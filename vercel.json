@@ -20,8 +20,5 @@
       ]
     }
   ],
-  "alias": [
-    "revampit.vercel.app",
-    "revampit-git-main-georgs-projects-babaf057.vercel.app"
-  ]
+  "alias": ["revampit.vercel.app"]
 } 
