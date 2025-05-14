@@ -12,8 +12,8 @@ export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [openDropdown, setOpenDropdown] = useState<string | null>(null)
   const [mounted, setMounted] = useState(false)
+  const mobileMenuRef = useRef<HTMLDivElement>(null)
   const dropdownRef = useRef<HTMLDivElement>(null)
-  const closeTimeoutRef = useRef<NodeJS.Timeout>()
 
   useEffect(() => {
     setMounted(true)
@@ -22,34 +22,34 @@ export default function Header() {
     }
 
     const handleClickOutside = (event: MouseEvent) => {
+      if (mobileMenuRef.current && !mobileMenuRef.current.contains(event.target as Node)) {
+        setMobileMenuOpen(false)
+      }
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setOpenDropdown(null)
+      }
+    }
+
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setMobileMenuOpen(false)
         setOpenDropdown(null)
       }
     }
 
     window.addEventListener('scroll', handleScroll)
     document.addEventListener('mousedown', handleClickOutside)
+    document.addEventListener('keydown', handleEscape)
 
     return () => {
       window.removeEventListener('scroll', handleScroll)
       document.removeEventListener('mousedown', handleClickOutside)
-      if (closeTimeoutRef.current) {
-        clearTimeout(closeTimeoutRef.current)
-      }
+      document.removeEventListener('keydown', handleEscape)
     }
   }, [])
 
-  const handleDropdownEnter = (itemName: string) => {
-    if (closeTimeoutRef.current) {
-      clearTimeout(closeTimeoutRef.current)
-    }
-    setOpenDropdown(itemName)
-  }
-
-  const handleDropdownLeave = () => {
-    closeTimeoutRef.current = setTimeout(() => {
-      setOpenDropdown(null)
-    }, 200) // Small delay to prevent accidental closures
+  const handleDropdownToggle = (itemName: string) => {
+    setOpenDropdown(openDropdown === itemName ? null : itemName)
   }
 
   const MobileMenu = () => {
@@ -57,8 +57,15 @@ export default function Header() {
 
     return createPortal(
       <div className="fixed inset-0 z-[100] lg:hidden">
-        <div className="fixed inset-0 bg-gray-900/80" onClick={() => setMobileMenuOpen(false)} />
-        <div className="fixed inset-y-0 right-0 z-[101] w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
+        <div 
+          className="fixed inset-0 bg-gray-900/80" 
+          onClick={() => setMobileMenuOpen(false)}
+          aria-hidden="true"
+        />
+        <div 
+          ref={mobileMenuRef}
+          className="fixed inset-y-0 right-0 z-[101] w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10"
+        >
           <div className="flex items-center justify-between">
             <Link href="/" onClick={() => setMobileMenuOpen(false)}>
               <Logo />
@@ -82,12 +89,15 @@ export default function Header() {
                         <button
                           type="button"
                           className="flex w-full items-center justify-between rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50 hover:text-green-600 transition-colors duration-200"
-                          onClick={() => setOpenDropdown(openDropdown === item.name ? null : item.name)}
+                          onClick={() => handleDropdownToggle(item.name)}
+                          aria-expanded={openDropdown === item.name}
                         >
                           {item.name}
-                          <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${
-                            openDropdown === item.name ? 'rotate-180' : ''
-                          }`} />
+                          <ChevronDown 
+                            className={`h-4 w-4 transition-transform duration-200 ${
+                              openDropdown === item.name ? 'rotate-180' : ''
+                            }`} 
+                          />
                         </button>
                         {openDropdown === item.name && (
                           <div className="mt-2 space-y-2 pl-4">
@@ -169,8 +179,8 @@ export default function Header() {
                 {item.subItems ? (
                   <div 
                     className="relative"
-                    onMouseEnter={() => handleDropdownEnter(item.name)}
-                    onMouseLeave={handleDropdownLeave}
+                    onMouseEnter={() => setOpenDropdown(item.name)}
+                    onMouseLeave={() => setOpenDropdown(null)}
                   >
                     <Link
                       href={item.href}
@@ -178,9 +188,11 @@ export default function Header() {
                       aria-expanded={openDropdown === item.name}
                     >
                       {item.name}
-                      <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${
-                        openDropdown === item.name ? 'rotate-180' : ''
-                      }`} />
+                      <ChevronDown 
+                        className={`h-4 w-4 transition-transform duration-200 ${
+                          openDropdown === item.name ? 'rotate-180' : ''
+                        }`} 
+                      />
                     </Link>
                     {openDropdown === item.name && (
                       <div className="absolute right-0 top-full z-10 mt-3 w-56 rounded-xl bg-white p-2 shadow-lg ring-1 ring-gray-900/5">
@@ -197,28 +209,26 @@ export default function Header() {
                       </div>
                     )}
                   </div>
+                ) : item.external ? (
+                  <a
+                    href={item.href}
+                    className="text-sm font-semibold leading-6 text-gray-900 hover:text-green-600 transition-colors duration-200"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {item.name}
+                  </a>
                 ) : (
-                  item.external ? (
-                    <a
-                      href={item.href}
-                      className="text-sm font-semibold leading-6 text-gray-900 hover:text-green-600 transition-colors duration-200"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      {item.name}
-                    </a>
-                  ) : (
-                    <Link
-                      href={item.href}
-                      className={`text-sm font-semibold leading-6 ${
-                        item.highlight 
-                          ? 'bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700' 
-                          : 'text-gray-900 hover:text-green-600'
-                      } transition-colors duration-200`}
-                    >
-                      {item.name}
-                    </Link>
-                  )
+                  <Link
+                    href={item.href}
+                    className={`text-sm font-semibold leading-6 ${
+                      item.highlight 
+                        ? 'bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700' 
+                        : 'text-gray-900 hover:text-green-600'
+                    } transition-colors duration-200`}
+                  >
+                    {item.name}
+                  </Link>
                 )}
               </div>
             ))}
