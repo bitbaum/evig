@@ -21,6 +21,11 @@ export const mainNavigation: NavigationItem[] = [
     description: 'Our refurbishment and recycling services',
     subItems: [
       {
+        name: 'Build Your Computer',
+        href: '/services/build-your-computer',
+        description: 'AI-powered custom computer builds with global parts sourcing'
+      },
+      {
         name: 'Computer Repair & Upgrades',
         href: '/services/computer-repair-upgrades',
         description: 'Expert repairs and upgrades for all devices'
@@ -64,14 +69,29 @@ export const mainNavigation: NavigationItem[] = [
         description: 'Open source ERP system implementation'
       },
       {
-        name: 'Linuxola',
-        href: '/projects/linuxola',
-        description: 'Linux installation and support program'
+        name: 'LTSP',
+        href: '/projects/ltsp',
+        description: 'Linux Terminal Server Project for efficient multi-user computing'
+      },
+      {
+        name: 'Hardware',
+        href: '/projects/hardware',
+        description: 'Sustainable hardware development and upcycling'
+      },
+      {
+        name: 'Compirat',
+        href: '/projects/compirat',
+        description: 'Digital inclusion and computer literacy for all'
       },
       {
         name: 'FreieComputer',
         href: '/projects/freiecomputer',
-        description: 'Computer donation and refurbishment program'
+        description: 'Swiss label for computers with free software'
+      },
+      {
+        name: 'Linuxola',
+        href: '/projects/linuxola',
+        description: 'Connecting Africa to the global digital commons'
       }
     ]
   },

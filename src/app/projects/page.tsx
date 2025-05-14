@@ -1,8 +1,9 @@
 import { Metadata } from 'next'
 import { HeroBanner } from '@/components/ui/hero-banner'
+import Link from 'next/link'
 
 export const metadata: Metadata = {
-  title: 'Our Projects | RevampIT',
+  title: 'Our Projects',
   description: 'Discover our diverse range of projects from open-source contributions to community initiatives and hardware development.'
 }
 
@@ -62,7 +63,7 @@ export default function ProjectsPage() {
                 <div className="text-4xl mb-4">{project.icon}</div>
                 <h3 className="text-xl font-semibold mb-3">{project.title}</h3>
                 <p className="text-gray-600 mb-4">{project.description}</p>
-                <a 
+                <Link 
                   href={project.readMoreLink}
                   className="text-green-600 hover:text-green-800 font-semibold inline-flex items-center"
                 >
@@ -70,7 +71,7 @@ export default function ProjectsPage() {
                   <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                   </svg>
-                </a>
+                </Link>
               </div>
             ))}
           </div>

@@ -67,6 +67,49 @@ export default function AboutPage() {
         </div>
       </section>
 
+      {/* By the Numbers Section */}
+      <section className="py-20 bg-white">
+        <div className="max-w-6xl mx-auto px-4">
+          <h2 className="text-3xl font-bold mb-12 text-center">By the Numbers</h2>
+          <div className="grid md:grid-cols-2 gap-8">
+            <div className="bg-green-50 p-8 rounded-lg shadow-md">
+              <h3 className="text-2xl font-bold text-green-800 mb-2">Environmental Impact</h3>
+              <div className="space-y-6">
+                <div>
+                  <p className="text-4xl font-bold text-green-700 mb-2">5+</p>
+                  <p className="text-gray-600">Years average device lifespan extension through our refurbishment program</p>
+                </div>
+                <div>
+                  <p className="text-4xl font-bold text-green-700 mb-2">1000+</p>
+                  <p className="text-gray-600">Devices saved from landfills annually through repair and refurbishment</p>
+                </div>
+                <div>
+                  <p className="text-4xl font-bold text-green-700 mb-2">75%</p>
+                  <p className="text-gray-600">Of donated equipment successfully refurbished and given a second life</p>
+                </div>
+              </div>
+            </div>
+            <div className="bg-green-50 p-8 rounded-lg shadow-md">
+              <h3 className="text-2xl font-bold text-green-800 mb-2">Community Impact</h3>
+              <div className="space-y-6">
+                <div>
+                  <p className="text-4xl font-bold text-green-700 mb-2">20+</p>
+                  <p className="text-gray-600">People trained in open source and sustainable technology annually</p>
+                </div>
+                <div>
+                  <p className="text-4xl font-bold text-green-700 mb-2">90%</p>
+                  <p className="text-gray-600">Of interns successfully transition to tech careers or further education</p>
+                </div>
+                <div>
+                  <p className="text-4xl font-bold text-green-700 mb-2">10+</p>
+                  <p className="text-gray-600">Successful work reintegration cases through our program</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Our Story */}
       <section className="py-20 px-4 max-w-6xl mx-auto">
         <div className="space-y-8">

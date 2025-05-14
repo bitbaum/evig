@@ -229,6 +229,70 @@ const services = {
         'Certificate of destruction'
       ]
     }
+  },
+  'build-your-computer': {
+    title: 'Build Your Computer',
+    description: 'Get a custom-built computer tailored to your specific needs, powered by AI analysis of our extensive inventory.',
+    icon: Server,
+    hero: {
+      title: 'Build Your Computer',
+      subtitle: 'AI-Powered Custom Builds',
+      description: 'Our advanced AI system analyzes our inventory to suggest the perfect build for your specific use case. Whether you need a computer for business, gaming, music production, video/photo editing, or everyday use, we\'ll find the optimal combination of components for your needs.'
+    },
+    features: [
+      {
+        title: 'AI-Powered Recommendations',
+        description: 'Smart analysis of our inventory to suggest the perfect build for your specific needs and use case.',
+        icon: Server
+      },
+      {
+        title: 'Global Parts Network',
+        description: 'Access to parts worldwide at competitive prices through our international network.',
+        icon: Database
+      },
+      {
+        title: 'Expert Assembly',
+        description: 'Professional assembly and testing by experienced technicians.',
+        icon: CheckCircle2
+      },
+      {
+        title: 'Quality Guarantee',
+        description: 'All builds come with our quality assurance and warranty.',
+        icon: Zap
+      }
+    ],
+    pricing: {
+      base: 'Starting from CHF 500',
+      details: [
+        'Free initial consultation',
+        'AI-powered build recommendations',
+        'Parts sourced from global network',
+        'Professional assembly and testing',
+        'Quality guarantee and warranty'
+      ]
+    },
+    process: [
+      {
+        step: 1,
+        title: 'Consultation',
+        description: 'We\'ll discuss your needs and use case to understand your requirements.'
+      },
+      {
+        step: 2,
+        title: 'AI Analysis',
+        description: 'Our AI system analyzes our inventory to suggest the optimal build for your needs.'
+      },
+      {
+        step: 3,
+        title: 'Parts Sourcing',
+        description: 'We source all necessary parts from our inventory and global network.'
+      },
+      {
+        step: 4,
+        title: 'Assembly & Testing',
+        description: 'Your computer is professionally assembled and thoroughly tested before delivery.'
+      }
+    ]
   }
 }
 

@@ -131,12 +131,12 @@ const partnerInstitutions = [
     url: 'https://www.rueti.ch'
   },
   {
-    name: 'Heks Visite',
-    url: 'https://www.heks.ch/page'
+    name: 'HEKS',
+    url: 'https://www.heks.ch/'
   },
   {
     name: 'AOZ (Asylorganisation Zürich)',
-    url: 'https://www.aoz.ch'
+    url: 'https://www.stadt-zuerich.ch/aoz/de/index.html'
   }
 ]
 

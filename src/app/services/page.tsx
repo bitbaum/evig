@@ -32,6 +32,19 @@ const services = {
   },
   coreServices: [
     {
+      title: 'Build Your Computer',
+      description: 'Get a custom-built computer tailored to your specific needs, powered by AI analysis of our extensive inventory. We source parts globally and provide professional assembly.',
+      icon: Server,
+      features: [
+        'AI-powered build recommendations',
+        'Global parts sourcing network',
+        'Professional assembly and testing',
+        'Quality guarantee and warranty'
+      ],
+      pricing: 'Starting from CHF 500',
+      highlight: 'Free initial consultation'
+    },
+    {
       title: 'Computer Repair & Upgrades',
       description: 'Expert repairs for all types of computers and components. We specialize in fixing what others can\'t, including motherboard repairs and component-level fixes.',
       icon: Wrench,

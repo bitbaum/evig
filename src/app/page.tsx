@@ -28,14 +28,14 @@ export default function Home() {
   return (
     <div className="bg-white">
       {/* Hero section */}
-      <div className="relative isolate overflow-hidden">
-        <div className="mx-auto max-w-7xl px-6 pb-24 pt-10 sm:pb-32 lg:px-8 lg:py-40">
-          <div className="mx-auto max-w-2xl text-center">
-            <h1 className="mt-10 text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
+      <div className="relative isolate px-6 pt-14 lg:px-8">
+        <div className="mx-auto max-w-2xl py-32 sm:py-48 lg:py-56">
+          <div className="text-center">
+            <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
               Giving Technology a Second Life
             </h1>
             <p className="mt-6 text-lg leading-8 text-gray-600">
-              We refurbish, recycle, and redistribute technology to create a more sustainable future.
+              We refurbish, recycle, and redistribute technology to create a more sustainable future. 
               Join us in our mission to reduce electronic waste and make technology accessible to everyone.
             </p>
             <div className="mt-10 flex items-center justify-center gap-x-6">
@@ -85,9 +85,6 @@ export default function Home() {
 
       {/* CTA section */}
       <div className="relative isolate mt-32 px-6 py-32 sm:mt-56 sm:py-40 lg:px-8">
-        <div className="absolute inset-x-0 top-1/2 -z-10 -translate-y-1/2 transform-gpu overflow-hidden opacity-30 blur-3xl">
-          <div className="ml-[max(50%,38rem)] aspect-[1313/771] w-[82.0625rem] bg-gradient-to-tr from-green-600 to-emerald-500"></div>
-        </div>
         <div className="mx-auto max-w-2xl text-center">
           <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
             Ready to make a difference?

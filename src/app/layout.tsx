@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
+import { NextProvider } from "@/components/providers/NextProvider";
 import MainLayout from "@/components/layout/MainLayout";
 import "./globals.css";
 
@@ -24,9 +25,11 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={`${inter.className} antialiased`}>
         <ThemeProvider>
-          <MainLayout>
-            {children}
-          </MainLayout>
+          <NextProvider>
+            <MainLayout>
+              {children}
+            </MainLayout>
+          </NextProvider>
         </ThemeProvider>
       </body>
     </html>
