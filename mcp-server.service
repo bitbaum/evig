@@ -1,0 +1,14 @@
+[Unit]
+Description=MCP Server
+After=network.target
+
+[Service]
+Type=simple
+User=g
+WorkingDirectory=/home/g/dev/mcp-local-server
+ExecStart=/usr/bin/node server.js
+Restart=always
+Environment=NODE_ENV=production
+
+[Install]
+WantedBy=multi-user.target

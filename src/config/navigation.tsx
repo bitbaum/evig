@@ -13,7 +13,15 @@ export const mainNavigation: NavigationItem[] = [
   {
     name: 'About',
     href: '/about',
-    description: 'Learn about our mission and impact'
+    description: 'Learn about our mission and impact',
+    subItems: [
+      {
+        name: 'Wiki',
+        href: 'https://revamp-it.ch/index.php/de/wiki-de',
+        description: 'Our community knowledge base',
+        external: true
+      }
+    ]
   },
   {
     name: 'Services',
@@ -136,6 +144,11 @@ export const mainNavigation: NavigationItem[] = [
         description: 'Support our mission financially'
       }
     ]
+  },
+  {
+    name: 'Blog',
+    href: '/blog',
+    description: 'Latest news, guides, and insights about sustainability and technology'
   },
   {
     name: 'Contact',
