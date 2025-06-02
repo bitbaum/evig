@@ -7,6 +7,8 @@ export interface NavigationItem {
   external?: boolean
   subItems?: NavigationItem[]
   highlight?: boolean
+  isSection?: boolean
+  badge?: string
 }
 
 export const mainNavigation: NavigationItem[] = [
@@ -29,9 +31,9 @@ export const mainNavigation: NavigationItem[] = [
     description: 'Our refurbishment and recycling services',
     subItems: [
       {
-        name: 'Build Your Computer',
-        href: '/services/build-your-computer',
-        description: 'AI-powered custom computer builds with global parts sourcing'
+        name: 'Hardware Services',
+        href: '#',
+        isSection: true
       },
       {
         name: 'Computer Repair & Upgrades',
@@ -44,7 +46,22 @@ export const mainNavigation: NavigationItem[] = [
         description: 'Secure data recovery and transfer services'
       },
       {
-        name: 'Linux',
+        name: 'Hardware Recycling',
+        href: '/services/hardware-recycling',
+        description: 'Responsible recycling of IT equipment'
+      },
+      {
+        name: 'Software Solutions',
+        href: '#',
+        isSection: true
+      },
+      {
+        name: 'Web Design & Development',
+        href: '/services/web-design-development',
+        description: 'Professional web development using open source technologies'
+      },
+      {
+        name: 'Linux & Open Source',
         href: '/services/linux-open-source',
         description: 'Professional Linux installation and support'
       },
@@ -54,9 +71,39 @@ export const mainNavigation: NavigationItem[] = [
         description: 'Open source software implementation and support'
       },
       {
-        name: 'Hardware Recycling',
-        href: '/services/hardware-recycling',
-        description: 'Responsible recycling of IT equipment'
+        name: 'Coming Soon',
+        href: '#',
+        isSection: true
+      },
+      {
+        name: 'Build Your Computer',
+        href: '/services/build-your-computer',
+        description: 'AI-powered custom computer builds with global parts sourcing',
+        badge: 'Soon'
+      },
+      {
+        name: 'Enterprise AI Solutions',
+        href: '/services/enterprise-ai-solutions',
+        description: 'Private, on-premises AI systems for professional firms',
+        badge: 'Soon'
+      },
+      {
+        name: 'Cloud Infrastructure',
+        href: '/services/cloud-infrastructure',
+        description: 'Sustainable cloud hosting and infrastructure',
+        badge: 'Soon'
+      },
+      {
+        name: 'Server Management',
+        href: '/services/server-management',
+        description: 'Professional server setup and maintenance',
+        badge: 'Soon'
+      },
+      {
+        name: 'IoT Solutions',
+        href: '/services/iot-solutions',
+        description: 'Internet of Things with open source hardware',
+        badge: 'Soon'
       }
     ]
   },

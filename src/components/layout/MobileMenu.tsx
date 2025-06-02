@@ -64,6 +64,8 @@ export function MobileMenu({
   }, [isOpen, triggerRef]);
   
   const handleNavigation = (href: string) => {
+    if (href === '#') return; // Don't navigate for placeholder links
+    
     router.push(href);
     // Close menu with a short delay to ensure navigation starts
     // Also, reset dropdown state
@@ -127,17 +129,62 @@ export function MobileMenu({
                         />
                       </button>
                       {openDropdown === item.name && (
-                        <div className="mt-2 space-y-2 pl-4">
-                          {item.subItems.map((subItem) => (
-                            <button
-                              key={subItem.name}
-                              className="block w-full text-left rounded-lg px-3 py-2 text-sm leading-6 text-gray-900 hover:bg-gray-50 hover:text-green-600 transition-colors duration-200"
-                              onClick={() => handleNavigation(subItem.href)}
-                            >
-                              <div className="font-semibold">{subItem.name}</div>
-                              {subItem.description && <div className="text-xs text-gray-500">{subItem.description}</div>}
-                            </button>
-                          ))}
+                        <div className="mt-2 space-y-1 pl-4">
+                          {item.subItems.map((subItem, index) => {
+                            if (subItem.isSection) {
+                              return (
+                                <div key={subItem.name} className={`${index > 0 ? 'mt-4 pt-2 border-t border-gray-200' : 'mb-2'}`}>
+                                  <div className="text-xs font-semibold text-gray-500 uppercase tracking-wider px-3 py-1">
+                                    {subItem.name}
+                                  </div>
+                                </div>
+                              )
+                            }
+
+                            if (subItem.href === '#') {
+                              return (
+                                <div
+                                  key={subItem.name}
+                                  className="block w-full text-left rounded-lg px-3 py-2 text-sm leading-6 text-gray-400 cursor-not-allowed"
+                                >
+                                  <div className="flex items-center justify-between">
+                                    <div>
+                                      <div className="font-semibold">{subItem.name}</div>
+                                      {subItem.description && <div className="text-xs text-gray-400">{subItem.description}</div>}
+                                    </div>
+                                    {subItem.badge && (
+                                      <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-700">
+                                        {subItem.badge}
+                                      </span>
+                                    )}
+                                  </div>
+                                </div>
+                              )
+                            }
+
+                            return subItem.external ? (
+                              <a
+                                key={subItem.name}
+                                href={subItem.href}
+                                className="block w-full text-left rounded-lg px-3 py-2 text-sm leading-6 text-gray-900 hover:bg-gray-50 hover:text-green-600 transition-colors duration-200"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                onClick={onClose}
+                              >
+                                <div className="font-semibold">{subItem.name}</div>
+                                {subItem.description && <div className="text-xs text-gray-500">{subItem.description}</div>}
+                              </a>
+                            ) : (
+                              <button
+                                key={subItem.name}
+                                className="block w-full text-left rounded-lg px-3 py-2 text-sm leading-6 text-gray-900 hover:bg-gray-50 hover:text-green-600 transition-colors duration-200"
+                                onClick={() => handleNavigation(subItem.href)}
+                              >
+                                <div className="font-semibold">{subItem.name}</div>
+                                {subItem.description && <div className="text-xs text-gray-500">{subItem.description}</div>}
+                              </button>
+                            )
+                          })}
                         </div>
                       )}
                     </div>

@@ -9,7 +9,11 @@ import {
   Clock, 
   Zap,
   FolderInput,
-  Disc
+  Disc,
+  Globe,
+  Code,
+  Palette,
+  Shield
 } from 'lucide-react'
 import Link from 'next/link'
 
@@ -48,10 +52,10 @@ const services = {
     pricing: {
       base: 'CHF 70/hour + parts',
       details: [
-        'CHF 30 evaluation fee included in final cost',
-        'CHF 70 per hour labor rate',
-        'Parts cost additional',
-        'Professional assessment required'
+        'Professional assessment required',
+        'Component-level repairs',
+        'Hardware upgrades available',
+        'Quality guarantee included'
       ]
     },
     process: [
@@ -232,67 +236,107 @@ const services = {
   },
   'build-your-computer': {
     title: 'Build Your Computer',
-    description: 'Get a custom-built computer tailored to your specific needs, powered by AI analysis of our extensive inventory.',
+    description: 'AI-powered sustainable computer builds prioritizing used and refurbished parts. Coming soon - express your interest to get notified when available.',
     icon: Server,
     hero: {
       title: 'Build Your Computer',
-      subtitle: 'AI-Powered Custom Builds',
-      description: 'Our advanced AI system analyzes our inventory to suggest the perfect build for your specific use case. Whether you need a computer for business, gaming, music production, video/photo editing, or everyday use, we\'ll find the optimal combination of components for your needs.'
+      subtitle: 'AI-Powered Sustainable Custom Builds',
+      description: 'Our advanced AI system will analyze our inventory and partner networks to suggest the perfect sustainable build for your specific needs. We prioritize used and refurbished components, only sourcing new parts when absolutely necessary.'
     },
     features: [
       {
-        title: 'AI-Powered Recommendations',
-        description: 'Smart analysis of our inventory to suggest the perfect build for your specific needs and use case.',
+        title: 'Sustainability-First Approach',
+        description: 'Our AI prioritizes used and refurbished parts from our inventory and partner network, only recommending new parts when absolutely necessary.',
         icon: Server
       },
       {
-        title: 'Global Parts Network',
-        description: 'Access to parts worldwide at competitive prices through our international network.',
+        title: 'AI-Powered Smart Selection',
+        description: 'Advanced AI analysis of your requirements matched against our comprehensive inventory and partner networks for optimal component selection.',
         icon: Database
       },
       {
-        title: 'Expert Assembly',
-        description: 'Professional assembly and testing by experienced technicians.',
+        title: 'Revamped Quality Label',
+        description: 'All our assembled computers receive our exclusive "Revamped" label, certifying their sustainable origin and quality assurance.',
         icon: CheckCircle2
       },
       {
-        title: 'Quality Guarantee',
-        description: 'All builds come with our quality assurance and warranty.',
+        title: 'Expert Assembly & Testing',
+        description: 'Professional assembly and thorough testing by experienced technicians, with quality guarantee and warranty coverage.',
         icon: Zap
       }
     ],
-    pricing: {
-      base: 'Starting from CHF 500',
-      details: [
-        'Free initial consultation',
-        'AI-powered build recommendations',
-        'Parts sourced from global network',
-        'Professional assembly and testing',
-        'Quality guarantee and warranty'
-      ]
-    },
+    comingSoon: true,
+    sustainabilityFocus: [
+      'Used parts prioritized over new',
+      'AI-powered inventory optimization',
+      'Partner network for rare components',
+      'Revamped sustainability certification',
+      'Circular economy principles'
+    ],
     process: [
       {
         step: 1,
-        title: 'Consultation',
-        description: 'We\'ll discuss your needs and use case to understand your requirements.'
+        title: 'Needs Assessment',
+        description: 'Tell us your intended use case - business, creative work, gaming, or everyday computing - and any specific requirements.'
       },
       {
         step: 2,
-        title: 'AI Analysis',
-        description: 'Our AI system analyzes our inventory to suggest the optimal build for your needs.'
+        title: 'AI-Powered Analysis',
+        description: 'Our AI analyzes your needs against our inventory and partner networks, prioritizing used and refurbished components.'
       },
       {
         step: 3,
-        title: 'Parts Sourcing',
-        description: 'We source all necessary parts from our inventory and global network.'
+        title: 'Sustainable Sourcing',
+        description: 'We source primarily from used inventory, only ordering new parts if absolutely necessary for your build requirements.'
       },
       {
         step: 4,
-        title: 'Assembly & Testing',
-        description: 'Your computer is professionally assembled and thoroughly tested before delivery.'
+        title: 'Assembly & Revamped Certification',
+        description: 'Professional assembly, testing, and application of our Revamped label certifying the sustainable build quality.'
       }
     ]
+  },
+  'web-design-development': {
+    title: 'Web Design & Development',
+    description: 'Professional web design and development services using open source technologies. Modern, responsive websites built with sustainability and performance in mind.',
+    icon: Globe,
+    hero: {
+      title: 'Web Design & Development',
+      subtitle: 'Sustainable Web Solutions',
+      description: 'We create modern, responsive websites using open source technologies that prioritize performance, sustainability, and user experience.'
+    },
+    features: [
+      {
+        title: 'Custom Web Development',
+        description: 'Tailored web applications built with modern open source technologies to meet your specific business needs.',
+        icon: Code
+      },
+      {
+        title: 'Responsive Design',
+        description: 'Beautiful, user-friendly designs that work perfectly across all devices and screen sizes.',
+        icon: Palette
+      },
+      {
+        title: 'Open Source CMS',
+        description: 'Modern content management systems using Strapi, Payload, Tina CMS, or WordPress that give you full control.',
+        icon: Globe
+      },
+      {
+        title: 'Ongoing Support',
+        description: 'Comprehensive maintenance and support to keep your website secure, updated, and performing optimally.',
+        icon: Shield
+      }
+    ],
+    pricing: {
+      base: 'CHF 70/hour',
+      details: [
+        'Free initial consultation',
+        'Open source technologies',
+        'Responsive design included',
+        'SEO optimization',
+        'Ongoing support available'
+      ]
+    }
   }
 }
 
@@ -349,6 +393,8 @@ export default function ServicePage({ params }: { params: { service: string } })
     notFound()
   }
 
+  const isComingSoon = 'comingSoon' in service && service.comingSoon
+
   return (
     <>
       {params.service === 'data-recovery-transfer' && (
@@ -403,6 +449,18 @@ export default function ServicePage({ params }: { params: { service: string } })
         />
       )}
       <main>
+        {/* Coming Soon Banner */}
+        {isComingSoon && (
+          <div className="bg-yellow-100 border-b border-yellow-200">
+            <div className="container mx-auto px-4 py-3">
+              <div className="flex items-center justify-center">
+                <Clock className="w-5 h-5 text-yellow-600 mr-2" />
+                <span className="text-yellow-800 font-semibold">This service is coming soon. Contact us to express interest and get notified when available.</span>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Hero Section */}
         <section className="relative bg-gradient-to-br from-green-700 via-green-800 to-green-900 text-white py-24 overflow-hidden">
           <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-10"></div>
@@ -436,39 +494,89 @@ export default function ServicePage({ params }: { params: { service: string } })
           </div>
         </section>
 
-        {/* Pricing Section */}
+        {/* Sustainability Focus or Pricing Section */}
         <section className="py-20">
           <div className="container mx-auto px-4">
             <div className="max-w-2xl mx-auto bg-white rounded-xl p-8 shadow-lg">
-              <h2 className="text-3xl font-bold mb-8 text-center">Pricing</h2>
-              <div className="text-center mb-8">
-                <p className="text-2xl font-bold text-green-600">{service.pricing.base}</p>
-              </div>
-              <div className="space-y-4">
-                {service.pricing.details.map((detail, index) => (
-                  <div key={index} className="flex items-center">
-                    <CheckCircle2 className="w-5 h-5 text-green-500 mr-3" />
-                    <span className="text-gray-600">{detail}</span>
+              {isComingSoon && 'sustainabilityFocus' in service ? (
+                <>
+                  <h2 className="text-3xl font-bold mb-8 text-center">Our Sustainable Approach</h2>
+                  <div className="space-y-4">
+                    {service.sustainabilityFocus.map((focus, index) => (
+                      <div key={index} className="flex items-center">
+                        <CheckCircle2 className="w-5 h-5 text-green-500 mr-3" />
+                        <span className="text-gray-600">{focus}</span>
+                      </div>
+                    ))}
                   </div>
-                ))}
-              </div>
+                  <div className="mt-8 p-6 bg-green-50 rounded-lg">
+                    <h3 className="text-lg font-semibold text-green-800 mb-2">The Revamped Label</h3>
+                    <p className="text-green-700">
+                      Every computer we assemble receives our exclusive "Revamped" label, certifying that it was built 
+                      with sustainability in mind, prioritizing used and refurbished components wherever possible.
+                    </p>
+                  </div>
+                </>
+              ) : 'pricing' in service ? (
+                <>
+                  <h2 className="text-3xl font-bold mb-8 text-center">Pricing</h2>
+                  <div className="text-center mb-8">
+                    <p className="text-2xl font-bold text-green-600">{service.pricing.base}</p>
+                  </div>
+                  <div className="space-y-4">
+                    {service.pricing.details.map((detail, index) => (
+                      <div key={index} className="flex items-center">
+                        <CheckCircle2 className="w-5 h-5 text-green-500 mr-3" />
+                        <span className="text-gray-600">{detail}</span>
+                      </div>
+                    ))}
+                  </div>
+                </>
+              ) : null}
             </div>
           </div>
         </section>
 
+        {/* Process Section */}
+        {'process' in service && (
+          <section className="py-20 bg-gray-50">
+            <div className="container mx-auto px-4">
+              <h2 className="text-3xl font-bold mb-12 text-center">
+                {isComingSoon ? 'How It Will Work' : 'Our Process'}
+              </h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                {service.process.map((step, index) => (
+                  <div key={index} className="text-center">
+                    <div className="w-16 h-16 bg-green-600 text-white rounded-full flex items-center justify-center text-xl font-bold mx-auto mb-4">
+                      {step.step}
+                    </div>
+                    <h3 className="text-xl font-bold mb-3">{step.title}</h3>
+                    <p className="text-gray-600">{step.description}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
+
         {/* CTA Section */}
         <section className="py-20 bg-gradient-to-r from-green-700 to-green-800 text-white">
           <div className="container mx-auto px-4 text-center">
-            <h2 className="text-4xl font-bold mb-6">Ready to Get Started?</h2>
+            <h2 className="text-4xl font-bold mb-6">
+              {isComingSoon ? 'Interested in This Service?' : 'Ready to Get Started?'}
+            </h2>
             <p className="text-xl mb-8 max-w-2xl mx-auto text-green-100">
-              Contact us today to learn more about our {service.title.toLowerCase()} services.
+              {isComingSoon 
+                ? `Express your interest in our ${service.title.toLowerCase()} service and be notified when it becomes available.`
+                : `Contact us today to learn more about our ${service.title.toLowerCase()} services.`
+              }
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
                 href="/contact"
                 className="inline-block bg-white text-green-800 px-8 py-4 rounded-lg font-semibold hover:bg-green-50 transition-colors duration-300 text-lg"
               >
-                Contact Us
+                {isComingSoon ? 'Express Interest' : 'Contact Us'}
               </Link>
               <Link
                 href="/services"
