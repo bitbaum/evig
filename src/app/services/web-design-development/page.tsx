@@ -37,23 +37,23 @@ import Link from 'next/link'
 
 const benefits = [
   {
-    title: 'Open Source First',
-    description: 'We prioritize open source technologies that give you freedom, flexibility, and long-term sustainability without vendor lock-in.',
-    icon: Code
-  },
-  {
-    title: 'Performance Optimized',
-    description: 'Fast-loading, efficient websites that provide excellent user experience while minimizing environmental impact.',
+    title: 'Automation-First Design',
+    description: 'We prioritize automated workflows that minimize manual administrative work while maintaining all our core principles. Maximum efficiency with zero compromise.',
     icon: Zap
   },
   {
-    title: 'Mobile-First Design',
-    description: 'Responsive designs that work perfectly on all devices, ensuring your audience can reach you anywhere.',
+    title: 'Open Source Foundation',
+    description: 'Built on transparent, auditable technologies that give you complete control and freedom. No vendor lock-ins, no proprietary black boxes.',
+    icon: Code
+  },
+  {
+    title: 'Seamless User Experience',
+    description: 'Intuitive interfaces that require minimal effort from users while delivering maximum functionality. Every interaction is designed for simplicity and effectiveness.',
     icon: Smartphone
   },
   {
-    title: 'SEO & Accessibility',
-    description: 'Built-in search engine optimization and accessibility features to reach the widest possible audience.',
+    title: 'Developer-Friendly Architecture',
+    description: 'Clean, maintainable code with excellent documentation and tooling. Built for long-term sustainability and easy maintenance.',
     icon: Search
   }
 ]
@@ -256,8 +256,8 @@ export default function WebDesignDevelopmentPage() {
           <div className="max-w-3xl">
             <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">Web Design & Development</h1>
             <p className="text-xl text-green-100 mb-8">
-              Professional web design and development services built on the principles of <strong>open source, decentralization, privacy, data ownership, and code ownership</strong>. 
-              We create modern, responsive websites that are sustainable, performant, and give you complete control over your digital presence.
+              Professional web design and development services built on the principles of <strong>open source, decentralization, privacy, data ownership, code ownership, and maximum automation</strong>. 
+              We create modern, responsive websites with seamless user experiences that give you complete control over your digital presence while minimizing manual administrative work.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
               <Link
@@ -283,84 +283,171 @@ export default function WebDesignDevelopmentPage() {
           <div className="max-w-4xl mx-auto text-center mb-16">
             <h2 className="text-4xl font-bold mb-6 text-gray-800">Our Core Values</h2>
             <p className="text-xl text-gray-600 mb-8">
-              Every website we build is guided by these fundamental principles that put you in control.
+              Every website we build is guided by these fundamental principles that put you in control while maximizing automation and user experience.
             </p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <div className="bg-white rounded-xl p-8 shadow-xl border-l-4 border-green-500 hover:shadow-2xl transition-shadow duration-300">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="bg-white rounded-xl p-6 shadow-xl border-l-4 border-green-500 hover:shadow-2xl transition-shadow duration-300">
               <div className="text-center">
-                <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Code className="w-8 h-8 text-green-600" />
+                <div className="w-14 h-14 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                  <Code className="w-7 h-7 text-green-600" />
                 </div>
-                <h3 className="text-2xl font-bold mb-4 text-green-800">Open Source</h3>
-                <p className="text-gray-600">
+                <h3 className="text-xl font-bold mb-3 text-green-800">Open Source</h3>
+                <p className="text-gray-600 text-sm">
                   Transparent, auditable code that you can inspect, modify, and own completely. 
                   No proprietary black boxes or vendor lock-ins.
                 </p>
               </div>
             </div>
             
-            <div className="bg-white rounded-xl p-8 shadow-xl border-l-4 border-blue-500 hover:shadow-2xl transition-shadow duration-300">
+            <div className="bg-white rounded-xl p-6 shadow-xl border-l-4 border-blue-500 hover:shadow-2xl transition-shadow duration-300">
               <div className="text-center">
-                <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Globe className="w-8 h-8 text-blue-600" />
+                <div className="w-14 h-14 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                  <Globe className="w-7 h-7 text-blue-600" />
                 </div>
-                <h3 className="text-2xl font-bold mb-4 text-blue-800">Decentralization</h3>
-                <p className="text-gray-600">
+                <h3 className="text-xl font-bold mb-3 text-blue-800">Decentralization</h3>
+                <p className="text-gray-600 text-sm">
                   Break free from Big Tech platforms. Host your website anywhere, 
                   maintain independence, and avoid single points of failure.
                 </p>
               </div>
             </div>
             
-            <div className="bg-white rounded-xl p-8 shadow-xl border-l-4 border-purple-500 hover:shadow-2xl transition-shadow duration-300">
+            <div className="bg-white rounded-xl p-6 shadow-xl border-l-4 border-purple-500 hover:shadow-2xl transition-shadow duration-300">
               <div className="text-center">
-                <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Shield className="w-8 h-8 text-purple-600" />
+                <div className="w-14 h-14 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                  <Shield className="w-7 h-7 text-purple-600" />
                 </div>
-                <h3 className="text-2xl font-bold mb-4 text-purple-800">Privacy First</h3>
-                <p className="text-gray-600">
+                <h3 className="text-xl font-bold mb-3 text-purple-800">Privacy First</h3>
+                <p className="text-gray-600 text-sm">
                   Minimal tracking, secure authentication, and transparent data handling. 
                   Your users' privacy is protected by design, not as an afterthought.
                 </p>
               </div>
             </div>
             
-            <div className="bg-white rounded-xl p-8 shadow-xl border-l-4 border-orange-500 hover:shadow-2xl transition-shadow duration-300">
+            <div className="bg-white rounded-xl p-6 shadow-xl border-l-4 border-orange-500 hover:shadow-2xl transition-shadow duration-300">
               <div className="text-center">
-                <div className="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Database className="w-8 h-8 text-orange-600" />
+                <div className="w-14 h-14 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                  <Database className="w-7 h-7 text-orange-600" />
                 </div>
-                <h3 className="text-2xl font-bold mb-4 text-orange-800">Own Your Data</h3>
-                <p className="text-gray-600">
+                <h3 className="text-xl font-bold mb-3 text-orange-800">Own Your Data</h3>
+                <p className="text-gray-600 text-sm">
                   Your data belongs to you, not to tech giants. Full control over 
                   where it's stored, how it's used, and who has access to it.
                 </p>
               </div>
             </div>
             
-            <div className="bg-white rounded-xl p-8 shadow-xl border-l-4 border-teal-500 hover:shadow-2xl transition-shadow duration-300">
+            <div className="bg-white rounded-xl p-6 shadow-xl border-l-4 border-teal-500 hover:shadow-2xl transition-shadow duration-300">
               <div className="text-center">
-                <div className="w-16 h-16 bg-teal-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Heart className="w-8 h-8 text-teal-600" />
+                <div className="w-14 h-14 bg-teal-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                  <Heart className="w-7 h-7 text-teal-600" />
                 </div>
-                <h3 className="text-2xl font-bold mb-4 text-teal-800">Own Your Code</h3>
-                <p className="text-gray-600">
+                <h3 className="text-xl font-bold mb-3 text-teal-800">Own Your Code</h3>
+                <p className="text-gray-600 text-sm">
                   Complete ownership of your website's source code. Modify, extend, 
                   or migrate whenever you want without restrictions or licensing fees.
                 </p>
               </div>
             </div>
             
-            <div className="bg-white rounded-xl p-8 shadow-xl border-l-4 border-indigo-500 hover:shadow-2xl transition-shadow duration-300">
+            <div className="bg-white rounded-xl p-6 shadow-xl border-l-4 border-rose-500 hover:shadow-2xl transition-shadow duration-300">
               <div className="text-center">
-                <div className="w-16 h-16 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Users className="w-8 h-8 text-indigo-600" />
+                <div className="w-14 h-14 bg-rose-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                  <Zap className="w-7 h-7 text-rose-600" />
                 </div>
-                <h3 className="text-2xl font-bold mb-4 text-indigo-800">Community Driven</h3>
-                <p className="text-gray-600">
-                  Benefit from global communities of developers who contribute improvements, 
-                  security fixes, and innovations to the technologies we use.
+                <h3 className="text-xl font-bold mb-3 text-rose-800">Maximum Automation</h3>
+                <p className="text-gray-600 text-sm">
+                  Seamless automated workflows that minimize manual work while maintaining 
+                  all our principles. 100% automation is our goal.
+                </p>
+              </div>
+            </div>
+            
+            <div className="bg-white rounded-xl p-6 shadow-xl border-l-4 border-indigo-500 hover:shadow-2xl transition-shadow duration-300">
+              <div className="text-center">
+                <div className="w-14 h-14 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                  <Users className="w-7 h-7 text-indigo-600" />
+                </div>
+                <h3 className="text-xl font-bold mb-3 text-indigo-800">User Experience</h3>
+                <p className="text-gray-600 text-sm">
+                  Intuitive interfaces that require minimal effort from users while 
+                  delivering maximum functionality and productivity.
+                </p>
+              </div>
+            </div>
+            
+            <div className="bg-white rounded-xl p-6 shadow-xl border-l-4 border-cyan-500 hover:shadow-2xl transition-shadow duration-300">
+              <div className="text-center">
+                <div className="w-14 h-14 bg-cyan-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                  <Monitor className="w-7 h-7 text-cyan-600" />
+                </div>
+                <h3 className="text-xl font-bold mb-3 text-cyan-800">Developer Experience</h3>
+                <p className="text-gray-600 text-sm">
+                  Clean, maintainable code with excellent tooling and documentation 
+                  that makes development and maintenance a pleasure.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Automation Philosophy Section */}
+      <section className="py-20 bg-white">
+        <div className="container mx-auto px-4">
+          <div className="max-w-4xl mx-auto">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl font-bold mb-6">Our Automation Philosophy</h2>
+              <p className="text-lg text-gray-600">
+                We believe in <strong>maximum automation with zero compromise</strong> on our core values.
+              </p>
+            </div>
+            
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+              <div>
+                <h3 className="text-2xl font-bold mb-6 text-gray-800">The Perfect Balance</h3>
+                <div className="space-y-4 text-gray-600">
+                  <p>
+                    <strong>Our Goal:</strong> 100% automation between website administration and users while maintaining complete adherence to our principles of open source, decentralization, privacy, and ownership.
+                  </p>
+                  <p>
+                    <strong>Our Approach:</strong> We design systems that work seamlessly in the background, handling user management, content updates, data processing, and system maintenance automatically.
+                  </p>
+                  <p>
+                    <strong>When Compromises Are Necessary:</strong> If a compromise significantly increases your productivity and helps move your project forward, we'll discuss it openly. But we always advise maintaining our principles unless absolutely necessary.
+                  </p>
+                </div>
+              </div>
+              
+              <div className="bg-gradient-to-br from-green-50 to-blue-50 rounded-xl p-8">
+                <h4 className="text-xl font-bold mb-4 text-gray-800">Our Rating System</h4>
+                <p className="text-gray-600 mb-4">
+                  Every website and webapp we build receives a comprehensive rating based on how well it aligns with our values:
+                </p>
+                <div className="space-y-3">
+                  {[
+                    { label: 'Open Source', color: 'bg-green-500' },
+                    { label: 'Decentralization', color: 'bg-blue-500' },
+                    { label: 'Privacy', color: 'bg-purple-500' },
+                    { label: 'Data Ownership', color: 'bg-orange-500' },
+                    { label: 'Code Ownership', color: 'bg-teal-500' },
+                    { label: 'Automation Level', color: 'bg-rose-500' },
+                    { label: 'User Experience', color: 'bg-indigo-500' },
+                    { label: 'Developer Experience', color: 'bg-cyan-500' }
+                  ].map((item, index) => (
+                    <div key={index} className="flex items-center space-x-3">
+                      <div className={`w-4 h-4 rounded-full ${item.color}`}></div>
+                      <span className="text-sm font-medium text-gray-700">{item.label}</span>
+                      <div className="flex-1 bg-gray-200 rounded-full h-2">
+                        <div className={`${item.color} h-2 rounded-full`} style={{width: '90%'}}></div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                <p className="text-sm text-gray-500 mt-4">
+                  We strive for maximum scores across all categories
                 </p>
               </div>
             </div>
