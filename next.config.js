@@ -4,7 +4,8 @@ const nextConfig = {
     unoptimized: false,
     remotePatterns: [],
   },
-  webpack: (config) => {
+  webpack: (config, { isServer }) => {
+    // Font loader configuration
     config.module.rules.push({
       test: /\.(woff|woff2|eot|ttf|otf)$/,
       use: {
@@ -15,13 +16,21 @@ const nextConfig = {
         },
       },
     });
+
+    // Handle fs module for client-side
+    if (!isServer) {
+      config.resolve.fallback = {
+        ...config.resolve.fallback,
+        fs: false,
+      };
+    }
     return config;
   },
   compiler: {
     styledComponents: true
   },
   // Enable static optimization
-  output: 'standalone',
+  output: 'export',
   // Ensure proper CSS handling
   experimental: {
     optimizeCss: true,
@@ -35,16 +44,6 @@ const nextConfig = {
   // Add specific CSS handling
   sassOptions: {
     includePaths: ['./src/styles'],
-  },
-  // Ensure CSS modules are processed
-  webpack: (config, { isServer }) => {
-    if (!isServer) {
-      config.resolve.fallback = {
-        ...config.resolve.fallback,
-        fs: false,
-      };
-    }
-    return config;
   },
 }
 
