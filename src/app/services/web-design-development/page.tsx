@@ -256,8 +256,8 @@ export default function WebDesignDevelopmentPage() {
           <div className="max-w-3xl">
             <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">Web Design & Development</h1>
             <p className="text-xl text-green-100 mb-8">
-              Professional web design and development services built on the principles of <strong>open source, decentralization, privacy, data ownership, code ownership, and maximum automation</strong>. 
-              We create modern, responsive websites with seamless user experiences that give you complete control over your digital presence while minimizing manual administrative work.
+              <strong>100% commitment to freedom</strong> through open source, decentralization, privacy, data ownership, code ownership, and maximum automation. 
+              We create digital experiences where <strong>effort becomes choice, not necessity</strong>—giving you complete control over your digital presence.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
               <Link
@@ -283,7 +283,7 @@ export default function WebDesignDevelopmentPage() {
           <div className="max-w-4xl mx-auto text-center mb-16">
             <h2 className="text-4xl font-bold mb-6 text-gray-800">Our Core Values</h2>
             <p className="text-xl text-gray-600 mb-8">
-              Every website we build is guided by these fundamental principles that put you in control while maximizing automation and user experience.
+              Every website we build serves one ultimate goal: <strong>your freedom</strong>. Each principle works together to transform effort from necessity into choice.
             </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -399,56 +399,80 @@ export default function WebDesignDevelopmentPage() {
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
             <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold mb-6">Our Automation Philosophy</h2>
-              <p className="text-lg text-gray-600">
-                We believe in <strong>maximum automation with zero compromise</strong> on our core values.
+              <h2 className="text-3xl font-bold mb-6">Our Freedom-First Philosophy</h2>
+              <p className="text-lg text-gray-600 mb-4">
+                We believe in <strong>100% commitment to freedom</strong> through maximum automation.
+              </p>
+              <p className="text-base text-gray-500">
+                When automation minimizes unwanted effort, it transforms effort from necessity into choice—and choice is freedom.
               </p>
             </div>
             
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
               <div>
-                <h3 className="text-2xl font-bold mb-6 text-gray-800">The Perfect Balance</h3>
-                <div className="space-y-4 text-gray-600">
-                  <p>
-                    <strong>Our Goal:</strong> 100% automation between website administration and users while maintaining complete adherence to our principles of open source, decentralization, privacy, and ownership.
-                  </p>
-                  <p>
-                    <strong>Our Approach:</strong> We design systems that work seamlessly in the background, handling user management, content updates, data processing, and system maintenance automatically.
-                  </p>
-                  <p>
-                    <strong>When Compromises Are Necessary:</strong> If a compromise significantly increases your productivity and helps move your project forward, we'll discuss it openly. But we always advise maintaining our principles unless absolutely necessary.
+                <h3 className="text-2xl font-bold mb-6 text-gray-800">Effort as Choice, Not Necessity</h3>
+                <div className="space-y-6 text-gray-600">
+                  <div className="border-l-4 border-green-500 pl-4">
+                    <p className="font-semibold text-green-800 mb-2">The Freedom Principle</p>
+                    <p>
+                      <strong>100% commitment to freedom</strong> means every aspect of your digital presence should serve your autonomy, not constrain it.
+                    </p>
+                  </div>
+                  
+                  <div className="border-l-4 border-blue-500 pl-4">
+                    <p className="font-semibold text-blue-800 mb-2">Automation as Liberation</p>
+                    <p>
+                      Maximum automation eliminates repetitive, unwanted tasks, freeing you to focus on what truly matters to you and your mission.
+                    </p>
+                  </div>
+                  
+                  <div className="border-l-4 border-purple-500 pl-4">
+                    <p className="font-semibold text-purple-800 mb-2">Choice Over Constraint</p>
+                    <p>
+                      When systems work seamlessly without your constant intervention, every moment you spend becomes intentional—a choice, not a necessity.
+                    </p>
+                  </div>
+                  
+                  <p className="italic text-gray-500 text-sm mt-6">
+                    "True freedom isn't just the ability to choose—it's having systems that preserve your right to choose by removing forced effort."
                   </p>
                 </div>
               </div>
               
               <div className="bg-gradient-to-br from-green-50 to-blue-50 rounded-xl p-8">
-                <h4 className="text-xl font-bold mb-4 text-gray-800">Our Rating System</h4>
+                <h4 className="text-xl font-bold mb-4 text-gray-800">Our Freedom Rating System</h4>
                 <p className="text-gray-600 mb-4">
-                  Every website and webapp we build receives a comprehensive rating based on how well it aligns with our values:
+                  Every website and webapp we build receives a comprehensive freedom rating based on how well it serves your autonomy:
                 </p>
                 <div className="space-y-3">
                   {[
-                    { label: 'Open Source', color: 'bg-green-500' },
-                    { label: 'Decentralization', color: 'bg-blue-500' },
-                    { label: 'Privacy', color: 'bg-purple-500' },
-                    { label: 'Data Ownership', color: 'bg-orange-500' },
-                    { label: 'Code Ownership', color: 'bg-teal-500' },
-                    { label: 'Automation Level', color: 'bg-rose-500' },
-                    { label: 'User Experience', color: 'bg-indigo-500' },
-                    { label: 'Developer Experience', color: 'bg-cyan-500' }
+                    { label: 'Open Source Freedom', color: 'bg-green-500', desc: 'Complete code transparency & ownership' },
+                    { label: 'Decentralization Freedom', color: 'bg-blue-500', desc: 'Independence from platform control' },
+                    { label: 'Privacy Freedom', color: 'bg-purple-500', desc: 'Data sovereignty & protection' },
+                    { label: 'Data Ownership Freedom', color: 'bg-orange-500', desc: 'Full control over your information' },
+                    { label: 'Code Ownership Freedom', color: 'bg-teal-500', desc: 'Unrestricted modification rights' },
+                    { label: 'Automation Freedom', color: 'bg-rose-500', desc: 'Effort transformed into choice' },
+                    { label: 'User Experience Freedom', color: 'bg-indigo-500', desc: 'Intuitive, effortless interaction' },
+                    { label: 'Developer Freedom', color: 'bg-cyan-500', desc: 'Maintainable, extensible systems' }
                   ].map((item, index) => (
-                    <div key={index} className="flex items-center space-x-3">
-                      <div className={`w-4 h-4 rounded-full ${item.color}`}></div>
-                      <span className="text-sm font-medium text-gray-700">{item.label}</span>
-                      <div className="flex-1 bg-gray-200 rounded-full h-2">
-                        <div className={`${item.color} h-2 rounded-full`} style={{width: '90%'}}></div>
+                    <div key={index} className="group">
+                      <div className="flex items-center space-x-3 mb-1">
+                        <div className={`w-3 h-3 rounded-full ${item.color}`}></div>
+                        <span className="text-sm font-medium text-gray-700">{item.label}</span>
+                        <div className="flex-1 bg-gray-200 rounded-full h-2">
+                          <div className={`${item.color} h-2 rounded-full transition-all duration-500`} style={{width: '95%'}}></div>
+                        </div>
                       </div>
+                      <p className="text-xs text-gray-500 ml-6 mb-2">{item.desc}</p>
                     </div>
                   ))}
                 </div>
-                <p className="text-sm text-gray-500 mt-4">
-                  We strive for maximum scores across all categories
-                </p>
+                <div className="mt-6 p-4 bg-white rounded-lg border border-green-200">
+                  <p className="text-sm text-green-800 font-semibold mb-1">Our Commitment</p>
+                  <p className="text-xs text-green-700">
+                    We strive for maximum scores across all freedom dimensions. Every compromise is discussed transparently, with alternatives always explored.
+                  </p>
+                </div>
               </div>
             </div>
           </div>
