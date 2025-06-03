@@ -30,7 +30,7 @@ const nextConfig = {
     styledComponents: true
   },
   // Enable static optimization
-  output: 'export',
+  output: 'standalone',
   // Ensure proper CSS handling
   experimental: {
     optimizeCss: true,
