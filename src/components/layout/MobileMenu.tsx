@@ -107,6 +107,24 @@ export function MobileMenu({
             <X className="h-6 w-6" aria-hidden="true" />
           </button>
         </div>
+        
+        {/* Experimental Site Banner for Mobile in Swiss German */}
+        <div className="mt-4 mb-2 flex items-center bg-amber-50 border border-amber-200 rounded-lg px-3 py-2 text-xs text-amber-700">
+          <div className="w-2 h-2 bg-amber-400 rounded-full mr-2 animate-pulse"></div>
+          <span className="font-medium">
+            Experimentelli Site - 
+            <a 
+              href="https://revampit.org" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-amber-800 hover:text-amber-900 underline ml-1 transition-colors"
+              onClick={onClose}
+            >
+              zur aktuelle Site
+            </a>
+          </span>
+        </div>
+        
         <div className="mt-6 flow-root">
           <div className="-my-6 divide-y divide-gray-500/10">
             <div className="space-y-2 py-6">

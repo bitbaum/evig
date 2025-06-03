@@ -181,10 +181,25 @@ export default function Header() {
         }`}
       >
         <nav className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8" aria-label="Global">
-          <div className="flex lg:flex-1">
+          <div className="flex lg:flex-1 items-center gap-4">
             <Link href="/">
               <Logo />
             </Link>
+            {/* Experimental Site Banner in Swiss German */}
+            <div className="hidden sm:flex items-center bg-amber-50 border border-amber-200 rounded-full px-3 py-1 text-xs text-amber-700">
+              <div className="w-2 h-2 bg-amber-400 rounded-full mr-2 animate-pulse"></div>
+              <span className="font-medium">
+                Experimentelli Site - 
+                <a 
+                  href="https://revampit.org" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-amber-800 hover:text-amber-900 underline ml-1 transition-colors"
+                >
+                  zur aktuelle Site
+                </a>
+              </span>
+            </div>
           </div>
           <div className="flex lg:hidden">
             <button
