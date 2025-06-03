@@ -18,6 +18,11 @@ export const mainNavigation: NavigationItem[] = [
     description: 'Learn about our mission and impact',
     subItems: [
       {
+        name: 'REVAMPED Certification',
+        href: '/revamped',
+        description: 'Our exclusive certification for sustainable computer builds'
+      },
+      {
         name: 'Wiki',
         href: 'https://revamp-it.ch/index.php/de/wiki-de',
         description: 'Our community knowledge base',
