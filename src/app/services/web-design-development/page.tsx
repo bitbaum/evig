@@ -202,34 +202,34 @@ const services = [
 
 const whyOpenSource = [
   {
-    title: 'Freedom & Flexibility',
-    description: 'Open source software gives you complete control over your website without vendor lock-in. You own your code and can modify it as needed.',
-    icon: Heart
+    title: 'You Own Your Code',
+    description: 'Complete ownership of your website\'s source code means no vendor lock-in, no licensing restrictions, and total freedom to modify, extend, or migrate your site at any time.',
+    icon: Code
   },
   {
-    title: 'Cost-Effective',
-    description: 'No expensive licensing fees means more budget for features and functionality that matter to your business.',
-    icon: Zap
+    title: 'You Own Your Data',
+    description: 'Your data belongs to you, not to tech giants. We build solutions that keep your information under your control, with options for self-hosting and data portability.',
+    icon: Database
   },
   {
-    title: 'Security & Transparency',
-    description: 'Open source code is reviewed by thousands of developers worldwide, making it more secure and trustworthy.',
+    title: 'Privacy by Design',
+    description: 'We prioritize privacy from the ground up, implementing minimal tracking, secure authentication, and transparent data handling practices that respect your users\' privacy.',
     icon: Shield
   },
   {
-    title: 'Community Support',
-    description: 'Benefit from a global community of developers contributing improvements, fixes, and innovations.',
-    icon: Users
-  },
-  {
-    title: 'Future-Proof',
-    description: 'Open source technologies evolve with the community and won\'t disappear if a company goes out of business.',
-    icon: Rocket
-  },
-  {
-    title: 'Environmental Impact',
-    description: 'Open source promotes resource sharing and reduces waste, aligning with our sustainability mission.',
+    title: 'Decentralized Architecture',
+    description: 'Move away from centralized platforms that control your online presence. We build solutions that can be hosted anywhere, giving you independence from Big Tech.',
     icon: Globe
+  },
+  {
+    title: 'Open Source Foundation',
+    description: 'Built on open source technologies that are transparent, auditable, and backed by global communities. No hidden code, no proprietary lock-ins.',
+    icon: Heart
+  },
+  {
+    title: 'Future-Proof & Sustainable',
+    description: 'Open source technologies evolve with the community and won\'t disappear if a company fails. Your investment is protected for the long term.',
+    icon: Rocket
   }
 ]
 
@@ -256,8 +256,8 @@ export default function WebDesignDevelopmentPage() {
           <div className="max-w-3xl">
             <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">Web Design & Development</h1>
             <p className="text-xl text-green-100 mb-8">
-              Professional web design and development services using open source technologies. 
-              We create modern, responsive websites that are sustainable, performant, and built to last.
+              Professional web design and development services built on the principles of <strong>open source, decentralization, privacy, data ownership, and code ownership</strong>. 
+              We create modern, responsive websites that are sustainable, performant, and give you complete control over your digital presence.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
               <Link
@@ -272,6 +272,97 @@ export default function WebDesignDevelopmentPage() {
               >
                 Explore Services
               </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Values Section - New dedicated section */}
+      <section className="py-20 bg-gradient-to-br from-green-50 to-blue-50">
+        <div className="container mx-auto px-4">
+          <div className="max-w-4xl mx-auto text-center mb-16">
+            <h2 className="text-4xl font-bold mb-6 text-gray-800">Our Core Values</h2>
+            <p className="text-xl text-gray-600 mb-8">
+              Every website we build is guided by these fundamental principles that put you in control.
+            </p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="bg-white rounded-xl p-8 shadow-xl border-l-4 border-green-500 hover:shadow-2xl transition-shadow duration-300">
+              <div className="text-center">
+                <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Code className="w-8 h-8 text-green-600" />
+                </div>
+                <h3 className="text-2xl font-bold mb-4 text-green-800">Open Source</h3>
+                <p className="text-gray-600">
+                  Transparent, auditable code that you can inspect, modify, and own completely. 
+                  No proprietary black boxes or vendor lock-ins.
+                </p>
+              </div>
+            </div>
+            
+            <div className="bg-white rounded-xl p-8 shadow-xl border-l-4 border-blue-500 hover:shadow-2xl transition-shadow duration-300">
+              <div className="text-center">
+                <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Globe className="w-8 h-8 text-blue-600" />
+                </div>
+                <h3 className="text-2xl font-bold mb-4 text-blue-800">Decentralization</h3>
+                <p className="text-gray-600">
+                  Break free from Big Tech platforms. Host your website anywhere, 
+                  maintain independence, and avoid single points of failure.
+                </p>
+              </div>
+            </div>
+            
+            <div className="bg-white rounded-xl p-8 shadow-xl border-l-4 border-purple-500 hover:shadow-2xl transition-shadow duration-300">
+              <div className="text-center">
+                <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Shield className="w-8 h-8 text-purple-600" />
+                </div>
+                <h3 className="text-2xl font-bold mb-4 text-purple-800">Privacy First</h3>
+                <p className="text-gray-600">
+                  Minimal tracking, secure authentication, and transparent data handling. 
+                  Your users' privacy is protected by design, not as an afterthought.
+                </p>
+              </div>
+            </div>
+            
+            <div className="bg-white rounded-xl p-8 shadow-xl border-l-4 border-orange-500 hover:shadow-2xl transition-shadow duration-300">
+              <div className="text-center">
+                <div className="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Database className="w-8 h-8 text-orange-600" />
+                </div>
+                <h3 className="text-2xl font-bold mb-4 text-orange-800">Own Your Data</h3>
+                <p className="text-gray-600">
+                  Your data belongs to you, not to tech giants. Full control over 
+                  where it's stored, how it's used, and who has access to it.
+                </p>
+              </div>
+            </div>
+            
+            <div className="bg-white rounded-xl p-8 shadow-xl border-l-4 border-teal-500 hover:shadow-2xl transition-shadow duration-300">
+              <div className="text-center">
+                <div className="w-16 h-16 bg-teal-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Heart className="w-8 h-8 text-teal-600" />
+                </div>
+                <h3 className="text-2xl font-bold mb-4 text-teal-800">Own Your Code</h3>
+                <p className="text-gray-600">
+                  Complete ownership of your website's source code. Modify, extend, 
+                  or migrate whenever you want without restrictions or licensing fees.
+                </p>
+              </div>
+            </div>
+            
+            <div className="bg-white rounded-xl p-8 shadow-xl border-l-4 border-indigo-500 hover:shadow-2xl transition-shadow duration-300">
+              <div className="text-center">
+                <div className="w-16 h-16 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Users className="w-8 h-8 text-indigo-600" />
+                </div>
+                <h3 className="text-2xl font-bold mb-4 text-indigo-800">Community Driven</h3>
+                <p className="text-gray-600">
+                  Benefit from global communities of developers who contribute improvements, 
+                  security fixes, and innovations to the technologies we use.
+                </p>
+              </div>
             </div>
           </div>
         </div>
@@ -327,10 +418,10 @@ export default function WebDesignDevelopmentPage() {
       <section className="py-20 bg-gray-50">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center mb-16">
-            <h2 className="text-3xl font-bold mb-6">Why We Prioritize Open Source</h2>
+            <h2 className="text-3xl font-bold mb-6">Why These Values Matter</h2>
             <p className="text-lg text-gray-600">
-              Open source software isn't just a technical choice—it's a philosophy that aligns with our values 
-              of sustainability, transparency, and community collaboration.
+              In an era of increasing digital surveillance and platform monopolies, 
+              these principles aren't just nice-to-haves—they're essential for digital freedom and independence.
             </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
