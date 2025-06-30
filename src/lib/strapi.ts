@@ -108,9 +108,9 @@ class StrapiClient {
   private async request<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
     const url = `${this.baseURL}/api${endpoint}`;
     
-    const headers: HeadersInit = {
+    const headers: Record<string, string> = {
       'Content-Type': 'application/json',
-      ...options.headers,
+      ...(typeof options.headers === 'object' && !Array.isArray(options.headers) ? options.headers : {}),
     };
 
     if (this.apiToken) {
