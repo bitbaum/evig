@@ -110,7 +110,6 @@ class StrapiClient {
     
     const headers: Record<string, string> = {
       'Content-Type': 'application/json',
-      ...(typeof options.headers === 'object' && !Array.isArray(options.headers) ? options.headers : {}),
     };
 
     if (this.apiToken) {
