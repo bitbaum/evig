@@ -366,7 +366,7 @@ export default function ServicePage({ params }: { params: { service: string } })
     notFound()
   }
 
-  const isComingSoon = 'comingSoon' in service && service.comingSoon
+  const isComingSoon = false
 
   return (
     <>
