@@ -72,8 +72,8 @@ export default function Header() {
     }, 300)
   }
 
-  // Helper function to render services dropdown
-  const renderServicesDropdown = (subItems: any[]) => {
+  // Helper function to render sectioned mega-menu dropdown
+  const renderSectionedDropdown = (subItems: any[]) => {
     const sections: { [key: string]: any[] } = {}
     let currentSection = ''
     
@@ -244,8 +244,8 @@ export default function Header() {
                         <div className="relative">
                           <div className="absolute -top-3 left-0 h-3 w-full" />
                           <div className="relative rounded-xl bg-white p-6 shadow-lg ring-1 ring-gray-900/5">
-                            {item.name === 'Services' ? (
-                              renderServicesDropdown(item.subItems)
+                            {item.subItems.some(subItem => subItem.isSection) ? (
+                              renderSectionedDropdown(item.subItems)
                             ) : (
                               <div className="w-80">
                                 {item.subItems.map((subItem, index) => {

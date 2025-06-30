@@ -1,9 +1,79 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
+import { Calendar, User, Tag, Eye } from 'lucide-react'
+import strapi, { formatDate, getStrapiMediaURL } from '@/lib/strapi'
+import type { BlogPost } from '@/lib/strapi'
 
 export const metadata: Metadata = {
   title: 'Blog | RevampIt',
   description: 'Explore ways to give a second life to things that once held value—technology, food, art, and more.',
+}
+
+// Transform blog post for easier use
+interface BlogPostSummary {
+  id: number;
+  title: string;
+  slug: string;
+  excerpt?: string;
+  featuredImage?: string;
+  author: {
+    username: string;
+    email: string;
+  };
+  categories: Array<{
+    id: number;
+    name: string;
+    slug: string;
+    color?: string;
+  }>;
+  tags: Array<{
+    id: number;
+    name: string;
+    slug: string;
+  }>;
+  publishedAt?: string;
+  viewCount: number;
+  createdAt: string;
+}
+
+async function getBlogPosts(): Promise<BlogPostSummary[]> {
+  try {
+    const response = await strapi.getBlogPosts({
+      filters: { status: 'published' },
+      populate: ['featured_image', 'author', 'categories', 'tags'],
+      sort: 'published_at:desc',
+      pageSize: 12
+    });
+
+    return response.data.map((post: BlogPost) => ({
+      id: post.id,
+      title: post.attributes.title,
+      slug: post.attributes.slug,
+      excerpt: post.attributes.excerpt,
+      featuredImage: post.attributes.featured_image?.data?.attributes.url,
+      author: {
+        username: post.attributes.author.data.attributes.username,
+        email: post.attributes.author.data.attributes.email
+      },
+      categories: post.attributes.categories?.data.map((cat: any) => ({
+        id: cat.id,
+        name: cat.attributes.name,
+        slug: cat.attributes.slug,
+        color: cat.attributes.color
+      })) || [],
+      tags: post.attributes.tags?.data.map((tag: any) => ({
+        id: tag.id,
+        name: tag.attributes.name,
+        slug: tag.attributes.slug
+      })) || [],
+      publishedAt: post.attributes.published_at,
+      viewCount: post.attributes.view_count,
+      createdAt: post.attributes.createdAt
+    }));
+  } catch (error) {
+    console.error('Error fetching blog posts:', error);
+    return [];
+  }
 }
 
 const topics = [

@@ -124,6 +124,11 @@ export const mainNavigation: NavigationItem[] = [
     description: 'Our current and past initiatives',
     subItems: [
       {
+        name: 'Software Projects',
+        href: '#',
+        isSection: true
+      },
+      {
         name: 'Kivitendo',
         href: '/projects/kivitendo',
         description: 'Open source ERP system implementation'
@@ -134,9 +139,19 @@ export const mainNavigation: NavigationItem[] = [
         description: 'Linux Terminal Server Project for efficient multi-user computing'
       },
       {
+        name: 'Hardware Projects',
+        href: '#',
+        isSection: true
+      },
+      {
         name: 'Hardware',
         href: '/projects/hardware',
         description: 'Sustainable hardware development and upcycling'
+      },
+      {
+        name: 'Community Projects',
+        href: '#',
+        isSection: true
       },
       {
         name: 'Compirat',
@@ -166,6 +181,11 @@ export const mainNavigation: NavigationItem[] = [
     description: 'Volunteer and support our mission',
     subItems: [
       {
+        name: 'Individual Involvement',
+        href: '#',
+        isSection: true
+      },
+      {
         name: 'Volunteer',
         href: '/get-involved/volunteer',
         description: 'Join our team of volunteers'
@@ -176,6 +196,11 @@ export const mainNavigation: NavigationItem[] = [
         description: 'Share your expertise with us'
       },
       {
+        name: 'Learning Opportunities',
+        href: '#',
+        isSection: true
+      },
+      {
         name: 'Internships',
         href: '/get-involved/internships',
         description: 'Gain valuable experience'
@@ -184,6 +209,11 @@ export const mainNavigation: NavigationItem[] = [
         name: 'Work Reintegration',
         href: '/get-involved/work-reintegration',
         description: 'Rebuild your career with us'
+      },
+      {
+        name: 'Organization Support',
+        href: '#',
+        isSection: true
       },
       {
         name: 'Partnerships',

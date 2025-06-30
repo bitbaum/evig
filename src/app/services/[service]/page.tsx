@@ -13,11 +13,46 @@ import {
   Globe,
   Code,
   Palette,
-  Shield
+  Shield,
+  LucideIcon
 } from 'lucide-react'
 import Link from 'next/link'
 
-const services = {
+interface ServiceFeature {
+  title: string
+  description: string
+  icon: LucideIcon
+}
+
+interface ServiceProcess {
+  step: number
+  title: string
+  description: string
+}
+
+interface ServicePricing {
+  base: string
+  details: string[]
+  mediaPrices?: string[]
+}
+
+interface ServiceHero {
+  title: string
+  subtitle: string
+  description: string
+}
+
+interface ServiceDefinition {
+  title: string
+  description: string
+  icon: LucideIcon
+  hero: ServiceHero
+  features: ServiceFeature[]
+  pricing?: ServicePricing
+  process?: ServiceProcess[]
+}
+
+const services: Record<string, ServiceDefinition> = {
   'computer-repair-upgrades': {
     title: 'Computer Repair & Upgrades',
     description: 'Expert computer repairs and upgrades. We specialize in fixing what others can\'t, including motherboard repairs and component-level fixes.',
@@ -234,68 +269,6 @@ const services = {
       ]
     }
   },
-  'build-your-computer': {
-    title: 'Build Your Computer',
-    description: 'AI-powered sustainable computer builds prioritizing used and refurbished parts. Coming soon - express your interest to get notified when available.',
-    icon: Server,
-    hero: {
-      title: 'Build Your Computer',
-      subtitle: 'AI-Powered Sustainable Custom Builds',
-      description: 'Our advanced AI system will analyze our inventory and partner networks to suggest the perfect sustainable build for your specific needs. We prioritize used and refurbished components, only sourcing new parts when absolutely necessary.'
-    },
-    features: [
-      {
-        title: 'Sustainability-First Approach',
-        description: 'Our AI prioritizes used and refurbished parts from our inventory and partner network, only recommending new parts when absolutely necessary.',
-        icon: Server
-      },
-      {
-        title: 'AI-Powered Smart Selection',
-        description: 'Advanced AI analysis of your requirements matched against our comprehensive inventory and partner networks for optimal component selection.',
-        icon: Database
-      },
-      {
-        title: 'Revamped Quality Label',
-        description: 'All our assembled computers receive our exclusive "Revamped" label, certifying their sustainable origin and quality assurance.',
-        icon: CheckCircle2
-      },
-      {
-        title: 'Expert Assembly & Testing',
-        description: 'Professional assembly and thorough testing by experienced technicians, with quality guarantee and warranty coverage.',
-        icon: Zap
-      }
-    ],
-    comingSoon: true,
-    sustainabilityFocus: [
-      'Used parts prioritized over new',
-      'AI-powered inventory optimization',
-      'Partner network for rare components',
-      'Revamped sustainability certification',
-      'Circular economy principles'
-    ],
-    process: [
-      {
-        step: 1,
-        title: 'Needs Assessment',
-        description: 'Tell us your intended use case - business, creative work, gaming, or everyday computing - and any specific requirements.'
-      },
-      {
-        step: 2,
-        title: 'AI-Powered Analysis',
-        description: 'Our AI analyzes your needs against our inventory and partner networks, prioritizing used and refurbished components.'
-      },
-      {
-        step: 3,
-        title: 'Sustainable Sourcing',
-        description: 'We source primarily from used inventory, only ordering new parts if absolutely necessary for your build requirements.'
-      },
-      {
-        step: 4,
-        title: 'Assembly & Revamped Certification',
-        description: 'Professional assembly, testing, and application of our Revamped label certifying the sustainable build quality.'
-      }
-    ]
-  },
   'web-design-development': {
     title: 'Web Design & Development',
     description: 'Professional web design and development services using open source technologies. Modern, responsive websites built with sustainability and performance in mind.',
@@ -498,26 +471,7 @@ export default function ServicePage({ params }: { params: { service: string } })
         <section className="py-20">
           <div className="container mx-auto px-4">
             <div className="max-w-2xl mx-auto bg-white rounded-xl p-8 shadow-lg">
-              {isComingSoon && 'sustainabilityFocus' in service ? (
-                <>
-                  <h2 className="text-3xl font-bold mb-8 text-center">Our Sustainable Approach</h2>
-                  <div className="space-y-4">
-                    {service.sustainabilityFocus.map((focus, index) => (
-                      <div key={index} className="flex items-center">
-                        <CheckCircle2 className="w-5 h-5 text-green-500 mr-3" />
-                        <span className="text-gray-600">{focus}</span>
-                      </div>
-                    ))}
-                  </div>
-                  <div className="mt-8 p-6 bg-green-50 rounded-lg">
-                    <h3 className="text-lg font-semibold text-green-800 mb-2">The Revamped Label</h3>
-                    <p className="text-green-700">
-                      Every computer we assemble receives our exclusive "Revamped" label, certifying that it was built 
-                      with sustainability in mind, prioritizing used and refurbished components wherever possible.
-                    </p>
-                  </div>
-                </>
-              ) : 'pricing' in service ? (
+              {service.pricing ? (
                 <>
                   <h2 className="text-3xl font-bold mb-8 text-center">Pricing</h2>
                   <div className="text-center mb-8">
@@ -538,12 +492,10 @@ export default function ServicePage({ params }: { params: { service: string } })
         </section>
 
         {/* Process Section */}
-        {'process' in service && (
+        {service.process && (
           <section className="py-20 bg-gray-50">
             <div className="container mx-auto px-4">
-              <h2 className="text-3xl font-bold mb-12 text-center">
-                {isComingSoon ? 'How It Will Work' : 'Our Process'}
-              </h2>
+              <h2 className="text-3xl font-bold mb-12 text-center">Our Process</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                 {service.process.map((step, index) => (
                   <div key={index} className="text-center">
@@ -562,21 +514,16 @@ export default function ServicePage({ params }: { params: { service: string } })
         {/* CTA Section */}
         <section className="py-20 bg-gradient-to-r from-green-700 to-green-800 text-white">
           <div className="container mx-auto px-4 text-center">
-            <h2 className="text-4xl font-bold mb-6">
-              {isComingSoon ? 'Interested in This Service?' : 'Ready to Get Started?'}
-            </h2>
+            <h2 className="text-4xl font-bold mb-6">Ready to Get Started?</h2>
             <p className="text-xl mb-8 max-w-2xl mx-auto text-green-100">
-              {isComingSoon 
-                ? `Express your interest in our ${service.title.toLowerCase()} service and be notified when it becomes available.`
-                : `Contact us today to learn more about our ${service.title.toLowerCase()} services.`
-              }
+              Contact us today to learn more about our {service.title.toLowerCase()} services.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
                 href="/contact"
                 className="inline-block bg-white text-green-800 px-8 py-4 rounded-lg font-semibold hover:bg-green-50 transition-colors duration-300 text-lg"
               >
-                {isComingSoon ? 'Express Interest' : 'Contact Us'}
+                Contact Us
               </Link>
               <Link
                 href="/services"

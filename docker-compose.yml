@@ -1,0 +1,76 @@
+services:
+  nextjs:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - STRAPI_API_URL=http://strapi:1337
+      - NEXT_PUBLIC_STRAPI_URL=http://localhost:1337
+    depends_on:
+      - strapi
+    volumes:
+      - .:/app
+      - /app/node_modules
+    command: npm run dev
+
+  strapi:
+    build: ./strapi
+    ports:
+      - "1337:1337"
+    environment:
+      - NODE_ENV=development
+      - DATABASE_CLIENT=postgres
+      - DATABASE_URL=postgresql://strapi:strapi_password_2024@postgres:5432/strapi_db
+      - JWT_SECRET=${JWT_SECRET:-your-jwt-secret-here}
+      - ADMIN_JWT_SECRET=${ADMIN_JWT_SECRET:-your-admin-jwt-secret-here}
+      - TRANSFER_TOKEN_SALT=${TRANSFER_TOKEN_SALT:-your-transfer-token-salt-here}
+      - API_TOKEN_SALT=${API_TOKEN_SALT:-your-api-token-salt-here}
+      - HOST=0.0.0.0
+      - PORT=1337
+    volumes:
+      - ./strapi:/opt/app
+      - /opt/app/node_modules
+      - strapi_uploads:/opt/app/public/uploads
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      - POSTGRES_DB=strapi_db
+      - POSTGRES_USER=strapi
+      - POSTGRES_PASSWORD=strapi_password_2024
+      - POSTGRES_INITDB_ARGS=--encoding=UTF-8 --lc-collate=C --lc-ctype=C
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./postgres-init:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U strapi -d strapi_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  # Optional: Database Admin Interface
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@revampit.ch
+      - PGADMIN_DEFAULT_PASSWORD=admin123
+      - PGADMIN_CONFIG_SERVER_MODE=False
+    ports:
+      - "5050:80"
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    depends_on:
+      - postgres
+    profiles:
+      - admin
+
+volumes:
+  postgres_data:
+  strapi_uploads:
+  pgadmin_data:
