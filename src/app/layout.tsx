@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
 import { NextProvider } from "@/components/providers/NextProvider";
+import { DropdownProvider } from "@/lib/contexts/DropdownContext";
 import MainLayout from "@/components/layout/MainLayout";
 import "./globals.css";
 
@@ -26,9 +27,11 @@ export default function RootLayout({
       <body className={`${inter.className} antialiased`}>
         <ThemeProvider>
           <NextProvider>
-            <MainLayout>
-              {children}
-            </MainLayout>
+            <DropdownProvider>
+              <MainLayout>
+                {children}
+              </MainLayout>
+            </DropdownProvider>
           </NextProvider>
         </ThemeProvider>
       </body>
