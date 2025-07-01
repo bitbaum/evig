@@ -100,35 +100,35 @@ handle_feature_branch() {
     local current_branch=$(get_current_branch)
     
     if [ "$current_branch" = "$MAIN_BRANCH" ]; then
-        print_info "🌿 Auto-creating feature branch for deployment..."
-        print_info "📋 Current branch: $current_branch (main branch)"
+        print_info "🌿 Auto-creating feature branch for deployment..." >&2
+        print_info "📋 Current branch: $current_branch (main branch)" >&2
         
         # Generate automatic branch name with timestamp
         local timestamp=$(date '+%Y%m%d-%H%M%S')
         local branch_name="auto-deploy-$timestamp"
         local full_branch_name="feature/$branch_name"
         
-        echo "Command: git checkout -b $full_branch_name"
-        echo "----------------------------------------"
+        echo "Command: git checkout -b $full_branch_name" >&2
+        echo "----------------------------------------" >&2
         
         if git checkout -b "$full_branch_name"; then
-            print_status "✅ Created and switched to $full_branch_name"
+            print_status "✅ Created and switched to $full_branch_name" >&2
             current_branch="$full_branch_name"
             
             local github_repo=$(get_github_info)
             if [ -n "$github_repo" ]; then
-                print_info "👉 Branch will be visible at: https://github.com/$github_repo/tree/$full_branch_name"
+                print_info "👉 Branch will be visible at: https://github.com/$github_repo/tree/$full_branch_name" >&2
             fi
         else
-            print_error "❌ Failed to create feature branch"
+            print_error "❌ Failed to create feature branch" >&2
             exit 1
         fi
     else
-        print_status "✅ Working on existing branch: $current_branch"
+        print_status "✅ Working on existing branch: $current_branch" >&2
         
         local github_repo=$(get_github_info)
         if [ -n "$github_repo" ]; then
-            print_info "👉 View branch: https://github.com/$github_repo/tree/$current_branch"
+            print_info "👉 View branch: https://github.com/$github_repo/tree/$current_branch" >&2
         fi
     fi
     
