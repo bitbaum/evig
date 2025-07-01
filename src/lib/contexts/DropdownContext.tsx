@@ -73,7 +73,7 @@ export function DropdownProvider({ children }: DropdownProviderProps) {
     
     return {
       x,
-      y: rect.bottom + scrollY + 2, // Position dropdown just below trigger with small gap
+      y: rect.bottom + scrollY - 2, // Position dropdown to overlap slightly with trigger hover area
       width: dropdownWidth,
       alignment
     }
@@ -88,26 +88,25 @@ export function DropdownProvider({ children }: DropdownProviderProps) {
   }, [])
 
   // Set a new hover timeout with longer delay for more forgiving UX
-  const setHoverTimeout = useCallback((callback: () => void, delay: number = 150) => {
+  const setHoverTimeout = useCallback((callback: () => void, delay: number = 500) => {
     clearHoverTimeout()
     hoverTimeoutRef.current = setTimeout(callback, delay)
   }, [clearHoverTimeout])
 
   // Handle dropdown content mouse enter
   const handleDropdownMouseEnter = useCallback(() => {
-    console.log('Dropdown mouse enter - clearing timeout')
-    clearHoverTimeout()
-  }, [clearHoverTimeout])
+    if (hoverTimeoutRef.current) {
+      clearTimeout(hoverTimeoutRef.current)
+      hoverTimeoutRef.current = undefined
+    }
+  }, [])
 
   // Handle dropdown content mouse leave
   const handleDropdownMouseLeave = useCallback(() => {
-    console.log('Dropdown mouse leave - setting timeout to close')
-    setHoverTimeout(() => {
-      console.log('Closing dropdown due to timeout')
-      setOpenDropdownState(null)
-      setDropdownPosition(null)
-    })
-  }, [setHoverTimeout])
+    hoverTimeoutRef.current = setTimeout(() => {
+      setOpenDropdown(null)
+    }, 500) // 500ms delay before closing
+  }, [])
 
   const setOpenDropdown = useCallback((id: string | null) => {
     // Clear any existing timeout
@@ -168,6 +167,35 @@ export function DropdownProvider({ children }: DropdownProviderProps) {
       clearHoverTimeout()
     }
   }, [clearHoverTimeout])
+
+  // Enhanced global mouse tracking
+  useEffect(() => {
+    const handleGlobalMouseMove = (e: MouseEvent) => {
+      if (!openDropdown || !dropdownElements.current.has(openDropdown)) return
+      
+      const element = dropdownElements.current.get(openDropdown)!
+      const rect = element.getBoundingClientRect()
+      const isMultiColumn = element.dataset.multiColumn === 'true'
+      
+      // Expanded detection area for better UX
+      const margin = isMultiColumn ? 60 : 30
+      const isOverTrigger = (
+        e.clientX >= rect.left - 16 &&
+        e.clientX <= rect.right + 16 &&
+        e.clientY >= rect.top - 8 &&
+        e.clientY <= rect.bottom + 20
+      )
+      
+      if (isOverTrigger) {
+        handleDropdownMouseEnter()
+      }
+    }
+
+    if (openDropdown) {
+      document.addEventListener('mousemove', handleGlobalMouseMove)
+      return () => document.removeEventListener('mousemove', handleGlobalMouseMove)
+    }
+  }, [openDropdown, handleDropdownMouseEnter])
 
   const value: DropdownContextType = {
     openDropdown,

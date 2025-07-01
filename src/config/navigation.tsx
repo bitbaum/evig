@@ -9,6 +9,7 @@ export interface NavigationItem {
   highlight?: boolean
   isSection?: boolean
   badge?: string
+  icon?: React.ReactNode
 }
 
 export const mainNavigation: NavigationItem[] = [
