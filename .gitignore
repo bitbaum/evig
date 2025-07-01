@@ -42,3 +42,34 @@ next-env.d.ts
 
 # strapi
 /strapi
+
+# test results and reports
+test-results/
+playwright-report/
+coverage/
+
+# screenshots and temporary images
+*.png
+*.jpg
+*.jpeg
+*.gif
+!public/**/*.png
+!public/**/*.jpg
+!public/**/*.jpeg
+!public/**/*.gif
+
+# temporary files and system files
+.DS_Store
+Thumbs.db
+*.tmp
+*.temp
+
+# editor and IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# docker (if not using docker deployment)
+Dockerfile.dev
+docker-compose.dev.yml

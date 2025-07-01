@@ -12,8 +12,9 @@ import { MobileMenu } from './MobileMenu'
 import { WelcomeModal } from '@/components/ui/WelcomeModal'
 import { DropdownTrigger } from '@/components/ui/DropdownTrigger'
 import { MultiColumnDropdown } from '@/components/ui/MultiColumnDropdown'
+import { cn } from '@/lib/utils'
 
-export default function Header() {
+export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const mobileMenuTriggerRef = useRef<HTMLButtonElement>(null)
   const headerRef = useRef<HTMLElement>(null)
@@ -40,79 +41,74 @@ export default function Header() {
   return (
     <>
       <WelcomeModal />
-      <header 
-        ref={headerRef}
-        className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${
-          isScrolled ? 'bg-white shadow-md' : 'bg-white/90 backdrop-blur-sm'
-        }`}
-      >
-        <nav className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8" aria-label="Global">
-          <div className="flex lg:flex-1 items-center gap-4">
-            <Link href="/">
-              <Logo />
-            </Link>
-            {/* Experimental Site Banner in Swiss German */}
-            <div className="hidden sm:flex items-center bg-amber-50 border border-amber-200 rounded-full px-3 py-1 text-xs text-amber-700">
-              <div className="w-2 h-2 bg-amber-400 rounded-full mr-2 animate-pulse"></div>
-              <span className="font-medium">
-                Experimentelli Site - 
-                <a 
-                  href="https://revampit.org" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="text-amber-800 hover:text-amber-900 underline ml-1 transition-colors"
-                >
-                  zur aktuelle Site
-                </a>
+      <header className="fixed top-0 left-0 right-0 z-40 bg-white/90 backdrop-blur-md border-b border-gray-200/50">
+        <div className="max-w-7xl mx-auto">
+          <nav className="flex items-center justify-between px-6 py-4">
+            {/* Logo */}
+            <Link href="/" className="flex items-center gap-3 group">
+              <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-gradient-to-br from-green-600 to-green-700 shadow-lg group-hover:shadow-xl transition-all duration-200">
+                <span className="text-white font-bold text-xl">R</span>
+              </div>
+              <span className="text-xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">
+                RevampIT
               </span>
-            </div>
-          </div>
-          
-          <div className="flex lg:hidden">
-            <button
-              ref={mobileMenuTriggerRef}
-              type="button"
-              className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700 hover:bg-gray-100 transition-colors duration-200"
-              onClick={handleOpenMobileMenu}
-              aria-expanded={mobileMenuOpen}
-              aria-controls="mobile-menu-panel"
-            >
-              <span className="sr-only">Open main menu</span>
-              <Menu className="h-6 w-6" aria-hidden="true" />
-            </button>
-          </div>
-          
-          <div className="hidden lg:flex lg:gap-x-12">
-            {mainNavigation.map((item) => {
-              const hasDropdown = item.subItems && item.subItems.length > 0
-              const isMultiColumn = hasDropdown && item.subItems!.some(subItem => subItem.isSection)
-              
-              return (
-                <div key={item.name}>
-                  <DropdownTrigger
-                    id={item.name}
+            </Link>
+
+            {/* Navigation Links */}
+            <div className="hidden md:flex items-center space-x-1">
+              {mainNavigation.map((item) => (
+                <div key={item.name} className="relative">
+                                  <DropdownTrigger
+                    id={item.name.toLowerCase()}
                     href={item.href}
-                    hasDropdown={hasDropdown}
-                    isMultiColumn={isMultiColumn}
-                    className={item.highlight 
-                      ? 'bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 hover:text-white' 
-                      : ''
-                    }
+                    hasDropdown={!!item.subItems}
+                    isMultiColumn={item.name === 'Services' || item.name === 'Projects' || item.name === 'Get Involved'}
+                    className={cn(
+                      // Special styling for highlight items (Contact)
+                      item.highlight && [
+                        "bg-gradient-to-r from-green-600 to-green-700",
+                        "text-white hover:text-white",
+                        "shadow-lg hover:shadow-xl",
+                        "hover:from-green-700 hover:to-green-800",
+                        "transform hover:scale-105"
+                      ],
+                      // External link styling
+                      item.external && [
+                        "text-blue-600 hover:text-blue-700",
+                        "hover:bg-blue-50/80"
+                      ]
+                    )}
                   >
-                    {item.name}
+                    <span className="relative z-10">
+                      {item.name}
+                    </span>
                   </DropdownTrigger>
                   
-                  {hasDropdown && item.subItems && (
+                  {/* Dropdown Menu */}
+                  {item.subItems && (
                     <MultiColumnDropdown
-                      id={item.name}
+                      id={item.name.toLowerCase()}
                       items={item.subItems}
+                      isMultiColumn={item.name === 'Services' || item.name === 'Projects' || item.name === 'Get Involved'}
                     />
                   )}
                 </div>
-              )
-            })}
-          </div>
-        </nav>
+              ))}
+            </div>
+
+            {/* Mobile Menu Button */}
+            <button 
+              ref={mobileMenuTriggerRef}
+              className="md:hidden p-2 rounded-lg text-gray-700 hover:text-gray-900 hover:bg-gray-100/80 transition-colors duration-200"
+              onClick={handleOpenMobileMenu}
+              aria-label="Open menu"
+            >
+              <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+            </button>
+          </nav>
+        </div>
       </header>
       
       <MobileMenu 
