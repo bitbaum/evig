@@ -132,7 +132,8 @@ handle_feature_branch() {
         fi
     fi
     
-    echo "$current_branch"
+    # Return just the branch name without any output formatting
+    printf "%s" "$current_branch"
 }
 
 # Function to auto-fix common issues
