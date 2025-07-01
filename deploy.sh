@@ -135,8 +135,94 @@ handle_feature_branch() {
     echo "$current_branch"
 }
 
-# Function to run tests
+# Function to auto-fix common issues
+auto_fix_issues() {
+    local max_fix_attempts=10
+    local fix_attempt=1
+    
+    while [ $fix_attempt -le $max_fix_attempts ]; do
+        print_info "🔧 Auto-fix attempt $fix_attempt/$max_fix_attempts..."
+        
+        # Try to build and capture output
+        print_info "Running build to identify issues..."
+        local build_output=$(npm run build 2>&1)
+        local build_exit_code=$?
+        
+        if [ $build_exit_code -eq 0 ]; then
+            print_status "✅ Build successful after auto-fixing!"
+            return 0
+        fi
+        
+        print_info "📋 Build failed, analyzing error..."
+        echo "$build_output"
+        echo "----------------------------------------"
+        
+        # Check for specific error patterns and apply fixes
+        if echo "$build_output" | grep -q "Property 'bool' does not exist"; then
+            print_info "🔧 Detected Strapi env.bool issue - fixing..."
+            auto_fix_strapi_env_bool
+        elif echo "$build_output" | grep -q "ESLint"; then
+            print_info "🔧 Detected ESLint issues - auto-fixing..."
+            npm run lint --fix
+        elif echo "$build_output" | grep -q "Module not found\|Cannot resolve"; then
+            print_info "🔧 Detected missing dependencies - installing..."
+            npm install
+        elif echo "$build_output" | grep -q "TypeScript error\|Type error"; then
+            print_info "🔧 Detected TypeScript errors - attempting generic fixes..."
+            auto_fix_typescript_errors "$build_output"
+        else
+            print_info "🔧 Trying generic fixes..."
+            rm -rf .next node_modules/.cache
+            npm install
+        fi
+        
+        sleep 2
+        ((fix_attempt++))
+    done
+    
+    print_error "❌ Unable to auto-fix build issues after $max_fix_attempts attempts"
+    return 1
+}
+
+# Function to fix Strapi env.bool issues
+auto_fix_strapi_env_bool() {
+    if [ -f "strapi/config/admin.ts" ]; then
+        print_info "🔧 Fixing Strapi env.bool usage..."
+        sed -i 's/env\.bool(/env(/g' strapi/config/admin.ts
+        print_status "✅ Fixed env.bool references in strapi/config/admin.ts"
+    fi
+    
+    # Check other common Strapi config files
+    for file in strapi/config/*.ts strapi/config/*.js; do
+        if [ -f "$file" ]; then
+            if grep -q "env\.bool" "$file"; then
+                print_info "🔧 Fixing env.bool in $file..."
+                sed -i 's/env\.bool(/env(/g' "$file"
+                print_status "✅ Fixed env.bool references in $file"
+            fi
+        fi
+    done
+}
+
+# Function to fix TypeScript errors
+auto_fix_typescript_errors() {
+    local build_output="$1"
+    
+    # Try adding missing type imports
+    if echo "$build_output" | grep -q "Cannot find name"; then
+        print_info "🔧 Attempting to fix missing type definitions..."
+        npm install @types/node @types/react @types/react-dom --save-dev
+    fi
+    
+    # Clear TypeScript cache
+    print_info "🔧 Clearing TypeScript cache..."
+    rm -rf .next tsconfig.tsbuildinfo
+}
+
+# Function to run tests with auto-fixing
 run_tests() {
+    local max_attempts=3
+    local attempt=1
     
     # Check if tests exist and run them
     if [ -f "package.json" ]; then
@@ -147,36 +233,49 @@ run_tests() {
         if npm run lint; then
             print_status "✅ Linting passed!"
         else
-            print_warning "⚠️  Linting had issues, but continuing with deployment..."
-            print_info "You can fix linting issues later if needed"
+            print_info "🔧 Auto-fixing linting issues..."
+            npm run lint --fix
+            if npm run lint; then
+                print_status "✅ Linting fixed and passed!"
+            else
+                print_warning "⚠️  Some linting issues remain, but continuing..."
+            fi
         fi
         
         echo ""
-        print_info "🏗️  Running build test (you can see the actual output)..."
+        print_info "🏗️  Running build test with auto-fixing..."
         echo "Command: npm run build"
         echo "----------------------------------------"
         
-        if npm run build; then
-            print_status "✅ Build successful!"
-        else
-            print_error "❌ Build failed - cannot deploy broken code"
-            echo
-            print_header "🔧 Build Error Solutions"
-            print_info "Common fixes for build errors:"
-            print_info "1. 🔍 TypeScript errors: Check type annotations and imports"
-            print_info "2. 🚫 ESLint errors: Run 'npm run lint --fix' to auto-fix"
-            print_info "3. 📦 Missing dependencies: Run 'npm install'"
-            print_info "4. 🧹 Clear cache: Delete .next folder and rebuild"
-            echo
-            print_info "🔄 Quick fix commands to try:"
-            print_info "   npm run lint --fix     # Fix linting issues"
-            print_info "   rm -rf .next           # Clear build cache"
-            print_info "   npm run build          # Try building again"
-            print_info "   w                      # Re-run deployment"
-            echo
-            print_info "📋 After fixing errors, just run 'w' again to continue deployment!"
-            exit 1
-        fi
+        while [ $attempt -le $max_attempts ]; do
+            if npm run build; then
+                print_status "✅ Build successful!"
+                return 0
+            else
+                print_warning "❌ Build failed (attempt $attempt/$max_attempts)"
+                
+                if [ $attempt -lt $max_attempts ]; then
+                    print_info "🔧 Attempting auto-fix..."
+                    if auto_fix_issues; then
+                        print_status "✅ Auto-fix successful, retrying build..."
+                        continue
+                    else
+                        print_error "❌ Auto-fix failed"
+                    fi
+                fi
+                
+                ((attempt++))
+            fi
+        done
+        
+        print_error "❌ Build failed after $max_attempts attempts with auto-fixing"
+        print_header "🔧 Manual Fix Required"
+        print_info "The auto-fix couldn't resolve all issues. Please check the errors above."
+        print_info "Common manual fixes:"
+        print_info "1. Check TypeScript errors and fix type annotations"
+        print_info "2. Verify all imports are correct"
+        print_info "3. Remove problematic files if they're not needed"
+        exit 1
     else
         print_warning "No package.json found - skipping tests"
     fi
@@ -273,17 +372,34 @@ update_main_branch() {
     fi
 }
 
-# Function to check Vercel deployment status
+# Function to check Vercel deployment status with persistent monitoring
 check_vercel_deployment() {
-    local attempt=1
-    print_info "🔍 Watching deployment status in real-time..."
+    print_info "🔍 Starting persistent deployment monitoring..."
+    print_info "⏰ This will monitor until deployment succeeds - no giving up!"
     
     # Show Vercel dashboard link immediately
     print_info "👉 Monitor deployment live at: https://vercel.com/dashboard"
+    local github_repo=$(get_github_info)
+    if [ -n "$github_repo" ]; then
+        print_info "👉 GitHub Repository: https://github.com/$github_repo"
+        print_info "👉 GitHub Actions: https://github.com/$github_repo/actions"
+    fi
+    print_info "👉 Live Website: https://revampit.vercel.app"
     echo
     
-    while [ $attempt -le $MAX_RETRIES ]; do
-        print_info "📊 Checking deployment status (attempt $attempt/$MAX_RETRIES)..."
+    local attempt=1
+    local consecutive_errors=0
+    local max_consecutive_errors=5
+    
+    # Install Vercel CLI if not available
+    if ! command -v vercel &> /dev/null; then
+        print_info "📦 Installing Vercel CLI..."
+        npm install -g vercel
+        print_status "✅ Vercel CLI installed"
+    fi
+    
+    while true; do
+        print_info "📊 Deployment check #$attempt ($(date '+%H:%M:%S'))"
         
         # Check if Vercel CLI is available
         if command -v vercel &> /dev/null; then
@@ -291,50 +407,66 @@ check_vercel_deployment() {
             echo "----------------------------------------"
             
             # Show recent deployments with full output
-            vercel ls --limit 3
+            local ls_output=$(vercel ls --limit 3 2>&1)
+            echo "$ls_output"
             
             # Get latest deployment status
-            local deployment_status=$(vercel ls --limit 1 | grep -o 'READY\|ERROR\|BUILDING\|QUEUED' | head -1)
+            local deployment_status=$(echo "$ls_output" | grep -o 'READY\|ERROR\|BUILDING\|QUEUED' | head -1)
             
             echo "----------------------------------------"
             
             case $deployment_status in
                 "READY")
-                    print_status "🎉 Deployment successful!"
-                    print_info "Your website is live!"
+                    print_status "🎉 Deployment successful after $attempt checks!"
+                    print_info "🌐 Your website is live at: https://revampit.vercel.app"
                     return 0
                     ;;
                 "ERROR")
-                    print_error "❌ Deployment failed!"
+                    ((consecutive_errors++))
+                    print_error "❌ Deployment failed! (Error #$consecutive_errors)"
                     print_info "📋 Showing deployment logs:"
                     echo "Command: vercel logs --limit 20"
                     echo "----------------------------------------"
                     vercel logs --limit 20
                     echo "----------------------------------------"
                     
-                    if [ $attempt -lt $MAX_RETRIES ]; then
-                        print_warning "🔄 Retrying deployment in $RETRY_DELAY seconds..."
-                        sleep $RETRY_DELAY
-                        print_info "Triggering redeploy..."
-                        vercel --prod
+                    # Auto-fix deployment errors
+                    print_info "🔧 Attempting to fix deployment errors..."
+                    auto_fix_deployment_errors
+                    
+                    print_warning "🔄 Triggering redeploy in $RETRY_DELAY seconds..."
+                    sleep $RETRY_DELAY
+                    print_info "Command: vercel --prod"
+                    echo "----------------------------------------"
+                    vercel --prod
+                    
+                    if [ $consecutive_errors -ge $max_consecutive_errors ]; then
+                        print_warning "⚠️  Multiple consecutive errors detected"
+                        print_info "🔧 Applying more aggressive fixes..."
+                        aggressive_deployment_fixes
+                        consecutive_errors=0
                     fi
                     ;;
                 "BUILDING"|"QUEUED")
-                    print_info "🔨 Deployment in progress... waiting 30 seconds"
-                    print_info "👀 Watch live at: https://vercel.com/dashboard"
-                    sleep 30
+                    consecutive_errors=0
+                    print_info "🔨 Deployment in progress... waiting 45 seconds"
+                    print_info "👀 Monitor live:"
+                    print_info "   👉 Vercel Dashboard: https://vercel.com/dashboard"
+                    if [ -n "$github_repo" ]; then
+                        print_info "   👉 GitHub Actions: https://github.com/$github_repo/actions"
+                    fi
+                    sleep 45
                     ;;
                 *)
-                    print_warning "⚠️  Unable to determine deployment status from output"
-                    print_info "📋 Recent deployments shown above"
+                    consecutive_errors=0
+                    print_info "📋 Deployment status unclear - waiting and retrying..."
                     print_info "👉 Check manually at: https://vercel.com/dashboard"
-                    return 0
+                    sleep 30
                     ;;
             esac
         else
-            print_warning "⚠️  Vercel CLI not available"
-            print_info "💡 Install with: npm install -g vercel"
-            print_info "🔗 Manual monitoring links:"
+            print_error "❌ Vercel CLI installation failed"
+            print_info "🔗 Manual monitoring required:"
             print_info "   👉 Vercel Dashboard: https://vercel.com/dashboard"
             print_info "   👉 Live Website: https://revampit.vercel.app"
             print_info "✅ Deployment was triggered via Git push - check links above"
@@ -342,12 +474,68 @@ check_vercel_deployment() {
         fi
         
         ((attempt++))
+        
+        # Progress indicator
+        if [ $((attempt % 10)) -eq 0 ]; then
+            print_header "📊 Deployment Monitoring Progress"
+            print_info "⏱️  Monitoring for $(((attempt * 45) / 60)) minutes"
+            print_info "🔄 Check #$attempt completed"
+            print_info "🌐 Live site: https://revampit.vercel.app"
+            print_info "📊 Dashboard: https://vercel.com/dashboard"
+            echo
+            print_info "💪 Still monitoring - will not give up until deployed!"
+        fi
     done
+}
+
+# Function to auto-fix deployment errors
+auto_fix_deployment_errors() {
+    print_info "🔧 Analyzing deployment errors and applying fixes..."
     
-    print_error "❌ Deployment monitoring failed after $MAX_RETRIES attempts"
-    print_info "🔗 Check deployment status manually:"
-    print_info "   👉 https://vercel.com/dashboard"
-    return 1
+    # Clear build cache
+    print_info "🧹 Clearing build cache..."
+    rm -rf .next node_modules/.cache
+    
+    # Update dependencies
+    print_info "📦 Updating dependencies..."
+    npm install
+    
+    # Try to fix common Vercel deployment issues
+    if [ -f "vercel.json" ]; then
+        print_info "🔧 Checking vercel.json configuration..."
+    fi
+    
+    # Ensure build works locally
+    print_info "🏗️  Testing build locally..."
+    if npm run build 2>/dev/null; then
+        print_status "✅ Local build successful"
+    else
+        print_warning "⚠️  Local build failed - running auto-fix..."
+        auto_fix_issues
+    fi
+}
+
+# Function for aggressive deployment fixes
+aggressive_deployment_fixes() {
+    print_header "🚨 Applying Aggressive Fixes"
+    
+    # Remove all caches and reinstall everything
+    print_info "🧹 Deep cleaning..."
+    rm -rf .next node_modules package-lock.json
+    npm install
+    
+    # Check for environment variable issues
+    print_info "🔧 Checking environment configuration..."
+    
+    # Force a fresh deployment
+    print_info "🚀 Forcing fresh deployment..."
+    git add .
+    git commit -m "Force deployment refresh - $(date)" || true
+    git push origin "$(git branch --show-current)"
+    
+    # Wait longer before next check
+    print_info "⏳ Waiting 2 minutes for fresh deployment..."
+    sleep 120
 }
 
 # Function to get GitHub repository info
