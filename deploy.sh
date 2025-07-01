@@ -54,7 +54,6 @@ check_git_repo() {
 # Function to check if we have uncommitted changes
 check_uncommitted_changes() {
     if [ -n "$(git status --porcelain)" ]; then
-        print_header "Committing Changes"
         print_info "📝 Auto-committing uncommitted changes..."
         echo "Current changes:"
         git status --short
@@ -101,7 +100,6 @@ handle_feature_branch() {
     local current_branch=$(get_current_branch)
     
     if [ "$current_branch" = "$MAIN_BRANCH" ]; then
-        print_header "Creating Feature Branch"
         print_info "🌿 Auto-creating feature branch for deployment..."
         print_info "📋 Current branch: $current_branch (main branch)"
         
@@ -126,7 +124,6 @@ handle_feature_branch() {
             exit 1
         fi
     else
-        print_header "Using Existing Branch"
         print_status "✅ Working on existing branch: $current_branch"
         
         local github_repo=$(get_github_info)
@@ -140,7 +137,6 @@ handle_feature_branch() {
 
 # Function to run tests
 run_tests() {
-    print_header "Running Quality Checks"
     
     # Check if tests exist and run them
     if [ -f "package.json" ]; then
@@ -164,7 +160,21 @@ run_tests() {
             print_status "✅ Build successful!"
         else
             print_error "❌ Build failed - cannot deploy broken code"
-            print_info "Please fix build errors and try again"
+            echo
+            print_header "🔧 Build Error Solutions"
+            print_info "Common fixes for build errors:"
+            print_info "1. 🔍 TypeScript errors: Check type annotations and imports"
+            print_info "2. 🚫 ESLint errors: Run 'npm run lint --fix' to auto-fix"
+            print_info "3. 📦 Missing dependencies: Run 'npm install'"
+            print_info "4. 🧹 Clear cache: Delete .next folder and rebuild"
+            echo
+            print_info "🔄 Quick fix commands to try:"
+            print_info "   npm run lint --fix     # Fix linting issues"
+            print_info "   rm -rf .next           # Clear build cache"
+            print_info "   npm run build          # Try building again"
+            print_info "   w                      # Re-run deployment"
+            echo
+            print_info "📋 After fixing errors, just run 'w' again to continue deployment!"
             exit 1
         fi
     else
@@ -176,8 +186,6 @@ run_tests() {
 push_and_create_pr() {
     local branch_name=$1
     local github_repo=$(get_github_info)
-    
-    print_header "Git Operations"
     print_info "📤 Pushing branch to GitHub..."
     echo "Command: git push origin $branch_name"
     echo "----------------------------------------"
@@ -268,8 +276,6 @@ update_main_branch() {
 # Function to check Vercel deployment status
 check_vercel_deployment() {
     local attempt=1
-    
-    print_header "Monitoring Vercel Deployment"
     print_info "🔍 Watching deployment status in real-time..."
     
     # Show Vercel dashboard link immediately
@@ -421,28 +427,48 @@ main() {
     print_info "📂 Working directory: $(pwd)"
     echo
     
+    print_header "📋 Deployment Progress"
+    print_info "Step 1/6: ✅ Pre-flight checks"
+    print_info "Step 2/6: ⏳ Commit changes"
+    print_info "Step 3/6: ⏳ Create/update branch"
+    print_info "Step 4/6: ⏳ Run quality checks"
+    print_info "Step 5/6: ⏳ Push to GitHub & create PR"
+    print_info "Step 6/6: ⏳ Deploy to Vercel"
+    echo
+    
     # Pre-flight checks
-    print_header "Pre-flight Checks"
+    print_header "🔍 Step 1/6: Pre-flight Checks"
     check_git_repo
     echo
+    
+    # Commit changes
+    print_header "💾 Step 2/6: Commit Changes"  
     check_uncommitted_changes
+    print_status "✅ Step 2/6 Complete: Changes committed"
     echo
     
     # Handle feature branch workflow
+    print_header "🌿 Step 3/6: Branch Management"
     local current_branch=$(handle_feature_branch)
+    print_status "✅ Step 3/6 Complete: Branch ready"
     echo
     
     # Run tests
+    print_header "🧪 Step 4/6: Quality Checks"
     run_tests
+    print_status "✅ Step 4/6 Complete: Quality checks passed"
     echo
     
     # Push and create PR if needed
+    print_header "📤 Step 5/6: GitHub Operations"
     push_and_create_pr "$current_branch"
+    print_status "✅ Step 5/6 Complete: Code pushed to GitHub"
     echo
     
     # Update main branch
-    print_header "Updating Main Branch"
+    print_header "🔄 Step 6/6: Vercel Deployment"
     update_main_branch
+    print_status "✅ Main branch updated"
     echo
     
     # Monitor Vercel deployment
