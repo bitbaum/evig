@@ -3,11 +3,11 @@ import Link from 'next/link'
 import { ArrowRight, Calendar, Cpu, Wifi, Zap, Layers, Smartphone, Clock, AlertTriangle, Heart } from 'lucide-react'
 
 export const metadata: Metadata = {
-  title: 'IoT Solutions - Future Vision | RevampIT',
-  description: 'Our vision for ethical IoT development with open source hardware. Part of our long-term mission as a non-profit. Not currently offered - targeted for 2026-2028.',
+  title: 'IoT-Lösungen - Zukunftsvision | RevampIT',
+  description: 'Unsere Vision für ethische IoT-Entwicklung mit Open-Source-Hardware. Teil unserer langfristigen Mission als gemeinnützige Organisation. Derzeit nicht angeboten - angestrebt für 2026-2028.',
   openGraph: {
-    title: 'IoT Solutions - Future Vision | RevampIT',
-    description: 'Our vision for ethical IoT development with open source hardware. Part of our long-term mission as a non-profit. Not currently offered - targeted for 2026-2028.',
+    title: 'IoT-Lösungen - Zukunftsvision | RevampIT',
+    description: 'Unsere Vision für ethische IoT-Entwicklung mit Open-Source-Hardware. Teil unserer langfristigen Mission als gemeinnützige Organisation. Derzeit nicht angeboten - angestrebt für 2026-2028.',
     type: 'website',
   },
 }
@@ -22,14 +22,14 @@ export default function IoTSolutionsPage() {
           __html: JSON.stringify({
             '@context': 'https://schema.org',
             '@type': 'Service',
-            'name': 'IoT Solutions - Future Vision',
-            'description': 'Ethical IoT development vision for 2026-2028',
+            'name': 'IoT-Lösungen - Zukunftsvision',
+            'description': 'Ethische IoT-Entwicklungsvision für 2026-2028',
             'provider': {
               '@type': 'Organization',
               'name': 'RevampIT',
               'url': 'https://revampit.org'
             },
-            'serviceType': 'IoT Solutions',
+            'serviceType': 'IoT-Lösungen',
             'areaServed': {
               '@type': 'Country',
               'name': 'Switzerland'
@@ -48,24 +48,24 @@ export default function IoTSolutionsPage() {
               <div className="flex items-center gap-3 mb-6">
                 <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-red-100 text-red-800">
                   <AlertTriangle className="w-4 h-4 mr-1" />
-                  Not Currently Offered
+                  Derzeit nicht im Angebot
                 </span>
               </div>
-              <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">IoT Solutions</h1>
-              <h2 className="text-2xl md:text-3xl font-semibold mb-8 text-green-200">Future Vision: Ethical IoT for Community Good</h2>
+              <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">IoT-Lösungen</h1>
+              <h2 className="text-2xl md:text-3xl font-semibold mb-8 text-green-200">Zukunftsvision: Ethisches IoT für das Gemeinwohl</h2>
               <p className="text-xl text-green-100 mb-8">
-                <strong>This service is not currently available.</strong> As a mission-driven, self-sustaining non-profit, 
-                we envision creating IoT solutions that empower communities while protecting privacy and the environment.
+                <strong>Dieser Service ist derzeit nicht verfügbar.</strong> Als missionsgetriebene, sich selbst tragende gemeinnützige Organisation
+                stellen wir uns vor, IoT-Lösungen zu schaffen, die Gemeinschaften stärken und gleichzeitig Privatsphäre und Umwelt schützen.
               </p>
               
               <div className="bg-red-900/50 border border-red-600 rounded-lg p-6 mb-6">
                 <div className="flex items-start gap-3">
                   <AlertTriangle className="w-6 h-6 text-red-300 mt-1 flex-shrink-0" />
                   <div>
-                    <h3 className="text-lg font-semibold text-red-100 mb-2">Service Not Available</h3>
+                    <h3 className="text-lg font-semibold text-red-100 mb-2">Dienstleistung nicht verfügbar</h3>
                     <p className="text-red-200">
-                      We do not currently offer IoT development services. This represents our long-term vision 
-                      for creating technology that serves people and planet over profit.
+                      Wir bieten derzeit keine IoT-Entwicklungsdienste an. Dies repräsentiert unsere langfristige Vision
+                      für die Schaffung von Technologie, die den Menschen und dem Planeten dient, nicht dem Profit.
                     </p>
                   </div>
                 </div>
@@ -75,10 +75,10 @@ export default function IoTSolutionsPage() {
                 <div className="flex items-start gap-3">
                   <Calendar className="w-6 h-6 text-green-300 mt-1 flex-shrink-0" />
                   <div>
-                    <h3 className="text-lg font-semibold text-green-100 mb-2">Vision Timeline: 2026-2028</h3>
+                    <h3 className="text-lg font-semibold text-green-100 mb-2">Visions-Zeitplan: 2026-2028</h3>
                     <p className="text-green-200">
-                      Through community collaboration and sustainable development practices, we aim to create 
-                      IoT solutions that are transparent, privacy-respecting, and environmentally responsible.
+                      Durch Zusammenarbeit mit der Gemeinschaft und nachhaltige Entwicklungspraktiken streben wir an, IoT-Lösungen
+                      zu schaffen, die transparent, datenschutzfreundlich und umweltverantwortlich sind.
                     </p>
                   </div>
                 </div>
@@ -93,11 +93,11 @@ export default function IoTSolutionsPage() {
             <div className="text-center mb-16">
               <div className="flex items-center justify-center gap-2 mb-4">
                 <Heart className="w-8 h-8 text-green-600" />
-                <h2 className="text-4xl font-bold text-gray-900">IoT for Social Good</h2>
+                <h2 className="text-4xl font-bold text-gray-900">IoT für das soziale Wohl</h2>
               </div>
               <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                Our future IoT solutions will prioritize community empowerment, environmental monitoring, 
-                and digital sovereignty over surveillance and data extraction.
+                Unsere zukünftigen IoT-Lösungen werden die Stärkung der Gemeinschaft, die Umweltüberwachung
+                und die digitale Souveränität über Überwachung und Datenextraktion stellen.
               </p>
             </div>
             
@@ -105,33 +105,33 @@ export default function IoTSolutionsPage() {
               {[
                 {
                   icon: Heart,
-                  title: 'Community-Controlled Data',
-                  description: 'Local data ownership and processing to protect community privacy'
+                  title: 'Gemeinschaftlich kontrollierte Daten',
+                  description: 'Lokale Dateneigentümerschaft und -verarbeitung zum Schutz der Privatsphäre der Gemeinschaft'
                 },
                 {
                   icon: Cpu,
-                  title: 'Open Source Hardware',
-                  description: 'Transparent, modifiable designs that communities can understand and repair'
+                  title: 'Open-Source-Hardware',
+                  description: 'Transparente, modifizierbare Designs, die Gemeinschaften verstehen und reparieren können'
                 },
                 {
                   icon: Zap,
-                  title: 'Environmental Monitoring',
-                  description: 'Helping communities track and respond to environmental changes'
+                  title: 'Umweltüberwachung',
+                  description: 'Hilft Gemeinschaften, Umweltveränderungen zu verfolgen und darauf zu reagieren'
                 },
                 {
                   icon: Wifi,
-                  title: 'Cooperative Networks',
-                  description: 'Community-owned mesh networks for digital independence'
+                  title: 'Genossenschaftliche Netzwerke',
+                  description: 'Gemeinschaftseigene Mesh-Netzwerke für digitale Unabhängigkeit'
                 },
                 {
                   icon: Layers,
-                  title: 'Right to Repair',
-                  description: 'Designs that prioritize repairability and long-term sustainability'
+                  title: 'Recht auf Reparatur',
+                  description: 'Designs, die Reparierbarkeit und langfristige Nachhaltigkeit priorisieren'
                 },
                 {
                   icon: Smartphone,
-                  title: 'Digital Literacy',
-                  description: 'Educational components to build technical capacity in communities'
+                  title: 'Digitale Kompetenz',
+                  description: 'Bildungskomponenten zum Aufbau technischer Kapazitäten in Gemeinschaften'
                 }
               ].map((feature, index) => (
                 <div key={index} className="bg-green-50 rounded-xl p-6 shadow-lg border-l-4 border-green-600">
@@ -154,26 +154,26 @@ export default function IoTSolutionsPage() {
         <section className="py-20">
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto">
-              <h2 className="text-4xl font-bold text-gray-900 mb-8 text-center">Ethical Development Takes Time</h2>
+              <h2 className="text-4xl font-bold text-gray-900 mb-8 text-center">Ethische Entwicklung braucht Zeit</h2>
               <div className="bg-gray-50 rounded-xl p-8 border">
                 <p className="text-lg text-gray-700 mb-6">
-                  Unlike profit-driven IoT companies that prioritize fast deployment and data collection, 
-                  we're committed to responsible development that considers long-term community impact:
+                  Im Gegensatz zu gewinnorientierten IoT-Unternehmen, die eine schnelle Bereitstellung und Datenerfassung priorisieren,
+                  verpflichten wir uns zu einer verantwortungsvollen Entwicklung, die die langfristigen Auswirkungen auf die Gemeinschaft berücksichtigt:
                 </p>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-4">
                     <div className="flex items-start gap-3">
                       <div className="w-2 h-2 bg-green-600 rounded-full mt-3"></div>
                       <div>
-                        <h4 className="font-semibold text-gray-900">Community Consultation</h4>
-                        <p className="text-gray-600">Extensive engagement to understand real community needs and concerns</p>
+                        <h4 className="font-semibold text-gray-900">Konsultation der Gemeinschaft</h4>
+                        <p className="text-gray-600">Umfassendes Engagement, um die tatsächlichen Bedürfnisse und Anliegen der Gemeinschaft zu verstehen</p>
                       </div>
                     </div>
                     <div className="flex items-start gap-3">
                       <div className="w-2 h-2 bg-green-600 rounded-full mt-3"></div>
                       <div>
-                        <h4 className="font-semibold text-gray-900">Privacy-First Design</h4>
-                        <p className="text-gray-600">Developing systems that protect rather than exploit user data</p>
+                        <h4 className="font-semibold text-gray-900">Datenschutzfreundliches Design</h4>
+                        <p className="text-gray-600">Entwicklung von Systemen, die Benutzerdaten schützen statt ausnutzen</p>
                       </div>
                     </div>
                   </div>
@@ -181,15 +181,15 @@ export default function IoTSolutionsPage() {
                     <div className="flex items-start gap-3">
                       <div className="w-2 h-2 bg-green-600 rounded-full mt-3"></div>
                       <div>
-                        <h4 className="font-semibold text-gray-900">Sustainable Supply Chains</h4>
-                        <p className="text-gray-600">Researching ethical sourcing and circular economy approaches</p>
+                        <h4 className="font-semibold text-gray-900">Nachhaltige Lieferketten</h4>
+                        <p className="text-gray-600">Erforschung ethischer Beschaffung und Ansätze der Kreislaufwirtschaft</p>
                       </div>
                     </div>
                     <div className="flex items-start gap-3">
                       <div className="w-2 h-2 bg-green-600 rounded-full mt-3"></div>
                       <div>
-                        <h4 className="font-semibold text-gray-900">Open Source Development</h4>
-                        <p className="text-gray-600">Building collaborative development processes with transparency</p>
+                        <h4 className="font-semibold text-gray-900">Open-Source-Entwicklung</h4>
+                        <p className="text-gray-600">Aufbau kollaborativer Entwicklungsprozesse mit Transparenz</p>
                       </div>
                     </div>
                   </div>
@@ -203,34 +203,34 @@ export default function IoTSolutionsPage() {
         <section className="py-20 bg-white">
           <div className="container mx-auto px-4">
             <div className="text-center mb-16">
-              <h2 className="text-4xl font-bold text-gray-900 mb-4">Community-Centered Applications</h2>
+              <h2 className="text-4xl font-bold text-gray-900 mb-4">Gemeinschaftszentrierte Anwendungen</h2>
               <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                When we're ready, our IoT solutions will address real community challenges, 
-                not create new forms of surveillance or dependency.
+                Wenn wir bereit sind, werden unsere IoT-Lösungen echte Herausforderungen der Gemeinschaft angehen,
+                anstatt neue Formen der Überwachung oder Abhängigkeit zu schaffen.
               </p>
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               {[
                 {
-                  title: 'Community Environmental Monitoring',
-                  description: 'Citizen science networks for tracking air quality, water health, and climate impacts',
-                  applications: ['Community-owned sensors', 'Open data platforms', 'Early warning systems', 'Environmental justice documentation']
+                  title: 'Gemeinschaftliche Umweltüberwachung',
+                  description: 'Bürgerwissenschaftsnetzwerke zur Verfolgung der Luftqualität, der Wassergesundheit und der Klimaauswirkungen',
+                  applications: ['Gemeinschaftseigene Sensoren', 'Offene Datenplattformen', 'Frühwarnsysteme', 'Dokumentation zur Umweltgerechtigkeit']
                 },
                 {
-                  title: 'Cooperative Infrastructure',
-                  description: 'Shared technology infrastructure that reduces costs and increases community control',
-                  applications: ['Community mesh networks', 'Shared monitoring systems', 'Collective resource management', 'Democratic governance tools']
+                  title: 'Genossenschaftliche Infrastruktur',
+                  description: 'Gemeinsame Technologieinfrastruktur, die Kosten senkt und die Kontrolle der Gemeinschaft erhöht',
+                  applications: ['Gemeinschaftliche Mesh-Netzwerke', 'Gemeinsame Überwachungssysteme', 'Kollektives Ressourcenmanagement', 'Demokratische Governance-Tools']
                 },
                 {
-                  title: 'Elder and Disability Support',
-                  description: 'Privacy-respecting assistance technology that empowers rather than surveils',
-                  applications: ['Personal safety alerts', 'Health monitoring', 'Community connection tools', 'Accessibility enhancements']
+                  title: 'Unterstützung für Ältere und Behinderte',
+                  description: 'Datenschutzfreundliche Hilfstechnologie, die befähigt statt überwacht',
+                  applications: ['Persönliche Sicherheitswarnungen', 'Gesundheitsüberwachung', 'Tools zur Gemeinschaftsverbindung', 'Barrierefreiheitsverbesserungen']
                 },
                 {
-                  title: 'Urban Gardening & Food Security',
-                  description: 'Supporting community food systems with appropriate technology',
-                  applications: ['Community garden monitoring', 'Resource sharing platforms', 'Harvest coordination', 'Soil health tracking']
+                  title: 'Urbane Gärten & Ernährungssicherheit',
+                  description: 'Unterstützung gemeinschaftlicher Lebensmittelsysteme mit angemessener Technologie',
+                  applications: ['Überwachung von Gemeinschaftsgärten', 'Plattformen zum Teilen von Ressourcen', 'Erntekoordination', 'Verfolgung der Bodengesundheit']
                 }
               ].map((useCase, index) => (
                 <div key={index} className="bg-gray-50 rounded-xl p-8 border-2 border-gray-200">
@@ -254,36 +254,36 @@ export default function IoTSolutionsPage() {
         <section className="py-20 bg-gray-50">
           <div className="container mx-auto px-4 text-center">
             <div className="max-w-3xl mx-auto">
-              <h2 className="text-4xl font-bold text-gray-900 mb-6">Shape Our Research</h2>
+              <h2 className="text-4xl font-bold text-gray-900 mb-6">Gestalten Sie unsere Forschung mit</h2>
               <p className="text-xl text-gray-600 mb-8">
-                Help us research and develop IoT solutions that truly serve community needs. 
-                Your input is essential for ethical technology development.
+                Helfen Sie uns bei der Erforschung und Entwicklung von IoT-Lösungen, die wirklich den Bedürfnissen der Gemeinschaft dienen.
+                Ihr Beitrag ist für eine ethische Technologieentwicklung unerlässlich.
               </p>
               <div className="bg-green-50 border border-green-200 rounded-lg p-8">
-                <h3 className="text-2xl font-bold text-green-800 mb-4">Community Research Partnership</h3>
+                <h3 className="text-2xl font-bold text-green-800 mb-4">Forschungspartnerschaft mit der Gemeinschaft</h3>
                 <p className="text-green-700 mb-6">
-                  Join our research process to explore how IoT technology can support your community 
-                  without compromising privacy or autonomy. We need diverse voices to build better solutions.
+                  Nehmen Sie an unserem Forschungsprozess teil, um zu untersuchen, wie die IoT-Technologie Ihre Gemeinschaft unterstützen kann,
+                  ohne die Privatsphäre oder Autonomie zu beeinträchtigen. Wir brauchen vielfältige Stimmen, um bessere Lösungen zu entwickeln.
                 </p>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
                   <div className="text-center">
-                    <div className="text-2xl font-bold text-green-800">Community</div>
-                    <div className="text-green-700">Led design process</div>
+                    <div className="text-2xl font-bold text-green-800">Gemeinschaft</div>
+                    <div className="text-green-700">Geführter Designprozess</div>
                   </div>
                   <div className="text-center">
-                    <div className="text-2xl font-bold text-green-800">Open</div>
-                    <div className="text-green-700">Source everything</div>
+                    <div className="text-2xl font-bold text-green-800">Offen</div>
+                    <div className="text-green-700">Alles Open Source</div>
                   </div>
                   <div className="text-center">
-                    <div className="text-2xl font-bold text-green-800">Privacy</div>
-                    <div className="text-green-700">First architecture</div>
+                    <div className="text-2xl font-bold text-green-800">Privatsphäre</div>
+                    <div className="text-green-700">Datenschutzfreundliche Architektur</div>
                   </div>
                 </div>
                 <Link
                   href="/contact"
                   className="inline-flex items-center bg-green-600 text-white px-8 py-4 rounded-lg font-semibold hover:bg-green-700 transition-colors duration-300 text-lg"
                 >
-                  Join Research Community
+                  Treten Sie der Forschungsgemeinschaft bei
                   <ArrowRight className="ml-2 w-5 h-5" />
                 </Link>
               </div>
@@ -294,23 +294,23 @@ export default function IoTSolutionsPage() {
         {/* Current Services CTA */}
         <section className="py-20 bg-gradient-to-r from-green-700 to-green-800 text-white">
           <div className="container mx-auto px-4 text-center">
-            <h2 className="text-4xl font-bold mb-6">Need Tech Support Today?</h2>
+            <h2 className="text-4xl font-bold mb-6">Benötigen Sie heute technische Unterstützung?</h2>
             <p className="text-xl mb-8 max-w-2xl mx-auto text-green-100">
-              While we develop our IoT vision, we're actively supporting communities with 
-              open source solutions and hardware refurbishment.
+              Während wir unsere IoT-Vision entwickeln, unterstützen wir aktiv Gemeinschaften mit
+              Open-Source-Lösungen und der Wiederaufbereitung von Hardware.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
                 href="/services/open-source-solutions"
                 className="inline-block bg-white text-green-800 px-8 py-4 rounded-lg font-semibold hover:bg-green-50 transition-colors duration-300 text-lg"
               >
-                Open Source Solutions
+                Open-Source-Lösungen
               </Link>
               <Link
                 href="/get-involved"
                 className="inline-block border-2 border-white text-white px-8 py-4 rounded-lg font-semibold hover:bg-white/10 transition-colors duration-300 text-lg"
               >
-                Get Involved
+                Machen Sie mit
               </Link>
             </div>
           </div>
@@ -318,4 +318,4 @@ export default function IoTSolutionsPage() {
       </main>
     </>
   )
-} 
+}

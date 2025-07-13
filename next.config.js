@@ -2,7 +2,19 @@
 const nextConfig = {
   images: {
     unoptimized: false,
-    remotePatterns: [],
+    remotePatterns: [
+      {
+        protocol: 'http',
+        hostname: 'localhost',
+        port: '1337',
+        pathname: '/uploads/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'strapi.revampit.ch',
+        pathname: '/uploads/**',
+      },
+    ],
   },
   webpack: (config, { isServer }) => {
     // Font loader configuration

@@ -42,29 +42,29 @@ import {
 import Link from 'next/link'
 
 export const metadata: Metadata = {
-  title: 'Open Source Solutions | RevampIT',
-  description: 'Expert open source software implementation, support, and training services for businesses and individuals.',
+  title: 'Open-Source-Lösungen | RevampIT',
+  description: 'Professionelle Implementierung, Unterstützung und Schulung für Open-Source-Software für Unternehmen und Privatpersonen.',
 }
 
 const benefits = [
   {
-    title: 'Cost-Effective',
-    description: 'No licensing fees and lower total cost of ownership compared to proprietary solutions.',
+    title: 'Kosteneffektiv',
+    description: 'Keine Lizenzgebühren und niedrigere Gesamtbetriebskosten im Vergleich zu proprietären Lösungen.',
     icon: DollarSign
   },
   {
-    title: 'Enhanced Security',
-    description: 'Transparent code that can be audited by anyone, leading to faster vulnerability detection and fixes.',
+    title: 'Erhöhte Sicherheit',
+    description: 'Transparenter Code, der von jedermann überprüft werden kann, was zu einer schnelleren Erkennung und Behebung von Schwachstellen führt.',
     icon: Shield
   },
   {
-    title: 'Freedom & Flexibility',
-    description: 'No vendor lock-in. You own your data and can customize the software to your needs.',
+    title: 'Freiheit & Flexibilität',
+    description: 'Kein Anbieter-Lock-in. Sie besitzen Ihre Daten und können die Software an Ihre Bedürfnisse anpassen.',
     icon: Globe
   },
   {
-    title: 'Community Support',
-    description: 'Access to a global community of developers and users for support and innovation.',
+    title: 'Community-Unterstützung',
+    description: 'Zugang zu einer globalen Gemeinschaft von Entwicklern und Benutzern für Unterstützung und Innovation.',
     icon: Users
   }
 ]
@@ -72,196 +72,196 @@ const benefits = [
 const popularApps = [
   {
     name: 'LibreOffice',
-    description: 'Professional office suite that rivals Microsoft Office, with full compatibility and advanced features.',
+    description: 'Professionelle Office-Suite, die mit Microsoft Office konkurriert, mit voller Kompatibilität und erweiterten Funktionen.',
     icon: BookOpen,
-    comparison: 'Microsoft Office alternative'
+    comparison: 'Microsoft Office-Alternative'
   },
   {
     name: 'Nextcloud',
-    description: 'Secure file sharing and collaboration platform that competes with Dropbox and Google Drive.',
+    description: 'Sichere Filesharing- und Kollaborationsplattform, die mit Dropbox und Google Drive konkurriert.',
     icon: Server,
-    comparison: 'Dropbox/Google Drive alternative'
+    comparison: 'Dropbox/Google Drive-Alternative'
   },
   {
     name: 'GIMP',
-    description: 'Professional image editing software with capabilities matching Adobe Photoshop.',
+    description: 'Professionelle Bildbearbeitungssoftware mit Funktionen, die Adobe Photoshop entsprechen.',
     icon: Code,
-    comparison: 'Photoshop alternative'
+    comparison: 'Photoshop-Alternative'
   },
   {
     name: 'PostgreSQL',
-    description: 'Enterprise-grade database system that rivals Oracle and SQL Server in performance and features.',
+    description: 'Datenbanksystem der Enterprise-Klasse, das in Leistung und Funktionen mit Oracle und SQL Server konkurriert.',
     icon: Database,
-    comparison: 'Oracle/SQL Server alternative'
+    comparison: 'Oracle/SQL Server-Alternative'
   }
 ]
 
 const features = [
   {
-    title: 'Open Source Consulting',
-    description: 'Strategic guidance on open source software selection and implementation for your specific needs.',
+    title: 'Open-Source-Beratung',
+    description: 'Strategische Anleitung zur Auswahl und Implementierung von Open-Source-Software für Ihre spezifischen Bedürfnisse.',
     icon: Code
   },
   {
-    title: 'Custom Development',
-    description: 'Tailored open source solutions and modifications to meet your unique requirements.',
+    title: 'Kundenspezifische Entwicklung',
+    description: 'Massgeschneiderte Open-Source-Lösungen und -Anpassungen, um Ihre einzigartigen Anforderungen zu erfüllen.',
     icon: Terminal
   },
   {
-    title: 'Community Integration',
-    description: 'Help you become an active part of the open source community and leverage its benefits.',
+    title: 'Community-Integration',
+    description: 'Hilft Ihnen, ein aktiver Teil der Open-Source-Community zu werden und deren Vorteile zu nutzen.',
     icon: Users
   },
   {
-    title: 'Security & Compliance',
-    description: 'Ensure your open source solutions meet security standards and compliance requirements.',
+    title: 'Sicherheit & Compliance',
+    description: 'Stellen Sie sicher, dass Ihre Open-Source-Lösungen die Sicherheitsstandards und Compliance-Anforderungen erfüllen.',
     icon: Shield
   }
 ]
 
 const consumerComparisons = [
   {
-    category: 'Office Suite',
+    category: 'Office-Paket',
     openSource: {
       name: 'LibreOffice',
       icon: FileSpreadsheet,
-      cost: 'Free, no subscriptions',
+      cost: 'Kostenlos, keine Abonnements',
       comparisons: [
-        'Full feature set matching Microsoft Office',
-        'Export to any document format',
-        'No forced upgrades or telemetry',
-        'Community-driven development',
-        'Available in multiple languages',
-        'Complete control over your documents'
+        'Vollständiger Funktionsumfang, der Microsoft Office entspricht',
+        'Export in jedes Dokumentenformat',
+        'Keine erzwungenen Upgrades oder Telemetrie',
+        'Community-gesteuerte Entwicklung',
+        'Verfügbar in mehreren Sprachen',
+        'Vollständige Kontrolle über Ihre Dokumente'
       ]
     },
     proprietary: {
       name: 'Microsoft 365',
       icon: FileText,
-      cost: 'From CHF 69/year per user',
+      cost: 'Ab CHF 69/Jahr pro Benutzer',
       comparisons: [
-        'Full feature set with cloud integration',
-        'Native Microsoft format support',
-        'Regular updates and new features',
-        'Corporate-driven development',
-        'Available in multiple languages',
-        'Subscription required for full features'
+        'Vollständiger Funktionsumfang mit Cloud-Integration',
+        'Native Unterstützung des Microsoft-Formats',
+        'Regelmässige Updates und neue Funktionen',
+        'Unternehmensgesteuerte Entwicklung',
+        'Verfügbar in mehreren Sprachen',
+        'Abonnement für volle Funktionalität erforderlich'
       ]
     }
   },
   {
-    category: 'Operating System',
+    category: 'Betriebssystem',
     openSource: {
       name: 'Linux',
       icon: Terminal,
-      cost: 'Free, no licenses',
+      cost: 'Kostenlos, keine Lizenzen',
       comparisons: [
-        'Fully customizable and inspectable',
-        'No forced updates or telemetry',
-        'Thousands of free applications',
-        'Community-driven security updates',
-        'Available in multiple distributions',
-        'Complete control over your system'
+        'Vollständig anpassbar und überprüfbar',
+        'Keine erzwungenen Updates oder Telemetrie',
+        'Tausende von kostenlosen Anwendungen',
+        'Community-gesteuerte Sicherheitsupdates',
+        'Verfügbar in mehreren Distributionen',
+        'Vollständige Kontrolle über Ihr System'
       ]
     },
     proprietary: {
       name: 'Windows/macOS',
       icon: Monitor,
-      cost: 'License fees and subscriptions',
+      cost: 'Lizenzgebühren und Abonnements',
       comparisons: [
-        'Pre-installed on most hardware',
-        'Built-in telemetry and updates',
-        'Official app stores and support',
-        'Corporate-driven updates',
-        'Limited customization options',
-        'Regular license renewals needed'
+        'Auf den meisten Geräten vorinstalliert',
+        'Integrierte Telemetrie und Updates',
+        'Offizielle App-Stores und Support',
+        'Unternehmensgesteuerte Updates',
+        'Begrenzte Anpassungsmöglichkeiten',
+        'Regelmässige Lizenzerneuerungen erforderlich'
       ]
     }
   },
   {
-    category: 'File Sync & Share',
+    category: 'Datei-Synchronisierung & -Freigabe',
     openSource: {
       name: 'Nextcloud',
       icon: Cloud,
-      cost: 'Free, self-hosted',
+      cost: 'Kostenlos, selbst gehostet',
       comparisons: [
-        'Complete control over your data',
-        'Hundreds of integrated apps',
-        'GDPR and privacy compliant',
-        'Community-driven development',
-        'Available in multiple languages',
-        'No storage limits or fees'
+        'Vollständige Kontrolle über Ihre Daten',
+        'Hunderte von integrierten Apps',
+        'DSGVO- und datenschutzkonform',
+        'Community-gesteuerte Entwicklung',
+        'Verfügbar in mehreren Sprachen',
+        'Keine Speicherbegrenzungen oder Gebühren'
       ]
     },
     proprietary: {
       name: 'Dropbox/Google Drive',
       icon: Cloud,
-      cost: 'From CHF 10/month',
+      cost: 'Ab CHF 10/Monat',
       comparisons: [
-        'Easy to use and set up',
-        'Integrated with other services',
-        'Automatic sync and backup',
-        'Corporate-driven development',
-        'Available in multiple languages',
-        'Storage limits and fees apply'
+        'Einfach zu bedienen und einzurichten',
+        'Integriert mit anderen Diensten',
+        'Automatische Synchronisierung und Sicherung',
+        'Unternehmensgesteuerte Entwicklung',
+        'Verfügbar in mehreren Sprachen',
+        'Speicherbegrenzungen und Gebühren fallen an'
       ]
     }
   },
   {
-    category: 'Web Browser',
+    category: 'Webbrowser',
     openSource: {
       name: 'Firefox/Brave',
       icon: Globe,
-      cost: 'Free',
+      cost: 'Kostenlos',
       comparisons: [
-        'Privacy-focused with no tracking',
-        'Works with all web standards',
-        'Regular security updates',
-        'Community-driven development',
-        'Available in multiple languages',
-        'No data collection'
+        'Datenschutzorientiert ohne Tracking',
+        'Funktioniert mit allen Webstandards',
+        'Regelmässige Sicherheitsupdates',
+        'Community-gesteuerte Entwicklung',
+        'Verfügbar in mehreren Sprachen',
+        'Keine Datenerfassung'
       ]
     },
     proprietary: {
       name: 'Chrome/Edge',
       icon: Chrome,
-      cost: 'Free with data collection',
+      cost: 'Kostenlos mit Datenerfassung',
       comparisons: [
-        'Extensive data collection and tracking',
-        'Works with all web standards',
-        'Regular security updates',
-        'Corporate-driven development',
-        'Available in multiple languages',
-        'Data collection required'
+        'Umfangreiche Datenerfassung und Tracking',
+        'Funktioniert mit allen Webstandards',
+        'Regelmässige Sicherheitsupdates',
+        'Unternehmensgesteuerte Entwicklung',
+        'Verfügbar in mehreren Sprachen',
+        'Datenerfassung erforderlich'
       ]
     }
   },
   {
-    category: 'Graphics Editing',
+    category: 'Grafikbearbeitung',
     openSource: {
       name: 'GIMP/Inkscape',
       icon: Paintbrush,
-      cost: 'Free',
+      cost: 'Kostenlos',
       comparisons: [
-        'Professional-grade tools',
-        'Works with all image formats',
-        'Regular security updates',
-        'Community-driven development',
-        'Available in multiple languages',
-        'No watermarks or limitations'
+        'Professionelle Werkzeuge',
+        'Funktioniert mit allen Bildformaten',
+        'Regelmässige Sicherheitsupdates',
+        'Community-gesteuerte Entwicklung',
+        'Verfügbar in mehreren Sprachen',
+        'Keine Wasserzeichen oder Einschränkungen'
       ]
     },
     proprietary: {
       name: 'Adobe Photoshop/Illustrator',
       icon: Image,
-      cost: 'CHF 24/month',
+      cost: 'CHF 24/Monat',
       comparisons: [
-        'Industry standard tools',
-        'Works with all image formats',
-        'Regular security updates',
-        'Corporate-driven development',
-        'Available in multiple languages',
-        'Subscription required'
+        'Branchenübliche Werkzeuge',
+        'Funktioniert mit allen Bildformaten',
+        'Regelmässige Sicherheitsupdates',
+        'Unternehmensgesteuerte Entwicklung',
+        'Verfügbar in mehreren Sprachen',
+        'Abonnement erforderlich'
       ]
     }
   },
@@ -270,56 +270,56 @@ const consumerComparisons = [
     openSource: {
       name: 'Blender',
       icon: Film,
-      cost: 'Free',
+      cost: 'Kostenlos',
       comparisons: [
-        'Studio-quality 3D/VFX/animation',
-        'Massive plugin ecosystem',
-        'Regular security updates',
-        'Community-driven development',
-        'Available in multiple languages',
-        'No watermarks or limitations'
+        '3D/VFX/Animation in Studioqualität',
+        'Riesiges Plugin-Ökosystem',
+        'Regelmässige Sicherheitsupdates',
+        'Community-gesteuerte Entwicklung',
+        'Verfügbar in mehreren Sprachen',
+        'Keine Wasserzeichen oder Einschränkungen'
       ]
     },
     proprietary: {
       name: 'Autodesk Maya/3ds Max',
       icon: Video,
-      cost: 'Complex licensing fees',
+      cost: 'Komplexe Lizenzgebühren',
       comparisons: [
-        'Industry standard tools',
-        'Works with all formats',
-        'Regular security updates',
-        'Corporate-driven development',
-        'Available in multiple languages',
-        'License and support required'
+        'Branchenübliche Werkzeuge',
+        'Funktioniert mit allen Formaten',
+        'Regelmässige Sicherheitsupdates',
+        'Unternehmensgesteuerte Entwicklung',
+        'Verfügbar in mehreren Sprachen',
+        'Lizenz und Support erforderlich'
       ]
     }
   },
   {
-    category: 'Social Media',
+    category: 'Soziale Medien',
     openSource: {
       name: 'Mastodon/Pixelfed',
       icon: Users,
-      cost: 'Free, self-hosted or join a server',
+      cost: 'Kostenlos, selbst gehostet oder einem Server beitreten',
       comparisons: [
-        'Decentralized network (Fediverse)',
-        'No algorithm manipulation',
-        'No data collection or ads',
-        'Community-driven moderation',
-        'Available in multiple languages',
-        'Export your data anytime'
+        'Dezentrales Netzwerk (Fediverse)',
+        'Keine Algorithmus-Manipulation',
+        'Keine Datenerfassung oder Werbung',
+        'Community-gesteuerte Moderation',
+        'Verfügbar in mehreren Sprachen',
+        'Exportieren Sie Ihre Daten jederzeit'
       ]
     },
     proprietary: {
       name: 'Twitter/Instagram',
       icon: Share2,
-      cost: 'Free with ads and data collection',
+      cost: 'Kostenlos mit Werbung und Datenerfassung',
       comparisons: [
-        'Centralized platform control',
-        'Algorithm-driven content',
-        'Extensive data collection',
-        'Corporate moderation',
-        'Available in multiple languages',
-        'Limited data portability'
+        'Zentralisierte Plattformkontrolle',
+        'Algorithmus-gesteuerter Inhalt',
+        'Umfangreiche Datenerfassung',
+        'Unternehmensmoderation',
+        'Verfügbar in mehreren Sprachen',
+        'Begrenzte Datenportabilität'
       ]
     }
   }
@@ -327,89 +327,89 @@ const consumerComparisons = [
 
 const businessComparisons = [
   {
-    category: 'Database',
+    category: 'Datenbank',
     openSource: {
       name: 'PostgreSQL/MariaDB',
       icon: Database,
-      cost: 'Free, no seat fees',
+      cost: 'Kostenlos, keine Platzgebühren',
       comparisons: [
-        'Enterprise-grade performance',
-        'Unlimited extensions and plugins',
-        'Strong ACID compliance',
-        'Community-driven security',
-        'Available for all platforms',
-        'Complete control over data'
+        'Leistung auf Unternehmensebene',
+        'Unbegrenzte Erweiterungen und Plugins',
+        'Starke ACID-Konformität',
+        'Community-gesteuerte Sicherheit',
+        'Verfügbar für alle Plattformen',
+        'Vollständige Kontrolle über die Daten'
       ]
     },
     proprietary: {
       name: 'Oracle DB',
       icon: Database,
-      cost: 'Complex licensing fees',
+      cost: 'Komplexe Lizenzgebühren',
       comparisons: [
-        'Enterprise-grade features',
-        'Official support and training',
-        'Strong security features',
-        'Corporate-driven updates',
-        'Available for all platforms',
-        'License and support required'
+        'Funktionen auf Unternehmensebene',
+        'Offizieller Support und Schulungen',
+        'Starke Sicherheitsfunktionen',
+        'Unternehmensgesteuerte Updates',
+        'Verfügbar für alle Plattformen',
+        'Lizenz und Support erforderlich'
       ]
     }
   },
   {
-    category: 'Virtualization',
+    category: 'Virtualisierung',
     openSource: {
       name: 'KVM/QEMU',
       icon: Server,
-      cost: 'Free, no licenses',
+      cost: 'Kostenlos, keine Lizenzen',
       comparisons: [
-        'Fully open hypervisor',
-        'Integrates with any toolchain',
-        'Enterprise-grade features',
-        'Community-driven security',
-        'Available for all platforms',
-        'Complete control over VMs'
+        'Vollständig offener Hypervisor',
+        'Integriert sich in jede Toolchain',
+        'Funktionen auf Unternehmensebene',
+        'Community-gesteuerte Sicherheit',
+        'Verfügbar für alle Plattformen',
+        'Vollständige Kontrolle über VMs'
       ]
     },
     proprietary: {
       name: 'VMware vSphere',
       icon: Server,
-      cost: 'Per-CPU/socket licenses',
+      cost: 'Lizenzen pro CPU/Sockel',
       comparisons: [
-        'Enterprise-grade features',
-        'Official support and training',
-        'Strong security features',
-        'Corporate-driven updates',
-        'Available for all platforms',
-        'License and support required'
+        'Funktionen auf Unternehmensebene',
+        'Offizieller Support und Schulungen',
+        'Starke Sicherheitsfunktionen',
+        'Unternehmensgesteuerte Updates',
+        'Verfügbar für alle Plattformen',
+        'Lizenz und Support erforderlich'
       ]
     }
   },
   {
-    category: 'Container Platform',
+    category: 'Container-Plattform',
     openSource: {
       name: 'Kubernetes',
       icon: Box,
-      cost: 'Free, no lock-in',
+      cost: 'Kostenlos, kein Lock-in',
       comparisons: [
-        'Run anywhere, no cloud lock',
-        'Fork and customize as needed',
-        'Enterprise-grade features',
-        'Community-driven security',
-        'Available for all platforms',
-        'Complete control over containers'
+        'Überall lauffähig, kein Cloud-Lock',
+        'Nach Bedarf forken und anpassen',
+        'Funktionen auf Unternehmensebene',
+        'Community-gesteuerte Sicherheit',
+        'Verfügbar für alle Plattformen',
+        'Vollständige Kontrolle über Container'
       ]
     },
     proprietary: {
       name: 'AWS ECS/EKS',
       icon: Cloud,
-      cost: 'Complex pricing model',
+      cost: 'Komplexes Preismodell',
       comparisons: [
-        'Managed service with support',
-        'Integrated with AWS ecosystem',
-        'Enterprise-grade features',
-        'Corporate-driven updates',
-        'Available on AWS platform',
-        'Vendor lock-in potential'
+        'Verwalteter Dienst mit Support',
+        'Integriert in das AWS-Ökosystem',
+        'Funktionen auf Unternehmensebene',
+        'Unternehmensgesteuerte Updates',
+        'Verfügbar auf der AWS-Plattform',
+        'Potenzial für Anbieter-Lock-in'
       ]
     }
   },
@@ -418,85 +418,85 @@ const businessComparisons = [
     openSource: {
       name: 'Jenkins/GitLab CI',
       icon: GitBranch,
-      cost: 'Free, self-hosted',
+      cost: 'Kostenlos, selbst gehostet',
       comparisons: [
-        'Infinite plugins and extensions',
-        'Self-host or cloud deployment',
-        'Enterprise-grade features',
-        'Community-driven security',
-        'Available for all platforms',
-        'Complete control over pipeline'
+        'Unendliche Plugins und Erweiterungen',
+        'Selbst-Hosting oder Cloud-Bereitstellung',
+        'Funktionen auf Unternehmensebene',
+        'Community-gesteuerte Sicherheit',
+        'Verfügbar für alle Plattformen',
+        'Vollständige Kontrolle über die Pipeline'
       ]
     },
     proprietary: {
       name: 'TeamCity/CircleCI',
       icon: GitBranch,
-      cost: 'Per-user or per-build fees',
+      cost: 'Gebühren pro Benutzer oder pro Build',
       comparisons: [
-        'Managed service with support',
-        'Integrated with other tools',
-        'Enterprise-grade features',
-        'Corporate-driven updates',
-        'Available for all platforms',
-        'Usage-based pricing'
+        'Verwalteter Dienst mit Support',
+        'Integriert mit anderen Tools',
+        'Funktionen auf Unternehmensebene',
+        'Unternehmensgesteuerte Updates',
+        'Verfügbar für alle Plattformen',
+        'Nutzungsabhängige Preise'
       ]
     }
   },
   {
-    category: 'Monitoring',
+    category: 'Überwachung',
     openSource: {
       name: 'Prometheus + Grafana',
       icon: Activity,
-      cost: 'Free, self-hosted',
+      cost: 'Kostenlos, selbst gehostet',
       comparisons: [
-        'Pull-model metrics collection',
-        'Flexible query language',
-        'Extensive plugin ecosystem',
-        'Community-driven security',
-        'Available for all platforms',
-        'Complete control over monitoring'
+        'Pull-Modell-Metrikerfassung',
+        'Flexible Abfragesprache',
+        'Umfangreiches Plugin-Ökosystem',
+        'Community-gesteuerte Sicherheit',
+        'Verfügbar für alle Plattformen',
+        'Vollständige Kontrolle über die Überwachung'
       ]
     },
     proprietary: {
       name: 'Datadog/New Relic',
       icon: Activity,
-      cost: 'Per-host/per-metric fees',
+      cost: 'Gebühren pro Host/pro Metrik',
       comparisons: [
-        'Managed service with support',
-        'Integrated with other tools',
-        'Enterprise-grade features',
-        'Corporate-driven updates',
-        'Available for all platforms',
-        'Usage-based pricing'
+        'Verwalteter Dienst mit Support',
+        'Integriert mit anderen Tools',
+        'Funktionen auf Unternehmensebene',
+        'Unternehmensgesteuerte Updates',
+        'Verfügbar für alle Plattformen',
+        'Nutzungsabhängige Preise'
       ]
     }
   },
   {
-    category: 'Collaboration',
+    category: 'Zusammenarbeit',
     openSource: {
       name: 'Mattermost/Rocket.Chat',
       icon: MessageSquare,
-      cost: 'Free, self-hosted',
+      cost: 'Kostenlos, selbst gehostet',
       comparisons: [
-        'Self-hosted Slack alternative',
-        'No data collection',
-        'Export data at any time',
-        'Community-driven security',
-        'Available for all platforms',
-        'Complete control over data'
+        'Selbst gehostete Slack-Alternative',
+        'Keine Datenerfassung',
+        'Daten jederzeit exportieren',
+        'Community-gesteuerte Sicherheit',
+        'Verfügbar für alle Plattformen',
+        'Vollständige Kontrolle über die Daten'
       ]
     },
     proprietary: {
       name: 'Slack/Teams',
       icon: MessageSquare,
-      cost: 'Per-user subscription',
+      cost: 'Abonnement pro Benutzer',
       comparisons: [
-        'Easy to use and set up',
-        'Integrated with other services',
-        'Enterprise-grade features',
-        'Corporate-driven updates',
-        'Available for all platforms',
-        'Data retention policies apply'
+        'Einfach zu bedienen und einzurichten',
+        'Integriert mit anderen Diensten',
+        'Funktionen auf Unternehmensebene',
+        'Unternehmensgesteuerte Updates',
+        'Verfügbar für alle Plattformen',
+        'Es gelten Datenaufbewahrungsrichtlinien'
       ]
     }
   }
@@ -504,60 +504,60 @@ const businessComparisons = [
 
 const emergingTechComparisons = [
   {
-    category: 'Digital Currency',
+    category: 'Digitale Währung',
     openSource: {
       name: 'Bitcoin',
       icon: Coins,
-      cost: 'Transparent network fees',
+      cost: 'Transparente Netzwerkgebühren',
       comparisons: [
-        'Open-source protocol with public audit trail',
-        'Predictable supply with 21 million cap',
-        'Self-custody: full control of funds',
-        'Global network with 24/7 availability',
-        'Permissionless transactions',
-        'No central authority'
+        'Open-Source-Protokoll mit öffentlichem Prüfpfad',
+        'Vorhersehbares Angebot mit 21 Millionen Obergrenze',
+        'Selbstverwahrung: volle Kontrolle über die Gelder',
+        'Globales Netzwerk mit 24/7-Verfügbarkeit',
+        'Genehmigungsfreie Transaktionen',
+        'Keine zentrale Behörde'
       ]
     },
     proprietary: {
-      name: 'Traditional Banking',
+      name: 'Traditionelles Bankwesen',
       icon: Banknote,
-      cost: 'Multiple fees and charges',
+      cost: 'Mehrere Gebühren und Entgelte',
       comparisons: [
-        'Centralized control and regulation',
-        'Unlimited supply by central banks',
-        'Custodial: banks control funds',
-        'Limited by banking hours',
-        'Permissioned transactions',
-        'Central authority required'
+        'Zentralisierte Kontrolle und Regulierung',
+        'Unbegrenztes Angebot durch Zentralbanken',
+        'Verwahrung: Banken kontrollieren die Gelder',
+        'Begrenzt durch Banköffnungszeiten',
+        'Genehmigungspflichtige Transaktionen',
+        'Zentrale Behörde erforderlich'
       ]
     }
   },
   {
-    category: 'Artificial Intelligence',
+    category: 'Künstliche Intelligenz',
     openSource: {
-      name: 'Open Source AI',
+      name: 'Open-Source-KI',
       icon: Brain,
-      cost: 'Free to use, pay for compute',
+      cost: 'Kostenlos nutzbar, Bezahlung für Rechenleistung',
       examples: [
-        'LLaMA 2 (Meta) - Powerful language model',
-        'Stable Diffusion - Image generation',
-        'Whisper - Speech recognition',
-        'BERT - Natural language processing',
-        'TensorFlow/PyTorch - ML frameworks'
+        'LLaMA 2 (Meta) - Leistungsstarkes Sprachmodell',
+        'Stable Diffusion - Bilderzeugung',
+        'Whisper - Spracherkennung',
+        'BERT - Verarbeitung natürlicher Sprache',
+        'TensorFlow/PyTorch - ML-Frameworks'
       ],
       comparisons: [
-        'Fully inspectable code and models',
-        'No forced telemetry or tracking',
-        'Run on any compatible hardware',
-        'Community-driven security',
-        'Democratized development',
-        'Full customization possible'
+        'Vollständig überprüfbarer Code und Modelle',
+        'Keine erzwungene Telemetrie oder Tracking',
+        'Läuft auf jeder kompatiblen Hardware',
+        'Community-gesteuerte Sicherheit',
+        'Demokratisierte Entwicklung',
+        'Vollständige Anpassung möglich'
       ]
     },
     proprietary: {
-      name: 'Proprietary AI',
+      name: 'Proprietäre KI',
       icon: Network,
-      cost: 'Pay-per-use or subscription',
+      cost: 'Pay-per-Use oder Abonnement',
       examples: [
         'ChatGPT (OpenAI)',
         'DALL-E (OpenAI)',
@@ -566,12 +566,12 @@ const emergingTechComparisons = [
         'Google Bard'
       ],
       comparisons: [
-        'Closed-source with restrictions',
-        'Built-in usage tracking',
-        'Cloud-only deployment',
-        'Corporate-controlled updates',
-        'Single-company roadmap',
-        'Limited customization'
+        'Closed-Source mit Einschränkungen',
+        'Integriertes Nutzungs-Tracking',
+        'Nur Cloud-Bereitstellung',
+        'Unternehmensgesteuerte Updates',
+        'Roadmap eines einzelnen Unternehmens',
+        'Begrenzte Anpassungsmöglichkeiten'
       ]
     }
   }
@@ -585,9 +585,9 @@ export default function OpenSourceSolutionsPage() {
         <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-10"></div>
         <div className="container mx-auto px-4 relative">
           <div className="max-w-3xl">
-            <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">Open Source Solutions</h1>
+            <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">Open-Source-Lösungen</h1>
             <p className="text-xl text-green-100">
-              Professional open source software implementation that matches or exceeds proprietary alternatives.
+              Professionelle Implementierung von Open-Source-Software, die proprietären Alternativen entspricht oder diese übertrifft.
             </p>
           </div>
         </div>
@@ -597,9 +597,9 @@ export default function OpenSourceSolutionsPage() {
       <section className="py-20 bg-white">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center mb-16">
-            <h2 className="text-3xl font-bold mb-6">Why Choose Open Source?</h2>
+            <h2 className="text-3xl font-bold mb-6">Warum Open Source wählen?</h2>
             <p className="text-lg text-gray-600">
-              Open source software offers superior value, security, and flexibility compared to proprietary alternatives.
+              Open-Source-Software bietet einen überlegenen Wert, Sicherheit und Flexibilität im Vergleich zu proprietären Alternativen.
             </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -619,7 +619,7 @@ export default function OpenSourceSolutionsPage() {
       {/* Services Section */}
       <section className="py-20 bg-gray-50">
         <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold mb-12 text-center">Our Services</h2>
+          <h2 className="text-3xl font-bold mb-12 text-center">Unsere Dienstleistungen</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {features.map((feature, index) => (
               <div key={index} className="bg-white rounded-xl p-8 shadow-lg">
@@ -641,39 +641,39 @@ export default function OpenSourceSolutionsPage() {
       {/* CTA Section */}
       <section className="py-20 bg-gradient-to-r from-green-700 to-green-800 text-white">
         <div className="container mx-auto px-4 text-center">
-          <h2 className="text-4xl font-bold mb-6">Ready to Embrace Open Source?</h2>
+          <h2 className="text-4xl font-bold mb-6">Bereit für Open Source?</h2>
           <p className="text-xl mb-8 max-w-2xl mx-auto text-green-100">
-            Join thousands of individuals and businesses who have successfully transitioned to open source solutions.
-            Our team of experts is ready to help you make the switch.
+            Schliessen Sie sich Tausenden von Einzelpersonen und Unternehmen an, die erfolgreich auf Open-Source-Lösungen umgestiegen sind.
+            Unser Expertenteam ist bereit, Ihnen beim Wechsel zu helfen.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
               href="/contact"
               className="inline-block bg-white text-green-800 px-8 py-4 rounded-lg font-semibold hover:bg-green-50 transition-colors duration-300 text-lg"
             >
-              Get Started Today
+              Starten Sie noch heute
             </Link>
             <Link
               href="/services"
               className="inline-block border-2 border-white text-white px-8 py-4 rounded-lg font-semibold hover:bg-white/10 transition-colors duration-300 text-lg"
             >
-              Explore All Services
+              Alle Dienstleistungen entdecken
             </Link>
           </div>
           <div className="mt-12">
-            <h3 className="text-2xl font-bold mb-4">Why Choose RevampIT?</h3>
+            <h3 className="text-2xl font-bold mb-4">Warum RevampIT wählen?</h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
               <div className="bg-white/10 rounded-lg p-6">
-                <h4 className="text-xl font-semibold mb-2">Expert Guidance</h4>
-                <p className="text-green-100">Professional support for your open source journey</p>
+                <h4 className="text-xl font-semibold mb-2">Expertenberatung</h4>
+                <p className="text-green-100">Professionelle Unterstützung für Ihre Open-Source-Reise</p>
               </div>
               <div className="bg-white/10 rounded-lg p-6">
-                <h4 className="text-xl font-semibold mb-2">Custom Solutions</h4>
-                <p className="text-green-100">Tailored to your specific needs and requirements</p>
+                <h4 className="text-xl font-semibold mb-2">Massgeschneiderte Lösungen</h4>
+                <p className="text-green-100">Zugeschnitten auf Ihre spezifischen Bedürfnisse und Anforderungen</p>
               </div>
               <div className="bg-white/10 rounded-lg p-6">
-                <h4 className="text-xl font-semibold mb-2">Ongoing Support</h4>
-                <p className="text-green-100">Continuous assistance and maintenance</p>
+                <h4 className="text-xl font-semibold mb-2">Laufender Support</h4>
+                <p className="text-green-100">Kontinuierliche Unterstützung und Wartung</p>
               </div>
             </div>
           </div>
@@ -684,8 +684,8 @@ export default function OpenSourceSolutionsPage() {
       <div className="bg-gray-50 py-8">
         <div className="container mx-auto px-4 text-center">
           <p className="text-gray-600 text-sm">
-            All information provided is accurate as of {new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long' })}.
-            We regularly update our content to reflect the latest developments in open source software.
+            Alle bereitgestellten Informationen sind zum {new Date().toLocaleDateString('de-CH', { year: 'numeric', month: 'long' })} korrekt.
+            Wir aktualisieren unsere Inhalte regelmässig, um die neuesten Entwicklungen in der Open-Source-Software widerzuspiegeln.
           </p>
         </div>
       </div>
@@ -694,16 +694,16 @@ export default function OpenSourceSolutionsPage() {
       <section className="py-20 bg-white">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center mb-16">
-            <h2 className="text-3xl font-bold mb-6">Open Source Solutions</h2>
+            <h2 className="text-3xl font-bold mb-6">Open-Source-Lösungen</h2>
             <p className="text-lg text-gray-600">
-              Discover powerful open-source alternatives to expensive proprietary software.
-              All these solutions are free, regularly updated, and community-driven.
+              Entdecken Sie leistungsstarke Open-Source-Alternativen zu teurer proprietärer Software.
+              Alle diese Lösungen sind kostenlos, werden regelmässig aktualisiert und von der Community vorangetrieben.
             </p>
           </div>
 
           {/* Consumer Solutions */}
           <div className="mb-16">
-            <h3 className="text-2xl font-bold mb-8 text-center">Consumer Solutions</h3>
+            <h3 className="text-2xl font-bold mb-8 text-center">Lösungen für Verbraucher</h3>
             <div className="space-y-12">
               {consumerComparisons.map((comparison, index) => (
                 <div key={index} className="bg-gray-50 rounded-xl p-8 shadow-lg">
@@ -739,7 +739,7 @@ export default function OpenSourceSolutionsPage() {
                         </div>
                         <div>
                           <h5 className="text-2xl font-bold">{comparison.proprietary.name}</h5>
-                          <p className="text-gray-600 font-medium">Proprietary • {comparison.proprietary.cost}</p>
+                          <p className="text-gray-600 font-medium">Proprietär • {comparison.proprietary.cost}</p>
                         </div>
                       </div>
                       <div className="space-y-4">
@@ -761,7 +761,7 @@ export default function OpenSourceSolutionsPage() {
 
           {/* Business Solutions */}
           <div className="mb-16">
-            <h3 className="text-2xl font-bold mb-8 text-center">Business Solutions</h3>
+            <h3 className="text-2xl font-bold mb-8 text-center">Lösungen für Unternehmen</h3>
             <div className="space-y-12">
               {businessComparisons.map((comparison, index) => (
                 <div key={index} className="bg-gray-50 rounded-xl p-8 shadow-lg">
@@ -797,7 +797,7 @@ export default function OpenSourceSolutionsPage() {
                         </div>
                         <div>
                           <h5 className="text-2xl font-bold">{comparison.proprietary.name}</h5>
-                          <p className="text-gray-600 font-medium">Proprietary • {comparison.proprietary.cost}</p>
+                          <p className="text-gray-600 font-medium">Proprietär • {comparison.proprietary.cost}</p>
                         </div>
                       </div>
                       <div className="space-y-4">
@@ -819,7 +819,7 @@ export default function OpenSourceSolutionsPage() {
 
           {/* Emerging Technologies */}
           <div className="mb-16">
-            <h3 className="text-2xl font-bold mb-8 text-center">Emerging Technologies</h3>
+            <h3 className="text-2xl font-bold mb-8 text-center">Aufstrebende Technologien</h3>
             <div className="space-y-12">
               {emergingTechComparisons.map((comparison, index) => (
                 <div key={index} className="bg-gray-50 rounded-xl p-8 shadow-lg">
@@ -838,7 +838,7 @@ export default function OpenSourceSolutionsPage() {
                       </div>
                       {comparison.openSource.examples && (
                         <div className="mb-6">
-                          <h6 className="text-lg font-semibold mb-3">Popular Examples:</h6>
+                          <h6 className="text-lg font-semibold mb-3">Beliebte Beispiele:</h6>
                           <ul className="space-y-2">
                             {comparison.openSource.examples.map((example, i) => (
                               <li key={i} className="flex items-start">
@@ -852,7 +852,7 @@ export default function OpenSourceSolutionsPage() {
                         </div>
                       )}
                       <div className="space-y-4">
-                        <h6 className="text-lg font-semibold mb-3">Key Advantages:</h6>
+                        <h6 className="text-lg font-semibold mb-3">Wichtige Vorteile:</h6>
                         {comparison.openSource.comparisons.map((item, i) => (
                           <div key={i} className="flex items-start">
                             <div className="p-1 bg-green-100 rounded-full mr-3 mt-0.5">
@@ -871,12 +871,12 @@ export default function OpenSourceSolutionsPage() {
                         </div>
                         <div>
                           <h5 className="text-2xl font-bold">{comparison.proprietary.name}</h5>
-                          <p className="text-gray-600 font-medium">Proprietary • {comparison.proprietary.cost}</p>
+                          <p className="text-gray-600 font-medium">Proprietär • {comparison.proprietary.cost}</p>
                         </div>
                       </div>
                       {comparison.proprietary.examples && (
                         <div className="mb-6">
-                          <h6 className="text-lg font-semibold mb-3">Popular Examples:</h6>
+                          <h6 className="text-lg font-semibold mb-3">Beliebte Beispiele:</h6>
                           <ul className="space-y-2">
                             {comparison.proprietary.examples.map((example, i) => (
                               <li key={i} className="flex items-start">
@@ -890,7 +890,7 @@ export default function OpenSourceSolutionsPage() {
                         </div>
                       )}
                       <div className="space-y-4">
-                        <h6 className="text-lg font-semibold mb-3">Key Characteristics:</h6>
+                        <h6 className="text-lg font-semibold mb-3">Wichtige Merkmale:</h6>
                         {comparison.proprietary.comparisons.map((item, i) => (
                           <div key={i} className="flex items-start">
                             <div className="p-1 bg-gray-100 rounded-full mr-3 mt-0.5">
@@ -910,4 +910,4 @@ export default function OpenSourceSolutionsPage() {
       </section>
     </main>
   )
-} 
+}

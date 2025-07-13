@@ -7,7 +7,7 @@ const cardClass = 'bg-white rounded-2xl shadow-sm p-8 flex flex-col items-start 
 
 export const metadata: Metadata = {
   title: 'LTSP - Linux Terminal Server Project',
-  description: 'The Linux Terminal Server Project enables multiple users to work simultaneously on older computers by connecting them to a powerful server, optimizing resource usage and extending hardware lifespan.'
+  description: 'Das Linux Terminal Server Project ermöglicht es mehreren Benutzern, gleichzeitig an älteren Computern zu arbeiten, indem sie mit einem leistungsstarken Server verbunden werden, was die Ressourcennutzung optimiert und die Lebensdauer der Hardware verlängert.'
 }
 
 export default function LTSPPage() {
@@ -15,7 +15,7 @@ export default function LTSPPage() {
     <main className="min-h-screen bg-gray-50">
       <HeroBanner
         title="LTSP - Linux Terminal Server Project"
-        description="Extending the life of older computers through server-based computing"
+        description="Verlängerung der Lebensdauer älterer Computer durch serverbasiertes Computing"
         className="bg-gradient-to-r from-green-600 to-blue-700"
       />
 
@@ -24,20 +24,20 @@ export default function LTSPPage() {
           <div className="grid md:grid-cols-2 gap-8 mb-12">
             <div className={cardClass}>
               <Server className="w-8 h-8 text-green-600" />
-              <h2 className="text-2xl font-bold">About LTSP</h2>
+              <h2 className="text-2xl font-bold">Über LTSP</h2>
               <p>
-                The Linux Terminal Server Project (LTSP) enables multiple users to work simultaneously on older computers by connecting them to a powerful server. This optimizes resource usage and extends hardware lifespan.
+                Das Linux Terminal Server Project (LTSP) ermöglicht es mehreren Benutzern, gleichzeitig an älteren Computern zu arbeiten, indem sie mit einem leistungsstarken Server verbunden werden. Dies optimiert die Ressourcennutzung und verlängert die Lebensdauer der Hardware.
               </p>
             </div>
             <div className={cardClass}>
               <Settings className="w-8 h-8 text-blue-600" />
-              <h2 className="text-2xl font-bold">How It Works</h2>
+              <h2 className="text-2xl font-bold">Wie es funktioniert</h2>
               <ul className="list-disc pl-5 text-gray-700">
-                <li>Applications run on a central server</li>
-                <li>Thin clients or old PCs act as terminals</li>
-                <li>Efficient resource management</li>
-                <li>Consistent user experience</li>
-                <li>Minimal requirements for client machines</li>
+                <li>Anwendungen laufen auf einem zentralen Server</li>
+                <li>Thin Clients oder alte PCs fungieren als Terminals</li>
+                <li>Effizientes Ressourcenmanagement</li>
+                <li>Konsistente Benutzererfahrung</li>
+                <li>Minimale Anforderungen an die Client-Rechner</li>
               </ul>
             </div>
           </div>
@@ -45,56 +45,56 @@ export default function LTSPPage() {
           <div className="grid md:grid-cols-3 gap-8 mb-12">
             <div className={cardClass}>
               <CheckCircle className="w-8 h-8 text-green-500" />
-              <h2 className="text-xl font-semibold">Benefits</h2>
+              <h2 className="text-xl font-semibold">Vorteile</h2>
               <ul className="list-disc pl-5 text-gray-700">
-                <li>Extend hardware lifespan</li>
-                <li>Reduce maintenance costs</li>
-                <li>Centralized management & updates</li>
-                <li>Improved security</li>
-                <li>Lower energy consumption</li>
+                <li>Verlängerung der Hardware-Lebensdauer</li>
+                <li>Reduzierung der Wartungskosten</li>
+                <li>Zentralisierte Verwaltung & Updates</li>
+                <li>Verbesserte Sicherheit</li>
+                <li>Geringerer Energieverbrauch</li>
               </ul>
             </div>
             <div className={cardClass}>
               <Rocket className="w-8 h-8 text-blue-500" />
-              <h2 className="text-xl font-semibold">Implementation</h2>
+              <h2 className="text-xl font-semibold">Implementierung</h2>
               <ul className="list-disc pl-5 text-gray-700">
-                <li>Server setup & configuration</li>
-                <li>Client preparation</li>
-                <li>Network optimization</li>
-                <li>User management & security</li>
-                <li>Ongoing support</li>
+                <li>Server-Einrichtung & Konfiguration</li>
+                <li>Client-Vorbereitung</li>
+                <li>Netzwerkoptimierung</li>
+                <li>Benutzerverwaltung & Sicherheit</li>
+                <li>Laufender Support</li>
               </ul>
             </div>
             <div className={cardClass}>
               <Users className="w-8 h-8 text-green-700" />
-              <h2 className="text-xl font-semibold">Use Cases</h2>
+              <h2 className="text-xl font-semibold">Anwendungsfälle</h2>
               <ul className="list-disc pl-5 text-gray-700">
-                <li>Schools & education</li>
-                <li>Public computer labs</li>
-                <li>Businesses</li>
-                <li>Community centers</li>
-                <li>Non-profits</li>
+                <li>Schulen & Bildung</li>
+                <li>Öffentliche Computerräume</li>
+                <li>Unternehmen</li>
+                <li>Gemeindezentren</li>
+                <li>Gemeinnützige Organisationen</li>
               </ul>
             </div>
           </div>
 
           <div className="grid md:grid-cols-2 gap-8">
             <div className={cardClass}>
-              <h2 className="text-xl font-semibold">Get Started</h2>
+              <h2 className="text-xl font-semibold">Erste Schritte</h2>
               <ul className="list-disc pl-5 text-gray-700">
-                <li>Assess your infrastructure</li>
-                <li>Plan your implementation</li>
-                <li>Set up server & clients</li>
-                <li>Staff training</li>
-                <li>Ongoing support</li>
+                <li>Bewertung Ihrer Infrastruktur</li>
+                <li>Planung Ihrer Implementierung</li>
+                <li>Einrichtung von Server & Clients</li>
+                <li>Schulung der Mitarbeiter</li>
+                <li>Laufender Support</li>
               </ul>
             </div>
             <div className={cardClass}>
               <Phone className="w-8 h-8 text-blue-700" />
-              <h2 className="text-xl font-semibold">Contact Us</h2>
+              <h2 className="text-xl font-semibold">Kontaktieren Sie uns</h2>
               <p>
-                Ready to learn more about how LTSP can benefit your organization? <br />
-                <a href="/contact" className="text-blue-700 underline font-medium">Contact us</a> to discuss your needs and how we can help you implement this powerful solution.
+                Möchten Sie mehr darüber erfahren, wie LTSP Ihrer Organisation zugute kommen kann? <br />
+                <a href="/contact" className="text-blue-700 underline font-medium">Kontaktieren Sie uns</a>, um Ihre Bedürfnisse zu besprechen und wie wir Ihnen bei der Implementierung dieser leistungsstarken Lösung helfen können.
               </p>
             </div>
           </div>

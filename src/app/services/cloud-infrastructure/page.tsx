@@ -3,11 +3,11 @@ import Link from 'next/link'
 import { ArrowRight, Calendar, Cloud, Server, Zap, Shield, Globe, Clock, AlertTriangle, Heart } from 'lucide-react'
 
 export const metadata: Metadata = {
-  title: 'Cloud Infrastructure - Future Vision | RevampIT',
-  description: 'Our vision for sustainable cloud hosting. Part of our long-term mission as a non-profit. Not currently offered - targeted for 2026-2028.',
+  title: 'Cloud-Infrastruktur - Zukunftsvision | RevampIT',
+  description: 'Unsere Vision für nachhaltiges Cloud-Hosting. Teil unserer langfristigen Mission als gemeinnützige Organisation. Derzeit nicht angeboten - angestrebt für 2026-2028.',
   openGraph: {
-    title: 'Cloud Infrastructure - Future Vision | RevampIT',
-    description: 'Our vision for sustainable cloud hosting. Part of our long-term mission as a non-profit. Not currently offered - targeted for 2026-2028.',
+    title: 'Cloud-Infrastruktur - Zukunftsvision | RevampIT',
+    description: 'Unsere Vision für nachhaltiges Cloud-Hosting. Teil unserer langfristigen Mission als gemeinnützige Organisation. Derzeit nicht angeboten - angestrebt für 2026-2028.',
     type: 'website',
   },
 }
@@ -22,14 +22,14 @@ export default function CloudInfrastructurePage() {
           __html: JSON.stringify({
             '@context': 'https://schema.org',
             '@type': 'Service',
-            'name': 'Cloud Infrastructure - Future Vision',
-            'description': 'Sustainable cloud hosting vision for 2026-2028',
+            'name': 'Cloud-Infrastruktur - Zukunftsvision',
+            'description': 'Nachhaltige Cloud-Hosting-Vision für 2026-2028',
             'provider': {
               '@type': 'Organization',
               'name': 'RevampIT',
               'url': 'https://revampit.org'
             },
-            'serviceType': 'Cloud Infrastructure',
+            'serviceType': 'Cloud-Infrastruktur',
             'areaServed': {
               '@type': 'Country',
               'name': 'Switzerland'
@@ -48,24 +48,24 @@ export default function CloudInfrastructurePage() {
               <div className="flex items-center gap-3 mb-6">
                 <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-red-100 text-red-800">
                   <AlertTriangle className="w-4 h-4 mr-1" />
-                  Not Currently Offered
+                  Derzeit nicht im Angebot
                 </span>
               </div>
-              <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">Cloud Infrastructure</h1>
-              <h2 className="text-2xl md:text-3xl font-semibold mb-8 text-green-200">Future Vision: Sustainable Cloud for Good</h2>
+              <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">Cloud-Infrastruktur</h1>
+              <h2 className="text-2xl md:text-3xl font-semibold mb-8 text-green-200">Zukunftsvision: Nachhaltige Cloud für das Gemeinwohl</h2>
               <p className="text-xl text-green-100 mb-8">
-                <strong>This service is not currently available.</strong> As a mission-driven, self-sustaining non-profit, 
-                we envision building ethical cloud infrastructure that serves communities while protecting our planet.
+                <strong>Dieser Service ist derzeit nicht verfügbar.</strong> Als missionsgetriebene, sich selbst tragende gemeinnützige Organisation
+                stellen wir uns vor, eine ethische Cloud-Infrastruktur aufzubauen, die Gemeinschaften dient und gleichzeitig unseren Planeten schützt.
               </p>
               
               <div className="bg-red-900/50 border border-red-600 rounded-lg p-6 mb-6">
                 <div className="flex items-start gap-3">
                   <AlertTriangle className="w-6 h-6 text-red-300 mt-1 flex-shrink-0" />
                   <div>
-                    <h3 className="text-lg font-semibold text-red-100 mb-2">Service Not Available</h3>
+                    <h3 className="text-lg font-semibold text-red-100 mb-2">Dienstleistung nicht verfügbar</h3>
                     <p className="text-red-200">
-                      We do not currently offer cloud infrastructure services. This page represents our long-term vision 
-                      as we build sustainable capacity to serve our community's digital needs.
+                      Wir bieten derzeit keine Cloud-Infrastrukturdienste an. Diese Seite repräsentiert unsere langfristige Vision,
+                      während wir nachhaltige Kapazitäten aufbauen, um die digitalen Bedürfnisse unserer Gemeinschaft zu erfüllen.
                     </p>
                   </div>
                 </div>
@@ -75,10 +75,10 @@ export default function CloudInfrastructurePage() {
                 <div className="flex items-start gap-3">
                   <Calendar className="w-6 h-6 text-green-300 mt-1 flex-shrink-0" />
                   <div>
-                    <h3 className="text-lg font-semibold text-green-100 mb-2">Vision Timeline: 2026-2028</h3>
+                    <h3 className="text-lg font-semibold text-green-100 mb-2">Visions-Zeitplan: 2026-2028</h3>
                     <p className="text-green-200">
-                      Through community partnerships and sustainable growth, we aim to develop truly ethical cloud 
-                      infrastructure that prioritizes environmental responsibility and digital equity.
+                      Durch Gemeinschaftspartnerschaften und nachhaltiges Wachstum streben wir an, eine wirklich ethische Cloud-Infrastruktur
+                      zu entwickeln, die ökologische Verantwortung und digitale Gerechtigkeit in den Vordergrund stellt.
                     </p>
                   </div>
                 </div>
@@ -93,11 +93,11 @@ export default function CloudInfrastructurePage() {
             <div className="text-center mb-16">
               <div className="flex items-center justify-center gap-2 mb-4">
                 <Heart className="w-8 h-8 text-green-600" />
-                <h2 className="text-4xl font-bold text-gray-900">Mission-Driven Technology</h2>
+                <h2 className="text-4xl font-bold text-gray-900">Missionsgetriebene Technologie</h2>
               </div>
               <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                As a non-profit organization, our future cloud infrastructure will be built on principles of 
-                sustainability, community empowerment, and digital justice.
+                Als gemeinnützige Organisation wird unsere zukünftige Cloud-Infrastruktur auf den Prinzipien der
+                Nachhaltigkeit, der Stärkung der Gemeinschaft und der digitalen Gerechtigkeit aufgebaut sein.
               </p>
             </div>
             
@@ -105,33 +105,33 @@ export default function CloudInfrastructurePage() {
               {[
                 {
                   icon: Heart,
-                  title: 'Community First',
-                  description: 'Designed to serve underserved communities and promote digital inclusion'
+                  title: 'Gemeinschaft zuerst',
+                  description: 'Entwickelt, um unterversorgten Gemeinschaften zu dienen und die digitale Inklusion zu fördern'
                 },
                 {
                   icon: Zap,
-                  title: '100% Renewable Energy',
-                  description: 'Powered entirely by clean, renewable energy sources with carbon-negative goals'
+                  title: '100% erneuerbare Energie',
+                  description: 'Vollständig mit sauberer, erneuerbarer Energie betrieben, mit CO2-negativen Zielen'
                 },
                 {
                   icon: Globe,
-                  title: 'Open Source Foundation',
-                  description: 'Built on open source technologies to ensure transparency and community ownership'
+                  title: 'Open-Source-Grundlage',
+                  description: 'Aufgebaut auf Open-Source-Technologien, um Transparenz und gemeinschaftliches Eigentum zu gewährleisten'
                 },
                 {
                   icon: Shield,
-                  title: 'Privacy by Design',
-                  description: 'Privacy-first architecture protecting user data and digital rights'
+                  title: 'Datenschutz durch Design',
+                  description: 'Datenschutzfreundliche Architektur, die Benutzerdaten und digitale Rechte schützt'
                 },
                 {
                   icon: Server,
-                  title: 'Cooperative Model',
-                  description: 'Community-owned infrastructure supporting local digital sovereignty'
+                  title: 'Genossenschaftsmodell',
+                  description: 'Gemeinschaftseigene Infrastruktur zur Unterstützung der lokalen digitalen Souveränität'
                 },
                 {
                   icon: Cloud,
-                  title: 'Circular Economy',
-                  description: 'Using refurbished hardware and promoting sustainable technology lifecycles'
+                  title: 'Kreislaufwirtschaft',
+                  description: 'Verwendung von wiederaufbereiteter Hardware und Förderung nachhaltiger Technologie-Lebenszyklen'
                 }
               ].map((feature, index) => (
                 <div key={index} className="bg-green-50 rounded-xl p-6 shadow-lg border-l-4 border-green-600">
@@ -154,26 +154,26 @@ export default function CloudInfrastructurePage() {
         <section className="py-20">
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto">
-              <h2 className="text-4xl font-bold text-gray-900 mb-8 text-center">Why We're Not Ready Yet</h2>
+              <h2 className="text-4xl font-bold text-gray-900 mb-8 text-center">Warum wir noch nicht bereit sind</h2>
               <div className="bg-gray-50 rounded-xl p-8 border">
                 <p className="text-lg text-gray-700 mb-6">
-                  As a mission-driven non-profit, we believe in building technology infrastructure responsibly and sustainably. 
-                  Rather than rushing to market, we're taking the time to:
+                  Als missionsgetriebene gemeinnützige Organisation glauben wir daran, Technologieinfrastruktur verantwortungsvoll und nachhaltig aufzubauen.
+                  Anstatt überstürzt auf den Markt zu drängen, nehmen wir uns die Zeit, um:
                 </p>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-4">
                     <div className="flex items-start gap-3">
                       <div className="w-2 h-2 bg-green-600 rounded-full mt-3"></div>
                       <div>
-                        <h4 className="font-semibold text-gray-900">Build Community Partnerships</h4>
-                        <p className="text-gray-600">Collaborate with local organizations and communities to understand real needs</p>
+                        <h4 className="font-semibold text-gray-900">Gemeinschaftspartnerschaften aufzubauen</h4>
+                        <p className="text-gray-600">Zusammenarbeit mit lokalen Organisationen und Gemeinschaften, um echte Bedürfnisse zu verstehen</p>
                       </div>
                     </div>
                     <div className="flex items-start gap-3">
                       <div className="w-2 h-2 bg-green-600 rounded-full mt-3"></div>
                       <div>
-                        <h4 className="font-semibold text-gray-900">Ensure Financial Sustainability</h4>
-                        <p className="text-gray-600">Develop a self-sustaining model that doesn't compromise our mission</p>
+                        <h4 className="font-semibold text-gray-900">Finanzielle Nachhaltigkeit sicherzustellen</h4>
+                        <p className="text-gray-600">Entwicklung eines sich selbst tragenden Modells, das unsere Mission nicht gefährdet</p>
                       </div>
                     </div>
                   </div>
@@ -181,15 +181,15 @@ export default function CloudInfrastructurePage() {
                     <div className="flex items-start gap-3">
                       <div className="w-2 h-2 bg-green-600 rounded-full mt-3"></div>
                       <div>
-                        <h4 className="font-semibold text-gray-900">Research Sustainable Technologies</h4>
-                        <p className="text-gray-600">Identify and test the most environmentally responsible solutions</p>
+                        <h4 className="font-semibold text-gray-900">Nachhaltige Technologien zu erforschen</h4>
+                        <p className="text-gray-600">Identifizierung und Erprobung der umweltverträglichsten Lösungen</p>
                       </div>
                     </div>
                     <div className="flex items-start gap-3">
                       <div className="w-2 h-2 bg-green-600 rounded-full mt-3"></div>
                       <div>
-                        <h4 className="font-semibold text-gray-900">Train Our Team</h4>
-                        <p className="text-gray-600">Build internal expertise while creating meaningful employment opportunities</p>
+                        <h4 className="font-semibold text-gray-900">Unser Team zu schulen</h4>
+                        <p className="text-gray-600">Aufbau interner Expertise bei gleichzeitiger Schaffung sinnvoller Beschäftigungsmöglichkeiten</p>
                       </div>
                     </div>
                   </div>
@@ -203,22 +203,22 @@ export default function CloudInfrastructurePage() {
         <section className="py-20 bg-white">
           <div className="container mx-auto px-4 text-center">
             <div className="max-w-3xl mx-auto">
-              <h2 className="text-4xl font-bold text-gray-900 mb-6">Help Shape Our Vision</h2>
+              <h2 className="text-4xl font-bold text-gray-900 mb-6">Gestalten Sie unsere Vision mit</h2>
               <p className="text-xl text-gray-600 mb-8">
-                Want to be part of building ethical, sustainable cloud infrastructure? 
-                Join our community and help us plan for the future.
+                Möchten Sie Teil des Aufbaus einer ethischen, nachhaltigen Cloud-Infrastruktur sein?
+                Treten Sie unserer Gemeinschaft bei und helfen Sie uns, für die Zukunft zu planen.
               </p>
               <div className="bg-green-50 border border-green-200 rounded-lg p-8">
-                <h3 className="text-2xl font-bold text-green-800 mb-4">Community Input Needed</h3>
+                <h3 className="text-2xl font-bold text-green-800 mb-4">Gemeinschaftlicher Input benötigt</h3>
                 <p className="text-green-700 mb-6">
-                  Share your thoughts on sustainable cloud infrastructure and help us understand community needs. 
-                  Your input will directly influence our development roadmap.
+                  Teilen Sie Ihre Gedanken zu nachhaltiger Cloud-Infrastruktur und helfen Sie uns, die Bedürfnisse der Gemeinschaft zu verstehen.
+                  Ihr Beitrag wird unsere Entwicklungs-Roadmap direkt beeinflussen.
                 </p>
                 <Link
                   href="/contact"
                   className="inline-flex items-center bg-green-600 text-white px-8 py-4 rounded-lg font-semibold hover:bg-green-700 transition-colors duration-300 text-lg"
                 >
-                  Share Your Vision
+                  Teilen Sie Ihre Vision
                   <ArrowRight className="ml-2 w-5 h-5" />
                 </Link>
               </div>
@@ -229,22 +229,22 @@ export default function CloudInfrastructurePage() {
         {/* Current Services CTA */}
         <section className="py-20 bg-gradient-to-r from-green-700 to-green-800 text-white">
           <div className="container mx-auto px-4 text-center">
-            <h2 className="text-4xl font-bold mb-6">Need Technology Help Today?</h2>
+            <h2 className="text-4xl font-bold mb-6">Benötigen Sie heute technische Hilfe?</h2>
             <p className="text-xl mb-8 max-w-2xl mx-auto text-green-100">
-              While we develop our long-term vision, we're actively providing these services to our community right now.
+              Während wir unsere langfristige Vision entwickeln, unterstützen wir unsere Gemeinschaft aktiv mit diesen Dienstleistungen.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
                 href="/services"
                 className="inline-block bg-white text-green-800 px-8 py-4 rounded-lg font-semibold hover:bg-green-50 transition-colors duration-300 text-lg"
               >
-                View Current Services
+                Aktuelle Dienstleistungen anzeigen
               </Link>
               <Link
                 href="/get-involved"
                 className="inline-block border-2 border-white text-white px-8 py-4 rounded-lg font-semibold hover:bg-white/10 transition-colors duration-300 text-lg"
               >
-                Get Involved
+                Machen Sie mit
               </Link>
             </div>
           </div>
@@ -252,4 +252,4 @@ export default function CloudInfrastructurePage() {
       </main>
     </>
   )
-} 
+}

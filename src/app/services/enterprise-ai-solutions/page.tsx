@@ -29,11 +29,11 @@ import {
 import Link from 'next/link'
 
 export const metadata: Metadata = {
-  title: 'Sustainable Enterprise AI Solutions | RevampIT',
-  description: 'Open-source, sovereign AI systems for professional firms. Sustainable, private, and GDPR-compliant AI that keeps your data secure and supports digital sovereignty.',
+  title: 'Nachhaltige KI-Lösungen für Unternehmen | RevampIT',
+  description: 'Open-Source, souveräne KI-Systeme für professionelle Firmen. Nachhaltige, private und DSGVO-konforme KI, die Ihre Daten schützt und die digitale Souveränität unterstützt.',
   openGraph: {
-    title: 'Sustainable Enterprise AI Solutions | RevampIT',
-    description: 'Open-source, sovereign AI systems for professional firms. Sustainable, private, and GDPR-compliant AI that keeps your data secure and supports digital sovereignty.',
+    title: 'Nachhaltige KI-Lösungen für Unternehmen | RevampIT',
+    description: 'Open-Source, souveräne KI-Systeme für professionelle Firmen. Nachhaltige, private und DSGVO-konforme KI, die Ihre Daten schützt und die digitale Souveränität unterstützt.',
     type: 'website',
     url: 'https://revampit.org/services/enterprise-ai-solutions',
   },
@@ -41,20 +41,20 @@ export const metadata: Metadata = {
 
 const coreValues = [
   {
-    title: 'Digital Sovereignty',
-    description: 'Complete control over your AI infrastructure and data. No dependency on foreign tech giants.',
+    title: 'Digitale Souveränität',
+    description: 'Vollständige Kontrolle über Ihre KI-Infrastruktur und Daten. Keine Abhängigkeit von ausländischen Technologiegiganten.',
     icon: Shield,
     color: 'green'
   },
   {
-    title: 'Open Source Foundation',
-    description: 'Built on transparent, auditable open-source technologies. No vendor lock-in, full transparency.',
+    title: 'Open-Source-Grundlage',
+    description: 'Aufgebaut auf transparenten, überprüfbaren Open-Source-Technologien. Kein Anbieter-Lock-in, volle Transparenz.',
     icon: Code,
     color: 'green'
   },
   {
-    title: 'Sustainable Computing',
-    description: 'Energy-efficient AI that scales responsibly. Optimized for minimal environmental impact.',
+    title: 'Nachhaltiges Computing',
+    description: 'Energieeffiziente KI, die verantwortungsvoll skaliert. Optimiert für minimale Umweltbelastung.',
     icon: Leaf,
     color: 'green'
   }
@@ -62,238 +62,238 @@ const coreValues = [
 
 const painPoints = [
   {
-    pain: 'Sensitive data can\'t leave your organization\'s secure environment',
-    solution: '100% self-hosted open-source AI stack with complete data sovereignty',
-    benefit: 'Zero external AI service dependencies ✓ Full GDPR/compliance control',
+    pain: 'Sensible Daten dürfen die sichere Umgebung Ihres Unternehmens nicht verlassen',
+    solution: '100% selbst gehosteter Open-Source-KI-Stack mit vollständiger Datensouveränität',
+    benefit: 'Keine Abhängigkeiten von externen KI-Diensten ✓ Volle DSGVO-/Compliance-Kontrolle',
     icon: Shield
   },
   {
-    pain: 'Teams waste hours searching through institutional knowledge',
-    solution: 'RAG-powered intelligent search across all your documents and data',
-    benefit: 'Expert-grade answers from your own data in seconds',
+    pain: 'Teams verschwenden Stunden mit der Suche in institutionellem Wissen',
+    solution: 'RAG-gestützte intelligente Suche über alle Ihre Dokumente und Daten',
+    benefit: 'Antworten auf Expertenniveau aus Ihren eigenen Daten in Sekunden',
     icon: Search
   },
   {
-    pain: 'No internal AI expertise or resources to deploy enterprise solutions',
-    solution: 'Complete "done-for-you" deployment, training, and ongoing support',
-    benefit: 'Focus on your core mission while we handle the AI infrastructure',
+    pain: 'Keine interne KI-Expertise oder Ressourcen zur Bereitstellung von Unternehmenslösungen',
+    solution: 'Komplette "Done-for-you"-Bereitstellung, Schulung und laufender Support',
+    benefit: 'Konzentrieren Sie sich auf Ihre Kernmission, während wir uns um die KI-Infrastruktur kümmern',
     icon: Users
   }
 ]
 
 const technicalStack = [
   {
-    component: 'AI Model',
+    component: 'KI-Modell',
     technology: 'Open Source Large Language Models',
-    description: 'State-of-the-art open models like Llama 3, optimized for commercial deployment with full sovereignty',
+    description: 'Modernste offene Modelle wie Llama 3, optimiert für den kommerziellen Einsatz mit voller Souveränität',
     icon: Brain,
-    features: ['No proprietary dependencies', 'Commercial licensing included', 'Efficient quantization techniques']
+    features: ['Keine proprietären Abhängigkeiten', 'Kommerzielle Lizenzierung inklusive', 'Effiziente Quantisierungstechniken']
   },
   {
-    component: 'Compute Infrastructure',
-    technology: 'Flexible Cloud or On-Premises',
-    description: 'Scalable GPU infrastructure that adapts to your needs and compliance requirements',
+    component: 'Recheninfrastruktur',
+    technology: 'Flexible Cloud oder On-Premises',
+    description: 'Skalierbare GPU-Infrastruktur, die sich an Ihre Bedürfnisse und Compliance-Anforderungen anpasst',
     icon: Cpu,
-    features: ['On-demand scaling', 'Cost-optimized deployment', 'Client-controlled environment']
+    features: ['Bedarfsgerechte Skalierung', 'Kostenoptimierte Bereitstellung', 'Vom Kunden kontrollierte Umgebung']
   },
   {
-    component: 'Vector Database',
+    component: 'Vektor-Datenbank',
     technology: 'Open Source Vector Store',
-    description: 'Transparent, license-free vector database solutions with no vendor dependencies',
+    description: 'Transparente, lizenzfreie Vektor-Datenbanklösungen ohne Anbieterabhängigkeiten',
     icon: Database,
-    features: ['No vendor lock-in', 'Auditable source code', 'Scalable architecture']
+    features: ['Kein Anbieter-Lock-in', 'Überprüfbarer Quellcode', 'Skalierbare Architektur']
   },
   {
-    component: 'RAG Framework',
+    component: 'RAG-Framework',
     technology: 'Open Source Retrieval System',
-    description: 'Advanced document processing and retrieval using transparent, open-source frameworks',
+    description: 'Fortschrittliche Dokumentenverarbeitung und -abruf mit transparenten, quelloffenen Frameworks',
     icon: FileText,
-    features: ['Intelligent document processing', 'Contextual understanding', 'Full source transparency']
+    features: ['Intelligente Dokumentenverarbeitung', 'Kontextuelles Verständnis', 'Vollständige Quelltransparenz']
   },
   {
-    component: 'Automation',
+    component: 'Automatisierung',
     technology: 'Open Workflow Orchestration',
-    description: 'Transparent workflow automation with full visibility into processing logic',
+    description: 'Transparente Workflow-Automatisierung mit voller Einsicht in die Verarbeitungslogik',
     icon: Network,
-    features: ['Open-source workflows', 'Auditable processes', 'Custom integrations']
+    features: ['Open-Source-Workflows', 'Überprüfbare Prozesse', 'Benutzerdefinierte Integrationen']
   },
   {
-    component: 'User Interface',
-    technology: 'Secure Open Web Stack',
-    description: 'Modern, secure web interface built on open standards with complete transparency',
+    component: 'Benutzeroberfläche',
+    technology: 'Sicherer Open Web Stack',
+    description: 'Moderne, sichere Weboberfläche, die auf offenen Standards mit vollständiger Transparenz basiert',
     icon: Eye,
-    features: ['Open web standards', 'Transparent security', 'Full audit trails']
+    features: ['Offene Webstandards', 'Transparente Sicherheit', 'Vollständige Audit-Trails']
   }
 ]
 
 const pricingTiers = [
   {
-    name: 'Starter Setup',
-    duration: '2-3 weeks',
-    description: 'Perfect for small teams and proof of concept',
-    price: 'CHF 12,000 - 18,000',
+    name: 'Starter-Setup',
+    duration: '2-3 Wochen',
+    description: 'Perfekt für kleine Teams und Proof of Concept',
+    price: 'CHF 12.000 - 18.000',
     features: [
-      'RTX 4090 workstation or small server setup',
-      'Llama 3.1 8B model with basic fine-tuning',
-      'Basic document processing (up to 5,000 docs)',
-      'Simple web interface',
-      'Basic training and documentation'
+      'RTX 4090 Workstation oder kleines Server-Setup',
+      'Llama 3.1 8B-Modell mit grundlegendem Fine-Tuning',
+      'Grundlegende Dokumentenverarbeitung (bis zu 5.000 Dokumente)',
+      'Einfache Weboberfläche',
+      'Grundschulung und Dokumentation'
     ],
-    highlight: 'Great entry point',
-    note: 'Ongoing: CHF 450-800/month depending on hosting'
+    highlight: 'Toller Einstiegspunkt',
+    note: 'Laufend: CHF 450-800/Monat je nach Hosting'
   },
   {
-    name: 'Professional Deployment',
-    duration: '4-6 weeks',
-    description: 'Full-featured AI system for growing businesses',
-    price: 'CHF 30,000 - 45,000',
+    name: 'Professionelle Bereitstellung',
+    duration: '4-6 Wochen',
+    description: 'Voll funktionsfähiges KI-System für wachsende Unternehmen',
+    price: 'CHF 30.000 - 45.000',
     features: [
-      'Professional server with RTX 4090 Ti or dual GPUs',
-      'Llama 3.1 13B-70B models',
-      'Advanced document processing (up to 25,000 docs)',
-      'Custom integrations and API access',
-      'Comprehensive training & support'
+      'Professioneller Server mit RTX 4090 Ti oder zwei GPUs',
+      'Llama 3.1 13B-70B Modelle',
+      'Erweiterte Dokumentenverarbeitung (bis zu 25.000 Dokumente)',
+      'Benutzerdefinierte Integrationen und API-Zugang',
+      'Umfassende Schulung & Support'
     ],
-    highlight: 'Most popular',
+    highlight: 'Beliebteste Option',
     popular: true,
-    note: 'Ongoing: CHF 1,200-2,800/month'
+    note: 'Laufend: CHF 1.200-2.800/Monat'
   },
   {
-    name: 'Enterprise Solution',
-    duration: '6-10 weeks',
-    description: 'Large-scale deployment with enterprise features',
-    price: 'CHF 60,000 - 100,000',
+    name: 'Unternehmenslösung',
+    duration: '6-10 Wochen',
+    description: 'Gross angelegte Bereitstellung mit Unternehmensfunktionen',
+    price: 'CHF 60.000 - 100.000',
     features: [
-      'Enterprise-grade A100/H100 infrastructure',
-      'Custom fine-tuned Llama 3.1 70B+ models',
-      'Unlimited document processing',
-      'Advanced security and compliance features',
-      'Dedicated support and SLA'
+      'Unternehmensgerechte A100/H100-Infrastruktur',
+      'Benutzerdefinierte, feinabgestimmte Llama 3.1 70B+ Modelle',
+      'Unbegrenzte Dokumentenverarbeitung',
+      'Erweiterte Sicherheits- und Compliance-Funktionen',
+      'Dedizierter Support und SLA'
     ],
-    highlight: 'Maximum performance',
-    note: 'Ongoing: CHF 4,200-8,000/month'
+    highlight: 'Maximale Leistung',
+    note: 'Laufend: CHF 4.200-8.000/Monat'
   }
 ]
 
 const industries = [
   {
-    name: 'Legal Firms',
-    description: 'Contract analysis, precedent search, and legal document summarization',
+    name: 'Anwaltskanzleien',
+    description: 'Vertragsanalyse, Präzedenzfallsuche und Zusammenfassung juristischer Dokumente',
     icon: Scale,
     useCases: [
-      'Contract clause analysis',
-      'Legal precedent search',
-      'Document summarization',
-      'Compliance checking'
+      'Analyse von Vertragsklauseln',
+      'Suche nach juristischen Präzedenzfällen',
+      'Zusammenfassung von Dokumenten',
+      'Compliance-Prüfung'
     ]
   },
   {
-    name: 'Financial Services',
-    description: 'Risk analysis, regulatory compliance, and financial document processing',
+    name: 'Finanzdienstleistungen',
+    description: 'Risikoanalyse, Einhaltung gesetzlicher Vorschriften und Verarbeitung von Finanzdokumenten',
     icon: BarChart3,
     useCases: [
-      'Risk assessment reports',
-      'Regulatory compliance',
-      'Financial document analysis',
-      'Investment research'
+      'Risikobewertungsberichte',
+      'Einhaltung gesetzlicher Vorschriften',
+      'Analyse von Finanzdokumenten',
+      'Anlagerecherche'
     ]
   },
   {
-    name: 'Pharmaceutical & Life Sciences',
-    description: 'Research acceleration, drug discovery support, and regulatory documentation',
+    name: 'Pharma & Life Sciences',
+    description: 'Beschleunigung der Forschung, Unterstützung bei der Arzneimittelentdeckung und regulatorische Dokumentation',
     icon: Building,
     useCases: [
-      'Scientific literature analysis',
-      'Clinical trial documentation',
-      'Regulatory submission support',
-      'Research synthesis and insights'
+      'Analyse wissenschaftlicher Literatur',
+      'Dokumentation klinischer Studien',
+      'Unterstützung bei Zulassungsanträgen',
+      'Synthese und Erkenntnisse aus der Forschung'
     ]
   },
   {
-    name: 'Healthcare Institutions',
-    description: 'Medical record analysis, research summarization, and clinical decision support',
+    name: 'Gesundheitseinrichtungen',
+    description: 'Analyse von Krankenakten, Zusammenfassung von Forschungsergebnissen und Unterstützung bei klinischen Entscheidungen',
     icon: Heart,
     useCases: [
-      'Medical record analysis',
-      'Research paper summarization',
-      'Clinical documentation',
-      'Treatment protocol search'
+      'Analyse von Krankenakten',
+      'Zusammenfassung von Forschungsarbeiten',
+      'Klinische Dokumentation',
+      'Suche nach Behandlungsprotokollen'
     ]
   },
   {
-    name: 'Non-Profit Organizations',
-    description: 'Grant research, impact documentation, and knowledge management',
+    name: 'Gemeinnützige Organisationen',
+    description: 'Fördermittelrecherche, Wirkungsdokumentation und Wissensmanagement',
     icon: Users,
     useCases: [
-      'Grant opportunity research',
-      'Impact measurement reporting',
-      'Donor communication',
-      'Policy analysis and advocacy'
+      'Recherche nach Fördermöglichkeiten',
+      'Berichterstattung zur Wirkungsmessung',
+      'Spenderkommunikation',
+      'Politikanalyse und Interessenvertretung'
     ]
   },
   {
-    name: 'Research Institutions',
-    description: 'Academic research acceleration, literature review, and knowledge synthesis',
+    name: 'Forschungseinrichtungen',
+    description: 'Beschleunigung der akademischen Forschung, Literaturrecherche und Wissenssynthese',
     icon: Brain,
     useCases: [
-      'Literature review automation',
-      'Research proposal development',
-      'Academic collaboration',
-      'Knowledge discovery'
+      'Automatisierung der Literaturrecherche',
+      'Entwicklung von Forschungsanträgen',
+      'Akademische Zusammenarbeit',
+      'Wissensentdeckung'
     ]
   },
   {
-    name: 'Manufacturing & Engineering',
-    description: 'Technical documentation, quality assurance, and process optimization',
+    name: 'Fertigung & Maschinenbau',
+    description: 'Technische Dokumentation, Qualitätssicherung und Prozessoptimierung',
     icon: Briefcase,
     useCases: [
-      'Technical manual search',
-      'Quality control documentation',
-      'Process optimization insights',
-      'Regulatory compliance'
+      'Suche in technischen Handbüchern',
+      'Dokumentation der Qualitätskontrolle',
+      'Erkenntnisse zur Prozessoptimierung',
+      'Einhaltung gesetzlicher Vorschriften'
     ]
   },
   {
-    name: 'Consulting Firms',
-    description: 'Knowledge management, proposal generation, and client research',
+    name: 'Beratungsunternehmen',
+    description: 'Wissensmanagement, Angebotserstellung und Kundenrecherche',
     icon: Briefcase,
     useCases: [
-      'Knowledge base search',
-      'Proposal automation',
-      'Client research',
-      'Best practice identification'
+      'Suche in der Wissensdatenbank',
+      'Automatisierung von Angeboten',
+      'Kundenrecherche',
+      'Identifizierung von Best Practices'
     ]
   }
 ]
 
 const timeline = [
-  { week: 1, milestone: 'Infrastructure assessment, security setup, and environment preparation' },
-  { week: 2, milestone: 'Open-source AI model deployment and performance optimization' },
-  { week: 3, milestone: 'Vector database setup and document ingestion pipeline' },
-  { week: 4, milestone: 'Secure web interface deployment and authentication integration' },
-  { week: 5, milestone: 'Workflow automation and system integration setup' },
-  { week: 6, milestone: 'User acceptance testing, training, and knowledge transfer' }
+  { week: 1, milestone: 'Bewertung der Infrastruktur, Sicherheitseinrichtung und Umgebungsvorbereitung' },
+  { week: 2, milestone: 'Bereitstellung und Leistungsoptimierung des Open-Source-KI-Modells' },
+  { week: 3, milestone: 'Einrichtung der Vektor-Datenbank und der Dokumenten-Ingestions-Pipeline' },
+  { week: 4, milestone: 'Bereitstellung der sicheren Weboberfläche und Authentifizierungsintegration' },
+  { week: 5, milestone: 'Einrichtung der Workflow-Automatisierung und Systemintegration' },
+  { week: 6, milestone: 'Benutzerakzeptanztests, Schulung und Wissenstransfer' }
 ]
 
 const riskMitigation = [
   {
-    risk: 'AI Hallucinations',
-    mitigation: 'JSON output guardrails + reference snippets, show sources. Users verify all outputs.',
+    risk: 'KI-Halluzinationen',
+    mitigation: 'JSON-Ausgabe-Leitplanken + Referenz-Snippets, Quellen anzeigen. Benutzer überprüfen alle Ausgaben.',
     icon: AlertTriangle
   },
   {
-    risk: 'Regulatory Changes',
-    mitigation: 'Stick to on-premises/client-chosen cloud, sign DPA with no sub-processors.',
+    risk: 'Regulatorische Änderungen',
+    mitigation: 'Bleiben Sie bei On-Premises/vom Kunden gewählter Cloud, unterzeichnen Sie DPA ohne Unterauftragsverarbeiter.',
     icon: Shield
   },
   {
-    risk: 'Cost Overruns',
-    mitigation: 'Auto-scale GPU pods off at night; vLLM KV-cache reuse keeps cold-start cheap.',
+    risk: 'Kostenüberschreitungen',
+    mitigation: 'GPU-Pods nachts automatisch abschalten; vLLM KV-Cache-Wiederverwendung hält Kaltstarts günstig.',
     icon: BarChart3
   },
   {
-    risk: 'Competition (In-house)',
-    mitigation: 'Offer source-code escrow; still cheaper than hiring 2 AI engineers.',
+    risk: 'Wettbewerb (intern)',
+    mitigation: 'Bieten Sie Quellcode-Treuhand an; immer noch billiger als die Einstellung von 2 KI-Ingenieuren.',
     icon: Users
   }
 ]
@@ -301,82 +301,82 @@ const riskMitigation = [
 // Add case study section
 const deploymentExamples = [
   {
-    title: 'Small Consulting Firm',
-    description: 'Document search and basic analysis',
-    scale: '2-5 employees',
-    documents: '1,000-5,000',
-    responseTime: '8-15 seconds',
-    infrastructure: 'RTX 4090 24GB workstation',
-    model: 'Llama 3.1 8B (4-bit quantization)',
-    cost: 'CHF 450/month',
-    deployment: 'Local workstation setup'
+    title: 'Kleine Beratungsfirma',
+    description: 'Dokumentensuche und Basisanalyse',
+    scale: '2-5 Mitarbeiter',
+    documents: '1.000-5.000',
+    responseTime: '8-15 Sekunden',
+    infrastructure: 'RTX 4090 24GB Workstation',
+    model: 'Llama 3.1 8B (4-Bit-Quantisierung)',
+    cost: 'CHF 450/Monat',
+    deployment: 'Lokales Workstation-Setup'
   },
   {
-    title: 'Mid-Size Law Firm',
-    description: 'Contract analysis and legal research',
-    scale: '10-25 employees',
-    documents: '10,000-25,000',
-    responseTime: '5-10 seconds',
-    infrastructure: 'RTX 4090 Ti 24GB server',
-    model: 'Llama 3.1 13B (INT8 quantization)',
-    cost: 'CHF 1,200/month',
-    deployment: 'Dedicated server on-premises'
+    title: 'Mittelgrosse Anwaltskanzlei',
+    description: 'Vertragsanalyse und Rechtsrecherche',
+    scale: '10-25 Mitarbeiter',
+    documents: '10.000-25.000',
+    responseTime: '5-10 Sekunden',
+    infrastructure: 'RTX 4090 Ti 24GB Server',
+    model: 'Llama 3.1 13B (INT8-Quantisierung)',
+    cost: 'CHF 1.200/Monat',
+    deployment: 'Dedizierter Server vor Ort'
   },
   {
-    title: 'Research Institution',
-    description: 'Scientific literature analysis',
-    scale: '50+ employees',
-    documents: '25,000+',
-    responseTime: '3-8 seconds',
-    infrastructure: '2× RTX 4090 or 1× A100 80GB',
-    model: 'Llama 3.1 70B (INT8 quantization)',
-    cost: 'CHF 2,800/month',
-    deployment: 'High-performance server or cloud'
+    title: 'Forschungseinrichtung',
+    description: 'Analyse wissenschaftlicher Literatur',
+    scale: '50+ Mitarbeiter',
+    documents: '25.000+',
+    responseTime: '3-8 Sekunden',
+    infrastructure: '2× RTX 4090 oder 1× A100 80GB',
+    model: 'Llama 3.1 70B (INT8-Quantisierung)',
+    cost: 'CHF 2.800/Monat',
+    deployment: 'Hochleistungsserver oder Cloud'
   },
   {
-    title: 'Large Enterprise',
-    description: 'Complex document processing and analysis',
-    scale: '100+ employees',
-    documents: '50,000+',
-    responseTime: '2-5 seconds',
-    infrastructure: '2× A100 80GB or H100',
-    model: 'Llama 3.1 70B + specialized fine-tuning',
-    cost: 'CHF 4,200/month',
-    deployment: 'Enterprise cloud or on-premises'
+    title: 'Grossunternehmen',
+    description: 'Komplexe Dokumentenverarbeitung und -analyse',
+    scale: '100+ Mitarbeiter',
+    documents: '50.000+',
+    responseTime: '2-5 Sekunden',
+    infrastructure: '2× A100 80GB oder H100',
+    model: 'Llama 3.1 70B + spezialisiertes Fine-Tuning',
+    cost: 'CHF 4.200/Monat',
+    deployment: 'Unternehmens-Cloud oder On-Premises'
   }
 ]
 
 const technicalImplementation = {
-  title: 'How Our Sustainable AI Infrastructure Works',
-  description: 'A complete technical overview of our sovereign AI deployment process and technology choices',
+  title: 'Wie unsere nachhaltige KI-Infrastruktur funktioniert',
+  description: 'Ein vollständiger technischer Überblick über unseren souveränen KI-Bereitstellungsprozess und unsere Technologieentscheidungen',
   steps: [
     {
-      phase: 'Infrastructure Setup',
-      duration: '2-3 weeks',
-      description: 'We deploy GPU infrastructure in your chosen environment with proper security and networking configuration',
-      technical: 'NVIDIA A100/H100 GPUs, containerized deployment via Docker/Kubernetes, network security setup',
-      sustainability: 'Efficient quantization and optimized inference reduce computational requirements vs. unoptimized deployments'
+      phase: 'Infrastruktur-Setup',
+      duration: '2-3 Wochen',
+      description: 'Wir stellen die GPU-Infrastruktur in Ihrer gewählten Umgebung mit entsprechender Sicherheits- und Netzwerkkonfiguration bereit',
+      technical: 'NVIDIA A100/H100 GPUs, containerisierte Bereitstellung über Docker/Kubernetes, Netzwerksicherheits-Setup',
+      sustainability: 'Effiziente Quantisierung und optimierte Inferenz reduzieren den Rechenaufwand im Vergleich zu unoptimierten Bereitstellungen'
     },
     {
-      phase: 'Open Source AI Stack',
-      duration: '1-2 weeks',
-      description: 'Deploy and optimize open-source large language models with no proprietary dependencies',
-      technical: 'Llama 3.1 (8B-70B), vLLM inference engine, INT8 quantization, model optimization',
-      sustainability: 'Open source ensures longevity, transparency, and no vendor lock-in'
+      phase: 'Open-Source-KI-Stack',
+      duration: '1-2 Wochen',
+      description: 'Bereitstellung und Optimierung von Open-Source-Large-Language-Modellen ohne proprietäre Abhängigkeiten',
+      technical: 'Llama 3.1 (8B-70B), vLLM-Inferenz-Engine, INT8-Quantisierung, Modelloptimierung',
+      sustainability: 'Open Source gewährleistet Langlebigkeit, Transparenz und keinen Anbieter-Lock-in'
     },
     {
-      phase: 'Data Processing Pipeline',
-      duration: '2-3 weeks',
-      description: 'Implement secure document processing and vector storage with complete data control',
-      technical: 'ChromaDB vector database, LlamaIndex RAG pipeline, document preprocessing, embedding generation',
-      sustainability: 'Self-hosted ensures data never leaves Switzerland, reducing regulatory compliance complexity'
+      phase: 'Datenverarbeitungspipeline',
+      duration: '2-3 Wochen',
+      description: 'Implementierung einer sicheren Dokumentenverarbeitung und Vektorspeicherung mit vollständiger Datenkontrolle',
+      technical: 'ChromaDB-Vektor-Datenbank, LlamaIndex-RAG-Pipeline, Dokumentenvorverarbeitung, Embedding-Generierung',
+      sustainability: 'Self-Hosting stellt sicher, dass die Daten die Schweiz nie verlassen, was die Komplexität der Einhaltung gesetzlicher Vorschriften reduziert'
     },
     {
-      phase: 'Integration & Training',
-      duration: '3-4 weeks',
-      description: 'Custom integrations with your existing systems and comprehensive team training',
-      technical: 'RESTful APIs, authentication integration, monitoring setup, comprehensive documentation',
-      sustainability: 'Open standards ensure future flexibility and prevent vendor lock-in'
+      phase: 'Integration & Schulung',
+      duration: '3-4 Wochen',
+      description: 'Benutzerdefinierte Integrationen mit Ihren bestehenden Systemen und umfassende Teamschulung',
+      technical: 'RESTful-APIs, Authentifizierungsintegration, Einrichten der Überwachung, umfassende Dokumentation',
+      sustainability: 'Offene Standards gewährleisten zukünftige Flexibilität und verhindern einen Anbieter-Lock-in'
     }
   ]
 }
@@ -390,14 +390,14 @@ export default function EnterpriseAIPage() {
           __html: JSON.stringify({
             '@context': 'https://schema.org',
             '@type': 'Service',
-            'name': 'Sustainable Enterprise AI Solutions',
-            'description': 'Open-source, sovereign AI systems for professional firms with complete data privacy, digital sovereignty, and sustainable computing practices.',
+            'name': 'Nachhaltige KI-Lösungen für Unternehmen',
+            'description': 'Open-Source, souveräne KI-Systeme für professionelle Firmen mit vollständiger Datenprivatsphäre, digitaler Souveränität und nachhaltigen Computing-Praktiken.',
             'provider': {
               '@type': 'Organization',
               'name': 'RevampIT',
               'url': 'https://revampit.org'
             },
-            'serviceType': 'Sustainable Enterprise AI Solutions',
+            'serviceType': 'Nachhaltige KI-Lösungen für Unternehmen',
             'areaServed': {
               '@type': 'Country',
               'name': 'Switzerland'
@@ -411,7 +411,7 @@ export default function EnterpriseAIPage() {
           <div className="container mx-auto px-4 py-3">
             <div className="flex items-center justify-center">
               <Clock className="w-5 h-5 text-yellow-600 mr-2" />
-              <span className="text-yellow-800 font-semibold">This service is coming soon. Contact us to express interest and get notified when available.</span>
+              <span className="text-yellow-800 font-semibold">Dieser Service ist bald verfügbar. Kontaktieren Sie uns, um Interesse zu bekunden und benachrichtigt zu werden, wenn er verfügbar ist.</span>
             </div>
           </div>
         </div>
@@ -424,25 +424,25 @@ export default function EnterpriseAIPage() {
               <div className="flex items-center mb-6">
                 <Brain className="w-16 h-16 mr-4 text-green-300" />
                 <div>
-                  <h1 className="text-5xl md:text-6xl font-bold mb-2 leading-tight">Sustainable Enterprise AI</h1>
-                  <p className="text-2xl md:text-3xl font-semibold text-green-200">Sovereign • Open Source • Sustainable</p>
+                  <h1 className="text-5xl md:text-6xl font-bold mb-2 leading-tight">Nachhaltige Unternehmens-KI</h1>
+                  <p className="text-2xl md:text-3xl font-semibold text-green-200">Souverän • Open Source • Nachhaltig</p>
                 </div>
               </div>
               <p className="text-xl text-green-100 mb-8">
-                The future of AI is sustainable sovereign compute. Deploy advanced AI systems that respect your data sovereignty, embrace open-source transparency, and minimize environmental impact.
+                Die Zukunft der KI ist nachhaltiges, souveränes Computing. Setzen Sie fortschrittliche KI-Systeme ein, die Ihre Datensouveränität respektieren, auf Open-Source-Transparenz setzen und die Umweltbelastung minimieren.
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
                 <Link
                   href="/contact"
                   className="inline-block bg-white text-green-800 px-8 py-4 rounded-lg font-semibold hover:bg-green-50 transition-colors duration-300 text-lg text-center"
                 >
-                  Express Interest
+                  Interesse bekunden
                 </Link>
                 <Link
                   href="#case-study"
                   className="inline-block border-2 border-white text-white px-8 py-4 rounded-lg font-semibold hover:bg-white/10 transition-colors duration-300 text-lg text-center"
                 >
-                  View Future Plans
+                  Zukünftige Pläne ansehen
                 </Link>
               </div>
             </div>
@@ -453,9 +453,9 @@ export default function EnterpriseAIPage() {
         <section className="py-20">
           <div className="container mx-auto px-4">
             <div className="text-center mb-16">
-              <h2 className="text-4xl font-bold mb-6">Our Ethos: The Future of Computing</h2>
+              <h2 className="text-4xl font-bold mb-6">Unser Ethos: Die Zukunft des Computing</h2>
               <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                Sustainable sovereign compute represents a fundamental shift towards responsible AI that respects data sovereignty, embraces transparency, and minimizes environmental impact.
+                Nachhaltiges, souveränes Computing stellt einen grundlegenden Wandel hin zu einer verantwortungsvollen KI dar, die die Datensouveränität respektiert, Transparenz begrüsst und die Umweltbelastung minimiert.
               </p>
             </div>
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -476,9 +476,9 @@ export default function EnterpriseAIPage() {
         <section className="py-20 bg-white">
           <div className="container mx-auto px-4">
             <div className="text-center mb-16">
-              <h2 className="text-4xl font-bold mb-6">Why Sustainable Sovereign AI?</h2>
+              <h2 className="text-4xl font-bold mb-6">Warum nachhaltige, souveräne KI?</h2>
               <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                Transform your document workflows with AI that aligns with Swiss values of privacy, sustainability, and independence.
+                Transformieren Sie Ihre Dokumenten-Workflows mit einer KI, die den Schweizer Werten von Datenschutz, Nachhaltigkeit und Unabhängigkeit entspricht.
               </p>
             </div>
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -488,12 +488,12 @@ export default function EnterpriseAIPage() {
                     <div className="p-3 bg-green-100 rounded-lg text-green-600 mr-4">
                       <item.icon className="w-8 h-8" />
                     </div>
-                    <h3 className="text-xl font-bold">Challenge</h3>
+                    <h3 className="text-xl font-bold">Herausforderung</h3>
                   </div>
                   <p className="text-gray-600 mb-4 font-medium">{item.pain}</p>
                   
                   <div className="border-t pt-4">
-                    <h4 className="font-semibold text-green-600 mb-2">Sovereign Solution</h4>
+                    <h4 className="font-semibold text-green-600 mb-2">Souveräne Lösung</h4>
                     <p className="text-gray-700 mb-3">{item.solution}</p>
                     <div className="flex items-center text-green-600 font-medium">
                       <CheckCircle2 className="w-5 h-5 mr-2" />
@@ -510,9 +510,9 @@ export default function EnterpriseAIPage() {
         <section className="py-20">
           <div className="container mx-auto px-4">
             <div className="text-center mb-16">
-              <h2 className="text-4xl font-bold mb-6">Open Source Technical Foundation</h2>
+              <h2 className="text-4xl font-bold mb-6">Technische Grundlage: Open Source</h2>
               <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                Built entirely on transparent, auditable open-source technologies. No proprietary dependencies, no vendor lock-in, complete digital sovereignty.
+                Vollständig auf transparenten, überprüfbaren Open-Source-Technologien aufgebaut. Keine proprietären Abhängigkeiten, kein Anbieter-Lock-in, vollständige digitale Souveränität.
               </p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -546,9 +546,9 @@ export default function EnterpriseAIPage() {
         <section id="case-study" className="py-20 bg-green-50">
           <div className="container mx-auto px-4">
             <div className="text-center mb-16">
-              <h2 className="text-4xl font-bold mb-6">Deployment Examples by Business Size</h2>
+              <h2 className="text-4xl font-bold mb-6">Bereitstellungsbeispiele nach Unternehmensgrösse</h2>
               <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                Scalable AI solutions from small startups to large enterprises - we have options for every budget and scale.
+                Skalierbare KI-Lösungen von kleinen Start-ups bis hin zu grossen Unternehmen - wir haben Optionen für jedes Budget und jeden Umfang.
               </p>
             </div>
             
@@ -559,11 +559,11 @@ export default function EnterpriseAIPage() {
                   <p className="text-sm text-gray-500 mb-2">{example.scale}</p>
                   <p className="text-gray-600 mb-4">{example.description}</p>
                   <div className="space-y-2 text-sm">
-                    <div><span className="font-semibold">Documents:</span> {example.documents}</div>
-                    <div><span className="font-semibold">Response Time:</span> {example.responseTime}</div>
+                    <div><span className="font-semibold">Dokumente:</span> {example.documents}</div>
+                    <div><span className="font-semibold">Antwortzeit:</span> {example.responseTime}</div>
                     <div><span className="font-semibold">Hardware:</span> {example.infrastructure}</div>
-                    <div><span className="font-semibold">Model:</span> {example.model}</div>
-                    <div><span className="font-semibold">Deployment:</span> {example.deployment}</div>
+                    <div><span className="font-semibold">Modell:</span> {example.model}</div>
+                    <div><span className="font-semibold">Bereitstellung:</span> {example.deployment}</div>
                     <div className="text-lg font-bold text-green-600 mt-3">{example.cost}</div>
                   </div>
                 </div>
@@ -571,42 +571,42 @@ export default function EnterpriseAIPage() {
             </div>
 
             <div className="bg-white rounded-xl shadow-lg p-8">
-              <h3 className="text-2xl font-bold mb-6 text-center">Hardware Options & Technology Stack</h3>
+              <h3 className="text-2xl font-bold mb-6 text-center">Hardware-Optionen & Technologie-Stack</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div>
-                  <h4 className="font-semibold text-green-600 mb-3">Hardware Tiers</h4>
+                  <h4 className="font-semibold text-green-600 mb-3">Hardware-Stufen</h4>
                   <ul className="space-y-2 text-gray-700">
-                    <li>• <strong>Entry Level:</strong> RTX 4090 24GB (excellent price/performance)</li>
-                    <li>• <strong>Professional:</strong> RTX 4090 Ti or dual RTX 4090 setups</li>
-                    <li>• <strong>Enterprise:</strong> NVIDIA A100 80GB (maximum performance)</li>
-                    <li>• <strong>Cutting Edge:</strong> NVIDIA H100 (latest generation)</li>
+                    <li>• <strong>Einstiegslevel:</strong> RTX 4090 24GB (hervorragendes Preis-Leistungs-Verhältnis)</li>
+                    <li>• <strong>Professionell:</strong> RTX 4090 Ti oder duale RTX 4090-Setups</li>
+                    <li>• <strong>Unternehmen:</strong> NVIDIA A100 80GB (maximale Leistung)</li>
+                    <li>• <strong>Spitzentechnologie:</strong> NVIDIA H100 (neueste Generation)</li>
                   </ul>
                 </div>
                 <div>
-                  <h4 className="font-semibold text-green-600 mb-3">Software & AI Models</h4>
+                  <h4 className="font-semibold text-green-600 mb-3">Software & KI-Modelle</h4>
                   <ul className="space-y-2 text-gray-700">
-                    <li>• <strong>Small:</strong> Llama 3.1 8B (fast, efficient, budget-friendly)</li>
-                    <li>• <strong>Medium:</strong> Llama 3.1 13B (balanced performance)</li>
-                    <li>• <strong>Large:</strong> Llama 3.1 70B (maximum capability)</li>
-                    <li>• <strong>Deployment:</strong> vLLM, ChromaDB, LlamaIndex</li>
+                    <li>• <strong>Klein:</strong> Llama 3.1 8B (schnell, effizient, budgetfreundlich)</li>
+                    <li>• <strong>Mittel:</strong> Llama 3.1 13B (ausgewogene Leistung)</li>
+                    <li>• <strong>Gross:</strong> Llama 3.1 70B (maximale Fähigkeit)</li>
+                    <li>• <strong>Bereitstellung:</strong> vLLM, ChromaDB, LlamaIndex</li>
                   </ul>
                 </div>
               </div>
               
               <div className="mt-8 bg-green-50 rounded-lg p-6">
-                <h4 className="font-semibold text-green-800 mb-3">Start Small, Scale Smart</h4>
+                <h4 className="font-semibold text-green-800 mb-3">Klein anfangen, intelligent skalieren</h4>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <div>
-                    <h5 className="font-semibold text-green-700">Entry Point</h5>
-                    <p className="text-sm text-gray-700">Begin with RTX 4090 setup for CHF 450/month. Perfect for small teams to test and learn.</p>
+                    <h5 className="font-semibold text-green-700">Einstiegspunkt</h5>
+                    <p className="text-sm text-gray-700">Beginnen Sie mit einem RTX 4090-Setup für CHF 450/Monat. Perfekt für kleine Teams zum Testen und Lernen.</p>
                   </div>
                   <div>
-                    <h5 className="font-semibold text-green-700">Gradual Scaling</h5>
-                    <p className="text-sm text-gray-700">Upgrade hardware and models as your needs grow. No need to start with enterprise-grade equipment.</p>
+                    <h5 className="font-semibold text-green-700">Allmähliche Skalierung</h5>
+                    <p className="text-sm text-gray-700">Aktualisieren Sie Hardware und Modelle, wenn Ihre Anforderungen wachsen. Sie müssen nicht mit unternehmenstauglicher Ausrüstung beginnen.</p>
                   </div>
                   <div>
-                    <h5 className="font-semibold text-green-700">Future-Proof</h5>
-                    <p className="text-sm text-gray-700">Open architecture allows seamless upgrades without vendor lock-in or data migration.</p>
+                    <h5 className="font-semibold text-green-700">Zukunftssicher</h5>
+                    <p className="text-sm text-gray-700">Die offene Architektur ermöglicht nahtlose Upgrades ohne Anbieter-Lock-in oder Datenmigration.</p>
                   </div>
                 </div>
               </div>
@@ -618,9 +618,9 @@ export default function EnterpriseAIPage() {
         <section className="py-20">
           <div className="container mx-auto px-4">
             <div className="text-center mb-16">
-              <h2 className="text-4xl font-bold mb-6">Industry Applications</h2>
+              <h2 className="text-4xl font-bold mb-6">Branchenanwendungen</h2>
               <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                Our sovereign AI solutions adapt to your industry's specific needs while maintaining complete data sovereignty and compliance.
+                Unsere souveränen KI-Lösungen passen sich den spezifischen Bedürfnissen Ihrer Branche an und gewährleisten gleichzeitig vollständige Datensouveränität und Compliance.
               </p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -653,9 +653,9 @@ export default function EnterpriseAIPage() {
         <section id="pricing" className="py-20 bg-white">
           <div className="container mx-auto px-4">
             <div className="text-center mb-16">
-              <h2 className="text-4xl font-bold mb-6">Sustainable Investment in Digital Sovereignty</h2>
+              <h2 className="text-4xl font-bold mb-6">Nachhaltige Investition in die digitale Souveränität</h2>
               <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                Transparent pricing that reflects our commitment to sustainable, sovereign AI. Scale from proof-of-concept to full production with complete cost visibility.
+                Transparente Preise, die unser Engagement für nachhaltige, souveräne KI widerspiegeln. Skalieren Sie vom Proof-of-Concept bis zur vollen Produktion mit vollständiger Kostentransparenz.
               </p>
             </div>
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -664,7 +664,7 @@ export default function EnterpriseAIPage() {
                   <div className="p-8">
                     {tier.popular && (
                       <div className="bg-green-500 text-white text-sm font-semibold px-3 py-1 rounded-full inline-block mb-4">
-                        Most Popular
+                        Beliebteste Option
                       </div>
                     )}
                     <h3 className="text-2xl font-bold mb-2">{tier.name}</h3>
@@ -698,10 +698,10 @@ export default function EnterpriseAIPage() {
               <div className="bg-green-50 rounded-xl p-8 max-w-4xl mx-auto">
                 <div className="flex items-center justify-center mb-4">
                   <Leaf className="w-8 h-8 text-green-600 mr-3" />
-                  <h3 className="text-2xl font-bold text-green-800">Sustainability Commitment</h3>
+                  <h3 className="text-2xl font-bold text-green-800">Nachhaltigkeitsverpflichtung</h3>
                 </div>
                 <p className="text-gray-700 leading-relaxed">
-                  Our pricing reflects the true cost of sustainable AI. By choosing energy-efficient models, optimized infrastructure, and transparent open-source technologies, we deliver superior value while minimizing environmental impact. Every deployment contributes to a more sustainable digital future.
+                  Unsere Preisgestaltung spiegelt die wahren Kosten nachhaltiger KI wider. Durch die Wahl energieeffizienter Modelle, optimierter Infrastruktur und transparenter Open-Source-Technologien liefern wir einen überlegenen Wert und minimieren gleichzeitig die Umweltbelastung. Jede Bereitstellung trägt zu einer nachhaltigeren digitalen Zukunft bei.
                 </p>
               </div>
             </div>
@@ -712,9 +712,9 @@ export default function EnterpriseAIPage() {
         <section className="py-20">
           <div className="container mx-auto px-4">
             <div className="text-center mb-16">
-              <h2 className="text-4xl font-bold mb-6">8-12 Week Implementation Timeline</h2>
+              <h2 className="text-4xl font-bold mb-6">8-12 Wochen Implementierungszeitplan</h2>
               <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                Structured deployment process with clear milestones and deliverables. Timeline varies based on complexity and requirements.
+                Strukturierter Bereitstellungsprozess mit klaren Meilensteinen und Ergebnissen. Der Zeitplan variiert je nach Komplexität und Anforderungen.
               </p>
             </div>
             <div className="max-w-4xl mx-auto">
@@ -725,7 +725,7 @@ export default function EnterpriseAIPage() {
                       <span className="text-2xl font-bold text-green-600">W{item.week}</span>
                     </div>
                     <div className="flex-grow">
-                      <h3 className="text-lg font-semibold mb-2">Week {item.week}</h3>
+                      <h3 className="text-lg font-semibold mb-2">Woche {item.week}</h3>
                       <p className="text-gray-600">{item.milestone}</p>
                     </div>
                     <div className="flex-shrink-0">
@@ -742,9 +742,9 @@ export default function EnterpriseAIPage() {
         <section className="py-20 bg-white">
           <div className="container mx-auto px-4">
             <div className="text-center mb-16">
-              <h2 className="text-4xl font-bold mb-6">Risk Management</h2>
+              <h2 className="text-4xl font-bold mb-6">Risikomanagement</h2>
               <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                We've identified and mitigated the key risks in enterprise AI deployment.
+                Wir haben die Hauptrisiken bei der Bereitstellung von Unternehmens-KI identifiziert und gemindert.
               </p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -755,7 +755,7 @@ export default function EnterpriseAIPage() {
                       <item.icon className="w-6 h-6" />
                     </div>
                     <div>
-                      <h3 className="font-bold text-lg mb-2 text-red-700">Risk: {item.risk}</h3>
+                      <h3 className="font-bold text-lg mb-2 text-red-700">Risiko: {item.risk}</h3>
                       <p className="text-gray-700">{item.mitigation}</p>
                     </div>
                   </div>
@@ -769,9 +769,9 @@ export default function EnterpriseAIPage() {
         <section className="py-20">
           <div className="container mx-auto px-4">
             <div className="text-center mb-16">
-              <h2 className="text-4xl font-bold mb-6">Technical Implementation Overview</h2>
+              <h2 className="text-4xl font-bold mb-6">Technischer Implementierungsüberblick</h2>
               <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                A complete technical overview of our sovereign AI deployment process and technology choices.
+                Ein vollständiger technischer Überblick über unseren souveränen KI-Bereitstellungsprozess und unsere Technologieentscheidungen.
               </p>
             </div>
             <div className="max-w-4xl mx-auto">
@@ -793,7 +793,7 @@ export default function EnterpriseAIPage() {
                       <span>{step.technical}</span>
                     </div>
                     <div className="mt-4">
-                      <span className="text-green-600 font-semibold">Sustainability Impact:</span>
+                      <span className="text-green-600 font-semibold">Nachhaltigkeitsauswirkungen:</span>
                       <p className="text-gray-700">{step.sustainability}</p>
                     </div>
                   </div>
@@ -811,28 +811,28 @@ export default function EnterpriseAIPage() {
               <Heart className="w-8 h-8 mr-4 text-green-300" />
               <Leaf className="w-10 h-10 text-green-300" />
             </div>
-            <h2 className="text-4xl font-bold mb-6">Ready for Sustainable Sovereign AI?</h2>
+            <h2 className="text-4xl font-bold mb-6">Bereit für nachhaltige, souveräne KI?</h2>
             <p className="text-xl mb-8 max-w-3xl mx-auto text-green-100">
-              Join the movement towards digital sovereignty. Deploy AI that respects your data, embraces transparency, and builds a sustainable digital future for Switzerland and beyond.
+              Schliessen Sie sich der Bewegung zur digitalen Souveränität an. Setzen Sie eine KI ein, die Ihre Daten respektiert, Transparenz begrüsst und eine nachhaltige digitale Zukunft für die Schweiz und darüber hinaus schafft.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
                 href="/contact"
                 className="inline-block bg-white text-green-800 px-8 py-4 rounded-lg font-semibold hover:bg-green-50 transition-colors duration-300 text-lg"
               >
-                Start Your Sovereign AI Journey
+                Starten Sie Ihre souveräne KI-Reise
               </Link>
               <Link
                 href="/services"
                 className="inline-block border-2 border-white text-white px-8 py-4 rounded-lg font-semibold hover:bg-white/10 transition-colors duration-300 text-lg"
               >
-                Explore All Services
+                Alle Dienstleistungen entdecken
               </Link>
             </div>
             
             <div className="mt-12 max-w-2xl mx-auto">
               <p className="text-green-200 text-lg italic">
-                "Sustainable sovereign compute is not just the future—it's the responsible choice for today."
+                "Nachhaltiges, souveränes Computing ist nicht nur die Zukunft – es ist die verantwortungsvolle Wahl für heute."
               </p>
             </div>
           </div>
@@ -840,4 +840,4 @@ export default function EnterpriseAIPage() {
       </main>
     </>
   )
-} 
+}

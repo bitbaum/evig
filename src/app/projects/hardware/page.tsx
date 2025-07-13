@@ -5,26 +5,26 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import Link from 'next/link'
 
 export const metadata: Metadata = {
-  title: 'Hardware Development',
-  description: 'RevampIT\'s hardware development work focuses on discovering new possibilities for decommissioned computer hardware, optimizing energy usage, and creating guides for open source hardware assembly.'
+  title: 'Hardware-Entwicklung',
+  description: 'Die Hardware-Entwicklungsarbeit von RevampIT konzentriert sich auf die Entdeckung neuer Möglichkeiten für ausgemusterte Computer-Hardware, die Optimierung des Energieverbrauchs und die Erstellung von Anleitungen für die Montage von Open-Source-Hardware.'
 }
 
 export default function HardwarePage() {
   return (
     <main className="min-h-screen">
       <HeroBanner
-        title="Hardware Development"
-        description="Innovative solutions for sustainable computing"
+        title="Hardware-Entwicklung"
+        description="Innovative Lösungen für nachhaltiges Computing"
       >
         <div className="flex gap-4 mt-8">
           <Link href="/get-involved/volunteer">
             <Button size="lg" className="bg-white text-green-800 hover:bg-green-50">
-              Join Our Projects
+              An unseren Projekten teilnehmen
             </Button>
           </Link>
           <Link href="/contact">
             <Button variant="outline" size="lg" className="border-white text-white hover:bg-white/10">
-              Contact Us
+              Kontakt
             </Button>
           </Link>
         </div>
@@ -34,43 +34,42 @@ export default function HardwarePage() {
       <section className="py-20 bg-white">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
-            <h2 className="text-4xl font-bold mb-6 text-center">About Our Hardware Work</h2>
+            <h2 className="text-4xl font-bold mb-6 text-center">Über unsere Hardware-Arbeit</h2>
             <p className="text-xl text-gray-600 text-center mb-12">
-              At revamp-it, we focus on finding new applications for decommissioned computer hardware 
-              that remains fully functional but is no longer suitable for its original purpose due to 
-              technological advancement.
+              Bei revamp-it konzentrieren wir uns darauf, neue Anwendungen für ausgemusterte Computer-Hardware zu finden,
+              die noch voll funktionsfähig ist, aber aufgrund des technologischen Fortschritts nicht mehr für ihren ursprünglichen Zweck geeignet ist.
             </p>
             
             <div className="grid md:grid-cols-3 gap-8">
               <Card className="bg-gray-50">
                 <CardHeader>
-                  <CardTitle className="text-xl">Hardware Repurposing</CardTitle>
+                  <CardTitle className="text-xl">Hardware-Wiederverwendung</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <p className="text-gray-600">
-                    Finding new functionalities for used electronic components and extending their lifecycle
+                    Neue Funktionalitäten für gebrauchte elektronische Komponenten finden und deren Lebenszyklus verlängern
                   </p>
                 </CardContent>
               </Card>
 
               <Card className="bg-gray-50">
                 <CardHeader>
-                  <CardTitle className="text-xl">Energy Optimization</CardTitle>
+                  <CardTitle className="text-xl">Energieoptimierung</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <p className="text-gray-600">
-                    Developing energy and resource-efficient computing solutions
+                    Entwicklung von energie- und ressourceneffizienten Computerlösungen
                   </p>
                 </CardContent>
               </Card>
 
               <Card className="bg-gray-50">
                 <CardHeader>
-                  <CardTitle className="text-xl">Open Source Guides</CardTitle>
+                  <CardTitle className="text-xl">Open-Source-Anleitungen</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <p className="text-gray-600">
-                    Creating comprehensive guides for open source hardware assembly
+                    Erstellung umfassender Anleitungen für die Montage von Open-Source-Hardware
                   </p>
                 </CardContent>
               </Card>
@@ -83,30 +82,30 @@ export default function HardwarePage() {
       <section className="py-20 bg-gray-50">
         <div className="container mx-auto px-4">
           <div className="max-w-6xl mx-auto">
-            <h2 className="text-4xl font-bold mb-12 text-center">Current Projects</h2>
+            <h2 className="text-4xl font-bold mb-12 text-center">Aktuelle Projekte</h2>
             
             <div className="grid md:grid-cols-2 gap-8">
               <Card className="bg-white shadow-lg">
                 <CardHeader>
-                  <CardTitle className="text-2xl font-bold">12V Power for Recycled Computers</CardTitle>
+                  <CardTitle className="text-2xl font-bold">12V-Stromversorgung für rezyklierte Computer</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <p className="text-gray-600 mb-4">
-                    Developing solutions to replace 220V power supplies with 12V alternatives for use with 
-                    renewable energy sources (solar, wind, or pedal power).
+                    Entwicklung von Lösungen zum Ersatz von 220V-Netzteilen durch 12V-Alternativen für den Einsatz mit
+                    erneuerbaren Energiequellen (Solar-, Wind- oder Pedalkraft).
                   </p>
                   <ul className="space-y-2 text-gray-600">
                     <li className="flex items-start">
                       <span className="text-primary mr-2">•</span>
-                      <span>Creating self-build guides for 12V power supplies</span>
+                      <span>Erstellung von Selbstbauanleitungen für 12V-Netzteile</span>
                     </li>
                     <li className="flex items-start">
                       <span className="text-primary mr-2">•</span>
-                      <span>Maximizing use of recycled components</span>
+                      <span>Maximierung der Nutzung von rezyklierten Komponenten</span>
                     </li>
                     <li className="flex items-start">
                       <span className="text-primary mr-2">•</span>
-                      <span>Enabling computer use in areas with limited power infrastructure</span>
+                      <span>Ermöglichung der Computernutzung in Gebieten mit begrenzter Strominfrastruktur</span>
                     </li>
                   </ul>
                 </CardContent>
@@ -114,28 +113,28 @@ export default function HardwarePage() {
 
               <Card className="bg-white shadow-lg">
                 <CardHeader>
-                  <CardTitle className="text-2xl font-bold">EPROM Repurposing</CardTitle>
+                  <CardTitle className="text-2xl font-bold">EPROM-Wiederverwendung</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <p className="text-gray-600 mb-4">
-                    Collecting and reprogramming BIOS chips from old motherboards, expansion cards, and printers.
+                    Sammeln und Umprogrammieren von BIOS-Chips von alten Motherboards, Erweiterungskarten und Druckern.
                   </p>
                   <ul className="space-y-2 text-gray-600">
                     <li className="flex items-start">
                       <span className="text-primary mr-2">•</span>
-                      <span>Using EPROM programmer for chip reprogramming</span>
+                      <span>Verwendung eines EPROM-Programmiergeräts zur Chip-Umprogrammierung</span>
                     </li>
                     <li className="flex items-start">
                       <span className="text-primary mr-2">•</span>
-                      <span>Implementation in network cards with empty sockets</span>
+                      <span>Implementierung in Netzwerkkarten mit leeren Sockeln</span>
                     </li>
                     <li className="flex items-start">
                       <span className="text-primary mr-2">•</span>
-                      <span>Enabling network boot for LTSP clients</span>
+                      <span>Ermöglichung des Netzwerk-Boots für LTSP-Clients</span>
                     </li>
                   </ul>
                   <div className="mt-4 p-4 bg-gray-50 rounded-lg">
-                    <p className="text-sm font-medium text-gray-700">Interested in these chips:</p>
+                    <p className="text-sm font-medium text-gray-700">Interessiert an diesen Chips:</p>
                     <p className="text-sm text-gray-600">27C128, 27C256, 27C512</p>
                   </div>
                 </CardContent>
@@ -143,24 +142,24 @@ export default function HardwarePage() {
 
               <Card className="bg-white shadow-lg">
                 <CardHeader>
-                  <CardTitle className="text-2xl font-bold">Power Supply Repair</CardTitle>
+                  <CardTitle className="text-2xl font-bold">Netzteil-Reparatur</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <p className="text-gray-600 mb-4">
-                    Developing expertise in computer power supply repair and component replacement.
+                    Entwicklung von Fachwissen in der Reparatur von Computer-Netzteilen und dem Austausch von Komponenten.
                   </p>
                   <ul className="space-y-2 text-gray-600">
                     <li className="flex items-start">
                       <span className="text-primary mr-2">•</span>
-                      <span>Focus on large, easily replaceable components</span>
+                      <span>Fokus auf grosse, leicht austauschbare Komponenten</span>
                     </li>
                     <li className="flex items-start">
                       <span className="text-primary mr-2">•</span>
-                      <span>Extending the life of partially damaged power supplies</span>
+                      <span>Verlängerung der Lebensdauer von teilweise beschädigten Netzteilen</span>
                     </li>
                     <li className="flex items-start">
                       <span className="text-primary mr-2">•</span>
-                      <span>Creating repair guides and documentation</span>
+                      <span>Erstellung von Reparaturanleitungen und Dokumentationen</span>
                     </li>
                   </ul>
                 </CardContent>
@@ -168,24 +167,24 @@ export default function HardwarePage() {
 
               <Card className="bg-white shadow-lg">
                 <CardHeader>
-                  <CardTitle className="text-2xl font-bold">LCD Monitor Repair</CardTitle>
+                  <CardTitle className="text-2xl font-bold">LCD-Monitor-Reparatur</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <p className="text-gray-600 mb-4">
-                    Expanding our expertise in repairing flat-screen monitors with minor defects.
+                    Erweiterung unserer Expertise in der Reparatur von Flachbildschirmen mit kleineren Defekten.
                   </p>
                   <ul className="space-y-2 text-gray-600">
                     <li className="flex items-start">
                       <span className="text-primary mr-2">•</span>
-                      <span>Diagnosing and fixing common LCD issues</span>
+                      <span>Diagnose und Behebung gängiger LCD-Probleme</span>
                     </li>
                     <li className="flex items-start">
                       <span className="text-primary mr-2">•</span>
-                      <span>Component-level repair techniques</span>
+                      <span>Reparaturtechniken auf Komponentenebene</span>
                     </li>
                     <li className="flex items-start">
                       <span className="text-primary mr-2">•</span>
-                      <span>Documenting successful repair methods</span>
+                      <span>Dokumentation erfolgreicher Reparaturmethoden</span>
                     </li>
                   </ul>
                 </CardContent>
@@ -201,25 +200,25 @@ export default function HardwarePage() {
           <div className="max-w-4xl mx-auto">
             <Card className="bg-gray-50">
               <CardHeader>
-                <CardTitle className="text-2xl font-bold">SCSI Cable Repurposing</CardTitle>
+                <CardTitle className="text-2xl font-bold">SCSI-Kabel-Wiederverwendung</CardTitle>
               </CardHeader>
               <CardContent>
                 <p className="text-gray-600 mb-4">
-                  Exploring new applications for SCSI cables and interfaces, which were once the standard 
-                  for reliable data transfer in server environments.
+                  Erforschung neuer Anwendungen für SCSI-Kabel und -Schnittstellen, die einst der Standard
+                  für zuverlässige Datenübertragung in Serverumgebungen waren.
                 </p>
                 <ul className="space-y-2 text-gray-600">
                   <li className="flex items-start">
                     <span className="text-primary mr-2">•</span>
-                    <span>Finding new uses for robust SCSI cables</span>
+                    <span>Finden neuer Verwendungszwecke für robuste SCSI-Kabel</span>
                   </li>
                   <li className="flex items-start">
                     <span className="text-primary mr-2">•</span>
-                    <span>Developing alternative applications for SCSI interfaces</span>
+                    <span>Entwicklung alternativer Anwendungen für SCSI-Schnittstellen</span>
                   </li>
                   <li className="flex items-start">
                     <span className="text-primary mr-2">•</span>
-                    <span>Creating documentation for repurposing methods</span>
+                    <span>Erstellung von Dokumentationen für Wiederverwendungsmethoden</span>
                   </li>
                 </ul>
               </CardContent>
@@ -232,27 +231,27 @@ export default function HardwarePage() {
       <section className="py-20 bg-gray-50">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
-            <h2 className="text-4xl font-bold mb-8">Get Involved</h2>
+            <h2 className="text-4xl font-bold mb-8">Machen Sie mit</h2>
             <div className="grid md:grid-cols-3 gap-8 mb-12">
               <div className="p-6 bg-white rounded-lg shadow-sm flex flex-col h-full">
-                <h3 className="text-xl font-semibold mb-4">Share Knowledge</h3>
-                <p className="text-gray-600 mb-4 flex-grow">Contribute your expertise in hardware repair and optimization</p>
+                <h3 className="text-xl font-semibold mb-4">Wissen teilen</h3>
+                <p className="text-gray-600 mb-4 flex-grow">Bringen Sie Ihr Fachwissen in der Hardware-Reparatur und -Optimierung ein</p>
                 <Link href="/get-involved/volunteer" className="block w-full">
-                  <Button variant="outline" className="w-full">Join Us</Button>
+                  <Button variant="outline" className="w-full">Engagieren Sie sich</Button>
                 </Link>
               </div>
               <div className="p-6 bg-white rounded-lg shadow-sm flex flex-col h-full">
-                <h3 className="text-xl font-semibold mb-4">Donate Hardware</h3>
-                <p className="text-gray-600 mb-4 flex-grow">Contribute old hardware for our repurposing projects</p>
+                <h3 className="text-xl font-semibold mb-4">Hardware spenden</h3>
+                <p className="text-gray-600 mb-4 flex-grow">Spenden Sie alte Hardware für unsere Wiederverwendungsprojekte</p>
                 <Link href="/get-involved/donate" className="block w-full">
-                  <Button variant="outline" className="w-full">Donate</Button>
+                  <Button variant="outline" className="w-full">Spenden</Button>
                 </Link>
               </div>
               <div className="p-6 bg-white rounded-lg shadow-sm flex flex-col h-full">
-                <h3 className="text-xl font-semibold mb-4">Collaborate</h3>
-                <p className="text-gray-600 mb-4 flex-grow">Work with us on hardware development projects</p>
+                <h3 className="text-xl font-semibold mb-4">Zusammenarbeiten</h3>
+                <p className="text-gray-600 mb-4 flex-grow">Arbeiten Sie mit uns an Hardware-Entwicklungsprojekten</p>
                 <Link href="/contact" className="block w-full">
-                  <Button variant="outline" className="w-full">Contact Us</Button>
+                  <Button variant="outline" className="w-full">Kontaktieren Sie uns</Button>
                 </Link>
               </div>
             </div>
