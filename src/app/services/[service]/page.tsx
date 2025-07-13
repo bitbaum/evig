@@ -77,6 +77,7 @@ const services: Record<string, ServiceDefinition> = {
         title: 'Diagnostic Services',
         description: 'Comprehensive diagnostics to identify and fix issues quickly. We use professional tools and years of experience to pinpoint problems accurately.',
         icon: Database
+        
       },
       {
         title: 'Professional Assessment',

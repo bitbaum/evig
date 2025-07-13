@@ -13,6 +13,7 @@ import { WelcomeModal } from '@/components/ui/WelcomeModal'
 import { DropdownTrigger } from '@/components/ui/DropdownTrigger'
 import { MultiColumnDropdown } from '@/components/ui/MultiColumnDropdown'
 import { cn } from '@/lib/utils'
+import { Button } from '@/components/ui/button'
 
 export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
@@ -45,14 +46,7 @@ export function Header() {
         <div className="max-w-7xl mx-auto">
           <nav className="flex items-center justify-between px-6 py-4">
             {/* Logo */}
-            <Link href="/" className="flex items-center gap-3 group">
-              <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-gradient-to-br from-green-600 to-green-700 shadow-lg group-hover:shadow-xl transition-all duration-200">
-                <span className="text-white font-bold text-xl">R</span>
-              </div>
-              <span className="text-xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">
-                RevampIT
-              </span>
-            </Link>
+            <Logo />
 
             {/* Navigation Links */}
             <div className="hidden md:flex items-center space-x-1">
@@ -62,7 +56,7 @@ export function Header() {
                     id={item.name.toLowerCase()}
                     href={item.href}
                     hasDropdown={!!item.subItems}
-                    isMultiColumn={item.name === 'Services' || item.name === 'Projects' || item.name === 'Get Involved'}
+                    isMultiColumn={item.isMultiColumn}
                     className={cn(
                       // Special styling for highlight items (Contact)
                       item.highlight && [
@@ -89,7 +83,8 @@ export function Header() {
                     <MultiColumnDropdown
                       id={item.name.toLowerCase()}
                       items={item.subItems}
-                      isMultiColumn={item.name === 'Services' || item.name === 'Projects' || item.name === 'Get Involved'}
+                      isMultiColumn={item.isMultiColumn}
+                      dropdownAlignment={item.dropdownAlignment}
                     />
                   )}
                 </div>
@@ -97,16 +92,15 @@ export function Header() {
             </div>
 
             {/* Mobile Menu Button */}
-            <button 
+            <Button
               ref={mobileMenuTriggerRef}
-              className="md:hidden p-2 rounded-lg text-gray-700 hover:text-gray-900 hover:bg-gray-100/80 transition-colors duration-200"
+              variant="ghost"
+              className="md:hidden"
               onClick={handleOpenMobileMenu}
-              aria-label="Open menu"
+              aria-label="Menü öffnen"
             >
-              <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-              </svg>
-            </button>
+              <Menu className="h-6 w-6" />
+            </Button>
           </nav>
         </div>
       </header>

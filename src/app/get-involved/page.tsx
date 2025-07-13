@@ -1,114 +1,113 @@
 import { Metadata } from 'next'
 import { Users, Code, Building2, GraduationCap, Handshake, Heart, Globe, Recycle, Lightbulb, Gift } from 'lucide-react'
-import { siteConfig } from '@/config/site'
 import { ContactLink } from '@/components/ui/contact-link'
 import { HeroBanner } from '@/components/ui/hero-banner'
 
 export const metadata: Metadata = {
-  title: 'Get Involved | RevampIT',
-  description: 'Join our mission to reduce electronic waste and make technology accessible to everyone. Volunteer, intern, or partner with us.'
+  title: 'Mitmachen | RevampIT',
+  description: 'Schliessen Sie sich unserer Mission an, Elektroschrott zu reduzieren und Technologie für alle zugänglich zu machen. Werden Sie Freiwilliger, Praktikant oder Partner.'
 }
 
 const coreValues = [
   {
-    title: 'Sustainability',
-    description: 'We believe in creating a sustainable future through responsible technology use and waste reduction.',
+    title: 'Nachhaltigkeit',
+    description: 'Wir glauben an die Schaffung einer nachhaltigen Zukunft durch verantwortungsvolles Technologieeinsatz und Abfallreduzierung.',
     icon: Recycle
   },
   {
-    title: 'Community',
-    description: 'Building strong communities through technology education and inclusive participation.',
+    title: 'Gemeinschaft',
+    description: 'Starke Gemeinschaften durch Technologiebildung und inklusive Teilnahme aufbauen.',
     icon: Users
   },
   {
     title: 'Innovation',
-    description: 'Finding creative solutions to make technology accessible and environmentally friendly.',
+    description: 'Kreative Lösungen finden, um Technologie zugänglich und umweltfreundlich zu machen.',
     icon: Lightbulb
   },
   {
-    title: 'Global Impact',
-    description: 'Making a difference in local and global communities through technology.',
+    title: 'Globale Wirkung',
+    description: 'Einen Unterschied in lokalen und globalen Gemeinschaften durch Technologie machen.',
     icon: Globe
   }
 ]
 
 const involvementOptions = [
   {
-    title: 'Volunteer',
-    description: 'Join our team of dedicated volunteers. No previous expertise required - just bring your interest and enthusiasm for our mission.',
+    title: 'Freiwilligenarbeit',
+    description: 'Schliessen Sie sich unserem Team engagierter Freiwilliger an. Keine Vorerfahrung erforderlich - bringen Sie einfach Ihr Interesse und Ihre Begeisterung für unsere Mission mit.',
     icon: Users,
     features: [
-      'Work with hardware and software',
-      'Learn new skills',
-      'Make a difference in your community',
-      'Meet like-minded people'
+      'Mit Hardware und Software arbeiten',
+      'Neue Fähigkeiten erlernen',
+      'Einen Unterschied in Ihrer Gemeinschaft machen',
+      'Gleichgesinnte Menschen treffen'
     ],
-    cta: 'Start Volunteering',
+    cta: 'Freiwilligenarbeit beginnen',
     href: '/get-involved/volunteer'
   },
   {
-    title: 'Technical Experts',
-    description: 'If you have experience in open source software, hardware, or electronics, we\'d love to have you join our team or help realize your own ideas.',
+    title: 'Technische Experten',
+    description: 'Wenn Sie Erfahrung mit Open-Source-Software, Hardware oder Elektronik haben, würden wir uns freuen, Sie in unserem Team zu haben oder Ihnen bei der Umsetzung Ihrer eigenen Ideen zu helfen.',
     icon: Code,
     features: [
-      'Work on meaningful projects',
-      'Share your expertise',
-      'Collaborate with the community',
-      'Develop new solutions'
+      'An sinnvollen Projekten arbeiten',
+      'Ihre Expertise teilen',
+      'Mit der Gemeinschaft zusammenarbeiten',
+      'Neue Lösungen entwickeln'
     ],
-    cta: 'Share Your Expertise',
+    cta: 'Ihre Expertise teilen',
     href: '/get-involved/technical-experts'
   },
   {
-    title: 'Internships',
-    description: 'We offer internship opportunities for those looking to gain experience in technology and sustainability.',
+    title: 'Praktika',
+    description: 'Wir bieten Praktikumsmöglichkeiten für diejenigen, die Erfahrungen in Technologie und Nachhaltigkeit sammeln möchten.',
     icon: GraduationCap,
     features: [
-      'Hands-on experience',
-      'Professional development',
-      'Mentorship opportunities',
-      'Flexible arrangements'
+      'Praktische Erfahrung',
+      'Berufliche Entwicklung',
+      'Mentoring-Möglichkeiten',
+      'Flexible Vereinbarungen'
     ],
-    cta: 'Apply for Internship',
+    cta: 'Für Praktikum bewerben',
     href: '/get-involved/internships'
   },
   {
-    title: 'Work Reintegration',
-    description: 'We collaborate with institutions to provide work reintegration opportunities for people looking to re-enter the workforce.',
+    title: 'Arbeitsintegration',
+    description: 'Wir arbeiten mit Institutionen zusammen, um Arbeitsintegrations-möglichkeiten für Menschen zu bieten, die wieder ins Berufsleben einsteigen möchten.',
     icon: Handshake,
     features: [
-      'Skill development',
-      'Social integration',
-      'Professional support',
-      'Meaningful work'
+      'Fähigkeitsentwicklung',
+      'Soziale Integration',
+      'Professionelle Unterstützung',
+      'Sinnvolle Arbeit'
     ],
-    cta: 'Learn More',
+    cta: 'Mehr erfahren',
     href: '/get-involved/work-reintegration'
   },
   {
-    title: 'Partnerships',
-    description: 'We work with educational institutions and organizations to create meaningful programs and opportunities.',
+    title: 'Partnerschaften',
+    description: 'Wir arbeiten mit Bildungseinrichtungen und Organisationen zusammen, um sinnvolle Programme und Möglichkeiten zu schaffen.',
     icon: Building2,
     features: [
-      'Educational programs',
-      'Work experience placements',
-      'Community initiatives',
-      'Sustainable solutions'
+      'Bildungsprogramme',
+      'Praktikumsplätze',
+      'Gemeinschaftsinitiativen',
+      'Nachhaltige Lösungen'
     ],
-    cta: 'Partner With Us',
+    cta: 'Partner werden',
     href: '/get-involved/partnerships'
   },
   {
-    title: 'Donate',
-    description: 'Support our mission to make technology sustainable and accessible for everyone. Your contribution helps us continue our important work.',
+    title: 'Spenden',
+    description: 'Unterstützen Sie unsere Mission, Technologie nachhaltig und für alle zugänglich zu machen. Ihr Beitrag hilft uns, unsere wichtige Arbeit fortzusetzen.',
     icon: Gift,
     features: [
-      'Support sustainable technology',
-      'Help reduce e-waste',
-      'Enable community programs',
-      'Make technology accessible'
+      'Nachhaltige Technologie unterstützen',
+      'Helfen, Elektroschrott zu reduzieren',
+      'Gemeinschaftsprogramme ermöglichen',
+      'Technologie zugänglich machen'
     ],
-    cta: 'Donate Now',
+    cta: 'Jetzt spenden',
     href: '/get-involved/donate'
   }
 ]
@@ -117,7 +116,7 @@ const testimonials = [
   {
     quote: "As a refugee, RevampIT gave me the opportunity to work with them. I learn a lot and have the freedom to develop skills aligned with my goals. Now I write code and can learn anything I find interesting, as everyone is willing to share knowledge. This is a real community.",
     author: "G.",
-    role: "Volunteer"
+    role: "Freiwilliger"
   }
 ]
 
@@ -144,21 +143,21 @@ export default function GetInvolvedPage() {
   return (
     <main className="min-h-screen">
       <HeroBanner
-        title="Join Our Mission"
-        description="Be part of a community that's making technology sustainable and accessible for everyone."
+        title="Schliessen Sie sich unserer Mission an"
+        description="Werden Sie Teil einer Gemeinschaft, die Technologie nachhaltig und für alle zugänglich macht."
       >
         <div className="flex flex-col sm:flex-row gap-4">
           <a
             href="#get-started"
             className="bg-white text-green-800 px-8 py-3 rounded-lg font-semibold hover:bg-green-50 transition-colors duration-300 text-center"
           >
-            Get Started
+            Loslegen
           </a>
           <a
             href="#learn-more"
             className="bg-transparent border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white/10 transition-colors duration-300 text-center"
           >
-            Learn More
+            Mehr erfahren
           </a>
         </div>
       </HeroBanner>
@@ -166,7 +165,7 @@ export default function GetInvolvedPage() {
       {/* Core Values Section */}
       <section id="learn-more" className="py-20 bg-gray-50">
         <div className="container mx-auto px-4">
-          <h2 className="text-3xl md:text-4xl font-bold text-center mb-16">Our Core Values</h2>
+          <h2 className="text-3xl md:text-4xl font-bold text-center mb-16">Unsere Grundwerte</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {coreValues.map((value, index) => (
               <div key={index} className="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300">
@@ -184,7 +183,7 @@ export default function GetInvolvedPage() {
       {/* Involvement Options */}
       <section id="get-started" className="py-20">
         <div className="container mx-auto px-4">
-          <h2 className="text-3xl md:text-4xl font-bold text-center mb-16">Ways to Get Involved</h2>
+          <h2 className="text-3xl md:text-4xl font-bold text-center mb-16">Wege zum Mitmachen</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {involvementOptions.map((option, index) => (
               <div key={index} className="bg-white rounded-xl shadow-lg p-8 hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border border-gray-100 flex flex-col h-full">
@@ -218,7 +217,7 @@ export default function GetInvolvedPage() {
       {/* Testimonials Section */}
       <section className="py-20 bg-gray-50">
         <div className="container mx-auto px-4">
-          <h2 className="text-3xl md:text-4xl font-bold text-center mb-16">What Our Community Says</h2>
+          <h2 className="text-3xl md:text-4xl font-bold text-center mb-16">Was unsere Gemeinschaft sagt</h2>
           <div className="max-w-3xl mx-auto">
             {testimonials.map((testimonial, index) => (
               <div key={index} className="bg-white rounded-xl p-8 shadow-lg">
@@ -237,7 +236,7 @@ export default function GetInvolvedPage() {
       {/* Partner Institutions */}
       <section className="py-20">
         <div className="container mx-auto px-4">
-          <h2 className="text-3xl md:text-4xl font-bold text-center mb-16">Our Partner Institutions</h2>
+          <h2 className="text-3xl md:text-4xl font-bold text-center mb-16">Unsere Partnerorganisationen</h2>
           <div className="max-w-4xl mx-auto">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {partnerInstitutions.map((institution, index) => (
@@ -262,19 +261,19 @@ export default function GetInvolvedPage() {
       {/* CTA Section */}
       <section className="py-20 bg-gradient-to-br from-green-700 via-green-800 to-green-900 text-white">
         <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-6">Ready to Make a Difference?</h2>
+          <h2 className="text-3xl md:text-4xl font-bold mb-6">Bereit, einen Unterschied zu machen?</h2>
           <p className="text-xl mb-8 max-w-2xl mx-auto text-green-100">
-            Join our community of changemakers and help us create a more sustainable future through technology.
+            Schliessen Sie sich unserer Gemeinschaft von Veränderern an und helfen Sie uns, eine nachhaltigere Zukunft durch Technologie zu schaffen.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <ContactLink variant="outline" size="lg" className="bg-white text-green-800 hover:bg-green-50">
-              Contact Us Today
+              Kontaktieren Sie uns heute
             </ContactLink>
             <a
               href="/workshops"
               className="bg-transparent border-2 border-white text-white px-8 py-4 rounded-lg font-semibold hover:bg-white/10 transition-colors duration-300 text-lg"
             >
-              Explore Workshops
+              Workshops entdecken
             </a>
           </div>
         </div>

@@ -1,6 +1,7 @@
 import { Fragment, useEffect, useState } from 'react'
-import { X } from 'lucide-react'
+import { X, Wrench } from 'lucide-react'
 import { Transition } from '@headlessui/react'
+import { Button } from './button'
 
 export function WelcomeModal() {
   const [showWelcomeModal, setShowWelcomeModal] = useState(false)
@@ -51,13 +52,13 @@ export function WelcomeModal() {
                   className="rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
                   onClick={handleCloseWelcomeModal}
                 >
-                  <span className="sr-only">Close</span>
+                  <span className="sr-only">Schliessen</span>
                   <X className="h-6 w-6" aria-hidden="true" />
                 </button>
               </div>
               <div className="sm:flex sm:items-start">
                 <div className="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-green-100 sm:mx-0 sm:h-10 sm:w-10">
-                  <span className="text-2xl">🚧</span>
+                  <Wrench className="h-6 w-6 text-green-600" aria-hidden="true" />
                 </div>
                 <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
                   <h3 className="text-lg font-semibold leading-6 text-gray-900">
@@ -79,13 +80,13 @@ export function WelcomeModal() {
                 >
                   Aktuelli Website bsueche
                 </a>
-                <button
-                  type="button"
-                  className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto"
+                <Button
+                  variant="outline"
                   onClick={handleCloseWelcomeModal}
+                  className="mt-3 sm:mt-0 sm:w-auto"
                 >
                   Neui Version erkunde
-                </button>
+                </Button>
               </div>
             </div>
           </div>

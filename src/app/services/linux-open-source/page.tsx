@@ -19,29 +19,29 @@ import {
 import Link from 'next/link'
 
 export const metadata: Metadata = {
-  title: 'Linux | RevampIT',
-  description: 'Expert Linux installation, support, and training services. Discover the perfect Linux distribution for your needs.',
+  title: 'Linux & Open Source | RevampIT',
+  description: 'Experten-Linux-Installation, Support und Schulungsdienstleistungen. Entdecken Sie die perfekte Linux-Distribution für Ihre Bedürfnisse.'
 }
 
 const benefits = [
   {
-    title: 'Security & Stability',
-    description: 'Linux is renowned for its robust security features and system stability, making it ideal for both personal and enterprise use.',
+    title: 'Sicherheit & Stabilität',
+    description: 'Linux ist bekannt für seine robusten Sicherheitsfunktionen und Systemstabilität, was es ideal für den privaten und gewerblichen Einsatz macht.',
     icon: Shield
   },
   {
-    title: 'Performance',
-    description: 'Efficient resource usage and optimized performance, even on older hardware, with minimal system requirements.',
+    title: 'Leistung',
+    description: 'Effiziente Ressourcennutzung und optimierte Leistung, auch auf älterer Hardware, mit minimalen Systemanforderungen.',
     icon: Zap
   },
   {
-    title: 'Customization',
-    description: 'Complete control over your system with endless customization options to match your workflow and preferences.',
+    title: 'Anpassung',
+    description: 'Vollständige Kontrolle über Ihr System mit unendlichen Anpassungsmöglichkeiten, um Ihren Workflow und Ihre Präferenzen zu entsprechen.',
     icon: Code
   },
   {
-    title: 'Community Support',
-    description: 'Access to a vast global community of users and developers for support, documentation, and continuous improvement.',
+    title: 'Community-Support',
+    description: 'Zugang zu einer grossen globalen Gemeinschaft von Benutzern und Entwicklern für Unterstützung, Dokumentation und kontinuierliche Verbesserung.',
     icon: Users
   }
 ]
@@ -49,70 +49,70 @@ const benefits = [
 const distributions = [
   {
     name: 'Ubuntu',
-    description: 'User-friendly distribution perfect for beginners and professionals alike. Features a polished desktop environment and extensive software repository.',
+    description: 'Benutzerfreundliche Distribution, perfekt für Anfänger und Profis gleichermassen. Bietet eine polierte Desktop-Umgebung und ein umfangreiches Software-Repository.',
     icon: Laptop,
-    useCases: ['Desktop computing', 'Development', 'Server deployment'],
-    pros: ['Easy to use', 'Large community', 'Regular updates', 'Extensive documentation'],
-    cons: ['Some proprietary software', 'Heavier than some alternatives'],
+    useCases: ['Desktop-Computing', 'Entwicklung', 'Server-Bereitstellung'],
+    pros: ['Einfach zu verwenden', 'Grosse Community', 'Regelmässige Updates', 'Umfangreiche Dokumentation'],
+    cons: ['Etwas proprietäre Software', 'Schwerer als einige Alternativen'],
     website: 'https://ubuntu.com'
   },
   {
     name: 'Linux Mint',
-    description: 'Based on Ubuntu but with a more traditional desktop experience. Known for its stability and ease of use.',
+    description: 'Basiert auf Ubuntu, bietet aber eine traditionellere Desktop-Erfahrung. Bekannt für seine Stabilität und Benutzerfreundlichkeit.',
     icon: Laptop,
-    useCases: ['Desktop computing', 'Office work', 'Multimedia'],
-    pros: ['Windows-like interface', 'Excellent hardware support', 'Stable and reliable', 'Great for beginners'],
-    cons: ['Less frequent updates', 'Limited enterprise features'],
+    useCases: ['Desktop-Computing', 'Büroarbeit', 'Multimedia'],
+    pros: ['Windows-ähnliche Oberfläche', 'Exzellente Hardware-Unterstützung', 'Stabil und zuverlässig', 'Grossartig für Anfänger'],
+    cons: ['Seltener Updates', 'Begrenzte Enterprise-Funktionen'],
     website: 'https://linuxmint.com'
   },
   {
     name: 'Fedora',
-    description: 'Cutting-edge distribution that showcases the latest open source technologies. Backed by Red Hat.',
+    description: 'Hochmoderne Distribution, die die neuesten Open-Source-Technologien präsentiert. Unterstützt von Red Hat.',
     icon: Cpu,
-    useCases: ['Development', 'Enterprise', 'Innovation'],
-    pros: ['Latest software', 'Strong security', 'Enterprise-ready', 'Excellent development tools'],
-    cons: ['Frequent updates', 'Shorter support cycles'],
+    useCases: ['Entwicklung', 'Enterprise', 'Innovation'],
+    pros: ['Neueste Software', 'Starke Sicherheit', 'Enterprise-bereit', 'Exzellente Entwicklungstools'],
+    cons: ['Häufige Updates', 'Kürzere Support-Zyklen'],
     website: 'https://fedoraproject.org'
   },
   {
     name: 'Debian',
-    description: 'One of the most stable and reliable distributions, serving as the foundation for many other Linux systems.',
+    description: 'Eine der stabilsten und zuverlässigsten Distributionen, die als Grundlage für viele andere Linux-Systeme dient.',
     icon: Server,
-    useCases: ['Servers', 'Enterprise', 'Stable systems'],
-    pros: ['Extremely stable', 'Large package repository', 'Long support cycles', 'Strong security'],
-    cons: ['Older software versions', 'Less user-friendly'],
+    useCases: ['Server', 'Enterprise', 'Stabile Systeme'],
+    pros: ['Extrem stabil', 'Grosses Paket-Repository', 'Lange Support-Zyklen', 'Starke Sicherheit'],
+    cons: ['Ältere Software-Versionen', 'Weniger benutzerfreundlich'],
     website: 'https://www.debian.org'
   },
   {
     name: 'MX Linux',
-    description: 'Lightweight distribution based on Debian, known for its excellent performance and user-friendly interface.',
+    description: 'Leichtgewichtige Distribution basierend auf Debian, bekannt für ihre exzellente Leistung und benutzerfreundliche Oberfläche.',
     icon: HardDrive,
-    useCases: ['Older hardware', 'Desktop computing', 'Resource efficiency'],
-    pros: ['Lightweight', 'Fast performance', 'User-friendly', 'Stable base'],
-    cons: ['Smaller community', 'Limited enterprise features'],
+    useCases: ['Ältere Hardware', 'Desktop-Computing', 'Ressourceneffizienz'],
+    pros: ['Leichtgewichtig', 'Schnelle Leistung', 'Benutzerfreundlich', 'Stabile Basis'],
+    cons: ['Kleinere Community', 'Begrenzte Enterprise-Funktionen'],
     website: 'https://mxlinux.org'
   }
 ]
 
 const services = [
   {
-    title: 'Linux Installation',
-    description: 'Professional installation of your chosen Linux distribution, with full hardware compatibility testing and optimization.',
+    title: 'Linux-Installation',
+    description: 'Professionelle Installation Ihrer gewählten Linux-Distribution mit vollständiger Hardware-Kompatibilitätsprüfung und Optimierung.',
     icon: Download
   },
   {
-    title: 'System Configuration',
-    description: 'Custom configuration of your Linux system to match your specific needs and workflow requirements.',
+    title: 'Systemkonfiguration',
+    description: 'Individuelle Konfiguration Ihres Linux-Systems entsprechend Ihren spezifischen Anforderungen und Workflow-Bedürfnissen.',
     icon: Terminal
   },
   {
-    title: 'Training & Support',
-    description: 'Comprehensive training programs and ongoing support to help you get the most out of your Linux system.',
+    title: 'Schulung & Support',
+    description: 'Umfassende Schulungsprogramme und laufende Unterstützung, um das Beste aus Ihrem Linux-System herauszuholen.',
     icon: Users
   },
   {
-    title: 'Server Setup',
-    description: 'Enterprise-grade Linux server configuration and optimization for businesses and organizations.',
+    title: 'Server-Setup',
+    description: 'Enterprise-taugliche Linux-Server-Konfiguration und -Optimierung für Unternehmen und Organisationen.',
     icon: Server
   }
 ]
@@ -125,15 +125,15 @@ export default function LinuxPage() {
         <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-10"></div>
         <div className="container mx-auto px-4 relative">
           <div className="max-w-3xl">
-            <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">Linux</h1>
+            <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">Linux & Open Source</h1>
             <p className="text-xl text-green-100">
-              Professional Linux installation, support, and training services. Find the perfect distribution for your needs.
+              Professionelle Linux-Installation, Support und Schulungsdienstleistungen. Finden Sie die perfekte Distribution für Ihre Bedürfnisse.
             </p>
             <div className="mt-8">
               <p className="text-green-200">
-                Linux is a powerful, secure, and flexible operating system that powers everything from personal computers to enterprise servers.
+                Linux ist ein leistungsstarkes, sicheres und flexibles Betriebssystem, das alles von Personalcomputern bis hin zu Enterprise-Servern antreibt.
                 <Link href="/services/open-source-solutions" className="inline-flex items-center text-white hover:text-green-200 ml-2">
-                  Learn more about open source <ArrowRight className="w-4 h-4 ml-1" />
+                  Mehr über Open Source erfahren <ArrowRight className="w-4 h-4 ml-1" />
                 </Link>
               </p>
             </div>
@@ -145,12 +145,12 @@ export default function LinuxPage() {
       <section className="py-20 bg-white">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center mb-16">
-            <h2 className="text-3xl font-bold mb-6">Our Linux Services</h2>
+            <h2 className="text-3xl font-bold mb-6">Unsere Linux-Dienstleistungen</h2>
             <p className="text-lg text-gray-600 mb-4">
-              Comprehensive support for all your Linux needs, from installation to ongoing maintenance.
+              Umfassende Unterstützung für alle Ihre Linux-Bedürfnisse, von der Installation bis zur laufenden Wartung.
             </p>
             <div className="text-green-600 font-semibold text-xl mb-8">
-              Professional Linux Support from CHF 70/hour
+              Professioneller Linux-Support ab CHF 70/Stunde
             </div>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -172,60 +172,60 @@ export default function LinuxPage() {
           {/* Value Proposition Section */}
           <div className="mt-20">
             <div className="max-w-3xl mx-auto text-center mb-16">
-              <h2 className="text-3xl font-bold mb-6">Your Linux Advantage</h2>
+              <h2 className="text-3xl font-bold mb-6">Ihr Linux-Vorteil</h2>
               <p className="text-lg text-gray-600">
-                Get expert support and maximize the benefits of Linux for your needs.
+                Erhalten Sie Expertenunterstützung und maximieren Sie die Vorteile von Linux für Ihre Bedürfnisse.
               </p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               <div className="bg-white rounded-xl p-8 shadow-lg border-l-4 border-green-600">
-                <h3 className="text-xl font-bold mb-4">Save Money</h3>
+                <h3 className="text-xl font-bold mb-4">Geld sparen</h3>
                 <ul className="space-y-3">
                   <li className="flex items-start">
                     <CheckCircle2 className="w-5 h-5 text-green-600 mr-3 mt-0.5 flex-shrink-0" />
-                    <span>No expensive licenses or subscriptions</span>
+                    <span>Keine teuren Lizenzen oder Abonnements</span>
                   </li>
                   <li className="flex items-start">
                     <CheckCircle2 className="w-5 h-5 text-green-600 mr-3 mt-0.5 flex-shrink-0" />
-                    <span>Extend the life of your existing hardware</span>
+                    <span>Verlängern Sie die Lebensdauer Ihrer vorhandenen Hardware</span>
                   </li>
                   <li className="flex items-start">
                     <CheckCircle2 className="w-5 h-5 text-green-600 mr-3 mt-0.5 flex-shrink-0" />
-                    <span>Reduce maintenance and upgrade costs</span>
+                    <span>Reduzieren Sie Wartungs- und Upgrade-Kosten</span>
                   </li>
                 </ul>
               </div>
               <div className="bg-white rounded-xl p-8 shadow-lg border-l-4 border-green-600">
-                <h3 className="text-xl font-bold mb-4">Boost Performance</h3>
+                <h3 className="text-xl font-bold mb-4">Leistung steigern</h3>
                 <ul className="space-y-3">
                   <li className="flex items-start">
                     <CheckCircle2 className="w-5 h-5 text-green-600 mr-3 mt-0.5 flex-shrink-0" />
-                    <span>Faster system performance on any hardware</span>
+                    <span>Schnellere Systemleistung auf jeder Hardware</span>
                   </li>
                   <li className="flex items-start">
                     <CheckCircle2 className="w-5 h-5 text-green-600 mr-3 mt-0.5 flex-shrink-0" />
-                    <span>Optimized for your specific needs</span>
+                    <span>Optimiert für Ihre spezifischen Bedürfnisse</span>
                   </li>
                   <li className="flex items-start">
                     <CheckCircle2 className="w-5 h-5 text-green-600 mr-3 mt-0.5 flex-shrink-0" />
-                    <span>Reliable and stable operation</span>
+                    <span>Zuverlässiger und stabiler Betrieb</span>
                   </li>
                 </ul>
               </div>
               <div className="bg-white rounded-xl p-8 shadow-lg border-l-4 border-green-600">
-                <h3 className="text-xl font-bold mb-4">Expert Support</h3>
+                <h3 className="text-xl font-bold mb-4">Expertenunterstützung</h3>
                 <ul className="space-y-3">
                   <li className="flex items-start">
                     <CheckCircle2 className="w-5 h-5 text-green-600 mr-3 mt-0.5 flex-shrink-0" />
-                    <span>Professional installation and setup</span>
+                    <span>Professionelle Installation und Einrichtung</span>
                   </li>
                   <li className="flex items-start">
                     <CheckCircle2 className="w-5 h-5 text-green-600 mr-3 mt-0.5 flex-shrink-0" />
-                    <span>Ongoing technical support</span>
+                    <span>Laufende technische Unterstützung</span>
                   </li>
                   <li className="flex items-start">
                     <CheckCircle2 className="w-5 h-5 text-green-600 mr-3 mt-0.5 flex-shrink-0" />
-                    <span>Training and documentation</span>
+                    <span>Schulung und Dokumentation</span>
                   </li>
                 </ul>
               </div>
@@ -234,23 +234,23 @@ export default function LinuxPage() {
 
           {/* Quick Contact CTA */}
           <div className="mt-12 bg-green-50 rounded-xl p-8 text-center">
-            <h3 className="text-2xl font-bold mb-4">Ready to Get Started?</h3>
+            <h3 className="text-2xl font-bold mb-4">Bereit loszulegen?</h3>
             <p className="text-gray-600 mb-6 max-w-2xl mx-auto">
-              We offer professional Linux support and solutions for both businesses and individuals. Contact us for a free consultation.
+              Wir bieten professionelle Linux-Unterstützung und -Lösungen für Unternehmen und Privatpersonen. Kontaktieren Sie uns für eine kostenlose Beratung.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
                 href="/contact"
                 className="inline-flex items-center bg-green-600 text-white px-8 py-4 rounded-lg font-semibold hover:bg-green-700 transition-colors"
               >
-                Schedule Consultation
+Beratung vereinbaren
                 <ArrowRight className="w-5 h-5 ml-2" />
               </Link>
               <Link
                 href="tel:+41223334455"
                 className="inline-flex items-center border-2 border-green-600 text-green-600 px-8 py-4 rounded-lg font-semibold hover:bg-green-50 transition-colors"
               >
-                Call Us Now
+Jetzt anrufen
                 <ArrowRight className="w-5 h-5 ml-2" />
               </Link>
             </div>
@@ -262,9 +262,9 @@ export default function LinuxPage() {
       <section className="py-20 bg-gray-50">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center mb-16">
-            <h2 className="text-3xl font-bold mb-6">Why Choose Linux?</h2>
+            <h2 className="text-3xl font-bold mb-6">Warum Linux wählen?</h2>
             <p className="text-lg text-gray-600">
-              Linux offers superior performance, security, and flexibility compared to other operating systems.
+              Linux bietet überlegene Leistung, Sicherheit und Flexibilität im Vergleich zu anderen Betriebssystemen.
             </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -285,9 +285,9 @@ export default function LinuxPage() {
       <section className="py-20 bg-white">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center mb-16">
-            <h2 className="text-3xl font-bold mb-6">Popular Linux Distributions</h2>
+            <h2 className="text-3xl font-bold mb-6">Beliebte Linux-Distributionen</h2>
             <p className="text-lg text-gray-600">
-              Each distribution has its own strengths and is suited for different use cases.
+              Jede Distribution hat ihre eigenen Stärken und ist für verschiedene Anwendungsfälle geeignet.
             </p>
           </div>
           <div className="space-y-8">
@@ -305,12 +305,12 @@ export default function LinuxPage() {
                       rel="noopener noreferrer"
                       className="text-green-600 hover:text-green-700 text-sm mb-4 inline-flex items-center"
                     >
-                      Visit Website <ArrowRight className="w-4 h-4 ml-1" />
+                      Website besuchen <ArrowRight className="w-4 h-4 ml-1" />
                     </a>
                     <p className="text-gray-600 mb-4">{distro.description}</p>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <div>
-                        <h4 className="font-semibold mb-2">Best For:</h4>
+                        <h4 className="font-semibold mb-2">Am besten für:</h4>
                         <ul className="space-y-2">
                           {distro.useCases.map((useCase, i) => (
                             <li key={i} className="flex items-start">
@@ -323,7 +323,7 @@ export default function LinuxPage() {
                         </ul>
                       </div>
                       <div>
-                        <h4 className="font-semibold mb-2">Advantages:</h4>
+                        <h4 className="font-semibold mb-2">Vorteile:</h4>
                         <ul className="space-y-2">
                           {distro.pros.map((pro, i) => (
                             <li key={i} className="flex items-start">
@@ -338,7 +338,7 @@ export default function LinuxPage() {
                     </div>
                     {distro.cons && distro.cons.length > 0 && (
                       <div className="mt-6">
-                        <h4 className="font-semibold mb-2">Considerations:</h4>
+                        <h4 className="font-semibold mb-2">Berücksichtigungen:</h4>
                         <ul className="space-y-2">
                           {distro.cons.map((con, i) => (
                             <li key={i} className="flex items-start">
@@ -362,22 +362,22 @@ export default function LinuxPage() {
       {/* Final CTA Section */}
       <section className="py-20 bg-gradient-to-r from-green-700 to-green-800 text-white">
         <div className="container mx-auto px-4 text-center">
-          <h2 className="text-4xl font-bold mb-6">Ready to Switch to Linux?</h2>
+          <h2 className="text-4xl font-bold mb-6">Bereit für den Wechsel zu Linux?</h2>
           <p className="text-xl mb-8 max-w-2xl mx-auto text-green-100">
-            Let our experts help you find and set up the perfect Linux distribution for your needs.
+            Lassen Sie unsere Experten Ihnen dabei helfen, die perfekte Linux-Distribution für Ihre Bedürfnisse zu finden und einzurichten.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
               href="/contact"
               className="inline-block bg-white text-green-800 px-8 py-4 rounded-lg font-semibold hover:bg-green-50 transition-colors duration-300 text-lg"
             >
-              Get Started
+Loslegen
             </Link>
             <Link
               href="/services"
               className="inline-block border-2 border-white text-white px-8 py-4 rounded-lg font-semibold hover:bg-white/10 transition-colors duration-300 text-lg"
             >
-              Explore Services
+Dienstleistungen erkunden
             </Link>
           </div>
         </div>

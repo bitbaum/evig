@@ -17,66 +17,80 @@ The RevampIT website requires a robust strategy for managing two main types of d
 
 ## 3. Options Considered
 
-1.  **TinaCMS Alone:** Excellent for content, but not designed for complex e-commerce inventory management.
-2.  **MedusaJS Alone:** Strong for e-commerce and inventory; content management capabilities are present but less rich than a dedicated CMS.
-3.  **Combined TinaCMS and MedusaJS:** Leverages the strengths of both but introduces higher initial complexity.
+1.  **Strapi Alone:** Robust headless CMS with good content modeling and internationalization, but not primarily designed for complex e-commerce inventory, order, and cart management.
+2.  **MedusaJS Alone:** Strong for e-commerce and inventory; content management capabilities are present but less rich and customizable for general website content (like blogs, informational pages) compared to a dedicated CMS like Strapi.
+3.  **Combined Strapi and MedusaJS:** Leverages the strengths of Strapi for comprehensive content management and internationalization, and MedusaJS for its powerful e-commerce engine. This provides a best-of-breed solution for both needs.
 
-## 4. Chosen Strategy: Phased Approach
+## 4. Chosen Strategy: Phased Approach with Strapi and MedusaJS
 
-A phased approach was decided upon to manage complexity, build on existing progress, and utilize the most appropriate tools for each primary need.
+A phased approach is chosen to manage complexity, build on existing progress, and utilize the most appropriate tools for each primary need. The initial focus will be on establishing a robust, multilingual content website using Strapi. The e-commerce integration with MedusaJS will be a subsequent, distinct phase.
 
-### Phase 1: Solidify Content Management with TinaCMS
+### Phase 1: Establish Multilingual Content Website with Strapi
 
-*   **Action:** Integrate TinaCMS into the existing Next.js application.
-*   **Scope:** Manage content for workshops, static pages (e.g., "About Us"), and potentially project detail pages.
+*   **Action:** Integrate Strapi as the headless CMS for the Next.js application.
+*   **Scope:** Manage content for workshops, static pages (e.g., "About Us," "Projects"), blog posts, and other informational content. Implement robust internationalization for all planned languages (German, English, French, Italian). The existing webshop will remain an external link.
 *   **Implementation:**
-    *   Convert existing hardcoded content (especially for workshops) into Markdown/MDX files stored in the Git repository (e.g., `content/workshops/`, `content/pages/`).
-    *   Define clear frontmatter for structured data within these files.
-    *   Update Next.js dynamic routes (e.g., `/workshops/[slug]`) to fetch and render content from these MDX files.
-    *   Adapt existing frontend components to consume data from TinaCMS/MDX.
+    *   Set up a new Strapi backend instance.
+    *   Define content types (collections and single types) in Strapi, including fields necessary for all languages.
+    *   Migrate existing content from JSON files (and any other sources) into Strapi.
+    *   Update Next.js pages and components to fetch content from Strapi's API, handling localization based on the route.
+    *   Adapt existing frontend components to consume data from Strapi.
+    *   Ensure the current external link to the Kivitendo/Joomla webshop remains functional.
 *   **Rationale:**
-    *   Leverages the "almost finished" state of the non-webshop frontend.
-    *   Provides immediate improvements in content manageability.
-    *   Sets a strong foundation for structured content.
+    *   Provides a powerful and user-friendly interface for non-technical users to manage content across multiple languages.
+    *   Strapi's strong API capabilities and internationalization features are well-suited for the project's immediate needs.
+    *   Establishes a scalable foundation for all website content, independent of the e-commerce component initially.
 
-### Phase 2: Tackle Webshop with MedusaJS
+### Future Phase: E-commerce Development with MedusaJS (Phase 2 - Parallel Build)
 
-*   **Action:** Implement MedusaJS as the backend for the e-commerce webshop.
-*   **Scope:** Manage inventory, product details, variants, orders, and eventually checkout for used computers and parts.
+*   **Action:** Develop and launch a new, modern webshop using MedusaJS, to run in parallel with the existing externally linked Kivitendo/Joomla system.
+*   **Scope:** The new MedusaJS webshop will manage its own catalog (which may initially include a subset of items or new offerings), inventory, product details, variants, orders, and checkout. This phase will commence after the multilingual content website (Phase 1) is stable and complete.
 *   **Implementation:**
-    *   Set up a new MedusaJS backend instance.
-    *   Develop a detailed data migration plan to move the thousands of existing items from Kivitendo/Joomla into MedusaJS.
-    *   Build dedicated webshop frontend sections/pages in the Next.js application (e.g., `/shop`, `/shop/[productHandle]`, `/cart`) that interact with the MedusaJS API.
+    *   Set up a new, separate MedusaJS backend instance for the new webshop.
+    *   Define the product catalog strategy for the new MedusaJS shop. This may involve selecting specific products, potentially sourcing some data from Kivitendo/Joomla if items are to be duplicated or transitioned, but not a full, immediate migration and replacement.
+    *   Build dedicated frontend sections/pages in the Next.js application for the new MedusaJS webshop (e.g., under a specific path like `/new-shop` or a subdomain). These pages will interact with the new MedusaJS API.
+    *   The existing Kivitendo/Joomla webshop will continue to be accessible via its current external link.
+    *   Plan for clear user communication regarding the two available webshops during the parallel run.
 *   **Rationale:**
-    *   Uses a specialized e-commerce engine for its core strengths (inventory, product management).
-    *   Isolates the complex webshop build and data migration effort.
+    *   Allows for the development and testing of a new e-commerce solution (MedusaJS) without disrupting the existing Kivitendo/Joomla webshop.
+    *   Provides an opportunity to gather user feedback on the new shop before making decisions about the old system.
+    *   Reduces risk by not attempting a direct cutover migration for a complex e-commerce system initially.
 
-### Phase 3: Optional Linking and Future Integration
+### Future Phase: Webshop Consolidation & Advanced Integration (Phase 3)
 
-*   **Consideration:** If, in the future, workshops require e-commerce functionalities (e.g., paid registrations, seat inventory managed like products), a link between TinaCMS-managed workshop content and MedusaJS can be established.
-*   **Potential Implementation:**
-    *   Create minimalist "product" representations for relevant workshops in MedusaJS.
-    *   Add a reference (e.g., `medusaProductHandle`) in the frontmatter of the corresponding TinaCMS MDX file.
-    *   The Next.js workshop detail page would then fetch primary content from TinaCMS/MDX and make a secondary call to MedusaJS for any commerce-related data.
-*   **Rationale:** Defers this complexity until the need is concrete, keeping initial phases simpler.
+*   **Consideration:** After the new MedusaJS webshop (from Phase 2) is operational and evaluated, a strategic decision will be made regarding the Kivitendo/Joomla webshop. This could involve decommissioning it, migrating all its data to MedusaJS, or other solutions.
+*   **Potential Implementation (Post-Decision):**
+    *   If consolidating on MedusaJS: Perform a full data migration from Kivitendo/Joomla to MedusaJS.
+    *   Update website navigation to direct all e-commerce traffic to the MedusaJS shop.
+    *   Establish deeper integrations between content in Strapi and the unified MedusaJS e-commerce platform (e.g., richer product storytelling, related content).
+*   **Rationale:** Aims to eventually provide a single, cohesive, and modern e-commerce experience, while allowing for a data-driven decision-making process regarding the existing system.
 
 ## 5. Justification for Phased Approach
 
-*   **Risk Mitigation:** Addresses distinct complex problems (content vs. inventory) in focused stages.
-*   **Leverages Progress:** Builds upon the frontend work already completed for content-heavy pages.
-*   **Best-of-Breed:** Allows for using TinaCMS for its content strengths and MedusaJS for its e-commerce strengths without forcing one tool to do everything inadequately.
-*   **Incremental Value:** Delivers improvements to content management quickly, followed by the larger webshop overhaul.
+*   **Risk Mitigation:** Addresses distinct complex problems (content management with internationalization vs. e-commerce inventory and logistics) in focused stages.
+*   **Best-of-Breed:** Allows for using Strapi for its rich content management, customization, and internationalization features, and MedusaJS for its robust e-commerce engine.
+*   **Scalability and Maintainability:** Both Strapi and MedusaJS are designed for scalability and offer good developer experiences, leading to a more maintainable long-term solution.
+*   **Incremental Value:** Delivers improvements to content management and internationalization quickly (Phase 1). Allows for the careful introduction of a new e-commerce platform (Phase 2) in parallel, before a final decision on consolidating webshop operations (Phase 3).
 
 ## 6. High-Level Next Steps
 
-1.  **TinaCMS Integration:**
-    *   Install and configure TinaCMS.
-    *   Define content models/schemas.
-    *   Begin migrating workshop content to MDX files.
-2.  **Webshop Planning (MedusaJS):**
-    *   Detailed planning for MedusaJS setup.
-    *   In-depth analysis for data migration from Kivitendo/Joomla.
-    *   Prototype product structure in Medusa.
+**Current Focus (Phase 1):**
+1.  **Strapi Integration & Content Migration:**
+    *   Install and configure Strapi.
+    *   Define content types/schemas in Strapi, including localization settings for German, English, French, and Italian.
+    *   Begin migrating existing content from JSON files to Strapi.
+    *   Update Next.js frontend to fetch content from Strapi and handle multilingual routing.
+    *   Ensure the external webshop link (to Kivitendo/Joomla) continues to function.
+
+**Future Phases (After Phase 1 Completion):**
+2.  **New E-commerce Platform Development (MedusaJS - Parallel Build):**
+    *   Detailed planning for the new MedusaJS webshop setup.
+    *   Define product catalog and data strategy for the new MedusaJS shop.
+    *   Build and integrate the new MedusaJS-powered shop with the Next.js frontend, running in parallel to the existing external webshop.
+3.  **Webshop Consolidation & Decision Making (Post-Parallel Run):**
+    *   Evaluate the performance of the new MedusaJS shop.
+    *   Plan and execute the decided strategy for the Kivitendo/Joomla webshop (e.g., migration, decommissioning).
+    *   Implement advanced Strapi-MedusaJS integrations.
 
 ---
 This document outlines the strategic direction. Detailed implementation plans for each phase will be developed as they are initiated. 

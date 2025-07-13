@@ -11,6 +11,7 @@ interface MultiColumnDropdownProps {
   items: NavigationItem[]
   isMultiColumn?: boolean
   className?: string
+  dropdownAlignment?: 'left' | 'center' | 'right'
 }
 
 // Group items by sections for category-based columns
@@ -45,7 +46,8 @@ export function MultiColumnDropdown({
   id, 
   items, 
   isMultiColumn = false,
-  className = ''
+  className = '',
+  dropdownAlignment = 'center'
 }: MultiColumnDropdownProps) {
   const { openDropdown, handleDropdownMouseEnter, handleDropdownMouseLeave } = useDropdown()
   const dropdownRef = useRef<HTMLDivElement>(null)
@@ -67,9 +69,11 @@ export function MultiColumnDropdown({
         "backdrop-blur-md bg-white/95",
         // Strapi-style smart centering with viewport awareness
         useGroupedLayout ? "w-[800px]" : "w-80",
-        "left-1/2 -translate-x-1/2",
-        // Viewport-aware adjustment for right-side items
-        id === 'get involved' && "transform-none right-0 left-auto",
+        {
+          'left-1/2 -translate-x-1/2': dropdownAlignment === 'center',
+          'left-0': dropdownAlignment === 'left',
+          'right-0': dropdownAlignment === 'right'
+        },
         className
       )}
       onMouseEnter={handleDropdownMouseEnter}

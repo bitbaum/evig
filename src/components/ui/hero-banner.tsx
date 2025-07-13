@@ -1,6 +1,7 @@
 'use client'
 
 import { ReactNode } from 'react'
+import { cn } from '@/lib/utils'
 
 interface HeroBannerProps {
   title: string
@@ -16,8 +17,17 @@ export function HeroBanner({
   className = ''
 }: HeroBannerProps) {
   return (
-    <section className={`relative bg-gradient-to-br from-green-700 via-green-800 to-green-900 text-white py-24 overflow-hidden ${className}`}>
-      <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-10"></div>
+    <section className={cn(
+      'relative bg-gradient-to-br from-green-700 via-green-800 to-green-900 text-white py-24 overflow-hidden',
+      className
+    )}>
+      <div 
+        className="absolute inset-0 opacity-10"
+        style={{
+          backgroundImage: 'linear-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.1) 1px, transparent 1px)',
+          backgroundSize: '20px 20px',
+        }}
+      ></div>
       <div className="absolute inset-0 bg-gradient-to-r from-black/50 to-transparent"></div>
       <div className="container mx-auto px-4 relative">
         <div className="max-w-3xl">

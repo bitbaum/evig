@@ -4,23 +4,23 @@ import Link from 'next/link'
 export default function Home() {
   const features = [
     {
-      name: 'Sustainable Solutions',
-      description: 'We provide eco-friendly technology solutions that help reduce electronic waste.',
+      name: 'Nachhaltige Lösungen',
+      description: 'Wir bieten umweltfreundliche Technologielösungen, die helfen, Elektroschrott zu reduzieren.',
       icon: Leaf,
     },
     {
-      name: 'Community Driven',
-      description: 'Join our community of volunteers and make a difference in the world.',
+      name: 'Gemeinschaft im Fokus',
+      description: 'Werde Teil unserer Freiwilligen-Community und bewirke etwas Gutes.',
       icon: Users,
     },
     {
-      name: 'Circular Economy',
-      description: 'We believe in giving technology a second life through refurbishment and recycling.',
+      name: 'Kreislaufwirtschaft',
+      description: 'Wir geben Technik ein zweites Leben durch Wiederaufbereitung und Recycling.',
       icon: Recycle,
     },
     {
       name: 'Open Source',
-      description: 'We embrace open source principles, sharing knowledge and solutions with the community.',
+      description: 'Wir setzen auf Open Source und teilen Wissen und Lösungen mit der Gemeinschaft.',
       icon: Code,
     },
   ]
@@ -32,11 +32,10 @@ export default function Home() {
         <div className="mx-auto max-w-2xl py-32 sm:py-48 lg:py-56">
           <div className="text-center">
             <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
-              Giving Technology a Second Life
+              Technik ein zweites Leben geben
             </h1>
             <p className="mt-6 text-lg leading-8 text-gray-600">
-              We refurbish, recycle, and redistribute technology to create a more sustainable future. 
-              Join us in our mission to reduce electronic waste and make technology accessible to everyone.
+              Wir bereiten Computer und Geräte wieder auf, recyceln und verteilen sie neu – für eine nachhaltigere Zukunft. Mach mit bei unserer Mission, Elektroschrott zu reduzieren und Technik für alle zugänglich zu machen.
             </p>
             <div className="mt-10 flex items-center justify-center gap-x-6">
               <Link
@@ -45,10 +44,10 @@ export default function Home() {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                Shop Now
+                Zum Shop
               </Link>
               <Link href="/services" className="text-sm font-semibold leading-6 text-gray-900">
-                Explore Services <span aria-hidden="true">→</span>
+                Unsere Dienstleistungen <span aria-hidden="true">→</span>
               </Link>
             </div>
           </div>
@@ -58,12 +57,12 @@ export default function Home() {
       {/* Feature section */}
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <div className="mx-auto max-w-2xl lg:text-center">
-          <h2 className="text-base font-semibold leading-7 text-green-600">Our Mission</h2>
+          <h2 className="text-base font-semibold leading-7 text-green-600">Unsere Mission</h2>
           <p className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-            Empowering Communities Through Sustainable Technology
+            Gemeinschaft stärken durch nachhaltige Technologie
           </p>
           <p className="mt-6 text-lg leading-8 text-gray-600">
-            We're committed to reducing electronic waste and making technology accessible to everyone.
+            Wir setzen uns dafür ein, Elektroschrott zu reduzieren und Technik für alle zugänglich zu machen.
           </p>
         </div>
         <div className="mx-auto mt-16 max-w-2xl sm:mt-20 lg:mt-24 lg:max-w-none">
@@ -87,20 +86,20 @@ export default function Home() {
       <div className="relative isolate mt-32 px-6 py-32 sm:mt-56 sm:py-40 lg:px-8">
         <div className="mx-auto max-w-2xl text-center">
           <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-            Ready to make a difference?
+            Bereit, einen Unterschied zu machen?
           </h2>
           <p className="mx-auto mt-6 max-w-xl text-lg leading-8 text-gray-600">
-            Join our community of volunteers and help us create a more sustainable future through technology.
+            Werde Teil unserer Freiwilligen-Community und hilf mit, eine nachhaltigere Zukunft durch Technik zu gestalten.
           </p>
           <div className="mt-10 flex items-center justify-center gap-x-6">
             <Link
               href="/get-involved"
               className="rounded-md bg-green-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600"
             >
-              Get Involved
+              Mitmachen
             </Link>
             <Link href="/about" className="text-sm font-semibold leading-6 text-gray-900">
-              Learn More <ArrowRight className="inline h-4 w-4" />
+              Mehr erfahren <ArrowRight className="inline h-4 w-4" />
             </Link>
           </div>
         </div>

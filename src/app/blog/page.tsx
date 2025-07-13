@@ -6,7 +6,7 @@ import type { BlogPost } from '@/lib/strapi'
 
 export const metadata: Metadata = {
   title: 'Blog | RevampIt',
-  description: 'Explore ways to give a second life to things that once held value—technology, food, art, and more.',
+  description: 'Entdecken Sie Wege, Dingen, die einst wertvoll waren, ein zweites Leben zu geben – Technologie, Nahrung, Kunst und mehr.'
 }
 
 // Transform blog post for easier use
@@ -78,8 +78,8 @@ async function getBlogPosts(): Promise<BlogPostSummary[]> {
 
 const topics = [
   {
-    title: 'Sustainability',
-    description: 'Discover how we give new life to technology and reduce e-waste through innovative solutions.',
+    title: 'Nachhaltigkeit',
+    description: 'Entdecken Sie, wie wir Technologie neues Leben geben und Elektroschrott durch innovative Lösungen reduzieren.',
     icon: (
       <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
@@ -88,7 +88,7 @@ const topics = [
   },
   {
     title: 'Linux & Open Source',
-    description: 'Deep dives into Linux distributions, open source software, and how they contribute to sustainable computing.',
+    description: 'Tiefe Einblicke in Linux-Distributionen, Open-Source-Software und wie sie zu nachhaltigem Computing beitragen.',
     icon: (
       <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
@@ -96,8 +96,8 @@ const topics = [
     )
   },
   {
-    title: 'Hardware Revival',
-    description: 'Learn about hardware refurbishment, upgrades, and creative ways to extend the life of technology.',
+    title: 'Hardware-Wiederbelebung',
+    description: 'Lernen Sie über Hardware-Aufarbeitung, Upgrades und kreative Wege, die Lebensdauer von Technologie zu verlängern.',
     icon: (
       <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z" />
@@ -118,7 +118,7 @@ export default function BlogPage() {
               RevampIt Blog
             </h1>
             <p className="text-xl text-green-100 max-w-2xl">
-              Coming soon: A space for exploring sustainability, open source, and the art of giving technology a second life.
+              Bald verfügbar: Ein Raum für die Erforschung von Nachhaltigkeit, Open Source und der Kunst, Technologie ein zweites Leben zu geben.
             </p>
           </div>
         </div>
@@ -127,7 +127,7 @@ export default function BlogPage() {
       {/* Topics Section */}
       <div className="container mx-auto px-4 py-16 max-w-4xl">
         <h2 className="text-3xl font-bold text-gray-900 mb-12 text-center">
-          What to Expect
+          Was Sie erwarten können
         </h2>
         
         <div className="grid md:grid-cols-3 gap-8">
@@ -152,20 +152,20 @@ export default function BlogPage() {
         <div className="container mx-auto px-4 py-16 max-w-4xl">
           <div className="text-center">
             <h2 className="text-3xl font-bold text-gray-900 mb-4">
-              Stay Updated
+              Bleiben Sie auf dem Laufenden
             </h2>
             <p className="text-gray-600 mb-8">
-              Subscribe to our newsletter to be the first to know when we launch our blog.
+              Abonnieren Sie unseren Newsletter, um als Erste zu erfahren, wann wir unseren Blog starten.
             </p>
             <div className="max-w-md mx-auto">
               <div className="flex gap-4">
                 <input
                   type="email"
-                  placeholder="Enter your email"
+                  placeholder="Geben Sie Ihre E-Mail ein"
                   className="flex-1 px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500"
                 />
                 <button className="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors">
-                  Subscribe
+                  Abonnieren
                 </button>
               </div>
             </div>
@@ -177,19 +177,19 @@ export default function BlogPage() {
       <div className="container mx-auto px-4 py-16 max-w-4xl">
         <div className="text-center">
           <div className="inline-block px-4 py-2 bg-green-100 text-green-800 rounded-full text-sm font-medium mb-6">
-            Coming Soon
+            Bald verfügbar
           </div>
           <h2 className="text-3xl font-bold text-gray-900 mb-4">
-            Join Our Journey
+            Begleiten Sie unsere Reise
           </h2>
           <p className="text-gray-600 max-w-2xl mx-auto mb-8">
-            We're working on bringing you insightful content about sustainable technology, open source solutions, and innovative ways to reduce e-waste. Stay tuned for our launch!
+            Wir arbeiten daran, Ihnen aufschlussreiche Inhalte über nachhaltige Technologie, Open-Source-Lösungen und innovative Wege zur Reduzierung von Elektroschrott zu bringen. Bleiben Sie dran für unsere Einführung!
           </p>
           <Link 
             href="/contact"
             className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-green-600 hover:bg-green-700 transition-colors"
           >
-            Get in Touch
+            Kontakt aufnehmen
             <svg className="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
             </svg>

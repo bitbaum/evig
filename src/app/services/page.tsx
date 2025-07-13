@@ -25,14 +25,14 @@ import Link from 'next/link'
 const services = [
   // Hardware Services
   {
-    title: 'Computer Repair & Upgrades',
-    description: 'Expert repairs for all types of computers and components. We specialize in fixing what others can\'t, including motherboard repairs and component-level fixes.',
+    title: 'Computerreparatur & Aufrüstungen',
+    description: 'Expertenreparaturen für alle Arten von Computern und Komponenten. Wir spezialisieren uns darauf zu reparieren, was andere nicht können, einschließlich Motherboard-Reparaturen und Bauteil-Level-Fixes.',
     icon: Wrench,
-    category: 'Hardware Services',
+    category: 'Hardware-Dienstleistungen',
     features: [
-      'Component-level repairs',
-      'Hardware upgrades',
-      'Diagnostic services',
+      'Bauteil-Level-Reparaturen',
+      'Hardware-Aufrüstungen',
+      'Diagnosedienste',
       'Professional assessment'
     ],
     pricing: 'CHF 70/hour + parts',
@@ -41,10 +41,10 @@ const services = [
     available: true
   },
   {
-    title: 'Data Recovery & Transfer',
+    title: 'Datenrettung & Transfer',
     description: 'Secure and reliable data transfer services for all types of storage media. We can recover data from damaged devices and transfer it to modern storage solutions.',
     icon: HardDrive,
-    category: 'Hardware Services',
+    category: 'Hardware-Dienstleistungen',
     features: [
       'Secure data transfer',
       'Data recovery from damaged devices',
@@ -57,10 +57,10 @@ const services = [
     available: true
   },
   {
-    title: 'Hardware Recycling',
+    title: 'Hardware-Recycling',
     description: 'Responsible recycling and refurbishment of IT equipment. We give your old devices a new life while ensuring secure data deletion.',
     icon: Shield,
-    category: 'Hardware Services',
+    category: 'Hardware-Dienstleistungen',
     features: [
       'Secure data deletion',
       'Equipment refurbishment',
@@ -75,10 +75,10 @@ const services = [
 
   // Software Solutions
   {
-    title: 'Web Design & Development',
+    title: 'Webdesign & Entwicklung',
     description: 'Professional web design and development services using modern open source technologies. Fast, responsive websites built with Next.js, headless CMS, and sustainable practices.',
     icon: Globe,
-    category: 'Software Solutions',
+    category: 'Software-Lösungen',
     features: [
       'Modern frameworks (Next.js, React)',
       'Headless CMS (Strapi, Payload, Tina)',
@@ -95,7 +95,7 @@ const services = [
     title: 'Linux & Open Source',
     description: 'Professional Linux installation, configuration, and support services. We help you get the most out of your Linux system with expert guidance and maintenance.',
     icon: Server,
-    category: 'Software Solutions',
+    category: 'Software-Lösungen',
     features: [
       'Linux installation & configuration',
       'System optimization & maintenance',
@@ -111,7 +111,7 @@ const services = [
     title: 'Open Source Solutions',
     description: 'Expert implementation and support for open source software. We help you transition to and maintain open source solutions for your business needs.',
     icon: Code,
-    category: 'Software Solutions',
+    category: 'Software-Lösungen',
     features: [
       'Open source consulting',
       'Custom development',
@@ -129,7 +129,7 @@ const services = [
     title: 'Build Your Computer',
     description: 'Get a custom-built computer tailored to your specific needs, powered by AI analysis of our extensive inventory. We source parts globally and provide professional assembly.',
     icon: Cpu,
-    category: 'Coming Soon',
+    category: 'Bald verfügbar',
     features: [
       'AI-powered build recommendations',
       'Global parts sourcing network',
@@ -137,7 +137,7 @@ const services = [
       'Quality guarantee and warranty'
     ],
     pricing: '',
-    highlight: 'Coming Soon',
+    highlight: 'Bald verfügbar',
     href: '/services/build-your-computer',
     available: false,
     badge: 'Soon'
@@ -146,7 +146,7 @@ const services = [
     title: 'Enterprise AI Solutions',
     description: 'Private, on-premises AI systems for professional firms. GPT-4 level performance with complete data privacy and GDPR compliance.',
     icon: Brain,
-    category: 'Coming Soon',
+    category: 'Bald verfügbar',
     features: [
       'Self-hosted Llama 3 70B deployment',
       'RAG-powered document search',
@@ -154,7 +154,7 @@ const services = [
       'Custom training on your documents'
     ],
     pricing: '',
-    highlight: 'Coming Soon',
+    highlight: 'Bald verfügbar',
     href: '/services/enterprise-ai-solutions',
     available: false,
     badge: 'Soon'
@@ -163,7 +163,7 @@ const services = [
     title: 'Cloud Infrastructure',
     description: 'Sustainable cloud hosting and infrastructure solutions. We provide scalable, eco-friendly hosting with renewable energy and open source technologies.',
     icon: Cloud,
-    category: 'Coming Soon',
+    category: 'Bald verfügbar',
     features: [
       'Renewable energy hosting',
       'Open source infrastructure',
@@ -171,7 +171,7 @@ const services = [
       'Professional monitoring'
     ],
     pricing: '',
-    highlight: 'Coming Soon',
+    highlight: 'Bald verfügbar',
     href: '/services/cloud-infrastructure',
     available: false,
     badge: 'Soon'
@@ -180,7 +180,7 @@ const services = [
     title: 'Server Management',
     description: 'Professional server setup and maintenance services. We manage your servers so you can focus on your business.',
     icon: Monitor,
-    category: 'Coming Soon',
+    category: 'Bald verfügbar',
     features: [
       'Server setup & configuration',
       '24/7 monitoring',
@@ -188,7 +188,7 @@ const services = [
       'Performance optimization'
     ],
     pricing: '',
-    highlight: 'Coming Soon',
+    highlight: 'Bald verfügbar',
     href: '/services/server-management',
     available: false,
     badge: 'Soon'
@@ -197,7 +197,7 @@ const services = [
     title: 'IoT Solutions',
     description: 'Internet of Things solutions with open source hardware. Create connected devices that respect your privacy and data ownership.',
     icon: Settings,
-    category: 'Coming Soon',
+    category: 'Bald verfügbar',
     features: [
       'Open source hardware',
       'Privacy-focused design',
@@ -205,7 +205,7 @@ const services = [
       'Data ownership guaranteed'
     ],
     pricing: '',
-    highlight: 'Coming Soon',
+    highlight: 'Bald verfügbar',
     href: '/services/iot-solutions',
     available: false,
     badge: 'Soon'
@@ -215,7 +215,7 @@ const services = [
 // Get unique categories for filtering
 const getUniqueCategories = () => {
   // Define the order we want: All, Hardware Services, Software Solutions, Coming Soon
-  const categoryOrder = ['All', 'Hardware Services', 'Software Solutions', 'Coming Soon']
+  const categoryOrder = ['Alle', 'Hardware-Dienstleistungen', 'Software-Lösungen', 'Bald verfügbar']
   const categories = services.map(service => service.category)
   const uniqueCategories = Array.from(new Set(categories))
   
@@ -224,10 +224,10 @@ const getUniqueCategories = () => {
 }
 
 export default function ServicesPage() {
-  const [selectedCategory, setSelectedCategory] = useState('All')
+  const [selectedCategory, setSelectedCategory] = useState('Alle')
   const categories = getUniqueCategories()
   
-  const filteredServices = selectedCategory === 'All' 
+  const filteredServices = selectedCategory === 'Alle' 
     ? services 
     : services.filter(service => service.category === selectedCategory)
 
@@ -269,9 +269,9 @@ export default function ServicesPage() {
           <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-10"></div>
           <div className="container mx-auto px-4 relative">
             <div className="max-w-3xl">
-              <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">Expert IT Services</h1>
-              <h2 className="text-2xl md:text-3xl font-semibold mb-8 text-green-200">Sustainable Solutions for Your Technology Needs</h2>
-              <p className="text-xl text-green-100">We combine technical expertise with environmental responsibility to provide comprehensive IT solutions that save you money and reduce electronic waste.</p>
+              <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">Experten-IT-Dienstleistungen</h1>
+              <h2 className="text-2xl md:text-3xl font-semibold mb-8 text-green-200">Nachhaltige Lösungen für Ihre Technologiebedürfnisse</h2>
+              <p className="text-xl text-green-100">Wir kombinieren technische Expertise mit Umweltverantwortung, um umfassende IT-Lösungen zu bieten, die Ihnen Geld sparen und Elektroschrott reduzieren.</p>
             </div>
           </div>
         </section>
@@ -289,7 +289,7 @@ export default function ServicesPage() {
               <div className="flex flex-wrap justify-center gap-3 mb-12">
                 <div className="flex items-center text-gray-500 mr-4 mb-2">
                   <Filter className="w-4 h-4 mr-2" />
-                  <span className="text-sm font-medium">Filter by category:</span>
+                  <span className="text-sm font-medium">Nach Kategorie filtern:</span>
                 </div>
                 {categories.map((category) => (
                   <button
@@ -370,7 +370,7 @@ export default function ServicesPage() {
                             : 'text-gray-400 hover:text-gray-500'
                         }`}
                       >
-                        <span>{service.available ? 'View details' : 'Learn more'}</span>
+                        <span>{service.available ? 'Details anzeigen' : 'Mehr erfahren'}</span>
                         <ArrowRight className="w-4 h-4 ml-2 transform group-hover:translate-x-1 transition-transform duration-300" />
                       </Link>
                     </div>
@@ -382,8 +382,8 @@ export default function ServicesPage() {
             {/* Results count */}
             <div className="text-center mt-8">
               <p className="text-gray-500 text-sm">
-                Showing {filteredServices.length} of {services.length} services
-                {selectedCategory !== 'All' && ` in "${selectedCategory}"`}
+                {filteredServices.length} von {services.length} Dienstleistungen
+                {selectedCategory !== 'Alle' && ` in "${selectedCategory}"`}
               </p>
             </div>
           </div>
@@ -392,8 +392,8 @@ export default function ServicesPage() {
         {/* CTA Section */}
         <section className="py-20 bg-gradient-to-r from-green-700 to-green-800 text-white">
           <div className="container mx-auto px-4 text-center">
-            <h2 className="text-4xl font-bold mb-6">Ready to Revamp Your Technology?</h2>
-            <p className="text-xl mb-8 max-w-2xl mx-auto text-green-100">Contact us today for a free consultation and discover how we can help you get the most out of your devices.</p>
+            <h2 className="text-4xl font-bold mb-6">Bereit, Ihre Technologie zu erneuern?</h2>
+            <p className="text-xl mb-8 max-w-2xl mx-auto text-green-100">Kontaktieren Sie uns heute für eine kostenlose Beratung und entdecken Sie, wie wir Ihnen helfen können, das Beste aus Ihren Geräten herauszuholen.</p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
                 href="/contact"

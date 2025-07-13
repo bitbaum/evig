@@ -69,7 +69,7 @@ export function DropdownTrigger({
 
   const baseClasses = cn(
     "relative inline-flex items-center gap-1 px-4 py-2.5 rounded-lg",
-    "text-sm font-medium transition-all duration-200 ease-in-out",
+    "text-base font-medium transition-all duration-200 ease-in-out",
     "hover:bg-gray-50/80 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2",
     "text-gray-700 hover:text-gray-900",
     isOpen && hasDropdown && "text-gray-900 bg-gray-50/80",

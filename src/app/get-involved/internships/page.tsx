@@ -3,29 +3,29 @@ import { InvolvementPageLayout } from '../involvement-page-layout'
 import { GraduationCap, Briefcase, Users, BookOpen } from 'lucide-react'
 
 export const metadata: Metadata = {
-  title: 'Internships | RevampIT',
-  description: 'Gain hands-on experience in technology and sustainability through our internship program.'
+  title: 'Praktika | RevampIT',
+  description: 'Sammeln Sie praktische Erfahrungen in Technologie und Nachhaltigkeit durch unser Praktikumsprogramm.'
 }
 
 const benefits = [
   {
-    title: 'Hands-on Experience',
-    description: 'Work on real projects that make a difference in the community.',
+    title: 'Praktische Erfahrung',
+    description: 'Arbeiten Sie an echten Projekten, die einen Unterschied in der Gemeinschaft machen.',
     icon: Briefcase
   },
   {
-    title: 'Professional Development',
-    description: 'Learn from experienced mentors and develop valuable skills.',
+    title: 'Berufliche Entwicklung',
+    description: 'Lernen Sie von erfahrenen Mentoren und entwickeln Sie wertvolle Fähigkeiten.',
     icon: GraduationCap
   },
   {
-    title: 'Team Collaboration',
-    description: 'Work with a diverse team of professionals and volunteers.',
+    title: 'Teamzusammenarbeit',
+    description: 'Arbeiten Sie mit einem vielfältigen Team von Fachleuten und Freiwilligen.',
     icon: Users
   },
   {
-    title: 'Learning Opportunities',
-    description: 'Access to training resources and workshops.',
+    title: 'Lernmöglichkeiten',
+    description: 'Zugang zu Schulungsressourcen und Workshops.',
     icon: BookOpen
   }
 ]
@@ -33,26 +33,26 @@ const benefits = [
 export default function InternshipsPage() {
   return (
     <InvolvementPageLayout
-      title="Internship Opportunities"
-      description="Gain valuable experience in technology and sustainability while making a real impact."
-      ctaText="Apply for Internship"
+      title="Praktikumsmöglichkeiten"
+      description="Sammeln Sie wertvolle Erfahrungen in Technologie und Nachhaltigkeit und bewirken Sie echte Veränderungen."
+      ctaText="Für Praktikum bewerben"
       ctaHref="mailto:empfang@revamp-it.ch"
     >
       <div className="space-y-16">
         {/* Overview Section */}
         <section className="space-y-6">
-          <h2 className="text-3xl font-bold text-gray-900">About Our Internship Program</h2>
+          <h2 className="text-3xl font-bold text-gray-900">Über unser Praktikumsprogramm</h2>
           <p className="text-lg text-gray-600 leading-relaxed">
-            Our internship program offers a unique opportunity to gain hands-on experience in sustainable 
-            technology while contributing to meaningful projects. Whether you're a student looking to 
-            complement your studies or someone seeking to transition into the tech industry, our program 
-            provides valuable learning and growth opportunities.
+            Unser Praktikumsprogramm bietet eine einzigartige Gelegenheit, praktische Erfahrungen in nachhaltiger 
+            Technologie zu sammeln und gleichzeitig zu sinnvollen Projekten beizutragen. Ob Sie ein Student sind, der 
+            sein Studium ergänzen möchte, oder jemand, der in die Technologiebranche wechseln möchte - unser Programm 
+            bietet wertvolle Lern- und Wachstumsmöglichkeiten.
           </p>
         </section>
 
         {/* Benefits Section */}
         <section className="space-y-8">
-          <h2 className="text-3xl font-bold text-gray-900">Program Benefits</h2>
+          <h2 className="text-3xl font-bold text-gray-900">Programmvorteile</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {benefits.map((benefit, index) => (
               <div key={index} className="bg-white rounded-xl p-8 shadow-lg border border-gray-100 hover:border-green-200 transition-colors duration-300">
@@ -68,32 +68,32 @@ export default function InternshipsPage() {
 
         {/* Available Positions Section */}
         <section className="space-y-6">
-          <h2 className="text-3xl font-bold text-gray-900">Available Positions</h2>
+          <h2 className="text-3xl font-bold text-gray-900">Verfügbare Positionen</h2>
           <div className="bg-white rounded-xl p-8 shadow-lg border border-gray-100">
             <ul className="space-y-4">
               <li className="flex items-start">
                 <span className="text-green-600 mr-3">•</span>
-                <span className="text-gray-600">Hardware Refurbishment and Repair</span>
+                <span className="text-gray-600">Hardware-Aufarbeitung und -Reparatur</span>
               </li>
               <li className="flex items-start">
                 <span className="text-green-600 mr-3">•</span>
-                <span className="text-gray-600">Software Development</span>
+                <span className="text-gray-600">Softwareentwicklung</span>
               </li>
               <li className="flex items-start">
                 <span className="text-green-600 mr-3">•</span>
-                <span className="text-gray-600">System Administration</span>
+                <span className="text-gray-600">Systemadministration</span>
               </li>
               <li className="flex items-start">
                 <span className="text-green-600 mr-3">•</span>
-                <span className="text-gray-600">Project Management</span>
+                <span className="text-gray-600">Projektmanagement</span>
               </li>
               <li className="flex items-start">
                 <span className="text-green-600 mr-3">•</span>
-                <span className="text-gray-600">Community Outreach</span>
+                <span className="text-gray-600">Gemeinschaftsarbeit</span>
               </li>
               <li className="flex items-start">
                 <span className="text-green-600 mr-3">•</span>
-                <span className="text-gray-600">Technical Documentation</span>
+                <span className="text-gray-600">Technische Dokumentation</span>
               </li>
             </ul>
           </div>
@@ -101,28 +101,28 @@ export default function InternshipsPage() {
 
         {/* Skills Section */}
         <section className="space-y-6">
-          <h2 className="text-3xl font-bold text-gray-900">What You'll Learn</h2>
+          <h2 className="text-3xl font-bold text-gray-900">Was Sie lernen werden</h2>
           <div className="bg-white rounded-xl p-8 shadow-lg border border-gray-100">
             <ul className="space-y-4">
               <li className="flex items-start">
                 <span className="text-green-600 mr-3">•</span>
-                <span className="text-gray-600">Hardware and software troubleshooting</span>
+                <span className="text-gray-600">Hardware- und Software-Fehlerbehebung</span>
               </li>
               <li className="flex items-start">
                 <span className="text-green-600 mr-3">•</span>
-                <span className="text-gray-600">Project management and collaboration</span>
+                <span className="text-gray-600">Projektmanagement und Zusammenarbeit</span>
               </li>
               <li className="flex items-start">
                 <span className="text-green-600 mr-3">•</span>
-                <span className="text-gray-600">Technical documentation and communication</span>
+                <span className="text-gray-600">Technische Dokumentation und Kommunikation</span>
               </li>
               <li className="flex items-start">
                 <span className="text-green-600 mr-3">•</span>
-                <span className="text-gray-600">Community engagement and outreach</span>
+                <span className="text-gray-600">Gemeinschaftsengagement und Öffentlichkeitsarbeit</span>
               </li>
               <li className="flex items-start">
                 <span className="text-green-600 mr-3">•</span>
-                <span className="text-gray-600">Sustainable technology practices</span>
+                <span className="text-gray-600">Nachhaltige Technologiepraktiken</span>
               </li>
             </ul>
           </div>
@@ -130,28 +130,28 @@ export default function InternshipsPage() {
 
         {/* Requirements Section */}
         <section className="space-y-6">
-          <h2 className="text-3xl font-bold text-gray-900">Requirements</h2>
+          <h2 className="text-3xl font-bold text-gray-900">Anforderungen</h2>
           <div className="bg-white rounded-xl p-8 shadow-lg border border-gray-100">
             <ul className="space-y-4">
               <li className="flex items-start">
                 <span className="text-green-600 mr-3">•</span>
-                <span className="text-gray-600">Be enrolled in or have completed relevant studies</span>
+                <span className="text-gray-600">In relevanten Studien eingeschrieben sein oder diese abgeschlossen haben</span>
               </li>
               <li className="flex items-start">
                 <span className="text-green-600 mr-3">•</span>
-                <span className="text-gray-600">Have a passion for technology and sustainability</span>
+                <span className="text-gray-600">Leidenschaft für Technologie und Nachhaltigkeit haben</span>
               </li>
               <li className="flex items-start">
                 <span className="text-green-600 mr-3">•</span>
-                <span className="text-gray-600">Be able to commit to the program duration</span>
+                <span className="text-gray-600">Sich für die Programmdauer verpflichten können</span>
               </li>
               <li className="flex items-start">
                 <span className="text-green-600 mr-3">•</span>
-                <span className="text-gray-600">Have basic computer skills</span>
+                <span className="text-gray-600">Grundlegende Computerfähigkeiten haben</span>
               </li>
               <li className="flex items-start">
                 <span className="text-green-600 mr-3">•</span>
-                <span className="text-gray-600">Be willing to learn and contribute</span>
+                <span className="text-gray-600">Bereit sein zu lernen und beizutragen</span>
               </li>
             </ul>
           </div>
@@ -159,34 +159,34 @@ export default function InternshipsPage() {
 
         {/* Flexible Arrangements Section */}
         <section className="bg-green-50 rounded-xl p-8 space-y-4">
-          <h3 className="text-2xl font-semibold text-gray-900">Flexible Arrangements</h3>
+          <h3 className="text-2xl font-semibold text-gray-900">Flexible Vereinbarungen</h3>
           <p className="text-gray-600 leading-relaxed">
-            We understand that students and professionals have different schedules. We offer flexible 
-            arrangements to accommodate your academic or work commitments while ensuring you get the 
-            most out of your internship experience.
+            Wir verstehen, dass Studenten und Berufstätige unterschiedliche Zeitpläne haben. Wir bieten flexible 
+            Vereinbarungen, um Ihren akademischen oder beruflichen Verpflichtungen gerecht zu werden und 
+            gleichzeitig sicherzustellen, dass Sie das Beste aus Ihrer Praktikumserfahrung herausholen.
           </p>
         </section>
 
         {/* How to Apply Section */}
         <section className="space-y-6">
-          <h2 className="text-3xl font-bold text-gray-900">How to Apply</h2>
+          <h2 className="text-3xl font-bold text-gray-900">Wie Sie sich bewerben</h2>
           <div className="bg-white rounded-xl p-8 shadow-lg border border-gray-100">
             <ol className="space-y-4">
               <li className="flex items-start">
                 <span className="text-green-600 font-semibold mr-3">1.</span>
-                <span className="text-gray-600">Send us your resume and a cover letter</span>
+                <span className="text-gray-600">Senden Sie uns Ihren Lebenslauf und ein Anschreiben</span>
               </li>
               <li className="flex items-start">
                 <span className="text-green-600 font-semibold mr-3">2.</span>
-                <span className="text-gray-600">Specify your area of interest and availability</span>
+                <span className="text-gray-600">Geben Sie Ihren Interessensbereich und Ihre Verfügbarkeit an</span>
               </li>
               <li className="flex items-start">
                 <span className="text-green-600 font-semibold mr-3">3.</span>
-                <span className="text-gray-600">Complete a brief interview</span>
+                <span className="text-gray-600">Führen Sie ein kurzes Gespräch</span>
               </li>
               <li className="flex items-start">
                 <span className="text-green-600 font-semibold mr-3">4.</span>
-                <span className="text-gray-600">Start your internship journey!</span>
+                <span className="text-gray-600">Beginnen Sie Ihre Praktikumsreise!</span>
               </li>
             </ol>
           </div>

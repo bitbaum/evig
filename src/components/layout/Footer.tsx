@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { mainNavigation, socialLinks } from '@/config/navigation'
 import { Logo } from '@/components/ui/Logo'
 import { Mail, Phone, MapPin, Clock } from 'lucide-react'
+import { siteConfig } from '@/config/site'
 
 export default function Footer() {
   return (
@@ -14,7 +15,7 @@ export default function Footer() {
           <div>
             <Logo className="mb-4" showText={true} />
             <p className="text-sm text-gray-300">
-              Transforming the future of IT through sustainable refurbishment and recycling.
+              Die Zukunft der IT durch nachhaltige Aufarbeitung und Recycling gestalten.
             </p>
           </div>
 
@@ -48,36 +49,30 @@ export default function Footer() {
 
           {/* Contact Section */}
           <div>
-            <h3 className="text-xl font-bold mb-4">Contact Us</h3>
+            <h3 className="text-xl font-bold mb-4">Kontakt</h3>
             <div className="space-y-4">
-              <div className="flex items-start">
-                <MapPin className="w-5 h-5 mt-1 mr-3 flex-shrink-0" />
-                <div>
-                  <p className="font-medium">Retail Location</p>
-                  <p className="text-gray-300">Birmensdorferstr. 379</p>
-                  <p className="text-gray-300">8055 Zürich</p>
-                  <p className="text-gray-300">Schweiz</p>
+              {siteConfig.contact.locations.map((location) => (
+                <div className="flex items-start" key={location.name}>
+                  <MapPin className="w-5 h-5 mt-1 mr-3 flex-shrink-0" />
+                  <div>
+                    <p className="font-medium">{location.name}</p>
+                    {location.addressLines.map((line) => (
+                      <p className="text-gray-300" key={line}>{line}</p>
+                    ))}
+                    {'extra' in location && location.extra && <p className="text-gray-300 text-sm">{location.extra}</p>}
+                  </div>
                 </div>
-              </div>
-              <div className="flex items-start">
-                <MapPin className="w-5 h-5 mt-1 mr-3 flex-shrink-0" />
-                <div>
-                  <p className="font-medium">Warehouse</p>
-                  <p className="text-gray-300">Badenerstr. 816</p>
-                  <p className="text-gray-300">8048 Zürich</p>
-                  <p className="text-gray-300 text-sm">(by appointment only)</p>
-                </div>
-              </div>
+              ))}
               <div className="flex items-center">
                 <Phone className="w-5 h-5 mr-3" />
-                <a href="tel:+41439603264" className="text-gray-300 hover:text-white transition-colors">
-                  +41 (0)43 960 32 64
+                <a href={`tel:${siteConfig.contact.phone}`} className="text-gray-300 hover:text-white transition-colors">
+                  {siteConfig.contact.phone}
                 </a>
               </div>
               <div className="flex items-center">
                 <Mail className="w-5 h-5 mr-3" />
-                <a href="mailto:empfang@revamp-it.ch" className="text-gray-300 hover:text-white transition-colors">
-                  empfang@revamp-it.ch
+                <a href={`mailto:${siteConfig.contact.email}`} className="text-gray-300 hover:text-white transition-colors">
+                  {siteConfig.contact.email}
                 </a>
               </div>
             </div>
@@ -85,12 +80,12 @@ export default function Footer() {
 
           {/* Opening Hours Section */}
           <div>
-            <h3 className="text-xl font-bold mb-4">Opening Hours</h3>
+            <h3 className="text-xl font-bold mb-4">Öffnungszeiten</h3>
             <div className="flex items-start">
               <Clock className="w-5 h-5 mt-1 mr-3 flex-shrink-0" />
               <div className="space-y-2">
-                <p className="text-gray-300">Monday: 9:00 - 12:00</p>
-                <p className="text-gray-300">Tuesday - Friday: 13:00 - 17:00</p>
+                <p className="text-gray-300">Montag: {siteConfig.openingHours.monday}</p>
+                <p className="text-gray-300">Dienstag - Freitag: {siteConfig.openingHours.tuesdayToFriday}</p>
               </div>
             </div>
           </div>
@@ -116,7 +111,7 @@ export default function Footer() {
 
         {/* Copyright */}
         <div className="mt-8 text-center text-gray-400">
-          <p>&copy; {new Date().getFullYear()} RevampIT. All rights reserved.</p>
+          <p>&copy; {new Date().getFullYear()} RevampIT. Alle Rechte vorbehalten.</p>
         </div>
       </div>
     </footer>

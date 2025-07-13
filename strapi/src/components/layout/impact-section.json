@@ -1,0 +1,22 @@
+{
+  "collectionName": "components_layout_impact_sections",
+  "info": {
+    "displayName": "Impact Section",
+    "icon": "apps",
+    "description": "A section to display multiple impact cards."
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "cards": {
+      "type": "component",
+      "repeatable": true,
+      "component": "shared.impact-card",
+      "required": true,
+      "min": 1
+    }
+  }
+} 

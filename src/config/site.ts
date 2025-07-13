@@ -1,34 +1,36 @@
 export const siteConfig = {
   name: 'RevampIT',
-  description: 'Making technology sustainable and accessible for everyone.',
+  description: 'Wir machen Technologie nachhaltig und für alle zugänglich.',
   contact: {
     email: 'empfang@revamp-it.ch',
     phone: '+41 44 586 86 86',
-    address: 'Industriestrasse 4, 8630 Rüti ZH, Switzerland'
+    address: 'Industriestrasse 4, 8630 Rüti ZH, Switzerland',
+    locations: [
+      {
+        name: 'Verkaufsstelle',
+        addressLines: [
+          'Birmensdorferstr. 379',
+          '8055 Zürich',
+          'Schweiz'
+        ]
+      },
+      {
+        name: 'Lager',
+        addressLines: [
+          'Badenerstr. 816',
+          '8048 Zürich'
+        ],
+        extra: '(nur nach Terminvereinbarung)'
+      }
+    ]
+  },
+  openingHours: {
+    monday: '9:00 - 12:00',
+    tuesdayToFriday: '13:00 - 17:00'
   },
   social: {
     // Add social media links when available
   },
-  navigation: {
-    main: [
-      { name: 'Home', href: '/' },
-      { name: 'Projects', href: '/projects' },
-      { 
-        name: 'Get Involved', 
-        href: '/get-involved',
-        children: [
-          { name: 'Volunteer', href: '/get-involved/volunteer' },
-          { name: 'Technical Experts', href: '/get-involved/technical-experts' },
-          { name: 'Internships', href: '/get-involved/internships' },
-          { name: 'Work Reintegration', href: '/get-involved/work-reintegration' },
-          { name: 'Partnerships', href: '/get-involved/partnerships' },
-          { name: 'Donate', href: '/get-involved/donate' }
-        ]
-      },
-      { name: 'About', href: '/about' },
-      { name: 'Contact', href: '/contact' }
-    ]
-  }
 } as const
 
 // Type for the site configuration

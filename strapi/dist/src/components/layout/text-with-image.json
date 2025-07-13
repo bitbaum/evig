@@ -1,0 +1,21 @@
+{
+    "collectionName": "components_layout_text_with_images",
+    "info": {
+        "displayName": "Text With Image",
+        "icon": "image",
+        "description": "A block of text that can be accompanied by an image."
+    },
+    "options": {},
+    "attributes": {
+        "content": {
+            "type": "richtext",
+            "required": true
+        },
+        "image": {
+            "type": "media",
+            "multiple": false,
+            "required": false,
+            "allowedTypes": ["images"]
+        }
+    }
+}
