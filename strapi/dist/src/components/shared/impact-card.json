@@ -1,0 +1,19 @@
+{
+    "collectionName": "components_shared_impact_cards",
+    "info": {
+        "displayName": "Impact Card",
+        "icon": "star",
+        "description": "A card with a title and description to highlight an area of impact."
+    },
+    "options": {},
+    "attributes": {
+        "title": {
+            "type": "string",
+            "required": true
+        },
+        "description": {
+            "type": "text",
+            "required": true
+        }
+    }
+}

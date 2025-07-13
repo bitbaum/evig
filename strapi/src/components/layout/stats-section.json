@@ -1,0 +1,35 @@
+{
+  "collectionName": "components_layout_stats_sections",
+  "info": {
+    "displayName": "Stats Section",
+    "icon": "bullet-list",
+    "description": "A section to display statistics in two columns."
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "stat_group_1_title": {
+      "type": "string",
+      "required": true
+    },
+    "stat_group_1_items": {
+      "type": "component",
+      "repeatable": true,
+      "component": "shared.stat-item",
+      "required": true
+    },
+    "stat_group_2_title": {
+      "type": "string",
+      "required": true
+    },
+    "stat_group_2_items": {
+      "type": "component",
+      "repeatable": true,
+      "component": "shared.stat-item",
+      "required": true
+    }
+  }
+} 

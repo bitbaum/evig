@@ -45,9 +45,10 @@ This project is a complete redevelopment of our website with a modern tech stack
 - **TypeScript**: Ensures robust, type-safe code.
 
 ### Backend & APIs
-- **Node.js / Express.js**: For building high-performance RESTful APIs.
-- **Headless CMS (Strapi / Sanity)**: To empower content creators with an easy-to-manage backend.
-- **GraphQL (optional)**: For flexible data fetching where needed.
+- **Content Management System (CMS):** Strapi (headless CMS) for managing website content, pages, workshops, blog posts, and internationalization (German, English, French, Italian).
+- **E-commerce Platform (Future):** MedusaJS (headless commerce engine) will be integrated in a later phase for webshop inventory, product management, orders, and cart functionality.
+- **Custom APIs (if needed):** Node.js / Express.js for any specific backend logic not covered by Strapi.
+- **GraphQL (optional):** Strapi supports GraphQL, offering flexible data fetching.
 
 ### Deployment & Infrastructure
 - **Vercel / Netlify**: For seamless deployment and global Content Delivery Network (CDN) support.
@@ -61,10 +62,11 @@ This project is a complete redevelopment of our website with a modern tech stack
 
 ## Architecture Overview
 
-The website is designed with a modular, microservices-friendly architecture:
-- **Presentation Layer:** Next.js serves as the frontend framework that fetches data from APIs.
-- **Content Layer:** A headless CMS powers content dynamically (blog posts, project pages, news).
-- **API Layer:** Node.js/Express.js endpoints handle authentication, data processing, and third-party integrations.
+The website is designed with a modular, API-driven architecture:
+- **Presentation Layer:** Next.js serves as the frontend framework, consuming data from Strapi APIs.
+- **Content Layer:** Strapi (headless CMS) powers all informational content dynamically (e.g., blog posts, project pages, workshop details, general site copy) and manages multilingual content.
+- **E-commerce Layer (Future):** MedusaJS will be implemented in a later phase to manage all aspects of the webshop.
+- **API Layer:** Primarily consists of the API exposed by Strapi. Custom Node.js/Express.js endpoints can be added for unique integrations or functionalities. The MedusaJS API will be added in the future phase.
 - **Deployment:** The entire application is containerized using Docker for consistent, scalable, and secure deployments via Vercel's CD pipeline.
 
 ## Installation & Setup
@@ -100,7 +102,7 @@ The website is designed with a modular, microservices-friendly architecture:
      ```bash
      cp .env.example .env
      ```
-   - Edit `.env` with your API keys, environment variables, and configuration settings.
+   - Edit `.env` with your API keys and environment variables for Next.js and Strapi (e.g., `NEXT_PUBLIC_STRAPI_API_URL`). MedusaJS variables will be added in a future phase.
 
 4. **Run Locally**
 
@@ -129,7 +131,8 @@ The website is designed with a modular, microservices-friendly architecture:
   npm run build
   npm start
   ```
-- **Content Updates**: Manage your website's content via the headless CMS dashboard (URL provided in `.env`).
+- **Content Updates**: Manage website content via the Strapi admin dashboard.
+- **Product & Shop Management (Future)**: Once MedusaJS is integrated, webshop inventory, products, and orders will be managed via its admin dashboard. For now, the webshop is an external link.
 
 ## Development Workflow
 
@@ -152,11 +155,25 @@ See our [CONTRIBUTING.md](CONTRIBUTING.md) for more details and our code of cond
 
 ## Roadmap
 
-- **Phase 1**: Establish foundational project structure, integrate Next.js and headless CMS.
-- **Phase 2**: Implement core pages (Home, About, Services, Blog, Contact) with responsive design.
-- **Phase 3**: Enhance API integrations (search, authentication, third-party services).
-- **Phase 4**: Optimize performance, accessibility, and add user personalization features.
-- **Future Enhancements**: Progressive Web App (PWA) capabilities, advanced analytics, and refined CI/CD workflows.
+- **Phase 1: Core Content Site & Internationalization (Current Focus)**
+  - Establish foundational project structure.
+  - Integrate Next.js with Strapi (CMS) for content management.
+  - Set up internationalization in Strapi and Next.js for German, English, French, and Italian.
+  - Define initial content types in Strapi and migrate existing content.
+  - Implement core website pages (Home, About, Services, Projects, Contact, etc.) fetching content from Strapi.
+  - Ensure the external link to the existing webshop remains functional.
+
+- **Phase 2: E-commerce Integration with MedusaJS (Future)**
+  - Plan and implement MedusaJS as the e-commerce backend.
+  - Define product structures and plan data migration from Kivitendo/Joomla.
+  - Build integrated shop functionalities in the Next.js frontend (product listings, cart, checkout).
+  - Replace the external webshop link with the integrated solution.
+
+- **Phase 3: Enhancements & Optimizations (Future)**
+  - Refine API integrations between Strapi and MedusaJS (once both are active).
+  - Implement advanced search (e.g., Algolia/Meilisearch).
+  - Address user authentication if needed for integrated shop/site features.
+  - Optimize performance, accessibility, and add further user personalization features.
 
 ## License
 

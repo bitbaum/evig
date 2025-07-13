@@ -1,0 +1,86 @@
+
+> strapi@0.1.0 develop
+> strapi develop
+
+- Cleaning dist dir /home/g/dev/revampit/strapi/dist
+✔ Cleaning dist dir (32ms)
+- Loading Strapi
+- Building build context
+
+[INFO] Including the following ENV variables as part of the JS bundle:
+    - ADMIN_PATH
+    - STRAPI_ADMIN_BACKEND_URL
+    - STRAPI_TELEMETRY_DISABLED
+✔ Building build context (160ms)
+- Creating admin
+✔ Creating admin (682ms)
+✔ Loading Strapi (3417ms)
+- Generating types
+✔ Generating types (1468ms)
+- Compiling TS
+- Cleaning dist dir /home/g/dev/revampit/strapi/dist
+✔ Cleaning dist dir (66ms)
+✔ Compiling TS (5568ms)
+
+ Project information
+
+[90m┌────────────────────[39m[90m┬──────────────────────────────────────────────────┐[39m
+[90m│[39m Time               [90m│[39m Tue Jul 01 2025 11:40:38 GMT+0200 (Mitteleuropä… [90m│[39m
+[90m│[39m Launched in        [90m│[39m 10513 ms                                         [90m│[39m
+[90m│[39m Environment        [90m│[39m development                                      [90m│[39m
+[90m│[39m Process PID        [90m│[39m 290527                                           [90m│[39m
+[90m│[39m Version            [90m│[39m 5.16.1 (node v20.19.2)                           [90m│[39m
+[90m│[39m Edition            [90m│[39m Community                                        [90m│[39m
+[90m│[39m Database           [90m│[39m postgres                                         [90m│[39m
+[90m│[39m Database name      [90m│[39m strapi_db                                        [90m│[39m
+[90m│[39m Database schema    [90m│[39m public                                           [90m│[39m
+[90m└────────────────────[39m[90m┴──────────────────────────────────────────────────┘[39m
+
+ Actions available
+
+One more thing...
+Create your first administrator 💻 by going to the administration panel at:
+
+[90m┌─────────────────────────────┐[39m
+[90m│[39m http://localhost:1337/admin [90m│[39m
+[90m└─────────────────────────────┘[39m
+
+[2025-07-01 11:40:38.224] [32minfo[39m: Strapi started successfully
+
+warn - The `content` option in your Tailwind CSS configuration is missing or empty.
+warn - Configure your content sources or your generated CSS will be missing styles.
+warn - https://tailwindcss.com/docs/content-configuration
+[2025-07-01 11:40:53.903] [32mhttp[39m: HEAD /admin (482 ms) 200
+[2025-07-01 13:43:25.805] [32minfo[39m: File changed: /home/g/dev/revampit/strapi/config/admin.ts
+- Cleaning dist dir /home/g/dev/revampit/strapi/dist
+✔ Cleaning dist dir (78ms)
+[2025-07-01 13:43:26.375] [32minfo[39m: File changed: /home/g/dev/revampit/strapi/config/admin.ts
+[2025-07-01 13:43:31.719] [32minfo[39m: Shutting down Strapi
+[2025-07-01 13:43:31.755] [32minfo[39m: Strapi has been shut down
+- Loading Strapi
+- Building build context
+
+[INFO] Including the following ENV variables as part of the JS bundle:
+    - ADMIN_PATH
+    - STRAPI_ADMIN_BACKEND_URL
+    - STRAPI_TELEMETRY_DISABLED
+✔ Building build context (123ms)
+- Creating admin
+✔ Creating admin (661ms)
+✔ Loading Strapi (3148ms)
+- Generating types
+✔ Generating types (1041ms)
+- Compiling TS
+- Cleaning dist dir /home/g/dev/revampit/strapi/dist
+✔ Cleaning dist dir (45ms)
+[96mconfig/admin.ts[0m:[93m17[0m:[93m14[0m - [91merror[0m[90m TS2339: [0mProperty 'bool' does not exist on type '(key: string, defaultValue?: any) => any'.
+
+[7m17[0m     nps: env.bool('FLAG_NPS', true),
+[7m  [0m [91m             ~~~~[0m
+[96mconfig/admin.ts[0m:[93m18[0m:[93m20[0m - [91merror[0m[90m TS2339: [0mProperty 'bool' does not exist on type '(key: string, defaultValue?: any) => any'.
+
+[7m18[0m     promoteEE: env.bool('FLAG_PROMOTE_EE', true),
+[7m  [0m [91m                   ~~~~[0m
+
+Found 2 error(s).
+

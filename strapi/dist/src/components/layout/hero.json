@@ -1,0 +1,18 @@
+{
+    "collectionName": "components_layout_heroes",
+    "info": {
+        "displayName": "Hero",
+        "icon": "heading",
+        "description": "A hero banner with a title and description."
+    },
+    "options": {},
+    "attributes": {
+        "title": {
+            "type": "string",
+            "required": true
+        },
+        "description": {
+            "type": "text"
+        }
+    }
+}

@@ -1,0 +1,203 @@
+
+> strapi-app@0.1.0 develop
+> strapi develop
+
+[WARN] Declared version of react-router-dom (6.30.1) is not compatible with the version required by Strapi (^5.2.0).
+You may experience issues, we recommend you change this.
+[WARN] Declared version of react-router-dom (6.30.1) is not compatible with the version required by Strapi (^5.2.0).
+You may experience issues, we recommend you change this.
+[WARN] Declared version of styled-components (6.1.19) is not compatible with the version required by Strapi (^5.2.1).
+You may experience issues, we recommend you change this.
+[WARN] Declared version of styled-components (6.1.19) is not compatible with the version required by Strapi (^5.2.1).
+You may experience issues, we recommend you change this.
+- Cleaning dist dir /home/g/dev/revampit/strapi/dist
+✔ Cleaning dist dir (6ms)
+- Building build context
+
+[INFO] Including the following ENV variables as part of the JS bundle:
+    - ADMIN_PATH
+    - STRAPI_ADMIN_BACKEND_URL
+    - STRAPI_TELEMETRY_DISABLED
+✔ Building build context (362ms)
+- Creating admin
+✔ Creating admin (30075ms)
+- Loading Strapi
+[2025-07-03 13:43:03.286] [33mwarn[39m: Users-permissions registration has defaulted to accepting the following additional user fields during registration: blog_posts
+[2025-07-03 13:43:03.413] [33mwarn[39m: Your application doesn't have a super admin user.
+[2025-07-03 13:43:03.545] [33mwarn[39m: Some users (1) don't have any role.
+✔ Loading Strapi (2061ms)
+- Generating types
+✔ Generating types (670ms)
+- Compiling TS
+- Cleaning dist dir /home/g/dev/revampit/strapi/dist
+✔ Cleaning dist dir (18ms)
+✔ Compiling TS (3585ms)
+
+ Project information
+
+[90m┌────────────────────[39m[90m┬──────────────────────────────────────────────────┐[39m
+[90m│[39m Time               [90m│[39m Thu Jul 03 2025 13:43:07 GMT+0200 (Mitteleuropä… [90m│[39m
+[90m│[39m Launched in        [90m│[39m 6343 ms                                          [90m│[39m
+[90m│[39m Environment        [90m│[39m development                                      [90m│[39m
+[90m│[39m Process PID        [90m│[39m 645281                                           [90m│[39m
+[90m│[39m Version            [90m│[39m 4.17.1 (node v20.19.2)                           [90m│[39m
+[90m│[39m Edition            [90m│[39m Community                                        [90m│[39m
+[90m│[39m Database           [90m│[39m postgres                                         [90m│[39m
+[90m└────────────────────[39m[90m┴──────────────────────────────────────────────────┘[39m
+
+ Actions available
+
+Welcome back!
+To manage your project 🚀, go to the administration panel at:
+http://localhost:1337/admin
+
+To access the server ⚡️, go to:
+http://localhost:1337
+
+[2025-07-03 13:43:07.889] [32minfo[39m: File changed: /home/g/dev/revampit/strapi/strapi-startup.log
+- Cleaning dist dir /home/g/dev/revampit/strapi/dist
+✔ Cleaning dist dir (13ms)
+- Loading Strapi
+[2025-07-03 13:43:15.501] [33mwarn[39m: Users-permissions registration has defaulted to accepting the following additional user fields during registration: blog_posts
+[2025-07-03 13:43:15.627] [33mwarn[39m: Your application doesn't have a super admin user.
+[2025-07-03 13:43:15.721] [33mwarn[39m: Some users (1) don't have any role.
+✔ Loading Strapi (1848ms)
+- Generating types
+✔ Generating types (706ms)
+- Compiling TS
+- Cleaning dist dir /home/g/dev/revampit/strapi/dist
+✔ Cleaning dist dir (25ms)
+✔ Compiling TS (3859ms)
+
+ Project information
+
+[90m┌────────────────────[39m[90m┬──────────────────────────────────────────────────┐[39m
+[90m│[39m Time               [90m│[39m Thu Jul 03 2025 13:43:20 GMT+0200 (Mitteleuropä… [90m│[39m
+[90m│[39m Launched in        [90m│[39m 6432 ms                                          [90m│[39m
+[90m│[39m Environment        [90m│[39m development                                      [90m│[39m
+[90m│[39m Process PID        [90m│[39m 645339                                           [90m│[39m
+[90m│[39m Version            [90m│[39m 4.17.1 (node v20.19.2)                           [90m│[39m
+[90m│[39m Edition            [90m│[39m Community                                        [90m│[39m
+[90m│[39m Database           [90m│[39m postgres                                         [90m│[39m
+[90m└────────────────────[39m[90m┴──────────────────────────────────────────────────┘[39m
+
+ Actions available
+
+Welcome back!
+To manage your project 🚀, go to the administration panel at:
+http://localhost:1337/admin
+
+To access the server ⚡️, go to:
+http://localhost:1337
+
+[2025-07-03 13:43:22.219] [32mhttp[39m: HEAD index.html (27 ms) 200
+[2025-07-03 13:43:22.227] [32minfo[39m: File changed: /home/g/dev/revampit/strapi/strapi-startup.log
+- Cleaning dist dir /home/g/dev/revampit/strapi/dist
+✔ Cleaning dist dir (31ms)
+- Loading Strapi
+[2025-07-03 13:43:28.103] [33mwarn[39m: Users-permissions registration has defaulted to accepting the following additional user fields during registration: blog_posts
+[2025-07-03 13:43:28.219] [33mwarn[39m: Your application doesn't have a super admin user.
+[2025-07-03 13:43:28.308] [33mwarn[39m: Some users (1) don't have any role.
+✔ Loading Strapi (1206ms)
+- Generating types
+✔ Generating types (618ms)
+- Compiling TS
+- Cleaning dist dir /home/g/dev/revampit/strapi/dist
+✔ Cleaning dist dir (19ms)
+✔ Compiling TS (3652ms)
+
+ Project information
+
+[90m┌────────────────────[39m[90m┬──────────────────────────────────────────────────┐[39m
+[90m│[39m Time               [90m│[39m Thu Jul 03 2025 13:43:32 GMT+0200 (Mitteleuropä… [90m│[39m
+[90m│[39m Launched in        [90m│[39m 5508 ms                                          [90m│[39m
+[90m│[39m Environment        [90m│[39m development                                      [90m│[39m
+[90m│[39m Process PID        [90m│[39m 645443                                           [90m│[39m
+[90m│[39m Version            [90m│[39m 4.17.1 (node v20.19.2)                           [90m│[39m
+[90m│[39m Edition            [90m│[39m Community                                        [90m│[39m
+[90m│[39m Database           [90m│[39m postgres                                         [90m│[39m
+[90m└────────────────────[39m[90m┴──────────────────────────────────────────────────┘[39m
+
+ Actions available
+
+Welcome back!
+To manage your project 🚀, go to the administration panel at:
+http://localhost:1337/admin
+
+To access the server ⚡️, go to:
+http://localhost:1337
+
+[2025-07-03 13:43:33.521] [32mhttp[39m: GET /admin (24 ms) 200
+[2025-07-03 13:43:33.527] [32minfo[39m: File changed: /home/g/dev/revampit/strapi/strapi-startup.log
+- Cleaning dist dir /home/g/dev/revampit/strapi/dist
+✔ Cleaning dist dir (20ms)
+- Loading Strapi
+[2025-07-03 13:43:40.085] [33mwarn[39m: Users-permissions registration has defaulted to accepting the following additional user fields during registration: blog_posts
+[2025-07-03 13:43:40.213] [33mwarn[39m: Your application doesn't have a super admin user.
+[2025-07-03 13:43:40.311] [33mwarn[39m: Some users (1) don't have any role.
+✔ Loading Strapi (1217ms)
+- Generating types
+✔ Generating types (1069ms)
+- Compiling TS
+- Cleaning dist dir /home/g/dev/revampit/strapi/dist
+✔ Cleaning dist dir (31ms)
+✔ Compiling TS (4188ms)
+
+ Project information
+
+[90m┌────────────────────[39m[90m┬──────────────────────────────────────────────────┐[39m
+[90m│[39m Time               [90m│[39m Thu Jul 03 2025 13:43:45 GMT+0200 (Mitteleuropä… [90m│[39m
+[90m│[39m Launched in        [90m│[39m 6494 ms                                          [90m│[39m
+[90m│[39m Environment        [90m│[39m development                                      [90m│[39m
+[90m│[39m Process PID        [90m│[39m 645562                                           [90m│[39m
+[90m│[39m Version            [90m│[39m 4.17.1 (node v20.19.2)                           [90m│[39m
+[90m│[39m Edition            [90m│[39m Community                                        [90m│[39m
+[90m│[39m Database           [90m│[39m postgres                                         [90m│[39m
+[90m└────────────────────[39m[90m┴──────────────────────────────────────────────────┘[39m
+
+ Actions available
+
+Welcome back!
+To manage your project 🚀, go to the administration panel at:
+http://localhost:1337/admin
+
+To access the server ⚡️, go to:
+http://localhost:1337
+
+[2025-07-03 13:56:54.616] [32mhttp[39m: HEAD /admin (25 ms) 200
+[2025-07-03 13:56:54.628] [32minfo[39m: File changed: /home/g/dev/revampit/strapi/strapi-startup.log
+- Cleaning dist dir /home/g/dev/revampit/strapi/dist
+✔ Cleaning dist dir (18ms)
+- Loading Strapi
+[2025-07-03 13:57:03.731] [33mwarn[39m: Users-permissions registration has defaulted to accepting the following additional user fields during registration: blog_posts
+[2025-07-03 13:57:03.845] [33mwarn[39m: Your application doesn't have a super admin user.
+[2025-07-03 13:57:03.933] [33mwarn[39m: Some users (1) don't have any role.
+✔ Loading Strapi (1215ms)
+- Generating types
+✔ Generating types (601ms)
+- Compiling TS
+- Cleaning dist dir /home/g/dev/revampit/strapi/dist
+✔ Cleaning dist dir (24ms)
+✔ Compiling TS (4329ms)
+
+ Project information
+
+[90m┌────────────────────[39m[90m┬──────────────────────────────────────────────────┐[39m
+[90m│[39m Time               [90m│[39m Thu Jul 03 2025 13:57:08 GMT+0200 (Mitteleuropä… [90m│[39m
+[90m│[39m Launched in        [90m│[39m 6176 ms                                          [90m│[39m
+[90m│[39m Environment        [90m│[39m development                                      [90m│[39m
+[90m│[39m Process PID        [90m│[39m 648209                                           [90m│[39m
+[90m│[39m Version            [90m│[39m 4.17.1 (node v20.19.2)                           [90m│[39m
+[90m│[39m Edition            [90m│[39m Community                                        [90m│[39m
+[90m│[39m Database           [90m│[39m postgres                                         [90m│[39m
+[90m└────────────────────[39m[90m┴──────────────────────────────────────────────────┘[39m
+
+ Actions available
+
+Welcome back!
+To manage your project 🚀, go to the administration panel at:
+http://localhost:1337/admin
+
+To access the server ⚡️, go to:
+http://localhost:1337
+
