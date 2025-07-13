@@ -105,8 +105,11 @@ class StrapiClient {
     this.apiToken = apiToken || process.env.STRAPI_API_TOKEN;
   }
 
-  private async request<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
-    const url = `${this.baseURL}/api${endpoint}`;
+  private async request<T>(endpoint: string, options: RequestInit = {}, locale?: string): Promise<T> {
+    const url = new URL(`${this.baseURL}/api${endpoint}`);
+    if (locale) {
+      url.searchParams.append('locale', locale);
+    }
     
     const headers: Record<string, string> = {
       'Content-Type': 'application/json',
@@ -116,7 +119,7 @@ class StrapiClient {
       headers.Authorization = `Bearer ${this.apiToken}`;
     }
 
-    const response = await fetch(url, {
+    const response = await fetch(url.toString(), {
       ...options,
       headers,
     });
@@ -135,6 +138,7 @@ class StrapiClient {
     sort?: string;
     filters?: Record<string, any>;
     populate?: string[];
+    locale?: string;
   }): Promise<StrapiResponse<BlogPost[]>> {
     const searchParams = new URLSearchParams();
     
@@ -154,11 +158,13 @@ class StrapiClient {
       });
     }
 
+    if (params?.locale) searchParams.append('locale', params.locale);
+
     const endpoint = `/blog-posts?${searchParams.toString()}`;
-    return this.request<StrapiResponse<BlogPost[]>>(endpoint);
+    return this.request<StrapiResponse<BlogPost[]>>(endpoint, {}, params?.locale || 'de');
   }
 
-  async getBlogPost(slug: string, populate?: string[]): Promise<StrapiResponse<BlogPost[]>> {
+  async getBlogPost(slug: string, populate?: string[], locale?: string): Promise<StrapiResponse<BlogPost[]>> {
     const searchParams = new URLSearchParams();
     searchParams.append('filters[slug][$eq]', slug);
     
@@ -168,14 +174,17 @@ class StrapiClient {
       });
     }
 
+    if (locale) searchParams.append('locale', locale);
+
     const endpoint = `/blog-posts?${searchParams.toString()}`;
-    return this.request<StrapiResponse<BlogPost[]>>(endpoint);
+    return this.request<StrapiResponse<BlogPost[]>>(endpoint, {}, locale || 'de');
   }
 
   async getBlogPostsByCategory(categorySlug: string, params?: {
     page?: number;
     pageSize?: number;
     populate?: string[];
+    locale?: string;
   }): Promise<StrapiResponse<BlogPost[]>> {
     const searchParams = new URLSearchParams();
     searchParams.append('filters[categories][slug][$eq]', categorySlug);
@@ -190,14 +199,17 @@ class StrapiClient {
       });
     }
 
+    if (params?.locale) searchParams.append('locale', params.locale);
+
     const endpoint = `/blog-posts?${searchParams.toString()}`;
-    return this.request<StrapiResponse<BlogPost[]>>(endpoint);
+    return this.request<StrapiResponse<BlogPost[]>>(endpoint, {}, params?.locale || 'de');
   }
 
   async getBlogPostsByTag(tagSlug: string, params?: {
     page?: number;
     pageSize?: number;
     populate?: string[];
+    locale?: string;
   }): Promise<StrapiResponse<BlogPost[]>> {
     const searchParams = new URLSearchParams();
     searchParams.append('filters[tags][slug][$eq]', tagSlug);
@@ -212,50 +224,63 @@ class StrapiClient {
       });
     }
 
+    if (params?.locale) searchParams.append('locale', params.locale);
+
     const endpoint = `/blog-posts?${searchParams.toString()}`;
-    return this.request<StrapiResponse<BlogPost[]>>(endpoint);
+    return this.request<StrapiResponse<BlogPost[]>>(endpoint, {}, params?.locale || 'de');
   }
 
   // Static Pages
-  async getStaticPage(pageKey: string): Promise<StrapiResponse<StaticPage[]>> {
+  async getStaticPage(pageKey: string, locale?: string): Promise<StrapiResponse<StaticPage[]>> {
     const searchParams = new URLSearchParams();
     searchParams.append('filters[page_key][$eq]', pageKey);
     searchParams.append('filters[is_active][$eq]', 'true');
 
+    if (locale) searchParams.append('locale', locale);
+
     const endpoint = `/static-pages?${searchParams.toString()}`;
-    return this.request<StrapiResponse<StaticPage[]>>(endpoint);
+    return this.request<StrapiResponse<StaticPage[]>>(endpoint, {}, locale || 'de');
   }
 
   // Categories
-  async getCategories(): Promise<StrapiResponse<Category[]>> {
-    return this.request<StrapiResponse<Category[]>>('/categories?sort=name:asc');
+  async getCategories(locale?: string): Promise<StrapiResponse<Category[]>> {
+    const searchParams = new URLSearchParams();
+    searchParams.append('sort', 'name:asc');
+    if (locale) searchParams.append('locale', locale);
+    return this.request<StrapiResponse<Category[]>>(`/categories?${searchParams.toString()}`, {}, locale || 'de');
   }
 
-  async getCategory(slug: string): Promise<StrapiResponse<Category[]>> {
+  async getCategory(slug: string, locale?: string): Promise<StrapiResponse<Category[]>> {
     const searchParams = new URLSearchParams();
     searchParams.append('filters[slug][$eq]', slug);
+    if (locale) searchParams.append('locale', locale);
 
     const endpoint = `/categories?${searchParams.toString()}`;
-    return this.request<StrapiResponse<Category[]>>(endpoint);
+    return this.request<StrapiResponse<Category[]>>(endpoint, {}, locale || 'de');
   }
 
   // Tags
-  async getTags(): Promise<StrapiResponse<Tag[]>> {
-    return this.request<StrapiResponse<Tag[]>>('/tags?sort=name:asc');
+  async getTags(locale?: string): Promise<StrapiResponse<Tag[]>> {
+    const searchParams = new URLSearchParams();
+    searchParams.append('sort', 'name:asc');
+    if (locale) searchParams.append('locale', locale);
+    return this.request<StrapiResponse<Tag[]>>(`/tags?${searchParams.toString()}`, {}, locale || 'de');
   }
 
-  async getTag(slug: string): Promise<StrapiResponse<Tag[]>> {
+  async getTag(slug: string, locale?: string): Promise<StrapiResponse<Tag[]>> {
     const searchParams = new URLSearchParams();
     searchParams.append('filters[slug][$eq]', slug);
+    if (locale) searchParams.append('locale', locale);
 
     const endpoint = `/tags?${searchParams.toString()}`;
-    return this.request<StrapiResponse<Tag[]>>(endpoint);
+    return this.request<StrapiResponse<Tag[]>>(endpoint, {}, locale || 'de');
   }
 
   // Search
   async searchBlogPosts(query: string, params?: {
     page?: number;
     pageSize?: number;
+    locale?: string;
   }): Promise<StrapiResponse<BlogPost[]>> {
     const searchParams = new URLSearchParams();
     searchParams.append('filters[status][$eq]', 'published');
@@ -265,6 +290,7 @@ class StrapiClient {
     
     if (params?.page) searchParams.append('pagination[page]', params.page.toString());
     if (params?.pageSize) searchParams.append('pagination[pageSize]', params.pageSize.toString());
+    if (params?.locale) searchParams.append('locale', params.locale);
     
     searchParams.append('populate', 'author');
     searchParams.append('populate', 'categories');
@@ -272,7 +298,7 @@ class StrapiClient {
     searchParams.append('populate', 'featured_image');
 
     const endpoint = `/blog-posts?${searchParams.toString()}`;
-    return this.request<StrapiResponse<BlogPost[]>>(endpoint);
+    return this.request<StrapiResponse<BlogPost[]>>(endpoint, {}, params?.locale || 'de');
   }
 }
 

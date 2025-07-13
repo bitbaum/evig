@@ -102,42 +102,14 @@ const components = {
 };
 
 export async function generateMetadata(): Promise<Metadata> {
-  try {
-    const response = await strapi.getStaticPage('about');
-    const page = response.data[0] || null;
-
-  if (!page) {
-    return {
-      title: 'About Us - RevampIT',
-      description: 'Learn about our mission to extend the life of IT devices and promote sustainable computing practices.',
-    };
-  }
-  
-  const seo = { seo_title: page.attributes.meta_title, seo_description: page.attributes.meta_description };
-
+  // Use static metadata during build to avoid Strapi connection issues
   return {
-    title: seo.seo_title || page.attributes.title,
-    description: seo.seo_description || page.attributes.content,
+    title: 'About Us - RevampIT',
+    description: 'Learn about our mission to extend the life of IT devices and promote sustainable computing practices.',
   };
-  } catch (error) {
-    console.error('Error fetching about page for metadata:', error);
-    return {
-      title: 'Über uns - RevampIT',
-      description: 'Erfahren Sie mehr über unsere Mission, die Lebensdauer von IT-Geräten zu verlängern und nachhaltige Computing-Praktiken zu fördern.',
-    };
-  }
 }
 
-export default async function AboutPage() {
-  try {
-    const response = await strapi.getStaticPage('about');
-    const page = response.data[0] || null;
-
-  // For now, always return the hardcoded about page
-  // until Strapi sections are properly configured
+export default function AboutPage() {
+  // Use hardcoded content during build to avoid Strapi connection issues
   return <HardcodedAboutPage />;
-  } catch (error) {
-    console.error('Error fetching about page:', error);
-    return <HardcodedAboutPage />;
-  }
 } 
