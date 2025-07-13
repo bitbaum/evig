@@ -269,9 +269,9 @@ export default function ServicesPage() {
           <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-10"></div>
           <div className="container mx-auto px-4 relative">
             <div className="max-w-3xl">
-              <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">Expert IT Services</h1>
-              <h2 className="text-2xl md:text-3xl font-semibold mb-8 text-green-200">Sustainable Solutions for Your Technology Needs</h2>
-              <p className="text-xl text-green-100">We combine technical expertise with environmental responsibility to provide comprehensive IT solutions that save you money and reduce electronic waste.</p>
+              <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">Experten-IT-Dienstleistungen</h1>
+              <h2 className="text-2xl md:text-3xl font-semibold mb-8 text-green-200">Nachhaltige Lösungen für Ihre Technologiebedürfnisse</h2>
+              <p className="text-xl text-green-100">Wir kombinieren technische Expertise mit Umweltverantwortung, um umfassende IT-Lösungen zu bieten, die Ihnen Geld sparen und Elektroschrott reduzieren.</p>
             </div>
           </div>
         </section>
@@ -392,8 +392,8 @@ export default function ServicesPage() {
         {/* CTA Section */}
         <section className="py-20 bg-gradient-to-r from-green-700 to-green-800 text-white">
           <div className="container mx-auto px-4 text-center">
-            <h2 className="text-4xl font-bold mb-6">Ready to Revamp Your Technology?</h2>
-            <p className="text-xl mb-8 max-w-2xl mx-auto text-green-100">Contact us today for a free consultation and discover how we can help you get the most out of your devices.</p>
+            <h2 className="text-4xl font-bold mb-6">Bereit, Ihre Technologie zu erneuern?</h2>
+            <p className="text-xl mb-8 max-w-2xl mx-auto text-green-100">Kontaktieren Sie uns heute für eine kostenlose Beratung und entdecken Sie, wie wir Ihnen helfen können, das Beste aus Ihren Geräten herauszuholen.</p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
                 href="/contact"

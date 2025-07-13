@@ -5,14 +5,14 @@ import React from 'react'
 import { WorkshopCard, Workshop } from '@/components/workshops/WorkshopCard'
 
 export const metadata: Metadata = {
-  title: 'Our Workshops | RevampIT',
-  description: 'Join our expert-led workshops on Linux, Open Source Software, and Computer Repair. More workshops coming soon!'
+  title: 'Unsere Workshops | RevampIT',
+  description: 'Nehmen Sie an unseren expertengeleiteten Workshops zu Linux, Open-Source-Software und Computerreparatur teil. Weitere Workshops kommen bald!'
 }
 
 const workshops: Workshop[] = [
   {
     title: 'Linux Workshop',
-    description: 'Master the Linux operating system from basics to advanced topics. Learn about system administration, command line tools, and open-source software management.',
+    description: 'Meistern Sie das Linux-Betriebssystem von den Grundlagen bis zu fortgeschrittenen Themen. Lernen Sie über Systemadministration, Kommandozeilen-Tools und Open-Source-Software-Verwaltung.'
     icon: '🐧',
     duration: '2 days',
     level: 'Beginner to Intermediate',
