@@ -10,7 +10,7 @@ export default function KivitendoPage() {
     <main className="min-h-screen">
       <HeroBanner
         title="Kivitendo"
-        description="The unique Open Source CRM & ERP that meets the highest quality standards through constant personalized development"
+        description="Das einzigartige Open Source CRM & ERP, das durch ständige personalisierte Weiterentwicklung höchste Qualitätsstandards erfüllt"
         className="bg-gradient-to-r from-blue-600 to-blue-800"
       />
 
@@ -19,9 +19,9 @@ export default function KivitendoPage() {
         <div className="container mx-auto px-4">
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-16">
-              <h2 className="text-4xl font-bold text-gray-900 mb-4">Why Choose Kivitendo?</h2>
+              <h2 className="text-4xl font-bold text-gray-900 mb-4">Warum Kivitendo wählen?</h2>
               <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                A comprehensive solution for order processing, inventory management, and financial accounting
+                Eine umfassende Lösung für Auftragsabwicklung, Warenwirtschaft und Finanzbuchhaltung
               </p>
             </div>
 
@@ -29,20 +29,20 @@ export default function KivitendoPage() {
               <div className="bg-gradient-to-br from-blue-50 to-white p-8 rounded-2xl shadow-sm hover:shadow-md transition-shadow duration-300">
                 <div className="flex items-center mb-4">
                   <Code className="w-8 h-8 text-blue-600 mr-3" />
-                  <h3 className="text-2xl font-semibold text-gray-900">Open Source Benefits</h3>
+                  <h3 className="text-2xl font-semibold text-gray-900">Open-Source-Vorteile</h3>
                 </div>
                 <ul className="space-y-3 text-gray-600">
                   <li className="flex items-start">
                     <CheckCircle className="w-5 h-5 text-green-500 mr-2 flex-shrink-0 mt-1" />
-                    <span>Highly adaptable to your needs</span>
+                    <span>Hohe Anpassungsfähigkeit an Ihre Bedürfnisse</span>
                   </li>
                   <li className="flex items-start">
                     <CheckCircle className="w-5 h-5 text-green-500 mr-2 flex-shrink-0 mt-1" />
-                    <span>Full access to code and developments</span>
+                    <span>Vollständiger Zugriff auf Code und Entwicklungen</span>
                   </li>
                   <li className="flex items-start">
                     <CheckCircle className="w-5 h-5 text-green-500 mr-2 flex-shrink-0 mt-1" />
-                    <span>No fixed license costs</span>
+                    <span>Keine fixen Lizenzkosten</span>
                   </li>
                 </ul>
               </div>
@@ -50,20 +50,20 @@ export default function KivitendoPage() {
               <div className="bg-gradient-to-br from-blue-50 to-white p-8 rounded-2xl shadow-sm hover:shadow-md transition-shadow duration-300">
                 <div className="flex items-center mb-4">
                   <Package className="w-8 h-8 text-blue-600 mr-3" />
-                  <h3 className="text-2xl font-semibold text-gray-900">Order Processing</h3>
+                  <h3 className="text-2xl font-semibold text-gray-900">Auftragsabwicklung</h3>
                 </div>
                 <ul className="space-y-3 text-gray-600">
                   <li className="flex items-start">
                     <CheckCircle className="w-5 h-5 text-green-500 mr-2 flex-shrink-0 mt-1" />
-                    <span>Complete quote to invoice workflow</span>
+                    <span>Kompletter Workflow von Angebot bis Rechnung</span>
                   </li>
                   <li className="flex items-start">
                     <CheckCircle className="w-5 h-5 text-green-500 mr-2 flex-shrink-0 mt-1" />
-                    <span>Customizable document templates</span>
+                    <span>Anpassbare Dokumentvorlagen</span>
                   </li>
                   <li className="flex items-start">
                     <CheckCircle className="w-5 h-5 text-green-500 mr-2 flex-shrink-0 mt-1" />
-                    <span>Direct email integration</span>
+                    <span>Direkte E-Mail-Integration</span>
                   </li>
                 </ul>
               </div>
@@ -71,20 +71,20 @@ export default function KivitendoPage() {
               <div className="bg-gradient-to-br from-blue-50 to-white p-8 rounded-2xl shadow-sm hover:shadow-md transition-shadow duration-300">
                 <div className="flex items-center mb-4">
                   <FileText className="w-8 h-8 text-blue-600 mr-3" />
-                  <h3 className="text-2xl font-semibold text-gray-900">Financial Accounting</h3>
+                  <h3 className="text-2xl font-semibold text-gray-900">Finanzbuchhaltung</h3>
                 </div>
                 <ul className="space-y-3 text-gray-600">
                   <li className="flex items-start">
                     <CheckCircle className="w-5 h-5 text-green-500 mr-2 flex-shrink-0 mt-1" />
-                    <span>Complete or modular accounting</span>
+                    <span>Komplette oder modulare Buchhaltung</span>
                   </li>
                   <li className="flex items-start">
                     <CheckCircle className="w-5 h-5 text-green-500 mr-2 flex-shrink-0 mt-1" />
-                    <span>Customizable chart of accounts</span>
+                    <span>Anpassbarer Kontenplan</span>
                   </li>
                   <li className="flex items-start">
                     <CheckCircle className="w-5 h-5 text-green-500 mr-2 flex-shrink-0 mt-1" />
-                    <span>Bank statement import</span>
+                    <span>Import von Kontoauszügen</span>
                   </li>
                 </ul>
               </div>
@@ -98,62 +98,62 @@ export default function KivitendoPage() {
         <div className="container mx-auto px-4">
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-16">
-              <h2 className="text-4xl font-bold text-gray-900 mb-4">Key Features</h2>
+              <h2 className="text-4xl font-bold text-gray-900 mb-4">Hauptmerkmale</h2>
               <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                Comprehensive features for your business needs
+                Umfassende Funktionen für Ihre Geschäftsanforderungen
               </p>
             </div>
 
             <div className="grid md:grid-cols-2 gap-8">
               <div className="bg-white p-8 rounded-xl shadow-sm">
-                <h3 className="text-2xl font-semibold mb-6">Business Configuration</h3>
+                <h3 className="text-2xl font-semibold mb-6">Geschäftskonfiguration</h3>
                 <ul className="space-y-4">
                   <li className="flex items-start">
                     <CheckCircle className="w-6 h-6 text-green-500 mr-3 flex-shrink-0 mt-1" />
                     <div>
-                      <span className="font-medium">Multiple Currencies & Languages</span>
-                      <p className="text-gray-600 mt-1">Support for various currencies and customer languages</p>
+                      <span className="font-medium">Mehrere Währungen & Sprachen</span>
+                      <p className="text-gray-600 mt-1">Unterstützung für verschiedene Währungen und Kundensprachen</p>
                     </div>
                   </li>
                   <li className="flex items-start">
                     <CheckCircle className="w-6 h-6 text-green-500 mr-3 flex-shrink-0 mt-1" />
                     <div>
-                      <span className="font-medium">Multi-tenant Capability</span>
-                      <p className="text-gray-600 mt-1">Manage multiple companies in one system</p>
+                      <span className="font-medium">Mandantenfähigkeit</span>
+                      <p className="text-gray-600 mt-1">Verwalten Sie mehrere Unternehmen in einem System</p>
                     </div>
                   </li>
                   <li className="flex items-start">
                     <CheckCircle className="w-6 h-6 text-green-500 mr-3 flex-shrink-0 mt-1" />
                     <div>
-                      <span className="font-medium">Custom User Groups</span>
-                      <p className="text-gray-600 mt-1">Define specific permissions for different roles</p>
+                      <span className="font-medium">Benutzerdefinierte Benutzergruppen</span>
+                      <p className="text-gray-600 mt-1">Definieren Sie spezifische Berechtigungen für verschiedene Rollen</p>
                     </div>
                   </li>
                 </ul>
               </div>
 
               <div className="bg-white p-8 rounded-xl shadow-sm">
-                <h3 className="text-2xl font-semibold mb-6">Integration & Customization</h3>
+                <h3 className="text-2xl font-semibold mb-6">Integration & Anpassung</h3>
                 <ul className="space-y-4">
                   <li className="flex items-start">
                     <CheckCircle className="w-6 h-6 text-green-500 mr-3 flex-shrink-0 mt-1" />
                     <div>
-                      <span className="font-medium">Webshop Integration</span>
-                      <p className="text-gray-600 mt-1">Seamless connection with your online store</p>
+                      <span className="font-medium">Webshop-Integration</span>
+                      <p className="text-gray-600 mt-1">Nahtlose Anbindung an Ihren Online-Shop</p>
                     </div>
                   </li>
                   <li className="flex items-start">
                     <CheckCircle className="w-6 h-6 text-green-500 mr-3 flex-shrink-0 mt-1" />
                     <div>
-                      <span className="font-medium">Custom Variables</span>
-                      <p className="text-gray-600 mt-1">Define custom fields for customers, articles, and projects</p>
+                      <span className="font-medium">Benutzerdefinierte Variablen</span>
+                      <p className="text-gray-600 mt-1">Definieren Sie benutzerdefinierte Felder für Kunden, Artikel und Projekte</p>
                     </div>
                   </li>
                   <li className="flex items-start">
                     <CheckCircle className="w-6 h-6 text-green-500 mr-3 flex-shrink-0 mt-1" />
                     <div>
-                      <span className="font-medium">Process Automation</span>
-                      <p className="text-gray-600 mt-1">Automate background processes and periodic tasks</p>
+                      <span className="font-medium">Prozessautomatisierung</span>
+                      <p className="text-gray-600 mt-1">Automatisieren Sie Hintergrundprozesse und periodische Aufgaben</p>
                     </div>
                   </li>
                 </ul>
@@ -168,59 +168,59 @@ export default function KivitendoPage() {
         <div className="container mx-auto px-4">
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-16">
-              <h2 className="text-4xl font-bold text-gray-900 mb-4">Pricing Structure</h2>
+              <h2 className="text-4xl font-bold text-gray-900 mb-4">Preisstruktur</h2>
               <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                Flexible options to suit your business needs
+                Flexible Optionen, die Ihren Geschäftsanforderungen entsprechen
               </p>
             </div>
 
             <div className="grid md:grid-cols-2 gap-8">
               <div className="bg-gradient-to-br from-blue-600 to-blue-800 rounded-2xl p-8 text-white">
-                <h3 className="text-2xl font-semibold mb-4">Hosting Package</h3>
+                <h3 className="text-2xl font-semibold mb-4">Hosting-Paket</h3>
                 <ul className="space-y-4 mb-8">
                   <li className="flex items-center">
                     <CheckCircle className="w-5 h-5 text-green-300 mr-3" />
-                    <span>Internet access from anywhere</span>
+                    <span>Internetzugang von überall</span>
                   </li>
                   <li className="flex items-center">
                     <CheckCircle className="w-5 h-5 text-green-300 mr-3" />
-                    <span>Unlimited users</span>
+                    <span>Unbegrenzte Benutzer</span>
                   </li>
                   <li className="flex items-center">
                     <CheckCircle className="w-5 h-5 text-green-300 mr-3" />
-                    <span>Daily data backup</span>
+                    <span>Tägliche Datensicherung</span>
                   </li>
                   <li className="flex items-center">
                     <CheckCircle className="w-5 h-5 text-green-300 mr-3" />
-                    <span>Standard version upgrades</span>
+                    <span>Upgrades der Standardversion</span>
                   </li>
                 </ul>
-                <div className="text-3xl font-bold mb-2">CHF 100.- / month</div>
-                <p className="text-blue-100">CHF 50.- for non-profit organizations</p>
+                <div className="text-3xl font-bold mb-2">CHF 100.- / Monat</div>
+                <p className="text-blue-100">CHF 50.- für gemeinnützige Organisationen</p>
               </div>
 
               <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-200">
-                <h3 className="text-2xl font-semibold mb-4">Custom Development</h3>
+                <h3 className="text-2xl font-semibold mb-4">Individuelle Entwicklung</h3>
                 <ul className="space-y-4 mb-8">
                   <li className="flex items-center">
                     <CheckCircle className="w-5 h-5 text-green-500 mr-3" />
-                    <span>Configuration & Support</span>
+                    <span>Konfiguration & Support</span>
                   </li>
                   <li className="flex items-center">
                     <CheckCircle className="w-5 h-5 text-green-500 mr-3" />
-                    <span>Individual Adaptations</span>
+                    <span>Individuelle Anpassungen</span>
                   </li>
                   <li className="flex items-center">
                     <CheckCircle className="w-5 h-5 text-green-500 mr-3" />
-                    <span>Personal Consultation</span>
+                    <span>Persönliche Beratung</span>
                   </li>
                   <li className="flex items-center">
                     <CheckCircle className="w-5 h-5 text-green-500 mr-3" />
-                    <span>Detailed Quotation</span>
+                    <span>Detaillierte Offerte</span>
                   </li>
                 </ul>
-                <div className="text-3xl font-bold mb-2">CHF 100.- / hour</div>
-                <p className="text-gray-600">Custom solutions for your specific needs</p>
+                <div className="text-3xl font-bold mb-2">CHF 100.- / Stunde</div>
+                <p className="text-gray-600">Massgeschneiderte Lösungen für Ihre spezifischen Bedürfnisse</p>
               </div>
             </div>
           </div>
@@ -232,35 +232,35 @@ export default function KivitendoPage() {
         <div className="container mx-auto px-4">
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-16">
-              <h2 className="text-4xl font-bold text-gray-900 mb-4">Resources & Community</h2>
+              <h2 className="text-4xl font-bold text-gray-900 mb-4">Ressourcen & Community</h2>
               <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                Join our active community and access comprehensive resources
+                Treten Sie unserer aktiven Community bei und greifen Sie auf umfassende Ressourcen zu
               </p>
             </div>
 
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {[
                 { 
-                  title: 'Kivitendo Switzerland',
-                  description: 'Official Swiss Kivitendo website',
+                  title: 'Kivitendo Schweiz',
+                  description: 'Offizielle Schweizer Kivitendo-Website',
                   href: 'https://www.kivitendo.ch',
                   icon: 'swiss'
                 },
                 { 
-                  title: 'Kivitendo Germany',
-                  description: 'Official German Kivitendo website',
+                  title: 'Kivitendo Deutschland',
+                  description: 'Offizielle Deutsche Kivitendo-Website',
                   href: 'https://www.kivitendo.de',
                   icon: 'german'
                 },
                 { 
-                  title: 'Community Forum',
-                  description: 'Get help and share knowledge with other users',
+                  title: 'Community-Forum',
+                  description: 'Holen Sie sich Hilfe und teilen Sie Wissen mit anderen Benutzern',
                   href: 'https://forum.kivitendo.de/',
                   icon: 'forum'
                 },
                 { 
-                  title: 'Feature Requests',
-                  description: 'View and contribute to upcoming features',
+                  title: 'Funktionswünsche',
+                  description: 'Sehen Sie sich kommende Funktionen an und tragen Sie dazu bei',
                   href: 'https://wiki.revamp-it.ch/index.php?title=Wunschliste_Kivitendo',
                   icon: 'features'
                 }

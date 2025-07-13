@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import { ThemeProvider } from "@/components/providers/ThemeProvider";
-import { DropdownProvider } from "@/lib/contexts/DropdownContext";
+import { Providers } from "@/components/providers/providers";
 import MainLayout from "@/components/layout/MainLayout";
 import "./globals.css";
 
@@ -21,13 +20,11 @@ export default function RootLayout({
   return (
     <html lang="de" suppressHydrationWarning>
       <body className={inter.className}>
-        <ThemeProvider>
-          <DropdownProvider>
-            <MainLayout>
-              {children}
-            </MainLayout>
-          </DropdownProvider>
-        </ThemeProvider>
+        <Providers>
+          <MainLayout>
+            {children}
+          </MainLayout>
+        </Providers>
       </body>
     </html>
   );
