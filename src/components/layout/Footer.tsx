@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { mainNavigation, socialLinks } from '@/config/navigation'
 import { Logo } from '@/components/ui/Logo'
 import { Mail, Phone, MapPin, Clock } from 'lucide-react'
+import { siteConfig } from '@/config/site'
 
 export default function Footer() {
   return (
@@ -50,34 +51,28 @@ export default function Footer() {
           <div>
             <h3 className="text-xl font-bold mb-4">Contact Us</h3>
             <div className="space-y-4">
-              <div className="flex items-start">
-                <MapPin className="w-5 h-5 mt-1 mr-3 flex-shrink-0" />
-                <div>
-                  <p className="font-medium">Retail Location</p>
-                  <p className="text-gray-300">Birmensdorferstr. 379</p>
-                  <p className="text-gray-300">8055 Zürich</p>
-                  <p className="text-gray-300">Schweiz</p>
+              {siteConfig.contact.locations.map((location) => (
+                <div className="flex items-start" key={location.name}>
+                  <MapPin className="w-5 h-5 mt-1 mr-3 flex-shrink-0" />
+                  <div>
+                    <p className="font-medium">{location.name}</p>
+                    {location.addressLines.map((line) => (
+                      <p className="text-gray-300" key={line}>{line}</p>
+                    ))}
+                    {'extra' in location && location.extra && <p className="text-gray-300 text-sm">{location.extra}</p>}
+                  </div>
                 </div>
-              </div>
-              <div className="flex items-start">
-                <MapPin className="w-5 h-5 mt-1 mr-3 flex-shrink-0" />
-                <div>
-                  <p className="font-medium">Warehouse</p>
-                  <p className="text-gray-300">Badenerstr. 816</p>
-                  <p className="text-gray-300">8048 Zürich</p>
-                  <p className="text-gray-300 text-sm">(by appointment only)</p>
-                </div>
-              </div>
+              ))}
               <div className="flex items-center">
                 <Phone className="w-5 h-5 mr-3" />
-                <a href="tel:+41439603264" className="text-gray-300 hover:text-white transition-colors">
-                  +41 (0)43 960 32 64
+                <a href={`tel:${siteConfig.contact.phone}`} className="text-gray-300 hover:text-white transition-colors">
+                  {siteConfig.contact.phone}
                 </a>
               </div>
               <div className="flex items-center">
                 <Mail className="w-5 h-5 mr-3" />
-                <a href="mailto:empfang@revamp-it.ch" className="text-gray-300 hover:text-white transition-colors">
-                  empfang@revamp-it.ch
+                <a href={`mailto:${siteConfig.contact.email}`} className="text-gray-300 hover:text-white transition-colors">
+                  {siteConfig.contact.email}
                 </a>
               </div>
             </div>
@@ -89,8 +84,8 @@ export default function Footer() {
             <div className="flex items-start">
               <Clock className="w-5 h-5 mt-1 mr-3 flex-shrink-0" />
               <div className="space-y-2">
-                <p className="text-gray-300">Monday: 9:00 - 12:00</p>
-                <p className="text-gray-300">Tuesday - Friday: 13:00 - 17:00</p>
+                <p className="text-gray-300">Monday: {siteConfig.openingHours.monday}</p>
+                <p className="text-gray-300">Tuesday - Friday: {siteConfig.openingHours.tuesdayToFriday}</p>
               </div>
             </div>
           </div>

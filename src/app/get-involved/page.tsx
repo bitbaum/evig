@@ -1,6 +1,5 @@
 import { Metadata } from 'next'
 import { Users, Code, Building2, GraduationCap, Handshake, Heart, Globe, Recycle, Lightbulb, Gift } from 'lucide-react'
-import { siteConfig } from '@/config/site'
 import { ContactLink } from '@/components/ui/contact-link'
 import { HeroBanner } from '@/components/ui/hero-banner'
 

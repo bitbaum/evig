@@ -35,10 +35,10 @@ src/
 │   ├── services/                   # Service pages
 │   └── workshops/                  # Workshop information
 ├── components/                     # React components
-│   ├── layout/                     # Layout components (Header, Footer, etc.)
-│   ├── ui/                         # Reusable UI components
-│   ├── providers/                  # Context providers
-│   └── workshops/                  # Workshop-specific components
+│   ├── layout/                     # Layout components (Header, Footer, MobileMenu, MainLayout)
+│   ├── ui/                         # Reusable UI components (Button, Card, Logo, Dropdowns, etc.)
+│   ├── providers/                  # Context providers (ThemeProvider, DropdownProvider)
+│   └── workshops/                  # Workshop-specific components (WorkshopCard)
 ├── lib/                           # Utility libraries
 │   ├── strapi.ts                  # Strapi CMS client
 │   ├── utils.ts                   # General utilities
@@ -47,8 +47,8 @@ src/
 ├── types/                         # TypeScript type definitions
 │   └── strapi.ts                  # Strapi content types
 └── config/                        # Configuration files
-    ├── navigation.tsx             # Navigation structure
-    └── site.ts                    # Site-wide configuration
+    ├── navigation.tsx             # Main navigation structure for header and footer
+    └── site.ts                    # Site-wide configuration (contact info, metadata)
 ```
 
 ### `/strapi` - Content Management System

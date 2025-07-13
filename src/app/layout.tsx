@@ -1,15 +1,11 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
-import { NextProvider } from "@/components/providers/NextProvider";
 import { DropdownProvider } from "@/lib/contexts/DropdownContext";
 import MainLayout from "@/components/layout/MainLayout";
 import "./globals.css";
 
-const inter = Inter({
-  subsets: ["latin"],
-  display: "swap",
-});
+const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "RevampIT",
@@ -19,20 +15,18 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: {
+}: Readonly<{
   children: React.ReactNode;
-}) {
+}>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${inter.className} antialiased`}>
+      <body className={inter.className}>
         <ThemeProvider>
-          <NextProvider>
-            <DropdownProvider>
-              <MainLayout>
-                {children}
-              </MainLayout>
-            </DropdownProvider>
-          </NextProvider>
+          <DropdownProvider>
+            <MainLayout>
+              {children}
+            </MainLayout>
+          </DropdownProvider>
         </ThemeProvider>
       </body>
     </html>

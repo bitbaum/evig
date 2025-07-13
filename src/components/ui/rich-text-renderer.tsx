@@ -22,7 +22,24 @@ const renderNode = (node: RichTextNode, index: number): React.ReactNode => {
     
     case 'heading':
       const Tag = `h${node.level}` as keyof JSX.IntrinsicElements;
-      return <Tag key={index} className={`text-2xl font-bold mb-6 mt-10`}>{node.children.map(renderNode)}</Tag>;
+      let headingClass = '';
+      switch (node.level) {
+        case 1:
+          headingClass = 'text-4xl font-bold mb-8 mt-12';
+          break;
+        case 2:
+          headingClass = 'text-3xl font-bold mb-6 mt-10';
+          break;
+        case 3:
+          headingClass = 'text-2xl font-bold mb-4 mt-8';
+          break;
+        case 4:
+          headingClass = 'text-xl font-bold mb-4 mt-6';
+          break;
+        default:
+          headingClass = 'text-lg font-bold mb-4 mt-6';
+      }
+      return <Tag key={index} className={headingClass}>{node.children.map(renderNode)}</Tag>;
 
     case 'list':
       const ListTag = node.format === 'ordered' ? 'ol' : 'ul';
