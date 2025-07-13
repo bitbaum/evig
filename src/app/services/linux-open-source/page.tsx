@@ -20,28 +20,28 @@ import Link from 'next/link'
 
 export const metadata: Metadata = {
   title: 'Linux | RevampIT',
-  description: 'Expert Linux installation, support, and training services. Discover the perfect Linux distribution for your needs.',
+  description: 'Experten-Linux-Installation, Support und Schulungsdienstleistungen. Entdecken Sie die perfekte Linux-Distribution für Ihre Bedürfnisse.'
 }
 
 const benefits = [
   {
-    title: 'Security & Stability',
-    description: 'Linux is renowned for its robust security features and system stability, making it ideal for both personal and enterprise use.',
+    title: 'Sicherheit & Stabilität',
+    description: 'Linux ist bekannt für seine robusten Sicherheitsfunktionen und Systemstabilität, was es ideal für den privaten und gewerblichen Einsatz macht.'
     icon: Shield
   },
   {
-    title: 'Performance',
-    description: 'Efficient resource usage and optimized performance, even on older hardware, with minimal system requirements.',
+    title: 'Leistung',
+    description: 'Effiziente Ressourcennutzung und optimierte Leistung, auch auf älterer Hardware, mit minimalen Systemanforderungen.'
     icon: Zap
   },
   {
-    title: 'Customization',
-    description: 'Complete control over your system with endless customization options to match your workflow and preferences.',
+    title: 'Anpassung',
+    description: 'Vollständige Kontrolle über Ihr System mit unendlichen Anpassungsmöglichkeiten, um Ihren Workflow und Ihre Präferenzen zu entsprechen.'
     icon: Code
   },
   {
-    title: 'Community Support',
-    description: 'Access to a vast global community of users and developers for support, documentation, and continuous improvement.',
+    title: 'Community-Support',
+    description: 'Zugang zu einer grossen globalen Gemeinschaft von Benutzern und Entwicklern für Unterstützung, Dokumentation und kontinuierliche Verbesserung.'
     icon: Users
   }
 ]
