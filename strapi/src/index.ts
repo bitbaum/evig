@@ -16,7 +16,7 @@ export default {
    * This gives you an opportunity to set up your data model,
    * run jobs, or perform some special logic.
    */
-  async bootstrap({ strapi }) {
+  async bootstrap({ strapi }: { strapi: any }) {
     // Grant full access to the Super Admin role
     const superAdminRole = await strapi.db.query('admin::role').findOne({
       where: { code: 'strapi-super-admin' },
@@ -27,7 +27,7 @@ export default {
       await strapi.db.query('admin::role').update({
         where: { id: superAdminRole.id },
         data: {
-          permissions: allPermissions.map((p) => p.id),
+          permissions: allPermissions.map((p: any) => p.id),
         },
       });
       console.log('Super admin permissions have been set.');
@@ -58,7 +58,7 @@ export default {
       await strapi.db.query('plugin::users-permissions.role').update({
         where: { id: publicRole.id },
         data: {
-          permissions: [...new Set([...(publicRole.permissions || []).map(p => p.id), ...permissions.map(p => p.id)])],
+          permissions: [...new Set([...(publicRole.permissions || []).map((p: any) => p.id), ...permissions.map((p: any) => p.id)])],
         },
       });
       console.log('Public permissions have been set for blog posts and static pages.');

@@ -27,7 +27,7 @@ const workshops: Workshop[] = [
   },
   {
     title: 'Open-Source-Software',
-    description: 'Entdecken Sie die Welt der Open-Source-Software-Entwicklung. Lernen Sie, wie Sie zu Open-Source-Projekten beitragen, Lizenzierung verstehen und in der Gemeinschaft mitarbeiten können.'
+    description: 'Entdecken Sie die Welt der Open-Source-Software-Entwicklung. Lernen Sie, wie Sie zu Open-Source-Projekten beitragen, Lizenzierung verstehen und in der Gemeinschaft mitarbeiten können.',
     icon: '🔓',
     duration: '1 Tag',
     level: 'Alle Stufen',
@@ -42,7 +42,7 @@ const workshops: Workshop[] = [
   },
   {
     title: 'Computerreparatur',
-    description: 'Lernen Sie grundlegende Hardware-Reparatur- und Wartungsfähigkeiten. Von der Grunddiagnose bis zum Komponententausch - werden Sie sicher im Umgang mit Computerproblemen.'
+    description: 'Lernen Sie grundlegende Hardware-Reparatur- und Wartungsfähigkeiten. Von der Grunddiagnose bis zum Komponententausch - werden Sie sicher im Umgang mit Computerproblemen.',
     icon: '🔧',
     duration: '2 Tage',
     level: 'Anfänger',
@@ -57,7 +57,7 @@ const workshops: Workshop[] = [
   },
   {
     title: 'Bitcoin & Blockchain',
-    description: 'Verstehen Sie die Grundlagen von Bitcoin, Blockchain-Technologie und Kryptowährungen. Lernen Sie über Wallets, Transaktionen und die Zukunft digitaler Währungen.'
+    description: 'Verstehen Sie die Grundlagen von Bitcoin, Blockchain-Technologie und Kryptowährungen. Lernen Sie über Wallets, Transaktionen und die Zukunft digitaler Währungen.',
     icon: '₿',
     duration: '1 Tag',
     level: 'Anfänger',
@@ -67,7 +67,7 @@ const workshops: Workshop[] = [
   },
   {
     title: 'Künstliche Intelligenz',
-    description: 'Tauchen Sie ein in die Welt der KI und des maschinellen Lernens. Lernen Sie über neuronale Netzwerke, Datenverarbeitung und praktische Anwendungen der KI-Technologie.'
+    description: 'Tauchen Sie ein in die Welt der KI und des maschinellen Lernens. Lernen Sie über neuronale Netzwerke, Datenverarbeitung und praktische Anwendungen der KI-Technologie.',
     icon: '🤖',
     duration: '2 Tage',
     level: 'Fortgeschrittene',
@@ -77,7 +77,7 @@ const workshops: Workshop[] = [
   },
   {
     title: 'Kreatives Programmieren',
-    description: 'Verwandeln Sie Ideen in funktionierende Prototypen mit KI-gestützten Programmier-Workflows und modernem Tech-Stack. Erstellen Sie einen vollständigen Next.js + Supabase MVP in praktischen Sitzungen.'
+    description: 'Verwandeln Sie Ideen in funktionierende Prototypen mit KI-gestützten Programmier-Workflows und modernem Tech-Stack. Erstellen Sie einen vollständigen Next.js + Supabase MVP in praktischen Sitzungen.',
     icon: '🎨',
     duration: '4 Sitzungen',
     level: 'Anfänger bis Fortgeschrittene',
@@ -90,17 +90,17 @@ const workshops: Workshop[] = [
 const benefits = [
   {
     title: 'Praktisches Lernen',
-    description: 'Sammeln Sie praktische Erfahrungen mit realen Beispielen und angeleiteten Übungssitzungen'
+    description: 'Sammeln Sie praktische Erfahrungen mit realen Beispielen und angeleiteten Übungssitzungen',
     icon: Rocket
   },
   {
     title: 'In Ihrem Tempo lernen',
-    description: 'Angenehme Lernumgebung mit geduldigen, erfahrenen Instruktoren, die sich an Ihre Bedürfnisse anpassen'
+    description: 'Angenehme Lernumgebung mit geduldigen, erfahrenen Instruktoren, die sich an Ihre Bedürfnisse anpassen',
     icon: Briefcase
   },
   {
     title: 'Neue Technologien entdecken',
-    description: 'Entdecken und meistern Sie verschiedene Technologiebereiche, die Sie am meisten interessieren'
+    description: 'Entdecken und meistern Sie verschiedene Technologiebereiche, die Sie am meisten interessieren',
     icon: Users
   }
 ]

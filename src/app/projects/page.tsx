@@ -10,37 +10,37 @@ export const metadata: Metadata = {
 const projects = [
   {
     title: 'Kivitendo Modus CH',
-    description: 'Seit Juli 2015 ist revamp-it Premium-Partner des Kivitendo-Projekts. Ab 2005 suchten wir - zunächst für unsere eigenen Zwecke, aber bald darauf zur Befriedigung der Bedürfnisse unserer Kunden - nach einer Software-Lösung für Buchhaltung, Ressourcen- und Kundenverwaltung.'
+    description: 'Seit Juli 2015 ist revamp-it Premium-Partner des Kivitendo-Projekts. Ab 2005 suchten wir - zunächst für unsere eigenen Zwecke, aber bald darauf zur Befriedigung der Bedürfnisse unserer Kunden - nach einer Software-Lösung für Buchhaltung, Ressourcen- und Kundenverwaltung.',
     readMoreLink: '/projects/kivitendo',
     icon: '📊'
   },
   {
     title: 'Verein Linuxola',
-    description: 'Der Verein Linuxola wurde am 2. Dezember 2005 von acht Personen aus verschiedenen Regionen der Schweiz gegründet. Der Zweck der Organisation ist es, unseren Partnern in Afrika Zugang zu Informationstechnologie und eine Verbindung zu den globalen digitalen Gemeingütern zu bieten.'
+    description: 'Der Verein Linuxola wurde am 2. Dezember 2005 von acht Personen aus verschiedenen Regionen der Schweiz gegründet. Der Zweck der Organisation ist es, unseren Partnern in Afrika Zugang zu Informationstechnologie und eine Verbindung zu den globalen digitalen Gemeingütern zu bieten.',
     readMoreLink: '/projects/linuxola',
     icon: '🌍'
   },
   {
     title: 'FreieComputer.ch',
-    description: 'Das Schweizer Label für Computer mit vorinstallierter freier Software und garantiertem Support! revamp-it hat zusammen mit der Unterstützung der engagierten Open-Source-Gemeinschaft zur Entstehung dieses Labels beigetragen.'
+    description: 'Das Schweizer Label für Computer mit vorinstallierter freier Software und garantiertem Support! revamp-it hat zusammen mit der Unterstützung der engagierten Open-Source-Gemeinschaft zur Entstehung dieses Labels beigetragen.',
     readMoreLink: '/projects/freiecomputer',
     icon: '💻'
   },
   {
     title: 'Compirat',
-    description: 'Compirat ist eine Zusammenarbeit zwischen Caritas Zürich und revamp-it. Dank der Unterstützung von Compirat erhalten Menschen mit begrenzten Mitteln im Kanton Zürich die Möglichkeit, das Arbeiten mit Computern in der Nähe ihres Wohnorts zu erlernen.'
+    description: 'Compirat ist eine Zusammenarbeit zwischen Caritas Zürich und revamp-it. Dank der Unterstützung von Compirat erhalten Menschen mit begrenzten Mitteln im Kanton Zürich die Möglichkeit, das Arbeiten mit Computern in der Nähe ihres Wohnorts zu erlernen.',
     readMoreLink: '/projects/compirat',
     icon: '👥'
   },
   {
     title: 'Hardware-Entwicklung',
-    description: 'Die Hardware-Entwicklungsarbeit bei revamp-it konzentriert sich darauf, neue Möglichkeiten stillgelegter Computer-Hardware zu entdecken, Energie- und Ressourcenverbrauch zu optimieren und Anleitungen für den Zusammenbau von Open-Source-Hardware zu erstellen.'
+    description: 'Die Hardware-Entwicklungsarbeit bei revamp-it konzentriert sich darauf, neue Möglichkeiten stillgelegter Computer-Hardware zu entdecken, Energie- und Ressourcenverbrauch zu optimieren und Anleitungen für den Zusammenbau von Open-Source-Hardware zu erstellen.',
     readMoreLink: '/projects/hardware',
     icon: '🔧'
   },
   {
     title: 'LTSP - Linux Terminal Server Project',
-    description: 'Das Linux Terminal Server Project konzentriert sich darauf, die Leistung eines schnellen, leistungsstarken Servers zu nutzen, der über ein Netzwerk mit älteren, langsameren Computern verbunden ist. Dies ermöglicht es mehreren Benutzern, gleichzeitig an ihren Clients zu arbeiten, die mit demselben Server verbunden sind.'
+    description: 'Das Linux Terminal Server Project konzentriert sich darauf, die Leistung eines schnellen, leistungsstarken Servers zu nutzen, der über ein Netzwerk mit älteren, langsameren Computern verbunden ist. Dies ermöglicht es mehreren Benutzern, gleichzeitig an ihren Clients zu arbeiten, die mit demselben Server verbunden sind.',
     readMoreLink: '/projects/ltsp',
     icon: '🖥️'
   }

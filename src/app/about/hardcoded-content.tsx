@@ -19,7 +19,7 @@ export default function HardcodedAboutPage() {
             </p>
             <div className="relative w-full h-[400px] rounded-lg overflow-hidden my-8">
               <Image
-                src="/images/storefront.png"
+                src="/images/Article Pics/storefront.png"
                 alt="RevampIT Schaufenster mit Computern und Geräten"
                 fill
                 className="object-cover"

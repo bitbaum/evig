@@ -53,7 +53,7 @@ exports.default = {
             await strapi.db.query('plugin::users-permissions.role').update({
                 where: { id: publicRole.id },
                 data: {
-                    permissions: [...new Set([...(publicRole.permissions || []).map(p => p.id), ...permissions.map(p => p.id)])],
+                    permissions: [...new Set([...(publicRole.permissions || []).map((p) => p.id), ...permissions.map((p) => p.id)])],
                 },
             });
             console.log('Public permissions have been set for blog posts and static pages.');
