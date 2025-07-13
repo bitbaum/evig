@@ -1,7 +1,7 @@
 import { Metadata } from 'next'
 import Image from 'next/image'
 import { HeroBanner } from '@/components/ui/hero-banner'
-import { getStaticPage } from '@/lib/strapi'
+import strapi from '@/lib/strapi'
 import RichTextRenderer from '@/components/ui/rich-text-renderer'
 import HardcodedAboutPage from './hardcoded-content'
 
@@ -102,7 +102,9 @@ const components = {
 };
 
 export async function generateMetadata(): Promise<Metadata> {
-  const page = await getStaticPage('about', { populate: 'deep' });
+  try {
+    const response = await strapi.getStaticPage('about');
+    const page = response.data[0] || null;
 
   if (!page) {
     return {
@@ -117,10 +119,19 @@ export async function generateMetadata(): Promise<Metadata> {
     title: seo.seo_title || page.attributes.title,
     description: seo.seo_description || page.attributes.excerpt,
   };
+  } catch (error) {
+    console.error('Error fetching about page for metadata:', error);
+    return {
+      title: 'Über uns - RevampIT',
+      description: 'Erfahren Sie mehr über unsere Mission, die Lebensdauer von IT-Geräten zu verlängern und nachhaltige Computing-Praktiken zu fördern.',
+    };
+  }
 }
 
 export default async function AboutPage() {
-  const page = await getStaticPage('about', { populate: 'deep' });
+  try {
+    const response = await strapi.getStaticPage('about');
+    const page = response.data[0] || null;
 
   if (!page || !page.attributes.sections || page.attributes.sections.length === 0) {
     return <HardcodedAboutPage />;
@@ -131,10 +142,14 @@ export default async function AboutPage() {
       {page.attributes.sections.map((section: any, index: number) => {
         const Component = components[section.__component as keyof typeof components];
         if (!Component) {
-          return <p key={index}>Component not found: {section.__component}</p>;
+          return <p key={index}>Komponente nicht gefunden: {section.__component}</p>;
         }
         return Component(section, index);
       })}
     </main>
   )
+  } catch (error) {
+    console.error('Error fetching about page:', error);
+    return <HardcodedAboutPage />;
+  }
 } 
