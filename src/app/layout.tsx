@@ -9,8 +9,8 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "RevampIT",
-  description: "RevampIT - Sustainable technology solutions through refurbishment and recycling. Join us in reducing electronic waste and making technology accessible to everyone.",
-  keywords: ["electronic waste", "recycling", "refurbishment", "sustainable technology", "workshops", "volunteer"],
+  description: "RevampIT - Nachhaltige Technologielösungen durch Aufarbeitung und Recycling. Helfen Sie mit, Elektroschrott zu reduzieren und Technologie für alle zugänglich zu machen.",
+  keywords: ["Elektroschrott", "Recycling", "Aufarbeitung", "nachhaltige Technologie", "Workshops", "Freiwilligenarbeit"],
 };
 
 export default function RootLayout({
@@ -19,7 +19,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="de" suppressHydrationWarning>
       <body className={inter.className}>
         <ThemeProvider>
           <DropdownProvider>

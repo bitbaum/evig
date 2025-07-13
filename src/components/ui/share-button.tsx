@@ -11,7 +11,7 @@ interface ShareButtonProps {
   children?: ReactNode
 }
 
-export function ShareButton({ className, text, url, children = 'Share' }: ShareButtonProps) {
+export function ShareButton({ className, text, url, children = 'Teilen' }: ShareButtonProps) {
   const handleShare = () => {
     if (typeof window !== 'undefined') {
       window.open(

@@ -104,7 +104,7 @@ export function MobileMenu({
             className="-m-2.5 rounded-md p-2.5 text-gray-700 hover:bg-gray-100 transition-colors duration-200"
             onClick={onClose}
           >
-            <span className="sr-only">Close menu</span>
+            <span className="sr-only">Menü schliessen</span>
             <X className="h-6 w-6" aria-hidden="true" />
           </button>
         </div>
@@ -113,7 +113,7 @@ export function MobileMenu({
         <div className="mt-4 mb-2 flex items-center bg-amber-50 border border-amber-200 rounded-lg px-3 py-2 text-xs text-amber-700">
           <div className="w-2 h-2 bg-amber-400 rounded-full mr-2 animate-pulse"></div>
           <span className="font-medium">
-            Experimentelli Site - 
+            Experimentelle Site - 
             <a 
               href="https://revampit.org" 
               target="_blank" 
@@ -121,7 +121,7 @@ export function MobileMenu({
               className="text-amber-800 hover:text-amber-900 underline ml-1 transition-colors"
               onClick={onClose}
             >
-              zur aktuelle Site
+              zur aktuellen Site
             </a>
           </span>
         </div>

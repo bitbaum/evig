@@ -1,13 +1,13 @@
 export const siteConfig = {
   name: 'RevampIT',
-  description: 'Making technology sustainable and accessible for everyone.',
+  description: 'Wir machen Technologie nachhaltig und für alle zugänglich.',
   contact: {
     email: 'empfang@revamp-it.ch',
     phone: '+41 44 586 86 86',
     address: 'Industriestrasse 4, 8630 Rüti ZH, Switzerland',
     locations: [
       {
-        name: 'Retail Location',
+        name: 'Verkaufsstelle',
         addressLines: [
           'Birmensdorferstr. 379',
           '8055 Zürich',
@@ -15,12 +15,12 @@ export const siteConfig = {
         ]
       },
       {
-        name: 'Warehouse',
+        name: 'Lager',
         addressLines: [
           'Badenerstr. 816',
           '8048 Zürich'
         ],
-        extra: '(by appointment only)'
+        extra: '(nur nach Terminvereinbarung)'
       }
     ]
   },

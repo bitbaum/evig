@@ -52,7 +52,7 @@ export function WelcomeModal() {
                   className="rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
                   onClick={handleCloseWelcomeModal}
                 >
-                  <span className="sr-only">Close</span>
+                  <span className="sr-only">Schliessen</span>
                   <X className="h-6 w-6" aria-hidden="true" />
                 </button>
               </div>

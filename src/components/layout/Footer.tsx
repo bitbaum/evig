@@ -15,7 +15,7 @@ export default function Footer() {
           <div>
             <Logo className="mb-4" showText={true} />
             <p className="text-sm text-gray-300">
-              Transforming the future of IT through sustainable refurbishment and recycling.
+              Die Zukunft der IT durch nachhaltige Aufarbeitung und Recycling gestalten.
             </p>
           </div>
 
@@ -49,7 +49,7 @@ export default function Footer() {
 
           {/* Contact Section */}
           <div>
-            <h3 className="text-xl font-bold mb-4">Contact Us</h3>
+            <h3 className="text-xl font-bold mb-4">Kontakt</h3>
             <div className="space-y-4">
               {siteConfig.contact.locations.map((location) => (
                 <div className="flex items-start" key={location.name}>
@@ -80,12 +80,12 @@ export default function Footer() {
 
           {/* Opening Hours Section */}
           <div>
-            <h3 className="text-xl font-bold mb-4">Opening Hours</h3>
+            <h3 className="text-xl font-bold mb-4">Öffnungszeiten</h3>
             <div className="flex items-start">
               <Clock className="w-5 h-5 mt-1 mr-3 flex-shrink-0" />
               <div className="space-y-2">
-                <p className="text-gray-300">Monday: {siteConfig.openingHours.monday}</p>
-                <p className="text-gray-300">Tuesday - Friday: {siteConfig.openingHours.tuesdayToFriday}</p>
+                <p className="text-gray-300">Montag: {siteConfig.openingHours.monday}</p>
+                <p className="text-gray-300">Dienstag - Freitag: {siteConfig.openingHours.tuesdayToFriday}</p>
               </div>
             </div>
           </div>
@@ -111,7 +111,7 @@ export default function Footer() {
 
         {/* Copyright */}
         <div className="mt-8 text-center text-gray-400">
-          <p>&copy; {new Date().getFullYear()} RevampIT. All rights reserved.</p>
+          <p>&copy; {new Date().getFullYear()} RevampIT. Alle Rechte vorbehalten.</p>
         </div>
       </div>
     </footer>
