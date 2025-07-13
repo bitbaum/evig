@@ -11,32 +11,32 @@ import {
 } from 'lucide-react'
 
 export const metadata: Metadata = {
-  title: 'Contact Us | RevampIT',
-  description: 'Get in touch with RevampIT for Linux support, workshops, and open-source solutions.',
+  title: 'Kontakt | RevampIT',
+  description: 'Kontaktieren Sie RevampIT für Linux-Support, Workshops und Open-Source-Lösungen.'
 }
 
 const contactInfo = [
   {
-    title: 'Email',
+    title: 'E-Mail',
     value: 'empfang@revamp-it.ch',
     icon: Mail,
     link: 'mailto:empfang@revamp-it.ch'
   },
   {
-    title: 'Phone',
+    title: 'Telefon',
     value: '+41 (0)43 960 32 64',
     icon: Phone,
     link: 'tel:+41439603264'
   },
   {
-    title: 'Address',
+    title: 'Adresse',
     value: 'Birmensdorferstr. 379\n8055 Zürich\nSchweiz',
     icon: MapPin,
     link: 'https://www.google.com/maps/place/Birmensdorferstrasse+379,+8055+Z%C3%BCrich'
   },
   {
-    title: 'Opening Hours',
-    value: 'Monday: 9:00 - 12:00\nTuesday - Friday: 13:00 - 17:00',
+    title: 'Öffnungszeiten',
+    value: 'Montag: 9:00 - 12:00\nDienstag - Freitag: 13:00 - 17:00',
     icon: Clock
   }
 ]
@@ -49,9 +49,9 @@ export default function ContactPage() {
         <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-10"></div>
         <div className="container mx-auto px-4 relative">
           <div className="max-w-3xl">
-            <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">Contact Us</h1>
+            <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">Kontakt</h1>
             <p className="text-xl text-green-100">
-              Have questions about our services, workshops, or Linux solutions? We're here to help!
+              Haben Sie Fragen zu unseren Dienstleistungen, Workshops oder Linux-Lösungen? Wir helfen gerne!
             </p>
           </div>
         </div>
@@ -88,7 +88,7 @@ export default function ContactPage() {
         <div className="container mx-auto px-4">
           <div className="max-w-2xl mx-auto">
             <div className="bg-white rounded-xl shadow-lg p-8">
-              <h2 className="text-3xl font-bold mb-8 text-center">Send us a Message</h2>
+              <h2 className="text-3xl font-bold mb-8 text-center">Senden Sie uns eine Nachricht</h2>
               <form className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
@@ -104,13 +104,13 @@ export default function ContactPage() {
                         id="name"
                         name="name"
                         className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500"
-                        placeholder="Your name"
+                        placeholder="Ihr Name"
                       />
                     </div>
                   </div>
                   <div>
                     <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
-                      Email
+                      E-Mail
                     </label>
                     <div className="relative">
                       <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -121,26 +121,26 @@ export default function ContactPage() {
                         id="email"
                         name="email"
                         className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500"
-                        placeholder="your@email.com"
+                        placeholder="ihre@email.com"
                       />
                     </div>
                   </div>
                 </div>
                 <div>
                   <label htmlFor="subject" className="block text-sm font-medium text-gray-700 mb-2">
-                    Subject
+                    Betreff
                   </label>
                   <input
                     type="text"
                     id="subject"
                     name="subject"
                     className="block w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500"
-                    placeholder="What's this about?"
+                    placeholder="Worum geht es?"
                   />
                 </div>
                 <div>
                   <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-2">
-                    Message
+                    Nachricht
                   </label>
                   <div className="relative">
                     <div className="absolute top-3 left-3 pointer-events-none">
@@ -151,7 +151,7 @@ export default function ContactPage() {
                       name="message"
                       rows={4}
                       className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500"
-                      placeholder="Your message..."
+                      placeholder="Ihre Nachricht..."
                     />
                   </div>
                 </div>
@@ -161,7 +161,7 @@ export default function ContactPage() {
                     className="inline-flex items-center px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-200"
                   >
                     <Send className="w-5 h-5 mr-2" />
-                    Send Message
+                    Nachricht senden
                   </button>
                 </div>
               </form>
@@ -174,7 +174,7 @@ export default function ContactPage() {
       <section className="py-20 bg-white">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
-            <h2 className="text-3xl font-bold mb-8 text-center">Find Us</h2>
+            <h2 className="text-3xl font-bold mb-8 text-center">Finden Sie uns</h2>
             <div className="aspect-w-16 aspect-h-9 rounded-xl overflow-hidden shadow-lg">
               <iframe
                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2701.1234567890123!2d8.5237!3d47.3815!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x479aa0a7e8c7b8b9%3A0x1234567890abcdef!2sBirmensdorferstrasse%20379%2C%208055%20Z%C3%BCrich!5e0!3m2!1sen!2sch!4v1234567890123"
@@ -187,7 +187,7 @@ export default function ContactPage() {
               ></iframe>
             </div>
             <div className="mt-8 text-center">
-              <p className="text-gray-600 mb-4">We also have a warehouse location at Badenerstr. 816, 8048 Zürich (by appointment only)</p>
+              <p className="text-gray-600 mb-4">Wir haben auch einen Lagerstandort in der Badenerstr. 816, 8048 Zürich (nur nach Terminvereinbarung)</p>
               <Link
                 href="https://www.google.com/maps/place/RevampIT/@47.3815,8.5237,17z"
                 target="_blank"
@@ -195,7 +195,7 @@ export default function ContactPage() {
                 className="inline-flex items-center text-green-600 hover:text-green-700"
               >
                 <MapPin className="w-5 h-5 mr-2" />
-                Open in Google Maps
+                In Google Maps öffnen
               </Link>
             </div>
           </div>
