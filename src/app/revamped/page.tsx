@@ -14,30 +14,30 @@ import {
 import Link from 'next/link'
 
 export const metadata: Metadata = {
-  title: 'REVAMPED Certification | Sustainable Computer Builds | RevampIT',
-  description: 'Learn about our exclusive REVAMPED certification - guaranteeing sustainability, quality, and performance in every computer we build.',
+  title: 'REVAMPED Zertifizierung | Nachhaltige Computer-Builds | RevampIT',
+  description: 'Erfahren Sie mehr über unsere exklusive REVAMPED-Zertifizierung - die Nachhaltigkeit, Qualität und Leistung in jedem Computer garantiert, den wir bauen.'
   keywords: [
-    'revamped certification',
-    'sustainable computer certification',
-    'green computing label',
-    'eco-friendly computer build',
-    'computer sustainability score',
-    'circular economy computing',
-    'refurbished computer certification',
-    'used computer parts quality',
-    'environmental computer standards',
-    'sustainable technology certification'
+    'REVAMPED Zertifizierung',
+    'nachhaltige Computer-Zertifizierung',
+    'Green Computing Label',
+    'umweltfreundlicher Computer-Bau',
+    'Computer-Nachhaltigkeitsbewertung',
+    'Kreislaufwirtschaft Computing',
+    'aufgearbeitete Computer-Zertifizierung',
+    'Qualität gebrauchter Computerteile',
+    'Umwelt-Computer-Standards',
+    'nachhaltige Technologie-Zertifizierung'
   ],
   openGraph: {
-    title: 'REVAMPED Certification | Sustainable Computer Builds | RevampIT',
-    description: 'Discover our exclusive REVAMPED certification - a guarantee of sustainability, quality, and performance that sets a new standard in the computer industry.',
+    title: 'REVAMPED Zertifizierung | Nachhaltige Computer-Builds | RevampIT',
+    description: 'Entdecken Sie unsere exklusive REVAMPED-Zertifizierung - eine Garantie für Nachhaltigkeit, Qualität und Leistung, die einen neuen Standard in der Computerbranche setzt.'
     type: 'website',
     url: 'https://revampit.org/revamped',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'REVAMPED Certification | Sustainable Computer Builds',
-    description: 'The new standard in sustainable computing - REVAMPED certified computers.',
+    title: 'REVAMPED Zertifizierung | Nachhaltige Computer-Builds',
+    description: 'Der neue Standard im nachhaltigen Computing - REVAMPED-zertifizierte Computer.'
   }
 }
 
