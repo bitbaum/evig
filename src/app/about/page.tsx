@@ -113,11 +113,11 @@ export async function generateMetadata(): Promise<Metadata> {
     };
   }
   
-  const seo = page.attributes.seo || {};
+  const seo = { seo_title: page.attributes.meta_title, seo_description: page.attributes.meta_description };
 
   return {
     title: seo.seo_title || page.attributes.title,
-    description: seo.seo_description || page.attributes.excerpt,
+    description: seo.seo_description || page.attributes.content,
   };
   } catch (error) {
     console.error('Error fetching about page for metadata:', error);
@@ -133,21 +133,9 @@ export default async function AboutPage() {
     const response = await strapi.getStaticPage('about');
     const page = response.data[0] || null;
 
-  if (!page || !page.attributes.sections || page.attributes.sections.length === 0) {
-    return <HardcodedAboutPage />;
-  }
-
-  return (
-    <main className="min-h-screen">
-      {page.attributes.sections.map((section: any, index: number) => {
-        const Component = components[section.__component as keyof typeof components];
-        if (!Component) {
-          return <p key={index}>Komponente nicht gefunden: {section.__component}</p>;
-        }
-        return Component(section, index);
-      })}
-    </main>
-  )
+  // For now, always return the hardcoded about page
+  // until Strapi sections are properly configured
+  return <HardcodedAboutPage />;
   } catch (error) {
     console.error('Error fetching about page:', error);
     return <HardcodedAboutPage />;
