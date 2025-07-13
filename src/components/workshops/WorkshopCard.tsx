@@ -50,7 +50,7 @@ export const WorkshopCard: React.FC<WorkshopCardProps> = ({ workshop, variant })
         <div className="mb-6">
           <h4 className="text-sm font-semibold text-gray-700 mb-2 flex items-center">
             <Sparkles className="w-4 h-4 text-green-500 mr-2" />
-            What You'll Achieve:
+            Was Sie erreichen werden:
           </h4>
           <ul className="space-y-2">
             {workshop.outcomes.map((outcome, i) => (
@@ -69,7 +69,7 @@ export const WorkshopCard: React.FC<WorkshopCardProps> = ({ workshop, variant })
             href="/contact"
             className="inline-flex items-center text-green-600 hover:text-green-800 font-semibold group-hover:translate-x-1 transition-transform duration-300"
           >
-            Start Learning
+            Lernen beginnen
             <ArrowRight className="w-4 h-4 ml-1" />
           </Link>
         ) : (
@@ -77,12 +77,12 @@ export const WorkshopCard: React.FC<WorkshopCardProps> = ({ workshop, variant })
             className="inline-flex items-center text-gray-500 font-medium cursor-not-allowed"
             disabled
           >
-            Coming Soon
+            Bald verfügbar
             <ArrowRight className="w-4 h-4 ml-1" />
           </button>
         )}
         <span className="text-sm text-gray-500">
-          {isAvailable ? 'Next session: Coming soon' : 'Stay tuned!'}
+          {isAvailable ? 'Nächste Sitzung: Bald verfügbar' : 'Bleiben Sie dran!'}
         </span>
       </div>
     </div>
