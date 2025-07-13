@@ -11,22 +11,22 @@ export const metadata: Metadata = {
 const coreValues = [
   {
     title: 'Nachhaltigkeit',
-    description: 'Wir glauben an die Schaffung einer nachhaltigen Zukunft durch verantwortungsvolles Technologieeinsatz und Abfallreduzierung.'
+    description: 'Wir glauben an die Schaffung einer nachhaltigen Zukunft durch verantwortungsvolles Technologieeinsatz und Abfallreduzierung.',
     icon: Recycle
   },
   {
     title: 'Gemeinschaft',
-    description: 'Starke Gemeinschaften durch Technologiebildung und inklusive Teilnahme aufbauen.'
+    description: 'Starke Gemeinschaften durch Technologiebildung und inklusive Teilnahme aufbauen.',
     icon: Users
   },
   {
     title: 'Innovation',
-    description: 'Kreative Lösungen finden, um Technologie zugänglich und umweltfreundlich zu machen.'
+    description: 'Kreative Lösungen finden, um Technologie zugänglich und umweltfreundlich zu machen.',
     icon: Lightbulb
   },
   {
     title: 'Globale Wirkung',
-    description: 'Einen Unterschied in lokalen und globalen Gemeinschaften durch Technologie machen.'
+    description: 'Einen Unterschied in lokalen und globalen Gemeinschaften durch Technologie machen.',
     icon: Globe
   }
 ]
@@ -34,7 +34,7 @@ const coreValues = [
 const involvementOptions = [
   {
     title: 'Freiwilligenarbeit',
-    description: 'Schliessen Sie sich unserem Team engagierter Freiwilliger an. Keine Vorerfahrung erforderlich - bringen Sie einfach Ihr Interesse und Ihre Begeisterung für unsere Mission mit.'
+    description: 'Schliessen Sie sich unserem Team engagierter Freiwilliger an. Keine Vorerfahrung erforderlich - bringen Sie einfach Ihr Interesse und Ihre Begeisterung für unsere Mission mit.',
     icon: Users,
     features: [
       'Mit Hardware und Software arbeiten',
@@ -47,7 +47,7 @@ const involvementOptions = [
   },
   {
     title: 'Technische Experten',
-    description: 'Wenn Sie Erfahrung mit Open-Source-Software, Hardware oder Elektronik haben, würden wir uns freuen, Sie in unserem Team zu haben oder Ihnen bei der Umsetzung Ihrer eigenen Ideen zu helfen.'
+    description: 'Wenn Sie Erfahrung mit Open-Source-Software, Hardware oder Elektronik haben, würden wir uns freuen, Sie in unserem Team zu haben oder Ihnen bei der Umsetzung Ihrer eigenen Ideen zu helfen.',
     icon: Code,
     features: [
       'An sinnvollen Projekten arbeiten',
@@ -60,7 +60,7 @@ const involvementOptions = [
   },
   {
     title: 'Praktika',
-    description: 'Wir bieten Praktikumsmöglichkeiten für diejenigen, die Erfahrungen in Technologie und Nachhaltigkeit sammeln möchten.'
+    description: 'Wir bieten Praktikumsmöglichkeiten für diejenigen, die Erfahrungen in Technologie und Nachhaltigkeit sammeln möchten.',
     icon: GraduationCap,
     features: [
       'Praktische Erfahrung',
@@ -73,7 +73,7 @@ const involvementOptions = [
   },
   {
     title: 'Arbeitsintegration',
-    description: 'Wir arbeiten mit Institutionen zusammen, um Arbeitsintegrations-möglichkeiten für Menschen zu bieten, die wieder ins Berufsleben einsteigen möchten.'
+    description: 'Wir arbeiten mit Institutionen zusammen, um Arbeitsintegrations-möglichkeiten für Menschen zu bieten, die wieder ins Berufsleben einsteigen möchten.',
     icon: Handshake,
     features: [
       'Fähigkeitsentwicklung',
@@ -86,7 +86,7 @@ const involvementOptions = [
   },
   {
     title: 'Partnerschaften',
-    description: 'Wir arbeiten mit Bildungseinrichtungen und Organisationen zusammen, um sinnvolle Programme und Möglichkeiten zu schaffen.'
+    description: 'Wir arbeiten mit Bildungseinrichtungen und Organisationen zusammen, um sinnvolle Programme und Möglichkeiten zu schaffen.',
     icon: Building2,
     features: [
       'Bildungsprogramme',
@@ -99,7 +99,7 @@ const involvementOptions = [
   },
   {
     title: 'Spenden',
-    description: 'Unterstützen Sie unsere Mission, Technologie nachhaltig und für alle zugänglich zu machen. Ihr Beitrag hilft uns, unsere wichtige Arbeit fortzusetzen.'
+    description: 'Unterstützen Sie unsere Mission, Technologie nachhaltig und für alle zugänglich zu machen. Ihr Beitrag hilft uns, unsere wichtige Arbeit fortzusetzen.',
     icon: Gift,
     features: [
       'Nachhaltige Technologie unterstützen',

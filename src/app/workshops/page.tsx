@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 const workshops: Workshop[] = [
   {
     title: 'Linux Workshop',
-    description: 'Meistern Sie das Linux-Betriebssystem von den Grundlagen bis zu fortgeschrittenen Themen. Lernen Sie über Systemadministration, Kommandozeilen-Tools und Open-Source-Software-Verwaltung.'
+    description: 'Meistern Sie das Linux-Betriebssystem von den Grundlagen bis zu fortgeschrittenen Themen. Lernen Sie über Systemadministration, Kommandozeilen-Tools und Open-Source-Software-Verwaltung.',
     icon: '🐧',
     duration: '2 days',
     level: 'Beginner to Intermediate',
