@@ -54,115 +54,115 @@ interface ServiceDefinition {
 
 const services: Record<string, ServiceDefinition> = {
   'computer-repair-upgrades': {
-    title: 'Computer Repair & Upgrades',
-    description: 'Expert computer repairs and upgrades. We specialize in fixing what others can\'t, including motherboard repairs and component-level fixes.',
+    title: 'Computerreparatur & Aufrüstungen',
+    description: 'Expertenreparaturen für alle Arten von Computern und Komponenten. Wir spezialisieren uns darauf zu reparieren, was andere nicht können, einschließlich Motherboard-Reparaturen und Bauteil-Level-Fixes.',
     icon: HardDrive,
     hero: {
-      title: 'Computer Repair & Upgrades',
-      subtitle: 'Expert Repairs You Can Trust',
-      description: 'We combine technical expertise with sustainable practices to extend the life of your devices. Our repair services focus on fixing what others can\'t, saving you money and reducing electronic waste.'
+      title: 'Computerreparatur & Aufrüstungen',
+      subtitle: 'Vertrauensvolle Expertenreparaturen',
+      description: 'Wir kombinieren technische Expertise mit nachhaltigen Praktiken, um die Lebensdauer Ihrer Geräte zu verlängern. Unsere Reparaturdienste konzentrieren sich darauf zu reparieren, was andere nicht können, und sparen Ihnen Geld und reduzieren Elektroschrott.'
     },
     features: [
       {
-        title: 'Component-Level Repairs',
-        description: 'We don\'t just replace parts - we fix them. Our technicians can repair motherboards, power supplies, and other components at the circuit level.',
+        title: 'Bauteil-Level-Reparaturen',
+        description: 'Wir ersetzen nicht nur Teile - wir reparieren sie. Unsere Techniker können Motherboards, Netzteile und andere Komponenten auf Schaltkreisebene reparieren.',
         icon: HardDrive
       },
       {
-        title: 'Hardware Upgrades',
-        description: 'Extend the life of your computer with strategic upgrades. We can help you choose and install the right components to meet your needs.',
+        title: 'Hardware-Aufrüstungen',
+        description: 'Verlängern Sie die Lebensdauer Ihres Computers mit strategischen Aufrüstungen. Wir helfen Ihnen bei der Auswahl und Installation der richtigen Komponenten für Ihre Bedürfnisse.',
         icon: Zap
       },
       {
-        title: 'Diagnostic Services',
-        description: 'Comprehensive diagnostics to identify and fix issues quickly. We use professional tools and years of experience to pinpoint problems accurately.',
+        title: 'Diagnosedienste',
+        description: 'Umfassende Diagnose zur schnellen Identifizierung und Behebung von Problemen. Wir verwenden professionelle Werkzeuge und jahrelange Erfahrung, um Probleme genau zu lokalisieren.',
         icon: Database
         
       },
       {
-        title: 'Professional Assessment',
-        description: 'All repairs start with a thorough evaluation to determine the best course of action and provide an accurate estimate.',
+        title: 'Professionelle Bewertung',
+        description: 'Alle Reparaturen beginnen mit einer gründlichen Bewertung, um die beste Vorgehensweise zu bestimmen und einen genauen Kostenvoranschlag zu erstellen.',
         icon: Clock
       }
     ],
     pricing: {
-      base: 'CHF 70/hour + parts',
+      base: 'CHF 70/Stunde + Teile',
       details: [
-        'Professional assessment required',
-        'Component-level repairs',
-        'Hardware upgrades available',
-        'Quality guarantee included'
+        'Professionelle Bewertung erforderlich',
+        'Bauteil-Level-Reparaturen',
+        'Hardware-Aufrüstungen verfügbar',
+        'Qualitätsgarantie inbegriffen'
       ]
     },
     process: [
       {
         step: 1,
-        title: 'Evaluation',
-        description: 'We\'ll examine your device and provide a detailed assessment of the issue. The CHF 30 evaluation fee will be included in your final repair cost.'
+        title: 'Bewertung',
+        description: 'Wir untersuchen Ihr Gerät und erstellen eine detaillierte Bewertung des Problems. Die CHF 30 Bewertungsgebühr wird in Ihre endgültigen Reparaturkosten einbezogen.'
       },
       {
         step: 2,
-        title: 'Quote',
-        description: 'You\'ll receive a transparent quote for the repair, including parts and labor costs.'
+        title: 'Kostenvoranschlag',
+        description: 'Sie erhalten einen transparenten Kostenvoranschlag für die Reparatur, einschließlich Teile- und Arbeitskosten.'
       },
       {
         step: 3,
-        title: 'Repair',
-        description: 'Our technicians will fix your device using high-quality parts. Typical repair time is a few weeks due to parts availability.'
+        title: 'Reparatur',
+        description: 'Unsere Techniker reparieren Ihr Gerät mit hochwertigen Teilen. Die typische Reparaturzeit beträgt einige Wochen aufgrund der Teileverfügbarkeit.'
       },
       {
         step: 4,
-        title: 'Testing',
-        description: 'We thoroughly test all repairs to ensure your device is working perfectly before return.'
+        title: 'Testen',
+        description: 'Wir testen alle Reparaturen gründlich, um sicherzustellen, dass Ihr Gerät perfekt funktioniert, bevor es zurückgegeben wird.'
       }
     ]
   },
   'data-recovery-transfer': {
-    title: 'Data Recovery & Transfer',
-    description: 'Professional data transfer and recovery services for all types of storage media. We help you access and transfer your valuable data from any device or format.',
+    title: 'Datenrettung & Transfer',
+    description: 'Professionelle Datenübertragung und Wiederherstellungsdienste für alle Arten von Speichermedien. Wir helfen Ihnen dabei, Ihre wertvollen Daten von jedem Gerät oder Format zu erreichen und zu übertragen.',
     icon: HardDrive,
     hero: {
-      title: 'Data Recovery & Transfer',
-      subtitle: 'Access Your Data, Preserve Your History',
-      description: 'Whether you need to recover data from a non-working device, transfer data between computers, or access data from legacy storage media, we have the expertise and equipment to help.'
+      title: 'Datenrettung & Transfer',
+      subtitle: 'Zugang zu Ihren Daten, Bewahrung Ihrer Geschichte',
+      description: 'Ob Sie Daten von einem nicht funktionierenden Gerät wiederherstellen, Daten zwischen Computern übertragen oder auf Daten von alten Speichermedien zugreifen müssen - wir haben die Expertise und Ausrüstung, um zu helfen.'
     },
     features: [
       {
-        title: 'Media Support',
-        description: 'Our Dino server features 14 front-accessible drives and multiple interfaces, ready to handle almost any data transfer task.',
+        title: 'Medienunterstützung',
+        description: 'Unser Dino-Server verfügt über 14 frontzugängliche Laufwerke und mehrere Schnittstellen, bereit für fast jede Datenübertragungsaufgabe.',
         icon: Server
       },
       {
-        title: 'Data Transfer',
-        description: 'Transfer data between computers, migrate settings, or create backups. We can handle large data volumes efficiently.',
+        title: 'Datenübertragung',
+        description: 'Übertragen Sie Daten zwischen Computern, migrieren Sie Einstellungen oder erstellen Sie Backups. Wir können große Datenmengen effizient verarbeiten.',
         icon: FolderInput
       },
       {
-        title: 'Legacy Media Access',
-        description: 'Access data from any storage media, even if you no longer have the necessary drive. We support all formats including floppy disks, ZIP drives, MO drives, and more.',
+        title: 'Zugang zu alten Medien',
+        description: 'Zugang zu Daten von jedem Speichermedium, auch wenn Sie das erforderliche Laufwerk nicht mehr haben. Wir unterstützen alle Formate einschließlich Disketten, ZIP-Laufwerke, MO-Laufwerke und mehr.',
         icon: Disc
       },
       {
-        title: 'Custom Solutions',
-        description: 'Need a similar server setup for your location? We can build a custom solution tailored to your specific needs.',
+        title: 'Maßgeschneiderte Lösungen',
+        description: 'Benötigen Sie eine ähnliche Server-Einrichtung für Ihren Standort? Wir können eine maßgeschneiderte Lösung erstellen, die auf Ihre spezifischen Bedürfnisse zugeschnitten ist.',
         icon: Database
       }
     ],
     pricing: {
-      base: 'CHF 30 per job + media cost',
+      base: 'CHF 30 pro Auftrag + Medienkosten',
       details: [
-        'Base fee: CHF 30 per job',
-        'Media cost additional if not provided',
-        'Legacy media support available',
-        'Custom solutions on request'
+        'Grundgebühr: CHF 30 pro Auftrag',
+        'Medienkosten zusätzlich, falls nicht bereitgestellt',
+        'Unterstützung für alte Medien verfügbar',
+        'Maßgeschneiderte Lösungen auf Anfrage'
       ],
       mediaPrices: [
-        'Floppy disks (3.5" and 5.25"): CHF 10 per disk',
-        'ZIP/Syquest/EZ Drive/Jazz: CHF 20 per disk',
-        'MO drives (3.5"-5.25"): CHF 30 per disk',
-        'Hard disks: CHF 40 per disk',
-        'Tape drives: CHF 50 per tape',
-        'VHS/Records: Price on request'
+        'Disketten (3.5" und 5.25"): CHF 10 pro Diskette',
+        'ZIP/Syquest/EZ Drive/Jazz: CHF 20 pro Diskette',
+        'MO-Laufwerke (3.5"-5.25"): CHF 30 pro Diskette',
+        'Festplatten: CHF 40 pro Festplatte',
+        'Bandlaufwerke: CHF 50 pro Band',
+        'VHS/Schallplatten: Preis auf Anfrage'
       ]
     },
     process: [
@@ -230,43 +230,43 @@ const services: Record<string, ServiceDefinition> = {
     }
   },
   'hardware-recycling': {
-    title: 'Hardware Recycling',
-    description: 'Responsible recycling and refurbishment of IT equipment. We give your old devices a new life while ensuring secure data deletion.',
+    title: 'Hardware-Recycling',
+    description: 'Verantwortungsvolles Recycling und Aufarbeitung von IT-Ausrüstung. Wir geben Ihren alten Geräten ein neues Leben und sorgen gleichzeitig für sichere Datenlöschung.',
     icon: Archive,
     hero: {
-      title: 'Hardware Recycling',
-      subtitle: 'Sustainable IT Solutions',
-      description: 'We provide responsible recycling and refurbishment services for IT equipment, helping reduce electronic waste while ensuring secure data deletion.'
+      title: 'Hardware-Recycling',
+      subtitle: 'Nachhaltige IT-Lösungen',
+      description: 'Wir bieten verantwortungsvolle Recycling- und Aufarbeitungsdienste für IT-Ausrüstung und helfen dabei, Elektroschrott zu reduzieren, während wir sichere Datenlöschung gewährleisten.'
     },
     features: [
       {
-        title: 'Secure Data Deletion',
-        description: 'Complete and secure deletion of all data from devices.',
+        title: 'Sichere Datenlöschung',
+        description: 'Vollständige und sichere Löschung aller Daten von Geräten.',
         icon: Archive
       },
       {
-        title: 'Equipment Refurbishment',
-        description: 'Professional refurbishment of IT equipment.',
+        title: 'Geräte-Aufarbeitung',
+        description: 'Professionelle Aufarbeitung von IT-Ausrüstung.',
         icon: HardDrive
       },
       {
-        title: 'Component Recycling',
-        description: 'Responsible recycling of electronic components.',
+        title: 'Komponenten-Recycling',
+        description: 'Verantwortungsvolles Recycling elektronischer Komponenten.',
         icon: Zap
       },
       {
-        title: 'Free Pickup Service',
-        description: 'Convenient pickup service for your old equipment.',
+        title: 'Kostenloser Abholservice',
+        description: 'Bequemer Abholservice für Ihre alte Ausrüstung.',
         icon: Clock
       }
     ],
     pricing: {
-      base: 'Free for most items',
+      base: 'Kostenlos für die meisten Artikel',
       details: [
-        'Free pickup service',
-        'Secure data deletion',
-        'Environmentally responsible',
-        'Certificate of destruction'
+        'Kostenloser Abholservice',
+        'Sichere Datenlöschung',
+        'Umweltverantwortlich',
+        'Zertifikat der Vernichtung'
       ]
     }
   },
@@ -474,7 +474,7 @@ export default function ServicePage({ params }: { params: { service: string } })
             <div className="max-w-2xl mx-auto bg-white rounded-xl p-8 shadow-lg">
               {service.pricing ? (
                 <>
-                  <h2 className="text-3xl font-bold mb-8 text-center">Pricing</h2>
+                  <h2 className="text-3xl font-bold mb-8 text-center">Preise</h2>
                   <div className="text-center mb-8">
                     <p className="text-2xl font-bold text-green-600">{service.pricing.base}</p>
                   </div>
@@ -496,7 +496,7 @@ export default function ServicePage({ params }: { params: { service: string } })
         {service.process && (
           <section className="py-20 bg-gray-50">
             <div className="container mx-auto px-4">
-              <h2 className="text-3xl font-bold mb-12 text-center">Our Process</h2>
+              <h2 className="text-3xl font-bold mb-12 text-center">Unser Prozess</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                 {service.process.map((step, index) => (
                   <div key={index} className="text-center">
@@ -515,22 +515,22 @@ export default function ServicePage({ params }: { params: { service: string } })
         {/* CTA Section */}
         <section className="py-20 bg-gradient-to-r from-green-700 to-green-800 text-white">
           <div className="container mx-auto px-4 text-center">
-            <h2 className="text-4xl font-bold mb-6">Ready to Get Started?</h2>
+            <h2 className="text-4xl font-bold mb-6">Bereit loszulegen?</h2>
             <p className="text-xl mb-8 max-w-2xl mx-auto text-green-100">
-              Contact us today to learn more about our {service.title.toLowerCase()} services.
+              Kontaktieren Sie uns heute, um mehr über unsere {service.title} Dienstleistungen zu erfahren.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
                 href="/contact"
                 className="inline-block bg-white text-green-800 px-8 py-4 rounded-lg font-semibold hover:bg-green-50 transition-colors duration-300 text-lg"
               >
-                Contact Us
+                Kontakt
               </Link>
               <Link
                 href="/services"
                 className="inline-block border-2 border-white text-white px-8 py-4 rounded-lg font-semibold hover:bg-white/10 transition-colors duration-300 text-lg"
               >
-                Back to Services
+                Zurück zu Services
               </Link>
             </div>
           </div>
