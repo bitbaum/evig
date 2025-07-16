@@ -1,6 +1,23 @@
 # Project Structure
 
+---
+created_date: 2023-10-01
+last_modified_date: 2025-07-15
+last_modified_summary: Updated with system integration analysis, added current status indicators, and database configuration details.
+---
+
 This document outlines the organization of the RevampIT website project.
+
+## 🚀 System Status
+
+### Integration Health
+- **Frontend (Next.js):** ✅ Fully Operational
+- **Database (PostgreSQL):** ✅ Fully Operational
+- **Docker Environment:** ✅ Fully Operational
+- **Strapi CMS:** ⚠️ Partially Working (dependency conflicts)
+- **Content Management:** 🔄 Needs Setup
+
+> **Note:** See [SYSTEM_INTEGRATION_REPORT.md](../SYSTEM_INTEGRATION_REPORT.md) for detailed analysis.
 
 ## 📁 Root Directory Structure
 
@@ -142,10 +159,13 @@ content/
 |------|---------|
 | `next.config.js` | Next.js framework configuration |
 | `tailwind.config.ts` | Tailwind CSS styling configuration |
-| `tsconfig.json` | TypeScript compiler settings |
+| `tsconfig.json` | TypeScript configuration |
 | `eslint.config.mjs` | Code linting rules |
 | `postcss.config.js` | PostCSS processing configuration |
 | `next-sitemap.config.js` | Sitemap generation settings |
+| `vercel.json` | Vercel deployment configuration |
+
+> **Note:** Vercel is the only supported production deployment platform. Docker Compose is for local development only. For deployment instructions, see [`docs/DEPLOYMENT.md`](DEPLOYMENT.md).
 
 ## 📦 Package Scripts
 
@@ -180,7 +200,30 @@ content/
 STRAPI_API_URL=http://localhost:1337
 STRAPI_API_TOKEN=your_token_here
 NEXT_PUBLIC_STRAPI_URL=http://localhost:1337
-DATABASE_URL=postgresql://...
+DATABASE_URL=postgresql://strapi:strapi@localhost:5434/strapi
+```
+
+### Database Configuration
+- **Host:** localhost (external), db (internal Docker)
+- **Port:** 5434 (external), 5432 (internal)
+- **Database:** strapi
+- **Username:** strapi
+- **Password:** strapi
+
+### Development Commands
+```bash
+# Start database only
+docker-compose up -d db
+
+# Start full environment
+./docker-setup.sh
+
+# Check system status
+docker-compose ps
+docker-compose logs strapi
+
+# Clean restart
+docker-compose down -v && docker-compose up --build
 ```
 
 This structure ensures maintainability, scalability, and clear separation of concerns across the entire project.

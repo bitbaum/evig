@@ -1,0 +1,11 @@
+version: '3.8'
+
+services:
+  strapi:
+    command: ["npx", "strapi", "develop"]
+    environment:
+      NODE_ENV: development
+    volumes:
+      - ./strapi:/opt/app
+      - /opt/app/node_modules
+      - ./strapi/uploads:/opt/app/public/uploads

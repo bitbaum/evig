@@ -26,14 +26,14 @@ const services = [
   // Hardware Services
   {
     title: 'Computerreparatur & Aufrüstungen',
-    description: 'Expertenreparaturen für alle Arten von Computern und Komponenten. Wir spezialisieren uns darauf zu reparieren, was andere nicht können, einschließlich Motherboard-Reparaturen und Bauteil-Level-Fixes.',
+    description: 'Expertenreparaturen für alle Arten von Computern und Komponenten. Wir spezialisieren uns darauf zu reparieren, was andere nicht koennen, einschliesslich Motherboard-Reparaturen und Bauteil-Level-Fixes.',
     icon: Wrench,
     category: 'Hardware-Dienstleistungen',
     features: [
       'Bauteil-Level-Reparaturen',
       'Hardware-Aufrüstungen',
       'Diagnosedienste',
-      'Professional assessment'
+      'Professionelle Bewertung'
     ],
     pricing: 'CHF 70/hour + parts',
     highlight: 'Professional assessment required',
@@ -42,14 +42,14 @@ const services = [
   },
   {
     title: 'Datenrettung & Transfer',
-    description: 'Secure and reliable data transfer services for all types of storage media. We can recover data from damaged devices and transfer it to modern storage solutions.',
+    description: 'Sichere und zuverlässige Datentransferdienste für alle Arten von Speichermedien. Wir können Daten von beschädigten Geräten wiederherstellen und auf moderne Speicherlösungen übertragen.',
     icon: HardDrive,
     category: 'Hardware-Dienstleistungen',
     features: [
-      'Secure data transfer',
-      'Data recovery from damaged devices',
-      'Legacy media support (Floppy disks, ZIP drives, MO drives, SCSI/IDE drives)',
-      'Complete data security'
+      'Sicherer Datentransfer',
+      'Datenwiederherstellung von beschädigten Geräten',
+      'Unterstützung für Legacy-Medien (Disketten, ZIP-Laufwerke, MO-Laufwerke, SCSI/IDE-Laufwerke)',
+      'Komplette Datensicherheit'
     ],
     pricing: 'CHF 70/hour',
     highlight: 'Evaluation required before recovery',
@@ -58,14 +58,14 @@ const services = [
   },
   {
     title: 'Hardware-Recycling',
-    description: 'Responsible recycling and refurbishment of IT equipment. We give your old devices a new life while ensuring secure data deletion.',
+    description: 'Verantwortungsvolles Recycling und Aufbereitung von IT-Geräten. Wir geben Ihren alten Geräten ein neues Leben und sorgen für sichere Datenlöschung.',
     icon: Shield,
     category: 'Hardware-Dienstleistungen',
     features: [
-      'Secure data deletion',
-      'Equipment refurbishment',
-      'Component recycling',
-      'Free pickup service'
+      'Sichere Datenlöschung',
+      'Geräteaufbereitung',
+      'Komponenten-Recycling',
+      'Kostenloser Abholservice'
     ],
     pricing: 'Free for most items',
     highlight: 'Free pickup service available',
@@ -76,15 +76,15 @@ const services = [
   // Software Solutions
   {
     title: 'Webdesign & Entwicklung',
-    description: 'Professional web design and development services using modern open source technologies. Fast, responsive websites built with Next.js, headless CMS, and sustainable practices.',
+    description: 'Professionelle Webdesign- und Entwicklungsdienstleistungen mit modernen Open-Source-Technologien. Schnelle, responsive Websites mit Next.js, Headless CMS und nachhaltigen Praktiken.',
     icon: Globe,
     category: 'Software-Lösungen',
     features: [
-      'Modern frameworks (Next.js, React)',
+      'Moderne Frameworks (Next.js, React)',
       'Headless CMS (Strapi, Payload, Tina)',
-      'Responsive design & Tailwind CSS',
-      'E-commerce solutions (Medusa.js, Shopware 6)',
-      'SEO optimization & performance'
+      'Responsive Design & Tailwind CSS',
+      'E-Commerce-Lösungen (Medusa.js, Shopware 6)',
+      'SEO-Optimierung & Performance'
     ],
     pricing: 'CHF 70/hour',
     highlight: 'Free initial consultation',
@@ -93,14 +93,14 @@ const services = [
   },
   {
     title: 'Linux & Open Source',
-    description: 'Professional Linux installation, configuration, and support services. We help you get the most out of your Linux system with expert guidance and maintenance.',
+    description: 'Professionelle Linux-Installation, -Konfiguration und -Support-Dienstleistungen. Wir helfen Ihnen, das Beste aus Ihrem Linux-System mit fachkundiger Anleitung und Wartung herauszuholen.',
     icon: Server,
     category: 'Software-Lösungen',
     features: [
-      'Linux installation & configuration',
-      'System optimization & maintenance',
-      'Security hardening',
-      'Performance tuning'
+      'Linux-Installation & Konfiguration',
+      'Systemoptimierung & Wartung',
+      'Sicherheitshärtung',
+      'Performance-Tuning'
     ],
     pricing: 'CHF 70/hour',
     highlight: 'Professional assessment required',
@@ -109,14 +109,14 @@ const services = [
   },
   {
     title: 'Open Source Solutions',
-    description: 'Expert implementation and support for open source software. We help you transition to and maintain open source solutions for your business needs.',
+    description: 'Fachkundige Implementierung und Support für Open-Source-Software. Wir helfen Ihnen beim Übergang zu und der Wartung von Open-Source-Lösungen für Ihre Geschäftsanforderungen.',
     icon: Code,
     category: 'Software-Lösungen',
     features: [
-      'Open source consulting',
-      'Custom development',
-      'Community integration',
-      'Security & compliance'
+      'Open-Source-Beratung',
+      'Maßgeschneiderte Entwicklung',
+      'Community-Integration',
+      'Sicherheit & Compliance'
     ],
     pricing: 'CHF 70/hour',
     highlight: 'Free initial consultation',
@@ -127,14 +127,14 @@ const services = [
   // Coming Soon
   {
     title: 'Build Your Computer',
-    description: 'Get a custom-built computer tailored to your specific needs, powered by AI analysis of our extensive inventory. We source parts globally and provide professional assembly.',
+    description: 'Erhalten Sie einen maßgeschneiderten Computer für Ihre spezifischen Bedürfnisse, unterstützt durch KI-Analyse unseres umfangreichen Inventars. Wir beziehen Teile global und bieten professionelle Montage.',
     icon: Cpu,
     category: 'Bald verfügbar',
     features: [
-      'AI-powered build recommendations',
-      'Global parts sourcing network',
-      'Professional assembly and testing',
-      'Quality guarantee and warranty'
+      'KI-gestützte Build-Empfehlungen',
+      'Globales Teile-Beschaffungsnetzwerk',
+      'Professionelle Montage und Tests',
+      'Qualitätsgarantie und Gewährleistung'
     ],
     pricing: '',
     highlight: 'Bald verfügbar',
@@ -144,14 +144,14 @@ const services = [
   },
   {
     title: 'Enterprise AI Solutions',
-    description: 'Private, on-premises AI systems for professional firms. GPT-4 level performance with complete data privacy and GDPR compliance.',
+    description: 'Private, vor-Ort KI-Systeme für professionelle Unternehmen. GPT-4-Level-Performance mit vollständigem Datenschutz und DSGVO-Compliance.',
     icon: Brain,
     category: 'Bald verfügbar',
     features: [
-      'Self-hosted Llama 3 70B deployment',
-      'RAG-powered document search',
-      'Complete data privacy & GDPR compliance',
-      'Custom training on your documents'
+      'Selbstgehostete Llama 3 70B-Bereitstellung',
+      'RAG-unterstützte Dokumentensuche',
+      'Vollständiger Datenschutz & DSGVO-Compliance',
+      'Maßgeschneiderte Schulung auf Ihren Dokumenten'
     ],
     pricing: '',
     highlight: 'Bald verfügbar',
@@ -161,14 +161,14 @@ const services = [
   },
   {
     title: 'Cloud Infrastructure',
-    description: 'Sustainable cloud hosting and infrastructure solutions. We provide scalable, eco-friendly hosting with renewable energy and open source technologies.',
+    description: 'Nachhaltige Cloud-Hosting- und Infrastrukturlösungen. Wir bieten skalierbare, umweltfreundliche Hosting-Lösungen mit erneuerbarer Energie und Open-Source-Technologien.',
     icon: Cloud,
     category: 'Bald verfügbar',
     features: [
-      'Renewable energy hosting',
-      'Open source infrastructure',
-      'Scalable solutions',
-      'Professional monitoring'
+      'Hosting mit erneuerbarer Energie',
+      'Open-Source-Infrastruktur',
+      'Skalierbare Lösungen',
+      'Professionelle Überwachung'
     ],
     pricing: '',
     highlight: 'Bald verfügbar',
@@ -178,14 +178,14 @@ const services = [
   },
   {
     title: 'Server Management',
-    description: 'Professional server setup and maintenance services. We manage your servers so you can focus on your business.',
+    description: 'Professionelle Server-Setup- und Wartungsdienste. Wir verwalten Ihre Server, damit Sie sich auf Ihr Geschäft konzentrieren können.',
     icon: Monitor,
     category: 'Bald verfügbar',
     features: [
-      'Server setup & configuration',
-      '24/7 monitoring',
-      'Security management',
-      'Performance optimization'
+      'Server-Setup & Konfiguration',
+      '24/7-Überwachung',
+      'Sicherheitsverwaltung',
+      'Performance-Optimierung'
     ],
     pricing: '',
     highlight: 'Bald verfügbar',
@@ -195,14 +195,14 @@ const services = [
   },
   {
     title: 'IoT Solutions',
-    description: 'Internet of Things solutions with open source hardware. Create connected devices that respect your privacy and data ownership.',
+    description: 'Internet-of-Things-Lösungen mit Open-Source-Hardware. Erstellen Sie vernetzte Geräte, die Ihre Privatsphäre und Dateneigentum respektieren.',
     icon: Settings,
     category: 'Bald verfügbar',
     features: [
-      'Open source hardware',
-      'Privacy-focused design',
-      'Custom IoT development',
-      'Data ownership guaranteed'
+      'Open-Source-Hardware',
+      'Datenschutz-fokussiertes Design',
+      'Maßgeschneiderte IoT-Entwicklung',
+      'Dateneigentum garantiert'
     ],
     pricing: '',
     highlight: 'Bald verfügbar',
@@ -280,9 +280,9 @@ export default function ServicesPage() {
         <section className="py-20">
           <div className="container mx-auto px-4">
             <div className="max-w-3xl mx-auto text-center mb-12">
-              <h2 className="text-3xl font-bold mb-6">Our Services</h2>
+              <h2 className="text-3xl font-bold mb-6">Unsere Dienstleistungen</h2>
               <p className="text-lg text-gray-600 mb-8">
-                Repair time varies based on parts availability, typically taking a few weeks.
+                Die Reparaturdauer variiert je nach Teileverfügbarkeit und dauert in der Regel einige Wochen.
               </p>
               
               {/* Service Filter */}
@@ -399,7 +399,7 @@ export default function ServicesPage() {
                 href="/contact"
                 className="inline-block bg-white text-green-800 px-8 py-4 rounded-lg font-semibold hover:bg-green-50 transition-colors duration-300 text-lg"
               >
-                Contact Us
+                Kontaktieren Sie uns
               </Link>
               <Link
                 href="https://www.revamp-it.ch/index.php/de/shop-de"
@@ -407,7 +407,7 @@ export default function ServicesPage() {
                 rel="noopener noreferrer"
                 className="inline-block border-2 border-white text-white px-8 py-4 rounded-lg font-semibold hover:bg-white/10 transition-colors duration-300 text-lg"
               >
-                Browse Inventory
+                Inventar durchsuchen
               </Link>
             </div>
           </div>

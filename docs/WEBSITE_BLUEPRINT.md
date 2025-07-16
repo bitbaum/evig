@@ -1,5 +1,11 @@
 # Revamp-it Website Blueprint – Version 2 (English)
 
+---
+created_date: 2023-10-01
+last_modified_date: 2025-07-15
+last_modified_summary: Clarified Vercel-only deployment, removed Netlify references, added metadata, and pointed to docs/DEPLOYMENT.md for deployment details.
+---
+
 ## Overall Vision
 
 Our website will spotlight what we do best—by keeping things simple, engaging, and mission-driven:
@@ -177,6 +183,8 @@ Display all legal and transactional details.
 7. **Localization Support (Strapi & Next.js i18n):**  
    - Utilize Strapi's robust internationalization features for managing content in German, English, French, and Italian.
    - Next.js i18n will handle routing and locale detection, with the frontend fetching appropriately localized content from Strapi.
+
+> **Note:** Vercel is the only supported production deployment platform. For deployment instructions, see [`docs/DEPLOYMENT.md`](DEPLOYMENT.md).
 
 ## Next Steps (Initial Focus)
 

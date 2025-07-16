@@ -169,33 +169,33 @@ const services: Record<string, ServiceDefinition> = {
       {
         step: 1,
         title: 'Assessment',
-        description: 'We\'ll evaluate your storage media and determine the best approach for data transfer or recovery.'
+        description: 'Wir bewerten Ihre Speichermedien und bestimmen den besten Ansatz für Datenübertragung oder -wiederherstellung.'
       },
       {
         step: 2,
         title: 'Transfer',
-        description: 'Using our specialized equipment, we\'ll transfer your data to the media of your choice.'
+        description: 'Mit unserer spezialisierten Ausrüstung übertragen wir Ihre Daten auf das Medium Ihrer Wahl.'
       },
       {
         step: 3,
         title: 'Verification',
-        description: 'We verify the integrity of the transferred data to ensure everything is copied correctly.'
+        description: 'Wir überprüfen die Integrität der übertragenen Daten, um sicherzustellen, dass alles korrekt kopiert wurde.'
       },
       {
         step: 4,
-        title: 'Delivery',
-        description: 'Your data is returned to you on the media of your choice, ready to use.'
+        title: 'Lieferung',
+        description: 'Ihre Daten werden Ihnen auf dem Medium Ihrer Wahl zurückgegeben, bereit zur Verwendung.'
       }
     ]
   },
   'linux-open-source': {
     title: 'Linux & Open Source',
-    description: 'Professional Linux installation, support, and training. We help you transition to open-source software and provide ongoing support.',
+    description: 'Professionelle Linux-Installation, Support und Schulung. Wir helfen Ihnen beim Übergang zu Open-Source-Software und bieten fortlaufenden Support.',
     icon: Server,
     hero: {
-      title: 'Linux & Open Source Solutions',
-      subtitle: 'Expert Open Source Support',
-      description: 'We help you transition to and maintain Linux and open-source software solutions, providing expert support and training.'
+      title: 'Linux & Open Source Lösungen',
+      subtitle: 'Experten Open Source Support',
+      description: 'Wir helfen Ihnen beim Übergang zu und der Wartung von Linux- und Open-Source-Software-Lösungen und bieten fachkundige Unterstützung und Schulung.'
     },
     features: [
       {
@@ -205,17 +205,17 @@ const services: Record<string, ServiceDefinition> = {
       },
       {
         title: 'Open Source Migration',
-        description: 'Smooth transition from proprietary to open-source software.',
+        description: 'Reibungsloser Übergang von proprietärer zu Open-Source-Software.',
         icon: Zap
       },
       {
-        title: 'Technical Support',
-        description: 'Expert support for all your Linux and open-source needs.',
+        title: 'Technischer Support',
+        description: 'Fachkundiger Support für alle Ihre Linux- und Open-Source-Bedürfnisse.',
         icon: Database
       },
       {
         title: 'Training & Workshops',
-        description: 'Comprehensive training and workshops for individuals and teams.',
+        description: 'Umfassende Schulungen und Workshops für Einzelpersonen und Teams.',
         icon: Clock
       }
     ],
@@ -429,7 +429,7 @@ export default function ServicePage({ params }: { params: { service: string } })
             <div className="container mx-auto px-4 py-3">
               <div className="flex items-center justify-center">
                 <Clock className="w-5 h-5 text-yellow-600 mr-2" />
-                <span className="text-yellow-800 font-semibold">This service is coming soon. Contact us to express interest and get notified when available.</span>
+                <span className="text-yellow-800 font-semibold">Dieser Service kommt bald. Kontaktieren Sie uns, um Ihr Interesse zu bekunden und benachrichtigt zu werden, wenn er verfügbar ist.</span>
               </div>
             </div>
           </div>

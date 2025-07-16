@@ -8,7 +8,7 @@ services:
       dockerfile: Dockerfile
     image: strapi-app
     restart: unless-stopped
-    env_file: .env
+    env_file: ./strapi/.env
     environment:
       DATABASE_CLIENT: postgres
       DATABASE_HOST: db
@@ -17,13 +17,6 @@ services:
       DATABASE_USERNAME: strapi
       DATABASE_PASSWORD: strapi
       NODE_ENV: development
-      APP_KEYS: ***REMOVED***,***REMOVED***,***REMOVED***,***REMOVED***
-      API_TOKEN_SALT: ***REMOVED***
-      ADMIN_JWT_SECRET: ***REMOVED***
-      TRANSFER_TOKEN_SALT: ***REMOVED***
-      ENCRYPTION_KEY: ***REMOVED***
-      FLAG_NPS: true
-      FLAG_PROMOTE_EE: true
     volumes:
       - ./strapi:/opt/app
       - ./strapi/uploads:/opt/app/public/uploads

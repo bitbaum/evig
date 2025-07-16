@@ -6,6 +6,13 @@
 [![Build Status](https://img.shields.io/badge/build-passing-brightgreen)](https://github.com/yourusername/revamp-it-modernization) 
 [![License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 
+---
+**Documentation Metadata**
+- created_date: 2023-10-01
+- last_modified_date: 2025-07-15
+- last_modified_summary: Updated with system integration analysis, added status indicators, and current system health information.
+---
+
 ## Table of Contents
 
 - [Overview](#overview)
@@ -15,6 +22,7 @@
 - [Installation & Setup](#installation--setup)
 - [Usage](#usage)
 - [Development Workflow](#development-workflow)
+- [Documentation Structure](#documentation-structure)
 - [Contributing](#contributing)
 - [Roadmap](#roadmap)
 - [License](#license)
@@ -51,8 +59,8 @@ This project is a complete redevelopment of our website with a modern tech stack
 - **GraphQL (optional):** Strapi supports GraphQL, offering flexible data fetching.
 
 ### Deployment & Infrastructure
-- **Vercel / Netlify**: For seamless deployment and global Content Delivery Network (CDN) support.
-- **Docker**: Containerization for consistency across environments.
+- **Vercel**: For seamless deployment and global Content Delivery Network (CDN) support. **Vercel is the only supported deployment platform.**
+- **Docker**: Containerization for consistency across environments (used for local development only).
 - **CI/CD Pipelines**: Automated testing and deployment (GitHub Actions).
 
 ### Other Tools
@@ -67,14 +75,26 @@ The website is designed with a modular, API-driven architecture:
 - **Content Layer:** Strapi (headless CMS) powers all informational content dynamically (e.g., blog posts, project pages, workshop details, general site copy) and manages multilingual content.
 - **E-commerce Layer (Future):** MedusaJS will be implemented in a later phase to manage all aspects of the webshop.
 - **API Layer:** Primarily consists of the API exposed by Strapi. Custom Node.js/Express.js endpoints can be added for unique integrations or functionalities. The MedusaJS API will be added in the future phase.
-- **Deployment:** The entire application is containerized using Docker for consistent, scalable, and secure deployments via Vercel's CD pipeline.
+- **Deployment:** The entire application is containerized using Docker for consistent, scalable, and secure deployments. **Production deployment is handled exclusively by Vercel. Docker Compose is for local development only.**
+
+## System Status
+
+### Current Integration Status
+- **Frontend (Next.js):** ✅ Operational
+- **Database (PostgreSQL):** ✅ Operational  
+- **Docker Environment:** ✅ Operational
+- **Strapi CMS:** ⚠️ Partially Working (dependency conflicts)
+- **Content Management:** 🔄 Needs Setup
+
+> **Latest Analysis:** See [SYSTEM_INTEGRATION_REPORT.md](SYSTEM_INTEGRATION_REPORT.md) for detailed findings and recommendations.
 
 ## Installation & Setup
 
 ### Prerequisites
-- **Node.js (>=14) & npm/yarn**
-- **Docker (for containerized development)**
+- **Node.js (>=18) & npm/yarn**
+- **Docker (for containerized development only)**
 - **Git**
+- **PostgreSQL client** (for database testing)
 
 ### Steps
 
@@ -104,43 +124,73 @@ The website is designed with a modular, API-driven architecture:
      ```
    - Edit `.env` with your API keys and environment variables for Next.js and Strapi (e.g., `NEXT_PUBLIC_STRAPI_API_URL`). MedusaJS variables will be added in a future phase.
 
-4. **Run Locally**
+4. **Start Database**
 
-   Start the development server:
+   First, start the PostgreSQL database:
+   ```bash
+   docker-compose up -d db
+   ```
+
+5. **Run Development Servers**
+
+   Start the Next.js frontend:
    ```bash
    npm run dev
    ```
-   The website will be available at `http://localhost:3000`.
+   The website will be available at `http://localhost:3000` or `http://localhost:3001`.
 
-5. **Docker (Optional)**
-   
-   Build and run with Docker:
+   Start Strapi CMS (in a separate terminal):
    ```bash
-   docker-compose up --build
+   cd strapi && npm run develop
    ```
+   Strapi admin will be available at `http://localhost:1337/admin`.
+
+6. **Docker for Full Environment (Optional)**
+   
+   Build and run complete environment:
+   ```bash
+   ./docker-setup.sh
+   ```
+   > **Note:** Docker Compose is for local development only. Production deployment is handled by Vercel.
 
 ## Usage
 
 - **Development**: Use hot reloading with Next.js for immediate feedback.
-- **Testing**: Run tests with:
-  ```bash
-  npm test
-  ```
+- **Database Access**: PostgreSQL available at `localhost:5434` (user: strapi, password: strapi)
+- **Content Management**: Strapi admin at `http://localhost:1337/admin` (after setup)
+- **API Testing**: Strapi API available at `http://localhost:1337/api`
 - **Building for Production**:
   ```bash
   npm run build
   npm start
   ```
-- **Content Updates**: Manage website content via the Strapi admin dashboard.
-- **Product & Shop Management (Future)**: Once MedusaJS is integrated, webshop inventory, products, and orders will be managed via its admin dashboard. For now, the webshop is an external link.
+- **Docker Management**:
+  ```bash
+  docker-compose ps          # Check container status
+  docker-compose logs strapi  # View Strapi logs
+  docker-compose down        # Stop all containers
+  ```
+
+### Known Issues
+- **Strapi Startup:** May take 2-3 minutes on first run due to dependency conflicts
+- **API Token:** Required for frontend-backend communication (generate in Strapi admin)
+- **Security Vulnerabilities:** 32 npm vulnerabilities detected - run `npm audit fix`
 
 ## Development Workflow
 
 We follow a Git-based branching strategy:
 - **Main Branch**: Always stable and production-ready.
-- **Feature Branches**: Each new feature or bug fix should be developed in a dedicated branch.
-- **Pull Requests**: Require code review and automated tests (via GitHub Actions) before merging.
-- **Documentation**: Code should be well-commented and documented. Update the wiki and inline documentation as features are added.
+
+## Documentation Structure
+
+- **Deployment:** See [`docs/DEPLOYMENT.md`](docs/DEPLOYMENT.md) for all deployment instructions and troubleshooting.
+- **Developer Guide:** [`docs/DEVELOPER_DOC.md`](docs/DEVELOPER_DOC.md) for technical details and best practices.
+- **Project Structure:** [`docs/PROJECT_STRUCTURE.md`](docs/PROJECT_STRUCTURE.md) for file and directory layout.
+- **Strapi Integration:** [`docs/strapi-integration.md`](docs/strapi-integration.md) and [`docs/strapi-frontend-integration.md`](docs/strapi-frontend-integration.md) for CMS and frontend integration.
+- **Setup Guides:** [`docs/setup/DEPLOYMENT_SETUP.md`](docs/setup/DEPLOYMENT_SETUP.md), [`docs/setup/STRAPI_SETUP_GUIDE.md`](docs/setup/STRAPI_SETUP_GUIDE.md), [`docs/setup/BLOG_SETUP.md`](docs/setup/BLOG_SETUP.md) for onboarding and environment setup.
+- **Roadmap:** [`docs/PROJECT_ROADMAP.md`](docs/PROJECT_ROADMAP.md) for project milestones and future plans.
+
+> **Always refer to the docs/ directory for the most up-to-date and detailed documentation.**
 
 ## Contributing
 

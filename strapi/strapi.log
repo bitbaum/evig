@@ -1,86 +1,213 @@
 
-> strapi@0.1.0 develop
+> strapi-app@0.1.0 develop
 > strapi develop
 
+[WARN] Declared version of react-router-dom (6.30.1) is not compatible with the version required by Strapi (^5.2.0).
+You may experience issues, we recommend you change this.
+[WARN] Declared version of react-router-dom (6.30.1) is not compatible with the version required by Strapi (^5.2.0).
+You may experience issues, we recommend you change this.
+[WARN] Declared version of styled-components (6.1.19) is not compatible with the version required by Strapi (^5.2.1).
+You may experience issues, we recommend you change this.
+[WARN] Declared version of styled-components (6.1.19) is not compatible with the version required by Strapi (^5.2.1).
+You may experience issues, we recommend you change this.
 - Cleaning dist dir /home/g/dev/revampit/strapi/dist
-✔ Cleaning dist dir (32ms)
-- Loading Strapi
+✔ Cleaning dist dir (14ms)
 - Building build context
 
 [INFO] Including the following ENV variables as part of the JS bundle:
     - ADMIN_PATH
     - STRAPI_ADMIN_BACKEND_URL
     - STRAPI_TELEMETRY_DISABLED
-✔ Building build context (160ms)
+✔ Building build context (307ms)
 - Creating admin
-✔ Creating admin (682ms)
-✔ Loading Strapi (3417ms)
+✔ Creating admin (30113ms)
+- Loading Strapi
+[2025-07-15 14:16:59.978] [33mwarn[39m: Users-permissions registration has defaulted to accepting the following additional user fields during registration: blog_posts
+Super admin permissions have been set.
+Public permissions have been set for blog posts and static pages.
+✔ Loading Strapi (1473ms)
 - Generating types
-✔ Generating types (1468ms)
+✔ Generating types (680ms)
 - Compiling TS
 - Cleaning dist dir /home/g/dev/revampit/strapi/dist
-✔ Cleaning dist dir (66ms)
-✔ Compiling TS (5568ms)
+✔ Cleaning dist dir (20ms)
+✔ Compiling TS (4069ms)
 
  Project information
 
 [90m┌────────────────────[39m[90m┬──────────────────────────────────────────────────┐[39m
-[90m│[39m Time               [90m│[39m Tue Jul 01 2025 11:40:38 GMT+0200 (Mitteleuropä… [90m│[39m
-[90m│[39m Launched in        [90m│[39m 10513 ms                                         [90m│[39m
+[90m│[39m Time               [90m│[39m Tue Jul 15 2025 14:17:05 GMT+0200 (Mitteleuropä… [90m│[39m
+[90m│[39m Launched in        [90m│[39m 6252 ms                                          [90m│[39m
 [90m│[39m Environment        [90m│[39m development                                      [90m│[39m
-[90m│[39m Process PID        [90m│[39m 290527                                           [90m│[39m
-[90m│[39m Version            [90m│[39m 5.16.1 (node v20.19.2)                           [90m│[39m
+[90m│[39m Process PID        [90m│[39m 17461                                            [90m│[39m
+[90m│[39m Version            [90m│[39m 4.17.1 (node v20.19.2)                           [90m│[39m
 [90m│[39m Edition            [90m│[39m Community                                        [90m│[39m
 [90m│[39m Database           [90m│[39m postgres                                         [90m│[39m
-[90m│[39m Database name      [90m│[39m strapi_db                                        [90m│[39m
-[90m│[39m Database schema    [90m│[39m public                                           [90m│[39m
 [90m└────────────────────[39m[90m┴──────────────────────────────────────────────────┘[39m
 
  Actions available
 
-One more thing...
-Create your first administrator 💻 by going to the administration panel at:
+Welcome back!
+To manage your project 🚀, go to the administration panel at:
+http://localhost:1337/admin
 
-[90m┌─────────────────────────────┐[39m
-[90m│[39m http://localhost:1337/admin [90m│[39m
-[90m└─────────────────────────────┘[39m
+To access the server ⚡️, go to:
+http://localhost:1337
 
-[2025-07-01 11:40:38.224] [32minfo[39m: Strapi started successfully
-
-warn - The `content` option in your Tailwind CSS configuration is missing or empty.
-warn - Configure your content sources or your generated CSS will be missing styles.
-warn - https://tailwindcss.com/docs/content-configuration
-[2025-07-01 11:40:53.903] [32mhttp[39m: HEAD /admin (482 ms) 200
-[2025-07-01 13:43:25.805] [32minfo[39m: File changed: /home/g/dev/revampit/strapi/config/admin.ts
+[2025-07-15 14:17:05.133] [32minfo[39m: File changed: /home/g/dev/revampit/strapi/strapi.log
 - Cleaning dist dir /home/g/dev/revampit/strapi/dist
-✔ Cleaning dist dir (78ms)
-[2025-07-01 13:43:26.375] [32minfo[39m: File changed: /home/g/dev/revampit/strapi/config/admin.ts
-[2025-07-01 13:43:31.719] [32minfo[39m: Shutting down Strapi
-[2025-07-01 13:43:31.755] [32minfo[39m: Strapi has been shut down
+✔ Cleaning dist dir (13ms)
 - Loading Strapi
-- Building build context
-
-[INFO] Including the following ENV variables as part of the JS bundle:
-    - ADMIN_PATH
-    - STRAPI_ADMIN_BACKEND_URL
-    - STRAPI_TELEMETRY_DISABLED
-✔ Building build context (123ms)
-- Creating admin
-✔ Creating admin (661ms)
-✔ Loading Strapi (3148ms)
+[2025-07-15 14:17:12.731] [33mwarn[39m: Users-permissions registration has defaulted to accepting the following additional user fields during registration: blog_posts
+Super admin permissions have been set.
+Public permissions have been set for blog posts and static pages.
+✔ Loading Strapi (1639ms)
 - Generating types
-✔ Generating types (1041ms)
+✔ Generating types (723ms)
 - Compiling TS
 - Cleaning dist dir /home/g/dev/revampit/strapi/dist
-✔ Cleaning dist dir (45ms)
-[96mconfig/admin.ts[0m:[93m17[0m:[93m14[0m - [91merror[0m[90m TS2339: [0mProperty 'bool' does not exist on type '(key: string, defaultValue?: any) => any'.
+✔ Cleaning dist dir (19ms)
+✔ Compiling TS (3498ms)
 
-[7m17[0m     nps: env.bool('FLAG_NPS', true),
-[7m  [0m [91m             ~~~~[0m
-[96mconfig/admin.ts[0m:[93m18[0m:[93m20[0m - [91merror[0m[90m TS2339: [0mProperty 'bool' does not exist on type '(key: string, defaultValue?: any) => any'.
+ Project information
 
-[7m18[0m     promoteEE: env.bool('FLAG_PROMOTE_EE', true),
-[7m  [0m [91m                   ~~~~[0m
+[90m┌────────────────────[39m[90m┬──────────────────────────────────────────────────┐[39m
+[90m│[39m Time               [90m│[39m Tue Jul 15 2025 14:17:17 GMT+0200 (Mitteleuropä… [90m│[39m
+[90m│[39m Launched in        [90m│[39m 5879 ms                                          [90m│[39m
+[90m│[39m Environment        [90m│[39m development                                      [90m│[39m
+[90m│[39m Process PID        [90m│[39m 17558                                            [90m│[39m
+[90m│[39m Version            [90m│[39m 4.17.1 (node v20.19.2)                           [90m│[39m
+[90m│[39m Edition            [90m│[39m Community                                        [90m│[39m
+[90m│[39m Database           [90m│[39m postgres                                         [90m│[39m
+[90m└────────────────────[39m[90m┴──────────────────────────────────────────────────┘[39m
 
-Found 2 error(s).
+ Actions available
+
+Welcome back!
+To manage your project 🚀, go to the administration panel at:
+http://localhost:1337/admin
+
+To access the server ⚡️, go to:
+http://localhost:1337
+
+[2025-07-15 14:17:20.896] [32mhttp[39m: HEAD /admin (25 ms) 200
+[2025-07-15 14:17:20.905] [32minfo[39m: File changed: /home/g/dev/revampit/strapi/strapi.log
+- Cleaning dist dir /home/g/dev/revampit/strapi/dist
+✔ Cleaning dist dir (19ms)
+- Loading Strapi
+[2025-07-15 14:17:28.134] [33mwarn[39m: Users-permissions registration has defaulted to accepting the following additional user fields during registration: blog_posts
+Super admin permissions have been set.
+Public permissions have been set for blog posts and static pages.
+✔ Loading Strapi (2119ms)
+- Generating types
+✔ Generating types (962ms)
+- Compiling TS
+- Cleaning dist dir /home/g/dev/revampit/strapi/dist
+✔ Cleaning dist dir (25ms)
+✔ Compiling TS (4146ms)
+
+ Project information
+
+[90m┌────────────────────[39m[90m┬──────────────────────────────────────────────────┐[39m
+[90m│[39m Time               [90m│[39m Tue Jul 15 2025 14:17:33 GMT+0200 (Mitteleuropä… [90m│[39m
+[90m│[39m Launched in        [90m│[39m 7256 ms                                          [90m│[39m
+[90m│[39m Environment        [90m│[39m development                                      [90m│[39m
+[90m│[39m Process PID        [90m│[39m 17690                                            [90m│[39m
+[90m│[39m Version            [90m│[39m 4.17.1 (node v20.19.2)                           [90m│[39m
+[90m│[39m Edition            [90m│[39m Community                                        [90m│[39m
+[90m│[39m Database           [90m│[39m postgres                                         [90m│[39m
+[90m└────────────────────[39m[90m┴──────────────────────────────────────────────────┘[39m
+
+ Actions available
+
+Welcome back!
+To manage your project 🚀, go to the administration panel at:
+http://localhost:1337/admin
+
+To access the server ⚡️, go to:
+http://localhost:1337
+
+[2025-07-15 14:19:01.265] [32mhttp[39m: GET /admin (59 ms) 200
+[2025-07-15 14:19:01.277] [32minfo[39m: File changed: /home/g/dev/revampit/strapi/strapi.log
+- Cleaning dist dir /home/g/dev/revampit/strapi/dist
+✔ Cleaning dist dir (31ms)
+[2025-07-15 14:19:02.489] [32mhttp[39m: GET /admin/project-type (13 ms) 200
+[2025-07-15 14:19:02.494] [32minfo[39m: File changed: /home/g/dev/revampit/strapi/strapi.log
+[2025-07-15 14:19:02.869] [32mhttp[39m: GET /admin/init (48 ms) 200
+[2025-07-15 14:19:02.878] [32minfo[39m: File changed: /home/g/dev/revampit/strapi/strapi.log
+[2025-07-15 14:19:03.091] [32mhttp[39m: GET /admin/telemetry-properties (6 ms) 401
+[2025-07-15 14:19:03.094] [32minfo[39m: File changed: /home/g/dev/revampit/strapi/strapi.log
+[2025-07-15 14:19:03.221] [32mhttp[39m: GET /admin/project-settings (12 ms) 401
+[2025-07-15 14:19:03.226] [32minfo[39m: File changed: /home/g/dev/revampit/strapi/strapi.log
+- Loading Strapi
+[2025-07-15 14:19:08.571] [33mwarn[39m: Users-permissions registration has defaulted to accepting the following additional user fields during registration: blog_posts
+Super admin permissions have been set.
+Public permissions have been set for blog posts and static pages.
+✔ Loading Strapi (1196ms)
+- Generating types
+✔ Generating types (612ms)
+- Compiling TS
+- Cleaning dist dir /home/g/dev/revampit/strapi/dist
+✔ Cleaning dist dir (11ms)
+✔ Compiling TS (2679ms)
+
+ Project information
+
+[90m┌────────────────────[39m[90m┬──────────────────────────────────────────────────┐[39m
+[90m│[39m Time               [90m│[39m Tue Jul 15 2025 14:19:12 GMT+0200 (Mitteleuropä… [90m│[39m
+[90m│[39m Launched in        [90m│[39m 4503 ms                                          [90m│[39m
+[90m│[39m Environment        [90m│[39m development                                      [90m│[39m
+[90m│[39m Process PID        [90m│[39m 18377                                            [90m│[39m
+[90m│[39m Version            [90m│[39m 4.17.1 (node v20.19.2)                           [90m│[39m
+[90m│[39m Edition            [90m│[39m Community                                        [90m│[39m
+[90m│[39m Database           [90m│[39m postgres                                         [90m│[39m
+[90m└────────────────────[39m[90m┴──────────────────────────────────────────────────┘[39m
+
+ Actions available
+
+Welcome back!
+To manage your project 🚀, go to the administration panel at:
+http://localhost:1337/admin
+
+To access the server ⚡️, go to:
+http://localhost:1337
+
+[2025-07-15 14:19:13.522] [32mhttp[39m: POST /admin/login (178 ms) 200
+[2025-07-15 14:19:13.526] [32minfo[39m: File changed: /home/g/dev/revampit/strapi/strapi.log
+- Cleaning dist dir /home/g/dev/revampit/strapi/dist
+✔ Cleaning dist dir (16ms)
+[2025-07-15 14:19:13.757] [32mhttp[39m: GET /admin/information (146 ms) 200
+[2025-07-15 14:19:13.763] [32minfo[39m: File changed: /home/g/dev/revampit/strapi/strapi.log
+- Loading Strapi
+[2025-07-15 14:19:19.844] [33mwarn[39m: Users-permissions registration has defaulted to accepting the following additional user fields during registration: blog_posts
+Super admin permissions have been set.
+Public permissions have been set for blog posts and static pages.
+✔ Loading Strapi (1793ms)
+- Generating types
+✔ Generating types (736ms)
+- Compiling TS
+- Cleaning dist dir /home/g/dev/revampit/strapi/dist
+✔ Cleaning dist dir (17ms)
+✔ Compiling TS (3438ms)
+
+ Project information
+
+[90m┌────────────────────[39m[90m┬──────────────────────────────────────────────────┐[39m
+[90m│[39m Time               [90m│[39m Tue Jul 15 2025 14:19:24 GMT+0200 (Mitteleuropä… [90m│[39m
+[90m│[39m Launched in        [90m│[39m 5986 ms                                          [90m│[39m
+[90m│[39m Environment        [90m│[39m development                                      [90m│[39m
+[90m│[39m Process PID        [90m│[39m 18425                                            [90m│[39m
+[90m│[39m Version            [90m│[39m 4.17.1 (node v20.19.2)                           [90m│[39m
+[90m│[39m Edition            [90m│[39m Community                                        [90m│[39m
+[90m│[39m Database           [90m│[39m postgres                                         [90m│[39m
+[90m└────────────────────[39m[90m┴──────────────────────────────────────────────────┘[39m
+
+ Actions available
+
+Welcome back!
+To manage your project 🚀, go to the administration panel at:
+http://localhost:1337/admin
+
+To access the server ⚡️, go to:
+http://localhost:1337
 
