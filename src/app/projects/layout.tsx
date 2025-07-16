@@ -2,10 +2,10 @@ import { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: {
-    template: '%s | RevampIT Projects',
-    default: 'Projects | RevampIT'
+    template: '%s | RevampIT Projekte',
+    default: 'Unsere Projekte | RevampIT'
   },
-  description: 'Discover our diverse range of projects from open-source contributions to community initiatives and hardware development.'
+  description: 'Entdecken Sie unser vielfältiges Spektrum an Projekten, von Open-Source-Beiträgen bis hin zu Gemeinschaftsinitiativen und Hardware-Entwicklung.'
 }
 
 export default function ProjectsLayout({

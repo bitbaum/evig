@@ -220,7 +220,7 @@ const getUniqueCategories = () => {
   const uniqueCategories = Array.from(new Set(categories))
   
   // Return categories in the specified order
-  return categoryOrder.filter(cat => cat === 'All' || uniqueCategories.includes(cat))
+  return categoryOrder.filter(cat => cat === 'Alle' || uniqueCategories.includes(cat))
 }
 
 export default function ServicesPage() {
