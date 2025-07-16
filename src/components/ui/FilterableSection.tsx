@@ -40,6 +40,7 @@ export function FilterableSection<T extends FilterableItem>({
     filteredItems,
     filterOptions,
     updateFilter,
+    toggleFilter,
     resetFilters,
     getFilterSummary,
     hasActiveFilters
@@ -62,6 +63,8 @@ export function FilterableSection<T extends FilterableItem>({
             filters={filterOptions}
             filterState={filterState}
             onFilterChange={updateFilter}
+            onFilterToggle={toggleFilter}
+            enableToggle={true}
           />
         </div>
 

@@ -122,6 +122,10 @@ export default function ProjectsPage() {
     ? projects 
     : projects.filter(project => project.category === selectedCategory)
 
+  const handleCategoryToggle = (category: string) => {
+    setSelectedCategory(prev => prev === category ? 'Alle' : category)
+  }
+
   return (
     <main className="min-h-screen bg-gray-50">
       <HeroBanner
@@ -147,7 +151,7 @@ export default function ProjectsPage() {
               {categories.map((category) => (
                 <button
                   key={category}
-                  onClick={() => setSelectedCategory(category)}
+                  onClick={() => category === 'Alle' ? setSelectedCategory(category) : handleCategoryToggle(category)}
                   className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
                     selectedCategory === category
                       ? 'bg-green-600 text-white shadow-lg transform scale-105'

@@ -6,6 +6,8 @@ interface FilterBarProps {
   filters: FilterConfig[]
   filterState: FilterState
   onFilterChange: (filterKey: string, value: string) => void
+  onFilterToggle?: (filterKey: string, value: string) => void
+  enableToggle?: boolean
   className?: string
 }
 
@@ -32,6 +34,8 @@ export const FilterBar: React.FC<FilterBarProps> = ({
   filters,
   filterState,
   onFilterChange,
+  onFilterToggle,
+  enableToggle = true,
   className = ''
 }) => {
   return (
@@ -46,10 +50,18 @@ export const FilterBar: React.FC<FilterBarProps> = ({
             const isActive = filterState[filter.key] === option
             const colorScheme = colorVariants[filter.color || 'green']
             
+            const handleClick = () => {
+              if (enableToggle && onFilterToggle && option !== 'Alle') {
+                onFilterToggle(filter.key, option)
+              } else {
+                onFilterChange(filter.key, option)
+              }
+            }
+
             return (
               <button
                 key={option}
-                onClick={() => onFilterChange(filter.key, option)}
+                onClick={handleClick}
                 className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
                   isActive ? colorScheme.active : colorScheme.inactive
                 }`}

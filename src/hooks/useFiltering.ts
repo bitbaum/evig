@@ -66,6 +66,18 @@ export function useFiltering<T extends FilterableItem>({
     }))
   }
 
+  // Toggle a filter (if already selected, revert to "All")
+  const toggleFilter = (filterKey: string, value: string) => {
+    setFilterState(prev => {
+      const currentValue = prev[filterKey]
+      const newValue = currentValue === value ? allLabel : value
+      return {
+        ...prev,
+        [filterKey]: newValue
+      }
+    })
+  }
+
   // Reset all filters
   const resetFilters = () => {
     setFilterState(initialState)
@@ -85,6 +97,7 @@ export function useFiltering<T extends FilterableItem>({
     filteredItems,
     filterOptions,
     updateFilter,
+    toggleFilter,
     resetFilters,
     getFilterSummary,
     hasActiveFilters: Object.values(filterState).some(value => value !== allLabel)

@@ -231,6 +231,10 @@ export default function ServicesPage() {
     ? services 
     : services.filter(service => service.category === selectedCategory)
 
+  const handleCategoryToggle = (category: string) => {
+    setSelectedCategory(prev => prev === category ? 'Alle' : category)
+  }
+
   return (
     <>
       <script
@@ -294,7 +298,7 @@ export default function ServicesPage() {
                 {categories.map((category) => (
                   <button
                     key={category}
-                    onClick={() => setSelectedCategory(category)}
+                    onClick={() => category === 'Alle' ? setSelectedCategory(category) : handleCategoryToggle(category)}
                     className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
                       selectedCategory === category
                         ? 'bg-green-600 text-white shadow-lg transform scale-105'

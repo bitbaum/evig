@@ -141,6 +141,14 @@ const WorkshopsPage: React.FC = () => {
   const availableWorkshops = filteredWorkshops.filter(w => w.isAvailable)
   const comingSoonWorkshops = filteredWorkshops.filter(w => w.comingSoon)
 
+  const handleCategoryToggle = (category: string) => {
+    setSelectedCategory(prev => prev === category ? 'Alle' : category)
+  }
+
+  const handleStatusToggle = (status: string) => {
+    setSelectedStatus(prev => prev === status ? 'Alle' : status)
+  }
+
   return (
     <main className="min-h-screen bg-gray-50">
       {/* Hero Section */}
@@ -189,7 +197,7 @@ const WorkshopsPage: React.FC = () => {
               {categories.map((category) => (
                 <button
                   key={category}
-                  onClick={() => setSelectedCategory(category)}
+                  onClick={() => category === 'Alle' ? setSelectedCategory(category) : handleCategoryToggle(category)}
                   className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
                     selectedCategory === category
                       ? 'bg-green-600 text-white shadow-lg transform scale-105'
@@ -209,7 +217,7 @@ const WorkshopsPage: React.FC = () => {
               {statuses.map((status) => (
                 <button
                   key={status}
-                  onClick={() => setSelectedStatus(status)}
+                  onClick={() => status === 'Alle' ? setSelectedStatus(status) : handleStatusToggle(status)}
                   className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
                     selectedStatus === status
                       ? 'bg-blue-600 text-white shadow-lg transform scale-105'
