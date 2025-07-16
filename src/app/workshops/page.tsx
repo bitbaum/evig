@@ -170,26 +170,6 @@ const WorkshopsPage: React.FC = () => {
         </div>
       </section>
 
-      {/* Value Proposition Section */}
-      <section className="py-16 bg-white">
-        <div className="container mx-auto px-4">
-          <div className="max-w-3xl mx-auto text-center mb-12">
-            <h2 className="text-3xl font-bold mb-6">Warum unsere Workshops wählen?</h2>
-            <p className="text-lg text-gray-600">
-              Unsere Workshops sind darauf ausgelegt, Ihnen praxisnahe Fähigkeiten zu vermitteln, die Sie sofort anwenden können. Ob Sie Ihre Karriere vorantreiben, eine neue beginnen oder einfach Technologie besser verstehen möchten - wir bieten das praktische Wissen und die Erfahrung, die Sie brauchen.
-            </p>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {benefits.map((benefit, index) => (
-              <div key={index} className="text-center p-6 rounded-xl bg-gray-50 hover:bg-green-50 transition-colors duration-300">
-                <benefit.icon className="w-12 h-12 mx-auto mb-4 text-green-600" />
-                <h3 className="text-xl font-semibold mb-3">{benefit.title}</h3>
-                <p className="text-gray-600">{benefit.description}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
 
       {/* Workshops Section with Filtering */}
       <section className="py-20">
@@ -304,6 +284,27 @@ const WorkshopsPage: React.FC = () => {
               {selectedCategory !== 'Alle' && ` in "${selectedCategory}"`}
               {selectedStatus !== 'Alle' && ` (${selectedStatus})`}
             </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Value Proposition Section */}
+      <section className="py-16 bg-white">
+        <div className="container mx-auto px-4">
+          <div className="max-w-3xl mx-auto text-center mb-12">
+            <h2 className="text-3xl font-bold mb-6">Warum unsere Workshops wählen?</h2>
+            <p className="text-lg text-gray-600">
+              Unsere Workshops sind darauf ausgelegt, Ihnen praxisnahe Fähigkeiten zu vermitteln, die Sie sofort anwenden können. Ob Sie Ihre Karriere vorantreiben, eine neue beginnen oder einfach Technologie besser verstehen möchten - wir bieten das praktische Wissen und die Erfahrung, die Sie brauchen.
+            </p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {benefits.map((benefit, index) => (
+              <div key={index} className="text-center p-6 rounded-xl bg-gray-50 hover:bg-green-50 transition-colors duration-300">
+                <benefit.icon className="w-12 h-12 mx-auto mb-4 text-green-600" />
+                <h3 className="text-xl font-semibold mb-3">{benefit.title}</h3>
+                <p className="text-gray-600">{benefit.description}</p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
