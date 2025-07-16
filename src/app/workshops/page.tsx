@@ -1,13 +1,17 @@
+'use client'
+
+import { useState } from 'react'
 import { Metadata } from 'next'
-import { Calendar, Clock, Users, ArrowRight, Sparkles, CheckCircle2, Briefcase, Rocket } from 'lucide-react'
+import { Calendar, Clock, Users, ArrowRight, Sparkles, CheckCircle2, Briefcase, Rocket, Filter } from 'lucide-react'
 import Link from 'next/link'
 import React from 'react'
 import { WorkshopCard, Workshop } from '@/components/workshops/WorkshopCard'
 
-export const metadata: Metadata = {
-  title: 'Unsere Workshops | RevampIT',
-  description: 'Nehmen Sie an unseren expertengeleiteten Workshops zu Linux, Open-Source-Software und Computerreparatur teil. Weitere Workshops kommen bald!'
-}
+// Note: metadata export removed since this is now a client component
+// const metadata: Metadata = {
+//   title: 'Unsere Workshops | RevampIT',
+//   description: 'Nehmen Sie an unseren expertengeleiteten Workshops zu Linux, Open-Source-Software und Computerreparatur teil. Weitere Workshops kommen bald!'
+// }
 
 const workshops: Workshop[] = [
   {
@@ -87,6 +91,20 @@ const workshops: Workshop[] = [
   }
 ]
 
+// Get unique categories for filtering
+const getUniqueCategories = () => {
+  const categoryOrder = ['Alle', 'Betriebssysteme', 'Entwicklung', 'Hardware', 'Blockchain', 'KI & ML', 'Kreativ']
+  const categories = workshops.map(workshop => workshop.category)
+  const uniqueCategories = Array.from(new Set(categories))
+  
+  return categoryOrder.filter(cat => cat === 'Alle' || uniqueCategories.includes(cat))
+}
+
+// Get unique statuses for filtering
+const getUniqueStatuses = () => {
+  return ['Alle', 'Verfügbar', 'Bald verfügbar']
+}
+
 const benefits = [
   {
     title: 'Praktisches Lernen',
@@ -106,8 +124,25 @@ const benefits = [
 ]
 
 const WorkshopsPage: React.FC = () => {
+  const [selectedCategory, setSelectedCategory] = useState('Alle')
+  const [selectedStatus, setSelectedStatus] = useState('Alle')
+  const categories = getUniqueCategories()
+  const statuses = getUniqueStatuses()
+  
+  // Filter workshops based on selected category and status
+  const filteredWorkshops = workshops.filter(workshop => {
+    const categoryMatch = selectedCategory === 'Alle' || workshop.category === selectedCategory
+    const statusMatch = selectedStatus === 'Alle' || 
+      (selectedStatus === 'Verfügbar' && workshop.isAvailable) ||
+      (selectedStatus === 'Bald verfügbar' && workshop.comingSoon)
+    return categoryMatch && statusMatch
+  })
+  
+  const availableWorkshops = filteredWorkshops.filter(w => w.isAvailable)
+  const comingSoonWorkshops = filteredWorkshops.filter(w => w.comingSoon)
+
   return (
-    <main className="min-h-screen">
+    <main className="min-h-screen bg-gray-50">
       {/* Hero Section */}
       <section className="relative bg-gradient-to-br from-green-700 via-green-800 to-green-900 text-white py-24 overflow-hidden">
         <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-10"></div>
@@ -156,29 +191,119 @@ const WorkshopsPage: React.FC = () => {
         </div>
       </section>
 
-      {/* Available Workshops */}
-      <section className="py-16 bg-gray-50">
+      {/* Workshops Section with Filtering */}
+      <section className="py-20">
         <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold mb-8 text-center">Aktuell verfügbare Workshops</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {workshops.filter(w => w.isAvailable).map((workshop, index) => (
-              <WorkshopCard key={index} workshop={workshop} variant="available" />
-            ))}
+          <div className="max-w-3xl mx-auto text-center mb-12">
+            <h2 className="text-3xl font-bold mb-6">Unsere Workshops</h2>
+            <p className="text-lg text-gray-600 mb-8">
+              Praktische Workshops mit Experten - von Linux bis KI, für alle Erfahrungsstufen.
+            </p>
+            
+            {/* Workshop Filters */}
+            <div className="flex flex-wrap justify-center gap-3 mb-8">
+              <div className="flex items-center text-gray-500 mr-4 mb-2">
+                <Filter className="w-4 h-4 mr-2" />
+                <span className="text-sm font-medium">Nach Kategorie:</span>
+              </div>
+              {categories.map((category) => (
+                <button
+                  key={category}
+                  onClick={() => setSelectedCategory(category)}
+                  className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
+                    selectedCategory === category
+                      ? 'bg-green-600 text-white shadow-lg transform scale-105'
+                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-800'
+                  }`}
+                >
+                  {category}
+                </button>
+              ))}
+            </div>
+            
+            <div className="flex flex-wrap justify-center gap-3 mb-12">
+              <div className="flex items-center text-gray-500 mr-4 mb-2">
+                <Filter className="w-4 h-4 mr-2" />
+                <span className="text-sm font-medium">Nach Status:</span>
+              </div>
+              {statuses.map((status) => (
+                <button
+                  key={status}
+                  onClick={() => setSelectedStatus(status)}
+                  className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
+                    selectedStatus === status
+                      ? 'bg-blue-600 text-white shadow-lg transform scale-105'
+                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-800'
+                  }`}
+                >
+                  {status}
+                </button>
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
 
-      {/* Coming Soon Workshops */}
-      <section className="py-16 bg-white">
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold mb-8 text-center">Bald verfügbar</h2>
-          <p className="text-lg text-gray-600 text-center mb-12 max-w-2xl mx-auto">
-            Wir erweitern ständig unser Workshop-Angebot. Hier ist, woran wir als nächstes arbeiten. Bleiben Sie dran für Ankündigungen!
-          </p>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {workshops.filter(w => w.comingSoon).map((workshop, index) => (
-              <WorkshopCard key={index} workshop={workshop} variant="coming-soon" />
-            ))}
+          {/* Available Workshops */}
+          {availableWorkshops.length > 0 && (
+            <div className="mb-16">
+              <h3 className="text-2xl font-bold mb-8 text-center">Aktuell verfügbare Workshops</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {availableWorkshops.map((workshop, index) => (
+                  <div 
+                    key={`available-${workshop.title}-${selectedCategory}-${selectedStatus}`}
+                    className="animate-fadeIn"
+                    style={{ animationDelay: `${index * 100}ms` }}
+                  >
+                    <WorkshopCard workshop={workshop} variant="available" />
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Coming Soon Workshops */}
+          {comingSoonWorkshops.length > 0 && (
+            <div className="mb-16">
+              <h3 className="text-2xl font-bold mb-8 text-center">Bald verfügbar</h3>
+              <p className="text-lg text-gray-600 text-center mb-12 max-w-2xl mx-auto">
+                Wir erweitern ständig unser Workshop-Angebot. Hier ist, woran wir als nächstes arbeiten.
+              </p>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {comingSoonWorkshops.map((workshop, index) => (
+                  <div 
+                    key={`coming-soon-${workshop.title}-${selectedCategory}-${selectedStatus}`}
+                    className="animate-fadeIn"
+                    style={{ animationDelay: `${(availableWorkshops.length + index) * 100}ms` }}
+                  >
+                    <WorkshopCard workshop={workshop} variant="coming-soon" />
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* No results message */}
+          {filteredWorkshops.length === 0 && (
+            <div className="text-center py-16">
+              <p className="text-lg text-gray-600">Keine Workshops gefunden, die den ausgewählten Filtern entsprechen.</p>
+              <button
+                onClick={() => {
+                  setSelectedCategory('Alle')
+                  setSelectedStatus('Alle')
+                }}
+                className="mt-4 px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+              >
+                Filter zurücksetzen
+              </button>
+            </div>
+          )}
+
+          {/* Results count */}
+          <div className="text-center mt-8">
+            <p className="text-gray-500 text-sm">
+              {filteredWorkshops.length} von {workshops.length} Workshops
+              {selectedCategory !== 'Alle' && ` in "${selectedCategory}"`}
+              {selectedStatus !== 'Alle' && ` (${selectedStatus})`}
+            </p>
           </div>
         </div>
       </section>
@@ -219,8 +344,26 @@ const WorkshopsPage: React.FC = () => {
           </div>
         </div>
       </section>
+
+      {/* Add custom CSS for animations */}
+      <style jsx>{`
+        @keyframes fadeIn {
+          from {
+            opacity: 0;
+            transform: translateY(20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+        
+        .animate-fadeIn {
+          animation: fadeIn 0.6s ease-out forwards;
+        }
+      `}</style>
     </main>
   )
 }
 
-export default WorkshopsPage 
+export default WorkshopsPage
