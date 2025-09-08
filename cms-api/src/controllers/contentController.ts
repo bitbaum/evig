@@ -72,6 +72,14 @@ export const getStaticPages = [
         params
       );
 
+      if (!countResult) {
+        res.status(500).json({
+          success: false,
+          error: 'Database error: Unable to count pages'
+        });
+        return;
+      }
+
       // Get pages
       const pages = await executeQuery<StaticPage>(
         `SELECT * FROM static_pages
@@ -389,6 +397,14 @@ export const getBlogPosts = [
         `SELECT COUNT(*) as count FROM blog_posts WHERE ${whereClause}`,
         params
       );
+
+      if (!countResult) {
+        res.status(500).json({
+          success: false,
+          error: 'Database error: Unable to count blog posts'
+        });
+        return;
+      }
 
       // Get posts with category information
       const posts = await executeQuery<BlogPost & { category_name?: string; category_slug?: string }>(

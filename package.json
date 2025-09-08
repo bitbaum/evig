@@ -6,7 +6,7 @@
     "dev": "next dev --turbo",
     "dev:backend": "cd backend && npm run dev",
     "dev:full": "concurrently \"npm run dev\" \"npm run dev:backend\"",
-    "d": "concurrently \"npm:dev\" \"npm:develop --prefix strapi\"",
+    "d": "concurrently \"npm:dev\" \"cd cms-api && npm run dev\" \"npm:develop --prefix strapi\"",
     "build": "next build && next-sitemap",
     "build:backend": "cd backend && npm run build",
     "start": "next start",
@@ -31,6 +31,7 @@
     "next-sitemap": "^4.2.3",
     "next-themes": "^0.2.1",
     "node-html-parser": "^7.0.1",
+    "pg": "^8.16.3",
     "puppeteer": "^24.9.0",
     "qs": "^6.14.0",
     "react": "^18.2.0",
@@ -41,7 +42,7 @@
     "zustand": "^4.5.1"
   },
   "devDependencies": {
-    "@playwright/test": "^1.53.1",
+    "@playwright/test": "^1.55.0",
     "@types/node": "^20.11.24",
     "@types/react": "^18.2.61",
     "@types/react-dom": "^18.2.19",

@@ -294,6 +294,13 @@ export const updateUser = [
  */
 export const deleteUser = async (req: Request, res: Response): Promise<void> => {
   try {
+    if (!req.user) {
+      return res.status(401).json({
+        success: false,
+        error: 'Authentication required'
+      });
+    }
+
     const { id } = req.params;
 
     // Prevent deleting yourself

@@ -35,6 +35,12 @@ exports.getStaticPages = [
                 paramIndex++;
             }
             const countResult = await (0, database_1.executeQuerySingle)(`SELECT COUNT(*) as count FROM static_pages WHERE ${whereClause}`, params);
+            if (!countResult) {
+                return res.status(500).json({
+                    success: false,
+                    error: 'Database error: Unable to count pages'
+                });
+            }
             const pages = await (0, database_1.executeQuery)(`SELECT * FROM static_pages
          WHERE ${whereClause}
          ORDER BY updated_at DESC

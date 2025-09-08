@@ -1,63 +1,173 @@
-# Contributing to Revamp-it Website Modernization
+# Contributing to RevampIT
 
-Thank you for your interest in contributing! We welcome contributions from developers, designers, and writers alike, as we work together to build a modern and sustainable digital platform.
+We're thrilled that you're interested in contributing to RevampIT! This document provides guidelines and information for contributors to help make the process smooth and effective.
 
-## Code of Conduct
+## 🌟 Ways to Contribute
 
-Please review our [Code of Conduct](./CODE_OF_CONDUCT.md) before contributing. We expect all participants to adhere to a respectful and collaborative environment.
+### Code Contributions
+- 🐛 **Bug Fixes** - Fix issues and improve stability
+- ✨ **New Features** - Implement new functionality
+- 🔧 **Refactoring** - Improve code quality and performance
+- 📝 **Documentation** - Improve existing docs or create new ones
+- 🧪 **Testing** - Add or improve tests
 
-## How to Contribute
+### Non-Code Contributions
+- 🎨 **Design** - UI/UX improvements and design assets
+- 🌐 **Translation** - Help with German/English localization
+- 📖 **Documentation** - User guides, tutorials, and API docs
+- 🐛 **Bug Reports** - Report issues and suggest improvements
+- 💡 **Feature Requests** - Suggest new features
 
-Contributions can come in many forms: code fixes, new features, documentation improvements, testing, or even ideas for future enhancements. Please follow these steps to contribute:
+## 🚀 Getting Started
 
-1. **Fork the Repository**
-   - Click the **Fork** button on the project's GitHub page.
+### Prerequisites
+- Node.js 18+
+- PostgreSQL 13+
+- Git knowledge
+- Basic understanding of Next.js and TypeScript
 
-2. **Clone Your Fork**
-   - Replace `<YOUR_GITHUB_USERNAME>` with your GitHub username:
-     ```bash
-     git clone https://github.com/<YOUR_GITHUB_USERNAME>/revamp-it-modernization.git
-     cd revamp-it-modernization
-     ```
+### Setting Up Development Environment
 
-3. **Create a New Branch**
-   - Use descriptive branch names following our conventions, such as:
-     ```bash
-     git checkout -b feat/new-feature-name
-     ```
-   - For bug fixes, you might use:
-     ```bash
-     git checkout -b fix/issue-description
-     ```
+1. **Fork and Clone**
+   ```bash
+   git clone https://github.com/YOUR_USERNAME/revampit.git
+   cd revampit
+   ```
 
-4. **Make Your Changes**
-   - Modify the code and update documentation according to the feature or fix.
-   - Ensure your code meets our style guidelines and includes proper comments and tests where applicable.
+2. **Install Dependencies**
+   ```bash
+   # Frontend dependencies
+   npm install
+   
+   # CMS API dependencies  
+   cd cms-api
+   npm install
+   cd ..
+   ```
 
-5. **Commit Your Changes**
-   - Use clear commit messages following the Conventional Commits format. For example:
-     ```bash
-     git commit -s -m "feat(module): add new login functionality (closes #123)"
-     ```
-   - If necessary, amend commits using our aliases (configured in your `.gitconfig`).
+3. **Environment Setup**
+   ```bash
+   cp .env.example .env.local
+   cp cms-api/.env.example cms-api/.env
+   # Edit environment files with your configuration
+   ```
 
-6. **Push Your Branch and Create a Pull Request**
-   - Push your branch to your fork:
-     ```bash
-     git push origin feat/new-feature-name
-     ```
-   - Open a pull request from your fork to the main repository and follow any pull request templates provided.
+4. **Database Setup**
+   ```bash
+   # Start PostgreSQL using Docker
+   docker-compose up -d postgres
+   
+   # Run migrations
+   cd cms-api
+   npm run migrate
+   cd ..
+   ```
 
-## Testing & Documentation
+5. **Start Development Servers**
+   ```bash
+   # Terminal 1: Start CMS API
+   cd cms-api && npm run dev
+   
+   # Terminal 2: Start Frontend  
+   npm run dev
+   ```
 
-- **Testing:** Ensure that your changes are covered by tests. If you're adding a new feature, add corresponding unit or integration tests.
-- **Documentation:** Update any documentation if your changes affect how the project is used, especially for legacy content. Refer to the [LEGACY_CONTENT.md](./LEGACY_CONTENT.md) if applicable.
+## 🛠️ Development Workflow
 
-## Additional Guidelines
+### Branch Naming
+- `feature/feature-name` - New features
+- `fix/bug-description` - Bug fixes  
+- `docs/documentation-update` - Documentation updates
+- `refactor/component-name` - Code refactoring
+- `test/test-description` - Test additions/improvements
 
-- Keep your commits small and focused.
-- Communicate clearly—if you're unsure about any process, feel free to open an issue or ask on our communication channels.
-- Be patient during the review process and be prepared to make adjustments based on feedback.
+### Commit Messages
+Follow conventional commits format:
 
-Thank you for helping improve Revamp-it!
+```
+type(scope): description
+
+Examples:
+feat(cms): add rich text editor for page content
+fix(auth): resolve JWT token expiration issue  
+docs(readme): update installation instructions
+style(ui): improve button component styling
+test(api): add unit tests for user authentication
+```
+
+### Pull Request Process
+
+1. **Create Feature Branch**
+   ```bash
+   git checkout -b feature/amazing-feature
+   ```
+
+2. **Make Changes**
+   - Write clean, readable code
+   - Follow existing code style
+   - Add/update tests as needed
+   - Update documentation
+
+3. **Test Your Changes**
+   ```bash
+   npm run test          # Run tests
+   npm run lint          # Check linting
+   npm run type-check    # TypeScript check
+   ```
+
+4. **Commit and Push**
+   ```bash
+   git add .
+   git commit -m "feat(scope): description"
+   git push origin feature/amazing-feature
+   ```
+
+5. **Open Pull Request**
+   - Use descriptive title and description
+   - Reference related issues
+   - Add screenshots for UI changes
+   - Request review from maintainers
+
+## 📋 Code Standards
+
+### TypeScript
+- Use strict TypeScript configuration
+- Define proper types and interfaces
+- Avoid `any` type unless absolutely necessary
+- Use meaningful variable and function names
+
+### React/Next.js
+- Use functional components with hooks
+- Implement proper error boundaries
+- Follow Next.js best practices for routing and data fetching
+- Use server components where appropriate
+
+### Styling
+- Use Tailwind CSS for styling
+- Follow mobile-first responsive design
+- Maintain consistent spacing and typography
+- Ensure accessibility standards (WCAG 2.1)
+
+### Testing
+- Write unit tests for utility functions
+- Add integration tests for API endpoints
+- Include E2E tests for critical user flows
+- Maintain minimum 80% code coverage
+
+## 🎉 Recognition
+
+Contributors are recognized in several ways:
+
+- **README contributors section** - All contributors listed
+- **Release notes** - Major contributors mentioned
+- **Community highlights** - Featured in newsletters
+- **Maintainer opportunities** - Active contributors can become maintainers
+
+## 🙏 Thank You
+
+Thank you for contributing to RevampIT! Your contributions help us achieve our mission of sustainable technology and digital inclusion.
+
+---
+
+**Happy Contributing! 🚀**
 

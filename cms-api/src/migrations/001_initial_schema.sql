@@ -104,18 +104,30 @@ BEGIN
 END;
 $$ language 'plpgsql';
 
--- Add updated_at triggers to all tables
-CREATE TRIGGER update_users_updated_at BEFORE UPDATE ON users
-    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+-- Add updated_at triggers to all tables (with conditional creation)
+DO $$
+BEGIN
+    -- Create triggers only if they don't already exist
+    IF NOT EXISTS (SELECT 1 FROM pg_trigger WHERE tgname = 'update_users_updated_at') THEN
+        CREATE TRIGGER update_users_updated_at BEFORE UPDATE ON users
+            FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+    END IF;
 
-CREATE TRIGGER update_categories_updated_at BEFORE UPDATE ON categories
-    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+    IF NOT EXISTS (SELECT 1 FROM pg_trigger WHERE tgname = 'update_categories_updated_at') THEN
+        CREATE TRIGGER update_categories_updated_at BEFORE UPDATE ON categories
+            FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+    END IF;
 
-CREATE TRIGGER update_static_pages_updated_at BEFORE UPDATE ON static_pages
-    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+    IF NOT EXISTS (SELECT 1 FROM pg_trigger WHERE tgname = 'update_static_pages_updated_at') THEN
+        CREATE TRIGGER update_static_pages_updated_at BEFORE UPDATE ON static_pages
+            FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+    END IF;
 
-CREATE TRIGGER update_blog_posts_updated_at BEFORE UPDATE ON blog_posts
-    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+    IF NOT EXISTS (SELECT 1 FROM pg_trigger WHERE tgname = 'update_blog_posts_updated_at') THEN
+        CREATE TRIGGER update_blog_posts_updated_at BEFORE UPDATE ON blog_posts
+            FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+    END IF;
+END $$;
 
 -- Insert default admin user (password: Admin123!)
 -- Note: In production, this should be created through the API or manually

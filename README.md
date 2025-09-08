@@ -1,251 +1,224 @@
-# Revamp-it Website Modernization
+# RevampIT - Sustainable Technology for Everyone
 
-> Modern, Sustainable IT for Everyone  
-> Hardware, Menschen und Know-how
+<div align="center">
 
-[![Build Status](https://img.shields.io/badge/build-passing-brightgreen)](https://github.com/yourusername/revamp-it-modernization) 
-[![License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
+![RevampIT Logo](https://revamp-it.ch/assets/logo.png)
+
+**Giving Technology a Second Life Through Sustainable IT Practices**
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Next.js](https://img.shields.io/badge/Next.js-13+-black)](https://nextjs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-4.9+-blue)](https://www.typescriptlang.org/)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15+-blue)](https://www.postgresql.org/)
+[![Docker](https://img.shields.io/badge/Docker-Ready-blue)](https://www.docker.com/)
+
+[Website](https://revamp-it.ch) • [Contribute](#contributing) • [Documentation](#documentation) • [Report Bug](https://github.com/your-org/revampit/issues)
+
+</div>
 
 ---
-**Documentation Metadata**
-- created_date: 2023-10-01
-- last_modified_date: 2025-07-15
-- last_modified_summary: Updated with system integration analysis, added status indicators, and current system health information.
----
 
-## Table of Contents
+## 🌟 About RevampIT
 
-- [Overview](#overview)
-- [Vision and Objectives](#vision-and-objectives)
-- [Tech Stack](#tech-stack)
-- [Architecture Overview](#architecture-overview)
-- [Installation & Setup](#installation--setup)
-- [Usage](#usage)
-- [Development Workflow](#development-workflow)
-- [Documentation Structure](#documentation-structure)
-- [Contributing](#contributing)
-- [Roadmap](#roadmap)
-- [License](#license)
-- [Contact & Acknowledgments](#contact--acknowledgments)
+RevampIT is a Swiss non-profit organization dedicated to **sustainable technology** and **digital inclusion**. We refurbish computers and electronic devices, provide technical education through workshops, and promote open-source solutions to reduce electronic waste.
 
-## Overview
+### Our Mission
+- ♻️ **Reduce E-Waste**: Refurbish and redistribute electronic devices
+- 🏫 **Education**: Provide workshops on Linux, open-source software, and hardware repair  
+- 🤝 **Community**: Build a network of volunteers, technical experts, and partners
+- 🌍 **Sustainability**: Promote responsible technology consumption and circular economy
 
-Revamp-it is a self-sustaining, mission-driven non-profit dedicated to sustainable IT. Our website serves multiple purposes:
-- **Promote hardware recycling:** Accept and refurbish used hardware to prolong their lifecycle.
-- **Foster community and education:** Provide workshops, Linux support, and open-source resources.
-- **Facilitate direct engagement:** Inform users, support donors, and expand our digital presence.
-
-This project is a complete redevelopment of our website with a modern tech stack and intuitive UX/UI—designed for performance, accessibility, and scalability.
-
-## Vision and Objectives
-
-- **User-Centric Design:** Create clear, accessible navigation that caters to diverse visitors (private, corporate, volunteers).
-- **Modern Development Practices:** Use state-of-the-art open-source technologies to deliver a fast, secure, and SEO-friendly site.
-- **Scalable Architecture:** Structure code for maintainability and ease of adding new features (blog, shop, events).
-- **Sustainable Impact:** Reflect our mission of reducing e-waste and championing sustainable IT practices.
-
-## Tech Stack
+## 🚀 Technology Stack
 
 ### Frontend
-- **Next.js**: Provides server-side rendering (SSR) and static site generation (SSG) for SEO and performance.
-- **React.js**: Leverages a component-based architecture for a dynamic user interface.
-- **Tailwind CSS**: Utility-first styling for rapid, responsive UI design.
-- **TypeScript**: Ensures robust, type-safe code.
+- **[Next.js 13+](https://nextjs.org/)** - React framework with server-side rendering
+- **[TypeScript](https://www.typescriptlang.org/)** - Type-safe JavaScript
+- **[Tailwind CSS](https://tailwindcss.com/)** - Utility-first CSS framework
+- **[React Hook Form](https://react-hook-form.com/)** - Forms with validation
 
-### Backend & APIs
-- **Content Management:**
-  - Strapi (legacy, partially working)
-  - Reboot Content (recommended) — custom API focused on static page content for non-technical editors
-- **E-commerce Platform (Future):** MedusaJS (headless commerce engine) will be integrated in a later phase for webshop inventory, product management, orders, and cart functionality.
-- **Custom APIs:** Node.js / Express.js
-- **GraphQL (optional):** Strapi supports GraphQL, offering flexible data fetching.
+### Backend & CMS
+- **[Node.js](https://nodejs.org/)** - JavaScript runtime
+- **[Express.js](https://expressjs.com/)** - Web application framework
+- **[PostgreSQL](https://www.postgresql.org/)** - Relational database
+- **[JWT](https://jwt.io/)** - Authentication and authorization
+- **Custom CMS** - Content management for non-technical users
 
-### Deployment & Infrastructure
-- **Vercel**: For seamless deployment and global Content Delivery Network (CDN) support. **Vercel is the only supported deployment platform.**
-- **Docker**: Containerization for consistency across environments (used for local development only).
-- **CI/CD Pipelines**: Automated testing and deployment (GitHub Actions).
+### Infrastructure
+- **[Docker](https://www.docker.com/)** - Containerization
+- **[Vercel](https://vercel.com/)** - Frontend hosting and deployment
+- **[GitHub Actions](https://github.com/features/actions)** - CI/CD workflows
 
-### Other Tools
-- **Algolia / Meilisearch**: Advanced search capabilities across content.
-- **ESLint & Prettier**: Enforce code style and quality standards.
-- **Jest & React Testing Library**: For frontend testing; Mocha/Chai for backend testing.
-
-## Architecture Overview
-
-The website is designed with a modular, API-driven architecture:
-- **Presentation Layer:** Next.js serves as the frontend framework, consuming data from Strapi or Reboot Content APIs.
-- **Content Layer:**
-  - Strapi (headless CMS) powers informational content dynamically
-  - Reboot Content provides an editor-friendly API for static pages
-- **E-commerce Layer (Future):** MedusaJS will be implemented in a later phase to manage all aspects of the webshop.
-- **API Layer:** Primarily consists of the API exposed by Strapi or Reboot Content. Custom Node.js/Express.js endpoints can be added for unique integrations or functionalities.
-- **Deployment:** The entire application is containerized using Docker for consistent, scalable, and secure deployments. **Production deployment is handled exclusively by Vercel. Docker Compose is for local development only.**
-
-## System Status
-
-### Current Integration Status
-- **Frontend (Next.js):** ✅ Operational
-- **Database (PostgreSQL):** ✅ Operational  
-- **Docker Environment:** ✅ Operational
-- **Strapi CMS:** ⚠️ Partially Working
-- **Reboot Content:** ✅ API ready; admin UI to be implemented (Phase 1)
-
-> See `docs/development/reboot-content-admin-ui.md` for the admin UI blueprint and onboarding.
-
-## Installation & Setup
+## 🛠️ Quick Start
 
 ### Prerequisites
-- **Node.js (>=18) & npm/yarn**
-- **Docker (for containerized development only)**
-- **Git**
-- **PostgreSQL client** (for database testing)
+- Node.js 18+ 
+- PostgreSQL 13+
+- Docker (optional)
 
-### Steps
+### Installation
 
-1. **Clone the Repository**
+```bash
+# Clone the repository
+git clone https://github.com/your-org/revampit.git
+cd revampit
 
-   ```bash
-   git clone https://github.com/yourusername/revamp-it-modernization.git
-   cd revamp-it-modernization
-   ```
+# Install frontend dependencies
+npm install
 
-2. **Install Dependencies**
+# Set up environment variables
+cp .env.example .env.local
+# Edit .env.local with your configuration
 
-   Using npm:
-   ```bash
-   npm install
-   ```
-   Or using yarn:
-   ```bash
-   yarn install
-   ```
+# Install CMS API dependencies
+cd cms-api
+npm install
+cp .env.example .env
+# Edit .env with your database configuration
 
-3. **Environment Setup**
+# Start PostgreSQL (using Docker)
+docker-compose up -d postgres
 
-   - Copy the environment template:
-     ```bash
-     cp .env.example .env
-     ```
-   - For Strapi: set `NEXT_PUBLIC_STRAPI_URL`
-   - For Reboot Content:
-     ```env
-     NEXT_PUBLIC_REBOOT_CONTENT_URL=http://localhost:3001
-     REBOOT_CONTENT_TOKEN=your-jwt-token-here
-     ```
+# Start the CMS API
+npm run dev
 
-4. **Start Database**
+# In another terminal, start the frontend
+cd ..
+npm run dev
+```
 
-   First, start the PostgreSQL database:
-   ```bash
-   docker-compose up -d db
-   ```
+### Access Points
+- **Frontend**: http://localhost:3000
+- **CMS API**: http://localhost:3001
+- **Admin Interface**: http://localhost:3000/admin/login
 
-5. **Run Development Servers**
+## 📁 Project Structure
 
-   Start the Next.js frontend:
-   ```bash
-   npm run dev
-   ```
-   The website will be available at `http://localhost:3000`.
+```
+revampit/
+├── src/                      # Frontend source code
+│   ├── app/                  # Next.js app directory
+│   ├── components/           # Reusable UI components
+│   └── lib/                  # Utilities and configurations
+├── cms-api/                  # Custom CMS backend
+│   ├── src/                  # API source code
+│   ├── migrations/           # Database migrations
+│   └── uploads/              # File storage
+├── public/                   # Static assets
+├── docs/                     # Documentation
+├── tests/                    # Test files
+└── docker-compose.yml        # Development services
+```
 
-   Start Reboot Content API (recommended):
-   ```bash
-   cd cms-api
-   npm install
-   npm run migrate
-   npm run dev
-   ```
-   API at `http://localhost:3001`.
+## 🎯 Features
 
-   Or start Strapi CMS (legacy):
-   ```bash
-   cd strapi && npm run develop
-   ```
-   Strapi admin at `http://localhost:1337/admin`.
+### Public Website
+- 📱 **Responsive Design** - Mobile-first approach
+- 🔍 **SEO Optimized** - Server-side rendering and meta tags
+- 🌐 **Multilingual** - German and English support
+- ⚡ **Performance** - Optimized images and lazy loading
+- ♿ **Accessibility** - WCAG 2.1 compliant
 
-## Usage
+### Content Management
+- 🔐 **Secure Authentication** - JWT-based admin access
+- ✏️ **Rich Text Editor** - WYSIWYG content editing
+- 📄 **Page Management** - Create and edit static pages
+- 👥 **User Management** - Role-based access control
+- 🖼️ **Media Management** - Image upload and optimization
 
-- **Development**: Use hot reloading with Next.js for immediate feedback.
-- **Database Access**: PostgreSQL available at `localhost:5434` (user: strapi, password: strapi)
-- **Content Management**: Strapi admin at `http://localhost:1337/admin` (legacy); Reboot Content API at `http://localhost:3001`
-- **Building for Production**:
-  ```bash
-  npm run build
-  npm start
-  ```
-- **Docker Management**:
-  ```bash
-  docker-compose ps          # Check container status
-  docker-compose logs strapi  # View Strapi logs
-  docker-compose down        # Stop all containers
-  ```
+### Services
+- 🛠️ **Hardware Services** - Computer repair and refurbishment
+- 🐧 **Linux Support** - Open-source software consulting
+- 🏢 **Enterprise Solutions** - Custom IT solutions for businesses
+- 📚 **Workshops** - Educational programs and training
+- 🌐 **Web Development** - Modern web solutions
 
-### Known Issues
-- **Strapi Startup:** May take 2-3 minutes on first run
-- **Admin UI:** Reboot Content admin interface pending (see docs/development/reboot-content-admin-ui.md)
+## 🤝 Contributing
 
-## Development Workflow
+We welcome contributions from developers, designers, translators, and anyone passionate about sustainable technology!
 
-We follow a Git-based branching strategy:
-- **Main Branch**: Always stable and production-ready.
+### How to Contribute
+1. **Fork** the repository
+2. **Create** a feature branch (`git checkout -b feature/amazing-feature`)
+3. **Commit** your changes (`git commit -m 'Add amazing feature'`)
+4. **Push** to the branch (`git push origin feature/amazing-feature`)
+5. **Open** a Pull Request
 
-## Documentation Structure
+### Areas for Contribution
+- 💻 **Frontend Development** - React/Next.js components and pages
+- 🔧 **Backend Development** - API endpoints and database design
+- 🎨 **UI/UX Design** - Interface design and user experience
+- 📝 **Documentation** - Technical writing and guides
+- 🌐 **Translations** - German ↔ English localization
+- 🧪 **Testing** - Unit tests, integration tests, and E2E tests
+- 📊 **Analytics** - Performance monitoring and optimization
 
-- **Deployment:** See [`docs/DEPLOYMENT.md`](docs/DEPLOYMENT.md) for deployment instructions and troubleshooting.
-- **Developer Guide:** [`docs/DEVELOPER_DOC.md`](docs/DEVELOPER_DOC.md) for technical details and best practices.
-- **Project Structure:** [`docs/PROJECT_STRUCTURE.md`](docs/PROJECT_STRUCTURE.md) for file and directory layout.
-- **Strapi Integration:** [`docs/strapi-integration.md`](docs/strapi-integration.md) and [`docs/strapi-frontend-integration.md`](docs/strapi-frontend-integration.md)
-- **Reboot Content Admin UI:** [`docs/development/reboot-content-admin-ui.md`](docs/development/reboot-content-admin-ui.md)
+### Development Guidelines
+- Follow TypeScript best practices
+- Write meaningful commit messages
+- Add tests for new features
+- Ensure accessibility standards
+- Maintain responsive design
+- Update documentation
 
-## Contributing
+## 📚 Documentation
 
-Contributions are welcome! If you'd like to help develop this project:
-1. Fork the repository.
-2. Create your feature branch: `git checkout -b feature/my-new-feature`
-3. Commit your changes: `git commit -m "Add my new feature"`
-4. Push to the branch: `git push origin feature/my-new-feature`
-5. Open a pull request and describe your changes.
+- [Installation Guide](docs/installation.md)
+- [API Documentation](docs/api.md)
+- [Development Guide](docs/development.md)
+- [Deployment Guide](docs/deployment.md)
+- [CMS User Guide](docs/cms-guide.md)
+- [Contributing Guidelines](CONTRIBUTING.md)
 
-See our [CONTRIBUTING.md](CONTRIBUTING.md) for more details and our code of conduct.
+## 🗺️ Roadmap
 
-## Roadmap
+### Current Focus
+- ✅ Custom CMS Implementation
+- ✅ Admin Interface
+- ✅ Content Management
+- ⏳ User Authentication
+- ⏳ Media Management
 
-- **Phase 1: Core Content Site & Internationalization (Current Focus)**
-  - Establish foundational project structure.
-  - Integrate Next.js with Strapi (CMS) for content management.
-  - Set up internationalization in Strapi and Next.js for German, English, French, and Italian.
-  - Define initial content types in Strapi and migrate existing content.
-  - Implement core website pages (Home, About, Services, Projects, Contact, etc.) fetching content from Strapi.
-  - Ensure the external link to the existing webshop remains functional.
+### Upcoming Features
+- 📝 **Blog System** - News and updates
+- 🛒 **E-commerce Integration** - Online shop for refurbished devices
+- 📅 **Event Management** - Workshop scheduling and registration
+- 📊 **Analytics Dashboard** - Website and service metrics
+- 🔔 **Notification System** - Email newsletters and alerts
+- 🌍 **Multi-language Support** - Expanded localization
 
-- **Phase 2: E-commerce Integration with MedusaJS (Future)**
-  - Plan and implement MedusaJS as the e-commerce backend.
-  - Define product structures and plan data migration from Kivitendo/Joomla.
-  - Build integrated shop functionalities in the Next.js frontend (product listings, cart, checkout).
-  - Replace the external webshop link with the integrated solution.
+## 📞 Support & Community
 
-- **Phase 3: Enhancements & Optimizations (Future)**
-  - Refine API integrations between Strapi and MedusaJS (once both are active).
-  - Implement advanced search (e.g., Algolia/Meilisearch).
-  - Address user authentication if needed for integrated shop/site features.
-  - Optimize performance, accessibility, and add further user personalization features.
+### Get Help
+- 📧 **Email**: info@revamp-it.ch
+- 🐛 **Issues**: [GitHub Issues](https://github.com/your-org/revampit/issues)
+- 💬 **Discussions**: [GitHub Discussions](https://github.com/your-org/revampit/discussions)
 
-## License
+### Visit Us
+**RevampIT Headquarters**  
+Badenerstrasse 816  
+8048 Zürich, Switzerland
 
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+**Office Hours**  
+Monday - Friday: 13:00 - 17:00  
+Workshops: By appointment
 
-## Contact & Acknowledgments
+## 📜 License
 
-- **Project Maintainers**:  
-  - [Your Name](https://yourwebsite.com) – lead developer  
-  - [Contributor Name](https://github.com/contributor) – frontend/backend specialist
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-- **Contact**:  
-  Email: [support@revamp-it.ch](mailto:support@revamp-it.ch)
+## 🙏 Acknowledgments
 
-- **Acknowledgments**:  
-  We extend our gratitude to the open-source community and all volunteers who help make sustainable IT a reality.
+- Thanks to all our **volunteers** and **contributors**
+- **Open Source Community** for the amazing tools and libraries
+- **Swiss Non-Profit Sector** for supporting our mission
+- **Local Community** in Zürich for their continuous support
 
 ---
 
-*Let's build a modern digital home for Revamp-it that not only stands out technically but also champions sustainable and accessible technology for all.*
+<div align="center">
+
+**Made with ❤️ by the RevampIT community**
+
+[🌐 Website](https://revamp-it.ch) • [📧 Contact](mailto:info@revamp-it.ch) • [🐦 Twitter](https://twitter.com/revampit) • [💼 LinkedIn](https://linkedin.com/company/revampit)
+
+</div>

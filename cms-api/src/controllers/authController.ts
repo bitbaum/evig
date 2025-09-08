@@ -148,6 +148,14 @@ export const login = [
         role: user.role,
       });
 
+      // Set JWT as httpOnly cookie
+      res.cookie('token', token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: process.env.NODE_ENV === 'production' ? 'lax' : false,
+        maxAge: 24 * 60 * 60 * 1000, // 24 hours
+      });
+
       res.json({
         success: true,
         message: 'Login successful',
@@ -178,6 +186,13 @@ export const login = [
  */
 export const getProfile = async (req: Request, res: Response): Promise<void> => {
   try {
+    if (!req.user) {
+      return res.status(401).json({
+        success: false,
+        error: 'Authentication required'
+      });
+    }
+
     const user = await executeQuerySingle<User>(
       'SELECT id, email, first_name, last_name, role, is_active, last_login_at, created_at FROM users WHERE id = $1',
       [req.user.id]
@@ -215,6 +230,13 @@ export const updateProfile = [
 
   async (req: Request, res: Response): Promise<void> => {
     try {
+      if (!req.user) {
+        return res.status(401).json({
+          success: false,
+          error: 'Authentication required'
+        });
+      }
+
       // Check validation errors
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
@@ -282,6 +304,13 @@ export const changePassword = [
 
   async (req: Request, res: Response): Promise<void> => {
     try {
+      if (!req.user) {
+        return res.status(401).json({
+          success: false,
+          error: 'Authentication required'
+        });
+      }
+
       // Check validation errors
       const errors = validationResult(req);
       if (!errors.isEmpty()) {

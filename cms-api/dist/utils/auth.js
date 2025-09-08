@@ -23,13 +23,15 @@ async function comparePassword(password, hashedPassword) {
     return bcrypt_1.default.compare(password, hashedPassword);
 }
 function generateToken(user) {
+    const secret = JWT_SECRET || 'fallback-secret-change-in-production';
+    const expiresIn = JWT_EXPIRES_IN || '24h';
     return jsonwebtoken_1.default.sign({
         id: user.id,
         email: user.email,
         first_name: user.first_name,
         last_name: user.last_name,
         role: user.role,
-    }, JWT_SECRET || 'fallback-secret-change-in-production', { expiresIn: JWT_EXPIRES_IN });
+    }, secret, { expiresIn });
 }
 function verifyToken(token) {
     try {

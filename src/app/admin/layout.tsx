@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { useRouter, usePathname } from 'next/navigation'
 import Link from 'next/link'
 
 interface User {
@@ -20,25 +20,44 @@ export default function AdminLayout({
   const [user, setUser] = useState<User | null>(null)
   const [loading, setLoading] = useState(true)
   const router = useRouter()
+  const pathname = usePathname()
+
+  // Skip auth check for login page
+  const isLoginPage = pathname === '/admin/login'
 
   useEffect(() => {
-    checkAuth()
-  }, [])
+    if (!isLoginPage) {
+      checkAuth()
+    } else {
+      setLoading(false)
+    }
+  }, [isLoginPage])
 
   const checkAuth = async () => {
     try {
-      const response = await fetch('/api/admin/profile', {
-        credentials: 'include',
+      const token = localStorage.getItem('token')
+      if (!token) {
+        router.push('/admin/login')
+        return
+      }
+
+      const response = await fetch('http://localhost:3001/api/auth/profile', {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
       })
 
       if (response.ok) {
         const data = await response.json()
-        setUser(data.user)
+        setUser(data.data) // API returns user data under data.data
       } else {
+        localStorage.removeItem('token')
         router.push('/admin/login')
       }
     } catch (error) {
       console.error('Auth check failed:', error)
+      localStorage.removeItem('token')
       router.push('/admin/login')
     } finally {
       setLoading(false)
@@ -66,7 +85,14 @@ export default function AdminLayout({
     )
   }
 
+  // If it's the login page, render without admin layout chrome and without MainLayout
+  if (isLoginPage) {
+    return <>{children}</>
+  }
+
+  // If not logged in and not on login page, redirect
   if (!user) {
+    router.push('/admin/login')
     return null
   }
 

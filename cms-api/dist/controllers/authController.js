@@ -128,6 +128,12 @@ exports.login = [
 ];
 const getProfile = async (req, res) => {
     try {
+        if (!req.user) {
+            return res.status(401).json({
+                success: false,
+                error: 'Authentication required'
+            });
+        }
         const user = await (0, database_1.executeQuerySingle)('SELECT id, email, first_name, last_name, role, is_active, last_login_at, created_at FROM users WHERE id = $1', [req.user.id]);
         if (!user) {
             res.status(404).json({
@@ -156,6 +162,12 @@ exports.updateProfile = [
     (0, express_validator_1.body)('last_name').optional().trim().isLength({ min: 1, max: 100 }),
     async (req, res) => {
         try {
+            if (!req.user) {
+                return res.status(401).json({
+                    success: false,
+                    error: 'Authentication required'
+                });
+            }
             const errors = (0, express_validator_1.validationResult)(req);
             if (!errors.isEmpty()) {
                 res.status(400).json({
@@ -204,6 +216,12 @@ exports.changePassword = [
     (0, express_validator_1.body)('new_password').isLength({ min: 8 }),
     async (req, res) => {
         try {
+            if (!req.user) {
+                return res.status(401).json({
+                    success: false,
+                    error: 'Authentication required'
+                });
+            }
             const errors = (0, express_validator_1.validationResult)(req);
             if (!errors.isEmpty()) {
                 res.status(400).json({

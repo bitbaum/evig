@@ -16,7 +16,7 @@ export default function AdminLogin() {
     setError('')
 
     try {
-      const response = await fetch('/api/admin/login', {
+      const response = await fetch('http://localhost:3001/api/auth/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -25,11 +25,14 @@ export default function AdminLogin() {
         body: JSON.stringify({ email, password }),
       })
 
-      if (response.ok) {
+      const data = await response.json()
+      
+      if (response.ok && data.success) {
+        // Store the token for API requests
+        localStorage.setItem('token', data.data.token)
         router.push('/admin')
       } else {
-        const data = await response.json()
-        setError(data.message || 'Login failed')
+        setError(data.message || data.error || 'Login failed')
       }
     } catch (error) {
       setError('Network error. Please try again.')

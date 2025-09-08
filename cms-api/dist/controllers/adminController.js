@@ -209,6 +209,12 @@ exports.updateUser = [
 ];
 const deleteUser = async (req, res) => {
     try {
+        if (!req.user) {
+            return res.status(401).json({
+                success: false,
+                error: 'Authentication required'
+            });
+        }
         const { id } = req.params;
         if (id === req.user.id) {
             res.status(400).json({
