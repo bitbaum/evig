@@ -12,7 +12,7 @@
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15+-blue)](https://www.postgresql.org/)
 [![Docker](https://img.shields.io/badge/Docker-Ready-blue)](https://www.docker.com/)
 
-[Website](https://revamp-it.ch) • [Contribute](#contributing) • [Documentation](#documentation) • [Report Bug](https://github.com/your-org/revampit/issues)
+[Website](https://revamp-it.ch) • [Contribute](#contributing) • [Documentation](#documentation) • [Report Bug](https://github.com/g-but/revampit/issues)
 
 </div>
 
@@ -59,7 +59,7 @@ RevampIT is a Swiss non-profit organization dedicated to **sustainable technolog
 
 ```bash
 # Clone the repository
-git clone https://github.com/your-org/revampit.git
+git clone https://github.com/g-but/revampit.git
 cd revampit
 
 # Install frontend dependencies
@@ -163,10 +163,10 @@ We welcome contributions from developers, designers, translators, and anyone pas
 ## 📚 Documentation
 
 - [Installation Guide](docs/installation.md)
-- [API Documentation](docs/api.md)
-- [Development Guide](docs/development.md)
+- [System Integration](docs/system-integration.md)
+- [Migration Guide](docs/migration.md)
 - [Deployment Guide](docs/deployment.md)
-- [CMS User Guide](docs/cms-guide.md)
+- [CMS Solution](docs/cms-solution.md)
 - [Contributing Guidelines](CONTRIBUTING.md)
 
 ## 🗺️ Roadmap
@@ -190,8 +190,8 @@ We welcome contributions from developers, designers, translators, and anyone pas
 
 ### Get Help
 - 📧 **Email**: info@revamp-it.ch
-- 🐛 **Issues**: [GitHub Issues](https://github.com/your-org/revampit/issues)
-- 💬 **Discussions**: [GitHub Discussions](https://github.com/your-org/revampit/discussions)
+- 🐛 **Issues**: [GitHub Issues](https://github.com/g-but/revampit/issues)
+- 💬 **Discussions**: [GitHub Discussions](https://github.com/g-but/revampit/discussions)
 
 ### Visit Us
 **RevampIT Headquarters**  

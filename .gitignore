@@ -69,7 +69,35 @@ Thumbs.db
 .idea/
 *.swp
 *.swo
+.cursor/
+.claude/
 
 # docker (if not using docker deployment)
 Dockerfile.dev
 docker-compose.dev.yml
+
+# Database files and uploads
+cms-api/uploads/*
+!cms-api/uploads/.gitkeep
+*.sqlite
+*.db
+
+# Build artifacts and caches
+dist/
+build/
+.cache/
+.parcel-cache/
+
+# Logs
+logs/
+*.log
+
+# Runtime data
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# Archive and legacy files
+archive/
+legacy/
