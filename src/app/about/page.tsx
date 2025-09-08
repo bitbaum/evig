@@ -1,17 +1,9 @@
 import { Metadata } from 'next'
 import Image from 'next/image'
 import { HeroBanner } from '@/components/ui/hero-banner'
-import strapi from '@/lib/strapi'
+import { staticPagesApi, getImageUrl } from '@/lib/cms-api'
 import RichTextRenderer from '@/components/ui/rich-text-renderer'
 import HardcodedAboutPage from './hardcoded-content'
-
-const getImageUrl = (image: any) => {
-  if (!image?.data?.attributes?.url) {
-    return null;
-  }
-  const url = image.data.attributes.url;
-  return url.startsWith('http') ? url : `${process.env.STRAPI_URL || 'http://localhost:1337'}${url}`;
-};
 
 // Component Map
 const components = {
@@ -102,14 +94,45 @@ const components = {
 };
 
 export async function generateMetadata(): Promise<Metadata> {
-  // Use static metadata during build to avoid Strapi connection issues
+  try {
+    const response = await staticPagesApi.getBySlug('about');
+
+    if (response.success && response.data) {
+      const page = response.data;
+      return {
+        title: page.seo_title || page.title,
+        description: page.seo_description || 'Learn about our mission to extend the life of IT devices.',
+      };
+    }
+  } catch (error) {
+    console.error('Error fetching metadata from CMS API:', error);
+  }
+
+  // Fallback metadata
   return {
     title: 'About Us - RevampIT',
     description: 'Learn about our mission to extend the life of IT devices and promote sustainable computing practices.',
   };
 }
 
-export default function AboutPage() {
-  // Use hardcoded content during build to avoid Strapi connection issues
-  return <HardcodedAboutPage />;
+export default async function AboutPage() {
+  try {
+    // Fetch About page content from CMS API
+    const response = await staticPagesApi.getBySlug('about');
+
+    if (response.success && response.data) {
+      const page = response.data;
+
+      // For now, return hardcoded content if we have the page
+      // In the future, we can implement dynamic sections
+      return <HardcodedAboutPage />;
+    }
+
+    // Fallback to hardcoded content if CMS content not found
+    console.warn('About page content not found in CMS API, using fallback');
+    return <HardcodedAboutPage />;
+  } catch (error) {
+    console.error('Error fetching About page from CMS API:', error);
+    return <HardcodedAboutPage />;
+  }
 } 

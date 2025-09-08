@@ -139,4 +139,4 @@ export default function HardcodedAboutPage() {
       </section>
     </main>
   )
-} 
+}

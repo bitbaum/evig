@@ -106,7 +106,10 @@ const topics = [
   }
 ]
 
-export default function BlogPage() {
+export default async function BlogPage() {
+  // Fetch blog posts from Strapi
+  const posts = await getBlogPosts();
+
   return (
     <main className="min-h-screen bg-gray-50">
       {/* Hero Section */}
@@ -118,8 +121,15 @@ export default function BlogPage() {
               RevampIt Blog
             </h1>
             <p className="text-xl text-green-100 max-w-2xl">
-              Bald verfügbar: Ein Raum für die Erforschung von Nachhaltigkeit, Open Source und der Kunst, Technologie ein zweites Leben zu geben.
+              Entdecken Sie unsere Artikel über Nachhaltigkeit, Open Source und der Kunst, Technologie ein zweites Leben zu geben.
             </p>
+            <div className="mt-6 text-green-200">
+              {posts.length > 0 ? (
+                <span>{posts.length} Artikel verfügbar</span>
+              ) : (
+                <span>Fügen Sie Ihre ersten Artikel in Strapi hinzu!</span>
+              )}
+            </div>
           </div>
         </div>
       </div>
@@ -173,28 +183,113 @@ export default function BlogPage() {
         </div>
       </div>
 
-      {/* Coming Soon Section */}
-      <div className="container mx-auto px-4 py-16 max-w-4xl">
+      {/* Blog Posts Section */}
+      <div className="container mx-auto px-4 py-16 max-w-6xl">
+        {posts.length === 0 ? (
         <div className="text-center">
           <div className="inline-block px-4 py-2 bg-green-100 text-green-800 rounded-full text-sm font-medium mb-6">
-            Bald verfügbar
+              Keine Artikel gefunden
           </div>
           <h2 className="text-3xl font-bold text-gray-900 mb-4">
-            Begleiten Sie unsere Reise
+              Fügen Sie Ihre ersten Blog-Artikel hinzu!
           </h2>
           <p className="text-gray-600 max-w-2xl mx-auto mb-8">
-            Wir arbeiten daran, Ihnen aufschlussreiche Inhalte über nachhaltige Technologie, Open-Source-Lösungen und innovative Wege zur Reduzierung von Elektroschrott zu bringen. Bleiben Sie dran für unsere Einführung!
+              Verwenden Sie Strapi Admin Panel, um Ihre ersten Artikel zu erstellen. Gehen Sie zu Content Manager → Blog Posts → Add new entry.
           </p>
           <Link 
-            href="/contact"
+              href="/admin"
+              target="_blank"
             className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-green-600 hover:bg-green-700 transition-colors"
           >
-            Kontakt aufnehmen
+              Strapi Admin öffnen
             <svg className="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+              </svg>
+            </Link>
+          </div>
+        ) : (
+          <>
+            <div className="flex justify-between items-center mb-12">
+              <h2 className="text-3xl font-bold text-gray-900">
+                Aktuelle Artikel
+              </h2>
+              <Link
+                href="/admin"
+                target="_blank"
+                className="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 transition-colors"
+              >
+                Admin Panel
+                <svg className="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                </svg>
+              </Link>
+            </div>
+
+            <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+              {posts.map((post) => (
+                <article key={post.id} className="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow border border-gray-100">
+                  {post.featuredImage && (
+                    <div className="aspect-video overflow-hidden">
+                      <img
+                        src={getStrapiMediaURL(post.featuredImage)}
+                        alt={post.title}
+                        className="w-full h-full object-cover hover:scale-105 transition-transform"
+                      />
+                    </div>
+                  )}
+
+                  <div className="p-6">
+                    <h3 className="text-xl font-semibold text-gray-900 mb-3 line-clamp-2">
+                      <Link href={`/blog/${post.slug}`} className="hover:text-green-600 transition-colors">
+                        {post.title}
+                      </Link>
+                    </h3>
+
+                    {post.excerpt && (
+                      <p className="text-gray-600 mb-4 line-clamp-3">
+                        {post.excerpt}
+                      </p>
+                    )}
+
+                    <div className="flex items-center justify-between text-sm text-gray-500 mb-4">
+                      <div className="flex items-center">
+                        <User className="w-4 h-4 mr-1" />
+                        <span>{post.author.username}</span>
+                      </div>
+                      <div className="flex items-center">
+                        <Calendar className="w-4 h-4 mr-1" />
+                        <span>{formatDate(post.publishedAt || post.createdAt)}</span>
+                      </div>
+                    </div>
+
+                    {post.categories.length > 0 && (
+                      <div className="flex flex-wrap gap-2 mb-4">
+                        {post.categories.slice(0, 2).map((category) => (
+                          <span
+                            key={category.id}
+                            className="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full font-medium"
+                          >
+                            {category.name}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+
+                    <Link
+                      href={`/blog/${post.slug}`}
+                      className="inline-flex items-center text-green-600 hover:text-green-700 font-medium"
+                    >
+                      Weiterlesen
+                      <svg className="ml-1 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
             </svg>
           </Link>
         </div>
+                </article>
+              ))}
+            </div>
+          </>
+        )}
       </div>
     </main>
   )

@@ -1,50 +1,84 @@
 version: '3.8'
 
 services:
+  # Strapi CMS
   strapi:
-    container_name: strapi
+    container_name: strapi_app
     build:
       context: ./strapi
       dockerfile: Dockerfile
-    image: strapi-app
+    image: revampit/strapi:latest
     restart: unless-stopped
     env_file: ./strapi/.env
     environment:
-      DATABASE_CLIENT: postgres
-      DATABASE_HOST: db
-      DATABASE_PORT: 5432
-      DATABASE_NAME: strapi
-      DATABASE_USERNAME: strapi
-      DATABASE_PASSWORD: strapi
-      NODE_ENV: development
+      NODE_ENV: ${NODE_ENV:-development}
     volumes:
-      - ./strapi:/opt/app
-      - ./strapi/uploads:/opt/app/public/uploads
+      - ./strapi:/opt/app:cached
+      - ./strapi/uploads:/opt/app/public/uploads:cached
+      - /opt/app/node_modules  # Avoid conflicts
     ports:
-      - "1337:1337"
+      - "${STRAPI_PORT:-1337}:1337"
     networks:
-      - strapi_network
+      - revampit_network
     depends_on:
-      - db
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:1337/_health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
 
+  # PostgreSQL Database
   db:
     container_name: strapi_db
-    image: postgres:14.5-alpine
+    image: postgres:15-alpine
     restart: unless-stopped
     environment:
-      POSTGRES_USER: strapi
-      POSTGRES_PASSWORD: strapi
-      POSTGRES_DB: strapi
+      POSTGRES_USER: ${DB_USER:-strapi}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-strapi}
+      POSTGRES_DB: ${DB_NAME:-strapi}
+      POSTGRES_INITDB_ARGS: "--encoding=UTF-8"
     volumes:
-      - strapi-data:/var/lib/postgresql/data
+      - strapi_db_data:/var/lib/postgresql/data
+      - ./postgres-init:/docker-entrypoint-initdb.d
     ports:
-      - "5434:5432"
+      - "${DB_PORT:-5434}:5432"
     networks:
-      - strapi_network
+      - revampit_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-strapi}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Next.js Frontend (for production)
+  frontend:
+    container_name: revampit_frontend
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    image: revampit/frontend:latest
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      NEXT_PUBLIC_STRAPI_URL: http://strapi:1337
+    ports:
+      - "${FRONTEND_PORT:-3000}:3000"
+    networks:
+      - revampit_network
+    depends_on:
+      - strapi
 
 volumes:
-  strapi-data:
+  strapi_db_data:
+    driver: local
+  strapi_uploads:
+    driver: local
 
 networks:
-  strapi_network:
-    driver: bridge 
+  revampit_network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.25.0.0/16 

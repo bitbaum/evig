@@ -1,0 +1,41 @@
+# Environment Configuration Template
+# Copy this file to .env and fill in your values
+
+# Application Environment
+NODE_ENV=development
+
+# Database Configuration
+DB_USER=strapi
+DB_PASSWORD=your_secure_password_here
+DB_NAME=strapi
+DB_PORT=5434
+
+# Strapi Configuration
+STRAPI_PORT=1337
+NEXT_PUBLIC_STRAPI_URL=http://localhost:1337
+
+# JWT Secrets (generate random strings)
+JWT_SECRET=your_jwt_secret_here
+ADMIN_JWT_SECRET=your_admin_jwt_secret_here
+API_TOKEN_SALT=your_api_token_salt_here
+
+# App Keys (generate random strings)
+APP_KEYS=app_key_1,app_key_2,app_key_3,app_key_4
+
+# File Upload Configuration
+UPLOAD_PROVIDER=local
+
+# Frontend Configuration
+FRONTEND_PORT=3000
+
+# Security
+ENCRYPTION_KEY=your_32_char_encryption_key_here
+
+# Optional: External Services
+# SMTP_HOST=your_smtp_host
+# SMTP_PORT=587
+# SMTP_USER=your_email
+# SMTP_PASS=your_email_password
+
+# Analytics (if needed)
+# GA_TRACKING_ID=your_google_analytics_id

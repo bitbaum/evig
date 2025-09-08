@@ -86,13 +86,15 @@ export interface StrapiStaticPage {
   attributes: {
     page_key: string;
     title: string;
-    content: string;
-    meta_title?: string;
-    meta_description?: string;
+    slug: string;
+    sections: any[]; // Dynamic zone components
+    page_type: string;
+    seo_title?: string;
+    seo_description?: string;
+    show_in_navigation: boolean;
     updated_by?: {
       data: StrapiUser;
     };
-    is_active: boolean;
     createdAt: string;
     updatedAt: string;
   };
@@ -181,8 +183,11 @@ export interface StaticPageContent {
   id: number;
   pageKey: string;
   title: string;
-  content: string;
-  metaTitle?: string;
-  metaDescription?: string;
+  slug: string;
+  sections: any[];
+  pageType: string;
+  seoTitle?: string;
+  seoDescription?: string;
+  showInNavigation: boolean;
   updatedAt: string;
 }
