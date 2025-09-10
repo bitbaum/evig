@@ -292,7 +292,7 @@ export const updateUser = [
 /**
  * Delete a user
  */
-export const deleteUser = async (req: Request, res: Response): Promise<void> => {
+export const deleteUser = async (req: Request, res: Response): Promise<Response | void> => {
   try {
     if (!req.user) {
       return res.status(401).json({
