@@ -175,7 +175,7 @@ export const createStaticPage = [
       }
 
       const { slug, title, content, seo_title, seo_description, meta_keywords, is_published = false }: CreateStaticPageData = req.body;
-      const userId = req.user.id;
+      const userId = req.user!.id;
 
       // Check if slug already exists
       const existingPage = await executeQuerySingle<StaticPage>(

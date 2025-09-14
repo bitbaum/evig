@@ -19,3 +19,4 @@ INSERT INTO migrations (name) VALUES ('001_initial_schema')
 ON CONFLICT (name) DO NOTHING;
 
 
+

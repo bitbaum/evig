@@ -150,3 +150,4 @@ INSERT INTO categories (id, slug, name, description, color, created_by, updated_
 ON CONFLICT (slug) DO NOTHING;
 
 
+

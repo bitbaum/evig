@@ -1,0 +1,402 @@
+/* AI Native CMS - Suggestion Widget Styles */
+
+/* CSS Variables for theming */
+:root {
+  --ai-cms-primary-color: #667eea;
+  --ai-cms-primary-hover: #5a67d8;
+  --ai-cms-success-color: #48bb78;
+  --ai-cms-error-color: #f56565;
+  --ai-cms-text-color: #2d3748;
+  --ai-cms-text-secondary: #4a5568;
+  --ai-cms-background: #ffffff;
+  --ai-cms-border-color: #e2e8f0;
+  --ai-cms-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --ai-cms-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --ai-cms-radius: 0.5rem;
+  --ai-cms-radius-full: 9999px;
+  --ai-cms-transition: all 0.2s ease-in-out;
+}
+
+/* Dark theme variables */
+.ai-cms-theme-dark {
+  --ai-cms-text-color: #f7fafc;
+  --ai-cms-text-secondary: #e2e8f0;
+  --ai-cms-background: #2d3748;
+  --ai-cms-border-color: #4a5568;
+}
+
+/* Auto theme - respects system preference */
+@media (prefers-color-scheme: dark) {
+  .ai-cms-theme-auto {
+    --ai-cms-text-color: #f7fafc;
+    --ai-cms-text-secondary: #e2e8f0;
+    --ai-cms-background: #2d3748;
+    --ai-cms-border-color: #4a5568;
+  }
+}
+
+/* Base reset for AI CMS components */
+.ai-cms-suggestion-button,
+.ai-cms-modal-overlay,
+.ai-cms-modal-content,
+.ai-cms-form,
+.ai-cms-button {
+  box-sizing: border-box;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+/* Floating suggestion button */
+.ai-cms-suggestion-button {
+  z-index: 1000;
+  background-color: var(--ai-cms-primary-color);
+  color: white;
+  border: none;
+  border-radius: var(--ai-cms-radius-full);
+  padding: 1rem;
+  box-shadow: var(--ai-cms-shadow-lg);
+  cursor: pointer;
+  transition: var(--ai-cms-transition);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  outline: none;
+}
+
+.ai-cms-suggestion-button:hover:not(.ai-cms-disabled) {
+  background-color: var(--ai-cms-primary-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 12px 20px -3px rgba(0, 0, 0, 0.15), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.ai-cms-suggestion-button:focus {
+  outline: 2px solid var(--ai-cms-primary-color);
+  outline-offset: 2px;
+}
+
+.ai-cms-suggestion-button:active:not(.ai-cms-disabled) {
+  transform: translateY(0);
+}
+
+.ai-cms-suggestion-button.ai-cms-disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.ai-cms-button-icon {
+  width: 1.5rem;
+  height: 1.5rem;
+  flex-shrink: 0;
+}
+
+.ai-cms-button-text {
+  white-space: nowrap;
+}
+
+/* Modal overlay */
+.ai-cms-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  z-index: 1001;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  animation: ai-cms-fade-in 0.2s ease-out;
+}
+
+/* Modal content */
+.ai-cms-modal-content {
+  background-color: var(--ai-cms-background);
+  color: var(--ai-cms-text-color);
+  border-radius: var(--ai-cms-radius);
+  box-shadow: var(--ai-cms-shadow-lg);
+  width: 100%;
+  max-width: 28rem;
+  max-height: 90vh;
+  overflow-y: auto;
+  animation: ai-cms-slide-in 0.3s ease-out;
+}
+
+/* Modal header */
+.ai-cms-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 1.5rem 1rem 1.5rem;
+  border-bottom: 1px solid var(--ai-cms-border-color);
+}
+
+.ai-cms-modal-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--ai-cms-text-color);
+  margin: 0;
+}
+
+.ai-cms-close-button {
+  background: none;
+  border: none;
+  color: var(--ai-cms-text-secondary);
+  cursor: pointer;
+  padding: 0.25rem;
+  border-radius: var(--ai-cms-radius);
+  transition: var(--ai-cms-transition);
+  outline: none;
+}
+
+.ai-cms-close-button:hover {
+  color: var(--ai-cms-text-color);
+  background-color: var(--ai-cms-border-color);
+}
+
+.ai-cms-close-button:focus {
+  outline: 2px solid var(--ai-cms-primary-color);
+  outline-offset: 2px;
+}
+
+/* Form styles */
+.ai-cms-form {
+  padding: 1.5rem;
+}
+
+.ai-cms-form-group {
+  margin-bottom: 1.5rem;
+}
+
+.ai-cms-form-group:last-of-type {
+  margin-bottom: 0;
+}
+
+.ai-cms-label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--ai-cms-text-color);
+  margin-bottom: 0.5rem;
+}
+
+.ai-cms-input,
+.ai-cms-textarea {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid var(--ai-cms-border-color);
+  border-radius: var(--ai-cms-radius);
+  font-size: 0.875rem;
+  color: var(--ai-cms-text-color);
+  background-color: var(--ai-cms-background);
+  transition: var(--ai-cms-transition);
+  outline: none;
+}
+
+.ai-cms-input:focus,
+.ai-cms-textarea:focus {
+  border-color: var(--ai-cms-primary-color);
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.ai-cms-textarea {
+  resize: vertical;
+  min-height: 6rem;
+  font-family: inherit;
+  line-height: 1.5;
+}
+
+.ai-cms-input:disabled,
+.ai-cms-textarea:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  background-color: var(--ai-cms-border-color);
+}
+
+/* Button styles */
+.ai-cms-button {
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--ai-cms-radius);
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--ai-cms-transition);
+  border: 1px solid transparent;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  outline: none;
+}
+
+.ai-cms-button:focus {
+  outline: 2px solid var(--ai-cms-primary-color);
+  outline-offset: 2px;
+}
+
+.ai-cms-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.ai-cms-button-primary {
+  background-color: var(--ai-cms-primary-color);
+  color: white;
+}
+
+.ai-cms-button-primary:hover:not(:disabled) {
+  background-color: var(--ai-cms-primary-hover);
+}
+
+.ai-cms-button-secondary {
+  background-color: transparent;
+  color: var(--ai-cms-text-secondary);
+  border-color: var(--ai-cms-border-color);
+}
+
+.ai-cms-button-secondary:hover:not(:disabled) {
+  background-color: var(--ai-cms-border-color);
+  color: var(--ai-cms-text-color);
+}
+
+/* Form actions */
+.ai-cms-form-actions {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: flex-end;
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--ai-cms-border-color);
+}
+
+/* Success message */
+.ai-cms-success-message {
+  padding: 2rem;
+  text-align: center;
+}
+
+.ai-cms-success-icon {
+  color: var(--ai-cms-success-color);
+  margin-bottom: 1rem;
+}
+
+.ai-cms-success-icon svg {
+  width: 4rem;
+  height: 4rem;
+  margin: 0 auto;
+}
+
+.ai-cms-success-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--ai-cms-text-color);
+  margin: 0 0 0.5rem 0;
+}
+
+.ai-cms-success-text {
+  color: var(--ai-cms-text-secondary);
+  margin: 0;
+}
+
+/* Error message */
+.ai-cms-error-message {
+  background-color: #fed7d7;
+  color: #c53030;
+  padding: 0.75rem;
+  border-radius: var(--ai-cms-radius);
+  font-size: 0.875rem;
+  margin-bottom: 1rem;
+  border: 1px solid #feb2b2;
+}
+
+.ai-cms-theme-dark .ai-cms-error-message {
+  background-color: #742a2a;
+  color: #fc8181;
+  border-color: #9b2c2c;
+}
+
+/* Animations */
+@keyframes ai-cms-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes ai-cms-slide-in {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* Responsive design */
+@media (max-width: 640px) {
+  .ai-cms-modal-overlay {
+    padding: 0.5rem;
+  }
+  
+  .ai-cms-modal-content {
+    max-width: none;
+  }
+  
+  .ai-cms-modal-header,
+  .ai-cms-form {
+    padding: 1rem;
+  }
+  
+  .ai-cms-form-actions {
+    flex-direction: column-reverse;
+  }
+  
+  .ai-cms-button {
+    width: 100%;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .ai-cms-suggestion-button {
+    border: 2px solid currentColor;
+  }
+  
+  .ai-cms-input,
+  .ai-cms-textarea {
+    border-width: 2px;
+  }
+  
+  .ai-cms-button {
+    border-width: 2px;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .ai-cms-suggestion-button,
+  .ai-cms-input,
+  .ai-cms-textarea,
+  .ai-cms-button,
+  .ai-cms-close-button {
+    transition: none;
+  }
+  
+  .ai-cms-modal-overlay,
+  .ai-cms-modal-content {
+    animation: none;
+  }
+}
+
+/* Focus visible for better keyboard navigation */
+.ai-cms-suggestion-button:focus-visible,
+.ai-cms-close-button:focus-visible,
+.ai-cms-button:focus-visible,
+.ai-cms-input:focus-visible,
+.ai-cms-textarea:focus-visible {
+  outline: 2px solid var(--ai-cms-primary-color);
+  outline-offset: 2px;
+}

@@ -184,7 +184,7 @@ export const login = [
 /**
  * Get current user profile
  */
-export const getProfile = async (req: Request, res: Response): Promise<void> => {
+export const getProfile = async (req: Request, res: Response): Promise<Response | void> => {
   try {
     if (!req.user) {
       return res.status(401).json({
@@ -228,7 +228,7 @@ export const updateProfile = [
   body('first_name').optional().trim().isLength({ min: 1, max: 100 }),
   body('last_name').optional().trim().isLength({ min: 1, max: 100 }),
 
-  async (req: Request, res: Response): Promise<void> => {
+  async (req: Request, res: Response): Promise<Response | void> => {
     try {
       if (!req.user) {
         return res.status(401).json({
@@ -302,7 +302,7 @@ export const changePassword = [
   body('current_password').exists(),
   body('new_password').isLength({ min: 8 }),
 
-  async (req: Request, res: Response): Promise<void> => {
+  async (req: Request, res: Response): Promise<Response | void> => {
     try {
       if (!req.user) {
         return res.status(401).json({
