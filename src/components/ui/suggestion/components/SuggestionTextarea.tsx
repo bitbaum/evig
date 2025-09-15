@@ -3,7 +3,7 @@
  * @fileoverview Isolated textarea component for better input handling and reusability
  */
 
-import { useCallback, forwardRef, useRef } from 'react'
+import { useCallback, forwardRef, useState, useEffect } from 'react'
 import { cn } from '@/lib/utils'
 import { SCOPE_CONFIG, VALIDATION, FeedbackScope, SelectedElement } from '../types'
 import { validateSuggestion, getCharacterCountColor } from '../utils'
@@ -26,17 +26,18 @@ export const SuggestionTextarea = forwardRef<HTMLTextAreaElement, SuggestionText
   error
 }, ref) => {
   const scopeConfig = SCOPE_CONFIG[feedbackScope]
+  const [localValue, setLocalValue] = useState(value)
 
-  // Use ref to store the latest onChange callback to prevent infinite re-renders
-  const onChangeRef = useRef(onChange)
-  onChangeRef.current = onChange
+  // Sync local value with prop value when it changes externally
+  useEffect(() => {
+    setLocalValue(value)
+  }, [value])
 
   const handleChange = useCallback((e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    // Use the event's target value directly to prevent React state conflicts
     const newValue = e.target.value
-    // Call the latest onChange callback through ref
-    onChangeRef.current(newValue)
-  }, [])
+    setLocalValue(newValue)
+    onChange(newValue)
+  }, [onChange])
 
   const getPlaceholder = () => {
     switch (feedbackScope) {
@@ -54,7 +55,7 @@ export const SuggestionTextarea = forwardRef<HTMLTextAreaElement, SuggestionText
   }
 
   const isDisabled = disabled || (feedbackScope === 'element' && selectedElements.length === 0)
-  const validationError = value ? validateSuggestion(value) : null
+  const validationError = localValue ? validateSuggestion(localValue) : null
   const showError = error || validationError
 
   return (
@@ -65,7 +66,7 @@ export const SuggestionTextarea = forwardRef<HTMLTextAreaElement, SuggestionText
       <textarea
         ref={ref}
         id="suggestion"
-        value={value}
+        value={localValue}
         onChange={handleChange}
         className={cn(
           "w-full px-2 py-1.5 border rounded focus:outline-none focus:ring-1 focus:border-transparent resize-none text-xs transition-colors",
@@ -86,9 +87,9 @@ export const SuggestionTextarea = forwardRef<HTMLTextAreaElement, SuggestionText
         )}
         <p className={cn(
           "text-xs ml-auto",
-          getCharacterCountColor(value.length)
+          getCharacterCountColor(localValue.length)
         )}>
-          {value.length}/{VALIDATION.MAX_LENGTH_UI}
+          {localValue.length}/{VALIDATION.MAX_LENGTH_UI}
         </p>
       </div>
       {showError && (
