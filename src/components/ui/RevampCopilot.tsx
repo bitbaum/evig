@@ -4,7 +4,7 @@ import { useState, useRef, useEffect } from 'react'
 import { Button } from './button'
 import { cn } from '@/lib/utils'
 import { ChevronDown, MessageCircle, X, Send, Bot, ArrowRight, ExternalLink, Sparkles } from 'lucide-react'
-import { chatbotEngine } from '@/lib/chatbot-engine'
+import { modernChatbotEngine } from '@/lib/chatbot/ModernChatbotEngine'
 import { detectLanguage, getWelcomeMessage, getMessage, getContextualSuggestions, type Language } from '@/lib/chatbot-language'
 
 interface ChatMessage {
@@ -46,13 +46,15 @@ export default function RevampCopilot() {
   useEffect(() => {
     if (messages.length === 0) {
       const context = getCurrentPageContext()
+      const welcomeResponse = modernChatbotEngine.getWelcomeMessage(context.page, currentLanguage)
+
       setMessages([{
         id: '1',
         type: 'assistant',
-        content: getWelcomeMessage(context.page, currentLanguage),
+        content: welcomeResponse.content,
         timestamp: new Date(),
-        suggestions: getContextualSuggestions(context.page, currentLanguage),
-        confidence: 1.0
+        suggestions: welcomeResponse.suggestions,
+        confidence: welcomeResponse.confidence
       }])
     }
   }, [messages.length, currentLanguage])
@@ -96,12 +98,29 @@ export default function RevampCopilot() {
       const conversationContext = {
         currentPage: context.page,
         userHistory: messages.slice(-5).map(m => m.content),
-        language: detectedLanguage
+        language: detectedLanguage,
+        timeOfDay: new Date().getHours()
       }
 
-      // Use the intelligent chatbot engine
-      const response = await chatbotEngine.processMessage(trimmedInput, conversationContext)
-      
+      // Handle special commands first
+      if (trimmedInput.startsWith('/')) {
+        const response = modernChatbotEngine.handleCommand(trimmedInput, conversationContext)
+        const assistantMessage: ChatMessage = {
+          id: (Date.now() + 1).toString(),
+          type: 'assistant',
+          content: response.content,
+          timestamp: new Date(),
+          suggestions: response.suggestions,
+          confidence: response.confidence
+        }
+        setMessages(prev => [...prev, assistantMessage])
+        setIsLoading(false)
+        return
+      }
+
+      // Use the modern intelligent chatbot engine
+      const response = await modernChatbotEngine.processMessage(trimmedInput, conversationContext)
+
       const assistantMessage: ChatMessage = {
         id: (Date.now() + 1).toString(),
         type: 'assistant',
@@ -290,7 +309,11 @@ export default function RevampCopilot() {
                     value={inputValue}
                     onChange={(e) => setInputValue(e.target.value)}
                     onKeyDown={handleKeyDown}
-                    placeholder={getMessage('placeholder', currentLanguage)}
+                    placeholder={
+                      currentLanguage === 'de' ?
+                        'Fragen Sie mich nach Services, Shop, Navigation... oder /help für Befehle' :
+                        'Ask me about services, shop, navigation... or /help for commands'
+                    }
                     className="flex-1 px-4 py-2.5 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 text-sm transition-colors"
                     disabled={isLoading}
                   />
