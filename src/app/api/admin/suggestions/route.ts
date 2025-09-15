@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { requireAdminAuth } from '@/lib/admin-auth'
+import { requireAdminAuth, AuthenticatedNextRequest } from '@/lib/admin-auth'
 import { getSuggestions, updateSuggestionStatus, generateAIInstructions, getSuggestionStats } from '@/lib/suggestions'
 import { SuggestionFilters, SuggestionStatus } from '@/types/suggestion'
 
-async function handler(request: NextRequest) {
+async function handler(request: AuthenticatedNextRequest) {
   const { searchParams } = new URL(request.url)
   const method = request.method
 

@@ -96,7 +96,7 @@ async function apiRequest<T>(
 
   // Add authorization header if token exists
   if (REBOOT_CONTENT_TOKEN) {
-    headers.Authorization = `Bearer ${REBOOT_CONTENT_TOKEN}`;
+    (headers as Record<string, string>).Authorization = `Bearer ${REBOOT_CONTENT_TOKEN}`;
   }
 
   try {

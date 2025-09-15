@@ -200,14 +200,14 @@ export default function RevampCopilot() {
               <button
                 onClick={() => setIsMinimized(!isMinimized)}
                 className="p-1.5 hover:bg-gray-100 rounded-full text-gray-500 hover:text-gray-700 transition-colors"
-                aria-label={isMinimized ? getMessage('buttons.maximize', currentLanguage) : getMessage('buttons.minimize', currentLanguage)}
+                aria-label={isMinimized ? getMessage('buttons', currentLanguage).maximize : getMessage('buttons', currentLanguage).minimize}
               >
                 <ChevronDown className={cn("w-4 h-4 transition-transform", isMinimized && "rotate-180")} />
               </button>
               <button
                 onClick={() => setIsOpen(false)}
                 className="p-1.5 hover:bg-gray-100 rounded-full text-gray-500 hover:text-gray-700 transition-colors"
-                aria-label={getMessage('buttons.close', currentLanguage)}
+                aria-label={getMessage('buttons', currentLanguage).close}
               >
                 <X className="w-4 h-4" />
               </button>

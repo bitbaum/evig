@@ -285,7 +285,7 @@ This appears to be a content change. Look for:
 **Estimated time:** 2-5 minutes`
   }
 
-  return templates[suggestion.category] || templates[SuggestionCategory.VISUAL_STYLING]
+  return templates[suggestion.category as keyof typeof templates] || templates[SuggestionCategory.VISUAL_STYLING]
 }
 
 async function generateAdvancedInstructions(suggestion: Suggestion): Promise<string> {

@@ -1,5 +1,6 @@
 import { serialize, parse } from 'cookie'
 import jwt from 'jsonwebtoken'
+import { NextRequest, NextResponse } from 'next/server'
 
 const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-change-in-production'
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'admin123'
@@ -62,24 +63,30 @@ export function clearAuthCookie(): string {
   })
 }
 
-// Middleware function for API routes
-export function requireAdminAuth(handler: Function) {
-  return async (req: any, res: any) => {
-    const token = getTokenFromCookies(req.headers.cookie)
-    
+// Extended NextRequest interface
+export interface AuthenticatedNextRequest extends NextRequest {
+  adminUser: AdminUser
+}
+
+// Middleware function for App Router API routes
+export function requireAdminAuth(handler: (request: AuthenticatedNextRequest) => Promise<NextResponse>) {
+  return async (request: NextRequest) => {
+    const token = getTokenFromCookies(request.headers.get('cookie') || undefined)
+
     if (!token) {
-      return res.status(401).json({ error: 'No authentication token' })
+      return NextResponse.json({ error: 'No authentication token' }, { status: 401 })
     }
 
     const adminUser = verifyAdminToken(token)
-    
+
     if (!adminUser) {
-      return res.status(401).json({ error: 'Invalid authentication token' })
+      return NextResponse.json({ error: 'Invalid authentication token' }, { status: 401 })
     }
 
     // Add admin user to request
-    req.adminUser = adminUser
-    
-    return handler(req, res)
+    const authenticatedRequest = request as AuthenticatedNextRequest
+    authenticatedRequest.adminUser = adminUser
+
+    return handler(authenticatedRequest)
   }
 }
