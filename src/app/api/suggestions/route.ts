@@ -218,7 +218,10 @@ Copy the above prompt and use it with your AI development agent.`
 
     const mailOptions = {
       from: process.env.EMAIL_FROM || 'noreply@revamp-it.ch',
-      to: 'georgy.butaev@revamp-it.ch',
+      to: [
+        'georgy.butaev@revamp-it.ch',
+        'butaeff@gmail.com'
+      ],
       subject: `📝 RevampIT Verbesserungsvorschlag - ${suggestion.pageTitle || suggestion.page}`,
       html: emailHtml,
       text: `
@@ -265,7 +268,7 @@ TECHNISCHE DETAILS:
     console.log(`Kontakt: ${suggestion.contact || 'Anonym'}`)
     console.log(`IP: ${suggestion.ip}`)
     console.log(`Vorschlag: ${suggestion.suggestion}`)
-    console.log(`E-Mail an: georgy.butaev@revamp-it.ch`)
+    console.log(`E-Mail an: georgy.butaev@revamp-it.ch, butaeff@gmail.com`)
     console.log('===============================')
 
     // Send email

@@ -1,11 +1,13 @@
 'use client'
 
 import { ReactNode } from 'react'
+import dynamic from 'next/dynamic'
 import { Header } from './Header'
 import Footer from './Footer'
-import SuggestionButton from '@/components/ui/SuggestionButton'
-import RevampCopilot from '@/components/ui/RevampCopilot'
-import { SuggestionProvider } from '@/contexts/SuggestionContext'
+
+const RevampCopilot = dynamic(() => import('@/components/ui/RevampCopilot'), { ssr: false })
+// Cleaned: use the refactored SuggestionButton (renamed to canonical path)
+const SuggestionButton = dynamic(() => import('@/components/ui/SuggestionButton'), { ssr: false })
 
 interface MainLayoutProps {
   children: ReactNode
@@ -13,7 +15,6 @@ interface MainLayoutProps {
 
 export default function MainLayout({ children }: MainLayoutProps) {
   return (
-    <SuggestionProvider>
       <div className="min-h-screen bg-gradient-to-b from-white to-gray-50">
         <Header />
         
@@ -29,6 +30,5 @@ export default function MainLayout({ children }: MainLayoutProps) {
         {/* Page Improvement Suggestions - Right Side (Upper Third) */}
         <SuggestionButton />
       </div>
-    </SuggestionProvider>
   )
 } 

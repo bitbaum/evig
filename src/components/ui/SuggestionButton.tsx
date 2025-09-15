@@ -1,280 +1,112 @@
+/**
+ * Refactored SuggestionButton Component
+ * @fileoverview Modular, maintainable suggestion system with proper separation of concerns
+ */
+
 'use client'
 
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { Button } from './button'
 import { cn } from '@/lib/utils'
-import { Edit3, X, ChevronLeft, ChevronRight, Brain, Info, ExternalLink, Sparkles } from 'lucide-react'
+import { Edit3, X, Info } from 'lucide-react'
 import { useSuggestionContext } from '@/contexts/SuggestionContext'
 import Link from 'next/link'
 
-interface SelectedElement {
-  element: Element
-  elementType: string
-  elementText: string
-  selector: string
-}
-
-interface SuggestionFormData {
-  suggestion: string
-  contact?: string
-  selectedElements?: SelectedElement[]
-}
-
-type FeedbackScope = 'page' | 'element' | 'site'
-
-const CONTEXTUAL_SUGGESTIONS = {
-  site: ["Navigation verbessern", "Design modernisieren", "Performance optimieren", "Mobile verbessern"],
-  page: ["Details hinzufügen", "Link reparieren", "Layout verbessern", "Inhalt aktualisieren"],
-  element: (count: number) => count > 0 ? [
-    "Besser sichtbar machen",
-    "Neu positionieren", 
-    "Text ändern",
-    "Entfernen"
-  ] : ["Element auswählen"]
-} as const
-
-// Utility functions for cleaner code
-const clearSelectedElements = () => {
-  document.querySelectorAll('.suggestion-selected-element').forEach(el => {
-    el.classList.remove('suggestion-selected-element')
-  })
-}
+// Import modular components and hooks
+import { SuggestionTextarea, FeedbackScopeSelector, QuickSuggestions } from './suggestion/components'
+import { useSuggestionForm, useElementSelection } from './suggestion/hooks'
+import { FeedbackScope } from './suggestion/types'
 
 export default function SuggestionButton() {
   const { currentPage, isVisible } = useSuggestionContext()
   const [isExpanded, setIsExpanded] = useState(false)
-  const [isSubmitting, setIsSubmitting] = useState(false)
   const [feedbackScope, setFeedbackScope] = useState<FeedbackScope>('page')
-  const [isElementSelectionMode, setIsElementSelectionMode] = useState(false)
-  const [selectedElements, setSelectedElements] = useState<SelectedElement[]>([])
-  const [formData, setFormData] = useState<SuggestionFormData>({
-    suggestion: '',
-    contact: '',
-    selectedElements: []
-  })
   const [submitted, setSubmitted] = useState(false)
-  const [submitError, setSubmitError] = useState<string | null>(null)
+
   const panelRef = useRef<HTMLDivElement>(null)
   const textareaRef = useRef<HTMLTextAreaElement>(null)
   const closeButtonRef = useRef<HTMLButtonElement>(null)
-  const handleSubmitRef = useRef<((e: any) => Promise<void>) | null>(null)
+
+  // Custom hooks for better separation of concerns
+  const {
+    formData,
+    isSubmitting,
+    submitError,
+    updateSuggestion,
+    updateContact,
+    resetForm,
+    submitSuggestion,
+    setSubmitError
+  } = useSuggestionForm({
+    onSuccess: () => {
+      setSubmitted(true)
+      setTimeout(() => {
+        closePanelAndReset()
+      }, 2000)
+    }
+  })
+
+  const {
+    selectedElements,
+    isElementSelectionMode,
+    toggleElementSelection,
+    resetSelection,
+    setIsElementSelectionMode
+  } = useElementSelection({ panelRef })
 
   // Handle focus management when panel opens
   useEffect(() => {
-    if (isExpanded && !submitted) {
-      // Auto-focus textarea after panel opens
+    if (isExpanded && !submitted && feedbackScope !== 'element') {
       const timeoutId = setTimeout(() => {
-        if (textareaRef.current && feedbackScope !== 'element') {
-          textareaRef.current.focus()
-        }
+        textareaRef.current?.focus()
       }, 300)
       return () => clearTimeout(timeoutId)
     }
   }, [isExpanded, feedbackScope, submitted])
 
-  // Reset form when page changes (but not when just opening/closing)
+  // Reset form when page changes or panel closes
   useEffect(() => {
     if (!isExpanded) {
-      setFormData(prev => ({ ...prev, suggestion: '', contact: '' }))
+      resetForm()
       setSubmitted(false)
-      setSelectedElements([])
+      resetSelection()
       setFeedbackScope('page')
-      setIsElementSelectionMode(false)
       setSubmitError(null)
     }
-  }, [currentPage.path, isExpanded])
+  }, [currentPage.path, isExpanded, resetForm, resetSelection, setSubmitError])
 
-  // Component-specific utility functions - must be defined before use
+  // Component-specific utility functions
   const resetToPageScope = useCallback(() => {
     setFeedbackScope('page')
-    setSelectedElements([])
-    setIsElementSelectionMode(false)
-    clearSelectedElements()
-  }, [])
+    resetSelection()
+  }, [resetSelection])
 
   const closePanelAndReset = useCallback(() => {
     setIsExpanded(false)
     setIsElementSelectionMode(false)
-    setSelectedElements([])
+    resetSelection()
     setFeedbackScope('page')
     setSubmitError(null)
-    clearSelectedElements()
-  }, [])
+  }, [resetSelection, setSubmitError, setIsElementSelectionMode])
 
-  // Handle outside click to close and keyboard shortcuts
+  // Handle outside click to close
   const handleClickOutside = useCallback((event: MouseEvent) => {
-    // If in element selection mode, don't handle outside clicks
-    if (isElementSelectionMode) {
-      return
-    }
+    if (isElementSelectionMode) return
 
     if (panelRef.current && !panelRef.current.contains(event.target as Node)) {
       closePanelAndReset()
     }
   }, [isElementSelectionMode, closePanelAndReset])
 
-
-  // Handle element selection mode
-  useEffect(() => {
-    if (isElementSelectionMode) {
-
-      const handleElementClick = (event: MouseEvent) => {
-        const target = event.target as Element
-
-        // Check if the click is on the panel itself - if so, ignore it
-        if (panelRef.current?.contains(target)) {
-          return
-        }
-
-        // Check if the click is on the element selection overlay - if so, ignore it
-        const overlay = document.querySelector('[data-element-selection-overlay]')
-        if (overlay?.contains(target)) {
-          return
-        }
-
-        event.preventDefault()
-        event.stopPropagation()
-
-        // Check if element is already selected
-        const isAlreadySelected = selectedElements.some(selected => selected.element === target)
-
-        if (isAlreadySelected) {
-          // Deselect the element
-          setSelectedElements(prev => prev.filter(selected => selected.element !== target))
-          target.classList.remove('suggestion-selected-element')
-        } else {
-          // Select the element
-
-          // Extract element information
-          const elementType = target.tagName.toLowerCase()
-          const elementText = target.textContent?.substring(0, 100) || ''
-          const elementClasses = Array.from(target.classList).join(' ')
-          const elementId = target.id || ''
-
-          const newSelectedElement: SelectedElement = {
-            element: target,
-            elementType,
-            elementText,
-            selector: elementId ? `#${elementId}` : `.${elementClasses.split(' ')[0]}`
-          }
-
-          setSelectedElements(prev => [...prev, newSelectedElement])
-
-          // Add visual marker
-          target.classList.add('suggestion-selected-element')
-        }
-      }
-
-      const handleMouseOver = (event: MouseEvent) => {
-        const target = event.target as HTMLElement
-        if (target && !panelRef.current?.contains(target)) {
-          target.style.outline = '2px solid #10b981'
-          target.style.outlineOffset = '2px'
-        }
-      }
-
-      const handleMouseOut = (event: MouseEvent) => {
-        const target = event.target as HTMLElement
-        if (target) {
-          target.style.outline = ''
-          target.style.outlineOffset = ''
-        }
-      }
-
-      // Add a small delay to ensure the panel is rendered before attaching listeners
-      const timeoutId = setTimeout(() => {
-        document.addEventListener('click', handleElementClick, true)
-        document.addEventListener('mouseover', handleMouseOver)
-        document.addEventListener('mouseout', handleMouseOut)
-      }, 100)
-
-      return () => {
-        clearTimeout(timeoutId)
-        document.removeEventListener('click', handleElementClick, true)
-        document.removeEventListener('mouseover', handleMouseOver)
-        document.removeEventListener('mouseout', handleMouseOut)
-        // Clean up any remaining outlines
-        document.querySelectorAll('[style*="outline"]').forEach(el => {
-          const htmlEl = el as HTMLElement
-          htmlEl.style.outline = ''
-          htmlEl.style.outlineOffset = ''
-        })
-      }
+  // Form submission handler
+  const handleSubmit = useCallback(async () => {
+    const success = await submitSuggestion(feedbackScope, selectedElements)
+    if (success) {
+      setSubmitted(true)
     }
-  }, [isElementSelectionMode, selectedElements])
+  }, [submitSuggestion, feedbackScope, selectedElements])
 
-  const handleSubmit = useCallback(async (e: React.FormEvent) => {
-    e.preventDefault()
-    if (!formData.suggestion.trim()) return
-
-    setIsSubmitting(true)
-    setSubmitError(null)
-    
-    try {
-      const response = await fetch('/api/suggestions', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          suggestion: formData.suggestion,
-          contact: formData.contact,
-          page: currentPage.path,
-          url: typeof window !== 'undefined' ? window.location.href : '',
-          pageTitle: currentPage.title,
-          pageSection: currentPage.section,
-          feedbackScope,
-          selectedElements: selectedElements.map(el => ({
-            elementType: el.elementType,
-            elementText: el.elementText,
-            selector: el.selector
-          })),
-          timestamp: new Date().toISOString(),
-        }),
-      })
-
-      if (response.ok) {
-        setSubmitted(true)
-        setFormData(prev => ({ ...prev, suggestion: '', contact: '', selectedElements: [] }))
-        setTimeout(() => {
-          setIsExpanded(false)
-          setSubmitted(false)
-          setSelectedElements([])
-          setFeedbackScope('page')
-          setIsElementSelectionMode(false)
-        }, 2000)
-      } else {
-        const errorData = await response.json().catch(() => ({}))
-        setSubmitError(errorData.message || `Fehler beim Senden (${response.status})`)
-      }
-    } catch (error) {
-      console.error('Failed to submit suggestion:', error)
-      setSubmitError('Netzwerkfehler. Bitte versuchen Sie es später erneut.')
-    } finally {
-      setIsSubmitting(false)
-    }
-  }, [formData.suggestion, formData.contact, currentPage.path, currentPage.title, currentPage.section, feedbackScope, selectedElements])
-
-  // Update handleSubmit ref
-  useEffect(() => {
-    handleSubmitRef.current = handleSubmit
-  }, [handleSubmit])
-
-  // Memoized handlers to prevent unnecessary re-renders
-  const handleSuggestionChange = useCallback((e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    const newValue = e.target.value
-    setFormData(prev => ({ ...prev, suggestion: newValue }))
-  }, [])
-
-  const handleContactChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    const newValue = e.target.value
-    setFormData(prev => ({ ...prev, contact: newValue }))
-  }, [])
-
-  const handleQuickSuggestion = useCallback((suggestion: string) => {
-    setFormData(prev => ({ ...prev, suggestion }))
-  }, [])
-
+  // Handle keyboard shortcuts
   const handleKeyDown = useCallback((event: KeyboardEvent) => {
     if (event.key === 'Escape') {
       closePanelAndReset()
@@ -283,10 +115,10 @@ export default function SuggestionButton() {
     if (event.key === 'Enter' && event.ctrlKey && isExpanded && !isElementSelectionMode) {
       event.preventDefault()
       if (formData.suggestion.trim() && !(feedbackScope === 'element' && selectedElements.length === 0)) {
-        handleSubmitRef.current?.(event as any)
+        handleSubmit()
       }
     }
-  }, [isExpanded, isElementSelectionMode, formData.suggestion, feedbackScope, selectedElements, closePanelAndReset, handleSubmitRef])
+  }, [isExpanded, isElementSelectionMode, formData.suggestion, feedbackScope, selectedElements, closePanelAndReset, handleSubmit])
 
   useEffect(() => {
     if (isExpanded) {
@@ -300,120 +132,6 @@ export default function SuggestionButton() {
   }, [isExpanded, handleClickOutside, handleKeyDown])
 
   if (!isVisible) return null
-
-  // Feedback scope selector component - Compact version
-  const FeedbackScopeSelector = () => (
-    <div className="mb-2">
-      <h4 className="text-sm font-medium text-gray-700 mb-1.5">Was möchten Sie verbessern?</h4>
-      <div className="flex gap-1">
-        <button
-          type="button"
-          onClick={(e) => {
-            e.preventDefault()
-            e.stopPropagation()
-            if (feedbackScope !== 'site') {
-              setFeedbackScope('site')
-              setSelectedElements([])
-              setIsElementSelectionMode(false)
-              clearSelectedElements()
-            }
-          }}
-          className={cn(
-            "flex-1 p-1.5 rounded-md border transition-all duration-200 text-center text-xs",
-            feedbackScope === 'site'
-              ? "border-purple-500 bg-purple-50 text-purple-900 font-medium"
-              : "border-gray-200 bg-white text-gray-700 hover:border-purple-300 hover:bg-purple-25"
-          )}
-        >
-          <div className="font-medium">Website</div>
-        </button>
-
-        <button
-          type="button"
-          onClick={(e) => {
-            e.preventDefault()
-            e.stopPropagation()
-            if (feedbackScope !== 'page') {
-              resetToPageScope()
-            }
-          }}
-          className={cn(
-            "flex-1 p-1.5 rounded-md border transition-all duration-200 text-center text-xs",
-            feedbackScope === 'page'
-              ? "border-green-500 bg-green-50 text-green-900 font-medium"
-              : "border-gray-200 bg-white text-gray-700 hover:border-green-300 hover:bg-green-25"
-          )}
-        >
-          <div className="font-medium">Diese Seite</div>
-        </button>
-
-        <button
-          type="button"
-          onClick={(e) => {
-            e.preventDefault()
-            e.stopPropagation()
-            if (feedbackScope !== 'element') {
-              setFeedbackScope('element')
-              setIsElementSelectionMode(true)
-              setSelectedElements([])
-              clearSelectedElements()
-            } else {
-              // Toggle element selection mode
-              setIsElementSelectionMode(!isElementSelectionMode)
-            }
-          }}
-          className={cn(
-            "flex-1 p-1.5 rounded-md border transition-all duration-200 text-center text-xs",
-            feedbackScope === 'element'
-              ? "border-blue-500 bg-blue-50 text-blue-900 font-medium"
-              : "border-gray-200 bg-white text-gray-700 hover:border-blue-300 hover:bg-blue-25"
-          )}
-        >
-          <div className="font-medium">Element</div>
-          {selectedElements.length > 0 && (
-            <div className="text-xs mt-0.5 text-blue-600">{selectedElements.length}</div>
-          )}
-        </button>
-      </div>
-    </div>
-  )
-
-  // Quick suggestions component - now context-aware
-  const ContextualQuickSuggestions = () => {
-    const suggestions = feedbackScope === 'element' 
-      ? CONTEXTUAL_SUGGESTIONS.element(selectedElements.length)
-      : CONTEXTUAL_SUGGESTIONS[feedbackScope] || []
-
-    return (
-      <div className="mb-2">
-        <h4 className="text-xs font-medium text-gray-700 mb-1">
-          {feedbackScope === 'element' && selectedElements.length === 0
-            ? 'Element auswählen'
-            : 'Schnelle Ideen'
-          }:
-        </h4>
-        <div className="grid grid-cols-2 gap-0.5">
-          {suggestions.map((suggestion, idx) => (
-            <button
-              key={idx}
-              type="button"
-              onClick={() => handleQuickSuggestion(suggestion)}
-              className={cn(
-                "text-left py-1 px-1.5 text-xs bg-gray-50 hover:bg-green-50 border border-gray-200 hover:border-green-300 rounded transition-colors truncate",
-                feedbackScope === 'site' && "hover:bg-purple-50 hover:border-purple-300",
-                feedbackScope === 'element' && "hover:bg-blue-50 hover:border-blue-300"
-              )}
-              disabled={feedbackScope === 'element' && selectedElements.length === 0}
-              title={suggestion}
-            >
-              {suggestion}
-            </button>
-          ))}
-        </div>
-      </div>
-    )
-  }
-
 
   // Success message component
   const SuccessMessage = () => (
@@ -431,74 +149,44 @@ export default function SuggestionButton() {
     </div>
   )
 
-  // Form component - Compact version
+  // Form component
   const SuggestionForm = () => (
-    <form onSubmit={handleSubmit} className="space-y-2">
-      <FeedbackScopeSelector />
-      <ContextualQuickSuggestions />
+    <form onSubmit={(e) => { e.preventDefault(); handleSubmit(); }} className="space-y-2">
+      <FeedbackScopeSelector
+        feedbackScope={feedbackScope}
+        selectedElements={selectedElements}
+        onScopeChange={setFeedbackScope}
+        onElementSelectionToggle={toggleElementSelection}
+        onResetToPageScope={resetToPageScope}
+        isElementSelectionMode={isElementSelectionMode}
+      />
 
-      <div>
-        <label htmlFor="suggestion" className="block text-xs font-medium text-gray-700 mb-1">
-          Ihre Verbesserungsvorschlag *
-        </label>
-        <textarea
-          ref={textareaRef}
-          id="suggestion"
-          value={formData.suggestion}
-          onChange={handleSuggestionChange}
-          className={cn(
-            "w-full px-2 py-1.5 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:border-transparent resize-none text-xs transition-colors",
-            feedbackScope === 'site' && "focus:ring-purple-500",
-            feedbackScope === 'page' && "focus:ring-green-500",
-            feedbackScope === 'element' && "focus:ring-blue-500"
-          )}
-          rows={2}
-          maxLength={500}
-          placeholder={
-            feedbackScope === 'site'
-              ? "Idee für Website..."
-              : feedbackScope === 'page'
-                ? "Was soll verbessert werden?"
-                : selectedElements.length > 0
-                  ? `${selectedElements.length} Element${selectedElements.length > 1 ? 'e' : ''} ausgewählt - Verbesserungsvorschlag?`
-                  : "Element zuerst auswählen..."
-          }
-          required
-          disabled={feedbackScope === 'element' && selectedElements.length === 0}
-        />
-        <div className="flex justify-between items-center mt-0.5">
-          {feedbackScope === 'element' && selectedElements.length > 0 && (
-            <p className="text-xs text-blue-600">🎯 {selectedElements.length} Element{selectedElements.length > 1 ? 'e' : ''} ausgewählt</p>
-          )}
-          <p className={cn(
-            "text-xs ml-auto",
-            formData.suggestion.length > 450
-              ? "text-orange-600"
-              : formData.suggestion.length > 480
-                ? "text-red-600"
-                : "text-gray-500"
-          )}>
-            {formData.suggestion.length}/500
-          </p>
-        </div>
-      </div>
+      <QuickSuggestions
+        feedbackScope={feedbackScope}
+        selectedElements={selectedElements}
+        onQuickSuggestion={updateSuggestion}
+      />
+
+      <SuggestionTextarea
+        ref={textareaRef}
+        value={formData.suggestion}
+        onChange={updateSuggestion}
+        feedbackScope={feedbackScope}
+        selectedElements={selectedElements}
+        disabled={feedbackScope === 'element' && selectedElements.length === 0}
+        error={submitError}
+      />
 
       <div>
         <input
           type="text"
           id="contact"
           value={formData.contact || ''}
-          onChange={handleContactChange}
+          onChange={(e) => updateContact(e.target.value)}
           className="w-full px-2 py-1 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-green-500 focus:border-green-500 text-xs"
           placeholder="Name/E-Mail (optional)"
         />
       </div>
-
-      {submitError && (
-        <div className="text-red-600 text-xs bg-red-50 border border-red-200 rounded px-2 py-1">
-          {submitError}
-        </div>
-      )}
 
       <div className="flex space-x-1.5">
         <Button
@@ -517,11 +205,7 @@ export default function SuggestionButton() {
         <Button
           type="button"
           variant="outline"
-          onClick={(e) => {
-            e.preventDefault()
-            e.stopPropagation()
-            closePanelAndReset()
-          }}
+          onClick={closePanelAndReset}
           disabled={isSubmitting}
           className="px-2 py-1 text-xs rounded border-gray-300 hover:bg-gray-50"
         >
@@ -563,7 +247,7 @@ export default function SuggestionButton() {
         }
       `}</style>
 
-      {/* Element Selection Overlay - shown when in selection mode */}
+      {/* Element Selection Overlay */}
       {isElementSelectionMode && (
         <div
           data-element-selection-overlay
@@ -584,7 +268,6 @@ export default function SuggestionButton() {
             </div>
           </div>
 
-          {/* Selected elements counter */}
           {selectedElements.length > 0 && (
             <div className="absolute top-20 left-4 bg-green-600 text-white px-3 py-2 rounded-lg shadow-lg text-sm font-medium">
               ✅ {selectedElements.length} Element{selectedElements.length > 1 ? 'e' : ''} ausgewählt
@@ -593,10 +276,7 @@ export default function SuggestionButton() {
 
           <div className="absolute top-4 right-4 flex space-x-2">
             <button
-              onClick={() => {
-                setIsElementSelectionMode(false)
-                // Keep the selected elements
-              }}
+              onClick={() => setIsElementSelectionMode(false)}
               className="bg-green-600 text-white px-3 py-2 rounded-lg shadow-lg text-sm font-medium hover:bg-green-700 transition-colors"
             >
               ✅ Fertig ({selectedElements.length})
@@ -614,7 +294,7 @@ export default function SuggestionButton() {
         </div>
       )}
 
-      {/* Small Floating Button - only show when closed */}
+      {/* Floating Button */}
       {!isExpanded && !isElementSelectionMode && isVisible && (
         <div className="fixed right-4 top-1/2 z-50 -translate-y-1/2">
           <button
@@ -635,27 +315,19 @@ export default function SuggestionButton() {
             tabIndex={0}
           >
             <Edit3 className="w-5 h-5" />
-            {/* Pulse effect when element selection is active */}
-            {isElementSelectionMode && (
-              <div className="absolute inset-0 rounded-full bg-blue-400 animate-ping opacity-20"></div>
-            )}
           </button>
         </div>
       )}
 
-      {/* Backdrop for outside click closing - only when expanded */}
+      {/* Backdrop */}
       {isExpanded && (
         <div
           className="fixed inset-0 bg-black bg-opacity-25 z-35 cursor-pointer"
-          onClick={(e) => {
-            e.preventDefault()
-            e.stopPropagation()
-            closePanelAndReset()
-          }}
+          onClick={closePanelAndReset}
         />
       )}
 
-      {/* Expandable Side Panel - only render when expanded */}
+      {/* Side Panel */}
       {isExpanded && (
         <div className="fixed right-0 top-1/2 -translate-y-1/2 z-40">
           <div
@@ -664,6 +336,7 @@ export default function SuggestionButton() {
             aria-modal="true"
             aria-labelledby="suggestion-panel-title"
             aria-describedby="suggestion-panel-description"
+            data-suggestion-panel
             className={cn(
               "bg-white shadow-2xl border border-gray-200 w-80 sm:w-96 rounded-l-2xl overflow-hidden flex flex-col",
               "fixed right-0 top-1/2 -translate-y-1/2 max-h-[70vh] h-auto",
@@ -671,59 +344,53 @@ export default function SuggestionButton() {
             )}
             style={isElementSelectionMode ? { pointerEvents: 'auto' } : undefined}
           >
-          {/* Header */}
-          <div className="bg-gradient-to-r from-green-50 to-blue-50 border-b border-gray-200 px-4 py-3 flex-shrink-0">
-            <div className="flex justify-between items-center">
-              <div className="flex items-center space-x-2">
-                <Edit3 className="w-4 h-4 text-green-600" />
-                <h3 id="suggestion-panel-title" className="font-semibold text-gray-900 text-sm">Verbesserungen vorschlagen</h3>
-              </div>
-              <button
-                ref={closeButtonRef}
-                onClick={(e) => {
-                  e.preventDefault()
-                  e.stopPropagation()
-                  closePanelAndReset()
-                }}
-                className="text-gray-400 hover:text-gray-600 transition-colors p-1 hover:bg-gray-100 rounded-full"
-                aria-label="Panel schließen"
-                type="button"
-              >
-                <X className="w-4 h-4" />
-              </button>
-            </div>
-            <div id="suggestion-panel-description" className="mt-2 text-xs text-gray-600">
-              Aktuelle Seite: <span className="font-medium text-gray-900">
-                {currentPage.path === '/' ? 'Startseite' : currentPage.title || currentPage.path}
-              </span>
-            </div>
-          </div>
-
-          {/* Panel Content - Scrollable */}
-          <div className="flex-1 overflow-y-auto min-h-0">
-            <div className="p-4 pb-2">
-            {submitted ? (
-                <SuccessMessage />
-              ) : (
-                <SuggestionForm />
-              )}
-                  </div>
+            {/* Header */}
+            <div className="bg-gradient-to-r from-green-50 to-blue-50 border-b border-gray-200 px-4 py-3 flex-shrink-0">
+              <div className="flex justify-between items-center">
+                <div className="flex items-center space-x-2">
+                  <Edit3 className="w-4 h-4 text-green-600" />
+                  <h3 id="suggestion-panel-title" className="font-semibold text-gray-900 text-sm">
+                    Verbesserungen vorschlagen
+                  </h3>
                 </div>
+                <button
+                  ref={closeButtonRef}
+                  onClick={closePanelAndReset}
+                  className="text-gray-400 hover:text-gray-600 transition-colors p-1 hover:bg-gray-100 rounded-full"
+                  aria-label="Panel schließen"
+                  type="button"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+              <div id="suggestion-panel-description" className="mt-2 text-xs text-gray-600">
+                Aktuelle Seite: <span className="font-medium text-gray-900">
+                  {currentPage.path === '/' ? 'Startseite' : currentPage.title || currentPage.path}
+                </span>
+              </div>
+            </div>
 
-          {/* Footer with link */}
-          <div className="border-t border-gray-200 px-4 py-3 bg-gray-50 flex-shrink-0">
-            <Link
-              href="/revamp-ux#wie-funktioniert"
-              className="text-xs text-blue-600 hover:text-blue-800 underline flex items-center space-x-1 justify-center"
-            >
-              <Info className="w-3 h-3" />
-              <span>Wie funktioniert's?</span>
-            </Link>
+            {/* Panel Content */}
+            <div className="flex-1 overflow-y-auto min-h-0">
+              <div className="p-4 pb-2">
+                {submitted ? <SuccessMessage /> : <SuggestionForm />}
+              </div>
+            </div>
+
+            {/* Footer */}
+            <div className="border-t border-gray-200 px-4 py-3 bg-gray-50 flex-shrink-0">
+              <Link
+                href="/revamp-ux#wie-funktioniert"
+                className="text-xs text-blue-600 hover:text-blue-800 underline flex items-center space-x-1 justify-center"
+              >
+                <Info className="w-3 h-3" />
+                <span>Wie funktioniert's?</span>
+              </Link>
+            </div>
           </div>
         </div>
-      </div>
       )}
-
     </>
   )
 }
+
