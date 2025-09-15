@@ -18,10 +18,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <Providers>
-      <ConditionalMainLayout>
-        {children}
-      </ConditionalMainLayout>
-    </Providers>
+    <html lang="de">
+      <body className={inter.className}>
+        <Providers>
+          <ConditionalMainLayout>
+            {children}
+          </ConditionalMainLayout>
+        </Providers>
+      </body>
+    </html>
   );
 }
