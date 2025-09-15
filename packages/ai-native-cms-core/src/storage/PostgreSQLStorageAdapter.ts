@@ -55,7 +55,7 @@ export class PostgreSQLStorageAdapter implements StorageAdapter {
     try {
       await this.db.query('SELECT NOW()')
     } catch (error) {
-      throw new Error(`Failed to connect to PostgreSQL: ${error.message}`)
+      throw new Error(`Failed to connect to PostgreSQL: ${error instanceof Error ? error.message : String(error)}`)
     }
 
     // Create table if it doesn't exist
@@ -176,7 +176,7 @@ export class PostgreSQLStorageAdapter implements StorageAdapter {
     }
 
     const result = await this.db.query(query, values)
-    return result.rows.map(row => this.mapRowToSuggestion(row))
+    return result.rows.map((row: any) => this.mapRowToSuggestion(row))
   }
 
   async update(id: string, updates: Partial<Suggestion>): Promise<Suggestion> {
@@ -285,7 +285,7 @@ export class PostgreSQLStorageAdapter implements StorageAdapter {
       byPage[row.page] = parseInt(row.count)
     }
 
-    const recentActivity = recentActivityResult.rows.map(row => 
+    const recentActivity = recentActivityResult.rows.map((row: any) =>
       this.mapRowToSuggestion(row)
     )
 

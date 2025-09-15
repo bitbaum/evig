@@ -59,7 +59,7 @@ export async function GET(request: NextRequest) {
     const cookieHeader = request.headers.get('cookie')
     const { getTokenFromCookies, verifyAdminToken } = await import('@/lib/admin-auth')
     
-    const token = getTokenFromCookies(cookieHeader)
+    const token = getTokenFromCookies(cookieHeader || undefined)
     
     if (!token) {
       return NextResponse.json(

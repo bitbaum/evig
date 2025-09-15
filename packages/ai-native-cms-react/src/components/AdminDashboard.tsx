@@ -5,7 +5,7 @@ import {
   SuggestionFilters,
   SuggestionStats,
   AINativeCMS
-} from '@ai-native-cms/core'
+} from '../../../ai-native-cms-core/src'
 
 export interface AdminDashboardProps {
   cms: AINativeCMS

@@ -8,7 +8,7 @@ export function createStorageAdapter(config: AINativeCMSConfig['storage']): Stor
       return new MemoryStorageAdapter(config.config)
     
     case 'postgres':
-      return new PostgreSQLStorageAdapter(config.config)
+      return new PostgreSQLStorageAdapter(config.config as any)
     
     case 'mysql':
       throw new Error('MySQL adapter not yet implemented')
