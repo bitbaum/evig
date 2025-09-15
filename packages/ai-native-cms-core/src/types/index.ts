@@ -43,7 +43,7 @@ export interface SiteConfig {
   name: string
   domain: string
   framework: 'nextjs' | 'react' | 'vue' | 'vanilla' | 'other'
-  aiProvider: 'openai' | 'anthropic' | 'local' | 'custom'
+  aiProvider: 'openai' | 'anthropic' | 'local' | 'custom' | 'disabled'
   fileStructure?: FileStructureHint[]
   customPrompts?: Record<string, string>
 }
@@ -64,6 +64,8 @@ export interface PageContext {
 
 // Storage adapter interface
 export interface StorageAdapter {
+  init?(): Promise<void> // Optional init method
+  destroy?(): Promise<void> // Optional destroy method
   create(suggestion: SuggestionInput, ip: string): Promise<Suggestion>
   findById(id: string): Promise<Suggestion | null>
   findAll(filters?: SuggestionFilters): Promise<Suggestion[]>
@@ -90,6 +92,8 @@ export interface SuggestionStats {
 
 // Notification provider interface
 export interface NotificationProvider {
+  init?(): Promise<void> // Optional init method
+  destroy?(): Promise<void> // Optional destroy method
   name: string
   send(notification: NotificationPayload): Promise<boolean>
   configure(config: Record<string, any>): void
@@ -106,6 +110,8 @@ export interface NotificationPayload {
 
 // AI instruction generator interface
 export interface AIInstructionGenerator {
+  init?(): Promise<void> // Optional init method
+  destroy?(): Promise<void> // Optional destroy method
   name: string
   generate(context: AIInstructionContext): Promise<string>
   configure(config: Record<string, any>): void

@@ -67,7 +67,10 @@ export class AINativeCMS extends EventEmitter implements AINativeCMSCore {
       this.initialized = true
       this.emit('cms:initialized', { config: this.config })
     } catch (error) {
-      throw new Error(`Failed to initialize AINativeCMS: ${error.message}`)
+      if (error instanceof Error) {
+        throw new Error(`Failed to initialize AINativeCMS: ${error.message}`)
+      }
+      throw new Error(`Failed to initialize AINativeCMS: ${error}`)
     }
   }
 
@@ -100,7 +103,10 @@ export class AINativeCMS extends EventEmitter implements AINativeCMSCore {
 
       return suggestion
     } catch (error) {
-      throw new Error(`Failed to submit suggestion: ${error.message}`)
+      if (error instanceof Error) {
+        throw new Error(`Failed to submit suggestion: ${error.message}`)
+      }
+      throw new Error(`Failed to submit suggestion: ${error}`)
     }
   }
 
@@ -177,8 +183,9 @@ export class AINativeCMS extends EventEmitter implements AINativeCMSCore {
 
       return instructions
     } catch (error) {
-      this.emit('ai:generation_failed', { suggestionId: id, error })
-      throw new Error(`Failed to generate AI instructions: ${error.message}`)
+      const err = error instanceof Error ? error : new Error(String(error));
+      this.emit('ai:generation_failed', { suggestionId: id, error: err })
+      throw new Error(`Failed to generate AI instructions: ${err.message}`)
     }
   }
 
@@ -209,7 +216,8 @@ export class AINativeCMS extends EventEmitter implements AINativeCMSCore {
         const success = await provider.send(payload)
         this.emit('notification:sent', { provider: provider.name, payload, success })
       } catch (error) {
-        this.emit('notification:failed', { provider: provider.name, payload, error })
+        const err = error instanceof Error ? error : new Error(String(error));
+        this.emit('notification:failed', { provider: provider.name, payload, error: err })
       }
     }
   }

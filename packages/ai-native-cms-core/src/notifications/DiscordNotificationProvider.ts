@@ -1,6 +1,6 @@
 import { NotificationProvider, NotificationPayload } from '../types'
 
-interface DiscordConfig {
+export interface DiscordConfig {
   webhookUrl: string
   username?: string
   avatarUrl?: string

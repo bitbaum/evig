@@ -1,4 +1,5 @@
 // Main entry point for AI-Native CMS Core
+import { AINativeCMS } from './core/AINativeCMS'
 export { AINativeCMS } from './core/AINativeCMS'
 
 // Core types

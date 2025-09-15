@@ -1,6 +1,6 @@
 import { NotificationProvider, NotificationPayload } from '../types'
 
-interface EmailConfig {
+export interface EmailConfig {
   host: string
   port: number
   secure?: boolean
@@ -32,7 +32,7 @@ export class EmailNotificationProvider implements NotificationProvider {
       // Dynamic import to avoid requiring nodemailer as peer dependency
       const nodemailer = await import('nodemailer')
       
-      this.transporter = nodemailer.createTransporter({
+      this.transporter = nodemailer.createTransport({
         host: this.config.host,
         port: this.config.port,
         secure: this.config.secure || false,
@@ -42,10 +42,11 @@ export class EmailNotificationProvider implements NotificationProvider {
       // Verify connection
       await this.transporter.verify()
     } catch (error) {
-      if (error.code === 'MODULE_NOT_FOUND') {
+      const err = error instanceof Error ? error : new Error(String(error));
+      if ('code' in err && err.code === 'MODULE_NOT_FOUND') {
         throw new Error('nodemailer package is required for email notifications. Install it with: npm install nodemailer @types/nodemailer')
       }
-      throw new Error(`Failed to initialize email provider: ${error.message}`)
+      throw new Error(`Failed to initialize email provider: ${err.message}`)
     }
   }
 

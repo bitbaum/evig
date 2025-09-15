@@ -25,19 +25,21 @@ export async function comparePassword(password: string, hashedPassword: string):
  */
 export function generateToken(user: AuthToken): string {
   const secret = JWT_SECRET || 'fallback-secret-change-in-production';
-  const expiresIn = JWT_EXPIRES_IN || '24h';
+  const expiresIn = 24 * 60 * 60; // 24 hours in seconds
 
-  return jwt.sign(
-    {
-      id: user.id,
-      email: user.email,
-      first_name: user.first_name,
-      last_name: user.last_name,
-      role: user.role,
-    },
-    secret,
-    { expiresIn }
-  );
+  const payload = {
+    id: user.id,
+    email: user.email,
+    first_name: user.first_name,
+    last_name: user.last_name,
+    role: user.role,
+  };
+  const options = {
+    expiresIn,
+    algorithm: 'HS256' as const,
+  };
+
+  return jwt.sign(payload, secret, options);
 }
 
 /**

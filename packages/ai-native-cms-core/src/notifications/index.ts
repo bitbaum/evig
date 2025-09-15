@@ -1,9 +1,9 @@
 import { NotificationProvider, AINativeCMSConfig } from '../types'
 import { ConsoleNotificationProvider } from './ConsoleNotificationProvider'
-import { EmailNotificationProvider } from './EmailNotificationProvider'
-import { SlackNotificationProvider } from './SlackNotificationProvider'
-import { DiscordNotificationProvider } from './DiscordNotificationProvider'
-import { WebhookNotificationProvider } from './WebhookNotificationProvider'
+import { EmailNotificationProvider, EmailConfig } from './EmailNotificationProvider'
+import { SlackNotificationProvider, SlackConfig } from './SlackNotificationProvider'
+import { DiscordNotificationProvider, DiscordConfig } from './DiscordNotificationProvider'
+import { WebhookNotificationProvider, WebhookConfig } from './WebhookNotificationProvider'
 
 export function createNotificationProviders(config: AINativeCMSConfig['notifications']): NotificationProvider[] {
   const providers: NotificationProvider[] = []
@@ -21,19 +21,19 @@ export function createNotificationProviders(config: AINativeCMSConfig['notificat
         break
       
       case 'email':
-        provider = new EmailNotificationProvider(providerConfig.config)
+        provider = new EmailNotificationProvider(providerConfig.config as EmailConfig)
         break
       
       case 'slack':
-        provider = new SlackNotificationProvider(providerConfig.config)
+        provider = new SlackNotificationProvider(providerConfig.config as SlackConfig)
         break
       
       case 'discord':
-        provider = new DiscordNotificationProvider(providerConfig.config)
+        provider = new DiscordNotificationProvider(providerConfig.config as DiscordConfig)
         break
       
       case 'webhook':
-        provider = new WebhookNotificationProvider(providerConfig.config)
+        provider = new WebhookNotificationProvider(providerConfig.config as WebhookConfig)
         break
       
       case 'custom':

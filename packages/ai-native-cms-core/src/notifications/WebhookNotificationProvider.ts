@@ -1,6 +1,6 @@
 import { NotificationProvider, NotificationPayload } from '../types'
 
-interface WebhookConfig {
+export interface WebhookConfig {
   url: string
   method?: 'POST' | 'PUT' | 'PATCH'
   headers?: Record<string, string>
@@ -112,12 +112,12 @@ export class WebhookNotificationProvider implements NotificationProvider {
       return true
     } catch (error) {
       clearTimeout(timeoutId)
+      const err = error instanceof Error ? error : new Error(String(error));
       
-      if (error.name === 'AbortError') {
+      if (err.name === 'AbortError') {
         throw new Error(`Webhook timeout after ${this.config.timeout}ms`)
       }
-      
-      throw error
+      throw new Error(`Failed to send webhook: ${err.message}`)
     }
   }
 

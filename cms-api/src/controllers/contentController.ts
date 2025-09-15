@@ -175,7 +175,11 @@ export const createStaticPage = [
       }
 
       const { slug, title, content, seo_title, seo_description, meta_keywords, is_published = false }: CreateStaticPageData = req.body;
-      const userId = req.user!.id;
+      if (!req.user) {
+        res.status(401).json({ success: false, error: 'Unauthorized' });
+        return;
+      }
+      const userId = req.user.id;
 
       // Check if slug already exists
       const existingPage = await executeQuerySingle<StaticPage>(
@@ -242,6 +246,10 @@ export const updateStaticPage = [
 
       const { id } = req.params;
       const { slug, title, content, seo_title, seo_description, meta_keywords, is_published } = req.body;
+      if (!req.user) {
+        res.status(401).json({ success: false, error: 'Unauthorized' });
+        return;
+      }
       const userId = req.user.id;
 
       // Check if slug conflicts with another page
@@ -522,6 +530,10 @@ export const createBlogPost = [
         tags = [],
         is_published = false
       }: CreateBlogPostData = req.body;
+      if (!req.user) {
+        res.status(401).json({ success: false, error: 'Unauthorized' });
+        return;
+      }
       const userId = req.user.id;
 
       // Check if slug already exists
@@ -622,6 +634,10 @@ export const updateBlogPost = [
         tags,
         is_published
       } = req.body;
+      if (!req.user) {
+        res.status(401).json({ success: false, error: 'Unauthorized' });
+        return;
+      }
       const userId = req.user.id;
 
       // Check if slug conflicts with another post
@@ -816,6 +832,10 @@ export const createCategory = [
       }
 
       const { slug, name, description, color = '#6B7280' }: CreateCategoryData = req.body;
+      if (!req.user) {
+        res.status(401).json({ success: false, error: 'Unauthorized' });
+        return;
+      }
       const userId = req.user.id;
 
       // Check if slug already exists
@@ -881,6 +901,10 @@ export const updateCategory = [
 
       const { id } = req.params;
       const { slug, name, description, color, is_active } = req.body;
+      if (!req.user) {
+        res.status(401).json({ success: false, error: 'Unauthorized' });
+        return;
+      }
       const userId = req.user.id;
 
       // Check if slug conflicts with another category
@@ -950,7 +974,7 @@ export const deleteCategory = async (req: Request, res: Response): Promise<void>
       [id]
     );
 
-    if (postCount.count > 0) {
+    if (postCount && postCount.count > 0) {
       res.status(409).json({
         success: false,
         error: 'Cannot delete category with associated posts',

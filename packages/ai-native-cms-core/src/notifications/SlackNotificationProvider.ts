@@ -1,6 +1,6 @@
 import { NotificationProvider, NotificationPayload } from '../types'
 
-interface SlackConfig {
+export interface SlackConfig {
   webhookUrl: string
   channel?: string
   username?: string

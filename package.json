@@ -48,6 +48,7 @@
   "devDependencies": {
     "@playwright/test": "^1.55.0",
     "@types/node": "^20.11.24",
+    "@types/pg": "^8.15.5",
     "@types/react": "^18.2.61",
     "@types/react-dom": "^18.2.19",
     "autoprefixer": "^10.4.18",
