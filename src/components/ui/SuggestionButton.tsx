@@ -260,6 +260,21 @@ export default function SuggestionButton() {
     handleSubmitRef.current = handleSubmit
   }, [handleSubmit])
 
+  // Memoized handlers to prevent unnecessary re-renders
+  const handleSuggestionChange = useCallback((e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const newValue = e.target.value
+    setFormData(prev => ({ ...prev, suggestion: newValue }))
+  }, [])
+
+  const handleContactChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    const newValue = e.target.value
+    setFormData(prev => ({ ...prev, contact: newValue }))
+  }, [])
+
+  const handleQuickSuggestion = useCallback((suggestion: string) => {
+    setFormData(prev => ({ ...prev, suggestion }))
+  }, [])
+
   const handleKeyDown = useCallback((event: KeyboardEvent) => {
     if (event.key === 'Escape') {
       closePanelAndReset()
@@ -382,7 +397,7 @@ export default function SuggestionButton() {
             <button
               key={idx}
               type="button"
-              onClick={() => setFormData(prev => ({ ...prev, suggestion }))}
+              onClick={() => handleQuickSuggestion(suggestion)}
               className={cn(
                 "text-left py-1 px-1.5 text-xs bg-gray-50 hover:bg-green-50 border border-gray-200 hover:border-green-300 rounded transition-colors truncate",
                 feedbackScope === 'site' && "hover:bg-purple-50 hover:border-purple-300",
@@ -430,7 +445,7 @@ export default function SuggestionButton() {
           ref={textareaRef}
           id="suggestion"
           value={formData.suggestion}
-          onChange={(e) => setFormData(prev => ({ ...prev, suggestion: e.target.value }))}
+          onChange={handleSuggestionChange}
           className={cn(
             "w-full px-2 py-1.5 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:border-transparent resize-none text-xs transition-colors",
             feedbackScope === 'site' && "focus:ring-purple-500",
@@ -473,7 +488,7 @@ export default function SuggestionButton() {
           type="text"
           id="contact"
           value={formData.contact || ''}
-          onChange={(e) => setFormData(prev => ({ ...prev, contact: e.target.value }))}
+          onChange={handleContactChange}
           className="w-full px-2 py-1 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-green-500 focus:border-green-500 text-xs"
           placeholder="Name/E-Mail (optional)"
         />
