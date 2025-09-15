@@ -89,12 +89,13 @@ export function SuggestionProvider({ children }: { children: ReactNode }) {
   }, [])
 
   // Debounced page context update to prevent excessive updates
+  const pathname = typeof window !== 'undefined' ? window.location.pathname : ''
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       updatePageContext()
     }, 100)
     return () => clearTimeout(timeoutId)
-  }, [typeof window !== 'undefined' ? window.location.pathname : ''])
+  }, [pathname])
 
   return (
     <SuggestionContext.Provider value={{

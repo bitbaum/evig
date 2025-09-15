@@ -101,13 +101,6 @@ export function DropdownProvider({ children }: DropdownProviderProps) {
     }
   }, [])
 
-  // Handle dropdown content mouse leave
-  const handleDropdownMouseLeave = useCallback(() => {
-    hoverTimeoutRef.current = setTimeout(() => {
-      setOpenDropdown(null)
-    }, 500) // 500ms delay before closing
-  }, [])
-
   const setOpenDropdown = useCallback((id: string | null) => {
     // Clear any existing timeout
     clearHoverTimeout()
@@ -133,6 +126,13 @@ export function DropdownProvider({ children }: DropdownProviderProps) {
       setDropdownPosition(null)
     }
   }, [calculatePosition, clearHoverTimeout])
+
+  // Handle dropdown content mouse leave
+  const handleDropdownMouseLeave = useCallback(() => {
+    hoverTimeoutRef.current = setTimeout(() => {
+      setOpenDropdown(null)
+    }, 500) // 500ms delay before closing
+  }, [setOpenDropdown])
 
   const registerDropdownElement = useCallback((id: string, element: HTMLElement) => {
     dropdownElements.current.set(id, element)
