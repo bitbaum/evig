@@ -2,10 +2,10 @@
 
 import { useState, useEffect } from 'react'
 import { cn } from '@/lib/utils'
-import { useChatbot } from '../hooks/useChatbot'
-import { FloatingButton } from './FloatingButton'
-import { ChatHeader } from './ChatHeader'
-import { ChatWindow } from './ChatWindow'
+import { useChatbot } from '@/features/chatbot/hooks/useChatbot'
+import { FloatingButton } from '@/features/chatbot/components/FloatingButton'
+import { ChatHeader } from '@/features/chatbot/components/ChatHeader'
+import { ChatWindow } from '@/features/chatbot/components/ChatWindow'
 import { uiEvents } from '@/lib/ui/uiEvents'
 
 // Get current page context
@@ -17,6 +17,10 @@ function getCurrentPageContext(): string {
 export default function RevampCopilot() {
   const [isOpen, setIsOpen] = useState(false)
   const [isMinimized, setIsMinimized] = useState(false)
+
+  // Debug: Log component mount and state
+  // console.log('RevampCopilot: Component mounted, isOpen:', isOpen)
+  // console.log('RevampCopilot: useChatbot result:', { messages, inputValue, isLoading })
 
   // Component mounts successfully
 

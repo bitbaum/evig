@@ -1,7 +1,8 @@
 /**
- * Type definitions for the Suggestion system
- * @fileoverview Centralized type definitions for better maintainability and type safety
+ * Types for Floating UI Components
  */
+
+export type FeedbackScope = 'page' | 'element' | 'site'
 
 export interface SelectedElement {
   element: Element
@@ -14,22 +15,6 @@ export interface SuggestionFormData {
   suggestion: string
   contact?: string
   selectedElements?: SelectedElement[]
-}
-
-export type FeedbackScope = 'page' | 'element' | 'site'
-
-export interface SuggestionContextualData {
-  page: string
-  url: string
-  pageTitle?: string
-  pageSection?: string
-  feedbackScope: FeedbackScope
-  selectedElements?: Array<{
-    elementType: string
-    elementText: string
-    selector: string
-  }>
-  timestamp: string
 }
 
 export interface SuggestionSubmission {
@@ -48,23 +33,6 @@ export interface SuggestionSubmission {
   timestamp: string
 }
 
-/**
- * Contextual suggestions based on feedback scope
- */
-export const CONTEXTUAL_SUGGESTIONS = {
-  site: ["Navigation verbessern", "Design modernisieren", "Performance optimieren", "Mobile verbessern"],
-  page: ["Details hinzufügen", "Link reparieren", "Layout verbessern", "Inhalt aktualisieren"],
-  element: (count: number) => count > 0 ? [
-    "Besser sichtbar machen",
-    "Neu positionieren",
-    "Text ändern",
-    "Entfernen"
-  ] : ["Element auswählen"]
-} as const
-
-/**
- * Scope configuration for UI styling and behavior
- */
 export const SCOPE_CONFIG = {
   site: {
     emoji: '🌐',
@@ -99,22 +67,4 @@ export const SCOPE_CONFIG = {
     textColor: 'text-blue-900',
     hoverBg: 'hover:bg-blue-50 hover:border-blue-300'
   }
-} as const
-
-/**
- * Rate limiting configuration
- */
-export const RATE_LIMIT = {
-  WINDOW: 5 * 60 * 1000, // 5 minutes
-  MAX_REQUESTS: 3 // Max 3 suggestions per window per IP
-} as const
-
-/**
- * Validation constraints
- */
-export const VALIDATION = {
-  MIN_LENGTH: 5,
-  MAX_LENGTH_UI: 500,
-  MAX_LENGTH_API: 1000,
-  SPAM_INDICATORS: ['http://', 'https://', 'www.', 'viagra', 'casino', 'crypto']
 } as const

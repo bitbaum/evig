@@ -77,23 +77,64 @@ CREATE TABLE IF NOT EXISTS blog_posts (
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
--- Create indexes for better performance
-CREATE INDEX IF NOT EXISTS idx_users_email ON users(email);
-CREATE INDEX IF NOT EXISTS idx_users_role ON users(role);
-CREATE INDEX IF NOT EXISTS idx_users_is_active ON users(is_active);
+-- Create indexes for better performance (only create if tables exist and have the expected columns)
+DO $$
+BEGIN
+    -- Users table indexes
+    IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'users') THEN
+        IF EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'users' AND column_name = 'email') THEN
+            CREATE INDEX IF NOT EXISTS idx_users_email ON users(email);
+        END IF;
+        IF EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'users' AND column_name = 'role') THEN
+            CREATE INDEX IF NOT EXISTS idx_users_role ON users(role);
+        END IF;
+        IF EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'users' AND column_name = 'is_active') THEN
+            CREATE INDEX IF NOT EXISTS idx_users_is_active ON users(is_active);
+        END IF;
+    END IF;
 
-CREATE INDEX IF NOT EXISTS idx_categories_slug ON categories(slug);
-CREATE INDEX IF NOT EXISTS idx_categories_is_active ON categories(is_active);
+    -- Categories table indexes
+    IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'categories') THEN
+        IF EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'categories' AND column_name = 'slug') THEN
+            CREATE INDEX IF NOT EXISTS idx_categories_slug ON categories(slug);
+        END IF;
+        IF EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'categories' AND column_name = 'is_active') THEN
+            CREATE INDEX IF NOT EXISTS idx_categories_is_active ON categories(is_active);
+        END IF;
+    END IF;
 
-CREATE INDEX IF NOT EXISTS idx_static_pages_slug ON static_pages(slug);
-CREATE INDEX IF NOT EXISTS idx_static_pages_is_published ON static_pages(is_published);
-CREATE INDEX IF NOT EXISTS idx_static_pages_published_at ON static_pages(published_at);
+    -- Static pages table indexes
+    IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'static_pages') THEN
+        IF EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'static_pages' AND column_name = 'slug') THEN
+            CREATE INDEX IF NOT EXISTS idx_static_pages_slug ON static_pages(slug);
+        END IF;
+        IF EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'static_pages' AND column_name = 'is_published') THEN
+            CREATE INDEX IF NOT EXISTS idx_static_pages_is_published ON static_pages(is_published);
+        END IF;
+        IF EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'static_pages' AND column_name = 'published_at') THEN
+            CREATE INDEX IF NOT EXISTS idx_static_pages_published_at ON static_pages(published_at);
+        END IF;
+    END IF;
 
-CREATE INDEX IF NOT EXISTS idx_blog_posts_slug ON blog_posts(slug);
-CREATE INDEX IF NOT EXISTS idx_blog_posts_is_published ON blog_posts(is_published);
-CREATE INDEX IF NOT EXISTS idx_blog_posts_published_at ON blog_posts(published_at);
-CREATE INDEX IF NOT EXISTS idx_blog_posts_category_id ON blog_posts(category_id);
-CREATE INDEX IF NOT EXISTS idx_blog_posts_tags ON blog_posts USING GIN (tags);
+    -- Blog posts table indexes
+    IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'blog_posts') THEN
+        IF EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'blog_posts' AND column_name = 'slug') THEN
+            CREATE INDEX IF NOT EXISTS idx_blog_posts_slug ON blog_posts(slug);
+        END IF;
+        IF EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'blog_posts' AND column_name = 'is_published') THEN
+            CREATE INDEX IF NOT EXISTS idx_blog_posts_is_published ON blog_posts(is_published);
+        END IF;
+        IF EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'blog_posts' AND column_name = 'published_at') THEN
+            CREATE INDEX IF NOT EXISTS idx_blog_posts_published_at ON blog_posts(published_at);
+        END IF;
+        IF EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'blog_posts' AND column_name = 'category_id') THEN
+            CREATE INDEX IF NOT EXISTS idx_blog_posts_category_id ON blog_posts(category_id);
+        END IF;
+        IF EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'blog_posts' AND column_name = 'tags') THEN
+            CREATE INDEX IF NOT EXISTS idx_blog_posts_tags ON blog_posts USING GIN (tags);
+        END IF;
+    END IF;
+END $$;
 
 -- Create updated_at trigger function
 CREATE OR REPLACE FUNCTION update_updated_at_column()
@@ -107,47 +148,68 @@ $$ language 'plpgsql';
 -- Add updated_at triggers to all tables (with conditional creation)
 DO $$
 BEGIN
-    -- Create triggers only if they don't already exist
-    IF NOT EXISTS (SELECT 1 FROM pg_trigger WHERE tgname = 'update_users_updated_at') THEN
-        CREATE TRIGGER update_users_updated_at BEFORE UPDATE ON users
-            FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+    -- Create triggers only if tables exist and triggers don't already exist
+    IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'users') THEN
+        IF NOT EXISTS (SELECT 1 FROM pg_trigger WHERE tgname = 'update_users_updated_at') THEN
+            CREATE TRIGGER update_users_updated_at BEFORE UPDATE ON users
+                FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+        END IF;
     END IF;
 
-    IF NOT EXISTS (SELECT 1 FROM pg_trigger WHERE tgname = 'update_categories_updated_at') THEN
-        CREATE TRIGGER update_categories_updated_at BEFORE UPDATE ON categories
-            FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+    IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'categories') THEN
+        IF NOT EXISTS (SELECT 1 FROM pg_trigger WHERE tgname = 'update_categories_updated_at') THEN
+            CREATE TRIGGER update_categories_updated_at BEFORE UPDATE ON categories
+                FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+        END IF;
     END IF;
 
-    IF NOT EXISTS (SELECT 1 FROM pg_trigger WHERE tgname = 'update_static_pages_updated_at') THEN
-        CREATE TRIGGER update_static_pages_updated_at BEFORE UPDATE ON static_pages
-            FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+    IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'static_pages') THEN
+        IF NOT EXISTS (SELECT 1 FROM pg_trigger WHERE tgname = 'update_static_pages_updated_at') THEN
+            CREATE TRIGGER update_static_pages_updated_at BEFORE UPDATE ON static_pages
+                FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+        END IF;
     END IF;
 
-    IF NOT EXISTS (SELECT 1 FROM pg_trigger WHERE tgname = 'update_blog_posts_updated_at') THEN
-        CREATE TRIGGER update_blog_posts_updated_at BEFORE UPDATE ON blog_posts
-            FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+    IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'blog_posts') THEN
+        IF NOT EXISTS (SELECT 1 FROM pg_trigger WHERE tgname = 'update_blog_posts_updated_at') THEN
+            CREATE TRIGGER update_blog_posts_updated_at BEFORE UPDATE ON blog_posts
+                FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+        END IF;
     END IF;
 END $$;
 
--- Insert default admin user (password: Admin123!)
--- Note: In production, this should be created through the API or manually
-INSERT INTO users (id, email, password_hash, first_name, last_name, role)
-VALUES (
-    '00000000-0000-0000-0000-000000000001',
-    'admin@revampit.ch',
-    '$2b$10$8K3VzJcXcQzJcXcQzJcXcQ.K3VzJcXcQzJcXcQzJcXcQzJcXcQzJcXcQ', -- Admin123!
-    'Admin',
-    'RevampIT',
-    'admin'
-) ON CONFLICT (email) DO NOTHING;
+-- Insert default data only if tables exist and have the expected schema
+DO $$
+BEGIN
+    -- Insert default admin user only if users table exists and has ALL expected columns
+    IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'users') THEN
+        IF (SELECT COUNT(*) FROM information_schema.columns
+            WHERE table_name = 'users' AND column_name IN ('id', 'email', 'password_hash', 'first_name', 'last_name', 'role')) = 6 THEN
+            INSERT INTO users (id, email, password_hash, first_name, last_name, role)
+            VALUES (
+                '00000000-0000-0000-0000-000000000001',
+                'admin@revampit.ch',
+                '$2b$10$8K3VzJcXcQzJcXcQzJcXcQ.K3VzJcXcQzJcXcQzJcXcQzJcXcQzJcXcQ', -- Admin123!
+                'Admin',
+                'RevampIT',
+                'admin'
+            ) ON CONFLICT (email) DO NOTHING;
+        END IF;
+    END IF;
 
--- Insert default categories
-INSERT INTO categories (id, slug, name, description, color, created_by, updated_by) VALUES
-    ('11111111-1111-1111-1111-111111111111', 'uncategorized', 'Uncategorized', 'Default category for posts', '#6B7280', '00000000-0000-0000-0000-000000000001', '00000000-0000-0000-0000-000000000001'),
-    ('22222222-2222-2222-2222-222222222222', 'news', 'News', 'Latest news and updates', '#3B82F6', '00000000-0000-0000-0000-000000000001', '00000000-0000-0000-0000-000000000001'),
-    ('33333333-3333-3333-3333-333333333333', 'tutorials', 'Tutorials', 'Step-by-step guides and tutorials', '#10B981', '00000000-0000-0000-0000-000000000001', '00000000-0000-0000-0000-000000000001'),
-    ('44444444-4444-4444-4444-444444444444', 'projects', 'Projects', 'Project updates and showcases', '#F59E0B', '00000000-0000-0000-0000-000000000001', '00000000-0000-0000-0000-000000000001')
-ON CONFLICT (slug) DO NOTHING;
+    -- Insert default categories only if categories table exists and has ALL expected columns
+    IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'categories') THEN
+        IF (SELECT COUNT(*) FROM information_schema.columns
+            WHERE table_name = 'categories' AND column_name IN ('id', 'slug', 'name', 'description', 'color', 'created_by', 'updated_by')) = 7 THEN
+            INSERT INTO categories (id, slug, name, description, color, created_by, updated_by) VALUES
+                ('11111111-1111-1111-1111-111111111111', 'uncategorized', 'Uncategorized', 'Default category for posts', '#6B7280', '00000000-0000-0000-0000-000000000001', '00000000-0000-0000-0000-000000000001'),
+                ('22222222-2222-2222-2222-222222222222', 'news', 'News', 'Latest news and updates', '#3B82F6', '00000000-0000-0000-0000-000000000001', '00000000-0000-0000-0000-000000000001'),
+                ('33333333-3333-3333-3333-333333333333', 'tutorials', 'Tutorials', 'Step-by-step guides and tutorials', '#10B981', '00000000-0000-0000-0000-000000000001', '00000000-0000-0000-0000-000000000001'),
+                ('44444444-4444-4444-4444-444444444444', 'projects', 'Projects', 'Project updates and showcases', '#F59E0B', '00000000-0000-0000-0000-000000000001', '00000000-0000-0000-0000-000000000001')
+            ON CONFLICT (slug) DO NOTHING;
+        END IF;
+    END IF;
+END $$;
 
 
 

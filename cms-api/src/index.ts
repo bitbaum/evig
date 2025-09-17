@@ -6,6 +6,7 @@ import { initializeDatabase } from './utils/database';
 import authRoutes from './routes/auth';
 import contentRoutes from './routes/content';
 import adminRoutes from './routes/admin';
+import suggestionsRoutes from './routes/suggestions';
 import { errorHandler } from './middleware/errorHandler';
 import { logger } from './middleware/logger';
 import { rateLimiter } from './middleware/rateLimiter';
@@ -60,6 +61,7 @@ app.get('/health', (req, res) => {
 app.use('/api/auth', authRoutes);
 app.use('/api/content', contentRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api/suggestions', suggestionsRoutes);
 
 // 404 handler
 app.use('*', (req, res) => {

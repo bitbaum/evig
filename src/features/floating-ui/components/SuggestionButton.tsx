@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { Edit3, X, Info } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { uiEvents } from '@/lib/ui/uiEvents'
 // Import types inline to avoid potential import issues
 type FeedbackScope = 'page' | 'element' | 'site'
 
@@ -81,9 +82,11 @@ export default function SuggestionButton() {
   const [submitted, setSubmitted] = useState(false)
   const [submitError, setSubmitError] = useState<string | null>(null)
 
+
   const panelRef = useRef<HTMLDivElement>(null)
   const textareaRef = useRef<HTMLTextAreaElement>(null)
   const contactRef = useRef<HTMLInputElement>(null)
+  const lastHoverRef = useRef<Element | null>(null)
 
   // Get current page info
   const getCurrentPageInfo = () => {
@@ -270,6 +273,33 @@ export default function SuggestionButton() {
       })
     }
   }, [isElementSelectionMode, selectedElements])
+
+  // Hover highlight while in element selection mode
+  useEffect(() => {
+    if (!isElementSelectionMode) return
+
+    const handleMouseMove = (e: MouseEvent) => {
+      const target = e.target as Element
+      if (target.closest('[data-suggestion-panel]') || target.closest('[data-element-selection-overlay]')) {
+        return
+      }
+
+      if (lastHoverRef.current && lastHoverRef.current !== target) {
+        lastHoverRef.current.classList.remove('suggestion-hover-element')
+      }
+      lastHoverRef.current = target
+      target.classList.add('suggestion-hover-element')
+    }
+
+    document.addEventListener('mousemove', handleMouseMove, true)
+    return () => {
+      document.removeEventListener('mousemove', handleMouseMove, true)
+      if (lastHoverRef.current) {
+        lastHoverRef.current.classList.remove('suggestion-hover-element')
+        lastHoverRef.current = null
+      }
+    }
+  }, [isElementSelectionMode])
 
   // Simple selector generator
   const generateSelector = (element: Element): string => {
@@ -528,6 +558,11 @@ export default function SuggestionButton() {
       <>
         {/* Global styles for selected elements */}
         <style jsx global>{`
+          .suggestion-hover-element {
+            outline: 2px dashed #3b82f6 !important;
+            outline-offset: 2px !important;
+            cursor: crosshair !important;
+          }
           .suggestion-selected-element {
             position: relative;
             box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.6) !important;
@@ -573,11 +608,14 @@ export default function SuggestionButton() {
           }
         `}</style>
 
-        {/* Backdrop - Always present to allow clicking outside */}
+        {/* Backdrop - Only show when panel is open */}
         <div
-          className="fixed inset-0 bg-black bg-opacity-25 z-[60] cursor-pointer"
+          className="fixed inset-0 bg-black/25 z-[50] cursor-pointer"
           onClick={closePanelAndReset}
-          style={{ pointerEvents: isElementSelectionMode ? 'none' : 'auto' }}
+          style={{
+            pointerEvents: isElementSelectionMode ? 'none' : 'auto',
+            display: isExpanded ? 'block' : 'none'
+          }}
         />
 
         {/* Element Selection Overlay */}
@@ -716,9 +754,9 @@ export default function SuggestionButton() {
 
   // Floating Button
   return (
-    <div className="fixed right-4 top-1/2 z-[55] -translate-y-1/2">
+    <div className="fixed right-4 top-1/2 z-[75] -translate-y-1/2">
       <button
-        onClick={() => setIsExpanded(true)}
+        onClick={() => { setIsExpanded(true); uiEvents.emit('openSuggestion') }}
         className={cn(
           "group relative",
           "bg-green-100 hover:bg-green-600 text-green-600 hover:text-white",
@@ -726,7 +764,9 @@ export default function SuggestionButton() {
           "transition-all duration-300 ease-out",
           "focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2",
           "flex items-center justify-center",
-          "border-2 border-white shadow-black/10"
+          "border-2 border-white shadow-black/10",
+          "hover:scale-110 active:scale-95",
+          isExpanded && "ring-2 ring-green-500 ring-offset-2"
         )}
         aria-label="Verbesserungen vorschlagen öffnen"
         aria-expanded={isExpanded}

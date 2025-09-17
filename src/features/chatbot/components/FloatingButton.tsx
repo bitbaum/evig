@@ -12,6 +12,8 @@ interface FloatingButtonProps {
 }
 
 export function FloatingButton({ currentLanguage, isOpen, onClick }: FloatingButtonProps) {
+  // console.log('FloatingButton: Rendering, isOpen:', isOpen)
+
   if (isOpen) return null
 
   return (
@@ -22,7 +24,9 @@ export function FloatingButton({ currentLanguage, isOpen, onClick }: FloatingBut
         "bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700",
         "text-white rounded-full p-4 shadow-lg hover:shadow-xl",
         "transition-all duration-300 ease-in-out transform hover:scale-105",
-        "focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
+        "focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2",
+        "hover:scale-110 active:scale-95",
+        isOpen && "ring-2 ring-green-500 ring-offset-2"
       )}
       aria-label={currentLanguage === 'de' ? 'Revamp IT Assistent öffnen' : 'Open Revamp IT Assistant'}
     >

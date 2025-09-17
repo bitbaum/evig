@@ -21,7 +21,7 @@ interface UseChatbotOptions {
 
 export function useChatbot(options: UseChatbotOptions = {}) {
   const { initialLanguage = 'de', getCurrentPage } = options
-  
+
   const [messages, setMessages] = useState<ChatMessage[]>([])
   const [inputValue, setInputValue] = useState('')
   const [isLoading, setIsLoading] = useState(false)

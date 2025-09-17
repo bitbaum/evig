@@ -19,10 +19,12 @@ docs/
 ├── deployment/                 # Deployment and DevOps
 │   ├── vercel.md              # Vercel deployment guide
 │   └── environment.md         # Environment variables
-└── guides/                     # User and developer guides
-    ├── development.md          # Development setup
-    ├── contributing.md         # Contribution guidelines
-    └── troubleshooting.md      # Common issues and solutions
+├── guides/                     # User and developer guides
+│   ├── development.md          # Development setup
+│   ├── contributing.md         # Contribution guidelines
+│   └── troubleshooting.md      # Common issues and solutions
+├── floating-ui-typing-fix.md   # Critical typing issue fix documentation
+└── legacy/                     # Archived documentation
 ```
 
 ## Quick Navigation
@@ -46,6 +48,9 @@ docs/
 - [**Getting Started**](./guides/development.md) - Local development setup (TODO)
 - [**Contributing**](./guides/contributing.md) - Code standards and PR process (TODO)
 - [**Troubleshooting**](./guides/troubleshooting.md) - Common issues and solutions (TODO)
+
+### Special Documentation
+- [**Floating UI Typing Fix**](./floating-ui-typing-fix.md) - Critical fix for React input pattern conflicts (September 2025)
 
 ## Documentation Standards
 
