@@ -311,3 +311,7 @@ NODE_ENV=development|production
 - [ ] Add unit tests for complex state management
 - [ ] Implement proper logging system instead of console.log
 - [ ] Add Storybook stories for component documentation
+
+### Element Selection Mode
+- Notification box now positioned below header (top-16)
+- Typing enabled even without selected elements, but submission requires at least one selected element in element scope

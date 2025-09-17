@@ -23,7 +23,7 @@ export default function HardwarePage() {
             </Button>
           </Link>
           <Link href="/contact">
-            <Button variant="outline" size="lg" className="border-white text-white hover:bg-white/10">
+            <Button variant="ghost" size="lg" className="border border-white text-white hover:bg-white/10">
               Kontakt
             </Button>
           </Link>

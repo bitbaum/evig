@@ -2,8 +2,12 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { AuthToken } from '../models/User';
 
-const JWT_SECRET = process.env.JWT_SECRET || 'your-super-secret-jwt-key-change-in-production-this-is-a-very-long-secret-key-for-development-only-123456789';
+const JWT_SECRET = process.env.JWT_SECRET;
 const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '24h';
+
+if (!JWT_SECRET) {
+  throw new Error('JWT_SECRET environment variable is required');
+}
 
 /**
  * Hash a password using bcrypt
@@ -24,7 +28,7 @@ export async function comparePassword(password: string, hashedPassword: string):
  * Generate a JWT token for a user
  */
 export function generateToken(user: AuthToken): string {
-  const secret = JWT_SECRET || 'fallback-secret-change-in-production';
+  const secret = JWT_SECRET;
   const expiresIn = 24 * 60 * 60; // 24 hours in seconds
 
   const payload = {

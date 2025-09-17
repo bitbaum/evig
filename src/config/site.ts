@@ -1,8 +1,10 @@
+import { CONTACT_EMAIL } from '@/lib/constants'
+
 export const siteConfig = {
   name: 'RevampIT',
   description: 'Wir machen Technologie nachhaltig und für alle zugänglich.',
   contact: {
-    email: 'empfang@revamp-it.ch',
+    email: CONTACT_EMAIL,
     phone: '+41 44 586 86 86',
     address: 'Industriestrasse 4, 8630 Rüti ZH, Switzerland',
     locations: [

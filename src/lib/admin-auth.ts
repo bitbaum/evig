@@ -2,8 +2,15 @@ import { serialize, parse } from 'cookie'
 import jwt from 'jsonwebtoken'
 import { NextRequest, NextResponse } from 'next/server'
 
-const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-change-in-production'
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'admin123'
+export const JWT_SECRET = process.env.JWT_SECRET
+export const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD
+
+if (!JWT_SECRET) {
+  throw new Error('JWT_SECRET environment variable is required')
+}
+if (!ADMIN_PASSWORD) {
+  throw new Error('ADMIN_PASSWORD environment variable is required')
+}
 
 export interface AdminUser {
   id: string
@@ -24,12 +31,12 @@ export function createAdminToken(email: string = 'admin@revampit.ch'): string {
     loginTime: Date.now()
   }
   
-  return jwt.sign(payload, JWT_SECRET, { expiresIn: '7d' })
+  return jwt.sign(payload, JWT_SECRET!, { expiresIn: '7d' })
 }
 
 export function verifyAdminToken(token: string): AdminUser | null {
   try {
-    const decoded = jwt.verify(token, JWT_SECRET) as AdminUser
+    const decoded = jwt.verify(token, JWT_SECRET!) as AdminUser
     return decoded
   } catch (error) {
     return null

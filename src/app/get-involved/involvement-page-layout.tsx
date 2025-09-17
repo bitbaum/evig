@@ -40,19 +40,19 @@ export function InvolvementPageLayout({
       {/* CTA Section */}
       <section className="py-20 bg-gray-50">
         <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-6">Ready to Get Started?</h2>
+          <h2 className="text-3xl md:text-4xl font-bold mb-6">Bereit anzufangen?</h2>
           <p className="text-xl mb-8 max-w-2xl mx-auto text-gray-600">
-            Have questions or want to learn more? We're here to help you take the next step.
+            Haben Sie Fragen oder möchten Sie mehr erfahren? Wir sind da, um Ihnen beim nächsten Schritt zu helfen.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <ContactLink variant="default" size="lg">
-              Contact Us
+              Kontaktieren Sie uns
             </ContactLink>
             <a
               href="/get-involved"
               className="bg-transparent border-2 border-green-600 text-green-600 px-8 py-4 rounded-lg font-semibold hover:bg-green-50 transition-colors duration-300 text-lg"
             >
-              Explore Other Options
+              Andere Optionen erkunden
             </a>
           </div>
         </div>

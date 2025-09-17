@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { cookies } from 'next/headers'
 import jwt from 'jsonwebtoken'
+import { JWT_SECRET } from '@/lib/admin-auth'
 
 const REBOOT_CONTENT_URL = process.env.NEXT_PUBLIC_REBOOT_CONTENT_URL || 'http://localhost:3001'
 
@@ -41,7 +42,7 @@ export async function POST(request: NextRequest) {
         email: data.user.email,
         role: data.user.role,
       },
-      process.env.JWT_SECRET || 'fallback-secret',
+      JWT_SECRET!,
       { expiresIn: '24h' }
     )
 
