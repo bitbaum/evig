@@ -310,7 +310,7 @@ const consumerComparisons = [
       ]
     },
     proprietary: {
-      name: 'Twitter/Instagram',
+      name: 'X/Instagram',
       icon: Share2,
       cost: 'Kostenlos mit Werbung und Datenerfassung',
       comparisons: [

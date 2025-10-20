@@ -219,6 +219,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 **Made with ❤️ by the RevampIT community**
 
-[🌐 Website](https://revamp-it.ch) • [📧 Contact](mailto:info@revamp-it.ch) • [🐦 Twitter](https://twitter.com/revampit) • [💼 LinkedIn](https://linkedin.com/company/revampit)
+[🌐 Website](https://revamp-it.ch) • [📧 Contact](mailto:info@revamp-it.ch) • [𝕏 X](https://twitter.com/revampit) • [💼 LinkedIn](https://linkedin.com/company/revampit)
 
 </div>
