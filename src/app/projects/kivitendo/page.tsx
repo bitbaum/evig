@@ -1,7 +1,6 @@
 import { Metadata } from 'next'
 import { ProjectPage, generateProjectMetadata, ProjectCallToAction } from '@/components/projects'
 import { ProjectPageConfig } from '@/components/projects/types'
-import { Code, Package, FileText } from 'lucide-react'
 
 const kivitendoConfig: ProjectPageConfig = {
   hero: {
@@ -19,7 +18,6 @@ const kivitendoConfig: ProjectPageConfig = {
         {
           title: 'Open-Source-Vorteile',
           description: '',
-          icon: Code,
           features: [
             'Hohe Anpassungsfähigkeit an Ihre Bedürfnisse',
             'Vollständiger Zugriff auf Code und Entwicklungen',
@@ -29,7 +27,6 @@ const kivitendoConfig: ProjectPageConfig = {
         {
           title: 'Auftragsabwicklung',
           description: '',
-          icon: Package,
           features: [
             'Kompletter Workflow von Angebot bis Rechnung',
             'Anpassbare Dokumentvorlagen',
@@ -39,7 +36,6 @@ const kivitendoConfig: ProjectPageConfig = {
         {
           title: 'Finanzbuchhaltung',
           description: '',
-          icon: FileText,
           features: [
             'Komplette oder modulare Buchhaltung',
             'Anpassbarer Kontenplan',

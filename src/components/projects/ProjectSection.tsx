@@ -65,6 +65,11 @@ export function ProjectSection({ section }: ProjectSectionProps) {
                         <div className={`w-8 h-8 ${card.iconColor || 'text-blue-600'} mr-3`}>
                           {card.icon}
                         </div>
+                      ) : typeof card.icon === 'function' ? (
+                        <div className={`w-8 h-8 ${card.iconColor || 'text-blue-600'} mr-3`}>
+                          {/* @ts-ignore - Component type handling */}
+                          <card.icon className="w-8 h-8" />
+                        </div>
                       ) : (
                         <div className={`w-8 h-8 ${card.iconColor || 'text-blue-600'} mr-3`}>
                           {card.icon}

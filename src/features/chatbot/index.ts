@@ -21,7 +21,7 @@
  */
 
 // Main component exports
-import RevampCopilotComponent from './components/RevampCopilot'
+import RevampCopilotComponent from '../floating-ui/components/RevampCopilot'
 export { RevampCopilotComponent as RevampCopilot }
 export default RevampCopilotComponent
 

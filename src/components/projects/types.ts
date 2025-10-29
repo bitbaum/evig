@@ -1,6 +1,6 @@
 /**
  * Project Page Types
- * 
+ *
  * Centralized type definitions for consistent project page structure
  */
 
@@ -21,7 +21,7 @@ export interface ProjectHero {
 export interface ProjectCard {
   title: string
   description: string
-  icon?: string | React.ReactNode
+  icon?: string | React.ReactNode | React.ComponentType<any>
   features?: string[]
   href?: string
   ctaText?: string
