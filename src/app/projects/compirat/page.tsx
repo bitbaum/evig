@@ -83,21 +83,6 @@ const compiratConfig: ProjectPageConfig = {
           ]
         }
       ]
-    },
-    {
-      title: 'Unsere Standorte',
-      backgroundColor: 'white',
-      layout: 'grid-2',
-      cards: [
-        {
-          title: 'Wetzikon',
-          description: 'Unser erster Standort, gegründet 2010, bietet regelmässige Kurse und einen Internetzugangspunkt.'
-        },
-        {
-          title: 'Zürich',
-          description: 'Regelmässige Kurse und Aktivitäten in der Stadt Zürich, weitere Standorte folgen bald.'
-        }
-      ]
     }
   ],
   metadata: {
