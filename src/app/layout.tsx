@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import { Providers } from "@/components/providers/providers";
 import ConditionalMainLayout from "@/components/layout/ConditionalMainLayout";
 import "./globals.css";
 
-const inter = Inter({ subsets: ["latin"] });
+// Use system fonts to avoid build-time network fetches
+const interClassName = "";
 
 export const metadata: Metadata = {
   title: "RevampIT",
@@ -19,7 +19,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="de">
-      <body className={inter.className}>
+      <body className={interClassName}>
         <Providers>
           <ConditionalMainLayout>
             {children}
