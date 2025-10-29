@@ -1,0 +1,41 @@
+/**
+ * AboutCTA Component
+ * 
+ * Call-to-action section for the about page.
+ * Displays a centered CTA with title, description, and button.
+ */
+
+import { Button } from '@/components/ui/button'
+import Link from 'next/link'
+
+interface AboutCTAProps {
+  title: string
+  description: string
+  buttonText: string
+  href: string
+}
+
+export default function AboutCTA({ title, description, buttonText, href }: AboutCTAProps) {
+  return (
+    <section className="py-20 bg-green-600 text-white">
+      <div className="container mx-auto px-4">
+        <div className="max-w-4xl mx-auto text-center">
+          <h2 className="text-3xl font-bold mb-6">{title}</h2>
+          <p className="text-xl mb-8">
+            {description}
+          </p>
+          <Link href={href}>
+            <Button 
+              size="lg"
+              className="bg-white text-green-600 hover:bg-gray-100"
+            >
+              {buttonText}
+            </Button>
+          </Link>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+

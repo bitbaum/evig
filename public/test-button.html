@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Button</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+        .test-button {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 99999;
+            background: linear-gradient(to right, #16a34a, #2563eb);
+            color: white;
+            border-radius: 9999px;
+            padding: 16px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            border: none;
+            cursor: pointer;
+            width: 64px;
+            height: 64px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+        .test-button:hover {
+            transform: scale(1.1);
+        }
+    </style>
+</head>
+<body>
+    <h1 style="padding: 20px;">Test Page - Look for button in bottom-right corner</h1>
+    <button class="test-button">🤖</button>
+
+    <script>
+        document.querySelector('.test-button').addEventListener('click', function() {
+            alert('Button clicked! The button IS working.');
+        });
+    </script>
+</body>
+</html>
