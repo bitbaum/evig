@@ -21,9 +21,24 @@ export const mainNavigation: NavigationItem[] = [
     description: 'Erfahre mehr über unsere Mission und Wirkung',
     subItems: [
       {
+        name: 'Unsere Mission',
+        href: '/about',
+        description: 'Grundwerte und Ziele von RevampIT'
+      },
+      {
+        name: 'Unsere Wirkung',
+        href: '/about/impact',
+        description: 'Transparente Darstellung unserer messbaren Impact-Zahlen'
+      },
+      {
         name: 'REVAMPED-Zertifizierung',
         href: '/revamped',
         description: 'Unsere exklusive Auszeichnung für nachhaltige Computer-Builds'
+      },
+      {
+        name: 'FAQ',
+        href: '/faq',
+        description: 'Häufig gestellte Fragen rund um RevampIT'
       },
       {
         name: 'Wiki',
