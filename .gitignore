@@ -101,3 +101,4 @@ pids/
 # Archive and legacy files
 archive/
 legacy/
+tina/__generated__
