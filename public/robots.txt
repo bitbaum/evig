@@ -4,3 +4,6 @@ Allow: /
 
 # Host
 Host: https://revampit.ch
+
+# Sitemaps
+Sitemap: https://revampit.ch/sitemap.xml

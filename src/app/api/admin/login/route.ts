@@ -3,6 +3,8 @@ import { cookies } from 'next/headers'
 import jwt from 'jsonwebtoken'
 import { JWT_SECRET } from '@/lib/admin-auth'
 
+export const dynamic = 'force-dynamic'
+
 const REBOOT_CONTENT_URL = process.env.NEXT_PUBLIC_REBOOT_CONTENT_URL || 'http://localhost:3001'
 
 export async function POST(request: NextRequest) {

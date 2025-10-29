@@ -176,9 +176,37 @@ export const mainNavigation: NavigationItem[] = [
     ]
   },
   {
-    name: 'Workshops',
-    href: '/workshops',
-    description: 'Aktuelle Workshops und Lernangebote'
+    name: 'Knowhow',
+    href: '/knowhow',
+    description: 'Guides, Workshops, Blog und Ressourcen',
+    isMultiColumn: false,
+    subItems: [
+      {
+        name: 'Übersicht',
+        href: '/knowhow',
+        description: 'Alle Ressourcen für dein Lernen'
+      },
+      {
+        name: 'Guides',
+        href: '/knowhow#guides',
+        description: 'Schritt-für-Schritt Anleitungen'
+      },
+      {
+        name: 'Blog',
+        href: '/blog',
+        description: 'Tipps und Geschichten von unseren Experten'
+      },
+      {
+        name: 'Workshops',
+        href: '/workshops',
+        description: 'Live-Kurse zum Buchen'
+      },
+      {
+        name: 'Ressourcen',
+        href: '/knowhow#ressourcen',
+        description: 'Curated Links und Open Source Alternativen'
+      }
+    ]
   },
   {
     name: 'Engagiere dich',
@@ -233,11 +261,6 @@ export const mainNavigation: NavigationItem[] = [
         description: 'Unterstütze unsere Mission finanziell'
       }
     ]
-  },
-  {
-    name: 'Blog',
-    href: '/blog',
-    description: 'Neuigkeiten, Ratgeber und Einblicke zu Nachhaltigkeit und Technik'
   },
   {
     name: 'Kontakt',
