@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken'
 import { NextRequest, NextResponse } from 'next/server'
 
 // Lazy getters for environment variables to avoid build-time errors
-function getJwtSecret(): string {
+export function getJwtSecret(): string {
   const secret = process.env.JWT_SECRET
   if (!secret) {
     throw new Error('JWT_SECRET environment variable is required')
@@ -11,7 +11,7 @@ function getJwtSecret(): string {
   return secret
 }
 
-function getAdminPassword(): string {
+export function getAdminPassword(): string {
   const password = process.env.ADMIN_PASSWORD
   if (!password) {
     throw new Error('ADMIN_PASSWORD environment variable is required')

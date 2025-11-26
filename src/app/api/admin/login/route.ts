@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { cookies } from 'next/headers'
 import jwt from 'jsonwebtoken'
-import { JWT_SECRET } from '@/lib/admin-auth'
+import { getJwtSecret } from '@/lib/admin-auth'
 
 export const dynamic = 'force-dynamic'
 
@@ -44,7 +44,7 @@ export async function POST(request: NextRequest) {
         email: data.user.email,
         role: data.user.role,
       },
-      JWT_SECRET!,
+      getJwtSecret(),
       { expiresIn: '24h' }
     )
 

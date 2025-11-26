@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { cookies } from 'next/headers'
 import jwt from 'jsonwebtoken'
-import { JWT_SECRET } from '@/lib/admin-auth'
+import { getJwtSecret } from '@/lib/admin-auth'
 
 export const dynamic = 'force-dynamic'
 
@@ -20,7 +20,7 @@ export async function GET(request: NextRequest) {
     // Verify JWT
     const decoded = jwt.verify(
       token,
-      JWT_SECRET!
+      getJwtSecret()
     ) as any
 
     return NextResponse.json({
