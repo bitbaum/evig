@@ -72,20 +72,20 @@ export default function RepairPage() {
   return (
     <main>
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-green-700 via-green-800 to-green-900 text-white py-24 overflow-hidden">
+      <section className="relative bg-gradient-to-br from-green-700 via-green-800 to-green-900 text-white py-12 sm:py-16 md:py-20 lg:py-24 overflow-hidden">
         <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-10"></div>
-        <div className="container mx-auto px-4 relative">
+        <div className="container mx-auto px-4 sm:px-6 relative">
           <div className="max-w-3xl">
-            <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">{repairDetails.hero.title}</h1>
-            <h2 className="text-2xl md:text-3xl font-semibold mb-8 text-green-200">{repairDetails.hero.subtitle}</h2>
-            <p className="text-xl text-green-100">{repairDetails.hero.description}</p>
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6 leading-tight">{repairDetails.hero.title}</h1>
+            <h2 className="text-xl sm:text-2xl md:text-3xl font-semibold mb-4 sm:mb-6 md:mb-8 text-green-200">{repairDetails.hero.subtitle}</h2>
+            <p className="text-base sm:text-lg md:text-xl text-green-100">{repairDetails.hero.description}</p>
           </div>
         </div>
       </section>
 
       {/* Features Section */}
-      <section className="py-20">
-        <div className="container mx-auto px-4">
+      <section className="py-12 sm:py-16 md:py-20">
+        <div className="container mx-auto px-4 sm:px-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
             {repairDetails.features.map((feature, index) => (
               <div key={index} className="bg-white rounded-xl p-8 shadow-lg">
@@ -105,7 +105,7 @@ export default function RepairPage() {
       </section>
 
       {/* Process Section */}
-      <section className="py-20 bg-white">
+      <section className="py-12 sm:py-16 md:py-20 bg-white">
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold mb-12 text-center">Our Repair Process</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">

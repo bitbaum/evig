@@ -581,12 +581,12 @@ export default function OpenSourceSolutionsPage() {
   return (
     <main>
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-green-700 via-green-800 to-green-900 text-white py-24 overflow-hidden">
+      <section className="relative bg-gradient-to-br from-green-700 via-green-800 to-green-900 text-white py-12 sm:py-16 md:py-20 lg:py-24 overflow-hidden">
         <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-10"></div>
-        <div className="container mx-auto px-4 relative">
+        <div className="container mx-auto px-4 sm:px-6 relative">
           <div className="max-w-3xl">
-            <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">Open-Source-Lösungen</h1>
-            <p className="text-xl text-green-100">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6 leading-tight">Open-Source-Lösungen</h1>
+            <p className="text-base sm:text-lg md:text-xl text-green-100">
               Professionelle Implementierung von Open-Source-Software, die proprietären Alternativen entspricht oder diese übertrifft.
             </p>
           </div>
@@ -594,7 +594,7 @@ export default function OpenSourceSolutionsPage() {
       </section>
 
       {/* Benefits Section */}
-      <section className="py-20 bg-white">
+      <section className="py-12 sm:py-16 md:py-20 bg-white">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center mb-16">
             <h2 className="text-3xl font-bold mb-6">Warum Open Source wählen?</h2>
@@ -617,7 +617,7 @@ export default function OpenSourceSolutionsPage() {
       </section>
 
       {/* Services Section */}
-      <section className="py-20 bg-gray-50">
+      <section className="py-12 sm:py-16 md:py-20 bg-gray-50">
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold mb-12 text-center">Unsere Dienstleistungen</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -691,7 +691,7 @@ export default function OpenSourceSolutionsPage() {
       </div>
 
       {/* Comparison Section */}
-      <section className="py-20 bg-white">
+      <section className="py-12 sm:py-16 md:py-20 bg-white">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center mb-16">
             <h2 className="text-3xl font-bold mb-6">Open-Source-Lösungen</h2>

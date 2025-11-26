@@ -238,18 +238,18 @@ const serviceFilters: FilterConfig[] = [
 // Service card component
 const ServiceCard: React.FC<{ service: Service }> = ({ service }) => (
   <div className="group bg-white rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden flex flex-col h-full">
-    <div className="p-8 flex flex-col h-full">
-      <div className="flex items-start mb-6">
-        <div className={`p-3 rounded-lg mr-4 transition-colors duration-300 ${
+    <div className="p-4 sm:p-6 md:p-8 flex flex-col h-full">
+      <div className="flex items-start mb-4 sm:mb-6">
+        <div className={`p-2 sm:p-3 rounded-lg mr-3 sm:mr-4 transition-colors duration-300 ${
           service.available 
             ? 'bg-green-100 text-green-600 group-hover:bg-green-600 group-hover:text-white' 
             : 'bg-gray-100 text-gray-400'
         }`}>
-          <service.icon className="w-8 h-8" />
+          <service.icon className="w-6 h-6 sm:w-8 sm:h-8" />
         </div>
         <div className="flex-1">
           <div className="flex items-center gap-2 mb-2">
-            <h3 className="text-2xl font-bold">{service.title}</h3>
+            <h3 className="text-xl sm:text-2xl font-bold">{service.title}</h3>
             {service.badge && (
               <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-700">
                 {service.badge}
@@ -336,13 +336,13 @@ export default function ServicesPage() {
       />
       <main className="min-h-screen bg-gray-50">
         {/* Hero Section */}
-        <section className="relative bg-gradient-to-br from-green-700 via-green-800 to-green-900 text-white py-24 overflow-hidden">
+        <section className="relative bg-gradient-to-br from-green-700 via-green-800 to-green-900 text-white py-12 sm:py-16 md:py-20 lg:py-24 overflow-hidden">
           <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-10"></div>
-          <div className="container mx-auto px-4 relative">
+          <div className="container mx-auto px-4 sm:px-6 relative">
             <div className="max-w-3xl">
-              <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">Experten-IT-Dienstleistungen</h1>
-              <h2 className="text-2xl md:text-3xl font-semibold mb-8 text-green-200">Nachhaltige Lösungen für Ihre Technologiebedürfnisse</h2>
-              <p className="text-xl text-green-100">Wir kombinieren technische Expertise mit Umweltverantwortung, um umfassende IT-Lösungen zu bieten, die Ihnen Geld sparen und Elektroschrott reduzieren.</p>
+              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6 leading-tight">Experten-IT-Dienstleistungen</h1>
+              <h2 className="text-xl sm:text-2xl md:text-3xl font-semibold mb-4 sm:mb-6 md:mb-8 text-green-200">Nachhaltige Lösungen für Ihre Technologiebedürfnisse</h2>
+              <p className="text-base sm:text-lg md:text-xl text-green-100">Wir kombinieren technische Expertise mit Umweltverantwortung, um umfassende IT-Lösungen zu bieten, die Ihnen Geld sparen und Elektroschrott reduzieren.</p>
             </div>
           </div>
         </section>
@@ -360,10 +360,10 @@ export default function ServicesPage() {
         />
 
         {/* CTA Section */}
-        <section className="py-20 bg-gradient-to-r from-green-700 to-green-800 text-white">
-          <div className="container mx-auto px-4 text-center">
-            <h2 className="text-4xl font-bold mb-6">Bereit, Ihre Technologie zu erneuern?</h2>
-            <p className="text-xl mb-8 max-w-2xl mx-auto text-green-100">Kontaktieren Sie uns heute für eine kostenlose Beratung und entdecken Sie, wie wir Ihnen helfen können, das Beste aus Ihren Geräten herauszuholen.</p>
+        <section className="py-12 sm:py-16 md:py-20 bg-gradient-to-r from-green-700 to-green-800 text-white">
+          <div className="container mx-auto px-4 sm:px-6 text-center">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 sm:mb-6">Bereit, Ihre Technologie zu erneuern?</h2>
+            <p className="text-base sm:text-lg md:text-xl mb-6 sm:mb-8 max-w-2xl mx-auto text-green-100">Kontaktieren Sie uns heute für eine kostenlose Beratung und entdecken Sie, wie wir Ihnen helfen können, das Beste aus Ihren Geräten herauszuholen.</p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
                 href="/contact"
@@ -375,7 +375,7 @@ export default function ServicesPage() {
                 href="https://www.revamp-it.ch/index.php/de/shop-de"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-block border-2 border-white text-white px-8 py-4 rounded-lg font-semibold hover:bg-white/10 transition-colors duration-300 text-lg"
+                className="inline-block border-2 border-white text-white px-4 sm:px-6 md:px-8 py-3 sm:py-4 rounded-lg font-semibold hover:bg-white/10 transition-colors duration-300 text-base sm:text-lg"
               >
                 Inventar durchsuchen
               </Link>

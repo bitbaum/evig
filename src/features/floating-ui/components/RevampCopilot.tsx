@@ -63,14 +63,26 @@ export default function RevampCopilot() {
         onClick={() => { setIsOpen(true); uiEvents.emit('openChat') }}
       />
 
+      {/* Backdrop for mobile - click to close */}
+      {isOpen && (
+        <div
+          className="fixed inset-0 z-[605] bg-black/20 sm:hidden"
+          onClick={() => setIsOpen(false)}
+          aria-hidden="true"
+        />
+      )}
+
       {/* Chat Interface */}
       {isOpen && (
         <div
           className={cn(
-            "fixed bottom-6 right-6 z-[610]",
+            "fixed z-[610]",
             "bg-white rounded-2xl shadow-2xl border border-gray-200/80 backdrop-blur-sm",
-            "w-96 transition-all duration-300 ease-in-out",
-            isMinimized ? "h-16" : "h-[28rem]"
+            "transition-all duration-300 ease-in-out",
+            // Mobile: full width with margins, bottom-aligned
+            "w-[calc(100%-2rem)] max-w-sm sm:w-96",
+            "bottom-4 left-1/2 -translate-x-1/2 sm:bottom-6 sm:right-6 sm:left-auto sm:translate-x-0",
+            isMinimized ? "h-16" : "h-[calc(100vh-8rem)] max-h-[28rem] sm:h-[28rem]"
           )}
         >
           <ChatHeader

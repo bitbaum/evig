@@ -134,19 +134,19 @@ export default function ProjectsPage() {
       />
 
       {/* Projects Section with Filtering */}
-      <section className="py-20">
-        <div className="container mx-auto px-4">
-          <div className="max-w-3xl mx-auto text-center mb-12">
-            <h2 className="text-3xl font-bold mb-6">Unsere Projekte</h2>
-            <p className="text-lg text-gray-600 mb-8">
+      <section className="py-12 sm:py-16 md:py-20">
+        <div className="container mx-auto px-4 sm:px-6">
+          <div className="max-w-3xl mx-auto text-center mb-8 sm:mb-12">
+            <h2 className="text-2xl sm:text-3xl font-bold mb-4 sm:mb-6">Unsere Projekte</h2>
+            <p className="text-base sm:text-lg text-gray-600 mb-6 sm:mb-8">
               Von Open-Source-Software bis hin zu Community-Initiativen - entdecken Sie unsere vielfältigen Projekte.
             </p>
             
             {/* Project Filter */}
-            <div className="flex flex-wrap justify-center gap-3 mb-12">
-              <div className="flex items-center text-gray-500 mr-4 mb-2">
+            <div className="flex flex-wrap justify-center gap-2 sm:gap-3 mb-8 sm:mb-12">
+              <div className="flex items-center text-gray-500 mr-2 sm:mr-4 mb-2 w-full sm:w-auto justify-center sm:justify-start">
                 <Filter className="w-4 h-4 mr-2" />
-                <span className="text-sm font-medium">Nach Kategorie filtern:</span>
+                <span className="text-xs sm:text-sm font-medium">Nach Kategorie filtern:</span>
               </div>
               {categories.map((category) => (
                 <button
@@ -165,37 +165,37 @@ export default function ProjectsPage() {
           </div>
 
           {/* Projects Grid with Animation */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
             {filteredProjects.map((project, index) => (
               <div 
                 key={`${project.title}-${selectedCategory}`}
                 className="group bg-white rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden flex flex-col h-full animate-fadeIn"
                 style={{ animationDelay: `${index * 100}ms` }}
               >
-                <div className="p-8 flex flex-col h-full">
-                  <div className="flex items-start mb-6">
-                    <div className="p-3 bg-green-100 rounded-lg text-green-600 mr-4 transition-colors duration-300 group-hover:bg-green-600 group-hover:text-white">
-                      <project.icon className="w-8 h-8" />
+                <div className="p-6 sm:p-8 flex flex-col h-full">
+                  <div className="flex items-start mb-4 sm:mb-6">
+                    <div className="p-2 sm:p-3 bg-green-100 rounded-lg text-green-600 mr-3 sm:mr-4 transition-colors duration-300 group-hover:bg-green-600 group-hover:text-white flex-shrink-0">
+                      <project.icon className="w-6 h-6 sm:w-8 sm:h-8" />
                     </div>
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2 mb-2">
-                        <h3 className="text-2xl font-bold">{project.title}</h3>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex flex-wrap items-center gap-2 mb-2">
+                        <h3 className="text-xl sm:text-2xl font-bold">{project.title}</h3>
                         <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-700">
                           {project.status}
                         </span>
                       </div>
-                      <div className="flex items-center text-gray-500 mb-4">
-                        <Calendar className="w-4 h-4 mr-2" />
-                        <span className="text-sm">Seit {project.year}</span>
+                      <div className="flex items-center text-gray-500 mb-3 sm:mb-4">
+                        <Calendar className="w-4 h-4 mr-2 flex-shrink-0" />
+                        <span className="text-xs sm:text-sm">Seit {project.year}</span>
                       </div>
                     </div>
                   </div>
-                  <p className="text-gray-600 mb-6 flex-grow">{project.description}</p>
-                  <div className="space-y-3 mb-6">
+                  <p className="text-sm sm:text-base text-gray-600 mb-4 sm:mb-6 flex-grow">{project.description}</p>
+                  <div className="space-y-2 sm:space-y-3 mb-4 sm:mb-6">
                     {project.features.map((feature, i) => (
-                      <div key={i} className="flex items-center text-gray-600">
-                        <CheckCircle2 className="w-5 h-5 mr-3 flex-shrink-0 text-green-500" />
-                        <span className="text-sm">{feature}</span>
+                      <div key={i} className="flex items-start text-gray-600">
+                        <CheckCircle2 className="w-4 h-4 sm:w-5 sm:h-5 mr-2 sm:mr-3 flex-shrink-0 text-green-500 mt-0.5" />
+                        <span className="text-xs sm:text-sm">{feature}</span>
                       </div>
                     ))}
                   </div>

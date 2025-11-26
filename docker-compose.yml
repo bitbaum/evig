@@ -1,79 +1,31 @@
 version: '3.8'
 
 services:
-  # Strapi CMS
-  strapi:
-    container_name: strapi_app
-    build:
-      context: ./strapi
-      dockerfile: Dockerfile
-    image: revampit/strapi:latest
-    restart: unless-stopped
-    env_file: ./strapi/.env
-    environment:
-      NODE_ENV: ${NODE_ENV:-development}
-    volumes:
-      - ./strapi:/opt/app:cached
-      - ./strapi/uploads:/opt/app/public/uploads:cached
-      - /opt/app/node_modules  # Avoid conflicts
-    ports:
-      - "${STRAPI_PORT:-1337}:1337"
-    networks:
-      - revampit_network
-    depends_on:
-      db:
-        condition: service_healthy
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:1337/_health"]
-      interval: 30s
-      timeout: 10s
-      retries: 5
-
-  # PostgreSQL Database
+  # PostgreSQL Database (for CMS API)
   db:
-    container_name: strapi_db
+    container_name: revampit_db
     image: postgres:15-alpine
     restart: unless-stopped
     environment:
-      POSTGRES_USER: ${DB_USER:-strapi}
-      POSTGRES_PASSWORD: ${DB_PASSWORD:-strapi}
-      POSTGRES_DB: ${DB_NAME:-strapi}
+      POSTGRES_USER: ${DB_USER:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
+      POSTGRES_DB: ${DB_NAME:-revampit_cms}
       POSTGRES_INITDB_ARGS: "--encoding=UTF-8"
     volumes:
-      - strapi_db_data:/var/lib/postgresql/data
+      - revampit_db_data:/var/lib/postgresql/data
       - ./postgres-init:/docker-entrypoint-initdb.d
     ports:
-      - "${DB_PORT:-5434}:5432"
+      - "${DB_PORT:-5433}:5432"
     networks:
       - revampit_network
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-strapi}"]
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-postgres}"]
       interval: 10s
       timeout: 5s
       retries: 5
 
-  # Next.js Frontend (for production)
-  frontend:
-    container_name: revampit_frontend
-    build:
-      context: .
-      dockerfile: Dockerfile.frontend
-    image: revampit/frontend:latest
-    restart: unless-stopped
-    environment:
-      NODE_ENV: production
-      NEXT_PUBLIC_STRAPI_URL: http://strapi:1337
-    ports:
-      - "${FRONTEND_PORT:-3000}:3000"
-    networks:
-      - revampit_network
-    depends_on:
-      - strapi
-
 volumes:
-  strapi_db_data:
-    driver: local
-  strapi_uploads:
+  revampit_db_data:
     driver: local
 
 networks:

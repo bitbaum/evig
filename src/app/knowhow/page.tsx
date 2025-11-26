@@ -87,12 +87,12 @@ export default function WissenPage() {
   return (
     <main className="min-h-screen bg-white">
       {/* Hero Section */}
-      <section className="px-6 py-20 sm:py-32 lg:px-8">
+      <section className="px-4 sm:px-6 py-12 sm:py-16 md:py-20 lg:py-32 lg:px-8">
         <div className="mx-auto max-w-3xl text-center">
-          <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl mb-6">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-gray-900 mb-4 sm:mb-6">
             Knowhow teilen über Vintage Hardware, Linux und Open Source
           </h1>
-          <p className="text-lg leading-8 text-gray-600 mb-8">
+          <p className="text-base sm:text-lg leading-7 sm:leading-8 text-gray-600 mb-6 sm:mb-8">
             Wir teilen unser 16+ Jahre Knowhow, damit du Technologie besser verstehen und nutzen kannst. 
             Egal ob du gerade anfängst oder bereits ein Experte bist – hier findest du Ressourcen für deine Lernreise.
           </p>
@@ -100,9 +100,9 @@ export default function WissenPage() {
       </section>
 
       {/* Main Sections Grid */}
-      <section className="px-6 py-16 lg:px-8">
+      <section className="px-4 sm:px-6 py-12 sm:py-16 lg:px-8">
         <div className="mx-auto max-w-6xl">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
             {sections.map((section) => {
               const Icon = section.icon
               const colorClass = colorClasses[section.color as keyof typeof colorClasses]
@@ -111,16 +111,16 @@ export default function WissenPage() {
               return (
                 <div
                   key={section.id}
-                  className={`${colorClass} border rounded-lg p-8 flex flex-col`}
+                  className={`${colorClass} border rounded-lg p-6 sm:p-8 flex flex-col`}
                 >
-                  <div className="flex items-center gap-3 mb-4">
-                    <Icon className="w-6 h-6" />
-                    <h2 className="text-2xl font-bold">{section.title}</h2>
+                  <div className="flex items-center gap-3 mb-3 sm:mb-4">
+                    <Icon className="w-5 h-5 sm:w-6 sm:h-6" />
+                    <h2 className="text-xl sm:text-2xl font-bold">{section.title}</h2>
                   </div>
-                  <p className="text-base mb-6 flex-grow">{section.description}</p>
+                  <p className="text-sm sm:text-base mb-4 sm:mb-6 flex-grow">{section.description}</p>
                   <Link
                     href={section.href}
-                    className={`inline-flex items-center justify-center px-4 py-2 rounded-md text-white font-semibold ${buttonClass} transition-colors`}
+                    className={`inline-flex items-center justify-center px-4 py-2 rounded-md text-white font-semibold text-sm sm:text-base ${buttonClass} transition-colors`}
                   >
                     {section.cta}
                   </Link>
@@ -132,45 +132,45 @@ export default function WissenPage() {
       </section>
 
       {/* Resources Section */}
-      <section id="ressourcen" className="px-6 py-20 lg:px-8 bg-gray-50">
+      <section id="ressourcen" className="px-4 sm:px-6 py-12 sm:py-16 md:py-20 lg:px-8 bg-gray-50">
         <div className="mx-auto max-w-6xl">
-          <h2 className="text-3xl font-bold tracking-tight text-gray-900 mb-16 text-center">
+          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-gray-900 mb-8 sm:mb-12 md:mb-16 text-center">
             Curatierte Ressourcen
           </h2>
 
           {/* Open Source Software */}
-          <div className="mb-16">
-            <h3 className="text-2xl font-bold text-gray-900 mb-6">Open Source Software Alternativen</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="mb-12 sm:mb-16">
+            <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6">Open Source Software Alternativen</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
               {resources.openSource.map((resource, idx) => (
                 <a
                   key={idx}
                   href={resource.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="block p-6 rounded-lg border border-gray-200 hover:border-green-500 hover:bg-green-50 transition-colors"
+                  className="block p-4 sm:p-6 rounded-lg border border-gray-200 hover:border-green-500 hover:bg-green-50 transition-colors"
                 >
-                  <h4 className="font-semibold text-gray-900 mb-2">{resource.name}</h4>
-                  <p className="text-sm text-gray-600">{resource.description}</p>
+                  <h4 className="font-semibold text-sm sm:text-base text-gray-900 mb-2">{resource.name}</h4>
+                  <p className="text-xs sm:text-sm text-gray-600">{resource.description}</p>
                 </a>
               ))}
             </div>
           </div>
 
           {/* Linux Distributionen */}
-          <div className="mb-16">
-            <h3 className="text-2xl font-bold text-gray-900 mb-6">Linux Distributionen</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="mb-12 sm:mb-16">
+            <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6">Linux Distributionen</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
               {resources.linux.map((resource, idx) => (
                 <a
                   key={idx}
                   href={resource.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="block p-6 rounded-lg border border-gray-200 hover:border-blue-500 hover:bg-blue-50 transition-colors"
+                  className="block p-4 sm:p-6 rounded-lg border border-gray-200 hover:border-blue-500 hover:bg-blue-50 transition-colors"
                 >
-                  <h4 className="font-semibold text-gray-900 mb-2">{resource.name}</h4>
-                  <p className="text-sm text-gray-600">{resource.description}</p>
+                  <h4 className="font-semibold text-sm sm:text-base text-gray-900 mb-2">{resource.name}</h4>
+                  <p className="text-xs sm:text-sm text-gray-600">{resource.description}</p>
                 </a>
               ))}
             </div>
@@ -178,18 +178,18 @@ export default function WissenPage() {
 
           {/* Documentation */}
           <div>
-            <h3 className="text-2xl font-bold text-gray-900 mb-6">Externe Dokumentation & Portale</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6">Externe Dokumentation & Portale</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
               {resources.documentation.map((resource, idx) => (
                 <a
                   key={idx}
                   href={resource.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="block p-6 rounded-lg border border-gray-200 hover:border-purple-500 hover:bg-purple-50 transition-colors"
+                  className="block p-4 sm:p-6 rounded-lg border border-gray-200 hover:border-purple-500 hover:bg-purple-50 transition-colors"
                 >
-                  <h4 className="font-semibold text-gray-900 mb-2">{resource.name}</h4>
-                  <p className="text-sm text-gray-600">{resource.description}</p>
+                  <h4 className="font-semibold text-sm sm:text-base text-gray-900 mb-2">{resource.name}</h4>
+                  <p className="text-xs sm:text-sm text-gray-600">{resource.description}</p>
                 </a>
               ))}
             </div>
@@ -198,17 +198,17 @@ export default function WissenPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="px-6 py-20 lg:px-8">
+      <section className="px-4 sm:px-6 py-12 sm:py-16 md:py-20 lg:px-8">
         <div className="mx-auto max-w-3xl text-center">
-          <h2 className="text-3xl font-bold tracking-tight text-gray-900 mb-6">
+          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-gray-900 mb-4 sm:mb-6">
             Bereit zu lernen?
           </h2>
-          <p className="text-lg text-gray-600 mb-10">
+          <p className="text-base sm:text-lg text-gray-600 mb-8 sm:mb-10">
             Starte mit unserem Blog, besuche einen Workshop oder schau dir ein Guide an.
           </p>
           <Link
             href="/contact"
-            className="inline-flex items-center justify-center px-6 py-3 rounded-md bg-green-600 text-white font-semibold hover:bg-green-700 transition-colors"
+            className="inline-flex items-center justify-center px-4 sm:px-6 py-2.5 sm:py-3 rounded-md bg-green-600 text-white font-semibold hover:bg-green-700 transition-colors text-sm sm:text-base"
           >
             Fragen? Kontaktiere uns
           </Link>

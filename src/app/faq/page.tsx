@@ -171,29 +171,29 @@ export default function FAQPage() {
   return (
     <main className="min-h-screen bg-gradient-to-b from-white to-gray-50">
       <FAQSchema />
-      <section className="py-16">
-        <div className="container mx-auto px-4">
+      <section className="py-12 sm:py-16">
+        <div className="container mx-auto px-4 sm:px-6">
           <div className="max-w-5xl mx-auto">
-            <header className="mb-10 text-center">
-              <h1 className="text-3xl md:text-4xl font-bold text-gray-900">Häufige Fragen (FAQ)</h1>
-              <p className="mt-3 text-gray-600">
+            <header className="mb-8 sm:mb-10 text-center">
+              <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900">Häufige Fragen (FAQ)</h1>
+              <p className="mt-3 text-sm sm:text-base text-gray-600">
                 Unsere Antworten zu Linux & Open Source, Reparatur, Nachhaltigkeit und fairem Umgang mit
                 Ressourcen – im Sinne unserer Mission gegen Elektroschrott.
               </p>
             </header>
 
-            <div className="space-y-10">
+            <div className="space-y-8 sm:space-y-10">
               {faqs.map((group) => (
                 <section key={group.category}>
-                  <h2 className="text-xl font-semibold text-gray-800 mb-4">{group.category}</h2>
+                  <h2 className="text-lg sm:text-xl font-semibold text-gray-800 mb-3 sm:mb-4">{group.category}</h2>
                   <div className="divide-y divide-gray-200 rounded-xl border border-gray-200 bg-white">
                     {group.items.map((item, idx) => (
-                      <details key={idx} className="group p-5 open:bg-gray-50/60">
+                      <details key={idx} className="group p-4 sm:p-5 open:bg-gray-50/60">
                         <summary className="cursor-pointer list-none flex items-start justify-between">
-                          <span className="text-gray-900 font-medium">{item.q}</span>
-                          <span className="ml-4 text-gray-400 group-open:rotate-180 transition-transform">▾</span>
+                          <span className="text-sm sm:text-base text-gray-900 font-medium pr-2">{item.q}</span>
+                          <span className="ml-4 text-gray-400 group-open:rotate-180 transition-transform flex-shrink-0">▾</span>
                         </summary>
-                        <div className="mt-3 text-gray-700 text-sm">
+                        <div className="mt-3 text-gray-700 text-xs sm:text-sm">
                           <p>{item.a}</p>
                           {item.link && (
                             <p className="mt-2">
@@ -210,7 +210,7 @@ export default function FAQPage() {
               ))}
             </div>
 
-            <div className="mt-12 p-6 rounded-xl bg-gradient-to-r from-green-50 to-blue-50 border border-green-100 text-sm">
+            <div className="mt-8 sm:mt-12 p-4 sm:p-6 rounded-xl bg-gradient-to-r from-green-50 to-blue-50 border border-green-100 text-xs sm:text-sm">
               <p className="text-gray-800">
                 Deine Frage ist nicht dabei? Wir helfen gerne persönlich weiter.
                 <span className="ml-2">

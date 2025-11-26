@@ -41,17 +41,17 @@ export default function ServerManagementPage() {
       
       <main className="min-h-screen bg-gray-50">
         {/* Hero Section */}
-        <section className="relative bg-gradient-to-br from-green-700 via-green-800 to-green-900 text-white py-24 overflow-hidden">
+        <section className="relative bg-gradient-to-br from-green-700 via-green-800 to-green-900 text-white py-12 sm:py-16 md:py-20 lg:py-24 overflow-hidden">
           <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-10"></div>
-          <div className="container mx-auto px-4 relative">
+          <div className="container mx-auto px-4 sm:px-6 relative">
             <div className="max-w-4xl">
-              <div className="flex items-center gap-3 mb-6">
-                <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-red-100 text-red-800">
-                  <AlertTriangle className="w-4 h-4 mr-1" />
+              <div className="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-6">
+                <span className="inline-flex items-center px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-medium bg-red-100 text-red-800">
+                  <AlertTriangle className="w-3 h-3 sm:w-4 sm:h-4 mr-1" />
                   Derzeit nicht im Angebot
                 </span>
               </div>
-              <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">Server-Management</h1>
+              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6 leading-tight">Server-Management</h1>
               <h2 className="text-2xl md:text-3xl font-semibold mb-8 text-green-200">Zukunftsvision: Ethisches Infrastruktur-Management</h2>
               <p className="text-xl text-green-100 mb-8">
                 <strong>Dieser Service ist derzeit nicht verfügbar.</strong> Als missionsgetriebene, sich selbst tragende gemeinnützige Organisation
@@ -88,7 +88,7 @@ export default function ServerManagementPage() {
         </section>
 
         {/* Mission Alignment Section */}
-        <section className="py-20 bg-white">
+        <section className="py-12 sm:py-16 md:py-20 bg-white">
           <div className="container mx-auto px-4">
             <div className="text-center mb-16">
               <div className="flex items-center justify-center gap-2 mb-4">
@@ -151,7 +151,7 @@ export default function ServerManagementPage() {
         </section>
 
         {/* Why Not Now Section */}
-        <section className="py-20">
+        <section className="py-12 sm:py-16 md:py-20">
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto">
               <h2 className="text-4xl font-bold text-gray-900 mb-8 text-center">Kapazitäten verantwortungsvoll aufbauen</h2>
@@ -200,7 +200,7 @@ export default function ServerManagementPage() {
         </section>
 
         {/* Planned Service Model */}
-        <section className="py-20 bg-white">
+        <section className="py-12 sm:py-16 md:py-20 bg-white">
           <div className="container mx-auto px-4">
             <div className="text-center mb-16">
               <h2 className="text-4xl font-bold text-gray-900 mb-4">Zukünftiges Dienstleistungsmodell</h2>

@@ -10,11 +10,11 @@ export default function HardcodedAboutPage() {
       />
 
       {/* Mission Section */}
-      <section className="py-20 px-4 max-w-6xl mx-auto">
-        <div className="space-y-8">
-          <h2 className="text-3xl font-bold">Unsere Mission</h2>
-          <div className="space-y-6">
-            <p className="text-lg">
+      <section className="py-12 sm:py-16 md:py-20 px-4 sm:px-6 max-w-6xl mx-auto">
+        <div className="space-y-6 sm:space-y-8">
+          <h2 className="text-2xl sm:text-3xl font-bold">Unsere Mission</h2>
+          <div className="space-y-4 sm:space-y-6">
+            <p className="text-base sm:text-lg">
               Bei RevampIT glauben wir an das Motto "10 Jahre sind das Minimum für ein Velo – und für einen Laptop auch!" Als gemeinnütziger Verein verändern wir seit 2009 den Umgang mit Technik. Unsere Mission ist klar: Die Lebensdauer von IT-Geräten verlängern und Elektroschrott durch Reparatur, Wiederaufbereitung und nachhaltige Praktiken reduzieren.
             </p>
             <div className="relative w-full h-[400px] rounded-lg overflow-hidden my-8">
@@ -27,7 +27,7 @@ export default function HardcodedAboutPage() {
                 priority
               />
             </div>
-            <p className="text-lg">
+            <p className="text-base sm:text-lg">
               In unseren Räumlichkeiten – einer ehemaligen Bank – haben wir einen Treffpunkt geschaffen, wo Technik und Nachhaltigkeit zusammenkommen. Unser Ansatz verbindet Hardware-Recycling mit Open Source-Software und schafft so nachhaltige IT-Lösungen für Mensch und Umwelt.
             </p>
           </div>
@@ -35,25 +35,25 @@ export default function HardcodedAboutPage() {
       </section>
 
       {/* Impact Areas */}
-      <section className="py-20 bg-gray-50">
-        <div className="max-w-6xl mx-auto px-4">
-          <h2 className="text-3xl font-bold mb-12 text-center">Unsere Wirkung</h2>
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="bg-white p-8 rounded-lg shadow-md">
-              <h3 className="text-xl font-semibold mb-4">Hardware-Recycling</h3>
-              <p className="text-lg">
+      <section className="py-12 sm:py-16 md:py-20 bg-gray-50">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6">
+          <h2 className="text-2xl sm:text-3xl font-bold mb-8 sm:mb-12 text-center">Unsere Wirkung</h2>
+          <div className="grid md:grid-cols-3 gap-6 sm:gap-8">
+            <div className="bg-white p-6 sm:p-8 rounded-lg shadow-md">
+              <h3 className="text-lg sm:text-xl font-semibold mb-3 sm:mb-4">Hardware-Recycling</h3>
+              <p className="text-base sm:text-lg">
                 Wir reparieren und überholen IT-Geräte jeden Alters und schenken ihnen ein zweites Leben. So reduzieren wir Elektroschrott und ermöglichen Zugang zu Technik für alle. Von alten MacBooks bis zu Vintage-Computern – jedes Gerät verdient eine zweite Chance.
               </p>
             </div>
-            <div className="bg-white p-8 rounded-lg shadow-md">
-              <h3 className="text-xl font-semibold mb-4">Open Source-Software</h3>
-              <p className="text-lg">
+            <div className="bg-white p-6 sm:p-8 rounded-lg shadow-md">
+              <h3 className="text-lg sm:text-xl font-semibold mb-3 sm:mb-4">Open Source-Software</h3>
+              <p className="text-base sm:text-lg">
                 Wir setzen auf Linux und andere Open Source-Lösungen. Diese Technologien halten ältere Geräte effizient am Laufen und bieten Sicherheit durch Kontrolle über das eigene System. In unseren Workshops vermitteln wir praxisnahes Wissen rund um nachhaltige IT.
               </p>
             </div>
-            <div className="bg-white p-8 rounded-lg shadow-md">
-              <h3 className="text-xl font-semibold mb-4">Gemeinschaft & Soziales</h3>
-              <p className="text-lg">
+            <div className="bg-white p-6 sm:p-8 rounded-lg shadow-md">
+              <h3 className="text-lg sm:text-xl font-semibold mb-3 sm:mb-4">Gemeinschaft & Soziales</h3>
+              <p className="text-base sm:text-lg">
                 Wir schaffen sinnvolle Arbeitsplätze für Menschen, die es auf dem regulären Arbeitsmarkt schwer haben. Mit unserem Tauschsystem kann man Dienstleistungen (z.B. einen Haarschnitt) gegen Technik tauschen. Zudem bieten wir Hosting und Cloud-Services für Schweizer KMU, die ihre Daten in der Schweiz behalten möchten.
               </p>
             </div>
@@ -62,41 +62,41 @@ export default function HardcodedAboutPage() {
       </section>
 
       {/* By the Numbers Section */}
-      <section className="py-20 bg-white">
-        <div className="max-w-6xl mx-auto px-4">
-          <h2 className="text-3xl font-bold mb-12 text-center">Zahlen & Fakten</h2>
-          <div className="grid md:grid-cols-2 gap-8">
-            <div className="bg-green-50 p-8 rounded-lg shadow-md">
-              <h3 className="text-2xl font-bold text-green-800 mb-2">Umweltwirkung</h3>
-              <div className="space-y-6">
+      <section className="py-12 sm:py-16 md:py-20 bg-white">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6">
+          <h2 className="text-2xl sm:text-3xl font-bold mb-8 sm:mb-12 text-center">Zahlen & Fakten</h2>
+          <div className="grid md:grid-cols-2 gap-6 sm:gap-8">
+            <div className="bg-green-50 p-6 sm:p-8 rounded-lg shadow-md">
+              <h3 className="text-xl sm:text-2xl font-bold text-green-800 mb-2">Umweltwirkung</h3>
+              <div className="space-y-4 sm:space-y-6">
                 <div>
-                  <p className="text-4xl font-bold text-green-700 mb-2">5+</p>
-                  <p className="text-gray-600">Durchschnittliche Lebensdauerverlängerung pro Gerät (in Jahren)</p>
+                  <p className="text-3xl sm:text-4xl font-bold text-green-700 mb-2">5+</p>
+                  <p className="text-sm sm:text-base text-gray-600">Durchschnittliche Lebensdauerverlängerung pro Gerät (in Jahren)</p>
                 </div>
                 <div>
-                  <p className="text-4xl font-bold text-green-700 mb-2">1000+</p>
-                  <p className="text-gray-600">Geräte, die wir jährlich vor dem Entsorgen retten</p>
+                  <p className="text-3xl sm:text-4xl font-bold text-green-700 mb-2">1000+</p>
+                  <p className="text-sm sm:text-base text-gray-600">Geräte, die wir jährlich vor dem Entsorgen retten</p>
                 </div>
                 <div>
-                  <p className="text-4xl font-bold text-green-700 mb-2">75%</p>
-                  <p className="text-gray-600">Anteil der gespendeten Geräte, die wir erfolgreich wiederverwenden</p>
+                  <p className="text-3xl sm:text-4xl font-bold text-green-700 mb-2">75%</p>
+                  <p className="text-sm sm:text-base text-gray-600">Anteil der gespendeten Geräte, die wir erfolgreich wiederverwenden</p>
                 </div>
               </div>
             </div>
-            <div className="bg-green-50 p-8 rounded-lg shadow-md">
-              <h3 className="text-2xl font-bold text-green-800 mb-2">Soziale Wirkung</h3>
-              <div className="space-y-6">
+            <div className="bg-green-50 p-6 sm:p-8 rounded-lg shadow-md">
+              <h3 className="text-xl sm:text-2xl font-bold text-green-800 mb-2">Soziale Wirkung</h3>
+              <div className="space-y-4 sm:space-y-6">
                 <div>
-                  <p className="text-4xl font-bold text-green-700 mb-2">20+</p>
-                  <p className="text-gray-600">Personen, die wir jährlich in Open Source und nachhaltiger IT schulen</p>
+                  <p className="text-3xl sm:text-4xl font-bold text-green-700 mb-2">20+</p>
+                  <p className="text-sm sm:text-base text-gray-600">Personen, die wir jährlich in Open Source und nachhaltiger IT schulen</p>
                 </div>
                 <div>
-                  <p className="text-4xl font-bold text-green-700 mb-2">90%</p>
-                  <p className="text-gray-600">Unserer Praktikant:innen finden den Einstieg in die IT oder eine Weiterbildung</p>
+                  <p className="text-3xl sm:text-4xl font-bold text-green-700 mb-2">90%</p>
+                  <p className="text-sm sm:text-base text-gray-600">Unserer Praktikant:innen finden den Einstieg in die IT oder eine Weiterbildung</p>
                 </div>
                 <div>
-                  <p className="text-4xl font-bold text-green-700 mb-2">10+</p>
-                  <p className="text-gray-600">Erfolgreiche Wiedereinstiege ins Berufsleben durch unser Programm</p>
+                  <p className="text-3xl sm:text-4xl font-bold text-green-700 mb-2">10+</p>
+                  <p className="text-sm sm:text-base text-gray-600">Erfolgreiche Wiedereinstiege ins Berufsleben durch unser Programm</p>
                 </div>
               </div>
             </div>

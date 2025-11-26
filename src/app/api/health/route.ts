@@ -10,7 +10,7 @@ export async function GET() {
       timestamp: new Date().toISOString(),
       services: {
         frontend: 'up',
-        strapi: process.env.NEXT_PUBLIC_STRAPI_URL ? 'configured' : 'not_configured'
+        cms_api: process.env.NEXT_PUBLIC_API_URL ? 'configured' : 'not_configured'
       }
     });
   } catch (error) {

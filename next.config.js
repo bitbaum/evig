@@ -2,19 +2,7 @@
 const nextConfig = {
   images: {
     unoptimized: false,
-    remotePatterns: [
-      {
-        protocol: 'http',
-        hostname: 'localhost',
-        port: '1337',
-        pathname: '/uploads/**',
-      },
-      {
-        protocol: 'https',
-        hostname: 'strapi.revampit.ch',
-        pathname: '/uploads/**',
-      },
-    ],
+    remotePatterns: [],
   },
   webpack: (config, { isServer }) => {
     // Font loader configuration
@@ -37,9 +25,6 @@ const nextConfig = {
       };
     }
     return config;
-  },
-  compiler: {
-    styledComponents: true
   },
   // Enable static optimization
   output: 'standalone',

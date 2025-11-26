@@ -96,9 +96,9 @@ export function MobileMenu({
       >
         <div className="flex items-center justify-between">
           <span id="mobile-menu-title" className="sr-only">Mobile Navigation Menu</span>
-          <Link href="/" onClick={onClose}> {/* Logo click should also close */} 
-            <Logo />
-          </Link>
+          <div onClick={onClose}>
+            <Logo href="/" />
+          </div>
           <button
             type="button"
             className="-m-2.5 rounded-md p-2.5 text-gray-700 hover:bg-gray-100 transition-colors duration-200"

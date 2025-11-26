@@ -11,15 +11,15 @@ export default function SupportPage() {
   return (
     <main className="min-h-screen bg-white">
       {/* Header */}
-      <div className="bg-gradient-to-br from-green-700 via-green-800 to-green-900 text-white py-20">
-        <div className="max-w-4xl mx-auto px-6 text-center">
-          <div className="inline-flex items-center justify-center w-20 h-20 bg-white/10 rounded-full mb-6">
-            <Heart className="w-10 h-10" />
+      <div className="bg-gradient-to-br from-green-700 via-green-800 to-green-900 text-white py-12 sm:py-16 md:py-20">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 text-center">
+          <div className="inline-flex items-center justify-center w-16 h-16 sm:w-20 sm:h-20 bg-white/10 rounded-full mb-4 sm:mb-6">
+            <Heart className="w-8 h-8 sm:w-10 sm:h-10" />
           </div>
-          <h1 className="text-5xl font-bold mb-6">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 sm:mb-6">
             Unterstützen Sie RevampIt
           </h1>
-          <p className="text-2xl text-green-100 leading-relaxed max-w-2xl mx-auto">
+          <p className="text-lg sm:text-xl md:text-2xl text-green-100 leading-relaxed max-w-2xl mx-auto">
             Helfen Sie uns, qualitativ hochwertige, werbefreie Inhalte über nachhaltige
             Technologie, Open Source und die Zukunft des Computing zu erstellen.
           </p>
@@ -27,13 +27,13 @@ export default function SupportPage() {
       </div>
 
       {/* Why Support */}
-      <div className="max-w-4xl mx-auto px-6 py-16">
-        <div className="grid md:grid-cols-3 gap-8 mb-16">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
+        <div className="grid md:grid-cols-3 gap-6 sm:gap-8 mb-12 sm:mb-16">
           <div className="text-center">
-            <div className="inline-flex items-center justify-center w-16 h-16 bg-green-100 rounded-full mb-4">
-              <Shield className="w-8 h-8 text-green-600" />
+            <div className="inline-flex items-center justify-center w-12 h-12 sm:w-16 sm:h-16 bg-green-100 rounded-full mb-3 sm:mb-4">
+              <Shield className="w-6 h-6 sm:w-8 sm:h-8 text-green-600" />
             </div>
-            <h3 className="text-lg font-bold text-gray-900 mb-2">Keine Werbung</h3>
+            <h3 className="text-base sm:text-lg font-bold text-gray-900 mb-2">Keine Werbung</h3>
             <p className="text-gray-600">
               Wir werden niemals Werbung schalten oder Ihre Daten verkaufen
             </p>
@@ -59,8 +59,8 @@ export default function SupportPage() {
         </div>
 
         {/* Our Promise */}
-        <div className="bg-gray-50 rounded-lg p-8 mb-12">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">Unser Versprechen</h2>
+        <div className="bg-gray-50 rounded-lg p-6 sm:p-8 mb-8 sm:mb-12">
+          <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-3 sm:mb-4">Unser Versprechen</h2>
           <div className="prose prose-lg text-gray-700">
             <p>
               RevampIt ist kein Unternehmen – es ist eine Bewegung. Wir glauben daran, dass
@@ -81,12 +81,12 @@ export default function SupportPage() {
         </div>
 
         {/* Support Options */}
-        <div className="grid md:grid-cols-2 gap-8 mb-12">
+        <div className="grid md:grid-cols-2 gap-6 sm:gap-8 mb-8 sm:mb-12">
           {/* One-time */}
-          <div className="border-2 border-gray-200 rounded-lg p-8 hover:border-green-500 transition-colors">
-            <div className="flex items-center gap-3 mb-4">
-              <Coffee className="w-8 h-8 text-green-600" />
-              <h3 className="text-2xl font-bold text-gray-900">Einmalige Spende</h3>
+          <div className="border-2 border-gray-200 rounded-lg p-6 sm:p-8 hover:border-green-500 transition-colors">
+            <div className="flex items-center gap-3 mb-3 sm:mb-4">
+              <Coffee className="w-6 h-6 sm:w-8 sm:h-8 text-green-600" />
+              <h3 className="text-xl sm:text-2xl font-bold text-gray-900">Einmalige Spende</h3>
             </div>
             <p className="text-gray-600 mb-6">
               Kaufen Sie uns einen Kaffee oder unterstützen Sie uns mit einem beliebigen Betrag
@@ -102,10 +102,10 @@ export default function SupportPage() {
           </div>
 
           {/* Monthly */}
-          <div className="border-2 border-green-500 rounded-lg p-8 bg-green-50">
-            <div className="flex items-center gap-3 mb-4">
-              <Heart className="w-8 h-8 text-green-600" />
-              <h3 className="text-2xl font-bold text-gray-900">Monatlicher Support</h3>
+          <div className="border-2 border-green-500 rounded-lg p-6 sm:p-8 bg-green-50">
+            <div className="flex items-center gap-3 mb-3 sm:mb-4">
+              <Heart className="w-6 h-6 sm:w-8 sm:h-8 text-green-600" />
+              <h3 className="text-xl sm:text-2xl font-bold text-gray-900">Monatlicher Support</h3>
             </div>
             <p className="text-gray-600 mb-6">
               Werden Sie Unterstützer und helfen Sie uns nachhaltig zu wachsen

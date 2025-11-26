@@ -156,21 +156,21 @@ export default function BuildYourComputerPage() {
   return (
     <main>
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-green-700 via-green-800 to-green-900 text-white py-24 overflow-hidden">
+      <section className="relative bg-gradient-to-br from-green-700 via-green-800 to-green-900 text-white py-12 sm:py-16 md:py-20 lg:py-24 overflow-hidden">
         <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-10"></div>
-        <div className="container mx-auto px-4 relative">
+        <div className="container mx-auto px-4 sm:px-6 relative">
           <div className="max-w-4xl mx-auto text-center">
-            <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6 leading-tight">
               KI-gestützte nachhaltige Computer-Builds
             </h1>
-            <h2 className="text-2xl md:text-3xl font-semibold mb-8 text-green-200">
+            <h2 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-semibold mb-4 sm:mb-6 md:mb-8 text-green-200">
               100% Gebrauchtteile-Priorität • Globales Inventar-Netzwerk • Intelligentes KI-Matching
             </h2>
-            <p className="text-xl text-green-100 mb-8">
+            <p className="text-base sm:text-lg md:text-xl text-green-100 mb-6 sm:mb-8">
               Unser revolutionäres KI-System scannt unser Inventar und globale Partnernetzwerke, um Ihren perfekten Computer hauptsächlich aus gebrauchten und wiederaufbereiteten Komponenten zusammenzustellen. Nur wenn es absolut notwendig ist, beschaffen wir neue Teile.
             </p>
-            <div className="flex flex-wrap justify-center gap-4 text-sm">
-              <div className="flex items-center bg-green-600/30 px-4 py-2 rounded-full">
+            <div className="flex flex-wrap justify-center gap-3 sm:gap-4 text-xs sm:text-sm">
+              <div className="flex items-center bg-green-600/30 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full">
                 <Recycle className="w-4 h-4 mr-2" />
                 Kreislaufwirtschaft
               </div>
@@ -188,7 +188,7 @@ export default function BuildYourComputerPage() {
       </section>
 
       {/* How It Works */}
-      <section className="py-20 bg-gray-50">
+      <section className="py-12 sm:py-16 md:py-20 bg-gray-50">
         <div className="container mx-auto px-4">
           <h2 className="text-4xl font-bold text-center mb-12">Wie unser KI-Build-System funktioniert</h2>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
@@ -217,7 +217,7 @@ export default function BuildYourComputerPage() {
       </section>
 
       {/* Interactive Build Tool */}
-      <section className="py-20" id="build-tool">
+      <section className="py-12 sm:py-16 md:py-20" id="build-tool">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
             <h2 className="text-4xl font-bold text-center mb-4">Testen Sie unsere Build-Tool-Demo</h2>
@@ -478,7 +478,7 @@ export default function BuildYourComputerPage() {
       </section>
 
       {/* Features */}
-      <section className="py-20 bg-gray-50">
+      <section className="py-12 sm:py-16 md:py-20 bg-gray-50">
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold text-center mb-12">Warum unser KI-Build-System wählen?</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">

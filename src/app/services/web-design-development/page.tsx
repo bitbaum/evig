@@ -250,25 +250,25 @@ export default function WebDesignDevelopmentPage() {
   return (
     <main>
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-green-700 via-green-800 to-green-900 text-white py-24 overflow-hidden">
+      <section className="relative bg-gradient-to-br from-green-700 via-green-800 to-green-900 text-white py-12 sm:py-16 md:py-20 lg:py-24 overflow-hidden">
         <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-10"></div>
-        <div className="container mx-auto px-4 relative">
+        <div className="container mx-auto px-4 sm:px-6 relative">
           <div className="max-w-3xl">
-            <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">Webdesign & Entwicklung</h1>
-            <p className="text-xl text-green-100 mb-8">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6 leading-tight">Webdesign & Entwicklung</h1>
+            <p className="text-base sm:text-lg md:text-xl text-green-100 mb-6 sm:mb-8">
               <strong>100% Engagement für Freiheit</strong> durch Open Source, Dezentralisierung, Datenschutz, Dateneigentum, Code-Eigentum und maximale Automatisierung.
               Wir schaffen digitale Erlebnisse, bei denen <strong>Anstrengung zur Wahl und nicht zur Notwendigkeit wird</strong> – und geben Ihnen die vollständige Kontrolle über Ihre digitale Präsenz.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4">
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
               <Link
                 href="/contact"
-                className="inline-block bg-white text-green-800 px-8 py-4 rounded-lg font-semibold hover:bg-green-50 transition-colors duration-300 text-lg"
+                className="inline-block bg-white text-green-800 px-4 sm:px-6 md:px-8 py-3 sm:py-4 rounded-lg font-semibold hover:bg-green-50 transition-colors duration-300 text-sm sm:text-base md:text-lg"
               >
                 Starten Sie Ihr Projekt
               </Link>
               <Link
                 href="#services"
-                className="inline-block border-2 border-white text-white px-8 py-4 rounded-lg font-semibold hover:bg-white/10 transition-colors duration-300 text-lg"
+                className="inline-block border-2 border-white text-white px-4 sm:px-6 md:px-8 py-3 sm:py-4 rounded-lg font-semibold hover:bg-white/10 transition-colors duration-300 text-sm sm:text-base md:text-lg"
               >
                 Dienstleistungen entdecken
               </Link>
@@ -278,7 +278,7 @@ export default function WebDesignDevelopmentPage() {
       </section>
 
       {/* Values Section - New dedicated section */}
-      <section className="py-20 bg-gradient-to-br from-green-50 to-blue-50">
+      <section className="py-12 sm:py-16 md:py-20 bg-gradient-to-br from-green-50 to-blue-50">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center mb-16">
             <h2 className="text-4xl font-bold mb-6 text-gray-800">Unsere Grundwerte</h2>
@@ -395,7 +395,7 @@ export default function WebDesignDevelopmentPage() {
       </section>
 
       {/* Automation Philosophy Section */}
-      <section className="py-20 bg-white">
+      <section className="py-12 sm:py-16 md:py-20 bg-white">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
             <div className="text-center mb-12">
@@ -526,7 +526,7 @@ export default function WebDesignDevelopmentPage() {
       </section>
 
       {/* Why Open Source Section */}
-      <section className="py-20 bg-gray-50">
+      <section className="py-12 sm:py-16 md:py-20 bg-gray-50">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center mb-16">
             <h2 className="text-3xl font-bold mb-6">Warum diese Werte wichtig sind</h2>
@@ -552,7 +552,7 @@ export default function WebDesignDevelopmentPage() {
       </section>
 
       {/* Technologies Section with Filtering */}
-      <section className="py-20 bg-white">
+      <section className="py-12 sm:py-16 md:py-20 bg-white">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center mb-12">
             <h2 className="text-3xl font-bold mb-6">Technologien, die wir verwenden</h2>
@@ -633,7 +633,7 @@ export default function WebDesignDevelopmentPage() {
       </section>
 
       {/* Benefits Section */}
-      <section className="py-20 bg-gray-50">
+      <section className="py-12 sm:py-16 md:py-20 bg-gray-50">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center mb-16">
             <h2 className="text-3xl font-bold mb-6">Warum unsere Webentwicklungsdienste wählen?</h2>
@@ -661,7 +661,7 @@ export default function WebDesignDevelopmentPage() {
       </section>
 
       {/* Process Section */}
-      <section className="py-20 bg-white">
+      <section className="py-12 sm:py-16 md:py-20 bg-white">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center mb-16">
             <h2 className="text-3xl font-bold mb-6">Unser Entwicklungsprozess</h2>

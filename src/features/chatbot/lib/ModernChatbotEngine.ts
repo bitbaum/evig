@@ -17,6 +17,7 @@
 import { ChatbotResponse, ConversationContext, Language } from './types'
 import { ChatbotOrchestrator } from './services/ChatbotOrchestrator'
 import { NavigationService } from './services/NavigationService'
+import { logger } from '@/lib/logger'
 
 export class ModernChatbotEngine {
   private orchestrator: ChatbotOrchestrator
@@ -288,7 +289,7 @@ export class ModernChatbotEngine {
   ): void {
     // In a real application, this would send data to analytics
     if (process.env.NODE_ENV === 'development') {
-      console.log('Chatbot Interaction:', {
+      logger.debug('Chatbot Interaction:', {
         timestamp: new Date().toISOString(),
         message: message.substring(0, 100), // Truncate for privacy
         confidence: response.confidence,

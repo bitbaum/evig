@@ -152,25 +152,25 @@ const WorkshopsPage: React.FC = () => {
   return (
     <main className="min-h-screen bg-gray-50">
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-green-700 via-green-800 to-green-900 text-white py-24 overflow-hidden">
+      <section className="relative bg-gradient-to-br from-green-700 via-green-800 to-green-900 text-white py-12 sm:py-16 md:py-20 lg:py-24 overflow-hidden">
         <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-10"></div>
-        <div className="container mx-auto px-4 relative">
+        <div className="container mx-auto px-4 sm:px-6 relative">
           <div className="max-w-3xl">
-            <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">Technische Fähigkeiten meistern, Zukunft gestalten</h1>
-            <p className="text-xl text-green-100 mb-8">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6 leading-tight">Technische Fähigkeiten meistern, Zukunft gestalten</h1>
+            <p className="text-base sm:text-lg md:text-xl text-green-100 mb-6 sm:mb-8">
               Verwandeln Sie Ihre Neugier in praktisches Fachwissen mit unseren praxisorientierten Workshops. Von Linux-Expertise bis zur Computerreparatur - lernen Sie direkt von Branchenexperten in einer unterstützenden Umgebung. Keine Vorerfahrung nötig - bringen Sie einfach Ihre Begeisterung mit!
             </p>
-            <div className="flex flex-wrap gap-4">
-              <div className="flex items-center bg-white/10 rounded-lg px-4 py-2">
-                <Users className="w-5 h-5 mr-2" />
+            <div className="flex flex-wrap gap-2 sm:gap-4">
+              <div className="flex items-center bg-white/10 rounded-lg px-3 sm:px-4 py-1.5 sm:py-2 text-sm sm:text-base">
+                <Users className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
                 <span>Expertengeleitete Sitzungen</span>
               </div>
-              <div className="flex items-center bg-white/10 rounded-lg px-4 py-2">
-                <Clock className="w-5 h-5 mr-2" />
+              <div className="flex items-center bg-white/10 rounded-lg px-3 sm:px-4 py-1.5 sm:py-2 text-sm sm:text-base">
+                <Clock className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
                 <span>Praktische Übungen</span>
               </div>
-              <div className="flex items-center bg-white/10 rounded-lg px-4 py-2">
-                <Calendar className="w-5 h-5 mr-2" />
+              <div className="flex items-center bg-white/10 rounded-lg px-3 sm:px-4 py-1.5 sm:py-2 text-sm sm:text-base">
+                <Calendar className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
                 <span>Flexibles Lernen</span>
               </div>
             </div>
@@ -180,19 +180,19 @@ const WorkshopsPage: React.FC = () => {
 
 
       {/* Workshops Section with Filtering */}
-      <section className="py-20">
-        <div className="container mx-auto px-4">
-          <div className="max-w-3xl mx-auto text-center mb-12">
-            <h2 className="text-3xl font-bold mb-6">Unsere Workshops</h2>
-            <p className="text-lg text-gray-600 mb-8">
+      <section className="py-12 sm:py-16 md:py-20">
+        <div className="container mx-auto px-4 sm:px-6">
+          <div className="max-w-3xl mx-auto text-center mb-8 sm:mb-12">
+            <h2 className="text-2xl sm:text-3xl font-bold mb-4 sm:mb-6">Unsere Workshops</h2>
+            <p className="text-base sm:text-lg text-gray-600 mb-6 sm:mb-8">
               Praktische Workshops mit Experten - von Linux bis KI, für alle Erfahrungsstufen.
             </p>
             
             {/* Workshop Filters */}
-            <div className="flex flex-wrap justify-center gap-3 mb-8">
-              <div className="flex items-center text-gray-500 mr-4 mb-2">
+            <div className="flex flex-wrap justify-center gap-2 sm:gap-3 mb-6 sm:mb-8">
+              <div className="flex items-center text-gray-500 mr-2 sm:mr-4 mb-2 w-full sm:w-auto justify-center sm:justify-start">
                 <Filter className="w-4 h-4 mr-2" />
-                <span className="text-sm font-medium">Nach Kategorie:</span>
+                <span className="text-xs sm:text-sm font-medium">Nach Kategorie:</span>
               </div>
               {categories.map((category) => (
                 <button
@@ -209,16 +209,16 @@ const WorkshopsPage: React.FC = () => {
               ))}
             </div>
             
-            <div className="flex flex-wrap justify-center gap-3 mb-12">
-              <div className="flex items-center text-gray-500 mr-4 mb-2">
+            <div className="flex flex-wrap justify-center gap-2 sm:gap-3 mb-8 sm:mb-12">
+              <div className="flex items-center text-gray-500 mr-2 sm:mr-4 mb-2 w-full sm:w-auto justify-center sm:justify-start">
                 <Filter className="w-4 h-4 mr-2" />
-                <span className="text-sm font-medium">Nach Status:</span>
+                <span className="text-xs sm:text-sm font-medium">Nach Status:</span>
               </div>
               {statuses.map((status) => (
                 <button
                   key={status}
                   onClick={() => status === 'Alle' ? setSelectedStatus(status) : handleStatusToggle(status)}
-                  className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
+                  className={`px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-medium transition-all duration-300 ${
                     selectedStatus === status
                       ? 'bg-blue-600 text-white shadow-lg transform scale-105'
                       : 'bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-800'
@@ -232,9 +232,9 @@ const WorkshopsPage: React.FC = () => {
 
           {/* Available Workshops */}
           {availableWorkshops.length > 0 && (
-            <div className="mb-16">
-              <h3 className="text-2xl font-bold mb-8 text-center">Aktuell verfügbare Workshops</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="mb-12 sm:mb-16">
+              <h3 className="text-xl sm:text-2xl font-bold mb-6 sm:mb-8 text-center">Aktuell verfügbare Workshops</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
                 {availableWorkshops.map((workshop, index) => (
                   <div 
                     key={`available-${workshop.title}-${selectedCategory}-${selectedStatus}`}
@@ -331,22 +331,22 @@ const WorkshopsPage: React.FC = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-r from-green-700 to-green-800 text-white">
-        <div className="container mx-auto px-4 text-center">
-          <h2 className="text-4xl font-bold mb-6">Bereit, Technologie zu entdecken?</h2>
-          <p className="text-xl mb-8 max-w-2xl mx-auto text-green-100">
+      <section className="py-12 sm:py-16 md:py-20 bg-gradient-to-r from-green-700 to-green-800 text-white">
+        <div className="container mx-auto px-4 sm:px-6 text-center">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 sm:mb-6">Bereit, Technologie zu entdecken?</h2>
+          <p className="text-base sm:text-lg md:text-xl mb-6 sm:mb-8 max-w-2xl mx-auto text-green-100">
             Nehmen Sie an unseren Workshops teil und entdecken Sie die praktische Seite der Technologie. Lernen Sie in Ihrem eigenen Tempo in einer unterstützenden Umgebung.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
             <Link
               href="/contact"
-              className="inline-block bg-white text-green-800 px-8 py-4 rounded-lg font-semibold hover:bg-green-50 transition-colors duration-300 text-lg"
+              className="inline-block bg-white text-green-800 px-4 sm:px-6 md:px-8 py-3 sm:py-4 rounded-lg font-semibold hover:bg-green-50 transition-colors duration-300 text-base sm:text-lg"
             >
               Für Workshop anmelden
             </Link>
             <Link
               href="/services"
-              className="inline-block border-2 border-white text-white px-8 py-4 rounded-lg font-semibold hover:bg-white/10 transition-colors duration-300 text-lg"
+              className="inline-block border-2 border-white text-white px-4 sm:px-6 md:px-8 py-3 sm:py-4 rounded-lg font-semibold hover:bg-white/10 transition-colors duration-300 text-base sm:text-lg"
             >
               Dienstleistungen entdecken
             </Link>

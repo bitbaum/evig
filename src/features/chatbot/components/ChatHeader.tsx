@@ -36,20 +36,20 @@ export function ChatHeader({
           <p className="text-xs text-gray-600">{getMessage('status', currentLanguage)}</p>
         </div>
       </div>
-      <div className="flex items-center space-x-1">
+      <div className="flex items-center space-x-2">
         <button
           onClick={onToggleMinimize}
-          className="p-1.5 hover:bg-gray-100 rounded-full text-gray-500 hover:text-gray-700 transition-colors"
+          className="p-2 sm:p-1.5 hover:bg-gray-100 active:bg-gray-200 rounded-full text-gray-500 hover:text-gray-700 transition-colors touch-manipulation"
           aria-label={isMinimized ? getMessage('buttons', currentLanguage).maximize : getMessage('buttons', currentLanguage).minimize}
         >
-          <ChevronDown className={cn("w-4 h-4 transition-transform", isMinimized && "rotate-180")} />
+          <ChevronDown className={cn("w-5 h-5 sm:w-4 sm:h-4 transition-transform", isMinimized && "rotate-180")} />
         </button>
         <button
           onClick={onClose}
-          className="p-1.5 hover:bg-gray-100 rounded-full text-gray-500 hover:text-gray-700 transition-colors"
+          className="p-2 sm:p-1.5 hover:bg-gray-100 active:bg-gray-200 rounded-full text-gray-500 hover:text-gray-700 transition-colors touch-manipulation"
           aria-label={getMessage('buttons', currentLanguage).close}
         >
-          <X className="w-4 h-4" />
+          <X className="w-5 h-5 sm:w-4 sm:h-4" />
         </button>
       </div>
     </div>

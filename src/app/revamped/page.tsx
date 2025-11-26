@@ -45,32 +45,32 @@ export default function RevampedPage() {
   return (
     <main>
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-green-700 via-green-800 to-green-900 text-white py-24 overflow-hidden">
+      <section className="relative bg-gradient-to-br from-green-700 via-green-800 to-green-900 text-white py-12 sm:py-16 md:py-20 lg:py-24 overflow-hidden">
         <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-10"></div>
-        <div className="container mx-auto px-4 relative">
+        <div className="container mx-auto px-4 sm:px-6 relative">
           <div className="max-w-4xl mx-auto text-center">
-            <div className="inline-flex items-center bg-green-600/30 px-6 py-3 rounded-full mb-6">
-              <Award className="w-8 h-8 text-green-200 mr-3" />
-              <span className="text-2xl font-bold text-white">REVAMPED</span>
-              <Sparkles className="w-6 h-6 text-green-200 ml-2" />
+            <div className="inline-flex items-center bg-green-600/30 px-4 sm:px-6 py-2 sm:py-3 rounded-full mb-4 sm:mb-6">
+              <Award className="w-6 h-6 sm:w-8 sm:h-8 text-green-200 mr-2 sm:mr-3" />
+              <span className="text-xl sm:text-2xl font-bold text-white">REVAMPED</span>
+              <Sparkles className="w-5 h-5 sm:w-6 sm:h-6 text-green-200 ml-2" />
             </div>
-            <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6 leading-tight">
               Die REVAMPED-Zertifizierung
             </h1>
-            <p className="text-xl text-green-100 mb-8 max-w-3xl mx-auto">
+            <p className="text-base sm:text-lg md:text-xl text-green-100 mb-6 sm:mb-8 max-w-3xl mx-auto">
               Jeder Computer, den wir bauen, erhält unser exklusives "REVAMPED"-Label - eine Garantie für Nachhaltigkeit, Qualität und Leistung, die einen neuen Standard in der Branche setzt.
             </p>
-            <div className="flex flex-wrap justify-center gap-4 text-sm">
-              <div className="flex items-center bg-green-600/30 px-4 py-2 rounded-full">
-                <Recycle className="w-4 h-4 mr-2" />
+            <div className="flex flex-wrap justify-center gap-3 sm:gap-4 text-xs sm:text-sm">
+              <div className="flex items-center bg-green-600/30 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full">
+                <Recycle className="w-3 h-3 sm:w-4 sm:h-4 mr-2" />
 Nachhaltigkeitsfokus
               </div>
-              <div className="flex items-center bg-green-600/30 px-4 py-2 rounded-full">
-                <Shield className="w-4 h-4 mr-2" />
+              <div className="flex items-center bg-green-600/30 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full">
+                <Shield className="w-3 h-3 sm:w-4 sm:h-4 mr-2" />
 Qualitätsgarantie
               </div>
-              <div className="flex items-center bg-green-600/30 px-4 py-2 rounded-full">
-                <Star className="w-4 h-4 mr-2" />
+              <div className="flex items-center bg-green-600/30 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full">
+                <Star className="w-3 h-3 sm:w-4 sm:h-4 mr-2" />
 KI-optimierte Builds
               </div>
             </div>
@@ -79,14 +79,14 @@ KI-optimierte Builds
       </section>
 
       {/* Hero Image with Real Revamped Laptop */}
-      <section className="py-20">
-        <div className="container mx-auto px-4">
+      <section className="py-12 sm:py-16 md:py-20">
+        <div className="container mx-auto px-4 sm:px-6">
           <div className="max-w-7xl mx-auto">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12 items-center">
               {/* Left Column - Content */}
-              <div className="space-y-8">
+              <div className="space-y-6 sm:space-y-8">
                 <div>
-                  <h2 className="text-4xl md:text-5xl font-bold mb-6 leading-tight">
+                  <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 sm:mb-6 leading-tight">
                     Echte REVAMPED-Computer im Einsatz
                   </h2>
                   <p className="text-xl text-gray-600 mb-8 leading-relaxed">
@@ -303,7 +303,7 @@ Mehr über Zertifizierung erfahren
       </section>
 
       {/* Call to Action */}
-      <section className="py-20">
+      <section className="py-12 sm:py-16 md:py-20">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
             <h2 className="text-4xl font-bold mb-6">Schliessen Sie sich der REVAMPED-Revolution an</h2>

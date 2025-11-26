@@ -121,11 +121,11 @@ export default function LinuxPage() {
   return (
     <main>
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-green-700 via-green-800 to-green-900 text-white py-24 overflow-hidden">
+      <section className="relative bg-gradient-to-br from-green-700 via-green-800 to-green-900 text-white py-12 sm:py-16 md:py-20 lg:py-24 overflow-hidden">
         <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-10"></div>
-        <div className="container mx-auto px-4 relative">
+        <div className="container mx-auto px-4 sm:px-6 relative">
           <div className="max-w-3xl">
-            <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">Linux & Open Source</h1>
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6 leading-tight">Linux & Open Source</h1>
             <p className="text-xl text-green-100">
               Professionelle Linux-Installation, Support und Schulungsdienstleistungen. Finden Sie die perfekte Distribution für Ihre Bedürfnisse.
             </p>
@@ -142,7 +142,7 @@ export default function LinuxPage() {
       </section>
 
       {/* Services & Pricing Section - Immediately after hero */}
-      <section className="py-20 bg-white">
+      <section className="py-12 sm:py-16 md:py-20 bg-white">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center mb-16">
             <h2 className="text-3xl font-bold mb-6">Unsere Linux-Dienstleistungen</h2>
@@ -259,7 +259,7 @@ Jetzt anrufen
       </section>
 
       {/* Benefits Section */}
-      <section className="py-20 bg-gray-50">
+      <section className="py-12 sm:py-16 md:py-20 bg-gray-50">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center mb-16">
             <h2 className="text-3xl font-bold mb-6">Warum Linux wählen?</h2>
@@ -282,7 +282,7 @@ Jetzt anrufen
       </section>
 
       {/* Distributions Section */}
-      <section className="py-20 bg-white">
+      <section className="py-12 sm:py-16 md:py-20 bg-white">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center mb-16">
             <h2 className="text-3xl font-bold mb-6">Beliebte Linux-Distributionen</h2>

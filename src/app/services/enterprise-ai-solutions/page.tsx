@@ -417,30 +417,30 @@ export default function EnterpriseAIPage() {
         </div>
 
         {/* Hero Section */}
-        <section className="relative bg-gradient-to-br from-green-700 via-green-800 to-green-900 text-white py-24 overflow-hidden">
+        <section className="relative bg-gradient-to-br from-green-700 via-green-800 to-green-900 text-white py-12 sm:py-16 md:py-20 lg:py-24 overflow-hidden">
           <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-10"></div>
-          <div className="container mx-auto px-4 relative">
+          <div className="container mx-auto px-4 sm:px-6 relative">
             <div className="max-w-4xl">
-              <div className="flex items-center mb-6">
-                <Brain className="w-16 h-16 mr-4 text-green-300" />
+              <div className="flex items-center mb-4 sm:mb-6">
+                <Brain className="w-12 h-12 sm:w-16 sm:h-16 mr-3 sm:mr-4 text-green-300" />
                 <div>
-                  <h1 className="text-5xl md:text-6xl font-bold mb-2 leading-tight">Nachhaltige Unternehmens-KI</h1>
-                  <p className="text-2xl md:text-3xl font-semibold text-green-200">Souverän • Open Source • Nachhaltig</p>
+                  <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-2 leading-tight">Nachhaltige Unternehmens-KI</h1>
+                  <p className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-semibold text-green-200">Souverän • Open Source • Nachhaltig</p>
                 </div>
               </div>
-              <p className="text-xl text-green-100 mb-8">
+              <p className="text-base sm:text-lg md:text-xl text-green-100 mb-6 sm:mb-8">
                 Die Zukunft der KI ist nachhaltiges, souveränes Computing. Setzen Sie fortschrittliche KI-Systeme ein, die Ihre Datensouveränität respektieren, auf Open-Source-Transparenz setzen und die Umweltbelastung minimieren.
               </p>
-              <div className="flex flex-col sm:flex-row gap-4">
+              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
                 <Link
                   href="/contact"
-                  className="inline-block bg-white text-green-800 px-8 py-4 rounded-lg font-semibold hover:bg-green-50 transition-colors duration-300 text-lg text-center"
+                  className="inline-block bg-white text-green-800 px-4 sm:px-6 md:px-8 py-3 sm:py-4 rounded-lg font-semibold hover:bg-green-50 transition-colors duration-300 text-sm sm:text-base md:text-lg text-center"
                 >
                   Interesse bekunden
                 </Link>
                 <Link
                   href="#case-study"
-                  className="inline-block border-2 border-white text-white px-8 py-4 rounded-lg font-semibold hover:bg-white/10 transition-colors duration-300 text-lg text-center"
+                  className="inline-block border-2 border-white text-white px-4 sm:px-6 md:px-8 py-3 sm:py-4 rounded-lg font-semibold hover:bg-white/10 transition-colors duration-300 text-sm sm:text-base md:text-lg text-center"
                 >
                   Zukünftige Pläne ansehen
                 </Link>
@@ -450,8 +450,8 @@ export default function EnterpriseAIPage() {
         </section>
 
         {/* Core Values */}
-        <section className="py-20">
-          <div className="container mx-auto px-4">
+        <section className="py-12 sm:py-16 md:py-20">
+          <div className="container mx-auto px-4 sm:px-6">
             <div className="text-center mb-16">
               <h2 className="text-4xl font-bold mb-6">Unser Ethos: Die Zukunft des Computing</h2>
               <p className="text-xl text-gray-600 max-w-3xl mx-auto">
@@ -473,7 +473,7 @@ export default function EnterpriseAIPage() {
         </section>
 
         {/* Value Proposition */}
-        <section className="py-20 bg-white">
+        <section className="py-12 sm:py-16 md:py-20 bg-white">
           <div className="container mx-auto px-4">
             <div className="text-center mb-16">
               <h2 className="text-4xl font-bold mb-6">Warum nachhaltige, souveräne KI?</h2>
@@ -739,7 +739,7 @@ export default function EnterpriseAIPage() {
         </section>
 
         {/* Risk Mitigation */}
-        <section className="py-20 bg-white">
+        <section className="py-12 sm:py-16 md:py-20 bg-white">
           <div className="container mx-auto px-4">
             <div className="text-center mb-16">
               <h2 className="text-4xl font-bold mb-6">Risikomanagement</h2>

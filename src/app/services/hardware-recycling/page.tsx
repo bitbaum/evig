@@ -88,13 +88,13 @@ export default function HardwareRecyclingPage() {
 
       <main className="min-h-screen bg-gray-50">
         {/* Hero Section */}
-        <section className="relative bg-gradient-to-br from-green-700 via-green-800 to-green-900 text-white py-24 overflow-hidden">
+        <section className="relative bg-gradient-to-br from-green-700 via-green-800 to-green-900 text-white py-12 sm:py-16 md:py-20 lg:py-24 overflow-hidden">
           <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-10"></div>
-          <div className="container mx-auto px-4 relative">
+          <div className="container mx-auto px-4 sm:px-6 relative">
             <div className="max-w-4xl">
-              <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">Hardware-Recycling</h1>
-              <h2 className="text-2xl md:text-3xl font-semibold mb-8 text-green-200">Nachhaltige IT-Lösungen</h2>
-              <p className="text-xl text-green-100 mb-8">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6 leading-tight">Hardware-Recycling</h1>
+              <h2 className="text-xl sm:text-2xl md:text-3xl font-semibold mb-4 sm:mb-6 md:mb-8 text-green-200">Nachhaltige IT-Lösungen</h2>
+              <p className="text-base sm:text-lg md:text-xl text-green-100 mb-6 sm:mb-8">
                 Wir bieten verantwortungsvolle Recycling- und Aufarbeitungsdienste für IT-Ausrüstung und helfen dabei,
                 Elektroschrott zu reduzieren, während wir sichere Datenlöschung gewährleisten.
               </p>
@@ -103,18 +103,18 @@ export default function HardwareRecyclingPage() {
         </section>
 
         {/* Features Grid */}
-        <section className="py-20 bg-white">
-          <div className="container mx-auto px-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+        <section className="py-12 sm:py-16 md:py-20 bg-white">
+          <div className="container mx-auto px-4 sm:px-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 max-w-5xl mx-auto">
               {features.map((feature, index) => (
-                <div key={index} className="bg-green-50 rounded-xl p-8 shadow-lg border-l-4 border-green-600">
+                <div key={index} className="bg-green-50 rounded-xl p-6 sm:p-8 shadow-lg border-l-4 border-green-600">
                   <div className="flex items-start">
-                    <div className="p-3 bg-green-100 rounded-lg text-green-600 mr-4">
-                      <feature.icon className="w-8 h-8" />
+                    <div className="p-2 sm:p-3 bg-green-100 rounded-lg text-green-600 mr-3 sm:mr-4">
+                      <feature.icon className="w-6 h-6 sm:w-8 sm:h-8" />
                     </div>
                     <div>
-                      <h3 className="text-xl font-bold mb-2">{feature.title}</h3>
-                      <p className="text-gray-600">{feature.description}</p>
+                      <h3 className="text-lg sm:text-xl font-bold mb-2">{feature.title}</h3>
+                      <p className="text-sm sm:text-base text-gray-600">{feature.description}</p>
                     </div>
                   </div>
                 </div>
@@ -124,37 +124,37 @@ export default function HardwareRecyclingPage() {
         </section>
 
         {/* Pricing Section */}
-        <section className="py-20 bg-gray-50">
-          <div className="container mx-auto px-4">
+        <section className="py-12 sm:py-16 md:py-20 bg-gray-50">
+          <div className="container mx-auto px-4 sm:px-6">
             <div className="max-w-3xl mx-auto">
-              <div className="text-center mb-12">
-                <h2 className="text-4xl font-bold text-gray-900 mb-4">Preise</h2>
-                <p className="text-xl text-gray-600">Nachhaltig und erschwinglich</p>
+              <div className="text-center mb-8 sm:mb-12">
+                <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-3 sm:mb-4">Preise</h2>
+                <p className="text-base sm:text-lg md:text-xl text-gray-600">Nachhaltig und erschwinglich</p>
               </div>
 
-              <div className="bg-white rounded-2xl shadow-xl p-8 md:p-12">
-                <div className="text-center mb-8">
-                  <div className="inline-block bg-green-100 text-green-800 px-6 py-2 rounded-full text-sm font-semibold mb-6">
+              <div className="bg-white rounded-2xl shadow-xl p-6 sm:p-8 md:p-12">
+                <div className="text-center mb-6 sm:mb-8">
+                  <div className="inline-block bg-green-100 text-green-800 px-4 sm:px-6 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-semibold mb-4 sm:mb-6">
                     Beste Wahl
                   </div>
-                  <div className="text-5xl font-bold text-gray-900 mb-2">
+                  <div className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-2">
                     Kostenlos
                   </div>
-                  <p className="text-gray-600">für die meisten Artikel</p>
+                  <p className="text-sm sm:text-base text-gray-600">für die meisten Artikel</p>
                 </div>
 
-                <div className="space-y-4 mb-8">
+                <div className="space-y-3 sm:space-y-4 mb-6 sm:mb-8">
                   {pricingFeatures.map((feature, index) => (
                     <div key={index} className="flex items-center">
-                      <CheckCircle2 className="w-5 h-5 text-green-600 mr-3 flex-shrink-0" />
-                      <span className="text-gray-700">{feature}</span>
+                      <CheckCircle2 className="w-4 h-4 sm:w-5 sm:h-5 text-green-600 mr-2 sm:mr-3 flex-shrink-0" />
+                      <span className="text-sm sm:text-base text-gray-700">{feature}</span>
                     </div>
                   ))}
                 </div>
 
                 <Link
                   href="/contact"
-                  className="block w-full bg-green-600 text-white text-center py-4 px-6 rounded-lg font-semibold hover:bg-green-700 transition-colors duration-300"
+                  className="block w-full bg-green-600 text-white text-center py-3 sm:py-4 px-4 sm:px-6 rounded-lg font-semibold hover:bg-green-700 transition-colors duration-300 text-sm sm:text-base"
                 >
                   Bereit loszulegen?
                 </Link>
@@ -164,29 +164,29 @@ export default function HardwareRecyclingPage() {
         </section>
 
         {/* Environmental Impact */}
-        <section className="py-20 bg-white">
-          <div className="container mx-auto px-4">
+        <section className="py-12 sm:py-16 md:py-20 bg-white">
+          <div className="container mx-auto px-4 sm:px-6">
             <div className="max-w-4xl mx-auto">
-              <div className="text-center mb-12">
-                <Leaf className="w-16 h-16 text-green-600 mx-auto mb-4" />
-                <h2 className="text-4xl font-bold text-gray-900 mb-4">Umweltverantwortung</h2>
-                <p className="text-xl text-gray-600">
+              <div className="text-center mb-8 sm:mb-12">
+                <Leaf className="w-12 h-12 sm:w-16 sm:h-16 text-green-600 mx-auto mb-3 sm:mb-4" />
+                <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-3 sm:mb-4">Umweltverantwortung</h2>
+                <p className="text-base sm:text-lg md:text-xl text-gray-600">
                   Jedes recycelte Gerät hilft, unseren Planeten zu schützen
                 </p>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
-                <div className="bg-green-50 rounded-xl p-8">
-                  <div className="text-4xl font-bold text-green-600 mb-2">100%</div>
-                  <p className="text-gray-700">Sichere Datenlöschung</p>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 text-center">
+                <div className="bg-green-50 rounded-xl p-6 sm:p-8">
+                  <div className="text-3xl sm:text-4xl font-bold text-green-600 mb-2">100%</div>
+                  <p className="text-sm sm:text-base text-gray-700">Sichere Datenlöschung</p>
                 </div>
-                <div className="bg-green-50 rounded-xl p-8">
-                  <div className="text-4xl font-bold text-green-600 mb-2">♻️</div>
-                  <p className="text-gray-700">Nachhaltige Prozesse</p>
+                <div className="bg-green-50 rounded-xl p-6 sm:p-8">
+                  <div className="text-3xl sm:text-4xl font-bold text-green-600 mb-2">♻️</div>
+                  <p className="text-sm sm:text-base text-gray-700">Nachhaltige Prozesse</p>
                 </div>
-                <div className="bg-green-50 rounded-xl p-8">
-                  <div className="text-4xl font-bold text-green-600 mb-2">🌱</div>
-                  <p className="text-gray-700">Reduzierter E-Waste</p>
+                <div className="bg-green-50 rounded-xl p-6 sm:p-8">
+                  <div className="text-3xl sm:text-4xl font-bold text-green-600 mb-2">🌱</div>
+                  <p className="text-sm sm:text-base text-gray-700">Reduzierter E-Waste</p>
                 </div>
               </div>
             </div>
@@ -194,40 +194,40 @@ export default function HardwareRecyclingPage() {
         </section>
 
         {/* Contact Information */}
-        <section className="py-20 bg-gray-50">
-          <div className="container mx-auto px-4">
+        <section className="py-12 sm:py-16 md:py-20 bg-gray-50">
+          <div className="container mx-auto px-4 sm:px-6">
             <div className="max-w-4xl mx-auto">
-              <div className="text-center mb-12">
-                <h2 className="text-4xl font-bold text-gray-900 mb-4">Kontaktieren Sie uns heute</h2>
-                <p className="text-xl text-gray-600">
+              <div className="text-center mb-8 sm:mb-12">
+                <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-3 sm:mb-4">Kontaktieren Sie uns heute</h2>
+                <p className="text-base sm:text-lg md:text-xl text-gray-600">
                   Um mehr über unsere Hardware-Recycling Dienstleistungen zu erfahren
                 </p>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div className="bg-white rounded-xl p-8 shadow-lg">
-                  <MapPin className="w-8 h-8 text-green-600 mb-4" />
-                  <h3 className="text-xl font-bold mb-4">Standorte</h3>
-                  <div className="space-y-3 text-gray-600">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
+                <div className="bg-white rounded-xl p-6 sm:p-8 shadow-lg">
+                  <MapPin className="w-6 h-6 sm:w-8 sm:h-8 text-green-600 mb-3 sm:mb-4" />
+                  <h3 className="text-lg sm:text-xl font-bold mb-3 sm:mb-4">Standorte</h3>
+                  <div className="space-y-2 sm:space-y-3 text-sm sm:text-base text-gray-600">
                     <p><strong>Verkauf:</strong><br />Birmensdorferstr. 379, 8055 Zürich</p>
                     <p><strong>Lager:</strong><br />Badenerstr. 816, 8048 Zürich<br />(Nur nach Vereinbarung)</p>
                   </div>
                 </div>
 
-                <div className="bg-white rounded-xl p-8 shadow-lg">
-                  <div className="mb-6">
-                    <Phone className="w-8 h-8 text-green-600 mb-4" />
-                    <h3 className="text-xl font-bold mb-4">Kontakt</h3>
-                    <p className="text-gray-600">
+                <div className="bg-white rounded-xl p-6 sm:p-8 shadow-lg">
+                  <div className="mb-4 sm:mb-6">
+                    <Phone className="w-6 h-6 sm:w-8 sm:h-8 text-green-600 mb-3 sm:mb-4" />
+                    <h3 className="text-lg sm:text-xl font-bold mb-3 sm:mb-4">Kontakt</h3>
+                    <p className="text-sm sm:text-base text-gray-600">
                       <strong>Telefon:</strong><br />
                       +41 44 586 86 86
                     </p>
                   </div>
 
                   <div>
-                    <Clock className="w-8 h-8 text-green-600 mb-4" />
-                    <h3 className="text-xl font-bold mb-4">Öffnungszeiten</h3>
-                    <div className="text-gray-600 space-y-1">
+                    <Clock className="w-6 h-6 sm:w-8 sm:h-8 text-green-600 mb-3 sm:mb-4" />
+                    <h3 className="text-lg sm:text-xl font-bold mb-3 sm:mb-4">Öffnungszeiten</h3>
+                    <div className="text-sm sm:text-base text-gray-600 space-y-1">
                       <p>Montag: 9:00-12:00</p>
                       <p>Dienstag-Freitag: 13:00-17:00</p>
                     </div>
@@ -239,23 +239,23 @@ export default function HardwareRecyclingPage() {
         </section>
 
         {/* CTA Section */}
-        <section className="py-20 bg-gradient-to-r from-green-700 to-green-800 text-white">
-          <div className="container mx-auto px-4 text-center">
-            <h2 className="text-4xl font-bold mb-6">Bereit loszulegen?</h2>
-            <p className="text-xl mb-8 max-w-2xl mx-auto text-green-100">
+        <section className="py-12 sm:py-16 md:py-20 bg-gradient-to-r from-green-700 to-green-800 text-white">
+          <div className="container mx-auto px-4 sm:px-6 text-center">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 sm:mb-6">Bereit loszulegen?</h2>
+            <p className="text-base sm:text-lg md:text-xl mb-6 sm:mb-8 max-w-2xl mx-auto text-green-100">
               Kontaktieren Sie uns heute, um mehr über unsere Hardware-Recycling Dienstleistungen zu erfahren.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
               <Link
                 href="/contact"
-                className="inline-flex items-center justify-center bg-white text-green-800 px-8 py-4 rounded-lg font-semibold hover:bg-green-50 transition-colors duration-300 text-lg"
+                className="inline-flex items-center justify-center bg-white text-green-800 px-4 sm:px-6 md:px-8 py-3 sm:py-4 rounded-lg font-semibold hover:bg-green-50 transition-colors duration-300 text-sm sm:text-base md:text-lg"
               >
                 Kontakt
-                <ArrowRight className="ml-2 w-5 h-5" />
+                <ArrowRight className="ml-2 w-4 h-4 sm:w-5 sm:h-5" />
               </Link>
               <Link
                 href="/services"
-                className="inline-flex items-center justify-center border-2 border-white text-white px-8 py-4 rounded-lg font-semibold hover:bg-white/10 transition-colors duration-300 text-lg"
+                className="inline-flex items-center justify-center border-2 border-white text-white px-4 sm:px-6 md:px-8 py-3 sm:py-4 rounded-lg font-semibold hover:bg-white/10 transition-colors duration-300 text-sm sm:text-base md:text-lg"
               >
                 Zurück zu Services
               </Link>

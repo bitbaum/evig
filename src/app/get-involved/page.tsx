@@ -146,16 +146,16 @@ export default function GetInvolvedPage() {
         title="Schliessen Sie sich unserer Mission an"
         description="Werden Sie Teil einer Gemeinschaft, die Technologie nachhaltig und für alle zugänglich macht."
       >
-        <div className="flex flex-col sm:flex-row gap-4">
+        <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
           <a
             href="#get-started"
-            className="bg-white text-green-800 px-8 py-3 rounded-lg font-semibold hover:bg-green-50 transition-colors duration-300 text-center"
+            className="bg-white text-green-800 px-4 sm:px-6 md:px-8 py-2.5 sm:py-3 rounded-lg font-semibold hover:bg-green-50 transition-colors duration-300 text-center text-sm sm:text-base"
           >
             Loslegen
           </a>
           <a
             href="#learn-more"
-            className="bg-transparent border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white/10 transition-colors duration-300 text-center"
+            className="bg-transparent border-2 border-white text-white px-4 sm:px-6 md:px-8 py-2.5 sm:py-3 rounded-lg font-semibold hover:bg-white/10 transition-colors duration-300 text-center text-sm sm:text-base"
           >
             Mehr erfahren
           </a>
@@ -163,17 +163,17 @@ export default function GetInvolvedPage() {
       </HeroBanner>
 
       {/* Core Values Section */}
-      <section id="learn-more" className="py-20 bg-gray-50">
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl md:text-4xl font-bold text-center mb-16">Unsere Grundwerte</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+      <section id="learn-more" className="py-12 sm:py-16 md:py-20 bg-gray-50">
+        <div className="container mx-auto px-4 sm:px-6">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center mb-8 sm:mb-12 md:mb-16">Unsere Grundwerte</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
             {coreValues.map((value, index) => (
-              <div key={index} className="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300">
-                <div className="text-green-600 mb-4">
-                  <value.icon className="w-12 h-12" />
+              <div key={index} className="bg-white rounded-xl p-5 sm:p-6 shadow-lg hover:shadow-xl transition-all duration-300">
+                <div className="text-green-600 mb-3 sm:mb-4">
+                  <value.icon className="w-10 h-10 sm:w-12 sm:h-12" />
                 </div>
-                <h3 className="text-xl font-semibold mb-3">{value.title}</h3>
-                <p className="text-gray-600">{value.description}</p>
+                <h3 className="text-lg sm:text-xl font-semibold mb-2 sm:mb-3">{value.title}</h3>
+                <p className="text-sm sm:text-base text-gray-600">{value.description}</p>
               </div>
             ))}
           </div>
@@ -181,30 +181,30 @@ export default function GetInvolvedPage() {
       </section>
 
       {/* Involvement Options */}
-      <section id="get-started" className="py-20">
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl md:text-4xl font-bold text-center mb-16">Wege zum Mitmachen</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <section id="get-started" className="py-12 sm:py-16 md:py-20">
+        <div className="container mx-auto px-4 sm:px-6">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center mb-8 sm:mb-12 md:mb-16">Wege zum Mitmachen</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
             {involvementOptions.map((option, index) => (
-              <div key={index} className="bg-white rounded-xl shadow-lg p-8 hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border border-gray-100 flex flex-col h-full">
-                <div className="text-green-600 mb-6">
-                  <option.icon className="w-12 h-12" />
+              <div key={index} className="bg-white rounded-xl shadow-lg p-6 sm:p-8 hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border border-gray-100 flex flex-col h-full">
+                <div className="text-green-600 mb-4 sm:mb-6">
+                  <option.icon className="w-10 h-10 sm:w-12 sm:h-12" />
                 </div>
-                <h3 className="text-2xl font-semibold mb-4">{option.title}</h3>
-                <p className="text-gray-600 mb-6 flex-grow">{option.description}</p>
-                <ul className="space-y-3 mb-8">
+                <h3 className="text-xl sm:text-2xl font-semibold mb-3 sm:mb-4">{option.title}</h3>
+                <p className="text-sm sm:text-base text-gray-600 mb-4 sm:mb-6 flex-grow">{option.description}</p>
+                <ul className="space-y-2 sm:space-y-3 mb-6 sm:mb-8">
                   {option.features.map((feature, featureIndex) => (
-                    <li key={featureIndex} className="flex items-center text-gray-600">
-                      <svg className="w-5 h-5 mr-3 text-green-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <li key={featureIndex} className="flex items-start text-gray-600">
+                      <svg className="w-4 h-4 sm:w-5 sm:h-5 mr-2 sm:mr-3 text-green-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                       </svg>
-                      {feature}
+                      <span className="text-xs sm:text-sm">{feature}</span>
                     </li>
                   ))}
                 </ul>
                 <a
                   href={option.href}
-                  className="inline-block bg-green-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors duration-300 w-full text-center mt-auto"
+                  className="inline-block bg-green-600 text-white px-4 sm:px-6 py-2.5 sm:py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors duration-300 w-full text-center mt-auto text-sm sm:text-base"
                 >
                   {option.cta}
                 </a>
@@ -215,18 +215,18 @@ export default function GetInvolvedPage() {
       </section>
 
       {/* Testimonials Section */}
-      <section className="py-20 bg-gray-50">
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl md:text-4xl font-bold text-center mb-16">Was unsere Gemeinschaft sagt</h2>
+      <section className="py-12 sm:py-16 md:py-20 bg-gray-50">
+        <div className="container mx-auto px-4 sm:px-6">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center mb-8 sm:mb-12 md:mb-16">Was unsere Gemeinschaft sagt</h2>
           <div className="max-w-3xl mx-auto">
             {testimonials.map((testimonial, index) => (
-              <div key={index} className="bg-white rounded-xl p-8 shadow-lg">
-                <div className="text-green-600 mb-4">
-                  <Heart className="w-8 h-8" />
+              <div key={index} className="bg-white rounded-xl p-6 sm:p-8 shadow-lg">
+                <div className="text-green-600 mb-3 sm:mb-4">
+                  <Heart className="w-6 h-6 sm:w-8 sm:h-8" />
                 </div>
-                <blockquote className="text-gray-600 mb-6 italic text-lg">"{testimonial.quote}"</blockquote>
-                <div className="font-semibold text-lg">{testimonial.author}</div>
-                <div className="text-gray-500">{testimonial.role}</div>
+                <blockquote className="text-sm sm:text-base md:text-lg text-gray-600 mb-4 sm:mb-6 italic">"{testimonial.quote}"</blockquote>
+                <div className="font-semibold text-base sm:text-lg">{testimonial.author}</div>
+                <div className="text-sm sm:text-base text-gray-500">{testimonial.role}</div>
               </div>
             ))}
           </div>
@@ -234,23 +234,23 @@ export default function GetInvolvedPage() {
       </section>
 
       {/* Partner Institutions */}
-      <section className="py-20">
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl md:text-4xl font-bold text-center mb-16">Unsere Partnerorganisationen</h2>
+      <section className="py-12 sm:py-16 md:py-20">
+        <div className="container mx-auto px-4 sm:px-6">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center mb-8 sm:mb-12 md:mb-16">Unsere Partnerorganisationen</h2>
           <div className="max-w-4xl mx-auto">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
               {partnerInstitutions.map((institution, index) => (
                 <a
                   key={index}
                   href={institution.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center p-6 bg-white rounded-xl shadow-sm hover:shadow-md transition-all duration-300 border border-gray-100 hover:border-green-200 group"
+                  className="flex items-center p-4 sm:p-6 bg-white rounded-xl shadow-sm hover:shadow-md transition-all duration-300 border border-gray-100 hover:border-green-200 group"
                 >
-                  <svg className="w-6 h-6 mr-4 text-green-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-5 h-5 sm:w-6 sm:h-6 mr-3 sm:mr-4 text-green-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
-                  <span className="text-gray-700 group-hover:text-green-600 transition-colors duration-300">{institution.name}</span>
+                  <span className="text-sm sm:text-base text-gray-700 group-hover:text-green-600 transition-colors duration-300">{institution.name}</span>
                 </a>
               ))}
             </div>
@@ -259,19 +259,19 @@ export default function GetInvolvedPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-br from-green-700 via-green-800 to-green-900 text-white">
-        <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-6">Bereit, einen Unterschied zu machen?</h2>
-          <p className="text-xl mb-8 max-w-2xl mx-auto text-green-100">
+      <section className="py-12 sm:py-16 md:py-20 bg-gradient-to-br from-green-700 via-green-800 to-green-900 text-white">
+        <div className="container mx-auto px-4 sm:px-6 text-center">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 sm:mb-6">Bereit, einen Unterschied zu machen?</h2>
+          <p className="text-base sm:text-lg md:text-xl mb-6 sm:mb-8 max-w-2xl mx-auto text-green-100">
             Schliessen Sie sich unserer Gemeinschaft von Veränderern an und helfen Sie uns, eine nachhaltigere Zukunft durch Technologie zu schaffen.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
             <ContactLink variant="outline" size="lg" className="bg-white text-green-800 hover:bg-green-50">
               Kontaktieren Sie uns heute
             </ContactLink>
             <a
               href="/workshops"
-              className="bg-transparent border-2 border-white text-white px-8 py-4 rounded-lg font-semibold hover:bg-white/10 transition-colors duration-300 text-lg"
+              className="bg-transparent border-2 border-white text-white px-4 sm:px-6 md:px-8 py-3 sm:py-4 rounded-lg font-semibold hover:bg-white/10 transition-colors duration-300 text-base sm:text-lg"
             >
               Workshops entdecken
             </a>

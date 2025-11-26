@@ -628,7 +628,7 @@ export default function SuggestionButton() {
               pointerEvents: 'none'
             }}
           >
-            <div className="absolute top-20 left-4 bg-blue-600 text-white px-4 py-3 rounded-lg shadow-lg text-sm font-medium max-w-xs">
+            <div className="absolute top-20 left-4 sm:left-4 right-4 sm:right-auto bg-blue-600 text-white px-4 py-3 rounded-lg shadow-lg text-sm font-medium max-w-xs sm:max-w-xs">
               <div className="flex items-center space-x-2">
                 <span>🎯</span>
                 <div>
@@ -658,10 +658,10 @@ export default function SuggestionButton() {
               </div>
             </div>
 
-            <div className="absolute top-4 right-4 flex space-x-2" style={{ pointerEvents: 'auto' }}>
+            <div className="absolute top-4 left-4 right-4 sm:right-4 sm:left-auto flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2" style={{ pointerEvents: 'auto' }}>
               <button
                 onClick={() => setIsElementSelectionMode(false)}
-                className="bg-green-600 text-white px-3 py-2 rounded-lg shadow-lg text-sm font-medium hover:bg-green-700 transition-colors"
+                className="bg-green-600 text-white px-4 py-3 sm:px-3 sm:py-2 rounded-lg shadow-lg text-sm font-medium hover:bg-green-700 active:bg-green-800 transition-colors touch-manipulation"
                 style={{ pointerEvents: 'auto' }}
               >
                 ✅ Fertig ({selectedElements.length})
@@ -671,7 +671,7 @@ export default function SuggestionButton() {
                   setIsElementSelectionMode(false)
                   resetToPageScope()
                 }}
-                className="bg-gray-600 text-white px-3 py-2 rounded-lg shadow-lg text-sm font-medium hover:bg-gray-700 transition-colors"
+                className="bg-gray-600 text-white px-4 py-3 sm:px-3 sm:py-2 rounded-lg shadow-lg text-sm font-medium hover:bg-gray-700 active:bg-gray-800 transition-colors touch-manipulation"
                 style={{ pointerEvents: 'auto' }}
               >
                 ❌ Abbrechen
@@ -682,13 +682,9 @@ export default function SuggestionButton() {
 
         {/* Side Panel */}
         <div
-          className="fixed right-4 top-20 z-[70]"
+          className="fixed z-[70] sm:right-4 sm:top-20 bottom-4 left-1/2 -translate-x-1/2 sm:left-auto sm:translate-x-0 sm:bottom-auto"
           style={{
-            maxHeight: 'calc(100vh - 5rem)',
-            position: 'fixed',
-            right: '16px',
-            top: '80px',
-            zIndex: 70
+            maxHeight: 'calc(100vh - 5rem)'
           }}
         >
           <div
@@ -698,7 +694,9 @@ export default function SuggestionButton() {
             aria-labelledby="suggestion-panel-title"
             data-suggestion-panel
             className={cn(
-              "bg-white shadow-2xl border border-gray-200 w-80 sm:w-96 rounded-l-2xl overflow-hidden flex flex-col max-h-[70vh] h-auto",
+              "bg-white shadow-2xl border border-gray-200 rounded-2xl sm:rounded-l-2xl overflow-hidden flex flex-col max-h-[calc(100vh-8rem)] sm:max-h-[70vh] h-auto",
+              // Mobile: full width with margins, desktop: fixed width
+              "w-[calc(100%-2rem)] max-w-sm sm:w-80 md:w-96",
               isElementSelectionMode && "ring-2 ring-blue-500 ring-opacity-50 pointer-events-auto"
             )}
             style={{
@@ -716,10 +714,10 @@ export default function SuggestionButton() {
                 </div>
                 <button
                   onClick={closePanelAndReset}
-                  className="text-gray-400 hover:text-gray-600 transition-colors p-1 hover:bg-gray-100 rounded-full"
+                  className="text-gray-400 hover:text-gray-600 active:bg-gray-200 transition-colors p-2 sm:p-1 hover:bg-gray-100 rounded-full touch-manipulation"
                   aria-label="Panel schließen"
                 >
-                  <X className="w-4 h-4" />
+                  <X className="w-5 h-5 sm:w-4 sm:h-4" />
                 </button>
               </div>
               <div className="mt-2 text-xs text-gray-600">
@@ -754,18 +752,18 @@ export default function SuggestionButton() {
 
   // Floating Button
   return (
-    <div className="fixed right-4 top-1/2 z-[75] -translate-y-1/2">
+    <div className="fixed z-[75] sm:right-4 sm:top-1/2 sm:-translate-y-1/2 right-4 top-20">
       <button
         onClick={() => { setIsExpanded(true); uiEvents.emit('openSuggestion') }}
         className={cn(
           "group relative",
           "bg-green-100 hover:bg-green-600 text-green-600 hover:text-white",
-          "w-12 h-12 rounded-full shadow-lg hover:shadow-xl",
+          "w-12 h-12 sm:w-12 sm:h-12 rounded-full shadow-lg hover:shadow-xl",
           "transition-all duration-300 ease-out",
           "focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2",
           "flex items-center justify-center",
           "border-2 border-white shadow-black/10",
-          "hover:scale-110 active:scale-95",
+          "hover:scale-110 active:scale-95 touch-manipulation",
           isExpanded && "ring-2 ring-green-500 ring-offset-2"
         )}
         aria-label="Verbesserungen vorschlagen öffnen"

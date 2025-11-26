@@ -13,18 +13,18 @@ interface ServiceFeaturesProps {
 
 export default function ServiceFeatures({ features }: ServiceFeaturesProps) {
   return (
-    <section className="py-20">
-      <div className="container mx-auto px-4">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+    <section className="py-12 sm:py-16 md:py-20">
+      <div className="container mx-auto px-4 sm:px-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 md:gap-12">
           {features.map((feature, index) => (
-            <div key={index} className="bg-white rounded-xl p-8 shadow-lg">
-              <div className="flex items-start mb-6">
-                <div className="p-3 bg-green-100 rounded-lg text-green-600 mr-4">
-                  <feature.icon className="w-8 h-8" />
+            <div key={index} className="bg-white rounded-xl p-6 sm:p-8 shadow-lg">
+              <div className="flex items-start mb-4 sm:mb-6">
+                <div className="p-2 sm:p-3 bg-green-100 rounded-lg text-green-600 mr-3 sm:mr-4 flex-shrink-0">
+                  <feature.icon className="w-6 h-6 sm:w-8 sm:h-8" />
                 </div>
-                <div>
-                  <h3 className="text-2xl font-bold mb-3">{feature.title}</h3>
-                  <p className="text-gray-600">{feature.description}</p>
+                <div className="flex-1 min-w-0">
+                  <h3 className="text-xl sm:text-2xl font-bold mb-2 sm:mb-3">{feature.title}</h3>
+                  <p className="text-sm sm:text-base text-gray-600">{feature.description}</p>
                 </div>
               </div>
             </div>
