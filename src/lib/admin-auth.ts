@@ -2,14 +2,21 @@ import { serialize, parse } from 'cookie'
 import jwt from 'jsonwebtoken'
 import { NextRequest, NextResponse } from 'next/server'
 
-export const JWT_SECRET = process.env.JWT_SECRET
-export const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD
-
-if (!JWT_SECRET) {
-  throw new Error('JWT_SECRET environment variable is required')
+// Lazy getters for environment variables to avoid build-time errors
+function getJwtSecret(): string {
+  const secret = process.env.JWT_SECRET
+  if (!secret) {
+    throw new Error('JWT_SECRET environment variable is required')
+  }
+  return secret
 }
-if (!ADMIN_PASSWORD) {
-  throw new Error('ADMIN_PASSWORD environment variable is required')
+
+function getAdminPassword(): string {
+  const password = process.env.ADMIN_PASSWORD
+  if (!password) {
+    throw new Error('ADMIN_PASSWORD environment variable is required')
+  }
+  return password
 }
 
 export interface AdminUser {
@@ -20,7 +27,7 @@ export interface AdminUser {
 }
 
 export function verifyAdminPassword(password: string): boolean {
-  return password === ADMIN_PASSWORD
+  return password === getAdminPassword()
 }
 
 export function createAdminToken(email: string = 'admin@revampit.ch'): string {
@@ -30,13 +37,13 @@ export function createAdminToken(email: string = 'admin@revampit.ch'): string {
     role: 'admin',
     loginTime: Date.now()
   }
-  
-  return jwt.sign(payload, JWT_SECRET!, { expiresIn: '7d' })
+
+  return jwt.sign(payload, getJwtSecret(), { expiresIn: '7d' })
 }
 
 export function verifyAdminToken(token: string): AdminUser | null {
   try {
-    const decoded = jwt.verify(token, JWT_SECRET!) as AdminUser
+    const decoded = jwt.verify(token, getJwtSecret()) as AdminUser
     return decoded
   } catch (error) {
     return null
