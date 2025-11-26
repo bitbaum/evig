@@ -2,6 +2,15 @@
 
 This directory contains comprehensive documentation for the RevampIT platform components, APIs, and architecture.
 
+**created_date**: 2025-01-15  
+**last_modified_date**: 2025-11-26  
+**last_modified_summary**: Dokumentation um aktuellen Shop-Routing-Status (Legacy, Shopware, Medusa-Planung) ergänzt
+
+## ⚠️ Essential Reading
+
+**Before starting any development work, please review:**
+- [**Best Practices Guide**](./BEST_PRACTICES.md) - Comprehensive guide covering web development, design, UX/UI, content, and **critical AI slop prevention** ⚠️
+
 ## Structure
 
 ```
@@ -49,8 +58,17 @@ docs/
 - [**Contributing**](./guides/contributing.md) - Code standards and PR process (TODO)
 - [**Troubleshooting**](./guides/troubleshooting.md) - Common issues and solutions (TODO)
 
+### Essential References
+- [**Best Practices Guide**](./BEST_PRACTICES.md) - Complete best practices for development, design, UX/UI, and AI slop prevention ⚠️
+
 ### Special Documentation
 - [**Floating UI Typing Fix**](./floating-ui-typing-fix.md) - Critical fix for React input pattern conflicts (September 2025)
+- **Shop-Routing-Überblick**: Die Hauptnavigation verlinkt `Shop` auf die Seite `/shop`.  
+  - Diese Seite bietet eine Übersicht über alle Einkaufskanäle (Ladenlokal, aktueller Online‑Shop, Shopware‑Shop, geplanter Medusa‑Shop).  
+  - Technische Links:
+    - Aktueller Online‑Shop (Legacy): `https://www.revamp-it.ch/index.php/de/shop-de`
+    - Shopware-Shop: [`https://shop.revamp-it.ch/`](https://shop.revamp-it.ch/)
+    - Zukünftiger Medusa‑Shop (Platzhalter‑Route): `/shop/medusa`
 
 ## Documentation Standards
 

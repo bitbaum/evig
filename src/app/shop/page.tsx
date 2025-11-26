@@ -7,7 +7,7 @@ import { SHOP_ONLINE_URL, SHOPWARE_URL, STORE_ADDRESS, STORE_GOOGLE_MAPS_URL, ST
 
 export const metadata: Metadata = {
   title: 'Shop | RevampIT',
-  description: 'Besuchen Sie unser Ladenlokal in Zürich oder shoppen Sie bequem online – nachhaltige, refurbished Elektronik von RevampIT.'
+  description: 'Wählen Sie, wie Sie bei RevampIT einkaufen möchten – aktueller Online-Shop, neuer Shopware-Kanal, zukünftiger Medusa-Shop oder Ladenlokal in Zürich.'
 }
 
 // URLs and address centralized in constants
@@ -16,13 +16,13 @@ export default function ShopPage() {
   return (
     <main>
       {/* Hero */}
-      <section className="relative bg-gradient-to-br from-green-700 via-green-800 to-green-900 text-white py-24 overflow-hidden">
+      <section className="relative bg-gradient-to-br from-green-700 via-green-800 to-green-900 text-white py-12 sm:py-16 md:py-20 lg:py-24 overflow-hidden">
         <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-10" />
-        <div className="container mx-auto px-4 relative">
+        <div className="container mx-auto px-4 sm:px-6 relative">
           <div className="max-w-3xl">
-            <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">Shop</h1>
-            <p className="text-xl text-green-100">
-              Refurbished Computer und nachhaltige Elektronik – im Ladenlokal in Zürich oder bequem online.
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6 leading-tight">Wie möchtest du einkaufen?</h1>
+            <p className="text-base sm:text-lg md:text-xl text-green-100">
+              Wähle den Kanal, der am besten zu dir passt: unser aktueller Online-Shop, der neue Shopware-Shop, der kommende Medusa-Webshop oder unser Ladenlokal in Zürich.
             </p>
           </div>
         </div>
@@ -30,10 +30,10 @@ export default function ShopPage() {
 
       {/* Removed redundant top quick actions – buttons remain inside the cards below */}
 
-      {/* Options */}
-      <section className="py-20 bg-white">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+      {/* Routing Options */}
+      <section className="py-12 sm:py-16 md:py-20 bg-white" id="routing">
+        <div className="container mx-auto px-4 sm:px-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             {/* Physical Store */}
             <Card className="overflow-hidden border-gray-200">
               <CardHeader className="bg-green-50">
@@ -42,7 +42,7 @@ export default function ShopPage() {
                     <Store className="w-5 h-5" />
                   </div>
                   <div>
-                    <CardTitle>Ladenlokal (Zürich)</CardTitle>
+                    <CardTitle id="ladenlokal">Ladenlokal (Zürich)</CardTitle>
                     <p className="text-sm text-gray-600">Beratung, Geräte ansehen, direkt mitnehmen</p>
                   </div>
                 </div>
@@ -90,7 +90,7 @@ export default function ShopPage() {
               </CardContent>
             </Card>
 
-            {/* Online Shop */}
+            {/* Online & zukünftige Shops */}
             <Card className="overflow-hidden border-gray-200">
               <CardHeader className="bg-blue-50">
                 <div className="flex items-center gap-3">
@@ -98,36 +98,49 @@ export default function ShopPage() {
                     <ShoppingCart className="w-5 h-5" />
                   </div>
                   <div>
-                    <CardTitle>Online-Shop</CardTitle>
-                    <p className="text-sm text-gray-600">Sicher bestellen, schnell geliefert</p>
+                    <CardTitle>Online & zukünftige Shops</CardTitle>
+                    <p className="text-sm text-gray-600">
+                      Wähle zwischen aktuellem Shop, neuem Shopware-Kanal und unserem zukünftigen Medusa-Webshop.
+                    </p>
                   </div>
                 </div>
               </CardHeader>
               <CardContent className="space-y-4">
                 <ul className="list-disc list-inside text-gray-700 space-y-1">
-                  <li>Geprüfte Qualität und Garantie</li>
+                  <li>Geprüfte Qualität und Garantie in allen Kanälen</li>
                   <li>Faire Preise, nachhaltige Auswahl</li>
                   <li>Sichere Zahlung</li>
                 </ul>
                 <div className="flex flex-wrap gap-3 pt-2">
+                  {/* Legacy / aktueller Online-Shop */}
+                  <a
+                    href={SHOP_ONLINE_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2"
+                  >
+                    <ExternalLink className="w-4 h-4 mr-2" /> Aktueller Online‑Shop
+                  </a>
+                  {/* Shopware */}
                   <a href={SHOPWARE_URL} target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2">
-                    <ExternalLink className="w-4 h-4 mr-2" /> Zum Shopware-Shop
+                    <ExternalLink className="w-4 h-4 mr-2" /> Zum Shopware‑Shop
                   </a>
-                  <a href={SHOP_ONLINE_URL} target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2">
-                    <ExternalLink className="w-4 h-4 mr-2" /> Zum Online‑Shop
-                  </a>
-                  <Link href="/services" className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2">
-                    Reparatur & Service
+                  {/* Medusa – interner Aufbau-Ort */}
+                  <Link
+                    href="/shop/medusa"
+                    className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-dashed border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2"
+                  >
+                    Geplanter Medusa‑Shop
                   </Link>
                 </div>
                 <div className="mt-4 rounded-lg border border-gray-200 bg-gray-50 p-4 text-sm text-gray-700">
                   <div className="flex items-start gap-3">
                     <Shield className="mt-0.5 w-4 h-4 text-blue-700" />
                     <div>
-                      <p className="font-medium text-gray-900 mb-1">Zwei Online-Shops?</p>
+                      <p className="font-medium text-gray-900 mb-1">Mehrere Shop‑Kanäle?</p>
                       <p>
-                        Unser Shopware-Shop bietet das vollständige Sortiment mit modernem E-Commerce. 
-                        Der Online-Shop ist unser klassisches System. Beide bieten sichere Zahlung und schnelle Lieferung.
+                        Unser aktueller Online‑Shop und der Shopware‑Shop bilden heute den Kern unseres Angebots. 
+                        Zusätzlich planen wir einen modernen, headless Medusa‑Shop, um dir in Zukunft noch flexiblere Einkaufserlebnisse zu bieten.
                       </p>
                     </div>
                   </div>

@@ -133,9 +133,40 @@ export const mainNavigation: NavigationItem[] = [
   },
   {
     name: 'Shop',
-    href: 'https://www.revamp-it.ch/index.php/de/shop-de',
-    description: 'Refurbished Elektronik kaufen',
-    external: true
+    href: '/shop',
+    description: 'Wähle zwischen Online-Shops und Ladenlokal',
+    isMultiColumn: false,
+    subItems: [
+      {
+        name: 'Shop-Übersicht',
+        href: '/shop',
+        description: 'Alle Shopping-Optionen auf einen Blick'
+      },
+      {
+        name: 'Aktueller Online-Shop',
+        href: 'https://www.revamp-it.ch/index.php/de/shop-de',
+        description: 'Bestehender Webshop (Legacy-System)',
+        external: true
+      },
+      {
+        name: 'Shopware-Shop',
+        href: 'https://www.revamp-it.ch/index.php/de/shop-de',
+        description: 'Neuer Shopware-Kanal',
+        external: true,
+        badge: 'Neu'
+      },
+      {
+        name: 'Medusa-Shop',
+        href: '/shop/medusa',
+        description: 'Zukünftiger Headless-Webshop auf Medusa',
+        badge: 'In Planung'
+      },
+      {
+        name: 'Ladenlokal Zürich',
+        href: '/shop#ladenlokal',
+        description: 'Vor Ort beraten lassen und einkaufen'
+      }
+    ]
   },
   {
     name: 'Projekte',
