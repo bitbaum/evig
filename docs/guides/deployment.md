@@ -1,9 +1,105 @@
-# RevampIT Automated Deployment Setup
+# RevampIT Deployment Guide
 
 **Created:** 2024-12-29  
-**Last Modified:** 2024-12-29
+**Last Modified:** 2025-01-XX  
+**Last Modified Summary:** Added GitHub Actions + Vercel automated deployment setup
 
-This guide will help you set up the **fully automated** deployment system. Just type `w` + Enter and your website deploys automatically - no prompts, no questions, zero manual steps!
+This guide covers multiple deployment methods for RevampIT:
+1. **GitHub + Vercel (Recommended)** - Automated CI/CD from main branch
+2. **Manual CLI Deployment** - Local deployment using scripts
+
+## 🚀 Method 1: GitHub + Vercel Automated Deployment (Recommended)
+
+This is the recommended approach for production deployments. Every push to the `main` branch automatically triggers:
+- Code quality checks (linting, type checking)
+- Build verification
+- Automatic deployment to Vercel
+
+### Initial Setup
+
+1. **Connect GitHub Repository to Vercel:**
+   - Go to [Vercel Dashboard](https://vercel.com/dashboard)
+   - Click "Add New Project"
+   - Import your GitHub repository
+   - Configure project settings:
+     - Framework Preset: Next.js
+     - Root Directory: `/` (project root)
+     - Build Command: `npm run build`
+     - Output Directory: `.next`
+     - Install Command: `npm ci`
+
+2. **Configure Environment Variables:**
+   - In Vercel project settings, add all required environment variables
+   - These should match your `.env.local` file (but never commit secrets!)
+   - Required variables:
+     - `NEXTAUTH_URL` - Production URL
+     - `NEXTAUTH_SECRET` - Secure random string
+     - `AUTH_DB_*` - Database connection strings
+     - Any other environment variables your app needs
+
+3. **Verify Vercel Configuration:**
+   - The `vercel.json` file is already configured to deploy from `main` branch
+   - Vercel will automatically detect pushes to `main` and deploy
+
+4. **GitHub Actions CI/CD:**
+   - The repository includes `.github/workflows/ci.yml` for automated checks
+   - Runs on every push and pull request
+   - Ensures code quality before deployment
+
+### How It Works
+
+1. **Developer pushes to main branch:**
+   ```bash
+   git push origin main
+   ```
+
+2. **GitHub Actions runs:**
+   - Linting and type checking
+   - Build verification
+   - Test execution (if configured)
+
+3. **Vercel automatically deploys:**
+   - Detects the push to `main` branch
+   - Builds the application
+   - Deploys to production
+   - Provides deployment URL
+
+### Deployment Workflow
+
+```
+Developer → Push to main → GitHub Actions (CI) → Vercel (Deploy) → Production
+```
+
+### Monitoring Deployments
+
+- **GitHub Actions:** Check `.github/workflows/ci.yml` status in GitHub
+- **Vercel Dashboard:** View deployments at [vercel.com/dashboard](https://vercel.com/dashboard)
+- **Deployment URLs:** 
+  - Production: `https://revampit.vercel.app`
+  - Preview: Each PR gets a preview deployment URL
+
+### Troubleshooting GitHub + Vercel Setup
+
+**Vercel not deploying automatically:**
+- Verify GitHub integration in Vercel project settings
+- Check that `vercel.json` has `"main": true` in git.deploymentEnabled
+- Ensure repository is properly connected in Vercel
+
+**Build failures:**
+- Check Vercel build logs in dashboard
+- Verify all environment variables are set
+- Ensure `package.json` build script is correct
+
+**GitHub Actions failing:**
+- Check workflow logs in GitHub Actions tab
+- Fix linting/type errors locally first
+- Ensure Node.js version matches (currently 20)
+
+---
+
+## 🛠️ Method 2: Manual CLI Deployment
+
+This guide will help you set up the **fully automated** deployment system using local scripts. Just type `w` + Enter and your website deploys automatically - no prompts, no questions, zero manual steps!
 
 ## 🚀 Quick Start
 
@@ -265,10 +361,53 @@ To update the scripts:
 - [Full Deployment Documentation](docs/DEPLOYMENT.md)
 - [Vercel CLI Documentation](https://vercel.com/docs/cli)
 - [GitHub CLI Documentation](https://cli.github.com/manual/)
+- [GitHub Actions Documentation](https://docs.github.com/en/actions)
 - [Project README](README.md)
+
+---
+
+## 🔄 Choosing Your Deployment Method
+
+### When to Use GitHub + Vercel (Method 1) ✅ Recommended
+
+**Best for:**
+- Production deployments
+- Team collaboration
+- Automated CI/CD pipelines
+- Multiple developers
+- Long-term maintenance
+
+**Advantages:**
+- ✅ Fully automated - no manual steps
+- ✅ Built-in preview deployments for PRs
+- ✅ Automatic rollback on failures
+- ✅ Deployment history and logs
+- ✅ No local dependencies required
+- ✅ Works for all team members
+
+### When to Use Manual CLI (Method 2)
+
+**Best for:**
+- Quick local testing
+- Development workflows
+- Single developer projects
+- Custom deployment scripts
+- Learning/debugging
+
+**Advantages:**
+- ✅ Full control over deployment process
+- ✅ Can test locally before pushing
+- ✅ Useful for debugging deployment issues
+- ✅ Works offline (after initial setup)
+
+### Recommendation
+
+**For production:** Use **Method 1 (GitHub + Vercel)** - it's the industry standard, fully automated, and requires zero maintenance once set up.
+
+**For development:** Use **Method 2 (Manual CLI)** when you need to test deployments locally or debug issues.
 
 ---
 
 **Happy Deploying!** 🚀
 
-Now you can deploy with **zero interaction** - just type `w` + Enter and watch your website go live automatically! All best practices are handled behind the scenes. 
+Choose the method that best fits your workflow. For most teams, the GitHub + Vercel integration provides the best balance of automation, reliability, and ease of use. 
