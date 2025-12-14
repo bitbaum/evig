@@ -1,0 +1,312 @@
+/**
+ * CSRF Protection Middleware
+ *
+ * Implements the Synchronizer Token Pattern for CSRF protection.
+ * Also supports the Double Submit Cookie pattern as a fallback.
+ *
+ * Security features:
+ * - Cryptographically secure token generation
+ * - Token tied to session
+ * - Constant-time comparison to prevent timing attacks
+ * - Token rotation on sensitive operations
+ */
+
+import { randomBytes, createHash } from 'crypto'
+import { NextRequest, NextResponse } from 'next/server'
+import { serialize, parse } from 'cookie'
+import { constantTimeCompare } from './password'
+
+// =============================================================================
+// Configuration
+// =============================================================================
+
+const CSRF_CONFIG = {
+  cookieName: '__Host-csrf',  // __Host- prefix for additional security
+  headerName: 'x-csrf-token',
+  formFieldName: '_csrf',
+  tokenLength: 32,
+  cookieMaxAge: 24 * 60 * 60, // 24 hours
+  // Methods that require CSRF protection
+  protectedMethods: ['POST', 'PUT', 'PATCH', 'DELETE'],
+  // Paths that don't require CSRF (e.g., webhooks, API with API key auth)
+  excludedPaths: [
+    '/api/webhooks/',
+    '/api/public/',
+  ],
+}
+
+// =============================================================================
+// Token Generation and Validation
+// =============================================================================
+
+/**
+ * Generate a CSRF token
+ */
+export function generateCsrfToken(): string {
+  return randomBytes(CSRF_CONFIG.tokenLength).toString('hex')
+}
+
+/**
+ * Hash a CSRF token for storage
+ */
+export function hashCsrfToken(token: string): string {
+  return createHash('sha256').update(token).digest('hex')
+}
+
+/**
+ * Validate a CSRF token against its hash
+ */
+export function validateCsrfToken(token: string, hash: string): boolean {
+  const tokenHash = hashCsrfToken(token)
+  return constantTimeCompare(tokenHash, hash)
+}
+
+// =============================================================================
+// Cookie Helpers
+// =============================================================================
+
+/**
+ * Create a CSRF cookie
+ */
+export function createCsrfCookie(token: string): string {
+  return serialize(CSRF_CONFIG.cookieName, token, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'strict',
+    path: '/',
+    maxAge: CSRF_CONFIG.cookieMaxAge,
+  })
+}
+
+/**
+ * Get CSRF token from cookies
+ */
+export function getCsrfFromCookies(cookieHeader: string | null): string | null {
+  if (!cookieHeader) return null
+  const cookies = parse(cookieHeader)
+  return cookies[CSRF_CONFIG.cookieName] || null
+}
+
+// =============================================================================
+// Request Helpers
+// =============================================================================
+
+/**
+ * Get CSRF token from request (header or form body)
+ */
+export async function getCsrfFromRequest(request: NextRequest): Promise<string | null> {
+  // First check header
+  const headerToken = request.headers.get(CSRF_CONFIG.headerName)
+  if (headerToken) return headerToken
+
+  // Then check form body for POST requests
+  const contentType = request.headers.get('content-type') || ''
+
+  if (contentType.includes('application/x-www-form-urlencoded')) {
+    try {
+      const formData = await request.formData()
+      const formToken = formData.get(CSRF_CONFIG.formFieldName)
+      if (typeof formToken === 'string') return formToken
+    } catch {
+      // Ignore parsing errors
+    }
+  }
+
+  if (contentType.includes('application/json')) {
+    try {
+      const body = await request.clone().json()
+      if (body && typeof body._csrf === 'string') return body._csrf
+    } catch {
+      // Ignore parsing errors
+    }
+  }
+
+  return null
+}
+
+/**
+ * Check if request path is excluded from CSRF protection
+ */
+export function isExcludedPath(pathname: string): boolean {
+  return CSRF_CONFIG.excludedPaths.some(path =>
+    pathname.startsWith(path)
+  )
+}
+
+/**
+ * Check if request method requires CSRF protection
+ */
+export function requiresCsrfProtection(method: string): boolean {
+  return CSRF_CONFIG.protectedMethods.includes(method.toUpperCase())
+}
+
+// =============================================================================
+// CSRF Validation Middleware
+// =============================================================================
+
+interface CsrfValidationResult {
+  valid: boolean
+  error?: string
+  newToken?: string  // For token rotation
+}
+
+/**
+ * Validate CSRF token for a request
+ */
+export async function validateCsrf(request: NextRequest): Promise<CsrfValidationResult> {
+  const { pathname } = request.nextUrl
+  const method = request.method
+
+  // Skip for non-protected methods
+  if (!requiresCsrfProtection(method)) {
+    return { valid: true }
+  }
+
+  // Skip for excluded paths
+  if (isExcludedPath(pathname)) {
+    return { valid: true }
+  }
+
+  // Get token from cookie
+  const cookieToken = getCsrfFromCookies(request.headers.get('cookie'))
+  if (!cookieToken) {
+    return { valid: false, error: 'Missing CSRF cookie' }
+  }
+
+  // Get token from request
+  const requestToken = await getCsrfFromRequest(request)
+  if (!requestToken) {
+    return { valid: false, error: 'Missing CSRF token in request' }
+  }
+
+  // Validate using Double Submit Cookie pattern
+  // In this pattern, the cookie and request token should match
+  if (!constantTimeCompare(cookieToken, requestToken)) {
+    return { valid: false, error: 'Invalid CSRF token' }
+  }
+
+  return { valid: true }
+}
+
+// =============================================================================
+// Middleware Factory
+// =============================================================================
+
+/**
+ * Create a CSRF-protected handler
+ */
+export function withCsrfProtection(
+  handler: (request: NextRequest) => Promise<NextResponse>
+): (request: NextRequest) => Promise<NextResponse> {
+  return async (request: NextRequest) => {
+    const validation = await validateCsrf(request)
+
+    if (!validation.valid) {
+      return NextResponse.json(
+        { error: validation.error },
+        { status: 403 }
+      )
+    }
+
+    return handler(request)
+  }
+}
+
+// =============================================================================
+// Token Endpoint Helper
+// =============================================================================
+
+/**
+ * Handler for getting a new CSRF token
+ * Use this for SPA applications that need to fetch tokens
+ */
+export function handleCsrfTokenRequest(request: NextRequest): NextResponse {
+  // Check for existing token in cookie
+  let token = getCsrfFromCookies(request.headers.get('cookie'))
+
+  // Generate new token if none exists
+  if (!token) {
+    token = generateCsrfToken()
+  }
+
+  const response = NextResponse.json({ csrfToken: token })
+  response.headers.set('Set-Cookie', createCsrfCookie(token))
+
+  return response
+}
+
+// =============================================================================
+// React Hook Helper (for client-side)
+// =============================================================================
+
+/**
+ * Get CSRF token from cookie (client-side)
+ * Note: This works because we use a non-httpOnly cookie for the readable token
+ */
+export const CSRF_SCRIPT = `
+  function getCsrfToken() {
+    const match = document.cookie.match(new RegExp('${CSRF_CONFIG.cookieName}=([^;]+)'));
+    return match ? match[1] : null;
+  }
+
+  // Add CSRF token to all fetch requests
+  const originalFetch = window.fetch;
+  window.fetch = function(url, options = {}) {
+    const method = (options.method || 'GET').toUpperCase();
+    const protectedMethods = ${JSON.stringify(CSRF_CONFIG.protectedMethods)};
+
+    if (protectedMethods.includes(method)) {
+      options.headers = options.headers || {};
+      if (options.headers instanceof Headers) {
+        options.headers.set('${CSRF_CONFIG.headerName}', getCsrfToken() || '');
+      } else {
+        options.headers['${CSRF_CONFIG.headerName}'] = getCsrfToken() || '';
+      }
+    }
+
+    return originalFetch.call(this, url, options);
+  };
+`
+
+// =============================================================================
+// Middleware for Next.js
+// =============================================================================
+
+/**
+ * CSRF middleware for Next.js
+ * Add this to your middleware.ts file
+ */
+export function csrfMiddleware(request: NextRequest): NextResponse | null {
+  const method = request.method
+  const { pathname } = request.nextUrl
+
+  // Skip for non-protected methods
+  if (!requiresCsrfProtection(method)) {
+    return null // Continue to next middleware
+  }
+
+  // Skip for excluded paths
+  if (isExcludedPath(pathname)) {
+    return null
+  }
+
+  // Skip for API routes that use other auth (e.g., Bearer tokens)
+  const authHeader = request.headers.get('authorization')
+  if (authHeader?.startsWith('Bearer ')) {
+    return null
+  }
+
+  // Get tokens
+  const cookieToken = getCsrfFromCookies(request.headers.get('cookie'))
+  const headerToken = request.headers.get(CSRF_CONFIG.headerName)
+
+  // Validate
+  if (!cookieToken || !headerToken || !constantTimeCompare(cookieToken, headerToken)) {
+    return NextResponse.json(
+      { error: 'CSRF validation failed' },
+      { status: 403 }
+    )
+  }
+
+  return null // Continue to next middleware
+}

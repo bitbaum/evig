@@ -2,7 +2,32 @@
 const nextConfig = {
   images: {
     unoptimized: false,
-    remotePatterns: [],
+    remotePatterns: [
+      {
+        protocol: 'http',
+        hostname: 'localhost',
+        port: '9000',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'medusa-public-images.s3.eu-west-1.amazonaws.com',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: '*.amazonaws.com',
+        pathname: '/**',
+      },
+    ],
+  },
+  async rewrites() {
+    return [
+      {
+        source: '/api/medusa/:path*',
+        destination: `${process.env.MEDUSA_API_URL || 'http://localhost:9000'}/:path*`,
+      },
+    ];
   },
   webpack: (config, { isServer }) => {
     // Font loader configuration

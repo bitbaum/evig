@@ -1,10 +1,10 @@
 'use client'
 
-import { 
-  Wrench, 
-  HardDrive, 
-  Server, 
-  Shield, 
+import {
+  Wrench,
+  HardDrive,
+  Server,
+  Shield,
   ArrowRight,
   CheckCircle2,
   Zap,
@@ -15,15 +15,21 @@ import {
   Brain,
   Cloud,
   Cpu,
-  Settings
+  Settings,
+  Calendar,
+  Loader2
 } from 'lucide-react'
 import Link from 'next/link'
+import { useState } from 'react'
+import { useSession } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
 import { FilterableSection } from '@/components/ui/FilterableSection'
 import { FilterConfig } from '@/hooks/useFiltering'
 
 // Service interface
 interface Service {
   title: string
+  slug?: string
   description: string
   icon: React.ComponentType<React.SVGProps<SVGSVGElement>>
   category: string
@@ -38,6 +44,7 @@ interface Service {
 const services: Service[] = [
   // Hardware Services
   {
+    slug: 'computer-repair',
     title: 'Computerreparatur & Aufrüstungen',
     description: 'Expertenreparaturen für alle Arten von Computern und Komponenten. Wir spezialisieren uns darauf zu reparieren, was andere nicht koennen, einschliesslich Motherboard-Reparaturen und Bauteil-Level-Fixes.',
     icon: Wrench,
@@ -54,6 +61,7 @@ const services: Service[] = [
     available: true
   },
   {
+    slug: 'data-recovery',
     title: 'Datenrettung & Transfer',
     description: 'Sichere und zuverlässige Datentransferdienste für alle Arten von Speichermedien. Wir können Daten von beschädigten Geräten wiederherstellen und auf moderne Speicherlösungen übertragen.',
     icon: HardDrive,
@@ -105,6 +113,7 @@ const services: Service[] = [
     available: true
   },
   {
+    slug: 'linux-installation',
     title: 'Linux & Open Source',
     description: 'Professionelle Linux-Installation, -Konfiguration und -Support-Dienstleistungen. Wir helfen Ihnen, das Beste aus Ihrem Linux-System mit fachkundiger Anleitung und Wartung herauszuholen.',
     icon: Server,
@@ -236,70 +245,176 @@ const serviceFilters: FilterConfig[] = [
 ]
 
 // Service card component
-const ServiceCard: React.FC<{ service: Service }> = ({ service }) => (
-  <div className="group bg-white rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden flex flex-col h-full">
-    <div className="p-4 sm:p-6 md:p-8 flex flex-col h-full">
-      <div className="flex items-start mb-4 sm:mb-6">
-        <div className={`p-2 sm:p-3 rounded-lg mr-3 sm:mr-4 transition-colors duration-300 ${
-          service.available 
-            ? 'bg-green-100 text-green-600 group-hover:bg-green-600 group-hover:text-white' 
-            : 'bg-gray-100 text-gray-400'
-        }`}>
-          <service.icon className="w-6 h-6 sm:w-8 sm:h-8" />
+const ServiceCard: React.FC<{ service: Service }> = ({ service }) => {
+  const { data: session, status } = useSession()
+  const router = useRouter()
+  const [bookingStatus, setBookingStatus] = useState<'idle' | 'booking' | 'booked' | 'error'>('idle')
+  const [errorMessage, setErrorMessage] = useState<string>('')
+
+  const handleBooking = async () => {
+    if (!session?.user) {
+      router.push('/auth/login?callbackUrl=' + encodeURIComponent(window.location.pathname))
+      return
+    }
+
+    if (!service.slug) {
+      // If no slug, redirect to details page
+      router.push(service.href)
+      return
+    }
+
+    setBookingStatus('booking')
+    setErrorMessage('')
+
+    try {
+      const response = await fetch('/api/appointments', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          serviceSlug: service.slug,
+          description: `Termin für ${service.title}`,
+          urgency: 'normal'
+        }),
+      })
+
+      if (response.ok) {
+        setBookingStatus('booked')
+        // Redirect to dashboard to see the appointment
+        setTimeout(() => {
+          router.push('/dashboard/appointments')
+        }, 1500)
+      } else {
+        const error = await response.text()
+        setBookingStatus('error')
+        setErrorMessage(error || 'Terminbuchung fehlgeschlagen')
+      }
+    } catch (error) {
+      setBookingStatus('error')
+      setErrorMessage('Netzwerkfehler. Bitte versuchen Sie es erneut.')
+    }
+  }
+
+  return (
+    <div className="group bg-white rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden flex flex-col h-full">
+      <div className="p-4 sm:p-6 md:p-8 flex flex-col h-full">
+        <div className="flex items-start mb-4 sm:mb-6">
+          <div className={`p-2 sm:p-3 rounded-lg mr-3 sm:mr-4 transition-colors duration-300 ${
+            service.available
+              ? 'bg-green-100 text-green-600 group-hover:bg-green-600 group-hover:text-white'
+              : 'bg-gray-100 text-gray-400'
+          }`}>
+            <service.icon className="w-6 h-6 sm:w-8 sm:h-8" />
+          </div>
+          <div className="flex-1">
+            <div className="flex items-center gap-2 mb-2">
+              <h3 className="text-xl sm:text-2xl font-bold">{service.title}</h3>
+              {service.badge && (
+                <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-700">
+                  {service.badge}
+                </span>
+              )}
+            </div>
+            <div className={`flex items-center font-semibold mb-4 ${
+              service.available ? 'text-green-600' : 'text-gray-400'
+            }`}>
+              <Zap className="w-4 h-4 mr-2" />
+              <span>{service.highlight}</span>
+            </div>
+          </div>
         </div>
-        <div className="flex-1">
-          <div className="flex items-center gap-2 mb-2">
-            <h3 className="text-xl sm:text-2xl font-bold">{service.title}</h3>
-            {service.badge && (
-              <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-700">
-                {service.badge}
+        <p className="text-gray-600 mb-6 flex-grow">{service.description}</p>
+        <div className="space-y-3 mb-6">
+          {service.features.map((feature, i) => (
+            <div key={i} className="flex items-center text-gray-600">
+              <CheckCircle2 className={`w-5 h-5 mr-3 flex-shrink-0 ${
+                service.available ? 'text-green-500' : 'text-gray-400'
+              }`} />
+              <span>{feature}</span>
+            </div>
+          ))}
+        </div>
+        <div className="mt-auto pt-6 border-t border-gray-200">
+          {/* Pricing */}
+          <div className="flex items-center justify-between mb-4">
+            {service.pricing ? (
+              <span className={`text-lg font-semibold ${
+                service.available ? 'text-green-600' : 'text-gray-400'
+              }`}>
+                {service.pricing}
               </span>
+            ) : (
+              <span className="text-gray-400 text-sm">Pricing TBD</span>
             )}
+            <Link
+              href={service.href}
+              className={`inline-flex items-center font-medium transition-colors duration-300 group text-sm ${
+                service.available
+                  ? 'text-gray-500 hover:text-gray-700'
+                  : 'text-gray-400 hover:text-gray-500'
+              }`}
+            >
+              <span>Details</span>
+              <ArrowRight className="w-3 h-3 ml-1" />
+            </Link>
           </div>
-          <div className={`flex items-center font-semibold mb-4 ${
-            service.available ? 'text-green-600' : 'text-gray-400'
-          }`}>
-            <Zap className="w-4 h-4 mr-2" />
-            <span>{service.highlight}</span>
-          </div>
+
+          {/* Action Buttons */}
+          {service.available && (
+            <div className="flex gap-2">
+              {bookingStatus === 'booked' ? (
+                <div className="w-full inline-flex items-center justify-center text-green-600 font-semibold bg-green-50 px-4 py-2 rounded-lg">
+                  <CheckCircle2 className="w-4 h-4 mr-2" />
+                  Termin angefragt!
+                </div>
+              ) : bookingStatus === 'booking' ? (
+                <div className="w-full inline-flex items-center justify-center text-gray-500 font-semibold bg-gray-50 px-4 py-2 rounded-lg">
+                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                  Wird gebucht...
+                </div>
+              ) : !session?.user ? (
+                <button
+                  onClick={() => router.push('/auth/login?callbackUrl=' + encodeURIComponent(window.location.pathname))}
+                  className="flex-1 inline-flex items-center justify-center text-green-600 hover:text-green-800 font-semibold bg-green-50 hover:bg-green-100 px-4 py-2 rounded-lg transition-colors duration-300"
+                >
+                  <Calendar className="w-4 h-4 mr-2" />
+                  Termin buchen
+                </button>
+              ) : service.slug ? (
+                <>
+                  <button
+                    onClick={handleBooking}
+                    className="flex-1 inline-flex items-center justify-center text-white font-semibold bg-green-600 hover:bg-green-700 px-4 py-2 rounded-lg transition-colors duration-300 disabled:opacity-50"
+                    disabled={bookingStatus === 'booking'}
+                  >
+                    <Calendar className="w-4 h-4 mr-2" />
+                    Termin buchen
+                  </button>
+                </>
+              ) : (
+                <Link
+                  href={service.href}
+                  className="flex-1 inline-flex items-center justify-center text-green-600 hover:text-green-800 font-semibold bg-green-50 hover:bg-green-100 px-4 py-2 rounded-lg transition-colors duration-300"
+                >
+                  <ArrowRight className="w-4 h-4 mr-2" />
+                  Mehr erfahren
+                </Link>
+              )}
+            </div>
+          )}
+
+          {/* Error Message */}
+          {bookingStatus === 'error' && errorMessage && (
+            <div className="mt-2 text-xs text-red-600 bg-red-50 p-2 rounded">
+              {errorMessage}
+            </div>
+          )}
         </div>
-      </div>
-      <p className="text-gray-600 mb-6 flex-grow">{service.description}</p>
-      <div className="space-y-3 mb-6">
-        {service.features.map((feature, i) => (
-          <div key={i} className="flex items-center text-gray-600">
-            <CheckCircle2 className={`w-5 h-5 mr-3 flex-shrink-0 ${
-              service.available ? 'text-green-500' : 'text-gray-400'
-            }`} />
-            <span>{feature}</span>
-          </div>
-        ))}
-      </div>
-      <div className="mt-auto pt-6 border-t border-gray-200 flex items-center justify-between">
-        {service.pricing ? (
-          <span className={`text-lg font-semibold ${
-            service.available ? 'text-green-600' : 'text-gray-400'
-          }`}>
-            {service.pricing}
-          </span>
-        ) : (
-          <span className="text-gray-400 text-sm">Pricing TBD</span>
-        )}
-        <Link
-          href={service.href}
-          className={`inline-flex items-center font-medium transition-colors duration-300 group ${
-            service.available 
-              ? 'text-green-600 hover:text-green-700' 
-              : 'text-gray-400 hover:text-gray-500'
-          }`}
-        >
-          <span>{service.available ? 'Details anzeigen' : 'Mehr erfahren'}</span>
-          <ArrowRight className="w-4 h-4 ml-2 transform group-hover:translate-x-1 transition-transform duration-300" />
-        </Link>
       </div>
     </div>
-  </div>
-)
+  )
+}
 
 export default function ServicesPage() {
   return (

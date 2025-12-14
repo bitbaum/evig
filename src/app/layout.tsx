@@ -19,7 +19,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="de">
-      <body className={interClassName}>
+      <body className={`${interClassName} fix-text-rendering`}>
         <Providers>
           <ConditionalMainLayout>
             {children}

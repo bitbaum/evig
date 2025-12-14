@@ -62,34 +62,26 @@ RevampIT is a Swiss non-profit organization dedicated to **sustainable technolog
 git clone https://github.com/g-but/revampit.git
 cd revampit
 
-# Install frontend dependencies
+# Install dependencies
 npm install
 
 # Set up environment variables
-cp .env.example .env.local
+cp environment.example .env.local
 # Edit .env.local with your configuration
 
-# Install CMS API dependencies
-cd cms-api
-npm install
-cp .env.example .env
-# Edit .env with your database configuration
+# 🚀 One-command setup (starts everything!)
+npm run d
 
-# Start PostgreSQL (using Docker)
-docker-compose up -d postgres
-
-# Start the CMS API
-npm run dev
-
-# In another terminal, start the frontend
-cd ..
-npm run dev
+# Setup admin users
+npm run setup-admins
 ```
 
 ### Access Points
 - **Frontend**: http://localhost:3000
-- **CMS API**: http://localhost:3001
-- **Admin Interface**: http://localhost:3000/admin/login
+- **Unified Admin Dashboard**: http://localhost:3000/admin
+- **Medusa Shop Admin**: http://localhost:9000/app
+- **AI CMS Editor**: http://localhost:3000/ai-cms
+- **Shop Frontend**: http://localhost:3000/shop/medusa
 
 ## 📁 Project Structure
 

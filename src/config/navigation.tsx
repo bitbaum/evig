@@ -150,16 +150,16 @@ export const mainNavigation: NavigationItem[] = [
       },
       {
         name: 'Shopware-Shop',
-        href: 'https://www.revamp-it.ch/index.php/de/shop-de',
+        href: 'https://shop.revamp-it.ch/',
         description: 'Neuer Shopware-Kanal',
         external: true,
         badge: 'Neu'
       },
       {
-        name: 'Medusa-Shop',
+        name: 'RevampIT Online-Shop',
         href: '/shop/medusa',
-        description: 'Zukünftiger Headless-Webshop auf Medusa',
-        badge: 'In Planung'
+        description: 'Unser neuer moderner Online-Shop',
+        badge: 'Neu'
       },
       {
         name: 'Ladenlokal Zürich',

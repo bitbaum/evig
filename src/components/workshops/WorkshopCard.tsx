@@ -1,9 +1,12 @@
 import Link from 'next/link'
-import React from 'react'
-import { Calendar, Clock, Users, ArrowRight, Sparkles, CheckCircle2, Briefcase, Rocket } from 'lucide-react'
+import React, { useState } from 'react'
+import { Calendar, Clock, Users, ArrowRight, Sparkles, CheckCircle2, Briefcase, Rocket, UserCheck, Loader2 } from 'lucide-react'
+import { useSession } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
 
 export interface Workshop {
   title: string
+  slug?: string
   description: string
   icon: string
   duration: string
@@ -20,8 +23,55 @@ interface WorkshopCardProps {
 }
 
 export const WorkshopCard: React.FC<WorkshopCardProps> = ({ workshop, variant }) => {
+  const { data: session, status } = useSession()
+  const router = useRouter()
+  const [registrationStatus, setRegistrationStatus] = useState<'idle' | 'registering' | 'registered' | 'error'>('idle')
+  const [errorMessage, setErrorMessage] = useState<string>('')
+
+
   const isAvailable = variant === 'available'
   const categoryColor = isAvailable ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'
+
+  const handleRegistration = async () => {
+    if (status === 'loading') {
+      // Session is still loading, do nothing
+      return
+    }
+
+    if (!session?.user) {
+      // Redirect to login
+      router.push('/auth/login?callbackUrl=' + encodeURIComponent(window.location.pathname))
+      return
+    }
+
+    setRegistrationStatus('registering')
+    setErrorMessage('')
+
+    try {
+      const response = await fetch('/api/workshops/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          workshopSlug: workshop.slug || workshop.title.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, ''),
+          // For now, we'll register for the workshop itself, not a specific instance
+          // In the future, this could be expanded to allow instance selection
+        }),
+      })
+
+      if (response.ok) {
+        setRegistrationStatus('registered')
+      } else {
+        const error = await response.text()
+        setRegistrationStatus('error')
+        setErrorMessage(error || 'Registrierung fehlgeschlagen')
+      }
+    } catch (error) {
+      setRegistrationStatus('error')
+      setErrorMessage('Netzwerkfehler. Bitte versuchen Sie es erneut.')
+    }
+  }
 
   return (
     <div className="group bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border border-gray-100 flex flex-col h-full">
@@ -65,15 +115,48 @@ Was Sie lernen werden:
       
       <div className="flex justify-between items-center mt-auto pt-4 border-t border-gray-100">
         {isAvailable ? (
-          <Link 
-            href="/contact"
-            className="inline-flex items-center text-green-600 hover:text-green-800 font-semibold group-hover:translate-x-1 transition-transform duration-300"
-          >
-Lernen beginnen
-            <ArrowRight className="w-4 h-4 ml-1" />
-          </Link>
+          <>
+            {status === 'loading' ? (
+              <div className="inline-flex items-center text-gray-500 font-semibold">
+                <Loader2 className="w-4 h-4 mr-1 animate-spin" />
+                Laden...
+              </div>
+            ) : registrationStatus === 'registered' ? (
+              <div className="inline-flex items-center text-green-600 font-semibold">
+                <UserCheck className="w-4 h-4 mr-1" />
+                Angemeldet
+              </div>
+            ) : registrationStatus === 'registering' ? (
+              <div className="inline-flex items-center text-gray-500 font-semibold">
+                <Loader2 className="w-4 h-4 mr-1 animate-spin" />
+                Wird angemeldet...
+              </div>
+            ) : !session?.user ? (
+              <button
+                onClick={() => window.location.href = '/auth/login?callbackUrl=' + encodeURIComponent(window.location.pathname)}
+                className="inline-flex items-center text-green-600 hover:text-green-800 font-semibold group-hover:translate-x-1 transition-transform duration-300"
+              >
+                Anmelden
+                <ArrowRight className="w-4 h-4 ml-1" />
+              </button>
+            ) : (
+              <button
+                onClick={handleRegistration}
+                className="inline-flex items-center text-green-600 hover:text-green-800 font-semibold group-hover:translate-x-1 transition-transform duration-300 disabled:opacity-50"
+                disabled={['registering', 'registered'].includes(registrationStatus)}
+              >
+                Anmelden
+                <ArrowRight className="w-4 h-4 ml-1" />
+              </button>
+            )}
+            {registrationStatus === 'error' && (
+              <div className="text-xs text-red-600 mt-1">
+                {errorMessage}
+              </div>
+            )}
+          </>
         ) : (
-          <button 
+          <button
             className="inline-flex items-center text-gray-500 font-medium cursor-not-allowed"
             disabled
           >

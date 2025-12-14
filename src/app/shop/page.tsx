@@ -7,7 +7,7 @@ import { SHOP_ONLINE_URL, SHOPWARE_URL, STORE_ADDRESS, STORE_GOOGLE_MAPS_URL, ST
 
 export const metadata: Metadata = {
   title: 'Shop | RevampIT',
-  description: 'Wählen Sie, wie Sie bei RevampIT einkaufen möchten – aktueller Online-Shop, neuer Shopware-Kanal, zukünftiger Medusa-Shop oder Ladenlokal in Zürich.'
+  description: 'Wählen Sie, wie Sie bei RevampIT einkaufen möchten – Online-Shop, Shopware-Kanal oder Ladenlokal in Zürich.'
 }
 
 // URLs and address centralized in constants
@@ -22,7 +22,7 @@ export default function ShopPage() {
           <div className="max-w-3xl">
             <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6 leading-tight">Wie möchtest du einkaufen?</h1>
             <p className="text-base sm:text-lg md:text-xl text-green-100">
-              Wähle den Kanal, der am besten zu dir passt: unser aktueller Online-Shop, der neue Shopware-Shop, der kommende Medusa-Webshop oder unser Ladenlokal in Zürich.
+              Wähle den Kanal, der am besten zu dir passt: unseren Online-Shop, den Shopware-Shop oder unser Ladenlokal in Zürich.
             </p>
           </div>
         </div>
@@ -98,9 +98,9 @@ export default function ShopPage() {
                     <ShoppingCart className="w-5 h-5" />
                   </div>
                   <div>
-                    <CardTitle>Online & zukünftige Shops</CardTitle>
+                    <CardTitle>Online-Shops</CardTitle>
                     <p className="text-sm text-gray-600">
-                      Wähle zwischen aktuellem Shop, neuem Shopware-Kanal und unserem zukünftigen Medusa-Webshop.
+                      Wähle zwischen unserem Online-Shop und dem Shopware-Kanal.
                     </p>
                   </div>
                 </div>
@@ -125,12 +125,12 @@ export default function ShopPage() {
                   <a href={SHOPWARE_URL} target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2">
                     <ExternalLink className="w-4 h-4 mr-2" /> Zum Shopware‑Shop
                   </a>
-                  {/* Medusa – interner Aufbau-Ort */}
+                  {/* RevampIT Online-Shop */}
                   <Link
                     href="/shop/medusa"
-                    className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-dashed border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2"
+                    className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-emerald-600 text-white hover:bg-emerald-700 h-10 px-4 py-2"
                   >
-                    Geplanter Medusa‑Shop
+                    <ShoppingCart className="w-4 h-4 mr-2" /> RevampIT Online‑Shop
                   </Link>
                 </div>
                 <div className="mt-4 rounded-lg border border-gray-200 bg-gray-50 p-4 text-sm text-gray-700">
@@ -139,8 +139,8 @@ export default function ShopPage() {
                     <div>
                       <p className="font-medium text-gray-900 mb-1">Mehrere Shop‑Kanäle?</p>
                       <p>
-                        Unser aktueller Online‑Shop und der Shopware‑Shop bilden heute den Kern unseres Angebots. 
-                        Zusätzlich planen wir einen modernen, headless Medusa‑Shop, um dir in Zukunft noch flexiblere Einkaufserlebnisse zu bieten.
+                        Unser RevampIT Online-Shop bietet dir die beste Auswahl an aufgearbeiteter IT-Hardware. 
+                        Alternativ findest du unser Sortiment auch im Shopware-Shop und im Legacy-System.
                       </p>
                     </div>
                   </div>

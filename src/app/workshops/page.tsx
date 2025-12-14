@@ -15,6 +15,7 @@ import { WorkshopCard, Workshop } from '@/components/workshops/WorkshopCard'
 
 const workshops: Workshop[] = [
   {
+    slug: 'linux-workshop',
     title: 'Linux Workshop',
     description: 'Meistern Sie das Linux-Betriebssystem von den Grundlagen bis zu fortgeschrittenen Themen. Lernen Sie über Systemadministration, Kommandozeilen-Tools und Open-Source-Software-Verwaltung.',
     icon: '🐧',
@@ -30,6 +31,7 @@ const workshops: Workshop[] = [
     ]
   },
   {
+    slug: 'open-source-software',
     title: 'Open-Source-Software',
     description: 'Entdecken Sie die Welt der Open-Source-Software-Entwicklung. Lernen Sie, wie Sie zu Open-Source-Projekten beitragen, Lizenzierung verstehen und in der Gemeinschaft mitarbeiten können.',
     icon: '🔓',
@@ -45,6 +47,7 @@ const workshops: Workshop[] = [
     ]
   },
   {
+    slug: 'computer-repair',
     title: 'Computerreparatur',
     description: 'Lernen Sie grundlegende Hardware-Reparatur- und Wartungsfähigkeiten. Von der Grunddiagnose bis zum Komponententausch - werden Sie sicher im Umgang mit Computerproblemen.',
     icon: '🔧',
@@ -60,6 +63,7 @@ const workshops: Workshop[] = [
     ]
   },
   {
+    slug: 'bitcoin-blockchain',
     title: 'Bitcoin & Blockchain',
     description: 'Verstehen Sie die Grundlagen von Bitcoin, Blockchain-Technologie und Kryptowährungen. Lernen Sie über Wallets, Transaktionen und die Zukunft digitaler Währungen.',
     icon: '₿',
@@ -70,6 +74,7 @@ const workshops: Workshop[] = [
     comingSoon: true
   },
   {
+    slug: 'ai-workshop',
     title: 'Künstliche Intelligenz',
     description: 'Tauchen Sie ein in die Welt der KI und des maschinellen Lernens. Lernen Sie über neuronale Netzwerke, Datenverarbeitung und praktische Anwendungen der KI-Technologie.',
     icon: '🤖',
@@ -80,6 +85,7 @@ const workshops: Workshop[] = [
     comingSoon: true
   },
   {
+    slug: 'creative-coding',
     title: 'Kreatives Programmieren',
     description: 'Verwandeln Sie Ideen in funktionierende Prototypen mit KI-gestützten Programmier-Workflows und modernem Tech-Stack. Erstellen Sie einen vollständigen Next.js + Supabase MVP in praktischen Sitzungen.',
     icon: '🎨',
