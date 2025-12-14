@@ -6,6 +6,7 @@ import { getJwtSecret } from '@/lib/admin-auth'
 export const dynamic = 'force-dynamic'
 
 const REBOOT_CONTENT_URL = process.env.NEXT_PUBLIC_REBOOT_CONTENT_URL || 'http://localhost:3001'
+const ENABLE_CMS = process.env.ENABLE_CMS === 'true'
 
 interface User {
   id: string
@@ -42,6 +43,9 @@ export async function GET(
   { params }: { params: { id: string } }
 ) {
   try {
+    if (!ENABLE_CMS) {
+      return NextResponse.json({ error: 'CMS is disabled' }, { status: 501 })
+    }
     const user = authenticateUser()
 
     // Forward to Reboot Content API
@@ -74,6 +78,9 @@ export async function PUT(
   { params }: { params: { id: string } }
 ) {
   try {
+    if (!ENABLE_CMS) {
+      return NextResponse.json({ error: 'CMS is disabled' }, { status: 501 })
+    }
     const user = authenticateUser()
     const body = await request.json()
 

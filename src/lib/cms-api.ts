@@ -2,6 +2,7 @@
 // This replaces the Strapi integration with our custom Reboot Content API
 
 const REBOOT_CONTENT_URL = process.env.NEXT_PUBLIC_REBOOT_CONTENT_URL || 'http://localhost:3001';
+const ENABLE_CMS = process.env.ENABLE_CMS === 'true';
 const REBOOT_CONTENT_TOKEN = process.env.REBOOT_CONTENT_TOKEN;
 
 // Types for CMS API responses
@@ -87,6 +88,9 @@ async function apiRequest<T>(
   endpoint: string,
   options: RequestInit = {}
 ): Promise<CMSResponse<T>> {
+  if (!ENABLE_CMS) {
+    return { success: false, error: 'CMS is disabled' };
+  }
   const url = `${REBOOT_CONTENT_URL}${endpoint}`;
 
   const headers: HeadersInit = {
@@ -449,4 +453,3 @@ export function generateExcerpt(content: string, maxLength: number = 150): strin
 export function isPublished(item: { is_published: boolean; published_at?: string }): boolean {
   return item.is_published && (!item.published_at || new Date(item.published_at) <= new Date());
 }
-

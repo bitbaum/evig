@@ -1,16 +1,47 @@
 import { serialize, parse } from 'cookie'
 import jwt from 'jsonwebtoken'
 import { NextRequest, NextResponse } from 'next/server'
+import { verifyPassword, constantTimeCompare } from './auth/password'
+import { getJwtSecret, AUTH_CONFIG } from './auth/config'
+import {
+  checkRateLimit,
+  recordFailedAttempt,
+  isAccountLocked,
+  resetLockout,
+  getClientIp,
+  checkRateLimitRedis,
+  recordFailedAttemptRedis,
+  isAccountLockedRedis,
+  resetLockoutRedis,
+} from './auth/rate-limiter'
+import {
+  logLoginSuccess,
+  logLoginFailure,
+  logAccountLocked,
+  logRateLimitExceeded,
+} from './auth/audit'
 
-// Lazy getters for environment variables to avoid build-time errors
-export function getJwtSecret(): string {
-  const secret = process.env.JWT_SECRET
-  if (!secret) {
-    throw new Error('JWT_SECRET environment variable is required')
-  }
-  return secret
+// Re-export for backwards compatibility
+export { getJwtSecret }
+
+/**
+ * Get admin password hash from environment
+ * For security, store the bcrypt hash, not the plain password
+ */
+export function getAdminPasswordHash(): string | null {
+  // First check for hashed password (preferred)
+  const hash = process.env.ADMIN_PASSWORD_HASH
+  if (hash) return hash
+
+  // Fallback to plain password (will be hashed at runtime)
+  // This is for backwards compatibility - migrate to hash ASAP
+  return null
 }
 
+/**
+ * Get plain admin password (legacy, for migration only)
+ * @deprecated Use ADMIN_PASSWORD_HASH instead
+ */
 export function getAdminPassword(): string {
   const password = process.env.ADMIN_PASSWORD
   if (!password) {
@@ -24,10 +55,128 @@ export interface AdminUser {
   email: string
   role: 'admin'
   loginTime: number
+  tokenVersion?: number  // For token rotation
 }
 
-export function verifyAdminPassword(password: string): boolean {
-  return password === getAdminPassword()
+/**
+ * Verify admin password with bcrypt
+ * Supports both hashed (secure) and plain (legacy) password comparison
+ */
+export async function verifyAdminPassword(
+  password: string,
+  ipAddress?: string,
+  userAgent?: string
+): Promise<{
+  valid: boolean
+  error?: string
+  retryAfter?: number
+}> {
+  const identifier = 'admin'
+  const ctx = {
+    userId: 'admin-1',
+    email: 'admin@revampit.ch',
+    ipAddress: ipAddress || 'unknown',
+    userAgent: userAgent || 'unknown',
+  }
+
+  // Check rate limit
+  const useRedis = process.env.ENABLE_REDIS_RATE_LIMITER === 'true'
+  const rateLimit = useRedis
+    ? await checkRateLimitRedis(ipAddress || 'admin', 'login')
+    : checkRateLimit(ipAddress || 'admin', 'login')
+  if (!rateLimit.allowed) {
+    logRateLimitExceeded(ctx, 'admin_login', AUTH_CONFIG.rateLimit.login.maxAttempts)
+    return {
+      valid: false,
+      error: 'Zu viele Anmeldeversuche. Bitte warten Sie.',
+      retryAfter: rateLimit.retryAfter,
+    }
+  }
+
+  // Check account lockout
+  const lockout = useRedis
+    ? await isAccountLockedRedis(identifier)
+    : isAccountLocked(identifier)
+  if (lockout.locked) {
+    return {
+      valid: false,
+      error: 'Konto vorübergehend gesperrt. Bitte versuchen Sie es später erneut.',
+      retryAfter: lockout.retryAfter,
+    }
+  }
+
+  try {
+    const hash = getAdminPasswordHash()
+
+    let isValid = false
+
+    if (hash) {
+      // Use bcrypt verification (secure)
+      isValid = await verifyPassword(password, hash)
+    } else {
+      // Fallback to constant-time plain comparison (legacy)
+      // Log a warning - this should be migrated
+      console.warn(
+        '[SECURITY WARNING] Using plain text admin password comparison. ' +
+        'Please set ADMIN_PASSWORD_HASH with a bcrypt hash instead.'
+      )
+      const plainPassword = getAdminPassword()
+      isValid = constantTimeCompare(password, plainPassword)
+    }
+
+    if (!isValid) {
+      // Record failed attempt
+      const lockoutResult = useRedis
+        ? await recordFailedAttemptRedis(identifier)
+        : recordFailedAttempt(identifier)
+      logLoginFailure(ctx, 'invalid_password')
+
+      if (lockoutResult.locked) {
+        logAccountLocked(ctx, lockoutResult.retryAfter! * 1000)
+        return {
+          valid: false,
+          error: 'Konto vorübergehend gesperrt nach mehreren Fehlversuchen.',
+          retryAfter: lockoutResult.retryAfter,
+        }
+      }
+
+      return {
+        valid: false,
+        error: `Falsches Passwort. ${lockoutResult.remainingAttempts} Versuche verbleibend.`,
+      }
+    }
+
+    // Success - reset lockout
+    if (useRedis) {
+      await resetLockoutRedis(identifier)
+    } else {
+      resetLockout(identifier)
+    }
+    logLoginSuccess(ctx)
+
+    return { valid: true }
+  } catch (error) {
+    console.error('Admin password verification error:', error)
+    return {
+      valid: false,
+      error: 'Authentifizierungsfehler. Bitte versuchen Sie es erneut.',
+    }
+  }
+}
+
+/**
+ * Legacy synchronous password verification
+ * @deprecated Use verifyAdminPassword (async) instead
+ */
+export function verifyAdminPasswordSync(password: string): boolean {
+  const hash = getAdminPasswordHash()
+  if (hash) {
+    // Cannot use bcrypt synchronously without blocking
+    console.warn('Cannot verify hashed password synchronously. Use verifyAdminPassword().')
+    return false
+  }
+  const plainPassword = getAdminPassword()
+  return constantTimeCompare(password, plainPassword)
 }
 
 export function createAdminToken(email: string = 'admin@revampit.ch'): string {

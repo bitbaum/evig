@@ -2,13 +2,19 @@
 
 import { ThemeProvider } from '@/components/providers/ThemeProvider'
 import { DropdownProvider } from '@/lib/contexts/DropdownContext'
+import { MedusaProvider } from '@/lib/medusa/providers'
+import { SessionProvider } from '@/components/auth/SessionProvider'
 
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
-    <ThemeProvider>
-      <DropdownProvider>
-        {children}
-      </DropdownProvider>
-    </ThemeProvider>
+    <SessionProvider>
+      <ThemeProvider>
+        <MedusaProvider>
+          <DropdownProvider>
+            {children}
+          </DropdownProvider>
+        </MedusaProvider>
+      </ThemeProvider>
+    </SessionProvider>
   )
 }

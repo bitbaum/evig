@@ -2,19 +2,36 @@ import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
 export function middleware(request: NextRequest) {
-  // Only protect admin routes
-  if (request.nextUrl.pathname.startsWith('/admin')) {
+  const { pathname } = request.nextUrl
+
+  // Protect admin routes - use Auth.js session
+  if (pathname.startsWith('/admin')) {
     // Skip login page
-    if (request.nextUrl.pathname === '/admin/login') {
+    if (pathname === '/admin/login') {
       return NextResponse.next()
     }
 
-    // Check for admin token
-    const token = request.cookies.get('admin_token')?.value
+    // Check for Auth.js session token
+    const sessionToken = request.cookies.get('authjs.session-token')?.value
+      || request.cookies.get('__Secure-authjs.session-token')?.value
 
-    if (!token) {
-      // Redirect to login
-      return NextResponse.redirect(new URL('/admin/login', request.url))
+    if (!sessionToken) {
+      const loginUrl = new URL('/auth/login', request.url)
+      loginUrl.searchParams.set('callbackUrl', pathname)
+      return NextResponse.redirect(loginUrl)
+    }
+  }
+
+  // Protect dashboard routes
+  if (pathname.startsWith('/dashboard')) {
+    // Check for Auth.js session token
+    const sessionToken = request.cookies.get('authjs.session-token')?.value
+      || request.cookies.get('__Secure-authjs.session-token')?.value
+
+    if (!sessionToken) {
+      const loginUrl = new URL('/auth/login', request.url)
+      loginUrl.searchParams.set('callbackUrl', pathname)
+      return NextResponse.redirect(loginUrl)
     }
   }
 
@@ -22,5 +39,5 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: '/admin/:path*',
+  matcher: ['/admin/:path*', '/dashboard/:path*'],
 }

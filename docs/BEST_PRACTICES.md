@@ -1088,3 +1088,13 @@ This document should be:
 **Remember**: The goal is maintainable, high-quality code that avoids AI slop and follows best practices. When in doubt, prioritize clarity, consistency, and maintainability.
 
 
+
+
+
+
+
+
+
+
+
+

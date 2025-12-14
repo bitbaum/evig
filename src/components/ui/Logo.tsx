@@ -16,7 +16,7 @@ export function Logo({ className, href = '/', showText = true }: LogoProps) {
         alt="RevampIT"
         width={200}
         height={48}
-        className="h-12 w-auto transition-transform duration-200 group-hover:scale-105"
+        className="h-12 w-auto object-contain transition-transform duration-200 group-hover:scale-105"
         priority
       />
     </Link>
