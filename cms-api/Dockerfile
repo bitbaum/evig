@@ -5,13 +5,14 @@ FROM node:18-alpine
 WORKDIR /app
 
 # Install system dependencies for PostgreSQL
-RUN apk add --no-cache postgresql-client
+RUN apk add --no-cache postgresql-client curl
 
 # Copy package files
 COPY package*.json ./
 
 # Install dependencies
-RUN npm ci --only=production --ignore-scripts && npm cache clean --force
+# Install all deps to build TypeScript, then prune to production
+RUN npm ci && npm cache clean --force
 
 # Copy source code
 COPY . .
@@ -20,7 +21,7 @@ COPY . .
 RUN mkdir -p uploads
 
 # Build TypeScript
-RUN npm run build
+RUN npm run build && npm prune --production
 
 # Create non-root user
 RUN addgroup -g 1001 -S nodejs
@@ -35,19 +36,9 @@ EXPOSE 3001
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
-  CMD node -e "
-    const http = require('http');
-    const options = { hostname: 'localhost', port: 3001, path: '/health', method: 'GET' };
-    const req = http.request(options, (res) => {
-      if (res.statusCode === 200) process.exit(0);
-      else process.exit(1);
-    });
-    req.on('error', () => process.exit(1));
-    req.end();
-  "
+  CMD curl -fsS http://localhost:3001/health || exit 1
 
 # Start the application
 CMD ["npm", "start"]
-
 
 

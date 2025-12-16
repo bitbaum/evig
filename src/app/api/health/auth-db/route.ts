@@ -24,10 +24,10 @@ export async function GET() {
   }
 
   try {
-    const res = await query<{ count: string }>(
+    const res = await query<{ count: string | number }>(
       `SELECT count(*)::int as count FROM information_schema.tables WHERE table_name IN ('users','user_profiles')`
     )
-    const ok = (res.rows?.[0]?.count ?? 0) >= 2
+    const ok = Number(res.rows?.[0]?.count ?? 0) >= 2
     diagnostics.checks.push({ name: 'schema_core_tables', ok })
   } catch (e: any) {
     diagnostics.checks.push({ name: 'schema_core_tables', ok: false, error: String(e?.message || e) })
@@ -36,4 +36,3 @@ export async function GET() {
   diagnostics.ok = diagnostics.checks.every((c: any) => c.ok)
   return NextResponse.json(diagnostics, { status: diagnostics.ok ? 200 : 500 })
 }
-

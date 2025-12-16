@@ -13,7 +13,7 @@ export const getUsers = [
   query('page').optional().isInt({ min: 1 }),
   query('limit').optional().isInt({ min: 1, max: 100 }),
   query('search').optional().trim(),
-  query('role').optional().isIn(['admin', 'editor', 'viewer']),
+  query('role').optional().isIn(['admin', 'editor', 'user']),
   query('is_active').optional().isBoolean(),
 
   async (req: Request, res: Response): Promise<void> => {
@@ -152,7 +152,7 @@ export const createUser = [
   body('password').isLength({ min: 8 }),
   body('first_name').trim().isLength({ min: 1, max: 100 }),
   body('last_name').trim().isLength({ min: 1, max: 100 }),
-  body('role').optional().isIn(['admin', 'editor', 'viewer']),
+  body('role').optional().isIn(['admin', 'editor', 'user']),
 
   async (req: Request, res: Response): Promise<void> => {
     try {
@@ -167,7 +167,7 @@ export const createUser = [
         return;
       }
 
-      const { email, password, first_name, last_name, role = 'viewer' }: CreateUserData = req.body;
+      const { email, password, first_name, last_name, role = 'user' }: CreateUserData = req.body;
 
       // Check if user already exists
       const existingUser = await executeQuerySingle<User>(
@@ -217,7 +217,7 @@ export const updateUser = [
   body('email').optional().isEmail().normalizeEmail(),
   body('first_name').optional().trim().isLength({ min: 1, max: 100 }),
   body('last_name').optional().trim().isLength({ min: 1, max: 100 }),
-  body('role').optional().isIn(['admin', 'editor', 'viewer']),
+  body('role').optional().isIn(['admin', 'editor', 'user']),
   body('is_active').optional().isBoolean(),
 
   async (req: Request, res: Response): Promise<void> => {

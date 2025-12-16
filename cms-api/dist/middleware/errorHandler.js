@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.errorHandler = void 0;
+const env_1 = require("../utils/env");
 const errorHandler = (err, req, res, next) => {
     let error = { ...err };
     error.message = err.message;
@@ -34,7 +35,7 @@ const errorHandler = (err, req, res, next) => {
     res.status(statusCode).json({
         success: false,
         error: message,
-        ...(process.env.NODE_ENV === 'development' && { stack: error.stack })
+        ...(env_1.env.NODE_ENV === 'development' && { stack: error.stack })
     });
 };
 exports.errorHandler = errorHandler;

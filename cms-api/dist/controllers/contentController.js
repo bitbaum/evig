@@ -36,10 +36,11 @@ exports.getStaticPages = [
             }
             const countResult = await (0, database_1.executeQuerySingle)(`SELECT COUNT(*) as count FROM static_pages WHERE ${whereClause}`, params);
             if (!countResult) {
-                return res.status(500).json({
+                res.status(500).json({
                     success: false,
                     error: 'Database error: Unable to count pages'
                 });
+                return;
             }
             const pages = await (0, database_1.executeQuery)(`SELECT * FROM static_pages
          WHERE ${whereClause}
@@ -115,6 +116,10 @@ exports.createStaticPage = [
                 return;
             }
             const { slug, title, content, seo_title, seo_description, meta_keywords, is_published = false } = req.body;
+            if (!req.user) {
+                res.status(401).json({ success: false, error: 'Unauthorized' });
+                return;
+            }
             const userId = req.user.id;
             const existingPage = await (0, database_1.executeQuerySingle)('SELECT id FROM static_pages WHERE slug = $1', [slug]);
             if (existingPage) {
@@ -163,6 +168,10 @@ exports.updateStaticPage = [
             }
             const { id } = req.params;
             const { slug, title, content, seo_title, seo_description, meta_keywords, is_published } = req.body;
+            if (!req.user) {
+                res.status(401).json({ success: false, error: 'Unauthorized' });
+                return;
+            }
             const userId = req.user.id;
             if (slug) {
                 const existingPage = await (0, database_1.executeQuerySingle)('SELECT id FROM static_pages WHERE slug = $1 AND id != $2', [slug, id]);
@@ -271,6 +280,13 @@ exports.getBlogPosts = [
                 paramIndex++;
             }
             const countResult = await (0, database_1.executeQuerySingle)(`SELECT COUNT(*) as count FROM blog_posts WHERE ${whereClause}`, params);
+            if (!countResult) {
+                res.status(500).json({
+                    success: false,
+                    error: 'Database error: Unable to count blog posts'
+                });
+                return;
+            }
             const posts = await (0, database_1.executeQuery)(`SELECT bp.*, c.name as category_name, c.slug as category_slug
          FROM blog_posts bp
          LEFT JOIN categories c ON bp.category_id = c.id
@@ -354,6 +370,10 @@ exports.createBlogPost = [
                 return;
             }
             const { slug, title, content, excerpt, featured_image, seo_title, seo_description, meta_keywords, category_id, tags = [], is_published = false } = req.body;
+            if (!req.user) {
+                res.status(401).json({ success: false, error: 'Unauthorized' });
+                return;
+            }
             const userId = req.user.id;
             const existingPost = await (0, database_1.executeQuerySingle)('SELECT id FROM blog_posts WHERE slug = $1', [slug]);
             if (existingPost) {
@@ -417,6 +437,10 @@ exports.updateBlogPost = [
             }
             const { id } = req.params;
             const { slug, title, content, excerpt, featured_image, seo_title, seo_description, meta_keywords, category_id, tags, is_published } = req.body;
+            if (!req.user) {
+                res.status(401).json({ success: false, error: 'Unauthorized' });
+                return;
+            }
             const userId = req.user.id;
             if (slug) {
                 const existingPost = await (0, database_1.executeQuerySingle)('SELECT id FROM blog_posts WHERE slug = $1 AND id != $2', [slug, id]);
@@ -562,6 +586,10 @@ exports.createCategory = [
                 return;
             }
             const { slug, name, description, color = '#6B7280' } = req.body;
+            if (!req.user) {
+                res.status(401).json({ success: false, error: 'Unauthorized' });
+                return;
+            }
             const userId = req.user.id;
             const existingCategory = await (0, database_1.executeQuerySingle)('SELECT id FROM categories WHERE slug = $1', [slug]);
             if (existingCategory) {
@@ -608,6 +636,10 @@ exports.updateCategory = [
             }
             const { id } = req.params;
             const { slug, name, description, color, is_active } = req.body;
+            if (!req.user) {
+                res.status(401).json({ success: false, error: 'Unauthorized' });
+                return;
+            }
             const userId = req.user.id;
             if (slug) {
                 const existingCategory = await (0, database_1.executeQuerySingle)('SELECT id FROM categories WHERE slug = $1 AND id != $2', [slug, id]);
@@ -655,7 +687,7 @@ const deleteCategory = async (req, res) => {
     try {
         const { id } = req.params;
         const postCount = await (0, database_1.executeQuerySingle)('SELECT COUNT(*) as count FROM blog_posts WHERE category_id = $1', [id]);
-        if (postCount.count > 0) {
+        if (postCount && postCount.count > 0) {
             res.status(409).json({
                 success: false,
                 error: 'Cannot delete category with associated posts',

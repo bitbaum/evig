@@ -13,8 +13,7 @@ exports.authenticateToken = authenticateToken;
 exports.authorizeRole = authorizeRole;
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-const JWT_SECRET = process.env.JWT_SECRET || 'your-super-secret-jwt-key-change-in-production';
-const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '24h';
+const env_1 = require("./env");
 async function hashPassword(password) {
     const saltRounds = 12;
     return bcrypt_1.default.hash(password, saltRounds);
@@ -23,19 +22,22 @@ async function comparePassword(password, hashedPassword) {
     return bcrypt_1.default.compare(password, hashedPassword);
 }
 function generateToken(user) {
-    const secret = JWT_SECRET || 'fallback-secret-change-in-production';
-    const expiresIn = JWT_EXPIRES_IN || '24h';
-    return jsonwebtoken_1.default.sign({
+    const payload = {
         id: user.id,
         email: user.email,
         first_name: user.first_name,
         last_name: user.last_name,
         role: user.role,
-    }, secret, { expiresIn });
+    };
+    const expiresIn = 24 * 60 * 60;
+    return jsonwebtoken_1.default.sign(payload, env_1.env.JWT_SECRET, {
+        expiresIn,
+        algorithm: 'HS256',
+    });
 }
 function verifyToken(token) {
     try {
-        const decoded = jsonwebtoken_1.default.verify(token, JWT_SECRET);
+        const decoded = jsonwebtoken_1.default.verify(token, env_1.env.JWT_SECRET);
         return decoded;
     }
     catch (error) {
@@ -51,12 +53,13 @@ function extractTokenFromHeader(authHeader) {
 }
 function hasRole(userRole, requiredRole) {
     const roleHierarchy = {
-        viewer: 1,
+        user: 1,
         editor: 2,
         admin: 3,
     };
-    return roleHierarchy[userRole] >=
-        roleHierarchy[requiredRole];
+    const userLevel = roleHierarchy[userRole] || 0;
+    const requiredLevel = roleHierarchy[requiredRole] || 0;
+    return userLevel >= requiredLevel;
 }
 function authenticateToken(req, res, next) {
     const token = extractTokenFromHeader(req.headers.authorization);

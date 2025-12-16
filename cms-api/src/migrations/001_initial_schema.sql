@@ -15,10 +15,13 @@ CREATE TABLE IF NOT EXISTS migrations (
 CREATE TABLE IF NOT EXISTS users (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     email VARCHAR(255) NOT NULL UNIQUE,
-    password_hash VARCHAR(255) NOT NULL,
-    first_name VARCHAR(100) NOT NULL,
-    last_name VARCHAR(100) NOT NULL,
-    role VARCHAR(20) NOT NULL DEFAULT 'viewer' CHECK (role IN ('admin', 'editor', 'viewer')),
+    password_hash VARCHAR(255),
+    name VARCHAR(255),
+    first_name VARCHAR(100),
+    last_name VARCHAR(100),
+    email_verified TIMESTAMP WITH TIME ZONE,
+    image TEXT,
+    role VARCHAR(20) NOT NULL DEFAULT 'user' CHECK (role IN ('admin', 'editor', 'user')),
     is_active BOOLEAN NOT NULL DEFAULT true,
     last_login_at TIMESTAMP WITH TIME ZONE,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
@@ -194,19 +197,6 @@ BEGIN
                 'RevampIT',
                 'admin'
             ) ON CONFLICT (email) DO NOTHING;
-        END IF;
-    END IF;
-
-    -- Insert default categories only if categories table exists and has ALL expected columns
-    IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'categories') THEN
-        IF (SELECT COUNT(*) FROM information_schema.columns
-            WHERE table_name = 'categories' AND column_name IN ('id', 'slug', 'name', 'description', 'color', 'created_by', 'updated_by')) = 7 THEN
-            INSERT INTO categories (id, slug, name, description, color, created_by, updated_by) VALUES
-                ('11111111-1111-1111-1111-111111111111', 'uncategorized', 'Uncategorized', 'Default category for posts', '#6B7280', '00000000-0000-0000-0000-000000000001', '00000000-0000-0000-0000-000000000001'),
-                ('22222222-2222-2222-2222-222222222222', 'news', 'News', 'Latest news and updates', '#3B82F6', '00000000-0000-0000-0000-000000000001', '00000000-0000-0000-0000-000000000001'),
-                ('33333333-3333-3333-3333-333333333333', 'tutorials', 'Tutorials', 'Step-by-step guides and tutorials', '#10B981', '00000000-0000-0000-0000-000000000001', '00000000-0000-0000-0000-000000000001'),
-                ('44444444-4444-4444-4444-444444444444', 'projects', 'Projects', 'Project updates and showcases', '#F59E0B', '00000000-0000-0000-0000-000000000001', '00000000-0000-0000-0000-000000000001')
-            ON CONFLICT (slug) DO NOTHING;
         END IF;
     END IF;
 END $$;

@@ -50,12 +50,7 @@ declare module 'next-auth' {
   }
 }
 
-declare module 'next-auth/jwt' {
-  interface JWT {
-    id: string
-    role?: string
-  }
-}
+// Note: For Auth.js v5 the JWT type is already defined internally.
 
 // Main Auth.js configuration (v5)
 export const authConfig = {
@@ -152,7 +147,8 @@ export const authConfig = {
   ],
 
   callbacks: {
-    async jwt({ token, user }) {
+    // Add user id and role into JWT
+    async jwt({ token, user }: any) {
       // On first sign in, add user info to token
       if (user) {
         token.id = user.id
@@ -162,7 +158,8 @@ export const authConfig = {
       return token
     },
 
-    async session({ session, token }) {
+    // Expose id and role on the session
+    async session({ session, token }: any) {
       // Add user ID and role from JWT token to session
       if (session.user && token) {
         session.user.id = token.id as string
@@ -171,7 +168,7 @@ export const authConfig = {
       return session
     },
 
-    async signIn({ user }) {
+    async signIn({ user }: any) {
       // Create profile on first sign in
       if (user.id) {
         try {

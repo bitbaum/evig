@@ -12,12 +12,13 @@ exports.closeDatabase = closeDatabase;
 const pg_1 = require("pg");
 const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
+const env_1 = require("./env");
 const dbConfig = {
-    host: process.env.DB_HOST || 'localhost',
-    port: parseInt(process.env.DB_PORT || '5432'),
-    database: process.env.DB_NAME || 'revampit_cms',
-    user: process.env.DB_USER || 'postgres',
-    password: process.env.DB_PASSWORD || '',
+    host: env_1.env.DB_HOST,
+    port: env_1.env.DB_PORT,
+    database: env_1.env.DB_NAME,
+    user: env_1.env.DB_USER,
+    password: env_1.env.DB_PASSWORD,
     max: 20,
     idleTimeoutMillis: 30000,
     connectionTimeoutMillis: 2000,

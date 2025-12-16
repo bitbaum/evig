@@ -76,7 +76,7 @@ async function analyzeProductImage(imageData: string, imageUrl?: string) {
 // Calculate sustainability score based on product analysis
 function calculateSustainabilityScore(productData: any) {
   let score = 50 // Base score
-  const factors = {}
+  const factors: Record<string, number> = {}
 
   // Brand sustainability factors
   const sustainableBrands = ['fairphone', 'shift', 'framework']

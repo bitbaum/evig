@@ -3,6 +3,7 @@ import { body, validationResult } from 'express-validator';
 import { executeQuerySingle, executeQuery } from '../utils/database';
 import { hashPassword, comparePassword, generateToken } from '../utils/auth';
 import { User, LoginData, CreateUserData, AuthToken } from '../models/User';
+import { env } from '../utils/env';
 
 /**
  * Register a new user (Admin only)
@@ -13,7 +14,7 @@ export const register = [
   body('password').isLength({ min: 8 }),
   body('first_name').trim().isLength({ min: 1, max: 100 }),
   body('last_name').trim().isLength({ min: 1, max: 100 }),
-  body('role').optional().isIn(['admin', 'editor', 'viewer']),
+  body('role').optional().isIn(['admin', 'editor', 'user']),
 
   async (req: Request, res: Response): Promise<void> => {
     try {
@@ -28,7 +29,7 @@ export const register = [
         return;
       }
 
-      const { email, password, first_name, last_name, role = 'viewer' }: CreateUserData = req.body;
+      const { email, password, first_name, last_name, role = 'user' }: CreateUserData = req.body;
 
       // Check if user already exists
       const existingUser = await executeQuerySingle<User>(
@@ -49,10 +50,10 @@ export const register = [
 
       // Create user
       const newUser = await executeQuerySingle<User>(
-        `INSERT INTO users (email, password_hash, first_name, last_name, role)
-         VALUES ($1, $2, $3, $4, $5)
-         RETURNING id, email, first_name, last_name, role, is_active, created_at`,
-        [email, password_hash, first_name, last_name, role]
+        `INSERT INTO users (email, password_hash, name, first_name, last_name, role)
+         VALUES ($1, $2, $3, $4, $5, $6)
+         RETURNING id, email, name, first_name, last_name, role, is_active, created_at`,
+        [email, password_hash, `${first_name} ${last_name}`.trim(), first_name, last_name, role]
       );
 
       if (!newUser) {
@@ -123,7 +124,25 @@ export const login = [
         return;
       }
 
+      // Check if email is verified (skip for admin users)
+      if (!user.email_verified && user.role !== 'admin') {
+        res.status(403).json({
+          success: false,
+          error: 'Please verify your email before logging in',
+          requires_verification: true,
+        });
+        return;
+      }
+
       // Check password
+      if (!user.password_hash) {
+        res.status(401).json({
+          success: false,
+          error: 'Invalid credentials',
+        });
+        return;
+      }
+
       const isValidPassword = await comparePassword(password, user.password_hash);
       if (!isValidPassword) {
         res.status(401).json({
@@ -151,8 +170,8 @@ export const login = [
       // Set JWT as httpOnly cookie
       res.cookie('token', token, {
         httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: process.env.NODE_ENV === 'production' ? 'lax' : false,
+        secure: env.NODE_ENV === 'production',
+        sameSite: env.NODE_ENV === 'production' ? 'lax' : 'lax',
         maxAge: 24 * 60 * 60 * 1000, // 24 hours
       });
 
@@ -194,7 +213,7 @@ export const getProfile = async (req: Request, res: Response): Promise<Response 
     }
 
     const user = await executeQuerySingle<User>(
-      'SELECT id, email, first_name, last_name, role, is_active, last_login_at, created_at FROM users WHERE id = $1',
+      'SELECT id, email, name, first_name, last_name, email_verified, image, role, is_active, last_login_at, created_at FROM users WHERE id = $1',
       [req.user.id]
     );
 
@@ -225,8 +244,10 @@ export const getProfile = async (req: Request, res: Response): Promise<Response 
 export const updateProfile = [
   // Validation rules
   body('email').optional().isEmail().normalizeEmail(),
+  body('name').optional().trim().isLength({ min: 1, max: 255 }),
   body('first_name').optional().trim().isLength({ min: 1, max: 100 }),
   body('last_name').optional().trim().isLength({ min: 1, max: 100 }),
+  body('image').optional().isURL(),
 
   async (req: Request, res: Response): Promise<Response | void> => {
     try {
@@ -248,7 +269,7 @@ export const updateProfile = [
         return;
       }
 
-      const { email, first_name, last_name } = req.body;
+      const { email, name, first_name, last_name, image } = req.body;
       const userId = req.user.id;
 
       // Check if email is already taken by another user
@@ -271,12 +292,14 @@ export const updateProfile = [
       const updatedUser = await executeQuerySingle<User>(
         `UPDATE users
          SET email = COALESCE($1, email),
-             first_name = COALESCE($2, first_name),
-             last_name = COALESCE($3, last_name),
+             name = COALESCE($2, name),
+             first_name = COALESCE($3, first_name),
+             last_name = COALESCE($4, last_name),
+             image = COALESCE($5, image),
              updated_at = CURRENT_TIMESTAMP
-         WHERE id = $4
-         RETURNING id, email, first_name, last_name, role, is_active, updated_at`,
-        [email, first_name, last_name, userId]
+         WHERE id = $6
+         RETURNING id, email, name, first_name, last_name, image, role, is_active, updated_at`,
+        [email, name, first_name, last_name, image, userId]
       );
 
       res.json({

@@ -2,10 +2,17 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const authController_1 = require("../controllers/authController");
+const verificationController_1 = require("../controllers/verificationController");
+const passwordResetController_1 = require("../controllers/passwordResetController");
 const auth_1 = require("../utils/auth");
 const router = (0, express_1.Router)();
-router.post('/register', (0, auth_1.authorizeRole)('admin'), authController_1.register);
+router.post('/register', authController_1.register);
 router.post('/login', authController_1.login);
+router.post('/verify-email', verificationController_1.sendVerificationEmail);
+router.get('/verify-email/:token', verificationController_1.verifyEmail);
+router.post('/reset-password', passwordResetController_1.requestPasswordReset);
+router.post('/reset-password/confirm', passwordResetController_1.resetPassword);
+router.get('/reset-password/validate/:token', passwordResetController_1.validateResetToken);
 router.get('/profile', auth_1.authenticateToken, authController_1.getProfile);
 router.put('/profile', auth_1.authenticateToken, authController_1.updateProfile);
 router.put('/password', auth_1.authenticateToken, authController_1.changePassword);

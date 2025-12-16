@@ -1,4 +1,4 @@
-import { Router } from 'express';
+import { Router, Request, Response } from 'express';
 import { body, validationResult } from 'express-validator';
 
 const router = Router();
@@ -13,15 +13,16 @@ const validateSuggestion = [
 ];
 
 // POST /api/suggestions - Submit a suggestion
-router.post('/', validateSuggestion, async (req, res) => {
+router.post('/', validateSuggestion, async (req: Request, res: Response): Promise<void> => {
   try {
     // Check validation errors
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).json({
+      res.status(400).json({
         error: 'Validation failed',
         details: errors.array()
       });
+      return;
     }
 
     const {
@@ -57,7 +58,6 @@ router.post('/', validateSuggestion, async (req, res) => {
       id: `suggestion_${Date.now()}`,
       timestamp: new Date().toISOString()
     });
-
   } catch (error) {
     console.error('Error processing suggestion:', error);
     res.status(500).json({
@@ -68,7 +68,7 @@ router.post('/', validateSuggestion, async (req, res) => {
 });
 
 // GET /api/suggestions - Get all suggestions (admin only)
-router.get('/', async (req, res) => {
+router.get('/', async (req: Request, res: Response) => {
   try {
     // In a real implementation, you'd fetch from database
     // For now, return a placeholder response

@@ -8,7 +8,7 @@ exports.getUsers = [
     (0, express_validator_1.query)('page').optional().isInt({ min: 1 }),
     (0, express_validator_1.query)('limit').optional().isInt({ min: 1, max: 100 }),
     (0, express_validator_1.query)('search').optional().trim(),
-    (0, express_validator_1.query)('role').optional().isIn(['admin', 'editor', 'viewer']),
+    (0, express_validator_1.query)('role').optional().isIn(['admin', 'editor', 'user']),
     (0, express_validator_1.query)('is_active').optional().isBoolean(),
     async (req, res) => {
         try {
@@ -107,7 +107,7 @@ exports.createUser = [
     (0, express_validator_1.body)('password').isLength({ min: 8 }),
     (0, express_validator_1.body)('first_name').trim().isLength({ min: 1, max: 100 }),
     (0, express_validator_1.body)('last_name').trim().isLength({ min: 1, max: 100 }),
-    (0, express_validator_1.body)('role').optional().isIn(['admin', 'editor', 'viewer']),
+    (0, express_validator_1.body)('role').optional().isIn(['admin', 'editor', 'user']),
     async (req, res) => {
         try {
             const errors = (0, express_validator_1.validationResult)(req);
@@ -119,7 +119,7 @@ exports.createUser = [
                 });
                 return;
             }
-            const { email, password, first_name, last_name, role = 'viewer' } = req.body;
+            const { email, password, first_name, last_name, role = 'user' } = req.body;
             const existingUser = await (0, database_1.executeQuerySingle)('SELECT id FROM users WHERE email = $1', [email]);
             if (existingUser) {
                 res.status(409).json({
@@ -151,7 +151,7 @@ exports.updateUser = [
     (0, express_validator_1.body)('email').optional().isEmail().normalizeEmail(),
     (0, express_validator_1.body)('first_name').optional().trim().isLength({ min: 1, max: 100 }),
     (0, express_validator_1.body)('last_name').optional().trim().isLength({ min: 1, max: 100 }),
-    (0, express_validator_1.body)('role').optional().isIn(['admin', 'editor', 'viewer']),
+    (0, express_validator_1.body)('role').optional().isIn(['admin', 'editor', 'user']),
     (0, express_validator_1.body)('is_active').optional().isBoolean(),
     async (req, res) => {
         try {

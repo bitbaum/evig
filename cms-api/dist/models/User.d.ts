@@ -1,10 +1,13 @@
 export interface User {
     id: string;
     email: string;
-    password_hash: string;
-    first_name: string;
-    last_name: string;
-    role: 'admin' | 'editor' | 'viewer';
+    password_hash?: string;
+    name?: string;
+    first_name?: string;
+    last_name?: string;
+    email_verified?: Date;
+    image?: string;
+    role: 'admin' | 'editor' | 'user';
     is_active: boolean;
     last_login_at?: Date;
     created_at: Date;
@@ -12,17 +15,21 @@ export interface User {
 }
 export interface CreateUserData {
     email: string;
-    password: string;
-    first_name: string;
-    last_name: string;
-    role?: 'admin' | 'editor' | 'viewer';
+    password?: string;
+    name?: string;
+    first_name?: string;
+    last_name?: string;
+    role?: 'admin' | 'editor' | 'user';
 }
 export interface UpdateUserData {
     email?: string;
+    name?: string;
     first_name?: string;
     last_name?: string;
-    role?: 'admin' | 'editor' | 'viewer';
+    role?: 'admin' | 'editor' | 'user';
     is_active?: boolean;
+    email_verified?: Date;
+    image?: string;
 }
 export interface LoginData {
     email: string;

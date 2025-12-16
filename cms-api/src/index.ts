@@ -1,7 +1,6 @@
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
-import dotenv from 'dotenv';
 import { initializeDatabase } from './utils/database';
 import authRoutes from './routes/auth';
 import contentRoutes from './routes/content';
@@ -10,12 +9,11 @@ import suggestionsRoutes from './routes/suggestions';
 import { errorHandler } from './middleware/errorHandler';
 import { logger } from './middleware/logger';
 import { rateLimiter } from './middleware/rateLimiter';
-
-// Load environment variables
-dotenv.config();
+import { swaggerUi, specs } from './docs/swagger';
+import { monitoring, getHealthMetrics } from './utils/monitoring';
+import { env } from './utils/env';
 
 const app = express();
-const PORT = process.env.PORT || 3001;
 
 // Security middleware
 app.use(helmet({
@@ -31,8 +29,8 @@ app.use(helmet({
 
 // CORS configuration
 app.use(cors({
-  origin: process.env.NODE_ENV === 'production'
-    ? process.env.FRONTEND_URL
+  origin: env.NODE_ENV === 'production'
+    ? env.FRONTEND_URL
     : ['http://localhost:3000', 'http://localhost:3001', 'http://localhost:3002'],
   credentials: true,
 }));
@@ -41,14 +39,22 @@ app.use(cors({
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
 
+// Monitoring middleware
+app.use(monitoring.middleware());
+
 // Logging middleware
 app.use(logger);
 
 // Rate limiting
 app.use('/api/', rateLimiter);
 
-// Health check endpoint
-app.get('/health', (req, res) => {
+// Health check endpoints
+app.get('/health', async (req, res) => {
+  const metrics = await getHealthMetrics();
+  res.json(metrics);
+});
+
+app.get('/health/simple', (req, res) => {
   res.json({
     status: 'OK',
     timestamp: new Date().toISOString(),
@@ -56,6 +62,9 @@ app.get('/health', (req, res) => {
     version: process.env.npm_package_version || '1.0.0'
   });
 });
+
+// API documentation
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 
 // API routes
 app.use('/api/auth', authRoutes);
@@ -91,12 +100,14 @@ async function startServer() {
     // Initialize database connection
     await initializeDatabase();
 
-    app.listen(PORT, () => {
-      console.log(`🚀 RevampIT CMS API running on port ${PORT}`);
-      console.log(`📊 Health check: http://localhost:${PORT}/health`);
-      console.log(`🔐 Auth endpoints: http://localhost:${PORT}/api/auth`);
-      console.log(`📝 Content endpoints: http://localhost:${PORT}/api/content`);
-      console.log(`⚙️ Admin endpoints: http://localhost:${PORT}/api/admin`);
+    app.listen(env.PORT, () => {
+      console.log(`🚀 RevampIT CMS API running on port ${env.PORT}`);
+      console.log(`📊 Health check: http://localhost:${env.PORT}/health`);
+      console.log(`📊 Simple health: http://localhost:${env.PORT}/health/simple`);
+      console.log(`📚 API Docs: http://localhost:${env.PORT}/api-docs`);
+      console.log(`🔐 Auth endpoints: http://localhost:${env.PORT}/api/auth`);
+      console.log(`📝 Content endpoints: http://localhost:${env.PORT}/api/content`);
+      console.log(`⚙️ Admin endpoints: http://localhost:${env.PORT}/api/admin`);
     });
   } catch (error) {
     console.error('Failed to start server:', error);

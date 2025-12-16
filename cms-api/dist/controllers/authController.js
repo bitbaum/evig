@@ -4,12 +4,13 @@ exports.changePassword = exports.updateProfile = exports.getProfile = exports.lo
 const express_validator_1 = require("express-validator");
 const database_1 = require("../utils/database");
 const auth_1 = require("../utils/auth");
+const env_1 = require("../utils/env");
 exports.register = [
     (0, express_validator_1.body)('email').isEmail().normalizeEmail(),
     (0, express_validator_1.body)('password').isLength({ min: 8 }),
     (0, express_validator_1.body)('first_name').trim().isLength({ min: 1, max: 100 }),
     (0, express_validator_1.body)('last_name').trim().isLength({ min: 1, max: 100 }),
-    (0, express_validator_1.body)('role').optional().isIn(['admin', 'editor', 'viewer']),
+    (0, express_validator_1.body)('role').optional().isIn(['admin', 'editor', 'user']),
     async (req, res) => {
         try {
             const errors = (0, express_validator_1.validationResult)(req);
@@ -21,7 +22,7 @@ exports.register = [
                 });
                 return;
             }
-            const { email, password, first_name, last_name, role = 'viewer' } = req.body;
+            const { email, password, first_name, last_name, role = 'user' } = req.body;
             const existingUser = await (0, database_1.executeQuerySingle)('SELECT id, email FROM users WHERE email = $1', [email]);
             if (existingUser) {
                 res.status(409).json({
@@ -31,9 +32,9 @@ exports.register = [
                 return;
             }
             const password_hash = await (0, auth_1.hashPassword)(password);
-            const newUser = await (0, database_1.executeQuerySingle)(`INSERT INTO users (email, password_hash, first_name, last_name, role)
-         VALUES ($1, $2, $3, $4, $5)
-         RETURNING id, email, first_name, last_name, role, is_active, created_at`, [email, password_hash, first_name, last_name, role]);
+            const newUser = await (0, database_1.executeQuerySingle)(`INSERT INTO users (email, password_hash, name, first_name, last_name, role)
+         VALUES ($1, $2, $3, $4, $5, $6)
+         RETURNING id, email, name, first_name, last_name, role, is_active, created_at`, [email, password_hash, `${first_name} ${last_name}`.trim(), first_name, last_name, role]);
             if (!newUser) {
                 throw new Error('Failed to create user');
             }
@@ -85,6 +86,21 @@ exports.login = [
                 });
                 return;
             }
+            if (!user.email_verified && user.role !== 'admin') {
+                res.status(403).json({
+                    success: false,
+                    error: 'Please verify your email before logging in',
+                    requires_verification: true,
+                });
+                return;
+            }
+            if (!user.password_hash) {
+                res.status(401).json({
+                    success: false,
+                    error: 'Invalid credentials',
+                });
+                return;
+            }
             const isValidPassword = await (0, auth_1.comparePassword)(password, user.password_hash);
             if (!isValidPassword) {
                 res.status(401).json({
@@ -100,6 +116,12 @@ exports.login = [
                 first_name: user.first_name,
                 last_name: user.last_name,
                 role: user.role,
+            });
+            res.cookie('token', token, {
+                httpOnly: true,
+                secure: env_1.env.NODE_ENV === 'production',
+                sameSite: env_1.env.NODE_ENV === 'production' ? 'lax' : 'lax',
+                maxAge: 24 * 60 * 60 * 1000,
             });
             res.json({
                 success: true,
@@ -134,7 +156,7 @@ const getProfile = async (req, res) => {
                 error: 'Authentication required'
             });
         }
-        const user = await (0, database_1.executeQuerySingle)('SELECT id, email, first_name, last_name, role, is_active, last_login_at, created_at FROM users WHERE id = $1', [req.user.id]);
+        const user = await (0, database_1.executeQuerySingle)('SELECT id, email, name, first_name, last_name, email_verified, image, role, is_active, last_login_at, created_at FROM users WHERE id = $1', [req.user.id]);
         if (!user) {
             res.status(404).json({
                 success: false,
@@ -158,8 +180,10 @@ const getProfile = async (req, res) => {
 exports.getProfile = getProfile;
 exports.updateProfile = [
     (0, express_validator_1.body)('email').optional().isEmail().normalizeEmail(),
+    (0, express_validator_1.body)('name').optional().trim().isLength({ min: 1, max: 255 }),
     (0, express_validator_1.body)('first_name').optional().trim().isLength({ min: 1, max: 100 }),
     (0, express_validator_1.body)('last_name').optional().trim().isLength({ min: 1, max: 100 }),
+    (0, express_validator_1.body)('image').optional().isURL(),
     async (req, res) => {
         try {
             if (!req.user) {
@@ -177,7 +201,7 @@ exports.updateProfile = [
                 });
                 return;
             }
-            const { email, first_name, last_name } = req.body;
+            const { email, name, first_name, last_name, image } = req.body;
             const userId = req.user.id;
             if (email) {
                 const existingUser = await (0, database_1.executeQuerySingle)('SELECT id FROM users WHERE email = $1 AND id != $2', [email, userId]);
@@ -191,11 +215,13 @@ exports.updateProfile = [
             }
             const updatedUser = await (0, database_1.executeQuerySingle)(`UPDATE users
          SET email = COALESCE($1, email),
-             first_name = COALESCE($2, first_name),
-             last_name = COALESCE($3, last_name),
+             name = COALESCE($2, name),
+             first_name = COALESCE($3, first_name),
+             last_name = COALESCE($4, last_name),
+             image = COALESCE($5, image),
              updated_at = CURRENT_TIMESTAMP
-         WHERE id = $4
-         RETURNING id, email, first_name, last_name, role, is_active, updated_at`, [email, first_name, last_name, userId]);
+         WHERE id = $6
+         RETURNING id, email, name, first_name, last_name, image, role, is_active, updated_at`, [email, name, first_name, last_name, image, userId]);
             res.json({
                 success: true,
                 message: 'Profile updated successfully',
