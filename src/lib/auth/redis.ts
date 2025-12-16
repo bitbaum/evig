@@ -34,7 +34,7 @@ export async function getRedis(): Promise<RedisLike | null> {
       incr: (key) => client.incr(key),
       pttl: (key) => client.pttl(key),
       expire: (key, seconds) => client.expire(key, seconds),
-      set: (key, value, mode?: string, duration?: number) => {
+      set: (key, value, mode?: 'EX' | 'PX', duration?: number) => {
         if (mode && duration) return client.set(key, value, mode, duration)
         return client.set(key, value)
       },

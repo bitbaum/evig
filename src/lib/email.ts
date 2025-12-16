@@ -200,10 +200,15 @@ export const emailTemplates = {
 }
 
 // Send email function
-export async function sendEmail(to: string, template: keyof typeof emailTemplates, ...args: any[]) {
+export async function sendEmail(to: string, template: keyof typeof emailTemplates, ...args: unknown[]) {
   try {
     const transporter = await getTransporter()
-    const emailTemplate = emailTemplates[template](...args)
+    const templateFn = (emailTemplates as any)[template] as (...a: unknown[]) => {
+      subject: string
+      html: string
+      text: string
+    }
+    const emailTemplate = templateFn(...(args as unknown[]))
 
     const mailOptions = {
       from: process.env.EMAIL_FROM || emailConfig.auth.user,

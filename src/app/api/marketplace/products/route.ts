@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server"
 import { requireAuth } from '@/middleware/auth'
 
 // Mock marketplace products storage (in real app, this would be a database)
@@ -81,12 +81,12 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     // Require authentication
-    const user = await requireAuth();
+    const user = await requireAuth()
 
-    const productData = await request.json();
+    const productData = await request.json()
 
     // Validate required fields
-    const requiredFields = ['title', 'description', 'price', 'category', 'condition', 'location'];
+    const requiredFields = ['title', 'description', 'price', 'category', 'condition', 'location']
     for (const field of requiredFields) {
       if (!productData[field]) {
         return NextResponse.json(
@@ -101,7 +101,7 @@ export async function POST(request: NextRequest) {
       id: `user_prod_${Date.now()}`,
       ...productData,
       owner_id: user.id,
-      owner_name: `${user.firstName} ${user.lastName}`,
+      owner_name: user.name || user.email,
       status: "published", // Auto-publish user listings
       created_at: new Date().toISOString()
     };
