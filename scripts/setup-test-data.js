@@ -56,7 +56,7 @@ async function setupTestData() {
     console.log('✅ Tables created');
 
     // Create admin user
-    const bcrypt = require('bcrypt');
+    const bcrypt = require('bcryptjs');
     const adminPassword = await bcrypt.hash('Admin123!', 12);
 
     const adminResult = await client.query(`

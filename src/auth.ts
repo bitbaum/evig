@@ -1,6 +1,6 @@
 /**
  * RevampIT Unified Authentication Configuration
- * 
+ *
  * Self-hosted Auth.js v5 with PostgreSQL adapter
  * Provides unified accounts for shop, workshops, services, and community
  */
@@ -28,7 +28,7 @@ const pool = new Pool({
   connectionTimeoutMillis: 5000,
 })
 
-// Extend the built-in types
+// Extend the built-in Auth.js types
 declare module 'next-auth' {
   interface User {
     id: string
@@ -50,14 +50,15 @@ declare module 'next-auth' {
   }
 }
 
-declare module '@auth/core/jwt' {
+declare module 'next-auth/jwt' {
   interface JWT {
     id: string
     role?: string
   }
 }
 
-export const { handlers, auth, signIn, signOut } = NextAuth({
+// Main Auth.js configuration (v5)
+export const authConfig = {
   // Secret for signing cookies and tokens
   secret: process.env.AUTH_SECRET || process.env.NEXTAUTH_SECRET,
   
@@ -94,19 +95,20 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         },
       },
       async authorize(credentials) {
+        const creds = credentials as { email?: string; password?: string } | null
         console.log('Auth attempt with credentials:', {
-          hasEmail: !!credentials?.email,
-          hasPassword: !!credentials?.password,
-          email: credentials?.email,
-          passwordLength: credentials?.password?.length
+          hasEmail: !!creds?.email,
+          hasPassword: !!creds?.password,
+          email: creds?.email,
+          passwordLength: (creds?.password ?? '').length,
         })
 
-        if (!credentials?.email || !credentials?.password) {
+        if (!creds?.email || !creds?.password) {
           throw new Error('E-Mail und Passwort sind erforderlich')
         }
 
-        const email = credentials.email as string
-        const password = credentials.password as string
+        const email = creds.email as string
+        const password = creds.password as string
 
         // Get user from database
         const user = await getUserByEmail(email)
@@ -184,7 +186,10 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 
   // Enable debug mode in development
   debug: process.env.NODE_ENV === 'development',
-})
+}
+
+// Export Auth.js helpers for App Router
+export const { handlers, auth, signIn, signOut } = NextAuth(authConfig)
 
 // ============================================================================
 // Registration helper (not part of Auth.js, but used by registration API)
@@ -196,6 +201,7 @@ export interface RegisterResult {
     id: string
     email: string
     name: string | null
+    emailVerified?: boolean
   }
   error?: string
   errors?: string[]
@@ -207,7 +213,7 @@ export async function registerUser(data: {
   name?: string
   role?: string
 }): Promise<RegisterResult> {
-  const { email, password, name, role = ROLES.USER } = data
+  const { email, password, name, role = ROLES.CUSTOMER } = data
 
   // Validate email format
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/

@@ -63,6 +63,3 @@ export async function userMiddleware(request: NextRequest) {
     return NextResponse.redirect(loginUrl)
   }
 }
-
-
-

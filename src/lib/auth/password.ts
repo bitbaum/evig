@@ -3,7 +3,7 @@
  * Uses bcrypt for secure password hashing
  */
 
-import bcrypt from 'bcrypt'
+import bcrypt from 'bcryptjs'
 
 const SALT_ROUNDS = 12
 
@@ -19,6 +19,19 @@ export async function hashPassword(password: string): Promise<string> {
  */
 export async function verifyPassword(password: string, hash: string): Promise<boolean> {
   return bcrypt.compare(password, hash)
+}
+
+/**
+ * Constant-time string comparison to prevent timing attacks
+ * Used for legacy plain-text comparisons only (avoid in production).
+ */
+export function constantTimeCompare(a: string, b: string): boolean {
+  if (a.length !== b.length) return false
+  let diff = 0
+  for (let i = 0; i < a.length; i++) {
+    diff |= a.charCodeAt(i) ^ b.charCodeAt(i)
+  }
+  return diff === 0
 }
 
 /**
@@ -67,7 +80,6 @@ export function validatePasswordStrength(password: string): {
     errors
   }
 }
-
 
 
 

@@ -31,11 +31,8 @@ export {
   hashPassword,
   verifyPassword,
   constantTimeCompare,
-  generateSecureToken,
-  generateUrlSafeToken,
+  generateToken,
   validatePasswordStrength,
-  checkPasswordBreach,
-  type PasswordValidationResult,
 } from './password'
 
 // Rate limiting and lockout

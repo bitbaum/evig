@@ -13,7 +13,7 @@ interface RoleSelectorProps {
 export function RoleSelector({ selectedRole, onRoleChange, disabled, variant = 'default' }: RoleSelectorProps) {
   const roles = [
     {
-      id: ROLES.USER,
+      id: ROLES.CUSTOMER,
       title: 'Kunde',
       description: 'Kaufen Sie Produkte, buchen Sie Workshops und Reparaturen',
       icon: User,
@@ -130,7 +130,7 @@ export function RoleSelector({ selectedRole, onRoleChange, disabled, variant = '
               </h4>
               <div className="mt-1 sm:mt-2 text-xs sm:text-sm text-blue-700 dark:text-blue-300">
                 <p>
-                  {selectedRole === ROLES.USER && "Perfekt für den Einstieg! Sie können später jederzeit zur Seller- oder Repairer-Rolle wechseln."}
+                  {selectedRole === ROLES.CUSTOMER && "Perfekt für den Einstieg! Sie können später jederzeit zur Seller- oder Repairer-Rolle wechseln."}
                   {selectedRole === ROLES.SELLER && "Großartig! Sie können sofort mit dem Verkauf Ihrer refurbished Produkte beginnen."}
                   {selectedRole === ROLES.REPAIRER && "Ausgezeichnet! Ihre Reparaturkenntnisse werden der Community helfen."}
                 </p>

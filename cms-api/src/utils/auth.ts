@@ -1,13 +1,7 @@
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { AuthToken } from '../models/User';
-
-const JWT_SECRET = process.env.JWT_SECRET;
-const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '24h';
-
-if (!JWT_SECRET) {
-  throw new Error('JWT_SECRET environment variable is required');
-}
+import { env } from './env';
 
 /**
  * Hash a password using bcrypt
@@ -28,9 +22,6 @@ export async function comparePassword(password: string, hashedPassword: string):
  * Generate a JWT token for a user
  */
 export function generateToken(user: AuthToken): string {
-  const secret = JWT_SECRET;
-  const expiresIn = 24 * 60 * 60; // 24 hours in seconds
-
   const payload = {
     id: user.id,
     email: user.email,
@@ -38,12 +29,14 @@ export function generateToken(user: AuthToken): string {
     last_name: user.last_name,
     role: user.role,
   };
-  const options = {
+
+  // Use 24 hours as default
+  const expiresIn = 24 * 60 * 60; // 24 hours in seconds
+
+  return jwt.sign(payload, env.JWT_SECRET, {
     expiresIn,
     algorithm: 'HS256' as const,
-  };
-
-  return jwt.sign(payload, secret, options);
+  });
 }
 
 /**
@@ -51,7 +44,7 @@ export function generateToken(user: AuthToken): string {
  */
 export function verifyToken(token: string): AuthToken | null {
   try {
-    const decoded = jwt.verify(token, JWT_SECRET) as AuthToken;
+    const decoded = jwt.verify(token, env.JWT_SECRET) as AuthToken;
     return decoded;
   } catch (error) {
     console.error('Token verification failed:', error);
@@ -74,13 +67,15 @@ export function extractTokenFromHeader(authHeader: string | undefined): string |
  */
 export function hasRole(userRole: string, requiredRole: string): boolean {
   const roleHierarchy = {
-    viewer: 1,
+    user: 1,
     editor: 2,
     admin: 3,
   };
 
-  return roleHierarchy[userRole as keyof typeof roleHierarchy] >=
-         roleHierarchy[requiredRole as keyof typeof roleHierarchy];
+  const userLevel = roleHierarchy[userRole as keyof typeof roleHierarchy] || 0;
+  const requiredLevel = roleHierarchy[requiredRole as keyof typeof roleHierarchy] || 0;
+
+  return userLevel >= requiredLevel;
 }
 
 /**
