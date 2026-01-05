@@ -1,5 +1,7 @@
-import { Metadata } from 'next'
-import { auth } from '@/auth'
+'use client'
+
+import { useState, useEffect } from 'react'
+import { useSession } from 'next-auth/react'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { InventoryTable } from '@/components/inventory/InventoryTable'
@@ -15,11 +17,7 @@ import {
   TrendingUp,
   Loader2
 } from 'lucide-react'
-
-export const metadata: Metadata = {
-  title: 'Inventory Dashboard | RevampIT',
-  description: 'Manage your AI-powered inventory and sync with the marketplace.',
-}
+import { logger } from '@/lib/logger'
 
 interface InventoryItem {
   id: string
@@ -49,13 +47,6 @@ interface InventoryItem {
     }>
   } | null
 }
-
-'use client'
-
-import { useState, useEffect } from 'react'
-import { useSession } from 'next-auth/react'
-import { redirect } from 'next/navigation'
-import { logger } from '@/lib/logger'
 
 export default function InventoryDashboardPage() {
   const { data: session, status } = useSession()

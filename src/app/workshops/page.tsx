@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useSession } from 'next-auth/react'
 import Link from 'next/link'
 import { logger } from '@/lib/logger'
@@ -54,11 +54,7 @@ export default function WorkshopsPage() {
   const [loading, setLoading] = useState(true)
   const [filter, setFilter] = useState<string>('all')
 
-  useEffect(() => {
-    fetchWorkshops()
-  }, [session])
-
-  const fetchWorkshops = async () => {
+  const fetchWorkshops = useCallback(async () => {
     try {
       // Fetch workshops
       const workshopsResponse = await fetch('/api/workshops')
@@ -104,7 +100,11 @@ export default function WorkshopsPage() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [session])
+
+  useEffect(() => {
+    fetchWorkshops()
+  }, [fetchWorkshops])
 
   const getCategoryIcon = (category: string) => {
     switch (category.toLowerCase()) {

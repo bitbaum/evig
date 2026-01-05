@@ -11,7 +11,6 @@ export async function POST(request: NextRequest) {
     if (!session?.user?.id) {
       return apiUnauthorized(ERROR_MESSAGES.UNAUTHORIZED)
     }
-  try {
 
     const formData = await request.formData()
 
