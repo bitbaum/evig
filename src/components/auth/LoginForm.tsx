@@ -5,6 +5,8 @@ import { signIn } from 'next-auth/react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { Mail, Lock, Loader2, AlertCircle, CheckCircle2, ArrowRight } from 'lucide-react'
+import { getTextColor, getStatusColors, getButtonVariant } from '@/lib/design-system'
+import { cn } from '@/lib/utils'
 
 export function LoginForm() {
   const router = useRouter()
@@ -94,28 +96,28 @@ export function LoginForm() {
       <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 border border-gray-100 dark:border-gray-700">
         {/* Header */}
         <div className="text-center mb-8">
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+          <h1 className={cn('text-2xl font-bold mb-2', getTextColor('white', 'primary'), 'dark:text-white')}>
             Willkommen zurück
           </h1>
-          <p className="text-gray-600 dark:text-gray-400">
+          <p className={cn('text-sm sm:text-base', getTextColor('white', 'muted'), 'dark:text-neutral-400')}>
             Melden Sie sich in Ihrem Konto an
           </p>
         </div>
 
         {/* Success Messages */}
         {verified && (
-          <div className="mb-6 p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg flex items-start gap-3">
-            <CheckCircle2 className="w-5 h-5 text-green-600 dark:text-green-400 flex-shrink-0 mt-0.5" />
-            <p className="text-sm text-green-700 dark:text-green-300">
+          <div className={cn('mb-6 p-4 rounded-lg flex items-start gap-3 border-2', getStatusColors('success').bg, getStatusColors('success').border)}>
+            <CheckCircle2 className={cn('w-5 h-5 flex-shrink-0 mt-0.5', getStatusColors('success').icon)} />
+            <p className={cn('text-sm', getStatusColors('success').text)}>
               E-Mail-Adresse erfolgreich bestätigt! Sie können sich jetzt anmelden.
             </p>
           </div>
         )}
 
         {reset === 'success' && (
-          <div className="mb-6 p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg flex items-start gap-3">
-            <CheckCircle2 className="w-5 h-5 text-green-600 dark:text-green-400 flex-shrink-0 mt-0.5" />
-            <p className="text-sm text-green-700 dark:text-green-300">
+          <div className={cn('mb-6 p-4 rounded-lg flex items-start gap-3 border-2', getStatusColors('success').bg, getStatusColors('success').border)}>
+            <CheckCircle2 className={cn('w-5 h-5 flex-shrink-0 mt-0.5', getStatusColors('success').icon)} />
+            <p className={cn('text-sm', getStatusColors('success').text)}>
               Ihr Passwort wurde erfolgreich geändert! Sie können sich jetzt mit Ihrem neuen Passwort anmelden.
             </p>
           </div>
@@ -123,9 +125,9 @@ export function LoginForm() {
 
         {/* Error Messages */}
         {(formError || error) && (
-          <div className="mb-6 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg flex items-start gap-3">
-            <AlertCircle className="w-5 h-5 text-red-600 dark:text-red-400 flex-shrink-0 mt-0.5" />
-            <p className="text-sm text-red-700 dark:text-red-300">
+          <div className={cn('mb-6 p-4 rounded-lg flex items-start gap-3 border-2', getStatusColors('error').bg, getStatusColors('error').border)}>
+            <AlertCircle className={cn('w-5 h-5 flex-shrink-0 mt-0.5', getStatusColors('error').icon)} />
+            <p className={cn('text-sm', getStatusColors('error').text)}>
               {getErrorMessage(formError || error)}
             </p>
           </div>
@@ -135,11 +137,11 @@ export function LoginForm() {
         <form onSubmit={handleSubmit} className="space-y-5">
           {/* Email */}
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
+            <label htmlFor="email" className={cn('block text-sm font-medium mb-1.5', getTextColor('white', 'secondary'), 'dark:text-neutral-300')}>
               E-Mail-Adresse
             </label>
             <div className="relative">
-              <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+              <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-400" />
               <input
                 id="email"
                 type="email"
@@ -148,7 +150,15 @@ export function LoginForm() {
                 required
                 autoComplete="email"
                 placeholder="name@beispiel.ch"
-                className="w-full pl-11 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-400 focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
+                className={cn(
+                  'w-full pl-11 pr-4 py-3 border-2 rounded-lg transition-all min-h-[touch] touch-target',
+                  'border-neutral-300 dark:border-neutral-600',
+                  'bg-white dark:bg-neutral-700',
+                  getTextColor('white', 'primary'),
+                  'dark:text-white',
+                  'placeholder-neutral-400',
+                  'focus:ring-2 focus:ring-primary-500 focus:border-primary-500'
+                )}
               />
             </div>
           </div>
@@ -156,18 +166,18 @@ export function LoginForm() {
           {/* Password */}
           <div>
             <div className="flex items-center justify-between mb-1.5">
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+              <label htmlFor="password" className={cn('block text-sm font-medium', getTextColor('white', 'secondary'), 'dark:text-neutral-300')}>
                 Passwort
               </label>
               <Link
                 href="/auth/forgot-password"
-                className="text-sm text-green-600 hover:text-green-700 dark:text-green-400"
+                className="text-sm text-primary-600 hover:text-primary-700 dark:text-primary-400"
               >
                 Passwort vergessen?
               </Link>
             </div>
             <div className="relative">
-              <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+              <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-400" />
               <input
                 id="password"
                 type="password"
@@ -176,7 +186,15 @@ export function LoginForm() {
                 required
                 autoComplete="current-password"
                 placeholder="••••••••"
-                className="w-full pl-11 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-400 focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
+                className={cn(
+                  'w-full pl-11 pr-4 py-3 border-2 rounded-lg transition-all min-h-[touch] touch-target',
+                  'border-neutral-300 dark:border-neutral-600',
+                  'bg-white dark:bg-neutral-700',
+                  getTextColor('white', 'primary'),
+                  'dark:text-white',
+                  'placeholder-neutral-400',
+                  'focus:ring-2 focus:ring-primary-500 focus:border-primary-500'
+                )}
               />
             </div>
           </div>
@@ -185,7 +203,13 @@ export function LoginForm() {
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 disabled:bg-green-400 text-white font-semibold py-3 px-4 rounded-lg transition-colors"
+            className={cn(
+              'w-full flex items-center justify-center gap-2 font-semibold py-3 px-4 rounded-lg transition-colors min-h-[touch] touch-target',
+              'disabled:opacity-50 disabled:cursor-not-allowed',
+              getButtonVariant('primary').bg,
+              getButtonVariant('primary').text,
+              getButtonVariant('primary').hover
+            )}
           >
             {isLoading ? (
               <>

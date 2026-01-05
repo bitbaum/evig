@@ -4,7 +4,7 @@
  * This is a simplified lookup for common postal codes
  */
 
-interface PostalCodeData {
+export interface PostalCodeData {
   postal_code: string;
   city: string;
   canton: string;

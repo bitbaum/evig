@@ -3,9 +3,12 @@
  * POST /api/auth/forgot-password
  */
 
-import { NextResponse } from 'next/server'
+import { Request } from 'next/server'
 import { getUserByEmail, createPasswordResetToken } from '@/lib/auth/db'
 import { sendEmail } from '@/lib/email'
+import { apiError, apiSuccess, apiBadRequest } from '@/lib/api/helpers'
+import { logger } from '@/lib/logger'
+import { ERROR_MESSAGES } from '@/config/error-messages'
 
 export async function POST(request: Request) {
   try {
@@ -13,18 +16,14 @@ export async function POST(request: Request) {
     const { email } = body
 
     if (!email) {
-      return NextResponse.json(
-        { error: 'E-Mail-Adresse ist erforderlich' },
-        { status: 400 }
-      )
+      return apiBadRequest(ERROR_MESSAGES.EMAIL_REQUIRED)
     }
 
     // Check if user exists
     const user = await getUserByEmail(email)
     if (!user) {
       // Don't reveal if email exists or not for security
-      return NextResponse.json({
-        success: true,
+      return apiSuccess({
         message: 'Falls ein Konto mit dieser E-Mail-Adresse existiert, haben wir Ihnen einen Reset-Link gesendet.',
       })
     }
@@ -36,21 +35,16 @@ export async function POST(request: Request) {
     const resetUrl = `${process.env.NEXTAUTH_URL || 'http://localhost:3001'}/auth/reset-password?token=${resetToken}`
     try {
       await sendEmail(email, 'passwordReset', user.name || 'RevampIT Benutzer', resetUrl)
-      console.log('Password reset email sent to:', email)
+      logger.info('Password reset email sent', { email })
     } catch (emailError) {
-      console.error('Failed to send password reset email:', emailError)
+      logger.error('Failed to send password reset email', { error: emailError, email })
       // Still return success for security (don't reveal email issues)
     }
 
-    return NextResponse.json({
-      success: true,
+    return apiSuccess({
       message: 'Falls ein Konto mit dieser E-Mail-Adresse existiert, haben wir Ihnen einen Reset-Link gesendet.',
     })
   } catch (error) {
-    console.error('Forgot password error:', error)
-    return NextResponse.json(
-      { error: 'Ein unerwarteter Fehler ist aufgetreten' },
-      { status: 500 }
-    )
+    return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)
   }
 }

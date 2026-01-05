@@ -5,6 +5,7 @@
 
 import { useState, useCallback } from 'react'
 import { SuggestionFormData, FeedbackScope, SelectedElement } from '../types'
+import { logger } from '@/lib/logger'
 
 interface UseSuggestionFormProps {
   onSuccess?: () => void
@@ -87,7 +88,7 @@ export function useSuggestionForm({ onSuccess }: UseSuggestionFormProps = {}): U
       onSuccess?.()
       return true
     } catch (error) {
-      console.error('Error submitting suggestion:', error)
+      logger.error('Error submitting suggestion', { error })
       setSubmitError('Fehler beim Senden. Bitte versuchen Sie es später erneut.')
       return false
     } finally {

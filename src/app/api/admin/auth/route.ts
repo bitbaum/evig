@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { verifyAdminPassword, createAdminToken, createAuthCookie, clearAuthCookie } from '@/lib/admin-auth'
+import { apiSuccess, apiError, apiBadRequest, apiUnauthorized } from '@/lib/api/helpers'
+import { logger } from '@/lib/logger'
 
 export const dynamic = 'force-dynamic'
 
@@ -10,32 +12,25 @@ export async function POST(request: NextRequest) {
 
     // Handle logout
     if (action === 'logout') {
-      const response = NextResponse.json({ success: true, message: 'Logged out successfully' })
+      const response = apiSuccess({ message: 'Logged out successfully' })
       response.headers.set('Set-Cookie', clearAuthCookie())
       return response
     }
 
     // Handle login
     if (!password) {
-      return NextResponse.json(
-        { error: 'Password is required' },
-        { status: 400 }
-      )
+      return apiBadRequest('Password is required')
     }
 
     if (!verifyAdminPassword(password)) {
-      return NextResponse.json(
-        { error: 'Invalid password' },
-        { status: 401 }
-      )
+      return apiUnauthorized('Invalid password')
     }
 
     // Create JWT token
     const token = createAdminToken()
     
     // Create response with auth cookie
-    const response = NextResponse.json({ 
-      success: true, 
+    const response = apiSuccess({ 
       message: 'Login successful',
       user: {
         email: 'admin@revampit.ch',
@@ -48,11 +43,7 @@ export async function POST(request: NextRequest) {
     return response
 
   } catch (error) {
-    console.error('Admin auth error:', error)
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    )
+    return apiError(error, 'Internal server error')
   }
 }
 
@@ -64,22 +55,16 @@ export async function GET(request: NextRequest) {
     const token = getTokenFromCookies(cookieHeader || undefined)
     
     if (!token) {
-      return NextResponse.json(
-        { authenticated: false },
-        { status: 401 }
-      )
+      return apiUnauthorized('Not authenticated')
     }
 
     const adminUser = verifyAdminToken(token)
     
     if (!adminUser) {
-      return NextResponse.json(
-        { authenticated: false },
-        { status: 401 }
-      )
+      return apiUnauthorized('Invalid token')
     }
 
-    return NextResponse.json({ 
+    return apiSuccess({ 
       authenticated: true,
       user: {
         email: adminUser.email,
@@ -88,10 +73,6 @@ export async function GET(request: NextRequest) {
     })
 
   } catch (error) {
-    console.error('Admin auth check error:', error)
-    return NextResponse.json(
-      { authenticated: false },
-      { status: 500 }
-    )
+    return apiError(error, 'Authentication check failed', 500)
   }
 }

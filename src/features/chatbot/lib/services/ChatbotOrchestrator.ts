@@ -8,12 +8,13 @@
  */
 
 import { ChatbotResponse, ConversationContext, MatchResult } from '../types'
-import type { Language } from '@/lib/suggestion-utils'
+import type { Language, NavigationSuggestion } from '@/lib/suggestion-utils'
 import { SemanticMatchingService } from './SemanticMatchingService'
 import { NavigationService } from './NavigationService'
 import { ResponseQualityService } from './ResponseQualityService'
 import { IntelligentResponder } from './IntelligentResponder'
 import { enhanceSuggestion } from '@/lib/suggestion-utils'
+import { logger } from '@/lib/logger'
 
 export class ChatbotOrchestrator {
   private semanticMatcher: SemanticMatchingService
@@ -69,7 +70,7 @@ export class ChatbotOrchestrator {
       return await this.enhanceResponse(fallbackResponse, context, message, 'fallback')
 
     } catch (error) {
-      console.error('ChatbotOrchestrator error:', error)
+      logger.error('ChatbotOrchestrator error', { error })
       return this.generateErrorResponse(context)
     }
   }
@@ -77,7 +78,7 @@ export class ChatbotOrchestrator {
   /**
    * Get contextual suggestions for site navigation
    */
-  getNavigationSuggestions(query: string, context: ConversationContext): any[] {
+  getNavigationSuggestions(query: string, context: ConversationContext): NavigationSuggestion[] {
     return this.navigationService.getNavigationSuggestions(query, context)
   }
 
@@ -143,7 +144,9 @@ export class ChatbotOrchestrator {
     )
 
     // Add metadata about how the response was generated
-    ;(enhancedResponse as any).metadata = {
+    // Note: metadata is not part of ChatbotResponse type, but useful for debugging
+    const responseWithMetadata = enhancedResponse as ChatbotResponse & { metadata?: { matchType: MatchResult['matchType']; processingSteps: string[]; confidence: number } }
+    responseWithMetadata.metadata = {
       matchType,
       processingSteps: ['semantic', 'navigation', 'quality'],
       confidence: enhancedResponse.confidence
@@ -501,7 +504,7 @@ export class ChatbotOrchestrator {
     return recommendations[interest]?.[language as keyof typeof recommendations[string]] || null
   }
 
-  private deduplicateSuggestions(suggestions: any[]): any[] {
+  private deduplicateSuggestions(suggestions: NavigationSuggestion[]): NavigationSuggestion[] {
     const seen = new Set<string>()
     return suggestions.filter(suggestion => {
       if (seen.has(suggestion.href)) {

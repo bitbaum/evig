@@ -1,11 +1,11 @@
-import { NextResponse } from 'next/server';
+import { apiSuccess, apiError } from '@/lib/api/helpers';
 
 export async function GET() {
   try {
     // Check database connectivity (optional)
     // You could add database health checks here
 
-    return NextResponse.json({
+    return apiSuccess({
       status: 'healthy',
       timestamp: new Date().toISOString(),
       services: {
@@ -14,13 +14,10 @@ export async function GET() {
       }
     });
   } catch (error) {
-    return NextResponse.json(
-      {
-        status: 'unhealthy',
-        timestamp: new Date().toISOString(),
-        error: error instanceof Error ? error.message : 'Unknown error'
-      },
-      { status: 500 }
+    return apiError(
+      error,
+      error instanceof Error ? error.message : 'Unknown error',
+      500
     );
   }
 }

@@ -3,6 +3,8 @@
  * Tries ioredis first, then node-redis. Falls back to null if unavailable.
  */
 
+import { logger } from '@/lib/logger'
+
 export type RedisLike = {
   incr(key: string): Promise<number>
   pttl(key: string): Promise<number>
@@ -14,10 +16,12 @@ export type RedisLike = {
 
 let cached: RedisLike | null | undefined
 
+import { REDIS_CONFIG } from '@/config/redis'
+
 export async function getRedis(): Promise<RedisLike | null> {
   if (cached !== undefined) return cached
 
-  const url = process.env.REDIS_URL || process.env.MEDUSA_REDIS_URL
+  const url = REDIS_CONFIG.URL
   if (!url) {
     cached = null
     return cached
@@ -34,8 +38,12 @@ export async function getRedis(): Promise<RedisLike | null> {
       incr: (key) => client.incr(key),
       pttl: (key) => client.pttl(key),
       expire: (key, seconds) => client.expire(key, seconds),
-      set: (key, value, mode?: 'EX' | 'PX', duration?: number) => {
-        if (mode && duration) return client.set(key, value, mode, duration)
+      set: async (key, value, mode?: 'EX' | 'PX', duration?: number) => {
+        if (mode === 'EX' && duration) {
+          return client.set(key, value, 'EX', duration)
+        } else if (mode === 'PX' && duration) {
+          return client.set(key, value, 'PX', duration)
+        }
         return client.set(key, value)
       },
       get: (key) => client.get(key),
@@ -72,7 +80,7 @@ export async function getRedis(): Promise<RedisLike | null> {
     cached = wrapper
     return cached
   } catch (err) {
-    console.warn('Redis client not available; falling back to in-memory rate limits')
+    logger.warn('Redis client not available; falling back to in-memory rate limits', { error: err })
     cached = null
     return cached
   }

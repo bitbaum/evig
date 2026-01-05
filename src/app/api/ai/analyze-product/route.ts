@@ -1,6 +1,9 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { cookies } from "next/headers";
+import { apiError, apiSuccess, apiBadRequest } from "@/lib/api/helpers";
+import { TABLE_NAMES } from "@/config/database";
+import { logger } from "@/lib/logger";
 
 // Enhanced AI product database for demonstration
 const PRODUCT_DATABASE = [
@@ -73,8 +76,20 @@ async function analyzeProductImage(imageData: string, imageUrl?: string) {
   return mockAnalysis
 }
 
+// Product data interface for sustainability scoring
+interface ProductData {
+  brand?: string;
+  category?: string;
+  material?: string;
+  specifications?: {
+    battery?: string;
+    [key: string]: unknown;
+  };
+  [key: string]: unknown;
+}
+
 // Calculate sustainability score based on product analysis
-function calculateSustainabilityScore(productData: any) {
+function calculateSustainabilityScore(productData: ProductData) {
   let score = 50 // Base score
   const factors: Record<string, number> = {}
 
@@ -136,9 +151,10 @@ export async function POST(request: NextRequest) {
     const { image, imageUrl, saveToDatabase = false, userId } = await request.json()
 
     if (!image && !imageUrl) {
-      return NextResponse.json(
-        { error: "Image data or URL required" },
-        { status: 400 }
+      return apiError(
+        new Error("Image data or URL required"),
+        "Image data or URL required",
+        400
       )
     }
 
@@ -196,7 +212,7 @@ export async function POST(request: NextRequest) {
         .single()
 
       if (saveError) {
-        console.error('Error saving product analysis:', saveError)
+        logger.error('Error saving product analysis', { error: saveError })
       } else {
         savedProductId = savedProduct.id
 
@@ -235,8 +251,7 @@ export async function POST(request: NextRequest) {
         })
     }
 
-    return NextResponse.json({
-      success: true,
+    return apiSuccess({
       analysis: analysisResult,
       saved_product_id: savedProductId,
       sustainability_score: calculateSustainabilityScore(analysisResult),
@@ -248,10 +263,6 @@ export async function POST(request: NextRequest) {
     })
 
   } catch (error) {
-    console.error("AI analysis error:", error)
-    return NextResponse.json(
-      { error: "Failed to analyze product image" },
-      { status: 500 }
-    )
+    return apiError(error, "Failed to analyze product image")
   }
 }

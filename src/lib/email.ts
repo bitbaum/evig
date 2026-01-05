@@ -3,21 +3,25 @@
  * Handles sending emails using nodemailer
  */
 
+import { logger } from '@/lib/logger'
+import { EMAIL_CONFIG } from '@/config/email'
+import type { Transporter } from 'nodemailer'
+
 // Email configuration
 const emailConfig = {
-  host: process.env.EMAIL_HOST || 'smtp.gmail.com',
-  port: parseInt(process.env.EMAIL_PORT || '587'),
-  secure: process.env.EMAIL_SECURE === 'true',
+  host: EMAIL_CONFIG.HOST,
+  port: EMAIL_CONFIG.PORT,
+  secure: EMAIL_CONFIG.SECURE,
   auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
+    user: EMAIL_CONFIG.USER,
+    pass: EMAIL_CONFIG.PASS,
   },
 }
 
 // Create transporter
-let transporter: any = null
+let transporter: Transporter | null = null
 
-export async function getTransporter(): Promise<any> {
+export async function getTransporter(): Promise<Transporter> {
   if (!transporter) {
     const nodemailer = await import('nodemailer')
     transporter = nodemailer.createTransport(emailConfig)
@@ -199,19 +203,22 @@ export const emailTemplates = {
   }),
 }
 
+// Email template function type
+type EmailTemplateFn = (...args: unknown[]) => {
+  subject: string
+  html: string
+  text: string
+}
+
 // Send email function
 export async function sendEmail(to: string, template: keyof typeof emailTemplates, ...args: unknown[]) {
   try {
     const transporter = await getTransporter()
-    const templateFn = (emailTemplates as any)[template] as (...a: unknown[]) => {
-      subject: string
-      html: string
-      text: string
-    }
-    const emailTemplate = templateFn(...(args as unknown[]))
+    const templateFn = emailTemplates[template] as EmailTemplateFn
+    const emailTemplate = templateFn(...args)
 
     const mailOptions = {
-      from: process.env.EMAIL_FROM || emailConfig.auth.user,
+      from: EMAIL_CONFIG.FROM || emailConfig.auth.user,
       to,
       subject: emailTemplate.subject,
       html: emailTemplate.html,
@@ -219,10 +226,10 @@ export async function sendEmail(to: string, template: keyof typeof emailTemplate
     }
 
     const info = await transporter.sendMail(mailOptions)
-    console.log('Email sent:', info.messageId)
+    logger.info('Email sent', { messageId: info.messageId, to })
     return { success: true, messageId: info.messageId }
   } catch (error) {
-    console.error('Email send error:', error)
+    logger.error('Email send error', { error, to })
     return { success: false, error: error instanceof Error ? error.message : 'Unknown error' }
   }
 }

@@ -3,6 +3,7 @@ import jwt from 'jsonwebtoken'
 import { NextRequest, NextResponse } from 'next/server'
 import { verifyPassword, constantTimeCompare } from './auth/password'
 import { getJwtSecret, AUTH_CONFIG } from './auth/config'
+import { REDIS_CONFIG } from '@/config/redis'
 import {
   checkRateLimit,
   recordFailedAttempt,
@@ -20,6 +21,7 @@ import {
   logAccountLocked,
   logRateLimitExceeded,
 } from './auth/audit'
+import { logger } from '@/lib/logger'
 
 // Re-export for backwards compatibility
 export { getJwtSecret }
@@ -80,7 +82,7 @@ export async function verifyAdminPassword(
   }
 
   // Check rate limit
-  const useRedis = process.env.ENABLE_REDIS_RATE_LIMITER === 'true'
+  const useRedis = REDIS_CONFIG.ENABLE_RATE_LIMITER
   const rateLimit = useRedis
     ? await checkRateLimitRedis(ipAddress || 'admin', 'login')
     : checkRateLimit(ipAddress || 'admin', 'login')
@@ -116,7 +118,7 @@ export async function verifyAdminPassword(
     } else {
       // Fallback to constant-time plain comparison (legacy)
       // Log a warning - this should be migrated
-      console.warn(
+      logger.warn(
         '[SECURITY WARNING] Using plain text admin password comparison. ' +
         'Please set ADMIN_PASSWORD_HASH with a bcrypt hash instead.'
       )
@@ -156,7 +158,7 @@ export async function verifyAdminPassword(
 
     return { valid: true }
   } catch (error) {
-    console.error('Admin password verification error:', error)
+    logger.error('Admin password verification error', { error })
     return {
       valid: false,
       error: 'Authentifizierungsfehler. Bitte versuchen Sie es erneut.',
@@ -172,7 +174,7 @@ export function verifyAdminPasswordSync(password: string): boolean {
   const hash = getAdminPasswordHash()
   if (hash) {
     // Cannot use bcrypt synchronously without blocking
-    console.warn('Cannot verify hashed password synchronously. Use verifyAdminPassword().')
+    logger.warn('Cannot verify hashed password synchronously. Use verifyAdminPassword().')
     return false
   }
   const plainPassword = getAdminPassword()

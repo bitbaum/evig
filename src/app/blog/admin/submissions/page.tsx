@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { ArrowLeft, Eye, Check, X, Edit, Calendar, User, Mail, Tag, Folder } from 'lucide-react'
+import { logger } from '@/lib/logger'
 
 interface Submission {
   id: string
@@ -36,7 +37,7 @@ export default function SubmissionsAdminPage() {
       const data = await response.json()
       setSubmissions(data.submissions || [])
     } catch (error) {
-      console.error('Error fetching submissions:', error)
+      logger.error('Error fetching submissions', { error })
     } finally {
       setIsLoading(false)
     }

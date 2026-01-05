@@ -9,6 +9,8 @@ import NextAuth from 'next-auth'
 import Credentials from 'next-auth/providers/credentials'
 import PostgresAdapter from '@auth/pg-adapter'
 import { Pool } from 'pg'
+import type { JWT } from 'next-auth/jwt'
+import type { Session, User } from 'next-auth'
 import { getUserByEmail, createUser, getOrCreateProfile, createVerificationToken, type DbUser } from '@/lib/auth/db'
 import { hashPassword, verifyPassword, validatePasswordStrength } from '@/lib/auth/password'
 import { sendEmail } from '@/lib/email'
@@ -16,17 +18,33 @@ import { ROLES, determineUserRole } from '@/lib/constants'
 import { getMedusaConfig } from '@/lib/auth/config'
 import { updateUser } from '@/lib/auth/db'
 
-// Create PostgreSQL pool for Auth.js adapter
-const pool = new Pool({
-  host: process.env.AUTH_DB_HOST || process.env.DB_HOST || 'localhost',
-  port: parseInt(process.env.AUTH_DB_PORT || process.env.DB_PORT || '5433'),
-  database: process.env.AUTH_DB_NAME || process.env.DB_NAME || 'revampit_cms',
-  user: process.env.AUTH_DB_USER || process.env.DB_USER || 'postgres',
-  password: process.env.AUTH_DB_PASSWORD || process.env.DB_PASSWORD || 'postgres',
-  max: 20,
-  idleTimeoutMillis: 30000,
-  connectionTimeoutMillis: 5000,
-})
+// Create PostgreSQL pool for Auth.js adapter with optimized connection settings
+// Use lazy connection to avoid blocking page loads
+let pool: Pool | null = null
+
+function getAuthPool(): Pool {
+  if (!pool) {
+    pool = new Pool({
+      host: process.env.AUTH_DB_HOST || process.env.DB_HOST || 'localhost',
+      port: parseInt(process.env.AUTH_DB_PORT || process.env.DB_PORT || '5433'),
+      database: process.env.AUTH_DB_NAME || process.env.DB_NAME || 'revampit_cms',
+      user: process.env.AUTH_DB_USER || process.env.DB_USER || 'postgres',
+      password: process.env.AUTH_DB_PASSWORD || process.env.DB_PASSWORD || 'postgres',
+      max: 20,
+      idleTimeoutMillis: 30000,
+      connectionTimeoutMillis: 2000, // Reduced from 5000 to fail faster
+      // Don't connect immediately - let it connect on first use
+      allowExitOnIdle: true,
+    })
+
+    // Handle pool errors gracefully without crashing
+    pool.on('error', (err) => {
+      console.error('Unexpected error on idle database pool:', err)
+      // Don't throw - let the app continue
+    })
+  }
+  return pool
+}
 
 // Extend the built-in Auth.js types
 declare module 'next-auth' {
@@ -53,15 +71,21 @@ declare module 'next-auth' {
 // Note: For Auth.js v5 the JWT type is already defined internally.
 
 // Main Auth.js configuration (v5)
+// Note: For JWT strategy with credentials provider, adapter is optional
+// JWT sessions are stored in cookies, not database, so adapter is only needed for OAuth
+// For now, we skip the adapter to avoid blocking on database connection issues
+// The adapter can be added later when OAuth providers are needed
 export const authConfig = {
   // Secret for signing cookies and tokens
   secret: process.env.AUTH_SECRET || process.env.NEXTAUTH_SECRET,
   
-  adapter: PostgresAdapter(pool),
+  // Skip adapter for now - JWT strategy works without it
+  // Uncomment when OAuth providers are added:
+  // adapter: PostgresAdapter(getAuthPool()),
   
   session: {
     // JWT strategy required for credentials provider
-    strategy: 'jwt',
+    strategy: 'jwt' as const,
     maxAge: 30 * 24 * 60 * 60, // 30 days
     updateAge: 24 * 60 * 60, // Update session every 24 hours
   },
@@ -105,37 +129,47 @@ export const authConfig = {
         const email = creds.email as string
         const password = creds.password as string
 
-        // Get user from database
-        const user = await getUserByEmail(email)
+        try {
+          // Get user from database
+          const user = await getUserByEmail(email)
 
-        if (!user) {
-          throw new Error('Kein Konto mit dieser E-Mail-Adresse gefunden')
-        }
+          if (!user) {
+            throw new Error('Kein Konto mit dieser E-Mail-Adresse gefunden')
+          }
 
-        if (!user.password_hash) {
-          throw new Error('Dieses Konto verwendet eine andere Anmeldemethode')
-        }
+          if (!user.password_hash) {
+            throw new Error('Dieses Konto verwendet eine andere Anmeldemethode')
+          }
 
-        // Verify password
-        const isValid = await verifyPassword(password, user.password_hash)
+          // Verify password
+          const isValid = await verifyPassword(password, user.password_hash)
 
-        if (!isValid) {
-          throw new Error('Falsches Passwort')
-        }
+          if (!isValid) {
+            throw new Error('Falsches Passwort')
+          }
 
-        // Check if email is verified
-        if (!user.emailVerified) {
-          throw new Error('Bitte bestätigen Sie zuerst Ihre E-Mail-Adresse')
-        }
+          // Check if email is verified
+          if (!user.emailVerified) {
+            throw new Error('Bitte bestätigen Sie zuerst Ihre E-Mail-Adresse')
+          }
 
-        // Return user object
-        return {
-          id: user.id,
-          email: user.email,
-          name: user.name,
-          image: user.image,
-          role: user.role,
-          emailVerified: user.emailVerified,
+          // Return user object
+          return {
+            id: user.id,
+            email: user.email,
+            name: user.name,
+            image: user.image,
+            role: user.role,
+            emailVerified: user.emailVerified,
+          }
+        } catch (dbError) {
+          // Handle database connection errors gracefully
+          const errorMessage = dbError instanceof Error ? dbError.message : String(dbError)
+          if (errorMessage.includes('connect') || errorMessage.includes('ECONNREFUSED') || errorMessage.includes('timeout')) {
+            throw new Error('Datenbankverbindung fehlgeschlagen. Bitte versuchen Sie es später erneut.')
+          }
+          // Re-throw other errors (like "user not found", "wrong password", etc.)
+          throw dbError
         }
       },
     }),
@@ -148,7 +182,7 @@ export const authConfig = {
 
   callbacks: {
     // Add user id and role into JWT
-    async jwt({ token, user }: any) {
+    async jwt({ token, user }: { token: JWT & { id?: string; role?: string }, user?: User }) {
       // On first sign in, add user info to token
       if (user) {
         token.id = user.id
@@ -159,7 +193,7 @@ export const authConfig = {
     },
 
     // Expose id and role on the session
-    async session({ session, token }: any) {
+    async session({ session, token }: { session: Session, token: JWT & { id?: string; role?: string } }) {
       // Add user ID and role from JWT token to session
       if (session.user && token) {
         session.user.id = token.id as string
@@ -168,7 +202,7 @@ export const authConfig = {
       return session
     },
 
-    async signIn({ user }: any) {
+    async signIn({ user }: { user: User }) {
       // Create profile on first sign in
       if (user.id) {
         try {
@@ -233,17 +267,22 @@ export async function registerUser(data: {
   // Hash password
   const password_hash = await hashPassword(password)
 
-  // Create user
-  try {
-    const user = await createUser({
-      email,
-      name,
-      password_hash,
-      role,
-    })
+    // Create user
+    try {
+      const user = await createUser({
+        email,
+        name,
+        password_hash,
+        role,
+      })
 
-    // Create profile
-    await getOrCreateProfile(user.id)
+      // Create profile
+      try {
+        await getOrCreateProfile(user.id)
+      } catch (profileError) {
+        // Log but don't fail registration if profile creation fails
+        console.error('Failed to create profile:', profileError)
+      }
 
     // Optional: create Medusa customer and link ID
     try {
@@ -263,7 +302,7 @@ export async function registerUser(data: {
           }),
         })
         if (resp.ok) {
-          const data = await resp.json() as any
+          const data = await resp.json() as { customer?: { id?: string } }
           const medusaId = data?.customer?.id
           if (medusaId) {
             await updateUser(user.id, { medusa_customer_id: medusaId })

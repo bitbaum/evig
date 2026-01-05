@@ -1,12 +1,15 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextRequest } from 'next/server'
 import { cookies } from 'next/headers'
 import jwt from 'jsonwebtoken'
 import { getJwtSecret } from '@/lib/admin-auth'
+import { apiSuccess, apiError, apiBadRequest } from '@/lib/api/helpers'
+import { logger } from '@/lib/logger'
+import { CMS_CONFIG } from '@/config/cms'
 
 export const dynamic = 'force-dynamic'
 
-const REBOOT_CONTENT_URL = process.env.NEXT_PUBLIC_REBOOT_CONTENT_URL || 'http://localhost:3001'
-const ENABLE_CMS = process.env.ENABLE_CMS === 'true'
+const REBOOT_CONTENT_URL = CMS_CONFIG.URL
+const ENABLE_CMS = CMS_CONFIG.ENABLED
 
 interface User {
   id: string
@@ -21,10 +24,16 @@ function getCurrentUser(): User | null {
 
     if (!token) return null
 
+    interface DecodedToken {
+      userId: string;
+      email: string;
+      role: string;
+    }
+
     const decoded = jwt.verify(
       token,
       getJwtSecret()
-    ) as any
+    ) as DecodedToken
 
     return {
       id: decoded.userId,
@@ -47,7 +56,7 @@ function authenticateUser(): User {
 export async function GET(request: NextRequest) {
   try {
     if (!ENABLE_CMS) {
-      return NextResponse.json({ error: 'CMS is disabled' }, { status: 501 })
+      return apiError(new Error('CMS is disabled'), 'CMS is disabled', 501)
     }
     const user = authenticateUser()
 
@@ -59,27 +68,24 @@ export async function GET(request: NextRequest) {
     })
 
     if (!response.ok) {
-      return NextResponse.json(
-        { error: 'Failed to fetch pages' },
-        { status: response.status }
+      return apiError(
+        new Error(`Failed to fetch pages: ${response.status}`),
+        'Failed to fetch pages',
+        response.status
       )
     }
 
     const data = await response.json()
-    return NextResponse.json(data)
-  } catch (error: any) {
-    console.error('Pages GET error:', error)
-    return NextResponse.json(
-      { error: error.message || 'Internal server error' },
-      { status: 500 }
-    )
+    return apiSuccess(data)
+  } catch (error) {
+    return apiError(error, error instanceof Error ? error.message : 'Internal server error')
   }
 }
 
 export async function POST(request: NextRequest) {
   try {
     if (!ENABLE_CMS) {
-      return NextResponse.json({ error: 'CMS is disabled' }, { status: 501 })
+      return apiError(new Error('CMS is disabled'), 'CMS is disabled', 501)
     }
     const user = authenticateUser()
     const body = await request.json()
@@ -96,19 +102,16 @@ export async function POST(request: NextRequest) {
 
     if (!response.ok) {
       const errorData = await response.json()
-      return NextResponse.json(
-        { error: errorData.error || 'Failed to create page' },
-        { status: response.status }
+      return apiError(
+        new Error(errorData.error || 'Failed to create page'),
+        errorData.error || 'Failed to create page',
+        response.status
       )
     }
 
     const data = await response.json()
-    return NextResponse.json(data)
-  } catch (error: any) {
-    console.error('Pages POST error:', error)
-    return NextResponse.json(
-      { error: error.message || 'Internal server error' },
-      { status: 500 }
-    )
+    return apiSuccess(data)
+  } catch (error) {
+    return apiError(error, error instanceof Error ? error.message : 'Internal server error')
   }
 }

@@ -4,6 +4,7 @@ import { useState, useEffect, useRef, useCallback } from 'react'
 import { Edit3, X, Info } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { uiEvents } from '@/lib/ui/uiEvents'
+import { logger } from '@/lib/logger'
 // Import types inline to avoid potential import issues
 type FeedbackScope = 'page' | 'element' | 'site'
 
@@ -223,7 +224,7 @@ export default function SuggestionButton() {
       }, 2000)
 
     } catch (error) {
-      console.error('Submission error:', error)
+      logger.error('Submission error', { error })
       setSubmitError('Fehler beim Senden. Bitte versuchen Sie es erneut.')
     } finally {
       setIsSubmitting(false)

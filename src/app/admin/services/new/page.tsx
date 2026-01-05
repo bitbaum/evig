@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import { logger } from '@/lib/logger'
 import {
   ArrowLeft,
   Save,
@@ -70,7 +71,7 @@ export default function NewServicePage() {
     'Sonstiges'
   ]
 
-  const handleInputChange = (field: keyof ServiceFormData, value: any) => {
+  const handleInputChange = (field: keyof ServiceFormData, value: ServiceFormData[keyof ServiceFormData]) => {
     setFormData(prev => ({ ...prev, [field]: value }))
   }
 
@@ -140,7 +141,7 @@ export default function NewServicePage() {
       }
 
       // Here you would normally save to your database
-      console.log('Creating service:', formData)
+      logger.info('Creating service', { name: formData.name })
 
       // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 1000))
@@ -148,7 +149,7 @@ export default function NewServicePage() {
       // Redirect to services list
       router.push('/admin/services')
     } catch (error) {
-      console.error('Error creating service:', error)
+      logger.error('Error creating service', { error })
     } finally {
       setIsLoading(false)
     }
@@ -572,6 +573,15 @@ export default function NewServicePage() {
     </div>
   )
 }
+
+
+
+
+
+
+
+
+
 
 
 

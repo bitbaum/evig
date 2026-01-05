@@ -1,13 +1,15 @@
-import { Metadata } from 'next'
+'use client'
+
 import { LoginForm } from '@/components/auth/LoginForm'
 import Link from 'next/link'
+import { useEffect } from 'react'
 
-export const metadata: Metadata = {
-  title: 'Anmelden | RevampIT',
-  description: 'Melden Sie sich bei Ihrem RevampIT-Konto an, um Workshops zu buchen, Termine zu vereinbaren und mehr.',
-}
-
+// Client-side only page to avoid server-side session checks blocking the page
 export default function LoginPage() {
+  // Set page title on client side
+  useEffect(() => {
+    document.title = 'Anmelden | RevampIT'
+  }, [])
   return (
     <main className="min-h-screen bg-gradient-to-br from-green-50 via-white to-green-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">

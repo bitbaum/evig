@@ -1,30 +1,17 @@
-import { NextRequest, NextResponse } from "next/server";
-import { hasRole } from '@/middleware/admin'
-import { ROLES } from '@/lib/constants'
-
-const MEDUSA_URL = process.env.MEDUSA_BACKEND_URL || "http://localhost:9000";
-const PUBLISHABLE_KEY = process.env.NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY || "pk_eee502aced5bea9f350f22cc90c2f98e74417fcfa17a35a230837b069e915a55";
+import { NextRequest } from "next/server";
+import { MEDUSA_CONFIG } from "@/config/medusa";
+import { apiSuccess, apiError, apiBadRequest, apiForbidden } from "@/lib/api/helpers";
+import { logger } from "@/lib/logger";
+import { withAdmin } from "@/lib/api/middleware";
 
 // POST /api/admin/products/bulk-import - Bulk import products from CSV
-export async function POST(request: NextRequest) {
+export const POST = withAdmin(async (request: NextRequest) => {
   try {
-    // Check admin role
-    const isAdmin = await hasRole(ROLES.REVAMPIT_ADMIN)
-    if (!isAdmin) {
-      return NextResponse.json(
-        { error: "Admin access required" },
-        { status: 403 }
-      )
-    }
-
     const formData = await request.formData();
     const file = formData.get('file') as File;
 
     if (!file) {
-      return NextResponse.json(
-        { error: "No file provided" },
-        { status: 400 }
-      );
+      return apiBadRequest("No file provided");
     }
 
     // Read CSV content
@@ -32,10 +19,7 @@ export async function POST(request: NextRequest) {
     const lines = csvText.split('\n').filter(line => line.trim());
 
     if (lines.length < 2) {
-      return NextResponse.json(
-        { error: "CSV must have at least header and one data row" },
-        { status: 400 }
-      );
+      return apiBadRequest("CSV must have at least header and one data row");
     }
 
     // Parse CSV (simple implementation - in production use a proper CSV parser)
@@ -73,11 +57,7 @@ export async function POST(request: NextRequest) {
     }
 
     if (errors.length > 0) {
-      return NextResponse.json({
-        error: "CSV validation errors",
-        errors,
-        processed: products.length
-      }, { status: 400 });
+      return apiBadRequest("CSV validation errors", { errors, processed: products.length });
     }
 
     // Create products in Medusa
@@ -87,12 +67,12 @@ export async function POST(request: NextRequest) {
     for (const product of products) {
       try {
         // First, create the product
-        const createResponse = await fetch(`${MEDUSA_URL}/admin/products`, {
+        const createResponse = await fetch(`${MEDUSA_CONFIG.URL}/admin/products`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            "x-publishable-api-key": PUBLISHABLE_KEY,
-            "Authorization": `Bearer ${process.env.MEDUSA_ADMIN_API_KEY || 'admin_key_here'}`
+            "x-publishable-api-key": MEDUSA_CONFIG.PUBLISHABLE_KEY,
+            "Authorization": `Bearer ${MEDUSA_CONFIG.ADMIN_API_KEY}`
           },
           body: JSON.stringify({
             title: product.title,
@@ -110,12 +90,12 @@ export async function POST(request: NextRequest) {
         const createdProduct = await createResponse.json();
 
         // Then, add variant with price
-        const variantResponse = await fetch(`${MEDUSA_URL}/admin/products/${createdProduct.product.id}/variants`, {
+        const variantResponse = await fetch(`${MEDUSA_CONFIG.URL}/admin/products/${createdProduct.product.id}/variants`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            "x-publishable-api-key": PUBLISHABLE_KEY,
-            "Authorization": `Bearer ${process.env.MEDUSA_ADMIN_API_KEY || 'admin_key_here'}`
+            "x-publishable-api-key": MEDUSA_CONFIG.PUBLISHABLE_KEY,
+            "Authorization": `Bearer ${MEDUSA_CONFIG.ADMIN_API_KEY}`
           },
           body: JSON.stringify({
             title: "Default",
@@ -128,13 +108,16 @@ export async function POST(request: NextRequest) {
         });
 
         if (!variantResponse.ok) {
-          console.warn(`Failed to add variant for product ${product.title}`);
+          logger.warn(`Failed to add variant for product ${product.title}`, { 
+            productId: createdProduct.product.id,
+            status: variantResponse.status 
+          });
         }
 
         createdProducts.push(createdProduct.product);
 
       } catch (error) {
-        console.error(`Error creating product "${product.title}":`, error);
+        logger.error(`Error creating product "${product.title}"`, { error, product });
         creationErrors.push({
           product: product.title,
           error: error instanceof Error ? error.message : 'Unknown error'
@@ -142,21 +125,16 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    return NextResponse.json({
-      success: true,
+    return apiSuccess({
       created: createdProducts.length,
       errors: creationErrors,
       total: products.length
     });
 
   } catch (error) {
-    console.error("Error in bulk import:", error);
-    return NextResponse.json(
-      { error: "Failed to process bulk import" },
-      { status: 500 }
-    );
+    return apiError(error, "Failed to process bulk import");
   }
-}
+});
 
 
 

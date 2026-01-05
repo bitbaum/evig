@@ -3,9 +3,11 @@
  * POST /api/auth/reset-password
  */
 
-import { NextResponse } from 'next/server'
+import { Request } from 'next/server'
 import { verifyPasswordResetToken, updateUserPassword } from '@/lib/auth/db'
 import { hashPassword, validatePasswordStrength } from '@/lib/auth/password'
+import { apiError, apiSuccess, apiBadRequest } from '@/lib/api/helpers'
+import { ERROR_MESSAGES } from '@/config/error-messages'
 
 export async function POST(request: Request) {
   try {
@@ -13,28 +15,22 @@ export async function POST(request: Request) {
     const { token, password } = body
 
     if (!token || !password) {
-      return NextResponse.json(
-        { error: 'Token und Passwort sind erforderlich' },
-        { status: 400 }
-      )
+      return apiBadRequest('Token und Passwort sind erforderlich')
     }
 
     // Validate password strength
     const passwordCheck = validatePasswordStrength(password)
     if (!passwordCheck.isValid) {
-      return NextResponse.json(
-        { error: 'Das Passwort erfüllt nicht die Anforderungen', errors: passwordCheck.errors },
-        { status: 400 }
+      return apiBadRequest(
+        'Das Passwort erfüllt nicht die Anforderungen',
+        passwordCheck.errors
       )
     }
 
     // Verify token and get email
     const result = await verifyPasswordResetToken(token)
     if (!result.success) {
-      return NextResponse.json(
-        { error: result.error || 'Ungültiger oder abgelaufener Token' },
-        { status: 400 }
-      )
+      return apiBadRequest(result.error || 'Ungültiger oder abgelaufener Token')
     }
 
     // Hash new password
@@ -43,21 +39,16 @@ export async function POST(request: Request) {
     // Update user password
     const updateResult = await updateUserPassword(result.email!, passwordHash)
     if (!updateResult.success) {
-      return NextResponse.json(
-        { error: 'Passwort konnte nicht aktualisiert werden' },
-        { status: 500 }
+      return apiError(
+        new Error('Password update failed'),
+        'Passwort konnte nicht aktualisiert werden'
       )
     }
 
-    return NextResponse.json({
-      success: true,
+    return apiSuccess({
       message: 'Passwort erfolgreich geändert',
     })
   } catch (error) {
-    console.error('Reset password error:', error)
-    return NextResponse.json(
-      { error: 'Ein unerwarteter Fehler ist aufgetreten' },
-      { status: 500 }
-    )
+    return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)
   }
 }

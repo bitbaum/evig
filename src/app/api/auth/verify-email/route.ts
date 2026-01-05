@@ -1,25 +1,22 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { verifyEmailWithToken } from '@/lib/auth/db'
 import { sendEmail } from '@/lib/email'
+import { apiError, apiSuccess, apiBadRequest } from '@/lib/api/helpers'
+import { logger } from '@/lib/logger'
+import { ERROR_MESSAGES } from '@/config/error-messages'
 
 export async function POST(request: NextRequest) {
   try {
     const { token } = await request.json()
 
     if (!token) {
-      return NextResponse.json(
-        { error: 'Token ist erforderlich' },
-        { status: 400 }
-      )
+      return apiBadRequest('Token ist erforderlich')
     }
 
     const result = await verifyEmailWithToken(token)
 
     if (!result.success) {
-      return NextResponse.json(
-        { error: result.error },
-        { status: 400 }
-      )
+      return apiBadRequest(result.error || ERROR_MESSAGES.INTERNAL_SERVER_ERROR)
     }
 
     // Send welcome email
@@ -38,20 +35,15 @@ export async function POST(request: NextRequest) {
         await sendEmail(result.email!, 'welcome', userName)
       }
     } catch (emailError) {
-      console.error('Failed to send welcome email:', emailError)
+      logger.error('Failed to send welcome email', { error: emailError })
       // Don't fail the verification if welcome email fails
     }
 
-    return NextResponse.json({
-      success: true,
+    return apiSuccess({
       message: 'E-Mail-Adresse erfolgreich bestätigt! Sie können sich jetzt anmelden.',
     })
   } catch (error) {
-    console.error('Email verification API error:', error)
-    return NextResponse.json(
-      { error: 'Ein unerwarteter Fehler ist aufgetreten' },
-      { status: 500 }
-    )
+    return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)
   }
 }
 
@@ -76,13 +68,13 @@ export async function GET(request: NextRequest) {
       // This is a simplified approach - in production you'd want to get user details
       await sendEmail(result.email!, 'welcome', 'RevampIT Benutzer')
     } catch (emailError) {
-      console.error('Failed to send welcome email:', emailError)
+      logger.error('Failed to send welcome email', { error: emailError })
     }
 
     // Redirect to login with success message
     return NextResponse.redirect(new URL('/auth/login?verified=true', request.url))
   } catch (error) {
-    console.error('Email verification GET error:', error)
+    logger.error('Email verification GET error', { error })
     return NextResponse.redirect(new URL('/auth/login?error=verification_error', request.url))
   }
 }

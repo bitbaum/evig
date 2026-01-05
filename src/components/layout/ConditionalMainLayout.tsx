@@ -21,6 +21,12 @@ export default function ConditionalMainLayout({ children }: ConditionalMainLayou
     return <>{children}</>
   }
   
+  // Don't apply MainLayout to auth pages (they have their own layout)
+  // This prevents session checks from blocking auth page loads
+  if (pathname?.startsWith('/auth')) {
+    return <>{children}</>
+  }
+  
   // Apply MainLayout to all other pages
   return <MainLayout>{children}</MainLayout>
 }

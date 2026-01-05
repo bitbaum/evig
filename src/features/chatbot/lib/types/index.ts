@@ -30,7 +30,7 @@ export interface ConversationContext {
   /** User's preferred language */
   language: Language
   /** Additional session data */
-  sessionData?: Record<string, any>
+  sessionData?: Record<string, unknown>
   /** Time of day (0-23) for contextual responses */
   timeOfDay?: number
 }

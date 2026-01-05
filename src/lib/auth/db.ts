@@ -5,14 +5,13 @@
 
 import { randomBytes } from 'crypto'
 import { Pool, PoolClient } from 'pg'
+import { logger } from '@/lib/logger'
+import { getDbConfig } from './config'
+import type { QueryParams, SocialLinks, Availability, PurchaseHistoryItem, PreferenceValue, SegmentCriteria } from '@/types/common'
 
-// Environment variables with fallbacks for development
+// Get database configuration from centralized config
 const dbConfig = {
-  host: process.env.AUTH_DB_HOST || process.env.DB_HOST || 'localhost',
-  port: parseInt(process.env.AUTH_DB_PORT || process.env.DB_PORT || '5433'),
-  database: process.env.AUTH_DB_NAME || process.env.DB_NAME || 'revampit_cms',
-  user: process.env.AUTH_DB_USER || process.env.DB_USER || 'postgres',
-  password: process.env.AUTH_DB_PASSWORD || process.env.DB_PASSWORD || 'postgres',
+  ...getDbConfig(),
   max: 20,
   idleTimeoutMillis: 30000,
   connectionTimeoutMillis: 5000,
@@ -27,7 +26,7 @@ export function getPool(): Pool {
     
     // Handle pool errors
     pool.on('error', (err) => {
-      console.error('Unexpected error on auth database pool', err)
+      logger.error('Unexpected error on auth database pool', { error: err })
     })
   }
   return pool
@@ -35,16 +34,32 @@ export function getPool(): Pool {
 
 /**
  * Execute a query with automatic connection management
+ * Handles database connection errors gracefully
  */
-export async function query<T = any>(
+export async function query<T = unknown>(
   text: string,
-  params?: any[]
+  params?: QueryParams
 ): Promise<{ rows: T[]; rowCount: number }> {
-  const pool = getPool()
-  const result = await pool.query(text, params)
-  return {
-    rows: result.rows as T[],
-    rowCount: result.rowCount || 0
+  try {
+    const pool = getPool()
+    const result = await pool.query(text, params)
+    return {
+      rows: result.rows as T[],
+      rowCount: result.rowCount || 0
+    }
+  } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : String(error)
+    // Check for connection errors
+    if (errorMessage.includes('connect') || 
+        errorMessage.includes('ECONNREFUSED') || 
+        errorMessage.includes('timeout') ||
+        errorMessage.includes('Connection terminated') ||
+        errorMessage.includes('Connection closed')) {
+      logger.error('Database connection error', { error, query: text.substring(0, 100) })
+      throw new Error('Datenbankverbindung fehlgeschlagen. Bitte versuchen Sie es später erneut.')
+    }
+    // Re-throw other database errors (constraint violations, etc.)
+    throw error
   }
 }
 
@@ -138,12 +153,12 @@ export interface DbUserProfile {
   occupation: string | null
   bio: string | null
   website: string | null
-  social_links: Record<string, any> | null
+  social_links: SocialLinks | null
   skills: string[] | null
   expertise_areas: string[] | null
-  availability: Record<string, any> | null
+  availability: Availability | null
   customer_segment: string | null
-  purchase_history: any[] | null
+  purchase_history: PurchaseHistoryItem[] | null
   loyalty_points: number | null
   created_at: Date
   updated_at: Date
@@ -205,7 +220,7 @@ export async function createUser(data: {
   }
 
   const columns: string[] = ['email', 'name', 'password_hash', 'image', 'role']
-  const values: any[] = [
+  const values: QueryParams = [
     data.email.toLowerCase(),
     data.name || null,
     data.password_hash || null,
@@ -253,7 +268,7 @@ export async function updateUser(
 ): Promise<DbUser | null> {
   const userColumns = await getUserColumns()
   const fields: string[] = []
-  const values: any[] = []
+  const values: QueryParams = []
   let paramIndex = 1
 
   if (data.name !== undefined) {
@@ -346,7 +361,7 @@ export async function updateProfile(
   data: Partial<Omit<DbUserProfile, 'user_id' | 'created_at' | 'updated_at'>>
 ): Promise<DbUserProfile | null> {
   const fields: string[] = []
-  const values: any[] = []
+  const values: QueryParams = []
   let paramIndex = 1
 
   const fieldMap: Record<string, keyof typeof data> = {
@@ -632,7 +647,7 @@ export async function verifyEmailWithToken(token: string): Promise<{ success: bo
 
     return { success: true, email }
   } catch (error) {
-    console.error('Email verification error:', error)
+    logger.error('Email verification error', { error })
     return { success: false, error: 'Verifizierung fehlgeschlagen' }
   }
 }
@@ -696,7 +711,7 @@ export interface DbCustomerPreference {
   id: string
   user_id: string
   preference_key: string
-  preference_value: any
+  preference_value: PreferenceValue
   created_at: Date
   updated_at: Date
 }
@@ -706,7 +721,7 @@ export interface DbCustomerSegment {
   slug: string
   name: string
   description: string | null
-  criteria: Record<string, any>
+  criteria: SegmentCriteria
   is_active: boolean
   created_at: Date
   updated_at: Date
@@ -767,7 +782,7 @@ export async function verifyPasswordResetToken(token: string): Promise<{ success
 
     return { success: true, email }
   } catch (error) {
-    console.error('Password reset token verification error:', error)
+    logger.error('Password reset token verification error', { error })
     return { success: false, error: 'Token-Verifizierung fehlgeschlagen' }
   }
 }
@@ -790,7 +805,7 @@ export async function updateUserPassword(email: string, passwordHash: string): P
 
     return { success: true }
   } catch (error) {
-    console.error('Update password error:', error)
+    logger.error('Update password error', { error })
     return { success: false, error: 'Passwort konnte nicht aktualisiert werden' }
   }
 }
@@ -887,7 +902,7 @@ export async function getUserPreferences(userId: string): Promise<DbCustomerPref
 export async function setUserPreference(
   userId: string,
   key: string,
-  value: any
+  value: PreferenceValue
 ): Promise<DbCustomerPreference> {
   const result = await query<DbCustomerPreference>(
     `INSERT INTO customer_preferences (user_id, preference_key, preference_value)
@@ -970,7 +985,7 @@ export async function getUserWithProfile(userId: string): Promise<DbUser & { pro
   }
 
   const user = userResult.rows[0]
-  const result: any = { ...user }
+  const result: DbUser & { profile?: DbUserProfile, role_info?: DbUserRole, permissions?: DbPermission[] } = { ...user }
 
   // Get profile
   const profileResult = await query<DbUserProfile>(

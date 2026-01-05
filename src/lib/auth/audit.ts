@@ -10,6 +10,7 @@
  */
 
 import { query } from './db'
+import { logger } from '@/lib/logger'
 
 // =============================================================================
 // Types
@@ -120,12 +121,12 @@ async function flushAuditBuffer(): Promise<void> {
     )
   } catch (error) {
     // On error, put entries back in buffer (at the front)
-    console.error('Failed to flush audit log:', error)
+    logger.error('Failed to flush audit log', { error, entryCount: entries.length })
     auditBuffer.unshift(...entries)
 
-    // Log to console as fallback
+    // Log to logger as fallback
     for (const entry of entries) {
-      console.log('[AUDIT]', JSON.stringify(entry))
+      logger.warn('[AUDIT FALLBACK]', { entry })
     }
   }
 }
@@ -146,12 +147,12 @@ export function logAuditEvent(entry: Omit<AuditLogEntry, 'id' | 'created_at'>): 
 
   // Flush if buffer is full
   if (auditBuffer.length >= BUFFER_SIZE) {
-    flushAuditBuffer().catch(console.error)
+    flushAuditBuffer().catch((error) => logger.error('Failed to flush audit buffer', { error }))
   }
 
-  // Log critical events immediately to console
+  // Log critical events immediately
   if (entry.severity === 'critical') {
-    console.warn('[AUDIT CRITICAL]', JSON.stringify(entry))
+    logger.warn('[AUDIT CRITICAL]', { entry })
   }
 }
 
@@ -176,9 +177,9 @@ export async function logAuditEventSync(
       ]
     )
   } catch (error) {
-    console.error('Failed to write audit log:', error)
-    // Log to console as fallback
-    console.log('[AUDIT]', JSON.stringify(entry))
+    logger.error('Failed to write audit log', { error, entry })
+    // Log to logger as fallback
+    logger.warn('[AUDIT FALLBACK]', { entry })
   }
 }
 

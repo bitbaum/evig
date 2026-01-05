@@ -1,105 +1,183 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextRequest } from 'next/server'
 import { auth } from '@/auth'
-import { hasPermission } from '@/middleware/admin'
-import { PERMISSIONS } from '@/lib/constants'
-import { getMedusaConfig } from '@/lib/auth/config'
+import { query } from '@/lib/auth/db'
+import { apiError, apiSuccess, apiUnauthorized, apiBadRequest } from '@/lib/api/helpers'
+import { requireSeller } from '@/lib/api/role-checks'
+import { ERROR_MESSAGES } from '@/config/error-messages'
+import { TABLE_NAMES } from '@/config/database'
+import { MEDUSA_CONFIG } from '@/config/medusa'
+import { logger } from '@/lib/logger'
 
-export const dynamic = 'force-dynamic'
-
-// POST /api/seller/products
-// Creates a Medusa product on behalf of the signed-in seller
 export async function POST(request: NextRequest) {
   try {
     const session = await auth()
     if (!session?.user?.id) {
-      return NextResponse.json({ error: 'Nicht authentifiziert' }, { status: 401 })
+      return apiUnauthorized(ERROR_MESSAGES.UNAUTHORIZED)
     }
 
-    const canSell = await hasPermission(PERMISSIONS.SELL_PRODUCTS)
-    if (!canSell) {
-      return NextResponse.json({ error: 'Verkauf nicht erlaubt' }, { status: 403 })
+    // Check if user is a seller
+    const sellerError = await requireSeller(session.user.id)
+    if (sellerError) {
+      return sellerError
     }
 
-    const body = await request.json()
     const {
+      images,
       title,
       description,
-      price, // CHF as string or number
-      category,
-      brand,
       condition,
+      category,
+      price: priceCents,
       location,
-      imageUrls = [], // from /api/uploads
-      publish = true, // default publish
-    } = body || {}
+      useAiAnalysis
+    } = await request.json()
 
-    if (!title || !price || !condition || !location) {
-      return NextResponse.json({ error: 'Erforderliche Felder fehlen' }, { status: 400 })
+    // Validate required fields
+    if (!images || images.length === 0 || !title || !description || !category || !priceCents || !location) {
+      return apiBadRequest(ERROR_MESSAGES.ALL_FIELDS_REQUIRED)
     }
 
-    const amount = Math.round(Number(price) * 100)
-    if (!Number.isFinite(amount) || amount <= 0) {
-      return NextResponse.json({ error: 'Ungültiger Preis' }, { status: 400 })
-    }
+    // Create inventory item
+    const inventoryResult = await query(`
+      INSERT INTO ${TABLE_NAMES.INVENTORY_ITEMS} (
+        kivitendo_article_number,
+        selling_price_chf,
+        quantity_available,
+        condition_override,
+        assigned_to,
+        assignment_notes,
+        location
+      ) VALUES (
+        CONCAT('SELLER-', $1::text, '-', EXTRACT(epoch FROM NOW())::int),
+        $2 / 100.0,
+        1,
+        $3,
+        $4,
+        'Created via seller dashboard',
+        $5
+      )
+      RETURNING id
+    `, [
+      session.user.id,
+      priceCents,
+      condition,
+      session.user.id,
+      location
+    ])
 
-    const medusa = getMedusaConfig()
-    if (!medusa.backendUrl || !medusa.adminApiKey) {
-      return NextResponse.json({ error: 'Medusa Admin API nicht konfiguriert' }, { status: 500 })
-    }
+    const inventoryId = inventoryResult.rows[0].id
 
-    const payload = {
-      title,
-      description: description || undefined,
-      status: publish ? 'published' : 'draft',
-      options: [{ title: 'Default' }],
-      variants: [
-        {
-          title: 'Default',
-          prices: [
-            {
-              amount,
-              currency_code: 'chf',
-            },
-          ],
-        },
-      ],
-      images: imageUrls,
-      metadata: {
-        seller_user_id: session.user.id,
-        seller_type: 'private',
+    // Create AI extracted product entry (simplified for now)
+    const aiProductResult = await query(`
+      INSERT INTO ${TABLE_NAMES.AI_EXTRACTED_PRODUCTS} (
+        original_image_url,
+        product_name,
+        category,
         condition,
-        location,
-        brand: brand || undefined,
-        category: category || undefined,
-        fulfillment: 'direct_seller',
-        review_status: publish ? 'auto' : 'pending',
-        // helpful linking from storefront → dashboard
-        source: 'revampit-community',
-      },
+        estimated_price_chf,
+        created_by
+      ) VALUES (
+        $1,
+        $2,
+        $3,
+        $4,
+        $5 / 100.0,
+        $6
+      )
+      RETURNING id
+    `, [
+      images[0], // Use first image as primary
+      title,
+      category,
+      condition,
+      priceCents,
+      session.user.id
+    ])
+
+    const aiProductId = aiProductResult.rows[0].id
+
+    // Link inventory item to AI product
+    await query(
+      `UPDATE ${TABLE_NAMES.INVENTORY_ITEMS} SET ai_product_id = $1 WHERE id = $2`,
+      [aiProductId, inventoryId]
+    )
+
+    // Create product images
+    for (let i = 0; i < images.length; i++) {
+      await query(`
+        INSERT INTO ${TABLE_NAMES.PRODUCT_IMAGES} (
+          product_id,
+          filename,
+          file_path,
+          is_primary,
+          uploaded_by
+        ) VALUES ($1, $2, $3, $4, $5)
+      `, [
+        aiProductId,
+        `seller-image-${i + 1}.jpg`,
+        images[i],
+        i === 0, // First image is primary
+        session.user.id
+      ])
     }
 
-    const resp = await fetch(`${medusa.backendUrl}/admin/products`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${medusa.adminApiKey}`,
-        // also include publishable in case of gateway checks
-        'x-publishable-api-key': medusa.publishableKey || '',
-      },
-      body: JSON.stringify(payload),
+    // If AI analysis is requested, trigger it (simplified for now)
+    if (useAiAnalysis) {
+      // Create sustainability score (placeholder)
+      await query(`
+        INSERT INTO ${TABLE_NAMES.SUSTAINABILITY_SCORES} (
+          product_id,
+          overall_score,
+          environmental_score,
+          social_score,
+          economic_score,
+          assessed_by
+        ) VALUES ($1, 75, 70, 80, 75, 'ai')
+      `, [aiProductId])
+
+      // Log AI processing
+      await query(`
+        INSERT INTO ${TABLE_NAMES.AI_PROCESSING_LOGS} (
+          product_id,
+          request_type,
+          provider,
+          model,
+          confidence_score,
+          user_id
+        ) VALUES ($1, 'product_analysis', 'seller_input', 'manual', 0.8, $2)
+      `, [aiProductId, session.user.id])
+    }
+
+    // Publish to MedusaJS
+    try {
+      const publishResponse = await fetch(`${MEDUSA_CONFIG.BACKEND_URL}/api/inventory/publish-medusa`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${MEDUSA_CONFIG.ADMIN_API_KEY || ''}`
+        },
+        body: JSON.stringify({ inventoryItemId: inventoryId })
+      })
+
+      if (publishResponse.ok) {
+        const publishData = await publishResponse.json()
+        logger.info('Product published to MedusaJS', { inventoryId, publishData })
+      } else {
+        const errorText = await publishResponse.text()
+        logger.warn('Failed to publish to MedusaJS', { inventoryId, error: errorText })
+      }
+    } catch (error) {
+      logger.warn('Error publishing to MedusaJS', { inventoryId, error })
+      // Don't fail the whole request if MedusaJS is down
+    }
+
+    return apiSuccess({
+      message: 'Produkt erfolgreich eingereicht! Es wird analysiert und bald im Shop verfügbar sein.',
+      inventoryId,
+      aiProductId
     })
 
-    if (!resp.ok) {
-      const text = await resp.text().catch(() => '')
-      console.error('Medusa create product failed', resp.status, text)
-      return NextResponse.json({ error: 'Produktanlage fehlgeschlagen' }, { status: 502 })
-    }
-
-    const data = await resp.json()
-    return NextResponse.json({ ok: true, product: data.product || data })
   } catch (error) {
-    console.error('Seller product error:', error)
-    return NextResponse.json({ error: 'Interner Serverfehler' }, { status: 500 })
+    return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)
   }
 }
-

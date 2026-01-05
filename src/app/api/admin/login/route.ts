@@ -1,21 +1,21 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextRequest } from 'next/server'
 import { cookies } from 'next/headers'
 import jwt from 'jsonwebtoken'
 import { getJwtSecret } from '@/lib/admin-auth'
+import { apiSuccess, apiError, apiBadRequest } from '@/lib/api/helpers'
+import { logger } from '@/lib/logger'
+import { CMS_CONFIG } from '@/config/cms'
 
 export const dynamic = 'force-dynamic'
 
-const REBOOT_CONTENT_URL = process.env.NEXT_PUBLIC_REBOOT_CONTENT_URL || 'http://localhost:3001'
+const REBOOT_CONTENT_URL = CMS_CONFIG.URL
 
 export async function POST(request: NextRequest) {
   try {
     const { email, password } = await request.json()
 
     if (!email || !password) {
-      return NextResponse.json(
-        { error: 'Email and password are required' },
-        { status: 400 }
-      )
+      return apiBadRequest('Email and password are required')
     }
 
     // Forward login request to Reboot Content API
@@ -58,15 +58,10 @@ export async function POST(request: NextRequest) {
       path: '/',
     })
 
-    return NextResponse.json({
-      success: true,
+    return apiSuccess({
       user: data.user,
     })
   } catch (error) {
-    console.error('Admin login error:', error)
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    )
+    return apiError(error, 'Internal server error')
   }
 }

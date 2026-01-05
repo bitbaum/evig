@@ -12,6 +12,8 @@
 import { AUTH_CONFIG } from './config'
 import { query } from './db'
 import { getRedis } from './redis'
+import { logger } from '@/lib/logger'
+import { isRedisConfigured, REDIS_CONFIG } from '@/config/redis'
 
 // =============================================================================
 // Types
@@ -36,7 +38,7 @@ interface LockoutEntry {
 
 const rateLimitStore = new Map<string, RateLimitEntry>()
 const lockoutStore = new Map<string, LockoutEntry>()
-const ENABLE_REDIS = process.env.ENABLE_REDIS_RATE_LIMITER === 'true'
+const ENABLE_REDIS = isRedisConfigured() && REDIS_CONFIG.ENABLE_RATE_LIMITER
 
 // Cleanup old entries periodically
 setInterval(() => {
@@ -349,7 +351,7 @@ export async function recordFailedAttemptDb(
     }
   } catch (error) {
     // If database fails, fall back to in-memory
-    console.error('Database lockout error, falling back to in-memory:', error)
+    logger.error('Database lockout error, falling back to in-memory', { error, userId, ipAddress })
     return recordFailedAttempt(`${userId}:${ipAddress}`)
   }
 }
@@ -366,7 +368,7 @@ export async function clearLockoutDb(userId: string): Promise<void> {
       [userId]
     )
   } catch (error) {
-    console.error('Error clearing lockout from database:', error)
+    logger.error('Error clearing lockout from database', { error, userId })
   }
 }
 

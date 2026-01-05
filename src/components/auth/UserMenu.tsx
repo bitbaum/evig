@@ -24,7 +24,12 @@ import { cn } from '@/lib/utils'
  * - Elegant dropdown when logged in
  */
 export function UserMenu() {
-  const { data: session, status } = useSession()
+  // Use session hook with non-blocking configuration
+  // This ensures buttons show immediately even if session check is slow
+  // Critical for local hosting where DB connections can be slow
+  const { data: session, status } = useSession({
+    required: false, // Don't require session for this component
+  })
   const [isOpen, setIsOpen] = useState(false)
   const menuRef = useRef<HTMLDivElement>(null)
 
@@ -50,18 +55,11 @@ export function UserMenu() {
     return () => document.removeEventListener('keydown', handleEscape)
   }, [])
 
-  // Loading state
-  if (status === 'loading') {
-    return (
-      <div className="flex items-center gap-3">
-        <div className="w-16 h-4 rounded bg-gray-100 animate-pulse" />
-        <div className="w-24 h-9 rounded-lg bg-gray-100 animate-pulse" />
-      </div>
-    )
-  }
-
-  // Not logged in - Show subtle login link + primary register button
-  if (!session?.user) {
+  // CRITICAL: Always show buttons immediately - don't wait for session check
+  // Session check happens in background and UI updates when ready
+  // This prevents blocking page loads, especially on slow local connections
+  // Show login/register buttons if: loading OR no session
+  if (status === 'loading' || !session?.user) {
     return (
       <div className="flex items-center gap-2">
         <Link

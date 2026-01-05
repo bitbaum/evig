@@ -4,48 +4,43 @@
  * PUT /api/user/profile - Update current user's profile
  */
 
-import { NextResponse } from 'next/server'
-import { auth } from '@/auth'
+import { NextRequest } from 'next/server'
 import { getOrCreateProfile, updateProfile } from '@/lib/auth/db'
+import { apiError, apiSuccess } from '@/lib/api/helpers'
+import { withAuth } from '@/lib/api/middleware'
 
-export async function GET() {
+export const GET = withAuth(async (request, session) => {
   try {
-    const session = await auth()
-
-    if (!session?.user?.id) {
-      return NextResponse.json(
-        { error: 'Nicht authentifiziert' },
-        { status: 401 }
-      )
-    }
-
     const profile = await getOrCreateProfile(session.user.id)
-
-    return NextResponse.json({ profile })
+    return apiSuccess({ profile })
   } catch (error) {
-    console.error('Get profile error:', error)
-    return NextResponse.json(
-      { error: 'Profil konnte nicht geladen werden' },
-      { status: 500 }
-    )
+    return apiError(error, 'Profil konnte nicht geladen werden')
   }
+})
+
+interface ProfileUpdateData {
+  first_name?: string;
+  last_name?: string;
+  company_name?: string;
+  phone?: string;
+  mobile?: string;
+  address_line1?: string;
+  address_line2?: string;
+  postal_code?: string;
+  city?: string;
+  canton?: string;
+  country?: string;
+  preferred_language?: string;
+  newsletter_subscribed?: boolean;
+  interests?: string[];
 }
 
-export async function PUT(request: Request) {
+export const PUT = withAuth(async (request: NextRequest, session) => {
   try {
-    const session = await auth()
-
-    if (!session?.user?.id) {
-      return NextResponse.json(
-        { error: 'Nicht authentifiziert' },
-        { status: 401 }
-      )
-    }
-
-    const body = await request.json()
+    const body = await request.json() as Partial<ProfileUpdateData>
 
     // Validate and sanitize input
-    const allowedFields = [
+    const allowedFields: (keyof ProfileUpdateData)[] = [
       'first_name',
       'last_name',
       'company_name',
@@ -62,7 +57,7 @@ export async function PUT(request: Request) {
       'interests',
     ]
 
-    const updateData: Record<string, any> = {}
+    const updateData: Partial<ProfileUpdateData> = {}
     for (const field of allowedFields) {
       if (body[field] !== undefined) {
         updateData[field] = body[field]
@@ -71,19 +66,13 @@ export async function PUT(request: Request) {
 
     const updatedProfile = await updateProfile(session.user.id, updateData)
 
-    return NextResponse.json({
-      success: true,
+    return apiSuccess({
       profile: updatedProfile,
     })
-  } catch (error: any) {
-    console.error('Update profile error:', error)
-    const devDetail = process.env.NODE_ENV !== 'production' ? String(error?.message || error) : undefined
-    return NextResponse.json(
-      { error: 'Profil konnte nicht aktualisiert werden', detail: devDetail },
-      { status: 500 }
-    )
+  } catch (error) {
+    return apiError(error, 'Profil konnte nicht aktualisiert werden')
   }
-}
+})
 
 
 

@@ -8,6 +8,7 @@
 import { ProjectHero as ProjectHeroType } from './types'
 import Link from 'next/link'
 import { cn } from '@/lib/utils'
+import { getTextColor, getButtonVariant } from '@/lib/design-system'
 
 interface ProjectHeroProps {
   hero: ProjectHeroType
@@ -34,27 +35,44 @@ export function ProjectHero({ hero }: ProjectHeroProps) {
       <div className="container mx-auto px-4 relative">
         <div className="max-w-3xl">
           <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">{title}</h1>
-          <p className="text-xl text-green-100 mb-8">
+          <p className={cn('text-xl mb-8', getTextColor('primary', 'secondary'))}>
             {description}
           </p>
           {ctas && ctas.length > 0 && (
             <div className="flex flex-wrap gap-4">
-              {ctas.map((cta, index) => (
-                <Link
-                  key={index}
-                  href={cta.href}
-                  className={cn(
-                    'inline-flex items-center gap-2 px-6 py-3 rounded-lg font-semibold transition-all',
-                    cta.variant === 'primary' && 'bg-white text-green-900 hover:bg-green-50',
-                    cta.variant === 'outline' && 'border-2 border-white text-white hover:bg-white/10',
-                    cta.variant === 'secondary' && 'bg-green-600 text-white hover:bg-green-500',
-                    !cta.variant && 'bg-white text-green-900 hover:bg-green-50'
-                  )}
-                >
-                  {cta.text}
-                  {cta.icon}
-                </Link>
-              ))}
+              {ctas.map((cta, index) => {
+                const variant = cta.variant || 'primary'
+                const primaryBtn = cn(
+                  'inline-flex items-center gap-2 px-6 py-3 rounded-lg font-semibold transition-all min-h-[44px] touch-target',
+                  'bg-white text-primary-900 hover:bg-primary-50'
+                )
+                const outlineBtn = cn(
+                  'inline-flex items-center gap-2 px-6 py-3 rounded-lg font-semibold transition-all min-h-[44px] touch-target',
+                  'border-2 border-white text-white hover:bg-white/20'
+                )
+                const secondaryBtn = cn(
+                  'inline-flex items-center gap-2 px-6 py-3 rounded-lg font-semibold transition-all min-h-[44px] touch-target',
+                  getButtonVariant('primary').bg,
+                  getButtonVariant('primary').text,
+                  getButtonVariant('primary').hover
+                )
+                
+                return (
+                  <Link
+                    key={index}
+                    href={cta.href}
+                    className={cn(
+                      variant === 'primary' && primaryBtn,
+                      variant === 'outline' && outlineBtn,
+                      variant === 'secondary' && secondaryBtn,
+                      !variant && primaryBtn
+                    )}
+                  >
+                    {cta.text}
+                    {cta.icon}
+                  </Link>
+                )
+              })}
             </div>
           )}
         </div>

@@ -1,7 +1,9 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextRequest } from 'next/server'
 import { auth } from '@/auth'
 import { mkdir, writeFile } from 'fs/promises'
 import path from 'path'
+import { apiError, apiSuccess, apiUnauthorized, apiBadRequest } from '@/lib/api/helpers'
+import { ERROR_MESSAGES } from '@/config/error-messages'
 
 export const dynamic = 'force-dynamic'
 
@@ -12,7 +14,7 @@ export async function POST(req: NextRequest) {
   try {
     const session = await auth()
     if (!session?.user?.id) {
-      return NextResponse.json({ error: 'Nicht authentifiziert' }, { status: 401 })
+      return apiUnauthorized(ERROR_MESSAGES.UNAUTHORIZED)
     }
 
     const formData = await req.formData()
@@ -25,11 +27,11 @@ export async function POST(req: NextRequest) {
     }
 
     if (files.length === 0) {
-      return NextResponse.json({ error: 'Keine Dateien hochgeladen' }, { status: 400 })
+      return apiBadRequest('Keine Dateien hochgeladen')
     }
 
     if (files.length > 5) {
-      return NextResponse.json({ error: 'Maximal 5 Bilder erlaubt' }, { status: 400 })
+      return apiBadRequest('Maximal 5 Bilder erlaubt')
     }
 
     const uploadBaseDir = path.join(process.cwd(), 'public', 'uploads', session.user.id)
@@ -43,12 +45,12 @@ export async function POST(req: NextRequest) {
       // Basic validation: only images up to ~10 MB
       const isImage = file.type?.startsWith('image/')
       if (!isImage) {
-        return NextResponse.json({ error: 'Nur Bilddateien sind erlaubt' }, { status: 400 })
+        return apiBadRequest('Nur Bilddateien sind erlaubt')
       }
 
       const maxSize = 10 * 1024 * 1024 // 10 MB
       if (file.size > maxSize) {
-        return NextResponse.json({ error: 'Datei zu gross (max 10MB)' }, { status: 400 })
+        return apiBadRequest('Datei zu gross (max 10MB)')
       }
 
       const arrayBuffer = await file.arrayBuffer()
@@ -66,10 +68,9 @@ export async function POST(req: NextRequest) {
       urls.push(publicUrl)
     }
 
-    return NextResponse.json({ ok: true, urls })
+    return apiSuccess({ urls })
   } catch (error) {
-    console.error('Upload error:', error)
-    return NextResponse.json({ error: 'Upload fehlgeschlagen' }, { status: 500 })
+    return apiError(error, 'Upload fehlgeschlagen')
   }
 }
 

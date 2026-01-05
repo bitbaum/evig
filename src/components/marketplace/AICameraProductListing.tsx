@@ -19,6 +19,7 @@ import {
   Router
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { logger } from '@/lib/logger'
 
 interface ProductSuggestion {
   id: string
@@ -30,11 +31,23 @@ interface ProductSuggestion {
   model?: string
   condition: 'new' | 'excellent' | 'good' | 'fair'
   features: string[]
-  icon: React.ComponentType<any>
+  icon: React.ComponentType<React.SVGProps<SVGSVGElement>>
+}
+
+interface DetectedProductData {
+  title?: string
+  price?: string  // ProductFormData expects string, not number
+  category?: string
+  brand?: string
+  condition?: string
+  description?: string
+  images?: string[] | File[]
+  location?: string
+  contactInfo?: string
 }
 
 interface AICameraProductListingProps {
-  onProductDetected: (product: Partial<ProductSuggestion>) => void
+  onProductDetected: (product: DetectedProductData) => void
   onClose: () => void
 }
 
@@ -100,7 +113,7 @@ export default function AICameraProductListing({ onProductDetected, onClose }: A
         setIsCapturing(true)
       }
     } catch (error) {
-      console.error('Error accessing camera:', error)
+      logger.error('Error accessing camera', { error })
       alert('Kamera-Zugriff fehlgeschlagen. Bitte erlauben Sie Kamerazugriff.')
     }
   }, [])
@@ -162,8 +175,8 @@ export default function AICameraProductListing({ onProductDetected, onClose }: A
 
     // Auto-fill the product form with AI-detected data
     onProductDetected({
-      title: `${suggestion.brand} ${suggestion.model} - ${getConditionText(suggestion.condition)}`,
-      price: suggestion.estimatedPrice,
+      title: `${suggestion.brand || ''} ${suggestion.model || ''} - ${getConditionText(suggestion.condition)}`.trim(),
+      price: suggestion.estimatedPrice.toString(),
       category: suggestion.category,
       brand: suggestion.brand,
       condition: suggestion.condition,

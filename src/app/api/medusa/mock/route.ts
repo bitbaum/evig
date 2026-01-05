@@ -3,7 +3,8 @@
  * Provides basic product and cart functionality
  */
 
-import { NextRequest, NextResponse } from 'next/server'
+import { NextRequest } from 'next/server'
+import { apiSuccess, apiNotFound } from '@/lib/api/helpers'
 
 // Mock products data
 const mockProducts = [
@@ -72,8 +73,23 @@ const mockCollections = [
   { id: 'col_4', title: 'Zubehör', handle: 'zubehoer' }
 ]
 
+interface MockCart {
+  id: string;
+  items: Array<{
+    id: string;
+    title: string;
+    thumbnail: string;
+    unit_price: number;
+    quantity: number;
+    total: number;
+  }>;
+  total: number;
+  subtotal: number;
+  tax_total: number;
+}
+
 // Simple in-memory cart storage (for demo only)
-let mockCarts: Record<string, any> = {}
+let mockCarts: Record<string, MockCart> = {}
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url)
@@ -81,18 +97,18 @@ export async function GET(request: NextRequest) {
 
   switch (path) {
     case 'store/product':
-      return NextResponse.json({
+      return apiSuccess({
         products: mockProducts,
         count: mockProducts.length
       })
 
     case 'store/collection':
-      return NextResponse.json({
+      return apiSuccess({
         collections: mockCollections
       })
 
     default:
-      return NextResponse.json({ error: 'Unknown endpoint' }, { status: 404 })
+      return apiNotFound('Endpoint')
   }
 }
 
@@ -113,7 +129,7 @@ export async function POST(request: NextRequest) {
         tax_total: 0
       }
       mockCarts[cartId] = cart
-      return NextResponse.json({ cart })
+      return apiSuccess({ cart })
 
     case 'store/cart/line-item':
       // Add item to cart
@@ -121,14 +137,14 @@ export async function POST(request: NextRequest) {
       const existingCart = mockCarts[cart_id]
 
       if (!existingCart) {
-        return NextResponse.json({ error: 'Cart not found' }, { status: 404 })
+        return apiNotFound('Cart')
       }
 
       const product = mockProducts.find(p => p.variants.some(v => v.id === variant_id))
       const variant = product?.variants.find(v => v.id === variant_id)
 
-      if (!variant) {
-        return NextResponse.json({ error: 'Variant not found' }, { status: 404 })
+      if (!product || !variant) {
+        return apiNotFound('Variant')
       }
 
       const lineItem = {
@@ -141,10 +157,10 @@ export async function POST(request: NextRequest) {
       }
 
       existingCart.items.push(lineItem)
-      existingCart.total = existingCart.items.reduce((sum: number, item: any) => sum + item.total, 0)
+      existingCart.total = existingCart.items.reduce((sum, item) => sum + item.total, 0)
       existingCart.subtotal = existingCart.total
 
-      return NextResponse.json({ cart: existingCart })
+      return apiSuccess({ cart: existingCart })
 
     default:
       return NextResponse.json({ error: 'Unknown endpoint' }, { status: 404 })
@@ -160,18 +176,18 @@ export async function DELETE(request: NextRequest) {
     const lineId = path.split('/').pop()
 
     if (!cartId || !mockCarts[cartId]) {
-      return NextResponse.json({ error: 'Cart not found' }, { status: 404 })
+      return apiNotFound('Cart')
     }
 
     const cart = mockCarts[cartId]
-    cart.items = cart.items.filter((item: any) => item.id !== lineId)
-    cart.total = cart.items.reduce((sum: number, item: any) => sum + item.total, 0)
+    cart.items = cart.items.filter((item) => item.id !== lineId)
+    cart.total = cart.items.reduce((sum, item) => sum + item.total, 0)
     cart.subtotal = cart.total
 
-    return NextResponse.json({ cart })
+    return apiSuccess({ cart })
   }
 
-  return NextResponse.json({ error: 'Unknown endpoint' }, { status: 404 })
+  return apiNotFound('Endpoint')
 }
 
 

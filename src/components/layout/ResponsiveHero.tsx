@@ -12,6 +12,7 @@
 import { ReactNode } from 'react'
 import { responsiveSpacing, responsiveTypography, responsiveButtons } from '@/lib/responsive'
 import { cn } from '@/lib/utils'
+import { getTextColor, getBackgroundColor, getButtonVariant } from '@/lib/design-system'
 import Link from 'next/link'
 
 export interface ResponsiveHeroProps {
@@ -40,27 +41,41 @@ export function ResponsiveHero({
   ctas,
 }: ResponsiveHeroProps) {
   const bgClasses = {
-    green: 'bg-gradient-to-br from-green-700 via-green-800 to-green-900 text-white',
-    blue: 'bg-gradient-to-br from-blue-700 via-blue-800 to-blue-900 text-white',
-    gray: 'bg-gradient-to-br from-gray-700 via-gray-800 to-gray-900 text-white',
-    white: 'bg-white text-gray-900',
+    green: cn(
+      'bg-gradient-to-br from-primary-700 via-primary-800 to-primary-900',
+      getTextColor('primary', 'primary')
+    ),
+    blue: cn(
+      'bg-gradient-to-br from-info-700 via-info-800 to-info-900',
+      getTextColor('info', 'primary')
+    ),
+    gray: cn(
+      'bg-gradient-to-br from-neutral-700 via-neutral-800 to-neutral-900',
+      getTextColor('dark', 'primary')
+    ),
+    white: cn(
+      getBackgroundColor('white'),
+      getTextColor('white', 'primary')
+    ),
   }
 
   const buttonClasses = {
     primary: cn(
-      'bg-white text-green-800 hover:bg-green-50',
+      'bg-white text-primary-800 hover:bg-primary-50',
       responsiveButtons.primary,
-      'rounded-lg font-semibold transition-colors duration-300 text-center'
+      'rounded-lg font-semibold transition-colors duration-300 text-center min-h-[44px]'
     ),
     secondary: cn(
-      'bg-green-600 text-white hover:bg-green-700',
+      getButtonVariant('primary').bg,
+      getButtonVariant('primary').text,
+      getButtonVariant('primary').hover,
       responsiveButtons.secondary,
-      'rounded-lg font-semibold transition-colors duration-300 text-center'
+      'rounded-lg font-semibold transition-colors duration-300 text-center min-h-[44px]'
     ),
     outline: cn(
-      'bg-transparent border-2 border-white text-white hover:bg-white/10',
+      'bg-transparent border-2 border-white text-white hover:bg-white/20',
       responsiveButtons.secondary,
-      'rounded-lg font-semibold transition-colors duration-300 text-center'
+      'rounded-lg font-semibold transition-colors duration-300 text-center min-h-[44px]'
     ),
   }
 
@@ -97,7 +112,13 @@ export function ResponsiveHero({
             <h2 className={cn(
               responsiveTypography.subsection,
               'font-semibold mb-4 sm:mb-6 md:mb-8',
-              backgroundColor === 'white' ? 'text-gray-700' : 'text-green-200'
+              backgroundColor === 'white' 
+                ? getTextColor('white', 'secondary')
+                : backgroundColor === 'green'
+                ? 'text-primary-100'
+                : backgroundColor === 'blue'
+                ? 'text-info-100'
+                : 'text-neutral-200'
             )}>
               {subtitle}
             </h2>
@@ -107,7 +128,13 @@ export function ResponsiveHero({
             <p className={cn(
               responsiveTypography.lead,
               'mb-6 sm:mb-8',
-              backgroundColor === 'white' ? 'text-gray-600' : 'text-green-100'
+              backgroundColor === 'white' 
+                ? getTextColor('white', 'muted')
+                : backgroundColor === 'green'
+                ? 'text-primary-50'
+                : backgroundColor === 'blue'
+                ? 'text-info-50'
+                : 'text-neutral-300'
             )}>
               {description}
             </p>

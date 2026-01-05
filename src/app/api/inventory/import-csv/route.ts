@@ -1,6 +1,10 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { parse } from 'csv-parse/sync';
+import { TABLE_NAMES } from "@/config/database";
+import { apiSuccess, apiError, apiBadRequest, apiUnauthorized } from "@/lib/api/helpers";
+import { logger } from "@/lib/logger";
+import { withAuth } from "@/lib/api/middleware";
 
 interface CSVRow {
   Artikelnummer: string;
@@ -18,25 +22,13 @@ interface ImportResult {
   duplicates: string[];
 }
 
-export async function POST(request: NextRequest) {
+export const POST = withAuth(async (request: NextRequest, session) => {
   try {
     const supabase = createClient();
     const { csvContent, options = {} } = await request.json();
 
     if (!csvContent) {
-      return NextResponse.json(
-        { error: "CSV content required" },
-        { status: 400 }
-      );
-    }
-
-    // Get current user
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) {
-      return NextResponse.json(
-        { error: "Authentication required" },
-        { status: 401 }
-      );
+      return apiBadRequest("CSV content required");
     }
 
     // Parse CSV
@@ -66,7 +58,7 @@ export async function POST(request: NextRequest) {
 
         // Check for existing product
         const { data: existingProduct } = await supabase
-          .from('inventory_items')
+          .from(TABLE_NAMES.INVENTORY_ITEMS)
           .select('id')
           .eq('kivitendo_article_number', row.Artikelnummer)
           .single();
@@ -82,7 +74,7 @@ export async function POST(request: NextRequest) {
 
         // Create AI-extracted product record
         const { data: aiProduct, error: aiError } = await supabase
-          .from('ai_extracted_products')
+          .from(TABLE_NAMES.AI_EXTRACTED_PRODUCTS)
           .insert({
             product_name: analysis.productName,
             product_name_confidence: analysis.confidence,
@@ -103,7 +95,7 @@ export async function POST(request: NextRequest) {
               original_data: row,
               analysis_method: 'rule_based'
             },
-            created_by: user.id,
+            created_by: session.user.id,
             status: 'approved', // Auto-approve CSV imports
             kivitendo_article_number: row.Artikelnummer
           })
@@ -119,7 +111,7 @@ export async function POST(request: NextRequest) {
         // Calculate and save sustainability score
         const sustainabilityScore = calculateSustainabilityScore(analysis);
         await supabase
-          .from('sustainability_scores')
+          .from(TABLE_NAMES.SUSTAINABILITY_SCORES)
           .insert({
             product_id: aiProduct.id,
             overall_score: sustainabilityScore.overall_score,
@@ -139,7 +131,7 @@ export async function POST(request: NextRequest) {
 
         // Create inventory item
         const { error: inventoryError } = await supabase
-          .from('inventory_items')
+          .from(TABLE_NAMES.INVENTORY_ITEMS)
           .insert({
             ai_product_id: aiProduct.id,
             kivitendo_article_number: row.Artikelnummer,
@@ -147,7 +139,7 @@ export async function POST(request: NextRequest) {
             status: 'available',
             acquisition_cost_chf: parseFloat(row.Verkaufspreis) * 0.7 || 0, // Estimate acquisition cost
             selling_price_chf: parseFloat(row.Verkaufspreis) || 0,
-            assigned_to: user.id
+            assigned_to: session.user.id
           });
 
         if (inventoryError) {
@@ -164,19 +156,23 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    return NextResponse.json(result);
+    return apiSuccess(result);
 
   } catch (error) {
-    console.error("CSV import error:", error);
-    return NextResponse.json(
-      { error: "Failed to import CSV data" },
-      { status: 500 }
-    );
+    return apiError(error, "Failed to import CSV data");
   }
+});
+
+interface ProductAnalysis {
+  productName: string;
+  brand: string;
+  category: string;
+  condition: string;
+  confidence: number;
 }
 
 // Rule-based product analysis for CSV imports
-function analyzeProductDescription(description: string, manufacturer: string): any {
+function analyzeProductDescription(description: string, manufacturer: string): ProductAnalysis {
   const desc = description.toLowerCase();
   const brand = manufacturer || 'Unknown';
 
@@ -230,7 +226,7 @@ function analyzeProductDescription(description: string, manufacturer: string): a
 }
 
 // Calculate sustainability score for imported products
-function calculateSustainabilityScore(analysis: any) {
+function calculateSustainabilityScore(analysis: ProductAnalysis) {
   let score = 50; // Base score
 
   // Brand sustainability factors
@@ -275,21 +271,13 @@ function calculateSustainabilityScore(analysis: any) {
 }
 
 // GET endpoint to retrieve import history
-export async function GET(request: NextRequest) {
+export const GET = withAuth(async (request: NextRequest, session) => {
   try {
     const supabase = createClient();
 
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) {
-      return NextResponse.json(
-        { error: "Authentication required" },
-        { status: 401 }
-      );
-    }
-
     // Get recent imports
     const { data: imports, error } = await supabase
-      .from('inventory_items')
+      .from(TABLE_NAMES.INVENTORY_ITEMS)
       .select(`
         id,
         kivitendo_article_number,
@@ -302,30 +290,31 @@ export async function GET(request: NextRequest) {
           status
         )
       `)
-      .eq('assigned_to', user.id)
+      .eq('assigned_to', session.user.id)
       .order('created_at', { ascending: false })
       .limit(50);
 
     if (error) {
-      return NextResponse.json(
-        { error: "Failed to fetch import history" },
-        { status: 500 }
-      );
+      return apiError(error, "Failed to fetch import history");
     }
 
-    return NextResponse.json({
-      success: true,
+    return apiSuccess({
       imports: imports || []
     });
 
   } catch (error) {
-    console.error("Error fetching import history:", error);
-    return NextResponse.json(
-      { error: "Failed to fetch import history" },
-      { status: 500 }
-    );
+    return apiError(error, "Failed to fetch import history");
   }
-}
+});
+
+
+
+
+
+
+
+
+
 
 
 

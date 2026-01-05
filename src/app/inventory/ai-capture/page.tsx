@@ -3,6 +3,7 @@
 import { useState, useRef, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
+import { logger } from '@/lib/logger'
 import {
   Camera,
   Upload,
@@ -106,7 +107,7 @@ export default function AICapturePage() {
       }
     } catch (err) {
       setError('Failed to analyze image. Please try again.')
-      console.error('Analysis error:', err)
+      logger.error('Analysis error', { error: err })
     } finally {
       setIsAnalyzing(false)
     }
@@ -147,7 +148,7 @@ export default function AICapturePage() {
       }
     } catch (err) {
       setError('Failed to save product. Please try again.')
-      console.error('Save error:', err)
+      logger.error('Save error', { error: err })
     } finally {
       setIsSaving(false)
     }
@@ -519,6 +520,15 @@ export default function AICapturePage() {
     </div>
   )
 }
+
+
+
+
+
+
+
+
+
 
 
 

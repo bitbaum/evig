@@ -77,7 +77,7 @@ services:
       COOKIE_SECRET: ${COOKIE_SECRET:-supersecret_change_in_production}
       MEILI_HOST: http://meilisearch:7700
       MEILI_MASTER_KEY: ${MEILI_MASTER_KEY:-masterKey_change_in_production}
-    command: sh -c "npm ci && npx medusa migrations run && npx medusa develop"
+    command: sh -c "npm ci && npx medusa db:setup && npx medusa develop"
     ports:
       - "9000:9000"
     depends_on:

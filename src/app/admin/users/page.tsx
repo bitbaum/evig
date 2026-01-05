@@ -98,7 +98,7 @@ export default function AdminUsersPage() {
     activeUsers: users.filter(u => u.status === 'active').length,
     revampitStaff: users.filter(u => u.email.endsWith('@revamp-it.ch')).length,
     sellers: users.filter(u => u.role === ROLES.SELLER).length,
-    customers: users.filter(u => [ROLES.CUSTOMER, ROLES.PREMIUM_CUSTOMER, ROLES.VERIFIED_CUSTOMER].includes(u.role as any)).length
+    customers: users.filter(u => [ROLES.CUSTOMER, ROLES.PREMIUM_CUSTOMER, ROLES.VERIFIED_CUSTOMER].includes(u.role as typeof ROLES.CUSTOMER | typeof ROLES.PREMIUM_CUSTOMER | typeof ROLES.VERIFIED_CUSTOMER)).length
   }
 
   const getRoleIcon = (role: string) => {

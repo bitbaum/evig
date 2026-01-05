@@ -59,6 +59,12 @@ FRONTEND_URL=http://localhost:3000
 ENABLE_CMS=false
 NEXT_PUBLIC_ENABLE_ROLE_SELECTION_ON_REGISTER=false
 
+# Admin Setup (Optional - for setup scripts)
+# If not set, secure random passwords will be generated
+# ADMIN_PASSWORD=your-secure-admin-password-here
+# MEDUSA_ADMIN_PASSWORD=your-secure-medusa-admin-password-here
+# ADMIN_PASSWORD_FILE=/path/to/secure/password/file (optional - for saving generated passwords)
+
 # Email Configuration (Production)
 SMTP_HOST=smtp.gmail.com
 SMTP_PORT=587

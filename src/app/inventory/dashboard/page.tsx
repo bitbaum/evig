@@ -1,468 +1,349 @@
+import { Metadata } from 'next'
+import { auth } from '@/auth'
+import { redirect } from 'next/navigation'
+import Link from 'next/link'
+import { InventoryTable } from '@/components/inventory/InventoryTable'
+import {
+  Package,
+  Upload,
+  CheckCircle,
+  AlertCircle,
+  Clock,
+  Zap,
+  Image as ImageIcon,
+  BarChart3,
+  TrendingUp,
+  Loader2
+} from 'lucide-react'
+
+export const metadata: Metadata = {
+  title: 'Inventory Dashboard | RevampIT',
+  description: 'Manage your AI-powered inventory and sync with the marketplace.',
+}
+
+interface InventoryItem {
+  id: string
+  kivitendo_article_number: string
+  quantity_available: number
+  selling_price_chf: number
+  condition_override: string
+  medusa_product_id: string | null
+  marketplace_status: string
+  created_at: string
+  ai_extracted_products: {
+    id: string
+    product_name: string
+    brand: string | null
+    category: string | null
+    condition: string
+    product_images: Array<{
+      id: string
+      filename: string
+      file_path: string
+    }>
+    sustainability_scores: Array<{
+      overall_score: number
+      environmental_score: number
+      social_score: number
+      economic_score: number
+    }>
+  } | null
+}
+
 'use client'
 
 import { useState, useEffect } from 'react'
-import Link from 'next/link'
-import Image from 'next/image'
-import {
-  Search,
-  Filter,
-  Download,
-  Upload,
-  BarChart3,
-  Package,
-  AlertTriangle,
-  CheckCircle,
-  Clock,
-  TrendingUp,
-  Camera,
-  Zap,
-  Leaf,
-  DollarSign,
-  Eye,
-  Edit,
-  Trash2,
-  MoreHorizontal,
-  RefreshCw
-} from 'lucide-react'
-
-interface Product {
-  id: string
-  product_name: string
-  brand: string
-  category: string
-  estimated_price_chf: number
-  condition: string
-  total_confidence: number
-  status: string
-  created_at: string
-  kivitendo_article_number?: string
-  medusa_product_id?: string
-}
-
-interface DashboardStats {
-  total_products: number
-  pending_review: number
-  approved_products: number
-  sold_products: number
-  total_value: number
-  avg_confidence: number
-  sustainability_avg: number
-}
+import { useSession } from 'next-auth/react'
+import { redirect } from 'next/navigation'
+import { logger } from '@/lib/logger'
 
 export default function InventoryDashboardPage() {
-  const [products, setProducts] = useState<Product[]>([])
-  const [stats, setStats] = useState<DashboardStats | null>(null)
-  const [loading, setLoading] = useState(true)
-  const [searchTerm, setSearchTerm] = useState('')
-  const [statusFilter, setStatusFilter] = useState('all')
-  const [selectedProducts, setSelectedProducts] = useState<string[]>([])
+  const { data: session, status } = useSession()
+  const [inventoryItems, setInventoryItems] = useState<InventoryItem[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+  const [bulkPublishing, setBulkPublishing] = useState(false)
 
   useEffect(() => {
-    loadDashboardData()
-  }, [])
+    if (status === 'unauthenticated') {
+      redirect('/auth/login')
+    }
+  }, [status])
 
-  const loadDashboardData = async () => {
-    setLoading(true)
+  useEffect(() => {
+    if (session?.user) {
+      fetchInventoryItems()
+    }
+  }, [session])
+
+  const fetchInventoryItems = async () => {
     try {
-      // Mock data - replace with actual API calls
-      const mockProducts: Product[] = [
+      // Mock data for now - replace with real API call
+      const mockItems: InventoryItem[] = [
         {
-          id: '1',
-          product_name: 'MacBook Pro 16" M3',
-          brand: 'Apple',
-          category: 'Laptops',
-          estimated_price_chf: 2800,
-          condition: 'excellent',
-          total_confidence: 0.92,
-          status: 'pending_review',
-          created_at: new Date().toISOString(),
-          kivitendo_article_number: 'MBP16M3-001'
+          id: 'inv_1',
+          kivitendo_article_number: 'ART-001',
+          quantity_available: 1,
+          selling_price_chf: 899,
+          condition_override: 'like_new',
+          medusa_product_id: null,
+          marketplace_status: 'draft',
+          created_at: '2024-12-15T10:00:00Z',
+          ai_extracted_products: {
+            id: 'ai_1',
+            product_name: 'MacBook Air M1 13"',
+            brand: 'Apple',
+            category: 'Laptops',
+            condition: 'like_new',
+            product_images: [
+              { id: 'img_1', filename: 'macbook.jpg', file_path: '/uploads/macbook.jpg' }
+            ],
+            sustainability_scores: [{
+              overall_score: 85,
+              environmental_score: 82,
+              social_score: 88,
+              economic_score: 85
+            }]
+          }
         },
         {
-          id: '2',
-          product_name: 'iPhone 15 Pro Max',
-          brand: 'Apple',
-          category: 'Smartphones',
-          estimated_price_chf: 1200,
-          condition: 'good',
-          total_confidence: 0.89,
-          status: 'approved',
-          created_at: new Date().toISOString(),
-          medusa_product_id: 'med_12345'
-        },
-        {
-          id: '3',
-          product_name: 'Dell XPS 13',
-          brand: 'Dell',
-          category: 'Laptops',
-          estimated_price_chf: 1500,
-          condition: 'fair',
-          total_confidence: 0.76,
-          status: 'rejected',
-          created_at: new Date().toISOString()
+          id: 'inv_2',
+          kivitendo_article_number: 'ART-002',
+          quantity_available: 1,
+          selling_price_chf: 1299,
+          condition_override: null,
+          medusa_product_id: 'med_123',
+          marketplace_status: 'published',
+          created_at: '2024-12-14T14:30:00Z',
+          ai_extracted_products: {
+            id: 'ai_2',
+            product_name: 'Gaming Desktop RTX 4070',
+            brand: 'Custom Build',
+            category: 'Desktop PCs',
+            condition: 'new',
+            product_images: [
+              { id: 'img_2', filename: 'gaming-pc.jpg', file_path: '/uploads/gaming-pc.jpg' }
+            ],
+            sustainability_scores: [{
+              overall_score: 78,
+              environmental_score: 75,
+              social_score: 80,
+              economic_score: 79
+            }]
+          }
         }
       ]
-
-      const mockStats: DashboardStats = {
-        total_products: 156,
-        pending_review: 23,
-        approved_products: 89,
-        sold_products: 44,
-        total_value: 284750,
-        avg_confidence: 0.84,
-        sustainability_avg: 72
-      }
-
-      setProducts(mockProducts)
-      setStats(mockStats)
+      setInventoryItems(mockItems)
     } catch (error) {
-      console.error('Error loading dashboard data:', error)
+      logger.error('Error fetching inventory', { error })
     } finally {
-      setLoading(false)
+      setIsLoading(false)
     }
   }
 
-  const filteredProducts = products.filter(product => {
-    const matchesSearch = product.product_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         product.brand.toLowerCase().includes(searchTerm.toLowerCase())
-    const matchesStatus = statusFilter === 'all' || product.status === statusFilter
-    return matchesSearch && matchesStatus
-  })
+  const handlePublishSuccess = (itemId: string) => {
+    setInventoryItems(prev => prev.map(item =>
+      item.id === itemId
+        ? { ...item, marketplace_status: 'published', medusa_product_id: `med_${Date.now()}` }
+        : item
+    ))
+  }
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'approved': return 'text-green-600 bg-green-100'
-      case 'pending_review': return 'text-yellow-600 bg-yellow-100'
-      case 'rejected': return 'text-red-600 bg-red-100'
-      case 'sold': return 'text-blue-600 bg-blue-100'
-      default: return 'text-gray-600 bg-gray-100'
+  const handleBulkPublish = async () => {
+    const draftItems = inventoryItems.filter(item => item.marketplace_status === 'draft')
+    if (draftItems.length === 0) return
+
+    setBulkPublishing(true)
+    try {
+      // Publish all draft items in parallel
+      const publishPromises = draftItems.map(item =>
+        fetch('/api/inventory/publish-medusa', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ inventoryItemId: item.id }),
+        }).then(res => res.json())
+      )
+
+      const results = await Promise.allSettled(publishPromises)
+
+      // Update items that were successfully published
+      results.forEach((result, index) => {
+        if (result.status === 'fulfilled' && result.value.success) {
+          const itemId = draftItems[index].id
+          handlePublishSuccess(itemId)
+        }
+      })
+    } catch (error) {
+      logger.error('Bulk publish error', { error })
+    } finally {
+      setBulkPublishing(false)
     }
   }
 
-  const getStatusLabel = (status: string) => {
-    switch (status) {
-      case 'approved': return 'Freigegeben'
-      case 'pending_review': return 'Wartet auf Prüfung'
-      case 'rejected': return 'Abgelehnt'
-      case 'sold': return 'Verkauft'
-      default: return status
-    }
-  }
-
-  const getConditionColor = (condition: string) => {
-    switch (condition) {
-      case 'new': return 'text-green-600'
-      case 'excellent': return 'text-green-600'
-      case 'good': return 'text-blue-600'
-      case 'fair': return 'text-yellow-600'
-      case 'poor': return 'text-red-600'
-      default: return 'text-gray-600'
-    }
-  }
-
-  const getConditionLabel = (condition: string) => {
-    switch (condition) {
-      case 'new': return 'Neu'
-      case 'excellent': return 'Ausgezeichnet'
-      case 'good': return 'Gut'
-      case 'fair': return 'Akzeptabel'
-      case 'poor': return 'Schlecht'
-      default: return condition
-    }
-  }
-
-  if (loading) {
+  if (status === 'loading' || isLoading) {
     return (
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
-        <div className="text-center">
-          <RefreshCw className="w-12 h-12 animate-spin text-blue-600 mx-auto mb-4" />
-          <p className="text-gray-600 dark:text-gray-400">Lade Dashboard...</p>
-        </div>
+      <div className="flex items-center justify-center min-h-screen">
+        <Loader2 className="w-8 h-8 animate-spin text-green-600" />
       </div>
     )
   }
 
+  if (!session?.user) {
+    return null // Will redirect
+  }
+
+
+  const stats = {
+    totalItems: inventoryItems.length,
+    publishedItems: inventoryItems.filter(item => item.marketplace_status === 'published').length,
+    draftItems: inventoryItems.filter(item => item.marketplace_status === 'draft').length,
+    totalValue: inventoryItems.reduce((sum, item) => sum + (item.selling_price_chf * item.quantity_available), 0),
+    averageScore: inventoryItems.length > 0 ? inventoryItems.reduce((sum, item) => {
+      const score = item.ai_extracted_products?.sustainability_scores?.[0]?.overall_score || 0;
+      return sum + score;
+    }, 0) / inventoryItems.length : 0
+  }
+
+
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-      <div className="max-w-7xl mx-auto px-4 py-8">
-        {/* Header */}
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-              Inventar-Dashboard
-            </h1>
-            <p className="text-gray-600 dark:text-gray-400 mt-1">
-              KI-gestützte Inventarverwaltung und Analyse
-            </p>
-          </div>
-          <div className="flex gap-4">
-            <Link
-              href="/inventory/ai-capture"
-              className="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white font-semibold px-4 py-2 rounded-lg transition-colors"
-            >
-              <Camera className="w-5 h-5" />
-              Neues Produkt
-            </Link>
-            <button className="inline-flex items-center gap-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 font-semibold px-4 py-2 rounded-lg transition-colors">
-              <Upload className="w-5 h-5" />
-              CSV Import
-            </button>
+    <div className="space-y-8">
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+            Inventory Dashboard
+          </h1>
+          <p className="text-gray-600 dark:text-gray-400 mt-1">
+            Manage your AI-powered inventory and sync with the marketplace
+          </p>
+        </div>
+        <Link
+          href="/inventory/ai-capture"
+          className="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
+        >
+          <Upload className="w-5 h-5" />
+          Neues Produkt
+        </Link>
+      </div>
+
+      {/* Stats Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
+        <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-100 dark:border-gray-700">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Gesamt Produkte</p>
+              <p className="text-2xl font-bold text-gray-900 dark:text-white">{stats.totalItems}</p>
+            </div>
+            <Package className="w-8 h-8 text-blue-600" />
           </div>
         </div>
 
-        {/* Stats Cards */}
-        {stats && (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
-              <div className="flex items-center gap-3">
-                <Package className="w-8 h-8 text-blue-600" />
-                <div>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">Gesamt Produkte</p>
-                  <p className="text-2xl font-bold text-gray-900 dark:text-white">{stats.total_products}</p>
-                </div>
-              </div>
+        <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-100 dark:border-gray-700">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Veröffentlicht</p>
+              <p className="text-2xl font-bold text-gray-900 dark:text-white">{stats.publishedItems}</p>
             </div>
-
-            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
-              <div className="flex items-center gap-3">
-                <Clock className="w-8 h-8 text-yellow-600" />
-                <div>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">Warten auf Prüfung</p>
-                  <p className="text-2xl font-bold text-gray-900 dark:text-white">{stats.pending_review}</p>
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
-              <div className="flex items-center gap-3">
-                <TrendingUp className="w-8 h-8 text-green-600" />
-                <div>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">Inventarwert</p>
-                  <p className="text-2xl font-bold text-gray-900 dark:text-white">CHF {stats.total_value.toLocaleString()}</p>
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
-              <div className="flex items-center gap-3">
-                <Leaf className="w-8 h-8 text-green-600" />
-                <div>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">Ø Nachhaltigkeit</p>
-                  <p className="text-2xl font-bold text-gray-900 dark:text-white">{stats.sustainability_avg}%</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Filters and Search */}
-        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6 mb-6">
-          <div className="flex flex-col sm:flex-row gap-4">
-            <div className="flex-1">
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                <input
-                  type="text"
-                  placeholder="Produkte suchen..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                />
-              </div>
-            </div>
-            <div className="flex gap-4">
-              <select
-                value={statusFilter}
-                onChange={(e) => setStatusFilter(e.target.value)}
-                className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              >
-                <option value="all">Alle Status</option>
-                <option value="pending_review">Warten auf Prüfung</option>
-                <option value="approved">Freigegeben</option>
-                <option value="rejected">Abgelehnt</option>
-                <option value="sold">Verkauft</option>
-              </select>
-              <button className="inline-flex items-center gap-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 font-semibold px-4 py-2 rounded-lg transition-colors">
-                <Download className="w-5 h-5" />
-                Export
-              </button>
-            </div>
+            <CheckCircle className="w-8 h-8 text-green-600" />
           </div>
         </div>
 
-        {/* Products Table */}
-        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead className="bg-gray-50 dark:bg-gray-700">
-                <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                    Produkt
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                    Marke
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                    Kategorie
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                    Preis
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                    Zustand
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                    KI-Konfidenz
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                    Status
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                    Integration
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                    Aktionen
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-                {filteredProducts.map((product) => (
-                  <tr key={product.id} className="hover:bg-gray-50 dark:hover:bg-gray-700">
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="flex items-center">
-                        <div>
-                          <div className="text-sm font-medium text-gray-900 dark:text-white">
-                            {product.product_name}
-                          </div>
-                          <div className="text-sm text-gray-500 dark:text-gray-400">
-                            Erstellt: {new Date(product.created_at).toLocaleDateString('de-CH')}
-                          </div>
-                        </div>
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-900 dark:text-white">{product.brand}</div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-900 dark:text-white">{product.category}</div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-900 dark:text-white">
-                        CHF {product.estimated_price_chf}
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getConditionColor(product.condition)}`}>
-                        {getConditionLabel(product.condition)}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="flex items-center gap-2">
-                        <div className="flex-1 bg-gray-200 dark:bg-gray-700 rounded-full h-2">
-                          <div
-                            className="bg-blue-600 h-2 rounded-full"
-                            style={{ width: `${product.total_confidence * 100}%` }}
-                          />
-                        </div>
-                        <span className="text-sm text-gray-600 dark:text-gray-400">
-                          {Math.round(product.total_confidence * 100)}%
-                        </span>
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusColor(product.status)}`}>
-                        {getStatusLabel(product.status)}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-900 dark:text-white">
-                        {product.kivitendo_article_number && (
-                          <div className="text-green-600">✓ Kivitendo</div>
-                        )}
-                        {product.medusa_product_id && (
-                          <div className="text-blue-600">✓ Medusa</div>
-                        )}
-                        {!product.kivitendo_article_number && !product.medusa_product_id && (
-                          <div className="text-gray-500">Nicht integriert</div>
-                        )}
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                      <div className="flex items-center gap-2">
-                        <button className="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300">
-                          <Eye className="w-4 h-4" />
-                        </button>
-                        <button className="text-green-600 hover:text-green-900 dark:text-green-400 dark:hover:text-green-300">
-                          <Edit className="w-4 h-4" />
-                        </button>
-                        <button className="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300">
-                          <Trash2 className="w-4 h-4" />
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+        <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-100 dark:border-gray-700">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Entwürfe</p>
+              <p className="text-2xl font-bold text-gray-900 dark:text-white">{stats.draftItems}</p>
+            </div>
+            <Clock className="w-8 h-8 text-yellow-600" />
           </div>
+        </div>
 
-          {filteredProducts.length === 0 && (
-            <div className="text-center py-12">
-              <Package className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-              <p className="text-gray-600 dark:text-gray-400">
-                {searchTerm || statusFilter !== 'all'
-                  ? 'Keine Produkte entsprechen deinen Filterkriterien'
-                  : 'Noch keine Produkte erfasst'
-                }
+        <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-100 dark:border-gray-700">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Gesamtwert</p>
+              <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                CHF {stats.totalValue.toLocaleString('de-CH')}
               </p>
             </div>
-          )}
+            <BarChart3 className="w-8 h-8 text-purple-600" />
+          </div>
         </div>
 
-        {/* Quick Actions */}
-        <div className="mt-8 bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
-          <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
-            Schnellaktionen
+        <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-100 dark:border-gray-700">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Ø Nachhaltigkeit</p>
+              <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                {Math.round(stats.averageScore)}%
+              </p>
+            </div>
+            <TrendingUp className="w-8 h-8 text-green-600" />
+          </div>
+        </div>
+      </div>
+
+      {/* Inventory Table */}
+      <InventoryTable
+        items={inventoryItems}
+        onPublishSuccess={handlePublishSuccess}
+      />
+
+      {/* Publish CTA for Draft Items */}
+      {stats.draftItems > 0 && (
+        <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl p-8 text-white text-center">
+          <Zap className="w-16 h-16 text-blue-200 mx-auto mb-4" />
+          <h2 className="text-2xl font-bold mb-4">
+            {stats.draftItems} Produkt{stats.draftItems > 1 ? 'e' : ''} bereit zum Veröffentlichen
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <button className="p-4 border border-gray-200 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors text-left">
-              <div className="flex items-center gap-3">
-                <BarChart3 className="w-8 h-8 text-blue-600" />
-                <div>
-                  <h3 className="font-medium text-gray-900 dark:text-white">Analytics</h3>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">Inventar-Statistiken und Trends</p>
-                </div>
-              </div>
-            </button>
+          <p className="text-blue-100 mb-6 max-w-2xl mx-auto">
+            Ihre AI-analyzierten Produkte warten darauf, im RevampIT Marketplace veröffentlicht zu werden.
+            Mit einem Klick werden sie automatisch in den Shop übertragen.
+          </p>
+          <button
+            onClick={handleBulkPublish}
+            disabled={bulkPublishing}
+            className="inline-flex items-center gap-2 bg-white text-blue-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {bulkPublishing ? (
+              <Loader2 className="w-5 h-5 animate-spin" />
+            ) : (
+              <Package className="w-5 h-5" />
+            )}
+            {bulkPublishing ? 'Wird veröffentlicht...' : 'Alle veröffentlichen'}
+          </button>
+        </div>
+      )}
 
-            <button className="p-4 border border-gray-200 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors text-left">
-              <div className="flex items-center gap-3">
-                <AlertTriangle className="w-8 h-8 text-yellow-600" />
-                <div>
-                  <h3 className="font-medium text-gray-900 dark:text-white">Cleanup</h3>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">Doppelte und veraltete Produkte</p>
-                </div>
-              </div>
-            </button>
-
-            <button className="p-4 border border-gray-200 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors text-left">
-              <div className="flex items-center gap-3">
-                <Zap className="w-8 h-8 text-purple-600" />
-                <div>
-                  <h3 className="font-medium text-gray-900 dark:text-white">KI-Optimierung</h3>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">KI-Modelle trainieren</p>
-                </div>
-              </div>
-            </button>
+      {/* Help Section */}
+      <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-xl p-6">
+        <div className="flex items-start gap-4">
+          <div className="w-10 h-10 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center flex-shrink-0">
+            <ImageIcon className="w-5 h-5 text-blue-600" />
+          </div>
+          <div>
+            <h3 className="font-medium text-blue-900 dark:text-blue-200">
+              So funktioniert die AI-Inventur
+            </h3>
+            <ul className="mt-2 text-sm text-blue-700 dark:text-blue-300 space-y-1">
+              <li>• Laden Sie Produktbilder hoch - unsere KI analysiert automatisch Marke, Modell und Zustand</li>
+              <li>• Die KI berechnet Nachhaltigkeits-Scores basierend auf Umwelt- und Sozialfaktoren</li>
+              <li>• Mit einem Klick werden Produkte in den MedusaJS-Shop übertragen</li>
+              <li>• Kunden können Produkte sofort im Marketplace finden und kaufen</li>
+              <li>• Vollständige Synchronisation zwischen Ihrem Lager und dem Online-Shop</li>
+            </ul>
+            <Link
+              href="/inventory/ai-capture"
+              className="inline-flex items-center gap-1 mt-3 text-sm text-blue-600 hover:text-blue-700 dark:text-blue-400"
+            >
+              Jetzt Produkt hinzufügen
+              <Package className="w-4 h-4" />
+            </Link>
           </div>
         </div>
       </div>
     </div>
   )
 }
-
-
-
 
 
 

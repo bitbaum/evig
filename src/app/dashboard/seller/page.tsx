@@ -27,7 +27,7 @@ export default async function SellerDashboard() {
   }
 
   const userRole = session.user.role as string
-  const hasAccess = [ROLES.SELLER, ROLES.REVAMPIT_ADMIN].includes(userRole)
+  const hasAccess = userRole === ROLES.SELLER || userRole === ROLES.REVAMPIT_ADMIN
 
   if (!hasAccess) {
     redirect('/dashboard')

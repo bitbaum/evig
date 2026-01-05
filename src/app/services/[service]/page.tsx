@@ -142,7 +142,11 @@ export default function ServicePage({ params }: { params: { service: string } })
         {service.process && <ServiceProcessSection process={service.process} />}
 
         {/* CTA Section */}
-        <ServiceCTA serviceTitle={service.title} />
+        <ServiceCTA
+          serviceTitle={service.title}
+          serviceSlug={params.service}
+          pricing={service.pricing?.base}
+        />
       </main>
     </>
   )

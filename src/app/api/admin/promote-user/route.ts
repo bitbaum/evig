@@ -3,73 +3,53 @@
  * POST /api/admin/promote-user
  */
 
-import { NextResponse } from 'next/server'
-import { auth } from '@/auth'
+import { NextRequest } from 'next/server'
 import { query } from '@/lib/auth/db'
+import { TABLE_NAMES } from '@/config/database'
+import { apiSuccess, apiError, apiBadRequest, apiNotFound, apiForbidden } from '@/lib/api/helpers'
+import { logger } from '@/lib/logger'
+import { withAdmin } from '@/lib/api/middleware'
 
-export async function POST(request: Request) {
+export const POST = withAdmin(async (request: NextRequest) => {
   try {
-    const session = await auth()
-
-    if (!session?.user?.id || session.user.role !== 'admin') {
-      return NextResponse.json(
-        { error: 'Admin access required' },
-        { status: 403 }
-      )
-    }
-
     const body = await request.json()
     const { userId, email } = body
 
     if (!userId && !email) {
-      return NextResponse.json(
-        { error: 'User ID or email required' },
-        { status: 400 }
-      )
+      return apiBadRequest('User ID or email required')
     }
 
     // Find user by ID or email
     let userIdToPromote = userId
     if (email && !userId) {
       const userResult = await query(
-        'SELECT id FROM users WHERE email = $1',
+        `SELECT id FROM ${TABLE_NAMES.USERS} WHERE email = $1`,
         [email]
       )
       if (userResult.rows.length === 0) {
-        return NextResponse.json(
-          { error: 'User not found' },
-          { status: 404 }
-        )
+        return apiNotFound('User')
       }
       userIdToPromote = userResult.rows[0].id
     }
 
     // Update user role to admin
     const updateResult = await query(
-      'UPDATE users SET role = $1, "updatedAt" = NOW() WHERE id = $2',
+      `UPDATE ${TABLE_NAMES.USERS} SET role = $1, "updatedAt" = NOW() WHERE id = $2`,
       ['admin', userIdToPromote]
     )
 
     if (updateResult.rowCount === 0) {
-      return NextResponse.json(
-        { error: 'User not found or already admin' },
-        { status: 404 }
-      )
+      return apiNotFound('User')
     }
 
-    return NextResponse.json({
-      success: true,
+    return apiSuccess({
       message: 'User promoted to admin successfully',
       userId: userIdToPromote,
     })
   } catch (error) {
-    console.error('Promote user error:', error)
-    return NextResponse.json(
-      { error: 'Failed to promote user' },
-      { status: 500 }
-    )
+    return apiError(error, 'Failed to promote user')
   }
-}
+})
 
 
 

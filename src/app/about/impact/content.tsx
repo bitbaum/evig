@@ -481,7 +481,7 @@ export default function ImpactPageContent() {
               Jetzt spenden
               <Heart className="h-5 w-5 ml-2" />
             </Button>
-            <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-green-600">
+            <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/20 hover:text-primary-600">
               Kontakt aufnehmen
             </Button>
           </div>

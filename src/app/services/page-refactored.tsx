@@ -386,7 +386,7 @@ const ServiceCard: React.FC<{ service: Service }> = ({ service }) => {
                   <button
                     onClick={handleBooking}
                     className="flex-1 inline-flex items-center justify-center text-white font-semibold bg-green-600 hover:bg-green-700 px-4 py-2 rounded-lg transition-colors duration-300 disabled:opacity-50"
-                    disabled={bookingStatus === 'booking'}
+                    disabled={bookingStatus !== 'idle' && bookingStatus !== 'error'}
                   >
                     <Calendar className="w-4 h-4 mr-2" />
                     Termin buchen

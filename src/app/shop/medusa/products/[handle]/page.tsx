@@ -8,6 +8,7 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useProduct, useAddToCart, useCreateCart, getCartId, useRegions } from "@/lib/medusa/hooks";
 import { cn } from "@/lib/utils";
+import { logger } from "@/lib/logger";
 
 export default function ProductPage() {
   const params = useParams();
@@ -47,7 +48,7 @@ export default function ProductPage() {
       setAddedToCart(true);
       setTimeout(() => setAddedToCart(false), 3000);
     } catch (err) {
-      console.error("Failed to add to cart:", err);
+      logger.error("Failed to add to cart", { error: err });
     }
   };
 

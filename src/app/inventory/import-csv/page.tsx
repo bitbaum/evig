@@ -2,6 +2,7 @@
 
 import { useState, useRef } from 'react'
 import { useRouter } from 'next/navigation'
+import { logger } from '@/lib/logger'
 import {
   Upload,
   FileText,
@@ -86,7 +87,7 @@ export default function ImportCSVPage() {
 
     } catch (err) {
       setError('Fehler beim Importieren der CSV-Datei')
-      console.error('Import error:', err)
+      logger.error('Import error', { error: err })
     } finally {
       setIsUploading(false)
     }
@@ -342,6 +343,15 @@ ALI00001;W;100% getestet Echtem Touch Panel Touchpad Trackpad Mit Kabel Für App
     </div>
   )
 }
+
+
+
+
+
+
+
+
+
 
 
 

@@ -5,6 +5,8 @@
  * All API calls are proxied through Next.js API routes to avoid CORS issues.
  */
 
+import { MEDUSA_CONFIG } from '@/config/medusa'
+
 export const MEDUSA_API_BASE = "/api/shop";
-export const MEDUSA_BACKEND_URL = process.env.NEXT_PUBLIC_MEDUSA_URL || "http://localhost:9000";
-export const PUBLISHABLE_KEY = process.env.NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY || "pk_eee502aced5bea9f350f22cc90c2f98e74417fcfa17a35a230837b069e915a55";
+export const MEDUSA_BACKEND_URL = MEDUSA_CONFIG.URL;
+export const PUBLISHABLE_KEY = MEDUSA_CONFIG.PUBLISHABLE_KEY;

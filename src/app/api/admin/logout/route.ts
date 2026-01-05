@@ -1,5 +1,7 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextRequest } from 'next/server'
 import { cookies } from 'next/headers'
+import { apiSuccess, apiError } from '@/lib/api/helpers'
+import { logger } from '@/lib/logger'
 
 export const dynamic = 'force-dynamic'
 
@@ -15,15 +17,10 @@ export async function POST(request: NextRequest) {
       path: '/',
     })
 
-    return NextResponse.json({
-      success: true,
+    return apiSuccess({
       message: 'Logged out successfully',
     })
   } catch (error) {
-    console.error('Logout error:', error)
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    )
+    return apiError(error, 'Internal server error')
   }
 }

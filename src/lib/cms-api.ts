@@ -1,9 +1,12 @@
 // RevampIT Reboot Content API Client
 // This replaces the Strapi integration with our custom Reboot Content API
 
-const REBOOT_CONTENT_URL = process.env.NEXT_PUBLIC_REBOOT_CONTENT_URL || 'http://localhost:3001';
-const ENABLE_CMS = process.env.ENABLE_CMS === 'true';
-const REBOOT_CONTENT_TOKEN = process.env.REBOOT_CONTENT_TOKEN;
+import { logger } from '@/lib/logger'
+import { CMS_CONFIG } from '@/config/cms'
+
+const REBOOT_CONTENT_URL = CMS_CONFIG.URL;
+const ENABLE_CMS = CMS_CONFIG.ENABLED;
+const REBOOT_CONTENT_TOKEN = CMS_CONFIG.TOKEN;
 
 // Types for CMS API responses
 export interface CMSResponse<T> {
@@ -124,7 +127,7 @@ async function apiRequest<T>(
       message: data.message,
     };
   } catch (error) {
-    console.error(`API Request failed for ${endpoint}:`, error);
+    logger.error(`API Request failed for ${endpoint}`, { error, endpoint });
     return {
       success: false,
       error: error instanceof Error ? error.message : 'Network error',

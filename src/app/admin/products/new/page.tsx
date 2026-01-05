@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import { logger } from '@/lib/logger'
 import {
   ArrowLeft,
   Save,
@@ -70,7 +71,7 @@ export default function NewProductPage() {
     'Software'
   ]
 
-  const handleInputChange = (field: keyof ProductFormData, value: any) => {
+  const handleInputChange = (field: keyof ProductFormData, value: ProductFormData[keyof ProductFormData]) => {
     if (field === 'title' && !formData.handle) {
       // Auto-generate handle from title
       const handle = value.toLowerCase()
@@ -173,12 +174,12 @@ export default function NewProductPage() {
       }
 
       const result = await response.json()
-      console.log('Product created successfully:', result)
+      logger.info('Product created successfully', { productId: result.id })
 
       // Redirect to products list
       router.push('/admin/products')
     } catch (error) {
-      console.error('Error saving product:', error)
+      logger.error('Error saving product', { error })
       alert(`Error creating product: ${error}`)
     } finally {
       setIsLoading(false)

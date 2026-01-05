@@ -38,7 +38,7 @@ const nextConfig = {
       },
     ];
   },
-  webpack: (config, { isServer }) => {
+  webpack: (config, { isServer, dev }) => {
     // Font loader configuration
     config.module.rules.push({
       test: /\.(woff|woff2|eot|ttf|otf)$/,
@@ -56,6 +56,29 @@ const nextConfig = {
       config.resolve.fallback = {
         ...config.resolve.fallback,
         fs: false,
+      };
+    }
+
+    // Reduce file watching load in dev to avoid EMFILE errors
+    if (dev) {
+      config.watchOptions = {
+        ...(config.watchOptions || {}),
+        // Large/irrelevant directories to ignore in watch
+        ignored: [
+          '**/.git/**',
+          '**/.next/**',
+          '**/node_modules/**',
+          '**/.swc/**',
+          '**/logs/**',
+          '**/playwright-report/**',
+          '**/test-results/**',
+          '**/postgres-init/**',
+          '**/cms-api/**',
+          '**/medusa-backend/**',
+          '**/examples/**',
+          '**/packages/**',
+        ],
+        followSymlinks: false,
       };
     }
     return config;

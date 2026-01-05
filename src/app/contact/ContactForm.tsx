@@ -42,9 +42,9 @@ export default function ContactForm() {
       setEmail('')
       setSubject('')
       setMessage('')
-    } catch (err: any) {
+    } catch (err) {
       setStatus('error')
-      setError(err?.message || 'Fehler beim Senden. Bitte später erneut versuchen.')
+      setError(err instanceof Error ? err.message : 'Fehler beim Senden. Bitte später erneut versuchen.')
     }
   }
 

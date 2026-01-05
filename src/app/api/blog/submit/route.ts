@@ -1,6 +1,8 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextRequest } from 'next/server'
 import fs from 'fs'
 import path from 'path'
+import { apiSuccess, apiError, apiBadRequest } from '@/lib/api/helpers'
+import { logger } from '@/lib/logger'
 
 const submissionsDir = path.join(process.cwd(), 'content/submissions')
 
@@ -15,10 +17,7 @@ export async function POST(request: NextRequest) {
 
     // Validate required fields
     if (!data.name || !data.email || !data.title || !data.content) {
-      return NextResponse.json(
-        { error: 'Missing required fields' },
-        { status: 400 }
-      )
+      return apiBadRequest('Missing required fields')
     }
 
     // Create a unique filename based on timestamp and slug
@@ -53,20 +52,12 @@ export async function POST(request: NextRequest) {
     // TODO: Send email notification to admin
     // TODO: Send confirmation email to submitter
 
-    return NextResponse.json(
-      {
-        success: true,
-        message: 'Submission received successfully',
-        id: submission.id
-      },
-      { status: 200 }
-    )
+    return apiSuccess({
+      message: 'Submission received successfully',
+      id: submission.id
+    })
   } catch (error) {
-    console.error('Error processing submission:', error)
-    return NextResponse.json(
-      { error: 'Failed to process submission' },
-      { status: 500 }
-    )
+    return apiError(error, 'Failed to process submission')
   }
 }
 
@@ -83,12 +74,8 @@ export async function GET(request: NextRequest) {
       })
       .sort((a, b) => new Date(b.submittedAt).getTime() - new Date(a.submittedAt).getTime())
 
-    return NextResponse.json({ submissions }, { status: 200 })
+    return apiSuccess({ submissions })
   } catch (error) {
-    console.error('Error fetching submissions:', error)
-    return NextResponse.json(
-      { error: 'Failed to fetch submissions' },
-      { status: 500 }
-    )
+    return apiError(error, 'Failed to fetch submissions')
   }
 }

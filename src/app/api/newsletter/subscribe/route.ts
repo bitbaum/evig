@@ -3,6 +3,8 @@ import fs from 'fs'
 import path from 'path'
 import { randomBytes } from 'crypto'
 import { requireAdminAuth } from '@/lib/admin-auth'
+import { apiError, apiSuccess, apiBadRequest } from '@/lib/api/helpers'
+import { logger } from '@/lib/logger'
 
 const subscribersDir = path.join(process.cwd(), 'content/newsletter')
 
@@ -31,10 +33,7 @@ export async function POST(request: NextRequest) {
 
     // Validate email
     if (!email || typeof email !== 'string' || !isValidEmail(email)) {
-      return NextResponse.json(
-        { error: 'Bitte geben Sie eine gültige E-Mail-Adresse ein' },
-        { status: 400 }
-      )
+      return apiBadRequest('Bitte geben Sie eine gültige E-Mail-Adresse ein')
     }
 
     // Check if already subscribed
@@ -53,7 +52,7 @@ export async function POST(request: NextRequest) {
           throw new Error('Invalid subscribers data format')
         }
       } catch (parseError) {
-        console.error('Error parsing subscribers file:', parseError)
+        logger.error('Error parsing subscribers file', { error: parseError })
         // Start fresh if file is corrupted
         subscribers = []
       }
@@ -65,10 +64,7 @@ export async function POST(request: NextRequest) {
     )
 
     if (existing && existing.status === 'active') {
-      return NextResponse.json(
-        { error: 'Diese E-Mail-Adresse ist bereits registriert' },
-        { status: 400 }
-      )
+      return apiBadRequest('Diese E-Mail-Adresse ist bereits registriert')
     }
 
     // Add new subscriber
@@ -92,19 +88,11 @@ export async function POST(request: NextRequest) {
     // For now, we'll just return success
     // In production, you'd send an email with confirmToken
 
-    return NextResponse.json(
-      {
-        success: true,
-        message: 'Bestätigungs-E-Mail gesendet',
-      },
-      { status: 200 }
-    )
+    return apiSuccess({
+      message: 'Bestätigungs-E-Mail gesendet',
+    })
   } catch (error) {
-    console.error('Newsletter subscription error:', error)
-    return NextResponse.json(
-      { error: 'Serverfehler. Bitte versuchen Sie es später erneut.' },
-      { status: 500 }
-    )
+    return apiError(error, 'Serverfehler. Bitte versuchen Sie es später erneut.')
   }
 }
 
@@ -114,12 +102,12 @@ export const GET = requireAdminAuth(async (request: NextRequest) => {
     const subscribersFile = path.join(subscribersDir, 'subscribers.json')
 
     if (!fs.existsSync(subscribersFile)) {
-      return NextResponse.json({
+      return apiSuccess({
         total: 0,
         active: 0,
         pending: 0,
         subscribers: []
-      }, { status: 200 })
+      })
     }
 
     try {
@@ -131,28 +119,21 @@ export const GET = requireAdminAuth(async (request: NextRequest) => {
         throw new Error('Invalid subscribers data format')
       }
 
-      return NextResponse.json(
-        {
-          total: subscribers.length,
-          active: subscribers.filter((s) => s.status === 'active').length,
-          pending: subscribers.filter((s) => s.status === 'pending').length,
-          subscribers: subscribers,
-        },
-        { status: 200 }
-      )
+      return apiSuccess({
+        total: subscribers.length,
+        active: subscribers.filter((s) => s.status === 'active').length,
+        pending: subscribers.filter((s) => s.status === 'pending').length,
+        subscribers: subscribers,
+      })
     } catch (parseError) {
-      console.error('Error parsing subscribers file:', parseError)
-      return NextResponse.json(
-        { error: 'Invalid subscribers data format' },
-        { status: 500 }
+      logger.error('Error parsing subscribers file', { error: parseError })
+      return apiError(
+        parseError instanceof Error ? parseError : new Error('Parse error'),
+        'Invalid subscribers data format'
       )
     }
   } catch (error) {
-    console.error('Error fetching subscribers:', error)
-    return NextResponse.json(
-      { error: 'Failed to fetch subscribers' },
-      { status: 500 }
-    )
+    return apiError(error, 'Failed to fetch subscribers')
   }
 })
 

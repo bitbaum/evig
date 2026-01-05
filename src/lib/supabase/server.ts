@@ -1,12 +1,17 @@
 import { createServerClient, type CookieOptions } from '@supabase/ssr'
 import { cookies } from 'next/headers'
+import { SUPABASE_CONFIG } from '@/config/supabase'
 
 export function createClient() {
   const cookieStore = cookies()
 
+  if (!SUPABASE_CONFIG.URL || !SUPABASE_CONFIG.ANON_KEY) {
+    throw new Error('Supabase configuration is missing. Please set NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY')
+  }
+
   return createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    SUPABASE_CONFIG.URL,
+    SUPABASE_CONFIG.ANON_KEY,
     {
       cookies: {
         get(name: string) {

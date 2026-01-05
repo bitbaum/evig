@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import { logger } from '@/lib/logger'
 import {
   ArrowLeft,
   Save,
@@ -89,7 +90,7 @@ export default function NewWorkshopPage() {
     { value: 'advanced', label: 'Experte', description: 'Umfassende Vorkenntnisse erforderlich' }
   ]
 
-  const handleInputChange = (field: keyof WorkshopFormData, value: any) => {
+  const handleInputChange = (field: keyof WorkshopFormData, value: WorkshopFormData[keyof WorkshopFormData]) => {
     setFormData(prev => ({ ...prev, [field]: value }))
   }
 
@@ -159,7 +160,7 @@ export default function NewWorkshopPage() {
       }
 
       // Here you would normally save to your database
-      console.log('Creating workshop:', formData)
+      logger.info('Creating workshop', { title: formData.title })
 
       // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 1000))
@@ -167,7 +168,7 @@ export default function NewWorkshopPage() {
       // Redirect to workshops list
       router.push('/admin/workshops')
     } catch (error) {
-      console.error('Error creating workshop:', error)
+      logger.error('Error creating workshop', { error })
     } finally {
       setIsLoading(false)
     }
@@ -675,6 +676,15 @@ export default function NewWorkshopPage() {
     </div>
   )
 }
+
+
+
+
+
+
+
+
+
 
 
 

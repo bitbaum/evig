@@ -1,7 +1,7 @@
-import { NextRequest, NextResponse } from "next/server";
-
-const MEDUSA_URL = process.env.MEDUSA_BACKEND_URL || "http://localhost:9000";
-const PUBLISHABLE_KEY = process.env.NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY || "pk_eee502aced5bea9f350f22cc90c2f98e74417fcfa17a35a230837b069e915a55";
+import { NextRequest } from "next/server";
+import { MEDUSA_CONFIG } from "@/config/medusa";
+import { logger } from "@/lib/logger";
+import { apiError, apiSuccess } from "@/lib/api/helpers";
 
 /**
  * POST /api/shop/cart/[cartId]/line-items
@@ -15,12 +15,21 @@ export async function POST(
     const { cartId } = params;
     const body = await request.json();
 
-    const response = await fetch(`${MEDUSA_URL}/store/carts/${cartId}/line-items`, {
+    if (!MEDUSA_CONFIG.PUBLISHABLE_KEY) {
+      logger.error("Medusa publishable key not configured");
+      return apiError(
+        new Error("Configuration error"),
+        "Medusa configuration is missing",
+        500
+      );
+    }
+
+    const response = await fetch(`${MEDUSA_CONFIG.URL}/store/carts/${cartId}/line-items`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "x-publishable-key": PUBLISHABLE_KEY,
-        "x-publishable-api-key": PUBLISHABLE_KEY,
+        "x-publishable-key": MEDUSA_CONFIG.PUBLISHABLE_KEY,
+        "x-publishable-api-key": MEDUSA_CONFIG.PUBLISHABLE_KEY,
       },
       body: JSON.stringify({
         variant_id: body.variant_id,
@@ -29,22 +38,23 @@ export async function POST(
     });
 
     if (!response.ok) {
-      const error = await response.text();
-      console.error("Medusa add to cart error:", response.status, error);
-      return NextResponse.json(
-        { error: "Failed to add item to cart" },
-        { status: response.status }
+      const errorText = await response.text();
+      logger.error("Medusa add to cart error", {
+        status: response.status,
+        cartId,
+        error: errorText,
+      });
+      return apiError(
+        new Error(`Medusa API returned ${response.status}`),
+        "Failed to add item to cart",
+        response.status
       );
     }
 
     const data = await response.json();
-    return NextResponse.json(data);
+    return apiSuccess(data);
   } catch (error) {
-    console.error("Error adding to cart:", error);
-    return NextResponse.json(
-      { error: "Failed to connect to Medusa backend" },
-      { status: 500 }
-    );
+    return apiError(error, "Failed to connect to Medusa backend");
   }
 }
 

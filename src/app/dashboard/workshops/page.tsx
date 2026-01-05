@@ -4,6 +4,8 @@ import { useSession } from 'next-auth/react'
 import { useEffect, useState } from 'react'
 import { Calendar, Clock, MapPin, Users, CheckCircle, XCircle, AlertCircle, ArrowLeft } from 'lucide-react'
 import Link from 'next/link'
+import { getTextColor, getStatusColors } from '@/lib/design-system'
+import { cn } from '@/lib/utils'
 
 interface WorkshopRegistration {
   id: string
@@ -84,13 +86,13 @@ export default function WorkshopsDashboard() {
   const getStatusIcon = (status: string) => {
     switch (status) {
       case 'confirmed':
-        return <CheckCircle className="w-5 h-5 text-green-500" />
+        return <CheckCircle className="w-5 h-5 text-success-500" />
       case 'pending':
-        return <AlertCircle className="w-5 h-5 text-yellow-500" />
+        return <AlertCircle className="w-5 h-5 text-warning-500" />
       case 'cancelled':
-        return <XCircle className="w-5 h-5 text-red-500" />
+        return <XCircle className="w-5 h-5 text-error-500" />
       default:
-        return <AlertCircle className="w-5 h-5 text-gray-500" />
+        return <AlertCircle className="w-5 h-5 text-neutral-500" />
     }
   }
 
@@ -117,15 +119,15 @@ export default function WorkshopsDashboard() {
 
   if (status === 'loading' || loading) {
     return (
-      <div className="min-h-screen bg-gray-50 py-8">
+      <div className="min-h-screen bg-neutral-50 py-8">
         <div className="max-w-4xl mx-auto px-4">
-          <div className="bg-white rounded-xl shadow-lg p-8">
+          <div className="bg-white rounded-xl shadow-lg p-8 border-2 border-neutral-200">
             <div className="animate-pulse">
-              <div className="h-8 bg-gray-200 rounded w-1/3 mb-6"></div>
+              <div className="h-8 bg-neutral-200 rounded w-1/3 mb-6"></div>
               <div className="space-y-4">
-                <div className="h-4 bg-gray-200 rounded w-full"></div>
-                <div className="h-4 bg-gray-200 rounded w-3/4"></div>
-                <div className="h-4 bg-gray-200 rounded w-1/2"></div>
+                <div className="h-4 bg-neutral-200 rounded w-full"></div>
+                <div className="h-4 bg-neutral-200 rounded w-3/4"></div>
+                <div className="h-4 bg-neutral-200 rounded w-1/2"></div>
               </div>
             </div>
           </div>
@@ -136,16 +138,16 @@ export default function WorkshopsDashboard() {
 
   if (!session?.user) {
     return (
-      <div className="min-h-screen bg-gray-50 py-8">
+      <div className="min-h-screen bg-neutral-50 py-8">
         <div className="max-w-4xl mx-auto px-4">
-          <div className="bg-white rounded-xl shadow-lg p-8 text-center">
-            <h1 className="text-2xl font-bold mb-4">Anmeldung erforderlich</h1>
-            <p className="text-gray-600 mb-6">
+          <div className="bg-white rounded-xl shadow-lg p-8 text-center border-2 border-neutral-200">
+            <h1 className={cn('text-2xl font-bold mb-4', getTextColor('white', 'primary'))}>Anmeldung erforderlich</h1>
+            <p className={cn('mb-6', getTextColor('white', 'muted'))}>
               Bitte melden Sie sich an, um Ihre Workshop-Anmeldungen zu sehen.
             </p>
             <Link
               href="/auth/login"
-              className="inline-block bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition-colors"
+              className="inline-block bg-primary-600 text-white px-6 py-3 rounded-lg hover:bg-primary-700 transition-colors min-h-[touch] touch-target"
             >
               Anmelden
             </Link>
@@ -156,27 +158,27 @@ export default function WorkshopsDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
+    <div className="min-h-screen bg-neutral-50 py-8">
       <div className="max-w-4xl mx-auto px-4">
         {/* Header */}
         <div className="mb-8">
           <Link
             href="/dashboard"
-            className="inline-flex items-center text-gray-600 hover:text-gray-800 mb-4"
+            className={cn('inline-flex items-center mb-4', getTextColor('neutral', 'muted'), 'hover:text-primary-600')}
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
             Zurück zum Dashboard
           </Link>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Meine Workshops</h1>
-          <p className="text-gray-600">
+          <h1 className={cn('text-3xl font-bold mb-2', getTextColor('neutral', 'primary'))}>Meine Workshops</h1>
+          <p className={cn('text-sm sm:text-base', getTextColor('neutral', 'muted'))}>
             Übersicht Ihrer Workshop-Anmeldungen und Teilnahmen
           </p>
         </div>
 
         {/* Error Message */}
         {error && (
-          <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
-            <p className="text-red-800">{error}</p>
+          <div className={cn('rounded-lg p-4 mb-6 border-2', getStatusColors('error').bg, getStatusColors('error').border)}>
+            <p className={cn('text-sm', getStatusColors('error').text)}>{error}</p>
           </div>
         )}
 
@@ -184,13 +186,13 @@ export default function WorkshopsDashboard() {
         {registrations.length > 0 ? (
           <div className="space-y-6">
             {registrations.map((registration) => (
-              <div key={registration.id} className="bg-white rounded-xl shadow-lg p-6">
+              <div key={registration.id} className="bg-white rounded-xl shadow-lg p-4 sm:p-6 border-2 border-neutral-200">
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex-1">
-                    <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                    <h3 className={cn('text-xl font-semibold mb-2', getTextColor('white', 'primary'))}>
                       {registration.workshop_title}
                     </h3>
-                    <div className="flex items-center gap-4 text-sm text-gray-600 mb-3">
+                    <div className={cn('flex items-center gap-4 text-sm mb-3', getTextColor('white', 'muted'))}>
                       <div className="flex items-center">
                         {getStatusIcon(registration.status)}
                         <span className="ml-2">{getStatusText(registration.status)}</span>

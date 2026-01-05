@@ -1,6 +1,14 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextRequest } from 'next/server'
 import { auth } from '@/auth'
 import { query } from '@/lib/auth/db'
+import { apiError, apiSuccess, apiUnauthorized, apiBadRequest, apiNotFound } from '@/lib/api/helpers'
+import { ERROR_MESSAGES } from '@/config/error-messages'
+import { TABLE_NAMES } from '@/config/database'
+
+interface UpdateBody {
+  feedback?: string
+  rating?: number
+}
 
 // Cancel workshop registration (set status = 'cancelled')
 export async function PATCH(
@@ -10,11 +18,11 @@ export async function PATCH(
   try {
     const session = await auth()
     if (!session?.user?.id) {
-      return NextResponse.json({ error: 'Nicht angemeldet' }, { status: 401 })
+      return apiUnauthorized(ERROR_MESSAGES.UNAUTHORIZED)
     }
 
     const { id } = params
-    let body: any = null
+    let body: UpdateBody | null = null
     try {
       body = await req.json()
     } catch {
@@ -23,7 +31,7 @@ export async function PATCH(
 
     if (body && (body.feedback !== undefined || body.rating !== undefined)) {
       const updates: string[] = []
-      const paramsArr: any[] = []
+      const paramsArr: unknown[] = []
       let p = 1
 
       if (body.feedback !== undefined) {
@@ -33,7 +41,7 @@ export async function PATCH(
       if (body.rating !== undefined) {
         const r = Number(body.rating)
         if (!Number.isFinite(r) || r < 1 || r > 5) {
-          return NextResponse.json({ error: 'Ungültige Bewertung (1-5)' }, { status: 400 })
+          return apiBadRequest('Ungültige Bewertung (1-5)')
         }
         updates.push(`rating = $${p++}`)
         paramsArr.push(Math.round(r))
@@ -41,7 +49,7 @@ export async function PATCH(
 
       paramsArr.push(id, session.user.id)
       const res = await query(
-        `UPDATE workshop_registrations
+        `UPDATE ${TABLE_NAMES.WORKSHOP_REGISTRATIONS}
          SET ${updates.join(', ')}, updated_at = NOW()
          WHERE id = $${p++} AND user_id = $${p}
          RETURNING id`,
@@ -49,14 +57,14 @@ export async function PATCH(
       )
 
       if (res.rowCount === 0) {
-        return NextResponse.json({ error: 'Anmeldung nicht gefunden' }, { status: 404 })
+        return apiNotFound('Anmeldung')
       }
-      return NextResponse.json({ ok: true })
+      return apiSuccess({})
     }
 
     // Default action: cancel registration if not already cancelled
     const res = await query(
-      `UPDATE workshop_registrations
+      `UPDATE ${TABLE_NAMES.WORKSHOP_REGISTRATIONS}
        SET status = 'cancelled', cancelled_at = NOW(), updated_at = NOW()
        WHERE id = $1 AND user_id = $2 AND status != 'cancelled'
        RETURNING id` ,
@@ -64,12 +72,11 @@ export async function PATCH(
     )
 
     if (res.rowCount === 0) {
-      return NextResponse.json({ error: 'Anmeldung nicht gefunden oder bereits storniert' }, { status: 400 })
+      return apiBadRequest('Anmeldung nicht gefunden oder bereits storniert')
     }
 
-    return NextResponse.json({ ok: true })
+    return apiSuccess({})
   } catch (e) {
-    console.error('Cancel registration error', e)
-    return NextResponse.json({ error: 'Stornierung fehlgeschlagen' }, { status: 500 })
+    return apiError(e, 'Stornierung fehlgeschlagen')
   }
 }

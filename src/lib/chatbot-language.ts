@@ -95,7 +95,7 @@ export function getWelcomeMessage(page: string, language: Language): string {
   return messages[page] || messages.default
 }
 
-export function getMessage(key: keyof ChatbotMessages, language: Language): any {
+export function getMessage(key: keyof ChatbotMessages, language: Language): ChatbotMessages[keyof ChatbotMessages] {
   return chatbotMessages[language][key]
 }
 

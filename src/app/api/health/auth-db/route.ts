@@ -1,8 +1,25 @@
-import { NextResponse } from 'next/server'
+import { apiSuccess, apiError } from '@/lib/api/helpers'
 import { query } from '@/lib/auth/db'
 
+interface DiagnosticCheck {
+  name: string;
+  ok: boolean;
+  error?: string;
+}
+
+interface Diagnostics {
+  ok: boolean;
+  config: {
+    host?: string;
+    port?: string;
+    database?: string;
+    user?: string;
+  };
+  checks: DiagnosticCheck[];
+}
+
 export async function GET() {
-  const diagnostics: any = {
+  const diagnostics: Diagnostics = {
     ok: false,
     config: {
       host: process.env.AUTH_DB_HOST || process.env.DB_HOST,
@@ -10,7 +27,7 @@ export async function GET() {
       database: process.env.AUTH_DB_NAME || process.env.DB_NAME,
       user: process.env.AUTH_DB_USER || process.env.DB_USER,
     },
-    checks: [] as Array<{ name: string; ok: boolean; error?: string }>,
+    checks: [],
   }
 
   try {
@@ -18,9 +35,10 @@ export async function GET() {
       'SELECT NOW() as now, current_database() as db'
     )
     diagnostics.checks.push({ name: 'connect', ok: res.rows.length > 0 })
-  } catch (e: any) {
-    diagnostics.checks.push({ name: 'connect', ok: false, error: String(e?.message || e) })
-    return NextResponse.json(diagnostics, { status: 500 })
+  } catch (e) {
+    const errorMessage = e instanceof Error ? e.message : String(e)
+    diagnostics.checks.push({ name: 'connect', ok: false, error: errorMessage })
+    return apiError(e, 'Database connection failed', 500)
   }
 
   try {
@@ -29,10 +47,11 @@ export async function GET() {
     )
     const ok = Number(res.rows?.[0]?.count ?? 0) >= 2
     diagnostics.checks.push({ name: 'schema_core_tables', ok })
-  } catch (e: any) {
-    diagnostics.checks.push({ name: 'schema_core_tables', ok: false, error: String(e?.message || e) })
+  } catch (e) {
+    const errorMessage = e instanceof Error ? e.message : String(e)
+    diagnostics.checks.push({ name: 'schema_core_tables', ok: false, error: errorMessage })
   }
 
-  diagnostics.ok = diagnostics.checks.every((c: any) => c.ok)
-  return NextResponse.json(diagnostics, { status: diagnostics.ok ? 200 : 500 })
+  diagnostics.ok = diagnostics.checks.every((c) => c.ok)
+  return diagnostics.ok ? apiSuccess(diagnostics) : apiError(new Error('Health check failed'), 'Health check failed', 500)
 }

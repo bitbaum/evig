@@ -4,6 +4,7 @@ import { ReactNode } from 'react'
 import { Header } from './Header'
 import Footer from './Footer'
 import { RevampCopilot, SuggestionButton } from '@/features/floating-ui'
+import { MessageButton } from '@/components/messaging/MessageButton'
 
 interface MainLayoutProps {
   children: ReactNode

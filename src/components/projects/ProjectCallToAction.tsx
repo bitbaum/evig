@@ -7,6 +7,8 @@
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import { ProjectCard } from './types'
+import { getTextColor, getBackgroundColor, getButtonVariant } from '@/lib/design-system'
+import { cn } from '@/lib/utils'
 
 interface ProjectCallToActionProps {
   title: string
@@ -21,14 +23,19 @@ export function ProjectCallToAction({
   actions, 
   backgroundColor = 'gray' 
 }: ProjectCallToActionProps) {
-  const bgClass = {
-    white: 'bg-white',
-    gray: 'bg-gray-50',
-    primary: 'bg-primary text-white'
-  }[backgroundColor]
+  const bgClass = cn(
+    backgroundColor === 'white' ? getBackgroundColor('white') :
+    backgroundColor === 'gray' ? getBackgroundColor('neutral') :
+    getBackgroundColor('primary')
+  )
 
-  const textColorClass = backgroundColor === 'primary' ? 'text-white' : 'text-gray-900'
-  const textSecondaryClass = backgroundColor === 'primary' ? 'text-gray-100' : 'text-gray-600'
+  const textColorClass = backgroundColor === 'primary' 
+    ? getTextColor('primary', 'primary')
+    : getTextColor('white', 'primary')
+  
+  const textSecondaryClass = backgroundColor === 'primary' 
+    ? getTextColor('primary', 'secondary')
+    : getTextColor('white', 'muted')
 
   return (
     <section className={`py-20 ${bgClass}`}>

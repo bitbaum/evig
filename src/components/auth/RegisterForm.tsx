@@ -7,6 +7,8 @@ import Link from 'next/link'
 import { Mail, Lock, User, Loader2, AlertCircle, CheckCircle2, ArrowRight } from 'lucide-react'
 import { RoleSelector } from './RoleSelector'
 import { ROLES } from '@/lib/constants'
+import { getTextColor, getStatusColors, getButtonVariant } from '@/lib/design-system'
+import { cn } from '@/lib/utils'
 
 export function RegisterForm() {
   const router = useRouter()
@@ -21,9 +23,9 @@ export function RegisterForm() {
   const [errors, setErrors] = useState<string[]>([])
   const [success, setSuccess] = useState(false)
 
-  // Password strength indicators
+  // Password strength indicators (matching AUTH_CONFIG: 12 chars minimum)
   const passwordChecks = {
-    length: password.length >= 8,
+    length: password.length >= 12,
     uppercase: /[A-Z]/.test(password),
     lowercase: /[a-z]/.test(password),
     number: /[0-9]/.test(password),
@@ -114,20 +116,20 @@ export function RegisterForm() {
       <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 border border-gray-100 dark:border-gray-700">
         {/* Header */}
         <div className="text-center mb-8">
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+          <h1 className={cn('text-2xl font-bold mb-2', getTextColor('white', 'primary'), 'dark:text-white')}>
             Konto erstellen
           </h1>
-          <p className="text-gray-600 dark:text-gray-400">
+          <p className={cn('text-sm sm:text-base', getTextColor('white', 'muted'), 'dark:text-neutral-400')}>
             Werden Sie Teil der RevampIT-Community
           </p>
         </div>
 
         {/* Error Messages */}
         {errors.length > 0 && (
-          <div className="mb-6 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
+          <div className={cn('mb-6 p-4 rounded-lg border-2', getStatusColors('error').bg, getStatusColors('error').border)}>
             <div className="flex items-start gap-3">
-              <AlertCircle className="w-5 h-5 text-red-600 dark:text-red-400 flex-shrink-0 mt-0.5" />
-              <ul className="text-sm text-red-700 dark:text-red-300 space-y-1">
+              <AlertCircle className={cn('w-5 h-5 flex-shrink-0 mt-0.5', getStatusColors('error').icon)} />
+              <ul className={cn('text-sm space-y-1', getStatusColors('error').text)}>
                 {errors.map((error, index) => (
                   <li key={index}>{error}</li>
                 ))}
@@ -140,11 +142,11 @@ export function RegisterForm() {
         <form onSubmit={handleSubmit} className="space-y-5">
           {/* Name */}
           <div>
-            <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
-              Name <span className="text-gray-400">(optional)</span>
+            <label htmlFor="name" className={cn('block text-sm font-medium mb-1.5', getTextColor('white', 'secondary'), 'dark:text-neutral-300')}>
+              Name <span className="text-neutral-400">(optional)</span>
             </label>
             <div className="relative">
-              <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+              <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-400" />
               <input
                 id="name"
                 type="text"
@@ -152,18 +154,26 @@ export function RegisterForm() {
                 onChange={(e) => setName(e.target.value)}
                 autoComplete="name"
                 placeholder="Ihr Name"
-                className="w-full pl-11 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-400 focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
+                className={cn(
+                  'w-full pl-11 pr-4 py-3 border-2 rounded-lg transition-all min-h-[touch] touch-target',
+                  'border-neutral-300 dark:border-neutral-600',
+                  'bg-white dark:bg-neutral-700',
+                  getTextColor('white', 'primary'),
+                  'dark:text-white',
+                  'placeholder-neutral-400',
+                  'focus:ring-2 focus:ring-primary-500 focus:border-primary-500'
+                )}
               />
             </div>
           </div>
 
           {/* Email */}
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
+            <label htmlFor="email" className={cn('block text-sm font-medium mb-1.5', getTextColor('white', 'secondary'), 'dark:text-neutral-300')}>
               E-Mail-Adresse *
             </label>
             <div className="relative">
-              <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+              <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-400" />
               <input
                 id="email"
                 type="email"
@@ -172,18 +182,26 @@ export function RegisterForm() {
                 required
                 autoComplete="email"
                 placeholder="name@beispiel.ch"
-                className="w-full pl-11 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-400 focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
+                className={cn(
+                  'w-full pl-11 pr-4 py-3 border-2 rounded-lg transition-all min-h-[touch] touch-target',
+                  'border-neutral-300 dark:border-neutral-600',
+                  'bg-white dark:bg-neutral-700',
+                  getTextColor('white', 'primary'),
+                  'dark:text-white',
+                  'placeholder-neutral-400',
+                  'focus:ring-2 focus:ring-primary-500 focus:border-primary-500'
+                )}
               />
             </div>
           </div>
 
           {/* Password */}
           <div>
-            <label htmlFor="password" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
+            <label htmlFor="password" className={cn('block text-sm font-medium mb-1.5', getTextColor('white', 'secondary'), 'dark:text-neutral-300')}>
               Passwort *
             </label>
             <div className="relative">
-              <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+              <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-400" />
               <input
                 id="password"
                 type="password"
@@ -192,7 +210,15 @@ export function RegisterForm() {
                 required
                 autoComplete="new-password"
                 placeholder="••••••••"
-                className="w-full pl-11 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-400 focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
+                className={cn(
+                  'w-full pl-11 pr-4 py-3 border-2 rounded-lg transition-all min-h-[touch] touch-target',
+                  'border-neutral-300 dark:border-neutral-600',
+                  'bg-white dark:bg-neutral-700',
+                  getTextColor('white', 'primary'),
+                  'dark:text-white',
+                  'placeholder-neutral-400',
+                  'focus:ring-2 focus:ring-primary-500 focus:border-primary-500'
+                )}
               />
             </div>
             
@@ -217,7 +243,7 @@ export function RegisterForm() {
                 </div>
                 <ul className="text-xs text-gray-500 dark:text-gray-400 space-y-0.5">
                   <li className={passwordChecks.length ? 'text-green-600' : ''}>
-                    {passwordChecks.length ? '✓' : '○'} Mindestens 8 Zeichen
+                    {passwordChecks.length ? '✓' : '○'} Mindestens 12 Zeichen
                   </li>
                   <li className={passwordChecks.uppercase ? 'text-green-600' : ''}>
                     {passwordChecks.uppercase ? '✓' : '○'} Ein Grossbuchstabe
@@ -297,7 +323,13 @@ export function RegisterForm() {
           <button
             type="submit"
             disabled={isLoading || passwordStrength < 4 || password !== confirmPassword}
-            className="w-full flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-semibold py-3 px-4 rounded-lg transition-colors"
+            className={cn(
+              'w-full flex items-center justify-center gap-2 font-semibold py-3 px-4 rounded-lg transition-colors min-h-[touch] touch-target',
+              'disabled:opacity-50 disabled:cursor-not-allowed',
+              getButtonVariant('primary').bg,
+              getButtonVariant('primary').text,
+              getButtonVariant('primary').hover
+            )}
           >
             {isLoading ? (
               <>

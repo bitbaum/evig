@@ -4,6 +4,7 @@ import { useState, useRef, useEffect, useCallback } from 'react'
 import { modernChatbotEngine } from '../lib/ModernChatbotEngine'
 import { detectLanguage, getMessage } from '@/lib/chatbot-language'
 import type { NavigationSuggestion, Language } from '@/lib/suggestion-utils'
+import { logger } from '@/lib/logger'
 
 export interface ChatMessage {
   id: string
@@ -49,7 +50,7 @@ export function useChatbot(options: UseChatbotOptions = {}) {
           confidence: welcomeResponse.confidence
         }])
       } catch (error) {
-        console.error('Error getting welcome message:', error)
+        logger.error('Error getting welcome message', { error })
         setMessages([{
           id: '1',
           type: 'assistant',
@@ -136,7 +137,7 @@ export function useChatbot(options: UseChatbotOptions = {}) {
       setMessages(prev => [...prev, assistantMessage])
 
     } catch (error) {
-      console.error('Chatbot error:', error)
+      logger.error('Chatbot error', { error })
       const errorMessage: ChatMessage = {
         id: (Date.now() + 1).toString(),
         type: 'assistant',

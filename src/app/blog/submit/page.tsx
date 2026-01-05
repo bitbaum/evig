@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { ArrowLeft, Send, Lightbulb, FileText } from 'lucide-react'
+import { logger } from '@/lib/logger'
 
 type SubmissionType = 'idea' | 'draft'
 
@@ -50,7 +51,7 @@ export default function SubmitPostPage() {
         content: '',
       })
     } catch (error) {
-      console.error('Error submitting:', error)
+      logger.error('Error submitting', { error })
       setSubmitStatus('error')
     } finally {
       setIsSubmitting(false)

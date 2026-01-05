@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { lookupSwissPostalCode, searchSwissCities, isValidSwissPostalCode } from '@/lib/swiss-postal-codes'
+import { lookupSwissPostalCode, searchSwissCities, isValidSwissPostalCode, type PostalCodeData } from '@/lib/swiss-postal-codes'
 import {
   User,
   Mail,
@@ -23,6 +23,9 @@ import {
   Clock,
   AlertCircle
 } from 'lucide-react'
+import { getTextColor, getStatusColors } from '@/lib/design-system'
+import { cn } from '@/lib/utils'
+import { logger } from '@/lib/logger'
 
 interface ProfileData {
   first_name: string
@@ -84,7 +87,7 @@ export default function ProfilePage() {
   const [passwordError, setPasswordError] = useState<string | null>(null)
 
   // Postal code auto-fill state
-  const [postalCodeSuggestions, setPostalCodeSuggestions] = useState<any[]>([])
+  const [postalCodeSuggestions, setPostalCodeSuggestions] = useState<PostalCodeData[]>([])
   const [showSuggestions, setShowSuggestions] = useState(false)
 
   // Redirect if not authenticated
@@ -110,7 +113,7 @@ export default function ProfilePage() {
           return
         }
       } catch (error) {
-        console.error('Failed to load profile:', error)
+        logger.error('Failed to load profile', { error })
       } finally {
         setIsLoading(false)
       }
@@ -185,7 +188,7 @@ export default function ProfilePage() {
     }
   }
 
-  const selectPostalSuggestion = (suggestion: any) => {
+  const selectPostalSuggestion = (suggestion: PostalCodeData) => {
     setProfile(prev => ({
       ...prev,
       postal_code: suggestion.postal_code,
@@ -235,28 +238,28 @@ export default function ProfilePage() {
 
   if (status === 'loading' || isLoading) {
     return (
-      <main className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
-        <Loader2 className="w-8 h-8 animate-spin text-green-600" />
+      <main className="min-h-screen bg-neutral-50 dark:bg-neutral-900 flex items-center justify-center">
+        <Loader2 className="w-8 h-8 animate-spin text-primary-600" />
       </main>
     )
   }
 
   return (
-    <main className="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <main className="min-h-screen bg-neutral-50 dark:bg-neutral-900">
       {/* Header */}
-      <div className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
+      <div className="bg-white dark:bg-neutral-800 border-b-2 border-neutral-200 dark:border-neutral-700">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <Link
             href="/dashboard"
-            className="inline-flex items-center text-green-600 hover:text-green-700 mb-4"
+            className="inline-flex items-center text-primary-600 hover:text-primary-700 mb-4"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
             Zurück zum Dashboard
           </Link>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+          <h1 className={cn('text-2xl font-bold', getTextColor('white', 'primary'), 'dark:text-white')}>
             Mein Profil
           </h1>
-          <p className="text-gray-600 dark:text-gray-400 mt-1">
+          <p className={cn('mt-1 text-sm sm:text-base', getTextColor('white', 'muted'), 'dark:text-neutral-400')}>
             Bearbeiten Sie Ihre persönlichen Daten und Einstellungen
           </p>
         </div>
@@ -265,39 +268,39 @@ export default function ProfilePage() {
       {/* Account Overview */}
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Account Status */}
-        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6 mb-6">
+        <div className="bg-white dark:bg-neutral-800 rounded-xl shadow-sm border-2 border-neutral-200 dark:border-neutral-700 p-4 sm:p-6 mb-6">
           <div className="flex items-center gap-3 mb-4">
-            <div className="w-10 h-10 bg-green-100 dark:bg-green-900/30 rounded-lg flex items-center justify-center">
-              <Shield className="w-5 h-5 text-green-600" />
+            <div className="w-10 h-10 bg-success-100 dark:bg-success-900/30 rounded-lg flex items-center justify-center">
+              <Shield className="w-5 h-5 text-success-600" />
             </div>
             <div>
-              <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
+              <h2 className={cn('text-lg font-semibold', getTextColor('white', 'primary'), 'dark:text-white')}>
                 Kontoübersicht
               </h2>
-              <p className="text-sm text-gray-500">Status und Sicherheit Ihres Kontos</p>
+              <p className={cn('text-sm', getTextColor('white', 'muted'), 'dark:text-neutral-400')}>Status und Sicherheit Ihres Kontos</p>
             </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="flex items-center gap-3 p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
-              <div className="w-8 h-8 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center">
-                <CheckCircle2 className="w-4 h-4 text-green-600" />
+            <div className="flex items-center gap-3 p-4 bg-neutral-50 dark:bg-neutral-700/50 rounded-lg border-2 border-neutral-200 dark:border-neutral-600">
+              <div className="w-8 h-8 bg-success-100 dark:bg-success-900/30 rounded-full flex items-center justify-center">
+                <CheckCircle2 className="w-4 h-4 text-success-600" />
               </div>
               <div>
-                <p className="font-medium text-gray-900 dark:text-white">E-Mail bestätigt</p>
-                <p className="text-sm text-gray-500">{session?.user?.email}</p>
+                <p className={cn('font-medium', getTextColor('neutral', 'primary'), 'dark:text-white')}>E-Mail bestätigt</p>
+                <p className={cn('text-sm', getTextColor('neutral', 'muted'), 'dark:text-neutral-400')}>{session?.user?.email}</p>
               </div>
             </div>
 
-            <div className="flex items-center gap-3 p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
-              <div className="w-8 h-8 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center">
-                <User className="w-4 h-4 text-blue-600" />
+            <div className="flex items-center gap-3 p-4 bg-neutral-50 dark:bg-neutral-700/50 rounded-lg border-2 border-neutral-200 dark:border-neutral-600">
+              <div className="w-8 h-8 bg-info-100 dark:bg-info-900/30 rounded-full flex items-center justify-center">
+                <User className="w-4 h-4 text-info-600" />
               </div>
               <div>
-                <p className="font-medium text-gray-900 dark:text-white">
+                <p className={cn('font-medium', getTextColor('neutral', 'primary'), 'dark:text-white')}>
                   {profile.first_name && profile.last_name ? `${profile.first_name} ${profile.last_name}` : 'Name nicht angegeben'}
                 </p>
-                <p className="text-sm text-gray-500">Mitglied seit {new Date().getFullYear()}</p>
+                <p className={cn('text-sm', getTextColor('neutral', 'muted'), 'dark:text-neutral-400')}>Mitglied seit {new Date().getFullYear()}</p>
               </div>
             </div>
           </div>

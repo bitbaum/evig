@@ -1,7 +1,7 @@
-import { NextRequest, NextResponse } from "next/server";
-
-const MEDUSA_URL = process.env.MEDUSA_BACKEND_URL || "http://localhost:9000";
-const PUBLISHABLE_KEY = process.env.NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY || "pk_eee502aced5bea9f350f22cc90c2f98e74417fcfa17a35a230837b069e915a55";
+import { NextRequest } from "next/server";
+import { MEDUSA_CONFIG } from "@/config/medusa";
+import { logger } from "@/lib/logger";
+import { apiError, apiSuccess } from "@/lib/api/helpers";
 
 /**
  * POST /api/shop/cart/[cartId]/line-items/[lineId]
@@ -15,14 +15,23 @@ export async function POST(
     const { cartId, lineId } = params;
     const body = await request.json();
 
+    if (!MEDUSA_CONFIG.PUBLISHABLE_KEY) {
+      logger.error("Medusa publishable key not configured");
+      return apiError(
+        new Error("Configuration error"),
+        "Medusa configuration is missing",
+        500
+      );
+    }
+
     const response = await fetch(
-      `${MEDUSA_URL}/store/carts/${cartId}/line-items/${lineId}`,
+      `${MEDUSA_CONFIG.URL}/store/carts/${cartId}/line-items/${lineId}`,
       {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "x-publishable-key": PUBLISHABLE_KEY,
-          "x-publishable-api-key": PUBLISHABLE_KEY,
+          "x-publishable-key": MEDUSA_CONFIG.PUBLISHABLE_KEY,
+          "x-publishable-api-key": MEDUSA_CONFIG.PUBLISHABLE_KEY,
         },
         body: JSON.stringify({
           quantity: body.quantity,
@@ -31,21 +40,24 @@ export async function POST(
     );
 
     if (!response.ok) {
-      console.error("Medusa update line item error:", response.status);
-      return NextResponse.json(
-        { error: "Failed to update item" },
-        { status: response.status }
+      const errorText = await response.text();
+      logger.error("Medusa update line item error", {
+        status: response.status,
+        cartId,
+        lineId,
+        error: errorText,
+      });
+      return apiError(
+        new Error(`Medusa API returned ${response.status}`),
+        "Failed to update item",
+        response.status
       );
     }
 
     const data = await response.json();
-    return NextResponse.json(data);
+    return apiSuccess(data);
   } catch (error) {
-    console.error("Error updating line item:", error);
-    return NextResponse.json(
-      { error: "Failed to connect to Medusa backend" },
-      { status: 500 }
-    );
+    return apiError(error, "Failed to connect to Medusa backend");
   }
 }
 
@@ -60,34 +72,46 @@ export async function DELETE(
   try {
     const { cartId, lineId } = params;
 
+    if (!MEDUSA_CONFIG.PUBLISHABLE_KEY) {
+      logger.error("Medusa publishable key not configured");
+      return apiError(
+        new Error("Configuration error"),
+        "Medusa configuration is missing",
+        500
+      );
+    }
+
     const response = await fetch(
-      `${MEDUSA_URL}/store/carts/${cartId}/line-items/${lineId}`,
+      `${MEDUSA_CONFIG.URL}/store/carts/${cartId}/line-items/${lineId}`,
       {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
-          "x-publishable-key": PUBLISHABLE_KEY,
-          "x-publishable-api-key": PUBLISHABLE_KEY,
+          "x-publishable-key": MEDUSA_CONFIG.PUBLISHABLE_KEY,
+          "x-publishable-api-key": MEDUSA_CONFIG.PUBLISHABLE_KEY,
         },
       }
     );
 
     if (!response.ok) {
-      console.error("Medusa remove line item error:", response.status);
-      return NextResponse.json(
-        { error: "Failed to remove item" },
-        { status: response.status }
+      const errorText = await response.text();
+      logger.error("Medusa remove line item error", {
+        status: response.status,
+        cartId,
+        lineId,
+        error: errorText,
+      });
+      return apiError(
+        new Error(`Medusa API returned ${response.status}`),
+        "Failed to remove item",
+        response.status
       );
     }
 
     const data = await response.json();
-    return NextResponse.json(data);
+    return apiSuccess(data);
   } catch (error) {
-    console.error("Error removing line item:", error);
-    return NextResponse.json(
-      { error: "Failed to connect to Medusa backend" },
-      { status: 500 }
-    );
+    return apiError(error, "Failed to connect to Medusa backend");
   }
 }
 

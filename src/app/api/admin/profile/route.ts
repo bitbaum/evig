@@ -1,7 +1,9 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextRequest } from 'next/server'
 import { cookies } from 'next/headers'
 import jwt from 'jsonwebtoken'
 import { getJwtSecret } from '@/lib/admin-auth'
+import { apiSuccess, apiError, apiUnauthorized } from '@/lib/api/helpers'
+import { logger } from '@/lib/logger'
 
 export const dynamic = 'force-dynamic'
 
@@ -11,20 +13,22 @@ export async function GET(request: NextRequest) {
     const token = cookieStore.get('admin_token')?.value
 
     if (!token) {
-      return NextResponse.json(
-        { error: 'Not authenticated' },
-        { status: 401 }
-      )
+      return apiUnauthorized('Not authenticated')
     }
 
     // Verify JWT
+    interface DecodedToken {
+      userId: string;
+      email: string;
+      role: string;
+    }
+
     const decoded = jwt.verify(
       token,
       getJwtSecret()
-    ) as any
+    ) as DecodedToken
 
-    return NextResponse.json({
-      success: true,
+    return apiSuccess({
       user: {
         id: decoded.userId,
         email: decoded.email,
@@ -32,10 +36,6 @@ export async function GET(request: NextRequest) {
       },
     })
   } catch (error) {
-    console.error('Profile error:', error)
-    return NextResponse.json(
-      { error: 'Invalid token' },
-      { status: 401 }
-    )
+    return apiError(error, 'Invalid token', 401)
   }
 }

@@ -7,20 +7,28 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { ProjectSection as ProjectSectionType } from './types'
 import { CheckCircle } from 'lucide-react'
+import { getTextColor, getBackgroundColor } from '@/lib/design-system'
+import { cn } from '@/lib/utils'
 
 interface ProjectSectionProps {
   section: ProjectSectionType
 }
 
 export function ProjectSection({ section }: ProjectSectionProps) {
-  const bgClass = {
-    white: 'bg-white',
-    gray: 'bg-gray-50',
-    primary: 'bg-primary text-white'
-  }[section.backgroundColor || 'white']
+  const bgVariant = (section.backgroundColor || 'white') as 'white' | 'neutral' | 'primary'
+  const bgClass = cn(
+    bgVariant === 'white' ? getBackgroundColor('white') :
+    bgVariant === 'gray' ? getBackgroundColor('neutral') :
+    getBackgroundColor('primary')
+  )
 
-  const textColorClass = section.backgroundColor === 'primary' ? 'text-white' : 'text-gray-900'
-  const textSecondaryClass = section.backgroundColor === 'primary' ? 'text-gray-100' : 'text-gray-600'
+  const textColorClass = bgVariant === 'primary' 
+    ? getTextColor('primary', 'primary')
+    : getTextColor('white', 'primary')
+  
+  const textSecondaryClass = bgVariant === 'primary' 
+    ? getTextColor('primary', 'secondary')
+    : getTextColor('white', 'muted')
 
   return (
     <section className={`py-20 ${bgClass}`}>

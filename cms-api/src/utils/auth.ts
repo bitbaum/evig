@@ -64,16 +64,18 @@ export function extractTokenFromHeader(authHeader: string | undefined): string |
 
 /**
  * Check if user has required role
+ * Includes backward compatibility for legacy 'viewer' role
  */
 export function hasRole(userRole: string, requiredRole: string): boolean {
   const roleHierarchy = {
+    viewer: 0,  // Legacy role - backward compatibility (maps to user level)
     user: 1,
     editor: 2,
     admin: 3,
   };
 
-  const userLevel = roleHierarchy[userRole as keyof typeof roleHierarchy] || 0;
-  const requiredLevel = roleHierarchy[requiredRole as keyof typeof roleHierarchy] || 0;
+  const userLevel = roleHierarchy[userRole as keyof typeof roleHierarchy] ?? 0;
+  const requiredLevel = roleHierarchy[requiredRole as keyof typeof roleHierarchy] ?? 0;
 
   return userLevel >= requiredLevel;
 }

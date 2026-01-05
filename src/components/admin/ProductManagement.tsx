@@ -29,6 +29,7 @@ import { cn } from '@/lib/utils'
 interface ProductWithOwner extends MedusaProduct {
   owner_id?: string;
   owner_name?: string;
+  status?: 'published' | 'draft';
 }
 
 interface ProductStats {
@@ -57,14 +58,30 @@ export default function ProductManagement() {
       title: "Vintage MacBook Pro 2015",
       description: "Guter Zustand, alle Ports funktionieren",
       handle: "vintage-macbook-2015",
+      subtitle: null,
       thumbnail: null,
+      is_giftcard: false,
+      discountable: true,
+      collection_id: null,
+      type_id: null,
+      weight: null,
+      material: null,
+      images: [],
+      options: [],
       status: "published",
       variants: [{
         id: "variant_001",
         title: "Default",
+        sku: "user_prod_001",
         inventory_quantity: 1,
-        prices: [{ amount: 45000, currency_code: "CHF" }]
+        allow_backorder: false,
+        manage_inventory: true,
+        product_id: "user_prod_001",
+        prices: [{ amount: 45000, currency_code: "CHF" }],
+        options: []
       }],
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
       owner_id: "user_123",
       owner_name: "Anna Müller"
     },
@@ -73,14 +90,30 @@ export default function ProductManagement() {
       title: "Gaming Maus Logitech G305",
       description: "Wireless, kaum benutzt",
       handle: "gaming-maus-logitech",
+      subtitle: null,
       thumbnail: null,
+      is_giftcard: false,
+      discountable: true,
+      collection_id: null,
+      type_id: null,
+      weight: null,
+      material: null,
+      images: [],
+      options: [],
       status: "published",
       variants: [{
         id: "variant_002",
         title: "Default",
+        sku: "user_prod_002",
         inventory_quantity: 1,
-        prices: [{ amount: 2500, currency_code: "CHF" }]
+        allow_backorder: false,
+        manage_inventory: true,
+        product_id: "user_prod_002",
+        prices: [{ amount: 2500, currency_code: "CHF" }],
+        options: []
       }],
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
       owner_id: "user_456",
       owner_name: "Max Weber"
     }
