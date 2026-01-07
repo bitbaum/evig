@@ -19,20 +19,30 @@ export const GET = withAuth(async (request, session) => {
 })
 
 interface ProfileUpdateData {
+  // Basic contact info
   first_name?: string;
   last_name?: string;
   company_name?: string;
   phone?: string;
   mobile?: string;
+  // Address
   address_line1?: string;
   address_line2?: string;
   postal_code?: string;
   city?: string;
   canton?: string;
   country?: string;
+  // Preferences
   preferred_language?: string;
   newsletter_subscribed?: boolean;
   interests?: string[];
+  // Service provider fields (for repairers/sellers)
+  bio?: string;
+  website?: string;
+  skills?: string[];
+  expertise_areas?: string[];
+  service_radius_km?: number;
+  availability?: Record<string, unknown>;
 }
 
 export const PUT = withAuth(async (request: NextRequest, session) => {
@@ -41,20 +51,30 @@ export const PUT = withAuth(async (request: NextRequest, session) => {
 
     // Validate and sanitize input
     const allowedFields: (keyof ProfileUpdateData)[] = [
+      // Basic contact info
       'first_name',
       'last_name',
       'company_name',
       'phone',
       'mobile',
+      // Address
       'address_line1',
       'address_line2',
       'postal_code',
       'city',
       'canton',
       'country',
+      // Preferences
       'preferred_language',
       'newsletter_subscribed',
       'interests',
+      // Service provider fields (for repairers/sellers)
+      'bio',
+      'website',
+      'skills',
+      'expertise_areas',
+      'service_radius_km',
+      'availability',
     ]
 
     const updateData: Partial<ProfileUpdateData> = {}

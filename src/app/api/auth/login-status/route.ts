@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getUserByEmail, query } from '@/lib/auth/db'
+import { logger } from '@/lib/logger'
 
 export async function POST(req: NextRequest) {
   try {

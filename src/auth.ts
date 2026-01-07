@@ -294,7 +294,7 @@ export async function registerUser(data: {
         id: user.id,
         email: user.email,
         name: user.name,
-        emailVerified: false, // Email verification required
+        emailVerified: true, // No email verification required for community app
       },
     }
   } catch (error) {

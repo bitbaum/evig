@@ -81,31 +81,23 @@ export function RegisterForm() {
       <div className="w-full max-w-md mx-auto">
         <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 border border-gray-100 dark:border-gray-700 text-center">
           <div className="w-16 h-16 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
-            <Mail className="w-8 h-8 text-green-600" />
+            <CheckCircle2 className="w-8 h-8 text-green-600" />
           </div>
           <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
-            Konto erstellt!
+            Willkommen bei RevampIT!
           </h2>
-          <p className="text-gray-600 dark:text-gray-400 mb-4">
-            Wir haben Ihnen eine E-Mail mit einem Bestätigungslink gesendet. Bitte überprüfen Sie Ihr E-Mail-Postfach und klicken Sie auf den Link, um Ihr Konto zu aktivieren.
+          <p className="text-gray-600 dark:text-gray-400 mb-6">
+            Ihr Konto wurde erfolgreich erstellt. Sie können sich jetzt anmelden und die Plattform nutzen.
           </p>
-          <div className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg p-4 mb-6">
-            <p className="text-yellow-800 dark:text-yellow-200 text-sm">
-              <strong>Hinweis:</strong> Der Bestätigungslink ist 24 Stunden gültig. Falls Sie keine E-Mail erhalten haben, überprüfen Sie Ihren Spam-Ordner.
-            </p>
-          </div>
           <div className="space-y-3">
             <Link
               href="/auth/login"
-              className="inline-block bg-green-600 hover:bg-green-700 text-white font-medium px-6 py-2 rounded-lg transition-colors"
+              className="inline-flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white font-medium px-6 py-3 rounded-lg transition-colors w-full"
             >
-              Zur Anmeldung
+              Jetzt anmelden
+              <ArrowRight className="w-4 h-4" />
             </Link>
-            <p className="text-sm text-gray-500 dark:text-gray-400">
-              Haben Sie bereits bestätigt? <Link href="/auth/login" className="text-green-600 hover:text-green-500">Jetzt anmelden</Link>
-            </p>
           </div>
-          <Loader2 className="w-6 h-6 animate-spin text-green-600 mx-auto" />
         </div>
       </div>
     )

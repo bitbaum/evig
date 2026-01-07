@@ -160,6 +160,7 @@ export interface DbUserProfile {
   skills: string[] | null
   expertise_areas: string[] | null
   availability: Availability | null
+  service_radius_km: number | null
   customer_segment: string | null
   purchase_history: PurchaseHistoryItem[] | null
   loyalty_points: number | null
@@ -402,6 +403,7 @@ export async function updateProfile(
     skills: 'skills',
     expertise_areas: 'expertise_areas',
     availability: 'availability',
+    service_radius_km: 'service_radius_km',
     customer_segment: 'customer_segment',
     purchase_history: 'purchase_history',
     loyalty_points: 'loyalty_points',
