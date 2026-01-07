@@ -2,7 +2,20 @@
 
 import { LoginForm } from '@/components/auth/LoginForm'
 import Link from 'next/link'
-import { useEffect } from 'react'
+import { Suspense, useEffect } from 'react'
+import { Loader2 } from 'lucide-react'
+
+function LoginFormFallback() {
+  return (
+    <div className="w-full max-w-md mx-auto">
+      <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 border border-gray-100 dark:border-gray-700">
+        <div className="flex items-center justify-center py-12">
+          <Loader2 className="w-8 h-8 animate-spin text-green-600" />
+        </div>
+      </div>
+    </div>
+  )
+}
 
 // Client-side only page to avoid server-side session checks blocking the page
 export default function LoginPage() {
@@ -15,7 +28,7 @@ export default function LoginPage() {
       <div className="max-w-7xl mx-auto">
         {/* Back link */}
         <div className="mb-8">
-          <Link 
+          <Link
             href="/"
             className="inline-flex items-center text-green-600 hover:text-green-700 dark:text-green-400 transition-colors"
           >
@@ -40,8 +53,10 @@ export default function LoginPage() {
           </Link>
         </div>
 
-        {/* Login Form */}
-        <LoginForm />
+        {/* Login Form with Suspense for useSearchParams */}
+        <Suspense fallback={<LoginFormFallback />}>
+          <LoginForm />
+        </Suspense>
       </div>
     </main>
   )

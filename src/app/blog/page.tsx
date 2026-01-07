@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { Suspense } from 'react'
 import { getAllPosts } from '@/lib/blog'
 import BlogHero from '@/components/blog/BlogHero'
 import BlogFeaturedGrid from '@/components/blog/BlogFeaturedGrid'
@@ -30,10 +31,20 @@ export default function BlogPage({ searchParams }: BlogPageProps) {
   return (
     <main className="min-h-screen bg-white">
       {/* Navigation */}
-      <BlogNavigationClient
-        categories={allCategories}
-        selectedCategories={selectedCategories}
-      />
+      <Suspense fallback={
+        <nav className="border-b border-gray-200 bg-white sticky top-0 z-50">
+          <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex items-center justify-between h-14 sm:h-16">
+              <h1 className="text-xl sm:text-2xl font-bold text-gray-900">Blog</h1>
+            </div>
+          </div>
+        </nav>
+      }>
+        <BlogNavigationClient
+          categories={allCategories}
+          selectedCategories={selectedCategories}
+        />
+      </Suspense>
 
       {/* Content */}
       <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">

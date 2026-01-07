@@ -1,13 +1,10 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Relax build blocking on type/ESLint errors for production deploys.
+  // Relax build blocking on type errors for production deploys.
   // CI covers quality checks; this ensures Vercel deploy does not fail
   // on non-critical type issues in optional scripts/routes.
   typescript: {
     ignoreBuildErrors: true,
-  },
-  eslint: {
-    ignoreDuringBuilds: true,
   },
   images: {
     unoptimized: false,
@@ -88,12 +85,14 @@ const nextConfig = {
   // Ensure proper CSS handling
   experimental: {
     optimizeCss: true,
-    turbo: {
-      resolveAlias: {
-        // Ensure CSS modules are handled correctly
-        styles: './src/styles',
-      },
+  },
+  // Turbopack configuration (moved from experimental.turbo in Next.js 16)
+  turbopack: {
+    resolveAlias: {
+      // Ensure CSS modules are handled correctly
+      styles: './src/styles',
     },
+    root: '/home/g/dev/revampit',
   },
   // Add specific CSS handling
   sassOptions: {

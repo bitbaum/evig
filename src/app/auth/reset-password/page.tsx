@@ -1,11 +1,11 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { Lock, CheckCircle2, AlertCircle, Loader2, Eye, EyeOff } from 'lucide-react'
 
-export default function ResetPasswordPage() {
+function ResetPasswordContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const token = searchParams.get('token')
@@ -281,8 +281,36 @@ export default function ResetPasswordPage() {
   )
 }
 
+function ResetPasswordFallback() {
+  return (
+    <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+      <div className="sm:mx-auto sm:w-full sm:max-w-md">
+        <div className="flex justify-center">
+          <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center">
+            <Lock className="w-8 h-8 text-blue-600" />
+          </div>
+        </div>
+        <h2 className="mt-6 text-center text-3xl font-bold text-gray-900">
+          Neues Passwort festlegen
+        </h2>
+      </div>
+      <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
+        <div className="bg-white py-8 px-4 shadow-lg rounded-lg sm:px-10">
+          <div className="flex items-center justify-center py-8">
+            <Loader2 className="w-12 h-12 text-blue-500 animate-spin" />
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
 
-
-
+export default function ResetPasswordPage() {
+  return (
+    <Suspense fallback={<ResetPasswordFallback />}>
+      <ResetPasswordContent />
+    </Suspense>
+  )
+}
 
 
