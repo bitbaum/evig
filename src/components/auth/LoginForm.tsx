@@ -45,8 +45,6 @@ export function LoginForm() {
             const s = await statusResp.json()
             if (!s.exists) {
               setFormError('Kein Konto mit dieser E-Mail gefunden')
-            } else if (!s.emailVerified) {
-              setFormError('Bitte bestätigen Sie zuerst Ihre E-Mail-Adresse')
             } else if (!s.hasPassword) {
               setFormError('Dieses Konto verwendet eine andere Anmeldemethode')
             } else if (s.locked) {

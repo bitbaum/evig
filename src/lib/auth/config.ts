@@ -181,8 +181,11 @@ export function getMedusaConfig() {
   const publishableKey = process.env.NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY
   const adminApiKey = process.env.MEDUSA_ADMIN_API_KEY
 
+  // Use URL config for SSOT compliance (synchronous import)
+  const { MEDUSA_API_URL } = require('@/config/urls')
+  
   return {
-    backendUrl: backendUrl || 'http://localhost:9000',
+    backendUrl: backendUrl || MEDUSA_API_URL,
     publishableKey,
     adminApiKey,
     isConfigured: !!(publishableKey && backendUrl),

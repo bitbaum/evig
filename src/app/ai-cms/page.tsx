@@ -1,6 +1,8 @@
 import { Metadata } from 'next'
 import { ArrowRight, Brain, Users, Zap, GitBranch, CheckCircle, AlertTriangle, Clock, Sparkles } from 'lucide-react'
 import Link from 'next/link'
+import { cn } from '@/lib/utils'
+import { getTextColor } from '@/lib/design-system'
 
 export const metadata: Metadata = {
   title: 'Kontextuelle Website-Verbesserungen | RevampIT',

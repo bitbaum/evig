@@ -4,6 +4,8 @@ import { query } from '@/lib/auth/db'
 import { apiError, apiSuccess, apiBadRequest, apiUnauthorized } from '@/lib/api/helpers'
 import { ERROR_MESSAGES, SUCCESS_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES } from '@/config/database'
+import { sendEmail } from '@/lib/email'
+import { logger } from '@/lib/logger'
 
 export async function POST(request: NextRequest) {
   try {
@@ -138,8 +140,54 @@ export async function POST(request: NextRequest) {
       termsAccepted
     ])
 
-    // TODO: Send notification email to admins for review
-    // TODO: Send confirmation email to applicant
+    // Send confirmation email to applicant
+    const applicantEmailResult = await sendEmail(
+      formData.get('email') as string || session.user.email || '',
+      'repairerApplicationSubmitted',
+      session.user.name || 'Reparateur-Bewerber',
+      applicationResult.rows[0].id
+    )
+
+    if (!applicantEmailResult.success) {
+      logger.warn('Failed to send repairer application confirmation email to applicant', {
+        applicationId: applicationResult.rows[0].id,
+        error: applicantEmailResult.error
+      })
+    }
+
+    // Send notification email to admins
+    try {
+      // Get all admin emails
+      const adminEmailsResult = await query(
+        'SELECT email FROM users WHERE role = $1 AND email IS NOT NULL',
+        ['admin']
+      )
+
+      const adminDashboardUrl = `${process.env.NEXTAUTH_URL || 'http://localhost:3000'}/admin/repairer-applications`
+
+      for (const admin of adminEmailsResult.rows) {
+        const adminEmailResult = await sendEmail(
+          admin.email,
+          'adminNewRepairerApplication',
+          session.user.name || 'Unbekannter Bewerber',
+          session.user.email || 'unbekannt@example.com',
+          adminDashboardUrl
+        )
+
+        if (!adminEmailResult.success) {
+          logger.warn('Failed to send new repairer application notification to admin', {
+            adminEmail: admin.email,
+            applicationId: applicationResult.rows[0].id,
+            error: adminEmailResult.error
+          })
+        }
+      }
+    } catch (error) {
+      logger.error('Error sending admin notifications for new repairer application', {
+        applicationId: applicationResult.rows[0].id,
+        error
+      })
+    }
 
     return apiSuccess({
       message: SUCCESS_MESSAGES.REPAIRER_APPLICATION_SUBMITTED,

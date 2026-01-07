@@ -32,7 +32,8 @@ export async function POST(request: Request) {
     const resetToken = await createPasswordResetToken(email)
 
     // Send reset email
-    const resetUrl = `${process.env.NEXTAUTH_URL || 'http://localhost:3001'}/auth/reset-password?token=${resetToken}`
+    const { getPasswordResetUrl } = require('@/config/urls')
+    const resetUrl = getPasswordResetUrl(resetToken)
     try {
       await sendEmail(email, 'passwordReset', user.name || 'RevampIT Benutzer', resetUrl)
       logger.info('Password reset email sent', { email })

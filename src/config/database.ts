@@ -34,6 +34,12 @@ export const TABLE_NAMES = {
   WORKSHOPS: 'workshops',
   WORKSHOP_INSTANCES: 'workshop_instances',
   WORKSHOP_REGISTRATIONS: 'workshop_registrations',
+  WORKSHOP_PROPOSALS: 'workshop_proposals',
+
+  // Locations
+  LOCATIONS: 'locations',
+  LOCATION_APPROVALS: 'location_approvals',
+  LOCATION_BOOKINGS: 'location_bookings',
   
   // Applications
   SELLER_APPLICATIONS: 'seller_applications',
@@ -45,6 +51,38 @@ export const TABLE_NAMES = {
   NEWSLETTER_SUBSCRIPTIONS: 'newsletter_subscriptions',
   BLOG_POSTS: 'blog_posts',
   BLOG_SUBMISSIONS: 'blog_submissions',
+
+  // User Roles & Permissions
+  USER_ROLES: 'user_roles',
+  ROLE_PERMISSIONS: 'role_permissions',
+  PERMISSIONS: 'permissions',
+  CUSTOMER_PREFERENCES: 'customer_preferences',
+  CUSTOMER_SEGMENTS: 'customer_segments',
+  USER_SEGMENTS: 'user_segments',
+
+  // Payments & Transactions
+  PAYMENT_TRANSACTIONS: 'payment_transactions',
+  PAYMENT_PROVIDERS: 'payment_providers',
+  PAYMENT_DISPUTES: 'payment_disputes',
+  ESCROW_ACCOUNTS: 'escrow_accounts',
+  REFUNDS: 'refunds',
+  INVOICES: 'invoices',
+  ORDERS: 'orders',
+
+  // Reviews
+  REVIEWS: 'reviews',
+  REVIEW_ATTACHMENTS: 'review_attachments',
+  REVIEW_RESPONSES: 'review_responses',
+  REVIEW_VOTES: 'review_votes',
+  REVIEW_MODERATION_LOG: 'review_moderation_log',
+
+  // Documents & Verification
+  VERIFICATION_DOCUMENTS: 'verification_documents',
+  DOCUMENT_TYPES: 'document_types',
+
+  // Auth & Security
+  USER_LOCKOUTS: 'user_lockouts',
+  AUTH_AUDIT_LOG: 'auth_audit_log',
 } as const;
 
 /**

@@ -3,6 +3,7 @@ import { ROLES } from '@/lib/constants'
 import { requireRole } from '@/middleware/admin'
 import Link from 'next/link'
 import AdminShortcuts from '@/components/admin/AdminShortcuts'
+import { MEDUSA_CONFIG } from '@/config/medusa'
 import {
   Users,
   Calendar,
@@ -16,7 +17,8 @@ import {
   BarChart3,
   Package,
   Edit,
-  Eye
+  Eye,
+  MessageSquare
 } from 'lucide-react'
 
 export const metadata: Metadata = {
@@ -38,6 +40,8 @@ export default async function AdminDashboard() {
     pendingAppointments: 23,
     totalRevenue: 45680,
     monthlyRevenue: 12890,
+    pendingRepairerApplications: 12, // Mock data for repairer applications
+    totalRepairers: 45,
   }
 
   const recentActivities = [
@@ -67,6 +71,14 @@ export default async function AdminDashboard() {
     },
     {
       id: 4,
+      type: 'repairer_application',
+      message: 'Neue Reparateur-Bewerbung eingegangen: anna.schmidt@example.com',
+      time: 'vor 45 Minuten',
+      icon: UserCheck,
+      color: 'bg-orange-500',
+    },
+    {
+      id: 5,
       type: 'pending_approval',
       message: 'Neue Workshop-Anmeldung wartet auf Genehmigung',
       time: 'vor 1 Stunde',
@@ -111,13 +123,27 @@ export default async function AdminDashboard() {
       icon: BarChart3,
       color: 'bg-purple-500',
     },
+    {
+      title: `Reparateur-Bewerbungen ${stats.pendingRepairerApplications > 0 ? `(${stats.pendingRepairerApplications})` : ''}`,
+      description: 'Reparateur-Anmeldungen prüfen und genehmigen',
+      href: '/admin/repairer-applications',
+      icon: UserCheck,
+      color: stats.pendingRepairerApplications > 0 ? 'bg-orange-500' : 'bg-blue-500',
+    },
+    {
+      title: 'Bewertungen verwalten',
+      description: 'Kundenbewertungen moderieren und verwalten',
+      href: '/admin/reviews',
+      icon: MessageSquare,
+      color: 'bg-purple-500',
+    },
   ]
 
   const externalActions = [
     {
       title: '🛒 Shop Admin',
       description: 'Produkte erstellen, bearbeiten und Bestellungen verwalten',
-      href: 'http://localhost:9000/app',
+      href: `${process.env.MEDUSA_BACKEND_URL || 'http://localhost:9000'}/app`,
       icon: Package,
       color: 'bg-indigo-500',
       external: true,
@@ -211,6 +237,22 @@ export default async function AdminDashboard() {
             </div>
             <div className="w-12 h-12 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex items-center justify-center">
               <DollarSign className="w-6 h-6 text-purple-600" />
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-100 dark:border-gray-700">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Ausstehende Reparateur-Bewerbungen</p>
+              <p className="text-3xl font-bold text-gray-900 dark:text-white">{stats.pendingRepairerApplications}</p>
+              <p className="text-sm text-orange-600 flex items-center gap-1">
+                <UserCheck className="w-4 h-4" />
+                {stats.totalRepairers} aktive Reparateure
+              </p>
+            </div>
+            <div className="w-12 h-12 bg-orange-100 dark:bg-orange-900/30 rounded-lg flex items-center justify-center">
+              <UserCheck className="w-6 h-6 text-orange-600" />
             </div>
           </div>
         </div>

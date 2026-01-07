@@ -6,6 +6,7 @@ import { auth } from '@/auth'
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 import { ROLES, PERMISSIONS, ROLE_PERMISSIONS, type UserRole } from '@/lib/constants'
+import { logger } from '@/lib/logger'
 
 /**
  * Check if user has permission

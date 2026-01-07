@@ -3,10 +3,13 @@
  * 
  * Single Source of Truth for CMS API configuration
  * Following dev guide: docs/development/DEV_GUIDE.md
+ * URLs come from src/config/urls.ts (SSOT)
  */
 
+import { CMS_API_URL } from './urls'
+
 export const CMS_CONFIG = {
-  URL: process.env.NEXT_PUBLIC_REBOOT_CONTENT_URL || 'http://localhost:3001',
+  URL: CMS_API_URL,
   ENABLED: process.env.ENABLE_CMS === 'true',
   TOKEN: process.env.REBOOT_CONTENT_TOKEN || '',
 } as const;

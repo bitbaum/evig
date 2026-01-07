@@ -1,320 +1,389 @@
-import { Metadata } from 'next'
+'use client'
+
+import { useState, useEffect } from 'react'
+import { useSession } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import {
-  Plus,
+  GraduationCap,
+  Search,
+  Filter,
+  CheckCircle,
+  XCircle,
+  Clock,
+  AlertCircle,
+  Eye,
+  Edit,
   Calendar,
   Users,
-  Clock,
   MapPin,
-  Edit,
-  Eye,
-  Trash2,
-  MoreHorizontal,
-  ArrowRight
+  DollarSign,
+  BookOpen,
+  ArrowLeft
 } from 'lucide-react'
 
-export const metadata: Metadata = {
-  title: 'Workshops verwalten | RevampIT Admin',
-  description: 'Workshops erstellen, bearbeiten und verwalten.',
+interface WorkshopProposal {
+  id: string
+  title: string
+  category: string
+  level: string
+  duration_minutes: number
+  max_participants: number
+  price_cents: number
+  location_type: string
+  selected_location_name?: string
+  proposed_location?: string
+  status: string
+  created_at: string
+  proposer_name: string
+  proposer_email: string
 }
 
 export default function AdminWorkshopsPage() {
-  // Mock data - replace with actual database queries
-  const workshops = [
-    {
-      id: '1',
-      title: 'Einführung in die Computer-Reparatur',
-      description: 'Lernen Sie die Grundlagen der Computer-Reparatur kennen.',
-      instructor: 'Hans Müller',
-      date: '2024-12-15',
-      time: '14:00 - 17:00',
-      location: 'Zürich, Werkstatt',
-      maxParticipants: 12,
-      currentParticipants: 8,
-      price: 120,
-      status: 'published',
-      category: 'Reparatur'
-    },
-    {
-      id: '2',
-      title: 'Linux für Anfänger',
-      description: 'Entdecken Sie die Möglichkeiten von Linux als Alternative zu Windows.',
-      instructor: 'Anna Schmidt',
-      date: '2024-12-18',
-      time: '10:00 - 13:00',
-      location: 'Online',
-      maxParticipants: 20,
-      currentParticipants: 15,
-      price: 80,
-      status: 'published',
-      category: 'Software'
-    },
-    {
-      id: '3',
-      title: 'Datenrettung und Backup-Strategien',
-      description: 'Professionelle Techniken zur Datenrettung und präventiven Massnahmen.',
-      instructor: 'Peter Weber',
-      date: '2024-12-20',
-      time: '09:00 - 16:00',
-      location: 'Zürich, Seminarraum',
-      maxParticipants: 8,
-      currentParticipants: 0,
-      price: 250,
-      status: 'draft',
-      category: 'Datenrettung'
-    }
-  ]
+  const { data: session, status } = useSession()
+  const router = useRouter()
 
-  const stats = {
-    totalWorkshops: workshops.length,
-    publishedWorkshops: workshops.filter(w => w.status === 'published').length,
-    draftWorkshops: workshops.filter(w => w.status === 'draft').length,
-    totalParticipants: workshops.reduce((sum, w) => sum + w.currentParticipants, 0),
-    upcomingWorkshops: workshops.filter(w => new Date(w.date) > new Date()).length
+  const [proposals, setProposals] = useState<WorkshopProposal[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string>('')
+
+  const [filters, setFilters] = useState({
+    status: 'pending',
+    category: 'all'
+  })
+
+  const [currentPage, setCurrentPage] = useState(1)
+  const [totalPages, setTotalPages] = useState(1)
+
+  useEffect(() => {
+    if (status === 'authenticated') {
+      loadProposals()
+    }
+  }, [status, filters, currentPage])
+
+  const loadProposals = async () => {
+    try {
+      setLoading(true)
+      const params = new URLSearchParams({
+        status: filters.status,
+        limit: '20',
+        offset: ((currentPage - 1) * 20).toString()
+      })
+
+      if (filters.category !== 'all') params.set('category', filters.category)
+
+      const response = await fetch(`/api/admin/workshops/proposals?${params}`)
+      if (response.ok) {
+        const data = await response.json()
+        setProposals(data.proposals)
+        setTotalPages(Math.ceil(data.pagination.total / 20))
+      } else {
+        setError('Fehler beim Laden der Workshop-Vorschläge')
+      }
+    } catch (error) {
+      setError('Netzwerkfehler')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const handleApproval = async (proposalId: string, action: 'approve' | 'reject') => {
+    const reason = action === 'reject' ?
+      prompt('Bitte geben Sie einen Ablehnungsgrund an:') :
+      null
+
+    if (action === 'reject' && !reason) {
+      return
+    }
+
+    if (!confirm(`Möchten Sie diesen Workshop-Vorschlag wirklich ${action === 'approve' ? 'genehmigen' : 'ablehnen'}?`)) {
+      return
+    }
+
+    try {
+      const response = await fetch(`/api/admin/workshops/proposals/${proposalId}/approve`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action,
+          review_notes: reason || 'Workshop genehmigt'
+        })
+      })
+
+      if (response.ok) {
+        loadProposals() // Reload the list
+      } else {
+        alert('Fehler bei der Genehmigung')
+      }
+    } catch (error) {
+      alert('Netzwerkfehler')
+    }
+  }
+
+  const getStatusIcon = (status: string) => {
+    switch (status) {
+      case 'approved':
+        return <CheckCircle className="w-5 h-5 text-green-600" />
+      case 'pending':
+        return <Clock className="w-5 h-5 text-yellow-600" />
+      case 'rejected':
+        return <XCircle className="w-5 h-5 text-red-600" />
+      case 'requires_changes':
+        return <AlertCircle className="w-5 h-5 text-orange-600" />
+      default:
+        return <AlertCircle className="w-5 h-5 text-gray-400" />
+    }
+  }
+
+  const getStatusText = (status: string) => {
+    switch (status) {
+      case 'approved':
+        return 'Genehmigt'
+      case 'pending':
+        return 'Ausstehend'
+      case 'rejected':
+        return 'Abgelehnt'
+      case 'requires_changes':
+        return 'Änderungen erforderlich'
+      default:
+        return status
+    }
+  }
+
+  const getLocationText = (proposal: WorkshopProposal) => {
+    switch (proposal.location_type) {
+      case 'venue':
+        return proposal.selected_location_name || proposal.proposed_location || 'Veranstaltungsort'
+      case 'home':
+        return proposal.proposed_location || 'Zu Hause'
+      case 'online':
+        return 'Online'
+      default:
+        return 'Unbekannt'
+    }
+  }
+
+  if (status === 'loading' || loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 py-8">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="bg-white rounded-xl shadow-lg p-8">
+            <div className="animate-pulse">
+              <div className="h-8 bg-gray-200 rounded w-1/4 mb-6"></div>
+              <div className="space-y-4">
+                {[...Array(5)].map((_, i) => (
+                  <div key={i} className="h-16 bg-gray-200 rounded"></div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  if (!session?.user) {
+    router.push('/auth/login')
+    return null
   }
 
   return (
-    <div className="space-y-8">
+    <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-            Workshops verwalten
-          </h1>
-          <p className="text-gray-600 dark:text-gray-400 mt-1">
-            Erstellen und verwalten Sie Ihre Workshop-Angebote
-          </p>
-        </div>
-        <Link
-          href="/admin/workshops/new"
-          className="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white font-semibold px-4 py-2 rounded-lg transition-colors"
-        >
-          <Plus className="w-5 h-5" />
-          Workshop erstellen
-        </Link>
-      </div>
-
-      {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
-        <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-100 dark:border-gray-700">
-          <div className="flex items-center gap-3">
-            <Calendar className="w-8 h-8 text-blue-600" />
+      <div className="bg-white shadow-sm border-b">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+          <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Gesamt Workshops</p>
-              <p className="text-2xl font-bold text-gray-900 dark:text-white">{stats.totalWorkshops}</p>
+              <h1 className="text-2xl font-bold text-gray-900">Workshop-Verwaltung</h1>
+              <p className="mt-1 text-sm text-gray-600">
+                Genehmigen und verwalten Sie Workshop-Vorschläge
+              </p>
             </div>
-          </div>
-        </div>
-
-        <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-100 dark:border-gray-700">
-          <div className="flex items-center gap-3">
-            <Eye className="w-8 h-8 text-green-600" />
-            <div>
-              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Veröffentlicht</p>
-              <p className="text-2xl font-bold text-gray-900 dark:text-white">{stats.publishedWorkshops}</p>
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-100 dark:border-gray-700">
-          <div className="flex items-center gap-3">
-            <Edit className="w-8 h-8 text-yellow-600" />
-            <div>
-              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Entwürfe</p>
-              <p className="text-2xl font-bold text-gray-900 dark:text-white">{stats.draftWorkshops}</p>
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-100 dark:border-gray-700">
-          <div className="flex items-center gap-3">
-            <Users className="w-8 h-8 text-purple-600" />
-            <div>
-              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Teilnehmer</p>
-              <p className="text-2xl font-bold text-gray-900 dark:text-white">{stats.totalParticipants}</p>
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-100 dark:border-gray-700">
-          <div className="flex items-center gap-3">
-            <Clock className="w-8 h-8 text-orange-600" />
-            <div>
-              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Bevorstehend</p>
-              <p className="text-2xl font-bold text-gray-900 dark:text-white">{stats.upcomingWorkshops}</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Workshops Table */}
-      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="w-full">
-            <thead className="bg-gray-50 dark:bg-gray-700">
-              <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                  Workshop
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                  Datum & Uhrzeit
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                  Ort
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                  Teilnehmer
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                  Preis
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                  Status
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                  Aktionen
-                </th>
-              </tr>
-            </thead>
-            <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-              {workshops.map((workshop) => (
-                <tr key={workshop.id} className="hover:bg-gray-50 dark:hover:bg-gray-700">
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="flex items-center">
-                      <div>
-                        <div className="text-sm font-medium text-gray-900 dark:text-white">
-                          {workshop.title}
-                        </div>
-                        <div className="text-sm text-gray-500 dark:text-gray-400">
-                          {workshop.instructor} • {workshop.category}
-                        </div>
-                      </div>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-900 dark:text-white">
-                      {new Date(workshop.date).toLocaleDateString('de-CH')}
-                    </div>
-                    <div className="text-sm text-gray-500 dark:text-gray-400">
-                      {workshop.time}
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="flex items-center gap-2">
-                      <MapPin className="w-4 h-4 text-gray-400" />
-                      <span className="text-sm text-gray-900 dark:text-white">{workshop.location}</span>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-900 dark:text-white">
-                      {workshop.currentParticipants}/{workshop.maxParticipants}
-                    </div>
-                    <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-1.5 mt-1">
-                      <div
-                        className="bg-blue-600 h-1.5 rounded-full"
-                        style={{ width: `${(workshop.currentParticipants / workshop.maxParticipants) * 100}%` }}
-                      />
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm font-medium text-gray-900 dark:text-white">
-                      CHF {workshop.price}
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
-                      workshop.status === 'published'
-                        ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300'
-                        : 'bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-300'
-                    }`}>
-                      {workshop.status === 'published' ? 'Veröffentlicht' : 'Entwurf'}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                    <div className="flex items-center gap-2">
-                      <button className="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300">
-                        <Eye className="w-4 h-4" />
-                      </button>
-                      <button className="text-green-600 hover:text-green-900 dark:text-green-400 dark:hover:text-green-300">
-                        <Edit className="w-4 h-4" />
-                      </button>
-                      <button className="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300">
-                        <Trash2 className="w-4 h-4" />
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-
-        {workshops.length === 0 && (
-          <div className="text-center py-12">
-            <Calendar className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
-              Noch keine Workshops
-            </h3>
-            <p className="text-gray-600 dark:text-gray-400 mb-6">
-              Erstellen Sie Ihren ersten Workshop, um mit der Vermittlung von Wissen zu beginnen.
-            </p>
             <Link
-              href="/admin/workshops/new"
-              className="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white font-semibold px-6 py-3 rounded-lg transition-colors"
+              href="/admin"
+              className="inline-flex items-center px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors"
             >
-              <Plus className="w-5 h-5" />
-              Ersten Workshop erstellen
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              Zurück zum Dashboard
             </Link>
           </div>
-        )}
+        </div>
       </div>
 
-      {/* Quick Actions */}
-      <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-xl p-6">
-        <div className="flex items-start gap-4">
-          <div className="w-10 h-10 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center flex-shrink-0">
-            <Calendar className="w-5 h-5 text-blue-600" />
-          </div>
-          <div>
-            <h3 className="font-medium text-blue-900 dark:text-blue-200">
-              Workshop-Verwaltung
-            </h3>
-            <p className="text-sm text-blue-700 dark:text-blue-300 mt-1 mb-3">
-              Workshps sind eine hervorragende Möglichkeit, Wissen zu vermitteln und gleichzeitig Einnahmen zu generieren.
-              Planen Sie Workshops zu Themen wie Computer-Reparatur, Linux-Einführung oder Datenrettung.
-            </p>
-            <div className="flex gap-3">
-              <Link
-                href="/admin/workshops/new"
-                className="text-sm bg-blue-600 text-white px-3 py-1.5 rounded hover:bg-blue-700 transition-colors"
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Filters */}
+        <div className="bg-white rounded-xl shadow-sm border p-6 mb-6">
+          <div className="flex flex-wrap gap-4">
+            <div className="flex-1 min-w-48">
+              <label className="block text-sm font-medium text-gray-700 mb-1">Status</label>
+              <select
+                value={filters.status}
+                onChange={(e) => setFilters(prev => ({ ...prev, status: e.target.value }))}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
               >
-                Workshop erstellen
-              </Link>
-              <Link
-                href="/workshops"
-                className="text-sm bg-white dark:bg-gray-800 text-blue-600 dark:text-blue-400 px-3 py-1.5 rounded border border-blue-200 dark:border-blue-800 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors"
+                <option value="all">Alle</option>
+                <option value="pending">Ausstehend</option>
+                <option value="approved">Genehmigt</option>
+                <option value="rejected">Abgelehnt</option>
+                <option value="requires_changes">Änderungen erforderlich</option>
+              </select>
+            </div>
+
+            <div className="flex-1 min-w-48">
+              <label className="block text-sm font-medium text-gray-700 mb-1">Kategorie</label>
+              <select
+                value={filters.category}
+                onChange={(e) => setFilters(prev => ({ ...prev, category: e.target.value }))}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
               >
-                Workshops ansehen
-              </Link>
+                <option value="all">Alle Kategorien</option>
+                <option value="Linux & Open Source">Linux & Open Source</option>
+                <option value="Hardware-Reparatur">Hardware-Reparatur</option>
+                <option value="Programmierung">Programmierung</option>
+                <option value="Webentwicklung">Webentwicklung</option>
+                <option value="Datenschutz">Datenschutz</option>
+                <option value="Nachhaltigkeit">Nachhaltigkeit</option>
+                <option value="Digital Skills">Digital Skills</option>
+                <option value="Sonstiges">Sonstiges</option>
+              </select>
             </div>
           </div>
         </div>
+
+        {/* Error Message */}
+        {error && (
+          <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
+            <p className="text-red-800">{error}</p>
+          </div>
+        )}
+
+        {/* Proposals List */}
+        <div className="bg-white rounded-xl shadow-sm border">
+          <div className="px-6 py-4 border-b border-gray-200">
+            <h2 className="text-lg font-semibold text-gray-900">
+              Workshop-Vorschläge ({proposals.length})
+            </h2>
+          </div>
+
+          <div className="divide-y divide-gray-200">
+            {proposals.map((proposal) => (
+              <div key={proposal.id} className="p-6 hover:bg-gray-50">
+                <div className="flex items-start justify-between">
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-3 mb-2">
+                      <GraduationCap className="w-5 h-5 text-blue-600" />
+                      <h3 className="text-lg font-semibold text-gray-900 truncate">
+                        {proposal.title}
+                      </h3>
+                      {getStatusIcon(proposal.status)}
+                      <span className="text-sm text-gray-600">
+                        {getStatusText(proposal.status)}
+                      </span>
+                    </div>
+
+                    <div className="flex flex-wrap items-center gap-4 text-sm text-gray-600 mb-3">
+                      <div className="flex items-center gap-1">
+                        <BookOpen className="w-4 h-4" />
+                        {proposal.category}
+                      </div>
+
+                      <div className="flex items-center gap-1">
+                        <Users className="w-4 h-4" />
+                        Max. {proposal.max_participants} Teilnehmer
+                      </div>
+
+                      <div className="flex items-center gap-1">
+                        <Clock className="w-4 h-4" />
+                        {Math.floor(proposal.duration_minutes / 60)}h {proposal.duration_minutes % 60}min
+                      </div>
+
+                      <div className="flex items-center gap-1">
+                        <DollarSign className="w-4 h-4" />
+                        CHF {(proposal.price_cents / 100).toFixed(2)}
+                      </div>
+
+                      <div className="flex items-center gap-1">
+                        <MapPin className="w-4 h-4" />
+                        {getLocationText(proposal)}
+                      </div>
+                    </div>
+
+                    <div className="text-sm text-gray-500">
+                      Vorgeschlagen von {proposal.proposer_name} ({proposal.proposer_email}) • {new Date(proposal.created_at).toLocaleDateString('de-CH')}
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-2 ml-4">
+                    <Link
+                      href={`/admin/workshops/${proposal.id}`}
+                      className="inline-flex items-center px-3 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50"
+                    >
+                      <Eye className="w-4 h-4 mr-1" />
+                      Details
+                    </Link>
+
+                    {proposal.status === 'pending' && (
+                      <>
+                        <button
+                          onClick={() => handleApproval(proposal.id, 'approve')}
+                          className="inline-flex items-center px-3 py-2 bg-green-600 text-white rounded-lg text-sm font-medium hover:bg-green-700"
+                        >
+                          <CheckCircle className="w-4 h-4 mr-1" />
+                          Genehmigen
+                        </button>
+                        <button
+                          onClick={() => handleApproval(proposal.id, 'reject')}
+                          className="inline-flex items-center px-3 py-2 bg-red-600 text-white rounded-lg text-sm font-medium hover:bg-red-700"
+                        >
+                          <XCircle className="w-4 h-4 mr-1" />
+                          Ablehnen
+                        </button>
+                      </>
+                    )}
+                  </div>
+                </div>
+              </div>
+            ))}
+
+            {proposals.length === 0 && !loading && (
+              <div className="px-6 py-12 text-center">
+                <GraduationCap className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+                <h3 className="text-lg font-medium text-gray-900 mb-2">Keine Workshop-Vorschläge gefunden</h3>
+                <p className="text-gray-600 mb-4">
+                  {filters.status === 'pending' ? 'Keine ausstehenden Vorschläge vorhanden.' : `Keine Vorschläge mit Status "${filters.status}" gefunden.`}
+                </p>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Pagination */}
+        {totalPages > 1 && (
+          <div className="mt-6 flex justify-center">
+            <nav className="flex items-center gap-2">
+              <button
+                onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+                disabled={currentPage === 1}
+                className="px-3 py-2 border border-gray-300 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
+              >
+                ← Zurück
+              </button>
+
+              <span className="px-4 py-2 text-sm text-gray-700">
+                Seite {currentPage} von {totalPages}
+              </span>
+
+              <button
+                onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+                disabled={currentPage === totalPages}
+                className="px-3 py-2 border border-gray-300 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
+              >
+                Weiter →
+              </button>
+            </nav>
+          </div>
+        )}
       </div>
     </div>
   )
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

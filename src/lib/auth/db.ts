@@ -1,12 +1,15 @@
 /**
  * Database client for RevampIT unified auth
  * Uses the pg package for PostgreSQL connection
+ * 
+ * SSOT Compliance: All table names must use TABLE_NAMES from config
  */
 
 import { randomBytes } from 'crypto'
 import { Pool, PoolClient } from 'pg'
 import { logger } from '@/lib/logger'
 import { getDbConfig } from './config'
+import { TABLE_NAMES } from '@/config/database'
 import type { QueryParams, SocialLinks, Availability, PurchaseHistoryItem, PreferenceValue, SegmentCriteria } from '@/types/common'
 
 // Get database configuration from centralized config
@@ -169,7 +172,7 @@ export interface DbUserProfile {
  */
 export async function getUserByEmail(email: string): Promise<DbUser | null> {
   const result = await query<DbUser>(
-    'SELECT * FROM users WHERE email = $1',
+    `SELECT * FROM ${TABLE_NAMES.USERS} WHERE email = $1`,
     [email.toLowerCase()]
   )
   return result.rows[0] || null
@@ -180,7 +183,7 @@ export async function getUserByEmail(email: string): Promise<DbUser | null> {
  */
 export async function getUserById(id: string): Promise<DbUser | null> {
   const result = await query<DbUser>(
-    'SELECT * FROM users WHERE id = $1',
+    `SELECT * FROM ${TABLE_NAMES.USERS} WHERE id = $1`,
     [id]
   )
   return result.rows[0] || null
@@ -206,14 +209,14 @@ export async function createUser(data: {
   if (userColumns.has('role_id')) {
     if (data.role) {
       const roleResult = await query<DbUserRole>(
-        'SELECT id FROM user_roles WHERE slug = $1 AND is_active = true',
+        `SELECT id FROM ${TABLE_NAMES.USER_ROLES} WHERE slug = $1 AND is_active = true`,
         [data.role]
       )
       roleId = roleResult.rows[0]?.id || null
     } else {
       // Get default role
       const defaultRoleResult = await query<DbUserRole>(
-        'SELECT id FROM user_roles WHERE is_default = true AND is_active = true LIMIT 1'
+        `SELECT id FROM ${TABLE_NAMES.USER_ROLES} WHERE is_default = true AND is_active = true LIMIT 1`
       )
       roleId = defaultRoleResult.rows[0]?.id || null
     }
@@ -227,6 +230,15 @@ export async function createUser(data: {
     data.image || null,
     data.role || 'user'
   ]
+
+  // Set email as verified by default (no verification step required)
+  if (userColumns.has('emailVerified')) {
+    columns.push('"emailVerified"')
+    values.push(new Date())
+  } else if (userColumns.has('email_verified')) {
+    columns.push('email_verified')
+    values.push(new Date())
+  }
 
   if (userColumns.has('status')) {
     columns.push('status')
@@ -251,7 +263,7 @@ export async function createUser(data: {
   const placeholders = columns.map((_, idx) => `$${idx + 1}`)
 
   const result = await query<DbUser>(
-    `INSERT INTO users (${columns.join(', ')})
+    `INSERT INTO ${TABLE_NAMES.USERS} (${columns.join(', ')})
      VALUES (${placeholders.join(', ')})
      RETURNING *`,
     values
@@ -299,7 +311,7 @@ export async function updateUser(
     // Also update role_id if role is being changed
     if (userColumns.has('role_id')) {
       const roleResult = await query<DbUserRole>(
-        'SELECT id FROM user_roles WHERE slug = $1 AND is_active = true',
+        `SELECT id FROM ${TABLE_NAMES.USER_ROLES} WHERE slug = $1 AND is_active = true`,
         [data.role]
       )
       fields.push(`role_id = $${paramIndex++}`)
@@ -325,7 +337,7 @@ export async function updateUser(
   const updatedAtColumn = userColumns.has('updatedAt') ? '"updatedAt"' : 'updated_at'
   const updateSet = `${fields.join(', ')}${fields.length ? ', ' : ''}${updatedAtColumn} = NOW()`
   const result = await query<DbUser>(
-    `UPDATE users SET ${updateSet} WHERE id = $${paramIndex} RETURNING *`,
+    `UPDATE ${TABLE_NAMES.USERS} SET ${updateSet} WHERE id = $${paramIndex} RETURNING *`,
     values
   )
   return result.rows[0] || null
@@ -337,7 +349,7 @@ export async function updateUser(
 export async function getOrCreateProfile(userId: string): Promise<DbUserProfile> {
   // Try to get existing profile
   const existing = await query<DbUserProfile>(
-    'SELECT * FROM user_profiles WHERE user_id = $1',
+    `SELECT * FROM ${TABLE_NAMES.USER_PROFILES} WHERE user_id = $1`,
     [userId]
   )
   
@@ -347,7 +359,7 @@ export async function getOrCreateProfile(userId: string): Promise<DbUserProfile>
 
   // Create new profile
   const result = await query<DbUserProfile>(
-    `INSERT INTO user_profiles (user_id) VALUES ($1) RETURNING *`,
+    `INSERT INTO ${TABLE_NAMES.USER_PROFILES} (user_id) VALUES ($1) RETURNING *`,
     [userId]
   )
   return result.rows[0]
@@ -406,7 +418,7 @@ export async function updateProfile(
 
   values.push(userId)
   const result = await query<DbUserProfile>(
-    `UPDATE user_profiles SET ${fields.join(', ')}, updated_at = NOW() WHERE user_id = $${paramIndex} RETURNING *`,
+    `UPDATE ${TABLE_NAMES.USER_PROFILES} SET ${fields.join(', ')}, updated_at = NOW() WHERE user_id = $${paramIndex} RETURNING *`,
     values
   )
   return result.rows[0] || null
@@ -454,7 +466,7 @@ export interface DbWorkshopRegistration {
  */
 export async function getWorkshopBySlug(slug: string): Promise<DbWorkshop | null> {
   const result = await query<DbWorkshop>(
-    'SELECT * FROM workshops WHERE slug = $1 AND is_active = true',
+    `SELECT * FROM ${TABLE_NAMES.WORKSHOPS} WHERE slug = $1 AND is_active = true`,
     [slug]
   )
   return result.rows[0] || null
@@ -468,9 +480,9 @@ export async function getWorkshopsForUser(userId: string): Promise<Array<DbWorks
     `SELECT
        w.*,
        wr.status as registration_status
-     FROM workshops w
-     LEFT JOIN workshop_instances wi ON w.id = wi.workshop_id
-     LEFT JOIN workshop_registrations wr ON wi.id = wr.workshop_instance_id AND wr.user_id = $1
+     FROM ${TABLE_NAMES.WORKSHOPS} w
+     LEFT JOIN ${TABLE_NAMES.WORKSHOP_INSTANCES} wi ON w.id = wi.workshop_id
+     LEFT JOIN ${TABLE_NAMES.WORKSHOP_REGISTRATIONS} wr ON wi.id = wr.workshop_instance_id AND wr.user_id = $1
      WHERE w.is_active = true
      ORDER BY w.created_at DESC`,
     [userId]
@@ -487,9 +499,9 @@ export async function getUserWorkshopRegistrations(userId: string): Promise<Arra
        wr.*,
        w.title as workshop_title,
        w.slug as workshop_slug
-     FROM workshop_registrations wr
-     JOIN workshop_instances wi ON wr.workshop_instance_id = wi.id
-     JOIN workshops w ON wi.workshop_id = w.id
+     FROM ${TABLE_NAMES.WORKSHOP_REGISTRATIONS} wr
+     JOIN ${TABLE_NAMES.WORKSHOP_INSTANCES} wi ON wr.workshop_instance_id = wi.id
+     JOIN ${TABLE_NAMES.WORKSHOPS} w ON wi.workshop_id = w.id
      WHERE wr.user_id = $1
      ORDER BY wr.created_at DESC`,
     [userId]
@@ -502,9 +514,9 @@ export async function getUserWorkshopRegistrations(userId: string): Promise<Arra
  */
 export async function isUserRegisteredForWorkshop(userId: string, workshopSlug: string): Promise<boolean> {
   const result = await query(
-    `SELECT 1 FROM workshop_registrations wr
-     JOIN workshop_instances wi ON wr.workshop_instance_id = wi.id
-     JOIN workshops w ON wi.workshop_id = w.id
+    `SELECT 1 FROM ${TABLE_NAMES.WORKSHOP_REGISTRATIONS} wr
+     JOIN ${TABLE_NAMES.WORKSHOP_INSTANCES} wi ON wr.workshop_instance_id = wi.id
+     JOIN ${TABLE_NAMES.WORKSHOPS} w ON wi.workshop_id = w.id
      WHERE wr.user_id = $1 AND w.slug = $2 AND wr.status != 'cancelled'`,
     [userId, workshopSlug]
   )
@@ -548,7 +560,7 @@ export interface DbServiceType {
  */
 export async function getServiceTypeBySlug(slug: string): Promise<DbServiceType | null> {
   const result = await query<DbServiceType>(
-    'SELECT * FROM service_types WHERE slug = $1 AND is_active = true',
+    `SELECT * FROM ${TABLE_NAMES.SERVICE_TYPES} WHERE slug = $1 AND is_active = true`,
     [slug]
   )
   return result.rows[0] || null
@@ -563,8 +575,8 @@ export async function getUserServiceAppointments(userId: string): Promise<Array<
        sa.*,
        st.name as service_name,
        st.slug as service_slug
-     FROM service_appointments sa
-     JOIN service_types st ON sa.service_type_id = st.id
+     FROM ${TABLE_NAMES.SERVICE_APPOINTMENTS} sa
+     JOIN ${TABLE_NAMES.SERVICE_TYPES} st ON sa.service_type_id = st.id
      WHERE sa.user_id = $1
      ORDER BY sa.created_at DESC`,
     [userId]
@@ -577,8 +589,8 @@ export async function getUserServiceAppointments(userId: string): Promise<Array<
  */
 export async function hasPendingAppointmentForService(userId: string, serviceSlug: string): Promise<boolean> {
   const result = await query(
-    `SELECT 1 FROM service_appointments sa
-     JOIN service_types st ON sa.service_type_id = st.id
+    `SELECT 1 FROM ${TABLE_NAMES.SERVICE_APPOINTMENTS} sa
+     JOIN ${TABLE_NAMES.SERVICE_TYPES} st ON sa.service_type_id = st.id
      WHERE sa.user_id = $1 AND st.slug = $2 AND sa.status IN ('requested', 'confirmed')`,
     [userId, serviceSlug]
   )
@@ -606,7 +618,7 @@ export async function createVerificationToken(email: string): Promise<string> {
   const expires = new Date(Date.now() + 24 * 60 * 60 * 1000)
 
   await query(
-    `INSERT INTO verification_tokens (identifier, token, expires)
+    `INSERT INTO ${TABLE_NAMES.VERIFICATION_TOKENS} (identifier, token, expires)
      VALUES ($1, $2, $3)
      ON CONFLICT (identifier, token) DO UPDATE SET
        expires = EXCLUDED.expires`,
@@ -622,7 +634,7 @@ export async function createVerificationToken(email: string): Promise<string> {
 export async function verifyEmailWithToken(token: string): Promise<{ success: boolean, email?: string, error?: string }> {
   try {
     const result = await query<DbVerificationToken>(
-      'SELECT * FROM verification_tokens WHERE token = $1 AND expires > NOW()',
+      `SELECT * FROM ${TABLE_NAMES.VERIFICATION_TOKENS} WHERE token = $1 AND expires > NOW()`,
       [token]
     )
 
@@ -635,13 +647,13 @@ export async function verifyEmailWithToken(token: string): Promise<{ success: bo
 
     // Update user email verification status
     await query(
-      'UPDATE users SET "emailVerified" = NOW() WHERE email = $1',
+      `UPDATE ${TABLE_NAMES.USERS} SET "emailVerified" = NOW() WHERE email = $1`,
       [email]
     )
 
     // Delete the used token
     await query(
-      'DELETE FROM verification_tokens WHERE token = $1',
+      `DELETE FROM ${TABLE_NAMES.VERIFICATION_TOKENS} WHERE token = $1`,
       [token]
     )
 
@@ -657,7 +669,7 @@ export async function verifyEmailWithToken(token: string): Promise<{ success: bo
  */
 export async function getVerificationToken(email: string): Promise<DbVerificationToken | null> {
   const result = await query<DbVerificationToken>(
-    'SELECT * FROM verification_tokens WHERE identifier = $1 AND expires > NOW() ORDER BY expires DESC LIMIT 1',
+    `SELECT * FROM ${TABLE_NAMES.VERIFICATION_TOKENS} WHERE identifier = $1 AND expires > NOW() ORDER BY expires DESC LIMIT 1`,
     [email]
   )
   return result.rows[0] || null
@@ -747,7 +759,7 @@ export async function createPasswordResetToken(email: string): Promise<string> {
   const expires = new Date(Date.now() + 60 * 60 * 1000)
 
   await query(
-    `INSERT INTO verification_tokens (identifier, token, expires)
+    `INSERT INTO ${TABLE_NAMES.VERIFICATION_TOKENS} (identifier, token, expires)
      VALUES ($1, $2, $3)
      ON CONFLICT (identifier, token) DO UPDATE SET
        expires = EXCLUDED.expires`,
@@ -763,7 +775,7 @@ export async function createPasswordResetToken(email: string): Promise<string> {
 export async function verifyPasswordResetToken(token: string): Promise<{ success: boolean, email?: string, error?: string }> {
   try {
     const result = await query<DbPasswordResetToken>(
-      'SELECT * FROM verification_tokens WHERE token = $1 AND expires > NOW()',
+      `SELECT * FROM ${TABLE_NAMES.VERIFICATION_TOKENS} WHERE token = $1 AND expires > NOW()`,
       [token]
     )
 
@@ -776,7 +788,7 @@ export async function verifyPasswordResetToken(token: string): Promise<{ success
 
     // Delete the used token for security
     await query(
-      'DELETE FROM verification_tokens WHERE token = $1',
+      `DELETE FROM ${TABLE_NAMES.VERIFICATION_TOKENS} WHERE token = $1`,
       [token]
     )
 
@@ -795,7 +807,7 @@ export async function updateUserPassword(email: string, passwordHash: string): P
     const userColumns = await getUserColumns()
     const updatedAtColumn = userColumns.has('updatedAt') ? '"updatedAt"' : 'updated_at'
     const result = await query(
-      `UPDATE users SET password_hash = $1, ${updatedAtColumn} = NOW() WHERE email = $2`,
+      `UPDATE ${TABLE_NAMES.USERS} SET password_hash = $1, ${updatedAtColumn} = NOW() WHERE email = $2`,
       [passwordHash, email.toLowerCase()]
     )
 
@@ -815,7 +827,7 @@ export async function updateUserPassword(email: string, passwordHash: string): P
  */
 export async function getPasswordResetToken(email: string): Promise<DbPasswordResetToken | null> {
   const result = await query<DbPasswordResetToken>(
-    'SELECT * FROM verification_tokens WHERE identifier = $1 AND expires > NOW() ORDER BY expires DESC LIMIT 1',
+    `SELECT * FROM ${TABLE_NAMES.VERIFICATION_TOKENS} WHERE identifier = $1 AND expires > NOW() ORDER BY expires DESC LIMIT 1`,
     [email.toLowerCase()]
   )
   return result.rows[0] || null
@@ -830,7 +842,7 @@ export async function getPasswordResetToken(email: string): Promise<DbPasswordRe
  */
 export async function getUserRoleById(id: string): Promise<DbUserRole | null> {
   const result = await query<DbUserRole>(
-    'SELECT * FROM user_roles WHERE id = $1',
+    `SELECT * FROM ${TABLE_NAMES.USER_ROLES} WHERE id = $1`,
     [id]
   )
   return result.rows[0] || null
@@ -841,7 +853,7 @@ export async function getUserRoleById(id: string): Promise<DbUserRole | null> {
  */
 export async function getUserRoleBySlug(slug: string): Promise<DbUserRole | null> {
   const result = await query<DbUserRole>(
-    'SELECT * FROM user_roles WHERE slug = $1 AND is_active = true',
+    `SELECT * FROM ${TABLE_NAMES.USER_ROLES} WHERE slug = $1 AND is_active = true`,
     [slug]
   )
   return result.rows[0] || null
@@ -852,7 +864,7 @@ export async function getUserRoleBySlug(slug: string): Promise<DbUserRole | null
  */
 export async function getActiveUserRoles(): Promise<DbUserRole[]> {
   const result = await query<DbUserRole>(
-    'SELECT * FROM user_roles WHERE is_active = true ORDER BY name'
+    `SELECT * FROM ${TABLE_NAMES.USER_ROLES} WHERE is_active = true ORDER BY name`
   )
   return result.rows
 }
@@ -862,8 +874,8 @@ export async function getActiveUserRoles(): Promise<DbUserRole[]> {
  */
 export async function getRolePermissions(roleId: string): Promise<DbPermission[]> {
   const result = await query<DbPermission>(
-    `SELECT p.* FROM permissions p
-     JOIN role_permissions rp ON p.id = rp.permission_id
+    `SELECT p.* FROM ${TABLE_NAMES.PERMISSIONS} p
+     JOIN ${TABLE_NAMES.ROLE_PERMISSIONS} rp ON p.id = rp.permission_id
      WHERE rp.role_id = $1 AND p.is_active = true
      ORDER BY p.resource, p.action`,
     [roleId]
@@ -876,9 +888,9 @@ export async function getRolePermissions(roleId: string): Promise<DbPermission[]
  */
 export async function userHasPermission(userId: string, permissionSlug: string): Promise<boolean> {
   const result = await query(
-    `SELECT 1 FROM role_permissions rp
-     JOIN permissions p ON rp.permission_id = p.id
-     JOIN users u ON u.role_id = rp.role_id
+    `SELECT 1 FROM ${TABLE_NAMES.ROLE_PERMISSIONS} rp
+     JOIN ${TABLE_NAMES.PERMISSIONS} p ON rp.permission_id = p.id
+     JOIN ${TABLE_NAMES.USERS} u ON u.role_id = rp.role_id
      WHERE u.id = $1 AND p.slug = $2 AND p.is_active = true`,
     [userId, permissionSlug]
   )
@@ -890,7 +902,7 @@ export async function userHasPermission(userId: string, permissionSlug: string):
  */
 export async function getUserPreferences(userId: string): Promise<DbCustomerPreference[]> {
   const result = await query<DbCustomerPreference>(
-    'SELECT * FROM customer_preferences WHERE user_id = $1 ORDER BY preference_key',
+    `SELECT * FROM ${TABLE_NAMES.CUSTOMER_PREFERENCES} WHERE user_id = $1 ORDER BY preference_key`,
     [userId]
   )
   return result.rows
@@ -905,7 +917,7 @@ export async function setUserPreference(
   value: PreferenceValue
 ): Promise<DbCustomerPreference> {
   const result = await query<DbCustomerPreference>(
-    `INSERT INTO customer_preferences (user_id, preference_key, preference_value)
+    `INSERT INTO ${TABLE_NAMES.CUSTOMER_PREFERENCES} (user_id, preference_key, preference_value)
      VALUES ($1, $2, $3)
      ON CONFLICT (user_id, preference_key)
      DO UPDATE SET preference_value = EXCLUDED.preference_value, updated_at = NOW()
@@ -921,8 +933,8 @@ export async function setUserPreference(
 export async function getUserSegments(userId: string): Promise<Array<DbUserSegment & { segment: DbCustomerSegment }>> {
   const result = await query<DbUserSegment & { segment: DbCustomerSegment }>(
     `SELECT us.*, cs.slug, cs.name, cs.description, cs.criteria
-     FROM user_segments us
-     JOIN customer_segments cs ON us.segment_id = cs.id
+     FROM ${TABLE_NAMES.USER_SEGMENTS} us
+     JOIN ${TABLE_NAMES.CUSTOMER_SEGMENTS} cs ON us.segment_id = cs.id
      WHERE us.user_id = $1 AND cs.is_active = true
      ORDER BY us.assigned_at DESC`,
     [userId]
@@ -940,7 +952,7 @@ export async function addUserToSegment(
   notes?: string
 ): Promise<DbUserSegment | null> {
   const segmentResult = await query<DbCustomerSegment>(
-    'SELECT id FROM customer_segments WHERE slug = $1 AND is_active = true',
+    `SELECT id FROM ${TABLE_NAMES.CUSTOMER_SEGMENTS} WHERE slug = $1 AND is_active = true`,
     [segmentSlug]
   )
 
@@ -951,7 +963,7 @@ export async function addUserToSegment(
   const segmentId = segmentResult.rows[0].id
 
   const result = await query<DbUserSegment>(
-    `INSERT INTO user_segments (user_id, segment_id, assigned_by, notes)
+    `INSERT INTO ${TABLE_NAMES.USER_SEGMENTS} (user_id, segment_id, assigned_by, notes)
      VALUES ($1, $2, $3, $4)
      ON CONFLICT (user_id, segment_id) DO NOTHING
      RETURNING *`,
@@ -966,7 +978,7 @@ export async function addUserToSegment(
  */
 export async function updateUserLastActivity(userId: string): Promise<void> {
   await query(
-    'UPDATE users SET last_activity_at = NOW() WHERE id = $1',
+    `UPDATE ${TABLE_NAMES.USERS} SET last_activity_at = NOW() WHERE id = $1`,
     [userId]
   )
 }
@@ -976,7 +988,7 @@ export async function updateUserLastActivity(userId: string): Promise<void> {
  */
 export async function getUserWithProfile(userId: string): Promise<DbUser & { profile?: DbUserProfile, role_info?: DbUserRole, permissions?: DbPermission[] } | null> {
   const userResult = await query<DbUser>(
-    'SELECT * FROM users WHERE id = $1',
+    `SELECT * FROM ${TABLE_NAMES.USERS} WHERE id = $1`,
     [userId]
   )
 
@@ -989,7 +1001,7 @@ export async function getUserWithProfile(userId: string): Promise<DbUser & { pro
 
   // Get profile
   const profileResult = await query<DbUserProfile>(
-    'SELECT * FROM user_profiles WHERE user_id = $1',
+    `SELECT * FROM ${TABLE_NAMES.USER_PROFILES} WHERE user_id = $1`,
     [userId]
   )
   result.profile = profileResult.rows[0] || undefined
@@ -997,7 +1009,7 @@ export async function getUserWithProfile(userId: string): Promise<DbUser & { pro
   // Get role info
   if (user.role_id) {
     const roleResult = await query<DbUserRole>(
-      'SELECT * FROM user_roles WHERE id = $1',
+      `SELECT * FROM ${TABLE_NAMES.USER_ROLES} WHERE id = $1`,
       [user.role_id]
     )
     result.role_info = roleResult.rows[0] || undefined

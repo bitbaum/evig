@@ -21,7 +21,8 @@ export async function POST(request: NextRequest) {
 
     // Send welcome email
     try {
-      const userResult = await fetch(`${process.env.NEXTAUTH_URL || 'http://localhost:3000'}/api/user/profile`, {
+      const { APP_URL } = require('@/config/urls')
+      const userResult = await fetch(`${APP_URL}/api/user/profile`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',

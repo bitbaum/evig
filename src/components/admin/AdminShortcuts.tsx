@@ -1,3 +1,5 @@
+'use client'
+
 import Link from 'next/link'
 import {
   Rocket,
@@ -11,8 +13,11 @@ import {
   RefreshCw,
   Shield,
   Eye,
-  Plus
+  Plus,
+  MapPin,
+  GraduationCap
 } from 'lucide-react'
+import { MEDUSA_ADMIN_URL } from '@/config/urls'
 
 interface ShortcutItem {
   title: string
@@ -56,12 +61,26 @@ export default function AdminShortcuts() {
       icon: Package,
       color: 'bg-indigo-500'
     },
+    {
+      title: 'Ortsverwaltung',
+      description: 'Veranstaltungsorte genehmigen und verwalten',
+      href: '/admin/locations',
+      icon: MapPin,
+      color: 'bg-orange-500'
+    },
+    {
+      title: 'Workshop-Verwaltung',
+      description: 'Workshop-Vorschläge genehmigen und verwalten',
+      href: '/admin/workshops',
+      icon: GraduationCap,
+      color: 'bg-purple-500'
+    },
 
     // External Admin Interfaces
     {
       title: 'Medusa Admin',
       description: 'Direkter Zugriff auf Medusa Admin-Interface',
-      href: 'http://localhost:9000/app',
+      href: MEDUSA_ADMIN_URL,
       icon: Settings,
       color: 'bg-gray-500',
       external: true
@@ -123,7 +142,7 @@ export default function AdminShortcuts() {
     {
       title: 'Neues Produkt',
       description: 'Schnellzugriff für neue Produkte im Medusa Admin',
-      href: 'http://localhost:9000/app/products/new',
+      href: `${MEDUSA_ADMIN_URL}/products/new`,
       icon: Plus,
       color: 'bg-purple-500',
       external: true

@@ -72,16 +72,16 @@ export default function NewProductPage() {
   ]
 
   const handleInputChange = (field: keyof ProductFormData, value: ProductFormData[keyof ProductFormData]) => {
-    if (field === 'title' && !formData.handle) {
+    if (field === 'title' && typeof value === 'string' && !formData.handle) {
       // Auto-generate handle from title
       const handle = value.toLowerCase()
         .replace(/[^a-z0-9\s-]/g, '')
         .replace(/\s+/g, '-')
         .replace(/-+/g, '-')
         .trim()
-      setFormData(prev => ({ ...prev, [field]: value, handle }))
+      setFormData(prev => ({ ...prev, title: value, handle }))
     } else {
-      setFormData(prev => ({ ...prev, [field]: value }))
+      setFormData(prev => ({ ...prev, [field]: value } as ProductFormData))
     }
   }
 

@@ -1,0 +1,227 @@
+import { NextRequest } from 'next/server'
+import { auth } from '@/auth'
+import { query } from '@/lib/auth/db'
+import { apiError, apiSuccess, apiUnauthorized, apiBadRequest, apiNotFound } from '@/lib/api/helpers'
+import { isAdminRole } from '@/lib/constants'
+import { logger } from '@/lib/logger'
+import { calculateTaxes, generateTaxInvoiceData } from '@/lib/payments/tax-compliance'
+
+// POST /api/invoices - Create new invoice
+export async function POST(request: NextRequest) {
+  try {
+    const session = await auth()
+    if (!session?.user?.id) {
+      return apiUnauthorized('Authentication required')
+    }
+
+    const {
+      type = 'service',
+      userId, // For admin creating invoices for others
+      orderId,
+      serviceAppointmentId,
+      workshopRegistrationId,
+      lineItems,
+      dueDate,
+      notes,
+      taxRate = 0.077, // Swiss VAT rate
+      currency = 'CHF',
+      customerCountry = 'CH',
+      customerType = 'consumer',
+      businessType = 'service'
+    } = await request.json()
+
+    // Check if user is admin or creating invoice for themselves
+    const userRoleResult = await query('SELECT role FROM users WHERE id = $1', [session.user.id])
+    const isAdmin = isAdminRole(userRoleResult.rows[0]?.role)
+    const targetUserId = isAdmin && userId ? userId : session.user.id
+
+    if (!targetUserId) {
+      return apiBadRequest('User ID required')
+    }
+
+    // Validate line items
+    if (!lineItems || !Array.isArray(lineItems) || lineItems.length === 0) {
+      return apiBadRequest('At least one line item required')
+    }
+
+    // Calculate totals with tax compliance
+    let subtotalCents = 0
+    const processedLineItems = lineItems.map((item: any) => {
+      if (!item.description || !item.quantity || !item.unitPrice) {
+        throw new Error('Invalid line item: description, quantity, and unitPrice required')
+      }
+
+      const quantity = parseFloat(item.quantity)
+      const unitPrice = parseFloat(item.unitPrice)
+      const total = quantity * unitPrice
+      subtotalCents += Math.round(total * 100)
+
+      return {
+        description: item.description,
+        quantity,
+        unitPrice,
+        total
+      }
+    })
+
+    // Use tax compliance system for accurate tax calculation
+    const taxCalculation = calculateTaxes(
+      subtotalCents / 100,
+      customerCountry,
+      customerType,
+      businessType,
+      currency as 'CHF' | 'EUR'
+    )
+
+    const taxCents = Math.round(taxCalculation.vatAmount * 100)
+    const totalCents = Math.round(taxCalculation.total * 100)
+
+    // Create invoice with tax compliance data
+    const invoiceResult = await query(`
+      INSERT INTO invoices (
+        invoice_number,
+        type,
+        status,
+        user_id,
+        order_id,
+        service_appointment_id,
+        workshop_registration_id,
+        subtotal_cents,
+        tax_cents,
+        total_cents,
+        currency,
+        tax_rate,
+        line_items,
+        due_date,
+        notes,
+        issue_date,
+        metadata
+      ) VALUES (
+        generate_invoice_number(),
+        $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, CURRENT_DATE, $15
+      )
+      RETURNING id, invoice_number, created_at
+    `, [
+      type,
+      'draft',
+      targetUserId,
+      orderId || null,
+      serviceAppointmentId || null,
+      workshopRegistrationId || null,
+      subtotalCents,
+      taxCents,
+      totalCents,
+      currency,
+      taxCalculation.vatRate,
+      JSON.stringify(processedLineItems),
+      dueDate || null,
+      notes || null,
+      JSON.stringify({
+        taxCompliance: {
+          customerCountry,
+          customerType,
+          businessType,
+          taxRegime: taxCalculation.regime,
+          reverseCharge: taxCalculation.regime === 'reverse_charge',
+          vatReportingRequired: taxCalculation.vatAmount > 0
+        },
+        taxBreakdown: {
+          taxableAmount: taxCalculation.breakdown.taxableAmount,
+          vatExemptAmount: taxCalculation.breakdown.vatExemptAmount,
+          reverseChargeAmount: taxCalculation.breakdown.reverseChargeAmount
+        }
+      })
+    ])
+
+    const invoice = invoiceResult.rows[0]
+
+    return apiSuccess({
+      invoiceId: invoice.id,
+      invoiceNumber: invoice.invoice_number,
+      status: 'draft',
+      total: totalCents / 100,
+      currency,
+      createdAt: invoice.created_at
+    })
+
+  } catch (error) {
+    logger.error('Invoice creation error', { error })
+    return apiError(error, 'Failed to create invoice')
+  }
+}
+
+// GET /api/invoices - List invoices
+export async function GET(request: NextRequest) {
+  try {
+    const session = await auth()
+    if (!session?.user?.id) {
+      return apiUnauthorized('Authentication required')
+    }
+
+    const { searchParams } = new URL(request.url)
+    const status = searchParams.get('status')
+    const type = searchParams.get('type')
+    const limit = parseInt(searchParams.get('limit') || '20')
+    const offset = parseInt(searchParams.get('offset') || '0')
+
+    // Check if user is admin
+    const userRoleResult = await query('SELECT role FROM users WHERE id = $1', [session.user.id])
+    const isAdmin = isAdminRole(userRoleResult.rows[0]?.role)
+
+    let whereClause = 'WHERE 1=1'
+    const params = []
+    let paramIndex = 1
+
+    if (!isAdmin) {
+      whereClause += ` AND i.user_id = $${paramIndex}`
+      params.push(session.user.id)
+      paramIndex++
+    }
+
+    if (status) {
+      whereClause += ` AND i.status = $${paramIndex}`
+      params.push(status)
+      paramIndex++
+    }
+
+    if (type) {
+      whereClause += ` AND i.type = $${paramIndex}`
+      params.push(type)
+      paramIndex++
+    }
+
+    // Get invoices with user info
+    const invoicesResult = await query(`
+      SELECT
+        i.*,
+        u.name as customer_name,
+        u.email as customer_email,
+        ROUND(i.total_cents / 100.0, 2) as total,
+        ROUND(i.subtotal_cents / 100.0, 2) as subtotal,
+        ROUND(i.tax_cents / 100.0, 2) as tax
+      FROM invoices i
+      JOIN users u ON i.user_id = u.id
+      ${whereClause}
+      ORDER BY i.created_at DESC
+      LIMIT $${paramIndex} OFFSET $${paramIndex + 1}
+    `, [...params, limit, offset])
+
+    // Get total count
+    const countResult = await query(`
+      SELECT COUNT(*) as total
+      FROM invoices i
+      ${whereClause}
+    `, params)
+
+    return apiSuccess({
+      invoices: invoicesResult.rows,
+      total: parseInt(countResult.rows[0].total),
+      limit,
+      offset
+    })
+
+  } catch (error) {
+    logger.error('List invoices error', { error })
+    return apiError(error, 'Failed to retrieve invoices')
+  }
+}

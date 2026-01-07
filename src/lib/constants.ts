@@ -121,6 +121,29 @@ export const ROLE_DESCRIPTIONS: Record<UserRole, string> = {
 
 export type UserRole = typeof ROLES[keyof typeof ROLES]
 
+/**
+ * Helper to check if a role has admin privileges
+ * Handles both new role format (revampit_admin) and legacy 'admin' role
+ */
+export function isAdminRole(role: string | undefined | null): boolean {
+  if (!role) return false
+  return role === ROLES.REVAMPIT_ADMIN ||
+         role === ROLES.REVAMPIT_SUPER_ADMIN ||
+         role === 'admin' ||  // Legacy role value
+         role === 'REVAMPIT_ADMIN'  // Uppercase variant
+}
+
+/**
+ * Admin role values for database queries
+ * Use this for role comparisons in SQL or when checking user roles
+ */
+export const ADMIN_ROLES = [
+  ROLES.REVAMPIT_ADMIN,
+  ROLES.REVAMPIT_SUPER_ADMIN,
+  'admin',  // Legacy
+  'REVAMPIT_ADMIN',  // Uppercase variant
+] as const
+
 export const PERMISSIONS = {
   // System Administration
   MANAGE_SYSTEM: 'manage_system',

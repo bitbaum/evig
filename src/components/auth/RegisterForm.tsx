@@ -31,7 +31,7 @@ export function RegisterForm() {
     number: /[0-9]/.test(password),
   }
   const passwordStrength = Object.values(passwordChecks).filter(Boolean).length
-  const enableRoleSelection = process.env.NEXT_PUBLIC_ENABLE_ROLE_SELECTION_ON_REGISTER === 'true'
+  const enableRoleSelection = process.env.NEXT_PUBLIC_ENABLE_ROLE_SELECTION_ON_REGISTER !== 'false'
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()

@@ -1,14 +1,41 @@
 /**
  * User Registration API
  * POST /api/auth/register
+ *
+ * Includes rate limiting to prevent abuse
  */
 
-import { Request } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 import { registerUser } from '@/auth'
 import { apiError, apiSuccess, apiBadRequest } from '@/lib/api/helpers'
+import { logger } from '@/lib/logger'
+import { checkRateLimit, getClientIp } from '@/lib/auth/rate-limiter'
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
   try {
+    // Rate limiting - prevent registration abuse
+    const clientIp = getClientIp(request.headers)
+    const rateLimitResult = checkRateLimit(clientIp, 'register')
+
+    if (!rateLimitResult.allowed) {
+      logger.warn('Registration rate limit exceeded', { ip: clientIp })
+      return NextResponse.json(
+        {
+          success: false,
+          error: 'Zu viele Registrierungsversuche. Bitte versuchen Sie es später erneut.',
+          retryAfter: rateLimitResult.retryAfter,
+        },
+        {
+          status: 429,
+          headers: {
+            'Retry-After': String(rateLimitResult.retryAfter || 60),
+            'X-RateLimit-Remaining': String(rateLimitResult.remaining),
+            'X-RateLimit-Reset': String(rateLimitResult.resetAt),
+          },
+        }
+      )
+    }
+
     const body = await request.json()
     const { email, password, name, role } = body
 
@@ -34,6 +61,7 @@ export async function POST(request: Request) {
       // Handle database connection errors gracefully
       const errorMessage = dbError instanceof Error ? dbError.message : String(dbError)
       if (errorMessage.includes('connect') || errorMessage.includes('ECONNREFUSED') || errorMessage.includes('timeout')) {
+        logger.error('Database connection failed during registration', { error: dbError })
         return apiError(
           new Error('Database connection failed'),
           'Datenbankverbindung fehlgeschlagen. Bitte versuchen Sie es später erneut.',
@@ -43,6 +71,7 @@ export async function POST(request: Request) {
       throw dbError
     }
   } catch (error) {
+    logger.error('Registration error', { error })
     return apiError(error, 'Ein unerwarteter Fehler ist aufgetreten')
   }
 }

@@ -3,10 +3,14 @@
  * 
  * Single Source of Truth for Medusa API configuration
  * Following dev guide: docs/development/DEV_GUIDE.md
+ * URLs come from src/config/urls.ts (SSOT)
  */
 
+import { MEDUSA_API_URL, MEDUSA_ADMIN_URL } from './urls'
+
 export const MEDUSA_CONFIG = {
-  URL: process.env.MEDUSA_BACKEND_URL || 'http://localhost:9000',
+  URL: MEDUSA_API_URL,
+  ADMIN_URL: MEDUSA_ADMIN_URL,
   PUBLISHABLE_KEY: process.env.NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY || '',
   ADMIN_API_KEY: process.env.MEDUSA_ADMIN_API_KEY || '',
 } as const;

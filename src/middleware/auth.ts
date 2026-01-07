@@ -58,7 +58,7 @@ export async function userMiddleware(request: NextRequest) {
 
     return NextResponse.next()
   } catch (error) {
-    console.error('User middleware error:', error)
+    logger.error('User middleware error', { error })
     const loginUrl = new URL('/auth/login', request.url)
     return NextResponse.redirect(loginUrl)
   }

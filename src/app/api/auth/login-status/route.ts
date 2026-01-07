@@ -55,7 +55,7 @@ export async function POST(req: NextRequest) {
       throw dbError
     }
   } catch (e) {
-    console.error('Login status check error:', e)
+    logger.error('Login status check error', { error: e })
     return NextResponse.json({ error: 'Statusprüfung fehlgeschlagen' }, { status: 500 })
   }
 }

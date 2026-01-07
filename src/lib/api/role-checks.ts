@@ -84,3 +84,17 @@ export async function checkRepairerApplication(userId: string): Promise<{
     status: existingApplication.rows[0].status,
   }
 }
+
+/**
+ * Get user role from database
+ * @param userId - User ID to check
+ * @returns Promise<string | null> - User role or null if not found
+ */
+export async function getUserRole(userId: string): Promise<string | null> {
+  const result = await query(
+    `SELECT role FROM ${TABLE_NAMES.USERS} WHERE id = $1`,
+    [userId]
+  )
+
+  return result.rows.length > 0 ? result.rows[0].role : null
+}

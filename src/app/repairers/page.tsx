@@ -32,10 +32,33 @@ interface Repairer {
   hourly_rate_cents: number | null
   average_rating: number
   total_reviews: number
+  rating_distribution: { [key: string]: number }
+  review_summary: {
+    communication: number
+    professionalism: number
+    quality: number
+    timeliness: number
+    value: number
+  }
   services_offered: string[]
   specializations: string[]
   is_verified: boolean
   distance_km?: number
+}
+
+interface Review {
+  id: string
+  reviewerName: string
+  rating: number
+  title?: string
+  content: string
+  createdAt: string
+  isVerifiedPurchase: boolean
+  response?: {
+    content: string
+    responderName: string
+    createdAt: string
+  }
 }
 
 export default function RepairersPage() {
@@ -45,6 +68,9 @@ export default function RepairersPage() {
   const [selectedService, setSelectedService] = useState('')
   const [userLocation, setUserLocation] = useState('')
   const [showFilters, setShowFilters] = useState(false)
+  const [selectedRepairer, setSelectedRepairer] = useState<Repairer | null>(null)
+  const [repairerReviews, setRepairerReviews] = useState<Review[]>([])
+  const [showReviewsModal, setShowReviewsModal] = useState(false)
 
   useEffect(() => {
     fetchRepairers()
@@ -80,6 +106,78 @@ export default function RepairersPage() {
 
   const handleSearch = () => {
     fetchRepairers({ q: searchQuery, service: selectedService, location: userLocation })
+  }
+
+  const handleViewReviews = async (repairer: Repairer) => {
+    setSelectedRepairer(repairer)
+    try {
+      const response = await fetch(`/api/reviews?targetType=repairer&targetId=${repairer.id}&limit=5`)
+      if (response.ok) {
+        const data = await response.json()
+        setRepairerReviews(data.reviews.map((review: any) => ({
+          id: review.id,
+          reviewerName: review.reviewerName,
+          rating: review.overallRating,
+          title: review.title,
+          content: review.content,
+          createdAt: review.createdAt,
+          isVerifiedPurchase: review.isVerifiedPurchase,
+          response: review.response
+        })))
+      }
+    } catch (error) {
+      console.error('Error fetching reviews:', error)
+      setRepairerReviews([])
+    }
+    setShowReviewsModal(true)
+  }
+
+  const renderStars = (rating: number, size: 'sm' | 'md' | 'lg' = 'md') => {
+    const starSize = size === 'sm' ? 'w-3 h-3' : size === 'lg' ? 'w-5 h-5' : 'w-4 h-4'
+
+    return (
+      <div className="flex items-center gap-1">
+        {[1, 2, 3, 4, 5].map((star) => (
+          <Star
+            key={star}
+            className={`${starSize} ${star <= rating ? 'text-yellow-400 fill-current' : 'text-gray-300'}`}
+          />
+        ))}
+        <span className={`ml-1 text-gray-600 ${size === 'sm' ? 'text-xs' : 'text-sm'}`}>
+          {rating.toFixed(1)}
+        </span>
+      </div>
+    )
+  }
+
+  const renderRatingBreakdown = (repairer: Repairer) => {
+    if (!repairer.rating_distribution) return null
+
+    const total = repairer.total_reviews
+    if (total === 0) return null
+
+    return (
+      <div className="space-y-1">
+        {[5, 4, 3, 2, 1].map((stars) => {
+          const count = repairer.rating_distribution[stars.toString()] || 0
+          const percentage = total > 0 ? (count / total) * 100 : 0
+
+          return (
+            <div key={stars} className="flex items-center gap-2 text-xs">
+              <span className="w-3 text-gray-600">{stars}</span>
+              <Star className="w-3 h-3 text-yellow-400 fill-current" />
+              <div className="flex-1 bg-gray-200 rounded-full h-1.5">
+                <div
+                  className="bg-yellow-400 h-1.5 rounded-full"
+                  style={{ width: `${percentage}%` }}
+                />
+              </div>
+              <span className="w-8 text-right text-gray-600">{count}</span>
+            </div>
+          )
+        })}
+      </div>
+    )
   }
 
   const getServiceIcon = (service: string) => {
@@ -280,24 +378,23 @@ export default function RepairersPage() {
 
                   {/* Rating */}
                   <div className="flex items-center mb-3">
-                    <div className="flex items-center">
-                      {[1, 2, 3, 4, 5].map((star) => (
-                        <Star
-                          key={star}
-                          className={`w-4 h-4 ${
-                            star <= Math.floor(repairer.average_rating)
-                              ? 'text-yellow-400 fill-current'
-                              : 'text-gray-300'
-                          }`}
-                        />
-                      ))}
-                      <span className="ml-2 text-sm font-medium text-gray-900">
-                        {repairer.average_rating.toFixed(1)}
-                      </span>
-                    </div>
-                    <span className="ml-2 text-sm text-gray-600">
+                  <div className="flex items-center gap-3">
+                    {renderStars(repairer.average_rating)}
+                    <span className="text-sm text-gray-600">
                       ({repairer.total_reviews} Bewertungen)
                     </span>
+                    {repairer.total_reviews > 0 && (
+                      <button
+                        onClick={() => handleViewReviews(repairer)}
+                        className="text-sm text-green-600 hover:text-green-700 font-medium"
+                      >
+                        Bewertungen anzeigen
+                      </button>
+                    )}
+                  </div>
+
+                  {/* Rating Breakdown */}
+                  {repairer.total_reviews > 0 && renderRatingBreakdown(repairer)}
                   </div>
 
                   {/* Description */}
@@ -388,6 +485,100 @@ export default function RepairersPage() {
           </Link>
         </div>
       </div>
+
+      {/* Reviews Modal */}
+      {showReviewsModal && selectedRepairer && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="p-6 border-b border-gray-200">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h2 className="text-xl font-semibold text-gray-900">
+                    Bewertungen für {selectedRepairer.business_name || 'Reparateur'}
+                  </h2>
+                  <div className="flex items-center gap-2 mt-1">
+                    {renderStars(selectedRepairer.average_rating)}
+                    <span className="text-sm text-gray-600">
+                      ({selectedRepairer.total_reviews} Bewertungen)
+                    </span>
+                  </div>
+                </div>
+                <button
+                  onClick={() => setShowReviewsModal(false)}
+                  className="text-gray-400 hover:text-gray-600"
+                >
+                  ✕
+                </button>
+              </div>
+            </div>
+
+            <div className="p-6">
+              {repairerReviews.length === 0 ? (
+                <p className="text-gray-600 text-center py-8">
+                  Noch keine Bewertungen vorhanden.
+                </p>
+              ) : (
+                <div className="space-y-4">
+                  {repairerReviews.map((review) => (
+                    <div key={review.id} className="border border-gray-200 rounded-lg p-4">
+                      <div className="flex items-start justify-between mb-2">
+                        <div className="flex items-center gap-2">
+                          <span className="font-medium text-gray-900">{review.reviewerName}</span>
+                          {review.isVerifiedPurchase && (
+                            <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-100 text-green-800">
+                              <CheckCircle className="w-3 h-3 mr-1" />
+                              Verifizierter Kauf
+                            </span>
+                          )}
+                        </div>
+                        <span className="text-sm text-gray-500">
+                          {new Date(review.createdAt).toLocaleDateString('de-CH')}
+                        </span>
+                      </div>
+
+                      <div className="mb-2">
+                        {renderStars(review.rating, 'sm')}
+                      </div>
+
+                      {review.title && (
+                        <h4 className="font-medium text-gray-900 mb-2">{review.title}</h4>
+                      )}
+
+                      <p className="text-gray-700 text-sm mb-3">{review.content}</p>
+
+                      {review.response && (
+                        <div className="mt-3 p-3 bg-blue-50 rounded-lg">
+                          <div className="flex items-center gap-2 mb-1">
+                            <span className="text-sm font-medium text-blue-900">
+                              Antwort von {review.response.responderName}
+                            </span>
+                            <span className="text-xs text-blue-600">
+                              {new Date(review.response.createdAt).toLocaleDateString('de-CH')}
+                            </span>
+                          </div>
+                          <p className="text-blue-800 text-sm">{review.response.content}</p>
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {selectedRepairer.total_reviews > 5 && (
+                <div className="text-center mt-6">
+                  <Link
+                    href={`/repairers/${selectedRepairer.id}`}
+                    className="text-green-600 hover:text-green-700 font-medium"
+                    onClick={() => setShowReviewsModal(false)}
+                  >
+                    Alle {selectedRepairer.total_reviews} Bewertungen anzeigen
+                  </Link>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

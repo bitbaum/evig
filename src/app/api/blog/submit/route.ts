@@ -1,8 +1,10 @@
 import { NextRequest } from 'next/server'
 import fs from 'fs'
 import path from 'path'
-import { apiSuccess, apiError, apiBadRequest } from '@/lib/api/helpers'
+import { apiSuccess, apiError, apiBadRequest, apiUnauthorized } from '@/lib/api/helpers'
 import { logger } from '@/lib/logger'
+import { auth } from '@/auth'
+import { isAdminRole } from '@/lib/constants'
 
 const submissionsDir = path.join(process.cwd(), 'content/submissions')
 
@@ -63,6 +65,17 @@ export async function POST(request: NextRequest) {
 
 export async function GET(request: NextRequest) {
   try {
+    // Authentication required - only admins can view submissions
+    const session = await auth()
+    if (!session?.user) {
+      return apiUnauthorized('Authentication required')
+    }
+
+    // Check admin role
+    if (!isAdminRole(session.user.role as string)) {
+      return apiUnauthorized('Admin access required')
+    }
+
     // Get all submissions
     const files = fs.readdirSync(submissionsDir)
     const submissions = files
@@ -76,6 +89,7 @@ export async function GET(request: NextRequest) {
 
     return apiSuccess({ submissions })
   } catch (error) {
+    logger.error('Failed to fetch submissions', { error })
     return apiError(error, 'Failed to fetch submissions')
   }
 }

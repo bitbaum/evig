@@ -203,6 +203,27 @@ export default async function DashboardPage() {
             </Link>
           )}
 
+          {/* Workshop Proposal Card */}
+          <Link
+            href="/workshops/propose"
+            className="bg-white dark:bg-neutral-800 rounded-lg shadow-sm border-2 border-neutral-200 dark:border-neutral-700 p-4 sm:p-6 hover:shadow-md transition-shadow"
+          >
+            <div className="flex items-center">
+              <div className="w-12 h-12 bg-purple-100 dark:bg-purple-900 rounded-lg flex items-center justify-center">
+                <span className="text-purple-600 dark:text-purple-400 text-xl">🎓</span>
+              </div>
+              <div className="ml-4">
+                <h3 className={cn('text-lg font-semibold', getTextColor('white', 'primary'), 'dark:text-white')}>
+                  Workshop vorschlagen
+                </h3>
+                <p className={cn('text-sm', getTextColor('white', 'muted'), 'dark:text-neutral-400')}>
+                  Eigene Workshops anbieten
+                </p>
+              </div>
+            </div>
+          </Link>
+
+          
           {/* Blog Submit Card */}
           <Link
             href="/blog/submit"

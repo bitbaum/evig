@@ -294,7 +294,7 @@ export default function WorkshopsPage() {
                 </div>
               </div>
             )
-          ))}
+          })}
         </div>
 
         {filteredWorkshops.length === 0 && (

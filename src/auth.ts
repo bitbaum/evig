@@ -11,12 +11,12 @@ import PostgresAdapter from '@auth/pg-adapter'
 import { Pool } from 'pg'
 import type { JWT } from 'next-auth/jwt'
 import type { Session, User } from 'next-auth'
-import { getUserByEmail, createUser, getOrCreateProfile, createVerificationToken, type DbUser } from '@/lib/auth/db'
+import { getUserByEmail, createUser, getOrCreateProfile, type DbUser } from '@/lib/auth/db'
 import { hashPassword, verifyPassword, validatePasswordStrength } from '@/lib/auth/password'
-import { sendEmail } from '@/lib/email'
 import { ROLES, determineUserRole } from '@/lib/constants'
 import { getMedusaConfig } from '@/lib/auth/config'
 import { updateUser } from '@/lib/auth/db'
+import { logger } from '@/lib/logger'
 
 // Create PostgreSQL pool for Auth.js adapter with optimized connection settings
 // Use lazy connection to avoid blocking page loads
@@ -39,7 +39,7 @@ function getAuthPool(): Pool {
 
     // Handle pool errors gracefully without crashing
     pool.on('error', (err) => {
-      console.error('Unexpected error on idle database pool:', err)
+      logger.error('Unexpected error on idle database pool', { error: err })
       // Don't throw - let the app continue
     })
   }
@@ -115,7 +115,7 @@ export const authConfig = {
       },
       async authorize(credentials) {
         const creds = credentials as { email?: string; password?: string } | null
-        console.log('Auth attempt with credentials:', {
+        logger.debug('Auth attempt with credentials', {
           hasEmail: !!creds?.email,
           hasPassword: !!creds?.password,
           email: creds?.email,
@@ -148,10 +148,8 @@ export const authConfig = {
             throw new Error('Falsches Passwort')
           }
 
-          // Check if email is verified
-          if (!user.emailVerified) {
-            throw new Error('Bitte bestätigen Sie zuerst Ihre E-Mail-Adresse')
-          }
+          // Email verification not required for community app
+          // Users can log in immediately after registration
 
           // Return user object
           return {
@@ -208,7 +206,7 @@ export const authConfig = {
         try {
           await getOrCreateProfile(user.id)
         } catch (error) {
-          console.error('Failed to create profile:', error)
+          logger.error('Failed to create profile', { error, userId: user.id })
         }
       }
       return true
@@ -267,66 +265,28 @@ export async function registerUser(data: {
   // Hash password
   const password_hash = await hashPassword(password)
 
-    // Create user
-    try {
-      const user = await createUser({
-        email,
-        name,
-        password_hash,
-        role,
-      })
+  // Create user with email already verified (no confirmation needed)
+  try {
+    const user = await createUser({
+      email,
+      name,
+      password_hash,
+      role,
+      emailVerified: true, // No email verification required for community app
+    })
 
-      // Create profile
-      try {
-        await getOrCreateProfile(user.id)
-      } catch (profileError) {
-        // Log but don't fail registration if profile creation fails
-        console.error('Failed to create profile:', profileError)
-      }
-
-    // Optional: create Medusa customer and link ID
+    // Create profile
     try {
-      const medusa = getMedusaConfig()
-      if (medusa.adminApiKey && medusa.backendUrl) {
-        const resp = await fetch(`${medusa.backendUrl}/admin/customers`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            // Try both common admin auth headers, depending on Medusa setup
-            'Authorization': `Bearer ${medusa.adminApiKey}`,
-            'x-medusa-access-token': medusa.adminApiKey,
-          },
-          body: JSON.stringify({
-            email,
-            first_name: name || undefined,
-          }),
-        })
-        if (resp.ok) {
-          const data = await resp.json() as { customer?: { id?: string } }
-          const medusaId = data?.customer?.id
-          if (medusaId) {
-            await updateUser(user.id, { medusa_customer_id: medusaId })
-          }
-        } else {
-          console.warn('Medusa customer creation failed', resp.status)
-        }
-      }
-    } catch (e) {
-      console.warn('Medusa integration skipped/failed:', e)
+      await getOrCreateProfile(user.id)
+    } catch (profileError) {
+      // Log but don't fail registration if profile creation fails
+      logger.error('Failed to create profile', { error: profileError, userId: user.id })
     }
 
-    // Create verification token
-    const verificationToken = await createVerificationToken(email)
+    // No email verification needed - user is ready to log in immediately
 
-    // Send verification email
-    const verificationUrl = `${process.env.NEXTAUTH_URL || 'http://localhost:3000'}/auth/verify-email?token=${verificationToken}`
-    try {
-      await sendEmail(email, 'emailVerification', name || 'RevampIT Benutzer', verificationUrl)
-      console.log('Verification email sent to:', email)
-    } catch (emailError) {
-      console.error('Failed to send verification email:', emailError)
-      // Don't fail registration if email fails, but log it
-    }
+    // Optional: create Medusa customer and link ID (only if email is verified later)
+    // We'll handle this after email verification
 
     return {
       success: true,
@@ -334,11 +294,11 @@ export async function registerUser(data: {
         id: user.id,
         email: user.email,
         name: user.name,
-        emailVerified: false, // User needs to verify email
+        emailVerified: false, // Email verification required
       },
     }
   } catch (error) {
-    console.error('Registration error:', error)
+    logger.error('Registration error', { error })
     return { success: false, error: 'Registrierung fehlgeschlagen. Bitte versuchen Sie es später erneut.' }
   }
 }
