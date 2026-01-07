@@ -1,14 +1,16 @@
 ---
 created_date: 2026-01-30
-last_modified_date: 2026-01-30
-last_modified_summary: Initial creation of Gemini-specific agent guidelines
+last_modified_date: 2026-01-06
+last_modified_summary: Updated to clarify terminal CLI vs web usage; terminal tools have file/terminal access
 ---
 
 # Google Gemini Agent Guidelines
 
 **For AI agents working via Google Gemini on the RevampIT codebase**
 
-> **Purpose**: This document provides Gemini-specific instructions and best practices for AI agents working on the RevampIT codebase.
+> **Note for Terminal Users**: If you're using **Gemini CLI** (terminal tool), it automatically loads `.gemini/GEMINI.md` and has full file/terminal access. This guide is for **web/non-terminal** Gemini usage.
+>
+> **Purpose**: This document provides Gemini-specific instructions for web/non-terminal usage where file access is limited.
 
 ---
 
@@ -22,7 +24,18 @@ last_modified_summary: Initial creation of Gemini-specific agent guidelines
 
 ---
 
-## Gemini-Specific Considerations
+## Gemini Usage Modes
+
+### 🤖 Gemini CLI (Terminal Tool)
+**If you're using Gemini in the terminal:**
+- ✅ **Auto-loads**: `.gemini/GEMINI.md` (project context)
+- ✅ **Has file access** - Can read/write files directly
+- ✅ **Has terminal access** - Can run commands
+- ✅ **Full repository context** - Understands codebase structure
+- 📖 **See**: `.gemini/GEMINI.md` for terminal-specific instructions
+
+### 🌐 Gemini Web/Non-Terminal
+**If you're using Gemini via web interface or without terminal tools:**
 
 ### Capabilities
 
@@ -32,15 +45,15 @@ Gemini provides:
 - ✅ **Documentation** - Can help with documentation tasks
 - ✅ **Problem solving** - Can help debug and troubleshoot
 
-### Limitations
+### Limitations (Web/Non-Terminal Only)
 
-Gemini has:
+When using Gemini **without terminal tools**:
 - ⚠️ **No direct file access** - Cannot read/write files directly
 - ⚠️ **No terminal access** - Cannot run commands
 - ⚠️ **No real-time context** - Limited to provided context
 - ⚠️ **No browser automation** - Cannot test web features directly
 
-### Workflow Adaptation
+### Workflow Adaptation (Web/Non-Terminal)
 
 **Since Gemini cannot directly modify files:**
 1. ✅ **Provide complete code** - Give full file contents, not just changes

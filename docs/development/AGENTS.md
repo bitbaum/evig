@@ -1,7 +1,7 @@
 ---
 created_date: 2026-01-30
-last_modified_date: 2026-01-30
-last_modified_summary: Initial creation of agent index and quick reference
+last_modified_date: 2026-01-06
+last_modified_summary: Added Codex CLI (terminal) and Gemini CLI (terminal) auto-loaded context files; clarified terminal tool vs web usage
 ---
 
 # AI Agent Quick Reference
@@ -17,7 +17,10 @@ last_modified_summary: Initial creation of agent index and quick reference
 ### 🤖 Cursor Cloud Code (Composer)
 **You are:** Working directly in Cursor IDE with file access, terminal, and browser tools
 
-**Read:** [`docs/development/cursor.md`](./cursor.md)
+**Read:**
+- **Primary:** `.cursorrules` (main rules - auto-discovered by Cursor)
+- **Modular:** `.cursor/rules/*.mdc` (topic-specific rules)
+- **Human Reference:** [`docs/development/cursor.md`](./cursor.md) (for developers, not AI)
 
 **Key capabilities:**
 - ✅ Direct file read/write access
@@ -33,41 +36,53 @@ last_modified_summary: Initial creation of agent index and quick reference
 
 ---
 
-### 🤖 Google Gemini
-**You are:** Working via Google Gemini interface (no direct file access)
+### 🤖 Gemini CLI (terminal)
+**You are:** Using Gemini in the terminal inside this repo
 
-**Read:** [`docs/development/gemini.md`](./gemini.md)
+**Auto-loaded context:**
+- **Primary:** `.gemini/GEMINI.md` (Gemini CLI project context)
 
-**Key capabilities:**
-- ✅ Code generation and analysis
-- ✅ Documentation assistance
-- ✅ Problem solving
-- ⚠️ No direct file access
-- ⚠️ No terminal access
+**Also follow (canonical rules):**
+- `.cursorrules`
+- `.cursor/rules/*.mdc`
 
 **Quick start:**
-1. Read `docs/development/gemini.md`
-2. Read `docs/development/DEV_GUIDE.md`
-3. Always provide complete context in prompts
+1. Keep `.gemini/GEMINI.md` lean and SSOT-oriented
+2. Prefer `.cursorrules` + `.cursor/rules/*.mdc` for canonical rules
 
 ---
 
-### 🤖 Claude/Codex
-**You are:** Working via Claude interface (strong analysis, limited file access)
+### 🤖 Google Gemini (web / non-terminal)
+**You are:** Using Gemini outside Cursor/terminal tooling (no repo tools)
+
+**Read:** [`docs/development/gemini.md`](./gemini.md)
+
+---
+
+### 🤖 Codex CLI (terminal)
+**You are:** Using OpenAI Codex in the terminal inside this repo
+
+**Auto-loaded context:**
+- **Primary:** `AGENTS.md` (repo root) (Codex CLI)
+
+**Also follow (canonical rules):**
+- `.cursorrules`
+- `.cursor/rules/*.mdc`
+
+---
+
+### 🤖 Claude Code (terminal)
+**You are:** Using Claude Code in the terminal inside this repo
+
+**Auto-loaded context:**
+- **Primary:** `.claude/CLAUDE.md`
+
+---
+
+### 🤖 Claude (web / non-terminal)
+**You are:** Using Claude outside Cursor/terminal tooling (limited file access)
 
 **Read:** [`docs/development/claude.md`](./claude.md)
-
-**Key capabilities:**
-- ✅ Strong code analysis
-- ✅ Pattern recognition
-- ✅ Refactoring suggestions
-- ✅ Architecture understanding
-- ⚠️ Limited direct file access
-
-**Quick start:**
-1. Read `docs/development/claude.md`
-2. Read `docs/development/DEV_GUIDE.md`
-3. Leverage Claude's analysis strengths
 
 ---
 
@@ -114,13 +129,13 @@ Start: I need to work on RevampIT codebase
 │  │
 │  └─ NO → Continue...
 │
-└─ Am I Claude/Codex?
+└─ Am I running a terminal agent?
    │
-   ├─ YES → Read claude.md
-   │        Leverage analysis strengths, provide context
+   ├─ Codex CLI → Uses `AGENTS.md` (repo root)
+   ├─ Gemini CLI → Uses `.gemini/GEMINI.md`
+   ├─ Claude Code → Uses `.claude/CLAUDE.md`
    │
-   └─ UNKNOWN → Read DEV_GUIDE.md
-                Follow general guidelines
+   └─ Otherwise → Use DEV_GUIDE.md + the appropriate docs/development/* guide
 ```
 
 ---
@@ -193,9 +208,15 @@ docs/development/
 - [`../../DEVELOPMENT_GUIDELINES.md`](../../DEVELOPMENT_GUIDELINES.md) - File protection
 
 ### Agent-Specific Guides
-- [`cursor.md`](./cursor.md) - Cursor agent guide
-- [`gemini.md`](./gemini.md) - Gemini agent guide
-- [`claude.md`](./claude.md) - Claude agent guide
+- **Cursor:**
+  - [`/.cursorrules`](../../.cursorrules) - Main Cursor rules (auto-discovered)
+  - [`/.cursor/rules/`](../../.cursor/rules/) - Modular rules
+  - [`cursor.md`](./cursor.md) - Human reference guide
+- **Claude:**
+  - [`/.claude/CLAUDE.md`](../../.claude/CLAUDE.md) - Claude Code standard (auto-discovered)
+  - [`claude.md`](./claude.md) - Detailed reference guide
+- **Gemini:**
+  - [`gemini.md`](./gemini.md) - Gemini agent guide
 
 ### Architecture & Setup
 - [`../guides/ARCHITECTURE.md`](../guides/ARCHITECTURE.md) - System architecture

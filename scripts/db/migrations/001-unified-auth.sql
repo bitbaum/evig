@@ -319,8 +319,8 @@ CREATE TABLE IF NOT EXISTS medusa_customer_links (
 -- ============================================================================
 
 CREATE INDEX IF NOT EXISTS idx_users_email ON users(email);
-CREATE INDEX IF NOT EXISTS idx_sessions_user_id ON sessions(user_id);
-CREATE INDEX IF NOT EXISTS idx_accounts_user_id ON accounts(user_id);
+CREATE INDEX IF NOT EXISTS idx_sessions_user_id ON sessions("userId");
+CREATE INDEX IF NOT EXISTS idx_accounts_user_id ON accounts("userId");
 CREATE INDEX IF NOT EXISTS idx_user_profiles_user_id ON user_profiles(user_id);
 CREATE INDEX IF NOT EXISTS idx_workshop_registrations_user_id ON workshop_registrations(user_id);
 CREATE INDEX IF NOT EXISTS idx_workshop_registrations_instance_id ON workshop_registrations(workshop_instance_id);

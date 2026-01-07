@@ -1,0 +1,219 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database (Unified - for CMS API, NextAuth, and all services)
+  db:
+    image: postgres:15-alpine
+    container_name: revampit_db_prod
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${DB_USER:-revampit_prod}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME:-revampit_cms}
+      POSTGRES_INITDB_ARGS: "--encoding=UTF-8"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+      - ./postgres-init:/docker-entrypoint-initdb.d
+    networks:
+      - revampit_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-revampit_prod}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  # PostgreSQL for Medusa (separate database)
+  medusa_db:
+    image: postgres:16-alpine
+    container_name: revampit_medusa_db_prod
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${MEDUSA_DB_USER:-medusa_prod}
+      POSTGRES_PASSWORD: ${MEDUSA_DB_PASSWORD}
+      POSTGRES_DB: ${MEDUSA_DB_NAME:-medusa_db}
+      POSTGRES_INITDB_ARGS: "--encoding=UTF-8"
+    volumes:
+      - medusa_db_data:/var/lib/postgresql/data
+    networks:
+      - revampit_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${MEDUSA_DB_USER:-medusa_prod}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  # Redis/Valkey for Medusa (caching and sessions)
+  medusa_redis:
+    image: redis:7-alpine
+    container_name: revampit_medusa_redis_prod
+    restart: unless-stopped
+    command: redis-server --appendonly yes --maxmemory 256mb --maxmemory-policy allkeys-lru
+    volumes:
+      - redis_data:/data
+    networks:
+      - revampit_network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  # Meilisearch for fast product search
+  meilisearch:
+    image: getmeili/meilisearch:v1.11
+    container_name: revampit_meilisearch_prod
+    restart: unless-stopped
+    environment:
+      MEILI_MASTER_KEY: ${MEILI_MASTER_KEY}
+      MEILI_ENV: production
+      MEILI_NO_ANALYTICS: "true"
+      MEILI_HTTP_PAYLOAD_SIZE_LIMIT: "100 MB"
+    volumes:
+      - meilisearch_data:/meili_data
+    networks:
+      - revampit_network
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--spider", "http://127.0.0.1:7700/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  # Medusa backend (e-commerce engine)
+  medusa:
+    build:
+      context: ./medusa-backend
+      dockerfile: Dockerfile.prod
+    container_name: revampit_medusa_prod
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: postgres://${MEDUSA_DB_USER:-medusa_prod}:${MEDUSA_DB_PASSWORD}@medusa_db:5432/${MEDUSA_DB_NAME:-medusa_db}
+      REDIS_URL: redis://medusa_redis:6379
+      JWT_SECRET: ${MEDUSA_JWT_SECRET}
+      COOKIE_SECRET: ${MEDUSA_COOKIE_SECRET}
+      MEDUSA_BACKEND_URL: ${MEDUSA_BACKEND_URL:-http://medusa:9000}
+      PORT: 9000
+      NODE_ENV: production
+      STORE_CORS: ${NEXT_PUBLIC_SITE_URL:-http://localhost:3000}
+      ADMIN_CORS: ${NEXT_PUBLIC_SITE_URL:-http://localhost:3000}
+      DATABASE_EXTRA: '{"ssl": false}'
+    depends_on:
+      medusa_db:
+        condition: service_healthy
+      medusa_redis:
+        condition: service_healthy
+    networks:
+      - revampit_network
+    volumes:
+      - medusa_uploads:/app/uploads
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  # Next.js Application (main frontend and backend API)
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.prod
+    container_name: revampit_app_prod
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      NEXT_PUBLIC_SITE_URL: ${NEXT_PUBLIC_SITE_URL}
+      PORT: 3000
+      HOSTNAME: 0.0.0.0
+      # Database
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_NAME: ${DB_NAME:-revampit_cms}
+      DB_USER: ${DB_USER:-revampit_prod}
+      DB_PASSWORD: ${DB_PASSWORD}
+      # Auth
+      AUTH_SECRET: ${AUTH_SECRET}
+      NEXTAUTH_SECRET: ${NEXTAUTH_SECRET}
+      NEXTAUTH_URL: ${NEXTAUTH_URL}
+      # Medusa
+      MEDUSA_BACKEND_URL: http://medusa:9000
+      MEDUSA_DB_HOST: medusa_db
+      MEDUSA_DB_PORT: 5432
+      MEDUSA_DB_NAME: ${MEDUSA_DB_NAME:-medusa_db}
+      MEDUSA_DB_USER: ${MEDUSA_DB_USER:-medusa_prod}
+      MEDUSA_DB_PASSWORD: ${MEDUSA_DB_PASSWORD}
+      # Redis
+      REDIS_URL: redis://medusa_redis:6379
+      MEDUSA_REDIS_PORT: 6380
+      # Search
+      MEILI_MASTER_KEY: ${MEILI_MASTER_KEY}
+      MEILI_PORT: 7700
+      # Email
+      SMTP_HOST: ${SMTP_HOST}
+      SMTP_PORT: ${SMTP_PORT}
+      SMTP_USER: ${SMTP_USER}
+      SMTP_PASSWORD: ${SMTP_PASSWORD}
+      EMAIL_FROM: ${EMAIL_FROM}
+    depends_on:
+      db:
+        condition: service_healthy
+      medusa_db:
+        condition: service_healthy
+      medusa_redis:
+        condition: service_healthy
+      meilisearch:
+        condition: service_healthy
+      medusa:
+        condition: service_healthy
+    networks:
+      - revampit_network
+    ports:
+      - "127.0.0.1:3000:3000"
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://127.0.0.1:3000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+volumes:
+  db_data:
+    driver: local
+  medusa_db_data:
+    driver: local
+  redis_data:
+    driver: local
+  meilisearch_data:
+    driver: local
+  medusa_uploads:
+    driver: local
+
+networks:
+  revampit_network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16

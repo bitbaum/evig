@@ -44,8 +44,13 @@ CREATE TABLE IF NOT EXISTS role_permissions (
 -- ============================================================================
 
 -- Update role constraint to allow new roles
+-- First, update any invalid roles to valid ones
+UPDATE users SET role = 'customer' WHERE role NOT IN ('admin', 'editor', 'user', 'customer', 'volunteer', 'participant', 'moderator', 'seller');
+
+-- Drop existing constraint if it exists
 ALTER TABLE users DROP CONSTRAINT IF EXISTS users_role_check;
--- Include legacy roles to avoid migration failures on existing data (e.g., 'seller')
+
+-- Add new constraint (NOT VALID means it won't check existing data)
 ALTER TABLE users ADD CONSTRAINT users_role_check CHECK (
     role IN (
         'admin', 'editor', 'user', 'customer', 'volunteer', 'participant', 'moderator', 'seller'
@@ -277,7 +282,8 @@ BEGIN
             'user_roles', 'permissions', 'role_permissions',
             'user_profiles', 'workshops', 'workshop_instances', 'workshop_registrations',
             'customer_preferences', 'customer_interactions', 'customer_segments', 'user_segments',
-            'service_types', 'service_appointments'
+            'service_types', 'service_appointments', 'repairer_applications', 'seller_applications', 'workshop_proposals',
+            'locations', 'location_approvals', 'location_bookings'
         ])
     LOOP
         trigger_name := 'update_' || tbl_name || '_updated_at';
@@ -290,6 +296,207 @@ BEGIN
         END IF;
     END LOOP;
 END $$;
+
+-- ============================================================================
+-- LOCATION MANAGEMENT SYSTEM
+-- ============================================================================
+
+-- Create locations table for workshop and service venues
+CREATE TABLE IF NOT EXISTS locations (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    name VARCHAR(255) NOT NULL,
+    type VARCHAR(50) NOT NULL CHECK (type IN ('venue', 'home', 'online', 'community_center', 'business')),
+    description TEXT,
+
+    -- Address information
+    address_line1 VARCHAR(255),
+    address_line2 VARCHAR(255),
+    postal_code VARCHAR(10),
+    city VARCHAR(100) NOT NULL,
+    canton VARCHAR(50),
+    country VARCHAR(100) DEFAULT 'Switzerland',
+
+    -- Geographic coordinates (for mapping)
+    latitude DECIMAL(10, 8),
+    longitude DECIMAL(11, 8),
+
+    -- Capacity and facilities
+    max_capacity INTEGER,
+    facilities TEXT[], -- ['wheelchair_accessible', 'parking', 'wifi', 'kitchen', etc.]
+
+    -- Accessibility information
+    accessibility_info JSONB DEFAULT '{}', -- wheelchair, parking, public_transport, etc.
+
+    -- Contact information
+    contact_name VARCHAR(255),
+    contact_phone VARCHAR(50),
+    contact_email VARCHAR(255),
+
+    -- Approval and moderation
+    approval_status VARCHAR(20) DEFAULT 'pending' CHECK (approval_status IN ('pending', 'approved', 'rejected', 'suspended')),
+    approved_by UUID REFERENCES users(id),
+    approved_at TIMESTAMP WITH TIME ZONE,
+    rejection_reason TEXT,
+
+    -- Usage statistics
+    usage_count INTEGER DEFAULT 0,
+    last_used_at TIMESTAMP WITH TIME ZONE,
+
+    -- Metadata
+    created_by UUID NOT NULL REFERENCES users(id),
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+
+    -- Full-text search
+    search_vector TSVECTOR GENERATED ALWAYS AS (
+        to_tsvector('german',
+            coalesce(name, '') || ' ' ||
+            coalesce(description, '') || ' ' ||
+            coalesce(city, '') || ' ' ||
+            coalesce(canton, '') || ' ' ||
+            coalesce(address_line1, '')
+        )
+    ) STORED
+);
+
+-- Create location_approvals table for approval workflow
+CREATE TABLE IF NOT EXISTS location_approvals (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    location_id UUID NOT NULL REFERENCES locations(id) ON DELETE CASCADE,
+    reviewer_id UUID NOT NULL REFERENCES users(id),
+    action VARCHAR(20) NOT NULL CHECK (action IN ('approve', 'reject', 'suspend', 'reinstate')),
+    status VARCHAR(20) NOT NULL CHECK (status IN ('approved', 'rejected', 'suspended', 'reinstated')),
+    review_notes TEXT,
+    required_changes TEXT[],
+    reviewed_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Create location_bookings table for scheduling
+CREATE TABLE IF NOT EXISTS location_bookings (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    location_id UUID NOT NULL REFERENCES locations(id) ON DELETE CASCADE,
+    booked_by UUID NOT NULL REFERENCES users(id),
+    event_type VARCHAR(50) NOT NULL CHECK (event_type IN ('workshop', 'repair', 'meeting', 'other')),
+    event_id UUID, -- Reference to workshop or service
+    title VARCHAR(255) NOT NULL,
+    description TEXT,
+    start_time TIMESTAMP WITH TIME ZONE NOT NULL,
+    end_time TIMESTAMP WITH TIME ZONE NOT NULL,
+    expected_attendees INTEGER,
+    special_requirements TEXT,
+    status VARCHAR(20) DEFAULT 'confirmed' CHECK (status IN ('pending', 'confirmed', 'cancelled', 'completed')),
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+
+    -- Prevent double bookings
+    EXCLUDE (location_id WITH =) WHERE (status IN ('pending', 'confirmed'))
+);
+
+-- ============================================================================
+-- WORKSHOP PROPOSALS SYSTEM
+-- ============================================================================
+
+-- Create workshop_proposals table if it doesn't exist
+CREATE TABLE IF NOT EXISTS workshop_proposals (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    title VARCHAR(500) NOT NULL,
+    description TEXT NOT NULL,
+    short_description TEXT,
+    category VARCHAR(100),
+    duration_minutes INTEGER NOT NULL,
+    level VARCHAR(20) NOT NULL DEFAULT 'beginner' CHECK (level IN ('beginner', 'intermediate', 'advanced')),
+    max_participants INTEGER NOT NULL DEFAULT 10,
+    min_participants INTEGER NOT NULL DEFAULT 3,
+    price_cents INTEGER NOT NULL DEFAULT 0,
+    prerequisites TEXT,
+    learning_objectives TEXT[] DEFAULT '{}',
+    target_audience TEXT,
+    materials_provided TEXT,
+    materials_required TEXT,
+    location_type VARCHAR(20) NOT NULL DEFAULT 'venue' CHECK (location_type IN ('venue', 'online', 'home')),
+    selected_location_id UUID REFERENCES locations(id),
+    proposed_location TEXT,
+    proposed_date DATE,
+    proposed_time TIME,
+    special_requirements TEXT,
+    terms_accepted BOOLEAN NOT NULL DEFAULT false,
+    status VARCHAR(20) NOT NULL DEFAULT 'pending'
+        CHECK (status IN ('pending', 'approved', 'rejected', 'requires_changes')),
+    admin_notes TEXT,
+    reviewed_by UUID REFERENCES users(id),
+    reviewed_at TIMESTAMP WITH TIME ZONE,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+
+    -- Prevent duplicate proposals same day
+    UNIQUE(user_id, title, created_at::date)
+);
+
+-- ============================================================================
+-- SERVICE PROVIDER ENHANCEMENT
+-- ============================================================================
+
+-- Create repairer_applications table if it doesn't exist
+CREATE TABLE IF NOT EXISTS repairer_applications (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    business_name VARCHAR(255),
+    business_type VARCHAR(50) NOT NULL CHECK (business_type IN ('individual', 'business', 'organization')),
+    description TEXT NOT NULL,
+    years_experience INTEGER DEFAULT 0,
+    phone VARCHAR(50) NOT NULL,
+    website VARCHAR(255),
+    address TEXT NOT NULL,
+    city VARCHAR(100) NOT NULL,
+    postal_code VARCHAR(20) NOT NULL,
+    service_radius_km INTEGER DEFAULT 50,
+    remote_services BOOLEAN NOT NULL DEFAULT false,
+    hourly_rate_cents INTEGER,
+    emergency_fee_cents INTEGER,
+    home_visit_fee_cents INTEGER,
+    services_offered TEXT[] DEFAULT '{}',
+    specializations TEXT[] DEFAULT '{}',
+    certifications JSONB DEFAULT '[]',
+    insurance_info TEXT,
+    portfolio_images TEXT[] DEFAULT '{}',
+    verification_documents TEXT[] DEFAULT '{}',
+    terms_accepted BOOLEAN NOT NULL DEFAULT false,
+    status VARCHAR(20) NOT NULL DEFAULT 'pending'
+        CHECK (status IN ('pending', 'approved', 'rejected', 'requires_changes')),
+    admin_notes TEXT,
+    reviewed_by UUID REFERENCES users(id),
+    reviewed_at TIMESTAMP WITH TIME ZONE,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE(user_id)
+);
+
+-- Create seller_applications table if it doesn't exist
+CREATE TABLE IF NOT EXISTS seller_applications (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    business_name VARCHAR(255),
+    business_type VARCHAR(50) NOT NULL CHECK (business_type IN ('individual', 'business', 'organization')),
+    description TEXT NOT NULL,
+    years_experience INTEGER DEFAULT 0,
+    phone VARCHAR(50) NOT NULL,
+    website VARCHAR(255),
+    preferred_contact_method VARCHAR(20) DEFAULT 'email'
+        CHECK (preferred_contact_method IN ('email', 'phone', 'message')),
+    services_offered TEXT[] DEFAULT '{}',
+    specializations TEXT[] DEFAULT '{}',
+    portfolio_items TEXT[] DEFAULT '{}',
+    terms_accepted BOOLEAN NOT NULL DEFAULT false,
+    status VARCHAR(20) NOT NULL DEFAULT 'pending'
+        CHECK (status IN ('pending', 'approved', 'rejected', 'requires_changes')),
+    admin_notes TEXT,
+    reviewed_by UUID REFERENCES users(id),
+    reviewed_at TIMESTAMP WITH TIME ZONE,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE(user_id)
+);
 
 -- ============================================================================
 -- DEFAULT DATA INSERTION
@@ -380,31 +587,30 @@ ON CONFLICT (slug) DO NOTHING;
 -- DATA MIGRATION
 -- ============================================================================
 
--- Migrate existing users to new role system
-UPDATE users
-SET role_id = ur.id
-FROM user_roles ur
-WHERE users.role = ur.slug
-  AND users.role_id IS NULL;
+-- Clean up any orphaned category references (skip if admin user doesn't exist)
+DO $$
+BEGIN
+    -- Only run if admin user exists
+    IF EXISTS (SELECT 1 FROM users WHERE email = 'admin@revampit.ch') THEN
+        -- Migrate existing users to new role system (only if user_roles exist)
+        IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'user_roles') THEN
+            -- Migrate existing users to new role system
+            UPDATE users
+            SET role_id = ur.id
+            FROM user_roles ur
+            WHERE users.role = ur.slug
+              AND users.role_id IS NULL;
 
--- Set default role for users without role_id
-UPDATE users
-SET role_id = (SELECT id FROM user_roles WHERE slug = 'customer' LIMIT 1)
-WHERE role_id IS NULL;
-
--- Migrate existing role column to new status for backward compatibility
--- (existing roles remain as-is for now, but new system uses role_id)
+            -- Set default role for users without role_id
+            UPDATE users
+            SET role_id = (SELECT id FROM user_roles WHERE slug = 'customer' LIMIT 1)
+            WHERE role_id IS NULL;
+        END IF;
+    END IF;
+END $$;
 
 -- Update existing user_profiles with timestamps if they exist
 UPDATE user_profiles
 SET created_at = CURRENT_TIMESTAMP,
     updated_at = CURRENT_TIMESTAMP
 WHERE created_at IS NULL OR updated_at IS NULL;
-
--- Insert default categories (now that admin user exists)
-INSERT INTO categories (id, slug, name, description, color, created_by, updated_by) VALUES
-    ('11111111-1111-1111-1111-111111111111', 'uncategorized', 'Uncategorized', 'Default category for posts', '#6B7280', '00000000-0000-0000-0000-000000000001', '00000000-0000-0000-0000-000000000001'),
-    ('22222222-2222-2222-2222-222222222222', 'news', 'News', 'Latest news and updates', '#3B82F6', '00000000-0000-0000-0000-000000000001', '00000000-0000-0000-0000-000000000001'),
-    ('33333333-3333-3333-3333-333333333333', 'tutorials', 'Tutorials', 'Step-by-step guides and tutorials', '#10B981', '00000000-0000-0000-0000-000000000001', '00000000-0000-0000-0000-000000000001'),
-    ('44444444-4444-4444-4444-444444444444', 'projects', 'Projects', 'Project updates and showcases', '#F59E0B', '00000000-0000-0000-0000-000000000001', '00000000-0000-0000-0000-000000000001')
-ON CONFLICT (slug) DO NOTHING;

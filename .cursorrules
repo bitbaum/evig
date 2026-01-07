@@ -1,0 +1,116 @@
+# RevampIT Project Rules for Cursor AI
+
+## 🎯 Project Overview
+
+RevampIT is a Swiss non-profit enabling free exchange of technology, promoting open-source hardware and software.
+
+**See SSOT files for details:**
+- **Mission**: `docs/MISSION_STATEMENT.md`
+- **Project Context**: `docs/SHARED_CONTEXT.md` (tech stack, location, database, file structure)
+- **Commands**: `docs/COMMANDS.md` (all npm scripts)
+
+---
+
+## ⚡ Quick Commands
+
+```bash
+npm run d              # Start everything (databases + dev server)
+npm run dev            # Frontend only (port 3000)
+npm run services:up    # Start Docker services
+npm run services:down  # Stop Docker services
+npm run setup-admins   # Create admin users
+npm run lint           # Check code quality
+npm run build          # Test production build
+npm run typecheck      # TypeScript check (IMPORTANT: run before commits)
+```
+
+**Full command reference**: See `docs/COMMANDS.md`
+
+---
+
+## 🛡️ Critical Rules (MUST FOLLOW)
+
+### File Deletion Protection
+**⚠️ NEVER delete without explicit user approval:**
+- Migration files: `cms-api/src/migrations/*`, `scripts/db/migrations/*`
+- `.env*` files
+- Core configuration files
+- Documentation files
+
+### Code Quality Standards
+**ALWAYS:**
+- ✅ Use `import { logger } from '@/lib/logger'` (NEVER `console.log`)
+- ✅ Use constants from `src/config/` (TABLE_NAMES, URLs, error messages)
+- ✅ Use TypeScript strict mode (no `any` without justification)
+- ✅ Search codebase before creating new files (prevent duplicates)
+- ✅ Follow existing patterns from similar files
+
+**NEVER:**
+- ❌ `console.log` statements (see `docs/CODE_AUDIT.md` for current count)
+- ❌ Hardcoded table names (use `TABLE_NAMES` from `src/config/database.ts`)
+- ❌ Hardcoded URLs (use `src/config/urls.ts`)
+- ❌ Duplicate functionality
+
+### AI Slop Prevention
+**Before creating ANY new file:**
+1. Search with semantic search: `@codebase "similar functionality"`
+2. Check with grep: `grep -r "ComponentName"`
+3. Verify naming conventions in target directory
+4. Ensure no duplicates exist
+
+---
+
+## 📋 Detailed Topic-Specific Rules
+
+For detailed, modular rules, see:
+- `.cursor/rules/code-quality.mdc` - Code standards and patterns
+- `.cursor/rules/database.mdc` - Database access patterns
+- `.cursor/rules/deployment.mdc` - Deployment workflow
+- `.cursor/rules/swiss-context.mdc` - Swiss-specific requirements
+
+---
+
+## 📚 Key Documentation
+
+**Read BEFORE starting any task:**
+1. `docs/development/DEV_GUIDE.md` - Core principles (DRY, SSOT)
+2. `docs/BEST_PRACTICES.md` - AI slop prevention
+3. `DEVELOPMENT_GUIDELINES.md` - File protection rules
+
+**Project Context:**
+- `docs/SHARED_CONTEXT.md` - Tech stack, database, file structure, access points
+- `docs/COMMANDS.md` - All npm scripts
+- `docs/CODE_AUDIT.md` - Current issues to fix
+
+**For specific features:**
+- `docs/UNIFIED_AUTH.md` - Authentication system
+- `docs/REVAMPIT_SHOP_STATUS.md` - Medusa shop integration
+- `docs/guides/ARCHITECTURE.md` - System architecture
+
+---
+
+## 🧪 Testing Changes
+
+```bash
+# After making changes:
+npm run typecheck      # TypeScript validation (CRITICAL: run before commits)
+npm run build          # Check TypeScript compilation
+npm run lint           # Check code quality
+npm run test           # Run tests (if applicable)
+npm run d              # Start and test manually
+```
+
+---
+
+## 🚨 Known Issues
+
+See `docs/CODE_AUDIT.md` for current issues:
+- console.log statements → replace with `logger`
+- Hardcoded table names → use `TABLE_NAMES`
+- Hardcoded URLs → use `src/config/urls.ts`
+- Missing auth checks
+- Performance issues
+
+---
+
+**Remember**: This is a Swiss non-profit focused on sustainability and inclusion. Write clean, maintainable code that future volunteers can understand and extend. Quality matters, but so does making technology accessible to everyone.

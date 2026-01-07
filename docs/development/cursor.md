@@ -1,14 +1,18 @@
 ---
 created_date: 2026-01-30
-last_modified_date: 2026-01-30
-last_modified_summary: Initial creation of Cursor-specific agent guidelines
+last_modified_date: 2026-01-06
+last_modified_summary: Updated to clarify this is a human reference guide; AI rules are in .cursorrules and .cursor/rules/
 ---
 
-# Cursor Cloud Code Agent Guidelines
+# Cursor IDE Reference Guide for Humans
 
-**For AI agents working in Cursor IDE using Cloud Code (Composer)**
+**For developers and team members using Cursor IDE**
 
-> **Purpose**: This document provides Cursor-specific instructions and best practices for AI agents working on the RevampIT codebase.
+> **Note for AI Agents**: This is a **human reference guide**. Cursor AI automatically reads project rules from:
+> - `.cursorrules` (main rules file)
+> - `.cursor/rules/*.mdc` (modular rule files)
+> 
+> **Purpose**: This document helps **human developers** understand how to use Cursor IDE effectively when working on the RevampIT codebase.
 
 ---
 

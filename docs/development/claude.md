@@ -1,14 +1,16 @@
 ---
 created_date: 2026-01-30
-last_modified_date: 2026-01-30
-last_modified_summary: Initial creation of Claude-specific agent guidelines
+last_modified_date: 2026-01-06
+last_modified_summary: Updated to clarify terminal CLI vs web usage; terminal tools have file/terminal access
 ---
 
-# Claude (Codex) Agent Guidelines
+# Claude Agent Guidelines
 
-**For AI agents working via Claude/Codex on the RevampIT codebase**
+**For AI agents working via Claude on the RevampIT codebase**
 
-> **Purpose**: This document provides Claude-specific instructions and best practices for AI agents working on the RevampIT codebase.
+> **Note for Terminal Users**: If you're using **Claude Code** (terminal tool), it automatically loads `.claude/CLAUDE.md` and has full file/terminal access. This guide is for **web/non-terminal** Claude usage.
+>
+> **Purpose**: This document provides Claude-specific instructions for web/non-terminal usage where file access is limited.
 
 ---
 
@@ -22,7 +24,18 @@ last_modified_summary: Initial creation of Claude-specific agent guidelines
 
 ---
 
-## Claude-Specific Considerations
+## Claude Usage Modes
+
+### 🤖 Claude Code (Terminal Tool)
+**If you're using Claude Code in the terminal:**
+- ✅ **Auto-loads**: `.claude/CLAUDE.md` (project context)
+- ✅ **Has file access** - Can read/write files directly
+- ✅ **Has terminal access** - Can run commands
+- ✅ **Full repository context** - Understands codebase structure
+- 📖 **See**: `.claude/CLAUDE.md` for terminal-specific instructions
+
+### 🌐 Claude Web/Non-Terminal
+**If you're using Claude via web interface or without terminal tools:**
 
 ### Capabilities
 
@@ -41,9 +54,9 @@ Claude excels at:
 - 🎯 **Best practices** - Applying development principles
 - 🎯 **Explanations** - Clear, detailed explanations
 
-### Limitations
+### Limitations (Web/Non-Terminal Only)
 
-Claude has:
+When using Claude **without terminal tools**:
 - ⚠️ **No direct file access** - Cannot read/write files directly (depends on interface)
 - ⚠️ **Limited real-time context** - Works with provided context
 - ⚠️ **No terminal access** - Cannot run commands directly

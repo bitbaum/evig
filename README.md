@@ -20,13 +20,37 @@
 
 ## 🌟 About RevampIT
 
-RevampIT is a Swiss non-profit organization dedicated to **sustainable technology** and **digital inclusion**. We refurbish computers and electronic devices, provide technical education through workshops, and promote open-source solutions to reduce electronic waste.
+RevampIT is a Swiss non-profit organization dedicated to **enabling free exchange of technology** between individuals and groups, promoting **open-source hardware and software** as the ideal form of human collaboration.
 
 ### Our Mission
-- ♻️ **Reduce E-Waste**: Refurbish and redistribute electronic devices
-- 🏫 **Education**: Provide workshops on Linux, open-source software, and hardware repair  
-- 🤝 **Community**: Build a network of volunteers, technical experts, and partners
-- 🌍 **Sustainability**: Promote responsible technology consumption and circular economy
+
+**Primary Goal**: Enable free exchange of technology on a nonprofit basis, promoting open-source solutions that can compete fairly with proprietary software.
+
+#### Core Activities
+
+- ♻️ **Technology Redistribution**: Redistribute computers, hardware, software, compute resources, and memory resources (servers) on a nonprofit, free basis
+- 🔓 **Open Source Advocacy**: Enable open-source hardware and software to compete with proprietary solutions, demonstrating that decentralized development can exceed centralized corporations
+- 🌍 **Environmental Impact Measurement**: Track CO2 impact of all electricity use (toasters, TVs, computers, AI, robotics, food production) to enable true individual environmental awareness
+- 💱 **Subscription Exchange**: Facilitate community funding of subscriptions when needed, while maintaining open-source alternatives until maturity
+- 🏫 **Education**: Provide workshops on Linux, open-source software, hardware repair, and sustainable technology practices
+- 🤝 **Community**: Build a network of volunteers, technical experts, and partners across national boundaries
+- 🌱 **Sustainability**: Promote responsible technology consumption, circular economy, and environmental consciousness
+
+#### Technology We Redistribute
+
+- Old computers and computer parts
+- Old synthesizers and DJ controllers
+- Old hardware (computers, peripherals)
+- Old software (proprietary software given away for free)
+- Compute resources (servers, cloud infrastructure)
+- Memory resources (servers, storage)
+- Bicycles and furniture (supporting sustainable living)
+
+#### Vision
+
+As development becomes more decentralized and can be done without big teams, **open source will ultimately exceed the capacities of big, centralized corporations**. The most beautiful way for this to happen is through **technological collaboration and exchange beyond national boundaries**, making it easy and simple for individuals and groups to share technology, knowledge, and resources.
+
+**See [Nonprofit Legal Compliance Documentation](docs/LEGAL_NONPROFIT_COMPLIANCE.md) for full mission statement and legal requirements.**
 
 ## 🚀 Technology Stack
 
