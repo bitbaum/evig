@@ -3,6 +3,7 @@
 
 import { NextRequest, NextResponse } from 'next/server'
 import { PCI_COMPLIANCE, paymentRateLimiter, isSecureRequest, createAuditLog } from '@/lib/payments/security'
+import { logger } from '@/lib/logger'
 
 // PCI DSS compliance middleware
 export function withPCICompliance(handler: Function) {
@@ -89,7 +90,7 @@ export function withPaymentSecurity(handler: Function, options: {
         )
 
         // In production, this would be sent to a secure logging service
-        console.log('Payment audit:', JSON.stringify(auditEntry))
+        logger.info('Payment audit', auditEntry)
       }
 
       // Add security headers to response

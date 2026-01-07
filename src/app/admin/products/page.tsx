@@ -46,7 +46,7 @@ export default async function ProductsAdminPage() {
         {/* Quick Actions */}
         <div className="flex items-center gap-3">
           <Link
-            href={process.env.NEXT_PUBLIC_MEDUSA_ADMIN_URL || `${process.env.MEDUSA_BACKEND_URL || 'http://localhost:9000'}/app`}
+            href={MEDUSA_CONFIG.ADMIN_URL}
             target="_blank"
             rel="noopener noreferrer"
             className="px-4 py-2 text-sm text-indigo-600 hover:text-indigo-700 border border-indigo-200 hover:border-indigo-300 rounded-lg transition-colors"

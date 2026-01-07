@@ -2,6 +2,7 @@
 // Implements security measures for handling payment data
 
 import crypto from 'crypto'
+import { logger } from '@/lib/logger'
 
 // PCI DSS compliance constants
 export const PCI_COMPLIANCE = {
@@ -162,7 +163,7 @@ export async function cleanupExpiredData() {
 
   // Note: In a real implementation, this would delete or anonymize
   // payment data older than the retention period
-  console.log(`Cleaning up payment data older than ${cutoffDate.toISOString()}`)
+  logger.info('Cleaning up expired payment data', { cutoffDate: cutoffDate.toISOString() })
 
   // Implementation would depend on your database cleanup strategy
   return {

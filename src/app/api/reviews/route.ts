@@ -5,6 +5,7 @@ import { apiError, apiSuccess, apiUnauthorized, apiBadRequest, apiNotFound } fro
 import { ERROR_MESSAGES, SUCCESS_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
+import { APP_URL } from '@/config/urls'
 
 export async function GET(request: NextRequest) {
   try {
@@ -300,7 +301,7 @@ export async function POST(request: NextRequest) {
 
         if (repairerResult.rows.length > 0) {
           const repairer = repairerResult.rows[0]
-          const reviewUrl = `${process.env.NEXTAUTH_URL || 'http://localhost:3000'}/dashboard/repairer/reviews`
+          const reviewUrl = `${APP_URL}/dashboard/repairer/reviews`
 
           const notificationResult = await sendEmail(
             repairer.email,

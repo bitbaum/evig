@@ -6,6 +6,8 @@ import { ERROR_MESSAGES, SUCCESS_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES } from '@/config/database'
 import { sendEmail } from '@/lib/email'
 import { logger } from '@/lib/logger'
+import { isAdminRole } from '@/lib/constants'
+import { APP_URL } from '@/config/urls'
 
 export async function PUT(
   request: NextRequest,
@@ -17,13 +19,13 @@ export async function PUT(
       return apiUnauthorized(ERROR_MESSAGES.UNAUTHORIZED)
     }
 
-    // Check if user is admin
+    // Check if user is admin using SSOT helper
     const userResult = await query(
-      'SELECT role FROM users WHERE id = $1',
+      `SELECT role FROM ${TABLE_NAMES.USERS} WHERE id = $1`,
       [session.user.id]
     )
 
-    if (!userResult.rows[0] || userResult.rows[0].role !== 'admin') {
+    if (!userResult.rows[0] || !isAdminRole(userResult.rows[0].role)) {
       return apiUnauthorized('Nur Administratoren können diese Funktion verwenden')
     }
 
@@ -219,7 +221,7 @@ export async function PUT(
       })
 
       // Send approval notification email to applicant
-      const dashboardUrl = `${process.env.NEXTAUTH_URL || 'http://localhost:3000'}/dashboard/repairer`
+      const dashboardUrl = `${APP_URL}/dashboard/repairer`
       const approvalEmailResult = await sendEmail(
         application.email,
         'repairerApplicationApproved',

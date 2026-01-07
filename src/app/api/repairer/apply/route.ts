@@ -6,6 +6,7 @@ import { ERROR_MESSAGES, SUCCESS_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES } from '@/config/database'
 import { sendEmail } from '@/lib/email'
 import { logger } from '@/lib/logger'
+import { APP_URL } from '@/config/urls'
 
 export async function POST(request: NextRequest) {
   try {
@@ -163,7 +164,7 @@ export async function POST(request: NextRequest) {
         ['admin']
       )
 
-      const adminDashboardUrl = `${process.env.NEXTAUTH_URL || 'http://localhost:3000'}/admin/repairer-applications`
+      const adminDashboardUrl = `${APP_URL}/admin/repairer-applications`
 
       for (const admin of adminEmailsResult.rows) {
         const adminEmailResult = await sendEmail(

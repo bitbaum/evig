@@ -8,6 +8,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/auth';
 import { apiUnauthorized } from './helpers';
+import { isAdminRole } from '@/lib/constants';
 
 type Session = Awaited<ReturnType<typeof auth>>;
 
@@ -65,10 +66,10 @@ export function withAdmin<TParams = Record<string, never>>(
       return apiUnauthorized('Nicht authentifiziert');
     }
     
-    // Check admin role (adjust based on your role system)
-    if (session.user.role !== 'admin' && session.user.role !== 'REVAMPIT_ADMIN') {
+    // Check admin role using SSOT helper from constants
+    if (!isAdminRole(session.user.role)) {
       return NextResponse.json(
-        { success: false, error: 'Admin access required' },
+        { success: false, error: 'Nur Administratoren können diese Funktion verwenden' },
         { status: 403 }
       );
     }

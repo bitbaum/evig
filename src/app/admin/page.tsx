@@ -143,7 +143,7 @@ export default async function AdminDashboard() {
     {
       title: '🛒 Shop Admin',
       description: 'Produkte erstellen, bearbeiten und Bestellungen verwalten',
-      href: `${process.env.MEDUSA_BACKEND_URL || 'http://localhost:9000'}/app`,
+      href: MEDUSA_CONFIG.ADMIN_URL,
       icon: Package,
       color: 'bg-indigo-500',
       external: true,
