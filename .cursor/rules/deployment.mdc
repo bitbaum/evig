@@ -1,211 +1,75 @@
 ---
-description: Deployment workflow and Git standards for RevampIT
-globs: **/*
+description: "RevampIT deployment and git workflow"
 alwaysApply: false
+globs: ["**/*"]
 ---
 
-# Deployment Workflow Rules
+# Deployment Rules
 
 ## Git Workflow
 
-### Branch Strategy
+### Branch Naming
 ```bash
-# 1. Create feature branch from main
-git checkout main
-git pull origin main
-git checkout -b feature/descriptive-name
-
-# 2. Make changes and test locally
-npm run dev
-npm run lint
-npm run build
-
-# 3. Commit with descriptive message
-git add .
-git commit -m "feat: add user authentication flow
-
-- Add JWT token generation
-- Implement login/logout routes
-- Add user session management
-- Fix #123"
-
-# 4. Push to remote
-git push origin feature/descriptive-name
-
-# 5. Create Pull Request on GitHub
+feature/user-authentication
+fix/console-log-removal
+refactor/database-queries
+docs/update-readme
 ```
 
-### Branch Naming Conventions
+### Commit Messages
 ```bash
-feature/user-authentication    # New features
-fix/console-log-removal        # Bug fixes
-refactor/database-queries      # Code refactoring
-docs/update-readme            # Documentation
-chore/update-dependencies     # Maintenance
-```
-
-### Commit Message Format
-Follow conventional commits:
-```bash
-# Format: <type>: <description>
-#
-# [optional body]
-#
-# [optional footer]
-
-# Types:
-feat:     # New feature
-fix:      # Bug fix
-refactor: # Code refactoring
-docs:     # Documentation
-style:    # Formatting, missing semicolons, etc.
-test:     # Adding tests
-chore:    # Maintenance
-
-# Examples:
-feat: add product listing page
-fix: resolve console.log statements in auth
-refactor: use TABLE_NAMES constants in queries
+feat: add user authentication
+fix: remove console.log statements
+refactor: use TABLE_NAMES constants
 docs: update API documentation
 ```
 
-## Protected Files
-
-### Never Commit These
-```bash
-# ❌ Never commit:
-.env
-.env.local
-.env.production
-*.log
-*.pid
-node_modules/
-.DS_Store
-.vscode/settings.json (if contains personal config)
-```
-
-### Protected Branches
-- **main** - Production branch (protected)
-- **develop** - Development branch (optional)
-
-**Rules:**
-- No direct commits to `main`
-- All changes via Pull Requests
-- Require at least 1 approval (for teams)
-- CI/CD must pass
-
 ## Pre-Commit Checklist
 
-### Before Every Commit
 ```bash
-# 1. Verify no console.log statements
-grep -r "console\." src/ --include="*.ts" --include="*.tsx"
+# 1. TypeScript check (REQUIRED)
+npm run typecheck
 
-# 2. Check linting
+# 2. Lint check
 npm run lint
 
-# 3. Verify TypeScript compilation
-npm run build
+# 3. Find console.log
+grep -r "console\." src/ --include="*.ts" --include="*.tsx"
 
-# 4. Run tests (if applicable)
-npm run test
-
-# 5. Check git status
-git status
-
-# 6. Review changes
-git diff
+# 4. Test locally
+npm run dev
 ```
-
-### File-Specific Checks
-- **Migration files**: Never delete or modify existing ones
-- **Config files**: Verify no hardcoded credentials
-- **Components**: Check for proper error handling
-- **API routes**: Ensure logger is used (not console.log)
 
 ## Deployment Process
 
-### Local to Vercel (Production)
-
-#### 1. Prepare for Deployment
 ```bash
-# Clean build
-rm -rf .next
-npm run build
+# 1. Create feature branch
+git checkout -b feature/my-feature
 
-# Verify environment variables
-cat .env.production.local  # Do NOT commit this file
-
-# Test production build locally
-npm run start
-```
-
-#### 2. Merge to Main
-```bash
-# Ensure feature branch is up-to-date
-git checkout feature/your-feature
-git pull origin main
-git rebase main  # Resolve any conflicts
-
-# Merge via Pull Request on GitHub
-# - Add clear PR description
-# - Link related issues
-# - Request review
-```
-
-#### 3. Automatic Deployment
-Vercel automatically deploys from `main` branch:
-- Commit to `main` → Automatic deployment
-- Preview deployments for PRs
-- Check deployment status on Vercel dashboard
-
-#### 4. Post-Deployment Verification
-```bash
-# Visit production site
-# Check these pages:
-https://revamp-it.ch
-https://revamp-it.ch/admin
-https://revamp-it.ch/shop/medusa
-
-# Verify:
-- [ ] Site loads correctly
-- [ ] No console errors in browser
-- [ ] Database connections work
-- [ ] Authentication works
-- [ ] API routes respond
-```
-
-### Database Migrations
-
-#### Before Deploying Database Changes
-```bash
-# 1. Test migration locally
-PGPASSWORD=$POSTGRES_PASSWORD psql -h localhost -p 5433 -U postgres -d revampit_cms < cms-api/src/migrations/XXX_migration.sql
-
-# 2. Verify schema changes
-\d table_name
-
-# 3. Test application with new schema
+# 2. Make changes and test
 npm run dev
+npm run typecheck
+npm run lint
 
-# 4. Create backup (production)
-# Backup database before running migrations in production
+# 3. Commit
+git add .
+git commit -m "feat: description"
+
+# 4. Push and create PR
+git push origin feature/my-feature
 ```
 
-#### Migration Deployment
-```bash
-# Production migration (careful!)
-# 1. Create database backup first
-# 2. Run migration script
-# 3. Verify application works
-# 4. Monitor for errors
-```
+## Protected Files - NEVER Delete
+
+- `cms-api/src/migrations/*`
+- `scripts/db/migrations/*`
+- `.env*` files
+- `docs/*`
 
 ## Environment Variables
 
-### Required Variables
 ```bash
-# Database
+# Required
 DATABASE_URL=
 POSTGRES_HOST=
 POSTGRES_PORT=5433
@@ -217,96 +81,29 @@ POSTGRES_PASSWORD=
 MEDUSA_DATABASE_URL=
 MEDUSA_PASSWORD=
 
-# Authentication
+# Auth
 JWT_SECRET=
 NEXTAUTH_SECRET=
 NEXTAUTH_URL=
-
-# Email (optional)
-SMTP_HOST=
-SMTP_PORT=
-SMTP_USER=
-SMTP_PASSWORD=
 ```
 
-### Environment Management
-- **Local**: `.env.local` (gitignored)
-- **Production**: Vercel dashboard → Environment Variables
-- **Never commit**: Any file with credentials
+## Emergency Rollback
 
-## Rollback Procedure
-
-### If Deployment Fails
 ```bash
-# 1. Revert commit on main
+# Revert last commit
 git revert HEAD
 git push origin main
 
-# 2. Or force push previous working commit
-git reset --hard <previous-commit-hash>
-git push origin main --force  # Use with caution!
-
-# 3. Vercel will automatically redeploy
+# Or reset to previous commit
+git reset --hard <commit-hash>
+git push origin main --force  # Use with caution
 ```
 
-### Database Rollback
-```bash
-# If migration fails:
-# 1. Restore from backup
-# 2. Verify application works
-# 3. Fix migration script
-# 4. Test again locally
-```
+## Don't
 
-## CI/CD Checks
-
-### Automated Checks (GitHub Actions)
-```yaml
-# Runs on every PR and push to main:
-- Lint check (npm run lint)
-- Type check (npm run build)
-- Tests (npm run test)
-- Build verification
-
-# Only deploy if all checks pass
-```
-
-## Emergency Procedures
-
-### If Production is Down
-1. Check Vercel deployment logs
-2. Check database connectivity
-3. Verify environment variables
-4. Check for runtime errors
-5. Rollback if necessary
-
-### Quick Fixes
-```bash
-# Hot fix process:
-git checkout -b hotfix/critical-bug
-# Fix the issue
-git commit -m "hotfix: resolve critical production bug"
-git push origin hotfix/critical-bug
-# Create PR, get quick review, merge to main
-```
-
-## Important Reminders
-
-### Never
-- ❌ Commit directly to `main`
-- ❌ Force push to `main` (unless emergency rollback)
-- ❌ Delete migration files
-- ❌ Commit `.env` files
-- ❌ Deploy without testing locally
-- ❌ Deploy without running linter
-- ❌ Skip CI/CD checks
-
-### Always
-- ✅ Create feature branches
-- ✅ Write descriptive commit messages
-- ✅ Test locally before pushing
-- ✅ Run linter before committing
-- ✅ Create Pull Requests
-- ✅ Wait for CI/CD checks to pass
-- ✅ Backup database before migrations
-- ✅ Verify production after deployment
+- Commit directly to `main`
+- Force push to `main` (except emergency)
+- Delete migration files
+- Commit `.env` files
+- Skip `npm run typecheck`
+- Deploy without local testing
