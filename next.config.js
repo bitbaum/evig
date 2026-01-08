@@ -92,7 +92,6 @@ const nextConfig = {
       // Ensure CSS modules are handled correctly
       styles: './src/styles',
     },
-    root: '/home/g/dev/revampit',
   },
   // Add specific CSS handling
   sassOptions: {
