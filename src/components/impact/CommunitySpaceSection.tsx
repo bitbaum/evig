@@ -1,0 +1,170 @@
+/**
+ * Community Space Section
+ *
+ * Displays information about RevampIT's physical location.
+ * Shows current offerings and future vision for expansion.
+ * Community-focused theme with warm colors.
+ */
+
+import {
+  MapPin,
+  Store,
+  GraduationCap,
+  Cpu,
+  Music2,
+  Users,
+  Coffee,
+  Wrench,
+  ArrowRight,
+  Sparkles
+} from 'lucide-react'
+import { PHYSICAL_SPACE, getFormattedAddress } from '@/data/impact-metrics'
+import { Button } from '@/components/ui/button'
+
+const offeringIcons: Record<number, React.ReactNode> = {
+  0: <Store className="h-5 w-5" />,
+  1: <Cpu className="h-5 w-5" />,
+  2: <Users className="h-5 w-5" />,
+  3: <Wrench className="h-5 w-5" />
+}
+
+const visionIcons: Record<number, React.ReactNode> = {
+  0: <Cpu className="h-5 w-5" />,
+  1: <Music2 className="h-5 w-5" />,
+  2: <Wrench className="h-5 w-5" />,
+  3: <GraduationCap className="h-5 w-5" />,
+  4: <Coffee className="h-5 w-5" />
+}
+
+export default function CommunitySpaceSection() {
+  const address = getFormattedAddress()
+
+  return (
+    <section className="py-20 bg-gray-900 text-white relative overflow-hidden">
+      {/* Background Pattern */}
+      <div className="absolute inset-0 opacity-5">
+        <div className="absolute top-0 right-0 w-96 h-96 bg-green-500 rounded-full blur-3xl" />
+        <div className="absolute bottom-0 left-0 w-80 h-80 bg-blue-500 rounded-full blur-3xl" />
+      </div>
+
+      <div className="max-w-7xl mx-auto px-4 relative z-10">
+        {/* Section Header */}
+        <div className="text-center mb-16">
+          <div className="inline-flex items-center gap-2 bg-green-500/20 text-green-400 px-4 py-2 rounded-full text-sm font-medium mb-6">
+            <MapPin className="h-4 w-4" />
+            Unser Standort
+          </div>
+          <h2 className="text-4xl md:text-5xl font-bold mb-6">
+            Besuchen Sie uns
+          </h2>
+          <p className="text-xl text-gray-400 max-w-3xl mx-auto">
+            Unser Laden in Zürich ist mehr als nur ein Geschäft – er ist ein Treffpunkt
+            für alle, die sich für nachhaltige IT und Open Source interessieren.
+          </p>
+        </div>
+
+        <div className="grid lg:grid-cols-2 gap-12 items-start mb-16">
+          {/* Current Location */}
+          <div className="bg-gray-800 rounded-2xl p-8 border border-gray-700">
+            <h3 className="text-2xl font-bold mb-2">{PHYSICAL_SPACE.current.name}</h3>
+            <p className="text-green-400 font-medium mb-6 flex items-center gap-2">
+              <MapPin className="h-4 w-4" />
+              {address}
+            </p>
+
+            <h4 className="text-lg font-semibold mb-4 text-gray-300">Was Sie bei uns finden:</h4>
+            <ul className="space-y-3">
+              {PHYSICAL_SPACE.current.offerings.map((offering, index) => (
+                <li key={index} className="flex items-center gap-3">
+                  <div className="p-2 bg-green-500/20 rounded-lg text-green-400">
+                    {offeringIcons[index] || <Store className="h-5 w-5" />}
+                  </div>
+                  <span className="text-gray-300">{offering}</span>
+                </li>
+              ))}
+            </ul>
+
+            <div className="mt-8">
+              <Button
+                className="bg-green-600 hover:bg-green-700 text-white w-full sm:w-auto"
+                onClick={() => window.open(`https://maps.google.com/?q=${encodeURIComponent(address + ', Schweiz')}`, '_blank')}
+              >
+                <MapPin className="h-4 w-4 mr-2" />
+                Route planen
+              </Button>
+            </div>
+          </div>
+
+          {/* Workshops */}
+          <div className="bg-gradient-to-br from-blue-900/50 to-purple-900/50 rounded-2xl p-8 border border-blue-700/50">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="p-2 bg-blue-500/20 rounded-lg text-blue-400">
+                <GraduationCap className="h-6 w-6" />
+              </div>
+              <h3 className="text-2xl font-bold">{PHYSICAL_SPACE.workshops.title}</h3>
+            </div>
+
+            <p className="text-gray-400 mb-6">
+              Lernen Sie von Experten in unseren regelmässigen Workshops und Vorträgen.
+              Für Anfänger bis Fortgeschrittene.
+            </p>
+
+            <ul className="space-y-2 mb-6">
+              {PHYSICAL_SPACE.workshops.topics.map((topic, index) => (
+                <li key={index} className="flex items-center gap-2 text-gray-300">
+                  <ArrowRight className="h-4 w-4 text-blue-400 flex-shrink-0" />
+                  {topic}
+                </li>
+              ))}
+            </ul>
+
+            <Button variant="outline" className="border-blue-500 text-blue-400 hover:bg-blue-500/20 w-full sm:w-auto">
+              Zum Workshop-Programm
+            </Button>
+          </div>
+        </div>
+
+        {/* Vision Section */}
+        <div className="bg-gradient-to-r from-green-900/30 to-emerald-900/30 rounded-2xl p-8 md:p-12 border border-green-700/50">
+          <div className="flex items-center gap-3 mb-6">
+            <div className="p-2 bg-green-500/20 rounded-lg text-green-400">
+              <Sparkles className="h-6 w-6" />
+            </div>
+            <div>
+              <span className="text-sm text-green-400 font-medium">Unsere Vision</span>
+              <h3 className="text-2xl font-bold">{PHYSICAL_SPACE.vision.title}</h3>
+            </div>
+          </div>
+
+          <p className="text-lg text-gray-300 mb-8 max-w-3xl">
+            {PHYSICAL_SPACE.vision.description}
+          </p>
+
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {PHYSICAL_SPACE.vision.features.map((feature, index) => (
+              <div
+                key={index}
+                className="bg-gray-900/50 rounded-xl p-4 flex items-start gap-3 border border-gray-700/50"
+              >
+                <div className="p-2 bg-green-500/10 rounded-lg text-green-500 flex-shrink-0">
+                  {visionIcons[index] || <Sparkles className="h-5 w-5" />}
+                </div>
+                <span className="text-gray-300 text-sm">{feature}</span>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-8 pt-8 border-t border-gray-700/50 text-center">
+            <p className="text-gray-400 mb-4">
+              Helfen Sie uns, diese Vision Wirklichkeit werden zu lassen.
+            </p>
+            <Button className="bg-green-600 hover:bg-green-700 text-white">
+              Projekt unterstützen
+              <ArrowRight className="h-4 w-4 ml-2" />
+            </Button>
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}

@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import Image from 'next/image'
 import { HeroBanner } from '@/components/ui/hero-banner'
+import { AboutSubNav } from '@/components/about'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { IMPACT_METRICS, getEnvironmentalSummary, type ImpactMetric } from '@/data/impact-metrics'
@@ -62,6 +63,11 @@ import {
   Calendar,
   MapPin
 } from 'lucide-react'
+import {
+  EWasteProblemSection,
+  ZeroWasteSolutionSection,
+  CommunitySpaceSection
+} from '@/components/impact'
 
 interface DonationMethod {
   id: string
@@ -160,6 +166,18 @@ export default function ImpactPageContent() {
         title="Unsere messbare Wirkung"
         description="Entdecken Sie, wie RevampIT seit 2009 die Schweizer IT-Landschaft nachhaltig verändert – transparent, messbar und wirksam."
       />
+
+      {/* Sub Navigation */}
+      <AboutSubNav />
+
+      {/* E-Waste Problem Section */}
+      <EWasteProblemSection />
+
+      {/* Zero-Waste Solution Section */}
+      <ZeroWasteSolutionSection />
+
+      {/* Community Space Section */}
+      <CommunitySpaceSection />
 
       {/* Impact Overview */}
       <section className="py-16 px-4 max-w-7xl mx-auto">

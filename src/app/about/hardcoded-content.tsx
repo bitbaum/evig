@@ -1,5 +1,6 @@
 import Image from 'next/image'
 import { HeroBanner } from '@/components/ui/hero-banner'
+import { AboutSubNav, GeschichteSection, ImpactStatsSection } from '@/components/about'
 
 export default function HardcodedAboutPage() {
   return (
@@ -8,6 +9,9 @@ export default function HardcodedAboutPage() {
         title="Technik ein zweites Leben geben"
         description="Seit 15 Jahren setzen wir uns gegen die vorschnelle Ausmusterung von Computern ein und fördern nachhaltige IT-Praktiken."
       />
+
+      {/* Sub Navigation */}
+      <AboutSubNav />
 
       {/* Mission Section */}
       <section className="py-12 sm:py-16 md:py-20 px-4 sm:px-6 max-w-6xl mx-auto">
@@ -61,66 +65,11 @@ export default function HardcodedAboutPage() {
         </div>
       </section>
 
-      {/* By the Numbers Section */}
-      <section className="py-12 sm:py-16 md:py-20 bg-white">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6">
-          <h2 className="text-2xl sm:text-3xl font-bold mb-8 sm:mb-12 text-center">Zahlen & Fakten</h2>
-          <div className="grid md:grid-cols-2 gap-6 sm:gap-8">
-            <div className="bg-green-50 p-6 sm:p-8 rounded-lg shadow-md">
-              <h3 className="text-xl sm:text-2xl font-bold text-green-800 mb-2">Umweltwirkung</h3>
-              <div className="space-y-4 sm:space-y-6">
-                <div>
-                  <p className="text-3xl sm:text-4xl font-bold text-green-700 mb-2">5+</p>
-                  <p className="text-sm sm:text-base text-gray-600">Durchschnittliche Lebensdauerverlängerung pro Gerät (in Jahren)</p>
-                </div>
-                <div>
-                  <p className="text-3xl sm:text-4xl font-bold text-green-700 mb-2">1000+</p>
-                  <p className="text-sm sm:text-base text-gray-600">Geräte, die wir jährlich vor dem Entsorgen retten</p>
-                </div>
-                <div>
-                  <p className="text-3xl sm:text-4xl font-bold text-green-700 mb-2">75%</p>
-                  <p className="text-sm sm:text-base text-gray-600">Anteil der gespendeten Geräte, die wir erfolgreich wiederverwenden</p>
-                </div>
-              </div>
-            </div>
-            <div className="bg-green-50 p-6 sm:p-8 rounded-lg shadow-md">
-              <h3 className="text-xl sm:text-2xl font-bold text-green-800 mb-2">Soziale Wirkung</h3>
-              <div className="space-y-4 sm:space-y-6">
-                <div>
-                  <p className="text-3xl sm:text-4xl font-bold text-green-700 mb-2">20+</p>
-                  <p className="text-sm sm:text-base text-gray-600">Personen, die wir jährlich in Open Source und nachhaltiger IT schulen</p>
-                </div>
-                <div>
-                  <p className="text-3xl sm:text-4xl font-bold text-green-700 mb-2">90%</p>
-                  <p className="text-sm sm:text-base text-gray-600">Unserer Praktikant:innen finden den Einstieg in die IT oder eine Weiterbildung</p>
-                </div>
-                <div>
-                  <p className="text-3xl sm:text-4xl font-bold text-green-700 mb-2">10+</p>
-                  <p className="text-sm sm:text-base text-gray-600">Erfolgreiche Wiedereinstiege ins Berufsleben durch unser Programm</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* By the Numbers Section - Data from SSOT */}
+      <ImpactStatsSection />
 
-      {/* Our Story */}
-      <section className="py-20 px-4 max-w-6xl mx-auto">
-        <div className="space-y-8">
-          <h2 className="text-3xl font-bold">Unsere Geschichte</h2>
-          <div className="space-y-6 text-lg">
-            <p>
-              2009 als kleine Reparaturwerkstatt gegründet, ist RevampIT heute eine Bewegung, die den Umgang mit Technik nachhaltig verändert. Was mit einer einfachen Idee begann – Technik länger nutzen – ist heute ein Vorbild für nachhaltige IT in der Schweiz.
-            </p>
-            <p>
-              Unser Team aus 20 engagierten Menschen setzt sich täglich für nachhaltige IT ein. Wir sind Anlaufstelle für Privatpersonen und Unternehmen, die ihren ökologischen Fussabdruck reduzieren und trotzdem auf zuverlässige Technik setzen wollen.
-            </p>
-            <p>
-              Unser Engagement geht über Reparaturen hinaus: Wir beteiligen uns an Klimademos, teilen Wissen zu nachhaltigen digitalen Alternativen und setzen uns für einen bewussteren Umgang mit Technik ein.
-            </p>
-          </div>
-        </div>
-      </section>
+      {/* Our Story - Full Timeline */}
+      <GeschichteSection />
 
       {/* Call to Action */}
       <section className="py-20 bg-green-600 text-white">

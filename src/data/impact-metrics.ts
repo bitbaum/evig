@@ -202,3 +202,188 @@ export function getSocialSummary() {
     careerReentries: ANNUAL_CAREER_REENTRIES
   }
 }
+
+// ============================================================================
+// E-WASTE GLOBAL STATISTICS (Verified Sources)
+// ============================================================================
+
+export interface EWasteStat {
+  id: string
+  value: string
+  unit: string
+  label: string
+  description: string
+  source: string
+  sourceUrl: string
+  year: number
+}
+
+/**
+ * Global E-Waste Statistics
+ * Source: UN Global E-waste Monitor 2024
+ * URL: https://ewastemonitor.info/the-global-e-waste-monitor-2024/
+ */
+export const EWASTE_GLOBAL_STATS: EWasteStat[] = [
+  {
+    id: 'global-total',
+    value: '62',
+    unit: 'Millionen Tonnen',
+    label: 'Globaler E-Waste',
+    description: 'Jährlich produzierter Elektroschrott weltweit',
+    source: 'UN Global E-waste Monitor 2024',
+    sourceUrl: 'https://ewastemonitor.info/the-global-e-waste-monitor-2024/',
+    year: 2022
+  },
+  {
+    id: 'recycling-rate',
+    value: '22.3',
+    unit: '%',
+    label: 'Recycling-Rate',
+    description: 'Anteil des Elektroschrotts, der korrekt recycelt wird',
+    source: 'UN Global E-waste Monitor 2024',
+    sourceUrl: 'https://ewastemonitor.info/the-global-e-waste-monitor-2024/',
+    year: 2022
+  },
+  {
+    id: 'europe-per-capita',
+    value: '17.6',
+    unit: 'kg pro Person',
+    label: 'E-Waste pro Kopf (Europa)',
+    description: 'Jährlicher Elektroschrott pro Person in Europa',
+    source: 'UN Global E-waste Monitor 2024',
+    sourceUrl: 'https://ewastemonitor.info/the-global-e-waste-monitor-2024/',
+    year: 2022
+  },
+  {
+    id: 'laptop-co2',
+    value: '331',
+    unit: 'kg CO₂',
+    label: 'CO₂ pro Laptop',
+    description: 'Durchschnittlicher CO₂-Fussabdruck bei der Herstellung eines neuen Laptops',
+    source: 'Circular Computing (Studie mit 230 Laptops)',
+    sourceUrl: 'https://circularcomputing.com/news/carbon-footprint-laptop/',
+    year: 2021
+  }
+]
+
+// ============================================================================
+// ZERO-WASTE PRINCIPLES
+// ============================================================================
+
+export interface ZeroWastePrinciple {
+  id: string
+  title: string
+  description: string
+  icon: 'wrench' | 'refresh' | 'recycle' | 'heart'
+  priority: number // 1 = highest priority
+}
+
+/**
+ * Zero-Waste Hierarchy
+ * Based on the waste management hierarchy: Reduce > Reuse > Recycle
+ * Applied to electronics: Repair > Refurbish > Recycle
+ */
+export const ZERO_WASTE_PRINCIPLES: ZeroWastePrinciple[] = [
+  {
+    id: 'repair',
+    title: 'Reparieren',
+    description: 'Defekte Geräte werden repariert und dem ursprünglichen Besitzer zurückgegeben. Das ist die nachhaltigste Option.',
+    icon: 'wrench',
+    priority: 1
+  },
+  {
+    id: 'refurbish',
+    title: 'Aufbereiten',
+    description: 'Gespendete Geräte werden professionell überholt, mit Linux ausgestattet und an neue Nutzer weitergegeben.',
+    icon: 'refresh',
+    priority: 2
+  },
+  {
+    id: 'recycle',
+    title: 'Recyceln',
+    description: 'Nicht mehr nutzbare Geräte werden fachgerecht zerlegt. Wertvolle Rohstoffe werden dem Kreislauf zurückgeführt.',
+    icon: 'recycle',
+    priority: 3
+  },
+  {
+    id: 'educate',
+    title: 'Aufklären',
+    description: 'Durch Workshops und Bildung befähigen wir Menschen, ihre Geräte länger zu nutzen und bewusster zu konsumieren.',
+    icon: 'heart',
+    priority: 4
+  }
+]
+
+// ============================================================================
+// PHYSICAL COMMUNITY SPACE
+// ============================================================================
+
+export interface PhysicalSpaceInfo {
+  current: {
+    name: string
+    address: string
+    city: string
+    postalCode: string
+    country: string
+    offerings: string[]
+  }
+  vision: {
+    title: string
+    description: string
+    features: string[]
+  }
+  workshops: {
+    title: string
+    topics: string[]
+  }
+}
+
+/**
+ * Physical Community Space Information
+ * Current location and future vision
+ */
+export const PHYSICAL_SPACE: PhysicalSpaceInfo = {
+  current: {
+    name: 'RevampIT Laden',
+    address: 'Birmensdorferstrasse 379',
+    city: 'Zürich',
+    postalCode: '8055',
+    country: 'Schweiz',
+    offerings: [
+      'Refurbished Hardware kaufen',
+      'Vintage-Computer-Sammlung besichtigen',
+      'Persönliche Beratung erhalten',
+      'Geräte zur Reparatur oder Spende abgeben'
+    ]
+  },
+  vision: {
+    title: 'Community Tech Space',
+    description: 'Unser Traum ist ein grösserer Raum, der als Museum, Werkstatt und Treffpunkt für die nachhaltige Tech-Community dient.',
+    features: [
+      'Museum für seltene Vintage-Hardware',
+      'Sammlung historischer Synthesizer und elektronischer Musikinstrumente',
+      'Offene Werkstatt für Reparatur-Workshops',
+      'Veranstaltungsraum für Vorträge und Meetups',
+      'Café-Bereich für Community-Austausch'
+    ]
+  },
+  workshops: {
+    title: 'Workshops & Vorträge',
+    topics: [
+      'Linux-Grundlagen für Einsteiger',
+      'Open-Source-Software im Alltag',
+      'Nachhaltige KI und ihre Grenzen',
+      'Alternative techno-ökonomische Modelle',
+      'Reparatur-Workshops: Laptop, Smartphone, etc.',
+      'Geschichte der Computerentwicklung'
+    ]
+  }
+}
+
+/**
+ * Get formatted address string
+ */
+export function getFormattedAddress(): string {
+  const { address, postalCode, city } = PHYSICAL_SPACE.current
+  return `${address}, ${postalCode} ${city}`
+}
