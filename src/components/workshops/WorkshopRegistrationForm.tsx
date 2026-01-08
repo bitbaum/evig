@@ -45,30 +45,30 @@ export default function WorkshopRegistrationForm({ workshop, instance }: Worksho
   const [error, setError] = useState<string>('')
 
   useEffect(() => {
+    const checkRegistrationStatus = async () => {
+      try {
+        const response = await fetch(`/api/workshops/registration/${instance.id}`)
+        const data = await response.json()
+
+        if (data.registered) {
+          setRegistrationStatus('registered')
+          setRegistrationData(data.registration)
+        } else {
+          setRegistrationStatus('not-registered')
+        }
+      } catch (err) {
+        logger.error('Error checking registration', { error: err })
+        setRegistrationStatus('error')
+        setError('Fehler beim Laden des Anmeldestatus')
+      }
+    }
+
     if (session?.user) {
       checkRegistrationStatus()
     } else if (status !== 'loading') {
       setRegistrationStatus('not-registered')
     }
-  }, [session, status])
-
-  const checkRegistrationStatus = async () => {
-    try {
-      const response = await fetch(`/api/workshops/registration/${instance.id}`)
-      const data = await response.json()
-
-      if (data.registered) {
-        setRegistrationStatus('registered')
-        setRegistrationData(data.registration)
-      } else {
-        setRegistrationStatus('not-registered')
-      }
-    } catch (err) {
-      logger.error('Error checking registration', { error: err })
-      setRegistrationStatus('error')
-      setError('Fehler beim Laden des Anmeldestatus')
-    }
-  }
+  }, [session, status, instance.id])
 
   const handleRegistration = async () => {
     if (!session?.user) {

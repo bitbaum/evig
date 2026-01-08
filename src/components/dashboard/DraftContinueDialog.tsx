@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import type { Campaign } from '@/types/campaign'
@@ -16,10 +16,12 @@ export default function DraftContinueDialog({
   draftData,
   draftTimestamp
 }: DraftContinueDialogProps) {
-  const timestamp = draftTimestamp || new Date()
-  const relativeTime = draftTimestamp 
-    ? `${Math.floor((Date.now() - timestamp.getTime()) / 1000 / 60)} minutes ago`
-    : 'just now'
+  const relativeTime = useMemo(() => {
+    if (!draftTimestamp) return 'just now'
+    const now = Date.now()
+    const minutes = Math.floor((now - draftTimestamp.getTime()) / 1000 / 60)
+    return `${minutes} minutes ago`
+  }, [draftTimestamp])
 
   return (
     <Card className="max-w-md mx-auto">

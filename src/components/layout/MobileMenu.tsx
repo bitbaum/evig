@@ -34,7 +34,9 @@ export function MobileMenu({
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
-    setMounted(true)
+    // Defer setState to avoid synchronous update during effect
+    const frame = requestAnimationFrame(() => setMounted(true))
+    return () => cancelAnimationFrame(frame)
   }, [])
 
   // Handle escape key

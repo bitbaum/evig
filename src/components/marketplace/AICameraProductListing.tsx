@@ -127,6 +127,17 @@ export default function AICameraProductListing({ onProductDetected, onClose }: A
     setIsCapturing(false)
   }, [])
 
+  const analyzeImage = useCallback(async (imageData: string) => {
+    setIsAnalyzing(true)
+
+    // Simulate AI analysis delay
+    await new Promise(resolve => setTimeout(resolve, 3000))
+
+    // Mock AI results - in real implementation, this would call an AI service
+    setSuggestions(mockAISuggestions)
+    setIsAnalyzing(false)
+  }, [])
+
   const capturePhoto = useCallback(() => {
     if (videoRef.current && canvasRef.current) {
       const video = videoRef.current
@@ -144,7 +155,7 @@ export default function AICameraProductListing({ onProductDetected, onClose }: A
         analyzeImage(imageData)
       }
     }
-  }, [stopCamera])
+  }, [stopCamera, analyzeImage])
 
   const handleFileUpload = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
@@ -157,18 +168,7 @@ export default function AICameraProductListing({ onProductDetected, onClose }: A
       }
       reader.readAsDataURL(file)
     }
-  }, [])
-
-  const analyzeImage = async (imageData: string) => {
-    setIsAnalyzing(true)
-
-    // Simulate AI analysis delay
-    await new Promise(resolve => setTimeout(resolve, 3000))
-
-    // Mock AI results - in real implementation, this would call an AI service
-    setSuggestions(mockAISuggestions)
-    setIsAnalyzing(false)
-  }
+  }, [analyzeImage])
 
   const selectProduct = (suggestion: ProductSuggestion) => {
     setSelectedSuggestion(suggestion)

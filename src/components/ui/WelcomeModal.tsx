@@ -7,10 +7,14 @@ export function WelcomeModal() {
   const [showWelcomeModal, setShowWelcomeModal] = useState(false)
 
   useEffect(() => {
-    const hasSeenWelcome = localStorage.getItem('hasSeenWelcome')
-    if (!hasSeenWelcome) {
-      setShowWelcomeModal(true)
-    }
+    // Defer to next frame to avoid synchronous setState in effect
+    const frame = requestAnimationFrame(() => {
+      const hasSeenWelcome = localStorage.getItem('hasSeenWelcome')
+      if (!hasSeenWelcome) {
+        setShowWelcomeModal(true)
+      }
+    })
+    return () => cancelAnimationFrame(frame)
   }, [])
 
   const handleCloseWelcomeModal = () => {

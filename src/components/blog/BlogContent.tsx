@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { BlogPost } from '@/lib/blog'
@@ -21,17 +21,11 @@ export default function BlogContent({ posts }: BlogContentProps) {
     new Set(posts.map((post) => post.category).filter(Boolean) as string[])
   ).sort()
 
-  const [selectedCategories, setSelectedCategories] = useState<string[]>([])
+  // Initialize from URL params - derive initial state from searchParams
+  const categoriesParam = searchParams?.get('categories')
+  const urlCategories = categoriesParam ? categoriesParam.split(',') : []
 
-  useEffect(() => {
-    if (!searchParams) return
-    const categoriesParam = searchParams.get('categories')
-    if (categoriesParam) {
-      setSelectedCategories(categoriesParam.split(','))
-    } else {
-      setSelectedCategories([])
-    }
-  }, [searchParams])
+  const [selectedCategories, setSelectedCategories] = useState<string[]>(urlCategories)
 
   const handleCategoryChange = (category: string) => {
     if (!searchParams) return
