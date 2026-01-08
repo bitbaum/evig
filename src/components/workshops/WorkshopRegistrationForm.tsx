@@ -66,7 +66,9 @@ export default function WorkshopRegistrationForm({ workshop, instance }: Worksho
     if (session?.user) {
       checkRegistrationStatus()
     } else if (status !== 'loading') {
-      setRegistrationStatus('not-registered')
+      // Defer setState to avoid synchronous update during effect
+      const frame = requestAnimationFrame(() => setRegistrationStatus('not-registered'))
+      return () => cancelAnimationFrame(frame)
     }
   }, [session, status, instance.id])
 

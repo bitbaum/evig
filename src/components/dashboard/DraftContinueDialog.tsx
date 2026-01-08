@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React, { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import type { Campaign } from '@/types/campaign'
@@ -10,18 +10,22 @@ interface DraftContinueDialogProps {
   draftTimestamp?: Date
 }
 
+// Calculate relative time from timestamp
+function getRelativeTime(timestamp: Date | undefined): string {
+  if (!timestamp) return 'just now'
+  const now = Date.now()
+  const minutes = Math.floor((now - timestamp.getTime()) / 1000 / 60)
+  return `${minutes} minutes ago`
+}
+
 export default function DraftContinueDialog({
   onContinue,
   onDiscard,
   draftData,
   draftTimestamp
 }: DraftContinueDialogProps) {
-  const relativeTime = useMemo(() => {
-    if (!draftTimestamp) return 'just now'
-    const now = Date.now()
-    const minutes = Math.floor((now - draftTimestamp.getTime()) / 1000 / 60)
-    return `${minutes} minutes ago`
-  }, [draftTimestamp])
+  // Use lazy initializer to capture time once on mount
+  const [relativeTime] = useState(() => getRelativeTime(draftTimestamp))
 
   return (
     <Card className="max-w-md mx-auto">
