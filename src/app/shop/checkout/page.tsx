@@ -54,6 +54,39 @@ function CheckoutContent() {
   const [paymentError, setPaymentError] = useState<string>('')
 
   useEffect(() => {
+    const getOrCreateCart = async () => {
+      // This would integrate with MedusaJS cart API
+      // For now, we'll simulate with sample data
+      setCart({
+        id: 'sample-cart-id',
+        items: [
+          {
+            id: 'item-1',
+            title: 'Refurbished MacBook Air M1',
+            quantity: 1,
+            unit_price: 89900, // in cents
+            total_price: 89900,
+            thumbnail: '/api/placeholder/100/100'
+          }
+        ],
+        subtotal: 89900,
+        tax_total: 7192, // 8% VAT
+        total: 97092
+      })
+      setLoading(false)
+    }
+
+    const fetchCart = async () => {
+      try {
+        // This would fetch cart from MedusaJS
+        // For now, simulate with sample data
+        await getOrCreateCart()
+      } catch (error) {
+        logger.error('Error fetching cart', { error })
+        setLoading(false)
+      }
+    }
+
     if (cartId) {
       fetchCart()
     } else {
@@ -61,39 +94,6 @@ function CheckoutContent() {
       getOrCreateCart()
     }
   }, [cartId])
-
-  const getOrCreateCart = async () => {
-    // This would integrate with MedusaJS cart API
-    // For now, we'll simulate with sample data
-    setCart({
-      id: 'sample-cart-id',
-      items: [
-        {
-          id: 'item-1',
-          title: 'Refurbished MacBook Air M1',
-          quantity: 1,
-          unit_price: 89900, // in cents
-          total_price: 89900,
-          thumbnail: '/api/placeholder/100/100'
-        }
-      ],
-      subtotal: 89900,
-      tax_total: 7192, // 8% VAT
-      total: 97092
-    })
-    setLoading(false)
-  }
-
-  const fetchCart = async () => {
-    try {
-      // This would fetch cart from MedusaJS
-      // For now, simulate with sample data
-      await getOrCreateCart()
-    } catch (error) {
-      logger.error('Error fetching cart', { error })
-      setLoading(false)
-    }
-  }
 
   const handlePaymentSuccess = async (paymentIntent: StripePaymentIntent) => {
     setPaymentStatus('success')
