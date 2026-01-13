@@ -5,12 +5,15 @@ import { apiError, apiSuccess, apiBadRequest, apiUnauthorized, apiForbidden, api
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES } from '@/config/database'
 import { getUserRole } from '@/lib/api/role-checks'
+import { isAdminRole } from '@/lib/constants'
 
 // POST /api/locations/[id]/approve - Approve or reject location
 export async function POST(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id: locationId } = await params
+
   try {
     const session = await auth()
     if (!session?.user?.id) {
@@ -19,13 +22,11 @@ export async function POST(
 
     // Check if user has approval permissions
     const userRole = await getUserRole(session.user.id)
-    const hasApprovalPermission = ['admin', 'moderator'].includes(userRole || '')
+    const hasApprovalPermission = isAdminRole(userRole) || userRole === 'moderator'
 
     if (!hasApprovalPermission) {
       return apiForbidden('Keine Berechtigung für Genehmigungen')
     }
-
-    const locationId = params.id
     const body = await request.json()
     const { action, review_notes, required_changes } = body
 

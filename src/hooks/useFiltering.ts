@@ -9,7 +9,7 @@ export interface FilterConfig {
 }
 
 export interface FilterableItem {
-  [key: string]: any
+  [key: string]: unknown
 }
 
 export interface UseFilteringProps<T extends FilterableItem> {

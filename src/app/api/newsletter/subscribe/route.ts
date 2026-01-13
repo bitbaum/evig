@@ -5,6 +5,7 @@ import { randomBytes } from 'crypto'
 import { requireAdminAuth } from '@/lib/admin-auth'
 import { apiError, apiSuccess, apiBadRequest } from '@/lib/api/helpers'
 import { logger } from '@/lib/logger'
+import { checkRateLimit, getClientIp } from '@/lib/auth/rate-limiter'
 
 const subscribersDir = path.join(process.cwd(), 'content/newsletter')
 
@@ -29,6 +30,29 @@ function isValidEmail(email: string): boolean {
 
 export async function POST(request: NextRequest) {
   try {
+    // Rate limiting - prevent subscription abuse
+    const clientIp = getClientIp(request.headers)
+    const rateLimitResult = checkRateLimit(clientIp, 'newsletter')
+
+    if (!rateLimitResult.allowed) {
+      logger.warn('Newsletter subscription rate limit exceeded', { ip: clientIp })
+      return NextResponse.json(
+        {
+          success: false,
+          error: 'Zu viele Anfragen. Bitte versuchen Sie es später erneut.',
+          retryAfter: rateLimitResult.retryAfter,
+        },
+        {
+          status: 429,
+          headers: {
+            'Retry-After': String(rateLimitResult.retryAfter || 60),
+            'X-RateLimit-Remaining': String(rateLimitResult.remaining),
+            'X-RateLimit-Reset': String(rateLimitResult.resetAt),
+          },
+        }
+      )
+    }
+
     const { email } = await request.json()
 
     // Validate email

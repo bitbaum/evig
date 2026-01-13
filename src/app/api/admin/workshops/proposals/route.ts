@@ -5,6 +5,7 @@ import { apiError, apiSuccess, apiBadRequest, apiUnauthorized, apiForbidden } fr
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES } from '@/config/database'
 import { getUserRole } from '@/lib/api/role-checks'
+import { isAdminRole } from '@/lib/constants'
 
 // GET /api/admin/workshops/proposals - List workshop proposals with filtering
 export async function GET(request: NextRequest) {
@@ -16,7 +17,7 @@ export async function GET(request: NextRequest) {
 
     // Check if user has admin permissions
     const userRole = await getUserRole(session.user.id)
-    const hasAdminPermission = ['admin', 'moderator'].includes(userRole || '')
+    const hasAdminPermission = isAdminRole(userRole) || userRole === 'moderator'
 
     if (!hasAdminPermission) {
       return apiForbidden('Keine Berechtigung für Workshop-Verwaltung')
@@ -52,7 +53,7 @@ export async function GET(request: NextRequest) {
         u.email as proposer_email,
         l.name as selected_location_name
       FROM ${TABLE_NAMES.WORKSHOP_PROPOSALS} wp
-      LEFT JOIN users u ON wp.user_id = u.id
+      LEFT JOIN ${TABLE_NAMES.USERS} u ON wp.user_id = u.id
       LEFT JOIN ${TABLE_NAMES.LOCATIONS} l ON wp.selected_location_id = l.id
       ${whereClause}
       ORDER BY wp.created_at DESC

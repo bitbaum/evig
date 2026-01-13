@@ -32,6 +32,20 @@ interface WorkshopInstance {
   current_participants: number
 }
 
+interface WorkshopInstanceDetails {
+  start_date: string
+  location: string
+  workshop_title: string
+  workshop_slug: string
+}
+
+interface RegistrationData {
+  id: string
+  status: string
+  registered_at: string
+  workshop_instance?: WorkshopInstanceDetails
+}
+
 interface WorkshopRegistrationFormProps {
   workshop: Workshop
   instance: WorkshopInstance
@@ -41,7 +55,7 @@ export default function WorkshopRegistrationForm({ workshop, instance }: Worksho
   const { data: session, status } = useSession()
   const router = useRouter()
   const [registrationStatus, setRegistrationStatus] = useState<'checking' | 'not-registered' | 'registered' | 'registering' | 'error'>('checking')
-  const [registrationData, setRegistrationData] = useState<any>(null)
+  const [registrationData, setRegistrationData] = useState<RegistrationData | null>(null)
   const [error, setError] = useState<string>('')
 
   useEffect(() => {

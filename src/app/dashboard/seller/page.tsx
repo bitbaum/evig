@@ -1,7 +1,8 @@
-import { Metadata } from 'next'
-import { ROLES } from '@/lib/constants'
-import { auth } from '@/auth'
-import { redirect } from 'next/navigation'
+'use client'
+
+import { useState, useEffect } from 'react'
+import { useSession } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import {
   Package,
@@ -11,73 +12,96 @@ import {
   Eye,
   Users,
   ArrowRight,
-  BarChart3
+  BarChart3,
+  Loader2,
+  AlertCircle,
+  RefreshCw
 } from 'lucide-react'
+import { ROLES } from '@/lib/constants'
 
-export const metadata: Metadata = {
-  title: 'Seller Dashboard | RevampIT',
-  description: 'Verwalten Sie Ihre Produkte im RevampIT Marketplace.',
+interface Product {
+  id: string
+  title: string
+  price: number
+  status: string
+  viewsCount: number
+  favoritesCount: number
+  condition: string
+  category: string
+  image: string | null
 }
 
-export default async function SellerDashboard() {
-  // Check if user has access (seller or admin role)
-  const session = await auth()
-  if (!session?.user) {
-    redirect('/auth/login')
+interface Stats {
+  totalProducts: number
+  activeProducts: number
+  totalViews: number
+  totalFavorites: number
+  totalOrders: number
+  pendingOrders: number
+  totalRevenue: number
+}
+
+interface DashboardData {
+  stats: Stats
+  products: Product[]
+}
+
+export default function SellerDashboard() {
+  const { data: session, status } = useSession()
+  const router = useRouter()
+  const [data, setData] = useState<DashboardData | null>(null)
+  const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+
+  useEffect(() => {
+    // Set page title
+    document.title = 'Seller Dashboard | RevampIT'
+  }, [])
+
+  useEffect(() => {
+    if (status === 'loading') return
+
+    if (!session?.user) {
+      router.push('/auth/login')
+      return
+    }
+
+    const userRole = session.user.role as string
+    const hasAccess = userRole === ROLES.SELLER || userRole === ROLES.REVAMPIT_ADMIN
+
+    if (!hasAccess) {
+      router.push('/dashboard')
+      return
+    }
+
+    fetchDashboardData()
+  }, [session, status, router])
+
+  const fetchDashboardData = async () => {
+    setIsLoading(true)
+    setError(null)
+
+    try {
+      const response = await fetch('/api/seller/dashboard')
+      const result = await response.json()
+
+      if (result.success && result.data) {
+        setData(result.data)
+      } else {
+        throw new Error(result.error || 'Fehler beim Laden des Dashboards')
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Ein unerwarteter Fehler ist aufgetreten')
+    } finally {
+      setIsLoading(false)
+    }
   }
-
-  const userRole = session.user.role as string
-  const hasAccess = userRole === ROLES.SELLER || userRole === ROLES.REVAMPIT_ADMIN
-
-  if (!hasAccess) {
-    redirect('/dashboard')
-  }
-
-  // Mock data for seller dashboard
-  const sellerStats = {
-    totalProducts: 12,
-    activeProducts: 8,
-    totalSales: 2450,
-    monthlyRevenue: 890,
-    views: 1250,
-    orders: 23,
-  }
-
-  const recentProducts = [
-    {
-      id: '1',
-      title: 'Gaming Laptop i7',
-      status: 'active',
-      price: 1200,
-      views: 45,
-      orders: 2,
-      image: 'https://images.unsplash.com/photo-1541807084-5c52b6b3adef?w=100',
-    },
-    {
-      id: '2',
-      title: 'Wireless Headphones',
-      status: 'active',
-      price: 150,
-      views: 32,
-      orders: 1,
-      image: 'https://images.unsplash.com/photo-1583394838336-acd977736f90?w=100',
-    },
-    {
-      id: '3',
-      title: 'USB-C Hub',
-      status: 'draft',
-      price: 45,
-      views: 0,
-      orders: 0,
-      image: 'https://images.unsplash.com/photo-1625842268584-8f3296236761?w=100',
-    },
-  ]
 
   const quickActions = [
     {
       title: 'Neues Produkt',
       description: 'Produkt zum Marketplace hinzufügen',
-      href: '/dashboard/seller/products/new',
+      href: '/marketplace/list',
       icon: Plus,
       color: 'bg-green-500',
     },
@@ -91,29 +115,90 @@ export default async function SellerDashboard() {
     {
       title: 'Verkäufe',
       description: 'Bestellungen und Verkäufe anzeigen',
-      href: '/dashboard/seller/sales',
+      href: '/dashboard/seller/orders',
       icon: TrendingUp,
       color: 'bg-purple-500',
     },
     {
-      title: 'Analytics',
-      description: 'Produkt-Performance analysieren',
-      href: '/dashboard/seller/analytics',
+      title: 'Marketplace',
+      description: 'Marketplace ansehen',
+      href: '/marketplace',
       icon: BarChart3,
       color: 'bg-orange-500',
     },
   ]
 
+  const getStatusLabel = (status: string) => {
+    switch (status) {
+      case 'published': return { label: 'Aktiv', className: 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300' }
+      case 'draft': return { label: 'Entwurf', className: 'bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-300' }
+      case 'sold': return { label: 'Verkauft', className: 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300' }
+      case 'paused': return { label: 'Pausiert', className: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300' }
+      default: return { label: status, className: 'bg-gray-100 text-gray-800' }
+    }
+  }
+
+  if (status === 'loading' || isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <Loader2 className="w-8 h-8 text-green-600 animate-spin" />
+        <span className="ml-3 text-gray-600 dark:text-gray-400">Dashboard wird geladen...</span>
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl p-6 text-center">
+        <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-4" />
+        <h3 className="text-lg font-semibold text-red-800 dark:text-red-200 mb-2">
+          Fehler beim Laden
+        </h3>
+        <p className="text-red-600 dark:text-red-300 mb-4">{error}</p>
+        <button
+          onClick={fetchDashboardData}
+          className="inline-flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg"
+        >
+          <RefreshCw className="w-4 h-4" />
+          Erneut versuchen
+        </button>
+      </div>
+    )
+  }
+
+  const stats = data?.stats || {
+    totalProducts: 0,
+    activeProducts: 0,
+    totalViews: 0,
+    totalFavorites: 0,
+    totalOrders: 0,
+    pendingOrders: 0,
+    totalRevenue: 0,
+  }
+
+  const products = data?.products || []
+
   return (
     <div className="space-y-8">
       {/* Welcome Header */}
       <div className="bg-gradient-to-r from-green-600 to-green-700 rounded-xl p-6 text-white">
-        <h1 className="text-2xl font-bold mb-2">
-          Seller Dashboard
-        </h1>
-        <p className="text-green-100">
-          Verwalten Sie Ihre Produkte im RevampIT Marketplace und verfolgen Sie Ihre Verkäufe.
-        </p>
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-2xl font-bold mb-2">
+              Seller Dashboard
+            </h1>
+            <p className="text-green-100">
+              Verwalten Sie Ihre Produkte im RevampIT Marketplace und verfolgen Sie Ihre Verkäufe.
+            </p>
+          </div>
+          <button
+            onClick={fetchDashboardData}
+            className="p-2 rounded-lg bg-white/10 hover:bg-white/20 transition-colors"
+            title="Aktualisieren"
+          >
+            <RefreshCw className="w-5 h-5" />
+          </button>
+        </div>
       </div>
 
       {/* Stats Cards */}
@@ -122,8 +207,8 @@ export default async function SellerDashboard() {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Meine Produkte</p>
-              <p className="text-3xl font-bold text-gray-900 dark:text-white">{sellerStats.totalProducts}</p>
-              <p className="text-sm text-green-600">{sellerStats.activeProducts} aktiv</p>
+              <p className="text-3xl font-bold text-gray-900 dark:text-white">{stats.totalProducts}</p>
+              <p className="text-sm text-green-600">{stats.activeProducts} aktiv</p>
             </div>
             <Package className="w-8 h-8 text-blue-600" />
           </div>
@@ -132,11 +217,13 @@ export default async function SellerDashboard() {
         <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-100 dark:border-gray-700">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Monatlicher Umsatz</p>
-              <p className="text-3xl font-bold text-gray-900 dark:text-white">CHF {sellerStats.monthlyRevenue}</p>
+              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Umsatz</p>
+              <p className="text-3xl font-bold text-gray-900 dark:text-white">
+                CHF {stats.totalRevenue.toLocaleString('de-CH')}
+              </p>
               <p className="text-sm text-green-600 flex items-center gap-1">
                 <TrendingUp className="w-4 h-4" />
-                +15%
+                Gesamtumsatz
               </p>
             </div>
             <DollarSign className="w-8 h-8 text-green-600" />
@@ -147,8 +234,8 @@ export default async function SellerDashboard() {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Produkt-Aufrufe</p>
-              <p className="text-3xl font-bold text-gray-900 dark:text-white">{sellerStats.views.toLocaleString()}</p>
-              <p className="text-sm text-blue-600">diese Woche</p>
+              <p className="text-3xl font-bold text-gray-900 dark:text-white">{stats.totalViews.toLocaleString()}</p>
+              <p className="text-sm text-blue-600">{stats.totalFavorites} Favoriten</p>
             </div>
             <Eye className="w-8 h-8 text-blue-600" />
           </div>
@@ -158,8 +245,8 @@ export default async function SellerDashboard() {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Bestellungen</p>
-              <p className="text-3xl font-bold text-gray-900 dark:text-white">{sellerStats.orders}</p>
-              <p className="text-sm text-purple-600">ausstehend: 3</p>
+              <p className="text-3xl font-bold text-gray-900 dark:text-white">{stats.totalOrders}</p>
+              <p className="text-sm text-purple-600">ausstehend: {stats.pendingOrders}</p>
             </div>
             <Users className="w-8 h-8 text-purple-600" />
           </div>
@@ -174,49 +261,66 @@ export default async function SellerDashboard() {
               Meine Produkte
             </h2>
             <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-              Übersicht Ihrer aktiven Produkte
+              Übersicht Ihrer Produkte
             </p>
           </div>
 
           <div className="p-6">
-            <div className="space-y-4">
-              {recentProducts.map((product) => (
-                <div key={product.id} className="flex items-center gap-4 p-3 rounded-lg border border-gray-100 dark:border-gray-700">
-                  <img
-                    src={product.image}
-                    alt={product.title}
-                    className="w-12 h-12 rounded-lg object-cover"
-                  />
-                  <div className="flex-1">
-                    <h3 className="font-medium text-gray-900 dark:text-white">
-                      {product.title}
-                    </h3>
-                    <p className="text-sm text-gray-500 dark:text-gray-400">
-                      CHF {product.price} • {product.views} Aufrufe • {product.orders} Bestellungen
-                    </p>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
-                      product.status === 'active'
-                        ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300'
-                        : 'bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-300'
-                    }`}>
-                      {product.status === 'active' ? 'Aktiv' : 'Entwurf'}
-                    </span>
-                  </div>
-                </div>
-              ))}
-            </div>
+            {products.length === 0 ? (
+              <div className="text-center py-8">
+                <Package className="w-12 h-12 text-gray-400 mx-auto mb-3" />
+                <p className="text-gray-600 dark:text-gray-400 mb-4">
+                  Sie haben noch keine Produkte erstellt.
+                </p>
+                <Link
+                  href="/marketplace/list"
+                  className="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg"
+                >
+                  <Plus className="w-4 h-4" />
+                  Erstes Produkt erstellen
+                </Link>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {products.map((product) => {
+                  const statusInfo = getStatusLabel(product.status)
+                  return (
+                    <div key={product.id} className="flex items-center gap-4 p-3 rounded-lg border border-gray-100 dark:border-gray-700">
+                      <img
+                        src={product.image || 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=100'}
+                        alt={product.title}
+                        className="w-12 h-12 rounded-lg object-cover"
+                      />
+                      <div className="flex-1 min-w-0">
+                        <h3 className="font-medium text-gray-900 dark:text-white truncate">
+                          {product.title}
+                        </h3>
+                        <p className="text-sm text-gray-500 dark:text-gray-400">
+                          CHF {product.price} • {product.viewsCount} Aufrufe
+                        </p>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${statusInfo.className}`}>
+                          {statusInfo.label}
+                        </span>
+                      </div>
+                    </div>
+                  )
+                })}
+              </div>
+            )}
 
-            <div className="mt-6 pt-4 border-t border-gray-100 dark:border-gray-700">
-              <Link
-                href="/dashboard/seller/products"
-                className="text-sm text-green-600 hover:text-green-700 dark:text-green-400 font-medium flex items-center gap-1"
-              >
-                Alle Produkte verwalten
-                <ArrowRight className="w-4 h-4" />
-              </Link>
-            </div>
+            {products.length > 0 && (
+              <div className="mt-6 pt-4 border-t border-gray-100 dark:border-gray-700">
+                <Link
+                  href="/dashboard/seller/products"
+                  className="text-sm text-green-600 hover:text-green-700 dark:text-green-400 font-medium flex items-center gap-1"
+                >
+                  Alle Produkte verwalten
+                  <ArrowRight className="w-4 h-4" />
+                </Link>
+              </div>
+            )}
           </div>
         </div>
 
@@ -280,7 +384,7 @@ export default async function SellerDashboard() {
                 Marketplace ansehen
               </Link>
               <Link
-                href="/dashboard/seller/products/new"
+                href="/marketplace/list"
                 className="text-sm bg-green-600 text-white px-3 py-1.5 rounded hover:bg-green-700 transition-colors"
               >
                 Produkt hinzufügen
@@ -292,6 +396,3 @@ export default async function SellerDashboard() {
     </div>
   )
 }
-
-
-

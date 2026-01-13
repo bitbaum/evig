@@ -3,6 +3,7 @@ import { auth } from '@/auth'
 import { query } from '@/lib/auth/db'
 import { apiError, apiSuccess, apiUnauthorized } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
+import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
 
 export async function GET(request: NextRequest) {
@@ -19,7 +20,7 @@ export async function GET(request: NextRequest) {
 
     // Build where clause
     let whereClause = 'r.reviewer_id = $1'
-    const params: any[] = [session.user.id]
+    const params: (string | number)[] = [session.user.id]
 
     if (status !== 'all') {
       whereClause += ` AND r.status = $${params.length + 1}`
@@ -35,11 +36,11 @@ export async function GET(request: NextRequest) {
         rr.content as response_content,
         rr.created_at as response_created_at,
         ru.name as responder_name
-      FROM reviews r
-      LEFT JOIN repairer_profiles rp ON r.target_type = 'repairer' AND r.target_id = rp.id
-      LEFT JOIN workshops ws ON r.target_type = 'workshop' AND r.target_id = ws.id::text
-      LEFT JOIN review_responses rr ON r.id = rr.review_id AND rr.status = 'published'
-      LEFT JOIN users ru ON rr.responder_id = ru.id
+      FROM ${TABLE_NAMES.REVIEWS} r
+      LEFT JOIN ${TABLE_NAMES.REPAIRER_PROFILES} rp ON r.target_type = 'repairer' AND r.target_id = rp.id
+      LEFT JOIN ${TABLE_NAMES.WORKSHOPS} ws ON r.target_type = 'workshop' AND r.target_id = ws.id::text
+      LEFT JOIN ${TABLE_NAMES.REVIEW_RESPONSES} rr ON r.id = rr.review_id AND rr.status = 'published'
+      LEFT JOIN ${TABLE_NAMES.USERS} ru ON rr.responder_id = ru.id
       WHERE ${whereClause}
       ORDER BY r.created_at DESC
       LIMIT $${params.length + 1} OFFSET $${params.length + 2}
@@ -47,7 +48,7 @@ export async function GET(request: NextRequest) {
 
     // Get total count
     const countResult = await query(
-      `SELECT COUNT(*) as total FROM reviews r WHERE ${whereClause}`,
+      `SELECT COUNT(*) as total FROM ${TABLE_NAMES.REVIEWS} r WHERE ${whereClause}`,
       params
     )
 

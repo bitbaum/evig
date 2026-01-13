@@ -35,7 +35,7 @@ export async function GET(request: NextRequest) {
     const applicationResult = await query(`
       SELECT ra.*, u.name, u.email
       FROM ${TABLE_NAMES.REPAIRER_APPLICATIONS} ra
-      JOIN users u ON ra.user_id = u.id
+      JOIN ${TABLE_NAMES.USERS} u ON ra.user_id = u.id
       WHERE ra.id = $1
     `, [applicationId])
 
@@ -52,8 +52,8 @@ export async function GET(request: NextRequest) {
         dt.is_required,
         dt.allowed_extensions,
         dt.max_file_size_mb
-      FROM verification_documents vd
-      LEFT JOIN document_types dt ON vd.document_type_id = dt.id
+      FROM ${TABLE_NAMES.VERIFICATION_DOCUMENTS} vd
+      LEFT JOIN ${TABLE_NAMES.DOCUMENT_TYPES} dt ON vd.document_type_id = dt.id
       WHERE vd.application_id = $1
       ORDER BY dt.is_required DESC, vd.created_at ASC
     `, [applicationId])
@@ -61,10 +61,10 @@ export async function GET(request: NextRequest) {
     // Get required document types that haven't been uploaded yet
     const requiredTypesResult = await query(`
       SELECT dt.*
-      FROM document_types dt
+      FROM ${TABLE_NAMES.DOCUMENT_TYPES} dt
       WHERE dt.is_required = true
         AND NOT EXISTS (
-          SELECT 1 FROM verification_documents vd
+          SELECT 1 FROM ${TABLE_NAMES.VERIFICATION_DOCUMENTS} vd
           WHERE vd.application_id = $1 AND vd.document_type_id = dt.id
         )
     `, [applicationId])

@@ -1,13 +1,14 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextRequest } from 'next/server'
 import { auth } from '@/auth'
 import { query } from '@/lib/auth/db'
 import { apiError, apiSuccess, apiUnauthorized, apiBadRequest, apiNotFound } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
+import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await auth()
@@ -15,7 +16,7 @@ export async function POST(
       return apiUnauthorized(ERROR_MESSAGES.UNAUTHORIZED)
     }
 
-    const reviewId = params.id
+    const { id: reviewId } = await params
     const body = await request.json()
     const { voteType } = body
 
@@ -25,7 +26,7 @@ export async function POST(
 
     // Check if review exists and is published
     const reviewResult = await query(
-      'SELECT id, status FROM reviews WHERE id = $1',
+      `SELECT id, status FROM ${TABLE_NAMES.REVIEWS} WHERE id = $1`,
       [reviewId]
     )
 
@@ -39,7 +40,7 @@ export async function POST(
 
     // Check if user already voted
     const existingVote = await query(
-      'SELECT vote_type FROM review_votes WHERE review_id = $1 AND voter_id = $2',
+      `SELECT vote_type FROM ${TABLE_NAMES.REVIEW_VOTES} WHERE review_id = $1 AND voter_id = $2`,
       [reviewId, session.user.id]
     )
 
@@ -49,13 +50,13 @@ export async function POST(
       if (currentVote === voteType) {
         // User is trying to vote the same way again - remove the vote
         await query(
-          'DELETE FROM review_votes WHERE review_id = $1 AND voter_id = $2',
+          `DELETE FROM ${TABLE_NAMES.REVIEW_VOTES} WHERE review_id = $1 AND voter_id = $2`,
           [reviewId, session.user.id]
         )
 
         // Update review vote counts
         await query(`
-          UPDATE reviews SET
+          UPDATE ${TABLE_NAMES.REVIEWS} SET
             helpful_votes = CASE WHEN $1 = 'helpful' THEN helpful_votes - 1 ELSE helpful_votes END,
             total_votes = total_votes - 1,
             updated_at = CURRENT_TIMESTAMP
@@ -69,13 +70,13 @@ export async function POST(
       } else {
         // User is changing their vote
         await query(
-          'UPDATE review_votes SET vote_type = $1 WHERE review_id = $2 AND voter_id = $3',
+          `UPDATE ${TABLE_NAMES.REVIEW_VOTES} SET vote_type = $1 WHERE review_id = $2 AND voter_id = $3`,
           [voteType, reviewId, session.user.id]
         )
 
         // Update review vote counts
         await query(`
-          UPDATE reviews SET
+          UPDATE ${TABLE_NAMES.REVIEWS} SET
             helpful_votes = CASE
               WHEN $1 = 'helpful' AND $2 = 'unhelpful' THEN helpful_votes + 1
               WHEN $1 = 'unhelpful' AND $2 = 'helpful' THEN helpful_votes - 1
@@ -93,13 +94,13 @@ export async function POST(
     } else {
       // New vote
       await query(
-        'INSERT INTO review_votes (review_id, voter_id, vote_type) VALUES ($1, $2, $3)',
+        `INSERT INTO ${TABLE_NAMES.REVIEW_VOTES} (review_id, voter_id, vote_type) VALUES ($1, $2, $3)`,
         [reviewId, session.user.id, voteType]
       )
 
       // Update review vote counts
       await query(`
-        UPDATE reviews SET
+        UPDATE ${TABLE_NAMES.REVIEWS} SET
           helpful_votes = CASE WHEN $1 = 'helpful' THEN helpful_votes + 1 ELSE helpful_votes END,
           total_votes = total_votes + 1,
           updated_at = CURRENT_TIMESTAMP
@@ -119,7 +120,8 @@ export async function POST(
     }
 
   } catch (error) {
-    logger.error('Error voting on review', { error, reviewId: params.id })
+    const { id } = await params
+    logger.error('Error voting on review', { error, reviewId: id })
     return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)
   }
 }

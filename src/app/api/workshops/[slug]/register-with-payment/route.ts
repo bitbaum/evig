@@ -4,10 +4,15 @@ import { query } from '@/lib/auth/db'
 import { apiError, apiSuccess, apiUnauthorized, apiNotFound, apiBadRequest } from '@/lib/api/helpers'
 import { logger } from '@/lib/logger'
 import { requireStripeClient } from '@/lib/payments/stripe-client'
+import { TABLE_NAMES } from '@/config/database'
+import {
+  processPayment,
+  buildInvoiceLineItem,
+  centsToDisplay
+} from '@/lib/payments/payment-flow'
 
 // POST /api/workshops/[slug]/register-with-payment - Register for workshop with payment
 export async function POST(request: NextRequest) {
-  // Initialize Stripe lazily inside handler to avoid build-time errors
   const stripe = requireStripeClient()
 
   try {
@@ -20,7 +25,6 @@ export async function POST(request: NextRequest) {
     const {
       instanceId, // Specific workshop instance
       useEscrow = false, // Workshops typically don't need escrow
-      paymentType = 'full'
     } = await request.json()
 
     // Get workshop details
@@ -28,7 +32,7 @@ export async function POST(request: NextRequest) {
       SELECT
         w.*,
         COALESCE(w.price_cents, 0) as price_cents
-      FROM workshops w
+      FROM ${TABLE_NAMES.WORKSHOPS} w
       WHERE w.slug = $1 AND w.is_active = true
     `, [workshopSlug])
 
@@ -53,8 +57,8 @@ export async function POST(request: NextRequest) {
           wi.*,
           w.title,
           w.price_cents as workshop_price
-        FROM workshop_instances wi
-        JOIN workshops w ON wi.workshop_id = w.id
+        FROM ${TABLE_NAMES.WORKSHOP_INSTANCES} wi
+        JOIN ${TABLE_NAMES.WORKSHOPS} w ON wi.workshop_id = w.id
         WHERE wi.id = $1 AND wi.status = 'scheduled'
       `, [instanceId])
 
@@ -74,7 +78,7 @@ export async function POST(request: NextRequest) {
 
     // Check if user is already registered
     const existingRegistration = await query(`
-      SELECT id, status FROM workshop_registrations
+      SELECT id, status FROM ${TABLE_NAMES.WORKSHOP_REGISTRATIONS}
       WHERE user_id = $1 AND workshop_instance_id = $2
     `, [session.user.id, registrationTarget])
 
@@ -85,26 +89,11 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // Get payment provider
-    const providerResult = await query(
-      'SELECT id, fee_percentage, fee_fixed_cents FROM payment_providers WHERE slug = $1 AND is_active = true',
-      ['stripe']
-    )
-
-    if (providerResult.rows.length === 0) {
-      return apiError(null, 'Payment provider not available', 500)
-    }
-
-    const provider = providerResult.rows[0]
-
-    // Calculate payment amount
     const baseAmount = workshop.price_cents
-    const feeCents = Math.round(baseAmount * (provider.fee_percentage / 100)) + provider.fee_fixed_cents
-    const totalAmount = baseAmount + feeCents
 
     // Create workshop registration
     const registrationResult = await query(`
-      INSERT INTO workshop_registrations (
+      INSERT INTO ${TABLE_NAMES.WORKSHOP_REGISTRATIONS} (
         user_id,
         workshop_instance_id,
         status,
@@ -125,143 +114,50 @@ export async function POST(request: NextRequest) {
     // Update instance participant count if registering for specific instance
     if (instanceId) {
       await query(`
-        UPDATE workshop_instances
+        UPDATE ${TABLE_NAMES.WORKSHOP_INSTANCES}
         SET current_participants = current_participants + 1
         WHERE id = $1
       `, [instanceId])
     }
 
-    // Create payment intent
-    const paymentIntent = await stripe.paymentIntents.create({
-      amount: totalAmount,
-      currency: 'chf',
-      metadata: {
+    // Process payment using shared utility
+    // Note: Workshops use 1-day escrow if enabled (rare case)
+    const autoReleaseDays = 1
+    const paymentResult = await processPayment({
+      stripe,
+      userId: session.user.id,
+      baseAmountCents: baseAmount,
+      useEscrow,
+      autoReleaseDays,
+      paymentDescription: `Workshop Registration: ${workshop.title}`,
+      paymentMetadata: {
         userId: session.user.id,
         workshopRegistrationId: registrationId.toString(),
         workshopSlug,
-        instanceId: instanceId || null,
+        instanceId: instanceId || '',
         useEscrow: useEscrow.toString(),
         registrationType
       },
-      automatic_payment_methods: {
-        enabled: true,
-      },
-      capture_method: useEscrow ? 'manual' : 'automatic',
-      description: `Workshop Registration: ${workshop.title}`
-    })
-
-    // Create payment transaction record
-    const transactionResult = await query(`
-      INSERT INTO payment_transactions (
-        user_id,
-        provider_id,
-        provider_transaction_id,
-        type,
-        status,
-        amount_cents,
-        currency,
-        fee_cents,
-        net_amount_cents,
-        workshop_registration_id,
-        description,
-        escrow_release_date
-      ) VALUES (
-        $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11,
-        CASE WHEN $12 THEN CURRENT_TIMESTAMP + INTERVAL '1 day' * 1 ELSE NULL END
-      )
-      RETURNING id
-    `, [
-      session.user.id,
-      provider.id,
-      paymentIntent.id,
-      'payment',
-      'pending',
-      totalAmount,
-      'CHF',
-      feeCents,
-      baseAmount,
-      registrationId,
-      `Workshop registration: ${workshop.title}`,
-      useEscrow
-    ])
-
-    const transactionId = transactionResult.rows[0].id
-
-    // Create escrow account if enabled (rare for workshops)
-    if (useEscrow) {
-      await query(`
-        INSERT INTO escrow_accounts (
-          transaction_id,
-          total_amount_cents,
-          currency,
-          auto_release_days,
-          release_deadline,
-          buyer_id,
-          status
-        ) VALUES (
-          $1, $2, $3, 1,
-          CURRENT_TIMESTAMP + INTERVAL '1 day',
-          $4, 'active'
+      workshopRegistrationId: registrationId,
+      invoiceLineItems: [
+        buildInvoiceLineItem(
+          `Workshop: ${workshop.title}`,
+          baseAmount
         )
-      `, [
-        transactionId,
-        totalAmount,
-        'CHF',
-        session.user.id
-      ])
-    }
-
-    // Create invoice for the workshop registration
-    const invoiceResult = await query(`
-      INSERT INTO invoices (
-        invoice_number,
-        type,
-        status,
-        user_id,
-        workshop_registration_id,
-        subtotal_cents,
-        tax_cents,
-        total_cents,
-        currency,
-        tax_rate,
-        line_items,
-        issue_date,
-        notes,
-        payment_terms
-      ) VALUES (
-        generate_invoice_number(),
-        'service',
-        'draft',
-        $1, $2, $3, $4, $5, $6, $7, $8, CURRENT_DATE, $9, $10
-      )
-      RETURNING id, invoice_number
-    `, [
-      session.user.id,
-      registrationId,
-      baseAmount,
-      Math.round(baseAmount * 0.077), // 7.7% Swiss VAT
-      totalAmount,
-      'CHF',
-      0.077,
-      JSON.stringify([{
-        description: `Workshop: ${workshop.title}`,
-        quantity: 1,
-        unitPrice: (baseAmount / 100).toFixed(2),
-        total: (baseAmount / 100).toFixed(2)
-      }]),
-      `Workshop registration - ${workshop.title}`,
-      'Payment due before workshop date'
-    ])
+      ],
+      invoiceNotes: `Workshop registration - ${workshop.title}`,
+      invoicePaymentTerms: 'Payment due before workshop date'
+    })
 
     return apiSuccess({
       registrationId,
-      paymentIntentId: paymentIntent.id,
-      clientSecret: paymentIntent.client_secret,
-      transactionId,
-      invoiceId: invoiceResult.rows[0].id,
-      invoiceNumber: invoiceResult.rows[0].invoice_number,
-      amount: totalAmount / 100,
-      currency: 'CHF',
+      paymentIntentId: paymentResult.paymentIntentId,
+      clientSecret: paymentResult.clientSecret,
+      transactionId: paymentResult.transactionId,
+      invoiceId: paymentResult.invoiceId,
+      invoiceNumber: paymentResult.invoiceNumber,
+      amount: centsToDisplay(paymentResult.totalAmountCents),
+      currency: paymentResult.currency,
       workshopTitle: workshop.title,
       registrationType,
       escrowEnabled: useEscrow,

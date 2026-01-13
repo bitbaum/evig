@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { verifyAdminPassword, createAdminToken, createAuthCookie, clearAuthCookie } from '@/lib/admin-auth'
 import { apiSuccess, apiError, apiBadRequest, apiUnauthorized } from '@/lib/api/helpers'
 import { logger } from '@/lib/logger'
+import { ROLES } from '@/lib/constants'
 
 export const dynamic = 'force-dynamic'
 
@@ -30,11 +31,11 @@ export async function POST(request: NextRequest) {
     const token = createAdminToken()
     
     // Create response with auth cookie
-    const response = apiSuccess({ 
+    const response = apiSuccess({
       message: 'Login successful',
       user: {
         email: 'admin@revampit.ch',
-        role: 'admin'
+        role: ROLES.REVAMPIT_ADMIN
       }
     })
 

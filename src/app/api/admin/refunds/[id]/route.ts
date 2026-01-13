@@ -4,13 +4,15 @@ import { query } from '@/lib/auth/db'
 import { apiError, apiSuccess, apiUnauthorized, apiNotFound, apiBadRequest } from '@/lib/api/helpers'
 import { isAdminRole } from '@/lib/constants'
 import { logger } from '@/lib/logger'
+import { TABLE_NAMES } from '@/config/database'
 import { getStripeClient } from '@/lib/payments/stripe-client'
 
 // GET /api/admin/refunds/[id] - Get refund details
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id: refundId } = await params
   try {
     const session = await auth()
     if (!session?.user?.id) {
@@ -18,12 +20,10 @@ export async function GET(
     }
 
     // Check if user is admin
-    const userRoleResult = await query('SELECT role FROM users WHERE id = $1', [session.user.id])
+    const userRoleResult = await query(`SELECT role FROM ${TABLE_NAMES.USERS} WHERE id = $1`, [session.user.id])
     if (!isAdminRole(userRoleResult.rows[0]?.role)) {
       return apiUnauthorized('Admin access required')
     }
-
-    const refundId = params.id
 
     // Get refund details with related data
     const refundResult = await query(`
@@ -38,12 +38,12 @@ export async function GET(
         ar.name as approved_by_name,
         rr.name as requested_by_name,
         pr.name as processed_by_name
-      FROM refunds r
-      JOIN users u ON r.requested_by = u.id
-      JOIN payment_transactions pt ON r.original_transaction_id = pt.id
-      LEFT JOIN users ar ON r.approved_by = ar.id
-      LEFT JOIN users rr ON r.requested_by = rr.id
-      LEFT JOIN users pr ON r.processed_by = pr.id
+      FROM ${TABLE_NAMES.REFUNDS} r
+      JOIN ${TABLE_NAMES.USERS} u ON r.requested_by = u.id
+      JOIN ${TABLE_NAMES.PAYMENT_TRANSACTIONS} pt ON r.original_transaction_id = pt.id
+      LEFT JOIN ${TABLE_NAMES.USERS} ar ON r.approved_by = ar.id
+      LEFT JOIN ${TABLE_NAMES.USERS} rr ON r.requested_by = rr.id
+      LEFT JOIN ${TABLE_NAMES.USERS} pr ON r.processed_by = pr.id
       WHERE r.id = $1
     `, [refundId])
 
@@ -64,8 +64,9 @@ export async function GET(
 // PUT /api/admin/refunds/[id] - Approve/reject/process refund
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id: refundId } = await params
   try {
     const session = await auth()
     if (!session?.user?.id) {
@@ -73,12 +74,10 @@ export async function PUT(
     }
 
     // Check if user is admin
-    const userRoleResult = await query('SELECT role FROM users WHERE id = $1', [session.user.id])
+    const userRoleResult = await query(`SELECT role FROM ${TABLE_NAMES.USERS} WHERE id = $1`, [session.user.id])
     if (!isAdminRole(userRoleResult.rows[0]?.role)) {
       return apiUnauthorized('Admin access required')
     }
-
-    const refundId = params.id
     const { action, notes } = await request.json() // action: 'approve', 'reject', 'process'
 
     if (!['approve', 'reject', 'process'].includes(action)) {
@@ -93,9 +92,9 @@ export async function PUT(
         pt.currency,
         pt.provider_id,
         pp.slug as provider_slug
-      FROM refunds r
-      JOIN payment_transactions pt ON r.original_transaction_id = pt.id
-      JOIN payment_providers pp ON pt.provider_id = pp.id
+      FROM ${TABLE_NAMES.REFUNDS} r
+      JOIN ${TABLE_NAMES.PAYMENT_TRANSACTIONS} pt ON r.original_transaction_id = pt.id
+      JOIN ${TABLE_NAMES.PAYMENT_PROVIDERS} pp ON pt.provider_id = pp.id
       WHERE r.id = $1
     `, [refundId])
 
@@ -113,7 +112,7 @@ export async function PUT(
 
       // Approve the refund
       await query(`
-        UPDATE refunds
+        UPDATE ${TABLE_NAMES.REFUNDS}
         SET
           status = 'approved',
           approved_by = $1,
@@ -134,7 +133,7 @@ export async function PUT(
 
       // Reject the refund
       await query(`
-        UPDATE refunds
+        UPDATE ${TABLE_NAMES.REFUNDS}
         SET
           status = 'rejected',
           processed_by = $1,
@@ -174,7 +173,7 @@ export async function PUT(
 
         // Update refund with Stripe refund ID
         await query(`
-          UPDATE refunds
+          UPDATE ${TABLE_NAMES.REFUNDS}
           SET
             refund_transaction_id = $1,
             status = 'processing',
@@ -192,7 +191,7 @@ export async function PUT(
 
         // Create refund transaction record
         await query(`
-          INSERT INTO payment_transactions (
+          INSERT INTO ${TABLE_NAMES.PAYMENT_TRANSACTIONS} (
             user_id,
             provider_id,
             provider_transaction_id,
@@ -217,12 +216,13 @@ export async function PUT(
           JSON.stringify(stripeRefund)
         ])
 
-      } catch (stripeError: any) {
+      } catch (stripeError: unknown) {
         logger.error('Stripe refund processing error', { error: stripeError })
+        const errorMessage = stripeError instanceof Error ? stripeError.message : 'Unknown Stripe error'
 
         // Mark refund as rejected due to processing error
         await query(`
-          UPDATE refunds
+          UPDATE ${TABLE_NAMES.REFUNDS}
           SET
             status = 'rejected',
             processed_by = $1,
@@ -232,7 +232,7 @@ export async function PUT(
           WHERE id = $3
         `, [
           session.user.id,
-          `\n[${new Date().toISOString()}] Processing failed: ${stripeError.message}`,
+          `\n[${new Date().toISOString()}] Processing failed: ${errorMessage}`,
           refundId
         ])
 
@@ -246,8 +246,8 @@ export async function PUT(
         r.*,
         u.name as customer_name,
         u.email as customer_email
-      FROM refunds r
-      JOIN users u ON r.requested_by = u.id
+      FROM ${TABLE_NAMES.REFUNDS} r
+      JOIN ${TABLE_NAMES.USERS} u ON r.requested_by = u.id
       WHERE r.id = $1
     `, [refundId])
 

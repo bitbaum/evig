@@ -48,8 +48,8 @@ export async function GET(request: NextRequest) {
         ct.issuing_authority as default_issuing_authority,
         ct.validity_period_months,
         ct.requires_verification
-      FROM repairer_certifications rc
-      LEFT JOIN certification_types ct ON rc.certification_type_id = ct.id
+      FROM ${TABLE_NAMES.REPAIRER_CERTIFICATIONS} rc
+      LEFT JOIN ${TABLE_NAMES.CERTIFICATION_TYPES} ct ON rc.certification_type_id = ct.id
       WHERE rc.application_id = $1 AND rc.verification_status = $2
       ORDER BY rc.created_at ASC
     `, [applicationId, status])
@@ -58,7 +58,7 @@ export async function GET(request: NextRequest) {
     const applicationResult = await query(`
       SELECT ra.*, u.name, u.email
       FROM ${TABLE_NAMES.REPAIRER_APPLICATIONS} ra
-      JOIN users u ON ra.user_id = u.id
+      JOIN ${TABLE_NAMES.USERS} u ON ra.user_id = u.id
       WHERE ra.id = $1
     `, [applicationId])
 

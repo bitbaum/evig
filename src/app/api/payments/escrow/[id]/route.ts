@@ -3,13 +3,14 @@ import { auth } from '@/auth'
 import { requireStripeClient } from '@/lib/payments/stripe-client'
 import { query } from '@/lib/auth/db'
 import { apiError, apiSuccess, apiUnauthorized, apiNotFound, apiBadRequest } from '@/lib/api/helpers'
+import { TABLE_NAMES } from '@/config/database'
 import { isAdminRole } from '@/lib/constants'
 import { logger } from '@/lib/logger'
 
 // GET /api/payments/escrow/[id] - Get escrow account details
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await auth()
@@ -17,7 +18,7 @@ export async function GET(
       return apiUnauthorized('Authentication required')
     }
 
-    const escrowId = params.id
+    const { id: escrowId } = await params
 
     // Get escrow account details
     const escrowResult = await query(`
@@ -40,11 +41,11 @@ export async function GET(
             'released_by', er.released_by
           )
         ) FILTER (WHERE er.id IS NOT NULL) as releases
-      FROM escrow_accounts ea
-      JOIN payment_transactions pt ON ea.transaction_id = pt.id
-      JOIN users b ON ea.buyer_id = b.id
-      LEFT JOIN users s ON ea.seller_id = s.id
-      LEFT JOIN escrow_releases er ON ea.id = er.escrow_account_id
+      FROM ${TABLE_NAMES.ESCROW_ACCOUNTS} ea
+      JOIN ${TABLE_NAMES.PAYMENT_TRANSACTIONS} pt ON ea.transaction_id = pt.id
+      JOIN ${TABLE_NAMES.USERS} b ON ea.buyer_id = b.id
+      LEFT JOIN ${TABLE_NAMES.USERS} s ON ea.seller_id = s.id
+      LEFT JOIN ${TABLE_NAMES.ESCROW_RELEASES} er ON ea.id = er.escrow_account_id
       WHERE ea.id = $1
       GROUP BY ea.id, pt.provider_transaction_id, pt.amount_cents, pt.currency, b.name, b.email, s.name, s.email
     `, [escrowId])
@@ -56,7 +57,7 @@ export async function GET(
     const escrow = escrowResult.rows[0]
 
     // Check permissions - buyer, seller, or admin can view
-    const userRoleResult = await query('SELECT role FROM users WHERE id = $1', [session.user.id])
+    const userRoleResult = await query(`SELECT role FROM ${TABLE_NAMES.USERS} WHERE id = $1`, [session.user.id])
     const isAdmin = isAdminRole(userRoleResult.rows[0]?.role)
 
     if (escrow.buyer_id !== session.user.id && escrow.seller_id !== session.user.id && !isAdmin) {
@@ -98,7 +99,7 @@ export async function GET(
 // POST /api/payments/escrow/[id]/release - Release escrow funds
 export async function POST(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   // Initialize Stripe lazily inside handler to avoid build-time errors
   const stripe = requireStripeClient()
@@ -109,7 +110,7 @@ export async function POST(
       return apiUnauthorized('Authentication required')
     }
 
-    const escrowId = params.id
+    const { id: escrowId } = await params
     const { amount, reason, releaseType = 'full' } = await request.json()
 
     if (!amount || amount <= 0) {
@@ -123,8 +124,8 @@ export async function POST(
         pt.provider_transaction_id,
         pt.amount_cents as transaction_amount,
         pt.currency
-      FROM escrow_accounts ea
-      JOIN payment_transactions pt ON ea.transaction_id = pt.id
+      FROM ${TABLE_NAMES.ESCROW_ACCOUNTS} ea
+      JOIN ${TABLE_NAMES.PAYMENT_TRANSACTIONS} pt ON ea.transaction_id = pt.id
       WHERE ea.id = $1 AND ea.status = 'active'
     `, [escrowId])
 
@@ -135,7 +136,7 @@ export async function POST(
     const escrow = escrowResult.rows[0]
 
     // Check permissions - only buyer or admin can release funds
-    const userRoleResult = await query('SELECT role FROM users WHERE id = $1', [session.user.id])
+    const userRoleResult = await query(`SELECT role FROM ${TABLE_NAMES.USERS} WHERE id = $1`, [session.user.id])
     const isAdmin = isAdminRole(userRoleResult.rows[0]?.role)
 
     if (escrow.buyer_id !== session.user.id && !isAdmin) {
@@ -161,7 +162,7 @@ export async function POST(
 
         // Update escrow status to released
         await query(`
-          UPDATE escrow_accounts
+          UPDATE ${TABLE_NAMES.ESCROW_ACCOUNTS}
           SET
             status = 'released',
             released_amount_cents = total_amount_cents,
@@ -179,7 +180,7 @@ export async function POST(
 
         // Update escrow released amount
         await query(`
-          UPDATE escrow_accounts
+          UPDATE ${TABLE_NAMES.ESCROW_ACCOUNTS}
           SET
             released_amount_cents = released_amount_cents + $1,
             updated_at = CURRENT_TIMESTAMP
@@ -189,7 +190,7 @@ export async function POST(
 
       // Create escrow release record
       await query(`
-        INSERT INTO escrow_releases (
+        INSERT INTO ${TABLE_NAMES.ESCROW_RELEASES} (
           escrow_account_id,
           transaction_id,
           amount_cents,
@@ -210,7 +211,7 @@ export async function POST(
 
       // Create payment transaction record for the release
       const releaseTransaction = await query(`
-        INSERT INTO payment_transactions (
+        INSERT INTO ${TABLE_NAMES.PAYMENT_TRANSACTIONS} (
           user_id,
           provider_id,
           provider_transaction_id,
@@ -241,7 +242,7 @@ export async function POST(
         currency: escrow.currency,
         remainingBalance: (availableAmount - releaseAmountCents) / 100
       })
-    } catch (stripeError: any) {
+    } catch (stripeError: unknown) {
       logger.error('Stripe capture error', { error: stripeError })
       return apiError(stripeError, 'Failed to release escrow funds')
     }

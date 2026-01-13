@@ -11,6 +11,15 @@ export interface CurrencyConfig {
   taxRate: number // VAT rate for this currency
 }
 
+export interface ServicePricing {
+  originalPrice: number
+  originalCurrency: SupportedCurrency
+  convertedPrice: number
+  convertedCurrency: SupportedCurrency
+  vat: number
+  total: number
+}
+
 export const CURRENCY_CONFIG: Record<SupportedCurrency, CurrencyConfig> = {
   CHF: {
     code: 'CHF',

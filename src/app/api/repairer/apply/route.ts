@@ -7,6 +7,7 @@ import { TABLE_NAMES } from '@/config/database'
 import { sendEmail } from '@/lib/email'
 import { logger } from '@/lib/logger'
 import { APP_URL } from '@/config/urls'
+import { ADMIN_ROLES } from '@/lib/constants'
 
 export async function POST(request: NextRequest) {
   try {
@@ -160,8 +161,8 @@ export async function POST(request: NextRequest) {
     try {
       // Get all admin emails
       const adminEmailsResult = await query(
-        'SELECT email FROM users WHERE role = $1 AND email IS NOT NULL',
-        ['admin']
+        `SELECT email FROM ${TABLE_NAMES.USERS} WHERE role = ANY($1) AND email IS NOT NULL`,
+        [ADMIN_ROLES]
       )
 
       const adminDashboardUrl = `${APP_URL}/admin/repairer-applications`

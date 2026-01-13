@@ -94,7 +94,7 @@ export async function adminMiddleware(request: NextRequest) {
 
     return NextResponse.next()
   } catch (error) {
-    console.error('Admin middleware error:', error)
+    logger.error('Admin middleware error', { error })
     const loginUrl = new URL('/auth/login', request.url)
     return NextResponse.redirect(loginUrl)
   }

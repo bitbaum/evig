@@ -81,6 +81,14 @@ export const AUTH_CONFIG = {
       windowMs: 60 * 60 * 1000,    // 1 hour
       maxAttempts: 3,               // 3 attempts per hour
     },
+    newsletter: {
+      windowMs: 60 * 60 * 1000,    // 1 hour
+      maxAttempts: 5,               // 5 subscriptions per hour per IP
+    },
+    submission: {
+      windowMs: 60 * 60 * 1000,    // 1 hour
+      maxAttempts: 10,              // 10 submissions per hour per IP
+    },
   },
 
   // Account lockout

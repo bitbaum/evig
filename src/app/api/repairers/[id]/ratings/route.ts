@@ -2,14 +2,16 @@ import { NextRequest, NextResponse } from 'next/server'
 import { query } from '@/lib/auth/db'
 import { apiError, apiSuccess, apiNotFound } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
+import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id: repairerId } = await params
+
   try {
-    const repairerId = params.id
 
     // Get repairer profile with rating summary
     const profileResult = await query(`
@@ -20,7 +22,7 @@ export async function GET(
         total_reviews,
         rating_distribution,
         review_summary
-      FROM repairer_profiles
+      FROM ${TABLE_NAMES.REPAIRER_PROFILES}
       WHERE id = $1 AND is_verified = true
     `, [repairerId])
 
@@ -42,9 +44,9 @@ export async function GET(
         u.name as reviewer_name,
         rr.content as response_content,
         rr.created_at as response_created_at
-      FROM reviews r
-      JOIN users u ON r.reviewer_id = u.id
-      LEFT JOIN review_responses rr ON r.id = rr.review_id AND rr.status = 'published'
+      FROM ${TABLE_NAMES.REVIEWS} r
+      JOIN ${TABLE_NAMES.USERS} u ON r.reviewer_id = u.id
+      LEFT JOIN ${TABLE_NAMES.REVIEW_RESPONSES} rr ON r.id = rr.review_id AND rr.status = 'published'
       WHERE r.target_type = 'repairer'
         AND r.target_id = $1
         AND r.status = 'published'
@@ -57,7 +59,7 @@ export async function GET(
       SELECT
         overall_rating,
         COUNT(*) as count
-      FROM reviews
+      FROM ${TABLE_NAMES.REVIEWS}
       WHERE target_type = 'repairer'
         AND target_id = $1
         AND status = 'published'
@@ -65,10 +67,10 @@ export async function GET(
       ORDER BY overall_rating DESC
     `, [repairerId])
 
-    const breakdownMap = ratingBreakdown.rows.reduce((acc: any, row) => {
+    const breakdownMap = ratingBreakdown.rows.reduce((acc: Record<number, number>, row) => {
       acc[row.overall_rating] = parseInt(row.count)
       return acc
-    }, {})
+    }, {} as Record<number, number>)
 
     const ratings = {
       overview: {
@@ -125,7 +127,7 @@ export async function GET(
     })
 
   } catch (error) {
-    logger.error('Error fetching repairer ratings', { error, repairerId: params.id })
+    logger.error('Error fetching repairer ratings', { error, repairerId })
     return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)
   }
 }

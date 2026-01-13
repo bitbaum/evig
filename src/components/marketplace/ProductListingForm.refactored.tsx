@@ -34,6 +34,16 @@ import type { ProductFormData } from './types'
 // External components
 import AICameraProductListing from './AICameraProductListing'
 
+interface ListedProductResult {
+  id: string
+  title: string
+  price: string
+  brand: string
+  condition: string
+  createdAt: string
+  views: number
+}
+
 export default function ProductListingForm() {
   const {
     formData,
@@ -64,7 +74,7 @@ export default function ProductListingForm() {
   const [showAICamera, setShowAICamera] = useState(false)
   const [showAISearch, setShowAISearch] = useState(false)
   const [showSuccessModal, setShowSuccessModal] = useState(false)
-  const [listedProduct, setListedProduct] = useState<any>(null)
+  const [listedProduct, setListedProduct] = useState<ListedProductResult | null>(null)
   const [submitSuccess, setSubmitSuccess] = useState(false)
   const [submitResult, setSubmitResult] = useState<{ success: boolean; message: string } | null>(null)
 

@@ -48,7 +48,7 @@ export async function GET(request: NextRequest) {
         u.email as creator_email,
         COUNT(lb.id) as active_bookings
       FROM ${TABLE_NAMES.LOCATIONS} l
-      LEFT JOIN users u ON l.created_by = u.id
+      LEFT JOIN ${TABLE_NAMES.USERS} u ON l.created_by = u.id
       LEFT JOIN ${TABLE_NAMES.LOCATION_BOOKINGS} lb ON l.id = lb.location_id
         AND lb.status IN ('pending', 'confirmed')
         AND lb.start_time > CURRENT_TIMESTAMP

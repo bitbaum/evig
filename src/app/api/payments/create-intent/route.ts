@@ -3,6 +3,7 @@ import { auth } from '@/auth'
 import { query } from '@/lib/auth/db'
 import { apiError, apiSuccess, apiUnauthorized, apiBadRequest } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
+import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
 import {
   SupportedCurrency,
@@ -49,7 +50,7 @@ export const POST = withSecurePayment(async (request: NextRequest) => {
     // Get payment provider with currency support
     const providerResult = await query(`
       SELECT id, fee_percentage, fee_fixed_cents, supported_currencies, config
-      FROM payment_providers
+      FROM ${TABLE_NAMES.PAYMENT_PROVIDERS}
       WHERE slug = $1 AND is_active = true AND $2 = ANY(supported_currencies)
     `, ['stripe', currency])
 
@@ -99,7 +100,7 @@ export const POST = withSecurePayment(async (request: NextRequest) => {
 
     // Create payment transaction record with detailed breakdown
     const transactionResult = await query(`
-      INSERT INTO payment_transactions (
+      INSERT INTO ${TABLE_NAMES.PAYMENT_TRANSACTIONS} (
         user_id,
         provider_id,
         provider_transaction_id,
@@ -160,7 +161,7 @@ export const POST = withSecurePayment(async (request: NextRequest) => {
     // Create escrow account if enabled
     if (escrowEnabled) {
       await query(`
-        INSERT INTO escrow_accounts (
+        INSERT INTO ${TABLE_NAMES.ESCROW_ACCOUNTS} (
           transaction_id,
           total_amount_cents,
           currency,
@@ -173,8 +174,8 @@ export const POST = withSecurePayment(async (request: NextRequest) => {
           CURRENT_TIMESTAMP + INTERVAL '1 day' * $4,
           $5,
           CASE
-            WHEN $6 IS NOT NULL THEN (SELECT technician_id FROM service_appointments WHERE id = $6)
-            WHEN $7 IS NOT NULL THEN (SELECT instructor_id FROM workshop_registrations wr JOIN workshop_instances wi ON wr.workshop_instance_id = wi.id WHERE wr.id = $7)
+            WHEN $6 IS NOT NULL THEN (SELECT technician_id FROM ${TABLE_NAMES.SERVICE_APPOINTMENTS} WHERE id = $6)
+            WHEN $7 IS NOT NULL THEN (SELECT instructor_id FROM ${TABLE_NAMES.WORKSHOP_REGISTRATIONS} wr JOIN ${TABLE_NAMES.WORKSHOP_INSTANCES} wi ON wr.workshop_instance_id = wi.id WHERE wr.id = $7)
             ELSE NULL
           END
         )

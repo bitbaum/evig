@@ -110,7 +110,7 @@ export function decryptSensitiveData(encryptedData: string): string {
 
     return decrypted
   } catch (error) {
-    console.error('Failed to decrypt sensitive data:', error)
+    logger.error('Failed to decrypt sensitive data', { error })
     throw new Error('Data decryption failed')
   }
 }
@@ -125,7 +125,13 @@ export function generatePaymentReference(): string {
 /**
  * Validate payment data integrity
  */
-export function validatePaymentData(data: any): { isValid: boolean; errors: string[] } {
+interface PaymentDataInput {
+  amount?: number
+  currency?: string
+  metadata?: Record<string, unknown>
+}
+
+export function validatePaymentData(data: PaymentDataInput): { isValid: boolean; errors: string[] } {
   const errors: string[] = []
 
   // Check for required fields
@@ -180,7 +186,7 @@ export function createAuditLog(
   userId: string,
   resourceType: string,
   resourceId: string,
-  details: any = {},
+  details: Record<string, unknown> = {},
   ipAddress?: string
 ) {
   return {

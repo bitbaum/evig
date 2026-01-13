@@ -5,12 +5,14 @@ import { apiError, apiSuccess, apiBadRequest, apiUnauthorized, apiForbidden, api
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES } from '@/config/database'
 import { getUserRole } from '@/lib/api/role-checks'
+import { isAdminRole } from '@/lib/constants'
 
 // POST /api/admin/workshops/proposals/[id]/approve - Approve or reject workshop proposal
 export async function POST(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id: proposalId } = await params
   try {
     const session = await auth()
     if (!session?.user?.id) {
@@ -19,13 +21,11 @@ export async function POST(
 
     // Check if user has approval permissions
     const userRole = await getUserRole(session.user.id)
-    const hasApprovalPermission = ['admin', 'moderator'].includes(userRole || '')
+    const hasApprovalPermission = isAdminRole(userRole) || userRole === 'moderator'
 
     if (!hasApprovalPermission) {
       return apiForbidden('Keine Berechtigung für Workshop-Genehmigungen')
     }
-
-    const proposalId = params.id
     const body = await request.json()
     const { action, review_notes, required_changes } = body
 
@@ -38,7 +38,7 @@ export async function POST(
     const proposalCheck = await query(`
       SELECT wp.*, u.name as proposer_name, u.email as proposer_email
       FROM ${TABLE_NAMES.WORKSHOP_PROPOSALS} wp
-      LEFT JOIN users u ON wp.user_id = u.id
+      LEFT JOIN ${TABLE_NAMES.USERS} u ON wp.user_id = u.id
       WHERE wp.id = $1
     `, [proposalId])
 

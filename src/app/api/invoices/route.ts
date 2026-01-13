@@ -5,6 +5,13 @@ import { apiError, apiSuccess, apiUnauthorized, apiBadRequest, apiNotFound } fro
 import { isAdminRole } from '@/lib/constants'
 import { logger } from '@/lib/logger'
 import { calculateTaxes, generateTaxInvoiceData } from '@/lib/payments/tax-compliance'
+import { TABLE_NAMES } from '@/config/database'
+
+interface LineItemInput {
+  description: string
+  quantity: number | string
+  unitPrice: number | string
+}
 
 // POST /api/invoices - Create new invoice
 export async function POST(request: NextRequest) {
@@ -31,7 +38,7 @@ export async function POST(request: NextRequest) {
     } = await request.json()
 
     // Check if user is admin or creating invoice for themselves
-    const userRoleResult = await query('SELECT role FROM users WHERE id = $1', [session.user.id])
+    const userRoleResult = await query(`SELECT role FROM ${TABLE_NAMES.USERS} WHERE id = $1`, [session.user.id])
     const isAdmin = isAdminRole(userRoleResult.rows[0]?.role)
     const targetUserId = isAdmin && userId ? userId : session.user.id
 
@@ -46,7 +53,7 @@ export async function POST(request: NextRequest) {
 
     // Calculate totals with tax compliance
     let subtotalCents = 0
-    const processedLineItems = lineItems.map((item: any) => {
+    const processedLineItems = lineItems.map((item: LineItemInput) => {
       if (!item.description || !item.quantity || !item.unitPrice) {
         throw new Error('Invalid line item: description, quantity, and unitPrice required')
       }
@@ -78,7 +85,7 @@ export async function POST(request: NextRequest) {
 
     // Create invoice with tax compliance data
     const invoiceResult = await query(`
-      INSERT INTO invoices (
+      INSERT INTO ${TABLE_NAMES.INVOICES} (
         invoice_number,
         type,
         status,
@@ -165,7 +172,7 @@ export async function GET(request: NextRequest) {
     const offset = parseInt(searchParams.get('offset') || '0')
 
     // Check if user is admin
-    const userRoleResult = await query('SELECT role FROM users WHERE id = $1', [session.user.id])
+    const userRoleResult = await query(`SELECT role FROM ${TABLE_NAMES.USERS} WHERE id = $1`, [session.user.id])
     const isAdmin = isAdminRole(userRoleResult.rows[0]?.role)
 
     let whereClause = 'WHERE 1=1'
@@ -199,8 +206,8 @@ export async function GET(request: NextRequest) {
         ROUND(i.total_cents / 100.0, 2) as total,
         ROUND(i.subtotal_cents / 100.0, 2) as subtotal,
         ROUND(i.tax_cents / 100.0, 2) as tax
-      FROM invoices i
-      JOIN users u ON i.user_id = u.id
+      FROM ${TABLE_NAMES.INVOICES} i
+      JOIN ${TABLE_NAMES.USERS} u ON i.user_id = u.id
       ${whereClause}
       ORDER BY i.created_at DESC
       LIMIT $${paramIndex} OFFSET $${paramIndex + 1}
@@ -209,7 +216,7 @@ export async function GET(request: NextRequest) {
     // Get total count
     const countResult = await query(`
       SELECT COUNT(*) as total
-      FROM invoices i
+      FROM ${TABLE_NAMES.INVOICES} i
       ${whereClause}
     `, params)
 

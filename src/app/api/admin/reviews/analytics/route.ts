@@ -46,7 +46,7 @@ export async function GET(request: NextRequest) {
         COUNT(CASE WHEN status = 'hidden' THEN 1 END) as hidden_reviews,
         ROUND(AVG(overall_rating)::numeric, 2) as average_rating,
         COUNT(CASE WHEN is_verified_purchase = true THEN 1 END) as verified_reviews
-      FROM reviews
+      FROM ${TABLE_NAMES.REVIEWS}
       WHERE target_type = $1 AND created_at >= $2
     `, [targetType, startDate.toISOString()])
 
@@ -55,7 +55,7 @@ export async function GET(request: NextRequest) {
       SELECT
         overall_rating,
         COUNT(*) as count
-      FROM reviews
+      FROM ${TABLE_NAMES.REVIEWS}
       WHERE target_type = $1 AND status = 'published' AND created_at >= $2
       GROUP BY overall_rating
       ORDER BY overall_rating DESC
@@ -68,8 +68,8 @@ export async function GET(request: NextRequest) {
         rp.average_rating,
         rp.total_reviews,
         COUNT(r.id) as recent_reviews
-      FROM repairer_profiles rp
-      LEFT JOIN reviews r ON r.target_type = 'repairer' AND r.target_id = rp.id
+      FROM ${TABLE_NAMES.REPAIRER_PROFILES} rp
+      LEFT JOIN ${TABLE_NAMES.REVIEWS} r ON r.target_type = 'repairer' AND r.target_id = rp.id
         AND r.status = 'published' AND r.created_at >= $1
       WHERE rp.is_verified = true AND rp.total_reviews > 0
       GROUP BY rp.id, rp.business_name, rp.average_rating, rp.total_reviews
@@ -83,7 +83,7 @@ export async function GET(request: NextRequest) {
         DATE(created_at) as date,
         COUNT(*) as count,
         ROUND(AVG(overall_rating)::numeric, 2) as avg_rating
-      FROM reviews
+      FROM ${TABLE_NAMES.REVIEWS}
       WHERE target_type = $1 AND status = 'published' AND created_at >= $2
       GROUP BY DATE(created_at)
       ORDER BY DATE(created_at) DESC
@@ -95,8 +95,8 @@ export async function GET(request: NextRequest) {
         u.name,
         COUNT(r.id) as review_count,
         ROUND(AVG(r.overall_rating)::numeric, 2) as avg_rating_given
-      FROM users u
-      JOIN reviews r ON u.id = r.reviewer_id
+      FROM ${TABLE_NAMES.USERS} u
+      JOIN ${TABLE_NAMES.REVIEWS} r ON u.id = r.reviewer_id
       WHERE r.target_type = $1 AND r.status = 'published' AND r.created_at >= $2
       GROUP BY u.id, u.name
       ORDER BY review_count DESC
@@ -120,10 +120,10 @@ export async function GET(request: NextRequest) {
           ? Math.round((overallStats.rows[0].published_reviews / overallStats.rows[0].total_reviews) * 100)
           : 0
       },
-      ratingDistribution: ratingDistribution.rows.reduce((acc: any, row) => {
+      ratingDistribution: ratingDistribution.rows.reduce((acc: Record<number, number>, row) => {
         acc[row.overall_rating] = parseInt(row.count)
         return acc
-      }, { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 }),
+      }, { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 } as Record<number, number>),
       topRated: topRated.rows.map(row => ({
         name: row.business_name,
         averageRating: parseFloat(row.average_rating),

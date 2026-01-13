@@ -4,6 +4,7 @@ import { requireStripeClient } from '@/lib/payments/stripe-client'
 import { query } from '@/lib/auth/db'
 import { apiError, apiSuccess, apiUnauthorized, apiBadRequest, apiNotFound } from '@/lib/api/helpers'
 import { isAdminRole } from '@/lib/constants'
+import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
 
 export async function POST(request: NextRequest) {
@@ -35,9 +36,9 @@ export async function POST(request: NextRequest) {
         pp.slug as provider_slug,
         u.name as user_name,
         u.email as user_email
-      FROM payment_transactions pt
-      JOIN payment_providers pp ON pt.provider_id = pp.id
-      JOIN users u ON pt.user_id = u.id
+      FROM ${TABLE_NAMES.PAYMENT_TRANSACTIONS} pt
+      JOIN ${TABLE_NAMES.PAYMENT_PROVIDERS} pp ON pt.provider_id = pp.id
+      JOIN ${TABLE_NAMES.USERS} u ON pt.user_id = u.id
       WHERE pt.id = $1 AND pt.status = 'succeeded'
     `, [transactionId])
 
@@ -48,7 +49,7 @@ export async function POST(request: NextRequest) {
     const transaction = transactionResult.rows[0]
 
     // Check if user owns the transaction or is admin
-    const userRoleResult = await query('SELECT role FROM users WHERE id = $1', [session.user.id])
+    const userRoleResult = await query(`SELECT role FROM ${TABLE_NAMES.USERS} WHERE id = $1`, [session.user.id])
     const isAdmin = isAdminRole(userRoleResult.rows[0]?.role)
 
     if (transaction.user_id !== session.user.id && !isAdmin) {
@@ -64,7 +65,7 @@ export async function POST(request: NextRequest) {
     // Check for existing refunds on this transaction
     const existingRefundsResult = await query(`
       SELECT COALESCE(SUM(amount_cents), 0) as total_refunded
-      FROM refunds
+      FROM ${TABLE_NAMES.REFUNDS}
       WHERE original_transaction_id = $1 AND status IN ('approved', 'processing', 'completed')
     `, [transactionId])
 
@@ -77,7 +78,7 @@ export async function POST(request: NextRequest) {
 
     // Create refund record
     const refundResult = await query(`
-      INSERT INTO refunds (
+      INSERT INTO ${TABLE_NAMES.REFUNDS} (
         refund_number,
         original_transaction_id,
         amount_cents,
@@ -123,7 +124,7 @@ export async function POST(request: NextRequest) {
 
         // Update refund with Stripe refund ID
         await query(`
-          UPDATE refunds
+          UPDATE ${TABLE_NAMES.REFUNDS}
           SET
             refund_transaction_id = $1,
             status = 'processing',
@@ -136,7 +137,7 @@ export async function POST(request: NextRequest) {
 
         // Create refund transaction record
         await query(`
-          INSERT INTO payment_transactions (
+          INSERT INTO ${TABLE_NAMES.PAYMENT_TRANSACTIONS} (
             user_id,
             provider_id,
             provider_transaction_id,
@@ -161,18 +162,19 @@ export async function POST(request: NextRequest) {
           JSON.stringify(stripeRefund)
         ])
 
-      } catch (stripeError: any) {
+      } catch (stripeError: unknown) {
         logger.error('Stripe refund error', { error: stripeError })
+        const errorMessage = stripeError instanceof Error ? stripeError.message : 'Unknown Stripe error'
 
         // Mark refund as rejected
         await query(`
-          UPDATE refunds
+          UPDATE ${TABLE_NAMES.REFUNDS}
           SET
             status = 'rejected',
             processed_at = CURRENT_TIMESTAMP,
             internal_notes = $1
           WHERE id = $2
-        `, [stripeError.message, refundId])
+        `, [errorMessage, refundId])
 
         return apiError(stripeError, 'Refund processing failed')
       }

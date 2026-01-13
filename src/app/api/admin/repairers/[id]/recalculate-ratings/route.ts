@@ -9,8 +9,9 @@ import { isAdminRole } from '@/lib/constants'
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id: repairerId } = await params
   try {
     const session = await auth()
     if (!session?.user?.id) {
@@ -27,11 +28,9 @@ export async function POST(
       return apiUnauthorized('Nur Administratoren können Bewertungen neu berechnen')
     }
 
-    const repairerId = params.id
-
     // Check if repairer exists
     const repairerResult = await query(
-      'SELECT id, business_name FROM repairer_profiles WHERE id = $1',
+      `SELECT id, business_name FROM ${TABLE_NAMES.REPAIRER_PROFILES} WHERE id = $1`,
       [repairerId]
     )
 
@@ -45,7 +44,7 @@ export async function POST(
     // Get updated ratings to return
     const updatedResult = await query(`
       SELECT average_rating, total_reviews, rating_distribution, review_summary
-      FROM repairer_profiles
+      FROM ${TABLE_NAMES.REPAIRER_PROFILES}
       WHERE id = $1
     `, [repairerId])
 
@@ -70,7 +69,7 @@ export async function POST(
     })
 
   } catch (error) {
-    logger.error('Error recalculating repairer ratings', { error, repairerId: params.id })
+    logger.error('Error recalculating repairer ratings', { error, repairerId })
     return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)
   }
 }

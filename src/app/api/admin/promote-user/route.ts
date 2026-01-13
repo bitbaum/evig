@@ -9,6 +9,7 @@ import { TABLE_NAMES } from '@/config/database'
 import { apiSuccess, apiError, apiBadRequest, apiNotFound, apiForbidden } from '@/lib/api/helpers'
 import { logger } from '@/lib/logger'
 import { withAdmin } from '@/lib/api/middleware'
+import { ROLES } from '@/lib/constants'
 
 export const POST = withAdmin(async (request: NextRequest) => {
   try {
@@ -35,7 +36,7 @@ export const POST = withAdmin(async (request: NextRequest) => {
     // Update user role to admin
     const updateResult = await query(
       `UPDATE ${TABLE_NAMES.USERS} SET role = $1, "updatedAt" = NOW() WHERE id = $2`,
-      ['admin', userIdToPromote]
+      [ROLES.REVAMPIT_ADMIN, userIdToPromote]
     )
 
     if (updateResult.rowCount === 0) {

@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextRequest } from 'next/server'
 import { auth } from '@/auth'
 import { query } from '@/lib/auth/db'
 import { apiError, apiSuccess, apiUnauthorized, apiBadRequest, apiNotFound, apiForbidden } from '@/lib/api/helpers'
@@ -9,11 +9,11 @@ import { isAdminRole } from '@/lib/constants'
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
-  try {
-    const reviewId = params.id
+  const { id: reviewId } = await params
 
+  try {
     // Get review with full details
     const reviewResult = await query(`
       SELECT
@@ -25,11 +25,11 @@ export async function GET(
         rr.content as response_content,
         rr.created_at as response_created_at,
         ru.name as responder_name
-      FROM reviews r
-      JOIN users u ON r.reviewer_id = u.id
-      LEFT JOIN repairer_profiles rp ON r.target_type = 'repairer' AND r.target_id = rp.id
-      LEFT JOIN review_responses rr ON r.id = rr.review_id AND rr.status = 'published'
-      LEFT JOIN users ru ON rr.responder_id = ru.id
+      FROM ${TABLE_NAMES.REVIEWS} r
+      JOIN ${TABLE_NAMES.USERS} u ON r.reviewer_id = u.id
+      LEFT JOIN ${TABLE_NAMES.REPAIRER_PROFILES} rp ON r.target_type = 'repairer' AND r.target_id = rp.id
+      LEFT JOIN ${TABLE_NAMES.REVIEW_RESPONSES} rr ON r.id = rr.review_id AND rr.status = 'published'
+      LEFT JOIN ${TABLE_NAMES.USERS} ru ON rr.responder_id = ru.id
       WHERE r.id = $1
     `, [reviewId])
 
@@ -41,7 +41,7 @@ export async function GET(
 
     // Get attachments
     const attachmentsResult = await query(
-      'SELECT * FROM review_attachments WHERE review_id = $1 ORDER BY sort_order, created_at',
+      `SELECT * FROM ${TABLE_NAMES.REVIEW_ATTACHMENTS} WHERE review_id = $1 ORDER BY sort_order, created_at`,
       [reviewId]
     )
 
@@ -91,22 +91,23 @@ export async function GET(
     return apiSuccess({ review: reviewData })
 
   } catch (error) {
-    logger.error('Error fetching review', { error, reviewId: params.id })
+    logger.error('Error fetching review', { error, reviewId })
     return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)
   }
 }
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id: reviewId } = await params
+
   try {
     const session = await auth()
     if (!session?.user?.id) {
       return apiUnauthorized(ERROR_MESSAGES.UNAUTHORIZED)
     }
 
-    const reviewId = params.id
     const body = await request.json()
     const {
       overallRating,
@@ -121,7 +122,7 @@ export async function PUT(
 
     // Get review and check ownership
     const reviewResult = await query(
-      'SELECT * FROM reviews WHERE id = $1',
+      `SELECT * FROM ${TABLE_NAMES.REVIEWS} WHERE id = $1`,
       [reviewId]
     )
 
@@ -159,7 +160,7 @@ export async function PUT(
 
     // Update review
     await query(`
-      UPDATE reviews SET
+      UPDATE ${TABLE_NAMES.REVIEWS} SET
         overall_rating = COALESCE($1, overall_rating),
         communication_rating = COALESCE($2, communication_rating),
         professionalism_rating = COALESCE($3, professionalism_rating),
@@ -193,26 +194,26 @@ export async function PUT(
     })
 
   } catch (error) {
-    logger.error('Error updating review', { error, reviewId: params.id })
+    logger.error('Error updating review', { error, reviewId })
     return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)
   }
 }
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id: reviewId } = await params
+
   try {
     const session = await auth()
     if (!session?.user?.id) {
       return apiUnauthorized(ERROR_MESSAGES.UNAUTHORIZED)
     }
 
-    const reviewId = params.id
-
     // Get review and check ownership
     const reviewResult = await query(
-      'SELECT reviewer_id FROM reviews WHERE id = $1',
+      `SELECT reviewer_id FROM ${TABLE_NAMES.REVIEWS} WHERE id = $1`,
       [reviewId]
     )
 
@@ -224,7 +225,7 @@ export async function DELETE(
 
     // Check if user owns this review or is admin
     const userResult = await query(
-      'SELECT role FROM users WHERE id = $1',
+      `SELECT role FROM ${TABLE_NAMES.USERS} WHERE id = $1`,
       [session.user.id]
     )
 
@@ -237,7 +238,7 @@ export async function DELETE(
 
     // Soft delete by setting status to 'deleted'
     await query(`
-      UPDATE reviews SET
+      UPDATE ${TABLE_NAMES.REVIEWS} SET
         status = 'deleted',
         updated_at = CURRENT_TIMESTAMP
       WHERE id = $1
@@ -246,7 +247,7 @@ export async function DELETE(
     // Log moderation action if admin
     if (isAdmin && !isOwner) {
       await query(`
-        INSERT INTO review_moderation_log (
+        INSERT INTO ${TABLE_NAMES.REVIEW_MODERATION_LOG} (
           review_id, action, reason, admin_id, old_status, new_status
         ) VALUES ($1, 'delete', 'User requested deletion', $2, 'published', 'deleted')
       `, [reviewId, session.user.id])
@@ -264,7 +265,7 @@ export async function DELETE(
     })
 
   } catch (error) {
-    logger.error('Error deleting review', { error, reviewId: params.id })
+    logger.error('Error deleting review', { error, reviewId })
     return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)
   }
 }

@@ -279,7 +279,7 @@ export default function ProductManagement() {
             <div className="flex gap-2">
               <select
                 value={filterSource}
-                onChange={(e) => setFilterSource(e.target.value as any)}
+                onChange={(e) => setFilterSource(e.target.value as 'all' | 'admin' | 'user')}
                 className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
               >
                 <option value="all">Alle Quellen</option>
@@ -289,7 +289,7 @@ export default function ProductManagement() {
 
               <select
                 value={filterStatus}
-                onChange={(e) => setFilterStatus(e.target.value as any)}
+                onChange={(e) => setFilterStatus(e.target.value as 'all' | 'published' | 'draft')}
                 className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
               >
                 <option value="all">Alle Status</option>

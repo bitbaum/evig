@@ -50,7 +50,7 @@ export async function GET(request: NextRequest) {
           WHEN ra.status = 'rejected' THEN 4
         END as priority_order
       FROM ${TABLE_NAMES.REPAIRER_APPLICATIONS} ra
-      JOIN users u ON ra.user_id = u.id
+      JOIN ${TABLE_NAMES.USERS} u ON ra.user_id = u.id
       WHERE ra.status = $1
       ORDER BY priority_order ASC, ra.created_at ASC
       LIMIT $2 OFFSET $3

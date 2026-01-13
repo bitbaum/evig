@@ -6,13 +6,14 @@ import { ERROR_MESSAGES, SUCCESS_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES } from '@/config/database'
 import { sendEmail } from '@/lib/email'
 import { logger } from '@/lib/logger'
-import { isAdminRole } from '@/lib/constants'
+import { isAdminRole, ROLES } from '@/lib/constants'
 import { APP_URL } from '@/config/urls'
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id: applicationId } = await params
   try {
     const session = await auth()
     if (!session?.user?.id) {
@@ -28,8 +29,6 @@ export async function PUT(
     if (!userResult.rows[0] || !isAdminRole(userResult.rows[0].role)) {
       return apiUnauthorized('Nur Administratoren können diese Funktion verwenden')
     }
-
-    const applicationId = params.id
     const body = await request.json()
     const { adminNotes } = body
 
@@ -42,7 +41,7 @@ export async function PUT(
     const applicationResult = await query(`
       SELECT ra.*, u.email, u.name
       FROM ${TABLE_NAMES.REPAIRER_APPLICATIONS} ra
-      JOIN users u ON ra.user_id = u.id
+      JOIN ${TABLE_NAMES.USERS} u ON ra.user_id = u.id
       WHERE ra.id = $1
     `, [applicationId])
 
@@ -74,10 +73,10 @@ export async function PUT(
 
       // Update user role to repairer
       await query(`
-        UPDATE users
-        SET role = 'repairer', updated_at = CURRENT_TIMESTAMP
-        WHERE id = $1
-      `, [application.user_id])
+        UPDATE ${TABLE_NAMES.USERS}
+        SET role = $1, updated_at = CURRENT_TIMESTAMP
+        WHERE id = $2
+      `, [ROLES.REPAIRER, application.user_id])
 
       // Check if repairer_profiles table exists and create profile if needed
       const profileTableExists = await query(`
@@ -97,16 +96,16 @@ export async function PUT(
             rc.issue_date,
             rc.expiry_date,
             ct.category
-          FROM repairer_certifications rc
-          LEFT JOIN certification_types ct ON rc.certification_type_id = ct.id
+          FROM ${TABLE_NAMES.REPAIRER_CERTIFICATIONS} rc
+          LEFT JOIN ${TABLE_NAMES.CERTIFICATION_TYPES} ct ON rc.certification_type_id = ct.id
           WHERE rc.application_id = $1 AND rc.verification_status = 'verified'
         `, [applicationId])
 
         // Get verified documents for the profile
         const verifiedDocuments = await query(`
           SELECT file_path, original_filename, dt.name as document_type
-          FROM verification_documents vd
-          LEFT JOIN document_types dt ON vd.document_type_id = dt.id
+          FROM ${TABLE_NAMES.VERIFICATION_DOCUMENTS} vd
+          LEFT JOIN ${TABLE_NAMES.DOCUMENT_TYPES} dt ON vd.document_type_id = dt.id
           WHERE vd.application_id = $1 AND vd.status = 'approved'
         `, [applicationId])
 
@@ -248,7 +247,7 @@ export async function PUT(
     }
 
   } catch (error) {
-    logger.error('Error approving repairer application', { error, applicationId: params.id })
+    logger.error('Error approving repairer application', { error, applicationId })
     return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)
   }
 }

@@ -9,8 +9,9 @@ import { isAdminRole } from '@/lib/constants'
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id: documentId } = await params
   try {
     const session = await auth()
     if (!session?.user?.id) {
@@ -26,8 +27,6 @@ export async function PUT(
     if (!userResult.rows[0] || !isAdminRole(userResult.rows[0].role)) {
       return apiUnauthorized('Nur Administratoren können diese Funktion verwenden')
     }
-
-    const documentId = params.id
     const body = await request.json()
     const { adminNotes, rejectionReason } = body
 
@@ -43,8 +42,8 @@ export async function PUT(
     // Get document details
     const documentResult = await query(`
       SELECT vd.*, ra.user_id, ra.document_verification_status
-      FROM verification_documents vd
-      JOIN repairer_applications ra ON vd.application_id = ra.id
+      FROM ${TABLE_NAMES.VERIFICATION_DOCUMENTS} vd
+      JOIN ${TABLE_NAMES.REPAIRER_APPLICATIONS} ra ON vd.application_id = ra.id
       WHERE vd.id = $1
     `, [documentId])
 
@@ -64,7 +63,7 @@ export async function PUT(
 
     // Update document status with rejection details
     await query(`
-      UPDATE verification_documents
+      UPDATE ${TABLE_NAMES.VERIFICATION_DOCUMENTS}
       SET
         status = 'rejected',
         admin_notes = COALESCE($1, admin_notes) || E'\n\nAblehnungsgrund: ' || $2,
@@ -76,7 +75,7 @@ export async function PUT(
 
     // Update application document verification status to incomplete
     await query(`
-      UPDATE repairer_applications
+      UPDATE ${TABLE_NAMES.REPAIRER_APPLICATIONS}
       SET document_verification_status = 'incomplete', updated_at = CURRENT_TIMESTAMP
       WHERE id = $1
     `, [document.application_id])
@@ -96,7 +95,7 @@ export async function PUT(
     })
 
   } catch (error) {
-    logger.error('Error rejecting document', { error, documentId: params.id })
+    logger.error('Error rejecting document', { error, documentId })
     return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)
   }
 }

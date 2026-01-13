@@ -9,8 +9,9 @@ import { isAdminRole } from '@/lib/constants'
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id: reviewId } = await params
   try {
     const session = await auth()
     if (!session?.user?.id) {
@@ -26,8 +27,6 @@ export async function PUT(
     if (!userResult.rows[0] || !isAdminRole(userResult.rows[0].role)) {
       return apiUnauthorized('Nur Administratoren können Bewertungen moderieren')
     }
-
-    const reviewId = params.id
     const body = await request.json()
     const { action, reason } = body
 
@@ -41,7 +40,7 @@ export async function PUT(
 
     // Get current review status
     const reviewResult = await query(
-      'SELECT status FROM reviews WHERE id = $1',
+      `SELECT status FROM ${TABLE_NAMES.REVIEWS} WHERE id = $1`,
       [reviewId]
     )
 
@@ -74,7 +73,7 @@ export async function PUT(
 
     // Update review status and moderation info
     await query(`
-      UPDATE reviews SET
+      UPDATE ${TABLE_NAMES.REVIEWS} SET
         status = $1,
         moderation_reason = $2,
         moderated_by = $3,
@@ -85,7 +84,7 @@ export async function PUT(
 
     // Log moderation action
     await query(`
-      INSERT INTO review_moderation_log (
+      INSERT INTO ${TABLE_NAMES.REVIEW_MODERATION_LOG} (
         review_id, action, reason, admin_id, old_status, new_status
       ) VALUES ($1, $2, $3, $4, $5, $6)
     `, [reviewId, action, reason, session.user.id, oldStatus, newStatus])
@@ -107,7 +106,7 @@ export async function PUT(
     })
 
   } catch (error) {
-    logger.error('Error moderating review', { error, reviewId: params.id })
+    logger.error('Error moderating review', { error, reviewId })
     return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)
   }
 }

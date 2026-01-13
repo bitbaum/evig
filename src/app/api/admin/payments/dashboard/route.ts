@@ -4,6 +4,7 @@ import { query } from '@/lib/auth/db'
 import { apiError, apiSuccess, apiUnauthorized } from '@/lib/api/helpers'
 import { isAdminRole } from '@/lib/constants'
 import { logger } from '@/lib/logger'
+import { TABLE_NAMES } from '@/config/database'
 
 // GET /api/admin/payments/dashboard - Get payment dashboard data
 export async function GET(request: NextRequest) {
@@ -14,19 +15,22 @@ export async function GET(request: NextRequest) {
     }
 
     // Check if user is admin
-    const userRoleResult = await query('SELECT role FROM users WHERE id = $1', [session.user.id])
+    const userRoleResult = await query(`SELECT role FROM ${TABLE_NAMES.USERS} WHERE id = $1`, [session.user.id])
     if (!isAdminRole(userRoleResult.rows[0]?.role)) {
       return apiUnauthorized('Admin access required')
     }
 
     const { searchParams } = new URL(request.url)
-    const period = searchParams.get('period') || '30' // days
+    const periodRaw = searchParams.get('period') || '30' // days
     const startDate = searchParams.get('startDate')
     const endDate = searchParams.get('endDate')
 
+    // Validate and sanitize period to prevent SQL injection
+    const period = Math.max(1, Math.min(365, parseInt(periodRaw, 10) || 30))
+
     // Calculate date range
     let dateFilter = ''
-    const params = []
+    const params: (string | number)[] = []
     let paramIndex = 1
 
     if (startDate && endDate) {
@@ -34,7 +38,10 @@ export async function GET(request: NextRequest) {
       params.push(startDate, endDate)
       paramIndex += 2
     } else {
-      dateFilter = `AND pt.created_at >= CURRENT_DATE - INTERVAL '${period} days'`
+      // Use parameterized query for period - cast to integer for safety
+      dateFilter = `AND pt.created_at >= CURRENT_DATE - INTERVAL '1 day' * $${paramIndex}`
+      params.push(period)
+      paramIndex++
     }
 
     // Get payment overview metrics
@@ -50,7 +57,7 @@ export async function GET(request: NextRequest) {
           AVG(CASE WHEN status = 'succeeded' THEN EXTRACT(EPOCH FROM (processed_at - created_at)) END) / 60,
           2
         ) as avg_processing_time_minutes
-      FROM payment_transactions pt
+      FROM ${TABLE_NAMES.PAYMENT_TRANSACTIONS} pt
       WHERE 1=1 ${dateFilter}
     `, params)
 
@@ -62,7 +69,7 @@ export async function GET(request: NextRequest) {
         currency,
         COUNT(*) as transaction_count,
         COALESCE(SUM(CASE WHEN status = 'succeeded' THEN amount_cents END), 0) as volume_cents
-      FROM payment_transactions pt
+      FROM ${TABLE_NAMES.PAYMENT_TRANSACTIONS} pt
       WHERE status = 'succeeded' ${dateFilter.replace('pt.', '')}
       GROUP BY currency
       ORDER BY volume_cents DESC
@@ -78,8 +85,8 @@ export async function GET(request: NextRequest) {
           AVG(CASE WHEN pt.status = 'succeeded' THEN pt.fee_cents END),
           2
         ) as avg_fee_cents
-      FROM payment_transactions pt
-      JOIN payment_providers pp ON pt.provider_id = pp.id
+      FROM ${TABLE_NAMES.PAYMENT_TRANSACTIONS} pt
+      JOIN ${TABLE_NAMES.PAYMENT_PROVIDERS} pp ON pt.provider_id = pp.id
       WHERE 1=1 ${dateFilter}
       GROUP BY pp.id, pp.name
       ORDER BY volume_cents DESC
@@ -91,7 +98,7 @@ export async function GET(request: NextRequest) {
         DATE(created_at) as date,
         COUNT(*) as transaction_count,
         COALESCE(SUM(CASE WHEN status = 'succeeded' THEN amount_cents END), 0) as volume_cents
-      FROM payment_transactions pt
+      FROM ${TABLE_NAMES.PAYMENT_TRANSACTIONS} pt
       WHERE created_at >= CURRENT_DATE - INTERVAL '30 days'
       GROUP BY DATE(created_at)
       ORDER BY date DESC
@@ -110,9 +117,9 @@ export async function GET(request: NextRequest) {
         pt.description,
         u.name as customer_name,
         pp.name as provider_name
-      FROM payment_transactions pt
-      JOIN users u ON pt.user_id = u.id
-      JOIN payment_providers pp ON pt.provider_id = pp.id
+      FROM ${TABLE_NAMES.PAYMENT_TRANSACTIONS} pt
+      JOIN ${TABLE_NAMES.USERS} u ON pt.user_id = u.id
+      JOIN ${TABLE_NAMES.PAYMENT_PROVIDERS} pp ON pt.provider_id = pp.id
       ORDER BY pt.created_at DESC
       LIMIT 10
     `)
@@ -125,7 +132,7 @@ export async function GET(request: NextRequest) {
         COUNT(CASE WHEN status = 'released' THEN 1 END) as released_escrows,
         COALESCE(SUM(total_amount_cents), 0) as total_escrow_amount_cents,
         COALESCE(SUM(released_amount_cents), 0) as total_released_amount_cents
-      FROM escrow_accounts ea
+      FROM ${TABLE_NAMES.ESCROW_ACCOUNTS} ea
       WHERE created_at >= CURRENT_DATE - INTERVAL '30 days'
     `)
 
@@ -136,7 +143,7 @@ export async function GET(request: NextRequest) {
         COUNT(CASE WHEN status = 'completed' THEN 1 END) as completed_refunds,
         COUNT(CASE WHEN status = 'requested' THEN 1 END) as pending_refunds,
         COALESCE(SUM(CASE WHEN status IN ('completed', 'processing') THEN amount_cents END), 0) as total_refund_amount_cents
-      FROM refunds r
+      FROM ${TABLE_NAMES.REFUNDS} r
       WHERE created_at >= CURRENT_DATE - INTERVAL '30 days'
     `)
 
@@ -147,7 +154,7 @@ export async function GET(request: NextRequest) {
         COUNT(CASE WHEN status = 'opened' THEN 1 END) as open_disputes,
         COUNT(CASE WHEN status = 'lost' THEN 1 END) as lost_disputes,
         COALESCE(SUM(amount_cents), 0) as total_dispute_amount_cents
-      FROM payment_disputes pd
+      FROM ${TABLE_NAMES.PAYMENT_DISPUTES} pd
       WHERE created_at >= CURRENT_DATE - INTERVAL '30 days'
     `)
 

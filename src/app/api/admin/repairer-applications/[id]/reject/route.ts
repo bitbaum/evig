@@ -10,8 +10,9 @@ import { isAdminRole } from '@/lib/constants'
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id: applicationId } = await params
   try {
     const session = await auth()
     if (!session?.user?.id) {
@@ -27,8 +28,6 @@ export async function PUT(
     if (!userResult.rows[0] || !isAdminRole(userResult.rows[0].role)) {
       return apiUnauthorized('Nur Administratoren können diese Funktion verwenden')
     }
-
-    const applicationId = params.id
     const body = await request.json()
     const { adminNotes, rejectionReason } = body
 
@@ -45,7 +44,7 @@ export async function PUT(
     const applicationResult = await query(`
       SELECT ra.*, u.email, u.name
       FROM ${TABLE_NAMES.REPAIRER_APPLICATIONS} ra
-      JOIN users u ON ra.user_id = u.id
+      JOIN ${TABLE_NAMES.USERS} u ON ra.user_id = u.id
       WHERE ra.id = $1
     `, [applicationId])
 
@@ -107,7 +106,7 @@ export async function PUT(
     })
 
   } catch (error) {
-    logger.error('Error rejecting repairer application', { error, applicationId: params.id })
+    logger.error('Error rejecting repairer application', { error, applicationId })
     return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)
   }
 }

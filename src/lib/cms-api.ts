@@ -73,15 +73,26 @@ export interface Category {
   updated_at: string;
 }
 
+export interface UserProfile {
+  id: string;
+  email: string;
+  first_name: string;
+  last_name: string;
+  role: string;
+}
+
 export interface AuthResponse {
-  user: {
-    id: string;
-    email: string;
-    first_name: string;
-    last_name: string;
-    role: string;
-  };
+  user: UserProfile;
   token: string;
+}
+
+export interface ProfileUpdateResponse {
+  user: UserProfile;
+  message?: string;
+}
+
+export interface PasswordChangeResponse {
+  message: string;
 }
 
 /**
@@ -377,8 +388,8 @@ export const authApi = {
   /**
    * Get current user profile
    */
-  async getProfile(): Promise<CMSResponse<any>> {
-    return apiRequest('/api/auth/profile');
+  async getProfile(): Promise<CMSResponse<UserProfile>> {
+    return apiRequest<UserProfile>('/api/auth/profile');
   },
 
   /**
@@ -388,8 +399,8 @@ export const authApi = {
     email?: string;
     first_name?: string;
     last_name?: string;
-  }): Promise<CMSResponse<any>> {
-    return apiRequest('/api/auth/profile', {
+  }): Promise<CMSResponse<ProfileUpdateResponse>> {
+    return apiRequest<ProfileUpdateResponse>('/api/auth/profile', {
       method: 'PUT',
       body: JSON.stringify(data),
     });
@@ -401,8 +412,8 @@ export const authApi = {
   async changePassword(data: {
     current_password: string;
     new_password: string;
-  }): Promise<CMSResponse<any>> {
-    return apiRequest('/api/auth/password', {
+  }): Promise<CMSResponse<PasswordChangeResponse>> {
+    return apiRequest<PasswordChangeResponse>('/api/auth/password', {
       method: 'PUT',
       body: JSON.stringify(data),
     });

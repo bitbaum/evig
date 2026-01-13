@@ -9,15 +9,15 @@ import { getUserRole } from '@/lib/api/role-checks'
 // GET /api/locations/[id]/bookings - Get location bookings
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id: locationId } = await params
+
   try {
     const session = await auth()
     if (!session?.user?.id) {
       return apiUnauthorized(ERROR_MESSAGES.UNAUTHORIZED)
     }
-
-    const locationId = params.id
     const { searchParams } = new URL(request.url)
     const status = searchParams.get('status')
     const startDate = searchParams.get('start_date')
@@ -69,7 +69,7 @@ export async function GET(
         u.email as booked_by_email,
         l.name as location_name
       FROM ${TABLE_NAMES.LOCATION_BOOKINGS} lb
-      LEFT JOIN users u ON lb.booked_by = u.id
+      LEFT JOIN ${TABLE_NAMES.USERS} u ON lb.booked_by = u.id
       LEFT JOIN ${TABLE_NAMES.LOCATIONS} l ON lb.location_id = l.id
       WHERE ${whereClause}
       ORDER BY lb.start_time ASC
@@ -90,15 +90,15 @@ export async function GET(
 // POST /api/locations/[id]/bookings - Create location booking
 export async function POST(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id: locationId } = await params
+
   try {
     const session = await auth()
     if (!session?.user?.id) {
       return apiUnauthorized(ERROR_MESSAGES.UNAUTHORIZED)
     }
-
-    const locationId = params.id
     const body = await request.json()
     const {
       event_type,

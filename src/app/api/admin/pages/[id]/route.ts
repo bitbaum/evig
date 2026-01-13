@@ -49,8 +49,9 @@ function authenticateUser(): User {
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params
   try {
     if (!ENABLE_CMS) {
       return apiError(new Error('CMS is disabled'), 'CMS is disabled', 501)
@@ -58,7 +59,7 @@ export async function GET(
     const user = authenticateUser()
 
     // Forward to Reboot Content API
-    const response = await fetch(`${REBOOT_CONTENT_URL}/api/content/static-pages/${params.id}`, {
+    const response = await fetch(`${REBOOT_CONTENT_URL}/api/content/static-pages/${id}`, {
       headers: {
         'Authorization': `Bearer ${cookies().get('admin_token')?.value}`,
       },
@@ -77,8 +78,9 @@ export async function GET(
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params
   try {
     if (!ENABLE_CMS) {
       return apiError(new Error('CMS is disabled'), 'CMS is disabled', 501)
@@ -87,7 +89,7 @@ export async function PUT(
     const body = await request.json()
 
     // Forward to Reboot Content API
-    const response = await fetch(`${REBOOT_CONTENT_URL}/api/content/static-pages/${params.id}`, {
+    const response = await fetch(`${REBOOT_CONTENT_URL}/api/content/static-pages/${id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',

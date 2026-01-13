@@ -9,15 +9,15 @@ import { isAdminRole } from '@/lib/constants'
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id: reviewId } = await params
+
   try {
     const session = await auth()
     if (!session?.user?.id) {
       return apiUnauthorized(ERROR_MESSAGES.UNAUTHORIZED)
     }
-
-    const reviewId = params.id
     const body = await request.json()
     const { content } = body
 
@@ -32,8 +32,8 @@ export async function POST(
     // Get review and check if user can respond
     const reviewResult = await query(`
       SELECT r.*, rp.user_id as repairer_user_id
-      FROM reviews r
-      LEFT JOIN repairer_profiles rp ON r.target_type = 'repairer' AND r.target_id = rp.id
+      FROM ${TABLE_NAMES.REVIEWS} r
+      LEFT JOIN ${TABLE_NAMES.REPAIRER_PROFILES} rp ON r.target_type = 'repairer' AND r.target_id = rp.id
       WHERE r.id = $1
     `, [reviewId])
 
@@ -50,7 +50,7 @@ export async function POST(
 
     // Check if user is admin (admins can respond on behalf of repairers)
     const userResult = await query(
-      'SELECT role FROM users WHERE id = $1',
+      `SELECT role FROM ${TABLE_NAMES.USERS} WHERE id = $1`,
       [session.user.id]
     )
 
@@ -62,7 +62,7 @@ export async function POST(
 
     // Check if response already exists
     const existingResponse = await query(
-      'SELECT id FROM review_responses WHERE review_id = $1',
+      `SELECT id FROM ${TABLE_NAMES.REVIEW_RESPONSES} WHERE review_id = $1`,
       [reviewId]
     )
 
@@ -72,7 +72,7 @@ export async function POST(
 
     // Create response
     const responseResult = await query(`
-      INSERT INTO review_responses (
+      INSERT INTO ${TABLE_NAMES.REVIEW_RESPONSES} (
         review_id, responder_id, content, status
       ) VALUES ($1, $2, $3, 'published')
       RETURNING id
@@ -90,22 +90,22 @@ export async function POST(
     }, 201)
 
   } catch (error) {
-    logger.error('Error creating review response', { error, reviewId: params.id })
+    logger.error('Error creating review response', { error, reviewId })
     return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)
   }
 }
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id: reviewId } = await params
+
   try {
     const session = await auth()
     if (!session?.user?.id) {
       return apiUnauthorized(ERROR_MESSAGES.UNAUTHORIZED)
     }
-
-    const reviewId = params.id
     const body = await request.json()
     const { content } = body
 
@@ -120,9 +120,9 @@ export async function PUT(
     // Get response and check ownership
     const responseResult = await query(`
       SELECT rr.*, r.target_type, rp.user_id as repairer_user_id
-      FROM review_responses rr
-      JOIN reviews r ON rr.review_id = r.id
-      LEFT JOIN repairer_profiles rp ON r.target_type = 'repairer' AND r.target_id = rp.id
+      FROM ${TABLE_NAMES.REVIEW_RESPONSES} rr
+      JOIN ${TABLE_NAMES.REVIEWS} r ON rr.review_id = r.id
+      LEFT JOIN ${TABLE_NAMES.REPAIRER_PROFILES} rp ON r.target_type = 'repairer' AND r.target_id = rp.id
       WHERE rr.review_id = $1
     `, [reviewId])
 
@@ -134,7 +134,7 @@ export async function PUT(
 
     // Check if user can edit this response
     const userResult = await query(
-      'SELECT role FROM users WHERE id = $1',
+      `SELECT role FROM ${TABLE_NAMES.USERS} WHERE id = $1`,
       [session.user.id]
     )
 
@@ -148,7 +148,7 @@ export async function PUT(
 
     // Update response
     await query(`
-      UPDATE review_responses SET
+      UPDATE ${TABLE_NAMES.REVIEW_RESPONSES} SET
         content = $1,
         updated_at = CURRENT_TIMESTAMP
       WHERE review_id = $2
@@ -164,29 +164,29 @@ export async function PUT(
     })
 
   } catch (error) {
-    logger.error('Error updating review response', { error, reviewId: params.id })
+    logger.error('Error updating review response', { error, reviewId })
     return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)
   }
 }
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id: reviewId } = await params
+
   try {
     const session = await auth()
     if (!session?.user?.id) {
       return apiUnauthorized(ERROR_MESSAGES.UNAUTHORIZED)
     }
 
-    const reviewId = params.id
-
     // Get response and check ownership
     const responseResult = await query(`
       SELECT rr.responder_id, r.target_type, rp.user_id as repairer_user_id
-      FROM review_responses rr
-      JOIN reviews r ON rr.review_id = r.id
-      LEFT JOIN repairer_profiles rp ON r.target_type = 'repairer' AND r.target_id = rp.id
+      FROM ${TABLE_NAMES.REVIEW_RESPONSES} rr
+      JOIN ${TABLE_NAMES.REVIEWS} r ON rr.review_id = r.id
+      LEFT JOIN ${TABLE_NAMES.REPAIRER_PROFILES} rp ON r.target_type = 'repairer' AND r.target_id = rp.id
       WHERE rr.review_id = $1
     `, [reviewId])
 
@@ -198,7 +198,7 @@ export async function DELETE(
 
     // Check if user can delete this response
     const userResult = await query(
-      'SELECT role FROM users WHERE id = $1',
+      `SELECT role FROM ${TABLE_NAMES.USERS} WHERE id = $1`,
       [session.user.id]
     )
 
@@ -212,7 +212,7 @@ export async function DELETE(
 
     // Delete response
     await query(
-      'DELETE FROM review_responses WHERE review_id = $1',
+      `DELETE FROM ${TABLE_NAMES.REVIEW_RESPONSES} WHERE review_id = $1`,
       [reviewId]
     )
 
@@ -226,7 +226,7 @@ export async function DELETE(
     })
 
   } catch (error) {
-    logger.error('Error deleting review response', { error, reviewId: params.id })
+    logger.error('Error deleting review response', { error, reviewId })
     return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)
   }
 }

@@ -6,6 +6,7 @@ import { ERROR_MESSAGES, SUCCESS_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
 import { APP_URL } from '@/config/urls'
+import { isAdminRole } from '@/lib/constants'
 
 export async function GET(request: NextRequest) {
   try {
@@ -40,11 +41,11 @@ export async function GET(request: NextRequest) {
       }
 
       const userResult = await query(
-        'SELECT role FROM users WHERE id = $1',
+        `SELECT role FROM ${TABLE_NAMES.USERS} WHERE id = $1`,
         [session.user.id]
       )
 
-      if (userResult.rows[0]?.role !== 'admin') {
+      if (!isAdminRole(userResult.rows[0]?.role)) {
         return apiUnauthorized('Nur Administratoren können nicht-veröffentlichte Bewertungen einsehen')
       }
       isAdmin = true
@@ -68,12 +69,12 @@ export async function GET(request: NextRequest) {
         ru.name as responder_name,
         CASE WHEN rv.vote_type IS NOT NULL THEN true ELSE false END as user_has_voted,
         rv.vote_type as user_vote
-      FROM reviews r
-      JOIN users u ON r.reviewer_id = u.id
-      LEFT JOIN repairer_profiles rp ON r.target_type = 'repairer' AND r.target_id = rp.id
-      LEFT JOIN review_responses rr ON r.id = rr.review_id AND rr.status = 'published'
-      LEFT JOIN users ru ON rr.responder_id = ru.id
-      LEFT JOIN review_votes rv ON r.id = rv.review_id AND rv.voter_id = $1
+      FROM ${TABLE_NAMES.REVIEWS} r
+      JOIN ${TABLE_NAMES.USERS} u ON r.reviewer_id = u.id
+      LEFT JOIN ${TABLE_NAMES.REPAIRER_PROFILES} rp ON r.target_type = 'repairer' AND r.target_id = rp.id
+      LEFT JOIN ${TABLE_NAMES.REVIEW_RESPONSES} rr ON r.id = rr.review_id AND rr.status = 'published'
+      LEFT JOIN ${TABLE_NAMES.USERS} ru ON rr.responder_id = ru.id
+      LEFT JOIN ${TABLE_NAMES.REVIEW_VOTES} rv ON r.id = rv.review_id AND rv.voter_id = $1
       WHERE r.target_type = $2 AND r.target_id = $3 AND r.status = $4
       ORDER BY r.${sortField} ${sortDirection}
       LIMIT $5 OFFSET $6
@@ -88,7 +89,7 @@ export async function GET(request: NextRequest) {
 
     // Get total count for pagination
     const countResult = await query(
-      'SELECT COUNT(*) as total FROM reviews WHERE target_type = $1 AND target_id = $2 AND status = $3',
+      `SELECT COUNT(*) as total FROM ${TABLE_NAMES.REVIEWS} WHERE target_type = $1 AND target_id = $2 AND status = $3`,
       [targetType, targetId, status]
     )
 
@@ -96,7 +97,7 @@ export async function GET(request: NextRequest) {
     const reviewsWithAttachments = await Promise.all(
       reviewsResult.rows.map(async (review) => {
         const attachmentsResult = await query(
-          'SELECT * FROM review_attachments WHERE review_id = $1 ORDER BY sort_order, created_at',
+          `SELECT * FROM ${TABLE_NAMES.REVIEW_ATTACHMENTS} WHERE review_id = $1 ORDER BY sort_order, created_at`,
           [review.id]
         )
 
@@ -225,7 +226,7 @@ export async function POST(request: NextRequest) {
 
     // Check if user already reviewed this target
     const existingReview = await query(`
-      SELECT id FROM reviews
+      SELECT id FROM ${TABLE_NAMES.REVIEWS}
       WHERE reviewer_id = $1 AND target_type = $2 AND target_id = $3
         AND ($4::uuid IS NULL OR booking_id = $4)
     `, [session.user.id, targetType, targetId, bookingId || null])
@@ -237,13 +238,13 @@ export async function POST(request: NextRequest) {
     // Verify target exists
     let targetExists = false
     if (targetType === 'repairer') {
-      const result = await query('SELECT id FROM repairer_profiles WHERE id = $1 AND is_verified = true', [targetId])
+      const result = await query(`SELECT id FROM ${TABLE_NAMES.REPAIRER_PROFILES} WHERE id = $1 AND is_verified = true`, [targetId])
       targetExists = result.rows.length > 0
     } else if (targetType === 'service') {
       // Add service validation when services table exists
       targetExists = true // Placeholder
     } else if (targetType === 'workshop') {
-      const result = await query('SELECT id FROM workshops WHERE id = $1', [targetId])
+      const result = await query(`SELECT id FROM ${TABLE_NAMES.WORKSHOPS} WHERE id = $1`, [targetId])
       targetExists = result.rows.length > 0
     }
 
@@ -261,7 +262,7 @@ export async function POST(request: NextRequest) {
 
     // Insert review
     const reviewResult = await query(`
-      INSERT INTO reviews (
+      INSERT INTO ${TABLE_NAMES.REVIEWS} (
         reviewer_id, target_type, target_id, booking_id,
         overall_rating, communication_rating, professionalism_rating,
         quality_rating, timeliness_rating, value_rating,
@@ -294,8 +295,8 @@ export async function POST(request: NextRequest) {
         // Get repairer details
         const repairerResult = await query(`
           SELECT rp.business_name, u.email, u.name as repairer_name
-          FROM repairer_profiles rp
-          JOIN users u ON rp.user_id = u.id
+          FROM ${TABLE_NAMES.REPAIRER_PROFILES} rp
+          JOIN ${TABLE_NAMES.USERS} u ON rp.user_id = u.id
           WHERE rp.id = $1
         `, [targetId])
 

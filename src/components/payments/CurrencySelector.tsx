@@ -7,6 +7,7 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Check, RefreshCw } from 'lucide-react'
 import {
   SupportedCurrency,
+  ServicePricing,
   getSupportedCurrencies,
   getCurrencyConfig,
   getServicePricing,
@@ -17,7 +18,7 @@ import {
 interface CurrencySelectorProps {
   baseAmount: number // Amount in CHF (our base currency)
   selectedCurrency: SupportedCurrency
-  onCurrencyChange: (currency: SupportedCurrency, pricing: any) => void
+  onCurrencyChange: (currency: SupportedCurrency, pricing: ServicePricing) => void
   businessType?: 'service' | 'product' | 'digital'
   className?: string
 }

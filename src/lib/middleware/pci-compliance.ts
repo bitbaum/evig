@@ -5,9 +5,19 @@ import { NextRequest, NextResponse } from 'next/server'
 import { PCI_COMPLIANCE, paymentRateLimiter, isSecureRequest, createAuditLog } from '@/lib/payments/security'
 import { logger } from '@/lib/logger'
 
+// Route handler context type for dynamic route parameters
+interface RouteContext {
+  params?: Promise<Record<string, string>>
+}
+
+// Extended request type with payment validation
+interface PaymentValidatedRequest extends NextRequest {
+  paymentValidation?: { isValid: boolean; errors: string[] }
+}
+
 // PCI DSS compliance middleware
 export function withPCICompliance(handler: Function) {
-  return async (request: NextRequest, context?: any) => {
+  return async (request: NextRequest, context?: RouteContext) => {
     try {
       // 1. Security Headers
       const response = await handler(request, context)
@@ -28,7 +38,7 @@ export function withPCICompliance(handler: Function) {
       return response
 
     } catch (error) {
-      console.error('PCI Compliance middleware error:', error)
+      logger.error('PCI Compliance middleware error', { error })
       return NextResponse.json(
         { error: 'Payment processing error' },
         { status: 500 }
@@ -43,7 +53,7 @@ export function withPaymentSecurity(handler: Function, options: {
   requireHttps?: boolean
   auditLog?: boolean
 } = {}) {
-  return async (request: NextRequest, context?: any) => {
+  return async (request: NextRequest, context?: RouteContext) => {
     const {
       rateLimit = { maxAttempts: 10, windowMs: 60000 },
       requireHttps = true,
@@ -58,7 +68,7 @@ export function withPaymentSecurity(handler: Function, options: {
 
       // Rate limiting
       if (!paymentRateLimiter.isAllowed(clientIP, rateLimit.maxAttempts, rateLimit.windowMs)) {
-        console.warn(`Rate limit exceeded for IP: ${clientIP}`)
+        logger.warn('Rate limit exceeded', { clientIP })
         return NextResponse.json(
           { error: 'Too many requests. Please try again later.' },
           { status: 429 }
@@ -67,7 +77,7 @@ export function withPaymentSecurity(handler: Function, options: {
 
       // HTTPS requirement (except in development)
       if (requireHttps && !isSecureRequest(request) && process.env.NODE_ENV !== 'development') {
-        console.warn(`Insecure request blocked from IP: ${clientIP}`)
+        logger.warn('Insecure request blocked', { clientIP })
         return NextResponse.json(
           { error: 'HTTPS required for payment processing' },
           { status: 403 }
@@ -99,7 +109,7 @@ export function withPaymentSecurity(handler: Function, options: {
       return response
 
     } catch (error) {
-      console.error('Payment security middleware error:', error)
+      logger.error('Payment security middleware error', { error })
 
       // Log security incidents
       const auditEntry = createAuditLog(
@@ -111,7 +121,7 @@ export function withPaymentSecurity(handler: Function, options: {
         request.headers.get('x-forwarded-for') || 'unknown'
       )
 
-      console.error('Security incident:', JSON.stringify(auditEntry))
+      logger.error('Security incident', auditEntry)
 
       return NextResponse.json(
         { error: 'Security error occurred' },
@@ -123,7 +133,7 @@ export function withPaymentSecurity(handler: Function, options: {
 
 // Validate payment data middleware
 export function withPaymentValidation(handler: Function) {
-  return async (request: NextRequest, context?: any) => {
+  return async (request: NextRequest, context?: RouteContext) => {
     try {
       const body = await request.json()
 
@@ -133,7 +143,7 @@ export function withPaymentValidation(handler: Function) {
       const validation = validatePaymentData(body)
 
       if (!validation.isValid) {
-        console.warn('Payment validation failed:', validation.errors)
+        logger.warn('Payment validation failed', { errors: validation.errors })
         return NextResponse.json(
           {
             error: 'Payment data validation failed',
@@ -144,12 +154,12 @@ export function withPaymentValidation(handler: Function) {
       }
 
       // Add validation result to request for handler access
-      ;(request as any).paymentValidation = validation
+      ;(request as PaymentValidatedRequest).paymentValidation = validation
 
       return handler(request, context)
 
     } catch (error) {
-      console.error('Payment validation error:', error)
+      logger.error('Payment validation error', { error })
       return NextResponse.json(
         { error: 'Invalid payment data format' },
         { status: 400 }

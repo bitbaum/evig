@@ -61,6 +61,22 @@ interface Review {
   }
 }
 
+// API response review format (different field names)
+interface ApiReviewResponse {
+  id: string
+  reviewerName: string
+  overallRating: number
+  title?: string
+  content: string
+  createdAt: string
+  isVerifiedPurchase: boolean
+  response?: {
+    content: string
+    responderName: string
+    createdAt: string
+  }
+}
+
 export default function RepairersPage() {
   const [repairers, setRepairers] = useState<Repairer[]>([])
   const [loading, setLoading] = useState(true)
@@ -114,7 +130,7 @@ export default function RepairersPage() {
       const response = await fetch(`/api/reviews?targetType=repairer&targetId=${repairer.id}&limit=5`)
       if (response.ok) {
         const data = await response.json()
-        setRepairerReviews(data.reviews.map((review: any) => ({
+        setRepairerReviews(data.reviews.map((review: ApiReviewResponse) => ({
           id: review.id,
           reviewerName: review.reviewerName,
           rating: review.overallRating,
@@ -126,7 +142,7 @@ export default function RepairersPage() {
         })))
       }
     } catch (error) {
-      console.error('Error fetching reviews:', error)
+      logger.error('Error fetching reviews', { error })
       setRepairerReviews([])
     }
     setShowReviewsModal(true)

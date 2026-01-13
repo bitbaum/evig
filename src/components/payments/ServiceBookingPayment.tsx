@@ -9,7 +9,31 @@ import { Loader2, CreditCard, Shield, Clock, CheckCircle, AlertCircle, Euro, Dol
 import StripeCheckout from '@/components/shop/StripeCheckout'
 import CurrencySelector from './CurrencySelector'
 import type { StripePaymentIntent } from '@/types/common'
-import type { SupportedCurrency } from '@/lib/payments/currency'
+import type { SupportedCurrency, ServicePricing } from '@/lib/payments/currency'
+
+// API response pricing structure (different from client-side ServicePricing)
+interface ApiPricingResponse {
+  currency: string
+  subtotal: number
+  vat: number
+  vatRate: string
+  providerFee: number
+  total: number
+}
+
+// Local display pricing structure
+interface DisplayPricing {
+  subtotal: number
+  vat: number
+  total: number
+}
+
+interface PaymentSuccessResult {
+  appointmentId: string
+  invoiceId: string
+  paymentIntentId?: string
+  invoiceNumber?: string
+}
 
 interface ServiceBookingPaymentProps {
   service: {
@@ -19,7 +43,7 @@ interface ServiceBookingPaymentProps {
     price_cents: number
     requires_approval: boolean
   }
-  onSuccess?: (result: any) => void
+  onSuccess?: (result: PaymentSuccessResult) => void
   onError?: (error: string) => void
 }
 
@@ -30,7 +54,7 @@ export default function ServiceBookingPayment({
 }: ServiceBookingPaymentProps) {
   const [step, setStep] = useState<'details' | 'payment' | 'processing' | 'success' | 'error'>('details')
   const [selectedCurrency, setSelectedCurrency] = useState<SupportedCurrency>('CHF')
-  const [currencyPricing, setCurrencyPricing] = useState<any>(null)
+  const [currencyPricing, setCurrencyPricing] = useState<ServicePricing | null>(null)
   const [bookingData, setBookingData] = useState({
     description: '',
     urgency: 'normal' as 'low' | 'normal' | 'high' | 'urgent',
@@ -45,18 +69,24 @@ export default function ServiceBookingPayment({
     appointmentId: string
     invoiceId: string
     invoiceNumber: string
-    pricing: any
+    pricing: ApiPricingResponse
   } | null>(null)
   const [error, setError] = useState<string>('')
 
   const servicePrice = service.price_cents / 100
-  const currentPricing = currencyPricing || {
-    subtotal: servicePrice,
-    vat: servicePrice * 0.077, // Swiss VAT
-    total: servicePrice * 1.077 + Math.round(servicePrice * 0.029) + 0.30
-  }
+  const currentPricing: DisplayPricing = currencyPricing
+    ? {
+        subtotal: currencyPricing.convertedPrice,
+        vat: currencyPricing.vat,
+        total: currencyPricing.total
+      }
+    : {
+        subtotal: servicePrice,
+        vat: servicePrice * 0.077, // Swiss VAT
+        total: servicePrice * 1.077 + Math.round(servicePrice * 0.029) + 0.30
+      }
 
-  const handleCurrencyChange = (currency: SupportedCurrency, pricing: any) => {
+  const handleCurrencyChange = (currency: SupportedCurrency, pricing: ServicePricing) => {
     setSelectedCurrency(currency)
     setCurrencyPricing(pricing)
   }
@@ -97,10 +127,11 @@ export default function ServiceBookingPayment({
       })
 
       setStep('payment')
-    } catch (err: any) {
-      setError(err.message)
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Ein Fehler ist aufgetreten'
+      setError(message)
       setStep('error')
-      onError?.(err.message)
+      onError?.(message)
     }
   }
 
@@ -111,16 +142,19 @@ export default function ServiceBookingPayment({
       // The webhook will handle updating the appointment status
       // For immediate feedback, we can show success
       setStep('success')
-      onSuccess?.({
-        appointmentId: paymentData?.appointmentId,
-        paymentIntentId: paymentIntent.id,
-        invoiceId: paymentData?.invoiceId,
-        invoiceNumber: paymentData?.invoiceNumber
-      })
-    } catch (err: any) {
+      if (paymentData) {
+        onSuccess?.({
+          appointmentId: paymentData.appointmentId,
+          invoiceId: paymentData.invoiceId,
+          paymentIntentId: paymentIntent.id,
+          invoiceNumber: paymentData.invoiceNumber
+        })
+      }
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Ein Fehler ist aufgetreten'
       setError('Payment succeeded but booking confirmation failed')
       setStep('error')
-      onError?.(err.message)
+      onError?.(message)
     }
   }
 

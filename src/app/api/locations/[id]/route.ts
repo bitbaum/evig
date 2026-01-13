@@ -10,15 +10,14 @@ import { isAdminRole } from '@/lib/constants'
 // GET /api/locations/[id] - Get location details
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id: locationId } = await params
   try {
     const session = await auth()
     if (!session?.user?.id) {
       return apiUnauthorized(ERROR_MESSAGES.UNAUTHORIZED)
     }
-
-    const locationId = params.id
 
     // Get location with creator and approval info
     const locationResult = await query(`
@@ -32,7 +31,7 @@ export async function GET(
         COUNT(DISTINCT lb.id) as total_bookings,
         COUNT(DISTINCT CASE WHEN lb.start_time > CURRENT_TIMESTAMP AND lb.status IN ('pending', 'confirmed') THEN lb.id END) as upcoming_bookings
       FROM ${TABLE_NAMES.LOCATIONS} l
-      LEFT JOIN users u ON l.created_by = u.id
+      LEFT JOIN ${TABLE_NAMES.USERS} u ON l.created_by = u.id
       LEFT JOIN ${TABLE_NAMES.LOCATION_APPROVALS} ua ON l.id = ua.location_id
         AND ua.reviewed_at = (
           SELECT MAX(reviewed_at) FROM ${TABLE_NAMES.LOCATION_APPROVALS} WHERE location_id = l.id
@@ -55,7 +54,7 @@ export async function GET(
         u.name as booked_by_name,
         u.email as booked_by_email
       FROM ${TABLE_NAMES.LOCATION_BOOKINGS} lb
-      LEFT JOIN users u ON lb.booked_by = u.id
+      LEFT JOIN ${TABLE_NAMES.USERS} u ON lb.booked_by = u.id
       WHERE lb.location_id = $1 AND lb.start_time > CURRENT_TIMESTAMP
       ORDER BY lb.start_time ASC
       LIMIT 10
@@ -74,7 +73,7 @@ export async function GET(
 // PUT /api/locations/[id] - Update location
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await auth()
@@ -82,7 +81,7 @@ export async function PUT(
       return apiUnauthorized(ERROR_MESSAGES.UNAUTHORIZED)
     }
 
-    const locationId = params.id
+    const { id: locationId } = await params
     const body = await request.json()
 
     // Check if user owns this location or is admin
@@ -156,7 +155,7 @@ export async function PUT(
 // DELETE /api/locations/[id] - Delete location
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await auth()
@@ -164,7 +163,7 @@ export async function DELETE(
       return apiUnauthorized(ERROR_MESSAGES.UNAUTHORIZED)
     }
 
-    const locationId = params.id
+    const { id: locationId } = await params
 
     // Check ownership and permissions
     const userRole = await getUserRole(session.user.id)

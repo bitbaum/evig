@@ -2,8 +2,9 @@ import { NextRequest } from 'next/server'
 import { auth } from '@/auth'
 import { query } from '@/lib/auth/db'
 import { apiError, apiSuccess, apiUnauthorized } from '@/lib/api/helpers'
-import { generateTaxReport, TAX_CONFIGURATIONS } from '@/lib/payments/tax-compliance'
+import { generateTaxReport, TAX_CONFIGURATIONS, TaxTransaction } from '@/lib/payments/tax-compliance'
 import { isAdminRole } from '@/lib/constants'
+import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
 
 // GET /api/admin/tax-reports - Generate tax reports
@@ -15,7 +16,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Check if user is admin
-    const userRoleResult = await query('SELECT role FROM users WHERE id = $1', [session.user.id])
+    const userRoleResult = await query(`SELECT role FROM ${TABLE_NAMES.USERS} WHERE id = $1`, [session.user.id])
     if (!isAdminRole(userRoleResult.rows[0]?.role)) {
       return apiUnauthorized('Admin access required')
     }
@@ -43,9 +44,9 @@ export async function GET(request: NextRequest) {
           'subtotalCents', (pt.metadata->>'subtotalCents')::int,
           'vatCents', (pt.metadata->>'vatCents')::int
         ) as tax_data
-      FROM payment_transactions pt
-      JOIN users u ON pt.user_id = u.id
-      LEFT JOIN user_profiles up ON u.id = up.user_id
+      FROM ${TABLE_NAMES.PAYMENT_TRANSACTIONS} pt
+      JOIN ${TABLE_NAMES.USERS} u ON pt.user_id = u.id
+      LEFT JOIN ${TABLE_NAMES.USER_PROFILES} up ON u.id = up.user_id
       WHERE pt.created_at >= $1
         AND pt.created_at <= $2
         AND pt.status = 'succeeded'
@@ -139,20 +140,20 @@ function calculatePeriodDates(period: string, year: number, month: number) {
   return { startDate, endDate }
 }
 
-async function generateComplianceReport(transactions: any[], startDate: Date, endDate: Date) {
+async function generateComplianceReport(transactions: TaxTransaction[], startDate: Date, endDate: Date) {
   // Get additional compliance data
   const refundCount = await query(`
-    SELECT COUNT(*) as count FROM refunds
+    SELECT COUNT(*) as count FROM ${TABLE_NAMES.REFUNDS}
     WHERE created_at >= $1 AND created_at <= $2
   `, [startDate, endDate])
 
   const escrowCount = await query(`
-    SELECT COUNT(*) as count FROM escrow_accounts
+    SELECT COUNT(*) as count FROM ${TABLE_NAMES.ESCROW_ACCOUNTS}
     WHERE created_at >= $1 AND created_at <= $2
   `, [startDate, endDate])
 
   const disputeCount = await query(`
-    SELECT COUNT(*) as count FROM payment_disputes
+    SELECT COUNT(*) as count FROM ${TABLE_NAMES.PAYMENT_DISPUTES}
     WHERE created_at >= $1 AND created_at <= $2
   `, [startDate, endDate])
 

@@ -27,6 +27,28 @@ export interface TaxCalculation {
   }
 }
 
+// Transaction type for tax calculations
+export interface TaxTransaction {
+  id: string
+  amount_cents: number
+  currency: 'CHF' | 'EUR'
+  created_at: string | Date
+  serviceType?: 'digital' | 'physical' | 'service'
+  customerVatId?: string
+  customerType?: 'business' | 'consumer'
+}
+
+// Tax report transaction entry
+export interface TaxReportTransaction {
+  id: string
+  date: string | Date
+  amount: number
+  vat: number
+  total: number
+  regime: TaxRegime
+  customerCountry: string
+}
+
 // Swiss VAT rates (as of 2024)
 export const SWISS_VAT_RATES = {
   standard: 0.077,    // 7.7% for most services
@@ -179,7 +201,7 @@ export function calculateTaxes(
  * Generate tax-compliant invoice data
  */
 export function generateTaxInvoiceData(
-  transaction: any,
+  transaction: TaxTransaction,
   customerLocation: { countryCode: string; vatId?: string },
   businessType: 'business' | 'consumer' = 'consumer'
 ) {
@@ -273,7 +295,7 @@ export function validateVATId(vatId: string, countryCode: string): boolean {
  * Generate tax report data for accounting
  */
 export function generateTaxReport(
-  transactions: any[],
+  transactions: TaxTransaction[],
   period: { start: Date; end: Date },
   countryCode: string = 'CH'
 ) {
@@ -289,7 +311,7 @@ export function generateTaxReport(
       totalVAT: 0,
       currency: 'CHF'
     },
-    transactions: [] as any[],
+    transactions: [] as TaxReportTransaction[],
     compliance: {
       reportingRequired: true,
       deadline: calculateReportingDeadline(period.end, countryCode),
@@ -341,7 +363,7 @@ function calculateReportingDeadline(periodEnd: Date, countryCode: string): strin
  * Check if transaction requires tax reporting
  */
 export function requiresTaxReporting(
-  transaction: any,
+  transaction: TaxTransaction,
   customerCountry: string
 ): boolean {
   // EU digital services require reporting regardless of customer location

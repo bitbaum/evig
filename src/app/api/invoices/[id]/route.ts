@@ -4,22 +4,22 @@ import { query } from '@/lib/auth/db'
 import { apiError, apiSuccess, apiUnauthorized, apiNotFound, apiBadRequest } from '@/lib/api/helpers'
 import { isAdminRole } from '@/lib/constants'
 import { logger } from '@/lib/logger'
+import { TABLE_NAMES } from '@/config/database'
 
 // GET /api/invoices/[id] - Get invoice details
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id: invoiceId } = await params
   try {
     const session = await auth()
     if (!session?.user?.id) {
       return apiUnauthorized('Authentication required')
     }
 
-    const invoiceId = params.id
-
     // Check if user is admin
-    const userRoleResult = await query('SELECT role FROM users WHERE id = $1', [session.user.id])
+    const userRoleResult = await query(`SELECT role FROM ${TABLE_NAMES.USERS} WHERE id = $1`, [session.user.id])
     const isAdmin = isAdminRole(userRoleResult.rows[0]?.role)
 
     // Get invoice details
@@ -31,8 +31,8 @@ export async function GET(
         ROUND(i.total_cents / 100.0, 2) as total,
         ROUND(i.subtotal_cents / 100.0, 2) as subtotal,
         ROUND(i.tax_cents / 100.0, 2) as tax
-      FROM invoices i
-      JOIN users u ON i.user_id = u.id
+      FROM ${TABLE_NAMES.INVOICES} i
+      JOIN ${TABLE_NAMES.USERS} u ON i.user_id = u.id
       WHERE i.id = $1
     `, [invoiceId])
 
@@ -58,23 +58,22 @@ export async function GET(
 // PUT /api/invoices/[id] - Update invoice
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id: invoiceId } = await params
   try {
     const session = await auth()
     if (!session?.user?.id) {
       return apiUnauthorized('Authentication required')
     }
-
-    const invoiceId = params.id
     const updates = await request.json()
 
     // Check if user is admin
-    const userRoleResult = await query('SELECT role FROM users WHERE id = $1', [session.user.id])
+    const userRoleResult = await query(`SELECT role FROM ${TABLE_NAMES.USERS} WHERE id = $1`, [session.user.id])
     const isAdmin = isAdminRole(userRoleResult.rows[0]?.role)
 
     // Get current invoice
-    const invoiceResult = await query('SELECT * FROM invoices WHERE id = $1', [invoiceId])
+    const invoiceResult = await query('SELECT * FROM ${TABLE_NAMES.INVOICES} WHERE id = $1', [invoiceId])
     if (invoiceResult.rows.length === 0) {
       return apiNotFound('Invoice not found')
     }
@@ -114,7 +113,7 @@ export async function PUT(
 
     // Execute update
     await query(`
-      UPDATE invoices
+      UPDATE ${TABLE_NAMES.INVOICES}
       SET ${updateFields.join(', ')}
       WHERE id = $${paramIndex}
     `, [...params, invoiceId])
@@ -126,8 +125,8 @@ export async function PUT(
         u.name as customer_name,
         u.email as customer_email,
         ROUND(i.total_cents / 100.0, 2) as total
-      FROM invoices i
-      JOIN users u ON i.user_id = u.id
+      FROM ${TABLE_NAMES.INVOICES} i
+      JOIN ${TABLE_NAMES.USERS} u ON i.user_id = u.id
       WHERE i.id = $1
     `, [invoiceId])
 
@@ -145,22 +144,21 @@ export async function PUT(
 // DELETE /api/invoices/[id] - Delete invoice (only draft invoices)
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id: invoiceId } = await params
   try {
     const session = await auth()
     if (!session?.user?.id) {
       return apiUnauthorized('Authentication required')
     }
 
-    const invoiceId = params.id
-
     // Check if user is admin
-    const userRoleResult = await query('SELECT role FROM users WHERE id = $1', [session.user.id])
+    const userRoleResult = await query(`SELECT role FROM ${TABLE_NAMES.USERS} WHERE id = $1`, [session.user.id])
     const isAdmin = isAdminRole(userRoleResult.rows[0]?.role)
 
     // Get invoice
-    const invoiceResult = await query('SELECT * FROM invoices WHERE id = $1', [invoiceId])
+    const invoiceResult = await query('SELECT * FROM ${TABLE_NAMES.INVOICES} WHERE id = $1', [invoiceId])
     if (invoiceResult.rows.length === 0) {
       return apiNotFound('Invoice not found')
     }
@@ -178,7 +176,7 @@ export async function DELETE(
     }
 
     // Delete invoice
-    await query('DELETE FROM invoices WHERE id = $1', [invoiceId])
+    await query(`DELETE FROM ${TABLE_NAMES.INVOICES} WHERE id = $1`, [invoiceId])
 
     return apiSuccess({
       message: 'Invoice deleted successfully'

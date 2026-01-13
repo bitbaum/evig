@@ -31,7 +31,7 @@ interface ProductAnalysis {
   condition_confidence: number
   color: string
   color_confidence: number
-  specifications: Record<string, any>
+  specifications: Record<string, string | number | boolean | string[]>
   total_confidence: number
 }
 

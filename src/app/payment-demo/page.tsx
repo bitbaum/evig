@@ -1,6 +1,7 @@
 'use client'
 
 import { Suspense } from 'react'
+import { logger } from '@/lib/logger'
 import ServiceBookingPayment from '@/components/payments/ServiceBookingPayment'
 
 export default function PaymentDemoPage() {
@@ -97,10 +98,10 @@ export default function PaymentDemoPage() {
             <ServiceBookingPayment
               service={mockService}
               onSuccess={(result) => {
-                console.log('Payment success:', result)
+                logger.info('Payment success', { result })
               }}
               onError={(error) => {
-                console.error('Payment error:', error)
+                logger.error('Payment error', { error })
               }}
             />
           </Suspense>

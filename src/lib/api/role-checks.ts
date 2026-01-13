@@ -9,6 +9,7 @@ import { query } from '@/lib/auth/db'
 import { TABLE_NAMES } from '@/config/database'
 import { apiForbidden } from './helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
+import { ROLES } from '@/lib/constants'
 
 /**
  * Check if user is a seller
@@ -21,7 +22,7 @@ export async function isSeller(userId: string): Promise<boolean> {
     [userId]
   )
   
-  return userCheck.rows.length > 0 && userCheck.rows[0].role === 'seller'
+  return userCheck.rows.length > 0 && userCheck.rows[0].role === ROLES.SELLER
 }
 
 /**

@@ -13,15 +13,15 @@ interface UpdateBody {
 // Cancel workshop registration (set status = 'cancelled')
 export async function PATCH(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params
+
   try {
     const session = await auth()
     if (!session?.user?.id) {
       return apiUnauthorized(ERROR_MESSAGES.UNAUTHORIZED)
     }
-
-    const { id } = params
     let body: UpdateBody | null = null
     try {
       body = await req.json()

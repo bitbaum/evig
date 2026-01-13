@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { logger } from '@/lib/logger'
 import { useSession } from 'next-auth/react'
 import { redirect } from 'next/navigation'
 import {
@@ -97,7 +98,7 @@ export default function UserReviewsPage() {
       // This would need a separate API endpoint for user votes
       // For now, we'll handle votes individually
     } catch (err) {
-      console.error('Error fetching user votes:', err)
+      logger.error('Error fetching user votes', { error: err })
     }
   }
 

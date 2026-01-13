@@ -48,7 +48,7 @@ export async function POST(request: NextRequest) {
 
     // Check if user already has pending proposals (limit to prevent spam)
     const existingProposals = await query(
-      `SELECT COUNT(*) as count FROM workshop_proposals
+      `SELECT COUNT(*) as count FROM ${TABLE_NAMES.WORKSHOP_PROPOSALS}
        WHERE user_id = $1 AND status IN ('pending', 'approved') AND created_at > NOW() - INTERVAL '30 days'`,
       [session.user.id]
     )
@@ -64,7 +64,7 @@ export async function POST(request: NextRequest) {
     // Validate selected location if provided
     if (selectedLocationId) {
       const locationCheck = await query(`
-        SELECT id, approval_status FROM locations WHERE id = $1
+        SELECT id, approval_status FROM ${TABLE_NAMES.LOCATIONS} WHERE id = $1
       `, [selectedLocationId])
 
       if (locationCheck.rows.length === 0) {
@@ -78,7 +78,7 @@ export async function POST(request: NextRequest) {
 
     // Create workshop proposal
     const proposalResult = await query(`
-      INSERT INTO workshop_proposals (
+      INSERT INTO ${TABLE_NAMES.WORKSHOP_PROPOSALS} (
         user_id,
         title,
         description,

@@ -5,6 +5,12 @@ import { apiError, apiSuccess, apiUnauthorized, apiNotFound, apiBadRequest } fro
 import { isAdminRole } from '@/lib/constants'
 import { logger } from '@/lib/logger'
 import { getStripeClient } from '@/lib/payments/stripe-client'
+import { TABLE_NAMES } from '@/config/database'
+import {
+  processPaymentWithoutInvoice,
+  centsToDisplay,
+  DEFAULT_AUTO_RELEASE_DAYS
+} from '@/lib/payments/payment-flow'
 
 // POST /api/appointments/[id]/pay - Pay for existing appointment
 export async function POST(request: NextRequest) {
@@ -17,7 +23,7 @@ export async function POST(request: NextRequest) {
     const appointmentId = request.nextUrl.pathname.split('/')[3] // Extract ID from URL
     const {
       useEscrow = true,
-      autoReleaseDays = 7,
+      autoReleaseDays = DEFAULT_AUTO_RELEASE_DAYS,
       paymentType = 'full', // 'full', 'deposit', 'remaining'
       customAmount // For custom payment amounts
     } = await request.json()
@@ -32,9 +38,9 @@ export async function POST(request: NextRequest) {
         st.requires_approval,
         u.name as customer_name,
         u.email as customer_email
-      FROM service_appointments sa
-      JOIN service_types st ON sa.service_type_id = st.id
-      JOIN users u ON sa.user_id = u.id
+      FROM ${TABLE_NAMES.SERVICE_APPOINTMENTS} sa
+      JOIN ${TABLE_NAMES.SERVICE_TYPES} st ON sa.service_type_id = st.id
+      JOIN ${TABLE_NAMES.USERS} u ON sa.user_id = u.id
       WHERE sa.id = $1
     `, [appointmentId])
 
@@ -46,7 +52,10 @@ export async function POST(request: NextRequest) {
 
     // Check ownership
     if (appointment.user_id !== session.user.id) {
-      const userRoleResult = await query('SELECT role FROM users WHERE id = $1', [session.user.id])
+      const userRoleResult = await query(
+        `SELECT role FROM ${TABLE_NAMES.USERS} WHERE id = $1`,
+        [session.user.id]
+      )
       if (!isAdminRole(userRoleResult.rows[0]?.role)) {
         return apiUnauthorized('You can only pay for your own appointments')
       }
@@ -67,7 +76,7 @@ export async function POST(request: NextRequest) {
       // Calculate remaining balance
       const paidResult = await query(`
         SELECT COALESCE(SUM(amount_cents), 0) as total_paid
-        FROM payment_transactions
+        FROM ${TABLE_NAMES.PAYMENT_TRANSACTIONS}
         WHERE service_appointment_id = $1 AND status = 'succeeded' AND type = 'payment'
       `, [appointmentId])
 
@@ -87,32 +96,24 @@ export async function POST(request: NextRequest) {
       return apiBadRequest('Invalid payment amount')
     }
 
-    // Get payment provider
-    const providerResult = await query(
-      'SELECT id, fee_percentage, fee_fixed_cents FROM payment_providers WHERE slug = $1 AND is_active = true',
-      ['stripe']
-    )
-
-    if (providerResult.rows.length === 0) {
-      return apiError(null, 'Payment provider not available', 500)
-    }
-
-    const provider = providerResult.rows[0]
-
-    // Calculate fees
-    const feeCents = Math.round(paymentAmountCents * (provider.fee_percentage / 100)) + provider.fee_fixed_cents
-    const totalAmount = paymentAmountCents + feeCents
-
-    // Create payment intent
+    // Initialize Stripe
     const stripe = getStripeClient()
     if (!stripe) {
       return apiError('Stripe is not configured', 500)
     }
-    
-    const paymentIntent = await stripe.paymentIntents.create({
-      amount: totalAmount,
-      currency: 'chf',
-      metadata: {
+
+    // Capitalize first letter of payment type for description
+    const paymentTypeLabel = paymentType.charAt(0).toUpperCase() + paymentType.slice(1)
+
+    // Process payment using shared utility (without invoice - appointment already has one)
+    const paymentResult = await processPaymentWithoutInvoice({
+      stripe,
+      userId: session.user.id,
+      baseAmountCents: paymentAmountCents,
+      useEscrow,
+      autoReleaseDays,
+      paymentDescription: `${paymentTypeLabel} payment for ${appointment.service_name}`,
+      paymentMetadata: {
         userId: session.user.id,
         serviceAppointmentId: appointmentId,
         useEscrow: useEscrow.toString(),
@@ -120,83 +121,17 @@ export async function POST(request: NextRequest) {
         paymentType,
         appointmentType: 'service_payment'
       },
-      automatic_payment_methods: {
-        enabled: true,
-      },
-      capture_method: useEscrow ? 'manual' : 'automatic',
-      description: `${paymentType.charAt(0).toUpperCase() + paymentType.slice(1)} payment for ${appointment.service_name}`,
+      serviceAppointmentId: appointmentId,
+      transactionMetadata: {
+        paymentType,
+        originalAppointmentStatus: appointment.status
+      }
     })
-
-    // Create payment transaction record
-    const transactionResult = await query(`
-      INSERT INTO payment_transactions (
-        user_id,
-        provider_id,
-        provider_transaction_id,
-        type,
-        status,
-        amount_cents,
-        currency,
-        fee_cents,
-        net_amount_cents,
-        service_appointment_id,
-        description,
-        escrow_release_date,
-        metadata
-      ) VALUES (
-        $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11,
-        CASE WHEN $12 THEN CURRENT_TIMESTAMP + INTERVAL '1 day' * $13 ELSE NULL END,
-        $14
-      )
-      RETURNING id
-    `, [
-      session.user.id,
-      provider.id,
-      paymentIntent.id,
-      'payment',
-      'pending',
-      totalAmount,
-      'CHF',
-      feeCents,
-      paymentAmountCents,
-      appointmentId,
-      `${paymentType.charAt(0).toUpperCase() + paymentType.slice(1)} payment: ${appointment.service_name}`,
-      useEscrow,
-      autoReleaseDays,
-      JSON.stringify({ paymentType, originalAppointmentStatus: appointment.status })
-    ])
-
-    const transactionId = transactionResult.rows[0].id
-
-    // Create escrow account if enabled
-    if (useEscrow) {
-      await query(`
-        INSERT INTO escrow_accounts (
-          transaction_id,
-          total_amount_cents,
-          currency,
-          auto_release_days,
-          release_deadline,
-          buyer_id,
-          status
-        ) VALUES (
-          $1, $2, $3, $4,
-          CURRENT_TIMESTAMP + INTERVAL '1 day' * $4,
-          $5, 'active'
-        )
-      `, [
-        transactionId,
-        totalAmount,
-        'CHF',
-        autoReleaseDays,
-        session.user.id
-      ])
-    }
 
     // Update appointment status if this completes the payment
     if (paymentType === 'full' || paymentType === 'remaining') {
       await query(`
-        UPDATE service_appointments
+        UPDATE ${TABLE_NAMES.SERVICE_APPOINTMENTS}
         SET
           status = CASE
             WHEN status = 'confirmed' THEN 'paid'
@@ -210,11 +145,11 @@ export async function POST(request: NextRequest) {
 
     return apiSuccess({
       appointmentId,
-      paymentIntentId: paymentIntent.id,
-      clientSecret: paymentIntent.client_secret,
-      transactionId,
-      amount: totalAmount / 100,
-      currency: 'CHF',
+      paymentIntentId: paymentResult.paymentIntentId,
+      clientSecret: paymentResult.clientSecret,
+      transactionId: paymentResult.transactionId,
+      amount: centsToDisplay(paymentResult.totalAmountCents),
+      currency: paymentResult.currency,
       paymentType,
       escrowEnabled: useEscrow,
       message: useEscrow

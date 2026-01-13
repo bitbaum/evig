@@ -15,27 +15,27 @@ import { ROLES, ROLE_PERMISSIONS, PERMISSIONS } from '@/lib/constants'
  * Check if user has admin-level access
  */
 export function hasAdminAccess(role: string): boolean {
-  const adminRoles = [
+  const adminRoles: string[] = [
     ROLES.REVAMPIT_SUPER_ADMIN,
     ROLES.REVAMPIT_ADMIN,
     ROLES.REVAMPIT_EDITOR,
     ROLES.REVAMPIT_SUPPORT,
     ROLES.PARTNER_ADMIN
   ]
-  return adminRoles.includes(role as any)
+  return adminRoles.includes(role)
 }
 
 /**
  * Check if user has seller access
  */
 export function hasSellerAccess(role: string): boolean {
-  const sellerRoles = [
+  const sellerRoles: string[] = [
     ROLES.REVAMPIT_SUPER_ADMIN,
     ROLES.REVAMPIT_ADMIN,
     ROLES.SELLER,
     ROLES.PARTNER_ADMIN
   ]
-  return sellerRoles.includes(role as any)
+  return sellerRoles.includes(role)
 }
 
 /**

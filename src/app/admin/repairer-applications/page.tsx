@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { logger } from '@/lib/logger'
 import { useRouter } from 'next/navigation'
 import {
   CheckCircle,
@@ -18,6 +19,13 @@ import {
   Filter,
   Search
 } from 'lucide-react'
+
+// Simple certification item (for display in application list)
+interface CertificationItem {
+  name?: string
+  type?: string
+  issuer?: string
+}
 
 interface RepairerApplication {
   id: string
@@ -41,7 +49,7 @@ interface RepairerApplication {
   homeVisitFeeCents: number | null
   servicesOffered: string[]
   specializations: string[]
-  certifications: any[]
+  certifications: (CertificationItem | string)[]
   insuranceInfo: string | null
   portfolioImages: string[]
   verificationDocuments: string[]
@@ -90,6 +98,13 @@ interface DocumentType {
   allowedExtensions: string[]
 }
 
+interface VerificationResult {
+  verified: boolean
+  verifiedAt?: string
+  notes?: string
+  method?: string
+}
+
 interface Certification {
   id: string
   applicationId: string
@@ -104,7 +119,7 @@ interface Certification {
   expiryDate: string | null
   verificationStatus: string
   verificationMethod: string
-  verificationResult: any
+  verificationResult: VerificationResult | null
   adminNotes: string | null
   verifiedBy: string | null
   verifiedAt: string | null
@@ -248,7 +263,7 @@ export default function RepairerApplicationsAdmin() {
       setSelectedApplicationDocuments(data.documents || [])
       setMissingRequiredDocuments(data.missingRequiredDocuments || [])
     } catch (err) {
-      console.error('Error fetching documents:', err)
+      logger.error('Error fetching documents', { error: err })
       setSelectedApplicationDocuments([])
       setMissingRequiredDocuments([])
     }
@@ -263,7 +278,7 @@ export default function RepairerApplicationsAdmin() {
       const data = await response.json()
       setSelectedApplicationCertifications(data.certifications || [])
     } catch (err) {
-      console.error('Error fetching certifications:', err)
+      logger.error('Error fetching certifications', { error: err })
       setSelectedApplicationCertifications([])
     }
   }
@@ -661,10 +676,10 @@ export default function RepairerApplicationsAdmin() {
                       <div>
                         <h4 className="font-medium text-gray-900 mb-2">Zertifizierungen</h4>
                         <div className="space-y-1">
-                          {application.certifications.map((cert: any, index: number) => (
+                          {application.certifications.map((cert, index) => (
                             <div key={index} className="flex items-center gap-2 text-sm">
                               <Star className="w-4 h-4 text-yellow-500" />
-                              <span>{cert.name || cert}</span>
+                              <span>{typeof cert === 'string' ? cert : cert.name}</span>
                             </div>
                           ))}
                         </div>

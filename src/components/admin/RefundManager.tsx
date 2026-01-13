@@ -48,8 +48,8 @@ export default function RefundManager() {
       }
 
       setRefunds(result.refunds)
-    } catch (err: any) {
-      setError(err.message)
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'Ein Fehler ist aufgetreten')
     } finally {
       setLoading(false)
     }
@@ -81,8 +81,8 @@ export default function RefundManager() {
           : refund
       ))
 
-    } catch (err: any) {
-      setError(err.message)
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'Ein Fehler ist aufgetreten')
     } finally {
       setProcessing(null)
     }

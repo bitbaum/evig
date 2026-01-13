@@ -62,7 +62,7 @@ setInterval(() => {
 // Rate Limiting Functions
 // =============================================================================
 
-export type RateLimitType = 'login' | 'register' | 'passwordReset'
+export type RateLimitType = 'login' | 'register' | 'passwordReset' | 'newsletter' | 'submission'
 
 interface RateLimitResult {
   allowed: boolean
@@ -452,8 +452,9 @@ export async function checkRateLimitRedis(identifier: string, type: RateLimitTyp
   const ttlMs = await redis.pttl(base)
 
   if (count > config.maxAttempts) {
-    if ('blockDuration' in config && (config as any).blockDuration) {
-      await redis.set(blockKey, '1', 'EX', Math.ceil((config as any).blockDuration / 1000))
+    if ('blockDuration' in config && config.blockDuration) {
+      const blockDuration = config.blockDuration as number
+      await redis.set(blockKey, '1', 'EX', Math.ceil(blockDuration / 1000))
     }
     return {
       allowed: false,

@@ -9,8 +9,9 @@ import { isAdminRole } from '@/lib/constants'
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id: certificationId } = await params
   try {
     const session = await auth()
     if (!session?.user?.id) {
@@ -26,8 +27,6 @@ export async function PUT(
     if (!userResult.rows[0] || !isAdminRole(userResult.rows[0].role)) {
       return apiUnauthorized('Nur Administratoren können diese Funktion verwenden')
     }
-
-    const certificationId = params.id
     const body = await request.json()
     const { adminNotes, rejectionReason } = body
 
@@ -43,8 +42,8 @@ export async function PUT(
     // Get certification details
     const certificationResult = await query(`
       SELECT rc.*, ra.user_id
-      FROM repairer_certifications rc
-      JOIN repairer_applications ra ON rc.application_id = ra.id
+      FROM ${TABLE_NAMES.REPAIRER_CERTIFICATIONS} rc
+      JOIN ${TABLE_NAMES.REPAIRER_APPLICATIONS} ra ON rc.application_id = ra.id
       WHERE rc.id = $1
     `, [certificationId])
 
@@ -64,7 +63,7 @@ export async function PUT(
 
     // Update certification verification status with rejection details
     await query(`
-      UPDATE repairer_certifications
+      UPDATE ${TABLE_NAMES.REPAIRER_CERTIFICATIONS}
       SET
         verification_status = 'rejected',
         verification_result = jsonb_build_object('rejectionReason', $1, 'rejectedAt', CURRENT_TIMESTAMP),
@@ -89,7 +88,7 @@ export async function PUT(
     })
 
   } catch (error) {
-    logger.error('Error rejecting certification', { error, certificationId: params.id })
+    logger.error('Error rejecting certification', { error, certificationId })
     return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)
   }
 }

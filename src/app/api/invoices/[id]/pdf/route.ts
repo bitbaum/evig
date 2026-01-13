@@ -4,23 +4,61 @@ import { query } from '@/lib/auth/db'
 import { apiError, apiSuccess, apiUnauthorized, apiNotFound } from '@/lib/api/helpers'
 import { isAdminRole } from '@/lib/constants'
 import { logger } from '@/lib/logger'
+import { TABLE_NAMES } from '@/config/database'
 import puppeteer from 'puppeteer'
+
+// Invoice data structure for PDF generation
+interface InvoiceLineItem {
+  description: string
+  quantity: number
+  unitPrice: number
+  total: number
+}
+
+interface CustomerAddress {
+  street?: string
+  city?: string
+  postal_code?: string
+  country?: string
+}
+
+interface InvoiceData {
+  id: string
+  invoice_number: string
+  user_id: string
+  status: 'draft' | 'sent' | 'paid' | 'overdue' | 'cancelled'
+  issue_date: string | Date
+  due_date?: string | Date
+  currency: string
+  tax_rate: number
+  subtotal_cents: number
+  tax_cents: number
+  total_cents: number
+  line_items: InvoiceLineItem[]
+  notes?: string
+  payment_terms?: string
+  customer_name: string
+  customer_email: string
+  first_name?: string
+  last_name?: string
+  phone?: string
+  customer_address?: CustomerAddress
+}
 
 // GET /api/invoices/[id]/pdf - Generate and return PDF
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id: invoiceId } = await params
   try {
     const session = await auth()
     if (!session?.user?.id) {
       return apiUnauthorized('Authentication required')
     }
 
-    const invoiceId = params.id
-
     // Check if user is admin
-    const userRoleResult = await query('SELECT role FROM users WHERE id = $1', [session.user.id])
+    const userRoleResult = await query(`SELECT role FROM ${TABLE_NAMES.USERS} WHERE id = $1`, [session.user.id])
     const isAdmin = isAdminRole(userRoleResult.rows[0]?.role)
 
     // Get invoice details
@@ -38,9 +76,9 @@ export async function GET(
           'postal_code', up.postal_code,
           'country', up.country
         ) as customer_address
-      FROM invoices i
-      JOIN users u ON i.user_id = u.id
-      LEFT JOIN user_profiles up ON u.id = up.user_id
+      FROM ${TABLE_NAMES.INVOICES} i
+      JOIN ${TABLE_NAMES.USERS} u ON i.user_id = u.id
+      LEFT JOIN ${TABLE_NAMES.USER_PROFILES} up ON u.id = up.user_id
       WHERE i.id = $1
     `, [invoiceId])
 
@@ -60,7 +98,7 @@ export async function GET(
 
     // Update PDF generation timestamp
     await query(`
-      UPDATE invoices
+      UPDATE ${TABLE_NAMES.INVOICES}
       SET
         pdf_generated_at = CURRENT_TIMESTAMP,
         updated_at = CURRENT_TIMESTAMP
@@ -84,18 +122,17 @@ export async function GET(
 // POST /api/invoices/[id]/pdf - Generate and store PDF URL
 export async function POST(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id: invoiceId } = await params
   try {
     const session = await auth()
     if (!session?.user?.id) {
       return apiUnauthorized('Authentication required')
     }
 
-    const invoiceId = params.id
-
     // Check if user is admin
-    const userRoleResult = await query('SELECT role FROM users WHERE id = $1', [session.user.id])
+    const userRoleResult = await query(`SELECT role FROM ${TABLE_NAMES.USERS} WHERE id = $1`, [session.user.id])
     const isAdmin = isAdminRole(userRoleResult.rows[0]?.role)
 
     // Get invoice details
@@ -107,9 +144,9 @@ export async function POST(
         up.first_name,
         up.last_name,
         up.phone
-      FROM invoices i
-      JOIN users u ON i.user_id = u.id
-      LEFT JOIN user_profiles up ON u.id = up.user_id
+      FROM ${TABLE_NAMES.INVOICES} i
+      JOIN ${TABLE_NAMES.USERS} u ON i.user_id = u.id
+      LEFT JOIN ${TABLE_NAMES.USER_PROFILES} up ON u.id = up.user_id
       WHERE i.id = $1
     `, [invoiceId])
 
@@ -133,7 +170,7 @@ export async function POST(
 
     // Update invoice with PDF URL
     await query(`
-      UPDATE invoices
+      UPDATE ${TABLE_NAMES.INVOICES}
       SET
         pdf_url = $1,
         pdf_generated_at = CURRENT_TIMESTAMP,
@@ -152,7 +189,7 @@ export async function POST(
   }
 }
 
-async function generateInvoicePDF(invoice: any): Promise<Buffer> {
+async function generateInvoicePDF(invoice: InvoiceData): Promise<Buffer> {
   try {
     // Try to use Puppeteer if available
     const browser = await puppeteer.launch({
@@ -190,7 +227,7 @@ async function generateInvoicePDF(invoice: any): Promise<Buffer> {
   }
 }
 
-function generateInvoiceHTML(invoice: any): string {
+function generateInvoiceHTML(invoice: InvoiceData): string {
   const lineItems = invoice.line_items || []
   const subtotal = invoice.subtotal_cents / 100
   const tax = invoice.tax_cents / 100
@@ -325,7 +362,7 @@ function generateInvoiceHTML(invoice: any): string {
           </tr>
         </thead>
         <tbody>
-          ${lineItems.map((item: any) => `
+          ${lineItems.map((item: InvoiceLineItem) => `
             <tr>
               <td>${item.description}</td>
               <td class="text-right">${item.quantity}</td>

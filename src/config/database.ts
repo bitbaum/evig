@@ -41,10 +41,15 @@ export const TABLE_NAMES = {
   LOCATION_APPROVALS: 'location_approvals',
   LOCATION_BOOKINGS: 'location_bookings',
   
-  // Applications
+  // Applications & Profiles
   SELLER_APPLICATIONS: 'seller_applications',
+  SELLER_PROFILES: 'seller_profiles',
   REPAIRER_APPLICATIONS: 'repairer_applications',
   REPAIRER_PROFILES: 'repairer_profiles',
+  REPAIRER_SERVICES: 'repairer_services',
+  REPAIRER_AVAILABILITY: 'repairer_availability',
+  REPAIRER_REVIEWS: 'repairer_reviews',
+  REPAIRER_CERTIFICATIONS: 'repairer_certifications',
   
   // Other
   DONATIONS: 'donations',
@@ -65,9 +70,11 @@ export const TABLE_NAMES = {
   PAYMENT_PROVIDERS: 'payment_providers',
   PAYMENT_DISPUTES: 'payment_disputes',
   ESCROW_ACCOUNTS: 'escrow_accounts',
+  ESCROW_RELEASES: 'escrow_releases',
   REFUNDS: 'refunds',
   INVOICES: 'invoices',
   ORDERS: 'orders',
+  ORDER_ITEMS: 'order_items',
 
   // Reviews
   REVIEWS: 'reviews',
@@ -79,6 +86,7 @@ export const TABLE_NAMES = {
   // Documents & Verification
   VERIFICATION_DOCUMENTS: 'verification_documents',
   DOCUMENT_TYPES: 'document_types',
+  CERTIFICATION_TYPES: 'certification_types',
 
   // Auth & Security
   USER_LOCKOUTS: 'user_lockouts',

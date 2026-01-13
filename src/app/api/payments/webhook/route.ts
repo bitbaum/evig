@@ -3,6 +3,7 @@ import { headers } from 'next/headers'
 import { requireStripeClient } from '@/lib/payments/stripe-client'
 import { query } from '@/lib/auth/db'
 import { apiError, apiSuccess } from '@/lib/api/helpers'
+import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
 
 // Webhook secret for signature verification
@@ -132,7 +133,7 @@ async function handlePaymentIntentSucceeded(paymentIntent: Stripe.PaymentIntent)
 
   // Update payment transaction status
   await query(`
-    UPDATE payment_transactions
+    UPDATE ${TABLE_NAMES.PAYMENT_TRANSACTIONS}
     SET
       status = 'succeeded',
       processed_at = CURRENT_TIMESTAMP,
@@ -144,7 +145,7 @@ async function handlePaymentIntentSucceeded(paymentIntent: Stripe.PaymentIntent)
   // Update related order if exists
   if (paymentIntent.metadata?.orderId) {
     await query(`
-      UPDATE orders
+      UPDATE ${TABLE_NAMES.ORDERS}
       SET
         payment_status = 'paid',
         status = CASE
@@ -159,7 +160,7 @@ async function handlePaymentIntentSucceeded(paymentIntent: Stripe.PaymentIntent)
   // Update service appointment if exists
   if (paymentIntent.metadata?.serviceAppointmentId) {
     await query(`
-      UPDATE service_appointments
+      UPDATE ${TABLE_NAMES.SERVICE_APPOINTMENTS}
       SET
         status = 'confirmed',
         updated_at = CURRENT_TIMESTAMP
@@ -170,7 +171,7 @@ async function handlePaymentIntentSucceeded(paymentIntent: Stripe.PaymentIntent)
   // Update workshop registration if exists
   if (paymentIntent.metadata?.workshopRegistrationId) {
     await query(`
-      UPDATE workshop_registrations
+      UPDATE ${TABLE_NAMES.WORKSHOP_REGISTRATIONS}
       SET
         payment_status = 'paid',
         status = 'confirmed',
@@ -185,7 +186,7 @@ async function handlePaymentIntentFailed(paymentIntent: Stripe.PaymentIntent) {
   logger.warn('Payment intent failed', { paymentIntentId: paymentIntent.id })
 
   await query(`
-    UPDATE payment_transactions
+    UPDATE ${TABLE_NAMES.PAYMENT_TRANSACTIONS}
     SET
       status = 'failed',
       failure_reason = $2,
@@ -204,7 +205,7 @@ async function handlePaymentIntentCanceled(paymentIntent: Stripe.PaymentIntent) 
   logger.info('Payment intent canceled', { paymentIntentId: paymentIntent.id })
 
   await query(`
-    UPDATE payment_transactions
+    UPDATE ${TABLE_NAMES.PAYMENT_TRANSACTIONS}
     SET
       status = 'cancelled',
       provider_response = $2,
@@ -220,7 +221,7 @@ async function handlePaymentIntentAmountCapturableUpdated(paymentIntent: Stripe.
   // This is relevant for escrow - funds are now available for capture
   // Update escrow account if this payment intent is part of escrow
   await query(`
-    UPDATE escrow_accounts
+    UPDATE ${TABLE_NAMES.ESCROW_ACCOUNTS}
     SET
       status = CASE
         WHEN status = 'active' THEN 'active'
@@ -228,7 +229,7 @@ async function handlePaymentIntentAmountCapturableUpdated(paymentIntent: Stripe.
       END,
       updated_at = CURRENT_TIMESTAMP
     WHERE transaction_id = (
-      SELECT id FROM payment_transactions WHERE provider_transaction_id = $1
+      SELECT id FROM ${TABLE_NAMES.PAYMENT_TRANSACTIONS} WHERE provider_transaction_id = $1
     )
   `, [paymentIntent.id])
 }
@@ -239,7 +240,7 @@ async function handleChargeSucceeded(charge: Stripe.Charge) {
 
   // Update payment transaction with charge details
   await query(`
-    UPDATE payment_transactions
+    UPDATE ${TABLE_NAMES.PAYMENT_TRANSACTIONS}
     SET
       fee_cents = $2,
       net_amount_cents = amount_cents - $2,
@@ -262,7 +263,7 @@ async function handleChargeFailed(charge: Stripe.Charge) {
 
   // Mark transaction as failed
   await query(`
-    UPDATE payment_transactions
+    UPDATE ${TABLE_NAMES.PAYMENT_TRANSACTIONS}
     SET
       status = 'failed',
       failure_reason = $2,
@@ -286,7 +287,7 @@ async function handleDisputeCreated(dispute: Stripe.Dispute) {
 
   // Create dispute record
   await query(`
-    INSERT INTO payment_disputes (
+    INSERT INTO ${TABLE_NAMES.PAYMENT_DISPUTES} (
       transaction_id,
       provider_dispute_id,
       amount_cents,
@@ -296,7 +297,7 @@ async function handleDisputeCreated(dispute: Stripe.Dispute) {
       evidence,
       response_deadline
     ) VALUES (
-      (SELECT id FROM payment_transactions WHERE provider_transaction_id = $1),
+      (SELECT id FROM ${TABLE_NAMES.PAYMENT_TRANSACTIONS} WHERE provider_transaction_id = $1),
       $2,
       $3,
       $4,
@@ -318,7 +319,7 @@ async function handleDisputeCreated(dispute: Stripe.Dispute) {
 
   // Update transaction status to disputed
   await query(`
-    UPDATE payment_transactions
+    UPDATE ${TABLE_NAMES.PAYMENT_TRANSACTIONS}
     SET
       status = 'disputed',
       updated_at = CURRENT_TIMESTAMP
@@ -331,7 +332,7 @@ async function handleDisputeClosed(dispute: Stripe.Dispute) {
 
   // Update dispute status
   await query(`
-    UPDATE payment_disputes
+    UPDATE ${TABLE_NAMES.PAYMENT_DISPUTES}
     SET
       status = CASE
         WHEN $2 = 'won' THEN 'won'
@@ -347,7 +348,7 @@ async function handleDisputeClosed(dispute: Stripe.Dispute) {
   // Update transaction status based on dispute outcome
   if (dispute.status === 'lost') {
     await query(`
-      UPDATE payment_transactions
+      UPDATE ${TABLE_NAMES.PAYMENT_TRANSACTIONS}
       SET
         status = 'disputed',
         updated_at = CURRENT_TIMESTAMP
@@ -362,7 +363,7 @@ async function handleRefundUpdated(refund: Stripe.Refund) {
 
   // Update refund record
   await query(`
-    UPDATE refunds
+    UPDATE ${TABLE_NAMES.REFUNDS}
     SET
       status = CASE
         WHEN $2 = 'succeeded' THEN 'completed'
@@ -393,7 +394,7 @@ async function handleInvoicePaymentSucceeded(invoice: Stripe.Invoice) {
 
   // Update invoice status
   await query(`
-    UPDATE invoices
+    UPDATE ${TABLE_NAMES.INVOICES}
     SET
       status = 'paid',
       paid_at = CURRENT_TIMESTAMP,
@@ -407,7 +408,7 @@ async function handleInvoicePaymentFailed(invoice: Stripe.Invoice) {
 
   // Update invoice status
   await query(`
-    UPDATE invoices
+    UPDATE ${TABLE_NAMES.INVOICES}
     SET
       status = 'overdue',
       updated_at = CURRENT_TIMESTAMP

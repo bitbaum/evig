@@ -192,7 +192,7 @@ export default function AppointmentBookingForm({ serviceSlug, serviceTitle, pric
                 </label>
                 <select
                   value={formData.urgency}
-                  onChange={(e) => setFormData(prev => ({ ...prev, urgency: e.target.value as any }))}
+                  onChange={(e) => setFormData(prev => ({ ...prev, urgency: e.target.value as 'normal' | 'high' | 'urgent' }))}
                   className="w-full px-3 py-2.5 border-2 border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-base min-h-[touch] touch-target"
                 >
                   <option value="normal">Normal - Innerhalb 1-2 Wochen</option>

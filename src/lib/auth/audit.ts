@@ -437,14 +437,16 @@ export async function getRecentSuspiciousActivity(
   ipAddress: string,
   hours: number = 24
 ): Promise<AuditLogEntry[]> {
+  // Validate hours to prevent SQL injection (1-168 hours = 1 week max)
+  const safeHours = Math.max(1, Math.min(168, Math.floor(hours)))
   const result = await query<AuditLogEntry>(
     `SELECT * FROM auth_audit_log
      WHERE ip_address = $1
        AND severity IN ('warning', 'critical')
-       AND created_at > NOW() - INTERVAL '${hours} hours'
+       AND created_at > NOW() - INTERVAL '1 hour' * $2
      ORDER BY created_at DESC
      LIMIT 100`,
-    [ipAddress]
+    [ipAddress, safeHours]
   )
   return result.rows
 }
@@ -456,12 +458,14 @@ export async function getFailedLoginAttempts(
   userId: string,
   hours: number = 24
 ): Promise<number> {
+  // Validate hours to prevent SQL injection (1-168 hours = 1 week max)
+  const safeHours = Math.max(1, Math.min(168, Math.floor(hours)))
   const result = await query<{ count: string }>(
     `SELECT COUNT(*) as count FROM auth_audit_log
      WHERE user_id = $1
        AND event_type = 'login_failure'
-       AND created_at > NOW() - INTERVAL '${hours} hours'`,
-    [userId]
+       AND created_at > NOW() - INTERVAL '1 hour' * $2`,
+    [userId, safeHours]
   )
   return parseInt(result.rows[0]?.count || '0', 10)
 }

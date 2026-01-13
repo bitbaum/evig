@@ -9,8 +9,9 @@ import { isAdminRole } from '@/lib/constants'
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id: documentId } = await params
   try {
     const session = await auth()
     if (!session?.user?.id) {
@@ -26,8 +27,6 @@ export async function PUT(
     if (!userResult.rows[0] || !isAdminRole(userResult.rows[0].role)) {
       return apiUnauthorized('Nur Administratoren können diese Funktion verwenden')
     }
-
-    const documentId = params.id
     const body = await request.json()
     const { adminNotes, expiresAt } = body
 
@@ -43,8 +42,8 @@ export async function PUT(
     // Get document details and check if it exists
     const documentResult = await query(`
       SELECT vd.*, ra.user_id, ra.document_verification_status
-      FROM verification_documents vd
-      JOIN repairer_applications ra ON vd.application_id = ra.id
+      FROM ${TABLE_NAMES.VERIFICATION_DOCUMENTS} vd
+      JOIN ${TABLE_NAMES.REPAIRER_APPLICATIONS} ra ON vd.application_id = ra.id
       WHERE vd.id = $1
     `, [documentId])
 
@@ -60,7 +59,7 @@ export async function PUT(
 
     // Update document status
     await query(`
-      UPDATE verification_documents
+      UPDATE ${TABLE_NAMES.VERIFICATION_DOCUMENTS}
       SET
         status = 'approved',
         admin_notes = COALESCE($1, admin_notes),
@@ -75,8 +74,8 @@ export async function PUT(
     const requiredDocsResult = await query(`
       SELECT COUNT(*) as total_required,
              COUNT(CASE WHEN vd.status = 'approved' THEN 1 END) as approved_required
-      FROM document_types dt
-      LEFT JOIN verification_documents vd ON dt.id = vd.document_type_id
+      FROM ${TABLE_NAMES.DOCUMENT_TYPES} dt
+      LEFT JOIN ${TABLE_NAMES.VERIFICATION_DOCUMENTS} vd ON dt.id = vd.document_type_id
         AND vd.application_id = $1
       WHERE dt.is_required = true
     `, [document.application_id])
@@ -92,7 +91,7 @@ export async function PUT(
     }
 
     await query(`
-      UPDATE repairer_applications
+      UPDATE ${TABLE_NAMES.REPAIRER_APPLICATIONS}
       SET document_verification_status = $1, updated_at = CURRENT_TIMESTAMP
       WHERE id = $2
     `, [newStatus, document.application_id])
@@ -112,7 +111,7 @@ export async function PUT(
     })
 
   } catch (error) {
-    logger.error('Error approving document', { error, documentId: params.id })
+    logger.error('Error approving document', { error, documentId })
     return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)
   }
 }

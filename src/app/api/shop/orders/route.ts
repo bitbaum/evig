@@ -23,7 +23,7 @@ export async function POST(request: NextRequest) {
 
     // Create order record
     const orderResult = await query(`
-      INSERT INTO orders (
+      INSERT INTO ${TABLE_NAMES.ORDERS} (
         user_id,
         status,
         total_amount_cents,
@@ -50,7 +50,7 @@ export async function POST(request: NextRequest) {
 
     // Create order items (this would come from the cart)
     await query(`
-      INSERT INTO order_items (
+      INSERT INTO ${TABLE_NAMES.ORDER_ITEMS} (
         order_id,
         product_title,
         quantity,

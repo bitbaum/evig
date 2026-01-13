@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { logger } from '@/lib/logger'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
@@ -17,6 +18,14 @@ import {
   BookOpen,
   Target
 } from 'lucide-react'
+
+interface WorkshopLocation {
+  id: string
+  name: string
+  address?: string
+  city?: string
+  capacity?: number
+}
 
 export default function WorkshopProposalPage() {
   const { data: session } = useSession()
@@ -51,7 +60,7 @@ export default function WorkshopProposalPage() {
     termsAccepted: false
   })
 
-  const [availableLocations, setAvailableLocations] = useState<any[]>([])
+  const [availableLocations, setAvailableLocations] = useState<WorkshopLocation[]>([])
   const [loadingLocations, setLoadingLocations] = useState(false)
 
   // Load available locations when location type is venue
@@ -70,7 +79,7 @@ export default function WorkshopProposalPage() {
         setAvailableLocations(data.locations || [])
       }
     } catch (error) {
-      console.error('Failed to load locations:', error)
+      logger.error('Failed to load locations', { error })
     } finally {
       setLoadingLocations(false)
     }

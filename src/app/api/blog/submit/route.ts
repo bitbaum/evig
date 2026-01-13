@@ -1,10 +1,11 @@
-import { NextRequest } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 import fs from 'fs'
 import path from 'path'
 import { apiSuccess, apiError, apiBadRequest, apiUnauthorized } from '@/lib/api/helpers'
 import { logger } from '@/lib/logger'
 import { auth } from '@/auth'
 import { isAdminRole } from '@/lib/constants'
+import { checkRateLimit, getClientIp } from '@/lib/auth/rate-limiter'
 
 const submissionsDir = path.join(process.cwd(), 'content/submissions')
 
@@ -15,6 +16,29 @@ if (!fs.existsSync(submissionsDir)) {
 
 export async function POST(request: NextRequest) {
   try {
+    // Rate limiting - prevent submission abuse
+    const clientIp = getClientIp(request.headers)
+    const rateLimitResult = checkRateLimit(clientIp, 'submission')
+
+    if (!rateLimitResult.allowed) {
+      logger.warn('Blog submission rate limit exceeded', { ip: clientIp })
+      return NextResponse.json(
+        {
+          success: false,
+          error: 'Zu viele Einreichungen. Bitte versuchen Sie es später erneut.',
+          retryAfter: rateLimitResult.retryAfter,
+        },
+        {
+          status: 429,
+          headers: {
+            'Retry-After': String(rateLimitResult.retryAfter || 60),
+            'X-RateLimit-Remaining': String(rateLimitResult.remaining),
+            'X-RateLimit-Reset': String(rateLimitResult.resetAt),
+          },
+        }
+      )
+    }
+
     const data = await request.json()
 
     // Validate required fields

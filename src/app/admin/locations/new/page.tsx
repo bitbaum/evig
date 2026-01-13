@@ -260,7 +260,7 @@ export default function NewLocationPage() {
                         type="radio"
                         value={type.id}
                         checked={formData.type === type.id}
-                        onChange={(e) => setFormData(prev => ({ ...prev, type: e.target.value as any }))}
+                        onChange={(e) => setFormData(prev => ({ ...prev, type: e.target.value as 'venue' | 'home' | 'online' | 'community_center' | 'business' }))}
                         className="sr-only peer"
                       />
                       <div className={`p-4 border-2 rounded-lg cursor-pointer transition-all ${

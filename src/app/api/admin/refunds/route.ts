@@ -4,6 +4,7 @@ import { query } from '@/lib/auth/db'
 import { apiError, apiSuccess, apiUnauthorized, apiNotFound, apiBadRequest } from '@/lib/api/helpers'
 import { isAdminRole } from '@/lib/constants'
 import { logger } from '@/lib/logger'
+import { TABLE_NAMES } from '@/config/database'
 
 // GET /api/admin/refunds - List all refunds for admin review
 export async function GET(request: NextRequest) {
@@ -14,7 +15,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Check if user is admin
-    const userRoleResult = await query('SELECT role FROM users WHERE id = $1', [session.user.id])
+    const userRoleResult = await query(`SELECT role FROM ${TABLE_NAMES.USERS} WHERE id = $1`, [session.user.id])
     if (!isAdminRole(userRoleResult.rows[0]?.role)) {
       return apiUnauthorized('Admin access required')
     }
@@ -43,11 +44,11 @@ export async function GET(request: NextRequest) {
         ROUND(r.amount_cents / 100.0, 2) as refund_amount,
         ar.name as approved_by_name,
         rr.name as requested_by_name
-      FROM refunds r
-      JOIN users u ON r.requested_by = u.id
-      JOIN payment_transactions pt ON r.original_transaction_id = pt.id
-      LEFT JOIN users ar ON r.approved_by = ar.id
-      LEFT JOIN users rr ON r.requested_by = rr.id
+      FROM ${TABLE_NAMES.REFUNDS} r
+      JOIN ${TABLE_NAMES.USERS} u ON r.requested_by = u.id
+      JOIN ${TABLE_NAMES.PAYMENT_TRANSACTIONS} pt ON r.original_transaction_id = pt.id
+      LEFT JOIN ${TABLE_NAMES.USERS} ar ON r.approved_by = ar.id
+      LEFT JOIN ${TABLE_NAMES.USERS} rr ON r.requested_by = rr.id
       ${whereClause}
       ORDER BY r.created_at DESC
       LIMIT $${params.length + 1} OFFSET $${params.length + 2}
@@ -55,7 +56,7 @@ export async function GET(request: NextRequest) {
 
     // Get total count
     const countResult = await query(`
-      SELECT COUNT(*) as total FROM refunds r ${whereClause}
+      SELECT COUNT(*) as total FROM ${TABLE_NAMES.REFUNDS} r ${whereClause}
     `, params)
 
     return apiSuccess({

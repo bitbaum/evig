@@ -41,7 +41,7 @@ export async function GET(request: NextRequest) {
               'email', u2.email,
               'role', u2.role
             )
-            FROM users u2 WHERE u2.id = c.participant_2
+            FROM ${TABLE_NAMES.USERS} u2 WHERE u2.id = c.participant_2
           )
           ELSE (
             SELECT json_build_object(
@@ -50,7 +50,7 @@ export async function GET(request: NextRequest) {
               'email', u1.email,
               'role', u1.role
             )
-            FROM users u1 WHERE u1.id = c.participant_1
+            FROM ${TABLE_NAMES.USERS} u1 WHERE u1.id = c.participant_1
           )
         END as other_participant,
         -- Get unread count for current user
