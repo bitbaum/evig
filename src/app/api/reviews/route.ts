@@ -13,6 +13,14 @@ interface UserRow {
   role: string
 }
 
+interface ReviewAttachment {
+  id: string
+  original_filename: string
+  file_path: string
+  mime_type: string
+  attachment_type: string
+}
+
 interface ReviewRow {
   id: string
   reviewer_id: string
@@ -42,6 +50,7 @@ interface ReviewRow {
   responder_name: string | null
   created_at: string
   updated_at: string
+  attachments: ReviewAttachment[] | null
 }
 
 interface AttachmentRow {
@@ -115,7 +124,7 @@ export async function GET(request: NextRequest) {
     const sortField = validSortFields.includes(sortBy) ? sortBy : 'created_at'
     const sortDirection = sortOrder === 'asc' ? 'ASC' : 'DESC'
 
-    // Get reviews with user details and responses
+    // Get reviews with user details, responses, and attachments (optimized - single query)
     const reviewsResult = await query(`
       SELECT
         r.*,
@@ -127,7 +136,20 @@ export async function GET(request: NextRequest) {
         rr.created_at as response_created_at,
         ru.name as responder_name,
         CASE WHEN rv.vote_type IS NOT NULL THEN true ELSE false END as user_has_voted,
-        rv.vote_type as user_vote
+        rv.vote_type as user_vote,
+        (
+          SELECT COALESCE(json_agg(
+            json_build_object(
+              'id', ra.id,
+              'original_filename', ra.original_filename,
+              'file_path', ra.file_path,
+              'mime_type', ra.mime_type,
+              'attachment_type', ra.attachment_type
+            ) ORDER BY ra.sort_order, ra.created_at
+          ), '[]'::json)
+          FROM ${TABLE_NAMES.REVIEW_ATTACHMENTS} ra
+          WHERE ra.review_id = r.id
+        ) as attachments
       FROM ${TABLE_NAMES.REVIEWS} r
       JOIN ${TABLE_NAMES.USERS} u ON r.reviewer_id = u.id
       LEFT JOIN ${TABLE_NAMES.REPAIRER_PROFILES} rp ON r.target_type = '${REVIEW_TARGET_TYPES.REPAIRER}' AND r.target_id = rp.id
@@ -152,28 +174,8 @@ export async function GET(request: NextRequest) {
       [targetType, targetId, status]
     )
 
-    // Get attachments for each review
-    const reviewsWithAttachments = await Promise.all(
-      (reviewsResult.rows as ReviewRow[]).map(async (review) => {
-        const attachmentsResult = await query(
-          `SELECT * FROM ${TABLE_NAMES.REVIEW_ATTACHMENTS} WHERE review_id = $1 ORDER BY sort_order, created_at`,
-          [review.id]
-        )
-
-        return {
-          ...review,
-          attachments: (attachmentsResult.rows as AttachmentRow[]).map(att => ({
-            id: att.id,
-            filename: att.original_filename,
-            filePath: att.file_path,
-            mimeType: att.mime_type,
-            attachmentType: att.attachment_type
-          }))
-        }
-      })
-    )
-
-    const reviews = reviewsWithAttachments.map((review: ReviewRow & { attachments: { id: string; filename: string; filePath: string; mimeType: string; attachmentType: string }[] }) => ({
+    // Attachments are now included in the main query via json_agg
+    const reviews = (reviewsResult.rows as ReviewRow[]).map((review) => ({
       id: review.id,
       reviewerId: review.reviewer_id,
       reviewerName: review.reviewer_name,
@@ -198,7 +200,13 @@ export async function GET(request: NextRequest) {
       userHasVoted: review.user_has_voted,
       userVote: review.user_vote,
       status: review.status,
-      attachments: review.attachments,
+      attachments: (review.attachments || []).map((att: ReviewAttachment) => ({
+        id: att.id,
+        filename: att.original_filename,
+        filePath: att.file_path,
+        mimeType: att.mime_type,
+        attachmentType: att.attachment_type
+      })),
       response: review.response_id ? {
         id: review.response_id,
         content: review.response_content,
