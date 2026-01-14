@@ -789,7 +789,7 @@ export default function ProfilePage() {
                   <p className="font-medium">Passwort-Anforderungen:</p>
                   <ul className="mt-1 ml-4 list-disc space-y-0.5">
                     <li>Mindestens 8 Zeichen</li>
-                    <li>Mindestens ein Großbuchstabe</li>
+                    <li>Mindestens ein Grossbuchstabe</li>
                     <li>Mindestens ein Kleinbuchstabe</li>
                     <li>Mindestens eine Zahl</li>
                   </ul>

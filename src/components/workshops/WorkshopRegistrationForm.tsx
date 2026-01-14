@@ -220,7 +220,7 @@ export default function WorkshopRegistrationForm({ workshop, instance }: Worksho
             <span className="font-medium">Keine Plätze mehr verfügbar</span>
           </div>
           <p className="text-red-700 text-sm">
-            Dieser Workshop ist bereits ausgebucht. Schauen Sie regelmäßig vorbei für neue Termine.
+            Dieser Workshop ist bereits ausgebucht. Schauen Sie regelmässig vorbei für neue Termine.
           </p>
         </div>
 

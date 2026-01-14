@@ -702,7 +702,7 @@ export default function WorkshopProposalPage() {
                 <p>• Ich bin für die Sicherheit und den reibungslosen Ablauf des Workshops verantwortlich</p>
                 <p>• Ich werde angemessene Vorkenntnisse und klare Lernziele kommunizieren</p>
                 <p>• Ich akzeptiere das Bewertungssystem und die Plattformgebühren</p>
-                <p>• Meine Angaben sind wahrheitsgemäß und ich werde sie aktuell halten</p>
+                <p>• Meine Angaben sind wahrheitsgemäss und ich werde sie aktuell halten</p>
               </div>
 
               <div className="mt-4">

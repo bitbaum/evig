@@ -622,7 +622,7 @@ export default function RepairerApplicationPage() {
                 <p>• Ich bin für die Qualität meiner Arbeit und verwendeten Ersatzteile verantwortlich</p>
                 <p>• Ich werde Kunden termingerecht und professionell betreuen</p>
                 <p>• Ich akzeptiere das Bewertungssystem und die Servicegebühren der Plattform</p>
-                <p>• Meine Angaben sind wahrheitsgemäß und ich werde sie aktuell halten</p>
+                <p>• Meine Angaben sind wahrheitsgemäss und ich werde sie aktuell halten</p>
               </div>
 
               <div className="mt-4">

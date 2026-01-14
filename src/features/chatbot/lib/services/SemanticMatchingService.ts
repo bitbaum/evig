@@ -263,7 +263,7 @@ export class SemanticMatchingService {
           conditions: { language: 'en' }
         },
         {
-          template: 'Wir bieten regelmäßig Workshops zu Linux, Open-Source-Software und Hardware-Reparaturen an. Diese Kurse sind für alle Erfahrungsstufen geeignet.',
+          template: 'Wir bieten regelmässig Workshops zu Linux, Open-Source-Software und Hardware-Reparaturen an. Diese Kurse sind für alle Erfahrungsstufen geeignet.',
           confidence: 0.9,
           conditions: { language: 'de' }
         }
@@ -275,7 +275,7 @@ export class SemanticMatchingService {
           conditions: { language: 'en' }
         },
         {
-          template: 'Vielen Dank für Ihr Interesse als Freiwilliger! Wir heißen Menschen mit verschiedenen Fähigkeiten willkommen - von technischer Expertise bis hin zu administrativer Unterstützung.',
+          template: 'Vielen Dank für Ihr Interesse als Freiwilliger! Wir heissen Menschen mit verschiedenen Fähigkeiten willkommen - von technischer Expertise bis hin zu administrativer Unterstützung.',
           confidence: 0.9,
           conditions: { language: 'de' }
         }

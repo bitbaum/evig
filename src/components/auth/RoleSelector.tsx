@@ -131,7 +131,7 @@ export function RoleSelector({ selectedRole, onRoleChange, disabled, variant = '
               <div className="mt-1 sm:mt-2 text-xs sm:text-sm text-blue-700 dark:text-blue-300">
                 <p>
                   {selectedRole === ROLES.CUSTOMER && "Perfekt für den Einstieg! Sie können später jederzeit zur Seller- oder Repairer-Rolle wechseln."}
-                  {selectedRole === ROLES.SELLER && "Großartig! Sie können sofort mit dem Verkauf Ihrer refurbished Produkte beginnen."}
+                  {selectedRole === ROLES.SELLER && "Grossartig! Sie können sofort mit dem Verkauf Ihrer refurbished Produkte beginnen."}
                   {selectedRole === ROLES.REPAIRER && "Ausgezeichnet! Ihre Reparaturkenntnisse werden der Community helfen."}
                 </p>
               </div>

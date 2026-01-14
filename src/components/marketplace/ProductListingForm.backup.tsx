@@ -1006,7 +1006,7 @@ export default function ProductListingForm() {
                   onClick={() => setShowSuccessModal(false)}
                   className="w-full text-gray-600 hover:text-gray-800 transition-colors"
                 >
-                  Schließen
+                  Schliessen
                 </button>
               </div>
             </motion.div>

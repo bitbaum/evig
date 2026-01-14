@@ -38,7 +38,7 @@ export const chatbotMessages: Record<Language, ChatbotMessages> = {
     buttons: {
       minimize: 'Minimieren',
       maximize: 'Maximieren',
-      close: 'Schließen',
+      close: 'Schliessen',
       send: 'Senden'
     },
     status: 'Hier um zu helfen'

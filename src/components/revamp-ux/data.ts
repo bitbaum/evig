@@ -13,7 +13,7 @@ export const FEATURE_DETAILS: FeatureDetails = {
     revamp: 'Revamp-UX integriert Feedback-Sammlung direkt in jede Website-Seite. Ein Klick genügt - keine Suche nach Kontaktformularen.'
   },
   'Technische Voraussetzungen': {
-    wordpress: 'WordPress-Installation, Hosting, Theme-Setup und Plugin-Konfiguration erforderlich. Regelmäßige Updates und Sicherheit nötig.',
+    wordpress: 'WordPress-Installation, Hosting, Theme-Setup und Plugin-Konfiguration erforderlich. Regelmässige Updates und Sicherheit nötig.',
     strapi: 'Erfordert Node.js, Datenbank-Setup, API-Entwicklung und separates Frontend. Hohe technische Kompetenz für Deployment und Wartung.',
     contentful: 'Benötigt API-Schlüssel, Frontend-Framework und Hosting. Content-Modelle müssen definiert werden. Mittel bis fortgeschrittene Kenntnisse.',
     revamp: 'Einfache Integration durch Script-Tag oder NPM-Paket. Keine Server-Setup, Datenbank oder API-Konfiguration nötig.'

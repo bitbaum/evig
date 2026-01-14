@@ -25,7 +25,7 @@ export function FeatureModal({ selectedFeature, featureDetails, onClose }: Featu
         <button
           onClick={onClose}
           className="absolute top-6 right-6 w-12 h-12 bg-green-600 hover:bg-green-700 text-white rounded-full flex items-center justify-center shadow-lg transition-colors duration-200 z-10"
-          aria-label="Panel schließen"
+          aria-label="Panel schliessen"
         >
           <svg
             className="w-6 h-6"

@@ -293,7 +293,7 @@ export class ChatbotOrchestrator {
       if (messageLower.includes('contribute') || messageLower.includes('help') || messageLower.includes('beitragen') || messageLower.includes('helfen')) {
         return {
           content: language === 'de' ?
-            'Großartig, dass Sie zu unseren Projekten beitragen möchten! Sie schauen sich gerade unsere Projekte an - perfekt! Wir begrüßen Beiträge in verschiedenen Formen - von Code bis hin zu Dokumentation und Tests.' :
+            'Grossartig, dass Sie zu unseren Projekten beitragen möchten! Sie schauen sich gerade unsere Projekte an - perfekt! Wir begrüssen Beiträge in verschiedenen Formen - von Code bis hin zu Dokumentation und Tests.' :
             'Great that you want to contribute to our projects! You\'re looking at our projects right now - perfect! We welcome contributions in various forms - from code to documentation and testing.',
           suggestions: [
             {
@@ -347,7 +347,7 @@ export class ChatbotOrchestrator {
       if (messageLower.includes('when') || messageLower.includes('schedule') || messageLower.includes('wann') || messageLower.includes('termine')) {
         return {
           content: language === 'de' ?
-            'Sie sind auf unserer Workshop-Seite! Hier finden Sie alle aktuellen Termine und Informationen zu unseren Bildungsangeboten. Die Workshops sind eine großartige Möglichkeit zu lernen!' :
+            'Sie sind auf unserer Workshop-Seite! Hier finden Sie alle aktuellen Termine und Informationen zu unseren Bildungsangeboten. Die Workshops sind eine grossartige Möglichkeit zu lernen!' :
             'You\'re on our workshops page! Here you\'ll find all current dates and information about our educational offerings. Workshops are a great way to learn!',
           suggestions: [
             {

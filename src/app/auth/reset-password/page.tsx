@@ -55,7 +55,7 @@ function ResetPasswordContent() {
     const hasNumbers = /\d/.test(password)
 
     if (!hasUpperCase || !hasLowerCase || !hasNumbers) {
-      setError('Das Passwort muss mindestens einen Großbuchstaben, einen Kleinbuchstaben und eine Zahl enthalten')
+      setError('Das Passwort muss mindestens einen Grossbuchstaben, einen Kleinbuchstaben und eine Zahl enthalten')
       setIsLoading(false)
       return
     }
@@ -246,7 +246,7 @@ function ResetPasswordContent() {
                   ✓ Mindestens 8 Zeichen
                 </li>
                 <li className={/[A-Z]/.test(password) ? 'text-green-600' : 'text-gray-400'}>
-                  ✓ Mindestens ein Großbuchstabe
+                  ✓ Mindestens ein Grossbuchstabe
                 </li>
                 <li className={/[a-z]/.test(password) ? 'text-green-600' : 'text-gray-400'}>
                   ✓ Mindestens ein Kleinbuchstabe

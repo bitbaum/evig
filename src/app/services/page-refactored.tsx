@@ -137,7 +137,7 @@ const services: Service[] = [
     category: 'Software-Lösungen',
     features: [
       'Open-Source-Beratung',
-      'Maßgeschneiderte Entwicklung',
+      'Massgeschneiderte Entwicklung',
       'Community-Integration',
       'Sicherheit & Compliance'
     ],
@@ -150,7 +150,7 @@ const services: Service[] = [
   // Coming Soon
   {
     title: 'Build Your Computer',
-    description: 'Erhalten Sie einen maßgeschneiderten Computer für Ihre spezifischen Bedürfnisse, unterstützt durch KI-Analyse unseres umfangreichen Inventars. Wir beziehen Teile global und bieten professionelle Montage.',
+    description: 'Erhalten Sie einen massgeschneiderten Computer für Ihre spezifischen Bedürfnisse, unterstützt durch KI-Analyse unseres umfangreichen Inventars. Wir beziehen Teile global und bieten professionelle Montage.',
     icon: Cpu,
     category: 'Bald verfügbar',
     features: [
@@ -174,7 +174,7 @@ const services: Service[] = [
       'Selbstgehostete Llama 3 70B-Bereitstellung',
       'RAG-unterstützte Dokumentensuche',
       'Vollständiger Datenschutz & DSGVO-Compliance',
-      'Maßgeschneiderte Schulung auf Ihren Dokumenten'
+      'Massgeschneiderte Schulung auf Ihren Dokumenten'
     ],
     pricing: '',
     highlight: 'Bald verfügbar',
@@ -224,7 +224,7 @@ const services: Service[] = [
     features: [
       'Open-Source-Hardware',
       'Datenschutz-fokussiertes Design',
-      'Maßgeschneiderte IoT-Entwicklung',
+      'Massgeschneiderte IoT-Entwicklung',
       'Dateneigentum garantiert'
     ],
     pricing: '',

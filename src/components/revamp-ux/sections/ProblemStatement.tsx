@@ -17,7 +17,7 @@ export function ProblemStatement() {
             Warum Website-Verbesserungen scheitern
           </h2>
           <p className="mt-4 text-lg text-gray-600">
-            Die Kluft zwischen Nutzer-Feedback und erfolgreichen Verbesserungen ist größer als je zuvor.
+            Die Kluft zwischen Nutzer-Feedback und erfolgreichen Verbesserungen ist grösser als je zuvor.
           </p>
         </div>
 
