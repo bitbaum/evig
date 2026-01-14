@@ -1,6 +1,6 @@
 import { NextRequest } from 'next/server'
 import { query } from '@/lib/auth/db'
-import { apiError, apiSuccess } from '@/lib/api/helpers'
+import { apiError, apiSuccessCached } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
@@ -244,7 +244,8 @@ export async function GET(request: NextRequest) {
       total
     })
 
-    return apiSuccess({
+    // Cache public repairer listing for 5 minutes
+    return apiSuccessCached({
       repairers: repairersWithDetails,
       pagination: {
         total,
@@ -252,7 +253,7 @@ export async function GET(request: NextRequest) {
         offset,
         hasMore: offset + repairersWithDetails.length < total
       }
-    })
+    }, 300, 60)
 
   } catch (error) {
     logger.error('Error fetching repairers', { error })

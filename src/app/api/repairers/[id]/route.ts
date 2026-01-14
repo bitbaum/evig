@@ -1,6 +1,6 @@
 import { NextRequest } from 'next/server'
 import { query } from '@/lib/auth/db'
-import { apiError, apiSuccess, apiNotFound } from '@/lib/api/helpers'
+import { apiError, apiSuccessCached, apiNotFound } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
@@ -204,7 +204,8 @@ export async function GET(
 
     logger.info('Repairer profile fetched', { repairerId: id })
 
-    return apiSuccess({
+    // Cache individual repairer profile for 5 minutes
+    return apiSuccessCached({
       repairer: {
         ...profile,
         rating_distribution: ratingDistribution,

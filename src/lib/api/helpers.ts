@@ -18,6 +18,29 @@ export function apiSuccess<T>(data: T, status = 200): NextResponse {
 }
 
 /**
+ * Cacheable success response helper
+ * Adds Cache-Control headers for semi-static public data
+ * @param data - Response data
+ * @param maxAge - Cache duration in seconds (default: 300 = 5 minutes)
+ * @param staleWhileRevalidate - Stale content duration (default: 60)
+ */
+export function apiSuccessCached<T>(
+  data: T,
+  maxAge = 300,
+  staleWhileRevalidate = 60
+): NextResponse {
+  return NextResponse.json(
+    { success: true, data },
+    {
+      status: 200,
+      headers: {
+        'Cache-Control': `public, s-maxage=${maxAge}, stale-while-revalidate=${staleWhileRevalidate}`,
+      },
+    }
+  );
+}
+
+/**
  * Error response helper
  * Logs error and returns standardized error response
  * @param error - Error object or message
