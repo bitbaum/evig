@@ -7,10 +7,11 @@ export function middleware(request: NextRequest) {
   const method = request.method
 
   // CSRF Protection for state-changing requests
-  // Apply to API routes that aren't webhooks or public
+  // Apply to API routes that aren't webhooks, public, or auth (Auth.js has its own CSRF)
   if (pathname.startsWith('/api/') &&
       !pathname.startsWith('/api/webhooks/') &&
-      !pathname.startsWith('/api/public/')) {
+      !pathname.startsWith('/api/public/') &&
+      !pathname.startsWith('/api/auth/')) {
     const csrfResult = csrfMiddleware(request)
     if (csrfResult) {
       return csrfResult // CSRF validation failed

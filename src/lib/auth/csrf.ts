@@ -5,16 +5,33 @@
  * Also supports the Double Submit Cookie pattern as a fallback.
  *
  * Security features:
- * - Cryptographically secure token generation
+ * - Cryptographically secure token generation (Web Crypto API for Edge compatibility)
  * - Token tied to session
  * - Constant-time comparison to prevent timing attacks
  * - Token rotation on sensitive operations
  */
 
-import { randomBytes, createHash } from 'crypto'
 import { NextRequest, NextResponse } from 'next/server'
 import { serialize, parse } from 'cookie'
-import { constantTimeCompare } from './password'
+
+// =============================================================================
+// Edge-compatible crypto utilities (Web Crypto API)
+// =============================================================================
+
+/**
+ * Constant-time string comparison to prevent timing attacks
+ * Edge-compatible version without Node.js crypto
+ */
+function constantTimeCompareEdge(a: string, b: string): boolean {
+  if (a.length !== b.length) {
+    return false
+  }
+  let result = 0
+  for (let i = 0; i < a.length; i++) {
+    result |= a.charCodeAt(i) ^ b.charCodeAt(i)
+  }
+  return result === 0
+}
 
 // =============================================================================
 // Configuration
@@ -40,25 +57,32 @@ const CSRF_CONFIG = {
 // =============================================================================
 
 /**
- * Generate a CSRF token
+ * Generate a CSRF token using Web Crypto API (Edge-compatible)
  */
 export function generateCsrfToken(): string {
-  return randomBytes(CSRF_CONFIG.tokenLength).toString('hex')
+  const bytes = new Uint8Array(CSRF_CONFIG.tokenLength)
+  crypto.getRandomValues(bytes)
+  return Array.from(bytes, b => b.toString(16).padStart(2, '0')).join('')
 }
 
 /**
- * Hash a CSRF token for storage
+ * Hash a CSRF token for storage using Web Crypto API (Edge-compatible)
+ * Note: This is async due to Web Crypto API requirements
  */
-export function hashCsrfToken(token: string): string {
-  return createHash('sha256').update(token).digest('hex')
+export async function hashCsrfToken(token: string): Promise<string> {
+  const encoder = new TextEncoder()
+  const data = encoder.encode(token)
+  const hashBuffer = await crypto.subtle.digest('SHA-256', data)
+  const hashArray = Array.from(new Uint8Array(hashBuffer))
+  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('')
 }
 
 /**
  * Validate a CSRF token against its hash
  */
-export function validateCsrfToken(token: string, hash: string): boolean {
-  const tokenHash = hashCsrfToken(token)
-  return constantTimeCompare(tokenHash, hash)
+export async function validateCsrfToken(token: string, hash: string): Promise<boolean> {
+  const tokenHash = await hashCsrfToken(token)
+  return constantTimeCompareEdge(tokenHash, hash)
 }
 
 // =============================================================================
@@ -181,7 +205,7 @@ export async function validateCsrf(request: NextRequest): Promise<CsrfValidation
 
   // Validate using Double Submit Cookie pattern
   // In this pattern, the cookie and request token should match
-  if (!constantTimeCompare(cookieToken, requestToken)) {
+  if (!constantTimeCompareEdge(cookieToken, requestToken)) {
     return { valid: false, error: 'Invalid CSRF token' }
   }
 
@@ -301,7 +325,7 @@ export function csrfMiddleware(request: NextRequest): NextResponse | null {
   const headerToken = request.headers.get(CSRF_CONFIG.headerName)
 
   // Validate
-  if (!cookieToken || !headerToken || !constantTimeCompare(cookieToken, headerToken)) {
+  if (!cookieToken || !headerToken || !constantTimeCompareEdge(cookieToken, headerToken)) {
     return NextResponse.json(
       { error: 'CSRF validation failed' },
       { status: 403 }
