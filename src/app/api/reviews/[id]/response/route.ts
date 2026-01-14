@@ -3,7 +3,7 @@ import { auth } from '@/auth'
 import { query } from '@/lib/auth/db'
 import { apiError, apiSuccess, apiUnauthorized, apiBadRequest, apiNotFound, apiForbidden } from '@/lib/api/helpers'
 import { ERROR_MESSAGES, SUCCESS_MESSAGES } from '@/config/error-messages'
-import { TABLE_NAMES } from '@/config/database'
+import { TABLE_NAMES, REVIEW_TARGET_TYPES } from '@/config/database'
 import { logger } from '@/lib/logger'
 import { isAdminRole } from '@/lib/constants'
 
@@ -55,7 +55,7 @@ export async function POST(
     const reviewResult = await query(`
       SELECT r.*, rp.user_id as repairer_user_id
       FROM ${TABLE_NAMES.REVIEWS} r
-      LEFT JOIN ${TABLE_NAMES.REPAIRER_PROFILES} rp ON r.target_type = 'repairer' AND r.target_id = rp.id
+      LEFT JOIN ${TABLE_NAMES.REPAIRER_PROFILES} rp ON r.target_type = '${REVIEW_TARGET_TYPES.REPAIRER}' AND r.target_id = rp.id
       WHERE r.id = $1
     `, [reviewId])
 
@@ -66,7 +66,7 @@ export async function POST(
     const review = reviewResult.rows[0] as ReviewRow
 
     // Check if user is the repairer being reviewed
-    if (review.target_type === 'repairer' && review.repairer_user_id !== session.user.id) {
+    if (review.target_type === REVIEW_TARGET_TYPES.REPAIRER && review.repairer_user_id !== session.user.id) {
       return apiForbidden('Nur der bewertete Reparateur kann auf Bewertungen antworten')
     }
 
@@ -79,7 +79,7 @@ export async function POST(
     const user = userResult.rows[0] as UserRow | undefined
     const isAdmin = isAdminRole(user?.role)
 
-    if (review.target_type !== 'repairer' && !isAdmin) {
+    if (review.target_type !== REVIEW_TARGET_TYPES.REPAIRER && !isAdmin) {
       return apiForbidden('Antworten sind derzeit nur für Reparatur-Bewertungen verfügbar')
     }
 
@@ -147,7 +147,7 @@ export async function PUT(
       SELECT rr.*, r.target_type, rp.user_id as repairer_user_id
       FROM ${TABLE_NAMES.REVIEW_RESPONSES} rr
       JOIN ${TABLE_NAMES.REVIEWS} r ON rr.review_id = r.id
-      LEFT JOIN ${TABLE_NAMES.REPAIRER_PROFILES} rp ON r.target_type = 'repairer' AND r.target_id = rp.id
+      LEFT JOIN ${TABLE_NAMES.REPAIRER_PROFILES} rp ON r.target_type = '${REVIEW_TARGET_TYPES.REPAIRER}' AND r.target_id = rp.id
       WHERE rr.review_id = $1
     `, [reviewId])
 
@@ -166,7 +166,7 @@ export async function PUT(
     const userForEdit = userResult.rows[0] as UserRow | undefined
     const isAdmin = isAdminRole(userForEdit?.role)
     const isOwner = response.responder_id === session.user.id
-    const isRepairer = response.target_type === 'repairer' && response.repairer_user_id === session.user.id
+    const isRepairer = response.target_type === REVIEW_TARGET_TYPES.REPAIRER && response.repairer_user_id === session.user.id
 
     if (!isOwner && !isAdmin && !isRepairer) {
       return apiForbidden('Sie können diese Antwort nicht bearbeiten')
@@ -212,7 +212,7 @@ export async function DELETE(
       SELECT rr.responder_id, r.target_type, rp.user_id as repairer_user_id
       FROM ${TABLE_NAMES.REVIEW_RESPONSES} rr
       JOIN ${TABLE_NAMES.REVIEWS} r ON rr.review_id = r.id
-      LEFT JOIN ${TABLE_NAMES.REPAIRER_PROFILES} rp ON r.target_type = 'repairer' AND r.target_id = rp.id
+      LEFT JOIN ${TABLE_NAMES.REPAIRER_PROFILES} rp ON r.target_type = '${REVIEW_TARGET_TYPES.REPAIRER}' AND r.target_id = rp.id
       WHERE rr.review_id = $1
     `, [reviewId])
 
@@ -231,7 +231,7 @@ export async function DELETE(
     const userForDelete = userResult.rows[0] as UserRow | undefined
     const isAdmin = isAdminRole(userForDelete?.role)
     const isOwner = responseToDelete.responder_id === session.user.id
-    const isRepairer = responseToDelete.target_type === 'repairer' && responseToDelete.repairer_user_id === session.user.id
+    const isRepairer = responseToDelete.target_type === REVIEW_TARGET_TYPES.REPAIRER && responseToDelete.repairer_user_id === session.user.id
 
     if (!isOwner && !isAdmin && !isRepairer) {
       return apiForbidden('Sie können diese Antwort nicht löschen')

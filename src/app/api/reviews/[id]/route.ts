@@ -3,7 +3,7 @@ import { auth } from '@/auth'
 import { query } from '@/lib/auth/db'
 import { apiError, apiSuccess, apiUnauthorized, apiBadRequest, apiNotFound, apiForbidden } from '@/lib/api/helpers'
 import { ERROR_MESSAGES, SUCCESS_MESSAGES } from '@/config/error-messages'
-import { TABLE_NAMES } from '@/config/database'
+import { TABLE_NAMES, REVIEW_TARGET_TYPES } from '@/config/database'
 import { logger } from '@/lib/logger'
 import { isAdminRole } from '@/lib/constants'
 
@@ -75,7 +75,7 @@ export async function GET(
         ru.name as responder_name
       FROM ${TABLE_NAMES.REVIEWS} r
       JOIN ${TABLE_NAMES.USERS} u ON r.reviewer_id = u.id
-      LEFT JOIN ${TABLE_NAMES.REPAIRER_PROFILES} rp ON r.target_type = 'repairer' AND r.target_id = rp.id
+      LEFT JOIN ${TABLE_NAMES.REPAIRER_PROFILES} rp ON r.target_type = '${REVIEW_TARGET_TYPES.REPAIRER}' AND r.target_id = rp.id
       LEFT JOIN ${TABLE_NAMES.REVIEW_RESPONSES} rr ON r.id = rr.review_id AND rr.status = 'published'
       LEFT JOIN ${TABLE_NAMES.USERS} ru ON rr.responder_id = ru.id
       WHERE r.id = $1

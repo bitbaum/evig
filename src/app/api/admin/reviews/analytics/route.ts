@@ -3,7 +3,7 @@ import { auth } from '@/auth'
 import { query } from '@/lib/auth/db'
 import { apiError, apiSuccess, apiUnauthorized, apiBadRequest } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
-import { TABLE_NAMES } from '@/config/database'
+import { TABLE_NAMES, REVIEW_TARGET_TYPES } from '@/config/database'
 import { logger } from '@/lib/logger'
 import { isAdminRole } from '@/lib/constants'
 
@@ -64,7 +64,7 @@ export async function GET(request: NextRequest) {
 
     const { searchParams } = new URL(request.url)
     const period = searchParams.get('period') || '30' // days
-    const targetType = searchParams.get('targetType') || 'repairer'
+    const targetType = searchParams.get('targetType') || REVIEW_TARGET_TYPES.REPAIRER
 
     const days = parseInt(period)
     if (isNaN(days) || days < 1 || days > 365) {
@@ -107,7 +107,7 @@ export async function GET(request: NextRequest) {
         rp.total_reviews,
         COUNT(r.id) as recent_reviews
       FROM ${TABLE_NAMES.REPAIRER_PROFILES} rp
-      LEFT JOIN ${TABLE_NAMES.REVIEWS} r ON r.target_type = 'repairer' AND r.target_id = rp.id
+      LEFT JOIN ${TABLE_NAMES.REVIEWS} r ON r.target_type = '${REVIEW_TARGET_TYPES.REPAIRER}' AND r.target_id = rp.id
         AND r.status = 'published' AND r.created_at >= $1
       WHERE rp.is_verified = true AND rp.total_reviews > 0
       GROUP BY rp.id, rp.business_name, rp.average_rating, rp.total_reviews

@@ -3,6 +3,7 @@ import { query } from '@/lib/auth/db'
 import { apiError, apiSuccess, apiForbidden, apiNotFound } from '@/lib/api/helpers'
 import { withAuth, ValidSession } from '@/lib/api/middleware'
 import { ERROR_MESSAGES } from '@/config/error-messages'
+import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
 
 interface MessageRow {
@@ -37,7 +38,7 @@ export const GET = withAuth<{ conversationId: string }>(async (
 
     // Verify user is participant
     const convResult = await query(
-      'SELECT participant_1, participant_2, context_id, type FROM conversations WHERE id = $1',
+      'SELECT participant_1, participant_2, context_id, type FROM ' + TABLE_NAMES.CONVERSATIONS + ' WHERE id = $1',
       [conversationId]
     )
 
@@ -56,8 +57,8 @@ export const GET = withAuth<{ conversationId: string }>(async (
 
     let messagesQuery = 'SELECT m.id, m.sender_id, m.recipient_id, m.content, m.message_type, ' +
       'm.is_read, m.created_at, u.name as sender_name ' +
-      'FROM messages m ' +
-      'LEFT JOIN users u ON m.sender_id = u.id ' +
+      'FROM ' + TABLE_NAMES.MESSAGES + ' m ' +
+      'LEFT JOIN ' + TABLE_NAMES.USERS + ' u ON m.sender_id = u.id ' +
       'WHERE m.conversation_id = $1'
     
     const params: (string | number)[] = [conversationId]
@@ -76,11 +77,11 @@ export const GET = withAuth<{ conversationId: string }>(async (
     // Mark messages as read
     const unreadField = conv.participant_1 === session.user.id ? 'unread_count_1' : 'unread_count_2'
     await query(
-      'UPDATE conversations SET ' + unreadField + ' = 0 WHERE id = $1',
+      'UPDATE ' + TABLE_NAMES.CONVERSATIONS + ' SET ' + unreadField + ' = 0 WHERE id = $1',
       [conversationId]
     )
     await query(
-      'UPDATE messages SET is_read = true, read_at = CURRENT_TIMESTAMP ' +
+      'UPDATE ' + TABLE_NAMES.MESSAGES + ' SET is_read = true, read_at = CURRENT_TIMESTAMP ' +
       'WHERE conversation_id = $1 AND recipient_id = $2 AND is_read = false',
       [conversationId, session.user.id]
     )

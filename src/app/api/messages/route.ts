@@ -3,6 +3,7 @@ import { query } from '@/lib/auth/db'
 import { apiError, apiSuccess, apiBadRequest } from '@/lib/api/helpers'
 import { withAuth, ValidSession } from '@/lib/api/middleware'
 import { ERROR_MESSAGES } from '@/config/error-messages'
+import { TABLE_NAMES, CONVERSATION_TYPES } from '@/config/database'
 import { logger } from '@/lib/logger'
 
 interface ConversationRow {
@@ -55,9 +56,9 @@ export const GET = withAuth(async (
       'c.last_message_at, c.last_message_preview, c.unread_count_1, c.unread_count_2, ' +
       'CASE WHEN c.participant_1 = $1 THEN u2.name ELSE u1.name END as other_user_name, ' +
       'CASE WHEN c.participant_1 = $1 THEN c.participant_2 ELSE c.participant_1 END as other_user_id ' +
-      'FROM conversations c ' +
-      'LEFT JOIN users u1 ON c.participant_1 = u1.id ' +
-      'LEFT JOIN users u2 ON c.participant_2 = u2.id ' +
+      'FROM ' + TABLE_NAMES.CONVERSATIONS + ' c ' +
+      'LEFT JOIN ' + TABLE_NAMES.USERS + ' u1 ON c.participant_1 = u1.id ' +
+      'LEFT JOIN ' + TABLE_NAMES.USERS + ' u2 ON c.participant_2 = u2.id ' +
       'WHERE ' + whereClause + ' AND c.is_active = true ' +
       'ORDER BY c.last_message_at DESC ' +
       'LIMIT $' + (params.length - 1) + ' OFFSET $' + params.length,
@@ -86,7 +87,7 @@ export const POST = withAuth(async (
 ) => {
   try {
     const body = await request.json()
-    const { recipient_id, content, context_id, context_type = 'appointment' } = body
+    const { recipient_id, content, context_id, context_type = CONVERSATION_TYPES.APPOINTMENT } = body
 
     if (!recipient_id) return apiBadRequest('Empfänger erforderlich')
     if (!content) return apiBadRequest('Nachricht erforderlich')
@@ -101,7 +102,7 @@ export const POST = withAuth(async (
     try {
       // Find or create conversation
       let conversationResult = await query(
-        'SELECT id FROM conversations ' +
+        'SELECT id FROM ' + TABLE_NAMES.CONVERSATIONS + ' ' +
         'WHERE participant_1 = $1 AND participant_2 = $2 AND type = $3 ' +
         (context_id ? 'AND context_id = $4' : 'AND context_id IS NULL'),
         context_id ? [participant_1, participant_2, context_type, context_id] : [participant_1, participant_2, context_type]
@@ -112,7 +113,7 @@ export const POST = withAuth(async (
       if (conversationResult.rows.length === 0) {
         // Create new conversation
         const createResult = await query(
-          'INSERT INTO conversations (participant_1, participant_2, type, context_id) ' +
+          'INSERT INTO ' + TABLE_NAMES.CONVERSATIONS + ' (participant_1, participant_2, type, context_id) ' +
           'VALUES ($1, $2, $3, $4) RETURNING id',
           [participant_1, participant_2, context_type, context_id || null]
         )
@@ -123,7 +124,7 @@ export const POST = withAuth(async (
 
       // Create message
       const messageResult = await query(
-        'INSERT INTO messages (conversation_id, sender_id, recipient_id, content) ' +
+        'INSERT INTO ' + TABLE_NAMES.MESSAGES + ' (conversation_id, sender_id, recipient_id, content) ' +
         'VALUES ($1, $2, $3, $4) RETURNING id, created_at',
         [conversationId, session.user.id, recipient_id, content]
       )
@@ -131,7 +132,7 @@ export const POST = withAuth(async (
       // Update conversation with last message info
       const unreadField = session.user.id === participant_1 ? 'unread_count_2' : 'unread_count_1'
       await query(
-        'UPDATE conversations SET ' +
+        'UPDATE ' + TABLE_NAMES.CONVERSATIONS + ' SET ' +
         'last_message_at = CURRENT_TIMESTAMP, ' +
         'last_message_preview = $1, ' +
         unreadField + ' = ' + unreadField + ' + 1, ' +
@@ -141,7 +142,7 @@ export const POST = withAuth(async (
       )
 
       // Update appointment messages count if context is appointment
-      if (context_id && context_type === 'appointment') {
+      if (context_id && context_type === CONVERSATION_TYPES.APPOINTMENT) {
         await query(
           'UPDATE service_appointments SET ' +
           'messages_count = messages_count + 1, ' +

@@ -97,3 +97,34 @@ export const TABLE_NAMES = {
  * Type for table name values
  */
 export type TableName = typeof TABLE_NAMES[keyof typeof TABLE_NAMES];
+
+/**
+ * Appointment role types for filtering
+ */
+export const APPOINTMENT_ROLES = {
+  CUSTOMER: 'customer',
+  REPAIRER: 'repairer',
+} as const;
+
+export type AppointmentRole = typeof APPOINTMENT_ROLES[keyof typeof APPOINTMENT_ROLES];
+
+/**
+ * Review target types
+ */
+export const REVIEW_TARGET_TYPES = {
+  REPAIRER: 'repairer',
+  SERVICE: 'service',
+  WORKSHOP: 'workshop',
+} as const;
+
+export type ReviewTargetType = typeof REVIEW_TARGET_TYPES[keyof typeof REVIEW_TARGET_TYPES];
+
+/**
+ * Conversation context types
+ */
+export const CONVERSATION_TYPES = {
+  APPOINTMENT: 'appointment',
+  GENERAL: 'general',
+} as const;
+
+export type ConversationType = typeof CONVERSATION_TYPES[keyof typeof CONVERSATION_TYPES];

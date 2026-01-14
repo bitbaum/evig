@@ -3,7 +3,7 @@ import { auth } from '@/auth'
 import { query } from '@/lib/auth/db'
 import { apiError, apiSuccess, apiUnauthorized, apiBadRequest, apiNotFound } from '@/lib/api/helpers'
 import { ERROR_MESSAGES, SUCCESS_MESSAGES } from '@/config/error-messages'
-import { TABLE_NAMES } from '@/config/database'
+import { TABLE_NAMES, REVIEW_TARGET_TYPES } from '@/config/database'
 import { logger } from '@/lib/logger'
 import { APP_URL } from '@/config/urls'
 import { isAdminRole } from '@/lib/constants'
@@ -82,7 +82,7 @@ export async function GET(request: NextRequest) {
       return apiBadRequest('targetType und targetId sind erforderlich')
     }
 
-    if (!['repairer', 'service', 'workshop'].includes(targetType)) {
+    if (!Object.values(REVIEW_TARGET_TYPES).includes(targetType as typeof REVIEW_TARGET_TYPES[keyof typeof REVIEW_TARGET_TYPES])) {
       return apiBadRequest('Ungültiger targetType')
     }
 
@@ -130,7 +130,7 @@ export async function GET(request: NextRequest) {
         rv.vote_type as user_vote
       FROM ${TABLE_NAMES.REVIEWS} r
       JOIN ${TABLE_NAMES.USERS} u ON r.reviewer_id = u.id
-      LEFT JOIN ${TABLE_NAMES.REPAIRER_PROFILES} rp ON r.target_type = 'repairer' AND r.target_id = rp.id
+      LEFT JOIN ${TABLE_NAMES.REPAIRER_PROFILES} rp ON r.target_type = '${REVIEW_TARGET_TYPES.REPAIRER}' AND r.target_id = rp.id
       LEFT JOIN ${TABLE_NAMES.REVIEW_RESPONSES} rr ON r.id = rr.review_id AND rr.status = 'published'
       LEFT JOIN ${TABLE_NAMES.USERS} ru ON rr.responder_id = ru.id
       LEFT JOIN ${TABLE_NAMES.REVIEW_VOTES} rv ON r.id = rv.review_id AND rv.voter_id = $1
@@ -268,7 +268,7 @@ export async function POST(request: NextRequest) {
       return apiBadRequest('targetType, targetId, content und overallRating sind erforderlich')
     }
 
-    if (!['repairer', 'service', 'workshop'].includes(targetType)) {
+    if (!Object.values(REVIEW_TARGET_TYPES).includes(targetType as typeof REVIEW_TARGET_TYPES[keyof typeof REVIEW_TARGET_TYPES])) {
       return apiBadRequest('Ungültiger targetType')
     }
 
@@ -297,7 +297,7 @@ export async function POST(request: NextRequest) {
 
     // Verify target exists
     let targetExists = false
-    if (targetType === 'repairer') {
+    if (targetType === REVIEW_TARGET_TYPES.REPAIRER) {
       const result = await query(`SELECT id FROM ${TABLE_NAMES.REPAIRER_PROFILES} WHERE id = $1 AND is_verified = true`, [targetId])
       targetExists = result.rows.length > 0
     } else if (targetType === 'service') {
@@ -351,7 +351,7 @@ export async function POST(request: NextRequest) {
     const reviewId = createdReview.id
 
     // Send notification to repairer if it's a repairer review
-    if (targetType === 'repairer') {
+    if (targetType === REVIEW_TARGET_TYPES.REPAIRER) {
       try {
         // Get repairer details
         const repairerResult = await query(`

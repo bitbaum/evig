@@ -3,7 +3,7 @@ import { query } from '@/lib/auth/db'
 import { apiError, apiSuccess } from '@/lib/api/helpers'
 import { withAuth, ValidSession } from '@/lib/api/middleware'
 import { ERROR_MESSAGES } from '@/config/error-messages'
-import { TABLE_NAMES } from '@/config/database'
+import { TABLE_NAMES, APPOINTMENT_ROLES } from '@/config/database'
 import { logger } from '@/lib/logger'
 
 interface AppointmentRow {
@@ -42,7 +42,7 @@ export const GET = withAuth(async (
 ) => {
   try {
     const { searchParams } = new URL(request.url)
-    const role = searchParams.get('role') || 'customer'
+    const role = searchParams.get('role') || APPOINTMENT_ROLES.CUSTOMER
     const status = searchParams.get('status')
     const limit = Math.min(parseInt(searchParams.get('limit') || '50'), 100)
     const offset = parseInt(searchParams.get('offset') || '0')
@@ -50,7 +50,7 @@ export const GET = withAuth(async (
     let whereClause: string
     const params: (string | number)[] = [session.user.id]
 
-    if (role === 'repairer') {
+    if (role === APPOINTMENT_ROLES.REPAIRER) {
       whereClause = 'sa.repairer_id = $1'
     } else {
       whereClause = 'sa.user_id = $1'
