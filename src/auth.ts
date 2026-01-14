@@ -11,12 +11,13 @@ import PostgresAdapter from '@auth/pg-adapter'
 import { Pool } from 'pg'
 import type { JWT } from 'next-auth/jwt'
 import type { Session, User } from 'next-auth'
-import { getUserByEmail, createUser, getOrCreateProfile, type DbUser } from '@/lib/auth/db'
+import { getUserByEmail, createUser, getOrCreateProfile, createVerificationCode, type DbUser } from '@/lib/auth/db'
 import { hashPassword, verifyPassword, validatePasswordStrength } from '@/lib/auth/password'
 import { ROLES, determineUserRole } from '@/lib/constants'
 import { getMedusaConfig } from '@/lib/auth/config'
 import { updateUser } from '@/lib/auth/db'
 import { logger } from '@/lib/logger'
+import { sendEmail } from '@/lib/email'
 
 // Create PostgreSQL pool for Auth.js adapter with optimized connection settings
 // Use lazy connection to avoid blocking page loads
@@ -64,6 +65,7 @@ declare module 'next-auth' {
       name?: string | null
       image?: string | null
       role?: string
+      emailVerified?: boolean
     }
   }
 }
@@ -179,23 +181,25 @@ export const authConfig = {
   ],
 
   callbacks: {
-    // Add user id and role into JWT
-    async jwt({ token, user }: { token: JWT & { id?: string; role?: string }, user?: User }) {
+    // Add user id, role, and emailVerified into JWT
+    async jwt({ token, user }: { token: JWT & { id?: string; role?: string; emailVerified?: boolean }, user?: User }) {
       // On first sign in, add user info to token
       if (user) {
         token.id = user.id
         // Use intelligent role determination based on email domain and other factors
         token.role = user.role || determineUserRole(user.email || '')
+        token.emailVerified = !!user.emailVerified
       }
       return token
     },
 
-    // Expose id and role on the session
-    async session({ session, token }: { session: Session, token: JWT & { id?: string; role?: string } }) {
-      // Add user ID and role from JWT token to session
+    // Expose id, role, and emailVerified on the session
+    async session({ session, token }: { session: Session, token: JWT & { id?: string; role?: string; emailVerified?: boolean } }) {
+      // Add user ID, role, and emailVerified from JWT token to session
       if (session.user && token) {
         session.user.id = token.id as string
         session.user.role = token.role as string
+        session.user.emailVerified = token.emailVerified ?? false
       }
       return session
     },
@@ -226,11 +230,11 @@ export const { handlers, auth, signIn, signOut } = NextAuth(authConfig)
 
 export interface RegisterResult {
   success: boolean
-  user?: {
-    id: string
+  data?: {
+    userId: string
     email: string
     name: string | null
-    emailVerified?: boolean
+    emailVerified: boolean
   }
   error?: string
   errors?: string[]
@@ -265,14 +269,14 @@ export async function registerUser(data: {
   // Hash password
   const password_hash = await hashPassword(password)
 
-  // Create user with email already verified (no confirmation needed)
+  // Create user WITHOUT email verification (user must verify via 6-digit code)
   try {
-    // createUser automatically sets emailVerified - no verification required for community app
     const user = await createUser({
       email,
       name,
       password_hash,
       role,
+      // emailVerified: false by default - user must verify
     })
 
     // Create profile
@@ -283,18 +287,23 @@ export async function registerUser(data: {
       logger.error('Failed to create profile', { error: profileError, userId: user.id })
     }
 
-    // No email verification needed - user is ready to log in immediately
-
-    // Optional: create Medusa customer and link ID (only if email is verified later)
-    // We'll handle this after email verification
+    // Generate 6-digit verification code and send email
+    try {
+      const verificationCode = await createVerificationCode(email)
+      await sendEmail(email, 'verificationCode', name || 'Benutzer', verificationCode)
+      logger.info('Verification code sent', { email, userId: user.id })
+    } catch (emailError) {
+      // Log but don't fail registration if email fails
+      logger.error('Failed to send verification email', { error: emailError, userId: user.id })
+    }
 
     return {
       success: true,
-      user: {
-        id: user.id,
+      data: {
+        userId: user.id,
         email: user.email,
         name: user.name,
-        emailVerified: true, // No email verification required for community app
+        emailVerified: false, // User needs to verify via code
       },
     }
   } catch (error) {

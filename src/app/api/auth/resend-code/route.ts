@@ -1,0 +1,79 @@
+/**
+ * Resend Verification Code API
+ * POST /api/auth/resend-code
+ *
+ * Generates a new 6-digit verification code and sends it via email
+ */
+
+import { NextRequest, NextResponse } from 'next/server'
+import { apiError, apiSuccess, apiBadRequest } from '@/lib/api/helpers'
+import { logger } from '@/lib/logger'
+import { getUserByEmail, createVerificationCode } from '@/lib/auth/db'
+import { sendEmail } from '@/lib/email'
+import { checkRateLimit, getClientIp } from '@/lib/auth/rate-limiter'
+
+export async function POST(request: NextRequest) {
+  try {
+    // Rate limiting - prevent abuse
+    const clientIp = getClientIp(request.headers)
+    const rateLimitResult = checkRateLimit(clientIp, 'register') // Use register rate limit
+
+    if (!rateLimitResult.allowed) {
+      logger.warn('Resend code rate limit exceeded', { ip: clientIp })
+      return NextResponse.json(
+        {
+          success: false,
+          error: 'Zu viele Anfragen. Bitte versuchen Sie es später erneut.',
+          retryAfter: rateLimitResult.retryAfter,
+        },
+        {
+          status: 429,
+          headers: {
+            'Retry-After': String(rateLimitResult.retryAfter || 60),
+            'X-RateLimit-Remaining': String(rateLimitResult.remaining),
+            'X-RateLimit-Reset': String(rateLimitResult.resetAt),
+          },
+        }
+      )
+    }
+
+    const body = await request.json()
+    const { email } = body
+
+    if (!email) {
+      return apiBadRequest('E-Mail ist erforderlich')
+    }
+
+    // Check if user exists
+    const user = await getUserByEmail(email)
+    if (!user) {
+      // Don't reveal if user exists - just return success
+      logger.warn('Resend code attempted for non-existent email', { email })
+      return apiSuccess({
+        message: 'Falls ein Konto mit dieser E-Mail existiert, wurde ein neuer Code gesendet.',
+      })
+    }
+
+    // Check if already verified
+    if (user.emailVerified) {
+      return apiBadRequest('Diese E-Mail-Adresse wurde bereits bestätigt.')
+    }
+
+    // Generate new code and send email
+    try {
+      const verificationCode = await createVerificationCode(email)
+      await sendEmail(email, 'verificationCode', user.name || 'Benutzer', verificationCode)
+      logger.info('Verification code resent', { email, userId: user.id })
+    } catch (emailError) {
+      logger.error('Failed to resend verification email', { error: emailError, email })
+      return apiError(emailError, 'E-Mail konnte nicht gesendet werden. Bitte versuchen Sie es später erneut.')
+    }
+
+    return apiSuccess({
+      message: 'Ein neuer Bestätigungscode wurde an Ihre E-Mail-Adresse gesendet.',
+    })
+  } catch (error) {
+    logger.error('Resend code error', { error })
+    return apiError(error, 'Ein unerwarteter Fehler ist aufgetreten')
+  }
+}

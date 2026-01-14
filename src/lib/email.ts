@@ -31,6 +31,60 @@ export async function getTransporter(): Promise<Transporter> {
 
 // Email templates
 export const emailTemplates = {
+  verificationCode: (name: string, code: string) => ({
+    subject: 'Ihr Bestätigungscode - RevampIT',
+    html: `
+      <!DOCTYPE html>
+      <html lang="de">
+      <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Bestätigungscode</title>
+        <style>
+          body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+          .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+          .header { background-color: #22c55e; color: white; padding: 20px; text-align: center; }
+          .content { padding: 30px 20px; background-color: #f9f9f9; }
+          .code { font-size: 32px; font-weight: bold; letter-spacing: 8px; color: #22c55e; background-color: #f0fdf4; padding: 20px; text-align: center; border-radius: 8px; margin: 20px 0; }
+          .footer { padding: 20px; text-align: center; color: #666; font-size: 12px; }
+        </style>
+      </head>
+      <body>
+        <div class="container">
+          <div class="header">
+            <h1>Bestätigungscode</h1>
+          </div>
+          <div class="content">
+            <h2>Hallo ${name || 'Benutzer'},</h2>
+            <p>Vielen Dank für Ihre Registrierung bei RevampIT! Geben Sie den folgenden Code ein, um Ihre E-Mail-Adresse zu bestätigen:</p>
+            <div class="code">${code}</div>
+            <p><strong>Sicherheitshinweis:</strong> Dieser Code ist 15 Minuten gültig. Teilen Sie diesen Code mit niemandem.</p>
+            <p>Wenn Sie diese E-Mail nicht angefordert haben, ignorieren Sie sie bitte.</p>
+          </div>
+          <div class="footer">
+            <p>Diese E-Mail wurde automatisch generiert. Bitte antworten Sie nicht darauf.</p>
+            <p>© 2025 RevampIT - Die Zukunft der IT durch nachhaltige Aufarbeitung</p>
+          </div>
+        </div>
+      </body>
+      </html>
+    `,
+    text: `
+      Hallo ${name || 'Benutzer'},
+
+      Vielen Dank für Ihre Registrierung bei RevampIT!
+
+      Ihr Bestätigungscode lautet: ${code}
+
+      Dieser Code ist 15 Minuten gültig.
+
+      Falls Sie diese E-Mail nicht angefordert haben, ignorieren Sie sie bitte.
+
+      Mit freundlichen Grüssen,
+      Das RevampIT Team
+    `,
+  }),
+
   emailVerification: (name: string, verificationUrl: string) => ({
     subject: 'E-Mail-Adresse bestätigen - RevampIT',
     html: `

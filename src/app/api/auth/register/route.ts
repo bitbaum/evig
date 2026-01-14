@@ -54,8 +54,8 @@ export async function POST(request: NextRequest) {
       }
 
       return apiSuccess({
-        message: 'Konto erfolgreich erstellt',
-        user: result.user,
+        message: 'Konto erfolgreich erstellt. Bitte bestätigen Sie Ihre E-Mail-Adresse.',
+        data: result.data,
       })
     } catch (dbError) {
       // Handle database connection errors gracefully

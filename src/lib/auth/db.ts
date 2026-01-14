@@ -192,6 +192,7 @@ export async function getUserById(id: string): Promise<DbUser | null> {
 
 /**
  * Create a new user
+ * @param data.emailVerified - If true, sets email as verified. If false/undefined, email remains unverified.
  */
 export async function createUser(data: {
   email: string
@@ -202,6 +203,7 @@ export async function createUser(data: {
   status?: string
   account_type?: string
   medusa_customer_id?: string
+  emailVerified?: boolean
 }): Promise<DbUser> {
   const userColumns = await getUserColumns()
 
@@ -232,13 +234,15 @@ export async function createUser(data: {
     data.role || 'user'
   ]
 
-  // Set email as verified by default (no verification step required)
-  if (userColumns.has('emailVerified')) {
-    columns.push('"emailVerified"')
-    values.push(new Date())
-  } else if (userColumns.has('email_verified')) {
-    columns.push('email_verified')
-    values.push(new Date())
+  // Only set emailVerified if explicitly requested (for OAuth or admin-created accounts)
+  if (data.emailVerified) {
+    if (userColumns.has('emailVerified')) {
+      columns.push('"emailVerified"')
+      values.push(new Date())
+    } else if (userColumns.has('email_verified')) {
+      columns.push('email_verified')
+      values.push(new Date())
+    }
   }
 
   if (userColumns.has('status')) {
@@ -675,6 +679,74 @@ export async function getVerificationToken(email: string): Promise<DbVerificatio
     [email]
   )
   return result.rows[0] || null
+}
+
+/**
+ * Create a 6-digit verification code for email verification
+ * @param email - User's email address
+ * @param expiresInMinutes - Code expiration time in minutes (default: 15)
+ * @returns The generated 6-digit code
+ */
+export async function createVerificationCode(email: string, expiresInMinutes = 15): Promise<string> {
+  // Generate a 6-digit code
+  const code = Math.floor(100000 + Math.random() * 900000).toString()
+
+  // Set expiration
+  const expires = new Date(Date.now() + expiresInMinutes * 60 * 1000)
+
+  // Delete any existing codes for this email
+  await query(
+    `DELETE FROM ${TABLE_NAMES.VERIFICATION_TOKENS} WHERE identifier = $1`,
+    [email.toLowerCase()]
+  )
+
+  // Insert new code
+  await query(
+    `INSERT INTO ${TABLE_NAMES.VERIFICATION_TOKENS} (identifier, token, expires)
+     VALUES ($1, $2, $3)`,
+    [email.toLowerCase(), code, expires]
+  )
+
+  return code
+}
+
+/**
+ * Verify a 6-digit email verification code
+ * @param email - User's email address
+ * @param code - The 6-digit verification code
+ * @returns Success status and email if verified
+ */
+export async function verifyEmailCode(email: string, code: string): Promise<{ success: boolean, error?: string }> {
+  try {
+    const result = await query<DbVerificationToken>(
+      `SELECT * FROM ${TABLE_NAMES.VERIFICATION_TOKENS} WHERE identifier = $1 AND token = $2 AND expires > NOW()`,
+      [email.toLowerCase(), code]
+    )
+
+    if (result.rows.length === 0) {
+      return { success: false, error: 'Ungültiger oder abgelaufener Code' }
+    }
+
+    // Update user email verification status
+    const userColumns = await getUserColumns()
+    const emailVerifiedColumn = userColumns.has('emailVerified') ? '"emailVerified"' : 'email_verified'
+
+    await query(
+      `UPDATE ${TABLE_NAMES.USERS} SET ${emailVerifiedColumn} = NOW() WHERE LOWER(email) = $1`,
+      [email.toLowerCase()]
+    )
+
+    // Delete the used code
+    await query(
+      `DELETE FROM ${TABLE_NAMES.VERIFICATION_TOKENS} WHERE identifier = $1`,
+      [email.toLowerCase()]
+    )
+
+    return { success: true }
+  } catch (error) {
+    logger.error('Email code verification error', { error })
+    return { success: false, error: 'Verifizierung fehlgeschlagen' }
+  }
 }
 
 // ============================================================================

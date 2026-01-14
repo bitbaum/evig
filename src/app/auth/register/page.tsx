@@ -1,6 +1,6 @@
 'use client'
 
-import { RegisterForm } from '@/components/auth/RegisterForm'
+import { RegistrationWizard } from '@/components/auth/RegistrationWizard'
 import Link from 'next/link'
 import { useEffect } from 'react'
 
@@ -15,7 +15,7 @@ export default function RegisterPage() {
       <div className="max-w-7xl mx-auto">
         {/* Back link */}
         <div className="mb-8">
-          <Link 
+          <Link
             href="/"
             className="inline-flex items-center text-green-600 hover:text-green-700 dark:text-green-400 transition-colors"
           >
@@ -40,8 +40,8 @@ export default function RegisterPage() {
           </Link>
         </div>
 
-        {/* Register Form */}
-        <RegisterForm />
+        {/* Registration Wizard */}
+        <RegistrationWizard />
       </div>
     </main>
   )

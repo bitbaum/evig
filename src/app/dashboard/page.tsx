@@ -6,6 +6,8 @@ import { ROLES } from '@/lib/constants'
 import { getCurrentUserRole } from '@/middleware/admin'
 import { getTextColor } from '@/lib/design-system'
 import { cn } from '@/lib/utils'
+import { EmailVerificationBanner } from '@/components/dashboard/EmailVerificationBanner'
+import { OnboardingChecklist } from '@/components/dashboard/OnboardingChecklist'
 
 export const metadata: Metadata = {
   title: 'Dashboard | RevampIT',
@@ -24,6 +26,18 @@ export default async function DashboardPage() {
   return (
     <main className="min-h-screen bg-neutral-50 dark:bg-neutral-900">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Email Verification Banner */}
+        {!session.user.emailVerified && session.user.email && (
+          <EmailVerificationBanner email={session.user.email} className="mb-6" />
+        )}
+
+        {/* Onboarding Checklist */}
+        <OnboardingChecklist
+          role={userRole || ROLES.CUSTOMER}
+          emailVerified={session.user.emailVerified ?? false}
+          className="mb-6"
+        />
+
         <div className="mb-8">
           <h1 className={cn('text-3xl font-bold', getTextColor('neutral', 'primary'), 'dark:text-white')}>
             Willkommen zurück, {session.user.name || session.user.email}!
