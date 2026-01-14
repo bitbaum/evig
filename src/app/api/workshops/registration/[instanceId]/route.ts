@@ -5,9 +5,19 @@ import { apiError, apiSuccess } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES } from '@/config/database'
 
+interface RegistrationRow {
+  id: string
+  status: string
+  created_at: string
+  start_date: string
+  location: string
+  workshop_title: string
+  workshop_slug: string
+}
+
 export async function GET(
   request: NextRequest,
-  { params }: { params: { instanceId: string } }
+  { params }: { params: Promise<{ instanceId: string }> }
 ) {
   try {
     const session = await auth()
@@ -18,7 +28,7 @@ export async function GET(
       })
     }
 
-    const instanceId = params.instanceId
+    const { instanceId } = await params
 
     // Check if user is registered for this workshop instance
     const registration = await query(`
@@ -35,7 +45,7 @@ export async function GET(
     `, [session.user.id, instanceId])
 
     if (registration.rows.length > 0) {
-      const reg = registration.rows[0]
+      const reg = registration.rows[0] as RegistrationRow
       return apiSuccess({
         registered: true,
         registration: {

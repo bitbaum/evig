@@ -5,6 +5,11 @@ import { apiError, apiSuccess, apiUnauthorized, apiBadRequest } from '@/lib/api/
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES } from '@/config/database'
 
+interface OrderRow {
+  id: string
+  created_at: string
+}
+
 export async function POST(request: NextRequest) {
   try {
     const session = await auth()
@@ -46,7 +51,8 @@ export async function POST(request: NextRequest) {
       shippingAddress ? JSON.stringify(shippingAddress) : null
     ])
 
-    const orderId = orderResult.rows[0].id
+    const orderData = orderResult.rows[0] as OrderRow
+    const orderId = orderData.id
 
     // Create order items (this would come from the cart)
     await query(`

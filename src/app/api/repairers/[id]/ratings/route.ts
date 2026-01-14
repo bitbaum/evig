@@ -5,6 +5,38 @@ import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
 
+interface ProfileRow {
+  id: string
+  business_name: string
+  average_rating: string
+  total_reviews: string
+  rating_distribution: Record<string, number> | null
+  review_summary: {
+    communication?: string
+    professionalism?: string
+    quality?: string
+    timeliness?: string
+    value?: string
+  } | null
+}
+
+interface RatingBreakdownRow {
+  overall_rating: number
+  count: string
+}
+
+interface ReviewRow {
+  id: string
+  overall_rating: number
+  title: string
+  content: string
+  created_at: string
+  is_verified_purchase: boolean
+  reviewer_name: string
+  response_content: string | null
+  response_created_at: string | null
+}
+
 export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
@@ -30,7 +62,7 @@ export async function GET(
       return apiNotFound('Reparateur nicht gefunden')
     }
 
-    const profile = profileResult.rows[0]
+    const profile = profileResult.rows[0] as ProfileRow
 
     // Get recent reviews (last 10)
     const reviewsResult = await query(`
@@ -67,7 +99,7 @@ export async function GET(
       ORDER BY overall_rating DESC
     `, [repairerId])
 
-    const breakdownMap = ratingBreakdown.rows.reduce((acc: Record<number, number>, row) => {
+    const breakdownMap = (ratingBreakdown.rows as RatingBreakdownRow[]).reduce((acc: Record<number, number>, row) => {
       acc[row.overall_rating] = parseInt(row.count)
       return acc
     }, {} as Record<number, number>)
@@ -86,11 +118,11 @@ export async function GET(
         1: breakdownMap[1] || 0
       },
       detailedRatings: profile.review_summary ? {
-        communication: parseFloat(profile.review_summary.communication) || 0,
-        professionalism: parseFloat(profile.review_summary.professionalism) || 0,
-        quality: parseFloat(profile.review_summary.quality) || 0,
-        timeliness: parseFloat(profile.review_summary.timeliness) || 0,
-        value: parseFloat(profile.review_summary.value) || 0
+        communication: parseFloat(profile.review_summary.communication || '0') || 0,
+        professionalism: parseFloat(profile.review_summary.professionalism || '0') || 0,
+        quality: parseFloat(profile.review_summary.quality || '0') || 0,
+        timeliness: parseFloat(profile.review_summary.timeliness || '0') || 0,
+        value: parseFloat(profile.review_summary.value || '0') || 0
       } : {
         communication: 0,
         professionalism: 0,
@@ -98,7 +130,7 @@ export async function GET(
         timeliness: 0,
         value: 0
       },
-      recentReviews: reviewsResult.rows.map(review => ({
+      recentReviews: (reviewsResult.rows as ReviewRow[]).map(review => ({
         id: review.id,
         rating: review.overall_rating,
         title: review.title,

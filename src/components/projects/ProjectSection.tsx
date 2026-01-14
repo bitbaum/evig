@@ -15,10 +15,10 @@ interface ProjectSectionProps {
 }
 
 export function ProjectSection({ section }: ProjectSectionProps) {
-  const bgVariant = (section.backgroundColor || 'white') as 'white' | 'neutral' | 'primary'
+  const bgVariant = (section.backgroundColor || 'white') as 'white' | 'neutral' | 'primary' | 'gray'
   const bgClass = cn(
     bgVariant === 'white' ? getBackgroundColor('white') :
-    bgVariant === 'gray' ? getBackgroundColor('neutral') :
+    (bgVariant === 'gray' || bgVariant === 'neutral') ? getBackgroundColor('neutral') :
     getBackgroundColor('primary')
   )
 

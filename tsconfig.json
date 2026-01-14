@@ -42,6 +42,7 @@
     "cms-api",
     "tina",
     "medusa-backend",
-    "scripts"
+    "scripts",
+    "**/*.backup.*"
   ]
 }

@@ -24,7 +24,9 @@ interface WorkshopLocation {
   name: string
   address?: string
   city?: string
+  canton?: string
   capacity?: number
+  max_capacity?: number
 }
 
 export default function WorkshopProposalPage() {

@@ -7,6 +7,64 @@ import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
 import { APP_URL } from '@/config/urls'
 import { isAdminRole } from '@/lib/constants'
+import { sendEmail } from '@/lib/email'
+
+interface UserRow {
+  role: string
+}
+
+interface ReviewRow {
+  id: string
+  reviewer_id: string
+  reviewer_name: string
+  reviewer_email: string
+  target_type: string
+  target_id: string
+  target_name: string
+  booking_id: string | null
+  overall_rating: number
+  communication_rating: number | null
+  professionalism_rating: number | null
+  quality_rating: number | null
+  timeliness_rating: number | null
+  value_rating: number | null
+  title: string | null
+  content: string
+  is_verified_purchase: boolean
+  helpful_votes: number
+  total_votes: number
+  user_has_voted: boolean
+  user_vote: string | null
+  status: string
+  response_id: string | null
+  response_content: string | null
+  response_created_at: string | null
+  responder_name: string | null
+  created_at: string
+  updated_at: string
+}
+
+interface AttachmentRow {
+  id: string
+  original_filename: string
+  file_path: string
+  mime_type: string
+  attachment_type: string
+}
+
+interface CountRow {
+  total: string
+}
+
+interface IdRow {
+  id: string
+}
+
+interface RepairerRow {
+  business_name: string
+  email: string
+  repairer_name: string | null
+}
 
 export async function GET(request: NextRequest) {
   try {
@@ -45,7 +103,8 @@ export async function GET(request: NextRequest) {
         [session.user.id]
       )
 
-      if (!isAdminRole(userResult.rows[0]?.role)) {
+      const user = userResult.rows[0] as UserRow | undefined
+      if (!isAdminRole(user?.role)) {
         return apiUnauthorized('Nur Administratoren können nicht-veröffentlichte Bewertungen einsehen')
       }
       isAdmin = true
@@ -95,7 +154,7 @@ export async function GET(request: NextRequest) {
 
     // Get attachments for each review
     const reviewsWithAttachments = await Promise.all(
-      reviewsResult.rows.map(async (review) => {
+      (reviewsResult.rows as ReviewRow[]).map(async (review) => {
         const attachmentsResult = await query(
           `SELECT * FROM ${TABLE_NAMES.REVIEW_ATTACHMENTS} WHERE review_id = $1 ORDER BY sort_order, created_at`,
           [review.id]
@@ -103,7 +162,7 @@ export async function GET(request: NextRequest) {
 
         return {
           ...review,
-          attachments: attachmentsResult.rows.map(att => ({
+          attachments: (attachmentsResult.rows as AttachmentRow[]).map(att => ({
             id: att.id,
             filename: att.original_filename,
             filePath: att.file_path,
@@ -114,7 +173,7 @@ export async function GET(request: NextRequest) {
       })
     )
 
-    const reviews = reviewsWithAttachments.map(review => ({
+    const reviews = reviewsWithAttachments.map((review: ReviewRow & { attachments: { id: string; filename: string; filePath: string; mimeType: string; attachmentType: string }[] }) => ({
       id: review.id,
       reviewerId: review.reviewer_id,
       reviewerName: review.reviewer_name,
@@ -157,13 +216,14 @@ export async function GET(request: NextRequest) {
       count: reviews.length
     })
 
+    const countData = countResult.rows[0] as CountRow
     return apiSuccess({
       reviews,
-      total: parseInt(countResult.rows[0].total),
+      total: parseInt(countData.total),
       pagination: {
         limit,
         offset,
-        hasMore: offset + limit < parseInt(countResult.rows[0].total)
+        hasMore: offset + limit < parseInt(countData.total)
       },
       filters: {
         targetType,
@@ -287,7 +347,8 @@ export async function POST(request: NextRequest) {
       verifiedPurchase
     ])
 
-    const reviewId = reviewResult.rows[0].id
+    const createdReview = reviewResult.rows[0] as IdRow
+    const reviewId = createdReview.id
 
     // Send notification to repairer if it's a repairer review
     if (targetType === 'repairer') {
@@ -301,7 +362,7 @@ export async function POST(request: NextRequest) {
         `, [targetId])
 
         if (repairerResult.rows.length > 0) {
-          const repairer = repairerResult.rows[0]
+          const repairer = repairerResult.rows[0] as RepairerRow
           const reviewUrl = `${APP_URL}/dashboard/repairer/reviews`
 
           const notificationResult = await sendEmail(
@@ -336,7 +397,7 @@ export async function POST(request: NextRequest) {
     })
 
     return apiSuccess({
-      message: SUCCESS_MESSAGES.REVIEW_CREATED,
+      message: 'Bewertung erfolgreich erstellt',
       reviewId
     }, 201)
 

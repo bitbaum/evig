@@ -16,6 +16,18 @@ import {
 import { withSecurePayment } from '@/lib/middleware/pci-compliance'
 import { requireStripeClient } from '@/lib/payments/stripe-client'
 
+interface ProviderRow {
+  id: string
+  fee_percentage: number
+  fee_fixed_cents: number
+  supported_currencies: string[]
+  config: Record<string, unknown>
+}
+
+interface IdRow {
+  id: string
+}
+
 export const POST = withSecurePayment(async (request: NextRequest) => {
   // Initialize Stripe lazily inside handler to avoid build-time errors
   const stripe = requireStripeClient()
@@ -58,7 +70,7 @@ export const POST = withSecurePayment(async (request: NextRequest) => {
       return apiError(null, `Payment provider unterstützt ${currency} nicht`, 400)
     }
 
-    const provider = providerResult.rows[0]
+    const provider = providerResult.rows[0] as ProviderRow
 
     // Calculate VAT and pricing
     const vatRate = getVATRate(currency as SupportedCurrency, businessType)
@@ -156,7 +168,7 @@ export const POST = withSecurePayment(async (request: NextRequest) => {
       JSON.stringify(paymentIntent)
     ])
 
-    const transactionId = transactionResult.rows[0].id
+    const transactionId = (transactionResult.rows[0] as IdRow).id
 
     // Create escrow account if enabled
     if (escrowEnabled) {

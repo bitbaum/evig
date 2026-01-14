@@ -111,6 +111,15 @@ export interface InvoiceResult {
   invoiceNumber: string
 }
 
+interface TransactionRow {
+  id: string
+}
+
+interface InvoiceRow {
+  id: string
+  invoice_number: string
+}
+
 // ============================================================================
 // Payment Provider Operations
 // ============================================================================
@@ -251,7 +260,8 @@ export async function createTransaction(
     params.metadata ? JSON.stringify(params.metadata) : null
   ])
 
-  const transactionId = result.rows[0].id
+  const row = result.rows[0] as TransactionRow
+  const transactionId = row.id
 
   logger.info('Payment transaction created', {
     transactionId,
@@ -348,8 +358,9 @@ export async function createInvoice(params: InvoiceParams): Promise<InvoiceResul
     params.paymentTerms
   ])
 
-  const invoiceId = result.rows[0].id
-  const invoiceNumber = result.rows[0].invoice_number
+  const row = result.rows[0] as InvoiceRow
+  const invoiceId = row.id
+  const invoiceNumber = row.invoice_number
 
   logger.info('Invoice created', {
     invoiceId,

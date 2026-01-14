@@ -12,6 +12,27 @@ import {
   DEFAULT_AUTO_RELEASE_DAYS
 } from '@/lib/payments/payment-flow'
 
+interface AppointmentRow {
+  id: string
+  user_id: string
+  status: string
+  price_charged_cents: number
+  service_price_cents: number
+  service_name: string
+  service_slug: string
+  requires_approval: boolean
+  customer_name: string
+  customer_email: string
+}
+
+interface UserRow {
+  role: string
+}
+
+interface PaidRow {
+  total_paid: number
+}
+
 // POST /api/appointments/[id]/pay - Pay for existing appointment
 export async function POST(request: NextRequest) {
   try {
@@ -48,7 +69,7 @@ export async function POST(request: NextRequest) {
       return apiNotFound('Appointment not found')
     }
 
-    const appointment = appointmentResult.rows[0]
+    const appointment = appointmentResult.rows[0] as AppointmentRow
 
     // Check ownership
     if (appointment.user_id !== session.user.id) {
@@ -56,7 +77,8 @@ export async function POST(request: NextRequest) {
         `SELECT role FROM ${TABLE_NAMES.USERS} WHERE id = $1`,
         [session.user.id]
       )
-      if (!isAdminRole(userRoleResult.rows[0]?.role)) {
+      const user = userRoleResult.rows[0] as UserRow | undefined
+      if (!isAdminRole(user?.role)) {
         return apiUnauthorized('You can only pay for your own appointments')
       }
     }
@@ -80,7 +102,8 @@ export async function POST(request: NextRequest) {
         WHERE service_appointment_id = $1 AND status = 'succeeded' AND type = 'payment'
       `, [appointmentId])
 
-      const totalPaid = paidResult.rows[0].total_paid
+      const paid = paidResult.rows[0] as PaidRow
+      const totalPaid = paid.total_paid
       const remaining = paymentAmountCents - totalPaid
 
       if (remaining <= 0) {
@@ -99,7 +122,7 @@ export async function POST(request: NextRequest) {
     // Initialize Stripe
     const stripe = getStripeClient()
     if (!stripe) {
-      return apiError('Stripe is not configured', 500)
+      return apiError(new Error('Stripe not configured'), 'Stripe is not configured')
     }
 
     // Capitalize first letter of payment type for description

@@ -38,13 +38,21 @@ interface WorkshopInstance {
   current_participants: number
 }
 
+interface WorkshopInstanceRow {
+  id: string
+  start_date: string
+  location: string
+  status: string
+  current_participants: string  // COUNT returns string
+}
+
 async function getWorkshop(slug: string): Promise<Workshop | null> {
   try {
     const result = await query(
       'SELECT * FROM workshops WHERE slug = $1 AND is_active = true',
       [slug]
     )
-    return result.rows[0] || null
+    return (result.rows[0] as Workshop) || null
   } catch (error) {
     logger.error('Error fetching workshop', { error })
     return null
@@ -64,8 +72,11 @@ async function getWorkshopInstances(workshopId: string): Promise<WorkshopInstanc
       ORDER BY wi.start_date ASC
     `, [workshopId])
 
-    return result.rows.map(instance => ({
-      ...instance,
+    return (result.rows as WorkshopInstanceRow[]).map((instance): WorkshopInstance => ({
+      id: instance.id,
+      start_date: instance.start_date,
+      location: instance.location,
+      status: instance.status,
       current_participants: parseInt(instance.current_participants) || 0
     }))
   } catch (error) {

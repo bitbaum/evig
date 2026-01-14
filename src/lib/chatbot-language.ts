@@ -95,6 +95,10 @@ export function getWelcomeMessage(page: string, language: Language): string {
   return messages[page] || messages.default
 }
 
+// Type-safe overloads for getMessage
+export function getMessage(key: 'welcome', language: Language): { default: string; [key: string]: string }
+export function getMessage(key: 'placeholder' | 'typing' | 'error' | 'fallback' | 'status', language: Language): string
+export function getMessage(key: 'buttons', language: Language): { minimize: string; maximize: string; close: string; send: string }
 export function getMessage(key: keyof ChatbotMessages, language: Language): ChatbotMessages[keyof ChatbotMessages] {
   return chatbotMessages[language][key]
 }

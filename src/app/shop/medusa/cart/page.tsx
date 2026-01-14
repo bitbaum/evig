@@ -30,12 +30,12 @@ export default function CartPage() {
     removeLineItem.mutate({ cartId, lineId });
   };
 
-  const total = cart?.items?.reduce((sum: number, item: MedusaCartItem) => {
+  const total = cart?.items?.reduce((sum: number, item) => {
     const price = item.unit_price || 0;
     return sum + price * item.quantity;
-  }, 0);
+  }, 0) ?? 0;
 
-  const formattedTotal = total
+  const formattedTotal = total > 0
     ? new Intl.NumberFormat("de-CH", {
         style: "currency",
         currency: "CHF",
@@ -105,7 +105,7 @@ export default function CartPage() {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
             {/* Cart Items */}
             <div className="lg:col-span-2 space-y-4">
-              {cart.items.map((item: MedusaCartItem) => {
+              {cart.items.map((item) => {
                 const price = item.unit_price || 0;
                 const formattedPrice = new Intl.NumberFormat("de-CH", {
                   style: "currency",

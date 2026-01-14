@@ -7,6 +7,50 @@ import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
 import { isAdminRole } from '@/lib/constants'
 
+interface UserRow {
+  role: string
+}
+
+interface CountRow {
+  total: string
+}
+
+interface ApplicationRow {
+  id: string
+  user_id: string
+  applicant_name: string
+  applicant_email: string
+  user_created_at: string
+  business_name: string
+  business_type: string
+  description: string
+  years_experience: number
+  phone: string
+  website: string
+  address: string
+  city: string
+  postal_code: string
+  service_radius_km: number
+  remote_services: boolean
+  hourly_rate_cents: number
+  emergency_fee_cents: number
+  home_visit_fee_cents: number
+  services_offered: string[]
+  specializations: string[]
+  certifications: unknown
+  insurance_info: unknown
+  portfolio_images: string[]
+  verification_documents: unknown
+  terms_accepted: boolean
+  status: string
+  document_verification_status: string
+  admin_notes: string
+  reviewed_by: string
+  reviewed_at: string
+  created_at: string
+  updated_at: string
+}
+
 export async function GET(request: NextRequest) {
   try {
     const session = await auth()
@@ -20,7 +64,8 @@ export async function GET(request: NextRequest) {
       [session.user.id]
     )
 
-    if (!userResult.rows[0] || !isAdminRole(userResult.rows[0].role)) {
+    const user = userResult.rows[0] as UserRow | undefined
+    if (!user || !isAdminRole(user.role)) {
       return apiUnauthorized('Nur Administratoren können diese Funktion verwenden')
     }
 
@@ -62,7 +107,7 @@ export async function GET(request: NextRequest) {
       [status]
     )
 
-    const applications = applicationsResult.rows.map(app => ({
+    const applications = (applicationsResult.rows as ApplicationRow[]).map(app => ({
       id: app.id,
       userId: app.user_id,
       applicantName: app.applicant_name,
@@ -104,14 +149,15 @@ export async function GET(request: NextRequest) {
       count: applications.length
     })
 
+    const count = countResult.rows[0] as CountRow
     return apiSuccess({
       applications,
-      total: parseInt(countResult.rows[0].total),
+      total: parseInt(count.total),
       status,
       pagination: {
         limit,
         offset,
-        hasMore: offset + limit < parseInt(countResult.rows[0].total)
+        hasMore: offset + limit < parseInt(count.total)
       }
     })
 

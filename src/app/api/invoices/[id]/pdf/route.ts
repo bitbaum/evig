@@ -22,6 +22,10 @@ interface CustomerAddress {
   country?: string
 }
 
+interface UserRow {
+  role: string
+}
+
 interface InvoiceData {
   id: string
   invoice_number: string
@@ -59,7 +63,8 @@ export async function GET(
 
     // Check if user is admin
     const userRoleResult = await query(`SELECT role FROM ${TABLE_NAMES.USERS} WHERE id = $1`, [session.user.id])
-    const isAdmin = isAdminRole(userRoleResult.rows[0]?.role)
+    const user = userRoleResult.rows[0] as UserRow | undefined
+    const isAdmin = isAdminRole(user?.role)
 
     // Get invoice details
     const invoiceResult = await query(`
@@ -86,7 +91,7 @@ export async function GET(
       return apiNotFound('Invoice not found')
     }
 
-    const invoice = invoiceResult.rows[0]
+    const invoice = invoiceResult.rows[0] as InvoiceData
 
     // Check permissions
     if (invoice.user_id !== session.user.id && !isAdmin) {
@@ -133,7 +138,8 @@ export async function POST(
 
     // Check if user is admin
     const userRoleResult = await query(`SELECT role FROM ${TABLE_NAMES.USERS} WHERE id = $1`, [session.user.id])
-    const isAdmin = isAdminRole(userRoleResult.rows[0]?.role)
+    const user = userRoleResult.rows[0] as UserRow | undefined
+    const isAdmin = isAdminRole(user?.role)
 
     // Get invoice details
     const invoiceResult = await query(`
@@ -154,7 +160,7 @@ export async function POST(
       return apiNotFound('Invoice not found')
     }
 
-    const invoice = invoiceResult.rows[0]
+    const invoice = invoiceResult.rows[0] as InvoiceData
 
     // Check permissions
     if (invoice.user_id !== session.user.id && !isAdmin) {
@@ -215,7 +221,7 @@ async function generateInvoicePDF(invoice: InvoiceData): Promise<Buffer> {
     })
 
     await browser.close()
-    return pdfBuffer
+    return Buffer.from(pdfBuffer)
 
   } catch (error) {
     logger.warn('Puppeteer PDF generation failed, using fallback', { error })
@@ -345,7 +351,7 @@ function generateInvoiceHTML(invoice: InvoiceData): string {
         <p>
           ${invoice.customer_name}<br>
           ${invoice.first_name || ''} ${invoice.last_name || ''}<br>
-          ${invoice.email}<br>
+          ${invoice.customer_email}<br>
           ${invoice.phone ? `${invoice.phone}<br>` : ''}
           ${invoice.customer_address?.street ? `${invoice.customer_address.street}<br>` : ''}
           ${invoice.customer_address?.postal_code ? `${invoice.customer_address.postal_code} ` : ''}${invoice.customer_address?.city || ''}

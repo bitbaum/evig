@@ -3,13 +3,13 @@
  * POST /api/auth/reset-password
  */
 
-import { Request } from 'next/server'
+import { NextRequest } from 'next/server'
 import { verifyPasswordResetToken, updateUserPassword } from '@/lib/auth/db'
 import { hashPassword, validatePasswordStrength } from '@/lib/auth/password'
 import { apiError, apiSuccess, apiBadRequest } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
     const { token, password } = body
@@ -23,7 +23,7 @@ export async function POST(request: Request) {
     if (!passwordCheck.isValid) {
       return apiBadRequest(
         'Das Passwort erfüllt nicht die Anforderungen',
-        passwordCheck.errors
+        { password: passwordCheck.errors }
       )
     }
 

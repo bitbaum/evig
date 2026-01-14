@@ -5,6 +5,30 @@ import { apiError, apiSuccess, apiUnauthorized, apiBadRequest } from '@/lib/api/
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES } from '@/config/database'
 
+interface ConversationRow {
+  id: string
+  participant_1: string
+  participant_2: string
+  type: string
+  context_id: string | null
+  title: string
+  last_message_preview: string
+  other_participant: {
+    id: string
+    name: string
+    email: string
+    role: string
+  }
+  unread_count: number
+  last_message_at: Date
+  created_at: Date
+  updated_at: Date
+}
+
+interface IdRow {
+  id: string
+}
+
 export async function GET(request: NextRequest) {
   try {
     const session = await auth()
@@ -65,7 +89,7 @@ export async function GET(request: NextRequest) {
     `, [...params, limit, offset])
 
     return apiSuccess({
-      conversations: conversations.rows.map(conv => ({
+      conversations: (conversations.rows as ConversationRow[]).map((conv: ConversationRow) => ({
         ...conv,
         last_message_at: conv.last_message_at?.toISOString(),
         created_at: conv.created_at?.toISOString(),
@@ -107,7 +131,7 @@ export async function POST(request: NextRequest) {
 
     if (existingConv.rows.length > 0) {
       return apiSuccess({
-        conversation: { id: existingConv.rows[0].id },
+        conversation: { id: (existingConv.rows[0] as IdRow).id },
         message: 'Unterhaltung existiert bereits'
       })
     }
@@ -129,7 +153,7 @@ export async function POST(request: NextRequest) {
       initialMessage ? initialMessage.substring(0, 100) : 'Neue Unterhaltung'
     ])
 
-    const conversationId = conversationResult.rows[0].id
+    const conversationId = (conversationResult.rows[0] as IdRow).id
 
     // Create initial message if provided
     if (initialMessage) {

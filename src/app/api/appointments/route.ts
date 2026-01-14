@@ -1,10 +1,36 @@
 import { NextRequest } from 'next/server'
 import { query } from '@/lib/auth/db'
 import { apiError, apiSuccess, apiBadRequest, apiNotFound } from '@/lib/api/helpers'
-import { withAuth } from '@/lib/api/middleware'
+import { withAuth, ValidSession } from '@/lib/api/middleware'
 import { TABLE_NAMES } from '@/config/database'
 
-export const POST = withAuth(async (request, session) => {
+interface ServiceRow {
+  id: string
+  name: string
+  requires_approval: boolean
+}
+
+interface AppointmentIdRow {
+  id: string
+  created_at: string
+}
+
+interface AppointmentRow {
+  id: string
+  user_id: string
+  status: string
+  description: string
+  service_name: string
+  service_slug: string
+  duration_minutes: number
+  price_cents: number
+  created_at: Date
+  updated_at: Date
+  preferred_date: Date | null
+  confirmed_date: Date | null
+}
+
+export const POST = withAuth(async (request: NextRequest, session: ValidSession) => {
   try {
     const { serviceSlug, description, urgency = 'normal' } = await request.json()
 
@@ -22,7 +48,7 @@ export const POST = withAuth(async (request, session) => {
       return apiNotFound('Service')
     }
 
-    const service = services.rows[0]
+    const service = services.rows[0] as ServiceRow
 
     // Create the appointment
     const appointmentResult = await query(
@@ -32,11 +58,12 @@ export const POST = withAuth(async (request, session) => {
       [session.user.id, service.id, description || null, urgency]
     )
 
+    const aptRow = appointmentResult.rows[0] as AppointmentIdRow
     return apiSuccess({
       message: service.requires_approval
         ? 'Terminanfrage eingereicht. Wir kontaktieren Sie bald für die Terminbestätigung.'
         : 'Termin erfolgreich gebucht!',
-      appointmentId: appointmentResult.rows[0].id,
+      appointmentId: aptRow.id,
       serviceName: service.name,
       requiresApproval: service.requires_approval
     })
@@ -46,7 +73,7 @@ export const POST = withAuth(async (request, session) => {
   }
 })
 
-export const GET = withAuth(async (request, session) => {
+export const GET = withAuth(async (request: NextRequest, session: ValidSession) => {
   try {
     // Get user's appointments
     const appointments = await query(
@@ -64,7 +91,7 @@ export const GET = withAuth(async (request, session) => {
     )
 
     return apiSuccess({
-      appointments: appointments.rows.map(apt => ({
+      appointments: (appointments.rows as AppointmentRow[]).map(apt => ({
         ...apt,
         created_at: apt.created_at.toISOString(),
         preferred_date: apt.preferred_date?.toISOString() || null,

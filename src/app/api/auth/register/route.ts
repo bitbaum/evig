@@ -49,7 +49,7 @@ export async function POST(request: NextRequest) {
       if (!result.success) {
         return apiBadRequest(
           result.error || 'Registration failed',
-          result.errors
+          result.errors ? { validation: result.errors } : undefined
         )
       }
 

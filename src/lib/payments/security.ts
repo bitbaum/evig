@@ -144,7 +144,7 @@ export function validatePaymentData(data: PaymentDataInput): { isValid: boolean;
   }
 
   // Check amount limits (PCI DSS requirement)
-  if (data.amount > 50000) { // 500 CHF/EUR limit for high-risk transactions
+  if (data.amount && data.amount > 50000) { // 500 CHF/EUR limit for high-risk transactions
     errors.push('Amount exceeds maximum limit')
   }
 

@@ -1,6 +1,6 @@
 /**
  * Role checking utilities
- * 
+ *
  * DRY helper functions for role-based access control
  * Following dev guide: docs/development/DEV_GUIDE.md
  */
@@ -10,6 +10,15 @@ import { TABLE_NAMES } from '@/config/database'
 import { apiForbidden } from './helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { ROLES } from '@/lib/constants'
+
+interface UserRoleRow {
+  role: string
+}
+
+interface ApplicationRow {
+  id: string
+  status: string
+}
 
 /**
  * Check if user is a seller
@@ -21,8 +30,9 @@ export async function isSeller(userId: string): Promise<boolean> {
     `SELECT role FROM ${TABLE_NAMES.USERS} WHERE id = $1`,
     [userId]
   )
-  
-  return userCheck.rows.length > 0 && userCheck.rows[0].role === ROLES.SELLER
+
+  const user = userCheck.rows[0] as UserRoleRow | undefined
+  return !!user && user.role === ROLES.SELLER
 }
 
 /**
@@ -56,9 +66,10 @@ export async function checkSellerApplication(userId: string): Promise<{
     return { hasApplication: false }
   }
 
+  const app = existingApplication.rows[0] as ApplicationRow
   return {
     hasApplication: true,
-    status: existingApplication.rows[0].status,
+    status: app.status,
   }
 }
 
@@ -80,9 +91,10 @@ export async function checkRepairerApplication(userId: string): Promise<{
     return { hasApplication: false }
   }
 
+  const app = existingApplication.rows[0] as ApplicationRow
   return {
     hasApplication: true,
-    status: existingApplication.rows[0].status,
+    status: app.status,
   }
 }
 
@@ -97,5 +109,6 @@ export async function getUserRole(userId: string): Promise<string | null> {
     [userId]
   )
 
-  return result.rows.length > 0 ? result.rows[0].role : null
+  const user = result.rows[0] as UserRoleRow | undefined
+  return user?.role ?? null
 }

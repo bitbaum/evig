@@ -9,10 +9,10 @@ import { apiError, apiSuccess } from "@/lib/api/helpers";
  */
 export async function POST(
   request: NextRequest,
-  { params }: { params: { cartId: string } }
+  { params }: { params: Promise<{ cartId: string }> }
 ) {
   try {
-    const { cartId } = params;
+    const { cartId } = await params;
     const body = await request.json();
 
     if (!MEDUSA_CONFIG.PUBLISHABLE_KEY) {

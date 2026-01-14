@@ -267,12 +267,12 @@ export async function registerUser(data: {
 
   // Create user with email already verified (no confirmation needed)
   try {
+    // createUser automatically sets emailVerified - no verification required for community app
     const user = await createUser({
       email,
       name,
       password_hash,
       role,
-      emailVerified: true, // No email verification required for community app
     })
 
     // Create profile

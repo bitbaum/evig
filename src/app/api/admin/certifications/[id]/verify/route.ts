@@ -7,6 +7,20 @@ import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
 import { isAdminRole } from '@/lib/constants'
 
+interface UserRow {
+  role: string
+}
+
+interface CertificationRow {
+  id: string
+  application_id: string
+  user_id: string
+  verification_status: string
+  expiry_date: string | null
+  validity_period_months: number | null
+  issue_date: string | null
+}
+
 export async function PUT(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
@@ -24,7 +38,8 @@ export async function PUT(
       [session.user.id]
     )
 
-    if (!userResult.rows[0] || !isAdminRole(userResult.rows[0].role)) {
+    const user = userResult.rows[0] as UserRow | undefined
+    if (!user || !isAdminRole(user.role)) {
       return apiUnauthorized('Nur Administratoren können diese Funktion verwenden')
     }
     const body = await request.json()
@@ -48,7 +63,7 @@ export async function PUT(
       return apiNotFound('Zertifizierung nicht gefunden')
     }
 
-    const certification = certificationResult.rows[0]
+    const certification = certificationResult.rows[0] as CertificationRow
 
     if (certification.verification_status === 'verified') {
       return apiBadRequest('Diese Zertifizierung wurde bereits verifiziert')
@@ -58,7 +73,8 @@ export async function PUT(
     let calculatedExpiryDate = certification.expiry_date
     if (!calculatedExpiryDate && certification.validity_period_months && certification.issue_date) {
       const issueDate = new Date(certification.issue_date)
-      calculatedExpiryDate = new Date(issueDate.getTime() + (certification.validity_period_months * 30 * 24 * 60 * 60 * 1000))
+      const expiryDate = new Date(issueDate.getTime() + (certification.validity_period_months * 30 * 24 * 60 * 60 * 1000))
+      calculatedExpiryDate = expiryDate.toISOString()
     }
 
     // Update certification verification status

@@ -7,6 +7,17 @@ import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
 import { isAdminRole } from '@/lib/constants'
 
+interface UserRow {
+  role: string
+}
+
+interface CertificationRow {
+  id: string
+  application_id: string
+  user_id: string
+  verification_status: string
+}
+
 export async function PUT(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
@@ -24,7 +35,8 @@ export async function PUT(
       [session.user.id]
     )
 
-    if (!userResult.rows[0] || !isAdminRole(userResult.rows[0].role)) {
+    const user = userResult.rows[0] as UserRow | undefined
+    if (!user || !isAdminRole(user.role)) {
       return apiUnauthorized('Nur Administratoren können diese Funktion verwenden')
     }
     const body = await request.json()
@@ -51,7 +63,7 @@ export async function PUT(
       return apiNotFound('Zertifizierung nicht gefunden')
     }
 
-    const certification = certificationResult.rows[0]
+    const certification = certificationResult.rows[0] as CertificationRow
 
     if (certification.verification_status === 'verified') {
       return apiBadRequest('Eine bereits verifizierte Zertifizierung kann nicht abgelehnt werden')

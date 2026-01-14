@@ -7,6 +7,22 @@ import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
 import { isAdminRole } from '@/lib/constants'
 
+interface UserRow {
+  role: string
+}
+
+interface RepairerRow {
+  id: string
+  business_name: string
+}
+
+interface RatingRow {
+  average_rating: number
+  total_reviews: number
+  rating_distribution: Record<string, number>
+  review_summary: Record<string, unknown>
+}
+
 export async function POST(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
@@ -24,7 +40,8 @@ export async function POST(
       [session.user.id]
     )
 
-    if (!userResult.rows[0] || !isAdminRole(userResult.rows[0].role)) {
+    const user = userResult.rows[0] as UserRow | undefined
+    if (!user || !isAdminRole(user.role)) {
       return apiUnauthorized('Nur Administratoren können Bewertungen neu berechnen')
     }
 
@@ -48,7 +65,7 @@ export async function POST(
       WHERE id = $1
     `, [repairerId])
 
-    const updated = updatedResult.rows[0]
+    const updated = updatedResult.rows[0] as RatingRow
 
     logger.info('Recalculated repairer ratings', {
       repairerId,
@@ -61,8 +78,8 @@ export async function POST(
       message: 'Bewertungen erfolgreich neu berechnet',
       repairerId,
       ratings: {
-        averageRating: parseFloat(updated.average_rating) || 0,
-        totalReviews: parseInt(updated.total_reviews) || 0,
+        averageRating: Number(updated.average_rating) || 0,
+        totalReviews: Number(updated.total_reviews) || 0,
         ratingDistribution: updated.rating_distribution,
         reviewSummary: updated.review_summary
       }

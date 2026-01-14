@@ -4,12 +4,29 @@ import { apiError, apiSuccess, apiNotFound } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES } from '@/config/database'
 
+interface WorkshopIdRow {
+  id: string
+}
+
+interface InstanceRow {
+  id: string
+  workshop_id: string
+  start_date: Date
+  end_date: Date | null
+  location: string | null
+  max_participants: number
+  current_participants: string
+  status: string
+  created_at: Date
+  updated_at: Date
+}
+
 export async function GET(
   request: NextRequest,
-  { params }: { params: { slug: string } }
+  { params }: { params: Promise<{ slug: string }> }
 ) {
   try {
-    const workshopSlug = params.slug
+    const { slug: workshopSlug } = await params
 
     // Get workshop ID first
     const workshopResult = await query(
@@ -21,7 +38,8 @@ export async function GET(
       return apiNotFound('Workshop')
     }
 
-    const workshopId = workshopResult.rows[0].id
+    const workshopData = workshopResult.rows[0] as WorkshopIdRow
+    const workshopId = workshopData.id
 
     // Get workshop instances
     const instances = await query(`
@@ -36,9 +54,9 @@ export async function GET(
     `, [workshopId])
 
     return apiSuccess({
-      instances: instances.rows.map(instance => ({
+      instances: (instances.rows as InstanceRow[]).map(instance => ({
         ...instance,
-        current_participants: parseInt(instance.current_participants as string) || 0
+        current_participants: parseInt(instance.current_participants) || 0
       }))
     })
 

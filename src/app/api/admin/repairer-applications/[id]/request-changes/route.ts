@@ -9,6 +9,17 @@ import { logger } from '@/lib/logger'
 import { isAdminRole } from '@/lib/constants'
 import { APP_URL } from '@/config/urls'
 
+interface UserRow {
+  role: string
+}
+
+interface ApplicationRow {
+  user_id: string
+  email: string
+  name: string
+  status: string
+}
+
 export async function PUT(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
@@ -26,7 +37,8 @@ export async function PUT(
       [session.user.id]
     )
 
-    if (!userResult.rows[0] || !isAdminRole(userResult.rows[0].role)) {
+    const user = userResult.rows[0] as UserRow | undefined
+    if (!user || !isAdminRole(user.role)) {
       return apiUnauthorized('Nur Administratoren können diese Funktion verwenden')
     }
     const body = await request.json()
@@ -53,7 +65,7 @@ export async function PUT(
       return apiNotFound('Reparateur-Bewerbung nicht gefunden')
     }
 
-    const application = applicationResult.rows[0]
+    const application = applicationResult.rows[0] as ApplicationRow
 
     if (application.status === 'approved') {
       return apiBadRequest('Eine bereits genehmigte Bewerbung kann nicht zurückgewiesen werden')

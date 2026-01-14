@@ -7,6 +7,31 @@ import { isAdminRole } from '@/lib/constants'
 import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
 
+interface UserRow {
+  role: string
+}
+
+interface CountRow {
+  count: string
+}
+
+// Extended transaction type with joined data from query
+interface TaxTransactionWithJoins {
+  id: string
+  amount_cents: number
+  currency: 'CHF' | 'EUR'
+  created_at: Date
+  customer_email: string
+  customer_country: string
+  customerType: 'business' | 'consumer'
+  tax_data: {
+    includeVAT: string
+    businessType: string
+    subtotalCents: number
+    vatCents: number
+  }
+}
+
 // GET /api/admin/tax-reports - Generate tax reports
 export async function GET(request: NextRequest) {
   try {
@@ -17,7 +42,8 @@ export async function GET(request: NextRequest) {
 
     // Check if user is admin
     const userRoleResult = await query(`SELECT role FROM ${TABLE_NAMES.USERS} WHERE id = $1`, [session.user.id])
-    if (!isAdminRole(userRoleResult.rows[0]?.role)) {
+    const user = userRoleResult.rows[0] as UserRow | undefined
+    if (!isAdminRole(user?.role)) {
       return apiUnauthorized('Admin access required')
     }
 
@@ -54,7 +80,15 @@ export async function GET(request: NextRequest) {
       ORDER BY pt.created_at DESC
     `, [startDate, endDate])
 
-    const transactions = transactionsResult.rows
+    // Use extended type for database results, standard type for tax compliance functions
+    const transactionsWithJoins = transactionsResult.rows as TaxTransactionWithJoins[]
+    const transactions: TaxTransaction[] = transactionsWithJoins.map(tx => ({
+      id: tx.id,
+      amount_cents: tx.amount_cents,
+      currency: tx.currency,
+      created_at: tx.created_at,
+      customerType: tx.customerType
+    }))
 
     if (reportType === 'vat') {
       // Generate VAT report
@@ -78,15 +112,15 @@ export async function GET(request: NextRequest) {
           start: startDate.toISOString().split('T')[0],
           end: endDate.toISOString().split('T')[0]
         },
-        totalTransactions: transactions.length,
-        transactions: transactions.map(tx => ({
+        totalTransactions: transactionsWithJoins.length,
+        transactions: transactionsWithJoins.map(tx => ({
           id: tx.id,
           date: tx.created_at.toISOString().split('T')[0],
           amount: tx.amount_cents / 100,
           currency: tx.currency,
           customer: tx.customer_email,
           country: tx.customer_country,
-          type: tx.customer_type,
+          type: tx.customerType,
           taxData: tx.tax_data
         }))
       }
@@ -97,7 +131,7 @@ export async function GET(request: NextRequest) {
 
     } else if (reportType === 'compliance') {
       // Compliance checklist report
-      const complianceReport = await generateComplianceReport(transactions, startDate, endDate)
+      const complianceReport = await generateComplianceReport(transactionsWithJoins, startDate, endDate)
 
       return apiSuccess({
         report: complianceReport
@@ -140,7 +174,7 @@ function calculatePeriodDates(period: string, year: number, month: number) {
   return { startDate, endDate }
 }
 
-async function generateComplianceReport(transactions: TaxTransaction[], startDate: Date, endDate: Date) {
+async function generateComplianceReport(transactions: TaxTransactionWithJoins[], startDate: Date, endDate: Date) {
   // Get additional compliance data
   const refundCount = await query(`
     SELECT COUNT(*) as count FROM ${TABLE_NAMES.REFUNDS}
@@ -157,6 +191,10 @@ async function generateComplianceReport(transactions: TaxTransaction[], startDat
     WHERE created_at >= $1 AND created_at <= $2
   `, [startDate, endDate])
 
+  const refundRow = refundCount.rows[0] as CountRow
+  const escrowRow = escrowCount.rows[0] as CountRow
+  const disputeRow = disputeCount.rows[0] as CountRow
+
   return {
     period: {
       start: startDate.toISOString().split('T')[0],
@@ -164,9 +202,9 @@ async function generateComplianceReport(transactions: TaxTransaction[], startDat
     },
     compliance: {
       totalTransactions: transactions.length,
-      totalRefunds: parseInt(refundCount.rows[0].count),
-      totalEscrows: parseInt(escrowCount.rows[0].count),
-      totalDisputes: parseInt(disputeCount.rows[0].count),
+      totalRefunds: parseInt(refundRow.count),
+      totalEscrows: parseInt(escrowRow.count),
+      totalDisputes: parseInt(disputeRow.count),
       taxReportingRequired: transactions.some(tx => tx.tax_data?.vatCents > 0),
       pciCompliant: true, // Assume compliant if system is running
       dataRetentionCompliant: true

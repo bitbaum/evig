@@ -8,6 +8,10 @@ import { TABLE_NAMES } from '@/config/database'
 import { MEDUSA_CONFIG } from '@/config/medusa'
 import { logger } from '@/lib/logger'
 
+interface IdRow {
+  id: string
+}
+
 export async function POST(request: NextRequest) {
   try {
     const session = await auth()
@@ -65,7 +69,8 @@ export async function POST(request: NextRequest) {
       location
     ])
 
-    const inventoryId = inventoryResult.rows[0].id
+    const inventoryRow = inventoryResult.rows[0] as IdRow
+    const inventoryId = inventoryRow.id
 
     // Create AI extracted product entry (simplified for now)
     const aiProductResult = await query(`
@@ -94,7 +99,8 @@ export async function POST(request: NextRequest) {
       session.user.id
     ])
 
-    const aiProductId = aiProductResult.rows[0].id
+    const aiProductRow = aiProductResult.rows[0] as IdRow
+    const aiProductId = aiProductRow.id
 
     // Link inventory item to AI product
     await query(

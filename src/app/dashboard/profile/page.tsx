@@ -192,7 +192,7 @@ export default function ProfilePage() {
     }
   }
 
-  const handleChange = (field: keyof ProfileData, value: string | boolean) => {
+  const handleChange = (field: keyof ProfileData, value: string | boolean | string[] | number) => {
     setProfile(prev => ({ ...prev, [field]: value }))
   }
 

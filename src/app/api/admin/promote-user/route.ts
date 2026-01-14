@@ -11,6 +11,10 @@ import { logger } from '@/lib/logger'
 import { withAdmin } from '@/lib/api/middleware'
 import { ROLES } from '@/lib/constants'
 
+interface UserIdRow {
+  id: string
+}
+
 export const POST = withAdmin(async (request: NextRequest) => {
   try {
     const body = await request.json()
@@ -30,7 +34,8 @@ export const POST = withAdmin(async (request: NextRequest) => {
       if (userResult.rows.length === 0) {
         return apiNotFound('User')
       }
-      userIdToPromote = userResult.rows[0].id
+      const row = userResult.rows[0] as UserIdRow
+      userIdToPromote = row.id
     }
 
     // Update user role to admin

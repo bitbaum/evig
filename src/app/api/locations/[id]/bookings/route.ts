@@ -6,6 +6,24 @@ import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES } from '@/config/database'
 import { getUserRole } from '@/lib/api/role-checks'
 
+interface LocationStatusRow {
+  id: string
+  approval_status: string
+}
+
+interface LocationCapacityRow {
+  id: string
+  approval_status: string
+  max_capacity: number | null
+}
+
+interface BookingConflictRow {
+  id: string
+  title: string
+  start_time: string
+  end_time: string
+}
+
 // GET /api/locations/[id]/bookings - Get location bookings
 export async function GET(
   request: NextRequest,
@@ -33,7 +51,8 @@ export async function GET(
       return apiNotFound('Ort nicht gefunden')
     }
 
-    if (locationCheck.rows[0].approval_status !== 'approved') {
+    const locationStatus = locationCheck.rows[0] as LocationStatusRow
+    if (locationStatus.approval_status !== 'approved') {
       return apiForbidden('Ort ist nicht zur Buchung freigegeben')
     }
 
@@ -79,7 +98,7 @@ export async function GET(
 
     return apiSuccess({
       bookings: bookings.rows,
-      location: locationCheck.rows[0]
+      location: locationStatus
     })
 
   } catch (error) {
@@ -147,7 +166,7 @@ export async function POST(
       return apiNotFound('Ort nicht gefunden')
     }
 
-    const location = locationCheck.rows[0]
+    const location = locationCheck.rows[0] as LocationCapacityRow
     if (location.approval_status !== 'approved') {
       return apiForbidden('Ort ist nicht zur Buchung freigegeben')
     }
@@ -170,7 +189,7 @@ export async function POST(
     `, [locationId, startDate.toISOString(), endDate.toISOString()])
 
     if (conflictCheck.rows.length > 0) {
-      const conflict = conflictCheck.rows[0]
+      const conflict = conflictCheck.rows[0] as BookingConflictRow
       return apiBadRequest(
         `Zeitkonflikt mit bestehender Buchung: "${conflict.title}" (${conflict.start_time} - ${conflict.end_time})`
       )

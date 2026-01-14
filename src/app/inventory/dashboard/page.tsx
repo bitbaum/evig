@@ -24,7 +24,7 @@ interface InventoryItem {
   kivitendo_article_number: string
   quantity_available: number
   selling_price_chf: number
-  condition_override: string
+  condition_override: string | null
   medusa_product_id: string | null
   marketplace_status: string
   created_at: string

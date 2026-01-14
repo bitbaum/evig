@@ -57,7 +57,7 @@ export const POST = withAdmin(async (request: NextRequest) => {
     }
 
     if (errors.length > 0) {
-      return apiBadRequest("CSV validation errors", { errors, processed: products.length });
+      return apiBadRequest(`CSV validation errors (${products.length} products processed)`, { csv: errors });
     }
 
     // Create products in Medusa

@@ -143,7 +143,9 @@ export function getTextColor(
   variant: TextVariant = 'primary'
 ): string {
   const colors = contrastSafeColors[background] || contrastSafeColors.white
-  return colors.text[variant] || colors.text.primary
+  // Convert kebab-case variants to camelCase for object access
+  const variantKey = variant.replace(/-([a-z])/g, (_, c) => c.toUpperCase()) as keyof typeof colors.text
+  return colors.text[variantKey] || colors.text.primary
 }
 
 /**

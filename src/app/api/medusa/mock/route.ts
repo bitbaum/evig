@@ -3,7 +3,7 @@
  * Provides basic product and cart functionality
  */
 
-import { NextRequest } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 import { apiSuccess, apiNotFound } from '@/lib/api/helpers'
 
 // Mock products data

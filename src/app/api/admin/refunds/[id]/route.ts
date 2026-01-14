@@ -6,6 +6,25 @@ import { isAdminRole } from '@/lib/constants'
 import { logger } from '@/lib/logger'
 import { TABLE_NAMES } from '@/config/database'
 import { getStripeClient } from '@/lib/payments/stripe-client'
+import type Stripe from 'stripe'
+
+interface UserRow {
+  role: string
+}
+
+interface RefundRow {
+  id: string
+  status: string
+  provider_transaction_id: string
+  currency: string
+  provider_id: string
+  provider_slug: string
+  amount_cents: number
+  reason: string
+  requested_by: string
+  refund_number: string
+  original_transaction_id: string
+}
 
 // GET /api/admin/refunds/[id] - Get refund details
 export async function GET(
@@ -21,7 +40,8 @@ export async function GET(
 
     // Check if user is admin
     const userRoleResult = await query(`SELECT role FROM ${TABLE_NAMES.USERS} WHERE id = $1`, [session.user.id])
-    if (!isAdminRole(userRoleResult.rows[0]?.role)) {
+    const userRow = userRoleResult.rows[0] as UserRow | undefined
+    if (!isAdminRole(userRow?.role)) {
       return apiUnauthorized('Admin access required')
     }
 
@@ -75,7 +95,8 @@ export async function PUT(
 
     // Check if user is admin
     const userRoleResult = await query(`SELECT role FROM ${TABLE_NAMES.USERS} WHERE id = $1`, [session.user.id])
-    if (!isAdminRole(userRoleResult.rows[0]?.role)) {
+    const adminUser = userRoleResult.rows[0] as UserRow | undefined
+    if (!isAdminRole(adminUser?.role)) {
       return apiUnauthorized('Admin access required')
     }
     const { action, notes } = await request.json() // action: 'approve', 'reject', 'process'
@@ -102,7 +123,7 @@ export async function PUT(
       return apiNotFound('Refund not found')
     }
 
-    const refund = refundResult.rows[0]
+    const refund = refundResult.rows[0] as RefundRow
 
     // Handle different actions
     if (action === 'approve') {
@@ -156,7 +177,7 @@ export async function PUT(
         // Process refund with Stripe
         const stripe = getStripeClient()
         if (!stripe) {
-          return apiError('Stripe is not configured', 500)
+          return apiError(new Error('Stripe not configured'), 'Stripe is not configured', 500)
         }
         
         const stripeRefund = await stripe.refunds.create({

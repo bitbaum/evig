@@ -6,6 +6,10 @@ import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES } from '@/config/database'
 import { getUserRole } from '@/lib/api/role-checks'
 
+interface CountRow {
+  total: string
+}
+
 // GET /api/locations - List locations with filtering
 export async function GET(request: NextRequest) {
   try {
@@ -58,7 +62,7 @@ export async function GET(request: NextRequest) {
       LIMIT $${paramIndex} OFFSET $${paramIndex + 1}
     `
 
-    params.push(limit, offset)
+    params.push(String(limit), String(offset))
 
     const locations = await query(locationsQuery, params)
 
@@ -70,14 +74,15 @@ export async function GET(request: NextRequest) {
     `
     const countParams = params.slice(0, -2) // Remove limit and offset
     const countResult = await query(countQuery, countParams)
+    const totalCount = parseInt((countResult.rows[0] as CountRow).total)
 
     return apiSuccess({
       locations: locations.rows,
       pagination: {
-        total: parseInt(countResult.rows[0].total),
+        total: totalCount,
         limit,
         offset,
-        hasMore: offset + limit < parseInt(countResult.rows[0].total)
+        hasMore: offset + limit < totalCount
       }
     })
 

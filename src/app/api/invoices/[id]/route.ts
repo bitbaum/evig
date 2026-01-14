@@ -6,6 +6,31 @@ import { isAdminRole } from '@/lib/constants'
 import { logger } from '@/lib/logger'
 import { TABLE_NAMES } from '@/config/database'
 
+interface UserRow {
+  role: string
+}
+
+interface InvoiceRow {
+  id: string
+  user_id: string
+  status: string
+  invoice_number: string
+  total_cents: number
+  subtotal_cents: number
+  tax_cents: number
+  customer_name: string
+  customer_email: string
+  total: number
+  subtotal: number
+  tax: number
+  notes: string
+  due_date: string
+  billing_address: string
+  shipping_address: string
+  payment_terms: string
+  line_items: unknown[]
+}
+
 // GET /api/invoices/[id] - Get invoice details
 export async function GET(
   request: NextRequest,
@@ -20,7 +45,8 @@ export async function GET(
 
     // Check if user is admin
     const userRoleResult = await query(`SELECT role FROM ${TABLE_NAMES.USERS} WHERE id = $1`, [session.user.id])
-    const isAdmin = isAdminRole(userRoleResult.rows[0]?.role)
+    const user = userRoleResult.rows[0] as UserRow | undefined
+    const isAdmin = isAdminRole(user?.role)
 
     // Get invoice details
     const invoiceResult = await query(`
@@ -40,7 +66,7 @@ export async function GET(
       return apiNotFound('Invoice not found')
     }
 
-    const invoice = invoiceResult.rows[0]
+    const invoice = invoiceResult.rows[0] as InvoiceRow
 
     // Check permissions
     if (invoice.user_id !== session.user.id && !isAdmin) {
@@ -70,15 +96,16 @@ export async function PUT(
 
     // Check if user is admin
     const userRoleResult = await query(`SELECT role FROM ${TABLE_NAMES.USERS} WHERE id = $1`, [session.user.id])
-    const isAdmin = isAdminRole(userRoleResult.rows[0]?.role)
+    const user = userRoleResult.rows[0] as UserRow | undefined
+    const isAdmin = isAdminRole(user?.role)
 
     // Get current invoice
-    const invoiceResult = await query('SELECT * FROM ${TABLE_NAMES.INVOICES} WHERE id = $1', [invoiceId])
+    const invoiceResult = await query(`SELECT * FROM ${TABLE_NAMES.INVOICES} WHERE id = $1`, [invoiceId])
     if (invoiceResult.rows.length === 0) {
       return apiNotFound('Invoice not found')
     }
 
-    const invoice = invoiceResult.rows[0]
+    const invoice = invoiceResult.rows[0] as InvoiceRow
 
     // Check permissions - only admin can update others' invoices
     if (invoice.user_id !== session.user.id && !isAdmin) {
@@ -155,15 +182,16 @@ export async function DELETE(
 
     // Check if user is admin
     const userRoleResult = await query(`SELECT role FROM ${TABLE_NAMES.USERS} WHERE id = $1`, [session.user.id])
-    const isAdmin = isAdminRole(userRoleResult.rows[0]?.role)
+    const user = userRoleResult.rows[0] as UserRow | undefined
+    const isAdmin = isAdminRole(user?.role)
 
     // Get invoice
-    const invoiceResult = await query('SELECT * FROM ${TABLE_NAMES.INVOICES} WHERE id = $1', [invoiceId])
+    const invoiceResult = await query(`SELECT * FROM ${TABLE_NAMES.INVOICES} WHERE id = $1`, [invoiceId])
     if (invoiceResult.rows.length === 0) {
       return apiNotFound('Invoice not found')
     }
 
-    const invoice = invoiceResult.rows[0]
+    const invoice = invoiceResult.rows[0] as InvoiceRow
 
     // Check permissions
     if (invoice.user_id !== session.user.id && !isAdmin) {

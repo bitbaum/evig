@@ -30,7 +30,7 @@ export const POST = withAuth(async (request: NextRequest, session) => {
     if (!passwordCheck.isValid) {
       return apiBadRequest(
         'Das neue Passwort erfüllt nicht die Anforderungen',
-        passwordCheck.errors
+        { password: passwordCheck.errors }
       )
     }
 

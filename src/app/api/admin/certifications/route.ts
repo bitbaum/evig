@@ -7,6 +7,40 @@ import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
 import { isAdminRole } from '@/lib/constants'
 
+interface UserRow {
+  role: string
+}
+
+interface CertificationRow {
+  id: string
+  application_id: string
+  certification_type_id: string
+  certification_type_name: string
+  certification_type_description: string
+  category: string
+  custom_name: string
+  issuing_authority: string
+  default_issuing_authority: string
+  certification_number: string
+  issue_date: string
+  expiry_date: string
+  verification_status: string
+  verification_method: string
+  verification_result: unknown
+  admin_notes: string
+  verified_by: string
+  verified_at: string
+  document_path: string
+  created_at: string
+  updated_at: string
+}
+
+interface ApplicationRow {
+  id: string
+  name: string
+  email: string
+}
+
 export async function GET(request: NextRequest) {
   try {
     const session = await auth()
@@ -20,7 +54,8 @@ export async function GET(request: NextRequest) {
       [session.user.id]
     )
 
-    if (!userResult.rows[0] || !isAdminRole(userResult.rows[0].role)) {
+    const user = userResult.rows[0] as UserRow | undefined
+    if (!user || !isAdminRole(user.role)) {
       return apiUnauthorized('Nur Administratoren können diese Funktion verwenden')
     }
 
@@ -66,7 +101,7 @@ export async function GET(request: NextRequest) {
       return apiNotFound('Reparatur-Bewerbung nicht gefunden')
     }
 
-    const certifications = certificationsResult.rows.map(cert => ({
+    const certifications = (certificationsResult.rows as CertificationRow[]).map(cert => ({
       id: cert.id,
       applicationId: cert.application_id,
       certificationTypeId: cert.certification_type_id,
@@ -101,11 +136,12 @@ export async function GET(request: NextRequest) {
       count: certifications.length
     })
 
+    const application = applicationResult.rows[0] as ApplicationRow
     return apiSuccess({
       application: {
-        id: applicationResult.rows[0].id,
-        applicantName: applicationResult.rows[0].name,
-        applicantEmail: applicationResult.rows[0].email
+        id: application.id,
+        applicantName: application.name,
+        applicantEmail: application.email
       },
       certifications,
       total: certifications.length

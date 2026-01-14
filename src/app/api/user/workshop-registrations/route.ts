@@ -5,6 +5,17 @@ import { apiError, apiSuccess, apiUnauthorized } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES } from '@/config/database'
 
+interface RegistrationRow {
+  id: string
+  workshop_title: string
+  workshop_slug: string
+  start_date: Date | null
+  location: string | null
+  status: string
+  created_at: Date | null
+  updated_at: Date | null
+}
+
 export async function GET(request: NextRequest) {
   try {
     const session = await auth()
@@ -31,9 +42,13 @@ export async function GET(request: NextRequest) {
     `, [session.user.id])
 
     return apiSuccess({
-      registrations: registrations.rows.map(reg => ({
-        ...reg,
+      registrations: (registrations.rows as RegistrationRow[]).map(reg => ({
+        id: reg.id,
+        workshop_title: reg.workshop_title,
+        workshop_slug: reg.workshop_slug,
         start_date: reg.start_date?.toISOString(),
+        location: reg.location,
+        status: reg.status,
         created_at: reg.created_at?.toISOString(),
         updated_at: reg.updated_at?.toISOString(),
       }))

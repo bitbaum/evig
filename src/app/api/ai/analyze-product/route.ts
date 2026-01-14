@@ -147,7 +147,7 @@ function calculateSustainabilityScore(productData: ProductData) {
 
 export async function POST(request: NextRequest) {
   try {
-    const supabase = createClient()
+    const supabase = await createClient()
     const { image, imageUrl, saveToDatabase = false, userId } = await request.json()
 
     if (!image && !imageUrl) {

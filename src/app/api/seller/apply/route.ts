@@ -5,6 +5,15 @@ import { apiError, apiSuccess, apiBadRequest, apiUnauthorized } from '@/lib/api/
 import { ERROR_MESSAGES, SUCCESS_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES } from '@/config/database'
 
+interface ApplicationRow {
+  id: string
+  status: string
+}
+
+interface IdRow {
+  id: string
+}
+
 export async function POST(request: NextRequest) {
   try {
     const session = await auth()
@@ -38,7 +47,7 @@ export async function POST(request: NextRequest) {
     )
 
     if (existingApplication.rows.length > 0) {
-      const app = existingApplication.rows[0]
+      const app = existingApplication.rows[0] as ApplicationRow
       if (app.status === 'approved') {
         return apiBadRequest(ERROR_MESSAGES.ALREADY_APPROVED)
       }
@@ -83,9 +92,10 @@ export async function POST(request: NextRequest) {
     // TODO: Send notification email to admins
     // TODO: Send confirmation email to user
 
+    const createdApp = applicationResult.rows[0] as IdRow
     return apiSuccess({
       message: SUCCESS_MESSAGES.SELLER_APPLICATION_SUBMITTED,
-      applicationId: applicationResult.rows[0].id
+      applicationId: createdApp.id
     })
 
   } catch (error) {

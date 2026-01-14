@@ -6,6 +6,15 @@ import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
 
+interface ReviewRow {
+  id: string
+  status: string
+}
+
+interface VoteRow {
+  vote_type: string
+}
+
 export async function POST(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
@@ -34,7 +43,8 @@ export async function POST(
       return apiNotFound('Bewertung nicht gefunden')
     }
 
-    if (reviewResult.rows[0].status !== 'published') {
+    const review = reviewResult.rows[0] as ReviewRow
+    if (review.status !== 'published') {
       return apiBadRequest('Diese Bewertung ist nicht verfügbar')
     }
 
@@ -45,7 +55,8 @@ export async function POST(
     )
 
     if (existingVote.rows.length > 0) {
-      const currentVote = existingVote.rows[0].vote_type
+      const voteData = existingVote.rows[0] as VoteRow
+      const currentVote = voteData.vote_type
 
       if (currentVote === voteType) {
         // User is trying to vote the same way again - remove the vote

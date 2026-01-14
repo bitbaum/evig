@@ -8,6 +8,7 @@ import { NextRequest } from 'next/server'
 import { getOrCreateProfile, updateProfile } from '@/lib/auth/db'
 import { apiError, apiSuccess } from '@/lib/api/helpers'
 import { withAuth } from '@/lib/api/middleware'
+import type { Availability } from '@/types/common'
 
 export const GET = withAuth(async (request, session) => {
   try {
@@ -42,7 +43,7 @@ interface ProfileUpdateData {
   skills?: string[];
   expertise_areas?: string[];
   service_radius_km?: number;
-  availability?: Record<string, unknown>;
+  availability?: Availability;
 }
 
 export const PUT = withAuth(async (request: NextRequest, session) => {
@@ -80,7 +81,8 @@ export const PUT = withAuth(async (request: NextRequest, session) => {
     const updateData: Partial<ProfileUpdateData> = {}
     for (const field of allowedFields) {
       if (body[field] !== undefined) {
-        updateData[field] = body[field]
+        // Use type assertion for dynamic field access
+        (updateData as Record<string, unknown>)[field] = body[field]
       }
     }
 

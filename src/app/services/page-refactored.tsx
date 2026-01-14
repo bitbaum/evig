@@ -39,6 +39,7 @@ interface Service {
   href: string
   available: boolean
   badge?: string
+  [key: string]: unknown  // Allow index access for FilterableItem compatibility
 }
 
 const services: Service[] = [
@@ -468,8 +469,8 @@ export default function ServicesPage() {
           description="Die Reparaturdauer variiert je nach Teileverfügbarkeit und dauert in der Regel einige Wochen."
           items={services}
           filters={serviceFilters}
-          renderItem={(service) => <ServiceCard service={service} />}
-          keyExtractor={(service) => service.title}
+          renderItem={(service) => <ServiceCard service={service as Service} />}
+          keyExtractor={(service) => (service as Service).title}
           noResultsMessage="Keine Dienstleistungen gefunden, die den ausgewählten Filtern entsprechen."
           showResultsCount={true}
         />

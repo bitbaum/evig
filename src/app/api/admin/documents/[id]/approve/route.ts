@@ -7,6 +7,23 @@ import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
 import { isAdminRole } from '@/lib/constants'
 
+interface UserRow {
+  role: string
+}
+
+interface DocumentRow {
+  id: string
+  application_id: string
+  user_id: string
+  status: string
+  document_verification_status: string
+}
+
+interface RequiredDocsRow {
+  total_required: string
+  approved_required: string
+}
+
 export async function PUT(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
@@ -24,7 +41,8 @@ export async function PUT(
       [session.user.id]
     )
 
-    if (!userResult.rows[0] || !isAdminRole(userResult.rows[0].role)) {
+    const user = userResult.rows[0] as UserRow | undefined
+    if (!user || !isAdminRole(user.role)) {
       return apiUnauthorized('Nur Administratoren können diese Funktion verwenden')
     }
     const body = await request.json()
@@ -51,7 +69,7 @@ export async function PUT(
       return apiNotFound('Dokument nicht gefunden')
     }
 
-    const document = documentResult.rows[0]
+    const document = documentResult.rows[0] as DocumentRow
 
     if (document.status === 'approved') {
       return apiBadRequest('Dieses Dokument wurde bereits genehmigt')
@@ -80,13 +98,15 @@ export async function PUT(
       WHERE dt.is_required = true
     `, [document.application_id])
 
-    const { total_required, approved_required } = requiredDocsResult.rows[0]
+    const requiredDocs = requiredDocsResult.rows[0] as RequiredDocsRow
+    const totalRequired = parseInt(requiredDocs.total_required) || 0
+    const approvedRequired = parseInt(requiredDocs.approved_required) || 0
 
     // Update application document verification status
     let newStatus = 'pending'
-    if (approved_required === total_required && total_required > 0) {
+    if (approvedRequired === totalRequired && totalRequired > 0) {
       newStatus = 'approved'
-    } else if (approved_required > 0 && approved_required < total_required) {
+    } else if (approvedRequired > 0 && approvedRequired < totalRequired) {
       newStatus = 'in_review'
     }
 

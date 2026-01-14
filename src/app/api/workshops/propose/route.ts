@@ -5,6 +5,19 @@ import { apiError, apiSuccess, apiBadRequest, apiUnauthorized } from '@/lib/api/
 import { ERROR_MESSAGES, SUCCESS_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES } from '@/config/database'
 
+interface CountRow {
+  count: string
+}
+
+interface LocationRow {
+  id: string
+  approval_status: string
+}
+
+interface ProposalIdRow {
+  id: string
+}
+
 export async function POST(request: NextRequest) {
   try {
     const session = await auth()
@@ -53,7 +66,8 @@ export async function POST(request: NextRequest) {
       [session.user.id]
     )
 
-    if (parseInt(existingProposals.rows[0].count) >= 3) {
+    const proposalCount = existingProposals.rows[0] as CountRow
+    if (parseInt(proposalCount.count) >= 3) {
       return apiBadRequest('Sie haben bereits 3 ausstehende oder genehmigte Workshop-Vorschläge. Bitte warten Sie auf deren Bearbeitung.')
     }
 
@@ -71,7 +85,8 @@ export async function POST(request: NextRequest) {
         return apiBadRequest('Ausgewählter Ort existiert nicht')
       }
 
-      if (locationCheck.rows[0].approval_status !== 'approved') {
+      const location = locationCheck.rows[0] as LocationRow
+      if (location.approval_status !== 'approved') {
         return apiBadRequest('Ausgewählter Ort ist nicht zur Buchung freigegeben')
       }
     }
@@ -135,9 +150,10 @@ export async function POST(request: NextRequest) {
     // TODO: Send notification email to admins for review
     // TODO: Send confirmation email to proposer
 
+    const proposal = proposalResult.rows[0] as ProposalIdRow
     return apiSuccess({
-      message: SUCCESS_MESSAGES.WORKSHOP_PROPOSAL_SUBMITTED,
-      proposalId: proposalResult.rows[0].id
+      message: 'Workshop-Vorschlag erfolgreich eingereicht',
+      proposalId: proposal.id
     })
 
   } catch (error) {

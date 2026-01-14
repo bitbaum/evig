@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import Stripe from 'stripe'
 import { headers } from 'next/headers'
 import { requireStripeClient } from '@/lib/payments/stripe-client'
 import { query } from '@/lib/auth/db'
@@ -33,7 +34,8 @@ export async function POST(request: NextRequest) {
 
   try {
     const body = await request.text()
-    const sig = headers().get('stripe-signature')
+    const headersList = await headers()
+    const sig = headersList.get('stripe-signature')
 
     if (!sig || !endpointSecret) {
       return apiError(null, 'Webhook signature verification failed', 400)
@@ -253,7 +255,7 @@ async function handleChargeSucceeded(charge: Stripe.Charge) {
     WHERE provider_transaction_id = $1
   `, [
     charge.payment_intent as string,
-    charge.fee || 0,
+    0, // Fee is available in balance_transaction when expanded
     JSON.stringify(charge)
   ])
 }

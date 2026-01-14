@@ -4,9 +4,33 @@ import { query } from '@/lib/auth/db'
 import { apiError, apiSuccess, apiNotFound, apiUnauthorized, apiBadRequest } from '@/lib/api/helpers'
 import { TABLE_NAMES } from '@/config/database'
 
+interface MessageRow {
+  id: string
+  conversation_id: string
+  sender_id: string
+  recipient_id: string
+  content: string
+  message_type: string
+  sender_name: string
+  sender_email: string
+  is_read: boolean
+  created_at: Date
+  updated_at: Date
+  read_at: Date | null
+}
+
+interface ConversationParticipantRow {
+  other_participant: string
+}
+
+interface MessageCreatedRow {
+  id: string
+  created_at: Date
+}
+
 export async function GET(
   request: NextRequest,
-  { params }: { params: { conversationId: string } }
+  { params }: { params: Promise<{ conversationId: string }> }
 ) {
   try {
     const session = await auth()
@@ -14,7 +38,7 @@ export async function GET(
       return apiUnauthorized('Nicht authentifiziert')
     }
 
-    const conversationId = params.conversationId
+    const { conversationId } = await params
     const { searchParams } = new URL(request.url)
     const limit = parseInt(searchParams.get('limit') || '50')
     const before = searchParams.get('before') // Message ID to paginate before
@@ -62,14 +86,14 @@ export async function GET(
     `, [...queryParams, limit])
 
     // Reverse to get chronological order
-    const chronologicalMessages = messages.rows.reverse()
+    const chronologicalMessages = (messages.rows as MessageRow[]).reverse()
 
     return apiSuccess({
-      messages: chronologicalMessages.map(msg => ({
+      messages: chronologicalMessages.map((msg: MessageRow) => ({
         ...msg,
         created_at: msg.created_at?.toISOString(),
         updated_at: msg.updated_at?.toISOString(),
-        read_at: msg.read_at?.toISOString(),
+        read_at: msg.read_at?.toISOString() ?? null,
       }))
     })
 
@@ -80,7 +104,7 @@ export async function GET(
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: { conversationId: string } }
+  { params }: { params: Promise<{ conversationId: string }> }
 ) {
   try {
     const session = await auth()
@@ -88,7 +112,7 @@ export async function POST(
       return apiUnauthorized('Nicht authentifiziert')
     }
 
-    const conversationId = params.conversationId
+    const { conversationId } = await params
     const { content, messageType = 'text' } = await request.json()
 
     if (!content) {
@@ -111,7 +135,8 @@ export async function POST(
       return apiNotFound('Unterhaltung')
     }
 
-    const recipientId = conversationCheck.rows[0].other_participant
+    const participant = conversationCheck.rows[0] as ConversationParticipantRow
+    const recipientId = participant.other_participant
 
     // Create message
     const messageResult = await query(`
@@ -122,7 +147,7 @@ export async function POST(
       RETURNING id, created_at
     `, [conversationId, session.user.id, recipientId, content, messageType])
 
-    const message = messageResult.rows[0]
+    const message = messageResult.rows[0] as MessageCreatedRow
 
     // Create notification for recipient
     await query(`

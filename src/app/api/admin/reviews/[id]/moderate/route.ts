@@ -7,6 +7,14 @@ import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
 import { isAdminRole } from '@/lib/constants'
 
+interface UserRow {
+  role: string
+}
+
+interface ReviewStatusRow {
+  status: string
+}
+
 export async function PUT(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
@@ -24,7 +32,8 @@ export async function PUT(
       [session.user.id]
     )
 
-    if (!userResult.rows[0] || !isAdminRole(userResult.rows[0].role)) {
+    const user = userResult.rows[0] as UserRow | undefined
+    if (!user || !isAdminRole(user.role)) {
       return apiUnauthorized('Nur Administratoren können Bewertungen moderieren')
     }
     const body = await request.json()
@@ -48,7 +57,8 @@ export async function PUT(
       return apiNotFound('Bewertung nicht gefunden')
     }
 
-    const oldStatus = reviewResult.rows[0].status
+    const review = reviewResult.rows[0] as ReviewStatusRow
+    const oldStatus = review.status
     let newStatus = oldStatus
 
     // Determine new status based on action

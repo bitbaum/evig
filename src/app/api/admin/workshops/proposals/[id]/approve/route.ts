@@ -6,6 +6,35 @@ import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES } from '@/config/database'
 import { getUserRole } from '@/lib/api/role-checks'
 import { isAdminRole } from '@/lib/constants'
+import { logger } from '@/lib/logger'
+
+interface ProposalRow {
+  id: string
+  user_id: string
+  title: string
+  description: string
+  short_description: string
+  category: string
+  duration_minutes: number
+  level: string
+  max_participants: number
+  min_participants: number
+  price_cents: number
+  prerequisites: string[]
+  learning_objectives: string[]
+  target_audience: string
+  materials_provided: string[]
+  materials_required: string[]
+  proposed_date: Date | null
+  selected_location_id: string | null
+  proposed_location: string | null
+  proposer_name: string
+  proposer_email: string
+}
+
+interface WorkshopIdRow {
+  id: string
+}
 
 // POST /api/admin/workshops/proposals/[id]/approve - Approve or reject workshop proposal
 export async function POST(
@@ -46,7 +75,7 @@ export async function POST(
       return apiNotFound('Workshop-Vorschlag nicht gefunden')
     }
 
-    const proposal = proposalCheck.rows[0]
+    const proposal = proposalCheck.rows[0] as ProposalRow
 
     // Determine new status based on action
     let newStatus: string
@@ -64,14 +93,12 @@ export async function POST(
         return apiBadRequest('Ungültige Aktion')
     }
 
-    // Start transaction
-    const client = await query.getClient()
+    // Use transaction with BEGIN/COMMIT
+    await query('BEGIN')
 
     try {
-      await client.query('BEGIN')
-
       // Update proposal status
-      await client.query(`
+      await query(`
         UPDATE ${TABLE_NAMES.WORKSHOP_PROPOSALS}
         SET status = $1, admin_notes = $2, reviewed_by = $3, reviewed_at = CURRENT_TIMESTAMP, updated_at = CURRENT_TIMESTAMP
         WHERE id = $4
@@ -80,7 +107,7 @@ export async function POST(
       // If approved, create the actual workshop
       if (action === 'approve') {
         // Create workshop entry
-        const workshopResult = await client.query(`
+        const workshopResult = await query(`
           INSERT INTO ${TABLE_NAMES.WORKSHOPS} (
             slug,
             title,
@@ -127,9 +154,14 @@ export async function POST(
           session.user.id  // updated_by
         ])
 
+        const workshop = workshopResult.rows[0] as WorkshopIdRow
+
         // Create initial workshop instance if location is specified
         if (proposal.selected_location_id || proposal.proposed_location) {
-          await client.query(`
+          const proposedDate = proposal.proposed_date || new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
+          const endDate = new Date(proposedDate.getTime() + proposal.duration_minutes * 60 * 1000)
+
+          await query(`
             INSERT INTO ${TABLE_NAMES.WORKSHOP_INSTANCES} (
               workshop_id,
               start_date,
@@ -143,9 +175,9 @@ export async function POST(
               updated_at
             ) VALUES ($1, $2, $3, $4, $5, $6, 'scheduled', $7, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
           `, [
-            workshopResult.rows[0].id,
-            proposal.proposed_date || new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // Default to 1 week from now
-            new Date((proposal.proposed_date || new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)).getTime() + proposal.duration_minutes * 60 * 1000),
+            workshop.id,
+            proposedDate,
+            endDate,
             proposal.selected_location_id ? null : proposal.proposed_location,
             proposal.selected_location_id ? JSON.stringify({ location_id: proposal.selected_location_id }) : null,
             proposal.max_participants,
@@ -154,10 +186,14 @@ export async function POST(
         }
       }
 
-      await client.query('COMMIT')
+      await query('COMMIT')
 
-      // Send notification to proposer
-      // TODO: Implement notification system
+      logger.info('Workshop proposal processed', {
+        proposalId,
+        action,
+        newStatus,
+        adminId: session.user.id
+      })
 
       return apiSuccess({
         message: `Workshop-Vorschlag erfolgreich ${action === 'approve' ? 'genehmigt' : action === 'reject' ? 'abgelehnt' : 'zur Überarbeitung zurückgewiesen'}`,
@@ -169,10 +205,8 @@ export async function POST(
       })
 
     } catch (error) {
-      await client.query('ROLLBACK')
+      await query('ROLLBACK')
       throw error
-    } finally {
-      client.release()
     }
 
   } catch (error) {

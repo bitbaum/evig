@@ -9,10 +9,10 @@ import { apiError, apiSuccess } from "@/lib/api/helpers";
  */
 export async function POST(
   request: NextRequest,
-  { params }: { params: { cartId: string; lineId: string } }
+  { params }: { params: Promise<{ cartId: string; lineId: string }> }
 ) {
   try {
-    const { cartId, lineId } = params;
+    const { cartId, lineId } = await params;
     const body = await request.json();
 
     if (!MEDUSA_CONFIG.PUBLISHABLE_KEY) {
@@ -67,10 +67,10 @@ export async function POST(
  */
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { cartId: string; lineId: string } }
+  { params }: { params: Promise<{ cartId: string; lineId: string }> }
 ) {
   try {
-    const { cartId, lineId } = params;
+    const { cartId, lineId } = await params;
 
     if (!MEDUSA_CONFIG.PUBLISHABLE_KEY) {
       logger.error("Medusa publishable key not configured");

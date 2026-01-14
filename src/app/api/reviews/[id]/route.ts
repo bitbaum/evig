@@ -7,6 +7,54 @@ import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
 import { isAdminRole } from '@/lib/constants'
 
+interface UserRow {
+  role: string
+}
+
+interface ReviewRow {
+  id: string
+  reviewer_id: string
+  reviewer_name: string
+  reviewer_email: string
+  target_type: string
+  target_id: string
+  target_name: string
+  booking_id: string
+  overall_rating: number
+  communication_rating: number
+  professionalism_rating: number
+  quality_rating: number
+  timeliness_rating: number
+  value_rating: number
+  title: string
+  content: string
+  is_verified_purchase: boolean
+  helpful_votes: number
+  total_votes: number
+  status: string
+  moderation_reason: string
+  moderated_by: string
+  moderated_at: string
+  response_id: string
+  response_content: string
+  response_created_at: string
+  responder_name: string
+  created_at: string
+  updated_at: string
+}
+
+interface AttachmentRow {
+  id: string
+  original_filename: string
+  file_path: string
+  mime_type: string
+  attachment_type: string
+}
+
+interface ReviewOwnerRow {
+  reviewer_id: string
+}
+
 export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
@@ -37,7 +85,7 @@ export async function GET(
       return apiNotFound('Bewertung nicht gefunden')
     }
 
-    const review = reviewResult.rows[0]
+    const review = reviewResult.rows[0] as ReviewRow
 
     // Get attachments
     const attachmentsResult = await query(
@@ -71,7 +119,7 @@ export async function GET(
       moderationReason: review.moderation_reason,
       moderatedBy: review.moderated_by,
       moderatedAt: review.moderated_at,
-      attachments: attachmentsResult.rows.map(att => ({
+      attachments: (attachmentsResult.rows as AttachmentRow[]).map(att => ({
         id: att.id,
         filename: att.original_filename,
         filePath: att.file_path,
@@ -130,7 +178,7 @@ export async function PUT(
       return apiNotFound('Bewertung nicht gefunden')
     }
 
-    const review = reviewResult.rows[0]
+    const review = reviewResult.rows[0] as ReviewRow
 
     // Check if user owns this review
     if (review.reviewer_id !== session.user.id) {
@@ -221,7 +269,7 @@ export async function DELETE(
       return apiNotFound('Bewertung nicht gefunden')
     }
 
-    const review = reviewResult.rows[0]
+    const review = reviewResult.rows[0] as ReviewOwnerRow
 
     // Check if user owns this review or is admin
     const userResult = await query(
@@ -229,7 +277,8 @@ export async function DELETE(
       [session.user.id]
     )
 
-    const isAdmin = isAdminRole(userResult.rows[0]?.role)
+    const user = userResult.rows[0] as UserRow | undefined
+    const isAdmin = isAdminRole(user?.role)
     const isOwner = review.reviewer_id === session.user.id
 
     if (!isOwner && !isAdmin) {

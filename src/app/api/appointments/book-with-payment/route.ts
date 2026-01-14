@@ -13,6 +13,20 @@ import {
   DEFAULT_AUTO_RELEASE_DAYS
 } from '@/lib/payments/payment-flow'
 
+interface ServiceRow {
+  id: string
+  name: string
+  slug: string
+  price_cents: number
+  duration_minutes: number
+  requires_approval: boolean
+}
+
+interface AppointmentIdRow {
+  id: string
+  created_at: string
+}
+
 // POST /api/appointments/book-with-payment - Book service with immediate payment
 export async function POST(request: NextRequest) {
   const stripe = requireStripeClient()
@@ -52,7 +66,7 @@ export async function POST(request: NextRequest) {
       return apiNotFound('Service type not found')
     }
 
-    const service = serviceResult.rows[0]
+    const service = serviceResult.rows[0] as ServiceRow
 
     if (!service.price_cents || service.price_cents <= 0) {
       return apiBadRequest('This service requires a price to be set for online booking')
@@ -92,7 +106,8 @@ export async function POST(request: NextRequest) {
       service.duration_minutes
     ])
 
-    const appointmentId = appointmentResult.rows[0].id
+    const appointmentRow = appointmentResult.rows[0] as AppointmentIdRow
+    const appointmentId = appointmentRow.id
 
     // Process payment using shared utility
     const paymentResult = await processPayment({

@@ -6,6 +6,35 @@ import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
 
+interface ReviewRow {
+  id: string
+  target_type: string
+  target_id: string
+  target_name: string
+  overall_rating: number
+  communication_rating: number | null
+  professionalism_rating: number | null
+  quality_rating: number | null
+  timeliness_rating: number | null
+  value_rating: number | null
+  title: string | null
+  content: string
+  status: string
+  helpful_votes: number
+  total_votes: number
+  is_verified_purchase: boolean
+  created_at: string
+  updated_at: string
+  response_id: string | null
+  response_content: string | null
+  response_created_at: string | null
+  responder_name: string | null
+}
+
+interface CountRow {
+  total: string
+}
+
 export async function GET(request: NextRequest) {
   try {
     const session = await auth()
@@ -52,7 +81,7 @@ export async function GET(request: NextRequest) {
       params
     )
 
-    const reviews = reviewsResult.rows.map(review => ({
+    const reviews = (reviewsResult.rows as ReviewRow[]).map(review => ({
       id: review.id,
       targetType: review.target_type,
       targetId: review.target_id,
@@ -87,13 +116,14 @@ export async function GET(request: NextRequest) {
       status
     })
 
+    const countData = countResult.rows[0] as CountRow
     return apiSuccess({
       reviews,
-      total: parseInt(countResult.rows[0].total),
+      total: parseInt(countData.total),
       pagination: {
         limit,
         offset,
-        hasMore: offset + limit < parseInt(countResult.rows[0].total)
+        hasMore: offset + limit < parseInt(countData.total)
       }
     })
 

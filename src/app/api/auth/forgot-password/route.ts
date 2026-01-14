@@ -3,14 +3,14 @@
  * POST /api/auth/forgot-password
  */
 
-import { Request } from 'next/server'
+import { NextRequest } from 'next/server'
 import { getUserByEmail, createPasswordResetToken } from '@/lib/auth/db'
 import { sendEmail } from '@/lib/email'
 import { apiError, apiSuccess, apiBadRequest } from '@/lib/api/helpers'
 import { logger } from '@/lib/logger'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
     const { email } = body

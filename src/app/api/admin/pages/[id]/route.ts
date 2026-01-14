@@ -23,9 +23,9 @@ interface DecodedToken {
   role: string;
 }
 
-function authenticateUser(): User {
+async function authenticateUser(): Promise<User> {
   try {
-    const cookieStore = cookies()
+    const cookieStore = await cookies()
     const token = cookieStore.get('admin_token')?.value
 
     if (!token) {
@@ -56,12 +56,13 @@ export async function GET(
     if (!ENABLE_CMS) {
       return apiError(new Error('CMS is disabled'), 'CMS is disabled', 501)
     }
-    const user = authenticateUser()
+    const user = await authenticateUser()
+    const cookieStore = await cookies()
 
     // Forward to Reboot Content API
     const response = await fetch(`${REBOOT_CONTENT_URL}/api/content/static-pages/${id}`, {
       headers: {
-        'Authorization': `Bearer ${cookies().get('admin_token')?.value}`,
+        'Authorization': `Bearer ${cookieStore.get('admin_token')?.value}`,
       },
     })
 
@@ -85,15 +86,16 @@ export async function PUT(
     if (!ENABLE_CMS) {
       return apiError(new Error('CMS is disabled'), 'CMS is disabled', 501)
     }
-    const user = authenticateUser()
+    const user = await authenticateUser()
     const body = await request.json()
+    const cookieStore = await cookies()
 
     // Forward to Reboot Content API
     const response = await fetch(`${REBOOT_CONTENT_URL}/api/content/static-pages/${id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${cookies().get('admin_token')?.value}`,
+        'Authorization': `Bearer ${cookieStore.get('admin_token')?.value}`,
       },
       body: JSON.stringify(body),
     })

@@ -7,6 +7,55 @@ import { TABLE_NAMES } from '@/config/database'
 import { isAdminRole } from '@/lib/constants'
 import { logger } from '@/lib/logger'
 
+interface UserRow {
+  role: string
+}
+
+interface EscrowRow {
+  id: string
+  transaction_id: string
+  buyer_id: string
+  seller_id: string | null
+  total_amount_cents: number
+  held_amount_cents: number
+  released_amount_cents: number
+  currency: string
+  status: string
+  auto_release_days: number
+  release_deadline: string
+  created_at: string
+  released_at: string | null
+  provider_transaction_id: string
+  transaction_amount: number
+  buyer_name: string
+  buyer_email: string
+  seller_name: string | null
+  seller_email: string | null
+  releases: Array<{
+    id: string
+    amount_cents: number
+    release_type: string
+    reason: string
+    released_at: string
+    released_by: string
+  }> | null
+}
+
+// Simpler escrow row for release operations
+interface EscrowReleaseRow {
+  id: string
+  transaction_id: string
+  buyer_id: string
+  seller_id: string | null
+  total_amount_cents: number
+  released_amount_cents: number
+  currency: string
+  status: string
+  provider_id: string
+  provider_transaction_id: string
+  transaction_amount: number
+}
+
 // GET /api/payments/escrow/[id] - Get escrow account details
 export async function GET(
   request: NextRequest,
@@ -54,11 +103,12 @@ export async function GET(
       return apiNotFound('Escrow account not found')
     }
 
-    const escrow = escrowResult.rows[0]
+    const escrow = escrowResult.rows[0] as EscrowRow
 
     // Check permissions - buyer, seller, or admin can view
     const userRoleResult = await query(`SELECT role FROM ${TABLE_NAMES.USERS} WHERE id = $1`, [session.user.id])
-    const isAdmin = isAdminRole(userRoleResult.rows[0]?.role)
+    const user = userRoleResult.rows[0] as UserRow | undefined
+    const isAdmin = isAdminRole(user?.role)
 
     if (escrow.buyer_id !== session.user.id && escrow.seller_id !== session.user.id && !isAdmin) {
       return apiUnauthorized('You do not have permission to view this escrow account')
@@ -133,11 +183,12 @@ export async function POST(
       return apiNotFound('Active escrow account not found')
     }
 
-    const escrow = escrowResult.rows[0]
+    const escrow = escrowResult.rows[0] as EscrowReleaseRow
 
     // Check permissions - only buyer or admin can release funds
     const userRoleResult = await query(`SELECT role FROM ${TABLE_NAMES.USERS} WHERE id = $1`, [session.user.id])
-    const isAdmin = isAdminRole(userRoleResult.rows[0]?.role)
+    const userRole = userRoleResult.rows[0] as UserRow | undefined
+    const isAdmin = isAdminRole(userRole?.role)
 
     if (escrow.buyer_id !== session.user.id && !isAdmin) {
       return apiUnauthorized('Only the buyer can release escrow funds')

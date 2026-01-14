@@ -44,6 +44,19 @@ interface ListedProductResult {
   views: number
 }
 
+// DetectedProductData type from AICameraProductListing
+interface DetectedProductData {
+  title?: string
+  price?: string
+  category?: string
+  brand?: string
+  condition?: string
+  description?: string
+  images?: string[] | File[]
+  location?: string
+  contactInfo?: string
+}
+
 export default function ProductListingForm() {
   const {
     formData,
@@ -87,7 +100,7 @@ export default function ProductListingForm() {
     }
   }
 
-  const handleProductDetected = (detectedProduct: Partial<ProductFormData>) => {
+  const handleProductDetected = (detectedProduct: DetectedProductData) => {
     updateField('title', detectedProduct.title || formData.title)
     updateField('description', detectedProduct.description || formData.description)
     updateField('price', detectedProduct.price || formData.price)

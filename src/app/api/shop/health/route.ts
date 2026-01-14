@@ -22,7 +22,7 @@ export async function GET() {
     checks: [],
   }
 
-  const headers = MEDUSA_CONFIG.PUBLISHABLE_KEY
+  const headers: HeadersInit = MEDUSA_CONFIG.PUBLISHABLE_KEY
     ? {
         'x-publishable-key': MEDUSA_CONFIG.PUBLISHABLE_KEY,
         'x-publishable-api-key': MEDUSA_CONFIG.PUBLISHABLE_KEY,

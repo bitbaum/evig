@@ -7,6 +7,15 @@ import { TABLE_NAMES } from '@/config/database'
 import { getUserRole } from '@/lib/api/role-checks'
 import { isAdminRole } from '@/lib/constants'
 
+interface LocationOwnerRow {
+  created_by: string
+  approval_status: string
+}
+
+interface CountRow {
+  count: string
+}
+
 // GET /api/locations/[id] - Get location details
 export async function GET(
   request: NextRequest,
@@ -95,7 +104,7 @@ export async function PUT(
       return apiNotFound('Ort nicht gefunden')
     }
 
-    const location = ownershipCheck.rows[0]
+    const location = ownershipCheck.rows[0] as LocationOwnerRow
     const isOwner = location.created_by === session.user.id
     const isAdmin = isAdminRole(userRole) || userRole === 'moderator'
 
@@ -176,7 +185,7 @@ export async function DELETE(
       return apiNotFound('Ort nicht gefunden')
     }
 
-    const location = locationCheck.rows[0]
+    const location = locationCheck.rows[0] as LocationOwnerRow
     const isOwner = location.created_by === session.user.id
     const isAdmin = isAdminRole(userRole) || userRole === 'moderator'
 
@@ -190,7 +199,7 @@ export async function DELETE(
       WHERE location_id = $1 AND status IN ('pending', 'confirmed') AND start_time > CURRENT_TIMESTAMP
     `, [locationId])
 
-    if (parseInt(activeBookings.rows[0].count) > 0) {
+    if (parseInt((activeBookings.rows[0] as CountRow).count) > 0) {
       return apiBadRequest('Ort kann nicht gelöscht werden, da aktive Buchungen existieren')
     }
 

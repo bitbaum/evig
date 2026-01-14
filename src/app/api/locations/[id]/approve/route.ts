@@ -6,6 +6,13 @@ import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES } from '@/config/database'
 import { getUserRole } from '@/lib/api/role-checks'
 import { isAdminRole } from '@/lib/constants'
+import { logger } from '@/lib/logger'
+
+interface LocationRow {
+  id: string
+  approval_status: string
+  name: string
+}
 
 // POST /api/locations/[id]/approve - Approve or reject location
 export async function POST(
@@ -45,7 +52,7 @@ export async function POST(
       return apiNotFound('Ort nicht gefunden')
     }
 
-    const location = locationCheck.rows[0]
+    const location = locationCheck.rows[0] as LocationRow
 
     // Determine new status based on action
     let newStatus: string
@@ -66,21 +73,19 @@ export async function POST(
         return apiBadRequest('Ungültige Aktion')
     }
 
-    // Start transaction
-    const client = await query.getClient()
-
+    // Execute in transaction
     try {
-      await client.query('BEGIN')
+      await query('BEGIN')
 
       // Update location status
-      await client.query(`
+      await query(`
         UPDATE ${TABLE_NAMES.LOCATIONS}
         SET approval_status = $1, approved_by = $2, approved_at = CURRENT_TIMESTAMP, updated_at = CURRENT_TIMESTAMP
         WHERE id = $3
       `, [newStatus, session.user.id, locationId])
 
       // Create approval record
-      await client.query(`
+      await query(`
         INSERT INTO ${TABLE_NAMES.LOCATION_APPROVALS} (
           location_id, reviewer_id, action, status, review_notes, required_changes
         ) VALUES ($1, $2, $3, $4, $5, $6)
@@ -90,10 +95,10 @@ export async function POST(
         action,
         newStatus,
         review_notes || null,
-        required_changes || []
+        JSON.stringify(required_changes || [])
       ])
 
-      await client.query('COMMIT')
+      await query('COMMIT')
 
       // Send notification to location creator
       // TODO: Implement notification system
@@ -107,11 +112,10 @@ export async function POST(
         }
       })
 
-    } catch (error) {
-      await client.query('ROLLBACK')
-      throw error
-    } finally {
-      client.release()
+    } catch (txError) {
+      await query('ROLLBACK')
+      logger.error('Transaction error in location approval', { error: txError })
+      throw txError
     }
 
   } catch (error) {

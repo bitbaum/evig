@@ -10,7 +10,19 @@ import { auth } from '@/auth';
 import { apiUnauthorized } from './helpers';
 import { isAdminRole } from '@/lib/constants';
 
-type Session = Awaited<ReturnType<typeof auth>>;
+export type AuthSession = Awaited<ReturnType<typeof auth>>;
+
+// Explicit ValidSession type with guaranteed user property
+export interface ValidSession {
+  user: {
+    id: string
+    email: string
+    name?: string | null
+    image?: string | null
+    role?: string
+  }
+  expires: string
+}
 
 /**
  * Middleware wrapper for authenticated routes
@@ -20,13 +32,18 @@ type Session = Awaited<ReturnType<typeof auth>>;
  * - withAuth((req, session) => handler(req, session))
  * - withAuth((req, session, { params }) => handler(req, session, params))
  */
+type RouteHandler<TParams> = (
+  request: NextRequest,
+  context?: { params?: Promise<TParams> }
+) => Promise<NextResponse>;
+
 export function withAuth<TParams = Record<string, never>>(
   handler: (
     request: NextRequest,
-    session: NonNullable<Session>,
+    session: ValidSession,
     context?: { params?: TParams }
   ) => Promise<NextResponse>
-) {
+): RouteHandler<TParams> {
   return async (
     request: NextRequest,
     context?: { params?: Promise<TParams> }
@@ -37,12 +54,15 @@ export function withAuth<TParams = Record<string, never>>(
       return apiUnauthorized('Nicht authentifiziert');
     }
 
+    // Session is guaranteed non-null after the check above
+    const validSession = session as unknown as ValidSession;
+
     // Await params if they exist (Next.js 15+ async params)
     const resolvedContext = context?.params
       ? { params: await context.params }
       : undefined;
 
-    return handler(request, session, resolvedContext);
+    return handler(request, validSession, resolvedContext);
   };
 }
 
@@ -57,10 +77,10 @@ export function withAuth<TParams = Record<string, never>>(
 export function withAdmin<TParams = Record<string, never>>(
   handler: (
     request: NextRequest,
-    session: NonNullable<Session>,
+    session: ValidSession,
     context?: { params?: TParams }
   ) => Promise<NextResponse>
-) {
+): RouteHandler<TParams> {
   return async (
     request: NextRequest,
     context?: { params?: Promise<TParams> }
@@ -71,8 +91,11 @@ export function withAdmin<TParams = Record<string, never>>(
       return apiUnauthorized('Nicht authentifiziert');
     }
 
+    // Session is guaranteed non-null after the check above
+    const validSession = session as unknown as ValidSession;
+
     // Check admin role using SSOT helper from constants
-    if (!isAdminRole(session.user.role)) {
+    if (!isAdminRole(validSession.user.role)) {
       return NextResponse.json(
         { success: false, error: 'Nur Administratoren können diese Funktion verwenden' },
         { status: 403 }
@@ -84,6 +107,6 @@ export function withAdmin<TParams = Record<string, never>>(
       ? { params: await context.params }
       : undefined;
 
-    return handler(request, session, resolvedContext);
+    return handler(request, validSession, resolvedContext);
   };
 }

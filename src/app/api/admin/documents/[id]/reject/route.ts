@@ -7,6 +7,18 @@ import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
 import { isAdminRole } from '@/lib/constants'
 
+interface UserRow {
+  role: string
+}
+
+interface DocumentRow {
+  id: string
+  application_id: string
+  user_id: string
+  status: string
+  document_verification_status: string
+}
+
 export async function PUT(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
@@ -24,7 +36,8 @@ export async function PUT(
       [session.user.id]
     )
 
-    if (!userResult.rows[0] || !isAdminRole(userResult.rows[0].role)) {
+    const user = userResult.rows[0] as UserRow | undefined
+    if (!user || !isAdminRole(user.role)) {
       return apiUnauthorized('Nur Administratoren können diese Funktion verwenden')
     }
     const body = await request.json()
@@ -51,7 +64,7 @@ export async function PUT(
       return apiNotFound('Dokument nicht gefunden')
     }
 
-    const document = documentResult.rows[0]
+    const document = documentResult.rows[0] as DocumentRow
 
     if (document.status === 'approved') {
       return apiBadRequest('Ein bereits genehmigtes Dokument kann nicht abgelehnt werden')

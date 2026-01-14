@@ -5,6 +5,11 @@ import { apiError, apiSuccess, apiUnauthorized, apiBadRequest, apiNotFound, apiF
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES } from '@/config/database'
 
+interface AppointmentRow {
+  user_id: string
+  status: string
+}
+
 export async function PATCH(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
@@ -27,7 +32,7 @@ export async function PATCH(
       return apiNotFound('Termin')
     }
 
-    const appointment = appointmentCheck.rows[0]
+    const appointment = appointmentCheck.rows[0] as AppointmentRow
 
     if (appointment.user_id !== session.user.id) {
       return apiForbidden(ERROR_MESSAGES.FORBIDDEN)

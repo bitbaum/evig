@@ -1,4 +1,5 @@
 import { NextRequest } from 'next/server'
+import Stripe from 'stripe'
 import { auth } from '@/auth'
 import { requireStripeClient } from '@/lib/payments/stripe-client'
 import { query } from '@/lib/auth/db'
@@ -6,6 +7,31 @@ import { apiError, apiSuccess, apiUnauthorized, apiBadRequest, apiNotFound } fro
 import { isAdminRole } from '@/lib/constants'
 import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
+
+interface UserRow {
+  role: string
+}
+
+interface TransactionRow {
+  id: string
+  user_id: string
+  provider_id: string
+  provider_transaction_id: string
+  amount_cents: number
+  currency: string
+  provider_slug: string
+  user_name: string
+  user_email: string
+}
+
+interface RefundTotalRow {
+  total_refunded: number
+}
+
+interface RefundCreatedRow {
+  id: string
+  refund_number: string
+}
 
 export async function POST(request: NextRequest) {
   // Initialize Stripe lazily inside handler to avoid build-time errors
@@ -46,11 +72,12 @@ export async function POST(request: NextRequest) {
       return apiNotFound('Transaction not found or not eligible for refund')
     }
 
-    const transaction = transactionResult.rows[0]
+    const transaction = transactionResult.rows[0] as TransactionRow
 
     // Check if user owns the transaction or is admin
     const userRoleResult = await query(`SELECT role FROM ${TABLE_NAMES.USERS} WHERE id = $1`, [session.user.id])
-    const isAdmin = isAdminRole(userRoleResult.rows[0]?.role)
+    const user = userRoleResult.rows[0] as UserRow | undefined
+    const isAdmin = isAdminRole(user?.role)
 
     if (transaction.user_id !== session.user.id && !isAdmin) {
       return apiUnauthorized('You can only refund your own transactions')
@@ -69,7 +96,8 @@ export async function POST(request: NextRequest) {
       WHERE original_transaction_id = $1 AND status IN ('approved', 'processing', 'completed')
     `, [transactionId])
 
-    const totalRefunded = existingRefundsResult.rows[0].total_refunded
+    const refundTotals = existingRefundsResult.rows[0] as RefundTotalRow
+    const totalRefunded = refundTotals.total_refunded
     const remainingAmount = transaction.amount_cents - totalRefunded
 
     if (refundAmountCents > remainingAmount) {
@@ -104,8 +132,9 @@ export async function POST(request: NextRequest) {
       isAdmin ? 'approved' : 'requested'
     ])
 
-    const refundId = refundResult.rows[0].id
-    const refundNumber = refundResult.rows[0].refund_number
+    const refund = refundResult.rows[0] as RefundCreatedRow
+    const refundId = refund.id
+    const refundNumber = refund.refund_number
 
     // If admin requested, process immediately
     if (isAdmin) {

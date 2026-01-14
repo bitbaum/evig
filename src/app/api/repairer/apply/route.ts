@@ -9,6 +9,22 @@ import { logger } from '@/lib/logger'
 import { APP_URL } from '@/config/urls'
 import { ADMIN_ROLES } from '@/lib/constants'
 
+interface ApplicationRow {
+  id: string
+  status: string
+}
+
+interface ApplicationCreatedRow {
+  id: string
+  created_at: string
+}
+
+interface AdminRow {
+  id: string
+  name: string
+  email: string
+}
+
 export async function POST(request: NextRequest) {
   try {
     const session = await auth()
@@ -60,7 +76,7 @@ export async function POST(request: NextRequest) {
     )
 
     if (existingApplication.rows.length > 0) {
-      const app = existingApplication.rows[0]
+      const app = existingApplication.rows[0] as ApplicationRow
       if (app.status === 'approved') {
         return apiBadRequest('Ihr Profil wurde bereits freigeschaltet')
       }
@@ -142,17 +158,19 @@ export async function POST(request: NextRequest) {
       termsAccepted
     ])
 
+    const createdApplication = applicationResult.rows[0] as ApplicationCreatedRow
+
     // Send confirmation email to applicant
     const applicantEmailResult = await sendEmail(
       formData.get('email') as string || session.user.email || '',
       'repairerApplicationSubmitted',
       session.user.name || 'Reparateur-Bewerber',
-      applicationResult.rows[0].id
+      createdApplication.id
     )
 
     if (!applicantEmailResult.success) {
       logger.warn('Failed to send repairer application confirmation email to applicant', {
-        applicationId: applicationResult.rows[0].id,
+        applicationId: createdApplication.id,
         error: applicantEmailResult.error
       })
     }
@@ -167,7 +185,7 @@ export async function POST(request: NextRequest) {
 
       const adminDashboardUrl = `${APP_URL}/admin/repairer-applications`
 
-      for (const admin of adminEmailsResult.rows) {
+      for (const admin of adminEmailsResult.rows as AdminRow[]) {
         const adminEmailResult = await sendEmail(
           admin.email,
           'adminNewRepairerApplication',
@@ -179,21 +197,21 @@ export async function POST(request: NextRequest) {
         if (!adminEmailResult.success) {
           logger.warn('Failed to send new repairer application notification to admin', {
             adminEmail: admin.email,
-            applicationId: applicationResult.rows[0].id,
+            applicationId: createdApplication.id,
             error: adminEmailResult.error
           })
         }
       }
     } catch (error) {
       logger.error('Error sending admin notifications for new repairer application', {
-        applicationId: applicationResult.rows[0].id,
+        applicationId: createdApplication.id,
         error
       })
     }
 
     return apiSuccess({
       message: SUCCESS_MESSAGES.REPAIRER_APPLICATION_SUBMITTED,
-      applicationId: applicationResult.rows[0].id
+      applicationId: createdApplication.id
     })
 
   } catch (error) {

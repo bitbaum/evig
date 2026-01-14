@@ -7,6 +7,10 @@ import { TABLE_NAMES } from '@/config/database'
 import { getUserRole } from '@/lib/api/role-checks'
 import { isAdminRole } from '@/lib/constants'
 
+interface CountRow {
+  total: string
+}
+
 // GET /api/admin/workshops/proposals - List workshop proposals with filtering
 export async function GET(request: NextRequest) {
   try {
@@ -76,13 +80,14 @@ export async function GET(request: NextRequest) {
     const countParams = params.slice(0, -2) // Remove limit and offset
     const countResult = await query(countQuery, countParams)
 
+    const count = countResult.rows[0] as CountRow
     return apiSuccess({
       proposals: proposals.rows,
       pagination: {
-        total: parseInt(countResult.rows[0].total),
+        total: parseInt(count.total),
         limit,
         offset,
-        hasMore: offset + limit < parseInt(countResult.rows[0].total)
+        hasMore: offset + limit < parseInt(count.total)
       }
     })
 

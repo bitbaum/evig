@@ -8,7 +8,7 @@ export const dynamic = 'force-dynamic'
 export async function POST(request: NextRequest) {
   try {
     // Clear the admin token cookie
-    const cookieStore = cookies()
+    const cookieStore = await cookies()
     cookieStore.set('admin_token', '', {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',

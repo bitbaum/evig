@@ -13,6 +13,20 @@ interface LineItemInput {
   unitPrice: number | string
 }
 
+interface UserRow {
+  role: string
+}
+
+interface InvoiceCreatedRow {
+  id: string
+  invoice_number: string
+  created_at: string
+}
+
+interface CountRow {
+  total: string
+}
+
 // POST /api/invoices - Create new invoice
 export async function POST(request: NextRequest) {
   try {
@@ -39,7 +53,8 @@ export async function POST(request: NextRequest) {
 
     // Check if user is admin or creating invoice for themselves
     const userRoleResult = await query(`SELECT role FROM ${TABLE_NAMES.USERS} WHERE id = $1`, [session.user.id])
-    const isAdmin = isAdminRole(userRoleResult.rows[0]?.role)
+    const user = userRoleResult.rows[0] as UserRow | undefined
+    const isAdmin = isAdminRole(user?.role)
     const targetUserId = isAdmin && userId ? userId : session.user.id
 
     if (!targetUserId) {
@@ -58,8 +73,8 @@ export async function POST(request: NextRequest) {
         throw new Error('Invalid line item: description, quantity, and unitPrice required')
       }
 
-      const quantity = parseFloat(item.quantity)
-      const unitPrice = parseFloat(item.unitPrice)
+      const quantity = parseFloat(String(item.quantity))
+      const unitPrice = parseFloat(String(item.unitPrice))
       const total = quantity * unitPrice
       subtotalCents += Math.round(total * 100)
 
@@ -140,7 +155,7 @@ export async function POST(request: NextRequest) {
       })
     ])
 
-    const invoice = invoiceResult.rows[0]
+    const invoice = invoiceResult.rows[0] as InvoiceCreatedRow
 
     return apiSuccess({
       invoiceId: invoice.id,
@@ -173,7 +188,8 @@ export async function GET(request: NextRequest) {
 
     // Check if user is admin
     const userRoleResult = await query(`SELECT role FROM ${TABLE_NAMES.USERS} WHERE id = $1`, [session.user.id])
-    const isAdmin = isAdminRole(userRoleResult.rows[0]?.role)
+    const user = userRoleResult.rows[0] as UserRow | undefined
+    const isAdmin = isAdminRole(user?.role)
 
     let whereClause = 'WHERE 1=1'
     const params = []
@@ -222,7 +238,7 @@ export async function GET(request: NextRequest) {
 
     return apiSuccess({
       invoices: invoicesResult.rows,
-      total: parseInt(countResult.rows[0].total),
+      total: parseInt((countResult.rows[0] as CountRow).total),
       limit,
       offset
     })

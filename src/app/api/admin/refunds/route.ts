@@ -6,6 +6,14 @@ import { isAdminRole } from '@/lib/constants'
 import { logger } from '@/lib/logger'
 import { TABLE_NAMES } from '@/config/database'
 
+interface UserRow {
+  role: string
+}
+
+interface CountRow {
+  total: string
+}
+
 // GET /api/admin/refunds - List all refunds for admin review
 export async function GET(request: NextRequest) {
   try {
@@ -16,7 +24,8 @@ export async function GET(request: NextRequest) {
 
     // Check if user is admin
     const userRoleResult = await query(`SELECT role FROM ${TABLE_NAMES.USERS} WHERE id = $1`, [session.user.id])
-    if (!isAdminRole(userRoleResult.rows[0]?.role)) {
+    const user = userRoleResult.rows[0] as UserRow | undefined
+    if (!isAdminRole(user?.role)) {
       return apiUnauthorized('Admin access required')
     }
 
@@ -59,9 +68,10 @@ export async function GET(request: NextRequest) {
       SELECT COUNT(*) as total FROM ${TABLE_NAMES.REFUNDS} r ${whereClause}
     `, params)
 
+    const count = countResult.rows[0] as CountRow
     return apiSuccess({
       refunds: refundsResult.rows,
-      total: parseInt(countResult.rows[0].total),
+      total: parseInt(count.total),
       limit,
       offset
     })

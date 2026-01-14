@@ -4,7 +4,7 @@ import { MEDUSA_CONFIG } from "@/config/medusa";
 import { TABLE_NAMES } from "@/config/database";
 import { apiSuccess, apiError, apiBadRequest, apiNotFound, apiUnauthorized } from "@/lib/api/helpers";
 import { logger } from "@/lib/logger";
-import { withAuth } from "@/lib/api/middleware";
+import { withAuth, ValidSession } from "@/lib/api/middleware";
 
 interface PublishResult {
   success: boolean;
@@ -13,9 +13,32 @@ interface PublishResult {
   errors?: string[];
 }
 
-export const POST = withAuth(async (request: NextRequest, session) => {
+interface AIProductRaw {
+  id: string;
+  product_name: string;
+  brand?: string;
+  category?: string;
+  condition?: string;
+  specifications?: Record<string, unknown>;
+  color?: string;
+  material?: string;
+  dimensions?: {
+    width?: number;
+    height?: number;
+    depth?: number;
+    unit?: string;
+  };
+  weight_grams?: number;
+  product_images?: Array<{
+    id: string;
+    filename: string;
+    file_path: string;
+  }>;
+}
+
+export const POST = withAuth(async (request: NextRequest, session: ValidSession) => {
   try {
-    const supabase = createClient();
+    const supabase = await createClient();
     const { inventoryItemId, options = {} } = await request.json();
 
     if (!inventoryItemId) {
@@ -396,7 +419,7 @@ function generateVariantOptions(aiProduct: AIProductRaw): Array<{ option_id: str
 // Get sustainability score for product
 async function getSustainabilityScore(aiProductId: string): Promise<number> {
   try {
-    const supabase = createClient();
+    const supabase = await createClient();
     const { data: score } = await supabase
       .from(TABLE_NAMES.SUSTAINABILITY_SCORES)
       .select('overall_score')
@@ -413,7 +436,7 @@ async function getSustainabilityScore(aiProductId: string): Promise<number> {
 // GET endpoint to check publishing status
 export const GET = withAuth(async (request: NextRequest) => {
   try {
-    const supabase = createClient();
+    const supabase = await createClient();
     const { searchParams } = new URL(request.url);
     const inventoryItemId = searchParams.get('inventoryItemId');
 

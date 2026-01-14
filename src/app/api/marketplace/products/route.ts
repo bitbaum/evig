@@ -296,7 +296,7 @@ export async function POST(request: NextRequest) {
       id: listingResult.rows[0].id,
       inventoryItemId,
       message: 'Produkt erfolgreich erstellt',
-    }, undefined, 201)
+    }, 201)
   } catch (error) {
     logger.error('Failed to create marketplace product', { error })
     return apiError(error, 'Produkt konnte nicht erstellt werden')

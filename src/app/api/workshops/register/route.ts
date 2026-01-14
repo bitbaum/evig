@@ -5,6 +5,20 @@ import { apiError, apiSuccess, apiUnauthorized, apiBadRequest, apiNotFound } fro
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES } from '@/config/database'
 
+interface WorkshopRow {
+  id: string
+  title: string
+}
+
+interface IdRow {
+  id: string
+}
+
+interface RegistrationRow {
+  id: string
+  created_at: string
+}
+
 export async function POST(request: NextRequest) {
   try {
     // Check authentication
@@ -30,7 +44,7 @@ export async function POST(request: NextRequest) {
       return apiNotFound('Workshop')
     }
 
-    const workshop = workshopResult.rows[0]
+    const workshop = workshopResult.rows[0] as WorkshopRow
 
     // For now, we'll create a registration request without a specific instance
     // In the future, this could be expanded to allow instance selection
@@ -63,7 +77,7 @@ export async function POST(request: NextRequest) {
     )
 
     if (instanceResult.rows.length > 0) {
-      workshopInstanceId = instanceResult.rows[0].id
+      workshopInstanceId = (instanceResult.rows[0] as IdRow).id
     } else {
       // Create a default instance (this is temporary until proper instance management is implemented)
       const newInstanceResult = await query(
@@ -72,7 +86,7 @@ export async function POST(request: NextRequest) {
          RETURNING id`,
         [workshop.id]
       )
-      workshopInstanceId = newInstanceResult.rows[0].id
+      workshopInstanceId = (newInstanceResult.rows[0] as IdRow).id
     }
 
     // Create the registration
@@ -83,9 +97,10 @@ export async function POST(request: NextRequest) {
       [session.user.id, workshopInstanceId]
     )
 
+    const registration = registrationResult.rows[0] as RegistrationRow
     return apiSuccess({
       message: 'Erfolgreich für Workshop angemeldet',
-      registrationId: registrationResult.rows[0].id,
+      registrationId: registration.id,
       workshopTitle: workshop.title
     })
 

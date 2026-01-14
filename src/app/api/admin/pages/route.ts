@@ -17,9 +17,9 @@ interface User {
   role: string
 }
 
-function getCurrentUser(): User | null {
+async function getCurrentUser(): Promise<User | null> {
   try {
-    const cookieStore = cookies()
+    const cookieStore = await cookies()
     const token = cookieStore.get('admin_token')?.value
 
     if (!token) return null
@@ -45,8 +45,8 @@ function getCurrentUser(): User | null {
   }
 }
 
-function authenticateUser(): User {
-  const user = getCurrentUser()
+async function authenticateUser(): Promise<User> {
+  const user = await getCurrentUser()
   if (!user) {
     throw new Error('Not authenticated')
   }
@@ -58,12 +58,13 @@ export async function GET(request: NextRequest) {
     if (!ENABLE_CMS) {
       return apiError(new Error('CMS is disabled'), 'CMS is disabled', 501)
     }
-    const user = authenticateUser()
+    const user = await authenticateUser()
+    const cookieStore = await cookies()
 
     // Forward to Reboot Content API
     const response = await fetch(`${REBOOT_CONTENT_URL}/api/content/static-pages`, {
       headers: {
-        'Authorization': `Bearer ${cookies().get('admin_token')?.value}`,
+        'Authorization': `Bearer ${cookieStore.get('admin_token')?.value}`,
       },
     })
 
@@ -87,15 +88,16 @@ export async function POST(request: NextRequest) {
     if (!ENABLE_CMS) {
       return apiError(new Error('CMS is disabled'), 'CMS is disabled', 501)
     }
-    const user = authenticateUser()
+    const user = await authenticateUser()
     const body = await request.json()
+    const cookieStore = await cookies()
 
     // Forward to Reboot Content API
     const response = await fetch(`${REBOOT_CONTENT_URL}/api/content/static-pages`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${cookies().get('admin_token')?.value}`,
+        'Authorization': `Bearer ${cookieStore.get('admin_token')?.value}`,
       },
       body: JSON.stringify(body),
     })

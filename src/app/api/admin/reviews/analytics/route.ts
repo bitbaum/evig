@@ -7,6 +7,43 @@ import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
 import { isAdminRole } from '@/lib/constants'
 
+interface UserRow {
+  role: string
+}
+
+interface OverallStatsRow {
+  total_reviews: string
+  published_reviews: string
+  pending_reviews: string
+  hidden_reviews: string
+  average_rating: string
+  verified_reviews: string
+}
+
+interface RatingDistributionRow {
+  overall_rating: number
+  count: string
+}
+
+interface TopRatedRow {
+  business_name: string
+  average_rating: string
+  total_reviews: string
+  recent_reviews: string
+}
+
+interface TrendRow {
+  date: string
+  count: string
+  avg_rating: string
+}
+
+interface ReviewerRow {
+  name: string
+  review_count: string
+  avg_rating_given: string
+}
+
 export async function GET(request: NextRequest) {
   try {
     const session = await auth()
@@ -20,7 +57,8 @@ export async function GET(request: NextRequest) {
       [session.user.id]
     )
 
-    if (!userResult.rows[0] || !isAdminRole(userResult.rows[0].role)) {
+    const user = userResult.rows[0] as UserRow | undefined
+    if (!user || !isAdminRole(user.role)) {
       return apiUnauthorized('Nur Administratoren können Analytics einsehen')
     }
 
@@ -103,6 +141,10 @@ export async function GET(request: NextRequest) {
       LIMIT 10
     `, [targetType, startDate.toISOString()])
 
+    const stats = overallStats.rows[0] as OverallStatsRow
+    const totalReviews = parseInt(stats.total_reviews)
+    const publishedReviews = parseInt(stats.published_reviews)
+
     const analytics = {
       period: {
         days,
@@ -110,32 +152,32 @@ export async function GET(request: NextRequest) {
         endDate: endDate.toISOString()
       },
       overview: {
-        totalReviews: parseInt(overallStats.rows[0].total_reviews),
-        publishedReviews: parseInt(overallStats.rows[0].published_reviews),
-        pendingReviews: parseInt(overallStats.rows[0].pending_reviews),
-        hiddenReviews: parseInt(overallStats.rows[0].hidden_reviews),
-        verifiedReviews: parseInt(overallStats.rows[0].verified_reviews),
-        averageRating: parseFloat(overallStats.rows[0].average_rating) || 0,
-        publishRate: overallStats.rows[0].total_reviews > 0
-          ? Math.round((overallStats.rows[0].published_reviews / overallStats.rows[0].total_reviews) * 100)
+        totalReviews,
+        publishedReviews,
+        pendingReviews: parseInt(stats.pending_reviews),
+        hiddenReviews: parseInt(stats.hidden_reviews),
+        verifiedReviews: parseInt(stats.verified_reviews),
+        averageRating: parseFloat(stats.average_rating) || 0,
+        publishRate: totalReviews > 0
+          ? Math.round((publishedReviews / totalReviews) * 100)
           : 0
       },
-      ratingDistribution: ratingDistribution.rows.reduce((acc: Record<number, number>, row) => {
+      ratingDistribution: (ratingDistribution.rows as RatingDistributionRow[]).reduce((acc: Record<number, number>, row) => {
         acc[row.overall_rating] = parseInt(row.count)
         return acc
       }, { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 } as Record<number, number>),
-      topRated: topRated.rows.map(row => ({
+      topRated: (topRated.rows as TopRatedRow[]).map(row => ({
         name: row.business_name,
         averageRating: parseFloat(row.average_rating),
         totalReviews: parseInt(row.total_reviews),
         recentReviews: parseInt(row.recent_reviews)
       })),
-      trends: reviewTrends.rows.map(row => ({
+      trends: (reviewTrends.rows as TrendRow[]).map(row => ({
         date: row.date,
         count: parseInt(row.count),
         averageRating: parseFloat(row.avg_rating)
       })),
-      activeReviewers: activeReviewers.rows.map(row => ({
+      activeReviewers: (activeReviewers.rows as ReviewerRow[]).map(row => ({
         name: row.name,
         reviewCount: parseInt(row.review_count),
         averageRatingGiven: parseFloat(row.avg_rating_given)

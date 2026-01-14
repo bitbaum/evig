@@ -4,7 +4,7 @@ import { parse } from 'csv-parse/sync';
 import { TABLE_NAMES } from "@/config/database";
 import { apiSuccess, apiError, apiBadRequest, apiUnauthorized } from "@/lib/api/helpers";
 import { logger } from "@/lib/logger";
-import { withAuth } from "@/lib/api/middleware";
+import { withAuth, ValidSession } from "@/lib/api/middleware";
 
 interface CSVRow {
   Artikelnummer: string;
@@ -22,9 +22,9 @@ interface ImportResult {
   duplicates: string[];
 }
 
-export const POST = withAuth(async (request: NextRequest, session) => {
+export const POST = withAuth(async (request: NextRequest, session: ValidSession) => {
   try {
-    const supabase = createClient();
+    const supabase = await createClient();
     const { csvContent, options = {} } = await request.json();
 
     if (!csvContent) {
@@ -271,9 +271,9 @@ function calculateSustainabilityScore(analysis: ProductAnalysis) {
 }
 
 // GET endpoint to retrieve import history
-export const GET = withAuth(async (request: NextRequest, session) => {
+export const GET = withAuth(async (request: NextRequest, session: ValidSession) => {
   try {
-    const supabase = createClient();
+    const supabase = await createClient();
 
     // Get recent imports
     const { data: imports, error } = await supabase

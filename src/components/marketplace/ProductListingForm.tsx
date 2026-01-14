@@ -61,10 +61,21 @@ export default function ProductListingForm() {
     clearSearch,
   } = useAISearch()
 
+  // ListedProduct type for the SuccessModal
+  interface ListedProduct {
+    id: string
+    title: string
+    price: string
+    brand?: string
+    condition?: string
+    createdAt: string
+    views?: number
+  }
+
   const [showAICamera, setShowAICamera] = useState(false)
   const [showAISearch, setShowAISearch] = useState(false)
   const [showSuccessModal, setShowSuccessModal] = useState(false)
-  const [listedProduct, setListedProduct] = useState<ProductFormData | null>(null)
+  const [listedProduct, setListedProduct] = useState<ListedProduct | null>(null)
   const [submitSuccess, setSubmitSuccess] = useState(false)
   const [submitResult, setSubmitResult] = useState<{ success: boolean; message: string } | null>(null)
 
@@ -77,7 +88,20 @@ export default function ProductListingForm() {
     }
   }
 
-  const handleProductDetected = (detectedProduct: Partial<ProductFormData>) => {
+  // DetectedProductData type from AICameraProductListing
+  interface DetectedProductData {
+    title?: string
+    price?: string
+    category?: string
+    brand?: string
+    condition?: string
+    description?: string
+    images?: string[] | File[]
+    location?: string
+    contactInfo?: string
+  }
+
+  const handleProductDetected = (detectedProduct: DetectedProductData) => {
     updateField('title', detectedProduct.title || formData.title)
     updateField('description', detectedProduct.description || formData.description)
     updateField('price', detectedProduct.price || formData.price)

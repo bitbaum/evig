@@ -11,6 +11,28 @@ import {
   centsToDisplay
 } from '@/lib/payments/payment-flow'
 
+interface WorkshopRow {
+  id: string
+  title: string
+  price_cents: number
+  slug: string
+  is_active: boolean
+}
+
+interface InstanceRow {
+  id: string
+  title: string
+  workshop_price: number
+  current_participants: number
+  max_participants: number
+  status: string
+}
+
+interface RegistrationRow {
+  id: string
+  status: string
+}
+
 // POST /api/workshops/[slug]/register-with-payment - Register for workshop with payment
 export async function POST(request: NextRequest) {
   const stripe = requireStripeClient()
@@ -40,15 +62,15 @@ export async function POST(request: NextRequest) {
       return apiNotFound('Workshop not found')
     }
 
-    const workshop = workshopResult.rows[0]
+    const workshop = workshopResult.rows[0] as WorkshopRow
 
     if (!workshop.price_cents || workshop.price_cents <= 0) {
       return apiBadRequest('This workshop is not available for online registration with payment')
     }
 
     // Get workshop instance if specified, otherwise use general workshop
-    let instanceDetails = null
-    let registrationTarget = workshop.id
+    let instanceDetails: InstanceRow | null = null
+    let registrationTarget: string = workshop.id
     let registrationType = 'workshop'
 
     if (instanceId) {
@@ -66,7 +88,7 @@ export async function POST(request: NextRequest) {
         return apiNotFound('Workshop instance not found or not available')
       }
 
-      instanceDetails = instanceResult.rows[0]
+      instanceDetails = instanceResult.rows[0] as InstanceRow
       registrationTarget = instanceId
       registrationType = 'instance'
 
@@ -83,7 +105,7 @@ export async function POST(request: NextRequest) {
     `, [session.user.id, registrationTarget])
 
     if (existingRegistration.rows.length > 0) {
-      const reg = existingRegistration.rows[0]
+      const reg = existingRegistration.rows[0] as RegistrationRow
       if (reg.status === 'confirmed' || reg.status === 'attended') {
         return apiBadRequest('You are already registered for this workshop')
       }
@@ -109,7 +131,8 @@ export async function POST(request: NextRequest) {
       baseAmount
     ])
 
-    const registrationId = registrationResult.rows[0].id
+    const createdReg = registrationResult.rows[0] as { id: string; created_at: string }
+    const registrationId = createdReg.id
 
     // Update instance participant count if registering for specific instance
     if (instanceId) {

@@ -7,6 +7,47 @@ import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
 import { isAdminRole } from '@/lib/constants'
 
+interface UserRow {
+  role: string
+}
+
+interface DocumentRow {
+  id: string
+  application_id: string
+  document_type_id: string
+  document_type_name: string
+  document_type_description: string
+  is_required: boolean
+  filename: string
+  original_filename: string
+  file_path: string
+  file_size_bytes: number
+  mime_type: string
+  status: string
+  admin_notes: string
+  reviewed_by: string
+  reviewed_at: string
+  expires_at: string
+  created_at: string
+  updated_at: string
+}
+
+interface DocumentTypeRow {
+  id: string
+  slug: string
+  name: string
+  description: string
+  max_file_size_mb: number
+  allowed_extensions: string[]
+}
+
+interface ApplicationRow {
+  id: string
+  name: string
+  email: string
+  document_verification_status: string
+}
+
 export async function GET(request: NextRequest) {
   try {
     const session = await auth()
@@ -20,7 +61,8 @@ export async function GET(request: NextRequest) {
       [session.user.id]
     )
 
-    if (!userResult.rows[0] || !isAdminRole(userResult.rows[0].role)) {
+    const user = userResult.rows[0] as UserRow | undefined
+    if (!user || !isAdminRole(user.role)) {
       return apiUnauthorized('Nur Administratoren können diese Funktion verwenden')
     }
 
@@ -69,7 +111,7 @@ export async function GET(request: NextRequest) {
         )
     `, [applicationId])
 
-    const documents = documentsResult.rows.map(doc => ({
+    const documents = (documentsResult.rows as DocumentRow[]).map(doc => ({
       id: doc.id,
       applicationId: doc.application_id,
       documentTypeId: doc.document_type_id,
@@ -90,7 +132,7 @@ export async function GET(request: NextRequest) {
       updatedAt: doc.updated_at
     }))
 
-    const missingRequiredDocuments = requiredTypesResult.rows.map(type => ({
+    const missingRequiredDocuments = (requiredTypesResult.rows as DocumentTypeRow[]).map(type => ({
       id: type.id,
       slug: type.slug,
       name: type.name,
@@ -105,12 +147,13 @@ export async function GET(request: NextRequest) {
       documentCount: documents.length
     })
 
+    const application = applicationResult.rows[0] as ApplicationRow
     return apiSuccess({
       application: {
-        id: applicationResult.rows[0].id,
-        applicantName: applicationResult.rows[0].name,
-        applicantEmail: applicationResult.rows[0].email,
-        documentVerificationStatus: applicationResult.rows[0].document_verification_status
+        id: application.id,
+        applicantName: application.name,
+        applicantEmail: application.email,
+        documentVerificationStatus: application.document_verification_status
       },
       documents,
       missingRequiredDocuments

@@ -7,6 +7,28 @@ import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
 import { isAdminRole } from '@/lib/constants'
 
+interface ReviewRow {
+  id: string
+  target_type: string
+  target_id: string
+  repairer_user_id: string | null
+}
+
+interface UserRow {
+  role: string
+}
+
+interface ResponseIdRow {
+  id: string
+}
+
+interface ResponseRow {
+  id: string
+  responder_id: string
+  target_type: string
+  repairer_user_id: string | null
+}
+
 export async function POST(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
@@ -41,7 +63,7 @@ export async function POST(
       return apiNotFound('Bewertung nicht gefunden')
     }
 
-    const review = reviewResult.rows[0]
+    const review = reviewResult.rows[0] as ReviewRow
 
     // Check if user is the repairer being reviewed
     if (review.target_type === 'repairer' && review.repairer_user_id !== session.user.id) {
@@ -54,7 +76,8 @@ export async function POST(
       [session.user.id]
     )
 
-    const isAdmin = isAdminRole(userResult.rows[0]?.role)
+    const user = userResult.rows[0] as UserRow | undefined
+    const isAdmin = isAdminRole(user?.role)
 
     if (review.target_type !== 'repairer' && !isAdmin) {
       return apiForbidden('Antworten sind derzeit nur für Reparatur-Bewertungen verfügbar')
@@ -78,15 +101,17 @@ export async function POST(
       RETURNING id
     `, [reviewId, session.user.id, content.trim()])
 
+    const createdResponse = responseResult.rows[0] as ResponseIdRow
+
     logger.info('Review response created', {
       reviewId,
-      responseId: responseResult.rows[0].id,
+      responseId: createdResponse.id,
       responderId: session.user.id
     })
 
     return apiSuccess({
       message: 'Antwort erfolgreich hinzugefügt',
-      responseId: responseResult.rows[0].id
+      responseId: createdResponse.id
     }, 201)
 
   } catch (error) {
@@ -130,7 +155,7 @@ export async function PUT(
       return apiNotFound('Antwort nicht gefunden')
     }
 
-    const response = responseResult.rows[0]
+    const response = responseResult.rows[0] as ResponseRow
 
     // Check if user can edit this response
     const userResult = await query(
@@ -138,7 +163,8 @@ export async function PUT(
       [session.user.id]
     )
 
-    const isAdmin = isAdminRole(userResult.rows[0]?.role)
+    const userForEdit = userResult.rows[0] as UserRow | undefined
+    const isAdmin = isAdminRole(userForEdit?.role)
     const isOwner = response.responder_id === session.user.id
     const isRepairer = response.target_type === 'repairer' && response.repairer_user_id === session.user.id
 
@@ -194,7 +220,7 @@ export async function DELETE(
       return apiNotFound('Antwort nicht gefunden')
     }
 
-    const response = responseResult.rows[0]
+    const responseToDelete = responseResult.rows[0] as ResponseRow
 
     // Check if user can delete this response
     const userResult = await query(
@@ -202,9 +228,10 @@ export async function DELETE(
       [session.user.id]
     )
 
-    const isAdmin = isAdminRole(userResult.rows[0]?.role)
-    const isOwner = response.responder_id === session.user.id
-    const isRepairer = response.target_type === 'repairer' && response.repairer_user_id === session.user.id
+    const userForDelete = userResult.rows[0] as UserRow | undefined
+    const isAdmin = isAdminRole(userForDelete?.role)
+    const isOwner = responseToDelete.responder_id === session.user.id
+    const isRepairer = responseToDelete.target_type === 'repairer' && responseToDelete.repairer_user_id === session.user.id
 
     if (!isOwner && !isAdmin && !isRepairer) {
       return apiForbidden('Sie können diese Antwort nicht löschen')

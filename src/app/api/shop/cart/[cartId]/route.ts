@@ -9,10 +9,10 @@ import { apiError, apiSuccess } from "@/lib/api/helpers";
  */
 export async function GET(
   request: NextRequest,
-  { params }: { params: { cartId: string } }
+  { params }: { params: Promise<{ cartId: string }> }
 ) {
   try {
-    const { cartId } = params;
+    const { cartId } = await params;
 
     if (!MEDUSA_CONFIG.PUBLISHABLE_KEY) {
       logger.error("Medusa publishable key not configured");

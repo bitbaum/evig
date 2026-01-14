@@ -9,6 +9,54 @@ import { logger } from '@/lib/logger'
 import { isAdminRole, ROLES } from '@/lib/constants'
 import { APP_URL } from '@/config/urls'
 
+interface UserRow {
+  role: string
+}
+
+interface ExistsRow {
+  exists: boolean
+}
+
+interface ApplicationRow {
+  user_id: string
+  email: string
+  name: string
+  status: string
+  business_name: string
+  business_type: string
+  description: string
+  years_experience: number
+  phone: string
+  website: string
+  address: string
+  city: string
+  postal_code: string
+  service_radius_km: number
+  remote_services: boolean
+  hourly_rate_cents: number
+  emergency_fee_cents: number
+  home_visit_fee_cents: number
+  services_offered: string[]
+  specializations: string[]
+  insurance_info: unknown
+  portfolio_images: string[]
+}
+
+interface CertificationRow {
+  name: string
+  issuing_authority: string
+  certification_number: string
+  issue_date: string
+  expiry_date: string
+  category: string
+}
+
+interface DocumentRow {
+  file_path: string
+  original_filename: string
+  document_type: string
+}
+
 export async function PUT(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
@@ -26,7 +74,8 @@ export async function PUT(
       [session.user.id]
     )
 
-    if (!userResult.rows[0] || !isAdminRole(userResult.rows[0].role)) {
+    const user = userResult.rows[0] as UserRow | undefined
+    if (!user || !isAdminRole(user.role)) {
       return apiUnauthorized('Nur Administratoren können diese Funktion verwenden')
     }
     const body = await request.json()
@@ -49,7 +98,7 @@ export async function PUT(
       return apiNotFound('Reparateur-Bewerbung nicht gefunden')
     }
 
-    const application = applicationResult.rows[0]
+    const application = applicationResult.rows[0] as ApplicationRow
 
     if (application.status === 'approved') {
       return apiBadRequest('Diese Bewerbung wurde bereits genehmigt')
@@ -86,7 +135,8 @@ export async function PUT(
         )
       `)
 
-      if (profileTableExists.rows[0].exists) {
+      const exists = (profileTableExists.rows[0] as ExistsRow).exists
+      if (exists) {
         // Get verified certifications for the profile
         const verifiedCertifications = await query(`
           SELECT
@@ -109,7 +159,7 @@ export async function PUT(
           WHERE vd.application_id = $1 AND vd.status = 'approved'
         `, [applicationId])
 
-        const certificationsData = verifiedCertifications.rows.map(cert => ({
+        const certificationsData = (verifiedCertifications.rows as CertificationRow[]).map(cert => ({
           name: cert.name,
           authority: cert.issuing_authority,
           number: cert.certification_number,
@@ -119,7 +169,7 @@ export async function PUT(
           verified: true
         }))
 
-        const documentsData = verifiedDocuments.rows.map(doc => ({
+        const documentsData = (verifiedDocuments.rows as DocumentRow[]).map(doc => ({
           type: doc.document_type,
           filename: doc.original_filename,
           path: doc.file_path,

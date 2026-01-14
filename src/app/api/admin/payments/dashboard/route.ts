@@ -6,6 +6,74 @@ import { isAdminRole } from '@/lib/constants'
 import { logger } from '@/lib/logger'
 import { TABLE_NAMES } from '@/config/database'
 
+interface UserRow {
+  role: string
+}
+
+interface OverviewRow {
+  total_transactions: number
+  successful_transactions: number
+  failed_transactions: number
+  total_volume_cents: number
+  total_fees_cents: number
+  total_refunds_cents: number
+  avg_processing_time_minutes: number | null
+}
+
+interface CurrencyRow {
+  currency: string
+  transaction_count: string
+  volume_cents: number
+}
+
+interface ProviderRow {
+  provider_name: string
+  transaction_count: string
+  volume_cents: number
+  avg_fee_cents: number
+}
+
+interface DailyRow {
+  date: string
+  transaction_count: string
+  volume_cents: number
+}
+
+interface TransactionRow {
+  id: string
+  provider_transaction_id: string
+  type: string
+  status: string
+  amount: number
+  currency: string
+  created_at: string
+  description: string
+  customer_name: string
+  provider_name: string
+}
+
+interface EscrowRow {
+  total_escrows: string
+  active_escrows: string
+  released_escrows: string
+  total_escrow_amount_cents: number
+  total_released_amount_cents: number
+}
+
+interface RefundSummaryRow {
+  total_refunds: string
+  completed_refunds: string
+  pending_refunds: string
+  total_refund_amount_cents: number
+}
+
+interface DisputeRow {
+  total_disputes: string
+  open_disputes: string
+  lost_disputes: string
+  total_dispute_amount_cents: number
+}
+
 // GET /api/admin/payments/dashboard - Get payment dashboard data
 export async function GET(request: NextRequest) {
   try {
@@ -16,7 +84,8 @@ export async function GET(request: NextRequest) {
 
     // Check if user is admin
     const userRoleResult = await query(`SELECT role FROM ${TABLE_NAMES.USERS} WHERE id = $1`, [session.user.id])
-    if (!isAdminRole(userRoleResult.rows[0]?.role)) {
+    const userRow = userRoleResult.rows[0] as UserRow | undefined
+    if (!isAdminRole(userRow?.role)) {
       return apiUnauthorized('Admin access required')
     }
 
@@ -61,7 +130,7 @@ export async function GET(request: NextRequest) {
       WHERE 1=1 ${dateFilter}
     `, params)
 
-    const overview = overviewResult.rows[0]
+    const overview = overviewResult.rows[0] as OverviewRow
 
     // Get transactions by currency
     const currencyResult = await query(`
@@ -165,36 +234,40 @@ export async function GET(request: NextRequest) {
 
     const netVolume = overview.total_volume_cents - overview.total_fees_cents - overview.total_refunds_cents
 
+    const escrow = escrowResult.rows[0] as EscrowRow
+    const refundSummary = refundResult.rows[0] as RefundSummaryRow
+    const dispute = disputeResult.rows[0] as DisputeRow
+
     return apiSuccess({
       overview: {
-        totalTransactions: parseInt(overview.total_transactions),
-        successfulTransactions: parseInt(overview.successful_transactions),
-        failedTransactions: parseInt(overview.failed_transactions),
+        totalTransactions: Number(overview.total_transactions),
+        successfulTransactions: Number(overview.successful_transactions),
+        failedTransactions: Number(overview.failed_transactions),
         successRate: `${successRate}%`,
-        totalVolume: overview.total_volume_cents / 100,
-        totalFees: overview.total_fees_cents / 100,
-        totalRefunds: overview.total_refunds_cents / 100,
+        totalVolume: Number(overview.total_volume_cents) / 100,
+        totalFees: Number(overview.total_fees_cents) / 100,
+        totalRefunds: Number(overview.total_refunds_cents) / 100,
         netVolume: netVolume / 100,
         avgProcessingTime: overview.avg_processing_time_minutes || 0,
         currency: 'CHF' // Primary currency
       },
-      currencyBreakdown: currencyResult.rows.map(row => ({
+      currencyBreakdown: (currencyResult.rows as CurrencyRow[]).map(row => ({
         currency: row.currency,
         transactions: parseInt(row.transaction_count),
-        volume: row.volume_cents / 100
+        volume: Number(row.volume_cents) / 100
       })),
-      providerBreakdown: providerResult.rows.map(row => ({
+      providerBreakdown: (providerResult.rows as ProviderRow[]).map(row => ({
         provider: row.provider_name,
         transactions: parseInt(row.transaction_count),
-        volume: row.volume_cents / 100,
-        avgFee: row.avg_fee_cents / 100
+        volume: Number(row.volume_cents) / 100,
+        avgFee: Number(row.avg_fee_cents) / 100
       })),
-      dailyVolume: dailyVolumeResult.rows.map(row => ({
+      dailyVolume: (dailyVolumeResult.rows as DailyRow[]).map(row => ({
         date: row.date,
         transactions: parseInt(row.transaction_count),
-        volume: row.volume_cents / 100
+        volume: Number(row.volume_cents) / 100
       })),
-      recentTransactions: recentTransactionsResult.rows.map(row => ({
+      recentTransactions: (recentTransactionsResult.rows as TransactionRow[]).map(row => ({
         id: row.id,
         transactionId: row.provider_transaction_id,
         type: row.type,
@@ -207,23 +280,23 @@ export async function GET(request: NextRequest) {
         provider: row.provider_name
       })),
       escrow: {
-        totalEscrows: parseInt(escrowResult.rows[0].total_escrows),
-        activeEscrows: parseInt(escrowResult.rows[0].active_escrows),
-        releasedEscrows: parseInt(escrowResult.rows[0].released_escrows),
-        totalEscrowAmount: escrowResult.rows[0].total_escrow_amount_cents / 100,
-        totalReleasedAmount: escrowResult.rows[0].total_released_amount_cents / 100
+        totalEscrows: parseInt(escrow.total_escrows),
+        activeEscrows: parseInt(escrow.active_escrows),
+        releasedEscrows: parseInt(escrow.released_escrows),
+        totalEscrowAmount: Number(escrow.total_escrow_amount_cents) / 100,
+        totalReleasedAmount: Number(escrow.total_released_amount_cents) / 100
       },
       refunds: {
-        totalRefunds: parseInt(refundResult.rows[0].total_refunds),
-        completedRefunds: parseInt(refundResult.rows[0].completed_refunds),
-        pendingRefunds: parseInt(refundResult.rows[0].pending_refunds),
-        totalRefundAmount: refundResult.rows[0].total_refund_amount_cents / 100
+        totalRefunds: parseInt(refundSummary.total_refunds),
+        completedRefunds: parseInt(refundSummary.completed_refunds),
+        pendingRefunds: parseInt(refundSummary.pending_refunds),
+        totalRefundAmount: Number(refundSummary.total_refund_amount_cents) / 100
       },
       disputes: {
-        totalDisputes: parseInt(disputeResult.rows[0].total_disputes),
-        openDisputes: parseInt(disputeResult.rows[0].open_disputes),
-        lostDisputes: parseInt(disputeResult.rows[0].lost_disputes),
-        totalDisputeAmount: disputeResult.rows[0].total_dispute_amount_cents / 100
+        totalDisputes: parseInt(dispute.total_disputes),
+        openDisputes: parseInt(dispute.open_disputes),
+        lostDisputes: parseInt(dispute.lost_disputes),
+        totalDisputeAmount: Number(dispute.total_dispute_amount_cents) / 100
       }
     })
 
