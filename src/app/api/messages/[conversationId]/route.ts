@@ -1,173 +1,103 @@
 import { NextRequest } from 'next/server'
-import { auth } from '@/auth'
 import { query } from '@/lib/auth/db'
-import { apiError, apiSuccess, apiNotFound, apiUnauthorized, apiBadRequest } from '@/lib/api/helpers'
-import { TABLE_NAMES } from '@/config/database'
+import { apiError, apiSuccess, apiForbidden, apiNotFound } from '@/lib/api/helpers'
+import { withAuth, ValidSession } from '@/lib/api/middleware'
+import { ERROR_MESSAGES } from '@/config/error-messages'
+import { logger } from '@/lib/logger'
 
 interface MessageRow {
   id: string
-  conversation_id: string
   sender_id: string
   recipient_id: string
   content: string
   message_type: string
-  sender_name: string
-  sender_email: string
   is_read: boolean
-  created_at: Date
-  updated_at: Date
-  read_at: Date | null
+  created_at: string
+  sender_name: string
 }
 
-interface ConversationParticipantRow {
-  other_participant: string
+interface ConversationRow {
+  participant_1: string
+  participant_2: string
+  context_id: string | null
+  type: string
 }
 
-interface MessageCreatedRow {
-  id: string
-  created_at: Date
-}
-
-export async function GET(
+// GET /api/messages/[conversationId] - Get messages in conversation
+export const GET = withAuth<{ conversationId: string }>(async (
   request: NextRequest,
-  { params }: { params: Promise<{ conversationId: string }> }
-) {
+  session: ValidSession,
+  context?: { params?: { conversationId: string } }
+) => {
   try {
-    const session = await auth()
-    if (!session?.user?.id) {
-      return apiUnauthorized('Nicht authentifiziert')
+    const conversationId = context?.params?.conversationId
+    if (!conversationId) {
+      return apiNotFound('Konversation nicht gefunden')
     }
 
-    const { conversationId } = await params
+    // Verify user is participant
+    const convResult = await query(
+      'SELECT participant_1, participant_2, context_id, type FROM conversations WHERE id = $1',
+      [conversationId]
+    )
+
+    if (convResult.rows.length === 0) {
+      return apiNotFound('Konversation nicht gefunden')
+    }
+
+    const conv = convResult.rows[0] as ConversationRow
+    if (conv.participant_1 !== session.user.id && conv.participant_2 !== session.user.id) {
+      return apiForbidden('Kein Zugriff auf diese Konversation')
+    }
+
     const { searchParams } = new URL(request.url)
-    const limit = parseInt(searchParams.get('limit') || '50')
-    const before = searchParams.get('before') // Message ID to paginate before
+    const limit = Math.min(parseInt(searchParams.get('limit') || '50'), 100)
+    const before = searchParams.get('before') // cursor for pagination
 
-    // Verify user has access to this conversation
-    const conversationCheck = await query(`
-      SELECT id FROM ${TABLE_NAMES.CONVERSATIONS}
-      WHERE id = $1 AND (participant_1 = $2 OR participant_2 = $2)
-      AND is_active = true
-    `, [conversationId, session.user.id])
-
-    if (conversationCheck.rows.length === 0) {
-      return apiNotFound('Unterhaltung')
-    }
-
-    // Build query for messages
-    let whereClause = `WHERE m.conversation_id = $1`
-    const queryParams = [conversationId]
-    let paramIndex = 2
+    let messagesQuery = 'SELECT m.id, m.sender_id, m.recipient_id, m.content, m.message_type, ' +
+      'm.is_read, m.created_at, u.name as sender_name ' +
+      'FROM messages m ' +
+      'LEFT JOIN users u ON m.sender_id = u.id ' +
+      'WHERE m.conversation_id = $1'
+    
+    const params: (string | number)[] = [conversationId]
 
     if (before) {
-      whereClause += ` AND m.id < $${paramIndex}`
-      queryParams.push(before)
-      paramIndex++
+      params.push(before)
+      messagesQuery += ' AND m.created_at < $' + params.length
     }
 
-    // Mark messages as read for current user
-    await query(`
-      UPDATE ${TABLE_NAMES.MESSAGES}
-      SET is_read = true, read_at = CURRENT_TIMESTAMP
-      WHERE conversation_id = $1 AND recipient_id = $2 AND is_read = false
-    `, [conversationId, session.user.id])
+    params.push(limit)
+    messagesQuery += ' ORDER BY m.created_at DESC LIMIT $' + params.length
 
-    // Get messages
-    const messages = await query(`
-      SELECT
-        m.*,
-        u.name as sender_name,
-        u.email as sender_email
-      FROM ${TABLE_NAMES.MESSAGES} m
-      JOIN ${TABLE_NAMES.USERS} u ON m.sender_id = u.id
-      ${whereClause}
-      ORDER BY m.created_at DESC
-      LIMIT $${paramIndex}
-    `, [...queryParams, limit])
+    const result = await query(messagesQuery, params)
+    const messages = result.rows as MessageRow[]
 
-    // Reverse to get chronological order
-    const chronologicalMessages = (messages.rows as MessageRow[]).reverse()
+    // Mark messages as read
+    const unreadField = conv.participant_1 === session.user.id ? 'unread_count_1' : 'unread_count_2'
+    await query(
+      'UPDATE conversations SET ' + unreadField + ' = 0 WHERE id = $1',
+      [conversationId]
+    )
+    await query(
+      'UPDATE messages SET is_read = true, read_at = CURRENT_TIMESTAMP ' +
+      'WHERE conversation_id = $1 AND recipient_id = $2 AND is_read = false',
+      [conversationId, session.user.id]
+    )
+
+    logger.info('Messages fetched', { conversationId, userId: session.user.id, count: messages.length })
 
     return apiSuccess({
-      messages: chronologicalMessages.map((msg: MessageRow) => ({
-        ...msg,
-        created_at: msg.created_at?.toISOString(),
-        updated_at: msg.updated_at?.toISOString(),
-        read_at: msg.read_at?.toISOString() ?? null,
-      }))
-    })
-
-  } catch (error) {
-    return apiError(error, 'Interner Serverfehler')
-  }
-}
-
-export async function POST(
-  request: NextRequest,
-  { params }: { params: Promise<{ conversationId: string }> }
-) {
-  try {
-    const session = await auth()
-    if (!session?.user?.id) {
-      return apiUnauthorized('Nicht authentifiziert')
-    }
-
-    const { conversationId } = await params
-    const { content, messageType = 'text' } = await request.json()
-
-    if (!content) {
-      return apiBadRequest('Nachricht erforderlich')
-    }
-
-    // Verify user has access to this conversation and get other participant
-    const conversationCheck = await query(`
-      SELECT
-        CASE
-          WHEN participant_1 = $2 THEN participant_2
-          ELSE participant_1
-        END as other_participant
-      FROM ${TABLE_NAMES.CONVERSATIONS}
-      WHERE id = $1 AND (participant_1 = $2 OR participant_2 = $2)
-      AND is_active = true
-    `, [conversationId, session.user.id])
-
-    if (conversationCheck.rows.length === 0) {
-      return apiNotFound('Unterhaltung')
-    }
-
-    const participant = conversationCheck.rows[0] as ConversationParticipantRow
-    const recipientId = participant.other_participant
-
-    // Create message
-    const messageResult = await query(`
-      INSERT INTO ${TABLE_NAMES.MESSAGES} (
-        conversation_id, sender_id, recipient_id, content, message_type
-      )
-      VALUES ($1, $2, $3, $4, $5)
-      RETURNING id, created_at
-    `, [conversationId, session.user.id, recipientId, content, messageType])
-
-    const message = messageResult.rows[0] as MessageCreatedRow
-
-    // Create notification for recipient
-    await query(`
-      INSERT INTO ${TABLE_NAMES.NOTIFICATIONS} (
-        user_id, type, title, content, related_type, related_id, sent_in_app
-      )
-      VALUES ($1, 'message', 'Neue Nachricht', $2, 'conversation', $3, true)
-    `, [recipientId, content.substring(0, 100), conversationId])
-
-    return apiSuccess({
-      message: {
-        id: message.id,
-        created_at: message.created_at?.toISOString(),
+      messages: messages.reverse(), // Return in chronological order
+      conversation: {
+        id: conversationId,
+        context_id: conv.context_id,
+        type: conv.type
       }
     })
 
   } catch (error) {
-    return apiError(error, 'Interner Serverfehler')
+    logger.error('Error fetching messages', { error })
+    return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)
   }
-}
-
-
-
+})

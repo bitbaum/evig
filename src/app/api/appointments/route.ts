@@ -1,113 +1,116 @@
 import { NextRequest } from 'next/server'
 import { query } from '@/lib/auth/db'
-import { apiError, apiSuccess, apiBadRequest, apiNotFound } from '@/lib/api/helpers'
+import { apiError, apiSuccess } from '@/lib/api/helpers'
 import { withAuth, ValidSession } from '@/lib/api/middleware'
+import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES } from '@/config/database'
-
-interface ServiceRow {
-  id: string
-  name: string
-  requires_approval: boolean
-}
-
-interface AppointmentIdRow {
-  id: string
-  created_at: string
-}
+import { logger } from '@/lib/logger'
 
 interface AppointmentRow {
   id: string
   user_id: string
-  status: string
+  repairer_id: string
+  repairer_profile_id: string
+  service_type_id: string
   description: string
+  device_info: string | null
+  preferred_date: string | null
+  confirmed_date: string | null
+  urgency: string
+  status: string
+  is_home_visit: boolean
+  visit_address: string | null
+  visit_city: string | null
+  quoted_price_chf: number | null
+  created_at: string
+  updated_at: string
+  customer_name: string
+  customer_email: string
+  repairer_name: string
+  business_name: string | null
   service_name: string
-  service_slug: string
-  duration_minutes: number
-  price_cents: number
-  created_at: Date
-  updated_at: Date
-  preferred_date: Date | null
-  confirmed_date: Date | null
 }
 
-export const POST = withAuth(async (request: NextRequest, session: ValidSession) => {
+interface CountRow {
+  total: number
+}
+
+// GET /api/appointments - Get appointments for current user (as customer or repairer)
+export const GET = withAuth(async (
+  request: NextRequest,
+  session: ValidSession
+) => {
   try {
-    const { serviceSlug, description, urgency = 'normal' } = await request.json()
+    const { searchParams } = new URL(request.url)
+    const role = searchParams.get('role') || 'customer'
+    const status = searchParams.get('status')
+    const limit = Math.min(parseInt(searchParams.get('limit') || '50'), 100)
+    const offset = parseInt(searchParams.get('offset') || '0')
 
-    if (!serviceSlug) {
-      return apiBadRequest('Service-Slug erforderlich')
+    let whereClause: string
+    const params: (string | number)[] = [session.user.id]
+
+    if (role === 'repairer') {
+      whereClause = 'sa.repairer_id = $1'
+    } else {
+      whereClause = 'sa.user_id = $1'
     }
 
-    // Find the service type
-    const services = await query(
-      `SELECT id, name, requires_approval FROM ${TABLE_NAMES.SERVICE_TYPES} WHERE slug = $1`,
-      [serviceSlug]
-    )
-
-    if (services.rows.length === 0) {
-      return apiNotFound('Service')
+    if (status) {
+      params.push(status)
+      whereClause += ' AND sa.status = $' + params.length
     }
 
-    const service = services.rows[0] as ServiceRow
+    const countParams = [...params]
+    params.push(limit)
+    params.push(offset)
 
-    // Create the appointment
-    const appointmentResult = await query(
-      `INSERT INTO ${TABLE_NAMES.SERVICE_APPOINTMENTS} (user_id, service_type_id, description, urgency, status)
-       VALUES ($1, $2, $3, $4, 'requested')
-       RETURNING id, created_at`,
-      [session.user.id, service.id, description || null, urgency]
+    const result = await query(
+      'SELECT sa.id, sa.user_id, sa.repairer_id, sa.repairer_profile_id, ' +
+      'sa.service_type_id, sa.description, sa.device_info, sa.preferred_date, ' +
+      'sa.confirmed_date, sa.urgency, sa.status, sa.is_home_visit, sa.visit_address, ' +
+      'sa.visit_city, sa.quoted_price_chf, sa.diagnosis_notes, sa.completion_notes, ' +
+      'sa.customer_rating, sa.created_at, sa.updated_at, c.name as customer_name, ' +
+      'c.email as customer_email, r.name as repairer_name, rp.business_name, ' +
+      'st.name as service_name ' +
+      'FROM ' + TABLE_NAMES.SERVICE_APPOINTMENTS + ' sa ' +
+      'LEFT JOIN ' + TABLE_NAMES.USERS + ' c ON sa.user_id = c.id ' +
+      'LEFT JOIN ' + TABLE_NAMES.USERS + ' r ON sa.repairer_id = r.id ' +
+      'LEFT JOIN ' + TABLE_NAMES.REPAIRER_PROFILES + ' rp ON sa.repairer_profile_id = rp.id ' +
+      'LEFT JOIN ' + TABLE_NAMES.SERVICE_TYPES + ' st ON sa.service_type_id = st.id ' +
+      'WHERE ' + whereClause + ' ' +
+      'ORDER BY sa.created_at DESC ' +
+      'LIMIT $' + (params.length - 1) + ' OFFSET $' + params.length,
+      params
     )
 
-    const aptRow = appointmentResult.rows[0] as AppointmentIdRow
+    const countResult = await query(
+      'SELECT COUNT(*)::int as total FROM ' + TABLE_NAMES.SERVICE_APPOINTMENTS + ' sa WHERE ' + whereClause,
+      countParams
+    )
+
+    const appointments = result.rows as AppointmentRow[]
+    const countRows = countResult.rows as CountRow[]
+    const total = countRows[0]?.total || 0
+
+    logger.info('Appointments fetched', {
+      userId: session.user.id,
+      role,
+      count: appointments.length
+    })
+
     return apiSuccess({
-      message: service.requires_approval
-        ? 'Terminanfrage eingereicht. Wir kontaktieren Sie bald für die Terminbestätigung.'
-        : 'Termin erfolgreich gebucht!',
-      appointmentId: aptRow.id,
-      serviceName: service.name,
-      requiresApproval: service.requires_approval
+      appointments,
+      pagination: {
+        total,
+        limit,
+        offset,
+        hasMore: offset + appointments.length < total
+      }
     })
 
   } catch (error) {
-    return apiError(error, 'Interner Serverfehler')
+    logger.error('Error fetching appointments', { error })
+    return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)
   }
 })
-
-export const GET = withAuth(async (request: NextRequest, session: ValidSession) => {
-  try {
-    // Get user's appointments
-    const appointments = await query(
-      `SELECT
-         sa.*,
-         st.name as service_name,
-         st.slug as service_slug,
-         st.duration_minutes,
-         st.price_cents
-       FROM ${TABLE_NAMES.SERVICE_APPOINTMENTS} sa
-       JOIN ${TABLE_NAMES.SERVICE_TYPES} st ON sa.service_type_id = st.id
-       WHERE sa.user_id = $1
-       ORDER BY sa.created_at DESC`,
-      [session.user.id]
-    )
-
-    return apiSuccess({
-      appointments: (appointments.rows as AppointmentRow[]).map(apt => ({
-        ...apt,
-        created_at: apt.created_at.toISOString(),
-        preferred_date: apt.preferred_date?.toISOString() || null,
-        confirmed_date: apt.confirmed_date?.toISOString() || null,
-        updated_at: apt.updated_at.toISOString(),
-      }))
-    })
-
-  } catch (error) {
-    return apiError(error, 'Interner Serverfehler')
-  }
-})
-
-
-
-
-
-
-
