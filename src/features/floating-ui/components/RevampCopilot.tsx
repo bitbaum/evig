@@ -18,12 +18,6 @@ export default function RevampCopilot() {
   const [isOpen, setIsOpen] = useState(false)
   const [isMinimized, setIsMinimized] = useState(false)
 
-  // Debug: Log component mount and state
-  // console.log('RevampCopilot: Component mounted, isOpen:', isOpen)
-  // console.log('RevampCopilot: useChatbot result:', { messages, inputValue, isLoading })
-
-  // Component mounts successfully
-
   const {
     messages,
     inputValue,

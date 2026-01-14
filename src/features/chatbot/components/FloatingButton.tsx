@@ -12,8 +12,6 @@ interface FloatingButtonProps {
 }
 
 export function FloatingButton({ currentLanguage, isOpen, onClick }: FloatingButtonProps) {
-  // console.log('FloatingButton: Rendering, isOpen:', isOpen)
-
   if (isOpen) return null
 
   return (
