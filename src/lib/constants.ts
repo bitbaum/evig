@@ -96,6 +96,7 @@ export const ROLE_DISPLAY_NAMES: Record<UserRole, string> = {
   [ROLES.REVAMPIT_SUPPORT]: 'Support Specialist',
   [ROLES.PARTNER_ADMIN]: 'Partner Administrator',
   [ROLES.PARTNER_STAFF]: 'Partner Staff',
+  [ROLES.MODERATOR]: 'Community Moderator',
   [ROLES.SELLER]: 'Marketplace Seller',
   [ROLES.REPAIRER]: 'Service Provider',
   [ROLES.TECHNICAL_EXPERT]: 'Technical Expert',
@@ -112,6 +113,7 @@ export const ROLE_DESCRIPTIONS: Record<UserRole, string> = {
   [ROLES.REVAMPIT_SUPPORT]: 'Customer service and support',
   [ROLES.PARTNER_ADMIN]: 'Business partner administration',
   [ROLES.PARTNER_STAFF]: 'Partner staff access',
+  [ROLES.MODERATOR]: 'Moderate community content and approve submissions',
   [ROLES.SELLER]: 'Sell refurbished products on marketplace',
   [ROLES.REPAIRER]: 'Offer repair services to customers',
   [ROLES.TECHNICAL_EXPERT]: 'Provide technical assistance',
@@ -259,6 +261,13 @@ export const ROLE_PERMISSIONS: Record<UserRole, string[]> = {
   ],
 
   // Community Roles - User-requested and verified
+  [ROLES.MODERATOR]: [
+    // Community moderation permissions
+    PERMISSIONS.MODERATE_COMMENTS, PERMISSIONS.MODERATE_FORUM,
+    PERMISSIONS.MANAGE_CONTENT, PERMISSIONS.VIEW_CUSTOMER_DATA,
+    PERMISSIONS.BUY_PRODUCTS, PERMISSIONS.BOOK_WORKSHOPS, PERMISSIONS.BOOK_REPAIRS,
+    PERMISSIONS.LEAVE_REVIEWS
+  ],
   [ROLES.SELLER]: [
     // Marketplace seller permissions
     PERMISSIONS.SELL_PRODUCTS, PERMISSIONS.MANAGE_OWN_PRODUCTS,
