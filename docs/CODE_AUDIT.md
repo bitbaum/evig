@@ -1,51 +1,64 @@
 ---
 created_date: 2026-01-07
-last_modified_date: 2026-01-07
-last_modified_summary: Extracted code audit findings from CLAUDE.md for separation of concerns
+last_modified_date: 2026-01-14
+last_modified_summary: Updated audit to reflect major fixes - security auth added, N+1 fixed, cache headers added, React.memo added, Swiss German compliance
 ---
 
 # RevampIT Code Audit Findings
 
-**Last Audit Date**: 2026-01-07
+**Last Audit Date**: 2026-01-14
 
 This document tracks code quality issues, security findings, and performance problems identified during code audits.
 
 ---
 
+## Summary of Recent Fixes (2026-01-14)
+
+| Fix | Status | Commit |
+|-----|--------|--------|
+| Security auth/rate limiting | FIXED | Previously completed |
+| N+1 query in reviews | FIXED | `33dff13` - Used json_agg |
+| Swiss German compliance (ss not ss) | FIXED | `ddcd6ac` - 16 files |
+| Cache headers for public APIs | FIXED | `66e70cc` - repairers endpoints |
+| React.memo optimizations | FIXED | FilterBar + ComparisonCard |
+| Hardcoded table names | FIXED | `2af0448` - Using TABLE_NAMES |
+| Unused imports | FIXED | `b59b3c1` - Cleaned up |
+
+---
+
 ## Critical Issues to Fix
 
-| Category | Count | Priority | Key Files |
-|----------|-------|----------|-----------|
-| console.log statements | 65 | HIGH | `payments/webhook/route.ts` (16), `pci-compliance.ts` (8) |
-| `any` type usage | 52 | MEDIUM | `ServiceBookingPayment.tsx` (6), `tax-compliance.ts` (4) |
-| Hardcoded role strings | 20+ | HIGH | Use `ROLES.REVAMPIT_ADMIN` not `'admin'` |
-| Missing TABLE_NAMES | 14+ | MEDIUM | Add to `src/config/database.ts` |
-| Missing auth checks | 2 | CRITICAL | `GET /api/blog/submit`, `POST /newsletter/subscribe` |
-| Missing rate limiting | 2 | CRITICAL | `/auth/register`, `/newsletter/subscribe` |
+| Category | Count | Priority | Status |
+|----------|-------|----------|--------|
+| console.log statements | ~5 | LOW | Only in logger.ts (correct) |
+| `any` type usage | 1 | LOW | Only `window.next` check (acceptable) |
+| Hardcoded role strings | 0 | FIXED | Using constants |
+| Missing TABLE_NAMES | 0 | FIXED | All added to database.ts |
+| Missing auth checks | 0 | FIXED | Auth added to endpoints |
+| Missing rate limiting | 0 | FIXED | Rate limiting in place |
 
 ---
 
 ## Security Issues
 
-| Issue | Severity | Location |
-|-------|----------|----------|
-| Missing auth on GET /blog/submit | CRITICAL | `src/app/api/blog/submit/route.ts:64` |
-| No rate limiting on registration | HIGH | `src/app/api/auth/register/route.ts` |
-| Missing return in webhook handler | HIGH | `src/app/api/payments/webhook/route.ts:50` |
-| XSS risk (dangerouslySetInnerHTML) | MEDIUM | `src/app/services/*.tsx` - review needed |
-| Missing NextResponse import | HIGH | `src/app/api/admin/login/route.ts:32` |
+| Issue | Severity | Status |
+|-------|----------|--------|
+| Missing auth on GET /blog/submit | CRITICAL | FIXED |
+| No rate limiting on registration | HIGH | FIXED |
+| Missing return in webhook handler | HIGH | FIXED |
+| XSS risk (dangerouslySetInnerHTML) | MEDIUM | SAFE - Only JSON-LD patterns |
 
 ---
 
 ## Performance Issues
 
-| Issue | Location | Fix |
-|-------|----------|-----|
-| N+1 query (reviews + attachments) | `src/app/api/reviews/route.ts:95` | Use JOIN with json_agg |
-| Duplicate count queries | `src/app/api/locations/route.ts:44` | Use COUNT(*) OVER() |
-| Missing cache headers | Multiple API routes | Add `revalidate: 300` for semi-static data |
-| No React.memo | `FilterBar.tsx`, `ComparisonCard.tsx` | Wrap with memo() |
-| Raw `<img>` tags | `BlogFeaturedGrid.tsx` | Use Next.js `<Image>` |
+| Issue | Status | Fix Applied |
+|-------|--------|-------------|
+| N+1 query (reviews + attachments) | FIXED | json_agg subquery |
+| Missing cache headers | FIXED | apiSuccessCached helper added |
+| No React.memo | FIXED | FilterBar, ComparisonCard wrapped |
+| Duplicate count queries | TODO | Use COUNT(*) OVER() |
+| Raw `<img>` tags | TODO | Migrate to Next.js `<Image>` |
 
 ---
 
@@ -61,31 +74,14 @@ This masks errors. **Always run `npm run typecheck` manually before commits.**
 
 ---
 
-## Missing Table Names
+## Remaining TODOs
 
-Add these to `src/config/database.ts`:
+### Low Priority
+- Migrate raw `<img>` tags to `next/image` in BlogFeaturedGrid.tsx
+- Consider COUNT(*) OVER() for pagination queries
+- Increase test coverage
 
-```typescript
-// Add these to TABLE_NAMES:
-VERIFICATION_DOCUMENTS: 'verification_documents',
-DOCUMENT_TYPES: 'document_types',
-PAYMENT_TRANSACTIONS: 'payment_transactions',
-ESCROW_ACCOUNTS: 'escrow_accounts',
-REFUNDS: 'refunds',
-PAYMENT_DISPUTES: 'payment_disputes',
-REVIEW_ATTACHMENTS: 'review_attachments',
-REVIEW_RESPONSES: 'review_responses',
-REVIEW_VOTES: 'review_votes',
-REVIEW_MODERATION_LOG: 'review_moderation_log',
-PAYMENT_PROVIDERS: 'payment_providers',
-USER_LOCKOUTS: 'user_lockouts',
-AUTH_AUDIT_LOG: 'auth_audit_log',
-```
-
----
-
-## Testing Coverage
-
+### Testing Coverage
 **Current Coverage**: MINIMAL (only 3 test files found)
 - `src/middleware/__tests__/admin.test.ts`
 - `src/app/marketplace/__tests__/page.test.tsx`
@@ -95,4 +91,4 @@ AUTH_AUDIT_LOG: 'auth_audit_log',
 
 ---
 
-**Last Updated**: 2026-01-07
+**Last Updated**: 2026-01-14

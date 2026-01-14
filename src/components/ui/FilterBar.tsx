@@ -30,7 +30,7 @@ const colorVariants = {
   }
 }
 
-export const FilterBar: React.FC<FilterBarProps> = ({
+const FilterBarComponent: React.FC<FilterBarProps> = ({
   filters,
   filterState,
   onFilterChange,
@@ -75,3 +75,6 @@ export const FilterBar: React.FC<FilterBarProps> = ({
     </div>
   )
 }
+
+// Memoize to prevent unnecessary re-renders when parent updates
+export const FilterBar = React.memo(FilterBarComponent)

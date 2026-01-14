@@ -8,6 +8,7 @@
  * Last Modified Summary: Created reusable comparison card component
  */
 
+import React from 'react'
 import { FileCheck, FileX, LucideIcon } from 'lucide-react'
 import { getTextColor } from '@/lib/design-system'
 import { cn } from '@/lib/utils'
@@ -25,7 +26,7 @@ interface ComparisonCardProps {
   variant: 'openSource' | 'proprietary'
 }
 
-export function ComparisonCard({ item, variant }: ComparisonCardProps) {
+const ComparisonCardComponent: React.FC<ComparisonCardProps> = ({ item, variant }) => {
   const isOpenSource = variant === 'openSource'
   const Icon = item.icon
 
@@ -121,5 +122,5 @@ export function ComparisonCard({ item, variant }: ComparisonCardProps) {
   )
 }
 
-
-
+// Memoize to prevent unnecessary re-renders when parent updates
+export const ComparisonCard = React.memo(ComparisonCardComponent)
