@@ -1,8 +1,21 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
+import { csrfMiddleware, generateCsrfToken, createCsrfCookie, getCsrfFromCookies } from '@/lib/auth/csrf'
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
+  const method = request.method
+
+  // CSRF Protection for state-changing requests
+  // Apply to API routes that aren't webhooks or public
+  if (pathname.startsWith('/api/') &&
+      !pathname.startsWith('/api/webhooks/') &&
+      !pathname.startsWith('/api/public/')) {
+    const csrfResult = csrfMiddleware(request)
+    if (csrfResult) {
+      return csrfResult // CSRF validation failed
+    }
+  }
 
   // Protect admin routes - use Auth.js session
   if (pathname.startsWith('/admin')) {
@@ -35,9 +48,17 @@ export function middleware(request: NextRequest) {
     }
   }
 
-  return NextResponse.next()
+  // Set CSRF cookie on GET requests to establish token for forms
+  const response = NextResponse.next()
+
+  if (method === 'GET' && !getCsrfFromCookies(request.headers.get('cookie'))) {
+    const token = generateCsrfToken()
+    response.headers.set('Set-Cookie', createCsrfCookie(token))
+  }
+
+  return response
 }
 
 export const config = {
-  matcher: ['/admin/:path*', '/dashboard/:path*'],
+  matcher: ['/admin/:path*', '/dashboard/:path*', '/api/:path*'],
 }

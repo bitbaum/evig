@@ -23,13 +23,29 @@ export async function POST(request: NextRequest) {
       return apiBadRequest('Password is required')
     }
 
-    if (!verifyAdminPassword(password)) {
-      return apiUnauthorized('Invalid password')
+    // Get client info for rate limiting and audit logging
+    const ipAddress = request.headers.get('x-forwarded-for')?.split(',')[0] ||
+                      request.headers.get('x-real-ip') ||
+                      'unknown'
+    const userAgent = request.headers.get('user-agent') || 'unknown'
+
+    // Verify password (async with rate limiting and audit logging)
+    const verification = await verifyAdminPassword(password, ipAddress, userAgent)
+
+    if (!verification.valid) {
+      // Return appropriate error with retry info if available
+      if (verification.retryAfter) {
+        return NextResponse.json(
+          { error: verification.error, retryAfter: verification.retryAfter },
+          { status: 429 }
+        )
+      }
+      return apiUnauthorized(verification.error || 'Invalid password')
     }
 
     // Create JWT token
     const token = createAdminToken()
-    
+
     // Create response with auth cookie
     const response = apiSuccess({
       message: 'Login successful',
@@ -40,10 +56,11 @@ export async function POST(request: NextRequest) {
     })
 
     response.headers.set('Set-Cookie', createAuthCookie(token))
-    
+
     return response
 
   } catch (error) {
+    logger.error('Admin auth error', { error })
     return apiError(error, 'Internal server error')
   }
 }

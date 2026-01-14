@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { signIn } from 'next-auth/react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
-import { Mail, Lock, Loader2, AlertCircle, CheckCircle2, ArrowRight } from 'lucide-react'
+import { Mail, Lock, Loader2, AlertCircle, CheckCircle2, ArrowRight, Eye, EyeOff } from 'lucide-react'
 import { getTextColor, getStatusColors, getButtonVariant } from '@/lib/design-system'
 import { cn } from '@/lib/utils'
 
@@ -18,6 +18,7 @@ export function LoginForm() {
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [showPassword, setShowPassword] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [formError, setFormError] = useState<string | null>(null)
 
@@ -178,14 +179,14 @@ export function LoginForm() {
               <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-400" />
               <input
                 id="password"
-                type="password"
+                type={showPassword ? 'text' : 'password'}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
                 autoComplete="current-password"
                 placeholder="••••••••"
                 className={cn(
-                  'w-full pl-11 pr-4 py-3 border-2 rounded-lg transition-all min-h-[touch] touch-target',
+                  'w-full pl-11 pr-12 py-3 border-2 rounded-lg transition-all min-h-[touch] touch-target',
                   'border-neutral-300 dark:border-neutral-600',
                   'bg-white dark:bg-neutral-700',
                   getTextColor('white', 'primary'),
@@ -194,6 +195,14 @@ export function LoginForm() {
                   'focus:ring-2 focus:ring-primary-500 focus:border-primary-500'
                 )}
               />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-300 transition-colors"
+                aria-label={showPassword ? 'Passwort verbergen' : 'Passwort anzeigen'}
+              >
+                {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+              </button>
             </div>
           </div>
 
@@ -222,16 +231,6 @@ export function LoginForm() {
             )}
           </button>
         </form>
-
-        {/* Forgot Password Link */}
-        <div className="text-center mt-4">
-          <Link
-            href="/auth/forgot-password"
-            className="text-sm text-green-600 hover:text-green-700 dark:text-green-400 font-medium"
-          >
-            Passwort vergessen?
-          </Link>
-        </div>
 
         {/* Divider */}
         <div className="relative my-8">

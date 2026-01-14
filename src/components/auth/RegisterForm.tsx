@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { signIn } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { Mail, Lock, User, Loader2, AlertCircle, CheckCircle2, ArrowRight } from 'lucide-react'
+import { Mail, Lock, User, Loader2, AlertCircle, CheckCircle2, ArrowRight, Eye, EyeOff } from 'lucide-react'
 import { RoleSelector } from './RoleSelector'
 import { ROLES } from '@/lib/constants'
 import { getTextColor, getStatusColors, getButtonVariant } from '@/lib/design-system'
@@ -17,18 +17,21 @@ export function RegisterForm() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
+  const [showPassword, setShowPassword] = useState(false)
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   const [role, setRole] = useState<string>(ROLES.CUSTOMER)
   const [acceptTerms, setAcceptTerms] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [errors, setErrors] = useState<string[]>([])
   const [success, setSuccess] = useState(false)
 
-  // Password strength indicators (matching AUTH_CONFIG: 12 chars minimum)
+  // Password strength indicators (matching AUTH_CONFIG: 12 chars minimum + special char)
   const passwordChecks = {
     length: password.length >= 12,
     uppercase: /[A-Z]/.test(password),
     lowercase: /[a-z]/.test(password),
     number: /[0-9]/.test(password),
+    special: /[!@#$%^&*(),.?":{}|<>[\]\\;'`~_+\-=]/.test(password),
   }
   const passwordStrength = Object.values(passwordChecks).filter(Boolean).length
   const enableRoleSelection = process.env.NEXT_PUBLIC_ENABLE_ROLE_SELECTION_ON_REGISTER !== 'false'
@@ -196,14 +199,14 @@ export function RegisterForm() {
               <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-400" />
               <input
                 id="password"
-                type="password"
+                type={showPassword ? 'text' : 'password'}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
                 autoComplete="new-password"
                 placeholder="••••••••"
                 className={cn(
-                  'w-full pl-11 pr-4 py-3 border-2 rounded-lg transition-all min-h-[touch] touch-target',
+                  'w-full pl-11 pr-12 py-3 border-2 rounded-lg transition-all min-h-[touch] touch-target',
                   'border-neutral-300 dark:border-neutral-600',
                   'bg-white dark:bg-neutral-700',
                   getTextColor('white', 'primary'),
@@ -212,20 +215,28 @@ export function RegisterForm() {
                   'focus:ring-2 focus:ring-primary-500 focus:border-primary-500'
                 )}
               />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-300 transition-colors"
+                aria-label={showPassword ? 'Passwort verbergen' : 'Passwort anzeigen'}
+              >
+                {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+              </button>
             </div>
-            
+
             {/* Password Strength Indicator */}
             {password && (
               <div className="mt-2">
                 <div className="flex gap-1 mb-2">
-                  {[1, 2, 3, 4].map((level) => (
+                  {[1, 2, 3, 4, 5].map((level) => (
                     <div
                       key={level}
                       className={`h-1.5 flex-1 rounded-full ${
                         passwordStrength >= level
                           ? level <= 2
                             ? 'bg-red-500'
-                            : level === 3
+                            : level <= 4
                             ? 'bg-yellow-500'
                             : 'bg-green-500'
                           : 'bg-gray-200 dark:bg-gray-600'
@@ -246,6 +257,9 @@ export function RegisterForm() {
                   <li className={passwordChecks.number ? 'text-green-600' : ''}>
                     {passwordChecks.number ? '✓' : '○'} Eine Zahl
                   </li>
+                  <li className={passwordChecks.special ? 'text-green-600' : ''}>
+                    {passwordChecks.special ? '✓' : '○'} Ein Sonderzeichen (!@#$%...)
+                  </li>
                 </ul>
               </div>
             )}
@@ -253,25 +267,39 @@ export function RegisterForm() {
 
           {/* Confirm Password */}
           <div>
-            <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
+            <label htmlFor="confirmPassword" className={cn('block text-sm font-medium mb-1.5', getTextColor('white', 'secondary'), 'dark:text-neutral-300')}>
               Passwort bestätigen *
             </label>
             <div className="relative">
-              <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+              <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-400" />
               <input
                 id="confirmPassword"
-                type="password"
+                type={showConfirmPassword ? 'text' : 'password'}
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 required
                 autoComplete="new-password"
                 placeholder="••••••••"
-                className={`w-full pl-11 pr-4 py-3 border rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-400 focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all ${
+                className={cn(
+                  'w-full pl-11 pr-12 py-3 border-2 rounded-lg transition-all min-h-[touch] touch-target',
                   confirmPassword && confirmPassword !== password
                     ? 'border-red-500'
-                    : 'border-gray-300 dark:border-gray-600'
-                }`}
+                    : 'border-neutral-300 dark:border-neutral-600',
+                  'bg-white dark:bg-neutral-700',
+                  getTextColor('white', 'primary'),
+                  'dark:text-white',
+                  'placeholder-neutral-400',
+                  'focus:ring-2 focus:ring-primary-500 focus:border-primary-500'
+                )}
               />
+              <button
+                type="button"
+                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-300 transition-colors"
+                aria-label={showConfirmPassword ? 'Passwort verbergen' : 'Passwort anzeigen'}
+              >
+                {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+              </button>
             </div>
             {confirmPassword && confirmPassword !== password && (
               <p className="mt-1 text-xs text-red-500">Die Passwörter stimmen nicht überein</p>
@@ -314,7 +342,7 @@ export function RegisterForm() {
           {/* Submit Button */}
           <button
             type="submit"
-            disabled={isLoading || passwordStrength < 4 || password !== confirmPassword}
+            disabled={isLoading || passwordStrength < 5 || password !== confirmPassword}
             className={cn(
               'w-full flex items-center justify-center gap-2 font-semibold py-3 px-4 rounded-lg transition-colors min-h-[touch] touch-target',
               'disabled:opacity-50 disabled:cursor-not-allowed',

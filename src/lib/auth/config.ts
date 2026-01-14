@@ -246,3 +246,60 @@ export function hasMinimumRole(userRole: UserRole, requiredRole: UserRole): bool
   const requiredIndex = ROLE_HIERARCHY.indexOf(requiredRole)
   return userIndex >= requiredIndex
 }
+
+// =============================================================================
+// Admin Password Security
+// =============================================================================
+
+/**
+ * Validate admin password configuration
+ * In production, ADMIN_PASSWORD_HASH is required (plain text not allowed)
+ */
+export function validateAdminPasswordConfig(): {
+  valid: boolean
+  error?: string
+  warning?: string
+} {
+  const hash = process.env.ADMIN_PASSWORD_HASH
+  const plainPassword = process.env.ADMIN_PASSWORD
+  const isProduction = process.env.NODE_ENV === 'production'
+
+  // Check if using hashed password (preferred)
+  if (hash) {
+    // Validate it looks like a bcrypt hash
+    if (!hash.startsWith('$2a$') && !hash.startsWith('$2b$') && !hash.startsWith('$2y$')) {
+      return {
+        valid: false,
+        error: 'ADMIN_PASSWORD_HASH does not appear to be a valid bcrypt hash. ' +
+               'Generate one using: npx bcrypt-cli hash "your-password" 12'
+      }
+    }
+    return { valid: true }
+  }
+
+  // No hash configured - check for plain password
+  if (!plainPassword) {
+    return {
+      valid: false,
+      error: 'Neither ADMIN_PASSWORD_HASH nor ADMIN_PASSWORD is configured. ' +
+             'Set ADMIN_PASSWORD_HASH with a bcrypt hash for secure admin authentication.'
+    }
+  }
+
+  // Plain password in production is NOT allowed
+  if (isProduction) {
+    return {
+      valid: false,
+      error: 'SECURITY ERROR: Plain text admin password (ADMIN_PASSWORD) is not allowed in production. ' +
+             'Set ADMIN_PASSWORD_HASH instead. Generate hash: npx bcrypt-cli hash "your-password" 12'
+    }
+  }
+
+  // Plain password in development - warn but allow
+  return {
+    valid: true,
+    warning: 'SECURITY WARNING: Using plain text ADMIN_PASSWORD. ' +
+             'This is only acceptable in development. ' +
+             'For production, set ADMIN_PASSWORD_HASH instead.'
+  }
+}

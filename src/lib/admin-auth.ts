@@ -2,7 +2,7 @@ import { serialize, parse } from 'cookie'
 import jwt from 'jsonwebtoken'
 import { NextRequest, NextResponse } from 'next/server'
 import { verifyPassword, constantTimeCompare } from './auth/password'
-import { getJwtSecret, AUTH_CONFIG } from './auth/config'
+import { getJwtSecret, AUTH_CONFIG, validateAdminPasswordConfig } from './auth/config'
 import { REDIS_CONFIG } from '@/config/redis'
 import {
   checkRateLimit,
@@ -25,6 +25,22 @@ import { logger } from '@/lib/logger'
 
 // Re-export for backwards compatibility
 export { getJwtSecret }
+
+// =============================================================================
+// Startup Validation
+// =============================================================================
+
+// Validate admin password config on module load
+const passwordConfigValidation = validateAdminPasswordConfig()
+if (!passwordConfigValidation.valid) {
+  logger.error('Admin password configuration error', { error: passwordConfigValidation.error })
+  // In production, this is a fatal error
+  if (process.env.NODE_ENV === 'production') {
+    throw new Error(passwordConfigValidation.error)
+  }
+} else if (passwordConfigValidation.warning) {
+  logger.warn(passwordConfigValidation.warning)
+}
 
 /**
  * Get admin password hash from environment
