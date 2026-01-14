@@ -11,6 +11,7 @@
 
 import { query } from './db'
 import { logger } from '@/lib/logger'
+import { TABLE_NAMES } from '@/config/database'
 
 // =============================================================================
 // Types
@@ -115,7 +116,7 @@ async function flushAuditBuffer(): Promise<void> {
     ])
 
     await query(
-      `INSERT INTO auth_audit_log (event_type, user_id, ip_address, user_agent, details, severity, created_at)
+      `INSERT INTO ${TABLE_NAMES.AUTH_AUDIT_LOG} (event_type, user_id, ip_address, user_agent, details, severity, created_at)
        VALUES ${values}`,
       params
     )
@@ -165,7 +166,7 @@ export async function logAuditEventSync(
 ): Promise<void> {
   try {
     await query(
-      `INSERT INTO auth_audit_log (event_type, user_id, ip_address, user_agent, details, severity, created_at)
+      `INSERT INTO ${TABLE_NAMES.AUTH_AUDIT_LOG} (event_type, user_id, ip_address, user_agent, details, severity, created_at)
        VALUES ($1, $2, $3, $4, $5, $6, NOW())`,
       [
         entry.event_type,

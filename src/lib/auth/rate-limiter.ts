@@ -14,6 +14,7 @@ import { query } from './db'
 import { getRedis } from './redis'
 import { logger } from '@/lib/logger'
 import { isRedisConfigured, REDIS_CONFIG } from '@/config/redis'
+import { TABLE_NAMES } from '@/config/database'
 
 // =============================================================================
 // Types
@@ -295,18 +296,18 @@ export async function recordFailedAttemptDb(
       locked_until: Date | null
       lockout_count: number
     }>(
-      `INSERT INTO user_lockouts (user_id, ip_address, failed_attempts, last_attempt)
+      `INSERT INTO ${TABLE_NAMES.USER_LOCKOUTS} (user_id, ip_address, failed_attempts, last_attempt)
        VALUES ($1, $2, 1, $3)
        ON CONFLICT (user_id)
        DO UPDATE SET
          failed_attempts = CASE
-           WHEN user_lockouts.locked_until < $3 THEN 1
-           ELSE user_lockouts.failed_attempts + 1
+           WHEN ${TABLE_NAMES.USER_LOCKOUTS}.locked_until < $3 THEN 1
+           ELSE ${TABLE_NAMES.USER_LOCKOUTS}.failed_attempts + 1
          END,
          last_attempt = $3,
          locked_until = CASE
-           WHEN user_lockouts.locked_until < $3 THEN NULL
-           ELSE user_lockouts.locked_until
+           WHEN ${TABLE_NAMES.USER_LOCKOUTS}.locked_until < $3 THEN NULL
+           ELSE ${TABLE_NAMES.USER_LOCKOUTS}.locked_until
          END
        RETURNING failed_attempts, locked_until, lockout_count`,
       [userId, ipAddress, now]
@@ -321,7 +322,7 @@ export async function recordFailedAttemptDb(
       const lockoutUntil = new Date(now.getTime() + Math.min(config.lockoutDuration * multiplier, 24 * 60 * 60 * 1000))
 
       await query(
-        `UPDATE user_lockouts
+        `UPDATE ${TABLE_NAMES.USER_LOCKOUTS}
          SET locked_until = $1, lockout_count = $2
          WHERE user_id = $3`,
         [lockoutUntil, newLockoutCount, userId]
@@ -362,7 +363,7 @@ export async function recordFailedAttemptDb(
 export async function clearLockoutDb(userId: string): Promise<void> {
   try {
     await query(
-      `UPDATE user_lockouts
+      `UPDATE ${TABLE_NAMES.USER_LOCKOUTS}
        SET failed_attempts = 0, locked_until = NULL
        WHERE user_id = $1`,
       [userId]

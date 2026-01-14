@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { query } from '@/lib/auth/db'
 import { logger } from '@/lib/logger'
+import { TABLE_NAMES } from '@/config/database'
 import {
   Calendar,
   Clock,
@@ -49,7 +50,7 @@ interface WorkshopInstanceRow {
 async function getWorkshop(slug: string): Promise<Workshop | null> {
   try {
     const result = await query(
-      'SELECT * FROM workshops WHERE slug = $1 AND is_active = true',
+      `SELECT * FROM ${TABLE_NAMES.WORKSHOPS} WHERE slug = $1 AND is_active = true`,
       [slug]
     )
     return (result.rows[0] as Workshop) || null
@@ -65,8 +66,8 @@ async function getWorkshopInstances(workshopId: string): Promise<WorkshopInstanc
       SELECT
         wi.*,
         COUNT(wr.id) as current_participants
-      FROM workshop_instances wi
-      LEFT JOIN workshop_registrations wr ON wi.id = wr.workshop_instance_id
+      FROM ${TABLE_NAMES.WORKSHOP_INSTANCES} wi
+      LEFT JOIN ${TABLE_NAMES.WORKSHOP_REGISTRATIONS} wr ON wi.id = wr.workshop_instance_id
       WHERE wi.workshop_id = $1
       GROUP BY wi.id
       ORDER BY wi.start_date ASC

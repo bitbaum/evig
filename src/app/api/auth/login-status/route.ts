@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getUserByEmail, query } from '@/lib/auth/db'
 import { logger } from '@/lib/logger'
+import { TABLE_NAMES } from '@/config/database'
 
 export async function POST(req: NextRequest) {
   try {
@@ -24,7 +25,7 @@ export async function POST(req: NextRequest) {
       let lockedUntil: string | null = null
       try {
         const res = await query<{ locked_until: Date | null }>(
-          'SELECT locked_until FROM user_lockouts WHERE user_id = $1',
+          `SELECT locked_until FROM ${TABLE_NAMES.USER_LOCKOUTS} WHERE user_id = $1`,
           [user.id]
         )
         const rec = res.rows[0]
