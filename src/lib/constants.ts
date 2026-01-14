@@ -16,6 +16,7 @@ export const ROLES = {
   PARTNER_STAFF: 'partner_staff',                  // Partner staff with limited access
 
   // Community Roles (user-requested)
+  MODERATOR: 'moderator',                          // Community moderators with approval rights
   SELLER: 'seller',                                 // Users who sell refurbished products
   REPAIRER: 'repairer',                            // Users who offer repair services
   TECHNICAL_EXPERT: 'technical_expert',            // Community experts who help others

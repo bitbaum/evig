@@ -5,7 +5,7 @@ import { apiError, apiSuccess, apiBadRequest, apiUnauthorized, apiForbidden, api
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES } from '@/config/database'
 import { getUserRole } from '@/lib/api/role-checks'
-import { isAdminRole } from '@/lib/constants'
+import { isAdminRole, ROLES } from '@/lib/constants'
 
 interface LocationOwnerRow {
   created_by: string
@@ -106,7 +106,7 @@ export async function PUT(
 
     const location = ownershipCheck.rows[0] as LocationOwnerRow
     const isOwner = location.created_by === session.user.id
-    const isAdmin = isAdminRole(userRole) || userRole === 'moderator'
+    const isAdmin = isAdminRole(userRole) || userRole === ROLES.MODERATOR
 
     if (!isOwner && !isAdmin) {
       return apiForbidden('Keine Berechtigung diesen Ort zu bearbeiten')
@@ -187,7 +187,7 @@ export async function DELETE(
 
     const location = locationCheck.rows[0] as LocationOwnerRow
     const isOwner = location.created_by === session.user.id
-    const isAdmin = isAdminRole(userRole) || userRole === 'moderator'
+    const isAdmin = isAdminRole(userRole) || userRole === ROLES.MODERATOR
 
     if (!isOwner && !isAdmin) {
       return apiForbidden('Keine Berechtigung diesen Ort zu löschen')

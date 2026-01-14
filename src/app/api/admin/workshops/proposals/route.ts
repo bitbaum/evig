@@ -5,7 +5,7 @@ import { apiError, apiSuccess, apiBadRequest, apiUnauthorized, apiForbidden } fr
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES } from '@/config/database'
 import { getUserRole } from '@/lib/api/role-checks'
-import { isAdminRole } from '@/lib/constants'
+import { isAdminRole, ROLES } from '@/lib/constants'
 
 interface CountRow {
   total: string
@@ -21,7 +21,7 @@ export async function GET(request: NextRequest) {
 
     // Check if user has admin permissions
     const userRole = await getUserRole(session.user.id)
-    const hasAdminPermission = isAdminRole(userRole) || userRole === 'moderator'
+    const hasAdminPermission = isAdminRole(userRole) || userRole === ROLES.MODERATOR
 
     if (!hasAdminPermission) {
       return apiForbidden('Keine Berechtigung für Workshop-Verwaltung')
