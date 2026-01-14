@@ -13,19 +13,6 @@ interface AppointmentRow {
   status: string
 }
 
-// Valid status transitions
-const STATUS_TRANSITIONS: Record<string, string[]> = {
-  requested: ['accepted', 'rejected'],
-  accepted: ['quoted', 'in_progress', 'cancelled'],
-  quoted: ['quote_approved', 'quote_rejected', 'cancelled'],
-  quote_approved: ['in_progress', 'cancelled'],
-  quote_rejected: ['quoted', 'cancelled'],
-  in_progress: ['completed', 'cancelled'],
-  completed: [],
-  rejected: [],
-  cancelled: []
-}
-
 // GET /api/appointments/[id] - Get single appointment
 export const GET = withAuth<{ id: string }>(async (
   request: NextRequest,
