@@ -35,30 +35,9 @@ export function LoginForm() {
       })
 
       if (result?.error) {
-        // Ask server for a precise reason to improve UX
-        try {
-          const statusResp = await fetch('/api/auth/login-status', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email }),
-          })
-          if (statusResp.ok) {
-            const s = await statusResp.json()
-            if (!s.exists) {
-              setFormError('Kein Konto mit dieser E-Mail gefunden')
-            } else if (!s.hasPassword) {
-              setFormError('Dieses Konto verwendet eine andere Anmeldemethode')
-            } else if (s.locked) {
-              setFormError('Konto vorübergehend gesperrt. Bitte versuchen Sie es später erneut.')
-            } else {
-              setFormError('Falsches Passwort')
-            }
-          } else {
-            setFormError(result.error)
-          }
-        } catch {
-          setFormError(result.error)
-        }
+        // Use generic error to prevent user enumeration
+        // Don't reveal whether email exists or password is wrong
+        setFormError(result.error)
       } else if (result?.ok) {
         router.push(callbackUrl)
         router.refresh()
@@ -74,9 +53,9 @@ export function LoginForm() {
     if (!error) return null
     switch (error) {
       case 'CredentialsSignin':
-        return 'Ungültige Anmeldedaten'
       case 'Configuration':
-        return 'Anmeldung fehlgeschlagen (Konfiguration). Bitte versuchen Sie es erneut oder kontaktieren Sie den Support.'
+        // Generic message to prevent user enumeration
+        return 'Ungültige E-Mail-Adresse oder Passwort'
       case 'OAuthAccountNotLinked':
         return 'Diese E-Mail ist bereits mit einem anderen Konto verknüpft'
       case 'invalid_token':

@@ -135,8 +135,11 @@ export const authConfig = {
           // Get user from database
           const user = await getUserByEmail(email)
 
-          if (!user) {
-            throw new Error('Kein Konto mit dieser E-Mail-Adresse gefunden')
+          // Generic error message to prevent user enumeration
+        const invalidCredentialsError = 'Ungültige E-Mail-Adresse oder Passwort'
+
+        if (!user) {
+            throw new Error(invalidCredentialsError)
           }
 
           if (!user.password_hash) {
@@ -147,7 +150,7 @@ export const authConfig = {
           const isValid = await verifyPassword(password, user.password_hash)
 
           if (!isValid) {
-            throw new Error('Falsches Passwort')
+            throw new Error(invalidCredentialsError)
           }
 
           // Email verification not required for community app
