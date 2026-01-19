@@ -168,12 +168,15 @@ export function getAuthSecret(): string {
  * Get database configuration
  */
 export function getDbConfig() {
+  const sslEnabled = process.env.DB_SSL !== 'false'
+
   return {
     host: process.env.AUTH_DB_HOST || process.env.DB_HOST || 'localhost',
     port: parseInt(process.env.AUTH_DB_PORT || process.env.DB_PORT || '5433'),
     database: process.env.AUTH_DB_NAME || process.env.DB_NAME || 'revampit_cms',
     user: process.env.AUTH_DB_USER || process.env.DB_USER || 'postgres',
     password: process.env.AUTH_DB_PASSWORD || process.env.DB_PASSWORD,
+    ssl: sslEnabled ? { rejectUnauthorized: false } : false,
     max: 20,
     idleTimeoutMillis: 30000,
     connectionTimeoutMillis: 5000,
