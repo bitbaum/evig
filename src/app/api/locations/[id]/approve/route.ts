@@ -7,11 +7,13 @@ import { TABLE_NAMES } from '@/config/database'
 import { getUserRole } from '@/lib/api/role-checks'
 import { isAdminRole, ROLES } from '@/lib/constants'
 import { logger } from '@/lib/logger'
+import { sendEmail } from '@/lib/email'
 
 interface LocationRow {
   id: string
   approval_status: string
   name: string
+  created_by: string
 }
 
 // POST /api/locations/[id]/approve - Approve or reject location
@@ -42,10 +44,11 @@ export async function POST(
       return apiBadRequest('Ungültige Aktion')
     }
 
-    // Check if location exists
+    // Check if location exists and get creator info
     const locationCheck = await query(`
-      SELECT id, approval_status, name FROM ${TABLE_NAMES.LOCATIONS}
-      WHERE id = $1
+      SELECT l.id, l.approval_status, l.name, l.created_by
+      FROM ${TABLE_NAMES.LOCATIONS} l
+      WHERE l.id = $1
     `, [locationId])
 
     if (locationCheck.rows.length === 0) {
@@ -101,7 +104,33 @@ export async function POST(
       await query('COMMIT')
 
       // Send notification to location creator
-      // TODO: Implement notification system
+      if (location.created_by) {
+        try {
+          const creatorResult = await query(
+            `SELECT name, email FROM ${TABLE_NAMES.USERS} WHERE id = $1`,
+            [location.created_by]
+          )
+          if (creatorResult.rows.length > 0) {
+            const creator = creatorResult.rows[0] as { name: string; email: string }
+            if (creator.email) {
+              await sendEmail(
+                creator.email,
+                'locationApprovalNotification',
+                creator.name || 'Benutzer',
+                location.name,
+                action,
+                review_notes || null
+              )
+            }
+          }
+        } catch (emailError) {
+          logger.warn('Failed to send location approval notification', {
+            locationId,
+            action,
+            error: emailError
+          })
+        }
+      }
 
       return apiSuccess({
         message: `Ort erfolgreich ${action === 'approve' ? 'genehmigt' : action === 'reject' ? 'abgelehnt' : action === 'suspend' ? 'suspendiert' : 'wiederhergestellt'}`,

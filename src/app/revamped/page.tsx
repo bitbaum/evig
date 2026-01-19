@@ -1,5 +1,5 @@
 import { Metadata } from 'next'
-import { 
+import {
   Award,
   Shield,
   Sparkles,
@@ -12,6 +12,7 @@ import {
   TrendingUp
 } from 'lucide-react'
 import Link from 'next/link'
+import Image from 'next/image'
 
 export const metadata: Metadata = {
   title: 'REVAMPED Zertifizierung | Nachhaltige Computer-Builds | RevampIT',
@@ -132,11 +133,14 @@ Mehr über Zertifizierung erfahren
 
               {/* Right Column - Image */}
               <div className="relative">
-                <div className="relative rounded-2xl overflow-hidden shadow-2xl">
-                  <img 
-                    src="/images/certification/revamped-laptop-user.jpg" 
+                <div className="relative rounded-2xl overflow-hidden shadow-2xl aspect-[4/3]">
+                  <Image
+                    src="/images/certification/revamped-laptop-user.jpg"
                     alt="Woman with pink hair using a laptop with REVAMPED certification sticker"
-                    className="w-full h-auto object-cover"
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 1024px) 100vw, 50vw"
+                    priority
                   />
                   {/* Small badge in top corner - away from sticker area */}
                   <div className="absolute top-4 right-4 bg-green-600 text-white px-3 py-2 rounded-lg text-sm font-semibold shadow-lg">
@@ -263,10 +267,12 @@ Mehr über Zertifizierung erfahren
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               <div className="text-center">
                 <div className="bg-white p-12 rounded-2xl shadow-lg mb-6">
-                  <img 
-                    src="/images/certification/sticker-1.png" 
+                  <Image
+                    src="/images/certification/sticker-1.png"
                     alt="REVAMPED certification sticker design"
-                    className="w-40 h-40 mx-auto object-contain"
+                    width={160}
+                    height={160}
+                    className="mx-auto object-contain"
                   />
                 </div>
                 <h3 className="text-xl font-bold mb-2">Original-Design</h3>
@@ -274,10 +280,12 @@ Mehr über Zertifizierung erfahren
               </div>
               <div className="text-center">
                 <div className="bg-white p-12 rounded-2xl shadow-lg mb-6">
-                  <img 
-                    src="/images/certification/sticker-2.png" 
+                  <Image
+                    src="/images/certification/sticker-2.png"
                     alt="REVAMPED certification sticker variant"
-                    className="w-40 h-40 mx-auto object-contain"
+                    width={160}
+                    height={160}
+                    className="mx-auto object-contain"
                   />
                 </div>
                 <h3 className="text-xl font-bold mb-2">Öko-Variante</h3>

@@ -4,6 +4,10 @@ import { query } from '@/lib/auth/db'
 import { apiError, apiSuccess, apiBadRequest, apiUnauthorized } from '@/lib/api/helpers'
 import { ERROR_MESSAGES, SUCCESS_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES } from '@/config/database'
+import { sendEmail } from '@/lib/email'
+import { logger } from '@/lib/logger'
+import { APP_URL } from '@/config/urls'
+import { ADMIN_ROLES } from '@/lib/constants'
 
 interface ApplicationRow {
   id: string
@@ -89,10 +93,47 @@ export async function POST(request: NextRequest) {
       termsAccepted
     ])
 
-    // TODO: Send notification email to admins
-    // TODO: Send confirmation email to user
-
     const createdApp = applicationResult.rows[0] as IdRow
+
+    // Send confirmation email to user
+    try {
+      await sendEmail(
+        session.user.email || '',
+        'sellerApplicationSubmitted',
+        session.user.name || 'Verkäufer-Bewerber',
+        createdApp.id
+      )
+    } catch (emailError) {
+      logger.warn('Failed to send seller application confirmation email', {
+        applicationId: createdApp.id,
+        error: emailError
+      })
+    }
+
+    // Send notification email to admins
+    try {
+      const adminEmailsResult = await query(
+        `SELECT email FROM ${TABLE_NAMES.USERS} WHERE role = ANY($1) AND email IS NOT NULL`,
+        [ADMIN_ROLES]
+      )
+      const adminDashboardUrl = `${APP_URL}/admin/seller-applications`
+
+      for (const admin of adminEmailsResult.rows as { email: string }[]) {
+        await sendEmail(
+          admin.email,
+          'adminNewSellerApplication',
+          session.user.name || 'Unbekannter Bewerber',
+          session.user.email || 'unbekannt@example.com',
+          adminDashboardUrl
+        )
+      }
+    } catch (adminEmailError) {
+      logger.warn('Failed to send seller application admin notification', {
+        applicationId: createdApp.id,
+        error: adminEmailError
+      })
+    }
+
     return apiSuccess({
       message: SUCCESS_MESSAGES.SELLER_APPLICATION_SUBMITTED,
       applicationId: createdApp.id

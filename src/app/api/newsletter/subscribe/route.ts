@@ -6,6 +6,8 @@ import { requireAdminAuth } from '@/lib/admin-auth'
 import { apiError, apiSuccess, apiBadRequest } from '@/lib/api/helpers'
 import { logger } from '@/lib/logger'
 import { checkRateLimit, getClientIp } from '@/lib/auth/rate-limiter'
+import { sendEmail } from '@/lib/email'
+import { APP_URL } from '@/config/urls'
 
 const subscribersDir = path.join(process.cwd(), 'content/newsletter')
 
@@ -108,9 +110,21 @@ export async function POST(request: NextRequest) {
       'utf-8'
     )
 
-    // TODO: Send confirmation email
-    // For now, we'll just return success
-    // In production, you'd send an email with confirmToken
+    // Send confirmation email
+    try {
+      const confirmUrl = `${APP_URL}/api/newsletter/confirm?token=${newSubscriber.confirmToken}`
+      await sendEmail(
+        normalizedEmail,
+        'newsletterConfirmation',
+        confirmUrl
+      )
+      logger.info('Newsletter confirmation email sent', { email: normalizedEmail })
+    } catch (emailError) {
+      logger.warn('Failed to send newsletter confirmation email', {
+        email: normalizedEmail,
+        error: emailError
+      })
+    }
 
     return apiSuccess({
       message: 'Bestätigungs-E-Mail gesendet',

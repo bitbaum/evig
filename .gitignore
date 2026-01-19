@@ -103,3 +103,4 @@ archive/
 legacy/
 tina/__generated__
 
+.env*.local

@@ -13,6 +13,7 @@
 import { motion, AnimatePresence } from 'framer-motion'
 import { CheckCircle, Package, Eye, TrendingUp, DollarSign, Plus, BarChart3 } from 'lucide-react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { cn } from '@/lib/utils'
 import { getTextColor, getStatusColors } from '@/lib/design-system'
 
@@ -74,12 +75,14 @@ export function SuccessModal({ isOpen, onClose, product, onResetForm }: SuccessM
               {/* Product Preview */}
               <div className="bg-neutral-50 rounded-lg p-4 mb-6 border border-neutral-200">
                 <div className="flex items-start gap-4">
-                  <div className="w-16 h-16 bg-neutral-200 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <div className="w-16 h-16 bg-neutral-200 rounded-lg flex items-center justify-center flex-shrink-0 relative overflow-hidden">
                     {product.images?.[0] ? (
-                      <img 
-                        src={product.images[0]} 
-                        alt={product.title} 
-                        className="w-full h-full object-cover rounded" 
+                      <Image
+                        src={product.images[0]}
+                        alt={product.title}
+                        fill
+                        className="object-cover rounded"
+                        unoptimized
                       />
                     ) : (
                       <Package className="w-8 h-8 text-neutral-400" />

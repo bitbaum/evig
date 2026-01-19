@@ -4,8 +4,12 @@ import path from 'path'
 import { apiSuccess, apiError, apiBadRequest, apiUnauthorized } from '@/lib/api/helpers'
 import { logger } from '@/lib/logger'
 import { auth } from '@/auth'
-import { isAdminRole } from '@/lib/constants'
+import { isAdminRole, ADMIN_ROLES } from '@/lib/constants'
 import { checkRateLimit, getClientIp } from '@/lib/auth/rate-limiter'
+import { sendEmail } from '@/lib/email'
+import { APP_URL } from '@/config/urls'
+import { query } from '@/lib/auth/db'
+import { TABLE_NAMES } from '@/config/database'
 
 const submissionsDir = path.join(process.cwd(), 'content/submissions')
 
@@ -75,8 +79,47 @@ export async function POST(request: NextRequest) {
     const filepath = path.join(submissionsDir, filename)
     fs.writeFileSync(filepath, JSON.stringify(submission, null, 2))
 
-    // TODO: Send email notification to admin
-    // TODO: Send confirmation email to submitter
+    // Send confirmation email to submitter
+    try {
+      await sendEmail(
+        data.email,
+        'blogSubmissionReceived',
+        data.name,
+        data.title,
+        submission.id
+      )
+      logger.info('Blog submission confirmation email sent', { email: data.email })
+    } catch (emailError) {
+      logger.warn('Failed to send blog submission confirmation email', {
+        submissionId: submission.id,
+        error: emailError
+      })
+    }
+
+    // Send notification email to admins
+    try {
+      const adminEmailsResult = await query(
+        `SELECT email FROM ${TABLE_NAMES.USERS} WHERE role = ANY($1) AND email IS NOT NULL`,
+        [ADMIN_ROLES]
+      )
+      const adminDashboardUrl = `${APP_URL}/admin/blog/submissions`
+
+      for (const admin of adminEmailsResult.rows as { email: string }[]) {
+        await sendEmail(
+          admin.email,
+          'adminNewBlogSubmission',
+          data.name,
+          data.email,
+          data.title,
+          adminDashboardUrl
+        )
+      }
+    } catch (adminEmailError) {
+      logger.warn('Failed to send blog submission admin notification', {
+        submissionId: submission.id,
+        error: adminEmailError
+      })
+    }
 
     return apiSuccess({
       message: 'Submission received successfully',

@@ -617,6 +617,478 @@ export const emailTemplates = {
       Das RevampIT Team
     `,
   }),
+
+  // Workshop Proposal Templates
+  workshopProposalSubmitted: (name: string, workshopTitle: string, proposalId: string) => ({
+    subject: 'Workshop-Vorschlag eingereicht - RevampIT',
+    html: `
+      <!DOCTYPE html>
+      <html lang="de">
+      <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Workshop-Vorschlag eingereicht</title>
+        <style>
+          body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+          .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+          .header { background-color: #22c55e; color: white; padding: 20px; text-align: center; }
+          .content { padding: 30px 20px; background-color: #f9f9f9; }
+          .footer { padding: 20px; text-align: center; color: #666; font-size: 12px; }
+        </style>
+      </head>
+      <body>
+        <div class="container">
+          <div class="header">
+            <h1>Workshop-Vorschlag eingereicht</h1>
+          </div>
+          <div class="content">
+            <h2>Hallo ${name},</h2>
+            <p>Vielen Dank für Ihren Workshop-Vorschlag bei RevampIT! Wir haben Ihre Einreichung erhalten.</p>
+            <p><strong>Workshop-Titel:</strong> ${workshopTitle}</p>
+            <p><strong>Vorschlags-ID:</strong> ${proposalId}</p>
+            <p>Unser Team wird Ihren Vorschlag zeitnah prüfen. Der Prüfungsprozess umfasst:</p>
+            <ul>
+              <li>Überprüfung der Workshop-Inhalte</li>
+              <li>Bewertung der Zielgruppe und des Formats</li>
+              <li>Abstimmung mit unserem Workshop-Kalender</li>
+            </ul>
+            <p>Sie erhalten eine Benachrichtigung, sobald wir unsere Prüfung abgeschlossen haben. Dies kann bis zu 5 Werktage dauern.</p>
+          </div>
+          <div class="footer">
+            <p>Diese E-Mail wurde automatisch generiert. Bitte antworten Sie nicht darauf.</p>
+            <p>© 2025 RevampIT - Die Zukunft der IT durch nachhaltige Aufarbeitung</p>
+          </div>
+        </div>
+      </body>
+      </html>
+    `,
+    text: `
+      Hallo ${name},
+
+      Vielen Dank für Ihren Workshop-Vorschlag bei RevampIT! Wir haben Ihre Einreichung erhalten.
+
+      Workshop-Titel: ${workshopTitle}
+      Vorschlags-ID: ${proposalId}
+
+      Unser Team wird Ihren Vorschlag zeitnah prüfen. Der Prüfungsprozess umfasst:
+      - Überprüfung der Workshop-Inhalte
+      - Bewertung der Zielgruppe und des Formats
+      - Abstimmung mit unserem Workshop-Kalender
+
+      Sie erhalten eine Benachrichtigung, sobald wir unsere Prüfung abgeschlossen haben.
+
+      Mit freundlichen Grüssen,
+      Das RevampIT Team
+    `,
+  }),
+
+  adminNewWorkshopProposal: (proposerName: string, proposerEmail: string, workshopTitle: string, adminDashboardUrl: string) => ({
+    subject: 'Neuer Workshop-Vorschlag wartet auf Prüfung - RevampIT',
+    html: `
+      <!DOCTYPE html>
+      <html lang="de">
+      <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Neuer Workshop-Vorschlag</title>
+        <style>
+          body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+          .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+          .header { background-color: #22c55e; color: white; padding: 20px; text-align: center; }
+          .content { padding: 30px 20px; background-color: #f9f9f9; }
+          .button { display: inline-block; padding: 12px 24px; background-color: #22c55e; color: white; text-decoration: none; border-radius: 5px; margin: 20px 0; }
+          .footer { padding: 20px; text-align: center; color: #666; font-size: 12px; }
+        </style>
+      </head>
+      <body>
+        <div class="container">
+          <div class="header">
+            <h1>Neuer Workshop-Vorschlag</h1>
+          </div>
+          <div class="content">
+            <p>Ein neuer Workshop-Vorschlag wurde eingereicht und wartet auf Ihre Prüfung.</p>
+            <p><strong>Eingereicht von:</strong> ${proposerName}</p>
+            <p><strong>E-Mail:</strong> ${proposerEmail}</p>
+            <p><strong>Workshop-Titel:</strong> ${workshopTitle}</p>
+            <p>Bitte prüfen Sie den Vorschlag zeitnah, um eine schnelle Bearbeitung zu gewährleisten.</p>
+            <a href="${adminDashboardUrl}" class="button">Vorschlag prüfen</a>
+          </div>
+          <div class="footer">
+            <p>Diese E-Mail wurde automatisch generiert.</p>
+            <p>© 2025 RevampIT - Die Zukunft der IT durch nachhaltige Aufarbeitung</p>
+          </div>
+        </div>
+      </body>
+      </html>
+    `,
+    text: `
+      Ein neuer Workshop-Vorschlag wurde eingereicht und wartet auf Ihre Prüfung.
+
+      Eingereicht von: ${proposerName}
+      E-Mail: ${proposerEmail}
+      Workshop-Titel: ${workshopTitle}
+
+      Bitte prüfen Sie den Vorschlag zeitnah:
+      ${adminDashboardUrl}
+
+      Mit freundlichen Grüssen,
+      RevampIT System
+    `,
+  }),
+
+  // Newsletter Templates
+  newsletterConfirmation: (confirmUrl: string) => ({
+    subject: 'Newsletter-Anmeldung bestätigen - RevampIT',
+    html: `
+      <!DOCTYPE html>
+      <html lang="de">
+      <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Newsletter-Anmeldung bestätigen</title>
+        <style>
+          body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+          .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+          .header { background-color: #22c55e; color: white; padding: 20px; text-align: center; }
+          .content { padding: 30px 20px; background-color: #f9f9f9; }
+          .button { display: inline-block; padding: 12px 24px; background-color: #22c55e; color: white; text-decoration: none; border-radius: 5px; margin: 20px 0; }
+          .footer { padding: 20px; text-align: center; color: #666; font-size: 12px; }
+        </style>
+      </head>
+      <body>
+        <div class="container">
+          <div class="header">
+            <h1>Newsletter-Anmeldung bestätigen</h1>
+          </div>
+          <div class="content">
+            <p>Vielen Dank für Ihr Interesse am RevampIT Newsletter!</p>
+            <p>Um Ihre Anmeldung abzuschliessen, klicken Sie bitte auf den folgenden Button:</p>
+            <a href="${confirmUrl}" class="button">Anmeldung bestätigen</a>
+            <p>Was Sie erwartet:</p>
+            <ul>
+              <li>Neuigkeiten zu nachhaltiger IT und Open Source</li>
+              <li>Informationen zu kommenden Workshops und Events</li>
+              <li>Tipps zur Verlängerung der Lebensdauer Ihrer Geräte</li>
+              <li>Angebote aus unserem Shop</li>
+            </ul>
+            <p>Falls Sie diese E-Mail nicht angefordert haben, können Sie sie ignorieren.</p>
+            <p>Falls der Button nicht funktioniert, kopieren Sie diesen Link in Ihren Browser:</p>
+            <p><a href="${confirmUrl}">${confirmUrl}</a></p>
+          </div>
+          <div class="footer">
+            <p>Diese E-Mail wurde automatisch generiert. Bitte antworten Sie nicht darauf.</p>
+            <p>© 2025 RevampIT - Die Zukunft der IT durch nachhaltige Aufarbeitung</p>
+          </div>
+        </div>
+      </body>
+      </html>
+    `,
+    text: `
+      Vielen Dank für Ihr Interesse am RevampIT Newsletter!
+
+      Um Ihre Anmeldung abzuschliessen, öffnen Sie bitte folgenden Link:
+      ${confirmUrl}
+
+      Was Sie erwartet:
+      - Neuigkeiten zu nachhaltiger IT und Open Source
+      - Informationen zu kommenden Workshops und Events
+      - Tipps zur Verlängerung der Lebensdauer Ihrer Geräte
+      - Angebote aus unserem Shop
+
+      Falls Sie diese E-Mail nicht angefordert haben, können Sie sie ignorieren.
+
+      Mit freundlichen Grüssen,
+      Das RevampIT Team
+    `,
+  }),
+
+  // Blog Submission Templates
+  blogSubmissionReceived: (name: string, articleTitle: string, submissionId: string) => ({
+    subject: 'Blog-Beitrag eingereicht - RevampIT',
+    html: `
+      <!DOCTYPE html>
+      <html lang="de">
+      <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Blog-Beitrag eingereicht</title>
+        <style>
+          body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+          .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+          .header { background-color: #22c55e; color: white; padding: 20px; text-align: center; }
+          .content { padding: 30px 20px; background-color: #f9f9f9; }
+          .footer { padding: 20px; text-align: center; color: #666; font-size: 12px; }
+        </style>
+      </head>
+      <body>
+        <div class="container">
+          <div class="header">
+            <h1>Blog-Beitrag eingereicht</h1>
+          </div>
+          <div class="content">
+            <h2>Hallo ${name},</h2>
+            <p>Vielen Dank für Ihren Blog-Beitrag bei RevampIT! Wir haben Ihre Einreichung erhalten.</p>
+            <p><strong>Titel:</strong> ${articleTitle}</p>
+            <p><strong>Einreichungs-ID:</strong> ${submissionId}</p>
+            <p>Unser Redaktionsteam wird Ihren Beitrag prüfen. Der Prozess umfasst:</p>
+            <ul>
+              <li>Inhaltliche Überprüfung</li>
+              <li>Redaktionelle Bearbeitung falls erforderlich</li>
+              <li>Einplanung in unseren Veröffentlichungskalender</li>
+            </ul>
+            <p>Sie erhalten eine Benachrichtigung über den Status Ihrer Einreichung. Die Prüfung kann bis zu 7 Werktage dauern.</p>
+          </div>
+          <div class="footer">
+            <p>Diese E-Mail wurde automatisch generiert. Bitte antworten Sie nicht darauf.</p>
+            <p>© 2025 RevampIT - Die Zukunft der IT durch nachhaltige Aufarbeitung</p>
+          </div>
+        </div>
+      </body>
+      </html>
+    `,
+    text: `
+      Hallo ${name},
+
+      Vielen Dank für Ihren Blog-Beitrag bei RevampIT! Wir haben Ihre Einreichung erhalten.
+
+      Titel: ${articleTitle}
+      Einreichungs-ID: ${submissionId}
+
+      Unser Redaktionsteam wird Ihren Beitrag prüfen. Der Prozess umfasst:
+      - Inhaltliche Überprüfung
+      - Redaktionelle Bearbeitung falls erforderlich
+      - Einplanung in unseren Veröffentlichungskalender
+
+      Sie erhalten eine Benachrichtigung über den Status Ihrer Einreichung.
+
+      Mit freundlichen Grüssen,
+      Das RevampIT Team
+    `,
+  }),
+
+  adminNewBlogSubmission: (submitterName: string, submitterEmail: string, articleTitle: string, adminDashboardUrl: string) => ({
+    subject: 'Neuer Blog-Beitrag wartet auf Prüfung - RevampIT',
+    html: `
+      <!DOCTYPE html>
+      <html lang="de">
+      <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Neuer Blog-Beitrag</title>
+        <style>
+          body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+          .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+          .header { background-color: #22c55e; color: white; padding: 20px; text-align: center; }
+          .content { padding: 30px 20px; background-color: #f9f9f9; }
+          .button { display: inline-block; padding: 12px 24px; background-color: #22c55e; color: white; text-decoration: none; border-radius: 5px; margin: 20px 0; }
+          .footer { padding: 20px; text-align: center; color: #666; font-size: 12px; }
+        </style>
+      </head>
+      <body>
+        <div class="container">
+          <div class="header">
+            <h1>Neuer Blog-Beitrag</h1>
+          </div>
+          <div class="content">
+            <p>Ein neuer Blog-Beitrag wurde eingereicht und wartet auf Ihre Prüfung.</p>
+            <p><strong>Eingereicht von:</strong> ${submitterName}</p>
+            <p><strong>E-Mail:</strong> ${submitterEmail}</p>
+            <p><strong>Titel:</strong> ${articleTitle}</p>
+            <p>Bitte prüfen Sie den Beitrag und entscheiden Sie über die Veröffentlichung.</p>
+            <a href="${adminDashboardUrl}" class="button">Beitrag prüfen</a>
+          </div>
+          <div class="footer">
+            <p>Diese E-Mail wurde automatisch generiert.</p>
+            <p>© 2025 RevampIT - Die Zukunft der IT durch nachhaltige Aufarbeitung</p>
+          </div>
+        </div>
+      </body>
+      </html>
+    `,
+    text: `
+      Ein neuer Blog-Beitrag wurde eingereicht und wartet auf Ihre Prüfung.
+
+      Eingereicht von: ${submitterName}
+      E-Mail: ${submitterEmail}
+      Titel: ${articleTitle}
+
+      Bitte prüfen Sie den Beitrag:
+      ${adminDashboardUrl}
+
+      Mit freundlichen Grüssen,
+      RevampIT System
+    `,
+  }),
+
+  // Seller Application Templates
+  sellerApplicationSubmitted: (name: string, applicationId: string) => ({
+    subject: 'Verkäufer-Bewerbung eingereicht - RevampIT',
+    html: `
+      <!DOCTYPE html>
+      <html lang="de">
+      <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Verkäufer-Bewerbung eingereicht</title>
+        <style>
+          body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+          .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+          .header { background-color: #22c55e; color: white; padding: 20px; text-align: center; }
+          .content { padding: 30px 20px; background-color: #f9f9f9; }
+          .footer { padding: 20px; text-align: center; color: #666; font-size: 12px; }
+        </style>
+      </head>
+      <body>
+        <div class="container">
+          <div class="header">
+            <h1>Verkäufer-Bewerbung eingereicht</h1>
+          </div>
+          <div class="content">
+            <h2>Hallo ${name},</h2>
+            <p>Vielen Dank für Ihre Bewerbung als Verkäufer auf dem RevampIT Marktplatz! Wir haben Ihre Unterlagen erhalten.</p>
+            <p><strong>Bewerbungs-ID:</strong> ${applicationId}</p>
+            <p>Der Prüfungsprozess umfasst:</p>
+            <ul>
+              <li>Verifizierung Ihrer Angaben</li>
+              <li>Prüfung der Produktkategorien</li>
+              <li>Qualitätssicherung</li>
+            </ul>
+            <p>Sie erhalten eine Benachrichtigung, sobald wir unsere Prüfung abgeschlossen haben. Dies kann bis zu 5 Werktage dauern.</p>
+            <p>Bei Fragen können Sie uns jederzeit kontaktieren.</p>
+          </div>
+          <div class="footer">
+            <p>Diese E-Mail wurde automatisch generiert. Bitte antworten Sie nicht darauf.</p>
+            <p>© 2025 RevampIT - Die Zukunft der IT durch nachhaltige Aufarbeitung</p>
+          </div>
+        </div>
+      </body>
+      </html>
+    `,
+    text: `
+      Hallo ${name},
+
+      Vielen Dank für Ihre Bewerbung als Verkäufer auf dem RevampIT Marktplatz! Wir haben Ihre Unterlagen erhalten.
+
+      Bewerbungs-ID: ${applicationId}
+
+      Der Prüfungsprozess umfasst:
+      - Verifizierung Ihrer Angaben
+      - Prüfung der Produktkategorien
+      - Qualitätssicherung
+
+      Sie erhalten eine Benachrichtigung, sobald wir unsere Prüfung abgeschlossen haben.
+
+      Mit freundlichen Grüssen,
+      Das RevampIT Team
+    `,
+  }),
+
+  adminNewSellerApplication: (applicantName: string, applicantEmail: string, adminDashboardUrl: string) => ({
+    subject: 'Neue Verkäufer-Bewerbung wartet auf Prüfung - RevampIT',
+    html: `
+      <!DOCTYPE html>
+      <html lang="de">
+      <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Neue Verkäufer-Bewerbung</title>
+        <style>
+          body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+          .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+          .header { background-color: #22c55e; color: white; padding: 20px; text-align: center; }
+          .content { padding: 30px 20px; background-color: #f9f9f9; }
+          .button { display: inline-block; padding: 12px 24px; background-color: #22c55e; color: white; text-decoration: none; border-radius: 5px; margin: 20px 0; }
+          .footer { padding: 20px; text-align: center; color: #666; font-size: 12px; }
+        </style>
+      </head>
+      <body>
+        <div class="container">
+          <div class="header">
+            <h1>Neue Verkäufer-Bewerbung</h1>
+          </div>
+          <div class="content">
+            <p>Eine neue Verkäufer-Bewerbung wurde eingereicht und wartet auf Ihre Prüfung.</p>
+            <p><strong>Bewerber:</strong> ${applicantName}</p>
+            <p><strong>E-Mail:</strong> ${applicantEmail}</p>
+            <p>Bitte prüfen Sie die Bewerbung zeitnah, um eine schnelle Bearbeitung zu gewährleisten.</p>
+            <a href="${adminDashboardUrl}" class="button">Bewerbung prüfen</a>
+          </div>
+          <div class="footer">
+            <p>Diese E-Mail wurde automatisch generiert.</p>
+            <p>© 2025 RevampIT - Die Zukunft der IT durch nachhaltige Aufarbeitung</p>
+          </div>
+        </div>
+      </body>
+      </html>
+    `,
+    text: `
+      Eine neue Verkäufer-Bewerbung wurde eingereicht und wartet auf Ihre Prüfung.
+
+      Bewerber: ${applicantName}
+      E-Mail: ${applicantEmail}
+
+      Bitte prüfen Sie die Bewerbung zeitnah:
+      ${adminDashboardUrl}
+
+      Mit freundlichen Grüssen,
+      RevampIT System
+    `,
+  }),
+
+  // Location Approval Notification
+  locationApprovalNotification: (name: string, locationName: string, action: string, reviewNotes: string | null) => ({
+    subject: `Ort ${action === 'approve' ? 'genehmigt' : action === 'reject' ? 'abgelehnt' : action === 'suspend' ? 'suspendiert' : 'wiederhergestellt'} - RevampIT`,
+    html: `
+      <!DOCTYPE html>
+      <html lang="de">
+      <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Ort-Status aktualisiert</title>
+        <style>
+          body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+          .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+          .header { background-color: ${action === 'approve' || action === 'reinstate' ? '#22c55e' : action === 'reject' ? '#dc2626' : '#f59e0b'}; color: white; padding: 20px; text-align: center; }
+          .content { padding: 30px 20px; background-color: #f9f9f9; }
+          .footer { padding: 20px; text-align: center; color: #666; font-size: 12px; }
+        </style>
+      </head>
+      <body>
+        <div class="container">
+          <div class="header">
+            <h1>Ort-Status aktualisiert</h1>
+          </div>
+          <div class="content">
+            <h2>Hallo ${name},</h2>
+            <p>Der Status Ihres eingereichten Ortes wurde aktualisiert.</p>
+            <p><strong>Ort:</strong> ${locationName}</p>
+            <p><strong>Status:</strong> ${action === 'approve' ? 'Genehmigt' : action === 'reject' ? 'Abgelehnt' : action === 'suspend' ? 'Suspendiert' : 'Wiederhergestellt'}</p>
+            ${reviewNotes ? `<p><strong>Anmerkungen:</strong> ${reviewNotes}</p>` : ''}
+            ${action === 'approve' || action === 'reinstate' ? '<p>Ihr Ort ist nun für andere Benutzer sichtbar und kann für Workshops und Veranstaltungen gebucht werden.</p>' : ''}
+            ${action === 'reject' ? '<p>Bei Fragen zur Ablehnung können Sie uns gerne kontaktieren.</p>' : ''}
+            ${action === 'suspend' ? '<p>Der Ort ist vorübergehend nicht verfügbar. Bitte kontaktieren Sie uns für weitere Informationen.</p>' : ''}
+          </div>
+          <div class="footer">
+            <p>Diese E-Mail wurde automatisch generiert. Bitte antworten Sie nicht darauf.</p>
+            <p>© 2025 RevampIT - Die Zukunft der IT durch nachhaltige Aufarbeitung</p>
+          </div>
+        </div>
+      </body>
+      </html>
+    `,
+    text: `
+      Hallo ${name},
+
+      Der Status Ihres eingereichten Ortes wurde aktualisiert.
+
+      Ort: ${locationName}
+      Status: ${action === 'approve' ? 'Genehmigt' : action === 'reject' ? 'Abgelehnt' : action === 'suspend' ? 'Suspendiert' : 'Wiederhergestellt'}
+      ${reviewNotes ? `Anmerkungen: ${reviewNotes}` : ''}
+
+      Mit freundlichen Grüssen,
+      Das RevampIT Team
+    `,
+  }),
 }
 
 // Email template function type
