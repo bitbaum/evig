@@ -47,7 +47,8 @@ export function SuggestionProvider({ children }: SuggestionProviderProps) {
     window.addEventListener('popstate', handleNavigation)
 
     // Listen for Next.js router changes if available
-    if (typeof window !== 'undefined' && (window as any).next) {
+    // Note: We check for __NEXT_DATA__ which is always present in Next.js apps
+    if (typeof window !== 'undefined' && '__NEXT_DATA__' in window) {
       const originalPushState = history.pushState
       const originalReplaceState = history.replaceState
 
