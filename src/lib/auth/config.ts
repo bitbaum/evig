@@ -55,14 +55,14 @@ export const AUTH_CONFIG = {
     updateAge: 24 * 60 * 60,       // Refresh every 24 hours
   },
 
-  // Password policy
+  // Password policy - Simple and user-friendly
   password: {
-    minLength: 12,                  // NIST recommends 8+, we use 12
+    minLength: 8,                   // Simple 8 character minimum
     maxLength: 128,                 // Prevent DoS via long passwords
-    requireUppercase: true,
-    requireLowercase: true,
-    requireNumbers: true,
-    requireSpecialChars: true,
+    requireUppercase: false,        // No complexity requirements
+    requireLowercase: false,
+    requireNumbers: false,
+    requireSpecialChars: false,
     specialChars: '!@#$%^&*(),.?":{}|<>[]\\;\'`~_+-=',
   },
 
