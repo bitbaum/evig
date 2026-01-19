@@ -13,12 +13,8 @@ import {
   CheckCircle,
   Sparkles,
   BookOpen,
-  Code,
-  HardDrive,
-  Globe,
-  Bitcoin,
-  Brain
 } from 'lucide-react'
+import { getCategoryIcon, getLevelBadgeClass } from '@/config/workshops'
 
 interface Workshop {
   id: string
@@ -106,26 +102,6 @@ export default function WorkshopsPage() {
     fetchWorkshops()
   }, [fetchWorkshops])
 
-  const getCategoryIcon = (category: string) => {
-    switch (category.toLowerCase()) {
-      case 'betriebssysteme': return BookOpen
-      case 'entwicklung': return Code
-      case 'hardware': return HardDrive
-      case 'web': return Globe
-      case 'blockchain': return Bitcoin
-      case 'ki & ml': return Brain
-      default: return BookOpen
-    }
-  }
-
-  const getLevelColor = (level: string) => {
-    switch (level.toLowerCase()) {
-      case 'anfänger': return 'bg-green-100 text-green-800'
-      case 'fortgeschrittene': return 'bg-blue-100 text-blue-800'
-      case 'alle stufen': return 'bg-purple-100 text-purple-800'
-      default: return 'bg-gray-100 text-gray-800'
-    }
-  }
 
   const filteredWorkshops = workshops.filter(workshop => {
     if (filter === 'all') return true
@@ -199,7 +175,7 @@ export default function WorkshopsPage() {
                     <div className="p-3 bg-green-100 rounded-lg">
                       <IconComponent className="w-6 h-6 text-green-600" />
                     </div>
-                    <span className={`px-3 py-1 rounded-full text-xs font-medium ${getLevelColor(workshop.level)}`}>
+                    <span className={`px-3 py-1 rounded-full text-xs font-medium ${getLevelBadgeClass(workshop.level)}`}>
                       {workshop.level}
                     </span>
                   </div>

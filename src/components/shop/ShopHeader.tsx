@@ -16,57 +16,18 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { ShopLogo } from "@/components/shop/ShopLogo";
 import { UserMenu } from "@/components/auth/UserMenu";
+import {
+  MEGA_MENU_COLUMNS,
+  SHOP_QUICK_LINKS,
+  getCategoryBySlug,
+  getCategoryUrl,
+} from "@/config/shop";
 
 interface ShopHeaderProps {
   showBackButton?: boolean;
   backHref?: string;
   backLabel?: string;
 }
-
-// Category data for mega menu
-const categories = [
-  {
-    title: "Computer & IT",
-    items: [
-      "Computer und Komplettsysteme",
-      "Laptop und Zubehör",
-      "Drucker, Fax, Scanner",
-      "Monitor, Beamer, Kamera",
-      "Tastatur, Maus, Spielsteuerung",
-      "Mainboard, CPU, Ram",
-    ],
-  },
-  {
-    title: "Komponenten",
-    items: [
-      "Steckkarten",
-      "Gehäuse, Netzteile, USB-Hubs",
-      "Festplatten, Flashcards, Sticks",
-      "Laufwerke für Medien",
-      "Medien",
-      "Externe Netzwerkgeräte",
-    ],
-  },
-  {
-    title: "Multimedia",
-    items: [
-      "Soundgeräte, Multimedia",
-      "Kühlung",
-      "Verbrauchsmaterial",
-      "Kabel, Adapter, Montage",
-      "Kleinteile",
-    ],
-  },
-  {
-    title: "Sonstiges",
-    items: [
-      "Spielekonsolen, Telefone",
-      "Elektronik Komponenten",
-      "Non-IT",
-      "Gutscheine",
-    ],
-  },
-];
 
 export function ShopHeader({
   showBackButton = true,
@@ -280,23 +241,27 @@ export function ShopHeader({
             {/* Categories */}
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
-                {categories.map((category) => (
-                  <div key={category.title}>
+                {MEGA_MENU_COLUMNS.map((column) => (
+                  <div key={column.title}>
                     <h3 className="font-semibold text-gray-900 mb-3 text-sm uppercase tracking-wide">
-                      {category.title}
+                      {column.title}
                     </h3>
                     <ul className="space-y-2">
-                      {category.items.map((item) => (
-                        <li key={item}>
-                          <a
-                            href="#"
-                            className="text-sm text-gray-600 hover:text-emerald-600 hover:underline transition-colors block py-1"
-                            onClick={() => setIsMenuOpen(false)}
-                          >
-                            {item}
-                          </a>
-                        </li>
-                      ))}
+                      {column.categorySlugs.map((slug) => {
+                        const category = getCategoryBySlug(slug);
+                        if (!category) return null;
+                        return (
+                          <li key={slug}>
+                            <Link
+                              href={getCategoryUrl(slug)}
+                              className="text-sm text-gray-600 hover:text-emerald-600 hover:underline transition-colors block py-1"
+                              onClick={() => setIsMenuOpen(false)}
+                            >
+                              {category.name}
+                            </Link>
+                          </li>
+                        );
+                      })}
                     </ul>
                   </div>
                 ))}
@@ -313,12 +278,16 @@ export function ShopHeader({
                     <ArrowLeft className="w-4 h-4" />
                     Zur Shop-Übersicht
                   </Link>
-                  <a
-                    href="#"
-                    className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-emerald-700 bg-emerald-50 hover:bg-emerald-100 rounded-lg transition-colors"
-                  >
-                    Produkte verkaufen
-                  </a>
+                  {SHOP_QUICK_LINKS.map((link) => (
+                    <Link
+                      key={link.href}
+                      href={link.href}
+                      className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-emerald-700 bg-emerald-50 hover:bg-emerald-100 rounded-lg transition-colors"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      {link.name}
+                    </Link>
+                  ))}
                 </div>
               </div>
             </div>

@@ -1,7 +1,8 @@
-import { ArrowRight, Laptop, Code, HardDrive, Globe } from 'lucide-react'
+import { ArrowRight } from 'lucide-react'
 import Link from 'next/link'
 import type { Metadata } from 'next'
 import { getCompactMetrics } from '@/data/impact-metrics'
+import { VALUE_PROPS, TESTIMONIALS } from '@/data/homepage'
 
 export const metadata: Metadata = {
   title: 'revamp-it – Computer-Reparatur, Linux-Umstieg & Datenrettung in der Schweiz',
@@ -24,60 +25,6 @@ export const metadata: Metadata = {
 
 export default function Home() {
   const compactMetrics = getCompactMetrics()
-
-  const valueProps = [
-    {
-      name: 'Vintage-Computer',
-      description: 'Reparieren und Aufbauen von Retro-Computern für Gaming und Sammler. Seltene Hardware, die noch funktioniert.',
-      icon: Laptop,
-      href: '/projects/vintage-computers',
-    },
-    {
-      name: 'Gebrauchte Laptops mit Linux',
-      description: 'Alte Laptops schneller gemacht: Linux-Installation, kostenlose Software, professioneller Support.',
-      icon: Code,
-      href: '/services/linux-open-source',
-    },
-    {
-      name: 'Datenrettung',
-      description: 'Wiederherstellung von Daten aus beschädigten Geräten und alten Speichermedien (Disketten, ZIP, etc.).',
-      icon: HardDrive,
-      href: '/services',
-    },
-    {
-      name: 'Webentwicklung',
-      description: 'Moderne Websites und Apps mit Open-Source-Technologien. Next.js, Headless CMS, E-Commerce.',
-      icon: Globe,
-      href: '/services/web-design-development',
-    },
-  ]
-
-  const testimonials = [
-    {
-      quote: 'Mein Laptop von 2012 war langsam und Windows-Lizenzen teuer. revamp-it hat Linux installiert – er läuft jetzt schneller als je zuvor. Alle Programme sind kostenlos und werden unterstützt.',
-      author: 'Maria K.',
-      role: 'Zürich',
-      type: 'linux'
-    },
-    {
-      quote: 'Ich wollte einen Retro-Gaming PC bauen. revamp-it hat mir ein funktionierendes Vintage-System mit Original-Komponenten zusammengestellt. Klassische Spiele laufen perfekt.',
-      author: 'Thomas R.',
-      role: 'Basel',
-      type: 'vintage'
-    },
-    {
-      quote: 'Meine externe Festplatte war kaputt – alle meine Fotos und Dokumente schienen verloren. revamp-it hat die Daten wiederhergestellt. Sehr dankbar!',
-      author: 'Sandra M.',
-      role: 'Luzern',
-      type: 'recovery'
-    },
-    {
-      quote: 'Wir brauchten eine Website für unser Projekt. revamp-it hat mit Open-Source-Technologien eine moderne, schnelle Website gebaut. Die kostenlose Erstberatung war sehr hilfreich.',
-      author: 'Projekt-Team',
-      role: 'Zürich',
-      type: 'web'
-    },
-  ]
 
   return (
     <div className="bg-white">
@@ -182,7 +129,7 @@ export default function Home() {
         </div>
         <div className="mx-auto mt-8 sm:mt-12 md:mt-16 max-w-2xl lg:mt-24 lg:max-w-none">
           <dl className="grid max-w-xl grid-cols-1 gap-x-6 sm:gap-x-8 gap-y-8 sm:gap-y-12 lg:max-w-none lg:grid-cols-4">
-            {valueProps.map((prop) => (
+            {VALUE_PROPS.map((prop) => (
               <Link
                 key={prop.name}
                 href={prop.href}
@@ -274,7 +221,7 @@ export default function Home() {
           </p>
         </div>
         <div className="mx-auto grid max-w-2xl grid-cols-1 gap-6 sm:gap-8 lg:max-w-none lg:grid-cols-2">
-          {testimonials.map((testimonial, index) => (
+          {TESTIMONIALS.map((testimonial, index) => (
             <div key={index} className="flex flex-col bg-gray-50 rounded-lg p-6 sm:p-8 border border-gray-200">
               <div className="text-green-600 mb-4">
                 <span className="text-3xl font-bold">&#34;</span>

@@ -141,3 +141,61 @@ export const SHOP_QUICK_LINKS: QuickLink[] = [
   { name: "Produkte verkaufen", href: "/marketplace/sell" },
   { name: "Gutscheine", href: "/shop/category/gutscheine" },
 ];
+
+/**
+ * Mega menu configuration for ShopHeader
+ * Groups categories into columns for the dropdown menu
+ */
+export interface MegaMenuColumn {
+  title: string;
+  categorySlugs: string[];
+}
+
+/**
+ * Helper to get category by slug
+ */
+export function getCategoryBySlug(slug: string): ShopCategory | undefined {
+  return SHOP_CATEGORIES.find((cat) => cat.slug === slug);
+}
+
+/**
+ * Mega menu columns - references SHOP_CATEGORIES by slug
+ * This allows the mega menu to display grouped categories while
+ * maintaining SSOT with the main SHOP_CATEGORIES array
+ */
+export const MEGA_MENU_COLUMNS: MegaMenuColumn[] = [
+  {
+    title: "Computer & IT",
+    categorySlugs: [
+      "computer-komplettsysteme",
+      "laptop-zubehoer",
+      "drucker-fax-scanner",
+      "monitor-beamer-kamera",
+      "tastatur-maus-eingabegeraete",
+      "mainboard-cpu-ram",
+    ],
+  },
+  {
+    title: "Komponenten",
+    categorySlugs: [
+      "steckkarten",
+      "gehaeuse-netzteile-usb-hubs",
+      "festplatten-ssds-sticks",
+      "laufwerke-medien",
+      "externe-netzwerkgeraete",
+    ],
+  },
+  {
+    title: "Multimedia & Zubehör",
+    categorySlugs: [
+      "soundgeraete-multimedia",
+      "kabel-adapter-montage",
+    ],
+  },
+  {
+    title: "Sonstiges",
+    categorySlugs: [
+      "gutscheine",
+    ],
+  },
+];

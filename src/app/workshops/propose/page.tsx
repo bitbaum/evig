@@ -18,6 +18,7 @@ import {
   BookOpen,
   Target
 } from 'lucide-react'
+import { WORKSHOP_CATEGORIES, WORKSHOP_LEVELS } from '@/config/workshops'
 
 interface WorkshopLocation {
   id: string
@@ -86,17 +87,6 @@ export default function WorkshopProposalPage() {
       setLoadingLocations(false)
     }
   }
-
-  const categories = [
-    'Linux & Open Source',
-    'Hardware-Reparatur',
-    'Programmierung',
-    'Webentwicklung',
-    'Datenschutz',
-    'Nachhaltigkeit',
-    'Digital Skills',
-    'Sonstiges'
-  ]
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -282,8 +272,8 @@ export default function WorkshopProposalPage() {
                   required
                 >
                   <option value="">Kategorie wählen</option>
-                  {categories.map(category => (
-                    <option key={category} value={category}>{category}</option>
+                  {WORKSHOP_CATEGORIES.map(category => (
+                    <option key={category.id} value={category.name}>{category.name}</option>
                   ))}
                 </select>
               </div>
@@ -298,9 +288,9 @@ export default function WorkshopProposalPage() {
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                   required
                 >
-                  <option value="beginner">Anfänger</option>
-                  <option value="intermediate">Fortgeschrittene</option>
-                  <option value="advanced">Experten</option>
+                  {WORKSHOP_LEVELS.filter(l => l.id !== 'all').map(level => (
+                    <option key={level.id} value={level.id}>{level.name}</option>
+                  ))}
                 </select>
               </div>
 
