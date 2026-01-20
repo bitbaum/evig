@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import Link from 'next/link'
 import {
   Plus,
   Search,
@@ -21,10 +22,62 @@ import {
   Upload,
   FileText,
   Users,
-  Store
+  Store,
+  Printer,
+  Database
 } from 'lucide-react'
 import { useProducts, MedusaProduct } from '@/lib/medusa/hooks'
 import { cn } from '@/lib/utils'
+
+// Inventory product type from our local database
+interface InventoryProduct {
+  id: string
+  item_uuid: string
+  product_name: string
+  brand: string
+  short_description: string | null
+  estimated_price_chf: number
+  condition: string
+  category: string | null
+  subcategory: string | null
+  status: string
+  created_at: string
+  location: string | null
+  box_id: string | null
+  quantity_available: number
+  marketplace_status: string
+  customer_profiles: string[]
+}
+
+// Hook to fetch local inventory products
+function useInventoryProducts() {
+  const [data, setData] = useState<{ products: InventoryProduct[]; total: number } | null>(null)
+  const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState<Error | null>(null)
+
+  const fetchProducts = async () => {
+    try {
+      setIsLoading(true)
+      const response = await fetch('/api/admin/inventory')
+      if (!response.ok) {
+        throw new Error('Failed to fetch inventory products')
+      }
+      const result = await response.json()
+      setData(result)
+      setError(null)
+    } catch (err) {
+      setError(err instanceof Error ? err : new Error('Unknown error'))
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    fetchProducts()
+  }, [])
+
+  return { data, isLoading, error, refetch: fetchProducts }
+}
 
 interface ProductWithOwner extends MedusaProduct {
   owner_id?: string;
@@ -42,7 +95,8 @@ interface ProductStats {
 }
 
 export default function ProductManagement() {
-  const { data: productsData, isLoading, error, refetch } = useProducts({ limit: 100 })
+  const { data: productsData, isLoading: medusaLoading, error: medusaError, refetch } = useProducts({ limit: 100 })
+  const { data: inventoryData, isLoading: inventoryLoading, error: inventoryError, refetch: refetchInventory } = useInventoryProducts()
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedProducts, setSelectedProducts] = useState<string[]>([])
   const [showFilters, setShowFilters] = useState(false)
@@ -50,6 +104,10 @@ export default function ProductManagement() {
   const [filterCategory, setFilterCategory] = useState('all')
   const [filterSource, setFilterSource] = useState<'all' | 'admin' | 'user'>('all')
   const [showBulkImport, setShowBulkImport] = useState(false)
+  const [activeTab, setActiveTab] = useState<'medusa' | 'inventory'>('inventory') // Default to inventory
+
+  const isLoading = activeTab === 'medusa' ? medusaLoading : inventoryLoading
+  const error = activeTab === 'medusa' ? medusaError : inventoryError
 
   // Mock user marketplace products (in real app, this would come from API)
   const userMarketplaceProducts: ProductWithOwner[] = [
@@ -194,70 +252,175 @@ export default function ProductManagement() {
     )
   }
 
+  // Inventory products
+  const inventoryProducts = inventoryData?.products || []
+  const inventoryStats = {
+    total: inventoryProducts.length,
+    published: inventoryProducts.filter(p => p.marketplace_status === 'published').length,
+    draft: inventoryProducts.filter(p => p.marketplace_status === 'draft').length,
+    approved: inventoryProducts.filter(p => p.status === 'approved').length,
+    pending: inventoryProducts.filter(p => p.status === 'pending_review').length,
+  }
+
   return (
     <div className="space-y-6">
-      {/* Stats Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-4">
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-xs text-gray-600">Gesamt</p>
-              <p className="text-xl font-bold text-gray-900">{stats.total}</p>
-            </div>
-            <Package className="w-6 h-6 text-blue-500" />
-          </div>
-        </div>
-
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-xs text-gray-600">Veröffentlicht</p>
-              <p className="text-xl font-bold text-green-600">{stats.published}</p>
-            </div>
-            <CheckCircle className="w-6 h-6 text-green-500" />
-          </div>
-        </div>
-
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-xs text-gray-600">Admin Inventory</p>
-              <p className="text-xl font-bold text-indigo-600">{stats.adminInventory}</p>
-            </div>
-            <Store className="w-6 h-6 text-indigo-500" />
-          </div>
-        </div>
-
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-xs text-gray-600">User Listings</p>
-              <p className="text-xl font-bold text-purple-600">{stats.userListings}</p>
-            </div>
-            <Users className="w-6 h-6 text-purple-500" />
-          </div>
-        </div>
-
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-xs text-gray-600">Entwürfe</p>
-              <p className="text-xl font-bold text-yellow-600">{stats.draft}</p>
-            </div>
-            <XCircle className="w-6 h-6 text-yellow-500" />
-          </div>
-        </div>
-
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-xs text-gray-600">Niedriger Bestand</p>
-              <p className="text-xl font-bold text-red-600">{stats.lowStock}</p>
-            </div>
-            <AlertTriangle className="w-6 h-6 text-red-500" />
-          </div>
-        </div>
+      {/* Tab Switcher */}
+      <div className="flex items-center gap-2 border-b border-gray-200">
+        <button
+          onClick={() => setActiveTab('inventory')}
+          className={cn(
+            "px-4 py-3 font-medium text-sm flex items-center gap-2 border-b-2 transition-colors",
+            activeTab === 'inventory'
+              ? "border-green-600 text-green-600"
+              : "border-transparent text-gray-500 hover:text-gray-700"
+          )}
+        >
+          <Database className="w-4 h-4" />
+          Erfasste Produkte
+          {inventoryStats.total > 0 && (
+            <span className="bg-green-100 text-green-800 text-xs px-2 py-0.5 rounded-full">
+              {inventoryStats.total}
+            </span>
+          )}
+        </button>
+        <button
+          onClick={() => setActiveTab('medusa')}
+          className={cn(
+            "px-4 py-3 font-medium text-sm flex items-center gap-2 border-b-2 transition-colors",
+            activeTab === 'medusa'
+              ? "border-indigo-600 text-indigo-600"
+              : "border-transparent text-gray-500 hover:text-gray-700"
+          )}
+        >
+          <Store className="w-4 h-4" />
+          Shop Produkte (Medusa)
+          {stats.total > 0 && (
+            <span className="bg-indigo-100 text-indigo-800 text-xs px-2 py-0.5 rounded-full">
+              {stats.total}
+            </span>
+          )}
+        </button>
       </div>
+
+      {/* Stats Cards - Inventory */}
+      {activeTab === 'inventory' && (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-xs text-gray-600">Gesamt</p>
+                <p className="text-xl font-bold text-gray-900">{inventoryStats.total}</p>
+              </div>
+              <Package className="w-6 h-6 text-green-500" />
+            </div>
+          </div>
+
+          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-xs text-gray-600">Veröffentlicht</p>
+                <p className="text-xl font-bold text-green-600">{inventoryStats.published}</p>
+              </div>
+              <CheckCircle className="w-6 h-6 text-green-500" />
+            </div>
+          </div>
+
+          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-xs text-gray-600">Entwürfe</p>
+                <p className="text-xl font-bold text-yellow-600">{inventoryStats.draft}</p>
+              </div>
+              <XCircle className="w-6 h-6 text-yellow-500" />
+            </div>
+          </div>
+
+          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-xs text-gray-600">Freigegeben</p>
+                <p className="text-xl font-bold text-blue-600">{inventoryStats.approved}</p>
+              </div>
+              <CheckCircle className="w-6 h-6 text-blue-500" />
+            </div>
+          </div>
+
+          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-xs text-gray-600">Zur Prüfung</p>
+                <p className="text-xl font-bold text-orange-600">{inventoryStats.pending}</p>
+              </div>
+              <AlertTriangle className="w-6 h-6 text-orange-500" />
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Stats Cards - Medusa */}
+      {activeTab === 'medusa' && (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-4">
+          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-xs text-gray-600">Gesamt</p>
+                <p className="text-xl font-bold text-gray-900">{stats.total}</p>
+              </div>
+              <Package className="w-6 h-6 text-blue-500" />
+            </div>
+          </div>
+
+          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-xs text-gray-600">Veröffentlicht</p>
+                <p className="text-xl font-bold text-green-600">{stats.published}</p>
+              </div>
+              <CheckCircle className="w-6 h-6 text-green-500" />
+            </div>
+          </div>
+
+          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-xs text-gray-600">Admin Inventory</p>
+                <p className="text-xl font-bold text-indigo-600">{stats.adminInventory}</p>
+              </div>
+              <Store className="w-6 h-6 text-indigo-500" />
+            </div>
+          </div>
+
+          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-xs text-gray-600">User Listings</p>
+                <p className="text-xl font-bold text-purple-600">{stats.userListings}</p>
+              </div>
+              <Users className="w-6 h-6 text-purple-500" />
+            </div>
+          </div>
+
+          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-xs text-gray-600">Entwürfe</p>
+                <p className="text-xl font-bold text-yellow-600">{stats.draft}</p>
+              </div>
+              <XCircle className="w-6 h-6 text-yellow-500" />
+            </div>
+          </div>
+
+          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-xs text-gray-600">Niedriger Bestand</p>
+                <p className="text-xl font-bold text-red-600">{stats.lowStock}</p>
+              </div>
+              <AlertTriangle className="w-6 h-6 text-red-500" />
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Filters and Search */}
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
@@ -318,22 +481,192 @@ export default function ProductManagement() {
                 {selectedProducts.length} löschen
               </button>
             )}
-            <button
-              onClick={() => setShowBulkImport(true)}
-              className="px-4 py-2 text-indigo-600 border border-indigo-200 rounded-lg hover:bg-indigo-50 transition-colors"
-            >
-              <Upload className="w-4 h-4 inline mr-2" />
-              Bulk Import
-            </button>
-            <button className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors">
-              <Plus className="w-4 h-4 inline mr-2" />
-              Neues Produkt
-            </button>
+            {activeTab === 'inventory' ? (
+              <Link
+                href="/admin/erfassung"
+                className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+              >
+                <Plus className="w-4 h-4 inline mr-2" />
+                Produkt erfassen
+              </Link>
+            ) : (
+              <>
+                <button
+                  onClick={() => setShowBulkImport(true)}
+                  className="px-4 py-2 text-indigo-600 border border-indigo-200 rounded-lg hover:bg-indigo-50 transition-colors"
+                >
+                  <Upload className="w-4 h-4 inline mr-2" />
+                  Bulk Import
+                </button>
+                <button className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors">
+                  <Plus className="w-4 h-4 inline mr-2" />
+                  Neues Produkt
+                </button>
+              </>
+            )}
           </div>
         </div>
       </div>
 
-      {/* Products Table */}
+      {/* Inventory Products Table */}
+      {activeTab === 'inventory' && (
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <thead className="bg-gray-50 border-b border-gray-200">
+                <tr>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Artikel-Nr.
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Produkt
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Status
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Preis
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Bestand
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Lager
+                  </th>
+                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Aktionen
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-200">
+                {inventoryProducts
+                  .filter(p => {
+                    const matchesSearch =
+                      p.product_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                      p.brand.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                      p.item_uuid.toLowerCase().includes(searchQuery.toLowerCase())
+                    return matchesSearch
+                  })
+                  .map((product) => (
+                  <motion.tr
+                    key={product.id}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    className="hover:bg-gray-50"
+                  >
+                    <td className="px-6 py-4">
+                      <code className="text-sm font-mono bg-gray-100 px-2 py-1 rounded">
+                        {product.item_uuid}
+                      </code>
+                    </td>
+                    <td className="px-6 py-4">
+                      <div className="flex items-center">
+                        <div className="w-12 h-12 bg-gray-200 rounded-lg flex items-center justify-center mr-3">
+                          <Package className="w-6 h-6 text-gray-400" />
+                        </div>
+                        <div>
+                          <div className="font-medium text-gray-900">
+                            {product.brand} {product.product_name}
+                          </div>
+                          <div className="text-sm text-gray-500 truncate max-w-xs">
+                            {product.short_description || product.category || 'Keine Beschreibung'}
+                          </div>
+                        </div>
+                      </div>
+                    </td>
+                    <td className="px-6 py-4">
+                      <div className="flex flex-col gap-1">
+                        <span className={cn(
+                          "inline-flex px-2 py-1 text-xs font-medium rounded-full w-fit",
+                          product.marketplace_status === 'published'
+                            ? "bg-green-100 text-green-800"
+                            : "bg-yellow-100 text-yellow-800"
+                        )}>
+                          {product.marketplace_status === 'published' ? 'Veröffentlicht' : 'Entwurf'}
+                        </span>
+                        <span className={cn(
+                          "inline-flex px-2 py-1 text-xs font-medium rounded-full w-fit",
+                          product.status === 'approved'
+                            ? "bg-blue-100 text-blue-800"
+                            : product.status === 'pending_review'
+                            ? "bg-orange-100 text-orange-800"
+                            : "bg-gray-100 text-gray-800"
+                        )}>
+                          {product.status === 'approved' ? 'Freigegeben' :
+                           product.status === 'pending_review' ? 'Zur Prüfung' : product.status}
+                        </span>
+                      </div>
+                    </td>
+                    <td className="px-6 py-4">
+                      <span className="font-medium text-green-600">
+                        CHF {product.estimated_price_chf.toFixed(2)}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4">
+                      <span className={cn(
+                        "font-medium",
+                        product.quantity_available < 3 ? "text-red-600" : "text-gray-900"
+                      )}>
+                        {product.quantity_available}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4">
+                      <div className="text-sm text-gray-600">
+                        {product.location || '-'}
+                        {product.box_id && (
+                          <span className="text-gray-400"> / {product.box_id}</span>
+                        )}
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 text-right">
+                      <div className="flex items-center justify-end gap-2">
+                        <Link
+                          href={`/admin/products/${product.id}/factsheet`}
+                          className="p-1 text-green-600 hover:text-green-800"
+                          title="Factsheet drucken"
+                        >
+                          <Printer className="w-4 h-4" />
+                        </Link>
+                        <button className="p-1 text-gray-400 hover:text-gray-600" title="Ansehen">
+                          <Eye className="w-4 h-4" />
+                        </button>
+                        <button className="p-1 text-gray-400 hover:text-gray-600" title="Bearbeiten">
+                          <Edit className="w-4 h-4" />
+                        </button>
+                        <button className="p-1 text-red-400 hover:text-red-600" title="Löschen">
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
+                    </td>
+                  </motion.tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          {inventoryProducts.length === 0 && (
+            <div className="text-center py-12">
+              <Package className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+              <h3 className="text-lg font-medium text-gray-900 mb-2">
+                Keine erfassten Produkte
+              </h3>
+              <p className="text-gray-600 mb-4">
+                Erfassen Sie Ihr erstes Produkt, um zu beginnen.
+              </p>
+              <Link
+                href="/admin/erfassung"
+                className="inline-flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+              >
+                <Plus className="w-4 h-4" />
+                Produkt erfassen
+              </Link>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Medusa Products Table */}
+      {activeTab === 'medusa' && (
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full">
@@ -494,6 +827,7 @@ export default function ProductManagement() {
           </div>
         )}
       </div>
+      )}
 
       {/* Bulk Import Modal */}
       <AnimatePresence>

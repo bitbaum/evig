@@ -3,18 +3,95 @@
 import { useParams } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowLeft, ShoppingCart, Check, Heart, BarChart3, Truck, Shield, RefreshCw, Leaf, Star, Loader2 } from "lucide-react";
+import { ArrowLeft, ShoppingCart, Check, Heart, BarChart3, Truck, Shield, RefreshCw, Leaf, Star, Loader2, Package } from "lucide-react";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useProduct, useAddToCart, useCreateCart, getCartId, useRegions } from "@/lib/medusa/hooks";
 import { cn } from "@/lib/utils";
 import { logger } from "@/lib/logger";
 
+// Inventory product type
+interface InventoryProductDetail {
+  id: string
+  item_uuid: string
+  title: string
+  brand: string
+  model: string
+  description: string | null
+  specifications: Record<string, string>
+  price: number
+  condition: string
+  dimensions: { laenge_mm?: number; breite_mm?: number; hoehe_mm?: number } | null
+  weight_grams: number | null
+  category: string | null
+  subcategory: string | null
+  quantity: number
+  is_available: boolean
+  images: Array<{ id: string; url: string; is_primary: boolean }>
+  customer_profiles: Array<{ slug: string; name_de: string; color: string; description_de: string }>
+}
+
+// Check if ID looks like a UUID
+function isUUID(id: string): boolean {
+  const uuidPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
+  return uuidPattern.test(id)
+}
+
+// Custom hook for inventory products
+function useInventoryProduct(id: string) {
+  const [data, setData] = useState<InventoryProductDetail | null>(null)
+  const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState<Error | null>(null)
+
+  useEffect(() => {
+    async function fetchProduct() {
+      try {
+        setIsLoading(true)
+        const response = await fetch(`/api/shop/inventory/${id}`)
+        if (!response.ok) {
+          throw new Error('Product not found')
+        }
+        const result = await response.json()
+        setData(result.product)
+        setError(null)
+      } catch (err) {
+        setError(err instanceof Error ? err : new Error('Unknown error'))
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    if (id && isUUID(id)) {
+      fetchProduct()
+    }
+  }, [id])
+
+  return { data, isLoading: isUUID(id) ? isLoading : false, error }
+}
+
+// Condition labels
+const CONDITION_LABELS: Record<string, string> = {
+  new: 'Neu',
+  like_new: 'Wie neu',
+  good: 'Gut',
+  fair: 'Akzeptabel',
+  poor: 'Gebraucht',
+}
+
 export default function ProductPage() {
   const params = useParams();
   const handle = params.handle as string;
 
-  const { data: product, isLoading, error } = useProduct(handle);
+  // Check if this is an inventory product (UUID) or Medusa product (handle)
+  const isInventoryProduct = isUUID(handle)
+
+  // Fetch from appropriate source
+  const { data: medusaProduct, isLoading: medusaLoading, error: medusaError } = useProduct(isInventoryProduct ? '' : handle);
+  const { data: inventoryProduct, isLoading: inventoryLoading, error: inventoryError } = useInventoryProduct(handle)
+
+  const isLoading = isInventoryProduct ? inventoryLoading : medusaLoading
+  const error = isInventoryProduct ? inventoryError : medusaError
+  const product = isInventoryProduct ? inventoryProduct : medusaProduct
   const { data: regions } = useRegions();
   const addToCart = useAddToCart();
   const createCart = useCreateCart();
@@ -27,7 +104,15 @@ export default function ProductPage() {
   const defaultRegion = regions?.[0];
 
   const handleAddToCart = async () => {
-    if (!product || !product.variants?.[0]) return;
+    // For inventory products, we don't use Medusa cart
+    if (isInventoryProduct) {
+      // For now, show a contact message - can implement inventory cart later
+      setAddedToCart(true);
+      setTimeout(() => setAddedToCart(false), 3000);
+      return;
+    }
+
+    if (!medusaProduct || !medusaProduct.variants?.[0]) return;
 
     try {
       let cartId = getCartId();
@@ -41,7 +126,7 @@ export default function ProductPage() {
       // Add to cart
       await addToCart.mutateAsync({
         cartId: cartId!,
-        variantId: product.variants[0].id,
+        variantId: medusaProduct.variants[0].id,
         quantity,
       });
 
@@ -106,32 +191,67 @@ export default function ProductPage() {
     );
   }
 
-  // Get price
-  const prices = product.variants?.[0]?.prices;
-  const chfPrice = prices?.find((p) => p.currency_code === "chf");
-  const eurPrice = prices?.find((p) => p.currency_code === "eur");
-  const price = chfPrice || eurPrice || prices?.[0];
-  
-  const formattedPrice = price
-    ? new Intl.NumberFormat("de-CH", {
-        style: "currency",
-        currency: price.currency_code.toUpperCase(),
-      }).format(price.amount / 100)
-    : "Preis auf Anfrage";
+  // Handle both inventory and Medusa products
+  let formattedPrice: string
+  let isAvailable: boolean
+  let category: string
+  let allImages: Array<{ id: string; url: string }>
+  let productTitle: string
+  let productDescription: string | null
+  let hasOptions: boolean
+  let specs: Record<string, string> | null = null
+  let customerProfiles: Array<{ slug: string; name_de: string; color: string; description_de: string }> = []
+  let condition: string | null = null
 
-  const isAvailable = (product.variants?.[0]?.inventory_quantity ?? 0) > 0 || product.variants?.[0]?.allow_backorder;
-  const category = product.collection?.title || "Produkt";
-  
-  // Get all images including thumbnail
-  const allImages = [
-    ...(product.thumbnail ? [{ id: "thumb", url: product.thumbnail }] : []),
-    ...(product.images || [])
-  ].filter((img, index, self) => 
-    index === self.findIndex((t) => t.url === img.url)
-  );
+  if (isInventoryProduct && inventoryProduct) {
+    // Inventory product
+    formattedPrice = `CHF ${inventoryProduct.price.toFixed(2)}`
+    isAvailable = inventoryProduct.is_available
+    category = inventoryProduct.category || 'Produkt'
+    productTitle = inventoryProduct.title
+    productDescription = inventoryProduct.description
+    hasOptions = false
+    specs = inventoryProduct.specifications
+    customerProfiles = inventoryProduct.customer_profiles
+    condition = inventoryProduct.condition
+    allImages = inventoryProduct.images.length > 0
+      ? inventoryProduct.images
+      : [{ id: 'placeholder', url: '' }]
+  } else if (medusaProduct) {
+    // Medusa product
+    const prices = medusaProduct.variants?.[0]?.prices;
+    const chfPrice = prices?.find((p) => p.currency_code === "chf");
+    const eurPrice = prices?.find((p) => p.currency_code === "eur");
+    const price = chfPrice || eurPrice || prices?.[0];
 
-  // Product options
-  const hasOptions = product.options && product.options.length > 0;
+    formattedPrice = price
+      ? new Intl.NumberFormat("de-CH", {
+          style: "currency",
+          currency: price.currency_code.toUpperCase(),
+        }).format(price.amount / 100)
+      : "Preis auf Anfrage";
+
+    isAvailable = (medusaProduct.variants?.[0]?.inventory_quantity ?? 0) > 0 || medusaProduct.variants?.[0]?.allow_backorder || false;
+    category = medusaProduct.collection?.title || "Produkt";
+    productTitle = medusaProduct.title
+    productDescription = medusaProduct.description || null
+    hasOptions = medusaProduct.options && medusaProduct.options.length > 0;
+    allImages = [
+      ...(medusaProduct.thumbnail ? [{ id: "thumb", url: medusaProduct.thumbnail }] : []),
+      ...(medusaProduct.images || [])
+    ].filter((img, index, self) =>
+      index === self.findIndex((t) => t.url === img.url)
+    );
+  } else {
+    // Fallback
+    formattedPrice = 'Preis auf Anfrage'
+    isAvailable = false
+    category = 'Produkt'
+    productTitle = 'Produkt'
+    productDescription = null
+    hasOptions = false
+    allImages = []
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -158,7 +278,7 @@ export default function ProductPage() {
               {allImages[selectedImage]?.url ? (
                 <Image
                   src={allImages[selectedImage].url}
-                  alt={product.title}
+                  alt={productTitle}
                   fill
                   className="object-cover"
                   sizes="(max-width: 1024px) 100vw, 50vw"
@@ -189,7 +309,7 @@ export default function ProductPage() {
                   >
                     <Image
                       src={img.url}
-                      alt={`${product.title} Bild ${index + 1}`}
+                      alt={`${productTitle} Bild ${index + 1}`}
                       fill
                       className="object-cover"
                       sizes="80px"
@@ -227,8 +347,36 @@ export default function ProductPage() {
           <div className="flex flex-col">
             {/* Title */}
             <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-3">
-              {product.title}
+              {productTitle}
             </h1>
+
+            {/* Condition badge for inventory products */}
+            {condition && (
+              <div className="mb-3">
+                <span className="inline-flex items-center px-3 py-1 text-sm font-medium bg-gray-100 text-gray-700 rounded-full">
+                  Zustand: {CONDITION_LABELS[condition] || condition}
+                </span>
+              </div>
+            )}
+
+            {/* Customer Profiles for inventory products */}
+            {customerProfiles.length > 0 && (
+              <div className="mb-4">
+                <p className="text-sm text-gray-600 mb-2">Empfohlen für:</p>
+                <div className="flex flex-wrap gap-2">
+                  {customerProfiles.map((profile) => (
+                    <span
+                      key={profile.slug}
+                      className="inline-flex items-center gap-1 px-3 py-1 text-sm text-white rounded-full"
+                      style={{ backgroundColor: profile.color }}
+                      title={profile.description_de}
+                    >
+                      {profile.name_de}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
 
             {/* Rating placeholder */}
             <div className="flex items-center gap-2 mb-4">
@@ -266,16 +414,31 @@ export default function ProductPage() {
             </p>
 
             {/* Description */}
-            {product.description && (
+            {productDescription && (
               <div className="mb-6">
-                <p className="text-gray-600 leading-relaxed">{product.description}</p>
+                <p className="text-gray-600 leading-relaxed">{productDescription}</p>
               </div>
             )}
 
-            {/* Product Options (Size, Color, etc.) */}
-            {hasOptions && (
+            {/* Specifications - Inventory products */}
+            {specs && Object.keys(specs).length > 0 && (
+              <div className="mb-6">
+                <h3 className="text-sm font-medium text-gray-700 mb-3">Technische Daten</h3>
+                <div className="bg-gray-50 rounded-lg p-4 space-y-2">
+                  {Object.entries(specs).map(([key, value]) => (
+                    <div key={key} className="flex justify-between text-sm">
+                      <span className="text-gray-600">{key}</span>
+                      <span className="text-gray-900 font-medium">{value}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Product Options (Size, Color, etc.) - Medusa products only */}
+            {hasOptions && medusaProduct?.options && (
               <div className="space-y-4 mb-6">
-                {product.options?.map((option) => (
+                {medusaProduct.options.map((option) => (
                   <div key={option.id}>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       {option.title}
@@ -354,7 +517,7 @@ export default function ProductPage() {
                     className="flex items-center gap-2"
                   >
                     <Check className="h-5 w-5" />
-                    In den Warenkorb gelegt!
+                    {isInventoryProduct ? "Anfrage gemerkt!" : "In den Warenkorb gelegt!"}
                   </motion.span>
                 ) : (
                   <motion.span
@@ -365,13 +528,13 @@ export default function ProductPage() {
                     className="flex items-center gap-2"
                   >
                     <ShoppingCart className="h-5 w-5" />
-                    {isAvailable ? "In den Warenkorb" : "Nicht verfügbar"}
+                    {!isAvailable ? "Nicht verfügbar" : isInventoryProduct ? "Anfrage senden" : "In den Warenkorb"}
                   </motion.span>
                 )}
               </AnimatePresence>
             </motion.button>
 
-            {/* View Cart Link */}
+            {/* View Cart Link / Contact Info */}
             <AnimatePresence>
               {addedToCart && (
                 <motion.div
@@ -379,12 +542,24 @@ export default function ProductPage() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -10 }}
                 >
-                  <Link
-                    href="/shop/medusa/cart"
-                    className="mt-4 block text-center text-sm text-emerald-600 hover:text-emerald-700 font-medium transition-colors"
-                  >
-                    Zum Warenkorb →
-                  </Link>
+                  {isInventoryProduct ? (
+                    <div className="mt-4 text-center text-sm text-gray-600">
+                      <p className="mb-2">Kontaktieren Sie uns für dieses Produkt:</p>
+                      <a
+                        href="mailto:shop@revamp-it.ch"
+                        className="text-emerald-600 hover:text-emerald-700 font-medium"
+                      >
+                        shop@revamp-it.ch →
+                      </a>
+                    </div>
+                  ) : (
+                    <Link
+                      href="/shop/medusa/cart"
+                      className="mt-4 block text-center text-sm text-emerald-600 hover:text-emerald-700 font-medium transition-colors"
+                    >
+                      Zum Warenkorb →
+                    </Link>
+                  )}
                 </motion.div>
               )}
             </AnimatePresence>
