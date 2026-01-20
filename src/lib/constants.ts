@@ -368,3 +368,26 @@ export const ROLE_PERMISSIONS: Record<UserRole, string[]> = {
     PERMISSIONS.LEAVE_REVIEWS
   ],
 }
+
+// =============================================================================
+// NEW SIMPLIFIED PERMISSION SYSTEM (v2)
+// =============================================================================
+// The above role system is being replaced with a simpler approach.
+// Re-export from the new permissions module for easy migration.
+
+export {
+  ADMIN_SECTIONS,
+  STAFF_EMAIL_DOMAIN,
+  SUPER_ADMIN_EMAILS,
+  DEFAULT_STAFF_PERMISSIONS,
+  CONTENT_STATUS,
+  isStaffEmail,
+  isSuperAdmin,
+  canAccessSection,
+  canAccessSensitive,
+  getAccessibleSections,
+  getInitialStaffPermissions,
+  migrateOldRole,
+} from './permissions'
+
+export type { AdminSection, StaffUser, ContentStatus } from './permissions'

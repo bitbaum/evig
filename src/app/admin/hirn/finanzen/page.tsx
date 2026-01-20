@@ -7,7 +7,7 @@
 
 import { auth } from '@/auth'
 import { redirect } from 'next/navigation'
-import { hasHirnAccess, PERMISSIONS } from '@/lib/constants'
+import { canAccessSection } from '@/lib/permissions'
 import { loadAllYearsData, getAvailableYears } from '@/lib/hirn/data/financial-loader'
 import { generateYearInsights } from '@/lib/hirn/data/analysis'
 import Link from 'next/link'
@@ -23,8 +23,15 @@ export default async function FinanzenPage() {
     redirect('/auth/login?callbackUrl=/admin/hirn/finanzen')
   }
 
-  if (!hasHirnAccess(session.user.role)) {
-    redirect('/admin?error=no_hirn_access')
+  // Check permission for finances section (more restrictive than hirn)
+  const hasAccess = canAccessSection({
+    email: session.user.email,
+    is_staff: session.user.isStaff,
+    staff_permissions: session.user.staffPermissions,
+  }, 'finances')
+
+  if (!hasAccess) {
+    redirect('/admin/hirn?error=no_finances_access')
   }
 
   // Load financial data

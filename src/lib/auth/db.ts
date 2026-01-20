@@ -123,7 +123,7 @@ export interface DbUser {
   emailVerified: Date | null  // camelCase for Auth.js
   password_hash: string | null
   image: string | null
-  role: string
+  role: string  // Legacy - kept for backward compatibility
   status: string
   role_id: string | null
   medusa_customer_id: string | null
@@ -131,6 +131,9 @@ export interface DbUser {
   last_activity_at: Date | null
   createdAt: Date  // camelCase for Auth.js
   updatedAt: Date  // camelCase for Auth.js
+  // New simplified auth fields
+  is_staff: boolean
+  staff_permissions: string[]
 }
 
 export interface DbUserProfile {
@@ -204,6 +207,9 @@ export async function createUser(data: {
   account_type?: string
   medusa_customer_id?: string
   emailVerified?: boolean
+  // New simplified auth fields
+  is_staff?: boolean
+  staff_permissions?: string[]
 }): Promise<DbUser> {
   const userColumns = await getUserColumns()
 
@@ -263,6 +269,17 @@ export async function createUser(data: {
   if (userColumns.has('role_id')) {
     columns.push('role_id')
     values.push(roleId)
+  }
+
+  // New simplified auth fields
+  if (userColumns.has('is_staff')) {
+    columns.push('is_staff')
+    values.push(data.is_staff ?? false)
+  }
+
+  if (userColumns.has('staff_permissions')) {
+    columns.push('staff_permissions')
+    values.push(data.staff_permissions ?? [])
   }
 
   const placeholders = columns.map((_, idx) => `$${idx + 1}`)

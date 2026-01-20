@@ -7,7 +7,7 @@
 
 import { auth } from '@/auth'
 import { redirect } from 'next/navigation'
-import { hasHirnAccess } from '@/lib/constants'
+import { canAccessSection } from '@/lib/permissions'
 import { loadFinancialData, getAvailableYears } from '@/lib/hirn/data/financial-loader'
 import { generateYearInsights } from '@/lib/hirn/data/analysis'
 import { HirnDashboardClient } from './HirnDashboardClient'
@@ -20,7 +20,14 @@ export default async function HirnPage() {
     redirect('/auth/login?callbackUrl=/admin/hirn')
   }
 
-  if (!hasHirnAccess(session.user.role)) {
+  // Check permission for hirn section
+  const hasAccess = canAccessSection({
+    email: session.user.email,
+    is_staff: session.user.isStaff,
+    staff_permissions: session.user.staffPermissions,
+  }, 'hirn')
+
+  if (!hasAccess) {
     redirect('/admin?error=no_hirn_access')
   }
 

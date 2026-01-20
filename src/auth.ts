@@ -13,7 +13,7 @@ import type { JWT } from 'next-auth/jwt'
 import type { Session, User } from 'next-auth'
 import { getUserByEmail, createUser, getOrCreateProfile, createVerificationCode, type DbUser } from '@/lib/auth/db'
 import { hashPassword, verifyPassword, validatePasswordStrength } from '@/lib/auth/password'
-import { ROLES, determineUserRole } from '@/lib/constants'
+import { ROLES, determineUserRole, isStaffEmail, getInitialStaffPermissions } from '@/lib/constants'
 import { getMedusaConfig } from '@/lib/auth/config'
 import { updateUser } from '@/lib/auth/db'
 import { logger } from '@/lib/logger'
@@ -54,8 +54,11 @@ declare module 'next-auth' {
     email: string
     name?: string | null
     image?: string | null
-    role?: string
+    role?: string  // Legacy - kept for backward compatibility
     emailVerified?: Date | null
+    // New simplified auth fields
+    is_staff?: boolean
+    staff_permissions?: string[]
   }
 
   interface Session {
@@ -64,8 +67,11 @@ declare module 'next-auth' {
       email: string
       name?: string | null
       image?: string | null
-      role?: string
+      role?: string  // Legacy - kept for backward compatibility
       emailVerified?: boolean
+      // New simplified auth fields
+      isStaff: boolean
+      staffPermissions: string[]
     }
   }
 }
@@ -156,14 +162,21 @@ export const authConfig = {
           // Email verification not required for community app
           // Users can log in immediately after registration
 
-          // Return user object
+          // Determine staff status from email or database
+          const userIsStaff = user.is_staff ?? isStaffEmail(user.email)
+          const userPermissions = user.staff_permissions ?? (userIsStaff ? getInitialStaffPermissions(user.email) : [])
+
+          // Return user object with new simplified auth fields
           return {
             id: user.id,
             email: user.email,
             name: user.name,
             image: user.image,
-            role: user.role,
+            role: user.role,  // Legacy
             emailVerified: user.emailVerified,
+            // New simplified auth fields
+            is_staff: userIsStaff,
+            staff_permissions: userPermissions,
           }
         } catch (dbError) {
           // Handle database connection errors gracefully
@@ -184,25 +197,49 @@ export const authConfig = {
   ],
 
   callbacks: {
-    // Add user id, role, and emailVerified into JWT
-    async jwt({ token, user }: { token: JWT & { id?: string; role?: string; emailVerified?: boolean }, user?: User }) {
+    // Add user info into JWT token
+    async jwt({ token, user }: {
+      token: JWT & {
+        id?: string
+        role?: string
+        emailVerified?: boolean
+        isStaff?: boolean
+        staffPermissions?: string[]
+      },
+      user?: User
+    }) {
       // On first sign in, add user info to token
       if (user) {
         token.id = user.id
-        // Use intelligent role determination based on email domain and other factors
+        // Legacy role - kept for backward compatibility
         token.role = user.role || determineUserRole(user.email || '')
         token.emailVerified = !!user.emailVerified
+        // New simplified auth fields
+        token.isStaff = user.is_staff ?? isStaffEmail(user.email ?? '')
+        token.staffPermissions = user.staff_permissions ?? (token.isStaff ? getInitialStaffPermissions(user.email ?? '') : [])
       }
       return token
     },
 
-    // Expose id, role, and emailVerified on the session
-    async session({ session, token }: { session: Session, token: JWT & { id?: string; role?: string; emailVerified?: boolean } }) {
-      // Add user ID, role, and emailVerified from JWT token to session
+    // Expose user info on the session
+    async session({ session, token }: {
+      session: Session,
+      token: JWT & {
+        id?: string
+        role?: string
+        emailVerified?: boolean
+        isStaff?: boolean
+        staffPermissions?: string[]
+      }
+    }) {
+      // Add all user info from JWT token to session
       if (session.user && token) {
         session.user.id = token.id as string
-        session.user.role = token.role as string
+        session.user.role = token.role as string  // Legacy
         session.user.emailVerified = token.emailVerified ?? false
+        // New simplified auth fields
+        session.user.isStaff = token.isStaff ?? false
+        session.user.staffPermissions = token.staffPermissions ?? []
       }
       return session
     },
@@ -247,9 +284,16 @@ export async function registerUser(data: {
   email: string
   password: string
   name?: string
-  role?: string
+  role?: string  // Legacy - ignored in new system
 }): Promise<RegisterResult> {
-  const { email, password, name, role = ROLES.CUSTOMER } = data
+  const { email, password, name } = data
+
+  // Determine staff status from email domain
+  const is_staff = isStaffEmail(email)
+  const staff_permissions = is_staff ? getInitialStaffPermissions(email) : []
+
+  // Legacy role - set based on staff status for backward compatibility
+  const role = is_staff ? ROLES.REVAMPIT_ADMIN : ROLES.CUSTOMER
 
   // Validate email format
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -278,7 +322,10 @@ export async function registerUser(data: {
       email,
       name,
       password_hash,
-      role,
+      role,  // Legacy
+      // New simplified auth fields
+      is_staff,
+      staff_permissions,
       // emailVerified: false by default - user must verify
     })
 

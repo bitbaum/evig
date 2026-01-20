@@ -41,6 +41,11 @@ export const mainNavigation: NavigationItem[] = [
         description: 'Häufig gestellte Fragen rund um RevampIT'
       },
       {
+        name: 'Unsere Standorte',
+        href: '/space',
+        description: 'Geschichte unserer Standorte und Vision für die Zukunft'
+      },
+      {
         name: 'Wiki',
         href: 'https://revamp-it.ch/index.php/de/wiki-de',
         description: 'Unser gemeinsames Wissensportal',
