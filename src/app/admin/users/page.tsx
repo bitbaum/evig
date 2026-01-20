@@ -1,139 +1,126 @@
+/**
+ * Admin Users Page - Server Component
+ *
+ * Shows all users from the database with their staff status and permissions.
+ * No mock data - all values come from actual database queries.
+ */
+
 import { Metadata } from 'next'
 import Link from 'next/link'
+import { auth } from '@/auth'
+import { redirect } from 'next/navigation'
+import { query } from '@/lib/auth/db'
+import { TABLE_NAMES } from '@/config/database'
+import { canAccessSection, isSuperAdmin, isStaffEmail } from '@/lib/permissions'
 import {
   Users,
   Eye,
   UserCheck,
-  UserX,
   Crown,
   Shield,
   Edit,
   Mail,
-  Phone,
   MapPin,
-  Calendar,
-  MoreHorizontal,
   Search,
-  Filter
 } from 'lucide-react'
-import { ROLES, ROLE_DISPLAY_NAMES, ROLE_DESCRIPTIONS } from '@/lib/constants'
 
 export const metadata: Metadata = {
   title: 'Benutzer verwalten | RevampIT Admin',
   description: 'Benutzerkonten anzeigen und verwalten.',
 }
 
-export default function AdminUsersPage() {
-  // Mock data - replace with actual database queries
-  const users = [
-    {
-      id: '1',
-      name: 'Hans Müller',
-      email: 'hans.mueller@revamp-it.ch',
-      role: ROLES.REVAMPIT_ADMIN,
-      status: 'active',
-      joinDate: '2023-01-15',
-      lastLogin: '2024-12-10',
-      location: 'Zürich',
-      phone: '+41 44 123 45 67',
-      ordersCount: 0,
-      workshopsCount: 0
-    },
-    {
-      id: '2',
-      name: 'Anna Schmidt',
-      email: 'anna.schmidt@revamp-it.ch',
-      role: ROLES.REVAMPIT_EDITOR,
-      status: 'active',
-      joinDate: '2023-03-20',
-      lastLogin: '2024-12-09',
-      location: 'Basel',
-      phone: '+41 61 234 56 78',
-      ordersCount: 0,
-      workshopsCount: 0
-    },
-    {
-      id: '3',
-      name: 'Max Mustermann',
-      email: 'max@example.com',
-      role: ROLES.SELLER,
-      status: 'active',
-      joinDate: '2024-06-10',
-      lastLogin: '2024-12-08',
-      location: 'Zürich',
-      phone: '+41 44 345 67 89',
-      ordersCount: 15,
-      workshopsCount: 0
-    },
-    {
-      id: '4',
-      name: 'Lisa Weber',
-      email: 'lisa@example.com',
-      role: ROLES.CUSTOMER,
-      status: 'active',
-      joinDate: '2024-08-15',
-      lastLogin: '2024-12-07',
-      location: 'Luzern',
-      phone: '+41 41 456 78 90',
-      ordersCount: 8,
-      workshopsCount: 3
-    },
-    {
-      id: '5',
-      name: 'Peter Fischer',
-      email: 'peter@partner.ch',
-      role: ROLES.PARTNER_ADMIN,
-      status: 'active',
-      joinDate: '2024-02-01',
-      lastLogin: '2024-12-06',
-      location: 'Bern',
-      phone: '+41 31 567 89 01',
-      ordersCount: 0,
-      workshopsCount: 0
-    }
-  ]
+interface UserRow {
+  id: string
+  name: string | null
+  email: string
+  is_staff: boolean
+  staff_permissions: string[] | null
+  created_at: string
+  email_verified: string | null
+}
 
-  const stats = {
-    totalUsers: users.length,
-    activeUsers: users.filter(u => u.status === 'active').length,
-    revampitStaff: users.filter(u => u.email.endsWith('@revamp-it.ch')).length,
-    sellers: users.filter(u => u.role === ROLES.SELLER).length,
-    customers: users.filter(u => [ROLES.CUSTOMER, ROLES.PREMIUM_CUSTOMER, ROLES.VERIFIED_CUSTOMER].includes(u.role as typeof ROLES.CUSTOMER | typeof ROLES.PREMIUM_CUSTOMER | typeof ROLES.VERIFIED_CUSTOMER)).length
+interface UserStats {
+  totalUsers: number
+  activeUsers: number
+  staffCount: number
+  regularUsers: number
+}
+
+async function getUserStats(): Promise<UserStats> {
+  try {
+    const totalResult = await query<{ count: string }>(
+      `SELECT COUNT(*) as count FROM ${TABLE_NAMES.USERS}`
+    )
+    const totalUsers = parseInt(totalResult.rows[0]?.count || '0')
+
+    const verifiedResult = await query<{ count: string }>(
+      `SELECT COUNT(*) as count FROM ${TABLE_NAMES.USERS} WHERE email_verified IS NOT NULL`
+    )
+    const activeUsers = parseInt(verifiedResult.rows[0]?.count || '0')
+
+    const staffResult = await query<{ count: string }>(
+      `SELECT COUNT(*) as count FROM ${TABLE_NAMES.USERS} WHERE is_staff = true`
+    )
+    const staffCount = parseInt(staffResult.rows[0]?.count || '0')
+
+    return {
+      totalUsers,
+      activeUsers,
+      staffCount,
+      regularUsers: totalUsers - staffCount,
+    }
+  } catch {
+    return { totalUsers: 0, activeUsers: 0, staffCount: 0, regularUsers: 0 }
+  }
+}
+
+async function getUsers(): Promise<UserRow[]> {
+  try {
+    const result = await query<UserRow>(
+      `SELECT
+        id,
+        name,
+        email,
+        is_staff,
+        staff_permissions,
+        created_at,
+        email_verified
+       FROM ${TABLE_NAMES.USERS}
+       ORDER BY
+        is_staff DESC,
+        created_at DESC
+       LIMIT 100`
+    )
+    return result.rows
+  } catch {
+    return []
+  }
+}
+
+export default async function AdminUsersPage() {
+  const session = await auth()
+
+  if (!session?.user) {
+    redirect('/auth/login?callbackUrl=/admin/users')
   }
 
-  const getRoleIcon = (role: string) => {
-    switch (role) {
-      case ROLES.REVAMPIT_SUPER_ADMIN:
-      case ROLES.REVAMPIT_ADMIN:
-        return <Crown className="w-4 h-4 text-purple-600" />
-      case ROLES.REVAMPIT_EDITOR:
-      case ROLES.REVAMPIT_SUPPORT:
-        return <Shield className="w-4 h-4 text-blue-600" />
-      case ROLES.SELLER:
-        return <Users className="w-4 h-4 text-green-600" />
-      default:
-        return <UserCheck className="w-4 h-4 text-gray-600" />
-    }
+  // Check permission for sensitive users section
+  const hasAccess = canAccessSection({
+    email: session.user.email,
+    is_staff: session.user.isStaff,
+    staff_permissions: session.user.staffPermissions,
+  }, 'users')
+
+  if (!hasAccess) {
+    redirect('/admin?error=no_users_access')
   }
 
-  const getRoleColor = (role: string) => {
-    switch (role) {
-      case ROLES.REVAMPIT_SUPER_ADMIN:
-      case ROLES.REVAMPIT_ADMIN:
-        return 'bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300'
-      case ROLES.REVAMPIT_EDITOR:
-      case ROLES.REVAMPIT_SUPPORT:
-        return 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300'
-      case ROLES.SELLER:
-      case ROLES.REPAIRER:
-        return 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300'
-      case ROLES.PARTNER_ADMIN:
-      case ROLES.PARTNER_STAFF:
-        return 'bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-300'
-      default:
-        return 'bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-300'
-    }
-  }
+  const [stats, users] = await Promise.all([
+    getUserStats(),
+    getUsers(),
+  ])
+
+  const currentUserIsSuperAdmin = isSuperAdmin(session.user.email)
 
   return (
     <div className="space-y-8">
@@ -144,20 +131,13 @@ export default function AdminUsersPage() {
             Benutzer verwalten
           </h1>
           <p className="text-gray-600 dark:text-gray-400 mt-1">
-            Benutzerkonten anzeigen, Rollen zuweisen und Aktivitäten überwachen
+            Benutzerkonten anzeigen und Berechtigungen verwalten
           </p>
         </div>
-        <Link
-          href="/admin/users/invite"
-          className="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white font-semibold px-4 py-2 rounded-lg transition-colors"
-        >
-          <Users className="w-5 h-5" />
-          Benutzer einladen
-        </Link>
       </div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-100 dark:border-gray-700">
           <div className="flex items-center gap-3">
             <Users className="w-8 h-8 text-blue-600" />
@@ -172,7 +152,7 @@ export default function AdminUsersPage() {
           <div className="flex items-center gap-3">
             <UserCheck className="w-8 h-8 text-green-600" />
             <div>
-              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Aktive Benutzer</p>
+              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Verifiziert</p>
               <p className="text-2xl font-bold text-gray-900 dark:text-white">{stats.activeUsers}</p>
             </div>
           </div>
@@ -182,34 +162,24 @@ export default function AdminUsersPage() {
           <div className="flex items-center gap-3">
             <Crown className="w-8 h-8 text-purple-600" />
             <div>
-              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">RevampIT Team</p>
-              <p className="text-2xl font-bold text-gray-900 dark:text-white">{stats.revampitStaff}</p>
+              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Staff</p>
+              <p className="text-2xl font-bold text-gray-900 dark:text-white">{stats.staffCount}</p>
             </div>
           </div>
         </div>
 
         <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-100 dark:border-gray-700">
           <div className="flex items-center gap-3">
-            <Users className="w-8 h-8 text-green-600" />
+            <Users className="w-8 h-8 text-gray-600" />
             <div>
-              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Sellers</p>
-              <p className="text-2xl font-bold text-gray-900 dark:text-white">{stats.sellers}</p>
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-100 dark:border-gray-700">
-          <div className="flex items-center gap-3">
-            <UserCheck className="w-8 h-8 text-gray-600" />
-            <div>
-              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Kunden</p>
-              <p className="text-2xl font-bold text-gray-900 dark:text-white">{stats.customers}</p>
+              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Benutzer</p>
+              <p className="text-2xl font-bold text-gray-900 dark:text-white">{stats.regularUsers}</p>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Filters */}
+      {/* Search (UI only for now) */}
       <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
         <div className="flex flex-col sm:flex-row gap-4">
           <div className="flex-1">
@@ -224,16 +194,9 @@ export default function AdminUsersPage() {
           </div>
           <div className="flex gap-4">
             <select className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-              <option value="">Alle Rollen</option>
-              {Object.entries(ROLE_DISPLAY_NAMES).map(([role, name]) => (
-                <option key={role} value={role}>{name}</option>
-              ))}
-            </select>
-            <select className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-              <option value="">Alle Status</option>
-              <option value="active">Aktiv</option>
-              <option value="inactive">Inaktiv</option>
-              <option value="suspended">Gesperrt</option>
+              <option value="">Alle Typen</option>
+              <option value="staff">Staff</option>
+              <option value="regular">Benutzer</option>
             </select>
           </div>
         </div>
@@ -249,97 +212,137 @@ export default function AdminUsersPage() {
                   Benutzer
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                  Rolle
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                   Status
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                  Letzte Anmeldung
+                  Berechtigungen
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                  Aktivität
+                  Registriert
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                  Aktionen
-                </th>
+                {currentUserIsSuperAdmin && (
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                    Aktionen
+                  </th>
+                )}
               </tr>
             </thead>
             <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-              {users.map((user) => (
-                <tr key={user.id} className="hover:bg-gray-50 dark:hover:bg-gray-700">
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="flex items-center">
-                      <div className="flex-shrink-0">
-                        <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
-                          <span className="text-white font-medium text-sm">
-                            {user.name.split(' ').map(n => n[0]).join('')}
+              {users.map((user) => {
+                const userIsSuperAdmin = isSuperAdmin(user.email)
+                const userIsStaff = user.is_staff || isStaffEmail(user.email)
+                const permissions = user.staff_permissions || []
+                const hasFullAccess = permissions.includes('*')
+
+                return (
+                  <tr key={user.id} className="hover:bg-gray-50 dark:hover:bg-gray-700">
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="flex items-center">
+                        <div className="flex-shrink-0">
+                          <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
+                            userIsSuperAdmin
+                              ? 'bg-gradient-to-r from-purple-500 to-pink-600'
+                              : userIsStaff
+                                ? 'bg-gradient-to-r from-blue-500 to-green-600'
+                                : 'bg-gradient-to-r from-gray-400 to-gray-500'
+                          }`}>
+                            <span className="text-white font-medium text-sm">
+                              {user.name ? user.name.split(' ').map(n => n[0]).join('').substring(0, 2) : user.email[0].toUpperCase()}
+                            </span>
+                          </div>
+                        </div>
+                        <div className="ml-4">
+                          <div className="text-sm font-medium text-gray-900 dark:text-white">
+                            {user.name || 'Kein Name'}
+                          </div>
+                          <div className="text-sm text-gray-500 dark:text-gray-400 flex items-center gap-1">
+                            <Mail className="w-3 h-3" />
+                            {user.email}
+                          </div>
+                        </div>
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="flex flex-col gap-1">
+                        {userIsSuperAdmin && (
+                          <span className="inline-flex items-center gap-1 px-2 py-1 text-xs font-semibold rounded-full bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300">
+                            <Crown className="w-3 h-3" />
+                            Super Admin
                           </span>
-                        </div>
+                        )}
+                        {userIsStaff && !userIsSuperAdmin && (
+                          <span className="inline-flex items-center gap-1 px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300">
+                            <Shield className="w-3 h-3" />
+                            Staff
+                          </span>
+                        )}
+                        {!userIsStaff && (
+                          <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-300">
+                            Benutzer
+                          </span>
+                        )}
+                        {user.email_verified && (
+                          <span className="inline-flex items-center gap-1 px-2 py-1 text-xs rounded-full bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300">
+                            <UserCheck className="w-3 h-3" />
+                            Verifiziert
+                          </span>
+                        )}
                       </div>
-                      <div className="ml-4">
-                        <div className="text-sm font-medium text-gray-900 dark:text-white">
-                          {user.name}
-                        </div>
-                        <div className="text-sm text-gray-500 dark:text-gray-400 flex items-center gap-1">
-                          <Mail className="w-3 h-3" />
-                          {user.email}
-                        </div>
-                        <div className="text-sm text-gray-500 dark:text-gray-400 flex items-center gap-1">
-                          <MapPin className="w-3 h-3" />
-                          {user.location}
-                        </div>
+                    </td>
+                    <td className="px-6 py-4">
+                      {userIsStaff ? (
+                        hasFullAccess ? (
+                          <span className="text-sm text-purple-600 dark:text-purple-400 font-medium">
+                            Voller Zugriff
+                          </span>
+                        ) : permissions.length > 0 ? (
+                          <div className="flex flex-wrap gap-1 max-w-xs">
+                            {permissions.slice(0, 3).map(p => (
+                              <span key={p} className="inline-flex px-2 py-0.5 text-xs bg-gray-100 dark:bg-gray-700 rounded">
+                                {p}
+                              </span>
+                            ))}
+                            {permissions.length > 3 && (
+                              <span className="text-xs text-gray-500">
+                                +{permissions.length - 3} mehr
+                              </span>
+                            )}
+                          </div>
+                        ) : (
+                          <span className="text-sm text-gray-400">Keine Berechtigungen</span>
+                        )
+                      ) : (
+                        <span className="text-sm text-gray-400">-</span>
+                      )}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="text-sm text-gray-900 dark:text-white">
+                        {new Date(user.created_at).toLocaleDateString('de-CH')}
                       </div>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="flex items-center gap-2">
-                      {getRoleIcon(user.role)}
-                      <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getRoleColor(user.role)}`}>
-                        {ROLE_DISPLAY_NAMES[user.role as keyof typeof ROLE_DISPLAY_NAMES] || user.role}
-                      </span>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
-                      user.status === 'active'
-                        ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300'
-                        : 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300'
-                    }`}>
-                      {user.status === 'active' ? 'Aktiv' : 'Inaktiv'}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-900 dark:text-white">
-                      {new Date(user.lastLogin).toLocaleDateString('de-CH')}
-                    </div>
-                    <div className="text-sm text-gray-500 dark:text-gray-400">
-                      {new Date(user.lastLogin).toLocaleTimeString('de-CH', { hour: '2-digit', minute: '2-digit' })}
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-900 dark:text-white">
-                      {user.ordersCount} Bestellungen
-                    </div>
-                    <div className="text-sm text-gray-500 dark:text-gray-400">
-                      {user.workshopsCount} Workshops
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                    <div className="flex items-center gap-2">
-                      <button className="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300">
-                        <Eye className="w-4 h-4" />
-                      </button>
-                      <button className="text-green-600 hover:text-green-900 dark:text-green-400 dark:hover:text-green-300">
-                        <Edit className="w-4 h-4" />
-                      </button>
-                      <button className="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300">
-                        <UserX className="w-4 h-4" />
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
+                    </td>
+                    {currentUserIsSuperAdmin && (
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                        <div className="flex items-center gap-2">
+                          <button
+                            className="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300"
+                            title="Details anzeigen"
+                          >
+                            <Eye className="w-4 h-4" />
+                          </button>
+                          {!userIsSuperAdmin && (
+                            <button
+                              className="text-green-600 hover:text-green-900 dark:text-green-400 dark:hover:text-green-300"
+                              title="Berechtigungen bearbeiten"
+                            >
+                              <Edit className="w-4 h-4" />
+                            </button>
+                          )}
+                        </div>
+                      </td>
+                    )}
+                  </tr>
+                )
+              })}
             </tbody>
           </table>
         </div>
@@ -357,7 +360,7 @@ export default function AdminUsersPage() {
         )}
       </div>
 
-      {/* Role Management Info */}
+      {/* Info Box */}
       <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-xl p-6">
         <div className="flex items-start gap-4">
           <div className="w-10 h-10 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center flex-shrink-0">
@@ -365,26 +368,12 @@ export default function AdminUsersPage() {
           </div>
           <div>
             <h3 className="font-medium text-blue-900 dark:text-blue-200">
-              Automatische Rollenzuweisung
+              Berechtigungssystem
             </h3>
-            <p className="text-sm text-blue-700 dark:text-blue-300 mt-1 mb-3">
-              Benutzer mit @revamp-it.ch E-Mail-Adressen erhalten automatisch Administrator-Rollen.
-              Andere Benutzer starten als Kunden und können sich für Seller- oder Service-Provider-Rollen bewerben.
+            <p className="text-sm text-blue-700 dark:text-blue-300 mt-1">
+              Benutzer mit @revamp-it.ch E-Mail-Adressen werden automatisch als Staff erkannt.
+              Super Admins haben vollen Zugriff und können anderen Staff-Mitgliedern Berechtigungen erteilen.
             </p>
-            <div className="flex gap-3">
-              <Link
-                href="/admin/users/roles"
-                className="text-sm bg-blue-600 text-white px-3 py-1.5 rounded hover:bg-blue-700 transition-colors"
-              >
-                Rollen verwalten
-              </Link>
-              <Link
-                href="/admin/users/invite"
-                className="text-sm bg-white dark:bg-gray-800 text-blue-600 dark:text-blue-400 px-3 py-1.5 rounded border border-blue-200 dark:border-blue-800 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors"
-              >
-                Team einladen
-              </Link>
-            </div>
           </div>
         </div>
       </div>

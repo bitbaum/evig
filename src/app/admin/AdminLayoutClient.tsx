@@ -20,6 +20,9 @@ import {
   Star,
   FileText,
   CheckSquare,
+  Home,
+  Store,
+  ExternalLink,
   type LucideIcon
 } from 'lucide-react'
 import type { AdminSection } from '@/lib/permissions'
@@ -229,18 +232,48 @@ export function AdminLayoutClient({
             })}
           </div>
 
+          {/* User-facing site links */}
           <div className="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700">
-            <Link
-              href="/dashboard"
-              onClick={() => setMobileMenuOpen(false)}
-              className={`flex items-center gap-3 px-3 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors ${
-                sidebarCollapsed ? 'justify-center' : ''
-              }`}
-              title={sidebarCollapsed ? 'Zurück zum Dashboard' : undefined}
-            >
-              <LogOut className="w-5 h-5 flex-shrink-0" />
-              {!sidebarCollapsed && <span className="text-sm">Zurück zum Dashboard</span>}
-            </Link>
+            {!sidebarCollapsed && (
+              <p className="px-3 mb-2 text-xs font-semibold text-gray-400 uppercase tracking-wider">
+                Website
+              </p>
+            )}
+            <div className="space-y-1">
+              <Link
+                href="/"
+                onClick={() => setMobileMenuOpen(false)}
+                className={`flex items-center gap-3 px-3 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors ${
+                  sidebarCollapsed ? 'justify-center' : ''
+                }`}
+                title={sidebarCollapsed ? 'Startseite' : undefined}
+              >
+                <Home className="w-5 h-5 flex-shrink-0" />
+                {!sidebarCollapsed && <span className="text-sm">Startseite</span>}
+              </Link>
+              <Link
+                href="/shop"
+                onClick={() => setMobileMenuOpen(false)}
+                className={`flex items-center gap-3 px-3 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors ${
+                  sidebarCollapsed ? 'justify-center' : ''
+                }`}
+                title={sidebarCollapsed ? 'Shop' : undefined}
+              >
+                <Store className="w-5 h-5 flex-shrink-0" />
+                {!sidebarCollapsed && <span className="text-sm">Shop</span>}
+              </Link>
+              <Link
+                href="/dashboard"
+                onClick={() => setMobileMenuOpen(false)}
+                className={`flex items-center gap-3 px-3 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors ${
+                  sidebarCollapsed ? 'justify-center' : ''
+                }`}
+                title={sidebarCollapsed ? 'Mein Bereich' : undefined}
+              >
+                <LogOut className="w-5 h-5 flex-shrink-0" />
+                {!sidebarCollapsed && <span className="text-sm">Mein Bereich</span>}
+              </Link>
+            </div>
           </div>
         </nav>
       </div>
