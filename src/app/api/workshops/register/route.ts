@@ -4,10 +4,24 @@ import { query } from '@/lib/auth/db'
 import { apiError, apiSuccess, apiUnauthorized, apiBadRequest, apiNotFound } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES } from '@/config/database'
+import { sendEmail } from '@/lib/email'
+import { logger } from '@/lib/logger'
 
 interface WorkshopRow {
   id: string
   title: string
+  slug: string
+  price_cents: number
+}
+
+interface InstanceDetailsRow {
+  start_date: string
+  location: string | null
+}
+
+interface UserRow {
+  name: string
+  email: string
 }
 
 interface IdRow {
@@ -36,7 +50,7 @@ export async function POST(request: NextRequest) {
 
     // Find the workshop
     const workshopResult = await query(
-      `SELECT id, title FROM ${TABLE_NAMES.WORKSHOPS} WHERE slug = $1 AND is_active = true`,
+      `SELECT id, title, slug, price_cents FROM ${TABLE_NAMES.WORKSHOPS} WHERE slug = $1 AND is_active = true`,
       [workshopSlug]
     )
 
@@ -98,6 +112,53 @@ export async function POST(request: NextRequest) {
     )
 
     const registration = registrationResult.rows[0] as RegistrationRow
+
+    // Get user details and workshop instance for email
+    const userResult = await query(
+      `SELECT name, email FROM ${TABLE_NAMES.USERS} WHERE id = $1`,
+      [session.user.id]
+    )
+    const user = userResult.rows[0] as UserRow
+
+    const instanceDetailsResult = await query(
+      `SELECT start_date, location FROM ${TABLE_NAMES.WORKSHOP_INSTANCES} WHERE id = $1`,
+      [workshopInstanceId]
+    )
+    const instanceDetails = instanceDetailsResult.rows[0] as InstanceDetailsRow
+
+    // Send registration confirmation email
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://revampit.ch'
+    const workshopUrl = `${baseUrl}/workshops/${workshop.slug}`
+    const workshopDate = new Date(instanceDetails.start_date).toLocaleDateString('de-CH', {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    })
+
+    try {
+      await sendEmail(
+        user.email,
+        'workshopRegistrationConfirmation',
+        user.name || 'Benutzer',
+        workshop.title,
+        workshopDate,
+        instanceDetails.location || 'Wird noch bekannt gegeben',
+        workshop.price_cents || 0,
+        workshopUrl
+      )
+      logger.info('Workshop registration confirmation email sent', {
+        userId: session.user.id,
+        workshopId: workshop.id,
+        registrationId: registration.id
+      })
+    } catch (emailError) {
+      // Don't fail registration if email fails
+      logger.error('Failed to send workshop registration email', { error: emailError })
+    }
+
     return apiSuccess({
       message: 'Erfolgreich für Workshop angemeldet',
       registrationId: registration.id,

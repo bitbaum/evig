@@ -16,6 +16,8 @@ import {
   Star
 } from 'lucide-react'
 import WorkshopRegistrationForm from '@/components/workshops/WorkshopRegistrationForm'
+import WorkshopReviews from '@/components/workshops/WorkshopReviews'
+import WorkshopMaterials from '@/components/workshops/WorkshopMaterials'
 
 interface Workshop {
   id: string
@@ -316,14 +318,16 @@ export default async function WorkshopDetailPage({ params }: { params: { slug: s
               </div>
             </div>
 
-            {/* Reviews/Feedback Placeholder */}
+            {/* Workshop Materials */}
+            <div className="bg-white rounded-xl shadow-sm p-6">
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">Materialien</h3>
+              <WorkshopMaterials workshopSlug={workshop.slug} />
+            </div>
+
+            {/* Reviews/Feedback */}
             <div className="bg-white rounded-xl shadow-sm p-6">
               <h3 className="text-lg font-semibold text-gray-900 mb-4">Bewertungen</h3>
-
-              <div className="text-center py-8">
-                <Star className="w-12 h-12 text-gray-300 mx-auto mb-3" />
-                <p className="text-gray-500">Bewertungen kommen bald</p>
-              </div>
+              <WorkshopReviews workshopSlug={workshop.slug} />
             </div>
           </div>
         </div>

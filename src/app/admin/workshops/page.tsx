@@ -199,13 +199,22 @@ export default function AdminWorkshopsPage() {
                 Genehmigen und verwalten Sie Workshop-Vorschläge
               </p>
             </div>
-            <Link
-              href="/admin"
-              className="inline-flex items-center px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors"
-            >
-              <ArrowLeft className="w-4 h-4 mr-2" />
-              Zurück zum Dashboard
-            </Link>
+            <div className="flex gap-3">
+              <Link
+                href="/admin/workshops/instances"
+                className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+              >
+                <Calendar className="w-4 h-4 mr-2" />
+                Termine verwalten
+              </Link>
+              <Link
+                href="/admin"
+                className="inline-flex items-center px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors"
+              >
+                <ArrowLeft className="w-4 h-4 mr-2" />
+                Zurück zum Dashboard
+              </Link>
+            </div>
           </div>
         </div>
       </div>

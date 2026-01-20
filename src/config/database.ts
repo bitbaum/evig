@@ -35,6 +35,7 @@ export const TABLE_NAMES = {
   WORKSHOP_INSTANCES: 'workshop_instances',
   WORKSHOP_REGISTRATIONS: 'workshop_registrations',
   WORKSHOP_PROPOSALS: 'workshop_proposals',
+  WORKSHOP_MATERIALS: 'workshop_materials',
 
   // Locations
   LOCATIONS: 'locations',
@@ -91,6 +92,10 @@ export const TABLE_NAMES = {
   // Auth & Security
   USER_LOCKOUTS: 'user_lockouts',
   AUTH_AUDIT_LOG: 'auth_audit_log',
+
+  // Peer Repair Marketplace
+  PEER_REPAIR_REQUESTS: 'peer_repair_requests',
+  PEER_REPAIR_OFFERS: 'peer_repair_offers',
 } as const;
 
 /**
@@ -115,6 +120,7 @@ export const REVIEW_TARGET_TYPES = {
   REPAIRER: 'repairer',
   SERVICE: 'service',
   WORKSHOP: 'workshop',
+  PEER_REPAIR: 'peer_repair',
 } as const;
 
 export type ReviewTargetType = typeof REVIEW_TARGET_TYPES[keyof typeof REVIEW_TARGET_TYPES];
@@ -125,6 +131,7 @@ export type ReviewTargetType = typeof REVIEW_TARGET_TYPES[keyof typeof REVIEW_TA
 export const CONVERSATION_TYPES = {
   APPOINTMENT: 'appointment',
   GENERAL: 'general',
+  PEER_REPAIR: 'peer_repair',
 } as const;
 
 export type ConversationType = typeof CONVERSATION_TYPES[keyof typeof CONVERSATION_TYPES];
