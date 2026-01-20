@@ -27,7 +27,10 @@ import {
   Brain,
   Settings,
   AlertCircle,
+  Shield,
 } from 'lucide-react'
+import { PermissionRequestsManager } from '@/components/admin/PermissionRequestsManager'
+import { RequestAccessSection } from './RequestAccessSection'
 
 export const metadata: Metadata = {
   title: 'Admin Dashboard | RevampIT',
@@ -118,6 +121,17 @@ export default async function AdminDashboard() {
     staff_permissions: session.user.staffPermissions,
   })
   const isSuper = isSuperAdmin(session.user.email)
+
+  // Calculate sections the user doesn't have access to (for request form)
+  const allSections = Object.keys(ADMIN_SECTIONS) as AdminSection[]
+  const hasFullAccess = session.user.staffPermissions?.includes('*') || isSuper
+  const inaccessibleSections = hasFullAccess ? [] : allSections
+    .filter(s => !accessibleSections.includes(s) && s !== 'dashboard')
+    .map(s => ({
+      id: s,
+      label: ADMIN_SECTIONS[s].label,
+      description: ADMIN_SECTIONS[s].description,
+    }))
 
   return (
     <div className="space-y-8">
@@ -243,57 +257,68 @@ export default async function AdminDashboard() {
 
       {/* Super Admin: Permission Requests */}
       {isSuper && (
-        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
-          <div className="p-6 border-b border-gray-100 dark:border-gray-700">
-            <h2 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2">
-              <AlertCircle className="w-5 h-5 text-orange-500" />
-              Super Admin
-            </h2>
-            <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-              Berechtigungen verwalten und Freigaben erteilen
-            </p>
-          </div>
+        <>
+          {/* Pending Permission Requests */}
+          <PermissionRequestsManager />
 
-          <div className="p-6">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <Link
-                href="/admin/users"
-                className="p-4 bg-purple-50 dark:bg-purple-900/20 rounded-lg hover:bg-purple-100 dark:hover:bg-purple-900/30 transition-colors"
-              >
-                <div className="flex items-center gap-3">
-                  <Users className="w-6 h-6 text-purple-600" />
-                  <div>
-                    <h3 className="font-medium text-purple-900 dark:text-purple-200">
-                      Benutzer & Berechtigungen
-                    </h3>
-                    <p className="text-sm text-purple-700 dark:text-purple-300">
-                      Staff-Berechtigungen verwalten
-                    </p>
-                  </div>
-                  <ArrowRight className="w-4 h-4 text-purple-600 ml-auto" />
-                </div>
-              </Link>
+          {/* Super Admin Quick Actions */}
+          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
+            <div className="p-6 border-b border-gray-100 dark:border-gray-700">
+              <h2 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+                <AlertCircle className="w-5 h-5 text-orange-500" />
+                Super Admin
+              </h2>
+              <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                Berechtigungen verwalten und Freigaben erteilen
+              </p>
+            </div>
 
-              <Link
-                href="/admin/approvals"
-                className="p-4 bg-orange-50 dark:bg-orange-900/20 rounded-lg hover:bg-orange-100 dark:hover:bg-orange-900/30 transition-colors"
-              >
-                <div className="flex items-center gap-3">
-                  <CheckSquare className="w-6 h-6 text-orange-600" />
-                  <div>
-                    <h3 className="font-medium text-orange-900 dark:text-orange-200">
-                      Freigaben ({stats.pendingApprovals})
-                    </h3>
-                    <p className="text-sm text-orange-700 dark:text-orange-300">
-                      Eingereichte Inhalte prüfen
-                    </p>
+            <div className="p-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <Link
+                  href="/admin/users"
+                  className="p-4 bg-purple-50 dark:bg-purple-900/20 rounded-lg hover:bg-purple-100 dark:hover:bg-purple-900/30 transition-colors"
+                >
+                  <div className="flex items-center gap-3">
+                    <Users className="w-6 h-6 text-purple-600" />
+                    <div>
+                      <h3 className="font-medium text-purple-900 dark:text-purple-200">
+                        Benutzer & Berechtigungen
+                      </h3>
+                      <p className="text-sm text-purple-700 dark:text-purple-300">
+                        Staff-Berechtigungen verwalten
+                      </p>
+                    </div>
+                    <ArrowRight className="w-4 h-4 text-purple-600 ml-auto" />
                   </div>
-                  <ArrowRight className="w-4 h-4 text-orange-600 ml-auto" />
-                </div>
-              </Link>
+                </Link>
+
+                <Link
+                  href="/admin/approvals"
+                  className="p-4 bg-orange-50 dark:bg-orange-900/20 rounded-lg hover:bg-orange-100 dark:hover:bg-orange-900/30 transition-colors"
+                >
+                  <div className="flex items-center gap-3">
+                    <CheckSquare className="w-6 h-6 text-orange-600" />
+                    <div>
+                      <h3 className="font-medium text-orange-900 dark:text-orange-200">
+                        Freigaben ({stats.pendingApprovals})
+                      </h3>
+                      <p className="text-sm text-orange-700 dark:text-orange-300">
+                        Eingereichte Inhalte prüfen
+                      </p>
+                    </div>
+                    <ArrowRight className="w-4 h-4 text-orange-600 ml-auto" />
+                  </div>
+                </Link>
+              </div>
             </div>
           </div>
-        </div>
+        </>
+      )}
+
+      {/* Request More Access (for staff without full access) */}
+      {!isSuper && !hasFullAccess && inaccessibleSections.length > 0 && (
+        <RequestAccessSection inaccessibleSections={inaccessibleSections} />
       )}
 
       {/* Quick Links */}
