@@ -134,6 +134,7 @@ export interface DbUser {
   // New simplified auth fields
   is_staff: boolean
   staff_permissions: string[]
+  is_super_admin: boolean
 }
 
 export interface DbUserProfile {

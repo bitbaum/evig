@@ -59,6 +59,7 @@ declare module 'next-auth' {
     // New simplified auth fields
     is_staff?: boolean
     staff_permissions?: string[]
+    is_super_admin?: boolean
   }
 
   interface Session {
@@ -72,6 +73,7 @@ declare module 'next-auth' {
       // New simplified auth fields
       isStaff: boolean
       staffPermissions: string[]
+      isSuperAdmin: boolean
     }
   }
 }
@@ -165,6 +167,8 @@ export const authConfig = {
           // Determine staff status from email or database
           const userIsStaff = user.is_staff ?? isStaffEmail(user.email)
           const userPermissions = user.staff_permissions ?? (userIsStaff ? getInitialStaffPermissions(user.email) : [])
+          // Super admin status from database or check email list
+          const userIsSuperAdmin = user.is_super_admin ?? false
 
           // Return user object with new simplified auth fields
           return {
@@ -177,6 +181,7 @@ export const authConfig = {
             // New simplified auth fields
             is_staff: userIsStaff,
             staff_permissions: userPermissions,
+            is_super_admin: userIsSuperAdmin,
           }
         } catch (dbError) {
           // Handle database connection errors gracefully
@@ -205,6 +210,7 @@ export const authConfig = {
         emailVerified?: boolean
         isStaff?: boolean
         staffPermissions?: string[]
+        isSuperAdmin?: boolean
       },
       user?: User
     }) {
@@ -217,6 +223,7 @@ export const authConfig = {
         // New simplified auth fields
         token.isStaff = user.is_staff ?? isStaffEmail(user.email ?? '')
         token.staffPermissions = user.staff_permissions ?? (token.isStaff ? getInitialStaffPermissions(user.email ?? '') : [])
+        token.isSuperAdmin = user.is_super_admin ?? false
       }
       return token
     },
@@ -230,6 +237,7 @@ export const authConfig = {
         emailVerified?: boolean
         isStaff?: boolean
         staffPermissions?: string[]
+        isSuperAdmin?: boolean
       }
     }) {
       // Add all user info from JWT token to session
@@ -240,6 +248,7 @@ export const authConfig = {
         // New simplified auth fields
         session.user.isStaff = token.isStaff ?? false
         session.user.staffPermissions = token.staffPermissions ?? []
+        session.user.isSuperAdmin = token.isSuperAdmin ?? false
       }
       return session
     },

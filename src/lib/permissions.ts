@@ -139,7 +139,17 @@ export const SUPER_ADMIN_EMAILS = [
   // Add more as needed
 ] as const
 
-export function isSuperAdmin(email: string | null | undefined): boolean {
+/**
+ * Check if a user is a super admin
+ * Can be determined by:
+ * 1. Email being in the hardcoded SUPER_ADMIN_EMAILS list
+ * 2. is_super_admin flag from session/database
+ */
+export function isSuperAdmin(email: string | null | undefined, isSuperAdminFromDb?: boolean): boolean {
+  // If database flag is explicitly true, user is a super admin
+  if (isSuperAdminFromDb === true) return true
+
+  // Check hardcoded email list (fallback for initial setup)
   if (!email) return false
   return SUPER_ADMIN_EMAILS.includes(email.toLowerCase() as typeof SUPER_ADMIN_EMAILS[number])
 }
@@ -152,6 +162,7 @@ export interface StaffUser {
   email: string
   is_staff: boolean
   staff_permissions: string[]  // Array of section keys, or ['*'] for all
+  is_super_admin?: boolean     // From database/session
 }
 
 /**
@@ -161,8 +172,8 @@ export function canAccessSection(user: StaffUser | null | undefined, section: Ad
   if (!user) return false
   if (!user.is_staff) return false
 
-  // Super admins (by email) always have full access
-  if (isSuperAdmin(user.email)) return true
+  // Super admins (by email or database flag) always have full access
+  if (isSuperAdmin(user.email, user.is_super_admin)) return true
 
   // Wildcard permission = full access
   if (user.staff_permissions.includes('*')) return true
@@ -177,7 +188,7 @@ export function canAccessSection(user: StaffUser | null | undefined, section: Ad
 export function canAccessSensitive(user: StaffUser | null | undefined): boolean {
   if (!user) return false
   if (!user.is_staff) return false
-  if (isSuperAdmin(user.email)) return true
+  if (isSuperAdmin(user.email, user.is_super_admin)) return true
   if (user.staff_permissions.includes('*')) return true
 
   // Check if they have permission for any sensitive section
@@ -195,7 +206,7 @@ export function getAccessibleSections(user: StaffUser | null | undefined): Admin
   if (!user || !user.is_staff) return []
 
   // Super admins or wildcard = all sections
-  if (isSuperAdmin(user.email) || user.staff_permissions.includes('*')) {
+  if (isSuperAdmin(user.email, user.is_super_admin) || user.staff_permissions.includes('*')) {
     return Object.keys(ADMIN_SECTIONS) as AdminSection[]
   }
 
