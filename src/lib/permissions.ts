@@ -135,6 +135,7 @@ export const SUPER_ADMIN_EMAILS = [
   'veronica@revamp-it.ch',
   'daniel@revamp-it.ch',
   'georgy@revamp-it.ch',
+  'georgy.butaev@revamp-it.ch',
   // Add more as needed
 ] as const
 
