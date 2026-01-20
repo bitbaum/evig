@@ -15,6 +15,10 @@ export const ROLES = {
   PARTNER_ADMIN: 'partner_admin',                  // Business partners with admin access
   PARTNER_STAFF: 'partner_staff',                  // Partner staff with limited access
 
+  // Hirn Dashboard Roles (internal analytics & reporting)
+  HIRN_ADMIN: 'hirn_admin',                        // Full Hirn access - finances, KPIs, all data
+  HIRN_USER: 'hirn_user',                          // Hirn read access - view dashboards, reports
+
   // Community Roles (user-requested)
   MODERATOR: 'moderator',                          // Community moderators with approval rights
   SELLER: 'seller',                                 // Users who sell refurbished products
@@ -94,6 +98,8 @@ export const ROLE_DISPLAY_NAMES: Record<UserRole, string> = {
   [ROLES.REVAMPIT_ADMIN]: 'RevampIT Administrator',
   [ROLES.REVAMPIT_EDITOR]: 'Content Editor',
   [ROLES.REVAMPIT_SUPPORT]: 'Support Specialist',
+  [ROLES.HIRN_ADMIN]: 'Hirn Administrator',
+  [ROLES.HIRN_USER]: 'Hirn Benutzer',
   [ROLES.PARTNER_ADMIN]: 'Partner Administrator',
   [ROLES.PARTNER_STAFF]: 'Partner Staff',
   [ROLES.MODERATOR]: 'Community Moderator',
@@ -111,6 +117,8 @@ export const ROLE_DESCRIPTIONS: Record<UserRole, string> = {
   [ROLES.REVAMPIT_ADMIN]: 'Comprehensive administrative access',
   [ROLES.REVAMPIT_EDITOR]: 'Content creation and management',
   [ROLES.REVAMPIT_SUPPORT]: 'Customer service and support',
+  [ROLES.HIRN_ADMIN]: 'Full Hirn dashboard access - finances, KPIs, analytics',
+  [ROLES.HIRN_USER]: 'Hirn dashboard read access - view reports and dashboards',
   [ROLES.PARTNER_ADMIN]: 'Business partner administration',
   [ROLES.PARTNER_STAFF]: 'Partner staff access',
   [ROLES.MODERATOR]: 'Moderate community content and approve submissions',
@@ -146,6 +154,25 @@ export const ADMIN_ROLES = [
   'admin',  // Legacy
   'REVAMPIT_ADMIN',  // Uppercase variant
 ] as const
+
+/**
+ * Hirn dashboard role values
+ * Roles that have access to the Hirn dashboard
+ */
+export const HIRN_ROLES = [
+  ROLES.REVAMPIT_SUPER_ADMIN,
+  ROLES.REVAMPIT_ADMIN,
+  ROLES.HIRN_ADMIN,
+  ROLES.HIRN_USER,
+] as const
+
+/**
+ * Helper to check if a role has Hirn dashboard access
+ */
+export function hasHirnAccess(role: string | undefined | null): boolean {
+  if (!role) return false
+  return HIRN_ROLES.includes(role as typeof HIRN_ROLES[number])
+}
 
 export const PERMISSIONS = {
   // System Administration
@@ -202,6 +229,15 @@ export const PERMISSIONS = {
   LEAVE_REVIEWS: 'leave_reviews',
   PREMIUM_SUPPORT: 'premium_support',
   EARLY_ACCESS: 'early_access',
+
+  // Hirn Dashboard Permissions
+  VIEW_HIRN_DASHBOARD: 'view_hirn_dashboard',      // View Hirn overview dashboard
+  VIEW_HIRN_FINANZEN: 'view_hirn_finanzen',        // View financial data and reports
+  VIEW_HIRN_KENNZAHLEN: 'view_hirn_kennzahlen',    // View KPIs and metrics
+  VIEW_HIRN_WIRKUNG: 'view_hirn_wirkung',          // View impact reports
+  VIEW_HIRN_TRANSPARENZ: 'view_hirn_transparenz',  // View transparency reports
+  MANAGE_HIRN_DATA: 'manage_hirn_data',            // Edit/manage Hirn data sources
+  EXPORT_HIRN_REPORTS: 'export_hirn_reports',      // Export reports and analytics
 } as const
 
 // Contact information
@@ -220,7 +256,7 @@ export const WAREHOUSE_OSM_URL = 'https://www.openstreetmap.org/?mlat=47.378&mlo
 export const ROLE_PERMISSIONS: Record<UserRole, string[]> = {
   // Organization Roles - Auto-assigned by @revamp-it.ch email
   [ROLES.REVAMPIT_SUPER_ADMIN]: [
-    // All permissions - complete system access
+    // All permissions - complete system access (including all Hirn)
     ...Object.values(PERMISSIONS)
   ],
   [ROLES.REVAMPIT_ADMIN]: [
@@ -231,7 +267,12 @@ export const ROLE_PERMISSIONS: Record<UserRole, string[]> = {
     PERMISSIONS.VIEW_ANALYTICS, PERMISSIONS.VIEW_SYSTEM_LOGS, PERMISSIONS.MANAGE_BACKUPS,
     PERMISSIONS.MANAGE_CUSTOMER_SUPPORT, PERMISSIONS.PROCESS_REFUNDS,
     PERMISSIONS.SELL_PRODUCTS, PERMISSIONS.MANAGE_OWN_PRODUCTS, PERMISSIONS.VIEW_OWN_SALES,
-    PERMISSIONS.BUY_PRODUCTS, PERMISSIONS.BOOK_WORKSHOPS, PERMISSIONS.BOOK_REPAIRS
+    PERMISSIONS.BUY_PRODUCTS, PERMISSIONS.BOOK_WORKSHOPS, PERMISSIONS.BOOK_REPAIRS,
+    // Full Hirn access for RevampIT admins
+    PERMISSIONS.VIEW_HIRN_DASHBOARD, PERMISSIONS.VIEW_HIRN_FINANZEN,
+    PERMISSIONS.VIEW_HIRN_KENNZAHLEN, PERMISSIONS.VIEW_HIRN_WIRKUNG,
+    PERMISSIONS.VIEW_HIRN_TRANSPARENZ, PERMISSIONS.MANAGE_HIRN_DATA,
+    PERMISSIONS.EXPORT_HIRN_REPORTS
   ],
   [ROLES.REVAMPIT_EDITOR]: [
     // Content-focused admin access
@@ -245,6 +286,27 @@ export const ROLE_PERMISSIONS: Record<UserRole, string[]> = {
     PERMISSIONS.VIEW_ORDER_HISTORY, PERMISSIONS.PROCESS_REFUNDS,
     PERMISSIONS.TECHNICAL_SUPPORT, PERMISSIONS.BUY_PRODUCTS,
     PERMISSIONS.BOOK_WORKSHOPS, PERMISSIONS.BOOK_REPAIRS
+  ],
+
+  // Hirn Dashboard Roles
+  [ROLES.HIRN_ADMIN]: [
+    // Full Hirn access - manage data, export reports
+    PERMISSIONS.VIEW_HIRN_DASHBOARD, PERMISSIONS.VIEW_HIRN_FINANZEN,
+    PERMISSIONS.VIEW_HIRN_KENNZAHLEN, PERMISSIONS.VIEW_HIRN_WIRKUNG,
+    PERMISSIONS.VIEW_HIRN_TRANSPARENZ, PERMISSIONS.MANAGE_HIRN_DATA,
+    PERMISSIONS.EXPORT_HIRN_REPORTS,
+    // Basic user permissions
+    PERMISSIONS.BUY_PRODUCTS, PERMISSIONS.BOOK_WORKSHOPS, PERMISSIONS.BOOK_REPAIRS,
+    PERMISSIONS.LEAVE_REVIEWS
+  ],
+  [ROLES.HIRN_USER]: [
+    // Hirn read-only access
+    PERMISSIONS.VIEW_HIRN_DASHBOARD, PERMISSIONS.VIEW_HIRN_FINANZEN,
+    PERMISSIONS.VIEW_HIRN_KENNZAHLEN, PERMISSIONS.VIEW_HIRN_WIRKUNG,
+    PERMISSIONS.VIEW_HIRN_TRANSPARENZ,
+    // Basic user permissions
+    PERMISSIONS.BUY_PRODUCTS, PERMISSIONS.BOOK_WORKSHOPS, PERMISSIONS.BOOK_REPAIRS,
+    PERMISSIONS.LEAVE_REVIEWS
   ],
 
   // Business Partner Roles

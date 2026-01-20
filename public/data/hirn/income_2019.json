@@ -1,0 +1,64 @@
+{
+  "year": 2019,
+  "source": "revamp-Einnahmen-2025.xlsx",
+  "source_sheet": "Einnahmen 2015-2025",
+  "imported_at": "2026-01-14T14:14:00.913417",
+  "data_type": "yearly_aggregate",
+  "note": "Historical yearly totals - no monthly breakdown available",
+  "data": [
+    {
+      "year": 2019,
+      "month": 0,
+      "account_code": "30-38",
+      "account_name": "Nettoerl\u00f6se aus Lieferungen und Leistungen",
+      "category": "revenue",
+      "subcategory": "total",
+      "value": 112237.18
+    },
+    {
+      "year": 2019,
+      "month": 0,
+      "account_code": "3100",
+      "account_name": "Warenverkauf",
+      "category": "revenue",
+      "subcategory": "products",
+      "value": 30924.5
+    },
+    {
+      "year": 2019,
+      "month": 0,
+      "account_code": "3400",
+      "account_name": "Dienstleistungen und sonstiges",
+      "category": "revenue",
+      "subcategory": "services",
+      "value": 67137.43
+    },
+    {
+      "year": 2019,
+      "month": 0,
+      "account_code": "3450",
+      "account_name": "Integrations-Arbeitspl\u00e4tze",
+      "category": "revenue",
+      "subcategory": "integration",
+      "value": 9500
+    },
+    {
+      "year": 2019,
+      "month": 0,
+      "account_code": "3500",
+      "account_name": "Spenden",
+      "category": "revenue",
+      "subcategory": "donations",
+      "value": 4675.25
+    },
+    {
+      "year": 2019,
+      "month": 0,
+      "account_code": "3510",
+      "account_name": "Aufstockung Richtpreis",
+      "category": "revenue",
+      "subcategory": "price_adjustment",
+      "value": 0
+    }
+  ]
+}

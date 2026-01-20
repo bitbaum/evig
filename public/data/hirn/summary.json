@@ -1,0 +1,30 @@
+{
+  "years": [
+    2025,
+    2024,
+    2023,
+    2022,
+    2021,
+    2020,
+    2019,
+    2018,
+    2017,
+    2016,
+    2015
+  ],
+  "total_records": 277,
+  "source": "revamp-Einnahmen-2025.xlsx",
+  "exported_at": "2026-01-14T14:14:00.914128",
+  "categories": [
+    "total",
+    "integration",
+    "donations",
+    "price_adjustment",
+    "services",
+    "products"
+  ],
+  "notes": {
+    "2022-2025": "Monthly data available",
+    "2015-2021": "Yearly aggregates only"
+  }
+}

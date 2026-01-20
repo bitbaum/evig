@@ -132,6 +132,34 @@ export const mainNavigation: NavigationItem[] = [
     ]
   },
   {
+    name: 'Peer-Reparaturen',
+    href: '/peer-repairs',
+    description: 'Community-Hilfe für Hardware-Reparaturen',
+    isMultiColumn: false,
+    subItems: [
+      {
+        name: 'Alle Anfragen',
+        href: '/peer-repairs',
+        description: 'Durchsuche Reparaturanfragen aus der Community'
+      },
+      {
+        name: 'Anfrage erstellen',
+        href: '/peer-repairs/create',
+        description: 'Stelle eine neue Reparaturanfrage'
+      },
+      {
+        name: 'Meine Anfragen',
+        href: '/peer-repairs/my',
+        description: 'Verwalte deine eigenen Anfragen'
+      },
+      {
+        name: 'Meine Angebote',
+        href: '/peer-repairs/my/offers',
+        description: 'Sieh deine abgegebenen Hilfsangebote'
+      }
+    ]
+  },
+  {
     name: 'Shop',
     href: '/shop',
     description: 'Wähle zwischen Online-Shops und Ladenlokal',

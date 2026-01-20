@@ -12,7 +12,8 @@ import {
   LogOut,
   Menu,
   ChevronLeft,
-  ChevronRight
+  ChevronRight,
+  Brain
 } from 'lucide-react'
 
 export default function AdminLayout({
@@ -53,6 +54,11 @@ export default function AdminLayout({
       name: 'Analytics',
       href: '/admin/analytics',
       icon: BarChart3,
+    },
+    {
+      name: 'Hirn',
+      href: '/admin/hirn',
+      icon: Brain,
     },
     {
       name: 'Einstellungen',

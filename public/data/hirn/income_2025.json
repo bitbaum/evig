@@ -1,0 +1,502 @@
+{
+  "year": 2025,
+  "source": "revamp-Einnahmen-2025.xlsx",
+  "imported_at": "2026-01-11T21:38:12.885176",
+  "data": [
+    {
+      "year": 2025,
+      "month": 1,
+      "account_code": "30-38",
+      "account_name": "Nettoerlöse Total",
+      "category": "revenue",
+      "subcategory": "total",
+      "value": 3976.22
+    },
+    {
+      "year": 2025,
+      "month": 2,
+      "account_code": "30-38",
+      "account_name": "Nettoerlöse Total",
+      "category": "revenue",
+      "subcategory": "total",
+      "value": 4363.13
+    },
+    {
+      "year": 2025,
+      "month": 3,
+      "account_code": "30-38",
+      "account_name": "Nettoerlöse Total",
+      "category": "revenue",
+      "subcategory": "total",
+      "value": 3125.55
+    },
+    {
+      "year": 2025,
+      "month": 4,
+      "account_code": "30-38",
+      "account_name": "Nettoerlöse Total",
+      "category": "revenue",
+      "subcategory": "total",
+      "value": 3206.3
+    },
+    {
+      "year": 2025,
+      "month": 5,
+      "account_code": "30-38",
+      "account_name": "Nettoerlöse Total",
+      "category": "revenue",
+      "subcategory": "total",
+      "value": 4423.6
+    },
+    {
+      "year": 2025,
+      "month": 6,
+      "account_code": "30-38",
+      "account_name": "Nettoerlöse Total",
+      "category": "revenue",
+      "subcategory": "total",
+      "value": 3403.0
+    },
+    {
+      "year": 2025,
+      "month": 7,
+      "account_code": "30-38",
+      "account_name": "Nettoerlöse Total",
+      "category": "revenue",
+      "subcategory": "total",
+      "value": 3775.0
+    },
+    {
+      "year": 2025,
+      "month": 8,
+      "account_code": "30-38",
+      "account_name": "Nettoerlöse Total",
+      "category": "revenue",
+      "subcategory": "total",
+      "value": 3970.09
+    },
+    {
+      "year": 2025,
+      "month": 9,
+      "account_code": "30-38",
+      "account_name": "Nettoerlöse Total",
+      "category": "revenue",
+      "subcategory": "total",
+      "value": 2265.85
+    },
+    {
+      "year": 2025,
+      "month": 10,
+      "account_code": "30-38",
+      "account_name": "Nettoerlöse Total",
+      "category": "revenue",
+      "subcategory": "total",
+      "value": 3881.8
+    },
+    {
+      "year": 2025,
+      "month": 11,
+      "account_code": "30-38",
+      "account_name": "Nettoerlöse Total",
+      "category": "revenue",
+      "subcategory": "total",
+      "value": 1687.5
+    },
+    {
+      "year": 2025,
+      "month": 1,
+      "account_code": "3100",
+      "account_name": "Warenverkauf",
+      "category": "revenue",
+      "subcategory": "products",
+      "value": 1935.02
+    },
+    {
+      "year": 2025,
+      "month": 2,
+      "account_code": "3100",
+      "account_name": "Warenverkauf",
+      "category": "revenue",
+      "subcategory": "products",
+      "value": 1764.0
+    },
+    {
+      "year": 2025,
+      "month": 3,
+      "account_code": "3100",
+      "account_name": "Warenverkauf",
+      "category": "revenue",
+      "subcategory": "products",
+      "value": 2134.8
+    },
+    {
+      "year": 2025,
+      "month": 4,
+      "account_code": "3100",
+      "account_name": "Warenverkauf",
+      "category": "revenue",
+      "subcategory": "products",
+      "value": 1433.0
+    },
+    {
+      "year": 2025,
+      "month": 5,
+      "account_code": "3100",
+      "account_name": "Warenverkauf",
+      "category": "revenue",
+      "subcategory": "products",
+      "value": 2710.4
+    },
+    {
+      "year": 2025,
+      "month": 6,
+      "account_code": "3100",
+      "account_name": "Warenverkauf",
+      "category": "revenue",
+      "subcategory": "products",
+      "value": 2128.0
+    },
+    {
+      "year": 2025,
+      "month": 7,
+      "account_code": "3100",
+      "account_name": "Warenverkauf",
+      "category": "revenue",
+      "subcategory": "products",
+      "value": 825.0
+    },
+    {
+      "year": 2025,
+      "month": 8,
+      "account_code": "3100",
+      "account_name": "Warenverkauf",
+      "category": "revenue",
+      "subcategory": "products",
+      "value": 2730.05
+    },
+    {
+      "year": 2025,
+      "month": 9,
+      "account_code": "3100",
+      "account_name": "Warenverkauf",
+      "category": "revenue",
+      "subcategory": "products",
+      "value": 1513.0
+    },
+    {
+      "year": 2025,
+      "month": 10,
+      "account_code": "3100",
+      "account_name": "Warenverkauf",
+      "category": "revenue",
+      "subcategory": "products",
+      "value": 2321.0
+    },
+    {
+      "year": 2025,
+      "month": 11,
+      "account_code": "3100",
+      "account_name": "Warenverkauf",
+      "category": "revenue",
+      "subcategory": "products",
+      "value": 1050.0
+    },
+    {
+      "year": 2025,
+      "month": 1,
+      "account_code": "3400",
+      "account_name": "Dienstleistungen",
+      "category": "revenue",
+      "subcategory": "services",
+      "value": 2131.2
+    },
+    {
+      "year": 2025,
+      "month": 2,
+      "account_code": "3400",
+      "account_name": "Dienstleistungen",
+      "category": "revenue",
+      "subcategory": "services",
+      "value": 2589.13
+    },
+    {
+      "year": 2025,
+      "month": 3,
+      "account_code": "3400",
+      "account_name": "Dienstleistungen",
+      "category": "revenue",
+      "subcategory": "services",
+      "value": 990.75
+    },
+    {
+      "year": 2025,
+      "month": 4,
+      "account_code": "3400",
+      "account_name": "Dienstleistungen",
+      "category": "revenue",
+      "subcategory": "services",
+      "value": 1773.3
+    },
+    {
+      "year": 2025,
+      "month": 5,
+      "account_code": "3400",
+      "account_name": "Dienstleistungen",
+      "category": "revenue",
+      "subcategory": "services",
+      "value": 1167.7
+    },
+    {
+      "year": 2025,
+      "month": 6,
+      "account_code": "3400",
+      "account_name": "Dienstleistungen",
+      "category": "revenue",
+      "subcategory": "services",
+      "value": 1270.0
+    },
+    {
+      "year": 2025,
+      "month": 7,
+      "account_code": "3400",
+      "account_name": "Dienstleistungen",
+      "category": "revenue",
+      "subcategory": "services",
+      "value": 2920.0
+    },
+    {
+      "year": 2025,
+      "month": 8,
+      "account_code": "3400",
+      "account_name": "Dienstleistungen",
+      "category": "revenue",
+      "subcategory": "services",
+      "value": 1180.04
+    },
+    {
+      "year": 2025,
+      "month": 9,
+      "account_code": "3400",
+      "account_name": "Dienstleistungen",
+      "category": "revenue",
+      "subcategory": "services",
+      "value": 727.85
+    },
+    {
+      "year": 2025,
+      "month": 10,
+      "account_code": "3400",
+      "account_name": "Dienstleistungen",
+      "category": "revenue",
+      "subcategory": "services",
+      "value": 1481.8
+    },
+    {
+      "year": 2025,
+      "month": 11,
+      "account_code": "3400",
+      "account_name": "Dienstleistungen",
+      "category": "revenue",
+      "subcategory": "services",
+      "value": 637.5
+    },
+    {
+      "year": 2025,
+      "month": 1,
+      "account_code": "3500",
+      "account_name": "Spenden",
+      "category": "revenue",
+      "subcategory": "donations",
+      "value": -90.0
+    },
+    {
+      "year": 2025,
+      "month": 2,
+      "account_code": "3500",
+      "account_name": "Spenden",
+      "category": "revenue",
+      "subcategory": "donations",
+      "value": 0.0
+    },
+    {
+      "year": 2025,
+      "month": 3,
+      "account_code": "3500",
+      "account_name": "Spenden",
+      "category": "revenue",
+      "subcategory": "donations",
+      "value": 0.0
+    },
+    {
+      "year": 2025,
+      "month": 4,
+      "account_code": "3500",
+      "account_name": "Spenden",
+      "category": "revenue",
+      "subcategory": "donations",
+      "value": 0.0
+    },
+    {
+      "year": 2025,
+      "month": 5,
+      "account_code": "3500",
+      "account_name": "Spenden",
+      "category": "revenue",
+      "subcategory": "donations",
+      "value": 535.5
+    },
+    {
+      "year": 2025,
+      "month": 6,
+      "account_code": "3500",
+      "account_name": "Spenden",
+      "category": "revenue",
+      "subcategory": "donations",
+      "value": 5.0
+    },
+    {
+      "year": 2025,
+      "month": 7,
+      "account_code": "3500",
+      "account_name": "Spenden",
+      "category": "revenue",
+      "subcategory": "donations",
+      "value": 30.0
+    },
+    {
+      "year": 2025,
+      "month": 8,
+      "account_code": "3500",
+      "account_name": "Spenden",
+      "category": "revenue",
+      "subcategory": "donations",
+      "value": 20.0
+    },
+    {
+      "year": 2025,
+      "month": 9,
+      "account_code": "3500",
+      "account_name": "Spenden",
+      "category": "revenue",
+      "subcategory": "donations",
+      "value": 25.0
+    },
+    {
+      "year": 2025,
+      "month": 10,
+      "account_code": "3500",
+      "account_name": "Spenden",
+      "category": "revenue",
+      "subcategory": "donations",
+      "value": 54.0
+    },
+    {
+      "year": 2025,
+      "month": 11,
+      "account_code": "3500",
+      "account_name": "Spenden",
+      "category": "revenue",
+      "subcategory": "donations",
+      "value": 0.0
+    },
+    {
+      "year": 2025,
+      "month": 1,
+      "account_code": "3510",
+      "account_name": "Aufstockung Richtpreis",
+      "category": "revenue",
+      "subcategory": "price_adjustment",
+      "value": 0.0
+    },
+    {
+      "year": 2025,
+      "month": 2,
+      "account_code": "3510",
+      "account_name": "Aufstockung Richtpreis",
+      "category": "revenue",
+      "subcategory": "price_adjustment",
+      "value": 10.0
+    },
+    {
+      "year": 2025,
+      "month": 3,
+      "account_code": "3510",
+      "account_name": "Aufstockung Richtpreis",
+      "category": "revenue",
+      "subcategory": "price_adjustment",
+      "value": 0.0
+    },
+    {
+      "year": 2025,
+      "month": 4,
+      "account_code": "3510",
+      "account_name": "Aufstockung Richtpreis",
+      "category": "revenue",
+      "subcategory": "price_adjustment",
+      "value": 0.0
+    },
+    {
+      "year": 2025,
+      "month": 5,
+      "account_code": "3510",
+      "account_name": "Aufstockung Richtpreis",
+      "category": "revenue",
+      "subcategory": "price_adjustment",
+      "value": 10.0
+    },
+    {
+      "year": 2025,
+      "month": 6,
+      "account_code": "3510",
+      "account_name": "Aufstockung Richtpreis",
+      "category": "revenue",
+      "subcategory": "price_adjustment",
+      "value": 0.0
+    },
+    {
+      "year": 2025,
+      "month": 7,
+      "account_code": "3510",
+      "account_name": "Aufstockung Richtpreis",
+      "category": "revenue",
+      "subcategory": "price_adjustment",
+      "value": 0.0
+    },
+    {
+      "year": 2025,
+      "month": 8,
+      "account_code": "3510",
+      "account_name": "Aufstockung Richtpreis",
+      "category": "revenue",
+      "subcategory": "price_adjustment",
+      "value": 40.0
+    },
+    {
+      "year": 2025,
+      "month": 9,
+      "account_code": "3510",
+      "account_name": "Aufstockung Richtpreis",
+      "category": "revenue",
+      "subcategory": "price_adjustment",
+      "value": 0.0
+    },
+    {
+      "year": 2025,
+      "month": 10,
+      "account_code": "3510",
+      "account_name": "Aufstockung Richtpreis",
+      "category": "revenue",
+      "subcategory": "price_adjustment",
+      "value": 25.0
+    },
+    {
+      "year": 2025,
+      "month": 11,
+      "account_code": "3510",
+      "account_name": "Aufstockung Richtpreis",
+      "category": "revenue",
+      "subcategory": "price_adjustment",
+      "value": 0.0
+    }
+  ]
+}

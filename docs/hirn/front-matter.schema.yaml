@@ -1,0 +1,40 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+title: Documentation Front-Matter Schema
+type: object
+required: [id, area, status, review_cycle, last_reviewed]
+properties:
+  id:
+    type: string
+  area:
+    type: string
+  owner:
+    type: string
+  status:
+    type: string
+    enum: [Draft, Proposed, Approved, Canonical]
+  review_cycle:
+    type: string
+    enum: [weekly, biweekly, monthly, quarterly]
+  last_reviewed:
+    type: string
+    description: ISO date YYYY-MM-DD
+  source_of_truth:
+    type: array
+    items:
+      type: string
+  upstream:
+    type: array
+    items:
+      type: string
+  downstream:
+    type: array
+    items:
+      type: string
+  confidentiality:
+    type: string
+    enum: [public, internal, restricted, secret]
+  tags:
+    type: array
+    items:
+      type: string
+

@@ -1,0 +1,378 @@
+'use client'
+
+import { useState, useEffect, useCallback } from 'react'
+import { useSession } from 'next-auth/react'
+import Link from 'next/link'
+import { logger } from '@/lib/logger'
+import {
+  Search,
+  MapPin,
+  Clock,
+  Users,
+  Plus,
+  Filter,
+  ChevronDown,
+  Wrench,
+  Heart,
+} from 'lucide-react'
+import {
+  DEVICE_CATEGORIES,
+  URGENCY_LEVELS,
+  BUDGET_TYPES,
+  SERVICE_TYPES,
+  getCategoryById,
+  getUrgencyById,
+  getBudgetTypeById,
+  getServiceTypeById,
+} from '@/config/peer-repairs'
+
+interface PeerRepairRequest {
+  id: string
+  requesterId: string
+  requesterName: string
+  categoryId: string
+  deviceBrand: string | null
+  deviceModel: string | null
+  title: string
+  description: string
+  urgency: string
+  budgetType: string
+  budgetAmountCents: number | null
+  postalCode: string
+  city: string
+  canton: string
+  serviceType: string
+  skillsNeeded: string[]
+  imageUrls: string[]
+  status: string
+  offerCount: number
+  expiresAt: string
+  createdAt: string
+}
+
+// Swiss cantons for filter
+const SWISS_CANTONS = [
+  'Aargau', 'Appenzell Ausserrhoden', 'Appenzell Innerrhoden', 'Basel-Landschaft',
+  'Basel-Stadt', 'Bern', 'Freiburg', 'Genf', 'Glarus', 'Graubünden', 'Jura',
+  'Luzern', 'Neuenburg', 'Nidwalden', 'Obwalden', 'Schaffhausen', 'Schwyz',
+  'Solothurn', 'St. Gallen', 'Tessin', 'Thurgau', 'Uri', 'Waadt', 'Wallis',
+  'Zug', 'Zürich',
+]
+
+export default function PeerRepairsPage() {
+  const { data: session } = useSession()
+  const [requests, setRequests] = useState<PeerRepairRequest[]>([])
+  const [loading, setLoading] = useState(true)
+  const [total, setTotal] = useState(0)
+  const [showFilters, setShowFilters] = useState(false)
+
+  // Filters
+  const [category, setCategory] = useState('')
+  const [canton, setCanton] = useState('')
+  const [urgency, setUrgency] = useState('')
+  const [budgetType, setBudgetType] = useState('')
+
+  const fetchRequests = useCallback(async () => {
+    try {
+      setLoading(true)
+      const params = new URLSearchParams()
+
+      if (category) params.set('category', category)
+      if (canton) params.set('canton', canton)
+      if (urgency) params.set('urgency', urgency)
+      if (budgetType) params.set('budgetType', budgetType)
+
+      const response = await fetch(`/api/peer-repairs/requests?${params}`)
+      const data = await response.json()
+
+      if (data.success) {
+        setRequests(data.data.requests)
+        setTotal(data.data.total)
+      }
+    } catch (error) {
+      logger.error('Error fetching peer repair requests', { error })
+    } finally {
+      setLoading(false)
+    }
+  }, [category, canton, urgency, budgetType])
+
+  useEffect(() => {
+    fetchRequests()
+  }, [fetchRequests])
+
+  const clearFilters = () => {
+    setCategory('')
+    setCanton('')
+    setUrgency('')
+    setBudgetType('')
+  }
+
+  const hasActiveFilters = category || canton || urgency || budgetType
+
+  return (
+    <div className="min-h-screen bg-gray-50">
+      {/* Header */}
+      <div className="bg-gradient-to-r from-emerald-600 to-teal-600 text-white">
+        <div className="max-w-7xl mx-auto px-4 py-12">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="p-3 bg-white/20 rounded-xl">
+              <Wrench className="w-8 h-8" />
+            </div>
+            <h1 className="text-3xl font-bold">Peer-Reparaturen</h1>
+          </div>
+          <p className="text-emerald-100 text-lg max-w-2xl mb-8">
+            Community-Hilfe für Hardware-Reparaturen. Finde Hilfe in deiner Nähe oder biete deine Skills an.
+          </p>
+
+          <div className="flex flex-wrap gap-4">
+            {session?.user ? (
+              <Link
+                href="/peer-repairs/create"
+                className="inline-flex items-center gap-2 bg-white text-emerald-600 px-6 py-3 rounded-lg font-semibold hover:bg-emerald-50 transition-colors"
+              >
+                <Plus className="w-5 h-5" />
+                Anfrage erstellen
+              </Link>
+            ) : (
+              <Link
+                href="/auth/login?callbackUrl=/peer-repairs/create"
+                className="inline-flex items-center gap-2 bg-white text-emerald-600 px-6 py-3 rounded-lg font-semibold hover:bg-emerald-50 transition-colors"
+              >
+                <Plus className="w-5 h-5" />
+                Anmelden & Anfrage erstellen
+              </Link>
+            )}
+
+            {session?.user && (
+              <>
+                <Link
+                  href="/peer-repairs/my"
+                  className="inline-flex items-center gap-2 bg-emerald-700 text-white px-6 py-3 rounded-lg font-semibold hover:bg-emerald-800 transition-colors"
+                >
+                  Meine Anfragen
+                </Link>
+                <Link
+                  href="/peer-repairs/my/offers"
+                  className="inline-flex items-center gap-2 bg-emerald-700 text-white px-6 py-3 rounded-lg font-semibold hover:bg-emerald-800 transition-colors"
+                >
+                  <Heart className="w-5 h-5" />
+                  Meine Angebote
+                </Link>
+              </>
+            )}
+          </div>
+        </div>
+      </div>
+
+      <div className="max-w-7xl mx-auto px-4 py-8">
+        {/* Filters */}
+        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4 mb-8">
+          <div className="flex flex-wrap items-center gap-4">
+            <button
+              onClick={() => setShowFilters(!showFilters)}
+              className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
+            >
+              <Filter className="w-4 h-4" />
+              Filter
+              <ChevronDown className={`w-4 h-4 transition-transform ${showFilters ? 'rotate-180' : ''}`} />
+            </button>
+
+            {hasActiveFilters && (
+              <button
+                onClick={clearFilters}
+                className="text-sm text-emerald-600 hover:text-emerald-700"
+              >
+                Filter zurücksetzen
+              </button>
+            )}
+
+            <div className="ml-auto text-sm text-gray-500">
+              {total} {total === 1 ? 'Anfrage' : 'Anfragen'} gefunden
+            </div>
+          </div>
+
+          {showFilters && (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-4 pt-4 border-t border-gray-100">
+              {/* Category filter */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Gerätekategorie
+                </label>
+                <select
+                  value={category}
+                  onChange={(e) => setCategory(e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                >
+                  <option value="">Alle Kategorien</option>
+                  {DEVICE_CATEGORIES.map((cat) => (
+                    <option key={cat.id} value={cat.id}>
+                      {cat.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Canton filter */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Kanton
+                </label>
+                <select
+                  value={canton}
+                  onChange={(e) => setCanton(e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                >
+                  <option value="">Alle Kantone</option>
+                  {SWISS_CANTONS.map((c) => (
+                    <option key={c} value={c}>
+                      {c}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Urgency filter */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Dringlichkeit
+                </label>
+                <select
+                  value={urgency}
+                  onChange={(e) => setUrgency(e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                >
+                  <option value="">Alle</option>
+                  {URGENCY_LEVELS.map((u) => (
+                    <option key={u.id} value={u.id}>
+                      {u.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Budget type filter */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Vergütung
+                </label>
+                <select
+                  value={budgetType}
+                  onChange={(e) => setBudgetType(e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                >
+                  <option value="">Alle</option>
+                  {BUDGET_TYPES.map((b) => (
+                    <option key={b.id} value={b.id}>
+                      {b.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Requests Grid */}
+        {loading ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[1, 2, 3, 4, 5, 6].map((i) => (
+              <div key={i} className="bg-white rounded-xl shadow-sm p-6 animate-pulse">
+                <div className="h-6 bg-gray-200 rounded w-3/4 mb-4"></div>
+                <div className="h-4 bg-gray-200 rounded w-full mb-2"></div>
+                <div className="h-4 bg-gray-200 rounded w-2/3"></div>
+              </div>
+            ))}
+          </div>
+        ) : requests.length === 0 ? (
+          <div className="text-center py-16">
+            <Search className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+            <h3 className="text-xl font-semibold text-gray-900 mb-2">
+              Keine Anfragen gefunden
+            </h3>
+            <p className="text-gray-600 mb-6">
+              {hasActiveFilters
+                ? 'Versuche andere Filter oder setze sie zurück.'
+                : 'Sei der Erste, der eine Reparaturanfrage stellt!'}
+            </p>
+            {session?.user && (
+              <Link
+                href="/peer-repairs/create"
+                className="inline-flex items-center gap-2 bg-emerald-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-emerald-700 transition-colors"
+              >
+                <Plus className="w-5 h-5" />
+                Anfrage erstellen
+              </Link>
+            )}
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {requests.map((req) => {
+              const categoryConfig = getCategoryById(req.categoryId)
+              const urgencyConfig = getUrgencyById(req.urgency)
+              const budgetConfig = getBudgetTypeById(req.budgetType)
+              const CategoryIcon = categoryConfig?.icon || Wrench
+
+              return (
+                <Link
+                  key={req.id}
+                  href={`/peer-repairs/${req.id}`}
+                  className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow group"
+                >
+                  {/* Card Header */}
+                  <div className="p-5 border-b border-gray-100">
+                    <div className="flex items-start justify-between mb-3">
+                      <div className={`p-2.5 ${categoryConfig?.color || 'bg-gray-500'} rounded-lg`}>
+                        <CategoryIcon className="w-5 h-5 text-white" />
+                      </div>
+                      <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${urgencyConfig?.badgeClass || 'bg-gray-100 text-gray-700'}`}>
+                        {urgencyConfig?.name || req.urgency}
+                      </span>
+                    </div>
+
+                    <h3 className="font-semibold text-gray-900 mb-2 group-hover:text-emerald-600 transition-colors line-clamp-2">
+                      {req.title}
+                    </h3>
+
+                    <p className="text-sm text-gray-600 line-clamp-2 mb-3">
+                      {req.description}
+                    </p>
+
+                    {/* Device info */}
+                    {(req.deviceBrand || req.deviceModel) && (
+                      <p className="text-xs text-gray-500 mb-3">
+                        {[req.deviceBrand, req.deviceModel].filter(Boolean).join(' ')}
+                      </p>
+                    )}
+
+                    {/* Meta info */}
+                    <div className="flex flex-wrap items-center gap-3 text-sm text-gray-500">
+                      <div className="flex items-center gap-1">
+                        <MapPin className="w-4 h-4" />
+                        <span>{req.city}</span>
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <Users className="w-4 h-4" />
+                        <span>{req.offerCount} {req.offerCount === 1 ? 'Angebot' : 'Angebote'}</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Card Footer */}
+                  <div className="px-5 py-3 bg-gray-50 flex items-center justify-between">
+                    <span className="text-sm font-medium text-emerald-600">
+                      {budgetConfig?.name || req.budgetType}
+                      {req.budgetAmountCents && ` - CHF ${(req.budgetAmountCents / 100).toFixed(0)}`}
+                    </span>
+                    <span className="text-xs text-gray-400">
+                      {new Date(req.createdAt).toLocaleDateString('de-CH')}
+                    </span>
+                  </div>
+                </Link>
+              )
+            })}
+          </div>
+        )}
+      </div>
+    </div>
+  )
+}
