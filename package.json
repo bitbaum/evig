@@ -51,7 +51,11 @@
     "prod:down": "docker compose -f docker-compose.prod.yml down",
     "prod:logs": "docker compose -f docker-compose.prod.yml logs -f",
     "prod:restart": "docker compose -f docker-compose.prod.yml restart",
-    "prod:health": "curl -f http://localhost:3000/api/health"
+    "prod:health": "curl -f http://localhost:3000/api/health",
+    "hirn:ingest": "npx tsx scripts/hirn-ingest.ts",
+    "hirn:ingest:docs": "npx tsx scripts/hirn-ingest.ts --dir ./docs",
+    "hirn:ingest:src": "npx tsx scripts/hirn-ingest.ts --dir ./src --extensions .ts,.tsx",
+    "hirn:stats": "npx tsx scripts/hirn-ingest.ts --stats"
   },
   "dependencies": {
     "@auth/pg-adapter": "^1.11.1",

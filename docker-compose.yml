@@ -2,9 +2,10 @@ version: '3.8'
 
 services:
   # PostgreSQL Database (Unified - for CMS API, NextAuth, and all services)
+  # Using pgvector image for AI/RAG vector similarity search support
   db:
     container_name: revampit_db
-    image: postgres:15-alpine
+    image: pgvector/pgvector:pg15
     restart: unless-stopped
     environment:
       POSTGRES_USER: ${DB_USER:-postgres}

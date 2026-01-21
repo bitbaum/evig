@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { ArrowRight, TrendingUp, PiggyBank, Target, Eye, Brain } from 'lucide-react'
+import { ArrowRight, TrendingUp, PiggyBank, Target, Eye, Brain, MessageSquare } from 'lucide-react'
 import type { Insight } from '@/lib/hirn/data/analysis'
 
 // ============================================================================
@@ -33,6 +33,13 @@ interface HirnDashboardClientProps {
 // ============================================================================
 
 const QUICK_LINKS = [
+  {
+    title: 'AI Assistent',
+    description: 'Fragen zu RevampIT mit KI beantworten',
+    href: '/admin/hirn/ai',
+    icon: MessageSquare,
+    color: 'bg-gradient-to-r from-purple-500 to-pink-500',
+  },
   {
     title: 'Finanzen',
     description: 'Detaillierte Finanzübersicht und Trends',
@@ -158,7 +165,7 @@ export function HirnDashboardClient({
       </div>
 
       {/* Quick Links */}
-      <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
         {QUICK_LINKS.map(link => (
           <Card
             key={link.href}
