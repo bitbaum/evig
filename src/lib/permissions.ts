@@ -6,54 +6,62 @@
  * - Staff (@revamp-it.ch): Access to admin with granular permissions
  *
  * KISS, DRY, SSOT principles applied.
+ *
+ * Sensitive areas are defined in @/config/sensitive-areas.ts (SSOT)
  */
+
+import { SENSITIVE_SECTION_KEYS } from '@/config/sensitive-areas'
 
 // =============================================================================
 // ADMIN SECTIONS - Define what sections exist in the admin dashboard
 // =============================================================================
+
+// Helper to check if a section key is sensitive
+const isSensitive = (key: string): boolean =>
+  SENSITIVE_SECTION_KEYS.includes(key as AdminSection)
 
 export const ADMIN_SECTIONS = {
   // Core sections - most staff can see
   dashboard: {
     label: 'Dashboard',
     path: '/admin',
-    sensitive: false,
+    get sensitive() { return isSensitive('dashboard') },
     description: 'Übersicht und Statistiken'
   },
   products: {
     label: 'Produkte',
     path: '/admin/products',
-    sensitive: false,
+    get sensitive() { return isSensitive('products') },
     description: 'Produktverwaltung und Inventar'
   },
   workshops: {
     label: 'Workshops',
     path: '/admin/workshops',
-    sensitive: false,
+    get sensitive() { return isSensitive('workshops') },
     description: 'Workshop-Verwaltung und Anmeldungen'
   },
   services: {
     label: 'Dienstleistungen',
     path: '/admin/services',
-    sensitive: false,
+    get sensitive() { return isSensitive('services') },
     description: 'Service-Angebote verwalten'
   },
   locations: {
     label: 'Standorte',
     path: '/admin/locations',
-    sensitive: false,
+    get sensitive() { return isSensitive('locations') },
     description: 'Standortverwaltung'
   },
   reviews: {
     label: 'Bewertungen',
     path: '/admin/reviews',
-    sensitive: false,
+    get sensitive() { return isSensitive('reviews') },
     description: 'Bewertungen moderieren'
   },
   content: {
     label: 'Inhalte',
     path: '/admin/content',
-    sensitive: false,
+    get sensitive() { return isSensitive('content') },
     description: 'Blog, Seiten, Medien'
   },
 
@@ -61,39 +69,39 @@ export const ADMIN_SECTIONS = {
   approvals: {
     label: 'Freigaben',
     path: '/admin/approvals',
-    sensitive: false,
+    get sensitive() { return isSensitive('approvals') },
     description: 'Eingereichte Inhalte prüfen und freigeben'
   },
 
-  // Sensitive sections - limited access
+  // Sensitive sections - limited access (see @/config/sensitive-areas.ts)
   users: {
     label: 'Benutzer',
     path: '/admin/users',
-    sensitive: true,
+    get sensitive() { return isSensitive('users') },
     description: 'Benutzerverwaltung'
   },
   team: {
     label: 'Team & HR',
     path: '/admin/team',
-    sensitive: true,
+    get sensitive() { return isSensitive('team') },
     description: 'Mitarbeiter, Freiwillige, Praktikanten'
   },
   finances: {
     label: 'Finanzen',
     path: '/admin/hirn/finanzen',
-    sensitive: true,
+    get sensitive() { return isSensitive('finances') },
     description: 'Finanzübersicht und Berichte'
   },
   analytics: {
     label: 'Analytics',
     path: '/admin/analytics',
-    sensitive: false,
+    get sensitive() { return isSensitive('analytics') },
     description: 'Statistiken und Auswertungen'
   },
   settings: {
     label: 'Einstellungen',
     path: '/admin/settings',
-    sensitive: true,
+    get sensitive() { return isSensitive('settings') },
     description: 'Systemkonfiguration'
   },
 
@@ -101,7 +109,7 @@ export const ADMIN_SECTIONS = {
   hirn: {
     label: 'Hirn',
     path: '/admin/hirn',
-    sensitive: true,
+    get sensitive() { return isSensitive('hirn') },
     description: 'Business Intelligence Dashboard'
   },
 } as const

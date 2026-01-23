@@ -17,6 +17,7 @@
     "stop:all": "npm run services:down",
     "setup": "npm run db:up && sleep 5",
     "setup-admins": "npx tsx scripts/setup-all-admins.ts",
+    "generate:admin-hash": "node scripts/generate-admin-hash.js",
     "reset": "npm run services:down && docker compose down -v && npm run setup",
     "build": "next build && next-sitemap",
     "build:cms": "echo 'CMS disabled'",
@@ -55,7 +56,9 @@
     "hirn:ingest": "npx tsx scripts/hirn-ingest.ts",
     "hirn:ingest:docs": "npx tsx scripts/hirn-ingest.ts --dir ./docs",
     "hirn:ingest:src": "npx tsx scripts/hirn-ingest.ts --dir ./src --extensions .ts,.tsx",
-    "hirn:stats": "npx tsx scripts/hirn-ingest.ts --stats"
+    "hirn:stats": "npx tsx scripts/hirn-ingest.ts --stats",
+    "transcription:start": "./services/transcription/start.sh",
+    "transcription:setup": "python3 -m venv services/transcription/.venv && services/transcription/.venv/bin/pip install faster-whisper flask"
   },
   "dependencies": {
     "@auth/pg-adapter": "^1.11.1",
@@ -96,7 +99,8 @@
     "remark-gfm": "^4.0.1",
     "stripe": "^20.1.0",
     "tailwind-merge": "^3.2.0",
-    "uuid": "^13.0.0"
+    "uuid": "^13.0.0",
+    "zod": "^4.3.6"
   },
   "devDependencies": {
     "@playwright/test": "^1.55.1",

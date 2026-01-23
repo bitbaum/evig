@@ -391,3 +391,13 @@ export {
 } from './permissions'
 
 export type { AdminSection, StaffUser, ContentStatus } from './permissions'
+
+// Re-export sensitive areas config for easy access
+export {
+  SENSITIVE_SECTION_KEYS,
+  isSensitiveSection,
+  getSensitiveSections,
+  getNonSensitiveSections,
+  SENSITIVITY_REASONS,
+  getSensitivityReason,
+} from '@/config/sensitive-areas'

@@ -10,7 +10,6 @@ import {
   Wrench,
   BarChart3,
   Settings,
-  LogOut,
   Menu,
   ChevronLeft,
   ChevronRight,
@@ -22,10 +21,13 @@ import {
   CheckSquare,
   Home,
   Store,
-  ExternalLink,
+  Globe,
+  Shield,
+  User,
   type LucideIcon
 } from 'lucide-react'
 import type { AdminSection } from '@/lib/permissions'
+import { isSensitiveSection, getSensitivityReason } from '@/config/sensitive-areas'
 
 // Map admin sections to nav items
 const ADMIN_NAV_CONFIG: Record<AdminSection, {
@@ -211,6 +213,8 @@ export function AdminLayoutClient({
           <div className="space-y-1">
             {navItems.map((item) => {
               const active = isActive(item.href)
+              const sensitive = isSensitiveSection(item.section)
+              const sensitivityReason = sensitive ? getSensitivityReason(item.section) : undefined
               return (
                 <Link
                   key={item.href}
@@ -223,10 +227,19 @@ export function AdminLayoutClient({
                       ? 'bg-green-50 text-green-700 dark:bg-green-900/20 dark:text-green-400'
                       : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
                   }`}
-                  title={sidebarCollapsed ? item.name : undefined}
+                  title={sidebarCollapsed ? `${item.name}${sensitive ? ' (Geschützt)' : ''}` : sensitivityReason}
                 >
                   <item.icon className={`w-5 h-5 flex-shrink-0 ${active ? 'text-green-600' : ''}`} />
-                  {!sidebarCollapsed && <span className="text-sm font-medium">{item.name}</span>}
+                  {!sidebarCollapsed && (
+                    <span className="flex-1 text-sm font-medium flex items-center gap-2">
+                      {item.name}
+                      {sensitive && (
+                        <span title={sensitivityReason}>
+                          <Shield className="w-3.5 h-3.5 text-amber-500" />
+                        </span>
+                      )}
+                    </span>
+                  )}
                 </Link>
               )
             })}
@@ -270,7 +283,7 @@ export function AdminLayoutClient({
                 }`}
                 title={sidebarCollapsed ? 'Mein Bereich' : undefined}
               >
-                <LogOut className="w-5 h-5 flex-shrink-0" />
+                <User className="w-5 h-5 flex-shrink-0" />
                 {!sidebarCollapsed && <span className="text-sm">Mein Bereich</span>}
               </Link>
             </div>
@@ -318,6 +331,15 @@ export function AdminLayoutClient({
             </div>
 
             <div className="flex items-center gap-4">
+              {/* View Site Button */}
+              <Link
+                href="/"
+                className="hidden sm:flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-medium text-sm"
+              >
+                <Globe className="w-4 h-4" />
+                Website
+              </Link>
+
               <div className="text-right hidden sm:block">
                 <p className="text-sm font-medium text-gray-900 dark:text-white">
                   {user?.name || 'Staff'}

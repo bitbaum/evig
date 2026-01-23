@@ -27,19 +27,29 @@ import { logger } from '@/lib/logger'
 export { getJwtSecret }
 
 // =============================================================================
-// Startup Validation
+// Lazy Validation (only on first use, not during build)
 // =============================================================================
 
-// Validate admin password config on module load
-const passwordConfigValidation = validateAdminPasswordConfig()
-if (!passwordConfigValidation.valid) {
-  logger.error('Admin password configuration error', { error: passwordConfigValidation.error })
-  // In production, this is a fatal error
-  if (process.env.NODE_ENV === 'production') {
-    throw new Error(passwordConfigValidation.error)
+let passwordConfigValidated = false
+
+/**
+ * Validate admin password configuration lazily
+ * Only runs on first actual use, not during module load/build
+ */
+function ensurePasswordConfigValid(): void {
+  if (passwordConfigValidated) return
+  passwordConfigValidated = true
+
+  const validation = validateAdminPasswordConfig()
+  if (!validation.valid) {
+    logger.error('Admin password configuration error', { error: validation.error })
+    // In production, this is a fatal error
+    if (process.env.NODE_ENV === 'production') {
+      throw new Error(validation.error)
+    }
+  } else if (validation.warning) {
+    logger.warn(validation.warning)
   }
-} else if (passwordConfigValidation.warning) {
-  logger.warn(passwordConfigValidation.warning)
 }
 
 /**
@@ -89,6 +99,9 @@ export async function verifyAdminPassword(
   error?: string
   retryAfter?: number
 }> {
+  // Validate config on first actual use (not during build)
+  ensurePasswordConfigValid()
+
   const identifier = 'admin'
   const ctx = {
     userId: 'admin-1',
@@ -187,6 +200,7 @@ export async function verifyAdminPassword(
  * @deprecated Use verifyAdminPassword (async) instead
  */
 export function verifyAdminPasswordSync(password: string): boolean {
+  ensurePasswordConfigValid()
   const hash = getAdminPasswordHash()
   if (hash) {
     // Cannot use bcrypt synchronously without blocking

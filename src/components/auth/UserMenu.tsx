@@ -3,16 +3,17 @@
 import { useState, useRef, useEffect } from 'react'
 import { useSession, signOut } from 'next-auth/react'
 import Link from 'next/link'
-import { 
-  User, 
-  LogOut, 
-  Settings, 
-  LayoutDashboard, 
-  Calendar, 
+import {
+  User,
+  LogOut,
+  Settings,
+  LayoutDashboard,
+  Calendar,
   ShoppingBag,
   ChevronDown,
   Heart,
-  ArrowRight
+  ArrowRight,
+  Shield
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
@@ -97,7 +98,12 @@ export function UserMenu() {
     .toUpperCase()
     .slice(0, 2) || session.user.email?.charAt(0).toUpperCase() || 'U'
 
+  // Build menu items - include admin link for staff members
+  const isStaff = session.user.isStaff
+
   const menuItems = [
+    // Admin link - only for staff
+    ...(isStaff ? [{ href: '/admin', icon: Shield, label: 'Admin-Bereich', highlight: true }] : []),
     { href: '/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
     { href: '/dashboard/profile', icon: User, label: 'Mein Profil' },
     { href: '/dashboard/workshops', icon: Calendar, label: 'Meine Workshops' },
@@ -187,11 +193,18 @@ export function UserMenu() {
                 onClick={() => setIsOpen(false)}
                 className={cn(
                   "group flex items-center gap-3 px-5 py-2.5",
-                  "text-sm text-gray-600 hover:text-gray-900",
-                  "hover:bg-gray-50 transition-colors duration-150"
+                  "text-sm transition-colors duration-150",
+                  'highlight' in item && item.highlight
+                    ? "text-amber-700 bg-amber-50 hover:bg-amber-100 font-medium"
+                    : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"
                 )}
               >
-                <item.icon className="w-4 h-4 text-gray-400 group-hover:text-emerald-600 transition-colors" />
+                <item.icon className={cn(
+                  "w-4 h-4 transition-colors",
+                  'highlight' in item && item.highlight
+                    ? "text-amber-600"
+                    : "text-gray-400 group-hover:text-emerald-600"
+                )} />
                 {item.label}
               </Link>
             ))}
