@@ -1,6 +1,8 @@
 /**
  * Repairer Dashboard API
  * GET /api/repairer/dashboard - Get repairer dashboard stats and bookings
+ *
+ * MIGRATION: Now uses unified permissions for admin access check
  */
 
 import { NextRequest } from 'next/server'
@@ -10,6 +12,7 @@ import { apiError, apiSuccess, apiUnauthorized } from '@/lib/api/helpers'
 import { logger } from '@/lib/logger'
 import { auth } from '@/auth'
 import { ROLES } from '@/lib/constants'
+import { hasAdminAccessUnified, type UnifiedUser } from '@/lib/auth/unified-permissions'
 
 interface BookingRow {
   id: string
@@ -57,7 +60,18 @@ export async function GET(request: NextRequest) {
     }
 
     const userRole = session.user.role as string
-    const hasAccess = userRole === ROLES.REPAIRER || userRole === ROLES.REVAMPIT_ADMIN
+
+    // UNIFIED: Build user object for admin check
+    const user: UnifiedUser = {
+      email: session.user.email || '',
+      role: userRole,
+      isStaff: session.user.isStaff,
+      staffPermissions: session.user.staffPermissions,
+      isSuperAdmin: session.user.isSuperAdmin,
+    }
+
+    // Access granted if: repairer role OR admin access (via old or new system)
+    const hasAccess = userRole === ROLES.REPAIRER || hasAdminAccessUnified(user)
 
     if (!hasAccess) {
       return apiUnauthorized('Repairer-Berechtigung erforderlich')

@@ -1,6 +1,4 @@
 import { Metadata } from 'next'
-import { ROLES } from '@/lib/constants'
-import { requireRole } from '@/middleware/admin'
 import ProductManagement from '@/components/admin/ProductManagement'
 import Link from 'next/link'
 import { ArrowLeft, Package } from 'lucide-react'
@@ -12,8 +10,9 @@ export const metadata: Metadata = {
 }
 
 export default async function ProductsAdminPage() {
-  // Temporarily bypass role check for testing
-  // await requireRole(ROLES.REVAMPIT_ADMIN)
+  // UNIFIED: Admin access is handled by admin middleware/layout
+  // No additional role check needed here - the layout protects all /admin/* routes
+  // using hasAdminAccessUnified() which supports both old role and new is_staff system
 
   return (
     <div className="space-y-6">

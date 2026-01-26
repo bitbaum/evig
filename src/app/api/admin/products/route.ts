@@ -1,6 +1,5 @@
 import { NextRequest } from "next/server";
-import { ROLES } from '@/lib/constants'
-import { hasRole } from '@/middleware/admin'
+import { hasAdminRole } from '@/middleware/admin'
 import { MEDUSA_CONFIG } from "@/config/medusa";
 import { logger } from "@/lib/logger";
 import { apiError, apiSuccess, apiForbidden } from "@/lib/api/helpers";
@@ -8,8 +7,8 @@ import { apiError, apiSuccess, apiForbidden } from "@/lib/api/helpers";
 // GET /api/admin/products - List all products for admin
 export async function GET(request: NextRequest) {
   try {
-    // Check admin role
-    const isAdmin = await hasRole(ROLES.REVAMPIT_ADMIN)
+    // UNIFIED: Check admin access (supports both old role and new is_staff system)
+    const isAdmin = await hasAdminRole()
     if (!isAdmin) {
       return apiForbidden("Admin access required");
     }
@@ -75,8 +74,8 @@ export async function GET(request: NextRequest) {
 // POST /api/admin/products - Create new product
 export async function POST(request: NextRequest) {
   try {
-    // Check admin role
-    const isAdmin = await hasRole(ROLES.REVAMPIT_ADMIN)
+    // UNIFIED: Check admin access (supports both old role and new is_staff system)
+    const isAdmin = await hasAdminRole()
     if (!isAdmin) {
       return apiForbidden("Admin access required");
     }

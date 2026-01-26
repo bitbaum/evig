@@ -227,12 +227,40 @@ export const DASHBOARD_CARDS: DashboardCard[] = [
 ]
 
 /**
- * Get dashboard cards filtered by user role
+ * User info for dashboard card filtering
+ * UNIFIED: Supports both old role system and new is_staff system
  */
-export function getDashboardCardsForRole(userRole: UserRole | null): DashboardCard[] {
+export interface DashboardUserInfo {
+  role: UserRole | null
+  isStaff?: boolean
+  isSuperAdmin?: boolean
+}
+
+/**
+ * Get dashboard cards filtered by user role
+ * UNIFIED: Now supports both old role system AND new is_staff permission system
+ *
+ * @param userRole - Legacy parameter (role only)
+ * @param userInfo - Optional unified user info (role + isStaff)
+ */
+export function getDashboardCardsForRole(
+  userRole: UserRole | null,
+  userInfo?: DashboardUserInfo
+): DashboardCard[] {
+  // Build unified info from params
+  const role = userInfo?.role ?? userRole
+  const isStaff = userInfo?.isStaff ?? false
+  const isSuperAdmin = userInfo?.isSuperAdmin ?? false
+
+  // UNIFIED: Check if user has admin access via either system
+  const hasAdminAccess =
+    role === ROLES.REVAMPIT_ADMIN ||
+    isStaff === true ||
+    isSuperAdmin === true
+
   return DASHBOARD_CARDS.filter(card => {
     // Hide if user has a role that should hide this card
-    if (card.hiddenForRoles && userRole && card.hiddenForRoles.includes(userRole)) {
+    if (card.hiddenForRoles && role && card.hiddenForRoles.includes(role)) {
       return false
     }
 
@@ -241,12 +269,19 @@ export function getDashboardCardsForRole(userRole: UserRole | null): DashboardCa
       return true
     }
 
+    // UNIFIED: For admin-only cards, also show if user has isStaff or isSuperAdmin
+    const requiredRoles = Array.isArray(card.requiredRole)
+      ? card.requiredRole
+      : [card.requiredRole]
+
+    // Check if this requires admin access
+    if (requiredRoles.includes(ROLES.REVAMPIT_ADMIN) && hasAdminAccess) {
+      return true
+    }
+
     // Show if user has required role
-    if (userRole) {
-      const requiredRoles = Array.isArray(card.requiredRole) 
-        ? card.requiredRole 
-        : [card.requiredRole]
-      return requiredRoles.includes(userRole)
+    if (role) {
+      return requiredRoles.includes(role)
     }
 
     return false

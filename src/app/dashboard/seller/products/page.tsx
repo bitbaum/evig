@@ -17,6 +17,7 @@ import {
   Users,
   Star
 } from 'lucide-react'
+import { hasAdminAccessUnified, type UnifiedUser } from '@/lib/auth/unified-permissions'
 
 export const metadata: Metadata = {
   title: 'Meine Produkte | Seller Dashboard',
@@ -31,7 +32,18 @@ export default async function SellerProductsPage() {
   }
 
   const userRole = session.user.role as string
-  const hasAccess = userRole === ROLES.SELLER || userRole === ROLES.REVAMPIT_ADMIN
+
+  // UNIFIED: Build user object for admin check
+  const user: UnifiedUser = {
+    email: session.user.email || '',
+    role: userRole,
+    isStaff: session.user.isStaff,
+    staffPermissions: session.user.staffPermissions,
+    isSuperAdmin: session.user.isSuperAdmin,
+  }
+
+  // Access granted if: seller role OR admin access (via old or new system)
+  const hasAccess = userRole === ROLES.SELLER || hasAdminAccessUnified(user)
 
   if (!hasAccess) {
     redirect('/dashboard')

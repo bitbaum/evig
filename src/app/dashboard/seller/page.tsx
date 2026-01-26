@@ -67,7 +67,12 @@ export default function SellerDashboard() {
     }
 
     const userRole = session.user.role as string
-    const hasAccess = userRole === ROLES.SELLER || userRole === ROLES.REVAMPIT_ADMIN
+    // UNIFIED: Check seller role OR admin access (old role OR new is_staff system)
+    const hasAdminAccess =
+      userRole === ROLES.REVAMPIT_ADMIN ||
+      session.user.isStaff === true ||
+      session.user.isSuperAdmin === true
+    const hasAccess = userRole === ROLES.SELLER || hasAdminAccess
 
     if (!hasAccess) {
       router.push('/dashboard')
