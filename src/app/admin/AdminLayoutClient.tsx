@@ -4,111 +4,23 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import {
-  LayoutDashboard,
-  Users,
-  Calendar,
-  Wrench,
-  BarChart3,
-  Settings,
   Menu,
   ChevronLeft,
   ChevronRight,
-  Brain,
-  Package,
-  MapPin,
-  Star,
-  FileText,
-  CheckSquare,
   Home,
   Store,
   Globe,
   Shield,
   User,
-  type LucideIcon
 } from 'lucide-react'
-import type { AdminSection } from '@/lib/permissions'
-import { isSensitiveSection, getSensitivityReason } from '@/config/sensitive-areas'
+import { getAdminSections, isSensitiveSection } from '@/lib/permissions'
+import { getSensitivityReason } from '@/config/sensitive-areas'
 
-// Map admin sections to nav items
-const ADMIN_NAV_CONFIG: Record<AdminSection, {
-  name: string
-  href: string
-  icon: LucideIcon
-}> = {
-  dashboard: {
-    name: 'Dashboard',
-    href: '/admin',
-    icon: LayoutDashboard,
-  },
-  products: {
-    name: 'Produkte',
-    href: '/admin/products',
-    icon: Package,
-  },
-  workshops: {
-    name: 'Workshops',
-    href: '/admin/workshops',
-    icon: Calendar,
-  },
-  services: {
-    name: 'Dienstleistungen',
-    href: '/admin/services',
-    icon: Wrench,
-  },
-  locations: {
-    name: 'Standorte',
-    href: '/admin/locations',
-    icon: MapPin,
-  },
-  reviews: {
-    name: 'Bewertungen',
-    href: '/admin/reviews',
-    icon: Star,
-  },
-  content: {
-    name: 'Inhalte',
-    href: '/admin/content',
-    icon: FileText,
-  },
-  approvals: {
-    name: 'Freigaben',
-    href: '/admin/approvals',
-    icon: CheckSquare,
-  },
-  users: {
-    name: 'Benutzer',
-    href: '/admin/users',
-    icon: Users,
-  },
-  team: {
-    name: 'Team & HR',
-    href: '/admin/team',
-    icon: Users,
-  },
-  finances: {
-    name: 'Finanzen',
-    href: '/admin/hirn/finanzen',
-    icon: BarChart3,
-  },
-  analytics: {
-    name: 'Analytics',
-    href: '/admin/analytics',
-    icon: BarChart3,
-  },
-  settings: {
-    name: 'Einstellungen',
-    href: '/admin/settings',
-    icon: Settings,
-  },
-  hirn: {
-    name: 'Hirn',
-    href: '/admin/hirn',
-    icon: Brain,
-  },
-}
+// Get admin sections from SSOT
+const ADMIN_SECTIONS = getAdminSections()
 
-// Order of sections in the sidebar
-const SIDEBAR_ORDER: AdminSection[] = [
+// Order of sections in the sidebar (by priority is default, but can customize)
+const SIDEBAR_ORDER = [
   'dashboard',
   'approvals',
   'products',
@@ -133,7 +45,7 @@ interface AdminLayoutClientProps {
     isStaff: boolean
     staffPermissions: string[]
   } | null
-  accessibleSections: AdminSection[]
+  accessibleSections: string[]
 }
 
 export function AdminLayoutClient({
@@ -146,11 +58,23 @@ export function AdminLayoutClient({
   const pathname = usePathname()
 
   // Build nav items from accessible sections, in order
-  const navItems = SIDEBAR_ORDER
-    .filter(section => accessibleSections.includes(section))
+  // First sort by SIDEBAR_ORDER, then by priority for any not in order
+  const navItems = ADMIN_SECTIONS
+    .filter(section => accessibleSections.includes(section.id))
+    .sort((a, b) => {
+      const aIndex = SIDEBAR_ORDER.indexOf(a.id)
+      const bIndex = SIDEBAR_ORDER.indexOf(b.id)
+      if (aIndex === -1 && bIndex === -1) return a.priority - b.priority
+      if (aIndex === -1) return 1
+      if (bIndex === -1) return -1
+      return aIndex - bIndex
+    })
     .map(section => ({
-      ...ADMIN_NAV_CONFIG[section],
-      section,
+      section: section.id,
+      name: section.ui.label,
+      href: section.path,
+      icon: section.ui.icon,
+      sensitive: section.visibility.sensitive ?? false,
     }))
 
   // Check if current path matches a nav item
@@ -213,8 +137,7 @@ export function AdminLayoutClient({
           <div className="space-y-1">
             {navItems.map((item) => {
               const active = isActive(item.href)
-              const sensitive = isSensitiveSection(item.section)
-              const sensitivityReason = sensitive ? getSensitivityReason(item.section) : undefined
+              const sensitivityReason = item.sensitive ? getSensitivityReason(item.section) : undefined
               return (
                 <Link
                   key={item.href}
@@ -227,13 +150,13 @@ export function AdminLayoutClient({
                       ? 'bg-green-50 text-green-700 dark:bg-green-900/20 dark:text-green-400'
                       : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
                   }`}
-                  title={sidebarCollapsed ? `${item.name}${sensitive ? ' (Geschützt)' : ''}` : sensitivityReason}
+                  title={sidebarCollapsed ? `${item.name}${item.sensitive ? ' (Geschützt)' : ''}` : sensitivityReason}
                 >
                   <item.icon className={`w-5 h-5 flex-shrink-0 ${active ? 'text-green-600' : ''}`} />
                   {!sidebarCollapsed && (
                     <span className="flex-1 text-sm font-medium flex items-center gap-2">
                       {item.name}
-                      {sensitive && (
+                      {item.sensitive && (
                         <span title={sensitivityReason}>
                           <Shield className="w-3.5 h-3.5 text-amber-500" />
                         </span>

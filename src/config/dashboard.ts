@@ -1,38 +1,54 @@
 /**
- * Dashboard Configuration - Single Source of Truth
- * 
- * All dashboard navigation items, categories, and routes should be defined here.
- * Following dev guide: docs/development/DEV_GUIDE.md - SSOT principle
- * 
- * Created: 2026-01-05
- * Last Modified: 2026-01-05
- * Last Modified Summary: Initial dashboard navigation config for SSOT compliance
+ * Dashboard Configuration - Derived from SSOT
+ *
+ * All dashboard navigation items derive from the unified sections config.
+ * This ensures admin and user dashboard share the same source of truth.
+ *
+ * SSOT: @/config/sections.ts is the single source
+ * DRY: No duplication between admin and dashboard
+ *
+ * Last Updated: 2026-01-26
  */
 
-import { ROLES } from '@/lib/constants'
-import type { UserRole } from '@/lib/constants'
+import {
+  SECTIONS,
+  getDashboardSections,
+  CATEGORIES,
+  type SectionConfig,
+  type SectionCategory,
+  type SectionColor,
+} from '@/config/sections'
+
+// =============================================================================
+// LEGACY COMPATIBILITY - Types for existing components
+// =============================================================================
 
 export interface DashboardCard {
   id: string
   title: string
   description: string
   href: string
-  icon: string // Emoji or icon name
+  icon: string // Emoji
   category: DashboardCategory
-  requiredRole?: UserRole | UserRole[] // If specified, only show for these roles
-  hiddenForRoles?: UserRole[] // Hide for these roles
+  /** Show only for users with this community role */
+  requiredRole?: CommunityRole
+  /** Hide for users with this role */
+  hiddenForRoles?: CommunityRole[]
   badge?: string
   color: 'info' | 'success' | 'warning' | 'error' | 'secondary' | 'neutral'
-  priority: number // Lower number = higher priority (shown first)
+  priority: number
 }
 
-export type DashboardCategory = 
-  | 'account'      // Account management (profile, settings)
-  | 'activities'   // User activities (workshops, appointments)
-  | 'commerce'     // Selling/buying (seller dashboard, marketplace)
-  | 'services'     // Service provision (repairer dashboard)
-  | 'content'      // Content creation (blog submissions)
-  | 'admin'        // Admin functions
+/** Community roles (not staff roles) */
+export type CommunityRole = 'seller' | 'repairer' | 'helper'
+
+export type DashboardCategory =
+  | 'account'
+  | 'activities'
+  | 'commerce'
+  | 'services'
+  | 'content'
+  | 'admin'
 
 export interface DashboardCategoryConfig {
   id: DashboardCategory
@@ -42,225 +58,177 @@ export interface DashboardCategoryConfig {
   priority: number
 }
 
-/**
- * Dashboard categories configuration
- * SSOT for category definitions
- */
+// =============================================================================
+// CATEGORY MAPPING - Map SSOT categories to dashboard categories
+// =============================================================================
+
+const categoryMapping: Record<SectionCategory, DashboardCategory> = {
+  core: 'account',
+  activities: 'activities',
+  commerce: 'commerce',
+  services: 'services',
+  content: 'content',
+  management: 'admin',
+  sensitive: 'admin',
+  system: 'admin',
+}
+
+const colorMapping: Record<SectionColor, DashboardCard['color']> = {
+  primary: 'info',
+  secondary: 'secondary',
+  success: 'success',
+  warning: 'warning',
+  error: 'error',
+  info: 'info',
+  neutral: 'neutral',
+}
+
+// =============================================================================
+// DASHBOARD CATEGORIES - Derived from SSOT
+// =============================================================================
+
 export const DASHBOARD_CATEGORIES: Record<DashboardCategory, DashboardCategoryConfig> = {
   account: {
     id: 'account',
-    title: 'Konto',
-    description: 'Profil und Einstellungen verwalten',
-    icon: '👤',
-    priority: 1,
+    title: CATEGORIES.core.label,
+    description: CATEGORIES.core.description,
+    icon: CATEGORIES.core.emoji,
+    priority: CATEGORIES.core.priority,
   },
   activities: {
     id: 'activities',
-    title: 'Aktivitäten',
-    description: 'Workshops, Termine und Buchungen',
-    icon: '📚',
-    priority: 2,
+    title: CATEGORIES.activities.label,
+    description: CATEGORIES.activities.description,
+    icon: CATEGORIES.activities.emoji,
+    priority: CATEGORIES.activities.priority,
   },
   commerce: {
     id: 'commerce',
-    title: 'Verkauf & Handel',
-    description: 'Produkte verkaufen und Marktplatz nutzen',
-    icon: '🏪',
-    priority: 3,
+    title: CATEGORIES.commerce.label,
+    description: CATEGORIES.commerce.description,
+    icon: CATEGORIES.commerce.emoji,
+    priority: CATEGORIES.commerce.priority,
   },
   services: {
     id: 'services',
-    title: 'Dienstleistungen',
-    description: 'Reparaturen und Services anbieten',
-    icon: '🔧',
-    priority: 4,
+    title: CATEGORIES.services.label,
+    description: CATEGORIES.services.description,
+    icon: CATEGORIES.services.emoji,
+    priority: CATEGORIES.services.priority,
   },
   content: {
     id: 'content',
-    title: 'Inhalte',
-    description: 'Beiträge verfassen und teilen',
-    icon: '✍️',
-    priority: 5,
+    title: CATEGORIES.content.label,
+    description: CATEGORIES.content.description,
+    icon: CATEGORIES.content.emoji,
+    priority: CATEGORIES.content.priority,
   },
   admin: {
     id: 'admin',
     title: 'Administration',
     description: 'System verwalten',
     icon: '⚙️',
-    priority: 6,
+    priority: 10,
   },
 }
 
-/**
- * Dashboard routes - SSOT for all dashboard paths
- */
+// =============================================================================
+// DASHBOARD ROUTES - Derived from SSOT
+// =============================================================================
+
 export const DASHBOARD_ROUTES = {
   HOME: '/dashboard',
-  PROFILE: '/dashboard/profile',
-  WORKSHOPS: '/dashboard/workshops',
-  APPOINTMENTS: '/dashboard/appointments',
-  SELLER: '/dashboard/seller',
+  PROFILE: SECTIONS.profile?.path ?? '/dashboard/profile',
+  WORKSHOPS: SECTIONS.workshops?.path ?? '/dashboard/workshops',
+  APPOINTMENTS: SECTIONS.appointments?.path ?? '/dashboard/appointments',
+  SELLER: SECTIONS['seller-dashboard']?.path ?? '/dashboard/seller',
   SELLER_PRODUCTS: '/dashboard/seller/products',
   SELLER_PRODUCTS_NEW: '/dashboard/seller/products/new',
-  SELLER_ONBOARDING: '/dashboard/seller/onboarding',
-  REPAIRER: '/dashboard/repairer',
+  SELLER_ONBOARDING: SECTIONS['seller-onboarding']?.path ?? '/dashboard/seller/onboarding',
+  REPAIRER: SECTIONS['repairer-dashboard']?.path ?? '/dashboard/repairer',
   REPAIRER_BOOKINGS: '/dashboard/repairer/bookings',
   REPAIRER_SERVICES: '/dashboard/repairer/services',
-  REPAIRER_ONBOARDING: '/dashboard/repairer/onboarding',
+  REPAIRER_ONBOARDING: SECTIONS['repairer-onboarding']?.path ?? '/dashboard/repairer/onboarding',
   ADMIN: '/admin',
-  BLOG_SUBMIT: '/blog/submit',
+  BLOG_SUBMIT: SECTIONS['blog-submit']?.path ?? '/blog/submit',
 } as const
 
-/**
- * Dashboard cards configuration
- * SSOT for all dashboard navigation items
- */
-export const DASHBOARD_CARDS: DashboardCard[] = [
-  // Account Category
-  {
-    id: 'profile',
-    title: 'Mein Profil',
-    description: 'Persönliche Daten verwalten',
-    href: DASHBOARD_ROUTES.PROFILE,
-    icon: '👤',
-    category: 'account',
-    color: 'info',
-    priority: 1,
-  },
-
-  // Activities Category
-  {
-    id: 'workshops',
-    title: 'Meine Workshops',
-    description: 'Angemeldete Kurse verwalten',
-    href: DASHBOARD_ROUTES.WORKSHOPS,
-    icon: '🎓',
-    category: 'activities',
-    color: 'success',
-    priority: 1,
-  },
-  {
-    id: 'appointments',
-    title: 'Termine',
-    description: 'Service-Termin buchen',
-    href: DASHBOARD_ROUTES.APPOINTMENTS,
-    icon: '📅',
-    category: 'activities',
-    color: 'warning',
-    priority: 2,
-  },
-
-  // Commerce Category - Seller Dashboard (shown if user has seller role)
-  {
-    id: 'seller-dashboard',
-    title: 'Seller Dashboard',
-    description: 'Produkte und Verkäufe',
-    href: DASHBOARD_ROUTES.SELLER,
-    icon: '🏪',
-    category: 'commerce',
-    requiredRole: ROLES.SELLER,
-    color: 'secondary',
-    priority: 1,
-  },
-  // Commerce Category - Seller Onboarding (shown if user doesn't have seller role)
-  {
-    id: 'seller-onboarding',
-    title: 'Auf Revamp‑IT verkaufen',
-    description: 'Eigene Produkte anbieten – Versand direkt an Käufer',
-    href: DASHBOARD_ROUTES.SELLER_ONBOARDING,
-    icon: '🏪',
-    category: 'commerce',
-    hiddenForRoles: [ROLES.SELLER],
-    color: 'secondary',
-    priority: 2,
-  },
-
-  // Services Category - Repairer Dashboard (shown if user has repairer role)
-  {
-    id: 'repairer-dashboard',
-    title: 'Repairer Dashboard',
-    description: 'Reparaturen verwalten',
-    href: DASHBOARD_ROUTES.REPAIRER,
-    icon: '🔧',
-    category: 'services',
-    requiredRole: ROLES.REPAIRER,
-    color: 'warning',
-    priority: 1,
-  },
-  // Services Category - Repairer Onboarding (shown if user doesn't have repairer role)
-  {
-    id: 'repairer-onboarding',
-    title: 'Reparaturen anbieten',
-    description: 'Dienstleistungen publizieren und Anfragen erhalten',
-    href: DASHBOARD_ROUTES.REPAIRER_ONBOARDING,
-    icon: '🔧',
-    category: 'services',
-    hiddenForRoles: [ROLES.REPAIRER],
-    color: 'warning',
-    priority: 2,
-  },
-
-  // Content Category
-  {
-    id: 'blog-submit',
-    title: 'Beitrag verfassen',
-    description: 'Idee teilen oder Tutorial schreiben',
-    href: DASHBOARD_ROUTES.BLOG_SUBMIT,
-    icon: '✍️',
-    category: 'content',
-    color: 'info',
-    priority: 1,
-  },
-
-  // Admin Category
-  {
-    id: 'admin',
-    title: 'Admin-Bereich',
-    description: 'System verwalten',
-    href: DASHBOARD_ROUTES.ADMIN,
-    icon: '⚙️',
-    category: 'admin',
-    requiredRole: ROLES.REVAMPIT_ADMIN,
-    color: 'error',
-    priority: 1,
-  },
-]
+// =============================================================================
+// DASHBOARD CARDS - Derived from SSOT sections
+// =============================================================================
 
 /**
- * User info for dashboard card filtering
- * UNIFIED: Supports both old role system and new is_staff system
+ * Convert SSOT section to dashboard card
  */
+function sectionToCard(section: SectionConfig): DashboardCard {
+  const card: DashboardCard = {
+    id: section.id,
+    title: section.ui.label,
+    description: section.ui.description,
+    href: section.path,
+    icon: section.ui.emoji ?? '📄',
+    category: categoryMapping[section.category],
+    color: colorMapping[section.ui.color],
+    priority: section.priority,
+  }
+
+  // Handle community role visibility
+  if (section.visibility.communityRole) {
+    card.requiredRole = section.visibility.communityRole
+  }
+
+  if (section.visibility.hideIfRole) {
+    card.hiddenForRoles = [section.visibility.hideIfRole]
+  }
+
+  return card
+}
+
+/**
+ * Dashboard cards derived from SSOT
+ */
+export const DASHBOARD_CARDS: DashboardCard[] = getDashboardSections().map(sectionToCard)
+
+// =============================================================================
+// USER INFO & FILTERING
+// =============================================================================
+
 export interface DashboardUserInfo {
-  role: UserRole | null
+  /** Legacy role field (deprecated, use communityRoles) */
+  role?: string | null
+  /** Community roles the user has */
+  communityRoles?: CommunityRole[]
+  /** Is user a staff member */
   isStaff?: boolean
+  /** Is user a super admin */
   isSuperAdmin?: boolean
 }
 
 /**
- * Get dashboard cards filtered by user role
- * UNIFIED: Now supports both old role system AND new is_staff permission system
+ * Get dashboard cards filtered by user info
  *
- * @param userRole - Legacy parameter (role only)
- * @param userInfo - Optional unified user info (role + isStaff)
+ * @param userRole - Legacy parameter (deprecated)
+ * @param userInfo - User info for filtering
  */
 export function getDashboardCardsForRole(
-  userRole: UserRole | null,
+  userRole: string | null = null,
   userInfo?: DashboardUserInfo
 ): DashboardCard[] {
-  // Build unified info from params
-  const role = userInfo?.role ?? userRole
+  const communityRoles = userInfo?.communityRoles ?? []
   const isStaff = userInfo?.isStaff ?? false
   const isSuperAdmin = userInfo?.isSuperAdmin ?? false
 
-  // UNIFIED: Check if user has admin access via either system
-  const hasAdminAccess =
-    role === ROLES.REVAMPIT_ADMIN ||
-    isStaff === true ||
-    isSuperAdmin === true
+  // Legacy: Extract community roles from old role field
+  const legacyRole = userInfo?.role ?? userRole
+  if (legacyRole && !communityRoles.includes(legacyRole as CommunityRole)) {
+    if (['seller', 'repairer', 'helper'].includes(legacyRole)) {
+      communityRoles.push(legacyRole as CommunityRole)
+    }
+  }
 
   return DASHBOARD_CARDS.filter(card => {
     // Hide if user has a role that should hide this card
-    if (card.hiddenForRoles && role && card.hiddenForRoles.includes(role)) {
+    if (card.hiddenForRoles?.some(role => communityRoles.includes(role))) {
       return false
     }
 
@@ -269,19 +237,9 @@ export function getDashboardCardsForRole(
       return true
     }
 
-    // UNIFIED: For admin-only cards, also show if user has isStaff or isSuperAdmin
-    const requiredRoles = Array.isArray(card.requiredRole)
-      ? card.requiredRole
-      : [card.requiredRole]
-
-    // Check if this requires admin access
-    if (requiredRoles.includes(ROLES.REVAMPIT_ADMIN) && hasAdminAccess) {
+    // Show if user has required community role
+    if (communityRoles.includes(card.requiredRole)) {
       return true
-    }
-
-    // Show if user has required role
-    if (role) {
-      return requiredRoles.includes(role)
     }
 
     return false
@@ -291,9 +249,11 @@ export function getDashboardCardsForRole(
 /**
  * Group dashboard cards by category
  */
-export function groupCardsByCategory(cards: DashboardCard[]): Map<DashboardCategory, DashboardCard[]> {
+export function groupCardsByCategory(
+  cards: DashboardCard[]
+): Map<DashboardCategory, DashboardCard[]> {
   const grouped = new Map<DashboardCategory, DashboardCard[]>()
-  
+
   // Initialize all categories
   Object.keys(DASHBOARD_CATEGORIES).forEach(category => {
     grouped.set(category as DashboardCategory, [])
@@ -307,9 +267,43 @@ export function groupCardsByCategory(cards: DashboardCard[]): Map<DashboardCateg
   })
 
   // Sort cards within each category by priority
-  grouped.forEach((cards, category) => {
-    cards.sort((a, b) => a.priority - b.priority)
+  grouped.forEach(categoryCards => {
+    categoryCards.sort((a, b) => a.priority - b.priority)
   })
 
   return grouped
+}
+
+// =============================================================================
+// ADMIN CARD - Special handling for staff users
+// =============================================================================
+
+/**
+ * Get admin dashboard card for staff users
+ */
+export function getAdminCard(): DashboardCard {
+  return {
+    id: 'admin',
+    title: 'Admin-Bereich',
+    description: 'System verwalten',
+    href: '/admin',
+    icon: '⚙️',
+    category: 'admin',
+    color: 'error',
+    priority: 1000,
+  }
+}
+
+/**
+ * Get all dashboard cards including admin card if applicable
+ */
+export function getAllDashboardCards(userInfo: DashboardUserInfo): DashboardCard[] {
+  const cards = getDashboardCardsForRole(null, userInfo)
+
+  // Add admin card for staff users
+  if (userInfo.isStaff || userInfo.isSuperAdmin) {
+    cards.push(getAdminCard())
+  }
+
+  return cards
 }

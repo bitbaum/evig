@@ -1,0 +1,629 @@
+/**
+ * Unified Sections Configuration - SINGLE SOURCE OF TRUTH
+ *
+ * This file is the SSOT for all sections across admin and user dashboard.
+ * Both admin sidebar and dashboard cards derive their data from here.
+ *
+ * SSOT: Define once, use everywhere
+ * DRY: No duplication between admin.ts and dashboard.ts
+ * SoC: Section definitions separate from rendering logic
+ *
+ * Last Updated: 2026-01-26
+ */
+
+import type { LucideIcon } from 'lucide-react'
+import {
+  LayoutDashboard,
+  Package,
+  GraduationCap,
+  Wrench,
+  MapPin,
+  Star,
+  FileText,
+  CheckSquare,
+  Users,
+  UserCog,
+  DollarSign,
+  BarChart3,
+  Settings,
+  Brain,
+  ShoppingBag,
+  Calendar,
+  User,
+  PenTool,
+  Store,
+  Hammer,
+} from 'lucide-react'
+
+// =============================================================================
+// SECTION TYPES
+// =============================================================================
+
+/**
+ * Where a section is visible
+ */
+export type SectionContext = 'admin' | 'dashboard' | 'both'
+
+/**
+ * Who can see a section
+ */
+export interface SectionVisibility {
+  /** Section appears in admin sidebar */
+  admin: boolean
+  /** Section appears in user dashboard */
+  dashboard: boolean
+  /** For admin: requires staff access */
+  requiresStaff?: boolean
+  /** For admin: sensitive section (requires super admin or explicit grant) */
+  sensitive?: boolean
+  /** For dashboard: show only for users with this community role */
+  communityRole?: 'seller' | 'repairer' | 'helper'
+  /** For dashboard: hide if user has this role (show onboarding instead) */
+  hideIfRole?: 'seller' | 'repairer' | 'helper'
+}
+
+/**
+ * UI configuration for a section
+ */
+export interface SectionUI {
+  label: string
+  description: string
+  icon: LucideIcon
+  /** Emoji for dashboard cards (optional, fallback to icon) */
+  emoji?: string
+  /** Color theme */
+  color: SectionColor
+}
+
+export type SectionColor =
+  | 'primary'
+  | 'secondary'
+  | 'success'
+  | 'warning'
+  | 'error'
+  | 'info'
+  | 'neutral'
+
+/**
+ * Complete section definition
+ */
+export interface SectionConfig {
+  /** Unique identifier (also used as admin permission key) */
+  id: string
+  /** URL path */
+  path: string
+  /** UI configuration */
+  ui: SectionUI
+  /** Visibility rules */
+  visibility: SectionVisibility
+  /** Display priority (lower = higher priority) */
+  priority: number
+  /** Category for grouping */
+  category: SectionCategory
+}
+
+export type SectionCategory =
+  | 'core'        // Main features (dashboard, profile)
+  | 'activities'  // User activities (workshops, appointments)
+  | 'commerce'    // Selling/marketplace
+  | 'services'    // Service provision (repairs)
+  | 'content'     // Content creation
+  | 'management'  // Admin management sections
+  | 'sensitive'   // Sensitive admin areas
+  | 'system'      // System configuration
+
+// =============================================================================
+// SECTION DEFINITIONS - SSOT
+// =============================================================================
+
+export const SECTIONS: Record<string, SectionConfig> = {
+  // ---------------------------------------------------------------------------
+  // CORE - Shared between admin and dashboard
+  // ---------------------------------------------------------------------------
+  dashboard: {
+    id: 'dashboard',
+    path: '/admin',
+    ui: {
+      label: 'Dashboard',
+      description: 'Übersicht und Statistiken',
+      icon: LayoutDashboard,
+      emoji: '📊',
+      color: 'primary',
+    },
+    visibility: { admin: true, dashboard: false, requiresStaff: true },
+    priority: 0,
+    category: 'core',
+  },
+
+  profile: {
+    id: 'profile',
+    path: '/dashboard/profile',
+    ui: {
+      label: 'Mein Profil',
+      description: 'Persönliche Daten verwalten',
+      icon: User,
+      emoji: '👤',
+      color: 'info',
+    },
+    visibility: { admin: false, dashboard: true },
+    priority: 1,
+    category: 'core',
+  },
+
+  // ---------------------------------------------------------------------------
+  // ACTIVITIES - User-facing activities
+  // ---------------------------------------------------------------------------
+  workshops: {
+    id: 'workshops',
+    path: '/dashboard/workshops',
+    ui: {
+      label: 'Meine Workshops',
+      description: 'Angemeldete Kurse verwalten',
+      icon: GraduationCap,
+      emoji: '🎓',
+      color: 'success',
+    },
+    visibility: { admin: false, dashboard: true },
+    priority: 10,
+    category: 'activities',
+  },
+
+  appointments: {
+    id: 'appointments',
+    path: '/dashboard/appointments',
+    ui: {
+      label: 'Termine',
+      description: 'Service-Termin buchen',
+      icon: Calendar,
+      emoji: '📅',
+      color: 'warning',
+    },
+    visibility: { admin: false, dashboard: true },
+    priority: 11,
+    category: 'activities',
+  },
+
+  // ---------------------------------------------------------------------------
+  // COMMERCE - Seller features
+  // ---------------------------------------------------------------------------
+  'seller-dashboard': {
+    id: 'seller-dashboard',
+    path: '/dashboard/seller',
+    ui: {
+      label: 'Seller Dashboard',
+      description: 'Produkte und Verkäufe verwalten',
+      icon: Store,
+      emoji: '🏪',
+      color: 'secondary',
+    },
+    visibility: { admin: false, dashboard: true, communityRole: 'seller' },
+    priority: 20,
+    category: 'commerce',
+  },
+
+  'seller-onboarding': {
+    id: 'seller-onboarding',
+    path: '/dashboard/seller/onboarding',
+    ui: {
+      label: 'Auf Revamp-IT verkaufen',
+      description: 'Eigene Produkte anbieten - Versand direkt an Käufer',
+      icon: ShoppingBag,
+      emoji: '🏪',
+      color: 'secondary',
+    },
+    visibility: { admin: false, dashboard: true, hideIfRole: 'seller' },
+    priority: 21,
+    category: 'commerce',
+  },
+
+  // ---------------------------------------------------------------------------
+  // SERVICES - Repairer features
+  // ---------------------------------------------------------------------------
+  'repairer-dashboard': {
+    id: 'repairer-dashboard',
+    path: '/dashboard/repairer',
+    ui: {
+      label: 'Repairer Dashboard',
+      description: 'Reparaturen verwalten',
+      icon: Wrench,
+      emoji: '🔧',
+      color: 'warning',
+    },
+    visibility: { admin: false, dashboard: true, communityRole: 'repairer' },
+    priority: 30,
+    category: 'services',
+  },
+
+  'repairer-onboarding': {
+    id: 'repairer-onboarding',
+    path: '/dashboard/repairer/onboarding',
+    ui: {
+      label: 'Reparaturen anbieten',
+      description: 'Dienstleistungen publizieren und Anfragen erhalten',
+      icon: Hammer,
+      emoji: '🔧',
+      color: 'warning',
+    },
+    visibility: { admin: false, dashboard: true, hideIfRole: 'repairer' },
+    priority: 31,
+    category: 'services',
+  },
+
+  // ---------------------------------------------------------------------------
+  // CONTENT - Content creation
+  // ---------------------------------------------------------------------------
+  'blog-submit': {
+    id: 'blog-submit',
+    path: '/blog/submit',
+    ui: {
+      label: 'Beitrag verfassen',
+      description: 'Idee teilen oder Tutorial schreiben',
+      icon: PenTool,
+      emoji: '✍️',
+      color: 'info',
+    },
+    visibility: { admin: false, dashboard: true },
+    priority: 40,
+    category: 'content',
+  },
+
+  // ---------------------------------------------------------------------------
+  // ADMIN MANAGEMENT - Staff sections (non-sensitive)
+  // ---------------------------------------------------------------------------
+  products: {
+    id: 'products',
+    path: '/admin/products',
+    ui: {
+      label: 'Produkte',
+      description: 'Produktverwaltung und Inventar',
+      icon: Package,
+      emoji: '📦',
+      color: 'primary',
+    },
+    visibility: { admin: true, dashboard: false, requiresStaff: true },
+    priority: 100,
+    category: 'management',
+  },
+
+  'workshops-admin': {
+    id: 'workshops',
+    path: '/admin/workshops',
+    ui: {
+      label: 'Workshops',
+      description: 'Workshop-Verwaltung und Anmeldungen',
+      icon: GraduationCap,
+      emoji: '🎓',
+      color: 'success',
+    },
+    visibility: { admin: true, dashboard: false, requiresStaff: true },
+    priority: 101,
+    category: 'management',
+  },
+
+  services: {
+    id: 'services',
+    path: '/admin/services',
+    ui: {
+      label: 'Dienstleistungen',
+      description: 'Service-Angebote verwalten',
+      icon: Wrench,
+      emoji: '🔧',
+      color: 'warning',
+    },
+    visibility: { admin: true, dashboard: false, requiresStaff: true },
+    priority: 102,
+    category: 'management',
+  },
+
+  locations: {
+    id: 'locations',
+    path: '/admin/locations',
+    ui: {
+      label: 'Standorte',
+      description: 'Standortverwaltung',
+      icon: MapPin,
+      emoji: '📍',
+      color: 'info',
+    },
+    visibility: { admin: true, dashboard: false, requiresStaff: true },
+    priority: 103,
+    category: 'management',
+  },
+
+  reviews: {
+    id: 'reviews',
+    path: '/admin/reviews',
+    ui: {
+      label: 'Bewertungen',
+      description: 'Bewertungen moderieren',
+      icon: Star,
+      emoji: '⭐',
+      color: 'warning',
+    },
+    visibility: { admin: true, dashboard: false, requiresStaff: true },
+    priority: 104,
+    category: 'management',
+  },
+
+  content: {
+    id: 'content',
+    path: '/admin/content',
+    ui: {
+      label: 'Inhalte',
+      description: 'Blog, Seiten, Medien',
+      icon: FileText,
+      emoji: '📝',
+      color: 'info',
+    },
+    visibility: { admin: true, dashboard: false, requiresStaff: true },
+    priority: 105,
+    category: 'management',
+  },
+
+  approvals: {
+    id: 'approvals',
+    path: '/admin/approvals',
+    ui: {
+      label: 'Freigaben',
+      description: 'Eingereichte Inhalte prüfen und freigeben',
+      icon: CheckSquare,
+      emoji: '✅',
+      color: 'success',
+    },
+    visibility: { admin: true, dashboard: false, requiresStaff: true },
+    priority: 106,
+    category: 'management',
+  },
+
+  analytics: {
+    id: 'analytics',
+    path: '/admin/analytics',
+    ui: {
+      label: 'Analytics',
+      description: 'Statistiken und Auswertungen',
+      icon: BarChart3,
+      emoji: '📈',
+      color: 'info',
+    },
+    visibility: { admin: true, dashboard: false, requiresStaff: true },
+    priority: 107,
+    category: 'management',
+  },
+
+  // ---------------------------------------------------------------------------
+  // SENSITIVE - Admin sections requiring elevated permissions
+  // ---------------------------------------------------------------------------
+  users: {
+    id: 'users',
+    path: '/admin/users',
+    ui: {
+      label: 'Benutzer',
+      description: 'Benutzerverwaltung',
+      icon: Users,
+      emoji: '👥',
+      color: 'error',
+    },
+    visibility: { admin: true, dashboard: false, requiresStaff: true, sensitive: true },
+    priority: 200,
+    category: 'sensitive',
+  },
+
+  team: {
+    id: 'team',
+    path: '/admin/team',
+    ui: {
+      label: 'Team & HR',
+      description: 'Mitarbeiter, Freiwillige, Praktikanten',
+      icon: UserCog,
+      emoji: '👔',
+      color: 'error',
+    },
+    visibility: { admin: true, dashboard: false, requiresStaff: true, sensitive: true },
+    priority: 201,
+    category: 'sensitive',
+  },
+
+  finances: {
+    id: 'finances',
+    path: '/admin/hirn/finanzen',
+    ui: {
+      label: 'Finanzen',
+      description: 'Finanzübersicht und Berichte',
+      icon: DollarSign,
+      emoji: '💰',
+      color: 'error',
+    },
+    visibility: { admin: true, dashboard: false, requiresStaff: true, sensitive: true },
+    priority: 202,
+    category: 'sensitive',
+  },
+
+  hirn: {
+    id: 'hirn',
+    path: '/admin/hirn',
+    ui: {
+      label: 'Hirn',
+      description: 'Business Intelligence Dashboard',
+      icon: Brain,
+      emoji: '🧠',
+      color: 'error',
+    },
+    visibility: { admin: true, dashboard: false, requiresStaff: true, sensitive: true },
+    priority: 203,
+    category: 'sensitive',
+  },
+
+  settings: {
+    id: 'settings',
+    path: '/admin/settings',
+    ui: {
+      label: 'Einstellungen',
+      description: 'Systemkonfiguration',
+      icon: Settings,
+      emoji: '⚙️',
+      color: 'neutral',
+    },
+    visibility: { admin: true, dashboard: false, requiresStaff: true, sensitive: true },
+    priority: 204,
+    category: 'sensitive',
+  },
+}
+
+// =============================================================================
+// DERIVED DATA - Auto-generated from SECTIONS
+// =============================================================================
+
+/**
+ * All section IDs
+ */
+export const SECTION_IDS = Object.keys(SECTIONS)
+
+/**
+ * Admin section IDs (for permission system)
+ */
+export const ADMIN_SECTION_IDS = Object.values(SECTIONS)
+  .filter(s => s.visibility.admin)
+  .map(s => s.id)
+
+/**
+ * Sensitive section IDs
+ */
+export const SENSITIVE_SECTION_IDS = Object.values(SECTIONS)
+  .filter(s => s.visibility.sensitive)
+  .map(s => s.id)
+
+/**
+ * Dashboard section IDs
+ */
+export const DASHBOARD_SECTION_IDS = Object.values(SECTIONS)
+  .filter(s => s.visibility.dashboard)
+  .map(s => s.id)
+
+// =============================================================================
+// HELPER FUNCTIONS
+// =============================================================================
+
+/**
+ * Get sections for admin sidebar
+ */
+export function getAdminSections(): SectionConfig[] {
+  return Object.values(SECTIONS)
+    .filter(s => s.visibility.admin)
+    .sort((a, b) => a.priority - b.priority)
+}
+
+/**
+ * Get sections for user dashboard
+ */
+export function getDashboardSections(): SectionConfig[] {
+  return Object.values(SECTIONS)
+    .filter(s => s.visibility.dashboard)
+    .sort((a, b) => a.priority - b.priority)
+}
+
+/**
+ * Get section by ID
+ */
+export function getSection(id: string): SectionConfig | undefined {
+  return SECTIONS[id]
+}
+
+/**
+ * Check if section is sensitive
+ */
+export function isSensitiveSection(id: string): boolean {
+  return SENSITIVE_SECTION_IDS.includes(id)
+}
+
+/**
+ * Get sections by category
+ */
+export function getSectionsByCategory(category: SectionCategory): SectionConfig[] {
+  return Object.values(SECTIONS)
+    .filter(s => s.category === category)
+    .sort((a, b) => a.priority - b.priority)
+}
+
+// =============================================================================
+// CATEGORY DEFINITIONS
+// =============================================================================
+
+export interface CategoryConfig {
+  id: SectionCategory
+  label: string
+  description: string
+  emoji: string
+  priority: number
+}
+
+export const CATEGORIES: Record<SectionCategory, CategoryConfig> = {
+  core: {
+    id: 'core',
+    label: 'Übersicht',
+    description: 'Hauptbereiche',
+    emoji: '🏠',
+    priority: 0,
+  },
+  activities: {
+    id: 'activities',
+    label: 'Aktivitäten',
+    description: 'Workshops, Termine und Buchungen',
+    emoji: '📚',
+    priority: 1,
+  },
+  commerce: {
+    id: 'commerce',
+    label: 'Verkauf & Handel',
+    description: 'Produkte verkaufen und Marktplatz nutzen',
+    emoji: '🏪',
+    priority: 2,
+  },
+  services: {
+    id: 'services',
+    label: 'Dienstleistungen',
+    description: 'Reparaturen und Services anbieten',
+    emoji: '🔧',
+    priority: 3,
+  },
+  content: {
+    id: 'content',
+    label: 'Inhalte',
+    description: 'Beiträge verfassen und teilen',
+    emoji: '✍️',
+    priority: 4,
+  },
+  management: {
+    id: 'management',
+    label: 'Verwaltung',
+    description: 'Inhalte und Ressourcen verwalten',
+    emoji: '📋',
+    priority: 5,
+  },
+  sensitive: {
+    id: 'sensitive',
+    label: 'Sensibel',
+    description: 'Geschützte Bereiche',
+    emoji: '🔒',
+    priority: 6,
+  },
+  system: {
+    id: 'system',
+    label: 'System',
+    description: 'Systemkonfiguration',
+    emoji: '⚙️',
+    priority: 7,
+  },
+}
+
+/**
+ * Get sorted categories
+ */
+export function getSortedCategories(): CategoryConfig[] {
+  return Object.values(CATEGORIES).sort((a, b) => a.priority - b.priority)
+}
+
+// =============================================================================
+// TYPE EXPORTS
+// =============================================================================
+
+export type SectionId = keyof typeof SECTIONS

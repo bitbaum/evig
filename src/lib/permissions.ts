@@ -5,116 +5,45 @@
  * - Regular users: No roles, just create content that needs approval
  * - Staff (@revamp-it.ch): Access to admin with granular permissions
  *
- * KISS, DRY, SSOT principles applied.
+ * SSOT: Section definitions come from @/config/sections.ts
+ * KISS, DRY principles applied.
  *
- * Sensitive areas are defined in @/config/sensitive-areas.ts (SSOT)
+ * Last Updated: 2026-01-26
  */
 
-import { SENSITIVE_SECTION_KEYS } from '@/config/sensitive-areas'
+import {
+  SECTIONS,
+  ADMIN_SECTION_IDS,
+  SENSITIVE_SECTION_IDS,
+  getAdminSections,
+  isSensitiveSection as checkSensitive,
+  type SectionConfig,
+} from '@/config/sections'
 
 // =============================================================================
-// ADMIN SECTIONS - Define what sections exist in the admin dashboard
+// ADMIN SECTIONS - Derived from SSOT (sections.ts)
 // =============================================================================
 
-// Helper to check if a section key is sensitive
-const isSensitive = (key: string): boolean =>
-  SENSITIVE_SECTION_KEYS.includes(key as AdminSection)
+/**
+ * Admin sections derived from unified SSOT
+ * This replaces the manually defined ADMIN_SECTIONS
+ */
+export const ADMIN_SECTIONS = Object.fromEntries(
+  getAdminSections().map(section => [
+    section.id,
+    {
+      label: section.ui.label,
+      path: section.path,
+      sensitive: section.visibility.sensitive ?? false,
+      description: section.ui.description,
+    },
+  ])
+) as Record<
+  string,
+  { label: string; path: string; sensitive: boolean; description: string }
+>
 
-export const ADMIN_SECTIONS = {
-  // Core sections - most staff can see
-  dashboard: {
-    label: 'Dashboard',
-    path: '/admin',
-    get sensitive() { return isSensitive('dashboard') },
-    description: 'Übersicht und Statistiken'
-  },
-  products: {
-    label: 'Produkte',
-    path: '/admin/products',
-    get sensitive() { return isSensitive('products') },
-    description: 'Produktverwaltung und Inventar'
-  },
-  workshops: {
-    label: 'Workshops',
-    path: '/admin/workshops',
-    get sensitive() { return isSensitive('workshops') },
-    description: 'Workshop-Verwaltung und Anmeldungen'
-  },
-  services: {
-    label: 'Dienstleistungen',
-    path: '/admin/services',
-    get sensitive() { return isSensitive('services') },
-    description: 'Service-Angebote verwalten'
-  },
-  locations: {
-    label: 'Standorte',
-    path: '/admin/locations',
-    get sensitive() { return isSensitive('locations') },
-    description: 'Standortverwaltung'
-  },
-  reviews: {
-    label: 'Bewertungen',
-    path: '/admin/reviews',
-    get sensitive() { return isSensitive('reviews') },
-    description: 'Bewertungen moderieren'
-  },
-  content: {
-    label: 'Inhalte',
-    path: '/admin/content',
-    get sensitive() { return isSensitive('content') },
-    description: 'Blog, Seiten, Medien'
-  },
-
-  // Approval queue - for user-submitted content
-  approvals: {
-    label: 'Freigaben',
-    path: '/admin/approvals',
-    get sensitive() { return isSensitive('approvals') },
-    description: 'Eingereichte Inhalte prüfen und freigeben'
-  },
-
-  // Sensitive sections - limited access (see @/config/sensitive-areas.ts)
-  users: {
-    label: 'Benutzer',
-    path: '/admin/users',
-    get sensitive() { return isSensitive('users') },
-    description: 'Benutzerverwaltung'
-  },
-  team: {
-    label: 'Team & HR',
-    path: '/admin/team',
-    get sensitive() { return isSensitive('team') },
-    description: 'Mitarbeiter, Freiwillige, Praktikanten'
-  },
-  finances: {
-    label: 'Finanzen',
-    path: '/admin/hirn/finanzen',
-    get sensitive() { return isSensitive('finances') },
-    description: 'Finanzübersicht und Berichte'
-  },
-  analytics: {
-    label: 'Analytics',
-    path: '/admin/analytics',
-    get sensitive() { return isSensitive('analytics') },
-    description: 'Statistiken und Auswertungen'
-  },
-  settings: {
-    label: 'Einstellungen',
-    path: '/admin/settings',
-    get sensitive() { return isSensitive('settings') },
-    description: 'Systemkonfiguration'
-  },
-
-  // Hirn sections (internal business intelligence)
-  hirn: {
-    label: 'Hirn',
-    path: '/admin/hirn',
-    get sensitive() { return isSensitive('hirn') },
-    description: 'Business Intelligence Dashboard'
-  },
-} as const
-
-export type AdminSection = keyof typeof ADMIN_SECTIONS
+export type AdminSection = (typeof ADMIN_SECTION_IDS)[number]
 
 // =============================================================================
 // STAFF EMAIL DOMAIN
@@ -144,7 +73,6 @@ export const SUPER_ADMIN_EMAILS = [
   'daniel@revamp-it.ch',
   'georgy@revamp-it.ch',
   'georgy.butaev@revamp-it.ch',
-  // Add more as needed
 ] as const
 
 /**
@@ -153,13 +81,15 @@ export const SUPER_ADMIN_EMAILS = [
  * 1. Email being in the hardcoded SUPER_ADMIN_EMAILS list
  * 2. is_super_admin flag from session/database
  */
-export function isSuperAdmin(email: string | null | undefined, isSuperAdminFromDb?: boolean): boolean {
-  // If database flag is explicitly true, user is a super admin
+export function isSuperAdmin(
+  email: string | null | undefined,
+  isSuperAdminFromDb?: boolean
+): boolean {
   if (isSuperAdminFromDb === true) return true
-
-  // Check hardcoded email list (fallback for initial setup)
   if (!email) return false
-  return SUPER_ADMIN_EMAILS.includes(email.toLowerCase() as typeof SUPER_ADMIN_EMAILS[number])
+  return SUPER_ADMIN_EMAILS.includes(
+    email.toLowerCase() as (typeof SUPER_ADMIN_EMAILS)[number]
+  )
 }
 
 // =============================================================================
@@ -169,18 +99,21 @@ export function isSuperAdmin(email: string | null | undefined, isSuperAdminFromD
 export interface StaffUser {
   email: string
   is_staff: boolean
-  staff_permissions: string[]  // Array of section keys, or ['*'] for all
-  is_super_admin?: boolean     // From database/session
+  staff_permissions: string[] // Array of section keys, or ['*'] for all
+  is_super_admin?: boolean // From database/session
 }
 
 /**
  * Check if a user can access a specific admin section
  */
-export function canAccessSection(user: StaffUser | null | undefined, section: AdminSection): boolean {
+export function canAccessSection(
+  user: StaffUser | null | undefined,
+  section: string
+): boolean {
   if (!user) return false
   if (!user.is_staff) return false
 
-  // Super admins (by email or database flag) always have full access
+  // Super admins always have full access
   if (isSuperAdmin(user.email, user.is_super_admin)) return true
 
   // Wildcard permission = full access
@@ -200,28 +133,33 @@ export function canAccessSensitive(user: StaffUser | null | undefined): boolean 
   if (user.staff_permissions.includes('*')) return true
 
   // Check if they have permission for any sensitive section
-  const sensitiveSections = Object.entries(ADMIN_SECTIONS)
-    .filter(([_, config]) => config.sensitive)
-    .map(([key]) => key)
-
-  return sensitiveSections.some(section => user.staff_permissions.includes(section))
+  return SENSITIVE_SECTION_IDS.some(section =>
+    user.staff_permissions.includes(section)
+  )
 }
 
 /**
  * Get all sections a user can access
  */
-export function getAccessibleSections(user: StaffUser | null | undefined): AdminSection[] {
+export function getAccessibleSections(
+  user: StaffUser | null | undefined
+): string[] {
   if (!user || !user.is_staff) return []
 
   // Super admins or wildcard = all sections
   if (isSuperAdmin(user.email, user.is_super_admin) || user.staff_permissions.includes('*')) {
-    return Object.keys(ADMIN_SECTIONS) as AdminSection[]
+    return ADMIN_SECTION_IDS
   }
 
   // Filter to permitted sections
-  return user.staff_permissions.filter(
-    perm => perm in ADMIN_SECTIONS
-  ) as AdminSection[]
+  return user.staff_permissions.filter(perm => ADMIN_SECTION_IDS.includes(perm))
+}
+
+/**
+ * Check if a section is sensitive (derived from SSOT)
+ */
+export function isSensitiveSection(section: string): boolean {
+  return checkSensitive(section)
 }
 
 // =============================================================================
@@ -232,24 +170,16 @@ export function getAccessibleSections(user: StaffUser | null | undefined): Admin
  * Default permissions for new staff members (non-super-admins)
  * They get access to non-sensitive sections by default
  */
-export const DEFAULT_STAFF_PERMISSIONS: AdminSection[] = [
-  'dashboard',
-  'products',
-  'workshops',
-  'services',
-  'locations',
-  'reviews',
-  'content',
-  'approvals',
-  'analytics',
-]
+export const DEFAULT_STAFF_PERMISSIONS: string[] = ADMIN_SECTION_IDS.filter(
+  id => !SENSITIVE_SECTION_IDS.includes(id)
+)
 
 /**
  * Get initial permissions for a new staff member
  */
 export function getInitialStaffPermissions(email: string): string[] {
   if (isSuperAdmin(email)) {
-    return ['*']  // Full access
+    return ['*'] // Full access
   }
   return [...DEFAULT_STAFF_PERMISSIONS]
 }
@@ -262,14 +192,14 @@ export function getInitialStaffPermissions(email: string): string[] {
  * Status for user-submitted content (products, services, workshops, blog posts)
  */
 export const CONTENT_STATUS = {
-  DRAFT: 'draft',           // User is still editing
-  PENDING: 'pending',       // Submitted for review
-  APPROVED: 'approved',     // Approved and visible
-  REJECTED: 'rejected',     // Rejected with reason
-  ARCHIVED: 'archived',     // No longer active
+  DRAFT: 'draft', // User is still editing
+  PENDING: 'pending', // Submitted for review
+  APPROVED: 'approved', // Approved and visible
+  REJECTED: 'rejected', // Rejected with reason
+  ARCHIVED: 'archived', // No longer active
 } as const
 
-export type ContentStatus = typeof CONTENT_STATUS[keyof typeof CONTENT_STATUS]
+export type ContentStatus = (typeof CONTENT_STATUS)[keyof typeof CONTENT_STATUS]
 
 // =============================================================================
 // LEGACY COMPATIBILITY
@@ -288,19 +218,51 @@ export function migrateOldRole(oldRole: string | null | undefined): {
   }
 
   // Map old roles to new system
-  const roleMapping: Record<string, { is_staff: boolean, staff_permissions: string[] }> = {
-    'revampit_super_admin': { is_staff: true, staff_permissions: ['*'] },
-    'revampit_admin': { is_staff: true, staff_permissions: ['*'] },
-    'admin': { is_staff: true, staff_permissions: ['*'] },
-    'revampit_editor': { is_staff: true, staff_permissions: ['dashboard', 'content', 'products', 'workshops'] },
-    'revampit_support': { is_staff: true, staff_permissions: ['dashboard', 'users', 'reviews'] },
-    'hirn_admin': { is_staff: true, staff_permissions: ['dashboard', 'hirn', 'finances', 'analytics'] },
-    'hirn_user': { is_staff: true, staff_permissions: ['dashboard', 'hirn', 'analytics'] },
-    // All other roles (customer, seller, repairer, etc.) are just regular users
+  const roleMapping: Record<
+    string,
+    { is_staff: boolean; staff_permissions: string[] }
+  > = {
+    revampit_super_admin: { is_staff: true, staff_permissions: ['*'] },
+    revampit_admin: { is_staff: true, staff_permissions: ['*'] },
+    admin: { is_staff: true, staff_permissions: ['*'] },
+    revampit_editor: {
+      is_staff: true,
+      staff_permissions: ['dashboard', 'content', 'products', 'workshops'],
+    },
+    revampit_support: {
+      is_staff: true,
+      staff_permissions: ['dashboard', 'users', 'reviews'],
+    },
+    hirn_admin: {
+      is_staff: true,
+      staff_permissions: ['dashboard', 'hirn', 'finances', 'analytics'],
+    },
+    hirn_user: {
+      is_staff: true,
+      staff_permissions: ['dashboard', 'hirn', 'analytics'],
+    },
   }
 
   return roleMapping[oldRole] || { is_staff: false, staff_permissions: [] }
 }
+
+// =============================================================================
+// RE-EXPORTS FROM SSOT
+// =============================================================================
+
+export {
+  SECTIONS,
+  ADMIN_SECTION_IDS,
+  SENSITIVE_SECTION_IDS,
+  getAdminSections,
+  getDashboardSections,
+  getSection,
+  getSectionsByCategory,
+  CATEGORIES,
+  getSortedCategories,
+} from '@/config/sections'
+
+export type { SectionConfig, SectionCategory, SectionColor } from '@/config/sections'
 
 // =============================================================================
 // TYPE EXPORTS

@@ -374,8 +374,10 @@ export const ROLE_PERMISSIONS: Record<UserRole, string[]> = {
 // =============================================================================
 // The above role system is being replaced with a simpler approach.
 // Re-export from the new permissions module for easy migration.
+// SSOT: All section definitions now come from @/config/sections.ts
 
 export {
+  // Permission system
   ADMIN_SECTIONS,
   STAFF_EMAIL_DOMAIN,
   SUPER_ADMIN_EMAILS,
@@ -388,16 +390,24 @@ export {
   getAccessibleSections,
   getInitialStaffPermissions,
   migrateOldRole,
+  isSensitiveSection,
+  // SSOT section data
+  SECTIONS,
+  ADMIN_SECTION_IDS,
+  SENSITIVE_SECTION_IDS,
+  getAdminSections,
+  getDashboardSections,
+  getSection,
+  getSectionsByCategory,
+  CATEGORIES,
+  getSortedCategories,
 } from './permissions'
 
-export type { AdminSection, StaffUser, ContentStatus } from './permissions'
-
-// Re-export sensitive areas config for easy access
-export {
-  SENSITIVE_SECTION_KEYS,
-  isSensitiveSection,
-  getSensitiveSections,
-  getNonSensitiveSections,
-  SENSITIVITY_REASONS,
-  getSensitivityReason,
-} from '@/config/sensitive-areas'
+export type {
+  AdminSection,
+  StaffUser,
+  ContentStatus,
+  SectionConfig,
+  SectionCategory,
+  SectionColor,
+} from './permissions'
