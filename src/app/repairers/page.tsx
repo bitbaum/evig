@@ -30,7 +30,7 @@ interface Repairer {
   service_radius_km: number
   remote_services: boolean
   hourly_rate_cents: number | null
-  average_rating: number
+  average_rating: number | string
   total_reviews: number
   rating_distribution: { [key: string]: number }
   review_summary: {
@@ -149,19 +149,20 @@ export default function RepairersPage() {
     setShowReviewsModal(true)
   }
 
-  const renderStars = (rating: number, size: 'sm' | 'md' | 'lg' = 'md') => {
+  const renderStars = (rating: number | string, size: 'sm' | 'md' | 'lg' = 'md') => {
     const starSize = size === 'sm' ? 'w-3 h-3' : size === 'lg' ? 'w-5 h-5' : 'w-4 h-4'
+    const numRating = typeof rating === 'string' ? parseFloat(rating) || 0 : rating
 
     return (
       <div className="flex items-center gap-1">
         {[1, 2, 3, 4, 5].map((star) => (
           <Star
             key={star}
-            className={`${starSize} ${star <= rating ? 'text-yellow-400 fill-current' : 'text-gray-300'}`}
+            className={`${starSize} ${star <= numRating ? 'text-yellow-400 fill-current' : 'text-gray-300'}`}
           />
         ))}
         <span className={`ml-1 text-gray-600 ${size === 'sm' ? 'text-xs' : 'text-sm'}`}>
-          {rating.toFixed(1)}
+          {numRating.toFixed(1)}
         </span>
       </div>
     )
