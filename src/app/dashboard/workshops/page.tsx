@@ -44,7 +44,7 @@ export default function WorkshopsDashboard() {
       const response = await fetch('/api/user/workshop-registrations')
       if (response.ok) {
         const data = await response.json()
-        setRegistrations(data.registrations)
+        setRegistrations(data.data?.registrations || [])
       } else {
         setError('Fehler beim Laden der Workshop-Anmeldungen')
       }

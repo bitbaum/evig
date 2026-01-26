@@ -41,7 +41,7 @@ export default function AppointmentsDashboard() {
       const response = await fetch('/api/appointments')
       if (response.ok) {
         const data = await response.json()
-        setAppointments(data.appointments)
+        setAppointments(data.data?.appointments || [])
       } else {
         setError('Fehler beim Laden der Termine')
       }

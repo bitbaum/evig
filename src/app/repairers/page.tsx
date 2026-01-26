@@ -111,7 +111,7 @@ export default function RepairersPage() {
       const data = await response.json()
 
       if (data.success) {
-        setRepairers(data.repairers)
+        setRepairers(data.data?.repairers || [])
       }
     } catch (error) {
       logger.error('Error fetching repairers', { error })
@@ -130,7 +130,8 @@ export default function RepairersPage() {
       const response = await fetch(`/api/reviews?targetType=repairer&targetId=${repairer.id}&limit=5`)
       if (response.ok) {
         const data = await response.json()
-        setRepairerReviews(data.reviews.map((review: ApiReviewResponse) => ({
+        const reviews = data.data?.reviews || []
+        setRepairerReviews(reviews.map((review: ApiReviewResponse) => ({
           id: review.id,
           reviewerName: review.reviewerName,
           rating: review.overallRating,
