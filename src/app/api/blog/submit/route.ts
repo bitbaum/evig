@@ -4,7 +4,7 @@ import path from 'path'
 import { apiSuccess, apiError, apiBadRequest, apiUnauthorized } from '@/lib/api/helpers'
 import { logger } from '@/lib/logger'
 import { auth } from '@/auth'
-import { isAdminRole, ADMIN_ROLES } from '@/lib/constants'
+import { isAdminRole } from '@/lib/constants'
 import { checkRateLimit, getClientIp } from '@/lib/auth/rate-limiter'
 import { sendEmail } from '@/lib/email'
 import { APP_URL } from '@/config/urls'
@@ -96,11 +96,11 @@ export async function POST(request: NextRequest) {
       })
     }
 
-    // Send notification email to admins
+    // Send notification email to admins (staff users)
     try {
       const adminEmailsResult = await query(
-        `SELECT email FROM ${TABLE_NAMES.USERS} WHERE role = ANY($1) AND email IS NOT NULL`,
-        [ADMIN_ROLES]
+        `SELECT email FROM ${TABLE_NAMES.USERS} WHERE is_staff = true AND email IS NOT NULL`,
+        []
       )
       const adminDashboardUrl = `${APP_URL}/admin/blog/submissions`
 

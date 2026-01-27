@@ -3,36 +3,58 @@
  *
  * DRY helper functions for role-based access control
  * Following dev guide: docs/development/DEV_GUIDE.md
+ *
+ * MIGRATION: Seller/repairer checks now use profile tables instead of role field.
+ * - Seller: Check seller_profiles table for approved profile
+ * - Repairer: Check technician_profiles table for approved profile
  */
 
 import { query } from '@/lib/auth/db'
 import { TABLE_NAMES } from '@/config/database'
 import { apiForbidden } from './helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
-import { ROLES } from '@/lib/constants'
-
-interface UserRoleRow {
-  role: string
-}
 
 interface ApplicationRow {
   id: string
   status: string
 }
 
+interface ProfileRow {
+  id: string
+  status?: string
+}
+
+interface UserRoleRow {
+  role: string | null
+}
+
 /**
- * Check if user is a seller
+ * Check if user is an approved seller
+ *
+ * Uses seller_profiles table instead of role field (new system).
+ * A user is a seller if they have an approved seller profile.
+ *
  * @param userId - User ID to check
- * @returns Promise<boolean> - True if user is a seller
+ * @returns Promise<boolean> - True if user is an approved seller
  */
 export async function isSeller(userId: string): Promise<boolean> {
-  const userCheck = await query(
-    `SELECT role FROM ${TABLE_NAMES.USERS} WHERE id = $1`,
+  // Check seller_profiles table for approved profile
+  const profileCheck = await query(
+    `SELECT id FROM ${TABLE_NAMES.SELLER_PROFILES} WHERE user_id = $1 AND status = 'approved'`,
     [userId]
   )
 
-  const user = userCheck.rows[0] as UserRoleRow | undefined
-  return !!user && user.role === ROLES.SELLER
+  if (profileCheck.rows.length > 0) {
+    return true
+  }
+
+  // Fallback: Check approved seller application
+  const appCheck = await query(
+    `SELECT id FROM ${TABLE_NAMES.SELLER_APPLICATIONS} WHERE user_id = $1 AND status = 'approved'`,
+    [userId]
+  )
+
+  return appCheck.rows.length > 0
 }
 
 /**
@@ -96,6 +118,48 @@ export async function checkRepairerApplication(userId: string): Promise<{
     hasApplication: true,
     status: app.status,
   }
+}
+
+/**
+ * Check if user is an approved repairer/technician
+ *
+ * Uses repairer_profiles table instead of role field (new system).
+ * A user is a repairer if they have an approved repairer profile.
+ *
+ * @param userId - User ID to check
+ * @returns Promise<boolean> - True if user is an approved repairer
+ */
+export async function isRepairer(userId: string): Promise<boolean> {
+  // Check repairer_profiles table for approved profile
+  const profileCheck = await query(
+    `SELECT id FROM ${TABLE_NAMES.REPAIRER_PROFILES} WHERE user_id = $1 AND status = 'approved'`,
+    [userId]
+  )
+
+  if (profileCheck.rows.length > 0) {
+    return true
+  }
+
+  // Fallback: Check approved repairer application
+  const appCheck = await query(
+    `SELECT id FROM ${TABLE_NAMES.REPAIRER_APPLICATIONS} WHERE user_id = $1 AND status = 'approved'`,
+    [userId]
+  )
+
+  return appCheck.rows.length > 0
+}
+
+/**
+ * Require repairer role, return error response if not repairer
+ * @param userId - User ID to check
+ * @returns Promise<NextResponse | null> - Error response if not repairer, null if OK
+ */
+export async function requireRepairer(userId: string) {
+  const repairer = await isRepairer(userId)
+  if (!repairer) {
+    return apiForbidden(ERROR_MESSAGES.REPAIRER_ONLY)
+  }
+  return null
 }
 
 /**

@@ -3,6 +3,7 @@
  *
  * PATCH /api/admin/users/[id]/permissions
  * Super admins can update staff permissions and super admin status.
+ * All changes are logged to the audit log.
  */
 
 import { NextRequest, NextResponse } from 'next/server'
@@ -10,9 +11,22 @@ import { auth } from '@/auth'
 import { query } from '@/lib/auth/db'
 import { isSuperAdmin, ADMIN_SECTIONS, SUPER_ADMIN_EMAILS, type AdminSection } from '@/lib/permissions'
 import { TABLE_NAMES } from '@/config/database'
+import { logger } from '@/lib/logger'
+import { logPermissionsChange, logSuperAdminChange } from '@/lib/auth/audit'
 
 interface RequestContext {
   params: Promise<{ id: string }>
+}
+
+/**
+ * Get request context for audit logging
+ */
+function getAuditContext(request: NextRequest, userId: string | null) {
+  return {
+    userId,
+    ipAddress: request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown',
+    userAgent: request.headers.get('user-agent') || 'unknown',
+  }
 }
 
 export async function PATCH(request: NextRequest, context: RequestContext) {
@@ -57,13 +71,15 @@ export async function PATCH(request: NextRequest, context: RequestContext) {
       }
     }
 
-    // Get current user info
+    // Get current user info including current permissions
     const userResult = await query<{
       id: string
       email: string
       is_super_admin: boolean
+      staff_permissions: string[]
     }>(
-      `SELECT id, email, is_super_admin FROM ${TABLE_NAMES.USERS} WHERE id = $1`,
+      `SELECT id, email, is_super_admin, COALESCE(staff_permissions, '{}') as staff_permissions
+       FROM ${TABLE_NAMES.USERS} WHERE id = $1`,
       [id]
     )
 
@@ -75,6 +91,7 @@ export async function PATCH(request: NextRequest, context: RequestContext) {
     }
 
     const targetUser = userResult.rows[0]
+    const auditContext = getAuditContext(request, session.user.id)
 
     // Prevent demoting users who are in the hardcoded super admin list
     if (newSuperAdminStatus === false && SUPER_ADMIN_EMAILS.includes(targetUser.email.toLowerCase() as typeof SUPER_ADMIN_EMAILS[number])) {
@@ -106,12 +123,43 @@ export async function PATCH(request: NextRequest, context: RequestContext) {
       if (permissions.length > 0) {
         updates.push(`is_staff = true`)
       }
+
+      // Log permissions change
+      logPermissionsChange(
+        auditContext,
+        targetUser.id,
+        targetUser.email,
+        targetUser.staff_permissions || [],
+        permissions
+      )
+
+      logger.info('User permissions updated', {
+        adminEmail: session.user.email,
+        targetEmail: targetUser.email,
+        oldPermissions: targetUser.staff_permissions,
+        newPermissions: permissions,
+      })
     }
 
     if (newSuperAdminStatus !== undefined) {
       updates.push(`is_super_admin = $${paramIndex}`)
       values.push(newSuperAdminStatus)
       paramIndex++
+
+      // Log super admin status change
+      logSuperAdminChange(
+        auditContext,
+        targetUser.id,
+        targetUser.email,
+        newSuperAdminStatus
+      )
+
+      logger.info('User super admin status changed', {
+        adminEmail: session.user.email,
+        targetEmail: targetUser.email,
+        oldStatus: targetUser.is_super_admin,
+        newStatus: newSuperAdminStatus,
+      })
     }
 
     if (updates.length === 0) {
@@ -135,6 +183,7 @@ export async function PATCH(request: NextRequest, context: RequestContext) {
       message: 'User permissions updated successfully',
     })
   } catch (error) {
+    logger.error('Failed to update user permissions', { error })
     return NextResponse.json(
       { error: 'Failed to update user permissions' },
       { status: 500 }

@@ -35,6 +35,7 @@ export const ERROR_MESSAGES = {
   
   // Business Logic
   SELLER_ONLY: 'Nur Verkäufer können Produkte erstellen',
+  REPAIRER_ONLY: 'Nur Reparateure können diesen Bereich nutzen',
   ALREADY_APPROVED: 'Sie sind bereits als Verkäufer zugelassen',
   PENDING_APPLICATION: 'Sie haben bereits eine ausstehende Bewerbung',
   CANNOT_CANCEL_COMPLETED: 'Abgeschlossene Termine können nicht storniert werden',

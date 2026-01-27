@@ -9,6 +9,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/auth';
 import { apiUnauthorized } from './helpers';
 import { isAdminRole } from '@/lib/constants';
+import { hasAdminAccessUnified, type UnifiedUser } from '@/lib/auth/unified-permissions';
 
 export type AuthSession = Awaited<ReturnType<typeof auth>>;
 
@@ -94,8 +95,15 @@ export function withAdmin<TParams = Record<string, never>>(
     // Session is guaranteed non-null after the check above
     const validSession = session as unknown as ValidSession;
 
-    // Check admin role using SSOT helper from constants
-    if (!isAdminRole(validSession.user.role)) {
+    // Check admin access using unified permissions (checks both old role AND new is_staff)
+    const user: UnifiedUser = {
+      email: validSession.user.email || '',
+      role: validSession.user.role,
+      isStaff: (session.user as { isStaff?: boolean }).isStaff,
+      staffPermissions: (session.user as { staffPermissions?: string[] }).staffPermissions,
+      isSuperAdmin: (session.user as { isSuperAdmin?: boolean }).isSuperAdmin,
+    }
+    if (!hasAdminAccessUnified(user)) {
       return NextResponse.json(
         { success: false, error: 'Nur Administratoren können diese Funktion verwenden' },
         { status: 403 }

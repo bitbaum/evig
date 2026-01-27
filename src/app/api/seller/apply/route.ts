@@ -7,7 +7,6 @@ import { TABLE_NAMES } from '@/config/database'
 import { sendEmail } from '@/lib/email'
 import { logger } from '@/lib/logger'
 import { APP_URL } from '@/config/urls'
-import { ADMIN_ROLES } from '@/lib/constants'
 
 interface ApplicationRow {
   id: string
@@ -110,11 +109,11 @@ export async function POST(request: NextRequest) {
       })
     }
 
-    // Send notification email to admins
+    // Send notification email to admins (staff users)
     try {
       const adminEmailsResult = await query(
-        `SELECT email FROM ${TABLE_NAMES.USERS} WHERE role = ANY($1) AND email IS NOT NULL`,
-        [ADMIN_ROLES]
+        `SELECT email FROM ${TABLE_NAMES.USERS} WHERE is_staff = true AND email IS NOT NULL`,
+        []
       )
       const adminDashboardUrl = `${APP_URL}/admin/seller-applications`
 

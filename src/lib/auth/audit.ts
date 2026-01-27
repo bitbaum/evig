@@ -356,6 +356,57 @@ export function logAdminAction(
   })
 }
 
+/**
+ * Log permissions change
+ */
+export function logPermissionsChange(
+  ctx: AuditContext,
+  targetUserId: string,
+  targetEmail: string,
+  oldPermissions: string[],
+  newPermissions: string[]
+): void {
+  logAuditEvent({
+    event_type: 'permissions_changed',
+    user_id: ctx.userId || null,
+    ip_address: ctx.ipAddress,
+    user_agent: ctx.userAgent,
+    details: {
+      targetUserId,
+      targetEmail,
+      oldPermissions,
+      newPermissions,
+      added: newPermissions.filter(p => !oldPermissions.includes(p)),
+      removed: oldPermissions.filter(p => !newPermissions.includes(p)),
+    },
+    severity: 'warning',
+  })
+}
+
+/**
+ * Log super admin status change
+ */
+export function logSuperAdminChange(
+  ctx: AuditContext,
+  targetUserId: string,
+  targetEmail: string,
+  newStatus: boolean
+): void {
+  logAuditEvent({
+    event_type: 'role_changed',
+    user_id: ctx.userId || null,
+    ip_address: ctx.ipAddress,
+    user_agent: ctx.userAgent,
+    details: {
+      targetUserId,
+      targetEmail,
+      action: newStatus ? 'grant_super_admin' : 'revoke_super_admin',
+      newSuperAdminStatus: newStatus,
+    },
+    severity: 'critical', // Super admin changes are critical
+  })
+}
+
 // =============================================================================
 // Query Functions
 // =============================================================================

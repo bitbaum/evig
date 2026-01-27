@@ -13,7 +13,7 @@ import type { JWT } from 'next-auth/jwt'
 import type { Session, User } from 'next-auth'
 import { getUserByEmail, createUser, getOrCreateProfile, createVerificationCode, type DbUser } from '@/lib/auth/db'
 import { hashPassword, verifyPassword, validatePasswordStrength } from '@/lib/auth/password'
-import { ROLES, determineUserRole, isStaffEmail, getInitialStaffPermissions } from '@/lib/constants'
+import { ROLES, isStaffEmail, getInitialStaffPermissions, isSuperAdmin } from '@/lib/constants'
 import { getMedusaConfig } from '@/lib/auth/config'
 import { updateUser } from '@/lib/auth/db'
 import { logger } from '@/lib/logger'
@@ -218,12 +218,14 @@ export const authConfig = {
       if (user) {
         token.id = user.id
         // Legacy role - kept for backward compatibility
-        token.role = user.role || determineUserRole(user.email || '')
+        // Staff get REVAMPIT_ADMIN, others get CUSTOMER
+        const userIsStaff = user.is_staff ?? isStaffEmail(user.email ?? '')
+        token.role = user.role || (userIsStaff ? ROLES.REVAMPIT_ADMIN : ROLES.CUSTOMER)
         token.emailVerified = !!user.emailVerified
         // New simplified auth fields
-        token.isStaff = user.is_staff ?? isStaffEmail(user.email ?? '')
-        token.staffPermissions = user.staff_permissions ?? (token.isStaff ? getInitialStaffPermissions(user.email ?? '') : [])
-        token.isSuperAdmin = user.is_super_admin ?? false
+        token.isStaff = userIsStaff
+        token.staffPermissions = user.staff_permissions ?? (userIsStaff ? getInitialStaffPermissions(user.email ?? '') : [])
+        token.isSuperAdmin = user.is_super_admin ?? isSuperAdmin(user.email ?? '')
       }
       return token
     },

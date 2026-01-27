@@ -9,7 +9,7 @@
 import { auth } from '@/auth'
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
-import { ROLES, PERMISSIONS, ROLE_PERMISSIONS, type UserRole } from '@/lib/constants'
+import { ROLES, type UserRole } from '@/lib/constants'
 import { logger } from '@/lib/logger'
 import {
   hasAdminAccessUnified,
@@ -17,23 +17,33 @@ import {
 } from '@/lib/auth/unified-permissions'
 
 /**
- * Check if user has permission
+ * Check if user has permission (now checks staff_permissions)
+ *
+ * The new system uses staff_permissions array instead of role-based permissions.
+ * Super admins with ['*'] have all permissions.
  */
 export async function hasPermission(permission: string): Promise<boolean> {
   try {
     const session = await auth()
-    if (!session?.user?.role) return false
+    if (!session?.user) return false
 
-    const userRole = session.user.role as UserRole
-    const permissions = ROLE_PERMISSIONS[userRole] || []
-    return permissions.includes(permission)
+    // Super admins have all permissions
+    if (session.user.isSuperAdmin) return true
+
+    // Staff with wildcard have all permissions
+    const staffPermissions = session.user.staffPermissions || []
+    if (staffPermissions.includes('*')) return true
+
+    // Check specific permission in staff_permissions
+    return staffPermissions.includes(permission)
   } catch {
     return false
   }
 }
 
 /**
- * Check if user has role
+ * Check if user has role (legacy)
+ * @deprecated Use hasPermission or hasAdminRole instead
  */
 export async function hasRole(role: UserRole): Promise<boolean> {
   try {
@@ -46,6 +56,8 @@ export async function hasRole(role: UserRole): Promise<boolean> {
 
 /**
  * Require specific permission
+ *
+ * The new system uses staff_permissions array instead of role-based permissions.
  */
 export async function requirePermission(permission: string) {
   const session = await auth()
@@ -54,10 +66,15 @@ export async function requirePermission(permission: string) {
     throw new Error('Authentication required')
   }
 
-  const userRole = session.user.role as UserRole
-  const permissions = ROLE_PERMISSIONS[userRole] || []
+  // Super admins have all permissions
+  if (session.user.isSuperAdmin) return session.user
 
-  if (!permissions.includes(permission)) {
+  // Staff with wildcard have all permissions
+  const staffPermissions = session.user.staffPermissions || []
+  if (staffPermissions.includes('*')) return session.user
+
+  // Check specific permission
+  if (!staffPermissions.includes(permission)) {
     throw new Error(`Permission required: ${permission}`)
   }
 
@@ -65,7 +82,8 @@ export async function requirePermission(permission: string) {
 }
 
 /**
- * Require specific role
+ * Require specific role (legacy)
+ * @deprecated Use requirePermission instead
  */
 export async function requireRole(role: UserRole) {
   const session = await auth()
