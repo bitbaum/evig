@@ -1,20 +1,60 @@
 import { z } from 'zod';
+import { AUTH_CONFIG } from '@/lib/auth/config';
+import { REGISTRATION_ROLES } from '@/config/registration';
 
 // Email validation (RFC 5322 compliant)
 const emailSchema = z.string()
   .email('Bitte geben Sie eine gueltige E-Mail-Adresse ein')
   .transform(email => email.toLowerCase().trim());
 
-// Password requirements
-const passwordSchema = z.string()
-  .min(8, 'Passwort muss mindestens 8 Zeichen lang sein')
-  .max(128, 'Passwort darf maximal 128 Zeichen lang sein')
-  .regex(/[A-Z]/, 'Passwort muss mindestens einen Grossbuchstaben enthalten')
-  .regex(/[a-z]/, 'Passwort muss mindestens einen Kleinbuchstaben enthalten')
-  .regex(/[0-9]/, 'Passwort muss mindestens eine Zahl enthalten');
+// ============================================================================
+// PASSWORD SCHEMA - Derived from AUTH_CONFIG (SSOT)
+// ============================================================================
 
-// User roles
-export const UserRoleSchema = z.enum(['customer', 'seller', 'technician', 'staff']);
+/**
+ * Create password schema from AUTH_CONFIG
+ * This ensures schema matches the config - no duplicate definitions
+ */
+function createPasswordSchema() {
+  const { minLength, maxLength, requireUppercase, requireLowercase, requireNumbers, requireSpecialChars, specialChars } = AUTH_CONFIG.password;
+
+  let schema = z.string()
+    .min(minLength, `Passwort muss mindestens ${minLength} Zeichen lang sein`)
+    .max(maxLength, `Passwort darf maximal ${maxLength} Zeichen lang sein`);
+
+  if (requireUppercase) {
+    schema = schema.regex(/[A-Z]/, 'Passwort muss mindestens einen Grossbuchstaben enthalten');
+  }
+  if (requireLowercase) {
+    schema = schema.regex(/[a-z]/, 'Passwort muss mindestens einen Kleinbuchstaben enthalten');
+  }
+  if (requireNumbers) {
+    schema = schema.regex(/[0-9]/, 'Passwort muss mindestens eine Zahl enthalten');
+  }
+  if (requireSpecialChars) {
+    // Escape special regex characters in the specialChars string
+    const escapedChars = specialChars.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    schema = schema.regex(new RegExp(`[${escapedChars}]`), 'Passwort muss mindestens ein Sonderzeichen enthalten');
+  }
+
+  return schema;
+}
+
+const passwordSchema = createPasswordSchema();
+
+// ============================================================================
+// ROLE SCHEMA - Derived from REGISTRATION_ROLES (SSOT)
+// ============================================================================
+
+/**
+ * Registration role schema - derived from config
+ * Used for validating role during registration
+ */
+export const RegistrationRoleSchema = z.enum(REGISTRATION_ROLES);
+export type RegistrationRoleType = z.infer<typeof RegistrationRoleSchema>;
+
+// Legacy user role schema for backward compatibility
+export const UserRoleSchema = z.enum(['customer', 'seller', 'repairer', 'staff']);
 export type UserRole = z.infer<typeof UserRoleSchema>;
 
 // Registration schema
@@ -25,7 +65,7 @@ export const RegisterSchema = z.object({
     .min(2, 'Name muss mindestens 2 Zeichen lang sein')
     .max(100, 'Name darf maximal 100 Zeichen lang sein')
     .optional(),
-  role: UserRoleSchema.optional().default('customer'),
+  role: RegistrationRoleSchema.optional().default('customer'),
 });
 
 export type RegisterInput = z.infer<typeof RegisterSchema>;

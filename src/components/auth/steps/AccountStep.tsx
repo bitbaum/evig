@@ -18,7 +18,7 @@ interface AccountStepProps {
   onConfirmPasswordChange: (confirmPassword: string) => void
   onAcceptTermsChange: (accept: boolean) => void
   onNext: () => void
-  onBack: () => void
+  onBack?: () => void
   isLoading?: boolean
   errors?: string[]
 }
@@ -242,15 +242,17 @@ export function AccountStep({
 
       {/* Buttons */}
       <div className="flex gap-3">
-        <button
-          type="button"
-          onClick={onBack}
-          disabled={isLoading}
-          className="flex items-center justify-center gap-2 px-4 py-3 border-2 border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
-        >
-          <ArrowLeft className="w-5 h-5" />
-          <span>Zurück</span>
-        </button>
+        {onBack && (
+          <button
+            type="button"
+            onClick={onBack}
+            disabled={isLoading}
+            className="flex items-center justify-center gap-2 px-4 py-3 border-2 border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+          >
+            <ArrowLeft className="w-5 h-5" />
+            <span>Zurück</span>
+          </button>
+        )}
         <button
           type="submit"
           disabled={!isValid || isLoading}

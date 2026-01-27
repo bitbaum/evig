@@ -10,6 +10,7 @@ import { registerUser } from '@/auth'
 import { apiError, apiSuccess, apiBadRequest } from '@/lib/api/helpers'
 import { logger } from '@/lib/logger'
 import { checkRateLimit, getClientIp } from '@/lib/auth/rate-limiter'
+import { RegisterSchema, formatZodErrors, ZodError } from '@/lib/schemas'
 
 export async function POST(request: NextRequest) {
   try {
@@ -22,7 +23,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         {
           success: false,
-          error: 'Zu viele Registrierungsversuche. Bitte versuchen Sie es später erneut.',
+          error: 'Zu viele Registrierungsversuche. Bitte versuchen Sie es spaeter erneut.',
           retryAfter: rateLimitResult.retryAfter,
         },
         {
@@ -37,11 +38,21 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json()
-    const { email, password, name, role } = body
 
-    if (!email || !password) {
-      return apiBadRequest('E-Mail und Passwort sind erforderlich')
+    // Validate input with Zod schema
+    const validationResult = RegisterSchema.safeParse(body)
+    if (!validationResult.success) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: 'Validierung fehlgeschlagen',
+          errors: formatZodErrors(validationResult.error),
+        },
+        { status: 400 }
+      )
     }
+
+    const { email, password, name, role } = validationResult.data
 
     try {
       const result = await registerUser({ email, password, name, role })

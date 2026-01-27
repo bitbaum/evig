@@ -8,6 +8,7 @@ import { logger } from '@/lib/logger'
 import { checkRateLimit, getClientIp } from '@/lib/auth/rate-limiter'
 import { sendEmail } from '@/lib/email'
 import { APP_URL } from '@/config/urls'
+import { NewsletterSubscribeSchema, formatZodErrors } from '@/lib/schemas'
 
 const subscribersDir = path.join(process.cwd(), 'content/newsletter')
 
@@ -22,12 +23,6 @@ interface Subscriber {
   subscribedAt: string
   status: 'active' | 'pending'
   confirmToken?: string
-}
-
-// RFC 5322 compliant email validation
-function isValidEmail(email: string): boolean {
-  const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/
-  return emailRegex.test(email)
 }
 
 export async function POST(request: NextRequest) {
@@ -55,15 +50,23 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const { email } = await request.json()
+    const body = await request.json()
 
-    // Validate email
-    if (!email || typeof email !== 'string' || !isValidEmail(email)) {
-      return apiBadRequest('Bitte geben Sie eine gültige E-Mail-Adresse ein')
+    // Validate input with Zod schema
+    const validationResult = NewsletterSubscribeSchema.safeParse(body)
+    if (!validationResult.success) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: 'Validierung fehlgeschlagen',
+          errors: formatZodErrors(validationResult.error),
+        },
+        { status: 400 }
+      )
     }
 
-    // Check if already subscribed
-    const normalizedEmail = email.toLowerCase().trim()
+    // Email is already normalized by the schema
+    const normalizedEmail = validationResult.data.email
     const subscribersFile = path.join(subscribersDir, 'subscribers.json')
 
     let subscribers: Subscriber[] = []

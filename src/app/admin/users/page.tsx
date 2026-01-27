@@ -14,15 +14,12 @@ import { TABLE_NAMES } from '@/config/database'
 import { canAccessSection, isSuperAdmin, isStaffEmail } from '@/lib/permissions'
 import {
   Users,
-  Eye,
+  Search,
+  Shield,
   UserCheck,
   Crown,
-  Shield,
-  Edit,
-  Mail,
-  MapPin,
-  Search,
 } from 'lucide-react'
+import { UsersTableClient } from '@/components/admin/UsersTableClient'
 
 export const metadata: Metadata = {
   title: 'Benutzer verwalten | RevampIT Admin',
@@ -83,16 +80,18 @@ async function getUsers(): Promise<UserRow[]> {
         email,
         is_staff,
         staff_permissions,
-        created_at,
+        "createdAt" as created_at,
         email_verified
        FROM ${TABLE_NAMES.USERS}
        ORDER BY
         is_staff DESC,
-        created_at DESC
+        "createdAt" DESC
        LIMIT 100`
     )
     return result.rows
-  } catch {
+  } catch (error) {
+    // Log error for debugging instead of silently failing
+    console.error('Failed to fetch users:', error)
     return []
   }
 }
@@ -203,162 +202,7 @@ export default async function AdminUsersPage() {
       </div>
 
       {/* Users Table */}
-      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="w-full">
-            <thead className="bg-gray-50 dark:bg-gray-700">
-              <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                  Benutzer
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                  Status
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                  Berechtigungen
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                  Registriert
-                </th>
-                {currentUserIsSuperAdmin && (
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                    Aktionen
-                  </th>
-                )}
-              </tr>
-            </thead>
-            <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-              {users.map((user) => {
-                const userIsSuperAdmin = isSuperAdmin(user.email)
-                const userIsStaff = user.is_staff || isStaffEmail(user.email)
-                const permissions = user.staff_permissions || []
-                const hasFullAccess = permissions.includes('*')
-
-                return (
-                  <tr key={user.id} className="hover:bg-gray-50 dark:hover:bg-gray-700">
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="flex items-center">
-                        <div className="flex-shrink-0">
-                          <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                            userIsSuperAdmin
-                              ? 'bg-gradient-to-r from-purple-500 to-pink-600'
-                              : userIsStaff
-                                ? 'bg-gradient-to-r from-blue-500 to-green-600'
-                                : 'bg-gradient-to-r from-gray-400 to-gray-500'
-                          }`}>
-                            <span className="text-white font-medium text-sm">
-                              {user.name ? user.name.split(' ').map(n => n[0]).join('').substring(0, 2) : user.email[0].toUpperCase()}
-                            </span>
-                          </div>
-                        </div>
-                        <div className="ml-4">
-                          <div className="text-sm font-medium text-gray-900 dark:text-white">
-                            {user.name || 'Kein Name'}
-                          </div>
-                          <div className="text-sm text-gray-500 dark:text-gray-400 flex items-center gap-1">
-                            <Mail className="w-3 h-3" />
-                            {user.email}
-                          </div>
-                        </div>
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="flex flex-col gap-1">
-                        {userIsSuperAdmin && (
-                          <span className="inline-flex items-center gap-1 px-2 py-1 text-xs font-semibold rounded-full bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300">
-                            <Crown className="w-3 h-3" />
-                            Super Admin
-                          </span>
-                        )}
-                        {userIsStaff && !userIsSuperAdmin && (
-                          <span className="inline-flex items-center gap-1 px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300">
-                            <Shield className="w-3 h-3" />
-                            Staff
-                          </span>
-                        )}
-                        {!userIsStaff && (
-                          <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-300">
-                            Benutzer
-                          </span>
-                        )}
-                        {user.email_verified && (
-                          <span className="inline-flex items-center gap-1 px-2 py-1 text-xs rounded-full bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300">
-                            <UserCheck className="w-3 h-3" />
-                            Verifiziert
-                          </span>
-                        )}
-                      </div>
-                    </td>
-                    <td className="px-6 py-4">
-                      {userIsStaff ? (
-                        hasFullAccess ? (
-                          <span className="text-sm text-purple-600 dark:text-purple-400 font-medium">
-                            Voller Zugriff
-                          </span>
-                        ) : permissions.length > 0 ? (
-                          <div className="flex flex-wrap gap-1 max-w-xs">
-                            {permissions.slice(0, 3).map(p => (
-                              <span key={p} className="inline-flex px-2 py-0.5 text-xs bg-gray-100 dark:bg-gray-700 rounded">
-                                {p}
-                              </span>
-                            ))}
-                            {permissions.length > 3 && (
-                              <span className="text-xs text-gray-500">
-                                +{permissions.length - 3} mehr
-                              </span>
-                            )}
-                          </div>
-                        ) : (
-                          <span className="text-sm text-gray-400">Keine Berechtigungen</span>
-                        )
-                      ) : (
-                        <span className="text-sm text-gray-400">-</span>
-                      )}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-900 dark:text-white">
-                        {new Date(user.created_at).toLocaleDateString('de-CH')}
-                      </div>
-                    </td>
-                    {currentUserIsSuperAdmin && (
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                        <div className="flex items-center gap-2">
-                          <button
-                            className="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300"
-                            title="Details anzeigen"
-                          >
-                            <Eye className="w-4 h-4" />
-                          </button>
-                          {!userIsSuperAdmin && (
-                            <button
-                              className="text-green-600 hover:text-green-900 dark:text-green-400 dark:hover:text-green-300"
-                              title="Berechtigungen bearbeiten"
-                            >
-                              <Edit className="w-4 h-4" />
-                            </button>
-                          )}
-                        </div>
-                      </td>
-                    )}
-                  </tr>
-                )
-              })}
-            </tbody>
-          </table>
-        </div>
-
-        {users.length === 0 && (
-          <div className="text-center py-12">
-            <Users className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
-              Noch keine Benutzer
-            </h3>
-            <p className="text-gray-600 dark:text-gray-400 mb-6">
-              Es wurden noch keine Benutzer registriert.
-            </p>
-          </div>
-        )}
-      </div>
+      <UsersTableClient users={users} currentUserIsSuperAdmin={currentUserIsSuperAdmin} />
 
       {/* Info Box */}
       <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-xl p-6">

@@ -137,30 +137,36 @@ export const mainNavigation: NavigationItem[] = [
     ]
   },
   {
-    name: 'Peer-Reparaturen',
-    href: '/peer-repairs',
-    description: 'Community-Hilfe für Hardware-Reparaturen',
+    name: 'IT-Hilfe',
+    href: '/it-hilfe',
+    description: 'Community-basierte IT-Unterstützung',
     isMultiColumn: false,
     subItems: [
       {
         name: 'Alle Anfragen',
-        href: '/peer-repairs',
-        description: 'Durchsuche Reparaturanfragen aus der Community'
+        href: '/it-hilfe',
+        description: 'Durchsuche IT-Hilfe-Anfragen aus der Community'
       },
       {
         name: 'Anfrage erstellen',
-        href: '/peer-repairs/create',
-        description: 'Stelle eine neue Reparaturanfrage'
+        href: '/it-hilfe/create',
+        description: 'Stelle eine neue IT-Hilfe-Anfrage'
       },
       {
         name: 'Meine Anfragen',
-        href: '/peer-repairs/my',
+        href: '/it-hilfe/my',
         description: 'Verwalte deine eigenen Anfragen'
       },
       {
         name: 'Meine Angebote',
-        href: '/peer-repairs/my/offers',
+        href: '/it-hilfe/my/offers',
         description: 'Sieh deine abgegebenen Hilfsangebote'
+      },
+      {
+        name: 'Helfer finden',
+        href: '/it-hilfe/helpers',
+        description: 'Finde IT-Helfer in deiner Nähe',
+        badge: 'Neu'
       }
     ]
   },

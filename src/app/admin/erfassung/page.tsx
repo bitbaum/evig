@@ -8,168 +8,35 @@ import { logger } from '@/lib/logger'
 import {
   ArrowLeft,
   Save,
-  Upload,
   X,
   Plus,
   Trash2,
   Loader2,
   Camera,
-  Zap,
   Package,
   Ruler,
   MapPin,
   Users,
   FileText,
-  Printer
+  Printer,
 } from 'lucide-react'
-
-// Customer profile type
-interface CustomerProfile {
-  slug: string
-  name_de: string
-  icon: string
-  color: string
-}
-
-// Spec field type
-interface SpecField {
-  key: string
-  value: string
-}
-
-// Form data type
-interface ErfassungFormData {
-  // Basic info
-  hersteller: string
-  produktname: string
-  kurzbeschreibung: string
-
-  // Technical specs (dynamic)
-  specs: SpecField[]
-
-  // Physical
-  laenge_mm: string
-  breite_mm: string
-  hoehe_mm: string
-  gewicht_kg: string
-
-  // Inventory
-  verkaufspreis: string
-  zustand: string
-  location: string
-  box_id: string
-  auf_lager: string
-
-  // Category
-  hauptkategorie: string
-  unterkategorie: string
-
-  // Customer profiles
-  kundenprofile: string[]
-
-  // Image
-  image: string | null
-}
-
-const CUSTOMER_PROFILES: CustomerProfile[] = [
-  { slug: 'oma', name_de: 'Oma/Opa', icon: '❤️', color: '#EC4899' },
-  { slug: 'buero', name_de: 'Büro', icon: '💼', color: '#3B82F6' },
-  { slug: 'chiller', name_de: 'Chiller', icon: '📺', color: '#8B5CF6' },
-  { slug: 'gamer', name_de: 'Gamer', icon: '🎮', color: '#EF4444' },
-  { slug: 'kreativ', name_de: 'Kreativ-Kopf', icon: '🎨', color: '#F59E0B' },
-  { slug: 'dev', name_de: 'Entwickler', icon: '💻', color: '#10B981' },
-  { slug: 'student', name_de: 'Student', icon: '🎓', color: '#06B6D4' },
-]
-
-const ZUSTAND_OPTIONS = [
-  { value: 'new', label: 'Neu' },
-  { value: 'like_new', label: 'Wie neu' },
-  { value: 'good', label: 'Gut' },
-  { value: 'fair', label: 'Akzeptabel' },
-  { value: 'poor', label: 'Schlecht' },
-]
-
-const KATEGORIEN = [
-  { value: '10', label: 'Laptops', subs: [
-    { value: '101', label: 'Business Laptops' },
-    { value: '102', label: 'Consumer Laptops' },
-    { value: '103', label: 'Gaming Laptops' },
-  ]},
-  { value: '20', label: 'Desktop PCs', subs: [
-    { value: '201', label: 'Office PCs' },
-    { value: '202', label: 'Gaming PCs' },
-    { value: '203', label: 'Workstations' },
-  ]},
-  { value: '30', label: 'Monitore', subs: [
-    { value: '301', label: 'Office Monitore' },
-    { value: '302', label: 'Gaming Monitore' },
-  ]},
-  { value: '70', label: 'Komponenten', subs: [
-    { value: '701', label: 'Grafikkarten' },
-    { value: '702', label: 'RAM' },
-    { value: '703', label: 'SSDs/HDDs' },
-    { value: '704', label: 'CPUs' },
-  ]},
-  { value: '80', label: 'Peripherie', subs: [
-    { value: '801', label: 'Tastaturen' },
-    { value: '802', label: 'Mäuse' },
-    { value: '803', label: 'Webcams' },
-  ]},
-]
-
-// Common spec templates by category
-const SPEC_TEMPLATES: Record<string, SpecField[]> = {
-  '10': [ // Laptops
-    { key: 'CPU', value: '' },
-    { key: 'RAM', value: '' },
-    { key: 'RAM-Typ', value: '' },
-    { key: 'Speicher', value: '' },
-    { key: 'Display', value: '' },
-    { key: 'Auflösung', value: '' },
-    { key: 'Grafik', value: '' },
-    { key: 'Akku', value: '' },
-    { key: 'Anschlüsse', value: '' },
-    { key: 'WLAN', value: '' },
-    { key: 'OS', value: '' },
-  ],
-  '70': [ // Komponenten
-    { key: 'Typ', value: '' },
-    { key: 'Kapazität', value: '' },
-    { key: 'Takt', value: '' },
-    { key: 'Anschluss', value: '' },
-    { key: 'Formfaktor', value: '' },
-  ],
-  default: [
-    { key: 'Beschreibung', value: '' },
-  ]
-}
+import { DataEntryTabs } from '@/components/erfassung/DataEntryTabs'
+import type { ErfassungFormData } from '@/types/erfassung'
+import { DEFAULT_FORM_DATA } from '@/types/erfassung'
+import {
+  CUSTOMER_PROFILES,
+  ZUSTAND_OPTIONS,
+  KATEGORIEN,
+  SPEC_TEMPLATES,
+} from '@/config/erfassung'
 
 export default function ErfassungPage() {
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(false)
-  const [isAnalyzing, setIsAnalyzing] = useState(false)
   const [savedItemUUID, setSavedItemUUID] = useState<string | null>(null)
   const [savedProductId, setSavedProductId] = useState<string | null>(null)
 
-  const [formData, setFormData] = useState<ErfassungFormData>({
-    hersteller: '',
-    produktname: '',
-    kurzbeschreibung: '',
-    specs: [{ key: '', value: '' }],
-    laenge_mm: '',
-    breite_mm: '',
-    hoehe_mm: '',
-    gewicht_kg: '',
-    verkaufspreis: '',
-    zustand: 'good',
-    location: '',
-    box_id: '',
-    auf_lager: '1',
-    hauptkategorie: '',
-    unterkategorie: '',
-    kundenprofile: [],
-    image: null,
-  })
+  const [formData, setFormData] = useState<ErfassungFormData>(DEFAULT_FORM_DATA)
 
   // Handle basic field changes
   const handleChange = (field: keyof ErfassungFormData, value: string | string[]) => {
@@ -221,49 +88,32 @@ export default function ErfassungPage() {
     }))
   }
 
-  // Handle image upload
-  const handleImageUpload = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    if (file) {
-      const reader = new FileReader()
-      reader.onload = (ev) => {
-        setFormData(prev => ({ ...prev, image: ev.target?.result as string }))
-      }
-      reader.readAsDataURL(file)
-    }
+  // Handle product data from DataEntryTabs (voice or image analysis)
+  const handleProductData = useCallback((data: Partial<ErfassungFormData>) => {
+    logger.info('Product data received', { product: data.produktname })
+
+    // Merge incoming data with existing form data
+    setFormData(prev => ({
+      ...prev,
+      hersteller: data.hersteller || prev.hersteller,
+      produktname: data.produktname || prev.produktname,
+      kurzbeschreibung: data.kurzbeschreibung || prev.kurzbeschreibung,
+      verkaufspreis: data.verkaufspreis || prev.verkaufspreis,
+      zustand: data.zustand || prev.zustand,
+      hauptkategorie: data.hauptkategorie || prev.hauptkategorie,
+      unterkategorie: data.unterkategorie || prev.unterkategorie,
+      kundenprofile: data.kundenprofile?.length ? data.kundenprofile : prev.kundenprofile,
+      // Merge specs if provided
+      specs: data.specs?.length
+        ? data.specs.map(s => ({ key: s.key, value: s.value }))
+        : prev.specs,
+    }))
   }, [])
 
-  // Optional AI analysis
-  const analyzeWithAI = async () => {
-    if (!formData.image) return
-
-    setIsAnalyzing(true)
-    try {
-      const response = await fetch('/api/ai/analyze-product', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ image: formData.image, saveToDatabase: false }),
-      })
-
-      if (response.ok) {
-        const result = await response.json()
-        if (result.success && result.analysis) {
-          const a = result.analysis
-          setFormData(prev => ({
-            ...prev,
-            hersteller: a.brand || prev.hersteller,
-            produktname: a.product_name || prev.produktname,
-            zustand: a.condition || prev.zustand,
-            verkaufspreis: a.estimated_price_chf?.toString() || prev.verkaufspreis,
-          }))
-        }
-      }
-    } catch (error) {
-      logger.error('AI analysis failed', { error })
-    } finally {
-      setIsAnalyzing(false)
-    }
-  }
+  // Handle image capture from DataEntryTabs
+  const handleImageCapture = useCallback((imageBase64: string) => {
+    setFormData(prev => ({ ...prev, image: imageBase64 }))
+  }, [])
 
   // Submit form
   const handleSubmit = async (e: React.FormEvent, publish: boolean = false) => {
@@ -353,25 +203,7 @@ export default function ErfassungPage() {
               onClick={() => {
                 setSavedItemUUID(null)
                 setSavedProductId(null)
-                setFormData({
-                  hersteller: '',
-                  produktname: '',
-                  kurzbeschreibung: '',
-                  specs: [{ key: '', value: '' }],
-                  laenge_mm: '',
-                  breite_mm: '',
-                  hoehe_mm: '',
-                  gewicht_kg: '',
-                  verkaufspreis: '',
-                  zustand: 'good',
-                  location: '',
-                  box_id: '',
-                  auf_lager: '1',
-                  hauptkategorie: '',
-                  unterkategorie: '',
-                  kundenprofile: [],
-                  image: null,
-                })
+                setFormData(DEFAULT_FORM_DATA)
               }}
               className="inline-flex items-center gap-2 px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
             >
@@ -421,33 +253,22 @@ export default function ErfassungPage() {
         </Link>
       </div>
 
+      {/* Data Entry Tabs (Speech / Picture / Form) */}
+      <DataEntryTabs
+        onProductData={handleProductData}
+        onImageCapture={handleImageCapture}
+        onError={(error) => logger.error('Data entry error', { error })}
+      />
+
       <form onSubmit={(e) => handleSubmit(e, false)} className="space-y-6">
 
-        {/* Image Upload (Optional) */}
-        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
-          <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
-            <Camera className="w-5 h-5" />
-            Produktbild (optional)
-          </h2>
-
-          {!formData.image ? (
-            <div className="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-8 text-center">
-              <Upload className="w-10 h-10 text-gray-400 mx-auto mb-3" />
-              <label htmlFor="image-upload" className="cursor-pointer">
-                <span className="text-green-600 hover:text-green-500 font-medium">
-                  Bild hochladen
-                </span>
-                <span className="text-gray-500"> oder hierhin ziehen</span>
-              </label>
-              <input
-                id="image-upload"
-                type="file"
-                accept="image/*"
-                onChange={handleImageUpload}
-                className="hidden"
-              />
-            </div>
-          ) : (
+        {/* Image Preview (if captured via Picture tab) */}
+        {formData.image && (
+          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+              <Camera className="w-5 h-5" />
+              Produktbild
+            </h2>
             <div className="flex items-start gap-4">
               <div className="relative">
                 <Image
@@ -465,21 +286,9 @@ export default function ErfassungPage() {
                   <X className="w-3 h-3" />
                 </button>
               </div>
-              <button
-                type="button"
-                onClick={analyzeWithAI}
-                disabled={isAnalyzing}
-                className="inline-flex items-center gap-2 bg-purple-600 hover:bg-purple-700 disabled:bg-purple-400 text-white px-4 py-2 rounded-lg text-sm"
-              >
-                {isAnalyzing ? (
-                  <><Loader2 className="w-4 h-4 animate-spin" /> Analysiere...</>
-                ) : (
-                  <><Zap className="w-4 h-4" /> Mit KI ausfüllen</>
-                )}
-              </button>
             </div>
-          )}
-        </div>
+          </div>
+        )}
 
         {/* Basic Info */}
         <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">

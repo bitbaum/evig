@@ -93,9 +93,15 @@ export const TABLE_NAMES = {
   USER_LOCKOUTS: 'user_lockouts',
   AUTH_AUDIT_LOG: 'auth_audit_log',
 
-  // Peer Repair Marketplace
-  PEER_REPAIR_REQUESTS: 'peer_repair_requests',
-  PEER_REPAIR_OFFERS: 'peer_repair_offers',
+  // IT-Hilfe Marketplace (formerly Peer Repair)
+  IT_HILFE_REQUESTS: 'it_hilfe_requests',
+  IT_HILFE_OFFERS: 'it_hilfe_offers',
+  USER_SKILLS: 'user_skills',
+  HELPER_PROFILES: 'helper_profiles',
+
+  // @deprecated - Use IT_HILFE_* instead
+  PEER_REPAIR_REQUESTS: 'it_hilfe_requests',
+  PEER_REPAIR_OFFERS: 'it_hilfe_offers',
 } as const;
 
 /**
@@ -120,7 +126,9 @@ export const REVIEW_TARGET_TYPES = {
   REPAIRER: 'repairer',
   SERVICE: 'service',
   WORKSHOP: 'workshop',
-  PEER_REPAIR: 'peer_repair',
+  IT_HILFE: 'it_hilfe',
+  /** @deprecated Use IT_HILFE instead */
+  PEER_REPAIR: 'it_hilfe',
 } as const;
 
 export type ReviewTargetType = typeof REVIEW_TARGET_TYPES[keyof typeof REVIEW_TARGET_TYPES];
@@ -131,7 +139,9 @@ export type ReviewTargetType = typeof REVIEW_TARGET_TYPES[keyof typeof REVIEW_TA
 export const CONVERSATION_TYPES = {
   APPOINTMENT: 'appointment',
   GENERAL: 'general',
-  PEER_REPAIR: 'peer_repair',
+  IT_HILFE: 'it_hilfe',
+  /** @deprecated Use IT_HILFE instead */
+  PEER_REPAIR: 'it_hilfe',
 } as const;
 
 export type ConversationType = typeof CONVERSATION_TYPES[keyof typeof CONVERSATION_TYPES];

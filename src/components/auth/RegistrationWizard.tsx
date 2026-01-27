@@ -1,44 +1,35 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { Stepper } from '@/components/ui/Stepper'
-import { RoleStep, AccountStep, VerifyStep, ProfileStep } from './steps'
-import { ROLES } from '@/lib/constants'
-import { CheckCircle2, ArrowRight } from 'lucide-react'
-
-interface ProfileData {
-  location?: string
-  interests?: string[]
-  businessName?: string
-  services?: string[]
-  categories?: string[]
-}
+import { AccountStep, VerifyStep } from './steps'
+import {
+  CheckCircle2,
+  ArrowRight,
+  Wrench,
+  ShoppingBag,
+  Search,
+} from 'lucide-react'
 
 interface RegistrationState {
-  role: string
   name: string
   email: string
   password: string
   confirmPassword: string
   acceptTerms: boolean
-  profileData: ProfileData
   userId?: string
   emailVerified: boolean
 }
 
 const STEPS = [
-  { label: 'Rolle', description: 'Wählen Sie Ihre Rolle' },
   { label: 'Konto', description: 'Erstellen Sie Ihr Konto' },
   { label: 'Verifizierung', description: 'Bestätigen Sie Ihre E-Mail' },
-  { label: 'Profil', description: 'Optional: Vervollständigen' }
 ]
 
 const STORAGE_KEY = 'revampit_registration_state'
 
 export function RegistrationWizard() {
-  const router = useRouter()
   const [currentStep, setCurrentStep] = useState(0)
   const [isLoading, setIsLoading] = useState(false)
   const [errors, setErrors] = useState<string[]>([])
@@ -46,14 +37,12 @@ export function RegistrationWizard() {
   const [isComplete, setIsComplete] = useState(false)
 
   const [state, setState] = useState<RegistrationState>({
-    role: ROLES.CUSTOMER,
     name: '',
     email: '',
     password: '',
     confirmPassword: '',
     acceptTerms: false,
-    profileData: {},
-    emailVerified: false
+    emailVerified: false,
   })
 
   // Load state from localStorage on mount
@@ -63,18 +52,16 @@ export function RegistrationWizard() {
       try {
         const parsed = JSON.parse(saved)
         // Don't restore password for security
-        setState(prev => ({
+        setState((prev) => ({
           ...prev,
-          role: parsed.role || ROLES.CUSTOMER,
           name: parsed.name || '',
           email: parsed.email || '',
-          profileData: parsed.profileData || {},
           userId: parsed.userId,
-          emailVerified: parsed.emailVerified || false
+          emailVerified: parsed.emailVerified || false,
         }))
         // If user already created account, skip to verification
         if (parsed.userId && !parsed.emailVerified) {
-          setCurrentStep(2)
+          setCurrentStep(1)
         }
       } catch {
         localStorage.removeItem(STORAGE_KEY)
@@ -88,12 +75,10 @@ export function RegistrationWizard() {
     setState(updated)
     // Don't save passwords
     const toSave = {
-      role: updated.role,
       name: updated.name,
       email: updated.email,
-      profileData: updated.profileData,
       userId: updated.userId,
-      emailVerified: updated.emailVerified
+      emailVerified: updated.emailVerified,
     }
     localStorage.setItem(STORAGE_KEY, JSON.stringify(toSave))
   }
@@ -103,12 +88,7 @@ export function RegistrationWizard() {
     localStorage.removeItem(STORAGE_KEY)
   }
 
-  // Step 1: Role Selection
-  const handleRoleNext = () => {
-    setCurrentStep(1)
-  }
-
-  // Step 2: Account Creation
+  // Step 1: Account Creation
   const handleAccountNext = async () => {
     setIsLoading(true)
     setErrors([])
@@ -121,8 +101,8 @@ export function RegistrationWizard() {
           email: state.email,
           password: state.password,
           name: state.name,
-          role: state.role
-        })
+          // Role defaults to 'customer' in schema
+        }),
       })
 
       const data = await response.json()
@@ -135,7 +115,7 @@ export function RegistrationWizard() {
 
       // Save user ID and move to verification
       saveState({ userId: data.data?.userId })
-      setCurrentStep(2)
+      setCurrentStep(1)
     } catch {
       setErrors(['Ein Netzwerkfehler ist aufgetreten'])
     } finally {
@@ -143,7 +123,7 @@ export function RegistrationWizard() {
     }
   }
 
-  // Step 3: Email Verification
+  // Step 2: Email Verification
   const handleVerify = async (code: string): Promise<boolean> => {
     setVerifyError(undefined)
 
@@ -151,7 +131,7 @@ export function RegistrationWizard() {
       const response = await fetch('/api/auth/verify-code', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: state.email, code })
+        body: JSON.stringify({ email: state.email, code }),
       })
 
       const data = await response.json()
@@ -162,7 +142,8 @@ export function RegistrationWizard() {
       }
 
       saveState({ emailVerified: true })
-      setCurrentStep(3)
+      clearState()
+      setIsComplete(true)
       return true
     } catch {
       setVerifyError('Ein Fehler ist aufgetreten')
@@ -175,7 +156,7 @@ export function RegistrationWizard() {
       const response = await fetch('/api/auth/resend-code', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: state.email })
+        body: JSON.stringify({ email: state.email }),
       })
 
       return response.ok
@@ -185,35 +166,6 @@ export function RegistrationWizard() {
   }
 
   const handleSkipVerification = () => {
-    setCurrentStep(3)
-  }
-
-  // Step 4: Profile Completion
-  const handleProfileComplete = async () => {
-    setIsLoading(true)
-
-    try {
-      // Save profile data if provided
-      if (Object.keys(state.profileData).length > 0) {
-        await fetch('/api/user/profile', {
-          method: 'PATCH',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(state.profileData)
-        })
-      }
-
-      clearState()
-      setIsComplete(true)
-    } catch {
-      // Profile save failed, but still allow completion
-      clearState()
-      setIsComplete(true)
-    } finally {
-      setIsLoading(false)
-    }
-  }
-
-  const handleSkipProfile = () => {
     clearState()
     setIsComplete(true)
   }
@@ -225,23 +177,87 @@ export function RegistrationWizard() {
     }
   }
 
-  // Completion screen
+  // Completion screen with options
   if (isComplete) {
     return (
       <div className="w-full max-w-md mx-auto">
-        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 border border-gray-100 dark:border-gray-700 text-center">
-          <div className="w-16 h-16 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
-            <CheckCircle2 className="w-8 h-8 text-green-600" />
+        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 border border-gray-100 dark:border-gray-700">
+          <div className="text-center mb-8">
+            <div className="w-16 h-16 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
+              <CheckCircle2 className="w-8 h-8 text-green-600" />
+            </div>
+            <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
+              Willkommen bei RevampIT!
+            </h2>
+            <p className="text-gray-600 dark:text-gray-400">
+              {state.emailVerified
+                ? 'Ihr Konto ist vollständig eingerichtet.'
+                : 'Ihr Konto wurde erstellt. Vergessen Sie nicht, Ihre E-Mail zu verifizieren.'}
+            </p>
           </div>
-          <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
-            Willkommen bei RevampIT!
-          </h2>
-          <p className="text-gray-600 dark:text-gray-400 mb-6">
-            {state.emailVerified
-              ? 'Ihr Konto ist vollständig eingerichtet.'
-              : 'Ihr Konto wurde erstellt. Vergessen Sie nicht, Ihre E-Mail zu verifizieren.'}
-          </p>
+
+          {/* What do you want to do? */}
           <div className="space-y-3">
+            <p className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
+              Was möchten Sie als Nächstes tun?
+            </p>
+
+            <Link
+              href="/it-hilfe"
+              className="flex items-center gap-3 p-4 rounded-lg border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
+            >
+              <div className="w-10 h-10 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center">
+                <Search className="w-5 h-5 text-blue-600" />
+              </div>
+              <div className="flex-1">
+                <div className="font-medium text-gray-900 dark:text-white">
+                  IT-Hilfe suchen
+                </div>
+                <div className="text-sm text-gray-500 dark:text-gray-400">
+                  Hilfe bei IT-Problemen finden
+                </div>
+              </div>
+              <ArrowRight className="w-5 h-5 text-gray-400" />
+            </Link>
+
+            <Link
+              href="/profil/skills"
+              className="flex items-center gap-3 p-4 rounded-lg border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
+            >
+              <div className="w-10 h-10 bg-emerald-100 dark:bg-emerald-900/30 rounded-full flex items-center justify-center">
+                <Wrench className="w-5 h-5 text-emerald-600" />
+              </div>
+              <div className="flex-1">
+                <div className="font-medium text-gray-900 dark:text-white">
+                  IT-Hilfe anbieten
+                </div>
+                <div className="text-sm text-gray-500 dark:text-gray-400">
+                  Deine Skills erfassen und anderen helfen
+                </div>
+              </div>
+              <ArrowRight className="w-5 h-5 text-gray-400" />
+            </Link>
+
+            <Link
+              href="/shop"
+              className="flex items-center gap-3 p-4 rounded-lg border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
+            >
+              <div className="w-10 h-10 bg-purple-100 dark:bg-purple-900/30 rounded-full flex items-center justify-center">
+                <ShoppingBag className="w-5 h-5 text-purple-600" />
+              </div>
+              <div className="flex-1">
+                <div className="font-medium text-gray-900 dark:text-white">
+                  Shop durchstöbern
+                </div>
+                <div className="text-sm text-gray-500 dark:text-gray-400">
+                  Refurbished IT-Geräte entdecken
+                </div>
+              </div>
+              <ArrowRight className="w-5 h-5 text-gray-400" />
+            </Link>
+          </div>
+
+          <div className="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700">
             <Link
               href="/auth/login"
               className="inline-flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white font-medium px-6 py-3 rounded-lg transition-colors w-full"
@@ -269,33 +285,30 @@ export function RegistrationWizard() {
 
         {/* Step Content */}
         {currentStep === 0 && (
-          <RoleStep
-            selectedRole={state.role}
-            onRoleChange={(role) => saveState({ role })}
-            onNext={handleRoleNext}
-          />
-        )}
-
-        {currentStep === 1 && (
           <AccountStep
             name={state.name}
             email={state.email}
             password={state.password}
             confirmPassword={state.confirmPassword}
             acceptTerms={state.acceptTerms}
-            onNameChange={(name) => setState(prev => ({ ...prev, name }))}
-            onEmailChange={(email) => setState(prev => ({ ...prev, email }))}
-            onPasswordChange={(password) => setState(prev => ({ ...prev, password }))}
-            onConfirmPasswordChange={(confirmPassword) => setState(prev => ({ ...prev, confirmPassword }))}
-            onAcceptTermsChange={(acceptTerms) => setState(prev => ({ ...prev, acceptTerms }))}
+            onNameChange={(name) => setState((prev) => ({ ...prev, name }))}
+            onEmailChange={(email) => setState((prev) => ({ ...prev, email }))}
+            onPasswordChange={(password) =>
+              setState((prev) => ({ ...prev, password }))
+            }
+            onConfirmPasswordChange={(confirmPassword) =>
+              setState((prev) => ({ ...prev, confirmPassword }))
+            }
+            onAcceptTermsChange={(acceptTerms) =>
+              setState((prev) => ({ ...prev, acceptTerms }))
+            }
             onNext={handleAccountNext}
-            onBack={() => setCurrentStep(0)}
             isLoading={isLoading}
             errors={errors}
           />
         )}
 
-        {currentStep === 2 && (
+        {currentStep === 1 && (
           <VerifyStep
             email={state.email}
             onVerify={handleVerify}
@@ -305,22 +318,14 @@ export function RegistrationWizard() {
           />
         )}
 
-        {currentStep === 3 && (
-          <ProfileStep
-            role={state.role}
-            profileData={state.profileData}
-            onProfileChange={(profileData) => saveState({ profileData })}
-            onNext={handleProfileComplete}
-            onSkip={handleSkipProfile}
-            isLoading={isLoading}
-          />
-        )}
-
         {/* Login Link */}
         <div className="mt-8 pt-6 border-t border-gray-200 dark:border-gray-700 text-center">
           <p className="text-sm text-gray-600 dark:text-gray-400">
             Bereits registriert?{' '}
-            <Link href="/auth/login" className="text-green-600 hover:underline font-medium">
+            <Link
+              href="/auth/login"
+              className="text-green-600 hover:underline font-medium"
+            >
               Anmelden
             </Link>
           </p>
