@@ -6,12 +6,12 @@
  */
 
 import { Metadata } from 'next'
-import Link from 'next/link'
 import { auth } from '@/auth'
 import { redirect } from 'next/navigation'
 import { query } from '@/lib/auth/db'
 import { TABLE_NAMES } from '@/config/database'
-import { canAccessSection, isSuperAdmin, isStaffEmail } from '@/lib/permissions'
+import { canAccessSection, isSuperAdmin } from '@/lib/permissions'
+import { logger } from '@/lib/logger'
 import {
   Users,
   Search,
@@ -90,8 +90,7 @@ async function getUsers(): Promise<UserRow[]> {
     )
     return result.rows
   } catch (error) {
-    // Log error for debugging instead of silently failing
-    console.error('Failed to fetch users:', error)
+    logger.error('Failed to fetch users', error)
     return []
   }
 }
