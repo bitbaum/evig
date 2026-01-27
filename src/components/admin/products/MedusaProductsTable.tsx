@@ -174,13 +174,13 @@ export function MedusaProductsTable({
                 </td>
                 <td className="px-6 py-4 text-right">
                   <div className="flex items-center justify-end gap-2">
-                    <button className="p-1 text-gray-400 hover:text-gray-600">
+                    <button className="p-1 text-gray-400 hover:text-gray-600" title="Ansehen">
                       <Eye className="w-4 h-4" />
                     </button>
-                    <button className="p-1 text-gray-400 hover:text-gray-600">
+                    <button className="p-1 text-gray-400 hover:text-gray-600" title="Bearbeiten">
                       <Edit className="w-4 h-4" />
                     </button>
-                    <button className="p-1 text-red-400 hover:text-red-600">
+                    <button className="p-1 text-red-400 hover:text-red-600" title="Löschen">
                       <Trash2 className="w-4 h-4" />
                     </button>
                   </div>
