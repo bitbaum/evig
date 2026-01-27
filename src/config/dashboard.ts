@@ -71,6 +71,7 @@ const categoryMapping: Record<SectionCategory, DashboardCategory> = {
   management: 'admin',
   sensitive: 'admin',
   system: 'admin',
+  analyse: 'admin',
 }
 
 const colorMapping: Record<SectionColor, DashboardCard['color']> = {

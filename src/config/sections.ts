@@ -8,7 +8,7 @@
  * DRY: No duplication between admin.ts and dashboard.ts
  * SoC: Section definitions separate from rendering logic
  *
- * Last Updated: 2026-01-26
+ * Last Updated: 2026-01-27
  */
 
 import type { LucideIcon } from 'lucide-react'
@@ -33,6 +33,10 @@ import {
   PenTool,
   Store,
   Hammer,
+  PiggyBank,
+  TrendingUp,
+  Target,
+  Eye,
 } from 'lucide-react'
 
 // =============================================================================
@@ -100,6 +104,8 @@ export interface SectionConfig {
   priority: number
   /** Category for grouping */
   category: SectionCategory
+  /** Sidebar group for admin navigation (optional, defaults to none) */
+  sidebarGroup?: SidebarGroupId
 }
 
 export type SectionCategory =
@@ -111,6 +117,67 @@ export type SectionCategory =
   | 'management'  // Admin management sections
   | 'sensitive'   // Sensitive admin areas
   | 'system'      // System configuration
+  | 'analyse'     // Analytics and reporting
+
+// =============================================================================
+// SIDEBAR GROUPS - For admin sidebar organization
+// =============================================================================
+
+/**
+ * Sidebar group IDs for admin navigation
+ */
+export type SidebarGroupId =
+  | 'uebersicht'   // Overview: Dashboard, Freigaben
+  | 'angebot'      // Offerings: Produkte, Dienstleistungen, Workshops, Standorte
+  | 'inhalte'      // Content: Blog & Seiten, Bewertungen
+  | 'analyse'      // Analytics: Finanzen, Kennzahlen, Wirkung, Transparenz, Analytics
+  | 'personen'     // People: Team & HR, Benutzer
+  | 'system'       // System: Einstellungen
+
+/**
+ * Sidebar group configuration
+ */
+export interface SidebarGroup {
+  id: SidebarGroupId
+  label: string
+  priority: number
+}
+
+/**
+ * Sidebar groups for admin navigation - SSOT
+ */
+export const SIDEBAR_GROUPS: Record<SidebarGroupId, SidebarGroup> = {
+  uebersicht: {
+    id: 'uebersicht',
+    label: 'Übersicht',
+    priority: 0,
+  },
+  angebot: {
+    id: 'angebot',
+    label: 'Angebot',
+    priority: 1,
+  },
+  inhalte: {
+    id: 'inhalte',
+    label: 'Inhalte',
+    priority: 2,
+  },
+  analyse: {
+    id: 'analyse',
+    label: 'Analyse',
+    priority: 3,
+  },
+  personen: {
+    id: 'personen',
+    label: 'Personen',
+    priority: 4,
+  },
+  system: {
+    id: 'system',
+    label: 'System',
+    priority: 5,
+  },
+}
 
 // =============================================================================
 // SECTION DEFINITIONS - SSOT
@@ -133,6 +200,7 @@ export const SECTIONS: Record<string, SectionConfig> = {
     visibility: { admin: true, dashboard: false, requiresStaff: true },
     priority: 0,
     category: 'core',
+    sidebarGroup: 'uebersicht',
   },
 
   profile: {
@@ -283,6 +351,7 @@ export const SECTIONS: Record<string, SectionConfig> = {
     visibility: { admin: true, dashboard: false, requiresStaff: true },
     priority: 100,
     category: 'management',
+    sidebarGroup: 'angebot',
   },
 
   'workshops-admin': {
@@ -298,6 +367,7 @@ export const SECTIONS: Record<string, SectionConfig> = {
     visibility: { admin: true, dashboard: false, requiresStaff: true },
     priority: 101,
     category: 'management',
+    sidebarGroup: 'angebot',
   },
 
   services: {
@@ -313,6 +383,7 @@ export const SECTIONS: Record<string, SectionConfig> = {
     visibility: { admin: true, dashboard: false, requiresStaff: true },
     priority: 102,
     category: 'management',
+    sidebarGroup: 'angebot',
   },
 
   locations: {
@@ -328,6 +399,7 @@ export const SECTIONS: Record<string, SectionConfig> = {
     visibility: { admin: true, dashboard: false, requiresStaff: true },
     priority: 103,
     category: 'management',
+    sidebarGroup: 'angebot',
   },
 
   reviews: {
@@ -343,13 +415,14 @@ export const SECTIONS: Record<string, SectionConfig> = {
     visibility: { admin: true, dashboard: false, requiresStaff: true },
     priority: 104,
     category: 'management',
+    sidebarGroup: 'inhalte',
   },
 
   content: {
     id: 'content',
     path: '/admin/content',
     ui: {
-      label: 'Inhalte',
+      label: 'Blog & Seiten',
       description: 'Blog, Seiten, Medien',
       icon: FileText,
       emoji: '📝',
@@ -358,6 +431,7 @@ export const SECTIONS: Record<string, SectionConfig> = {
     visibility: { admin: true, dashboard: false, requiresStaff: true },
     priority: 105,
     category: 'management',
+    sidebarGroup: 'inhalte',
   },
 
   approvals: {
@@ -373,6 +447,7 @@ export const SECTIONS: Record<string, SectionConfig> = {
     visibility: { admin: true, dashboard: false, requiresStaff: true },
     priority: 106,
     category: 'management',
+    sidebarGroup: 'uebersicht',
   },
 
   analytics: {
@@ -388,6 +463,7 @@ export const SECTIONS: Record<string, SectionConfig> = {
     visibility: { admin: true, dashboard: false, requiresStaff: true },
     priority: 107,
     category: 'management',
+    sidebarGroup: 'analyse',
   },
 
   // ---------------------------------------------------------------------------
@@ -406,6 +482,7 @@ export const SECTIONS: Record<string, SectionConfig> = {
     visibility: { admin: true, dashboard: false, requiresStaff: true, sensitive: true },
     priority: 200,
     category: 'sensitive',
+    sidebarGroup: 'personen',
   },
 
   team: {
@@ -421,11 +498,80 @@ export const SECTIONS: Record<string, SectionConfig> = {
     visibility: { admin: true, dashboard: false, requiresStaff: true, sensitive: true },
     priority: 201,
     category: 'sensitive',
+    sidebarGroup: 'personen',
   },
 
+  // ---------------------------------------------------------------------------
+  // ANALYSE - Analytics and reporting sections (moved from Hirn)
+  // ---------------------------------------------------------------------------
+  finanzen: {
+    id: 'finanzen',
+    path: '/admin/analyse/finanzen',
+    ui: {
+      label: 'Finanzen',
+      description: 'Detaillierte Finanzübersicht und Trends',
+      icon: PiggyBank,
+      emoji: '💰',
+      color: 'info',
+    },
+    visibility: { admin: true, dashboard: false, requiresStaff: true, sensitive: true },
+    priority: 150,
+    category: 'analyse',
+    sidebarGroup: 'analyse',
+  },
+
+  kennzahlen: {
+    id: 'kennzahlen',
+    path: '/admin/analyse/kennzahlen',
+    ui: {
+      label: 'Kennzahlen',
+      description: 'KPIs und Metriken auf einen Blick',
+      icon: TrendingUp,
+      emoji: '📊',
+      color: 'info',
+    },
+    visibility: { admin: true, dashboard: false, requiresStaff: true, sensitive: true },
+    priority: 151,
+    category: 'analyse',
+    sidebarGroup: 'analyse',
+  },
+
+  wirkung: {
+    id: 'wirkung',
+    path: '/admin/analyse/wirkung',
+    ui: {
+      label: 'Wirkung',
+      description: 'Ökologische und soziale Wirkung',
+      icon: Target,
+      emoji: '🎯',
+      color: 'success',
+    },
+    visibility: { admin: true, dashboard: false, requiresStaff: true, sensitive: true },
+    priority: 152,
+    category: 'analyse',
+    sidebarGroup: 'analyse',
+  },
+
+  transparenz: {
+    id: 'transparenz',
+    path: '/admin/analyse/transparenz',
+    ui: {
+      label: 'Transparenz',
+      description: 'First Principles Analyse',
+      icon: Eye,
+      emoji: '👁️',
+      color: 'warning',
+    },
+    visibility: { admin: true, dashboard: false, requiresStaff: true, sensitive: true },
+    priority: 153,
+    category: 'analyse',
+    sidebarGroup: 'analyse',
+  },
+
+  // Keep 'finances' as alias for backwards compatibility
   finances: {
     id: 'finances',
-    path: '/admin/hirn/finanzen',
+    path: '/admin/analyse/finanzen',
     ui: {
       label: 'Finanzen',
       description: 'Finanzübersicht und Berichte',
@@ -433,8 +579,8 @@ export const SECTIONS: Record<string, SectionConfig> = {
       emoji: '💰',
       color: 'error',
     },
-    visibility: { admin: true, dashboard: false, requiresStaff: true, sensitive: true },
-    priority: 202,
+    visibility: { admin: false, dashboard: false, requiresStaff: true, sensitive: true },
+    priority: 999, // Hide from sidebar but keep for permissions
     category: 'sensitive',
   },
 
@@ -442,8 +588,8 @@ export const SECTIONS: Record<string, SectionConfig> = {
     id: 'hirn',
     path: '/admin/hirn',
     ui: {
-      label: 'Hirn',
-      description: 'Business Intelligence Dashboard',
+      label: 'Hirn AI',
+      description: 'KI-Assistent für RevampIT',
       icon: Brain,
       emoji: '🧠',
       color: 'error',
@@ -451,6 +597,7 @@ export const SECTIONS: Record<string, SectionConfig> = {
     visibility: { admin: true, dashboard: false, requiresStaff: true, sensitive: true },
     priority: 203,
     category: 'sensitive',
+    // Note: Hirn is shown separately in sidebar, not in a group
   },
 
   settings: {
@@ -466,6 +613,7 @@ export const SECTIONS: Record<string, SectionConfig> = {
     visibility: { admin: true, dashboard: false, requiresStaff: true, sensitive: true },
     priority: 204,
     category: 'sensitive',
+    sidebarGroup: 'system',
   },
 }
 
@@ -544,6 +692,31 @@ export function getSectionsByCategory(category: SectionCategory): SectionConfig[
     .sort((a, b) => a.priority - b.priority)
 }
 
+/**
+ * Get sidebar groups with their sections for admin navigation
+ * Returns groups sorted by priority, each with its sections
+ */
+export function getSidebarGroupsWithSections(): Array<{
+  group: SidebarGroup
+  sections: SectionConfig[]
+}> {
+  const groups = Object.values(SIDEBAR_GROUPS).sort((a, b) => a.priority - b.priority)
+
+  return groups.map(group => ({
+    group,
+    sections: Object.values(SECTIONS)
+      .filter(s => s.visibility.admin && s.sidebarGroup === group.id)
+      .sort((a, b) => a.priority - b.priority),
+  })).filter(g => g.sections.length > 0) // Only return groups with sections
+}
+
+/**
+ * Get Hirn section config (special case - not in a group)
+ */
+export function getHirnSection(): SectionConfig | undefined {
+  return SECTIONS.hirn
+}
+
 // =============================================================================
 // CATEGORY DEFINITIONS
 // =============================================================================
@@ -612,6 +785,13 @@ export const CATEGORIES: Record<SectionCategory, CategoryConfig> = {
     description: 'Systemkonfiguration',
     emoji: '⚙️',
     priority: 7,
+  },
+  analyse: {
+    id: 'analyse',
+    label: 'Analyse',
+    description: 'Analytics und Auswertungen',
+    emoji: '📊',
+    priority: 8,
   },
 }
 

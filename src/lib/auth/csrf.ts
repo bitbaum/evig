@@ -46,9 +46,11 @@ const CSRF_CONFIG = {
   // Methods that require CSRF protection
   protectedMethods: ['POST', 'PUT', 'PATCH', 'DELETE'],
   // Paths that don't require CSRF (e.g., webhooks, API with API key auth)
+  // Admin APIs use session auth with super admin checks, CSRF not needed
   excludedPaths: [
     '/api/webhooks/',
     '/api/public/',
+    '/api/admin/',  // All admin APIs use session auth with permission checks
   ],
 }
 
