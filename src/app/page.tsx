@@ -5,12 +5,12 @@ import { getCompactMetrics } from '@/data/impact-metrics'
 import { VALUE_PROPS, TESTIMONIALS } from '@/data/homepage'
 
 export const metadata: Metadata = {
-  title: 'revamp-it – Computer-Reparatur, Linux-Umstieg & Datenrettung in der Schweiz',
-  description: 'Alte Computer reparieren, aufrüsten und wiederherstellen. Gebrauchte Hardware bekommt mit Linux und Open Source ein zweites Leben. Nachhaltige IT-Lösungen für Privatpersonen, Vereine und KMU.',
+  title: 'revamp-it – Alte Hardware. Neues Leben. | Computer-Reparatur & Linux in der Schweiz',
+  description: 'Wir geben alter Hardware ein zweites Leben. Computer reparieren, aufrüsten und mit Linux wiederherstellen. Nachhaltige IT-Lösungen für Privatpersonen, Vereine und KMU.',
   keywords: ['Computer Reparatur Schweiz', 'Linux Installation', 'Datenrettung', 'Vintage Computer', 'Open Source', 'nachhaltige IT', 'Zürich', 'Basel', 'Luzern', 'refurbished Computer'],
   openGraph: {
-    title: 'revamp-it – Computer-Reparatur, Linux-Umstieg & Datenrettung',
-    description: 'Alte Computer reparieren, aufrüsten und wiederherstellen. Gebrauchte Hardware bekommt mit Linux und Open Source ein zweites Leben.',
+    title: 'revamp-it – Alte Hardware. Neues Leben.',
+    description: 'Wir geben alter Hardware ein zweites Leben. Computer reparieren, aufrüsten und mit Linux wiederherstellen. Nachhaltige IT-Lösungen in der Schweiz.',
     type: 'website',
     locale: 'de_CH',
     url: 'https://revampit.vercel.app',
@@ -18,8 +18,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'revamp-it – Computer-Reparatur, Linux-Umstieg & Datenrettung',
-    description: 'Alte Computer reparieren, aufrüsten und wiederherstellen. Gebrauchte Hardware bekommt mit Linux und Open Source ein zweites Leben.',
+    title: 'revamp-it – Alte Hardware. Neues Leben.',
+    description: 'Wir geben alter Hardware ein zweites Leben. Computer reparieren, aufrüsten und mit Linux wiederherstellen.',
   },
 }
 
@@ -99,7 +99,7 @@ export default function Home() {
         <div className="mx-auto max-w-2xl py-16 sm:py-24 md:py-32 lg:py-48">
           <div className="text-center">
             <h1 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl md:text-5xl lg:text-6xl">
-              Die Experten für alte Computer mit neuer Software
+              Alte Hardware. Neues Leben.
             </h1>
             <p className="mt-4 sm:mt-6 text-base sm:text-lg leading-7 sm:leading-8 text-gray-600">
               Alte Computer reparieren, aufrüsten und wiederherstellen. Gebrauchte Hardware bekommt mit Linux und Open Source ein zweites Leben. Für eine nachhaltigere Zukunft und mehr Technologie für alle.
