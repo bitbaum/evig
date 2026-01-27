@@ -41,7 +41,8 @@ export async function GET(request: NextRequest) {
       conditions.push(`(
         p.product_name ILIKE $${paramIndex}
         OR p.brand ILIKE $${paramIndex}
-        OR p.item_uuid ILIKE $${paramIndex}
+        OR p.model ILIKE $${paramIndex}
+        OR CAST(p.id AS TEXT) ILIKE $${paramIndex}
       )`)
       params.push(`%${search}%`)
       paramIndex++
@@ -54,9 +55,9 @@ export async function GET(request: NextRequest) {
     // Fetch products with inventory data
     const productsResult = await query<{
       id: string
-      item_uuid: string
       product_name: string
       brand: string
+      model: string | null
       short_description: string | null
       estimated_price_chf: number
       condition: string
@@ -65,16 +66,16 @@ export async function GET(request: NextRequest) {
       status: string
       created_at: string
       location: string | null
-      box_id: string | null
       quantity_available: number
       marketplace_status: string
+      kivitendo_article_number: string | null
     }>(
       `SELECT
         p.id,
-        p.item_uuid,
         p.product_name,
         p.brand,
-        p.short_description,
+        p.model,
+        p.specifications->>'short_description' as short_description,
         p.estimated_price_chf,
         p.condition,
         p.category,
@@ -82,9 +83,9 @@ export async function GET(request: NextRequest) {
         p.status,
         p.created_at,
         i.location,
-        i.box_id,
         COALESCE(i.quantity_available, 1) as quantity_available,
-        COALESCE(i.marketplace_status, 'draft') as marketplace_status
+        COALESCE(i.marketplace_status, 'draft') as marketplace_status,
+        p.kivitendo_article_number
       FROM ai_extracted_products p
       LEFT JOIN inventory_items i ON i.ai_product_id = p.id
       ${whereClause}

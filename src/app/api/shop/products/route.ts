@@ -63,6 +63,26 @@ export async function GET(request: NextRequest) {
     const data = await response.json();
     return apiSuccess(data);
   } catch (error) {
+    // Graceful degradation: if Medusa is down, return empty products
+    // instead of crashing the entire shop page
+    const isConnectionError = error instanceof Error &&
+      (error.cause as { code?: string })?.code === 'ECONNREFUSED';
+
+    if (isConnectionError) {
+      logger.warn("Medusa backend unavailable - returning empty products", {
+        url: MEDUSA_CONFIG.BACKEND_URL,
+      });
+      return apiSuccess({
+        products: [],
+        count: 0,
+        offset: 0,
+        limit: 50,
+        _medusa_unavailable: true,
+        _message: "Shop service temporarily unavailable"
+      });
+    }
+
+    logger.error("Failed to connect to Medusa backend", { error });
     return apiError(
       error,
       "Failed to connect to Medusa backend"
