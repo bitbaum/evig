@@ -11,18 +11,18 @@
  * Delete a chat session.
  */
 
-import { NextRequest, NextResponse } from 'next/server'
+import { NextRequest } from 'next/server'
 import { auth } from '@/auth'
 import { canAccessSection } from '@/lib/permissions'
 import { getChatHistory, getUserSessions, deleteSession } from '@/lib/hirn'
-import { logger } from '@/lib/logger'
+import { apiSuccess, apiError, apiUnauthorized, apiForbidden, apiBadRequest } from '@/lib/api/helpers'
 
 export async function GET(request: NextRequest) {
   try {
     const session = await auth()
 
     if (!session?.user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+      return apiUnauthorized()
     }
 
     const user = {
@@ -33,10 +33,7 @@ export async function GET(request: NextRequest) {
     }
 
     if (!canAccessSection(user, 'hirn')) {
-      return NextResponse.json(
-        { error: 'No permission to access Hirn' },
-        { status: 403 }
-      )
+      return apiForbidden('Keine Berechtigung für Hirn')
     }
 
     const { searchParams } = new URL(request.url)
@@ -45,18 +42,14 @@ export async function GET(request: NextRequest) {
     if (sessionId) {
       // Get history for specific session
       const history = await getChatHistory(sessionId)
-      return NextResponse.json({ success: true, data: history })
+      return apiSuccess(history)
     } else {
       // Get all sessions for user
       const sessions = await getUserSessions(session.user.id)
-      return NextResponse.json({ success: true, data: sessions })
+      return apiSuccess(sessions)
     }
   } catch (error) {
-    logger.error('Hirn history error', { error })
-    return NextResponse.json(
-      { error: 'Failed to get chat history' },
-      { status: 500 }
-    )
+    return apiError(error, 'Chat-Verlauf konnte nicht geladen werden')
   }
 }
 
@@ -65,7 +58,7 @@ export async function DELETE(request: NextRequest) {
     const session = await auth()
 
     if (!session?.user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+      return apiUnauthorized()
     }
 
     const user = {
@@ -76,30 +69,20 @@ export async function DELETE(request: NextRequest) {
     }
 
     if (!canAccessSection(user, 'hirn')) {
-      return NextResponse.json(
-        { error: 'No permission to access Hirn' },
-        { status: 403 }
-      )
+      return apiForbidden('Keine Berechtigung für Hirn')
     }
 
     const { searchParams } = new URL(request.url)
     const sessionId = searchParams.get('sessionId')
 
     if (!sessionId) {
-      return NextResponse.json(
-        { error: 'Session ID is required' },
-        { status: 400 }
-      )
+      return apiBadRequest('Session-ID ist erforderlich')
     }
 
     await deleteSession(sessionId)
 
-    return NextResponse.json({ success: true })
+    return apiSuccess({ message: 'Session gelöscht' })
   } catch (error) {
-    logger.error('Hirn delete session error', { error })
-    return NextResponse.json(
-      { error: 'Failed to delete session' },
-      { status: 500 }
-    )
+    return apiError(error, 'Session konnte nicht gelöscht werden')
   }
 }

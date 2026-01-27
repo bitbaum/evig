@@ -5,11 +5,12 @@
  * Super admins can approve or reject permission requests.
  */
 
-import { NextRequest, NextResponse } from 'next/server'
+import { NextRequest } from 'next/server'
 import { auth } from '@/auth'
 import { query } from '@/lib/auth/db'
 import { isSuperAdmin } from '@/lib/permissions'
 import { TABLE_NAMES } from '@/config/database'
+import { apiSuccess, apiError, apiUnauthorized, apiForbidden, apiBadRequest, apiNotFound } from '@/lib/api/helpers'
 
 interface RequestContext {
   params: Promise<{ id: string }>
@@ -20,15 +21,12 @@ export async function POST(request: NextRequest, context: RequestContext) {
     const session = await auth()
 
     if (!session?.user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+      return apiUnauthorized()
     }
 
     // Only super admins can approve/reject
     if (!isSuperAdmin(session.user.email)) {
-      return NextResponse.json(
-        { error: 'Only super admins can approve permission requests' },
-        { status: 403 }
-      )
+      return apiForbidden('Nur Super-Admins können Berechtigungsanfragen genehmigen')
     }
 
     const { id } = await context.params
@@ -36,10 +34,7 @@ export async function POST(request: NextRequest, context: RequestContext) {
     const { action, notes } = body
 
     if (!action || !['approve', 'reject'].includes(action)) {
-      return NextResponse.json(
-        { error: 'Invalid action. Use "approve" or "reject"' },
-        { status: 400 }
-      )
+      return apiBadRequest('Ungültige Aktion. Verwenden Sie "approve" oder "reject"')
     }
 
     // Get the request details
@@ -56,19 +51,13 @@ export async function POST(request: NextRequest, context: RequestContext) {
     )
 
     if (requestResult.rows.length === 0) {
-      return NextResponse.json(
-        { error: 'Permission request not found' },
-        { status: 404 }
-      )
+      return apiNotFound('Berechtigungsanfrage')
     }
 
     const permRequest = requestResult.rows[0]
 
     if (permRequest.status !== 'pending') {
-      return NextResponse.json(
-        { error: 'This request has already been processed' },
-        { status: 400 }
-      )
+      return apiBadRequest('Diese Anfrage wurde bereits bearbeitet')
     }
 
     // Update the request status
@@ -105,16 +94,12 @@ export async function POST(request: NextRequest, context: RequestContext) {
       )
     }
 
-    return NextResponse.json({
-      success: true,
+    return apiSuccess({
       message: action === 'approve'
-        ? 'Permission request approved. User now has access to the requested sections.'
-        : 'Permission request rejected.',
+        ? 'Berechtigungsanfrage genehmigt. Der Benutzer hat nun Zugriff auf die angeforderten Bereiche.'
+        : 'Berechtigungsanfrage abgelehnt.',
     })
   } catch (error) {
-    return NextResponse.json(
-      { error: 'Failed to process permission request' },
-      { status: 500 }
-    )
+    return apiError(error, 'Berechtigungsanfrage konnte nicht verarbeitet werden')
   }
 }

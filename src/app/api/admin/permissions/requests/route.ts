@@ -5,11 +5,12 @@
  * Super admins can see all pending permission requests.
  */
 
-import { NextRequest, NextResponse } from 'next/server'
+import { NextRequest } from 'next/server'
 import { auth } from '@/auth'
 import { query } from '@/lib/auth/db'
 import { isSuperAdmin } from '@/lib/permissions'
 import { TABLE_NAMES } from '@/config/database'
+import { apiSuccess, apiError, apiUnauthorized, apiForbidden } from '@/lib/api/helpers'
 
 interface PermissionRequest {
   id: string
@@ -31,15 +32,12 @@ export async function GET(request: NextRequest) {
     const session = await auth()
 
     if (!session?.user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+      return apiUnauthorized()
     }
 
     // Only super admins can view permission requests
     if (!isSuperAdmin(session.user.email)) {
-      return NextResponse.json(
-        { error: 'Only super admins can view permission requests' },
-        { status: 403 }
-      )
+      return apiForbidden('Nur Super-Admins können Berechtigungsanfragen einsehen')
     }
 
     const { searchParams } = new URL(request.url)
@@ -68,14 +66,8 @@ export async function GET(request: NextRequest) {
       [status]
     )
 
-    return NextResponse.json({
-      success: true,
-      requests: result.rows,
-    })
+    return apiSuccess({ requests: result.rows })
   } catch (error) {
-    return NextResponse.json(
-      { error: 'Failed to fetch permission requests' },
-      { status: 500 }
-    )
+    return apiError(error, 'Berechtigungsanfragen konnten nicht geladen werden')
   }
 }

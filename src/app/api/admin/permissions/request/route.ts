@@ -5,25 +5,23 @@
  * Allows staff to request access to admin sections they don't have.
  */
 
-import { NextRequest, NextResponse } from 'next/server'
+import { NextRequest } from 'next/server'
 import { auth } from '@/auth'
 import { query } from '@/lib/auth/db'
 import { isStaffEmail, ADMIN_SECTIONS, type AdminSection } from '@/lib/permissions'
+import { apiSuccess, apiError, apiUnauthorized, apiForbidden, apiBadRequest } from '@/lib/api/helpers'
 
 export async function POST(request: NextRequest) {
   try {
     const session = await auth()
 
     if (!session?.user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+      return apiUnauthorized()
     }
 
     // Only staff can request permissions
     if (!session.user.isStaff && !isStaffEmail(session.user.email)) {
-      return NextResponse.json(
-        { error: 'Only staff members can request permissions' },
-        { status: 403 }
-      )
+      return apiForbidden('Nur Mitarbeiter können Berechtigungen anfordern')
     }
 
     const body = await request.json()
@@ -31,28 +29,19 @@ export async function POST(request: NextRequest) {
 
     // Validate sections
     if (!Array.isArray(sections) || sections.length === 0) {
-      return NextResponse.json(
-        { error: 'At least one section is required' },
-        { status: 400 }
-      )
+      return apiBadRequest('Mindestens ein Bereich ist erforderlich')
     }
 
     // Validate that all sections are valid
     const validSections = Object.keys(ADMIN_SECTIONS) as AdminSection[]
     const invalidSections = sections.filter((s: string) => !validSections.includes(s as AdminSection))
     if (invalidSections.length > 0) {
-      return NextResponse.json(
-        { error: `Invalid sections: ${invalidSections.join(', ')}` },
-        { status: 400 }
-      )
+      return apiBadRequest(`Ungültige Bereiche: ${invalidSections.join(', ')}`)
     }
 
     // Validate reason
     if (!reason || typeof reason !== 'string' || reason.trim().length < 10) {
-      return NextResponse.json(
-        { error: 'Please provide a reason (at least 10 characters)' },
-        { status: 400 }
-      )
+      return apiBadRequest('Bitte geben Sie einen Grund an (mindestens 10 Zeichen)')
     }
 
     // Check if user already has a pending request for any of these sections
@@ -65,10 +54,7 @@ export async function POST(request: NextRequest) {
     )
 
     if (existingResult.rows.length > 0) {
-      return NextResponse.json(
-        { error: 'You already have a pending request for one or more of these sections' },
-        { status: 400 }
-      )
+      return apiBadRequest('Sie haben bereits eine ausstehende Anfrage für einen oder mehrere dieser Bereiche')
     }
 
     // Create the permission request
@@ -79,15 +65,11 @@ export async function POST(request: NextRequest) {
       [session.user.id, sections, reason.trim()]
     )
 
-    return NextResponse.json({
-      success: true,
+    return apiSuccess({
       requestId: result.rows[0].id,
-      message: 'Permission request submitted. A super admin will review it.',
+      message: 'Berechtigungsanfrage eingereicht. Ein Super-Admin wird sie prüfen.',
     })
   } catch (error) {
-    return NextResponse.json(
-      { error: 'Failed to submit permission request' },
-      { status: 500 }
-    )
+    return apiError(error, 'Berechtigungsanfrage konnte nicht eingereicht werden')
   }
 }

@@ -5,18 +5,18 @@
  * Send a message and get an AI response with RAG context.
  */
 
-import { NextRequest, NextResponse } from 'next/server'
+import { NextRequest } from 'next/server'
 import { auth } from '@/auth'
 import { canAccessSection } from '@/lib/permissions'
 import { chat } from '@/lib/hirn'
-import { logger } from '@/lib/logger'
+import { apiSuccess, apiError, apiUnauthorized, apiForbidden, apiBadRequest } from '@/lib/api/helpers'
 
 export async function POST(request: NextRequest) {
   try {
     const session = await auth()
 
     if (!session?.user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+      return apiUnauthorized()
     }
 
     // Check hirn permission
@@ -28,27 +28,18 @@ export async function POST(request: NextRequest) {
     }
 
     if (!canAccessSection(user, 'hirn')) {
-      return NextResponse.json(
-        { error: 'No permission to access Hirn' },
-        { status: 403 }
-      )
+      return apiForbidden('Keine Berechtigung für Hirn')
     }
 
     const body = await request.json()
     const { message, sessionId, temperature, maxTokens, topK, minSimilarity } = body
 
     if (!message || typeof message !== 'string') {
-      return NextResponse.json(
-        { error: 'Message is required' },
-        { status: 400 }
-      )
+      return apiBadRequest('Nachricht ist erforderlich')
     }
 
     if (!sessionId || typeof sessionId !== 'string') {
-      return NextResponse.json(
-        { error: 'Session ID is required' },
-        { status: 400 }
-      )
+      return apiBadRequest('Session-ID ist erforderlich')
     }
 
     const response = await chat(message, {
@@ -60,26 +51,19 @@ export async function POST(request: NextRequest) {
       minSimilarity,
     })
 
-    return NextResponse.json({
-      success: true,
-      data: {
-        content: response.content,
-        contextUsed: response.contextUsed.map(c => ({
-          chunkId: c.chunkId,
-          content: c.content.slice(0, 200) + (c.content.length > 200 ? '...' : ''),
-          similarity: c.similarity,
-          source: c.document.title || c.document.sourcePath,
-        })),
-        usage: response.usage,
-        model: response.model,
-        provider: response.provider,
-      },
+    return apiSuccess({
+      content: response.content,
+      contextUsed: response.contextUsed.map(c => ({
+        chunkId: c.chunkId,
+        content: c.content.slice(0, 200) + (c.content.length > 200 ? '...' : ''),
+        similarity: c.similarity,
+        source: c.document.title || c.document.sourcePath,
+      })),
+      usage: response.usage,
+      model: response.model,
+      provider: response.provider,
     })
   } catch (error) {
-    logger.error('Hirn chat error', { error })
-    return NextResponse.json(
-      { error: 'Failed to process chat message' },
-      { status: 500 }
-    )
+    return apiError(error, 'Chat-Nachricht konnte nicht verarbeitet werden')
   }
 }

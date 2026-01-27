@@ -8,12 +8,14 @@
  * Only super admins can access these endpoints.
  */
 
-import { NextRequest, NextResponse } from 'next/server'
+import { NextRequest } from 'next/server'
 import { auth } from '@/auth'
 import { query } from '@/lib/auth/db'
 import { isSuperAdmin, SUPER_ADMIN_EMAILS } from '@/lib/permissions'
 import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
+import { apiSuccess, apiError, apiUnauthorized, apiForbidden, apiNotFound, apiBadRequest } from '@/lib/api/helpers'
+import { ERROR_MESSAGES } from '@/config/error-messages'
 
 interface RequestContext {
   params: Promise<{ id: string }>
@@ -28,14 +30,11 @@ export async function GET(request: NextRequest, context: RequestContext) {
     const session = await auth()
 
     if (!session?.user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+      return apiUnauthorized()
     }
 
     if (!isSuperAdmin(session.user.email, session.user.isSuperAdmin)) {
-      return NextResponse.json(
-        { error: 'Only super admins can view user details' },
-        { status: 403 }
-      )
+      return apiForbidden('Nur Super-Admins können Benutzerdetails einsehen')
     }
 
     const { id } = await context.params
@@ -62,16 +61,12 @@ export async function GET(request: NextRequest, context: RequestContext) {
     )
 
     if (result.rows.length === 0) {
-      return NextResponse.json({ error: 'User not found' }, { status: 404 })
+      return apiNotFound('Benutzer')
     }
 
-    return NextResponse.json({ user: result.rows[0] })
+    return apiSuccess({ user: result.rows[0] })
   } catch (error) {
-    logger.error('Failed to fetch user', { error })
-    return NextResponse.json(
-      { error: 'Failed to fetch user' },
-      { status: 500 }
-    )
+    return apiError(error, 'Benutzer konnte nicht geladen werden')
   }
 }
 
@@ -84,14 +79,11 @@ export async function PATCH(request: NextRequest, context: RequestContext) {
     const session = await auth()
 
     if (!session?.user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+      return apiUnauthorized()
     }
 
     if (!isSuperAdmin(session.user.email, session.user.isSuperAdmin)) {
-      return NextResponse.json(
-        { error: 'Only super admins can edit users' },
-        { status: 403 }
-      )
+      return apiForbidden('Nur Super-Admins können Benutzer bearbeiten')
     }
 
     const { id } = await context.params
@@ -105,7 +97,7 @@ export async function PATCH(request: NextRequest, context: RequestContext) {
     )
 
     if (existingUser.rows.length === 0) {
-      return NextResponse.json({ error: 'User not found' }, { status: 404 })
+      return apiNotFound('Benutzer')
     }
 
     // If changing email, check if new email already exists
@@ -115,10 +107,7 @@ export async function PATCH(request: NextRequest, context: RequestContext) {
         [email, id]
       )
       if (emailCheck.rows.length > 0) {
-        return NextResponse.json(
-          { error: 'Email already in use by another user' },
-          { status: 400 }
-        )
+        return apiBadRequest('E-Mail wird bereits von einem anderen Benutzer verwendet')
       }
     }
 
@@ -158,10 +147,7 @@ export async function PATCH(request: NextRequest, context: RequestContext) {
     }
 
     if (updates.length === 0) {
-      return NextResponse.json(
-        { error: 'No fields to update' },
-        { status: 400 }
-      )
+      return apiBadRequest('Keine Felder zum Aktualisieren')
     }
 
     values.push(id)
@@ -179,16 +165,9 @@ export async function PATCH(request: NextRequest, context: RequestContext) {
       fields: Object.keys(body),
     })
 
-    return NextResponse.json({
-      success: true,
-      message: 'User updated successfully',
-    })
+    return apiSuccess({ message: 'Benutzer erfolgreich aktualisiert' })
   } catch (error) {
-    logger.error('Failed to update user', { error })
-    return NextResponse.json(
-      { error: 'Failed to update user' },
-      { status: 500 }
-    )
+    return apiError(error, 'Benutzer konnte nicht aktualisiert werden')
   }
 }
 
@@ -201,14 +180,11 @@ export async function DELETE(request: NextRequest, context: RequestContext) {
     const session = await auth()
 
     if (!session?.user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+      return apiUnauthorized()
     }
 
     if (!isSuperAdmin(session.user.email, session.user.isSuperAdmin)) {
-      return NextResponse.json(
-        { error: 'Only super admins can delete users' },
-        { status: 403 }
-      )
+      return apiForbidden('Nur Super-Admins können Benutzer löschen')
     }
 
     const { id } = await context.params
@@ -220,25 +196,19 @@ export async function DELETE(request: NextRequest, context: RequestContext) {
     )
 
     if (userResult.rows.length === 0) {
-      return NextResponse.json({ error: 'User not found' }, { status: 404 })
+      return apiNotFound('Benutzer')
     }
 
     const targetUser = userResult.rows[0]
 
     // Prevent deleting super admins from the hardcoded list
     if (SUPER_ADMIN_EMAILS.includes(targetUser.email.toLowerCase() as typeof SUPER_ADMIN_EMAILS[number])) {
-      return NextResponse.json(
-        { error: 'Cannot delete a core super admin' },
-        { status: 403 }
-      )
+      return apiForbidden('Kern-Super-Admins können nicht gelöscht werden')
     }
 
     // Prevent self-deletion
     if (targetUser.id === session.user.id) {
-      return NextResponse.json(
-        { error: 'You cannot delete yourself' },
-        { status: 400 }
-      )
+      return apiBadRequest('Sie können sich nicht selbst löschen')
     }
 
     // Delete related data first (foreign key constraints)
@@ -268,15 +238,8 @@ export async function DELETE(request: NextRequest, context: RequestContext) {
       deletedUserName: targetUser.name,
     })
 
-    return NextResponse.json({
-      success: true,
-      message: `User ${targetUser.email} has been deleted`,
-    })
+    return apiSuccess({ message: `Benutzer ${targetUser.email} wurde gelöscht` })
   } catch (error) {
-    logger.error('Failed to delete user', { error })
-    return NextResponse.json(
-      { error: 'Failed to delete user' },
-      { status: 500 }
-    )
+    return apiError(error, 'Benutzer konnte nicht gelöscht werden')
   }
 }

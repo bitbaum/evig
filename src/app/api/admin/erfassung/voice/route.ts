@@ -15,6 +15,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@/auth'
 import { canAccessSection } from '@/lib/permissions'
 import { logger } from '@/lib/logger'
+import { apiUnauthorized, apiForbidden, apiBadRequest } from '@/lib/api/helpers'
 
 // Transcription service URL
 const TRANSCRIPTION_URL = process.env.TRANSCRIPTION_URL || 'http://localhost:5111'
@@ -65,7 +66,7 @@ export async function POST(request: NextRequest) {
     // Auth check
     const session = await auth()
     if (!session?.user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+      return apiUnauthorized()
     }
 
     const user = {
@@ -76,10 +77,7 @@ export async function POST(request: NextRequest) {
 
     // Check permission - erfassung is part of products section
     if (!canAccessSection(user, 'products')) {
-      return NextResponse.json(
-        { error: 'Keine Berechtigung für Produkterfassung' },
-        { status: 403 }
-      )
+      return apiForbidden('Keine Berechtigung für Produkterfassung')
     }
 
     // Get audio from form data
@@ -87,10 +85,7 @@ export async function POST(request: NextRequest) {
     const audioFile = formData.get('audio') as File | null
 
     if (!audioFile) {
-      return NextResponse.json(
-        { error: 'Keine Audiodatei empfangen' },
-        { status: 400 }
-      )
+      return apiBadRequest('Keine Audiodatei empfangen')
     }
 
     logger.info('Voice erfassung started', {
@@ -115,7 +110,7 @@ export async function POST(request: NextRequest) {
       const error = await transcribeResponse.text()
       logger.error('Transcription failed', { error })
       return NextResponse.json(
-        { error: 'Transkription fehlgeschlagen', details: error },
+        { success: false, error: 'Transkription fehlgeschlagen', details: error },
         { status: 500 }
       )
     }
@@ -124,10 +119,7 @@ export async function POST(request: NextRequest) {
     const transcribedText = transcription.text
 
     if (!transcribedText || transcribedText.trim() === '') {
-      return NextResponse.json(
-        { error: 'Keine Sprache erkannt. Bitte erneut versuchen.' },
-        { status: 400 }
-      )
+      return apiBadRequest('Keine Sprache erkannt. Bitte erneut versuchen.')
     }
 
     logger.info('Transcription complete', {
@@ -156,7 +148,7 @@ export async function POST(request: NextRequest) {
       const error = await ollamaResponse.text()
       logger.error('Ollama parsing failed', { error })
       return NextResponse.json(
-        { error: 'KI-Parsing fehlgeschlagen', details: error },
+        { success: false, error: 'KI-Parsing fehlgeschlagen', details: error },
         { status: 500 }
       )
     }
@@ -181,6 +173,7 @@ export async function POST(request: NextRequest) {
       })
       return NextResponse.json(
         {
+          success: false,
           error: 'Konnte Produktdaten nicht extrahieren',
           transcription: transcribedText,
           rawResponse: responseText,
@@ -203,7 +196,7 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     logger.error('Voice erfassung error', { error })
     return NextResponse.json(
-      { error: 'Interner Serverfehler' },
+      { success: false, error: 'Interner Serverfehler' },
       { status: 500 }
     )
   }

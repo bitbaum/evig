@@ -2,12 +2,14 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getUserByEmail, query } from '@/lib/auth/db'
 import { logger } from '@/lib/logger'
 import { TABLE_NAMES } from '@/config/database'
+import { apiBadRequest, apiError } from '@/lib/api/helpers'
+import { ERROR_MESSAGES } from '@/config/error-messages'
 
 export async function POST(req: NextRequest) {
   try {
     const { email } = await req.json()
     if (!email) {
-      return NextResponse.json({ error: 'E-Mail erforderlich' }, { status: 400 })
+      return apiBadRequest(ERROR_MESSAGES.EMAIL_REQUIRED)
     }
 
     try {
@@ -49,16 +51,15 @@ export async function POST(req: NextRequest) {
       // Handle database connection errors gracefully
       const errorMessage = dbError instanceof Error ? dbError.message : String(dbError)
       if (errorMessage.includes('connect') || errorMessage.includes('ECONNREFUSED') || errorMessage.includes('timeout')) {
-        return NextResponse.json({ 
+        return NextResponse.json({
+          success: false,
           error: 'Datenbankverbindung fehlgeschlagen. Bitte versuchen Sie es später erneut.',
-          dbError: true 
+          dbError: true
         }, { status: 503 })
       }
       throw dbError
     }
   } catch (e) {
-    logger.error('Login status check error', { error: e })
-    return NextResponse.json({ error: 'Statusprüfung fehlgeschlagen' }, { status: 500 })
+    return apiError(e, ERROR_MESSAGES.STATUS_CHECK_FAILED)
   }
 }
-

@@ -472,7 +472,7 @@ export async function queryAuditLogs(
   const offset = options.offset || 0
 
   const result = await query<AuditLogEntry>(
-    `SELECT * FROM auth_audit_log
+    `SELECT * FROM ${TABLE_NAMES.AUTH_AUDIT_LOG}
      ${whereClause}
      ORDER BY created_at DESC
      LIMIT $${paramIndex++} OFFSET $${paramIndex++}`,
@@ -492,7 +492,7 @@ export async function getRecentSuspiciousActivity(
   // Validate hours to prevent SQL injection (1-168 hours = 1 week max)
   const safeHours = Math.max(1, Math.min(168, Math.floor(hours)))
   const result = await query<AuditLogEntry>(
-    `SELECT * FROM auth_audit_log
+    `SELECT * FROM ${TABLE_NAMES.AUTH_AUDIT_LOG}
      WHERE ip_address = $1
        AND severity IN ('warning', 'critical')
        AND created_at > NOW() - INTERVAL '1 hour' * $2
@@ -513,7 +513,7 @@ export async function getFailedLoginAttempts(
   // Validate hours to prevent SQL injection (1-168 hours = 1 week max)
   const safeHours = Math.max(1, Math.min(168, Math.floor(hours)))
   const result = await query<{ count: string }>(
-    `SELECT COUNT(*) as count FROM auth_audit_log
+    `SELECT COUNT(*) as count FROM ${TABLE_NAMES.AUTH_AUDIT_LOG}
      WHERE user_id = $1
        AND event_type = 'login_failure'
        AND created_at > NOW() - INTERVAL '1 hour' * $2`,

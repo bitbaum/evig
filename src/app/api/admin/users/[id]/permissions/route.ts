@@ -6,13 +6,14 @@
  * All changes are logged to the audit log.
  */
 
-import { NextRequest, NextResponse } from 'next/server'
+import { NextRequest } from 'next/server'
 import { auth } from '@/auth'
 import { query } from '@/lib/auth/db'
 import { isSuperAdmin, ADMIN_SECTIONS, SUPER_ADMIN_EMAILS, type AdminSection } from '@/lib/permissions'
 import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
 import { logPermissionsChange, logSuperAdminChange } from '@/lib/auth/audit'
+import { apiSuccess, apiError, apiUnauthorized, apiForbidden, apiBadRequest, apiNotFound } from '@/lib/api/helpers'
 
 interface RequestContext {
   params: Promise<{ id: string }>
@@ -34,15 +35,12 @@ export async function PATCH(request: NextRequest, context: RequestContext) {
     const session = await auth()
 
     if (!session?.user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+      return apiUnauthorized()
     }
 
     // Only super admins can manage permissions
     if (!isSuperAdmin(session.user.email, session.user.isSuperAdmin)) {
-      return NextResponse.json(
-        { error: 'Only super admins can manage permissions' },
-        { status: 403 }
-      )
+      return apiForbidden('Nur Super-Admins können Berechtigungen verwalten')
     }
 
     const { id } = await context.params
@@ -52,10 +50,7 @@ export async function PATCH(request: NextRequest, context: RequestContext) {
     // Validate permissions if provided
     if (permissions !== undefined) {
       if (!Array.isArray(permissions)) {
-        return NextResponse.json(
-          { error: 'Permissions must be an array' },
-          { status: 400 }
-        )
+        return apiBadRequest('Berechtigungen müssen ein Array sein')
       }
 
       // Validate each permission
@@ -64,10 +59,7 @@ export async function PATCH(request: NextRequest, context: RequestContext) {
         (p: string) => p !== '*' && !validSections.includes(p as AdminSection)
       )
       if (invalidPermissions.length > 0) {
-        return NextResponse.json(
-          { error: `Invalid permissions: ${invalidPermissions.join(', ')}` },
-          { status: 400 }
-        )
+        return apiBadRequest(`Ungültige Berechtigungen: ${invalidPermissions.join(', ')}`)
       }
     }
 
@@ -84,10 +76,7 @@ export async function PATCH(request: NextRequest, context: RequestContext) {
     )
 
     if (userResult.rows.length === 0) {
-      return NextResponse.json(
-        { error: 'User not found' },
-        { status: 404 }
-      )
+      return apiNotFound('Benutzer')
     }
 
     const targetUser = userResult.rows[0]
@@ -95,18 +84,12 @@ export async function PATCH(request: NextRequest, context: RequestContext) {
 
     // Prevent demoting users who are in the hardcoded super admin list
     if (newSuperAdminStatus === false && SUPER_ADMIN_EMAILS.includes(targetUser.email.toLowerCase() as typeof SUPER_ADMIN_EMAILS[number])) {
-      return NextResponse.json(
-        { error: 'Cannot demote a user who is in the core super admin list' },
-        { status: 400 }
-      )
+      return apiBadRequest('Benutzer aus der Kern-Super-Admin-Liste können nicht herabgestuft werden')
     }
 
     // Prevent self-demotion
     if (newSuperAdminStatus === false && targetUser.id === session.user.id) {
-      return NextResponse.json(
-        { error: 'You cannot demote yourself' },
-        { status: 400 }
-      )
+      return apiBadRequest('Sie können sich nicht selbst herabstufen')
     }
 
     // Build the update query
@@ -163,10 +146,7 @@ export async function PATCH(request: NextRequest, context: RequestContext) {
     }
 
     if (updates.length === 0) {
-      return NextResponse.json(
-        { error: 'No updates provided' },
-        { status: 400 }
-      )
+      return apiBadRequest('Keine Aktualisierungen angegeben')
     }
 
     values.push(id)
@@ -178,15 +158,8 @@ export async function PATCH(request: NextRequest, context: RequestContext) {
       values
     )
 
-    return NextResponse.json({
-      success: true,
-      message: 'User permissions updated successfully',
-    })
+    return apiSuccess({ message: 'Benutzerberechtigungen erfolgreich aktualisiert' })
   } catch (error) {
-    logger.error('Failed to update user permissions', { error })
-    return NextResponse.json(
-      { error: 'Failed to update user permissions' },
-      { status: 500 }
-    )
+    return apiError(error, 'Benutzerberechtigungen konnten nicht aktualisiert werden')
   }
 }

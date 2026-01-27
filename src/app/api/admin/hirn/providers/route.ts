@@ -8,18 +8,19 @@
  * Update provider settings (set default, enable/disable).
  */
 
-import { NextRequest, NextResponse } from 'next/server'
+import { NextRequest } from 'next/server'
 import { auth } from '@/auth'
 import { canAccessSection } from '@/lib/permissions'
 import { getProviderSettings, setDefaultProvider, createProvider } from '@/lib/hirn/providers'
 import { logger } from '@/lib/logger'
+import { apiSuccess, apiError, apiUnauthorized, apiForbidden, apiBadRequest, apiNotFound } from '@/lib/api/helpers'
 
 export async function GET(request: NextRequest) {
   try {
     const session = await auth()
 
     if (!session?.user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+      return apiUnauthorized()
     }
 
     const user = {
@@ -30,10 +31,7 @@ export async function GET(request: NextRequest) {
     }
 
     if (!canAccessSection(user, 'hirn')) {
-      return NextResponse.json(
-        { error: 'No permission to access Hirn' },
-        { status: 403 }
-      )
+      return apiForbidden('Keine Berechtigung für Hirn')
     }
 
     // Get system settings and check availability
@@ -64,16 +62,9 @@ export async function GET(request: NextRequest) {
       })
     )
 
-    return NextResponse.json({
-      success: true,
-      data: providersWithStatus,
-    })
+    return apiSuccess(providersWithStatus)
   } catch (error) {
-    logger.error('Hirn providers error', { error })
-    return NextResponse.json(
-      { error: 'Failed to get providers' },
-      { status: 500 }
-    )
+    return apiError(error, 'Provider konnten nicht geladen werden')
   }
 }
 
@@ -82,7 +73,7 @@ export async function PATCH(request: NextRequest) {
     const session = await auth()
 
     if (!session?.user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+      return apiUnauthorized()
     }
 
     const user = {
@@ -93,20 +84,14 @@ export async function PATCH(request: NextRequest) {
     }
 
     if (!canAccessSection(user, 'hirn')) {
-      return NextResponse.json(
-        { error: 'No permission to access Hirn' },
-        { status: 403 }
-      )
+      return apiForbidden('Keine Berechtigung für Hirn')
     }
 
     const body = await request.json()
     const { provider, isDefault } = body
 
     if (!provider) {
-      return NextResponse.json(
-        { error: 'Provider is required' },
-        { status: 400 }
-      )
+      return apiBadRequest('Provider ist erforderlich')
     }
 
     // Check if provider is available before setting as default
@@ -114,17 +99,11 @@ export async function PATCH(request: NextRequest) {
     const providerSettings = settings.find(s => s.provider === provider)
 
     if (!providerSettings) {
-      return NextResponse.json(
-        { error: 'Provider not found' },
-        { status: 404 }
-      )
+      return apiNotFound('Provider')
     }
 
     if (!providerSettings.is_enabled) {
-      return NextResponse.json(
-        { error: 'Provider is not enabled' },
-        { status: 400 }
-      )
+      return apiBadRequest('Provider ist nicht aktiviert')
     }
 
     // Check availability
@@ -137,16 +116,10 @@ export async function PATCH(request: NextRequest) {
       const isAvailable = await providerInstance.isAvailable()
 
       if (!isAvailable) {
-        return NextResponse.json(
-          { error: `Provider ${provider} ist nicht verfügbar. Prüfe API-Key oder Ollama-Status.` },
-          { status: 400 }
-        )
+        return apiBadRequest(`Provider ${provider} ist nicht verfügbar. Prüfe API-Key oder Ollama-Status.`)
       }
     } catch (err) {
-      return NextResponse.json(
-        { error: `Provider ${provider} konnte nicht geprüft werden` },
-        { status: 400 }
-      )
+      return apiBadRequest(`Provider ${provider} konnte nicht geprüft werden`)
     }
 
     if (isDefault) {
@@ -155,12 +128,8 @@ export async function PATCH(request: NextRequest) {
 
     logger.info('Provider updated', { provider, isDefault, userId: session.user.id })
 
-    return NextResponse.json({ success: true })
+    return apiSuccess({ message: 'Provider aktualisiert' })
   } catch (error) {
-    logger.error('Hirn provider update error', { error })
-    return NextResponse.json(
-      { error: 'Failed to update provider' },
-      { status: 500 }
-    )
+    return apiError(error, 'Provider konnte nicht aktualisiert werden')
   }
 }

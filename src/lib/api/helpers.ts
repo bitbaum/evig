@@ -1,12 +1,13 @@
 /**
  * Standardized API response helpers
- * 
+ *
  * Provides consistent response formats across all API routes
  * Following dev guide: docs/development/DEV_GUIDE.md
  */
 
 import { NextResponse } from 'next/server';
 import { logger } from '@/lib/logger';
+import { ERROR_MESSAGES } from '@/config/error-messages';
 
 /**
  * Success response helper
@@ -65,7 +66,7 @@ export function apiError(
  */
 export function apiNotFound(resource: string): NextResponse {
   return NextResponse.json(
-    { success: false, error: `${resource} not found` },
+    { success: false, error: `${resource} ${ERROR_MESSAGES.NOT_FOUND}` },
     { status: 404 }
   );
 }
@@ -73,7 +74,7 @@ export function apiNotFound(resource: string): NextResponse {
 /**
  * Unauthorized response helper
  */
-export function apiUnauthorized(message = 'Unauthorized'): NextResponse {
+export function apiUnauthorized(message: string = ERROR_MESSAGES.UNAUTHORIZED): NextResponse {
   return NextResponse.json(
     { success: false, error: message },
     { status: 401 }
