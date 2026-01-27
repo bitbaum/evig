@@ -1,8 +1,10 @@
 /**
- * Admin Hirn Finanzen Page - Server Component
+ * Admin Analyse Finanzen Page - Server Component
  *
  * Detailed financial data view.
  * Protected by role-based access control.
+ *
+ * Moved from /admin/hirn/finanzen
  */
 
 import { auth } from '@/auth'
@@ -20,18 +22,22 @@ export default async function FinanzenPage() {
   const session = await auth()
 
   if (!session?.user) {
-    redirect('/auth/login?callbackUrl=/admin/hirn/finanzen')
+    redirect('/auth/login?callbackUrl=/admin/analyse/finanzen')
   }
 
-  // Check permission for finances section (more restrictive than hirn)
+  // Check permission for finanzen section (or legacy 'finances' alias)
   const hasAccess = canAccessSection({
+    email: session.user.email,
+    is_staff: session.user.isStaff,
+    staff_permissions: session.user.staffPermissions,
+  }, 'finanzen') || canAccessSection({
     email: session.user.email,
     is_staff: session.user.isStaff,
     staff_permissions: session.user.staffPermissions,
   }, 'finances')
 
   if (!hasAccess) {
-    redirect('/admin/hirn?error=no_finances_access')
+    redirect('/admin?error=no_finances_access')
   }
 
   // Load financial data
@@ -41,11 +47,11 @@ export default async function FinanzenPage() {
   try {
     availableYears = await getAvailableYears()
     data = await loadAllYearsData()
-  } catch (error) {
+  } catch {
     return (
       <div className="space-y-6">
         <div className="flex items-center gap-4">
-          <Link href="/admin/hirn">
+          <Link href="/admin">
             <Button variant="ghost" size="sm">
               <ArrowLeft className="mr-2 h-4 w-4" />
               Zurück
@@ -70,7 +76,7 @@ export default async function FinanzenPage() {
     <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center gap-4">
-        <Link href="/admin/hirn">
+        <Link href="/admin">
           <Button variant="ghost" size="sm">
             <ArrowLeft className="mr-2 h-4 w-4" />
             Zurück
@@ -92,7 +98,6 @@ export default async function FinanzenPage() {
       {/* Years Overview */}
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
         {yearsData.map(([year, yearData]) => {
-          const insights = generateYearInsights(yearData)
           const selfFinancingPct = yearData.derived.eigenfinanzierungPct.value
 
           return (

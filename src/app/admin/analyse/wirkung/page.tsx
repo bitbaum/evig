@@ -1,8 +1,10 @@
 /**
- * Admin Hirn Wirkung Page
+ * Admin Analyse Wirkung Page
  *
  * Impact reporting - environmental and social impact.
  * Protected by role-based access control.
+ *
+ * Moved from /admin/hirn/wirkung
  */
 
 import { auth } from '@/auth'
@@ -17,18 +19,22 @@ export default async function WirkungPage() {
   const session = await auth()
 
   if (!session?.user) {
-    redirect('/auth/login?callbackUrl=/admin/hirn/wirkung')
+    redirect('/auth/login?callbackUrl=/admin/analyse/wirkung')
   }
 
-  // Check permission for hirn section
+  // Check permission for wirkung section
   const hasAccess = canAccessSection({
+    email: session.user.email,
+    is_staff: session.user.isStaff,
+    staff_permissions: session.user.staffPermissions,
+  }, 'wirkung') || canAccessSection({
     email: session.user.email,
     is_staff: session.user.isStaff,
     staff_permissions: session.user.staffPermissions,
   }, 'hirn')
 
   if (!hasAccess) {
-    redirect('/admin?error=no_hirn_access')
+    redirect('/admin?error=no_wirkung_access')
   }
 
   const impactAreas = [
@@ -71,7 +77,7 @@ export default async function WirkungPage() {
     <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center gap-4">
-        <Link href="/admin/hirn">
+        <Link href="/admin">
           <Button variant="ghost" size="sm">
             <ArrowLeft className="mr-2 h-4 w-4" />
             Zurück

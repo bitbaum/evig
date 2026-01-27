@@ -21,9 +21,11 @@ interface Message {
 interface HirnChatProps {
   sessionId: string
   onSessionChange?: () => void
+  /** Compact mode for slide-over panel - smaller padding, no header */
+  compact?: boolean
 }
 
-export function HirnChat({ sessionId, onSessionChange }: HirnChatProps) {
+export function HirnChat({ sessionId, onSessionChange, compact = false }: HirnChatProps) {
   const [messages, setMessages] = useState<Message[]>([])
   const [input, setInput] = useState('')
   const [loading, setLoading] = useState(false)
@@ -77,9 +79,16 @@ export function HirnChat({ sessionId, onSessionChange }: HirnChatProps) {
     setError('')
 
     try {
+      // Get CSRF token from cookie
+      const csrfMatch = document.cookie.match(/__Host-csrf=([^;]+)/)
+      const csrfToken = csrfMatch ? csrfMatch[1] : ''
+
       const response = await fetch('/api/admin/hirn/chat', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'x-csrf-token': csrfToken,
+        },
         body: JSON.stringify({
           message: userMessage.content,
           sessionId,
@@ -115,8 +124,12 @@ export function HirnChat({ sessionId, onSessionChange }: HirnChatProps) {
     if (!confirm('Möchtest du dieses Gespräch wirklich löschen?')) return
 
     try {
+      const csrfMatch = document.cookie.match(/__Host-csrf=([^;]+)/)
+      const csrfToken = csrfMatch ? csrfMatch[1] : ''
+
       await fetch(`/api/admin/hirn/history?sessionId=${sessionId}`, {
         method: 'DELETE',
+        headers: { 'x-csrf-token': csrfToken },
       })
       setMessages([])
       onSessionChange?.()
@@ -135,25 +148,27 @@ export function HirnChat({ sessionId, onSessionChange }: HirnChatProps) {
 
   return (
     <div className="flex flex-col h-full">
-      {/* Header */}
-      <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
-        <div className="flex items-center gap-2">
-          <Bot className="w-5 h-5 text-purple-600" />
-          <span className="font-medium text-gray-900 dark:text-white">Hirn Assistant</span>
+      {/* Header - hidden in compact mode */}
+      {!compact && (
+        <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
+          <div className="flex items-center gap-2">
+            <Bot className="w-5 h-5 text-purple-600" />
+            <span className="font-medium text-gray-900 dark:text-white">Hirn Assistant</span>
+          </div>
+          {messages.length > 0 && (
+            <button
+              onClick={clearSession}
+              className="flex items-center gap-1 px-2 py-1 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded"
+            >
+              <Trash2 className="w-4 h-4" />
+              Löschen
+            </button>
+          )}
         </div>
-        {messages.length > 0 && (
-          <button
-            onClick={clearSession}
-            className="flex items-center gap-1 px-2 py-1 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded"
-          >
-            <Trash2 className="w-4 h-4" />
-            Löschen
-          </button>
-        )}
-      </div>
+      )}
 
       {/* Messages */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-4">
+      <div className={`flex-1 overflow-y-auto space-y-4 ${compact ? 'p-3' : 'p-4'}`}>
         {messages.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-full text-center text-gray-500 dark:text-gray-400">
             <Sparkles className="w-12 h-12 mb-4 text-purple-500" />
@@ -257,7 +272,7 @@ export function HirnChat({ sessionId, onSessionChange }: HirnChatProps) {
       </div>
 
       {/* Input */}
-      <form onSubmit={sendMessage} className="p-4 border-t border-gray-200 dark:border-gray-700">
+      <form onSubmit={sendMessage} className={`border-t border-gray-200 dark:border-gray-700 ${compact ? 'p-3' : 'p-4'}`}>
         <div className="flex gap-2">
           <input
             type="text"

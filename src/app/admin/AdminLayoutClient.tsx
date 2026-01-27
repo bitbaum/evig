@@ -7,35 +7,22 @@ import {
   Menu,
   ChevronLeft,
   ChevronRight,
+  ChevronDown,
   Home,
   Store,
   Globe,
   Shield,
   User,
+  Brain,
 } from 'lucide-react'
-import { getAdminSections, isSensitiveSection } from '@/lib/permissions'
+import {
+  getSidebarGroupsWithSections,
+  getHirnSection,
+  isSensitiveSection,
+  type SidebarGroupId,
+} from '@/config/sections'
 import { getSensitivityReason } from '@/config/sensitive-areas'
-
-// Get admin sections from SSOT
-const ADMIN_SECTIONS = getAdminSections()
-
-// Order of sections in the sidebar (by priority is default, but can customize)
-const SIDEBAR_ORDER = [
-  'dashboard',
-  'approvals',
-  'products',
-  'workshops',
-  'services',
-  'locations',
-  'reviews',
-  'content',
-  'analytics',
-  'hirn',
-  'users',
-  'team',
-  'finances',
-  'settings',
-]
+import { HirnFloatingButton } from '@/components/admin/HirnFloatingButton'
 
 interface AdminLayoutClientProps {
   children: React.ReactNode
@@ -55,27 +42,29 @@ export function AdminLayoutClient({
 }: AdminLayoutClientProps) {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [expandedGroups, setExpandedGroups] = useState<Set<SidebarGroupId>>(() => {
+    // Default: expand first 3 groups
+    return new Set(['uebersicht', 'angebot', 'inhalte'])
+  })
   const pathname = usePathname()
 
-  // Build nav items from accessible sections, in order
-  // First sort by SIDEBAR_ORDER, then by priority for any not in order
-  const navItems = ADMIN_SECTIONS
-    .filter(section => accessibleSections.includes(section.id))
-    .sort((a, b) => {
-      const aIndex = SIDEBAR_ORDER.indexOf(a.id)
-      const bIndex = SIDEBAR_ORDER.indexOf(b.id)
-      if (aIndex === -1 && bIndex === -1) return a.priority - b.priority
-      if (aIndex === -1) return 1
-      if (bIndex === -1) return -1
-      return aIndex - bIndex
+  // Get grouped sections from SSOT
+  const groupedSections = getSidebarGroupsWithSections()
+  const hirnSection = getHirnSection()
+  const hasHirnAccess = hirnSection && accessibleSections.includes(hirnSection.id)
+
+  // Toggle group expansion
+  const toggleGroup = (groupId: SidebarGroupId) => {
+    setExpandedGroups(prev => {
+      const next = new Set(prev)
+      if (next.has(groupId)) {
+        next.delete(groupId)
+      } else {
+        next.add(groupId)
+      }
+      return next
     })
-    .map(section => ({
-      section: section.id,
-      name: section.ui.label,
-      href: section.path,
-      icon: section.ui.icon,
-      sensitive: section.visibility.sensitive ?? false,
-    }))
+  }
 
   // Check if current path matches a nav item
   const isActive = (href: string) => {
@@ -83,6 +72,13 @@ export function AdminLayoutClient({
       return pathname === '/admin'
     }
     return pathname.startsWith(href)
+  }
+
+  // Check if group contains active item
+  const groupHasActiveItem = (groupId: SidebarGroupId) => {
+    const group = groupedSections.find(g => g.group.id === groupId)
+    if (!group) return false
+    return group.sections.some(s => isActive(s.path) && accessibleSections.includes(s.id))
   }
 
   return (
@@ -133,40 +129,105 @@ export function AdminLayoutClient({
         </div>
 
         {/* Navigation */}
-        <nav className="mt-4 px-3 overflow-y-auto" style={{ maxHeight: 'calc(100vh - 140px)' }}>
-          <div className="space-y-1">
-            {navItems.map((item) => {
-              const active = isActive(item.href)
-              const sensitivityReason = item.sensitive ? getSensitivityReason(item.section) : undefined
-              return (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  onClick={() => setMobileMenuOpen(false)}
-                  className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-colors ${
-                    sidebarCollapsed ? 'justify-center' : ''
-                  } ${
-                    active
-                      ? 'bg-green-50 text-green-700 dark:bg-green-900/20 dark:text-green-400'
-                      : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
-                  }`}
-                  title={sidebarCollapsed ? `${item.name}${item.sensitive ? ' (Geschützt)' : ''}` : sensitivityReason}
-                >
-                  <item.icon className={`w-5 h-5 flex-shrink-0 ${active ? 'text-green-600' : ''}`} />
-                  {!sidebarCollapsed && (
-                    <span className="flex-1 text-sm font-medium flex items-center gap-2">
-                      {item.name}
-                      {item.sensitive && (
-                        <span title={sensitivityReason}>
-                          <Shield className="w-3.5 h-3.5 text-amber-500" />
-                        </span>
-                      )}
-                    </span>
-                  )}
-                </Link>
-              )
-            })}
-          </div>
+        <nav className="mt-2 px-3 overflow-y-auto" style={{ maxHeight: 'calc(100vh - 200px)' }}>
+          {/* Grouped Navigation */}
+          {groupedSections.map(({ group, sections }) => {
+            // Filter to accessible sections
+            const accessibleGroupSections = sections.filter(s => accessibleSections.includes(s.id))
+            if (accessibleGroupSections.length === 0) return null
+
+            const isExpanded = expandedGroups.has(group.id)
+            const hasActive = groupHasActiveItem(group.id)
+
+            return (
+              <div key={group.id} className="mb-2">
+                {/* Group Header */}
+                {!sidebarCollapsed && (
+                  <button
+                    onClick={() => toggleGroup(group.id)}
+                    className={`w-full flex items-center justify-between px-3 py-2 text-xs font-semibold uppercase tracking-wider rounded-lg transition-colors ${
+                      hasActive
+                        ? 'text-green-700 dark:text-green-400 bg-green-50 dark:bg-green-900/20'
+                        : 'text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700'
+                    }`}
+                  >
+                    <span>{group.label}</span>
+                    <ChevronDown
+                      className={`w-4 h-4 transition-transform ${isExpanded ? '' : '-rotate-90'}`}
+                    />
+                  </button>
+                )}
+
+                {/* Group Items */}
+                {(isExpanded || sidebarCollapsed) && (
+                  <div className={`space-y-1 ${sidebarCollapsed ? '' : 'mt-1'}`}>
+                    {accessibleGroupSections.map(section => {
+                      const active = isActive(section.path)
+                      const sensitive = isSensitiveSection(section.id)
+                      const sensitivityReason = sensitive ? getSensitivityReason(section.id) : undefined
+                      const Icon = section.ui.icon
+
+                      return (
+                        <Link
+                          key={section.path}
+                          href={section.path}
+                          onClick={() => setMobileMenuOpen(false)}
+                          className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-colors ${
+                            sidebarCollapsed ? 'justify-center' : ''
+                          } ${
+                            active
+                              ? 'bg-green-50 text-green-700 dark:bg-green-900/20 dark:text-green-400'
+                              : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
+                          }`}
+                          title={sidebarCollapsed ? `${section.ui.label}${sensitive ? ' (Geschützt)' : ''}` : sensitivityReason}
+                        >
+                          <Icon className={`w-5 h-5 flex-shrink-0 ${active ? 'text-green-600' : ''}`} />
+                          {!sidebarCollapsed && (
+                            <span className="flex-1 text-sm font-medium flex items-center gap-2">
+                              {section.ui.label}
+                              {sensitive && (
+                                <span title={sensitivityReason}>
+                                  <Shield className="w-3.5 h-3.5 text-amber-500" />
+                                </span>
+                              )}
+                            </span>
+                          )}
+                        </Link>
+                      )
+                    })}
+                  </div>
+                )}
+              </div>
+            )
+          })}
+
+          {/* Hirn AI - Special Item */}
+          {hasHirnAccess && hirnSection && (
+            <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+              <Link
+                href={hirnSection.path}
+                onClick={() => setMobileMenuOpen(false)}
+                className={`flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all ${
+                  sidebarCollapsed ? 'justify-center' : ''
+                } ${
+                  isActive(hirnSection.path)
+                    ? 'bg-gradient-to-r from-purple-500/10 to-pink-500/10 text-purple-700 dark:text-purple-400 ring-1 ring-purple-500/30'
+                    : 'text-gray-700 dark:text-gray-300 hover:bg-gradient-to-r hover:from-purple-500/10 hover:to-pink-500/10'
+                }`}
+                title={sidebarCollapsed ? 'Hirn AI' : undefined}
+              >
+                <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center flex-shrink-0">
+                  <Brain className="w-4 h-4 text-white" />
+                </div>
+                {!sidebarCollapsed && (
+                  <div className="flex-1">
+                    <span className="text-sm font-semibold">Hirn AI</span>
+                    <p className="text-xs text-gray-500 dark:text-gray-400">KI-Assistent</p>
+                  </div>
+                )}
+              </Link>
+            </div>
+          )}
 
           {/* User-facing site links */}
           <div className="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700">
@@ -285,6 +346,9 @@ export function AdminLayoutClient({
           {children}
         </main>
       </div>
+
+      {/* Hirn Floating Button */}
+      <HirnFloatingButton hasAccess={!!hasHirnAccess} />
     </div>
   )
 }

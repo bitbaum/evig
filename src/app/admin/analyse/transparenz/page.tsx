@@ -1,8 +1,10 @@
 /**
- * Admin Hirn Transparenz Page
+ * Admin Analyse Transparenz Page
  *
  * First Principles analysis and methodology transparency.
  * Protected by role-based access control.
+ *
+ * Moved from /admin/hirn/transparenz
  */
 
 import { auth } from '@/auth'
@@ -17,18 +19,22 @@ export default async function TransparenzPage() {
   const session = await auth()
 
   if (!session?.user) {
-    redirect('/auth/login?callbackUrl=/admin/hirn/transparenz')
+    redirect('/auth/login?callbackUrl=/admin/analyse/transparenz')
   }
 
-  // Check permission for hirn section
+  // Check permission for transparenz section
   const hasAccess = canAccessSection({
+    email: session.user.email,
+    is_staff: session.user.isStaff,
+    staff_permissions: session.user.staffPermissions,
+  }, 'transparenz') || canAccessSection({
     email: session.user.email,
     is_staff: session.user.isStaff,
     staff_permissions: session.user.staffPermissions,
   }, 'hirn')
 
   if (!hasAccess) {
-    redirect('/admin?error=no_hirn_access')
+    redirect('/admin?error=no_transparenz_access')
   }
 
   const principles = [
@@ -86,7 +92,7 @@ export default async function TransparenzPage() {
     <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center gap-4">
-        <Link href="/admin/hirn">
+        <Link href="/admin">
           <Button variant="ghost" size="sm">
             <ArrowLeft className="mr-2 h-4 w-4" />
             Zurück

@@ -1,8 +1,10 @@
 /**
- * Admin Hirn Kennzahlen Page
+ * Admin Analyse Kennzahlen Page
  *
  * KPIs and metrics overview.
  * Protected by role-based access control.
+ *
+ * Moved from /admin/hirn/kennzahlen
  */
 
 import { auth } from '@/auth'
@@ -17,18 +19,22 @@ export default async function KennzahlenPage() {
   const session = await auth()
 
   if (!session?.user) {
-    redirect('/auth/login?callbackUrl=/admin/hirn/kennzahlen')
+    redirect('/auth/login?callbackUrl=/admin/analyse/kennzahlen')
   }
 
-  // Check permission for hirn section
+  // Check permission for kennzahlen section
   const hasAccess = canAccessSection({
+    email: session.user.email,
+    is_staff: session.user.isStaff,
+    staff_permissions: session.user.staffPermissions,
+  }, 'kennzahlen') || canAccessSection({
     email: session.user.email,
     is_staff: session.user.isStaff,
     staff_permissions: session.user.staffPermissions,
   }, 'hirn')
 
   if (!hasAccess) {
-    redirect('/admin?error=no_hirn_access')
+    redirect('/admin?error=no_kennzahlen_access')
   }
 
   // Placeholder KPIs - these will be loaded from data sources later
@@ -63,7 +69,7 @@ export default async function KennzahlenPage() {
     <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center gap-4">
-        <Link href="/admin/hirn">
+        <Link href="/admin">
           <Button variant="ghost" size="sm">
             <ArrowLeft className="mr-2 h-4 w-4" />
             Zurück

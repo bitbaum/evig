@@ -1,11 +1,5 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Relax build blocking on type errors for production deploys.
-  // CI covers quality checks; this ensures Vercel deploy does not fail
-  // on non-critical type issues in optional scripts/routes.
-  typescript: {
-    ignoreBuildErrors: true,
-  },
   images: {
     unoptimized: false,
     remotePatterns: [
@@ -26,6 +20,37 @@ const nextConfig = {
         pathname: '/**',
       },
     ],
+  },
+  async redirects() {
+    return [
+      // Redirect old Hirn paths to new Analyse paths
+      {
+        source: '/admin/hirn/finanzen',
+        destination: '/admin/analyse/finanzen',
+        permanent: true,
+      },
+      {
+        source: '/admin/hirn/kennzahlen',
+        destination: '/admin/analyse/kennzahlen',
+        permanent: true,
+      },
+      {
+        source: '/admin/hirn/wirkung',
+        destination: '/admin/analyse/wirkung',
+        permanent: true,
+      },
+      {
+        source: '/admin/hirn/transparenz',
+        destination: '/admin/analyse/transparenz',
+        permanent: true,
+      },
+      // Redirect old AI page to main Hirn page
+      {
+        source: '/admin/hirn/ai',
+        destination: '/admin/hirn',
+        permanent: true,
+      },
+    ];
   },
   async rewrites() {
     return [

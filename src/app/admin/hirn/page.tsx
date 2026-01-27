@@ -1,126 +1,77 @@
 /**
- * Admin Hirn Dashboard - Server Component
+ * Admin Hirn Page - Pure AI Chat Interface
  *
- * Main entry point for the Hirn dashboard within admin.
+ * Main entry point for Hirn AI assistant.
+ * Transformed from BI dashboard to pure AI chat.
  * Protected by role-based access control.
  */
 
-import { auth } from '@/auth'
-import { redirect } from 'next/navigation'
-import { canAccessSection } from '@/lib/permissions'
-import { loadFinancialData, getAvailableYears } from '@/lib/hirn/data/financial-loader'
-import { generateYearInsights } from '@/lib/hirn/data/analysis'
-import { HirnDashboardClient } from './HirnDashboardClient'
+'use client'
 
-export default async function HirnPage() {
-  // Check authentication and authorization
-  const session = await auth()
+import { useState, useCallback } from 'react'
+import { Brain } from 'lucide-react'
+import { HirnChat } from '@/components/admin/HirnChat'
+import { HirnSidebar } from '@/components/admin/HirnSidebar'
+import { HirnProviderSelector } from '@/components/admin/HirnProviderSelector'
 
-  if (!session?.user) {
-    redirect('/auth/login?callbackUrl=/admin/hirn')
-  }
+function generateSessionId(): string {
+  return crypto.randomUUID()
+}
 
-  // Check permission for hirn section
-  const hasAccess = canAccessSection({
-    email: session.user.email,
-    is_staff: session.user.isStaff,
-    staff_permissions: session.user.staffPermissions,
-  }, 'hirn')
+export default function HirnPage() {
+  const [currentSessionId, setCurrentSessionId] = useState<string>(generateSessionId())
+  const [refreshTrigger, setRefreshTrigger] = useState(0)
 
-  if (!hasAccess) {
-    redirect('/admin?error=no_hirn_access')
-  }
+  const handleNewSession = useCallback(() => {
+    setCurrentSessionId(generateSessionId())
+  }, [])
 
-  // Get most recent year with data
-  let availableYears: number[] = []
-  try {
-    availableYears = await getAvailableYears()
-  } catch (error) {
-    // If data files don't exist yet, show empty state
-    return (
-      <div className="space-y-6">
-        <div>
-          <h1 className="text-3xl font-bold">Hirn Dashboard</h1>
-          <p className="text-muted-foreground mt-2">
-            Transparente Übersicht über Finanzen, KPIs und Wirkung
-          </p>
-        </div>
-        <div className="p-6 bg-yellow-50 border border-yellow-200 rounded-lg">
-          <h3 className="font-semibold text-yellow-800">Keine Daten verfügbar</h3>
-          <p className="text-sm text-yellow-700 mt-2">
-            Die Finanzdaten wurden noch nicht importiert. Bitte stellen Sie sicher,
-            dass die JSON-Dateien im Ordner <code className="bg-white px-1 rounded">public/data/hirn/</code> vorhanden sind.
-          </p>
-        </div>
-      </div>
-    )
-  }
+  const handleSelectSession = useCallback((sessionId: string) => {
+    setCurrentSessionId(sessionId)
+  }, [])
 
-  const currentYear = availableYears[0] ?? new Date().getFullYear()
-
-  // Load real data
-  const data = await loadFinancialData(currentYear)
-
-  if (!data) {
-    return (
-      <div className="space-y-6">
-        <div>
-          <h1 className="text-3xl font-bold">Hirn Dashboard</h1>
-          <p className="text-muted-foreground mt-2">
-            Transparente Übersicht über Finanzen, KPIs und Wirkung
-          </p>
-        </div>
-        <div className="p-6 bg-yellow-50 border border-yellow-200 rounded-lg">
-          <h3 className="font-semibold text-yellow-800">Keine Finanzdaten für {currentYear}</h3>
-          <p className="text-sm text-yellow-700 mt-2">
-            Bitte prüfen Sie die Datenquellen.
-          </p>
-        </div>
-      </div>
-    )
-  }
-
-  // Generate insights
-  const insights = generateYearInsights(data)
-
-  // Prepare stats for display - all from real data
-  const stats = [
-    {
-      value: Math.round(data.totals.total.value),
-      label: `Gesamteinnahmen ${currentYear}`,
-      numberKey: `financial_total_${currentYear}`,
-      format: 'CHF' as const,
-    },
-    {
-      value: Math.round(data.derived.eigenfinanzierungPct.value * 10) / 10,
-      label: 'Eigenfinanzierung',
-      numberKey: `financial_self_financing_${currentYear}`,
-      format: 'percent' as const,
-    },
-    {
-      value: Math.round(data.derived.monthlyAvg.value),
-      label: 'Monatsdurchschnitt',
-      numberKey: `financial_monthly_avg_${currentYear}`,
-      format: 'CHF' as const,
-    },
-    {
-      value: Math.round(data.derived.earnedTotal.value),
-      label: 'Eigenerwirtschaftet',
-      numberKey: `financial_earned_${currentYear}`,
-      format: 'CHF' as const,
-    },
-  ]
+  const handleSessionChange = useCallback(() => {
+    setRefreshTrigger(prev => prev + 1)
+  }, [])
 
   return (
-    <HirnDashboardClient
-      stats={stats}
-      insights={insights}
-      year={currentYear}
-      dataSource={{
-        file: data.metadata.source,
-        importedAt: data.metadata.importedAt,
-      }}
-      userRole={session.user.role || 'customer'}
-    />
+    <div className="h-[calc(100vh-4rem)]">
+      {/* Page Header */}
+      <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center">
+            <Brain className="w-5 h-5 text-white" />
+          </div>
+          <div>
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Hirn AI</h1>
+            <p className="text-sm text-gray-600 dark:text-gray-400">
+              KI-Assistent mit RevampIT Dokumentation und Code-Kontext
+            </p>
+          </div>
+        </div>
+        <HirnProviderSelector />
+      </div>
+
+      {/* Main Content */}
+      <div className="flex h-[calc(100%-5rem)]">
+        {/* Sidebar */}
+        <div className="w-72 border-r border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900">
+          <HirnSidebar
+            currentSessionId={currentSessionId}
+            onSelectSession={handleSelectSession}
+            onNewSession={handleNewSession}
+            refreshTrigger={refreshTrigger}
+          />
+        </div>
+
+        {/* Chat Area */}
+        <div className="flex-1 bg-white dark:bg-gray-800">
+          <HirnChat
+            sessionId={currentSessionId}
+            onSessionChange={handleSessionChange}
+          />
+        </div>
+      </div>
+    </div>
   )
 }

@@ -104,6 +104,14 @@ export interface StaffUser {
 }
 
 /**
+ * Permission aliases for backwards compatibility
+ * Maps old permission names to new ones
+ */
+const PERMISSION_ALIASES: Record<string, string> = {
+  finances: 'finanzen', // Old finances -> new finanzen
+}
+
+/**
  * Check if a user can access a specific admin section
  */
 export function canAccessSection(
@@ -119,8 +127,18 @@ export function canAccessSection(
   // Wildcard permission = full access
   if (user.staff_permissions.includes('*')) return true
 
-  // Check specific permission
-  return user.staff_permissions.includes(section)
+  // Check specific permission (with alias support)
+  if (user.staff_permissions.includes(section)) return true
+
+  // Check alias
+  const alias = PERMISSION_ALIASES[section]
+  if (alias && user.staff_permissions.includes(alias)) return true
+
+  // Check reverse alias (if user has old permission, grant access to new section)
+  const reverseAlias = Object.entries(PERMISSION_ALIASES).find(([, v]) => v === section)
+  if (reverseAlias && user.staff_permissions.includes(reverseAlias[0])) return true
+
+  return false
 }
 
 /**

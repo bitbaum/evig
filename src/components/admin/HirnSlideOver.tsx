@@ -1,0 +1,130 @@
+'use client'
+
+import { useEffect, useState, useCallback } from 'react'
+import { X, Brain, Maximize2 } from 'lucide-react'
+import Link from 'next/link'
+import { HirnChat } from './HirnChat'
+
+interface HirnSlideOverProps {
+  isOpen: boolean
+  onClose: () => void
+}
+
+function generateSessionId(): string {
+  return crypto.randomUUID()
+}
+
+/**
+ * Slide-over panel for Hirn AI chat
+ * Opens from the right side like ChatGPT/Claude interfaces
+ */
+export function HirnSlideOver({ isOpen, onClose }: HirnSlideOverProps) {
+  const [sessionId, setSessionId] = useState<string>('')
+
+  // Generate session ID on first open
+  useEffect(() => {
+    if (isOpen && !sessionId) {
+      setSessionId(generateSessionId())
+    }
+  }, [isOpen, sessionId])
+
+  // Handle escape key
+  useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onClose()
+      }
+    }
+
+    if (isOpen) {
+      document.addEventListener('keydown', handleEscape)
+      // Prevent body scroll when panel is open
+      document.body.style.overflow = 'hidden'
+    }
+
+    return () => {
+      document.removeEventListener('keydown', handleEscape)
+      document.body.style.overflow = ''
+    }
+  }, [isOpen, onClose])
+
+  const handleNewSession = useCallback(() => {
+    setSessionId(generateSessionId())
+  }, [])
+
+  if (!isOpen) {
+    return null
+  }
+
+  return (
+    <>
+      {/* Backdrop */}
+      <div
+        className="fixed inset-0 z-50 bg-black/30 backdrop-blur-sm transition-opacity"
+        onClick={onClose}
+      />
+
+      {/* Panel */}
+      <div className="fixed inset-y-0 right-0 z-50 w-full max-w-md bg-white dark:bg-gray-800 shadow-2xl flex flex-col animate-slide-in-right">
+        {/* Header */}
+        <div className="flex items-center justify-between px-4 py-3 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-purple-500 to-pink-500">
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 rounded-lg bg-white/20 flex items-center justify-center">
+              <Brain className="w-4 h-4 text-white" />
+            </div>
+            <div>
+              <h2 className="font-semibold text-white">Hirn AI</h2>
+              <p className="text-xs text-white/70">RevampIT Assistent</p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2">
+            {/* Full screen link */}
+            <Link
+              href="/admin/hirn"
+              onClick={onClose}
+              className="p-2 text-white/80 hover:text-white hover:bg-white/10 rounded-lg transition-colors"
+              title="Vollbild öffnen"
+            >
+              <Maximize2 className="w-4 h-4" />
+            </Link>
+
+            {/* Close button */}
+            <button
+              onClick={onClose}
+              className="p-2 text-white/80 hover:text-white hover:bg-white/10 rounded-lg transition-colors"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          </div>
+        </div>
+
+        {/* Chat Area */}
+        <div className="flex-1 overflow-hidden">
+          {sessionId && (
+            <HirnChat
+              sessionId={sessionId}
+              onSessionChange={handleNewSession}
+              compact
+            />
+          )}
+        </div>
+      </div>
+
+      {/* Animation keyframes */}
+      <style jsx global>{`
+        @keyframes slide-in-right {
+          from {
+            transform: translateX(100%);
+          }
+          to {
+            transform: translateX(0);
+          }
+        }
+        .animate-slide-in-right {
+          animation: slide-in-right 0.2s ease-out;
+        }
+      `}</style>
+    </>
+  )
+}

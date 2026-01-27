@@ -38,7 +38,7 @@ export const metadata: Metadata = {
 }
 
 // Icon mapping for sections
-const SECTION_ICONS: Record<AdminSection, typeof Users> = {
+const SECTION_ICONS: Record<string, typeof Users> = {
   dashboard: BarChart3,
   products: Package,
   workshops: Calendar,
@@ -50,6 +50,10 @@ const SECTION_ICONS: Record<AdminSection, typeof Users> = {
   users: Users,
   team: UserCheck,
   finances: BarChart3,
+  finanzen: BarChart3,
+  kennzahlen: BarChart3,
+  wirkung: BarChart3,
+  transparenz: BarChart3,
   analytics: BarChart3,
   settings: Settings,
   hirn: Brain,
@@ -335,7 +339,7 @@ export default async function AdminDashboard() {
             Hirn Dashboard
           </Link>
           <Link
-            href="/admin/hirn/finanzen"
+            href="/admin/analyse/finanzen"
             className="inline-flex items-center gap-2 px-4 py-2 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 rounded-lg hover:bg-green-200 dark:hover:bg-green-900/50 transition-colors"
           >
             <BarChart3 className="w-4 h-4" />
