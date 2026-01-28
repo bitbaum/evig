@@ -1,3 +1,5 @@
+'use client'
+
 /**
  * Hook for user management operations
  * Handles state and API calls for editing/deleting users
