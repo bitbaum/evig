@@ -54,8 +54,8 @@ export async function GET(
         i.quantity_available,
         i.marketplace_status,
         p.status
-      FROM ai_extracted_products p
-      JOIN inventory_items i ON i.ai_product_id = p.id
+      FROM ${TABLE_NAMES.AI_EXTRACTED_PRODUCTS} p
+      JOIN ${TABLE_NAMES.INVENTORY_ITEMS} i ON i.ai_product_id = p.id
       WHERE p.id = $1`,
       [productId]
     )
@@ -92,7 +92,7 @@ export async function GET(
       is_primary: boolean
     }>(
       `SELECT id, file_path, is_primary
-       FROM product_images
+       FROM ${TABLE_NAMES.PRODUCT_IMAGES}
        WHERE product_id = $1
        ORDER BY is_primary DESC`,
       [productId]

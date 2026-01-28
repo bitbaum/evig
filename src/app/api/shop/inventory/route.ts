@@ -84,9 +84,9 @@ export async function GET(request: NextRequest) {
         p.category,
         p.subcategory,
         i.quantity_available,
-        (SELECT file_path FROM product_images pi WHERE pi.product_id = p.id AND pi.is_primary = true LIMIT 1) as image_url
-      FROM ai_extracted_products p
-      JOIN inventory_items i ON i.ai_product_id = p.id
+        (SELECT file_path FROM ${TABLE_NAMES.PRODUCT_IMAGES} pi WHERE pi.product_id = p.id AND pi.is_primary = true LIMIT 1) as image_url
+      FROM ${TABLE_NAMES.AI_EXTRACTED_PRODUCTS} p
+      JOIN ${TABLE_NAMES.INVENTORY_ITEMS} i ON i.ai_product_id = p.id
       ${profileJoin}
       ${whereClause}
       ORDER BY p.created_at DESC
@@ -97,8 +97,8 @@ export async function GET(request: NextRequest) {
     // Get total count
     const countResult = await query<{ count: string }>(
       `SELECT COUNT(DISTINCT p.id) as count
-       FROM ai_extracted_products p
-       JOIN inventory_items i ON i.ai_product_id = p.id
+       FROM ${TABLE_NAMES.AI_EXTRACTED_PRODUCTS} p
+       JOIN ${TABLE_NAMES.INVENTORY_ITEMS} i ON i.ai_product_id = p.id
        ${profileJoin}
        ${whereClause}`,
       params

@@ -62,8 +62,8 @@ export async function GET(
         i.location,
         i.box_id,
         COALESCE(i.quantity_available, 1) as quantity_available
-      FROM ai_extracted_products p
-      LEFT JOIN inventory_items i ON i.ai_product_id = p.id
+      FROM ${TABLE_NAMES.AI_EXTRACTED_PRODUCTS} p
+      LEFT JOIN ${TABLE_NAMES.INVENTORY_ITEMS} i ON i.ai_product_id = p.id
       WHERE p.id = $1`,
       [productId]
     )
@@ -88,7 +88,7 @@ export async function GET(
     // Fetch primary image if exists
     const imageResult = await query<{ file_path: string }>(
       `SELECT file_path
-       FROM product_images
+       FROM ${TABLE_NAMES.PRODUCT_IMAGES}
        WHERE product_id = $1 AND is_primary = true
        LIMIT 1`,
       [productId]

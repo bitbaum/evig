@@ -87,8 +87,8 @@ export async function GET(request: NextRequest) {
         COALESCE(i.quantity_available, 1) as quantity_available,
         COALESCE(i.marketplace_status, 'draft') as marketplace_status,
         p.kivitendo_article_number
-      FROM ai_extracted_products p
-      LEFT JOIN inventory_items i ON i.ai_product_id = p.id
+      FROM ${TABLE_NAMES.AI_EXTRACTED_PRODUCTS} p
+      LEFT JOIN ${TABLE_NAMES.INVENTORY_ITEMS} i ON i.ai_product_id = p.id
       ${whereClause}
       ORDER BY p.created_at DESC
       LIMIT $${paramIndex} OFFSET $${paramIndex + 1}`,
@@ -98,7 +98,7 @@ export async function GET(request: NextRequest) {
     // Get total count
     const countResult = await query<{ count: string }>(
       `SELECT COUNT(*) as count
-       FROM ai_extracted_products p
+       FROM ${TABLE_NAMES.AI_EXTRACTED_PRODUCTS} p
        ${whereClause}`,
       params
     )

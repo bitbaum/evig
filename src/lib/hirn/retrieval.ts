@@ -90,7 +90,7 @@ export async function searchSimilar(
       d.source_path,
       d.source_type,
       d.title
-    FROM hirn_chunks c
+    FROM ${TABLE_NAMES.HIRN_CHUNKS} c
     JOIN ${TABLE_NAMES.HIRN_DOCUMENTS} d ON c.document_id = d.id
     WHERE c.embedding IS NOT NULL
       AND 1 - (c.embedding <=> $1::vector) >= $2
@@ -187,7 +187,7 @@ export async function listDocuments(options: {
        d.id, d.source_path, d.source_type, d.title, d.created_at, d.indexed_at,
        COUNT(c.id) as chunk_count
      FROM ${TABLE_NAMES.HIRN_DOCUMENTS} d
-     LEFT JOIN hirn_chunks c ON c.document_id = d.id
+     LEFT JOIN ${TABLE_NAMES.HIRN_CHUNKS} c ON c.document_id = d.id
      ${whereClause}
      GROUP BY d.id
      ORDER BY d.created_at DESC

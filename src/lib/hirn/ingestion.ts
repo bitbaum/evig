@@ -293,19 +293,19 @@ export async function getIngestionStats(): Promise<{
   byType: Record<string, number>
 }> {
   const docsResult = await query<{ count: string }>(
-    `SELECT COUNT(*) as count FROM hirn_documents`
+    `SELECT COUNT(*) as count FROM ${TABLE_NAMES.HIRN_DOCUMENTS}`
   )
 
   const chunksResult = await query<{ count: string }>(
-    `SELECT COUNT(*) as count FROM hirn_chunks`
+    `SELECT COUNT(*) as count FROM ${TABLE_NAMES.HIRN_CHUNKS}`
   )
 
   const lastIndexedResult = await query<{ max: Date | null }>(
-    `SELECT MAX(indexed_at) as max FROM hirn_documents`
+    `SELECT MAX(indexed_at) as max FROM ${TABLE_NAMES.HIRN_DOCUMENTS}`
   )
 
   const byTypeResult = await query<{ source_type: string; count: string }>(
-    `SELECT source_type, COUNT(*) as count FROM hirn_documents GROUP BY source_type`
+    `SELECT source_type, COUNT(*) as count FROM ${TABLE_NAMES.HIRN_DOCUMENTS} GROUP BY source_type`
   )
 
   return {
