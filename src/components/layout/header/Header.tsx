@@ -1,0 +1,148 @@
+'use client'
+
+/**
+ * Header Component - Main navigation header
+ *
+ * Design principles:
+ * - Clean, spacious layout
+ * - Subtle hover states
+ * - Single primary CTA
+ * - Elegant mega menus
+ */
+
+import { useState, useRef, useEffect } from 'react'
+import { Menu } from 'lucide-react'
+import Link from 'next/link'
+import { Logo } from '@/components/ui/Logo'
+import { MobileMenu } from '../MobileMenu'
+import { WelcomeModal } from '@/components/ui/WelcomeModal'
+import { UserMenu } from '@/components/auth/UserMenu'
+import { cn } from '@/lib/utils'
+import { mainNavigation } from '@/config/navigation'
+import { NavItem } from './NavItem'
+
+export function Header() {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [anyDropdownOpen, setAnyDropdownOpen] = useState(false)
+  const [isScrolled, setIsScrolled] = useState(false)
+  const headerRef = useRef<HTMLElement>(null)
+  const mobileMenuTriggerRef = useRef<HTMLButtonElement>(null)
+
+  // Filter navigation - separate main nav from action items
+  const primaryNavItems = mainNavigation.filter(item => !item.highlight)
+  const contactItem = mainNavigation.find(item => item.highlight)
+
+  // Scroll detection for header styling
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 10)
+    }
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
+  // Escape key to close mobile menu
+  useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setMobileMenuOpen(false)
+      }
+    }
+    document.addEventListener('keydown', handleEscape)
+    return () => document.removeEventListener('keydown', handleEscape)
+  }, [])
+
+  return (
+    <>
+      <WelcomeModal />
+
+      <header
+        ref={headerRef}
+        className={cn(
+          "fixed top-0 left-0 right-0 z-50",
+          "transition-all duration-300",
+          isScrolled || anyDropdownOpen
+            ? "bg-white/95 backdrop-blur-xl shadow-sm shadow-gray-200/50 border-b border-gray-100"
+            : "bg-white/80 backdrop-blur-md"
+        )}
+      >
+        <div className="max-w-7xl mx-auto">
+          <nav className="flex items-center justify-between h-16 px-6 lg:px-8">
+            {/* Logo */}
+            <div className="flex-shrink-0">
+              <Logo className="h-10" />
+            </div>
+
+            {/* Primary Navigation - Desktop */}
+            <div className="hidden lg:flex items-center justify-center flex-1 px-8">
+              <div className="flex items-center gap-1">
+                {primaryNavItems.map((item) => (
+                  <NavItem
+                    key={item.name}
+                    item={item}
+                    onAnyOpen={() => setAnyDropdownOpen(true)}
+                    onAnyClose={() => setAnyDropdownOpen(false)}
+                  />
+                ))}
+              </div>
+            </div>
+
+            {/* Right Side Actions - Desktop */}
+            <div className="hidden lg:flex items-center gap-3">
+              {/* Contact Link - subtle */}
+              {contactItem && (
+                <Link
+                  href={contactItem.href}
+                  className={cn(
+                    "px-4 py-2 text-sm font-medium text-gray-600",
+                    "hover:text-gray-900 transition-colors duration-200",
+                    "focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 rounded-lg"
+                  )}
+                >
+                  {contactItem.name}
+                </Link>
+              )}
+
+              {/* Divider */}
+              <div className="w-px h-5 bg-gray-200" />
+
+              {/* User Menu / Auth */}
+              <UserMenu />
+            </div>
+
+            {/* Mobile Right Side - Auth + Menu */}
+            <div className="lg:hidden flex items-center gap-2">
+              {/* User Menu - Mobile */}
+              <UserMenu />
+              {/* Mobile Menu Button */}
+              <button
+                ref={mobileMenuTriggerRef}
+                type="button"
+                className={cn(
+                  "relative p-2 rounded-lg",
+                  "text-gray-600 hover:text-gray-900 hover:bg-gray-100",
+                  "transition-colors duration-200",
+                  "focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500"
+                )}
+                onClick={() => setMobileMenuOpen(true)}
+                aria-label="Menü öffnen"
+              >
+                <Menu className="h-5 w-5" />
+              </button>
+            </div>
+          </nav>
+        </div>
+      </header>
+
+      {/* Spacer for fixed header */}
+      <div className="h-16" />
+
+      <MobileMenu
+        isOpen={mobileMenuOpen}
+        onClose={() => setMobileMenuOpen(false)}
+        navigationItems={mainNavigation}
+        triggerRef={mobileMenuTriggerRef}
+      />
+    </>
+  )
+}
