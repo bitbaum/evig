@@ -7,6 +7,7 @@
 
 import { query } from '@/lib/auth/db'
 import { logger } from '@/lib/logger'
+import { TABLE_NAMES } from '@/config/database'
 import { getDefaultChatProvider, type Message, type ChatCompletionResponse } from './providers'
 import { searchSimilar, formatContext, type RetrievalResult } from './retrieval'
 
@@ -75,7 +76,7 @@ export async function chat(
 
   // Get chat history for this session
   const historyResult = await query<{ role: string; content: string }>(
-    `SELECT role, content FROM hirn_chat_history
+    `SELECT role, content FROM ${TABLE_NAMES.HIRN_CHAT_HISTORY}
      WHERE session_id = $1
      ORDER BY created_at ASC
      LIMIT 20`,
@@ -113,14 +114,14 @@ export async function chat(
 
   // Store user message
   await query(
-    `INSERT INTO hirn_chat_history (user_id, session_id, role, content)
+    `INSERT INTO ${TABLE_NAMES.HIRN_CHAT_HISTORY} (user_id, session_id, role, content)
      VALUES ($1, $2, 'user', $3)`,
     [userId || null, sessionId, message]
   )
 
   // Store assistant response with context reference
   await query(
-    `INSERT INTO hirn_chat_history (user_id, session_id, role, content, context_chunks, provider, model)
+    `INSERT INTO ${TABLE_NAMES.HIRN_CHAT_HISTORY} (user_id, session_id, role, content, context_chunks, provider, model)
      VALUES ($1, $2, 'assistant', $3, $4, $5, $6)`,
     [
       userId || null,
@@ -171,7 +172,7 @@ export async function getChatHistory(
     model: string | null
   }>(
     `SELECT id, role, content, created_at, provider, model
-     FROM hirn_chat_history
+     FROM ${TABLE_NAMES.HIRN_CHAT_HISTORY}
      WHERE session_id = $1
      ORDER BY created_at ASC`,
     [sessionId]
@@ -207,12 +208,12 @@ export async function getUserSessions(
   }>(
     `SELECT
        session_id,
-       (SELECT content FROM hirn_chat_history h2
+       (SELECT content FROM ${TABLE_NAMES.HIRN_CHAT_HISTORY} h2
         WHERE h2.session_id = h.session_id AND h2.role = 'user'
         ORDER BY created_at ASC LIMIT 1) as first_message,
        MAX(created_at) as last_activity,
        COUNT(*) as message_count
-     FROM hirn_chat_history h
+     FROM ${TABLE_NAMES.HIRN_CHAT_HISTORY} h
      WHERE user_id = $1
      GROUP BY session_id
      ORDER BY last_activity DESC
@@ -232,7 +233,7 @@ export async function getUserSessions(
  * Delete a chat session
  */
 export async function deleteSession(sessionId: string): Promise<void> {
-  await query(`DELETE FROM hirn_chat_history WHERE session_id = $1`, [sessionId])
+  await query(`DELETE FROM ${TABLE_NAMES.HIRN_CHAT_HISTORY} WHERE session_id = $1`, [sessionId])
   logger.info('Chat session deleted', { sessionId })
 }
 
@@ -240,6 +241,6 @@ export async function deleteSession(sessionId: string): Promise<void> {
  * Clear all chat history for a user
  */
 export async function clearUserHistory(userId: string): Promise<void> {
-  await query(`DELETE FROM hirn_chat_history WHERE user_id = $1`, [userId])
+  await query(`DELETE FROM ${TABLE_NAMES.HIRN_CHAT_HISTORY} WHERE user_id = $1`, [userId])
   logger.info('User chat history cleared', { userId })
 }

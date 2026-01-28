@@ -10,6 +10,7 @@ import { NextRequest } from 'next/server'
 import { apiSuccess, apiError, apiNotFound, apiUnauthorized } from '@/lib/api/helpers'
 import { query } from '@/lib/auth/db'
 import { logger } from '@/lib/logger'
+import { TABLE_NAMES } from '@/config/database'
 import { auth } from '@/auth'
 
 export async function GET(
@@ -76,8 +77,8 @@ export async function GET(
     // Fetch customer profiles for this product
     const profilesResult = await query<{ slug: string }>(
       `SELECT cp.slug
-       FROM product_customer_profiles pcp
-       JOIN customer_profiles cp ON cp.id = pcp.profile_id
+       FROM ${TABLE_NAMES.PRODUCT_CUSTOMER_PROFILES} pcp
+       JOIN ${TABLE_NAMES.CUSTOMER_PROFILES} cp ON cp.id = pcp.profile_id
        WHERE pcp.product_id = $1`,
       [productId]
     )

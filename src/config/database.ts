@@ -102,6 +102,19 @@ export const TABLE_NAMES = {
   // @deprecated - Use IT_HILFE_* instead
   PEER_REPAIR_REQUESTS: 'it_hilfe_requests',
   PEER_REPAIR_OFFERS: 'it_hilfe_offers',
+
+  // HIRN AI System
+  HIRN_DOCUMENTS: 'hirn_documents',
+  HIRN_CHUNKS: 'hirn_chunks',
+  HIRN_CHAT_HISTORY: 'hirn_chat_history',
+  HIRN_PROVIDER_SETTINGS: 'hirn_provider_settings',
+
+  // Staff & Permissions
+  STAFF_PERMISSION_REQUESTS: 'staff_permission_requests',
+
+  // Customer Profiles
+  CUSTOMER_PROFILES: 'customer_profiles',
+  PRODUCT_CUSTOMER_PROFILES: 'product_customer_profiles',
 } as const;
 
 /**

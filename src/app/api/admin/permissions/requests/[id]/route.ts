@@ -45,7 +45,7 @@ export async function POST(request: NextRequest, context: RequestContext) {
       status: string
     }>(
       `SELECT id, user_id, requested_sections, status
-       FROM staff_permission_requests
+       FROM ${TABLE_NAMES.STAFF_PERMISSION_REQUESTS}
        WHERE id = $1`,
       [id]
     )
@@ -62,7 +62,7 @@ export async function POST(request: NextRequest, context: RequestContext) {
 
     // Update the request status
     await query(
-      `UPDATE staff_permission_requests
+      `UPDATE ${TABLE_NAMES.STAFF_PERMISSION_REQUESTS}
        SET status = $1,
            reviewed_by = $2,
            reviewed_at = NOW(),

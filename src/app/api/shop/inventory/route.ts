@@ -9,6 +9,7 @@ import { NextRequest } from 'next/server'
 import { apiSuccess, apiError } from '@/lib/api/helpers'
 import { query } from '@/lib/auth/db'
 import { logger } from '@/lib/logger'
+import { TABLE_NAMES } from '@/config/database'
 
 export async function GET(request: NextRequest) {
   try {
@@ -51,8 +52,8 @@ export async function GET(request: NextRequest) {
     let profileJoin = ''
     if (profile) {
       profileJoin = `
-        JOIN product_customer_profiles pcp ON pcp.product_id = p.id
-        JOIN customer_profiles cp ON cp.id = pcp.profile_id AND cp.slug = $${paramIndex}
+        JOIN ${TABLE_NAMES.PRODUCT_CUSTOMER_PROFILES} pcp ON pcp.product_id = p.id
+        JOIN ${TABLE_NAMES.CUSTOMER_PROFILES} cp ON cp.id = pcp.profile_id AND cp.slug = $${paramIndex}
       `
       params.push(profile)
       paramIndex++
@@ -117,8 +118,8 @@ export async function GET(request: NextRequest) {
         color: string
       }>(
         `SELECT pcp.product_id, cp.slug, cp.name_de, cp.color
-         FROM product_customer_profiles pcp
-         JOIN customer_profiles cp ON cp.id = pcp.profile_id
+         FROM ${TABLE_NAMES.PRODUCT_CUSTOMER_PROFILES} pcp
+         JOIN ${TABLE_NAMES.CUSTOMER_PROFILES} cp ON cp.id = pcp.profile_id
          WHERE pcp.product_id = ANY($1)`,
         [productIds]
       )

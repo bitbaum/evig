@@ -7,6 +7,7 @@
 
 import { query } from '@/lib/auth/db'
 import { logger } from '@/lib/logger'
+import { TABLE_NAMES } from '@/config/database'
 import { generateEmbeddings } from './providers'
 
 export interface RetrievalResult {
@@ -90,7 +91,7 @@ export async function searchSimilar(
       d.source_type,
       d.title
     FROM hirn_chunks c
-    JOIN hirn_documents d ON c.document_id = d.id
+    JOIN ${TABLE_NAMES.HIRN_DOCUMENTS} d ON c.document_id = d.id
     WHERE c.embedding IS NOT NULL
       AND 1 - (c.embedding <=> $1::vector) >= $2
       ${filterClauses}
@@ -185,7 +186,7 @@ export async function listDocuments(options: {
     `SELECT
        d.id, d.source_path, d.source_type, d.title, d.created_at, d.indexed_at,
        COUNT(c.id) as chunk_count
-     FROM hirn_documents d
+     FROM ${TABLE_NAMES.HIRN_DOCUMENTS} d
      LEFT JOIN hirn_chunks c ON c.document_id = d.id
      ${whereClause}
      GROUP BY d.id
@@ -196,7 +197,7 @@ export async function listDocuments(options: {
 
   const countParams = sourceType ? [sourceType] : []
   const countResult = await query<{ count: string }>(
-    `SELECT COUNT(*) as count FROM hirn_documents ${sourceType ? 'WHERE source_type = $1' : ''}`,
+    `SELECT COUNT(*) as count FROM ${TABLE_NAMES.HIRN_DOCUMENTS} ${sourceType ? 'WHERE source_type = $1' : ''}`,
     countParams
   )
 
@@ -218,6 +219,6 @@ export async function listDocuments(options: {
  * Delete a document and its chunks
  */
 export async function deleteDocument(documentId: string): Promise<void> {
-  await query(`DELETE FROM hirn_documents WHERE id = $1`, [documentId])
+  await query(`DELETE FROM ${TABLE_NAMES.HIRN_DOCUMENTS} WHERE id = $1`, [documentId])
   logger.info('Document deleted', { documentId })
 }

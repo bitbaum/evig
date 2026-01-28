@@ -9,6 +9,7 @@ import { NextRequest } from 'next/server'
 import { apiSuccess, apiError, apiBadRequest, apiUnauthorized } from '@/lib/api/helpers'
 import { query, transaction } from '@/lib/auth/db'
 import { logger } from '@/lib/logger'
+import { TABLE_NAMES } from '@/config/database'
 import { auth } from '@/auth'
 
 interface ErfassungPayload {
@@ -41,7 +42,7 @@ async function generateItemUUID(): Promise<string> {
 
   // Get the next sequence number for today
   const result = await query<{ count: string }>(
-    `SELECT COUNT(*) as count FROM ai_extracted_products
+    `SELECT COUNT(*) as count FROM ${TABLE_NAMES.AI_EXTRACTED_PRODUCTS}
      WHERE DATE(created_at) = CURRENT_DATE`
   )
 
@@ -94,9 +95,9 @@ export async function POST(request: NextRequest) {
 
     // Use transaction for data integrity
     const result = await transaction(async (client) => {
-      // 1. Insert into ai_extracted_products
+      // 1. Insert into ${TABLE_NAMES.AI_EXTRACTED_PRODUCTS}
       const productResult = await client.query(
-        `INSERT INTO ai_extracted_products (
+        `INSERT INTO ${TABLE_NAMES.AI_EXTRACTED_PRODUCTS} (
           item_uuid,
           product_name,
           brand,
@@ -131,9 +132,9 @@ export async function POST(request: NextRequest) {
 
       const productId = productResult.rows[0].id
 
-      // 2. Insert into inventory_items
+      // 2. Insert into ${TABLE_NAMES.INVENTORY_ITEMS}
       await client.query(
-        `INSERT INTO inventory_items (
+        `INSERT INTO ${TABLE_NAMES.INVENTORY_ITEMS} (
           ai_product_id,
           location,
           box_id,
@@ -158,13 +159,13 @@ export async function POST(request: NextRequest) {
         for (const profileSlug of payload.kundenprofile) {
           // Get profile ID
           const profileResult = await client.query(
-            `SELECT id FROM customer_profiles WHERE slug = $1`,
+            `SELECT id FROM ${TABLE_NAMES.CUSTOMER_PROFILES} WHERE slug = $1`,
             [profileSlug]
           )
 
           if (profileResult.rows.length > 0) {
             await client.query(
-              `INSERT INTO product_customer_profiles (product_id, profile_id, assigned_by)
+              `INSERT INTO ${TABLE_NAMES.PRODUCT_CUSTOMER_PROFILES} (product_id, profile_id, assigned_by)
                VALUES ($1, $2, 'manual')
                ON CONFLICT (product_id, profile_id) DO NOTHING`,
               [productId, profileResult.rows[0].id]
@@ -176,7 +177,7 @@ export async function POST(request: NextRequest) {
       // 4. Create marketplace listing if publishing
       if (payload.publish) {
         await client.query(
-          `INSERT INTO marketplace_listings (
+          `INSERT INTO ${TABLE_NAMES.MARKETPLACE_LISTINGS} (
             inventory_item_id,
             title,
             description,
@@ -186,7 +187,7 @@ export async function POST(request: NextRequest) {
             published_at,
             created_by
           ) VALUES (
-            (SELECT id FROM inventory_items WHERE ai_product_id = $1),
+            (SELECT id FROM ${TABLE_NAMES.INVENTORY_ITEMS} WHERE ai_product_id = $1),
             $2,
             $3,
             $4,
@@ -207,10 +208,10 @@ export async function POST(request: NextRequest) {
 
       // 5. Handle image upload if provided
       if (payload.image) {
-        // For now, store as base64 in product_images table
+        // For now, store as base64 in ${TABLE_NAMES.PRODUCT_IMAGES} table
         // In production, upload to storage service
         await client.query(
-          `INSERT INTO product_images (
+          `INSERT INTO ${TABLE_NAMES.PRODUCT_IMAGES} (
             product_id,
             filename,
             file_path,

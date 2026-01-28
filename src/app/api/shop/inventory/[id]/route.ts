@@ -9,6 +9,7 @@ import { NextRequest } from 'next/server'
 import { apiSuccess, apiError, apiNotFound } from '@/lib/api/helpers'
 import { query } from '@/lib/auth/db'
 import { logger } from '@/lib/logger'
+import { TABLE_NAMES } from '@/config/database'
 
 export async function GET(
   request: NextRequest,
@@ -78,8 +79,8 @@ export async function GET(
       description_de: string
     }>(
       `SELECT cp.slug, cp.name_de, cp.color, cp.description_de
-       FROM product_customer_profiles pcp
-       JOIN customer_profiles cp ON cp.id = pcp.profile_id
+       FROM ${TABLE_NAMES.PRODUCT_CUSTOMER_PROFILES} pcp
+       JOIN ${TABLE_NAMES.CUSTOMER_PROFILES} cp ON cp.id = pcp.profile_id
        WHERE pcp.product_id = $1`,
       [productId]
     )

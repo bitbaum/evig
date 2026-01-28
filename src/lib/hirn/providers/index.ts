@@ -7,6 +7,7 @@
 
 import { query } from '@/lib/auth/db'
 import { logger } from '@/lib/logger'
+import { TABLE_NAMES } from '@/config/database'
 import { GroqProvider } from './groq'
 import { OllamaProvider } from './ollama'
 import { OpenAIProvider } from './openai'
@@ -73,7 +74,7 @@ export async function getProviderSettings(
 ): Promise<ProviderSettings[]> {
   const result = await query<ProviderSettings>(
     `SELECT provider, is_enabled, is_default, settings
-     FROM hirn_provider_settings
+     FROM ${TABLE_NAMES.HIRN_PROVIDER_SETTINGS}
      WHERE scope = $1 AND ($2::uuid IS NULL OR user_id = $2)
      ORDER BY is_default DESC, provider`,
     [scope, userId || null]
@@ -174,7 +175,7 @@ export async function updateProviderSettings(
   userId?: string
 ): Promise<void> {
   await query(
-    `UPDATE hirn_provider_settings
+    `UPDATE ${TABLE_NAMES.HIRN_PROVIDER_SETTINGS}
      SET settings = settings || $1::jsonb,
          updated_at = NOW()
      WHERE provider = $2 AND scope = $3 AND ($4::uuid IS NULL OR user_id = $4)`,
@@ -192,7 +193,7 @@ export async function setDefaultProvider(
 ): Promise<void> {
   // First, unset all defaults for this scope
   await query(
-    `UPDATE hirn_provider_settings
+    `UPDATE ${TABLE_NAMES.HIRN_PROVIDER_SETTINGS}
      SET is_default = false, updated_at = NOW()
      WHERE scope = $1 AND ($2::uuid IS NULL OR user_id = $2)`,
     [scope, userId || null]
@@ -200,7 +201,7 @@ export async function setDefaultProvider(
 
   // Then set the new default
   await query(
-    `UPDATE hirn_provider_settings
+    `UPDATE ${TABLE_NAMES.HIRN_PROVIDER_SETTINGS}
      SET is_default = true, updated_at = NOW()
      WHERE provider = $1 AND scope = $2 AND ($3::uuid IS NULL OR user_id = $3)`,
     [provider, scope, userId || null]
@@ -217,7 +218,7 @@ export async function addUserProvider(
   isDefault: boolean = false
 ): Promise<void> {
   await query(
-    `INSERT INTO hirn_provider_settings (scope, user_id, provider, is_enabled, is_default, settings)
+    `INSERT INTO ${TABLE_NAMES.HIRN_PROVIDER_SETTINGS} (scope, user_id, provider, is_enabled, is_default, settings)
      VALUES ('user', $1, $2, true, $3, $4)
      ON CONFLICT (scope, user_id, provider)
      DO UPDATE SET settings = EXCLUDED.settings, is_default = EXCLUDED.is_default, updated_at = NOW()`,

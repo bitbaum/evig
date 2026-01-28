@@ -14,6 +14,7 @@ import * as fs from 'fs/promises'
 import * as path from 'path'
 import { query } from '@/lib/auth/db'
 import { logger } from '@/lib/logger'
+import { TABLE_NAMES } from '@/config/database'
 import { chunkText, chunkMarkdown, chunkCode, type Chunk } from './chunking'
 import { generateEmbeddings } from './providers'
 
@@ -46,7 +47,7 @@ export async function ingestDocument(input: DocumentInput): Promise<IngestResult
 
   // Check if document exists and if content changed
   const existing = await query<{ id: string; content_hash: string }>(
-    `SELECT id, content_hash FROM hirn_documents WHERE source_path = $1`,
+    `SELECT id, content_hash FROM ${TABLE_NAMES.HIRN_DOCUMENTS} WHERE source_path = $1`,
     [input.sourcePath]
   )
 
@@ -71,7 +72,7 @@ export async function ingestDocument(input: DocumentInput): Promise<IngestResult
     wasUpdated = true
 
     await query(
-      `UPDATE hirn_documents
+      `UPDATE ${TABLE_NAMES.HIRN_DOCUMENTS}
        SET content = $1, content_hash = $2, title = $3, metadata = $4,
            updated_at = NOW(), indexed_at = NULL
        WHERE id = $5`,
@@ -79,11 +80,11 @@ export async function ingestDocument(input: DocumentInput): Promise<IngestResult
     )
 
     // Delete old chunks
-    await query(`DELETE FROM hirn_chunks WHERE document_id = $1`, [documentId])
+    await query(`DELETE FROM ${TABLE_NAMES.HIRN_CHUNKS} WHERE document_id = $1`, [documentId])
   } else {
     // Create new document
     const result = await query<{ id: string }>(
-      `INSERT INTO hirn_documents (source_path, source_type, title, content, content_hash, metadata)
+      `INSERT INTO ${TABLE_NAMES.HIRN_DOCUMENTS} (source_path, source_type, title, content, content_hash, metadata)
        VALUES ($1, $2, $3, $4, $5, $6)
        RETURNING id`,
       [input.sourcePath, input.sourceType, input.title, input.content, contentHash, JSON.stringify(input.metadata || {})]
@@ -133,7 +134,7 @@ export async function ingestDocument(input: DocumentInput): Promise<IngestResult
       const embedding = allEmbeddings[i]
 
       await query(
-        `INSERT INTO hirn_chunks (document_id, content, chunk_index, embedding, metadata)
+        `INSERT INTO ${TABLE_NAMES.HIRN_CHUNKS} (document_id, content, chunk_index, embedding, metadata)
          VALUES ($1, $2, $3, $4::vector, $5)`,
         [
           documentId,
@@ -147,7 +148,7 @@ export async function ingestDocument(input: DocumentInput): Promise<IngestResult
 
     // Mark document as indexed
     await query(
-      `UPDATE hirn_documents SET indexed_at = NOW() WHERE id = $1`,
+      `UPDATE ${TABLE_NAMES.HIRN_DOCUMENTS} SET indexed_at = NOW() WHERE id = $1`,
       [documentId]
     )
   }

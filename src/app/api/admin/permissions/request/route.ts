@@ -8,6 +8,7 @@
 import { NextRequest } from 'next/server'
 import { auth } from '@/auth'
 import { query } from '@/lib/auth/db'
+import { TABLE_NAMES } from '@/config/database'
 import { isStaffEmail, ADMIN_SECTIONS, type AdminSection } from '@/lib/permissions'
 import { apiSuccess, apiError, apiUnauthorized, apiForbidden, apiBadRequest } from '@/lib/api/helpers'
 
@@ -46,7 +47,7 @@ export async function POST(request: NextRequest) {
 
     // Check if user already has a pending request for any of these sections
     const existingResult = await query<{ id: string }>(
-      `SELECT id FROM staff_permission_requests
+      `SELECT id FROM ${TABLE_NAMES.STAFF_PERMISSION_REQUESTS}
        WHERE user_id = $1
        AND status = 'pending'
        AND requested_sections && $2`,
@@ -59,7 +60,7 @@ export async function POST(request: NextRequest) {
 
     // Create the permission request
     const result = await query<{ id: string }>(
-      `INSERT INTO staff_permission_requests (user_id, requested_sections, reason)
+      `INSERT INTO ${TABLE_NAMES.STAFF_PERMISSION_REQUESTS} (user_id, requested_sections, reason)
        VALUES ($1, $2, $3)
        RETURNING id`,
       [session.user.id, sections, reason.trim()]

@@ -57,7 +57,7 @@ export async function GET(request: NextRequest) {
         rev.name as reviewer_name,
         r.reviewed_at,
         r.review_notes
-       FROM staff_permission_requests r
+       FROM ${TABLE_NAMES.STAFF_PERMISSION_REQUESTS} r
        JOIN ${TABLE_NAMES.USERS} u ON r.user_id = u.id
        LEFT JOIN ${TABLE_NAMES.USERS} rev ON r.reviewed_by = rev.id
        WHERE r.status = $1
