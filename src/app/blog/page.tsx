@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { Suspense } from 'react'
-import { getAllPosts } from '@/lib/blog'
+import { getAllPosts } from '@/lib/blog-db'
+import { getAllPosts as getFilePosts } from '@/lib/blog'
 import BlogHero from '@/components/blog/BlogHero'
 import BlogFeaturedGrid from '@/components/blog/BlogFeaturedGrid'
 import BlogLatestList from '@/components/blog/BlogLatestList'
@@ -10,8 +11,12 @@ interface BlogPageProps {
   searchParams: { categories?: string }
 }
 
-export default function BlogPage({ searchParams }: BlogPageProps) {
-  const allPosts = getAllPosts()
+export default async function BlogPage({ searchParams }: BlogPageProps) {
+  // Try database first, fall back to file system if no posts in DB
+  let allPosts = await getAllPosts()
+  if (allPosts.length === 0) {
+    allPosts = getFilePosts()
+  }
   const allCategories = Array.from(
     new Set(allPosts.map((post) => post.category).filter(Boolean) as string[])
   ).sort()

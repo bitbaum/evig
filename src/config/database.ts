@@ -57,8 +57,9 @@ export const TABLE_NAMES = {
   NEWSLETTER_SUBSCRIPTIONS: 'newsletter_subscriptions',
   BLOG_POSTS: 'blog_posts',
   BLOG_SUBMISSIONS: 'blog_submissions',
+  BLOG_CATEGORIES: 'blog_categories',
   STATIC_PAGES: 'static_pages',
-  BLOG_CATEGORIES: 'categories',
+  SERVICES: 'services',
   MEDIA_ITEMS: 'media_items',
 
   // User Roles & Permissions

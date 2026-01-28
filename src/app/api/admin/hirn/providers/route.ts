@@ -11,7 +11,7 @@
 import { NextRequest } from 'next/server'
 import { auth } from '@/auth'
 import { canAccessSection } from '@/lib/permissions'
-import { getProviderSettings, setDefaultProvider, createProvider } from '@/lib/hirn/providers'
+import { getProviderSettings, setDefaultProvider, createProvider, type ProviderName } from '@/lib/hirn/providers'
 import { logger } from '@/lib/logger'
 import { apiSuccess, apiError, apiUnauthorized, apiForbidden, apiBadRequest, apiNotFound } from '@/lib/api/helpers'
 
@@ -108,7 +108,7 @@ export async function PATCH(request: NextRequest) {
 
     // Check availability
     try {
-      const providerInstance = createProvider(provider as 'groq' | 'ollama' | 'openai' | 'openrouter', {
+      const providerInstance = createProvider(provider as ProviderName, {
         apiKey: providerSettings.settings.api_key,
         baseUrl: providerSettings.settings.base_url,
         model: providerSettings.settings.model,
@@ -123,7 +123,7 @@ export async function PATCH(request: NextRequest) {
     }
 
     if (isDefault) {
-      await setDefaultProvider(provider as 'groq' | 'ollama' | 'openai' | 'openrouter', 'system')
+      await setDefaultProvider(provider as ProviderName, 'system')
     }
 
     logger.info('Provider updated', { provider, isDefault, userId: session.user.id })

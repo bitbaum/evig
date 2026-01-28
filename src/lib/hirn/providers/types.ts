@@ -81,5 +81,8 @@ export interface AIProvider {
 
 /**
  * Provider names supported by the system
+ * - ollama: Local, free, private (self-hosted)
+ * - groq: Free tier, ultra-fast inference
+ * - openrouter: Pay-per-use, many models available
  */
-export type ProviderName = 'groq' | 'ollama' | 'openai' | 'openrouter' | 'anthropic' | 'google' | 'xai'
+export type ProviderName = 'ollama' | 'groq' | 'openrouter'

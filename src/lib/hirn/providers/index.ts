@@ -10,11 +10,7 @@ import { logger } from '@/lib/logger'
 import { TABLE_NAMES } from '@/config/database'
 import { GroqProvider } from './groq'
 import { OllamaProvider } from './ollama'
-import { OpenAIProvider } from './openai'
 import { OpenRouterProvider } from './openrouter'
-import { AnthropicProvider } from './anthropic'
-import { GoogleProvider } from './google'
-import { XAIProvider } from './xai'
 import type {
   AIProvider,
   ProviderConfig,
@@ -30,20 +26,12 @@ export * from './types'
  */
 export function createProvider(name: ProviderName, config: ProviderConfig = {}): AIProvider {
   switch (name) {
-    case 'groq':
-      return new GroqProvider(config)
     case 'ollama':
       return new OllamaProvider(config)
-    case 'openai':
-      return new OpenAIProvider(config)
+    case 'groq':
+      return new GroqProvider(config)
     case 'openrouter':
       return new OpenRouterProvider(config)
-    case 'anthropic':
-      return new AnthropicProvider(config)
-    case 'google':
-      return new GoogleProvider(config)
-    case 'xai':
-      return new XAIProvider(config)
     default:
       throw new Error(`Unknown provider: ${name}`)
   }
@@ -136,7 +124,7 @@ export async function getDefaultChatProvider(userId?: string): Promise<AIProvide
 /**
  * Get the embedding provider
  * Always uses Ollama for embeddings (local, free, 768 dimensions)
- * Falls back to OpenAI if Ollama is unavailable
+ * Falls back to OpenRouter if Ollama is unavailable
  */
 export async function getEmbeddingProvider(): Promise<AIProvider> {
   // Try Ollama first (preferred for embeddings - local and free)
@@ -145,14 +133,14 @@ export async function getEmbeddingProvider(): Promise<AIProvider> {
     return ollama
   }
 
-  // Try OpenAI as fallback
-  const openai = new OpenAIProvider()
-  if (await openai.isAvailable()) {
-    logger.warn('Using OpenAI for embeddings (Ollama unavailable)')
-    return openai
+  // Try OpenRouter as fallback
+  const openrouter = new OpenRouterProvider()
+  if (await openrouter.isAvailable()) {
+    logger.warn('Using OpenRouter for embeddings (Ollama unavailable)')
+    return openrouter
   }
 
-  throw new Error('No embedding provider available. Please start Ollama or configure OpenAI.')
+  throw new Error('No embedding provider available. Please start Ollama or configure OpenRouter.')
 }
 
 /**

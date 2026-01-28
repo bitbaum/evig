@@ -1,6 +1,7 @@
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import { getPostBySlug, getAllPosts } from '@/lib/blog'
+import { getPostBySlug, getAllPosts } from '@/lib/blog-db'
+import { getPostBySlug as getFilePost, getAllPosts as getFilePosts } from '@/lib/blog'
 import BlogPostHeader from '@/components/blog/BlogPostHeader'
 import BlogPostContent from '@/components/blog/BlogPostContent'
 import RelatedPosts from '@/components/blog/RelatedPosts'
@@ -11,9 +12,23 @@ interface BlogPostPageProps {
   };
 }
 
+// Helper to get post from DB or file system
+async function getPost(slug: string) {
+  const dbPost = await getPostBySlug(slug)
+  if (dbPost) return dbPost
+  return getFilePost(slug)
+}
+
+// Helper to get all posts from DB or file system
+async function getPosts() {
+  const dbPosts = await getAllPosts()
+  if (dbPosts.length > 0) return dbPosts
+  return getFilePosts()
+}
+
 export async function generateMetadata({ params }: BlogPostPageProps): Promise<Metadata> {
-  const post = getPostBySlug(params.slug);
-  
+  const post = await getPost(params.slug);
+
   if (!post) {
     return {
       title: 'Post Not Found | RevampIt Blog',
@@ -41,14 +56,14 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
 }
 
 export default async function BlogPostPage({ params }: BlogPostPageProps) {
-  const post = getPostBySlug(params.slug);
-  
+  const post = await getPost(params.slug);
+
   if (!post || !post.published) {
     notFound();
   }
 
   // Get related posts from same category
-  const allPosts = getAllPosts();
+  const allPosts = await getPosts();
   const relatedPosts = allPosts
     .filter((p) => p.slug !== post.slug && p.category === post.category)
     .slice(0, 3);

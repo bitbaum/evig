@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Settings, Check, Loader2, Cpu, Cloud, Zap, Brain, Sparkles, X, Key, ExternalLink } from 'lucide-react'
+import { Settings, Check, Loader2, Cpu, Cloud, Zap, X, Key, ExternalLink } from 'lucide-react'
 
 interface Provider {
   provider: string
@@ -12,7 +12,7 @@ interface Provider {
   description?: string
 }
 
-type ProviderCategory = 'local' | 'free' | 'premium'
+type ProviderCategory = 'local' | 'free'
 
 interface ProviderMeta {
   label: string
@@ -59,54 +59,11 @@ const PROVIDER_META: Record<string, ProviderMeta> = {
     keyUrl: 'https://openrouter.ai/keys',
     keyPrefix: 'sk-or-',
   },
-  openai: {
-    label: 'OpenAI',
-    icon: Sparkles,
-    color: 'text-emerald-500',
-    bgColor: 'bg-emerald-100 dark:bg-emerald-900/30',
-    category: 'premium',
-    description: 'GPT-4o',
-    keyName: 'OPENAI_API_KEY',
-    keyUrl: 'https://platform.openai.com/api-keys',
-    keyPrefix: 'sk-',
-  },
-  anthropic: {
-    label: 'Anthropic',
-    icon: Brain,
-    color: 'text-amber-600',
-    bgColor: 'bg-amber-100 dark:bg-amber-900/30',
-    category: 'premium',
-    description: 'Claude',
-    keyName: 'ANTHROPIC_API_KEY',
-    keyUrl: 'https://console.anthropic.com/settings/keys',
-    keyPrefix: 'sk-ant-',
-  },
-  google: {
-    label: 'Google',
-    icon: Sparkles,
-    color: 'text-blue-500',
-    bgColor: 'bg-blue-100 dark:bg-blue-900/30',
-    category: 'premium',
-    description: 'Gemini',
-    keyName: 'GOOGLE_AI_API_KEY',
-    keyUrl: 'https://aistudio.google.com/app/apikey',
-  },
-  xai: {
-    label: 'xAI',
-    icon: Zap,
-    color: 'text-slate-600',
-    bgColor: 'bg-slate-100 dark:bg-slate-900/30',
-    category: 'premium',
-    description: 'Grok',
-    keyName: 'XAI_API_KEY',
-    keyUrl: 'https://console.x.ai',
-  },
 }
 
 const CATEGORIES: { id: ProviderCategory; label: string; description: string }[] = [
   { id: 'local', label: 'Lokal', description: 'Auf deinem Computer' },
-  { id: 'free', label: 'Gratis', description: 'Kostenlose APIs' },
-  { id: 'premium', label: 'Premium', description: 'Bezahlt, beste Qualität' },
+  { id: 'free', label: 'Gratis / Pay-per-use', description: 'Cloud APIs' },
 ]
 
 export function HirnProviderSelector() {
@@ -298,7 +255,7 @@ export function HirnProviderSelector() {
 
             <div className="p-3 bg-gray-50 dark:bg-gray-900/50 border-t border-gray-100 dark:border-gray-700">
               <p className="text-xs text-gray-500 text-center">
-                API Keys in <code className="bg-gray-200 dark:bg-gray-700 px-1 rounded">.env.local</code> hinzufügen
+                Wähle einen Provider mit aktivem API-Key
               </p>
             </div>
           </div>
