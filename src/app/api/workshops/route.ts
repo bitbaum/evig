@@ -37,9 +37,9 @@ export async function GET(request: NextRequest) {
       ORDER BY created_at DESC
     `, params)
 
-    return apiSuccess({
-      workshops: workshops.rows
-    })
+    // Return array directly - consistent with /api/services pattern
+    // Frontend accesses as: result.data (not result.data.workshops)
+    return apiSuccess(workshops.rows)
 
   } catch (error) {
     // Handle database connection errors gracefully

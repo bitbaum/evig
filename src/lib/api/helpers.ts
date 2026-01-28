@@ -3,6 +3,28 @@
  *
  * Provides consistent response formats across all API routes
  * Following dev guide: docs/development/DEV_GUIDE.md
+ *
+ * API RESPONSE PATTERN (SSOT):
+ * ============================
+ * All responses use: { success: boolean, data?: T, error?: string }
+ *
+ * For LIST endpoints (GET /api/resources):
+ *   apiSuccess(items)          → { success: true, data: [...] }
+ *
+ * For SINGLE resource (GET /api/resources/:id):
+ *   apiSuccess(item)           → { success: true, data: {...} }
+ *
+ * For PAGINATED lists:
+ *   apiSuccess({ items, pagination }) → { success: true, data: { items: [...], pagination: {...} } }
+ *
+ * Client-side usage:
+ *   const result = await fetch('/api/resources').then(r => r.json())
+ *   if (result.success) {
+ *     const items = result.data  // Array for lists, Object for single
+ *   }
+ *
+ * DO NOT wrap arrays in named objects like { workshops: [...] }
+ * The endpoint path already tells you what the data is.
  */
 
 import { NextResponse } from 'next/server';

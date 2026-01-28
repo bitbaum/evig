@@ -36,6 +36,11 @@ export const ERROR_MESSAGES = {
   // Business Logic
   SELLER_ONLY: 'Nur Verkäufer können Produkte erstellen',
   REPAIRER_ONLY: 'Nur Reparateure können diesen Bereich nutzen',
+
+  // Workshops
+  WORKSHOP_PROPOSALS_LOAD_FAILED: 'Fehler beim Laden der Workshop-Vorschläge',
+  WORKSHOP_APPROVAL_FAILED: 'Fehler bei der Workshop-Genehmigung',
+  NETWORK_ERROR: 'Netzwerkfehler',
   ALREADY_APPROVED: 'Sie sind bereits als Verkäufer zugelassen',
   PENDING_APPLICATION: 'Sie haben bereits eine ausstehende Bewerbung',
   CANNOT_CANCEL_COMPLETED: 'Abgeschlossene Termine können nicht storniert werden',

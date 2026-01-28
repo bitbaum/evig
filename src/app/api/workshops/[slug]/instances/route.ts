@@ -53,12 +53,13 @@ export async function GET(
       ORDER BY wi.start_date ASC
     `, [workshopId])
 
-    return apiSuccess({
-      instances: (instances.rows as InstanceRow[]).map(instance => ({
+    // Return array directly - consistent API pattern
+    return apiSuccess(
+      (instances.rows as InstanceRow[]).map(instance => ({
         ...instance,
         current_participants: parseInt(instance.current_participants) || 0
       }))
-    })
+    )
 
   } catch (error) {
     return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)

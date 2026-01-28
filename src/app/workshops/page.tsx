@@ -56,18 +56,22 @@ export default function WorkshopsPage() {
       const workshopsResponse = await fetch('/api/workshops')
       const workshopsData = await workshopsResponse.json()
 
-      if (workshopsData.success) {
+      if (workshopsData.success && Array.isArray(workshopsData.data)) {
         // Fetch instances for each workshop
         const workshopsWithInstances = await Promise.all(
-          workshopsData.workshops.map(async (workshop: Workshop) => {
+          workshopsData.data.map(async (workshop: Workshop) => {
             try {
               const instancesResponse = await fetch(`/api/workshops/${workshop.slug}/instances`)
               const instancesData = await instancesResponse.json()
 
+              const instances = instancesData.success && Array.isArray(instancesData.data)
+                ? instancesData.data
+                : []
+
               let userRegistered = false
-              if (session?.user && instancesData.success) {
+              if (session?.user && instances.length > 0) {
                 // Check if user is registered for any instance
-                for (const instance of instancesData.instances) {
+                for (const instance of instances) {
                   const registrationResponse = await fetch(`/api/workshops/registration/${instance.id}`)
                   const registrationData = await registrationResponse.json()
                   if (registrationData.registered) {
@@ -79,7 +83,7 @@ export default function WorkshopsPage() {
 
               return {
                 ...workshop,
-                instances: instancesData.success ? instancesData.instances : [],
+                instances,
                 user_registered: userRegistered
               }
             } catch (error) {
@@ -165,7 +169,8 @@ export default function WorkshopsPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {filteredWorkshops.map((workshop) => {
             const IconComponent = getCategoryIcon(workshop.category)
-            const nextInstance = workshop.instances.find(inst => new Date(inst.start_date) > new Date())
+            const instances = workshop.instances || []
+            const nextInstance = instances.find(inst => new Date(inst.start_date) > new Date())
 
             return (
               <div key={workshop.id} className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow">

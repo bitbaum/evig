@@ -21,6 +21,8 @@ import {
   BookOpen,
   ArrowLeft
 } from 'lucide-react'
+import { ERROR_MESSAGES } from '@/config/error-messages'
+import { PROPOSAL_STATUS, PROPOSAL_STATUS_LABELS, type ProposalStatus } from '@/config/workshops'
 
 interface WorkshopProposal {
   id: string
@@ -47,8 +49,11 @@ export default function AdminWorkshopsPage() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string>('')
 
-  const [filters, setFilters] = useState({
-    status: 'pending',
+  const [filters, setFilters] = useState<{
+    status: ProposalStatus | 'all'
+    category: string
+  }>({
+    status: PROPOSAL_STATUS.PENDING,
     category: 'all'
   })
 
@@ -74,14 +79,18 @@ export default function AdminWorkshopsPage() {
 
       const response = await fetch(`/api/admin/workshops/proposals?${params}`)
       if (response.ok) {
-        const data = await response.json()
-        setProposals(data.proposals)
-        setTotalPages(Math.ceil(data.pagination.total / 20))
+        const result = await response.json()
+        if (result.success && result.data) {
+          setProposals(result.data.items || [])
+          setTotalPages(Math.ceil((result.data.pagination?.total || 0) / 20))
+        } else {
+          setError(ERROR_MESSAGES.WORKSHOP_PROPOSALS_LOAD_FAILED)
+        }
       } else {
-        setError('Fehler beim Laden der Workshop-Vorschläge')
+        setError(ERROR_MESSAGES.WORKSHOP_PROPOSALS_LOAD_FAILED)
       }
     } catch (error) {
-      setError('Netzwerkfehler')
+      setError(ERROR_MESSAGES.NETWORK_ERROR)
     } finally {
       setLoading(false)
     }
@@ -116,19 +125,19 @@ export default function AdminWorkshopsPage() {
         alert('Fehler bei der Genehmigung')
       }
     } catch (error) {
-      alert('Netzwerkfehler')
+      alert(ERROR_MESSAGES.NETWORK_ERROR)
     }
   }
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'approved':
+      case PROPOSAL_STATUS.APPROVED:
         return <CheckCircle className="w-5 h-5 text-green-600" />
-      case 'pending':
+      case PROPOSAL_STATUS.PENDING:
         return <Clock className="w-5 h-5 text-yellow-600" />
-      case 'rejected':
+      case PROPOSAL_STATUS.REJECTED:
         return <XCircle className="w-5 h-5 text-red-600" />
-      case 'requires_changes':
+      case PROPOSAL_STATUS.REQUIRES_CHANGES:
         return <AlertCircle className="w-5 h-5 text-orange-600" />
       default:
         return <AlertCircle className="w-5 h-5 text-gray-400" />
@@ -136,18 +145,7 @@ export default function AdminWorkshopsPage() {
   }
 
   const getStatusText = (status: string) => {
-    switch (status) {
-      case 'approved':
-        return 'Genehmigt'
-      case 'pending':
-        return 'Ausstehend'
-      case 'rejected':
-        return 'Abgelehnt'
-      case 'requires_changes':
-        return 'Änderungen erforderlich'
-      default:
-        return status
-    }
+    return PROPOSAL_STATUS_LABELS[status as ProposalStatus] || status
   }
 
   const getLocationText = (proposal: WorkshopProposal) => {
@@ -227,7 +225,7 @@ export default function AdminWorkshopsPage() {
               <label className="block text-sm font-medium text-gray-700 mb-1">Status</label>
               <select
                 value={filters.status}
-                onChange={(e) => setFilters(prev => ({ ...prev, status: e.target.value }))}
+                onChange={(e) => setFilters(prev => ({ ...prev, status: e.target.value as ProposalStatus | 'all' }))}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
               >
                 <option value="all">Alle</option>

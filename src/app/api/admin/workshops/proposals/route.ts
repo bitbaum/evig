@@ -4,8 +4,7 @@ import { query } from '@/lib/auth/db'
 import { apiError, apiSuccess, apiBadRequest, apiUnauthorized, apiForbidden } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES } from '@/config/database'
-import { getUserRole } from '@/lib/api/role-checks'
-import { isAdminRole, ROLES } from '@/lib/constants'
+import { isStaffEmail } from '@/lib/permissions'
 
 interface CountRow {
   total: string
@@ -19,11 +18,8 @@ export async function GET(request: NextRequest) {
       return apiUnauthorized(ERROR_MESSAGES.UNAUTHORIZED)
     }
 
-    // Check if user has admin permissions
-    const userRole = await getUserRole(session.user.id)
-    const hasAdminPermission = isAdminRole(userRole) || userRole === ROLES.MODERATOR
-
-    if (!hasAdminPermission) {
+    // Check if user is staff (has @revamp-it.ch email)
+    if (!isStaffEmail(session.user.email)) {
       return apiForbidden('Keine Berechtigung für Workshop-Verwaltung')
     }
 
@@ -80,9 +76,11 @@ export async function GET(request: NextRequest) {
     const countParams = params.slice(0, -2) // Remove limit and offset
     const countResult = await query(countQuery, countParams)
 
+    // Return with pagination metadata - this is an exception where wrapping makes sense
+    // because we need to return both data AND pagination info
     const count = countResult.rows[0] as CountRow
     return apiSuccess({
-      proposals: proposals.rows,
+      items: proposals.rows,
       pagination: {
         total: parseInt(count.total),
         limit,

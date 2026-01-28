@@ -30,7 +30,7 @@ interface ServiceType {
   id: string
   name: string
   description: string | null
-  base_price_cents: number | null
+  price_cents: number | null
   duration_minutes: number | null
   is_active: boolean
   created_at: string
@@ -91,7 +91,7 @@ async function getServices(): Promise<ServiceType[]> {
         id,
         name,
         description,
-        base_price_cents,
+        price_cents,
         duration_minutes,
         is_active,
         created_at
@@ -236,7 +236,7 @@ export default async function AdminServicesPage() {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="text-sm font-medium text-gray-900 dark:text-white">
-                        {formatPrice(service.base_price_cents)}
+                        {formatPrice(service.price_cents)}
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">

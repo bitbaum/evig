@@ -161,6 +161,29 @@ export const WORKSHOP_LEVELS: WorkshopLevel[] = [
 ];
 
 /**
+ * Workshop proposal statuses
+ * Used in workshop_proposals table and admin UI
+ */
+export const PROPOSAL_STATUS = {
+  PENDING: 'pending',
+  APPROVED: 'approved',
+  REJECTED: 'rejected',
+  REQUIRES_CHANGES: 'requires_changes',
+} as const;
+
+export type ProposalStatus = typeof PROPOSAL_STATUS[keyof typeof PROPOSAL_STATUS];
+
+/**
+ * Status labels for UI display
+ */
+export const PROPOSAL_STATUS_LABELS: Record<ProposalStatus, string> = {
+  [PROPOSAL_STATUS.PENDING]: 'Ausstehend',
+  [PROPOSAL_STATUS.APPROVED]: 'Genehmigt',
+  [PROPOSAL_STATUS.REJECTED]: 'Abgelehnt',
+  [PROPOSAL_STATUS.REQUIRES_CHANGES]: 'Änderungen erforderlich',
+};
+
+/**
  * Get category by ID
  */
 export function getCategoryById(id: string): WorkshopCategory | undefined {
