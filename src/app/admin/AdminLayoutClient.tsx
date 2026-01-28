@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import Image from 'next/image'
 import {
   Menu,
   ChevronLeft,
@@ -93,18 +94,28 @@ export function AdminLayoutClient({
         <div className="flex items-center justify-between h-16 px-4 border-b border-gray-200 dark:border-gray-700">
           {!sidebarCollapsed && (
             <Link href="/admin" className="flex items-center gap-2">
-              <div className="w-8 h-8 bg-green-600 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-sm">R</span>
-              </div>
+              <Image
+                src="/images/logo/revampit-favicon.png"
+                alt="RevampIT"
+                width={32}
+                height={32}
+                className="w-8 h-8 object-contain"
+              />
               <span className="text-lg font-bold text-gray-900 dark:text-white">
                 Admin
               </span>
             </Link>
           )}
           {sidebarCollapsed && (
-            <div className="w-8 h-8 bg-green-600 rounded-lg flex items-center justify-center mx-auto">
-              <span className="text-white font-bold text-sm">R</span>
-            </div>
+            <Link href="/admin" className="mx-auto">
+              <Image
+                src="/images/logo/revampit-favicon.png"
+                alt="RevampIT"
+                width={32}
+                height={32}
+                className="w-8 h-8 object-contain"
+              />
+            </Link>
           )}
 
           {/* Desktop collapse button */}
