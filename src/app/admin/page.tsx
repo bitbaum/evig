@@ -1,8 +1,14 @@
 /**
- * Admin Dashboard - Server Component
+ * Admin Dashboard - Task-Oriented UX
  *
- * Shows real-time data from the database.
- * No mock data - all values come from actual database queries.
+ * Redesigned to show what needs action first, then quick actions,
+ * then activity metrics, with reference stats at the bottom.
+ *
+ * Design principles:
+ * 1. Task-first: Show what needs action, not abstract stats
+ * 2. Clear hierarchy: Visual weight = importance
+ * 3. 1-click actions: Most common workflows immediately accessible
+ * 4. Progressive disclosure: Important first, details on demand
  */
 
 import { Metadata } from 'next'
@@ -10,24 +16,23 @@ import Link from 'next/link'
 import { auth } from '@/auth'
 import { query } from '@/lib/auth/db'
 import { TABLE_NAMES } from '@/config/database'
-import { getAccessibleSections, isSuperAdmin } from '@/lib/permissions'
-import { ADMIN_SECTIONS, type AdminSection } from '@/lib/permissions'
+import { getAccessibleSections, isSuperAdmin, canAccessSection } from '@/lib/permissions'
+import { ADMIN_SECTIONS } from '@/lib/permissions'
 import {
   Users,
-  Calendar,
   Wrench,
   UserCheck,
   ArrowRight,
-  BarChart3,
   Package,
   CheckSquare,
   FileText,
   MapPin,
-  Star,
-  Brain,
-  Settings,
-  AlertCircle,
+  GraduationCap,
   Shield,
+  Zap,
+  TrendingUp,
+  AlertCircle,
+  Check,
 } from 'lucide-react'
 import { PermissionRequestsManager } from '@/components/admin/PermissionRequestsManager'
 import { RequestAccessSection } from './RequestAccessSection'
@@ -37,77 +42,120 @@ export const metadata: Metadata = {
   description: 'Verwalten Sie Ihr RevampIT-System als Administrator.',
 }
 
-// Icon mapping for sections
-const SECTION_ICONS: Record<string, typeof Users> = {
-  dashboard: BarChart3,
-  products: Package,
-  workshops: Calendar,
-  services: Wrench,
-  locations: MapPin,
-  reviews: Star,
-  content: FileText,
-  approvals: CheckSquare,
-  users: Users,
-  team: UserCheck,
-  finances: BarChart3,
-  finanzen: BarChart3,
-  kennzahlen: BarChart3,
-  wirkung: BarChart3,
-  transparenz: BarChart3,
-  analytics: BarChart3,
-  settings: Settings,
-  hirn: Brain,
+interface DashboardStats {
+  // Action items
+  pendingApprovals: number
+  pendingPermissionRequests: number
+  pendingAppointments: number
+
+  // Activity (this week)
+  newUsersThisWeek: number
+  postsPublishedThisWeek: number
+
+  // Reference stats
+  totalUsers: number
+  totalStaff: number
+  totalTechnicians: number
 }
 
-async function getDashboardStats() {
+async function getDashboardStats(isSuper: boolean): Promise<DashboardStats> {
+  const stats: DashboardStats = {
+    pendingApprovals: 0,
+    pendingPermissionRequests: 0,
+    pendingAppointments: 0,
+    newUsersThisWeek: 0,
+    postsPublishedThisWeek: 0,
+    totalUsers: 0,
+    totalStaff: 0,
+    totalTechnicians: 0,
+  }
+
   try {
-    // Get user count
+    // Get total user count
     const usersResult = await query<{ count: string }>(
       `SELECT COUNT(*) as count FROM ${TABLE_NAMES.USERS}`
     )
-    const totalUsers = parseInt(usersResult.rows[0]?.count || '0')
+    stats.totalUsers = parseInt(usersResult.rows[0]?.count || '0')
 
     // Get staff count
     const staffResult = await query<{ count: string }>(
       `SELECT COUNT(*) as count FROM ${TABLE_NAMES.USERS} WHERE is_staff = true`
     )
-    const totalStaff = parseInt(staffResult.rows[0]?.count || '0')
+    stats.totalStaff = parseInt(staffResult.rows[0]?.count || '0')
 
-    // Get pending approvals (user_content_submissions with status='pending')
-    let pendingApprovals = 0
+    // Get pending content approvals
     try {
       const approvalsResult = await query<{ count: string }>(
         `SELECT COUNT(*) as count FROM user_content_submissions WHERE status = 'pending'`
       )
-      pendingApprovals = parseInt(approvalsResult.rows[0]?.count || '0')
+      stats.pendingApprovals = parseInt(approvalsResult.rows[0]?.count || '0')
+    } catch {
+      // Table might not exist yet
+    }
+
+    // Get pending permission requests (super admin only)
+    if (isSuper) {
+      try {
+        const permissionsResult = await query<{ count: string }>(
+          `SELECT COUNT(*) as count FROM ${TABLE_NAMES.STAFF_PERMISSION_REQUESTS} WHERE status = 'pending'`
+        )
+        stats.pendingPermissionRequests = parseInt(permissionsResult.rows[0]?.count || '0')
+      } catch {
+        // Table might not exist yet
+      }
+    }
+
+    // Get pending service appointments
+    try {
+      const appointmentsResult = await query<{ count: string }>(
+        `SELECT COUNT(*) as count FROM ${TABLE_NAMES.SERVICE_APPOINTMENTS} WHERE status = 'pending'`
+      )
+      stats.pendingAppointments = parseInt(appointmentsResult.rows[0]?.count || '0')
     } catch {
       // Table might not exist yet
     }
 
     // Get technician count
-    let totalTechnicians = 0
     try {
       const techResult = await query<{ count: string }>(
         `SELECT COUNT(*) as count FROM technician_profiles WHERE is_active = true`
       )
-      totalTechnicians = parseInt(techResult.rows[0]?.count || '0')
+      stats.totalTechnicians = parseInt(techResult.rows[0]?.count || '0')
     } catch {
       // Table might not exist yet
     }
 
-    return {
-      totalUsers,
-      totalStaff,
-      pendingApprovals,
-      totalTechnicians,
+    // Get new users this week
+    try {
+      const weekAgo = new Date()
+      weekAgo.setDate(weekAgo.getDate() - 7)
+      const newUsersResult = await query<{ count: string }>(
+        `SELECT COUNT(*) as count FROM ${TABLE_NAMES.USERS}
+         WHERE created_at >= $1`,
+        [weekAgo.toISOString()]
+      )
+      stats.newUsersThisWeek = parseInt(newUsersResult.rows[0]?.count || '0')
+    } catch {
+      // Column might not exist
     }
-  } catch (error) {
-    return {
-      totalUsers: 0,
-      totalStaff: 0,
-      pendingApprovals: 0,
-      totalTechnicians: 0,
+
+    // Get posts published this week
+    try {
+      const weekAgo = new Date()
+      weekAgo.setDate(weekAgo.getDate() - 7)
+      const postsResult = await query<{ count: string }>(
+        `SELECT COUNT(*) as count FROM ${TABLE_NAMES.BLOG_POSTS}
+         WHERE status = 'published' AND published_at >= $1`,
+        [weekAgo.toISOString()]
+      )
+      stats.postsPublishedThisWeek = parseInt(postsResult.rows[0]?.count || '0')
+    } catch {
+      // Table might not exist
     }
+
+    return stats
+  } catch {
+    return stats
   }
 }
 
@@ -118,242 +166,341 @@ export default async function AdminDashboard() {
     return null
   }
 
-  const stats = await getDashboardStats()
-  const accessibleSections = getAccessibleSections({
-    email: session.user.email,
-    is_staff: session.user.isStaff,
-    staff_permissions: session.user.staffPermissions,
-  })
   const isSuper = isSuperAdmin(session.user.email)
+  const stats = await getDashboardStats(isSuper)
+
+  const userForPermissions = {
+    email: session.user.email ?? '',
+    is_staff: session.user.isStaff ?? false,
+    staff_permissions: session.user.staffPermissions ?? [],
+  }
+
+  const accessibleSections = getAccessibleSections(userForPermissions)
 
   // Calculate sections the user doesn't have access to (for request form)
-  const allSections = Object.keys(ADMIN_SECTIONS) as AdminSection[]
+  const allSections = Object.keys(ADMIN_SECTIONS)
   const hasFullAccess = session.user.staffPermissions?.includes('*') || isSuper
-  const inaccessibleSections = hasFullAccess ? [] : allSections
-    .filter(s => !accessibleSections.includes(s) && s !== 'dashboard')
-    .map(s => ({
-      id: s,
-      label: ADMIN_SECTIONS[s].label,
-      description: ADMIN_SECTIONS[s].description,
-    }))
+  const inaccessibleSections = hasFullAccess
+    ? []
+    : allSections
+        .filter(s => !accessibleSections.includes(s) && s !== 'dashboard')
+        .map(s => ({
+          id: s,
+          label: ADMIN_SECTIONS[s]?.label ?? s,
+          description: ADMIN_SECTIONS[s]?.description ?? '',
+        }))
+
+  // Build action items list
+  const actionItems: Array<{
+    type: 'urgent' | 'warning' | 'success'
+    label: string
+    count?: number
+    href: string
+    actionLabel: string
+  }> = []
+
+  // Pending approvals
+  if (stats.pendingApprovals > 0 && canAccessSection(userForPermissions, 'approvals')) {
+    actionItems.push({
+      type: 'urgent',
+      label: `${stats.pendingApprovals} Freigabe${stats.pendingApprovals > 1 ? 'n' : ''} warten`,
+      count: stats.pendingApprovals,
+      href: '/admin/approvals',
+      actionLabel: 'Jetzt prüfen',
+    })
+  }
+
+  // Pending permission requests (super admin only)
+  if (isSuper && stats.pendingPermissionRequests > 0) {
+    actionItems.push({
+      type: 'warning',
+      label: `${stats.pendingPermissionRequests} Berechtigungsanfrage${stats.pendingPermissionRequests > 1 ? 'n' : ''}`,
+      count: stats.pendingPermissionRequests,
+      href: '#permission-requests',
+      actionLabel: 'Ansehen',
+    })
+  }
+
+  // Pending appointments
+  if (stats.pendingAppointments > 0 && canAccessSection(userForPermissions, 'services')) {
+    actionItems.push({
+      type: 'warning',
+      label: `${stats.pendingAppointments} Termin${stats.pendingAppointments > 1 ? 'e' : ''} ausstehend`,
+      count: stats.pendingAppointments,
+      href: '/admin/services/appointments',
+      actionLabel: 'Ansehen',
+    })
+  }
+
+  // No pending items message
+  const hasNoActionItems = actionItems.length === 0
+
+  // Quick actions based on user permissions
+  const quickActions: Array<{
+    label: string
+    href: string
+    icon: typeof Package
+    color: string
+  }> = []
+
+  if (canAccessSection(userForPermissions, 'content')) {
+    quickActions.push({
+      label: 'Neuer Artikel',
+      href: '/admin/content/blog/new',
+      icon: FileText,
+      color: 'bg-blue-100 dark:bg-blue-900/30 text-blue-600 hover:bg-blue-200 dark:hover:bg-blue-900/50',
+    })
+  }
+
+  if (canAccessSection(userForPermissions, 'products')) {
+    quickActions.push({
+      label: 'Neues Produkt',
+      href: '/admin/products/new',
+      icon: Package,
+      color: 'bg-green-100 dark:bg-green-900/30 text-green-600 hover:bg-green-200 dark:hover:bg-green-900/50',
+    })
+  }
+
+  if (canAccessSection(userForPermissions, 'workshops')) {
+    quickActions.push({
+      label: 'Neuer Workshop',
+      href: '/admin/workshops/new',
+      icon: GraduationCap,
+      color: 'bg-purple-100 dark:bg-purple-900/30 text-purple-600 hover:bg-purple-200 dark:hover:bg-purple-900/50',
+    })
+  }
+
+  if (canAccessSection(userForPermissions, 'services')) {
+    quickActions.push({
+      label: 'Neue Dienstleistung',
+      href: '/admin/services/new',
+      icon: Wrench,
+      color: 'bg-orange-100 dark:bg-orange-900/30 text-orange-600 hover:bg-orange-200 dark:hover:bg-orange-900/50',
+    })
+  }
+
+  if (canAccessSection(userForPermissions, 'locations')) {
+    quickActions.push({
+      label: 'Neuer Standort',
+      href: '/admin/locations/new',
+      icon: MapPin,
+      color: 'bg-teal-100 dark:bg-teal-900/30 text-teal-600 hover:bg-teal-200 dark:hover:bg-teal-900/50',
+    })
+  }
 
   return (
-    <div className="space-y-8">
-      {/* Welcome Header */}
-      <div className="bg-gradient-to-r from-green-600 to-green-700 rounded-xl p-6 text-white">
-        <h1 className="text-2xl font-bold mb-2">
-          Willkommen, {session.user.name || session.user.email}
-        </h1>
-        <p className="text-green-100">
-          {isSuper ? 'Super Admin' : 'Staff'} • {accessibleSections.length} Bereiche verfügbar
-        </p>
-      </div>
-
-      {/* Key Metrics from Database */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-100 dark:border-gray-700">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Benutzer</p>
-              <p className="text-3xl font-bold text-gray-900 dark:text-white">{stats.totalUsers}</p>
-              <p className="text-sm text-gray-500">Registriert</p>
-            </div>
-            <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center">
-              <Users className="w-6 h-6 text-blue-600" />
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-100 dark:border-gray-700">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Team</p>
-              <p className="text-3xl font-bold text-gray-900 dark:text-white">{stats.totalStaff}</p>
-              <p className="text-sm text-gray-500">Mitarbeitende</p>
-            </div>
-            <div className="w-12 h-12 bg-green-100 dark:bg-green-900/30 rounded-lg flex items-center justify-center">
-              <UserCheck className="w-6 h-6 text-green-600" />
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-100 dark:border-gray-700">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Freigaben</p>
-              <p className="text-3xl font-bold text-gray-900 dark:text-white">{stats.pendingApprovals}</p>
-              <p className="text-sm text-orange-600">Ausstehend</p>
-            </div>
-            <div className="w-12 h-12 bg-orange-100 dark:bg-orange-900/30 rounded-lg flex items-center justify-center">
-              <CheckSquare className="w-6 h-6 text-orange-600" />
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-100 dark:border-gray-700">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Techniker</p>
-              <p className="text-3xl font-bold text-gray-900 dark:text-white">{stats.totalTechnicians}</p>
-              <p className="text-sm text-gray-500">Aktiv</p>
-            </div>
-            <div className="w-12 h-12 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex items-center justify-center">
-              <Wrench className="w-6 h-6 text-purple-600" />
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Accessible Sections Grid */}
-      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
-        <div className="p-6 border-b border-gray-100 dark:border-gray-700">
-          <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
-            Deine Bereiche
-          </h2>
-          <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-            Schnellzugriff auf verfügbare Admin-Bereiche
+    <div className="space-y-6">
+      {/* Welcome Header - Simplified */}
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+            Hallo, {session.user.name?.split(' ')[0] || 'Admin'}
+          </h1>
+          <p className="text-gray-600 dark:text-gray-400">
+            {isSuper ? 'Super Admin' : 'Staff'} • {accessibleSections.length} Bereiche
           </p>
         </div>
+      </div>
 
-        <div className="p-6">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-            {accessibleSections
-              .filter(section => section !== 'dashboard')
-              .map((section) => {
-                const config = ADMIN_SECTIONS[section]
-                const Icon = SECTION_ICONS[section]
-                const isSensitive = config.sensitive
+      {/* Section 1: Action Items - Most Important */}
+      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
+        <div className="p-4 border-b border-gray-100 dark:border-gray-700 flex items-center gap-2">
+          <Zap className="w-5 h-5 text-amber-500" />
+          <h2 className="font-semibold text-gray-900 dark:text-white">
+            Was gibt es zu tun?
+          </h2>
+        </div>
 
+        <div className="p-4">
+          {hasNoActionItems ? (
+            <div className="flex items-center gap-3 text-green-600 dark:text-green-400">
+              <div className="w-8 h-8 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center">
+                <Check className="w-5 h-5" />
+              </div>
+              <span className="font-medium">Alles erledigt! Keine offenen Aufgaben.</span>
+            </div>
+          ) : (
+            <div className="space-y-2">
+              {actionItems.map((item, index) => (
+                <Link
+                  key={index}
+                  href={item.href}
+                  className="flex items-center justify-between p-3 rounded-lg bg-gray-50 dark:bg-gray-700/50 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors group"
+                >
+                  <div className="flex items-center gap-3">
+                    <div
+                      className={`w-3 h-3 rounded-full ${
+                        item.type === 'urgent'
+                          ? 'bg-red-500'
+                          : item.type === 'warning'
+                            ? 'bg-amber-500'
+                            : 'bg-green-500'
+                      }`}
+                    />
+                    <span className="font-medium text-gray-900 dark:text-white">
+                      {item.label}
+                    </span>
+                  </div>
+                  <span className="flex items-center gap-1 text-sm text-gray-600 dark:text-gray-400 group-hover:text-green-600 dark:group-hover:text-green-400 transition-colors">
+                    {item.actionLabel}
+                    <ArrowRight className="w-4 h-4" />
+                  </span>
+                </Link>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Section 2: Quick Actions */}
+      {quickActions.length > 0 && (
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
+          <div className="p-4 border-b border-gray-100 dark:border-gray-700">
+            <h2 className="font-semibold text-gray-900 dark:text-white">
+              Schnellaktionen
+            </h2>
+          </div>
+
+          <div className="p-4">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+              {quickActions.map((action, index) => {
+                const Icon = action.icon
                 return (
                   <Link
-                    key={section}
-                    href={config.path}
-                    className="group p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                    key={index}
+                    href={action.href}
+                    className={`flex flex-col items-center gap-2 p-4 rounded-lg transition-colors ${action.color}`}
                   >
-                    <div className="flex items-center gap-3 mb-2">
-                      <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${
-                        isSensitive
-                          ? 'bg-red-100 dark:bg-red-900/30'
-                          : 'bg-green-100 dark:bg-green-900/30'
-                      }`}>
-                        <Icon className={`w-5 h-5 ${
-                          isSensitive ? 'text-red-600' : 'text-green-600'
-                        }`} />
-                      </div>
-                      <div>
-                        <h3 className="font-medium text-gray-900 dark:text-white group-hover:text-green-600 transition-colors">
-                          {config.label}
-                        </h3>
-                        {isSensitive && (
-                          <span className="text-xs text-red-600">Sensibel</span>
-                        )}
-                      </div>
-                    </div>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">
-                      {config.description}
-                    </p>
+                    <Icon className="w-6 h-6" />
+                    <span className="text-sm font-medium text-center">
+                      {action.label}
+                    </span>
                   </Link>
                 )
               })}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Section 3: Activity Summary */}
+      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
+        <div className="p-4 border-b border-gray-100 dark:border-gray-700 flex items-center gap-2">
+          <TrendingUp className="w-5 h-5 text-green-500" />
+          <h2 className="font-semibold text-gray-900 dark:text-white">
+            Diese Woche
+          </h2>
+        </div>
+
+        <div className="p-4">
+          <div className="flex flex-wrap gap-x-6 gap-y-2 text-sm">
+            <span className="text-gray-700 dark:text-gray-300">
+              <span className="font-semibold text-green-600">+{stats.newUsersThisWeek}</span>{' '}
+              neue Benutzer
+            </span>
+            <span className="text-gray-400 dark:text-gray-500">•</span>
+            <span className="text-gray-700 dark:text-gray-300">
+              <span className="font-semibold text-blue-600">{stats.postsPublishedThisWeek}</span>{' '}
+              Artikel veröffentlicht
+            </span>
           </div>
         </div>
       </div>
 
-      {/* Super Admin: Permission Requests */}
-      {isSuper && (
-        <>
-          {/* Pending Permission Requests */}
+      {/* Super Admin: Permission Requests (inline) */}
+      {isSuper && stats.pendingPermissionRequests > 0 && (
+        <div id="permission-requests">
           <PermissionRequestsManager />
+        </div>
+      )}
 
-          {/* Super Admin Quick Actions */}
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
-            <div className="p-6 border-b border-gray-100 dark:border-gray-700">
-              <h2 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2">
-                <AlertCircle className="w-5 h-5 text-orange-500" />
-                Super Admin
-              </h2>
-              <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-                Berechtigungen verwalten und Freigaben erteilen
-              </p>
+      {/* Section 4: Stats Overview - Smaller, at bottom */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <Link
+          href="/admin/users"
+          className="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-sm border border-gray-100 dark:border-gray-700 hover:border-green-300 dark:hover:border-green-700 transition-colors"
+        >
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center">
+              <Users className="w-5 h-5 text-blue-600" />
             </div>
-
-            <div className="p-6">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <Link
-                  href="/admin/users"
-                  className="p-4 bg-purple-50 dark:bg-purple-900/20 rounded-lg hover:bg-purple-100 dark:hover:bg-purple-900/30 transition-colors"
-                >
-                  <div className="flex items-center gap-3">
-                    <Users className="w-6 h-6 text-purple-600" />
-                    <div>
-                      <h3 className="font-medium text-purple-900 dark:text-purple-200">
-                        Benutzer & Berechtigungen
-                      </h3>
-                      <p className="text-sm text-purple-700 dark:text-purple-300">
-                        Staff-Berechtigungen verwalten
-                      </p>
-                    </div>
-                    <ArrowRight className="w-4 h-4 text-purple-600 ml-auto" />
-                  </div>
-                </Link>
-
-                <Link
-                  href="/admin/approvals"
-                  className="p-4 bg-orange-50 dark:bg-orange-900/20 rounded-lg hover:bg-orange-100 dark:hover:bg-orange-900/30 transition-colors"
-                >
-                  <div className="flex items-center gap-3">
-                    <CheckSquare className="w-6 h-6 text-orange-600" />
-                    <div>
-                      <h3 className="font-medium text-orange-900 dark:text-orange-200">
-                        Freigaben ({stats.pendingApprovals})
-                      </h3>
-                      <p className="text-sm text-orange-700 dark:text-orange-300">
-                        Eingereichte Inhalte prüfen
-                      </p>
-                    </div>
-                    <ArrowRight className="w-4 h-4 text-orange-600 ml-auto" />
-                  </div>
-                </Link>
-              </div>
+            <div>
+              <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                {stats.totalUsers}
+              </p>
+              <p className="text-xs text-gray-500 dark:text-gray-400">Benutzer</p>
             </div>
           </div>
-        </>
-      )}
+        </Link>
+
+        <Link
+          href="/admin/team"
+          className="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-sm border border-gray-100 dark:border-gray-700 hover:border-green-300 dark:hover:border-green-700 transition-colors"
+        >
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 bg-green-100 dark:bg-green-900/30 rounded-lg flex items-center justify-center">
+              <UserCheck className="w-5 h-5 text-green-600" />
+            </div>
+            <div>
+              <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                {stats.totalStaff}
+              </p>
+              <p className="text-xs text-gray-500 dark:text-gray-400">Team</p>
+            </div>
+          </div>
+        </Link>
+
+        <Link
+          href="/admin/approvals"
+          className="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-sm border border-gray-100 dark:border-gray-700 hover:border-green-300 dark:hover:border-green-700 transition-colors"
+        >
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 bg-orange-100 dark:bg-orange-900/30 rounded-lg flex items-center justify-center">
+              <CheckSquare className="w-5 h-5 text-orange-600" />
+            </div>
+            <div>
+              <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                {stats.pendingApprovals}
+              </p>
+              <p className="text-xs text-gray-500 dark:text-gray-400">Freigaben</p>
+            </div>
+          </div>
+        </Link>
+
+        <Link
+          href="/admin/services"
+          className="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-sm border border-gray-100 dark:border-gray-700 hover:border-green-300 dark:hover:border-green-700 transition-colors"
+        >
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex items-center justify-center">
+              <Wrench className="w-5 h-5 text-purple-600" />
+            </div>
+            <div>
+              <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                {stats.totalTechnicians}
+              </p>
+              <p className="text-xs text-gray-500 dark:text-gray-400">Techniker</p>
+            </div>
+          </div>
+        </Link>
+      </div>
 
       {/* Request More Access (for staff without full access) */}
       {!isSuper && !hasFullAccess && inaccessibleSections.length > 0 && (
         <RequestAccessSection inaccessibleSections={inaccessibleSections} />
       )}
 
-      {/* Quick Links */}
-      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
-        <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-          Schnellzugriff
-        </h2>
-        <div className="flex flex-wrap gap-3">
-          <Link
-            href="/admin/hirn"
-            className="inline-flex items-center gap-2 px-4 py-2 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-lg hover:bg-blue-200 dark:hover:bg-blue-900/50 transition-colors"
-          >
-            <Brain className="w-4 h-4" />
-            Hirn Dashboard
-          </Link>
-          <Link
-            href="/admin/analyse/finanzen"
-            className="inline-flex items-center gap-2 px-4 py-2 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 rounded-lg hover:bg-green-200 dark:hover:bg-green-900/50 transition-colors"
-          >
-            <BarChart3 className="w-4 h-4" />
-            Finanzen
-          </Link>
-          <Link
-            href="/"
-            className="inline-flex items-center gap-2 px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
-          >
-            <ArrowRight className="w-4 h-4" />
-            Zur Website
-          </Link>
+      {/* Super Admin: Additional Info (collapsed) */}
+      {isSuper && stats.pendingPermissionRequests === 0 && (
+        <div className="bg-gray-50 dark:bg-gray-800/50 rounded-lg p-4 border border-gray-200 dark:border-gray-700">
+          <div className="flex items-center gap-2 text-gray-500 dark:text-gray-400">
+            <Shield className="w-4 h-4" />
+            <span className="text-sm">
+              Super Admin • Keine offenen Berechtigungsanfragen
+            </span>
+          </div>
         </div>
-      </div>
+      )}
     </div>
   )
 }
