@@ -34,17 +34,25 @@ import {
   getServiceTypeById,
   getServiceTypesByCategory,
   getAllServiceSlugs as getAllServiceSlugsFromDb,
+  // Admin functions
+  getAllServiceTypesForAdmin,
+  updateServiceType,
+  createServiceType,
+  deleteServiceType,
+  type UpdateServiceTypeData,
 } from './db'
 import {
   getServicePresentation,
   getServicePricing,
   formatPrice as formatPriceUtil,
 } from './presentation'
+import { getIconByName } from '@/config/service-icons'
 import type {
   DbServiceType,
   UnifiedService,
   ServiceListItem,
   ServiceCategory,
+  ServiceFeature,
 } from './types'
 
 // Re-export types
@@ -70,19 +78,69 @@ export const formatPrice = formatPriceUtil
 // ============================================================================
 
 /**
+ * Convert DB feature JSON to ServiceFeature with resolved icon
+ */
+function convertFeatures(
+  dbFeatures: DbServiceType['features_json'],
+  fallbackFeatures: ServiceFeature[]
+): ServiceFeature[] {
+  // If DB has features, use them
+  if (dbFeatures && dbFeatures.length > 0) {
+    return dbFeatures.map((f) => ({
+      title: f.title,
+      description: f.description,
+      icon: getIconByName(f.icon),
+    }))
+  }
+  // Fall back to presentation.ts
+  return fallbackFeatures
+}
+
+/**
  * Merge database service with presentation config
+ * Priority: DB content > presentation.ts fallback
  */
 function mergeServiceData(dbService: DbServiceType): UnifiedService {
-  const presentation = getServicePresentation(dbService.slug)
-  const pricing = getServicePricing(dbService.slug, dbService.price_cents)
+  // Get fallback presentation from config
+  const fallbackPresentation = getServicePresentation(dbService.slug)
+  const fallbackPricing = getServicePricing(dbService.slug, dbService.price_cents)
+
+  // Build hero section - prefer DB, fall back to presentation.ts
+  const hero = {
+    title: dbService.hero_title || fallbackPresentation.hero.title,
+    subtitle: dbService.hero_subtitle || fallbackPresentation.hero.subtitle,
+    description: dbService.hero_description || fallbackPresentation.hero.description,
+  }
+
+  // Resolve icon from DB string name, fall back to presentation.ts
+  const icon = dbService.icon_name
+    ? getIconByName(dbService.icon_name)
+    : fallbackPresentation.icon
+
+  // Features - prefer DB, fall back to presentation.ts
+  const features = convertFeatures(dbService.features_json, fallbackPresentation.features)
+
+  // Process - prefer DB, fall back to presentation.ts
+  const process = (dbService.process_json && dbService.process_json.length > 0)
+    ? dbService.process_json
+    : fallbackPresentation.process
+
+  // Pricing - prefer DB, fall back to computed/override
+  const pricing = {
+    base: dbService.pricing_base || fallbackPricing.base,
+    details: (dbService.pricing_details && dbService.pricing_details.length > 0)
+      ? dbService.pricing_details
+      : fallbackPricing.details,
+    mediaPrices: dbService.pricing_media_prices || fallbackPricing.mediaPrices,
+  }
 
   return {
     // Identifiers
     id: dbService.id,
     slug: dbService.slug,
 
-    // Basic info (from DB, presentation hero title can override name)
-    name: presentation.hero.title || dbService.name,
+    // Basic info (prefer hero title for display name)
+    name: hero.title || dbService.name,
     description: dbService.description || '',
     category: dbService.category,
 
@@ -95,11 +153,11 @@ function mergeServiceData(dbService: DbServiceType): UnifiedService {
     isFeatured: dbService.is_featured,
     displayOrder: dbService.display_order,
 
-    // Presentation (from config)
-    icon: presentation.icon,
-    hero: presentation.hero,
-    features: presentation.features,
-    process: presentation.process,
+    // Presentation (DB preferred, fallback to config)
+    icon,
+    hero,
+    features,
+    process,
 
     // Computed pricing
     pricing,
@@ -246,3 +304,32 @@ export async function getServiceForBooking(
   if (!service || !service.isBookable) return null
   return service
 }
+
+// ============================================================================
+// Admin Functions
+// ============================================================================
+
+/**
+ * Get all services for admin (includes inactive)
+ * Returns raw DB services with all fields
+ */
+export async function getAdminServices(): Promise<DbServiceType[]> {
+  return getAllServiceTypesForAdmin()
+}
+
+/**
+ * Get a single service by ID for admin editing
+ * Returns raw DB service (not unified, to preserve DB field names)
+ */
+export async function getAdminServiceById(id: string): Promise<DbServiceType | null> {
+  return getServiceTypeById(id)
+}
+
+/**
+ * Update a service type
+ */
+export { updateServiceType, createServiceType, deleteServiceType }
+export type { UpdateServiceTypeData }
+
+// Re-export DbServiceType for admin components
+export type { DbServiceType, DbFeatureJson, DbProcessJson } from './types'

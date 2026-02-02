@@ -13,6 +13,24 @@ import type { LucideIcon } from 'lucide-react'
 // ============================================================================
 
 /**
+ * Feature stored in JSONB
+ */
+export interface DbFeatureJson {
+  title: string
+  description: string
+  icon: string
+}
+
+/**
+ * Process step stored in JSONB
+ */
+export interface DbProcessJson {
+  step: number
+  title: string
+  description: string
+}
+
+/**
  * Raw service type from database
  */
 export interface DbServiceType {
@@ -30,6 +48,17 @@ export interface DbServiceType {
   display_order: number
   created_at: Date
   updated_at: Date | null
+
+  // Presentation fields (added in migration 018)
+  icon_name: string | null
+  hero_title: string | null
+  hero_subtitle: string | null
+  hero_description: string | null
+  features_json: DbFeatureJson[] | null
+  process_json: DbProcessJson[] | null
+  pricing_base: string | null
+  pricing_details: string[] | null
+  pricing_media_prices: string[] | null
 }
 
 // ============================================================================

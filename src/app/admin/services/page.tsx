@@ -1,8 +1,7 @@
 /**
  * Admin Services Page - Server Component
  *
- * Shows service types from the database.
- * No mock data - all values come from actual database queries.
+ * Shows service types from the database with full CRUD functionality.
  */
 
 import { Metadata } from 'next'
@@ -11,14 +10,16 @@ import { auth } from '@/auth'
 import { redirect } from 'next/navigation'
 import { query } from '@/lib/auth/db'
 import { TABLE_NAMES } from '@/config/database'
+import { CATEGORY_LABELS } from '@/config/service-categories'
 import {
   Plus,
   Wrench,
   Users,
   Edit,
   Eye,
-  Trash2,
   CheckCircle,
+  Star,
+  Calendar,
 } from 'lucide-react'
 
 export const metadata: Metadata = {
@@ -28,11 +29,16 @@ export const metadata: Metadata = {
 
 interface ServiceType {
   id: string
+  slug: string
   name: string
   description: string | null
+  category: string | null
   price_cents: number | null
   duration_minutes: number | null
   is_active: boolean
+  is_bookable: boolean
+  is_featured: boolean
+  display_order: number
   created_at: string
 }
 
@@ -88,15 +94,12 @@ async function getServices(): Promise<ServiceType[]> {
   try {
     const result = await query<ServiceType>(
       `SELECT
-        id,
-        name,
-        description,
-        price_cents,
-        duration_minutes,
-        is_active,
+        id, slug, name, description, category,
+        price_cents, duration_minutes,
+        is_active, is_bookable, is_featured, display_order,
         created_at
        FROM ${TABLE_NAMES.SERVICE_TYPES}
-       ORDER BY is_active DESC, name ASC`
+       ORDER BY is_active DESC, display_order, name ASC`
     )
     return result.rows
   } catch {
@@ -206,13 +209,13 @@ export default async function AdminServicesPage() {
                     Dienstleistung
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                    Kategorie
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                     Preis
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                    Dauer
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                    Status
+                    Flags
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                     Aktionen
@@ -227,43 +230,64 @@ export default async function AdminServicesPage() {
                         <div className="text-sm font-medium text-gray-900 dark:text-white">
                           {service.name}
                         </div>
-                        {service.description && (
-                          <div className="text-sm text-gray-500 dark:text-gray-400 line-clamp-1">
-                            {service.description}
-                          </div>
-                        )}
+                        <div className="text-xs text-gray-500 dark:text-gray-400 font-mono">
+                          /{service.slug}
+                        </div>
                       </div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <span className="text-sm text-gray-700 dark:text-gray-300">
+                        {service.category ? CATEGORY_LABELS[service.category as keyof typeof CATEGORY_LABELS] || service.category : '-'}
+                      </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="text-sm font-medium text-gray-900 dark:text-white">
                         {formatPrice(service.price_cents)}
                       </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-900 dark:text-white">
+                      <div className="text-xs text-gray-500 dark:text-gray-400">
                         {formatDuration(service.duration_minutes)}
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
-                        service.is_active
-                          ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300'
-                          : 'bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-300'
-                      }`}>
-                        {service.is_active ? 'Aktiv' : 'Inaktiv'}
-                      </span>
+                      <div className="flex items-center gap-1.5">
+                        <span className={`inline-flex px-2 py-0.5 text-xs font-semibold rounded-full ${
+                          service.is_active
+                            ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300'
+                            : 'bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-300'
+                        }`}>
+                          {service.is_active ? 'Aktiv' : 'Inaktiv'}
+                        </span>
+                        {service.is_featured && (
+                          <span className="inline-flex items-center gap-0.5 px-2 py-0.5 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300">
+                            <Star className="w-3 h-3" />
+                          </span>
+                        )}
+                        {service.is_bookable && (
+                          <span className="inline-flex items-center gap-0.5 px-2 py-0.5 text-xs font-semibold rounded-full bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300">
+                            <Calendar className="w-3 h-3" />
+                          </span>
+                        )}
+                      </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                       <div className="flex items-center gap-2">
-                        <button className="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300">
-                          <Eye className="w-4 h-4" />
-                        </button>
-                        <button className="text-green-600 hover:text-green-900 dark:text-green-400 dark:hover:text-green-300">
+                        {service.is_featured && (
+                          <Link
+                            href={`/services/${service.slug}`}
+                            target="_blank"
+                            className="p-1.5 text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded"
+                            title="Auf Website ansehen"
+                          >
+                            <Eye className="w-4 h-4" />
+                          </Link>
+                        )}
+                        <Link
+                          href={`/admin/services/${service.id}/edit`}
+                          className="p-1.5 text-green-600 hover:text-green-900 dark:text-green-400 dark:hover:text-green-300 hover:bg-green-50 dark:hover:bg-green-900/20 rounded"
+                          title="Bearbeiten"
+                        >
                           <Edit className="w-4 h-4" />
-                        </button>
-                        <button className="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300">
-                          <Trash2 className="w-4 h-4" />
-                        </button>
+                        </Link>
                       </div>
                     </td>
                   </tr>
