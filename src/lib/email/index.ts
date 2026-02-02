@@ -71,6 +71,10 @@ export const emailTemplates = {
   // Misc
   newsletterConfirmation: miscTemplates.newsletterConfirmation,
   blogSubmissionReceived: miscTemplates.blogSubmissionReceived,
+  blogSubmissionApproved: miscTemplates.blogSubmissionApproved,
+  blogSubmissionRejected: miscTemplates.blogSubmissionRejected,
+  blogSubmissionPublished: miscTemplates.blogSubmissionPublished,
+  blogSubmissionChangesRequested: miscTemplates.blogSubmissionChangesRequested,
   newReviewNotification: miscTemplates.newReviewNotification,
   sellerApplicationSubmitted: miscTemplates.sellerApplicationSubmitted,
   locationApprovalNotification: miscTemplates.locationApprovalNotification,

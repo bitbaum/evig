@@ -122,6 +122,200 @@ ${createTextFooter()}
   `.trim(),
 });
 
+export const blogSubmissionApproved = (
+  name: string,
+  articleTitle: string
+): EmailContent => ({
+  subject: 'Blog-Beitrag genehmigt - RevampIT',
+  html: `
+    <!DOCTYPE html>
+    <html lang="de">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Blog-Beitrag genehmigt</title>
+      <style>${BASE_STYLES}</style>
+    </head>
+    <body>
+      <div class="container">
+        <div class="header header-green">
+          <h1>Blog-Beitrag genehmigt</h1>
+        </div>
+        <div class="content">
+          <h2>Hallo ${name},</h2>
+          <p>Gute Nachrichten! Ihr Blog-Beitrag wurde genehmigt.</p>
+          <p><strong>Titel:</strong> ${articleTitle}</p>
+          <p>Unser Redaktionsteam wird Ihren Beitrag nun für die Veröffentlichung vorbereiten. Sie erhalten eine weitere Benachrichtigung, sobald er live ist.</p>
+        </div>
+        <div class="footer">
+          <p>${AUTO_GENERATED_TEXT}</p>
+          <p>${COPYRIGHT_TEXT}</p>
+        </div>
+      </div>
+    </body>
+    </html>
+  `,
+  text: `
+Hallo ${name},
+
+Gute Nachrichten! Ihr Blog-Beitrag wurde genehmigt.
+
+Titel: ${articleTitle}
+
+Unser Redaktionsteam wird Ihren Beitrag nun für die Veröffentlichung vorbereiten.
+${createTextFooter()}
+  `.trim(),
+});
+
+export const blogSubmissionRejected = (
+  name: string,
+  articleTitle: string,
+  reason: string
+): EmailContent => ({
+  subject: 'Blog-Beitrag abgelehnt - RevampIT',
+  html: `
+    <!DOCTYPE html>
+    <html lang="de">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Blog-Beitrag abgelehnt</title>
+      <style>${BASE_STYLES}</style>
+    </head>
+    <body>
+      <div class="container">
+        <div class="header header-red">
+          <h1>Blog-Beitrag abgelehnt</h1>
+        </div>
+        <div class="content">
+          <h2>Hallo ${name},</h2>
+          <p>Leider können wir Ihren Blog-Beitrag nicht veröffentlichen.</p>
+          <p><strong>Titel:</strong> ${articleTitle}</p>
+          <p><strong>Grund:</strong> ${reason}</p>
+          <p>Wir schätzen Ihren Beitrag zur Community und ermutigen Sie, weitere Themen einzureichen.</p>
+        </div>
+        <div class="footer">
+          <p>${AUTO_GENERATED_TEXT}</p>
+          <p>${COPYRIGHT_TEXT}</p>
+        </div>
+      </div>
+    </body>
+    </html>
+  `,
+  text: `
+Hallo ${name},
+
+Leider können wir Ihren Blog-Beitrag nicht veröffentlichen.
+
+Titel: ${articleTitle}
+Grund: ${reason}
+
+Wir schätzen Ihren Beitrag zur Community und ermutigen Sie, weitere Themen einzureichen.
+${createTextFooter()}
+  `.trim(),
+});
+
+export const blogSubmissionPublished = (
+  name: string,
+  articleTitle: string,
+  articleUrl: string
+): EmailContent => ({
+  subject: 'Ihr Blog-Beitrag ist live! - RevampIT',
+  html: `
+    <!DOCTYPE html>
+    <html lang="de">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Blog-Beitrag veröffentlicht</title>
+      <style>${BASE_STYLES}</style>
+    </head>
+    <body>
+      <div class="container">
+        <div class="header header-green">
+          <h1>Ihr Beitrag ist live!</h1>
+        </div>
+        <div class="content">
+          <h2>Hallo ${name},</h2>
+          <p>Herzlichen Glückwunsch! Ihr Blog-Beitrag wurde veröffentlicht.</p>
+          <p><strong>Titel:</strong> ${articleTitle}</p>
+          <a href="${articleUrl}" class="button button-green">Beitrag ansehen</a>
+          <p>Vielen Dank für Ihren wertvollen Beitrag zur RevampIT Community!</p>
+        </div>
+        <div class="footer">
+          <p>${AUTO_GENERATED_TEXT}</p>
+          <p>${COPYRIGHT_TEXT}</p>
+        </div>
+      </div>
+    </body>
+    </html>
+  `,
+  text: `
+Hallo ${name},
+
+Herzlichen Glückwunsch! Ihr Blog-Beitrag wurde veröffentlicht.
+
+Titel: ${articleTitle}
+Link: ${articleUrl}
+
+Vielen Dank für Ihren wertvollen Beitrag zur RevampIT Community!
+${createTextFooter()}
+  `.trim(),
+});
+
+export const blogSubmissionChangesRequested = (
+  name: string,
+  articleTitle: string,
+  notes: string
+): EmailContent => ({
+  subject: 'Änderungen für Blog-Beitrag angefragt - RevampIT',
+  html: `
+    <!DOCTYPE html>
+    <html lang="de">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Änderungen angefragt</title>
+      <style>${BASE_STYLES}</style>
+    </head>
+    <body>
+      <div class="container">
+        <div class="header header-orange">
+          <h1>Änderungen angefragt</h1>
+        </div>
+        <div class="content">
+          <h2>Hallo ${name},</h2>
+          <p>Unser Redaktionsteam hat Ihren Blog-Beitrag überprüft und einige Änderungsvorschläge.</p>
+          <p><strong>Titel:</strong> ${articleTitle}</p>
+          <p><strong>Anmerkungen:</strong></p>
+          <div style="background: #f5f5f5; padding: 15px; border-radius: 5px; margin: 15px 0;">
+            ${notes.replace(/\n/g, '<br>')}
+          </div>
+          <p>Bitte überarbeiten Sie Ihren Beitrag entsprechend und reichen Sie ihn erneut ein.</p>
+        </div>
+        <div class="footer">
+          <p>${AUTO_GENERATED_TEXT}</p>
+          <p>${COPYRIGHT_TEXT}</p>
+        </div>
+      </div>
+    </body>
+    </html>
+  `,
+  text: `
+Hallo ${name},
+
+Unser Redaktionsteam hat Ihren Blog-Beitrag überprüft und einige Änderungsvorschläge.
+
+Titel: ${articleTitle}
+
+Anmerkungen:
+${notes}
+
+Bitte überarbeiten Sie Ihren Beitrag entsprechend und reichen Sie ihn erneut ein.
+${createTextFooter()}
+  `.trim(),
+});
+
 export const newReviewNotification = (
   repairerName: string,
   reviewerName: string,
