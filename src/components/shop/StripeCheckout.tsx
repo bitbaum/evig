@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { loadStripe } from '@stripe/stripe-js'
 import {
   Elements,
@@ -128,39 +128,42 @@ export default function StripeCheckout({
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string>('')
 
-  useEffect(() => {
-    const createPaymentIntent = async () => {
-      try {
-        const response = await fetch('/api/payments/create-intent', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            cartId,
-            amount: total,
-            currency: 'chf'
-          })
+  const createPaymentIntent = useCallback(async () => {
+    try {
+      setLoading(true)
+      setError('')
+      const response = await fetch('/api/payments/create-intent', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          cartId,
+          amount: total,
+          currency: 'chf'
         })
+      })
 
-        const data = await response.json()
+      const data = await response.json()
 
-        if (data.clientSecret) {
-          setClientSecret(data.clientSecret)
-        } else {
-          setError(data.error || 'Fehler beim Erstellen der Zahlung')
-          onPaymentError(data.error || 'Payment intent creation failed')
-        }
-      } catch {
-        const errorMessage = 'Netzwerkfehler beim Erstellen der Zahlung'
-        setError(errorMessage)
-        onPaymentError(errorMessage)
-      } finally {
-        setLoading(false)
+      if (data.clientSecret) {
+        setClientSecret(data.clientSecret)
+      } else {
+        setError(data.error || 'Fehler beim Erstellen der Zahlung')
+        onPaymentError(data.error || 'Payment intent creation failed')
       }
+    } catch {
+      const errorMessage = 'Netzwerkfehler beim Erstellen der Zahlung'
+      setError(errorMessage)
+      onPaymentError(errorMessage)
+    } finally {
+      setLoading(false)
     }
-    createPaymentIntent()
   }, [cartId, total, onPaymentError])
+
+  useEffect(() => {
+    createPaymentIntent()
+  }, [createPaymentIntent])
 
   if (loading) {
     return (
