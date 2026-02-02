@@ -82,6 +82,7 @@ export async function POST(request: NextRequest) {
       metadata: result.metadata,
       model: result.model,
       sourceType: result.sourceType,
+      verificationSources: result.verificationSources,
     })
   } catch (error) {
     logger.error('Text erfassung error', { error })
