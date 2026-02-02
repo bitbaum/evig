@@ -46,31 +46,17 @@ export const ADMIN_SECTIONS = Object.fromEntries(
 export type AdminSection = (typeof ADMIN_SECTION_IDS)[number]
 
 // =============================================================================
-// STAFF EMAIL DOMAINS
+// STAFF EMAIL DOMAIN
 // =============================================================================
 
-/**
- * Primary staff email domain (canonical)
- */
 export const STAFF_EMAIL_DOMAIN = 'revamp-it.ch'
 
 /**
- * All valid staff email domains
- * Both revamp-it.ch (with hyphen) and revampit.ch (without hyphen) are valid
- */
-export const STAFF_EMAIL_DOMAINS = [
-  'revamp-it.ch',  // Primary domain with hyphen
-  'revampit.ch',   // Alternative domain without hyphen
-] as const
-
-/**
  * Check if an email belongs to staff
- * Accepts both @revamp-it.ch and @revampit.ch domains
  */
 export function isStaffEmail(email: string | null | undefined): boolean {
   if (!email) return false
-  const emailLower = email.toLowerCase()
-  return STAFF_EMAIL_DOMAINS.some(domain => emailLower.endsWith(`@${domain}`))
+  return email.toLowerCase().endsWith(`@${STAFF_EMAIL_DOMAIN}`)
 }
 
 // =============================================================================
@@ -80,7 +66,6 @@ export function isStaffEmail(email: string | null | undefined): boolean {
 /**
  * Super admins have full access to all sections including sensitive ones.
  * This is a simple allowlist of email addresses.
- * Includes both domain variants (@revamp-it.ch and @revampit.ch)
  */
 export const SUPER_ADMIN_EMAILS = [
   'andreas@revamp-it.ch',
@@ -88,9 +73,6 @@ export const SUPER_ADMIN_EMAILS = [
   'daniel@revamp-it.ch',
   'georgy@revamp-it.ch',
   'georgy.butaev@revamp-it.ch',
-  // Alternative domain variants
-  'admin@revampit.ch',
-  'georgy.butaev@revampit.ch',
 ] as const
 
 /**
