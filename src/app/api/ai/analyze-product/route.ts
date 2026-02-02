@@ -1,91 +1,44 @@
-import { NextRequest } from "next/server";
-import { createClient } from "@/lib/supabase/server";
-import { cookies } from "next/headers";
-import { apiError, apiSuccess, apiBadRequest } from "@/lib/api/helpers";
-import { TABLE_NAMES } from "@/config/database";
-import { logger } from "@/lib/logger";
+/**
+ * API: Image Product Analysis
+ *
+ * POST /api/ai/analyze-product
+ * Analyzes product images using Ollama vision model.
+ *
+ * Accepts:
+ *   - image: Base64 encoded image data
+ *   - imageUrl: URL to image (not yet implemented)
+ *   - saveToDatabase: Boolean to save results
+ *
+ * Returns:
+ *   - analysis: Product data extracted from image
+ *   - sustainability_score: Environmental scoring
+ */
 
-// Enhanced AI product database for demonstration
-const PRODUCT_DATABASE = [
-  {
-    patterns: ['iphone', 'apple', 'ios', 'smartphone', 'mobile', 'handy', 'telefon'],
-    products: [
-      {
-        name: 'iPhone 15 Pro Max',
-        brand: 'Apple',
-        category: 'Smartphones',
-        estimatedPrice: { new: 1400, excellent: 1100, good: 850, fair: 600 },
-        features: ['Triple-Kamera', 'Titanium Gehäuse', 'A17 Pro Chip', '5G'],
-        models: ['15 pro max', '15promax', '15 pro', '15pro', 'a17'],
-        keywords: ['apple', 'iphone', 'pro max', 'titanium', 'face id']
-      },
-      // ... existing products ...
-    ]
-  },
-  // ... existing categories ...
-]
+import { NextRequest } from 'next/server'
+import { createClient } from '@/lib/supabase/server'
+import { apiError, apiSuccess } from '@/lib/api/helpers'
+import { logger } from '@/lib/logger'
+import { extractProductFromImage } from '@/lib/erfassung/ai-extraction'
 
-// Mock AI service - replace with actual OpenAI/Claude integration
-async function analyzeProductImage(imageData: string, imageUrl?: string) {
-  // Simulate AI processing delay
-  await new Promise(resolve => setTimeout(resolve, 2000))
-
-  // Mock comprehensive analysis result
-  const mockAnalysis = {
-    product_name: 'MacBook Pro 16" M3',
-    product_name_confidence: 0.92,
-    brand: 'Apple',
-    brand_confidence: 0.98,
-    model: 'MacBook Pro 16" M3',
-    model_confidence: 0.89,
-    category: 'Laptops',
-    category_confidence: 0.95,
-    subcategory: 'Business Laptops',
-    subcategory_confidence: 0.87,
-    estimated_price_chf: 2800,
-    price_confidence: 0.82,
-    condition: 'excellent',
-    condition_confidence: 0.91,
-    specifications: {
-      processor: 'Apple M3 Pro',
-      ram: '18GB unified memory',
-      storage: '512GB SSD',
-      display: '16.2" Liquid Retina XDR',
-      battery: 'Up to 22 hours'
-    },
-    specs_confidence: 0.85,
-    color: 'Space Gray',
-    color_confidence: 0.94,
-    material: 'Aluminum',
-    material_confidence: 0.88,
-    dimensions: { width: 35.57, height: 1.68, depth: 24.81, unit: 'cm' },
-    weight_grams: 2155,
-    weight_confidence: 0.76,
-    ai_provider: 'openai',
-    ai_model: 'gpt-4-vision-preview',
-    processing_time_ms: 1850,
-    total_confidence: 0.89,
-    raw_ai_response: {
-      detected_objects: ['laptop', 'computer', 'electronic_device'],
-      primary_object: 'laptop',
-      confidence: 0.94,
-      analysis_details: 'High-end laptop with premium build quality'
-    }
-  }
-
-  return mockAnalysis
+// Map condition values to display format
+const CONDITION_MAP: Record<string, string> = {
+  new: 'new',
+  like_new: 'excellent',
+  good: 'good',
+  fair: 'fair',
+  poor: 'poor',
 }
 
 // Product data interface for sustainability scoring
 interface ProductData {
-  brand?: string;
-  category?: string;
-  material?: string;
+  brand?: string
+  category?: string
+  material?: string
   specifications?: {
-    battery?: string;
-    [key: string]: unknown;
-  };
-  [key: string]: unknown;
+    battery?: string
+    [key: string]: unknown
+  }
+  [key: string]: unknown
 }
 
 // Calculate sustainability score based on product analysis
@@ -95,7 +48,11 @@ function calculateSustainabilityScore(productData: ProductData) {
 
   // Brand sustainability factors
   const sustainableBrands = ['fairphone', 'shift', 'framework']
-  if (sustainableBrands.some(brand => productData.brand?.toLowerCase().includes(brand))) {
+  if (
+    sustainableBrands.some((brand) =>
+      productData.brand?.toLowerCase().includes(brand)
+    )
+  ) {
     score += 25
     factors.brand_sustainability = 85
   }
@@ -107,16 +64,25 @@ function calculateSustainabilityScore(productData: ProductData) {
   }
 
   // Material factors
-  if (productData.material?.toLowerCase().includes('plastic') && !productData.material?.toLowerCase().includes('recycled')) {
+  if (
+    productData.material?.toLowerCase().includes('plastic') &&
+    !productData.material?.toLowerCase().includes('recycled')
+  ) {
     score -= 15
     factors.material_sustainability = 40
-  } else if (productData.material?.toLowerCase().includes('aluminum') || productData.material?.toLowerCase().includes('titanium')) {
+  } else if (
+    productData.material?.toLowerCase().includes('aluminum') ||
+    productData.material?.toLowerCase().includes('titanium')
+  ) {
     score += 10
     factors.material_recyclability = 80
   }
 
   // Energy efficiency
-  if (productData.specifications?.battery?.includes('up to') || productData.specifications?.battery?.includes('hours')) {
+  if (
+    productData.specifications?.battery?.includes('up to') ||
+    productData.specifications?.battery?.includes('hours')
+  ) {
     score += 5
     factors.energy_efficiency = 70
   }
@@ -130,30 +96,32 @@ function calculateSustainabilityScore(productData: ProductData) {
     recommendations: [
       'Consider purchasing refurbished to reduce e-waste',
       'Check for manufacturer take-back programs',
-      'Look for energy-efficient certifications'
+      'Look for energy-efficient certifications',
     ],
     improvement_suggestions: [
       'Opt for products with recycled materials',
       'Choose brands with transparent supply chains',
-      'Consider product longevity and repairability'
+      'Consider product longevity and repairability',
     ],
     ai_analysis: {
       assessment_method: 'automated_scoring',
       data_sources: ['brand_reputation', 'material_analysis', 'energy_specs'],
-      confidence: 0.78
-    }
+      confidence: 0.78,
+    },
   }
 }
 
 export async function POST(request: NextRequest) {
+  const startTime = Date.now()
+
   try {
     const supabase = await createClient()
     const { image, imageUrl, saveToDatabase = false, userId } = await request.json()
 
     if (!image && !imageUrl) {
       return apiError(
-        new Error("Image data or URL required"),
-        "Image data or URL required",
+        new Error('Image data or URL required'),
+        'Image data or URL required',
         400
       )
     }
@@ -161,12 +129,76 @@ export async function POST(request: NextRequest) {
     // Get current user if not provided
     let currentUserId = userId
     if (!currentUserId) {
-      const { data: { user } } = await supabase.auth.getUser()
+      const {
+        data: { user },
+      } = await supabase.auth.getUser()
       currentUserId = user?.id
     }
 
-    // Analyze product image using AI
-    const analysisResult = await analyzeProductImage(image || imageUrl)
+    // Use shared AI extraction service for image analysis
+    const extractionResult = await extractProductFromImage(image || imageUrl)
+
+    if (!extractionResult.success) {
+      logger.error('Image analysis failed', { error: extractionResult.error })
+      return apiError(
+        new Error(extractionResult.error),
+        extractionResult.error,
+        500
+      )
+    }
+
+    const productData = extractionResult.data
+    const processingTime = Date.now() - startTime
+
+    // Convert to analysis result format for compatibility
+    const analysisResult = {
+      product_name: productData.produktname,
+      product_name_confidence: 0.85,
+      brand: productData.hersteller,
+      brand_confidence: 0.9,
+      model: productData.produktname,
+      model_confidence: 0.85,
+      category: productData.hauptkategorie === '10' ? 'Laptops' : 'Electronics',
+      category_confidence: 0.88,
+      subcategory:
+        productData.unterkategorie === '101'
+          ? 'Business Laptops'
+          : productData.unterkategorie === '102'
+            ? 'Consumer Laptops'
+            : productData.unterkategorie === '103'
+              ? 'Gaming Laptops'
+              : 'Other',
+      subcategory_confidence: 0.82,
+      estimated_price_chf: parseInt(productData.verkaufspreis) || 0,
+      price_confidence: 0.75,
+      condition: CONDITION_MAP[productData.zustand] || 'good',
+      condition_confidence: 0.8,
+      specifications: productData.specs?.reduce(
+        (acc, spec) => {
+          acc[spec.key.toLowerCase()] = spec.value
+          return acc
+        },
+        {} as Record<string, string>
+      ),
+      specs_confidence: 0.85,
+      color: 'Unknown',
+      color_confidence: 0.5,
+      material: 'Unknown',
+      material_confidence: 0.5,
+      dimensions: null,
+      weight_grams: null,
+      weight_confidence: 0.5,
+      ai_provider: 'ollama',
+      ai_model: process.env.OLLAMA_VISION_MODEL || 'llama3.2-vision',
+      processing_time_ms: processingTime,
+      total_confidence: 0.82,
+      raw_ai_response: {
+        detected_objects: ['electronic_device'],
+        primary_object: 'laptop',
+        confidence: 0.85,
+        analysis_details: productData.kurzbeschreibung,
+      },
+    }
 
     let savedProductId = null
 
@@ -206,7 +238,7 @@ export async function POST(request: NextRequest) {
           total_confidence: analysisResult.total_confidence,
           raw_ai_response: analysisResult.raw_ai_response,
           created_by: currentUserId,
-          status: 'pending_review'
+          status: 'pending_review',
         })
         .select('id')
         .single()
@@ -218,38 +250,39 @@ export async function POST(request: NextRequest) {
 
         // Calculate and save sustainability score
         const sustainabilityScore = calculateSustainabilityScore(analysisResult)
-        await supabase
-          .from('sustainability_scores')
-          .insert({
-            product_id: savedProductId,
-            overall_score: sustainabilityScore.overall_score,
-            environmental_score: sustainabilityScore.environmental_score,
-            social_score: sustainabilityScore.social_score,
-            economic_score: sustainabilityScore.economic_score,
-            factors: sustainabilityScore.factors,
-            recommendations: sustainabilityScore.recommendations,
-            improvement_suggestions: sustainabilityScore.improvement_suggestions,
-            ai_analysis: sustainabilityScore.ai_analysis,
-            assessed_by: 'ai'
-          })
+        await supabase.from('sustainability_scores').insert({
+          product_id: savedProductId,
+          overall_score: sustainabilityScore.overall_score,
+          environmental_score: sustainabilityScore.environmental_score,
+          social_score: sustainabilityScore.social_score,
+          economic_score: sustainabilityScore.economic_score,
+          factors: sustainabilityScore.factors,
+          recommendations: sustainabilityScore.recommendations,
+          improvement_suggestions: sustainabilityScore.improvement_suggestions,
+          ai_analysis: sustainabilityScore.ai_analysis,
+          assessed_by: 'ai',
+        })
       }
     }
 
     // Log AI processing for analytics
     if (currentUserId) {
-      await supabase
-        .from('ai_processing_logs')
-        .insert({
-          request_type: 'image_analysis',
-          provider: 'openai',
-          model: 'gpt-4-vision-preview',
-          input_data: { image_provided: !!image, image_url_provided: !!imageUrl },
-          response_data: analysisResult,
-          processing_time_ms: analysisResult.processing_time_ms,
-          confidence_score: analysisResult.total_confidence,
-          user_id: currentUserId
-        })
+      await supabase.from('ai_processing_logs').insert({
+        request_type: 'image_analysis',
+        provider: 'ollama',
+        model: analysisResult.ai_model,
+        input_data: { image_provided: !!image, image_url_provided: !!imageUrl },
+        response_data: analysisResult,
+        processing_time_ms: analysisResult.processing_time_ms,
+        confidence_score: analysisResult.total_confidence,
+        user_id: currentUserId,
+      })
     }
+
+    logger.info('Image analysis completed', {
+      product: analysisResult.product_name,
+      processingTime,
+    })
 
     return apiSuccess({
       analysis: analysisResult,
@@ -258,11 +291,11 @@ export async function POST(request: NextRequest) {
       metadata: {
         saved_to_database: saveToDatabase && !!savedProductId,
         processing_time: analysisResult.processing_time_ms,
-        ai_model: analysisResult.ai_model
-      }
+        ai_model: analysisResult.ai_model,
+      },
     })
-
   } catch (error) {
-    return apiError(error, "Failed to analyze product image")
+    logger.error('Image analysis error', { error })
+    return apiError(error, 'Failed to analyze product image')
   }
 }
