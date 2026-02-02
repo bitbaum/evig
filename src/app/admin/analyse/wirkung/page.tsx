@@ -3,17 +3,50 @@
  *
  * Impact reporting - environmental and social impact.
  * Protected by role-based access control.
- *
- * Moved from /admin/hirn/wirkung
  */
 
 import { auth } from '@/auth'
 import { redirect } from 'next/navigation'
 import { canAccessSection } from '@/lib/permissions'
+import {
+  getMetricsByCategory,
+  CATEGORY_LABELS,
+  CATEGORY_COLORS,
+  type MetricDefinition,
+} from '@/config/analyse/metrics'
 import Link from 'next/link'
-import { ArrowLeft, Target, Leaf, Users, Recycle } from 'lucide-react'
+import { ArrowLeft, Target, Leaf, Users, Recycle, AlertCircle } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
+import { AnalyseTabs, MissingDataBanner } from '@/components/analyse'
+
+function ImpactCard({ metric }: { metric: MetricDefinition }) {
+  const needsData = metric.status === 'needs_data'
+
+  return (
+    <div className="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+      <div className="flex justify-between items-start mb-2">
+        <div className="text-sm text-muted-foreground">{metric.name}</div>
+        {needsData && (
+          <AlertCircle className="w-4 h-4 text-amber-500" />
+        )}
+      </div>
+      <div className={`text-2xl font-bold ${needsData ? 'text-amber-500' : ''}`}>
+        {needsData ? '[TBD]' : '—'}
+      </div>
+      {metric.target && (
+        <div className="text-xs text-muted-foreground mt-2">
+          Ziel: {metric.target}
+        </div>
+      )}
+      {needsData && metric.dataNeeded && (
+        <div className="text-xs text-amber-600 mt-2">
+          Benötigt: {metric.dataNeeded}
+        </div>
+      )}
+    </div>
+  )
+}
 
 export default async function WirkungPage() {
   const session = await auth()
@@ -37,39 +70,36 @@ export default async function WirkungPage() {
     redirect('/admin?error=no_wirkung_access')
   }
 
+  // Get impact-related metrics
+  const environmentalMetrics = getMetricsByCategory('environmental')
+  const socialMetrics = getMetricsByCategory('social')
+  const digitalMetrics = getMetricsByCategory('digital')
+
+  // Combine all impact metrics for missing data banner
+  const allImpactMetrics = [...environmentalMetrics, ...socialMetrics, ...digitalMetrics]
+  const missingMetrics = allImpactMetrics.filter(m => m.status === 'needs_data')
+
   const impactAreas = [
     {
       title: 'Ökologische Wirkung',
       icon: Leaf,
       color: 'green',
       description: 'Umweltschutz durch Hardware-Recycling',
-      metrics: [
-        { label: 'Geräte vor Entsorgung gerettet', value: '[TBD]' },
-        { label: 'CO2-Äquivalent eingespart', value: '[TBD]' },
-        { label: 'Rohstoffe wiederverwendet', value: '[TBD]' },
-      ],
+      metrics: environmentalMetrics,
     },
     {
       title: 'Soziale Wirkung',
       icon: Users,
       color: 'blue',
       description: 'Menschen befähigen und integrieren',
-      metrics: [
-        { label: 'Personen in Workshops', value: '[TBD]' },
-        { label: 'Berufliche Integrationen', value: '[TBD]' },
-        { label: 'Freiwillige Mitarbeitende', value: '[TBD]' },
-      ],
+      metrics: socialMetrics,
     },
     {
       title: 'Digitale Souveränität',
       icon: Recycle,
       color: 'purple',
       description: 'Open Source und digitale Bildung',
-      metrics: [
-        { label: 'Linux-Installationen', value: '[TBD]' },
-        { label: 'Open Source Schulungen', value: '[TBD]' },
-        { label: 'Beratungen durchgeführt', value: '[TBD]' },
-      ],
+      metrics: digitalMetrics,
     },
   ]
 
@@ -77,7 +107,7 @@ export default async function WirkungPage() {
     <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center gap-4">
-        <Link href="/admin">
+        <Link href="/admin/analyse">
           <Button variant="ghost" size="sm">
             <ArrowLeft className="mr-2 h-4 w-4" />
             Zurück
@@ -96,11 +126,25 @@ export default async function WirkungPage() {
         </div>
       </div>
 
+      {/* Tabs */}
+      <AnalyseTabs />
+
+      {/* Missing Data Summary */}
+      {missingMetrics.length > 0 && (
+        <MissingDataBanner metrics={missingMetrics} />
+      )}
+
       {/* Info Banner */}
       <div className="p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg">
         <p className="text-sm text-green-700 dark:text-green-300">
           <strong>Wirkungsbericht:</strong> Diese Seite zeigt die messbare Wirkung von Revamp-IT.
           Die Daten werden aus verschiedenen Quellen aggregiert und regelmässig aktualisiert.
+          {missingMetrics.length > 0 && (
+            <span className="block mt-2 text-amber-700 dark:text-amber-300">
+              <AlertCircle className="inline w-4 h-4 mr-1" />
+              {missingMetrics.length} Metriken benötigen noch Daten für vollständige Berichterstattung.
+            </span>
+          )}
         </p>
       </div>
 
@@ -113,27 +157,67 @@ export default async function WirkungPage() {
             purple: 'bg-purple-100 text-purple-600',
           }[area.color]
 
+          const pendingCount = area.metrics.filter(m => m.status === 'needs_data').length
+
           return (
             <Card key={area.title}>
               <CardHeader>
                 <div className={`w-12 h-12 ${bgColor} rounded-lg flex items-center justify-center mb-4`}>
                   <area.icon className="w-6 h-6" />
                 </div>
-                <CardTitle>{area.title}</CardTitle>
+                <CardTitle className="flex items-center gap-2">
+                  {area.title}
+                  {pendingCount > 0 && (
+                    <span className="text-xs font-normal px-2 py-0.5 bg-amber-100 text-amber-700 rounded">
+                      {pendingCount} ausstehend
+                    </span>
+                  )}
+                </CardTitle>
                 <CardDescription>{area.description}</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 {area.metrics.map(metric => (
-                  <div key={metric.label} className="flex justify-between items-center">
-                    <span className="text-sm text-muted-foreground">{metric.label}</span>
-                    <span className="font-semibold">{metric.value}</span>
-                  </div>
+                  <ImpactCard key={metric.id} metric={metric} />
                 ))}
               </CardContent>
             </Card>
           )
         })}
       </div>
+
+      {/* Impact Calculation Methodology */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Berechnungsmethodik</CardTitle>
+          <CardDescription>
+            Wie wir unsere Wirkung messen
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="grid md:grid-cols-2 gap-6">
+            <div>
+              <h4 className="font-medium mb-2">CO2-Einsparung</h4>
+              <p className="text-sm text-muted-foreground mb-2">
+                Pro wiederverwendetem Gerät werden durchschnittlich <strong>285 kg CO2</strong> eingespart.
+                Diese Zahl basiert auf Studien zur Herstellungsenergie von Elektronikgeräten.
+              </p>
+              <code className="text-xs bg-gray-100 dark:bg-gray-800 p-2 rounded block">
+                CO2 = Geräte × 285 kg
+              </code>
+            </div>
+            <div>
+              <h4 className="font-medium mb-2">Rohstoffeinsparung</h4>
+              <p className="text-sm text-muted-foreground mb-2">
+                Die Wiederverwendung von Hardware spart wertvolle Rohstoffe wie Seltene Erden,
+                Kupfer und andere Metalle, die sonst neu abgebaut werden müssten.
+              </p>
+              <code className="text-xs bg-gray-100 dark:bg-gray-800 p-2 rounded block">
+                Rohstoffe = Gewichtsmessung Geräte
+              </code>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
 
       {/* SDG Alignment */}
       <Card>
@@ -146,22 +230,39 @@ export default async function WirkungPage() {
         <CardContent>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {[
-              { number: 4, name: 'Hochwertige Bildung' },
-              { number: 8, name: 'Menschenwürdige Arbeit' },
-              { number: 12, name: 'Nachhaltiger Konsum' },
-              { number: 13, name: 'Massnahmen zum Klimaschutz' },
+              { number: 4, name: 'Hochwertige Bildung', description: 'Workshops und Schulungen' },
+              { number: 8, name: 'Menschenwürdige Arbeit', description: 'Arbeitsintegration' },
+              { number: 12, name: 'Nachhaltiger Konsum', description: 'Hardware-Wiederverwendung' },
+              { number: 13, name: 'Klimaschutz', description: 'CO2-Einsparung' },
             ].map(sdg => (
               <div
                 key={sdg.number}
                 className="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg text-center"
               >
                 <div className="text-2xl font-bold text-primary">SDG {sdg.number}</div>
-                <div className="text-xs text-muted-foreground mt-1">{sdg.name}</div>
+                <div className="text-sm font-medium mt-1">{sdg.name}</div>
+                <div className="text-xs text-muted-foreground mt-1">{sdg.description}</div>
               </div>
             ))}
           </div>
         </CardContent>
       </Card>
+
+      {/* Data Collection Note */}
+      <div className="p-4 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg text-sm">
+        <h4 className="font-medium text-amber-800 dark:text-amber-200 mb-2">
+          Datenerfassung erforderlich
+        </h4>
+        <p className="text-amber-700 dark:text-amber-300">
+          Um die Wirkung vollständig zu erfassen, benötigen wir regelmässige Daten aus dem operativen Betrieb.
+          Die verantwortlichen Teams sollten quartalsweise folgende Daten liefern:
+        </p>
+        <ul className="mt-2 space-y-1 text-amber-700 dark:text-amber-300">
+          <li>• <strong>Operations:</strong> Anzahl verarbeiteter Geräte, Gewichtsmessungen</li>
+          <li>• <strong>Bildung:</strong> Workshop-Teilnehmer, Schulungsstunden</li>
+          <li>• <strong>HR:</strong> Integrationen, Freiwilligenstunden</li>
+        </ul>
+      </div>
     </div>
   )
 }

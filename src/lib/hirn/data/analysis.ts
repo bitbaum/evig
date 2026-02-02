@@ -13,6 +13,7 @@ import type { YearlyAggregation, MonthlyData, TracedValue } from './financial-lo
 
 export type TrendDirection = 'up' | 'down' | 'stable';
 export type InsightType = 'positive' | 'negative' | 'neutral' | 'warning';
+export type InsightPriority = 'high' | 'medium' | 'low';
 
 export interface Insight {
   id: string;
@@ -23,6 +24,10 @@ export interface Insight {
   valueFormatted?: string;
   formula?: string;
   relatedNumbers: string[];
+  // Enhanced fields for actionable commentary
+  recommendation?: string;
+  priority?: InsightPriority;
+  implication?: string;
 }
 
 export interface TrendAnalysis {
@@ -131,15 +136,23 @@ export function compareYears(
 
   // Total revenue insight
   if (totalChange.direction === 'up') {
+    const isStrong = totalChange.percentChange > 20;
     insights.push({
       id: 'total_growth',
       type: 'positive',
-      title: 'Umsatzwachstum',
+      title: isStrong ? 'Starkes Umsatzwachstum' : 'Umsatzwachstum',
       description: `Gesamteinnahmen sind ${formatPercent(totalChange.percentChange)} höher als im Vorjahr`,
       value: totalChange.percentChange,
       valueFormatted: formatPercent(totalChange.percentChange),
       formula: totalChange.formula,
       relatedNumbers: [`financial_total_${current.year}`, `financial_total_${previous.year}`],
+      implication: isStrong
+        ? 'Nachfrage wächst deutlich; Kapazitäten könnten knapp werden'
+        : 'Stabile positive Entwicklung',
+      recommendation: isStrong
+        ? 'Kapazitätsplanung prüfen; Team-Erweiterung evaluieren'
+        : 'Kurs beibehalten; Qualität vor Quantität',
+      priority: isStrong ? 'medium' : 'low',
     });
   } else if (totalChange.direction === 'down') {
     insights.push({
@@ -151,6 +164,9 @@ export function compareYears(
       valueFormatted: formatPercent(Math.abs(totalChange.percentChange)),
       formula: totalChange.formula,
       relatedNumbers: [`financial_total_${current.year}`, `financial_total_${previous.year}`],
+      implication: 'Ernstes Warnsignal; könnte finanzielle Stabilität gefährden',
+      recommendation: 'Ursachenanalyse durchführen; Sofortmassnahmen prüfen',
+      priority: 'high',
     });
   }
 
@@ -160,15 +176,23 @@ export function compareYears(
   const selfFinancingChange = currentSelfFinancing - previousSelfFinancing;
 
   if (Math.abs(selfFinancingChange) > 3) {
+    const isImproved = selfFinancingChange > 0;
     insights.push({
       id: 'self_financing_change',
-      type: selfFinancingChange > 0 ? 'positive' : 'neutral',
-      title: selfFinancingChange > 0 ? 'Höhere Eigenfinanzierung' : 'Niedrigere Eigenfinanzierung',
+      type: isImproved ? 'positive' : 'neutral',
+      title: isImproved ? 'Höhere Eigenfinanzierung' : 'Niedrigere Eigenfinanzierung',
       description: `Eigenfinanzierungsquote: ${formatPercent(currentSelfFinancing)} (Vorjahr: ${formatPercent(previousSelfFinancing)})`,
       value: selfFinancingChange,
       valueFormatted: `${selfFinancingChange > 0 ? '+' : ''}${formatPercent(selfFinancingChange)}`,
       formula: `${formatPercent(currentSelfFinancing)} - ${formatPercent(previousSelfFinancing)} = ${formatPercent(selfFinancingChange)}`,
       relatedNumbers: [`financial_self_financing_${current.year}`, `financial_self_financing_${previous.year}`],
+      implication: isImproved
+        ? 'Stärkere finanzielle Unabhängigkeit'
+        : 'Erhöhte Abhängigkeit von Spenden',
+      recommendation: isImproved
+        ? 'Positive Entwicklung fortsetzen; Modell konsolidieren'
+        : 'Eigeneinnahmen stärken; Dienstleistungsbereich ausbauen',
+      priority: isImproved ? 'low' : 'medium',
     });
   }
 
@@ -183,6 +207,26 @@ export function compareYears(
       valueFormatted: formatPercent(categoryChanges.dienstleistungen.percentChange),
       formula: categoryChanges.dienstleistungen.formula,
       relatedNumbers: [`financial_dienstleistungen_${current.year}`, `financial_dienstleistungen_${previous.year}`],
+      implication: 'Servicebereich gewinnt an Bedeutung; stärkt Eigenfinanzierung',
+      recommendation: 'Kapazitäten für Dienstleistungen erweitern; Angebot diversifizieren',
+      priority: 'low',
+    });
+  }
+
+  // Products declining warning
+  if (categoryChanges.warenverkauf.direction === 'down' && Math.abs(categoryChanges.warenverkauf.percentChange) > 15) {
+    insights.push({
+      id: 'products_decline',
+      type: 'warning',
+      title: 'Warenverkauf rückläufig',
+      description: `Produktverkäufe sind ${formatPercent(Math.abs(categoryChanges.warenverkauf.percentChange))} niedriger`,
+      value: categoryChanges.warenverkauf.percentChange,
+      valueFormatted: formatPercent(Math.abs(categoryChanges.warenverkauf.percentChange)),
+      formula: categoryChanges.warenverkauf.formula,
+      relatedNumbers: [`financial_warenverkauf_${current.year}`, `financial_warenverkauf_${previous.year}`],
+      implication: 'Rückgang bei Haupteinnahmequelle; mögliche Nachfrageschwäche',
+      recommendation: 'Sortiment prüfen; Marketing verstärken; neue Beschaffungskanäle',
+      priority: 'high',
     });
   }
 
@@ -194,6 +238,27 @@ export function compareYears(
       title: 'Keine Integrations-Arbeitsplätze',
       description: 'Dieses Jahr keine Einnahmen aus Integrations-Arbeitsplätzen',
       relatedNumbers: [`financial_integration_${current.year}`],
+      implication: 'Soziales Kernziel nicht erfüllt',
+      recommendation: 'Integrations-Programm reaktivieren oder neue Partner suchen',
+      priority: 'high',
+    });
+  }
+
+  // Donations increasing significantly
+  const currentDonationsShare = current.totals.spenden.value / current.totals.total.value * 100;
+  const previousDonationsShare = previous.totals.spenden.value / previous.totals.total.value * 100;
+  if (currentDonationsShare > 40 && currentDonationsShare > previousDonationsShare + 5) {
+    insights.push({
+      id: 'donations_increasing',
+      type: 'neutral',
+      title: 'Steigender Spendenanteil',
+      description: `Spendenanteil bei ${formatPercent(currentDonationsShare)} (Vorjahr: ${formatPercent(previousDonationsShare)})`,
+      value: currentDonationsShare,
+      valueFormatted: formatPercent(currentDonationsShare),
+      relatedNumbers: [`financial_spenden_${current.year}`],
+      implication: 'Stärkere Abhängigkeit von wenigen Spendern',
+      recommendation: 'Spenderbasis diversifizieren; Eigeneinnahmen steigern',
+      priority: 'medium',
     });
   }
 
@@ -256,8 +321,25 @@ export function generateYearInsights(data: YearlyAggregation): Insight[] {
       valueFormatted: formatPercent(selfFinancing),
       formula: data.derived.eigenfinanzierungPct.source.accountName,
       relatedNumbers: [`financial_self_financing_${data.year}`],
+      implication: 'Starke finanzielle Unabhängigkeit von Spenden',
+      recommendation: 'Modell beibehalten; Reserven für Schwankungen aufbauen',
+      priority: 'low',
     });
-  } else if (selfFinancing < 50) {
+  } else if (selfFinancing >= 50) {
+    insights.push({
+      id: 'medium_self_financing',
+      type: 'neutral',
+      title: 'Ausgewogene Finanzierung',
+      description: `${formatPercent(selfFinancing)} der Einnahmen sind selbst erwirtschaftet`,
+      value: selfFinancing,
+      valueFormatted: formatPercent(selfFinancing),
+      formula: data.derived.eigenfinanzierungPct.source.accountName,
+      relatedNumbers: [`financial_self_financing_${data.year}`],
+      implication: 'Gute Balance zwischen Eigenerwirtschaftung und Spendeneinnahmen',
+      recommendation: 'Dienstleistungsbereich weiter stärken für mehr Unabhängigkeit',
+      priority: 'medium',
+    });
+  } else {
     insights.push({
       id: 'low_self_financing',
       type: 'warning',
@@ -267,6 +349,9 @@ export function generateYearInsights(data: YearlyAggregation): Insight[] {
       valueFormatted: formatPercent(selfFinancing),
       formula: data.derived.eigenfinanzierungPct.source.accountName,
       relatedNumbers: [`financial_self_financing_${data.year}`],
+      implication: 'Hohe Spendenabhängigkeit; Risiko bei Spendenrückgang',
+      recommendation: 'Dienstleistungen ausbauen oder Preise anpassen; alternative Einnahmequellen prüfen',
+      priority: 'high',
     });
   }
 
@@ -281,6 +366,7 @@ export function generateYearInsights(data: YearlyAggregation): Insight[] {
     valueFormatted: formatCHF(monthlyAvg),
     formula: data.derived.monthlyAvg.source.accountName,
     relatedNumbers: [`financial_monthly_avg_${data.year}`],
+    priority: 'low',
   });
 
   // Check for months with zero total
@@ -292,6 +378,9 @@ export function generateYearInsights(data: YearlyAggregation): Insight[] {
       title: 'Monate ohne Einnahmen',
       description: `${zeroMonths.length} Monat(e) mit null oder negativen Einnahmen`,
       relatedNumbers: zeroMonths.map(m => `financial_month_${m.month}_${data.year}`),
+      implication: 'Inkonsistente Einnahmen; mögliche Datenlücken oder saisonale Effekte',
+      recommendation: 'Datenqualität prüfen; bei echten Lücken Cashflow-Planung verbessern',
+      priority: 'medium',
     });
   }
 
@@ -300,6 +389,7 @@ export function generateYearInsights(data: YearlyAggregation): Insight[] {
   if (total > 0) {
     const warenverkaufPct = (data.totals.warenverkauf.value / total) * 100;
     const dienstleistungenPct = (data.totals.dienstleistungen.value / total) * 100;
+    const spendenPct = (data.totals.spenden.value / total) * 100;
 
     if (warenverkaufPct > 60) {
       insights.push({
@@ -311,17 +401,54 @@ export function generateYearInsights(data: YearlyAggregation): Insight[] {
         valueFormatted: formatPercent(warenverkaufPct),
         formula: `(${formatCHF(data.totals.warenverkauf.value)} / ${formatCHF(total)}) × 100`,
         relatedNumbers: [`financial_warenverkauf_${data.year}`, `financial_total_${data.year}`],
+        implication: 'Abhängig von Wareneingang; Lagerrisiken',
+        recommendation: 'Diversifikation durch Services; Lieferkette stabilisieren',
+        priority: 'medium',
       });
-    } else if (dienstleistungenPct > 60) {
+    } else if (dienstleistungenPct > 50) {
       insights.push({
         id: 'service_heavy',
-        type: 'neutral',
+        type: 'positive',
         title: 'Serviceorientiert',
         description: `${formatPercent(dienstleistungenPct)} der Einnahmen aus Dienstleistungen`,
         value: dienstleistungenPct,
         valueFormatted: formatPercent(dienstleistungenPct),
         formula: `(${formatCHF(data.totals.dienstleistungen.value)} / ${formatCHF(total)}) × 100`,
         relatedNumbers: [`financial_dienstleistungen_${data.year}`, `financial_total_${data.year}`],
+        implication: 'Starke Serviceorientierung; personenabhängig',
+        recommendation: 'Skalierbarkeit prüfen; Produktangebote als Ergänzung erwägen',
+        priority: 'low',
+      });
+    }
+
+    // High donation share warning
+    if (spendenPct > 40) {
+      insights.push({
+        id: 'high_donations_share',
+        type: 'warning',
+        title: 'Hoher Spendenanteil',
+        description: `${formatPercent(spendenPct)} der Einnahmen aus Spenden`,
+        value: spendenPct,
+        valueFormatted: formatPercent(spendenPct),
+        formula: `(${formatCHF(data.totals.spenden.value)} / ${formatCHF(total)}) × 100`,
+        relatedNumbers: [`financial_spenden_${data.year}`, `financial_total_${data.year}`],
+        implication: 'Starke Abhängigkeit von wenigen Spendern',
+        recommendation: 'Spenderbasis diversifizieren; Eigeneinnahmen steigern',
+        priority: 'high',
+      });
+    }
+
+    // Integration zero warning
+    if (data.totals.integration.value === 0) {
+      insights.push({
+        id: 'no_integration',
+        type: 'warning',
+        title: 'Keine Integrations-Arbeitsplätze',
+        description: 'Keine Einnahmen aus Integrations-Programm',
+        relatedNumbers: [`financial_integration_${data.year}`],
+        implication: 'Soziales Kernziel nicht erfüllt',
+        recommendation: 'Integrations-Programm reaktivieren oder neue Partner suchen',
+        priority: 'high',
       });
     }
   }

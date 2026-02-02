@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import Link from 'next/link'
 import { logger } from '@/lib/logger'
 import {
@@ -88,24 +88,20 @@ export default function RepairersPage() {
   const [repairerReviews, setRepairerReviews] = useState<Review[]>([])
   const [showReviewsModal, setShowReviewsModal] = useState(false)
 
-  useEffect(() => {
-    fetchRepairers()
-  }, [])
-
   interface RepairerFilters {
     q?: string
     service?: string
     location?: string
   }
 
-  const fetchRepairers = async (filters: RepairerFilters = {}) => {
+  const fetchRepairers = useCallback(async (filters: RepairerFilters = {}) => {
     try {
       setLoading(true)
       const params = new URLSearchParams()
 
-      if (searchQuery) params.set('q', searchQuery)
-      if (selectedService) params.set('service', selectedService)
-      if (userLocation) params.set('location', userLocation)
+      if (filters.q) params.set('q', filters.q)
+      if (filters.service) params.set('service', filters.service)
+      if (filters.location) params.set('location', filters.location)
 
       const response = await fetch(`/api/repairers?${params}`)
       const data = await response.json()
@@ -118,7 +114,11 @@ export default function RepairersPage() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [])
+
+  useEffect(() => {
+    fetchRepairers({})
+  }, [fetchRepairers])
 
   const handleSearch = () => {
     fetchRepairers({ q: searchQuery, service: selectedService, location: userLocation })

@@ -16,9 +16,11 @@
  */
 
 import React, { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { Loader2, AlertTriangle } from 'lucide-react'
 import { useProducts, MedusaProduct } from '@/lib/medusa/hooks'
-import { useInventoryProducts } from '@/hooks/useInventoryProducts'
+import { useInventoryProducts, type InventoryProduct } from '@/hooks/useInventoryProducts'
+import { ConfirmDialog } from '@/components/ui/ConfirmDialog'
 import {
   ProductTabSwitcher,
   ProductStatsCards,
@@ -103,9 +105,11 @@ const userMarketplaceProducts: ProductWithOwner[] = [
 ]
 
 export default function ProductManagement() {
+  const router = useRouter()
+
   // Data hooks
-  const { data: productsData, isLoading: medusaLoading, error: medusaError, refetch } = useProducts({ limit: 100 })
-  const { data: inventoryData, isLoading: inventoryLoading, error: inventoryError } = useInventoryProducts()
+  const { data: productsData, isLoading: medusaLoading, error: medusaError, refetch: refetchMedusa } = useProducts({ limit: 100 })
+  const { data: inventoryData, isLoading: inventoryLoading, error: inventoryError, refetch: refetchInventory } = useInventoryProducts()
 
   // UI state
   const [activeTab, setActiveTab] = useState<TabType>('inventory')
@@ -115,6 +119,15 @@ export default function ProductManagement() {
   const [filterCategory, setFilterCategory] = useState('all')
   const [filterSource, setFilterSource] = useState<FilterSource>('all')
   const [showBulkImport, setShowBulkImport] = useState(false)
+
+  // Delete confirmation state
+  const [deleteTarget, setDeleteTarget] = useState<{
+    type: 'medusa' | 'inventory'
+    id: string
+    name: string
+  } | null>(null)
+  const [isDeleting, setIsDeleting] = useState(false)
+  const [deleteError, setDeleteError] = useState<string | null>(null)
 
   // Derived state
   const isLoading = activeTab === 'medusa' ? medusaLoading : inventoryLoading
@@ -167,6 +180,80 @@ export default function ProductManagement() {
       checked ? [...prev, productId] : prev.filter(id => id !== productId)
     )
   }
+
+  // Product action handlers
+  const handleViewMedusa = (product: ProductWithOwner) => {
+    // Open in shop (public view)
+    window.open(`/shop/products/${product.handle}`, '_blank')
+  }
+
+  const handleEditMedusa = (product: ProductWithOwner) => {
+    // Navigate to edit page (will need to be created)
+    router.push(`/admin/products/${product.id}/edit`)
+  }
+
+  const handleDeleteMedusa = (product: ProductWithOwner) => {
+    setDeleteTarget({
+      type: 'medusa',
+      id: product.id,
+      name: product.title,
+    })
+    setDeleteError(null)
+  }
+
+  const handleViewInventory = (product: InventoryProduct) => {
+    // Open factsheet
+    router.push(`/admin/products/${product.id}/factsheet`)
+  }
+
+  const handleEditInventory = (product: InventoryProduct) => {
+    // Navigate to erfassung with edit mode
+    router.push(`/admin/erfassung?edit=${product.id}`)
+  }
+
+  const handleDeleteInventory = (product: InventoryProduct) => {
+    setDeleteTarget({
+      type: 'inventory',
+      id: product.id,
+      name: `${product.brand} ${product.product_name}`,
+    })
+    setDeleteError(null)
+  }
+
+  const handleConfirmDelete = async () => {
+    if (!deleteTarget) return
+
+    setIsDeleting(true)
+    setDeleteError(null)
+
+    try {
+      const endpoint = deleteTarget.type === 'medusa'
+        ? `/api/admin/products/${deleteTarget.id}`
+        : `/api/admin/inventory/${deleteTarget.id}`
+
+      const response = await fetch(endpoint, { method: 'DELETE' })
+      const data = await response.json()
+
+      if (!response.ok || !data.success) {
+        throw new Error(data.error || 'Löschen fehlgeschlagen')
+      }
+
+      // Refresh the appropriate list
+      if (deleteTarget.type === 'medusa') {
+        refetchMedusa()
+      } else {
+        refetchInventory()
+      }
+
+      setDeleteTarget(null)
+    } catch (err) {
+      setDeleteError(err instanceof Error ? err.message : 'Unbekannter Fehler')
+    } finally {
+      setIsDeleting(false)
+    }
+  }
+
+  const refetch = activeTab === 'medusa' ? refetchMedusa : refetchInventory
 
   // Loading state
   if (isLoading) {
@@ -237,6 +324,9 @@ export default function ProductManagement() {
         <InventoryProductsTable
           products={inventoryProducts}
           searchQuery={searchQuery}
+          onView={handleViewInventory}
+          onEdit={handleEditInventory}
+          onDelete={handleDeleteInventory}
         />
       ) : (
         <MedusaProductsTable
@@ -245,12 +335,30 @@ export default function ProductManagement() {
           onSelectAll={handleSelectAll}
           onSelectProduct={handleSelectProduct}
           searchQuery={searchQuery}
+          onView={handleViewMedusa}
+          onEdit={handleEditMedusa}
+          onDelete={handleDeleteMedusa}
         />
       )}
 
       <BulkImportModal
         isOpen={showBulkImport}
         onClose={() => setShowBulkImport(false)}
+      />
+
+      {/* Delete confirmation dialog */}
+      <ConfirmDialog
+        isOpen={!!deleteTarget}
+        title="Produkt löschen"
+        message="Sind Sie sicher, dass Sie dieses Produkt löschen möchten?"
+        itemName={deleteTarget?.name}
+        confirmLabel="Endgültig löschen"
+        cancelLabel="Abbrechen"
+        isLoading={isDeleting}
+        error={deleteError}
+        variant="danger"
+        onConfirm={handleConfirmDelete}
+        onClose={() => setDeleteTarget(null)}
       />
     </div>
   )

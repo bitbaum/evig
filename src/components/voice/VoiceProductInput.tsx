@@ -43,6 +43,50 @@ export function VoiceProductInput({
   const mediaRecorderRef = useRef<MediaRecorder | null>(null)
   const audioChunksRef = useRef<Blob[]>([])
 
+  // Process recording must be defined before startRecording
+  const processRecording = useCallback(async () => {
+    try {
+      const audioBlob = new Blob(audioChunksRef.current, {
+        type: mediaRecorderRef.current?.mimeType || 'audio/webm',
+      })
+
+      logger.info('Processing voice recording', { size: audioBlob.size })
+
+      // Send to API
+      const formData = new FormData()
+      formData.append('audio', audioBlob, 'recording.webm')
+
+      const response = await fetch('/api/admin/erfassung/voice', {
+        method: 'POST',
+        body: formData,
+      })
+
+      const result = await response.json()
+
+      if (!response.ok) {
+        throw new Error(result.error || 'Unbekannter Fehler')
+      }
+
+      // Success!
+      setTranscribedText(result.transcription)
+      onTranscription?.(result.transcription)
+      onProductData(result.data)
+      setState('success')
+
+      // Reset to idle after 3 seconds
+      setTimeout(() => {
+        setState('idle')
+      }, 3000)
+
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Verarbeitung fehlgeschlagen'
+      logger.error('Voice processing failed', { error })
+      setErrorMessage(message)
+      setState('error')
+      onError?.(message)
+    }
+  }, [onProductData, onTranscription, onError])
+
   const startRecording = useCallback(async () => {
     try {
       setErrorMessage(null)
@@ -90,7 +134,7 @@ export function VoiceProductInput({
       setState('error')
       onError?.('Mikrofon konnte nicht aktiviert werden')
     }
-  }, [onError])
+  }, [onError, processRecording])
 
   const stopRecording = useCallback(() => {
     if (mediaRecorderRef.current && state === 'recording') {
@@ -98,49 +142,6 @@ export function VoiceProductInput({
       setState('processing')
     }
   }, [state])
-
-  const processRecording = async () => {
-    try {
-      const audioBlob = new Blob(audioChunksRef.current, {
-        type: mediaRecorderRef.current?.mimeType || 'audio/webm',
-      })
-
-      logger.info('Processing voice recording', { size: audioBlob.size })
-
-      // Send to API
-      const formData = new FormData()
-      formData.append('audio', audioBlob, 'recording.webm')
-
-      const response = await fetch('/api/admin/erfassung/voice', {
-        method: 'POST',
-        body: formData,
-      })
-
-      const result = await response.json()
-
-      if (!response.ok) {
-        throw new Error(result.error || 'Unbekannter Fehler')
-      }
-
-      // Success!
-      setTranscribedText(result.transcription)
-      onTranscription?.(result.transcription)
-      onProductData(result.data)
-      setState('success')
-
-      // Reset to idle after 3 seconds
-      setTimeout(() => {
-        setState('idle')
-      }, 3000)
-
-    } catch (error) {
-      const message = error instanceof Error ? error.message : 'Verarbeitung fehlgeschlagen'
-      logger.error('Voice processing failed', { error })
-      setErrorMessage(message)
-      setState('error')
-      onError?.(message)
-    }
-  }
 
   const handleClick = () => {
     if (state === 'recording') {

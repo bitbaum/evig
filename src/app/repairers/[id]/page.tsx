@@ -109,31 +109,30 @@ export default function RepairerDetailPage({ params }: { params: Promise<{ id: s
   const [activeTab, setActiveTab] = useState<'services' | 'reviews' | 'about'>('services')
 
   useEffect(() => {
+    const fetchRepairerDetails = async () => {
+      try {
+        setLoading(true)
+        const response = await fetch(`/api/repairers/${id}`)
+        const data = await response.json()
+
+        if (!response.ok || !data.success) {
+          setError(data.error || 'Reparateur nicht gefunden')
+          return
+        }
+
+        setRepairer(data.repairer)
+        setServices(data.services || [])
+        setReviews(data.reviews || [])
+        setAvailability(data.availability || [])
+      } catch (err) {
+        logger.error('Error fetching repairer details', { error: err })
+        setError('Fehler beim Laden der Daten')
+      } finally {
+        setLoading(false)
+      }
+    }
     fetchRepairerDetails()
   }, [id])
-
-  const fetchRepairerDetails = async () => {
-    try {
-      setLoading(true)
-      const response = await fetch(`/api/repairers/${id}`)
-      const data = await response.json()
-
-      if (!response.ok || !data.success) {
-        setError(data.error || 'Reparateur nicht gefunden')
-        return
-      }
-
-      setRepairer(data.repairer)
-      setServices(data.services || [])
-      setReviews(data.reviews || [])
-      setAvailability(data.availability || [])
-    } catch (err) {
-      logger.error('Error fetching repairer details', { error: err })
-      setError('Fehler beim Laden der Daten')
-    } finally {
-      setLoading(false)
-    }
-  }
 
   const renderStars = (rating: number, size: 'sm' | 'md' | 'lg' = 'md') => {
     const starSize = size === 'sm' ? 'w-3 h-3' : size === 'lg' ? 'w-5 h-5' : 'w-4 h-4'

@@ -36,6 +36,23 @@ export function HirnChat({ sessionId, onSessionChange, compact = false }: HirnCh
 
   // Load chat history on mount or session change
   useEffect(() => {
+    const loadHistory = async () => {
+      setLoadingHistory(true)
+      try {
+        const response = await fetch(`/api/admin/hirn/history?sessionId=${sessionId}`)
+        const data = await response.json()
+        if (data.success) {
+          setMessages(data.data.map((m: { id: string; role: string; content: string; created_at?: string; createdAt?: string }) => ({
+            ...m,
+            createdAt: new Date(m.created_at || m.createdAt || Date.now()),
+          })))
+        }
+      } catch {
+        // New session, no history
+      } finally {
+        setLoadingHistory(false)
+      }
+    }
     loadHistory()
   }, [sessionId])
 
@@ -43,24 +60,6 @@ export function HirnChat({ sessionId, onSessionChange, compact = false }: HirnCh
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [messages])
-
-  const loadHistory = async () => {
-    setLoadingHistory(true)
-    try {
-      const response = await fetch(`/api/admin/hirn/history?sessionId=${sessionId}`)
-      const data = await response.json()
-      if (data.success) {
-        setMessages(data.data.map((m: { id: string; role: string; content: string; created_at?: string; createdAt?: string }) => ({
-          ...m,
-          createdAt: new Date(m.created_at || m.createdAt || Date.now()),
-        })))
-      }
-    } catch {
-      // New session, no history
-    } finally {
-      setLoadingHistory(false)
-    }
-  }
 
   const sendMessage = async (e: React.FormEvent) => {
     e.preventDefault()

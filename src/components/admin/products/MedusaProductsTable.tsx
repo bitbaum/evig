@@ -21,6 +21,9 @@ interface MedusaProductsTableProps {
   onSelectAll: (checked: boolean) => void
   onSelectProduct: (productId: string, checked: boolean) => void
   searchQuery: string
+  onView?: (product: ProductWithOwner) => void
+  onEdit?: (product: ProductWithOwner) => void
+  onDelete?: (product: ProductWithOwner) => void
 }
 
 export function MedusaProductsTable({
@@ -29,6 +32,9 @@ export function MedusaProductsTable({
   onSelectAll,
   onSelectProduct,
   searchQuery,
+  onView,
+  onEdit,
+  onDelete,
 }: MedusaProductsTableProps) {
   return (
     <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
@@ -174,13 +180,25 @@ export function MedusaProductsTable({
                 </td>
                 <td className="px-6 py-4 text-right">
                   <div className="flex items-center justify-end gap-2">
-                    <button className="p-1 text-gray-400 hover:text-gray-600" title="Ansehen">
+                    <button
+                      onClick={() => onView?.(product)}
+                      className="p-1 text-gray-400 hover:text-gray-600"
+                      title="Ansehen"
+                    >
                       <Eye className="w-4 h-4" />
                     </button>
-                    <button className="p-1 text-gray-400 hover:text-gray-600" title="Bearbeiten">
+                    <button
+                      onClick={() => onEdit?.(product)}
+                      className="p-1 text-gray-400 hover:text-gray-600"
+                      title="Bearbeiten"
+                    >
                       <Edit className="w-4 h-4" />
                     </button>
-                    <button className="p-1 text-red-400 hover:text-red-600" title="Löschen">
+                    <button
+                      onClick={() => onDelete?.(product)}
+                      className="p-1 text-red-400 hover:text-red-600"
+                      title="Löschen"
+                    >
                       <Trash2 className="w-4 h-4" />
                     </button>
                   </div>

@@ -19,14 +19,7 @@ function generateSessionId(): string {
  * Opens from the right side like ChatGPT/Claude interfaces
  */
 export function HirnSlideOver({ isOpen, onClose }: HirnSlideOverProps) {
-  const [sessionId, setSessionId] = useState<string>('')
-
-  // Generate session ID on first open
-  useEffect(() => {
-    if (isOpen && !sessionId) {
-      setSessionId(generateSessionId())
-    }
-  }, [isOpen, sessionId])
+  const [sessionId, setSessionId] = useState<string>(() => generateSessionId())
 
   // Handle escape key
   useEffect(() => {

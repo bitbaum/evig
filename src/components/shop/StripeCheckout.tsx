@@ -129,39 +129,38 @@ export default function StripeCheckout({
   const [error, setError] = useState<string>('')
 
   useEffect(() => {
-    createPaymentIntent()
-  }, [cartId, total])
-
-  const createPaymentIntent = async () => {
-    try {
-      const response = await fetch('/api/payments/create-intent', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          cartId,
-          amount: total,
-          currency: 'chf'
+    const createPaymentIntent = async () => {
+      try {
+        const response = await fetch('/api/payments/create-intent', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            cartId,
+            amount: total,
+            currency: 'chf'
+          })
         })
-      })
 
-      const data = await response.json()
+        const data = await response.json()
 
-      if (data.clientSecret) {
-        setClientSecret(data.clientSecret)
-      } else {
-        setError(data.error || 'Fehler beim Erstellen der Zahlung')
-        onPaymentError(data.error || 'Payment intent creation failed')
+        if (data.clientSecret) {
+          setClientSecret(data.clientSecret)
+        } else {
+          setError(data.error || 'Fehler beim Erstellen der Zahlung')
+          onPaymentError(data.error || 'Payment intent creation failed')
+        }
+      } catch {
+        const errorMessage = 'Netzwerkfehler beim Erstellen der Zahlung'
+        setError(errorMessage)
+        onPaymentError(errorMessage)
+      } finally {
+        setLoading(false)
       }
-    } catch (err) {
-      const errorMessage = 'Netzwerkfehler beim Erstellen der Zahlung'
-      setError(errorMessage)
-      onPaymentError(errorMessage)
-    } finally {
-      setLoading(false)
     }
-  }
+    createPaymentIntent()
+  }, [cartId, total, onPaymentError])
 
   if (loading) {
     return (

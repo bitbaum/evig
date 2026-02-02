@@ -16,11 +16,17 @@ import type { InventoryProduct } from '@/hooks/useInventoryProducts'
 interface InventoryProductsTableProps {
   products: InventoryProduct[]
   searchQuery: string
+  onView?: (product: InventoryProduct) => void
+  onEdit?: (product: InventoryProduct) => void
+  onDelete?: (product: InventoryProduct) => void
 }
 
 export function InventoryProductsTable({
   products,
   searchQuery,
+  onView,
+  onEdit,
+  onDelete,
 }: InventoryProductsTableProps) {
   const filteredProducts = products.filter((p) => {
     const matchesSearch =
@@ -149,13 +155,25 @@ export function InventoryProductsTable({
                     >
                       <Printer className="w-4 h-4" />
                     </Link>
-                    <button className="p-1 text-gray-400 hover:text-gray-600" title="Ansehen">
+                    <button
+                      onClick={() => onView?.(product)}
+                      className="p-1 text-gray-400 hover:text-gray-600"
+                      title="Ansehen"
+                    >
                       <Eye className="w-4 h-4" />
                     </button>
-                    <button className="p-1 text-gray-400 hover:text-gray-600" title="Bearbeiten">
+                    <button
+                      onClick={() => onEdit?.(product)}
+                      className="p-1 text-gray-400 hover:text-gray-600"
+                      title="Bearbeiten"
+                    >
                       <Edit className="w-4 h-4" />
                     </button>
-                    <button className="p-1 text-red-400 hover:text-red-600" title="Löschen">
+                    <button
+                      onClick={() => onDelete?.(product)}
+                      className="p-1 text-red-400 hover:text-red-600"
+                      title="Löschen"
+                    >
                       <Trash2 className="w-4 h-4" />
                     </button>
                   </div>

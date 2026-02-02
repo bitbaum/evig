@@ -1,7 +1,7 @@
 'use client'
 
-import { useState, useCallback } from 'react'
-import { useRouter } from 'next/navigation'
+import { useState, useCallback, useEffect } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
 import { logger } from '@/lib/logger'
@@ -36,13 +36,68 @@ import {
 
 export default function ErfassungPage() {
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const editId = searchParams.get('edit')
+
   const [isLoading, setIsLoading] = useState(false)
+  const [isLoadingProduct, setIsLoadingProduct] = useState(false)
   const [savedItemUUID, setSavedItemUUID] = useState<string | null>(null)
   const [savedProductId, setSavedProductId] = useState<string | null>(null)
   const [showAdvanced, setShowAdvanced] = useState(false) // Collapsed on mobile by default
+  const [isEditMode, setIsEditMode] = useState(false)
 
   const [formData, setFormData] = useState<ErfassungFormData>(DEFAULT_FORM_DATA)
   const [aiMetadata, setAiMetadata] = useState<AIFieldMetadata>({})
+
+  // Load existing product data in edit mode
+  useEffect(() => {
+    if (editId) {
+      setIsEditMode(true)
+      setIsLoadingProduct(true)
+      setShowAdvanced(true) // Show all fields in edit mode
+
+      fetch(`/api/admin/inventory/${editId}`)
+        .then(res => res.json())
+        .then(data => {
+          if (data.success && data.product) {
+            const p = data.product
+            // Parse specifications JSON back to array
+            const specsArray = p.specifications
+              ? Object.entries(p.specifications).map(([key, value]) => ({
+                  key,
+                  value: String(value),
+                }))
+              : [{ key: '', value: '' }]
+
+            setFormData({
+              hersteller: p.brand || '',
+              produktname: p.product_name || '',
+              kurzbeschreibung: p.short_description || '',
+              specs: specsArray.length > 0 ? specsArray : [{ key: '', value: '' }],
+              laenge_mm: p.dimensions?.laenge_mm?.toString() || '',
+              breite_mm: p.dimensions?.breite_mm?.toString() || '',
+              hoehe_mm: p.dimensions?.hoehe_mm?.toString() || '',
+              gewicht_kg: p.weight_grams ? (p.weight_grams / 1000).toString() : '',
+              verkaufspreis: p.estimated_price_chf?.toString() || '',
+              zustand: p.condition || 'good',
+              location: p.location || '',
+              box_id: p.box_id || '',
+              auf_lager: p.quantity_available?.toString() || '1',
+              hauptkategorie: p.category || '',
+              unterkategorie: p.subcategory || '',
+              kundenprofile: p.customer_profiles || [],
+              image: p.image_url || null,
+            })
+          }
+        })
+        .catch(err => {
+          logger.error('Failed to load product for edit', { error: err, editId })
+        })
+        .finally(() => {
+          setIsLoadingProduct(false)
+        })
+    }
+  }, [editId])
 
   // Handle basic field changes - clear AI metadata for the field when manually edited
   const handleChange = (field: keyof ErfassungFormData, value: string | string[]) => {
@@ -141,49 +196,85 @@ export default function ErfassungPage() {
     setIsLoading(true)
 
     try {
-      // Build Langtext JSON from specs
-      const langtext: Record<string, string> = {}
+      // Build specs object from array
+      const specifications: Record<string, string> = {}
       formData.specs.forEach(spec => {
         if (spec.key && spec.value) {
-          langtext[spec.key] = spec.value
+          specifications[spec.key] = spec.value
         }
       })
 
-      const payload = {
-        hersteller: formData.hersteller,
-        produktname: formData.produktname,
-        kurzbeschreibung: formData.kurzbeschreibung,
-        langtext: JSON.stringify(langtext),
-        verkaufspreis: parseFloat(formData.verkaufspreis) || 0,
-        zustand: formData.zustand,
-        laenge_mm: parseInt(formData.laenge_mm) || null,
-        breite_mm: parseInt(formData.breite_mm) || null,
-        hoehe_mm: parseInt(formData.hoehe_mm) || null,
-        gewicht_kg: parseFloat(formData.gewicht_kg) || null,
-        location: formData.location,
-        box_id: formData.box_id,
-        auf_lager: parseInt(formData.auf_lager) || 1,
-        hauptkategorie: formData.hauptkategorie,
-        unterkategorie: formData.unterkategorie,
-        kundenprofile: formData.kundenprofile,
-        image: formData.image,
-        publish: publish,
+      if (isEditMode && editId) {
+        // Update existing product
+        const updatePayload = {
+          product_name: formData.produktname,
+          brand: formData.hersteller,
+          short_description: formData.kurzbeschreibung,
+          specifications,
+          estimated_price_chf: parseFloat(formData.verkaufspreis) || 0,
+          condition: formData.zustand,
+          category: formData.hauptkategorie,
+          subcategory: formData.unterkategorie,
+          dimensions: {
+            laenge_mm: parseInt(formData.laenge_mm) || null,
+            breite_mm: parseInt(formData.breite_mm) || null,
+            hoehe_mm: parseInt(formData.hoehe_mm) || null,
+          },
+          weight_grams: formData.gewicht_kg ? parseFloat(formData.gewicht_kg) * 1000 : null,
+          location: formData.location,
+          box_id: formData.box_id,
+          quantity_available: parseInt(formData.auf_lager) || 1,
+        }
+
+        const response = await fetch(`/api/admin/inventory/${editId}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(updatePayload),
+        })
+
+        if (!response.ok) {
+          throw new Error('Failed to update product')
+        }
+
+        // Navigate back to products list on success
+        router.push('/admin/products')
+      } else {
+        // Create new product
+        const payload = {
+          hersteller: formData.hersteller,
+          produktname: formData.produktname,
+          kurzbeschreibung: formData.kurzbeschreibung,
+          langtext: JSON.stringify(specifications),
+          verkaufspreis: parseFloat(formData.verkaufspreis) || 0,
+          zustand: formData.zustand,
+          laenge_mm: parseInt(formData.laenge_mm) || null,
+          breite_mm: parseInt(formData.breite_mm) || null,
+          hoehe_mm: parseInt(formData.hoehe_mm) || null,
+          gewicht_kg: parseFloat(formData.gewicht_kg) || null,
+          location: formData.location,
+          box_id: formData.box_id,
+          auf_lager: parseInt(formData.auf_lager) || 1,
+          hauptkategorie: formData.hauptkategorie,
+          unterkategorie: formData.unterkategorie,
+          kundenprofile: formData.kundenprofile,
+          image: formData.image,
+          publish: publish,
+        }
+
+        const response = await fetch('/api/admin/erfassung', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        })
+
+        if (!response.ok) {
+          throw new Error('Failed to save product')
+        }
+
+        const result = await response.json()
+        setSavedItemUUID(result.item_uuid)
+        setSavedProductId(result.product_id)
       }
-
-      const response = await fetch('/api/admin/erfassung', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-      })
-
-      if (!response.ok) {
-        throw new Error('Failed to save product')
-      }
-
-      const result = await response.json()
-      setSavedItemUUID(result.item_uuid)
-      setSavedProductId(result.product_id)
-
     } catch (error) {
       logger.error('Error saving product', { error })
       alert('Fehler beim Speichern. Bitte erneut versuchen.')
@@ -194,6 +285,18 @@ export default function ErfassungPage() {
 
   // Get subcategories for selected main category
   const subcategories = KATEGORIEN.find(k => k.value === formData.hauptkategorie)?.subs || []
+
+  // Loading state for edit mode
+  if (isLoadingProduct) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <Loader2 className="w-8 h-8 text-green-600 animate-spin mx-auto mb-4" />
+          <p className="text-gray-600 dark:text-gray-400">Produkt wird geladen...</p>
+        </div>
+      </div>
+    )
+  }
 
   if (savedItemUUID && savedProductId) {
     return (
@@ -255,10 +358,10 @@ export default function ErfassungPage() {
         </Link>
         <div className="flex-1 min-w-0">
           <h1 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white truncate">
-            Produkt Erfassung
+            {isEditMode ? 'Produkt bearbeiten' : 'Produkt Erfassung'}
           </h1>
           <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400 hidden sm:block">
-            Neues Produkt ins Inventar aufnehmen
+            {isEditMode ? 'Produktdaten aktualisieren' : 'Neues Produkt ins Inventar aufnehmen'}
           </p>
         </div>
       </div>
@@ -677,34 +780,50 @@ export default function ErfassungPage() {
           </Link>
 
           <div className="flex gap-3">
-            <button
-              type="submit"
-              disabled={isLoading}
-              className="inline-flex items-center gap-2 bg-gray-600 hover:bg-gray-700 disabled:bg-gray-400 text-white font-semibold px-6 py-3 rounded-lg transition-colors"
-            >
-              {isLoading ? (
-                <><Loader2 className="w-5 h-5 animate-spin" /> Speichere...</>
-              ) : (
-                <><Save className="w-5 h-5" /> Als Entwurf speichern</>
-              )}
-            </button>
+            {isEditMode ? (
+              <button
+                type="submit"
+                disabled={isLoading}
+                className="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 disabled:bg-green-400 text-white font-semibold px-6 py-3 rounded-lg transition-colors"
+              >
+                {isLoading ? (
+                  <><Loader2 className="w-5 h-5 animate-spin" /> Speichere...</>
+                ) : (
+                  <><Save className="w-5 h-5" /> Änderungen speichern</>
+                )}
+              </button>
+            ) : (
+              <>
+                <button
+                  type="submit"
+                  disabled={isLoading}
+                  className="inline-flex items-center gap-2 bg-gray-600 hover:bg-gray-700 disabled:bg-gray-400 text-white font-semibold px-6 py-3 rounded-lg transition-colors"
+                >
+                  {isLoading ? (
+                    <><Loader2 className="w-5 h-5 animate-spin" /> Speichere...</>
+                  ) : (
+                    <><Save className="w-5 h-5" /> Als Entwurf speichern</>
+                  )}
+                </button>
 
-            <button
-              type="button"
-              onClick={(e) => handleSubmit(e as unknown as React.FormEvent, true)}
-              disabled={isLoading}
-              className="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 disabled:bg-green-400 text-white font-semibold px-6 py-3 rounded-lg transition-colors"
-            >
-              <Package className="w-5 h-5" />
-              Speichern & Veröffentlichen
-            </button>
+                <button
+                  type="button"
+                  onClick={(e) => handleSubmit(e as unknown as React.FormEvent, true)}
+                  disabled={isLoading}
+                  className="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 disabled:bg-green-400 text-white font-semibold px-6 py-3 rounded-lg transition-colors"
+                >
+                  <Package className="w-5 h-5" />
+                  Speichern & Veröffentlichen
+                </button>
+              </>
+            )}
           </div>
         </div>
       </form>
 
       {/* Mobile Sticky Bottom Bar */}
       <div className="sm:hidden fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 p-4 z-50 safe-area-inset-bottom">
-        <div className="flex gap-3">
+        {isEditMode ? (
           <button
             type="button"
             onClick={(e) => {
@@ -713,28 +832,50 @@ export default function ErfassungPage() {
               if (form) form.requestSubmit()
             }}
             disabled={isLoading}
-            className="flex-1 inline-flex items-center justify-center gap-2 bg-gray-600 hover:bg-gray-700 disabled:bg-gray-400 text-white font-semibold py-4 rounded-xl transition-colors touch-manipulation min-h-[52px]"
+            className="w-full inline-flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 disabled:bg-green-400 text-white font-semibold py-4 rounded-xl transition-colors touch-manipulation min-h-[52px]"
           >
             {isLoading ? (
               <Loader2 className="w-5 h-5 animate-spin" />
             ) : (
               <>
                 <Save className="w-5 h-5" />
-                <span>Entwurf</span>
+                <span>Änderungen speichern</span>
               </>
             )}
           </button>
+        ) : (
+          <div className="flex gap-3">
+            <button
+              type="button"
+              onClick={(e) => {
+                e.preventDefault()
+                const form = document.querySelector('form')
+                if (form) form.requestSubmit()
+              }}
+              disabled={isLoading}
+              className="flex-1 inline-flex items-center justify-center gap-2 bg-gray-600 hover:bg-gray-700 disabled:bg-gray-400 text-white font-semibold py-4 rounded-xl transition-colors touch-manipulation min-h-[52px]"
+            >
+              {isLoading ? (
+                <Loader2 className="w-5 h-5 animate-spin" />
+              ) : (
+                <>
+                  <Save className="w-5 h-5" />
+                  <span>Entwurf</span>
+                </>
+              )}
+            </button>
 
-          <button
-            type="button"
-            onClick={(e) => handleSubmit(e as unknown as React.FormEvent, true)}
-            disabled={isLoading}
-            className="flex-1 inline-flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 disabled:bg-green-400 text-white font-semibold py-4 rounded-xl transition-colors touch-manipulation min-h-[52px]"
-          >
-            <Package className="w-5 h-5" />
-            <span>Speichern</span>
-          </button>
-        </div>
+            <button
+              type="button"
+              onClick={(e) => handleSubmit(e as unknown as React.FormEvent, true)}
+              disabled={isLoading}
+              className="flex-1 inline-flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 disabled:bg-green-400 text-white font-semibold py-4 rounded-xl transition-colors touch-manipulation min-h-[52px]"
+            >
+              <Package className="w-5 h-5" />
+              <span>Speichern</span>
+            </button>
+          </div>
+        )}
       </div>
     </div>
   )

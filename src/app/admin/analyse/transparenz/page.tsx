@@ -14,6 +14,7 @@ import Link from 'next/link'
 import { ArrowLeft, Eye, FileText, Database, GitBranch } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
+import { AnalyseTabs } from '@/components/analyse'
 
 export default async function TransparenzPage() {
   const session = await auth()
@@ -92,7 +93,7 @@ export default async function TransparenzPage() {
     <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center gap-4">
-        <Link href="/admin">
+        <Link href="/admin/analyse">
           <Button variant="ghost" size="sm">
             <ArrowLeft className="mr-2 h-4 w-4" />
             Zurück
@@ -110,6 +111,9 @@ export default async function TransparenzPage() {
           </div>
         </div>
       </div>
+
+      {/* Tabs */}
+      <AnalyseTabs />
 
       {/* Philosophy */}
       <Card>
