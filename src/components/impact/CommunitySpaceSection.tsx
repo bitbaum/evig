@@ -118,7 +118,7 @@ export default function CommunitySpaceSection() {
               ))}
             </ul>
 
-            <Button variant="outline" className="border-blue-500 text-blue-400 hover:bg-blue-500/20 w-full sm:w-auto">
+            <Button variant="outline-light" className="border-blue-400 text-blue-400 hover:bg-blue-400 hover:text-white w-full sm:w-auto">
               Zum Workshop-Programm
             </Button>
           </div>

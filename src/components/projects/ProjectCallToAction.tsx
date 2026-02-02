@@ -67,26 +67,18 @@ export function ProjectCallToAction({
                 {action.href && (
                   action.href.startsWith('http') ? (
                     <a href={action.href} target="_blank" rel="noopener noreferrer" className="block w-full">
-                      <Button 
-                        variant="outline" 
-                        className={`w-full ${
-                          backgroundColor === 'primary' 
-                            ? 'border-white text-white hover:bg-white/10' 
-                            : ''
-                        }`}
+                      <Button
+                        variant={backgroundColor === 'primary' ? 'outline-light' : 'outline'}
+                        className="w-full"
                       >
                         {action.ctaText || 'Mehr erfahren'}
                       </Button>
                     </a>
                   ) : (
                     <Link href={action.href} className="block w-full">
-                      <Button 
-                        variant="outline" 
-                        className={`w-full ${
-                          backgroundColor === 'primary' 
-                            ? 'border-white text-white hover:bg-white/10' 
-                            : ''
-                        }`}
+                      <Button
+                        variant={backgroundColor === 'primary' ? 'outline-light' : 'outline'}
+                        className="w-full"
                       >
                         {action.ctaText || 'Mehr erfahren'}
                       </Button>

@@ -157,7 +157,7 @@ export default function SpacePage() {
                 </Button>
               </Link>
               <Link href="/get-involved/donate">
-                <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/10">
+                <Button size="lg" variant="outline-light">
                   <Heart className="w-5 h-5 mr-2" />
                   Standort-Budget unterstützen
                 </Button>
@@ -443,7 +443,7 @@ export default function SpacePage() {
                     </Button>
                   </Link>
                   <Link href="/about/impact">
-                    <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/10">
+                    <Button size="lg" variant="outline-light">
                       Unsere Wirkung ansehen
                     </Button>
                   </Link>
