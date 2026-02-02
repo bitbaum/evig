@@ -84,7 +84,8 @@ export async function GET(request: NextRequest) {
         p.category,
         p.subcategory,
         i.quantity_available,
-        (SELECT file_path FROM ${TABLE_NAMES.PRODUCT_IMAGES} pi WHERE pi.product_id = p.id AND pi.is_primary = true LIMIT 1) as image_url
+        (SELECT file_path FROM ${TABLE_NAMES.PRODUCT_IMAGES} pi WHERE pi.product_id = p.id AND pi.is_primary = true LIMIT 1) as image_url,
+        p.created_at
       FROM ${TABLE_NAMES.AI_EXTRACTED_PRODUCTS} p
       JOIN ${TABLE_NAMES.INVENTORY_ITEMS} i ON i.ai_product_id = p.id
       ${profileJoin}
@@ -145,7 +146,7 @@ export async function GET(request: NextRequest) {
       brand: product.brand,
       model: product.product_name,
       description: product.short_description,
-      price: product.estimated_price_chf,
+      price: parseFloat(product.estimated_price_chf?.toString() || '0'),
       condition: product.condition,
       category: product.category,
       subcategory: product.subcategory,

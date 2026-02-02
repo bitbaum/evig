@@ -235,7 +235,8 @@ function ProductsGrid() {
         if (!response.ok) throw new Error('Failed to fetch products')
 
         const data = await response.json()
-        setProducts(data.products || [])
+        // API returns { success: true, data: { products: [...] } }
+        setProducts(data.data?.products || data.products || [])
         setError(null)
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Error loading products')
