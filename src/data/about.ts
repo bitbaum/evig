@@ -65,7 +65,7 @@ export interface AboutPageConfig {
 export const aboutConfig: AboutPageConfig = {
   hero: {
     title: 'Technik ein zweites Leben geben',
-    description: 'Seit 15 Jahren setzen wir uns gegen die vorschnelle Ausmusterung von Computern ein und fördern nachhaltige IT-Praktiken.',
+    description: 'Seit über 20 Jahren setzen wir uns gegen die vorschnelle Ausmusterung von Computern ein und fördern nachhaltige IT-Praktiken.',
     backgroundColor: 'bg-gradient-to-r from-green-600 to-green-800',
     ctas: [
       {
@@ -88,15 +88,15 @@ export const aboutConfig: AboutPageConfig = {
   sections: [
     {
       title: 'Unsere Mission',
-      description: 'Seit 2009 verändern wir den Umgang mit Technik nachhaltig',
+      description: 'Seit 2003 verändern wir den Umgang mit Technik nachhaltig',
       backgroundColor: 'white',
       layout: 'single',
       cards: [
         {
           title: '10 Jahre sind das Minimum',
-          description: 'Bei RevampIT glauben wir an das Motto "10 Jahre sind das Minimum für ein Velo – und für einen Laptop auch!" Als gemeinnütziger Verein verändern wir seit 2009 den Umgang mit Technik. Unsere Mission ist klar: Die Lebensdauer von IT-Geräten verlängern und Elektroschrott durch Reparatur, Wiederaufbereitung und nachhaltige Praktiken reduzieren.',
+          description: 'Bei RevampIT glauben wir an das Motto "10 Jahre sind das Minimum für ein Velo – und für einen Laptop auch!" Als gemeinnütziger Verein verändern wir seit 2003 den Umgang mit Technik. Unsere Mission ist klar: Die Lebensdauer von IT-Geräten verlängern und Elektroschrott durch Reparatur, Wiederaufbereitung und nachhaltige Praktiken reduzieren.',
           features: [
-            'Gemeinnütziger Verein seit 2009',
+            'Gemeinnütziger Verein seit 2003',
             'Nachhaltige IT-Lösungen für alle',
             'Reparatur statt Entsorgung',
             'Offene Türen für die Community'
@@ -145,7 +145,7 @@ export const aboutConfig: AboutPageConfig = {
     },
     {
       title: 'Zahlen & Fakten',
-      description: 'Unsere messbare Wirkung seit 2009',
+      description: 'Unsere messbare Wirkung seit 2003',
       backgroundColor: 'white',
       layout: 'grid-2',
       cards: [
@@ -176,10 +176,10 @@ export const aboutConfig: AboutPageConfig = {
       layout: 'single',
       cards: [
         {
-          title: 'Seit 2009 für nachhaltige IT',
+          title: 'Seit 2003 für nachhaltige IT',
           description: 'Was mit einer einfachen Idee begann – Technik länger nutzen – ist heute ein Vorbild für nachhaltige IT in der Schweiz. Unser Team aus 20 engagierten Menschen setzt sich täglich für nachhaltige IT ein. Wir sind Anlaufstelle für Privatpersonen und Unternehmen, die ihren ökologischen Fussabdruck reduzieren und trotzdem auf zuverlässige Technik setzen wollen.',
           features: [
-            'Gegründet 2009 als kleine Reparaturwerkstatt',
+            'Gegründet 2003 in der Toni Molkerei',
             'Heute eine Bewegung für nachhaltige IT',
             'Team aus 20 engagierten Menschen',
             'Anlaufstelle für Privatpersonen und Unternehmen'

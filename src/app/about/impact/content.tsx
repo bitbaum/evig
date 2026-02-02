@@ -164,7 +164,7 @@ export default function ImpactPageContent() {
       {/* Hero Section */}
       <HeroBanner
         title="Unsere messbare Wirkung"
-        description="Entdecken Sie, wie RevampIT seit 2009 die Schweizer IT-Landschaft nachhaltig verändert – transparent, messbar und wirksam."
+        description="Entdecken Sie, wie RevampIT seit 2003 die Schweizer IT-Landschaft nachhaltig verändert – transparent, messbar und wirksam."
       />
 
       {/* Sub Navigation */}
@@ -285,7 +285,7 @@ export default function ImpactPageContent() {
                         </li>
                         <li className="flex items-start gap-2">
                           <CheckCircle className="h-4 w-4 text-blue-600 mt-0.5 flex-shrink-0" />
-                          <span>347 Menschen in nachhaltiger IT ausgebildet seit 2009</span>
+                          <span>347 Menschen in nachhaltiger IT ausgebildet seit 2003</span>
                         </li>
                       </ul>
                     </div>

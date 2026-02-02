@@ -7,7 +7,7 @@ export default function HardcodedAboutPage() {
     <main className="min-h-screen">
       <HeroBanner
         title="Technik ein zweites Leben geben"
-        description="Seit 15 Jahren setzen wir uns gegen die vorschnelle Ausmusterung von Computern ein und fördern nachhaltige IT-Praktiken."
+        description="Seit über 20 Jahren setzen wir uns gegen die vorschnelle Ausmusterung von Computern ein und fördern nachhaltige IT-Praktiken."
       />
 
       {/* Sub Navigation */}
@@ -19,7 +19,7 @@ export default function HardcodedAboutPage() {
           <h2 className="text-2xl sm:text-3xl font-bold">Unsere Mission</h2>
           <div className="space-y-4 sm:space-y-6">
             <p className="text-base sm:text-lg">
-              Bei RevampIT glauben wir an das Motto "10 Jahre sind das Minimum für ein Velo – und für einen Laptop auch!" Als gemeinnütziger Verein verändern wir seit 2009 den Umgang mit Technik. Unsere Mission ist klar: Die Lebensdauer von IT-Geräten verlängern und Elektroschrott durch Reparatur, Wiederaufbereitung und nachhaltige Praktiken reduzieren.
+              Bei RevampIT glauben wir an das Motto "10 Jahre sind das Minimum für ein Velo – und für einen Laptop auch!" Als gemeinnütziger Verein verändern wir seit 2003 den Umgang mit Technik. Unsere Mission ist klar: Die Lebensdauer von IT-Geräten verlängern und Elektroschrott durch Reparatur, Wiederaufbereitung und nachhaltige Praktiken reduzieren.
             </p>
             <div className="relative w-full h-[400px] rounded-lg overflow-hidden my-8">
               <Image

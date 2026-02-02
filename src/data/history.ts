@@ -35,44 +35,58 @@ export interface HistoryConfig {
 export const HISTORY_CONFIG: HistoryConfig = {
   founding: {
     title: 'Die Gründung von RevampIT',
-    subtitle: 'Vom Keller zur Bewegung',
+    subtitle: 'Vom Käsekeller zur Bewegung',
     paragraphs: [
-      'RevampIT wurde 2009 in Zürich gegründet – mit einer einfachen, aber radikalen Idee: Computer sollten mindestens 10 Jahre halten, genau wie ein gutes Velo. In einer Zeit, in der immer schnellere Hardware-Zyklen die Norm wurden, setzten wir auf das Gegenteil: Langlebigkeit.',
-      'Was als kleine Reparaturwerkstatt begann, entwickelte sich schnell zu einer Anlaufstelle für alle, die ihre Technik länger nutzen wollten. Wir entdeckten, dass Linux und Open-Source-Software der Schlüssel waren, um ältere Hardware wieder flott zu machen.',
-      'Heute, über 15 Jahre später, ist RevampIT mehr als nur ein Reparaturservice. Wir sind ein gemeinnütziger Verein mit einem Team von 20 engagierten Menschen, der jährlich über 1000 Geräte vor dem Elektroschrott rettet.',
+      'RevampIT wurde im Dezember 2003 in Zürich gegründet – geboren aus einer einfachen Beobachtung: Immer mehr brauchbare Computer landeten im Müll. "Da muss etwas passieren", war der Gedanke, der alles ins Rollen brachte.',
+      'Der erste Standort war ein alter Käsekeller in der Toni Molkerei. Dort entstand die Idee, die bis heute trägt: Hardware-Recycling und Linux kombinieren. Denn mit Open-Source-Software funktionieren auch ältere Geräte noch jahrelang.',
+      'Was als kleines Projekt begann, wurde zur Bewegung. Ohne gross nach Leuten zu suchen, kamen immer wieder Menschen dazu, die sagten: "Toll, was ihr da macht." Heute, über 20 Jahre später, retten wir jährlich über 1000 Geräte.',
     ],
   },
 
   milestones: [
     {
-      year: 2009,
+      year: 2003,
       title: 'Gründung',
       description:
-        'RevampIT wird als kleine Reparaturwerkstatt in Zürich gegründet. Die Vision: Computer sollten mindestens 10 Jahre halten.',
+        'RevampIT wird in der Toni Molkerei in Zürich gegründet – in einem alten Käsekeller. Die Vision: Brauchbare Computer vor dem Müll retten.',
       type: 'founding',
       highlight: true,
     },
     {
-      year: 2011,
-      title: 'Erste Linux-Workshops',
+      year: 2004,
+      title: 'Erste Projekte',
       description:
-        'Wir starten unsere ersten öffentlichen Linux-Workshops und entdecken die Kraft von Open Source für nachhaltige IT.',
+        'Linux-Workshops und erste Afrika-Projekte starten. Die Kombination von Hardware-Recycling und Open Source zeigt ihre Stärke.',
       type: 'community',
     },
     {
-      year: 2013,
-      title: 'Vereinsgründung',
+      year: 2005,
+      title: 'Debian-Jubiläum',
       description:
-        'RevampIT wird offiziell als gemeinnütziger Verein eingetragen und erhält den ZEWO-ähnlichen Status.',
-      type: 'achievement',
+        '10-jähriges Debian-Jubiläum auf dem Dach der Toni Molkerei. Die Open-Source-Community wächst zusammen.',
+      type: 'community',
+    },
+    {
+      year: 2008,
+      title: 'Umzug nach Wipkingen',
+      description:
+        'Neue Räume in der Reformierten Kirche Wipkingen. Mehr Platz für Werkstatt und wachsendes Team.',
+      type: 'expansion',
       highlight: true,
     },
     {
-      year: 2015,
-      title: 'Soziales Engagement',
+      year: 2012,
+      title: 'Wachstum',
       description:
-        'Start des Integrationsprogramms für Menschen mit erschwertem Arbeitsmarktzugang. Erste Praktikumsplätze werden geschaffen.',
+        'Röschibachstrasse – mehr Raum, mehr Möglichkeiten. Das Team wächst und die Nachfrage steigt.',
       type: 'growth',
+    },
+    {
+      year: 2015,
+      title: 'Zwei Standorte',
+      description:
+        'Laden an der Birmensdorferstrasse, Lager an der Badenerstrasse. RevampIT etabliert sich im Quartier.',
+      type: 'expansion',
     },
     {
       year: 2017,
@@ -81,13 +95,6 @@ export const HISTORY_CONFIG: HistoryConfig = {
         'Umzug in die ehemalige Bank an der Birmensdorferstrasse 379. Mehr Platz für Werkstatt, Laden und Community.',
       type: 'expansion',
       highlight: true,
-    },
-    {
-      year: 2019,
-      title: '10 Jahre RevampIT',
-      description:
-        'Jubiläum! Über 5000 Geräte gerettet, dutzende Menschen in IT-Berufe vermittelt. Die Vision von 2009 ist Realität geworden.',
-      type: 'achievement',
     },
     {
       year: 2020,
@@ -105,25 +112,18 @@ export const HISTORY_CONFIG: HistoryConfig = {
     },
     {
       year: 2024,
-      title: '15 Jahre nachhaltige IT',
+      title: '21 Jahre nachhaltige IT',
       description:
         'Über 1000 Geräte pro Jahr, 285 Tonnen CO₂ eingespart, 90% Erfolgsquote bei Praktika. RevampIT ist Vorbild für nachhaltige IT in der Schweiz.',
       type: 'achievement',
       highlight: true,
-    },
-    {
-      year: 2025,
-      title: 'Vision Community Tech Space',
-      description:
-        'Planung für einen grösseren Raum mit Museum für Vintage-Hardware, offener Werkstatt und Community-Treffpunkt.',
-      type: 'expansion',
     },
   ],
 
   currentState: {
     teamSize: 20,
     location: 'Birmensdorferstrasse 379, 8055 Zürich',
-    yearsActive: new Date().getFullYear() - 2009,
+    yearsActive: new Date().getFullYear() - 2003,
   },
 }
 

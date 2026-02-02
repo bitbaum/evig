@@ -1,5 +1,16 @@
 import React from 'react'
 
+/**
+ * Navigation Configuration - SSOT for all navigation data
+ *
+ * Design principles:
+ * - 5-6 primary items max (cognitive load)
+ * - Clear, action-oriented labels
+ * - No "coming soon" items in nav (show when ready)
+ * - Consolidated shop experience
+ * - Progressive disclosure (simple → detailed)
+ */
+
 export interface NavigationItem {
   name: string
   href: string
@@ -14,347 +25,234 @@ export interface NavigationItem {
   dropdownAlignment?: 'left' | 'center' | 'right'
 }
 
+/**
+ * Main navigation structure
+ *
+ * Reduced from 8 to 6 items for better cognitive load:
+ * 1. Über uns - About, mission, history
+ * 2. Angebot - Services + Shop (combined)
+ * 3. Projekte - Our initiatives
+ * 4. Lernen - Workshops, guides, blog (renamed from "Knowhow")
+ * 5. Mitmachen - Volunteer, donate, partner (renamed from "Engagiere dich")
+ * 6. Kontakt - CTA (highlighted)
+ */
 export const mainNavigation: NavigationItem[] = [
   {
     name: 'Über uns',
     href: '/about',
-    description: 'Erfahre mehr über unsere Mission und Wirkung',
+    description: 'Unsere Mission, Geschichte und Wirkung',
     subItems: [
       {
-        name: 'Unsere Mission',
+        name: 'Mission & Geschichte',
         href: '/about',
-        description: 'Grundwerte und Ziele von RevampIT'
+        description: 'Wer wir sind und was uns antreibt',
       },
       {
         name: 'Unsere Wirkung',
         href: '/about/impact',
-        description: 'Transparente Darstellung unserer messbaren Impact-Zahlen'
+        description: 'Messbare Erfolge und Transparenz',
       },
       {
-        name: 'REVAMPED-Zertifizierung',
-        href: '/revamped',
-        description: 'Unsere exklusive Auszeichnung für nachhaltige Computer-Builds'
+        name: 'Standorte',
+        href: '/space',
+        description: 'Unsere Räumlichkeiten in Zürich',
       },
       {
         name: 'FAQ',
         href: '/faq',
-        description: 'Häufig gestellte Fragen rund um RevampIT'
+        description: 'Häufig gestellte Fragen',
       },
-      {
-        name: 'Unsere Standorte',
-        href: '/space',
-        description: 'Geschichte unserer Standorte und Vision für die Zukunft'
-      },
-      {
-        name: 'Wiki',
-        href: 'https://revamp-it.ch/index.php/de/wiki-de',
-        description: 'Unser gemeinsames Wissensportal',
-        external: true
-      }
-    ]
+    ],
   },
   {
-    name: 'Dienstleistungen',
+    name: 'Angebot',
     href: '/services',
-    description: 'Unsere Reparatur-, Aufbereitungs- und Recycling-Angebote',
+    description: 'Dienstleistungen und Shop',
     isMultiColumn: true,
     subItems: [
+      // Section: Hardware
       {
-        name: 'Hardware-Dienstleistungen',
-        href: '#',
-        isSection: true
+        name: 'Hardware',
+        href: '/services',
+        isSection: true,
       },
       {
-        name: 'Computer-Reparatur & Upgrades',
+        name: 'Reparatur & Upgrades',
         href: '/services/computer-repair-upgrades',
-        description: 'Fachgerechte Reparaturen und Upgrades für alle Geräte'
+        description: 'Computer wieder fit machen',
       },
       {
-        name: 'Datenrettung & Übertragung',
+        name: 'Datenrettung',
         href: '/services/data-recovery-transfer',
-        description: 'Sichere Datenrettung und Übertragungsdienste'
+        description: 'Daten sichern und übertragen',
       },
       {
         name: 'Hardware-Recycling',
         href: '/services/hardware-recycling',
-        description: 'Verantwortungsvolles Recycling von IT-Geräten'
+        description: 'Verantwortungsvolle Entsorgung',
       },
+      // Section: Software
       {
-        name: 'Software-Lösungen',
-        href: '#',
-        isSection: true
-      },
-      {
-        name: 'Webdesign & Entwicklung',
-        href: '/services/web-design-development',
-        description: 'Professionelle Webentwicklung mit Open Source-Technologien'
+        name: 'Software',
+        href: '/services',
+        isSection: true,
       },
       {
         name: 'Linux & Open Source',
         href: '/services/linux-open-source',
-        description: 'Professionelle Linux-Installation und Support'
+        description: 'Installation und Support',
+      },
+      {
+        name: 'Webentwicklung',
+        href: '/services/web-design-development',
+        description: 'Websites mit Open Source',
       },
       {
         name: 'Open Source-Lösungen',
         href: '/services/open-source-solutions',
-        description: 'Open Source-Software-Implementierung und Support'
+        description: 'Beratung und Implementierung',
       },
+      // Section: Shop
       {
-        name: 'Demnächst',
-        href: '#',
-        isSection: true
-      },
-      {
-        name: 'Baue deinen Computer',
-        href: '/services/build-your-computer',
-        description: 'KI-gestützte, individuelle Computer-Builds mit globaler Teilebeschaffung',
-        badge: 'Bald'
-      },
-      {
-        name: 'Enterprise AI-Lösungen',
-        href: '/services/enterprise-ai-solutions',
-        description: 'Private, lokale KI-Systeme für Unternehmen',
-        badge: 'Bald'
-      },
-      {
-        name: 'Cloud-Infrastruktur',
-        href: '/services/cloud-infrastructure',
-        description: 'Nachhaltiges Cloud-Hosting und Infrastruktur',
-        badge: 'Bald'
-      },
-      {
-        name: 'Server-Management',
-        href: '/services/server-management',
-        description: 'Professionelle Server-Einrichtung und Wartung',
-        badge: 'Bald'
-      },
-      {
-        name: 'IoT-Lösungen',
-        href: '/services/iot-solutions',
-        description: 'Internet of Things mit Open Source-Hardware',
-        badge: 'Bald'
-      }
-    ]
-  },
-  {
-    name: 'IT-Hilfe',
-    href: '/it-hilfe',
-    description: 'Community-basierte IT-Unterstützung',
-    isMultiColumn: false,
-    subItems: [
-      {
-        name: 'Alle Anfragen',
-        href: '/it-hilfe',
-        description: 'Durchsuche IT-Hilfe-Anfragen aus der Community'
-      },
-      {
-        name: 'Anfrage erstellen',
-        href: '/it-hilfe/create',
-        description: 'Stelle eine neue IT-Hilfe-Anfrage'
-      },
-      {
-        name: 'Meine Anfragen',
-        href: '/it-hilfe/my',
-        description: 'Verwalte deine eigenen Anfragen'
-      },
-      {
-        name: 'Meine Angebote',
-        href: '/it-hilfe/my/offers',
-        description: 'Sieh deine abgegebenen Hilfsangebote'
-      },
-      {
-        name: 'Helfer finden',
-        href: '/it-hilfe/helpers',
-        description: 'Finde IT-Helfer in deiner Nähe',
-        badge: 'Neu'
-      }
-    ]
-  },
-  {
-    name: 'Shop',
-    href: '/shop',
-    description: 'Wähle zwischen Online-Shops und Ladenlokal',
-    isMultiColumn: false,
-    subItems: [
-      {
-        name: 'Shop-Übersicht',
+        name: 'Einkaufen',
         href: '/shop',
-        description: 'Alle Shopping-Optionen auf einen Blick'
+        isSection: true,
       },
       {
-        name: 'Aktueller Online-Shop',
-        href: 'https://www.revamp-it.ch/index.php/de/shop-de',
-        description: 'Bestehender Webshop (Legacy-System)',
-        external: true
-      },
-      {
-        name: 'Shopware-Shop',
-        href: 'https://shop.revamp-it.ch/',
-        description: 'Neuer Shopware-Kanal',
-        external: true,
-        badge: 'Neu'
-      },
-      {
-        name: 'RevampIT Online-Shop',
-        href: '/shop/medusa',
-        description: 'Unser neuer moderner Online-Shop',
-        badge: 'Neu'
+        name: 'Online-Shop',
+        href: '/shop',
+        description: 'Geräte und Zubehör bestellen',
       },
       {
         name: 'Ladenlokal Zürich',
         href: '/shop#ladenlokal',
-        description: 'Vor Ort beraten lassen und einkaufen'
-      }
-    ]
+        description: 'Vor Ort stöbern und beraten lassen',
+      },
+    ],
   },
   {
     name: 'Projekte',
     href: '/projects',
-    description: 'Unsere aktuellen und vergangenen Initiativen',
-    isMultiColumn: true,
+    description: 'Unsere Initiativen und Software',
     subItems: [
       {
-        name: 'Software-Projekte',
-        href: '#',
-        isSection: true
-      },
-      {
-        name: 'Kivitendo',
-        href: '/projects/kivitendo',
-        description: 'Open Source ERP-System-Implementierung'
-      },
-      {
-        name: 'LTSP',
-        href: '/projects/ltsp',
-        description: 'Linux Terminal Server Project für effizientes Multi-User-Computing'
-      },
-      {
-        name: 'Hardware-Projekte',
-        href: '#',
-        isSection: true
-      },
-      {
-        name: 'Hardware',
-        href: '/projects/hardware',
-        description: 'Nachhaltige Hardware-Entwicklung und Upcycling'
-      },
-      {
-        name: 'Community-Projekte',
-        href: '#',
-        isSection: true
-      },
-      {
-        name: 'Compirat',
-        href: '/projects/compirat',
-        description: 'Digitale Inklusion und Computerkompetenz für alle'
+        name: 'Alle Projekte',
+        href: '/projects',
+        description: 'Übersicht unserer Initiativen',
       },
       {
         name: 'FreieComputer',
         href: '/projects/freiecomputer',
-        description: 'Schweizer Label für Computer mit freier Software'
+        description: 'Schweizer Label für freie Software',
       },
       {
         name: 'Linuxola',
         href: '/projects/linuxola',
-        description: 'Afrika mit der globalen digitalen Commons verbinden'
-      }
-    ]
+        description: 'Computer für Afrika',
+      },
+      {
+        name: 'Compirat',
+        href: '/projects/compirat',
+        description: 'Digitale Inklusion für alle',
+      },
+      {
+        name: 'IT-Hilfe',
+        href: '/it-hilfe',
+        description: 'Community-basierte Unterstützung',
+        badge: 'Neu',
+      },
+    ],
   },
   {
-    name: 'Knowhow',
+    name: 'Lernen',
     href: '/knowhow',
-    description: 'Guides, Workshops, Blog und Ressourcen',
-    isMultiColumn: false,
+    description: 'Workshops, Guides und Ressourcen',
     subItems: [
       {
-        name: 'Übersicht',
-        href: '/knowhow',
-        description: 'Alle Ressourcen für dein Lernen'
+        name: 'Workshops',
+        href: '/workshops',
+        description: 'Kurse vor Ort buchen',
       },
       {
         name: 'Guides',
         href: '/knowhow#guides',
-        description: 'Schritt-für-Schritt Anleitungen'
+        description: 'Schritt-für-Schritt Anleitungen',
       },
       {
         name: 'Blog',
         href: '/blog',
-        description: 'Tipps und Geschichten von unseren Experten'
+        description: 'Tipps und Geschichten',
       },
       {
-        name: 'Workshops',
-        href: '/workshops',
-        description: 'Live-Kurse zum Buchen'
+        name: 'Wiki',
+        href: 'https://revamp-it.ch/index.php/de/wiki-de',
+        description: 'Gemeinsames Wissensportal',
+        external: true,
       },
-      {
-        name: 'Ressourcen',
-        href: '/knowhow#ressourcen',
-        description: 'Curated Links und Open Source Alternativen'
-      }
-    ]
+    ],
   },
   {
-    name: 'Engagiere dich',
+    name: 'Mitmachen',
     href: '/get-involved',
-    description: 'Freiwilligenarbeit und Unterstützung unserer Mission',
+    description: 'Teil der Bewegung werden',
     isMultiColumn: true,
     dropdownAlignment: 'right',
     subItems: [
+      // Section: Engagement
       {
-        name: 'Individuelles Engagement',
-        href: '#',
-        isSection: true
+        name: 'Engagement',
+        href: '/get-involved',
+        isSection: true,
       },
       {
-        name: 'Freiwillige',
+        name: 'Freiwilligenarbeit',
         href: '/get-involved/volunteer',
-        description: 'Werde Teil unseres Freiwilligen-Teams'
+        description: 'Zeit und Können einbringen',
       },
       {
-        name: 'Technische Expert:innen',
-        href: '/get-involved/technical-experts',
-        description: 'Teile dein Fachwissen mit uns'
-      },
-      {
-        name: 'Lernmöglichkeiten',
-        href: '#',
-        isSection: true
-      },
-      {
-        name: 'Praktika',
+        name: 'Praktikum',
         href: '/get-involved/internships',
-        description: 'Sammle wertvolle Erfahrungen'
+        description: 'Erfahrung sammeln',
       },
       {
         name: 'Wiedereinstieg',
         href: '/get-involved/work-reintegration',
-        description: 'Starte deine Karriere neu mit uns'
+        description: 'Zurück ins Berufsleben',
       },
+      // Section: Unterstützen
       {
-        name: 'Unterstützung für Organisationen',
-        href: '#',
-        isSection: true
-      },
-      {
-        name: 'Partnerschaften',
-        href: '/get-involved/partnerships',
-        description: 'Werde Unternehmenspartner:in'
+        name: 'Unterstützen',
+        href: '/get-involved',
+        isSection: true,
       },
       {
         name: 'Spenden',
         href: '/get-involved/donate',
-        description: 'Unterstütze unsere Mission finanziell'
-      }
-    ]
+        description: 'Unsere Mission fördern',
+      },
+      {
+        name: 'Geräte spenden',
+        href: '/get-involved/donate#geraete',
+        description: 'Hardware ein zweites Leben geben',
+      },
+      {
+        name: 'Partnerschaft',
+        href: '/get-involved/partnerships',
+        description: 'Als Unternehmen kooperieren',
+      },
+    ],
   },
   {
     name: 'Kontakt',
     href: '/contact',
-    description: 'Kontaktiere unser Team',
-    highlight: true
-  }
+    description: 'Wir freuen uns auf dich',
+    highlight: true,
+  },
 ]
 
+/**
+ * Social media link type
+ */
 export interface SocialLink {
   name: string
   href: string
@@ -362,8 +260,7 @@ export interface SocialLink {
 }
 
 /**
- * Social media icons as inline SVG components
- * Using inline SVGs to avoid dependency on specific icon library
+ * Social media icons - kept minimal and inline for bundle size
  */
 const FacebookIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
   <svg viewBox="0 0 24 24" fill="currentColor" {...props}>
@@ -383,12 +280,6 @@ const LinkedInIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
   </svg>
 )
 
-const YouTubeIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
-  <svg viewBox="0 0 24 24" fill="currentColor" {...props}>
-    <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
-  </svg>
-)
-
 const MastodonIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
   <svg viewBox="0 0 24 24" fill="currentColor" {...props}>
     <path d="M23.268 5.313c-.35-2.578-2.617-4.61-5.304-5.004C17.51.242 15.792 0 11.813 0h-.03c-3.98 0-4.835.242-5.288.309C3.882.692 1.496 2.518.917 5.127.64 6.412.61 7.837.661 9.143c.074 1.874.088 3.745.26 5.611.118 1.24.325 2.47.62 3.68.55 2.237 2.777 4.098 4.96 4.857 2.336.792 4.849.923 7.256.38.265-.061.527-.132.786-.213.585-.184 1.27-.39 1.774-.753a.057.057 0 0 0 .023-.043v-1.809a.052.052 0 0 0-.02-.041.053.053 0 0 0-.046-.01 20.282 20.282 0 0 1-4.709.545c-2.73 0-3.463-1.284-3.674-1.818a5.593 5.593 0 0 1-.319-1.433.053.053 0 0 1 .066-.054c1.517.363 3.072.546 4.632.546.376 0 .75 0 1.125-.01 1.57-.044 3.224-.124 4.768-.422.038-.008.077-.015.11-.024 2.435-.464 4.753-1.92 4.989-5.604.008-.145.03-1.52.03-1.67.002-.512.167-3.63-.024-5.545zm-3.748 9.195h-2.561V8.29c0-1.309-.55-1.976-1.67-1.976-1.23 0-1.846.79-1.846 2.35v3.403h-2.546V8.663c0-1.56-.617-2.35-1.848-2.35-1.112 0-1.668.668-1.67 1.977v6.218H4.822V8.102c0-1.31.337-2.35 1.011-3.12.696-.77 1.608-1.164 2.74-1.164 1.311 0 2.302.5 2.962 1.498l.638 1.06.638-1.06c.66-.999 1.65-1.498 2.96-1.498 1.13 0 2.043.395 2.74 1.164.675.77 1.012 1.81 1.012 3.12z" />
@@ -396,8 +287,8 @@ const MastodonIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
 )
 
 /**
- * Social media links for RevampIT
- * Update these URLs when the organization creates social media accounts
+ * Social media links
+ * Note: YouTube removed (low-value, clutters footer)
  */
 export const socialLinks: SocialLink[] = [
   {
@@ -414,11 +305,6 @@ export const socialLinks: SocialLink[] = [
     name: 'LinkedIn',
     href: 'https://linkedin.com/company/revampit',
     icon: LinkedInIcon,
-  },
-  {
-    name: 'YouTube',
-    href: 'https://youtube.com/@revampit',
-    icon: YouTubeIcon,
   },
   {
     name: 'Mastodon',

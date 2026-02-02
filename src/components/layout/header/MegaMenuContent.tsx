@@ -49,8 +49,11 @@ function MultiColumnLayout({
   groups: NavigationGroup[]
   onClose: () => void
 }) {
+  // Dynamic grid columns based on number of sections
+  const gridCols = groups.length === 2 ? 'grid-cols-2' : 'grid-cols-3'
+
   return (
-    <div className="grid grid-cols-3 divide-x divide-gray-100">
+    <div className={cn("grid divide-x divide-gray-100", gridCols)}>
       {groups.map((group, idx) => (
         <div key={idx} className="p-6">
           {group.section && (
