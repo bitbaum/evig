@@ -160,7 +160,7 @@ export async function POST(request: NextRequest) {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${MEDUSA_CONFIG.ADMIN_API_KEY || ''}`
+          'Authorization': `Basic ${MEDUSA_CONFIG.ADMIN_API_KEY || ''}`
         },
         body: JSON.stringify({ inventoryItemId: inventoryId })
       })

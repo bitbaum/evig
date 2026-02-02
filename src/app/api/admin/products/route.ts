@@ -42,7 +42,7 @@ export async function GET(request: NextRequest) {
         headers: {
           "Content-Type": "application/json",
           "x-publishable-api-key": MEDUSA_CONFIG.PUBLISHABLE_KEY,
-          "Authorization": `Bearer ${MEDUSA_CONFIG.ADMIN_API_KEY || ''}`
+          "Authorization": `Basic ${MEDUSA_CONFIG.ADMIN_API_KEY || ''}`
         },
       }
     );
@@ -96,7 +96,7 @@ export async function POST(request: NextRequest) {
       headers: {
         "Content-Type": "application/json",
         "x-publishable-api-key": MEDUSA_CONFIG.PUBLISHABLE_KEY,
-        "Authorization": `Bearer ${MEDUSA_CONFIG.ADMIN_API_KEY || ''}`
+        "Authorization": `Basic ${MEDUSA_CONFIG.ADMIN_API_KEY || ''}`
       },
       body: JSON.stringify(productData),
     });

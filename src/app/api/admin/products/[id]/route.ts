@@ -20,7 +20,7 @@ export const GET = withAdmin<{ id: string }>(async (
       headers: {
         "Content-Type": "application/json",
         "x-publishable-api-key": MEDUSA_CONFIG.PUBLISHABLE_KEY,
-        "Authorization": `Bearer ${MEDUSA_CONFIG.ADMIN_API_KEY}`
+        "Authorization": `Basic ${MEDUSA_CONFIG.ADMIN_API_KEY}`
       },
     });
 
@@ -60,7 +60,7 @@ export const POST = withAdmin<{ id: string }>(async (
       headers: {
         "Content-Type": "application/json",
         "x-publishable-api-key": MEDUSA_CONFIG.PUBLISHABLE_KEY,
-        "Authorization": `Bearer ${MEDUSA_CONFIG.ADMIN_API_KEY}`
+        "Authorization": `Basic ${MEDUSA_CONFIG.ADMIN_API_KEY}`
       },
       body: JSON.stringify(updateData),
     });
@@ -99,7 +99,7 @@ export const DELETE = withAdmin<{ id: string }>(async (
       headers: {
         "Content-Type": "application/json",
         "x-publishable-api-key": MEDUSA_CONFIG.PUBLISHABLE_KEY,
-        "Authorization": `Bearer ${MEDUSA_CONFIG.ADMIN_API_KEY}`
+        "Authorization": `Basic ${MEDUSA_CONFIG.ADMIN_API_KEY}`
       },
     });
 

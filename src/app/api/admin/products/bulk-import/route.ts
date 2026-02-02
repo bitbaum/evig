@@ -72,7 +72,7 @@ export const POST = withAdmin(async (request: NextRequest) => {
           headers: {
             "Content-Type": "application/json",
             "x-publishable-api-key": MEDUSA_CONFIG.PUBLISHABLE_KEY,
-            "Authorization": `Bearer ${MEDUSA_CONFIG.ADMIN_API_KEY}`
+            "Authorization": `Basic ${MEDUSA_CONFIG.ADMIN_API_KEY}`
           },
           body: JSON.stringify({
             title: product.title,
@@ -95,7 +95,7 @@ export const POST = withAdmin(async (request: NextRequest) => {
           headers: {
             "Content-Type": "application/json",
             "x-publishable-api-key": MEDUSA_CONFIG.PUBLISHABLE_KEY,
-            "Authorization": `Bearer ${MEDUSA_CONFIG.ADMIN_API_KEY}`
+            "Authorization": `Basic ${MEDUSA_CONFIG.ADMIN_API_KEY}`
           },
           body: JSON.stringify({
             title: "Default",
