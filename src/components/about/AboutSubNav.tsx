@@ -9,7 +9,7 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Info, BarChart3, Clock } from 'lucide-react'
+import { Info, BarChart3, Newspaper } from 'lucide-react'
 
 interface NavItem {
   href: string
@@ -30,6 +30,12 @@ const navItems: NavItem[] = [
     label: 'Wirkung',
     icon: <BarChart3 className="h-4 w-4" />,
     description: 'Unsere Zahlen & Fakten'
+  },
+  {
+    href: '/about/press',
+    label: 'Presse',
+    icon: <Newspaper className="h-4 w-4" />,
+    description: 'Medienberichte'
   }
 ]
 

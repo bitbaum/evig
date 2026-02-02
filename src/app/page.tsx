@@ -3,6 +3,7 @@ import Link from 'next/link'
 import type { Metadata } from 'next'
 import { getCompactMetrics } from '@/data/impact-metrics'
 import { VALUE_PROPS, TESTIMONIALS } from '@/data/homepage'
+import { AsSeenInLogos } from '@/components/about'
 
 export const metadata: Metadata = {
   title: 'revamp-it – Alte Hardware. Neues Leben. | Computer-Reparatur & Linux in der Schweiz',
@@ -118,6 +119,9 @@ export default function Home() {
           </div>
         </div>
       </div>
+
+      {/* As Seen In - Media Logos */}
+      <AsSeenInLogos />
 
       {/* Value Propositions */}
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
