@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import Link from 'next/link'
 import { AdminDashboard, AINativeCMSProvider } from '@ai-native-cms/react'
 import { createDefaultConfig } from '@ai-native-cms/core'
 import '@ai-native-cms/react/styles'
@@ -44,18 +45,18 @@ export default function AdminPage() {
                 </h1>
               </div>
               <nav className="flex space-x-4">
-                <a 
-                  href="/" 
+                <Link
+                  href="/"
                   className="text-gray-500 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium"
                 >
                   Back to Site
-                </a>
-                <a 
-                  href="/admin" 
+                </Link>
+                <Link
+                  href="/admin"
                   className="bg-indigo-100 text-indigo-700 px-3 py-2 rounded-md text-sm font-medium"
                 >
                   Dashboard
-                </a>
+                </Link>
               </nav>
             </div>
           </div>

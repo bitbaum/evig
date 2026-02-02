@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react'
+import React, { useState, useEffect, useMemo, useCallback } from 'react'
 import { 
   Suggestion, 
   SuggestionStatus, 
@@ -45,7 +45,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   const [selectedSuggestion, setSelectedSuggestion] = useState<Suggestion | null>(null)
 
   // Load data
-  const loadData = async () => {
+  const loadData = useCallback(async () => {
     try {
       setLoading(true)
       setError(null)
@@ -76,11 +76,11 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
     } finally {
       setLoading(false)
     }
-  }
+  }, [cms, filters, currentPage, pageSize, showStats])
 
   useEffect(() => {
     loadData()
-  }, [cms, filters, currentPage, pageSize])
+  }, [loadData])
 
   // Handle status update
   const handleStatusUpdate = async (suggestionId: string, newStatus: SuggestionStatus) => {

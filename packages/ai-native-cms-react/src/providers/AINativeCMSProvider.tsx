@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react'
+import React, { createContext, useContext, useState, useEffect, useRef, ReactNode } from 'react'
 import { AINativeCMS, AINativeCMSConfig, createAINativeCMS } from '@ai-native-cms/core'
 
 export interface AINativeCMSContextValue {
@@ -26,6 +26,7 @@ export function AINativeCMSProvider({
   const [cms, setCMS] = useState<AINativeCMS | null>(null)
   const [isInitialized, setIsInitialized] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const cmsRef = useRef<AINativeCMS | null>(null)
 
   useEffect(() => {
     let mounted = true
@@ -34,22 +35,23 @@ export function AINativeCMSProvider({
       try {
         setError(null)
         const cmsInstance = await createAINativeCMS(config)
-        
+
         if (mounted) {
+          cmsRef.current = cmsInstance
           setCMS(cmsInstance)
           setIsInitialized(true)
-          
+
           if (onInitialized) {
             onInitialized(cmsInstance)
           }
         }
       } catch (err) {
         const error = err instanceof Error ? err : new Error('Failed to initialize AI-Native CMS')
-        
+
         if (mounted) {
           setError(error.message)
           setIsInitialized(false)
-          
+
           if (onError) {
             onError(error)
           }
@@ -61,8 +63,8 @@ export function AINativeCMSProvider({
 
     return () => {
       mounted = false
-      if (cms) {
-        cms.destroy().catch(console.error)
+      if (cmsRef.current) {
+        cmsRef.current.destroy().catch(console.error)
       }
     }
   }, [config, onInitialized, onError])

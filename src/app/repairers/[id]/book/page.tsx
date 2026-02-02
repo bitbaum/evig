@@ -89,49 +89,47 @@ export default function BookRepairerPage({ params }: { params: Promise<{ id: str
   const [visitCity, setVisitCity] = useState('')
 
   useEffect(() => {
-    fetchRepairerData()
+    const fetchData = async () => {
+      try {
+        const response = await fetch(`/api/repairers/${id}`)
+        const data = await response.json()
+
+        if (!response.ok || !data.success) {
+          setError(data.error || 'Reparateur nicht gefunden')
+          return
+        }
+
+        setRepairer(data.repairer)
+      } catch (err) {
+        logger.error('Error fetching repairer', { error: err })
+        setError('Fehler beim Laden')
+      } finally {
+        setLoading(false)
+      }
+    }
+    fetchData()
   }, [id])
 
   useEffect(() => {
     if (selectedDate || step === 2) {
-      fetchAvailability()
+      const fetchSlots = async () => {
+        try {
+          const startDate = selectedDate || new Date().toISOString().split('T')[0]
+          const response = await fetch(
+            `/api/repairers/${id}/availability?start_date=${startDate}`
+          )
+          const data = await response.json()
+
+          if (data.success) {
+            setAvailability(data.slots || {})
+          }
+        } catch (err) {
+          logger.error('Error fetching availability', { error: err })
+        }
+      }
+      fetchSlots()
     }
   }, [id, selectedDate, step])
-
-  const fetchRepairerData = async () => {
-    try {
-      const response = await fetch(`/api/repairers/${id}`)
-      const data = await response.json()
-
-      if (!response.ok || !data.success) {
-        setError(data.error || 'Reparateur nicht gefunden')
-        return
-      }
-
-      setRepairer(data.repairer)
-    } catch (err) {
-      logger.error('Error fetching repairer', { error: err })
-      setError('Fehler beim Laden')
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  const fetchAvailability = async () => {
-    try {
-      const startDate = selectedDate || new Date().toISOString().split('T')[0]
-      const response = await fetch(
-        `/api/repairers/${id}/availability?start_date=${startDate}`
-      )
-      const data = await response.json()
-
-      if (data.success) {
-        setAvailability(data.slots || {})
-      }
-    } catch (err) {
-      logger.error('Error fetching availability', { error: err })
-    }
-  }
 
   const handleSubmit = async () => {
     if (!session) {

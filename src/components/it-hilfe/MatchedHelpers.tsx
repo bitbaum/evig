@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 import { Sparkles, TrendingUp, MapPin, Award } from 'lucide-react'
 import { logger } from '@/lib/logger'
 import { getSkillById } from '@/config/it-hilfe'
@@ -202,13 +203,13 @@ export function MatchedHelpers({ requestId, requestTitle }: MatchedHelpersProps)
       {/* See All Link */}
       {matches.length > 5 && (
         <div className="text-center mt-6">
-          <a
+          <Link
             href="/it-hilfe/helfer"
             className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium text-sm"
           >
             Alle {matches.length} Helfer durchsuchen
             <TrendingUp className="w-4 h-4" />
-          </a>
+          </Link>
         </div>
       )}
     </div>

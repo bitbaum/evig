@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { logger } from '@/lib/logger'
 import { useRouter } from 'next/navigation'
 import {
@@ -145,11 +145,7 @@ export default function RepairerApplicationsAdmin() {
   const [certificationActionLoading, setCertificationActionLoading] = useState<string | null>(null)
   const [searchQuery, setSearchQuery] = useState('')
 
-  useEffect(() => {
-    fetchApplications()
-  }, [selectedStatus])
-
-  const fetchApplications = async () => {
+  const fetchApplications = useCallback(async () => {
     try {
       setLoading(true)
       const response = await fetch(`/api/admin/repairer-applications?status=${selectedStatus}`)
@@ -163,7 +159,11 @@ export default function RepairerApplicationsAdmin() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [selectedStatus])
+
+  useEffect(() => {
+    fetchApplications()
+  }, [fetchApplications])
 
   const handleApprove = async (applicationId: string) => {
     if (!confirm('Sind Sie sicher, dass Sie diese Bewerbung genehmigen möchten? Der Benutzer erhält Reparatur-Berechtigungen.')) {

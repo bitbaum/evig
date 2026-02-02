@@ -1,4 +1,5 @@
 import { Metadata } from 'next'
+import Link from 'next/link'
 import { Users, Code, Building2, GraduationCap, Handshake, Heart, Globe, Recycle, Lightbulb, Gift } from 'lucide-react'
 import { ContactLink } from '@/components/ui/contact-link'
 import { HeroBanner } from '@/components/ui/hero-banner'
@@ -269,12 +270,12 @@ export default function GetInvolvedPage() {
             <ContactLink variant="outline" size="lg" className="bg-white text-green-800 hover:bg-green-50">
               Kontaktieren Sie uns heute
             </ContactLink>
-            <a
+            <Link
               href="/workshops"
               className="bg-transparent border-2 border-white text-white px-4 sm:px-6 md:px-8 py-3 sm:py-4 rounded-lg font-semibold hover:bg-white/10 transition-colors duration-300 text-base sm:text-lg"
             >
               Workshops entdecken
-            </a>
+            </Link>
           </div>
         </div>
       </section>

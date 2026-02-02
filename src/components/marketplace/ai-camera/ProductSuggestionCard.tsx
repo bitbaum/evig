@@ -6,7 +6,7 @@
 
 import { CheckCircle } from 'lucide-react'
 import { cn } from '@/lib/utils'
-import { getCategoryIcon, getConditionLabel } from './config'
+import { CATEGORY_ICONS, DEFAULT_CATEGORY_ICON, getConditionLabel } from './config'
 import type { ProductSuggestion } from './types'
 
 interface ProductSuggestionCardProps {
@@ -14,16 +14,20 @@ interface ProductSuggestionCardProps {
   onSelect: (suggestion: ProductSuggestion) => void
 }
 
-export function ProductSuggestionCard({ suggestion, onSelect }: ProductSuggestionCardProps) {
-  const IconComponent = getCategoryIcon(suggestion.category)
+// Render icon outside of component to avoid "creating component during render"
+function CategoryIcon({ category, className }: { category: string; className: string }) {
+  const IconComponent = CATEGORY_ICONS[category] || DEFAULT_CATEGORY_ICON
+  return <IconComponent className={className} />
+}
 
+export function ProductSuggestionCard({ suggestion, onSelect }: ProductSuggestionCardProps) {
   return (
     <div
       onClick={() => onSelect(suggestion)}
       className="p-4 border border-gray-200 rounded-lg hover:border-purple-300 hover:bg-purple-50 cursor-pointer transition-colors"
     >
       <div className="flex items-start gap-4">
-        <IconComponent className="w-8 h-8 text-purple-600 mt-1" />
+        <CategoryIcon category={suggestion.category} className="w-8 h-8 text-purple-600 mt-1" />
         <div className="flex-1">
           <div className="flex items-center gap-2 mb-1">
             <h4 className="font-medium text-gray-900">{suggestion.name}</h4>

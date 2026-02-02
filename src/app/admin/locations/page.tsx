@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
@@ -53,13 +53,7 @@ export default function AdminLocationsPage() {
   const [currentPage, setCurrentPage] = useState(1)
   const [totalPages, setTotalPages] = useState(1)
 
-  useEffect(() => {
-    if (status === 'authenticated') {
-      loadLocations()
-    }
-  }, [status, filters, currentPage])
-
-  const loadLocations = async () => {
+  const loadLocations = useCallback(async () => {
     try {
       setLoading(true)
       const params = new URLSearchParams({
@@ -84,7 +78,13 @@ export default function AdminLocationsPage() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [filters.status, filters.type, filters.city, currentPage])
+
+  useEffect(() => {
+    if (status === 'authenticated') {
+      loadLocations()
+    }
+  }, [status, loadLocations])
 
   const handleApproval = async (locationId: string, action: 'approve' | 'reject') => {
     if (!confirm(`Möchten Sie diesen Ort wirklich ${action === 'approve' ? 'genehmigen' : 'ablehnen'}?`)) {

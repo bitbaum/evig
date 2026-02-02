@@ -8,7 +8,8 @@
  */
 
 import { useState } from 'react'
-import { SERVICE_ICONS, getIconByName } from '@/config/service-icons'
+import { SERVICE_ICONS } from '@/config/service-icons'
+import { Wrench } from 'lucide-react'
 
 interface IconPickerProps {
   value: string | null
@@ -16,12 +17,17 @@ interface IconPickerProps {
   className?: string
 }
 
+// Render icon outside of component to avoid "creating component during render"
+function RenderIcon({ iconName, className }: { iconName: string | null; className: string }) {
+  const iconConfig = iconName ? SERVICE_ICONS[iconName] : null
+  const IconComponent = iconConfig?.icon || Wrench
+  return <IconComponent className={className} />
+}
+
 export function IconPicker({ value, onChange, className = '' }: IconPickerProps) {
   const [isOpen, setIsOpen] = useState(false)
   const iconNames = Object.keys(SERVICE_ICONS)
 
-  // Get current icon component
-  const CurrentIcon = getIconByName(value)
   const currentLabel = value ? SERVICE_ICONS[value]?.label : 'Wählen...'
 
   return (
@@ -33,7 +39,7 @@ export function IconPicker({ value, onChange, className = '' }: IconPickerProps)
         className="w-full flex items-center gap-3 px-4 py-3 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg hover:border-gray-400 dark:hover:border-gray-500 transition-colors"
       >
         <div className="w-10 h-10 bg-gray-100 dark:bg-gray-700 rounded-lg flex items-center justify-center">
-          <CurrentIcon className="w-6 h-6 text-gray-600 dark:text-gray-300" />
+          <RenderIcon iconName={value} className="w-6 h-6 text-gray-600 dark:text-gray-300" />
         </div>
         <div className="flex-1 text-left">
           <span className="text-gray-900 dark:text-white">{currentLabel}</span>

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import {
   Eye,
@@ -57,11 +57,7 @@ export default function AdminReviewsPage() {
   const [selectedReview, setSelectedReview] = useState<Review | null>(null)
   const [moderationAction, setModerationAction] = useState<string | null>(null)
 
-  useEffect(() => {
-    fetchReviews()
-  }, [selectedStatus])
-
-  const fetchReviews = async () => {
+  const fetchReviews = useCallback(async () => {
     try {
       setLoading(true)
       const response = await fetch(`/api/admin/reviews?status=${selectedStatus}&limit=50`)
@@ -75,7 +71,11 @@ export default function AdminReviewsPage() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [selectedStatus])
+
+  useEffect(() => {
+    fetchReviews()
+  }, [fetchReviews])
 
   const handleModerate = async (reviewId: string, action: string) => {
     const reason = prompt(`Grund für ${getActionLabel(action)}:`)

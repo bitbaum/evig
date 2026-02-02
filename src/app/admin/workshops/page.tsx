@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
@@ -44,13 +44,7 @@ export default function AdminWorkshopsPage() {
   const [currentPage, setCurrentPage] = useState(1)
   const [totalPages, setTotalPages] = useState(1)
 
-  useEffect(() => {
-    if (status === 'authenticated') {
-      loadProposals()
-    }
-  }, [status, filters, currentPage])
-
-  const loadProposals = async () => {
+  const loadProposals = useCallback(async () => {
     try {
       setLoading(true)
       const params = new URLSearchParams({
@@ -78,7 +72,13 @@ export default function AdminWorkshopsPage() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [filters.status, filters.category, currentPage])
+
+  useEffect(() => {
+    if (status === 'authenticated') {
+      loadProposals()
+    }
+  }, [status, loadProposals])
 
   const handleApproval = async (proposalId: string, action: 'approve' | 'reject') => {
     const reason = action === 'reject' ?
