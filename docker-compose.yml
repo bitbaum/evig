@@ -83,6 +83,38 @@ services:
       timeout: 10s
       retries: 3
 
+  # Medusa E-commerce Backend
+  medusa:
+    container_name: revampit_medusa
+    build:
+      context: ./medusa-backend
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    environment:
+      NODE_ENV: development
+      MEDUSA_ADMIN_ONBOARDING_TYPE: default
+      STORE_CORS: http://localhost:3000,http://localhost:3001,https://revampit.vercel.app
+      ADMIN_CORS: http://localhost:9000,http://localhost:7001
+      AUTH_CORS: http://localhost:9000,http://localhost:3000
+      REDIS_URL: redis://medusa_redis:6379
+      JWT_SECRET: ${MEDUSA_JWT_SECRET:-supersecret_change_in_production}
+      COOKIE_SECRET: ${MEDUSA_COOKIE_SECRET:-supersecret_change_in_production}
+      DATABASE_URL: postgresql://medusa:medusa_password@medusa_db:5432/medusa_db
+    ports:
+      - "9000:9000"
+    networks:
+      - medusa_network
+    depends_on:
+      medusa_db:
+        condition: service_healthy
+      medusa_redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://127.0.0.1:9000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
   # CMS API Service (disabled by default; requires explicit approval)
   # cms_api:
   #   build:
