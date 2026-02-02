@@ -1,12 +1,12 @@
 # Medusa Production Deployment (FREE)
 
-Deploy Medusa on your own server - 100% free.
+Deploy Medusa for free - no server required.
 
 ## Architecture
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│                    PRODUCTION (FREE)                             │
+│                    PRODUCTION (100% FREE)                        │
 ├─────────────────────────────────────────────────────────────────┤
 │                                                                  │
 │   Vercel (Next.js Frontend) - FREE                               │
@@ -14,15 +14,88 @@ Deploy Medusa on your own server - 100% free.
 │        │                                                         │
 │        │ API Routes proxy to Medusa                              │
 │        ▼                                                         │
-│   Your Server (Medusa + Redis) - FREE                            │
-│   https://medusa.revampit.ch                                     │
+│   Koyeb (Medusa Backend) - FREE                                  │
+│   https://revampit-medusa.koyeb.app                              │
 │        │                                                         │
-│        └──► Neon PostgreSQL - FREE (500MB)                       │
+│        ├──► Neon PostgreSQL - FREE (500MB)                       │
+│        └──► Upstash Redis - FREE (10K cmd/day)                   │
 │                                                                  │
 └─────────────────────────────────────────────────────────────────┘
 ```
 
-## Quick Deploy (Your Server)
+## Option A: Koyeb (FREE - Always On)
+
+### Step 1: Create free accounts
+
+1. **Neon** (PostgreSQL): [neon.tech](https://neon.tech) - create project "revampit-medusa"
+2. **Upstash** (Redis): [upstash.com](https://upstash.com) - create Redis database
+3. **Koyeb**: [koyeb.com](https://koyeb.com) - sign up
+
+### Step 2: Deploy to Koyeb
+
+```bash
+# Install Koyeb CLI
+curl -fsSL https://raw.githubusercontent.com/koyeb/koyeb-cli/master/install.sh | bash
+
+# Login
+koyeb login
+
+# Deploy from GitHub
+koyeb app create revampit-medusa \
+  --git github.com/g-but/revampit \
+  --git-branch main \
+  --git-workdir medusa-backend \
+  --git-dockerfile Dockerfile.prod \
+  --ports 9000:http \
+  --routes /:9000 \
+  --instance-type nano \
+  --regions fra \
+  --env DATABASE_URL="<neon-connection-string>" \
+  --env REDIS_URL="<upstash-connection-string>" \
+  --env JWT_SECRET="$(openssl rand -base64 32)" \
+  --env COOKIE_SECRET="$(openssl rand -base64 32)" \
+  --env STORE_CORS="https://revampit.vercel.app" \
+  --env ADMIN_CORS="https://revampit.vercel.app" \
+  --env AUTH_CORS="https://revampit.vercel.app"
+```
+
+Or deploy via Koyeb dashboard:
+1. Go to [app.koyeb.com](https://app.koyeb.com)
+2. Create App → GitHub → Select `g-but/revampit`
+3. Set work directory: `medusa-backend`
+4. Set Dockerfile: `Dockerfile.prod`
+5. Add environment variables (see above)
+6. Select `nano` instance (free)
+7. Deploy
+
+### Step 3: Run migrations
+
+```bash
+koyeb exec revampit-medusa -- npx medusa migrations run
+koyeb exec revampit-medusa -- npm run seed
+```
+
+### Step 4: Get publishable key
+
+1. Open: `https://revampit-medusa.koyeb.app/app`
+2. Create admin account
+3. Settings → API Keys → Create publishable key
+
+### Step 5: Configure Vercel
+
+```bash
+vercel env add MEDUSA_BACKEND_URL production
+# Enter: https://revampit-medusa.koyeb.app
+
+vercel env add NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY production
+# Enter: pk_...
+
+vercel --prod
+```
+
+---
+
+## Option B: Self-Hosted (Your Server)
 
 ### Step 1: Copy to server
 
