@@ -1,14 +1,22 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { ArrowLeft, Send, Lightbulb, FileText } from 'lucide-react'
-import { logger } from '@/lib/logger'
 
 type SubmissionType = 'idea' | 'draft'
 
+interface Category {
+  id: string
+  slug: string
+  name: string
+  description: string | null
+  color: string | null
+}
+
 export default function SubmitPostPage() {
   const [submissionType, setSubmissionType] = useState<SubmissionType>('idea')
+  const [categories, setCategories] = useState<Category[]>([])
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -20,13 +28,27 @@ export default function SubmitPostPage() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle')
 
+  // Fetch categories from database
+  useEffect(() => {
+    fetch('/api/blog/categories')
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success && data.data) {
+          setCategories(data.data)
+        }
+      })
+      .catch(() => {
+        // Silently fail - categories are optional
+      })
+  }, [])
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsSubmitting(true)
     setSubmitStatus('idle')
 
     try {
-      const response = await fetch('/api/blog/submit', {
+      const response = await fetch('/api/public/blog/submit', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -50,8 +72,7 @@ export default function SubmitPostPage() {
         tags: '',
         content: '',
       })
-    } catch (error) {
-      logger.error('Error submitting', { error })
+    } catch {
       setSubmitStatus('error')
     } finally {
       setIsSubmitting(false)
@@ -197,11 +218,11 @@ export default function SubmitPostPage() {
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
               >
                 <option value="">Kategorie wählen</option>
-                <option value="Nachhaltigkeit">Nachhaltigkeit</option>
-                <option value="Linux & Open Source">Linux & Open Source</option>
-                <option value="Hardware-Wiederbelebung">Hardware-Wiederbelebung</option>
-                <option value="Web Development">Web Development</option>
-                <option value="AI & Technology">AI & Technology</option>
+                {categories.map((cat) => (
+                  <option key={cat.id} value={cat.name}>
+                    {cat.name}
+                  </option>
+                ))}
               </select>
             </div>
 

@@ -30,7 +30,18 @@ export default function ContentPage() {
         </button>
       </div>
 
-      <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <Link
+          href="/admin/content/submissions"
+          className="p-6 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 hover:border-yellow-500 transition-colors relative"
+        >
+          <h3 className="font-semibold text-gray-900 dark:text-white mb-2">Einreichungen</h3>
+          <p className="text-sm text-gray-600 dark:text-gray-400">
+            Benutzer-Einreichungen prüfen und veröffentlichen
+          </p>
+          <span className="absolute top-4 right-4 w-2 h-2 bg-yellow-500 rounded-full animate-pulse" />
+        </Link>
+
         <Link
           href="/admin/content/blog"
           className="p-6 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 hover:border-teal-500 transition-colors"
