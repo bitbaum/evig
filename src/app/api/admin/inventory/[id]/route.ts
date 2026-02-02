@@ -7,11 +7,12 @@
  */
 
 import { NextRequest } from 'next/server'
-import { apiSuccess, apiError, apiNotFound, apiUnauthorized } from '@/lib/api/helpers'
+import { apiSuccess, apiError, apiNotFound, apiUnauthorized, apiForbidden } from '@/lib/api/helpers'
 import { query } from '@/lib/auth/db'
 import { logger } from '@/lib/logger'
 import { TABLE_NAMES } from '@/config/database'
 import { auth } from '@/auth'
+import { canAccessSection } from '@/lib/permissions'
 
 export async function GET(
   request: NextRequest,
@@ -112,5 +113,203 @@ export async function GET(
   } catch (error) {
     logger.error('Failed to fetch inventory product', { error })
     return apiError(error, 'Fehler beim Laden des Produkts')
+  }
+}
+
+/**
+ * DELETE /api/admin/inventory/[id]
+ * Deletes an inventory product and all related records
+ */
+export async function DELETE(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  try {
+    const session = await auth()
+    if (!session?.user?.id) {
+      return apiUnauthorized('Nicht angemeldet')
+    }
+
+    // Check permission
+    const user = {
+      email: session.user.email,
+      is_staff: session.user.isStaff,
+      staff_permissions: session.user.staffPermissions,
+    }
+    if (!canAccessSection(user, 'products')) {
+      return apiForbidden('Keine Berechtigung')
+    }
+
+    const { id: productId } = await params
+
+    // Delete in order: child tables first, then main table
+    // 1. Delete product customer profiles
+    await query(
+      `DELETE FROM ${TABLE_NAMES.PRODUCT_CUSTOMER_PROFILES} WHERE product_id = $1`,
+      [productId]
+    )
+
+    // 2. Delete product images
+    await query(
+      `DELETE FROM ${TABLE_NAMES.PRODUCT_IMAGES} WHERE product_id = $1`,
+      [productId]
+    )
+
+    // 3. Delete marketplace listings
+    await query(
+      `DELETE FROM ${TABLE_NAMES.MARKETPLACE_LISTINGS} WHERE ai_product_id = $1`,
+      [productId]
+    )
+
+    // 4. Delete inventory items
+    await query(
+      `DELETE FROM ${TABLE_NAMES.INVENTORY_ITEMS} WHERE ai_product_id = $1`,
+      [productId]
+    )
+
+    // 5. Delete the main product record
+    const result = await query<{ id: string; item_uuid: string }>(
+      `DELETE FROM ${TABLE_NAMES.AI_EXTRACTED_PRODUCTS} WHERE id = $1 RETURNING id, item_uuid`,
+      [productId]
+    )
+
+    if (result.rowCount === 0) {
+      return apiNotFound('Produkt nicht gefunden')
+    }
+
+    logger.info('Inventory product deleted', {
+      productId,
+      itemUuid: result.rows[0].item_uuid,
+      deletedBy: session.user.id,
+    })
+
+    return apiSuccess({ success: true, deleted: result.rows[0] })
+  } catch (error) {
+    logger.error('Failed to delete inventory product', { error })
+    return apiError(error, 'Fehler beim Löschen des Produkts')
+  }
+}
+
+/**
+ * PUT /api/admin/inventory/[id]
+ * Updates an inventory product
+ */
+export async function PUT(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  try {
+    const session = await auth()
+    if (!session?.user?.id) {
+      return apiUnauthorized('Nicht angemeldet')
+    }
+
+    // Check permission
+    const user = {
+      email: session.user.email,
+      is_staff: session.user.isStaff,
+      staff_permissions: session.user.staffPermissions,
+    }
+    if (!canAccessSection(user, 'products')) {
+      return apiForbidden('Keine Berechtigung')
+    }
+
+    const { id: productId } = await params
+    const body = await request.json() as Record<string, unknown>
+
+    // Build dynamic update query based on provided fields
+    const allowedFields = [
+      'product_name',
+      'brand',
+      'short_description',
+      'specifications',
+      'estimated_price_chf',
+      'condition',
+      'category',
+      'subcategory',
+      'dimensions',
+      'weight_grams',
+      'status',
+    ]
+
+    const updates: string[] = []
+    const values: unknown[] = []
+    let paramIndex = 1
+
+    for (const field of allowedFields) {
+      if (body[field] !== undefined) {
+        updates.push(`${field} = $${paramIndex}`)
+        values.push(body[field])
+        paramIndex++
+      }
+    }
+
+    if (updates.length === 0) {
+      return apiError(new Error('No valid fields to update'), 'Keine gültigen Felder zum Aktualisieren', 400)
+    }
+
+    // Add updated_at
+    updates.push(`updated_at = NOW()`)
+
+    // Add product ID as last parameter
+    values.push(productId)
+
+    const result = await query(
+      `UPDATE ${TABLE_NAMES.AI_EXTRACTED_PRODUCTS}
+       SET ${updates.join(', ')}
+       WHERE id = $${paramIndex}
+       RETURNING *`,
+      values
+    )
+
+    if (result.rowCount === 0) {
+      return apiNotFound('Produkt nicht gefunden')
+    }
+
+    // Update inventory item if location/quantity fields are provided
+    if (body.location !== undefined || body.box_id !== undefined || body.quantity_available !== undefined) {
+      const inventoryUpdates: string[] = []
+      const inventoryValues: unknown[] = []
+      let invParamIndex = 1
+
+      if (body.location !== undefined) {
+        inventoryUpdates.push(`location = $${invParamIndex}`)
+        inventoryValues.push(body.location)
+        invParamIndex++
+      }
+      if (body.box_id !== undefined) {
+        inventoryUpdates.push(`box_id = $${invParamIndex}`)
+        inventoryValues.push(body.box_id)
+        invParamIndex++
+      }
+      if (body.quantity_available !== undefined) {
+        inventoryUpdates.push(`quantity_available = $${invParamIndex}`)
+        inventoryValues.push(body.quantity_available)
+        invParamIndex++
+      }
+
+      if (inventoryUpdates.length > 0) {
+        inventoryUpdates.push(`updated_at = NOW()`)
+        inventoryValues.push(productId)
+
+        await query(
+          `UPDATE ${TABLE_NAMES.INVENTORY_ITEMS}
+           SET ${inventoryUpdates.join(', ')}
+           WHERE ai_product_id = $${invParamIndex}`,
+          inventoryValues
+        )
+      }
+    }
+
+    logger.info('Inventory product updated', {
+      productId,
+      updatedFields: Object.keys(body).filter(k => allowedFields.includes(k)),
+      updatedBy: session.user.id,
+    })
+
+    return apiSuccess({ success: true, product: result.rows[0] })
+  } catch (error) {
+    logger.error('Failed to update inventory product', { error })
+    return apiError(error, 'Fehler beim Aktualisieren des Produkts')
   }
 }

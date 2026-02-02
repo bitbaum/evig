@@ -28,7 +28,7 @@ interface RouteParams {
 }
 
 // Helper to check admin access
-async function checkAdminAccess(session: Awaited<ReturnType<typeof auth>>) {
+async function checkAdminAccess(session: { user?: { email?: string | null; isStaff?: boolean; staffPermissions?: string[] } } | null) {
   if (!session?.user) {
     return { allowed: false, error: 'Anmeldung erforderlich' }
   }
