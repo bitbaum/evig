@@ -18,34 +18,21 @@ import {
 import WorkshopRegistrationForm from '@/components/workshops/WorkshopRegistrationForm'
 import WorkshopReviews from '@/components/workshops/WorkshopReviews'
 import WorkshopMaterials from '@/components/workshops/WorkshopMaterials'
+import type { Workshop, WorkshopInstanceWithCount } from '@/components/workshops/types'
 
-interface Workshop {
-  id: string
-  slug: string
-  title: string
-  description: string
-  category: string
-  duration: string
-  level: string
-  max_participants: number
-  price_cents: number
-  is_active: boolean
-  outcomes?: string[]
-}
-
-interface WorkshopInstance {
-  id: string
-  start_date: string
-  location: string
-  status: string
-  current_participants: number
-}
-
+// DB row type - COUNT returns string, needs conversion
 interface WorkshopInstanceRow {
   id: string
+  workshop_id: string
   start_date: string
-  location: string
+  end_date: string | null
+  location: string | null
+  instructor: string | null
+  max_participants: number | null
+  notes: string | null
   status: string
+  created_at: string
+  updated_at: string
   current_participants: string  // COUNT returns string
 }
 
@@ -62,7 +49,7 @@ async function getWorkshop(slug: string): Promise<Workshop | null> {
   }
 }
 
-async function getWorkshopInstances(workshopId: string): Promise<WorkshopInstance[]> {
+async function getWorkshopInstances(workshopId: string): Promise<WorkshopInstanceWithCount[]> {
   try {
     const result = await query(`
       SELECT
@@ -75,12 +62,19 @@ async function getWorkshopInstances(workshopId: string): Promise<WorkshopInstanc
       ORDER BY wi.start_date ASC
     `, [workshopId])
 
-    return (result.rows as WorkshopInstanceRow[]).map((instance): WorkshopInstance => ({
-      id: instance.id,
-      start_date: instance.start_date,
-      location: instance.location,
-      status: instance.status,
-      current_participants: parseInt(instance.current_participants) || 0
+    return (result.rows as WorkshopInstanceRow[]).map((row): WorkshopInstanceWithCount => ({
+      id: row.id,
+      workshop_id: row.workshop_id,
+      start_date: row.start_date,
+      end_date: row.end_date,
+      location: row.location,
+      instructor: row.instructor,
+      max_participants: row.max_participants,
+      notes: row.notes,
+      status: row.status as 'scheduled' | 'cancelled' | 'completed',
+      created_at: row.created_at,
+      updated_at: row.updated_at,
+      current_participants: parseInt(row.current_participants) || 0
     }))
   } catch (error) {
     logger.error('Error fetching workshop instances', { error })
@@ -99,10 +93,10 @@ export async function generateMetadata({ params }: { params: { slug: string } })
 
   return {
     title: `${workshop.title} | RevampIT Workshops`,
-    description: workshop.description,
+    description: workshop.description ?? undefined,
     openGraph: {
       title: `${workshop.title} | RevampIT Workshops`,
-      description: workshop.description,
+      description: workshop.description ?? undefined,
       type: 'website'
     }
   }
@@ -119,7 +113,8 @@ export default async function WorkshopDetailPage({ params }: { params: { slug: s
   const upcomingInstances = instances.filter(inst => new Date(inst.start_date) > new Date())
   const nextInstance = upcomingInstances[0]
 
-  const getLevelColor = (level: string) => {
+  const getLevelColor = (level: string | null) => {
+    if (!level) return 'bg-gray-100 text-gray-800'
     switch (level.toLowerCase()) {
       case 'anfänger': return 'bg-green-100 text-green-800'
       case 'fortgeschrittene': return 'bg-blue-100 text-blue-800'
@@ -128,7 +123,8 @@ export default async function WorkshopDetailPage({ params }: { params: { slug: s
     }
   }
 
-  const getLevelDescription = (level: string) => {
+  const getLevelDescription = (level: string | null) => {
+    if (!level) return ''
     switch (level.toLowerCase()) {
       case 'anfänger': return 'Perfekt für Einsteiger ohne Vorkenntnisse'
       case 'fortgeschrittene': return 'Für Teilnehmer mit grundlegenden Kenntnissen'

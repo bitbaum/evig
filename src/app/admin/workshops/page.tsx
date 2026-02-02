@@ -22,30 +22,14 @@ import {
   ArrowLeft
 } from 'lucide-react'
 import { ERROR_MESSAGES } from '@/config/error-messages'
-import { PROPOSAL_STATUS, PROPOSAL_STATUS_LABELS, type ProposalStatus } from '@/config/workshops'
-
-interface WorkshopProposal {
-  id: string
-  title: string
-  category: string
-  level: string
-  duration_minutes: number
-  max_participants: number
-  price_cents: number
-  location_type: string
-  selected_location_name?: string
-  proposed_location?: string
-  status: string
-  created_at: string
-  proposer_name: string
-  proposer_email: string
-}
+import { PROPOSAL_STATUS, PROPOSAL_STATUS_LABELS, WORKSHOP_CATEGORIES, type ProposalStatus } from '@/config/workshops'
+import type { WorkshopProposalWithProposer } from '@/components/workshops/types'
 
 export default function AdminWorkshopsPage() {
   const { data: session, status } = useSession()
   const router = useRouter()
 
-  const [proposals, setProposals] = useState<WorkshopProposal[]>([])
+  const [proposals, setProposals] = useState<WorkshopProposalWithProposer[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string>('')
 
@@ -148,7 +132,7 @@ export default function AdminWorkshopsPage() {
     return PROPOSAL_STATUS_LABELS[status as ProposalStatus] || status
   }
 
-  const getLocationText = (proposal: WorkshopProposal) => {
+  const getLocationText = (proposal: WorkshopProposalWithProposer) => {
     switch (proposal.location_type) {
       case 'venue':
         return proposal.selected_location_name || proposal.proposed_location || 'Veranstaltungsort'
@@ -244,14 +228,9 @@ export default function AdminWorkshopsPage() {
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
               >
                 <option value="all">Alle Kategorien</option>
-                <option value="Linux & Open Source">Linux & Open Source</option>
-                <option value="Hardware-Reparatur">Hardware-Reparatur</option>
-                <option value="Programmierung">Programmierung</option>
-                <option value="Webentwicklung">Webentwicklung</option>
-                <option value="Datenschutz">Datenschutz</option>
-                <option value="Nachhaltigkeit">Nachhaltigkeit</option>
-                <option value="Digital Skills">Digital Skills</option>
-                <option value="Sonstiges">Sonstiges</option>
+                {WORKSHOP_CATEGORIES.map(cat => (
+                  <option key={cat.id} value={cat.name}>{cat.name}</option>
+                ))}
               </select>
             </div>
           </div>

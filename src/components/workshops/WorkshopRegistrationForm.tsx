@@ -30,10 +30,10 @@ import {
   WorkshopInstanceCard,
   RegistrationSuccessCard,
   type Workshop,
-  type WorkshopInstance,
+  type WorkshopInstanceWithCount,
   type RegistrationData,
   type PaymentData,
-  type RegistrationStatus,
+  type RegistrationUIStatus,
 } from './index'
 
 // Initialize Stripe
@@ -41,13 +41,13 @@ const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY 
 
 interface WorkshopRegistrationFormProps {
   workshop: Workshop
-  instance: WorkshopInstance
+  instance: WorkshopInstanceWithCount
 }
 
 export default function WorkshopRegistrationForm({ workshop, instance }: WorkshopRegistrationFormProps) {
   const { data: session, status } = useSession()
   const router = useRouter()
-  const [registrationStatus, setRegistrationStatus] = useState<RegistrationStatus>('checking')
+  const [registrationStatus, setRegistrationUIStatus] = useState<RegistrationUIStatus>('checking')
   // Registration data stored for potential future use (e.g., showing details in success state)
   const [_registrationData, setRegistrationData] = useState<RegistrationData | null>(null)
   const [paymentData, setPaymentData] = useState<PaymentData | null>(null)
@@ -58,28 +58,28 @@ export default function WorkshopRegistrationForm({ workshop, instance }: Worksho
   const spotsLeft = workshop.max_participants - instance.current_participants
 
   useEffect(() => {
-    const checkRegistrationStatus = async () => {
+    const checkRegistrationUIStatus = async () => {
       try {
         const response = await fetch(`/api/workshops/registration/${instance.id}`)
         const data = await response.json()
 
         if (data.registered) {
-          setRegistrationStatus('registered')
+          setRegistrationUIStatus('registered')
           setRegistrationData(data.registration)
         } else {
-          setRegistrationStatus('not-registered')
+          setRegistrationUIStatus('not-registered')
         }
       } catch (err) {
         logger.error('Error checking registration', { error: err })
-        setRegistrationStatus('error')
+        setRegistrationUIStatus('error')
         setError('Fehler beim Laden des Anmeldestatus')
       }
     }
 
     if (session?.user) {
-      checkRegistrationStatus()
+      checkRegistrationUIStatus()
     } else if (status !== 'loading') {
-      const frame = requestAnimationFrame(() => setRegistrationStatus('not-registered'))
+      const frame = requestAnimationFrame(() => setRegistrationUIStatus('not-registered'))
       return () => cancelAnimationFrame(frame)
     }
   }, [session, status, instance.id])
@@ -90,7 +90,7 @@ export default function WorkshopRegistrationForm({ workshop, instance }: Worksho
       return
     }
 
-    setRegistrationStatus('registering')
+    setRegistrationUIStatus('registering')
     setError('')
 
     try {
@@ -106,7 +106,7 @@ export default function WorkshopRegistrationForm({ workshop, instance }: Worksho
       const data = await response.json()
 
       if (data.success) {
-        setRegistrationStatus('registered')
+        setRegistrationUIStatus('registered')
         setRegistrationData({
           id: data.registrationId,
           status: 'confirmed',
@@ -123,11 +123,11 @@ export default function WorkshopRegistrationForm({ workshop, instance }: Worksho
           router.push('/dashboard/workshops')
         }, 2000)
       } else {
-        setRegistrationStatus('error')
+        setRegistrationUIStatus('error')
         setError(data.error || 'Anmeldung fehlgeschlagen')
       }
     } catch {
-      setRegistrationStatus('error')
+      setRegistrationUIStatus('error')
       setError('Netzwerkfehler. Bitte versuchen Sie es erneut.')
     }
   }
@@ -138,7 +138,7 @@ export default function WorkshopRegistrationForm({ workshop, instance }: Worksho
       return
     }
 
-    setRegistrationStatus('processing')
+    setRegistrationUIStatus('processing')
     setError('')
 
     try {
@@ -160,19 +160,19 @@ export default function WorkshopRegistrationForm({ workshop, instance }: Worksho
           amount: data.amount,
           invoiceNumber: data.invoiceNumber
         })
-        setRegistrationStatus('payment')
+        setRegistrationUIStatus('payment')
       } else {
-        setRegistrationStatus('error')
+        setRegistrationUIStatus('error')
         setError(data.message || data.error || 'Fehler beim Erstellen der Registrierung')
       }
     } catch {
-      setRegistrationStatus('error')
+      setRegistrationUIStatus('error')
       setError('Netzwerkfehler. Bitte versuchen Sie es erneut.')
     }
   }
 
   const handlePaymentSuccess = () => {
-    setRegistrationStatus('success')
+    setRegistrationUIStatus('success')
     setRegistrationData({
       id: paymentData?.registrationId || '',
       status: 'confirmed',
@@ -192,7 +192,7 @@ export default function WorkshopRegistrationForm({ workshop, instance }: Worksho
 
   const handlePaymentError = (errorMessage: string) => {
     setError(errorMessage)
-    setRegistrationStatus('error')
+    setRegistrationUIStatus('error')
   }
 
   // Loading state
@@ -262,7 +262,7 @@ export default function WorkshopRegistrationForm({ workshop, instance }: Worksho
         </div>
 
         <button
-          onClick={() => setRegistrationStatus('not-registered')}
+          onClick={() => setRegistrationUIStatus('not-registered')}
           className="w-full px-4 py-3 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors"
         >
           Erneut versuchen
@@ -312,7 +312,7 @@ export default function WorkshopRegistrationForm({ workshop, instance }: Worksho
         </Elements>
 
         <button
-          onClick={() => setRegistrationStatus('not-registered')}
+          onClick={() => setRegistrationUIStatus('not-registered')}
           className="w-full mt-3 px-4 py-2 text-gray-600 text-sm hover:text-gray-800 transition-colors"
         >
           Abbrechen

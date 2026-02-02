@@ -25,35 +25,7 @@ import {
   Save
 } from 'lucide-react'
 import { logger } from '@/lib/logger'
-
-interface Workshop {
-  id: string
-  title: string
-  slug: string
-  category: string
-  level: string
-  max_participants: number
-  price_cents: number
-  is_active: boolean
-}
-
-interface WorkshopInstance {
-  id: string
-  workshop_id: string
-  workshop_title: string
-  workshop_slug: string
-  start_date: string
-  end_date: string | null
-  location: string | null
-  instructor: string | null
-  max_participants: number | null
-  notes: string | null
-  status: string
-  current_participants: number
-  confirmed_count: number
-  pending_count: number
-  created_at: string
-}
+import type { Workshop, WorkshopInstanceWithDetails } from '@/components/workshops/types'
 
 interface InstanceFormData {
   workshopId: string
@@ -81,7 +53,7 @@ export default function AdminWorkshopInstancesPage() {
   const { data: session, status } = useSession()
   const router = useRouter()
 
-  const [instances, setInstances] = useState<WorkshopInstance[]>([])
+  const [instances, setInstances] = useState<WorkshopInstanceWithDetails[]>([])
   const [workshops, setWorkshops] = useState<Workshop[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
@@ -93,7 +65,7 @@ export default function AdminWorkshopInstancesPage() {
   })
 
   const [showCreateModal, setShowCreateModal] = useState(false)
-  const [editingInstance, setEditingInstance] = useState<WorkshopInstance | null>(null)
+  const [editingInstance, setEditingInstance] = useState<WorkshopInstanceWithDetails | null>(null)
   const [formData, setFormData] = useState<InstanceFormData>(initialFormData)
   const [submitting, setSubmitting] = useState(false)
 
@@ -200,7 +172,7 @@ export default function AdminWorkshopInstancesPage() {
     }
   }
 
-  const openEditModal = (instance: WorkshopInstance) => {
+  const openEditModal = (instance: WorkshopInstanceWithDetails) => {
     setEditingInstance(instance)
     setFormData({
       workshopId: instance.workshop_id,

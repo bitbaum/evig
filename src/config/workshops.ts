@@ -195,7 +195,8 @@ export function getCategoryById(id: string): WorkshopCategory | undefined {
 /**
  * Get category icon by name (for backwards compatibility with existing data)
  */
-export function getCategoryIcon(categoryName: string): LucideIcon {
+export function getCategoryIcon(categoryName: string | null | undefined): LucideIcon {
+  if (!categoryName) return BookOpen;
   const normalizedName = categoryName.toLowerCase();
 
   // Check by ID first
@@ -225,7 +226,8 @@ export function getCategoryIcon(categoryName: string): LucideIcon {
 /**
  * Get level badge class by level name
  */
-export function getLevelBadgeClass(levelName: string): string {
+export function getLevelBadgeClass(levelName: string | null | undefined): string {
+  if (!levelName) return "bg-gray-100 text-gray-800";
   const normalizedName = levelName.toLowerCase();
   const level = WORKSHOP_LEVELS.find(
     (l) => l.id === normalizedName || l.name.toLowerCase() === normalizedName

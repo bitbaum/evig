@@ -15,34 +15,7 @@ import {
   BookOpen,
 } from 'lucide-react'
 import { getCategoryIcon, getLevelBadgeClass } from '@/config/workshops'
-
-interface Workshop {
-  id: string
-  slug: string
-  title: string
-  description: string
-  category: string
-  duration: string
-  level: string
-  max_participants: number
-  price_cents: number
-  is_active: boolean
-  created_at: string
-}
-
-interface WorkshopInstance {
-  id: string
-  workshop_id: string
-  start_date: string
-  location: string
-  status: string
-  current_participants: number
-}
-
-interface WorkshopWithInstances extends Workshop {
-  instances: WorkshopInstance[]
-  user_registered?: boolean
-}
+import type { Workshop, WorkshopInstanceWithCount, WorkshopWithInstances } from '@/components/workshops/types'
 
 export default function WorkshopsPage() {
   const { data: session } = useSession()
@@ -109,10 +82,10 @@ export default function WorkshopsPage() {
 
   const filteredWorkshops = workshops.filter(workshop => {
     if (filter === 'all') return true
-    return workshop.category.toLowerCase().includes(filter.toLowerCase())
+    return (workshop.category || '').toLowerCase().includes(filter.toLowerCase())
   })
 
-  const categories = ['all', ...Array.from(new Set(workshops.map(w => w.category)))]
+  const categories = ['all', ...Array.from(new Set(workshops.map(w => w.category).filter((c): c is string => c !== null)))]
 
   if (loading) {
     return (

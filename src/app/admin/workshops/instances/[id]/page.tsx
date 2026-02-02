@@ -21,22 +21,9 @@ import {
   MessageSquare
 } from 'lucide-react'
 import { logger } from '@/lib/logger'
+import type { WorkshopInstanceWithDetails } from '@/components/workshops/types'
 
-interface WorkshopInstance {
-  id: string
-  workshop_id: string
-  workshop_title: string
-  workshop_slug: string
-  start_date: string
-  end_date: string | null
-  location: string | null
-  instructor: string | null
-  max_participants: number | null
-  notes: string | null
-  status: string
-  current_participants: number
-}
-
+// Admin-specific registration view with user details
 interface Registration {
   id: string
   user_id: string
@@ -60,7 +47,7 @@ export default function AdminWorkshopInstanceDetailPage({
   const { data: session, status } = useSession()
   const router = useRouter()
 
-  const [instance, setInstance] = useState<WorkshopInstance | null>(null)
+  const [instance, setInstance] = useState<WorkshopInstanceWithDetails | null>(null)
   const [registrations, setRegistrations] = useState<Registration[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')

@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { logger } from '@/lib/logger'
+import { WORKSHOP_CATEGORIES, WORKSHOP_LEVELS } from '@/config/workshops'
 import {
   ArrowLeft,
   Save,
@@ -73,22 +74,14 @@ export default function NewWorkshopPage() {
     status: 'draft'
   })
 
-  const categories = [
-    'Computer-Reparatur',
-    'Linux & Open Source',
-    'Datenrettung',
-    'Hardware-Recycling',
-    'Netzwerk-Technik',
-    'Programmierung',
-    'Webentwicklung',
-    'Sonstiges'
-  ]
-
-  const levels = [
-    { value: 'beginner', label: 'Anfänger', description: 'Keine Vorkenntnisse erforderlich' },
-    { value: 'intermediate', label: 'Fortgeschritten', description: 'Grundkenntnisse empfohlen' },
-    { value: 'advanced', label: 'Experte', description: 'Umfassende Vorkenntnisse erforderlich' }
-  ]
+  // Categories and levels imported from config (SSOT)
+  const levels = WORKSHOP_LEVELS.filter(l => l.id !== 'all').map(l => ({
+    value: l.id,
+    label: l.name,
+    description: l.id === 'beginner' ? 'Keine Vorkenntnisse erforderlich' :
+                 l.id === 'intermediate' ? 'Grundkenntnisse empfohlen' :
+                 'Umfassende Vorkenntnisse erforderlich'
+  }))
 
   const handleInputChange = (field: keyof WorkshopFormData, value: WorkshopFormData[keyof WorkshopFormData]) => {
     setFormData(prev => ({ ...prev, [field]: value }))
@@ -228,8 +221,8 @@ export default function NewWorkshopPage() {
                 required
               >
                 <option value="">Kategorie wählen</option>
-                {categories.map(category => (
-                  <option key={category} value={category}>{category}</option>
+                {WORKSHOP_CATEGORIES.map(cat => (
+                  <option key={cat.id} value={cat.name}>{cat.name}</option>
                 ))}
               </select>
             </div>
