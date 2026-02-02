@@ -21,7 +21,7 @@ const MEDIA_LOGOS = [
     name: 'SRF',
     fullName: 'Schweizer Radio und Fernsehen',
     color: '#C8102E', // SRF red
-    url: 'https://www.srf.ch/news/zuerich-schaffhausen/der-computer-recycler'
+    url: 'https://www.srf.ch/news/zuerich-schaffhausen-der-computer-recycler'
   },
   {
     id: 'beobachter',
@@ -42,7 +42,7 @@ const MEDIA_LOGOS = [
     name: 'öbu',
     fullName: 'Verband für nachhaltiges Wirtschaften',
     color: '#00A651', // öbu green
-    url: 'https://www.oebu.ch/de/news/aktuelle-news/revamp-it-nachhaltiges-it-upcycling-fuer-oebu-mitglieder-8054.html'
+    url: 'https://www.oebu.ch/news/revamp-it-nachhaltiges-it-upcycling-fuer-oebu-mitglieder'
   },
   {
     id: 'recycling-magazin',

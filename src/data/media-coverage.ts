@@ -38,7 +38,7 @@ export const MEDIA_COVERAGE: MediaMention[] = [
     source: 'SRF (Schweizer Radio und Fernsehen)',
     sourceShort: 'SRF',
     title: 'Der Computer-Recycler',
-    url: 'https://www.srf.ch/news/zuerich-schaffhausen/der-computer-recycler',
+    url: 'https://www.srf.ch/news/zuerich-schaffhausen-der-computer-recycler',
     date: '2014-09',
     type: 'feature',
     tier: 1,
@@ -50,7 +50,7 @@ export const MEDIA_COVERAGE: MediaMention[] = [
     source: 'SRF Radio SRF 3',
     sourceShort: 'SRF',
     title: 'Revamp-It: Computer und Zubehör aufgefrischt',
-    url: 'https://www.srf.ch/wissen/digital/revamp-it-computer-und-zubehoer-aufgefrischt',
+    url: 'https://www.srf.ch/radio-srf-3/digital/revamp-it-computer-und-zubehoer-aufgefrischt',
     date: '2013-03',
     type: 'article',
     tier: 1,
@@ -96,17 +96,7 @@ export const MEDIA_COVERAGE: MediaMention[] = [
     description: 'Feature auf der offiziellen Zürcher Stadtplattform über unser Tauschsystem.',
     quote: 'Rentenalter 10 für Laptops!'
   },
-  {
-    id: 'zuerich-nachhaltig',
-    source: 'Zürich Nachhaltig',
-    sourceShort: 'Zürich Nachhaltig',
-    title: 'RevampIT Organisationsprofil',
-    url: 'https://www.zuerich-nachhaltig.ch/de/organisations/revamp-it',
-    date: '2024',
-    type: 'listing',
-    tier: 2,
-    description: 'Offizieller Eintrag auf der städtischen Nachhaltigkeitsplattform.'
-  },
+  // Note: Zürich Nachhaltig listing removed - URL no longer accessible
 
   // ============================================
   // TIER 3 - Major Organizations & Industry
@@ -116,7 +106,7 @@ export const MEDIA_COVERAGE: MediaMention[] = [
     source: 'öbu - Der Verband für nachhaltiges Wirtschaften',
     sourceShort: 'öbu',
     title: 'Revamp-it: Nachhaltiges IT-Upcycling für öbu-Mitglieder',
-    url: 'https://www.oebu.ch/de/news/aktuelle-news/revamp-it-nachhaltiges-it-upcycling-fuer-oebu-mitglieder-8054.html',
+    url: 'https://www.oebu.ch/news/revamp-it-nachhaltiges-it-upcycling-fuer-oebu-mitglieder',
     date: '2024',
     type: 'partnership',
     tier: 3,
