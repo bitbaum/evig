@@ -1,207 +1,157 @@
-# Medusa Production Deployment
+# Medusa Production Deployment (FREE)
 
-This guide covers deploying the Medusa backend for production use with the RevampIT Next.js frontend on Vercel.
+Deploy Medusa on your own server - 100% free.
 
 ## Architecture
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│                         PRODUCTION                               │
+│                    PRODUCTION (FREE)                             │
 ├─────────────────────────────────────────────────────────────────┤
 │                                                                  │
-│   Vercel (Next.js Frontend)                                      │
+│   Vercel (Next.js Frontend) - FREE                               │
 │   https://revampit.vercel.app                                    │
 │        │                                                         │
 │        │ API Routes proxy to Medusa                              │
 │        ▼                                                         │
-│   Railway/Render (Medusa Backend)                                │
-│   https://revampit-medusa.railway.app                           │
+│   Your Server (Medusa + Redis) - FREE                            │
+│   https://medusa.revampit.ch                                     │
 │        │                                                         │
-│        ├──► Neon PostgreSQL (Medusa DB)                         │
-│        └──► Upstash Redis (Cache/Events)                        │
+│        └──► Neon PostgreSQL - FREE (500MB)                       │
 │                                                                  │
 └─────────────────────────────────────────────────────────────────┘
 ```
 
-## Deployment Options
+## Quick Deploy (Your Server)
 
-### Option A: Railway (Recommended)
-
-Railway provides a managed platform with easy PostgreSQL and Redis integration.
-
-#### Step 1: Create Railway Project
-
-1. Go to [railway.app](https://railway.app) and sign up
-2. Create a new project
-3. Add services:
-   - **PostgreSQL** (or use Neon connection string)
-   - **Redis** (or use Upstash)
-   - **GitHub Repo** (point to `medusa-backend` folder)
-
-#### Step 2: Configure Environment Variables
-
-In Railway dashboard, set these variables:
+### Step 1: Copy to server
 
 ```bash
-# Database (Railway PostgreSQL or Neon)
-DATABASE_URL=postgresql://...
+# SSH into your server
+ssh user@your-server
 
-# Redis (Railway Redis or Upstash)
-REDIS_URL=redis://...
-
-# Security (generate with: openssl rand -base64 32)
-JWT_SECRET=<generated-secret>
-COOKIE_SECRET=<generated-secret>
-
-# CORS
-STORE_CORS=https://revampit.vercel.app
-ADMIN_CORS=https://revampit.vercel.app
-AUTH_CORS=https://revampit.vercel.app
-
-# Admin
-MEDUSA_ADMIN_ONBOARDING_TYPE=default
+# Clone repo
+git clone https://github.com/g-but/revampit.git
+cd revampit/medusa-backend
 ```
 
-#### Step 3: Deploy
+### Step 2: Create Neon Database (FREE)
 
-Railway will auto-deploy from the `medusa-backend` directory using `railway.json`.
+1. Go to [neon.tech](https://neon.tech)
+2. Create project: "revampit-medusa"
+3. Copy the connection string
 
-### Option B: Render
-
-1. Go to [render.com](https://render.com)
-2. Create a new "Web Service"
-3. Connect your GitHub repo
-4. Set root directory to `medusa-backend`
-5. Build command: `npm install && npm run build`
-6. Start command: `npm run start`
-7. Add environment variables (same as Railway)
-
-### Option C: Self-Hosted (DigitalOcean/Hetzner)
-
-Use `Dockerfile.prod` for container deployment:
+### Step 3: Configure environment
 
 ```bash
-# Build
-docker build -f Dockerfile.prod -t medusa-backend .
+# Create .env
+cat > .env << 'EOF'
+# Neon PostgreSQL (paste your connection string)
+DATABASE_URL=postgresql://user:pass@ep-xxx.region.aws.neon.tech/neondb?sslmode=require
 
-# Run
-docker run -d \
-  -p 9000:9000 \
-  -e DATABASE_URL="..." \
-  -e REDIS_URL="..." \
-  -e JWT_SECRET="..." \
-  -e COOKIE_SECRET="..." \
-  -e STORE_CORS="https://revampit.vercel.app" \
-  -e ADMIN_CORS="https://revampit.vercel.app" \
-  -e AUTH_CORS="https://revampit.vercel.app" \
-  medusa-backend
+# Generate with: openssl rand -base64 32
+JWT_SECRET=your-jwt-secret-here
+COOKIE_SECRET=your-cookie-secret-here
+EOF
+
+# Generate actual secrets
+sed -i "s|JWT_SECRET=.*|JWT_SECRET=$(openssl rand -base64 32)|" .env
+sed -i "s|COOKIE_SECRET=.*|COOKIE_SECRET=$(openssl rand -base64 32)|" .env
 ```
 
-## Configure Vercel Frontend
-
-Once your Medusa backend is deployed, update Vercel environment variables:
-
-### Using Vercel CLI
+### Step 4: Deploy with Docker
 
 ```bash
-# Set Medusa backend URL
+# Start Medusa + Redis
+docker compose -f docker-compose.prod.yml up -d --build
+
+# Check health
+curl http://localhost:9000/health
+```
+
+### Step 5: Run migrations & seed
+
+```bash
+docker compose -f docker-compose.prod.yml exec medusa npx medusa migrations run
+docker compose -f docker-compose.prod.yml exec medusa npm run seed
+```
+
+### Step 6: Set up HTTPS with Caddy
+
+```bash
+# Install Caddy
+sudo apt install caddy
+
+# Configure
+sudo tee /etc/caddy/Caddyfile << 'EOF'
+medusa.revampit.ch {
+    reverse_proxy localhost:9000
+}
+EOF
+
+sudo systemctl restart caddy
+```
+
+### Step 7: Get Publishable Key
+
+1. Open: `https://medusa.revampit.ch/app`
+2. Create admin account
+3. Go to Settings → API Keys
+4. Create publishable key (starts with `pk_`)
+
+### Step 8: Configure Vercel
+
+```bash
+# Set environment variables
 vercel env add MEDUSA_BACKEND_URL production
-# Enter: https://your-medusa-backend.railway.app
+# Enter: https://medusa.revampit.ch
 
-# Set publishable key (get from Medusa admin)
 vercel env add NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY production
-# Enter: pk_...
+# Enter: pk_your_key_here
 
-# Trigger redeployment
+# Redeploy
 vercel --prod
 ```
 
-### Using Vercel Dashboard
-
-1. Go to [vercel.com/dashboard](https://vercel.com/dashboard)
-2. Select the RevampIT project
-3. Go to Settings → Environment Variables
-4. Add:
-   - `MEDUSA_BACKEND_URL` = `https://your-medusa-backend.railway.app`
-   - `NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY` = `pk_...`
-5. Redeploy
-
-## Get Publishable Key from Medusa
-
-1. Access Medusa Admin: `https://your-medusa-backend.railway.app/app`
-2. Log in (create admin user during first seed)
-3. Go to Settings → API Keys
-4. Create a new publishable key
-5. Copy the key (starts with `pk_`)
-
-## Database Migration
-
-After first deploy, run migrations:
+## Verify
 
 ```bash
-# SSH into Railway/Render or use Railway CLI
-railway run npx medusa migrations run
-railway run npm run seed
+# Check Medusa health
+curl https://medusa.revampit.ch/health
+
+# Check frontend
+open https://revampit.vercel.app/shop
 ```
 
-## Verify Deployment
+## Environment Variables
 
-### Health Check
+### Your Server (.env)
 
-```bash
-curl https://your-medusa-backend.railway.app/health
-# Should return: { "status": "ok" }
-```
+| Variable | Value |
+|----------|-------|
+| `DATABASE_URL` | Neon connection string |
+| `JWT_SECRET` | `openssl rand -base64 32` |
+| `COOKIE_SECRET` | `openssl rand -base64 32` |
 
-### Test Store API
+CORS is pre-configured in `docker-compose.prod.yml` for `revampit.vercel.app`.
 
-```bash
-curl https://your-medusa-backend.railway.app/store/products
-# Should return products list
-```
+### Vercel
 
-### Test Frontend
-
-1. Visit https://revampit.vercel.app/shop
-2. Products should load from Medusa
-3. Cart functionality should work
+| Variable | Value |
+|----------|-------|
+| `MEDUSA_BACKEND_URL` | `https://medusa.revampit.ch` |
+| `NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY` | `pk_...` from Medusa Admin |
 
 ## Troubleshooting
 
-### "Cannot connect to Medusa"
+**Products not showing?**
+- Check publishable key is set in Vercel
+- Verify region exists in Medusa Admin
 
-- Check `MEDUSA_BACKEND_URL` is correct in Vercel
-- Verify Medusa is running: `curl <medusa-url>/health`
-- Check CORS settings allow your frontend domain
+**CORS errors?**
+- Verify `STORE_CORS` includes your frontend URL
+- Check `docker-compose.prod.yml` has correct domain
 
-### "Products not showing"
-
-- Verify publishable key is set: `NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY`
-- Check products exist in Medusa Admin
-- Verify region is configured (required for store API)
-
-### "Cart errors"
-
-- Ensure Redis is connected (required for sessions)
-- Check region and shipping options are configured
-
-## Environment Variables Summary
-
-### Medusa Backend (Railway/Render)
-
-| Variable | Required | Example |
-|----------|----------|---------|
-| `DATABASE_URL` | Yes | `postgresql://...` |
-| `REDIS_URL` | Yes | `redis://...` |
-| `JWT_SECRET` | Yes | 32+ char secret |
-| `COOKIE_SECRET` | Yes | 32+ char secret |
-| `STORE_CORS` | Yes | `https://revampit.vercel.app` |
-| `ADMIN_CORS` | Yes | `https://revampit.vercel.app` |
-| `AUTH_CORS` | Yes | `https://revampit.vercel.app` |
-
-### Vercel Frontend
-
-| Variable | Required | Example |
-|----------|----------|---------|
-| `MEDUSA_BACKEND_URL` | Yes | `https://medusa.railway.app` |
-| `NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY` | Yes | `pk_...` |
+**Database errors?**
+- Run migrations: `docker compose exec medusa npx medusa migrations run`
+- Check Neon connection string is correct
