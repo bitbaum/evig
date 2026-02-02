@@ -30,7 +30,7 @@ export default function ContentPage() {
         </button>
       </div>
 
-      <div className="grid md:grid-cols-3 gap-6">
+      <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
         <Link
           href="/admin/content/blog"
           className="p-6 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 hover:border-teal-500 transition-colors"
@@ -38,6 +38,16 @@ export default function ContentPage() {
           <h3 className="font-semibold text-gray-900 dark:text-white mb-2">Blog-Artikel</h3>
           <p className="text-sm text-gray-600 dark:text-gray-400">
             News, Tutorials und Ankündigungen
+          </p>
+        </Link>
+
+        <Link
+          href="/admin/content/categories"
+          className="p-6 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 hover:border-purple-500 transition-colors"
+        >
+          <h3 className="font-semibold text-gray-900 dark:text-white mb-2">Kategorien</h3>
+          <p className="text-sm text-gray-600 dark:text-gray-400">
+            Blog-Kategorien verwalten
           </p>
         </Link>
 
