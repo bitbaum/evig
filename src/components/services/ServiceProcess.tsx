@@ -5,7 +5,7 @@
  * Shows 4-step process with numbered circles.
  */
 
-import { ServiceProcess } from '@/data/services'
+import type { ServiceProcess } from '@/lib/services'
 import { getTextColor } from '@/lib/design-system'
 import { cn } from '@/lib/utils'
 

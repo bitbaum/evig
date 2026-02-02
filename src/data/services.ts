@@ -1,9 +1,34 @@
 /**
- * Services Data Layer
- * 
+ * @deprecated This file is deprecated. Use the unified service layer instead:
+ *
+ * ```typescript
+ * import { getService, getFeaturedServices } from '@/lib/services'
+ *
+ * // Get a single service
+ * const service = await getService('computer-repair-upgrades')
+ *
+ * // Get all featured services
+ * const services = await getFeaturedServices()
+ * ```
+ *
+ * The new unified layer:
+ * - Fetches operational data from database (service_types table)
+ * - Merges with presentation config (icons, features, process steps)
+ * - Provides a clean, type-safe API
+ *
+ * Migration path:
+ * - Replace imports from '@/data/services' with '@/lib/services'
+ * - Use async functions (getService, getFeaturedServices, etc.)
+ * - Types are re-exported from '@/lib/services'
+ *
+ * This file will be removed in a future release.
+ * ============================================================================
+ *
+ * OLD: Services Data Layer (hardcoded)
+ *
  * Single source of truth for all service definitions.
  * Follows DRY principles with type-safe, modular data structure.
- * 
+ *
  * Architecture:
  * - Data layer completely separated from presentation
  * - Reusable interfaces for type safety

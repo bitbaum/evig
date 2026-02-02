@@ -5,7 +5,7 @@
  * Maintains existing beautiful card design.
  */
 
-import { ServiceFeature } from '@/data/services'
+import type { ServiceFeature } from '@/lib/services'
 import { getTextColor } from '@/lib/design-system'
 import { cn } from '@/lib/utils'
 

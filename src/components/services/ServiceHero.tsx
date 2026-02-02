@@ -5,7 +5,7 @@
  * Follows existing design patterns from the site.
  */
 
-import { ServiceHero as ServiceHeroType } from '@/data/services'
+import type { ServiceHero as ServiceHeroType } from '@/lib/services'
 
 interface ServiceHeroProps {
   hero: ServiceHeroType

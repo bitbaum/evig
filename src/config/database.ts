@@ -162,3 +162,31 @@ export const CONVERSATION_TYPES = {
 } as const;
 
 export type ConversationType = typeof CONVERSATION_TYPES[keyof typeof CONVERSATION_TYPES];
+
+/**
+ * Service categories for service_types table
+ */
+export const SERVICE_CATEGORIES = {
+  REPAIR: 'repair',       // Computer repair, hardware upgrades, custom builds
+  DATA: 'data',           // Data recovery, transfer, backup
+  RECYCLING: 'recycling', // Hardware recycling, e-waste
+  SOFTWARE: 'software',   // Linux, open source, installations
+  WEB: 'web',             // Web design, development
+  GENERAL: 'general',     // Consultation, general services
+} as const;
+
+export type ServiceCategory = typeof SERVICE_CATEGORIES[keyof typeof SERVICE_CATEGORIES];
+
+/**
+ * Featured service slugs (shown on /services page)
+ * Order matches display_order in database
+ */
+export const FEATURED_SERVICE_SLUGS = [
+  'computer-repair-upgrades',
+  'data-recovery-transfer',
+  'hardware-recycling',
+  'linux-open-source',
+  'web-design-development',
+] as const;
+
+export type FeaturedServiceSlug = typeof FEATURED_SERVICE_SLUGS[number];

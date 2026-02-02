@@ -5,12 +5,21 @@ import ServiceFeatures from '@/components/services/ServiceFeatures'
 import ServicePricing from '@/components/services/ServicePricing'
 import ServiceProcessSection from '@/components/services/ServiceProcess'
 import ServiceCTA from '@/components/services/ServiceCTA'
-import { services } from '@/data/services'
+import { getService, getAllServiceSlugs } from '@/lib/services'
 import { Clock } from 'lucide-react'
 
-export async function generateMetadata({ params }: { params: { service: string } }): Promise<Metadata> {
-  const service = services[params.service as keyof typeof services]
-  
+/**
+ * Generate static paths for all featured services
+ */
+export async function generateStaticParams() {
+  const slugs = await getAllServiceSlugs()
+  return slugs.map((slug) => ({ service: slug }))
+}
+
+export async function generateMetadata({ params }: { params: Promise<{ service: string }> }): Promise<Metadata> {
+  const { service: slug } = await params
+  const service = await getService(slug)
+
   if (!service) {
     return {
       title: 'Service Not Found | RevampIT',
@@ -18,7 +27,8 @@ export async function generateMetadata({ params }: { params: { service: string }
     }
   }
 
-  if (params.service === 'data-recovery-transfer') {
+  // Special SEO metadata for data recovery
+  if (slug === 'data-recovery-transfer') {
     return {
       title: 'Data Recovery & Transfer Services Zurich | RevampIT',
       description: 'Professional data recovery and transfer services in Zurich. Recover data from old computers, transfer files between devices, access legacy media (floppy disks, ZIP drives, MO drives). Base fee CHF 30.',
@@ -44,28 +54,29 @@ export async function generateMetadata({ params }: { params: { service: string }
   }
 
   return {
-    title: `${service.title} | RevampIT`,
+    title: `${service.name} | RevampIT`,
     description: service.description,
     openGraph: {
-      title: `${service.title} | RevampIT`,
+      title: `${service.name} | RevampIT`,
       description: service.description,
       type: 'website',
     },
   }
 }
 
-export default function ServicePage({ params }: { params: { service: string } }) {
-  const service = services[params.service as keyof typeof services]
-  
+export default async function ServicePage({ params }: { params: Promise<{ service: string }> }) {
+  const { service: slug } = await params
+  const service = await getService(slug)
+
   if (!service) {
     notFound()
   }
 
-  const isComingSoon = false
+  const isComingSoon = !service.isActive
 
   return (
     <>
-      {params.service === 'data-recovery-transfer' && (
+      {slug === 'data-recovery-transfer' && (
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -136,16 +147,16 @@ export default function ServicePage({ params }: { params: { service: string } })
         <ServiceFeatures features={service.features} />
 
         {/* Pricing Section */}
-        {service.pricing && <ServicePricing pricing={service.pricing} />}
+        <ServicePricing pricing={service.pricing} />
 
         {/* Process Section */}
         {service.process && <ServiceProcessSection process={service.process} />}
 
         {/* CTA Section */}
         <ServiceCTA
-          serviceTitle={service.title}
-          serviceSlug={params.service}
-          pricing={service.pricing?.base}
+          serviceTitle={service.name}
+          serviceSlug={service.isBookable ? slug : undefined}
+          pricing={service.pricing.base}
         />
       </main>
     </>

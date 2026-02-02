@@ -6,7 +6,7 @@
  */
 
 import { CheckCircle2 } from 'lucide-react'
-import { ServicePricing } from '@/data/services'
+import type { ServicePricing } from '@/lib/services'
 import { getTextColor } from '@/lib/design-system'
 import { cn } from '@/lib/utils'
 
