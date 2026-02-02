@@ -4,7 +4,7 @@
  * Shared types for voice recording components.
  */
 
-import type { VoiceProductData } from '@/types/erfassung'
+import type { VoiceProductData, AIFieldMetadata } from '@/types/erfassung'
 
 export type RecorderState =
   | 'idle'
@@ -17,7 +17,7 @@ export type RecorderState =
 
 export interface VoiceRecorderProps {
   onRecordingComplete?: (audioBlob: Blob, duration: number) => void
-  onTranscriptionComplete?: (data: VoiceProductData) => void
+  onTranscriptionComplete?: (data: VoiceProductData, metadata?: AIFieldMetadata) => void
   onTranscription?: (text: string) => void
   onError?: (error: string) => void
   maxDuration?: number // seconds, default 120

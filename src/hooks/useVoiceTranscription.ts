@@ -8,11 +8,11 @@
 
 import { useState, useCallback } from 'react'
 import { logger } from '@/lib/logger'
-import type { VoiceProductData } from '@/types/erfassung'
+import type { VoiceProductData, AIFieldMetadata } from '@/types/erfassung'
 
 interface UseVoiceTranscriptionProps {
   onTranscription?: (text: string) => void
-  onTranscriptionComplete?: (data: VoiceProductData) => void
+  onTranscriptionComplete?: (data: VoiceProductData, metadata?: AIFieldMetadata) => void
   onError?: (error: string) => void
   onSuccess?: () => void
 }
@@ -53,7 +53,7 @@ export function useVoiceTranscription({
 
       setTranscribedText(result.transcription)
       onTranscription?.(result.transcription)
-      onTranscriptionComplete?.(result.data)
+      onTranscriptionComplete?.(result.data, result.metadata as AIFieldMetadata)
       onSuccess?.()
 
       logger.info('Voice transcription completed', {

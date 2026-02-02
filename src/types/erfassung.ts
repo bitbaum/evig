@@ -16,6 +16,25 @@ export interface SpecField {
 }
 
 /**
+ * AI extraction source information
+ */
+export interface AIFieldSource {
+  type: 'voice' | 'text' | 'image' | 'database'
+  inputText?: string // Original input that led to this extraction
+  confidence: number // 0-1 confidence score
+  model?: string // AI model used (e.g., 'llama3.2')
+  timestamp: number // When the extraction happened
+}
+
+/**
+ * Metadata for AI-filled fields
+ * Maps field names to their extraction source info
+ */
+export type AIFieldMetadata = {
+  [K in keyof ErfassungFormData]?: AIFieldSource
+}
+
+/**
  * Full form data for product entry
  */
 export interface ErfassungFormData {

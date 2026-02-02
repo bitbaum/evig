@@ -7,7 +7,7 @@
  * Flow:
  * 1. Receive audio blob from browser
  * 2. Send to local Whisper transcription service
- * 3. Send transcribed text to Ollama for structured parsing
+ * 3. Send transcribed text to shared AI extraction service
  * 4. Return ErfassungFormData ready to fill the form
  */
 
@@ -16,50 +16,10 @@ import { auth } from '@/auth'
 import { canAccessSection } from '@/lib/permissions'
 import { logger } from '@/lib/logger'
 import { apiUnauthorized, apiForbidden, apiBadRequest } from '@/lib/api/helpers'
+import { extractProductFromText } from '@/lib/erfassung/ai-extraction'
 
 // Transcription service URL
 const TRANSCRIPTION_URL = process.env.TRANSCRIPTION_URL || 'http://localhost:5111'
-const OLLAMA_URL = process.env.OLLAMA_URL || 'http://localhost:11434'
-const OLLAMA_MODEL = process.env.OLLAMA_MODEL || 'llama3.2'
-
-// Product form structure for Ollama to fill
-const PRODUCT_SCHEMA = `{
-  "hersteller": "manufacturer name (Dell, Lenovo, HP, Apple, etc.)",
-  "produktname": "product model name",
-  "kurzbeschreibung": "short German description of the product",
-  "specs": [
-    { "key": "CPU", "value": "processor model" },
-    { "key": "RAM", "value": "memory amount" },
-    { "key": "Speicher", "value": "storage type and size" },
-    { "key": "Display", "value": "screen size and resolution" }
-  ],
-  "verkaufspreis": "price in CHF as number only",
-  "zustand": "one of: new, like_new, good, fair, poor",
-  "hauptkategorie": "10 for Laptops, 20 for Desktop PCs, 30 for Monitors, 40 for Peripherals",
-  "unterkategorie": "101 for Business Laptops, 102 for Consumer, 103 for Gaming",
-  "kundenprofile": ["suitable profiles: oma, buero, chiller, gamer, kreativ, dev, student"],
-  "bemerkungen": "any additional notes about condition or features"
-}`
-
-const OLLAMA_PROMPT = `Du bist ein Assistent für die Produkterfassung bei RevampIT, einem Schweizer Non-Profit für gebrauchte IT-Geräte.
-
-Der Benutzer hat folgendes gesagt (transkribiert von Sprache):
-"{TEXT}"
-
-Extrahiere die Produktinformationen und fülle folgendes JSON-Schema aus. Wenn Informationen fehlen, nutze sinnvolle Standardwerte basierend auf dem Produkttyp.
-
-Schema:
-${PRODUCT_SCHEMA}
-
-Wichtige Regeln:
-- Preise in CHF ohne Währungssymbol
-- Zustand mappen: "gut" -> "good", "wie neu" -> "like_new", "neu" -> "new", "akzeptabel" -> "fair", "schlecht" -> "poor"
-- Bei Laptops: Kategorien 10 (Hauptkategorie) und 101/102/103 (Unterkategorie je nach Typ)
-- Kundenprofile basierend auf Gerät wählen (z.B. ThinkPad -> buero, dev; Gaming Laptop -> gamer)
-- Beschreibung auf Deutsch
-- Specs basierend auf bekanntem Modell ergänzen falls nicht genannt
-
-Antworte NUR mit dem ausgefüllten JSON, keine Erklärungen.`
 
 export async function POST(request: NextRequest) {
   try {
@@ -128,55 +88,20 @@ export async function POST(request: NextRequest) {
       duration: transcription.duration_processing,
     })
 
-    // Step 2: Parse with Ollama
-    const ollamaPrompt = OLLAMA_PROMPT.replace('{TEXT}', transcribedText)
+    // Step 2: Extract product data using shared AI service
+    const extractionResult = await extractProductFromText(transcribedText, 'voice')
 
-    const ollamaResponse = await fetch(`${OLLAMA_URL}/api/generate`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        model: OLLAMA_MODEL,
-        prompt: ollamaPrompt,
-        stream: false,
-        options: {
-          temperature: 0.3,  // Low temperature for consistent output
-        },
-      }),
-    })
-
-    if (!ollamaResponse.ok) {
-      const error = await ollamaResponse.text()
-      logger.error('Ollama parsing failed', { error })
-      return NextResponse.json(
-        { success: false, error: 'KI-Parsing fehlgeschlagen', details: error },
-        { status: 500 }
-      )
-    }
-
-    const ollamaResult = await ollamaResponse.json()
-    const responseText = ollamaResult.response
-
-    // Extract JSON from response (in case there's extra text)
-    let productData
-    try {
-      // Try to find JSON in the response
-      const jsonMatch = responseText.match(/\{[\s\S]*\}/)
-      if (jsonMatch) {
-        productData = JSON.parse(jsonMatch[0])
-      } else {
-        throw new Error('No JSON found in response')
-      }
-    } catch (parseError) {
-      logger.error('Failed to parse Ollama response', {
-        response: responseText,
-        error: parseError,
+    if (!extractionResult.success) {
+      logger.error('Product extraction failed', {
+        error: extractionResult.error,
+        transcription: transcribedText,
       })
       return NextResponse.json(
         {
           success: false,
-          error: 'Konnte Produktdaten nicht extrahieren',
+          error: extractionResult.error,
           transcription: transcribedText,
-          rawResponse: responseText,
+          rawResponse: extractionResult.rawResponse,
         },
         { status: 500 }
       )
@@ -184,15 +109,17 @@ export async function POST(request: NextRequest) {
 
     logger.info('Voice erfassung complete', {
       userId: session.user.id,
-      product: productData.produktname,
+      product: extractionResult.data.produktname,
     })
 
     return NextResponse.json({
       success: true,
       transcription: transcribedText,
-      data: productData,
+      data: extractionResult.data,
+      metadata: extractionResult.metadata,
+      model: extractionResult.model,
+      sourceType: extractionResult.sourceType,
     })
-
   } catch (error) {
     logger.error('Voice erfassung error', { error })
     return NextResponse.json(

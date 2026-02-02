@@ -1,0 +1,180 @@
+'use client'
+
+/**
+ * AIFieldIndicator Component
+ *
+ * Shows AI extraction status next to form fields:
+ * - Confidence score (color-coded badge)
+ * - Source type icon (voice/text/image)
+ * - Click to show source input text
+ */
+
+import { useState } from 'react'
+import { Mic, Type, Image, Sparkles, X, ExternalLink } from 'lucide-react'
+import type { AIFieldSource } from '@/types/erfassung'
+
+interface AIFieldIndicatorProps {
+  source: AIFieldSource
+  fieldName: string
+  className?: string
+}
+
+const SOURCE_ICONS = {
+  voice: Mic,
+  text: Type,
+  image: Image,
+  database: ExternalLink,
+}
+
+const SOURCE_LABELS = {
+  voice: 'Spracheingabe',
+  text: 'Texteingabe',
+  image: 'Bildanalyse',
+  database: 'Datenbank',
+}
+
+function getConfidenceColor(confidence: number): string {
+  if (confidence >= 0.85) return 'bg-green-100 text-green-700 border-green-300'
+  if (confidence >= 0.7) return 'bg-yellow-100 text-yellow-700 border-yellow-300'
+  if (confidence >= 0.5) return 'bg-orange-100 text-orange-700 border-orange-300'
+  return 'bg-red-100 text-red-700 border-red-300'
+}
+
+function getConfidenceLabel(confidence: number): string {
+  if (confidence >= 0.85) return 'Hoch'
+  if (confidence >= 0.7) return 'Mittel'
+  if (confidence >= 0.5) return 'Niedrig'
+  return 'Unsicher'
+}
+
+export function AIFieldIndicator({
+  source,
+  fieldName,
+  className = '',
+}: AIFieldIndicatorProps) {
+  const [showDetails, setShowDetails] = useState(false)
+
+  const Icon = SOURCE_ICONS[source.type]
+  const confidencePercent = Math.round(source.confidence * 100)
+  const colorClass = getConfidenceColor(source.confidence)
+  const confidenceLabel = getConfidenceLabel(source.confidence)
+
+  return (
+    <div className={`relative inline-flex items-center ${className}`}>
+      {/* Badge button */}
+      <button
+        type="button"
+        onClick={() => setShowDetails(!showDetails)}
+        className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded border text-xs font-medium transition-all hover:opacity-80 ${colorClass}`}
+        title={`KI-Extraktion: ${confidencePercent}% Konfidenz`}
+      >
+        <Sparkles className="w-3 h-3" />
+        <span>{confidencePercent}%</span>
+        <Icon className="w-3 h-3" />
+      </button>
+
+      {/* Details popover */}
+      {showDetails && (
+        <>
+          {/* Backdrop */}
+          <div
+            className="fixed inset-0 z-40"
+            onClick={() => setShowDetails(false)}
+          />
+
+          {/* Popover */}
+          <div className="absolute left-0 top-full mt-1 z-50 w-72 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 p-3">
+            {/* Header */}
+            <div className="flex items-center justify-between mb-2">
+              <div className="flex items-center gap-2">
+                <Sparkles className="w-4 h-4 text-purple-600" />
+                <span className="font-medium text-gray-900 dark:text-white text-sm">
+                  KI-Extraktion
+                </span>
+              </div>
+              <button
+                type="button"
+                onClick={() => setShowDetails(false)}
+                className="p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded"
+              >
+                <X className="w-4 h-4 text-gray-400" />
+              </button>
+            </div>
+
+            {/* Content */}
+            <div className="space-y-2 text-sm">
+              {/* Confidence */}
+              <div className="flex items-center justify-between">
+                <span className="text-gray-600 dark:text-gray-400">Konfidenz:</span>
+                <span className={`px-2 py-0.5 rounded ${colorClass}`}>
+                  {confidencePercent}% ({confidenceLabel})
+                </span>
+              </div>
+
+              {/* Source type */}
+              <div className="flex items-center justify-between">
+                <span className="text-gray-600 dark:text-gray-400">Quelle:</span>
+                <span className="flex items-center gap-1 text-gray-900 dark:text-white">
+                  <Icon className="w-4 h-4" />
+                  {SOURCE_LABELS[source.type]}
+                </span>
+              </div>
+
+              {/* Model */}
+              {source.model && (
+                <div className="flex items-center justify-between">
+                  <span className="text-gray-600 dark:text-gray-400">Modell:</span>
+                  <code className="px-1.5 py-0.5 bg-gray-100 dark:bg-gray-700 rounded text-xs">
+                    {source.model}
+                  </code>
+                </div>
+              )}
+
+              {/* Source input */}
+              {source.inputText && (
+                <div className="mt-2 pt-2 border-t border-gray-200 dark:border-gray-700">
+                  <span className="text-gray-600 dark:text-gray-400 block mb-1">
+                    Eingabe:
+                  </span>
+                  <div className="bg-gray-50 dark:bg-gray-900 rounded p-2 text-xs text-gray-700 dark:text-gray-300 max-h-20 overflow-y-auto">
+                    &ldquo;{source.inputText}&rdquo;
+                  </div>
+                </div>
+              )}
+
+              {/* Timestamp */}
+              <div className="text-xs text-gray-400 mt-2">
+                Extrahiert: {new Date(source.timestamp).toLocaleTimeString('de-CH')}
+              </div>
+            </div>
+          </div>
+        </>
+      )}
+    </div>
+  )
+}
+
+/**
+ * Compact inline version for use in form labels
+ */
+export function AIFieldBadge({
+  source,
+  className = '',
+}: {
+  source: AIFieldSource
+  className?: string
+}) {
+  const Icon = SOURCE_ICONS[source.type]
+  const confidencePercent = Math.round(source.confidence * 100)
+  const colorClass = getConfidenceColor(source.confidence)
+
+  return (
+    <span
+      className={`inline-flex items-center gap-0.5 px-1 py-0.5 rounded text-[10px] font-medium ${colorClass} ${className}`}
+      title={`KI: ${confidencePercent}% (${SOURCE_LABELS[source.type]})`}
+    >
+      <Sparkles className="w-2.5 h-2.5" />
+      {confidencePercent}%
+    </span>
+  )
+}

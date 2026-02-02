@@ -21,6 +21,7 @@ export {
   getProfileBySlug,
   getProfilesBySlugs,
   validateProfileSlugs,
+  getProfilesByCategory,
   type CustomerProfile,
 } from './profiles'
 
@@ -32,6 +33,7 @@ export {
   getParentCategory,
   getSubcategories,
   getAllCategoriesFlat,
+  getCategoryDetails,
   type Kategorie,
   type SubKategorie,
 } from './categories'

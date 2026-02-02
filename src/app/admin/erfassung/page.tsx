@@ -19,15 +19,19 @@ import {
   Users,
   FileText,
   Printer,
+  ChevronDown,
+  ChevronUp,
 } from 'lucide-react'
 import { DataEntryTabs } from '@/components/erfassung/DataEntryTabs'
-import type { ErfassungFormData } from '@/types/erfassung'
+import { AIFieldIndicator } from '@/components/erfassung/AIFieldIndicator'
+import type { ErfassungFormData, AIFieldMetadata } from '@/types/erfassung'
 import { DEFAULT_FORM_DATA } from '@/types/erfassung'
 import {
   CUSTOMER_PROFILES,
   ZUSTAND_OPTIONS,
   KATEGORIEN,
   SPEC_TEMPLATES,
+  getProfilesByCategory,
 } from '@/config/erfassung'
 
 export default function ErfassungPage() {
@@ -35,12 +39,20 @@ export default function ErfassungPage() {
   const [isLoading, setIsLoading] = useState(false)
   const [savedItemUUID, setSavedItemUUID] = useState<string | null>(null)
   const [savedProductId, setSavedProductId] = useState<string | null>(null)
+  const [showAdvanced, setShowAdvanced] = useState(false) // Collapsed on mobile by default
 
   const [formData, setFormData] = useState<ErfassungFormData>(DEFAULT_FORM_DATA)
+  const [aiMetadata, setAiMetadata] = useState<AIFieldMetadata>({})
 
-  // Handle basic field changes
+  // Handle basic field changes - clear AI metadata for the field when manually edited
   const handleChange = (field: keyof ErfassungFormData, value: string | string[]) => {
     setFormData(prev => ({ ...prev, [field]: value }))
+    // Clear AI metadata for this field since user is manually editing
+    setAiMetadata(prev => {
+      const updated = { ...prev }
+      delete updated[field]
+      return updated
+    })
   }
 
   // Handle category change - load spec template
@@ -89,8 +101,8 @@ export default function ErfassungPage() {
   }
 
   // Handle product data from DataEntryTabs (voice or image analysis)
-  const handleProductData = useCallback((data: Partial<ErfassungFormData>) => {
-    logger.info('Product data received', { product: data.produktname })
+  const handleProductData = useCallback((data: Partial<ErfassungFormData>, metadata?: AIFieldMetadata) => {
+    logger.info('Product data received', { product: data.produktname, hasMetadata: !!metadata })
 
     // Merge incoming data with existing form data
     setFormData(prev => ({
@@ -108,6 +120,14 @@ export default function ErfassungPage() {
         ? data.specs.map(s => ({ key: s.key, value: s.value }))
         : prev.specs,
     }))
+
+    // Store AI metadata for displaying confidence indicators
+    if (metadata) {
+      setAiMetadata(prev => ({
+        ...prev,
+        ...metadata,
+      }))
+    }
   }, [])
 
   // Handle image capture from DataEntryTabs
@@ -224,33 +244,23 @@ export default function ErfassungPage() {
   }
 
   return (
-    <div className="space-y-6 max-w-5xl mx-auto">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-4">
-          <Link
-            href="/admin/products"
-            className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
-          >
-            <ArrowLeft className="w-5 h-5" />
-          </Link>
-          <div>
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-              Produkt Erfassung
-            </h1>
-            <p className="text-gray-600 dark:text-gray-400 mt-1">
-              Neues Produkt ins Inventar aufnehmen
-            </p>
-          </div>
-        </div>
-
+    <div className="space-y-4 sm:space-y-6 max-w-5xl mx-auto pb-24 sm:pb-6">
+      {/* Header - Compact on mobile */}
+      <div className="flex items-center gap-3 sm:gap-4">
         <Link
-          href="/inventory/ai-capture"
-          className="inline-flex items-center gap-2 text-sm text-purple-600 hover:text-purple-700"
+          href="/admin/products"
+          className="p-2 sm:p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 touch-manipulation"
         >
-          <Camera className="w-4 h-4" />
-          KI-Erfassung
+          <ArrowLeft className="w-5 h-5 sm:w-5 sm:h-5" />
         </Link>
+        <div className="flex-1 min-w-0">
+          <h1 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white truncate">
+            Produkt Erfassung
+          </h1>
+          <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400 hidden sm:block">
+            Neues Produkt ins Inventar aufnehmen
+          </p>
+        </div>
       </div>
 
       {/* Data Entry Tabs (Speech / Picture / Form) */}
@@ -297,29 +307,39 @@ export default function ErfassungPage() {
             Grundinformationen
           </h2>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                Hersteller *
+              <label className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
+                <span>Hersteller *</span>
+                {aiMetadata.hersteller && (
+                  <AIFieldIndicator source={aiMetadata.hersteller} fieldName="hersteller" />
+                )}
               </label>
               <input
                 type="text"
                 value={formData.hersteller}
                 onChange={(e) => handleChange('hersteller', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500"
+                className={`w-full px-4 py-3 sm:px-3 sm:py-2 border rounded-xl sm:rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 text-base touch-manipulation min-h-[48px] sm:min-h-0 ${
+                  aiMetadata.hersteller ? 'border-purple-300 dark:border-purple-600' : 'border-gray-300 dark:border-gray-600'
+                }`}
                 placeholder="z.B. Dell, HP, Lenovo"
                 required
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                Zustand *
+              <label className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
+                <span>Zustand *</span>
+                {aiMetadata.zustand && (
+                  <AIFieldIndicator source={aiMetadata.zustand} fieldName="zustand" />
+                )}
               </label>
               <select
                 value={formData.zustand}
                 onChange={(e) => handleChange('zustand', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500"
+                className={`w-full px-4 py-3 sm:px-3 sm:py-2 border rounded-xl sm:rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 text-base touch-manipulation min-h-[48px] sm:min-h-0 ${
+                  aiMetadata.zustand ? 'border-purple-300 dark:border-purple-600' : 'border-gray-300 dark:border-gray-600'
+                }`}
                 required
               >
                 {ZUSTAND_OPTIONS.map(opt => (
@@ -329,59 +349,100 @@ export default function ErfassungPage() {
             </div>
 
             <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                Produktname / Modell *
+              <label className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
+                <span>Produktname / Modell *</span>
+                {aiMetadata.produktname && (
+                  <AIFieldIndicator source={aiMetadata.produktname} fieldName="produktname" />
+                )}
               </label>
               <input
                 type="text"
                 value={formData.produktname}
                 onChange={(e) => handleChange('produktname', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500"
-                placeholder="z.B. Latitude 7470 (Intel i5-6300U, 8GB RAM, 256GB SSD)"
+                className={`w-full px-4 py-3 sm:px-3 sm:py-2 border rounded-xl sm:rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 text-base touch-manipulation min-h-[48px] sm:min-h-0 ${
+                  aiMetadata.produktname ? 'border-purple-300 dark:border-purple-600' : 'border-gray-300 dark:border-gray-600'
+                }`}
+                placeholder="z.B. Latitude 7470"
+                required
+              />
+            </div>
+
+            {/* Price field moved up for mobile - most important after name */}
+            <div className="md:hidden">
+              <label className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
+                <span>Verkaufspreis (CHF) *</span>
+                {aiMetadata.verkaufspreis && (
+                  <AIFieldIndicator source={aiMetadata.verkaufspreis} fieldName="verkaufspreis" />
+                )}
+              </label>
+              <input
+                type="number"
+                step="0.01"
+                value={formData.verkaufspreis}
+                onChange={(e) => handleChange('verkaufspreis', e.target.value)}
+                className={`w-full px-4 py-3 border rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 text-base touch-manipulation min-h-[48px] text-xl font-semibold ${
+                  aiMetadata.verkaufspreis ? 'border-purple-300 dark:border-purple-600' : 'border-gray-300 dark:border-gray-600'
+                }`}
+                placeholder="0.00"
                 required
               />
             </div>
 
             <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                Kurzbeschreibung
+              <label className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
+                <span>Kurzbeschreibung</span>
+                {aiMetadata.kurzbeschreibung && (
+                  <AIFieldIndicator source={aiMetadata.kurzbeschreibung} fieldName="kurzbeschreibung" />
+                )}
               </label>
               <textarea
                 value={formData.kurzbeschreibung}
                 onChange={(e) => handleChange('kurzbeschreibung', e.target.value)}
-                rows={3}
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500"
-                placeholder="Kurze Beschreibung für Kunden..."
+                rows={2}
+                className={`w-full px-4 py-3 sm:px-3 sm:py-2 border rounded-xl sm:rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 text-base touch-manipulation ${
+                  aiMetadata.kurzbeschreibung ? 'border-purple-300 dark:border-purple-600' : 'border-gray-300 dark:border-gray-600'
+                }`}
+                placeholder="Kurze Beschreibung..."
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                Hauptkategorie
+              <label className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
+                <span>Kategorie</span>
+                {aiMetadata.hauptkategorie && (
+                  <AIFieldIndicator source={aiMetadata.hauptkategorie} fieldName="hauptkategorie" />
+                )}
               </label>
               <select
                 value={formData.hauptkategorie}
                 onChange={(e) => handleKategorieChange(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500"
+                className={`w-full px-4 py-3 sm:px-3 sm:py-2 border rounded-xl sm:rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 text-base touch-manipulation min-h-[48px] sm:min-h-0 ${
+                  aiMetadata.hauptkategorie ? 'border-purple-300 dark:border-purple-600' : 'border-gray-300 dark:border-gray-600'
+                }`}
               >
-                <option value="">Kategorie wählen</option>
+                <option value="">Waehlen...</option>
                 {KATEGORIEN.map(kat => (
-                  <option key={kat.value} value={kat.value}>{kat.label}</option>
+                  <option key={kat.value} value={kat.value}>{kat.icon} {kat.label}</option>
                 ))}
               </select>
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                Unterkategorie
+              <label className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
+                <span>Unterkategorie</span>
+                {aiMetadata.unterkategorie && (
+                  <AIFieldIndicator source={aiMetadata.unterkategorie} fieldName="unterkategorie" />
+                )}
               </label>
               <select
                 value={formData.unterkategorie}
                 onChange={(e) => handleChange('unterkategorie', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500"
+                className={`w-full px-4 py-3 sm:px-3 sm:py-2 border rounded-xl sm:rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 text-base touch-manipulation min-h-[48px] sm:min-h-0 ${
+                  aiMetadata.unterkategorie ? 'border-purple-300 dark:border-purple-600' : 'border-gray-300 dark:border-gray-600'
+                }`}
                 disabled={!formData.hauptkategorie}
               >
-                <option value="">Unterkategorie wählen</option>
+                <option value="">Waehlen...</option>
                 {subcategories.map(sub => (
                   <option key={sub.value} value={sub.value}>{sub.label}</option>
                 ))}
@@ -390,183 +451,224 @@ export default function ErfassungPage() {
           </div>
         </div>
 
-        {/* Technical Specs */}
-        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2">
-              <FileText className="w-5 h-5" />
-              Technische Daten
-            </h2>
-            <button
-              type="button"
-              onClick={addSpecField}
-              className="inline-flex items-center gap-1 text-sm text-green-600 hover:text-green-700"
-            >
-              <Plus className="w-4 h-4" />
-              Feld hinzufügen
-            </button>
-          </div>
+        {/* Mobile: Collapsible Advanced Section Toggle */}
+        <button
+          type="button"
+          onClick={() => setShowAdvanced(!showAdvanced)}
+          className="sm:hidden w-full flex items-center justify-between px-4 py-3 bg-gray-100 dark:bg-gray-700 rounded-xl text-gray-700 dark:text-gray-300 touch-manipulation"
+        >
+          <span className="font-medium">Erweiterte Optionen</span>
+          {showAdvanced ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
+        </button>
 
-          <div className="space-y-3">
-            {formData.specs.map((spec, index) => (
-              <div key={index} className="flex gap-3">
-                <input
-                  type="text"
-                  value={spec.key}
-                  onChange={(e) => handleSpecChange(index, 'key', e.target.value)}
-                  className="w-1/3 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500"
-                  placeholder="Eigenschaft"
-                />
-                <input
-                  type="text"
-                  value={spec.value}
-                  onChange={(e) => handleSpecChange(index, 'value', e.target.value)}
-                  className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500"
-                  placeholder="Wert"
-                />
-                <button
-                  type="button"
-                  onClick={() => removeSpecField(index)}
-                  className="p-2 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg"
-                  disabled={formData.specs.length <= 1}
-                >
-                  <Trash2 className="w-4 h-4" />
-                </button>
-              </div>
-            ))}
+        {/* Technical Specs - Hidden on mobile unless expanded */}
+        <div className={`${showAdvanced ? 'block' : 'hidden'} sm:block`}>
+          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-4 sm:p-6">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+                <FileText className="w-5 h-5" />
+                <span>Technische Daten</span>
+                {aiMetadata.specs && (
+                  <AIFieldIndicator source={aiMetadata.specs} fieldName="specs" />
+                )}
+              </h2>
+              <button
+                type="button"
+                onClick={addSpecField}
+                className="inline-flex items-center gap-1 text-sm text-green-600 hover:text-green-700 touch-manipulation p-2 -m-2"
+              >
+                <Plus className="w-4 h-4" />
+                <span className="hidden sm:inline">Feld hinzufuegen</span>
+              </button>
+            </div>
+
+            <div className="space-y-3">
+              {formData.specs.map((spec, index) => (
+                <div key={index} className="flex gap-2 sm:gap-3">
+                  <input
+                    type="text"
+                    value={spec.key}
+                    onChange={(e) => handleSpecChange(index, 'key', e.target.value)}
+                    className="w-1/3 px-3 py-2.5 sm:py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 text-sm touch-manipulation"
+                    placeholder="Eigenschaft"
+                  />
+                  <input
+                    type="text"
+                    value={spec.value}
+                    onChange={(e) => handleSpecChange(index, 'value', e.target.value)}
+                    className="flex-1 px-3 py-2.5 sm:py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 text-sm touch-manipulation"
+                    placeholder="Wert"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => removeSpecField(index)}
+                    className="p-2.5 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg touch-manipulation min-w-[44px] flex items-center justify-center"
+                    disabled={formData.specs.length <= 1}
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </button>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
 
-        {/* Physical Dimensions & Inventory */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* Dimensions */}
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
-            <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
-              <Ruler className="w-5 h-5" />
-              Abmessungen
-            </h2>
+        {/* Physical Dimensions & Inventory - Hidden on mobile unless expanded */}
+        <div className={`${showAdvanced ? 'block' : 'hidden'} sm:block`}>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+            {/* Dimensions */}
+            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-4 sm:p-6">
+              <h2 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-white mb-3 sm:mb-4 flex items-center gap-2">
+                <Ruler className="w-5 h-5" />
+                Abmessungen
+              </h2>
 
-            <div className="grid grid-cols-2 gap-3">
-              <div>
-                <label className="block text-sm text-gray-600 dark:text-gray-400 mb-1">Länge (mm)</label>
-                <input
-                  type="number"
-                  value={formData.laenge_mm}
-                  onChange={(e) => handleChange('laenge_mm', e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500"
-                />
-              </div>
-              <div>
-                <label className="block text-sm text-gray-600 dark:text-gray-400 mb-1">Breite (mm)</label>
-                <input
-                  type="number"
-                  value={formData.breite_mm}
-                  onChange={(e) => handleChange('breite_mm', e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500"
-                />
-              </div>
-              <div>
-                <label className="block text-sm text-gray-600 dark:text-gray-400 mb-1">Höhe (mm)</label>
-                <input
-                  type="number"
-                  value={formData.hoehe_mm}
-                  onChange={(e) => handleChange('hoehe_mm', e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500"
-                />
-              </div>
-              <div>
-                <label className="block text-sm text-gray-600 dark:text-gray-400 mb-1">Gewicht (kg)</label>
-                <input
-                  type="number"
-                  step="0.01"
-                  value={formData.gewicht_kg}
-                  onChange={(e) => handleChange('gewicht_kg', e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500"
-                />
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-sm text-gray-600 dark:text-gray-400 mb-1">Länge (mm)</label>
+                  <input
+                    type="number"
+                    value={formData.laenge_mm}
+                    onChange={(e) => handleChange('laenge_mm', e.target.value)}
+                    className="w-full px-3 py-2.5 sm:py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 touch-manipulation"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm text-gray-600 dark:text-gray-400 mb-1">Breite (mm)</label>
+                  <input
+                    type="number"
+                    value={formData.breite_mm}
+                    onChange={(e) => handleChange('breite_mm', e.target.value)}
+                    className="w-full px-3 py-2.5 sm:py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 touch-manipulation"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm text-gray-600 dark:text-gray-400 mb-1">Höhe (mm)</label>
+                  <input
+                    type="number"
+                    value={formData.hoehe_mm}
+                    onChange={(e) => handleChange('hoehe_mm', e.target.value)}
+                    className="w-full px-3 py-2.5 sm:py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 touch-manipulation"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm text-gray-600 dark:text-gray-400 mb-1">Gewicht (kg)</label>
+                  <input
+                    type="number"
+                    step="0.01"
+                    value={formData.gewicht_kg}
+                    onChange={(e) => handleChange('gewicht_kg', e.target.value)}
+                    className="w-full px-3 py-2.5 sm:py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 touch-manipulation"
+                  />
+                </div>
               </div>
             </div>
-          </div>
 
-          {/* Inventory */}
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
-            <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
-              <MapPin className="w-5 h-5" />
-              Lager & Preis
-            </h2>
+            {/* Inventory */}
+            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-4 sm:p-6">
+              <h2 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-white mb-3 sm:mb-4 flex items-center gap-2">
+                <MapPin className="w-5 h-5" />
+                Lager & Preis
+              </h2>
 
-            <div className="grid grid-cols-2 gap-3">
-              <div>
-                <label className="block text-sm text-gray-600 dark:text-gray-400 mb-1">Verkaufspreis (CHF) *</label>
-                <input
-                  type="number"
-                  step="0.01"
-                  value={formData.verkaufspreis}
-                  onChange={(e) => handleChange('verkaufspreis', e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500"
-                  required
-                />
-              </div>
-              <div>
-                <label className="block text-sm text-gray-600 dark:text-gray-400 mb-1">Anzahl auf Lager</label>
-                <input
-                  type="number"
-                  value={formData.auf_lager}
-                  onChange={(e) => handleChange('auf_lager', e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500"
-                />
-              </div>
-              <div>
-                <label className="block text-sm text-gray-600 dark:text-gray-400 mb-1">Lagerort</label>
-                <input
-                  type="text"
-                  value={formData.location}
-                  onChange={(e) => handleChange('location', e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500"
-                  placeholder="S-B816-01-..."
-                />
-              </div>
-              <div>
-                <label className="block text-sm text-gray-600 dark:text-gray-400 mb-1">Box ID</label>
-                <input
-                  type="text"
-                  value={formData.box_id}
-                  onChange={(e) => handleChange('box_id', e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500"
-                  placeholder="B-YYMMDD-NNNN"
-                />
+              <div className="grid grid-cols-2 gap-3">
+                {/* Desktop price - hidden on mobile since it's shown above */}
+                <div className="hidden sm:block">
+                  <label className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 mb-1">
+                    <span>Verkaufspreis (CHF) *</span>
+                    {aiMetadata.verkaufspreis && (
+                      <AIFieldIndicator source={aiMetadata.verkaufspreis} fieldName="verkaufspreis" />
+                    )}
+                  </label>
+                  <input
+                    type="number"
+                    step="0.01"
+                    value={formData.verkaufspreis}
+                    onChange={(e) => handleChange('verkaufspreis', e.target.value)}
+                    className={`w-full px-3 py-2 border rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 ${
+                      aiMetadata.verkaufspreis ? 'border-purple-300 dark:border-purple-600' : 'border-gray-300 dark:border-gray-600'
+                    }`}
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm text-gray-600 dark:text-gray-400 mb-1">Anzahl auf Lager</label>
+                  <input
+                    type="number"
+                    value={formData.auf_lager}
+                    onChange={(e) => handleChange('auf_lager', e.target.value)}
+                    className="w-full px-3 py-2.5 sm:py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 touch-manipulation"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm text-gray-600 dark:text-gray-400 mb-1">Lagerort</label>
+                  <input
+                    type="text"
+                    value={formData.location}
+                    onChange={(e) => handleChange('location', e.target.value)}
+                    className="w-full px-3 py-2.5 sm:py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 touch-manipulation"
+                    placeholder="S-B816-01-..."
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm text-gray-600 dark:text-gray-400 mb-1">Box ID</label>
+                  <input
+                    type="text"
+                    value={formData.box_id}
+                    onChange={(e) => handleChange('box_id', e.target.value)}
+                    className="w-full px-3 py-2.5 sm:py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 touch-manipulation"
+                    placeholder="B-YYMMDD-NNNN"
+                  />
+                </div>
               </div>
             </div>
           </div>
         </div>
 
         {/* Customer Profiles */}
-        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
-          <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-4 sm:p-6">
+          <h2 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-white mb-3 sm:mb-4 flex items-center gap-2">
             <Users className="w-5 h-5" />
             Geeignet für (Kundenprofile)
           </h2>
+          <p className="text-sm text-gray-500 dark:text-gray-400 mb-3 sm:mb-4 hidden sm:block">
+            Wähle die Zielgruppen, für die dieses Produkt geeignet ist. Hover für Details.
+          </p>
 
-          <div className="flex flex-wrap gap-3">
-            {CUSTOMER_PROFILES.map(profile => (
-              <button
-                key={profile.slug}
-                type="button"
-                onClick={() => toggleProfile(profile.slug)}
-                className={`inline-flex items-center gap-2 px-4 py-2 rounded-full border-2 transition-colors ${
-                  formData.kundenprofile.includes(profile.slug)
-                    ? 'border-green-500 bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-300'
-                    : 'border-gray-300 dark:border-gray-600 hover:border-gray-400'
-                }`}
-              >
-                <span>{profile.icon}</span>
-                <span>{profile.name_de}</span>
-              </button>
-            ))}
-          </div>
+          {Object.entries(getProfilesByCategory()).map(([categoryName, profiles]) => (
+            <div key={categoryName} className="mb-4 last:mb-0">
+              <h3 className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-2">
+                {categoryName}
+              </h3>
+              <div className="flex flex-wrap gap-2 sm:gap-2">
+                {profiles.map(profile => (
+                  <button
+                    key={profile.slug}
+                    type="button"
+                    onClick={() => toggleProfile(profile.slug)}
+                    title={profile.description}
+                    className={`group relative inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2.5 sm:py-2 rounded-full border-2 transition-colors touch-manipulation min-h-[44px] text-sm ${
+                      formData.kundenprofile.includes(profile.slug)
+                        ? 'border-green-500 bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-300'
+                        : 'border-gray-300 dark:border-gray-600 hover:border-gray-400 active:bg-gray-100 dark:active:bg-gray-700'
+                    }`}
+                  >
+                    <span className="text-lg sm:text-base">{profile.icon}</span>
+                    <span>{profile.name_de}</span>
+                    {/* Tooltip on hover - hidden on mobile */}
+                    <span className="hidden sm:block invisible group-hover:visible absolute left-1/2 -translate-x-1/2 bottom-full mb-2 px-3 py-2 bg-gray-900 text-white text-xs rounded-lg whitespace-nowrap z-10 max-w-xs">
+                      {profile.description}
+                      <span className="absolute left-1/2 -translate-x-1/2 top-full border-4 border-transparent border-t-gray-900" />
+                    </span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          ))}
         </div>
 
-        {/* Submit Buttons */}
-        <div className="flex justify-between items-center pt-4">
+        {/* Submit Buttons - Desktop */}
+        <div className="hidden sm:flex justify-between items-center pt-4">
           <Link
             href="/admin/products"
             className="px-6 py-3 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 font-medium"
@@ -599,6 +701,41 @@ export default function ErfassungPage() {
           </div>
         </div>
       </form>
+
+      {/* Mobile Sticky Bottom Bar */}
+      <div className="sm:hidden fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 p-4 z-50 safe-area-inset-bottom">
+        <div className="flex gap-3">
+          <button
+            type="button"
+            onClick={(e) => {
+              e.preventDefault()
+              const form = document.querySelector('form')
+              if (form) form.requestSubmit()
+            }}
+            disabled={isLoading}
+            className="flex-1 inline-flex items-center justify-center gap-2 bg-gray-600 hover:bg-gray-700 disabled:bg-gray-400 text-white font-semibold py-4 rounded-xl transition-colors touch-manipulation min-h-[52px]"
+          >
+            {isLoading ? (
+              <Loader2 className="w-5 h-5 animate-spin" />
+            ) : (
+              <>
+                <Save className="w-5 h-5" />
+                <span>Entwurf</span>
+              </>
+            )}
+          </button>
+
+          <button
+            type="button"
+            onClick={(e) => handleSubmit(e as unknown as React.FormEvent, true)}
+            disabled={isLoading}
+            className="flex-1 inline-flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 disabled:bg-green-400 text-white font-semibold py-4 rounded-xl transition-colors touch-manipulation min-h-[52px]"
+          >
+            <Package className="w-5 h-5" />
+            <span>Speichern</span>
+          </button>
+        </div>
+      </div>
     </div>
   )
 }
