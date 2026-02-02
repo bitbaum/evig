@@ -13,7 +13,7 @@
  */
 
 import { logger } from '@/lib/logger'
-import type { VoiceProductData, AIFieldSource, AIFieldMetadata, ErfassungFormData } from '@/types/erfassung'
+import type { VoiceProductData, AIFieldSource, AIFieldMetadata, ErfassungFormData, VerificationSource } from '@/types/erfassung'
 
 // AI Provider configuration - prefer Groq (cloud) over Ollama (local)
 const GROQ_API_KEY = process.env.GROQ_API_KEY || ''
@@ -24,6 +24,146 @@ const GROQ_MODEL = 'llama-3.3-70b-versatile'
 const OLLAMA_URL = process.env.OLLAMA_URL || 'http://localhost:11434'
 const OLLAMA_MODEL = process.env.OLLAMA_MODEL || 'llama3.2'
 const AI_TIMEOUT_MS = 15000 // 15 second timeout
+
+// =============================================================================
+// VERIFICATION SOURCES
+// =============================================================================
+
+/**
+ * Manufacturer spec page URLs
+ */
+const MANUFACTURER_SPEC_URLS: Record<string, (product: string) => string> = {
+  apple: (product) => {
+    const searchQuery = encodeURIComponent(product)
+    return `https://support.apple.com/de-ch/search?q=${searchQuery}`
+  },
+  dell: (product) => {
+    const searchQuery = encodeURIComponent(product)
+    return `https://www.dell.com/support/home/de-ch/product-support/servicetag-lookup/${searchQuery}`
+  },
+  lenovo: (product) => {
+    const searchQuery = encodeURIComponent(product)
+    return `https://pcsupport.lenovo.com/ch/de/search?query=${searchQuery}`
+  },
+  hp: (product) => {
+    const searchQuery = encodeURIComponent(product)
+    return `https://support.hp.com/ch-de/search?q=${searchQuery}`
+  },
+  microsoft: (product) => {
+    const searchQuery = encodeURIComponent(product)
+    return `https://support.microsoft.com/de-ch/search/results?query=${searchQuery}`
+  },
+  asus: (product) => {
+    const searchQuery = encodeURIComponent(product)
+    return `https://www.asus.com/ch-de/support/search/?searchType=product&searchKey=${searchQuery}`
+  },
+  acer: (product) => {
+    const searchQuery = encodeURIComponent(product)
+    return `https://www.acer.com/ch-de/support/product-search?text=${searchQuery}`
+  },
+}
+
+/**
+ * Swiss marketplace search URLs for price comparison
+ */
+const SWISS_MARKETPLACES = [
+  {
+    name: 'Ricardo.ch',
+    baseUrl: 'https://www.ricardo.ch/de/s/',
+    buildUrl: (query: string) => `https://www.ricardo.ch/de/s/${encodeURIComponent(query)}`,
+    type: 'marketplace' as const,
+  },
+  {
+    name: 'tutti.ch',
+    baseUrl: 'https://www.tutti.ch/de/q/',
+    buildUrl: (query: string) => `https://www.tutti.ch/de/q/${encodeURIComponent(query)}`,
+    type: 'marketplace' as const,
+  },
+  {
+    name: 'Revendo.ch',
+    baseUrl: 'https://www.revendo.ch/search?q=',
+    buildUrl: (query: string) => `https://www.revendo.ch/search?q=${encodeURIComponent(query)}`,
+    type: 'marketplace' as const,
+  },
+]
+
+/**
+ * Tech review/specs sites
+ */
+const TECH_REVIEW_SITES = [
+  {
+    name: 'Notebookcheck',
+    buildUrl: (query: string) => `https://www.notebookcheck.com/Search.8222.0.html?q=${encodeURIComponent(query)}`,
+    type: 'review' as const,
+  },
+  {
+    name: 'Geizhals.ch',
+    buildUrl: (query: string) => `https://geizhals.ch/?fs=${encodeURIComponent(query)}`,
+    type: 'price' as const,
+  },
+]
+
+/**
+ * Generate verification sources for extracted product data
+ */
+export function generateVerificationSources(
+  data: VoiceProductData
+): { fieldSources: Record<string, VerificationSource[]>; allSources: VerificationSource[] } {
+  const fieldSources: Record<string, VerificationSource[]> = {}
+  const allSources: VerificationSource[] = []
+  const searchQuery = `${data.hersteller} ${data.produktname}`.trim()
+
+  // 1. Manufacturer specs source (for hersteller, produktname, specs)
+  const herstellerLower = data.hersteller?.toLowerCase() || ''
+  const manufacturerUrlBuilder = MANUFACTURER_SPEC_URLS[herstellerLower]
+
+  if (manufacturerUrlBuilder && data.produktname) {
+    const manufacturerSource: VerificationSource = {
+      title: `${data.hersteller} Support`,
+      url: manufacturerUrlBuilder(data.produktname),
+      type: 'manufacturer',
+      relevance: 0.95,
+    }
+
+    fieldSources.hersteller = [manufacturerSource]
+    fieldSources.produktname = [manufacturerSource]
+    fieldSources.specs = [manufacturerSource]
+    allSources.push(manufacturerSource)
+  }
+
+  // 2. Swiss marketplace sources (for verkaufspreis)
+  const priceeSources: VerificationSource[] = []
+  for (const marketplace of SWISS_MARKETPLACES) {
+    const source: VerificationSource = {
+      title: marketplace.name,
+      url: marketplace.buildUrl(searchQuery),
+      type: marketplace.type,
+      relevance: 0.85,
+    }
+    priceeSources.push(source)
+    allSources.push(source)
+  }
+  fieldSources.verkaufspreis = priceeSources
+
+  // 3. Tech review sources (for specs, kurzbeschreibung)
+  const reviewSources: VerificationSource[] = []
+  for (const site of TECH_REVIEW_SITES) {
+    const source: VerificationSource = {
+      title: site.name,
+      url: site.buildUrl(searchQuery),
+      type: site.type,
+      relevance: 0.8,
+    }
+    reviewSources.push(source)
+    allSources.push(source)
+  }
+
+  // Add review sources to specs and description
+  fieldSources.specs = [...(fieldSources.specs || []), ...reviewSources.filter(s => s.type === 'review')]
+  fieldSources.kurzbeschreibung = reviewSources.filter(s => s.type === 'review')
+
+  return { fieldSources, allSources }
+}
 
 /**
  * Fast regex-based fallback parser for when Ollama is slow/unavailable
@@ -152,6 +292,7 @@ export interface ExtractionResult {
   sourceType: 'voice' | 'text' | 'image'
   inputText: string
   model: string
+  verificationSources?: VerificationSource[] // Links for admin to verify AI-generated data
 }
 
 export interface ExtractionError {
@@ -165,15 +306,19 @@ export type ExtractProductResult = ExtractionResult | ExtractionError
 /**
  * Calculate confidence scores for extracted fields based on input analysis
  * Higher confidence if the field was explicitly mentioned in input
+ * Also attaches verification sources to each field
  */
 function calculateFieldConfidence(
   inputText: string,
   data: VoiceProductData,
   sourceType: 'voice' | 'text' | 'image'
-): AIFieldMetadata {
+): { metadata: AIFieldMetadata; allSources: VerificationSource[] } {
   const timestamp = Date.now()
   const model = OLLAMA_MODEL
   const inputLower = inputText.toLowerCase()
+
+  // Generate verification sources
+  const { fieldSources, allSources } = generateVerificationSources(data)
 
   // Helper to check if a value was likely mentioned in input
   const wasExplicitlyMentioned = (value: string): boolean => {
@@ -184,13 +329,14 @@ function calculateFieldConfidence(
     return words.some(word => inputLower.includes(word))
   }
 
-  // Helper to create source with confidence
-  const createSource = (confidence: number): AIFieldSource => ({
+  // Helper to create source with confidence and verification links
+  const createSource = (confidence: number, fieldName: string): AIFieldSource => ({
     type: sourceType,
     inputText,
     confidence,
     model,
     timestamp,
+    sources: fieldSources[fieldName] || [],
   })
 
   const metadata: AIFieldMetadata = {}
@@ -198,18 +344,18 @@ function calculateFieldConfidence(
   // Hersteller - high confidence if brand name mentioned
   if (data.hersteller) {
     const mentioned = wasExplicitlyMentioned(data.hersteller)
-    metadata.hersteller = createSource(mentioned ? 0.95 : 0.7)
+    metadata.hersteller = createSource(mentioned ? 0.95 : 0.7, 'hersteller')
   }
 
   // Produktname - high confidence if model number/name mentioned
   if (data.produktname) {
     const mentioned = wasExplicitlyMentioned(data.produktname)
-    metadata.produktname = createSource(mentioned ? 0.9 : 0.6)
+    metadata.produktname = createSource(mentioned ? 0.9 : 0.6, 'produktname')
   }
 
   // Kurzbeschreibung - lower confidence as it's generated
   if (data.kurzbeschreibung) {
-    metadata.kurzbeschreibung = createSource(0.75)
+    metadata.kurzbeschreibung = createSource(0.75, 'kurzbeschreibung')
   }
 
   // Specs - check each spec for confidence
@@ -218,37 +364,37 @@ function calculateFieldConfidence(
     const specsConfidence = ['ram', 'gb', 'ssd', 'cpu', 'i5', 'i7', 'ghz', 'core'].some(
       kw => inputLower.includes(kw)
     ) ? 0.85 : 0.5
-    metadata.specs = createSource(specsConfidence)
+    metadata.specs = createSource(specsConfidence, 'specs')
   }
 
   // Verkaufspreis - high if number mentioned with currency indicators
   if (data.verkaufspreis) {
     const pricePattern = /\d+\s*(chf|franken|fr|sfr|.-)?/i
     const priceMatch = inputLower.match(pricePattern)
-    metadata.verkaufspreis = createSource(priceMatch ? 0.9 : 0.4)
+    metadata.verkaufspreis = createSource(priceMatch ? 0.9 : 0.4, 'verkaufspreis')
   }
 
   // Zustand - check for condition keywords
   if (data.zustand) {
     const conditionKeywords = ['neu', 'new', 'gut', 'good', 'gebraucht', 'used', 'zustand', 'condition']
     const mentioned = conditionKeywords.some(kw => inputLower.includes(kw))
-    metadata.zustand = createSource(mentioned ? 0.85 : 0.5)
+    metadata.zustand = createSource(mentioned ? 0.85 : 0.5, 'zustand')
   }
 
   // Categories - medium confidence as often inferred
   if (data.hauptkategorie) {
-    metadata.hauptkategorie = createSource(0.8)
+    metadata.hauptkategorie = createSource(0.8, 'hauptkategorie')
   }
   if (data.unterkategorie) {
-    metadata.unterkategorie = createSource(0.7)
+    metadata.unterkategorie = createSource(0.7, 'unterkategorie')
   }
 
   // Kundenprofile - lower confidence as it's AI-inferred
   if (data.kundenprofile?.length) {
-    metadata.kundenprofile = createSource(0.6)
+    metadata.kundenprofile = createSource(0.6, 'kundenprofile')
   }
 
-  return metadata
+  return { metadata, allSources }
 }
 
 /**
@@ -315,11 +461,12 @@ async function tryGroqExtraction(
     }
 
     const productData = JSON.parse(jsonMatch[0]) as VoiceProductData
-    const metadata = calculateFieldConfidence(text, productData, sourceType)
+    const { metadata, allSources } = calculateFieldConfidence(text, productData, sourceType)
 
     logger.info('Groq extraction successful', {
       product: productData.produktname,
       hersteller: productData.hersteller,
+      sourcesCount: allSources.length,
     })
 
     return {
@@ -329,6 +476,7 @@ async function tryGroqExtraction(
       sourceType,
       inputText: text,
       model: GROQ_MODEL,
+      verificationSources: allSources,
     }
   } catch (error) {
     clearTimeout(timeoutId)
@@ -385,11 +533,12 @@ async function tryOllamaExtraction(
     }
 
     const productData = JSON.parse(jsonMatch[0]) as VoiceProductData
-    const metadata = calculateFieldConfidence(text, productData, sourceType)
+    const { metadata, allSources } = calculateFieldConfidence(text, productData, sourceType)
 
     logger.info('Ollama extraction successful', {
       product: productData.produktname,
       hersteller: productData.hersteller,
+      sourcesCount: allSources.length,
     })
 
     return {
@@ -399,6 +548,7 @@ async function tryOllamaExtraction(
       sourceType,
       inputText: text,
       model: OLLAMA_MODEL,
+      verificationSources: allSources,
     }
   } catch (error) {
     clearTimeout(timeoutId)
@@ -441,7 +591,7 @@ export async function extractProductFromText(
   })
 
   const productData = fastParseProductText(text)
-  const metadata = calculateFieldConfidence(text, productData, sourceType)
+  const { metadata, allSources } = calculateFieldConfidence(text, productData, sourceType)
 
   // Adjust confidence for fallback parser (slightly lower)
   Object.keys(metadata).forEach(key => {
@@ -455,6 +605,7 @@ export async function extractProductFromText(
   logger.info('Fast parser extraction successful', {
     product: productData.produktname,
     hersteller: productData.hersteller,
+    sourcesCount: allSources.length,
   })
 
   return {
@@ -464,6 +615,7 @@ export async function extractProductFromText(
     sourceType,
     inputText: text,
     model: 'fast-parser',
+    verificationSources: allSources,
   }
 }
 
@@ -553,12 +705,13 @@ Antworte NUR mit dem ausgefüllten JSON, keine Erklärungen.`
     const productData = JSON.parse(jsonMatch[0]) as VoiceProductData
 
     // For image extraction, use a generic input description for confidence
-    const metadata = calculateFieldConfidence('[image analysis]', productData, 'image')
+    const { metadata, allSources } = calculateFieldConfidence('[image analysis]', productData, 'image')
 
     logger.info('Image extraction successful', {
       product: productData.produktname,
       hersteller: productData.hersteller,
       fieldsExtracted: Object.keys(metadata).length,
+      sourcesCount: allSources.length,
     })
 
     return {
@@ -568,6 +721,7 @@ Antworte NUR mit dem ausgefüllten JSON, keine Erklärungen.`
       sourceType: 'image',
       inputText: '[Bild-Analyse]',
       model: VISION_MODEL,
+      verificationSources: allSources,
     }
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Unbekannter Fehler'

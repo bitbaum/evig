@@ -142,6 +142,34 @@ export function AIFieldIndicator({
                 </div>
               )}
 
+              {/* Verification sources */}
+              {source.sources && source.sources.length > 0 && (
+                <div className="mt-2 pt-2 border-t border-gray-200 dark:border-gray-700">
+                  <span className="text-gray-600 dark:text-gray-400 block mb-1.5 flex items-center gap-1">
+                    <ExternalLink className="w-3 h-3" />
+                    Quellen prüfen:
+                  </span>
+                  <div className="space-y-1">
+                    {source.sources.map((verifySource, idx) => (
+                      <a
+                        key={idx}
+                        href={verifySource.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-1.5 text-xs text-blue-600 dark:text-blue-400 hover:underline bg-blue-50 dark:bg-blue-900/20 rounded px-2 py-1"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <ExternalLink className="w-3 h-3 flex-shrink-0" />
+                        <span className="truncate">{verifySource.title}</span>
+                        <span className="text-gray-400 text-[10px] ml-auto flex-shrink-0">
+                          {verifySource.type}
+                        </span>
+                      </a>
+                    ))}
+                  </div>
+                </div>
+              )}
+
               {/* Timestamp */}
               <div className="text-xs text-gray-400 mt-2">
                 Extrahiert: {new Date(source.timestamp).toLocaleTimeString('de-CH')}

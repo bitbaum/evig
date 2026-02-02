@@ -16,6 +16,16 @@ export interface SpecField {
 }
 
 /**
+ * Verification source link for AI-extracted data
+ */
+export interface VerificationSource {
+  title: string // Display title (e.g., "Apple Official Specs")
+  url: string // Clickable URL
+  type: 'manufacturer' | 'marketplace' | 'review' | 'specs' | 'price'
+  relevance: number // 0-1 how relevant this source is
+}
+
+/**
  * AI extraction source information
  */
 export interface AIFieldSource {
@@ -24,6 +34,7 @@ export interface AIFieldSource {
   confidence: number // 0-1 confidence score
   model?: string // AI model used (e.g., 'llama3.2')
   timestamp: number // When the extraction happened
+  sources?: VerificationSource[] // Verification links for this field
 }
 
 /**
