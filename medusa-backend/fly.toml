@@ -1,0 +1,28 @@
+app = "revampit-medusa"
+primary_region = "fra"
+
+[build]
+  dockerfile = "Dockerfile.prod"
+
+[env]
+  PORT = "9000"
+  STORE_CORS = "https://revampit.vercel.app"
+  ADMIN_CORS = "https://revampit.vercel.app"
+  AUTH_CORS = "https://revampit.vercel.app"
+  MEDUSA_ADMIN_ONBOARDING_TYPE = "default"
+
+[http_service]
+  internal_port = 9000
+  force_https = true
+  auto_stop_machines = false
+  auto_start_machines = true
+  min_machines_running = 1
+
+[[http_service.checks]]
+  interval = "30s"
+  timeout = "5s"
+  path = "/health"
+
+[[vm]]
+  size = "shared-cpu-1x"
+  memory = "512mb"

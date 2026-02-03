@@ -1,0 +1,32 @@
+name: Deploy Medusa
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'medusa-backend/**'
+  workflow_dispatch:
+
+env:
+  FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+
+jobs:
+  deploy:
+    name: Deploy Medusa to Fly.io
+    runs-on: ubuntu-latest
+    # Only run if FLY_API_TOKEN is configured
+    if: ${{ secrets.FLY_API_TOKEN != '' }}
+    defaults:
+      run:
+        working-directory: medusa-backend
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Fly.io
+        uses: superfly/flyctl-actions/setup-flyctl@master
+
+      - name: Deploy to Fly.io
+        run: flyctl deploy --remote-only
+        env:
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
