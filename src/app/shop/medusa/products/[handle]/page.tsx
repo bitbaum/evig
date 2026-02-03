@@ -52,7 +52,12 @@ function useInventoryProduct(id: string) {
           throw new Error('Product not found')
         }
         const result = await response.json()
-        setData(result.product)
+        // API returns { success: true, data: { product: {...} } }
+        if (result.success && result.data?.product) {
+          setData(result.data.product)
+        } else {
+          throw new Error(result.error || 'Product not found')
+        }
         setError(null)
       } catch (err) {
         setError(err instanceof Error ? err : new Error('Unknown error'))
@@ -205,7 +210,7 @@ export default function ProductPage() {
 
   if (isInventoryProduct && inventoryProduct) {
     // Inventory product
-    formattedPrice = `CHF ${inventoryProduct.price.toFixed(2)}`
+    formattedPrice = `CHF ${Number(inventoryProduct.price).toFixed(2)}`
     isAvailable = inventoryProduct.is_available
     category = inventoryProduct.category || 'Produkt'
     productTitle = inventoryProduct.title

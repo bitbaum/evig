@@ -1,8 +1,8 @@
 'use client'
 
 /**
- * Product Fact Sheet / Label Template
- * Printable HTML page for product labels
+ * Product Fact Sheet / Sales Label
+ * A4-sized printable sales sheet with QR code
  *
  * Route: /admin/products/[id]/factsheet
  */
@@ -19,54 +19,34 @@ import {
   Code,
   GraduationCap,
   Package,
-  Ruler,
-  Weight,
-  MapPin,
-  Tag,
-  CheckCircle2
+  Shield,
+  Leaf,
+  ArrowLeft,
+  Smartphone,
 } from 'lucide-react'
 
-// Customer profile icons mapping
-const PROFILE_ICONS: Record<string, React.ReactNode> = {
-  oma: <Heart className="w-4 h-4" />,
-  buero: <Briefcase className="w-4 h-4" />,
-  chiller: <Tv className="w-4 h-4" />,
-  gamer: <Gamepad2 className="w-4 h-4" />,
-  kreativ: <Palette className="w-4 h-4" />,
-  dev: <Code className="w-4 h-4" />,
-  student: <GraduationCap className="w-4 h-4" />,
+// Customer profile config
+const PROFILES: Record<string, { name: string; icon: React.ReactNode; color: string }> = {
+  oma: { name: 'Oma/Opa', icon: <Heart className="w-5 h-5" />, color: '#EC4899' },
+  buero: { name: 'Büro', icon: <Briefcase className="w-5 h-5" />, color: '#3B82F6' },
+  chiller: { name: 'Chiller', icon: <Tv className="w-5 h-5" />, color: '#8B5CF6' },
+  gamer: { name: 'Gamer', icon: <Gamepad2 className="w-5 h-5" />, color: '#EF4444' },
+  kreativ: { name: 'Kreativ', icon: <Palette className="w-5 h-5" />, color: '#F59E0B' },
+  dev: { name: 'Entwickler', icon: <Code className="w-5 h-5" />, color: '#10B981' },
+  student: { name: 'Student', icon: <GraduationCap className="w-5 h-5" />, color: '#06B6D4' },
 }
 
-const PROFILE_COLORS: Record<string, string> = {
-  oma: '#EC4899',
-  buero: '#3B82F6',
-  chiller: '#8B5CF6',
-  gamer: '#EF4444',
-  kreativ: '#F59E0B',
-  dev: '#10B981',
-  student: '#06B6D4',
-}
-
-const PROFILE_NAMES: Record<string, string> = {
-  oma: 'Oma/Opa',
-  buero: 'Büro',
-  chiller: 'Chiller',
-  gamer: 'Gamer',
-  kreativ: 'Kreativ-Kopf',
-  dev: 'Entwickler',
-  student: 'Student',
-}
-
-const CONDITION_LABELS: Record<string, { label: string; color: string }> = {
-  new: { label: 'Neu', color: '#10B981' },
-  like_new: { label: 'Wie neu', color: '#22C55E' },
-  good: { label: 'Gut', color: '#3B82F6' },
-  fair: { label: 'Akzeptabel', color: '#F59E0B' },
-  poor: { label: 'Gebraucht', color: '#EF4444' },
-  damaged: { label: 'Beschädigt', color: '#DC2626' },
+const CONDITION_CONFIG: Record<string, { label: string; color: string; bgColor: string }> = {
+  new: { label: 'Neu', color: '#059669', bgColor: '#D1FAE5' },
+  like_new: { label: 'Wie neu', color: '#059669', bgColor: '#D1FAE5' },
+  good: { label: 'Gut', color: '#2563EB', bgColor: '#DBEAFE' },
+  fair: { label: 'Akzeptabel', color: '#D97706', bgColor: '#FEF3C7' },
+  poor: { label: 'Gebraucht', color: '#DC2626', bgColor: '#FEE2E2' },
+  damaged: { label: 'Beschädigt', color: '#DC2626', bgColor: '#FEE2E2' },
 }
 
 interface ProductData {
+  id: string
   item_uuid: string
   product_name: string
   brand: string
@@ -105,7 +85,11 @@ export default function FactSheetPage() {
           throw new Error('Produkt nicht gefunden')
         }
         const data = await response.json()
-        setProduct(data.product)
+        if (data.success && data.data?.product) {
+          setProduct({ ...data.data.product, id: productId })
+        } else {
+          throw new Error(data.error || 'Produkt nicht gefunden')
+        }
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Fehler beim Laden')
       } finally {
@@ -118,21 +102,17 @@ export default function FactSheetPage() {
     }
   }, [productId])
 
-  const handlePrint = () => {
-    window.print()
-  }
-
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600"></div>
+      <div className="min-h-screen flex items-center justify-center bg-gray-100">
+        <div className="animate-spin rounded-full h-12 w-12 border-4 border-green-600 border-t-transparent"></div>
       </div>
     )
   }
 
   if (error || !product) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center bg-gray-100">
         <div className="text-center">
           <Package className="w-16 h-16 text-gray-400 mx-auto mb-4" />
           <h2 className="text-xl font-semibold text-gray-900">
@@ -143,232 +123,223 @@ export default function FactSheetPage() {
     )
   }
 
-  const condition = CONDITION_LABELS[product.condition] || { label: product.condition, color: '#6B7280' }
+  const condition = CONDITION_CONFIG[product.condition] || {
+    label: product.condition,
+    color: '#6B7280',
+    bgColor: '#F3F4F6'
+  }
   const specs = product.specifications || {}
-  const hasSpecs = Object.keys(specs).length > 0
-  const hasDimensions = product.dimensions?.laenge_mm || product.dimensions?.breite_mm || product.dimensions?.hoehe_mm
+  const specEntries = Object.entries(specs).slice(0, 8) // Limit to 8 specs for layout
+  const shopUrl = `${typeof window !== 'undefined' ? window.location.origin : ''}/shop/medusa/products/${product.id}`
+  const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(shopUrl)}&bgcolor=ffffff&color=16a34a`
 
   return (
     <>
-      {/* Print Button - Hidden in print */}
-      <div className="print:hidden fixed top-4 right-4 z-50">
-        <button
-          onClick={handlePrint}
-          className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors shadow-lg"
-        >
-          <Printer className="w-5 h-5" />
-          Drucken
-        </button>
+      {/* Print Controls - Hidden in print */}
+      <div className="print:hidden fixed top-0 left-0 right-0 bg-white border-b border-gray-200 z-50 px-4 py-3">
+        <div className="max-w-[210mm] mx-auto flex items-center justify-between">
+          <a
+            href="/admin/products"
+            className="flex items-center gap-2 text-gray-600 hover:text-gray-900"
+          >
+            <ArrowLeft className="w-5 h-5" />
+            Zurück
+          </a>
+          <div className="flex items-center gap-3">
+            <span className="text-sm text-gray-500">
+              A4 Factsheet - {product.brand} {product.product_name}
+            </span>
+            <button
+              onClick={() => window.print()}
+              className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+            >
+              <Printer className="w-5 h-5" />
+              Drucken
+            </button>
+          </div>
+        </div>
       </div>
 
-      {/* Fact Sheet Container */}
-      <div className="factsheet-container bg-white min-h-screen p-8 print:p-4">
-        <div className="max-w-[210mm] mx-auto">
+      {/* A4 Fact Sheet */}
+      <div className="bg-gray-100 min-h-screen pt-16 pb-8 print:pt-0 print:pb-0 print:bg-white">
+        <div className="factsheet-page w-[210mm] min-h-[297mm] mx-auto bg-white shadow-lg print:shadow-none">
 
-          {/* Header with Logo and Item UUID */}
-          <header className="flex items-start justify-between border-b-2 border-green-600 pb-4 mb-6">
-            <div className="flex items-center gap-3">
-              <div className="w-12 h-12 bg-green-600 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-xl">R</span>
+          {/* Green Header Bar */}
+          <div className="bg-green-600 text-white px-8 py-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-4">
+                <div className="w-14 h-14 bg-white rounded-xl flex items-center justify-center">
+                  <span className="text-green-600 font-bold text-2xl">R</span>
+                </div>
+                <div>
+                  <h1 className="text-2xl font-bold tracking-tight">Revamp-IT</h1>
+                  <p className="text-green-100 text-sm">Nachhaltige IT - Gut für dich, gut für die Umwelt</p>
+                </div>
               </div>
-              <div>
-                <h1 className="text-2xl font-bold text-gray-900">Revamp-IT</h1>
-                <p className="text-sm text-gray-600">Nachhaltige IT für alle</p>
+              <div className="text-right">
+                <div className="text-green-200 text-xs uppercase tracking-wider">Artikel-Nr.</div>
+                <div className="text-xl font-mono font-bold">{product.item_uuid}</div>
               </div>
             </div>
-            <div className="text-right">
-              <div className="text-xs text-gray-500 uppercase tracking-wide">Artikel-Nr.</div>
-              <div className="text-xl font-mono font-bold text-green-600">
-                {product.item_uuid}
-              </div>
-            </div>
-          </header>
+          </div>
 
-          {/* Product Title Section */}
-          <section className="mb-6">
-            <div className="flex items-start gap-6">
-              {/* Product Image Placeholder */}
-              <div className="w-32 h-32 bg-gray-100 rounded-lg flex items-center justify-center flex-shrink-0 border-2 border-dashed border-gray-300">
+          {/* Main Content */}
+          <div className="px-8 py-6">
+
+            {/* Product Hero Section */}
+            <div className="flex gap-6 mb-6">
+              {/* Product Image */}
+              <div className="w-48 h-48 bg-gray-50 rounded-xl flex items-center justify-center flex-shrink-0 border-2 border-gray-200 overflow-hidden">
                 {product.image_url ? (
                   <img
                     src={product.image_url}
                     alt={product.product_name}
-                    className="w-full h-full object-cover rounded-lg"
+                    className="w-full h-full object-contain"
                   />
                 ) : (
-                  <Package className="w-12 h-12 text-gray-400" />
+                  <Package className="w-20 h-20 text-gray-300" />
                 )}
               </div>
 
+              {/* Product Info */}
               <div className="flex-1">
-                <div className="text-sm text-gray-500 mb-1">{product.brand}</div>
-                <h2 className="text-2xl font-bold text-gray-900 mb-2">
+                <div className="text-gray-500 text-sm font-medium mb-1">{product.brand}</div>
+                <h2 className="text-3xl font-bold text-gray-900 mb-2 leading-tight">
                   {product.product_name}
                 </h2>
                 {product.short_description && (
-                  <p className="text-gray-600 text-sm">
+                  <p className="text-gray-600 text-base mb-4 leading-relaxed">
                     {product.short_description}
                   </p>
                 )}
 
-                {/* Category badges */}
-                <div className="flex items-center gap-2 mt-3">
-                  {product.category && (
-                    <span className="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded">
-                      {product.category}
-                    </span>
-                  )}
-                  {product.subcategory && (
-                    <span className="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded">
-                      {product.subcategory}
-                    </span>
-                  )}
-                </div>
-              </div>
-            </div>
-          </section>
-
-          {/* Price and Condition */}
-          <section className="grid grid-cols-2 gap-4 mb-6">
-            <div className="bg-green-50 rounded-lg p-4 border border-green-200">
-              <div className="text-sm text-green-700 mb-1">Verkaufspreis</div>
-              <div className="text-3xl font-bold text-green-600">
-                CHF {product.estimated_price_chf.toFixed(2)}
-              </div>
-            </div>
-            <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
-              <div className="text-sm text-gray-600 mb-1">Zustand</div>
-              <div className="flex items-center gap-2">
-                <CheckCircle2
-                  className="w-6 h-6"
-                  style={{ color: condition.color }}
-                />
-                <span
-                  className="text-xl font-semibold"
-                  style={{ color: condition.color }}
+                {/* Condition Badge */}
+                <div
+                  className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold"
+                  style={{ backgroundColor: condition.bgColor, color: condition.color }}
                 >
-                  {condition.label}
-                </span>
+                  <span className="w-2 h-2 rounded-full" style={{ backgroundColor: condition.color }}></span>
+                  Zustand: {condition.label}
+                </div>
+              </div>
+
+              {/* Price Box */}
+              <div className="w-44 flex-shrink-0">
+                <div className="bg-green-50 border-2 border-green-500 rounded-xl p-4 text-center">
+                  <div className="text-green-700 text-sm font-medium mb-1">Ihr Preis</div>
+                  <div className="text-4xl font-bold text-green-600 mb-1">
+                    {Number(product.estimated_price_chf).toFixed(0)}.-
+                  </div>
+                  <div className="text-green-600 text-sm">CHF inkl. MwSt.</div>
+                </div>
+                {product.quantity_available > 0 && product.quantity_available <= 3 && (
+                  <div className="mt-2 text-center text-orange-600 text-sm font-medium">
+                    Nur noch {product.quantity_available} verfügbar!
+                  </div>
+                )}
               </div>
             </div>
-          </section>
 
-          {/* Technical Specifications */}
-          {hasSpecs && (
-            <section className="mb-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-3 flex items-center gap-2">
-                <Tag className="w-5 h-5 text-gray-600" />
-                Technische Daten
-              </h3>
-              <div className="bg-gray-50 rounded-lg border border-gray-200 overflow-hidden">
-                <table className="w-full text-sm">
-                  <tbody>
-                    {Object.entries(specs).map(([key, value], index) => (
-                      <tr
-                        key={key}
-                        className={index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}
-                      >
-                        <td className="px-4 py-2 font-medium text-gray-700 w-1/3 border-r border-gray-200">
-                          {key}
-                        </td>
-                        <td className="px-4 py-2 text-gray-900">
-                          {value}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </section>
-          )}
-
-          {/* Physical Properties */}
-          <section className="grid grid-cols-3 gap-4 mb-6">
-            {hasDimensions && (
-              <div className="bg-gray-50 rounded-lg p-3 border border-gray-200">
-                <div className="flex items-center gap-2 text-gray-600 mb-2">
-                  <Ruler className="w-4 h-4" />
-                  <span className="text-xs uppercase tracking-wide">Masse</span>
-                </div>
-                <div className="text-sm font-medium text-gray-900">
-                  {[
-                    product.dimensions.laenge_mm && `${product.dimensions.laenge_mm}mm`,
-                    product.dimensions.breite_mm && `${product.dimensions.breite_mm}mm`,
-                    product.dimensions.hoehe_mm && `${product.dimensions.hoehe_mm}mm`,
-                  ].filter(Boolean).join(' × ')}
-                </div>
-              </div>
-            )}
-
-            {product.weight_grams && (
-              <div className="bg-gray-50 rounded-lg p-3 border border-gray-200">
-                <div className="flex items-center gap-2 text-gray-600 mb-2">
-                  <Weight className="w-4 h-4" />
-                  <span className="text-xs uppercase tracking-wide">Gewicht</span>
-                </div>
-                <div className="text-sm font-medium text-gray-900">
-                  {product.weight_grams >= 1000
-                    ? `${(product.weight_grams / 1000).toFixed(2)} kg`
-                    : `${product.weight_grams} g`
-                  }
-                </div>
-              </div>
-            )}
-
-            {(product.location || product.box_id) && (
-              <div className="bg-gray-50 rounded-lg p-3 border border-gray-200">
-                <div className="flex items-center gap-2 text-gray-600 mb-2">
-                  <MapPin className="w-4 h-4" />
-                  <span className="text-xs uppercase tracking-wide">Lagerort</span>
-                </div>
-                <div className="text-sm font-medium text-gray-900">
-                  {[product.location, product.box_id].filter(Boolean).join(' / ')}
-                </div>
-              </div>
-            )}
-          </section>
-
-          {/* Customer Profiles */}
-          {product.customer_profiles && product.customer_profiles.length > 0 && (
-            <section className="mb-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-3">
-                Empfohlen für
-              </h3>
-              <div className="flex flex-wrap gap-2">
-                {product.customer_profiles.map((profileSlug) => {
-                  const color = PROFILE_COLORS[profileSlug] || '#6B7280'
-                  const name = PROFILE_NAMES[profileSlug] || profileSlug
-                  const icon = PROFILE_ICONS[profileSlug]
-
-                  return (
-                    <div
-                      key={profileSlug}
-                      className="flex items-center gap-2 px-3 py-2 rounded-full text-white text-sm font-medium"
-                      style={{ backgroundColor: color }}
-                    >
-                      {icon}
-                      {name}
+            {/* Technical Specs */}
+            {specEntries.length > 0 && (
+              <div className="mb-6">
+                <h3 className="text-lg font-bold text-gray-900 mb-3 pb-2 border-b-2 border-gray-200">
+                  Technische Daten
+                </h3>
+                <div className="grid grid-cols-2 gap-x-8 gap-y-2">
+                  {specEntries.map(([key, value]) => (
+                    <div key={key} className="flex justify-between py-2 border-b border-gray-100">
+                      <span className="text-gray-600 font-medium">{key}</span>
+                      <span className="text-gray-900 font-semibold text-right">{value}</span>
                     </div>
-                  )
-                })}
+                  ))}
+                </div>
               </div>
-            </section>
-          )}
+            )}
+
+            {/* Who is this for? */}
+            {product.customer_profiles && product.customer_profiles.length > 0 && (
+              <div className="mb-6">
+                <h3 className="text-lg font-bold text-gray-900 mb-3 pb-2 border-b-2 border-gray-200">
+                  Perfekt geeignet für
+                </h3>
+                <div className="flex flex-wrap gap-3">
+                  {product.customer_profiles.map((slug) => {
+                    const profile = PROFILES[slug]
+                    if (!profile) return null
+                    return (
+                      <div
+                        key={slug}
+                        className="flex items-center gap-2 px-4 py-2 rounded-lg text-white font-medium"
+                        style={{ backgroundColor: profile.color }}
+                      >
+                        {profile.icon}
+                        {profile.name}
+                      </div>
+                    )
+                  })}
+                </div>
+              </div>
+            )}
+
+            {/* Trust Badges + QR Code */}
+            <div className="flex gap-6 mt-auto">
+              {/* Trust Badges */}
+              <div className="flex-1">
+                <h3 className="text-lg font-bold text-gray-900 mb-3 pb-2 border-b-2 border-gray-200">
+                  Ihre Vorteile
+                </h3>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="flex items-start gap-3">
+                    <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                      <Shield className="w-5 h-5 text-green-600" />
+                    </div>
+                    <div>
+                      <div className="font-semibold text-gray-900">Geprüfte Qualität</div>
+                      <div className="text-sm text-gray-600">Jedes Gerät wird getestet</div>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                      <Leaf className="w-5 h-5 text-green-600" />
+                    </div>
+                    <div>
+                      <div className="font-semibold text-gray-900">Nachhaltig</div>
+                      <div className="text-sm text-gray-600">IT ein zweites Leben geben</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* QR Code */}
+              <div className="w-48 flex-shrink-0 text-center">
+                <div className="bg-white border-2 border-gray-200 rounded-xl p-3 inline-block">
+                  <img
+                    src={qrCodeUrl}
+                    alt="QR Code zum Online-Shop"
+                    className="w-32 h-32 mx-auto"
+                  />
+                </div>
+                <div className="mt-2 flex items-center justify-center gap-1 text-gray-600 text-sm">
+                  <Smartphone className="w-4 h-4" />
+                  Online ansehen & kaufen
+                </div>
+              </div>
+            </div>
+
+          </div>
 
           {/* Footer */}
-          <footer className="border-t border-gray-200 pt-4 mt-8">
-            <div className="flex items-center justify-between text-xs text-gray-500">
-              <div>
-                Erfasst am {new Date(product.created_at).toLocaleDateString('de-CH')}
+          <div className="mt-auto px-8 py-4 bg-gray-50 border-t border-gray-200">
+            <div className="flex items-center justify-between text-sm">
+              <div className="text-gray-600">
+                <span className="font-medium">Revamp-IT</span> | Genossenschaft für nachhaltige IT
               </div>
-              <div>
-                Lager: {product.quantity_available} Stück verfügbar
-              </div>
-              <div>
-                revamp-it.ch
+              <div className="text-gray-500">
+                revamp-it.ch | Zürich
               </div>
             </div>
-          </footer>
+          </div>
 
         </div>
       </div>
@@ -377,21 +348,34 @@ export default function FactSheetPage() {
       <style jsx global>{`
         @media print {
           @page {
-            size: A4;
-            margin: 10mm;
+            size: A4 portrait;
+            margin: 0;
           }
 
-          body {
+          html, body {
+            margin: 0;
+            padding: 0;
             -webkit-print-color-adjust: exact !important;
             print-color-adjust: exact !important;
           }
 
-          .factsheet-container {
-            padding: 0 !important;
-          }
-
           .print\\:hidden {
             display: none !important;
+          }
+
+          .factsheet-page {
+            width: 210mm;
+            min-height: 297mm;
+            margin: 0;
+            box-shadow: none;
+            page-break-after: always;
+          }
+        }
+
+        @media screen {
+          .factsheet-page {
+            /* Simulate A4 on screen */
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
           }
         }
       `}</style>

@@ -155,9 +155,12 @@ export async function DELETE(
       [productId]
     )
 
-    // 3. Delete marketplace listings
+    // 3. Delete marketplace listings (via inventory_item_id)
     await query(
-      `DELETE FROM ${TABLE_NAMES.MARKETPLACE_LISTINGS} WHERE ai_product_id = $1`,
+      `DELETE FROM ${TABLE_NAMES.MARKETPLACE_LISTINGS}
+       WHERE inventory_item_id IN (
+         SELECT id FROM ${TABLE_NAMES.INVENTORY_ITEMS} WHERE ai_product_id = $1
+       )`,
       [productId]
     )
 
@@ -310,6 +313,171 @@ export async function PUT(
     return apiSuccess({ success: true, product: result.rows[0] })
   } catch (error) {
     logger.error('Failed to update inventory product', { error })
+    return apiError(error, 'Fehler beim Aktualisieren des Produkts')
+  }
+}
+
+/**
+ * PATCH /api/admin/inventory/[id]
+ * Quick status updates (publish/unpublish, approve/reject)
+ */
+export async function PATCH(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  try {
+    const session = await auth()
+    if (!session?.user?.id) {
+      return apiUnauthorized('Nicht angemeldet')
+    }
+
+    // Check permission
+    const user = {
+      email: session.user.email,
+      is_staff: session.user.isStaff,
+      staff_permissions: session.user.staffPermissions,
+    }
+    if (!canAccessSection(user, 'products')) {
+      return apiForbidden('Keine Berechtigung')
+    }
+
+    const { id: productId } = await params
+    const body = await request.json() as {
+      marketplace_status?: 'draft' | 'published'
+      status?: 'pending_review' | 'approved' | 'rejected'
+    }
+
+    // Handle marketplace_status change (publish/unpublish)
+    if (body.marketplace_status !== undefined) {
+      // Update inventory_items.marketplace_status
+      await query(
+        `UPDATE ${TABLE_NAMES.INVENTORY_ITEMS}
+         SET marketplace_status = $1, updated_at = NOW()
+         WHERE ai_product_id = $2`,
+        [body.marketplace_status, productId]
+      )
+
+      // If publishing, also ensure product is approved and create marketplace listing
+      if (body.marketplace_status === 'published') {
+        // Ensure product is approved
+        await query(
+          `UPDATE ${TABLE_NAMES.AI_EXTRACTED_PRODUCTS}
+           SET status = 'approved', updated_at = NOW()
+           WHERE id = $1`,
+          [productId]
+        )
+
+        // Get product info for marketplace listing
+        const productInfo = await query<{
+          brand: string
+          product_name: string
+          short_description: string | null
+          estimated_price_chf: number
+        }>(
+          `SELECT brand, product_name, short_description, estimated_price_chf
+           FROM ${TABLE_NAMES.AI_EXTRACTED_PRODUCTS}
+           WHERE id = $1`,
+          [productId]
+        )
+
+        if (productInfo.rows.length > 0) {
+          const p = productInfo.rows[0]
+
+          // Get inventory item id
+          const inventoryItem = await query<{ id: string }>(
+            `SELECT id FROM ${TABLE_NAMES.INVENTORY_ITEMS} WHERE ai_product_id = $1`,
+            [productId]
+          )
+
+          if (inventoryItem.rows.length > 0) {
+            const inventoryItemId = inventoryItem.rows[0].id
+
+            // Check if listing exists
+            const existingListing = await query<{ id: string }>(
+              `SELECT id FROM ${TABLE_NAMES.MARKETPLACE_LISTINGS}
+               WHERE inventory_item_id = $1 AND platform = 'internal'`,
+              [inventoryItemId]
+            )
+
+            if (existingListing.rows.length > 0) {
+              // Update existing listing
+              await query(
+                `UPDATE ${TABLE_NAMES.MARKETPLACE_LISTINGS}
+                 SET status = 'published', published_at = NOW(), updated_at = NOW()
+                 WHERE id = $1`,
+                [existingListing.rows[0].id]
+              )
+            } else {
+              // Create new listing
+              await query(
+                `INSERT INTO ${TABLE_NAMES.MARKETPLACE_LISTINGS} (
+                  inventory_item_id,
+                  title,
+                  description,
+                  price_chf,
+                  platform,
+                  status,
+                  published_at,
+                  created_by
+                ) VALUES ($1, $2, $3, $4, 'internal', 'published', NOW(), $5)`,
+                [
+                  inventoryItemId,
+                  `${p.brand} ${p.product_name}`,
+                  p.short_description || '',
+                  p.estimated_price_chf,
+                  session.user.id,
+                ]
+              )
+            }
+          }
+        }
+
+        logger.info('Product published', {
+          productId,
+          publishedBy: session.user.id,
+        })
+      } else {
+        // Unpublishing - update marketplace listing status
+        await query(
+          `UPDATE ${TABLE_NAMES.MARKETPLACE_LISTINGS}
+           SET status = 'draft', updated_at = NOW()
+           WHERE inventory_item_id = (
+             SELECT id FROM ${TABLE_NAMES.INVENTORY_ITEMS} WHERE ai_product_id = $1
+           )`,
+          [productId]
+        )
+
+        logger.info('Product unpublished', {
+          productId,
+          unpublishedBy: session.user.id,
+        })
+      }
+    }
+
+    // Handle product status change (approve/reject)
+    if (body.status !== undefined) {
+      await query(
+        `UPDATE ${TABLE_NAMES.AI_EXTRACTED_PRODUCTS}
+         SET status = $1, updated_at = NOW()
+         WHERE id = $2`,
+        [body.status, productId]
+      )
+
+      logger.info('Product status changed', {
+        productId,
+        newStatus: body.status,
+        changedBy: session.user.id,
+      })
+    }
+
+    return apiSuccess({
+      success: true,
+      productId,
+      marketplace_status: body.marketplace_status,
+      status: body.status,
+    })
+  } catch (error) {
+    logger.error('Failed to patch inventory product', { error })
     return apiError(error, 'Fehler beim Aktualisieren des Produkts')
   }
 }
