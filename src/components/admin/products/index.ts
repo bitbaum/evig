@@ -10,5 +10,8 @@ export { ProductTabSwitcher } from './ProductTabSwitcher'
 export { ProductStatsCards } from './ProductStatsCards'
 export { ProductFilterBar } from './ProductFilterBar'
 export { InventoryProductsTable } from './InventoryProductsTable'
-export { MedusaProductsTable } from './MedusaProductsTable'
+export { ShopProductsTable } from './ShopProductsTable'
 export { BulkImportModal } from './BulkImportModal'
+
+// Legacy export for backwards compatibility (to be removed)
+export { MedusaProductsTable } from './MedusaProductsTable'

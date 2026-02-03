@@ -2,20 +2,20 @@
 
 import { Database, Store } from 'lucide-react'
 import { cn } from '@/lib/utils'
-import type { TabType, InventoryStats, ProductStats } from './types'
+import type { TabType, InventoryStats, ShopStats } from './types'
 
 interface ProductTabSwitcherProps {
   activeTab: TabType
   onTabChange: (tab: TabType) => void
   inventoryStats: InventoryStats
-  medusaStats: ProductStats
+  shopStats: ShopStats
 }
 
 export function ProductTabSwitcher({
   activeTab,
   onTabChange,
   inventoryStats,
-  medusaStats,
+  shopStats,
 }: ProductTabSwitcherProps) {
   return (
     <div className="flex items-center gap-2 border-b border-gray-200">
@@ -37,19 +37,19 @@ export function ProductTabSwitcher({
         )}
       </button>
       <button
-        onClick={() => onTabChange('medusa')}
+        onClick={() => onTabChange('shop')}
         className={cn(
           "px-4 py-3 font-medium text-sm flex items-center gap-2 border-b-2 transition-colors",
-          activeTab === 'medusa'
+          activeTab === 'shop'
             ? "border-indigo-600 text-indigo-600"
             : "border-transparent text-gray-500 hover:text-gray-700"
         )}
       >
         <Store className="w-4 h-4" />
-        Shop Produkte (Medusa)
-        {medusaStats.total > 0 && (
+        Shop Produkte
+        {shopStats.total > 0 && (
           <span className="bg-indigo-100 text-indigo-800 text-xs px-2 py-0.5 rounded-full">
-            {medusaStats.total}
+            {shopStats.total}
           </span>
         )}
       </button>

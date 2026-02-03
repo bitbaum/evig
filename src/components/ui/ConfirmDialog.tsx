@@ -7,7 +7,7 @@
  * message, and button labels.
  */
 
-import { X, Loader2, AlertTriangle } from 'lucide-react'
+import { X, Loader2, AlertTriangle, CheckCircle } from 'lucide-react'
 
 interface ConfirmDialogProps {
   isOpen: boolean
@@ -18,7 +18,7 @@ interface ConfirmDialogProps {
   cancelLabel?: string
   isLoading?: boolean
   error?: string | null
-  variant?: 'danger' | 'warning' | 'default'
+  variant?: 'danger' | 'warning' | 'success' | 'default'
   onConfirm: () => void
   onClose: () => void
 }
@@ -33,6 +33,11 @@ const VARIANT_STYLES = {
     title: 'text-orange-600 dark:text-orange-400',
     button: 'bg-orange-600 hover:bg-orange-700',
     icon: 'text-orange-500',
+  },
+  success: {
+    title: 'text-green-600 dark:text-green-400',
+    button: 'bg-green-600 hover:bg-green-700',
+    icon: 'text-green-500',
   },
   default: {
     title: 'text-gray-900 dark:text-white',
@@ -69,7 +74,11 @@ export function ConfirmDialog({
           {/* Header */}
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2">
-              <AlertTriangle className={`w-5 h-5 ${styles.icon}`} />
+              {variant === 'success' ? (
+                <CheckCircle className={`w-5 h-5 ${styles.icon}`} />
+              ) : (
+                <AlertTriangle className={`w-5 h-5 ${styles.icon}`} />
+              )}
               <h3 className={`text-lg font-semibold ${styles.title}`}>
                 {title}
               </h3>

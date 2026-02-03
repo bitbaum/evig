@@ -59,8 +59,9 @@ export default function ErfassungPage() {
       fetch(`/api/admin/inventory/${editId}`)
         .then(res => res.json())
         .then(data => {
-          if (data.success && data.product) {
-            const p = data.product
+          // API returns { success: true, data: { product: {...} } }
+          if (data.success && data.data?.product) {
+            const p = data.data.product
             // Parse specifications JSON back to array
             const specsArray = p.specifications
               ? Object.entries(p.specifications).map(([key, value]) => ({
@@ -191,7 +192,11 @@ export default function ErfassungPage() {
   }, [])
 
   // Submit form
-  const handleSubmit = async (e: React.FormEvent, publish: boolean = false) => {
+  // action: 'draft' | 'erfassen' | 'publish'
+  // - draft: Save as draft (pending_review, not in shop)
+  // - erfassen: Capture/register (approved, not in shop)
+  // - publish: Capture and publish to shop (approved, in shop)
+  const handleSubmit = async (e: React.FormEvent, action: 'draft' | 'erfassen' | 'publish' = 'draft') => {
     e.preventDefault()
     setIsLoading(true)
 
@@ -258,7 +263,8 @@ export default function ErfassungPage() {
           unterkategorie: formData.unterkategorie,
           kundenprofile: formData.kundenprofile,
           image: formData.image,
-          publish: publish,
+          // New action-based flags
+          action: action, // 'draft' | 'erfassen' | 'publish'
         }
 
         const response = await fetch('/api/admin/erfassung', {
@@ -272,8 +278,12 @@ export default function ErfassungPage() {
         }
 
         const result = await response.json()
-        setSavedItemUUID(result.item_uuid)
-        setSavedProductId(result.product_id)
+        if (result.success && result.data) {
+          setSavedItemUUID(result.data.item_uuid)
+          setSavedProductId(result.data.product_id)
+        } else {
+          throw new Error(result.error || 'Unbekannter Fehler')
+        }
       }
     } catch (error) {
       logger.error('Error saving product', { error })
@@ -373,7 +383,7 @@ export default function ErfassungPage() {
         onError={(error) => logger.error('Data entry error', { error })}
       />
 
-      <form onSubmit={(e) => handleSubmit(e, false)} className="space-y-6">
+      <form onSubmit={(e) => handleSubmit(e, 'draft')} className="space-y-6">
 
         {/* Image Preview (if captured via Picture tab) */}
         {formData.image && (
@@ -794,26 +804,46 @@ export default function ErfassungPage() {
               </button>
             ) : (
               <>
+                {/* 1. Als Entwurf speichern - gray, least prominent */}
                 <button
-                  type="submit"
+                  type="button"
+                  onClick={(e) => handleSubmit(e as unknown as React.FormEvent, 'draft')}
                   disabled={isLoading}
-                  className="inline-flex items-center gap-2 bg-gray-600 hover:bg-gray-700 disabled:bg-gray-400 text-white font-semibold px-6 py-3 rounded-lg transition-colors"
+                  className="inline-flex items-center gap-2 bg-gray-500 hover:bg-gray-600 disabled:bg-gray-400 text-white font-semibold px-5 py-3 rounded-lg transition-colors"
                 >
                   {isLoading ? (
-                    <><Loader2 className="w-5 h-5 animate-spin" /> Speichere...</>
+                    <Loader2 className="w-5 h-5 animate-spin" />
                   ) : (
-                    <><Save className="w-5 h-5" /> Als Entwurf speichern</>
+                    <><Save className="w-5 h-5" /> Entwurf</>
                   )}
                 </button>
 
+                {/* 2. Erfassen - blue, middle option */}
                 <button
                   type="button"
-                  onClick={(e) => handleSubmit(e as unknown as React.FormEvent, true)}
+                  onClick={(e) => handleSubmit(e as unknown as React.FormEvent, 'erfassen')}
                   disabled={isLoading}
-                  className="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 disabled:bg-green-400 text-white font-semibold px-6 py-3 rounded-lg transition-colors"
+                  className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white font-semibold px-5 py-3 rounded-lg transition-colors"
                 >
-                  <Package className="w-5 h-5" />
-                  Speichern & Veröffentlichen
+                  {isLoading ? (
+                    <Loader2 className="w-5 h-5 animate-spin" />
+                  ) : (
+                    <><Package className="w-5 h-5" /> Erfassen</>
+                  )}
+                </button>
+
+                {/* 3. Erfassen & im Shop veröffentlichen - green, most prominent */}
+                <button
+                  type="button"
+                  onClick={(e) => handleSubmit(e as unknown as React.FormEvent, 'publish')}
+                  disabled={isLoading}
+                  className="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 disabled:bg-green-400 text-white font-semibold px-5 py-3 rounded-lg transition-colors"
+                >
+                  {isLoading ? (
+                    <Loader2 className="w-5 h-5 animate-spin" />
+                  ) : (
+                    <><Package className="w-5 h-5" /> Erfassen & Shop</>
+                  )}
                 </button>
               </>
             )}
@@ -844,35 +874,53 @@ export default function ErfassungPage() {
             )}
           </button>
         ) : (
-          <div className="flex gap-3">
+          <div className="flex gap-2">
+            {/* 1. Entwurf - gray, smallest */}
             <button
               type="button"
-              onClick={(e) => {
-                e.preventDefault()
-                const form = document.querySelector('form')
-                if (form) form.requestSubmit()
-              }}
+              onClick={(e) => handleSubmit(e as unknown as React.FormEvent, 'draft')}
               disabled={isLoading}
-              className="flex-1 inline-flex items-center justify-center gap-2 bg-gray-600 hover:bg-gray-700 disabled:bg-gray-400 text-white font-semibold py-4 rounded-xl transition-colors touch-manipulation min-h-[52px]"
+              className="inline-flex items-center justify-center gap-1 bg-gray-500 hover:bg-gray-600 disabled:bg-gray-400 text-white font-semibold px-3 py-4 rounded-xl transition-colors touch-manipulation min-h-[52px]"
+            >
+              {isLoading ? (
+                <Loader2 className="w-5 h-5 animate-spin" />
+              ) : (
+                <Save className="w-5 h-5" />
+              )}
+            </button>
+
+            {/* 2. Erfassen - blue */}
+            <button
+              type="button"
+              onClick={(e) => handleSubmit(e as unknown as React.FormEvent, 'erfassen')}
+              disabled={isLoading}
+              className="flex-1 inline-flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white font-semibold py-4 rounded-xl transition-colors touch-manipulation min-h-[52px]"
             >
               {isLoading ? (
                 <Loader2 className="w-5 h-5 animate-spin" />
               ) : (
                 <>
-                  <Save className="w-5 h-5" />
-                  <span>Entwurf</span>
+                  <Package className="w-5 h-5" />
+                  <span>Erfassen</span>
                 </>
               )}
             </button>
 
+            {/* 3. Erfassen & Shop - green */}
             <button
               type="button"
-              onClick={(e) => handleSubmit(e as unknown as React.FormEvent, true)}
+              onClick={(e) => handleSubmit(e as unknown as React.FormEvent, 'publish')}
               disabled={isLoading}
               className="flex-1 inline-flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 disabled:bg-green-400 text-white font-semibold py-4 rounded-xl transition-colors touch-manipulation min-h-[52px]"
             >
-              <Package className="w-5 h-5" />
-              <span>Speichern</span>
+              {isLoading ? (
+                <Loader2 className="w-5 h-5 animate-spin" />
+              ) : (
+                <>
+                  <Package className="w-5 h-5" />
+                  <span>+ Shop</span>
+                </>
+              )}
             </button>
           </div>
         )}

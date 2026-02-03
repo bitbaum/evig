@@ -1,8 +1,8 @@
 "use client"
 
 import Link from 'next/link'
-import { Search, Plus, Upload } from 'lucide-react'
-import type { TabType, FilterStatus, FilterSource } from './types'
+import { Search, Plus } from 'lucide-react'
+import type { TabType, FilterStatus } from './types'
 
 interface ProductFilterBarProps {
   searchQuery: string
@@ -11,12 +11,9 @@ interface ProductFilterBarProps {
   onFilterStatusChange: (status: FilterStatus) => void
   filterCategory: string
   onFilterCategoryChange: (category: string) => void
-  filterSource: FilterSource
-  onFilterSourceChange: (source: FilterSource) => void
   selectedCount: number
   onBulkDelete: () => void
   activeTab: TabType
-  onShowBulkImport: () => void
 }
 
 export function ProductFilterBar({
@@ -26,12 +23,9 @@ export function ProductFilterBar({
   onFilterStatusChange,
   filterCategory,
   onFilterCategoryChange,
-  filterSource,
-  onFilterSourceChange,
   selectedCount,
   onBulkDelete,
   activeTab,
-  onShowBulkImport,
 }: ProductFilterBarProps) {
   return (
     <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
@@ -49,27 +43,19 @@ export function ProductFilterBar({
             />
           </div>
 
-          {/* Filters */}
+          {/* Filters - only show status filter for inventory tab */}
           <div className="flex gap-2">
-            <select
-              value={filterSource}
-              onChange={(e) => onFilterSourceChange(e.target.value as FilterSource)}
-              className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
-            >
-              <option value="all">Alle Quellen</option>
-              <option value="admin">Admin Inventory</option>
-              <option value="user">User Marketplace</option>
-            </select>
-
-            <select
-              value={filterStatus}
-              onChange={(e) => onFilterStatusChange(e.target.value as FilterStatus)}
-              className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
-            >
-              <option value="all">Alle Status</option>
-              <option value="published">Veröffentlicht</option>
-              <option value="draft">Entwurf</option>
-            </select>
+            {activeTab === 'inventory' && (
+              <select
+                value={filterStatus}
+                onChange={(e) => onFilterStatusChange(e.target.value as FilterStatus)}
+                className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              >
+                <option value="all">Alle Status</option>
+                <option value="published">Veröffentlicht</option>
+                <option value="draft">Entwurf</option>
+              </select>
+            )}
 
             <select
               value={filterCategory}
@@ -95,7 +81,7 @@ export function ProductFilterBar({
               {selectedCount} löschen
             </button>
           )}
-          {activeTab === 'inventory' ? (
+          {activeTab === 'inventory' && (
             <Link
               href="/admin/erfassung"
               className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
@@ -103,20 +89,6 @@ export function ProductFilterBar({
               <Plus className="w-4 h-4 inline mr-2" />
               Produkt erfassen
             </Link>
-          ) : (
-            <>
-              <button
-                onClick={onShowBulkImport}
-                className="px-4 py-2 text-indigo-600 border border-indigo-200 rounded-lg hover:bg-indigo-50 transition-colors"
-              >
-                <Upload className="w-4 h-4 inline mr-2" />
-                Bulk Import
-              </button>
-              <button className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors">
-                <Plus className="w-4 h-4 inline mr-2" />
-                Neues Produkt
-              </button>
-            </>
           )}
         </div>
       </div>

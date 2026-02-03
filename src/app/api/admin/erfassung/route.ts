@@ -30,7 +30,12 @@ interface ErfassungPayload {
   unterkategorie?: string
   kundenprofile?: string[]
   image?: string | null
-  publish?: boolean
+  // Action determines the product state:
+  // - 'draft': pending_review, not in shop (still being edited)
+  // - 'erfassen': approved, not in shop (captured but not published)
+  // - 'publish': approved, in shop (captured and visible to customers)
+  action?: 'draft' | 'erfassen' | 'publish'
+  publish?: boolean // Legacy support
 }
 
 /**
@@ -93,6 +98,14 @@ export async function POST(request: NextRequest) {
       }
     }
 
+    // Determine status based on action (with legacy publish support)
+    // - 'draft': pending_review, not in shop
+    // - 'erfassen': approved, not in shop
+    // - 'publish': approved, in shop
+    const action = payload.action || (payload.publish ? 'publish' : 'draft')
+    const productStatus = action === 'draft' ? 'pending_review' : 'approved'
+    const marketplaceStatus = action === 'publish' ? 'published' : 'draft'
+
     // Use transaction for data integrity
     const result = await transaction(async (client) => {
       // 1. Insert into ${TABLE_NAMES.AI_EXTRACTED_PRODUCTS}
@@ -125,7 +138,7 @@ export async function POST(request: NextRequest) {
           payload.gewicht_kg ? Math.round(payload.gewicht_kg * 1000) : null,
           payload.hauptkategorie || null,
           payload.unterkategorie || null,
-          payload.publish ? 'approved' : 'pending_review',
+          productStatus,
           session.user.id,
         ]
       )
@@ -150,7 +163,7 @@ export async function POST(request: NextRequest) {
           payload.auf_lager || 1,
           'available',
           payload.verkaufspreis,
-          payload.publish ? 'published' : 'draft',
+          marketplaceStatus,
         ]
       )
 
@@ -174,8 +187,8 @@ export async function POST(request: NextRequest) {
         }
       }
 
-      // 4. Create marketplace listing if publishing
-      if (payload.publish) {
+      // 4. Create marketplace listing if publishing to shop
+      if (action === 'publish') {
         await client.query(
           `INSERT INTO ${TABLE_NAMES.MARKETPLACE_LISTINGS} (
             inventory_item_id,
@@ -231,20 +244,26 @@ export async function POST(request: NextRequest) {
       return { productId, itemUUID }
     })
 
+    // Action-specific messages
+    const messages: Record<string, string> = {
+      draft: 'Produkt als Entwurf gespeichert',
+      erfassen: 'Produkt erfasst',
+      publish: 'Produkt erfasst und im Shop veröffentlicht',
+    }
+
     logger.info('Product erfasst', {
       itemUUID: result.itemUUID,
       productId: result.productId,
       userId: session.user.id,
-      published: payload.publish,
+      action,
     })
 
     return apiSuccess({
       item_uuid: result.itemUUID,
       product_id: result.productId,
-      published: payload.publish || false,
-      message: payload.publish
-        ? 'Produkt erfasst und veröffentlicht'
-        : 'Produkt als Entwurf gespeichert',
+      action,
+      published: action === 'publish',
+      message: messages[action] || messages.draft,
     })
 
   } catch (error) {

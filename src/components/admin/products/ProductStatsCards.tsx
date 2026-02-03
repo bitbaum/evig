@@ -5,21 +5,20 @@ import {
   CheckCircle,
   XCircle,
   AlertTriangle,
-  Store,
-  Users,
+  Tag,
 } from 'lucide-react'
-import type { TabType, InventoryStats, ProductStats } from './types'
+import type { TabType, InventoryStats, ShopStats } from './types'
 
 interface ProductStatsCardsProps {
   activeTab: TabType
   inventoryStats: InventoryStats
-  medusaStats: ProductStats
+  shopStats: ShopStats
 }
 
 export function ProductStatsCards({
   activeTab,
   inventoryStats,
-  medusaStats,
+  shopStats,
 }: ProductStatsCardsProps) {
   if (activeTab === 'inventory') {
     return (
@@ -57,45 +56,48 @@ export function ProductStatsCards({
     )
   }
 
+  // Shop tab - show condition breakdown
+  const conditionEntries = Object.entries(shopStats.byCondition)
+    .filter(([, count]) => count > 0)
+    .slice(0, 3) // Top 3 conditions
+
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-4">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
       <StatCard
-        label="Gesamt"
-        value={medusaStats.total}
-        icon={<Package className="w-6 h-6 text-blue-500" />}
+        label="Im Shop"
+        value={shopStats.total}
+        icon={<Package className="w-6 h-6 text-indigo-500" />}
       />
-      <StatCard
-        label="Veröffentlicht"
-        value={medusaStats.published}
-        valueColor="text-green-600"
-        icon={<CheckCircle className="w-6 h-6 text-green-500" />}
-      />
-      <StatCard
-        label="Admin Inventory"
-        value={medusaStats.adminInventory}
-        valueColor="text-indigo-600"
-        icon={<Store className="w-6 h-6 text-indigo-500" />}
-      />
-      <StatCard
-        label="User Listings"
-        value={medusaStats.userListings}
-        valueColor="text-purple-600"
-        icon={<Users className="w-6 h-6 text-purple-500" />}
-      />
-      <StatCard
-        label="Entwürfe"
-        value={medusaStats.draft}
-        valueColor="text-yellow-600"
-        icon={<XCircle className="w-6 h-6 text-yellow-500" />}
-      />
+      {conditionEntries.map(([condition, count]) => (
+        <StatCard
+          key={condition}
+          label={getConditionLabel(condition)}
+          value={count}
+          valueColor="text-blue-600"
+          icon={<Tag className="w-6 h-6 text-blue-500" />}
+        />
+      ))}
       <StatCard
         label="Niedriger Bestand"
-        value={medusaStats.lowStock}
-        valueColor="text-red-600"
-        icon={<AlertTriangle className="w-6 h-6 text-red-500" />}
+        value={shopStats.lowStock}
+        valueColor={shopStats.lowStock > 0 ? "text-red-600" : "text-gray-600"}
+        icon={<AlertTriangle className={`w-6 h-6 ${shopStats.lowStock > 0 ? 'text-red-500' : 'text-gray-400'}`} />}
       />
     </div>
   )
+}
+
+// Condition labels in German
+function getConditionLabel(condition: string): string {
+  const labels: Record<string, string> = {
+    'new': 'Neu',
+    'like_new': 'Wie neu',
+    'very_good': 'Sehr gut',
+    'good': 'Gut',
+    'acceptable': 'Akzeptabel',
+    'for_parts': 'Für Teile',
+  }
+  return labels[condition] || condition
 }
 
 interface StatCardProps {

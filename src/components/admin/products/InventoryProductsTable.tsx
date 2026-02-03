@@ -9,6 +9,7 @@ import {
   Trash2,
   Printer,
   Plus,
+  Upload,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import type { InventoryProduct } from '@/hooks/useInventoryProducts'
@@ -19,6 +20,7 @@ interface InventoryProductsTableProps {
   onView?: (product: InventoryProduct) => void
   onEdit?: (product: InventoryProduct) => void
   onDelete?: (product: InventoryProduct) => void
+  onPublish?: (product: InventoryProduct) => void
 }
 
 export function InventoryProductsTable({
@@ -27,6 +29,7 @@ export function InventoryProductsTable({
   onView,
   onEdit,
   onDelete,
+  onPublish,
 }: InventoryProductsTableProps) {
   const filteredProducts = products.filter((p) => {
     const matchesSearch =
@@ -125,7 +128,7 @@ export function InventoryProductsTable({
                 </td>
                 <td className="px-6 py-4">
                   <span className="font-medium text-green-600">
-                    CHF {product.estimated_price_chf.toFixed(2)}
+                    CHF {Number(product.estimated_price_chf).toFixed(2)}
                   </span>
                 </td>
                 <td className="px-6 py-4">
@@ -148,9 +151,19 @@ export function InventoryProductsTable({
                 </td>
                 <td className="px-6 py-4 text-right">
                   <div className="flex items-center justify-end gap-2">
+                    {/* Quick publish button for unpublished products */}
+                    {product.marketplace_status !== 'published' && (
+                      <button
+                        onClick={() => onPublish?.(product)}
+                        className="p-1 text-green-500 hover:text-green-700"
+                        title="Im Shop veröffentlichen"
+                      >
+                        <Upload className="w-4 h-4" />
+                      </button>
+                    )}
                     <Link
                       href={`/admin/products/${product.id}/factsheet`}
-                      className="p-1 text-green-600 hover:text-green-800"
+                      className="p-1 text-blue-500 hover:text-blue-700"
                       title="Factsheet drucken"
                     >
                       <Printer className="w-4 h-4" />

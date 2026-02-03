@@ -43,7 +43,12 @@ export function useInventoryProducts(): UseInventoryProductsReturn {
         throw new Error('Failed to fetch inventory products')
       }
       const result = await response.json()
-      setData(result)
+      // API returns { success: true, data: { products, total } }
+      if (result.success && result.data) {
+        setData(result.data)
+      } else {
+        throw new Error(result.error || 'Failed to fetch inventory products')
+      }
       setError(null)
     } catch (err) {
       setError(err instanceof Error ? err : new Error('Unknown error'))
