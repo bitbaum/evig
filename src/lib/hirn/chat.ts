@@ -66,13 +66,24 @@ export async function chat(
     systemPrompt = DEFAULT_SYSTEM_PROMPT,
   } = options
 
-  // Retrieve relevant context
-  const contextResults = await searchSimilar(message, {
-    topK,
-    minSimilarity,
-  })
+  // Retrieve relevant context (gracefully handle missing embeddings)
+  let contextResults: RetrievalResult[] = []
+  try {
+    contextResults = await searchSimilar(message, {
+      topK,
+      minSimilarity,
+    })
+  } catch (error) {
+    // Embeddings not available (e.g., no Ollama in production)
+    // Continue without RAG context - chat still works
+    logger.warn('RAG context unavailable, proceeding without document retrieval', {
+      error: error instanceof Error ? error.message : 'Unknown error',
+    })
+  }
 
-  const contextText = formatContext(contextResults)
+  const contextText = contextResults.length > 0
+    ? formatContext(contextResults)
+    : 'Kein Dokumentkontext verfügbar. Antworte basierend auf deinem allgemeinen Wissen.'
 
   // Get chat history for this session
   const historyResult = await query<{ role: string; content: string }>(

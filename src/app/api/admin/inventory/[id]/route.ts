@@ -13,6 +13,7 @@ import { logger } from '@/lib/logger'
 import { TABLE_NAMES } from '@/config/database'
 import { auth } from '@/auth'
 import { canAccessSection } from '@/lib/permissions'
+import { uploadImage, deleteImage } from '@/lib/storage/image-upload'
 
 export async function GET(
   request: NextRequest,
@@ -304,13 +305,65 @@ export async function PUT(
       }
     }
 
+    // Handle image update if provided
+    let imageUrl: string | null = null
+    if (body.image && typeof body.image === 'string') {
+      // Get existing image to delete
+      const existingImage = await query<{ id: string; file_path: string }>(
+        `SELECT id, file_path FROM ${TABLE_NAMES.PRODUCT_IMAGES}
+         WHERE product_id = $1 AND is_primary = true`,
+        [productId]
+      )
+
+      // Get item_uuid for filename
+      const productInfo = await query<{ item_uuid: string }>(
+        `SELECT item_uuid FROM ${TABLE_NAMES.AI_EXTRACTED_PRODUCTS} WHERE id = $1`,
+        [productId]
+      )
+      const itemUuid = productInfo.rows[0]?.item_uuid || productId
+
+      // Upload new image
+      const filename = `${itemUuid}.jpg`
+      const uploadResult = await uploadImage(body.image as string, filename, 'products')
+
+      if (uploadResult.success && uploadResult.url) {
+        imageUrl = uploadResult.url
+
+        // Delete old blob if it was a blob URL
+        if (existingImage.rows.length > 0) {
+          const oldUrl = existingImage.rows[0].file_path
+          if (oldUrl.includes('blob.vercel-storage.com')) {
+            await deleteImage(oldUrl)
+          }
+
+          // Update existing image record
+          await query(
+            `UPDATE ${TABLE_NAMES.PRODUCT_IMAGES}
+             SET file_path = $1, filename = $2, updated_at = NOW()
+             WHERE id = $3`,
+            [uploadResult.url, filename, existingImage.rows[0].id]
+          )
+        } else {
+          // Create new image record
+          await query(
+            `INSERT INTO ${TABLE_NAMES.PRODUCT_IMAGES} (
+              product_id, filename, file_path, is_primary, uploaded_by, upload_status
+            ) VALUES ($1, $2, $3, true, $4, 'ready')`,
+            [productId, filename, uploadResult.url, session.user.id]
+          )
+        }
+
+        logger.info('Product image updated', { productId, imageUrl: uploadResult.url })
+      }
+    }
+
     logger.info('Inventory product updated', {
       productId,
       updatedFields: Object.keys(body).filter(k => allowedFields.includes(k)),
       updatedBy: session.user.id,
     })
 
-    return apiSuccess({ success: true, product: result.rows[0] })
+    return apiSuccess({ success: true, product: result.rows[0], image_url: imageUrl })
   } catch (error) {
     logger.error('Failed to update inventory product', { error })
     return apiError(error, 'Fehler beim Aktualisieren des Produkts')

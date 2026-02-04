@@ -18,6 +18,8 @@ import {
   Image as ImageIcon,
   Tag,
   Send,
+  Sparkles,
+  X,
 } from 'lucide-react'
 
 interface Category {
@@ -67,6 +69,12 @@ export function BlogPostForm({ initialData, isEdit = false }: BlogPostFormProps)
   })
 
   const [tagInput, setTagInput] = useState('')
+
+  // AI Generation state
+  const [showAIModal, setShowAIModal] = useState(false)
+  const [aiTopic, setAiTopic] = useState('')
+  const [aiGenerating, setAiGenerating] = useState(false)
+  const [aiError, setAiError] = useState('')
 
   useEffect(() => {
     loadCategories()
@@ -166,6 +174,54 @@ export function BlogPostForm({ initialData, isEdit = false }: BlogPostFormProps)
     }
   }
 
+  const handleAIGenerate = async () => {
+    if (!aiTopic.trim()) {
+      setAiError('Bitte geben Sie ein Thema ein')
+      return
+    }
+
+    setAiError('')
+    setAiGenerating(true)
+
+    try {
+      const selectedCategory = categories.find(c => c.id === formData.categoryId)
+
+      const res = await fetch('/api/admin/blog/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          topic: aiTopic,
+          category: selectedCategory?.name,
+        }),
+      })
+
+      const data = await res.json()
+
+      if (data.success && data.data?.generated) {
+        const gen = data.data.generated
+        setFormData(prev => ({
+          ...prev,
+          title: gen.title || prev.title,
+          slug: generateSlug(gen.title || prev.title),
+          excerpt: gen.excerpt || prev.excerpt,
+          content: gen.content || prev.content,
+          tags: gen.tags?.length > 0 ? gen.tags : prev.tags,
+          seoTitle: gen.seoTitle || prev.seoTitle,
+          seoDescription: gen.seoDescription || prev.seoDescription,
+        }))
+        setShowAIModal(false)
+        setAiTopic('')
+        setSuccess('Artikel mit KI generiert! Bitte überprüfen und anpassen.')
+      } else {
+        setAiError(data.error || 'Generierung fehlgeschlagen')
+      }
+    } catch {
+      setAiError('Netzwerkfehler. Bitte versuchen Sie es erneut.')
+    } finally {
+      setAiGenerating(false)
+    }
+  }
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -188,6 +244,15 @@ export function BlogPostForm({ initialData, isEdit = false }: BlogPostFormProps)
         </div>
 
         <div className="flex items-center gap-3">
+          {!isEdit && (
+            <button
+              onClick={() => setShowAIModal(true)}
+              className="inline-flex items-center gap-2 px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white font-medium rounded-lg transition-colors"
+            >
+              <Sparkles className="w-4 h-4" />
+              Mit KI generieren
+            </button>
+          )}
           {formData.slug && (
             <Link
               href={`/blog/${formData.slug}`}
@@ -429,6 +494,86 @@ export function BlogPostForm({ initialData, isEdit = false }: BlogPostFormProps)
           </div>
         </div>
       </div>
+
+      {/* AI Generation Modal */}
+      {showAIModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-xl max-w-lg w-full mx-4 p-6">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+                <Sparkles className="w-5 h-5 text-purple-500" />
+                Artikel mit KI generieren
+              </h3>
+              <button
+                onClick={() => setShowAIModal(false)}
+                className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
+              >
+                <X className="w-5 h-5 text-gray-500" />
+              </button>
+            </div>
+
+            <p className="text-gray-600 dark:text-gray-400 text-sm mb-4">
+              Beschreiben Sie das Thema oder die Idee für Ihren Blog-Artikel. Die KI wird einen
+              vollständigen Entwurf generieren, den Sie dann anpassen können.
+            </p>
+
+            {aiError && (
+              <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-300 px-4 py-3 rounded-lg mb-4 text-sm">
+                {aiError}
+              </div>
+            )}
+
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Thema / Idee *
+                </label>
+                <textarea
+                  value={aiTopic}
+                  onChange={(e) => setAiTopic(e.target.value)}
+                  rows={4}
+                  className="w-full px-4 py-3 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                  placeholder="z.B. &quot;Wie man einen alten Laptop wieder fit macht&quot; oder &quot;Die Vorteile von Refurbished-Geräten für die Umwelt&quot;"
+                  disabled={aiGenerating}
+                />
+              </div>
+
+              {formData.categoryId && (
+                <p className="text-sm text-gray-500 dark:text-gray-400">
+                  Kategorie: <span className="font-medium">{categories.find(c => c.id === formData.categoryId)?.name}</span>
+                </p>
+              )}
+
+              <div className="flex justify-end gap-3">
+                <button
+                  onClick={() => setShowAIModal(false)}
+                  disabled={aiGenerating}
+                  className="px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
+                >
+                  Abbrechen
+                </button>
+                <button
+                  onClick={handleAIGenerate}
+                  disabled={aiGenerating || !aiTopic.trim()}
+                  className="inline-flex items-center gap-2 px-4 py-2 bg-purple-600 hover:bg-purple-700 disabled:bg-purple-400 text-white font-medium rounded-lg transition-colors"
+                >
+                  {aiGenerating ? (
+                    <>
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                      Generiere...
+                    </>
+                  ) : (
+                    <>
+                      <Sparkles className="w-4 h-4" />
+                      Generieren
+                    </>
+                  )}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

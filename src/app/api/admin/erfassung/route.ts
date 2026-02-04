@@ -11,6 +11,7 @@ import { query, transaction } from '@/lib/auth/db'
 import { logger } from '@/lib/logger'
 import { TABLE_NAMES } from '@/config/database'
 import { auth } from '@/auth'
+import { uploadImage, generateImageFilename } from '@/lib/storage/image-upload'
 
 interface ErfassungPayload {
   hersteller: string
@@ -220,28 +221,49 @@ export async function POST(request: NextRequest) {
       }
 
       // 5. Handle image upload if provided
+      let imageUrl: string | null = null
       if (payload.image) {
-        // For now, store as base64 in ${TABLE_NAMES.PRODUCT_IMAGES} table
-        // In production, upload to storage service
-        await client.query(
-          `INSERT INTO ${TABLE_NAMES.PRODUCT_IMAGES} (
-            product_id,
-            filename,
-            file_path,
-            is_primary,
-            uploaded_by,
-            upload_status
-          ) VALUES ($1, $2, $3, true, $4, 'ready')`,
-          [
+        // Upload to Vercel Blob storage
+        const filename = generateImageFilename(itemUUID)
+        const uploadResult = await uploadImage(payload.image, filename, 'products')
+
+        if (uploadResult.success && uploadResult.url) {
+          imageUrl = uploadResult.url
+
+          // Store the blob URL in the database
+          await client.query(
+            `INSERT INTO ${TABLE_NAMES.PRODUCT_IMAGES} (
+              product_id,
+              filename,
+              file_path,
+              is_primary,
+              uploaded_by,
+              upload_status
+            ) VALUES ($1, $2, $3, true, $4, 'ready')`,
+            [
+              productId,
+              filename,
+              uploadResult.url,
+              session.user.id,
+            ]
+          )
+
+          logger.info('Product image uploaded', {
             productId,
-            `${itemUUID}.jpg`,
-            payload.image.substring(0, 500), // Store reference, not full base64
-            session.user.id,
-          ]
-        )
+            itemUUID,
+            imageUrl: uploadResult.url,
+          })
+        } else {
+          // Log warning but don't fail the product creation
+          logger.warn('Image upload failed, continuing without image', {
+            productId,
+            itemUUID,
+            error: uploadResult.error,
+          })
+        }
       }
 
-      return { productId, itemUUID }
+      return { productId, itemUUID, imageUrl }
     })
 
     // Action-specific messages
@@ -263,6 +285,7 @@ export async function POST(request: NextRequest) {
       product_id: result.productId,
       action,
       published: action === 'publish',
+      image_url: result.imageUrl || null,
       message: messages[action] || messages.draft,
     })
 

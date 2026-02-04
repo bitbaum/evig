@@ -385,14 +385,14 @@ export default function ErfassungPage() {
 
       <form onSubmit={(e) => handleSubmit(e, 'draft')} className="space-y-6">
 
-        {/* Image Preview (if captured via Picture tab) */}
-        {formData.image && (
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
-            <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
-              <Camera className="w-5 h-5" />
-              Produktbild
-            </h2>
-            <div className="flex items-start gap-4">
+        {/* Produktbild Upload */}
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+            <Camera className="w-5 h-5" />
+            Produktbild
+          </h2>
+          <div className="flex items-start gap-4">
+            {formData.image ? (
               <div className="relative">
                 <Image
                   src={formData.image}
@@ -409,9 +409,34 @@ export default function ErfassungPage() {
                   <X className="w-3 h-3" />
                 </button>
               </div>
-            </div>
+            ) : (
+              <label className="flex flex-col items-center justify-center w-48 h-36 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg cursor-pointer hover:border-green-500 hover:bg-green-50 dark:hover:bg-green-900/20 transition-colors">
+                <Camera className="w-8 h-8 text-gray-400 mb-2" />
+                <span className="text-sm text-gray-500 dark:text-gray-400">Bild hochladen</span>
+                <span className="text-xs text-gray-400 dark:text-gray-500 mt-1">oder hierher ziehen</span>
+                <input
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0]
+                    if (file) {
+                      const reader = new FileReader()
+                      reader.onload = (event) => {
+                        const base64 = event.target?.result as string
+                        setFormData(prev => ({ ...prev, image: base64 }))
+                      }
+                      reader.readAsDataURL(file)
+                    }
+                  }}
+                />
+              </label>
+            )}
           </div>
-        )}
+          <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">
+            JPG, PNG oder WebP. Max 5 MB.
+          </p>
+        </div>
 
         {/* Basic Info */}
         <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
