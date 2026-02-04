@@ -151,13 +151,25 @@ export async function POST(request: NextRequest) {
     try {
       // Extract JSON from the response (handle potential markdown code blocks)
       let jsonStr = content
+
+      // Try to find JSON in markdown code blocks first
       const jsonMatch = content.match(/```(?:json)?\s*([\s\S]*?)```/)
       if (jsonMatch) {
         jsonStr = jsonMatch[1]
+      } else {
+        // Try to find JSON object directly (starts with { and ends with })
+        const jsonObjectMatch = content.match(/\{[\s\S]*\}/)
+        if (jsonObjectMatch) {
+          jsonStr = jsonObjectMatch[0]
+        }
       }
+
       generated = JSON.parse(jsonStr.trim())
-    } catch {
-      logger.error('Failed to parse AI response', { content })
+    } catch (parseError) {
+      logger.error('Failed to parse AI response', {
+        content: content.substring(0, 500),
+        error: parseError instanceof Error ? parseError.message : 'Unknown parse error'
+      })
       return apiError(
         new Error('Invalid AI response format'),
         'Fehler beim Verarbeiten der KI-Antwort. Bitte versuchen Sie es erneut.'
