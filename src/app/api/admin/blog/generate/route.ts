@@ -146,25 +146,90 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Parse the JSON response
+    // Parse the JSON response - LLMs often return malformed JSON with literal newlines
     let generated: GeneratedBlogPost
     try {
-      // Extract JSON from the response (handle potential markdown code blocks)
-      let jsonStr = content
+      // Helper to extract string value between quotes after a key
+      const extractField = (text: string, key: string): string => {
+        // Match the key and capture everything until the next key or closing brace
+        const keyPattern = new RegExp(`"${key}"\\s*:\\s*"`, 'i')
+        const keyMatch = text.match(keyPattern)
+        if (!keyMatch) return ''
 
-      // Try to find JSON in markdown code blocks first
-      const jsonMatch = content.match(/```(?:json)?\s*([\s\S]*?)```/)
-      if (jsonMatch) {
-        jsonStr = jsonMatch[1]
-      } else {
-        // Try to find JSON object directly (starts with { and ends with })
-        const jsonObjectMatch = content.match(/\{[\s\S]*\}/)
-        if (jsonObjectMatch) {
-          jsonStr = jsonObjectMatch[0]
+        const startIdx = keyMatch.index! + keyMatch[0].length
+        let depth = 0
+        let inString = true
+        let result = ''
+
+        for (let i = startIdx; i < text.length; i++) {
+          const char = text[i]
+          const prevChar = i > 0 ? text[i - 1] : ''
+
+          if (char === '"' && prevChar !== '\\') {
+            // End of string value
+            break
+          }
+          result += char
+        }
+
+        // Unescape any escaped quotes
+        return result.replace(/\\"/g, '"').replace(/\\n/g, '\n').replace(/\\t/g, '\t')
+      }
+
+      // Extract array field (tags)
+      const extractArrayField = (text: string, key: string): string[] => {
+        const pattern = new RegExp(`"${key}"\\s*:\\s*\\[([^\\]]*?)\\]`, 'i')
+        const match = text.match(pattern)
+        if (!match) return []
+
+        // Extract individual strings from the array
+        const items: string[] = []
+        const itemPattern = /"([^"]+)"/g
+        let itemMatch
+        while ((itemMatch = itemPattern.exec(match[1])) !== null) {
+          items.push(itemMatch[1])
+        }
+        return items
+      }
+
+      // Extract fields using the helper
+      const title = extractField(content, 'title')
+      const excerpt = extractField(content, 'excerpt')
+      const seoTitle = extractField(content, 'seoTitle')
+      const seoDescription = extractField(content, 'seoDescription')
+      const tags = extractArrayField(content, 'tags')
+
+      // Content is special - it may contain markdown with newlines
+      // Find content field and extract everything until the closing quote before "tags"
+      const contentStart = content.indexOf('"content"')
+      const tagsStart = content.indexOf('"tags"')
+      if (contentStart === -1) {
+        throw new Error('Content field not found')
+      }
+
+      let contentValue = ''
+      if (tagsStart > contentStart) {
+        // Extract between content and tags
+        const segment = content.substring(contentStart, tagsStart)
+        const colonIdx = segment.indexOf(':')
+        if (colonIdx !== -1) {
+          let inner = segment.substring(colonIdx + 1).trim()
+          // Remove leading quote
+          if (inner.startsWith('"')) inner = inner.substring(1)
+          // Remove trailing quote and comma
+          inner = inner.replace(/",?\s*$/, '')
+          contentValue = inner.replace(/\\n/g, '\n').replace(/\\"/g, '"')
         }
       }
 
-      generated = JSON.parse(jsonStr.trim())
+      generated = {
+        title,
+        excerpt,
+        content: contentValue,
+        tags,
+        seoTitle,
+        seoDescription,
+      }
     } catch (parseError) {
       logger.error('Failed to parse AI response', {
         content: content.substring(0, 500),
