@@ -49,8 +49,8 @@ export const DEVICE_CATEGORY_LABELS: Record<DeviceCategory, string> = {
   [DEVICE_CATEGORIES.SMARTPHONE]: 'Smartphone',
   [DEVICE_CATEGORIES.TABLET]: 'Tablet',
   [DEVICE_CATEGORIES.PRINTER]: 'Drucker',
-  [DEVICE_CATEGORIES.NETWORK]: 'Netzwerkgeraet',
-  [DEVICE_CATEGORIES.ACCESSORIES]: 'Zubehoer',
+  [DEVICE_CATEGORIES.NETWORK]: 'Netzwerkgerät',
+  [DEVICE_CATEGORIES.ACCESSORIES]: 'Zubehör',
   [DEVICE_CATEGORIES.OTHER]: 'Sonstiges',
 }
 
@@ -73,7 +73,7 @@ export const DEVICE_CONDITION_LABELS: Record<DeviceCondition, string> = {
   [DEVICE_CONDITIONS.GOOD]: 'Gut',
   [DEVICE_CONDITIONS.FAIR]: 'Akzeptabel',
   [DEVICE_CONDITIONS.POOR]: 'Schlecht',
-  [DEVICE_CONDITIONS.PARTS_ONLY]: 'Nur fuer Ersatzteile',
+  [DEVICE_CONDITIONS.PARTS_ONLY]: 'Nur für Ersatzteile',
 }
 
 // =============================================================================
@@ -91,7 +91,7 @@ export const PAYMENT_METHODS = {
 export type PaymentMethod = typeof PAYMENT_METHODS[keyof typeof PAYMENT_METHODS]
 
 export const PAYMENT_METHOD_LABELS: Record<PaymentMethod, string> = {
-  [PAYMENT_METHODS.BANK_TRANSFER]: 'Bankueberweisung',
+  [PAYMENT_METHODS.BANK_TRANSFER]: 'Banküberweisung',
   [PAYMENT_METHODS.TWINT]: 'TWINT',
   [PAYMENT_METHODS.PAYPAL]: 'PayPal',
   [PAYMENT_METHODS.CASH]: 'Bargeld',
