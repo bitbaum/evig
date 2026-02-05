@@ -37,6 +37,7 @@ import {
   TrendingUp,
   Target,
   Eye,
+  Heart,
 } from 'lucide-react'
 
 // =============================================================================
@@ -336,6 +337,24 @@ export const SECTIONS: Record<string, SectionConfig> = {
   },
 
   // ---------------------------------------------------------------------------
+  // DONATIONS - User donation history
+  // ---------------------------------------------------------------------------
+  'user-donations': {
+    id: 'user-donations',
+    path: '/dashboard/donations',
+    ui: {
+      label: 'Meine Spenden',
+      description: 'Geld- und Sachspenden einsehen',
+      icon: Heart,
+      emoji: '❤️',
+      color: 'success',
+    },
+    visibility: { admin: false, dashboard: true },
+    priority: 45,
+    category: 'activities',
+  },
+
+  // ---------------------------------------------------------------------------
   // ADMIN MANAGEMENT - Staff sections (non-sensitive)
   // ---------------------------------------------------------------------------
   products: {
@@ -463,6 +482,22 @@ export const SECTIONS: Record<string, SectionConfig> = {
     visibility: { admin: true, dashboard: false, requiresStaff: true },
     priority: 107,
     category: 'management',
+    sidebarGroup: 'analyse',
+  },
+
+  donations: {
+    id: 'donations',
+    path: '/admin/donations',
+    ui: {
+      label: 'Spenden',
+      description: 'Geld- und Sachspenden verwalten',
+      icon: Heart,
+      emoji: '❤️',
+      color: 'success',
+    },
+    visibility: { admin: true, dashboard: false, requiresStaff: true, sensitive: true },
+    priority: 108,
+    category: 'sensitive',
     sidebarGroup: 'analyse',
   },
 

@@ -173,6 +173,58 @@ export interface DbUserProfile {
 }
 
 /**
+ * Donation record (monetary or device)
+ */
+export interface DbDonation {
+  id: string
+  user_id: string | null
+
+  // Type discriminator
+  donation_type: 'monetary' | 'device'
+
+  // Monetary donation fields
+  amount_cents: number | null
+  currency: string
+  payment_method: string | null
+  payment_reference: string | null
+  payment_date: Date | null
+
+  // Recurring donation fields
+  is_recurring: boolean
+  recurring_frequency: string | null
+
+  // Device donation fields
+  device_category: string | null
+  device_description: string | null
+  device_brand: string | null
+  device_model: string | null
+  device_condition: string | null
+  device_age_years: number | null
+  estimated_value_cents: number | null
+
+  // Anonymous donor fields
+  donor_name: string | null
+  donor_email: string | null
+  donor_address: string | null
+
+  // Receipt/acknowledgment
+  receipt_requested: boolean
+  receipt_sent: boolean
+  receipt_sent_at: Date | null
+
+  // Admin tracking
+  status: string
+  recorded_by: string | null
+  notes: string | null
+  thank_you_sent: boolean
+  thank_you_sent_at: Date | null
+
+  // Timestamps
+  created_at: Date
+  updated_at: Date
+}
+
+/**
  * Get user by email
  */
 export async function getUserByEmail(email: string): Promise<DbUser | null> {
