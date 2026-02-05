@@ -83,10 +83,10 @@ export async function POST(request: NextRequest, context: RequestContext) {
       return apiBadRequest('Hilfsanfrage wurde abgebrochen')
     }
 
-    // Look up resolver user ID from session email
+    // Look up resolver user ID from session email (lowercase to match auth system)
     const resolverResult = await query<{ id: string }>(
       `SELECT id FROM ${TABLE_NAMES.USERS} WHERE email = $1`,
-      [session.user.email]
+      [session.user.email.toLowerCase()]
     )
 
     if (resolverResult.rows.length === 0) {

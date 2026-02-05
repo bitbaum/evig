@@ -228,10 +228,10 @@ export async function POST(request: NextRequest) {
 
     const data = validation.data
 
-    // Look up requester user ID from session email
+    // Look up requester user ID from session email (lowercase to match auth system)
     const requesterResult = await query<{ id: string }>(
       `SELECT id FROM ${TABLE_NAMES.USERS} WHERE email = $1`,
-      [session.user.email]
+      [session.user.email.toLowerCase()]
     )
 
     if (requesterResult.rows.length === 0) {
