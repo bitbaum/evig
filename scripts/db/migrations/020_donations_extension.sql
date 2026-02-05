@@ -38,6 +38,10 @@ ADD COLUMN IF NOT EXISTS status TEXT DEFAULT 'recorded';
 ALTER TABLE donations
 ADD COLUMN IF NOT EXISTS recorded_by UUID REFERENCES users(id) ON DELETE SET NULL;
 
+-- Ensure thank_you_sent_at exists (may be missing from original migration)
+ALTER TABLE donations
+ADD COLUMN IF NOT EXISTS thank_you_sent_at TIMESTAMPTZ;
+
 -- Ensure updated_at exists (may already exist from original migration)
 DO $$
 BEGIN
