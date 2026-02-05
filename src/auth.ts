@@ -349,10 +349,12 @@ export async function registerUser(data: {
     }
 
     // Generate 6-digit verification code and send email
+    // Staff members get a different template with team-focused messaging
     try {
       const verificationCode = await createVerificationCode(email)
-      await sendEmail(email, 'verificationCode', name || 'Benutzer', verificationCode)
-      logger.info('Verification code sent', { email, userId: user.id })
+      const templateName = is_staff ? 'staffVerificationCode' : 'verificationCode'
+      await sendEmail(email, templateName, name || 'Benutzer', verificationCode)
+      logger.info('Verification code sent', { email, userId: user.id, isStaff: is_staff })
     } catch (emailError) {
       // Log but don't fail registration if email fails
       logger.error('Failed to send verification email', { error: emailError, userId: user.id })

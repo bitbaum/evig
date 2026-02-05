@@ -84,6 +84,51 @@ CREATE TABLE IF NOT EXISTS seller_profiles (
 );
 
 -- ============================================================================
+-- ENSURE SELLER_PROFILES HAS REQUIRED COLUMNS (if table existed from earlier migration)
+-- ============================================================================
+DO $$
+BEGIN
+    -- Add missing columns from the full schema if seller_profiles was created by earlier migration
+    IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'seller_profiles' AND column_name = 'is_verified') THEN
+        ALTER TABLE seller_profiles ADD COLUMN is_verified BOOLEAN DEFAULT false;
+    END IF;
+    IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'seller_profiles' AND column_name = 'verification_date') THEN
+        ALTER TABLE seller_profiles ADD COLUMN verification_date TIMESTAMP WITH TIME ZONE;
+    END IF;
+    IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'seller_profiles' AND column_name = 'average_rating') THEN
+        ALTER TABLE seller_profiles ADD COLUMN average_rating DECIMAL(3,2) DEFAULT 0.0;
+    END IF;
+    IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'seller_profiles' AND column_name = 'total_sales') THEN
+        ALTER TABLE seller_profiles ADD COLUMN total_sales INTEGER DEFAULT 0;
+    END IF;
+    IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'seller_profiles' AND column_name = 'total_revenue_cents') THEN
+        ALTER TABLE seller_profiles ADD COLUMN total_revenue_cents BIGINT DEFAULT 0;
+    END IF;
+    IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'seller_profiles' AND column_name = 'total_reviews') THEN
+        ALTER TABLE seller_profiles ADD COLUMN total_reviews INTEGER DEFAULT 0;
+    END IF;
+    IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'seller_profiles' AND column_name = 'auto_publish') THEN
+        ALTER TABLE seller_profiles ADD COLUMN auto_publish BOOLEAN DEFAULT true;
+    END IF;
+    IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'seller_profiles' AND column_name = 'notification_preferences') THEN
+        ALTER TABLE seller_profiles ADD COLUMN notification_preferences JSONB DEFAULT '{"email": true, "sms": false}';
+    END IF;
+    IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'seller_profiles' AND column_name = 'business_name') THEN
+        ALTER TABLE seller_profiles ADD COLUMN business_name TEXT;
+    END IF;
+    IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'seller_profiles' AND column_name = 'business_type') THEN
+        ALTER TABLE seller_profiles ADD COLUMN business_type TEXT DEFAULT 'individual';
+    END IF;
+    IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'seller_profiles' AND column_name = 'tax_id') THEN
+        ALTER TABLE seller_profiles ADD COLUMN tax_id TEXT;
+    END IF;
+    IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'seller_profiles' AND column_name = 'product_types') THEN
+        ALTER TABLE seller_profiles ADD COLUMN product_types TEXT[] NOT NULL DEFAULT '{}';
+    END IF;
+END
+$$;
+
+-- ============================================================================
 -- INDEXES FOR PERFORMANCE
 -- ============================================================================
 

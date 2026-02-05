@@ -2,13 +2,14 @@
  * Email Module
  *
  * Main entry point for email functionality.
- * Provides sendEmail function and re-exports all templates.
+ * Supports both Listmonk (recommended) and direct SMTP via nodemailer.
  *
  * Directory structure:
  * - email/
  *   - index.ts (this file) - Main entry point
  *   - types.ts - Type definitions
  *   - transporter.ts - Nodemailer setup
+ *   - listmonk.ts - Listmonk API client
  *   - templates/
  *     - index.ts - Template exports
  *     - base-styles.ts - Shared CSS/HTML
@@ -20,14 +21,30 @@
  */
 
 import { logger } from '@/lib/logger';
+import { getEmailProvider } from '@/config/email';
 import { getTransporter, getFromEmail, testEmailConfig } from './transporter';
+import {
+  sendViaListmonk,
+  testListmonkConnection,
+  isListmonkEnabled,
+  subscribeToList,
+} from './listmonk';
 import type { EmailContent, SendEmailResult, TestEmailResult } from './types';
 
 // Re-export types
 export type { EmailContent, SendEmailResult, TestEmailResult } from './types';
 
-// Re-export transporter utilities
+// Re-export transporter utilities (SMTP)
 export { getTransporter, testEmailConfig } from './transporter';
+
+// Re-export Listmonk utilities
+export {
+  sendViaListmonk,
+  testListmonkConnection,
+  isListmonkEnabled,
+  subscribeToList,
+  getListmonkConfig,
+} from './listmonk';
 
 // Re-export all templates
 export * from './templates';
@@ -44,8 +61,10 @@ import * as miscTemplates from './templates/misc';
 export const emailTemplates = {
   // Auth
   verificationCode: authTemplates.verificationCode,
+  staffVerificationCode: authTemplates.staffVerificationCode,
   emailVerification: authTemplates.emailVerification,
   welcome: authTemplates.welcome,
+  staffWelcome: authTemplates.staffWelcome,
   passwordReset: authTemplates.passwordReset,
 
   // Repairer
@@ -86,6 +105,8 @@ type EmailTemplateFn = (...args: unknown[]) => EmailContent;
 /**
  * Send an email using a template
  *
+ * Automatically uses Listmonk if enabled, otherwise falls back to SMTP.
+ *
  * @param to - Recipient email address
  * @param template - Template name from emailTemplates
  * @param args - Arguments to pass to the template function
@@ -96,10 +117,21 @@ export async function sendEmail(
   ...args: unknown[]
 ): Promise<SendEmailResult> {
   try {
-    const transporter = await getTransporter();
     const templateFn = emailTemplates[template] as EmailTemplateFn;
     const emailContent = templateFn(...args);
+    const provider = getEmailProvider();
 
+    // Use Listmonk if enabled
+    if (provider === 'listmonk') {
+      return sendViaListmonk(to, emailContent, {
+        template,
+        // Pass name if available in args (common pattern)
+        name: typeof args[0] === 'string' ? args[0] : undefined,
+      });
+    }
+
+    // Fallback to SMTP/nodemailer
+    const transporter = await getTransporter();
     const mailOptions = {
       from: getFromEmail(),
       to,
@@ -109,7 +141,7 @@ export async function sendEmail(
     };
 
     const info = await transporter.sendMail(mailOptions);
-    logger.info('Email sent', { messageId: info.messageId, to, template });
+    logger.info('Email sent via SMTP', { messageId: info.messageId, to, template });
     return { success: true, messageId: info.messageId };
   } catch (error) {
     logger.error('Email send error', { error, to, template });
@@ -123,6 +155,8 @@ export async function sendEmail(
 /**
  * Send a custom email (not using a predefined template)
  *
+ * Automatically uses Listmonk if enabled, otherwise falls back to SMTP.
+ *
  * @param to - Recipient email address
  * @param content - Email content with subject, html, and text
  */
@@ -131,8 +165,15 @@ export async function sendCustomEmail(
   content: EmailContent
 ): Promise<SendEmailResult> {
   try {
-    const transporter = await getTransporter();
+    const provider = getEmailProvider();
 
+    // Use Listmonk if enabled
+    if (provider === 'listmonk') {
+      return sendViaListmonk(to, content);
+    }
+
+    // Fallback to SMTP/nodemailer
+    const transporter = await getTransporter();
     const mailOptions = {
       from: getFromEmail(),
       to,
@@ -142,7 +183,7 @@ export async function sendCustomEmail(
     };
 
     const info = await transporter.sendMail(mailOptions);
-    logger.info('Custom email sent', { messageId: info.messageId, to });
+    logger.info('Custom email sent via SMTP', { messageId: info.messageId, to });
     return { success: true, messageId: info.messageId };
   } catch (error) {
     logger.error('Custom email send error', { error, to });

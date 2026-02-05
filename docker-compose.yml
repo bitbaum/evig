@@ -147,12 +147,54 @@ services:
   #     timeout: 10s
   #     retries: 5
 
+  # Mailpit - Local email testing (catches all emails, sends nothing)
+  # Web UI: http://localhost:8025
+  # SMTP: localhost:1025
+  mailpit:
+    container_name: revampit_mailpit
+    image: axllent/mailpit:latest
+    restart: unless-stopped
+    ports:
+      - "8025:8025"   # Web UI
+      - "1025:1025"   # SMTP
+    networks:
+      - revampit_network
+    environment:
+      MP_SMTP_AUTH_ACCEPT_ANY: 1
+      MP_SMTP_AUTH_ALLOW_INSECURE: 1
+
+  # Listmonk - Open Source Email & Newsletter Service
+  listmonk:
+    container_name: revampit_listmonk
+    image: listmonk/listmonk:latest
+    restart: unless-stopped
+    ports:
+      - "${LISTMONK_PORT:-9090}:9000"
+    environment:
+      - TZ=Europe/Zurich
+    volumes:
+      - ./listmonk/config.toml:/listmonk/config.toml
+      - listmonk_uploads:/listmonk/uploads
+    networks:
+      - revampit_network
+    depends_on:
+      db:
+        condition: service_healthy
+    command: ["./listmonk", "--config", "/listmonk/config.toml"]
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://127.0.0.1:9000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
 volumes:
   revampit_db_data:
     driver: local
   medusa_db_data:
     driver: local
   meilisearch_data:
+    driver: local
+  listmonk_uploads:
     driver: local
 
 networks:

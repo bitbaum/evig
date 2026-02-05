@@ -94,9 +94,9 @@ CREATE TABLE IF NOT EXISTS workshop_proposals (
     updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 );
 
--- Unique index to prevent duplicate proposals same day (expressions need index, not constraint)
+-- Unique index to prevent duplicate proposals same day (use date_trunc which is IMMUTABLE for 'day')
 CREATE UNIQUE INDEX IF NOT EXISTS idx_workshop_proposals_unique_per_day
-    ON workshop_proposals(user_id, title, (created_at::date));
+    ON workshop_proposals(user_id, title, (date_trunc('day', created_at AT TIME ZONE 'UTC')));
 
 -- Indexes for efficient querying
 CREATE INDEX IF NOT EXISTS idx_workshop_proposals_user ON workshop_proposals(user_id);

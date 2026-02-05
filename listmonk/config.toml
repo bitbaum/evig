@@ -1,0 +1,30 @@
+# Listmonk Configuration for RevampIT
+# Documentation: https://listmonk.app/docs/configuration
+
+[app]
+# Admin interface address
+address = "0.0.0.0:9000"
+
+# Admin credentials (CHANGE THESE IN PRODUCTION!)
+admin_username = "admin"
+admin_password = "revampit2024"
+
+# Secret for signing transactional emails
+# Generate with: openssl rand -base64 32
+secret = "CHANGE_THIS_SECRET_IN_PRODUCTION_12345"
+
+[db]
+# Using a SEPARATE database for Listmonk to avoid table conflicts
+host = "db"
+port = 5432
+user = "postgres"
+password = "postgres"
+database = "listmonk_db"
+
+# SSL mode (disable for local Docker network)
+ssl_mode = "disable"
+
+# Max open connections
+max_open = 25
+max_idle = 25
+max_lifetime = "300s"

@@ -148,6 +148,136 @@ ${createTextFooter()}
   `.trim(),
 });
 
+/**
+ * Staff verification code template for @revamp-it.ch emails
+ * Uses a warmer, team-focused tone
+ */
+export const staffVerificationCode = (name: string, code: string): EmailContent => ({
+  subject: 'Willkommen im RevampIT Team - Dein Bestätigungscode',
+  html: `
+    <!DOCTYPE html>
+    <html lang="de">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Willkommen im Team</title>
+      <style>${BASE_STYLES}</style>
+    </head>
+    <body>
+      <div class="container">
+        <div class="header header-green">
+          <h1>Willkommen im Team!</h1>
+        </div>
+        <div class="content">
+          <h2>Hallo ${name || 'Teammitglied'},</h2>
+          <p>Schön, dass du dabei bist! Als Mitglied des RevampIT Teams erhältst du Zugang zum Admin-Dashboard und kannst aktiv an unserer Mission mitwirken.</p>
+          <p>Dein Bestätigungscode:</p>
+          <div class="code">${code}</div>
+          <p><strong>Was dich erwartet:</strong></p>
+          <ul>
+            <li>Zugang zum Admin-Dashboard</li>
+            <li>Verwaltung von Workshops, Services und Produkten</li>
+            <li>Bearbeitung von Kundenanfragen</li>
+            <li>Teilnahme an internen Projekten</li>
+          </ul>
+          <p><strong>Sicherheitshinweis:</strong> Dieser Code ist 15 Minuten gültig. Teile diesen Code mit niemandem.</p>
+          <p>Bei Fragen wende dich an das bestehende Team oder schreibe an info@revamp-it.ch.</p>
+        </div>
+        <div class="footer">
+          <p>${AUTO_GENERATED_TEXT}</p>
+          <p>${COPYRIGHT_TEXT}</p>
+        </div>
+      </div>
+    </body>
+    </html>
+  `,
+  text: `
+Hallo ${name || 'Teammitglied'},
+
+Schön, dass du dabei bist! Als Mitglied des RevampIT Teams erhältst du Zugang zum Admin-Dashboard.
+
+Dein Bestätigungscode: ${code}
+
+Was dich erwartet:
+- Zugang zum Admin-Dashboard
+- Verwaltung von Workshops, Services und Produkten
+- Bearbeitung von Kundenanfragen
+- Teilnahme an internen Projekten
+
+Dieser Code ist 15 Minuten gültig.
+
+Bei Fragen wende dich an das bestehende Team oder schreibe an info@revamp-it.ch.
+${createTextFooter()}
+  `.trim(),
+});
+
+/**
+ * Staff welcome email after verification
+ * Provides onboarding info for new team members
+ */
+export const staffWelcome = (name: string): EmailContent => ({
+  subject: 'Willkommen im RevampIT Team!',
+  html: `
+    <!DOCTYPE html>
+    <html lang="de">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Willkommen im RevampIT Team</title>
+      <style>${BASE_STYLES}</style>
+    </head>
+    <body>
+      <div class="container">
+        <div class="header header-green">
+          <h1>Willkommen im RevampIT Team!</h1>
+        </div>
+        <div class="content">
+          <h2>Hallo ${name},</h2>
+          <p>Dein Konto wurde erfolgreich aktiviert. Du bist jetzt offiziell Teil des RevampIT Teams!</p>
+          <h3>Deine ersten Schritte:</h3>
+          <ol>
+            <li><strong>Admin-Dashboard erkunden:</strong> Unter <a href="https://revampit.vercel.app/admin">/admin</a> findest du alle Verwaltungsfunktionen.</li>
+            <li><strong>Team kennenlernen:</strong> Besuche die Team-Seite im Dashboard, um deine Kolleginnen und Kollegen zu sehen.</li>
+            <li><strong>Profil vervollständigen:</strong> Füge ein Foto und deine Kontaktdaten hinzu.</li>
+          </ol>
+          <h3>Wichtige Links:</h3>
+          <ul>
+            <li><a href="https://revampit.vercel.app/admin">Admin-Dashboard</a></li>
+            <li><a href="https://revampit.vercel.app/admin/team">Team-Übersicht</a></li>
+            <li><a href="https://revamp-it.ch">Öffentliche Website</a></li>
+          </ul>
+          <p>Wir freuen uns auf die Zusammenarbeit!</p>
+          <p>Bei Fragen erreichst du uns unter info@revamp-it.ch.</p>
+        </div>
+        <div class="footer">
+          <p>${COPYRIGHT_TEXT}</p>
+        </div>
+      </div>
+    </body>
+    </html>
+  `,
+  text: `
+Hallo ${name},
+
+Dein Konto wurde erfolgreich aktiviert. Du bist jetzt offiziell Teil des RevampIT Teams!
+
+Deine ersten Schritte:
+1. Admin-Dashboard erkunden: Unter /admin findest du alle Verwaltungsfunktionen
+2. Team kennenlernen: Besuche die Team-Seite im Dashboard
+3. Profil vervollständigen: Füge ein Foto und deine Kontaktdaten hinzu
+
+Wichtige Links:
+- Admin-Dashboard: https://revampit.vercel.app/admin
+- Team-Übersicht: https://revampit.vercel.app/admin/team
+- Öffentliche Website: https://revamp-it.ch
+
+Wir freuen uns auf die Zusammenarbeit!
+
+Bei Fragen erreichst du uns unter info@revamp-it.ch.
+${createTextFooter()}
+  `.trim(),
+});
+
 export const passwordReset = (name: string, resetUrl: string): EmailContent => ({
   subject: 'Passwort zurücksetzen - RevampIT',
   html: `

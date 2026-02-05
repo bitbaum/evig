@@ -29,24 +29,40 @@ UPDATE users SET email = lower(email) WHERE email <> lower(email);
 ALTER TABLE users
   ALTER COLUMN email TYPE CITEXT;
 
--- Helpful composite indexes for hot paths
-CREATE INDEX IF NOT EXISTS idx_customer_interactions_user_created
-  ON customer_interactions (user_id, created_at DESC);
+-- Helpful composite indexes for hot paths (only create if tables exist)
+DO $$
+BEGIN
+  IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'customer_interactions') THEN
+    CREATE INDEX IF NOT EXISTS idx_customer_interactions_user_created
+      ON customer_interactions (user_id, created_at DESC);
+  END IF;
 
-CREATE INDEX IF NOT EXISTS idx_customer_preferences_user
-  ON customer_preferences (user_id);
+  IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'customer_preferences') THEN
+    CREATE INDEX IF NOT EXISTS idx_customer_preferences_user
+      ON customer_preferences (user_id);
+  END IF;
 
-CREATE INDEX IF NOT EXISTS idx_user_segments_user_segment
-  ON user_segments (user_id, segment_id);
+  IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'user_segments') THEN
+    CREATE INDEX IF NOT EXISTS idx_user_segments_user_segment
+      ON user_segments (user_id, segment_id);
+  END IF;
 
-CREATE INDEX IF NOT EXISTS idx_workshop_instances_workshop_start
-  ON workshop_instances (workshop_id, start_date);
+  IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'workshop_instances') THEN
+    CREATE INDEX IF NOT EXISTS idx_workshop_instances_workshop_start
+      ON workshop_instances (workshop_id, start_date);
+  END IF;
 
-CREATE INDEX IF NOT EXISTS idx_workshop_registrations_status
-  ON workshop_registrations (status);
+  IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'workshop_registrations') THEN
+    CREATE INDEX IF NOT EXISTS idx_workshop_registrations_status
+      ON workshop_registrations (status);
+  END IF;
 
-CREATE INDEX IF NOT EXISTS idx_service_appointments_user_status
-  ON service_appointments (user_id, status);
+  IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'service_appointments') THEN
+    CREATE INDEX IF NOT EXISTS idx_service_appointments_user_status
+      ON service_appointments (user_id, status);
+  END IF;
+END
+$$;
 
 -- JSONB indexes (only if columns exist)
 DO $$
