@@ -11,6 +11,7 @@ import { redirect } from 'next/navigation'
 import { query } from '@/lib/auth/db'
 import { TABLE_NAMES } from '@/config/database'
 import { canAccessSection, isSuperAdmin } from '@/lib/permissions'
+import { logger } from '@/lib/logger'
 import {
   Users,
   Shield,
@@ -54,7 +55,8 @@ async function getUserStats(): Promise<UserStats> {
       staffCount,
       regularUsers: totalUsers - staffCount,
     }
-  } catch {
+  } catch (error) {
+    logger.error('Failed to fetch user stats', { error })
     return { totalUsers: 0, activeUsers: 0, staffCount: 0, regularUsers: 0 }
   }
 }

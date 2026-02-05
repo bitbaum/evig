@@ -10,6 +10,7 @@ import { auth } from '@/auth'
 import { canAccessSection, isSuperAdmin } from '@/lib/permissions'
 import { query } from '@/lib/auth/db'
 import { TABLE_NAMES } from '@/config/database'
+import { logger } from '@/lib/logger'
 import { TeamProfileForm } from '@/components/admin/team'
 
 export const metadata: Metadata = {
@@ -37,7 +38,8 @@ async function getStaffWithoutProfiles(): Promise<StaffUser[]> {
        ORDER BY u.name ASC NULLS LAST, u.email ASC`
     )
     return result.rows
-  } catch {
+  } catch (error) {
+    logger.error('Failed to fetch staff without profiles', { error })
     return []
   }
 }

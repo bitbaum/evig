@@ -13,6 +13,7 @@ import { redirect } from 'next/navigation'
 import { query } from '@/lib/auth/db'
 import { TABLE_NAMES } from '@/config/database'
 import { canAccessSection, isSuperAdmin } from '@/lib/permissions'
+import { logger } from '@/lib/logger'
 import { Users, UserPlus, Briefcase, Crown, Shield } from 'lucide-react'
 import Link from 'next/link'
 import { PermissionRequestsManager } from '@/components/admin/PermissionRequestsManager'
@@ -67,7 +68,8 @@ async function getTeamStats(): Promise<TeamStats> {
     })
 
     return { totalStaff, totalProfiles, byDepartment, byType }
-  } catch {
+  } catch (error) {
+    logger.error('Failed to fetch team stats', { error })
     return { totalStaff: 0, totalProfiles: 0, byDepartment: {}, byType: {} }
   }
 }
@@ -82,7 +84,8 @@ async function getStaffWithoutProfiles(): Promise<Array<{ id: string; name: stri
        ORDER BY u.name ASC NULLS LAST, u.email ASC`
     )
     return result.rows
-  } catch {
+  } catch (error) {
+    logger.error('Failed to fetch staff without profiles', { error })
     return []
   }
 }

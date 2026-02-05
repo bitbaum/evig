@@ -11,6 +11,7 @@ import { auth } from '@/auth'
 import { canAccessSection, isSuperAdmin, isStaffEmail } from '@/lib/permissions'
 import { query } from '@/lib/auth/db'
 import { TABLE_NAMES } from '@/config/database'
+import { logger } from '@/lib/logger'
 import {
   ArrowLeft,
   Mail,
@@ -76,7 +77,8 @@ async function getUser(id: string): Promise<UserData | null> {
     )
 
     return result.rows[0] || null
-  } catch {
+  } catch (error) {
+    logger.error('Failed to fetch user details', { error, userId: id })
     return null
   }
 }

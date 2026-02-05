@@ -148,9 +148,8 @@ export async function GET(request: NextRequest) {
         tp.phone,
         tp.emergency_contact_name,
         tp.emergency_contact_phone,
-        tp.emergency_contact_relation
-        ${hrNotesColumn},
-        tp.is_active,
+        tp.emergency_contact_relation,
+        tp.is_active${hrNotesColumn},
         tp.created_at,
         tp.updated_at
        FROM ${TABLE_NAMES.TEAM_PROFILES} tp

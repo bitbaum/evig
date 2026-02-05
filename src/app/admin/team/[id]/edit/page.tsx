@@ -10,6 +10,7 @@ import { auth } from '@/auth'
 import { canAccessSection, isSuperAdmin } from '@/lib/permissions'
 import { query } from '@/lib/auth/db'
 import { TABLE_NAMES } from '@/config/database'
+import { logger } from '@/lib/logger'
 import { TeamProfileForm } from '@/components/admin/team'
 
 interface PageProps {
@@ -90,7 +91,8 @@ async function getProfile(id: string, includeHrNotes = false): Promise<ProfileDa
     )
 
     return result.rows[0] || null
-  } catch {
+  } catch (error) {
+    logger.error('Failed to fetch team profile for edit', { error, profileId: id })
     return null
   }
 }
