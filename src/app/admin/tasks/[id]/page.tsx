@@ -1,0 +1,476 @@
+/**
+ * Admin Task Detail Page - Server Component
+ *
+ * Shows task details, completion history, and actions.
+ * Created: 2026-02-05
+ */
+
+import { Metadata } from 'next'
+import Link from 'next/link'
+import { notFound } from 'next/navigation'
+import { query } from '@/lib/auth/db'
+import { TABLE_NAMES } from '@/config/database'
+import {
+  TASK_CATEGORY_LABELS,
+  TASK_STATUS_LABELS,
+  TASK_PRIORITY_LABELS,
+  TASK_TYPE_LABELS,
+  type TaskCategory,
+  type TaskStatus,
+  type TaskPriority,
+  type TaskType,
+} from '@/config/tasks'
+import {
+  ArrowLeft,
+  ClipboardList,
+  Clock,
+  User,
+  Calendar,
+  AlertTriangle,
+  CheckCircle2,
+  MessageSquare,
+  Send,
+  Edit,
+} from 'lucide-react'
+import TaskActionsClient from './TaskActionsClient'
+
+export const metadata: Metadata = {
+  title: 'Aufgabe Details | RevampIT Admin',
+  description: 'Aufgabendetails und Verlauf anzeigen.',
+}
+
+interface Task {
+  id: string
+  title: string
+  description: string | null
+  instructions: string | null
+  task_type: TaskType
+  category: TaskCategory
+  priority: TaskPriority
+  current_status: TaskStatus
+  estimated_minutes: number | null
+  schedule_human: string | null
+  is_completed: boolean
+  is_archived: boolean
+  created_at: string
+  updated_at: string
+  created_by: string
+  created_by_name: string | null
+  created_by_email: string | null
+}
+
+interface Completion {
+  id: string
+  completed_by: string
+  completed_by_name: string | null
+  completed_by_email: string | null
+  completed_at: string
+  notes: string | null
+  duration_minutes: number | null
+}
+
+interface AttentionFlag {
+  id: string
+  flagged_by: string
+  flagged_by_name: string | null
+  message: string | null
+  created_at: string
+  is_resolved: boolean
+}
+
+interface TaskRequest {
+  id: string
+  requested_by: string
+  requested_by_name: string | null
+  requested_user_id: string | null
+  requested_user_name: string | null
+  is_broadcast: boolean
+  message: string | null
+  status: string
+  created_at: string
+}
+
+async function getTask(id: string): Promise<Task | null> {
+  try {
+    const result = await query<Task>(
+      `SELECT
+        t.*,
+        u.name as created_by_name,
+        u.email as created_by_email
+      FROM ${TABLE_NAMES.TASKS} t
+      LEFT JOIN ${TABLE_NAMES.USERS} u ON t.created_by = u.id
+      WHERE t.id = $1`,
+      [id]
+    )
+    return result.rows[0] || null
+  } catch {
+    return null
+  }
+}
+
+async function getCompletions(taskId: string): Promise<Completion[]> {
+  try {
+    const result = await query<Completion>(
+      `SELECT
+        tc.*,
+        u.name as completed_by_name,
+        u.email as completed_by_email
+      FROM ${TABLE_NAMES.TASK_COMPLETIONS} tc
+      LEFT JOIN ${TABLE_NAMES.USERS} u ON tc.completed_by = u.id
+      WHERE tc.task_id = $1
+      ORDER BY tc.completed_at DESC
+      LIMIT 50`,
+      [taskId]
+    )
+    return result.rows
+  } catch {
+    return []
+  }
+}
+
+async function getAttentionFlags(taskId: string): Promise<AttentionFlag[]> {
+  try {
+    const result = await query<AttentionFlag>(
+      `SELECT
+        f.*,
+        u.name as flagged_by_name
+      FROM ${TABLE_NAMES.TASK_ATTENTION_FLAGS} f
+      LEFT JOIN ${TABLE_NAMES.USERS} u ON f.flagged_by = u.id
+      WHERE f.task_id = $1
+      ORDER BY f.created_at DESC`,
+      [taskId]
+    )
+    return result.rows
+  } catch {
+    return []
+  }
+}
+
+async function getRequests(taskId: string): Promise<TaskRequest[]> {
+  try {
+    const result = await query<TaskRequest>(
+      `SELECT
+        r.*,
+        rb.name as requested_by_name,
+        ru.name as requested_user_name
+      FROM ${TABLE_NAMES.TASK_REQUESTS} r
+      LEFT JOIN ${TABLE_NAMES.USERS} rb ON r.requested_by = rb.id
+      LEFT JOIN ${TABLE_NAMES.USERS} ru ON r.requested_user_id = ru.id
+      WHERE r.task_id = $1
+      ORDER BY r.created_at DESC`,
+      [taskId]
+    )
+    return result.rows
+  } catch {
+    return []
+  }
+}
+
+function getStatusColor(status: TaskStatus): string {
+  switch (status) {
+    case 'needs_attention':
+      return 'bg-red-100 text-red-800'
+    case 'requested':
+      return 'bg-yellow-100 text-yellow-800'
+    case 'in_progress':
+      return 'bg-blue-100 text-blue-800'
+    case 'idle':
+      return 'bg-green-100 text-green-800'
+    default:
+      return 'bg-gray-100 text-gray-800'
+  }
+}
+
+function getPriorityColor(priority: TaskPriority): string {
+  switch (priority) {
+    case 'urgent':
+      return 'bg-red-100 text-red-800'
+    case 'high':
+      return 'bg-orange-100 text-orange-800'
+    case 'normal':
+      return 'bg-blue-100 text-blue-800'
+    case 'low':
+      return 'bg-gray-100 text-gray-800'
+    default:
+      return 'bg-gray-100 text-gray-800'
+  }
+}
+
+function formatDate(dateString: string): string {
+  return new Date(dateString).toLocaleDateString('de-CH', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+  })
+}
+
+export default async function TaskDetailPage({
+  params,
+}: {
+  params: Promise<{ id: string }>
+}) {
+  const { id } = await params
+  const task = await getTask(id)
+
+  if (!task) {
+    notFound()
+  }
+
+  const [completions, flags, requests] = await Promise.all([
+    getCompletions(id),
+    getAttentionFlags(id),
+    getRequests(id),
+  ])
+
+  const activeFlags = flags.filter((f) => !f.is_resolved)
+  const pendingRequests = requests.filter((r) => r.status === 'pending')
+
+  return (
+    <div className="space-y-6">
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-4">
+          <Link
+            href="/admin/tasks"
+            className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors"
+          >
+            <ArrowLeft className="w-5 h-5" />
+            Zurück
+          </Link>
+          <div className="w-px h-6 bg-gray-300" />
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+              <ClipboardList className="w-5 h-5 text-blue-600" />
+            </div>
+            <div>
+              <h1 className="text-2xl font-bold text-gray-900">{task.title}</h1>
+              <p className="text-gray-600">
+                {TASK_CATEGORY_LABELS[task.category]} · {TASK_TYPE_LABELS[task.task_type]}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-3">
+          <Link
+            href={`/admin/tasks/${id}/edit`}
+            className="px-4 py-2 text-sm text-gray-600 hover:text-gray-900 border border-gray-200 hover:border-gray-300 rounded-lg transition-colors flex items-center gap-2"
+          >
+            <Edit className="w-4 h-4" />
+            Bearbeiten
+          </Link>
+        </div>
+      </div>
+
+      {/* Status Badges */}
+      <div className="flex items-center gap-3">
+        <span
+          className={`inline-flex px-3 py-1 text-sm font-medium rounded-full ${getStatusColor(
+            task.current_status
+          )}`}
+        >
+          {TASK_STATUS_LABELS[task.current_status]}
+        </span>
+        <span
+          className={`inline-flex px-3 py-1 text-sm font-medium rounded-full ${getPriorityColor(
+            task.priority
+          )}`}
+        >
+          {TASK_PRIORITY_LABELS[task.priority]}
+        </span>
+        {task.is_completed && (
+          <span className="inline-flex px-3 py-1 text-sm font-medium rounded-full bg-green-100 text-green-800">
+            Abgeschlossen
+          </span>
+        )}
+        {task.is_archived && (
+          <span className="inline-flex px-3 py-1 text-sm font-medium rounded-full bg-gray-100 text-gray-800">
+            Archiviert
+          </span>
+        )}
+      </div>
+
+      {/* Active Alerts */}
+      {activeFlags.length > 0 && (
+        <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+          <div className="flex items-start gap-3">
+            <AlertTriangle className="w-5 h-5 text-red-600 mt-0.5" />
+            <div>
+              <h3 className="font-medium text-red-800">
+                Aufgabe braucht Aufmerksamkeit
+              </h3>
+              {activeFlags.map((flag) => (
+                <p key={flag.id} className="text-sm text-red-700 mt-1">
+                  {flag.flagged_by_name || 'Jemand'}: {flag.message || 'Keine Nachricht'}
+                  <span className="text-red-500 ml-2">
+                    ({formatDate(flag.created_at)})
+                  </span>
+                </p>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Pending Requests */}
+      {pendingRequests.length > 0 && (
+        <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+          <div className="flex items-start gap-3">
+            <Send className="w-5 h-5 text-yellow-600 mt-0.5" />
+            <div>
+              <h3 className="font-medium text-yellow-800">Offene Anfragen</h3>
+              {pendingRequests.map((req) => (
+                <p key={req.id} className="text-sm text-yellow-700 mt-1">
+                  {req.requested_by_name || 'Jemand'} fragt{' '}
+                  {req.is_broadcast
+                    ? 'alle Teammitglieder'
+                    : req.requested_user_name || 'jemanden'}
+                  {req.message && `: "${req.message}"`}
+                  <span className="text-yellow-500 ml-2">
+                    ({formatDate(req.created_at)})
+                  </span>
+                </p>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      <div className="grid grid-cols-3 gap-6">
+        {/* Main Content */}
+        <div className="col-span-2 space-y-6">
+          {/* Description */}
+          {task.description && (
+            <div className="bg-white rounded-lg border p-6">
+              <h2 className="text-lg font-semibold text-gray-900 mb-3">
+                Beschreibung
+              </h2>
+              <p className="text-gray-700 whitespace-pre-wrap">{task.description}</p>
+            </div>
+          )}
+
+          {/* Instructions */}
+          {task.instructions && (
+            <div className="bg-white rounded-lg border p-6">
+              <h2 className="text-lg font-semibold text-gray-900 mb-3">Anleitung</h2>
+              <p className="text-gray-700 whitespace-pre-wrap">{task.instructions}</p>
+            </div>
+          )}
+
+          {/* Actions */}
+          <TaskActionsClient taskId={task.id} taskTitle={task.title} />
+
+          {/* Completion History */}
+          <div className="bg-white rounded-lg border p-6">
+            <h2 className="text-lg font-semibold text-gray-900 mb-4">
+              Erledigungen ({completions.length})
+            </h2>
+            {completions.length === 0 ? (
+              <p className="text-gray-500">Noch keine Erledigungen</p>
+            ) : (
+              <div className="space-y-4">
+                {completions.map((completion) => (
+                  <div
+                    key={completion.id}
+                    className="flex items-start gap-3 pb-4 border-b last:border-0"
+                  >
+                    <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
+                      <CheckCircle2 className="w-4 h-4 text-green-600" />
+                    </div>
+                    <div className="flex-1">
+                      <div className="flex items-center justify-between">
+                        <p className="font-medium text-gray-900">
+                          {completion.completed_by_name || completion.completed_by_email || 'Unbekannt'}
+                        </p>
+                        <p className="text-sm text-gray-500">
+                          {formatDate(completion.completed_at)}
+                        </p>
+                      </div>
+                      {completion.duration_minutes && (
+                        <p className="text-sm text-gray-600">
+                          Dauer: {completion.duration_minutes} Minuten
+                        </p>
+                      )}
+                      {completion.notes && (
+                        <p className="text-sm text-gray-600 mt-1">
+                          {completion.notes}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Sidebar */}
+        <div className="space-y-6">
+          {/* Task Info */}
+          <div className="bg-white rounded-lg border p-6">
+            <h2 className="text-lg font-semibold text-gray-900 mb-4">Details</h2>
+            <dl className="space-y-4">
+              <div>
+                <dt className="text-sm text-gray-500">Erstellt von</dt>
+                <dd className="flex items-center gap-2 mt-1">
+                  <User className="w-4 h-4 text-gray-400" />
+                  <span className="text-gray-900">
+                    {task.created_by_name || task.created_by_email || 'Unbekannt'}
+                  </span>
+                </dd>
+              </div>
+              <div>
+                <dt className="text-sm text-gray-500">Erstellt am</dt>
+                <dd className="flex items-center gap-2 mt-1">
+                  <Calendar className="w-4 h-4 text-gray-400" />
+                  <span className="text-gray-900">{formatDate(task.created_at)}</span>
+                </dd>
+              </div>
+              {task.estimated_minutes && (
+                <div>
+                  <dt className="text-sm text-gray-500">Geschätzte Dauer</dt>
+                  <dd className="flex items-center gap-2 mt-1">
+                    <Clock className="w-4 h-4 text-gray-400" />
+                    <span className="text-gray-900">
+                      {task.estimated_minutes} Minuten
+                    </span>
+                  </dd>
+                </div>
+              )}
+              {task.schedule_human && (
+                <div>
+                  <dt className="text-sm text-gray-500">Zeitplan</dt>
+                  <dd className="flex items-center gap-2 mt-1">
+                    <Calendar className="w-4 h-4 text-gray-400" />
+                    <span className="text-gray-900">{task.schedule_human}</span>
+                  </dd>
+                </div>
+              )}
+            </dl>
+          </div>
+
+          {/* Quick Stats */}
+          <div className="bg-white rounded-lg border p-6">
+            <h2 className="text-lg font-semibold text-gray-900 mb-4">Statistiken</h2>
+            <div className="space-y-3">
+              <div className="flex justify-between">
+                <span className="text-gray-600">Erledigungen gesamt</span>
+                <span className="font-medium text-gray-900">{completions.length}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-gray-600">Aufmerksamkeits-Flags</span>
+                <span className="font-medium text-gray-900">{flags.length}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-gray-600">Anfragen</span>
+                <span className="font-medium text-gray-900">{requests.length}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
