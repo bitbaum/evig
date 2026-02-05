@@ -136,7 +136,7 @@ export const POST = withAdmin(async (request: NextRequest, session: ValidSession
 
     const dbUserId = userResult.rows[0].id;
 
-    const insertResult = await query(
+    const insertResult = await query<{ id: string; title: string }>(
       `INSERT INTO ${TABLE_NAMES.TASKS} (
         title,
         description,
@@ -168,7 +168,7 @@ export const POST = withAdmin(async (request: NextRequest, session: ValidSession
       ]
     );
 
-    const task = insertResult.rows[0] as { id: string; title: string };
+    const task = insertResult.rows[0];
 
     logger.info('Task created', {
       taskId: task.id,

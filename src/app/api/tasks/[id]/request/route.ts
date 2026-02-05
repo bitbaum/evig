@@ -63,6 +63,19 @@ export const POST = withAdmin<RouteParams>(async (
       return apiBadRequest('Archivierte Aufgaben können nicht angefragt werden');
     }
 
+    // Look up the actual user ID from the database by email
+    // (Auth.js session ID may not match the database user ID)
+    const currentUserResult = await query<{ id: string }>(
+      `SELECT id FROM ${TABLE_NAMES.USERS} WHERE email = $1`,
+      [session.user.email]
+    );
+
+    if (currentUserResult.rows.length === 0) {
+      return apiBadRequest('Benutzer nicht gefunden');
+    }
+
+    const dbUserId = currentUserResult.rows[0].id;
+
     // If specific user requested, verify they exist
     if (data.requested_user_id) {
       const userResult = await query(
@@ -76,7 +89,7 @@ export const POST = withAdmin<RouteParams>(async (
     }
 
     // Create request record
-    const requestResult = await query(
+    const requestResult = await query<{ id: string }>(
       `INSERT INTO ${TABLE_NAMES.TASK_REQUESTS} (
         task_id,
         requested_by,
@@ -87,13 +100,13 @@ export const POST = withAdmin<RouteParams>(async (
       RETURNING *`,
       [
         taskId,
-        session.user.id,
+        dbUserId,
         data.requested_user_id || null,
         data.message || null,
       ]
     );
 
-    const taskRequest = requestResult.rows[0] as { id: string };
+    const taskRequest = requestResult.rows[0];
 
     // Update task status to requested
     await query(

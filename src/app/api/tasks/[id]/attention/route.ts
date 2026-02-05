@@ -64,18 +64,31 @@ export const POST = withAdmin<RouteParams>(async (
       return apiBadRequest('Archivierte Aufgaben können nicht markiert werden');
     }
 
+    // Look up the actual user ID from the database by email
+    // (Auth.js session ID may not match the database user ID)
+    const userResult = await query<{ id: string }>(
+      `SELECT id FROM ${TABLE_NAMES.USERS} WHERE email = $1`,
+      [session.user.email]
+    );
+
+    if (userResult.rows.length === 0) {
+      return apiBadRequest('Benutzer nicht gefunden');
+    }
+
+    const dbUserId = userResult.rows[0].id;
+
     // Create attention flag
-    const flagResult = await query(
+    const flagResult = await query<{ id: string }>(
       `INSERT INTO ${TABLE_NAMES.TASK_ATTENTION_FLAGS} (
         task_id,
         flagged_by,
         message
       ) VALUES ($1, $2, $3)
       RETURNING *`,
-      [taskId, session.user.id, data.message || null]
+      [taskId, dbUserId, data.message || null]
     );
 
-    const flag = flagResult.rows[0] as { id: string };
+    const flag = flagResult.rows[0];
 
     // Update task status to needs_attention
     await query(

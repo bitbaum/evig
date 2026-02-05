@@ -109,17 +109,37 @@ export const GET = withAdmin(async (request: NextRequest, session: ValidSession)
       days
     });
 
-    const stats = statsResult.rows[0] as Record<string, unknown> || {};
-    const completions = completionsResult.rows[0] as Record<string, unknown> || {};
-    const todayRow = todayResult.rows[0] as Record<string, string> || {};
-    const weekRow = weekResult.rows[0] as Record<string, string> || {};
-    const pendingRow = pendingRequestsResult.rows[0] as Record<string, string> || {};
-    const flagsRow = attentionFlagsResult.rows[0] as Record<string, string> || {};
+    interface StatsRow {
+      total_active: string;
+      needs_attention: string;
+      requested: string;
+      in_progress: string;
+      completed_one_time: string;
+    }
+
+    interface CompletionsRow {
+      total_completions: string;
+      unique_completers: string;
+      avg_duration: string;
+    }
+
+    const stats = (statsResult.rows[0] || {}) as StatsRow;
+    const completions = (completionsResult.rows[0] || {}) as CompletionsRow;
+    const todayRow = (todayResult.rows[0] || { completed_today: '0' }) as { completed_today: string };
+    const weekRow = (weekResult.rows[0] || { completed_this_week: '0' }) as { completed_this_week: string };
+    const pendingRow = (pendingRequestsResult.rows[0] || { pending_requests: '0' }) as { pending_requests: string };
+    const flagsRow = (attentionFlagsResult.rows[0] || { active_flags: '0' }) as { active_flags: string };
 
     return apiSuccess({
       overview: {
-        ...stats,
-        ...completions,
+        total_active: parseInt(stats.total_active || '0', 10),
+        needs_attention: parseInt(stats.needs_attention || '0', 10),
+        requested: parseInt(stats.requested || '0', 10),
+        in_progress: parseInt(stats.in_progress || '0', 10),
+        completed_one_time: parseInt(stats.completed_one_time || '0', 10),
+        total_completions: parseInt(completions.total_completions || '0', 10),
+        unique_completers: parseInt(completions.unique_completers || '0', 10),
+        avg_duration: parseInt(completions.avg_duration || '0', 10),
         completed_today: parseInt(todayRow.completed_today || '0', 10),
         completed_this_week: parseInt(weekRow.completed_this_week || '0', 10),
         pending_requests: parseInt(pendingRow.pending_requests || '0', 10),

@@ -59,13 +59,26 @@ export const POST = withAdmin<RouteParams>(async (
       return apiBadRequest('Archivierte Aufgaben können nicht erledigt werden');
     }
 
+    // Look up the actual user ID from the database by email
+    // (Auth.js session ID may not match the database user ID)
+    const userResult = await query<{ id: string }>(
+      `SELECT id FROM ${TABLE_NAMES.USERS} WHERE email = $1`,
+      [session.user.email]
+    );
+
+    if (userResult.rows.length === 0) {
+      return apiBadRequest('Benutzer nicht gefunden');
+    }
+
+    const dbUserId = userResult.rows[0].id;
+
     // Create completion record
     // The database trigger will handle:
     // - Resetting task status to idle
     // - Marking one-time tasks as completed
     // - Resolving attention flags
     // - Completing pending requests
-    const completionResult = await query(
+    const completionResult = await query<{ id: string }>(
       `INSERT INTO ${TABLE_NAMES.TASK_COMPLETIONS} (
         task_id,
         completed_by,
@@ -76,13 +89,13 @@ export const POST = withAdmin<RouteParams>(async (
       RETURNING *`,
       [
         taskId,
-        session.user.id,
+        dbUserId,
         data.notes || null,
         data.duration_minutes || null,
       ]
     );
 
-    const completion = completionResult.rows[0] as { id: string };
+    const completion = completionResult.rows[0];
 
     logger.info('Task completed', {
       taskId,

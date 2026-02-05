@@ -92,7 +92,20 @@ export const POST = withAdmin(async (request: NextRequest, session: ValidSession
 
     const data = result.data;
 
-    const insertResult = await query(
+    // Look up the actual user ID from the database by email
+    // (Auth.js session ID may not match the database user ID)
+    const userResult = await query<{ id: string }>(
+      `SELECT id FROM ${TABLE_NAMES.USERS} WHERE email = $1`,
+      [session.user.email]
+    );
+
+    if (userResult.rows.length === 0) {
+      return apiBadRequest('Benutzer nicht gefunden');
+    }
+
+    const dbUserId = userResult.rows[0].id;
+
+    const insertResult = await query<{ id: string; title: string }>(
       `INSERT INTO ${TABLE_NAMES.TASK_PROJECTS} (
         title,
         description,
@@ -106,11 +119,11 @@ export const POST = withAdmin(async (request: NextRequest, session: ValidSession
         data.description || null,
         data.status,
         data.target_date || null,
-        session.user.id,
+        dbUserId,
       ]
     );
 
-    const project = insertResult.rows[0] as { id: string; title: string };
+    const project = insertResult.rows[0];
 
     logger.info('Project created', {
       projectId: project.id,
