@@ -15,8 +15,8 @@
  *   />
  */
 
-import { useState, useCallback } from 'react'
-import { Mic, Camera, Zap, Loader2, CheckCircle2, AlertCircle } from 'lucide-react'
+import { useState, useCallback, useEffect } from 'react'
+import { Mic, Camera, Zap, Loader2, CheckCircle2, AlertCircle, ChevronDown, ChevronUp } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { logger } from '@/lib/logger'
 import type { VoiceProductData, ErfassungFormData, AIFieldMetadata } from '@/types/erfassung'
@@ -31,9 +31,11 @@ interface DataEntryTabsProps {
   onProductData: (data: Partial<ErfassungFormData>, metadata?: AIFieldMetadata) => void
   onImageCapture?: (imageBase64: string) => void
   onError?: (error: string) => void
+  onDataFilled?: () => void // Called when data is successfully extracted and filled
   activeMode?: EntryMode
   className?: string
   showAllTabs?: boolean // Show voice/image tabs (requires self-hosted services)
+  collapsed?: boolean // Allow parent to control collapsed state
 }
 
 interface TabConfig {
@@ -71,14 +73,22 @@ export function DataEntryTabs({
   onProductData,
   onImageCapture,
   onError,
+  onDataFilled,
   activeMode: initialMode = 'form',
   className = '',
   showAllTabs = false,
+  collapsed = false,
 }: DataEntryTabsProps) {
   const [activeMode, setActiveMode] = useState<EntryMode>(initialMode)
   const [quickText, setQuickText] = useState('')
   const [quickEntryState, setQuickEntryState] = useState<QuickEntryState>('idle')
   const [quickEntryError, setQuickEntryError] = useState<string | null>(null)
+  const [isCollapsed, setIsCollapsed] = useState(collapsed)
+
+  // Sync collapsed state from parent
+  useEffect(() => {
+    setIsCollapsed(collapsed)
+  }, [collapsed])
 
   // Handle voice transcription complete
   const handleVoiceData = useCallback(
@@ -156,11 +166,13 @@ export function DataEntryTabs({
       setQuickEntryState('success')
       logger.info('Quick text entry successful', { product: result.data.produktname })
 
-      // Reset after showing success
+      // Collapse and notify parent after showing success
       setTimeout(() => {
         setQuickEntryState('idle')
         setQuickText('')
-      }, 2000)
+        setIsCollapsed(true)
+        onDataFilled?.()
+      }, 1500)
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Unbekannter Fehler'
       setQuickEntryError(message)
@@ -174,9 +186,29 @@ export function DataEntryTabs({
     <div
       className={`bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 rounded-xl border border-purple-200 dark:border-purple-800 overflow-hidden ${className}`}
     >
-      {/* Tab headers - only show if multiple tabs */}
-      {TABS.length > 1 && (
-        <div className="flex border-b border-purple-200 dark:border-purple-800">
+      {/* Collapsible header */}
+      <button
+        type="button"
+        onClick={() => setIsCollapsed(!isCollapsed)}
+        className="w-full flex items-center justify-between px-4 sm:px-6 py-3 hover:bg-purple-100/50 dark:hover:bg-purple-800/30 transition-colors"
+      >
+        <div className="flex items-center gap-2">
+          <Zap className="w-5 h-5 text-purple-600 dark:text-purple-400" />
+          <span className="font-semibold text-gray-900 dark:text-white">KI-Schnelleingabe</span>
+          {isCollapsed && quickEntryState === 'success' && (
+            <span className="text-sm text-green-600 dark:text-green-400">(Ausgefuellt)</span>
+          )}
+        </div>
+        {isCollapsed ? (
+          <ChevronDown className="w-5 h-5 text-purple-600 dark:text-purple-400" />
+        ) : (
+          <ChevronUp className="w-5 h-5 text-purple-600 dark:text-purple-400" />
+        )}
+      </button>
+
+      {/* Tab headers - only show if multiple tabs and not collapsed */}
+      {!isCollapsed && TABS.length > 1 && (
+        <div className="flex border-b border-t border-purple-200 dark:border-purple-800">
           {TABS.map((tab) => (
             <button
               key={tab.id}
@@ -195,8 +227,8 @@ export function DataEntryTabs({
         </div>
       )}
 
-      {/* Tab content */}
-      <div className="p-6">
+      {/* Tab content - hidden when collapsed */}
+      {!isCollapsed && <div className="p-6">
         {/* Speech mode - Coming soon (requires self-hosted transcription service) */}
         {activeMode === 'speech' && (
           <div className="text-center py-8 text-gray-500 dark:text-gray-400">
@@ -277,7 +309,7 @@ export function DataEntryTabs({
             )}
           </div>
         )}
-      </div>
+      </div>}
     </div>
   )
 }

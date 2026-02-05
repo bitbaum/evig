@@ -20,6 +20,7 @@ import {
   Send,
   Sparkles,
   X,
+  Wand2,
 } from 'lucide-react'
 
 interface Category {
@@ -70,11 +71,20 @@ export function BlogPostForm({ initialData, isEdit = false }: BlogPostFormProps)
 
   const [tagInput, setTagInput] = useState('')
 
-  // AI Generation state
+  // AI Generation/Refinement state
   const [showAIModal, setShowAIModal] = useState(false)
+  const [aiMode, setAiMode] = useState<'generate' | 'refine'>('generate')
   const [aiTopic, setAiTopic] = useState('')
+  const [aiInstruction, setAiInstruction] = useState('')
   const [aiGenerating, setAiGenerating] = useState(false)
   const [aiError, setAiError] = useState('')
+
+  // Quick action prompts for refinement
+  const QUICK_ACTIONS = [
+    { key: 'shorter', label: 'Kürzer', prompt: 'Kürze den Artikel auf etwa die Hälfte der Länge. Behalte die wichtigsten Punkte bei.' },
+    { key: 'longer', label: 'Ausführlicher', prompt: 'Erweitere den Artikel mit mehr Details, Beispielen und praktischen Tipps. Verdopple etwa die Länge.' },
+    { key: 'seoOptimize', label: 'SEO-optimiert', prompt: 'Optimiere den Artikel für Suchmaschinen: Verbessere Titel, füge relevante Keywords ein, strukturiere mit besseren Überschriften.' },
+  ]
 
   useEffect(() => {
     loadCategories()
@@ -222,6 +232,70 @@ export function BlogPostForm({ initialData, isEdit = false }: BlogPostFormProps)
     }
   }
 
+  const handleAIRefine = async (instruction?: string) => {
+    const refineInstruction = instruction || aiInstruction
+    if (!refineInstruction.trim()) {
+      setAiError('Bitte geben Sie eine Anweisung ein')
+      return
+    }
+
+    if (!formData.content || !formData.title) {
+      setAiError('Bitte geben Sie zuerst Titel und Inhalt ein')
+      return
+    }
+
+    setAiError('')
+    setAiGenerating(true)
+
+    try {
+      const res = await fetch('/api/admin/blog/refine', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          currentContent: {
+            title: formData.title,
+            excerpt: formData.excerpt,
+            content: formData.content,
+            tags: formData.tags,
+          },
+          instruction: refineInstruction,
+        }),
+      })
+
+      const data = await res.json()
+
+      if (data.success && data.data?.refined) {
+        const ref = data.data.refined
+        setFormData(prev => ({
+          ...prev,
+          title: ref.title || prev.title,
+          excerpt: ref.excerpt || prev.excerpt,
+          content: ref.content || prev.content,
+          tags: ref.tags?.length > 0 ? ref.tags : prev.tags,
+          seoTitle: ref.seoTitle || prev.seoTitle,
+          seoDescription: ref.seoDescription || prev.seoDescription,
+        }))
+        setShowAIModal(false)
+        setAiInstruction('')
+        setSuccess('Artikel mit KI verbessert! Bitte überprüfen.')
+      } else {
+        setAiError(data.error || 'Verbesserung fehlgeschlagen')
+      }
+    } catch {
+      setAiError('Netzwerkfehler. Bitte versuchen Sie es erneut.')
+    } finally {
+      setAiGenerating(false)
+    }
+  }
+
+  const openAIModal = (mode: 'generate' | 'refine') => {
+    setAiMode(mode)
+    setAiError('')
+    setAiTopic('')
+    setAiInstruction('')
+    setShowAIModal(true)
+  }
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -244,24 +318,43 @@ export function BlogPostForm({ initialData, isEdit = false }: BlogPostFormProps)
         </div>
 
         <div className="flex items-center gap-3">
-          {!isEdit && (
+          {isEdit ? (
             <button
-              onClick={() => setShowAIModal(true)}
+              onClick={() => openAIModal('refine')}
+              className="inline-flex items-center gap-2 px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white font-medium rounded-lg transition-colors"
+            >
+              <Wand2 className="w-4 h-4" />
+              Mit KI verbessern
+            </button>
+          ) : (
+            <button
+              onClick={() => openAIModal('generate')}
               className="inline-flex items-center gap-2 px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white font-medium rounded-lg transition-colors"
             >
               <Sparkles className="w-4 h-4" />
               Mit KI generieren
             </button>
           )}
-          {formData.slug && (
-            <Link
-              href={`/blog/${formData.slug}`}
-              target="_blank"
-              className="inline-flex items-center gap-2 px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
-            >
-              <Eye className="w-4 h-4" />
-              Vorschau
-            </Link>
+          {formData.slug && isEdit && (
+            formData.isPublished ? (
+              <Link
+                href={`/blog/${formData.slug}`}
+                target="_blank"
+                className="inline-flex items-center gap-2 px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
+                title="Veröffentlichten Artikel ansehen"
+              >
+                <Eye className="w-4 h-4" />
+                Vorschau
+              </Link>
+            ) : (
+              <span
+                className="inline-flex items-center gap-2 px-4 py-2 text-gray-400 dark:text-gray-500 cursor-not-allowed"
+                title="Artikel muss zuerst veröffentlicht werden"
+              >
+                <Eye className="w-4 h-4" />
+                Vorschau
+              </span>
+            )
           )}
           <button
             onClick={() => handleSubmit(false)}
@@ -495,14 +588,23 @@ export function BlogPostForm({ initialData, isEdit = false }: BlogPostFormProps)
         </div>
       </div>
 
-      {/* AI Generation Modal */}
+      {/* AI Generation/Refinement Modal */}
       {showAIModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
           <div className="bg-white dark:bg-gray-800 rounded-xl shadow-xl max-w-lg w-full mx-4 p-6">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2">
-                <Sparkles className="w-5 h-5 text-purple-500" />
-                Artikel mit KI generieren
+                {aiMode === 'generate' ? (
+                  <>
+                    <Sparkles className="w-5 h-5 text-purple-500" />
+                    Artikel mit KI generieren
+                  </>
+                ) : (
+                  <>
+                    <Wand2 className="w-5 h-5 text-purple-500" />
+                    Artikel mit KI verbessern
+                  </>
+                )}
               </h3>
               <button
                 onClick={() => setShowAIModal(false)}
@@ -513,8 +615,9 @@ export function BlogPostForm({ initialData, isEdit = false }: BlogPostFormProps)
             </div>
 
             <p className="text-gray-600 dark:text-gray-400 text-sm mb-4">
-              Beschreiben Sie das Thema oder die Idee für Ihren Blog-Artikel. Die KI wird einen
-              vollständigen Entwurf generieren, den Sie dann anpassen können.
+              {aiMode === 'generate'
+                ? 'Beschreiben Sie das Thema oder die Idee für Ihren Blog-Artikel. Die KI wird einen vollständigen Entwurf generieren.'
+                : 'Beschreiben Sie, wie der Artikel verbessert werden soll, oder nutzen Sie die Schnellaktionen.'}
             </p>
 
             {aiError && (
@@ -524,19 +627,65 @@ export function BlogPostForm({ initialData, isEdit = false }: BlogPostFormProps)
             )}
 
             <div className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  Thema / Idee *
-                </label>
-                <textarea
-                  value={aiTopic}
-                  onChange={(e) => setAiTopic(e.target.value)}
-                  rows={4}
-                  className="w-full px-4 py-3 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                  placeholder="z.B. &quot;Wie man einen alten Laptop wieder fit macht&quot; oder &quot;Die Vorteile von Refurbished-Geräten für die Umwelt&quot;"
-                  disabled={aiGenerating}
-                />
-              </div>
+              {aiMode === 'generate' ? (
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    Thema / Idee *
+                  </label>
+                  <textarea
+                    value={aiTopic}
+                    onChange={(e) => setAiTopic(e.target.value)}
+                    rows={4}
+                    className="w-full px-4 py-3 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                    placeholder='z.B. "Wie man einen alten Laptop wieder fit macht" oder "Die Vorteile von Refurbished-Geräten für die Umwelt"'
+                    disabled={aiGenerating}
+                  />
+                </div>
+              ) : (
+                <>
+                  {/* Quick Actions for Refinement */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                      Schnellaktionen
+                    </label>
+                    <div className="flex flex-wrap gap-2">
+                      {QUICK_ACTIONS.map((action) => (
+                        <button
+                          key={action.key}
+                          onClick={() => handleAIRefine(action.prompt)}
+                          disabled={aiGenerating}
+                          className="px-3 py-1.5 bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 rounded-lg text-sm font-medium hover:bg-purple-200 dark:hover:bg-purple-800/40 disabled:opacity-50 transition-colors"
+                        >
+                          {action.label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="relative">
+                    <div className="absolute inset-0 flex items-center">
+                      <div className="w-full border-t border-gray-300 dark:border-gray-600"></div>
+                    </div>
+                    <div className="relative flex justify-center text-sm">
+                      <span className="px-2 bg-white dark:bg-gray-800 text-gray-500">oder</span>
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                      Eigene Anweisung
+                    </label>
+                    <textarea
+                      value={aiInstruction}
+                      onChange={(e) => setAiInstruction(e.target.value)}
+                      rows={3}
+                      className="w-full px-4 py-3 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                      placeholder='z.B. "Füge einen Abschnitt über Reparatur-Tipps hinzu" oder "Mache den Text ansprechender"'
+                      disabled={aiGenerating}
+                    />
+                  </div>
+                </>
+              )}
 
               {formData.categoryId && (
                 <p className="text-sm text-gray-500 dark:text-gray-400">
@@ -552,23 +701,43 @@ export function BlogPostForm({ initialData, isEdit = false }: BlogPostFormProps)
                 >
                   Abbrechen
                 </button>
-                <button
-                  onClick={handleAIGenerate}
-                  disabled={aiGenerating || !aiTopic.trim()}
-                  className="inline-flex items-center gap-2 px-4 py-2 bg-purple-600 hover:bg-purple-700 disabled:bg-purple-400 text-white font-medium rounded-lg transition-colors"
-                >
-                  {aiGenerating ? (
-                    <>
-                      <Loader2 className="w-4 h-4 animate-spin" />
-                      Generiere...
-                    </>
-                  ) : (
-                    <>
-                      <Sparkles className="w-4 h-4" />
-                      Generieren
-                    </>
-                  )}
-                </button>
+                {aiMode === 'generate' ? (
+                  <button
+                    onClick={handleAIGenerate}
+                    disabled={aiGenerating || !aiTopic.trim()}
+                    className="inline-flex items-center gap-2 px-4 py-2 bg-purple-600 hover:bg-purple-700 disabled:bg-purple-400 text-white font-medium rounded-lg transition-colors"
+                  >
+                    {aiGenerating ? (
+                      <>
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                        Generiere...
+                      </>
+                    ) : (
+                      <>
+                        <Sparkles className="w-4 h-4" />
+                        Generieren
+                      </>
+                    )}
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => handleAIRefine()}
+                    disabled={aiGenerating || !aiInstruction.trim()}
+                    className="inline-flex items-center gap-2 px-4 py-2 bg-purple-600 hover:bg-purple-700 disabled:bg-purple-400 text-white font-medium rounded-lg transition-colors"
+                  >
+                    {aiGenerating ? (
+                      <>
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                        Verbessere...
+                      </>
+                    ) : (
+                      <>
+                        <Wand2 className="w-4 h-4" />
+                        Verbessern
+                      </>
+                    )}
+                  </button>
+                )}
               </div>
             </div>
           </div>

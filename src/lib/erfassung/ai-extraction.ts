@@ -14,6 +14,7 @@
 
 import { logger } from '@/lib/logger'
 import type { VoiceProductData, AIFieldSource, AIFieldMetadata, ErfassungFormData, VerificationSource } from '@/types/erfassung'
+import { ERFASSUNG_PROMPTS, fillPromptTemplate } from '@/lib/ai/config/prompts'
 
 // AI Provider configuration - prefer Groq (cloud) over Ollama (local)
 const GROQ_API_KEY = process.env.GROQ_API_KEY || ''
@@ -246,26 +247,17 @@ function fastParseProductText(text: string): VoiceProductData {
   }
 }
 
-// Product form structure for Ollama to fill
-export const PRODUCT_SCHEMA = `{
-  "hersteller": "manufacturer name (Dell, Lenovo, HP, Apple, etc.)",
-  "produktname": "product model name",
-  "kurzbeschreibung": "short German description of the product",
-  "specs": [
-    { "key": "CPU", "value": "processor model" },
-    { "key": "RAM", "value": "memory amount" },
-    { "key": "Speicher", "value": "storage type and size" },
-    { "key": "Display", "value": "screen size and resolution" }
-  ],
-  "verkaufspreis": "price in CHF as number only",
-  "zustand": "one of: new, like_new, good, fair, poor",
-  "hauptkategorie": "10 for Laptops, 20 for Desktop PCs, 30 for Monitors, 40 for Peripherals",
-  "unterkategorie": "101 for Business Laptops, 102 for Consumer, 103 for Gaming",
-  "kundenprofile": ["suitable profiles: oma, buero, chiller, gamer, kreativ, dev, student"],
-  "bemerkungen": "any additional notes about condition or features"
-}`
+// Product form structure for AI to fill - imported from SSOT
+export const PRODUCT_SCHEMA = ERFASSUNG_PROMPTS.schema
 
-const OLLAMA_PROMPT = `Du bist ein Assistent für die Produkterfassung bei RevampIT, einem Schweizer Non-Profit für gebrauchte IT-Geräte.
+// Build extraction prompt using SSOT prompts
+const buildExtractionPrompt = (text: string) => fillPromptTemplate(ERFASSUNG_PROMPTS.extract, {
+  text,
+  schema: ERFASSUNG_PROMPTS.schema,
+})
+
+// Ollama-specific prompt (wraps the SSOT extract prompt)
+const OLLAMA_PROMPT = `${ERFASSUNG_PROMPTS.system}
 
 Der Benutzer hat folgendes eingegeben:
 "{TEXT}"
@@ -273,7 +265,7 @@ Der Benutzer hat folgendes eingegeben:
 Extrahiere die Produktinformationen und fülle folgendes JSON-Schema aus. Wenn Informationen fehlen, nutze sinnvolle Standardwerte basierend auf dem Produkttyp.
 
 Schema:
-${PRODUCT_SCHEMA}
+${ERFASSUNG_PROMPTS.schema}
 
 Wichtige Regeln:
 - Preise in CHF ohne Währungssymbol
@@ -429,11 +421,11 @@ async function tryGroqExtraction(
         messages: [
           {
             role: 'system',
-            content: `Du bist ein Assistent für die Produkterfassung bei RevampIT, einem Schweizer Non-Profit für gebrauchte IT-Geräte. Extrahiere Produktinformationen und antworte NUR mit JSON.`,
+            content: ERFASSUNG_PROMPTS.system,
           },
           {
             role: 'user',
-            content: `Extrahiere die Produktinformationen aus folgendem Text und fülle das JSON-Schema aus:\n\nText: "${text.trim()}"\n\nSchema:\n${PRODUCT_SCHEMA}\n\nWichtige Regeln:\n- Preise in CHF ohne Währungssymbol\n- Zustand: "gut" -> "good", "wie neu" -> "like_new", "neu" -> "new"\n- Bei Laptops: Kategorien 10 (Hauptkategorie)\n- Beschreibung auf Deutsch\n\nAntworte NUR mit dem JSON, keine Erklärungen.`,
+            content: buildExtractionPrompt(text.trim()),
           },
         ],
         temperature: 0.3,

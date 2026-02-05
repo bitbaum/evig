@@ -3,6 +3,8 @@
  *
  * POST /api/admin/blog/generate
  * Generates a blog post using AI based on a topic/prompt.
+ *
+ * Uses SSOT prompts from /src/lib/ai/config/prompts.ts
  */
 
 import { NextRequest } from 'next/server'
@@ -10,6 +12,7 @@ import { auth } from '@/auth'
 import { canAccessSection } from '@/lib/permissions'
 import { logger } from '@/lib/logger'
 import { apiSuccess, apiError, apiUnauthorized, apiForbidden, apiBadRequest } from '@/lib/api/helpers'
+import { BLOG_PROMPTS, fillPromptTemplate } from '@/lib/ai/config/prompts'
 
 const GROQ_API_KEY = process.env.GROQ_API_KEY || ''
 const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions'
@@ -23,51 +26,6 @@ interface GeneratedBlogPost {
   seoTitle: string
   seoDescription: string
 }
-
-const SYSTEM_PROMPT = `Du bist ein erfahrener Blog-Autor für RevampIT, einen Schweizer Non-Profit-Verein für nachhaltige IT.
-Du schreibst auf Deutsch mit Schweizer Schreibweise (verwende "ss" statt "ß", z.B. "Strasse" statt "Straße").
-
-RevampIT's Mission:
-- Förderung von nachhaltiger Technologie und Kreislaufwirtschaft
-- Reparatur statt Wegwerfen
-- Refurbished Hardware als Alternative zu Neugeräten
-- Open-Source Software und Hardware
-- Digitale Inklusion und Community-Building
-
-Dein Schreibstil:
-- Informativ aber zugänglich
-- Nicht zu formell, aber professionell
-- Praktische Tipps und Anleitungen wenn passend
-- Umweltbewusst ohne belehrend zu sein
-- Positiv und lösungsorientiert
-
-Formatiere den Artikel in Markdown mit:
-- Überschriften (##, ###)
-- Aufzählungen wo sinnvoll
-- Hervorhebungen (**fett** für wichtige Begriffe)
-- Kurze, lesbare Absätze
-
-Die Artikel sollten 400-800 Wörter lang sein.`
-
-const GENERATION_PROMPT = `Basierend auf dem folgenden Thema/Prompt, generiere einen kompletten Blog-Artikel:
-
-THEMA: {topic}
-
-Antworte im folgenden JSON-Format:
-{
-  "title": "Aussagekräftiger Titel",
-  "excerpt": "Kurze Zusammenfassung in 1-2 Sätzen (max 160 Zeichen)",
-  "content": "Der vollständige Artikel in Markdown",
-  "tags": ["tag1", "tag2", "tag3"],
-  "seoTitle": "SEO-optimierter Titel (kann gleich wie title sein)",
-  "seoDescription": "SEO-Beschreibung für Suchmaschinen (max 160 Zeichen)"
-}
-
-Wichtig:
-- Antworte NUR mit dem JSON, kein zusätzlicher Text
-- Verwende Schweizer Deutsch (ss statt ß)
-- Der Artikel sollte 400-800 Wörter umfassen
-- Tags sollten relevant und auf Deutsch sein`
 
 export async function POST(request: NextRequest) {
   try {
@@ -105,10 +63,14 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Build the prompt
+    // Build the prompt using SSOT prompts
     const topicWithCategory = category
       ? `${topic} (Kategorie: ${category})`
       : topic
+
+    const userPrompt = fillPromptTemplate(BLOG_PROMPTS.generate, {
+      topic: topicWithCategory,
+    })
 
     const response = await fetch(GROQ_API_URL, {
       method: 'POST',
@@ -119,8 +81,8 @@ export async function POST(request: NextRequest) {
       body: JSON.stringify({
         model: GROQ_MODEL,
         messages: [
-          { role: 'system', content: SYSTEM_PROMPT },
-          { role: 'user', content: GENERATION_PROMPT.replace('{topic}', topicWithCategory) },
+          { role: 'system', content: BLOG_PROMPTS.system },
+          { role: 'user', content: userPrompt },
         ],
         temperature: 0.7,
         max_tokens: 4096,

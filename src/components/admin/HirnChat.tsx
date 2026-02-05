@@ -111,7 +111,7 @@ export function HirnChat({ sessionId, onSessionChange, compact = false }: HirnCh
       }
 
       setMessages(prev => [...prev, assistantMessage])
-      onSessionChange?.()
+      // Note: Don't call onSessionChange here - it's only for when the session is cleared/changed
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Unbekannter Fehler')
     } finally {

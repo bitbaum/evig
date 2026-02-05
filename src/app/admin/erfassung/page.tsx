@@ -21,6 +21,8 @@ import {
   Printer,
   ChevronDown,
   ChevronUp,
+  Wand2,
+  Sparkles,
 } from 'lucide-react'
 import { DataEntryTabs } from '@/components/erfassung/DataEntryTabs'
 import { AIFieldIndicator } from '@/components/erfassung/AIFieldIndicator'
@@ -48,6 +50,21 @@ export default function ErfassungPage() {
 
   const [formData, setFormData] = useState<ErfassungFormData>(DEFAULT_FORM_DATA)
   const [aiMetadata, setAiMetadata] = useState<AIFieldMetadata>({})
+
+  // AI Refinement state
+  const [showAIRefine, setShowAIRefine] = useState(false)
+  const [aiInstruction, setAiInstruction] = useState('')
+  const [aiRefining, setAiRefining] = useState(false)
+  const [aiError, setAiError] = useState('')
+  const [aiSuccess, setAiSuccess] = useState('')
+  const [dataEntryCollapsed, setDataEntryCollapsed] = useState(false)
+
+  // Quick action prompts for refinement
+  const AI_QUICK_ACTIONS = [
+    { key: 'addSpecs', label: 'Specs ergänzen', prompt: 'Ergänze die technischen Spezifikationen basierend auf dem bekannten Produktmodell. Füge CPU, RAM, Speicher, Display-Grösse und andere relevante Specs hinzu.' },
+    { key: 'estimatePrice', label: 'Preis schätzen', prompt: 'Schätze einen realistischen Verkaufspreis für den Schweizer Markt für gebrauchte Geräte. Berücksichtige Zustand, Alter und aktuelle Marktpreise auf ricardo.ch und tutti.ch.' },
+    { key: 'improveDescription', label: 'Beschreibung verbessern', prompt: 'Verbessere die Kurzbeschreibung: Mache sie ansprechender und informativer. Hebe die wichtigsten Verkaufsargumente hervor.' },
+  ]
 
   // Load existing product data in edit mode
   useEffect(() => {
@@ -190,6 +207,78 @@ export default function ErfassungPage() {
   const handleImageCapture = useCallback((imageBase64: string) => {
     setFormData(prev => ({ ...prev, image: imageBase64 }))
   }, [])
+
+  // Handle when DataEntryTabs successfully fills the form
+  const handleDataFilled = useCallback(() => {
+    setDataEntryCollapsed(true)
+    setShowAIRefine(true)
+  }, [])
+
+  // Handle AI refinement
+  const handleAIRefine = async (instruction?: string) => {
+    const refineInstruction = instruction || aiInstruction
+    if (!refineInstruction.trim()) {
+      setAiError('Bitte geben Sie eine Anweisung ein')
+      return
+    }
+
+    if (!formData.produktname && !formData.hersteller) {
+      setAiError('Bitte geben Sie zuerst Hersteller oder Produktname ein')
+      return
+    }
+
+    setAiError('')
+    setAiSuccess('')
+    setAiRefining(true)
+
+    try {
+      const res = await fetch('/api/admin/erfassung/refine', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          currentProduct: {
+            hersteller: formData.hersteller,
+            produktname: formData.produktname,
+            kurzbeschreibung: formData.kurzbeschreibung,
+            specs: formData.specs,
+            verkaufspreis: formData.verkaufspreis,
+            zustand: formData.zustand,
+            hauptkategorie: formData.hauptkategorie,
+            unterkategorie: formData.unterkategorie,
+            kundenprofile: formData.kundenprofile,
+          },
+          instruction: refineInstruction,
+        }),
+      })
+
+      const data = await res.json()
+
+      if (data.success && data.data?.refined) {
+        const ref = data.data.refined
+        setFormData(prev => ({
+          ...prev,
+          hersteller: ref.hersteller || prev.hersteller,
+          produktname: ref.produktname || prev.produktname,
+          kurzbeschreibung: ref.kurzbeschreibung || prev.kurzbeschreibung,
+          specs: ref.specs?.length ? ref.specs : prev.specs,
+          verkaufspreis: ref.verkaufspreis || prev.verkaufspreis,
+          zustand: ref.zustand || prev.zustand,
+          hauptkategorie: ref.hauptkategorie || prev.hauptkategorie,
+          unterkategorie: ref.unterkategorie || prev.unterkategorie,
+          kundenprofile: ref.kundenprofile?.length ? ref.kundenprofile : prev.kundenprofile,
+        }))
+        setAiInstruction('')
+        const changedFields = data.data.fieldsChanged || []
+        setAiSuccess(`KI hat ${changedFields.length} Felder verbessert: ${changedFields.join(', ')}`)
+      } else {
+        setAiError(data.error || 'Verbesserung fehlgeschlagen')
+      }
+    } catch {
+      setAiError('Netzwerkfehler. Bitte versuchen Sie es erneut.')
+    } finally {
+      setAiRefining(false)
+    }
+  }
 
   // Submit form
   // action: 'draft' | 'erfassen' | 'publish'
@@ -381,7 +470,109 @@ export default function ErfassungPage() {
         onProductData={handleProductData}
         onImageCapture={handleImageCapture}
         onError={(error) => logger.error('Data entry error', { error })}
+        onDataFilled={handleDataFilled}
+        collapsed={dataEntryCollapsed}
       />
+
+      {/* AI Refinement Section - Show when we have some data */}
+      {(formData.hersteller || formData.produktname) && (
+        <div className="bg-gradient-to-r from-purple-50 to-indigo-50 dark:from-purple-900/20 dark:to-indigo-900/20 rounded-xl shadow-sm border border-purple-200 dark:border-purple-700 p-4 sm:p-6">
+          <button
+            type="button"
+            onClick={() => setShowAIRefine(!showAIRefine)}
+            className="w-full flex items-center justify-between"
+          >
+            <h2 className="text-base sm:text-lg font-semibold text-purple-900 dark:text-purple-100 flex items-center gap-2">
+              <Wand2 className="w-5 h-5 text-purple-600 dark:text-purple-400" />
+              Mit KI verbessern
+            </h2>
+            {showAIRefine ? (
+              <ChevronUp className="w-5 h-5 text-purple-600 dark:text-purple-400" />
+            ) : (
+              <ChevronDown className="w-5 h-5 text-purple-600 dark:text-purple-400" />
+            )}
+          </button>
+
+          {showAIRefine && (
+            <div className="mt-4 space-y-4">
+              <p className="text-sm text-purple-700 dark:text-purple-300">
+                Nutze KI, um fehlende Daten zu ergänzen oder die Produktinformationen zu verbessern.
+              </p>
+
+              {/* Error/Success Messages */}
+              {aiError && (
+                <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-300 px-4 py-3 rounded-lg text-sm">
+                  {aiError}
+                </div>
+              )}
+              {aiSuccess && (
+                <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 text-green-700 dark:text-green-300 px-4 py-3 rounded-lg text-sm">
+                  {aiSuccess}
+                </div>
+              )}
+
+              {/* Quick Actions */}
+              <div>
+                <label className="block text-sm font-medium text-purple-700 dark:text-purple-300 mb-2">
+                  Schnellaktionen
+                </label>
+                <div className="flex flex-wrap gap-2">
+                  {AI_QUICK_ACTIONS.map((action) => (
+                    <button
+                      key={action.key}
+                      type="button"
+                      onClick={() => handleAIRefine(action.prompt)}
+                      disabled={aiRefining}
+                      className="px-3 py-1.5 bg-purple-100 dark:bg-purple-800/40 text-purple-700 dark:text-purple-300 rounded-lg text-sm font-medium hover:bg-purple-200 dark:hover:bg-purple-700/50 disabled:opacity-50 transition-colors touch-manipulation"
+                    >
+                      <Sparkles className="w-3 h-3 inline mr-1" />
+                      {action.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Custom Instruction */}
+              <div className="relative">
+                <div className="absolute inset-0 flex items-center">
+                  <div className="w-full border-t border-purple-200 dark:border-purple-700"></div>
+                </div>
+                <div className="relative flex justify-center text-sm">
+                  <span className="px-2 bg-gradient-to-r from-purple-50 to-indigo-50 dark:from-purple-900/20 dark:to-indigo-900/20 text-purple-500">oder</span>
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-purple-700 dark:text-purple-300 mb-2">
+                  Eigene Anweisung
+                </label>
+                <div className="flex gap-2">
+                  <textarea
+                    value={aiInstruction}
+                    onChange={(e) => setAiInstruction(e.target.value)}
+                    rows={2}
+                    className="flex-1 px-4 py-2 bg-white dark:bg-gray-700 border border-purple-200 dark:border-purple-600 rounded-lg text-gray-900 dark:text-white focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm"
+                    placeholder='z.B. "Finde die genauen Spezifikationen für dieses ThinkPad Modell"'
+                    disabled={aiRefining}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => handleAIRefine()}
+                    disabled={aiRefining || !aiInstruction.trim()}
+                    className="px-4 py-2 bg-purple-600 hover:bg-purple-700 disabled:bg-purple-400 text-white font-medium rounded-lg transition-colors touch-manipulation"
+                  >
+                    {aiRefining ? (
+                      <Loader2 className="w-5 h-5 animate-spin" />
+                    ) : (
+                      <Wand2 className="w-5 h-5" />
+                    )}
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
 
       <form onSubmit={(e) => handleSubmit(e, 'draft')} className="space-y-6">
 

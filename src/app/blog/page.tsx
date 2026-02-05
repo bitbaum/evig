@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { Suspense } from 'react'
-import { getAllPosts } from '@/lib/blog-db'
+import { getAllPosts, getAllCategories, type BlogCategory } from '@/lib/blog-db'
 import { getAllPosts as getFilePosts } from '@/lib/blog'
 import BlogHero from '@/components/blog/BlogHero'
 import BlogFeaturedGrid from '@/components/blog/BlogFeaturedGrid'
@@ -20,16 +20,56 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
   if (allPosts.length === 0) {
     allPosts = getFilePosts()
   }
-  const allCategories = Array.from(
-    new Set(allPosts.map((post) => post.category).filter(Boolean) as string[])
-  ).sort()
 
-  const selectedCategories = searchParams.categories
+  // Fetch categories from DB (with colors and descriptions)
+  const dbCategories = await getAllCategories()
+
+  // Build category objects - merge DB categories with any categories found in posts
+  const postCategoryNames = new Set(
+    allPosts.map((post) => post.category).filter(Boolean) as string[]
+  )
+
+  // Create a map of DB categories by name for quick lookup
+  const dbCategoryMap = new Map(dbCategories.map(c => [c.name, c]))
+
+  // Build final categories list: DB categories that have posts + any post categories not in DB
+  const allCategories: BlogCategory[] = []
+
+  // First add DB categories that have posts
+  for (const dbCat of dbCategories) {
+    if (postCategoryNames.has(dbCat.name)) {
+      allCategories.push(dbCat)
+    }
+  }
+
+  // Then add any post categories not in DB (with default styling)
+  for (const catName of postCategoryNames) {
+    if (!dbCategoryMap.has(catName)) {
+      allCategories.push({
+        id: catName,
+        slug: catName.toLowerCase().replace(/\s+/g, '-'),
+        name: catName,
+        description: null,
+        color: null,
+        isActive: true,
+      })
+    }
+  }
+
+  // Sort alphabetically
+  allCategories.sort((a, b) => a.name.localeCompare(b.name))
+
+  const selectedCategorySlugs = searchParams.categories
     ? searchParams.categories.split(',').filter(Boolean)
     : []
 
-  const filteredPosts = selectedCategories.length > 0
-    ? allPosts.filter((post) => post.category && selectedCategories.includes(post.category))
+  // Map slugs back to names for filtering
+  const selectedCategoryNames = selectedCategorySlugs
+    .map(slug => allCategories.find(c => c.slug === slug)?.name)
+    .filter(Boolean) as string[]
+
+  const filteredPosts = selectedCategoryNames.length > 0
+    ? allPosts.filter((post) => post.category && selectedCategoryNames.includes(post.category))
     : allPosts
 
   const [heroPost, ...restPosts] = filteredPosts
@@ -50,7 +90,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
       }>
         <BlogNavigationClient
           categories={allCategories}
-          selectedCategories={selectedCategories}
+          selectedCategorySlugs={selectedCategorySlugs}
         />
       </Suspense>
 
