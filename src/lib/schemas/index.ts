@@ -2,6 +2,7 @@
 export * from './auth';
 export * from './reviews';
 export * from './newsletter';
+export * from './team';
 
 // Re-export Zod for convenience
 export { z, ZodError } from 'zod';

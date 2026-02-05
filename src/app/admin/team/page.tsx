@@ -1,8 +1,10 @@
 /**
  * Admin Team & HR Page - Server Component
  *
- * Shows staff members from the database.
- * No mock data - all values come from actual database queries.
+ * Main team management page with:
+ * - Stats overview
+ * - Permission requests (super admin only)
+ * - Filterable team member grid
  */
 
 import { Metadata } from 'next'
@@ -11,65 +13,73 @@ import { redirect } from 'next/navigation'
 import { query } from '@/lib/auth/db'
 import { TABLE_NAMES } from '@/config/database'
 import { canAccessSection, isSuperAdmin } from '@/lib/permissions'
-import { Users, UserPlus, Briefcase, Heart, Mail, Crown, Shield } from 'lucide-react'
+import { Users, UserPlus, Briefcase, Crown, Shield } from 'lucide-react'
+import Link from 'next/link'
+import { PermissionRequestsManager } from '@/components/admin/PermissionRequestsManager'
+import { TeamListClient } from './TeamListClient'
 
 export const metadata: Metadata = {
   title: 'Team & HR | RevampIT Admin',
   description: 'Mitarbeiter und Team verwalten.',
 }
 
-interface StaffMember {
-  id: string
-  name: string | null
-  email: string
-  is_staff: boolean
-  staff_permissions: string[] | null
-  created_at: string
-}
-
 interface TeamStats {
   totalStaff: number
-  superAdmins: number
-  regularStaff: number
+  totalProfiles: number
+  byDepartment: Record<string, number>
+  byType: Record<string, number>
 }
 
 async function getTeamStats(): Promise<TeamStats> {
   try {
+    // Staff count
     const staffResult = await query<{ count: string }>(
       `SELECT COUNT(*) as count FROM ${TABLE_NAMES.USERS} WHERE is_staff = true`
     )
     const totalStaff = parseInt(staffResult.rows[0]?.count || '0')
 
-    // Super admins are determined by the SUPER_ADMIN_EMAILS list, not DB
-    // So we count them from the staff list
-    const staffListResult = await query<{ email: string }>(
-      `SELECT email FROM ${TABLE_NAMES.USERS} WHERE is_staff = true`
+    // Profiles count
+    const profilesResult = await query<{ count: string }>(
+      `SELECT COUNT(*) as count FROM ${TABLE_NAMES.TEAM_PROFILES}`
     )
-    const superAdmins = staffListResult.rows.filter(r => isSuperAdmin(r.email)).length
+    const totalProfiles = parseInt(profilesResult.rows[0]?.count || '0')
 
-    return {
-      totalStaff,
-      superAdmins,
-      regularStaff: totalStaff - superAdmins,
-    }
+    // By department
+    const deptResult = await query<{ department: string; count: string }>(
+      `SELECT department, COUNT(*) as count FROM ${TABLE_NAMES.TEAM_PROFILES}
+       WHERE department IS NOT NULL
+       GROUP BY department`
+    )
+    const byDepartment: Record<string, number> = {}
+    deptResult.rows.forEach(row => {
+      byDepartment[row.department] = parseInt(row.count)
+    })
+
+    // By employment type
+    const typeResult = await query<{ employment_type: string; count: string }>(
+      `SELECT employment_type, COUNT(*) as count FROM ${TABLE_NAMES.TEAM_PROFILES}
+       WHERE employment_type IS NOT NULL
+       GROUP BY employment_type`
+    )
+    const byType: Record<string, number> = {}
+    typeResult.rows.forEach(row => {
+      byType[row.employment_type] = parseInt(row.count)
+    })
+
+    return { totalStaff, totalProfiles, byDepartment, byType }
   } catch {
-    return { totalStaff: 0, superAdmins: 0, regularStaff: 0 }
+    return { totalStaff: 0, totalProfiles: 0, byDepartment: {}, byType: {} }
   }
 }
 
-async function getStaffMembers(): Promise<StaffMember[]> {
+async function getStaffWithoutProfiles(): Promise<Array<{ id: string; name: string | null; email: string }>> {
   try {
-    const result = await query<StaffMember>(
-      `SELECT
-        id,
-        name,
-        email,
-        is_staff,
-        staff_permissions,
-        created_at
-       FROM ${TABLE_NAMES.USERS}
-       WHERE is_staff = true OR email LIKE '%@revamp-it.ch'
-       ORDER BY created_at DESC`
+    const result = await query<{ id: string; name: string | null; email: string }>(
+      `SELECT u.id, u.name, u.email
+       FROM ${TABLE_NAMES.USERS} u
+       LEFT JOIN ${TABLE_NAMES.TEAM_PROFILES} tp ON u.id = tp.user_id
+       WHERE u.is_staff = true AND tp.id IS NULL
+       ORDER BY u.name ASC NULLS LAST, u.email ASC`
     )
     return result.rows
   } catch {
@@ -84,24 +94,26 @@ export default async function TeamPage() {
     redirect('/auth/login?callbackUrl=/admin/team')
   }
 
-  // Check permission for sensitive team section
-  const hasAccess = canAccessSection({
+  const user = {
     email: session.user.email,
     is_staff: session.user.isStaff,
     staff_permissions: session.user.staffPermissions,
-  }, 'team')
+  }
 
-  if (!hasAccess) {
+  if (!canAccessSection(user, 'team')) {
     redirect('/admin?error=no_team_access')
   }
 
-  const [stats, staffMembers] = await Promise.all([
+  const currentUserIsSuperAdmin = isSuperAdmin(session.user.email, session.user.isSuperAdmin)
+
+  const [stats, staffWithoutProfiles] = await Promise.all([
     getTeamStats(),
-    getStaffMembers(),
+    getStaffWithoutProfiles(),
   ])
 
   return (
     <div className="space-y-6">
+      {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
           <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
@@ -116,10 +128,17 @@ export default async function TeamPage() {
             </p>
           </div>
         </div>
+        <Link
+          href="/admin/team/new"
+          className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
+        >
+          <UserPlus className="w-5 h-5" />
+          Profil erstellen
+        </Link>
       </div>
 
       {/* Stats */}
-      <div className="grid md:grid-cols-3 gap-6">
+      <div className="grid md:grid-cols-4 gap-6">
         <div className="p-6 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
           <div className="flex items-center gap-4">
             <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
@@ -127,7 +146,7 @@ export default async function TeamPage() {
             </div>
             <div>
               <p className="text-3xl font-bold text-gray-900 dark:text-white">{stats.totalStaff}</p>
-              <p className="text-gray-600 dark:text-gray-400">Gesamt Staff</p>
+              <p className="text-gray-600 dark:text-gray-400">Staff Gesamt</p>
             </div>
           </div>
         </div>
@@ -138,8 +157,8 @@ export default async function TeamPage() {
               <Crown className="w-6 h-6 text-purple-600" />
             </div>
             <div>
-              <p className="text-3xl font-bold text-gray-900 dark:text-white">{stats.superAdmins}</p>
-              <p className="text-gray-600 dark:text-gray-400">Super Admins</p>
+              <p className="text-3xl font-bold text-gray-900 dark:text-white">{stats.totalProfiles}</p>
+              <p className="text-gray-600 dark:text-gray-400">Profile</p>
             </div>
           </div>
         </div>
@@ -150,98 +169,73 @@ export default async function TeamPage() {
               <Shield className="w-6 h-6 text-green-600" />
             </div>
             <div>
-              <p className="text-3xl font-bold text-gray-900 dark:text-white">{stats.regularStaff}</p>
-              <p className="text-gray-600 dark:text-gray-400">Staff Mitglieder</p>
+              <p className="text-3xl font-bold text-gray-900 dark:text-white">
+                {Object.values(stats.byDepartment).reduce((a, b) => a + b, 0) || 0}
+              </p>
+              <p className="text-gray-600 dark:text-gray-400">Mit Abteilung</p>
+            </div>
+          </div>
+        </div>
+
+        <div className="p-6 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
+          <div className="flex items-center gap-4">
+            <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center">
+              <UserPlus className="w-6 h-6 text-orange-600" />
+            </div>
+            <div>
+              <p className="text-3xl font-bold text-gray-900 dark:text-white">{staffWithoutProfiles.length}</p>
+              <p className="text-gray-600 dark:text-gray-400">Ohne Profil</p>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Staff List */}
-      <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
-        <div className="p-4 border-b border-gray-200 dark:border-gray-700">
-          <h2 className="font-semibold text-gray-900 dark:text-white">Team Mitglieder</h2>
+      {/* Permission Requests - Super Admin Only */}
+      {currentUserIsSuperAdmin && (
+        <PermissionRequestsManager />
+      )}
+
+      {/* Staff without profiles warning */}
+      {staffWithoutProfiles.length > 0 && (
+        <div className="p-4 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-xl">
+          <h3 className="font-medium text-yellow-900 dark:text-yellow-200 mb-2">
+            {staffWithoutProfiles.length} Staff-Mitglieder ohne Profil
+          </h3>
+          <div className="flex flex-wrap gap-2">
+            {staffWithoutProfiles.slice(0, 5).map(user => (
+              <Link
+                key={user.id}
+                href={`/admin/team/new?user_id=${user.id}`}
+                className="px-3 py-1 bg-yellow-100 dark:bg-yellow-900/40 text-yellow-800 dark:text-yellow-300 text-sm rounded-full hover:bg-yellow-200 dark:hover:bg-yellow-900/60 transition-colors"
+              >
+                {user.name || user.email}
+              </Link>
+            ))}
+            {staffWithoutProfiles.length > 5 && (
+              <span className="px-3 py-1 text-yellow-700 dark:text-yellow-400 text-sm">
+                +{staffWithoutProfiles.length - 5} weitere
+              </span>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Team List with Filters (Client Component) */}
+      <TeamListClient />
+
+      {/* Info Boxes */}
+      <div className="grid md:grid-cols-2 gap-4">
+        <div className="p-4 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-xl">
+          <p className="text-sm text-yellow-700 dark:text-yellow-300">
+            <strong>Sensible Daten:</strong> Diese Seite enthält vertrauliche Team-Informationen und ist nur für autorisierte Mitarbeiter zugänglich.
+          </p>
         </div>
 
-        {staffMembers.length > 0 ? (
-          <div className="divide-y divide-gray-200 dark:divide-gray-700">
-            {staffMembers.map(member => {
-              const memberIsSuperAdmin = isSuperAdmin(member.email)
-              const permissions = member.staff_permissions || []
-              const hasFullAccess = permissions.includes('*')
-
-              return (
-                <div key={member.id} className="p-4 flex items-center justify-between">
-                  <div className="flex items-center gap-4">
-                    <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                      memberIsSuperAdmin
-                        ? 'bg-gradient-to-r from-purple-500 to-pink-600'
-                        : 'bg-gradient-to-r from-blue-500 to-green-600'
-                    }`}>
-                      <span className="text-white font-medium text-sm">
-                        {member.name ? member.name.split(' ').map(n => n[0]).join('').substring(0, 2) : member.email[0].toUpperCase()}
-                      </span>
-                    </div>
-                    <div>
-                      <p className="font-medium text-gray-900 dark:text-white">
-                        {member.name || member.email.split('@')[0]}
-                      </p>
-                      <p className="text-sm text-gray-500 dark:text-gray-400 flex items-center gap-1">
-                        <Mail className="w-3 h-3" />
-                        {member.email}
-                      </p>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    {memberIsSuperAdmin ? (
-                      <span className="inline-flex items-center gap-1 px-3 py-1 text-xs font-semibold rounded-full bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300">
-                        <Crown className="w-3 h-3" />
-                        Super Admin
-                      </span>
-                    ) : hasFullAccess ? (
-                      <span className="inline-flex items-center gap-1 px-3 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300">
-                        <Shield className="w-3 h-3" />
-                        Voller Zugriff
-                      </span>
-                    ) : permissions.length > 0 ? (
-                      <span className="text-sm text-gray-500">
-                        {permissions.length} Bereiche
-                      </span>
-                    ) : (
-                      <span className="text-sm text-gray-400">Basis</span>
-                    )}
-                    <span className="text-xs text-gray-400">
-                      Seit {new Date(member.created_at).toLocaleDateString('de-CH')}
-                    </span>
-                  </div>
-                </div>
-              )
-            })}
-          </div>
-        ) : (
-          <div className="p-8 text-center">
-            <Users className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
-              Keine Staff-Mitglieder
-            </h3>
-            <p className="text-gray-500 dark:text-gray-400">
-              Noch keine Mitarbeiter mit @revamp-it.ch E-Mail registriert.
-            </p>
-          </div>
-        )}
-      </div>
-
-      <div className="p-6 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-xl">
-        <p className="text-sm text-yellow-700 dark:text-yellow-300">
-          <strong>Sensible Daten:</strong> Diese Seite enthält vertrauliche Team-Informationen und ist nur für autorisierte Mitarbeiter zugänglich.
-        </p>
-      </div>
-
-      <div className="p-6 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-xl">
-        <p className="text-sm text-blue-700 dark:text-blue-300">
-          <strong>Hinweis:</strong> Benutzer mit @revamp-it.ch E-Mail-Adresse werden automatisch als Staff erkannt.
-          Super Admin Status wird durch die Systemkonfiguration definiert.
-        </p>
+        <div className="p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-xl">
+          <p className="text-sm text-blue-700 dark:text-blue-300">
+            <strong>Hinweis:</strong> Benutzer mit @revamp-it.ch E-Mail-Adresse werden automatisch als Staff erkannt.
+          </p>
+        </div>
       </div>
     </div>
   )

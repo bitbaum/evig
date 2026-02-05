@@ -1,8 +1,8 @@
 /**
  * Admin Users Page - Server Component
  *
- * Shows all users from the database with their staff status and permissions.
- * No mock data - all values come from actual database queries.
+ * Shows all users with working search, filters, and pagination.
+ * Uses new API with server-side filtering.
  */
 
 import { Metadata } from 'next'
@@ -11,29 +11,17 @@ import { redirect } from 'next/navigation'
 import { query } from '@/lib/auth/db'
 import { TABLE_NAMES } from '@/config/database'
 import { canAccessSection, isSuperAdmin } from '@/lib/permissions'
-import { logger } from '@/lib/logger'
 import {
   Users,
-  Search,
   Shield,
   UserCheck,
   Crown,
 } from 'lucide-react'
-import { UsersTableClient } from '@/components/admin/UsersTableClient'
+import { UsersListClient } from './UsersListClient'
 
 export const metadata: Metadata = {
   title: 'Benutzer verwalten | RevampIT Admin',
   description: 'Benutzerkonten anzeigen und verwalten.',
-}
-
-interface UserRow {
-  id: string
-  name: string | null
-  email: string
-  is_staff: boolean
-  staff_permissions: string[] | null
-  created_at: string
-  email_verified: string | null
 }
 
 interface UserStats {
@@ -71,30 +59,6 @@ async function getUserStats(): Promise<UserStats> {
   }
 }
 
-async function getUsers(): Promise<UserRow[]> {
-  try {
-    const result = await query<UserRow>(
-      `SELECT
-        id,
-        name,
-        email,
-        is_staff,
-        staff_permissions,
-        "createdAt" as created_at,
-        email_verified
-       FROM ${TABLE_NAMES.USERS}
-       ORDER BY
-        is_staff DESC,
-        "createdAt" DESC
-       LIMIT 100`
-    )
-    return result.rows
-  } catch (error) {
-    logger.error('Failed to fetch users', error)
-    return []
-  }
-}
-
 export default async function AdminUsersPage() {
   const session = await auth()
 
@@ -102,7 +66,6 @@ export default async function AdminUsersPage() {
     redirect('/auth/login?callbackUrl=/admin/users')
   }
 
-  // Check permission for sensitive users section
   const hasAccess = canAccessSection({
     email: session.user.email,
     is_staff: session.user.isStaff,
@@ -113,15 +76,11 @@ export default async function AdminUsersPage() {
     redirect('/admin?error=no_users_access')
   }
 
-  const [stats, users] = await Promise.all([
-    getUserStats(),
-    getUsers(),
-  ])
-
-  const currentUserIsSuperAdmin = isSuperAdmin(session.user.email)
+  const stats = await getUserStats()
+  const currentUserIsSuperAdmin = isSuperAdmin(session.user.email, session.user.isSuperAdmin)
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
@@ -177,31 +136,8 @@ export default async function AdminUsersPage() {
         </div>
       </div>
 
-      {/* Search (UI only for now) */}
-      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
-        <div className="flex flex-col sm:flex-row gap-4">
-          <div className="flex-1">
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-              <input
-                type="text"
-                placeholder="Benutzer suchen..."
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              />
-            </div>
-          </div>
-          <div className="flex gap-4">
-            <select className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-              <option value="">Alle Typen</option>
-              <option value="staff">Staff</option>
-              <option value="regular">Benutzer</option>
-            </select>
-          </div>
-        </div>
-      </div>
-
-      {/* Users Table */}
-      <UsersTableClient users={users} currentUserIsSuperAdmin={currentUserIsSuperAdmin} />
+      {/* Users List with Client-side Filtering */}
+      <UsersListClient currentUserIsSuperAdmin={currentUserIsSuperAdmin} />
 
       {/* Info Box */}
       <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-xl p-6">

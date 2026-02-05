@@ -1,0 +1,281 @@
+/**
+ * User Detail Page
+ *
+ * Shows detailed user information with link to team profile if exists.
+ */
+
+import { Metadata } from 'next'
+import { redirect, notFound } from 'next/navigation'
+import Link from 'next/link'
+import { auth } from '@/auth'
+import { canAccessSection, isSuperAdmin, isStaffEmail } from '@/lib/permissions'
+import { query } from '@/lib/auth/db'
+import { TABLE_NAMES } from '@/config/database'
+import {
+  ArrowLeft,
+  Mail,
+  Calendar,
+  Phone,
+  MapPin,
+  Crown,
+  Shield,
+  UserCheck,
+  User,
+  ExternalLink,
+} from 'lucide-react'
+
+interface PageProps {
+  params: Promise<{ id: string }>
+}
+
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { id } = await params
+  const user = await getUser(id)
+
+  return {
+    title: user
+      ? `${user.name || user.email} | Benutzer | RevampIT Admin`
+      : 'Benutzer | RevampIT Admin',
+    description: 'Benutzerdetails',
+  }
+}
+
+interface UserData {
+  id: string
+  name: string | null
+  email: string
+  is_staff: boolean
+  is_super_admin: boolean
+  staff_permissions: string[] | null
+  created_at: string
+  email_verified: string | null
+  phone: string | null
+  address: string | null
+  team_profile_id: string | null
+}
+
+async function getUser(id: string): Promise<UserData | null> {
+  try {
+    const result = await query<UserData>(
+      `SELECT
+        u.id,
+        u.name,
+        u.email,
+        u.is_staff,
+        u.is_super_admin,
+        u.staff_permissions,
+        u."createdAt" as created_at,
+        u.email_verified,
+        u.phone,
+        u.address,
+        tp.id as team_profile_id
+       FROM ${TABLE_NAMES.USERS} u
+       LEFT JOIN ${TABLE_NAMES.TEAM_PROFILES} tp ON u.id = tp.user_id
+       WHERE u.id = $1`,
+      [id]
+    )
+
+    return result.rows[0] || null
+  } catch {
+    return null
+  }
+}
+
+export default async function UserDetailPage({ params }: PageProps) {
+  const session = await auth()
+  const { id } = await params
+
+  if (!session?.user) {
+    redirect('/auth/login?callbackUrl=/admin/users')
+  }
+
+  const hasAccess = canAccessSection({
+    email: session.user.email,
+    is_staff: session.user.isStaff,
+    staff_permissions: session.user.staffPermissions,
+  }, 'users')
+
+  if (!hasAccess) {
+    redirect('/admin?error=no_users_access')
+  }
+
+  const user = await getUser(id)
+
+  if (!user) {
+    notFound()
+  }
+
+  const userIsSuperAdmin = isSuperAdmin(user.email, user.is_super_admin)
+  const userIsStaff = user.is_staff || isStaffEmail(user.email)
+  const permissions = user.staff_permissions || []
+  const hasFullAccess = permissions.includes('*')
+
+  const initials = user.name
+    ? user.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase()
+    : user.email[0].toUpperCase()
+
+  return (
+    <div className="max-w-4xl mx-auto space-y-6">
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <Link
+          href="/admin/users"
+          className="flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
+        >
+          <ArrowLeft className="w-5 h-5" />
+          Zurück zur Übersicht
+        </Link>
+      </div>
+
+      {/* Profile Card */}
+      <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
+        <div className="flex items-start gap-6">
+          {/* Avatar */}
+          <div className={`w-20 h-20 rounded-full flex items-center justify-center flex-shrink-0 ${
+            userIsSuperAdmin
+              ? 'bg-gradient-to-r from-purple-500 to-pink-600'
+              : userIsStaff
+                ? 'bg-gradient-to-r from-blue-500 to-green-600'
+                : 'bg-gradient-to-r from-gray-400 to-gray-500'
+          }`}>
+            <span className="text-white font-bold text-2xl">{initials}</span>
+          </div>
+
+          {/* Info */}
+          <div className="flex-1">
+            <div className="flex items-center gap-3">
+              <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+                {user.name || 'Kein Name'}
+              </h1>
+              {userIsSuperAdmin && (
+                <span className="inline-flex items-center gap-1 px-2 py-1 text-xs font-semibold rounded-full bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300">
+                  <Crown className="w-3 h-3" />
+                  Super Admin
+                </span>
+              )}
+              {userIsStaff && !userIsSuperAdmin && (
+                <span className="inline-flex items-center gap-1 px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300">
+                  <Shield className="w-3 h-3" />
+                  Staff
+                </span>
+              )}
+              {user.email_verified && (
+                <span className="inline-flex items-center gap-1 px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300">
+                  <UserCheck className="w-3 h-3" />
+                  Verifiziert
+                </span>
+              )}
+            </div>
+
+            <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="flex items-center gap-2 text-gray-600 dark:text-gray-400">
+                <Mail className="w-4 h-4" />
+                <span>{user.email}</span>
+              </div>
+
+              {user.phone && (
+                <div className="flex items-center gap-2 text-gray-600 dark:text-gray-400">
+                  <Phone className="w-4 h-4" />
+                  <span>{user.phone}</span>
+                </div>
+              )}
+
+              <div className="flex items-center gap-2 text-gray-600 dark:text-gray-400">
+                <Calendar className="w-4 h-4" />
+                <span>Registriert: {new Date(user.created_at).toLocaleDateString('de-CH')}</span>
+              </div>
+
+              {user.address && (
+                <div className="flex items-center gap-2 text-gray-600 dark:text-gray-400">
+                  <MapPin className="w-4 h-4" />
+                  <span>{user.address}</span>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Team Profile Link */}
+      {userIsStaff && (
+        <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
+          <h2 className="font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+            <User className="w-5 h-5" />
+            Team-Profil
+          </h2>
+
+          {user.team_profile_id ? (
+            <div className="flex items-center justify-between">
+              <p className="text-gray-600 dark:text-gray-400">
+                Dieses Mitglied hat ein Team-Profil.
+              </p>
+              <Link
+                href={`/admin/team/${user.team_profile_id}`}
+                className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
+              >
+                <ExternalLink className="w-4 h-4" />
+                Profil ansehen
+              </Link>
+            </div>
+          ) : (
+            <div className="flex items-center justify-between">
+              <p className="text-gray-600 dark:text-gray-400">
+                Noch kein Team-Profil vorhanden.
+              </p>
+              <Link
+                href={`/admin/team/new?user_id=${user.id}`}
+                className="flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors"
+              >
+                <User className="w-4 h-4" />
+                Profil erstellen
+              </Link>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Permissions */}
+      {userIsStaff && (
+        <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
+          <h2 className="font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+            <Shield className="w-5 h-5" />
+            Berechtigungen
+          </h2>
+
+          {userIsSuperAdmin ? (
+            <p className="text-purple-600 dark:text-purple-400 font-medium">
+              Super Admin - Voller Zugriff auf alle Bereiche
+            </p>
+          ) : hasFullAccess ? (
+            <p className="text-blue-600 dark:text-blue-400 font-medium">
+              Voller Zugriff auf alle Bereiche
+            </p>
+          ) : permissions.length > 0 ? (
+            <div className="flex flex-wrap gap-2">
+              {permissions.map(p => (
+                <span
+                  key={p}
+                  className="px-3 py-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 text-sm rounded-full"
+                >
+                  {p}
+                </span>
+              ))}
+            </div>
+          ) : (
+            <p className="text-gray-500 dark:text-gray-400">
+              Keine speziellen Berechtigungen zugewiesen
+            </p>
+          )}
+        </div>
+      )}
+
+      {/* Meta */}
+      <div className="text-xs text-gray-400 flex gap-4">
+        <span>Benutzer-ID: {user.id}</span>
+        {user.email_verified && (
+          <span>E-Mail verifiziert: {new Date(user.email_verified).toLocaleDateString('de-CH')}</span>
+        )}
+      </div>
+    </div>
+  )
+}

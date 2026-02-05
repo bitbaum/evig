@@ -115,6 +115,7 @@ export const TABLE_NAMES = {
 
   // Staff & Permissions
   STAFF_PERMISSION_REQUESTS: 'staff_permission_requests',
+  TEAM_PROFILES: 'team_profiles',
 
   // Customer Profiles
   CUSTOMER_PROFILES: 'customer_profiles',
