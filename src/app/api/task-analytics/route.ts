@@ -109,10 +109,13 @@ export const GET = withAdmin(async (request: NextRequest, session: ValidSession)
       days
     });
 
+    const stats = statsResult.rows[0] as Record<string, unknown> || {};
+    const completions = completionsResult.rows[0] as Record<string, unknown> || {};
+
     return apiSuccess({
       overview: {
-        ...statsResult.rows[0],
-        ...completionsResult.rows[0],
+        ...stats,
+        ...completions,
         completed_today: parseInt(todayResult.rows[0]?.completed_today || '0', 10),
         completed_this_week: parseInt(weekResult.rows[0]?.completed_this_week || '0', 10),
         pending_requests: parseInt(pendingRequestsResult.rows[0]?.pending_requests || '0', 10),
