@@ -75,7 +75,7 @@ export const POST = withAdmin<RouteParams>(async (
       [taskId, session.user.id, data.message || null]
     );
 
-    const flag = flagResult.rows[0];
+    const flag = flagResult.rows[0] as { id: string };
 
     // Update task status to needs_attention
     await query(

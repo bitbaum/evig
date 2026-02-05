@@ -93,7 +93,7 @@ export const POST = withAdmin<RouteParams>(async (
       ]
     );
 
-    const taskRequest = requestResult.rows[0];
+    const taskRequest = requestResult.rows[0] as { id: string };
 
     // Update task status to requested
     await query(

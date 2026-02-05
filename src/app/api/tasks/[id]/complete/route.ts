@@ -82,7 +82,7 @@ export const POST = withAdmin<RouteParams>(async (
       ]
     );
 
-    const completion = completionResult.rows[0];
+    const completion = completionResult.rows[0] as { id: string };
 
     logger.info('Task completed', {
       taskId,

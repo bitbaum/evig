@@ -110,7 +110,7 @@ export const POST = withAdmin(async (request: NextRequest, session: ValidSession
       ]
     );
 
-    const project = insertResult.rows[0];
+    const project = insertResult.rows[0] as { id: string; title: string };
 
     logger.info('Project created', {
       projectId: project.id,

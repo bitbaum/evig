@@ -123,6 +123,19 @@ export const POST = withAdmin(async (request: NextRequest, session: ValidSession
 
     const data = result.data;
 
+    // Look up the actual user ID from the database by email
+    // (Auth.js session ID may not match the database user ID)
+    const userResult = await query<{ id: string }>(
+      `SELECT id FROM ${TABLE_NAMES.USERS} WHERE email = $1`,
+      [session.user.email]
+    );
+
+    if (userResult.rows.length === 0) {
+      return apiBadRequest('Benutzer nicht gefunden');
+    }
+
+    const dbUserId = userResult.rows[0].id;
+
     const insertResult = await query(
       `INSERT INTO ${TABLE_NAMES.TASKS} (
         title,
@@ -151,21 +164,21 @@ export const POST = withAdmin(async (request: NextRequest, session: ValidSession
         data.priority,
         data.estimated_minutes || null,
         data.project_id || null,
-        session.user.id,
+        dbUserId,
       ]
     );
 
-    const task = insertResult.rows[0];
+    const task = insertResult.rows[0] as { id: string; title: string };
 
     logger.info('Task created', {
       taskId: task.id,
-      userId: session.user.id,
+      userId: dbUserId,
       title: data.title
     });
 
     return apiSuccess(task, 201);
   } catch (error) {
-    logger.error('Error creating task', { error, userId: session.user.id });
+    logger.error('Error creating task', { error, email: session.user.email });
     return apiError(error, 'Fehler beim Erstellen der Aufgabe');
   }
 });
