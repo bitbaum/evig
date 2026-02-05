@@ -100,6 +100,12 @@ export default function AdminDonationsPage() {
   const [formType, setFormType] = useState<DonationType>(DONATION_TYPES.MONETARY)
   const [submitting, setSubmitting] = useState(false)
 
+  // User search state
+  const [userSearch, setUserSearch] = useState('')
+  const [userResults, setUserResults] = useState<Array<{ id: string; name: string | null; email: string }>>([])
+  const [searchingUsers, setSearchingUsers] = useState(false)
+  const [selectedUser, setSelectedUser] = useState<{ id: string; name: string | null; email: string } | null>(null)
+
   // Form state
   const [formData, setFormData] = useState({
     // Monetary
@@ -180,6 +186,53 @@ export default function AdminDonationsPage() {
     }
   }, [status, loadDonations])
 
+  // User search with debounce
+  useEffect(() => {
+    if (userSearch.length < 2) {
+      setUserResults([])
+      return
+    }
+
+    const timeoutId = setTimeout(async () => {
+      setSearchingUsers(true)
+      try {
+        const response = await fetch(`/api/admin/donations/users?search=${encodeURIComponent(userSearch)}`)
+        if (response.ok) {
+          const result = await response.json()
+          if (result.success) {
+            setUserResults(result.data.users || [])
+          }
+        }
+      } catch {
+        // Ignore search errors
+      } finally {
+        setSearchingUsers(false)
+      }
+    }, 300)
+
+    return () => clearTimeout(timeoutId)
+  }, [userSearch])
+
+  const handleSelectUser = (user: { id: string; name: string | null; email: string }) => {
+    setSelectedUser(user)
+    setFormData({
+      ...formData,
+      donor_name: user.name || '',
+      donor_email: user.email,
+    })
+    setUserSearch('')
+    setUserResults([])
+  }
+
+  const handleClearUser = () => {
+    setSelectedUser(null)
+    setFormData({
+      ...formData,
+      donor_name: '',
+      donor_email: '',
+    })
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setSubmitting(true)
@@ -187,6 +240,7 @@ export default function AdminDonationsPage() {
     try {
       const payload: Record<string, unknown> = {
         donation_type: formType,
+        user_id: selectedUser?.id || null,
         donor_name: formData.donor_name || null,
         donor_email: formData.donor_email || null,
         receipt_requested: formData.receipt_requested,
@@ -196,7 +250,7 @@ export default function AdminDonationsPage() {
       if (formType === DONATION_TYPES.MONETARY) {
         const amountCents = Math.round(parseFloat(formData.amount_chf) * 100)
         if (isNaN(amountCents) || amountCents < 100) {
-          alert('Bitte geben Sie einen gueltigen Betrag ein (mind. CHF 1.00)')
+          alert('Bitte geben Sie einen gültigen Betrag ein (mind. CHF 1.00)')
           setSubmitting(false)
           return
         }
@@ -204,7 +258,7 @@ export default function AdminDonationsPage() {
         payload.payment_method = formData.payment_method || null
       } else {
         if (!formData.device_category) {
-          alert('Bitte waehlen Sie eine Geraetekategorie')
+          alert('Bitte wählen Sie eine Gerätekategorie')
           setSubmitting(false)
           return
         }
@@ -226,6 +280,9 @@ export default function AdminDonationsPage() {
 
       if (response.ok) {
         setShowForm(false)
+        setSelectedUser(null)
+        setUserSearch('')
+        setUserResults([])
         setFormData({
           amount_chf: '',
           payment_method: '',
@@ -585,7 +642,7 @@ export default function AdminDonationsPage() {
                         onChange={(e) => setFormData({ ...formData, payment_method: e.target.value })}
                         className="w-full px-3 py-2 border border-gray-300 rounded-lg"
                       >
-                        <option value="">-- Waehlen --</option>
+                        <option value="">-- Wählen --</option>
                         {getPaymentMethodOptions().map(opt => (
                           <option key={opt.value} value={opt.value}>{opt.label}</option>
                         ))}
@@ -598,7 +655,7 @@ export default function AdminDonationsPage() {
                 {formType === DONATION_TYPES.DEVICE && (
                   <>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Geraetekategorie *</label>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Gerätekategorie *</label>
                       <select
                         value={formData.device_category}
                         onChange={(e) => {
@@ -609,7 +666,7 @@ export default function AdminDonationsPage() {
                         className="w-full px-3 py-2 border border-gray-300 rounded-lg"
                         required
                       >
-                        <option value="">-- Waehlen --</option>
+                        <option value="">-- Wählen --</option>
                         {getDeviceCategoryOptions().map(opt => (
                           <option key={opt.value} value={opt.value}>{opt.label}</option>
                         ))}
@@ -644,7 +701,7 @@ export default function AdminDonationsPage() {
                         onChange={(e) => setFormData({ ...formData, device_condition: e.target.value })}
                         className="w-full px-3 py-2 border border-gray-300 rounded-lg"
                       >
-                        <option value="">-- Waehlen --</option>
+                        <option value="">-- Wählen --</option>
                         {getDeviceConditionOptions().map(opt => (
                           <option key={opt.value} value={opt.value}>{opt.label}</option>
                         ))}
@@ -657,11 +714,11 @@ export default function AdminDonationsPage() {
                         onChange={(e) => setFormData({ ...formData, device_description: e.target.value })}
                         className="w-full px-3 py-2 border border-gray-300 rounded-lg"
                         rows={2}
-                        placeholder="Details zum Geraet..."
+                        placeholder="Details zum Gerät..."
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Geschaetzter Wert (CHF)</label>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Geschätzter Wert (CHF)</label>
                       <input
                         type="number"
                         step="0.01"
@@ -675,26 +732,102 @@ export default function AdminDonationsPage() {
                   </>
                 )}
 
-                {/* Common Fields */}
+                {/* Donor Section */}
                 <hr className="my-4" />
+
+                {/* User Search */}
+                <div className="mb-4">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Benutzer verknüpfen (optional)
+                  </label>
+                  {selectedUser ? (
+                    <div className="flex items-center gap-2 p-3 bg-green-50 border border-green-200 rounded-lg">
+                      <User className="w-5 h-5 text-green-600" />
+                      <div className="flex-1">
+                        <div className="text-sm font-medium text-gray-900">
+                          {selectedUser.name || selectedUser.email}
+                        </div>
+                        {selectedUser.name && (
+                          <div className="text-xs text-gray-500">{selectedUser.email}</div>
+                        )}
+                      </div>
+                      <button
+                        type="button"
+                        onClick={handleClearUser}
+                        className="text-gray-400 hover:text-gray-600"
+                      >
+                        <X className="w-4 h-4" />
+                      </button>
+                    </div>
+                  ) : (
+                    <div className="relative">
+                      <div className="flex items-center">
+                        <Search className="absolute left-3 w-4 h-4 text-gray-400" />
+                        <input
+                          type="text"
+                          value={userSearch}
+                          onChange={(e) => setUserSearch(e.target.value)}
+                          className="w-full pl-9 pr-3 py-2 border border-gray-300 rounded-lg"
+                          placeholder="Benutzer suchen (Name oder E-Mail)..."
+                        />
+                        {searchingUsers && (
+                          <div className="absolute right-3">
+                            <div className="w-4 h-4 border-2 border-gray-300 border-t-gray-600 rounded-full animate-spin" />
+                          </div>
+                        )}
+                      </div>
+                      {userResults.length > 0 && (
+                        <div className="absolute z-10 w-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg max-h-48 overflow-y-auto">
+                          {userResults.map((user) => (
+                            <button
+                              key={user.id}
+                              type="button"
+                              onClick={() => handleSelectUser(user)}
+                              className="w-full px-3 py-2 text-left hover:bg-gray-50 flex items-center gap-2"
+                            >
+                              <User className="w-4 h-4 text-gray-400" />
+                              <div>
+                                <div className="text-sm font-medium text-gray-900">
+                                  {user.name || user.email}
+                                </div>
+                                {user.name && (
+                                  <div className="text-xs text-gray-500">{user.email}</div>
+                                )}
+                              </div>
+                            </button>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  )}
+                  <p className="mt-1 text-xs text-gray-500">
+                    Suchen Sie nach einem bestehenden Benutzer oder geben Sie die Daten manuell ein.
+                  </p>
+                </div>
+
+                {/* Manual Donor Info (for anonymous or non-users) */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Name des Spenders</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Name des Spenders {selectedUser && <span className="text-gray-400">(überschreibt Benutzer)</span>}
+                  </label>
                   <input
                     type="text"
                     value={formData.donor_name}
                     onChange={(e) => setFormData({ ...formData, donor_name: e.target.value })}
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg"
-                    placeholder="Max Muster"
+                    placeholder={selectedUser ? selectedUser.name || 'Kein Name' : 'Max Muster'}
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">E-Mail des Spenders</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    E-Mail des Spenders {selectedUser && <span className="text-gray-400">(überschreibt Benutzer)</span>}
+                  </label>
                   <input
                     type="email"
                     value={formData.donor_email}
                     onChange={(e) => setFormData({ ...formData, donor_email: e.target.value })}
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg"
-                    placeholder="max@example.com"
+                    placeholder={selectedUser ? selectedUser.email : 'max@example.com'}
                   />
                 </div>
                 <div>

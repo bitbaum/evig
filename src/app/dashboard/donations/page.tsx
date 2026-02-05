@@ -160,13 +160,13 @@ export default function DonationsDashboard() {
             className={cn('inline-flex items-center mb-4', getTextColor('neutral', 'muted'), 'hover:text-primary-600')}
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
-            Zurueck zum Dashboard
+            Zurück zum Dashboard
           </Link>
           <h1 className={cn('text-3xl font-bold mb-2', getTextColor('neutral', 'primary'))}>
             Meine Spenden
           </h1>
           <p className={cn('text-sm sm:text-base', getTextColor('neutral', 'muted'))}>
-            Uebersicht Ihrer Geld- und Sachspenden an RevampIT
+            Übersicht Ihrer Geld- und Sachspenden an RevampIT
           </p>
         </div>
 
@@ -258,13 +258,13 @@ export default function DonationsDashboard() {
 
         {/* Info Box */}
         <div className="mt-8 bg-info-50 border border-info-200 rounded-lg p-4">
-          <h4 className={cn('font-medium mb-2', getTextColor('info', 'primary'))}>
+          <h4 className="font-medium mb-2 text-info-800">
             Hinweis zu Spendenquittungen
           </h4>
-          <p className={cn('text-sm', getTextColor('info', 'muted'))}>
-            RevampIT ist ein gemeinnuetziger Verein. Fuer Spenden ab CHF 100 stellen wir Ihnen gerne
-            eine Spendenbestaetigung fuer die Steuererklarung aus. Kontaktieren Sie uns unter{' '}
-            <a href="mailto:spenden@revamp-it.ch" className="underline">spenden@revamp-it.ch</a>.
+          <p className="text-sm text-info-700">
+            RevampIT ist ein gemeinnütziger Verein. Für Spenden ab CHF 100 stellen wir Ihnen gerne
+            eine Spendenbestätigung für die Steuererklärung aus. Kontaktieren Sie uns unter{' '}
+            <a href="mailto:spenden@revamp-it.ch" className="underline text-info-800 hover:text-info-900">spenden@revamp-it.ch</a>.
           </p>
         </div>
       </div>
