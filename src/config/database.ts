@@ -120,6 +120,13 @@ export const TABLE_NAMES = {
   // Customer Profiles
   CUSTOMER_PROFILES: 'customer_profiles',
   PRODUCT_CUSTOMER_PROFILES: 'product_customer_profiles',
+
+  // Task Management
+  TASKS: 'tasks',
+  TASK_COMPLETIONS: 'task_completions',
+  TASK_ATTENTION_FLAGS: 'task_attention_flags',
+  TASK_REQUESTS: 'task_requests',
+  TASK_PROJECTS: 'task_projects',
 } as const;
 
 /**

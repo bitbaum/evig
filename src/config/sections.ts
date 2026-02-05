@@ -38,6 +38,7 @@ import {
   Target,
   Eye,
   Heart,
+  ClipboardList,
 } from 'lucide-react'
 
 // =============================================================================
@@ -131,6 +132,7 @@ export type SidebarGroupId =
   | 'uebersicht'   // Overview: Dashboard, Freigaben
   | 'angebot'      // Offerings: Produkte, Dienstleistungen, Workshops, Standorte
   | 'inhalte'      // Content: Blog & Seiten, Bewertungen
+  | 'betrieb'      // Operations: Aufgaben
   | 'analyse'      // Analytics: Finanzen, Kennzahlen, Wirkung, Transparenz, Analytics
   | 'personen'     // People: Team & HR, Benutzer
   | 'system'       // System: Einstellungen
@@ -163,20 +165,25 @@ export const SIDEBAR_GROUPS: Record<SidebarGroupId, SidebarGroup> = {
     label: 'Inhalte',
     priority: 2,
   },
+  betrieb: {
+    id: 'betrieb',
+    label: 'Betrieb',
+    priority: 3,
+  },
   analyse: {
     id: 'analyse',
     label: 'Analyse',
-    priority: 3,
+    priority: 4,
   },
   personen: {
     id: 'personen',
     label: 'Personen',
-    priority: 4,
+    priority: 5,
   },
   system: {
     id: 'system',
     label: 'System',
-    priority: 5,
+    priority: 6,
   },
 }
 
@@ -467,6 +474,22 @@ export const SECTIONS: Record<string, SectionConfig> = {
     priority: 106,
     category: 'management',
     sidebarGroup: 'uebersicht',
+  },
+
+  tasks: {
+    id: 'tasks',
+    path: '/admin/tasks',
+    ui: {
+      label: 'Aufgaben',
+      description: 'Teamaufgaben verwalten',
+      icon: ClipboardList,
+      emoji: '📋',
+      color: 'info',
+    },
+    visibility: { admin: true, dashboard: false, requiresStaff: true },
+    priority: 130,
+    category: 'management',
+    sidebarGroup: 'betrieb',
   },
 
   analytics: {
