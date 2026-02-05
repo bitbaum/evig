@@ -59,7 +59,7 @@ export function ShopHeader({
         </a>
       </nav>
 
-      <header className="sticky top-0 z-50 bg-white border-b border-gray-200 shadow-sm">
+      <header className="sticky top-0 z-40 bg-white border-b border-gray-200 shadow-sm">
         {/* Top bar - Back navigation (desktop) */}
         {shouldShowBackButton && (
           <div className="hidden md:block border-b border-gray-100 bg-gray-50">
