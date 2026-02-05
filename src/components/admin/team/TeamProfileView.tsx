@@ -7,6 +7,7 @@
  * Shows all profile sections with appropriate visibility.
  */
 
+import { useState } from 'react'
 import {
   ArrowLeft,
   Edit2,
@@ -19,7 +20,9 @@ import {
   Star,
   AlertCircle,
   FileText,
+  Activity,
 } from 'lucide-react'
+import Link from 'next/link'
 import {
   getEmploymentTypeLabel,
   getEmploymentTypeColor,
@@ -30,6 +33,7 @@ import {
   type ContactMethod,
   type EmergencyRelation,
 } from '@/config/team'
+import { CurrentFocusInput } from './activity/CurrentFocusInput'
 import type { TeamProfileViewProps } from './types'
 
 export function TeamProfileView({
@@ -38,6 +42,8 @@ export function TeamProfileView({
   onEdit,
   onBack,
 }: TeamProfileViewProps) {
+  const [currentFocus, setCurrentFocus] = useState(profile.current_focus)
+
   const initials = profile.user_name
     ? profile.user_name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase()
     : profile.user_email[0].toUpperCase()
@@ -127,6 +133,35 @@ export function TeamProfileView({
               )}
             </div>
           </div>
+        </div>
+      </div>
+
+      {/* Current Focus & Activity */}
+      <div className="grid lg:grid-cols-2 gap-6">
+        {/* Current Focus */}
+        <CurrentFocusInput
+          profileId={profile.id}
+          initialFocus={currentFocus}
+          onUpdate={setCurrentFocus}
+        />
+
+        {/* Activity Link */}
+        <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <Activity className="w-5 h-5 text-green-500" />
+              <h3 className="font-medium text-gray-900 dark:text-gray-100">Aktivitäten</h3>
+            </div>
+            <Link
+              href="/admin/team/activity"
+              className="px-3 py-1.5 text-sm text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded-lg"
+            >
+              Team-Aktivitäten ansehen
+            </Link>
+          </div>
+          <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
+            Erledigte Aufgaben, Meilensteine und Hilfsanfragen
+          </p>
         </div>
       </div>
 

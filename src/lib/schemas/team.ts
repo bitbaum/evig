@@ -109,6 +109,8 @@ export interface TeamProfile {
   emergency_contact_phone: string | null
   emergency_contact_relation: string | null
   hr_notes: string | null
+  current_focus: string | null
+  current_focus_updated_at: string | null
   is_active: boolean
   created_at: string
   updated_at: string

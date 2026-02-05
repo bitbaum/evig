@@ -1,0 +1,174 @@
+'use client'
+
+/**
+ * Current Focus Input Component
+ *
+ * Quick input for updating "what I'm working on" status
+ */
+
+import { useState, useMemo } from 'react'
+import { Target, Loader2, Check, X } from 'lucide-react'
+import { useCurrentFocus } from './useActivityStream'
+
+interface CurrentFocusInputProps {
+  profileId: string
+  initialFocus: string | null
+  onUpdate?: (newFocus: string | null) => void
+  compact?: boolean
+}
+
+export function CurrentFocusInput({
+  profileId,
+  initialFocus,
+  onUpdate,
+  compact = false,
+}: CurrentFocusInputProps) {
+  // Track if user has made local edits (reset when initialFocus changes via key prop)
+  const [focus, setFocus] = useState(initialFocus || '')
+  const [isEditing, setIsEditing] = useState(false)
+  const { saving, error, updateFocus } = useCurrentFocus()
+
+  // Derive hasChanges from current state (no effect needed)
+  const hasChanges = useMemo(() => {
+    return focus !== (initialFocus || '')
+  }, [focus, initialFocus])
+
+  const handleSave = async () => {
+    const newFocus = focus.trim() || null
+    const success = await updateFocus(profileId, newFocus)
+    if (success) {
+      setIsEditing(false)
+      onUpdate?.(newFocus)
+    }
+  }
+
+  const handleCancel = () => {
+    setFocus(initialFocus || '')
+    setIsEditing(false)
+  }
+
+  const handleClear = async () => {
+    const success = await updateFocus(profileId, null)
+    if (success) {
+      setFocus('')
+      setIsEditing(false)
+      onUpdate?.(null)
+    }
+  }
+
+  if (compact) {
+    return (
+      <div className="flex items-center gap-2">
+        <Target className="w-4 h-4 text-blue-500 flex-shrink-0" />
+        {isEditing ? (
+          <div className="flex items-center gap-2 flex-1">
+            <input
+              type="text"
+              value={focus}
+              onChange={(e) => setFocus(e.target.value)}
+              placeholder="Woran arbeitest du?"
+              maxLength={200}
+              className="flex-1 px-2 py-1 text-sm border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-800 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              autoFocus
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') handleSave()
+                if (e.key === 'Escape') handleCancel()
+              }}
+            />
+            <button
+              onClick={handleSave}
+              disabled={saving || !hasChanges}
+              className="p-1 text-green-600 hover:bg-green-50 dark:hover:bg-green-900/30 rounded disabled:opacity-50"
+            >
+              {saving ? (
+                <Loader2 className="w-4 h-4 animate-spin" />
+              ) : (
+                <Check className="w-4 h-4" />
+              )}
+            </button>
+            <button
+              onClick={handleCancel}
+              className="p-1 text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700 rounded"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </div>
+        ) : (
+          <button
+            onClick={() => setIsEditing(true)}
+            className="flex-1 text-left text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 truncate"
+          >
+            {focus || 'Fokus setzen...'}
+          </button>
+        )}
+      </div>
+    )
+  }
+
+  return (
+    <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-4">
+      <div className="flex items-center gap-2 mb-3">
+        <Target className="w-5 h-5 text-blue-500" />
+        <h3 className="font-medium text-gray-900 dark:text-gray-100">Aktueller Fokus</h3>
+      </div>
+
+      {error && (
+        <div className="mb-3 p-2 text-sm text-red-600 bg-red-50 dark:bg-red-900/30 dark:text-red-400 rounded-lg">
+          {error}
+        </div>
+      )}
+
+      <div className="space-y-3">
+        <div className="relative">
+          <input
+            type="text"
+            value={focus}
+            onChange={(e) => {
+              setFocus(e.target.value)
+              setIsEditing(true)
+            }}
+            placeholder="Woran arbeitest du gerade?"
+            maxLength={200}
+            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          />
+          <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-gray-400">
+            {focus.length}/200
+          </span>
+        </div>
+
+        {isEditing && (
+          <div className="flex items-center justify-between">
+            <p className="text-xs text-gray-500 dark:text-gray-400">
+              Teile deinem Team mit, woran du arbeitest
+            </p>
+            <div className="flex gap-2">
+              {initialFocus && (
+                <button
+                  onClick={handleClear}
+                  disabled={saving}
+                  className="px-3 py-1.5 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-lg disabled:opacity-50"
+                >
+                  Löschen
+                </button>
+              )}
+              <button
+                onClick={handleCancel}
+                className="px-3 py-1.5 text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg"
+              >
+                Abbrechen
+              </button>
+              <button
+                onClick={handleSave}
+                disabled={saving || !hasChanges}
+                className="px-3 py-1.5 text-sm text-white bg-blue-600 hover:bg-blue-700 rounded-lg disabled:opacity-50 flex items-center gap-2"
+              >
+                {saving && <Loader2 className="w-4 h-4 animate-spin" />}
+                Speichern
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  )
+}

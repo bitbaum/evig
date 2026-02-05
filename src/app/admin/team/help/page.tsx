@@ -1,0 +1,188 @@
+/**
+ * Help Requests Page - Server Component
+ *
+ * Dashboard for help requests:
+ * - Open requests (broadcast and targeted)
+ * - Resolved requests history
+ * - Create new help request
+ */
+
+import { Metadata } from 'next'
+import { auth } from '@/auth'
+import { redirect } from 'next/navigation'
+import { query } from '@/lib/auth/db'
+import { TABLE_NAMES } from '@/config/database'
+import { canAccessSection } from '@/lib/permissions'
+import { HelpCircle, ArrowLeft, Users, AlertTriangle, CheckCircle } from 'lucide-react'
+import Link from 'next/link'
+import { HelpRequestsPageClient } from './HelpRequestsPageClient'
+
+export const metadata: Metadata = {
+  title: 'Hilfsanfragen | RevampIT Admin',
+  description: 'Team-Hilfsanfragen verwalten.',
+}
+
+interface HelpStats {
+  open: number
+  in_progress: number
+  resolved_this_week: number
+  urgent_open: number
+}
+
+async function getHelpStats(): Promise<HelpStats> {
+  try {
+    const weekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString()
+
+    const [openResult, inProgressResult, resolvedResult, urgentResult] = await Promise.all([
+      query<{ count: string }>(
+        `SELECT COUNT(*) as count FROM ${TABLE_NAMES.HELP_REQUESTS} WHERE status = 'open'`
+      ),
+      query<{ count: string }>(
+        `SELECT COUNT(*) as count FROM ${TABLE_NAMES.HELP_REQUESTS} WHERE status = 'in_progress'`
+      ),
+      query<{ count: string }>(
+        `SELECT COUNT(*) as count FROM ${TABLE_NAMES.HELP_REQUESTS} WHERE status = 'resolved' AND resolved_at >= $1`,
+        [weekAgo]
+      ),
+      query<{ count: string }>(
+        `SELECT COUNT(*) as count FROM ${TABLE_NAMES.HELP_REQUESTS} WHERE status = 'open' AND urgency = 'urgent'`
+      ),
+    ])
+
+    return {
+      open: parseInt(openResult.rows[0]?.count || '0'),
+      in_progress: parseInt(inProgressResult.rows[0]?.count || '0'),
+      resolved_this_week: parseInt(resolvedResult.rows[0]?.count || '0'),
+      urgent_open: parseInt(urgentResult.rows[0]?.count || '0'),
+    }
+  } catch {
+    return { open: 0, in_progress: 0, resolved_this_week: 0, urgent_open: 0 }
+  }
+}
+
+async function getTeamMembers() {
+  try {
+    const result = await query<{
+      id: string
+      user_id: string
+      user_name: string | null
+      user_email: string
+    }>(
+      `SELECT tp.id, tp.user_id, u.name as user_name, u.email as user_email
+       FROM ${TABLE_NAMES.TEAM_PROFILES} tp
+       JOIN ${TABLE_NAMES.USERS} u ON tp.user_id = u.id
+       WHERE tp.is_active = true
+       ORDER BY u.name ASC NULLS LAST, u.email ASC`
+    )
+    return result.rows
+  } catch {
+    return []
+  }
+}
+
+export default async function HelpRequestsPage() {
+  const session = await auth()
+
+  if (!session?.user) {
+    redirect('/auth/login?callbackUrl=/admin/team/help')
+  }
+
+  const user = {
+    email: session.user.email,
+    is_staff: session.user.isStaff,
+    staff_permissions: session.user.staffPermissions,
+  }
+
+  if (!canAccessSection(user, 'team')) {
+    redirect('/admin?error=no_team_access')
+  }
+
+  const [stats, teamMembers] = await Promise.all([
+    getHelpStats(),
+    getTeamMembers(),
+  ])
+
+  return (
+    <div className="space-y-6">
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-4">
+          <Link
+            href="/admin/team"
+            className="p-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg"
+          >
+            <ArrowLeft className="w-5 h-5" />
+          </Link>
+          <div className="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center">
+            <HelpCircle className="w-6 h-6 text-yellow-600" />
+          </div>
+          <div>
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+              Hilfsanfragen
+            </h1>
+            <p className="text-gray-600 dark:text-gray-400">
+              Hilfe anfordern und Kollegen unterstützen
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Stats */}
+      <div className="grid md:grid-cols-4 gap-4">
+        <div className="p-4 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 bg-yellow-100 rounded-lg flex items-center justify-center">
+              <HelpCircle className="w-5 h-5 text-yellow-600" />
+            </div>
+            <div>
+              <p className="text-2xl font-bold text-gray-900 dark:text-white">{stats.open}</p>
+              <p className="text-sm text-gray-600 dark:text-gray-400">Offen</p>
+            </div>
+          </div>
+        </div>
+
+        <div className="p-4 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+              <Users className="w-5 h-5 text-blue-600" />
+            </div>
+            <div>
+              <p className="text-2xl font-bold text-gray-900 dark:text-white">{stats.in_progress}</p>
+              <p className="text-sm text-gray-600 dark:text-gray-400">In Bearbeitung</p>
+            </div>
+          </div>
+        </div>
+
+        <div className="p-4 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
+              <CheckCircle className="w-5 h-5 text-green-600" />
+            </div>
+            <div>
+              <p className="text-2xl font-bold text-gray-900 dark:text-white">{stats.resolved_this_week}</p>
+              <p className="text-sm text-gray-600 dark:text-gray-400">Diese Woche gelöst</p>
+            </div>
+          </div>
+        </div>
+
+        <div className="p-4 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
+              <AlertTriangle className="w-5 h-5 text-red-600" />
+            </div>
+            <div>
+              <p className="text-2xl font-bold text-gray-900 dark:text-white">{stats.urgent_open}</p>
+              <p className="text-sm text-gray-600 dark:text-gray-400">Dringend</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Help Requests (Client Component) */}
+      <HelpRequestsPageClient
+        teamMembers={teamMembers}
+        currentUserEmail={session.user.email}
+      />
+    </div>
+  )
+}

@@ -127,6 +127,10 @@ export const TABLE_NAMES = {
   TASK_ATTENTION_FLAGS: 'task_attention_flags',
   TASK_REQUESTS: 'task_requests',
   TASK_PROJECTS: 'task_projects',
+
+  // Activity Stream
+  ACTIVITY_UPDATES: 'activity_updates',
+  HELP_REQUESTS: 'help_requests',
 } as const;
 
 /**

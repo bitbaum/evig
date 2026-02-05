@@ -1,0 +1,288 @@
+/**
+ * API: Help Requests
+ *
+ * GET  /api/admin/team/help-requests - List help requests
+ * POST /api/admin/team/help-requests - Create help request
+ *
+ * Access: Staff with 'team' permission
+ */
+
+import { NextRequest } from 'next/server'
+import { auth } from '@/auth'
+import { query } from '@/lib/auth/db'
+import { canAccessSection } from '@/lib/permissions'
+import { TABLE_NAMES } from '@/config/database'
+import { logger } from '@/lib/logger'
+import {
+  apiSuccess,
+  apiError,
+  apiUnauthorized,
+  apiForbidden,
+  apiBadRequest,
+} from '@/lib/api/helpers'
+import {
+  validateCreateHelpRequest,
+  validateHelpRequestFilter,
+} from '@/lib/schemas/activity'
+
+interface HelpRequest {
+  id: string
+  requester_id: string
+  requester_name: string | null
+  requester_email: string
+  title: string
+  description: string | null
+  category: string | null
+  urgency: string
+  requested_user_id: string | null
+  requested_user_name: string | null
+  requested_user_email: string | null
+  is_broadcast: boolean
+  status: string
+  resolved_by: string | null
+  resolved_by_name: string | null
+  resolved_at: string | null
+  resolution_notes: string | null
+  created_at: string
+  updated_at: string
+}
+
+/**
+ * GET /api/admin/team/help-requests
+ * List help requests with optional filters
+ */
+export async function GET(request: NextRequest) {
+  try {
+    const session = await auth()
+
+    if (!session?.user) {
+      return apiUnauthorized()
+    }
+
+    const user = {
+      email: session.user.email,
+      is_staff: session.user.isStaff,
+      staff_permissions: session.user.staffPermissions,
+    }
+
+    if (!canAccessSection(user, 'team')) {
+      return apiForbidden('Kein Zugriff auf Team-Bereich')
+    }
+
+    // Parse filters from query params
+    const { searchParams } = new URL(request.url)
+    const filterResult = validateHelpRequestFilter({
+      status: searchParams.get('status') || undefined,
+      urgency: searchParams.get('urgency') || undefined,
+      category: searchParams.get('category') || undefined,
+      requester_id: searchParams.get('requester_id') || undefined,
+      requested_user_id: searchParams.get('requested_user_id') || undefined,
+      is_broadcast: searchParams.get('is_broadcast') || undefined,
+      limit: searchParams.get('limit') || 50,
+      offset: searchParams.get('offset') || 0,
+    })
+
+    if (!filterResult.success) {
+      return apiBadRequest('Ungültige Filterparameter')
+    }
+
+    const filters = filterResult.data
+    const conditions: string[] = []
+    const values: (string | number | boolean)[] = []
+    let paramIndex = 1
+
+    if (filters.status) {
+      conditions.push(`hr.status = $${paramIndex}`)
+      values.push(filters.status)
+      paramIndex++
+    }
+
+    if (filters.urgency) {
+      conditions.push(`hr.urgency = $${paramIndex}`)
+      values.push(filters.urgency)
+      paramIndex++
+    }
+
+    if (filters.category) {
+      conditions.push(`hr.category = $${paramIndex}`)
+      values.push(filters.category)
+      paramIndex++
+    }
+
+    if (filters.requester_id) {
+      conditions.push(`hr.requester_id = $${paramIndex}`)
+      values.push(filters.requester_id)
+      paramIndex++
+    }
+
+    if (filters.requested_user_id) {
+      conditions.push(`hr.requested_user_id = $${paramIndex}`)
+      values.push(filters.requested_user_id)
+      paramIndex++
+    }
+
+    if (filters.is_broadcast !== undefined) {
+      conditions.push(`hr.is_broadcast = $${paramIndex}`)
+      values.push(filters.is_broadcast)
+      paramIndex++
+    }
+
+    const whereClause = conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : ''
+
+    // Add pagination params
+    values.push(filters.limit)
+    const limitParam = paramIndex
+    paramIndex++
+    values.push(filters.offset)
+    const offsetParam = paramIndex
+
+    const result = await query<HelpRequest>(
+      `SELECT
+        hr.id,
+        hr.requester_id,
+        req_u.name as requester_name,
+        req_u.email as requester_email,
+        hr.title,
+        hr.description,
+        hr.category,
+        hr.urgency,
+        hr.requested_user_id,
+        target_u.name as requested_user_name,
+        target_u.email as requested_user_email,
+        hr.is_broadcast,
+        hr.status,
+        hr.resolved_by,
+        resolver_u.name as resolved_by_name,
+        hr.resolved_at,
+        hr.resolution_notes,
+        hr.created_at,
+        hr.updated_at
+       FROM ${TABLE_NAMES.HELP_REQUESTS} hr
+       JOIN ${TABLE_NAMES.USERS} req_u ON hr.requester_id = req_u.id
+       LEFT JOIN ${TABLE_NAMES.USERS} target_u ON hr.requested_user_id = target_u.id
+       LEFT JOIN ${TABLE_NAMES.USERS} resolver_u ON hr.resolved_by = resolver_u.id
+       ${whereClause}
+       ORDER BY
+         CASE hr.urgency
+           WHEN 'urgent' THEN 1
+           WHEN 'high' THEN 2
+           WHEN 'normal' THEN 3
+           WHEN 'low' THEN 4
+         END,
+         hr.created_at DESC
+       LIMIT $${limitParam} OFFSET $${offsetParam}`,
+      values
+    )
+
+    // Get total count for pagination
+    const countResult = await query<{ count: string }>(
+      `SELECT COUNT(*) as count
+       FROM ${TABLE_NAMES.HELP_REQUESTS} hr
+       ${whereClause}`,
+      values.slice(0, -2) // exclude limit/offset
+    )
+
+    return apiSuccess({
+      items: result.rows,
+      total: parseInt(countResult.rows[0]?.count || '0', 10),
+      limit: filters.limit,
+      offset: filters.offset,
+    })
+  } catch (error) {
+    return apiError(error, 'Hilfsanfragen konnten nicht geladen werden')
+  }
+}
+
+/**
+ * POST /api/admin/team/help-requests
+ * Create a new help request
+ */
+export async function POST(request: NextRequest) {
+  try {
+    const session = await auth()
+
+    if (!session?.user) {
+      return apiUnauthorized()
+    }
+
+    const user = {
+      email: session.user.email,
+      is_staff: session.user.isStaff,
+      staff_permissions: session.user.staffPermissions,
+    }
+
+    if (!canAccessSection(user, 'team')) {
+      return apiForbidden('Kein Zugriff auf Team-Bereich')
+    }
+
+    const body = await request.json()
+
+    // Validate input
+    const validation = validateCreateHelpRequest(body)
+    if (!validation.success) {
+      return apiBadRequest(
+        'Validierungsfehler',
+        validation.error.flatten().fieldErrors as Record<string, string[]>
+      )
+    }
+
+    const data = validation.data
+
+    // Look up requester user ID from session email
+    const requesterResult = await query<{ id: string }>(
+      `SELECT id FROM ${TABLE_NAMES.USERS} WHERE email = $1`,
+      [session.user.email]
+    )
+
+    if (requesterResult.rows.length === 0) {
+      return apiBadRequest('Benutzer nicht gefunden')
+    }
+
+    const requesterId = requesterResult.rows[0].id
+
+    // If targeted request, verify target user exists
+    if (data.requested_user_id) {
+      const targetResult = await query<{ id: string }>(
+        `SELECT id FROM ${TABLE_NAMES.USERS} WHERE id = $1`,
+        [data.requested_user_id]
+      )
+
+      if (targetResult.rows.length === 0) {
+        return apiBadRequest('Zielbenutzer nicht gefunden')
+      }
+    }
+
+    // Insert help request
+    const result = await query<{ id: string }>(
+      `INSERT INTO ${TABLE_NAMES.HELP_REQUESTS} (
+        requester_id,
+        title,
+        description,
+        category,
+        urgency,
+        requested_user_id
+      ) VALUES ($1, $2, $3, $4, $5, $6)
+      RETURNING id`,
+      [
+        requesterId,
+        data.title,
+        data.description || null,
+        data.category || null,
+        data.urgency,
+        data.requested_user_id || null,
+      ]
+    )
+
+    logger.info('Help request created', {
+      requestId: result.rows[0].id,
+      requesterId,
+      urgency: data.urgency,
+      isBroadcast: !data.requested_user_id,
+      title: data.title.substring(0, 50),
+    })
+
+    return apiSuccess({ id: result.rows[0].id }, 201)
+  } catch (error) {
+    return apiError(error, 'Hilfsanfrage konnte nicht erstellt werden')
+  }
+}

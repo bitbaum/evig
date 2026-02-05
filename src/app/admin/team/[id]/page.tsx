@@ -53,6 +53,8 @@ interface ProfileData {
   emergency_contact_phone: string | null
   emergency_contact_relation: string | null
   hr_notes: string | null
+  current_focus: string | null
+  current_focus_updated_at: string | null
   is_active: boolean
   created_at: string
   updated_at: string
@@ -85,7 +87,9 @@ async function getProfile(id: string, includeHrNotes = false): Promise<ProfileDa
         tp.phone,
         tp.emergency_contact_name,
         tp.emergency_contact_phone,
-        tp.emergency_contact_relation
+        tp.emergency_contact_relation,
+        tp.current_focus,
+        tp.current_focus_updated_at
         ${hrNotesColumn},
         tp.is_active,
         tp.created_at,
