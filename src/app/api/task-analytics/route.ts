@@ -111,15 +111,19 @@ export const GET = withAdmin(async (request: NextRequest, session: ValidSession)
 
     const stats = statsResult.rows[0] as Record<string, unknown> || {};
     const completions = completionsResult.rows[0] as Record<string, unknown> || {};
+    const todayRow = todayResult.rows[0] as Record<string, string> || {};
+    const weekRow = weekResult.rows[0] as Record<string, string> || {};
+    const pendingRow = pendingRequestsResult.rows[0] as Record<string, string> || {};
+    const flagsRow = attentionFlagsResult.rows[0] as Record<string, string> || {};
 
     return apiSuccess({
       overview: {
         ...stats,
         ...completions,
-        completed_today: parseInt(todayResult.rows[0]?.completed_today || '0', 10),
-        completed_this_week: parseInt(weekResult.rows[0]?.completed_this_week || '0', 10),
-        pending_requests: parseInt(pendingRequestsResult.rows[0]?.pending_requests || '0', 10),
-        active_attention_flags: parseInt(attentionFlagsResult.rows[0]?.active_flags || '0', 10),
+        completed_today: parseInt(todayRow.completed_today || '0', 10),
+        completed_this_week: parseInt(weekRow.completed_this_week || '0', 10),
+        pending_requests: parseInt(pendingRow.pending_requests || '0', 10),
+        active_attention_flags: parseInt(flagsRow.active_flags || '0', 10),
       },
       by_category: byCategoryResult.rows,
       contributions: contributionsResult.rows,
