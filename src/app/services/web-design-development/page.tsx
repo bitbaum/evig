@@ -1,27 +1,27 @@
 'use client'
 
-import { Metadata } from 'next'
 import { useState } from 'react'
-import { 
-  Globe, 
-  Code, 
-  Palette, 
-  Smartphone, 
-  Search, 
-  Shield, 
-  Zap, 
-  Users, 
+import {
+  Globe,
+  Code,
+  Shield,
+  Zap,
+  Users,
   CheckCircle2,
   ArrowRight,
   Monitor,
-  Layers,
-  Rocket,
   Heart,
   Database,
-  Cloud,
   Filter
 } from 'lucide-react'
 import Link from 'next/link'
+import {
+  benefits,
+  technologies,
+  services,
+  whyOpenSource,
+  getUniqueCategories,
+} from './data'
 
 // Remove metadata export since this is now a client component
 // export const metadata: Metadata = {
@@ -35,216 +35,12 @@ import Link from 'next/link'
 //   },
 // }
 
-const benefits = [
-  {
-    title: 'Automatisierungs-First-Design',
-    description: 'Wir priorisieren automatisierte Arbeitsabläufe, die den manuellen Verwaltungsaufwand minimieren und gleichzeitig alle unsere Grundprinzipien beibehalten. Maximale Effizienz ohne Kompromisse.',
-    icon: Zap
-  },
-  {
-    title: 'Open-Source-Grundlage',
-    description: 'Aufgebaut auf transparenten, überprüfbaren Technologien, die Ihnen vollständige Kontrolle und Freiheit geben. Keine Anbieterbindung, keine proprietären Black Boxes.',
-    icon: Code
-  },
-  {
-    title: 'Nahtlose Benutzererfahrung',
-    description: 'Intuitive Benutzeroberflächen, die von den Benutzern nur minimalen Aufwand erfordern und gleichzeitig maximale Funktionalität bieten. Jede Interaktion ist auf Einfachheit und Effektivität ausgelegt.',
-    icon: Smartphone
-  },
-  {
-    title: 'Entwicklerfreundliche Architektur',
-    description: 'Sauberer, wartbarer Code mit ausgezeichneter Dokumentation und Tools. Gebaut für langfristige Nachhaltigkeit und einfache Wartung.',
-    icon: Search
-  }
-]
-
-const technologies = [
-  {
-    name: 'Next.js & React',
-    description: 'Modernes React-Framework zum Erstellen schneller, skalierbarer Webanwendungen mit hervorragender Entwicklererfahrung und integrierter Optimierung.',
-    icon: Code,
-    category: 'Frontend',
-    benefits: ['Serverseitiges Rendering', 'Hervorragende Leistung', 'Grossartiges SEO', 'Aktive Community'],
-    url: 'https://nextjs.org'
-  },
-  {
-    name: 'Tailwind CSS',
-    description: 'Utility-First-CSS-Framework zum schnellen Erstellen moderner, responsiver Benutzeroberflächen mit konsistentem Design.',
-    icon: Palette,
-    category: 'Frontend',
-    benefits: ['Schnelle Entwicklung', 'Konsistentes Design', 'Standardmässig responsiv', 'Sehr anpassbar'],
-    url: 'https://tailwindcss.com'
-  },
-  {
-    name: 'Supabase',
-    description: 'Open-Source-Firebase-Alternative, die sofortige APIs, Echtzeit-Abonnements, Authentifizierung und Edge-Funktionen bietet.',
-    icon: Database,
-    category: 'Backend',
-    benefits: ['Sofortige APIs', 'Echtzeit-Updates', 'Integrierte Authentifizierung', 'Edge-Funktionen'],
-    url: 'https://supabase.com'
-  },
-  {
-    name: 'Strapi',
-    description: 'Führendes Open-Source-Headless-CMS, das Entwicklern die Freiheit gibt, ihre bevorzugten Tools und Frameworks zu wählen.',
-    icon: Layers,
-    category: 'CMS',
-    benefits: ['API-First-Ansatz', 'Flexible Inhaltstypen', 'Entwicklerfreundlich', 'Selbst gehostet'],
-    url: 'https://strapi.io'
-  },
-  {
-    name: 'Payload CMS',
-    description: 'TypeScript-First-Headless-CMS und Anwendungsframework, das mit Node.js, React und MongoDB erstellt wurde.',
-    icon: Shield,
-    category: 'CMS',
-    benefits: ['TypeScript nativ', 'Admin-Benutzeroberfläche enthalten', 'Sehr erweiterbar', 'Fokus auf Entwicklererfahrung'],
-    url: 'https://payloadcms.com'
-  },
-  {
-    name: 'Tina CMS',
-    description: 'Git-basiertes Headless-CMS, das die Bearbeitung von Inhalten direkt auf Ihrer Website mit visueller Echtzeitbearbeitung ermöglicht.',
-    icon: Code,
-    category: 'CMS',
-    benefits: ['Visuelle Bearbeitung', 'Git-basierter Workflow', 'Echtzeit-Vorschau', 'Entwicklerfreundlich'],
-    url: 'https://tina.io'
-  },
-  {
-    name: 'WordPress',
-    description: 'Ausgereiftes Content-Management-System, das für bestimmte Anwendungsfälle immer noch beliebt ist. Wir können mit bestehenden WordPress-Websites arbeiten.',
-    icon: Globe,
-    category: 'CMS',
-    benefits: ['Grosses Ökosystem', 'Einfache Inhaltsverwaltung', 'Umfangreiche Plugins', 'Vielen Benutzern vertraut'],
-    url: 'https://wordpress.org'
-  },
-  {
-    name: 'Joomla',
-    description: 'Flexibles Content-Management-System mit robuster Benutzerverwaltung und mehrsprachigen Funktionen. Ideal für komplexe Websites.',
-    icon: Globe,
-    category: 'CMS',
-    benefits: ['Benutzerverwaltung', 'Mehrsprachige Unterstützung', 'Flexible Vorlagen', 'Starke Community'],
-    url: 'https://www.joomla.org'
-  },
-  {
-    name: 'Medusa.js',
-    description: 'Moderne, quelloffene E-Commerce-Plattform für Entwickler. Headless Commerce mit leistungsstarken APIs und Anpassungsmöglichkeiten.',
-    icon: Globe,
-    category: 'E-Commerce',
-    benefits: ['Headless-Architektur', 'Entwicklerfreundlich', 'Sehr anpassbar', 'Moderner Tech-Stack'],
-    url: 'https://medusajs.com'
-  },
-  {
-    name: 'Shopware 6',
-    description: 'Moderne, API-First-E-Commerce-Plattform mit leistungsstarken Anpassungsmöglichkeiten. Open-Source-Kern mit kommerziellen Erweiterungen.',
-    icon: Globe,
-    category: 'E-Commerce',
-    benefits: ['API-First-Design', 'Flexible Architektur', 'Umfangreiche Admin-Oberfläche', 'Deutsche Ingenieurskunst'],
-    url: 'https://www.shopware.com'
-  },
-  {
-    name: 'Bereitstellung & Hosting',
-    description: 'Flexible Hosting-Optionen von Open-Source-Lösungen auf Linux-Servern bis hin zu modernen Plattformen wie Vercel und Netlify (proprietär, aber grosszügige kostenlose Stufen).',
-    icon: Cloud,
-    category: 'Infrastruktur',
-    benefits: ['Mehrere Hosting-Optionen', 'Globales CDN', 'Automatische Skalierung', 'Git-basierter Workflow'],
-    url: 'https://vercel.com'
-  }
-]
-
-const services = [
-  {
-    title: 'Benutzerdefinierte Webentwicklung',
-    description: 'Massgeschneiderte Webanwendungen, die mit modernen Open-Source-Technologien erstellt werden, um Ihre spezifischen Geschäftsanforderungen zu erfüllen.',
-    icon: Code,
-    features: [
-      'Benutzerdefinierte Webanwendungen',
-      'E-Commerce-Lösungen',
-      'API-Entwicklung',
-      'Datenbankdesign',
-      'Leistungsoptimierung'
-    ]
-  },
-  {
-    title: 'Responsives Webdesign',
-    description: 'Schöne, benutzerfreundliche Designs, die auf allen Geräten und Bildschirmgrössen perfekt funktionieren.',
-    icon: Palette,
-    features: [
-      'Mobile-First-Design',
-      'User Experience (UX) Design',
-      'User Interface (UI) Design',
-      'Integration der Markenidentität',
-      'Barrierefreiheitskonformität'
-    ]
-  },
-  {
-    title: 'CMS-Entwicklung',
-    description: 'Moderne Content-Management-Systeme, die Ihnen die volle Kontrolle über Ihre Website-Inhalte mit entwicklerfreundlichen APIs geben.',
-    icon: Globe,
-    features: [
-      'Headless-CMS-Lösungen (Strapi, Payload, Tina)',
-      'WordPress-Entwicklung (Legacy-Support)',
-      'Benutzerdefinierte CMS-Lösungen',
-      'Inhaltsmigration',
-      'Schulung und Support'
-    ]
-  },
-  {
-    title: 'Website-Wartung',
-    description: 'Laufender Support und Wartung, um Ihre Website sicher, aktuell und optimal leistungsfähig zu halten.',
-    icon: Shield,
-    features: [
-      'Sicherheitsupdates',
-      'Leistungsüberwachung',
-      'Inhaltsaktualisierungen',
-      'Backup-Management',
-      'Technischer Support'
-    ]
-  }
-]
-
-const whyOpenSource = [
-  {
-    title: 'Sie besitzen Ihren Code',
-    description: 'Das vollständige Eigentum am Quellcode Ihrer Website bedeutet keine Anbieterbindung, keine Lizenzbeschränkungen und völlige Freiheit, Ihre Website jederzeit zu ändern, zu erweitern oder zu migrieren.',
-    icon: Code
-  },
-  {
-    title: 'Sie besitzen Ihre Daten',
-    description: 'Ihre Daten gehören Ihnen, nicht den Tech-Giganten. Wir entwickeln Lösungen, die Ihre Informationen unter Ihrer Kontrolle halten, mit Optionen für Self-Hosting und Datenportabilität.',
-    icon: Database
-  },
-  {
-    title: 'Datenschutz durch Design',
-    description: 'Wir priorisieren den Datenschutz von Grund auf und implementieren minimales Tracking, sichere Authentifizierung und transparente Datenverarbeitungspraktiken, die die Privatsphäre Ihrer Benutzer respektieren.',
-    icon: Shield
-  },
-  {
-    title: 'Dezentrale Architektur',
-    description: 'Lösen Sie sich von zentralisierten Plattformen, die Ihre Online-Präsenz kontrollieren. Wir entwickeln Lösungen, die überall gehostet werden können und Ihnen Unabhängigkeit von Big Tech geben.',
-    icon: Globe
-  },
-  {
-    title: 'Open-Source-Grundlage',
-    description: 'Aufgebaut auf Open-Source-Technologien, die transparent, überprüfbar und von globalen Gemeinschaften unterstützt werden. Kein versteckter Code, keine proprietären Lock-ins.',
-    icon: Heart
-  },
-  {
-    title: 'Zukunftssicher & Nachhaltig',
-    description: 'Open-Source-Technologien entwickeln sich mit der Community weiter und verschwinden nicht, wenn ein Unternehmen scheitert. Ihre Investition ist langfristig geschützt.',
-    icon: Rocket
-  }
-]
-
-// Get unique categories for filtering
-const getUniqueCategories = () => {
-  const categories = technologies.map(tech => tech.category)
-  return ['Alle', ...Array.from(new Set(categories)).sort()]
-}
-
 export default function WebDesignDevelopmentPage() {
   const [selectedCategory, setSelectedCategory] = useState('Alle')
   const categories = getUniqueCategories()
-  
-  const filteredTechnologies = selectedCategory === 'Alle' 
-    ? technologies 
+
+  const filteredTechnologies = selectedCategory === 'Alle'
+    ? technologies
     : technologies.filter(tech => tech.category === selectedCategory)
 
   return (
@@ -257,7 +53,7 @@ export default function WebDesignDevelopmentPage() {
             <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6 leading-tight">Webdesign & Entwicklung</h1>
             <p className="text-base sm:text-lg md:text-xl text-green-100 mb-6 sm:mb-8">
               <strong>100% Engagement für Freiheit</strong> durch Open Source, Dezentralisierung, Datenschutz, Dateneigentum, Code-Eigentum und maximale Automatisierung.
-              Wir schaffen digitale Erlebnisse, bei denen <strong>Anstrengung zur Wahl und nicht zur Notwendigkeit wird</strong> – und geben Ihnen die vollständige Kontrolle über Ihre digitale Präsenz.
+              Wir schaffen digitale Erlebnisse, bei denen <strong>Anstrengung zur Wahl und nicht zur Notwendigkeit wird</strong> &ndash; und geben Ihnen die vollständige Kontrolle über Ihre digitale Präsenz.
             </p>
             <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
               <Link
@@ -299,7 +95,7 @@ export default function WebDesignDevelopmentPage() {
                 </p>
               </div>
             </div>
-            
+
             <div className="bg-white rounded-xl p-6 shadow-xl border-l-4 border-blue-500 hover:shadow-2xl transition-shadow duration-300">
               <div className="text-center">
                 <div className="w-14 h-14 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3">
@@ -312,7 +108,7 @@ export default function WebDesignDevelopmentPage() {
                 </p>
               </div>
             </div>
-            
+
             <div className="bg-white rounded-xl p-6 shadow-xl border-l-4 border-purple-500 hover:shadow-2xl transition-shadow duration-300">
               <div className="text-center">
                 <div className="w-14 h-14 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-3">
@@ -325,7 +121,7 @@ export default function WebDesignDevelopmentPage() {
                 </p>
               </div>
             </div>
-            
+
             <div className="bg-white rounded-xl p-6 shadow-xl border-l-4 border-orange-500 hover:shadow-2xl transition-shadow duration-300">
               <div className="text-center">
                 <div className="w-14 h-14 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-3">
@@ -338,7 +134,7 @@ export default function WebDesignDevelopmentPage() {
                 </p>
               </div>
             </div>
-            
+
             <div className="bg-white rounded-xl p-6 shadow-xl border-l-4 border-teal-500 hover:shadow-2xl transition-shadow duration-300">
               <div className="text-center">
                 <div className="w-14 h-14 bg-teal-100 rounded-full flex items-center justify-center mx-auto mb-3">
@@ -351,7 +147,7 @@ export default function WebDesignDevelopmentPage() {
                 </p>
               </div>
             </div>
-            
+
             <div className="bg-white rounded-xl p-6 shadow-xl border-l-4 border-rose-500 hover:shadow-2xl transition-shadow duration-300">
               <div className="text-center">
                 <div className="w-14 h-14 bg-rose-100 rounded-full flex items-center justify-center mx-auto mb-3">
@@ -364,7 +160,7 @@ export default function WebDesignDevelopmentPage() {
                 </p>
               </div>
             </div>
-            
+
             <div className="bg-white rounded-xl p-6 shadow-xl border-l-4 border-indigo-500 hover:shadow-2xl transition-shadow duration-300">
               <div className="text-center">
                 <div className="w-14 h-14 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-3">
@@ -377,7 +173,7 @@ export default function WebDesignDevelopmentPage() {
                 </p>
               </div>
             </div>
-            
+
             <div className="bg-white rounded-xl p-6 shadow-xl border-l-4 border-cyan-500 hover:shadow-2xl transition-shadow duration-300">
               <div className="text-center">
                 <div className="w-14 h-14 bg-cyan-100 rounded-full flex items-center justify-center mx-auto mb-3">
@@ -404,10 +200,10 @@ export default function WebDesignDevelopmentPage() {
                 Wir glauben an <strong>100% Engagement für Freiheit</strong> durch maximale Automatisierung.
               </p>
               <p className="text-base text-gray-500">
-                Wenn Automatisierung unerwünschten Aufwand minimiert, verwandelt sie Anstrengung von Notwendigkeit in Wahl – und Wahl ist Freiheit.
+                Wenn Automatisierung unerwünschten Aufwand minimiert, verwandelt sie Anstrengung von Notwendigkeit in Wahl &ndash; und Wahl ist Freiheit.
               </p>
             </div>
-            
+
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
               <div>
                 <h3 className="text-2xl font-bold mb-6 text-gray-800">Anstrengung als Wahl, nicht als Notwendigkeit</h3>
@@ -418,27 +214,27 @@ export default function WebDesignDevelopmentPage() {
                       <strong>100% Engagement für Freiheit</strong> bedeutet, dass jeder Aspekt Ihrer digitalen Präsenz Ihrer Autonomie dienen und sie nicht einschränken sollte.
                     </p>
                   </div>
-                  
+
                   <div className="border-l-4 border-blue-500 pl-4">
                     <p className="font-semibold text-blue-800 mb-2">Automatisierung als Befreiung</p>
                     <p>
                       Maximale Automatisierung eliminiert sich wiederholende, unerwünschte Aufgaben und gibt Ihnen die Freiheit, sich auf das zu konzentrieren, was Ihnen und Ihrer Mission wirklich wichtig ist.
                     </p>
                   </div>
-                  
+
                   <div className="border-l-4 border-purple-500 pl-4">
                     <p className="font-semibold text-purple-800 mb-2">Wahl statt Zwang</p>
                     <p>
-                      Wenn Systeme nahtlos ohne Ihr ständiges Eingreifen funktionieren, wird jeder Moment, den Sie aufwenden, beabsichtigt – eine Wahl, keine Notwendigkeit.
+                      Wenn Systeme nahtlos ohne Ihr ständiges Eingreifen funktionieren, wird jeder Moment, den Sie aufwenden, beabsichtigt &ndash; eine Wahl, keine Notwendigkeit.
                     </p>
                   </div>
-                  
+
                   <p className="italic text-gray-500 text-sm mt-6">
-                    "Wahre Freiheit ist nicht nur die Fähigkeit zu wählen – es sind Systeme, die Ihr Recht auf Wahl bewahren, indem sie erzwungenen Aufwand beseitigen."
+                    &ldquo;Wahre Freiheit ist nicht nur die Fähigkeit zu wählen &ndash; es sind Systeme, die Ihr Recht auf Wahl bewahren, indem sie erzwungenen Aufwand beseitigen.&rdquo;
                   </p>
                 </div>
               </div>
-              
+
               <div className="bg-gradient-to-br from-green-50 to-blue-50 rounded-xl p-8">
                 <h4 className="text-xl font-bold mb-4 text-gray-800">Unser Freiheits-Bewertungssystem</h4>
                 <p className="text-gray-600 mb-4">
@@ -532,7 +328,7 @@ export default function WebDesignDevelopmentPage() {
             <h2 className="text-3xl font-bold mb-6">Warum diese Werte wichtig sind</h2>
             <p className="text-lg text-gray-600">
               In einer Ära zunehmender digitaler Überwachung und Plattformmonopole
-              sind diese Prinzipien nicht nur "nice-to-haves" – sie sind für die digitale Freiheit und Unabhängigkeit unerlässlich.
+              sind diese Prinzipien nicht nur &ldquo;nice-to-haves&rdquo; &ndash; sie sind für die digitale Freiheit und Unabhängigkeit unerlässlich.
             </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -560,7 +356,7 @@ export default function WebDesignDevelopmentPage() {
               Wir arbeiten mit bewährten Open-Source-Technologien, die Zuverlässigkeit,
               Leistung und langfristige Nachhaltigkeit bieten.
             </p>
-            
+
             {/* Technology Filter */}
             <div className="flex flex-wrap justify-center gap-3 mb-12">
               <div className="flex items-center text-gray-500 mr-4 mb-2">
@@ -571,7 +367,7 @@ export default function WebDesignDevelopmentPage() {
                 <button
                   key={category}
                   onClick={() => setSelectedCategory(category)}
-                  className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${ 
+                  className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
                     selectedCategory === category
                       ? 'bg-green-600 text-white shadow-lg transform scale-105'
                       : 'bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-800'
@@ -586,7 +382,7 @@ export default function WebDesignDevelopmentPage() {
           {/* Technologies Grid with Animation */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {filteredTechnologies.map((tech, index) => (
-              <a 
+              <a
                 key={`${tech.name}-${selectedCategory}`}
                 href={tech.url}
                 target="_blank"
@@ -612,7 +408,7 @@ export default function WebDesignDevelopmentPage() {
                     </div>
                   ))}
                 </div>
-                
+
                 {/* Link indicator */}
                 <div className="mt-4 pt-3 border-t border-gray-200 flex items-center text-sm text-green-600 group-hover:text-green-700 transition-colors duration-300">
                   <ArrowRight className="w-4 h-4 mr-2 transform group-hover:translate-x-1 transition-transform duration-300" />
@@ -742,11 +538,11 @@ export default function WebDesignDevelopmentPage() {
             transform: translateY(0);
           }
         }
-        
+
         .animate-fadeIn {
           animation: fadeIn 0.6s ease-out forwards;
         }
-        
+
         .line-clamp-2 {
           display: -webkit-box;
           -webkit-line-clamp: 2;

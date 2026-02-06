@@ -1,32 +1,23 @@
 import { Metadata } from 'next'
-import { 
-  Brain, 
-  Shield, 
-  Server, 
-  Database, 
-  Lock, 
-  Zap, 
+import {
+  Brain,
   CheckCircle2,
-  ArrowRight,
   Clock,
-  Users,
-  FileText,
-  Search,
-  BarChart3,
-  Globe,
-  AlertTriangle,
-  Cpu,
-  HardDrive,
-  Network,
-  Eye,
-  Building,
-  Scale,
-  Briefcase,
   Leaf,
-  Code,
   Heart
 } from 'lucide-react'
 import Link from 'next/link'
+import {
+  coreValues,
+  painPoints,
+  technicalStack,
+  pricingTiers,
+  industries,
+  timeline,
+  riskMitigation,
+  deploymentExamples,
+  technicalImplementation,
+} from './data'
 
 export const metadata: Metadata = {
   title: 'Nachhaltige KI-Lösungen für Unternehmen | RevampIT',
@@ -37,348 +28,6 @@ export const metadata: Metadata = {
     type: 'website',
     url: 'https://revampit.org/services/enterprise-ai-solutions',
   },
-}
-
-const coreValues = [
-  {
-    title: 'Digitale Souveränität',
-    description: 'Vollständige Kontrolle über Ihre KI-Infrastruktur und Daten. Keine Abhängigkeit von ausländischen Technologiegiganten.',
-    icon: Shield,
-    color: 'green'
-  },
-  {
-    title: 'Open-Source-Grundlage',
-    description: 'Aufgebaut auf transparenten, überprüfbaren Open-Source-Technologien. Kein Anbieter-Lock-in, volle Transparenz.',
-    icon: Code,
-    color: 'green'
-  },
-  {
-    title: 'Nachhaltiges Computing',
-    description: 'Energieeffiziente KI, die verantwortungsvoll skaliert. Optimiert für minimale Umweltbelastung.',
-    icon: Leaf,
-    color: 'green'
-  }
-]
-
-const painPoints = [
-  {
-    pain: 'Sensible Daten dürfen die sichere Umgebung Ihres Unternehmens nicht verlassen',
-    solution: '100% selbst gehosteter Open-Source-KI-Stack mit vollständiger Datensouveränität',
-    benefit: 'Keine Abhängigkeiten von externen KI-Diensten ✓ Volle DSGVO-/Compliance-Kontrolle',
-    icon: Shield
-  },
-  {
-    pain: 'Teams verschwenden Stunden mit der Suche in institutionellem Wissen',
-    solution: 'RAG-gestützte intelligente Suche über alle Ihre Dokumente und Daten',
-    benefit: 'Antworten auf Expertenniveau aus Ihren eigenen Daten in Sekunden',
-    icon: Search
-  },
-  {
-    pain: 'Keine interne KI-Expertise oder Ressourcen zur Bereitstellung von Unternehmenslösungen',
-    solution: 'Komplette "Done-for-you"-Bereitstellung, Schulung und laufender Support',
-    benefit: 'Konzentrieren Sie sich auf Ihre Kernmission, während wir uns um die KI-Infrastruktur kümmern',
-    icon: Users
-  }
-]
-
-const technicalStack = [
-  {
-    component: 'KI-Modell',
-    technology: 'Open Source Large Language Models',
-    description: 'Modernste offene Modelle wie Llama 3, optimiert für den kommerziellen Einsatz mit voller Souveränität',
-    icon: Brain,
-    features: ['Keine proprietären Abhängigkeiten', 'Kommerzielle Lizenzierung inklusive', 'Effiziente Quantisierungstechniken']
-  },
-  {
-    component: 'Recheninfrastruktur',
-    technology: 'Flexible Cloud oder On-Premises',
-    description: 'Skalierbare GPU-Infrastruktur, die sich an Ihre Bedürfnisse und Compliance-Anforderungen anpasst',
-    icon: Cpu,
-    features: ['Bedarfsgerechte Skalierung', 'Kostenoptimierte Bereitstellung', 'Vom Kunden kontrollierte Umgebung']
-  },
-  {
-    component: 'Vektor-Datenbank',
-    technology: 'Open Source Vector Store',
-    description: 'Transparente, lizenzfreie Vektor-Datenbanklösungen ohne Anbieterabhängigkeiten',
-    icon: Database,
-    features: ['Kein Anbieter-Lock-in', 'Überprüfbarer Quellcode', 'Skalierbare Architektur']
-  },
-  {
-    component: 'RAG-Framework',
-    technology: 'Open Source Retrieval System',
-    description: 'Fortschrittliche Dokumentenverarbeitung und -abruf mit transparenten, quelloffenen Frameworks',
-    icon: FileText,
-    features: ['Intelligente Dokumentenverarbeitung', 'Kontextuelles Verständnis', 'Vollständige Quelltransparenz']
-  },
-  {
-    component: 'Automatisierung',
-    technology: 'Open Workflow Orchestration',
-    description: 'Transparente Workflow-Automatisierung mit voller Einsicht in die Verarbeitungslogik',
-    icon: Network,
-    features: ['Open-Source-Workflows', 'Überprüfbare Prozesse', 'Benutzerdefinierte Integrationen']
-  },
-  {
-    component: 'Benutzeroberfläche',
-    technology: 'Sicherer Open Web Stack',
-    description: 'Moderne, sichere Weboberfläche, die auf offenen Standards mit vollständiger Transparenz basiert',
-    icon: Eye,
-    features: ['Offene Webstandards', 'Transparente Sicherheit', 'Vollständige Audit-Trails']
-  }
-]
-
-const pricingTiers = [
-  {
-    name: 'Starter-Setup',
-    duration: '2-3 Wochen',
-    description: 'Perfekt für kleine Teams und Proof of Concept',
-    price: 'CHF 12.000 - 18.000',
-    features: [
-      'RTX 4090 Workstation oder kleines Server-Setup',
-      'Llama 3.1 8B-Modell mit grundlegendem Fine-Tuning',
-      'Grundlegende Dokumentenverarbeitung (bis zu 5.000 Dokumente)',
-      'Einfache Weboberfläche',
-      'Grundschulung und Dokumentation'
-    ],
-    highlight: 'Toller Einstiegspunkt',
-    note: 'Laufend: CHF 450-800/Monat je nach Hosting'
-  },
-  {
-    name: 'Professionelle Bereitstellung',
-    duration: '4-6 Wochen',
-    description: 'Voll funktionsfähiges KI-System für wachsende Unternehmen',
-    price: 'CHF 30.000 - 45.000',
-    features: [
-      'Professioneller Server mit RTX 4090 Ti oder zwei GPUs',
-      'Llama 3.1 13B-70B Modelle',
-      'Erweiterte Dokumentenverarbeitung (bis zu 25.000 Dokumente)',
-      'Benutzerdefinierte Integrationen und API-Zugang',
-      'Umfassende Schulung & Support'
-    ],
-    highlight: 'Beliebteste Option',
-    popular: true,
-    note: 'Laufend: CHF 1.200-2.800/Monat'
-  },
-  {
-    name: 'Unternehmenslösung',
-    duration: '6-10 Wochen',
-    description: 'Gross angelegte Bereitstellung mit Unternehmensfunktionen',
-    price: 'CHF 60.000 - 100.000',
-    features: [
-      'Unternehmensgerechte A100/H100-Infrastruktur',
-      'Benutzerdefinierte, feinabgestimmte Llama 3.1 70B+ Modelle',
-      'Unbegrenzte Dokumentenverarbeitung',
-      'Erweiterte Sicherheits- und Compliance-Funktionen',
-      'Dedizierter Support und SLA'
-    ],
-    highlight: 'Maximale Leistung',
-    note: 'Laufend: CHF 4.200-8.000/Monat'
-  }
-]
-
-const industries = [
-  {
-    name: 'Anwaltskanzleien',
-    description: 'Vertragsanalyse, Präzedenzfallsuche und Zusammenfassung juristischer Dokumente',
-    icon: Scale,
-    useCases: [
-      'Analyse von Vertragsklauseln',
-      'Suche nach juristischen Präzedenzfällen',
-      'Zusammenfassung von Dokumenten',
-      'Compliance-Prüfung'
-    ]
-  },
-  {
-    name: 'Finanzdienstleistungen',
-    description: 'Risikoanalyse, Einhaltung gesetzlicher Vorschriften und Verarbeitung von Finanzdokumenten',
-    icon: BarChart3,
-    useCases: [
-      'Risikobewertungsberichte',
-      'Einhaltung gesetzlicher Vorschriften',
-      'Analyse von Finanzdokumenten',
-      'Anlagerecherche'
-    ]
-  },
-  {
-    name: 'Pharma & Life Sciences',
-    description: 'Beschleunigung der Forschung, Unterstützung bei der Arzneimittelentdeckung und regulatorische Dokumentation',
-    icon: Building,
-    useCases: [
-      'Analyse wissenschaftlicher Literatur',
-      'Dokumentation klinischer Studien',
-      'Unterstützung bei Zulassungsanträgen',
-      'Synthese und Erkenntnisse aus der Forschung'
-    ]
-  },
-  {
-    name: 'Gesundheitseinrichtungen',
-    description: 'Analyse von Krankenakten, Zusammenfassung von Forschungsergebnissen und Unterstützung bei klinischen Entscheidungen',
-    icon: Heart,
-    useCases: [
-      'Analyse von Krankenakten',
-      'Zusammenfassung von Forschungsarbeiten',
-      'Klinische Dokumentation',
-      'Suche nach Behandlungsprotokollen'
-    ]
-  },
-  {
-    name: 'Gemeinnützige Organisationen',
-    description: 'Fördermittelrecherche, Wirkungsdokumentation und Wissensmanagement',
-    icon: Users,
-    useCases: [
-      'Recherche nach Fördermöglichkeiten',
-      'Berichterstattung zur Wirkungsmessung',
-      'Spenderkommunikation',
-      'Politikanalyse und Interessenvertretung'
-    ]
-  },
-  {
-    name: 'Forschungseinrichtungen',
-    description: 'Beschleunigung der akademischen Forschung, Literaturrecherche und Wissenssynthese',
-    icon: Brain,
-    useCases: [
-      'Automatisierung der Literaturrecherche',
-      'Entwicklung von Forschungsanträgen',
-      'Akademische Zusammenarbeit',
-      'Wissensentdeckung'
-    ]
-  },
-  {
-    name: 'Fertigung & Maschinenbau',
-    description: 'Technische Dokumentation, Qualitätssicherung und Prozessoptimierung',
-    icon: Briefcase,
-    useCases: [
-      'Suche in technischen Handbüchern',
-      'Dokumentation der Qualitätskontrolle',
-      'Erkenntnisse zur Prozessoptimierung',
-      'Einhaltung gesetzlicher Vorschriften'
-    ]
-  },
-  {
-    name: 'Beratungsunternehmen',
-    description: 'Wissensmanagement, Angebotserstellung und Kundenrecherche',
-    icon: Briefcase,
-    useCases: [
-      'Suche in der Wissensdatenbank',
-      'Automatisierung von Angeboten',
-      'Kundenrecherche',
-      'Identifizierung von Best Practices'
-    ]
-  }
-]
-
-const timeline = [
-  { week: 1, milestone: 'Bewertung der Infrastruktur, Sicherheitseinrichtung und Umgebungsvorbereitung' },
-  { week: 2, milestone: 'Bereitstellung und Leistungsoptimierung des Open-Source-KI-Modells' },
-  { week: 3, milestone: 'Einrichtung der Vektor-Datenbank und der Dokumenten-Ingestions-Pipeline' },
-  { week: 4, milestone: 'Bereitstellung der sicheren Weboberfläche und Authentifizierungsintegration' },
-  { week: 5, milestone: 'Einrichtung der Workflow-Automatisierung und Systemintegration' },
-  { week: 6, milestone: 'Benutzerakzeptanztests, Schulung und Wissenstransfer' }
-]
-
-const riskMitigation = [
-  {
-    risk: 'KI-Halluzinationen',
-    mitigation: 'JSON-Ausgabe-Leitplanken + Referenz-Snippets, Quellen anzeigen. Benutzer überprüfen alle Ausgaben.',
-    icon: AlertTriangle
-  },
-  {
-    risk: 'Regulatorische Änderungen',
-    mitigation: 'Bleiben Sie bei On-Premises/vom Kunden gewählter Cloud, unterzeichnen Sie DPA ohne Unterauftragsverarbeiter.',
-    icon: Shield
-  },
-  {
-    risk: 'Kostenüberschreitungen',
-    mitigation: 'GPU-Pods nachts automatisch abschalten; vLLM KV-Cache-Wiederverwendung hält Kaltstarts günstig.',
-    icon: BarChart3
-  },
-  {
-    risk: 'Wettbewerb (intern)',
-    mitigation: 'Bieten Sie Quellcode-Treuhand an; immer noch billiger als die Einstellung von 2 KI-Ingenieuren.',
-    icon: Users
-  }
-]
-
-// Add case study section
-const deploymentExamples = [
-  {
-    title: 'Kleine Beratungsfirma',
-    description: 'Dokumentensuche und Basisanalyse',
-    scale: '2-5 Mitarbeiter',
-    documents: '1.000-5.000',
-    responseTime: '8-15 Sekunden',
-    infrastructure: 'RTX 4090 24GB Workstation',
-    model: 'Llama 3.1 8B (4-Bit-Quantisierung)',
-    cost: 'CHF 450/Monat',
-    deployment: 'Lokales Workstation-Setup'
-  },
-  {
-    title: 'Mittelgrosse Anwaltskanzlei',
-    description: 'Vertragsanalyse und Rechtsrecherche',
-    scale: '10-25 Mitarbeiter',
-    documents: '10.000-25.000',
-    responseTime: '5-10 Sekunden',
-    infrastructure: 'RTX 4090 Ti 24GB Server',
-    model: 'Llama 3.1 13B (INT8-Quantisierung)',
-    cost: 'CHF 1.200/Monat',
-    deployment: 'Dedizierter Server vor Ort'
-  },
-  {
-    title: 'Forschungseinrichtung',
-    description: 'Analyse wissenschaftlicher Literatur',
-    scale: '50+ Mitarbeiter',
-    documents: '25.000+',
-    responseTime: '3-8 Sekunden',
-    infrastructure: '2× RTX 4090 oder 1× A100 80GB',
-    model: 'Llama 3.1 70B (INT8-Quantisierung)',
-    cost: 'CHF 2.800/Monat',
-    deployment: 'Hochleistungsserver oder Cloud'
-  },
-  {
-    title: 'Grossunternehmen',
-    description: 'Komplexe Dokumentenverarbeitung und -analyse',
-    scale: '100+ Mitarbeiter',
-    documents: '50.000+',
-    responseTime: '2-5 Sekunden',
-    infrastructure: '2× A100 80GB oder H100',
-    model: 'Llama 3.1 70B + spezialisiertes Fine-Tuning',
-    cost: 'CHF 4.200/Monat',
-    deployment: 'Unternehmens-Cloud oder On-Premises'
-  }
-]
-
-const technicalImplementation = {
-  title: 'Wie unsere nachhaltige KI-Infrastruktur funktioniert',
-  description: 'Ein vollständiger technischer Überblick über unseren souveränen KI-Bereitstellungsprozess und unsere Technologieentscheidungen',
-  steps: [
-    {
-      phase: 'Infrastruktur-Setup',
-      duration: '2-3 Wochen',
-      description: 'Wir stellen die GPU-Infrastruktur in Ihrer gewählten Umgebung mit entsprechender Sicherheits- und Netzwerkkonfiguration bereit',
-      technical: 'NVIDIA A100/H100 GPUs, containerisierte Bereitstellung über Docker/Kubernetes, Netzwerksicherheits-Setup',
-      sustainability: 'Effiziente Quantisierung und optimierte Inferenz reduzieren den Rechenaufwand im Vergleich zu unoptimierten Bereitstellungen'
-    },
-    {
-      phase: 'Open-Source-KI-Stack',
-      duration: '1-2 Wochen',
-      description: 'Bereitstellung und Optimierung von Open-Source-Large-Language-Modellen ohne proprietäre Abhängigkeiten',
-      technical: 'Llama 3.1 (8B-70B), vLLM-Inferenz-Engine, INT8-Quantisierung, Modelloptimierung',
-      sustainability: 'Open Source gewährleistet Langlebigkeit, Transparenz und keinen Anbieter-Lock-in'
-    },
-    {
-      phase: 'Datenverarbeitungspipeline',
-      duration: '2-3 Wochen',
-      description: 'Implementierung einer sicheren Dokumentenverarbeitung und Vektorspeicherung mit vollständiger Datenkontrolle',
-      technical: 'ChromaDB-Vektor-Datenbank, LlamaIndex-RAG-Pipeline, Dokumentenvorverarbeitung, Embedding-Generierung',
-      sustainability: 'Self-Hosting stellt sicher, dass die Daten die Schweiz nie verlassen, was die Komplexität der Einhaltung gesetzlicher Vorschriften reduziert'
-    },
-    {
-      phase: 'Integration & Schulung',
-      duration: '3-4 Wochen',
-      description: 'Benutzerdefinierte Integrationen mit Ihren bestehenden Systemen und umfassende Teamschulung',
-      technical: 'RESTful-APIs, Authentifizierungsintegration, Einrichten der Überwachung, umfassende Dokumentation',
-      sustainability: 'Offene Standards gewährleisten zukünftige Flexibilität und verhindern einen Anbieter-Lock-in'
-    }
-  ]
 }
 
 export default function EnterpriseAIPage() {
@@ -425,7 +74,7 @@ export default function EnterpriseAIPage() {
                 <Brain className="w-12 h-12 sm:w-16 sm:h-16 mr-3 sm:mr-4 text-green-300" />
                 <div>
                   <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-2 leading-tight">Nachhaltige Unternehmens-KI</h1>
-                  <p className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-semibold text-green-200">Souverän • Open Source • Nachhaltig</p>
+                  <p className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-semibold text-green-200">Souverän &bull; Open Source &bull; Nachhaltig</p>
                 </div>
               </div>
               <p className="text-base sm:text-lg md:text-xl text-green-100 mb-6 sm:mb-8">
@@ -491,7 +140,7 @@ export default function EnterpriseAIPage() {
                     <h3 className="text-xl font-bold">Herausforderung</h3>
                   </div>
                   <p className="text-gray-600 mb-4 font-medium">{item.pain}</p>
-                  
+
                   <div className="border-t pt-4">
                     <h4 className="font-semibold text-green-600 mb-2">Souveräne Lösung</h4>
                     <p className="text-gray-700 mb-3">{item.solution}</p>
@@ -551,7 +200,7 @@ export default function EnterpriseAIPage() {
                 Skalierbare KI-Lösungen von kleinen Start-ups bis hin zu grossen Unternehmen - wir haben Optionen für jedes Budget und jeden Umfang.
               </p>
             </div>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
               {deploymentExamples.map((example, index) => (
                 <div key={index} className="bg-white rounded-xl p-6 shadow-lg">
@@ -576,23 +225,23 @@ export default function EnterpriseAIPage() {
                 <div>
                   <h4 className="font-semibold text-green-600 mb-3">Hardware-Stufen</h4>
                   <ul className="space-y-2 text-gray-700">
-                    <li>• <strong>Einstiegslevel:</strong> RTX 4090 24GB (hervorragendes Preis-Leistungs-Verhältnis)</li>
-                    <li>• <strong>Professionell:</strong> RTX 4090 Ti oder duale RTX 4090-Setups</li>
-                    <li>• <strong>Unternehmen:</strong> NVIDIA A100 80GB (maximale Leistung)</li>
-                    <li>• <strong>Spitzentechnologie:</strong> NVIDIA H100 (neueste Generation)</li>
+                    <li>&bull; <strong>Einstiegslevel:</strong> RTX 4090 24GB (hervorragendes Preis-Leistungs-Verhältnis)</li>
+                    <li>&bull; <strong>Professionell:</strong> RTX 4090 Ti oder duale RTX 4090-Setups</li>
+                    <li>&bull; <strong>Unternehmen:</strong> NVIDIA A100 80GB (maximale Leistung)</li>
+                    <li>&bull; <strong>Spitzentechnologie:</strong> NVIDIA H100 (neueste Generation)</li>
                   </ul>
                 </div>
                 <div>
                   <h4 className="font-semibold text-green-600 mb-3">Software & KI-Modelle</h4>
                   <ul className="space-y-2 text-gray-700">
-                    <li>• <strong>Klein:</strong> Llama 3.1 8B (schnell, effizient, budgetfreundlich)</li>
-                    <li>• <strong>Mittel:</strong> Llama 3.1 13B (ausgewogene Leistung)</li>
-                    <li>• <strong>Gross:</strong> Llama 3.1 70B (maximale Fähigkeit)</li>
-                    <li>• <strong>Bereitstellung:</strong> vLLM, ChromaDB, LlamaIndex</li>
+                    <li>&bull; <strong>Klein:</strong> Llama 3.1 8B (schnell, effizient, budgetfreundlich)</li>
+                    <li>&bull; <strong>Mittel:</strong> Llama 3.1 13B (ausgewogene Leistung)</li>
+                    <li>&bull; <strong>Gross:</strong> Llama 3.1 70B (maximale Fähigkeit)</li>
+                    <li>&bull; <strong>Bereitstellung:</strong> vLLM, ChromaDB, LlamaIndex</li>
                   </ul>
                 </div>
               </div>
-              
+
               <div className="mt-8 bg-green-50 rounded-lg p-6">
                 <h4 className="font-semibold text-green-800 mb-3">Klein anfangen, intelligent skalieren</h4>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -693,7 +342,7 @@ export default function EnterpriseAIPage() {
                 </div>
               ))}
             </div>
-            
+
             <div className="mt-16 text-center">
               <div className="bg-green-50 rounded-xl p-8 max-w-4xl mx-auto">
                 <div className="flex items-center justify-center mb-4">
@@ -829,10 +478,10 @@ export default function EnterpriseAIPage() {
                 Alle Dienstleistungen entdecken
               </Link>
             </div>
-            
+
             <div className="mt-12 max-w-2xl mx-auto">
               <p className="text-green-200 text-lg italic">
-                "Nachhaltiges, souveränes Computing ist nicht nur die Zukunft – es ist die verantwortungsvolle Wahl für heute."
+                &ldquo;Nachhaltiges, souveränes Computing ist nicht nur die Zukunft &ndash; es ist die verantwortungsvolle Wahl für heute.&rdquo;
               </p>
             </div>
           </div>

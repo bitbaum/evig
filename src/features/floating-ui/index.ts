@@ -12,9 +12,13 @@
 export { default as RevampCopilot } from './components/RevampCopilot'
 export { default as SuggestionButton } from './components/SuggestionButton'
 
-// Re-export types if needed
+// Re-export types
 export type {
   FeedbackScope,
   SelectedElement,
-  SuggestionFormData
+  SuggestionFormData,
+  SuggestionSubmission,
 } from './types'
+
+// Re-export config
+export { SCOPE_CONFIG, getQuickSuggestions } from './config/scope-config'
