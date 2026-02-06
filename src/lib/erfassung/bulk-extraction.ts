@@ -10,7 +10,8 @@ import { ERFASSUNG_PROMPTS, fillPromptTemplate } from '@/lib/ai/config/prompts'
 import { formDataToBulkProduct } from '@/types/erfassung'
 import type { BulkProduct, ErfassungFormData } from '@/types/erfassung'
 import type { VoiceProductData, AIFieldMetadata } from '@/types/erfassung'
-import { BULK_LIMITS } from '@/config/erfassung'
+import { BULK_LIMITS, KATEGORIEN } from '@/config/erfassung'
+import { CONDITION_ALIASES } from '@/config/erfassung/conditions'
 
 const GROQ_API_KEY = process.env.GROQ_API_KEY || ''
 const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions'
@@ -179,29 +180,86 @@ async function extractInChunks(
 }
 
 /**
- * Fallback: parse each line as a separate product
+ * Fallback: parse each line as a separate product with smart extraction.
+ * Extracts brand, model, condition, price, and category from free-text lines.
  */
 function fallbackParse(text: string, sourceType: 'text' | 'voice'): BulkProduct[] {
   const lines = text.split(/\n+/).map(l => l.trim()).filter(l => l.length > 5)
 
   return lines.map(line => {
-    const formData: Partial<ErfassungFormData> = {
-      produktname: line.substring(0, 100),
-      kurzbeschreibung: line,
-    }
-
-    // Try to extract brand
-    const brands = ['dell', 'hp', 'lenovo', 'apple', 'asus', 'acer', 'microsoft', 'samsung']
     const lineLower = line.toLowerCase()
+    let remaining = line
+
+    // 1. Extract brand
+    const brands = ['dell', 'hp', 'lenovo', 'apple', 'asus', 'acer', 'microsoft', 'samsung', 'toshiba', 'fujitsu']
     const brand = brands.find(b => lineLower.includes(b))
+    const hersteller = brand ? brand.charAt(0).toUpperCase() + brand.slice(1) : ''
+    // Remove brand from remaining text for cleaner product name
     if (brand) {
-      formData.hersteller = brand.charAt(0).toUpperCase() + brand.slice(1)
+      remaining = remaining.replace(new RegExp(brand, 'i'), '').trim()
     }
 
-    // Try to extract price
-    const priceMatch = line.match(/(\d{2,4})\s*(chf|franken|fr\.?|sfr|.-)?/i)
-    if (priceMatch && parseInt(priceMatch[1]) >= 20 && parseInt(priceMatch[1]) <= 9999) {
-      formData.verkaufspreis = priceMatch[1]
+    // 2. Extract price — use the LAST standalone number on the line (most likely the price)
+    // Match numbers that appear at the end or are followed by currency/whitespace, not embedded in model names
+    const priceMatch = line.match(/\b(\d{2,4})\s*(chf|franken|fr\.?|sfr|.-)?\s*$/i)
+    let verkaufspreis = ''
+    if (priceMatch) {
+      const price = parseInt(priceMatch[1])
+      if (price >= 10 && price <= 9999) {
+        verkaufspreis = priceMatch[1]
+        // Remove price from remaining
+        remaining = remaining.replace(new RegExp(priceMatch[0].replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\s*$'), '').trim()
+      }
+    }
+
+    // 3. Extract condition — check for known condition words
+    // Sort by alias length descending so "wie neu" matches before "neu"
+    let zustand = 'good' // default
+    const sortedAliases = Object.entries(CONDITION_ALIASES).sort((a, b) => b[0].length - a[0].length)
+    for (const [alias, value] of sortedAliases) {
+      // Match whole word/phrase boundaries to avoid false positives
+      const aliasPattern = new RegExp(`\\b${alias.replace(/\s+/g, '\\s+')}\\b`, 'i')
+      if (aliasPattern.test(remaining)) {
+        zustand = value
+        // Remove condition from remaining
+        remaining = remaining.replace(aliasPattern, '').trim()
+        break
+      }
+    }
+
+    // 4. Detect category from known product patterns
+    let hauptkategorie = ''
+    const categoryPatterns: [RegExp, string][] = [
+      // Laptops (category '10')
+      [/\b(thinkpad|latitude|elitebook|probook|macbook|ideapad|inspiron|pavilion|vivobook|zenbook|chromebook|swift|aspire|travelmate|lifebook)\b/i, '10'],
+      // Desktop PCs (category '20')
+      [/\b(optiplex|prodesk|thinkcentre|imac|mac\s*mini|nuc|elitedesk)\b/i, '20'],
+      // Monitors (category '30')
+      [/\b(ultrasharp|ultrawide|monitor|bildschirm|display|eizo)\b/i, '30'],
+      // Tablets (category '40')
+      [/\b(ipad|galaxy\s*tab|surface\s*(go|pro)|tablet)\b/i, '40'],
+      // Phones (category '50')
+      [/\b(iphone|galaxy\s*s\d|pixel\s*\d|smartphone)\b/i, '50'],
+    ]
+    for (const [pattern, catValue] of categoryPatterns) {
+      if (pattern.test(line)) {
+        hauptkategorie = catValue
+        break
+      }
+    }
+
+    // 5. Clean up product name — remove extra whitespace, leading/trailing punctuation
+    remaining = remaining.replace(/\s+/g, ' ').replace(/^[\s,;-]+|[\s,;-]+$/g, '').trim()
+    // If brand was extracted, prepend it to make a nice product name like "ThinkPad T480 i5 8GB 256GB SSD"
+    const produktname = remaining || line.substring(0, 100)
+
+    const formData: Partial<ErfassungFormData> = {
+      hersteller,
+      produktname,
+      kurzbeschreibung: `${hersteller} ${produktname}`.trim(),
+      verkaufspreis,
+      zustand,
+      hauptkategorie,
     }
 
     return formDataToBulkProduct(formData, sourceType === 'voice' ? 'voice' : 'text')

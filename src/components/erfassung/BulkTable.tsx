@@ -119,13 +119,14 @@ export function BulkTable({
               return (
                 <tr
                   key={product._tempId}
-                  className={`border-b border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors ${
+                  className={`border-b border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors cursor-pointer ${
                     product._status === 'error' ? 'bg-red-50/50 dark:bg-red-900/10' :
                     product._status === 'saved' ? 'bg-green-50/50 dark:bg-green-900/10' : ''
                   }`}
+                  onClick={() => onProductClick(product._tempId)}
                 >
                   {/* Checkbox */}
-                  <td className="px-3 py-2">
+                  <td className="px-3 py-2" onClick={(e) => e.stopPropagation()}>
                     <input
                       type="checkbox"
                       checked={product._selected}
@@ -142,11 +143,7 @@ export function BulkTable({
                     // Display formatting for special columns
                     if (col.key === 'hauptkategorie' && !isEditing(col.key)) {
                       return (
-                        <td
-                          key={col.key}
-                          className="px-3 py-2 cursor-pointer"
-                          onClick={() => onProductClick(product._tempId)}
-                        >
+                        <td key={col.key} className="px-3 py-2">
                           <span className="text-sm">{getCategoryLabel(value)}</span>
                         </td>
                       )
@@ -154,11 +151,7 @@ export function BulkTable({
 
                     if (col.key === 'zustand' && !isEditing(col.key)) {
                       return (
-                        <td
-                          key={col.key}
-                          className="px-3 py-2 cursor-pointer"
-                          onClick={() => onProductClick(product._tempId)}
-                        >
+                        <td key={col.key} className="px-3 py-2">
                           <span className="text-sm">{getConditionLabel(value)}</span>
                         </td>
                       )
@@ -168,18 +161,18 @@ export function BulkTable({
                       return (
                         <td
                           key={col.key}
-                          className="px-3 py-2 cursor-pointer font-medium"
-                          onClick={() => col.editable ? startEditing(product._tempId, col.key, value) : onProductClick(product._tempId)}
+                          className={`px-3 py-2 font-medium ${col.editable ? 'hover:bg-purple-50 dark:hover:bg-purple-900/20' : ''}`}
+                          onClick={col.editable ? (e) => { e.stopPropagation(); startEditing(product._tempId, col.key, value) } : undefined}
                         >
                           {value ? `${value} CHF` : '-'}
                         </td>
                       )
                     }
 
-                    // Editable cell
+                    // Editable cell (actively editing)
                     if (isEditing(col.key)) {
                       return (
-                        <td key={col.key} className="px-1 py-1">
+                        <td key={col.key} className="px-1 py-1" onClick={(e) => e.stopPropagation()}>
                           <input
                             type="text"
                             value={editValue}
@@ -196,12 +189,12 @@ export function BulkTable({
                       )
                     }
 
-                    // Normal cell
+                    // Normal cell — editable cells intercept click to start editing
                     return (
                       <td
                         key={col.key}
-                        className={`px-3 py-2 ${col.editable ? 'cursor-pointer hover:bg-purple-50 dark:hover:bg-purple-900/20' : 'cursor-pointer'} truncate max-w-[200px]`}
-                        onClick={() => col.editable ? startEditing(product._tempId, col.key, value) : onProductClick(product._tempId)}
+                        className={`px-3 py-2 ${col.editable ? 'hover:bg-purple-50 dark:hover:bg-purple-900/20' : ''} truncate max-w-[200px]`}
+                        onClick={col.editable ? (e) => { e.stopPropagation(); startEditing(product._tempId, col.key, value) } : undefined}
                         title={value}
                       >
                         {value || <span className="text-gray-300 dark:text-gray-600">-</span>}
