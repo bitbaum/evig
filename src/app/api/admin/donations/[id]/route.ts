@@ -73,7 +73,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
     }
 
     if (!canAccessSection(staffUser, 'donations')) {
-      return apiForbidden('Keine Berechtigung fuer Spenden')
+      return apiForbidden('Keine Berechtigung für Spenden')
     }
 
     const { id } = await params
@@ -162,7 +162,7 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
     }
 
     if (!canAccessSection(staffUser, 'donations')) {
-      return apiForbidden('Keine Berechtigung fuer Spenden')
+      return apiForbidden('Keine Berechtigung für Spenden')
     }
 
     const { id } = await params
@@ -170,7 +170,7 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
     const parsed = UpdateDonationSchema.safeParse(body)
 
     if (!parsed.success) {
-      return apiBadRequest('Ungueltige Daten', parsed.error.flatten().fieldErrors)
+      return apiBadRequest('Ungültige Daten', parsed.error.flatten().fieldErrors)
     }
 
     // Check donation exists
@@ -224,7 +224,7 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
     }
 
     if (updates.length === 0) {
-      return apiBadRequest('Keine Aenderungen angegeben')
+      return apiBadRequest('Keine Änderungen angegeben')
     }
 
     values.push(id)
@@ -264,7 +264,7 @@ export async function DELETE(request: NextRequest, { params }: RouteParams) {
     }
 
     if (!canAccessSection(staffUser, 'donations')) {
-      return apiForbidden('Keine Berechtigung fuer Spenden')
+      return apiForbidden('Keine Berechtigung für Spenden')
     }
 
     const { id } = await params

@@ -3,39 +3,34 @@
 /**
  * DataEntryTabs Component
  *
- * Three-mode data entry UI for product capture:
- * - Speech (Sprache): Voice recording → AI extraction → Form prefill
- * - Picture (Bild): Photo/upload → AI analysis → Form prefill
- * - Form (Formular): Direct manual entry
+ * Multi-mode data entry UI for product capture:
+ * - Text (Formular): Quick text → AI extraction → Form prefill (single or bulk)
+ * - File (Datei): CSV upload → parsed products → bulk table
+ * - Speech (Sprache): Voice recording → AI extraction (future)
+ * - Picture (Bild): Photo/upload → AI analysis (future)
  *
- * Usage:
- *   <DataEntryTabs
- *     onProductData={(data) => mergeWithForm(data)}
- *     onImageCapture={(base64) => setImage(base64)}
- *   />
+ * Auto-detects single vs bulk: paste one product → single form. Paste many → bulk table.
  */
 
 import { useState, useCallback, useEffect } from 'react'
-import { Mic, Camera, Zap, Loader2, CheckCircle2, AlertCircle, ChevronDown, ChevronUp } from 'lucide-react'
+import { Mic, Camera, Zap, Loader2, CheckCircle2, AlertCircle, ChevronDown, ChevronUp, FileUp } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { logger } from '@/lib/logger'
-import type { VoiceProductData, ErfassungFormData, AIFieldMetadata } from '@/types/erfassung'
+import { detectMultipleProducts } from '@/lib/erfassung/bulk-extraction'
+import type { VoiceProductData, ErfassungFormData, AIFieldMetadata, BulkProduct } from '@/types/erfassung'
 
-// Lazy imports for voice/image tabs (used when showAllTabs is enabled)
-// import { VoiceRecorder } from '@/components/voice/VoiceRecorder'
-// import { ImageCapture } from '@/components/erfassung/ImageCapture'
-
-export type EntryMode = 'speech' | 'picture' | 'form'
+export type EntryMode = 'speech' | 'picture' | 'form' | 'file'
 
 interface DataEntryTabsProps {
   onProductData: (data: Partial<ErfassungFormData>, metadata?: AIFieldMetadata) => void
+  onBulkData?: (products: BulkProduct[]) => void
   onImageCapture?: (imageBase64: string) => void
   onError?: (error: string) => void
-  onDataFilled?: () => void // Called when data is successfully extracted and filled
+  onDataFilled?: () => void
   activeMode?: EntryMode
   className?: string
-  showAllTabs?: boolean // Show voice/image tabs (requires self-hosted services)
-  collapsed?: boolean // Allow parent to control collapsed state
+  showAllTabs?: boolean
+  collapsed?: boolean
 }
 
 interface TabConfig {
@@ -45,32 +40,41 @@ interface TabConfig {
   description: string
 }
 
-const TABS: TabConfig[] = [
+const CORE_TABS: TabConfig[] = [
   {
     id: 'form',
     label: 'Text',
     icon: <Zap className="w-4 h-4" />,
     description: 'Produktinfos eingeben, KI fuellt aus',
   },
-  // Voice and image tabs - coming soon (requires self-hosted services)
-  // {
-  //   id: 'speech',
-  //   label: 'Sprache',
-  //   icon: <Mic className="w-4 h-4" />,
-  //   description: 'Produkt per Sprache erfassen',
-  // },
-  // {
-  //   id: 'picture',
-  //   label: 'Bild',
-  //   icon: <Camera className="w-4 h-4" />,
-  //   description: 'Produkt per Foto erfassen',
-  // },
+  {
+    id: 'file',
+    label: 'Datei',
+    icon: <FileUp className="w-4 h-4" />,
+    description: 'CSV-Datei hochladen',
+  },
+]
+
+const FUTURE_TABS: TabConfig[] = [
+  {
+    id: 'speech',
+    label: 'Sprache',
+    icon: <Mic className="w-4 h-4" />,
+    description: 'Produkte per Sprache erfassen',
+  },
+  {
+    id: 'picture',
+    label: 'Bild',
+    icon: <Camera className="w-4 h-4" />,
+    description: 'Produkte per Foto erfassen',
+  },
 ]
 
 type QuickEntryState = 'idle' | 'loading' | 'success' | 'error'
 
 export function DataEntryTabs({
   onProductData,
+  onBulkData,
   onImageCapture,
   onError,
   onDataFilled,
@@ -79,13 +83,14 @@ export function DataEntryTabs({
   showAllTabs = false,
   collapsed = false,
 }: DataEntryTabsProps) {
+  const tabs = showAllTabs ? [...CORE_TABS, ...FUTURE_TABS] : CORE_TABS
   const [activeMode, setActiveMode] = useState<EntryMode>(initialMode)
   const [quickText, setQuickText] = useState('')
   const [quickEntryState, setQuickEntryState] = useState<QuickEntryState>('idle')
   const [quickEntryError, setQuickEntryError] = useState<string | null>(null)
   const [isCollapsed, setIsCollapsed] = useState(collapsed)
+  const [isUploading, setIsUploading] = useState(false)
 
-  // Sync collapsed state from parent
   useEffect(() => {
     setIsCollapsed(collapsed)
   }, [collapsed])
@@ -94,7 +99,6 @@ export function DataEntryTabs({
   const handleVoiceData = useCallback(
     (data: VoiceProductData, metadata?: AIFieldMetadata) => {
       logger.info('Voice data received', { product: data.produktname })
-      // Convert VoiceProductData to Partial<ErfassungFormData>
       const formData: Partial<ErfassungFormData> = {
         hersteller: data.hersteller,
         produktname: data.produktname,
@@ -119,16 +123,7 @@ export function DataEntryTabs({
     [onImageCapture]
   )
 
-  // Handle image analysis complete
-  const handleImageAnalysis = useCallback(
-    (data: Partial<ErfassungFormData>) => {
-      logger.info('Image analysis data received', { product: data.produktname })
-      onProductData(data)
-    },
-    [onProductData]
-  )
-
-  // Handle quick text entry with AI
+  // Handle quick text entry with AI — auto-detects single vs multi
   const handleQuickTextSubmit = useCallback(async () => {
     if (!quickText.trim()) return
 
@@ -136,43 +131,68 @@ export function DataEntryTabs({
     setQuickEntryError(null)
 
     try {
-      const response = await fetch('/api/admin/erfassung/text', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text: quickText }),
-      })
+      const isMulti = detectMultipleProducts(quickText)
 
-      const result = await response.json()
+      if (isMulti && onBulkData) {
+        // Multi-product: call bulk-text API
+        const response = await fetch('/api/admin/erfassung/bulk-text', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ text: quickText }),
+        })
 
-      if (!response.ok || !result.success) {
-        throw new Error(result.error || 'Verarbeitung fehlgeschlagen')
+        const result = await response.json()
+
+        if (!response.ok || !result.success) {
+          throw new Error(result.error || 'Verarbeitung fehlgeschlagen')
+        }
+
+        onBulkData(result.products)
+        setQuickEntryState('success')
+        logger.info('Bulk text entry successful', { count: result.productCount })
+
+        setTimeout(() => {
+          setQuickEntryState('idle')
+          setQuickText('')
+          setIsCollapsed(true)
+        }, 1500)
+      } else {
+        // Single product: call existing text API
+        const response = await fetch('/api/admin/erfassung/text', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ text: quickText }),
+        })
+
+        const result = await response.json()
+
+        if (!response.ok || !result.success) {
+          throw new Error(result.error || 'Verarbeitung fehlgeschlagen')
+        }
+
+        const formData: Partial<ErfassungFormData> = {
+          hersteller: result.data.hersteller,
+          produktname: result.data.produktname,
+          kurzbeschreibung: result.data.kurzbeschreibung,
+          specs: result.data.specs,
+          verkaufspreis: result.data.verkaufspreis,
+          zustand: result.data.zustand,
+          hauptkategorie: result.data.hauptkategorie,
+          unterkategorie: result.data.unterkategorie,
+          kundenprofile: result.data.kundenprofile,
+        }
+
+        onProductData(formData, result.metadata as AIFieldMetadata)
+        setQuickEntryState('success')
+        logger.info('Quick text entry successful', { product: result.data.produktname })
+
+        setTimeout(() => {
+          setQuickEntryState('idle')
+          setQuickText('')
+          setIsCollapsed(true)
+          onDataFilled?.()
+        }, 1500)
       }
-
-      // Convert to form data and pass to parent with metadata
-      const formData: Partial<ErfassungFormData> = {
-        hersteller: result.data.hersteller,
-        produktname: result.data.produktname,
-        kurzbeschreibung: result.data.kurzbeschreibung,
-        specs: result.data.specs,
-        verkaufspreis: result.data.verkaufspreis,
-        zustand: result.data.zustand,
-        hauptkategorie: result.data.hauptkategorie,
-        unterkategorie: result.data.unterkategorie,
-        kundenprofile: result.data.kundenprofile,
-      }
-
-      // Pass both form data and metadata to parent
-      onProductData(formData, result.metadata as AIFieldMetadata)
-      setQuickEntryState('success')
-      logger.info('Quick text entry successful', { product: result.data.produktname })
-
-      // Collapse and notify parent after showing success
-      setTimeout(() => {
-        setQuickEntryState('idle')
-        setQuickText('')
-        setIsCollapsed(true)
-        onDataFilled?.()
-      }, 1500)
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Unbekannter Fehler'
       setQuickEntryError(message)
@@ -180,7 +200,39 @@ export function DataEntryTabs({
       onError?.(message)
       logger.error('Quick text entry failed', { error })
     }
-  }, [quickText, onProductData, onError])
+  }, [quickText, onProductData, onBulkData, onError, onDataFilled])
+
+  // Handle CSV file upload
+  const handleFileUpload = useCallback(async (file: File) => {
+    if (!onBulkData) return
+    setIsUploading(true)
+
+    try {
+      const formData = new FormData()
+      formData.append('file', file)
+
+      const response = await fetch('/api/admin/erfassung/bulk-upload', {
+        method: 'POST',
+        body: formData,
+      })
+
+      const result = await response.json()
+
+      if (!response.ok || !result.success) {
+        throw new Error(result.error || 'Datei konnte nicht verarbeitet werden')
+      }
+
+      onBulkData(result.products)
+      setIsCollapsed(true)
+      logger.info('CSV upload successful', { count: result.products.length })
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Unbekannter Fehler'
+      onError?.(message)
+      logger.error('CSV upload failed', { error })
+    } finally {
+      setIsUploading(false)
+    }
+  }, [onBulkData, onError])
 
   return (
     <div
@@ -206,10 +258,10 @@ export function DataEntryTabs({
         )}
       </button>
 
-      {/* Tab headers - only show if multiple tabs and not collapsed */}
-      {!isCollapsed && TABS.length > 1 && (
+      {/* Tab headers */}
+      {!isCollapsed && tabs.length > 1 && (
         <div className="flex border-b border-t border-purple-200 dark:border-purple-800">
-          {TABS.map((tab) => (
+          {tabs.map((tab) => (
             <button
               key={tab.id}
               type="button"
@@ -227,9 +279,9 @@ export function DataEntryTabs({
         </div>
       )}
 
-      {/* Tab content - hidden when collapsed */}
+      {/* Tab content */}
       {!isCollapsed && <div className="p-6">
-        {/* Speech mode - Coming soon (requires self-hosted transcription service) */}
+        {/* Speech mode - Coming soon */}
         {activeMode === 'speech' && (
           <div className="text-center py-8 text-gray-500 dark:text-gray-400">
             <Mic className="w-12 h-12 mx-auto mb-3 opacity-50" />
@@ -238,7 +290,7 @@ export function DataEntryTabs({
           </div>
         )}
 
-        {/* Picture mode - Coming soon (requires vision model) */}
+        {/* Picture mode - Coming soon */}
         {activeMode === 'picture' && (
           <div className="text-center py-8 text-gray-500 dark:text-gray-400">
             <Camera className="w-12 h-12 mx-auto mb-3 opacity-50" />
@@ -255,7 +307,7 @@ export function DataEntryTabs({
                 KI-Schnelleingabe
               </h3>
               <p className="text-sm text-gray-600 dark:text-gray-400">
-                Beschreibe das Produkt - die KI fuellt das Formular automatisch aus
+                Ein Produkt oder mehrere auf einmal — die KI erkennt es automatisch
               </p>
             </div>
 
@@ -269,9 +321,9 @@ export function DataEntryTabs({
                     handleQuickTextSubmit()
                   }
                 }}
-                placeholder="z.B. Dell Latitude E7470 i5 8GB 256GB SSD guter Zustand 280 CHF&#10;&#10;Oder: HP EliteBook 840 G5, 16GB RAM, 512GB NVMe, Full HD Display, neuwertig, 350 Franken"
+                placeholder={"Ein Produkt:\nDell Latitude E7470 i5 8GB 256GB SSD guter Zustand 280 CHF\n\nOder mehrere:\nLenovo ThinkPad T480 i5 8GB 256GB SSD 299\nDell Latitude 5490 i7 16GB 512GB 449\nHP EliteBook 840 G5 i5 8GB 256GB 199"}
                 disabled={quickEntryState === 'loading'}
-                rows={3}
+                rows={4}
                 className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-900 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 disabled:opacity-50 text-base resize-none"
               />
               <Button
@@ -288,7 +340,7 @@ export function DataEntryTabs({
                 ) : (
                   <>
                     <Zap className="w-5 h-5" />
-                    <span>Formular ausfuellen</span>
+                    <span>Formular ausfüllen</span>
                   </>
                 )}
               </Button>
@@ -298,7 +350,7 @@ export function DataEntryTabs({
             {quickEntryState === 'success' && (
               <div className="flex items-center justify-center gap-2 py-2 px-4 bg-green-50 dark:bg-green-900/20 rounded-lg text-green-700 dark:text-green-400">
                 <CheckCircle2 className="w-5 h-5" />
-                <span className="font-medium">Formular wurde ausgefuellt! Bitte pruefen und ergaenzen.</span>
+                <span className="font-medium">Daten wurden verarbeitet! Bitte prüfen und ergänzen.</span>
               </div>
             )}
             {quickEntryState === 'error' && quickEntryError && (
@@ -307,6 +359,45 @@ export function DataEntryTabs({
                 <span>{quickEntryError}</span>
               </div>
             )}
+          </div>
+        )}
+
+        {/* File upload mode */}
+        {activeMode === 'file' && (
+          <div className="space-y-4">
+            <div className="text-center mb-2">
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                CSV-Import
+              </h3>
+              <p className="text-sm text-gray-600 dark:text-gray-400">
+                Lade eine CSV-Datei mit Produktdaten hoch
+              </p>
+            </div>
+
+            <label className="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-purple-300 dark:border-purple-600 rounded-xl cursor-pointer hover:border-purple-500 hover:bg-purple-50 dark:hover:bg-purple-900/20 transition-colors">
+              {isUploading ? (
+                <>
+                  <Loader2 className="w-10 h-10 text-purple-500 mb-2 animate-spin" />
+                  <span className="text-sm text-purple-600 dark:text-purple-400 font-medium">Wird verarbeitet...</span>
+                </>
+              ) : (
+                <>
+                  <FileUp className="w-10 h-10 text-purple-400 mb-2" />
+                  <span className="text-sm text-gray-600 dark:text-gray-400 font-medium">CSV-Datei wählen oder hierher ziehen</span>
+                  <span className="text-xs text-gray-400 dark:text-gray-500 mt-1">Spalten werden automatisch erkannt</span>
+                </>
+              )}
+              <input
+                type="file"
+                accept=".csv,.tsv,.txt"
+                className="hidden"
+                disabled={isUploading}
+                onChange={(e) => {
+                  const file = e.target.files?.[0]
+                  if (file) handleFileUpload(file)
+                }}
+              />
+            </label>
           </div>
         )}
       </div>}

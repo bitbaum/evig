@@ -97,6 +97,159 @@ export interface VoiceProductData {
   bemerkungen?: string
 }
 
+// =============================================================================
+// API PAYLOAD TYPES (shared between single and bulk save)
+// =============================================================================
+
+/**
+ * Payload for creating a product via the erfassung API
+ * SSOT: Used by both single route.ts and bulk-save route.ts
+ */
+export interface ErfassungPayload {
+  hersteller: string
+  produktname: string
+  kurzbeschreibung?: string
+  langtext?: string
+  verkaufspreis: number
+  zustand: string
+  laenge_mm?: number | null
+  breite_mm?: number | null
+  hoehe_mm?: number | null
+  gewicht_kg?: number | null
+  location?: string
+  box_id?: string
+  auf_lager?: number
+  hauptkategorie?: string
+  unterkategorie?: string
+  kundenprofile?: string[]
+  image?: string | null
+  // Action determines the product state:
+  // - 'draft': pending_review, not in shop
+  // - 'erfassen': approved, not in shop
+  // - 'publish': approved, in shop
+  action?: 'draft' | 'erfassen' | 'publish'
+  publish?: boolean // Legacy support
+}
+
+// =============================================================================
+// BULK ERFASSUNG TYPES
+// =============================================================================
+
+export type BulkProductStatus = 'valid' | 'warning' | 'error' | 'processing' | 'saved'
+export type BulkProductSource = 'text' | 'csv' | 'voice' | 'image' | 'manual'
+
+/**
+ * A product in the bulk review table.
+ * Extends ErfassungFormData with bulk-specific metadata.
+ */
+export interface BulkProduct extends ErfassungFormData {
+  _tempId: string
+  _source: BulkProductSource
+  _status: BulkProductStatus
+  _errors: string[]
+  _selected: boolean
+  _saveResult?: { success: boolean; productId?: string; itemUUID?: string; error?: string }
+  _aiMetadata?: AIFieldMetadata
+}
+
+/**
+ * Create a default BulkProduct from a source type
+ */
+export function createDefaultBulkProduct(
+  source: BulkProductSource,
+  tempId?: string,
+): BulkProduct {
+  return {
+    ...DEFAULT_FORM_DATA,
+    _tempId: tempId || `bulk-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+    _source: source,
+    _status: 'warning',
+    _errors: [],
+    _selected: true,
+  }
+}
+
+/**
+ * Convert form data to a BulkProduct
+ */
+export function formDataToBulkProduct(
+  data: Partial<ErfassungFormData>,
+  source: BulkProductSource,
+  metadata?: AIFieldMetadata,
+): BulkProduct {
+  return {
+    ...DEFAULT_FORM_DATA,
+    ...data,
+    _tempId: `bulk-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+    _source: source,
+    _status: data.hersteller && data.produktname ? 'valid' : 'warning',
+    _errors: [],
+    _selected: true,
+    _aiMetadata: metadata,
+  }
+}
+
+/**
+ * Request body for bulk save API
+ */
+export interface BulkSaveRequest {
+  products: ErfassungPayload[]
+  action: 'draft' | 'erfassen' | 'publish'
+}
+
+/**
+ * Response from bulk save API
+ */
+export interface BulkSaveResponse {
+  total: number
+  succeeded: number
+  failed: number
+  results: Array<{
+    index: number
+    success: boolean
+    productId?: string
+    itemUUID?: string
+    error?: string
+  }>
+}
+
+/**
+ * Convert ErfassungFormData to ErfassungPayload for API submission.
+ * SSOT: Used by both single-mode submit and bulk-mode save.
+ */
+export function formDataToPayload(
+  data: ErfassungFormData,
+  action: 'draft' | 'erfassen' | 'publish',
+): ErfassungPayload {
+  const specifications: Record<string, string> = {}
+  data.specs.forEach(spec => {
+    if (spec.key && spec.value) {
+      specifications[spec.key] = spec.value
+    }
+  })
+
+  return {
+    hersteller: data.hersteller,
+    produktname: data.produktname,
+    kurzbeschreibung: data.kurzbeschreibung,
+    langtext: JSON.stringify(specifications),
+    verkaufspreis: parseFloat(data.verkaufspreis) || 0,
+    zustand: data.zustand,
+    laenge_mm: parseInt(data.laenge_mm) || null,
+    breite_mm: parseInt(data.breite_mm) || null,
+    hoehe_mm: parseInt(data.hoehe_mm) || null,
+    gewicht_kg: parseFloat(data.gewicht_kg) || null,
+    location: data.location,
+    box_id: data.box_id,
+    auf_lager: parseInt(data.auf_lager) || 1,
+    hauptkategorie: data.hauptkategorie,
+    unterkategorie: data.unterkategorie,
+    kundenprofile: data.kundenprofile,
+    image: data.image,
+    action,
+  }
+}
+
 /**
  * Default form state
  */

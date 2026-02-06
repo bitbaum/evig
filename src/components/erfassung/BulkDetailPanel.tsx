@@ -1,0 +1,159 @@
+'use client'
+
+/**
+ * BulkDetailPanel Component
+ *
+ * Slide-in panel for editing a single product in bulk mode.
+ * Renders ProductForm with the selected product's data.
+ */
+
+import { useState } from 'react'
+import { X } from 'lucide-react'
+import { ProductForm } from '@/components/erfassung/ProductForm'
+import type { BulkProduct, ErfassungFormData } from '@/types/erfassung'
+import { SPEC_TEMPLATES } from '@/config/erfassung'
+
+interface BulkDetailPanelProps {
+  product: BulkProduct
+  onUpdate: (updates: Partial<BulkProduct>) => void
+  onClose: () => void
+}
+
+export function BulkDetailPanel({ product, onUpdate, onClose }: BulkDetailPanelProps) {
+  const [localData, setLocalData] = useState<BulkProduct>({ ...product })
+  const [showAdvanced, setShowAdvanced] = useState(false)
+
+  const handleFieldChange = (field: keyof ErfassungFormData, value: string | string[]) => {
+    setLocalData(prev => ({ ...prev, [field]: value }))
+  }
+
+  const handleCategoryChange = (kategorie: string) => {
+    setLocalData(prev => ({
+      ...prev,
+      hauptkategorie: kategorie,
+      unterkategorie: '',
+      specs: SPEC_TEMPLATES[kategorie] || SPEC_TEMPLATES.default,
+    }))
+  }
+
+  const handleSpecChange = (index: number, field: 'key' | 'value', value: string) => {
+    const newSpecs = [...localData.specs]
+    newSpecs[index] = { ...newSpecs[index], [field]: value }
+    setLocalData(prev => ({ ...prev, specs: newSpecs }))
+  }
+
+  const handleSpecAdd = () => {
+    setLocalData(prev => ({
+      ...prev,
+      specs: [...prev.specs, { key: '', value: '' }]
+    }))
+  }
+
+  const handleSpecRemove = (index: number) => {
+    if (localData.specs.length > 1) {
+      setLocalData(prev => ({
+        ...prev,
+        specs: prev.specs.filter((_, i) => i !== index)
+      }))
+    }
+  }
+
+  const handleProfileToggle = (slug: string) => {
+    setLocalData(prev => ({
+      ...prev,
+      kundenprofile: prev.kundenprofile.includes(slug)
+        ? prev.kundenprofile.filter(p => p !== slug)
+        : [...prev.kundenprofile, slug]
+    }))
+  }
+
+  const handleApply = () => {
+    // Validate and determine status
+    const hasRequired = localData.hersteller && localData.produktname
+    const status = hasRequired ? 'valid' : 'warning'
+
+    onUpdate({
+      ...localData,
+      _status: status,
+      _errors: hasRequired ? [] : ['Hersteller und Produktname erforderlich'],
+    })
+    onClose()
+  }
+
+  return (
+    <>
+      {/* Overlay backdrop */}
+      <div
+        className="fixed inset-0 bg-black/30 z-40"
+        onClick={onClose}
+      />
+
+      {/* Panel */}
+      <div className="fixed inset-y-0 right-0 w-full sm:w-[500px] md:w-[600px] bg-white dark:bg-gray-800 z-50 shadow-2xl overflow-y-auto">
+        {/* Header */}
+        <div className="sticky top-0 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-4 py-3 flex items-center justify-between z-10">
+          <div>
+            <h3 className="font-semibold text-gray-900 dark:text-white">
+              {localData.hersteller || 'Produkt'} {localData.produktname || 'bearbeiten'}
+            </h3>
+            <p className="text-xs text-gray-500 dark:text-gray-400">
+              Quelle: {localData._source}
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={onClose}
+            className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
+          >
+            <X className="w-5 h-5" />
+          </button>
+        </div>
+
+        {/* Form */}
+        <div className="p-4 space-y-4">
+          {/* Errors */}
+          {localData._errors.length > 0 && (
+            <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-3">
+              {localData._errors.map((err, i) => (
+                <p key={i} className="text-sm text-red-700 dark:text-red-300">{err}</p>
+              ))}
+            </div>
+          )}
+
+          <ProductForm
+            formData={localData}
+            aiMetadata={localData._aiMetadata || {}}
+            showAdvanced={showAdvanced}
+            isEditMode={false}
+            onFieldChange={handleFieldChange}
+            onSpecChange={handleSpecChange}
+            onCategoryChange={handleCategoryChange}
+            onProfileToggle={handleProfileToggle}
+            onSpecAdd={handleSpecAdd}
+            onSpecRemove={handleSpecRemove}
+            onImageChange={(image) => setLocalData(prev => ({ ...prev, image }))}
+            onToggleAdvanced={() => setShowAdvanced(!showAdvanced)}
+          />
+        </div>
+
+        {/* Footer with apply button */}
+        <div className="sticky bottom-0 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 px-4 py-3 flex gap-3">
+          <button
+            type="button"
+            onClick={onClose}
+            className="flex-1 px-4 py-2.5 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 font-medium"
+          >
+            Schliessen
+          </button>
+          <button
+            type="button"
+            onClick={handleApply}
+            className="flex-1 px-4 py-2.5 bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium transition-colors"
+          >
+            Übernehmen
+          </button>
+        </div>
+      </div>
+    </>
+  )
+}

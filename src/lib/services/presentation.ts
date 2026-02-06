@@ -38,13 +38,13 @@ export const servicePresentation: Record<string, ServicePresentation> = {
       title: 'Computerreparatur & Aufrüstungen',
       subtitle: 'Vertrauensvolle Expertenreparaturen',
       description:
-        'Wir kombinieren technische Expertise mit nachhaltigen Praktiken, um die Lebensdauer Ihrer Geräte zu verlängern. Unsere Reparaturdienste konzentrieren sich darauf zu reparieren, was andere nicht koennen, und sparen Ihnen Geld und reduzieren Elektroschrott.',
+        'Wir kombinieren technische Expertise mit nachhaltigen Praktiken, um die Lebensdauer Ihrer Geräte zu verlängern. Unsere Reparaturdienste konzentrieren sich darauf zu reparieren, was andere nicht können, und sparen Ihnen Geld und reduzieren Elektroschrott.',
     },
     features: [
       {
         title: 'Bauteil-Level-Reparaturen',
         description:
-          'Wir ersetzen nicht nur Teile - wir reparieren sie. Unsere Techniker koennen Motherboards, Netzteile und andere Komponenten auf Schaltkreisebene reparieren.',
+          'Wir ersetzen nicht nur Teile - wir reparieren sie. Unsere Techniker können Motherboards, Netzteile und andere Komponenten auf Schaltkreisebene reparieren.',
         icon: HardDrive,
       },
       {
@@ -121,7 +121,7 @@ export const servicePresentation: Record<string, ServicePresentation> = {
       {
         title: 'Datenübertragung',
         description:
-          'Übertragen Sie Daten zwischen Computern, migrieren Sie Einstellungen oder erstellen Sie Backups. Wir koennen grosse Datenmengen effizient verarbeiten.',
+          'Übertragen Sie Daten zwischen Computern, migrieren Sie Einstellungen oder erstellen Sie Backups. Wir können grosse Datenmengen effizient verarbeiten.',
         icon: FolderInput,
       },
       {
@@ -133,7 +133,7 @@ export const servicePresentation: Record<string, ServicePresentation> = {
       {
         title: 'Massgeschneiderte Lösungen',
         description:
-          'Benötigen Sie eine ähnliche Server-Einrichtung für Ihren Standort? Wir koennen eine massgeschneiderte Lösung erstellen, die auf Ihre spezifischen Bedürfnisse zugeschnitten ist.',
+          'Benötigen Sie eine ähnliche Server-Einrichtung für Ihren Standort? Wir können eine massgeschneiderte Lösung erstellen, die auf Ihre spezifischen Bedürfnisse zugeschnitten ist.',
         icon: Database,
       },
     ],

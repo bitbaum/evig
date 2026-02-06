@@ -299,7 +299,7 @@ export function ImageCapture({
                       className="inline-flex items-center gap-2 bg-purple-600 hover:bg-purple-700 text-white"
                     >
                       <Zap className="w-4 h-4" />
-                      Mit KI ausfuellen
+                      Mit KI ausfüllen
                     </Button>
                   </>
                 )}

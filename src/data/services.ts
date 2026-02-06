@@ -92,17 +92,17 @@ export const services: Record<string, ServiceDefinition> = {
   'computer-repair-upgrades': {
     slug: 'computer-repair-upgrades',
     title: 'Computerreparatur & Aufrüstungen',
-    description: 'Expertenreparaturen für alle Arten von Computern und Komponenten. Wir spezialisieren uns darauf zu reparieren, was andere nicht koennen, einschliesslich Motherboard-Reparaturen und Bauteil-Level-Fixes.',
+    description: 'Expertenreparaturen für alle Arten von Computern und Komponenten. Wir spezialisieren uns darauf zu reparieren, was andere nicht können, einschliesslich Motherboard-Reparaturen und Bauteil-Level-Fixes.',
     icon: HardDrive,
     hero: {
       title: 'Computerreparatur & Aufrüstungen',
       subtitle: 'Vertrauensvolle Expertenreparaturen',
-      description: 'Wir kombinieren technische Expertise mit nachhaltigen Praktiken, um die Lebensdauer Ihrer Geräte zu verlängern. Unsere Reparaturdienste konzentrieren sich darauf zu reparieren, was andere nicht koennen, und sparen Ihnen Geld und reduzieren Elektroschrott.'
+      description: 'Wir kombinieren technische Expertise mit nachhaltigen Praktiken, um die Lebensdauer Ihrer Geräte zu verlängern. Unsere Reparaturdienste konzentrieren sich darauf zu reparieren, was andere nicht können, und sparen Ihnen Geld und reduzieren Elektroschrott.'
     },
     features: [
       {
         title: 'Bauteil-Level-Reparaturen',
-        description: 'Wir ersetzen nicht nur Teile - wir reparieren sie. Unsere Techniker koennen Motherboards, Netzteile und andere Komponenten auf Schaltkreisebene reparieren.',
+        description: 'Wir ersetzen nicht nur Teile - wir reparieren sie. Unsere Techniker können Motherboards, Netzteile und andere Komponenten auf Schaltkreisebene reparieren.',
         icon: HardDrive
       },
       {
@@ -171,7 +171,7 @@ export const services: Record<string, ServiceDefinition> = {
       },
       {
         title: 'Datenübertragung',
-        description: 'Übertragen Sie Daten zwischen Computern, migrieren Sie Einstellungen oder erstellen Sie Backups. Wir koennen grosse Datenmengen effizient verarbeiten.',
+        description: 'Übertragen Sie Daten zwischen Computern, migrieren Sie Einstellungen oder erstellen Sie Backups. Wir können grosse Datenmengen effizient verarbeiten.',
         icon: FolderInput
       },
       {
@@ -181,7 +181,7 @@ export const services: Record<string, ServiceDefinition> = {
       },
       {
         title: 'Massgeschneiderte Lösungen',
-        description: 'Benötigen Sie eine ähnliche Server-Einrichtung für Ihren Standort? Wir koennen eine massgeschneiderte Lösung erstellen, die auf Ihre spezifischen Bedürfnisse zugeschnitten ist.',
+        description: 'Benötigen Sie eine ähnliche Server-Einrichtung für Ihren Standort? Wir können eine massgeschneiderte Lösung erstellen, die auf Ihre spezifischen Bedürfnisse zugeschnitten ist.',
         icon: Database
       }
     ],

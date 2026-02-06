@@ -74,7 +74,7 @@ export async function GET(request: NextRequest) {
     }
 
     if (!canAccessSection(staffUser, 'donations')) {
-      return apiForbidden('Keine Berechtigung fuer Spenden')
+      return apiForbidden('Keine Berechtigung für Spenden')
     }
 
     // Parse query params
@@ -92,7 +92,7 @@ export async function GET(request: NextRequest) {
     })
 
     if (!queryParsed.success) {
-      return apiBadRequest('Ungueltige Abfrageparameter', queryParsed.error.flatten().fieldErrors)
+      return apiBadRequest('Ungültige Abfrageparameter', queryParsed.error.flatten().fieldErrors)
     }
 
     const filters = queryParsed.data
@@ -227,14 +227,14 @@ export async function POST(request: NextRequest) {
     }
 
     if (!canAccessSection(staffUser, 'donations')) {
-      return apiForbidden('Keine Berechtigung fuer Spenden')
+      return apiForbidden('Keine Berechtigung für Spenden')
     }
 
     const body = await request.json()
     const parsed = CreateDonationSchema.safeParse(body)
 
     if (!parsed.success) {
-      return apiBadRequest('Ungueltige Spendedaten', parsed.error.flatten().fieldErrors)
+      return apiBadRequest('Ungültige Spendedaten', parsed.error.flatten().fieldErrors)
     }
 
     const data = parsed.data

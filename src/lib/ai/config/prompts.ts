@@ -213,6 +213,27 @@ Wichtig:
 - Füge "fieldsChanged" hinzu mit den Namen der geänderten Felder`,
 
   /**
+   * Prompt for extracting MULTIPLE products from text (bulk mode)
+   */
+  extractMulti: `Der folgende Text enthält Informationen zu MEHREREN Produkten.
+Extrahiere JEDES Produkt einzeln und gib ein JSON-Array zurück.
+
+Text: "{text}"
+
+Für jedes Produkt, fülle folgendes Schema aus:
+{schema}
+
+Wichtige Regeln:
+- Gib ein JSON-ARRAY zurück: [{...}, {...}, ...]
+- Jedes Produkt als eigenes Objekt im Array
+- Gleiche Regeln wie bei Einzelextraktion (Preise in CHF, Zustand mappen, etc.)
+- Wenn eine Zeile nur ein Produkt enthält, extrahiere es als ein Objekt
+- Trenne Produkte anhand von Zeilenumbrüchen, Nummern, Aufzählungszeichen oder logischen Grenzen
+- Specs basierend auf bekanntem Modell ergänzen falls nicht genannt
+
+Antworte NUR mit dem JSON-Array, keine Erklärungen.`,
+
+  /**
    * Quick action prompts for common refinements
    */
   quickActions: {

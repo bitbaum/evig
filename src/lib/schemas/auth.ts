@@ -4,7 +4,7 @@ import { REGISTRATION_ROLES } from '@/config/registration';
 
 // Email validation (RFC 5322 compliant)
 const emailSchema = z.string()
-  .email('Bitte geben Sie eine gueltige E-Mail-Adresse ein')
+  .email('Bitte geben Sie eine gültige E-Mail-Adresse ein')
   .transform(email => email.toLowerCase().trim());
 
 // ============================================================================
@@ -92,7 +92,7 @@ export const ResetPasswordSchema = z.object({
   password: passwordSchema,
   confirmPassword: z.string(),
 }).refine(data => data.password === data.confirmPassword, {
-  message: 'Passwoerter stimmen nicht ueberein',
+  message: 'Passwörter stimmen nicht überein',
   path: ['confirmPassword'],
 });
 
@@ -104,7 +104,7 @@ export const ChangePasswordSchema = z.object({
   newPassword: passwordSchema,
   confirmPassword: z.string(),
 }).refine(data => data.newPassword === data.confirmPassword, {
-  message: 'Passwoerter stimmen nicht ueberein',
+  message: 'Passwörter stimmen nicht überein',
   path: ['confirmPassword'],
 });
 

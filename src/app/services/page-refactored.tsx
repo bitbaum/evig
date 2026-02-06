@@ -47,7 +47,7 @@ const services: Service[] = [
   {
     slug: 'computer-repair',
     title: 'Computerreparatur & Aufrüstungen',
-    description: 'Expertenreparaturen für alle Arten von Computern und Komponenten. Wir spezialisieren uns darauf zu reparieren, was andere nicht koennen, einschliesslich Motherboard-Reparaturen und Bauteil-Level-Fixes.',
+    description: 'Expertenreparaturen für alle Arten von Computern und Komponenten. Wir spezialisieren uns darauf zu reparieren, was andere nicht können, einschliesslich Motherboard-Reparaturen und Bauteil-Level-Fixes.',
     icon: Wrench,
     category: 'Hardware-Dienstleistungen',
     features: [

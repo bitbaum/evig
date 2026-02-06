@@ -15,8 +15,8 @@ const validTargetTypes = Object.values(REVIEW_TARGET_TYPES) as [string, ...strin
 // Create review schema
 export const CreateReviewSchema = z.object({
   targetType: z.enum(validTargetTypes),
-  targetId: z.string().uuid('Ungueltige targetId'),
-  bookingId: z.string().uuid('Ungueltige bookingId').optional().nullable(),
+  targetId: z.string().uuid('Ungültige targetId'),
+  bookingId: z.string().uuid('Ungültige bookingId').optional().nullable(),
   overallRating: ratingSchema,
   communicationRating: optionalRatingSchema,
   professionalismRating: optionalRatingSchema,
@@ -37,7 +37,7 @@ export type CreateReviewInput = z.infer<typeof CreateReviewSchema>;
 // Get reviews query params schema
 export const GetReviewsQuerySchema = z.object({
   targetType: z.enum(validTargetTypes),
-  targetId: z.string().uuid('Ungueltige targetId'),
+  targetId: z.string().uuid('Ungültige targetId'),
   status: z.enum(['published', 'pending_moderation', 'hidden', 'deleted'])
     .optional()
     .default('published'),

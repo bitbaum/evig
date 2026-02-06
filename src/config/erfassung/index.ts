@@ -56,3 +56,11 @@ export {
   getSpecTemplateForSubcategory,
   mergeWithTemplate,
 } from './spec-templates'
+
+// Bulk erfassung config
+export {
+  BULK_TABLE_COLUMNS,
+  BULK_LIMITS,
+  CSV_COLUMN_ALIASES,
+  type BulkTableColumn,
+} from './bulk'

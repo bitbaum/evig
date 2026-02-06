@@ -23,7 +23,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         {
           success: false,
-          error: 'Zu viele Registrierungsversuche. Bitte versuchen Sie es spaeter erneut.',
+          error: 'Zu viele Registrierungsversuche. Bitte versuchen Sie es später erneut.',
           retryAfter: rateLimitResult.retryAfter,
         },
         {

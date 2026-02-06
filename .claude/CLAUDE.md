@@ -80,14 +80,29 @@ const result = await db.query(query, [email]);
 
 ### 4. Swiss German Standards
 ```typescript
-// Use "ss" not "ß"
+// ONLY replace ß with ss (Swiss German rule)
 "Strasse" ✓   "Straße" ✗
 "Grüsse" ✓    "Grüße" ✗
+
+// ALWAYS use proper umlauts ä, ö, ü — NEVER ASCII substitutes
+"für" ✓        "fuer" ✗
+"wählen" ✓     "waehlen" ✗
+"können" ✓     "koennen" ✗
+"Länge" ✓      "Laenge" ✗
+"Höhe" ✓       "Hoehe" ✗
+"Übernehmen" ✓ "Uebernehmen" ✗
+"Ungültig" ✓   "Ungueltig" ✗
+"Änderung" ✓   "Aenderung" ✗
+"Gerät" ✓      "Geraet" ✗
+"später" ✓     "spaeter" ✗
+"Passwörter" ✓ "Passwoerter" ✗
 
 // Use Swiss vocabulary
 "Velo" ✓      "Fahrrad" ✗
 "Billett" ✓   "Ticket" ✗
 ```
+
+**Run `npm run lint:umlauts` to catch ASCII umlaut violations.**
 
 ### 5. Protected Files - NEVER Delete
 - `cms-api/src/migrations/*`

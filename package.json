@@ -38,6 +38,7 @@
     "medusa:down": "docker compose -f docker-compose.medusa.yml down",
     "medusa:logs": "docker compose -f docker-compose.medusa.yml logs -f medusa",
     "lint": "eslint .",
+    "lint:umlauts": "bash scripts/lint-umlauts.sh src",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",

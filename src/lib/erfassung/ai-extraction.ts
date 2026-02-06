@@ -237,7 +237,7 @@ function fastParseProductText(text: string): VoiceProductData {
   return {
     hersteller: hersteller.charAt(0).toUpperCase() + hersteller.slice(1),
     produktname,
-    kurzbeschreibung: `${hersteller} ${produktname} - gebrauchtes Geraet in gutem Zustand`,
+    kurzbeschreibung: `${hersteller} ${produktname} - gebrauchtes Gerät in gutem Zustand`,
     specs,
     verkaufspreis,
     zustand,
