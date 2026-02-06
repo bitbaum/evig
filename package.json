@@ -132,5 +132,8 @@
     "postcss-import": "^16.1.0",
     "tailwindcss": "^3.4.1",
     "typescript": "^5.3.3"
+  },
+  "overrides": {
+    "fast-xml-parser": "^5.3.4"
   }
 }
