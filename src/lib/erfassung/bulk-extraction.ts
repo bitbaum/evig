@@ -191,9 +191,12 @@ function fallbackParse(text: string, sourceType: 'text' | 'voice'): BulkProduct[
     let remaining = line
 
     // 1. Extract brand
-    const brands = ['dell', 'hp', 'lenovo', 'apple', 'asus', 'acer', 'microsoft', 'samsung', 'toshiba', 'fujitsu']
-    const brand = brands.find(b => lineLower.includes(b))
-    const hersteller = brand ? brand.charAt(0).toUpperCase() + brand.slice(1) : ''
+    const brandMap: Record<string, string> = {
+      dell: 'Dell', hp: 'HP', lenovo: 'Lenovo', apple: 'Apple', asus: 'ASUS',
+      acer: 'Acer', microsoft: 'Microsoft', samsung: 'Samsung', toshiba: 'Toshiba', fujitsu: 'Fujitsu',
+    }
+    const brand = Object.keys(brandMap).find(b => lineLower.includes(b))
+    const hersteller = brand ? brandMap[brand] : ''
     // Remove brand from remaining text for cleaner product name
     if (brand) {
       remaining = remaining.replace(new RegExp(brand, 'i'), '').trim()
