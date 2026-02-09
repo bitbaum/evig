@@ -117,3 +117,99 @@ export type TaskRequestInput = z.infer<typeof taskRequestSchema>;
 export type RequestResponseInput = z.infer<typeof requestResponseSchema>;
 export type CreateProjectInput = z.infer<typeof createProjectSchema>;
 export type UpdateProjectInput = z.infer<typeof updateProjectSchema>;
+
+// ============================================================
+// Database row types (SSOT for task data shapes across pages)
+// ============================================================
+
+import type {
+  TaskType,
+  TaskCategory,
+  TaskPriority,
+  TaskStatus,
+} from '@/config/tasks';
+
+/** Task row for list pages (minimal fields for table display) */
+export interface TaskListItem {
+  id: string;
+  title: string;
+  description: string | null;
+  task_type: TaskType;
+  category: TaskCategory;
+  priority: TaskPriority;
+  current_status: TaskStatus;
+  estimated_minutes: number | null;
+  is_completed: boolean;
+  completion_count: number;
+  created_at: string;
+  created_by_name: string | null;
+}
+
+/** Task row for detail page (full fields) */
+export interface TaskDetail {
+  id: string;
+  title: string;
+  description: string | null;
+  instructions: string | null;
+  task_type: TaskType;
+  category: TaskCategory;
+  priority: TaskPriority;
+  current_status: TaskStatus;
+  estimated_minutes: number | null;
+  schedule_human: string | null;
+  is_completed: boolean;
+  is_archived: boolean;
+  created_at: string;
+  updated_at: string;
+  created_by: string;
+  created_by_name: string | null;
+  created_by_email: string | null;
+}
+
+/** Task row for edit form (editable fields only) */
+export interface TaskEditItem {
+  id: string;
+  title: string;
+  description: string | null;
+  instructions: string | null;
+  task_type: string;
+  category: string;
+  priority: string;
+  schedule_human: string | null;
+  estimated_minutes: number | null;
+  tags: string[];
+}
+
+/** Completion history record */
+export interface TaskCompletion {
+  id: string;
+  completed_by: string;
+  completed_by_name: string | null;
+  completed_by_email: string | null;
+  completed_at: string;
+  notes: string | null;
+  duration_minutes: number | null;
+}
+
+/** Attention flag record */
+export interface TaskAttentionFlag {
+  id: string;
+  flagged_by: string;
+  flagged_by_name: string | null;
+  message: string | null;
+  created_at: string;
+  is_resolved: boolean;
+}
+
+/** Task request record */
+export interface TaskRequestRecord {
+  id: string;
+  requested_by: string;
+  requested_by_name: string | null;
+  requested_user_id: string | null;
+  requested_user_name: string | null;
+  is_broadcast: boolean;
+  message: string | null;
+  status: string;
+  created_at: string;
+}

@@ -17,23 +17,12 @@ import {
   TASK_PRIORITIES,
   TASK_PRIORITY_LABELS,
 } from '@/config/tasks'
+import type { TaskEditItem } from '@/lib/schemas/tasks'
+import { getErrorMessage } from '@/lib/utils/error'
 import { Loader2, Save } from 'lucide-react'
 
-interface Task {
-  id: string
-  title: string
-  description: string | null
-  instructions: string | null
-  task_type: string
-  category: string
-  priority: string
-  schedule_human: string | null
-  estimated_minutes: number | null
-  tags: string[]
-}
-
 interface TaskEditFormClientProps {
-  task: Task
+  task: TaskEditItem
 }
 
 interface TaskFormData {
@@ -108,7 +97,7 @@ export default function TaskEditFormClient({ task }: TaskEditFormClientProps) {
       router.push(`/admin/tasks/${task.id}`)
       router.refresh()
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Unbekannter Fehler')
+      setError(getErrorMessage(err))
     } finally {
       setLoading(false)
     }

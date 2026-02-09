@@ -10,8 +10,10 @@
 import { NextRequest } from 'next/server';
 import { withAdmin, ValidSession } from '@/lib/api/middleware';
 import { apiSuccess, apiError, apiBadRequest } from '@/lib/api/helpers';
+import { getDbUserId } from '@/lib/api/task-helpers';
 import { query } from '@/lib/auth/db';
 import { TABLE_NAMES } from '@/config/database';
+import { TASK_PRIORITIES } from '@/config/tasks';
 import { createTaskSchema } from '@/lib/schemas/tasks';
 import { logger } from '@/lib/logger';
 
@@ -85,10 +87,10 @@ export const GET = withAdmin(async (request: NextRequest, session: ValidSession)
 
     queryText += ` ORDER BY
       CASE t.priority
-        WHEN 'urgent' THEN 0
-        WHEN 'high' THEN 1
-        WHEN 'normal' THEN 2
-        WHEN 'low' THEN 3
+        WHEN '${TASK_PRIORITIES.URGENT}' THEN 0
+        WHEN '${TASK_PRIORITIES.HIGH}' THEN 1
+        WHEN '${TASK_PRIORITIES.NORMAL}' THEN 2
+        WHEN '${TASK_PRIORITIES.LOW}' THEN 3
       END,
       t.created_at DESC
     `;
@@ -123,18 +125,9 @@ export const POST = withAdmin(async (request: NextRequest, session: ValidSession
 
     const data = result.data;
 
-    // Look up the actual user ID from the database by email
-    // (Auth.js session ID may not match the database user ID)
-    const userResult = await query<{ id: string }>(
-      `SELECT id FROM ${TABLE_NAMES.USERS} WHERE email = $1`,
-      [session.user.email]
-    );
-
-    if (userResult.rows.length === 0) {
-      return apiBadRequest('Benutzer nicht gefunden');
-    }
-
-    const dbUserId = userResult.rows[0].id;
+    const userLookup = await getDbUserId(session);
+    if ('error' in userLookup) return userLookup.error;
+    const { dbUserId } = userLookup;
 
     const insertResult = await query<{ id: string; title: string }>(
       `INSERT INTO ${TABLE_NAMES.TASKS} (

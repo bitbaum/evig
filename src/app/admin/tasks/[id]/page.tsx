@@ -11,16 +11,22 @@ import { notFound } from 'next/navigation'
 import { formatDateTimeNumeric } from '@/lib/date-formats'
 import { query } from '@/lib/auth/db'
 import { TABLE_NAMES } from '@/config/database'
+import { logger } from '@/lib/logger'
 import {
   TASK_CATEGORY_LABELS,
   TASK_STATUS_LABELS,
   TASK_PRIORITY_LABELS,
   TASK_TYPE_LABELS,
-  type TaskCategory,
-  type TaskStatus,
-  type TaskPriority,
-  type TaskType,
+  TASK_STATUS_COLORS,
+  TASK_PRIORITY_COLORS,
+  REQUEST_STATUSES,
 } from '@/config/tasks'
+import type {
+  TaskDetail,
+  TaskCompletion,
+  TaskAttentionFlag,
+  TaskRequestRecord,
+} from '@/lib/schemas/tasks'
 import {
   ArrowLeft,
   ClipboardList,
@@ -29,7 +35,6 @@ import {
   Calendar,
   AlertTriangle,
   CheckCircle2,
-  MessageSquare,
   Send,
   Edit,
 } from 'lucide-react'
@@ -40,60 +45,9 @@ export const metadata: Metadata = {
   description: 'Aufgabendetails und Verlauf anzeigen.',
 }
 
-interface Task {
-  id: string
-  title: string
-  description: string | null
-  instructions: string | null
-  task_type: TaskType
-  category: TaskCategory
-  priority: TaskPriority
-  current_status: TaskStatus
-  estimated_minutes: number | null
-  schedule_human: string | null
-  is_completed: boolean
-  is_archived: boolean
-  created_at: string
-  updated_at: string
-  created_by: string
-  created_by_name: string | null
-  created_by_email: string | null
-}
-
-interface Completion {
-  id: string
-  completed_by: string
-  completed_by_name: string | null
-  completed_by_email: string | null
-  completed_at: string
-  notes: string | null
-  duration_minutes: number | null
-}
-
-interface AttentionFlag {
-  id: string
-  flagged_by: string
-  flagged_by_name: string | null
-  message: string | null
-  created_at: string
-  is_resolved: boolean
-}
-
-interface TaskRequest {
-  id: string
-  requested_by: string
-  requested_by_name: string | null
-  requested_user_id: string | null
-  requested_user_name: string | null
-  is_broadcast: boolean
-  message: string | null
-  status: string
-  created_at: string
-}
-
-async function getTask(id: string): Promise<Task | null> {
+async function getTask(id: string): Promise<TaskDetail | null> {
   try {
-    const result = await query<Task>(
+    const result = await query<TaskDetail>(
       `SELECT
         t.*,
         u.name as created_by_name,
@@ -104,14 +58,15 @@ async function getTask(id: string): Promise<Task | null> {
       [id]
     )
     return result.rows[0] || null
-  } catch {
+  } catch (error) {
+    logger.error('Error fetching task', { error, taskId: id })
     return null
   }
 }
 
-async function getCompletions(taskId: string): Promise<Completion[]> {
+async function getCompletions(taskId: string): Promise<TaskCompletion[]> {
   try {
-    const result = await query<Completion>(
+    const result = await query<TaskCompletion>(
       `SELECT
         tc.*,
         u.name as completed_by_name,
@@ -124,14 +79,15 @@ async function getCompletions(taskId: string): Promise<Completion[]> {
       [taskId]
     )
     return result.rows
-  } catch {
+  } catch (error) {
+    logger.error('Error fetching completions', { error, taskId })
     return []
   }
 }
 
-async function getAttentionFlags(taskId: string): Promise<AttentionFlag[]> {
+async function getAttentionFlags(taskId: string): Promise<TaskAttentionFlag[]> {
   try {
-    const result = await query<AttentionFlag>(
+    const result = await query<TaskAttentionFlag>(
       `SELECT
         f.*,
         u.name as flagged_by_name
@@ -142,14 +98,15 @@ async function getAttentionFlags(taskId: string): Promise<AttentionFlag[]> {
       [taskId]
     )
     return result.rows
-  } catch {
+  } catch (error) {
+    logger.error('Error fetching attention flags', { error, taskId })
     return []
   }
 }
 
-async function getRequests(taskId: string): Promise<TaskRequest[]> {
+async function getRequests(taskId: string): Promise<TaskRequestRecord[]> {
   try {
-    const result = await query<TaskRequest>(
+    const result = await query<TaskRequestRecord>(
       `SELECT
         r.*,
         rb.name as requested_by_name,
@@ -162,41 +119,11 @@ async function getRequests(taskId: string): Promise<TaskRequest[]> {
       [taskId]
     )
     return result.rows
-  } catch {
+  } catch (error) {
+    logger.error('Error fetching task requests', { error, taskId })
     return []
   }
 }
-
-function getStatusColor(status: TaskStatus): string {
-  switch (status) {
-    case 'needs_attention':
-      return 'bg-red-100 text-red-800'
-    case 'requested':
-      return 'bg-yellow-100 text-yellow-800'
-    case 'in_progress':
-      return 'bg-blue-100 text-blue-800'
-    case 'idle':
-      return 'bg-green-100 text-green-800'
-    default:
-      return 'bg-gray-100 text-gray-800'
-  }
-}
-
-function getPriorityColor(priority: TaskPriority): string {
-  switch (priority) {
-    case 'urgent':
-      return 'bg-red-100 text-red-800'
-    case 'high':
-      return 'bg-orange-100 text-orange-800'
-    case 'normal':
-      return 'bg-blue-100 text-blue-800'
-    case 'low':
-      return 'bg-gray-100 text-gray-800'
-    default:
-      return 'bg-gray-100 text-gray-800'
-  }
-}
-
 
 export default async function TaskDetailPage({
   params,
@@ -217,7 +144,7 @@ export default async function TaskDetailPage({
   ])
 
   const activeFlags = flags.filter((f) => !f.is_resolved)
-  const pendingRequests = requests.filter((r) => r.status === 'pending')
+  const pendingRequests = requests.filter((r) => r.status === REQUEST_STATUSES.PENDING)
 
   return (
     <div className="space-y-6">
@@ -259,16 +186,16 @@ export default async function TaskDetailPage({
       {/* Status Badges */}
       <div className="flex items-center gap-3">
         <span
-          className={`inline-flex px-3 py-1 text-sm font-medium rounded-full ${getStatusColor(
-            task.current_status
-          )}`}
+          className={`inline-flex px-3 py-1 text-sm font-medium rounded-full ${
+            TASK_STATUS_COLORS[task.current_status] || 'bg-gray-100 text-gray-800'
+          }`}
         >
           {TASK_STATUS_LABELS[task.current_status]}
         </span>
         <span
-          className={`inline-flex px-3 py-1 text-sm font-medium rounded-full ${getPriorityColor(
-            task.priority
-          )}`}
+          className={`inline-flex px-3 py-1 text-sm font-medium rounded-full ${
+            TASK_PRIORITY_COLORS[task.priority] || 'bg-gray-100 text-gray-800'
+          }`}
         >
           {TASK_PRIORITY_LABELS[task.priority]}
         </span>
@@ -330,9 +257,9 @@ export default async function TaskDetailPage({
         </div>
       )}
 
-      <div className="grid grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Main Content */}
-        <div className="col-span-2 space-y-6">
+        <div className="lg:col-span-2 space-y-6">
           {/* Description */}
           {task.description && (
             <div className="bg-white rounded-lg border p-6">
@@ -347,7 +274,7 @@ export default async function TaskDetailPage({
           {task.instructions && (
             <div className="bg-white rounded-lg border p-6">
               <h2 className="text-lg font-semibold text-gray-900 mb-3">Anleitung</h2>
-              <p className="text-gray-700 whitespace-pre-wrap">{task.instructions}</p>
+              <div className="text-gray-700 whitespace-pre-wrap">{task.instructions}</div>
             </div>
           )}
 

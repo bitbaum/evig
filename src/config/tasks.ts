@@ -114,3 +114,24 @@ export type TaskCategory = (typeof TASK_CATEGORIES)[keyof typeof TASK_CATEGORIES
 export type TaskPriority = (typeof TASK_PRIORITIES)[keyof typeof TASK_PRIORITIES];
 export type ProjectStatus = (typeof PROJECT_STATUSES)[keyof typeof PROJECT_STATUSES];
 export type RequestStatus = (typeof REQUEST_STATUSES)[keyof typeof REQUEST_STATUSES];
+
+// Color maps for UI badges (SSOT for status/priority colors)
+export const TASK_STATUS_COLORS: Record<TaskStatus, string> = {
+  idle: 'bg-green-100 text-green-800',
+  needs_attention: 'bg-red-100 text-red-800',
+  requested: 'bg-yellow-100 text-yellow-800',
+  in_progress: 'bg-blue-100 text-blue-800',
+};
+
+export const TASK_PRIORITY_COLORS: Record<TaskPriority, string> = {
+  low: 'bg-gray-100 text-gray-800',
+  normal: 'bg-blue-100 text-blue-800',
+  high: 'bg-orange-100 text-orange-800',
+  urgent: 'bg-red-100 text-red-800',
+};
+
+/**
+ * NOTE: Adding a new task type, category, status, or priority requires
+ * a corresponding database migration to update CHECK constraints.
+ * See: scripts/db/migrations/021_task_management.sql
+ */

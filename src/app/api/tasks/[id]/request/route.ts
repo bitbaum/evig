@@ -12,6 +12,7 @@
 import { NextRequest } from 'next/server';
 import { withAdmin, ValidSession } from '@/lib/api/middleware';
 import { apiSuccess, apiError, apiNotFound, apiBadRequest } from '@/lib/api/helpers';
+import { getDbUserId, getActiveTask } from '@/lib/api/task-helpers';
 import { query } from '@/lib/auth/db';
 import { TABLE_NAMES } from '@/config/database';
 import { TASK_STATUSES } from '@/config/tasks';
@@ -47,34 +48,13 @@ export const POST = withAdmin<RouteParams>(async (
     const data = result.data;
     const isBroadcast = !data.requested_user_id;
 
-    // Verify task exists
-    const taskResult = await query(
-      `SELECT id, title, is_archived FROM ${TABLE_NAMES.TASKS} WHERE id = $1`,
-      [taskId]
-    );
+    const taskLookup = await getActiveTask(taskId);
+    if ('error' in taskLookup) return taskLookup.error;
+    const { task } = taskLookup;
 
-    if (taskResult.rows.length === 0) {
-      return apiNotFound('Aufgabe');
-    }
-
-    const task = taskResult.rows[0] as { id: string; title: string; is_archived: boolean };
-
-    if (task.is_archived) {
-      return apiBadRequest('Archivierte Aufgaben können nicht angefragt werden');
-    }
-
-    // Look up the actual user ID from the database by email
-    // (Auth.js session ID may not match the database user ID)
-    const currentUserResult = await query<{ id: string }>(
-      `SELECT id FROM ${TABLE_NAMES.USERS} WHERE email = $1`,
-      [session.user.email]
-    );
-
-    if (currentUserResult.rows.length === 0) {
-      return apiBadRequest('Benutzer nicht gefunden');
-    }
-
-    const dbUserId = currentUserResult.rows[0].id;
+    const userLookup = await getDbUserId(session);
+    if ('error' in userLookup) return userLookup.error;
+    const { dbUserId } = userLookup;
 
     // If specific user requested, verify they exist
     if (data.requested_user_id) {

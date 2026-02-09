@@ -15,6 +15,7 @@ import {
   Send,
   Loader2,
 } from 'lucide-react'
+import { getErrorMessage } from '@/lib/utils/error'
 
 interface TaskActionsClientProps {
   taskId: string
@@ -60,7 +61,7 @@ export default function TaskActionsClient({
       setDuration('')
       router.refresh()
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Unbekannter Fehler')
+      setError(getErrorMessage(err))
     } finally {
       setLoading(null)
     }
@@ -89,7 +90,7 @@ export default function TaskActionsClient({
       setMessage('')
       router.refresh()
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Unbekannter Fehler')
+      setError(getErrorMessage(err))
     } finally {
       setLoading(null)
     }
@@ -119,7 +120,7 @@ export default function TaskActionsClient({
       setMessage('')
       router.refresh()
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Unbekannter Fehler')
+      setError(getErrorMessage(err))
     } finally {
       setLoading(null)
     }

@@ -10,16 +10,18 @@ import Link from 'next/link'
 import { Suspense } from 'react'
 import { query } from '@/lib/auth/db'
 import { TABLE_NAMES } from '@/config/database'
+import { logger } from '@/lib/logger'
 import {
   TASK_CATEGORY_LABELS,
   TASK_STATUS_LABELS,
   TASK_PRIORITY_LABELS,
   TASK_TYPE_LABELS,
-  type TaskCategory,
-  type TaskStatus,
-  type TaskPriority,
-  type TaskType,
+  TASK_STATUS_COLORS,
+  TASK_PRIORITY_COLORS,
+  TASK_STATUSES,
+  TASK_PRIORITIES,
 } from '@/config/tasks'
+import type { TaskListItem } from '@/lib/schemas/tasks'
 import {
   Plus,
   ClipboardList,
@@ -33,21 +35,6 @@ import TaskFiltersClient from './TaskFiltersClient'
 export const metadata: Metadata = {
   title: 'Aufgaben | RevampIT Admin',
   description: 'Teamaufgaben verwalten und koordinieren.',
-}
-
-interface Task {
-  id: string
-  title: string
-  description: string | null
-  task_type: TaskType
-  category: TaskCategory
-  priority: TaskPriority
-  current_status: TaskStatus
-  estimated_minutes: number | null
-  is_completed: boolean
-  completion_count: number
-  created_at: string
-  created_by_name: string | null
 }
 
 interface TaskStats {
@@ -67,8 +54,8 @@ async function getTaskStats(): Promise<TaskStats> {
     }>(`
       SELECT
         COUNT(*) FILTER (WHERE NOT is_archived) as total,
-        COUNT(*) FILTER (WHERE current_status = 'needs_attention' AND NOT is_archived) as needs_attention,
-        COUNT(*) FILTER (WHERE current_status = 'requested' AND NOT is_archived) as requested,
+        COUNT(*) FILTER (WHERE current_status = '${TASK_STATUSES.NEEDS_ATTENTION}' AND NOT is_archived) as needs_attention,
+        COUNT(*) FILTER (WHERE current_status = '${TASK_STATUSES.REQUESTED}' AND NOT is_archived) as requested,
         (
           SELECT COUNT(*)
           FROM ${TABLE_NAMES.TASK_COMPLETIONS}
@@ -84,7 +71,8 @@ async function getTaskStats(): Promise<TaskStats> {
       requested: parseInt(row?.requested || '0'),
       completedToday: parseInt(row?.completed_today || '0'),
     }
-  } catch {
+  } catch (error) {
+    logger.error('Error fetching task stats', { error })
     return { total: 0, needsAttention: 0, requested: 0, completedToday: 0 }
   }
 }
@@ -92,7 +80,7 @@ async function getTaskStats(): Promise<TaskStats> {
 async function getTasks(
   category?: string,
   status?: string
-): Promise<Task[]> {
+): Promise<TaskListItem[]> {
   try {
     let queryText = `
       SELECT
@@ -133,55 +121,26 @@ async function getTasks(
     queryText += `
       ORDER BY
         CASE t.current_status
-          WHEN 'needs_attention' THEN 0
-          WHEN 'requested' THEN 1
-          WHEN 'in_progress' THEN 2
-          WHEN 'idle' THEN 3
+          WHEN '${TASK_STATUSES.NEEDS_ATTENTION}' THEN 0
+          WHEN '${TASK_STATUSES.REQUESTED}' THEN 1
+          WHEN '${TASK_STATUSES.IN_PROGRESS}' THEN 2
+          WHEN '${TASK_STATUSES.IDLE}' THEN 3
         END,
         CASE t.priority
-          WHEN 'urgent' THEN 0
-          WHEN 'high' THEN 1
-          WHEN 'normal' THEN 2
-          WHEN 'low' THEN 3
+          WHEN '${TASK_PRIORITIES.URGENT}' THEN 0
+          WHEN '${TASK_PRIORITIES.HIGH}' THEN 1
+          WHEN '${TASK_PRIORITIES.NORMAL}' THEN 2
+          WHEN '${TASK_PRIORITIES.LOW}' THEN 3
         END,
         t.created_at DESC
       LIMIT 100
     `
 
-    const result = await query<Task>(queryText, params)
+    const result = await query<TaskListItem>(queryText, params)
     return result.rows
-  } catch {
+  } catch (error) {
+    logger.error('Error fetching tasks', { error })
     return []
-  }
-}
-
-function getPriorityColor(priority: TaskPriority): string {
-  switch (priority) {
-    case 'urgent':
-      return 'bg-red-100 text-red-800'
-    case 'high':
-      return 'bg-orange-100 text-orange-800'
-    case 'normal':
-      return 'bg-blue-100 text-blue-800'
-    case 'low':
-      return 'bg-gray-100 text-gray-800'
-    default:
-      return 'bg-gray-100 text-gray-800'
-  }
-}
-
-function getStatusColor(status: TaskStatus): string {
-  switch (status) {
-    case 'needs_attention':
-      return 'bg-red-100 text-red-800'
-    case 'requested':
-      return 'bg-yellow-100 text-yellow-800'
-    case 'in_progress':
-      return 'bg-blue-100 text-blue-800'
-    case 'idle':
-      return 'bg-green-100 text-green-800'
-    default:
-      return 'bg-gray-100 text-gray-800'
   }
 }
 
@@ -227,7 +186,7 @@ export default async function TasksAdminPage({
       </div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <div className="bg-white rounded-lg border p-4">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center">
@@ -348,18 +307,18 @@ export default async function TasksAdminPage({
                   </td>
                   <td className="px-4 py-3">
                     <span
-                      className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(
-                        task.current_status
-                      )}`}
+                      className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${
+                        TASK_STATUS_COLORS[task.current_status] || 'bg-gray-100 text-gray-800'
+                      }`}
                     >
                       {TASK_STATUS_LABELS[task.current_status]}
                     </span>
                   </td>
                   <td className="px-4 py-3">
                     <span
-                      className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${getPriorityColor(
-                        task.priority
-                      )}`}
+                      className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${
+                        TASK_PRIORITY_COLORS[task.priority] || 'bg-gray-100 text-gray-800'
+                      }`}
                     >
                       {TASK_PRIORITY_LABELS[task.priority]}
                     </span>

@@ -11,6 +11,8 @@ import { notFound } from 'next/navigation'
 import { ArrowLeft, ClipboardList } from 'lucide-react'
 import { query } from '@/lib/auth/db'
 import { TABLE_NAMES } from '@/config/database'
+import { logger } from '@/lib/logger'
+import type { TaskEditItem } from '@/lib/schemas/tasks'
 import TaskEditFormClient from './TaskEditFormClient'
 
 export const metadata: Metadata = {
@@ -18,29 +20,17 @@ export const metadata: Metadata = {
   description: 'Aufgabe bearbeiten.',
 }
 
-interface Task {
-  id: string
-  title: string
-  description: string | null
-  instructions: string | null
-  task_type: string
-  category: string
-  priority: string
-  schedule_human: string | null
-  estimated_minutes: number | null
-  tags: string[]
-}
-
-async function getTask(id: string): Promise<Task | null> {
+async function getTask(id: string): Promise<TaskEditItem | null> {
   try {
-    const result = await query<Task>(
+    const result = await query<TaskEditItem>(
       `SELECT id, title, description, instructions, task_type, category, priority, schedule_human, estimated_minutes, tags
        FROM ${TABLE_NAMES.TASKS}
        WHERE id = $1 AND is_archived = false`,
       [id]
     )
     return result.rows[0] || null
-  } catch {
+  } catch (error) {
+    logger.error('Error fetching task for edit', { error, taskId: id })
     return null
   }
 }

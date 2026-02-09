@@ -17,6 +17,7 @@ import {
   TASK_PRIORITIES,
   TASK_PRIORITY_LABELS,
 } from '@/config/tasks'
+import { getErrorMessage } from '@/lib/utils/error'
 import { Loader2, Save } from 'lucide-react'
 
 interface TaskFormData {
@@ -90,7 +91,7 @@ export default function TaskFormClient() {
 
       router.push(`/admin/tasks/${data.data.id}`)
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Unbekannter Fehler')
+      setError(getErrorMessage(err))
     } finally {
       setLoading(false)
     }
