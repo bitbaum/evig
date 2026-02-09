@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useRef, useCallback } from 'react'
+import { useState, useRef, useCallback, useEffect } from 'react'
 import { Edit3, X, Info } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { uiEvents } from '@/lib/ui/uiEvents'
@@ -39,14 +39,26 @@ export default function SuggestionButton() {
     submitError,
     textareaRef,
     contactRef,
-    handleQuickSuggestion,
+    handleQuickSuggestion: _handleQuickSuggestion,
     handleSubmit,
-    resetFormState,
+    resetFormState: _resetFormState,
   } = useSuggestionForm({
     feedbackScope,
     selectedElements,
     onSubmitSuccess: () => closePanelAndResetRef.current(),
   })
+
+  const [textValue, setTextValue] = useState('')
+
+  const handleQuickSuggestion = useCallback((suggestion: string) => {
+    _handleQuickSuggestion(suggestion)
+    setTextValue(textareaRef.current?.value || '')
+  }, [_handleQuickSuggestion, textareaRef])
+
+  const resetFormState = useCallback(() => {
+    _resetFormState()
+    setTextValue('')
+  }, [_resetFormState])
 
   const closePanelAndReset = useCallback(() => {
     setIsExpanded(false)
@@ -57,7 +69,9 @@ export default function SuggestionButton() {
   }, [setIsElementSelectionMode, setSelectedElements, resetFormState])
 
   // Keep ref in sync
-  closePanelAndResetRef.current = closePanelAndReset
+  useEffect(() => {
+    closePanelAndResetRef.current = closePanelAndReset
+  }, [closePanelAndReset])
 
   useKeyboardShortcuts({ isExpanded, isSubmitting, closePanelAndReset })
 
@@ -226,6 +240,7 @@ export default function SuggestionButton() {
                         }
                         disabled={feedbackScope === 'element' && selectedElements.length === 0}
                         required
+                        onInput={(e) => setTextValue((e.target as HTMLTextAreaElement).value)}
                       />
                       <div className="flex justify-between items-center mt-0.5">
                         {feedbackScope === 'element' && selectedElements.length > 0 && (
@@ -234,7 +249,7 @@ export default function SuggestionButton() {
                           </p>
                         )}
                         <p className="text-xs text-gray-500 ml-auto">
-                          {textareaRef.current?.value?.length || 0}/500
+                          {textValue.length}/500
                         </p>
                       </div>
                       {submitError && (
@@ -258,7 +273,7 @@ export default function SuggestionButton() {
                     <div className="flex space-x-1.5">
                       <button
                         type="submit"
-                        disabled={isSubmitting || !textareaRef.current?.value?.trim() || (feedbackScope === 'element' && selectedElements.length === 0)}
+                        disabled={isSubmitting || !textValue.trim() || (feedbackScope === 'element' && selectedElements.length === 0)}
                         className={cn(
                           "flex-1 py-1 px-2 rounded text-xs font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed",
                           config.buttonBg,

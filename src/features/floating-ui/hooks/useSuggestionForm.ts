@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useRef, useCallback } from 'react'
+import { useState, useRef, useCallback, useEffect } from 'react'
 import { logger } from '@/lib/logger'
 import type { FeedbackScope, SelectedElement } from '../types'
 
@@ -31,7 +31,9 @@ export function useSuggestionForm({ feedbackScope, selectedElements, onSubmitSuc
 
   // Ref to always have latest callback without re-creating handleSubmit
   const onSubmitSuccessRef = useRef(onSubmitSuccess)
-  onSubmitSuccessRef.current = onSubmitSuccess
+  useEffect(() => {
+    onSubmitSuccessRef.current = onSubmitSuccess
+  }, [onSubmitSuccess])
 
   const handleQuickSuggestion = useCallback((suggestion: string) => {
     const currentValue = textareaRef.current?.value || ''

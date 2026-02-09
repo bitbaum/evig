@@ -12,6 +12,7 @@
 'use client'
 
 import { useState } from 'react'
+import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { Upload, Loader2, Zap, Search, CheckCircle } from 'lucide-react'
 import { cn } from '@/lib/utils'
@@ -181,7 +182,7 @@ export default function ProductListingForm() {
           >
             Weiteres Produkt auflisten
           </button>
-          <a
+          <Link
             href="/marketplace"
             className={cn(
               'px-6 py-3 rounded-lg transition-colors min-h-[touch] touch-target',
@@ -191,7 +192,7 @@ export default function ProductListingForm() {
             )}
           >
             Zum Marketplace
-          </a>
+          </Link>
         </div>
       </motion.div>
     )
