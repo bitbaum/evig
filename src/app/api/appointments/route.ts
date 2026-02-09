@@ -212,7 +212,7 @@ export const POST = withAuth(async (
 
     const insertQuery = `INSERT INTO ${TABLE_NAMES.SERVICE_APPOINTMENTS} (${fields.join(', ')}) VALUES (${actualPlaceholders.join(', ')}) RETURNING *`
 
-    const result = await query(insertQuery, actualParams)
+    const result = await query<{ id: string }>(insertQuery, actualParams)
 
     logger.info('Appointment created', {
       appointmentId: result.rows[0]?.id,
