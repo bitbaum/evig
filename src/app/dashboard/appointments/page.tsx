@@ -62,9 +62,11 @@ export default function AppointmentsDashboard() {
     if (!editingId) return
     setSaving(true)
     try {
-      const payload: { description: string; preferred_date?: string } = { description: editDescription }
+      const payload: { action: string; description: string; preferred_date?: string } = {
+        action: 'update',
+        description: editDescription
+      }
       if (editPreferredDate) {
-        // Convert local input (yyyy-MM-ddTHH:mm) to ISO
         const d = new Date(editPreferredDate)
         payload.preferred_date = d.toISOString()
       }
@@ -295,7 +297,11 @@ export default function AppointmentsDashboard() {
                       onClick={async () => {
                         if (!confirm('Möchten Sie diesen Termin wirklich stornieren?')) return
                         try {
-                          const resp = await fetch(`/api/appointments/${appointment.id}`, { method: 'PATCH' })
+                          const resp = await fetch(`/api/appointments/${appointment.id}`, {
+                            method: 'PATCH',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ action: 'cancel' })
+                          })
                           if (resp.ok) {
                             fetchAppointments()
                           } else {

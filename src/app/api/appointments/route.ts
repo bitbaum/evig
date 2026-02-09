@@ -125,15 +125,32 @@ export const POST = withAuth(async (
     const {
       repairer_id,
       repairer_profile_id,
-      service_type_id,
+      service_type_id: rawServiceTypeId,
+      serviceSlug,
       description,
       device_info,
-      preferred_date,
+      preferred_date: rawPreferredDate,
+      preferredDate: camelPreferredDate,
       urgency,
       is_home_visit,
       visit_address,
       visit_city,
     } = body
+
+    // Normalize field names (accept both snake_case and camelCase)
+    const preferred_date = rawPreferredDate || camelPreferredDate || null
+
+    // Resolve service_type_id from serviceSlug if needed
+    let service_type_id = rawServiceTypeId
+    if (!service_type_id && serviceSlug) {
+      const serviceResult = await query(
+        `SELECT id FROM ${TABLE_NAMES.SERVICE_TYPES} WHERE slug = $1 LIMIT 1`,
+        [serviceSlug]
+      )
+      if (serviceResult.rows.length > 0) {
+        service_type_id = (serviceResult.rows[0] as { id: string }).id
+      }
+    }
 
     // Validate required fields
     if (!description) {

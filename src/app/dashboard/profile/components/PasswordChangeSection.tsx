@@ -106,13 +106,8 @@ export function PasswordChangeSection({
         <div className="flex items-start gap-3 p-3 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg">
           <AlertCircle className="w-5 h-5 text-yellow-600 flex-shrink-0 mt-0.5" />
           <div className="text-sm text-yellow-700 dark:text-yellow-300">
-            <p className="font-medium">Passwort-Anforderungen:</p>
-            <ul className="mt-1 ml-4 list-disc space-y-0.5">
-              <li>Mindestens 8 Zeichen</li>
-              <li>Mindestens ein Grossbuchstabe</li>
-              <li>Mindestens ein Kleinbuchstabe</li>
-              <li>Mindestens eine Zahl</li>
-            </ul>
+            <p className="font-medium">Passwort-Anforderung:</p>
+            <p className="mt-1">Mindestens 8 Zeichen</p>
           </div>
         </div>
 

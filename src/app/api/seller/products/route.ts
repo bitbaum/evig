@@ -154,31 +154,27 @@ export async function POST(request: NextRequest) {
       `, [aiProductId, session.user.id])
     }
 
-    // Publish to MedusaJS
-    try {
-      const publishResponse = await fetch(`${MEDUSA_CONFIG.BACKEND_URL}/api/inventory/publish-medusa`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Basic ${MEDUSA_CONFIG.ADMIN_API_KEY || ''}`
-        },
-        body: JSON.stringify({ inventoryItemId: inventoryId })
-      })
+    // Create content submission for admin approval (instead of publishing directly)
+    await query(`
+      INSERT INTO ${TABLE_NAMES.USER_CONTENT_SUBMISSIONS} (
+        user_id, content_type, title, summary, status,
+        content_data, submitted_at, created_at, updated_at
+      ) VALUES ($1, 'product', $2, $3, 'pending', $4, NOW(), NOW(), NOW())
+    `, [
+      session.user.id,
+      title,
+      description?.substring(0, 200) || '',
+      JSON.stringify({ inventoryId, aiProductId, images, category, condition, priceCents })
+    ])
 
-      if (publishResponse.ok) {
-        const publishData = await publishResponse.json()
-        logger.info('Product published to MedusaJS', { inventoryId, publishData })
-      } else {
-        const errorText = await publishResponse.text()
-        logger.warn('Failed to publish to MedusaJS', { inventoryId, error: errorText })
-      }
-    } catch (error) {
-      logger.warn('Error publishing to MedusaJS', { inventoryId, error })
-      // Don't fail the whole request if MedusaJS is down
-    }
+    logger.info('Product submitted for approval', {
+      inventoryId,
+      aiProductId,
+      userId: session.user.id,
+    })
 
     return apiSuccess({
-      message: 'Produkt erfolgreich eingereicht! Es wird analysiert und bald im Shop verfügbar sein.',
+      message: 'Produkt erfolgreich eingereicht! Es wird geprüft und nach Freigabe im Shop verfügbar sein.',
       inventoryId,
       aiProductId
     })

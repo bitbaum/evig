@@ -8,6 +8,7 @@ import { auth } from '@/auth'
 import { query } from '@/lib/auth/db'
 import { apiError, apiSuccess, apiBadRequest, apiForbidden, apiNotFound } from '@/lib/api/helpers'
 import { TABLE_NAMES } from '@/config/database'
+import { MEDUSA_CONFIG } from '@/config/medusa'
 import { canAccessSection } from '@/lib/permissions'
 import { logger } from '@/lib/logger'
 
@@ -41,7 +42,7 @@ export async function PATCH(
 
     // Verify submission exists and is pending
     const submissionResult = await query(
-      `SELECT id, status, title FROM ${TABLE_NAMES.USER_CONTENT_SUBMISSIONS} WHERE id = $1`,
+      `SELECT id, status, title, content_type, content_data FROM ${TABLE_NAMES.USER_CONTENT_SUBMISSIONS} WHERE id = $1`,
       [id]
     )
 
@@ -49,7 +50,9 @@ export async function PATCH(
       return apiNotFound('Einreichung nicht gefunden')
     }
 
-    const submission = submissionResult.rows[0] as { id: string; status: string; title: string }
+    const submission = submissionResult.rows[0] as {
+      id: string; status: string; title: string; content_type: string; content_data: string | null
+    }
 
     if (submission.status !== 'pending') {
       return apiBadRequest('Diese Einreichung wurde bereits bearbeitet')
@@ -63,6 +66,35 @@ export async function PATCH(
        WHERE id = $3`,
       [newStatus, session.user.id, id]
     )
+
+    // On product approval, publish to MedusaJS
+    if (action === 'approve' && submission.content_type === 'product' && submission.content_data) {
+      try {
+        const contentData = typeof submission.content_data === 'string'
+          ? JSON.parse(submission.content_data)
+          : submission.content_data
+        const inventoryId = contentData?.inventoryId
+
+        if (inventoryId) {
+          const publishResponse = await fetch(`${MEDUSA_CONFIG.BACKEND_URL}/api/inventory/publish-medusa`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Basic ${MEDUSA_CONFIG.ADMIN_API_KEY || ''}`
+            },
+            body: JSON.stringify({ inventoryItemId: inventoryId })
+          })
+
+          if (publishResponse.ok) {
+            logger.info('Product published to MedusaJS after approval', { inventoryId, submissionId: id })
+          } else {
+            logger.warn('Failed to publish to MedusaJS after approval', { inventoryId, submissionId: id })
+          }
+        }
+      } catch (publishError) {
+        logger.warn('Error publishing to MedusaJS after approval', { submissionId: id, error: publishError })
+      }
+    }
 
     logger.info('Content submission reviewed', {
       submissionId: id,

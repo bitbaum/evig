@@ -251,7 +251,11 @@ export default function WorkshopsDashboard() {
                       onClick={async () => {
                         if (!confirm('Möchten Sie diese Anmeldung wirklich stornieren?')) return
                         try {
-                          const resp = await fetch(`/api/workshops/registrations/${registration.id}`, { method: 'PATCH' })
+                          const resp = await fetch(`/api/workshops/registrations/${registration.id}`, {
+                            method: 'PATCH',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ action: 'cancel' })
+                          })
                           if (resp.ok) {
                             fetchRegistrations()
                           } else {

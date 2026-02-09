@@ -72,7 +72,7 @@ export const PATCH = withAuth<{ id: string }>(async (
     }
 
     const body = await request.json()
-    const { action, quoted_price_chf, diagnosis_notes, completion_notes, confirmed_date } = body
+    const { action, quoted_price_chf, diagnosis_notes, completion_notes, confirmed_date, description, preferred_date } = body
 
     // Get current appointment
     const currentResult = await query(
@@ -160,6 +160,19 @@ export const PATCH = withAuth<{ id: string }>(async (
         if (completion_notes) {
           updates.push('completion_notes = $' + paramIndex++)
           updateParams.push(completion_notes)
+        }
+        break
+
+      case 'update':
+        if (!isCustomer) return apiForbidden('Nur der Kunde kann Angaben bearbeiten')
+        if (appointment.status !== 'requested') return apiBadRequest('Angaben können nur im Status "Angefragt" bearbeitet werden')
+        if (description) {
+          updates.push('description = $' + paramIndex++)
+          updateParams.push(description)
+        }
+        if (preferred_date) {
+          updates.push('preferred_date = $' + paramIndex++)
+          updateParams.push(preferred_date)
         }
         break
 
