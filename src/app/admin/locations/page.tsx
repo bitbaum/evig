@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import { formatDateShort } from '@/lib/date-formats'
 import {
   MapPin,
   Plus,
@@ -309,7 +310,7 @@ export default function AdminLocationsPage() {
                     </div>
 
                     <div className="text-sm text-gray-500">
-                      Erstellt von {location.creator_name} ({location.creator_email}) • {new Date(location.created_at).toLocaleDateString('de-CH')}
+                      Erstellt von {location.creator_name} ({location.creator_email}) • {formatDateShort(location.created_at)}
                     </div>
                   </div>
 

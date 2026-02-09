@@ -6,6 +6,7 @@ import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES } from '@/config/database'
 import { sendEmail } from '@/lib/email'
 import { logger } from '@/lib/logger'
+import { formatDateTimeWithWeekday } from '@/lib/date-formats'
 
 interface WorkshopRow {
   id: string
@@ -118,14 +119,7 @@ export async function POST(request: NextRequest) {
     // Send registration confirmation email
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://revampit.ch'
     const workshopUrl = `${baseUrl}/workshops/${workshop.slug}`
-    const workshopDate = new Date(instanceDetails.start_date).toLocaleDateString('de-CH', {
-      weekday: 'long',
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    })
+    const workshopDate = formatDateTimeWithWeekday(instanceDetails.start_date)
 
     try {
       await sendEmail(

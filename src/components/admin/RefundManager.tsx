@@ -7,6 +7,7 @@ import { Badge } from '@/components/ui/badge'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Loader2, CheckCircle, XCircle, Clock, AlertTriangle, RefreshCw } from 'lucide-react'
+import { formatDateShort } from '@/lib/date-formats'
 
 interface Refund {
   id: string
@@ -210,7 +211,7 @@ export default function RefundManager() {
                     </div>
                     <div>
                       <span className="font-medium">Angefragt am:</span>
-                      <p className="text-gray-600">{new Date(refund.created_at).toLocaleDateString('de-CH')}</p>
+                      <p className="text-gray-600">{formatDateShort(refund.created_at)}</p>
                     </div>
                   </div>
 
@@ -323,7 +324,7 @@ export default function RefundManager() {
                       <p className="text-sm text-gray-600">{getReasonText(refund.reason)}</p>
                     </div>
                     <div className="text-sm text-gray-500">
-                      Seit {new Date(refund.processed_at || refund.created_at).toLocaleDateString('de-CH')}
+                      Seit {formatDateShort(refund.processed_at || refund.created_at)}
                     </div>
                   </div>
                 </CardContent>
@@ -360,7 +361,7 @@ export default function RefundManager() {
                       <p className="text-sm text-gray-600">{getReasonText(refund.reason)}</p>
                     </div>
                     <div className="text-sm text-gray-500">
-                      {new Date(refund.processed_at || refund.created_at).toLocaleDateString('de-CH')}
+                      {formatDateShort(refund.processed_at || refund.created_at)}
                     </div>
                   </div>
                 </CardContent>

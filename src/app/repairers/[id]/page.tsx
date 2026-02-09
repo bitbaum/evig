@@ -3,6 +3,7 @@
 import { useState, useEffect, use } from 'react'
 import Link from 'next/link'
 import { logger } from '@/lib/logger'
+import { formatDateShort } from '@/lib/date-formats'
 import {
   ArrowLeft,
   MapPin,
@@ -457,7 +458,7 @@ export default function RepairerDetailPage({ params }: { params: Promise<{ id: s
                                 <div className="flex items-center gap-2 mt-1">
                                   {renderStars(review.rating, 'sm')}
                                   <span className="text-sm text-gray-500">
-                                    {new Date(review.createdAt).toLocaleDateString('de-CH')}
+                                    {formatDateShort(review.createdAt)}
                                   </span>
                                 </div>
                               </div>

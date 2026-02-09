@@ -12,6 +12,7 @@ import { loadAllYearsData, getAvailableYears } from '@/lib/hirn/data/financial-l
 import { compareYears, generateYearInsights } from '@/lib/hirn/data/analysis'
 import Link from 'next/link'
 import { ArrowLeft, PiggyBank, AlertCircle, CheckCircle2 } from 'lucide-react'
+import { formatDateShort } from '@/lib/date-formats'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { AnalyseTabs, RevenueAreaChart, RevenuePieChart, TrendBarChart } from '@/components/analyse'
@@ -169,7 +170,7 @@ export default async function FinanzenPage() {
         <RevenueAreaChart
           data={chartData}
           source="Kivitendo"
-          sourceDate={latestYear?.[1].metadata.importedAt ? new Date(latestYear[1].metadata.importedAt).toLocaleDateString('de-CH') : undefined}
+          sourceDate={latestYear?.[1].metadata.importedAt ? formatDateShort(latestYear[1].metadata.importedAt) : undefined}
         />
 
         {/* Latest Year Breakdown */}

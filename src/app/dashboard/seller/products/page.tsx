@@ -3,6 +3,7 @@ import { ROLES } from '@/lib/constants'
 import { auth } from '@/auth'
 import { redirect } from 'next/navigation'
 import { getConditionBadge } from '@/config/erfassung/conditions'
+import { formatDateShort } from '@/lib/date-formats'
 import Link from 'next/link'
 import {
   Package,
@@ -311,7 +312,7 @@ export default async function SellerProductsPage() {
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
-                      {new Date(product.updatedAt).toLocaleDateString('de-CH')}
+                      {formatDateShort(product.updatedAt)}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                       <div className="flex items-center justify-end gap-2">

@@ -5,6 +5,7 @@ import { apiError, apiSuccess, apiUnauthorized, apiForbidden } from '@/lib/api/h
 import { logger } from '@/lib/logger'
 import { TABLE_NAMES } from '@/config/database'
 import { sendEmail } from '@/lib/email'
+import { formatDateWithWeekday } from '@/lib/date-formats'
 
 interface CompletedWorkshopRow {
   instance_id: string
@@ -69,12 +70,7 @@ export async function POST(request: NextRequest) {
 
     for (const registration of workshops) {
       try {
-        const workshopDate = new Date(registration.start_date).toLocaleDateString('de-CH', {
-          weekday: 'long',
-          year: 'numeric',
-          month: 'long',
-          day: 'numeric'
-        })
+        const workshopDate = formatDateWithWeekday(registration.start_date)
         // Link to the workshop page where they can leave feedback
         const feedbackUrl = `${baseUrl}/workshops/${registration.workshop_slug}#feedback`
 

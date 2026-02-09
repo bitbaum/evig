@@ -9,6 +9,7 @@ import {
   Calendar, MapPin, User, Euro, MessageSquare,
   ChevronRight, Loader2, RefreshCw, Home, Building
 } from 'lucide-react'
+import { formatDateShort } from '@/lib/date-formats'
 
 interface Appointment {
   id: string
@@ -218,7 +219,7 @@ export default function RepairerDashboard() {
                       <h3 className="font-semibold text-lg text-gray-900">{apt.service_name || 'Reparatur'}</h3>
                     </div>
                     <div className="text-right text-sm text-gray-500">
-                      <div>{new Date(apt.created_at).toLocaleDateString('de-CH')}</div>
+                      <div>{formatDateShort(apt.created_at)}</div>
                       {apt.quoted_price_chf && (
                         <div className="font-semibold text-green-600">CHF {apt.quoted_price_chf}</div>
                       )}
@@ -239,7 +240,7 @@ export default function RepairerDashboard() {
                     {apt.preferred_date && (
                       <div className="flex items-center gap-1">
                         <Calendar className="h-4 w-4" />
-                        {new Date(apt.preferred_date).toLocaleDateString('de-CH')}
+                        {formatDateShort(apt.preferred_date)}
                       </div>
                     )}
                     {apt.is_home_visit && apt.visit_city && (

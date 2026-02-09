@@ -6,6 +6,7 @@
 
 import { Edit, Crown, Shield, UserCheck, Mail, Trash2, Pencil } from 'lucide-react'
 import { isSuperAdmin, isStaffEmail } from '@/lib/permissions'
+import { formatDateShort } from '@/lib/date-formats'
 import type { UserRow } from './types'
 
 interface UserTableRowProps {
@@ -194,7 +195,7 @@ function DateCell({ date }: { date: string }) {
   return (
     <td className="px-6 py-4 whitespace-nowrap">
       <div className="text-sm text-gray-900 dark:text-white">
-        {new Date(date).toLocaleDateString('de-CH')}
+        {formatDateShort(date)}
       </div>
     </td>
   )

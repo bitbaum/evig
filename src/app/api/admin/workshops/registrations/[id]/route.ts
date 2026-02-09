@@ -5,6 +5,7 @@ import { apiError, apiSuccess, apiUnauthorized, apiForbidden, apiNotFound, apiBa
 import { logger } from '@/lib/logger'
 import { TABLE_NAMES } from '@/config/database'
 import { sendEmail } from '@/lib/email'
+import { formatDateTimeWithWeekday } from '@/lib/date-formats'
 
 interface RegistrationDetailsRow {
   user_id: string
@@ -127,14 +128,7 @@ export async function PUT(
 
         if (detailsResult.rows.length > 0) {
           const details = detailsResult.rows[0] as RegistrationDetailsRow
-          const workshopDate = new Date(details.start_date).toLocaleDateString('de-CH', {
-            weekday: 'long',
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit'
-          })
+          const workshopDate = formatDateTimeWithWeekday(details.start_date)
 
           await sendEmail(
             details.user_email,

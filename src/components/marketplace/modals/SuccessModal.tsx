@@ -16,6 +16,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { cn } from '@/lib/utils'
 import { getTextColor, getStatusColors } from '@/lib/design-system'
+import { formatDateShort } from '@/lib/date-formats'
 
 interface ListedProduct {
   id: string
@@ -96,7 +97,7 @@ export function SuccessModal({ isOpen, onClose, product, onResetForm }: SuccessM
                       CHF {product.price} {product.brand && `• ${product.brand}`} {product.condition && `• ${product.condition}`}
                     </p>
                     <p className={cn('text-xs mt-1', getTextColor('white', 'muted'))}>
-                      Aufgelistet am {new Date(product.createdAt).toLocaleDateString('de-CH')}
+                      Aufgelistet am {formatDateShort(product.createdAt)}
                     </p>
                   </div>
                 </div>

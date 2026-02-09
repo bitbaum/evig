@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { Shield, Check, X, Clock, User, RefreshCw } from 'lucide-react'
+import { formatDateTimeNumeric } from '@/lib/date-formats'
 
 interface PermissionRequest {
   id: string
@@ -192,13 +193,7 @@ export function PermissionRequestsManager() {
 
                 <div className="flex items-center gap-2 mt-2 text-xs text-gray-400">
                   <Clock className="w-3 h-3" />
-                  {new Date(request.created_at).toLocaleDateString('de-CH', {
-                    day: '2-digit',
-                    month: '2-digit',
-                    year: 'numeric',
-                    hour: '2-digit',
-                    minute: '2-digit',
-                  })}
+                  {formatDateTimeNumeric(request.created_at)}
                 </div>
               </div>
 

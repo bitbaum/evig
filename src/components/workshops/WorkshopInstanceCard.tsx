@@ -1,6 +1,7 @@
 'use client'
 
 import { Calendar, MapPin, Users } from 'lucide-react'
+import { formatDateTimeWithWeekday } from '@/lib/date-formats'
 import type { WorkshopInstance } from './types'
 
 interface WorkshopInstanceCardProps {
@@ -21,14 +22,7 @@ export function WorkshopInstanceCard({
         <div className="space-y-3">
           <div className="flex items-center text-sm">
             <Calendar className="w-4 h-4 text-gray-400 mr-2" />
-            <span>{new Date(instance.start_date).toLocaleDateString('de-CH', {
-              weekday: 'long',
-              year: 'numeric',
-              month: 'long',
-              day: 'numeric',
-              hour: '2-digit',
-              minute: '2-digit'
-            })}</span>
+            <span>{formatDateTimeWithWeekday(instance.start_date)}</span>
           </div>
 
           <div className="flex items-center text-sm">

@@ -5,6 +5,7 @@ import { apiError, apiSuccess, apiUnauthorized, apiForbidden } from '@/lib/api/h
 import { logger } from '@/lib/logger'
 import { TABLE_NAMES } from '@/config/database'
 import { sendEmail } from '@/lib/email'
+import { formatDateWithWeekday } from '@/lib/date-formats'
 
 interface UpcomingWorkshopRow {
   instance_id: string
@@ -72,12 +73,7 @@ export async function POST(request: NextRequest) {
 
     for (const registration of workshops) {
       try {
-        const workshopDate = new Date(registration.start_date).toLocaleDateString('de-CH', {
-          weekday: 'long',
-          year: 'numeric',
-          month: 'long',
-          day: 'numeric'
-        })
+        const workshopDate = formatDateWithWeekday(registration.start_date)
         const workshopTime = new Date(registration.start_date).toLocaleTimeString('de-CH', {
           hour: '2-digit',
           minute: '2-digit'

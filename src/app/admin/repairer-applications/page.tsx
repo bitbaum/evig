@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import { logger } from '@/lib/logger'
 import { getApprovalStatusBadge, getApprovalStatusLabel } from '@/config/approval-status'
+import { formatDateShort } from '@/lib/date-formats'
 import { useRouter } from 'next/navigation'
 import {
   CheckCircle,
@@ -557,7 +558,7 @@ export default function RepairerApplicationsAdmin() {
                       )}
                     </div>
                     <div className="flex items-center gap-4 text-sm text-gray-500 mt-1">
-                      <span>Bewerbung vom {new Date(application.createdAt).toLocaleDateString('de-CH')}</span>
+                      <span>Bewerbung vom {formatDateShort(application.createdAt)}</span>
                       <span>{application.yearsExperience} Jahre Erfahrung</span>
                       <span className="flex items-center gap-1">
                         <MapPin className="w-4 h-4" />
@@ -860,13 +861,13 @@ export default function RepairerApplicationsAdmin() {
                                             {cert.issueDate && (
                                               <div>
                                                 <span className="font-medium">Ausstellungsdatum:</span><br />
-                                                {new Date(cert.issueDate).toLocaleDateString('de-CH')}
+                                                {formatDateShort(cert.issueDate)}
                                               </div>
                                             )}
                                             {cert.expiryDate && (
                                               <div>
                                                 <span className="font-medium">Ablaufdatum:</span><br />
-                                                {new Date(cert.expiryDate).toLocaleDateString('de-CH')}
+                                                {formatDateShort(cert.expiryDate)}
                                               </div>
                                             )}
                                           </div>

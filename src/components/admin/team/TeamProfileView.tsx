@@ -34,6 +34,7 @@ import {
   type EmergencyRelation,
 } from '@/config/team'
 import { CurrentFocusInput } from './activity/CurrentFocusInput'
+import { formatDateShort } from '@/lib/date-formats'
 import type { TeamProfileViewProps } from './types'
 
 export function TeamProfileView({
@@ -128,7 +129,7 @@ export function TeamProfileView({
               {profile.start_date && (
                 <div className="flex items-center gap-1">
                   <Calendar className="w-4 h-4" />
-                  Seit {new Date(profile.start_date).toLocaleDateString('de-CH')}
+                  Seit {formatDateShort(profile.start_date)}
                 </div>
               )}
             </div>
@@ -366,8 +367,8 @@ export function TeamProfileView({
 
       {/* Meta Info */}
       <div className="text-xs text-gray-400 flex gap-4">
-        <span>Erstellt: {new Date(profile.created_at).toLocaleDateString('de-CH')}</span>
-        <span>Aktualisiert: {new Date(profile.updated_at).toLocaleDateString('de-CH')}</span>
+        <span>Erstellt: {formatDateShort(profile.created_at)}</span>
+        <span>Aktualisiert: {formatDateShort(profile.updated_at)}</span>
       </div>
     </div>
   )

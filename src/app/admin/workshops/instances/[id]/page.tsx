@@ -21,6 +21,7 @@ import {
   MessageSquare
 } from 'lucide-react'
 import { logger } from '@/lib/logger'
+import { formatDateShort, formatDateTimeWithWeekday } from '@/lib/date-formats'
 import type { WorkshopInstanceWithDetails } from '@/components/workshops/types'
 
 // Admin-specific registration view with user details
@@ -184,14 +185,7 @@ export default function AdminWorkshopInstanceDetailPage({
               <div className="mt-2 flex flex-wrap items-center gap-4 text-sm text-gray-600">
                 <div className="flex items-center gap-1">
                   <Calendar className="w-4 h-4" />
-                  {new Date(instance.start_date).toLocaleDateString('de-CH', {
-                    weekday: 'long',
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric',
-                    hour: '2-digit',
-                    minute: '2-digit'
-                  })}
+                  {formatDateTimeWithWeekday(instance.start_date)}
                 </div>
                 {instance.location && (
                   <div className="flex items-center gap-1">
@@ -338,7 +332,7 @@ export default function AdminWorkshopInstanceDetailPage({
                         </div>
                       </td>
                       <td className="px-6 py-4 text-sm text-gray-600">
-                        {new Date(reg.registered_at).toLocaleDateString('de-CH')}
+                        {formatDateShort(reg.registered_at)}
                       </td>
                       <td className="px-6 py-4">
                         {reg.rating && (

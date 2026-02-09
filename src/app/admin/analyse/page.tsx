@@ -16,6 +16,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Button } from '@/components/ui/button'
 import { AnalyseTabs } from '@/components/analyse'
 import { formatCHF } from '@/lib/hirn/format'
+import { formatDateShort } from '@/lib/date-formats'
 
 export default async function AnalysePage() {
   const session = await auth()
@@ -311,7 +312,7 @@ export default async function AnalysePage() {
 
       {/* Data Source */}
       <div className="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg text-sm text-muted-foreground">
-        <strong>Datenquellen:</strong> Finanzdaten aus Kivitendo • Letzte Aktualisierung: {latestData?.metadata.importedAt ? new Date(latestData.metadata.importedAt).toLocaleDateString('de-CH') : 'N/A'}
+        <strong>Datenquellen:</strong> Finanzdaten aus Kivitendo • Letzte Aktualisierung: {latestData?.metadata.importedAt ? formatDateShort(latestData.metadata.importedAt) : 'N/A'}
       </div>
     </div>
   )

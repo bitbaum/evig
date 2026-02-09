@@ -4,6 +4,7 @@ import { query } from '@/lib/auth/db'
 import { apiError, apiSuccess, apiUnauthorized, apiNotFound } from '@/lib/api/helpers'
 import { isAdminRole } from '@/lib/constants'
 import { logger } from '@/lib/logger'
+import { formatDateShort } from '@/lib/date-formats'
 import { TABLE_NAMES } from '@/config/database'
 import puppeteer from 'puppeteer'
 
@@ -340,8 +341,8 @@ function generateInvoiceHTML(invoice: InvoiceData): string {
         <div class="invoice-details">
           <h2>Rechnung</h2>
           <p><strong>Rechnungsnummer:</strong> ${invoice.invoice_number}</p>
-          <p><strong>Datum:</strong> ${new Date(invoice.issue_date).toLocaleDateString('de-CH')}</p>
-          ${invoice.due_date ? `<p><strong>Fällig bis:</strong> ${new Date(invoice.due_date).toLocaleDateString('de-CH')}</p>` : ''}
+          <p><strong>Datum:</strong> ${formatDateShort(invoice.issue_date)}</p>
+          ${invoice.due_date ? `<p><strong>Fällig bis:</strong> ${formatDateShort(invoice.due_date)}</p>` : ''}
           <span class="status status-${invoice.status}">${invoice.status}</span>
         </div>
       </div>

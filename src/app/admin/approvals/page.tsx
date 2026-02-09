@@ -11,6 +11,7 @@ import { redirect } from 'next/navigation'
 import { query } from '@/lib/auth/db'
 import { TABLE_NAMES } from '@/config/database'
 import { CheckSquare, Clock, CheckCircle, XCircle, FileText } from 'lucide-react'
+import { formatDateShort } from '@/lib/date-formats'
 import { ApprovalActions } from './ApprovalActions'
 
 export const metadata: Metadata = {
@@ -172,7 +173,7 @@ export default async function ApprovalsPage() {
                   <p className="text-sm text-gray-500 dark:text-gray-400">
                     {contentTypeLabels[item.content_type] || item.content_type}
                     {' • '}{item.user_name || item.user_email}
-                    {' • '}{new Date(item.submitted_at).toLocaleDateString('de-CH')}
+                    {' • '}{formatDateShort(item.submitted_at)}
                   </p>
                   {item.summary && (
                     <p className="text-sm text-gray-400 mt-1 line-clamp-1">{item.summary}</p>

@@ -16,6 +16,7 @@ import {
   Eye,
   EyeOff
 } from 'lucide-react'
+import { formatDateShort } from '@/lib/date-formats'
 
 interface Review {
   id: string
@@ -465,9 +466,9 @@ export default function UserReviewsPage() {
                 <div className="flex items-center justify-between mt-4 pt-4 border-t border-gray-100">
                   <div className="flex items-center gap-4 text-sm text-gray-500">
                     <span>{review.helpfulVotes} hilfreiche Stimmen</span>
-                    <span>Erstellt am {new Date(review.createdAt).toLocaleDateString('de-CH')}</span>
+                    <span>Erstellt am {formatDateShort(review.createdAt)}</span>
                     {review.updatedAt !== review.createdAt && (
-                      <span>Zuletzt bearbeitet am {new Date(review.updatedAt).toLocaleDateString('de-CH')}</span>
+                      <span>Zuletzt bearbeitet am {formatDateShort(review.updatedAt)}</span>
                     )}
                   </div>
 

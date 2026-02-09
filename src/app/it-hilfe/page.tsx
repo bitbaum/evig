@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from 'react'
 import { useSession } from 'next-auth/react'
 import Link from 'next/link'
 import { logger } from '@/lib/logger'
+import { formatDateShort } from '@/lib/date-formats'
 import {
   Search,
   MapPin,
@@ -361,7 +362,7 @@ export default function ITHilfePage() {
                       {formatBudget(req.budgetAmountCents)}
                     </span>
                     <span className="text-xs text-gray-400">
-                      {new Date(req.createdAt).toLocaleDateString('de-CH')}
+                      {formatDateShort(req.createdAt)}
                     </span>
                   </div>
                 </Link>

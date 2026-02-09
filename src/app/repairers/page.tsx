@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import Link from 'next/link'
 import { logger } from '@/lib/logger'
+import { formatDateShort } from '@/lib/date-formats'
 import {
   Search,
   MapPin,
@@ -550,7 +551,7 @@ export default function RepairersPage() {
                           )}
                         </div>
                         <span className="text-sm text-gray-500">
-                          {new Date(review.createdAt).toLocaleDateString('de-CH')}
+                          {formatDateShort(review.createdAt)}
                         </span>
                       </div>
 
@@ -571,7 +572,7 @@ export default function RepairersPage() {
                               Antwort von {review.response.responderName}
                             </span>
                             <span className="text-xs text-blue-600">
-                              {new Date(review.response.createdAt).toLocaleDateString('de-CH')}
+                              {formatDateShort(review.response.createdAt)}
                             </span>
                           </div>
                           <p className="text-blue-800 text-sm">{review.response.content}</p>

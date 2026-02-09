@@ -12,6 +12,7 @@ import { canAccessSection, isSuperAdmin, isStaffEmail } from '@/lib/permissions'
 import { query } from '@/lib/auth/db'
 import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
+import { formatDateShort } from '@/lib/date-formats'
 import {
   ArrowLeft,
   Mail,
@@ -184,7 +185,7 @@ export default async function UserDetailPage({ params }: PageProps) {
 
               <div className="flex items-center gap-2 text-gray-600 dark:text-gray-400">
                 <Calendar className="w-4 h-4" />
-                <span>Registriert: {new Date(user.created_at).toLocaleDateString('de-CH')}</span>
+                <span>Registriert: {formatDateShort(user.created_at)}</span>
               </div>
 
               {user.address && (
@@ -275,7 +276,7 @@ export default async function UserDetailPage({ params }: PageProps) {
       <div className="text-xs text-gray-400 flex gap-4">
         <span>Benutzer-ID: {user.id}</span>
         {user.email_verified && (
-          <span>E-Mail verifiziert: {new Date(user.email_verified).toLocaleDateString('de-CH')}</span>
+          <span>E-Mail verifiziert: {formatDateShort(user.email_verified)}</span>
         )}
       </div>
     </div>

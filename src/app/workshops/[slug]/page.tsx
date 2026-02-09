@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { query } from '@/lib/auth/db'
 import { logger } from '@/lib/logger'
+import { formatDateWithWeekday } from '@/lib/date-formats'
 import { TABLE_NAMES } from '@/config/database'
 import {
   Calendar,
@@ -225,12 +226,7 @@ export default async function WorkshopDetailPage({ params }: { params: { slug: s
                           <div className="flex items-center">
                             <Calendar className="w-5 h-5 text-gray-400 mr-2" />
                             <span className="font-medium text-gray-900">
-                              {new Date(instance.start_date).toLocaleDateString('de-CH', {
-                                weekday: 'long',
-                                year: 'numeric',
-                                month: 'long',
-                                day: 'numeric'
-                              })}
+                              {formatDateWithWeekday(instance.start_date)}
                             </span>
                           </div>
                           <div className="flex items-center">

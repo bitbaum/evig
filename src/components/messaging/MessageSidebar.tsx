@@ -13,6 +13,7 @@ import {
   CheckCheck
 } from 'lucide-react'
 import { logger } from '@/lib/logger'
+import { formatDateShort } from '@/lib/date-formats'
 
 interface Conversation {
   id: string
@@ -177,7 +178,7 @@ export function MessageSidebar({ isOpen, onClose }: MessageSidebarProps) {
                             {conversation.other_participant.name}
                           </p>
                           <span className="text-xs text-gray-500 flex-shrink-0">
-                            {new Date(conversation.last_message_at).toLocaleDateString('de-CH')}
+                            {formatDateShort(conversation.last_message_at)}
                           </span>
                         </div>
                         <p className="text-sm text-gray-600 truncate mb-1">

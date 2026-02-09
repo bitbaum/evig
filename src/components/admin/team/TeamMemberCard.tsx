@@ -15,6 +15,7 @@ import {
   getDepartmentLabel,
   getDepartmentColor,
 } from '@/config/team'
+import { formatDateShort } from '@/lib/date-formats'
 import type { TeamMemberCardProps } from './types'
 
 export function TeamMemberCard({ member, onView, onEdit }: TeamMemberCardProps) {
@@ -98,7 +99,7 @@ export function TeamMemberCard({ member, onView, onEdit }: TeamMemberCardProps) 
             <div className="flex items-center gap-1 mt-2 text-xs text-gray-400">
               <Calendar className="w-3 h-3" />
               <span>
-                Seit {new Date(member.start_date).toLocaleDateString('de-CH')}
+                Seit {formatDateShort(member.start_date)}
               </span>
             </div>
           )}

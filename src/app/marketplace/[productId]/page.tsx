@@ -10,6 +10,7 @@ import { query } from '@/lib/auth/db'
 import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
 import { getConditionBadge } from '@/config/erfassung/conditions'
+import { formatDateShort } from '@/lib/date-formats'
 import {
   ArrowLeft,
   MapPin,
@@ -262,7 +263,7 @@ export default async function ProductDetailPage(
             {/* Published date */}
             <div className="flex items-center gap-2 text-sm text-gray-400">
               <Clock className="w-4 h-4" />
-              <span>Veröffentlicht am {new Date(product.published_at).toLocaleDateString('de-CH')}</span>
+              <span>Veröffentlicht am {formatDateShort(product.published_at)}</span>
             </div>
           </div>
         </div>

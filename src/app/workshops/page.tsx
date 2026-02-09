@@ -15,6 +15,7 @@ import {
   BookOpen,
 } from 'lucide-react'
 import { getCategoryIcon, getLevelBadgeClass } from '@/config/workshops'
+import { formatDateShort } from '@/lib/date-formats'
 import type { Workshop, WorkshopInstanceWithCount, WorkshopWithInstances } from '@/components/workshops/types'
 
 export default function WorkshopsPage() {
@@ -184,7 +185,7 @@ export default function WorkshopsPage() {
                     <div className="mb-4">
                       <div className="flex items-center text-sm text-gray-600 mb-2">
                         <Calendar className="w-4 h-4 mr-1" />
-                        <span>Nächster Termin: {new Date(nextInstance.start_date).toLocaleDateString('de-CH')}</span>
+                        <span>Nächster Termin: {formatDateShort(nextInstance.start_date)}</span>
                       </div>
                       <div className="flex items-center text-sm text-gray-600">
                         <MapPin className="w-4 h-4 mr-1" />

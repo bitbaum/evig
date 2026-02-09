@@ -5,6 +5,7 @@ import { useSession } from 'next-auth/react'
 import { useParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { logger } from '@/lib/logger'
+import { formatDate } from '@/lib/date-formats'
 import {
   ArrowLeft,
   MapPin,
@@ -578,11 +579,7 @@ export default function PeerRepairDetailPage() {
                   <div>
                     <p className="text-sm text-gray-500">Erstellt am</p>
                     <p className="font-medium text-gray-900">
-                      {new Date(request.createdAt).toLocaleDateString('de-CH', {
-                        day: 'numeric',
-                        month: 'long',
-                        year: 'numeric',
-                      })}
+                      {formatDate(request.createdAt)}
                     </p>
                   </div>
                 </div>
@@ -593,11 +590,7 @@ export default function PeerRepairDetailPage() {
                   <div>
                     <p className="text-sm text-gray-500">Läuft ab</p>
                     <p className="font-medium text-gray-900">
-                      {new Date(request.expiresAt).toLocaleDateString('de-CH', {
-                        day: 'numeric',
-                        month: 'long',
-                        year: 'numeric',
-                      })}
+                      {formatDate(request.expiresAt)}
                     </p>
                   </div>
                 </div>

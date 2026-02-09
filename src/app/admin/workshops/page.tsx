@@ -22,6 +22,7 @@ import {
   ArrowLeft
 } from 'lucide-react'
 import { ERROR_MESSAGES } from '@/config/error-messages'
+import { formatDateShort } from '@/lib/date-formats'
 import { PROPOSAL_STATUS, PROPOSAL_STATUS_LABELS, WORKSHOP_CATEGORIES, type ProposalStatus } from '@/config/workshops'
 import type { WorkshopProposalWithProposer } from '@/components/workshops/types'
 
@@ -314,7 +315,7 @@ export default function AdminWorkshopsPage() {
                     </div>
 
                     <div className="text-sm text-gray-500">
-                      Vorgeschlagen von {proposal.proposer_name} ({proposal.proposer_email}) • {new Date(proposal.created_at).toLocaleDateString('de-CH')}
+                      Vorgeschlagen von {proposal.proposer_name} ({proposal.proposer_email}) • {formatDateShort(proposal.created_at)}
                     </div>
                   </div>
 

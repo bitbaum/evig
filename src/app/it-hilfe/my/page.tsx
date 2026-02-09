@@ -5,6 +5,7 @@ import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { logger } from '@/lib/logger'
+import { formatDateShort } from '@/lib/date-formats'
 import {
   Plus,
   MapPin,
@@ -227,7 +228,7 @@ export default function MyRequestsPage() {
                         </div>
                         <div className="flex items-center gap-1">
                           <Clock className="w-4 h-4" />
-                          <span>{new Date(req.createdAt).toLocaleDateString('de-CH')}</span>
+                          <span>{formatDateShort(req.createdAt)}</span>
                         </div>
                         <span className="text-emerald-600 font-medium">
                           {formatBudget(req.budgetAmountCents)}

@@ -10,6 +10,7 @@ import {
   ChevronRight, Loader2, RefreshCw, Home, Phone
 } from 'lucide-react'
 import { BOOKING_STATUS_BADGES } from '@/config/booking-status'
+import { formatDateShort } from '@/lib/date-formats'
 
 interface Appointment {
   id: string
@@ -201,7 +202,7 @@ export default function CustomerBookings() {
                     <p className="text-xs text-gray-500 mt-1">{STATUS_CONFIG[apt.status]?.description}</p>
                   </div>
                   <div className="text-right text-sm text-gray-500">
-                    {new Date(apt.created_at).toLocaleDateString('de-CH')}
+                    {formatDateShort(apt.created_at)}
                   </div>
                 </div>
 
@@ -235,7 +236,7 @@ export default function CustomerBookings() {
                   {apt.preferred_date && (
                     <div className="flex items-center gap-1">
                       <Calendar className="h-4 w-4" />
-                      {new Date(apt.preferred_date).toLocaleDateString('de-CH')}
+                      {formatDateShort(apt.preferred_date)}
                     </div>
                   )}
                   {apt.is_home_visit && (

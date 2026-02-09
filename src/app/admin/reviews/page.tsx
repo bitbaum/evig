@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
+import { formatDateShort } from '@/lib/date-formats'
 import {
   Eye,
   EyeOff,
@@ -358,7 +359,7 @@ export default function AdminReviewsPage() {
                       <span>•</span>
                       <span>{review.reviewerName}</span>
                       <span>•</span>
-                      <span>{new Date(review.createdAt).toLocaleDateString('de-CH')}</span>
+                      <span>{formatDateShort(review.createdAt)}</span>
                     </div>
                     {review.title && (
                       <h4 className="font-medium text-gray-900 mb-2">{review.title}</h4>
@@ -373,7 +374,7 @@ export default function AdminReviewsPage() {
                             Antwort von {review.response.responderName}
                           </span>
                           <span className="text-xs text-blue-600">
-                            {new Date(review.response.createdAt).toLocaleDateString('de-CH')}
+                            {formatDateShort(review.response.createdAt)}
                           </span>
                         </div>
                         <p className="text-blue-800 text-sm">{review.response.content}</p>
@@ -453,7 +454,7 @@ export default function AdminReviewsPage() {
                     <span className="text-red-600">Moderationsgrund: {review.moderationReason}</span>
                   )}
                   {review.moderatedAt && (
-                    <span>Moderiert am {new Date(review.moderatedAt).toLocaleDateString('de-CH')}</span>
+                    <span>Moderiert am {formatDateShort(review.moderatedAt)}</span>
                   )}
                 </div>
               </div>

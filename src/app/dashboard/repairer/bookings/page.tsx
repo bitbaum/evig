@@ -16,6 +16,7 @@ import {
   DollarSign,
   Star
 } from 'lucide-react'
+import { formatDateShort } from '@/lib/date-formats'
 
 export const metadata: Metadata = {
   title: 'Reparatur-Buchungen | Repairer Dashboard',
@@ -262,11 +263,11 @@ export default async function RepairerBookingsPage() {
                       <div className="flex items-center gap-4 text-sm">
                         <div className="flex items-center gap-1">
                           <Calendar className="w-4 h-4 text-gray-400" />
-                          <span>Angefordert: {new Date(booking.requestedDate).toLocaleDateString('de-CH')}</span>
+                          <span>Angefordert: {formatDateShort(booking.requestedDate)}</span>
                         </div>
                         <div className="flex items-center gap-1">
                           <Clock className="w-4 h-4 text-gray-400" />
-                          <span>Fertigestellt: {new Date(booking.estimatedCompletion).toLocaleDateString('de-CH')}</span>
+                          <span>Fertigestellt: {formatDateShort(booking.estimatedCompletion)}</span>
                         </div>
                         <div className="flex items-center gap-1">
                           <DollarSign className="w-4 h-4 text-gray-400" />
@@ -297,7 +298,7 @@ export default async function RepairerBookingsPage() {
                     <MessageSquare className="w-4 h-4" />
                     <span>{booking.messages} Nachrichten</span>
                     <span>•</span>
-                    <span>Erstellt am {new Date(booking.createdAt).toLocaleDateString('de-CH')}</span>
+                    <span>Erstellt am {formatDateShort(booking.createdAt)}</span>
                   </div>
 
                   <div className="flex gap-2">
