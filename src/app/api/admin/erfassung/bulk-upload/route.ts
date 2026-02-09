@@ -75,7 +75,7 @@ export async function POST(request: NextRequest) {
 
     if (products.length > BULK_LIMITS.maxProducts) {
       return apiBadRequest(
-        `Datei enthaelt ${products.length} Produkte. Maximal ${BULK_LIMITS.maxProducts} erlaubt.`
+        `Datei enthält ${products.length} Produkte. Maximal ${BULK_LIMITS.maxProducts} erlaubt.`
       )
     }
 

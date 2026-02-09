@@ -79,15 +79,25 @@ const result = await db.query(query, [email]);
 ```
 
 ### 4. Swiss German Standards
+
+**CRITICAL: NEVER write ASCII umlaut substitutes (ae/oe/ue) in ANY German string.**
+This is the #1 most common mistake. EVERY German word with ä, ö, ü MUST use the real character.
+
 ```typescript
 // ONLY replace ß with ss (Swiss German rule)
 "Strasse" ✓   "Straße" ✗
 "Grüsse" ✓    "Grüße" ✗
+"schliessen" ✓ "schließen" ✗
+"abschliessen" ✓ "abschließen" ✗
 
 // ALWAYS use proper umlauts ä, ö, ü — NEVER ASCII substitutes
 "für" ✓        "fuer" ✗
 "wählen" ✓     "waehlen" ✗
 "können" ✓     "koennen" ✗
+"enthält" ✓    "enthaelt" ✗    ← COMMON MISTAKE
+"erhält" ✓     "erhaelt" ✗
+"verfügbar" ✓  "verfuegbar" ✗
+"überprüfen" ✓ "ueberpruefe" ✗
 "Länge" ✓      "Laenge" ✗
 "Höhe" ✓       "Hoehe" ✗
 "Übernehmen" ✓ "Uebernehmen" ✗
@@ -96,6 +106,11 @@ const result = await db.query(query, [email]);
 "Gerät" ✓      "Geraet" ✗
 "später" ✓     "spaeter" ✗
 "Passwörter" ✓ "Passwoerter" ✗
+"nächste" ✓    "naechste" ✗
+"zurück" ✓     "zurueck" ✗
+"gewählt" ✓    "gewaehlt" ✗
+"fällt" ✓      "faellt" ✗
+"lässt" ✓      "laesst" ✗
 
 // Use Swiss vocabulary
 "Velo" ✓      "Fahrrad" ✗
@@ -103,6 +118,7 @@ const result = await db.query(query, [email]);
 ```
 
 **Run `npm run lint:umlauts` to catch ASCII umlaut violations.**
+**ALWAYS run this before committing German text changes.**
 
 ### 5. Protected Files - NEVER Delete
 - `cms-api/src/migrations/*`
