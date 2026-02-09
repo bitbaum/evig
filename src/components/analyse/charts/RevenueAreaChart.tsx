@@ -10,6 +10,7 @@ import {
   Legend,
 } from 'recharts'
 import { ChartWrapper } from './ChartWrapper'
+import { formatCHF } from '@/lib/hirn/format'
 
 interface RevenueDataPoint {
   year: number
@@ -41,15 +42,6 @@ const CATEGORY_LABELS = {
   integration: 'Integration',
   spenden: 'Spenden',
   aufstockung: 'Aufstockung',
-}
-
-function formatCHF(value: number): string {
-  return new Intl.NumberFormat('de-CH', {
-    style: 'currency',
-    currency: 'CHF',
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 0,
-  }).format(value)
 }
 
 function CustomTooltip({ active, payload, label }: {

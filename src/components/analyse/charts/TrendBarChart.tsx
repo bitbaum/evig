@@ -12,6 +12,7 @@ import {
   Cell,
 } from 'recharts'
 import { ChartWrapper } from './ChartWrapper'
+import { formatCHF } from '@/lib/hirn/format'
 
 interface TrendDataPoint {
   category: string
@@ -25,15 +26,6 @@ interface TrendBarChartProps {
   currentYear: number
   previousYear: number
   source?: string
-}
-
-function formatCHF(value: number): string {
-  return new Intl.NumberFormat('de-CH', {
-    style: 'currency',
-    currency: 'CHF',
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 0,
-  }).format(value)
 }
 
 function CustomTooltip({ active, payload, label }: {

@@ -3,6 +3,7 @@
 import { TrendingUp, TrendingDown, Minus, AlertCircle, Info } from 'lucide-react'
 import { Card, CardContent } from '@/components/ui/card'
 import type { MetricDefinition } from '@/config/analyse/metrics'
+import { formatCHF, formatPercent, formatNumber } from '@/lib/hirn/format'
 
 interface KPICardProps {
   metric: MetricDefinition
@@ -13,20 +14,9 @@ interface KPICardProps {
 }
 
 function formatDefaultValue(value: number, unit: string): string {
-  if (unit === 'CHF') {
-    return new Intl.NumberFormat('de-CH', {
-      style: 'currency',
-      currency: 'CHF',
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0,
-    }).format(value)
-  }
-  if (unit === '%') {
-    return `${value.toFixed(1)}%`
-  }
-  if (value >= 1000) {
-    return new Intl.NumberFormat('de-CH').format(value)
-  }
+  if (unit === 'CHF') return formatCHF(value)
+  if (unit === '%') return formatPercent(value)
+  if (value >= 1000) return formatNumber(value)
   return String(value)
 }
 

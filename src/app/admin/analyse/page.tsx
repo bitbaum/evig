@@ -15,15 +15,7 @@ import { ArrowLeft, BarChart3, AlertCircle, CheckCircle2, ArrowRight } from 'luc
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { AnalyseTabs } from '@/components/analyse'
-
-function formatCHF(value: number): string {
-  return new Intl.NumberFormat('de-CH', {
-    style: 'currency',
-    currency: 'CHF',
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 0,
-  }).format(value)
-}
+import { formatCHF } from '@/lib/hirn/format'
 
 export default async function AnalysePage() {
   const session = await auth()

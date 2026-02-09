@@ -9,6 +9,7 @@ import {
   ResponsiveContainer,
 } from 'recharts'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
+import { formatCHF } from '@/lib/hirn/format'
 
 interface PieDataPoint {
   name: string
@@ -34,15 +35,6 @@ const CATEGORY_CONFIG = {
   integration: { label: 'Integration', color: '#8b5cf6' },
   spenden: { label: 'Spenden', color: '#f59e0b' },
   aufstockung: { label: 'Aufstockung', color: '#ec4899' },
-}
-
-function formatCHF(value: number): string {
-  return new Intl.NumberFormat('de-CH', {
-    style: 'currency',
-    currency: 'CHF',
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 0,
-  }).format(value)
 }
 
 function CustomTooltip({ active, payload }: {

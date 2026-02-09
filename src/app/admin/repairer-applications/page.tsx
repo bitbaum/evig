@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import { logger } from '@/lib/logger'
+import { getApprovalStatusBadge, getApprovalStatusLabel } from '@/config/approval-status'
 import { useRouter } from 'next/navigation'
 import {
   CheckCircle,
@@ -320,24 +321,11 @@ export default function RepairerApplicationsAdmin() {
   }
 
   const getStatusBadge = (status: string) => {
-    const styles = {
-      pending: 'bg-blue-100 text-blue-800',
-      approved: 'bg-green-100 text-green-800',
-      rejected: 'bg-red-100 text-red-800',
-      requires_changes: 'bg-orange-100 text-orange-800'
-    }
-
-    const labels = {
-      pending: 'Ausstehend',
-      approved: 'Genehmigt',
-      rejected: 'Abgelehnt',
-      requires_changes: 'Änderungen erforderlich'
-    }
-
+    const badge = getApprovalStatusBadge(status)
     return (
-      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${styles[status as keyof typeof styles] || styles.pending}`}>
+      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${badge.bg} ${badge.color}`}>
         {getStatusIcon(status)}
-        <span className="ml-1">{labels[status as keyof typeof labels] || 'Ausstehend'}</span>
+        <span className="ml-1">{badge.label}</span>
       </span>
     )
   }
@@ -489,10 +477,7 @@ export default function RepairerApplicationsAdmin() {
                       : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                   }`}
                 >
-                  {status === 'pending' && 'Ausstehend'}
-                  {status === 'approved' && 'Genehmigt'}
-                  {status === 'rejected' && 'Abgelehnt'}
-                  {status === 'requires_changes' && 'Änderungen erforderlich'}
+                  {getApprovalStatusLabel(status)}
                 </button>
               ))}
             </div>
