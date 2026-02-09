@@ -6,6 +6,7 @@ import { Calendar, Clock, MapPin, Users, CheckCircle, XCircle, AlertCircle, Arro
 import Link from 'next/link'
 import { getTextColor, getStatusColors } from '@/lib/design-system'
 import { cn } from '@/lib/utils'
+import { formatDate } from '@/lib/date-formats'
 
 interface WorkshopRegistration {
   id: string
@@ -109,13 +110,6 @@ export default function WorkshopsDashboard() {
     }
   }
 
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('de-CH', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
-    })
-  }
 
   if (status === 'loading' || loading) {
     return (

@@ -8,6 +8,7 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
+import { formatDateTimeNumeric } from '@/lib/date-formats'
 import { query } from '@/lib/auth/db'
 import { TABLE_NAMES } from '@/config/database'
 import {
@@ -196,15 +197,6 @@ function getPriorityColor(priority: TaskPriority): string {
   }
 }
 
-function formatDate(dateString: string): string {
-  return new Date(dateString).toLocaleDateString('de-CH', {
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
-  })
-}
 
 export default async function TaskDetailPage({
   params,
@@ -305,7 +297,7 @@ export default async function TaskDetailPage({
                 <p key={flag.id} className="text-sm text-red-700 mt-1">
                   {flag.flagged_by_name || 'Jemand'}: {flag.message || 'Keine Nachricht'}
                   <span className="text-red-500 ml-2">
-                    ({formatDate(flag.created_at)})
+                    ({formatDateTimeNumeric(flag.created_at)})
                   </span>
                 </p>
               ))}
@@ -329,7 +321,7 @@ export default async function TaskDetailPage({
                     : req.requested_user_name || 'jemanden'}
                   {req.message && `: "${req.message}"`}
                   <span className="text-yellow-500 ml-2">
-                    ({formatDate(req.created_at)})
+                    ({formatDateTimeNumeric(req.created_at)})
                   </span>
                 </p>
               ))}
@@ -385,7 +377,7 @@ export default async function TaskDetailPage({
                           {completion.completed_by_name || completion.completed_by_email || 'Unbekannt'}
                         </p>
                         <p className="text-sm text-gray-500">
-                          {formatDate(completion.completed_at)}
+                          {formatDateTimeNumeric(completion.completed_at)}
                         </p>
                       </div>
                       {completion.duration_minutes && (
@@ -425,7 +417,7 @@ export default async function TaskDetailPage({
                 <dt className="text-sm text-gray-500">Erstellt am</dt>
                 <dd className="flex items-center gap-2 mt-1">
                   <Calendar className="w-4 h-4 text-gray-400" />
-                  <span className="text-gray-900">{formatDate(task.created_at)}</span>
+                  <span className="text-gray-900">{formatDateTimeNumeric(task.created_at)}</span>
                 </dd>
               </div>
               {task.estimated_minutes && (

@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { ArrowLeft, Eye, Check, X, Edit, Calendar, User, Mail, Tag, Folder } from 'lucide-react'
 import { logger } from '@/lib/logger'
 import { getApprovalStatusBadge } from '@/config/approval-status'
+import { formatDateTime } from '@/lib/date-formats'
 
 interface Submission {
   id: string
@@ -52,15 +53,6 @@ export default function SubmissionsAdminPage() {
   const approvedCount = submissions.filter(s => s.status === 'approved').length
   const rejectedCount = submissions.filter(s => s.status === 'rejected').length
 
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('de-DE', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    })
-  }
 
   const handleConvertToPost = (submission: Submission) => {
     // Create markdown content
@@ -225,7 +217,7 @@ ${submission.content}
                         </span>
                         <span className="flex items-center gap-1">
                           <Calendar className="w-3 h-3" />
-                          {formatDate(submission.submittedAt)}
+                          {formatDateTime(submission.submittedAt)}
                         </span>
                       </div>
                     </div>
@@ -263,7 +255,7 @@ ${submission.content}
                       </div>
                       <div className="flex items-center gap-2 text-gray-600">
                         <Calendar className="w-4 h-4" />
-                        <span>{formatDate(selectedSubmission.submittedAt)}</span>
+                        <span>{formatDateTime(selectedSubmission.submittedAt)}</span>
                       </div>
                       {selectedSubmission.category && (
                         <div className="flex items-center gap-2 text-gray-600">

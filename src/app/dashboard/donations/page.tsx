@@ -6,6 +6,7 @@ import { Heart, Package, ArrowLeft, CheckCircle, Clock, Receipt } from 'lucide-r
 import Link from 'next/link'
 import { getTextColor, getStatusColors } from '@/lib/design-system'
 import { cn } from '@/lib/utils'
+import { formatDate } from '@/lib/date-formats'
 import {
   getDonationTypeLabel,
   getDeviceCategoryLabel,
@@ -64,13 +65,6 @@ export default function DonationsDashboard() {
     }
   }
 
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('de-CH', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
-    })
-  }
 
   const getStatusIcon = (donation: Donation) => {
     if (donation.receipt_sent) {

@@ -8,6 +8,7 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
 import { auth } from '@/auth'
+import { formatDateNumeric } from '@/lib/date-formats'
 import { redirect } from 'next/navigation'
 import { query } from '@/lib/auth/db'
 import { TABLE_NAMES } from '@/config/database'
@@ -91,11 +92,7 @@ async function getStaticPages(): Promise<StaticPage[]> {
 
 function formatDate(dateStr: string | null): string {
   if (!dateStr) return '-'
-  return new Date(dateStr).toLocaleDateString('de-CH', {
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric',
-  })
+  return formatDateNumeric(dateStr)
 }
 
 export default async function AdminPagesPage() {

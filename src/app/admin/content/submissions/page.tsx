@@ -9,6 +9,7 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import { APPROVAL_STATUS_BADGES } from '@/config/approval-status'
+import { formatDateTime } from '@/lib/date-formats'
 import Link from 'next/link'
 import {
   ArrowLeft,
@@ -152,16 +153,6 @@ export default function SubmissionsAdminPage() {
     published: submissions.filter((s) => s.status === 'published').length,
   }
 
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('de-CH', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-    })
-  }
-
   const statusConfig = APPROVAL_STATUS_BADGES
 
   return (
@@ -296,7 +287,7 @@ export default function SubmissionsAdminPage() {
                       </span>
                       <span className="flex items-center gap-1">
                         <Calendar className="w-3 h-3" />
-                        {formatDate(submission.submitted_at)}
+                        {formatDateTime(submission.submitted_at)}
                       </span>
                     </div>
                   </div>
@@ -337,7 +328,7 @@ export default function SubmissionsAdminPage() {
                     </div>
                     <div className="flex items-center gap-2 text-gray-600 dark:text-gray-400">
                       <Calendar className="w-4 h-4" />
-                      <span>{formatDate(selectedSubmission.submitted_at)}</span>
+                      <span>{formatDateTime(selectedSubmission.submitted_at)}</span>
                     </div>
                     {(selectedSubmission.category_label ||
                       selectedSubmission.category_name) && (
@@ -374,7 +365,7 @@ export default function SubmissionsAdminPage() {
                       Geprüft von {selectedSubmission.reviewer_name || 'Admin'}
                     </div>
                     <div className="text-gray-500 dark:text-gray-400">
-                      {formatDate(selectedSubmission.reviewed_at)}
+                      {formatDateTime(selectedSubmission.reviewed_at)}
                     </div>
                     {selectedSubmission.review_notes && (
                       <div className="mt-2 text-gray-600 dark:text-gray-400">

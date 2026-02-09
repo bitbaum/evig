@@ -433,16 +433,8 @@ export function getImageUrl(imagePath?: string): string | null {
   return `${REBOOT_CONTENT_URL}${imagePath}`;
 }
 
-/**
- * Format date for display
- */
-export function formatDate(dateString: string): string {
-  return new Date(dateString).toLocaleDateString('de-CH', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  });
-}
+// Re-export from SSOT
+export { formatDate } from '@/lib/date-formats'
 
 /**
  * Generate excerpt from content

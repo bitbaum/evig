@@ -2,8 +2,8 @@ import { Metadata } from 'next'
 import HardcodedAboutPage from './hardcoded-content'
 
 export const metadata: Metadata = {
-  title: 'About Us - RevampIT',
-  description: 'Learn about our mission to extend the life of IT devices and promote sustainable computing practices.',
+  title: 'Über uns - RevampIT',
+  description: 'Erfahren Sie mehr über unsere Mission, die Lebensdauer von IT-Geräten zu verlängern und nachhaltiges Computing zu fördern.',
 };
 
 export default function AboutPage() {

@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import { useSession } from 'next-auth/react'
 import Link from 'next/link'
+import { formatDateNumeric } from '@/lib/date-formats'
 import {
   Heart,
   Package,
@@ -339,13 +340,6 @@ export default function AdminDonationsPage() {
     }
   }
 
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('de-CH', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric',
-    })
-  }
 
   const getDonationIcon = (type: DonationType) => {
     return type === DONATION_TYPES.DEVICE
@@ -527,7 +521,7 @@ export default function AdminDonationsPage() {
                   </div>
                 </td>
                 <td className="px-4 py-3">
-                  <div className="text-sm text-gray-900">{formatDate(donation.created_at)}</div>
+                  <div className="text-sm text-gray-900">{formatDateNumeric(donation.created_at)}</div>
                 </td>
                 <td className="px-4 py-3">
                   <span className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium ${

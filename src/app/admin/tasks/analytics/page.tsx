@@ -8,6 +8,7 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
 import { query } from '@/lib/auth/db'
+import { formatDateTimeNumeric } from '@/lib/date-formats'
 import { TABLE_NAMES } from '@/config/database'
 import {
   TASK_CATEGORY_LABELS,
@@ -124,15 +125,6 @@ async function getRecentCompletions(): Promise<RecentCompletion[]> {
   return result.rows
 }
 
-function formatDate(dateString: string): string {
-  return new Date(dateString).toLocaleDateString('de-CH', {
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
-  })
-}
 
 function getProgressBarColor(index: number): string {
   const colors = [
@@ -359,7 +351,7 @@ export default async function TaskAnalyticsPage() {
                       {completion.completed_by_name || 'Unbekannt'}
                     </td>
                     <td className="py-3 px-4 text-sm text-gray-600">
-                      {formatDate(completion.completed_at)}
+                      {formatDateTimeNumeric(completion.completed_at)}
                     </td>
                     <td className="py-3 px-4 text-sm text-gray-600 text-right">
                       {completion.duration_minutes

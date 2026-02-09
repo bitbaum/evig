@@ -3,13 +3,8 @@
  * Client-safe utility functions for blog formatting
  */
 
-export function formatDate(dateString: string): string {
-  return new Date(dateString).toLocaleDateString('de-DE', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric'
-  })
-}
+// Re-export from SSOT — fixes de-DE → de-CH locale
+export { formatDate } from '@/lib/date-formats'
 
 export function getReadingTime(content: string): number {
   const wordsPerMinute = 200

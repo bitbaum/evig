@@ -51,14 +51,5 @@ export function formatNumber(value: number): string {
   return new Intl.NumberFormat('de-CH').format(value);
 }
 
-/**
- * Format date in Swiss German format
- */
-export function formatDate(date: Date | string): string {
-  const dateObj = typeof date === 'string' ? new Date(date) : date;
-  return new Intl.DateTimeFormat('de-CH', {
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric',
-  }).format(dateObj);
-}
+// Re-export numeric format from SSOT
+export { formatDateNumeric as formatDate } from '@/lib/date-formats'

@@ -7,6 +7,7 @@
  */
 
 import { useState } from 'react'
+import { formatDateNumeric } from '@/lib/date-formats'
 import {
   RefreshCw,
   Trophy,
@@ -21,13 +22,6 @@ import { useDigest } from '@/components/admin/team/activity'
 import { TASK_CATEGORY_LABELS, type TaskCategory } from '@/config/tasks'
 import { formatRelativeTime } from '@/lib/utils'
 
-function formatDate(dateString: string): string {
-  return new Date(dateString).toLocaleDateString('de-CH', {
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric',
-  })
-}
 
 export function DigestPageClient() {
   const [dateRange, setDateRange] = useState<'week' | 'month'>('week')
@@ -117,7 +111,7 @@ export function DigestPageClient() {
           <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
             <Calendar className="w-4 h-4" />
             <span>
-              {formatDate(digest.period.since)} - {formatDate(digest.period.until)}
+              {formatDateNumeric(digest.period.since)} - {formatDateNumeric(digest.period.until)}
             </span>
           </div>
 

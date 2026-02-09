@@ -4,6 +4,7 @@ import { useSession } from 'next-auth/react'
 import { useEffect, useState } from 'react'
 import { Calendar, Clock, Wrench, AlertCircle, CheckCircle, XCircle, ArrowLeft, Loader2 } from 'lucide-react'
 import Link from 'next/link'
+import { formatDateTime } from '@/lib/date-formats'
 
 interface ServiceAppointment {
   id: string
@@ -134,15 +135,6 @@ export default function AppointmentsDashboard() {
     }
   }
 
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('de-CH', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    })
-  }
 
   if (status === 'loading' || loading) {
     return (
@@ -231,7 +223,7 @@ export default function AppointmentsDashboard() {
                         <div className="flex items-center">
                           <Clock className="w-3 h-3 sm:w-4 sm:h-4 mr-1" />
                           <span className="hidden sm:inline">Beantragt am </span>
-                          <span>{formatDate(appointment.created_at)}</span>
+                          <span>{formatDateTime(appointment.created_at)}</span>
                         </div>
                         <span className={`px-2 py-1 rounded-full text-xs font-medium ${getUrgencyColor(appointment.urgency)}`}>
                           {appointment.urgency === 'urgent' ? 'Dringend' : appointment.urgency === 'high' ? 'Hoch' : appointment.urgency === 'normal' ? 'Normal' : 'Niedrig'}
