@@ -57,7 +57,7 @@ async function getAnalyticsStats(): Promise<AnalyticsStats> {
     let totalTechnicians = 0
     try {
       const techResult = await query<{ count: string }>(
-        `SELECT COUNT(*) as count FROM technician_profiles WHERE is_active = true`
+        `SELECT COUNT(*) as count FROM ${TABLE_NAMES.TECHNICIAN_PROFILES} WHERE is_active = true`
       )
       totalTechnicians = parseInt(techResult.rows[0]?.count || '0')
     } catch {
@@ -68,7 +68,7 @@ async function getAnalyticsStats(): Promise<AnalyticsStats> {
     let totalSellers = 0
     try {
       const sellerResult = await query<{ count: string }>(
-        `SELECT COUNT(*) as count FROM seller_profiles WHERE is_active = true`
+        `SELECT COUNT(*) as count FROM ${TABLE_NAMES.SELLER_PROFILES} WHERE is_active = true`
       )
       totalSellers = parseInt(sellerResult.rows[0]?.count || '0')
     } catch {
@@ -79,7 +79,7 @@ async function getAnalyticsStats(): Promise<AnalyticsStats> {
     let pendingApprovals = 0
     try {
       const approvalsResult = await query<{ count: string }>(
-        `SELECT COUNT(*) as count FROM user_content_submissions WHERE status = 'pending'`
+        `SELECT COUNT(*) as count FROM ${TABLE_NAMES.USER_CONTENT_SUBMISSIONS} WHERE status = 'pending'`
       )
       pendingApprovals = parseInt(approvalsResult.rows[0]?.count || '0')
     } catch {

@@ -86,7 +86,7 @@ async function getDashboardStats(isSuper: boolean): Promise<DashboardStats> {
     // Get pending content approvals
     try {
       const approvalsResult = await query<{ count: string }>(
-        `SELECT COUNT(*) as count FROM user_content_submissions WHERE status = 'pending'`
+        `SELECT COUNT(*) as count FROM ${TABLE_NAMES.USER_CONTENT_SUBMISSIONS} WHERE status = 'pending'`
       )
       stats.pendingApprovals = parseInt(approvalsResult.rows[0]?.count || '0')
     } catch {
@@ -118,7 +118,7 @@ async function getDashboardStats(isSuper: boolean): Promise<DashboardStats> {
     // Get technician count
     try {
       const techResult = await query<{ count: string }>(
-        `SELECT COUNT(*) as count FROM technician_profiles WHERE is_active = true`
+        `SELECT COUNT(*) as count FROM ${TABLE_NAMES.TECHNICIAN_PROFILES} WHERE is_active = true`
       )
       stats.totalTechnicians = parseInt(techResult.rows[0]?.count || '0')
     } catch {

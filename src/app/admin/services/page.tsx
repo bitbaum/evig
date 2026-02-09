@@ -80,7 +80,7 @@ async function getServiceStats(): Promise<ServiceStats> {
 
   try {
     const techResult = await query<{ count: string }>(
-      `SELECT COUNT(*) as count FROM technician_profiles WHERE is_active = true`
+      `SELECT COUNT(*) as count FROM ${TABLE_NAMES.TECHNICIAN_PROFILES} WHERE is_active = true`
     )
     totalTechnicians = parseInt(techResult.rows[0]?.count || '0')
   } catch {

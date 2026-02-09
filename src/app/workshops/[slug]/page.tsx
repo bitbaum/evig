@@ -272,7 +272,7 @@ export default async function WorkshopDetailPage({ params }: { params: { slug: s
           <div className="space-y-6">
             {/* Registration Form */}
             {nextInstance && (
-              <div className="bg-white rounded-xl shadow-sm p-6">
+              <div id="register" className="bg-white rounded-xl shadow-sm p-6">
                 <WorkshopRegistrationForm
                   workshop={workshop}
                   instance={nextInstance}

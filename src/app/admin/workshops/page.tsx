@@ -43,6 +43,8 @@ export default function AdminWorkshopsPage() {
 
   const [currentPage, setCurrentPage] = useState(1)
   const [totalPages, setTotalPages] = useState(1)
+  const [rejectingId, setRejectingId] = useState<string | null>(null)
+  const [rejectionReason, setRejectionReason] = useState('')
 
   const loadProposals = useCallback(async () => {
     try {
@@ -80,16 +82,8 @@ export default function AdminWorkshopsPage() {
     }
   }, [status, loadProposals])
 
-  const handleApproval = async (proposalId: string, action: 'approve' | 'reject') => {
-    const reason = action === 'reject' ?
-      prompt('Bitte geben Sie einen Ablehnungsgrund an:') :
-      null
-
-    if (action === 'reject' && !reason) {
-      return
-    }
-
-    if (!confirm(`Möchten Sie diesen Workshop-Vorschlag wirklich ${action === 'approve' ? 'genehmigen' : 'ablehnen'}?`)) {
+  const handleApprove = async (proposalId: string) => {
+    if (!confirm('Möchten Sie diesen Workshop-Vorschlag wirklich genehmigen?')) {
       return
     }
 
@@ -98,18 +92,43 @@ export default function AdminWorkshopsPage() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          action,
-          review_notes: reason || 'Workshop genehmigt'
+          action: 'approve',
+          review_notes: 'Workshop genehmigt'
         })
       })
 
       if (response.ok) {
-        loadProposals() // Reload the list
+        loadProposals()
       } else {
-        alert('Fehler bei der Genehmigung')
+        setError('Fehler bei der Genehmigung')
       }
-    } catch (error) {
-      alert(ERROR_MESSAGES.NETWORK_ERROR)
+    } catch {
+      setError(ERROR_MESSAGES.NETWORK_ERROR)
+    }
+  }
+
+  const handleReject = async (proposalId: string) => {
+    if (!rejectionReason.trim()) return
+
+    try {
+      const response = await fetch(`/api/admin/workshops/proposals/${proposalId}/approve`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'reject',
+          review_notes: rejectionReason
+        })
+      })
+
+      if (response.ok) {
+        setRejectingId(null)
+        setRejectionReason('')
+        loadProposals()
+      } else {
+        setError('Fehler bei der Ablehnung')
+      }
+    } catch {
+      setError(ERROR_MESSAGES.NETWORK_ERROR)
     }
   }
 
@@ -311,14 +330,14 @@ export default function AdminWorkshopsPage() {
                     {proposal.status === 'pending' && (
                       <>
                         <button
-                          onClick={() => handleApproval(proposal.id, 'approve')}
+                          onClick={() => handleApprove(proposal.id)}
                           className="inline-flex items-center px-3 py-2 bg-green-600 text-white rounded-lg text-sm font-medium hover:bg-green-700"
                         >
                           <CheckCircle className="w-4 h-4 mr-1" />
                           Genehmigen
                         </button>
                         <button
-                          onClick={() => handleApproval(proposal.id, 'reject')}
+                          onClick={() => { setRejectingId(proposal.id); setRejectionReason('') }}
                           className="inline-flex items-center px-3 py-2 bg-red-600 text-white rounded-lg text-sm font-medium hover:bg-red-700"
                         >
                           <XCircle className="w-4 h-4 mr-1" />
@@ -328,6 +347,37 @@ export default function AdminWorkshopsPage() {
                     )}
                   </div>
                 </div>
+
+                {rejectingId === proposal.id && (
+                  <div className="mt-4 p-4 bg-red-50 border border-red-200 rounded-lg">
+                    <label className="block text-sm font-medium text-red-800 mb-2">
+                      Ablehnungsgrund:
+                    </label>
+                    <textarea
+                      value={rejectionReason}
+                      onChange={(e) => setRejectionReason(e.target.value)}
+                      placeholder="Bitte geben Sie einen Ablehnungsgrund an..."
+                      rows={3}
+                      className="w-full px-3 py-2 border border-red-300 rounded-lg focus:ring-2 focus:ring-red-500 text-sm"
+                      autoFocus
+                    />
+                    <div className="flex gap-2 mt-2">
+                      <button
+                        onClick={() => handleReject(proposal.id)}
+                        disabled={!rejectionReason.trim()}
+                        className="px-3 py-1.5 bg-red-600 text-white rounded-lg text-sm font-medium hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                      >
+                        Ablehnung bestätigen
+                      </button>
+                      <button
+                        onClick={() => { setRejectingId(null); setRejectionReason('') }}
+                        className="px-3 py-1.5 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50"
+                      >
+                        Abbrechen
+                      </button>
+                    </div>
+                  </div>
+                )}
               </div>
             ))}
 

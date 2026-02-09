@@ -80,28 +80,17 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // For now, we'll create a dummy workshop instance if none exists
-    // In a real implementation, you'd have proper workshop instances with dates
-    let workshopInstanceId
-
-    // Check if there's already a default instance for this workshop
+    // Find the next scheduled instance for this workshop
     const instanceResult = await query(
-      `SELECT id FROM ${TABLE_NAMES.WORKSHOP_INSTANCES} WHERE workshop_id = $1 LIMIT 1`,
+      `SELECT id FROM ${TABLE_NAMES.WORKSHOP_INSTANCES} WHERE workshop_id = $1 AND status = 'scheduled' ORDER BY start_date ASC LIMIT 1`,
       [workshop.id]
     )
 
-    if (instanceResult.rows.length > 0) {
-      workshopInstanceId = (instanceResult.rows[0] as IdRow).id
-    } else {
-      // Create a default instance (this is temporary until proper instance management is implemented)
-      const newInstanceResult = await query(
-        `INSERT INTO ${TABLE_NAMES.WORKSHOP_INSTANCES} (workshop_id, start_date, location, status)
-         VALUES ($1, NOW() + INTERVAL '30 days', 'RevampIT, Birmensdorferstr. 379, 8055 Zürich', 'scheduled')
-         RETURNING id`,
-        [workshop.id]
-      )
-      workshopInstanceId = (newInstanceResult.rows[0] as IdRow).id
+    if (instanceResult.rows.length === 0) {
+      return apiBadRequest('Aktuell sind keine Termine für diesen Workshop verfügbar')
     }
+
+    const workshopInstanceId = (instanceResult.rows[0] as IdRow).id
 
     // Create the registration
     const registrationResult = await query(
