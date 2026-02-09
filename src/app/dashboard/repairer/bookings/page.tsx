@@ -2,6 +2,7 @@ import { Metadata } from 'next'
 import { ROLES } from '@/lib/constants'
 import { requireRole } from '@/middleware/admin'
 import Link from 'next/link'
+import { getBookingStatusBadge, getUrgencyBadge } from '@/config/booking-status'
 import {
   Calendar,
   Clock,
@@ -121,35 +122,21 @@ export default async function RepairerBookingsPage() {
     },
   ]
 
-  const getStatusInfo = (status: string) => {
-    switch (status) {
-      case 'pending':
-        return { label: 'Ausstehend', color: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300', icon: AlertCircle }
-      case 'confirmed':
-        return { label: 'Bestätigt', color: 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300', icon: Clock }
-      case 'in_progress':
-        return { label: 'In Bearbeitung', color: 'bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300', icon: CheckCircle }
-      case 'completed':
-        return { label: 'Abgeschlossen', color: 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300', icon: CheckCircle }
-      case 'cancelled':
-        return { label: 'Storniert', color: 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300', icon: XCircle }
-      default:
-        return { label: 'Unbekannt', color: 'bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-300', icon: AlertCircle }
-    }
+  // Status icons for repairer view (labels/colors from booking-status SSOT)
+  const STATUS_ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
+    pending: AlertCircle,
+    confirmed: Clock,
+    in_progress: CheckCircle,
+    completed: CheckCircle,
+    cancelled: XCircle,
   }
 
-  const getUrgencyInfo = (urgency: string) => {
-    switch (urgency) {
-      case 'urgent':
-        return { label: 'Dringend', color: 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300' }
-      case 'high':
-        return { label: 'Hoch', color: 'bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-300' }
-      case 'normal':
-        return { label: 'Normal', color: 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300' }
-      default:
-        return { label: 'Normal', color: 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300' }
-    }
+  const getStatusInfo = (status: string) => {
+    const badge = getBookingStatusBadge(status)
+    return { ...badge, icon: STATUS_ICONS[status] ?? AlertCircle }
   }
+
+  const getUrgencyInfo = (urgency: string) => getUrgencyBadge(urgency)
 
   const stats = {
     totalBookings: bookings.length,

@@ -9,6 +9,7 @@ import {
   Calendar, MapPin, Star, Euro, MessageSquare,
   ChevronRight, Loader2, RefreshCw, Home, Phone
 } from 'lucide-react'
+import { BOOKING_STATUS_BADGES } from '@/config/booking-status'
 
 interface Appointment {
   id: string
@@ -32,17 +33,7 @@ interface Appointment {
   service_name: string
 }
 
-const STATUS_CONFIG: Record<string, { label: string; color: string; description: string }> = {
-  requested: { label: 'Angefragt', color: 'bg-yellow-100 text-yellow-800', description: 'Wartet auf Bestätigung' },
-  accepted: { label: 'Angenommen', color: 'bg-blue-100 text-blue-800', description: 'Reparateur hat angenommen' },
-  quoted: { label: 'Angebot erhalten', color: 'bg-purple-100 text-purple-800', description: 'Bitte bestätigen' },
-  quote_approved: { label: 'Bestätigt', color: 'bg-green-100 text-green-800', description: 'Wartet auf Start' },
-  quote_rejected: { label: 'Angebot abgelehnt', color: 'bg-orange-100 text-orange-800', description: 'Neues Angebot erwartet' },
-  in_progress: { label: 'In Bearbeitung', color: 'bg-blue-100 text-blue-800', description: 'Wird repariert' },
-  completed: { label: 'Abgeschlossen', color: 'bg-green-100 text-green-800', description: 'Reparatur fertig' },
-  rejected: { label: 'Abgelehnt', color: 'bg-red-100 text-red-800', description: 'Reparateur hat abgelehnt' },
-  cancelled: { label: 'Storniert', color: 'bg-gray-100 text-gray-800', description: 'Termin abgebrochen' }
-}
+const STATUS_CONFIG = BOOKING_STATUS_BADGES
 
 export default function CustomerBookings() {
   const { data: session, status: sessionStatus } = useSession()
