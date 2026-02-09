@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { ArrowLeft, Eye, Check, X, Edit, Calendar, User, Mail, Tag, Folder } from 'lucide-react'
 import { logger } from '@/lib/logger'
+import { getApprovalStatusBadge } from '@/config/approval-status'
 
 interface Submission {
   id: string
@@ -209,19 +210,9 @@ ${submission.content}
                           {submission.submissionType === 'idea' ? 'Idee' : 'Entwurf'}
                         </span>
                         <span
-                          className={`px-2 py-1 text-xs rounded-full font-medium ${
-                            submission.status === 'pending'
-                              ? 'bg-yellow-100 text-yellow-800'
-                              : submission.status === 'approved'
-                              ? 'bg-green-100 text-green-800'
-                              : 'bg-red-100 text-red-800'
-                          }`}
+                          className={`px-2 py-1 text-xs rounded-full font-medium ${getApprovalStatusBadge(submission.status).bg} ${getApprovalStatusBadge(submission.status).color}`}
                         >
-                          {submission.status === 'pending'
-                            ? 'Ausstehend'
-                            : submission.status === 'approved'
-                            ? 'Genehmigt'
-                            : 'Abgelehnt'}
+                          {getApprovalStatusBadge(submission.status).label}
                         </span>
                       </div>
                       <h3 className="font-semibold text-gray-900 mb-1 line-clamp-2">

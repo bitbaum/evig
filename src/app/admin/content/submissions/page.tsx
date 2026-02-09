@@ -8,6 +8,7 @@
  */
 
 import { useState, useEffect, useCallback } from 'react'
+import { APPROVAL_STATUS_BADGES } from '@/config/approval-status'
 import Link from 'next/link'
 import {
   ArrowLeft,
@@ -161,31 +162,7 @@ export default function SubmissionsAdminPage() {
     })
   }
 
-  const statusConfig: Record<
-    string,
-    { label: string; color: string; bg: string }
-  > = {
-    pending: {
-      label: 'Ausstehend',
-      color: 'text-yellow-800 dark:text-yellow-300',
-      bg: 'bg-yellow-100 dark:bg-yellow-900/30',
-    },
-    approved: {
-      label: 'Genehmigt',
-      color: 'text-green-800 dark:text-green-300',
-      bg: 'bg-green-100 dark:bg-green-900/30',
-    },
-    rejected: {
-      label: 'Abgelehnt',
-      color: 'text-red-800 dark:text-red-300',
-      bg: 'bg-red-100 dark:bg-red-900/30',
-    },
-    published: {
-      label: 'Veröffentlicht',
-      color: 'text-blue-800 dark:text-blue-300',
-      bg: 'bg-blue-100 dark:bg-blue-900/30',
-    },
-  }
+  const statusConfig = APPROVAL_STATUS_BADGES
 
   return (
     <div className="space-y-6">
