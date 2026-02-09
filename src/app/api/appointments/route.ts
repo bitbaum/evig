@@ -1,6 +1,6 @@
 import { NextRequest } from 'next/server'
 import { query } from '@/lib/auth/db'
-import { apiError, apiSuccess } from '@/lib/api/helpers'
+import { apiError, apiSuccess, apiBadRequest } from '@/lib/api/helpers'
 import { withAuth, ValidSession } from '@/lib/api/middleware'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES, APPOINTMENT_ROLES } from '@/config/database'
@@ -111,6 +111,122 @@ export const GET = withAuth(async (
 
   } catch (error) {
     logger.error('Error fetching appointments', { error })
+    return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)
+  }
+})
+
+// POST /api/appointments - Create a new service appointment
+export const POST = withAuth(async (
+  request: NextRequest,
+  session: ValidSession
+) => {
+  try {
+    const body = await request.json()
+    const {
+      repairer_id,
+      repairer_profile_id,
+      service_type_id,
+      description,
+      device_info,
+      preferred_date,
+      urgency,
+      is_home_visit,
+      visit_address,
+      visit_city,
+    } = body
+
+    // Validate required fields
+    if (!description) {
+      return apiBadRequest('Beschreibung ist erforderlich')
+    }
+
+    // Build insert query
+    const fields = [
+      'user_id', 'description', 'status', 'urgency',
+      'is_home_visit', 'created_at', 'updated_at'
+    ]
+    const values = [
+      session.user.id,
+      description,
+      'requested',
+      urgency || 'normal',
+      is_home_visit || false,
+      'NOW()',
+      'NOW()',
+    ]
+    const placeholders = [
+      '$1', '$2', '$3', '$4', '$5', 'NOW()', 'NOW()'
+    ]
+    let paramIndex = 6
+
+    // Optional fields
+    if (repairer_id) {
+      fields.push('repairer_id')
+      placeholders.push(`$${paramIndex}`)
+      values.push(repairer_id)
+      paramIndex++
+    }
+    if (repairer_profile_id) {
+      fields.push('repairer_profile_id')
+      placeholders.push(`$${paramIndex}`)
+      values.push(repairer_profile_id)
+      paramIndex++
+    }
+    if (service_type_id) {
+      fields.push('service_type_id')
+      placeholders.push(`$${paramIndex}`)
+      values.push(service_type_id)
+      paramIndex++
+    }
+    if (device_info) {
+      fields.push('device_info')
+      placeholders.push(`$${paramIndex}`)
+      values.push(device_info)
+      paramIndex++
+    }
+    if (preferred_date) {
+      fields.push('preferred_date')
+      placeholders.push(`$${paramIndex}`)
+      values.push(preferred_date)
+      paramIndex++
+    }
+    if (visit_address) {
+      fields.push('visit_address')
+      placeholders.push(`$${paramIndex}`)
+      values.push(visit_address)
+      paramIndex++
+    }
+    if (visit_city) {
+      fields.push('visit_city')
+      placeholders.push(`$${paramIndex}`)
+      values.push(visit_city)
+      paramIndex++
+    }
+
+    // Remove NOW() from values since they're SQL expressions
+    const actualParams = values.filter(v => v !== 'NOW()')
+    const actualPlaceholders = fields.map((field, i) => {
+      if (field === 'created_at' || field === 'updated_at') return 'NOW()'
+      return placeholders[i]
+    })
+
+    const insertQuery = `INSERT INTO ${TABLE_NAMES.SERVICE_APPOINTMENTS} (${fields.join(', ')}) VALUES (${actualPlaceholders.join(', ')}) RETURNING *`
+
+    const result = await query(insertQuery, actualParams)
+
+    logger.info('Appointment created', {
+      appointmentId: result.rows[0]?.id,
+      userId: session.user.id,
+      repairerId: repairer_id,
+    })
+
+    return apiSuccess({
+      message: 'Termin erfolgreich erstellt',
+      appointment: result.rows[0],
+    }, 201)
+
+  } catch (error) {
+    logger.error('Error creating appointment', { error })
     return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)
   }
 })

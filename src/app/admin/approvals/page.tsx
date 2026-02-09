@@ -9,7 +9,9 @@ import { Metadata } from 'next'
 import { auth } from '@/auth'
 import { redirect } from 'next/navigation'
 import { query } from '@/lib/auth/db'
+import { TABLE_NAMES } from '@/config/database'
 import { CheckSquare, Clock, CheckCircle, XCircle, FileText } from 'lucide-react'
+import { ApprovalActions } from './ApprovalActions'
 
 export const metadata: Metadata = {
   title: 'Freigaben | RevampIT Admin',
@@ -37,13 +39,13 @@ async function getApprovalStats(): Promise<ApprovalStats> {
   try {
     // Get pending count
     const pendingResult = await query<{ count: string }>(
-      `SELECT COUNT(*) as count FROM user_content_submissions WHERE status = 'pending'`
+      `SELECT COUNT(*) as count FROM ${TABLE_NAMES.USER_CONTENT_SUBMISSIONS} WHERE status = 'pending'`
     )
     const pending = parseInt(pendingResult.rows[0]?.count || '0')
 
     // Get approved count (last 30 days)
     const approvedResult = await query<{ count: string }>(
-      `SELECT COUNT(*) as count FROM user_content_submissions
+      `SELECT COUNT(*) as count FROM ${TABLE_NAMES.USER_CONTENT_SUBMISSIONS}
        WHERE status = 'approved'
        AND reviewed_at >= NOW() - INTERVAL '30 days'`
     )
@@ -51,7 +53,7 @@ async function getApprovalStats(): Promise<ApprovalStats> {
 
     // Get rejected count (last 30 days)
     const rejectedResult = await query<{ count: string }>(
-      `SELECT COUNT(*) as count FROM user_content_submissions
+      `SELECT COUNT(*) as count FROM ${TABLE_NAMES.USER_CONTENT_SUBMISSIONS}
        WHERE status = 'rejected'
        AND reviewed_at >= NOW() - INTERVAL '30 days'`
     )
@@ -76,8 +78,8 @@ async function getPendingSubmissions(): Promise<ContentSubmission[]> {
         s.submitted_at,
         u.name as user_name,
         u.email as user_email
-       FROM user_content_submissions s
-       JOIN users u ON s.user_id = u.id
+       FROM ${TABLE_NAMES.USER_CONTENT_SUBMISSIONS} s
+       JOIN ${TABLE_NAMES.USERS} u ON s.user_id = u.id
        WHERE s.status = 'pending'
        ORDER BY s.submitted_at DESC
        LIMIT 50`
@@ -176,14 +178,7 @@ export default async function ApprovalsPage() {
                     <p className="text-sm text-gray-400 mt-1 line-clamp-1">{item.summary}</p>
                   )}
                 </div>
-                <div className="flex gap-2">
-                  <button className="px-3 py-1 bg-green-600 hover:bg-green-700 text-white text-sm rounded transition-colors">
-                    Genehmigen
-                  </button>
-                  <button className="px-3 py-1 bg-red-600 hover:bg-red-700 text-white text-sm rounded transition-colors">
-                    Ablehnen
-                  </button>
-                </div>
+                <ApprovalActions submissionId={item.id} title={item.title} />
               </div>
             ))}
           </div>

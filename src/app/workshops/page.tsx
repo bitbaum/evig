@@ -231,7 +231,7 @@ export default function WorkshopsPage() {
                       </Link>
                     ) : nextInstance ? (
                       <Link
-                        href={`/workshops/${workshop.slug}/register`}
+                        href={`/workshops/${workshop.slug}#register`}
                         className="flex-1 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors text-center text-sm font-medium"
                       >
                         Anmelden
@@ -273,7 +273,7 @@ export default function WorkshopsPage() {
             Hast du eine Idee für einen Workshop? Wir freuen uns über deine Vorschläge für neue Themen und Inhalte.
           </p>
           <Link
-            href="/contact?subject=Workshop%20Vorschlag"
+            href="/workshops/propose"
             className="inline-flex items-center gap-2 bg-white text-green-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-50 transition-colors"
           >
             Workshop vorschlagen

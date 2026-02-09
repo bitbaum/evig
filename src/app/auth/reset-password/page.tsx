@@ -36,7 +36,7 @@ function ResetPasswordContent() {
     setIsLoading(true)
     setError(null)
 
-    // Validate passwords
+    // Validate passwords - matches AUTH_CONFIG (SSOT: minLength=8, no complexity)
     if (password.length < 8) {
       setError('Das Passwort muss mindestens 8 Zeichen lang sein')
       setIsLoading(false)
@@ -45,17 +45,6 @@ function ResetPasswordContent() {
 
     if (password !== confirmPassword) {
       setError('Die Passwörter stimmen nicht überein')
-      setIsLoading(false)
-      return
-    }
-
-    // Validate password strength
-    const hasUpperCase = /[A-Z]/.test(password)
-    const hasLowerCase = /[a-z]/.test(password)
-    const hasNumbers = /\d/.test(password)
-
-    if (!hasUpperCase || !hasLowerCase || !hasNumbers) {
-      setError('Das Passwort muss mindestens einen Grossbuchstaben, einen Kleinbuchstaben und eine Zahl enthalten')
       setIsLoading(false)
       return
     }
@@ -244,15 +233,6 @@ function ResetPasswordContent() {
               <ul className="ml-4 space-y-0.5">
                 <li className={password.length >= 8 ? 'text-green-600' : 'text-gray-400'}>
                   ✓ Mindestens 8 Zeichen
-                </li>
-                <li className={/[A-Z]/.test(password) ? 'text-green-600' : 'text-gray-400'}>
-                  ✓ Mindestens ein Grossbuchstabe
-                </li>
-                <li className={/[a-z]/.test(password) ? 'text-green-600' : 'text-gray-400'}>
-                  ✓ Mindestens ein Kleinbuchstabe
-                </li>
-                <li className={/\d/.test(password) ? 'text-green-600' : 'text-gray-400'}>
-                  ✓ Mindestens eine Zahl
                 </li>
                 <li className={password === confirmPassword && password ? 'text-green-600' : 'text-gray-400'}>
                   ✓ Passwörter stimmen überein

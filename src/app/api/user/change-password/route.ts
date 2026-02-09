@@ -34,9 +34,33 @@ export const POST = withAuth(async (request: NextRequest, session) => {
       )
     }
 
-    // Verify current password (this would require access to the current password)
-    // For now, we'll implement this as a placeholder since we need to store current password
-    // In a real implementation, you'd verify against the stored hash
+    // Fetch current password hash from database
+    const userResult = await query(
+      `SELECT password_hash FROM ${TABLE_NAMES.USERS} WHERE id = $1`,
+      [session.user.id]
+    )
+
+    if (userResult.rows.length === 0) {
+      return apiBadRequest('Benutzer nicht gefunden')
+    }
+
+    const user = userResult.rows[0] as { password_hash: string }
+
+    if (!user.password_hash) {
+      return apiBadRequest('Kein Passwort gesetzt. Bitte verwenden Sie die Passwort-zurücksetzen Funktion.')
+    }
+
+    // Verify current password against stored hash
+    const isCurrentPasswordValid = await verifyPassword(currentPassword, user.password_hash)
+    if (!isCurrentPasswordValid) {
+      return apiBadRequest('Das aktuelle Passwort ist falsch')
+    }
+
+    // Prevent setting the same password
+    const isSamePassword = await verifyPassword(newPassword, user.password_hash)
+    if (isSamePassword) {
+      return apiBadRequest('Das neue Passwort muss sich vom aktuellen Passwort unterscheiden')
+    }
 
     // Hash new password
     const newPasswordHash = await hashPassword(newPassword)

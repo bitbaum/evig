@@ -128,6 +128,9 @@ export const TABLE_NAMES = {
   TASK_REQUESTS: 'task_requests',
   TASK_PROJECTS: 'task_projects',
 
+  // Content Submissions
+  USER_CONTENT_SUBMISSIONS: 'user_content_submissions',
+
   // Activity Stream
   ACTIVITY_UPDATES: 'activity_updates',
   HELP_REQUESTS: 'help_requests',

@@ -42,17 +42,14 @@ export function AccountStep({
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
 
-  // Password strength indicators
+  // Password strength indicators - derived from AUTH_CONFIG (SSOT)
+  // AUTH_CONFIG: minLength=8, no complexity requirements
   const passwordChecks = {
-    length: password.length >= 12,
-    uppercase: /[A-Z]/.test(password),
-    lowercase: /[a-z]/.test(password),
-    number: /[0-9]/.test(password),
-    special: /[!@#$%^&*(),.?":{}|<>[\]\\;'`~_+\-=]/.test(password),
+    length: password.length >= 8,
   }
-  const passwordStrength = Object.values(passwordChecks).filter(Boolean).length
+  const passwordValid = passwordChecks.length
   const passwordsMatch = password === confirmPassword
-  const isValid = email && passwordStrength === 5 && passwordsMatch && acceptTerms
+  const isValid = email && passwordValid && passwordsMatch && acceptTerms
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -136,7 +133,7 @@ export function AccountStep({
             onChange={(e) => onPasswordChange(e.target.value)}
             required
             autoComplete="new-password"
-            placeholder="Mindestens 12 Zeichen"
+            placeholder="Mindestens 8 Zeichen"
             className="w-full pl-11 pr-12 py-3 border-2 rounded-lg border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-700 text-gray-900 dark:text-white placeholder-neutral-400 focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
           />
           <button
@@ -153,32 +150,15 @@ export function AccountStep({
         {password && (
           <div className="mt-2">
             <div className="flex gap-1 mb-2">
-              {[1, 2, 3, 4, 5].map((level) => (
-                <div
-                  key={level}
-                  className={`h-1.5 flex-1 rounded-full ${
-                    passwordStrength >= level
-                      ? level <= 2 ? 'bg-red-500' : level <= 4 ? 'bg-yellow-500' : 'bg-green-500'
-                      : 'bg-gray-200'
-                  }`}
-                />
-              ))}
+              <div
+                className={`h-1.5 flex-1 rounded-full ${
+                  passwordChecks.length ? 'bg-green-500' : 'bg-gray-200'
+                }`}
+              />
             </div>
             <ul className="text-xs text-gray-500 space-y-0.5">
               <li className={passwordChecks.length ? 'text-green-600' : ''}>
-                {passwordChecks.length ? '✓' : '○'} Mindestens 12 Zeichen
-              </li>
-              <li className={passwordChecks.uppercase ? 'text-green-600' : ''}>
-                {passwordChecks.uppercase ? '✓' : '○'} Ein Grossbuchstabe
-              </li>
-              <li className={passwordChecks.lowercase ? 'text-green-600' : ''}>
-                {passwordChecks.lowercase ? '✓' : '○'} Ein Kleinbuchstabe
-              </li>
-              <li className={passwordChecks.number ? 'text-green-600' : ''}>
-                {passwordChecks.number ? '✓' : '○'} Eine Zahl
-              </li>
-              <li className={passwordChecks.special ? 'text-green-600' : ''}>
-                {passwordChecks.special ? '✓' : '○'} Ein Sonderzeichen
+                {passwordChecks.length ? '✓' : '○'} Mindestens 8 Zeichen
               </li>
             </ul>
           </div>
