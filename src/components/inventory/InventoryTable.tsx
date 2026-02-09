@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import { getConditionBadge } from '@/config/erfassung/conditions'
 import {
   Package,
   Eye,
@@ -86,15 +87,7 @@ export function InventoryTable({ items, onPublishSuccess }: InventoryTableProps)
     }
   }
 
-  const getConditionLabel = (condition: string) => {
-    switch (condition) {
-      case 'new': return { label: 'Neu', color: 'bg-green-100 text-green-800' }
-      case 'like_new': return { label: 'Wie neu', color: 'bg-blue-100 text-blue-800' }
-      case 'good': return { label: 'Gut', color: 'bg-yellow-100 text-yellow-800' }
-      case 'fair': return { label: 'Akzeptabel', color: 'bg-orange-100 text-orange-800' }
-      default: return { label: 'Unbekannt', color: 'bg-gray-100 text-gray-800' }
-    }
-  }
+  const getConditionLabel = (condition: string) => getConditionBadge(condition)
 
   const getStatusIcon = (status: string) => {
     switch (status) {

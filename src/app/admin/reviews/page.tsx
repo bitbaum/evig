@@ -56,6 +56,10 @@ export default function AdminReviewsPage() {
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedReview, setSelectedReview] = useState<Review | null>(null)
   const [moderationAction, setModerationAction] = useState<string | null>(null)
+  const [moderatingId, setModeratingId] = useState<string | null>(null)
+  const [moderatingAction, setModeratingAction] = useState<string>('')
+  const [moderationReason, setModerationReason] = useState('')
+  const [successMessage, setSuccessMessage] = useState<string | null>(null)
 
   const fetchReviews = useCallback(async () => {
     try {
@@ -77,18 +81,29 @@ export default function AdminReviewsPage() {
     fetchReviews()
   }, [fetchReviews])
 
-  const handleModerate = async (reviewId: string, action: string) => {
-    const reason = prompt(`Grund für ${getActionLabel(action)}:`)
-    if (!reason) return
+  const startModeration = (reviewId: string, action: string) => {
+    setModeratingId(reviewId)
+    setModeratingAction(action)
+    setModerationReason('')
+  }
 
-    setModerationAction(reviewId)
+  const cancelModeration = () => {
+    setModeratingId(null)
+    setModeratingAction('')
+    setModerationReason('')
+  }
+
+  const handleModerate = async () => {
+    if (!moderatingId || !moderationReason.trim()) return
+
+    setModerationAction(moderatingId)
     try {
-      const response = await fetch(`/api/admin/reviews/${reviewId}/moderate`, {
+      const response = await fetch(`/api/admin/reviews/${moderatingId}/moderate`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          action,
-          reason
+          action: moderatingAction,
+          reason: moderationReason
         })
       })
 
@@ -96,10 +111,12 @@ export default function AdminReviewsPage() {
         throw new Error('Failed to moderate review')
       }
 
+      cancelModeration()
       await fetchReviews()
-      alert(`Bewertung erfolgreich ${getActionLabel(action)}`)
+      setSuccessMessage(`Bewertung erfolgreich ${getActionLabel(moderatingAction)}`)
+      setTimeout(() => setSuccessMessage(null), 3000)
     } catch (err) {
-      alert('Fehler bei der Moderation: ' + (err instanceof Error ? err.message : 'Unknown error'))
+      setError('Fehler bei der Moderation: ' + (err instanceof Error ? err.message : 'Unbekannter Fehler'))
     } finally {
       setModerationAction(null)
     }
@@ -266,6 +283,45 @@ export default function AdminReviewsPage() {
         </div>
       </div>
 
+      {/* Success Message */}
+      {successMessage && (
+        <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+          <p className="text-green-800">{successMessage}</p>
+        </div>
+      )}
+
+      {/* Moderation Dialog */}
+      {moderatingId && (
+        <div className="bg-white rounded-lg shadow-sm border border-orange-200 p-6">
+          <h3 className="text-sm font-semibold text-gray-900 mb-2">
+            Grund für {getActionLabel(moderatingAction)}:
+          </h3>
+          <textarea
+            value={moderationReason}
+            onChange={(e) => setModerationReason(e.target.value)}
+            placeholder="Bitte geben Sie einen Grund an..."
+            rows={3}
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 text-sm"
+            autoFocus
+          />
+          <div className="flex gap-2 mt-3">
+            <button
+              onClick={handleModerate}
+              disabled={!moderationReason.trim()}
+              className="px-4 py-2 bg-green-600 text-white rounded-lg text-sm font-medium hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              Bestätigen
+            </button>
+            <button
+              onClick={cancelModeration}
+              className="px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50"
+            >
+              Abbrechen
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* Reviews List */}
       <div className="space-y-4">
         {filteredReviews.length === 0 ? (
@@ -330,7 +386,7 @@ export default function AdminReviewsPage() {
                     {selectedStatus === 'pending_moderation' && (
                       <>
                         <button
-                          onClick={() => handleModerate(review.id, 'approve')}
+                          onClick={() => startModeration(review.id, 'approve')}
                           disabled={moderationAction === review.id}
                           className="px-3 py-1.5 bg-green-600 text-white rounded text-xs hover:bg-green-700 disabled:opacity-50 flex items-center gap-1"
                         >
@@ -338,7 +394,7 @@ export default function AdminReviewsPage() {
                           {moderationAction === review.id ? '...' : 'Freigeben'}
                         </button>
                         <button
-                          onClick={() => handleModerate(review.id, 'hide')}
+                          onClick={() => startModeration(review.id, 'hide')}
                           disabled={moderationAction === review.id}
                           className="px-3 py-1.5 bg-red-600 text-white rounded text-xs hover:bg-red-700 disabled:opacity-50 flex items-center gap-1"
                         >
@@ -351,7 +407,7 @@ export default function AdminReviewsPage() {
                     {selectedStatus === 'hidden' && (
                       <>
                         <button
-                          onClick={() => handleModerate(review.id, 'restore')}
+                          onClick={() => startModeration(review.id, 'restore')}
                           disabled={moderationAction === review.id}
                           className="px-3 py-1.5 bg-green-600 text-white rounded text-xs hover:bg-green-700 disabled:opacity-50 flex items-center gap-1"
                         >
@@ -359,7 +415,7 @@ export default function AdminReviewsPage() {
                           {moderationAction === review.id ? '...' : 'Wiederherstellen'}
                         </button>
                         <button
-                          onClick={() => handleModerate(review.id, 'delete')}
+                          onClick={() => startModeration(review.id, 'delete')}
                           disabled={moderationAction === review.id}
                           className="px-3 py-1.5 bg-red-600 text-white rounded text-xs hover:bg-red-700 disabled:opacity-50 flex items-center gap-1"
                         >
@@ -371,7 +427,7 @@ export default function AdminReviewsPage() {
 
                     <div className="flex gap-1 mt-2">
                       <button
-                        onClick={() => handleModerate(review.id, 'flag_spam')}
+                        onClick={() => startModeration(review.id, 'flag_spam')}
                         disabled={moderationAction === review.id}
                         className="px-2 py-1 bg-yellow-100 text-yellow-700 rounded text-xs hover:bg-yellow-200 disabled:opacity-50"
                         title="Als Spam markieren"
@@ -379,7 +435,7 @@ export default function AdminReviewsPage() {
                         <Flag className="w-3 h-3" />
                       </button>
                       <button
-                        onClick={() => handleModerate(review.id, 'flag_inappropriate')}
+                        onClick={() => startModeration(review.id, 'flag_inappropriate')}
                         disabled={moderationAction === review.id}
                         className="px-2 py-1 bg-orange-100 text-orange-700 rounded text-xs hover:bg-orange-200 disabled:opacity-50"
                         title="Als unangemessen markieren"

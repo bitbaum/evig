@@ -9,6 +9,7 @@ import Link from 'next/link'
 import { query } from '@/lib/auth/db'
 import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
+import { getConditionBadge } from '@/config/erfassung/conditions'
 import {
   ArrowLeft,
   MapPin,
@@ -43,21 +44,7 @@ interface ProductDetail {
   views_count: number
 }
 
-const CONDITION_LABELS: Record<string, string> = {
-  new: 'Neu',
-  like_new: 'Wie neu',
-  good: 'Gut',
-  fair: 'Akzeptabel',
-  poor: 'Gebraucht',
-}
-
-const CONDITION_COLORS: Record<string, string> = {
-  new: 'bg-green-100 text-green-800',
-  like_new: 'bg-blue-100 text-blue-800',
-  good: 'bg-yellow-100 text-yellow-800',
-  fair: 'bg-orange-100 text-orange-800',
-  poor: 'bg-red-100 text-red-800',
-}
+// Condition labels and colors from SSOT: @/config/erfassung/conditions
 
 async function getProduct(productId: string): Promise<ProductDetail | null> {
   try {
@@ -132,8 +119,7 @@ export default async function ProductDetailPage(
     notFound()
   }
 
-  const conditionLabel = CONDITION_LABELS[product.condition] || product.condition
-  const conditionColor = CONDITION_COLORS[product.condition] || 'bg-gray-100 text-gray-800'
+  const { label: conditionLabel, color: conditionColor } = getConditionBadge(product.condition)
   const hasDiscount = product.selling_price_chf && product.selling_price_chf > product.price_chf
 
   return (

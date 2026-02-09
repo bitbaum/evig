@@ -36,6 +36,8 @@ export function PermissionRequestsManager() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const [processingId, setProcessingId] = useState<string | null>(null)
+  const [rejectingId, setRejectingId] = useState<string | null>(null)
+  const [rejectionNotes, setRejectionNotes] = useState('')
 
   const fetchRequests = async () => {
     try {
@@ -59,30 +61,43 @@ export function PermissionRequestsManager() {
     fetchRequests()
   }, [])
 
-  const handleAction = async (requestId: string, action: 'approve' | 'reject') => {
-    const notes = action === 'reject'
-      ? prompt('Grund für Ablehnung (optional):')
-      : null
-
+  const handleApprove = async (requestId: string) => {
     setProcessingId(requestId)
-
     try {
       const response = await fetch(`/api/admin/permissions/requests/${requestId}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action, notes }),
+        body: JSON.stringify({ action: 'approve', notes: null }),
       })
-
       const data = await response.json()
-
       if (!response.ok) {
         throw new Error(data.error || 'Fehler bei der Verarbeitung')
       }
-
-      // Remove the processed request from the list
       setRequests(prev => prev.filter(r => r.id !== requestId))
     } catch (err) {
-      alert(err instanceof Error ? err.message : 'Fehler')
+      setError(err instanceof Error ? err.message : 'Fehler')
+    } finally {
+      setProcessingId(null)
+    }
+  }
+
+  const handleReject = async (requestId: string) => {
+    setProcessingId(requestId)
+    try {
+      const response = await fetch(`/api/admin/permissions/requests/${requestId}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'reject', notes: rejectionNotes || null }),
+      })
+      const data = await response.json()
+      if (!response.ok) {
+        throw new Error(data.error || 'Fehler bei der Verarbeitung')
+      }
+      setRejectingId(null)
+      setRejectionNotes('')
+      setRequests(prev => prev.filter(r => r.id !== requestId))
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Fehler')
     } finally {
       setProcessingId(null)
     }
@@ -189,7 +204,7 @@ export function PermissionRequestsManager() {
 
               <div className="flex gap-2 ml-4">
                 <button
-                  onClick={() => handleAction(request.id, 'approve')}
+                  onClick={() => handleApprove(request.id)}
                   disabled={processingId === request.id}
                   className="flex items-center gap-1 px-3 py-1.5 bg-green-600 hover:bg-green-700 disabled:bg-gray-400 text-white text-sm rounded transition-colors"
                 >
@@ -197,7 +212,7 @@ export function PermissionRequestsManager() {
                   Genehmigen
                 </button>
                 <button
-                  onClick={() => handleAction(request.id, 'reject')}
+                  onClick={() => { setRejectingId(request.id); setRejectionNotes('') }}
                   disabled={processingId === request.id}
                   className="flex items-center gap-1 px-3 py-1.5 bg-red-600 hover:bg-red-700 disabled:bg-gray-400 text-white text-sm rounded transition-colors"
                 >
@@ -206,6 +221,37 @@ export function PermissionRequestsManager() {
                 </button>
               </div>
             </div>
+
+            {rejectingId === request.id && (
+              <div className="mt-3 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
+                <label className="block text-sm font-medium text-red-800 dark:text-red-300 mb-1">
+                  Grund für Ablehnung (optional):
+                </label>
+                <textarea
+                  value={rejectionNotes}
+                  onChange={(e) => setRejectionNotes(e.target.value)}
+                  placeholder="Optionaler Ablehnungsgrund..."
+                  rows={2}
+                  className="w-full px-3 py-2 border border-red-300 rounded-lg focus:ring-2 focus:ring-red-500 text-sm"
+                  autoFocus
+                />
+                <div className="flex gap-2 mt-2">
+                  <button
+                    onClick={() => handleReject(request.id)}
+                    disabled={processingId === request.id}
+                    className="px-3 py-1.5 bg-red-600 text-white rounded text-sm font-medium hover:bg-red-700 disabled:opacity-50"
+                  >
+                    Ablehnung bestätigen
+                  </button>
+                  <button
+                    onClick={() => { setRejectingId(null); setRejectionNotes('') }}
+                    className="px-3 py-1.5 border border-gray-300 rounded text-sm font-medium text-gray-700 hover:bg-gray-50"
+                  >
+                    Abbrechen
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
         ))}
       </div>

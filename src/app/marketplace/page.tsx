@@ -18,6 +18,7 @@ import {
   AlertCircle,
   RefreshCw
 } from 'lucide-react'
+import { ZUSTAND_OPTIONS, getConditionBadge } from '@/config/erfassung/conditions'
 
 interface Product {
   id: string
@@ -111,16 +112,7 @@ export default function MarketplacePage() {
     setSearch(searchInput)
   }
 
-  const getConditionLabel = (cond: Product['condition']) => {
-    switch (cond) {
-      case 'new': return { label: 'Neu', color: 'bg-green-100 text-green-800' }
-      case 'like_new': return { label: 'Wie neu', color: 'bg-blue-100 text-blue-800' }
-      case 'good': return { label: 'Gut', color: 'bg-yellow-100 text-yellow-800' }
-      case 'fair': return { label: 'Akzeptabel', color: 'bg-orange-100 text-orange-800' }
-      case 'poor': return { label: 'Gebraucht', color: 'bg-red-100 text-red-800' }
-      default: return { label: 'Unbekannt', color: 'bg-gray-100 text-gray-800' }
-    }
-  }
+  const getConditionDisplay = (cond: string) => getConditionBadge(cond)
 
   return (
     <div className="space-y-8">
@@ -225,10 +217,9 @@ export default function MarketplacePage() {
               className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
             >
               <option value="">Alle Zustände</option>
-              <option value="new">Neu</option>
-              <option value="like_new">Wie neu</option>
-              <option value="good">Gut</option>
-              <option value="fair">Akzeptabel</option>
+              {ZUSTAND_OPTIONS.map(opt => (
+                <option key={opt.value} value={opt.value}>{opt.label}</option>
+              ))}
             </select>
           </div>
 
@@ -326,7 +317,7 @@ export default function MarketplacePage() {
       {!isLoading && !error && products.length > 0 && (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {products.map((product) => {
-            const conditionInfo = getConditionLabel(product.condition)
+            const conditionInfo = getConditionDisplay(product.condition)
             return (
               <div key={product.id} className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden hover:shadow-md transition-shadow">
                 {/* Product Image */}

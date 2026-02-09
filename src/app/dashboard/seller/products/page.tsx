@@ -2,6 +2,7 @@ import { Metadata } from 'next'
 import { ROLES } from '@/lib/constants'
 import { auth } from '@/auth'
 import { redirect } from 'next/navigation'
+import { getConditionBadge } from '@/config/erfassung/conditions'
 import Link from 'next/link'
 import {
   Package,
@@ -104,15 +105,7 @@ export default async function SellerProductsPage() {
     },
   ]
 
-  const getConditionLabel = (condition: string) => {
-    switch (condition) {
-      case 'new': return { label: 'Neu', color: 'bg-green-100 text-green-800' }
-      case 'like_new': return { label: 'Wie neu', color: 'bg-blue-100 text-blue-800' }
-      case 'good': return { label: 'Gut', color: 'bg-yellow-100 text-yellow-800' }
-      case 'fair': return { label: 'Akzeptabel', color: 'bg-orange-100 text-orange-800' }
-      default: return { label: 'Unbekannt', color: 'bg-gray-100 text-gray-800' }
-    }
-  }
+  const getConditionLabel = (condition: string) => getConditionBadge(condition)
 
   const stats = {
     totalProducts: products.length,

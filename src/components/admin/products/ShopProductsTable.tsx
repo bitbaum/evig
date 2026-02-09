@@ -1,6 +1,7 @@
 "use client"
 
 import { motion } from 'framer-motion'
+import { getConditionBadge } from '@/config/erfassung/conditions'
 import {
   Package,
   Eye,
@@ -21,25 +22,7 @@ interface ShopProductsTableProps {
   onDelete?: (product: ShopProduct) => void
 }
 
-// Condition labels in German
-const CONDITION_LABELS: Record<string, string> = {
-  'new': 'Neu',
-  'like_new': 'Wie neu',
-  'very_good': 'Sehr gut',
-  'good': 'Gut',
-  'acceptable': 'Akzeptabel',
-  'for_parts': 'Für Teile',
-}
-
-// Condition colors
-const CONDITION_COLORS: Record<string, string> = {
-  'new': 'bg-green-100 text-green-800',
-  'like_new': 'bg-emerald-100 text-emerald-800',
-  'very_good': 'bg-blue-100 text-blue-800',
-  'good': 'bg-sky-100 text-sky-800',
-  'acceptable': 'bg-yellow-100 text-yellow-800',
-  'for_parts': 'bg-orange-100 text-orange-800',
-}
+// Condition labels and colors from SSOT: @/config/erfassung/conditions
 
 export function ShopProductsTable({
   products,
@@ -132,10 +115,10 @@ export function ShopProductsTable({
                   <span
                     className={cn(
                       "inline-flex px-2 py-1 text-xs font-medium rounded-full",
-                      CONDITION_COLORS[product.condition] || 'bg-gray-100 text-gray-800'
+                      getConditionBadge(product.condition).color
                     )}
                   >
-                    {CONDITION_LABELS[product.condition] || product.condition}
+                    {getConditionBadge(product.condition).label}
                   </span>
                 </td>
                 <td className="px-6 py-4">

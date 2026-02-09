@@ -144,6 +144,14 @@ export default function RepairerApplicationsAdmin() {
   const [documentActionLoading, setDocumentActionLoading] = useState<string | null>(null)
   const [certificationActionLoading, setCertificationActionLoading] = useState<string | null>(null)
   const [searchQuery, setSearchQuery] = useState('')
+  const [successMessage, setSuccessMessage] = useState<string | null>(null)
+  const [actionDialog, setActionDialog] = useState<{
+    type: 'approve_app' | 'reject_app' | 'request_changes' | 'approve_doc' | 'reject_doc' | 'verify_cert' | 'reject_cert'
+    targetId: string
+    reason: string
+    notes: string
+    expiresAt: string
+  } | null>(null)
 
   const fetchApplications = useCallback(async () => {
     try {
@@ -165,91 +173,98 @@ export default function RepairerApplicationsAdmin() {
     fetchApplications()
   }, [fetchApplications])
 
-  const handleApprove = async (applicationId: string) => {
-    if (!confirm('Sind Sie sicher, dass Sie diese Bewerbung genehmigen möchten? Der Benutzer erhält Reparatur-Berechtigungen.')) {
-      return
-    }
-
-    setActionLoading(applicationId)
-    try {
-      const response = await fetch(`/api/admin/repairer-applications/${applicationId}/approve`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          adminNotes: prompt('Optionale Admin-Notizen:') || undefined
-        })
-      })
-
-      if (!response.ok) {
-        throw new Error('Failed to approve application')
-      }
-
-      await fetchApplications()
-      alert('Bewerbung erfolgreich genehmigt!')
-    } catch (err) {
-      alert('Fehler beim Genehmigen der Bewerbung: ' + (err instanceof Error ? err.message : 'Unknown error'))
-    } finally {
-      setActionLoading(null)
-    }
+  const openDialog = (type: NonNullable<typeof actionDialog>['type'], targetId: string) => {
+    setActionDialog({ type, targetId, reason: '', notes: '', expiresAt: '' })
   }
 
-  const handleReject = async (applicationId: string) => {
-    const reason = prompt('Ablehnungsgrund (erforderlich):')
-    if (!reason) return
+  const closeDialog = () => setActionDialog(null)
 
-    const adminNotes = prompt('Optionale zusätzliche Admin-Notizen:')
-
-    setActionLoading(applicationId)
-    try {
-      const response = await fetch(`/api/admin/repairer-applications/${applicationId}/reject`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          rejectionReason: reason,
-          adminNotes
-        })
-      })
-
-      if (!response.ok) {
-        throw new Error('Failed to reject application')
-      }
-
-      await fetchApplications()
-      alert('Bewerbung erfolgreich abgelehnt!')
-    } catch (err) {
-      alert('Fehler beim Ablehnen der Bewerbung: ' + (err instanceof Error ? err.message : 'Unknown error'))
-    } finally {
-      setActionLoading(null)
-    }
+  const showSuccess = (msg: string) => {
+    setSuccessMessage(msg)
+    setTimeout(() => setSuccessMessage(null), 3000)
   }
 
-  const handleRequestChanges = async (applicationId: string) => {
-    const changes = prompt('Geforderte Änderungen beschreiben (erforderlich):')
-    if (!changes) return
+  const submitAction = async () => {
+    if (!actionDialog) return
+    const { type, targetId, reason, notes, expiresAt } = actionDialog
 
-    const adminNotes = prompt('Optionale zusätzliche Admin-Notizen:')
+    // Validate required fields
+    if (['reject_app', 'request_changes', 'reject_doc', 'reject_cert'].includes(type) && !reason.trim()) return
 
-    setActionLoading(applicationId)
+    const loadingSetter = type.includes('doc') ? setDocumentActionLoading
+      : type.includes('cert') ? setCertificationActionLoading
+      : setActionLoading
+
+    loadingSetter(targetId)
+    closeDialog()
+
     try {
-      const response = await fetch(`/api/admin/repairer-applications/${applicationId}/request-changes`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          requestedChanges: changes,
-          adminNotes
-        })
-      })
+      let url = ''
+      let body: Record<string, unknown> = {}
 
-      if (!response.ok) {
-        throw new Error('Failed to request changes')
+      switch (type) {
+        case 'approve_app':
+          url = `/api/admin/repairer-applications/${targetId}/approve`
+          body = { adminNotes: notes || undefined }
+          break
+        case 'reject_app':
+          url = `/api/admin/repairer-applications/${targetId}/reject`
+          body = { rejectionReason: reason, adminNotes: notes || undefined }
+          break
+        case 'request_changes':
+          url = `/api/admin/repairer-applications/${targetId}/request-changes`
+          body = { requestedChanges: reason, adminNotes: notes || undefined }
+          break
+        case 'approve_doc':
+          url = `/api/admin/documents/${targetId}/approve`
+          body = { adminNotes: notes || undefined, expiresAt: expiresAt || undefined }
+          break
+        case 'reject_doc':
+          url = `/api/admin/documents/${targetId}/reject`
+          body = { rejectionReason: reason, adminNotes: notes || undefined }
+          break
+        case 'verify_cert':
+          url = `/api/admin/certifications/${targetId}/verify`
+          body = { adminNotes: notes || undefined, verificationResult: { verified: true, verifiedAt: new Date().toISOString() } }
+          break
+        case 'reject_cert':
+          url = `/api/admin/certifications/${targetId}/reject`
+          body = { rejectionReason: reason, adminNotes: notes || undefined }
+          break
       }
 
-      await fetchApplications()
-      alert('Änderungen wurden erfolgreich angefordert!')
+      const response = await fetch(url, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
+      })
+
+      if (!response.ok) throw new Error('Aktion fehlgeschlagen')
+
+      // Refresh data
+      if (type.includes('doc') && selectedApplication) {
+        await fetchApplicationDocuments(selectedApplication.id)
+        await fetchApplications()
+      } else if (type.includes('cert') && selectedApplication) {
+        await fetchApplicationCertifications(selectedApplication.id)
+      } else {
+        await fetchApplications()
+      }
+
+      const labels: Record<string, string> = {
+        approve_app: 'Bewerbung genehmigt',
+        reject_app: 'Bewerbung abgelehnt',
+        request_changes: 'Änderungen angefordert',
+        approve_doc: 'Dokument genehmigt',
+        reject_doc: 'Dokument abgelehnt',
+        verify_cert: 'Zertifizierung verifiziert',
+        reject_cert: 'Zertifizierung abgelehnt',
+      }
+      showSuccess(labels[type] + '!')
     } catch (err) {
-      alert('Fehler beim Anfordern von Änderungen: ' + (err instanceof Error ? err.message : 'Unknown error'))
+      setError(err instanceof Error ? err.message : 'Unbekannter Fehler')
     } finally {
-      setActionLoading(null)
+      loadingSetter(null)
     }
   }
 
@@ -289,134 +304,7 @@ export default function RepairerApplicationsAdmin() {
     fetchApplicationCertifications(application.id)
   }
 
-  const handleApproveDocument = async (documentId: string) => {
-    const adminNotes = prompt('Optionale Admin-Notizen:')
-    const expiresAt = prompt('Ablaufdatum (YYYY-MM-DD, optional):')
-
-    setDocumentActionLoading(documentId)
-    try {
-      const response = await fetch(`/api/admin/documents/${documentId}/approve`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          adminNotes,
-          expiresAt: expiresAt || undefined
-        })
-      })
-
-      if (!response.ok) {
-        throw new Error('Failed to approve document')
-      }
-
-      // Refresh documents
-      if (selectedApplication) {
-        await fetchApplicationDocuments(selectedApplication.id)
-        await fetchApplications() // Refresh application list to update verification status
-      }
-      alert('Dokument erfolgreich genehmigt!')
-    } catch (err) {
-      alert('Fehler beim Genehmigen des Dokuments: ' + (err instanceof Error ? err.message : 'Unknown error'))
-    } finally {
-      setDocumentActionLoading(null)
-    }
-  }
-
-  const handleRejectDocument = async (documentId: string) => {
-    const rejectionReason = prompt('Ablehnungsgrund (erforderlich):')
-    if (!rejectionReason) return
-
-    const adminNotes = prompt('Optionale zusätzliche Admin-Notizen:')
-
-    setDocumentActionLoading(documentId)
-    try {
-      const response = await fetch(`/api/admin/documents/${documentId}/reject`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          rejectionReason,
-          adminNotes
-        })
-      })
-
-      if (!response.ok) {
-        throw new Error('Failed to reject document')
-      }
-
-      // Refresh documents
-      if (selectedApplication) {
-        await fetchApplicationDocuments(selectedApplication.id)
-        await fetchApplications() // Refresh application list to update verification status
-      }
-      alert('Dokument erfolgreich abgelehnt!')
-    } catch (err) {
-      alert('Fehler beim Ablehnen des Dokuments: ' + (err instanceof Error ? err.message : 'Unknown error'))
-    } finally {
-      setDocumentActionLoading(null)
-    }
-  }
-
-  const handleVerifyCertification = async (certificationId: string) => {
-    const adminNotes = prompt('Optionale Admin-Notizen:')
-
-    setCertificationActionLoading(certificationId)
-    try {
-      const response = await fetch(`/api/admin/certifications/${certificationId}/verify`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          adminNotes,
-          verificationResult: { verified: true, verifiedAt: new Date().toISOString() }
-        })
-      })
-
-      if (!response.ok) {
-        throw new Error('Failed to verify certification')
-      }
-
-      // Refresh certifications
-      if (selectedApplication) {
-        await fetchApplicationCertifications(selectedApplication.id)
-      }
-      alert('Zertifizierung erfolgreich verifiziert!')
-    } catch (err) {
-      alert('Fehler beim Verifizieren der Zertifizierung: ' + (err instanceof Error ? err.message : 'Unknown error'))
-    } finally {
-      setCertificationActionLoading(null)
-    }
-  }
-
-  const handleRejectCertification = async (certificationId: string) => {
-    const rejectionReason = prompt('Ablehnungsgrund (erforderlich):')
-    if (!rejectionReason) return
-
-    const adminNotes = prompt('Optionale zusätzliche Admin-Notizen:')
-
-    setCertificationActionLoading(certificationId)
-    try {
-      const response = await fetch(`/api/admin/certifications/${certificationId}/reject`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          rejectionReason,
-          adminNotes
-        })
-      })
-
-      if (!response.ok) {
-        throw new Error('Failed to reject certification')
-      }
-
-      // Refresh certifications
-      if (selectedApplication) {
-        await fetchApplicationCertifications(selectedApplication.id)
-      }
-      alert('Zertifizierung erfolgreich abgelehnt!')
-    } catch (err) {
-      alert('Fehler beim Ablehnen der Zertifizierung: ' + (err instanceof Error ? err.message : 'Unknown error'))
-    } finally {
-      setCertificationActionLoading(null)
-    }
-  }
+  // Document and certification handlers now use the unified actionDialog via openDialog/submitAction
 
   const getStatusIcon = (status: string) => {
     switch (status) {
@@ -499,6 +387,88 @@ export default function RepairerApplicationsAdmin() {
         </div>
         <h1 className="text-2xl font-bold text-gray-900">Reparateur-Bewerbungen</h1>
       </div>
+
+      {/* Success Message */}
+      {successMessage && (
+        <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+          <p className="text-green-800">{successMessage}</p>
+        </div>
+      )}
+
+      {/* Action Dialog */}
+      {actionDialog && (
+        <div className="bg-white rounded-lg shadow-lg border-2 border-blue-300 p-6">
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">
+            {{
+              approve_app: 'Bewerbung genehmigen',
+              reject_app: 'Bewerbung ablehnen',
+              request_changes: 'Änderungen anfordern',
+              approve_doc: 'Dokument genehmigen',
+              reject_doc: 'Dokument ablehnen',
+              verify_cert: 'Zertifizierung verifizieren',
+              reject_cert: 'Zertifizierung ablehnen',
+            }[actionDialog.type]}
+          </h3>
+
+          {['reject_app', 'request_changes', 'reject_doc', 'reject_cert'].includes(actionDialog.type) && (
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                {actionDialog.type === 'request_changes' ? 'Geforderte Änderungen (erforderlich):' : 'Grund (erforderlich):'}
+              </label>
+              <textarea
+                value={actionDialog.reason}
+                onChange={(e) => setActionDialog(prev => prev ? { ...prev, reason: e.target.value } : null)}
+                rows={3}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm"
+                autoFocus
+              />
+            </div>
+          )}
+
+          {actionDialog.type === 'approve_doc' && (
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Ablaufdatum (YYYY-MM-DD, optional):
+              </label>
+              <input
+                type="date"
+                value={actionDialog.expiresAt}
+                onChange={(e) => setActionDialog(prev => prev ? { ...prev, expiresAt: e.target.value } : null)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm"
+              />
+            </div>
+          )}
+
+          <div className="mb-4">
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Admin-Notizen (optional):
+            </label>
+            <textarea
+              value={actionDialog.notes}
+              onChange={(e) => setActionDialog(prev => prev ? { ...prev, notes: e.target.value } : null)}
+              rows={2}
+              placeholder="Optionale Notizen..."
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm"
+            />
+          </div>
+
+          <div className="flex gap-3">
+            <button
+              onClick={submitAction}
+              disabled={['reject_app', 'request_changes', 'reject_doc', 'reject_cert'].includes(actionDialog.type) && !actionDialog.reason.trim()}
+              className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              Bestätigen
+            </button>
+            <button
+              onClick={closeDialog}
+              className="px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50"
+            >
+              Abbrechen
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Filters and Search */}
       <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
@@ -615,21 +585,21 @@ export default function RepairerApplicationsAdmin() {
                   {selectedStatus === 'pending' && (
                     <div className="flex gap-2">
                       <button
-                        onClick={() => handleRequestChanges(application.id)}
+                        onClick={() => openDialog('request_changes', application.id)}
                         disabled={actionLoading === application.id}
                         className="px-3 py-1.5 bg-orange-100 text-orange-700 rounded-lg hover:bg-orange-200 disabled:opacity-50 text-sm font-medium"
                       >
                         {actionLoading === application.id ? '...' : 'Änderungen anfordern'}
                       </button>
                       <button
-                        onClick={() => handleReject(application.id)}
+                        onClick={() => openDialog('reject_app', application.id)}
                         disabled={actionLoading === application.id}
                         className="px-3 py-1.5 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 disabled:opacity-50 text-sm font-medium"
                       >
                         {actionLoading === application.id ? '...' : 'Ablehnen'}
                       </button>
                       <button
-                        onClick={() => handleApprove(application.id)}
+                        onClick={() => openDialog('approve_app', application.id)}
                         disabled={actionLoading === application.id}
                         className="px-3 py-1.5 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50 text-sm font-medium"
                       >
@@ -792,14 +762,14 @@ export default function RepairerApplicationsAdmin() {
                                       {doc.status === 'pending' && (
                                         <>
                                           <button
-                                            onClick={() => handleApproveDocument(doc.id)}
+                                            onClick={() => openDialog('approve_doc', doc.id)}
                                             disabled={documentActionLoading === doc.id}
                                             className="px-2 py-1 bg-green-100 text-green-700 rounded text-xs hover:bg-green-200 disabled:opacity-50"
                                           >
                                             {documentActionLoading === doc.id ? '...' : 'Genehmigen'}
                                           </button>
                                           <button
-                                            onClick={() => handleRejectDocument(doc.id)}
+                                            onClick={() => openDialog('reject_doc', doc.id)}
                                             disabled={documentActionLoading === doc.id}
                                             className="px-2 py-1 bg-red-100 text-red-700 rounded text-xs hover:bg-red-200 disabled:opacity-50"
                                           >
@@ -927,14 +897,14 @@ export default function RepairerApplicationsAdmin() {
                                           {cert.verificationStatus === 'pending' && (
                                             <>
                                               <button
-                                                onClick={() => handleVerifyCertification(cert.id)}
+                                                onClick={() => openDialog('verify_cert', cert.id)}
                                                 disabled={certificationActionLoading === cert.id}
                                                 className="px-3 py-1.5 bg-green-600 text-white rounded text-xs hover:bg-green-700 disabled:opacity-50"
                                               >
                                                 {certificationActionLoading === cert.id ? '...' : 'Verifizieren'}
                                               </button>
                                               <button
-                                                onClick={() => handleRejectCertification(cert.id)}
+                                                onClick={() => openDialog('reject_cert', cert.id)}
                                                 disabled={certificationActionLoading === cert.id}
                                                 className="px-3 py-1.5 bg-red-600 text-white rounded text-xs hover:bg-red-700 disabled:opacity-50"
                                               >

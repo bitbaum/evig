@@ -86,7 +86,53 @@ export function getConditionByValue(value: string): Condition | undefined {
  * Get condition label (German)
  */
 export function getConditionLabel(value: string): string {
-  return getConditionByValue(value)?.label ?? value
+  return getConditionByValue(value)?.label ?? CONDITION_VALUE_ALIASES[value]?.label ?? value
+}
+
+/**
+ * Badge style for condition display in UI
+ */
+export interface ConditionBadge {
+  label: string
+  color: string
+}
+
+const CONDITION_BADGE_COLORS: Record<string, string> = {
+  new: 'bg-green-100 text-green-800',
+  like_new: 'bg-blue-100 text-blue-800',
+  good: 'bg-yellow-100 text-yellow-800',
+  fair: 'bg-orange-100 text-orange-800',
+  poor: 'bg-red-100 text-red-800',
+  defect: 'bg-gray-100 text-gray-800',
+}
+
+/**
+ * Aliases for legacy condition values used in different parts of the codebase
+ */
+const CONDITION_VALUE_ALIASES: Record<string, { canonical: string; label: string }> = {
+  excellent: { canonical: 'like_new', label: 'Sehr gut' },
+  very_good: { canonical: 'like_new', label: 'Sehr gut' },
+  acceptable: { canonical: 'fair', label: 'Akzeptabel' },
+  for_parts: { canonical: 'defect', label: 'Für Teile' },
+}
+
+/**
+ * Get condition badge with label and Tailwind color classes
+ * Supports both canonical values (new, like_new, good, fair, poor, defect)
+ * and legacy aliases (excellent, very_good, acceptable)
+ */
+export function getConditionBadge(value: string): ConditionBadge {
+  // Check canonical values first
+  const condition = getConditionByValue(value)
+  if (condition) {
+    return { label: condition.label, color: CONDITION_BADGE_COLORS[value] || 'bg-gray-100 text-gray-800' }
+  }
+  // Check aliases
+  const alias = CONDITION_VALUE_ALIASES[value]
+  if (alias) {
+    return { label: alias.label, color: CONDITION_BADGE_COLORS[alias.canonical] || 'bg-gray-100 text-gray-800' }
+  }
+  return { label: value, color: 'bg-gray-100 text-gray-800' }
 }
 
 /**
