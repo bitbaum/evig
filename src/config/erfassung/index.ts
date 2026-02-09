@@ -44,6 +44,7 @@ export {
   CONDITION_ALIASES,
   getConditionByValue,
   getConditionLabel,
+  normalizeConditionValue,
   parseConditionFromText,
   type Condition,
   type ZustandValue,

@@ -80,7 +80,11 @@ export async function POST(request: NextRequest) {
             continue
           }
 
-          if (product.verkaufspreis === undefined || product.verkaufspreis < 0) {
+          // Coerce numeric fields (client may send strings from CSV)
+          const price = typeof product.verkaufspreis === 'string'
+            ? parseFloat(product.verkaufspreis)
+            : Number(product.verkaufspreis)
+          if (isNaN(price) || price < 0) {
             results.push({
               index: globalIndex,
               success: false,
@@ -90,8 +94,14 @@ export async function POST(request: NextRequest) {
             continue
           }
 
+          if (product.auf_lager !== undefined) {
+            product.auf_lager = typeof product.auf_lager === 'string'
+              ? parseInt(product.auf_lager, 10)
+              : Number(product.auf_lager)
+          }
+
           // Set action on each product payload
-          const payload = { ...product, action }
+          const payload = { ...product, verkaufspreis: price, action }
 
           const result = await transaction(async (client) => {
             return createErfassungProduct(payload, session.user.id, client)

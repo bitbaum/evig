@@ -117,6 +117,19 @@ const CONDITION_VALUE_ALIASES: Record<string, { canonical: string; label: string
 }
 
 /**
+ * Normalize a condition value to its canonical DB form.
+ * Resolves aliases (very_good → like_new, acceptable → fair, etc.)
+ * and returns the value unchanged if already canonical.
+ */
+export function normalizeConditionValue(value: string): string {
+  const canonical = getConditionByValue(value)
+  if (canonical) return value
+  const alias = CONDITION_VALUE_ALIASES[value]
+  if (alias) return alias.canonical
+  return value
+}
+
+/**
  * Get condition badge with label and Tailwind color classes
  * Supports both canonical values (new, like_new, good, fair, poor, defect)
  * and legacy aliases (excellent, very_good, acceptable)

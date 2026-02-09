@@ -90,6 +90,7 @@ export function DataEntryTabs({
   const [quickEntryError, setQuickEntryError] = useState<string | null>(null)
   const [isCollapsed, setIsCollapsed] = useState(collapsed)
   const [isUploading, setIsUploading] = useState(false)
+  const [unmappedColumns, setUnmappedColumns] = useState<string[]>([])
 
   useEffect(() => {
     setIsCollapsed(collapsed)
@@ -223,8 +224,9 @@ export function DataEntryTabs({
       }
 
       onBulkData(result.products)
+      setUnmappedColumns(result.unmappedColumns || [])
       setIsCollapsed(true)
-      logger.info('CSV upload successful', { count: result.products.length })
+      logger.info('File upload successful', { count: result.products.length, unmappedColumns: result.unmappedColumns })
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Unbekannter Fehler'
       onError?.(message)
@@ -367,10 +369,10 @@ export function DataEntryTabs({
           <div className="space-y-4">
             <div className="text-center mb-2">
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-                CSV-Import
+                Datei-Import
               </h3>
               <p className="text-sm text-gray-600 dark:text-gray-400">
-                Lade eine CSV-Datei mit Produktdaten hoch
+                Lade eine CSV- oder Excel-Datei mit Produktdaten hoch
               </p>
             </div>
 
@@ -383,13 +385,13 @@ export function DataEntryTabs({
               ) : (
                 <>
                   <FileUp className="w-10 h-10 text-purple-400 mb-2" />
-                  <span className="text-sm text-gray-600 dark:text-gray-400 font-medium">CSV-Datei wählen oder hierher ziehen</span>
-                  <span className="text-xs text-gray-400 dark:text-gray-500 mt-1">Spalten werden automatisch erkannt</span>
+                  <span className="text-sm text-gray-600 dark:text-gray-400 font-medium">CSV- oder Excel-Datei wählen oder hierher ziehen</span>
+                  <span className="text-xs text-gray-400 dark:text-gray-500 mt-1">CSV, TSV, XLSX — Spalten werden automatisch erkannt</span>
                 </>
               )}
               <input
                 type="file"
-                accept=".csv,.tsv,.txt"
+                accept=".csv,.tsv,.txt,.xlsx,.xls"
                 className="hidden"
                 disabled={isUploading}
                 onChange={(e) => {
@@ -398,6 +400,16 @@ export function DataEntryTabs({
                 }}
               />
             </label>
+
+            {unmappedColumns.length > 0 && (
+              <div className="flex items-start gap-2 py-2 px-4 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg text-yellow-700 dark:text-yellow-400 text-sm">
+                <AlertCircle className="w-4 h-4 mt-0.5 shrink-0" />
+                <div>
+                  <span className="font-medium">Nicht zugeordnete Spalten:</span>{' '}
+                  {unmappedColumns.join(', ')}
+                </div>
+              </div>
+            )}
           </div>
         )}
       </div>}

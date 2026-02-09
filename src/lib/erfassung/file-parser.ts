@@ -1,12 +1,13 @@
 /**
- * CSV File Parser for Bulk Erfassung
+ * CSV/Excel File Parser for Bulk Erfassung
  *
- * Parses CSV/TSV files into BulkProduct arrays with automatic column detection.
+ * Parses CSV/TSV/Excel files into BulkProduct arrays with automatic column detection.
  * Uses CSV_COLUMN_ALIASES config for mapping column names to form fields.
  */
 
 import { parse } from 'csv-parse/sync'
-import { CSV_COLUMN_ALIASES } from '@/config/erfassung'
+import * as XLSX from 'xlsx'
+import { CSV_COLUMN_ALIASES, normalizeConditionValue } from '@/config/erfassung'
 import { createDefaultBulkProduct } from '@/types/erfassung'
 import type { BulkProduct, ErfassungFormData } from '@/types/erfassung'
 
@@ -88,6 +89,11 @@ export function parseCSV(content: string): {
       }
     }
 
+    // Normalize condition alias to canonical DB value
+    if (data.zustand) {
+      data.zustand = normalizeConditionValue(data.zustand)
+    }
+
     // Apply mapped data to product
     Object.assign(product, data)
 
@@ -100,4 +106,23 @@ export function parseCSV(content: string): {
   })
 
   return { products, unmappedColumns }
+}
+
+/**
+ * Parse Excel (.xlsx/.xls) buffer into BulkProduct array.
+ * Converts the first sheet to CSV, then delegates to parseCSV().
+ */
+export function parseExcel(buffer: ArrayBuffer): {
+  products: BulkProduct[]
+  unmappedColumns: string[]
+} {
+  const workbook = XLSX.read(buffer, { type: 'array' })
+  const sheetName = workbook.SheetNames[0]
+  if (!sheetName) {
+    return { products: [], unmappedColumns: [] }
+  }
+
+  const sheet = workbook.Sheets[sheetName]
+  const csv = XLSX.utils.sheet_to_csv(sheet, { FS: ';' })
+  return parseCSV(csv)
 }
