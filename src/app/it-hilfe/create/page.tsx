@@ -93,6 +93,23 @@ export default function CreatePeerRepairPage() {
     }
   }, [status, router])
 
+  // Pre-fill location from user's helper profile (if exists)
+  useEffect(() => {
+    if (status !== 'authenticated') return
+    fetch('/api/user/helper-profile')
+      .then(res => res.json())
+      .then(data => {
+        if (data.success && data.data.profile) {
+          const p = data.data.profile
+          if (p.postalCode && !postalCode) setPostalCode(p.postalCode)
+          if (p.city && !city) setCity(p.city)
+          if (p.canton && !canton) setCanton(p.canton)
+        }
+      })
+      .catch(() => {}) // Silent fail — user just fills manually
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [status])
+
   // Auto-fill city and canton from postal code
   useEffect(() => {
     if (postalCode.length === 4) {
