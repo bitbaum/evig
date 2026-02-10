@@ -16,7 +16,7 @@
  * Created: 2026-02-10
  */
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog'
@@ -72,6 +72,13 @@ export default function ProtocolDetailClient({ protocol, actionLinks, teamMember
   const [expandedTopics, setExpandedTopics] = useState<Set<string>>(
     () => new Set(isReview && notes?.topics ? notes.topics.map(t => t.id) : [])
   )
+
+  // Expand all topics when transitioning to review (e.g. after AI processing)
+  useEffect(() => {
+    if (isReview && notes?.topics && expandedTopics.size === 0) {
+      setExpandedTopics(new Set(notes.topics.map(t => t.id)))
+    }
+  }, [isReview, notes?.topics]) // eslint-disable-line react-hooks/exhaustive-deps
 
   // Attendee mapping state
   const [attendeeMapping, setAttendeeMapping] = useState<Record<string, string>>(() => {

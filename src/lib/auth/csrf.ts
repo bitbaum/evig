@@ -54,6 +54,8 @@ const CSRF_CONFIG = {
     '/api/tasks',   // Staff-only, protected by session auth (withAdmin middleware)
     '/api/task-',   // task-requests, task-analytics, task-projects
     '/api/ai/',     // AI extraction APIs, protected by session auth
+    '/api/it-hilfe/', // IT-Hilfe APIs, protected by session auth
+    '/api/protocols', // Protocols APIs, protected by withAdmin middleware
   ],
 }
 
