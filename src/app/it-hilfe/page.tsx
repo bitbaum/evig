@@ -146,6 +146,14 @@ export default function ITHilfePage() {
               Techniker finden
             </Link>
 
+            <Link
+              href={session?.user ? IT_HILFE.routes.register : `/auth/login?callbackUrl=${IT_HILFE.routes.register}`}
+              className="inline-flex items-center gap-2 border-2 border-white text-white px-6 py-3 rounded-lg font-semibold hover:bg-white/10 transition-colors"
+            >
+              <Wrench className="w-5 h-5" />
+              Techniker werden
+            </Link>
+
             {session?.user && (
               <>
                 <Link
@@ -370,6 +378,36 @@ export default function ITHilfePage() {
             })}
           </div>
         )}
+
+        {/* Technician Registration CTA */}
+        <div className="mt-12 bg-gradient-to-r from-emerald-600 to-teal-600 rounded-2xl px-6 py-12 md:px-12 text-center text-white">
+          <h2 className="text-2xl sm:text-3xl font-bold mb-3">
+            Kannst du Geräte reparieren?
+          </h2>
+          <p className="text-emerald-100 text-lg max-w-2xl mx-auto mb-6">
+            Registriere dich als Techniker und hilf Menschen in deiner Nähe. Kostenlos oder gegen Vergütung — du entscheidest.
+          </p>
+          <div className="flex flex-wrap justify-center gap-3 mb-8">
+            <span className="px-4 py-1.5 bg-white/20 rounded-full text-sm font-medium">Flexible Zeiten</span>
+            <span className="px-4 py-1.5 bg-white/20 rounded-full text-sm font-medium">Gratis oder bezahlt</span>
+            <span className="px-4 py-1.5 bg-white/20 rounded-full text-sm font-medium">Hilf deiner Community</span>
+          </div>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <Link
+              href={session?.user ? IT_HILFE.routes.register : `/auth/login?callbackUrl=${IT_HILFE.routes.register}`}
+              className="inline-flex items-center gap-2 bg-white text-emerald-700 px-6 py-3 rounded-lg font-semibold hover:bg-emerald-50 transition-colors"
+            >
+              <Wrench className="w-5 h-5" />
+              Techniker-Profil erstellen
+            </Link>
+            <Link
+              href={IT_HILFE.routes.browse}
+              className="text-sm font-semibold text-white hover:text-emerald-100 transition-colors"
+            >
+              Mehr über IT-Hilfe →
+            </Link>
+          </div>
+        </div>
       </div>
     </div>
   )

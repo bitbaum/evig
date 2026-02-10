@@ -1,4 +1,4 @@
-import { ArrowRight } from 'lucide-react'
+import { ArrowRight, Wrench } from 'lucide-react'
 import Link from 'next/link'
 import type { Metadata } from 'next'
 import { getCompactMetrics } from '@/data/impact-metrics'
@@ -174,6 +174,34 @@ export default function Home() {
             </Link>
             <Link href="/services" className="text-sm font-semibold leading-6 text-gray-900">
               Alle Dienstleistungen <ArrowRight className="inline h-4 w-4" />
+            </Link>
+          </div>
+        </div>
+      </div>
+
+      {/* Community IT-Hilfe Section */}
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
+        <div className="bg-emerald-50 rounded-2xl px-4 sm:px-6 py-12 sm:py-16 md:px-16 text-center">
+          <h2 className="text-sm sm:text-base font-semibold leading-7 text-emerald-600">Community IT-Hilfe</h2>
+          <p className="mt-2 text-2xl sm:text-3xl font-bold tracking-tight text-gray-900">
+            Teile dein IT-Wissen mit der Community
+          </p>
+          <p className="mx-auto mt-4 sm:mt-6 max-w-xl text-base sm:text-lg leading-7 sm:leading-8 text-gray-600">
+            Unsere IT-Hilfe Plattform verbindet Menschen, die Hilfe brauchen, mit freiwilligen Technikern in der Nähe. Jeder kann mitmachen.
+          </p>
+          <div className="mt-6 sm:mt-10 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-x-6">
+            <Link
+              href="/it-hilfe"
+              className="inline-flex items-center gap-2 rounded-md bg-emerald-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-emerald-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600"
+            >
+              Hilfe suchen
+            </Link>
+            <Link
+              href="/profil/skills"
+              className="inline-flex items-center gap-2 text-sm font-semibold leading-6 text-gray-900"
+            >
+              <Wrench className="h-4 w-4 text-emerald-600" />
+              Techniker werden <ArrowRight className="inline h-4 w-4" />
             </Link>
           </div>
         </div>

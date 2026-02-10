@@ -61,6 +61,20 @@ export const ERROR_MESSAGES = {
   PROTOCOL_NOT_EDITABLE: 'Protokoll kann in diesem Status nicht bearbeitet werden',
   TRANSCRIPT_TOO_SHORT: 'Transkript zu kurz (mindestens 50 Zeichen)',
   PROCESSING_FAILED: 'Fehler bei der KI-Verarbeitung des Transkripts',
+
+  // Decisions
+  DECISION_NOT_FOUND: 'Entscheidung nicht gefunden',
+  DECISION_CREATE_FAILED: 'Fehler beim Erstellen der Entscheidung',
+  DECISION_UPDATE_FAILED: 'Fehler beim Aktualisieren der Entscheidung',
+  DECISION_NOT_EDITABLE: 'Entscheidung kann in diesem Status nicht bearbeitet werden',
+  DECISION_INVALID_TRANSITION: 'Ungültiger Statusübergang',
+  VOTE_NOT_IN_VOTING_PHASE: 'Abstimmung ist nicht in der Abstimmungsphase',
+  VOTE_NOT_PARTICIPANT: 'Nicht zur Teilnahme an dieser Abstimmung berechtigt',
+  VOTE_INVALID_DATA: 'Ungültige Abstimmungsdaten',
+  VOTE_SUBMIT_FAILED: 'Fehler beim Abgeben der Stimme',
+  COMMENT_NOT_FOUND: 'Kommentar nicht gefunden',
+  COMMENT_NOT_AUTHOR: 'Nur der Autor kann diesen Kommentar bearbeiten',
+  COMMENT_CREATE_FAILED: 'Fehler beim Erstellen des Kommentars',
 } as const;
 
 /**
@@ -79,4 +93,13 @@ export const SUCCESS_MESSAGES = {
   PROTOCOL_CREATED: 'Protokoll erfolgreich erstellt',
   PROTOCOL_FINALIZED: 'Protokoll abgeschlossen',
   ACTION_LINKED: 'Aufgabe erfolgreich verknüpft',
+
+  // Decisions
+  DECISION_CREATED: 'Entscheidung erfolgreich erstellt',
+  DECISION_UPDATED: 'Entscheidung erfolgreich aktualisiert',
+  DECISION_TRANSITIONED: 'Status erfolgreich geändert',
+  VOTE_SUBMITTED: 'Stimme erfolgreich abgegeben',
+  COMMENT_CREATED: 'Kommentar erfolgreich erstellt',
+  COMMENT_UPDATED: 'Kommentar erfolgreich aktualisiert',
+  COMMENT_DELETED: 'Kommentar erfolgreich gelöscht',
 } as const;

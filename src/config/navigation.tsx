@@ -219,6 +219,12 @@ export const mainNavigation: NavigationItem[] = [
         href: '/get-involved/work-reintegration',
         description: 'Zurück ins Berufsleben',
       },
+      {
+        name: 'IT-Hilfe Techniker',
+        href: '/profil/skills',
+        description: 'IT-Wissen teilen und helfen',
+        badge: 'Neu',
+      },
       // Section: Unterstützen
       {
         name: 'Unterstützen',
