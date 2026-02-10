@@ -11,16 +11,21 @@ import { z } from 'zod';
 import {
   MEETING_TYPES,
   PROTOCOL_VISIBILITY,
+  INPUT_METHODS,
+  DECISION_VOTE_TYPES,
 } from '@/config/protocols';
 import type {
   MeetingType,
   ProtocolStatus,
   ProtocolVisibility,
+  InputMethod,
+  DecisionResult,
 } from '@/config/protocols';
 
 // Derive enums from config
 const meetingTypes = Object.values(MEETING_TYPES) as [string, ...string[]];
 const visibilityOptions = Object.values(PROTOCOL_VISIBILITY) as [string, ...string[]];
+const inputMethods = Object.values(INPUT_METHODS) as [string, ...string[]];
 
 // ============================================================
 // Structured Notes (AI output) — defined first, used by update schema
@@ -75,6 +80,7 @@ export const createProtocolSchema = z.object({
     .array(z.string().uuid())
     .optional()
     .default([]),
+  input_method: z.enum(inputMethods).optional().default('transcript'),
 });
 
 /**
@@ -93,6 +99,36 @@ export const processTranscriptSchema = z.object({
     .min(50, 'Transkript zu kurz (min 50 Zeichen)')
     .max(100000, 'Transkript zu lang (max 100\'000 Zeichen)'),
 });
+
+/**
+ * Process notes request schema (Step 3: notes → structured)
+ */
+export const processNotesSchema = z.object({
+  content: z.string().min(20, 'Notizen zu kurz').max(100000),
+});
+
+/**
+ * Import tasks request schema (Step 4: task list → tasks)
+ */
+export const importTasksSchema = z.object({
+  content: z.string().min(10, 'Aufgabenliste zu kurz').max(50000),
+});
+
+/**
+ * Parsed task item schema (AI output for task parsing)
+ */
+export const parsedTaskItemSchema = z.object({
+  description: z.string().min(1),
+  assigned_to_name: z.string().nullable().default(null),
+  priority: z.enum(['low', 'normal', 'high']).default('normal'),
+  due_hint: z.string().nullable().default(null),
+});
+
+export const parsedTaskListSchema = z.array(parsedTaskItemSchema);
+
+export type ParsedTaskItem = z.infer<typeof parsedTaskItemSchema>;
+export type ProcessNotesInput = z.infer<typeof processNotesSchema>;
+export type ImportTasksInput = z.infer<typeof importTasksSchema>;
 
 /**
  * Link action item schema
@@ -134,6 +170,7 @@ export interface ProtocolListItem {
   meeting_type: MeetingType;
   visibility: ProtocolVisibility;
   attendees: string[];
+  input_method: InputMethod;
   status: ProtocolStatus;
   created_by_name: string | null;
   created_at: string;
@@ -148,6 +185,7 @@ export interface ProtocolDetail {
   meeting_type: MeetingType;
   visibility: ProtocolVisibility;
   attendees: string[];
+  input_method: InputMethod;
   raw_transcript: string | null;
   structured_notes: StructuredNotes | null;
   processing_model: string | null;
@@ -172,4 +210,62 @@ export interface ActionLinkRecord {
   linked_decision_title: string | null;
   linked_decision_status: string | null;
   created_at: string;
+}
+
+// ============================================================
+// Decision Voting Schemas
+// ============================================================
+
+const decisionVoteTypes = Object.values(DECISION_VOTE_TYPES) as [string, ...string[]];
+
+/** Vote on a decision action item */
+export const decisionVoteSchema = z.object({
+  action_item_id: z.string().min(1, 'Action Item ID erforderlich'),
+  vote_type: z.enum(decisionVoteTypes),
+});
+
+/** Close a decision manually */
+export const closeDecisionSchema = z.object({
+  action_item_id: z.string().min(1, 'Action Item ID erforderlich'),
+});
+
+/** AI-proposed task from an approved decision */
+export const proposedTaskSchema = z.object({
+  title: z.string().min(1).max(200),
+  description: z.string().max(2000).nullable().optional(),
+  priority: z.enum(['low', 'normal', 'high']).default('normal'),
+  assigned_to_name: z.string().nullable().optional(),
+  estimated_minutes: z.number().nullable().optional(),
+});
+
+export const proposedTaskListSchema = z.array(proposedTaskSchema);
+
+export type DecisionVoteInput = z.infer<typeof decisionVoteSchema>;
+export type CloseDecisionInput = z.infer<typeof closeDecisionSchema>;
+export type ProposedTask = z.infer<typeof proposedTaskSchema>;
+
+/** Decision vote database record */
+export interface DecisionVoteRecord {
+  id: string;
+  protocol_id: string;
+  action_item_id: string;
+  voter_id: string;
+  vote_type: 'up' | 'down';
+  created_at: string;
+}
+
+/** Decision outcome database record */
+export interface DecisionOutcomeRecord {
+  id: string;
+  protocol_id: string;
+  action_item_id: string;
+  is_closed: boolean;
+  closed_by: string | null;
+  closed_at: string | null;
+  result: DecisionResult;
+  votes_up: number;
+  votes_down: number;
+  proposed_tasks: ProposedTask[] | null;
+  proposal_model: string | null;
+  tasks_created: boolean;
 }

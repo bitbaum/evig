@@ -24,9 +24,11 @@ import {
   ACTION_ITEM_TYPE_LABELS,
   ACTION_ITEM_TYPE_COLORS,
   PRIORITY_HINT_LABELS,
+  INPUT_METHOD_LABELS,
 } from '@/config/protocols'
-import type { ProtocolDetail, ActionLinkRecord, StructuredNotes } from '@/lib/schemas/protocols'
+import type { ProtocolDetail, ActionLinkRecord, StructuredNotes, DecisionVoteRecord, DecisionOutcomeRecord } from '@/lib/schemas/protocols'
 import { getErrorMessage } from '@/lib/utils/error'
+import DecisionActions from './DecisionActions'
 import {
   Loader2,
   CheckCircle2,
@@ -36,7 +38,6 @@ import {
   ChevronDown,
   ChevronRight,
   ExternalLink,
-  Lock,
   FileText,
   Upload,
 } from 'lucide-react'
@@ -51,9 +52,13 @@ interface Props {
   protocol: ProtocolDetail
   actionLinks: ActionLinkRecord[]
   teamMembers: Array<{ id: string; name: string }>
+  decisionVotes: DecisionVoteRecord[]
+  decisionOutcomes: DecisionOutcomeRecord[]
+  currentUserId: string
+  isProtocolCreator: boolean
 }
 
-export default function ProtocolDetailClient({ protocol, actionLinks, teamMembers }: Props) {
+export default function ProtocolDetailClient({ protocol, actionLinks, teamMembers, decisionVotes, decisionOutcomes, currentUserId, isProtocolCreator }: Props) {
   const router = useRouter()
   const [finalizing, setFinalizing] = useState(false)
   const [showFinalizeDialog, setShowFinalizeDialog] = useState(false)
@@ -254,7 +259,11 @@ export default function ProtocolDetailClient({ protocol, actionLinks, teamMember
       {isReview && (
         <details className="bg-amber-50 rounded-lg border border-amber-200">
           <summary className="p-4 cursor-pointer text-sm font-medium text-amber-800 hover:text-amber-900">
-            Nicht zufrieden? Transkript erneut verarbeiten
+            Nicht zufrieden? {protocol.input_method === 'tasks'
+              ? 'Aufgaben erneut importieren'
+              : protocol.input_method === 'notes'
+              ? 'Notizen erneut verarbeiten'
+              : 'Transkript erneut verarbeiten'}
           </summary>
           <div className="px-4 pb-4 space-y-3">
             <div className="flex items-center justify-between">
@@ -521,11 +530,17 @@ export default function ProtocolDetailClient({ protocol, actionLinks, teamMember
                               )}
                               Aufgabe erstellen
                             </button>
-                          ) : item.item_type === 'decision' ? (
-                            <span className="flex items-center gap-1 text-sm text-gray-400">
-                              <Lock className="w-3 h-3" />
-                              In Entwicklung
-                            </span>
+                          ) : item.item_type === 'decision' && (isReview || isFinalized) ? (
+                            <DecisionActions
+                              protocolId={protocol.id}
+                              actionItemId={item.id}
+                              votes={decisionVotes.filter(v => v.action_item_id === item.id)}
+                              outcome={decisionOutcomes.find(o => o.action_item_id === item.id)}
+                              currentUserId={currentUserId}
+                              isProtocolCreator={isProtocolCreator}
+                              attendeeCount={protocol.attendees?.length || 0}
+                              onRefresh={() => router.refresh()}
+                            />
                           ) : null}
                         </div>
                       </div>

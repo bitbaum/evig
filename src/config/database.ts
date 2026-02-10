@@ -142,10 +142,12 @@ export const TABLE_NAMES = {
   MEETING_PROTOCOLS: 'meeting_protocols',
   PROTOCOL_ACTION_LINKS: 'protocol_action_links',
 
+
   // Team Decisions & Voting
   DECISIONS: 'decisions',
   DECISION_VOTES: 'decision_votes',
   DECISION_COMMENTS: 'decision_comments',
+  DECISION_OUTCOMES: 'decision_outcomes',
 } as const;
 
 /**

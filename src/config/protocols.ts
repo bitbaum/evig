@@ -131,6 +131,35 @@ export const ACTION_ITEM_TYPE_COLORS: Record<ActionItemType, string> = {
   info: 'bg-gray-100 text-gray-800',
 };
 
+// Input methods (pipeline entry points)
+export const INPUT_METHODS = {
+  AUDIO: 'audio',
+  TRANSCRIPT: 'transcript',
+  NOTES: 'notes',
+  TASKS: 'tasks',
+} as const;
+
+export const INPUT_METHOD_LABELS: Record<InputMethod, string> = {
+  audio: 'Audio-Aufnahme',
+  transcript: 'Transkript',
+  notes: 'Strukturierte Notizen',
+  tasks: 'Aufgabenliste',
+};
+
+export const INPUT_METHOD_DESCRIPTIONS: Record<InputMethod, string> = {
+  audio: 'Demnächst verfügbar',
+  transcript: 'Rohtext einfügen oder .txt hochladen',
+  notes: 'JSON oder Freitext hochladen',
+  tasks: 'Aufgaben direkt importieren',
+};
+
+export const INPUT_METHOD_ICONS: Record<InputMethod, string> = {
+  audio: 'Mic',
+  transcript: 'FileText',
+  notes: 'ListTree',
+  tasks: 'ListChecks',
+};
+
 // Priority hints
 export const PRIORITY_HINT_LABELS: Record<string, string> = {
   low: 'Niedrig',
@@ -138,14 +167,42 @@ export const PRIORITY_HINT_LABELS: Record<string, string> = {
   high: 'Hoch',
 };
 
+// Decision voting
+export const DECISION_VOTE_TYPES = {
+  UP: 'up',
+  DOWN: 'down',
+} as const;
+
+export const DECISION_RESULTS = {
+  APPROVED: 'approved',
+  REJECTED: 'rejected',
+  PENDING: 'pending',
+} as const;
+
+export const DECISION_RESULT_LABELS: Record<DecisionResult, string> = {
+  approved: 'Angenommen',
+  rejected: 'Abgelehnt',
+  pending: 'Offen',
+};
+
+export const DECISION_RESULT_COLORS: Record<DecisionResult, string> = {
+  approved: 'bg-green-100 text-green-800',
+  rejected: 'bg-red-100 text-red-800',
+  pending: 'bg-yellow-100 text-yellow-800',
+};
+
 // Types derived from constants
 export type MeetingType = (typeof MEETING_TYPES)[keyof typeof MEETING_TYPES];
 export type ProtocolStatus = (typeof PROTOCOL_STATUSES)[keyof typeof PROTOCOL_STATUSES];
 export type ProtocolVisibility = (typeof PROTOCOL_VISIBILITY)[keyof typeof PROTOCOL_VISIBILITY];
 export type ActionItemType = (typeof ACTION_ITEM_TYPES)[keyof typeof ACTION_ITEM_TYPES];
+export type InputMethod = (typeof INPUT_METHODS)[keyof typeof INPUT_METHODS];
+export type DecisionVoteType = (typeof DECISION_VOTE_TYPES)[keyof typeof DECISION_VOTE_TYPES];
+export type DecisionResult = (typeof DECISION_RESULTS)[keyof typeof DECISION_RESULTS];
 
 // Options arrays for forms (derived from constants)
 export const MEETING_TYPE_OPTIONS = Object.values(MEETING_TYPES) as [string, ...string[]];
 export const PROTOCOL_STATUS_OPTIONS = Object.values(PROTOCOL_STATUSES) as [string, ...string[]];
 export const PROTOCOL_VISIBILITY_OPTIONS = Object.values(PROTOCOL_VISIBILITY) as [string, ...string[]];
+export const INPUT_METHOD_OPTIONS = Object.values(INPUT_METHODS) as [string, ...string[]];
 
