@@ -107,6 +107,13 @@ export const linkActionSchema = z.object({
     category: z.string().default('admin'),
     priority: z.string().default('normal'),
   }).optional(),
+  decision_data: z.object({
+    title: z.string().min(1).max(200),
+    description: z.string().min(1).max(2000),
+    decisionType: z.string().default('sense_check'),
+    votingMethod: z.string().default('simple_majority'),
+    initialStatus: z.string().default('draft'),
+  }).optional(),
 });
 
 // Derived types from schemas
@@ -161,5 +168,8 @@ export interface ActionLinkRecord {
   linked_task_id: string | null;
   linked_task_title: string | null;
   linked_task_status: string | null;
+  linked_decision_id: string | null;
+  linked_decision_title: string | null;
+  linked_decision_status: string | null;
   created_at: string;
 }
