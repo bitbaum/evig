@@ -102,11 +102,13 @@ export const TABLE_NAMES = {
   IT_HILFE_REQUESTS: 'it_hilfe_requests',
   IT_HILFE_OFFERS: 'it_hilfe_offers',
   USER_SKILLS: 'user_skills',
-  HELPER_PROFILES: 'helper_profiles',
+  IT_HILFE_TECHNICIAN_PROFILES: 'helper_profiles',
 
   // @deprecated - Use IT_HILFE_* instead
   PEER_REPAIR_REQUESTS: 'it_hilfe_requests',
   PEER_REPAIR_OFFERS: 'it_hilfe_offers',
+  /** @deprecated Use IT_HILFE_TECHNICIAN_PROFILES instead */
+  HELPER_PROFILES: 'helper_profiles',
 
   // HIRN AI System
   HIRN_DOCUMENTS: 'hirn_documents',

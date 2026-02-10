@@ -93,10 +93,10 @@ export default function CreatePeerRepairPage() {
     }
   }, [status, router])
 
-  // Pre-fill location from user's helper profile (if exists)
+  // Pre-fill location from user's technician profile (if exists)
   useEffect(() => {
     if (status !== 'authenticated') return
-    fetch('/api/user/helper-profile')
+    fetch('/api/user/technician-profile')
       .then(res => res.json())
       .then(data => {
         if (data.success && data.data.profile) {

@@ -1,7 +1,7 @@
 /**
- * Helper Profile API
- * GET /api/user/helper-profile - Get current user's helper profile
- * PUT /api/user/helper-profile - Create or update helper profile
+ * Technician Profile API
+ * GET /api/user/technician-profile - Get current user's technician profile
+ * PUT /api/user/technician-profile - Create or update technician profile
  */
 
 import { NextRequest } from 'next/server'
@@ -18,7 +18,7 @@ import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
 import { getSkillIds } from '@/config/it-hilfe'
 
-interface HelperProfileRow {
+interface TechnicianProfileRow {
   id: string
   user_id: string
   bio: string | null
@@ -41,8 +41,8 @@ interface UserSkillRow {
 }
 
 /**
- * GET /api/user/helper-profile
- * Get current user's helper profile and skills
+ * GET /api/user/technician-profile
+ * Get current user's technician profile and skills
  */
 export async function GET() {
   try {
@@ -51,10 +51,10 @@ export async function GET() {
       return apiUnauthorized(ERROR_MESSAGES.UNAUTHORIZED)
     }
 
-    // Get helper profile
+    // Get technician profile
     const profileResult = await query(
       `
-      SELECT * FROM ${TABLE_NAMES.HELPER_PROFILES}
+      SELECT * FROM ${TABLE_NAMES.IT_HILFE_TECHNICIAN_PROFILES}
       WHERE user_id = $1
     `,
       [session.user.id]
@@ -69,7 +69,7 @@ export async function GET() {
       [session.user.id]
     )
 
-    const profileRow = profileResult.rows[0] as HelperProfileRow | undefined
+    const profileRow = profileResult.rows[0] as TechnicianProfileRow | undefined
     const skillRows = skillsResult.rows as UserSkillRow[]
 
     // Map to response format
@@ -94,14 +94,14 @@ export async function GET() {
       hasProfile: !!profile,
     })
   } catch (error) {
-    logger.error('Error fetching helper profile', { error })
+    logger.error('Error fetching technician profile', { error })
     return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)
   }
 }
 
 /**
- * PUT /api/user/helper-profile
- * Create or update helper profile and skills
+ * PUT /api/user/technician-profile
+ * Create or update technician profile and skills
  */
 export async function PUT(request: NextRequest) {
   try {
@@ -141,10 +141,10 @@ export async function PUT(request: NextRequest) {
       return apiBadRequest(`Ungültige Service-Typen: ${invalidTypes.join(', ')}`)
     }
 
-    // Upsert helper profile
+    // Upsert technician profile
     await query(
       `
-      INSERT INTO ${TABLE_NAMES.HELPER_PROFILES} (
+      INSERT INTO ${TABLE_NAMES.IT_HILFE_TECHNICIAN_PROFILES} (
         user_id,
         bio,
         hourly_rate_cents,
@@ -216,7 +216,7 @@ export async function PUT(request: NextRequest) {
       )
     }
 
-    logger.info('Updated helper profile', {
+    logger.info('Updated technician profile', {
       userId: session.user.id,
       skillCount: skills.length,
       isActive,
@@ -226,7 +226,7 @@ export async function PUT(request: NextRequest) {
       message: 'Techniker-Profil erfolgreich gespeichert',
     })
   } catch (error) {
-    logger.error('Error updating helper profile', { error })
+    logger.error('Error updating technician profile', { error })
     return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)
   }
 }

@@ -150,7 +150,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
         hp.location_city,
         ARRAY_AGG(us.skill_id) FILTER (WHERE us.skill_id IS NOT NULL) as skills,
         COUNT(us.skill_id) as skill_count
-      FROM ${TABLE_NAMES.HELPER_PROFILES} hp
+      FROM ${TABLE_NAMES.IT_HILFE_TECHNICIAN_PROFILES} hp
       JOIN ${TABLE_NAMES.USERS} u ON hp.user_id = u.id
       LEFT JOIN ${TABLE_NAMES.USER_SKILLS} us ON hp.user_id = us.user_id
       WHERE hp.is_active = true

@@ -343,7 +343,7 @@ export async function POST(request: NextRequest) {
       query(`
         SELECT DISTINCT hp.user_id, u.name, u.email,
           ARRAY_AGG(us.skill_id) FILTER (WHERE us.skill_id = ANY($1::text[])) as matching_skills
-        FROM ${TABLE_NAMES.HELPER_PROFILES} hp
+        FROM ${TABLE_NAMES.IT_HILFE_TECHNICIAN_PROFILES} hp
         JOIN ${TABLE_NAMES.USERS} u ON hp.user_id = u.id
         JOIN ${TABLE_NAMES.USER_SKILLS} us ON hp.user_id = us.user_id
         WHERE hp.is_active = true

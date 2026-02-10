@@ -25,7 +25,7 @@ import {
   type ITSkill,
 } from '@/config/it-hilfe'
 
-interface HelperProfile {
+interface TechnicianProfile {
   skills: string[]
   bio: string
   hourlyRateCents: number | null
@@ -48,7 +48,7 @@ export default function SkillsProfilePage() {
   const [error, setError] = useState('')
   const [success, setSuccess] = useState(false)
 
-  const [profile, setProfile] = useState<HelperProfile>({
+  const [profile, setProfile] = useState<TechnicianProfile>({
     skills: [],
     bio: '',
     hourlyRateCents: null,
@@ -75,7 +75,7 @@ export default function SkillsProfilePage() {
 
     const fetchProfile = async () => {
       try {
-        const response = await fetch('/api/user/helper-profile')
+        const response = await fetch('/api/user/technician-profile')
         if (response.ok) {
           const data = await response.json()
           if (data.data?.profile) {
@@ -83,7 +83,7 @@ export default function SkillsProfilePage() {
           }
         }
       } catch (err) {
-        logger.error('Error fetching helper profile', { error: err })
+        logger.error('Error fetching technician profile', { error: err })
       } finally {
         setLoading(false)
       }
@@ -116,7 +116,7 @@ export default function SkillsProfilePage() {
     setSuccess(false)
 
     try {
-      const response = await fetch('/api/user/helper-profile', {
+      const response = await fetch('/api/user/technician-profile', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(profile),
@@ -132,7 +132,7 @@ export default function SkillsProfilePage() {
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Speichern fehlgeschlagen'
       setError(message)
-      logger.error('Error saving helper profile', { error: err })
+      logger.error('Error saving technician profile', { error: err })
     } finally {
       setSaving(false)
     }

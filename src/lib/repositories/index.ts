@@ -6,7 +6,7 @@
  *
  * @example
  * ```typescript
- * import { RepairerRepository, HelperRepository } from '@/lib/repositories'
+ * import { RepairerRepository, TechnicianRepository } from '@/lib/repositories'
  *
  * const repairerRepo = new RepairerRepository()
  * const repairers = await repairerRepo.findActiveWithDetails(50)
@@ -15,12 +15,20 @@
 
 export { BaseRepository } from './base-repository'
 export { RepairerRepository } from './repairer-repository'
-export { HelperRepository } from './helper-repository'
+export { TechnicianRepository } from './technician-repository'
+
+/** @deprecated Use TechnicianRepository instead */
+export { TechnicianRepository as HelperRepository } from './technician-repository'
 
 export type {
   RepairerWithDetails,
 } from './repairer-repository'
 
 export type {
-  HelperWithDetails,
-} from './helper-repository'
+  TechnicianWithDetails,
+} from './technician-repository'
+
+/** @deprecated Use TechnicianWithDetails instead */
+export type {
+  TechnicianWithDetails as HelperWithDetails,
+} from './technician-repository'

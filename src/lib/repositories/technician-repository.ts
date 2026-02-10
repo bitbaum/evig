@@ -1,12 +1,12 @@
 /**
- * Helper Repository (IT-Hilfe/Peer Repair)
+ * Technician Repository (IT-Hilfe)
  *
- * Data access layer for IT-Hilfe helper operations.
+ * Data access layer for IT-Hilfe technician operations.
  * Solves N+1 query problems by using JOIN aggregation.
  *
  * Performance improvements:
- * - findActiveWithDetails(): 76 queries → 1 query (76x faster)
- * - findByIdWithDetails(): 5 queries → 1 query
+ * - findActiveWithDetails(): 76 queries -> 1 query (76x faster)
+ * - findByIdWithDetails(): 5 queries -> 1 query
  *
  * @see ARCHITECTURE_EVALUATION.md - Phase 1: Repository Layer
  */
@@ -15,10 +15,10 @@ import { BaseRepository } from './base-repository'
 import { TABLE_NAMES } from '@/config/database'
 
 /**
- * Helper with aggregated details (reviews, ratings, skills)
+ * Technician with aggregated details (reviews, ratings, skills)
  */
-export interface HelperWithDetails {
-  // Helper profile
+export interface TechnicianWithDetails {
+  // Technician profile
   id: string
   user_id: string
   status: string
@@ -53,23 +53,23 @@ export interface HelperWithDetails {
 }
 
 /**
- * Repository for IT-Hilfe helper data access
+ * Repository for IT-Hilfe technician data access
  */
-export class HelperRepository extends BaseRepository {
+export class TechnicianRepository extends BaseRepository {
   /**
-   * Find active helpers with aggregated details
+   * Find active technicians with aggregated details
    *
    * **Performance**: Fetches all data in a SINGLE query using JOINs
    * and JSON aggregation, avoiding N+1 query problem.
    *
-   * Before: 76 queries (1 for helpers + 25*3 for reviews/stats/offers)
+   * Before: 76 queries (1 for technicians + 25*3 for reviews/stats/offers)
    * After: 1 query (76x improvement)
    *
-   * @param limit - Maximum number of helpers to return
-   * @returns Array of helpers with reviews, ratings, and stats
+   * @param limit - Maximum number of technicians to return
+   * @returns Array of technicians with reviews, ratings, and stats
    */
-  async findActiveWithDetails(limit = 50): Promise<HelperWithDetails[]> {
-    const result = await this.query<HelperWithDetails>(`
+  async findActiveWithDetails(limit = 50): Promise<TechnicianWithDetails[]> {
+    const result = await this.query<TechnicianWithDetails>(`
       SELECT
         hp.*,
         u.name,
@@ -97,7 +97,7 @@ export class HelperRepository extends BaseRepository {
         COUNT(DISTINCT offer.id) FILTER (WHERE offer.status IN ('completed', 'accepted', 'in_progress')) as total_helps,
         COUNT(DISTINCT offer.id) FILTER (WHERE offer.status = 'completed') as completed_helps
 
-      FROM ${TABLE_NAMES.HELPER_PROFILES} hp
+      FROM ${TABLE_NAMES.IT_HILFE_TECHNICIAN_PROFILES} hp
       INNER JOIN ${TABLE_NAMES.USERS} u ON hp.user_id = u.id
       LEFT JOIN ${TABLE_NAMES.REVIEWS} r
         ON hp.id = r.target_id AND r.target_type = 'it_hilfe' AND r.status = 'published'
@@ -115,17 +115,17 @@ export class HelperRepository extends BaseRepository {
   }
 
   /**
-   * Find a single helper by ID with all details
+   * Find a single technician by ID with all details
    *
    * **Performance**: Single query with JOINs and aggregation
    * Before: 5 queries (profile + user + reviews + stats + offers)
    * After: 1 query
    *
-   * @param helperId - Helper profile ID
-   * @returns Helper with details or null
+   * @param technicianId - Technician profile ID
+   * @returns Technician with details or null
    */
-  async findByIdWithDetails(helperId: string): Promise<HelperWithDetails | null> {
-    const result = await this.query<HelperWithDetails>(`
+  async findByIdWithDetails(technicianId: string): Promise<TechnicianWithDetails | null> {
+    const result = await this.query<TechnicianWithDetails>(`
       SELECT
         hp.*,
         u.name,
@@ -150,7 +150,7 @@ export class HelperRepository extends BaseRepository {
         COUNT(DISTINCT offer.id) FILTER (WHERE offer.status IN ('completed', 'accepted', 'in_progress')) as total_helps,
         COUNT(DISTINCT offer.id) FILTER (WHERE offer.status = 'completed') as completed_helps
 
-      FROM ${TABLE_NAMES.HELPER_PROFILES} hp
+      FROM ${TABLE_NAMES.IT_HILFE_TECHNICIAN_PROFILES} hp
       INNER JOIN ${TABLE_NAMES.USERS} u ON hp.user_id = u.id
       LEFT JOIN ${TABLE_NAMES.REVIEWS} r
         ON hp.id = r.target_id AND r.target_type = 'it_hilfe' AND r.status = 'published'
@@ -160,19 +160,19 @@ export class HelperRepository extends BaseRepository {
       WHERE hp.id = $1
 
       GROUP BY hp.id, u.id
-    `, [helperId])
+    `, [technicianId])
 
     return result.rows[0] || null
   }
 
   /**
-   * Find helper profile by user ID
+   * Find technician profile by user ID
    *
    * @param userId - User ID
-   * @returns Helper profile or null
+   * @returns Technician profile or null
    */
-  async findByUserId(userId: string): Promise<HelperWithDetails | null> {
-    const result = await this.query<HelperWithDetails>(`
+  async findByUserId(userId: string): Promise<TechnicianWithDetails | null> {
+    const result = await this.query<TechnicianWithDetails>(`
       SELECT
         hp.*,
         u.name,
@@ -197,7 +197,7 @@ export class HelperRepository extends BaseRepository {
         COUNT(DISTINCT offer.id) FILTER (WHERE offer.status IN ('completed', 'accepted', 'in_progress')) as total_helps,
         COUNT(DISTINCT offer.id) FILTER (WHERE offer.status = 'completed') as completed_helps
 
-      FROM ${TABLE_NAMES.HELPER_PROFILES} hp
+      FROM ${TABLE_NAMES.IT_HILFE_TECHNICIAN_PROFILES} hp
       INNER JOIN ${TABLE_NAMES.USERS} u ON hp.user_id = u.id
       LEFT JOIN ${TABLE_NAMES.REVIEWS} r
         ON hp.id = r.target_id AND r.target_type = 'it_hilfe' AND r.status = 'published'
@@ -213,14 +213,14 @@ export class HelperRepository extends BaseRepository {
   }
 
   /**
-   * Search helpers by skill
+   * Search technicians by skill
    *
    * @param skill - Skill to search for
    * @param limit - Maximum results
-   * @returns Matching helpers
+   * @returns Matching technicians
    */
-  async searchBySkill(skill: string, limit = 20): Promise<HelperWithDetails[]> {
-    const result = await this.query<HelperWithDetails>(`
+  async searchBySkill(skill: string, limit = 20): Promise<TechnicianWithDetails[]> {
+    const result = await this.query<TechnicianWithDetails>(`
       SELECT
         hp.*,
         u.name,
@@ -245,7 +245,7 @@ export class HelperRepository extends BaseRepository {
         COUNT(DISTINCT offer.id) FILTER (WHERE offer.status IN ('completed', 'accepted', 'in_progress')) as total_helps,
         COUNT(DISTINCT offer.id) FILTER (WHERE offer.status = 'completed') as completed_helps
 
-      FROM ${TABLE_NAMES.HELPER_PROFILES} hp
+      FROM ${TABLE_NAMES.IT_HILFE_TECHNICIAN_PROFILES} hp
       INNER JOIN ${TABLE_NAMES.USERS} u ON hp.user_id = u.id
       LEFT JOIN ${TABLE_NAMES.REVIEWS} r
         ON hp.id = r.target_id AND r.target_type = 'it_hilfe' AND r.status = 'published'
@@ -266,13 +266,13 @@ export class HelperRepository extends BaseRepository {
   }
 
   /**
-   * Find helpers available for remote support
+   * Find technicians available for remote support
    *
    * @param limit - Maximum results
-   * @returns Helpers offering remote support
+   * @returns Technicians offering remote support
    */
-  async findRemoteHelpers(limit = 20): Promise<HelperWithDetails[]> {
-    const result = await this.query<HelperWithDetails>(`
+  async findRemoteTechnicians(limit = 20): Promise<TechnicianWithDetails[]> {
+    const result = await this.query<TechnicianWithDetails>(`
       SELECT
         hp.*,
         u.name,
@@ -297,7 +297,7 @@ export class HelperRepository extends BaseRepository {
         COUNT(DISTINCT offer.id) FILTER (WHERE offer.status IN ('completed', 'accepted', 'in_progress')) as total_helps,
         COUNT(DISTINCT offer.id) FILTER (WHERE offer.status = 'completed') as completed_helps
 
-      FROM ${TABLE_NAMES.HELPER_PROFILES} hp
+      FROM ${TABLE_NAMES.IT_HILFE_TECHNICIAN_PROFILES} hp
       INNER JOIN ${TABLE_NAMES.USERS} u ON hp.user_id = u.id
       LEFT JOIN ${TABLE_NAMES.REVIEWS} r
         ON hp.id = r.target_id AND r.target_type = 'it_hilfe' AND r.status = 'published'
@@ -318,33 +318,33 @@ export class HelperRepository extends BaseRepository {
   }
 
   /**
-   * Update helper availability status
+   * Update technician availability status
    *
-   * @param helperId - Helper ID
+   * @param technicianId - Technician ID
    * @param isAvailable - Availability status
    * @returns Success status
    */
   async updateAvailability(
-    helperId: string,
+    technicianId: string,
     isAvailable: boolean
   ): Promise<{ success: boolean }> {
     await this.query(
-      `UPDATE ${TABLE_NAMES.HELPER_PROFILES}
+      `UPDATE ${TABLE_NAMES.IT_HILFE_TECHNICIAN_PROFILES}
        SET is_available = $2, updated_at = NOW()
        WHERE id = $1`,
-      [helperId, isAvailable]
+      [technicianId, isAvailable]
     )
 
     return { success: true }
   }
 
   /**
-   * Get helper statistics
+   * Get technician statistics
    *
-   * @param helperId - Helper ID
+   * @param technicianId - Technician ID
    * @returns Statistics
    */
-  async getStatistics(helperId: string): Promise<{
+  async getStatistics(technicianId: string): Promise<{
     total_helps: number
     completed_helps: number
     avg_rating: number
@@ -361,14 +361,14 @@ export class HelperRepository extends BaseRepository {
         COUNT(DISTINCT offer.id) FILTER (WHERE offer.status = 'completed') as completed_helps,
         ROUND(CAST(AVG(r.rating) AS NUMERIC), 2) as avg_rating,
         COUNT(r.id) FILTER (WHERE r.target_type = 'it_hilfe') as review_count
-      FROM ${TABLE_NAMES.HELPER_PROFILES} hp
+      FROM ${TABLE_NAMES.IT_HILFE_TECHNICIAN_PROFILES} hp
       LEFT JOIN ${TABLE_NAMES.IT_HILFE_OFFERS} offer
         ON hp.user_id = offer.helper_id
       LEFT JOIN ${TABLE_NAMES.REVIEWS} r
         ON hp.id = r.target_id AND r.target_type = 'it_hilfe' AND r.status = 'published'
       WHERE hp.id = $1
       GROUP BY hp.id
-    `, [helperId])
+    `, [technicianId])
 
     const stats = result.rows[0] || {
       total_helps: '0',
