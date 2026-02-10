@@ -393,9 +393,9 @@ export interface ServiceType {
 export const SERVICE_TYPES: ServiceType[] = [
   { id: 'flexible', name: 'Flexibel', description: 'Offen für verschiedene Optionen' },
   { id: 'remote', name: 'Remote', description: 'Fernhilfe per Video/Telefon' },
-  { id: 'onsite', name: 'Vor Ort', description: 'Hilfe bei dir zu Hause' },
-  { id: 'pickup', name: 'Abholung', description: 'Techniker holt das Gerät ab' },
-  { id: 'dropoff', name: 'Bringen', description: 'Du bringst das Gerät zum Techniker' },
+  { id: 'onsite', name: 'Vor Ort', description: 'Hilfe vor Ort beim Kunden' },
+  { id: 'pickup', name: 'Abholung', description: 'Gerät wird abgeholt' },
+  { id: 'dropoff', name: 'Bringen', description: 'Gerät wird vorbeigebracht' },
 ]
 
 // ============================================================================
