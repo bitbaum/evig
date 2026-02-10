@@ -53,6 +53,7 @@ const CSRF_CONFIG = {
     '/api/admin/',  // All admin APIs use session auth with permission checks
     '/api/tasks',   // Staff-only, protected by session auth (withAdmin middleware)
     '/api/task-',   // task-requests, task-analytics, task-projects
+    '/api/ai/',     // AI extraction APIs, protected by session auth
   ],
 }
 
