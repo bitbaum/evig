@@ -84,6 +84,7 @@
     "bcryptjs": "^2.4.3",
     "cookie": "^1.0.2",
     "csv-parse": "^6.1.0",
+    "exceljs": "^4.4.0",
     "framer-motion": "^12.23.25",
     "gray-matter": "^4.0.3",
     "ioredis": "^5.8.2",
@@ -106,7 +107,6 @@
     "stripe": "^20.1.0",
     "tailwind-merge": "^3.2.0",
     "uuid": "^13.0.0",
-    "xlsx": "^0.18.5",
     "zod": "^4.3.6"
   },
   "devDependencies": {
