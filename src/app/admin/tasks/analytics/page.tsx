@@ -83,11 +83,11 @@ async function getContributorStats(days: number = 30): Promise<ContributorStats[
       SUM(tc.duration_minutes)::int as total_duration_minutes
     FROM ${TABLE_NAMES.TASK_COMPLETIONS} tc
     JOIN ${TABLE_NAMES.USERS} u ON tc.completed_by = u.id
-    WHERE tc.completed_at >= CURRENT_DATE - INTERVAL '${days} days'
+    WHERE tc.completed_at >= CURRENT_DATE - INTERVAL '1 day' * $1
     GROUP BY tc.completed_by, u.name, u.email
     ORDER BY completion_count DESC
     LIMIT 20`,
-    []
+    [days]
   )
   return result.rows
 }
@@ -99,10 +99,10 @@ async function getCategoryStats(days: number = 30): Promise<CategoryStats[]> {
       COUNT(*)::int as completion_count
     FROM ${TABLE_NAMES.TASK_COMPLETIONS} tc
     JOIN ${TABLE_NAMES.TASKS} t ON tc.task_id = t.id
-    WHERE tc.completed_at >= CURRENT_DATE - INTERVAL '${days} days'
+    WHERE tc.completed_at >= CURRENT_DATE - INTERVAL '1 day' * $1
     GROUP BY t.category
     ORDER BY completion_count DESC`,
-    []
+    [days]
   )
   return result.rows
 }

@@ -14,23 +14,27 @@ import {
   AlertTriangle,
   Send,
   Loader2,
+  Archive,
 } from 'lucide-react'
 import { getErrorMessage } from '@/lib/utils/error'
 
 interface TaskActionsClientProps {
   taskId: string
   taskTitle: string
+  isArchived?: boolean
 }
 
 export default function TaskActionsClient({
   taskId,
   taskTitle,
+  isArchived = false,
 }: TaskActionsClientProps) {
   const router = useRouter()
   const [loading, setLoading] = useState<string | null>(null)
   const [showCompleteForm, setShowCompleteForm] = useState(false)
   const [showAttentionForm, setShowAttentionForm] = useState(false)
   const [showRequestForm, setShowRequestForm] = useState(false)
+  const [showArchiveConfirm, setShowArchiveConfirm] = useState(false)
   const [notes, setNotes] = useState('')
   const [duration, setDuration] = useState('')
   const [message, setMessage] = useState('')
@@ -119,6 +123,29 @@ export default function TaskActionsClient({
       setShowRequestForm(false)
       setMessage('')
       router.refresh()
+    } catch (err) {
+      setError(getErrorMessage(err))
+    } finally {
+      setLoading(null)
+    }
+  }
+
+  const handleArchive = async () => {
+    setLoading('archive')
+    setError(null)
+
+    try {
+      const res = await fetch(`/api/tasks/${taskId}`, {
+        method: 'DELETE',
+      })
+
+      const data = await res.json()
+
+      if (!data.success) {
+        throw new Error(data.error || 'Fehler beim Archivieren')
+      }
+
+      router.push('/admin/tasks')
     } catch (err) {
       setError(getErrorMessage(err))
     } finally {
@@ -295,6 +322,45 @@ export default function TaskActionsClient({
               </button>
             </div>
           </div>
+        </div>
+      )}
+
+      {/* Archive Section */}
+      {!isArchived && (
+        <div className="mt-6 pt-4 border-t">
+          {!showArchiveConfirm ? (
+            <button
+              onClick={() => setShowArchiveConfirm(true)}
+              className="flex items-center gap-2 px-4 py-2 text-red-600 border border-red-200 rounded-lg hover:bg-red-50 transition-colors"
+            >
+              <Archive className="w-4 h-4" />
+              Aufgabe archivieren
+            </button>
+          ) : (
+            <div className="p-4 bg-red-50 rounded-lg border border-red-200">
+              <p className="text-sm text-red-700 mb-3">
+                Aufgabe &ldquo;{taskTitle}&rdquo; wirklich archivieren? Sie wird aus der Liste entfernt.
+              </p>
+              <div className="flex gap-2">
+                <button
+                  onClick={handleArchive}
+                  disabled={loading === 'archive'}
+                  className="flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors disabled:opacity-50"
+                >
+                  {loading === 'archive' && (
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                  )}
+                  Archivieren
+                </button>
+                <button
+                  onClick={() => setShowArchiveConfirm(false)}
+                  className="px-4 py-2 text-gray-600 hover:text-gray-900"
+                >
+                  Abbrechen
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       )}
     </div>

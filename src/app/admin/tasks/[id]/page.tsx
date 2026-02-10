@@ -279,7 +279,7 @@ export default async function TaskDetailPage({
           )}
 
           {/* Actions */}
-          <TaskActionsClient taskId={task.id} taskTitle={task.title} />
+          <TaskActionsClient taskId={task.id} taskTitle={task.title} isArchived={task.is_archived} />
 
           {/* Completion History */}
           <div className="bg-white rounded-lg border p-6">

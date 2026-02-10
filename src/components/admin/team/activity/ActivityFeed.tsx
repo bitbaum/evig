@@ -19,11 +19,18 @@ import { useActivityStream } from './useActivityStream'
 import { ActivityCard } from './ActivityCard'
 import { AddActivityModal } from './AddActivityModal'
 
+interface TeamMemberOption {
+  id: string
+  name: string | null
+  email: string
+}
+
 interface ActivityFeedProps {
   userId?: string
   showAddButton?: boolean
   showFilters?: boolean
   compact?: boolean
+  teamMembers?: TeamMemberOption[]
 }
 
 export function ActivityFeed({
@@ -31,6 +38,7 @@ export function ActivityFeed({
   showAddButton = true,
   showFilters = true,
   compact = false,
+  teamMembers = [],
 }: ActivityFeedProps) {
   const [showAddModal, setShowAddModal] = useState(false)
   const [showFilterPanel, setShowFilterPanel] = useState(false)
@@ -48,13 +56,14 @@ export function ActivityFeed({
     setFilters({
       source_type: undefined,
       category: undefined,
+      user_id: undefined,
       since: undefined,
       until: undefined,
       offset: 0,
     })
   }
 
-  const hasActiveFilters = filters.source_type || filters.category || filters.since || filters.until
+  const hasActiveFilters = filters.source_type || filters.category || filters.user_id || filters.since || filters.until
 
   return (
     <div className="space-y-4">
@@ -146,6 +155,27 @@ export function ActivityFeed({
                 ))}
               </select>
             </div>
+
+            {/* Person Filter */}
+            {teamMembers.length > 0 && (
+              <div className="flex-1">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  Person
+                </label>
+                <select
+                  value={filters.user_id || ''}
+                  onChange={(e) => handleFilterChange('user_id', e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-sm"
+                >
+                  <option value="">Alle</option>
+                  {teamMembers.map((member) => (
+                    <option key={member.id} value={member.id}>
+                      {member.name || member.email}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            )}
 
             {/* Clear Filters */}
             {hasActiveFilters && (

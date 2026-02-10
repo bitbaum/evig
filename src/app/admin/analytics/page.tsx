@@ -1,7 +1,7 @@
 /**
  * Admin Analytics Page - Server Component
  *
- * Shows real statistics from the database.
+ * Shows real statistics from the database with user growth and activity overview.
  * No mock data - all values come from actual database queries.
  */
 
@@ -11,7 +11,18 @@ import { auth } from '@/auth'
 import { redirect } from 'next/navigation'
 import { query } from '@/lib/auth/db'
 import { TABLE_NAMES } from '@/config/database'
-import { BarChart3, Users, Calendar, Wrench, Package, TrendingUp } from 'lucide-react'
+import { logger } from '@/lib/logger'
+import {
+  BarChart3,
+  Users,
+  Calendar,
+  Wrench,
+  Package,
+  TrendingUp,
+  ArrowRight,
+  ClipboardList,
+  DollarSign,
+} from 'lucide-react'
 
 export const metadata: Metadata = {
   title: 'Analytics | RevampIT Admin',
@@ -27,22 +38,31 @@ interface AnalyticsStats {
   pendingApprovals: number
 }
 
+interface MonthlyGrowth {
+  month: string
+  count: number
+}
+
+interface ActivitySummary {
+  taskCompletionsThisWeek: number
+  taskCompletionsThisMonth: number
+  contentSubmissionsThisMonth: number
+  activeTasksCount: number
+}
+
 async function getAnalyticsStats(): Promise<AnalyticsStats> {
   try {
-    // Get total users
     const usersResult = await query<{ count: string }>(
       `SELECT COUNT(*) as count FROM ${TABLE_NAMES.USERS}`
     )
     const totalUsers = parseInt(usersResult.rows[0]?.count || '0')
 
-    // Get users registered this month
     const usersThisMonthResult = await query<{ count: string }>(
       `SELECT COUNT(*) as count FROM ${TABLE_NAMES.USERS}
        WHERE created_at >= DATE_TRUNC('month', CURRENT_DATE)`
     )
     const usersThisMonth = parseInt(usersThisMonthResult.rows[0]?.count || '0')
 
-    // Get total workshops
     let totalWorkshops = 0
     try {
       const workshopsResult = await query<{ count: string }>(
@@ -53,7 +73,6 @@ async function getAnalyticsStats(): Promise<AnalyticsStats> {
       // Table might not exist
     }
 
-    // Get technician count
     let totalTechnicians = 0
     try {
       const techResult = await query<{ count: string }>(
@@ -64,7 +83,6 @@ async function getAnalyticsStats(): Promise<AnalyticsStats> {
       // Table might not exist
     }
 
-    // Get seller count
     let totalSellers = 0
     try {
       const sellerResult = await query<{ count: string }>(
@@ -75,11 +93,11 @@ async function getAnalyticsStats(): Promise<AnalyticsStats> {
       // Table might not exist
     }
 
-    // Get pending approvals
     let pendingApprovals = 0
     try {
       const approvalsResult = await query<{ count: string }>(
-        `SELECT COUNT(*) as count FROM ${TABLE_NAMES.USER_CONTENT_SUBMISSIONS} WHERE status = 'pending'`
+        `SELECT COUNT(*) as count FROM ${TABLE_NAMES.USER_CONTENT_SUBMISSIONS} WHERE status = $1`,
+        ['pending']
       )
       pendingApprovals = parseInt(approvalsResult.rows[0]?.count || '0')
     } catch {
@@ -94,7 +112,8 @@ async function getAnalyticsStats(): Promise<AnalyticsStats> {
       totalSellers,
       pendingApprovals,
     }
-  } catch {
+  } catch (error) {
+    logger.error('Error fetching analytics stats', { error })
     return {
       totalUsers: 0,
       usersThisMonth: 0,
@@ -106,6 +125,88 @@ async function getAnalyticsStats(): Promise<AnalyticsStats> {
   }
 }
 
+async function getUserGrowth(): Promise<MonthlyGrowth[]> {
+  try {
+    const result = await query<{ month: string; count: string }>(
+      `SELECT
+        TO_CHAR(DATE_TRUNC('month', created_at), 'YYYY-MM') as month,
+        COUNT(*)::int as count
+      FROM ${TABLE_NAMES.USERS}
+      WHERE created_at >= CURRENT_DATE - INTERVAL '6 months'
+      GROUP BY DATE_TRUNC('month', created_at)
+      ORDER BY DATE_TRUNC('month', created_at) ASC`
+    )
+    return result.rows.map(r => ({ month: r.month, count: parseInt(r.count || '0') }))
+  } catch (error) {
+    logger.error('Error fetching user growth', { error })
+    return []
+  }
+}
+
+async function getActivitySummary(): Promise<ActivitySummary> {
+  const defaults = {
+    taskCompletionsThisWeek: 0,
+    taskCompletionsThisMonth: 0,
+    contentSubmissionsThisMonth: 0,
+    activeTasksCount: 0,
+  }
+
+  try {
+    let taskCompletionsThisWeek = 0
+    let taskCompletionsThisMonth = 0
+    let activeTasksCount = 0
+    try {
+      const tcResult = await query<{ week: string; month: string }>(
+        `SELECT
+          COUNT(*) FILTER (WHERE completed_at >= CURRENT_DATE - INTERVAL '7 days')::int as week,
+          COUNT(*) FILTER (WHERE completed_at >= DATE_TRUNC('month', CURRENT_DATE))::int as month
+        FROM ${TABLE_NAMES.TASK_COMPLETIONS}`
+      )
+      taskCompletionsThisWeek = parseInt(tcResult.rows[0]?.week || '0')
+      taskCompletionsThisMonth = parseInt(tcResult.rows[0]?.month || '0')
+
+      const tasksResult = await query<{ count: string }>(
+        `SELECT COUNT(*) as count FROM ${TABLE_NAMES.TASKS} WHERE NOT is_archived`
+      )
+      activeTasksCount = parseInt(tasksResult.rows[0]?.count || '0')
+    } catch {
+      // Tasks tables might not exist
+    }
+
+    let contentSubmissionsThisMonth = 0
+    try {
+      const csResult = await query<{ count: string }>(
+        `SELECT COUNT(*) as count FROM ${TABLE_NAMES.USER_CONTENT_SUBMISSIONS}
+         WHERE created_at >= DATE_TRUNC('month', CURRENT_DATE)`
+      )
+      contentSubmissionsThisMonth = parseInt(csResult.rows[0]?.count || '0')
+    } catch {
+      // Table might not exist
+    }
+
+    return {
+      taskCompletionsThisWeek,
+      taskCompletionsThisMonth,
+      contentSubmissionsThisMonth,
+      activeTasksCount,
+    }
+  } catch (error) {
+    logger.error('Error fetching activity summary', { error })
+    return defaults
+  }
+}
+
+const MONTH_NAMES: Record<string, string> = {
+  '01': 'Januar', '02': 'Februar', '03': 'März', '04': 'April',
+  '05': 'Mai', '06': 'Juni', '07': 'Juli', '08': 'August',
+  '09': 'September', '10': 'Oktober', '11': 'November', '12': 'Dezember',
+}
+
+function formatMonth(monthStr: string): string {
+  const parts = monthStr.split('-')
+  return `${MONTH_NAMES[parts[1]] || parts[1]} ${parts[0]}`
+}
+
 export default async function AnalyticsPage() {
   const session = await auth()
 
@@ -113,7 +214,11 @@ export default async function AnalyticsPage() {
     redirect('/auth/login?callbackUrl=/admin/analytics')
   }
 
-  const stats = await getAnalyticsStats()
+  const [stats, userGrowth, activity] = await Promise.all([
+    getAnalyticsStats(),
+    getUserGrowth(),
+    getActivitySummary(),
+  ])
 
   return (
     <div className="space-y-6">
@@ -197,31 +302,107 @@ export default async function AnalyticsPage() {
         </div>
       </div>
 
-      {/* Placeholder Charts */}
+      {/* Content Sections */}
       <div className="grid md:grid-cols-2 gap-6">
+        {/* User Growth */}
         <div className="p-6 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
           <h3 className="font-semibold text-gray-900 dark:text-white mb-4">Benutzer-Wachstum</h3>
-          <div className="h-48 bg-gray-100 dark:bg-gray-700 rounded-lg flex items-center justify-center">
-            <div className="text-center">
-              <BarChart3 className="w-8 h-8 text-gray-400 mx-auto mb-2" />
-              <p className="text-gray-500 dark:text-gray-400 text-sm">
-                Diagramme werden in einer zukünftigen Version hinzugefügt
-              </p>
+          {userGrowth.length === 0 ? (
+            <p className="text-sm text-gray-500 dark:text-gray-400">Keine Daten vorhanden</p>
+          ) : (
+            <div className="space-y-3">
+              {userGrowth.map((item) => (
+                <div key={item.month} className="flex items-center justify-between">
+                  <span className="text-sm text-gray-600 dark:text-gray-400">{formatMonth(item.month)}</span>
+                  <div className="flex items-center gap-3">
+                    <div className="w-32 bg-gray-100 dark:bg-gray-700 rounded-full h-2">
+                      <div
+                        className="h-2 rounded-full bg-blue-500"
+                        style={{
+                          width: `${Math.min(100, (item.count / Math.max(...userGrowth.map(g => g.count))) * 100)}%`,
+                        }}
+                      />
+                    </div>
+                    <span className="text-sm font-medium text-gray-900 dark:text-white w-8 text-right">
+                      {item.count}
+                    </span>
+                  </div>
+                </div>
+              ))}
+              <p className="text-xs text-gray-400 mt-2">Registrierungen pro Monat (letzte 6 Monate)</p>
             </div>
-          </div>
+          )}
         </div>
 
+        {/* Activity Overview */}
         <div className="p-6 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
           <h3 className="font-semibold text-gray-900 dark:text-white mb-4">Aktivitäts-Übersicht</h3>
-          <div className="h-48 bg-gray-100 dark:bg-gray-700 rounded-lg flex items-center justify-center">
-            <div className="text-center">
-              <BarChart3 className="w-8 h-8 text-gray-400 mx-auto mb-2" />
-              <p className="text-gray-500 dark:text-gray-400 text-sm">
-                Diagramme werden in einer zukünftigen Version hinzugefügt
-              </p>
+          <div className="space-y-4">
+            <div className="flex items-center justify-between p-3 bg-green-50 dark:bg-green-900/20 rounded-lg">
+              <div className="flex items-center gap-2">
+                <ClipboardList className="w-5 h-5 text-green-600" />
+                <span className="text-sm text-gray-700 dark:text-gray-300">Aufgaben erledigt (diese Woche)</span>
+              </div>
+              <span className="text-lg font-bold text-green-600">{activity.taskCompletionsThisWeek}</span>
+            </div>
+            <div className="flex items-center justify-between p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+              <div className="flex items-center gap-2">
+                <ClipboardList className="w-5 h-5 text-blue-600" />
+                <span className="text-sm text-gray-700 dark:text-gray-300">Aufgaben erledigt (diesen Monat)</span>
+              </div>
+              <span className="text-lg font-bold text-blue-600">{activity.taskCompletionsThisMonth}</span>
+            </div>
+            <div className="flex items-center justify-between p-3 bg-purple-50 dark:bg-purple-900/20 rounded-lg">
+              <div className="flex items-center gap-2">
+                <Package className="w-5 h-5 text-purple-600" />
+                <span className="text-sm text-gray-700 dark:text-gray-300">Neue Einreichungen (diesen Monat)</span>
+              </div>
+              <span className="text-lg font-bold text-purple-600">{activity.contentSubmissionsThisMonth}</span>
+            </div>
+            <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
+              <div className="flex items-center gap-2">
+                <ClipboardList className="w-5 h-5 text-gray-600" />
+                <span className="text-sm text-gray-700 dark:text-gray-300">Aktive Aufgaben</span>
+              </div>
+              <span className="text-lg font-bold text-gray-900 dark:text-white">{activity.activeTasksCount}</span>
             </div>
           </div>
         </div>
+      </div>
+
+      {/* Drill-Down Links */}
+      <div className="grid md:grid-cols-2 gap-4">
+        <Link
+          href="/admin/analyse/finanzen"
+          className="flex items-center justify-between p-4 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 hover:border-blue-300 dark:hover:border-blue-600 transition-colors group"
+        >
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 bg-emerald-100 rounded-lg flex items-center justify-center">
+              <DollarSign className="w-5 h-5 text-emerald-600" />
+            </div>
+            <div>
+              <p className="font-medium text-gray-900 dark:text-white">Finanz-Analyse</p>
+              <p className="text-sm text-gray-500 dark:text-gray-400">Detaillierte Finanz-Statistiken und Diagramme</p>
+            </div>
+          </div>
+          <ArrowRight className="w-5 h-5 text-gray-400 group-hover:text-blue-600 transition-colors" />
+        </Link>
+
+        <Link
+          href="/admin/tasks/analytics"
+          className="flex items-center justify-between p-4 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 hover:border-blue-300 dark:hover:border-blue-600 transition-colors group"
+        >
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
+              <ClipboardList className="w-5 h-5 text-purple-600" />
+            </div>
+            <div>
+              <p className="font-medium text-gray-900 dark:text-white">Aufgaben-Analyse</p>
+              <p className="text-sm text-gray-500 dark:text-gray-400">Beiträge, Kategorien und Verlauf</p>
+            </div>
+          </div>
+          <ArrowRight className="w-5 h-5 text-gray-400 group-hover:text-blue-600 transition-colors" />
+        </Link>
       </div>
 
       <div className="p-6 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-xl">

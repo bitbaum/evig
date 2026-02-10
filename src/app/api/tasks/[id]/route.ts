@@ -89,9 +89,9 @@ export const GET = withAdmin<RouteParams>(async (
       FROM ${TABLE_NAMES.TASK_REQUESTS} r
       LEFT JOIN ${TABLE_NAMES.USERS} rb ON r.requested_by = rb.id
       LEFT JOIN ${TABLE_NAMES.USERS} ru ON r.requested_user_id = ru.id
-      WHERE r.task_id = $1 AND r.status = '${REQUEST_STATUSES.PENDING}'
+      WHERE r.task_id = $1 AND r.status = $2
       ORDER BY r.created_at DESC`,
-      [taskId]
+      [taskId, REQUEST_STATUSES.PENDING]
     );
 
     logger.info('Task detail fetched', {

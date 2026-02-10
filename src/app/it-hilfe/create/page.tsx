@@ -10,7 +10,11 @@ import {
   Wrench,
   AlertCircle,
   CheckCircle,
+  Sparkles,
+  Loader2,
 } from 'lucide-react'
+import { useAIFormAssist, type AIFieldMetadataEntry } from '@/hooks/useAIFormAssist'
+import { AIFieldBadge } from '@/components/ai/AIFieldIndicator'
 import {
   DEVICE_CATEGORIES,
   URGENCY_LEVELS,
@@ -42,6 +46,41 @@ export default function CreatePeerRepairPage() {
   const [canton, setCanton] = useState('')
   const [serviceType, setServiceType] = useState('flexible')
   const [skillsNeeded, setSkillsNeeded] = useState<string[]>([])
+
+  // AI assist state
+  const [aiInput, setAiInput] = useState('')
+  const [aiFieldMeta, setAiFieldMeta] = useState<Record<string, AIFieldMetadataEntry>>({})
+
+  interface ITHilfeFormData {
+    categoryId: string
+    deviceBrand: string
+    deviceModel: string
+    title: string
+    description: string
+    urgency: string
+    skillsNeeded: string[]
+  }
+
+  const { extractFromText, isExtracting, error: aiError } = useAIFormAssist<ITHilfeFormData>({
+    formType: 'it-hilfe',
+    onFieldsFilled: (data, metadata) => {
+      if (data.categoryId) {
+        setCategoryId(data.categoryId)
+        // Also trigger the category side-effects (suggested skills)
+        const category = getCategoryById(data.categoryId)
+        if (category && !data.skillsNeeded?.length) {
+          setSkillsNeeded(category.suggestedSkills)
+        }
+      }
+      if (data.deviceBrand) setDeviceBrand(data.deviceBrand)
+      if (data.deviceModel) setDeviceModel(data.deviceModel)
+      if (data.title) setTitle(data.title)
+      if (data.description) setDescription(data.description)
+      if (data.urgency) setUrgency(data.urgency)
+      if (data.skillsNeeded?.length) setSkillsNeeded(data.skillsNeeded)
+      setAiFieldMeta(metadata)
+    },
+  })
 
   // Redirect if not authenticated
   useEffect(() => {
@@ -190,6 +229,50 @@ export default function CreatePeerRepairPage() {
 
         {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-6">
+          {/* AI Assist Section */}
+          <div className="bg-gradient-to-r from-purple-50 to-indigo-50 rounded-xl border border-purple-200 p-6">
+            <div className="flex items-center gap-2 mb-3">
+              <Sparkles className="w-5 h-5 text-purple-600" />
+              <h2 className="text-lg font-semibold text-gray-900">KI-Assistent</h2>
+              <span className="text-xs bg-purple-100 text-purple-700 px-2 py-0.5 rounded-full">Beta</span>
+            </div>
+            <p className="text-sm text-gray-600 mb-3">
+              Beschreibe dein Problem in eigenen Worten und die KI füllt das Formular automatisch aus.
+            </p>
+            <div className="flex gap-3">
+              <textarea
+                value={aiInput}
+                onChange={(e) => setAiInput(e.target.value)}
+                placeholder="z.B. Mein MacBook Pro 2019 startet nicht mehr, Bildschirm bleibt schwarz nach dem Einschalten..."
+                rows={3}
+                className="flex-1 px-4 py-2 border border-purple-200 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 bg-white"
+              />
+              <div className="flex flex-col justify-end">
+                <button
+                  type="button"
+                  onClick={() => extractFromText(aiInput)}
+                  disabled={isExtracting || !aiInput.trim()}
+                  className="px-4 py-2 bg-purple-600 text-white rounded-lg font-medium hover:bg-purple-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                >
+                  {isExtracting ? (
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                  ) : (
+                    <Sparkles className="w-4 h-4" />
+                  )}
+                  {isExtracting ? 'Analysiere...' : 'KI ausfüllen'}
+                </button>
+              </div>
+            </div>
+            {aiError && (
+              <p className="mt-2 text-sm text-red-600">{aiError}</p>
+            )}
+            {Object.keys(aiFieldMeta).length > 0 && (
+              <p className="mt-2 text-xs text-purple-600">
+                Felder wurden von der KI ausgefüllt. Du kannst alle Felder nachträglich bearbeiten.
+              </p>
+            )}
+          </div>
+
           {/* Device Category - Primary selection */}
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
             <h2 className="text-lg font-semibold text-gray-900 mb-4">Was möchtest du reparieren?</h2>
@@ -226,8 +309,11 @@ export default function CreatePeerRepairPage() {
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center gap-2">
                       Marke
+                      {aiFieldMeta.deviceBrand && (
+                        <AIFieldBadge source={{ type: 'text', confidence: aiFieldMeta.deviceBrand.confidence, model: aiFieldMeta.deviceBrand.model, timestamp: aiFieldMeta.deviceBrand.timestamp, inputText: '', sources: [] }} />
+                      )}
                     </label>
                     <input
                       type="text"
@@ -238,8 +324,11 @@ export default function CreatePeerRepairPage() {
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center gap-2">
                       Modell
+                      {aiFieldMeta.deviceModel && (
+                        <AIFieldBadge source={{ type: 'text', confidence: aiFieldMeta.deviceModel.confidence, model: aiFieldMeta.deviceModel.model, timestamp: aiFieldMeta.deviceModel.timestamp, inputText: '', sources: [] }} />
+                      )}
                     </label>
                     <input
                       type="text"
@@ -252,8 +341,11 @@ export default function CreatePeerRepairPage() {
                 </div>
 
                 <div className="mb-4">
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center gap-2">
                     Titel
+                    {aiFieldMeta.title && (
+                      <AIFieldBadge source={{ type: 'text', confidence: aiFieldMeta.title.confidence, model: aiFieldMeta.title.model, timestamp: aiFieldMeta.title.timestamp, inputText: '', sources: [] }} />
+                    )}
                   </label>
                   <input
                     type="text"
@@ -265,8 +357,11 @@ export default function CreatePeerRepairPage() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center gap-2">
                     Beschreibung
+                    {aiFieldMeta.description && (
+                      <AIFieldBadge source={{ type: 'text', confidence: aiFieldMeta.description.confidence, model: aiFieldMeta.description.model, timestamp: aiFieldMeta.description.timestamp, inputText: '', sources: [] }} />
+                    )}
                   </label>
                   <textarea
                     value={description}

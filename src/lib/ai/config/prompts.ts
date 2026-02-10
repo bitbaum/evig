@@ -246,11 +246,157 @@ Antworte NUR mit dem JSON-Array, keine Erklärungen.`,
 } as const
 
 // =============================================================================
+// IT-HILFE PROMPTS
+// =============================================================================
+
+export const IT_HILFE_PROMPTS = {
+  /**
+   * System prompt for IT help request extraction
+   */
+  system: `${BRAND_CONTEXT}
+
+Du bist ein Assistent für IT-Hilfe-Anfragen bei RevampIT.
+Deine Aufgabe ist es, aus einer Problembeschreibung strukturierte Daten für eine Reparaturanfrage zu extrahieren.
+
+Bei fehlenden Informationen:
+- Wähle die wahrscheinlichste Gerätekategorie
+- Schätze die Dringlichkeit basierend auf der Beschreibung
+- Schlage passende Skills vor basierend auf dem Problem`,
+
+  /**
+   * JSON schema for IT help request data
+   */
+  schema: `{
+  "categoryId": "Gerätekategorie-ID: laptop, smartphone, tablet, desktop, console, audio, peripheral, storage, wearable, network",
+  "deviceBrand": "Marke des Geräts (z.B. Apple, Samsung, Lenovo)",
+  "deviceModel": "Modell des Geräts (z.B. MacBook Pro 2019, Galaxy S21)",
+  "title": "Kurzer Titel für die Anfrage (max 80 Zeichen)",
+  "description": "Detaillierte Problembeschreibung",
+  "urgency": "Dringlichkeit: low, normal, high, urgent",
+  "skillsNeeded": ["Benötigte Skills als Array von IDs: hardware_diagnosis, screen_repair, battery_replacement, ssd_upgrade, keyboard_repair, soldering, cleaning, power_supply, motherboard_repair, connector_repair, os_installation, linux_install, software_setup, troubleshooting, data_recovery, backup_setup, virus_removal, wifi_setup, router_config, network_troubleshooting"]
+}`,
+
+  /**
+   * Prompt for extracting IT help data from text
+   */
+  extract: `Extrahiere die IT-Hilfe-Anfrage aus folgendem Text und fülle das JSON-Schema aus:
+
+Text: "{text}"
+
+Schema:
+{schema}
+
+Wichtige Regeln:
+- Wähle die passendste categoryId basierend auf dem Gerät
+- Erstelle einen kurzen, hilfreichen Titel
+- Beschreibung soll das Problem klar zusammenfassen
+- Dringlichkeit basierend auf Kontext: "startet nicht" = high, "langsam" = normal, etc.
+- Skills basierend auf Problem wählen (z.B. "Bildschirm kaputt" → screen_repair, hardware_diagnosis)
+- Marke und Modell extrahieren wenn erwähnt
+
+Antworte NUR mit dem ausgefüllten JSON, keine Erklärungen.`,
+} as const
+
+// =============================================================================
+// PROTOCOL PROMPTS
+// =============================================================================
+
+export const PROTOCOL_PROMPTS = {
+  /**
+   * System prompt for meeting protocol structuring
+   */
+  system: `${BRAND_CONTEXT}
+
+Du bist ein Assistent für die Protokollierung von Teamsitzungen bei RevampIT.
+Deine Aufgabe ist es, rohe Transkripte von Besprechungen in strukturierte Sitzungsprotokolle zu verwandeln.
+
+Wichtige Regeln:
+- Extrahiere Themen, Diskussionspunkte und Ergebnisse
+- Identifiziere Aufgaben (wer muss was bis wann tun)
+- Erkenne Entscheidungsvorschläge (Punkte die das Team abstimmen muss)
+- Unterscheide zwischen Aufgaben, Entscheidungen und Informationen
+- Erkenne Teilnehmernamen aus dem Gespräch
+- Generiere eine kurze Zusammenfassung (2-3 Sätze)
+- Bei unklaren Zuweisungen: assigned_to_name auf null setzen
+- Schweizer Deutsch verwenden (ss statt ß)`,
+
+  /**
+   * JSON schema for structured notes output
+   */
+  schema: `{
+  "summary": "Kurze Zusammenfassung der Sitzung (2-3 Sätze)",
+  "detected_attendees": ["Name1", "Name2"],
+  "topics": [
+    {
+      "id": "uuid-v4",
+      "title": "Themenüberschrift",
+      "discussion": "Wichtigste Diskussionspunkte",
+      "outcome": "Ergebnis oder Entscheid (null wenn keines)"
+    }
+  ],
+  "action_items": [
+    {
+      "id": "uuid-v4",
+      "description": "Konkrete Aufgabe oder Vorschlag",
+      "assigned_to_name": "Vorname der zuständigen Person (null wenn unklar)",
+      "assigned_to_id": null,
+      "due_hint": "Zeithinweis aus dem Gespräch (null wenn keiner)",
+      "item_type": "task|decision|info",
+      "topic_id": "uuid des zugehörigen Themas",
+      "priority_hint": "low|normal|high (null wenn unklar)"
+    }
+  ],
+  "follow_ups": [
+    {
+      "description": "Verweis auf offene Punkte aus früheren Sitzungen",
+      "status": "erledigt|offen|in Arbeit"
+    }
+  ]
+}`,
+
+  /**
+   * Prompt for extracting structured notes from transcript
+   */
+  extract: `Strukturiere das folgende Sitzungsprotokoll.
+
+Besprechungstyp: {meetingType}
+Agendahinweise: {agendaHints}
+
+TRANSKRIPT:
+{transcript}
+
+Schema:
+{schema}
+
+Wichtige Regeln:
+- Generiere UUID-v4 Werte für alle "id" Felder
+- item_type "task" = jemand muss etwas tun
+- item_type "decision" = das Team muss darüber abstimmen/entscheiden
+- item_type "info" = zur Kenntnisnahme, keine Aktion nötig
+- priority_hint basierend auf Dringlichkeit im Gespräch
+- Erkenne Zeithinweise wie "bis Freitag", "nächste Woche", "so schnell wie möglich"
+- Wenn mehrere Themen besprochen wurden, trenne sie in separate topic-Objekte
+- follow_ups nur wenn explizit auf frühere Sitzungen verwiesen wird
+
+Antworte NUR mit dem ausgefüllten JSON, keine Erklärungen.`,
+
+  /**
+   * Quick action prompts for common refinements
+   */
+  quickActions: {
+    addDetails: 'Ergänze die Diskussionspunkte mit mehr Details aus dem Transkript.',
+    splitTopics: 'Unterteile die Themen feiner — jedes Unterthema als eigenen Eintrag.',
+    clarifyActions: 'Präzisiere die Aufgaben: Mache Beschreibungen konkreter und füge fehlende Zeithinweise hinzu.',
+  },
+} as const
+
+// =============================================================================
 // HELPER TYPES
 // =============================================================================
 
 export type BlogQuickAction = keyof typeof BLOG_PROMPTS.quickActions
 export type ErfassungQuickAction = keyof typeof ERFASSUNG_PROMPTS.quickActions
+export type ProtocolQuickAction = keyof typeof PROTOCOL_PROMPTS.quickActions
 
 /**
  * Get a blog quick action prompt by key
@@ -264,6 +410,13 @@ export function getBlogQuickActionPrompt(action: BlogQuickAction): string {
  */
 export function getErfassungQuickActionPrompt(action: ErfassungQuickAction): string {
   return ERFASSUNG_PROMPTS.quickActions[action]
+}
+
+/**
+ * Get a protocol quick action prompt by key
+ */
+export function getProtocolQuickActionPrompt(action: ProtocolQuickAction): string {
+  return PROTOCOL_PROMPTS.quickActions[action]
 }
 
 /**

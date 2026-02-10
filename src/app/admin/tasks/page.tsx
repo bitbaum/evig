@@ -30,6 +30,7 @@ import {
   Clock,
   BarChart3,
 } from 'lucide-react'
+import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
 import TaskFiltersClient from './TaskFiltersClient'
 
 export const metadata: Metadata = {
@@ -54,15 +55,15 @@ async function getTaskStats(): Promise<TaskStats> {
     }>(`
       SELECT
         COUNT(*) FILTER (WHERE NOT is_archived) as total,
-        COUNT(*) FILTER (WHERE current_status = '${TASK_STATUSES.NEEDS_ATTENTION}' AND NOT is_archived) as needs_attention,
-        COUNT(*) FILTER (WHERE current_status = '${TASK_STATUSES.REQUESTED}' AND NOT is_archived) as requested,
+        COUNT(*) FILTER (WHERE current_status = $1 AND NOT is_archived) as needs_attention,
+        COUNT(*) FILTER (WHERE current_status = $2 AND NOT is_archived) as requested,
         (
           SELECT COUNT(*)
           FROM ${TABLE_NAMES.TASK_COMPLETIONS}
           WHERE DATE(completed_at) = CURRENT_DATE
         ) as completed_today
       FROM ${TABLE_NAMES.TASKS}
-    `)
+    `, [TASK_STATUSES.NEEDS_ATTENTION, TASK_STATUSES.REQUESTED])
 
     const row = result.rows[0]
     return {
@@ -79,7 +80,9 @@ async function getTaskStats(): Promise<TaskStats> {
 
 async function getTasks(
   category?: string,
-  status?: string
+  status?: string,
+  q?: string,
+  priority?: string,
 ): Promise<TaskListItem[]> {
   try {
     let queryText = `
@@ -118,6 +121,19 @@ async function getTasks(
       params.push(status)
     }
 
+    if (q) {
+      queryText += ` AND (t.title ILIKE $${paramIndex} OR t.description ILIKE $${paramIndex})`
+      params.push(`%${q}%`)
+      paramIndex++
+    }
+
+    if (priority) {
+      queryText += ` AND t.priority = $${paramIndex++}`
+      params.push(priority)
+    }
+
+    // CASE/WHEN values are compile-time constants from config, not user input.
+    // SQL CASE expressions don't support parameterized values ($N).
     queryText += `
       ORDER BY
         CASE t.current_status
@@ -147,27 +163,20 @@ async function getTasks(
 export default async function TasksAdminPage({
   searchParams,
 }: {
-  searchParams: Promise<{ category?: string; status?: string }>
+  searchParams: Promise<{ category?: string; status?: string; q?: string; priority?: string }>
 }) {
   const params = await searchParams
   const stats = await getTaskStats()
-  const tasks = await getTasks(params.category, params.status)
+  const tasks = await getTasks(params.category, params.status, params.q, params.priority)
 
   return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-            <ClipboardList className="w-5 h-5 text-blue-600" />
-          </div>
-          <div>
-            <h1 className="text-2xl font-bold text-gray-900">Aufgaben</h1>
-            <p className="text-gray-600">Teamaufgaben verwalten und koordinieren</p>
-          </div>
-        </div>
-
-        <div className="flex items-center gap-3">
+    <AdminPageWrapper
+      title="Aufgaben"
+      description="Teamaufgaben verwalten und koordinieren"
+      icon={ClipboardList}
+      iconColor="blue"
+      actions={
+        <>
           <Link
             href="/admin/tasks/analytics"
             className="px-4 py-2 text-sm text-gray-600 hover:text-gray-900 border border-gray-200 hover:border-gray-300 rounded-lg transition-colors flex items-center gap-2"
@@ -182,9 +191,9 @@ export default async function TasksAdminPage({
             <Plus className="w-4 h-4" />
             Neue Aufgabe
           </Link>
-        </div>
-      </div>
-
+        </>
+      }
+    >
       {/* Stats Cards */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <div className="bg-white rounded-lg border p-4">
@@ -339,6 +348,6 @@ export default async function TasksAdminPage({
           </table>
         )}
       </div>
-    </div>
+    </AdminPageWrapper>
   )
 }
