@@ -39,6 +39,7 @@ import {
   Eye,
   Heart,
   ClipboardList,
+  Vote,
 } from 'lucide-react'
 
 // =============================================================================
@@ -504,6 +505,22 @@ export const SECTIONS: Record<string, SectionConfig> = {
     },
     visibility: { admin: true, dashboard: false, requiresStaff: true },
     priority: 131,
+    category: 'management',
+    sidebarGroup: 'betrieb',
+  },
+
+  decisions: {
+    id: 'decisions',
+    path: '/admin/decisions',
+    ui: {
+      label: 'Entscheidungen',
+      description: 'Vorschläge und Abstimmungen im Team',
+      icon: Vote,
+      emoji: '🗳️',
+      color: 'info',
+    },
+    visibility: { admin: true, dashboard: false, requiresStaff: true },
+    priority: 132,
     category: 'management',
     sidebarGroup: 'betrieb',
   },
