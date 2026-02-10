@@ -51,7 +51,7 @@ export default function ResultsPanel({
   votingMethod,
 }: Props) {
   // Outcome shape varies by voting method — typed per-branch below
-  const data = outcome as any; // eslint-disable-line @typescript-eslint/no-explicit-any
+  const data = outcome as any;
   if (!data) return null;
 
   return (

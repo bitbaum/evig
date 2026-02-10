@@ -12,7 +12,7 @@ import { withAdmin, ValidSession } from '@/lib/api/middleware'
 import { apiSuccess, apiError, apiBadRequest } from '@/lib/api/helpers'
 import { getDbUserId } from '@/lib/api/task-helpers'
 import { linkActionSchema } from '@/lib/schemas/protocols'
-import { getActionLinks, linkActionItemToTask } from '@/lib/services/protocols'
+import { getActionLinks, linkActionItemToTask, linkActionItemToDecision } from '@/lib/services/protocols'
 import { logger } from '@/lib/logger'
 
 type RouteParams = { id: string }
@@ -58,34 +58,52 @@ export const POST = withAdmin<RouteParams>(async (
       return apiBadRequest('Validierung fehlgeschlagen', result.error.flatten().fieldErrors)
     }
 
-    const { action_item_id, link_type, task_data } = result.data
-
-    if (link_type === 'decision') {
-      return apiBadRequest('Entscheidungssystem ist noch in Entwicklung')
-    }
-
-    if (!task_data) {
-      return apiBadRequest('Aufgabendaten erforderlich')
-    }
+    const { action_item_id, link_type, task_data, decision_data } = result.data
 
     const userLookup = await getDbUserId(session)
     if ('error' in userLookup) return userLookup.error
     const { dbUserId } = userLookup
 
-    const { taskId, linkId } = await linkActionItemToTask(
+    if (link_type === 'task') {
+      if (!task_data) {
+        return apiBadRequest('Aufgabendaten erforderlich')
+      }
+
+      const { taskId, linkId } = await linkActionItemToTask(
+        protocolId,
+        action_item_id,
+        task_data,
+        dbUserId
+      )
+
+      logger.info('Action item linked to task', {
+        protocolId,
+        actionItemId: action_item_id,
+        taskId,
+      })
+
+      return apiSuccess({ taskId, linkId }, 201)
+    }
+
+    // link_type === 'decision'
+    if (!decision_data) {
+      return apiBadRequest('Entscheidungsdaten erforderlich')
+    }
+
+    const { decisionId, linkId } = await linkActionItemToDecision(
       protocolId,
       action_item_id,
-      task_data,
+      decision_data,
       dbUserId
     )
 
-    logger.info('Action item linked to task', {
+    logger.info('Action item linked to decision', {
       protocolId,
       actionItemId: action_item_id,
-      taskId,
+      decisionId,
     })
 
-    return apiSuccess({ taskId, linkId }, 201)
+    return apiSuccess({ decisionId, linkId }, 201)
   } catch (error) {
     logger.error('Error linking action item', { error, userId: session.user.id })
     return apiError(error, 'Fehler beim Erstellen der Verknüpfung')
