@@ -47,5 +47,12 @@ export {
   locationApprovalNotification,
 } from './misc';
 
+// IT-Hilfe templates
+export {
+  itHilfeRequestConfirmation,
+  adminNewITHilfeRequest,
+  helperNewMatchingRequest,
+} from './it-hilfe';
+
 // Base styles (for custom templates)
 export { BASE_STYLES, COPYRIGHT_TEXT, AUTO_GENERATED_TEXT, createEmailLayout, createTextFooter } from './base-styles';

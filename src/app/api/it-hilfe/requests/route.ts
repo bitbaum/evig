@@ -7,10 +7,17 @@ import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
 import {
   getCategoryIds,
+  getCategoryById,
   getSkillIds,
+  getSkillById,
+  getUrgencyById,
+  getServiceTypeById,
   URGENCY_LEVELS,
   SERVICE_TYPES,
+  REVAMPIT_NOTIFICATION_EMAIL,
 } from '@/config/it-hilfe'
+import { sendCustomEmail } from '@/lib/email'
+import { itHilfeRequestConfirmation, adminNewITHilfeRequest, helperNewMatchingRequest } from '@/lib/email/templates/it-hilfe'
 
 interface RequestRow {
   id: string
@@ -209,6 +216,7 @@ export async function POST(request: NextRequest) {
       serviceType = 'flexible',
       skillsNeeded = [],
       imageUrls = [],
+      aiDiagnosis,
     } = body
 
     // Validate required fields (minimal validation - don't block users)
@@ -261,9 +269,10 @@ export async function POST(request: NextRequest) {
         canton,
         service_type,
         skills_needed,
-        image_urls
+        image_urls,
+        ai_diagnosis
       ) VALUES (
-        $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15
+        $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16
       )
       RETURNING id
     `, [
@@ -282,6 +291,7 @@ export async function POST(request: NextRequest) {
       serviceType,
       skillsNeeded.length > 0 ? skillsNeeded : null,
       imageUrls.length > 0 ? imageUrls : null,
+      aiDiagnosis || null,
     ])
 
     const requestId = (result.rows[0] as { id: string }).id
@@ -293,6 +303,76 @@ export async function POST(request: NextRequest) {
       budgetType,
       canton,
     })
+
+    // Fire-and-forget: Send confirmation and admin notification emails
+    const requestUrl = `${process.env.NEXTAUTH_URL || 'https://revamp-it.ch'}/it-hilfe/${requestId}`
+    const categoryName = getCategoryById(categoryId)?.name || categoryId
+    const urgencyName = getUrgencyById(urgency)?.name || urgency
+
+    // Confirmation email to requester
+    if (session.user.email) {
+      const confirmationContent = itHilfeRequestConfirmation(
+        session.user.name || 'Nutzer',
+        title,
+        requestId,
+        categoryName,
+        aiDiagnosis || null,
+        requestUrl
+      )
+      sendCustomEmail(session.user.email, confirmationContent).catch(err => {
+        logger.warn('Failed to send IT-Hilfe confirmation email', { error: err, requestId })
+      })
+    }
+
+    // Admin notification to RevampIT staff email
+    const adminContent = adminNewITHilfeRequest(
+      session.user.name || 'Nutzer',
+      session.user.email || '',
+      title,
+      categoryName,
+      urgencyName,
+      requestUrl
+    )
+    sendCustomEmail(REVAMPIT_NOTIFICATION_EMAIL, adminContent).catch(err => {
+      logger.warn('Failed to send IT-Hilfe admin notification', { error: err })
+    })
+
+    // Notify matching helpers (fire-and-forget)
+    const serviceTypeName = getServiceTypeById(serviceType)?.name || serviceType
+    if (skillsNeeded.length > 0) {
+      query(`
+        SELECT DISTINCT hp.user_id, u.name, u.email,
+          ARRAY_AGG(us.skill_id) FILTER (WHERE us.skill_id = ANY($1::text[])) as matching_skills
+        FROM ${TABLE_NAMES.HELPER_PROFILES} hp
+        JOIN ${TABLE_NAMES.USERS} u ON hp.user_id = u.id
+        JOIN ${TABLE_NAMES.USER_SKILLS} us ON hp.user_id = us.user_id
+        WHERE hp.is_active = true
+          AND hp.user_id != $2
+          AND us.skill_id = ANY($1::text[])
+        GROUP BY hp.user_id, u.name, u.email
+      `, [skillsNeeded, session.user.id]).then(helpersResult => {
+        for (const helper of helpersResult.rows as Array<{ user_id: string; name: string; email: string; matching_skills: string[] }>) {
+          const matchingSkillNames = (helper.matching_skills || [])
+            .map(sid => getSkillById(sid)?.name || sid)
+          const helperContent = helperNewMatchingRequest(
+            helper.name || 'Helfer',
+            title,
+            categoryName,
+            urgencyName,
+            canton || '',
+            serviceTypeName,
+            matchingSkillNames,
+            requestUrl
+          )
+          sendCustomEmail(helper.email, helperContent).catch(err => {
+            logger.warn('Failed to send IT-Hilfe helper notification', { error: err, helperEmail: helper.email })
+          })
+        }
+        logger.info('Sent IT-Hilfe helper notifications', { requestId, helperCount: helpersResult.rows.length })
+      }).catch(err => {
+        logger.warn('Failed to fetch matching helpers for IT-Hilfe notifications', { error: err })
+      })
+    }
 
     return apiSuccess({
       message: 'IT-Hilfe-Anfrage erfolgreich erstellt',

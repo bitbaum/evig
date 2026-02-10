@@ -55,6 +55,32 @@ export const IT_HILFE = {
 } as const
 
 // ============================================================================
+// REVAMPIT STORE (Physical location - Werkstatt & Laden)
+// ============================================================================
+
+export const REVAMPIT_STORE = {
+  name: 'RevampIT Werkstatt',
+  address: 'Birmensdorferstr. 379',
+  postalCode: '8055',
+  city: 'Zürich',
+  canton: 'Zürich',
+  lat: 47.3815,
+  lng: 8.5237,
+  googleMapsUrl: 'https://www.google.com/maps/place/Birmensdorferstrasse+379,+8055+Zürich',
+  description: 'Unser Laden und Werkstatt in Zürich Wiedikon',
+} as const
+
+export const REVAMPIT_NOTIFICATION_EMAIL = 'georgy.butaev@revamp-it.ch'
+
+export const MATCH_SCORES = {
+  PER_SKILL: 20,
+  DEVICE_CATEGORY_BONUS: 10,
+  SAME_CANTON: 15,
+  BUDGET_COMPATIBLE: 10,
+  SERVICE_TYPE_MATCH: 5,
+} as const
+
+// ============================================================================
 // SERVICE CATEGORIES (Expanded beyond repairs)
 // ============================================================================
 

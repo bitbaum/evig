@@ -57,6 +57,7 @@ import * as repairerTemplates from './templates/repairer';
 import * as workshopTemplates from './templates/workshop';
 import * as adminTemplates from './templates/admin';
 import * as miscTemplates from './templates/misc';
+import * as itHilfeTemplates from './templates/it-hilfe';
 
 export const emailTemplates = {
   // Auth
@@ -97,6 +98,11 @@ export const emailTemplates = {
   newReviewNotification: miscTemplates.newReviewNotification,
   sellerApplicationSubmitted: miscTemplates.sellerApplicationSubmitted,
   locationApprovalNotification: miscTemplates.locationApprovalNotification,
+
+  // IT-Hilfe
+  itHilfeRequestConfirmation: itHilfeTemplates.itHilfeRequestConfirmation,
+  adminNewITHilfeRequest: itHilfeTemplates.adminNewITHilfeRequest,
+  helperNewMatchingRequest: itHilfeTemplates.helperNewMatchingRequest,
 };
 
 // Email template function type
