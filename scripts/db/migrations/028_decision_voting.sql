@@ -1,8 +1,9 @@
--- Migration 028: Decision voting and outcomes for protocol action items
+-- Migration 028: Protocol-level decision voting and outcomes
 -- Enables team voting on decision items, AI task proposals, and bulk task creation
+-- Named protocol_decision_* to avoid collision with standalone decisions system
 
 -- Votes: one per user per decision, toggle behavior
-CREATE TABLE IF NOT EXISTS decision_votes (
+CREATE TABLE IF NOT EXISTS protocol_decision_votes (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   protocol_id UUID NOT NULL REFERENCES meeting_protocols(id) ON DELETE CASCADE,
   action_item_id TEXT NOT NULL,
@@ -13,7 +14,7 @@ CREATE TABLE IF NOT EXISTS decision_votes (
 );
 
 -- Outcomes: tracks close state, AI proposals, task creation
-CREATE TABLE IF NOT EXISTS decision_outcomes (
+CREATE TABLE IF NOT EXISTS protocol_decision_outcomes (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   protocol_id UUID NOT NULL REFERENCES meeting_protocols(id) ON DELETE CASCADE,
   action_item_id TEXT NOT NULL,
@@ -32,9 +33,9 @@ CREATE TABLE IF NOT EXISTS decision_outcomes (
 );
 
 -- Indexes for fast lookups
-CREATE INDEX IF NOT EXISTS idx_decision_votes_protocol ON decision_votes(protocol_id);
-CREATE INDEX IF NOT EXISTS idx_decision_votes_action ON decision_votes(protocol_id, action_item_id);
-CREATE INDEX IF NOT EXISTS idx_decision_outcomes_protocol ON decision_outcomes(protocol_id);
+CREATE INDEX IF NOT EXISTS idx_protocol_decision_votes_protocol ON protocol_decision_votes(protocol_id);
+CREATE INDEX IF NOT EXISTS idx_protocol_decision_votes_action ON protocol_decision_votes(protocol_id, action_item_id);
+CREATE INDEX IF NOT EXISTS idx_protocol_decision_outcomes_protocol ON protocol_decision_outcomes(protocol_id);
 
-COMMENT ON TABLE decision_votes IS 'Individual votes on protocol decision items (thumbs up/down)';
-COMMENT ON TABLE decision_outcomes IS 'Aggregated decision state, AI proposals, and task creation tracking';
+COMMENT ON TABLE protocol_decision_votes IS 'Individual votes on protocol decision items (thumbs up/down)';
+COMMENT ON TABLE protocol_decision_outcomes IS 'Aggregated decision state, AI proposals, and task creation tracking';

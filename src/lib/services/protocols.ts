@@ -795,7 +795,7 @@ export async function castDecisionVote(
 ): Promise<{ action: 'added' | 'changed' | 'removed'; votesUp: number; votesDown: number; isClosed: boolean; result: string }> {
   // Check if already closed
   const outcomeResult = await query<{ is_closed: boolean }>(
-    `SELECT is_closed FROM ${TABLE_NAMES.DECISION_OUTCOMES}
+    `SELECT is_closed FROM ${TABLE_NAMES.PROTOCOL_DECISION_OUTCOMES}
      WHERE protocol_id = $1 AND action_item_id = $2`,
     [protocolId, actionItemId]
   )
@@ -806,7 +806,7 @@ export async function castDecisionVote(
 
   // Check existing vote
   const existingVote = await query<{ vote_type: string }>(
-    `SELECT vote_type FROM ${TABLE_NAMES.DECISION_VOTES}
+    `SELECT vote_type FROM ${TABLE_NAMES.PROTOCOL_DECISION_VOTES}
      WHERE protocol_id = $1 AND action_item_id = $2 AND voter_id = $3`,
     [protocolId, actionItemId, voterId]
   )
@@ -817,7 +817,7 @@ export async function castDecisionVote(
     if (existingVote.rows[0].vote_type === voteType) {
       // Same vote → remove (toggle off)
       await query(
-        `DELETE FROM ${TABLE_NAMES.DECISION_VOTES}
+        `DELETE FROM ${TABLE_NAMES.PROTOCOL_DECISION_VOTES}
          WHERE protocol_id = $1 AND action_item_id = $2 AND voter_id = $3`,
         [protocolId, actionItemId, voterId]
       )
@@ -825,7 +825,7 @@ export async function castDecisionVote(
     } else {
       // Different vote → change
       await query(
-        `UPDATE ${TABLE_NAMES.DECISION_VOTES}
+        `UPDATE ${TABLE_NAMES.PROTOCOL_DECISION_VOTES}
          SET vote_type = $4
          WHERE protocol_id = $1 AND action_item_id = $2 AND voter_id = $3`,
         [protocolId, actionItemId, voterId, voteType]
@@ -835,7 +835,7 @@ export async function castDecisionVote(
   } else {
     // New vote
     await query(
-      `INSERT INTO ${TABLE_NAMES.DECISION_VOTES} (protocol_id, action_item_id, voter_id, vote_type)
+      `INSERT INTO ${TABLE_NAMES.PROTOCOL_DECISION_VOTES} (protocol_id, action_item_id, voter_id, vote_type)
        VALUES ($1, $2, $3, $4)`,
       [protocolId, actionItemId, voterId, voteType]
     )
@@ -871,7 +871,7 @@ async function recountVotes(
 ): Promise<{ votesUp: number; votesDown: number }> {
   const countResult = await query<{ vote_type: string; cnt: string }>(
     `SELECT vote_type, COUNT(*)::text as cnt
-     FROM ${TABLE_NAMES.DECISION_VOTES}
+     FROM ${TABLE_NAMES.PROTOCOL_DECISION_VOTES}
      WHERE protocol_id = $1 AND action_item_id = $2
      GROUP BY vote_type`,
     [protocolId, actionItemId]
@@ -882,7 +882,7 @@ async function recountVotes(
 
   // Upsert outcome with counts
   await query(
-    `INSERT INTO ${TABLE_NAMES.DECISION_OUTCOMES} (protocol_id, action_item_id, votes_up, votes_down)
+    `INSERT INTO ${TABLE_NAMES.PROTOCOL_DECISION_OUTCOMES} (protocol_id, action_item_id, votes_up, votes_down)
      VALUES ($1, $2, $3, $4)
      ON CONFLICT (protocol_id, action_item_id)
      DO UPDATE SET votes_up = $3, votes_down = $4, updated_at = NOW()`,
@@ -909,7 +909,7 @@ async function checkAutoClose(
   if (attendees.length === 0) {
     // No attendees defined, can't auto-close
     const outcome = await query<{ is_closed: boolean; result: string }>(
-      `SELECT is_closed, result FROM ${TABLE_NAMES.DECISION_OUTCOMES}
+      `SELECT is_closed, result FROM ${TABLE_NAMES.PROTOCOL_DECISION_OUTCOMES}
        WHERE protocol_id = $1 AND action_item_id = $2`,
       [protocolId, actionItemId]
     )
@@ -922,7 +922,7 @@ async function checkAutoClose(
   // Count distinct voters
   const voterCount = await query<{ cnt: string }>(
     `SELECT COUNT(DISTINCT voter_id)::text as cnt
-     FROM ${TABLE_NAMES.DECISION_VOTES}
+     FROM ${TABLE_NAMES.PROTOCOL_DECISION_VOTES}
      WHERE protocol_id = $1 AND action_item_id = $2`,
     [protocolId, actionItemId]
   )
@@ -935,7 +935,7 @@ async function checkAutoClose(
   }
 
   const outcome = await query<{ is_closed: boolean; result: string }>(
-    `SELECT is_closed, result FROM ${TABLE_NAMES.DECISION_OUTCOMES}
+    `SELECT is_closed, result FROM ${TABLE_NAMES.PROTOCOL_DECISION_OUTCOMES}
      WHERE protocol_id = $1 AND action_item_id = $2`,
     [protocolId, actionItemId]
   )
@@ -956,7 +956,7 @@ async function closeDecisionInternal(
 ): Promise<{ isClosed: boolean; result: string }> {
   // Get current counts
   const outcome = await query<{ votes_up: number; votes_down: number }>(
-    `SELECT votes_up, votes_down FROM ${TABLE_NAMES.DECISION_OUTCOMES}
+    `SELECT votes_up, votes_down FROM ${TABLE_NAMES.PROTOCOL_DECISION_OUTCOMES}
      WHERE protocol_id = $1 AND action_item_id = $2`,
     [protocolId, actionItemId]
   )
@@ -966,7 +966,7 @@ async function closeDecisionInternal(
   const result = votesUp > votesDown ? 'approved' : 'rejected'
 
   await query(
-    `UPDATE ${TABLE_NAMES.DECISION_OUTCOMES}
+    `UPDATE ${TABLE_NAMES.PROTOCOL_DECISION_OUTCOMES}
      SET is_closed = true, closed_by = $3, closed_at = NOW(), result = $4, updated_at = NOW()
      WHERE protocol_id = $1 AND action_item_id = $2`,
     [protocolId, actionItemId, closedBy, result]
@@ -989,7 +989,7 @@ export async function closeDecision(
 ): Promise<{ isClosed: boolean; result: string; votesUp: number; votesDown: number }> {
   // Check if already closed
   const existing = await query<{ is_closed: boolean }>(
-    `SELECT is_closed FROM ${TABLE_NAMES.DECISION_OUTCOMES}
+    `SELECT is_closed FROM ${TABLE_NAMES.PROTOCOL_DECISION_OUTCOMES}
      WHERE protocol_id = $1 AND action_item_id = $2`,
     [protocolId, actionItemId]
   )
@@ -1004,7 +1004,7 @@ export async function closeDecision(
   const closeResult = await closeDecisionInternal(protocolId, actionItemId, closedBy)
 
   const counts = await query<{ votes_up: number; votes_down: number }>(
-    `SELECT votes_up, votes_down FROM ${TABLE_NAMES.DECISION_OUTCOMES}
+    `SELECT votes_up, votes_down FROM ${TABLE_NAMES.PROTOCOL_DECISION_OUTCOMES}
      WHERE protocol_id = $1 AND action_item_id = $2`,
     [protocolId, actionItemId]
   )
@@ -1024,11 +1024,11 @@ export async function getDecisionData(
 ): Promise<{ votes: DecisionVoteRecord[]; outcomes: DecisionOutcomeRecord[] }> {
   const [votesResult, outcomesResult] = await Promise.all([
     query<DecisionVoteRecord>(
-      `SELECT * FROM ${TABLE_NAMES.DECISION_VOTES} WHERE protocol_id = $1 ORDER BY created_at`,
+      `SELECT * FROM ${TABLE_NAMES.PROTOCOL_DECISION_VOTES} WHERE protocol_id = $1 ORDER BY created_at`,
       [protocolId]
     ),
     query<DecisionOutcomeRecord>(
-      `SELECT * FROM ${TABLE_NAMES.DECISION_OUTCOMES} WHERE protocol_id = $1`,
+      `SELECT * FROM ${TABLE_NAMES.PROTOCOL_DECISION_OUTCOMES} WHERE protocol_id = $1`,
       [protocolId]
     ),
   ])
@@ -1048,7 +1048,7 @@ export async function generateTaskProposals(
 ): Promise<{ proposals: ProposedTask[]; model: string }> {
   // Get outcome — must be closed and approved
   const outcomeResult = await query<DecisionOutcomeRecord>(
-    `SELECT * FROM ${TABLE_NAMES.DECISION_OUTCOMES}
+    `SELECT * FROM ${TABLE_NAMES.PROTOCOL_DECISION_OUTCOMES}
      WHERE protocol_id = $1 AND action_item_id = $2`,
     [protocolId, actionItemId]
   )
@@ -1106,7 +1106,7 @@ export async function generateTaskProposals(
 
   // Store proposals in outcome
   await query(
-    `UPDATE ${TABLE_NAMES.DECISION_OUTCOMES}
+    `UPDATE ${TABLE_NAMES.PROTOCOL_DECISION_OUTCOMES}
      SET proposed_tasks = $3::jsonb, proposal_model = $4, updated_at = NOW()
      WHERE protocol_id = $1 AND action_item_id = $2`,
     [protocolId, actionItemId, JSON.stringify(aiResult.proposals), aiResult.model]
@@ -1144,7 +1144,7 @@ export async function createProposedTasks(
 ): Promise<{ taskCount: number; taskIds: string[] }> {
   // Get outcome with proposals
   const outcomeResult = await query<DecisionOutcomeRecord>(
-    `SELECT * FROM ${TABLE_NAMES.DECISION_OUTCOMES}
+    `SELECT * FROM ${TABLE_NAMES.PROTOCOL_DECISION_OUTCOMES}
      WHERE protocol_id = $1 AND action_item_id = $2`,
     [protocolId, actionItemId]
   )
@@ -1177,7 +1177,7 @@ export async function createProposedTasks(
 
   // Mark tasks as created
   await query(
-    `UPDATE ${TABLE_NAMES.DECISION_OUTCOMES}
+    `UPDATE ${TABLE_NAMES.PROTOCOL_DECISION_OUTCOMES}
      SET tasks_created = true, updated_at = NOW()
      WHERE protocol_id = $1 AND action_item_id = $2`,
     [protocolId, actionItemId]
