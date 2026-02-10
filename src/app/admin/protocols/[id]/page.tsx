@@ -13,7 +13,7 @@ import { auth } from '@/auth'
 import { query } from '@/lib/auth/db'
 import { TABLE_NAMES } from '@/config/database'
 import { isSuperAdmin } from '@/lib/permissions'
-import { getProtocolById, getActionLinks, getTeamMembers } from '@/lib/services/protocols'
+import { getProtocolById, getActionLinks, getTeamMembers, getDecisionData } from '@/lib/services/protocols'
 import {
   MEETING_TYPE_LABELS,
   MEETING_TYPE_COLORS,
@@ -21,8 +21,10 @@ import {
   PROTOCOL_STATUS_LABELS,
   PROTOCOL_STATUS_COLORS,
   PROTOCOL_VISIBILITY_LABELS,
+  INPUT_METHOD_LABELS,
+  INPUT_METHOD_ICONS,
 } from '@/config/protocols'
-import type { MeetingType } from '@/config/protocols'
+import type { MeetingType, InputMethod } from '@/config/protocols'
 import {
   ArrowLeft,
   FileText,
@@ -34,6 +36,9 @@ import {
   RefreshCw,
   Landmark,
   MessageSquare,
+  Mic,
+  ListTree,
+  ListChecks,
 } from 'lucide-react'
 import ProtocolDetailClient from './ProtocolDetailClient'
 
@@ -48,6 +53,13 @@ const MEETING_TYPE_ICON_MAP: Record<string, React.ComponentType<{ className?: st
   RefreshCw,
   Landmark,
   MessageSquare,
+}
+
+const INPUT_METHOD_ICON_MAP: Record<string, React.ComponentType<{ className?: string }>> = {
+  Mic,
+  FileText,
+  ListTree,
+  ListChecks,
 }
 
 export default async function ProtocolDetailPage({
@@ -80,9 +92,10 @@ export default async function ProtocolDetailPage({
     notFound()
   }
 
-  const [actionLinks, teamMembers] = await Promise.all([
+  const [actionLinks, teamMembers, decisionData] = await Promise.all([
     getActionLinks(id),
     getTeamMembers(),
+    getDecisionData(id),
   ])
 
   const iconName = MEETING_TYPE_ICONS[protocol.meeting_type as MeetingType]
@@ -140,6 +153,10 @@ export default async function ProtocolDetailPage({
             protocol={protocol}
             actionLinks={actionLinks}
             teamMembers={teamMembers}
+            decisionVotes={decisionData.votes}
+            decisionOutcomes={decisionData.outcomes}
+            currentUserId={dbUserId}
+            isProtocolCreator={protocol.created_by === dbUserId}
           />
         </div>
 
@@ -181,6 +198,21 @@ export default async function ProtocolDetailPage({
                   </span>
                 </dd>
               </div>
+              {protocol.input_method && (
+                <div>
+                  <dt className="text-sm text-gray-500">Eingabemethode</dt>
+                  <dd className="flex items-center gap-2 mt-1">
+                    {(() => {
+                      const iconName = INPUT_METHOD_ICONS[protocol.input_method as InputMethod]
+                      const InputIcon = INPUT_METHOD_ICON_MAP[iconName]
+                      return InputIcon ? <InputIcon className="w-4 h-4 text-gray-400" /> : null
+                    })()}
+                    <span className="text-gray-900">
+                      {INPUT_METHOD_LABELS[protocol.input_method as InputMethod] || protocol.input_method}
+                    </span>
+                  </dd>
+                </div>
+              )}
               {protocol.attendees && protocol.attendees.length > 0 && (
                 <div>
                   <dt className="text-sm text-gray-500">Teilnehmer</dt>

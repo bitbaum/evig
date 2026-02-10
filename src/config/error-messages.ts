@@ -61,6 +61,9 @@ export const ERROR_MESSAGES = {
   PROTOCOL_NOT_EDITABLE: 'Protokoll kann in diesem Status nicht bearbeitet werden',
   TRANSCRIPT_TOO_SHORT: 'Transkript zu kurz (mindestens 50 Zeichen)',
   PROCESSING_FAILED: 'Fehler bei der KI-Verarbeitung des Transkripts',
+  NOTES_PROCESSING_FAILED: 'Fehler bei der KI-Verarbeitung der Notizen',
+  TASKS_PROCESSING_FAILED: 'Fehler bei der KI-Verarbeitung der Aufgabenliste',
+  INVALID_JSON_FORMAT: 'Ungültiges JSON-Format',
 
   // Decisions
   DECISION_NOT_FOUND: 'Entscheidung nicht gefunden',
@@ -75,6 +78,13 @@ export const ERROR_MESSAGES = {
   COMMENT_NOT_FOUND: 'Kommentar nicht gefunden',
   COMMENT_NOT_AUTHOR: 'Nur der Autor kann diesen Kommentar bearbeiten',
   COMMENT_CREATE_FAILED: 'Fehler beim Erstellen des Kommentars',
+
+  // Decision Voting (Protocol)
+  VOTE_FAILED: 'Fehler bei der Abstimmung',
+  DECISION_ALREADY_CLOSED: 'Abstimmung ist bereits geschlossen',
+  DECISION_NOT_APPROVED: 'Entscheidung wurde nicht angenommen',
+  TASKS_ALREADY_CREATED: 'Aufgaben wurden bereits erstellt',
+  AI_PROPOSAL_FAILED: 'KI-Vorschlag fehlgeschlagen',
 } as const;
 
 /**
@@ -93,6 +103,8 @@ export const SUCCESS_MESSAGES = {
   PROTOCOL_CREATED: 'Protokoll erfolgreich erstellt',
   PROTOCOL_FINALIZED: 'Protokoll abgeschlossen',
   ACTION_LINKED: 'Aufgabe erfolgreich verknüpft',
+  NOTES_PROCESSED: 'Notizen erfolgreich verarbeitet',
+  TASKS_IMPORTED: 'Aufgaben erfolgreich importiert',
 
   // Decisions
   DECISION_CREATED: 'Entscheidung erfolgreich erstellt',
@@ -102,4 +114,11 @@ export const SUCCESS_MESSAGES = {
   COMMENT_CREATED: 'Kommentar erfolgreich erstellt',
   COMMENT_UPDATED: 'Kommentar erfolgreich aktualisiert',
   COMMENT_DELETED: 'Kommentar erfolgreich gelöscht',
+
+  // Decision Voting (Protocol)
+  VOTE_RECORDED: 'Stimme abgegeben',
+  VOTE_REMOVED: 'Stimme zurückgezogen',
+  DECISION_CLOSED: 'Abstimmung geschlossen',
+  TASKS_PROPOSED: 'Aufgabenvorschläge generiert',
+  TASKS_BULK_CREATED: 'Aufgaben erstellt',
 } as const;
