@@ -64,7 +64,7 @@ export function TechnicianMapList({ requestId, requestTitle }: TechnicianMapList
         const response = await fetch(`/api/it-hilfe/requests/${requestId}/matches`)
 
         if (!response.ok) {
-          throw new Error('Fehler beim Laden der passenden Helfer')
+          throw new Error('Fehler beim Laden der passenden Techniker')
         }
 
         const data = await response.json()
@@ -129,7 +129,7 @@ export function TechnicianMapList({ requestId, requestTitle }: TechnicianMapList
       <div className="space-y-4">
         <div className="flex items-center gap-2">
           <Sparkles className="w-5 h-5 text-blue-600" />
-          <h3 className="text-lg font-semibold text-gray-900">Helfer werden gesucht...</h3>
+          <h3 className="text-lg font-semibold text-gray-900">Techniker werden gesucht...</h3>
         </div>
         <div className="animate-pulse bg-gray-100 rounded-lg min-h-[300px]" />
       </div>
@@ -150,7 +150,7 @@ export function TechnicianMapList({ requestId, requestTitle }: TechnicianMapList
       <div className="flex items-center gap-2">
         <Sparkles className="w-5 h-5 text-blue-600" />
         <h3 className="text-lg font-semibold text-gray-900">
-          Helfer & Werkstatt
+          Techniker & Werkstatt
         </h3>
       </div>
 
@@ -188,7 +188,7 @@ export function TechnicianMapList({ requestId, requestTitle }: TechnicianMapList
               <div className="flex items-center gap-2">
                 <TrendingUp className="w-4 h-4 text-blue-600" />
                 <p className="text-sm font-medium text-gray-700">
-                  {topMatches.length} passende Community-Helfer
+                  {topMatches.length} passende Techniker
                 </p>
               </div>
 
@@ -264,7 +264,7 @@ export function TechnicianMapList({ requestId, requestTitle }: TechnicianMapList
                     href="/it-hilfe/helfer"
                     className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium text-sm"
                   >
-                    Alle {matches.length} Helfer anzeigen
+                    Alle {matches.length} Techniker anzeigen
                     <TrendingUp className="w-4 h-4" />
                   </Link>
                 </div>
@@ -273,7 +273,7 @@ export function TechnicianMapList({ requestId, requestTitle }: TechnicianMapList
           ) : (
             <div className="bg-blue-50 border border-blue-200 rounded-xl p-6 text-center">
               <p className="text-sm text-gray-600">
-                Noch keine Community-Helfer gefunden. Deine Anfrage ist öffentlich sichtbar.
+                Noch keine Techniker gefunden. Deine Anfrage ist öffentlich sichtbar.
               </p>
             </div>
           )}

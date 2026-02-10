@@ -394,8 +394,8 @@ export const SERVICE_TYPES: ServiceType[] = [
   { id: 'flexible', name: 'Flexibel', description: 'Offen für verschiedene Optionen' },
   { id: 'remote', name: 'Remote', description: 'Fernhilfe per Video/Telefon' },
   { id: 'onsite', name: 'Vor Ort', description: 'Hilfe bei dir zu Hause' },
-  { id: 'pickup', name: 'Abholung', description: 'Helfer holt das Gerät ab' },
-  { id: 'dropoff', name: 'Bringen', description: 'Du bringst das Gerät zum Helfer' },
+  { id: 'pickup', name: 'Abholung', description: 'Techniker holt das Gerät ab' },
+  { id: 'dropoff', name: 'Bringen', description: 'Du bringst das Gerät zum Techniker' },
 ]
 
 // ============================================================================
@@ -411,7 +411,7 @@ export interface RequestStatus {
 
 export const REQUEST_STATUSES: RequestStatus[] = [
   { id: 'open', name: 'Offen', description: 'Anfrage ist offen für Angebote', badgeClass: 'bg-green-100 text-green-700' },
-  { id: 'in_discussion', name: 'In Gespräch', description: 'In Verhandlung mit Helfern', badgeClass: 'bg-yellow-100 text-yellow-700' },
+  { id: 'in_discussion', name: 'In Gespräch', description: 'In Verhandlung mit Technikern', badgeClass: 'bg-yellow-100 text-yellow-700' },
   { id: 'matched', name: 'Vergeben', description: 'Angebot akzeptiert, Hilfe läuft', badgeClass: 'bg-blue-100 text-blue-700' },
   { id: 'completed', name: 'Abgeschlossen', description: 'Erfolgreich abgeschlossen', badgeClass: 'bg-emerald-100 text-emerald-700' },
   { id: 'cancelled', name: 'Abgebrochen', description: 'Anfrage wurde abgebrochen', badgeClass: 'bg-gray-100 text-gray-500' },

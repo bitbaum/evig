@@ -223,7 +223,7 @@ export async function PUT(request: NextRequest) {
     })
 
     return apiSuccess({
-      message: 'Helfer-Profil erfolgreich gespeichert',
+      message: 'Techniker-Profil erfolgreich gespeichert',
     })
   } catch (error) {
     logger.error('Error updating helper profile', { error })

@@ -107,10 +107,10 @@ export default function HelferPage() {
             <div className="p-3 bg-white/20 rounded-xl">
               <Users className="w-8 h-8" />
             </div>
-            <h1 className="text-3xl font-bold">IT-Helfer finden</h1>
+            <h1 className="text-3xl font-bold">IT-Techniker finden</h1>
           </div>
           <p className="text-blue-100 text-lg max-w-2xl mb-8">
-            Finde erfahrene IT-Helfer in deiner Nähe. Von Reparaturen bis Beratung - unsere Community hilft dir weiter.
+            Finde erfahrene IT-Techniker in deiner Nähe. Von Reparaturen bis Beratung - unsere Community hilft dir weiter.
           </p>
 
           <Link
@@ -145,7 +145,7 @@ export default function HelferPage() {
             )}
 
             <div className="ml-auto text-sm text-gray-500">
-              {total} {total === 1 ? 'Helfer' : 'Helfer'} gefunden
+              {total} {total === 1 ? 'Techniker' : 'Techniker'} gefunden
             </div>
           </div>
 
@@ -296,12 +296,12 @@ export default function HelferPage() {
           <div className="text-center py-16">
             <Search className="w-16 h-16 text-gray-300 mx-auto mb-4" />
             <h3 className="text-xl font-semibold text-gray-900 mb-2">
-              Keine Helfer gefunden
+              Keine Techniker gefunden
             </h3>
             <p className="text-gray-600 mb-6">
               {hasActiveFilters
                 ? 'Versuche andere Filter oder setze sie zurück.'
-                : 'Derzeit sind keine Helfer verfügbar.'}
+                : 'Derzeit sind keine Techniker verfügbar.'}
             </p>
           </div>
         ) : (

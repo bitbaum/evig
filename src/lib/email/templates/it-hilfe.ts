@@ -60,7 +60,7 @@ export const itHilfeRequestConfirmation = (
 
           <p><strong>Was passiert als Nächstes?</strong></p>
           <ul>
-            <li>Helfer aus der Community werden deine Anfrage sehen</li>
+            <li>Techniker aus der Community werden deine Anfrage sehen</li>
             <li>Du wirst benachrichtigt, wenn jemand ein Angebot macht</li>
             <li>Du entscheidest, welches Angebot du annimmst</li>
           </ul>
@@ -92,7 +92,7 @@ Du kannst dein Gerät auch direkt vorbeibringen:
 RevampIT Werkstatt - Birmensdorferstr. 379, 8055 Zürich
 
 Was passiert als Nächstes?
-- Helfer aus der Community werden deine Anfrage sehen
+- Techniker aus der Community werden deine Anfrage sehen
 - Du wirst benachrichtigt, wenn jemand ein Angebot macht
 - Du entscheidest, welches Angebot du annimmst
 

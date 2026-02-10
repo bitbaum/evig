@@ -355,7 +355,7 @@ export async function POST(request: NextRequest) {
           const matchingSkillNames = (helper.matching_skills || [])
             .map(sid => getSkillById(sid)?.name || sid)
           const helperContent = helperNewMatchingRequest(
-            helper.name || 'Helfer',
+            helper.name || 'Techniker',
             title,
             categoryName,
             urgencyName,

@@ -143,7 +143,7 @@ export default function ITHilfePage() {
               className="inline-flex items-center gap-2 bg-emerald-700 text-white px-6 py-3 rounded-lg font-semibold hover:bg-emerald-800 transition-colors"
             >
               <Users className="w-5 h-5" />
-              Helfer finden
+              Techniker finden
             </Link>
 
             {session?.user && (

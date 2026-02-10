@@ -77,7 +77,7 @@ export function HelperCard({ helper, requestId, requestTitle }: HelperCardProps)
       router.push(`/messages/${data.conversation_id}`)
     } catch (error) {
       logger.error('Error contacting helper', { error, helperId: helper.userId })
-      alert('Fehler beim Kontaktieren des Helfers. Bitte versuche es erneut.')
+      alert('Fehler beim Kontaktieren des Technikers. Bitte versuche es erneut.')
     } finally {
       setIsContacting(false)
     }

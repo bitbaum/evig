@@ -41,7 +41,7 @@ export function MatchedHelpers({ requestId, requestTitle }: MatchedHelpersProps)
         const response = await fetch(`/api/it-hilfe/requests/${requestId}/matches`)
 
         if (!response.ok) {
-          throw new Error('Fehler beim Laden der passenden Helfer')
+          throw new Error('Fehler beim Laden der passenden Techniker')
         }
 
         const data = await response.json()
@@ -67,7 +67,7 @@ export function MatchedHelpers({ requestId, requestTitle }: MatchedHelpersProps)
       <div className="space-y-4">
         <div className="flex items-center gap-2 mb-4">
           <Sparkles className="w-5 h-5 text-blue-600" />
-          <h3 className="text-lg font-semibold text-gray-900">Passende Helfer werden gesucht...</h3>
+          <h3 className="text-lg font-semibold text-gray-900">Passende Techniker werden gesucht...</h3>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {[1, 2, 3].map((i) => (
@@ -95,10 +95,10 @@ export function MatchedHelpers({ requestId, requestTitle }: MatchedHelpersProps)
       <div className="bg-blue-50 border border-blue-200 rounded-xl p-8 text-center">
         <Sparkles className="w-12 h-12 text-blue-400 mx-auto mb-3" />
         <h3 className="text-lg font-semibold text-gray-900 mb-2">
-          Noch keine passenden Helfer gefunden
+          Noch keine passenden Techniker gefunden
         </h3>
         <p className="text-gray-600 text-sm">
-          Deine Anfrage ist öffentlich sichtbar. Helfer können dir Angebote senden.
+          Deine Anfrage ist öffentlich sichtbar. Techniker können dir Angebote senden.
         </p>
       </div>
     )
@@ -114,7 +114,7 @@ export function MatchedHelpers({ requestId, requestTitle }: MatchedHelpersProps)
       <div className="flex items-center gap-2 mb-4">
         <Sparkles className="w-5 h-5 text-blue-600" />
         <h3 className="text-lg font-semibold text-gray-900">
-          Top {topMatches.length} passende Helfer
+          Top {topMatches.length} passende Techniker
         </h3>
       </div>
 
@@ -124,7 +124,7 @@ export function MatchedHelpers({ requestId, requestTitle }: MatchedHelpersProps)
           <TrendingUp className="w-5 h-5 text-blue-600 mt-0.5" />
           <div>
             <p className="text-sm text-gray-700">
-              Diese Helfer passen besonders gut zu deiner Anfrage basierend auf Fähigkeiten, Standort und Budget.
+              Diese Techniker passen besonders gut zu deiner Anfrage basierend auf Fähigkeiten, Standort und Budget.
             </p>
           </div>
         </div>
@@ -207,7 +207,7 @@ export function MatchedHelpers({ requestId, requestTitle }: MatchedHelpersProps)
             href="/it-hilfe/helfer"
             className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium text-sm"
           >
-            Alle {matches.length} Helfer durchsuchen
+            Alle {matches.length} Techniker durchsuchen
             <TrendingUp className="w-4 h-4" />
           </Link>
         </div>

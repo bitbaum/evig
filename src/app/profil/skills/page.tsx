@@ -445,7 +445,7 @@ export default function SkillsProfilePage() {
                 Profil aktivieren
               </h2>
               <p className="text-sm text-gray-600">
-                Dein Profil wird in der Helfer-Suche angezeigt
+                Dein Profil wird in der Techniker-Suche angezeigt
               </p>
             </div>
             <div className="relative">
