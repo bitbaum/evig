@@ -30,7 +30,8 @@ import {
   getOfferStatusById,
   getAllSkills,
 } from '@/config/it-hilfe'
-import { MatchedHelpers } from '@/components/it-hilfe/MatchedHelpers'
+import { TechnicianMapList } from '@/components/it-hilfe/TechnicianMapList'
+import { AIDiagnosisCard } from '@/components/it-hilfe/AIDiagnosisCard'
 
 interface PeerRepairRequest {
   id: string
@@ -54,6 +55,7 @@ interface PeerRepairRequest {
   status: string
   matchedOfferId: string | null
   offerCount: number
+  aiDiagnosis: string | null
   expiresAt: string
   createdAt: string
   updatedAt: string
@@ -321,10 +323,22 @@ export default function PeerRepairDetailPage() {
               )}
             </div>
 
-            {/* Matched Helpers - Show for request owner on open requests */}
-            {request.isOwner && request.status === 'open' && (
+            {/* AI Diagnosis */}
+            {request.aiDiagnosis && (
+              <AIDiagnosisCard
+                diagnosis={request.aiDiagnosis}
+                deviceInfo={[
+                  getCategoryById(request.categoryId)?.name,
+                  request.deviceBrand,
+                  request.deviceModel,
+                ].filter(Boolean).join(' - ') || undefined}
+              />
+            )}
+
+            {/* Technician Map + Matched Helpers */}
+            {['open', 'in_discussion'].includes(request.status) && (
               <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                <MatchedHelpers requestId={request.id} requestTitle={request.title} />
+                <TechnicianMapList requestId={request.id} requestTitle={request.title} />
               </div>
             )}
 

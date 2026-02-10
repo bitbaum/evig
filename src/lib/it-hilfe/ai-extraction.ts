@@ -22,6 +22,7 @@ export interface ITHilfeExtractedData {
   description: string
   urgency: string
   skillsNeeded: string[]
+  diagnosis: string
 }
 
 export interface ITHilfeExtractionResult {
@@ -96,6 +97,8 @@ export async function extractITHilfeFromText(
     .map(String)
     .filter(id => getSkillById(id) !== undefined)
 
+  const diagnosis = String(raw.diagnosis || '').slice(0, 500)
+
   const data: ITHilfeExtractedData = {
     categoryId,
     deviceBrand: String(raw.deviceBrand || ''),
@@ -104,6 +107,7 @@ export async function extractITHilfeFromText(
     description: String(raw.description || ''),
     urgency,
     skillsNeeded,
+    diagnosis,
   }
 
   // Calculate basic confidence scores
@@ -116,6 +120,7 @@ export async function extractITHilfeFromText(
     description: 0.8,
     urgency: 0.7,
     skillsNeeded: skillsNeeded.length > 0 ? 0.7 : 0.5,
+    diagnosis: diagnosis ? 0.75 : 0.5,
   }
 
   logger.info('IT-Hilfe extraction successful', {

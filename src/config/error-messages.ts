@@ -54,6 +54,13 @@ export const ERROR_MESSAGES = {
   
   // Configuration
   CONFIGURATION_MISSING: 'Medusa configuration is missing',
+
+  // Protocols
+  PROTOCOL_NOT_FOUND: 'Protokoll nicht gefunden',
+  PROTOCOL_CREATE_FAILED: 'Fehler beim Erstellen des Protokolls',
+  PROTOCOL_NOT_EDITABLE: 'Protokoll kann in diesem Status nicht bearbeitet werden',
+  TRANSCRIPT_TOO_SHORT: 'Transkript zu kurz (mindestens 50 Zeichen)',
+  PROCESSING_FAILED: 'Fehler bei der KI-Verarbeitung des Transkripts',
 } as const;
 
 /**
@@ -67,4 +74,9 @@ export const SUCCESS_MESSAGES = {
   APPOINTMENT_REQUESTED: 'Terminanfrage eingereicht. Wir kontaktieren Sie bald für die Terminbestätigung.',
   APPOINTMENT_BOOKED: 'Termin erfolgreich gebucht!',
   APPOINTMENT_CANCELLED: 'Termin erfolgreich storniert',
+
+  // Protocols
+  PROTOCOL_CREATED: 'Protokoll erfolgreich erstellt',
+  PROTOCOL_FINALIZED: 'Protokoll abgeschlossen',
+  ACTION_LINKED: 'Aufgabe erfolgreich verknüpft',
 } as const;

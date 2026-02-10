@@ -35,6 +35,7 @@ interface RequestRow {
   status: string
   matched_offer_id: string | null
   offer_count: number
+  ai_diagnosis: string | null
   expires_at: string
   created_at: string
   updated_at: string
@@ -100,6 +101,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
       status: row.status,
       matchedOfferId: row.matched_offer_id,
       offerCount: row.offer_count,
+      aiDiagnosis: row.ai_diagnosis,
       expiresAt: row.expires_at,
       createdAt: row.created_at,
       updatedAt: row.updated_at,

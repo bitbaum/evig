@@ -23,6 +23,7 @@ import {
   SERVICE_CATEGORIES,
   getCategoryById,
 } from '@/config/it-hilfe'
+import { AIDiagnosisCard } from '@/components/it-hilfe/AIDiagnosisCard'
 import { lookupSwissPostalCode } from '@/lib/swiss-postal-codes'
 
 export default function CreatePeerRepairPage() {
@@ -50,6 +51,7 @@ export default function CreatePeerRepairPage() {
   // AI assist state
   const [aiInput, setAiInput] = useState('')
   const [aiFieldMeta, setAiFieldMeta] = useState<Record<string, AIFieldMetadataEntry>>({})
+  const [aiDiagnosis, setAiDiagnosis] = useState('')
 
   interface ITHilfeFormData {
     categoryId: string
@@ -59,6 +61,7 @@ export default function CreatePeerRepairPage() {
     description: string
     urgency: string
     skillsNeeded: string[]
+    diagnosis: string
   }
 
   const { extractFromText, isExtracting, error: aiError } = useAIFormAssist<ITHilfeFormData>({
@@ -78,6 +81,7 @@ export default function CreatePeerRepairPage() {
       if (data.description) setDescription(data.description)
       if (data.urgency) setUrgency(data.urgency)
       if (data.skillsNeeded?.length) setSkillsNeeded(data.skillsNeeded)
+      if (data.diagnosis) setAiDiagnosis(data.diagnosis)
       setAiFieldMeta(metadata)
     },
   })
@@ -147,6 +151,7 @@ export default function CreatePeerRepairPage() {
         canton,
         serviceType,
         skillsNeeded,
+        aiDiagnosis: aiDiagnosis || null,
       }
 
       const response = await fetch('/api/it-hilfe/requests', {
@@ -272,6 +277,14 @@ export default function CreatePeerRepairPage() {
               </p>
             )}
           </div>
+
+          {/* AI Diagnosis Card */}
+          {aiDiagnosis && (
+            <AIDiagnosisCard
+              diagnosis={aiDiagnosis}
+              deviceInfo={[deviceBrand, deviceModel].filter(Boolean).join(' ') || undefined}
+            />
+          )}
 
           {/* Device Category - Primary selection */}
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">

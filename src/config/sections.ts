@@ -492,6 +492,22 @@ export const SECTIONS: Record<string, SectionConfig> = {
     sidebarGroup: 'betrieb',
   },
 
+  protocols: {
+    id: 'protocols',
+    path: '/admin/protocols',
+    ui: {
+      label: 'Protokolle',
+      description: 'Sitzungsprotokolle und Besprechungsnotizen',
+      icon: FileText,
+      emoji: '📝',
+      color: 'info',
+    },
+    visibility: { admin: true, dashboard: false, requiresStaff: true },
+    priority: 131,
+    category: 'management',
+    sidebarGroup: 'betrieb',
+  },
+
   analytics: {
     id: 'analytics',
     path: '/admin/analytics',

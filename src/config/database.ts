@@ -135,6 +135,10 @@ export const TABLE_NAMES = {
   // Activity Stream
   ACTIVITY_UPDATES: 'activity_updates',
   HELP_REQUESTS: 'help_requests',
+
+  // Meeting Protocols
+  MEETING_PROTOCOLS: 'meeting_protocols',
+  PROTOCOL_ACTION_LINKS: 'protocol_action_links',
 } as const;
 
 /**

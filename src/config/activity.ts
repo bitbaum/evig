@@ -99,6 +99,7 @@ export const ACTIVITY_SOURCE_TYPES = {
   ACTIVITY_UPDATE: 'activity_update',
   HELP_REQUEST: 'help_request',
   FOCUS_UPDATE: 'focus_update',
+  PROTOCOL_FINALIZED: 'protocol_finalized',
 } as const;
 
 export const ACTIVITY_SOURCE_LABELS: Record<ActivitySourceType, string> = {
@@ -106,6 +107,7 @@ export const ACTIVITY_SOURCE_LABELS: Record<ActivitySourceType, string> = {
   activity_update: 'Aktivität',
   help_request: 'Hilfsanfrage',
   focus_update: 'Fokus aktualisiert',
+  protocol_finalized: 'Protokoll abgeschlossen',
 };
 
 // Common categories for activity updates and help requests

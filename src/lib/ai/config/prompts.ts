@@ -256,12 +256,18 @@ export const IT_HILFE_PROMPTS = {
   system: `${BRAND_CONTEXT}
 
 Du bist ein Assistent für IT-Hilfe-Anfragen bei RevampIT.
-Deine Aufgabe ist es, aus einer Problembeschreibung strukturierte Daten für eine Reparaturanfrage zu extrahieren.
+Deine Aufgabe ist es, aus einer Problembeschreibung strukturierte Daten für eine Reparaturanfrage zu extrahieren UND eine freundliche Erstdiagnose zu stellen.
 
 Bei fehlenden Informationen:
 - Wähle die wahrscheinlichste Gerätekategorie
 - Schätze die Dringlichkeit basierend auf der Beschreibung
-- Schlage passende Skills vor basierend auf dem Problem`,
+- Schlage passende Skills vor basierend auf dem Problem
+
+Für die Diagnose:
+- Erkläre freundlich und nicht zu technisch, was wahrscheinlich das Problem ist
+- Nenne mögliche Ursachen
+- Schätze ein, ob es wahrscheinlich reparierbar ist und wie aufwändig
+- Erwähne, dass RevampIT in der Werkstatt an der Birmensdorferstr. 379, 8055 Zürich helfen kann`,
 
   /**
    * JSON schema for IT help request data
@@ -273,7 +279,8 @@ Bei fehlenden Informationen:
   "title": "Kurzer Titel für die Anfrage (max 80 Zeichen)",
   "description": "Detaillierte Problembeschreibung",
   "urgency": "Dringlichkeit: low, normal, high, urgent",
-  "skillsNeeded": ["Benötigte Skills als Array von IDs: hardware_diagnosis, screen_repair, battery_replacement, ssd_upgrade, keyboard_repair, soldering, cleaning, power_supply, motherboard_repair, connector_repair, os_installation, linux_install, software_setup, troubleshooting, data_recovery, backup_setup, virus_removal, wifi_setup, router_config, network_troubleshooting"]
+  "skillsNeeded": ["Benötigte Skills als Array von IDs: hardware_diagnosis, screen_repair, battery_replacement, ssd_upgrade, keyboard_repair, soldering, cleaning, power_supply, motherboard_repair, connector_repair, os_installation, linux_install, software_setup, troubleshooting, data_recovery, backup_setup, virus_removal, wifi_setup, router_config, network_troubleshooting"],
+  "diagnosis": "Freundliche Erstdiagnose in 2-4 Sätzen: Was ist wahrscheinlich das Problem, mögliche Ursachen, ist es reparierbar?"
 }`,
 
   /**
@@ -293,6 +300,7 @@ Wichtige Regeln:
 - Dringlichkeit basierend auf Kontext: "startet nicht" = high, "langsam" = normal, etc.
 - Skills basierend auf Problem wählen (z.B. "Bildschirm kaputt" → screen_repair, hardware_diagnosis)
 - Marke und Modell extrahieren wenn erwähnt
+- Diagnosis: Schreibe eine freundliche, verständliche Ersteinschätzung (2-4 Sätze). Erkläre was wahrscheinlich kaputt ist, ob es reparierbar ist und wie aufwändig. Schweizer Deutsch verwenden (ss statt ß).
 
 Antworte NUR mit dem ausgefüllten JSON, keine Erklärungen.`,
 } as const
