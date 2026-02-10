@@ -73,7 +73,7 @@ export type UpdateReviewInput = z.infer<typeof UpdateReviewSchema>;
 
 // Vote on review schema
 export const ReviewVoteSchema = z.object({
-  voteType: z.enum(['helpful', 'not_helpful']),
+  voteType: z.enum(['helpful', 'unhelpful']),
 });
 
 export type ReviewVoteInput = z.infer<typeof ReviewVoteSchema>;
@@ -81,7 +81,7 @@ export type ReviewVoteInput = z.infer<typeof ReviewVoteSchema>;
 // Review response schema
 export const ReviewResponseSchema = z.object({
   content: z.string()
-    .min(10, 'Antwort muss mindestens 10 Zeichen lang sein')
+    .min(1, 'Antwort-Text ist erforderlich')
     .max(2000, 'Antwort darf maximal 2000 Zeichen lang sein'),
 });
 

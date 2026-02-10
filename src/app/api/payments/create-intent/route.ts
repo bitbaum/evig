@@ -1,13 +1,12 @@
 import { NextRequest } from 'next/server'
 import { auth } from '@/auth'
 import { query } from '@/lib/auth/db'
-import { apiError, apiSuccess, apiUnauthorized, apiBadRequest } from '@/lib/api/helpers'
+import { apiError, apiSuccess, apiUnauthorized } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
 import {
   SupportedCurrency,
-  isValidCurrency,
   calculatePaymentFees,
   decimalToCents,
   getVATRate,
@@ -15,6 +14,7 @@ import {
 } from '@/lib/payments/currency'
 import { withSecurePayment } from '@/lib/middleware/pci-compliance'
 import { requireStripeClient } from '@/lib/payments/stripe-client'
+import { validateBody, CreatePaymentIntentSchema } from '@/lib/schemas'
 
 interface ProviderRow {
   id: string
@@ -38,26 +38,21 @@ export const POST = withSecurePayment(async (request: NextRequest) => {
       return apiUnauthorized(ERROR_MESSAGES.UNAUTHORIZED)
     }
 
+    const body = await request.json()
+    const validation = validateBody(CreatePaymentIntentSchema, body)
+    if (!validation.success) return validation.error
     const {
       amount,
-      currency = 'CHF',
+      currency,
       orderId,
       serviceAppointmentId,
       workshopRegistrationId,
       description,
-      escrowEnabled = false,
-      autoReleaseDays = 7,
-      includeVAT = true,
-      businessType = 'service'
-    } = await request.json()
-
-    if (!amount || amount <= 0) {
-      return apiBadRequest('Gültiger Betrag erforderlich')
-    }
-
-    if (!isValidCurrency(currency)) {
-      return apiBadRequest('Nicht unterstützte Währung. Unterstützt: CHF, EUR')
-    }
+      escrowEnabled,
+      autoReleaseDays,
+      includeVAT,
+      businessType
+    } = validation.data
 
     // Get payment provider with currency support
     const providerResult = await query(`

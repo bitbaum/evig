@@ -83,8 +83,9 @@ async function getWorkshopInstances(workshopId: string): Promise<WorkshopInstanc
   }
 }
 
-export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
-  const workshop = await getWorkshop(params.slug)
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await params
+  const workshop = await getWorkshop(slug)
 
   if (!workshop) {
     return {
@@ -103,8 +104,9 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   }
 }
 
-export default async function WorkshopDetailPage({ params }: { params: { slug: string } }) {
-  const workshop = await getWorkshop(params.slug)
+export default async function WorkshopDetailPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params
+  const workshop = await getWorkshop(slug)
 
   if (!workshop) {
     notFound()

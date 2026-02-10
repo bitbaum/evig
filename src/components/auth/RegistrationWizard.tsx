@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import Link from 'next/link'
 import { Stepper } from '@/components/ui/Stepper'
 import { AccountStep, VerifyStep } from './steps'
@@ -11,6 +11,7 @@ import {
   ShoppingBag,
   Search,
 } from 'lucide-react'
+import { useRegistration } from '@/hooks/useRegistration'
 
 interface RegistrationState {
   name: string
@@ -30,44 +31,36 @@ const STEPS = [
 const STORAGE_KEY = 'revampit_registration_state'
 
 export function RegistrationWizard() {
-  const [currentStep, setCurrentStep] = useState(0)
-  const [isLoading, setIsLoading] = useState(false)
-  const [errors, setErrors] = useState<string[]>([])
-  const [verifyError, setVerifyError] = useState<string>()
+  const { isLoading, errors, verifyError, register, verifyCode, resendCode } = useRegistration()
   const [isComplete, setIsComplete] = useState(false)
 
-  const [state, setState] = useState<RegistrationState>({
-    name: '',
-    email: '',
+  // Restore saved state from localStorage (lazy initializer avoids effect)
+  const savedData = useState(() => {
+    if (typeof window === 'undefined') return null
+    const saved = localStorage.getItem(STORAGE_KEY)
+    if (!saved) return null
+    try {
+      return JSON.parse(saved) as { name?: string; email?: string; userId?: string; emailVerified?: boolean }
+    } catch {
+      localStorage.removeItem(STORAGE_KEY)
+      return null
+    }
+  })[0]
+
+  const [currentStep, setCurrentStep] = useState(() => {
+    if (savedData?.userId && !savedData?.emailVerified) return 1
+    return 0
+  })
+
+  const [state, setState] = useState<RegistrationState>(() => ({
+    name: savedData?.name || '',
+    email: savedData?.email || '',
     password: '',
     confirmPassword: '',
     acceptTerms: false,
-    emailVerified: false,
-  })
-
-  // Load state from localStorage on mount
-  useEffect(() => {
-    const saved = localStorage.getItem(STORAGE_KEY)
-    if (saved) {
-      try {
-        const parsed = JSON.parse(saved)
-        // Don't restore password for security
-        setState((prev) => ({
-          ...prev,
-          name: parsed.name || '',
-          email: parsed.email || '',
-          userId: parsed.userId,
-          emailVerified: parsed.emailVerified || false,
-        }))
-        // If user already created account, skip to verification
-        if (parsed.userId && !parsed.emailVerified) {
-          setCurrentStep(1)
-        }
-      } catch {
-        localStorage.removeItem(STORAGE_KEY)
-      }
-    }
-  }, [])
+    userId: savedData?.userId,
+    emailVerified: savedData?.emailVerified || false,
+  }))
 
   // Save state to localStorage
   const saveState = (newState: Partial<RegistrationState>) => {
@@ -90,79 +83,33 @@ export function RegistrationWizard() {
 
   // Step 1: Account Creation
   const handleAccountNext = async () => {
-    setIsLoading(true)
-    setErrors([])
+    const result = await register({
+      email: state.email,
+      password: state.password,
+      name: state.name,
+    })
 
-    try {
-      const response = await fetch('/api/auth/register', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          email: state.email,
-          password: state.password,
-          name: state.name,
-          // Role defaults to 'customer' in schema
-        }),
-      })
-
-      const data = await response.json()
-
-      if (!response.ok) {
-        setErrors(data.errors || [data.error || 'Registrierung fehlgeschlagen'])
-        setIsLoading(false)
-        return
-      }
-
-      // Save user ID and move to verification
-      saveState({ userId: data.data?.userId })
+    if (result) {
+      saveState({ userId: result.userId })
       setCurrentStep(1)
-    } catch {
-      setErrors(['Ein Netzwerkfehler ist aufgetreten'])
-    } finally {
-      setIsLoading(false)
     }
   }
 
   // Step 2: Email Verification
   const handleVerify = async (code: string): Promise<boolean> => {
-    setVerifyError(undefined)
+    const success = await verifyCode(state.email, code)
 
-    try {
-      const response = await fetch('/api/auth/verify-code', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: state.email, code }),
-      })
-
-      const data = await response.json()
-
-      if (!response.ok) {
-        setVerifyError(data.error || 'Ungültiger Code')
-        return false
-      }
-
+    if (success) {
       saveState({ emailVerified: true })
       clearState()
       setIsComplete(true)
-      return true
-    } catch {
-      setVerifyError('Ein Fehler ist aufgetreten')
-      return false
     }
+
+    return success
   }
 
   const handleResendCode = async (): Promise<boolean> => {
-    try {
-      const response = await fetch('/api/auth/resend-code', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: state.email }),
-      })
-
-      return response.ok
-    } catch {
-      return false
-    }
+    return resendCode(state.email)
   }
 
   const handleSkipVerification = () => {

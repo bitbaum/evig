@@ -20,7 +20,7 @@ export default function Footer() {
           </div>
 
           {/* Navigation Section */}
-          <div>
+          <nav aria-label="Footer-Navigation">
             <h3 className="text-xl font-bold mb-4">Navigation</h3>
             <ul className="space-y-2">
               {mainNavigation.map((item) => (
@@ -45,12 +45,12 @@ export default function Footer() {
                 </li>
               ))}
             </ul>
-          </div>
+          </nav>
 
           {/* Contact Section */}
           <div>
             <h3 className="text-xl font-bold mb-4">Kontakt</h3>
-            <div className="space-y-4">
+            <address className="space-y-4 not-italic">
               {siteConfig.contact.locations.map((location) => (
                 <div className="flex items-start" key={location.name}>
                   <MapPin className="w-5 h-5 mt-1 mr-3 flex-shrink-0" />
@@ -75,7 +75,7 @@ export default function Footer() {
                   {siteConfig.contact.email}
                 </a>
               </div>
-            </div>
+            </address>
           </div>
 
           {/* Opening Hours Section */}

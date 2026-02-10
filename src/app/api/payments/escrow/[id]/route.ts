@@ -6,6 +6,7 @@ import { apiError, apiSuccess, apiUnauthorized, apiNotFound, apiBadRequest } fro
 import { TABLE_NAMES } from '@/config/database'
 import { isAdminRole } from '@/lib/constants'
 import { logger } from '@/lib/logger'
+import { validateBody, EscrowReleaseSchema } from '@/lib/schemas'
 
 interface UserRow {
   role: string
@@ -64,7 +65,7 @@ export async function GET(
   try {
     const session = await auth()
     if (!session?.user?.id) {
-      return apiUnauthorized('Authentication required')
+      return apiUnauthorized('Authentifizierung erforderlich')
     }
 
     const { id: escrowId } = await params
@@ -100,7 +101,7 @@ export async function GET(
     `, [escrowId])
 
     if (escrowResult.rows.length === 0) {
-      return apiNotFound('Escrow account not found')
+      return apiNotFound('Treuhandkonto nicht gefunden')
     }
 
     const escrow = escrowResult.rows[0] as EscrowRow
@@ -111,7 +112,7 @@ export async function GET(
     const isAdmin = isAdminRole(user?.role)
 
     if (escrow.buyer_id !== session.user.id && escrow.seller_id !== session.user.id && !isAdmin) {
-      return apiUnauthorized('You do not have permission to view this escrow account')
+      return apiUnauthorized('Keine Berechtigung, dieses Treuhandkonto einzusehen')
     }
 
     return apiSuccess({
@@ -142,7 +143,7 @@ export async function GET(
     })
   } catch (error) {
     logger.error('Get escrow error', { error })
-    return apiError(error, 'Failed to retrieve escrow account')
+    return apiError(error, 'Treuhandkonto konnte nicht abgerufen werden')
   }
 }
 
@@ -157,15 +158,14 @@ export async function POST(
   try {
     const session = await auth()
     if (!session?.user?.id) {
-      return apiUnauthorized('Authentication required')
+      return apiUnauthorized('Authentifizierung erforderlich')
     }
 
     const { id: escrowId } = await params
-    const { amount, reason, releaseType = 'full' } = await request.json()
-
-    if (!amount || amount <= 0) {
-      return apiBadRequest('Valid release amount required')
-    }
+    const body = await request.json()
+    const validation = validateBody(EscrowReleaseSchema, body)
+    if (!validation.success) return validation.error
+    const { amount, reason, releaseType } = validation.data
 
     // Get escrow account
     const escrowResult = await query(`
@@ -180,7 +180,7 @@ export async function POST(
     `, [escrowId])
 
     if (escrowResult.rows.length === 0) {
-      return apiNotFound('Active escrow account not found')
+      return apiNotFound('Aktives Treuhandkonto nicht gefunden')
     }
 
     const escrow = escrowResult.rows[0] as EscrowReleaseRow
@@ -191,14 +191,14 @@ export async function POST(
     const isAdmin = isAdminRole(userRole?.role)
 
     if (escrow.buyer_id !== session.user.id && !isAdmin) {
-      return apiUnauthorized('Only the buyer can release escrow funds')
+      return apiUnauthorized('Nur der Käufer kann Treuhandgelder freigeben')
     }
 
     const releaseAmountCents = Math.round(amount * 100)
     const availableAmount = escrow.total_amount_cents - escrow.released_amount_cents
 
     if (releaseAmountCents > availableAmount) {
-      return apiBadRequest(`Release amount exceeds available balance. Maximum: ${(availableAmount / 100).toFixed(2)} ${escrow.currency}`)
+      return apiBadRequest(`Freigabebetrag übersteigt verfügbares Guthaben. Maximum: ${(availableAmount / 100).toFixed(2)} ${escrow.currency}`)
     }
 
     // Determine if this is a full release
@@ -288,18 +288,18 @@ export async function POST(
       ])
 
       return apiSuccess({
-        message: isFullRelease ? 'Escrow funds fully released' : 'Partial escrow funds released',
+        message: isFullRelease ? 'Treuhandgelder vollständig freigegeben' : 'Treuhandgelder teilweise freigegeben',
         releasedAmount: releaseAmountCents / 100,
         currency: escrow.currency,
         remainingBalance: (availableAmount - releaseAmountCents) / 100
       })
     } catch (stripeError: unknown) {
       logger.error('Stripe capture error', { error: stripeError })
-      return apiError(stripeError, 'Failed to release escrow funds')
+      return apiError(stripeError, 'Treuhandgelder konnten nicht freigegeben werden')
     }
 
   } catch (error) {
     logger.error('Escrow release error', { error })
-    return apiError(error, 'Failed to release escrow funds')
+    return apiError(error, 'Treuhandgelder konnten nicht freigegeben werden')
   }
 }

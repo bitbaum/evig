@@ -54,7 +54,7 @@ export async function GET(request: NextRequest, context: RequestContext) {
       `SELECT
         id, name, email, is_staff, is_super_admin,
         staff_permissions, "createdAt" as created_at,
-        email_verified, phone, address
+        "emailVerified" as email_verified, phone, address
        FROM ${TABLE_NAMES.USERS}
        WHERE id = $1`,
       [id]

@@ -5,6 +5,7 @@ import { withAuth, ValidSession } from '@/lib/api/middleware'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
+import { validateBody, AppointmentActionSchema } from '@/lib/schemas'
 
 interface AppointmentRow {
   id: string
@@ -72,7 +73,10 @@ export const PATCH = withAuth<{ id: string }>(async (
     }
 
     const body = await request.json()
-    const { action, quoted_price_chf, diagnosis_notes, completion_notes, confirmed_date, description, preferred_date } = body
+    const validation = validateBody(AppointmentActionSchema, body)
+    if (!validation.success) return validation.error
+    const actionData = validation.data
+    const { action } = actionData
 
     // Get current appointment
     const currentResult = await query(
@@ -116,13 +120,12 @@ export const PATCH = withAuth<{ id: string }>(async (
         if (!['accepted', 'quote_rejected'].includes(appointment.status)) {
           return apiBadRequest('Angebot kann in diesem Status nicht erstellt werden')
         }
-        if (!quoted_price_chf) return apiBadRequest('Preis erforderlich')
         newStatus = 'quoted'
         updates.push('quoted_price_chf = $' + paramIndex++)
-        updateParams.push(quoted_price_chf)
-        if (diagnosis_notes) {
+        updateParams.push(actionData.quoted_price_chf)
+        if (actionData.diagnosis_notes) {
           updates.push('diagnosis_notes = $' + paramIndex++)
-          updateParams.push(diagnosis_notes)
+          updateParams.push(actionData.diagnosis_notes)
         }
         break
 
@@ -146,9 +149,9 @@ export const PATCH = withAuth<{ id: string }>(async (
           return apiBadRequest('Termin kann nicht gestartet werden')
         }
         newStatus = 'in_progress'
-        if (confirmed_date) {
+        if (actionData.confirmed_date) {
           updates.push('confirmed_date = $' + paramIndex++)
-          updateParams.push(confirmed_date)
+          updateParams.push(actionData.confirmed_date)
         }
         break
 
@@ -157,22 +160,22 @@ export const PATCH = withAuth<{ id: string }>(async (
         if (appointment.status !== 'in_progress') return apiBadRequest('Termin ist nicht in Bearbeitung')
         newStatus = 'completed'
         updates.push('completed_at = CURRENT_TIMESTAMP')
-        if (completion_notes) {
+        if (actionData.completion_notes) {
           updates.push('completion_notes = $' + paramIndex++)
-          updateParams.push(completion_notes)
+          updateParams.push(actionData.completion_notes)
         }
         break
 
       case 'update':
         if (!isCustomer) return apiForbidden('Nur der Kunde kann Angaben bearbeiten')
         if (appointment.status !== 'requested') return apiBadRequest('Angaben können nur im Status "Angefragt" bearbeitet werden')
-        if (description) {
+        if (actionData.description) {
           updates.push('description = $' + paramIndex++)
-          updateParams.push(description)
+          updateParams.push(actionData.description)
         }
-        if (preferred_date) {
+        if (actionData.preferred_date) {
           updates.push('preferred_date = $' + paramIndex++)
-          updateParams.push(preferred_date)
+          updateParams.push(actionData.preferred_date)
         }
         break
 

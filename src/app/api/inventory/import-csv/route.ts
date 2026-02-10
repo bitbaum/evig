@@ -2,9 +2,10 @@ import { NextRequest } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { parse } from 'csv-parse/sync';
 import { TABLE_NAMES } from "@/config/database";
-import { apiSuccess, apiError, apiBadRequest, apiUnauthorized } from "@/lib/api/helpers";
+import { apiSuccess, apiError } from "@/lib/api/helpers";
 import { logger } from "@/lib/logger";
 import { withAuth, ValidSession } from "@/lib/api/middleware";
+import { validateBody, ImportCSVSchema } from '@/lib/schemas';
 
 interface CSVRow {
   Artikelnummer: string;
@@ -25,11 +26,10 @@ interface ImportResult {
 export const POST = withAuth(async (request: NextRequest, session: ValidSession) => {
   try {
     const supabase = await createClient();
-    const { csvContent, options = {} } = await request.json();
-
-    if (!csvContent) {
-      return apiBadRequest("CSV content required");
-    }
+    const body = await request.json();
+    const validation = validateBody(ImportCSVSchema, body);
+    if (!validation.success) return validation.error;
+    const { csvContent, options } = validation.data;
 
     // Parse CSV
     const records: CSVRow[] = parse(csvContent, {

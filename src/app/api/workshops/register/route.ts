@@ -7,6 +7,7 @@ import { TABLE_NAMES } from '@/config/database'
 import { sendEmail } from '@/lib/email'
 import { logger } from '@/lib/logger'
 import { formatDateTimeWithWeekday } from '@/lib/date-formats'
+import { validateBody, WorkshopRegistrationSchema } from '@/lib/schemas'
 
 interface WorkshopRow {
   id: string
@@ -43,11 +44,10 @@ export async function POST(request: NextRequest) {
       return apiUnauthorized(ERROR_MESSAGES.UNAUTHORIZED)
     }
 
-    const { workshopSlug } = await request.json()
-
-    if (!workshopSlug) {
-      return apiBadRequest('Workshop-Slug erforderlich')
-    }
+    const body = await request.json()
+    const validation = validateBody(WorkshopRegistrationSchema, body)
+    if (!validation.success) return validation.error
+    const { workshopSlug } = validation.data
 
     // Find the workshop
     const workshopResult = await query(

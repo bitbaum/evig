@@ -14,6 +14,7 @@ import { useState, useRef, useCallback } from 'react'
 import { Mic, MicOff, Loader2, AlertCircle, CheckCircle2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { logger } from '@/lib/logger'
+import { useVoiceProduct } from '@/hooks/useVoiceProduct'
 import type { VoiceProductData } from '@/types/erfassung'
 
 // Re-export for convenience
@@ -36,6 +37,7 @@ export function VoiceProductInput({
   disabled = false,
   className = '',
 }: VoiceProductInputProps) {
+  const { isProcessing: isVoiceProcessing, error: voiceError, processRecording: processVoiceRecording } = useVoiceProduct()
   const [state, setState] = useState<RecordingState>('idle')
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
   const [transcribedText, setTranscribedText] = useState<string | null>(null)
@@ -43,31 +45,15 @@ export function VoiceProductInput({
   const mediaRecorderRef = useRef<MediaRecorder | null>(null)
   const audioChunksRef = useRef<Blob[]>([])
 
-  // Process recording must be defined before startRecording
+  // Process recording via the hook
   const processRecording = useCallback(async () => {
-    try {
-      const audioBlob = new Blob(audioChunksRef.current, {
-        type: mediaRecorderRef.current?.mimeType || 'audio/webm',
-      })
+    const audioBlob = new Blob(audioChunksRef.current, {
+      type: mediaRecorderRef.current?.mimeType || 'audio/webm',
+    })
 
-      logger.info('Processing voice recording', { size: audioBlob.size })
+    const result = await processVoiceRecording(audioBlob)
 
-      // Send to API
-      const formData = new FormData()
-      formData.append('audio', audioBlob, 'recording.webm')
-
-      const response = await fetch('/api/admin/erfassung/voice', {
-        method: 'POST',
-        body: formData,
-      })
-
-      const result = await response.json()
-
-      if (!response.ok) {
-        throw new Error(result.error || 'Unbekannter Fehler')
-      }
-
-      // Success!
+    if (result) {
       setTranscribedText(result.transcription)
       onTranscription?.(result.transcription)
       onProductData(result.data)
@@ -77,15 +63,12 @@ export function VoiceProductInput({
       setTimeout(() => {
         setState('idle')
       }, 3000)
-
-    } catch (error) {
-      const message = error instanceof Error ? error.message : 'Verarbeitung fehlgeschlagen'
-      logger.error('Voice processing failed', { error })
-      setErrorMessage(message)
+    } else {
+      setErrorMessage(voiceError || 'Verarbeitung fehlgeschlagen')
       setState('error')
-      onError?.(message)
+      onError?.(voiceError || 'Verarbeitung fehlgeschlagen')
     }
-  }, [onProductData, onTranscription, onError])
+  }, [processVoiceRecording, voiceError, onProductData, onTranscription, onError])
 
   const startRecording = useCallback(async () => {
     try {

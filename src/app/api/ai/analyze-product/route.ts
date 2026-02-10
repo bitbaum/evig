@@ -19,6 +19,7 @@ import { createClient } from '@/lib/supabase/server'
 import { apiError, apiSuccess } from '@/lib/api/helpers'
 import { logger } from '@/lib/logger'
 import { extractProductFromImage } from '@/lib/erfassung/ai-extraction'
+import { validateBody, AnalyzeProductSchema } from '@/lib/schemas'
 
 // Map condition values to display format
 const CONDITION_MAP: Record<string, string> = {
@@ -116,15 +117,10 @@ export async function POST(request: NextRequest) {
 
   try {
     const supabase = await createClient()
-    const { image, imageUrl, saveToDatabase = false, userId } = await request.json()
-
-    if (!image && !imageUrl) {
-      return apiError(
-        new Error('Image data or URL required'),
-        'Image data or URL required',
-        400
-      )
-    }
+    const body = await request.json()
+    const validation = validateBody(AnalyzeProductSchema, body)
+    if (!validation.success) return validation.error
+    const { image, imageUrl, saveToDatabase, userId } = validation.data
 
     // Get current user if not provided
     let currentUserId = userId
@@ -136,7 +132,8 @@ export async function POST(request: NextRequest) {
     }
 
     // Use shared AI extraction service for image analysis
-    const extractionResult = await extractProductFromImage(image || imageUrl)
+    // Zod refine guarantees at least one of image/imageUrl is present
+    const extractionResult = await extractProductFromImage((image || imageUrl)!)
 
     if (!extractionResult.success) {
       logger.error('Image analysis failed', { error: extractionResult.error })

@@ -6,20 +6,12 @@
  * Used by both /admin/content/categories/new and /admin/content/categories/[id]
  */
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Tag, Save, ArrowLeft, Trash2 } from 'lucide-react'
 import Link from 'next/link'
-
-interface CategoryFormData {
-  id?: string
-  name: string
-  slug: string
-  description: string
-  color: string
-  sort_order: number
-  is_active: boolean
-}
+import { useBlogCategories } from '@/hooks/useBlogCategories'
+import type { CategoryFormData } from '@/hooks/useBlogCategories'
 
 interface CategoryFormProps {
   initialData?: Partial<CategoryFormData>
@@ -57,6 +49,7 @@ export default function CategoryForm({
   isEdit = false,
 }: CategoryFormProps) {
   const router = useRouter()
+  const { saving, deleting, error, success, saveCategory, deleteCategory } = useBlogCategories()
   const [formData, setFormData] = useState<CategoryFormData>({
     name: initialData?.name || '',
     slug: initialData?.slug || '',
@@ -65,76 +58,30 @@ export default function CategoryForm({
     sort_order: initialData?.sort_order || 0,
     is_active: initialData?.is_active ?? true,
   })
-  const [saving, setSaving] = useState(false)
-  const [deleting, setDeleting] = useState(false)
-  const [error, setError] = useState('')
-  const [success, setSuccess] = useState('')
   const [slugManuallyEdited, setSlugManuallyEdited] = useState(isEdit)
 
-  // Auto-generate slug from name
-  useEffect(() => {
-    if (!slugManuallyEdited && formData.name) {
-      setFormData((prev) => ({
-        ...prev,
-        slug: generateSlug(formData.name),
-      }))
-    }
-  }, [formData.name, slugManuallyEdited])
+  // Auto-generate slug from name — computed during name change, not via effect
+  const updateName = (name: string) => {
+    setFormData((prev) => ({
+      ...prev,
+      name,
+      ...(!slugManuallyEdited && name ? { slug: generateSlug(name) } : {}),
+    }))
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setError('')
-    setSuccess('')
-    setSaving(true)
-
-    try {
-      const url = isEdit
-        ? `/api/admin/blog/categories/${initialData?.id}`
-        : '/api/admin/blog/categories'
-
-      const res = await fetch(url, {
-        method: isEdit ? 'PATCH' : 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
-      })
-
-      const data = await res.json()
-
-      if (data.success) {
-        setSuccess(isEdit ? 'Kategorie gespeichert!' : 'Kategorie erstellt!')
-        setTimeout(() => router.push('/admin/content/categories'), 1000)
-      } else {
-        setError(data.error || 'Fehler beim Speichern')
-      }
-    } catch {
-      setError('Netzwerkfehler')
-    } finally {
-      setSaving(false)
+    const saved = await saveCategory(formData, { isEdit, id: initialData?.id })
+    if (saved) {
+      setTimeout(() => router.push('/admin/content/categories'), 1000)
     }
   }
 
   const handleDelete = async () => {
     if (!confirm('Kategorie wirklich löschen?')) return
-
-    setDeleting(true)
-    setError('')
-
-    try {
-      const res = await fetch(`/api/admin/blog/categories/${initialData?.id}`, {
-        method: 'DELETE',
-      })
-
-      const data = await res.json()
-
-      if (data.success) {
-        router.push('/admin/content/categories')
-      } else {
-        setError(data.error || 'Fehler beim Löschen')
-      }
-    } catch {
-      setError('Netzwerkfehler')
-    } finally {
-      setDeleting(false)
+    const deleted = await deleteCategory(initialData?.id || '')
+    if (deleted) {
+      router.push('/admin/content/categories')
     }
   }
 
@@ -214,9 +161,7 @@ export default function CategoryForm({
               <input
                 type="text"
                 value={formData.name}
-                onChange={(e) =>
-                  setFormData((prev) => ({ ...prev, name: e.target.value }))
-                }
+                onChange={(e) => updateName(e.target.value)}
                 placeholder="z.B. Nachhaltigkeit"
                 className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                 required

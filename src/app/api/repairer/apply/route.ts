@@ -7,7 +7,7 @@ import { TABLE_NAMES } from '@/config/database'
 import { sendEmail } from '@/lib/email'
 import { logger } from '@/lib/logger'
 import { APP_URL } from '@/config/urls'
-// ADMIN_ROLES removed - now using is_staff field
+import { validateBody, RepairerApplicationSchema } from '@/lib/schemas'
 
 interface ApplicationRow {
   id: string
@@ -34,31 +34,39 @@ export async function POST(request: NextRequest) {
 
     const formData = await request.formData()
 
-    // Extract form fields
-    const businessType = formData.get('businessType') as string
-    const businessName = formData.get('businessName') as string
-    const description = formData.get('description') as string
-    const yearsExperience = parseInt(formData.get('yearsExperience') as string) || 0
-    const phone = formData.get('phone') as string
-    const website = formData.get('website') as string
-    const address = formData.get('address') as string
-    const city = formData.get('city') as string
-    const postalCode = formData.get('postalCode') as string
-    const serviceRadius = parseInt(formData.get('serviceRadius') as string) || 30
-    const remoteServices = formData.get('remoteServices') === 'true'
-    const hourlyRate = formData.get('hourlyRate') ? parseFloat(formData.get('hourlyRate') as string) * 100 : null
-    const emergencyFee = formData.get('emergencyFee') ? parseFloat(formData.get('emergencyFee') as string) * 100 : null
-    const homeVisitFee = formData.get('homeVisitFee') ? parseFloat(formData.get('homeVisitFee') as string) * 100 : null
-    const servicesOffered = JSON.parse(formData.get('servicesOffered') as string || '[]')
-    const specializations = JSON.parse(formData.get('specializations') as string || '[]')
-    const certifications = JSON.parse(formData.get('certifications') as string || '[]')
-    const insuranceInfo = formData.get('insuranceInfo') as string
-    const termsAccepted = formData.get('termsAccepted') === 'true'
-
-    // Validate required fields
-    if (!phone || !address || !city || !postalCode || !description || !termsAccepted || servicesOffered.length === 0) {
-      return apiBadRequest(ERROR_MESSAGES.ALL_FIELDS_REQUIRED)
+    // Convert FormData to plain object for Zod validation
+    const formDataObj = {
+      businessType: formData.get('businessType') as string,
+      businessName: formData.get('businessName') as string || null,
+      description: formData.get('description') as string,
+      yearsExperience: formData.get('yearsExperience') as string,
+      phone: formData.get('phone') as string,
+      website: formData.get('website') as string || null,
+      address: formData.get('address') as string,
+      city: formData.get('city') as string,
+      postalCode: formData.get('postalCode') as string,
+      serviceRadius: formData.get('serviceRadius') as string,
+      remoteServices: formData.get('remoteServices') as string,
+      hourlyRate: formData.get('hourlyRate') ? parseFloat(formData.get('hourlyRate') as string) : null,
+      emergencyFee: formData.get('emergencyFee') ? parseFloat(formData.get('emergencyFee') as string) : null,
+      homeVisitFee: formData.get('homeVisitFee') ? parseFloat(formData.get('homeVisitFee') as string) : null,
+      servicesOffered: JSON.parse(formData.get('servicesOffered') as string || '[]'),
+      specializations: JSON.parse(formData.get('specializations') as string || '[]'),
+      certifications: JSON.parse(formData.get('certifications') as string || '[]'),
+      insuranceInfo: formData.get('insuranceInfo') as string || null,
+      termsAccepted: formData.get('termsAccepted') === 'true' ? true as const : false,
     }
+
+    const validation = validateBody(RepairerApplicationSchema, formDataObj)
+    if (!validation.success) return validation.error
+
+    const {
+      businessType, businessName, description, yearsExperience,
+      phone, website, address, city, postalCode, serviceRadius,
+      remoteServices, hourlyRate, emergencyFee, homeVisitFee,
+      servicesOffered, specializations, certifications, insuranceInfo,
+      termsAccepted
+    } = validation.data
 
     // Check if user already has a repairer profile or application
     const existingProfile = await query(
@@ -146,9 +154,9 @@ export async function POST(request: NextRequest) {
       postalCode,
       serviceRadius,
       remoteServices,
-      hourlyRate,
-      emergencyFee,
-      homeVisitFee,
+      hourlyRate ? Math.round(hourlyRate * 100) : null,
+      emergencyFee ? Math.round(emergencyFee * 100) : null,
+      homeVisitFee ? Math.round(homeVisitFee * 100) : null,
       servicesOffered,
       specializations,
       certifications,

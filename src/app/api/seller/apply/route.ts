@@ -7,6 +7,7 @@ import { TABLE_NAMES } from '@/config/database'
 import { sendEmail } from '@/lib/email'
 import { logger } from '@/lib/logger'
 import { APP_URL } from '@/config/urls'
+import { validateBody, SellerApplicationSchema } from '@/lib/schemas'
 
 interface ApplicationRow {
   id: string
@@ -24,6 +25,9 @@ export async function POST(request: NextRequest) {
       return apiUnauthorized(ERROR_MESSAGES.UNAUTHORIZED)
     }
 
+    const body = await request.json()
+    const validation = validateBody(SellerApplicationSchema, body)
+    if (!validation.success) return validation.error
     const {
       businessName,
       businessType,
@@ -36,12 +40,7 @@ export async function POST(request: NextRequest) {
       productTypes,
       motivation,
       termsAccepted
-    } = await request.json()
-
-    // Validate required fields
-    if (!address || !city || !postalCode || !phone || !productTypes || productTypes.length === 0 || !termsAccepted) {
-      return apiBadRequest(ERROR_MESSAGES.ALL_FIELDS_REQUIRED)
-    }
+    } = validation.data
 
     // Check if user already has a pending or approved application
     const existingApplication = await query(

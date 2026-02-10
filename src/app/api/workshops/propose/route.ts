@@ -7,7 +7,7 @@ import { TABLE_NAMES } from '@/config/database'
 import { sendEmail } from '@/lib/email'
 import { logger } from '@/lib/logger'
 import { APP_URL } from '@/config/urls'
-// ADMIN_ROLES removed - now using is_staff field
+import { validateBody, WorkshopProposalSchema } from '@/lib/schemas'
 
 interface CountRow {
   count: string
@@ -29,9 +29,9 @@ export async function POST(request: NextRequest) {
       return apiUnauthorized(ERROR_MESSAGES.UNAUTHORIZED)
     }
 
-    const formData = await request.json()
-
-    // Extract form fields
+    const body = await request.json()
+    const validation = validateBody(WorkshopProposalSchema, body)
+    if (!validation.success) return validation.error
     const {
       title,
       description,
@@ -54,14 +54,7 @@ export async function POST(request: NextRequest) {
       proposedTime,
       specialRequirements,
       termsAccepted
-    } = formData
-
-    // Validate required fields
-    if (!title || !description || !shortDescription || !category ||
-        !durationHours || !level || !maxParticipants || !minParticipants ||
-        !pricePerPerson || !termsAccepted || !Array.isArray(learningObjectives) || learningObjectives.length === 0) {
-      return apiBadRequest(ERROR_MESSAGES.ALL_FIELDS_REQUIRED)
-    }
+    } = validation.data
 
     // Check if user already has pending proposals (limit to prevent spam)
     const existingProposals = await query(
@@ -76,8 +69,8 @@ export async function POST(request: NextRequest) {
     }
 
     // Calculate duration in minutes and price in cents
-    const durationMinutes = parseInt(durationHours) * 60
-    const priceCents = Math.round(parseFloat(pricePerPerson) * 100)
+    const durationMinutes = Math.round(durationHours * 60)
+    const priceCents = Math.round(pricePerPerson * 100)
 
     // Validate selected location if provided
     if (selectedLocationId) {
@@ -134,8 +127,8 @@ export async function POST(request: NextRequest) {
       category,
       durationMinutes,
       level,
-      parseInt(maxParticipants),
-      parseInt(minParticipants),
+      maxParticipants,
+      minParticipants,
       priceCents,
       prerequisites || null,
       learningObjectives,

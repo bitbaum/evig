@@ -20,6 +20,18 @@
 // Payment service
 export { PaymentService } from './payment-service'
 
+// Inventory service (public shop)
+export { getInventoryProducts } from './inventory-service'
+export type { InventoryFilters, InventoryProduct, InventoryResult } from './inventory-service'
+
+// Seller service (seller dashboard)
+export { getSellerDashboard } from './seller-service'
+export type { SellerProduct, SellerStats, SellerDashboardData } from './seller-service'
+
+// Order service
+export { createOrder } from './order-service'
+export type { CreateOrderParams, CreatedOrder, ShippingAddress } from './order-service'
+
 // ============================================================================
 // Unified Service Layer (Dienstleistungen)
 // ============================================================================

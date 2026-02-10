@@ -29,7 +29,7 @@ import {
   ImageIcon,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { logger } from '@/lib/logger'
+import { useProductAnalysis } from '@/hooks/useProductAnalysis'
 import type { ErfassungFormData } from '@/types/erfassung'
 
 interface ImageCaptureProps {
@@ -49,6 +49,7 @@ export function ImageCapture({
   disabled = false,
   className = '',
 }: ImageCaptureProps) {
+  const { isAnalyzing, error: analysisError, analyzeProduct } = useProductAnalysis()
   const [state, setState] = useState<CaptureState>('idle')
   const [imagePreview, setImagePreview] = useState<string | null>(null)
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
@@ -137,49 +138,23 @@ export function ImageCapture({
     setState('analyzing')
     setErrorMessage(null)
 
-    try {
-      const response = await fetch('/api/ai/analyze-product', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ image: imagePreview, saveToDatabase: false }),
-      })
+    const result = await analyzeProduct(imagePreview)
 
-      const result = await response.json()
+    if (result) {
+      onAnalysisComplete?.(result.formData)
+      setState('success')
 
-      if (!response.ok) {
-        throw new Error(result.error || 'Analyse fehlgeschlagen')
-      }
-
-      if (result.success && result.analysis) {
-        const a = result.analysis
-        const formData: Partial<ErfassungFormData> = {
-          hersteller: a.brand || '',
-          produktname: a.product_name || '',
-          zustand: a.condition || '',
-          verkaufspreis: a.estimated_price_chf?.toString() || '',
-        }
-
-        onAnalysisComplete?.(formData)
-        setState('success')
-
-        logger.info('Image analysis completed', { product: a.product_name })
-
-        // Reset to preview after 2 seconds
-        setTimeout(() => {
-          setState('preview')
-        }, 2000)
-      } else {
-        throw new Error('Keine Analysedaten erhalten')
-      }
-    } catch (error) {
-      const message =
-        error instanceof Error ? error.message : 'Analyse fehlgeschlagen'
-      logger.error('Image analysis failed', { error })
-      setErrorMessage(message)
+      // Reset to preview after 2 seconds
+      setTimeout(() => {
+        setState('preview')
+      }, 2000)
+    } else {
+      // analyzeProduct sets its own error; surface it to the component
+      setErrorMessage(analysisError || 'Analyse fehlgeschlagen')
       setState('error')
-      onError?.(message)
+      onError?.(analysisError || 'Analyse fehlgeschlagen')
     }
-  }, [imagePreview, onAnalysisComplete, onError])
+  }, [imagePreview, analyzeProduct, analysisError, onAnalysisComplete, onError])
 
   return (
     <div className={`flex flex-col gap-4 ${className}`}>

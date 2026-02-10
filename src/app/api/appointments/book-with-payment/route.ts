@@ -12,6 +12,7 @@ import {
   DEFAULT_CURRENCY,
   DEFAULT_AUTO_RELEASE_DAYS
 } from '@/lib/payments/payment-flow'
+import { validateBody, BookWithPaymentSchema } from '@/lib/schemas'
 
 interface ServiceRow {
   id: string
@@ -34,23 +35,22 @@ export async function POST(request: NextRequest) {
   try {
     const session = await auth()
     if (!session?.user?.id) {
-      return apiError(null, 'Authentication required', 401)
+      return apiError(null, 'Authentifizierung erforderlich', 401)
     }
 
+    const body = await request.json()
+    const validation = validateBody(BookWithPaymentSchema, body)
+    if (!validation.success) return validation.error
     const {
       serviceSlug,
       description,
-      urgency = 'normal',
+      urgency,
       deviceInfo,
       preferredDate,
       preferredTimeSlots,
-      useEscrow = true,
+      useEscrow,
       autoReleaseDays = DEFAULT_AUTO_RELEASE_DAYS,
-    } = await request.json()
-
-    if (!serviceSlug) {
-      return apiBadRequest('Service slug is required')
-    }
+    } = validation.data
 
     // Get service type details
     const serviceResult = await query(`
@@ -63,13 +63,13 @@ export async function POST(request: NextRequest) {
     `, [serviceSlug])
 
     if (serviceResult.rows.length === 0) {
-      return apiNotFound('Service type not found')
+      return apiNotFound('Service-Typ nicht gefunden')
     }
 
     const service = serviceResult.rows[0] as ServiceRow
 
     if (!service.price_cents || service.price_cents <= 0) {
-      return apiBadRequest('This service requires a price to be set for online booking')
+      return apiBadRequest('Für diesen Service muss ein Preis für die Online-Buchung festgelegt sein')
     }
 
     const baseAmount = service.price_cents
@@ -147,12 +147,12 @@ export async function POST(request: NextRequest) {
       escrowEnabled: useEscrow,
       status: service.requires_approval ? 'pending_approval' : 'confirmed',
       message: service.requires_approval
-        ? 'Appointment booked and payment authorized. Awaiting approval from our technicians.'
-        : 'Appointment booked and payment processed successfully!'
+        ? 'Termin gebucht und Zahlung autorisiert. Wartet auf Genehmigung durch unsere Techniker.'
+        : 'Termin gebucht und Zahlung erfolgreich verarbeitet!'
     })
 
   } catch (error) {
     logger.error('Book with payment error', { error })
-    return apiError(error, 'Failed to book service with payment')
+    return apiError(error, 'Service-Buchung mit Zahlung fehlgeschlagen')
   }
 }

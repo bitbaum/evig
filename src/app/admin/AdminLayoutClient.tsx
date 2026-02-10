@@ -30,6 +30,7 @@ import {
 } from '@/config/sections'
 import { getSensitivityReason } from '@/config/sensitive-areas'
 import { HirnFloatingButton } from '@/components/admin/HirnFloatingButton'
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
 
 interface AdminLayoutClientProps {
   children: React.ReactNode
@@ -478,6 +479,7 @@ export function AdminLayoutClient({
 
         {/* Page Content */}
         <main className="p-6">
+          <Breadcrumbs />
           {children}
         </main>
       </div>

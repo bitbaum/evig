@@ -2,154 +2,79 @@
  * Erfassung Types
  *
  * Type definitions for product data entry (Erfassung).
- * Used by: erfassung page, voice API, voice component
+ * Types are derived from Zod schemas in @/lib/schemas/erfassung (SSOT).
+ * Utility functions and defaults live here.
  *
  * For configuration constants, see: @/config/erfassung
  */
 
-/**
- * Spec field for technical specifications
- */
-export interface SpecField {
-  key: string
-  value: string
-}
+// =============================================================================
+// RE-EXPORT TYPES FROM SCHEMAS (SSOT)
+// =============================================================================
 
-/**
- * Verification source link for AI-extracted data
- */
-export interface VerificationSource {
-  title: string // Display title (e.g., "Apple Official Specs")
-  url: string // Clickable URL
-  type: 'manufacturer' | 'marketplace' | 'review' | 'specs' | 'price'
-  relevance: number // 0-1 how relevant this source is
-}
+export type {
+  SpecField,
+  VerificationSource,
+  AIFieldSource,
+  AIFieldMetadata,
+  ErfassungFormData,
+  VoiceProductData,
+  ErfassungPayload,
+  BulkProductStatus,
+  BulkProductSource,
+  BulkProduct,
+  BulkSaveRequest,
+  BulkSaveResponse,
+  ErfassungAction,
+} from '@/lib/schemas/erfassung'
 
-/**
- * AI extraction source information
- */
-export interface AIFieldSource {
-  type: 'voice' | 'text' | 'image' | 'database'
-  inputText?: string // Original input that led to this extraction
-  confidence: number // 0-1 confidence score
-  model?: string // AI model used (e.g., 'llama3.2')
-  timestamp: number // When the extraction happened
-  sources?: VerificationSource[] // Verification links for this field
-}
+// Re-export schemas for validation use
+export {
+  specFieldSchema,
+  verificationSourceSchema,
+  aiFieldSourceSchema,
+  erfassungFormDataSchema,
+  voiceProductDataSchema,
+  erfassungPayloadSchema,
+  bulkProductSchema,
+  bulkSaveRequestSchema,
+  bulkSaveResponseSchema,
+} from '@/lib/schemas/erfassung'
 
-/**
- * Metadata for AI-filled fields
- * Maps field names to their extraction source info
- */
-export type AIFieldMetadata = {
-  [K in keyof ErfassungFormData]?: AIFieldSource
-}
-
-/**
- * Full form data for product entry
- */
-export interface ErfassungFormData {
-  // Basic info
-  hersteller: string
-  produktname: string
-  kurzbeschreibung: string
-
-  // Technical specs (dynamic)
-  specs: SpecField[]
-
-  // Physical dimensions
-  laenge_mm: string
-  breite_mm: string
-  hoehe_mm: string
-  gewicht_kg: string
-
-  // Inventory
-  verkaufspreis: string
-  zustand: string
-  location: string
-  box_id: string
-  auf_lager: string
-
-  // Category
-  hauptkategorie: string
-  unterkategorie: string
-
-  // Customer profiles
-  kundenprofile: string[]
-
-  // Image (base64 or URL)
-  image: string | null
-}
-
-/**
- * Voice input result - subset of form data
- */
-export interface VoiceProductData {
-  hersteller: string
-  produktname: string
-  kurzbeschreibung: string
-  specs: SpecField[]
-  verkaufspreis: string
-  zustand: string
-  hauptkategorie: string
-  unterkategorie: string
-  kundenprofile: string[]
-  bemerkungen?: string
-}
+// Import types needed for utility functions
+import type {
+  ErfassungFormData,
+  BulkProductSource,
+  BulkProduct,
+  AIFieldMetadata,
+  ErfassungPayload,
+} from '@/lib/schemas/erfassung'
 
 // =============================================================================
-// API PAYLOAD TYPES (shared between single and bulk save)
+// UTILITY FUNCTIONS
 // =============================================================================
 
 /**
- * Payload for creating a product via the erfassung API
- * SSOT: Used by both single route.ts and bulk-save route.ts
+ * Default form state
  */
-export interface ErfassungPayload {
-  hersteller: string
-  produktname: string
-  kurzbeschreibung?: string
-  langtext?: string
-  verkaufspreis: number
-  zustand: string
-  laenge_mm?: number | null
-  breite_mm?: number | null
-  hoehe_mm?: number | null
-  gewicht_kg?: number | null
-  location?: string
-  box_id?: string
-  auf_lager?: number
-  hauptkategorie?: string
-  unterkategorie?: string
-  kundenprofile?: string[]
-  image?: string | null
-  // Action determines the product state:
-  // - 'draft': pending_review, not in shop
-  // - 'erfassen': approved, not in shop
-  // - 'publish': approved, in shop
-  action?: 'draft' | 'erfassen' | 'publish'
-  publish?: boolean // Legacy support
-}
-
-// =============================================================================
-// BULK ERFASSUNG TYPES
-// =============================================================================
-
-export type BulkProductStatus = 'valid' | 'warning' | 'error' | 'processing' | 'saved'
-export type BulkProductSource = 'text' | 'csv' | 'voice' | 'image' | 'manual'
-
-/**
- * A product in the bulk review table.
- * Extends ErfassungFormData with bulk-specific metadata.
- */
-export interface BulkProduct extends ErfassungFormData {
-  _tempId: string
-  _source: BulkProductSource
-  _status: BulkProductStatus
-  _errors: string[]
-  _selected: boolean
-  _saveResult?: { success: boolean; productId?: string; itemUUID?: string; error?: string }
-  _aiMetadata?: AIFieldMetadata
+export const DEFAULT_FORM_DATA: ErfassungFormData = {
+  hersteller: '',
+  produktname: '',
+  kurzbeschreibung: '',
+  specs: [{ key: '', value: '' }],
+  laenge_mm: '',
+  breite_mm: '',
+  hoehe_mm: '',
+  gewicht_kg: '',
+  verkaufspreis: '',
+  zustand: 'good',
+  location: '',
+  box_id: '',
+  auf_lager: '1',
+  hauptkategorie: '',
+  unterkategorie: '',
+  kundenprofile: [],
+  image: null,
 }
 
 /**
@@ -190,30 +115,6 @@ export function formDataToBulkProduct(
 }
 
 /**
- * Request body for bulk save API
- */
-export interface BulkSaveRequest {
-  products: ErfassungPayload[]
-  action: 'draft' | 'erfassen' | 'publish'
-}
-
-/**
- * Response from bulk save API
- */
-export interface BulkSaveResponse {
-  total: number
-  succeeded: number
-  failed: number
-  results: Array<{
-    index: number
-    success: boolean
-    productId?: string
-    itemUUID?: string
-    error?: string
-  }>
-}
-
-/**
  * Convert ErfassungFormData to ErfassungPayload for API submission.
  * SSOT: Used by both single-mode submit and bulk-mode save.
  */
@@ -248,27 +149,4 @@ export function formDataToPayload(
     image: data.image,
     action,
   }
-}
-
-/**
- * Default form state
- */
-export const DEFAULT_FORM_DATA: ErfassungFormData = {
-  hersteller: '',
-  produktname: '',
-  kurzbeschreibung: '',
-  specs: [{ key: '', value: '' }],
-  laenge_mm: '',
-  breite_mm: '',
-  hoehe_mm: '',
-  gewicht_kg: '',
-  verkaufspreis: '',
-  zustand: 'good',
-  location: '',
-  box_id: '',
-  auf_lager: '1',
-  hauptkategorie: '',
-  unterkategorie: '',
-  kundenprofile: [],
-  image: null,
 }

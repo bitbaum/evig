@@ -8,7 +8,7 @@ import { NextRequest } from 'next/server'
 import { getOrCreateProfile, updateProfile } from '@/lib/auth/db'
 import { apiError, apiSuccess } from '@/lib/api/helpers'
 import { withAuth } from '@/lib/api/middleware'
-import type { Availability } from '@/types/common'
+import { validateBody, UpdateProfileSchema } from '@/lib/schemas'
 
 export const GET = withAuth(async (request, session) => {
   try {
@@ -19,72 +19,13 @@ export const GET = withAuth(async (request, session) => {
   }
 })
 
-interface ProfileUpdateData {
-  // Basic contact info
-  first_name?: string;
-  last_name?: string;
-  company_name?: string;
-  phone?: string;
-  mobile?: string;
-  // Address
-  address_line1?: string;
-  address_line2?: string;
-  postal_code?: string;
-  city?: string;
-  canton?: string;
-  country?: string;
-  // Preferences
-  preferred_language?: string;
-  newsletter_subscribed?: boolean;
-  interests?: string[];
-  // Service provider fields (for repairers/sellers)
-  bio?: string;
-  website?: string;
-  skills?: string[];
-  expertise_areas?: string[];
-  service_radius_km?: number;
-  availability?: Availability;
-}
 
 export const PUT = withAuth(async (request: NextRequest, session) => {
   try {
-    const body = await request.json() as Partial<ProfileUpdateData>
-
-    // Validate and sanitize input
-    const allowedFields: (keyof ProfileUpdateData)[] = [
-      // Basic contact info
-      'first_name',
-      'last_name',
-      'company_name',
-      'phone',
-      'mobile',
-      // Address
-      'address_line1',
-      'address_line2',
-      'postal_code',
-      'city',
-      'canton',
-      'country',
-      // Preferences
-      'preferred_language',
-      'newsletter_subscribed',
-      'interests',
-      // Service provider fields (for repairers/sellers)
-      'bio',
-      'website',
-      'skills',
-      'expertise_areas',
-      'service_radius_km',
-      'availability',
-    ]
-
-    const updateData: Partial<ProfileUpdateData> = {}
-    for (const field of allowedFields) {
-      if (body[field] !== undefined) {
-        // Use type assertion for dynamic field access
-        (updateData as Record<string, unknown>)[field] = body[field]
-      }
-    }
+    const body = await request.json()
+    const validation = validateBody(UpdateProfileSchema, body)
+    if (!validation.success) return validation.error
+    const updateData = validation.data
 
     const updatedProfile = await updateProfile(session.user.id, updateData)
 

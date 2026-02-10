@@ -11,9 +11,9 @@ import { NextRequest } from 'next/server'
 import {
   apiSuccess,
   apiError,
-  apiBadRequest,
 } from '@/lib/api/helpers'
 import { logger } from '@/lib/logger'
+import { validateBody, BlogSubmissionSchema } from '@/lib/schemas'
 import { auth } from '@/auth'
 import { checkRateLimit, getClientIp } from '@/lib/auth/rate-limiter'
 import { sendEmail } from '@/lib/email'
@@ -48,12 +48,10 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const data = await request.json()
-
-    // Validate required fields
-    if (!data.name || !data.email || !data.title || !data.content) {
-      return apiBadRequest('Name, E-Mail, Titel und Inhalt sind erforderlich')
-    }
+    const body = await request.json()
+    const validation = validateBody(BlogSubmissionSchema, body)
+    if (!validation.success) return validation.error
+    const data = validation.data
 
     // Check if user is logged in
     const session = await auth()
@@ -86,10 +84,10 @@ export async function POST(request: NextRequest) {
         data.title,
         slug,
         data.content,
-        data.submissionType || 'draft',
+        data.submissionType,
         categoryId,
         data.category || null,
-        Array.isArray(data.tags) ? data.tags : [],
+        data.tags,
       ]
     )
 

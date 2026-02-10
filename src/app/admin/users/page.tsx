@@ -40,7 +40,7 @@ async function getUserStats(): Promise<UserStats> {
     const totalUsers = parseInt(totalResult.rows[0]?.count || '0')
 
     const verifiedResult = await query<{ count: string }>(
-      `SELECT COUNT(*) as count FROM ${TABLE_NAMES.USERS} WHERE email_verified IS NOT NULL`
+      `SELECT COUNT(*) as count FROM ${TABLE_NAMES.USERS} WHERE "emailVerified" IS NOT NULL`
     )
     const activeUsers = parseInt(verifiedResult.rows[0]?.count || '0')
 

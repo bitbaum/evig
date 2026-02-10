@@ -7,11 +7,16 @@
  */
 
 import { NextRequest } from 'next/server';
+import { z } from 'zod';
 import { withAdmin, ValidSession } from '@/lib/api/middleware';
-import { apiSuccess, apiError } from '@/lib/api/helpers';
+import { apiSuccess, apiError, apiBadRequest } from '@/lib/api/helpers';
 import { query } from '@/lib/auth/db';
 import { TABLE_NAMES } from '@/config/database';
 import { logger } from '@/lib/logger';
+
+const analyticsQuerySchema = z.object({
+  days: z.coerce.number().int().min(1).max(365).default(30),
+});
 
 /**
  * GET /api/task-analytics
@@ -20,7 +25,12 @@ import { logger } from '@/lib/logger';
 export const GET = withAdmin(async (request: NextRequest, session: ValidSession) => {
   try {
     const { searchParams } = new URL(request.url);
-    const days = parseInt(searchParams.get('days') || '30', 10);
+    const rawParams = Object.fromEntries(searchParams.entries());
+    const parsed = analyticsQuerySchema.safeParse(rawParams);
+    if (!parsed.success) {
+      return apiBadRequest(parsed.error.issues.map(i => i.message).join(', '));
+    }
+    const { days } = parsed.data;
 
     // Overall stats
     const statsResult = await query(`

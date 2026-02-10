@@ -48,10 +48,10 @@ export default function AboutSection({ section }: AboutSectionProps) {
               'md:grid-cols-1'
             }`}>
               {section.cards.map((card, index) => (
-                <div 
+                <article
                   key={index}
-                  className={section.backgroundColor === 'gray' 
-                    ? 'bg-white p-8 rounded-xl shadow-sm' 
+                  className={section.backgroundColor === 'gray'
+                    ? 'bg-white p-8 rounded-xl shadow-sm'
                     : 'bg-gradient-to-br from-blue-50 to-white p-8 rounded-2xl shadow-sm hover:shadow-md transition-shadow duration-300'
                   }
                 >
@@ -84,7 +84,7 @@ export default function AboutSection({ section }: AboutSectionProps) {
                       </ul>
                     )}
                   </div>
-                </div>
+                </article>
               ))}
             </div>
           )}

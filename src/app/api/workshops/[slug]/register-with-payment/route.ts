@@ -10,6 +10,7 @@ import {
   buildInvoiceLineItem,
   centsToDisplay
 } from '@/lib/payments/payment-flow'
+import { validateBody, WorkshopRegisterWithPaymentSchema } from '@/lib/schemas'
 
 interface WorkshopRow {
   id: string
@@ -40,14 +41,17 @@ export async function POST(request: NextRequest) {
   try {
     const session = await auth()
     if (!session?.user?.id) {
-      return apiUnauthorized('Authentication required')
+      return apiUnauthorized('Authentifizierung erforderlich')
     }
 
     const workshopSlug = request.nextUrl.pathname.split('/')[3] // Extract slug from URL
+    const body = await request.json()
+    const validation = validateBody(WorkshopRegisterWithPaymentSchema, body)
+    if (!validation.success) return validation.error
     const {
-      instanceId, // Specific workshop instance
-      useEscrow = false, // Workshops typically don't need escrow
-    } = await request.json()
+      instanceId,
+      useEscrow,
+    } = validation.data
 
     // Get workshop details
     const workshopResult = await query(`
@@ -59,13 +63,13 @@ export async function POST(request: NextRequest) {
     `, [workshopSlug])
 
     if (workshopResult.rows.length === 0) {
-      return apiNotFound('Workshop not found')
+      return apiNotFound('Workshop nicht gefunden')
     }
 
     const workshop = workshopResult.rows[0] as WorkshopRow
 
     if (!workshop.price_cents || workshop.price_cents <= 0) {
-      return apiBadRequest('This workshop is not available for online registration with payment')
+      return apiBadRequest('Dieser Workshop ist nicht für die Online-Anmeldung mit Zahlung verfügbar')
     }
 
     // Get workshop instance if specified, otherwise use general workshop
@@ -85,7 +89,7 @@ export async function POST(request: NextRequest) {
       `, [instanceId])
 
       if (instanceResult.rows.length === 0) {
-        return apiNotFound('Workshop instance not found or not available')
+        return apiNotFound('Workshop-Termin nicht gefunden oder nicht verfügbar')
       }
 
       instanceDetails = instanceResult.rows[0] as InstanceRow
@@ -94,7 +98,7 @@ export async function POST(request: NextRequest) {
 
       // Check capacity
       if (instanceDetails.current_participants >= instanceDetails.max_participants) {
-        return apiBadRequest('Workshop instance is fully booked')
+        return apiBadRequest('Workshop-Termin ist ausgebucht')
       }
     }
 
@@ -107,7 +111,7 @@ export async function POST(request: NextRequest) {
     if (existingRegistration.rows.length > 0) {
       const reg = existingRegistration.rows[0] as RegistrationRow
       if (reg.status === 'confirmed' || reg.status === 'attended') {
-        return apiBadRequest('You are already registered for this workshop')
+        return apiBadRequest('Sie sind bereits für diesen Workshop angemeldet')
       }
     }
 
@@ -184,10 +188,10 @@ export async function POST(request: NextRequest) {
       workshopTitle: workshop.title,
       registrationType,
       escrowEnabled: useEscrow,
-      message: 'Workshop registration created. Complete payment to confirm your spot.'
+      message: 'Workshop-Anmeldung erstellt. Schliessen Sie die Zahlung ab, um Ihren Platz zu bestätigen.'
     })
   } catch (error) {
     logger.error('Workshop registration with payment error', { error })
-    return apiError(error, 'Failed to register for workshop with payment')
+    return apiError(error, 'Workshop-Anmeldung mit Zahlung fehlgeschlagen')
   }
 }

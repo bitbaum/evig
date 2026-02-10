@@ -2,9 +2,10 @@ import { NextRequest } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { MEDUSA_CONFIG } from "@/config/medusa";
 import { TABLE_NAMES } from "@/config/database";
-import { apiSuccess, apiError, apiBadRequest, apiNotFound, apiUnauthorized } from "@/lib/api/helpers";
+import { apiSuccess, apiError, apiBadRequest, apiNotFound } from "@/lib/api/helpers";
 import { logger } from "@/lib/logger";
 import { withAuth, ValidSession } from "@/lib/api/middleware";
+import { validateBody, validateQuery, PublishMedusaSchema, PublishMedusaQuerySchema } from '@/lib/schemas';
 
 interface PublishResult {
   success: boolean;
@@ -39,11 +40,10 @@ interface AIProductRaw {
 export const POST = withAuth(async (request: NextRequest, session: ValidSession) => {
   try {
     const supabase = await createClient();
-    const { inventoryItemId, options = {} } = await request.json();
-
-    if (!inventoryItemId) {
-      return apiBadRequest("Inventory item ID required");
-    }
+    const body = await request.json();
+    const validation = validateBody(PublishMedusaSchema, body);
+    if (!validation.success) return validation.error;
+    const { inventoryItemId, options } = validation.data;
 
     // Get inventory item with AI product data
     const { data: inventoryItem, error: itemError } = await supabase
@@ -438,11 +438,11 @@ export const GET = withAuth(async (request: NextRequest) => {
   try {
     const supabase = await createClient();
     const { searchParams } = new URL(request.url);
-    const inventoryItemId = searchParams.get('inventoryItemId');
-
-    if (!inventoryItemId) {
-      return apiBadRequest("Inventory item ID required");
-    }
+    const queryValidation = validateQuery(PublishMedusaQuerySchema, {
+      inventoryItemId: searchParams.get('inventoryItemId'),
+    });
+    if (!queryValidation.success) return queryValidation.error;
+    const { inventoryItemId } = queryValidation.data;
 
     const { data: item } = await supabase
       .from(TABLE_NAMES.INVENTORY_ITEMS)

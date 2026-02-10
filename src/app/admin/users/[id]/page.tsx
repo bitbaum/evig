@@ -67,7 +67,7 @@ async function getUser(id: string): Promise<UserData | null> {
         u.is_super_admin,
         u.staff_permissions,
         u."createdAt" as created_at,
-        u.email_verified,
+        u."emailVerified" as email_verified,
         u.phone,
         u.address,
         tp.id as team_profile_id

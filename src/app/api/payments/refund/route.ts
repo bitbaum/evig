@@ -7,6 +7,7 @@ import { apiError, apiSuccess, apiUnauthorized, apiBadRequest, apiNotFound } fro
 import { isAdminRole } from '@/lib/constants'
 import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
+import { validateBody, RefundSchema } from '@/lib/schemas'
 
 interface UserRow {
   role: string
@@ -40,20 +41,19 @@ export async function POST(request: NextRequest) {
   try {
     const session = await auth()
     if (!session?.user?.id) {
-      return apiUnauthorized('Authentication required')
+      return apiUnauthorized('Authentifizierung erforderlich')
     }
 
+    const body = await request.json()
+    const validation = validateBody(RefundSchema, body)
+    if (!validation.success) return validation.error
     const {
       transactionId,
       amount,
       reason,
       reasonDetails,
       customerNotes
-    } = await request.json()
-
-    if (!transactionId || !amount || !reason) {
-      return apiBadRequest('Transaction ID, amount, and reason are required')
-    }
+    } = validation.data
 
     // Get transaction details
     const transactionResult = await query(`
@@ -69,7 +69,7 @@ export async function POST(request: NextRequest) {
     `, [transactionId])
 
     if (transactionResult.rows.length === 0) {
-      return apiNotFound('Transaction not found or not eligible for refund')
+      return apiNotFound('Transaktion nicht gefunden oder nicht erstattungsfähig')
     }
 
     const transaction = transactionResult.rows[0] as TransactionRow
@@ -80,13 +80,13 @@ export async function POST(request: NextRequest) {
     const isAdmin = isAdminRole(user?.role)
 
     if (transaction.user_id !== session.user.id && !isAdmin) {
-      return apiUnauthorized('You can only refund your own transactions')
+      return apiUnauthorized('Sie können nur eigene Transaktionen erstatten')
     }
 
     const refundAmountCents = Math.round(amount * 100)
 
     if (refundAmountCents > transaction.amount_cents) {
-      return apiBadRequest('Refund amount cannot exceed original transaction amount')
+      return apiBadRequest('Erstattungsbetrag darf den ursprünglichen Transaktionsbetrag nicht übersteigen')
     }
 
     // Check for existing refunds on this transaction
@@ -101,7 +101,7 @@ export async function POST(request: NextRequest) {
     const remainingAmount = transaction.amount_cents - totalRefunded
 
     if (refundAmountCents > remainingAmount) {
-      return apiBadRequest(`Refund amount exceeds remaining balance. Maximum refundable: ${(remainingAmount / 100).toFixed(2)} ${transaction.currency}`)
+      return apiBadRequest(`Erstattungsbetrag übersteigt das verbleibende Guthaben. Maximal erstattbar: ${(remainingAmount / 100).toFixed(2)} ${transaction.currency}`)
     }
 
     // Create refund record
@@ -205,7 +205,7 @@ export async function POST(request: NextRequest) {
           WHERE id = $2
         `, [errorMessage, refundId])
 
-        return apiError(stripeError, 'Refund processing failed')
+        return apiError(stripeError, 'Erstattung konnte nicht verarbeitet werden')
       }
     }
 
@@ -213,11 +213,11 @@ export async function POST(request: NextRequest) {
       refundId,
       refundNumber,
       status: isAdmin ? 'processing' : 'requested',
-      message: isAdmin ? 'Refund processed successfully' : 'Refund request submitted for approval'
+      message: isAdmin ? 'Erstattung erfolgreich verarbeitet' : 'Erstattungsantrag zur Genehmigung eingereicht'
     })
   } catch (error) {
     logger.error('Refund creation error', { error })
-    return apiError(error, 'Failed to create refund request')
+    return apiError(error, 'Erstattungsantrag konnte nicht erstellt werden')
   }
 }
 

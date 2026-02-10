@@ -1,4 +1,5 @@
 import { NextRequest } from 'next/server'
+import { z } from 'zod'
 import { auth } from '@/auth'
 import { query } from '@/lib/auth/db'
 import { apiError, apiSuccess, apiUnauthorized, apiBadRequest } from '@/lib/api/helpers'
@@ -7,6 +8,17 @@ import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES } from '@/config/database'
 import { MEDUSA_CONFIG } from '@/config/medusa'
 import { logger } from '@/lib/logger'
+
+const createProductSchema = z.object({
+  images: z.array(z.string().url()).min(1, 'Mindestens ein Bild erforderlich'),
+  title: z.string().min(1, 'Titel erforderlich').max(200),
+  description: z.string().min(1, 'Beschreibung erforderlich').max(5000),
+  condition: z.string().min(1, 'Zustand erforderlich'),
+  category: z.string().min(1, 'Kategorie erforderlich'),
+  price: z.number().int().positive('Preis muss positiv sein'),
+  location: z.string().min(1, 'Standort erforderlich').max(200),
+  useAiAnalysis: z.boolean().optional().default(false),
+})
 
 interface IdRow {
   id: string
@@ -25,6 +37,11 @@ export async function POST(request: NextRequest) {
       return sellerError
     }
 
+    const body = await request.json()
+    const parsed = createProductSchema.safeParse(body)
+    if (!parsed.success) {
+      return apiBadRequest(parsed.error.issues.map(i => i.message).join(', '))
+    }
     const {
       images,
       title,
@@ -33,13 +50,8 @@ export async function POST(request: NextRequest) {
       category,
       price: priceCents,
       location,
-      useAiAnalysis
-    } = await request.json()
-
-    // Validate required fields
-    if (!images || images.length === 0 || !title || !description || !category || !priceCents || !location) {
-      return apiBadRequest(ERROR_MESSAGES.ALL_FIELDS_REQUIRED)
-    }
+      useAiAnalysis,
+    } = parsed.data
 
     // Create inventory item
     const inventoryResult = await query(`
@@ -108,8 +120,18 @@ export async function POST(request: NextRequest) {
       [aiProductId, inventoryId]
     )
 
-    // Create product images
-    for (let i = 0; i < images.length; i++) {
+    // Create product images (batch insert to avoid N+1)
+    if (images.length > 0) {
+      const values = images.map((_: string, i: number) =>
+        `($${i * 5 + 1}, $${i * 5 + 2}, $${i * 5 + 3}, $${i * 5 + 4}, $${i * 5 + 5})`
+      ).join(', ')
+      const params = images.flatMap((url: string, i: number) => [
+        aiProductId,
+        `seller-image-${i + 1}.jpg`,
+        url,
+        i === 0, // First image is primary
+        session.user.id,
+      ])
       await query(`
         INSERT INTO ${TABLE_NAMES.PRODUCT_IMAGES} (
           product_id,
@@ -117,14 +139,8 @@ export async function POST(request: NextRequest) {
           file_path,
           is_primary,
           uploaded_by
-        ) VALUES ($1, $2, $3, $4, $5)
-      `, [
-        aiProductId,
-        `seller-image-${i + 1}.jpg`,
-        images[i],
-        i === 0, // First image is primary
-        session.user.id
-      ])
+        ) VALUES ${values}
+      `, params)
     }
 
     // If AI analysis is requested, trigger it (simplified for now)

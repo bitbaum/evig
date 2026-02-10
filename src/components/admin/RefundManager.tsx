@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
@@ -8,85 +8,18 @@ import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Loader2, CheckCircle, XCircle, Clock, AlertTriangle, RefreshCw } from 'lucide-react'
 import { formatDateShort } from '@/lib/date-formats'
-
-interface Refund {
-  id: string
-  refund_number: string
-  amount_cents: number
-  currency: string
-  reason: string
-  reason_details?: string
-  status: 'requested' | 'approved' | 'processing' | 'completed' | 'rejected'
-  customer_name: string
-  customer_email: string
-  original_amount: number
-  refund_amount: number
-  requested_by_name: string
-  approved_by_name?: string
-  created_at: string
-  approved_at?: string
-  processed_at?: string
-}
+import { useRefunds } from '@/hooks/useRefunds'
+import type { RefundAction } from '@/hooks/useRefunds'
 
 export default function RefundManager() {
-  const [refunds, setRefunds] = useState<Refund[]>([])
-  const [loading, setLoading] = useState(true)
-  const [processing, setProcessing] = useState<string | null>(null)
-  const [error, setError] = useState<string>('')
+  const { refunds, isLoading: loading, processingId: processing, error, fetchRefunds, updateRefund } = useRefunds()
 
   useEffect(() => {
-    loadRefunds()
-  }, [])
+    fetchRefunds()
+  }, [fetchRefunds])
 
-  const loadRefunds = async () => {
-    try {
-      setLoading(true)
-      const response = await fetch('/api/admin/refunds')
-      const result = await response.json()
-
-      if (!response.ok) {
-        throw new Error(result.message || 'Failed to load refunds')
-      }
-
-      setRefunds(result.refunds)
-    } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : 'Ein Fehler ist aufgetreten')
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  const handleRefundAction = async (refundId: string, action: 'approve' | 'reject' | 'process', notes?: string) => {
-    try {
-      setProcessing(refundId)
-      setError('')
-
-      const response = await fetch(`/api/admin/refunds/${refundId}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ action, notes })
-      })
-
-      const result = await response.json()
-
-      if (!response.ok) {
-        throw new Error(result.message || `Failed to ${action} refund`)
-      }
-
-      // Update local state
-      setRefunds(prev => prev.map(refund =>
-        refund.id === refundId
-          ? { ...refund, ...result.refund }
-          : refund
-      ))
-
-    } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : 'Ein Fehler ist aufgetreten')
-    } finally {
-      setProcessing(null)
-    }
+  const handleRefundAction = (refundId: string, action: RefundAction, notes?: string) => {
+    updateRefund(refundId, action, notes)
   }
 
   const getStatusBadge = (status: string) => {

@@ -5,6 +5,7 @@ import { withAuth, ValidSession } from '@/lib/api/middleware'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES, CONVERSATION_TYPES } from '@/config/database'
 import { logger } from '@/lib/logger'
+import { validateBody, SendMessageSchema } from '@/lib/schemas'
 
 interface ConversationRow {
   id: string
@@ -87,10 +88,10 @@ export const POST = withAuth(async (
 ) => {
   try {
     const body = await request.json()
-    const { recipient_id, content, context_id, context_type = CONVERSATION_TYPES.APPOINTMENT } = body
+    const validation = validateBody(SendMessageSchema, body)
+    if (!validation.success) return validation.error
+    const { recipient_id, content, context_id, context_type } = validation.data
 
-    if (!recipient_id) return apiBadRequest('Empfänger erforderlich')
-    if (!content) return apiBadRequest('Nachricht erforderlich')
     if (recipient_id === session.user.id) return apiBadRequest('Nachricht an sich selbst nicht möglich')
 
     // Ensure consistent participant ordering (lower UUID first)

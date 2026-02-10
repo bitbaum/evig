@@ -88,9 +88,9 @@ export async function GET(request: NextRequest) {
     }
 
     if (filters.verified === 'yes') {
-      conditions.push(`email_verified IS NOT NULL`)
+      conditions.push(`"emailVerified" IS NOT NULL`)
     } else if (filters.verified === 'no') {
-      conditions.push(`email_verified IS NULL`)
+      conditions.push(`"emailVerified" IS NULL`)
     }
 
     const whereClause = conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : ''
@@ -121,7 +121,7 @@ export async function GET(request: NextRequest) {
         is_super_admin,
         staff_permissions,
         "createdAt" as created_at,
-        email_verified
+        "emailVerified" as email_verified
        FROM ${TABLE_NAMES.USERS}
        ${whereClause}
        ORDER BY is_staff DESC, "createdAt" DESC

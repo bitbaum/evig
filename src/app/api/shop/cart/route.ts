@@ -1,7 +1,17 @@
 import { NextRequest } from "next/server";
+import { z } from "zod";
 import { MEDUSA_CONFIG } from "@/config/medusa";
 import { logger } from "@/lib/logger";
-import { apiError, apiSuccess } from "@/lib/api/helpers";
+import { apiError, apiSuccess, apiBadRequest } from "@/lib/api/helpers";
+
+const createCartSchema = z.object({
+  region_id: z.string().min(1, 'Region ID erforderlich'),
+  items: z.array(z.object({
+    variant_id: z.string().min(1),
+    quantity: z.number().int().positive(),
+  })).optional(),
+  context: z.record(z.string(), z.unknown()).optional(),
+});
 
 /**
  * POST /api/shop/cart
@@ -9,7 +19,12 @@ import { apiError, apiSuccess } from "@/lib/api/helpers";
  */
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json().catch(() => ({}));
+    const rawBody = await request.json().catch(() => ({}));
+    const parsed = createCartSchema.safeParse(rawBody);
+    if (!parsed.success) {
+      return apiBadRequest(parsed.error.issues.map(i => i.message).join(', '));
+    }
+    const body = parsed.data;
 
     if (!MEDUSA_CONFIG.PUBLISHABLE_KEY) {
       logger.error("Medusa publishable key not configured");
@@ -27,10 +42,7 @@ export async function POST(request: NextRequest) {
         "x-publishable-key": MEDUSA_CONFIG.PUBLISHABLE_KEY,
         "x-publishable-api-key": MEDUSA_CONFIG.PUBLISHABLE_KEY,
       },
-      body: JSON.stringify({
-        region_id: body.region_id,
-        ...body,
-      }),
+      body: JSON.stringify(body),
     });
 
     if (!response.ok) {

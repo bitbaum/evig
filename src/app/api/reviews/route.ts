@@ -8,6 +8,7 @@ import { logger } from '@/lib/logger'
 import { APP_URL } from '@/config/urls'
 import { isAdminRole } from '@/lib/constants'
 import { sendEmail } from '@/lib/email'
+import { validateBody, validateQuery, CreateReviewSchema, GetReviewsQuerySchema } from '@/lib/schemas'
 
 interface UserRow {
   role: string
@@ -78,26 +79,17 @@ interface RepairerRow {
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url)
-    const targetType = searchParams.get('targetType')
-    const targetId = searchParams.get('targetId')
-    const status = searchParams.get('status') || 'published'
-    const limit = parseInt(searchParams.get('limit') || '10')
-    const offset = parseInt(searchParams.get('offset') || '0')
-    const sortBy = searchParams.get('sortBy') || 'created_at'
-    const sortOrder = searchParams.get('sortOrder') || 'desc'
-
-    // Validate required parameters
-    if (!targetType || !targetId) {
-      return apiBadRequest('targetType und targetId sind erforderlich')
-    }
-
-    if (!Object.values(REVIEW_TARGET_TYPES).includes(targetType as typeof REVIEW_TARGET_TYPES[keyof typeof REVIEW_TARGET_TYPES])) {
-      return apiBadRequest('Ungültiger targetType')
-    }
-
-    if (!['published', 'pending_moderation', 'hidden', 'deleted'].includes(status)) {
-      return apiBadRequest('Ungültiger Status-Filter')
-    }
+    const queryValidation = validateQuery(GetReviewsQuerySchema, {
+      targetType: searchParams.get('targetType'),
+      targetId: searchParams.get('targetId'),
+      status: searchParams.get('status'),
+      limit: searchParams.get('limit'),
+      offset: searchParams.get('offset'),
+      sortBy: searchParams.get('sortBy'),
+      sortOrder: searchParams.get('sortOrder'),
+    })
+    if (!queryValidation.success) return queryValidation.error
+    const { targetType, targetId, status, limit, offset, sortBy, sortOrder } = queryValidation.data
 
     // Check if current user is admin for non-published reviews
     let isAdmin = false
@@ -256,6 +248,8 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json()
+    const validation = validateBody(CreateReviewSchema, body)
+    if (!validation.success) return validation.error
     const {
       targetType,
       targetId,
@@ -268,28 +262,7 @@ export async function POST(request: NextRequest) {
       valueRating,
       title,
       content
-    } = body
-
-    // Validate required fields
-    if (!targetType || !targetId || !content || !overallRating) {
-      return apiBadRequest('targetType, targetId, content und overallRating sind erforderlich')
-    }
-
-    if (!Object.values(REVIEW_TARGET_TYPES).includes(targetType as typeof REVIEW_TARGET_TYPES[keyof typeof REVIEW_TARGET_TYPES])) {
-      return apiBadRequest('Ungültiger targetType')
-    }
-
-    if (overallRating < 1 || overallRating > 5) {
-      return apiBadRequest('Gesamtbewertung muss zwischen 1 und 5 liegen')
-    }
-
-    // Validate rating fields if provided
-    const ratingFields = [communicationRating, professionalismRating, qualityRating, timelinessRating, valueRating]
-    for (const rating of ratingFields) {
-      if (rating !== undefined && (rating < 1 || rating > 5)) {
-        return apiBadRequest('Einzelbewertungen müssen zwischen 1 und 5 liegen')
-      }
-    }
+    } = validation.data
 
     // Check if user already reviewed this target
     const existingReview = await query(`

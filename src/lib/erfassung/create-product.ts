@@ -137,22 +137,26 @@ export async function createErfassungProduct(
     ]
   )
 
-  // 3. Link customer profiles if provided
+  // 3. Link customer profiles if provided (batch to avoid N+1)
   if (payload.kundenprofile && payload.kundenprofile.length > 0) {
-    for (const profileSlug of payload.kundenprofile) {
-      const profileResult = await client.query(
-        `SELECT id FROM ${TABLE_NAMES.CUSTOMER_PROFILES} WHERE slug = $1`,
-        [profileSlug]
-      )
+    const slugPlaceholders = payload.kundenprofile.map((_: string, i: number) => `$${i + 1}`).join(', ')
+    const profileResult = await client.query(
+      `SELECT id FROM ${TABLE_NAMES.CUSTOMER_PROFILES} WHERE slug IN (${slugPlaceholders})`,
+      payload.kundenprofile
+    )
 
-      if (profileResult.rows.length > 0) {
-        await client.query(
-          `INSERT INTO ${TABLE_NAMES.PRODUCT_CUSTOMER_PROFILES} (product_id, profile_id, assigned_by)
-           VALUES ($1, $2, 'manual')
-           ON CONFLICT (product_id, profile_id) DO NOTHING`,
-          [productId, profileResult.rows[0].id]
-        )
-      }
+    if (profileResult.rows.length > 0) {
+      const profileIds = profileResult.rows.map((r: { id: string }) => r.id)
+      const values = profileIds.map((_: string, i: number) =>
+        `($${i * 2 + 1}, $${i * 2 + 2}, 'manual')`
+      ).join(', ')
+      const params = profileIds.flatMap((profileId: string) => [productId, profileId])
+      await client.query(
+        `INSERT INTO ${TABLE_NAMES.PRODUCT_CUSTOMER_PROFILES} (product_id, profile_id, assigned_by)
+         VALUES ${values}
+         ON CONFLICT (product_id, profile_id) DO NOTHING`,
+        params
+      )
     }
   }
 

@@ -1,84 +1,59 @@
+/**
+ * Shop Orders API
+ * POST /api/shop/orders - Create a new order from a completed payment
+ */
+
 import { NextRequest } from 'next/server'
+import { z } from 'zod'
 import { auth } from '@/auth'
-import { query } from '@/lib/auth/db'
 import { apiError, apiSuccess, apiUnauthorized, apiBadRequest } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
-import { TABLE_NAMES } from '@/config/database'
+import { createOrder } from '@/lib/services/order-service'
 
-interface OrderRow {
-  id: string
-  created_at: string
-}
+const shippingAddressSchema = z.object({
+  firstName: z.string().min(1).max(100),
+  lastName: z.string().min(1).max(100),
+  street: z.string().min(1).max(200),
+  city: z.string().min(1).max(100),
+  postalCode: z.string().min(1).max(20),
+  country: z.string().min(2).max(2).default('CH'),
+}).optional()
+
+const createOrderSchema = z.object({
+  cartId: z.string().min(1, 'Cart ID erforderlich'),
+  paymentIntentId: z.string().min(1, 'Payment Intent ID erforderlich'),
+  shippingAddress: shippingAddressSchema,
+})
 
 export async function POST(request: NextRequest) {
   try {
+    // 1. Auth check
     const session = await auth()
     if (!session?.user?.id) {
       return apiUnauthorized(ERROR_MESSAGES.UNAUTHORIZED)
     }
 
-    const { cartId, paymentIntentId, shippingAddress } = await request.json()
-
-    if (!cartId || !paymentIntentId) {
-      return apiBadRequest('Cart ID und Payment Intent ID erforderlich')
+    // 2. Parse and validate body
+    const body = await request.json()
+    const parsed = createOrderSchema.safeParse(body)
+    if (!parsed.success) {
+      return apiBadRequest(parsed.error.issues.map(i => i.message).join(', '))
     }
+    const { cartId, paymentIntentId, shippingAddress } = parsed.data
 
-    // This would integrate with MedusaJS to create the order
-    // For now, we'll create a basic order record in our database
-
-    // Create order record
-    const orderResult = await query(`
-      INSERT INTO ${TABLE_NAMES.ORDERS} (
-        user_id,
-        status,
-        total_amount_cents,
-        currency,
-        payment_intent_id,
-        shipping_address
-      ) VALUES (
-        $1,
-        'completed',
-        $2,
-        'CHF',
-        $3,
-        $4
-      )
-      RETURNING id, created_at
-    `, [
-      session.user.id,
-      97092, // This would come from the cart total
+    // 3. Call service
+    const result = await createOrder({
+      userId: session.user.id,
+      cartId,
       paymentIntentId,
-      shippingAddress ? JSON.stringify(shippingAddress) : null
-    ])
-
-    const orderData = orderResult.rows[0] as OrderRow
-    const orderId = orderData.id
-
-    // Create order items (this would come from the cart)
-    await query(`
-      INSERT INTO ${TABLE_NAMES.ORDER_ITEMS} (
-        order_id,
-        product_title,
-        quantity,
-        unit_price_cents,
-        total_price_cents
-      ) VALUES (
-        $1,
-        'Refurbished MacBook Air M1',
-        1,
-        89900,
-        89900
-      )
-    `, [orderId])
-
-    // Update seller inventory (decrease quantity)
-    // This would be more complex in a real implementation
-
-    return apiSuccess({
-      orderId,
-      message: 'Bestellung erfolgreich erstellt'
+      shippingAddress,
     })
 
+    // 4. Return response
+    return apiSuccess({
+      orderId: result.orderId,
+      message: 'Bestellung erfolgreich erstellt',
+    })
   } catch (error) {
     return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)
   }

@@ -1,10 +1,11 @@
 import { NextRequest } from 'next/server'
 import { query } from '@/lib/auth/db'
-import { apiError, apiSuccess, apiBadRequest } from '@/lib/api/helpers'
+import { apiError, apiSuccess } from '@/lib/api/helpers'
 import { withAuth, ValidSession } from '@/lib/api/middleware'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES, APPOINTMENT_ROLES } from '@/config/database'
 import { logger } from '@/lib/logger'
+import { validateBody, validateQuery, CreateAppointmentSchema, GetAppointmentsQuerySchema } from '@/lib/schemas'
 
 interface AppointmentRow {
   id: string
@@ -42,10 +43,14 @@ export const GET = withAuth(async (
 ) => {
   try {
     const { searchParams } = new URL(request.url)
-    const role = searchParams.get('role') || APPOINTMENT_ROLES.CUSTOMER
-    const status = searchParams.get('status')
-    const limit = Math.min(parseInt(searchParams.get('limit') || '50'), 100)
-    const offset = parseInt(searchParams.get('offset') || '0')
+    const queryValidation = validateQuery(GetAppointmentsQuerySchema, {
+      role: searchParams.get('role'),
+      status: searchParams.get('status'),
+      limit: searchParams.get('limit'),
+      offset: searchParams.get('offset'),
+    })
+    if (!queryValidation.success) return queryValidation.error
+    const { role, status, limit, offset } = queryValidation.data
 
     let whereClause: string
     const params: (string | number)[] = [session.user.id]
@@ -122,6 +127,8 @@ export const POST = withAuth(async (
 ) => {
   try {
     const body = await request.json()
+    const validation = validateBody(CreateAppointmentSchema, body)
+    if (!validation.success) return validation.error
     const {
       repairer_id,
       repairer_profile_id,
@@ -135,7 +142,7 @@ export const POST = withAuth(async (
       is_home_visit,
       visit_address,
       visit_city,
-    } = body
+    } = validation.data
 
     // Normalize field names (accept both snake_case and camelCase)
     const preferred_date = rawPreferredDate || camelPreferredDate || null
@@ -150,11 +157,6 @@ export const POST = withAuth(async (
       if (serviceResult.rows.length > 0) {
         service_type_id = (serviceResult.rows[0] as { id: string }).id
       }
-    }
-
-    // Validate required fields
-    if (!description) {
-      return apiBadRequest('Beschreibung ist erforderlich')
     }
 
     // Build insert query

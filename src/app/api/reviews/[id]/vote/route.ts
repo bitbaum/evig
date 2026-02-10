@@ -5,6 +5,7 @@ import { apiError, apiSuccess, apiUnauthorized, apiBadRequest, apiNotFound } fro
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
+import { validateBody, ReviewVoteSchema } from '@/lib/schemas'
 
 interface ReviewRow {
   id: string
@@ -27,11 +28,9 @@ export async function POST(
 
     const { id: reviewId } = await params
     const body = await request.json()
-    const { voteType } = body
-
-    if (!voteType || !['helpful', 'unhelpful'].includes(voteType)) {
-      return apiBadRequest('voteType muss "helpful" oder "unhelpful" sein')
-    }
+    const validation = validateBody(ReviewVoteSchema, body)
+    if (!validation.success) return validation.error
+    const { voteType } = validation.data
 
     // Check if review exists and is published
     const reviewResult = await query(

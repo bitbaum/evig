@@ -103,7 +103,12 @@ export function LoginForm() {
 
         {/* Error Messages */}
         {(formError || error) && (
-          <div className={cn('mb-6 p-4 rounded-lg flex items-start gap-3 border-2', getStatusColors('error').bg, getStatusColors('error').border)}>
+          <div
+            id="login-error"
+            role="alert"
+            aria-live="assertive"
+            className={cn('mb-6 p-4 rounded-lg flex items-start gap-3 border-2', getStatusColors('error').bg, getStatusColors('error').border)}
+          >
             <AlertCircle className={cn('w-5 h-5 flex-shrink-0 mt-0.5', getStatusColors('error').icon)} />
             <p className={cn('text-sm', getStatusColors('error').text)}>
               {getErrorMessage(formError || error)}
@@ -128,6 +133,8 @@ export function LoginForm() {
                 required
                 autoComplete="email"
                 placeholder="name@beispiel.ch"
+                aria-invalid={!!(formError || error)}
+                aria-describedby={(formError || error) ? 'login-error' : undefined}
                 className={cn(
                   'w-full pl-11 pr-4 py-3 border-2 rounded-lg transition-all min-h-[touch] touch-target',
                   'border-neutral-300 dark:border-neutral-600',
@@ -164,6 +171,8 @@ export function LoginForm() {
                 required
                 autoComplete="current-password"
                 placeholder="••••••••"
+                aria-invalid={!!(formError || error)}
+                aria-describedby={(formError || error) ? 'login-error' : undefined}
                 className={cn(
                   'w-full pl-11 pr-12 py-3 border-2 rounded-lg transition-all min-h-[touch] touch-target',
                   'border-neutral-300 dark:border-neutral-600',

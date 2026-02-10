@@ -6,6 +6,7 @@ import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES, REVIEW_TARGET_TYPES } from '@/config/database'
 import { logger } from '@/lib/logger'
 import { isAdminRole } from '@/lib/constants'
+import { validateBody, ReviewResponseSchema } from '@/lib/schemas'
 
 interface ReviewRow {
   id: string
@@ -41,15 +42,9 @@ export async function POST(
       return apiUnauthorized(ERROR_MESSAGES.UNAUTHORIZED)
     }
     const body = await request.json()
-    const { content } = body
-
-    if (!content || typeof content !== 'string' || content.trim().length === 0) {
-      return apiBadRequest('Antwort-Text ist erforderlich')
-    }
-
-    if (content.length > 2000) {
-      return apiBadRequest('Antwort darf maximal 2000 Zeichen lang sein')
-    }
+    const validation = validateBody(ReviewResponseSchema, body)
+    if (!validation.success) return validation.error
+    const { content } = validation.data
 
     // Get review and check if user can respond
     const reviewResult = await query(`
@@ -132,15 +127,9 @@ export async function PUT(
       return apiUnauthorized(ERROR_MESSAGES.UNAUTHORIZED)
     }
     const body = await request.json()
-    const { content } = body
-
-    if (!content || typeof content !== 'string' || content.trim().length === 0) {
-      return apiBadRequest('Antwort-Text ist erforderlich')
-    }
-
-    if (content.length > 2000) {
-      return apiBadRequest('Antwort darf maximal 2000 Zeichen lang sein')
-    }
+    const validation = validateBody(ReviewResponseSchema, body)
+    if (!validation.success) return validation.error
+    const { content } = validation.data
 
     // Get response and check ownership
     const responseResult = await query(`
