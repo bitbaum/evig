@@ -57,6 +57,7 @@ const CSRF_CONFIG = {
     '/api/it-hilfe/', // IT-Hilfe APIs, protected by session auth
     '/api/user/',     // User profile APIs, protected by session auth
     '/api/protocols', // Protocols APIs, protected by withAdmin middleware
+    '/api/decisions', // Decisions APIs, protected by withAdmin middleware
   ],
 }
 
