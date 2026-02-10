@@ -627,6 +627,7 @@ export default function AdminDonationsPage() {
                         className="w-full px-3 py-2 border border-gray-300 rounded-lg"
                         placeholder="100.00"
                         required
+                        aria-required="true"
                       />
                     </div>
                     <div>
@@ -659,6 +660,7 @@ export default function AdminDonationsPage() {
                         }}
                         className="w-full px-3 py-2 border border-gray-300 rounded-lg"
                         required
+                        aria-required="true"
                       >
                         <option value="">-- Wählen --</option>
                         {getDeviceCategoryOptions().map(opt => (

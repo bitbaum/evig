@@ -167,7 +167,7 @@ function ResetPasswordContent() {
         <div className="bg-white py-8 px-4 shadow-lg rounded-lg sm:px-10">
           {/* Error Message */}
           {error && (
-            <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg flex items-start gap-3">
+            <div id="reset-password-error" className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg flex items-start gap-3">
               <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
               <p className="text-sm text-red-700">{error}</p>
             </div>
@@ -186,6 +186,9 @@ function ResetPasswordContent() {
                   type={showPassword ? 'text' : 'password'}
                   autoComplete="new-password"
                   required
+                  aria-required="true"
+                  aria-invalid={!!error}
+                  aria-describedby={error ? 'reset-password-error' : undefined}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   className="w-full pl-11 pr-11 py-2.5 border border-gray-300 rounded-lg bg-white text-gray-900 focus:ring-2 focus:ring-green-500 focus:border-transparent"
@@ -213,6 +216,9 @@ function ResetPasswordContent() {
                   type={showConfirmPassword ? 'text' : 'password'}
                   autoComplete="new-password"
                   required
+                  aria-required="true"
+                  aria-invalid={!!error}
+                  aria-describedby={error ? 'reset-password-error' : undefined}
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   className="w-full pl-11 pr-11 py-2.5 border border-gray-300 rounded-lg bg-white text-gray-900 focus:ring-2 focus:ring-green-500 focus:border-transparent"

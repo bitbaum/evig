@@ -119,12 +119,15 @@ export default function WorkshopFeedbackForm({
           onChange={(e) => setFeedback(e.target.value)}
           placeholder="Was hat Ihnen am Workshop gefallen? Was könnte verbessert werden?"
           rows={4}
+          aria-required="true"
+          aria-invalid={!!error}
+          aria-describedby={error ? 'feedback-error' : undefined}
           className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent resize-none"
         />
       </div>
 
       {error && (
-        <div className="bg-red-50 border border-red-200 rounded-lg p-3">
+        <div id="feedback-error" className="bg-red-50 border border-red-200 rounded-lg p-3">
           <p className="text-red-700 text-sm">{error}</p>
         </div>
       )}

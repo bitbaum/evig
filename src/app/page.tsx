@@ -4,6 +4,7 @@ import type { Metadata } from 'next'
 import { getCompactMetrics } from '@/data/impact-metrics'
 import { VALUE_PROPS, TESTIMONIALS } from '@/data/homepage'
 import { AsSeenInLogos } from '@/components/about'
+import Heading from '@/components/ui/Heading'
 
 export const metadata: Metadata = {
   title: 'revamp-it – Alte Hardware. Neues Leben. | Computer-Reparatur & Linux in der Schweiz',
@@ -99,9 +100,9 @@ export default function Home() {
       <div className="relative isolate px-4 sm:px-6 pt-14 lg:px-8">
         <div className="mx-auto max-w-2xl py-16 sm:py-24 md:py-32 lg:py-48">
           <div className="text-center">
-            <h1 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl md:text-5xl lg:text-6xl">
+            <Heading level={1} className="tracking-tight text-gray-900">
               Alte Hardware. Neues Leben.
-            </h1>
+            </Heading>
             <p className="mt-4 sm:mt-6 text-base sm:text-lg leading-7 sm:leading-8 text-gray-600">
               Alte Computer reparieren, aufrüsten und wiederherstellen. Gebrauchte Hardware bekommt mit Linux und Open Source ein zweites Leben. Für eine nachhaltigere Zukunft und mehr Technologie für alle.
             </p>
@@ -158,9 +159,9 @@ export default function Home() {
       {/* CTA Section - Termin vereinbaren */}
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
         <div className="bg-green-50 rounded-2xl px-4 sm:px-6 py-12 sm:py-16 md:px-16 text-center">
-          <h2 className="text-xl sm:text-2xl md:text-3xl font-bold tracking-tight text-gray-900">
+          <Heading level={2} className="tracking-tight text-gray-900">
             Bereit für eine nachhaltige IT-Lösung?
-          </h2>
+          </Heading>
           <p className="mx-auto mt-4 sm:mt-6 max-w-xl text-base sm:text-lg leading-7 sm:leading-8 text-gray-600">
             Vereinbare einen kostenlosen Beratungstermin. Wir analysieren deine Bedürfnisse und finden gemeinsam die beste Lösung.
           </p>
@@ -245,9 +246,9 @@ export default function Home() {
       {/* Mitmachen CTA section */}
       <div className="relative isolate px-4 sm:px-6 py-16 sm:py-24 md:py-32 lg:py-40 lg:px-8 bg-green-50">
         <div className="mx-auto max-w-2xl text-center">
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-gray-900">
+          <Heading level={2} className="tracking-tight text-gray-900">
             Bereit, einen Unterschied zu machen?
-          </h2>
+          </Heading>
           <p className="mx-auto mt-4 sm:mt-6 max-w-xl text-base sm:text-lg leading-7 sm:leading-8 text-gray-600">
             Werde Teil unserer Freiwilligen-Community und hilf mit, eine nachhaltigere Zukunft durch Technik zu gestalten.
           </p>

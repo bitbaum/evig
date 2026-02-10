@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { ChevronLeft, ShoppingCart, Package, Search, Filter, Heart, Briefcase, Tv, Gamepad2, Palette, Code, GraduationCap } from "lucide-react";
+import { CUSTOMER_PROFILES } from '@/config/erfassung/profiles'
 
 // Customer profile data
 const PROFILE_ICONS: Record<string, React.ReactNode> = {
@@ -248,15 +249,14 @@ function ProductsGrid() {
     fetchProducts()
   }, [search, selectedProfile])
 
-  const profiles = [
-    { slug: 'oma', name: 'Oma/Opa', icon: PROFILE_ICONS.oma, color: '#EC4899' },
-    { slug: 'buero', name: 'Büro', icon: PROFILE_ICONS.buero, color: '#3B82F6' },
-    { slug: 'chiller', name: 'Chiller', icon: PROFILE_ICONS.chiller, color: '#8B5CF6' },
-    { slug: 'gamer', name: 'Gamer', icon: PROFILE_ICONS.gamer, color: '#EF4444' },
-    { slug: 'kreativ', name: 'Kreativ', icon: PROFILE_ICONS.kreativ, color: '#F59E0B' },
-    { slug: 'dev', name: 'Entwickler', icon: PROFILE_ICONS.dev, color: '#10B981' },
-    { slug: 'student', name: 'Student', icon: PROFILE_ICONS.student, color: '#06B6D4' },
-  ]
+  const profiles = CUSTOMER_PROFILES
+    .filter(p => PROFILE_ICONS[p.slug])
+    .map(p => ({
+      slug: p.slug,
+      name: p.name_de,
+      icon: PROFILE_ICONS[p.slug],
+      color: p.color,
+    }))
 
   return (
     <div id="products" className="space-y-6">

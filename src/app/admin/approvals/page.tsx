@@ -13,6 +13,7 @@ import { TABLE_NAMES } from '@/config/database'
 import { CheckSquare, Clock, CheckCircle, XCircle, FileText } from 'lucide-react'
 import { formatDateShort } from '@/lib/date-formats'
 import { ApprovalActions } from './ApprovalActions'
+import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
 
 export const metadata: Metadata = {
   title: 'Freigaben | RevampIT Admin',
@@ -112,21 +113,12 @@ export default async function ApprovalsPage() {
   ])
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center gap-4">
-        <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center">
-          <CheckSquare className="w-6 h-6 text-orange-600" />
-        </div>
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-            Freigaben
-          </h1>
-          <p className="text-gray-600 dark:text-gray-400">
-            Eingereichte Inhalte von Benutzern prüfen und freigeben
-          </p>
-        </div>
-      </div>
-
+    <AdminPageWrapper
+      title="Freigaben"
+      description="Eingereichte Inhalte von Benutzern prüfen und freigeben"
+      icon={CheckSquare}
+      iconColor="orange"
+    >
       {/* Stats */}
       <div className="grid md:grid-cols-3 gap-4">
         <div className="p-4 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg border border-yellow-200 dark:border-yellow-800">
@@ -202,6 +194,6 @@ export default async function ApprovalsPage() {
           müssen hier geprüft und freigegeben werden, bevor sie öffentlich sichtbar sind.
         </p>
       </div>
-    </div>
+    </AdminPageWrapper>
   )
 }

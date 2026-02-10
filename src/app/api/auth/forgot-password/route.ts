@@ -6,10 +6,11 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getUserByEmail, createPasswordResetToken } from '@/lib/auth/db'
 import { sendEmail } from '@/lib/email'
-import { apiError, apiSuccess, apiBadRequest } from '@/lib/api/helpers'
+import { apiError, apiSuccess } from '@/lib/api/helpers'
 import { logger } from '@/lib/logger'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { checkRateLimit, getClientIp } from '@/lib/auth/rate-limiter'
+import { validateBody, ForgotPasswordSchema } from '@/lib/schemas'
 
 export async function POST(request: NextRequest) {
   try {
@@ -35,11 +36,9 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json()
-    const { email } = body
-
-    if (!email) {
-      return apiBadRequest(ERROR_MESSAGES.EMAIL_REQUIRED)
-    }
+    const validation = validateBody(ForgotPasswordSchema, body)
+    if (!validation.success) return validation.error
+    const { email } = validation.data
 
     // Check if user exists
     const user = await getUserByEmail(email)

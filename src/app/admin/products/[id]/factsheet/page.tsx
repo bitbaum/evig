@@ -24,26 +24,28 @@ import {
   ArrowLeft,
   Smartphone,
 } from 'lucide-react'
+import { CUSTOMER_PROFILES } from '@/config/erfassung/profiles'
+import { CONDITION_COLORS } from '@/config/ui-colors'
 
-// Customer profile config
-const PROFILES: Record<string, { name: string; icon: React.ReactNode; color: string }> = {
-  oma: { name: 'Oma/Opa', icon: <Heart className="w-5 h-5" />, color: '#EC4899' },
-  buero: { name: 'Büro', icon: <Briefcase className="w-5 h-5" />, color: '#3B82F6' },
-  chiller: { name: 'Chiller', icon: <Tv className="w-5 h-5" />, color: '#8B5CF6' },
-  gamer: { name: 'Gamer', icon: <Gamepad2 className="w-5 h-5" />, color: '#EF4444' },
-  kreativ: { name: 'Kreativ', icon: <Palette className="w-5 h-5" />, color: '#F59E0B' },
-  dev: { name: 'Entwickler', icon: <Code className="w-5 h-5" />, color: '#10B981' },
-  student: { name: 'Student', icon: <GraduationCap className="w-5 h-5" />, color: '#06B6D4' },
+// Profile icons mapped by slug
+const PROFILE_ICONS: Record<string, React.ReactNode> = {
+  oma: <Heart className="w-5 h-5" />,
+  buero: <Briefcase className="w-5 h-5" />,
+  chiller: <Tv className="w-5 h-5" />,
+  gamer: <Gamepad2 className="w-5 h-5" />,
+  kreativ: <Palette className="w-5 h-5" />,
+  dev: <Code className="w-5 h-5" />,
+  student: <GraduationCap className="w-5 h-5" />,
 }
 
-const CONDITION_CONFIG: Record<string, { label: string; color: string; bgColor: string }> = {
-  new: { label: 'Neu', color: '#059669', bgColor: '#D1FAE5' },
-  like_new: { label: 'Wie neu', color: '#059669', bgColor: '#D1FAE5' },
-  good: { label: 'Gut', color: '#2563EB', bgColor: '#DBEAFE' },
-  fair: { label: 'Akzeptabel', color: '#D97706', bgColor: '#FEF3C7' },
-  poor: { label: 'Gebraucht', color: '#DC2626', bgColor: '#FEE2E2' },
-  damaged: { label: 'Beschädigt', color: '#DC2626', bgColor: '#FEE2E2' },
-}
+// Derive PROFILES from CUSTOMER_PROFILES SSOT
+const PROFILES: Record<string, { name: string; icon: React.ReactNode; color: string }> = Object.fromEntries(
+  CUSTOMER_PROFILES
+    .filter(p => PROFILE_ICONS[p.slug])
+    .map(p => [p.slug, { name: p.name_de, icon: PROFILE_ICONS[p.slug], color: p.color }])
+)
+
+const CONDITION_CONFIG = CONDITION_COLORS
 
 interface ProductData {
   id: string

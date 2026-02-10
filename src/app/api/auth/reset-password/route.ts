@@ -5,11 +5,12 @@
 
 import { NextRequest, NextResponse } from 'next/server'
 import { verifyPasswordResetToken, updateUserPassword } from '@/lib/auth/db'
-import { hashPassword, validatePasswordStrength } from '@/lib/auth/password'
+import { hashPassword } from '@/lib/auth/password'
 import { apiError, apiSuccess, apiBadRequest } from '@/lib/api/helpers'
 import { logger } from '@/lib/logger'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { checkRateLimit, getClientIp } from '@/lib/auth/rate-limiter'
+import { validateBody, ResetPasswordSchema } from '@/lib/schemas'
 
 export async function POST(request: NextRequest) {
   try {
@@ -35,20 +36,9 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json()
-    const { token, password } = body
-
-    if (!token || !password) {
-      return apiBadRequest('Token und Passwort sind erforderlich')
-    }
-
-    // Validate password strength
-    const passwordCheck = validatePasswordStrength(password)
-    if (!passwordCheck.isValid) {
-      return apiBadRequest(
-        'Das Passwort erfüllt nicht die Anforderungen',
-        { password: passwordCheck.errors }
-      )
-    }
+    const validation = validateBody(ResetPasswordSchema, body)
+    if (!validation.success) return validation.error
+    const { token, password } = validation.data
 
     // Verify token and get email
     const result = await verifyPasswordResetToken(token)

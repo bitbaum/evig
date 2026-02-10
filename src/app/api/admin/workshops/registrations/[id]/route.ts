@@ -2,6 +2,7 @@ import { NextRequest } from 'next/server'
 import { auth } from '@/auth'
 import { query } from '@/lib/auth/db'
 import { apiError, apiSuccess, apiUnauthorized, apiForbidden, apiNotFound, apiBadRequest } from '@/lib/api/helpers'
+import { validateBody, AdminWorkshopRegistrationUpdateSchema } from '@/lib/schemas'
 import { logger } from '@/lib/logger'
 import { TABLE_NAMES } from '@/config/database'
 import { sendEmail } from '@/lib/email'
@@ -38,13 +39,9 @@ export async function PUT(
 
     const { id } = await params
     const body = await request.json()
-    const { status, attended, notes } = body
-
-    // Validate status
-    const validStatuses = ['pending', 'confirmed', 'waitlist', 'attended', 'cancelled', 'no_show']
-    if (status && !validStatuses.includes(status)) {
-      return apiBadRequest(`Invalid status. Valid values: ${validStatuses.join(', ')}`)
-    }
+    const validation = validateBody(AdminWorkshopRegistrationUpdateSchema, body)
+    if (!validation.success) return validation.error
+    const { status, attended, notes } = validation.data
 
     // Check registration exists
     const existingResult = await query(

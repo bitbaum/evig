@@ -19,6 +19,7 @@ import {
   RefreshCw
 } from 'lucide-react'
 import { ZUSTAND_OPTIONS, getConditionBadge } from '@/config/erfassung/conditions'
+import Heading from '@/components/ui/Heading'
 
 interface Product {
   id: string
@@ -119,9 +120,9 @@ export default function MarketplacePage() {
       {/* Hero Section */}
       <div className="bg-gradient-to-r from-green-600 to-blue-600 rounded-xl p-8 text-white">
         <div className="max-w-4xl mx-auto text-center">
-          <h1 className="text-4xl font-bold mb-4">
+          <Heading level={1} className="mb-4">
             RevampIT Marketplace
-          </h1>
+          </Heading>
           <p className="text-xl text-green-100 mb-8">
             Entdecken Sie hochwertige refurbished Produkte von RevampIT und unserer Community
           </p>
@@ -415,9 +416,9 @@ export default function MarketplacePage() {
       {/* Seller CTA */}
       {session?.user && (
         <div className="bg-gradient-to-r from-purple-600 to-pink-600 rounded-xl p-8 text-white text-center">
-          <h2 className="text-2xl font-bold mb-4">
+          <Heading level={2} className="mb-4">
             Auf Revamp‑IT verkaufen
-          </h2>
+          </Heading>
           <p className="text-purple-100 mb-6 max-w-2xl mx-auto">
             Verkaufen Sie Ihre eigenen refurbished Produkte direkt über den Revamp‑IT Marketplace.
             Erreichen Sie Käufer ohne Zwischenlagerung – Versand direkt von Ihnen zum Käufer.

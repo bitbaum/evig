@@ -6,6 +6,7 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import { ChevronDown, X } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import type { BlogCategory } from '@/lib/blog-db'
+import { UI_COLOR_PALETTE } from '@/config/ui-colors'
 
 interface BlogNavigationClientProps {
   categories: BlogCategory[]
@@ -13,15 +14,7 @@ interface BlogNavigationClientProps {
 }
 
 // Default colors for categories without a custom color
-const DEFAULT_COLORS = [
-  '#10B981', // green
-  '#3B82F6', // blue
-  '#8B5CF6', // purple
-  '#F59E0B', // amber
-  '#EF4444', // red
-  '#EC4899', // pink
-  '#06B6D4', // cyan
-]
+const DEFAULT_COLORS = UI_COLOR_PALETTE
 
 function getCategoryColor(category: BlogCategory, index: number): string {
   if (category.color) return category.color

@@ -36,6 +36,9 @@ export function BasicInfoSection({ formData, errors, onFieldChange }: BasicInfoS
             type="text"
             value={formData.title}
             onChange={(e) => onFieldChange('title', e.target.value)}
+            aria-required="true"
+            aria-invalid={!!errors.title}
+            aria-describedby={errors.title ? 'title-error' : undefined}
             className={cn(
               "w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500",
               errors.title ? "border-error-300" : "border-neutral-300"
@@ -43,7 +46,7 @@ export function BasicInfoSection({ formData, errors, onFieldChange }: BasicInfoS
             placeholder="z.B. Dell Latitude E7470 Laptop"
           />
           {errors.title && (
-            <p className="text-error-600 text-sm mt-1">{errors.title}</p>
+            <p id="title-error" className="text-error-600 text-sm mt-1">{errors.title}</p>
           )}
         </div>
 
@@ -59,6 +62,9 @@ export function BasicInfoSection({ formData, errors, onFieldChange }: BasicInfoS
               min="0"
               value={formData.price}
               onChange={(e) => onFieldChange('price', e.target.value)}
+              aria-required="true"
+              aria-invalid={!!errors.price}
+              aria-describedby={errors.price ? 'price-error' : undefined}
               className={cn(
                 "w-full pl-10 pr-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500",
                 errors.price ? "border-error-300" : "border-neutral-300"
@@ -67,7 +73,7 @@ export function BasicInfoSection({ formData, errors, onFieldChange }: BasicInfoS
             />
           </div>
           {errors.price && (
-            <p className="text-error-600 text-sm mt-1">{errors.price}</p>
+            <p id="price-error" className="text-error-600 text-sm mt-1">{errors.price}</p>
           )}
         </div>
       </div>
@@ -80,6 +86,9 @@ export function BasicInfoSection({ formData, errors, onFieldChange }: BasicInfoS
           value={formData.description}
           onChange={(e) => onFieldChange('description', e.target.value)}
           rows={4}
+          aria-required="true"
+          aria-invalid={!!errors.description}
+          aria-describedby={errors.description ? 'description-error' : undefined}
           className={cn(
             "w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500",
             errors.description ? "border-error-300" : "border-neutral-300"
@@ -87,7 +96,7 @@ export function BasicInfoSection({ formData, errors, onFieldChange }: BasicInfoS
           placeholder="Beschreiben Sie den Zustand, Ausstattung, eventuelle Mängel und alle wichtigen Details..."
         />
         {errors.description && (
-          <p className="text-error-600 text-sm mt-1">{errors.description}</p>
+          <p id="description-error" className="text-error-600 text-sm mt-1">{errors.description}</p>
         )}
       </div>
 
@@ -99,6 +108,9 @@ export function BasicInfoSection({ formData, errors, onFieldChange }: BasicInfoS
           <select
             value={formData.category}
             onChange={(e) => onFieldChange('category', e.target.value)}
+            aria-required="true"
+            aria-invalid={!!errors.category}
+            aria-describedby={errors.category ? 'category-error' : undefined}
             className={cn(
               "w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500",
               errors.category ? "border-error-300" : "border-neutral-300"
@@ -110,7 +122,7 @@ export function BasicInfoSection({ formData, errors, onFieldChange }: BasicInfoS
             ))}
           </select>
           {errors.category && (
-            <p className="text-error-600 text-sm mt-1">{errors.category}</p>
+            <p id="category-error" className="text-error-600 text-sm mt-1">{errors.category}</p>
           )}
         </div>
 
@@ -135,6 +147,9 @@ export function BasicInfoSection({ formData, errors, onFieldChange }: BasicInfoS
             type="text"
             value={formData.location}
             onChange={(e) => onFieldChange('location', e.target.value)}
+            aria-required="true"
+            aria-invalid={!!errors.location}
+            aria-describedby={errors.location ? 'location-error' : undefined}
             className={cn(
               "w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500",
               errors.location ? "border-error-300" : "border-neutral-300"
@@ -142,7 +157,7 @@ export function BasicInfoSection({ formData, errors, onFieldChange }: BasicInfoS
             placeholder="z.B. Zürich, Bern, Basel"
           />
           {errors.location && (
-            <p className="text-error-600 text-sm mt-1">{errors.location}</p>
+            <p id="location-error" className="text-error-600 text-sm mt-1">{errors.location}</p>
           )}
         </div>
       </div>

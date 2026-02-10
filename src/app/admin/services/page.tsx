@@ -21,6 +21,7 @@ import {
   Star,
   Calendar,
 } from 'lucide-react'
+import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
 
 export const metadata: Metadata = {
   title: 'Dienstleistungen verwalten | RevampIT Admin',
@@ -135,17 +136,12 @@ export default async function AdminServicesPage() {
   ])
 
   return (
-    <div className="space-y-8">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-            Dienstleistungen verwalten
-          </h1>
-          <p className="text-gray-600 dark:text-gray-400 mt-1">
-            Erstellen und verwalten Sie Ihre Service-Angebote
-          </p>
-        </div>
+    <AdminPageWrapper
+      title="Dienstleistungen verwalten"
+      description="Erstellen und verwalten Sie Ihre Service-Angebote"
+      icon={Wrench}
+      iconColor="green"
+      actions={
         <Link
           href="/admin/services/new"
           className="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white font-semibold px-4 py-2 rounded-lg transition-colors"
@@ -153,8 +149,8 @@ export default async function AdminServicesPage() {
           <Plus className="w-5 h-5" />
           Dienstleistung erstellen
         </Link>
-      </div>
-
+      }
+    >
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-100 dark:border-gray-700">
@@ -340,6 +336,6 @@ export default async function AdminServicesPage() {
           </div>
         </div>
       </div>
-    </div>
+    </AdminPageWrapper>
   )
 }

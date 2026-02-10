@@ -99,6 +99,9 @@ export default function NewsletterSignup() {
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="ihre.email@beispiel.de"
                 required
+                aria-required="true"
+                aria-invalid={status === 'error'}
+                aria-describedby={status === 'error' ? 'newsletter-error' : undefined}
                 disabled={status === 'loading'}
                 className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent disabled:bg-gray-100 disabled:cursor-not-allowed text-base"
               />
@@ -112,7 +115,7 @@ export default function NewsletterSignup() {
             </div>
 
             {status === 'error' && (
-              <p className="text-red-600 text-sm">{message}</p>
+              <p id="newsletter-error" className="text-red-600 text-sm">{message}</p>
             )}
 
             <p className="text-xs text-gray-500 text-center">

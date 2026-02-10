@@ -275,6 +275,7 @@ export default function ProductListingForm() {
               id="terms"
               className="mt-1 h-4 w-4 text-primary-600 focus:ring-primary-500 border-neutral-300 rounded"
               required
+              aria-required="true"
             />
             <label htmlFor="terms" className={cn('text-sm', getTextColor('white', 'secondary'))}>
               Ich bestätige, dass alle Angaben korrekt sind und das Produkt meinen Besitz ist.

@@ -205,7 +205,9 @@ export default function NewLocationPage() {
         </div>
 
         {submitResult && (
-          <div className={`mb-8 p-6 rounded-xl border ${
+          <div
+            id={submitResult.success ? undefined : 'location-form-error'}
+            className={`mb-8 p-6 rounded-xl border ${
             submitResult.success
               ? 'bg-green-50 border-green-200 text-green-800'
               : 'bg-red-50 border-red-200 text-red-800'
@@ -246,6 +248,9 @@ export default function NewLocationPage() {
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   placeholder="z.B. Gemeinschaftszentrum Zürich-West"
                   required
+                  aria-required="true"
+                  aria-invalid={!!(submitResult && !submitResult.success)}
+                  aria-describedby={submitResult && !submitResult.success ? 'location-form-error' : undefined}
                 />
               </div>
 
@@ -313,6 +318,7 @@ export default function NewLocationPage() {
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   placeholder="z.B. Musterstrasse 123"
                   required
+                  aria-required="true"
                 />
               </div>
 
@@ -341,6 +347,7 @@ export default function NewLocationPage() {
                   placeholder="8000"
                   maxLength={4}
                   required
+                  aria-required="true"
                 />
               </div>
 
@@ -355,6 +362,7 @@ export default function NewLocationPage() {
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   placeholder="Zürich"
                   required
+                  aria-required="true"
                 />
               </div>
 

@@ -209,7 +209,7 @@ export default function NewProductPage() {
         </div>
 
         {submitResult && (
-          <div className={`mb-8 p-6 rounded-xl border ${
+          <div id={submitResult.success ? undefined : 'seller-product-error'} className={`mb-8 p-6 rounded-xl border ${
             submitResult.success
               ? 'bg-green-50 border-green-200 text-green-800'
               : 'bg-red-50 border-red-200 text-red-800'
@@ -304,6 +304,7 @@ export default function NewProductPage() {
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                   placeholder="z.B. MacBook Air M1 - Wie neu"
                   required
+                  aria-required="true"
                 />
               </div>
 
@@ -318,6 +319,7 @@ export default function NewProductPage() {
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                   placeholder="Detaillierte Beschreibung des Produkts..."
                   required
+                  aria-required="true"
                 />
               </div>
 
@@ -330,6 +332,7 @@ export default function NewProductPage() {
                   onChange={(e) => setFormData(prev => ({ ...prev, category: e.target.value }))}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                   required
+                  aria-required="true"
                 >
                   <option value="">Kategorie auswählen</option>
                   <option value="Laptops">Laptops</option>
@@ -350,6 +353,7 @@ export default function NewProductPage() {
                   onChange={(e) => setFormData(prev => ({ ...prev, condition: e.target.value as 'new' | 'like_new' | 'good' | 'fair' }))}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                   required
+                  aria-required="true"
                 >
                   <option value="new">Neu</option>
                   <option value="like_new">Wie neu</option>
@@ -371,6 +375,7 @@ export default function NewProductPage() {
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                   placeholder="199.00"
                   required
+                  aria-required="true"
                 />
               </div>
 
@@ -385,6 +390,7 @@ export default function NewProductPage() {
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                   placeholder="z.B. Zürich, Schweiz"
                   required
+                  aria-required="true"
                 />
               </div>
             </div>

@@ -4,6 +4,7 @@ import { Store, ShoppingCart, MapPin, Clock, ExternalLink, Map as MapIcon, Shiel
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { SHOP_ONLINE_URL, SHOPWARE_URL, STORE_ADDRESS, STORE_GOOGLE_MAPS_URL, STORE_OSM_URL } from '@/lib/constants'
+import Heading from '@/components/ui/Heading'
 
 export const metadata: Metadata = {
   title: 'Shop | RevampIT',
@@ -20,7 +21,7 @@ export default function ShopPage() {
         <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-10" />
         <div className="container mx-auto px-4 sm:px-6 relative">
           <div className="max-w-3xl">
-            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6 leading-tight">Wie möchtest du einkaufen?</h1>
+            <Heading level={1} className="mb-4 sm:mb-6 leading-tight">Wie möchtest du einkaufen?</Heading>
             <p className="text-base sm:text-lg md:text-xl text-green-100">
               Wähle den Kanal, der am besten zu dir passt: unseren Online-Shop, den Shopware-Shop oder unser Ladenlokal in Zürich.
             </p>

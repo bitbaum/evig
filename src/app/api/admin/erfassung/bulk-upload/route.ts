@@ -60,7 +60,7 @@ export async function POST(request: NextRequest) {
       if (buffer.byteLength === 0) {
         return apiBadRequest('Datei ist leer')
       }
-      ;({ products, unmappedColumns } = parseExcel(buffer))
+      ;({ products, unmappedColumns } = await parseExcel(buffer))
     } else {
       const content = await file.text()
       if (!content.trim()) {

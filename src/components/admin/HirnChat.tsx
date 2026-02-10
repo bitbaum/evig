@@ -262,7 +262,7 @@ export function HirnChat({ sessionId, onSessionChange, compact = false }: HirnCh
         )}
 
         {error && (
-          <div className="p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
+          <div id="hirn-chat-error" className="p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
             <p className="text-sm text-red-700 dark:text-red-300">{error}</p>
           </div>
         )}
@@ -279,6 +279,9 @@ export function HirnChat({ sessionId, onSessionChange, compact = false }: HirnCh
             onChange={e => setInput(e.target.value)}
             placeholder="Stelle eine Frage..."
             disabled={loading}
+            aria-required="true"
+            aria-invalid={!!error}
+            aria-describedby={error ? 'hirn-chat-error' : undefined}
             className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-purple-500 focus:border-transparent disabled:opacity-50"
           />
           <button

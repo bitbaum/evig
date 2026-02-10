@@ -130,7 +130,7 @@ export default function AppointmentBookingForm({ serviceSlug, serviceTitle, pric
           )}
 
           {submitResult && (
-            <div className={`mb-4 sm:mb-6 p-3 sm:p-4 rounded-lg border ${
+            <div id={submitResult.success ? undefined : 'appointment-error'} className={`mb-4 sm:mb-6 p-3 sm:p-4 rounded-lg border ${
               submitResult.success
                 ? 'bg-success-50 border-success-200 text-success-800'
                 : 'bg-error-50 border-error-200 text-error-800'
@@ -183,6 +183,9 @@ export default function AppointmentBookingForm({ serviceSlug, serviceTitle, pric
                   className="w-full px-3 py-2.5 border-2 border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-base"
                   placeholder="Beschreiben Sie Ihr Problem oder Ihren Bedarf so genau wie möglich..."
                   required
+                  aria-required="true"
+                  aria-invalid={!!(submitResult && !submitResult.success)}
+                  aria-describedby={submitResult && !submitResult.success ? 'appointment-error' : undefined}
                 />
               </div>
 

@@ -207,6 +207,7 @@ export default function NewWorkshopPage() {
                 className="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 focus:border-transparent"
                 placeholder="z.B. Einführung in die Computer-Reparatur"
                 required
+                aria-required="true"
               />
             </div>
 
@@ -219,6 +220,7 @@ export default function NewWorkshopPage() {
                 onChange={(e) => handleInputChange('category', e.target.value)}
                 className="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 focus:border-transparent"
                 required
+                aria-required="true"
               >
                 <option value="">Kategorie wählen</option>
                 {WORKSHOP_CATEGORIES.map(cat => (
@@ -268,6 +270,7 @@ export default function NewWorkshopPage() {
                 className="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 focus:border-transparent"
                 placeholder="Detaillierte Beschreibung des Workshop-Inhalts, Ablaufs und Nutzens"
                 required
+                aria-required="true"
               />
             </div>
           </div>
@@ -292,6 +295,7 @@ export default function NewWorkshopPage() {
                 className="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 focus:border-transparent"
                 placeholder="z.B. Hans Müller"
                 required
+                aria-required="true"
               />
             </div>
 
@@ -328,6 +332,7 @@ export default function NewWorkshopPage() {
                 onChange={(e) => handleInputChange('date', e.target.value)}
                 className="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 focus:border-transparent"
                 required
+                aria-required="true"
               />
             </div>
 
@@ -342,6 +347,7 @@ export default function NewWorkshopPage() {
                   onChange={(e) => handleInputChange('startTime', e.target.value)}
                   className="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 focus:border-transparent"
                   required
+                  aria-required="true"
                 />
               </div>
               <div>
@@ -354,6 +360,7 @@ export default function NewWorkshopPage() {
                   onChange={(e) => handleInputChange('endTime', e.target.value)}
                   className="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 focus:border-transparent"
                   required
+                  aria-required="true"
                 />
               </div>
             </div>
@@ -369,6 +376,7 @@ export default function NewWorkshopPage() {
                 className="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 focus:border-transparent"
                 placeholder="z.B. Zürich, Werkstatt"
                 required
+                aria-required="true"
               />
             </div>
 
@@ -435,6 +443,7 @@ export default function NewWorkshopPage() {
                 className="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 focus:border-transparent"
                 placeholder="120.00"
                 required
+                aria-required="true"
               />
             </div>
 

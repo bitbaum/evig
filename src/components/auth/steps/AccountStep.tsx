@@ -71,7 +71,7 @@ export function AccountStep({
 
       {/* Error Messages */}
       {errors.length > 0 && (
-        <div className="p-4 rounded-lg border-2 bg-red-50 border-red-200">
+        <div id="account-errors" className="p-4 rounded-lg border-2 bg-red-50 border-red-200">
           <ul className="text-sm text-red-700 space-y-1">
             {errors.map((error, index) => (
               <li key={index}>{error}</li>
@@ -112,8 +112,11 @@ export function AccountStep({
             value={email}
             onChange={(e) => onEmailChange(e.target.value)}
             required
+            aria-required="true"
             autoComplete="email"
             placeholder="name@beispiel.ch"
+            aria-invalid={errors.length > 0}
+            aria-describedby={errors.length > 0 ? 'account-errors' : undefined}
             className="w-full pl-11 pr-4 py-3 border-2 rounded-lg border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-700 text-gray-900 dark:text-white placeholder-neutral-400 focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
           />
         </div>
@@ -132,8 +135,11 @@ export function AccountStep({
             value={password}
             onChange={(e) => onPasswordChange(e.target.value)}
             required
+            aria-required="true"
             autoComplete="new-password"
             placeholder="Mindestens 8 Zeichen"
+            aria-invalid={errors.length > 0}
+            aria-describedby={errors.length > 0 ? 'account-errors' : undefined}
             className="w-full pl-11 pr-12 py-3 border-2 rounded-lg border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-700 text-gray-900 dark:text-white placeholder-neutral-400 focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
           />
           <button
@@ -178,8 +184,11 @@ export function AccountStep({
             value={confirmPassword}
             onChange={(e) => onConfirmPasswordChange(e.target.value)}
             required
+            aria-required="true"
             autoComplete="new-password"
             placeholder="Passwort wiederholen"
+            aria-invalid={!!(confirmPassword && !passwordsMatch)}
+            aria-describedby={confirmPassword && !passwordsMatch ? 'confirmPassword-error' : undefined}
             className={cn(
               'w-full pl-11 pr-12 py-3 border-2 rounded-lg bg-white dark:bg-neutral-700 text-gray-900 dark:text-white placeholder-neutral-400 focus:ring-2 focus:ring-primary-500 focus:border-primary-500',
               confirmPassword && !passwordsMatch ? 'border-red-500' : 'border-neutral-300 dark:border-neutral-600'
@@ -195,7 +204,7 @@ export function AccountStep({
           </button>
         </div>
         {confirmPassword && !passwordsMatch && (
-          <p className="mt-1 text-xs text-red-500">Die Passwörter stimmen nicht überein</p>
+          <p id="confirmPassword-error" className="mt-1 text-xs text-red-500">Die Passwörter stimmen nicht überein</p>
         )}
       </div>
 
@@ -206,6 +215,7 @@ export function AccountStep({
           type="checkbox"
           checked={acceptTerms}
           onChange={(e) => onAcceptTermsChange(e.target.checked)}
+          aria-required="true"
           className="mt-1 w-4 h-4 rounded border-gray-300 text-green-600 focus:ring-green-500"
         />
         <label htmlFor="terms" className="text-sm text-gray-600 dark:text-gray-400">

@@ -18,6 +18,7 @@ import { Users, UserPlus, Briefcase, Crown, Shield } from 'lucide-react'
 import Link from 'next/link'
 import { PermissionRequestsManager } from '@/components/admin/PermissionRequestsManager'
 import { TeamListClient } from './TeamListClient'
+import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
 
 export const metadata: Metadata = {
   title: 'Team & HR | RevampIT Admin',
@@ -115,22 +116,12 @@ export default async function TeamPage() {
   ])
 
   return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-4">
-          <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
-            <Users className="w-6 h-6 text-purple-600" />
-          </div>
-          <div>
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-              Team & HR
-            </h1>
-            <p className="text-gray-600 dark:text-gray-400">
-              Mitarbeiter und Teammitglieder verwalten
-            </p>
-          </div>
-        </div>
+    <AdminPageWrapper
+      title="Team & HR"
+      description="Mitarbeiter und Teammitglieder verwalten"
+      icon={Users}
+      iconColor="purple"
+      actions={
         <Link
           href="/admin/team/new"
           className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
@@ -138,8 +129,8 @@ export default async function TeamPage() {
           <UserPlus className="w-5 h-5" />
           Profil erstellen
         </Link>
-      </div>
-
+      }
+    >
       {/* Stats */}
       <div className="grid md:grid-cols-4 gap-6">
         <div className="p-6 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
@@ -240,6 +231,6 @@ export default async function TeamPage() {
           </p>
         </div>
       </div>
-    </div>
+    </AdminPageWrapper>
   )
 }

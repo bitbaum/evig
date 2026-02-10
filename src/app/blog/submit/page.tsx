@@ -166,6 +166,7 @@ export default function SubmitPostPage() {
                 value={formData.name}
                 onChange={handleChange}
                 required
+                aria-required="true"
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                 placeholder="Max Mustermann"
               />
@@ -182,6 +183,7 @@ export default function SubmitPostPage() {
                 value={formData.email}
                 onChange={handleChange}
                 required
+                aria-required="true"
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                 placeholder="max@beispiel.de"
               />
@@ -200,6 +202,7 @@ export default function SubmitPostPage() {
               value={formData.title}
               onChange={handleChange}
               required
+              aria-required="true"
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
               placeholder={submissionType === 'idea' ? 'Wie man alte Laptops wiederverwendet' : 'Linux auf alten ThinkPads: Ein vollständiger Leitfaden'}
             />
@@ -252,6 +255,7 @@ export default function SubmitPostPage() {
               value={formData.content}
               onChange={handleChange}
               required
+              aria-required="true"
               rows={submissionType === 'idea' ? 6 : 16}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent font-mono text-sm"
               placeholder={

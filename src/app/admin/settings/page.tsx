@@ -3,6 +3,7 @@ import { auth } from '@/auth'
 import { redirect } from 'next/navigation'
 import { canAccessSection } from '@/lib/permissions'
 import { Settings, Globe, Mail, Shield, Database, Bell } from 'lucide-react'
+import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
 
 export const metadata: Metadata = {
   title: 'Einstellungen | RevampIT Admin',
@@ -77,21 +78,12 @@ export default async function SettingsPage() {
   }
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center gap-4">
-        <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
-          <Settings className="w-6 h-6 text-gray-600" />
-        </div>
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-            Einstellungen
-          </h1>
-          <p className="text-gray-600 dark:text-gray-400">
-            Systemkonfiguration und Einstellungen
-          </p>
-        </div>
-      </div>
-
+    <AdminPageWrapper
+      title="Einstellungen"
+      description="Systemkonfiguration und Einstellungen"
+      icon={Settings}
+      iconColor="gray"
+    >
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
         {settingsSections.map(section => (
           <div
@@ -123,6 +115,6 @@ export default async function SettingsPage() {
           <strong>In Entwicklung:</strong> Die Einstellungsseiten werden schrittweise implementiert.
         </p>
       </div>
-    </div>
+    </AdminPageWrapper>
   )
 }

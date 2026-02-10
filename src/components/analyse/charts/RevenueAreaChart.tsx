@@ -11,6 +11,7 @@ import {
 } from 'recharts'
 import { ChartWrapper } from './ChartWrapper'
 import { formatCHF } from '@/lib/hirn/format'
+import { REVENUE_CATEGORY_COLORS, REVENUE_CATEGORY_LABELS } from '@/config/ui-colors'
 
 interface RevenueDataPoint {
   year: number
@@ -28,21 +29,9 @@ interface RevenueAreaChartProps {
   sourceDate?: string
 }
 
-const CHART_COLORS = {
-  warenverkauf: '#22c55e',     // green-500
-  dienstleistungen: '#3b82f6', // blue-500
-  integration: '#8b5cf6',      // violet-500
-  spenden: '#f59e0b',          // amber-500
-  aufstockung: '#ec4899',      // pink-500
-}
+const CHART_COLORS = REVENUE_CATEGORY_COLORS
 
-const CATEGORY_LABELS = {
-  warenverkauf: 'Warenverkauf',
-  dienstleistungen: 'Dienstleistungen',
-  integration: 'Integration',
-  spenden: 'Spenden',
-  aufstockung: 'Aufstockung',
-}
+const CATEGORY_LABELS = REVENUE_CATEGORY_LABELS
 
 function CustomTooltip({ active, payload, label }: {
   active?: boolean

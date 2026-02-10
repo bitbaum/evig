@@ -4,35 +4,19 @@
  */
 
 import { NextRequest } from 'next/server'
-import { verifyPassword, hashPassword, validatePasswordStrength } from '@/lib/auth/password'
+import { verifyPassword, hashPassword } from '@/lib/auth/password'
 import { apiError, apiSuccess, apiBadRequest } from '@/lib/api/helpers'
 import { withAuth } from '@/lib/api/middleware'
 import { TABLE_NAMES } from '@/config/database'
 import { query } from '@/lib/auth/db'
+import { validateBody, ChangePasswordSchema } from '@/lib/schemas'
 
 export const POST = withAuth(async (request: NextRequest, session) => {
   try {
     const body = await request.json()
-    const { currentPassword, newPassword, confirmPassword } = body
-
-    // Validate required fields
-    if (!currentPassword || !newPassword || !confirmPassword) {
-      return apiBadRequest('Alle Passwortfelder sind erforderlich')
-    }
-
-    // Validate password confirmation
-    if (newPassword !== confirmPassword) {
-      return apiBadRequest('Die neuen Passwörter stimmen nicht überein')
-    }
-
-    // Validate password strength
-    const passwordCheck = validatePasswordStrength(newPassword)
-    if (!passwordCheck.isValid) {
-      return apiBadRequest(
-        'Das neue Passwort erfüllt nicht die Anforderungen',
-        { password: passwordCheck.errors }
-      )
-    }
+    const validation = validateBody(ChangePasswordSchema, body)
+    if (!validation.success) return validation.error
+    const { currentPassword, newPassword } = validation.data
 
     // Fetch current password hash from database
     const userResult = await query(

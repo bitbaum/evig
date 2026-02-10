@@ -100,7 +100,7 @@ export default function TaskFormClient() {
   return (
     <form onSubmit={handleSubmit} className="max-w-2xl">
       {error && (
-        <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg text-red-700">
+        <div id="task-form-error" className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg text-red-700">
           {error}
         </div>
       )}
@@ -121,6 +121,9 @@ export default function TaskFormClient() {
             value={formData.title}
             onChange={handleChange}
             required
+            aria-required="true"
+            aria-invalid={!!error}
+            aria-describedby={error ? 'task-form-error' : undefined}
             maxLength={200}
             placeholder="z.B. Kaffeemaschine reinigen"
             className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"

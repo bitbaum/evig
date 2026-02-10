@@ -239,7 +239,7 @@ export default function RepairerApplicationPage() {
         </div>
 
         {submitResult && (
-          <div className={`mb-8 p-6 rounded-xl border ${
+          <div id={submitResult.success ? undefined : 'repairer-apply-error'} className={`mb-8 p-6 rounded-xl border ${
             submitResult.success
               ? 'bg-green-50 border-green-200 text-green-800'
               : 'bg-red-50 border-red-200 text-red-800'
@@ -278,6 +278,7 @@ export default function RepairerApplicationPage() {
                   onChange={(e) => setFormData(prev => ({ ...prev, businessType: e.target.value as 'individual' | 'business' | 'freelance' }))}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   required
+                  aria-required="true"
                 >
                   <option value="individual">Einzelperson</option>
                   <option value="freelance">Freiberufler</option>
@@ -296,6 +297,7 @@ export default function RepairerApplicationPage() {
                     onChange={(e) => setFormData(prev => ({ ...prev, businessName: e.target.value }))}
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     required
+                    aria-required="true"
                   />
                 </div>
               )}
@@ -312,6 +314,7 @@ export default function RepairerApplicationPage() {
                   onChange={(e) => setFormData(prev => ({ ...prev, yearsExperience: e.target.value }))}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   required
+                  aria-required="true"
                 />
               </div>
 
@@ -326,6 +329,7 @@ export default function RepairerApplicationPage() {
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   placeholder="Beschreiben Sie Ihre Reparaturdienstleistungen, Fachgebiete und besondere Stärken..."
                   required
+                  aria-required="true"
                 />
               </div>
             </div>
@@ -350,6 +354,7 @@ export default function RepairerApplicationPage() {
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   placeholder="+41 79 123 45 67"
                   required
+                  aria-required="true"
                 />
               </div>
 
@@ -377,6 +382,7 @@ export default function RepairerApplicationPage() {
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   placeholder="Strasse und Hausnummer"
                   required
+                  aria-required="true"
                 />
               </div>
 
@@ -390,6 +396,7 @@ export default function RepairerApplicationPage() {
                   onChange={(e) => setFormData(prev => ({ ...prev, postalCode: e.target.value }))}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   required
+                  aria-required="true"
                 />
               </div>
 
@@ -403,6 +410,7 @@ export default function RepairerApplicationPage() {
                   onChange={(e) => setFormData(prev => ({ ...prev, city: e.target.value }))}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   required
+                  aria-required="true"
                 />
               </div>
 
@@ -415,6 +423,7 @@ export default function RepairerApplicationPage() {
                   onChange={(e) => setFormData(prev => ({ ...prev, serviceRadius: e.target.value }))}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   required
+                  aria-required="true"
                 >
                   <option value="10">10 km</option>
                   <option value="25">25 km</option>
@@ -500,6 +509,7 @@ export default function RepairerApplicationPage() {
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     placeholder="70.00"
                     required
+                    aria-required="true"
                   />
                 </div>
 
@@ -554,6 +564,7 @@ export default function RepairerApplicationPage() {
                   onChange={(e) => e.target.files?.[0] && handleIdDocument(e.target.files[0])}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   required
+                  aria-required="true"
                 />
                 <p className="text-xs text-gray-500 mt-1">JPG, PNG oder PDF, max. 5MB</p>
               </div>
@@ -633,6 +644,7 @@ export default function RepairerApplicationPage() {
                     onChange={(e) => setFormData(prev => ({ ...prev, termsAccepted: e.target.checked }))}
                     className="mr-3 text-blue-600 focus:ring-blue-500"
                     required
+                    aria-required="true"
                   />
                   <label className="text-sm font-medium text-gray-700">
                     Ich akzeptiere die <Link href="/terms" className="text-blue-600 hover:text-blue-700 underline">Nutzungsbedingungen</Link> und die <Link href="/privacy" className="text-blue-600 hover:text-blue-700 underline">Datenschutzerklärung</Link>

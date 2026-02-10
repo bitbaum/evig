@@ -131,6 +131,7 @@ export function LoginForm() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
+                aria-required="true"
                 autoComplete="email"
                 placeholder="name@beispiel.ch"
                 aria-invalid={!!(formError || error)}
@@ -169,6 +170,7 @@ export function LoginForm() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
+                aria-required="true"
                 autoComplete="current-password"
                 placeholder="••••••••"
                 aria-invalid={!!(formError || error)}

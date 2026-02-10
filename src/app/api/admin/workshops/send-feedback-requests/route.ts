@@ -2,6 +2,7 @@ import { NextRequest } from 'next/server'
 import { auth } from '@/auth'
 import { query } from '@/lib/auth/db'
 import { apiError, apiSuccess, apiUnauthorized, apiForbidden } from '@/lib/api/helpers'
+import { validateBody, AdminSendFeedbackRequestsSchema } from '@/lib/schemas'
 import { logger } from '@/lib/logger'
 import { TABLE_NAMES } from '@/config/database'
 import { sendEmail } from '@/lib/email'
@@ -37,7 +38,9 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json()
-    const { daysAfterWorkshop = 1 } = body // Default to 1 day after
+    const validation = validateBody(AdminSendFeedbackRequestsSchema, body)
+    if (!validation.success) return validation.error
+    const { daysAfterWorkshop } = validation.data
 
     // Get all attended registrations for workshops that completed recently and have no feedback yet
     const completedResult = await query(`
@@ -58,9 +61,9 @@ export async function POST(request: NextRequest) {
         AND wr.rating IS NULL
         AND wr.feedback IS NULL
         AND wi.start_date < NOW()
-        AND wi.start_date >= NOW() - INTERVAL '${daysAfterWorkshop + 7} days'
+        AND wi.start_date >= NOW() - make_interval(days => $1)
       ORDER BY wi.start_date DESC
-    `, [])
+    `, [daysAfterWorkshop + 7])
 
     const workshops = completedResult.rows as CompletedWorkshopRow[]
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://revampit.ch'

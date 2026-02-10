@@ -6,7 +6,8 @@
  */
 
 import { NextRequest } from 'next/server'
-import { apiSuccess, apiError, apiBadRequest, apiUnauthorized } from '@/lib/api/helpers'
+import { apiSuccess, apiError, apiUnauthorized } from '@/lib/api/helpers'
+import { validateBody, ErfassungCreateSchema } from '@/lib/schemas'
 import { transaction } from '@/lib/auth/db'
 import { logger } from '@/lib/logger'
 import { auth } from '@/auth'
@@ -21,16 +22,10 @@ export async function POST(request: NextRequest) {
       return apiUnauthorized('Nicht angemeldet')
     }
 
-    const payload: ErfassungPayload = await request.json()
-
-    // Validate required fields
-    if (!payload.hersteller || !payload.produktname) {
-      return apiBadRequest('Hersteller und Produktname sind erforderlich')
-    }
-
-    if (payload.verkaufspreis === undefined || payload.verkaufspreis < 0) {
-      return apiBadRequest('Gültiger Verkaufspreis ist erforderlich')
-    }
+    const raw = await request.json()
+    const validation = validateBody(ErfassungCreateSchema, raw)
+    if (!validation.success) return validation.error
+    const payload = validation.data as ErfassungPayload
 
     const action = payload.action || (payload.publish ? 'publish' : 'draft')
 

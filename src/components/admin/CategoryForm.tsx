@@ -12,25 +12,14 @@ import { Tag, Save, ArrowLeft, Trash2 } from 'lucide-react'
 import Link from 'next/link'
 import { useBlogCategories } from '@/hooks/useBlogCategories'
 import type { CategoryFormData } from '@/hooks/useBlogCategories'
+import { UI_COLOR_PALETTE } from '@/config/ui-colors'
 
 interface CategoryFormProps {
   initialData?: Partial<CategoryFormData>
   isEdit?: boolean
 }
 
-// Predefined color palette for easy selection
-const COLOR_PALETTE = [
-  '#22c55e', // green
-  '#3b82f6', // blue
-  '#06b6d4', // cyan
-  '#8b5cf6', // violet
-  '#f97316', // orange
-  '#6b7280', // gray
-  '#ec4899', // pink
-  '#f59e0b', // amber
-  '#14b8a6', // teal
-  '#ef4444', // red
-]
+const COLOR_PALETTE = UI_COLOR_PALETTE
 
 function generateSlug(name: string): string {
   return name
@@ -139,7 +128,7 @@ export default function CategoryForm({
 
       {/* Status Messages */}
       {error && (
-        <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-300 px-4 py-3 rounded-lg">
+        <div id="category-form-error" className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-300 px-4 py-3 rounded-lg">
           {error}
         </div>
       )}
@@ -165,6 +154,9 @@ export default function CategoryForm({
                 placeholder="z.B. Nachhaltigkeit"
                 className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                 required
+                aria-required="true"
+                aria-invalid={!!error}
+                aria-describedby={error ? 'category-form-error' : undefined}
               />
             </div>
 
@@ -183,6 +175,9 @@ export default function CategoryForm({
                 placeholder="z.B. nachhaltigkeit"
                 className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white font-mono text-sm"
                 required
+                aria-required="true"
+                aria-invalid={!!error}
+                aria-describedby={error ? 'category-form-error' : undefined}
               />
               <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
                 URL-freundlicher Name (automatisch generiert)

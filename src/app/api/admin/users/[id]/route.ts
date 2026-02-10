@@ -16,6 +16,7 @@ import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
 import { apiSuccess, apiError, apiUnauthorized, apiForbidden, apiNotFound, apiBadRequest } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
+import { validateBody, AdminUpdateUserSchema } from '@/lib/schemas'
 
 interface RequestContext {
   params: Promise<{ id: string }>
@@ -88,7 +89,9 @@ export async function PATCH(request: NextRequest, context: RequestContext) {
 
     const { id } = await context.params
     const body = await request.json()
-    const { name, email, phone, address, is_staff } = body
+    const validation = validateBody(AdminUpdateUserSchema, body)
+    if (!validation.success) return validation.error
+    const { name, email, phone, address, is_staff } = validation.data
 
     // Check if user exists
     const existingUser = await query<{ id: string; email: string }>(

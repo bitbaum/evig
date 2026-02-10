@@ -10,6 +10,7 @@ import { apiError, apiSuccess, apiBadRequest } from '@/lib/api/helpers'
 import { logger } from '@/lib/logger'
 import { verifyEmailCode } from '@/lib/auth/db'
 import { checkRateLimit, getClientIp } from '@/lib/auth/rate-limiter'
+import { validateBody, VerifyCodeSchema } from '@/lib/schemas'
 
 export async function POST(request: NextRequest) {
   try {
@@ -37,16 +38,9 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json()
-    const { email, code } = body
-
-    if (!email || !code) {
-      return apiBadRequest('E-Mail und Code sind erforderlich')
-    }
-
-    // Validate code format (6 digits)
-    if (!/^\d{6}$/.test(code)) {
-      return apiBadRequest('Ungültiges Code-Format')
-    }
+    const validation = validateBody(VerifyCodeSchema, body)
+    if (!validation.success) return validation.error
+    const { email, code } = validation.data
 
     const result = await verifyEmailCode(email, code)
 

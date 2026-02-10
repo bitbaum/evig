@@ -1,4 +1,5 @@
 // Central export for all validation schemas
+export * from './admin';
 export * from './auth';
 export * from './reviews';
 export * from './newsletter';

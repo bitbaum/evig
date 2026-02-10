@@ -157,7 +157,7 @@ export function ServiceForm({ initialData, isEdit = false }: ServiceFormProps) {
 
       {/* Alerts */}
       {error && (
-        <div role="alert" className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-300 px-4 py-3 rounded-lg">
+        <div id="service-form-error" role="alert" className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-300 px-4 py-3 rounded-lg">
           {error}
         </div>
       )}
@@ -175,6 +175,9 @@ export function ServiceForm({ initialData, isEdit = false }: ServiceFormProps) {
             <input
               type="text"
               required
+              aria-required="true"
+              aria-invalid={!!error}
+              aria-describedby={error ? 'service-form-error' : undefined}
               value={formData.name}
               onChange={(e) => {
                 setFormData((prev) => ({ ...prev, name: e.target.value, slug: !isEdit ? generateSlug(e.target.value) : prev.slug }))
@@ -187,6 +190,7 @@ export function ServiceForm({ initialData, isEdit = false }: ServiceFormProps) {
             <input
               type="text"
               required
+              aria-required="true"
               pattern="[a-z0-9-]+"
               value={formData.slug}
               onChange={(e) => updateField('slug', e.target.value)}

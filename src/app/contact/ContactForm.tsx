@@ -57,7 +57,7 @@ export default function ContactForm() {
         </div>
       )}
       {status === 'error' && (
-        <div className="mb-6 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-red-700 text-sm">
+        <div id="contact-error" className="mb-6 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-red-700 text-sm">
           {error}
         </div>
       )}
@@ -130,6 +130,10 @@ export default function ContactForm() {
               rows={4}
               value={message}
               onChange={(e) => setMessage(e.target.value)}
+              required
+              aria-required="true"
+              aria-invalid={status === 'error'}
+              aria-describedby={status === 'error' ? 'contact-error' : undefined}
               className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500"
               placeholder="Ihre Nachricht..."
             />

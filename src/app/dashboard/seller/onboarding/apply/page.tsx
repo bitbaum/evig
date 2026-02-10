@@ -166,7 +166,7 @@ export default function SellerApplicationPage() {
         </div>
 
         {submitResult && (
-          <div className={`mb-8 p-6 rounded-xl border ${
+          <div id={submitResult.success ? undefined : 'seller-apply-error'} className={`mb-8 p-6 rounded-xl border ${
             submitResult.success
               ? 'bg-green-50 border-green-200 text-green-800'
               : 'bg-red-50 border-red-200 text-red-800'
@@ -205,6 +205,7 @@ export default function SellerApplicationPage() {
                   onChange={(e) => setFormData(prev => ({ ...prev, businessType: e.target.value }))}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                   required
+                  aria-required="true"
                 >
                   <option value="individual">Privatperson</option>
                   <option value="business">Geschäft/Firma</option>
@@ -222,6 +223,7 @@ export default function SellerApplicationPage() {
                     onChange={(e) => setFormData(prev => ({ ...prev, businessName: e.target.value }))}
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                     required
+                    aria-required="true"
                   />
                 </div>
               )}
@@ -252,6 +254,7 @@ export default function SellerApplicationPage() {
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                   placeholder="Strasse und Hausnummer"
                   required
+                  aria-required="true"
                 />
               </div>
 
@@ -265,6 +268,7 @@ export default function SellerApplicationPage() {
                   onChange={(e) => setFormData(prev => ({ ...prev, postalCode: e.target.value }))}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                   required
+                  aria-required="true"
                 />
               </div>
 
@@ -278,6 +282,7 @@ export default function SellerApplicationPage() {
                   onChange={(e) => setFormData(prev => ({ ...prev, city: e.target.value }))}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                   required
+                  aria-required="true"
                 />
               </div>
 
@@ -291,6 +296,7 @@ export default function SellerApplicationPage() {
                   onChange={(e) => setFormData(prev => ({ ...prev, phone: e.target.value }))}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                   required
+                  aria-required="true"
                 />
               </div>
             </div>
@@ -372,6 +378,7 @@ export default function SellerApplicationPage() {
                     onChange={(e) => setFormData(prev => ({ ...prev, termsAccepted: e.target.checked }))}
                     className="mr-2 text-green-600 focus:ring-green-500"
                     required
+                    aria-required="true"
                   />
                   <span className="text-sm text-gray-700">
                     Ich akzeptiere die <Link href="/terms" className="text-green-600 hover:text-green-700">Nutzungsbedingungen</Link> und die <Link href="/privacy" className="text-green-600 hover:text-green-700">Datenschutzerklärung</Link>

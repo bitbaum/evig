@@ -19,6 +19,7 @@ import {
   Crown,
 } from 'lucide-react'
 import { UsersListClient } from './UsersListClient'
+import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
 
 export const metadata: Metadata = {
   title: 'Benutzer verwalten | RevampIT Admin',
@@ -82,19 +83,12 @@ export default async function AdminUsersPage() {
   const currentUserIsSuperAdmin = isSuperAdmin(session.user.email, session.user.isSuperAdmin)
 
   return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-            Benutzer verwalten
-          </h1>
-          <p className="text-gray-600 dark:text-gray-400 mt-1">
-            Benutzerkonten anzeigen und Berechtigungen verwalten
-          </p>
-        </div>
-      </div>
-
+    <AdminPageWrapper
+      title="Benutzer verwalten"
+      description="Benutzerkonten anzeigen und Berechtigungen verwalten"
+      icon={Users}
+      iconColor="blue"
+    >
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-100 dark:border-gray-700">
@@ -158,6 +152,6 @@ export default async function AdminUsersPage() {
           </div>
         </div>
       </div>
-    </div>
+    </AdminPageWrapper>
   )
 }

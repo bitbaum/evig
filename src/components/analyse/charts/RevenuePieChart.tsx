@@ -10,6 +10,7 @@ import {
 } from 'recharts'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { formatCHF } from '@/lib/hirn/format'
+import { REVENUE_CATEGORY_COLORS, REVENUE_CATEGORY_LABELS } from '@/config/ui-colors'
 
 interface PieDataPoint {
   name: string
@@ -29,13 +30,12 @@ interface RevenuePieChartProps {
   source?: string
 }
 
-const CATEGORY_CONFIG = {
-  warenverkauf: { label: 'Warenverkauf', color: '#22c55e' },
-  dienstleistungen: { label: 'Dienstleistungen', color: '#3b82f6' },
-  integration: { label: 'Integration', color: '#8b5cf6' },
-  spenden: { label: 'Spenden', color: '#f59e0b' },
-  aufstockung: { label: 'Aufstockung', color: '#ec4899' },
-}
+const CATEGORY_CONFIG = Object.fromEntries(
+  Object.entries(REVENUE_CATEGORY_COLORS).map(([key, color]) => [
+    key,
+    { label: REVENUE_CATEGORY_LABELS[key as keyof typeof REVENUE_CATEGORY_LABELS], color },
+  ])
+) as Record<keyof typeof REVENUE_CATEGORY_COLORS, { label: string; color: string }>
 
 function CustomTooltip({ active, payload }: {
   active?: boolean

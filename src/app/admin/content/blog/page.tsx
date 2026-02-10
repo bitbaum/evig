@@ -20,10 +20,10 @@ import {
   Trash2,
   CheckCircle,
   Clock,
-  ArrowLeft,
   Calendar,
   Tag,
 } from 'lucide-react'
+import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
 
 export const metadata: Metadata = {
   title: 'Blog-Artikel | RevampIT Admin',
@@ -123,25 +123,13 @@ export default async function AdminBlogPage() {
   const [stats, posts] = await Promise.all([getBlogStats(), getBlogPosts()])
 
   return (
-    <div className="space-y-8">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-4">
-          <Link
-            href="/admin/content"
-            className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
-          >
-            <ArrowLeft className="w-5 h-5 text-gray-600 dark:text-gray-400" />
-          </Link>
-          <div>
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-              Blog-Artikel
-            </h1>
-            <p className="text-gray-600 dark:text-gray-400 mt-1">
-              News, Tutorials und Ankündigungen verwalten
-            </p>
-          </div>
-        </div>
+    <AdminPageWrapper
+      title="Blog-Artikel"
+      description="News, Tutorials und Ankündigungen verwalten"
+      icon={FileText}
+      iconColor="blue"
+      backButton={{ href: '/admin/content', label: 'Zurück' }}
+      actions={
         <Link
           href="/admin/content/blog/new"
           className="inline-flex items-center gap-2 bg-teal-600 hover:bg-teal-700 text-white font-semibold px-4 py-2 rounded-lg transition-colors"
@@ -149,8 +137,8 @@ export default async function AdminBlogPage() {
           <Plus className="w-5 h-5" />
           Neuer Artikel
         </Link>
-      </div>
-
+      }
+    >
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-100 dark:border-gray-700">
@@ -360,6 +348,6 @@ export default async function AdminBlogPage() {
           </div>
         </div>
       </div>
-    </div>
+    </AdminPageWrapper>
   )
 }

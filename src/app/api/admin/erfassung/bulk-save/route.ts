@@ -12,6 +12,7 @@ import { canAccessSection } from '@/lib/permissions'
 import { logger } from '@/lib/logger'
 import { transaction } from '@/lib/auth/db'
 import { apiUnauthorized, apiForbidden, apiBadRequest } from '@/lib/api/helpers'
+import { validateBody, BulkSaveSchema } from '@/lib/schemas'
 import { createErfassungProduct } from '@/lib/erfassung/create-product'
 import { BULK_LIMITS } from '@/config/erfassung'
 import type { BulkSaveRequest, BulkSaveResponse } from '@/types/erfassung'
@@ -33,19 +34,13 @@ export async function POST(request: NextRequest) {
       return apiForbidden('Keine Berechtigung für Produkterfassung')
     }
 
-    const body: BulkSaveRequest = await request.json()
-    const { products, action } = body
-
-    if (!products || !Array.isArray(products) || products.length === 0) {
-      return apiBadRequest('Keine Produkte zum Speichern')
-    }
+    const raw = await request.json()
+    const validation = validateBody(BulkSaveSchema, raw)
+    if (!validation.success) return validation.error
+    const { products, action } = validation.data as BulkSaveRequest
 
     if (products.length > BULK_LIMITS.maxProducts) {
       return apiBadRequest(`Maximal ${BULK_LIMITS.maxProducts} Produkte pro Vorgang`)
-    }
-
-    if (!action || !['draft', 'erfassen', 'publish'].includes(action)) {
-      return apiBadRequest('Ungültige Aktion')
     }
 
     logger.info('Bulk save started', {

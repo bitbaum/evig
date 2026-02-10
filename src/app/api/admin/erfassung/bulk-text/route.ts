@@ -9,7 +9,8 @@ import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@/auth'
 import { canAccessSection } from '@/lib/permissions'
 import { logger } from '@/lib/logger'
-import { apiUnauthorized, apiForbidden, apiBadRequest } from '@/lib/api/helpers'
+import { apiUnauthorized, apiForbidden } from '@/lib/api/helpers'
+import { validateBody, BulkTextSchema } from '@/lib/schemas'
 import { extractMultipleProducts } from '@/lib/erfassung/bulk-extraction'
 
 export async function POST(request: NextRequest) {
@@ -29,16 +30,10 @@ export async function POST(request: NextRequest) {
       return apiForbidden('Keine Berechtigung für Produkterfassung')
     }
 
-    const body = await request.json()
-    const { text } = body
-
-    if (!text || typeof text !== 'string') {
-      return apiBadRequest('Text ist erforderlich')
-    }
-
-    if (text.trim().length < 10) {
-      return apiBadRequest('Text ist zu kurz für Mehrfacherfassung.')
-    }
+    const raw = await request.json()
+    const validation = validateBody(BulkTextSchema, raw)
+    if (!validation.success) return validation.error
+    const { text } = validation.data
 
     logger.info('Bulk text erfassung started', {
       userId: session.user.id,

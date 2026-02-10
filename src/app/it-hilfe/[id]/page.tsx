@@ -344,7 +344,7 @@ export default function PeerRepairDetailPage() {
                     <h3 className="text-lg font-semibold text-gray-900 mb-4">Dein Angebot</h3>
 
                     {offerError && (
-                      <div className="bg-red-50 border border-red-200 rounded-lg p-3 mb-4 text-sm text-red-700">
+                      <div id="offer-error" className="bg-red-50 border border-red-200 rounded-lg p-3 mb-4 text-sm text-red-700">
                         {offerError}
                       </div>
                     )}
@@ -359,6 +359,9 @@ export default function PeerRepairDetailPage() {
                           onChange={(e) => setOfferMessage(e.target.value)}
                           placeholder="Beschreibe, wie du helfen kannst und warum du geeignet bist..."
                           required
+                          aria-required="true"
+                          aria-invalid={!!offerError}
+                          aria-describedby={offerError ? 'offer-error' : undefined}
                           minLength={20}
                           maxLength={2000}
                           rows={4}

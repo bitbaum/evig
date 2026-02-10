@@ -6,7 +6,7 @@
  */
 
 import { parse } from 'csv-parse/sync'
-import * as XLSX from 'xlsx'
+import ExcelJS from 'exceljs'
 import { CSV_COLUMN_ALIASES, normalizeConditionValue } from '@/config/erfassung'
 import { createDefaultBulkProduct } from '@/types/erfassung'
 import type { BulkProduct, ErfassungFormData } from '@/types/erfassung'
@@ -112,17 +112,34 @@ export function parseCSV(content: string): {
  * Parse Excel (.xlsx/.xls) buffer into BulkProduct array.
  * Converts the first sheet to CSV, then delegates to parseCSV().
  */
-export function parseExcel(buffer: ArrayBuffer): {
+export async function parseExcel(buffer: ArrayBuffer): Promise<{
   products: BulkProduct[]
   unmappedColumns: string[]
-} {
-  const workbook = XLSX.read(buffer, { type: 'array' })
-  const sheetName = workbook.SheetNames[0]
-  if (!sheetName) {
+}> {
+  const workbook = new ExcelJS.Workbook()
+  // ExcelJS types expect legacy Buffer; use Uint8Array conversion + assertion
+  await workbook.xlsx.load(Buffer.from(new Uint8Array(buffer)) as never)
+
+  const sheet = workbook.worksheets[0]
+  if (!sheet || sheet.rowCount === 0) {
     return { products: [], unmappedColumns: [] }
   }
 
-  const sheet = workbook.Sheets[sheetName]
-  const csv = XLSX.utils.sheet_to_csv(sheet, { FS: ';' })
-  return parseCSV(csv)
+  // Convert sheet to semicolon-delimited CSV string
+  const rows: string[] = []
+  sheet.eachRow((row) => {
+    const values = row.values as (string | number | boolean | null | undefined)[]
+    // ExcelJS row.values is 1-indexed (index 0 is undefined), so slice from 1
+    const cells = values.slice(1).map(v => {
+      if (v == null) return ''
+      const str = String(v)
+      // Escape semicolons and quotes in cell values
+      return str.includes(';') || str.includes('"')
+        ? `"${str.replace(/"/g, '""')}"`
+        : str
+    })
+    rows.push(cells.join(';'))
+  })
+
+  return parseCSV(rows.join('\n'))
 }

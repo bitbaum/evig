@@ -11,6 +11,7 @@ import { auth } from '@/auth'
 import { canAccessSection } from '@/lib/permissions'
 import { logger } from '@/lib/logger'
 import { apiUnauthorized, apiForbidden, apiBadRequest } from '@/lib/api/helpers'
+import { validateBody, BulkEnrichSchema } from '@/lib/schemas'
 import { extractMultipleProducts } from '@/lib/erfassung/bulk-extraction'
 import { BULK_LIMITS } from '@/config/erfassung'
 
@@ -41,12 +42,10 @@ export async function POST(request: NextRequest) {
       return apiForbidden('Keine Berechtigung für Produkterfassung')
     }
 
-    const body = await request.json()
-    const { items } = body as { items: EnrichmentItem[] }
-
-    if (!items || !Array.isArray(items) || items.length === 0) {
-      return apiBadRequest('Keine Produkte zum Anreichern')
-    }
+    const raw = await request.json()
+    const validation = validateBody(BulkEnrichSchema, raw)
+    if (!validation.success) return validation.error
+    const { items } = validation.data
 
     if (items.length > BULK_LIMITS.maxProducts) {
       return apiBadRequest(`Maximal ${BULK_LIMITS.maxProducts} Produkte pro Vorgang`)

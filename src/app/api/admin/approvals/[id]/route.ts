@@ -7,6 +7,7 @@ import { NextRequest } from 'next/server'
 import { auth } from '@/auth'
 import { query } from '@/lib/auth/db'
 import { apiError, apiSuccess, apiBadRequest, apiForbidden, apiNotFound } from '@/lib/api/helpers'
+import { validateBody, AdminApprovalActionSchema } from '@/lib/schemas'
 import { TABLE_NAMES } from '@/config/database'
 import { MEDUSA_CONFIG } from '@/config/medusa'
 import { canAccessSection } from '@/lib/permissions'
@@ -34,11 +35,9 @@ export async function PATCH(
 
     const { id } = await params
     const body = await request.json()
-    const { action } = body
-
-    if (!action || !['approve', 'reject'].includes(action)) {
-      return apiBadRequest('Ungültige Aktion. Erwartet: approve oder reject')
-    }
+    const validation = validateBody(AdminApprovalActionSchema, body)
+    if (!validation.success) return validation.error
+    const { action } = validation.data
 
     // Verify submission exists and is pending
     const submissionResult = await query(

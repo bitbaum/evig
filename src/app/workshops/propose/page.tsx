@@ -217,7 +217,9 @@ export default function WorkshopProposalPage() {
         </div>
 
         {submitResult && (
-          <div className={`mb-8 p-6 rounded-xl border ${
+          <div
+            id={submitResult.success ? undefined : 'workshop-propose-error'}
+            className={`mb-8 p-6 rounded-xl border ${
             submitResult.success
               ? 'bg-green-50 border-green-200 text-green-800'
               : 'bg-red-50 border-red-200 text-red-800'
@@ -258,6 +260,7 @@ export default function WorkshopProposalPage() {
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                   placeholder="z.B. Linux für Anfänger"
                   required
+                  aria-required="true"
                 />
               </div>
 
@@ -270,6 +273,7 @@ export default function WorkshopProposalPage() {
                   onChange={(e) => setFormData(prev => ({ ...prev, category: e.target.value }))}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                   required
+                  aria-required="true"
                 >
                   <option value="">Kategorie wählen</option>
                   {WORKSHOP_CATEGORIES.map(category => (
@@ -287,6 +291,7 @@ export default function WorkshopProposalPage() {
                   onChange={(e) => setFormData(prev => ({ ...prev, level: e.target.value as 'beginner' | 'intermediate' | 'advanced' }))}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                   required
+                  aria-required="true"
                 >
                   {WORKSHOP_LEVELS.filter(l => l.id !== 'all').map(level => (
                     <option key={level.id} value={level.id}>{level.name}</option>
@@ -305,6 +310,7 @@ export default function WorkshopProposalPage() {
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                   placeholder="Eine kurze, einprägsame Beschreibung (erscheint in der Übersicht)"
                   required
+                  aria-required="true"
                 />
               </div>
 
@@ -319,6 +325,7 @@ export default function WorkshopProposalPage() {
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                   placeholder="Beschreiben Sie den Workshop detailliert..."
                   required
+                  aria-required="true"
                 />
               </div>
             </div>
@@ -381,6 +388,7 @@ export default function WorkshopProposalPage() {
                   onChange={(e) => setFormData(prev => ({ ...prev, durationHours: e.target.value }))}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                   required
+                  aria-required="true"
                 />
               </div>
 
@@ -397,6 +405,7 @@ export default function WorkshopProposalPage() {
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                   placeholder="0.00 (kostenlos)"
                   required
+                  aria-required="true"
                 />
               </div>
 
@@ -409,6 +418,7 @@ export default function WorkshopProposalPage() {
                   onChange={(e) => setFormData(prev => ({ ...prev, maxParticipants: e.target.value }))}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                   required
+                  aria-required="true"
                 >
                   {[5, 8, 10, 12, 15, 20, 25, 30].map(num => (
                     <option key={num} value={num}>{num}</option>
@@ -425,6 +435,7 @@ export default function WorkshopProposalPage() {
                   onChange={(e) => setFormData(prev => ({ ...prev, minParticipants: e.target.value }))}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                   required
+                  aria-required="true"
                 >
                   {[2, 3, 4, 5, 6, 8, 10].map(num => (
                     <option key={num} value={num}>{num}</option>
@@ -703,6 +714,7 @@ export default function WorkshopProposalPage() {
                     onChange={(e) => setFormData(prev => ({ ...prev, termsAccepted: e.target.checked }))}
                     className="mr-3 text-green-600 focus:ring-green-500"
                     required
+                    aria-required="true"
                   />
                   <label className="text-sm font-medium text-gray-700">
                     Ich akzeptiere die <Link href="/terms" className="text-green-600 hover:text-green-700 underline">Nutzungsbedingungen</Link> und die <Link href="/privacy" className="text-green-600 hover:text-green-700 underline">Datenschutzerklärung</Link>

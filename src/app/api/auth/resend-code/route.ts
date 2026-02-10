@@ -11,6 +11,7 @@ import { logger } from '@/lib/logger'
 import { getUserByEmail, createVerificationCode } from '@/lib/auth/db'
 import { sendEmail } from '@/lib/email'
 import { checkRateLimit, getClientIp } from '@/lib/auth/rate-limiter'
+import { validateBody, ResendCodeSchema } from '@/lib/schemas'
 
 export async function POST(request: NextRequest) {
   try {
@@ -38,11 +39,9 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json()
-    const { email } = body
-
-    if (!email) {
-      return apiBadRequest('E-Mail ist erforderlich')
-    }
+    const validation = validateBody(ResendCodeSchema, body)
+    if (!validation.success) return validation.error
+    const { email } = validation.data
 
     // Check if user exists
     const user = await getUserByEmail(email)

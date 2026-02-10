@@ -14,6 +14,7 @@ import {
   getAdminServices,
   createServiceType,
 } from '@/lib/services'
+import { validateBody, AdminCreateServiceSchema } from '@/lib/schemas'
 
 export async function GET() {
   try {
@@ -61,6 +62,8 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json()
+    const validation = validateBody(AdminCreateServiceSchema, body)
+    if (!validation.success) return validation.error
     const {
       name,
       slug,
@@ -72,7 +75,6 @@ export async function POST(request: NextRequest) {
       isBookable,
       isFeatured,
       displayOrder,
-      // Presentation fields
       iconName,
       heroTitle,
       heroSubtitle,
@@ -82,37 +84,27 @@ export async function POST(request: NextRequest) {
       pricingBase,
       pricingDetails,
       pricingMediaPrices,
-    } = body
-
-    if (!name || !slug) {
-      return apiBadRequest('Name und Slug sind erforderlich')
-    }
-
-    // Validate slug format
-    if (!/^[a-z0-9-]+$/.test(slug)) {
-      return apiBadRequest('Slug darf nur Kleinbuchstaben, Zahlen und Bindestriche enthalten')
-    }
+    } = validation.data
 
     const service = await createServiceType({
       name,
       slug,
       description: description || null,
       category: category || null,
-      duration_minutes: durationMinutes || 60,
+      duration_minutes: durationMinutes,
       price_cents: priceCents ?? null,
-      requires_approval: requiresApproval || false,
-      is_bookable: isBookable ?? true,
-      is_featured: isFeatured || false,
-      display_order: displayOrder || 100,
-      // Presentation fields
-      icon_name: iconName || 'Wrench',
+      requires_approval: requiresApproval,
+      is_bookable: isBookable,
+      is_featured: isFeatured,
+      display_order: displayOrder,
+      icon_name: iconName,
       hero_title: heroTitle || null,
       hero_subtitle: heroSubtitle || null,
       hero_description: heroDescription || null,
-      features_json: features || [],
-      process_json: process || [],
+      features_json: features,
+      process_json: process,
       pricing_base: pricingBase || null,
-      pricing_details: pricingDetails || [],
+      pricing_details: pricingDetails,
       pricing_media_prices: pricingMediaPrices || null,
     })
 

@@ -2,6 +2,7 @@ import { NextRequest } from 'next/server'
 import { auth } from '@/auth'
 import { query } from '@/lib/auth/db'
 import { apiError, apiSuccess, apiUnauthorized, apiForbidden } from '@/lib/api/helpers'
+import { validateBody, AdminSendRemindersSchema } from '@/lib/schemas'
 import { logger } from '@/lib/logger'
 import { TABLE_NAMES } from '@/config/database'
 import { sendEmail } from '@/lib/email'
@@ -39,7 +40,9 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json()
-    const { daysBeforeWorkshop = 1 } = body // Default to 1 day before
+    const validation = validateBody(AdminSendRemindersSchema, body)
+    if (!validation.success) return validation.error
+    const { daysBeforeWorkshop } = validation.data
 
     // Get all confirmed registrations for workshops happening in the specified days
     const upcomingResult = await query(`
@@ -61,9 +64,9 @@ export async function POST(request: NextRequest) {
       WHERE wr.status = 'confirmed'
         AND wi.status = 'scheduled'
         AND wi.start_date >= NOW()
-        AND wi.start_date <= NOW() + INTERVAL '${daysBeforeWorkshop} days'
+        AND wi.start_date <= NOW() + make_interval(days => $1)
       ORDER BY wi.start_date ASC
-    `, [])
+    `, [daysBeforeWorkshop])
 
     const workshops = upcomingResult.rows as UpcomingWorkshopRow[]
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://revampit.ch'

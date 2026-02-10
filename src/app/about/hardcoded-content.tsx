@@ -2,6 +2,7 @@ import Image from 'next/image'
 import { HeroBanner } from '@/components/ui/hero-banner'
 import { AboutSubNav, GeschichteSection, ImpactStatsSection } from '@/components/about'
 import { Target, Recycle, Code, Users, Quote } from 'lucide-react'
+import Heading from '@/components/ui/Heading'
 
 export default function HardcodedAboutPage() {
   return (
@@ -23,9 +24,9 @@ export default function HardcodedAboutPage() {
               <Target className="h-4 w-4" />
               Unsere Mission
             </div>
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+            <Heading level={2} className="text-gray-900 mb-4">
               Nachhaltigkeit trifft Technologie
-            </h2>
+            </Heading>
           </div>
 
           {/* Two Column Layout */}
@@ -80,7 +81,7 @@ export default function HardcodedAboutPage() {
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
           {/* Section Header */}
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Unsere Wirkungsbereiche</h2>
+            <Heading level={2} className="text-gray-900 mb-4">Unsere Wirkungsbereiche</Heading>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
               Drei Säulen, ein Ziel: Technologie nachhaltiger und zugänglicher machen.
             </p>
@@ -135,7 +136,7 @@ export default function HardcodedAboutPage() {
       {/* Call to Action */}
       <section className="py-20 bg-green-600 text-white">
         <div className="max-w-4xl mx-auto text-center px-4">
-          <h2 className="text-3xl font-bold mb-6">Werde Teil unserer Mission</h2>
+          <Heading level={2} className="mb-6">Werde Teil unserer Mission</Heading>
           <p className="text-xl mb-8">
             Ob du ein Gerät reparieren lassen möchtest, mehr über nachhaltige IT erfahren willst oder unsere Sache unterstützen möchtest – bei uns bist du willkommen. Gemeinsam machen wir Technik nachhaltiger und zugänglicher für alle.
           </p>

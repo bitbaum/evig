@@ -119,3 +119,10 @@ export const VerifyCodeSchema = z.object({
 });
 
 export type VerifyCodeInput = z.infer<typeof VerifyCodeSchema>;
+
+// Resend code schema
+export const ResendCodeSchema = z.object({
+  email: emailSchema,
+});
+
+export type ResendCodeInput = z.infer<typeof ResendCodeSchema>;

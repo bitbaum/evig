@@ -6,6 +6,7 @@ import BlogHero from '@/components/blog/BlogHero'
 import BlogFeaturedGrid from '@/components/blog/BlogFeaturedGrid'
 import BlogLatestList from '@/components/blog/BlogLatestList'
 import BlogNavigationClient from '@/components/blog/BlogNavigationClient'
+import Heading from '@/components/ui/Heading'
 
 // Revalidate every 60 seconds to show new posts
 export const revalidate = 60
@@ -98,9 +99,9 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
       <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
         {filteredPosts.length === 0 ? (
           <div className="text-center py-12 sm:py-16 md:py-20">
-            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-4">
+            <Heading level={2} className="text-gray-900 mb-4">
               Noch keine Artikel gefunden
-            </h2>
+            </Heading>
             <p className="text-sm sm:text-base text-gray-600 mb-6 sm:mb-8">
               Versuchen Sie, Ihre Filter anzupassen oder reichen Sie einen Beitrag ein!
             </p>
@@ -123,7 +124,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
             {/* Featured Stories */}
             {featuredPosts.length > 0 && (
               <div className="py-6 sm:py-8 border-t border-gray-200">
-                <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6">Featured Stories</h2>
+                <Heading level={2} className="text-gray-900 mb-4 sm:mb-6">Featured Stories</Heading>
                 <BlogFeaturedGrid posts={featuredPosts} />
               </div>
             )}
@@ -132,7 +133,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
             {latestPosts.length > 0 && (
               <div className="py-6 sm:py-8 border-t border-gray-200">
                 <div className="flex items-center justify-between mb-4 sm:mb-6">
-                  <h2 className="text-xl sm:text-2xl font-bold text-gray-900">Latest</h2>
+                  <Heading level={2} className="text-gray-900">Latest</Heading>
                 </div>
                 <BlogLatestList posts={latestPosts} />
               </div>

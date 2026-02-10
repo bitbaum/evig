@@ -77,7 +77,7 @@ export function AddActivityModal({ onClose, onSuccess }: AddActivityModalProps) 
 
           {/* Error */}
           {error && (
-            <div className="mb-4 p-3 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 rounded-lg text-red-700 dark:text-red-300 text-sm">
+            <div id="activity-modal-error" className="mb-4 p-3 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 rounded-lg text-red-700 dark:text-red-300 text-sm">
               {error}
             </div>
           )}
@@ -114,6 +114,9 @@ export function AddActivityModal({ onClose, onSuccess }: AddActivityModalProps) 
                 placeholder="Was hast du erreicht?"
                 maxLength={200}
                 required
+                aria-required="true"
+                aria-invalid={!!error}
+                aria-describedby={error ? 'activity-modal-error' : undefined}
                 className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
             </div>

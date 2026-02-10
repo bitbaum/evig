@@ -13,6 +13,7 @@ import {
 } from 'recharts'
 import { ChartWrapper } from './ChartWrapper'
 import { formatCHF } from '@/lib/hirn/format'
+import { TREND_CHART_COLORS } from '@/config/ui-colors'
 
 interface TrendDataPoint {
   category: string
@@ -98,19 +99,19 @@ export function TrendBarChart({ data, currentYear, previousYear, source }: Trend
         <Bar
           dataKey="previousValue"
           name={`${previousYear}`}
-          fill="#9ca3af"
+          fill={TREND_CHART_COLORS.previousYear}
           radius={[4, 4, 0, 0]}
         />
         <Bar
           dataKey="currentValue"
           name={`${currentYear}`}
-          fill="#3b82f6"
+          fill={TREND_CHART_COLORS.currentYear}
           radius={[4, 4, 0, 0]}
         >
           {data.map((entry, index) => (
             <Cell
               key={`cell-${index}`}
-              fill={entry.percentChange > 0 ? '#22c55e' : entry.percentChange < 0 ? '#ef4444' : '#3b82f6'}
+              fill={entry.percentChange > 0 ? TREND_CHART_COLORS.positive : entry.percentChange < 0 ? TREND_CHART_COLORS.negative : TREND_CHART_COLORS.neutral}
             />
           ))}
         </Bar>

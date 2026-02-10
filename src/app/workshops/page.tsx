@@ -15,6 +15,7 @@ import {
   BookOpen,
 } from 'lucide-react'
 import { getCategoryIcon, getLevelBadgeClass } from '@/config/workshops'
+import Heading from '@/components/ui/Heading'
 import { formatDateShort } from '@/lib/date-formats'
 import type { Workshop, WorkshopInstanceWithCount, WorkshopWithInstances } from '@/components/workshops/types'
 
@@ -114,9 +115,9 @@ export default function WorkshopsPage() {
       <div className="max-w-7xl mx-auto px-4">
         {/* Header */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">
+          <Heading level={1} className="text-gray-900 mb-4">
             RevampIT Workshops
-          </h1>
+          </Heading>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
             Erweitere dein Wissen in nachhaltiger Technologie. Von Linux über Open-Source bis hin zu Blockchain und KI.
           </p>
@@ -267,9 +268,9 @@ export default function WorkshopsPage() {
         {/* Call to Action */}
         <div className="mt-16 bg-gradient-to-r from-green-600 to-blue-600 rounded-xl p-8 text-white text-center">
           <Sparkles className="w-12 h-12 mx-auto mb-4" />
-          <h2 className="text-2xl font-bold mb-4">
+          <Heading level={2} className="mb-4">
             Workshop vorschlagen?
-          </h2>
+          </Heading>
           <p className="text-green-100 mb-6 max-w-2xl mx-auto">
             Hast du eine Idee für einen Workshop? Wir freuen uns über deine Vorschläge für neue Themen und Inhalte.
           </p>
