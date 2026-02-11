@@ -40,7 +40,11 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url)
 
     // Parse filters
-    const skill = searchParams.get('skill')
+    const skillsParam = searchParams.get('skills')
+    const skillParam = searchParams.get('skill')
+    const skills: string[] = skillsParam
+      ? skillsParam.split(',').filter(Boolean)
+      : skillParam ? [skillParam] : []
     const canton = searchParams.get('canton')
     const postalCode = searchParams.get('postalCode')
     const acceptsGratis = searchParams.get('acceptsGratis') === 'true'
@@ -51,15 +55,15 @@ export async function GET(request: NextRequest) {
 
     // Build WHERE conditions
     const conditions: string[] = ['hp.is_active = true']
-    const params: (string | number | boolean)[] = []
+    const params: (string | string[] | number | boolean)[] = []
     let paramIndex = 1
 
-    if (skill) {
+    if (skills.length > 0) {
       conditions.push(`EXISTS (
         SELECT 1 FROM ${TABLE_NAMES.USER_SKILLS} us
-        WHERE us.user_id = hp.user_id AND us.skill_id = $${paramIndex}
+        WHERE us.user_id = hp.user_id AND us.skill_id = ANY($${paramIndex}::text[])
       )`)
-      params.push(skill)
+      params.push(skills)
       paramIndex++
     }
 
@@ -156,7 +160,7 @@ export async function GET(request: NextRequest) {
     logger.info('Fetched IT helpers', {
       count: helpers.length,
       total,
-      filters: { skill, canton, postalCode, serviceType },
+      filters: { skills, canton, postalCode, serviceType },
     })
 
     return apiSuccess({

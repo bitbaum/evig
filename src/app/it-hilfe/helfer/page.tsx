@@ -53,9 +53,8 @@ export default function HelferPage() {
       setLoading(true)
       const params = new URLSearchParams()
 
-      // Note: API only accepts single skill, so take first selected
       if (selectedSkills.length > 0) {
-        params.set('skill', selectedSkills[0])
+        params.set('skills', selectedSkills.join(','))
       }
       if (canton) params.set('canton', canton)
       if (acceptsGratis) params.set('acceptsGratis', 'true')

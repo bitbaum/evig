@@ -16,7 +16,7 @@ import {
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
-import { getSkillIds } from '@/config/it-hilfe'
+import { getSkillIds, IT_SKILLS } from '@/config/it-hilfe'
 
 interface TechnicianProfileRow {
   id: string
@@ -235,9 +235,6 @@ export async function PUT(request: NextRequest) {
  * Get category ID for a skill
  */
 function getCategoryForSkill(skillId: string): string {
-  // Import IT_SKILLS mapping
-  const { IT_SKILLS } = require('@/config/it-hilfe')
-
   for (const [categoryId, skills] of Object.entries(IT_SKILLS)) {
     if (
       (skills as Array<{ id: string }>).some((s) => s.id === skillId)
