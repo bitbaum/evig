@@ -21,12 +21,13 @@ export interface ImpactMetric {
 /**
  * Core Impact Numbers - UPDATE THESE ANNUALLY
  */
-const ANNUAL_DEVICES_SAVED = 1000
+// TODO: Replace with actual tracked data — these are estimates, not verified
+const ANNUAL_DEVICES_SAVED = 150 // Conservative estimate based on known throughput
 const AVERAGE_DEVICE_LIFESPAN_YEARS = 5
 const REUSE_SUCCESS_RATE = 0.75 // 75%
 const ANNUAL_PEOPLE_TRAINED = 20
-const INTERNSHIP_SUCCESS_RATE = 0.90 // 90%
-const ANNUAL_CAREER_REENTRIES = 10
+const INTERNSHIP_SUCCESS_RATE = 0.40 // ~40% — historical estimate, not systematically tracked
+const ANNUAL_CAREER_REENTRIES = 4 // Derived from ~40% of ~10 practitioners/year
 
 /**
  * Environmental Calculations
@@ -54,9 +55,9 @@ export const IMPACT_METRICS: ImpactMetric[] = [
     value: `${ANNUAL_DEVICES_SAVED}+`,
     shortLabel: 'Geräte jährlich gerettet',
     description: 'Anzahl der IT-Geräte, die wir jährlich vor dem Entsorgen retten',
-    methodology: `Jedes Gerät wird bei der Annahme registriert und bei der Weitergabe dokumentiert. Diese Zahl umfasst alle reparierten, überholten und wiederverwendeten Geräte pro Jahr. Basis: Durchschnitt der letzten 3 Jahre.`,
+    methodology: `Konservative Schätzung basierend auf bekanntem Durchsatz. Systematisches Tracking wird aufgebaut.`,
     category: 'environmental',
-    verified: true,
+    verified: false,
     lastUpdated: '2024-12-01'
   },
   {
@@ -119,23 +120,23 @@ export const IMPACT_METRICS: ImpactMetric[] = [
   {
     id: 'internship-success',
     title: 'Erfolgreiche Praktika',
-    value: `${Math.round(INTERNSHIP_SUCCESS_RATE * 100)}%`,
+    value: `~${Math.round(INTERNSHIP_SUCCESS_RATE * 100)}%`,
     shortLabel: 'Erfolgreiche Praktika',
     description: 'Unserer Praktikant:innen finden den Einstieg in die IT oder eine Weiterbildung',
-    methodology: `Nachverfolgung aller Praktikant:innen 6 Monate nach Programmabschluss. Von ${Math.round(ANNUAL_PEOPLE_TRAINED * 0.6)} Praktikant:innen/Jahr finden ${Math.round(ANNUAL_PEOPLE_TRAINED * 0.6 * INTERNSHIP_SUCCESS_RATE)} eine Anstellung oder Weiterbildung.`,
+    methodology: `Geschätzt auf Basis historischer Erfahrungswerte, nicht systematisch erhoben. Systematisches Tracking wird aufgebaut.`,
     category: 'social',
-    verified: true,
+    verified: false,
     lastUpdated: '2024-12-01'
   },
   {
     id: 'career-reentries',
     title: 'Berufliche Wiedereinstiege',
-    value: `${ANNUAL_CAREER_REENTRIES}+`,
+    value: `~${ANNUAL_CAREER_REENTRIES}`,
     shortLabel: 'Berufliche Wiedereinstiege',
     description: 'Erfolgreiche Wiedereinstiege ins Berufsleben durch unser Programm',
-    methodology: `Anzahl der Personen mit erschwertem Arbeitsmarktzugang, die nach unseren Programmen eine Festanstellung finden. Nachverfolgung über 12 Monate.`,
+    methodology: `Geschätzt auf Basis von ~${Math.round(ANNUAL_PEOPLE_TRAINED * 0.5)} Praktikant:innen/Jahr mit erschwertem Arbeitsmarktzugang und ~${Math.round(INTERNSHIP_SUCCESS_RATE * 100)}% Erfolgsrate. Nicht systematisch erhoben.`,
     category: 'social',
-    verified: true,
+    verified: false,
     lastUpdated: '2024-12-01'
   }
 ]
@@ -146,7 +147,7 @@ export const IMPACT_METRICS: ImpactMetric[] = [
 export function getCompactMetrics() {
   return [
     {
-      value: IMPACT_METRICS.find(m => m.id === 'devices-recycled')?.value || '1000+',
+      value: IMPACT_METRICS.find(m => m.id === 'devices-recycled')?.value || '150+',
       label: 'Geräte jährlich gerettet'
     },
     {
@@ -162,11 +163,11 @@ export function getCompactMetrics() {
       label: 'Jahre Lebensverlängerung'
     },
     {
-      value: IMPACT_METRICS.find(m => m.id === 'internship-success')?.value || '90%',
+      value: IMPACT_METRICS.find(m => m.id === 'internship-success')?.value || '~40%',
       label: 'Erfolgreiche Praktika'
     },
     {
-      value: IMPACT_METRICS.find(m => m.id === 'career-reentries')?.value || '10+',
+      value: IMPACT_METRICS.find(m => m.id === 'career-reentries')?.value || '~4',
       label: 'Berufliche Wiedereinstiege'
     }
   ]
