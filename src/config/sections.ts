@@ -293,6 +293,51 @@ export const SECTIONS: Record<string, SectionConfig> = {
     category: 'commerce',
   },
 
+  'my-listings': {
+    id: 'my-listings',
+    path: '/dashboard/listings',
+    ui: {
+      label: 'Meine Inserate',
+      description: 'Ihre Inserate im Marketplace verwalten',
+      icon: Package,
+      emoji: '📦',
+      color: 'primary',
+    },
+    visibility: { admin: false, dashboard: true },
+    priority: 22,
+    category: 'commerce',
+  },
+
+  'my-orders': {
+    id: 'my-orders',
+    path: '/dashboard/orders',
+    ui: {
+      label: 'Meine Bestellungen',
+      description: 'Ihre Käufe und Verkäufe verwalten',
+      icon: ShoppingBag,
+      emoji: '🛒',
+      color: 'info',
+    },
+    visibility: { admin: false, dashboard: true },
+    priority: 23,
+    category: 'commerce',
+  },
+
+  favorites: {
+    id: 'favorites',
+    path: '/dashboard/favorites',
+    ui: {
+      label: 'Favoriten',
+      description: 'Gemerkte Inserate im Marketplace',
+      icon: Heart,
+      emoji: '❤️',
+      color: 'error',
+    },
+    visibility: { admin: false, dashboard: true },
+    priority: 24,
+    category: 'commerce',
+  },
+
   // ---------------------------------------------------------------------------
   // SERVICES - Repairer features
   // ---------------------------------------------------------------------------

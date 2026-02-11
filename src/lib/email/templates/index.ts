@@ -54,5 +54,23 @@ export {
   helperNewMatchingRequest,
 } from './it-hilfe';
 
+// Appointment templates
+export {
+  appointmentNewBooking,
+  appointmentQuoteReceived,
+  appointmentStatusUpdate,
+  appointmentUnassignedAlert,
+} from './appointments';
+
+// Marketplace templates
+export {
+  listingPublishedConfirmation,
+  newMarketplaceMessage,
+  listingReviewNotification,
+  orderConfirmationBuyer,
+  newOrderNotificationSeller,
+  orderStatusUpdate,
+} from './marketplace';
+
 // Base styles (for custom templates)
 export { BASE_STYLES, COPYRIGHT_TEXT, AUTO_GENERATED_TEXT, createEmailLayout, createTextFooter } from './base-styles';

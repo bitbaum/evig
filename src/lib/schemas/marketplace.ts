@@ -1,0 +1,154 @@
+/**
+ * Marketplace Zod Schemas
+ *
+ * Validation schemas for the P2P marketplace.
+ * Derives enum values from config SSOT — never hardcode here.
+ */
+
+import { z } from 'zod';
+import {
+  MARKETPLACE_CATEGORIES,
+  LISTING_CONDITIONS,
+  DELIVERY_OPTIONS,
+  PAYMENT_MODES,
+  MARKETPLACE_LIMITS,
+  LISTING_STATUSES,
+  ORDER_STATUSES,
+} from '@/config/marketplace';
+import { paginationSchema } from './common';
+
+// ============================================================================
+// Browse / Query
+// ============================================================================
+
+export const ListingsQuerySchema = z.object({
+  category: z.enum(MARKETPLACE_CATEGORIES as unknown as [string, ...string[]]).optional(),
+  condition: z.enum(LISTING_CONDITIONS as unknown as [string, ...string[]]).optional(),
+  delivery: z.enum(DELIVERY_OPTIONS as unknown as [string, ...string[]]).optional(),
+  payment: z.enum(PAYMENT_MODES as unknown as [string, ...string[]]).optional(),
+  search: z.string().max(200).optional(),
+  sort: z.enum(['newest', 'price_asc', 'price_desc', 'popular'] as const).default('newest'),
+  price_min: z.coerce.number().min(0).optional(),
+  price_max: z.coerce.number().max(MARKETPLACE_LIMITS.MAX_PRICE_CHF).optional(),
+  seller_type: z.enum(['revampit', 'community']).optional(),
+  status: z.enum(LISTING_STATUSES as unknown as [string, ...string[]]).optional(),
+}).merge(paginationSchema);
+
+export type ListingsQuery = z.infer<typeof ListingsQuerySchema>;
+
+// ============================================================================
+// Create Listing
+// ============================================================================
+
+export const CreateListingSchema = z.object({
+  title: z.string()
+    .min(3, 'Titel muss mindestens 3 Zeichen lang sein')
+    .max(MARKETPLACE_LIMITS.MAX_TITLE_LENGTH, `Titel darf maximal ${MARKETPLACE_LIMITS.MAX_TITLE_LENGTH} Zeichen lang sein`),
+  description: z.string()
+    .min(10, 'Beschreibung muss mindestens 10 Zeichen lang sein')
+    .max(MARKETPLACE_LIMITS.MAX_DESCRIPTION_LENGTH, `Beschreibung darf maximal ${MARKETPLACE_LIMITS.MAX_DESCRIPTION_LENGTH} Zeichen lang sein`),
+  price_chf: z.number()
+    .min(0, 'Preis muss mindestens 0 sein')
+    .max(MARKETPLACE_LIMITS.MAX_PRICE_CHF, `Preis darf maximal ${MARKETPLACE_LIMITS.MAX_PRICE_CHF} CHF sein`),
+  category: z.enum(MARKETPLACE_CATEGORIES as unknown as [string, ...string[]], {
+    error: 'Ungültige Kategorie',
+  }),
+  condition: z.enum(LISTING_CONDITIONS as unknown as [string, ...string[]], {
+    error: 'Ungültiger Zustand',
+  }),
+  brand: z.string().max(100).optional().nullable(),
+  model: z.string().max(100).optional().nullable(),
+  images: z.array(z.string().url('Ungültige Bild-URL'))
+    .min(MARKETPLACE_LIMITS.MIN_IMAGES, `Mindestens ${MARKETPLACE_LIMITS.MIN_IMAGES} Bild erforderlich`)
+    .max(MARKETPLACE_LIMITS.MAX_IMAGES, `Maximal ${MARKETPLACE_LIMITS.MAX_IMAGES} Bilder erlaubt`),
+  delivery_options: z.enum(DELIVERY_OPTIONS as unknown as [string, ...string[]]).default('pickup'),
+  shipping_cost_chf: z.number().min(0).optional().nullable(),
+  pickup_location: z.string().max(200).optional().nullable(),
+  payment_mode: z.enum(PAYMENT_MODES as unknown as [string, ...string[]]).default('direct'),
+  status: z.enum(['active', 'draft'] as const).default('active'),
+});
+
+export type CreateListingInput = z.infer<typeof CreateListingSchema>;
+
+// ============================================================================
+// Update Listing
+// ============================================================================
+
+export const UpdateListingSchema = z.object({
+  title: z.string()
+    .min(3, 'Titel muss mindestens 3 Zeichen lang sein')
+    .max(MARKETPLACE_LIMITS.MAX_TITLE_LENGTH)
+    .optional(),
+  description: z.string()
+    .min(10, 'Beschreibung muss mindestens 10 Zeichen lang sein')
+    .max(MARKETPLACE_LIMITS.MAX_DESCRIPTION_LENGTH)
+    .optional(),
+  price_chf: z.number().min(0).max(MARKETPLACE_LIMITS.MAX_PRICE_CHF).optional(),
+  category: z.enum(MARKETPLACE_CATEGORIES as unknown as [string, ...string[]]).optional(),
+  condition: z.enum(LISTING_CONDITIONS as unknown as [string, ...string[]]).optional(),
+  brand: z.string().max(100).optional().nullable(),
+  model: z.string().max(100).optional().nullable(),
+  images: z.array(z.string().url()).min(1).max(MARKETPLACE_LIMITS.MAX_IMAGES).optional(),
+  delivery_options: z.enum(DELIVERY_OPTIONS as unknown as [string, ...string[]]).optional(),
+  shipping_cost_chf: z.number().min(0).optional().nullable(),
+  pickup_location: z.string().max(200).optional().nullable(),
+  payment_mode: z.enum(PAYMENT_MODES as unknown as [string, ...string[]]).optional(),
+  status: z.enum(LISTING_STATUSES as unknown as [string, ...string[]]).optional(),
+});
+
+export type UpdateListingInput = z.infer<typeof UpdateListingSchema>;
+
+// ============================================================================
+// Contact Seller
+// ============================================================================
+
+export const ContactSellerSchema = z.object({
+  message: z.string()
+    .min(5, 'Nachricht muss mindestens 5 Zeichen lang sein')
+    .max(2000, 'Nachricht darf maximal 2000 Zeichen lang sein'),
+});
+
+export type ContactSellerInput = z.infer<typeof ContactSellerSchema>;
+
+// ============================================================================
+// Create Order (secure payment)
+// ============================================================================
+
+export const CreateOrderSchema = z.object({
+  listing_id: z.string().uuid('Ungültige Listing-ID'),
+  delivery_method: z.enum(['pickup', 'shipping'] as const),
+  shipping_address: z.object({
+    name: z.string().min(1),
+    street: z.string().min(1),
+    city: z.string().min(1),
+    postal_code: z.string().regex(/^\d{4}$/, 'Ungültige Postleitzahl'),
+    country: z.string().default('CH'),
+  }).optional().nullable(),
+});
+
+export type CreateOrderInput = z.infer<typeof CreateOrderSchema>;
+
+// ============================================================================
+// Orders Query (list my orders)
+// ============================================================================
+
+export const OrdersQuerySchema = z.object({
+  status: z.enum(ORDER_STATUSES as unknown as [string, ...string[]]).optional(),
+  role: z.enum(['buyer', 'seller'] as const).default('buyer'),
+}).merge(paginationSchema);
+
+export type OrdersQuery = z.infer<typeof OrdersQuerySchema>;
+
+// ============================================================================
+// Update Order Status
+// ============================================================================
+
+export const UpdateOrderStatusSchema = z.object({
+  status: z.enum(ORDER_STATUSES as unknown as [string, ...string[]], {
+    error: 'Ungültiger Bestellstatus',
+  }),
+  tracking_number: z.string().max(200).optional().nullable(),
+  tracking_url: z.string().url().max(500).optional().nullable(),
+});
+
+export type UpdateOrderStatusInput = z.infer<typeof UpdateOrderStatusSchema>;

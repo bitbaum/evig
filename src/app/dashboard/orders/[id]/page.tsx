@@ -1,0 +1,424 @@
+'use client'
+
+import { useState, useEffect } from 'react'
+import { useSession } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
+import Link from 'next/link'
+import {
+  ArrowLeft,
+  Package,
+  Truck,
+  MapPin,
+  User,
+  CheckCircle,
+  Clock,
+  XCircle,
+  Shield,
+  Loader2,
+  AlertCircle,
+  ExternalLink,
+} from 'lucide-react'
+import { ORDER_STATUS_CONFIG, formatCHF, DELIVERY_LABELS } from '@/config/marketplace'
+import type { OrderStatus, DeliveryOption } from '@/config/marketplace'
+import { formatDateShort } from '@/lib/date-formats'
+
+interface OrderDetail {
+  id: string
+  buyer_id: string
+  seller_id: string
+  listing_id: string
+  amount_chf: number
+  commission_chf: number
+  seller_payout_chf: number
+  status: string
+  delivery_method: string
+  shipping_address: {
+    name?: string
+    street?: string
+    city?: string
+    postal_code?: string
+    country?: string
+    tracking_number?: string
+    tracking_url?: string
+  } | null
+  created_at: string
+  updated_at: string
+  listing_title: string
+  thumbnail: string | null
+  buyer_name: string | null
+  buyer_email: string | null
+  seller_name: string | null
+  seller_email: string | null
+  role: 'buyer' | 'seller'
+  counterparty_name: string | null
+}
+
+const STATUS_STEPS: OrderStatus[] = ['pending_payment', 'paid', 'shipped', 'delivered', 'completed']
+
+export default function OrderDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const { data: session, status: sessionStatus } = useSession()
+  const router = useRouter()
+  const [order, setOrder] = useState<OrderDetail | null>(null)
+  const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+  const [updatingStatus, setUpdatingStatus] = useState(false)
+  const [trackingNumber, setTrackingNumber] = useState('')
+
+  useEffect(() => {
+    if (sessionStatus === 'unauthenticated') {
+      router.push('/auth/login')
+      return
+    }
+
+    const fetchOrder = async () => {
+      try {
+        const { id } = await params
+        const response = await fetch(`/api/marketplace/orders/${id}`)
+        const data = await response.json()
+
+        if (data.success && data.data) {
+          setOrder(data.data)
+        } else {
+          setError(data.error || 'Bestellung nicht gefunden')
+        }
+      } catch {
+        setError('Fehler beim Laden der Bestellung')
+      } finally {
+        setIsLoading(false)
+      }
+    }
+    fetchOrder()
+  }, [params, sessionStatus, router])
+
+  const updateStatus = async (newStatus: string) => {
+    if (!order || updatingStatus) return
+    setUpdatingStatus(true)
+    setError(null)
+
+    try {
+      const body: Record<string, unknown> = { status: newStatus }
+      if (newStatus === 'shipped' && trackingNumber.trim()) {
+        body.tracking_number = trackingNumber.trim()
+      }
+
+      const { id } = await params
+      const response = await fetch(`/api/marketplace/orders/${id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+      })
+
+      const data = await response.json()
+
+      if (data.success) {
+        setOrder(prev => prev ? { ...prev, status: newStatus } : null)
+      } else {
+        setError(data.error || 'Status konnte nicht aktualisiert werden')
+      }
+    } catch {
+      setError('Netzwerkfehler')
+    } finally {
+      setUpdatingStatus(false)
+    }
+  }
+
+  if (isLoading || sessionStatus === 'loading') {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <Loader2 className="w-8 h-8 text-green-600 animate-spin" />
+      </div>
+    )
+  }
+
+  if (error && !order) {
+    return (
+      <div className="max-w-2xl mx-auto py-12 text-center">
+        <AlertCircle className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+        <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-2">{error}</h2>
+        <Link href="/dashboard/orders" className="text-green-600 hover:text-green-700 font-medium">
+          Zurück zu meinen Bestellungen
+        </Link>
+      </div>
+    )
+  }
+
+  if (!order) return null
+
+  const statusConfig = ORDER_STATUS_CONFIG[order.status as OrderStatus]
+  const currentStepIndex = STATUS_STEPS.indexOf(order.status as OrderStatus)
+  const isCancelled = order.status === 'cancelled' || order.status === 'refunded'
+  const deliveryLabel = DELIVERY_LABELS[order.delivery_method as DeliveryOption] || order.delivery_method
+
+  return (
+    <div className="max-w-3xl mx-auto">
+      <Link
+        href="/dashboard/orders"
+        className="inline-flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-green-600 mb-6 transition-colors"
+      >
+        <ArrowLeft className="w-4 h-4" />
+        Zurück zu meinen Bestellungen
+      </Link>
+
+      {/* Header */}
+      <div className="flex items-center justify-between mb-6">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Bestelldetails</h1>
+          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+            Bestellt am {formatDateShort(order.created_at)}
+          </p>
+        </div>
+        {statusConfig && (
+          <span className={`inline-flex px-3 py-1 text-sm font-medium rounded-full ${statusConfig.color}`}>
+            {statusConfig.label}
+          </span>
+        )}
+      </div>
+
+      {/* Error */}
+      {error && (
+        <div className="mb-6 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4 text-red-700 dark:text-red-300">
+          {error}
+        </div>
+      )}
+
+      {/* Status timeline */}
+      {!isCancelled && (
+        <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm mb-6">
+          <h2 className="text-sm font-semibold text-gray-900 dark:text-white mb-4">Bestellverlauf</h2>
+          <div className="flex items-center justify-between">
+            {STATUS_STEPS.map((step, idx) => {
+              const stepConfig = ORDER_STATUS_CONFIG[step]
+              const isActive = idx <= currentStepIndex
+              const isCurrent = idx === currentStepIndex
+              return (
+                <div key={step} className="flex-1 flex items-center">
+                  <div className="flex flex-col items-center flex-shrink-0">
+                    <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
+                      isActive
+                        ? 'bg-green-500 text-white'
+                        : 'bg-gray-200 dark:bg-gray-700 text-gray-400'
+                    }`}>
+                      {isActive ? <CheckCircle className="w-4 h-4" /> : <Clock className="w-4 h-4" />}
+                    </div>
+                    <span className={`text-xs mt-1 text-center ${
+                      isCurrent ? 'font-semibold text-green-600' : isActive ? 'text-gray-700 dark:text-gray-300' : 'text-gray-400'
+                    }`}>
+                      {stepConfig.label}
+                    </span>
+                  </div>
+                  {idx < STATUS_STEPS.length - 1 && (
+                    <div className={`flex-1 h-0.5 mx-2 ${
+                      idx < currentStepIndex ? 'bg-green-500' : 'bg-gray-200 dark:bg-gray-700'
+                    }`} />
+                  )}
+                </div>
+              )
+            })}
+          </div>
+        </div>
+      )}
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {/* Listing info */}
+        <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
+          <h2 className="text-sm font-semibold text-gray-900 dark:text-white mb-4">Artikel</h2>
+          <Link
+            href={`/marketplace/${order.listing_id}`}
+            className="flex gap-3 hover:opacity-80 transition-opacity"
+          >
+            <div className="w-16 h-16 rounded-lg overflow-hidden flex-shrink-0 bg-gray-100 dark:bg-gray-700">
+              {order.thumbnail ? (
+                <img src={order.thumbnail} alt="" className="w-full h-full object-cover" />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center">
+                  <Package className="w-6 h-6 text-gray-400" />
+                </div>
+              )}
+            </div>
+            <div>
+              <h3 className="font-medium text-gray-900 dark:text-white">{order.listing_title}</h3>
+              <p className="text-sm text-gray-500 dark:text-gray-400 flex items-center gap-1 mt-1">
+                {order.delivery_method === 'shipping' ? <Truck className="w-3.5 h-3.5" /> : <MapPin className="w-3.5 h-3.5" />}
+                {deliveryLabel}
+              </p>
+            </div>
+          </Link>
+
+          {/* Tracking info */}
+          {order.shipping_address?.tracking_number && (
+            <div className="mt-4 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+              <p className="text-sm font-medium text-blue-800 dark:text-blue-300">
+                Sendungsnummer: {order.shipping_address.tracking_number}
+              </p>
+              {order.shipping_address.tracking_url && (
+                <a
+                  href={order.shipping_address.tracking_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sm text-blue-600 hover:text-blue-700 flex items-center gap-1 mt-1"
+                >
+                  Sendung verfolgen <ExternalLink className="w-3 h-3" />
+                </a>
+              )}
+            </div>
+          )}
+        </div>
+
+        {/* Price breakdown */}
+        <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
+          <h2 className="text-sm font-semibold text-gray-900 dark:text-white mb-4">Preisübersicht</h2>
+          <div className="space-y-2 text-sm">
+            <div className="flex justify-between">
+              <span className="text-gray-500 dark:text-gray-400">Betrag</span>
+              <span className="text-gray-900 dark:text-white">{formatCHF(Number(order.amount_chf))}</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-gray-500 dark:text-gray-400">Servicegebühr (5%)</span>
+              <span className="text-gray-900 dark:text-white">{formatCHF(Number(order.commission_chf))}</span>
+            </div>
+            {order.role === 'seller' && (
+              <div className="flex justify-between font-medium pt-2 border-t border-gray-200 dark:border-gray-700">
+                <span className="text-gray-700 dark:text-gray-300">Ihre Auszahlung</span>
+                <span className="text-green-600">{formatCHF(Number(order.seller_payout_chf))}</span>
+              </div>
+            )}
+            {order.role === 'buyer' && (
+              <div className="flex justify-between font-bold pt-2 border-t border-gray-200 dark:border-gray-700">
+                <span className="text-gray-900 dark:text-white">Total bezahlt</span>
+                <span className="text-gray-900 dark:text-white">{formatCHF(Number(order.amount_chf))}</span>
+              </div>
+            )}
+          </div>
+          <div className="mt-4 flex items-center gap-1.5 text-xs text-gray-400">
+            <Shield className="w-3.5 h-3.5 text-green-600" />
+            Käuferschutz aktiv
+          </div>
+        </div>
+
+        {/* Counterparty info */}
+        <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
+          <h2 className="text-sm font-semibold text-gray-900 dark:text-white mb-4">
+            {order.role === 'buyer' ? 'Verkäufer' : 'Käufer'}
+          </h2>
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center">
+              <User className="w-5 h-5 text-green-600" />
+            </div>
+            <div>
+              <p className="font-medium text-gray-900 dark:text-white">{order.counterparty_name}</p>
+              {order.role === 'buyer' && (
+                <Link
+                  href={`/sellers/${order.seller_id}`}
+                  className="text-sm text-green-600 hover:text-green-700"
+                >
+                  Profil ansehen
+                </Link>
+              )}
+            </div>
+          </div>
+        </div>
+
+        {/* Shipping address */}
+        {order.delivery_method === 'shipping' && order.shipping_address && (
+          <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
+            <h2 className="text-sm font-semibold text-gray-900 dark:text-white mb-4">Lieferadresse</h2>
+            <div className="text-sm text-gray-700 dark:text-gray-300 space-y-1">
+              {order.shipping_address.name && <p className="font-medium">{order.shipping_address.name}</p>}
+              {order.shipping_address.street && <p>{order.shipping_address.street}</p>}
+              {(order.shipping_address.postal_code || order.shipping_address.city) && (
+                <p>{order.shipping_address.postal_code} {order.shipping_address.city}</p>
+              )}
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Action buttons */}
+      <div className="mt-6 bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
+        <h2 className="text-sm font-semibold text-gray-900 dark:text-white mb-4">Aktionen</h2>
+
+        <div className="space-y-3">
+          {/* Seller: paid → shipped */}
+          {order.role === 'seller' && order.status === 'paid' && (
+            <div className="space-y-3">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  Sendungsnummer (optional)
+                </label>
+                <input
+                  type="text"
+                  value={trackingNumber}
+                  onChange={(e) => setTrackingNumber(e.target.value)}
+                  placeholder="z.B. 99.12.345678.90123456"
+                  className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white px-4 py-2.5 text-sm focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                />
+              </div>
+              <button
+                onClick={() => updateStatus('shipped')}
+                disabled={updatingStatus}
+                className="w-full flex items-center justify-center gap-2 bg-purple-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-purple-700 disabled:opacity-50 transition-colors"
+              >
+                {updatingStatus ? <Loader2 className="w-4 h-4 animate-spin" /> : <Truck className="w-4 h-4" />}
+                Als versendet markieren
+              </button>
+            </div>
+          )}
+
+          {/* Seller: shipped → delivered */}
+          {order.role === 'seller' && order.status === 'shipped' && (
+            <button
+              onClick={() => updateStatus('delivered')}
+              disabled={updatingStatus}
+              className="w-full flex items-center justify-center gap-2 bg-indigo-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-indigo-700 disabled:opacity-50 transition-colors"
+            >
+              {updatingStatus ? <Loader2 className="w-4 h-4 animate-spin" /> : <Package className="w-4 h-4" />}
+              Als geliefert markieren
+            </button>
+          )}
+
+          {/* Buyer: delivered → completed */}
+          {order.role === 'buyer' && order.status === 'delivered' && (
+            <button
+              onClick={() => updateStatus('completed')}
+              disabled={updatingStatus}
+              className="w-full flex items-center justify-center gap-2 bg-green-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-green-700 disabled:opacity-50 transition-colors"
+            >
+              {updatingStatus ? <Loader2 className="w-4 h-4 animate-spin" /> : <CheckCircle className="w-4 h-4" />}
+              Empfang bestätigen
+            </button>
+          )}
+
+          {/* Cancel (buyer: pending_payment or paid) */}
+          {order.role === 'buyer' && (order.status === 'pending_payment' || order.status === 'paid') && (
+            <button
+              onClick={() => {
+                if (window.confirm('Bestellung wirklich stornieren?')) {
+                  updateStatus('cancelled')
+                }
+              }}
+              disabled={updatingStatus}
+              className="w-full flex items-center justify-center gap-2 border border-red-300 dark:border-red-800 text-red-600 dark:text-red-400 py-3 px-6 rounded-lg font-medium hover:bg-red-50 dark:hover:bg-red-900/20 disabled:opacity-50 transition-colors"
+            >
+              {updatingStatus ? <Loader2 className="w-4 h-4 animate-spin" /> : <XCircle className="w-4 h-4" />}
+              Stornieren
+            </button>
+          )}
+
+          {/* No actions available */}
+          {isCancelled && (
+            <p className="text-sm text-gray-500 dark:text-gray-400 text-center py-2">
+              Diese Bestellung wurde {order.status === 'cancelled' ? 'storniert' : 'erstattet'}.
+            </p>
+          )}
+
+          {order.status === 'completed' && (
+            <p className="text-sm text-green-600 text-center py-2 flex items-center justify-center gap-1.5">
+              <CheckCircle className="w-4 h-4" />
+              Bestellung abgeschlossen
+            </p>
+          )}
+        </div>
+      </div>
+    </div>
+  )
+}

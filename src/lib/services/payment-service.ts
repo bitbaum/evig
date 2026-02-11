@@ -445,5 +445,21 @@ export class PaymentService {
         [metadata.workshopRegistrationId]
       )
     }
+
+    // Update marketplace order if exists (P2P marketplace secure payment)
+    if (metadata.marketplaceOrderId) {
+      await query(
+        `UPDATE ${TABLE_NAMES.MARKETPLACE_ORDERS}
+         SET
+           status = 'paid',
+           updated_at = CURRENT_TIMESTAMP
+         WHERE id = $1 AND status = 'pending_payment'`,
+        [metadata.marketplaceOrderId]
+      )
+      logger.info('Marketplace order marked as paid via webhook', {
+        orderId: metadata.marketplaceOrderId,
+        paymentIntentId: paymentIntent.id,
+      })
+    }
   }
 }
