@@ -56,6 +56,17 @@ export {
   sellerApplicationSubmitted,
   locationApprovalNotification,
 
+  // IT-Hilfe templates
+  itHilfeRequestConfirmation,
+  adminNewITHilfeRequest,
+  helperNewMatchingRequest,
+
+  // Appointment templates
+  appointmentNewBooking,
+  appointmentQuoteReceived,
+  appointmentStatusUpdate,
+  appointmentUnassignedAlert,
+
   // Base styles (for custom templates)
   BASE_STYLES,
   COPYRIGHT_TEXT,

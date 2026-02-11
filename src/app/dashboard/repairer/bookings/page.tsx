@@ -1,151 +1,116 @@
-import { Metadata } from 'next'
-import { ROLES } from '@/lib/constants'
-import { requireRole } from '@/middleware/admin'
+'use client'
+
+import { useState, useEffect, useCallback } from 'react'
+import { useSession } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { getBookingStatusBadge, getUrgencyBadge } from '@/config/booking-status'
 import {
-  Calendar,
-  Clock,
-  CheckCircle,
-  XCircle,
-  AlertCircle,
-  MessageSquare,
-  Phone,
-  MapPin,
-  User,
-  DollarSign,
-  Star
+  Calendar, Clock, CheckCircle, XCircle, AlertCircle,
+  User, Loader2, RefreshCw, Wrench, Home, ChevronRight, Send
 } from 'lucide-react'
+import { getBookingStatusBadge, getUrgencyBadge } from '@/config/booking-status'
 import { formatDateShort } from '@/lib/date-formats'
 
-export const metadata: Metadata = {
-  title: 'Reparatur-Buchungen | Repairer Dashboard',
-  description: 'Verwalten Sie Ihre eingehenden Reparaturaufträge.',
+interface Appointment {
+  id: string
+  user_id: string
+  repairer_id: string
+  description: string
+  device_info: string | null
+  preferred_date: string | null
+  confirmed_date: string | null
+  urgency: string
+  status: string
+  is_home_visit: boolean
+  visit_address: string | null
+  visit_city: string | null
+  quoted_price_chf: number | null
+  diagnosis_notes: string | null
+  completion_notes: string | null
+  customer_rating: number | null
+  created_at: string
+  customer_name: string
+  customer_email: string
+  repairer_name: string
+  business_name: string | null
+  service_name: string
 }
 
-export default async function RepairerBookingsPage() {
-  // Require repairer role
-  await requireRole(ROLES.REPAIRER)
+export default function RepairerBookingsPage() {
+  const { data: session, status: sessionStatus } = useSession()
+  const router = useRouter()
+  const [appointments, setAppointments] = useState<Appointment[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+  const [activeTab, setActiveTab] = useState<'active' | 'completed'>('active')
+  const [actionLoading, setActionLoading] = useState<string | null>(null)
+  const [quoteModal, setQuoteModal] = useState<{ appointmentId: string; open: boolean } | null>(null)
+  const [quotePrice, setQuotePrice] = useState('')
+  const [quoteDiagnosis, setQuoteDiagnosis] = useState('')
 
-  // Mock bookings data
-  const bookings = [
-    {
-      id: 'booking_1',
-      customer: {
-        name: 'Max Müller',
-        email: 'max@example.com',
-        phone: '+41 79 123 45 67',
-        location: 'Zürich',
-        rating: 4.5,
-      },
-      service: {
-        name: 'Laptop Bildschirm reparieren',
-        category: 'Laptop Reparaturen',
-        description: 'MacBook Pro 14" - Bildschirm ist gesprungen',
-        price: 180,
-      },
-      status: 'pending',
-      urgency: 'normal',
-      requestedDate: '2024-12-05',
-      estimatedCompletion: '2024-12-07',
-      createdAt: '2024-12-01',
-      messages: 2,
-      images: ['https://images.unsplash.com/photo-1541807084-5c52b6b3adef?w=100'],
-    },
-    {
-      id: 'booking_2',
-      customer: {
-        name: 'Anna Schmidt',
-        email: 'anna@example.com',
-        phone: '+41 78 987 65 43',
-        location: 'Bern',
-        rating: 4.8,
-      },
-      service: {
-        name: 'Smartphone Akku ersetzen',
-        category: 'Smartphone Reparaturen',
-        description: 'iPhone 12 - Akku hält nicht mehr',
-        price: 85,
-      },
-      status: 'confirmed',
-      urgency: 'high',
-      requestedDate: '2024-12-03',
-      estimatedCompletion: '2024-12-04',
-      createdAt: '2024-11-28',
-      messages: 5,
-      images: ['https://images.unsplash.com/photo-1592899677977-9c10ca588bbd?w=100'],
-    },
-    {
-      id: 'booking_3',
-      customer: {
-        name: 'Peter Weber',
-        email: 'peter@example.com',
-        phone: '+41 76 543 21 09',
-        location: 'Basel',
-        rating: 4.2,
-      },
-      service: {
-        name: 'Desktop PC Grafikkarte tauschen',
-        category: 'Desktop PC Service',
-        description: 'Gaming PC - Neue RTX 4070 installieren',
-        price: 250,
-      },
-      status: 'in_progress',
-      urgency: 'normal',
-      requestedDate: '2024-11-25',
-      estimatedCompletion: '2024-11-30',
-      createdAt: '2024-11-20',
-      messages: 8,
-      images: ['https://images.unsplash.com/photo-1587831990711-23ca6441447b?w=100'],
-    },
-    {
-      id: 'booking_4',
-      customer: {
-        name: 'Lisa Hofmann',
-        email: 'lisa@example.com',
-        phone: '+41 75 111 22 33',
-        location: 'Genève',
-        rating: 4.9,
-      },
-      service: {
-        name: 'Laptop Datenrettung',
-        category: 'Laptop Reparaturen',
-        description: 'Festplatte ausgefallen - Daten müssen gerettet werden',
-        price: 150,
-      },
-      status: 'completed',
-      urgency: 'urgent',
-      requestedDate: '2024-11-15',
-      estimatedCompletion: '2024-11-18',
-      createdAt: '2024-11-10',
-      messages: 12,
-      images: [],
-    },
-  ]
+  const fetchAppointments = useCallback(async () => {
+    try {
+      setLoading(true)
+      const res = await fetch('/api/appointments?role=repairer')
+      const data = await res.json()
+      if (data.success) {
+        setAppointments(data.data.appointments)
+      } else {
+        setError(data.error || 'Fehler beim Laden')
+      }
+    } catch {
+      setError('Netzwerkfehler')
+    } finally {
+      setLoading(false)
+    }
+  }, [])
 
-  // Status icons for repairer view (labels/colors from booking-status SSOT)
-  const STATUS_ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
-    pending: AlertCircle,
-    confirmed: Clock,
-    in_progress: CheckCircle,
-    completed: CheckCircle,
-    cancelled: XCircle,
+  useEffect(() => {
+    if (sessionStatus === 'unauthenticated') {
+      router.push('/auth/login')
+    } else if (sessionStatus === 'authenticated') {
+      fetchAppointments()
+    }
+  }, [sessionStatus, router, fetchAppointments])
+
+  const handleAction = async (appointmentId: string, action: string, extraData?: Record<string, unknown>) => {
+    setActionLoading(appointmentId)
+    try {
+      const res = await fetch('/api/appointments/' + appointmentId, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action, ...extraData })
+      })
+      const data = await res.json()
+      if (data.success) {
+        fetchAppointments()
+        setQuoteModal(null)
+        setQuotePrice('')
+        setQuoteDiagnosis('')
+      } else {
+        setError(data.error || 'Aktion fehlgeschlagen')
+      }
+    } catch {
+      setError('Netzwerkfehler')
+    } finally {
+      setActionLoading(null)
+    }
   }
 
-  const getStatusInfo = (status: string) => {
-    const badge = getBookingStatusBadge(status)
-    return { ...badge, icon: STATUS_ICONS[status] ?? AlertCircle }
-  }
+  const filteredAppointments = appointments.filter(apt => {
+    if (activeTab === 'active') return !['completed', 'rejected', 'cancelled'].includes(apt.status)
+    return ['completed', 'rejected', 'cancelled'].includes(apt.status)
+  })
 
-  const getUrgencyInfo = (urgency: string) => getUrgencyBadge(urgency)
+  const activeCount = appointments.filter(a => !['completed', 'rejected', 'cancelled'].includes(a.status)).length
+  const requestedCount = appointments.filter(a => a.status === 'requested').length
 
-  const stats = {
-    totalBookings: bookings.length,
-    pendingBookings: bookings.filter(b => b.status === 'pending').length,
-    confirmedBookings: bookings.filter(b => b.status === 'confirmed').length,
-    inProgressBookings: bookings.filter(b => b.status === 'in_progress').length,
-    completedBookings: bookings.filter(b => b.status === 'completed').length,
-    totalRevenue: bookings.reduce((sum, b) => sum + b.service.price, 0),
+  if (sessionStatus === 'loading' || loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
+      </div>
+    )
   }
 
   return (
@@ -160,189 +125,325 @@ export default async function RepairerBookingsPage() {
             Verwalten Sie Ihre eingehenden Reparaturaufträge
           </p>
         </div>
+        <button
+          onClick={fetchAppointments}
+          className="flex items-center gap-2 px-4 py-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700"
+        >
+          <RefreshCw className="h-4 w-4" />
+          Aktualisieren
+        </button>
       </div>
+
+      {/* Error Banner */}
+      {error && (
+        <div className="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg flex items-center gap-2 text-red-700 dark:text-red-300">
+          <AlertCircle className="h-5 w-5 flex-shrink-0" />
+          {error}
+          <button onClick={() => setError(null)} className="ml-auto text-red-500 hover:text-red-700">×</button>
+        </div>
+      )}
+
+      {/* Action needed banner */}
+      {requestedCount > 0 && (
+        <div className="p-4 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg flex items-center gap-2 text-yellow-700 dark:text-yellow-300">
+          <AlertCircle className="h-5 w-5" />
+          Sie haben {requestedCount} neue Anfrage{requestedCount > 1 ? 'n' : ''} zur Bearbeitung
+        </div>
+      )}
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-100 dark:border-gray-700">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Ausstehende</p>
-              <p className="text-2xl font-bold text-gray-900 dark:text-white">{stats.pendingBookings}</p>
+              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Neue Anfragen</p>
+              <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                {appointments.filter(a => a.status === 'requested').length}
+              </p>
             </div>
             <AlertCircle className="w-8 h-8 text-yellow-600" />
           </div>
         </div>
-
         <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-100 dark:border-gray-700">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Bestätigte</p>
-              <p className="text-2xl font-bold text-gray-900 dark:text-white">{stats.confirmedBookings}</p>
+              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Angenommen</p>
+              <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                {appointments.filter(a => ['accepted', 'quoted', 'quote_approved'].includes(a.status)).length}
+              </p>
             </div>
             <Clock className="w-8 h-8 text-blue-600" />
           </div>
         </div>
-
         <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-100 dark:border-gray-700">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-gray-600 dark:text-gray-400">In Bearbeitung</p>
-              <p className="text-2xl font-bold text-gray-900 dark:text-white">{stats.inProgressBookings}</p>
+              <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                {appointments.filter(a => a.status === 'in_progress').length}
+              </p>
             </div>
-            <CheckCircle className="w-8 h-8 text-purple-600" />
+            <Wrench className="w-8 h-8 text-purple-600" />
           </div>
         </div>
-
         <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-100 dark:border-gray-700">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Gesamteinnahmen</p>
+              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Abgeschlossen</p>
               <p className="text-2xl font-bold text-gray-900 dark:text-white">
-                CHF {stats.totalRevenue.toLocaleString('de-CH')}
+                {appointments.filter(a => a.status === 'completed').length}
               </p>
             </div>
-            <DollarSign className="w-8 h-8 text-green-600" />
+            <CheckCircle className="w-8 h-8 text-green-600" />
           </div>
         </div>
       </div>
 
-      {/* Bookings List */}
+      {/* Tabs */}
+      <div className="flex gap-2">
+        <button
+          onClick={() => setActiveTab('active')}
+          className={'px-4 py-2 rounded-lg font-medium flex items-center gap-2 ' +
+            (activeTab === 'active'
+              ? 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300'
+              : 'bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700')}
+        >
+          <Clock className="h-4 w-4" />
+          Aktiv
+          {activeCount > 0 && (
+            <span className="bg-blue-500 text-white text-xs px-2 py-0.5 rounded-full">{activeCount}</span>
+          )}
+        </button>
+        <button
+          onClick={() => setActiveTab('completed')}
+          className={'px-4 py-2 rounded-lg font-medium flex items-center gap-2 ' +
+            (activeTab === 'completed'
+              ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300'
+              : 'bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700')}
+        >
+          <CheckCircle className="h-4 w-4" />
+          Abgeschlossen
+        </button>
+      </div>
+
+      {/* Appointments List */}
       <div className="space-y-4">
-        {bookings.map((booking) => {
-          const statusInfo = getStatusInfo(booking.status)
-          const urgencyInfo = getUrgencyInfo(booking.urgency)
-          const StatusIcon = statusInfo.icon
+        {filteredAppointments.length === 0 ? (
+          <div className="bg-white dark:bg-gray-800 rounded-xl p-8 text-center shadow-sm border border-gray-100 dark:border-gray-700">
+            <Wrench className="h-12 w-12 text-gray-300 dark:text-gray-600 mx-auto mb-4" />
+            <p className="text-gray-500 dark:text-gray-400">Keine Buchungen in dieser Kategorie</p>
+          </div>
+        ) : (
+          filteredAppointments.map(apt => {
+            const statusBadge = getBookingStatusBadge(apt.status)
+            const urgencyBadge = getUrgencyBadge(apt.urgency)
 
-          return (
-            <div key={booking.id} className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">
-              <div className="p-6">
-                <div className="flex items-start justify-between mb-4">
-                  <div className="flex items-start gap-4">
-                    {/* Customer Avatar */}
-                    <div className="w-12 h-12 bg-gray-200 dark:bg-gray-600 rounded-full flex items-center justify-center flex-shrink-0">
-                      <User className="w-6 h-6 text-gray-600 dark:text-gray-400" />
+            return (
+              <div key={apt.id} className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">
+                <div className="p-6">
+                  {/* Header: Status + Date */}
+                  <div className="flex items-start justify-between mb-4">
+                    <div className="flex items-center gap-2">
+                      <span className={'px-3 py-1 rounded-full text-sm font-medium ' + statusBadge.color}>
+                        {statusBadge.label}
+                      </span>
+                      <span className={'px-2 py-1 rounded-full text-xs font-medium ' + urgencyBadge.color}>
+                        {urgencyBadge.label}
+                      </span>
                     </div>
+                    <span className="text-sm text-gray-500 dark:text-gray-400">
+                      {formatDateShort(apt.created_at)}
+                    </span>
+                  </div>
 
-                    {/* Booking Details */}
-                    <div className="flex-1">
-                      <div className="flex items-center gap-3 mb-2">
-                        <h3 className="font-semibold text-gray-900 dark:text-white">
-                          {booking.service.name}
-                        </h3>
-                        <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${statusInfo.color}`}>
-                          <StatusIcon className="w-3 h-3 mr-1" />
-                          {statusInfo.label}
-                        </span>
-                        <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${urgencyInfo.color}`}>
-                          {urgencyInfo.label}
-                        </span>
-                      </div>
-
-                      <p className="text-gray-600 dark:text-gray-400 mb-3">
-                        {booking.service.description}
-                      </p>
-
-                      {/* Customer Info */}
-                      <div className="flex items-center gap-4 text-sm text-gray-600 dark:text-gray-400 mb-3">
-                        <div className="flex items-center gap-1">
-                          <User className="w-4 h-4" />
-                          <span>{booking.customer.name}</span>
-                        </div>
-                        <div className="flex items-center gap-1">
-                          <MapPin className="w-4 h-4" />
-                          <span>{booking.customer.location}</span>
-                        </div>
-                        <div className="flex items-center gap-1">
-                          <Star className="w-4 h-4 text-yellow-400 fill-current" />
-                          <span>{booking.customer.rating}</span>
-                        </div>
-                      </div>
-
-                      {/* Service Info */}
-                      <div className="flex items-center gap-4 text-sm">
-                        <div className="flex items-center gap-1">
-                          <Calendar className="w-4 h-4 text-gray-400" />
-                          <span>Angefordert: {formatDateShort(booking.requestedDate)}</span>
-                        </div>
-                        <div className="flex items-center gap-1">
-                          <Clock className="w-4 h-4 text-gray-400" />
-                          <span>Fertigestellt: {formatDateShort(booking.estimatedCompletion)}</span>
-                        </div>
-                        <div className="flex items-center gap-1">
-                          <DollarSign className="w-4 h-4 text-gray-400" />
-                          <span className="font-semibold">CHF {booking.service.price}</span>
-                        </div>
-                      </div>
+                  {/* Customer + Service Info */}
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="w-10 h-10 bg-gray-200 dark:bg-gray-600 rounded-full flex items-center justify-center flex-shrink-0">
+                      <User className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-gray-900 dark:text-white">{apt.customer_name || 'Kunde'}</h3>
+                      <p className="text-sm text-gray-500 dark:text-gray-400">{apt.service_name || 'Reparatur'}</p>
                     </div>
                   </div>
 
-                  {/* Images */}
-                  {booking.images.length > 0 && (
-                    <div className="flex gap-2">
-                      {booking.images.map((image, index) => (
-                        <img
-                          key={index}
-                          src={image}
-                          alt={`Booking ${index + 1}`}
-                          className="w-16 h-16 object-cover rounded-lg"
-                        />
-                      ))}
+                  <p className="text-gray-700 dark:text-gray-300 mb-4">{apt.description}</p>
+
+                  {/* Quote Display */}
+                  {apt.quoted_price_chf && (
+                    <div className="bg-purple-50 dark:bg-purple-900/20 rounded-lg p-4 mb-4">
+                      <div className="flex justify-between items-center">
+                        <div>
+                          <p className="text-sm text-purple-700 dark:text-purple-300 font-medium">Ihr Angebot</p>
+                          <p className="text-2xl font-bold text-purple-900 dark:text-purple-200">CHF {apt.quoted_price_chf}</p>
+                        </div>
+                        {apt.diagnosis_notes && (
+                          <p className="text-sm text-purple-700 dark:text-purple-300 max-w-xs">{apt.diagnosis_notes}</p>
+                        )}
+                      </div>
                     </div>
                   )}
-                </div>
 
-                {/* Actions */}
-                <div className="flex items-center justify-between pt-4 border-t border-gray-100 dark:border-gray-700">
-                  <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
-                    <MessageSquare className="w-4 h-4" />
-                    <span>{booking.messages} Nachrichten</span>
-                    <span>•</span>
-                    <span>Erstellt am {formatDateShort(booking.createdAt)}</span>
+                  {/* Meta Info */}
+                  <div className="flex flex-wrap gap-4 text-sm text-gray-600 dark:text-gray-400 mb-4">
+                    {apt.preferred_date && (
+                      <div className="flex items-center gap-1">
+                        <Calendar className="h-4 w-4" />
+                        Wunschtermin: {formatDateShort(apt.preferred_date)}
+                      </div>
+                    )}
+                    {apt.confirmed_date && (
+                      <div className="flex items-center gap-1">
+                        <Clock className="h-4 w-4" />
+                        Bestätigt: {formatDateShort(apt.confirmed_date)}
+                      </div>
+                    )}
+                    {apt.is_home_visit && (
+                      <div className="flex items-center gap-1">
+                        <Home className="h-4 w-4" />
+                        Hausbesuch{apt.visit_city ? ` - ${apt.visit_city}` : ''}
+                      </div>
+                    )}
+                    {apt.device_info && (
+                      <div className="flex items-center gap-1">
+                        <Wrench className="h-4 w-4" />
+                        {apt.device_info}
+                      </div>
+                    )}
                   </div>
 
-                  <div className="flex gap-2">
-                    {booking.status === 'pending' && (
+                  {/* Action Buttons */}
+                  <div className="flex flex-wrap gap-2 pt-4 border-t border-gray-100 dark:border-gray-700">
+                    {apt.status === 'requested' && (
                       <>
-                        <button className="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-medium">
-                          <CheckCircle className="w-4 h-4" />
+                        <button
+                          onClick={() => handleAction(apt.id, 'accept')}
+                          disabled={actionLoading === apt.id}
+                          className="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-medium disabled:opacity-50"
+                        >
+                          {actionLoading === apt.id ? <Loader2 className="w-4 h-4 animate-spin" /> : <CheckCircle className="w-4 h-4" />}
                           Annehmen
                         </button>
-                        <button className="inline-flex items-center gap-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-200 dark:hover:bg-gray-600">
+                        <button
+                          onClick={() => handleAction(apt.id, 'reject')}
+                          disabled={actionLoading === apt.id}
+                          className="inline-flex items-center gap-2 bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 px-4 py-2 rounded-lg text-sm font-medium hover:bg-red-200 dark:hover:bg-red-900/50 disabled:opacity-50"
+                        >
                           <XCircle className="w-4 h-4" />
                           Ablehnen
                         </button>
                       </>
                     )}
 
-                    {booking.status === 'confirmed' && (
-                      <button className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium">
-                        <Clock className="w-4 h-4" />
-                        In Bearbeitung
+                    {(['accepted', 'quote_rejected'].includes(apt.status)) && (
+                      <button
+                        onClick={() => setQuoteModal({ appointmentId: apt.id, open: true })}
+                        disabled={actionLoading === apt.id}
+                        className="inline-flex items-center gap-2 bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg text-sm font-medium disabled:opacity-50"
+                      >
+                        <Send className="w-4 h-4" />
+                        Angebot erstellen
                       </button>
                     )}
 
-                    {booking.status === 'in_progress' && (
-                      <button className="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-medium">
-                        <CheckCircle className="w-4 h-4" />
+                    {(['accepted', 'quote_approved'].includes(apt.status)) && (
+                      <button
+                        onClick={() => handleAction(apt.id, 'start')}
+                        disabled={actionLoading === apt.id}
+                        className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium disabled:opacity-50"
+                      >
+                        {actionLoading === apt.id ? <Loader2 className="w-4 h-4 animate-spin" /> : <Wrench className="w-4 h-4" />}
+                        Reparatur starten
+                      </button>
+                    )}
+
+                    {apt.status === 'in_progress' && (
+                      <button
+                        onClick={() => handleAction(apt.id, 'complete')}
+                        disabled={actionLoading === apt.id}
+                        className="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-medium disabled:opacity-50"
+                      >
+                        {actionLoading === apt.id ? <Loader2 className="w-4 h-4 animate-spin" /> : <CheckCircle className="w-4 h-4" />}
                         Abgeschlossen
                       </button>
                     )}
 
                     <Link
-                      href={`/dashboard/repairer/bookings/${booking.id}`}
-                      className="inline-flex items-center gap-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-200 dark:hover:bg-gray-600"
+                      href={'/dashboard/repairer/bookings/' + apt.id}
+                      className="inline-flex items-center gap-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-200 dark:hover:bg-gray-600 ml-auto"
                     >
-                      <MessageSquare className="w-4 h-4" />
                       Details
+                      <ChevronRight className="w-4 h-4" />
                     </Link>
                   </div>
                 </div>
               </div>
-            </div>
-          )
-        })}
+            )
+          })
+        )}
       </div>
+
+      {/* Quote Modal */}
+      {quoteModal?.open && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="bg-white dark:bg-gray-800 rounded-xl p-6 max-w-md w-full mx-4 shadow-xl">
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Angebot erstellen</h3>
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  Preis (CHF)
+                </label>
+                <input
+                  type="number"
+                  value={quotePrice}
+                  onChange={(e) => setQuotePrice(e.target.value)}
+                  placeholder="z.B. 150"
+                  min="1"
+                  step="0.01"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-purple-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  Diagnose / Notizen (optional)
+                </label>
+                <textarea
+                  value={quoteDiagnosis}
+                  onChange={(e) => setQuoteDiagnosis(e.target.value)}
+                  placeholder="Beschreiben Sie das Problem und die geplante Reparatur..."
+                  rows={3}
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-purple-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                />
+              </div>
+            </div>
+            <div className="flex gap-2 mt-6">
+              <button
+                onClick={() => { setQuoteModal(null); setQuotePrice(''); setQuoteDiagnosis('') }}
+                className="flex-1 px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600"
+              >
+                Abbrechen
+              </button>
+              <button
+                onClick={() => {
+                  const price = parseFloat(quotePrice)
+                  if (!price || price <= 0) {
+                    setError('Bitte geben Sie einen gültigen Preis ein')
+                    return
+                  }
+                  handleAction(quoteModal.appointmentId, 'quote', {
+                    quoted_price_chf: price,
+                    diagnosis_notes: quoteDiagnosis || undefined
+                  })
+                }}
+                disabled={actionLoading !== null}
+                className="flex-1 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 disabled:opacity-50"
+              >
+                {actionLoading ? <Loader2 className="h-4 w-4 animate-spin mx-auto" /> : 'Angebot senden'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Help Section */}
       <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-xl p-6">
@@ -355,11 +456,10 @@ export default async function RepairerBookingsPage() {
               Tipps für die Buchungsverwaltung
             </h3>
             <ul className="mt-2 text-sm text-blue-700 dark:text-blue-300 space-y-1">
-              <li>• Antworten Sie schnell auf neue Buchungsanfragen (innerhalb 24h)</li>
-              <li>• Kommunizieren Sie klar über Preise und Lieferzeiten</li>
-              <li>• Dokumentieren Sie den Zustand der Geräte vor der Reparatur</li>
-              <li>• Bitten Sie um Bewertungen nach erfolgreichen Reparaturen</li>
-              <li>• Halten Sie Ihre Kunden über den Fortschritt auf dem Laufenden</li>
+              <li>Antworten Sie schnell auf neue Buchungsanfragen (innerhalb 24h)</li>
+              <li>Kommunizieren Sie klar über Preise und Lieferzeiten</li>
+              <li>Dokumentieren Sie den Zustand der Geräte vor der Reparatur</li>
+              <li>Halten Sie Ihre Kunden über den Fortschritt auf dem Laufenden</li>
             </ul>
           </div>
         </div>
@@ -367,6 +467,3 @@ export default async function RepairerBookingsPage() {
     </div>
   )
 }
-
-
-

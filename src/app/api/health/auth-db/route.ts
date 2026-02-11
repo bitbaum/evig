@@ -1,5 +1,6 @@
 import { apiSuccess, apiError } from '@/lib/api/helpers'
 import { query } from '@/lib/auth/db'
+import { TABLE_NAMES } from '@/config/database'
 
 interface DiagnosticCheck {
   name: string;
@@ -43,7 +44,8 @@ export async function GET() {
 
   try {
     const res = await query<{ count: string | number }>(
-      `SELECT count(*)::int as count FROM information_schema.tables WHERE table_name IN ('users','user_profiles')`
+      `SELECT count(*)::int as count FROM information_schema.tables WHERE table_name IN ($1, $2)`,
+      [TABLE_NAMES.USERS, TABLE_NAMES.USER_PROFILES]
     )
     const ok = Number(res.rows?.[0]?.count ?? 0) >= 2
     diagnostics.checks.push({ name: 'schema_core_tables', ok })

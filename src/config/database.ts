@@ -17,6 +17,8 @@ export const TABLE_NAMES = {
   INVENTORY_ITEMS: 'inventory_items',
   AI_EXTRACTED_PRODUCTS: 'ai_extracted_products',
   PRODUCT_IMAGES: 'product_images',
+  PRODUCT_CATEGORIES: 'product_categories',
+  PRODUCT_ATTRIBUTES: 'product_attributes',
   MARKETPLACE_LISTINGS: 'marketplace_listings',
   SUSTAINABILITY_SCORES: 'sustainability_scores',
   AI_PROCESSING_LOGS: 'ai_processing_logs',
@@ -25,6 +27,8 @@ export const TABLE_NAMES = {
   MESSAGES: 'messages',
   CONVERSATIONS: 'conversations',
   NOTIFICATIONS: 'notifications',
+  MESSAGE_REACTIONS: 'message_reactions',
+  USER_NOTIFICATION_PREFERENCES: 'user_notification_preferences',
   
   // Services & Appointments
   SERVICE_TYPES: 'service_types',
@@ -43,6 +47,7 @@ export const TABLE_NAMES = {
   LOCATION_BOOKINGS: 'location_bookings',
   
   // Applications & Profiles
+  APPLICATIONS: 'applications',
   SELLER_APPLICATIONS: 'seller_applications',
   SELLER_PROFILES: 'seller_profiles',
   REPAIRER_APPLICATIONS: 'repairer_applications',
@@ -52,6 +57,7 @@ export const TABLE_NAMES = {
   REPAIRER_REVIEWS: 'repairer_reviews',
   REPAIRER_CERTIFICATIONS: 'repairer_certifications',
   TECHNICIAN_PROFILES: 'technician_profiles',
+  MEDUSA_CUSTOMER_LINKS: 'medusa_customer_links',
 
   // Other
   DONATIONS: 'donations',
@@ -61,7 +67,6 @@ export const TABLE_NAMES = {
   BLOG_CATEGORIES: 'blog_categories',
   STATIC_PAGES: 'static_pages',
   SERVICES: 'services',
-  MEDIA_ITEMS: 'media_items',
 
   // User Roles & Permissions
   USER_ROLES: 'user_roles',
@@ -75,12 +80,15 @@ export const TABLE_NAMES = {
   PAYMENT_TRANSACTIONS: 'payment_transactions',
   PAYMENT_PROVIDERS: 'payment_providers',
   PAYMENT_DISPUTES: 'payment_disputes',
+  PAYMENT_METHODS: 'payment_methods',
+  PAYMENT_ANALYTICS: 'payment_analytics',
   ESCROW_ACCOUNTS: 'escrow_accounts',
   ESCROW_RELEASES: 'escrow_releases',
   REFUNDS: 'refunds',
   INVOICES: 'invoices',
   ORDERS: 'orders',
   ORDER_ITEMS: 'order_items',
+  ORDER_STATUS_HISTORY: 'order_status_history',
 
   // Reviews
   REVIEWS: 'reviews',
@@ -104,10 +112,11 @@ export const TABLE_NAMES = {
   USER_SKILLS: 'user_skills',
   IT_HILFE_TECHNICIAN_PROFILES: 'helper_profiles',
 
-  // @deprecated - Use IT_HILFE_* instead
+  /** @deprecated Use IT_HILFE_REQUESTS instead. Remove after 2026-06-01. */
   PEER_REPAIR_REQUESTS: 'it_hilfe_requests',
+  /** @deprecated Use IT_HILFE_OFFERS instead. Remove after 2026-06-01. */
   PEER_REPAIR_OFFERS: 'it_hilfe_offers',
-  /** @deprecated Use IT_HILFE_TECHNICIAN_PROFILES instead */
+  /** @deprecated Use IT_HILFE_TECHNICIAN_PROFILES instead. Remove after 2026-06-01. */
   HELPER_PROFILES: 'helper_profiles',
 
   // HIRN AI System
@@ -150,6 +159,12 @@ export const TABLE_NAMES = {
   DECISIONS: 'decisions',
   DECISION_VOTES: 'decision_votes',
   DECISION_COMMENTS: 'decision_comments',
+
+  // P2P Marketplace
+  LISTINGS: 'listings',
+  LISTING_IMAGES: 'listing_images',
+  LISTING_FAVORITES: 'listing_favorites',
+  MARKETPLACE_ORDERS: 'marketplace_orders',
 } as const;
 
 /**
@@ -175,6 +190,7 @@ export const REVIEW_TARGET_TYPES = {
   SERVICE: 'service',
   WORKSHOP: 'workshop',
   IT_HILFE: 'it_hilfe',
+  LISTING: 'listing',
   /** @deprecated Use IT_HILFE instead */
   PEER_REPAIR: 'it_hilfe',
 } as const;
@@ -188,6 +204,7 @@ export const CONVERSATION_TYPES = {
   APPOINTMENT: 'appointment',
   GENERAL: 'general',
   IT_HILFE: 'it_hilfe',
+  MARKETPLACE: 'marketplace',
   /** @deprecated Use IT_HILFE instead */
   PEER_REPAIR: 'it_hilfe',
 } as const;

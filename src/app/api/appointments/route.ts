@@ -6,6 +6,8 @@ import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES, APPOINTMENT_ROLES } from '@/config/database'
 import { logger } from '@/lib/logger'
 import { validateBody, validateQuery, CreateAppointmentSchema, GetAppointmentsQuerySchema } from '@/lib/schemas'
+import { sendCustomEmail, appointmentUnassignedAlert } from '@/lib/email'
+import { REVAMPIT_NOTIFICATION_EMAIL } from '@/config/it-hilfe'
 
 interface AppointmentRow {
   id: string
@@ -233,15 +235,33 @@ export const POST = withAuth(async (
 
     const result = await query<{ id: string }>(insertQuery, actualParams)
 
+    const createdAppointment = result.rows[0]
+
     logger.info('Appointment created', {
-      appointmentId: result.rows[0]?.id,
+      appointmentId: createdAppointment?.id,
       userId: session.user.id,
       repairerId: repairer_id,
     })
 
+    // If no repairer assigned, alert admin
+    if (!repairer_id && createdAppointment?.id) {
+      const baseUrl = process.env.NEXT_PUBLIC_URL || 'https://revamp-it.ch'
+      const emailContent = appointmentUnassignedAlert(
+        'Admin',
+        session.user.name || 'Kunde',
+        'Reparatur',
+        description,
+        urgency || 'normal',
+        baseUrl + '/admin/services'
+      )
+      sendCustomEmail(REVAMPIT_NOTIFICATION_EMAIL, emailContent).catch(err => {
+        logger.warn('Failed to send unassigned booking alert', { error: err, appointmentId: createdAppointment.id })
+      })
+    }
+
     return apiSuccess({
       message: 'Termin erfolgreich erstellt',
-      appointment: result.rows[0],
+      appointment: createdAppointment,
     }, 201)
 
   } catch (error) {

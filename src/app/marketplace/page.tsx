@@ -4,79 +4,82 @@ import { useState, useEffect, useCallback } from 'react'
 import { useSession } from 'next-auth/react'
 import Link from 'next/link'
 import {
-  Package,
   Search,
-  Grid,
-  List,
-  Star,
-  MapPin,
-  User,
   Heart,
-  ShoppingCart,
-  TrendingUp,
+  MapPin,
+  Star,
   Loader2,
   AlertCircle,
-  RefreshCw
+  RefreshCw,
+  Package,
+  Plus,
+  SlidersHorizontal,
+  X,
+  TrendingUp,
+  ChevronLeft,
+  ChevronRight,
 } from 'lucide-react'
 import { ZUSTAND_OPTIONS, getConditionBadge } from '@/config/erfassung/conditions'
+import {
+  MARKETPLACE_CATEGORIES,
+  DELIVERY_OPTIONS,
+  DELIVERY_LABELS,
+  PAYMENT_MODES,
+  PAYMENT_MODE_LABELS,
+  SORT_OPTIONS,
+  formatCHF,
+  MARKETPLACE_LIMITS,
+} from '@/config/marketplace'
 import Heading from '@/components/ui/Heading'
 
-interface Product {
+interface ListingItem {
   id: string
   title: string
-  price: number
-  originalPrice?: number | null
-  condition: 'new' | 'like_new' | 'good' | 'fair' | 'poor'
+  price_chf: number
   category: string
-  location: string
-  seller: {
-    id?: string
-    name: string
-    rating: number
-    verified: boolean
-  }
-  images: string[]
-  isOfficial: boolean
-  inStock: boolean
+  condition: string
+  brand: string | null
+  model: string | null
+  delivery_options: string
+  payment_mode: string
+  is_revampit: boolean
+  pickup_location: string | null
+  view_count: number
+  favorite_count: number
+  created_at: string
+  seller_name: string
+  seller_display_name: string | null
+  seller_rating: number | null
+  seller_city: string | null
+  thumbnail: string | null
 }
 
-interface Stats {
+interface Pagination {
   total: number
-  officialCount: number
-  communityCount: number
-  averagePrice: number
-}
-
-interface ApiResponse {
-  success: boolean
-  data?: {
-    products: Product[]
-    stats: Stats
-    pagination: {
-      page: number
-      limit: number
-      total: number
-      totalPages: number
-    }
-  }
-  error?: string
+  limit: number
+  offset: number
 }
 
 export default function MarketplacePage() {
   const { data: session } = useSession()
-  const [products, setProducts] = useState<Product[]>([])
-  const [stats, setStats] = useState<Stats>({ total: 0, officialCount: 0, communityCount: 0, averagePrice: 0 })
+  const [listings, setListings] = useState<ListingItem[]>([])
+  const [pagination, setPagination] = useState<Pagination>({ total: 0, limit: MARKETPLACE_LIMITS.DEFAULT_PAGE_SIZE, offset: 0 })
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [showFilters, setShowFilters] = useState(false)
 
   // Filters
   const [category, setCategory] = useState('')
   const [condition, setCondition] = useState('')
-  const [sellerType, setSellerType] = useState('')
+  const [delivery, setDelivery] = useState('')
+  const [payment, setPayment] = useState('')
+  const [sort, setSort] = useState('newest')
   const [search, setSearch] = useState('')
   const [searchInput, setSearchInput] = useState('')
+  const [priceMin, setPriceMin] = useState('')
+  const [priceMax, setPriceMax] = useState('')
 
-  const fetchProducts = useCallback(async () => {
+  const fetchListings = useCallback(async () => {
     setIsLoading(true)
     setError(null)
 
@@ -84,62 +87,88 @@ export default function MarketplacePage() {
       const params = new URLSearchParams()
       if (category) params.set('category', category)
       if (condition) params.set('condition', condition)
-      if (sellerType) params.set('sellerType', sellerType)
+      if (delivery) params.set('delivery', delivery)
+      if (payment) params.set('payment', payment)
+      if (sort) params.set('sort', sort)
       if (search) params.set('search', search)
+      if (priceMin) params.set('price_min', priceMin)
+      if (priceMax) params.set('price_max', priceMax)
+      params.set('limit', String(pagination.limit))
+      params.set('offset', String(pagination.offset))
 
-      const response = await fetch(`/api/marketplace/products?${params.toString()}`)
-      const data: ApiResponse = await response.json()
+      const response = await fetch(`/api/listings?${params.toString()}`)
+      const data = await response.json()
 
       if (data.success && data.data) {
-        setProducts(data.data.products)
-        setStats(data.data.stats)
+        setListings(data.data.items)
+        setPagination(data.data.pagination)
       } else {
-        throw new Error(data.error || 'Fehler beim Laden der Produkte')
+        throw new Error(data.error || 'Fehler beim Laden der Inserate')
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Ein unerwarteter Fehler ist aufgetreten')
-      setProducts([])
+      setListings([])
     } finally {
       setIsLoading(false)
     }
-  }, [category, condition, sellerType, search])
+  }, [category, condition, delivery, payment, sort, search, priceMin, priceMax, pagination.limit, pagination.offset])
 
   useEffect(() => {
-    fetchProducts()
-  }, [fetchProducts])
+    fetchListings()
+  }, [fetchListings])
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault()
+    setPagination(prev => ({ ...prev, offset: 0 }))
     setSearch(searchInput)
   }
 
-  const getConditionDisplay = (cond: string) => getConditionBadge(cond)
+  const clearFilters = () => {
+    setCategory('')
+    setCondition('')
+    setDelivery('')
+    setPayment('')
+    setSort('newest')
+    setSearch('')
+    setSearchInput('')
+    setPriceMin('')
+    setPriceMax('')
+    setPagination(prev => ({ ...prev, offset: 0 }))
+  }
+
+  const hasActiveFilters = category || condition || delivery || payment || search || priceMin || priceMax
+
+  const totalPages = Math.ceil(pagination.total / pagination.limit)
+  const currentPage = Math.floor(pagination.offset / pagination.limit) + 1
+
+  const goToPage = (page: number) => {
+    setPagination(prev => ({ ...prev, offset: (page - 1) * prev.limit }))
+  }
 
   return (
-    <div className="space-y-8">
-      {/* Hero Section */}
-      <div className="bg-gradient-to-r from-green-600 to-blue-600 rounded-xl p-8 text-white">
+    <div className="space-y-6">
+      {/* Hero / Search */}
+      <div className="bg-gradient-to-r from-green-600 to-blue-600 rounded-xl p-6 md:p-8 text-white">
         <div className="max-w-4xl mx-auto text-center">
-          <Heading level={1} className="mb-4">
-            RevampIT Marketplace
+          <Heading level={1} className="mb-3">
+            Marketplace
           </Heading>
-          <p className="text-xl text-green-100 mb-8">
-            Entdecken Sie hochwertige refurbished Produkte von RevampIT und unserer Community
+          <p className="text-lg text-green-100 mb-6">
+            Kaufen und verkaufen Sie gebrauchte IT-Geräte in der Community
           </p>
 
-          {/* Search Bar */}
           <form onSubmit={handleSearch} className="max-w-2xl mx-auto relative">
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
             <input
               type="text"
               value={searchInput}
               onChange={(e) => setSearchInput(e.target.value)}
-              placeholder="Suche nach Produkten..."
-              className="w-full pl-12 pr-24 py-4 rounded-lg text-gray-900 placeholder-gray-500 focus:ring-2 focus:ring-green-500 focus:border-transparent"
+              placeholder="Laptop, Monitor, Smartphone..."
+              className="w-full pl-12 pr-24 py-3 rounded-lg text-gray-900 placeholder-gray-500 focus:ring-2 focus:ring-green-500 focus:border-transparent"
             />
             <button
               type="submit"
-              className="absolute right-2 top-1/2 -translate-y-1/2 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md transition-colors"
+              className="absolute right-2 top-1/2 -translate-y-1/2 bg-green-600 hover:bg-green-700 text-white px-4 py-1.5 rounded-md transition-colors text-sm font-medium"
             >
               Suchen
             </button>
@@ -147,124 +176,150 @@ export default function MarketplacePage() {
         </div>
       </div>
 
-      {/* Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-100 dark:border-gray-700">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Gesamt Produkte</p>
-              <p className="text-2xl font-bold text-gray-900 dark:text-white">{stats.total}</p>
-            </div>
-            <Package className="w-8 h-8 text-blue-600" />
-          </div>
-        </div>
-
-        <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-100 dark:border-gray-700">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">RevampIT Produkte</p>
-              <p className="text-2xl font-bold text-gray-900 dark:text-white">{stats.officialCount}</p>
-            </div>
-            <TrendingUp className="w-8 h-8 text-green-600" />
-          </div>
-        </div>
-
-        <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-100 dark:border-gray-700">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Community Produkte</p>
-              <p className="text-2xl font-bold text-gray-900 dark:text-white">{stats.communityCount}</p>
-            </div>
-            <User className="w-8 h-8 text-purple-600" />
-          </div>
-        </div>
-
-        <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-100 dark:border-gray-700">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Ø Preis</p>
-              <p className="text-2xl font-bold text-gray-900 dark:text-white">
-                {stats.averagePrice > 0 ? `CHF ${stats.averagePrice}` : '-'}
-              </p>
-            </div>
-            <ShoppingCart className="w-8 h-8 text-orange-600" />
-          </div>
-        </div>
+      {/* Category Pills */}
+      <div className="flex gap-2 overflow-x-auto pb-2 -mx-1 px-1">
+        <button
+          onClick={() => { setCategory(''); setPagination(prev => ({ ...prev, offset: 0 })); }}
+          className={`flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+            !category ? 'bg-green-600 text-white' : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'
+          }`}
+        >
+          Alle
+        </button>
+        {MARKETPLACE_CATEGORIES.map((cat) => (
+          <button
+            key={cat}
+            onClick={() => { setCategory(cat); setPagination(prev => ({ ...prev, offset: 0 })); }}
+            className={`flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+              category === cat ? 'bg-green-600 text-white' : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'
+            }`}
+          >
+            {cat}
+          </button>
+        ))}
       </div>
 
-      {/* Filters */}
-      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
-        <div className="flex flex-col sm:flex-row gap-4">
-          <div className="flex-1">
-            <select
-              value={category}
-              onChange={(e) => setCategory(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-            >
-              <option value="">Alle Kategorien</option>
-              <option value="Laptops">Laptops</option>
-              <option value="Desktop PCs">Desktop PCs</option>
-              <option value="Monitore">Monitore</option>
-              <option value="Smartphones">Smartphones</option>
-              <option value="Tablets">Tablets</option>
-              <option value="Zubehör">Zubehör</option>
-            </select>
-          </div>
+      {/* Filter Bar */}
+      <div className="flex flex-wrap items-center gap-3">
+        <button
+          onClick={() => setShowFilters(!showFilters)}
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800"
+        >
+          <SlidersHorizontal className="w-4 h-4" />
+          Filter
+          {hasActiveFilters && (
+            <span className="w-2 h-2 rounded-full bg-green-500" />
+          )}
+        </button>
 
-          <div className="flex-1">
-            <select
-              value={condition}
-              onChange={(e) => setCondition(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-            >
-              <option value="">Alle Zustände</option>
-              {ZUSTAND_OPTIONS.map(opt => (
-                <option key={opt.value} value={opt.value}>{opt.label}</option>
-              ))}
-            </select>
-          </div>
+        <select
+          value={sort}
+          onChange={(e) => { setSort(e.target.value); setPagination(prev => ({ ...prev, offset: 0 })); }}
+          className="px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-sm text-gray-700 dark:text-gray-300"
+        >
+          {SORT_OPTIONS.map(opt => (
+            <option key={opt.value} value={opt.value}>{opt.label}</option>
+          ))}
+        </select>
 
-          <div className="flex-1">
-            <select
-              value={sellerType}
-              onChange={(e) => setSellerType(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-            >
-              <option value="">Alle Verkäufer</option>
-              <option value="official">Nur RevampIT</option>
-              <option value="community">Nur Community</option>
-            </select>
-          </div>
+        {hasActiveFilters && (
+          <button
+            onClick={clearFilters}
+            className="inline-flex items-center gap-1 px-3 py-2 text-sm text-red-600 hover:text-red-700"
+          >
+            <X className="w-4 h-4" />
+            Filter zurücksetzen
+          </button>
+        )}
 
-          <div className="flex items-center gap-2">
-            <button
-              onClick={() => {
-                setCategory('')
-                setCondition('')
-                setSellerType('')
-                setSearch('')
-                setSearchInput('')
-              }}
-              className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-600 dark:text-gray-300"
-              title="Filter zurücksetzen"
-            >
-              <RefreshCw className="w-5 h-5" />
-            </button>
-            <button className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600">
-              <Grid className="w-5 h-5" />
-            </button>
-            <button className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600">
-              <List className="w-5 h-5" />
-            </button>
+        <div className="ml-auto text-sm text-gray-500 dark:text-gray-400">
+          {pagination.total} {pagination.total === 1 ? 'Inserat' : 'Inserate'}
+        </div>
+
+        {session?.user && (
+          <Link
+            href="/marketplace/sell"
+            className="inline-flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg text-sm font-medium transition-colors"
+          >
+            <Plus className="w-4 h-4" />
+            Verkaufen
+          </Link>
+        )}
+      </div>
+
+      {/* Expanded Filters */}
+      {showFilters && (
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div>
+              <label className="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Zustand</label>
+              <select
+                value={condition}
+                onChange={(e) => { setCondition(e.target.value); setPagination(prev => ({ ...prev, offset: 0 })); }}
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-sm text-gray-900 dark:text-white"
+              >
+                <option value="">Alle Zustände</option>
+                {ZUSTAND_OPTIONS.map(opt => (
+                  <option key={opt.value} value={opt.value}>{opt.label}</option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label className="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Lieferung</label>
+              <select
+                value={delivery}
+                onChange={(e) => { setDelivery(e.target.value); setPagination(prev => ({ ...prev, offset: 0 })); }}
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-sm text-gray-900 dark:text-white"
+              >
+                <option value="">Alle Optionen</option>
+                {DELIVERY_OPTIONS.map(opt => (
+                  <option key={opt} value={opt}>{DELIVERY_LABELS[opt]}</option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label className="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Zahlung</label>
+              <select
+                value={payment}
+                onChange={(e) => { setPayment(e.target.value); setPagination(prev => ({ ...prev, offset: 0 })); }}
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-sm text-gray-900 dark:text-white"
+              >
+                <option value="">Alle</option>
+                {PAYMENT_MODES.map(opt => (
+                  <option key={opt} value={opt}>{PAYMENT_MODE_LABELS[opt]}</option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label className="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Preisbereich (CHF)</label>
+              <div className="flex gap-2">
+                <input
+                  type="number"
+                  placeholder="Min"
+                  value={priceMin}
+                  onChange={(e) => setPriceMin(e.target.value)}
+                  onBlur={() => setPagination(prev => ({ ...prev, offset: 0 }))}
+                  className="w-1/2 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-sm text-gray-900 dark:text-white"
+                />
+                <input
+                  type="number"
+                  placeholder="Max"
+                  value={priceMax}
+                  onChange={(e) => setPriceMax(e.target.value)}
+                  onBlur={() => setPagination(prev => ({ ...prev, offset: 0 }))}
+                  className="w-1/2 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-sm text-gray-900 dark:text-white"
+                />
+              </div>
+            </div>
           </div>
         </div>
-      </div>
+      )}
 
       {/* Loading State */}
       {isLoading && (
         <div className="flex items-center justify-center py-12">
           <Loader2 className="w-8 h-8 text-green-600 animate-spin" />
-          <span className="ml-3 text-gray-600 dark:text-gray-400">Produkte werden geladen...</span>
+          <span className="ml-3 text-gray-600 dark:text-gray-400">Inserate werden geladen...</span>
         </div>
       )}
 
@@ -277,70 +332,79 @@ export default function MarketplacePage() {
           </h3>
           <p className="text-red-600 dark:text-red-300 mb-4">{error}</p>
           <button
-            onClick={fetchProducts}
-            className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg"
+            onClick={fetchListings}
+            className="inline-flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg"
           >
+            <RefreshCw className="w-4 h-4" />
             Erneut versuchen
           </button>
         </div>
       )}
 
       {/* Empty State */}
-      {!isLoading && !error && products.length === 0 && (
+      {!isLoading && !error && listings.length === 0 && (
         <div className="bg-gray-50 dark:bg-gray-800 rounded-xl p-8 text-center border-2 border-dashed border-gray-300 dark:border-gray-600">
           <Package className="w-16 h-16 text-gray-400 mx-auto mb-4" />
           <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-            Keine Produkte gefunden
+            Keine Inserate gefunden
           </h3>
           <p className="text-gray-600 dark:text-gray-400 mb-6">
-            {search || category || condition || sellerType
+            {hasActiveFilters
               ? 'Versuchen Sie andere Filteroptionen oder entfernen Sie einige Filter.'
-              : 'Es sind noch keine Produkte im Marketplace verfügbar.'}
+              : 'Es sind noch keine Inserate verfügbar. Seien Sie der Erste!'}
           </p>
-          {(search || category || condition || sellerType) && (
+          {hasActiveFilters ? (
             <button
-              onClick={() => {
-                setCategory('')
-                setCondition('')
-                setSellerType('')
-                setSearch('')
-                setSearchInput('')
-              }}
+              onClick={clearFilters}
               className="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg"
             >
               Filter zurücksetzen
             </button>
-          )}
+          ) : session?.user ? (
+            <Link
+              href="/marketplace/sell"
+              className="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg"
+            >
+              <Plus className="w-4 h-4" />
+              Erstes Inserat erstellen
+            </Link>
+          ) : null}
         </div>
       )}
 
-      {/* Products Grid */}
-      {!isLoading && !error && products.length > 0 && (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {products.map((product) => {
-            const conditionInfo = getConditionDisplay(product.condition)
+      {/* Listings Grid */}
+      {!isLoading && !error && listings.length > 0 && (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
+          {listings.map((listing) => {
+            const conditionInfo = getConditionBadge(listing.condition)
+            const sellerName = listing.seller_display_name || listing.seller_name
             return (
-              <div key={product.id} className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden hover:shadow-md transition-shadow">
-                {/* Product Image */}
-                <div className="relative">
-                  <img
-                    src={product.images[0] || 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=300'}
-                    alt={product.title}
-                    className="w-full h-48 object-cover"
-                  />
+              <Link
+                key={listing.id}
+                href={`/marketplace/${listing.id}`}
+                className="group bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden hover:shadow-md transition-shadow"
+              >
+                {/* Image */}
+                <div className="relative aspect-[4/3]">
+                  {listing.thumbnail ? (
+                    <img
+                      src={listing.thumbnail}
+                      alt={listing.title}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <div className="w-full h-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center">
+                      <Package className="w-12 h-12 text-gray-300 dark:text-gray-500" />
+                    </div>
+                  )}
                   <div className="absolute top-2 left-2">
-                    <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${conditionInfo.color}`}>
+                    <span className={`inline-flex px-2 py-0.5 text-xs font-semibold rounded-full ${conditionInfo.color}`}>
                       {conditionInfo.label}
                     </span>
                   </div>
-                  <div className="absolute top-2 right-2">
-                    <button className="p-1.5 rounded-full bg-white/80 hover:bg-white text-gray-600 hover:text-red-600 transition-colors">
-                      <Heart className="w-4 h-4" />
-                    </button>
-                  </div>
-                  {product.isOfficial && (
-                    <div className="absolute bottom-2 left-2">
-                      <span className="inline-flex items-center gap-1 px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300">
+                  {listing.is_revampit && (
+                    <div className="absolute top-2 right-2">
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 text-xs font-semibold rounded-full bg-green-100 text-green-800">
                         <TrendingUp className="w-3 h-3" />
                         RevampIT
                       </span>
@@ -348,100 +412,81 @@ export default function MarketplacePage() {
                   )}
                 </div>
 
-                {/* Product Info */}
-                <div className="p-4">
-                  <h3 className="font-semibold text-gray-900 dark:text-white mb-1 line-clamp-2">
-                    {product.title}
+                {/* Info */}
+                <div className="p-3 md:p-4">
+                  <h3 className="font-semibold text-gray-900 dark:text-white mb-1 line-clamp-2 text-sm md:text-base group-hover:text-green-600 transition-colors">
+                    {listing.title}
                   </h3>
 
-                  {/* Price */}
-                  <div className="flex items-center gap-2 mb-3">
-                    <span className="text-lg font-bold text-gray-900 dark:text-white">
-                      CHF {product.price}
-                    </span>
-                    {product.originalPrice && product.originalPrice > product.price && (
-                      <span className="text-sm text-gray-500 line-through">
-                        CHF {product.originalPrice}
+                  <p className="text-lg font-bold text-gray-900 dark:text-white mb-2">
+                    {formatCHF(Number(listing.price_chf))}
+                  </p>
+
+                  <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400">
+                    <span className="truncate">{sellerName}</span>
+                    {listing.seller_rating && Number(listing.seller_rating) > 0 && (
+                      <span className="inline-flex items-center gap-0.5 flex-shrink-0">
+                        <Star className="w-3 h-3 text-yellow-400 fill-yellow-400" />
+                        {Number(listing.seller_rating).toFixed(1)}
                       </span>
                     )}
                   </div>
 
-                  {/* Seller Info */}
-                  <div className="flex items-center gap-2 mb-3">
-                    <div className="flex items-center gap-1">
-                      <User className="w-4 h-4 text-gray-400" />
-                      <span className="text-sm text-gray-600 dark:text-gray-400">
-                        {product.seller.name}
-                      </span>
-                      {product.seller.verified && (
-                        <div className="w-4 h-4 bg-blue-500 rounded-full flex items-center justify-center">
-                          <span className="text-xs text-white font-bold">✓</span>
-                        </div>
-                      )}
+                  {(listing.pickup_location || listing.seller_city) && (
+                    <div className="flex items-center gap-1 mt-1 text-xs text-gray-400">
+                      <MapPin className="w-3 h-3 flex-shrink-0" />
+                      <span className="truncate">{listing.pickup_location || listing.seller_city}</span>
                     </div>
-                    <div className="flex items-center gap-1 ml-auto">
-                      <Star className="w-4 h-4 text-yellow-400 fill-current" />
-                      <span className="text-sm text-gray-600 dark:text-gray-400">
-                        {product.seller.rating.toFixed(1)}
+                  )}
+
+                  <div className="flex items-center gap-3 mt-2 text-xs text-gray-400">
+                    <span>{listing.view_count} Aufrufe</span>
+                    {listing.favorite_count > 0 && (
+                      <span className="inline-flex items-center gap-0.5">
+                        <Heart className="w-3 h-3" />
+                        {listing.favorite_count}
                       </span>
-                    </div>
+                    )}
                   </div>
-
-                  {/* Location */}
-                  <div className="flex items-center gap-1 mb-4">
-                    <MapPin className="w-4 h-4 text-gray-400" />
-                    <span className="text-sm text-gray-600 dark:text-gray-400">
-                      {product.location}
-                    </span>
-                  </div>
-
-                  {/* Action Button */}
-                  <Link
-                    href={`/marketplace/${product.id}`}
-                    className={`block w-full py-2 px-4 rounded-lg font-medium transition-colors text-center ${
-                      product.inStock
-                        ? 'bg-green-600 hover:bg-green-700 text-white'
-                        : 'bg-gray-200 text-gray-500 cursor-not-allowed pointer-events-none'
-                    }`}
-                  >
-                    {product.inStock ? 'Details ansehen' : 'Nicht verfügbar'}
-                  </Link>
                 </div>
-              </div>
+              </Link>
             )
           })}
         </div>
       )}
 
-      {/* Seller CTA */}
-      {session?.user && (
-        <div className="bg-gradient-to-r from-purple-600 to-pink-600 rounded-xl p-8 text-white text-center">
-          <Heading level={2} className="mb-4">
-            Auf Revamp‑IT verkaufen
-          </Heading>
-          <p className="text-purple-100 mb-6 max-w-2xl mx-auto">
-            Verkaufen Sie Ihre eigenen refurbished Produkte direkt über den Revamp‑IT Marketplace.
-            Erreichen Sie Käufer ohne Zwischenlagerung – Versand direkt von Ihnen zum Käufer.
-          </p>
-          <Link
-            href="/dashboard/seller"
-            className="inline-flex items-center gap-2 bg-white text-purple-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-50 transition-colors"
+      {/* Pagination */}
+      {totalPages > 1 && (
+        <div className="flex items-center justify-center gap-2 pt-4">
+          <button
+            onClick={() => goToPage(currentPage - 1)}
+            disabled={currentPage <= 1}
+            className="p-2 rounded-lg border border-gray-300 dark:border-gray-600 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 dark:hover:bg-gray-800"
           >
-            Jetzt verkaufen
-            <Package className="w-5 h-5" />
-          </Link>
+            <ChevronLeft className="w-4 h-4" />
+          </button>
+          <span className="text-sm text-gray-600 dark:text-gray-400">
+            Seite {currentPage} von {totalPages}
+          </span>
+          <button
+            onClick={() => goToPage(currentPage + 1)}
+            disabled={currentPage >= totalPages}
+            className="p-2 rounded-lg border border-gray-300 dark:border-gray-600 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 dark:hover:bg-gray-800"
+          >
+            <ChevronRight className="w-4 h-4" />
+          </button>
         </div>
       )}
 
-      {/* Empty State for non-logged-in users */}
+      {/* Sell CTA for non-logged-in users */}
       {!session?.user && (
         <div className="bg-gray-50 dark:bg-gray-800 rounded-xl p-8 text-center border-2 border-dashed border-gray-300 dark:border-gray-600">
           <Package className="w-16 h-16 text-gray-400 mx-auto mb-4" />
           <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-            Melden Sie sich an, um Produkte zu kaufen
+            Melden Sie sich an, um zu kaufen oder zu verkaufen
           </h3>
           <p className="text-gray-600 dark:text-gray-400 mb-6">
-            Erstellen Sie ein Konto, um Produkte in den Warenkorb zu legen und zu kaufen.
+            Erstellen Sie ein Konto, um Inserate aufzugeben oder Verkäufer zu kontaktieren.
           </p>
           <div className="flex gap-4 justify-center">
             <Link

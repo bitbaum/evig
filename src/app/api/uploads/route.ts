@@ -2,14 +2,23 @@ import { NextRequest } from 'next/server'
 import { auth } from '@/auth'
 import { mkdir, writeFile } from 'fs/promises'
 import path from 'path'
+import sharp from 'sharp'
 import { apiError, apiSuccess, apiUnauthorized, apiBadRequest } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
+import { logger } from '@/lib/logger'
 
 export const dynamic = 'force-dynamic'
+
+interface ImageUrls {
+  original: string
+  thumbnail: string
+  medium: string
+}
 
 // POST /api/uploads
 // Accepts multipart/form-data with one or more image files under field name "files"
 // Stores locally under public/uploads/<userId>/ and returns public URLs
+// Generates optimized thumbnail (200x200) and medium (800x600) versions as webp
 export async function POST(req: NextRequest) {
   try {
     const session = await auth()
@@ -20,7 +29,7 @@ export async function POST(req: NextRequest) {
     const formData = await req.formData()
     // Support either multiple files under 'files' or any file inputs
     const files: File[] = []
-    for (const [key, value] of formData.entries()) {
+    for (const [, value] of formData.entries()) {
       if (value instanceof File) {
         files.push(value)
       }
@@ -38,7 +47,9 @@ export async function POST(req: NextRequest) {
     await mkdir(uploadBaseDir, { recursive: true })
 
     const urls: string[] = []
+    const imageUrls: ImageUrls[] = []
     const timestamp = Date.now()
+    const userPath = encodeURIComponent(session.user.id)
 
     for (let i = 0; i < files.length; i++) {
       const file = files[i]
@@ -61,16 +72,46 @@ export async function POST(req: NextRequest) {
       const fileName = `${base}_${timestamp}_${i}${ext}`
       const filePath = path.join(uploadBaseDir, fileName)
 
+      // Save original
       await writeFile(filePath, buffer)
 
-      // Public URL from /public folder
-      const publicUrl = `/uploads/${encodeURIComponent(session.user.id)}/${encodeURIComponent(fileName)}`
-      urls.push(publicUrl)
+      const originalUrl = `/uploads/${userPath}/${encodeURIComponent(fileName)}`
+      urls.push(originalUrl)
+
+      // Generate optimized versions
+      const thumbName = `${base}_${timestamp}_${i}_thumb.webp`
+      const mediumName = `${base}_${timestamp}_${i}_medium.webp`
+
+      try {
+        // Thumbnail: 200x200, cover crop
+        await sharp(buffer)
+          .resize(200, 200, { fit: 'cover' })
+          .webp({ quality: 80 })
+          .toFile(path.join(uploadBaseDir, thumbName))
+
+        // Medium: 800x600, fit inside
+        await sharp(buffer)
+          .resize(800, 600, { fit: 'inside', withoutEnlargement: true })
+          .webp({ quality: 85 })
+          .toFile(path.join(uploadBaseDir, mediumName))
+
+        imageUrls.push({
+          original: originalUrl,
+          thumbnail: `/uploads/${userPath}/${encodeURIComponent(thumbName)}`,
+          medium: `/uploads/${userPath}/${encodeURIComponent(mediumName)}`,
+        })
+      } catch (err) {
+        logger.warn('Image optimization failed, using original', { fileName, error: err })
+        imageUrls.push({
+          original: originalUrl,
+          thumbnail: originalUrl,
+          medium: originalUrl,
+        })
+      }
     }
 
-    return apiSuccess({ urls })
+    return apiSuccess({ urls, images: imageUrls })
   } catch (error) {
     return apiError(error, 'Upload fehlgeschlagen')
   }
 }
-

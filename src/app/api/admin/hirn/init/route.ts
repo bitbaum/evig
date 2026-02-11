@@ -12,6 +12,7 @@ import { isSuperAdmin } from '@/lib/permissions'
 import { query } from '@/lib/auth/db'
 import { logger } from '@/lib/logger'
 import { apiSuccess, apiError, apiUnauthorized, apiForbidden } from '@/lib/api/helpers'
+import { TABLE_NAMES } from '@/config/database'
 
 export async function POST(request: NextRequest) {
   try {
@@ -27,10 +28,10 @@ export async function POST(request: NextRequest) {
 
     // Create provider settings table
     await query(`
-      CREATE TABLE IF NOT EXISTS hirn_provider_settings (
+      CREATE TABLE IF NOT EXISTS ${TABLE_NAMES.HIRN_PROVIDER_SETTINGS} (
         id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
         scope TEXT NOT NULL DEFAULT 'system',
-        user_id UUID REFERENCES users(id) ON DELETE CASCADE,
+        user_id UUID REFERENCES ${TABLE_NAMES.USERS}(id) ON DELETE CASCADE,
         provider TEXT NOT NULL,
         is_enabled BOOLEAN DEFAULT true,
         is_default BOOLEAN DEFAULT false,
@@ -45,16 +46,16 @@ export async function POST(request: NextRequest) {
     // Create indexes
     await query(`
       CREATE INDEX IF NOT EXISTS idx_hirn_provider_settings_scope
-      ON hirn_provider_settings(scope)
+      ON ${TABLE_NAMES.HIRN_PROVIDER_SETTINGS}(scope)
     `)
     await query(`
       CREATE INDEX IF NOT EXISTS idx_hirn_provider_settings_user_id
-      ON hirn_provider_settings(user_id)
+      ON ${TABLE_NAMES.HIRN_PROVIDER_SETTINGS}(user_id)
     `)
 
     // Insert default providers (Groq as default)
     await query(`
-      INSERT INTO hirn_provider_settings (scope, provider, is_enabled, is_default, settings)
+      INSERT INTO ${TABLE_NAMES.HIRN_PROVIDER_SETTINGS} (scope, provider, is_enabled, is_default, settings)
       VALUES ('system', 'groq', true, true, $1::jsonb)
       ON CONFLICT (scope, user_id, provider) DO NOTHING
     `, [JSON.stringify({
@@ -64,7 +65,7 @@ export async function POST(request: NextRequest) {
 
     // Insert Ollama (for local development)
     await query(`
-      INSERT INTO hirn_provider_settings (scope, provider, is_enabled, is_default, settings)
+      INSERT INTO ${TABLE_NAMES.HIRN_PROVIDER_SETTINGS} (scope, provider, is_enabled, is_default, settings)
       VALUES ('system', 'ollama', true, false, $1::jsonb)
       ON CONFLICT (scope, user_id, provider) DO NOTHING
     `, [JSON.stringify({
@@ -76,7 +77,7 @@ export async function POST(request: NextRequest) {
 
     // Insert OpenRouter
     await query(`
-      INSERT INTO hirn_provider_settings (scope, provider, is_enabled, is_default, settings)
+      INSERT INTO ${TABLE_NAMES.HIRN_PROVIDER_SETTINGS} (scope, provider, is_enabled, is_default, settings)
       VALUES ('system', 'openrouter', true, false, $1::jsonb)
       ON CONFLICT (scope, user_id, provider) DO NOTHING
     `, [JSON.stringify({

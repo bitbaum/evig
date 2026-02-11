@@ -1,3 +1,7 @@
+/**
+ * @deprecated Use /api/listings and /api/listings/mine instead.
+ * This route requires seller approval. The new P2P marketplace allows any user to list.
+ */
 import { NextRequest } from 'next/server'
 import { z } from 'zod'
 import { auth } from '@/auth'

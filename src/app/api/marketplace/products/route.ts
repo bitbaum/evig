@@ -1,5 +1,8 @@
 /**
- * Marketplace Products API
+ * @deprecated Use /api/listings instead. This route uses the old marketplace_listings table.
+ * Will be removed after the P2P marketplace migration is complete.
+ *
+ * Marketplace Products API (LEGACY)
  * GET /api/marketplace/products - Get all published marketplace products
  * POST /api/marketplace/products - Create new marketplace product (requires auth)
  */

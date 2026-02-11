@@ -18,7 +18,24 @@ const dbConfig = {
   max: 20,
   idleTimeoutMillis: 30000,
   connectionTimeoutMillis: 5000,
+  statement_timeout: 30000,                    // 30s max per query
+  idle_in_transaction_session_timeout: 60000,   // 60s max idle in transaction
 }
+
+// Connection error patterns for retry logic
+const CONNECTION_ERROR_PATTERNS = [
+  'connect', 'ECONNREFUSED', 'timeout',
+  'Connection terminated', 'Connection closed',
+  'ENOTFOUND', 'EHOSTUNREACH',
+] as const
+
+function isConnectionError(error: unknown): boolean {
+  const message = error instanceof Error ? error.message : String(error)
+  return CONNECTION_ERROR_PATTERNS.some(pattern => message.includes(pattern))
+}
+
+const MAX_RETRIES = 2
+const RETRY_DELAYS = [100, 300] as const
 
 // Create connection pool (singleton)
 let pool: Pool | null = null
@@ -36,42 +53,85 @@ export function getPool(): Pool {
 }
 
 /**
- * Execute a query with automatic connection management
- * Handles database connection errors gracefully
+ * Execute a query with automatic connection management.
+ * Retries up to 2 times on connection errors with exponential backoff.
+ * Non-connection errors (constraint violations, syntax errors) throw immediately.
  */
 export async function query<T = unknown>(
   text: string,
   params?: QueryParams
 ): Promise<{ rows: T[]; rowCount: number }> {
-  try {
-    const pool = getPool()
-    const result = await pool.query(text, params)
-    return {
-      rows: result.rows as T[],
-      rowCount: result.rowCount || 0
+  let lastError: unknown
+
+  for (let attempt = 0; attempt <= MAX_RETRIES; attempt++) {
+    try {
+      const pool = getPool()
+      const result = await pool.query(text, params)
+      return {
+        rows: result.rows as T[],
+        rowCount: result.rowCount || 0
+      }
+    } catch (error) {
+      if (!isConnectionError(error)) {
+        throw error
+      }
+
+      lastError = error
+
+      if (attempt < MAX_RETRIES) {
+        const delay = RETRY_DELAYS[attempt]
+        logger.warn('Database connection error, retrying', {
+          attempt: attempt + 1,
+          maxRetries: MAX_RETRIES,
+          delayMs: delay,
+          query: text.substring(0, 100),
+        })
+        await new Promise(resolve => setTimeout(resolve, delay))
+      }
     }
-  } catch (error) {
-    const errorMessage = error instanceof Error ? error.message : String(error)
-    // Check for connection errors
-    if (errorMessage.includes('connect') || 
-        errorMessage.includes('ECONNREFUSED') || 
-        errorMessage.includes('timeout') ||
-        errorMessage.includes('Connection terminated') ||
-        errorMessage.includes('Connection closed')) {
-      logger.error('Database connection error', { error, query: text.substring(0, 100) })
-      throw new Error('Datenbankverbindung fehlgeschlagen. Bitte versuchen Sie es später erneut.')
-    }
-    // Re-throw other database errors (constraint violations, etc.)
-    throw error
   }
+
+  logger.error('Database connection failed after retries', {
+    attempts: MAX_RETRIES + 1,
+    query: text.substring(0, 100),
+  })
+  throw new Error('Datenbankverbindung fehlgeschlagen. Bitte versuchen Sie es später erneut.')
 }
 
 /**
- * Get a client from the pool for transactions
+ * Get a client from the pool for transactions.
+ * Retries up to 2 times on connection errors with exponential backoff.
  */
 export async function getClient(): Promise<PoolClient> {
-  const pool = getPool()
-  return pool.connect()
+  let lastError: unknown
+
+  for (let attempt = 0; attempt <= MAX_RETRIES; attempt++) {
+    try {
+      const pool = getPool()
+      return await pool.connect()
+    } catch (error) {
+      if (!isConnectionError(error)) {
+        throw error
+      }
+
+      lastError = error
+
+      if (attempt < MAX_RETRIES) {
+        const delay = RETRY_DELAYS[attempt]
+        logger.warn('Database client connection error, retrying', {
+          attempt: attempt + 1,
+          maxRetries: MAX_RETRIES,
+          delayMs: delay,
+        })
+        await new Promise(resolve => setTimeout(resolve, delay))
+      }
+    }
+  }
+
+  logger.error('Database client connection failed after retries', {
+    attempts: MAX_RETRIES + 1,
+  })
+  throw new Error('Datenbankverbindung fehlgeschlagen. Bitte versuchen Sie es später erneut.')
 }
 
 // Cache user columns to keep queries schema-safe across migrations
@@ -85,7 +145,8 @@ async function getUserColumns(): Promise<Set<string>> {
   const result = await query<{ column_name: string }>(
     `SELECT column_name
      FROM information_schema.columns
-     WHERE table_schema = 'public' AND table_name = 'users'`
+     WHERE table_schema = 'public' AND table_name = $1`,
+    [TABLE_NAMES.USERS]
   )
 
   userColumnsCache = new Set(result.rows.map((row) => row.column_name))

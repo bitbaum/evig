@@ -58,6 +58,7 @@ import * as workshopTemplates from './templates/workshop';
 import * as adminTemplates from './templates/admin';
 import * as miscTemplates from './templates/misc';
 import * as itHilfeTemplates from './templates/it-hilfe';
+import * as appointmentTemplates from './templates/appointments';
 
 export const emailTemplates = {
   // Auth
@@ -103,6 +104,12 @@ export const emailTemplates = {
   itHilfeRequestConfirmation: itHilfeTemplates.itHilfeRequestConfirmation,
   adminNewITHilfeRequest: itHilfeTemplates.adminNewITHilfeRequest,
   helperNewMatchingRequest: itHilfeTemplates.helperNewMatchingRequest,
+
+  // Appointments
+  appointmentNewBooking: appointmentTemplates.appointmentNewBooking,
+  appointmentQuoteReceived: appointmentTemplates.appointmentQuoteReceived,
+  appointmentStatusUpdate: appointmentTemplates.appointmentStatusUpdate,
+  appointmentUnassignedAlert: appointmentTemplates.appointmentUnassignedAlert,
 };
 
 // Email template function type

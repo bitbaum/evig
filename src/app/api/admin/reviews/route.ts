@@ -71,9 +71,9 @@ export async function GET(request: NextRequest) {
     const tableCheck = await query<{ exists: boolean }>(`
       SELECT EXISTS (
         SELECT FROM information_schema.tables
-        WHERE table_name = 'reviews'
+        WHERE table_name = $1
       ) as exists
-    `)
+    `, [TABLE_NAMES.REVIEWS])
 
     if (!tableCheck.rows[0] || !tableCheck.rows[0].exists) {
       // Return empty array if table doesn't exist yet

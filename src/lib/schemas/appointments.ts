@@ -80,6 +80,12 @@ const UpdateActionSchema = z.object({
   preferred_date: z.string().datetime({ offset: true }).optional(),
 })
 
+const RateActionSchema = z.object({
+  action: z.literal('rate'),
+  customer_rating: z.number().int().min(1).max(5),
+  customer_review: z.string().max(2000).optional(),
+})
+
 export const AppointmentActionSchema = z.discriminatedUnion('action', [
   AcceptActionSchema,
   RejectActionSchema,
@@ -90,6 +96,7 @@ export const AppointmentActionSchema = z.discriminatedUnion('action', [
   CompleteActionSchema,
   UpdateActionSchema,
   CancelActionSchema,
+  RateActionSchema,
 ])
 
 export type AppointmentActionInput = z.infer<typeof AppointmentActionSchema>

@@ -5,6 +5,7 @@ import { withAuth, ValidSession } from '@/lib/api/middleware'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
+import { sendCustomEmail, appointmentNewBooking } from '@/lib/email'
 
 interface RepairerRow {
   id: string
@@ -169,6 +170,26 @@ export const POST = withAuth<{ id: string }>(async (
       }
 
       await query('COMMIT')
+
+      // Fire-and-forget: notify repairer by email
+      const repairerUserResult = await query(
+        `SELECT email, name FROM ${TABLE_NAMES.USERS} WHERE id = $1`,
+        [repairer.user_id]
+      )
+      if (repairerUserResult.rows.length > 0) {
+        const repairerUser = repairerUserResult.rows[0] as { email: string; name: string | null }
+        const appointmentUrl = `${process.env.NEXT_PUBLIC_URL || 'https://revamp-it.ch'}/dashboard/repairer/bookings`
+        const emailContent = appointmentNewBooking(
+          repairerUser.name || repairer.business_name || 'Reparateur',
+          session.user.name || 'Kunde',
+          serviceType.name,
+          description,
+          appointmentUrl
+        )
+        sendCustomEmail(repairerUser.email, emailContent).catch(err => {
+          logger.warn('Failed to send new booking email to repairer', { error: err, appointmentId: appointment.id })
+        })
+      }
 
       logger.info('Appointment booked with repairer', {
         appointmentId: appointment.id,

@@ -145,7 +145,7 @@ export const POST = withAuth(async (
       // Update appointment messages count if context is appointment
       if (context_id && context_type === CONVERSATION_TYPES.APPOINTMENT) {
         await query(
-          'UPDATE service_appointments SET ' +
+          'UPDATE ' + TABLE_NAMES.SERVICE_APPOINTMENTS + ' SET ' +
           'messages_count = messages_count + 1, ' +
           'last_contact_at = CURRENT_TIMESTAMP ' +
           'WHERE id = $1',

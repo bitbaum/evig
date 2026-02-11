@@ -6,6 +6,8 @@ import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
 import { validateBody, AppointmentActionSchema } from '@/lib/schemas'
+import { sendCustomEmail, appointmentStatusUpdate, appointmentQuoteReceived } from '@/lib/email'
+import { getBookingStatusLabel } from '@/config/booking-status'
 
 interface AppointmentRow {
   id: string
@@ -179,6 +181,18 @@ export const PATCH = withAuth<{ id: string }>(async (
         }
         break
 
+      case 'rate':
+        if (!isCustomer) return apiForbidden('Nur der Kunde kann bewerten')
+        if (appointment.status !== 'completed') return apiBadRequest('Nur abgeschlossene Termine können bewertet werden')
+        // Prevent double-rating — checked via SQL WHERE clause below
+        updates.push('customer_rating = $' + paramIndex++)
+        updateParams.push(actionData.customer_rating)
+        if (actionData.customer_review) {
+          updates.push('customer_review = $' + paramIndex++)
+          updateParams.push(actionData.customer_review)
+        }
+        break
+
       case 'cancel':
         if (!['requested', 'accepted', 'quoted', 'quote_approved'].includes(appointment.status)) {
           return apiBadRequest('Termin kann nicht mehr storniert werden')
@@ -198,10 +212,20 @@ export const PATCH = withAuth<{ id: string }>(async (
     updates.push('updated_at = CURRENT_TIMESTAMP')
     updateParams.push(appointmentId)
 
+    let whereClause = 'WHERE id = $' + paramIndex
+    // Prevent double-rating at the SQL level
+    if (action === 'rate') {
+      whereClause += ' AND customer_rating IS NULL'
+    }
+
     const updateQuery = 'UPDATE ' + TABLE_NAMES.SERVICE_APPOINTMENTS + ' SET ' +
-      updates.join(', ') + ' WHERE id = $' + paramIndex + ' RETURNING *'
+      updates.join(', ') + ' ' + whereClause + ' RETURNING *'
 
     const updateResult = await query(updateQuery, updateParams)
+
+    if (updateResult.rows.length === 0 && action === 'rate') {
+      return apiBadRequest('Dieser Termin wurde bereits bewertet')
+    }
 
     logger.info('Appointment updated', {
       appointmentId,
@@ -210,6 +234,69 @@ export const PATCH = withAuth<{ id: string }>(async (
       newStatus,
       userId: session.user.id
     })
+
+    // Fire-and-forget email notifications
+    if (newStatus && action !== 'update') {
+      const partyResult = await query(
+        'SELECT c.name as customer_name, c.email as customer_email, ' +
+        'r.name as repairer_name, r.email as repairer_email, ' +
+        'st.name as service_name ' +
+        'FROM ' + TABLE_NAMES.SERVICE_APPOINTMENTS + ' sa ' +
+        'LEFT JOIN ' + TABLE_NAMES.USERS + ' c ON sa.user_id = c.id ' +
+        'LEFT JOIN ' + TABLE_NAMES.USERS + ' r ON sa.repairer_id = r.id ' +
+        'LEFT JOIN ' + TABLE_NAMES.SERVICE_TYPES + ' st ON sa.service_type_id = st.id ' +
+        'WHERE sa.id = $1',
+        [appointmentId]
+      )
+      if (partyResult.rows.length > 0) {
+        const p = partyResult.rows[0] as {
+          customer_name: string | null; customer_email: string;
+          repairer_name: string | null; repairer_email: string | null;
+          service_name: string | null
+        }
+        const baseUrl = process.env.NEXT_PUBLIC_URL || 'https://revamp-it.ch'
+        const serviceName = p.service_name || 'Reparatur'
+        const statusLabel = getBookingStatusLabel(newStatus)
+
+        if (action === 'quote' && p.customer_email) {
+          // Quote → special email to customer
+          const emailContent = appointmentQuoteReceived(
+            p.customer_name || 'Kunde',
+            p.repairer_name || 'Reparateur',
+            actionData.quoted_price_chf,
+            actionData.diagnosis_notes || null,
+            baseUrl + '/dashboard/bookings/' + appointmentId
+          )
+          sendCustomEmail(p.customer_email, emailContent).catch(err => {
+            logger.warn('Failed to send quote email', { error: err, appointmentId })
+          })
+        } else if (['accept', 'reject', 'start', 'complete'].includes(action) && p.customer_email) {
+          // Repairer actions → notify customer
+          const emailContent = appointmentStatusUpdate(
+            p.customer_name || 'Kunde',
+            p.repairer_name || 'Reparateur',
+            statusLabel,
+            serviceName,
+            baseUrl + '/dashboard/bookings/' + appointmentId
+          )
+          sendCustomEmail(p.customer_email, emailContent).catch(err => {
+            logger.warn('Failed to send status email to customer', { error: err, appointmentId })
+          })
+        } else if (['approve_quote', 'reject_quote', 'cancel'].includes(action) && p.repairer_email) {
+          // Customer actions → notify repairer
+          const emailContent = appointmentStatusUpdate(
+            p.repairer_name || 'Reparateur',
+            p.customer_name || 'Kunde',
+            statusLabel,
+            serviceName,
+            baseUrl + '/dashboard/repairer/bookings'
+          )
+          sendCustomEmail(p.repairer_email, emailContent).catch(err => {
+            logger.warn('Failed to send status email to repairer', { error: err, appointmentId })
+          })
+        }
+      }
+    }
 
     return apiSuccess({
       message: 'Termin aktualisiert',

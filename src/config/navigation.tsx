@@ -128,6 +128,23 @@ export const mainNavigation: NavigationItem[] = [
         href: '/shop#ladenlokal',
         description: 'Vor Ort stöbern und beraten lassen',
       },
+      // Section: Marketplace
+      {
+        name: 'Marketplace',
+        href: '/marketplace',
+        isSection: true,
+      },
+      {
+        name: 'Marketplace',
+        href: '/marketplace',
+        description: 'Gebrauchte IT-Geräte kaufen & verkaufen',
+        badge: 'Neu',
+      },
+      {
+        name: 'Verkaufen',
+        href: '/marketplace/sell',
+        description: 'Eigene Geräte an die Community verkaufen',
+      },
     ],
   },
   {
