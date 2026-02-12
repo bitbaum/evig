@@ -17,17 +17,7 @@ import Image from 'next/image'
 import { cn } from '@/lib/utils'
 import { getTextColor, getStatusColors } from '@/lib/design-system'
 import { formatDateShort } from '@/lib/date-formats'
-
-interface ListedProduct {
-  id: string
-  title: string
-  price: string
-  brand?: string
-  condition?: string
-  images?: string[]
-  createdAt: string
-  views?: number
-}
+import type { ListedProduct } from '../types'
 
 interface SuccessModalProps {
   isOpen: boolean

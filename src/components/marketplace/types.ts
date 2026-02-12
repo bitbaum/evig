@@ -40,5 +40,14 @@ export interface ProductListingErrors {
   location?: string
 }
 
-
+export interface ListedProduct {
+  id: string
+  title: string
+  price: string
+  brand?: string
+  condition?: string
+  images?: string[]
+  createdAt: string
+  views?: number
+}
 

@@ -30,7 +30,7 @@ import { SuccessModal } from './modals/SuccessModal'
 import { useProductForm } from './hooks/useProductForm'
 import { useProductSubmission } from './hooks/useProductSubmission'
 import { useAISearch } from './hooks/useAISearch'
-import type { ProductFormData } from './types'
+import type { ProductFormData, ListedProduct } from './types'
 
 // External components
 import AICameraProductListing from './AICameraProductListing'
@@ -61,17 +61,6 @@ export default function ProductListingForm() {
     selectResult,
     clearSearch,
   } = useAISearch()
-
-  // ListedProduct type for the SuccessModal
-  interface ListedProduct {
-    id: string
-    title: string
-    price: string
-    brand?: string
-    condition?: string
-    createdAt: string
-    views?: number
-  }
 
   const [showAICamera, setShowAICamera] = useState(false)
   const [showAISearch, setShowAISearch] = useState(false)

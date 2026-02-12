@@ -78,8 +78,14 @@ export default function MarketplacePage() {
   const [searchInput, setSearchInput] = useState('')
   const [priceMin, setPriceMin] = useState('')
   const [priceMax, setPriceMax] = useState('')
+  const [priceError, setPriceError] = useState<string | null>(null)
 
   const fetchListings = useCallback(async () => {
+    // Don't fetch if there's a price validation error
+    if (priceError) {
+      return
+    }
+
     setIsLoading(true)
     setError(null)
 
@@ -111,7 +117,7 @@ export default function MarketplacePage() {
     } finally {
       setIsLoading(false)
     }
-  }, [category, condition, delivery, payment, sort, search, priceMin, priceMax, pagination.limit, pagination.offset])
+  }, [category, condition, delivery, payment, sort, search, priceMin, priceMax, pagination.limit, pagination.offset, priceError])
 
   useEffect(() => {
     fetchListings()
@@ -158,17 +164,17 @@ export default function MarketplacePage() {
           </p>
 
           <form onSubmit={handleSearch} className="max-w-2xl mx-auto relative">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" aria-hidden="true" />
             <input
               type="text"
               value={searchInput}
               onChange={(e) => setSearchInput(e.target.value)}
               placeholder="Laptop, Monitor, Smartphone..."
-              className="w-full pl-12 pr-24 py-3 rounded-lg text-gray-900 placeholder-gray-500 focus:ring-2 focus:ring-green-500 focus:border-transparent"
+              className="w-full pl-12 pr-24 py-3 rounded-lg text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
             />
             <button
               type="submit"
-              className="absolute right-2 top-1/2 -translate-y-1/2 bg-green-600 hover:bg-green-700 text-white px-4 py-1.5 rounded-md transition-colors text-sm font-medium"
+              className="absolute right-2 top-1/2 -translate-y-1/2 bg-green-600 hover:bg-green-700 text-white px-4 py-3 min-h-[44px] rounded-md transition-colors text-sm font-medium focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
             >
               Suchen
             </button>
@@ -180,7 +186,7 @@ export default function MarketplacePage() {
       <div className="flex gap-2 overflow-x-auto pb-2 -mx-1 px-1">
         <button
           onClick={() => { setCategory(''); setPagination(prev => ({ ...prev, offset: 0 })); }}
-          className={`flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+          className={`flex-shrink-0 px-4 py-3 min-h-[44px] rounded-full text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 ${
             !category ? 'bg-green-600 text-white' : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'
           }`}
         >
@@ -190,7 +196,7 @@ export default function MarketplacePage() {
           <button
             key={cat}
             onClick={() => { setCategory(cat); setPagination(prev => ({ ...prev, offset: 0 })); }}
-            className={`flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+            className={`flex-shrink-0 px-4 py-3 min-h-[44px] rounded-full text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 ${
               category === cat ? 'bg-green-600 text-white' : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'
             }`}
           >
@@ -203,9 +209,9 @@ export default function MarketplacePage() {
       <div className="flex flex-wrap items-center gap-3">
         <button
           onClick={() => setShowFilters(!showFilters)}
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800"
+          className="inline-flex items-center gap-2 px-4 py-3 min-h-[44px] rounded-lg border border-gray-300 dark:border-gray-600 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
         >
-          <SlidersHorizontal className="w-4 h-4" />
+          <SlidersHorizontal className="w-4 h-4" aria-hidden="true" />
           Filter
           {hasActiveFilters && (
             <span className="w-2 h-2 rounded-full bg-green-500" />
@@ -215,7 +221,7 @@ export default function MarketplacePage() {
         <select
           value={sort}
           onChange={(e) => { setSort(e.target.value); setPagination(prev => ({ ...prev, offset: 0 })); }}
-          className="px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-sm text-gray-700 dark:text-gray-300"
+          className="px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-sm text-gray-700 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
         >
           {SORT_OPTIONS.map(opt => (
             <option key={opt.value} value={opt.value}>{opt.label}</option>
@@ -225,9 +231,9 @@ export default function MarketplacePage() {
         {hasActiveFilters && (
           <button
             onClick={clearFilters}
-            className="inline-flex items-center gap-1 px-3 py-2 text-sm text-red-600 hover:text-red-700"
+            className="inline-flex items-center gap-1 px-3 py-3 min-h-[44px] text-sm text-red-600 hover:text-red-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
           >
-            <X className="w-4 h-4" />
+            <X className="w-4 h-4" aria-hidden="true" />
             Filter zurücksetzen
           </button>
         )}
@@ -239,9 +245,9 @@ export default function MarketplacePage() {
         {session?.user && (
           <Link
             href="/marketplace/sell"
-            className="inline-flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg text-sm font-medium transition-colors"
+            className="inline-flex items-center gap-2 px-4 py-3 min-h-[44px] bg-green-600 hover:bg-green-700 text-white rounded-lg text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
           >
-            <Plus className="w-4 h-4" />
+            <Plus className="w-4 h-4" aria-hidden="true" />
             Verkaufen
           </Link>
         )}
@@ -256,7 +262,7 @@ export default function MarketplacePage() {
               <select
                 value={condition}
                 onChange={(e) => { setCondition(e.target.value); setPagination(prev => ({ ...prev, offset: 0 })); }}
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-sm text-gray-900 dark:text-white"
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
               >
                 <option value="">Alle Zustände</option>
                 {ZUSTAND_OPTIONS.map(opt => (
@@ -269,7 +275,7 @@ export default function MarketplacePage() {
               <select
                 value={delivery}
                 onChange={(e) => { setDelivery(e.target.value); setPagination(prev => ({ ...prev, offset: 0 })); }}
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-sm text-gray-900 dark:text-white"
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
               >
                 <option value="">Alle Optionen</option>
                 {DELIVERY_OPTIONS.map(opt => (
@@ -282,7 +288,7 @@ export default function MarketplacePage() {
               <select
                 value={payment}
                 onChange={(e) => { setPayment(e.target.value); setPagination(prev => ({ ...prev, offset: 0 })); }}
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-sm text-gray-900 dark:text-white"
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
               >
                 <option value="">Alle</option>
                 {PAYMENT_MODES.map(opt => (
@@ -296,20 +302,67 @@ export default function MarketplacePage() {
                 <input
                   type="number"
                   placeholder="Min"
+                  min="0"
+                  max="999999"
+                  step="1"
                   value={priceMin}
-                  onChange={(e) => setPriceMin(e.target.value)}
-                  onBlur={() => setPagination(prev => ({ ...prev, offset: 0 }))}
-                  className="w-1/2 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-sm text-gray-900 dark:text-white"
+                  onChange={(e) => {
+                    setPriceMin(e.target.value)
+                    setPriceError(null)
+                  }}
+                  onBlur={() => {
+                    const minVal = priceMin ? Number(priceMin) : null
+                    const maxVal = priceMax ? Number(priceMax) : null
+
+                    if (minVal !== null && minVal < 0) {
+                      setPriceError('Preis muss positiv sein')
+                      return
+                    }
+                    if (minVal !== null && maxVal !== null && minVal > maxVal) {
+                      setPriceError('Mindestpreis darf nicht höher als Höchstpreis sein')
+                      return
+                    }
+                    setPriceError(null)
+                    setPagination(prev => ({ ...prev, offset: 0 }))
+                  }}
+                  aria-invalid={!!priceError}
+                  aria-describedby={priceError ? "price-error" : undefined}
+                  className="w-1/2 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
                 />
                 <input
                   type="number"
                   placeholder="Max"
+                  min="0"
+                  max="999999"
+                  step="1"
                   value={priceMax}
-                  onChange={(e) => setPriceMax(e.target.value)}
-                  onBlur={() => setPagination(prev => ({ ...prev, offset: 0 }))}
-                  className="w-1/2 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-sm text-gray-900 dark:text-white"
+                  onChange={(e) => {
+                    setPriceMax(e.target.value)
+                    setPriceError(null)
+                  }}
+                  onBlur={() => {
+                    const minVal = priceMin ? Number(priceMin) : null
+                    const maxVal = priceMax ? Number(priceMax) : null
+
+                    if (maxVal !== null && maxVal < 0) {
+                      setPriceError('Preis muss positiv sein')
+                      return
+                    }
+                    if (minVal !== null && maxVal !== null && minVal > maxVal) {
+                      setPriceError('Mindestpreis darf nicht höher als Höchstpreis sein')
+                      return
+                    }
+                    setPriceError(null)
+                    setPagination(prev => ({ ...prev, offset: 0 }))
+                  }}
+                  aria-invalid={!!priceError}
+                  aria-describedby={priceError ? "price-error" : undefined}
+                  className="w-1/2 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
                 />
               </div>
+              {priceError && (
+                <p id="price-error" className="text-xs text-red-600 dark:text-red-400 mt-1">{priceError}</p>
+              )}
             </div>
           </div>
         </div>
@@ -318,7 +371,7 @@ export default function MarketplacePage() {
       {/* Loading State */}
       {isLoading && (
         <div className="flex items-center justify-center py-12">
-          <Loader2 className="w-8 h-8 text-green-600 animate-spin" />
+          <Loader2 className="w-8 h-8 text-green-600 animate-spin" aria-hidden="true" />
           <span className="ml-3 text-gray-600 dark:text-gray-400">Inserate werden geladen...</span>
         </div>
       )}
@@ -326,16 +379,16 @@ export default function MarketplacePage() {
       {/* Error State */}
       {error && !isLoading && (
         <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl p-6 text-center">
-          <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-4" />
+          <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-4" aria-hidden="true" />
           <h3 className="text-lg font-semibold text-red-800 dark:text-red-200 mb-2">
             Fehler beim Laden
           </h3>
           <p className="text-red-600 dark:text-red-300 mb-4">{error}</p>
           <button
             onClick={fetchListings}
-            className="inline-flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg"
+            className="inline-flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
           >
-            <RefreshCw className="w-4 h-4" />
+            <RefreshCw className="w-4 h-4" aria-hidden="true" />
             Erneut versuchen
           </button>
         </div>
@@ -344,7 +397,7 @@ export default function MarketplacePage() {
       {/* Empty State */}
       {!isLoading && !error && listings.length === 0 && (
         <div className="bg-gray-50 dark:bg-gray-800 rounded-xl p-8 text-center border-2 border-dashed border-gray-300 dark:border-gray-600">
-          <Package className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+          <Package className="w-16 h-16 text-gray-400 mx-auto mb-4" aria-hidden="true" />
           <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
             Keine Inserate gefunden
           </h3>
@@ -356,16 +409,16 @@ export default function MarketplacePage() {
           {hasActiveFilters ? (
             <button
               onClick={clearFilters}
-              className="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg"
+              className="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
             >
               Filter zurücksetzen
             </button>
           ) : session?.user ? (
             <Link
               href="/marketplace/sell"
-              className="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg"
+              className="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
             >
-              <Plus className="w-4 h-4" />
+              <Plus className="w-4 h-4" aria-hidden="true" />
               Erstes Inserat erstellen
             </Link>
           ) : null}
@@ -374,7 +427,7 @@ export default function MarketplacePage() {
 
       {/* Listings Grid */}
       {!isLoading && !error && listings.length > 0 && (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
           {listings.map((listing) => {
             const conditionInfo = getConditionBadge(listing.condition)
             const sellerName = listing.seller_display_name || listing.seller_name
@@ -394,7 +447,7 @@ export default function MarketplacePage() {
                     />
                   ) : (
                     <div className="w-full h-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center">
-                      <Package className="w-12 h-12 text-gray-300 dark:text-gray-500" />
+                      <Package className="w-12 h-12 text-gray-300 dark:text-gray-500" aria-hidden="true" />
                     </div>
                   )}
                   <div className="absolute top-2 left-2">
@@ -405,7 +458,7 @@ export default function MarketplacePage() {
                   {listing.is_revampit && (
                     <div className="absolute top-2 right-2">
                       <span className="inline-flex items-center gap-1 px-2 py-0.5 text-xs font-semibold rounded-full bg-green-100 text-green-800">
-                        <TrendingUp className="w-3 h-3" />
+                        <TrendingUp className="w-3 h-3" aria-hidden="true" />
                         RevampIT
                       </span>
                     </div>
@@ -426,7 +479,7 @@ export default function MarketplacePage() {
                     <span className="truncate">{sellerName}</span>
                     {listing.seller_rating && Number(listing.seller_rating) > 0 && (
                       <span className="inline-flex items-center gap-0.5 flex-shrink-0">
-                        <Star className="w-3 h-3 text-yellow-400 fill-yellow-400" />
+                        <Star className="w-3 h-3 text-yellow-400 fill-yellow-400" aria-hidden="true" />
                         {Number(listing.seller_rating).toFixed(1)}
                       </span>
                     )}
@@ -434,7 +487,7 @@ export default function MarketplacePage() {
 
                   {(listing.pickup_location || listing.seller_city) && (
                     <div className="flex items-center gap-1 mt-1 text-xs text-gray-400">
-                      <MapPin className="w-3 h-3 flex-shrink-0" />
+                      <MapPin className="w-3 h-3 flex-shrink-0" aria-hidden="true" />
                       <span className="truncate">{listing.pickup_location || listing.seller_city}</span>
                     </div>
                   )}
@@ -443,7 +496,7 @@ export default function MarketplacePage() {
                     <span>{listing.view_count} Aufrufe</span>
                     {listing.favorite_count > 0 && (
                       <span className="inline-flex items-center gap-0.5">
-                        <Heart className="w-3 h-3" />
+                        <Heart className="w-3 h-3" aria-hidden="true" />
                         {listing.favorite_count}
                       </span>
                     )}
@@ -461,9 +514,10 @@ export default function MarketplacePage() {
           <button
             onClick={() => goToPage(currentPage - 1)}
             disabled={currentPage <= 1}
-            className="p-2 rounded-lg border border-gray-300 dark:border-gray-600 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 dark:hover:bg-gray-800"
+            className="p-3 min-h-[44px] min-w-[44px] rounded-lg border border-gray-300 dark:border-gray-600 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 dark:hover:bg-gray-800"
+            aria-label="Vorherige Seite"
           >
-            <ChevronLeft className="w-4 h-4" />
+            <ChevronLeft className="w-4 h-4" aria-hidden="true" />
           </button>
           <span className="text-sm text-gray-600 dark:text-gray-400">
             Seite {currentPage} von {totalPages}
@@ -471,9 +525,10 @@ export default function MarketplacePage() {
           <button
             onClick={() => goToPage(currentPage + 1)}
             disabled={currentPage >= totalPages}
-            className="p-2 rounded-lg border border-gray-300 dark:border-gray-600 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 dark:hover:bg-gray-800"
+            className="p-3 min-h-[44px] min-w-[44px] rounded-lg border border-gray-300 dark:border-gray-600 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 dark:hover:bg-gray-800"
+            aria-label="Nächste Seite"
           >
-            <ChevronRight className="w-4 h-4" />
+            <ChevronRight className="w-4 h-4" aria-hidden="true" />
           </button>
         </div>
       )}
@@ -481,7 +536,7 @@ export default function MarketplacePage() {
       {/* Sell CTA for non-logged-in users */}
       {!session?.user && (
         <div className="bg-gray-50 dark:bg-gray-800 rounded-xl p-8 text-center border-2 border-dashed border-gray-300 dark:border-gray-600">
-          <Package className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+          <Package className="w-16 h-16 text-gray-400 mx-auto mb-4" aria-hidden="true" />
           <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
             Melden Sie sich an, um zu kaufen oder zu verkaufen
           </h3>
@@ -491,13 +546,13 @@ export default function MarketplacePage() {
           <div className="flex gap-4 justify-center">
             <Link
               href="/auth/login"
-              className="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg font-medium"
+              className="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg font-medium focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
             >
               Anmelden
             </Link>
             <Link
               href="/auth/register"
-              className="bg-white hover:bg-gray-50 text-gray-900 border border-gray-300 px-6 py-2 rounded-lg font-medium"
+              className="bg-white hover:bg-gray-50 text-gray-900 border border-gray-300 px-6 py-2 rounded-lg font-medium focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
             >
               Registrieren
             </Link>

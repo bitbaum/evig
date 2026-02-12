@@ -111,7 +111,7 @@ export default function ITHilfePage() {
         <div className="max-w-7xl mx-auto px-4 py-12">
           <div className="flex items-center gap-3 mb-4">
             <div className="p-3 bg-white/20 rounded-xl">
-              <Wrench className="w-8 h-8" />
+              <Wrench className="w-8 h-8" aria-hidden="true" />
             </div>
             <h1 className="text-3xl font-bold">{IT_HILFE.name}</h1>
           </div>
@@ -123,34 +123,34 @@ export default function ITHilfePage() {
             {session?.user ? (
               <Link
                 href={IT_HILFE.routes.create}
-                className="inline-flex items-center gap-2 bg-white text-emerald-600 px-6 py-3 rounded-lg font-semibold hover:bg-emerald-50 transition-colors"
+                className="inline-flex items-center gap-2 bg-white text-emerald-600 px-6 py-3 rounded-lg font-semibold hover:bg-emerald-50 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
               >
-                <Plus className="w-5 h-5" />
+                <Plus className="w-5 h-5" aria-hidden="true" />
                 Anfrage erstellen
               </Link>
             ) : (
               <Link
                 href={`/auth/login?callbackUrl=${IT_HILFE.routes.create}`}
-                className="inline-flex items-center gap-2 bg-white text-emerald-600 px-6 py-3 rounded-lg font-semibold hover:bg-emerald-50 transition-colors"
+                className="inline-flex items-center gap-2 bg-white text-emerald-600 px-6 py-3 rounded-lg font-semibold hover:bg-emerald-50 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
               >
-                <Plus className="w-5 h-5" />
+                <Plus className="w-5 h-5" aria-hidden="true" />
                 Anmelden & Anfrage erstellen
               </Link>
             )}
 
             <Link
               href={IT_HILFE.routes.helpers}
-              className="inline-flex items-center gap-2 bg-emerald-700 text-white px-6 py-3 rounded-lg font-semibold hover:bg-emerald-800 transition-colors"
+              className="inline-flex items-center gap-2 bg-emerald-700 text-white px-6 py-3 rounded-lg font-semibold hover:bg-emerald-800 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
             >
-              <Users className="w-5 h-5" />
+              <Users className="w-5 h-5" aria-hidden="true" />
               Techniker finden
             </Link>
 
             <Link
               href={session?.user ? IT_HILFE.routes.register : `/auth/login?callbackUrl=${IT_HILFE.routes.register}`}
-              className="inline-flex items-center gap-2 border-2 border-white text-white px-6 py-3 rounded-lg font-semibold hover:bg-white/10 transition-colors"
+              className="inline-flex items-center gap-2 border-2 border-white text-white px-6 py-3 rounded-lg font-semibold hover:bg-white/10 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
             >
-              <Wrench className="w-5 h-5" />
+              <Wrench className="w-5 h-5" aria-hidden="true" />
               Techniker werden
             </Link>
 
@@ -158,15 +158,15 @@ export default function ITHilfePage() {
               <>
                 <Link
                   href={IT_HILFE.routes.my}
-                  className="inline-flex items-center gap-2 bg-emerald-700 text-white px-6 py-3 rounded-lg font-semibold hover:bg-emerald-800 transition-colors"
+                  className="inline-flex items-center gap-2 bg-emerald-700 text-white px-6 py-3 rounded-lg font-semibold hover:bg-emerald-800 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
                 >
                   Meine Anfragen
                 </Link>
                 <Link
                   href={IT_HILFE.routes.myOffers}
-                  className="inline-flex items-center gap-2 bg-emerald-700 text-white px-6 py-3 rounded-lg font-semibold hover:bg-emerald-800 transition-colors"
+                  className="inline-flex items-center gap-2 bg-emerald-700 text-white px-6 py-3 rounded-lg font-semibold hover:bg-emerald-800 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
                 >
-                  <Heart className="w-5 h-5" />
+                  <Heart className="w-5 h-5" aria-hidden="true" />
                   Meine Angebote
                 </Link>
               </>
@@ -181,17 +181,17 @@ export default function ITHilfePage() {
           <div className="flex flex-wrap items-center gap-4">
             <button
               onClick={() => setShowFilters(!showFilters)}
-              className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
+              className="inline-flex items-center gap-2 px-4 py-3 min-h-[44px] text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
             >
-              <Filter className="w-4 h-4" />
+              <Filter className="w-4 h-4" aria-hidden="true" />
               Filter
-              <ChevronDown className={`w-4 h-4 transition-transform ${showFilters ? 'rotate-180' : ''}`} />
+              <ChevronDown className={`w-4 h-4 transition-transform ${showFilters ? 'rotate-180' : ''}`} aria-hidden="true" />
             </button>
 
             {hasActiveFilters && (
               <button
                 onClick={clearFilters}
-                className="text-sm text-emerald-600 hover:text-emerald-700"
+                className="text-sm text-emerald-600 hover:text-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 rounded px-2 py-1"
               >
                 Filter zurücksetzen
               </button>
@@ -203,7 +203,7 @@ export default function ITHilfePage() {
           </div>
 
           {showFilters && (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-4 pt-4 border-t border-gray-100">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-4 pt-4 border-t border-gray-100">
               {/* Category filter */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -212,7 +212,7 @@ export default function ITHilfePage() {
                 <select
                   value={category}
                   onChange={(e) => setCategory(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
                 >
                   <option value="">Alle Kategorien</option>
                   {DEVICE_CATEGORIES.map((cat) => (
@@ -231,7 +231,7 @@ export default function ITHilfePage() {
                 <select
                   value={canton}
                   onChange={(e) => setCanton(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
                 >
                   <option value="">Alle Kantone</option>
                   {SWISS_CANTONS.map((c) => (
@@ -250,7 +250,7 @@ export default function ITHilfePage() {
                 <select
                   value={urgency}
                   onChange={(e) => setUrgency(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
                 >
                   <option value="">Alle</option>
                   {URGENCY_LEVELS.map((u) => (
@@ -269,7 +269,7 @@ export default function ITHilfePage() {
                 <select
                   value={budgetType}
                   onChange={(e) => setBudgetType(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
                 >
                   <option value="">Alle</option>
                   <option value="free">Gratis / Community</option>
@@ -293,7 +293,7 @@ export default function ITHilfePage() {
           </div>
         ) : requests.length === 0 ? (
           <div className="text-center py-16">
-            <Search className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+            <Search className="w-16 h-16 text-gray-300 mx-auto mb-4" aria-hidden="true" />
             <h3 className="text-xl font-semibold text-gray-900 mb-2">
               Keine Anfragen gefunden
             </h3>
@@ -305,15 +305,15 @@ export default function ITHilfePage() {
             {session?.user && (
               <Link
                 href={IT_HILFE.routes.create}
-                className="inline-flex items-center gap-2 bg-emerald-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-emerald-700 transition-colors"
+                className="inline-flex items-center gap-2 bg-emerald-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-emerald-700 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
               >
-                <Plus className="w-5 h-5" />
+                <Plus className="w-5 h-5" aria-hidden="true" />
                 Anfrage erstellen
               </Link>
             )}
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6">
             {requests.map((req) => {
               const categoryConfig = getCategoryById(req.categoryId)
               const urgencyConfig = getUrgencyById(req.urgency)
@@ -329,7 +329,7 @@ export default function ITHilfePage() {
                   <div className="p-5 border-b border-gray-100">
                     <div className="flex items-start justify-between mb-3">
                       <div className={`p-2.5 ${categoryConfig?.color || 'bg-gray-500'} rounded-lg`}>
-                        <CategoryIcon className="w-5 h-5 text-white" />
+                        <CategoryIcon className="w-5 h-5 text-white" aria-hidden="true" />
                       </div>
                       <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${urgencyConfig?.badgeClass || 'bg-gray-100 text-gray-700'}`}>
                         {urgencyConfig?.name || req.urgency}
@@ -354,11 +354,11 @@ export default function ITHilfePage() {
                     {/* Meta info */}
                     <div className="flex flex-wrap items-center gap-3 text-sm text-gray-500">
                       <div className="flex items-center gap-1">
-                        <MapPin className="w-4 h-4" />
+                        <MapPin className="w-4 h-4" aria-hidden="true" />
                         <span>{req.city}</span>
                       </div>
                       <div className="flex items-center gap-1">
-                        <Users className="w-4 h-4" />
+                        <Users className="w-4 h-4" aria-hidden="true" />
                         <span>{req.offerCount} {req.offerCount === 1 ? 'Angebot' : 'Angebote'}</span>
                       </div>
                     </div>
@@ -395,9 +395,9 @@ export default function ITHilfePage() {
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link
               href={session?.user ? IT_HILFE.routes.register : `/auth/login?callbackUrl=${IT_HILFE.routes.register}`}
-              className="inline-flex items-center gap-2 bg-white text-emerald-700 px-6 py-3 rounded-lg font-semibold hover:bg-emerald-50 transition-colors"
+              className="inline-flex items-center gap-2 bg-white text-emerald-700 px-6 py-3 rounded-lg font-semibold hover:bg-emerald-50 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
             >
-              <Wrench className="w-5 h-5" />
+              <Wrench className="w-5 h-5" aria-hidden="true" />
               Techniker-Profil erstellen
             </Link>
             <Link
