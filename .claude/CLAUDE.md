@@ -27,13 +27,29 @@ revampit/
 
 | Layer | Technology | Port |
 |-------|------------|------|
-| Frontend | Next.js 16, TypeScript, Tailwind | 3000 |
+| Frontend | Next.js 16, TypeScript, Tailwind | 3001 |
 | CMS API | Express.js | 3001 |
 | E-commerce | Medusa | 9000 |
-| Main DB | PostgreSQL | 5433 |
+| **Main DB** | **Neon PostgreSQL (cloud)** | **Remote** |
 | Medusa DB | PostgreSQL | 5435 |
 | Cache | Redis | 6380 |
 | Search | Meilisearch | 7700 |
+
+### Database Configuration
+
+**CRITICAL: This project uses Neon PostgreSQL (cloud), NOT local PostgreSQL.**
+
+**.env.local MUST have:**
+```bash
+DATABASE_URL=postgresql://user:pass@ep-xxx.region.aws.neon.tech/dbname?sslmode=require
+```
+
+**To set up Neon:**
+1. Get connection string from https://console.neon.tech
+2. Run: `./switch-to-neon.sh` (will prompt for URL)
+3. Migrations run automatically
+
+**Never assume local PostgreSQL.** Always check for `DATABASE_URL` in `.env.local`.
 
 ## Quick Start
 
