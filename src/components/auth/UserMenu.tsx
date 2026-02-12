@@ -107,7 +107,7 @@ export function UserMenu() {
     { href: '/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
     { href: '/dashboard/profile', icon: User, label: 'Mein Profil' },
     { href: '/dashboard/workshops', icon: Calendar, label: 'Meine Workshops' },
-    { href: '/dashboard/appointments', icon: Calendar, label: 'Meine Termine' },
+    { href: '/dashboard/bookings', icon: Calendar, label: 'Meine Termine' },
     { href: '/dashboard/orders', icon: ShoppingBag, label: 'Meine Bestellungen' },
     { href: '/dashboard/donations', icon: Heart, label: 'Meine Spenden' },
   ]
