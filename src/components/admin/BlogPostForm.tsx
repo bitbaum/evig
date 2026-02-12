@@ -22,6 +22,7 @@ import {
   X,
   Wand2,
 } from 'lucide-react'
+import { BLOG_AI_QUICK_ACTIONS } from '@/config/blog'
 
 interface Category {
   id: string
@@ -79,12 +80,6 @@ export function BlogPostForm({ initialData, isEdit = false }: BlogPostFormProps)
   const [aiGenerating, setAiGenerating] = useState(false)
   const [aiError, setAiError] = useState('')
 
-  // Quick action prompts for refinement
-  const QUICK_ACTIONS = [
-    { key: 'shorter', label: 'Kürzer', prompt: 'Kürze den Artikel auf etwa die Hälfte der Länge. Behalte die wichtigsten Punkte bei.' },
-    { key: 'longer', label: 'Ausführlicher', prompt: 'Erweitere den Artikel mit mehr Details, Beispielen und praktischen Tipps. Verdopple etwa die Länge.' },
-    { key: 'seoOptimize', label: 'SEO-optimiert', prompt: 'Optimiere den Artikel für Suchmaschinen: Verbessere Titel, füge relevante Keywords ein, strukturiere mit besseren Überschriften.' },
-  ]
 
   useEffect(() => {
     loadCategories()
@@ -649,7 +644,7 @@ export function BlogPostForm({ initialData, isEdit = false }: BlogPostFormProps)
                       Schnellaktionen
                     </label>
                     <div className="flex flex-wrap gap-2">
-                      {QUICK_ACTIONS.map((action) => (
+                      {BLOG_AI_QUICK_ACTIONS.map((action) => (
                         <button
                           key={action.key}
                           onClick={() => handleAIRefine(action.prompt)}

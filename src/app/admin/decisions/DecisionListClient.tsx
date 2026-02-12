@@ -12,6 +12,7 @@ import {
   type DecisionType,
   type VotingMethod,
 } from '@/config/decisions';
+import { formatDeadline } from '@/lib/utils/date';
 
 interface DecisionListItem {
   id: string;
@@ -26,18 +27,6 @@ interface DecisionListItem {
   hasUserVoted: boolean;
   creator: { id: string; email: string };
   createdAt: string;
-}
-
-function formatDeadline(deadline: string | null): string {
-  if (!deadline) return '–';
-  const d = new Date(deadline);
-  const now = new Date();
-  const diffMs = d.getTime() - now.getTime();
-  if (diffMs < 0) return 'Abgelaufen';
-  const hours = Math.floor(diffMs / (1000 * 60 * 60));
-  if (hours < 24) return `${hours}h`;
-  const days = Math.floor(hours / 24);
-  return `${days}d`;
 }
 
 export default function DecisionListClient() {

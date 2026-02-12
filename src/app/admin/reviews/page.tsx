@@ -4,6 +4,14 @@ import { useState, useEffect, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { formatDateShort } from '@/lib/date-formats'
 import {
+  type ReviewStatus,
+  REVIEW_STATUS,
+  getReviewStatusLabel,
+  getReviewStatusBadgeColor,
+  getReviewFilterLabel,
+  getReviewActionLabel,
+} from '@/config/review-status'
+import {
   Eye,
   EyeOff,
   Trash2,
@@ -46,14 +54,12 @@ interface Review {
   }
 }
 
-type ReviewStatus = 'published' | 'pending_moderation' | 'hidden' | 'deleted'
-
 export default function AdminReviewsPage() {
   const router = useRouter()
   const [reviews, setReviews] = useState<Review[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [selectedStatus, setSelectedStatus] = useState<ReviewStatus>('pending_moderation')
+  const [selectedStatus, setSelectedStatus] = useState<ReviewStatus>(REVIEW_STATUS.PENDING_MODERATION)
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedReview, setSelectedReview] = useState<Review | null>(null)
   const [moderationAction, setModerationAction] = useState<string | null>(null)
@@ -114,7 +120,7 @@ export default function AdminReviewsPage() {
 
       cancelModeration()
       await fetchReviews()
-      setSuccessMessage(`Bewertung erfolgreich ${getActionLabel(moderatingAction)}`)
+      setSuccessMessage(`Bewertung erfolgreich ${getReviewActionLabel(moderatingAction)}`)
       setTimeout(() => setSuccessMessage(null), 3000)
     } catch (err) {
       setError('Fehler bei der Moderation: ' + (err instanceof Error ? err.message : 'Unbekannter Fehler'))
@@ -123,27 +129,16 @@ export default function AdminReviewsPage() {
     }
   }
 
-  const getActionLabel = (action: string) => {
-    switch (action) {
-      case 'approve': return 'freigegeben'
-      case 'hide': return 'ausgeblendet'
-      case 'delete': return 'gelöscht'
-      case 'restore': return 'wiederhergestellt'
-      case 'flag_spam': return 'als Spam markiert'
-      case 'flag_inappropriate': return 'als unangemessen markiert'
-      default: return 'moderiert'
-    }
-  }
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'published':
+      case REVIEW_STATUS.PUBLISHED:
         return <CheckCircle className="w-5 h-5 text-green-500" />
-      case 'pending_moderation':
+      case REVIEW_STATUS.PENDING_MODERATION:
         return <AlertTriangle className="w-5 h-5 text-orange-500" />
-      case 'hidden':
+      case REVIEW_STATUS.HIDDEN:
         return <EyeOff className="w-5 h-5 text-red-500" />
-      case 'deleted':
+      case REVIEW_STATUS.DELETED:
         return <Trash2 className="w-5 h-5 text-gray-500" />
       default:
         return <AlertTriangle className="w-5 h-5 text-gray-500" />
@@ -151,24 +146,10 @@ export default function AdminReviewsPage() {
   }
 
   const getStatusBadge = (status: string) => {
-    const styles = {
-      published: 'bg-green-100 text-green-800',
-      pending_moderation: 'bg-orange-100 text-orange-800',
-      hidden: 'bg-red-100 text-red-800',
-      deleted: 'bg-gray-100 text-gray-800'
-    }
-
-    const labels = {
-      published: 'Veröffentlicht',
-      pending_moderation: 'Wartet auf Moderation',
-      hidden: 'Ausgeblendet',
-      deleted: 'Gelöscht'
-    }
-
     return (
-      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${styles[status as keyof typeof styles] || styles.pending_moderation}`}>
+      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getReviewStatusBadgeColor(status)}`}>
         {getStatusIcon(status)}
-        <span className="ml-1">{labels[status as keyof typeof labels] || 'Unbekannt'}</span>
+        <span className="ml-1">{getReviewStatusLabel(status)}</span>
       </span>
     )
   }
@@ -243,7 +224,7 @@ export default function AdminReviewsPage() {
               <span className="text-sm font-medium text-gray-700">Status:</span>
             </div>
             <div className="flex gap-2">
-              {(['published', 'pending_moderation', 'hidden', 'deleted'] as ReviewStatus[]).map((status) => (
+              {([REVIEW_STATUS.PUBLISHED, REVIEW_STATUS.PENDING_MODERATION, REVIEW_STATUS.HIDDEN, REVIEW_STATUS.DELETED] as ReviewStatus[]).map((status) => (
                 <button
                   key={status}
                   onClick={() => setSelectedStatus(status)}
@@ -253,10 +234,7 @@ export default function AdminReviewsPage() {
                       : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                   }`}
                 >
-                  {status === 'published' && 'Veröffentlicht'}
-                  {status === 'pending_moderation' && 'Moderation'}
-                  {status === 'hidden' && 'Ausgeblendet'}
-                  {status === 'deleted' && 'Gelöscht'}
+                  {getReviewFilterLabel(status)}
                 </button>
               ))}
             </div>
@@ -295,7 +273,7 @@ export default function AdminReviewsPage() {
       {moderatingId && (
         <div className="bg-white rounded-lg shadow-sm border border-orange-200 p-6">
           <h3 className="text-sm font-semibold text-gray-900 mb-2">
-            Grund für {getActionLabel(moderatingAction)}:
+            Grund für {getReviewActionLabel(moderatingAction)}:
           </h3>
           <textarea
             value={moderationReason}
@@ -384,7 +362,7 @@ export default function AdminReviewsPage() {
 
                   {/* Action Buttons */}
                   <div className="flex flex-col gap-2 ml-4">
-                    {selectedStatus === 'pending_moderation' && (
+                    {selectedStatus === REVIEW_STATUS.PENDING_MODERATION && (
                       <>
                         <button
                           onClick={() => startModeration(review.id, 'approve')}
@@ -405,7 +383,7 @@ export default function AdminReviewsPage() {
                       </>
                     )}
 
-                    {selectedStatus === 'hidden' && (
+                    {selectedStatus === REVIEW_STATUS.HIDDEN && (
                       <>
                         <button
                           onClick={() => startModeration(review.id, 'restore')}

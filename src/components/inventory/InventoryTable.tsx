@@ -16,6 +16,7 @@ import {
   Zap
 } from 'lucide-react'
 import { logger } from '@/lib/logger'
+import { MARKETPLACE_STATUS, getMarketplaceStatusLabel } from '@/config/marketplace-status'
 
 interface InventoryItem {
   id: string
@@ -91,8 +92,8 @@ export function InventoryTable({ items, onPublishSuccess }: InventoryTableProps)
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'published': return <CheckCircle className="w-4 h-4 text-green-600" />
-      case 'draft': return <Clock className="w-4 h-4 text-yellow-600" />
+      case MARKETPLACE_STATUS.PUBLISHED: return <CheckCircle className="w-4 h-4 text-green-600" />
+      case MARKETPLACE_STATUS.DRAFT: return <Clock className="w-4 h-4 text-yellow-600" />
       default: return <AlertCircle className="w-4 h-4 text-gray-600" />
     }
   }
@@ -170,8 +171,7 @@ export function InventoryTable({ items, onPublishSuccess }: InventoryTableProps)
                     <div className="flex items-center gap-2">
                       {getStatusIcon(item.marketplace_status)}
                       <span className="text-sm text-gray-900 dark:text-white capitalize">
-                        {item.marketplace_status === 'published' ? 'Veröffentlicht' :
-                         item.marketplace_status === 'draft' ? 'Entwurf' : item.marketplace_status}
+                        {getMarketplaceStatusLabel(item.marketplace_status)}
                       </span>
                     </div>
                   </td>
@@ -190,7 +190,7 @@ export function InventoryTable({ items, onPublishSuccess }: InventoryTableProps)
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                     <div className="flex items-center justify-end gap-2">
-                      {item.marketplace_status === 'published' && item.medusa_product_id && (
+                      {item.marketplace_status === MARKETPLACE_STATUS.PUBLISHED && item.medusa_product_id && (
                         <Link
                           href={`/shop/products/${item.medusa_product_id}`}
                           className="text-gray-400 hover:text-blue-600 dark:hover:text-blue-400"
@@ -200,7 +200,7 @@ export function InventoryTable({ items, onPublishSuccess }: InventoryTableProps)
                         </Link>
                       )}
 
-                      {item.marketplace_status === 'draft' && (
+                      {item.marketplace_status === MARKETPLACE_STATUS.DRAFT && (
                         <button
                           onClick={() => handlePublish(item.id)}
                           disabled={isPublishing}

@@ -13,6 +13,14 @@ import {
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import type { InventoryProduct } from '@/hooks/useInventoryProducts'
+import {
+  MARKETPLACE_STATUS,
+  PRODUCT_STATUS,
+  getMarketplaceStatusLabel,
+  getMarketplaceStatusBadgeColor,
+  getProductStatusLabel,
+  getProductStatusBadgeColor,
+} from '@/config/marketplace-status'
 
 interface InventoryProductsTableProps {
   products: InventoryProduct[]
@@ -101,28 +109,18 @@ export function InventoryProductsTable({
                     <span
                       className={cn(
                         "inline-flex px-2 py-1 text-xs font-medium rounded-full w-fit",
-                        product.marketplace_status === 'published'
-                          ? "bg-green-100 text-green-800"
-                          : "bg-yellow-100 text-yellow-800"
+                        getMarketplaceStatusBadgeColor(product.marketplace_status)
                       )}
                     >
-                      {product.marketplace_status === 'published' ? 'Veröffentlicht' : 'Entwurf'}
+                      {getMarketplaceStatusLabel(product.marketplace_status)}
                     </span>
                     <span
                       className={cn(
                         "inline-flex px-2 py-1 text-xs font-medium rounded-full w-fit",
-                        product.status === 'approved'
-                          ? "bg-blue-100 text-blue-800"
-                          : product.status === 'pending_review'
-                          ? "bg-orange-100 text-orange-800"
-                          : "bg-gray-100 text-gray-800"
+                        getProductStatusBadgeColor(product.status)
                       )}
                     >
-                      {product.status === 'approved'
-                        ? 'Freigegeben'
-                        : product.status === 'pending_review'
-                        ? 'Zur Prüfung'
-                        : product.status}
+                      {getProductStatusLabel(product.status)}
                     </span>
                   </div>
                 </td>
@@ -152,7 +150,7 @@ export function InventoryProductsTable({
                 <td className="px-6 py-4 text-right">
                   <div className="flex items-center justify-end gap-2">
                     {/* Quick publish button for unpublished products */}
-                    {product.marketplace_status !== 'published' && (
+                    {product.marketplace_status !== MARKETPLACE_STATUS.PUBLISHED && (
                       <button
                         onClick={() => onPublish?.(product)}
                         className="p-1 text-green-500 hover:text-green-700"

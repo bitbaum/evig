@@ -7,6 +7,9 @@ import {
   DECISION_TYPE_CONFIG,
   VOTING_METHOD_CONFIG,
   VALID_TRANSITIONS,
+  EDITABLE_STATUSES,
+  PARTICIPATABLE_STATUSES,
+  READ_ONLY_STATUSES,
   type DecisionStatus,
   type DecisionType,
   type VotingMethod,
@@ -139,8 +142,7 @@ export default function DecisionDetailClient({
 
           {/* Action Buttons */}
           <div className="flex gap-2">
-            {(decision.status === 'draft' ||
-              decision.status === 'discussion') && (
+            {(EDITABLE_STATUSES as readonly string[]).includes(decision.status) && (
               <Link
                 href={`/admin/decisions/${decision.id}/edit`}
                 className="rounded-md border border-gray-300 px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-50"
@@ -294,7 +296,7 @@ export default function DecisionDetailClient({
       </div>
 
       {/* Participation Card */}
-      {['discussion', 'voting', 'closed'].includes(decision.status) && (
+      {(PARTICIPATABLE_STATUSES as readonly string[]).includes(decision.status) && (
         <ParticipationCard decisionId={decisionId} />
       )}
 
@@ -320,10 +322,10 @@ export default function DecisionDetailClient({
       )}
 
       {/* Discussion Thread */}
-      {['discussion', 'voting', 'closed'].includes(decision.status) && (
+      {(PARTICIPATABLE_STATUSES as readonly string[]).includes(decision.status) && (
         <DiscussionThread
           decisionId={decisionId}
-          readOnly={decision.status === 'closed' || decision.status === 'cancelled'}
+          readOnly={(READ_ONLY_STATUSES as readonly string[]).includes(decision.status)}
         />
       )}
     </div>

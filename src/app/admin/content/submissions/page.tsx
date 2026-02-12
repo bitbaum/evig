@@ -8,7 +8,7 @@
  */
 
 import { useState, useEffect, useCallback } from 'react'
-import { APPROVAL_STATUS_BADGES } from '@/config/approval-status'
+import { APPROVAL_STATUS_BADGES, type ApprovalStatus } from '@/config/approval-status'
 import { formatDateTime } from '@/lib/date-formats'
 import Link from 'next/link'
 import {
@@ -53,7 +53,7 @@ interface Submission {
   submitted_at: string
 }
 
-type FilterStatus = 'all' | 'pending' | 'approved' | 'rejected' | 'published'
+type FilterStatus = 'all' | ApprovalStatus
 
 export default function SubmissionsAdminPage() {
   const [submissions, setSubmissions] = useState<Submission[]>([])

@@ -108,3 +108,5 @@ tina/__generated__
 
 # Uploaded files (development)
 public/uploads/
+*.sh
+daten/

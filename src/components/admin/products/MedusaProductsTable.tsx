@@ -14,6 +14,7 @@ import {
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import type { ProductWithOwner } from './types'
+import { getMarketplaceStatusLabel, getMarketplaceStatusBadgeColor } from '@/config/marketplace-status'
 
 interface MedusaProductsTableProps {
   products: ProductWithOwner[]
@@ -114,12 +115,10 @@ export function MedusaProductsTable({
                   <span
                     className={cn(
                       "inline-flex px-2 py-1 text-xs font-medium rounded-full",
-                      product.status === 'published'
-                        ? "bg-green-100 text-green-800"
-                        : "bg-yellow-100 text-yellow-800"
+                      getMarketplaceStatusBadgeColor(product.status ?? '')
                     )}
                   >
-                    {product.status === 'published' ? 'Veröffentlicht' : 'Entwurf'}
+                    {getMarketplaceStatusLabel(product.status ?? '')}
                   </span>
                 </td>
                 <td className="px-6 py-4">

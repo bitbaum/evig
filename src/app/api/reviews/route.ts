@@ -144,7 +144,7 @@ export async function GET(request: NextRequest) {
         ) as attachments
       FROM ${TABLE_NAMES.REVIEWS} r
       JOIN ${TABLE_NAMES.USERS} u ON r.reviewer_id = u.id
-      LEFT JOIN ${TABLE_NAMES.REPAIRER_PROFILES} rp ON r.target_type = '${REVIEW_TARGET_TYPES.REPAIRER}' AND r.target_id = rp.id
+      LEFT JOIN ${TABLE_NAMES.REPAIRER_PROFILES} rp ON r.target_type = $7 AND r.target_id = rp.id
       LEFT JOIN ${TABLE_NAMES.REVIEW_RESPONSES} rr ON r.id = rr.review_id AND rr.status = 'published'
       LEFT JOIN ${TABLE_NAMES.USERS} ru ON rr.responder_id = ru.id
       LEFT JOIN ${TABLE_NAMES.REVIEW_VOTES} rv ON r.id = rv.review_id AND rv.voter_id = $1
@@ -157,7 +157,8 @@ export async function GET(request: NextRequest) {
       targetId,
       status,
       limit,
-      offset
+      offset,
+      REVIEW_TARGET_TYPES.REPAIRER,
     ])
 
     // Get total count for pagination

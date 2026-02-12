@@ -10,6 +10,7 @@ import { Loader2, CheckCircle, XCircle, Clock, AlertTriangle, RefreshCw } from '
 import { formatDateShort } from '@/lib/date-formats'
 import { useRefunds } from '@/hooks/useRefunds'
 import type { RefundAction } from '@/hooks/useRefunds'
+import { REFUND_STATUS, getRefundStatusLabel, getRefundReasonLabel } from '@/config/refund'
 
 export default function RefundManager() {
   const { refunds, isLoading: loading, processingId: processing, error, fetchRefunds, updateRefund } = useRefunds()
@@ -22,40 +23,22 @@ export default function RefundManager() {
     updateRefund(refundId, action, notes)
   }
 
-  const getStatusBadge = (status: string) => {
-    switch (status) {
-      case 'requested':
-        return <Badge variant="secondary"><Clock className="w-3 h-3 mr-1" />Angefragt</Badge>
-      case 'approved':
-        return <Badge variant="outline" className="text-blue-700 border-blue-300"><CheckCircle className="w-3 h-3 mr-1" />Genehmigt</Badge>
-      case 'processing':
-        return <Badge variant="outline" className="text-yellow-700 border-yellow-300"><RefreshCw className="w-3 h-3 mr-1" />In Bearbeitung</Badge>
-      case 'completed':
-        return <Badge variant="default" className="bg-green-100 text-green-800"><CheckCircle className="w-3 h-3 mr-1" />Abgeschlossen</Badge>
-      case 'rejected':
-        return <Badge variant="destructive"><XCircle className="w-3 h-3 mr-1" />Abgelehnt</Badge>
-      default:
-        return <Badge variant="secondary">{status}</Badge>
-    }
+  const statusBadgeConfig: Record<string, { variant: 'secondary' | 'outline' | 'default' | 'destructive'; className?: string; icon: React.ReactNode }> = {
+    [REFUND_STATUS.REQUESTED]: { variant: 'secondary', icon: <Clock className="w-3 h-3 mr-1" /> },
+    [REFUND_STATUS.APPROVED]: { variant: 'outline', className: 'text-blue-700 border-blue-300', icon: <CheckCircle className="w-3 h-3 mr-1" /> },
+    [REFUND_STATUS.PROCESSING]: { variant: 'outline', className: 'text-yellow-700 border-yellow-300', icon: <RefreshCw className="w-3 h-3 mr-1" /> },
+    [REFUND_STATUS.COMPLETED]: { variant: 'default', className: 'bg-green-100 text-green-800', icon: <CheckCircle className="w-3 h-3 mr-1" /> },
+    [REFUND_STATUS.REJECTED]: { variant: 'destructive', icon: <XCircle className="w-3 h-3 mr-1" /> },
   }
 
-  const getReasonText = (reason: string) => {
-    switch (reason) {
-      case 'customer_request':
-        return 'Kundenwunsch'
-      case 'service_cancelled':
-        return 'Service storniert'
-      case 'service_not_completed':
-        return 'Service nicht erbracht'
-      case 'duplicate_charge':
-        return 'Doppelte Belastung'
-      case 'fraud':
-        return 'Betrug'
-      case 'other':
-        return 'Sonstiges'
-      default:
-        return reason
-    }
+  const getStatusBadge = (status: string) => {
+    const config = statusBadgeConfig[status]
+    if (!config) return <Badge variant="secondary">{status}</Badge>
+    return (
+      <Badge variant={config.variant} className={config.className}>
+        {config.icon}{getRefundStatusLabel(status)}
+      </Badge>
+    )
   }
 
   if (loading) {
@@ -69,10 +52,10 @@ export default function RefundManager() {
     )
   }
 
-  const pendingRefunds = refunds.filter(r => r.status === 'requested')
-  const approvedRefunds = refunds.filter(r => r.status === 'approved')
-  const processingRefunds = refunds.filter(r => r.status === 'processing')
-  const completedRefunds = refunds.filter(r => ['completed', 'rejected'].includes(r.status))
+  const pendingRefunds = refunds.filter(r => r.status === REFUND_STATUS.REQUESTED)
+  const approvedRefunds = refunds.filter(r => r.status === REFUND_STATUS.APPROVED)
+  const processingRefunds = refunds.filter(r => r.status === REFUND_STATUS.PROCESSING)
+  const completedRefunds = refunds.filter(r => [REFUND_STATUS.COMPLETED, REFUND_STATUS.REJECTED].includes(r.status as any))
 
   return (
     <div className="space-y-6">
@@ -140,7 +123,7 @@ export default function RefundManager() {
                     </div>
                     <div>
                       <span className="font-medium">Grund:</span>
-                      <p className="text-gray-600">{getReasonText(refund.reason)}</p>
+                      <p className="text-gray-600">{getRefundReasonLabel(refund.reason)}</p>
                     </div>
                     <div>
                       <span className="font-medium">Angefragt am:</span>
@@ -208,7 +191,7 @@ export default function RefundManager() {
                   <div className="flex justify-between items-center">
                     <div>
                       <p className="font-medium">{refund.refund_amount} {refund.currency}</p>
-                      <p className="text-sm text-gray-600">{getReasonText(refund.reason)}</p>
+                      <p className="text-sm text-gray-600">{getRefundReasonLabel(refund.reason)}</p>
                     </div>
                     <Button
                       onClick={() => handleRefundAction(refund.id, 'process', 'Processed via admin panel')}
@@ -254,7 +237,7 @@ export default function RefundManager() {
                   <div className="flex justify-between items-center">
                     <div>
                       <p className="font-medium">{refund.refund_amount} {refund.currency}</p>
-                      <p className="text-sm text-gray-600">{getReasonText(refund.reason)}</p>
+                      <p className="text-sm text-gray-600">{getRefundReasonLabel(refund.reason)}</p>
                     </div>
                     <div className="text-sm text-gray-500">
                       Seit {formatDateShort(refund.processed_at || refund.created_at)}
@@ -281,7 +264,7 @@ export default function RefundManager() {
                     <div>
                       <CardTitle className="text-lg">{refund.refund_number}</CardTitle>
                       <CardDescription>
-                        {refund.customer_name} • {refund.status === 'completed' ? 'Abgeschlossen' : 'Abgelehnt'}
+                        {refund.customer_name} • {getRefundStatusLabel(refund.status)}
                       </CardDescription>
                     </div>
                     {getStatusBadge(refund.status)}
@@ -291,7 +274,7 @@ export default function RefundManager() {
                   <div className="flex justify-between items-center">
                     <div>
                       <p className="font-medium">{refund.refund_amount} {refund.currency}</p>
-                      <p className="text-sm text-gray-600">{getReasonText(refund.reason)}</p>
+                      <p className="text-sm text-gray-600">{getRefundReasonLabel(refund.reason)}</p>
                     </div>
                     <div className="text-sm text-gray-500">
                       {formatDateShort(refund.processed_at || refund.created_at)}

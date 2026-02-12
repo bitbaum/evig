@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import { logger } from '@/lib/logger'
-import { getApprovalStatusBadge, getApprovalStatusLabel } from '@/config/approval-status'
+import { getApprovalStatusBadge, getApprovalStatusLabel, type ApprovalStatus } from '@/config/approval-status'
 import { formatDateShort } from '@/lib/date-formats'
 import { useRouter } from 'next/navigation'
 import {
@@ -68,7 +68,7 @@ interface RepairerApplication {
   missingRequiredDocuments?: DocumentType[]
 }
 
-type ApplicationStatus = 'pending' | 'approved' | 'rejected' | 'requires_changes'
+type ApplicationStatus = ApprovalStatus
 
 interface VerificationDocument {
   id: string

@@ -11,6 +11,7 @@ import { TABLE_NAMES } from '@/config/database';
 import { logger } from '@/lib/logger';
 import {
   VALID_TRANSITIONS,
+  EDITABLE_STATUSES,
   type VotingMethod,
   type DecisionStatus,
 } from '@/config/decisions';
@@ -363,8 +364,7 @@ export async function updateDecision(
     return { decision: updated.rows[0] };
   }
 
-  const editableStatuses = ['draft', 'discussion'];
-  if (!editableStatuses.includes(decision.status)) {
+  if (!(EDITABLE_STATUSES as readonly string[]).includes(decision.status)) {
     return { error: 'not_editable' as const };
   }
 

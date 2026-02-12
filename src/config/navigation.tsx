@@ -28,19 +28,22 @@ export interface NavigationItem {
 /**
  * Main navigation structure
  *
- * Reduced from 8 to 6 items for better cognitive load:
- * 1. Über uns - About, mission, history
- * 2. Angebot - Services + Shop (combined)
- * 3. Projekte - Our initiatives
- * 4. Lernen - Workshops, guides, blog (renamed from "Knowhow")
- * 5. Mitmachen - Volunteer, donate, partner (renamed from "Engagiere dich")
- * 6. Kontakt - CTA (highlighted)
+ * Strategic positioning (7 items):
+ * 1. Über uns - About, mission, history, projects
+ * 2. Dienstleistungen - Professional services (B2C)
+ * 3. Shop - revamp-it's Medusa e-commerce (B2C)
+ * 4. Community - P2P platforms: Marketplace + IT-Hilfe (C2C) 🆕
+ * 5. Lernen - Workshops, guides, blog
+ * 6. Mitmachen - Volunteer, donate, partner
+ * 7. Kontakt - CTA (highlighted)
+ *
+ * Framing: "Community" language resonates with team, builds scalable P2P ecosystem
  */
 export const mainNavigation: NavigationItem[] = [
   {
     name: 'Über uns',
     href: '/about',
-    description: 'Unsere Mission, Geschichte und Wirkung',
+    description: 'Mission, Wirkung und Projekte',
     subItems: [
       {
         name: 'Mission & Geschichte',
@@ -51,6 +54,11 @@ export const mainNavigation: NavigationItem[] = [
         name: 'Unsere Wirkung',
         href: '/about/impact',
         description: 'Messbare Erfolge und Transparenz',
+      },
+      {
+        name: 'Projekte',
+        href: '/projects',
+        description: 'Unsere Initiativen',
       },
       {
         name: 'Standorte',
@@ -65,9 +73,9 @@ export const mainNavigation: NavigationItem[] = [
     ],
   },
   {
-    name: 'Angebot',
+    name: 'Dienstleistungen',
     href: '/services',
-    description: 'Dienstleistungen und Shop',
+    description: 'Professionelle IT-Services',
     isMultiColumn: true,
     subItems: [
       // Section: Hardware
@@ -112,12 +120,13 @@ export const mainNavigation: NavigationItem[] = [
         href: '/services/open-source-solutions',
         description: 'Beratung und Implementierung',
       },
-      // Section: Shop
-      {
-        name: 'Einkaufen',
-        href: '/shop',
-        isSection: true,
-      },
+    ],
+  },
+  {
+    name: 'Shop',
+    href: '/shop',
+    description: 'Geräte und Zubehör kaufen',
+    subItems: [
       {
         name: 'Online-Shop',
         href: '/shop',
@@ -128,6 +137,15 @@ export const mainNavigation: NavigationItem[] = [
         href: '/shop#ladenlokal',
         description: 'Vor Ort stöbern und beraten lassen',
       },
+    ],
+  },
+  {
+    name: 'Community',
+    href: '/marketplace',
+    description: 'Peer-to-Peer Plattformen',
+    badge: 'Neu',
+    isMultiColumn: true,
+    subItems: [
       // Section: Marketplace
       {
         name: 'Marketplace',
@@ -135,48 +153,40 @@ export const mainNavigation: NavigationItem[] = [
         isSection: true,
       },
       {
-        name: 'Marketplace',
+        name: 'Inserate durchsuchen',
         href: '/marketplace',
-        description: 'Gebrauchte IT-Geräte kaufen & verkaufen',
-        badge: 'Neu',
+        description: 'Gebrauchte IT-Geräte kaufen',
       },
       {
-        name: 'Verkaufen',
+        name: 'Inserat erstellen',
         href: '/marketplace/sell',
-        description: 'Eigene Geräte an die Community verkaufen',
-      },
-    ],
-  },
-  {
-    name: 'Projekte',
-    href: '/projects',
-    description: 'Unsere Initiativen und Software',
-    subItems: [
-      {
-        name: 'Alle Projekte',
-        href: '/projects',
-        description: 'Übersicht unserer Initiativen',
+        description: 'Eigene Geräte verkaufen',
       },
       {
-        name: 'FreieComputer',
-        href: '/projects/freiecomputer',
-        description: 'Schweizer Label für freie Software',
+        name: 'Meine Verkäufe',
+        href: '/dashboard/listings',
+        description: 'Inserate verwalten',
       },
-      {
-        name: 'Linuxola',
-        href: '/projects/linuxola',
-        description: 'Computer für Afrika',
-      },
-      {
-        name: 'Compirat',
-        href: '/projects/compirat',
-        description: 'Digitale Inklusion für alle',
-      },
+      // Section: IT-Hilfe
       {
         name: 'IT-Hilfe',
         href: '/it-hilfe',
-        description: 'Community-basierte Unterstützung',
-        badge: 'Neu',
+        isSection: true,
+      },
+      {
+        name: 'Hilfe suchen',
+        href: '/it-hilfe',
+        description: 'Community-Techniker finden',
+      },
+      {
+        name: 'Techniker werden',
+        href: '/profil/skills',
+        description: 'IT-Wissen teilen und helfen',
+      },
+      {
+        name: 'Meine Anfragen',
+        href: '/dashboard/repairer/bookings',
+        description: 'Buchungen verwalten',
       },
     ],
   },

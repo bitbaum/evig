@@ -23,8 +23,10 @@ import { ConfirmDialog } from '@/components/ui/ConfirmDialog'
 import {
   ACTION_ITEM_TYPE_LABELS,
   ACTION_ITEM_TYPE_COLORS,
+  ACTION_ITEM_BORDER_COLORS,
   PRIORITY_HINT_LABELS,
   INPUT_METHOD_LABELS,
+  getFollowUpStatusColor,
 } from '@/config/protocols'
 import type { ProtocolDetail, ActionLinkRecord, StructuredNotes, DecisionVoteRecord, DecisionOutcomeRecord } from '@/lib/schemas/protocols'
 import { getErrorMessage } from '@/lib/utils/error'
@@ -41,12 +43,6 @@ import {
   FileText,
   Upload,
 } from 'lucide-react'
-
-const ACTION_ITEM_BORDER_COLORS: Record<string, string> = {
-  task: 'border-l-4 border-l-blue-400',
-  decision: 'border-l-4 border-l-purple-400',
-  info: 'border-l-4 border-l-gray-300',
-}
 
 interface Props {
   protocol: ProtocolDetail
@@ -560,11 +556,7 @@ export default function ProtocolDetailClient({ protocol, actionLinks, teamMember
               <ul className="space-y-2">
                 {notes.follow_ups.map((fu, i) => (
                   <li key={i} className="flex items-start gap-2">
-                    <span className={`inline-flex px-2 py-0.5 text-xs rounded-full mt-0.5 ${
-                      fu.status === 'erledigt' ? 'bg-green-100 text-green-800' :
-                      fu.status === 'in Arbeit' ? 'bg-blue-100 text-blue-800' :
-                      'bg-yellow-100 text-yellow-800'
-                    }`}>
+                    <span className={`inline-flex px-2 py-0.5 text-xs rounded-full mt-0.5 ${getFollowUpStatusColor(fu.status)}`}>
                       {fu.status || 'offen'}
                     </span>
                     <span className="text-gray-700 text-sm">{fu.description}</span>

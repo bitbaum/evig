@@ -131,6 +131,23 @@ export const ACTION_ITEM_TYPE_COLORS: Record<ActionItemType, string> = {
   info: 'bg-gray-100 text-gray-800',
 };
 
+export const ACTION_ITEM_BORDER_COLORS: Record<ActionItemType, string> = {
+  task: 'border-l-4 border-l-blue-400',
+  decision: 'border-l-4 border-l-purple-400',
+  info: 'border-l-4 border-l-gray-300',
+};
+
+export const FOLLOW_UP_STATUS_COLORS: Record<string, string> = {
+  erledigt: 'bg-green-100 text-green-800',
+  'in Arbeit': 'bg-blue-100 text-blue-800',
+  offen: 'bg-yellow-100 text-yellow-800',
+};
+
+export function getFollowUpStatusColor(status: string | null | undefined): string {
+  if (!status) return FOLLOW_UP_STATUS_COLORS['offen'];
+  return FOLLOW_UP_STATUS_COLORS[status] || FOLLOW_UP_STATUS_COLORS['offen'];
+}
+
 // Input methods (pipeline entry points)
 export const INPUT_METHODS = {
   AUDIO: 'audio',

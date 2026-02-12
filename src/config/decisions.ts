@@ -223,3 +223,18 @@ export const DOT_VOTING_DEFAULTS: {
 // ─── Score Range ──────────────────────────────────────────────────────────
 
 export const SCORE_RANGE = { min: 1, max: 5 } as const;
+
+// ─── Lifecycle Helpers ───────────────────────────────────────────────────
+
+export const EDITABLE_STATUSES: readonly DecisionStatus[] = ['draft', 'discussion'];
+export const COMMENTABLE_STATUSES: readonly DecisionStatus[] = ['discussion', 'voting', 'closed'];
+export const PARTICIPATABLE_STATUSES: readonly DecisionStatus[] = ['discussion', 'voting', 'closed'];
+export const READ_ONLY_STATUSES: readonly DecisionStatus[] = ['closed', 'cancelled'];
+
+export function isStatusEditable(status: DecisionStatus): boolean {
+  return (EDITABLE_STATUSES as readonly string[]).includes(status);
+}
+
+export function isStatusCommentable(status: DecisionStatus): boolean {
+  return (COMMENTABLE_STATUSES as readonly string[]).includes(status);
+}

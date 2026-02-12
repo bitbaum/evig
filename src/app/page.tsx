@@ -1,4 +1,4 @@
-import { ArrowRight, Wrench } from 'lucide-react'
+import { ArrowRight, Wrench, Store, ShoppingBag, DollarSign, Users } from 'lucide-react'
 import Link from 'next/link'
 import type { Metadata } from 'next'
 import { getCompactMetrics } from '@/data/impact-metrics'
@@ -124,6 +124,124 @@ export default function Home() {
       {/* As Seen In - Media Logos */}
       <AsSeenInLogos />
 
+      {/* Community Platforms Section - Marketplace + IT-Hilfe */}
+      <div className="bg-gradient-to-br from-emerald-50 to-green-50 py-12 sm:py-16 lg:py-20">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="text-center">
+            <div className="inline-flex items-center gap-2 rounded-full bg-emerald-600 px-3 py-1 text-xs font-semibold text-white mb-4">
+              <Users className="h-3 w-3" />
+              Neu: Community-Plattformen
+            </div>
+            <Heading level={2} className="tracking-tight text-gray-900">
+              Community: Gemeinsam stärker
+            </Heading>
+            <p className="mx-auto mt-4 sm:mt-6 max-w-2xl text-base sm:text-lg leading-7 sm:leading-8 text-gray-600">
+              Unsere neuen Peer-to-Peer-Plattformen verbinden die Community: Kaufe und verkaufe gebrauchte IT-Geräte oder finde freiwillige Techniker in deiner Nähe.
+            </p>
+          </div>
+
+          <div className="mt-10 sm:mt-12 lg:mt-16 grid gap-6 sm:gap-8 lg:grid-cols-2">
+            {/* Marketplace Card */}
+            <div className="bg-white rounded-2xl shadow-sm hover:shadow-md transition-shadow p-6 sm:p-8 border border-gray-100">
+              <div className="flex items-start gap-4">
+                <div className="flex-shrink-0">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-orange-100">
+                    <Store className="h-6 w-6 text-orange-600" />
+                  </div>
+                </div>
+                <div className="flex-1">
+                  <h3 className="text-xl font-bold text-gray-900">Marketplace</h3>
+                  <p className="mt-2 text-base text-gray-600">
+                    Amazon-ähnlicher Marktplatz für die Community. Kaufe und verkaufe gebrauchte Computer, Laptops und IT-Zubehör direkt mit anderen.
+                  </p>
+                </div>
+              </div>
+
+              <div className="mt-6 grid grid-cols-2 gap-4">
+                <div className="flex items-start gap-2">
+                  <ShoppingBag className="h-5 w-5 text-orange-600 mt-0.5 flex-shrink-0" />
+                  <div>
+                    <div className="text-sm font-semibold text-gray-900">Kaufen</div>
+                    <div className="text-xs text-gray-500">Faire Preise, grosse Auswahl</div>
+                  </div>
+                </div>
+                <div className="flex items-start gap-2">
+                  <DollarSign className="h-5 w-5 text-orange-600 mt-0.5 flex-shrink-0" />
+                  <div>
+                    <div className="text-sm font-semibold text-gray-900">Verkaufen</div>
+                    <div className="text-xs text-gray-500">Alte Hardware weitergeben</div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-6 flex flex-col sm:flex-row gap-3">
+                <Link
+                  href="/marketplace"
+                  className="flex-1 rounded-md bg-orange-600 px-4 py-2.5 text-sm font-semibold text-white text-center shadow-sm hover:bg-orange-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-600"
+                >
+                  Inserate durchsuchen
+                </Link>
+                <Link
+                  href="/marketplace/sell"
+                  className="flex-1 rounded-md bg-white px-4 py-2.5 text-sm font-semibold text-orange-600 text-center border border-orange-600 hover:bg-orange-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-600"
+                >
+                  Inserat erstellen
+                </Link>
+              </div>
+            </div>
+
+            {/* IT-Hilfe Card */}
+            <div className="bg-white rounded-2xl shadow-sm hover:shadow-md transition-shadow p-6 sm:p-8 border border-gray-100">
+              <div className="flex items-start gap-4">
+                <div className="flex-shrink-0">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-100">
+                    <Wrench className="h-6 w-6 text-emerald-600" />
+                  </div>
+                </div>
+                <div className="flex-1">
+                  <h3 className="text-xl font-bold text-gray-900">IT-Hilfe</h3>
+                  <p className="mt-2 text-base text-gray-600">
+                    Uber-ähnliche Plattform für IT-Support. Finde freiwillige Techniker in deiner Nähe oder teile dein Wissen mit der Community.
+                  </p>
+                </div>
+              </div>
+
+              <div className="mt-6 grid grid-cols-2 gap-4">
+                <div className="flex items-start gap-2">
+                  <Users className="h-5 w-5 text-emerald-600 mt-0.5 flex-shrink-0" />
+                  <div>
+                    <div className="text-sm font-semibold text-gray-900">Hilfe finden</div>
+                    <div className="text-xs text-gray-500">Techniker in der Nähe</div>
+                  </div>
+                </div>
+                <div className="flex items-start gap-2">
+                  <Wrench className="h-5 w-5 text-emerald-600 mt-0.5 flex-shrink-0" />
+                  <div>
+                    <div className="text-sm font-semibold text-gray-900">Helfen</div>
+                    <div className="text-xs text-gray-500">Wissen teilen</div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-6 flex flex-col sm:flex-row gap-3">
+                <Link
+                  href="/it-hilfe"
+                  className="flex-1 rounded-md bg-emerald-600 px-4 py-2.5 text-sm font-semibold text-white text-center shadow-sm hover:bg-emerald-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600"
+                >
+                  Hilfe suchen
+                </Link>
+                <Link
+                  href="/profil/skills"
+                  className="flex-1 rounded-md bg-white px-4 py-2.5 text-sm font-semibold text-emerald-600 text-center border border-emerald-600 hover:bg-emerald-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600"
+                >
+                  Techniker werden
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* Value Propositions */}
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-2xl lg:text-center">
@@ -174,34 +292,6 @@ export default function Home() {
             </Link>
             <Link href="/services" className="text-sm font-semibold leading-6 text-gray-900">
               Alle Dienstleistungen <ArrowRight className="inline h-4 w-4" />
-            </Link>
-          </div>
-        </div>
-      </div>
-
-      {/* Community IT-Hilfe Section */}
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
-        <div className="bg-emerald-50 rounded-2xl px-4 sm:px-6 py-12 sm:py-16 md:px-16 text-center">
-          <h2 className="text-sm sm:text-base font-semibold leading-7 text-emerald-600">Community IT-Hilfe</h2>
-          <p className="mt-2 text-2xl sm:text-3xl font-bold tracking-tight text-gray-900">
-            Teile dein IT-Wissen mit der Community
-          </p>
-          <p className="mx-auto mt-4 sm:mt-6 max-w-xl text-base sm:text-lg leading-7 sm:leading-8 text-gray-600">
-            Unsere IT-Hilfe Plattform verbindet Menschen, die Hilfe brauchen, mit freiwilligen Technikern in der Nähe. Jeder kann mitmachen.
-          </p>
-          <div className="mt-6 sm:mt-10 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-x-6">
-            <Link
-              href="/it-hilfe"
-              className="inline-flex items-center gap-2 rounded-md bg-emerald-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-emerald-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600"
-            >
-              Hilfe suchen
-            </Link>
-            <Link
-              href="/profil/skills"
-              className="inline-flex items-center gap-2 text-sm font-semibold leading-6 text-gray-900"
-            >
-              <Wrench className="h-4 w-4 text-emerald-600" />
-              Techniker werden <ArrowRight className="inline h-4 w-4" />
             </Link>
           </div>
         </div>
