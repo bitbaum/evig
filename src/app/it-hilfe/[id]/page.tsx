@@ -232,14 +232,14 @@ export default function PeerRepairDetailPage() {
     return (
       <div className="min-h-screen bg-gray-50 py-12">
         <div className="max-w-3xl mx-auto px-4 text-center">
-          <AlertCircle className="w-16 h-16 text-red-500 mx-auto mb-4" />
+          <AlertCircle className="w-16 h-16 text-red-500 mx-auto mb-4" aria-hidden="true" />
           <h1 className="text-2xl font-bold text-gray-900 mb-2">Fehler</h1>
           <p className="text-gray-600 mb-6">{error || 'Anfrage nicht gefunden'}</p>
           <Link
             href="/it-hilfe"
-            className="inline-flex items-center gap-2 bg-emerald-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-emerald-700 transition-colors"
+            className="inline-flex items-center gap-2 bg-emerald-600 text-white px-6 py-3 min-h-[44px] rounded-lg font-medium hover:bg-emerald-700 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
           >
-            <ArrowLeft className="w-4 h-4" />
+            <ArrowLeft className="w-4 h-4" aria-hidden="true" />
             Zurück zur Übersicht
           </Link>
         </div>
@@ -261,9 +261,9 @@ export default function PeerRepairDetailPage() {
         {/* Back link */}
         <Link
           href="/it-hilfe"
-          className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-6"
+          className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-6 px-2 py-1 min-h-[44px] rounded focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
         >
-          <ArrowLeft className="w-4 h-4" />
+          <ArrowLeft className="w-4 h-4" aria-hidden="true" />
           Zurück zur Übersicht
         </Link>
 
@@ -274,7 +274,7 @@ export default function PeerRepairDetailPage() {
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
               <div className="flex items-start gap-4 mb-4">
                 <div className={`p-3 ${categoryConfig?.color || 'bg-gray-500'} rounded-xl`}>
-                  <CategoryIcon className="w-6 h-6 text-white" />
+                  <CategoryIcon className="w-6 h-6 text-white" aria-hidden="true" />
                 </div>
                 <div className="flex-1">
                   <div className="flex items-center gap-2 mb-1">
@@ -348,9 +348,9 @@ export default function PeerRepairDetailPage() {
                 {!showOfferForm ? (
                   <button
                     onClick={() => setShowOfferForm(true)}
-                    className="w-full py-3 bg-emerald-600 text-white rounded-lg font-medium hover:bg-emerald-700 transition-colors flex items-center justify-center gap-2"
+                    className="w-full py-3 min-h-[44px] bg-emerald-600 text-white rounded-lg font-medium hover:bg-emerald-700 transition-colors flex items-center justify-center gap-2 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
                   >
-                    <Send className="w-5 h-5" />
+                    <Send className="w-5 h-5" aria-hidden="true" />
                     Angebot abgeben
                   </button>
                 ) : (
@@ -379,7 +379,7 @@ export default function PeerRepairDetailPage() {
                           minLength={20}
                           maxLength={2000}
                           rows={4}
-                          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
                         />
                       </div>
 
@@ -393,7 +393,7 @@ export default function PeerRepairDetailPage() {
                             value={offerEstimatedTime}
                             onChange={(e) => setOfferEstimatedTime(e.target.value)}
                             placeholder="z.B. 1-2 Stunden"
-                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
                           />
                         </div>
                         <div>
@@ -405,7 +405,7 @@ export default function PeerRepairDetailPage() {
                             value={offerCompensation}
                             onChange={(e) => setOfferCompensation(e.target.value)}
                             placeholder="z.B. Kostenlos, CHF 30"
-                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
                           />
                         </div>
                       </div>
@@ -420,7 +420,7 @@ export default function PeerRepairDetailPage() {
                               key={skill.id}
                               type="button"
                               onClick={() => handleSkillToggle(skill.id)}
-                              className={`px-3 py-1.5 rounded-full text-sm transition-all ${
+                              className={`px-3 py-3 min-h-[44px] rounded-full text-sm transition-all focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 ${
                                 offerSkills.includes(skill.id)
                                   ? 'bg-emerald-100 text-emerald-700 border-2 border-emerald-500'
                                   : 'bg-gray-100 text-gray-700 border-2 border-transparent hover:bg-gray-200'
@@ -437,14 +437,14 @@ export default function PeerRepairDetailPage() {
                       <button
                         type="button"
                         onClick={() => setShowOfferForm(false)}
-                        className="px-4 py-2 text-gray-700 bg-gray-100 rounded-lg font-medium hover:bg-gray-200 transition-colors"
+                        className="px-4 py-3 min-h-[44px] text-gray-700 bg-gray-100 rounded-lg font-medium hover:bg-gray-200 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
                       >
                         Abbrechen
                       </button>
                       <button
                         type="submit"
                         disabled={submittingOffer || offerMessage.length < 20}
-                        className="px-4 py-2 bg-emerald-600 text-white rounded-lg font-medium hover:bg-emerald-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="px-4 py-3 min-h-[44px] bg-emerald-600 text-white rounded-lg font-medium hover:bg-emerald-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
                       >
                         {submittingOffer ? 'Wird gesendet...' : 'Angebot senden'}
                       </button>
@@ -475,7 +475,7 @@ export default function PeerRepairDetailPage() {
                         <div className="flex items-start justify-between mb-3">
                           <div className="flex items-center gap-2">
                             <div className="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center">
-                              <User className="w-5 h-5 text-gray-500" />
+                              <User className="w-5 h-5 text-gray-500" aria-hidden="true" />
                             </div>
                             <div>
                               <p className="font-medium text-gray-900">{offer.helperName}</p>
@@ -493,7 +493,7 @@ export default function PeerRepairDetailPage() {
                           <div className="flex flex-wrap gap-4 text-sm text-gray-600 mb-3">
                             {offer.estimatedTime && (
                               <span className="flex items-center gap-1">
-                                <Clock className="w-4 h-4" />
+                                <Clock className="w-4 h-4" aria-hidden="true" />
                                 {offer.estimatedTime}
                               </span>
                             )}
@@ -523,7 +523,7 @@ export default function PeerRepairDetailPage() {
                           <button
                             onClick={() => handleAcceptOffer(offer.id)}
                             disabled={acceptingOfferId === offer.id}
-                            className="mt-2 px-4 py-2 bg-emerald-600 text-white rounded-lg text-sm font-medium hover:bg-emerald-700 transition-colors disabled:opacity-50"
+                            className="mt-2 px-4 py-3 min-h-[44px] bg-emerald-600 text-white rounded-lg text-sm font-medium hover:bg-emerald-700 transition-colors disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
                           >
                             {acceptingOfferId === offer.id ? 'Wird akzeptiert...' : 'Angebot akzeptieren'}
                           </button>
@@ -547,7 +547,7 @@ export default function PeerRepairDetailPage() {
               <div className="space-y-4">
                 {/* Location */}
                 <div className="flex items-start gap-3">
-                  <MapPin className="w-5 h-5 text-gray-400 mt-0.5" />
+                  <MapPin className="w-5 h-5 text-gray-400 mt-0.5" aria-hidden="true" />
                   <div>
                     <p className="text-sm text-gray-500">Standort</p>
                     <p className="font-medium text-gray-900">
@@ -559,7 +559,7 @@ export default function PeerRepairDetailPage() {
 
                 {/* Budget */}
                 <div className="flex items-start gap-3">
-                  <Wrench className="w-5 h-5 text-gray-400 mt-0.5" />
+                  <Wrench className="w-5 h-5 text-gray-400 mt-0.5" aria-hidden="true" />
                   <div>
                     <p className="text-sm text-gray-500">Budget</p>
                     <p className="font-medium text-emerald-600">
@@ -570,7 +570,7 @@ export default function PeerRepairDetailPage() {
 
                 {/* Service Type */}
                 <div className="flex items-start gap-3">
-                  <User className="w-5 h-5 text-gray-400 mt-0.5" />
+                  <User className="w-5 h-5 text-gray-400 mt-0.5" aria-hidden="true" />
                   <div>
                     <p className="text-sm text-gray-500">Service-Typ</p>
                     <p className="font-medium text-gray-900">
@@ -581,7 +581,7 @@ export default function PeerRepairDetailPage() {
 
                 {/* Offers */}
                 <div className="flex items-start gap-3">
-                  <Users className="w-5 h-5 text-gray-400 mt-0.5" />
+                  <Users className="w-5 h-5 text-gray-400 mt-0.5" aria-hidden="true" />
                   <div>
                     <p className="text-sm text-gray-500">Angebote</p>
                     <p className="font-medium text-gray-900">
@@ -592,7 +592,7 @@ export default function PeerRepairDetailPage() {
 
                 {/* Created */}
                 <div className="flex items-start gap-3">
-                  <Calendar className="w-5 h-5 text-gray-400 mt-0.5" />
+                  <Calendar className="w-5 h-5 text-gray-400 mt-0.5" aria-hidden="true" />
                   <div>
                     <p className="text-sm text-gray-500">Erstellt am</p>
                     <p className="font-medium text-gray-900">
@@ -603,7 +603,7 @@ export default function PeerRepairDetailPage() {
 
                 {/* Expires */}
                 <div className="flex items-start gap-3">
-                  <Clock className="w-5 h-5 text-gray-400 mt-0.5" />
+                  <Clock className="w-5 h-5 text-gray-400 mt-0.5" aria-hidden="true" />
                   <div>
                     <p className="text-sm text-gray-500">Läuft ab</p>
                     <p className="font-medium text-gray-900">
@@ -621,7 +621,7 @@ export default function PeerRepairDetailPage() {
               </h3>
               <div className="flex items-center gap-3">
                 <div className="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center">
-                  <User className="w-6 h-6 text-gray-500" />
+                  <User className="w-6 h-6 text-gray-500" aria-hidden="true" />
                 </div>
                 <div>
                   <p className="font-medium text-gray-900">{request.requesterName}</p>
@@ -641,7 +641,7 @@ export default function PeerRepairDetailPage() {
                 <div className="space-y-2">
                   <Link
                     href="/it-hilfe/my"
-                    className="block w-full py-2 px-4 bg-gray-100 text-gray-700 rounded-lg text-center font-medium hover:bg-gray-200 transition-colors"
+                    className="block w-full py-3 px-4 min-h-[44px] bg-gray-100 text-gray-700 rounded-lg text-center font-medium hover:bg-gray-200 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
                   >
                     Alle meine Anfragen
                   </Link>
