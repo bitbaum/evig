@@ -116,11 +116,9 @@ export async function getAllCategories(): Promise<BlogCategory[]> {
       name: string
       description: string | null
       color: string | null
-      is_active: boolean
     }>(
-      `SELECT id, slug, name, description, color, is_active
+      `SELECT id, slug, name, description, color
       FROM ${TABLE_NAMES.BLOG_CATEGORIES}
-      WHERE is_active = true
       ORDER BY name`
     )
 
@@ -130,7 +128,7 @@ export async function getAllCategories(): Promise<BlogCategory[]> {
       name: row.name,
       description: row.description,
       color: row.color,
-      isActive: row.is_active,
+      isActive: true, // Default to true until is_active column is added
     }))
   } catch (error) {
     logger.error('Failed to get categories', { error })
