@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef, useEffect, Suspense } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
@@ -29,7 +29,7 @@ import { ZUSTAND_OPTIONS } from '@/config/erfassung/conditions'
 
 type Step = 'form' | 'preview'
 
-export default function SellPage() {
+function SellPageContent() {
   const { data: session, status } = useSession()
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -608,5 +608,17 @@ export default function SellPage() {
         </div>
       </div>
     </div>
+  )
+}
+
+export default function SellPage() {
+  return (
+    <Suspense fallback={
+      <div className="flex items-center justify-center min-h-screen">
+        <Loader2 className="w-8 h-8 text-green-600 animate-spin" />
+      </div>
+    }>
+      <SellPageContent />
+    </Suspense>
   )
 }
