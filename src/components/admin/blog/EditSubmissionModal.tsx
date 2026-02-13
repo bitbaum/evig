@@ -119,7 +119,7 @@ export function EditSubmissionModal({
             onChange={(e) => handleFieldChange(field, e.target.value)}
             rows={15}
             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 font-mono text-sm"
-            required={('required' in config && config.required) || false}
+            required={Boolean('required' in config && config.required)}
           />
         );
 
@@ -130,7 +130,7 @@ export function EditSubmissionModal({
             onChange={(e) => handleFieldChange(field, e.target.value)}
             rows={4}
             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-            required={('required' in config && config.required) || false}
+            required={Boolean('required' in config && config.required)}
           />
         );
 
@@ -173,7 +173,7 @@ export function EditSubmissionModal({
             value={value || ''}
             onChange={(e) => handleFieldChange(field, e.target.value)}
             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-            required={('required' in config && config.required) || false}
+            required={Boolean('required' in config && config.required)}
           />
         );
     }
