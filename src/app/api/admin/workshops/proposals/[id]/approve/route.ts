@@ -4,8 +4,6 @@ import { query } from '@/lib/auth/db'
 import { apiError, apiSuccess, apiBadRequest, apiUnauthorized, apiForbidden, apiNotFound } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES } from '@/config/database'
-import { getUserRole } from '@/lib/api/role-checks'
-import { isAdminRole, ROLES } from '@/lib/constants'
 import { logger } from '@/lib/logger'
 
 interface ProposalRow {
@@ -48,11 +46,9 @@ export async function POST(
       return apiUnauthorized(ERROR_MESSAGES.UNAUTHORIZED)
     }
 
-    // Check if user has approval permissions
-    const userRole = await getUserRole(session.user.id)
-    const hasApprovalPermission = isAdminRole(userRole) || userRole === ROLES.MODERATOR
-
-    if (!hasApprovalPermission) {
+    // Check if user is staff (admin/super admin)
+    // Using new simplified permission system (is_staff field)
+    if (!session.user.isStaff) {
       return apiForbidden('Keine Berechtigung für Workshop-Genehmigungen')
     }
     const body = await request.json()
