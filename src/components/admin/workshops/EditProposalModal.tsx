@@ -89,7 +89,7 @@ export function EditProposalModal({ proposal, onClose, onSaved }: EditProposalMo
             value={value || ''}
             onChange={(e) => handleFieldChange(field, e.target.value)}
             rows={config.type === 'textarea' ? 4 : undefined}
-            maxLength={config.maxLength || undefined}
+            maxLength={'maxLength' in config ? config.maxLength : undefined}
             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             required={Boolean(config.required)}
           />
@@ -101,8 +101,8 @@ export function EditProposalModal({ proposal, onClose, onSaved }: EditProposalMo
             type="number"
             value={value || ''}
             onChange={(e) => handleFieldChange(field, Number(e.target.value))}
-            min={config.min || undefined}
-            max={config.max || undefined}
+            min={'min' in config ? config.min : undefined}
+            max={'max' in config ? config.max : undefined}
             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             required={Boolean(config.required)}
           />
@@ -161,7 +161,7 @@ export function EditProposalModal({ proposal, onClose, onSaved }: EditProposalMo
             type="text"
             value={value || ''}
             onChange={(e) => handleFieldChange(field, e.target.value)}
-            maxLength={config.maxLength || undefined}
+            maxLength={'maxLength' in config ? config.maxLength : undefined}
             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             required={Boolean(config.required)}
           />
