@@ -25,13 +25,9 @@ export async function GET(request: NextRequest) {
       return apiUnauthorized('Authentication required')
     }
 
-    // Check if user is admin
-    const userResult = await query(
-      `SELECT role FROM ${TABLE_NAMES.USERS} WHERE id = $1`,
-      [session.user.id]
-    )
-    const userRole = (userResult.rows[0] as { role: string })?.role
-    if (userRole !== 'admin') {
+    // Check if user is staff (admin/super admin)
+    // Using new simplified permission system (is_staff field)
+    if (!session.user.isStaff) {
       return apiForbidden('Admin access required')
     }
 
