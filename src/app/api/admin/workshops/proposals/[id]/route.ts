@@ -11,8 +11,6 @@ import {
 } from '@/lib/api/helpers';
 import { ERROR_MESSAGES } from '@/config/error-messages';
 import { TABLE_NAMES } from '@/config/database';
-import { getUserRole } from '@/lib/api/role-checks';
-import { isAdminRole, ROLES } from '@/lib/constants';
 import { logger } from '@/lib/logger';
 import { createEditSnapshot, appendEditHistory } from '@/lib/admin/edit-utils';
 import { WorkshopProposal } from '@/components/workshops/types';
@@ -33,11 +31,9 @@ export async function GET(
       return apiUnauthorized(ERROR_MESSAGES.UNAUTHORIZED);
     }
 
-    // Check if user has admin/moderator permissions
-    const userRole = await getUserRole(session.user.id);
-    const hasPermission = isAdminRole(userRole) || userRole === ROLES.MODERATOR;
-
-    if (!hasPermission) {
+    // Check if user is staff (admin/super admin)
+    // Using new simplified permission system (is_staff field)
+    if (!session.user.isStaff) {
       return apiForbidden('Keine Berechtigung zum Anzeigen von Vorschlägen');
     }
 
@@ -93,11 +89,9 @@ export async function PATCH(
       return apiUnauthorized(ERROR_MESSAGES.UNAUTHORIZED);
     }
 
-    // Check if user has admin/moderator permissions
-    const userRole = await getUserRole(session.user.id);
-    const hasPermission = isAdminRole(userRole) || userRole === ROLES.MODERATOR;
-
-    if (!hasPermission) {
+    // Check if user is staff (admin/super admin)
+    // Using new simplified permission system (is_staff field)
+    if (!session.user.isStaff) {
       return apiForbidden('Keine Berechtigung zum Bearbeiten von Vorschlägen');
     }
 
