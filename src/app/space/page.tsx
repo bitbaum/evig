@@ -154,9 +154,7 @@ export default function SpacePage() {
                 </Button>
               </Link>
             </div>
-          </div>
-        </div>
-      </section>
+      </PageHero>
 
       {/* Timeline / History */}
       <section className="py-16 md:py-20 bg-gray-50">
