@@ -1,15 +1,17 @@
 import Image from 'next/image'
-import { HeroBanner } from '@/components/ui/hero-banner'
+import { PageHero } from '@/components/layout/PageHero'
 import { AboutSubNav, GeschichteSection, ImpactStatsSection } from '@/components/about'
-import { Target, Recycle, Code, Users, Quote } from 'lucide-react'
+import { Target, Recycle, Code, Users, Quote, Leaf } from 'lucide-react'
 import Heading from '@/components/ui/Heading'
 
 export default function HardcodedAboutPage() {
   return (
     <main className="min-h-screen">
-      <HeroBanner
+      <PageHero
+        theme="about"
+        icon={Leaf}
         title="Technik ein zweites Leben geben"
-        description="Seit über 20 Jahren setzen wir uns gegen die vorschnelle Ausmusterung von Computern ein und fördern nachhaltige IT-Praktiken."
+        subtitle="Seit über 20 Jahren setzen wir uns gegen die vorschnelle Ausmusterung von Computern ein und fördern nachhaltige IT-Praktiken."
       />
 
       {/* Sub Navigation */}

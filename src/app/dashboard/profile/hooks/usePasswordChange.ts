@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { logger } from '@/lib/logger'
 
 export function usePasswordChange() {
   const [passwordData, setPasswordData] = useState({
@@ -18,6 +19,8 @@ export function usePasswordChange() {
     setPasswordError(null)
     setPasswordSuccess(false)
 
+    logger.info('Password change starting')
+
     try {
       const response = await fetch('/api/user/change-password', {
         method: 'POST',
@@ -28,9 +31,14 @@ export function usePasswordChange() {
       const data = await response.json()
 
       if (!response.ok) {
+        logger.error('Password change failed', {
+          status: response.status,
+          error: data.error,
+        })
         throw new Error(data.error || 'Passwort-Änderung fehlgeschlagen')
       }
 
+      logger.info('Password changed successfully')
       setPasswordSuccess(true)
       setPasswordData({
         currentPassword: '',
@@ -40,6 +48,7 @@ export function usePasswordChange() {
 
       setTimeout(() => setPasswordSuccess(false), 3000)
     } catch (error) {
+      logger.error('Password change error', { error })
       setPasswordError(error instanceof Error ? error.message : 'Ein Fehler ist aufgetreten')
     } finally {
       setIsChangingPassword(false)

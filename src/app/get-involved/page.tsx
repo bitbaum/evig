@@ -1,8 +1,10 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
-import { Users, Code, Building2, GraduationCap, Handshake, Heart, Globe, Recycle, Lightbulb, Gift } from 'lucide-react'
+import { Heart, Globe, Recycle, Lightbulb, Users } from 'lucide-react'
 import { ContactLink } from '@/components/ui/contact-link'
-import { HeroBanner } from '@/components/ui/hero-banner'
+import { PageHero } from '@/components/layout/PageHero'
+import { responsiveTypography, responsiveSpacing, responsiveButtons, responsiveGrid } from '@/lib/responsive'
+import { INVOLVEMENT_OPTIONS, TESTIMONIALS, PARTNER_INSTITUTIONS, GET_INVOLVED_CONFIG } from '@/config/community'
 
 export const metadata: Metadata = {
   title: 'Mitmachen | RevampIT',
@@ -18,7 +20,7 @@ const coreValues = [
   {
     title: 'Gemeinschaft',
     description: 'Starke Gemeinschaften durch Technologiebildung und inklusive Teilnahme aufbauen.',
-    icon: Users
+    icon: Lightbulb
   },
   {
     title: 'Innovation',
@@ -32,149 +34,49 @@ const coreValues = [
   }
 ]
 
-const involvementOptions = [
-  {
-    title: 'Freiwilligenarbeit',
-    description: 'Schliessen Sie sich unserem Team engagierter Freiwilliger an. Keine Vorerfahrung erforderlich - bringen Sie einfach Ihr Interesse und Ihre Begeisterung für unsere Mission mit.',
-    icon: Users,
-    features: [
-      'Mit Hardware und Software arbeiten',
-      'Neue Fähigkeiten erlernen',
-      'Einen Unterschied in Ihrer Gemeinschaft machen',
-      'Gleichgesinnte Menschen treffen'
-    ],
-    cta: 'Freiwilligenarbeit beginnen',
-    href: '/get-involved/volunteer'
-  },
-  {
-    title: 'Technische Experten',
-    description: 'Wenn Sie Erfahrung mit Open-Source-Software, Hardware oder Elektronik haben, würden wir uns freuen, Sie in unserem Team zu haben oder Ihnen bei der Umsetzung Ihrer eigenen Ideen zu helfen.',
-    icon: Code,
-    features: [
-      'An sinnvollen Projekten arbeiten',
-      'Ihre Expertise teilen',
-      'Mit der Gemeinschaft zusammenarbeiten',
-      'Neue Lösungen entwickeln'
-    ],
-    cta: 'Ihre Expertise teilen',
-    href: '/get-involved/technical-experts'
-  },
-  {
-    title: 'Praktika',
-    description: 'Wir bieten Praktikumsmöglichkeiten für diejenigen, die Erfahrungen in Technologie und Nachhaltigkeit sammeln möchten.',
-    icon: GraduationCap,
-    features: [
-      'Praktische Erfahrung',
-      'Berufliche Entwicklung',
-      'Mentoring-Möglichkeiten',
-      'Flexible Vereinbarungen'
-    ],
-    cta: 'Für Praktikum bewerben',
-    href: '/get-involved/internships'
-  },
-  {
-    title: 'Arbeitsintegration',
-    description: 'Wir arbeiten mit Institutionen zusammen, um Arbeitsintegrations-möglichkeiten für Menschen zu bieten, die wieder ins Berufsleben einsteigen möchten.',
-    icon: Handshake,
-    features: [
-      'Fähigkeitsentwicklung',
-      'Soziale Integration',
-      'Professionelle Unterstützung',
-      'Sinnvolle Arbeit'
-    ],
-    cta: 'Mehr erfahren',
-    href: '/get-involved/work-reintegration'
-  },
-  {
-    title: 'Partnerschaften',
-    description: 'Wir arbeiten mit Bildungseinrichtungen und Organisationen zusammen, um sinnvolle Programme und Möglichkeiten zu schaffen.',
-    icon: Building2,
-    features: [
-      'Bildungsprogramme',
-      'Praktikumsplätze',
-      'Gemeinschaftsinitiativen',
-      'Nachhaltige Lösungen'
-    ],
-    cta: 'Partner werden',
-    href: '/get-involved/partnerships'
-  },
-  {
-    title: 'Spenden',
-    description: 'Unterstützen Sie unsere Mission, Technologie nachhaltig und für alle zugänglich zu machen. Ihr Beitrag hilft uns, unsere wichtige Arbeit fortzusetzen.',
-    icon: Gift,
-    features: [
-      'Nachhaltige Technologie unterstützen',
-      'Helfen, Elektroschrott zu reduzieren',
-      'Gemeinschaftsprogramme ermöglichen',
-      'Technologie zugänglich machen'
-    ],
-    cta: 'Jetzt spenden',
-    href: '/get-involved/donate'
-  }
-]
-
-const testimonials = [
-  {
-    quote: "As a refugee, RevampIT gave me the opportunity to work with them. I learn a lot and have the freedom to develop skills aligned with my goals. Now I write code and can learn anything I find interesting, as everyone is willing to share knowledge. This is a real community.",
-    author: "G.",
-    role: "Freiwilliger"
-  }
-]
-
-const partnerInstitutions = [
-  {
-    name: 'Verein für berufliche und soziale Integration Bezirk Uster',
-    url: 'https://www.integration-uster.ch'
-  },
-  {
-    name: 'Arbeitsintegrationsstelle der Gemeinde Rüti',
-    url: 'https://www.rueti.ch'
-  },
-  {
-    name: 'HEKS',
-    url: 'https://www.heks.ch/'
-  },
-  {
-    name: 'AOZ (Asylorganisation Zürich)',
-    url: 'https://www.stadt-zuerich.ch/aoz/de/index.html'
-  }
-]
-
 export default function GetInvolvedPage() {
   return (
     <main className="min-h-screen">
-      <HeroBanner
-        title="Schliessen Sie sich unserer Mission an"
-        description="Werden Sie Teil einer Gemeinschaft, die Technologie nachhaltig und für alle zugänglich macht."
+      <PageHero
+        theme="getInvolved"
+        icon={Users}
+        title={GET_INVOLVED_CONFIG.hero.title}
+        subtitle={GET_INVOLVED_CONFIG.hero.description}
       >
-        <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
+        <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mt-8">
           <a
             href="#get-started"
-            className="bg-white text-green-800 px-4 sm:px-6 md:px-8 py-2.5 sm:py-3 rounded-lg font-semibold hover:bg-green-50 transition-colors duration-300 text-center text-sm sm:text-base"
+            className="inline-flex items-center justify-center rounded-md text-sm font-medium px-6 py-3 bg-purple-600 hover:bg-purple-500 text-white transition-colors"
           >
             Loslegen
           </a>
           <a
             href="#learn-more"
-            className="bg-transparent border-2 border-white text-white px-4 sm:px-6 md:px-8 py-2.5 sm:py-3 rounded-lg font-semibold hover:bg-white/10 transition-colors duration-300 text-center text-sm sm:text-base"
+            className="inline-flex items-center justify-center rounded-md text-sm font-medium px-6 py-3 bg-white text-purple-600 hover:bg-gray-50 border-2 border-purple-600 transition-colors"
           >
             Mehr erfahren
           </a>
         </div>
-      </HeroBanner>
+      </PageHero>
 
       {/* Core Values Section */}
-      <section id="learn-more" className="py-12 sm:py-16 md:py-20 bg-gray-50">
-        <div className="container mx-auto px-4 sm:px-6">
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center mb-8 sm:mb-12 md:mb-16">Unsere Grundwerte</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
+      <section id="learn-more" className={`${responsiveSpacing.section} bg-gray-50`}>
+        <div className={`${responsiveSpacing.container} mx-auto`}>
+          <h2 className={`${responsiveTypography.section} font-bold text-center ${responsiveSpacing.mbLarge}`}>
+            {GET_INVOLVED_CONFIG.coreValues.title}
+          </h2>
+          <div className={responsiveGrid.cards}>
             {coreValues.map((value, index) => (
-              <div key={index} className="bg-white rounded-xl p-5 sm:p-6 shadow-lg hover:shadow-xl transition-all duration-300">
-                <div className="text-green-600 mb-3 sm:mb-4">
+              <div key={index} className={`bg-white rounded-xl ${responsiveSpacing.cardPadding} shadow-lg hover:shadow-xl transition-all duration-300`}>
+                <div className={`text-green-600 ${responsiveSpacing.mbMedium}`}>
                   <value.icon className="w-10 h-10 sm:w-12 sm:h-12" />
                 </div>
-                <h3 className="text-lg sm:text-xl font-semibold mb-2 sm:mb-3">{value.title}</h3>
-                <p className="text-sm sm:text-base text-gray-600">{value.description}</p>
+                <h3 className={`${responsiveTypography.cardTitle} font-semibold ${responsiveSpacing.mbSmall}`}>
+                  {value.title}
+                </h3>
+                <p className={`${responsiveTypography.body} text-gray-600`}>
+                  {value.description}
+                </p>
               </div>
             ))}
           </div>
@@ -182,30 +84,36 @@ export default function GetInvolvedPage() {
       </section>
 
       {/* Involvement Options */}
-      <section id="get-started" className="py-12 sm:py-16 md:py-20">
-        <div className="container mx-auto px-4 sm:px-6">
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center mb-8 sm:mb-12 md:mb-16">Wege zum Mitmachen</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-            {involvementOptions.map((option, index) => (
-              <div key={index} className="bg-white rounded-xl shadow-lg p-6 sm:p-8 hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border border-gray-100 flex flex-col h-full">
-                <div className="text-green-600 mb-4 sm:mb-6">
+      <section id="get-started" className={responsiveSpacing.section}>
+        <div className={`${responsiveSpacing.container} mx-auto`}>
+          <h2 className={`${responsiveTypography.section} font-bold text-center ${responsiveSpacing.mbLarge}`}>
+            Wege zum Mitmachen
+          </h2>
+          <div className={responsiveGrid.cards}>
+            {INVOLVEMENT_OPTIONS.map((option, index) => (
+              <div key={index} className={`bg-white rounded-xl shadow-lg ${responsiveSpacing.cardPadding} hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border border-gray-100 flex flex-col h-full`}>
+                <div className={`text-green-600 ${responsiveSpacing.mbMedium}`}>
                   <option.icon className="w-10 h-10 sm:w-12 sm:h-12" />
                 </div>
-                <h3 className="text-xl sm:text-2xl font-semibold mb-3 sm:mb-4">{option.title}</h3>
-                <p className="text-sm sm:text-base text-gray-600 mb-4 sm:mb-6 flex-grow">{option.description}</p>
-                <ul className="space-y-2 sm:space-y-3 mb-6 sm:mb-8">
+                <h3 className={`${responsiveTypography.cardTitle} font-semibold ${responsiveSpacing.mbSmall}`}>
+                  {option.title}
+                </h3>
+                <p className={`${responsiveTypography.body} text-gray-600 ${responsiveSpacing.mbMedium} flex-grow`}>
+                  {option.description}
+                </p>
+                <ul className={`space-y-2 sm:space-y-3 ${responsiveSpacing.mbMedium}`}>
                   {option.features.map((feature, featureIndex) => (
                     <li key={featureIndex} className="flex items-start text-gray-600">
                       <svg className="w-4 h-4 sm:w-5 sm:h-5 mr-2 sm:mr-3 text-green-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                       </svg>
-                      <span className="text-xs sm:text-sm">{feature}</span>
+                      <span className={responsiveTypography.small}>{feature}</span>
                     </li>
                   ))}
                 </ul>
                 <a
                   href={option.href}
-                  className="inline-block bg-green-600 text-white px-4 sm:px-6 py-2.5 sm:py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors duration-300 w-full text-center mt-auto text-sm sm:text-base"
+                  className={`${responsiveButtons.primary} bg-green-600 text-white hover:bg-green-700 w-full text-center mt-auto`}
                 >
                   {option.cta}
                 </a>
@@ -216,18 +124,22 @@ export default function GetInvolvedPage() {
       </section>
 
       {/* Testimonials Section */}
-      <section className="py-12 sm:py-16 md:py-20 bg-gray-50">
-        <div className="container mx-auto px-4 sm:px-6">
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center mb-8 sm:mb-12 md:mb-16">Was unsere Gemeinschaft sagt</h2>
+      <section className={`${responsiveSpacing.section} bg-gray-50`}>
+        <div className={`${responsiveSpacing.container} mx-auto`}>
+          <h2 className={`${responsiveTypography.section} font-bold text-center ${responsiveSpacing.mbLarge}`}>
+            Was unsere Gemeinschaft sagt
+          </h2>
           <div className="max-w-3xl mx-auto">
-            {testimonials.map((testimonial, index) => (
-              <div key={index} className="bg-white rounded-xl p-6 sm:p-8 shadow-lg">
-                <div className="text-green-600 mb-3 sm:mb-4">
+            {TESTIMONIALS.map((testimonial, index) => (
+              <div key={index} className={`bg-white rounded-xl ${responsiveSpacing.cardPadding} shadow-lg`}>
+                <div className={`text-green-600 ${responsiveSpacing.mbSmall}`}>
                   <Heart className="w-6 h-6 sm:w-8 sm:h-8" />
                 </div>
-                <blockquote className="text-sm sm:text-base md:text-lg text-gray-600 mb-4 sm:mb-6 italic">"{testimonial.quote}"</blockquote>
-                <div className="font-semibold text-base sm:text-lg">{testimonial.author}</div>
-                <div className="text-sm sm:text-base text-gray-500">{testimonial.role}</div>
+                <blockquote className={`${responsiveTypography.lead} text-gray-600 ${responsiveSpacing.mbMedium} italic`}>
+                  "{testimonial.quote}"
+                </blockquote>
+                <div className={`${responsiveTypography.cardTitle} font-semibold`}>{testimonial.author}</div>
+                <div className={`${responsiveTypography.body} text-gray-500`}>{testimonial.role}</div>
               </div>
             ))}
           </div>
@@ -235,23 +147,27 @@ export default function GetInvolvedPage() {
       </section>
 
       {/* Partner Institutions */}
-      <section className="py-12 sm:py-16 md:py-20">
-        <div className="container mx-auto px-4 sm:px-6">
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center mb-8 sm:mb-12 md:mb-16">Unsere Partnerorganisationen</h2>
+      <section className={responsiveSpacing.section}>
+        <div className={`${responsiveSpacing.container} mx-auto`}>
+          <h2 className={`${responsiveTypography.section} font-bold text-center ${responsiveSpacing.mbLarge}`}>
+            Unsere Partnerorganisationen
+          </h2>
           <div className="max-w-4xl mx-auto">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
-              {partnerInstitutions.map((institution, index) => (
+              {PARTNER_INSTITUTIONS.map((institution, index) => (
                 <a
                   key={index}
                   href={institution.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center p-4 sm:p-6 bg-white rounded-xl shadow-sm hover:shadow-md transition-all duration-300 border border-gray-100 hover:border-green-200 group"
+                  className={`flex items-center ${responsiveSpacing.cardPadding} bg-white rounded-xl shadow-sm hover:shadow-md transition-all duration-300 border border-gray-100 hover:border-green-200 group`}
                 >
                   <svg className="w-5 h-5 sm:w-6 sm:h-6 mr-3 sm:mr-4 text-green-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
-                  <span className="text-sm sm:text-base text-gray-700 group-hover:text-green-600 transition-colors duration-300">{institution.name}</span>
+                  <span className={`${responsiveTypography.body} text-gray-700 group-hover:text-green-600 transition-colors duration-300`}>
+                    {institution.name}
+                  </span>
                 </a>
               ))}
             </div>
@@ -260,19 +176,21 @@ export default function GetInvolvedPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-12 sm:py-16 md:py-20 bg-gradient-to-br from-green-700 via-green-800 to-green-900 text-white">
-        <div className="container mx-auto px-4 sm:px-6 text-center">
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 sm:mb-6">Bereit, einen Unterschied zu machen?</h2>
-          <p className="text-base sm:text-lg md:text-xl mb-6 sm:mb-8 max-w-2xl mx-auto text-green-100">
+      <section className={`${responsiveSpacing.section} bg-gradient-to-br from-green-600 to-emerald-700 text-white`}>
+        <div className={`${responsiveSpacing.container} mx-auto text-center`}>
+          <h2 className={`${responsiveTypography.section} font-bold ${responsiveSpacing.mbSmall}`}>
+            Bereit, einen Unterschied zu machen?
+          </h2>
+          <p className={`${responsiveTypography.lead} ${responsiveSpacing.mbMedium} max-w-2xl mx-auto text-green-100`}>
             Schliessen Sie sich unserer Gemeinschaft von Veränderern an und helfen Sie uns, eine nachhaltigere Zukunft durch Technologie zu schaffen.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
             <ContactLink variant="outline" size="lg" className="bg-white text-green-800 hover:bg-green-50">
-              Kontaktieren Sie uns heute
+              {GET_INVOLVED_CONFIG.cta.contactButton}
             </ContactLink>
             <Link
               href="/workshops"
-              className="bg-transparent border-2 border-white text-white px-4 sm:px-6 md:px-8 py-3 sm:py-4 rounded-lg font-semibold hover:bg-white/10 transition-colors duration-300 text-base sm:text-lg"
+              className={`${responsiveButtons.large} bg-transparent border-2 border-white text-white hover:bg-white/10`}
             >
               Workshops entdecken
             </Link>

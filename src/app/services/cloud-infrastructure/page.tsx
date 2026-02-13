@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { ArrowRight, Calendar, Cloud, Server, Zap, Shield, Globe, Clock, AlertTriangle, Heart } from 'lucide-react'
+import { PageHero } from '@/components/layout/PageHero'
 
 export const metadata: Metadata = {
   title: 'Cloud-Infrastruktur - Zukunftsvision | RevampIT',
@@ -40,52 +41,35 @@ export default function CloudInfrastructurePage() {
       />
       
       <main className="min-h-screen bg-gray-50">
-        {/* Hero Section */}
-        <section className="relative bg-gradient-to-br from-green-700 via-green-800 to-green-900 text-white py-12 sm:py-16 md:py-20 lg:py-24 overflow-hidden">
-          <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-10"></div>
-          <div className="container mx-auto px-4 sm:px-6 relative">
-            <div className="max-w-4xl">
-              <div className="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-6">
-                <span className="inline-flex items-center px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-medium bg-red-100 text-red-800">
-                  <AlertTriangle className="w-3 h-3 sm:w-4 sm:h-4 mr-1" />
-                  Derzeit nicht im Angebot
-                </span>
-              </div>
-              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6 leading-tight">Cloud-Infrastruktur</h1>
-              <h2 className="text-2xl md:text-3xl font-semibold mb-8 text-green-200">Zukunftsvision: Nachhaltige Cloud für das Gemeinwohl</h2>
-              <p className="text-xl text-green-100 mb-8">
-                <strong>Dieser Service ist derzeit nicht verfügbar.</strong> Als missionsgetriebene, sich selbst tragende gemeinnützige Organisation
-                stellen wir uns vor, eine ethische Cloud-Infrastruktur aufzubauen, die Gemeinschaften dient und gleichzeitig unseren Planeten schützt.
-              </p>
-              
-              <div className="bg-red-900/50 border border-red-600 rounded-lg p-6 mb-6">
-                <div className="flex items-start gap-3">
-                  <AlertTriangle className="w-6 h-6 text-red-300 mt-1 flex-shrink-0" />
-                  <div>
-                    <h3 className="text-lg font-semibold text-red-100 mb-2">Dienstleistung nicht verfügbar</h3>
-                    <p className="text-red-200">
-                      Wir bieten derzeit keine Cloud-Infrastrukturdienste an. Diese Seite repräsentiert unsere langfristige Vision,
-                      während wir nachhaltige Kapazitäten aufbauen, um die digitalen Bedürfnisse unserer Gemeinschaft zu erfüllen.
-                    </p>
-                  </div>
-                </div>
-              </div>
+        <PageHero
+          theme="services"
+          icon={Cloud}
+          title="Cloud-Infrastruktur"
+          subtitle="Zukunftsvision: Nachhaltige Cloud für das Gemeinwohl. Als missionsgetriebene gemeinnützige Organisation stellen wir uns vor, eine ethische Cloud-Infrastruktur aufzubauen, die Gemeinschaften dient und gleichzeitig unseren Planeten schützt."
+        >
+          <div className="mt-6 space-y-4 max-w-3xl mx-auto">
+            <div className="inline-flex items-center px-4 py-2 rounded-full text-sm font-medium bg-red-100 text-red-800">
+              <AlertTriangle className="w-4 h-4 mr-2" />
+              Derzeit nicht im Angebot
+            </div>
 
-              <div className="bg-green-800/50 border border-green-600 rounded-lg p-6">
-                <div className="flex items-start gap-3">
-                  <Calendar className="w-6 h-6 text-green-300 mt-1 flex-shrink-0" />
-                  <div>
-                    <h3 className="text-lg font-semibold text-green-100 mb-2">Visions-Zeitplan: 2026-2028</h3>
-                    <p className="text-green-200">
-                      Durch Gemeinschaftspartnerschaften und nachhaltiges Wachstum streben wir an, eine wirklich ethische Cloud-Infrastruktur
-                      zu entwickeln, die ökologische Verantwortung und digitale Gerechtigkeit in den Vordergrund stellt.
-                    </p>
-                  </div>
-                </div>
+            <div className="bg-white/90 border border-red-200 rounded-lg p-4">
+              <p className="text-gray-700 text-sm">
+                <strong>Dieser Service ist derzeit nicht verfügbar.</strong> Diese Seite repräsentiert unsere langfristige Vision,
+                während wir nachhaltige Kapazitäten aufbauen.
+              </p>
+            </div>
+
+            <div className="bg-white/90 border border-blue-200 rounded-lg p-4">
+              <div className="flex items-start gap-3">
+                <Calendar className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" />
+                <p className="text-gray-700 text-sm">
+                  <strong>Visions-Zeitplan: 2026-2028</strong> - Durch Gemeinschaftspartnerschaften und nachhaltiges Wachstum streben wir an, eine wirklich ethische Cloud-Infrastruktur zu entwickeln.
+                </p>
               </div>
             </div>
           </div>
-        </section>
+        </PageHero>
 
         {/* Mission Alignment Section */}
         <section className="py-12 sm:py-16 md:py-20 bg-white">

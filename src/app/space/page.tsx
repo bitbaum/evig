@@ -22,6 +22,7 @@ import {
 } from 'lucide-react'
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
+import { PageHero } from '@/components/layout/PageHero'
 import { STORE_ADDRESS, STORE_GOOGLE_MAPS_URL, STORE_OSM_URL } from '@/lib/constants'
 
 export const metadata: Metadata = {
@@ -133,25 +134,15 @@ const kpiImpact = [
 export default function SpacePage() {
   return (
     <main>
-      {/* Hero */}
-      <section className="relative bg-gradient-to-br from-green-700 via-green-800 to-green-900 text-white py-16 md:py-24 overflow-hidden">
-        <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-10" />
-        <div className="container mx-auto px-4 sm:px-6 relative">
-          <div className="max-w-3xl">
-            <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full mb-6">
-              <Building2 className="w-4 h-4" />
-              <span className="text-sm font-medium">Unsere Standorte</span>
-            </div>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
-              Von der Molkerei zum Community Space
-            </h1>
-            <p className="text-lg md:text-xl text-green-100 mb-8">
-              Seit 2003 bewegen wir uns durch Zürich. Jetzt suchen wir ein neues Zuhause -
-              einen Ort, an dem Nachhaltigkeit, Technologie und Gemeinschaft zusammenkommen.
-            </p>
-            <div className="flex flex-wrap gap-4">
-              <Link href="#zukunft">
-                <Button size="lg" className="bg-white text-green-800 hover:bg-green-50">
+      <PageHero
+        theme="about"
+        icon={Building2}
+        title="Von der Molkerei zum Community Space"
+        subtitle="Seit 2003 bewegen wir uns durch Zürich. Jetzt suchen wir ein neues Zuhause - einen Ort, an dem Nachhaltigkeit, Technologie und Gemeinschaft zusammenkommen."
+      >
+        <div className="flex flex-wrap justify-center gap-4 mt-8">
+          <Link href="#zukunft">
+            <Button size="lg" className="bg-green-600 text-white hover:bg-green-700">
                   <Sparkles className="w-5 h-5 mr-2" />
                   Unsere Vision
                 </Button>

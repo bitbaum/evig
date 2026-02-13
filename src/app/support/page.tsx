@@ -1,6 +1,7 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
 import { Heart, Coffee, Users, Shield } from 'lucide-react'
+import { PageHero } from '@/components/layout/PageHero'
 
 export const metadata: Metadata = {
   title: 'RevampIt unterstützen | Community-gestützte Inhalte',
@@ -10,21 +11,12 @@ export const metadata: Metadata = {
 export default function SupportPage() {
   return (
     <main className="min-h-screen bg-white">
-      {/* Header */}
-      <div className="bg-gradient-to-br from-green-700 via-green-800 to-green-900 text-white py-12 sm:py-16 md:py-20">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 text-center">
-          <div className="inline-flex items-center justify-center w-16 h-16 sm:w-20 sm:h-20 bg-white/10 rounded-full mb-4 sm:mb-6">
-            <Heart className="w-8 h-8 sm:w-10 sm:h-10" />
-          </div>
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 sm:mb-6">
-            Unterstützen Sie RevampIt
-          </h1>
-          <p className="text-lg sm:text-xl md:text-2xl text-green-100 leading-relaxed max-w-2xl mx-auto">
-            Helfen Sie uns, qualitativ hochwertige, werbefreie Inhalte über nachhaltige
-            Technologie, Open Source und die Zukunft des Computing zu erstellen.
-          </p>
-        </div>
-      </div>
+      <PageHero
+        theme="getInvolved"
+        icon={Heart}
+        title="Unterstützen Sie RevampIt"
+        subtitle="Helfen Sie uns, qualitativ hochwertige, werbefreie Inhalte über nachhaltige Technologie, Open Source und die Zukunft des Computing zu erstellen."
+      />
 
       {/* Why Support */}
       <div className="max-w-4xl mx-auto px-4 sm:px-6 py-12 sm:py-16">

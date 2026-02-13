@@ -47,19 +47,23 @@ export const responsiveSpacing = {
   // Section vertical padding
   section: 'py-12 sm:py-16 md:py-20',
   sectionLarge: 'py-12 sm:py-16 md:py-20 lg:py-24',
-  
+
   // Container horizontal padding
   container: 'px-4 sm:px-6',
   containerLarge: 'px-4 sm:px-6 md:px-8',
-  
+
+  // Card padding
+  cardPadding: 'p-6 sm:p-8',
+
   // Gap between elements
   gap: 'gap-4 sm:gap-6 md:gap-8',
   gapSmall: 'gap-2 sm:gap-3 md:gap-4',
   gapLarge: 'gap-6 sm:gap-8 md:gap-12',
-  
+
   // Margin bottom
   mb: 'mb-4 sm:mb-6 md:mb-8',
   mbSmall: 'mb-2 sm:mb-3 md:mb-4',
+  mbMedium: 'mb-6 sm:mb-8 md:mb-10',
   mbLarge: 'mb-8 sm:mb-12 md:mb-16',
 }
 
@@ -69,13 +73,16 @@ export const responsiveSpacing = {
  */
 export const responsiveButtons = {
   // Primary button
-  primary: 'px-4 sm:px-6 md:px-8 py-2.5 sm:py-3 md:py-4 text-sm sm:text-base md:text-lg',
-  
+  primary: 'px-4 sm:px-6 md:px-8 py-2.5 sm:py-3 md:py-4 text-sm sm:text-base md:text-lg rounded-lg font-semibold transition-colors duration-300',
+
   // Secondary button
-  secondary: 'px-4 sm:px-6 md:px-8 py-2.5 sm:py-3 text-sm sm:text-base',
-  
+  secondary: 'px-4 sm:px-6 md:px-8 py-2.5 sm:py-3 text-sm sm:text-base rounded-lg font-semibold transition-colors duration-300',
+
+  // Large button
+  large: 'px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg rounded-lg font-semibold transition-colors duration-300',
+
   // Small button
-  small: 'px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm',
+  small: 'px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm rounded-lg font-semibold transition-colors duration-300',
 }
 
 /**

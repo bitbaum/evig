@@ -14,6 +14,7 @@ import {
   Phone,
   Clock
 } from 'lucide-react'
+import { PageHero } from '@/components/layout/PageHero'
 
 export const metadata: Metadata = {
   title: 'Hardware-Recycling | RevampIT',
@@ -87,20 +88,12 @@ export default function HardwareRecyclingPage() {
       />
 
       <main className="min-h-screen bg-gray-50">
-        {/* Hero Section */}
-        <section className="relative bg-gradient-to-br from-green-700 via-green-800 to-green-900 text-white py-12 sm:py-16 md:py-20 lg:py-24 overflow-hidden">
-          <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-10"></div>
-          <div className="container mx-auto px-4 sm:px-6 relative">
-            <div className="max-w-4xl">
-              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6 leading-tight">Hardware-Recycling</h1>
-              <h2 className="text-xl sm:text-2xl md:text-3xl font-semibold mb-4 sm:mb-6 md:mb-8 text-green-200">Nachhaltige IT-Lösungen</h2>
-              <p className="text-base sm:text-lg md:text-xl text-green-100 mb-6 sm:mb-8">
-                Wir bieten verantwortungsvolle Recycling- und Aufarbeitungsdienste für IT-Ausrüstung und helfen dabei,
-                Elektroschrott zu reduzieren, während wir sichere Datenlöschung gewährleisten.
-              </p>
-            </div>
-          </div>
-        </section>
+        <PageHero
+          theme="services"
+          icon={Recycle}
+          title="Hardware-Recycling"
+          subtitle="Verantwortungsvolle Recycling- und Aufarbeitungsdienste für IT-Ausrüstung. Wir helfen dabei, Elektroschrott zu reduzieren, während wir sichere Datenlöschung gewährleisten."
+        />
 
         {/* Features Grid */}
         <section className="py-12 sm:py-16 md:py-20 bg-white">

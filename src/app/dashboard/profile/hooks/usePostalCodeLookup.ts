@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { logger } from '@/lib/logger'
 import { lookupSwissPostalCode, searchSwissCities, isValidSwissPostalCode, type PostalCodeData } from '@/lib/swiss-postal-codes'
 import type { ProfileData } from './useProfileData'
 
@@ -19,6 +20,11 @@ export function usePostalCodeLookup({ setProfile }: UsePostalCodeLookupParams) {
     if (isValidSwissPostalCode(value)) {
       const postalData = lookupSwissPostalCode(value)
       if (postalData) {
+        logger.info('Postal code auto-filled', {
+          postalCode: value,
+          city: postalData.city,
+          canton: postalData.canton,
+        })
         setProfile(prev => ({
           ...prev,
           postal_code: value,
@@ -42,6 +48,11 @@ export function usePostalCodeLookup({ setProfile }: UsePostalCodeLookupParams) {
   }
 
   const selectPostalSuggestion = (suggestion: PostalCodeData) => {
+    logger.info('Postal suggestion selected', {
+      postalCode: suggestion.postal_code,
+      city: suggestion.city,
+      canton: suggestion.canton,
+    })
     setProfile(prev => ({
       ...prev,
       postal_code: suggestion.postal_code,

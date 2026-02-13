@@ -15,6 +15,7 @@ import {
   Filter
 } from 'lucide-react'
 import Link from 'next/link'
+import { PageHero } from '@/components/layout/PageHero'
 import {
   benefits,
   technologies,
@@ -45,33 +46,27 @@ export default function WebDesignDevelopmentPage() {
 
   return (
     <main>
-      {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-green-700 via-green-800 to-green-900 text-white py-12 sm:py-16 md:py-20 lg:py-24 overflow-hidden">
-        <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-10"></div>
-        <div className="container mx-auto px-4 sm:px-6 relative">
-          <div className="max-w-3xl">
-            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6 leading-tight">Webdesign & Entwicklung</h1>
-            <p className="text-base sm:text-lg md:text-xl text-green-100 mb-6 sm:mb-8">
-              <strong>100% Engagement für Freiheit</strong> durch Open Source, Dezentralisierung, Datenschutz, Dateneigentum, Code-Eigentum und maximale Automatisierung.
-              Wir schaffen digitale Erlebnisse, bei denen <strong>Anstrengung zur Wahl und nicht zur Notwendigkeit wird</strong> &ndash; und geben Ihnen die vollständige Kontrolle über Ihre digitale Präsenz.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
-              <Link
-                href="/contact"
-                className="inline-block bg-white text-green-800 px-4 sm:px-6 md:px-8 py-3 sm:py-4 rounded-lg font-semibold hover:bg-green-50 transition-colors duration-300 text-sm sm:text-base md:text-lg"
-              >
-                Starten Sie Ihr Projekt
-              </Link>
-              <Link
-                href="#services"
-                className="inline-block border-2 border-white text-white px-4 sm:px-6 md:px-8 py-3 sm:py-4 rounded-lg font-semibold hover:bg-white/10 transition-colors duration-300 text-sm sm:text-base md:text-lg"
-              >
-                Dienstleistungen entdecken
-              </Link>
-            </div>
-          </div>
+      <PageHero
+        theme="services"
+        icon={Code}
+        title="Webdesign & Entwicklung"
+        subtitle="100% Engagement für Freiheit durch Open Source, Dezentralisierung, Datenschutz, Dateneigentum, Code-Eigentum und maximale Automatisierung. Wir schaffen digitale Erlebnisse, bei denen Anstrengung zur Wahl und nicht zur Notwendigkeit wird."
+      >
+        <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mt-8">
+          <Link
+            href="/contact"
+            className="inline-flex items-center justify-center rounded-md text-sm font-medium px-6 py-3 bg-blue-600 text-white hover:bg-blue-700 transition-colors"
+          >
+            Starten Sie Ihr Projekt
+          </Link>
+          <Link
+            href="#services"
+            className="inline-flex items-center justify-center rounded-md text-sm font-medium px-6 py-3 bg-white text-blue-600 hover:bg-gray-50 border-2 border-blue-600 transition-colors"
+          >
+            Dienstleistungen entdecken
+          </Link>
         </div>
-      </section>
+      </PageHero>
 
       {/* Values Section - New dedicated section */}
       <section className="py-12 sm:py-16 md:py-20 bg-gradient-to-br from-green-50 to-blue-50">

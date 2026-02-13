@@ -1,8 +1,9 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
-import { Mail, Phone, MapPin, Clock, Map as MapIcon, Shield } from 'lucide-react'
+import { Mail, Phone, MapPin, Clock, Map as MapIcon, Shield, MessageCircle } from 'lucide-react'
 import { STORE_GOOGLE_MAPS_URL, STORE_OSM_URL, WAREHOUSE_GOOGLE_MAPS_URL, WAREHOUSE_OSM_URL } from '@/lib/constants'
 import Heading from '@/components/ui/Heading'
+import { PageHero } from '@/components/layout/PageHero'
 
 export const metadata: Metadata = {
   title: 'Kontakt | RevampIT',
@@ -41,17 +42,12 @@ export default function ContactPage() {
   return (
     <main>
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-green-700 via-green-800 to-green-900 text-white py-12 sm:py-16 md:py-20 lg:py-24 overflow-hidden">
-        <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-10"></div>
-        <div className="container mx-auto px-4 sm:px-6 relative">
-          <div className="max-w-3xl">
-            <Heading level={1} className="mb-4 sm:mb-6 leading-tight">Kontakt</Heading>
-            <p className="text-base sm:text-lg md:text-xl text-green-100">
-              Haben Sie Fragen zu unseren Dienstleistungen, Workshops oder Linux-Lösungen? Wir helfen gerne!
-            </p>
-          </div>
-        </div>
-      </section>
+      <PageHero
+        theme="contact"
+        icon={MessageCircle}
+        title="Kontakt"
+        subtitle="Haben Sie Fragen zu unseren Dienstleistungen, Workshops oder Linux-Lösungen? Wir helfen gerne!"
+      />
 
       {/* Contact Information Section */}
       <section className="py-12 sm:py-16 md:py-20 bg-white">

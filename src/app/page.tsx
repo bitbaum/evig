@@ -152,7 +152,7 @@ export default function Home() {
                 <div className="flex-1">
                   <h3 className="text-xl font-bold text-gray-900">Marketplace</h3>
                   <p className="mt-2 text-base text-gray-600">
-                    Amazon-ähnlicher Marktplatz für die Community. Kaufe und verkaufe gebrauchte Computer, Laptops und IT-Zubehör direkt mit anderen.
+                    Community-Marktplatz für gebrauchte IT. Kaufe und verkaufe Computer, Laptops und Zubehör direkt mit anderen – fair, nachhaltig und lokal.
                   </p>
                 </div>
               </div>
@@ -201,7 +201,7 @@ export default function Home() {
                 <div className="flex-1">
                   <h3 className="text-xl font-bold text-gray-900">IT-Hilfe</h3>
                   <p className="mt-2 text-base text-gray-600">
-                    Uber-ähnliche Plattform für IT-Support. Finde freiwillige Techniker in deiner Nähe oder teile dein Wissen mit der Community.
+                    Community-basierter IT-Support. Finde freiwillige Techniker in deiner Nähe oder teile dein Wissen und hilf anderen.
                   </p>
                 </div>
               </div>

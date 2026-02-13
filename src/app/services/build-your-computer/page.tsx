@@ -2,16 +2,16 @@
 
 import { useState } from 'react'
 import { Metadata } from 'next'
-import { 
-  Computer, 
-  Cpu, 
-  HardDrive, 
-  Monitor, 
-  Zap, 
-  Globe, 
-  Recycle, 
-  CheckCircle2, 
-  AlertCircle, 
+import {
+  Computer,
+  Cpu,
+  HardDrive,
+  Monitor,
+  Zap,
+  Globe,
+  Recycle,
+  CheckCircle2,
+  AlertCircle,
   TrendingUp,
   MapPin,
   Calendar,
@@ -26,6 +26,7 @@ import {
   Sparkles
 } from 'lucide-react'
 import Link from 'next/link'
+import { PageHero } from '@/components/layout/PageHero'
 
 // Types for build result
 interface Component {
@@ -155,37 +156,30 @@ export default function BuildYourComputerPage() {
 
   return (
     <main>
-      {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-green-700 via-green-800 to-green-900 text-white py-12 sm:py-16 md:py-20 lg:py-24 overflow-hidden">
-        <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-10"></div>
-        <div className="container mx-auto px-4 sm:px-6 relative">
-          <div className="max-w-4xl mx-auto text-center">
-            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6 leading-tight">
-              KI-gestützte nachhaltige Computer-Builds
-            </h1>
-            <h2 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-semibold mb-4 sm:mb-6 md:mb-8 text-green-200">
-              100% Gebrauchtteile-Priorität • Globales Inventar-Netzwerk • Intelligentes KI-Matching
-            </h2>
-            <p className="text-base sm:text-lg md:text-xl text-green-100 mb-6 sm:mb-8">
-              Unser revolutionäres KI-System scannt unser Inventar und globale Partnernetzwerke, um Ihren perfekten Computer hauptsächlich aus gebrauchten und wiederaufbereiteten Komponenten zusammenzustellen. Nur wenn es absolut notwendig ist, beschaffen wir neue Teile.
-            </p>
-            <div className="flex flex-wrap justify-center gap-3 sm:gap-4 text-xs sm:text-sm">
-              <div className="flex items-center bg-green-600/30 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full">
-                <Recycle className="w-4 h-4 mr-2" />
-                Kreislaufwirtschaft
-              </div>
-              <div className="flex items-center bg-green-600/30 px-4 py-2 rounded-full">
-                <Globe className="w-4 h-4 mr-2" />
-                Globales Netzwerk
-              </div>
-              <div className="flex items-center bg-green-600/30 px-4 py-2 rounded-full">
-                <Star className="w-4 h-4 mr-2" />
-                KI-optimiert
-              </div>
-            </div>
+      <PageHero
+        theme="services"
+        icon={Computer}
+        title="KI-gestützte nachhaltige Computer-Builds"
+        subtitle="Unser revolutionäres KI-System scannt unser Inventar und globale Partnernetzwerke, um Ihren perfekten Computer hauptsächlich aus gebrauchten und wiederaufbereiteten Komponenten zusammenzustellen."
+      >
+        <p className="text-lg text-gray-600 max-w-2xl mx-auto mt-4">
+          <strong>100% Gebrauchtteile-Priorität • Globales Inventar-Netzwerk • Intelligentes KI-Matching</strong>
+        </p>
+        <div className="flex flex-wrap justify-center gap-3 sm:gap-4 text-sm mt-6">
+          <div className="flex items-center bg-blue-100 text-blue-700 px-4 py-2 rounded-full">
+            <Recycle className="w-4 h-4 mr-2" />
+            Kreislaufwirtschaft
+          </div>
+          <div className="flex items-center bg-blue-100 text-blue-700 px-4 py-2 rounded-full">
+            <Globe className="w-4 h-4 mr-2" />
+            Globales Netzwerk
+          </div>
+          <div className="flex items-center bg-blue-100 text-blue-700 px-4 py-2 rounded-full">
+            <Star className="w-4 h-4 mr-2" />
+            KI-optimiert
           </div>
         </div>
-      </section>
+      </PageHero>
 
       {/* How It Works */}
       <section className="py-12 sm:py-16 md:py-20 bg-gray-50">

@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { ArrowLeft, Send, Lightbulb, FileText } from 'lucide-react'
+import { ArrowLeft, Send, Lightbulb, FileText, Edit } from 'lucide-react'
+import { PageHero } from '@/components/layout/PageHero'
 
 type SubmissionType = 'idea' | 'draft'
 
@@ -88,22 +89,21 @@ export default function SubmitPostPage() {
 
   return (
     <main className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <div className="bg-gradient-to-br from-green-700 via-green-800 to-green-900 text-white py-16">
-        <div className="container mx-auto px-4 max-w-4xl">
+      <div className="relative">
+        <PageHero
+          theme="about"
+          icon={Edit}
+          title="Beitrag einreichen"
+          subtitle="Teilen Sie Ihre Ideen und Erfahrungen mit unserer Community!"
+        />
+        <div className="absolute top-4 left-4 sm:left-8">
           <Link
             href="/blog"
-            className="inline-flex items-center text-green-200 hover:text-white mb-6 transition-colors"
+            className="inline-flex items-center text-gray-600 hover:text-gray-900 transition-colors bg-white px-4 py-2 rounded-lg shadow-sm"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
             Zurück zum Blog
           </Link>
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">
-            Beitrag einreichen
-          </h1>
-          <p className="text-xl text-green-100">
-            Teilen Sie Ihre Ideen und Erfahrungen mit unserer Community!
-          </p>
         </div>
       </div>
 

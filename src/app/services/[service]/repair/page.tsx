@@ -1,6 +1,7 @@
 import { Metadata } from 'next'
 import { Wrench, CheckCircle2, Clock, Shield, Zap } from 'lucide-react'
 import Link from 'next/link'
+import { PageHero } from '@/components/layout/PageHero'
 
 export const metadata: Metadata = {
   title: 'Computer Repair & Upgrades | RevampIT',
@@ -71,17 +72,16 @@ const repairDetails = {
 export default function RepairPage() {
   return (
     <main>
-      {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-green-700 via-green-800 to-green-900 text-white py-12 sm:py-16 md:py-20 lg:py-24 overflow-hidden">
-        <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-10"></div>
-        <div className="container mx-auto px-4 sm:px-6 relative">
-          <div className="max-w-3xl">
-            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6 leading-tight">{repairDetails.hero.title}</h1>
-            <h2 className="text-xl sm:text-2xl md:text-3xl font-semibold mb-4 sm:mb-6 md:mb-8 text-green-200">{repairDetails.hero.subtitle}</h2>
-            <p className="text-base sm:text-lg md:text-xl text-green-100">{repairDetails.hero.description}</p>
-          </div>
-        </div>
-      </section>
+      <PageHero
+        theme="services"
+        icon={Wrench}
+        title={repairDetails.hero.title}
+        subtitle={repairDetails.hero.description}
+      >
+        <p className="text-lg text-gray-600 max-w-2xl mx-auto mt-4">
+          <strong>{repairDetails.hero.subtitle}</strong>
+        </p>
+      </PageHero>
 
       {/* Features Section */}
       <section className="py-12 sm:py-16 md:py-20">

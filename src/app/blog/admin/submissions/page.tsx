@@ -89,7 +89,7 @@ ${submission.content}
   return (
     <main className="min-h-screen bg-gray-50">
       {/* Header */}
-      <div className="bg-gradient-to-br from-green-700 via-green-800 to-green-900 text-white py-12">
+      <div className="bg-gradient-to-br from-green-600 to-emerald-700 text-white py-12">
         <div className="container mx-auto px-4 max-w-7xl">
           <Link
             href="/blog"

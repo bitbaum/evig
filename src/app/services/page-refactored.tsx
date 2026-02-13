@@ -26,6 +26,7 @@ import { useRouter } from 'next/navigation'
 import { FilterableSection } from '@/components/ui/FilterableSection'
 import { FilterConfig } from '@/hooks/useFiltering'
 import Heading from '@/components/ui/Heading'
+import { PageHero } from '@/components/layout/PageHero'
 
 // Service interface
 interface Service {
@@ -453,16 +454,12 @@ export default function ServicesPage() {
       />
       <main className="min-h-screen bg-gray-50">
         {/* Hero Section */}
-        <section className="relative bg-gradient-to-br from-green-700 via-green-800 to-green-900 text-white py-12 sm:py-16 md:py-20 lg:py-24 overflow-hidden">
-          <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-10"></div>
-          <div className="container mx-auto px-4 sm:px-6 relative">
-            <div className="max-w-3xl">
-              <Heading level={1} className="mb-4 sm:mb-6 leading-tight">Experten-IT-Dienstleistungen</Heading>
-              <Heading level={2} className="font-semibold mb-4 sm:mb-6 md:mb-8 text-green-200">Nachhaltige Lösungen für Ihre Technologiebedürfnisse</Heading>
-              <p className="text-base sm:text-lg md:text-xl text-green-100">Wir kombinieren technische Expertise mit Umweltverantwortung, um umfassende IT-Lösungen zu bieten, die Ihnen Geld sparen und Elektroschrott reduzieren.</p>
-            </div>
-          </div>
-        </section>
+        <PageHero
+          theme="services"
+          icon={Wrench}
+          title="Experten-IT-Dienstleistungen"
+          subtitle="Nachhaltige Lösungen für Ihre Technologiebedürfnisse. Wir kombinieren technische Expertise mit Umweltverantwortung, um umfassende IT-Lösungen zu bieten, die Ihnen Geld sparen und Elektroschrott reduzieren."
+        />
 
         {/* Services Section with Reusable Filtering */}
         <FilterableSection
@@ -477,14 +474,14 @@ export default function ServicesPage() {
         />
 
         {/* CTA Section */}
-        <section className="py-12 sm:py-16 md:py-20 bg-gradient-to-r from-green-700 to-green-800 text-white">
+        <section className="py-12 sm:py-16 md:py-20 bg-white border-t border-gray-200">
           <div className="container mx-auto px-4 sm:px-6 text-center">
-            <Heading level={2} className="mb-4 sm:mb-6">Bereit, Ihre Technologie zu erneuern?</Heading>
-            <p className="text-base sm:text-lg md:text-xl mb-6 sm:mb-8 max-w-2xl mx-auto text-green-100">Kontaktieren Sie uns heute für eine kostenlose Beratung und entdecken Sie, wie wir Ihnen helfen können, das Beste aus Ihren Geräten herauszuholen.</p>
+            <Heading level={2} className="mb-4 sm:mb-6 text-gray-900">Bereit, Ihre Technologie zu erneuern?</Heading>
+            <p className="text-base sm:text-lg md:text-xl mb-6 sm:mb-8 max-w-2xl mx-auto text-gray-600">Kontaktieren Sie uns heute für eine kostenlose Beratung und entdecken Sie, wie wir Ihnen helfen können, das Beste aus Ihren Geräten herauszuholen.</p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
                 href="/contact"
-                className="inline-block bg-white text-green-800 px-8 py-4 rounded-lg font-semibold hover:bg-green-50 transition-colors duration-300 text-lg"
+                className="inline-block bg-blue-600 text-white px-8 py-4 rounded-lg font-semibold hover:bg-blue-500 transition-colors duration-300 text-lg"
               >
                 Kontaktieren Sie uns
               </Link>
@@ -492,7 +489,7 @@ export default function ServicesPage() {
                 href="https://www.revamp-it.ch/index.php/de/shop-de"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-block border-2 border-white text-white px-4 sm:px-6 md:px-8 py-3 sm:py-4 rounded-lg font-semibold hover:bg-white/10 transition-colors duration-300 text-base sm:text-lg"
+                className="inline-block border-2 border-blue-300 text-blue-700 px-4 sm:px-6 md:px-8 py-3 sm:py-4 rounded-lg font-semibold hover:bg-blue-50 transition-colors duration-300 text-base sm:text-lg"
               >
                 Inventar durchsuchen
               </Link>

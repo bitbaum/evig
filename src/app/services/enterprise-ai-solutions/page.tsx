@@ -7,6 +7,7 @@ import {
   Heart
 } from 'lucide-react'
 import Link from 'next/link'
+import { PageHero } from '@/components/layout/PageHero'
 import {
   coreValues,
   painPoints,
@@ -65,38 +66,30 @@ export default function EnterpriseAIPage() {
           </div>
         </div>
 
-        {/* Hero Section */}
-        <section className="relative bg-gradient-to-br from-green-700 via-green-800 to-green-900 text-white py-12 sm:py-16 md:py-20 lg:py-24 overflow-hidden">
-          <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-10"></div>
-          <div className="container mx-auto px-4 sm:px-6 relative">
-            <div className="max-w-4xl">
-              <div className="flex items-center mb-4 sm:mb-6">
-                <Brain className="w-12 h-12 sm:w-16 sm:h-16 mr-3 sm:mr-4 text-green-300" />
-                <div>
-                  <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-2 leading-tight">Nachhaltige Unternehmens-KI</h1>
-                  <p className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-semibold text-green-200">Souverän &bull; Open Source &bull; Nachhaltig</p>
-                </div>
-              </div>
-              <p className="text-base sm:text-lg md:text-xl text-green-100 mb-6 sm:mb-8">
-                Die Zukunft der KI ist nachhaltiges, souveränes Computing. Setzen Sie fortschrittliche KI-Systeme ein, die Ihre Datensouveränität respektieren, auf Open-Source-Transparenz setzen und die Umweltbelastung minimieren.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
-                <Link
-                  href="/contact"
-                  className="inline-block bg-white text-green-800 px-4 sm:px-6 md:px-8 py-3 sm:py-4 rounded-lg font-semibold hover:bg-green-50 transition-colors duration-300 text-sm sm:text-base md:text-lg text-center"
-                >
-                  Interesse bekunden
-                </Link>
-                <Link
-                  href="#case-study"
-                  className="inline-block border-2 border-white text-white px-4 sm:px-6 md:px-8 py-3 sm:py-4 rounded-lg font-semibold hover:bg-white/10 transition-colors duration-300 text-sm sm:text-base md:text-lg text-center"
-                >
-                  Zukünftige Pläne ansehen
-                </Link>
-              </div>
-            </div>
+        <PageHero
+          theme="services"
+          icon={Brain}
+          title="Nachhaltige Unternehmens-KI"
+          subtitle="Die Zukunft der KI ist nachhaltiges, souveränes Computing. Setzen Sie fortschrittliche KI-Systeme ein, die Ihre Datensouveränität respektieren, auf Open-Source-Transparenz setzen und die Umweltbelastung minimieren."
+        >
+          <p className="text-lg text-gray-600 max-w-2xl mx-auto mt-4">
+            <strong>Souverän • Open Source • Nachhaltig</strong>
+          </p>
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mt-8">
+            <Link
+              href="/contact"
+              className="inline-flex items-center justify-center rounded-md text-sm font-medium px-6 py-3 bg-blue-600 text-white hover:bg-blue-700 transition-colors"
+            >
+              Interesse bekunden
+            </Link>
+            <Link
+              href="#case-study"
+              className="inline-flex items-center justify-center rounded-md text-sm font-medium px-6 py-3 bg-white text-blue-600 hover:bg-gray-50 border-2 border-blue-600 transition-colors"
+            >
+              Zukünftige Pläne ansehen
+            </Link>
           </div>
-        </section>
+        </PageHero>
 
         {/* Core Values */}
         <section className="py-12 sm:py-16 md:py-20">

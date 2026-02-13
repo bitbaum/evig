@@ -13,6 +13,8 @@ import { validateBody, validateQuery, ListingsQuerySchema, CreateListingSchema }
 import { indexListing } from '@/lib/search/meilisearch';
 import { sendCustomEmail } from '@/lib/email';
 import { listingPublishedConfirmation } from '@/lib/email/templates/marketplace';
+import { rateLimiters } from '@/lib/security/rate-limit';
+import { sanitizeInput } from '@/lib/security/sanitize';
 
 // ============================================================================
 // GET — Public browse
@@ -128,13 +130,25 @@ export async function GET(request: NextRequest) {
 
 export const POST = withAuth(async (request: NextRequest, session: ValidSession) => {
   try {
+    // SECURITY: Rate limiting - 10 listings per hour per user
+    if (!rateLimiters.listingCreate(`${session.user.id}:listing-create`)) {
+      return apiBadRequest('Zu viele Inserate erstellt. Bitte warte 1 Stunde.');
+    }
+
     const body = await request.json();
     const validation = validateBody(CreateListingSchema, body);
     if (!validation.success) return validation.error;
     const data = validation.data;
 
+    // SECURITY: Sanitize user inputs
+    const sanitizedTitle = sanitizeInput(data.title, { maxLength: 200 });
+    const sanitizedDescription = sanitizeInput(data.description, {
+      allowHtml: true,
+      maxLength: 5000,
+    });
+
     const result = await transaction(async (client) => {
-      // Insert listing
+      // Insert listing with sanitized data
       const listingResult = await client.query(
         `INSERT INTO ${TABLE_NAMES.LISTINGS} (
           seller_id, title, description, price_chf, category, condition,
@@ -144,8 +158,8 @@ export const POST = withAuth(async (request: NextRequest, session: ValidSession)
         RETURNING id`,
         [
           session.user.id,
-          data.title,
-          data.description,
+          sanitizedTitle,
+          sanitizedDescription,
           data.price_chf,
           data.category,
           data.condition,
@@ -186,8 +200,8 @@ export const POST = withAuth(async (request: NextRequest, session: ValidSession)
     // Fire-and-forget: index in Meilisearch
     indexListing({
       id: result,
-      title: data.title,
-      description: data.description,
+      title: sanitizedTitle,
+      description: sanitizedDescription,
       brand: data.brand || null,
       model: data.model || null,
       category: data.category,
@@ -213,7 +227,7 @@ export const POST = withAuth(async (request: NextRequest, session: ValidSession)
         session.user.email,
         listingPublishedConfirmation({
           recipientName: session.user.name || 'Nutzer',
-          listingTitle: data.title,
+          listingTitle: sanitizedTitle,
           listingUrl: `${baseUrl}/marketplace/${result}`,
         })
       ).catch(() => {});

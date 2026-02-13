@@ -5,6 +5,7 @@ import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { SHOP_ONLINE_URL, SHOPWARE_URL, STORE_ADDRESS, STORE_GOOGLE_MAPS_URL, STORE_OSM_URL } from '@/lib/constants'
 import Heading from '@/components/ui/Heading'
+import { PageHero } from '@/components/layout/PageHero'
 
 export const metadata: Metadata = {
   title: 'Shop | RevampIT',
@@ -17,17 +18,12 @@ export default function ShopPage() {
   return (
     <main>
       {/* Hero */}
-      <section className="relative bg-gradient-to-br from-green-700 via-green-800 to-green-900 text-white py-12 sm:py-16 md:py-20 lg:py-24 overflow-hidden">
-        <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-10" />
-        <div className="container mx-auto px-4 sm:px-6 relative">
-          <div className="max-w-3xl">
-            <Heading level={1} className="mb-4 sm:mb-6 leading-tight">Wie möchtest du einkaufen?</Heading>
-            <p className="text-base sm:text-lg md:text-xl text-green-100">
-              Wähle den Kanal, der am besten zu dir passt: unseren Online-Shop, den Shopware-Shop oder unser Ladenlokal in Zürich.
-            </p>
-          </div>
-        </div>
-  </section>
+      <PageHero
+        theme="services"
+        icon={ShoppingCart}
+        title="Wie möchtest du einkaufen?"
+        subtitle="Wähle den Kanal, der am besten zu dir passt: unseren Online-Shop, den Shopware-Shop oder unser Ladenlokal in Zürich."
+      />
 
       {/* Removed redundant top quick actions – buttons remain inside the cards below */}
 

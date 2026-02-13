@@ -219,13 +219,27 @@ export interface DbUserProfile {
   date_of_birth: Date | null
   gender: string | null
   occupation: string | null
+  // Public profile fields
+  avatar_url: string | null
+  display_name: string | null
   bio: string | null
+  profile_visibility: string | null
+  // Privacy settings
+  show_email: boolean | null
+  show_phone: boolean | null
+  // Notification preferences
+  email_notifications: boolean | null
+  sms_notifications: boolean | null
+  marketplace_updates: boolean | null
+  workshop_reminders: boolean | null
+  // Service provider fields
   website: string | null
   social_links: SocialLinks | null
   skills: string[] | null
   expertise_areas: string[] | null
   availability: Availability | null
   service_radius_km: number | null
+  // CRM fields
   customer_segment: string | null
   purchase_history: PurchaseHistoryItem[] | null
   loyalty_points: number | null
@@ -532,13 +546,27 @@ export async function updateProfile(
     date_of_birth: 'date_of_birth',
     gender: 'gender',
     occupation: 'occupation',
+    // Public profile fields
+    avatar_url: 'avatar_url',
+    display_name: 'display_name',
     bio: 'bio',
+    profile_visibility: 'profile_visibility',
+    // Privacy settings
+    show_email: 'show_email',
+    show_phone: 'show_phone',
+    // Notification preferences
+    email_notifications: 'email_notifications',
+    sms_notifications: 'sms_notifications',
+    marketplace_updates: 'marketplace_updates',
+    workshop_reminders: 'workshop_reminders',
+    // Service provider fields
     website: 'website',
     social_links: 'social_links',
     skills: 'skills',
     expertise_areas: 'expertise_areas',
     availability: 'availability',
     service_radius_km: 'service_radius_km',
+    // CRM fields
     customer_segment: 'customer_segment',
     purchase_history: 'purchase_history',
     loyalty_points: 'loyalty_points',

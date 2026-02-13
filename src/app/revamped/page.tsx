@@ -13,6 +13,7 @@ import {
 } from 'lucide-react'
 import Link from 'next/link'
 import Image from 'next/image'
+import { PageHero } from '@/components/layout/PageHero'
 
 export const metadata: Metadata = {
   title: 'REVAMPED Zertifizierung | Nachhaltige Computer-Builds | RevampIT',
@@ -45,39 +46,32 @@ export const metadata: Metadata = {
 export default function RevampedPage() {
   return (
     <main>
-      {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-green-700 via-green-800 to-green-900 text-white py-12 sm:py-16 md:py-20 lg:py-24 overflow-hidden">
-        <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-10"></div>
-        <div className="container mx-auto px-4 sm:px-6 relative">
-          <div className="max-w-4xl mx-auto text-center">
-            <div className="inline-flex items-center bg-green-600/30 px-4 sm:px-6 py-2 sm:py-3 rounded-full mb-4 sm:mb-6">
-              <Award className="w-6 h-6 sm:w-8 sm:h-8 text-green-200 mr-2 sm:mr-3" />
-              <span className="text-xl sm:text-2xl font-bold text-white">REVAMPED</span>
-              <Sparkles className="w-5 h-5 sm:w-6 sm:h-6 text-green-200 ml-2" />
-            </div>
-            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6 leading-tight">
-              Die REVAMPED-Zertifizierung
-            </h1>
-            <p className="text-base sm:text-lg md:text-xl text-green-100 mb-6 sm:mb-8 max-w-3xl mx-auto">
-              Jeder Computer, den wir bauen, erhält unser exklusives "REVAMPED"-Label - eine Garantie für Nachhaltigkeit, Qualität und Leistung, die einen neuen Standard in der Branche setzt.
-            </p>
-            <div className="flex flex-wrap justify-center gap-3 sm:gap-4 text-xs sm:text-sm">
-              <div className="flex items-center bg-green-600/30 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full">
-                <Recycle className="w-3 h-3 sm:w-4 sm:h-4 mr-2" />
-Nachhaltigkeitsfokus
-              </div>
-              <div className="flex items-center bg-green-600/30 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full">
-                <Shield className="w-3 h-3 sm:w-4 sm:h-4 mr-2" />
-Qualitätsgarantie
-              </div>
-              <div className="flex items-center bg-green-600/30 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full">
-                <Star className="w-3 h-3 sm:w-4 sm:h-4 mr-2" />
-KI-optimierte Builds
-              </div>
-            </div>
+      <PageHero
+        theme="services"
+        icon={Award}
+        title="Die REVAMPED-Zertifizierung"
+        subtitle="Jeder Computer, den wir bauen, erhält unser exklusives REVAMPED-Label - eine Garantie für Nachhaltigkeit, Qualität und Leistung, die einen neuen Standard in der Branche setzt."
+      >
+        <div className="inline-flex items-center gap-2 bg-blue-100 px-6 py-3 rounded-full mb-6 mt-6">
+          <Award className="w-6 h-6 text-blue-600" />
+          <span className="text-xl font-bold text-blue-800">REVAMPED</span>
+          <Sparkles className="w-5 h-5 text-blue-600" />
+        </div>
+        <div className="flex flex-wrap justify-center gap-3 sm:gap-4 text-sm mt-6">
+          <div className="flex items-center bg-blue-100 text-blue-700 px-4 py-2 rounded-full">
+            <Recycle className="w-4 h-4 mr-2" />
+            Nachhaltigkeitsfokus
+          </div>
+          <div className="flex items-center bg-blue-100 text-blue-700 px-4 py-2 rounded-full">
+            <Shield className="w-4 h-4 mr-2" />
+            Qualitätsgarantie
+          </div>
+          <div className="flex items-center bg-blue-100 text-blue-700 px-4 py-2 rounded-full">
+            <Star className="w-4 h-4 mr-2" />
+            KI-optimierte Builds
           </div>
         </div>
-      </section>
+      </PageHero>
 
       {/* Hero Image with Real Revamped Laptop */}
       <section className="py-12 sm:py-16 md:py-20">

@@ -18,6 +18,9 @@ import {
 } from '@/config/it-hilfe'
 import { sendCustomEmail } from '@/lib/email'
 import { itHilfeRequestConfirmation, adminNewITHilfeRequest, helperNewMatchingRequest } from '@/lib/email/templates/it-hilfe'
+import { rateLimiters } from '@/lib/security/rate-limit'
+import { sanitizeInput } from '@/lib/security/sanitize'
+import { itHilfeRequestSchema, validateAndRespond } from '@/lib/validation/schemas'
 
 interface RequestRow {
   id: string
@@ -201,58 +204,52 @@ export async function POST(request: NextRequest) {
       return apiUnauthorized(ERROR_MESSAGES.UNAUTHORIZED)
     }
 
+    // SECURITY: Rate limiting - 5 requests per hour per user
+    if (!rateLimiters.itHilfeCreate(`${session.user.id}:it-hilfe-create`)) {
+      return apiBadRequest('Zu viele Anfragen. Bitte warte 1 Stunde.')
+    }
+
     const body = await request.json()
+
+    // SECURITY: Validate with Zod schema
+    const validation = validateAndRespond(itHilfeRequestSchema, body)
+    if (!validation.success) {
+      logger.warn('IT-Hilfe validation failed', {
+        userId: session.user.id,
+        errors: validation.errors,
+      })
+      return apiBadRequest(validation.errors.join('; '))
+    }
+
+    const validatedData = validation.data
+
+    // SECURITY: Sanitize user inputs
+    const sanitizedTitle = sanitizeInput(validatedData.title, { maxLength: 200 })
+    const sanitizedDescription = sanitizeInput(validatedData.description, {
+      allowHtml: true,
+      maxLength: 5000,
+    })
+
     const {
       categoryId,
-      deviceBrand,
-      deviceModel,
-      title,
-      description,
-      urgency = 'normal',
-      maxBudgetCents, // Simplified: null/0 = free, > 0 = paid
+      urgency,
+      maxBudgetCents,
       postalCode,
       city,
       canton,
       serviceType = 'flexible',
       skillsNeeded = [],
-      imageUrls = [],
-      aiDiagnosis,
-    } = body
+      budgetTier,
+    } = validatedData
 
-    // Validate required fields (minimal validation - don't block users)
-    if (!categoryId || !title || !postalCode) {
-      return apiBadRequest('Kategorie, Titel und PLZ sind erforderlich')
-    }
-
-    // Validate category
-    if (!getCategoryIds().includes(categoryId)) {
-      return apiBadRequest('Ungültige Gerätekategorie')
-    }
-
-    // Validate urgency if provided
-    if (urgency && !URGENCY_LEVELS.some(u => u.id === urgency)) {
-      return apiBadRequest('Ungültige Dringlichkeitsstufe')
-    }
-
-    // Validate service type if provided
-    if (serviceType && !SERVICE_TYPES.some(s => s.id === serviceType)) {
-      return apiBadRequest('Ungültiger Service-Typ')
-    }
-
-    // Validate skills if provided
-    if (skillsNeeded.length > 0) {
-      const validSkillIds = getSkillIds()
-      const invalidSkills = skillsNeeded.filter((s: string) => !validSkillIds.includes(s))
-      if (invalidSkills.length > 0) {
-        return apiBadRequest(`Ungültige Skills: ${invalidSkills.join(', ')}`)
-      }
-    }
+    // Additional body fields not in schema
+    const { deviceBrand, deviceModel, imageUrls = [], aiDiagnosis } = body
 
     // Derive budget_type from maxBudgetCents for backwards compatibility
     const budgetType = (maxBudgetCents && maxBudgetCents > 0) ? 'fixed' : 'free'
     const budgetAmountCents = (maxBudgetCents && maxBudgetCents > 0) ? maxBudgetCents : null
 
-    // Insert the request
+    // Insert the request with sanitized data
     const result = await query(`
       INSERT INTO ${TABLE_NAMES.IT_HILFE_REQUESTS} (
         requester_id,
@@ -280,16 +277,16 @@ export async function POST(request: NextRequest) {
       categoryId,
       deviceBrand || null,
       deviceModel || null,
-      title,
-      description || '',
+      sanitizedTitle,
+      sanitizedDescription,
       urgency,
       budgetType,
       budgetAmountCents,
       postalCode,
-      city || '',
-      canton || '',
+      city,
+      canton,
       serviceType,
-      skillsNeeded.length > 0 ? skillsNeeded : null,
+      skillsNeeded && skillsNeeded.length > 0 ? skillsNeeded : null,
       imageUrls.length > 0 ? imageUrls : null,
       aiDiagnosis || null,
     ])
@@ -313,7 +310,7 @@ export async function POST(request: NextRequest) {
     if (session.user.email) {
       const confirmationContent = itHilfeRequestConfirmation(
         session.user.name || 'Nutzer',
-        title,
+        sanitizedTitle,
         requestId,
         categoryName,
         aiDiagnosis || null,
@@ -328,7 +325,7 @@ export async function POST(request: NextRequest) {
     const adminContent = adminNewITHilfeRequest(
       session.user.name || 'Nutzer',
       session.user.email || '',
-      title,
+      sanitizedTitle,
       categoryName,
       urgencyName,
       requestUrl
@@ -339,7 +336,7 @@ export async function POST(request: NextRequest) {
 
     // Notify matching helpers (fire-and-forget)
     const serviceTypeName = getServiceTypeById(serviceType)?.name || serviceType
-    if (skillsNeeded.length > 0) {
+    if (skillsNeeded && skillsNeeded.length > 0) {
       query(`
         SELECT DISTINCT hp.user_id, u.name, u.email,
           ARRAY_AGG(us.skill_id) FILTER (WHERE us.skill_id = ANY($1::text[])) as matching_skills
@@ -356,10 +353,10 @@ export async function POST(request: NextRequest) {
             .map(sid => getSkillById(sid)?.name || sid)
           const helperContent = helperNewMatchingRequest(
             helper.name || 'Techniker',
-            title,
+            sanitizedTitle,
             categoryName,
             urgencyName,
-            canton || '',
+            canton,
             serviceTypeName,
             matchingSkillNames,
             requestUrl

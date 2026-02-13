@@ -382,6 +382,22 @@ export const URGENCY_LEVELS: UrgencyLevel[] = [
 ]
 
 // ============================================================================
+// SORT OPTIONS
+// ============================================================================
+
+export interface SortOption {
+  value: string
+  label: string
+}
+
+export const SORT_OPTIONS: SortOption[] = [
+  { value: 'newest', label: 'Neueste zuerst' },
+  { value: 'urgent', label: 'Dringlichste zuerst' },
+  { value: 'budget_high', label: 'Höchstes Budget' },
+  { value: 'offers', label: 'Meiste Angebote' },
+]
+
+// ============================================================================
 // SERVICE TYPES (How help is delivered)
 // ============================================================================
 

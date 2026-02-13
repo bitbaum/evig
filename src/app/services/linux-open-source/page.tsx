@@ -1,12 +1,12 @@
 import { Metadata } from 'next'
-import { 
-  Terminal, 
-  Shield, 
-  Users, 
-  Zap, 
-  Code, 
-  Server, 
-  Laptop, 
+import {
+  Terminal,
+  Shield,
+  Users,
+  Zap,
+  Code,
+  Server,
+  Laptop,
   Download,
   Cpu,
   HardDrive,
@@ -17,6 +17,7 @@ import {
   XCircle
 } from 'lucide-react'
 import Link from 'next/link'
+import { PageHero } from '@/components/layout/PageHero'
 
 export const metadata: Metadata = {
   title: 'Linux & Open Source | RevampIT',
@@ -120,26 +121,16 @@ const services = [
 export default function LinuxPage() {
   return (
     <main>
-      {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-green-700 via-green-800 to-green-900 text-white py-12 sm:py-16 md:py-20 lg:py-24 overflow-hidden">
-        <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-10"></div>
-        <div className="container mx-auto px-4 sm:px-6 relative">
-          <div className="max-w-3xl">
-            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6 leading-tight">Linux & Open Source</h1>
-            <p className="text-xl text-green-100">
-              Professionelle Linux-Installation, Support und Schulungsdienstleistungen. Finden Sie die perfekte Distribution für Ihre Bedürfnisse.
-            </p>
-            <div className="mt-8">
-              <p className="text-green-200">
-                Linux ist ein leistungsstarkes, sicheres und flexibles Betriebssystem, das alles von Personalcomputern bis hin zu Enterprise-Servern antreibt.
-                <Link href="/services/open-source-solutions" className="inline-flex items-center text-white hover:text-green-200 ml-2">
-                  Mehr über Open Source erfahren <ArrowRight className="w-4 h-4 ml-1" />
-                </Link>
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
+      <PageHero
+        theme="services"
+        icon={Terminal}
+        title="Linux & Open Source"
+        subtitle="Professionelle Linux-Installation, Support und Schulungsdienstleistungen. Finden Sie die perfekte Distribution für Ihre Bedürfnisse."
+      >
+        <p className="text-lg text-gray-600 max-w-2xl mx-auto mt-6">
+          Linux ist ein leistungsstarkes, sicheres und flexibles Betriebssystem, das alles von Personalcomputern bis hin zu Enterprise-Servern antreibt.
+        </p>
+      </PageHero>
 
       {/* Services & Pricing Section - Immediately after hero */}
       <section className="py-12 sm:py-16 md:py-20 bg-white">
