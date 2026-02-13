@@ -179,8 +179,23 @@ export interface WorkshopProposal {
   admin_notes: string | null
   reviewed_by: string | null
   reviewed_at: string | null
+  // Admin edit tracking (migration 034)
+  edit_history: EditHistoryEntry[] | null
+  last_edited_by: string | null
+  last_edited_at: string | null
   created_at: string
   updated_at: string
+}
+
+/**
+ * Edit history entry for admin edits
+ */
+export interface EditHistoryEntry {
+  timestamp: string
+  editor_id: string
+  editor_name: string
+  fields_changed: string[]
+  snapshot: Record<string, any>
 }
 
 /**
@@ -191,6 +206,9 @@ export interface WorkshopProposalWithProposer extends WorkshopProposal {
   proposer_name: string
   proposer_email: string
   selected_location_name?: string
+  // Joined from users table for reviewer and editor
+  reviewer_name?: string | null
+  editor_name?: string | null
 }
 
 // =============================================================================

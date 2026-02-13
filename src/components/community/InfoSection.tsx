@@ -1,0 +1,100 @@
+/**
+ * InfoSection Component
+ *
+ * Reusable component for displaying list sections with checkmark bullets.
+ * Used across all get-involved pages for features, requirements, etc.
+ */
+
+import { responsiveTypography, responsiveSpacing } from '@/lib/responsive'
+import { ListItem } from '@/config/community'
+
+interface InfoSectionProps {
+  title: string
+  items: ListItem[]
+  description?: string
+  className?: string
+}
+
+export function InfoSection({ title, items, description, className = '' }: InfoSectionProps) {
+  return (
+    <section className={`space-y-6 ${className}`}>
+      <h2 className={`${responsiveTypography.section} font-bold text-gray-900`}>
+        {title}
+      </h2>
+      {description && (
+        <p className={`${responsiveTypography.lead} text-gray-600 leading-relaxed ${responsiveSpacing.mbMedium}`}>
+          {description}
+        </p>
+      )}
+      <div className={`bg-white rounded-xl ${responsiveSpacing.cardPadding} shadow-lg border border-gray-100`}>
+        <ul className={`space-y-${description ? '4' : '4'}`}>
+          {items.map((item, index) => (
+            <li key={index} className="flex items-start">
+              <span className="text-green-600 mr-3">•</span>
+              <span className={`${responsiveTypography.body} text-gray-600`}>{item.text}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  )
+}
+
+/**
+ * NumberedSteps Component
+ *
+ * Reusable component for displaying step-by-step processes.
+ * Used for "How to Get Started" sections across pages.
+ */
+
+interface NumberedStepsProps {
+  title: string
+  steps: ListItem[]
+  className?: string
+}
+
+export function NumberedSteps({ title, steps, className = '' }: NumberedStepsProps) {
+  return (
+    <section className={`space-y-6 ${className}`}>
+      <h2 className={`${responsiveTypography.section} font-bold text-gray-900`}>
+        {title}
+      </h2>
+      <div className={`bg-white rounded-xl ${responsiveSpacing.cardPadding} shadow-lg border border-gray-100`}>
+        <ol className="space-y-4">
+          {steps.map((step, index) => (
+            <li key={index} className="flex items-start">
+              <span className="text-green-600 font-semibold mr-3">{index + 1}.</span>
+              <span className={`${responsiveTypography.body} text-gray-600`}>{step.text}</span>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+  )
+}
+
+/**
+ * Callout Component
+ *
+ * Reusable component for highlighted callout boxes.
+ * Used for important messages, notes, and highlighted content.
+ */
+
+interface CalloutProps {
+  title: string
+  content: string
+  className?: string
+}
+
+export function Callout({ title, content, className = '' }: CalloutProps) {
+  return (
+    <section className={`bg-green-50 rounded-xl ${responsiveSpacing.cardPadding} space-y-4 ${className}`}>
+      <h3 className={`${responsiveTypography.cardTitle} font-semibold text-gray-900`}>
+        {title}
+      </h3>
+      <p className={`${responsiveTypography.body} text-gray-600 leading-relaxed`}>
+        {content}
+      </p>
+    </section>
+  )
+}

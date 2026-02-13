@@ -15,6 +15,7 @@ import { getUserRole } from '@/lib/api/role-checks';
 import { isAdminRole, ROLES } from '@/lib/constants';
 import { logger } from '@/lib/logger';
 import { createEditSnapshot, appendEditHistory } from '@/lib/admin/edit-utils';
+import { WorkshopProposal } from '@/components/workshops/types';
 
 /**
  * GET /api/admin/workshops/proposals/[id]
@@ -124,7 +125,7 @@ export async function PATCH(
       return apiNotFound('Workshop-Vorschlag nicht gefunden');
     }
 
-    const currentProposal = currentResult.rows[0];
+    const currentProposal = currentResult.rows[0] as WorkshopProposal;
 
     // Only allow editing pending proposals
     if (currentProposal.status !== 'pending') {

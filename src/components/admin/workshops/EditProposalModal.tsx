@@ -89,9 +89,9 @@ export function EditProposalModal({ proposal, onClose, onSaved }: EditProposalMo
             value={value || ''}
             onChange={(e) => handleFieldChange(field, e.target.value)}
             rows={config.type === 'textarea' ? 4 : undefined}
-            maxLength={config.maxLength}
+            maxLength={config.maxLength || undefined}
             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-            required={config.required}
+            required={config.required || false}
           />
         );
 
@@ -101,10 +101,10 @@ export function EditProposalModal({ proposal, onClose, onSaved }: EditProposalMo
             type="number"
             value={value || ''}
             onChange={(e) => handleFieldChange(field, Number(e.target.value))}
-            min={config.min}
-            max={config.max}
+            min={config.min || undefined}
+            max={config.max || undefined}
             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-            required={config.required}
+            required={config.required || false}
           />
         );
 
@@ -161,9 +161,9 @@ export function EditProposalModal({ proposal, onClose, onSaved }: EditProposalMo
             type="text"
             value={value || ''}
             onChange={(e) => handleFieldChange(field, e.target.value)}
-            maxLength={config.maxLength}
+            maxLength={config.maxLength || undefined}
             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-            required={config.required}
+            required={config.required || false}
           />
         );
     }
@@ -198,10 +198,10 @@ export function EditProposalModal({ proposal, onClose, onSaved }: EditProposalMo
                 <div key={field}>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     {config.label}
-                    {config.required && <span className="text-red-500 ml-1">*</span>}
+                    {('required' in config && config.required) && <span className="text-red-500 ml-1">*</span>}
                   </label>
                   {renderField(field)}
-                  {config.help && (
+                  {('help' in config && config.help) && (
                     <p className="mt-1 text-xs text-gray-500">{config.help}</p>
                   )}
                 </div>

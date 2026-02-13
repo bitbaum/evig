@@ -119,7 +119,7 @@ export function EditSubmissionModal({
             onChange={(e) => handleFieldChange(field, e.target.value)}
             rows={15}
             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 font-mono text-sm"
-            required={config.required}
+            required={('required' in config && config.required) || false}
           />
         );
 
@@ -130,7 +130,7 @@ export function EditSubmissionModal({
             onChange={(e) => handleFieldChange(field, e.target.value)}
             rows={4}
             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-            required={config.required}
+            required={('required' in config && config.required) || false}
           />
         );
 
@@ -173,7 +173,7 @@ export function EditSubmissionModal({
             value={value || ''}
             onChange={(e) => handleFieldChange(field, e.target.value)}
             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-            required={config.required}
+            required={('required' in config && config.required) || false}
           />
         );
     }
@@ -211,10 +211,10 @@ export function EditSubmissionModal({
               <div key={field}>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   {config.label}
-                  {config.required && <span className="text-red-500 ml-1">*</span>}
+                  {('required' in config && config.required) && <span className="text-red-500 ml-1">*</span>}
                 </label>
                 {renderField(field)}
-                {config.help && <p className="mt-1 text-xs text-gray-500">{config.help}</p>}
+                {('help' in config && config.help) && <p className="mt-1 text-xs text-gray-500">{config.help}</p>}
               </div>
             );
           })}

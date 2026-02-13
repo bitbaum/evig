@@ -48,7 +48,7 @@ export async function GET(
       return apiNotFound('Workshop-Vorschlag nicht gefunden');
     }
 
-    const history = result.rows[0].edit_history || [];
+    const history = (result.rows[0] as { edit_history: any }).edit_history || [];
 
     logger.info('Workshop proposal history fetched', {
       proposalId,
