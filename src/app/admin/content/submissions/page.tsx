@@ -11,6 +11,7 @@ import { useState, useEffect, useCallback } from 'react'
 import { APPROVAL_STATUS_BADGES, type ApprovalStatus } from '@/config/approval-status'
 import { formatDateTime } from '@/lib/date-formats'
 import Link from 'next/link'
+import { EditSubmissionModal } from '@/components/admin/blog/EditSubmissionModal'
 import {
   ArrowLeft,
   Eye,
@@ -28,6 +29,7 @@ import {
   Lightbulb,
   ExternalLink,
   Trash2,
+  Edit,
 } from 'lucide-react'
 
 interface Submission {
@@ -51,6 +53,8 @@ interface Submission {
   rejection_reason: string | null
   published_post_id: string | null
   submitted_at: string
+  last_edited_at?: string | null
+  last_edited_by?: string | null
 }
 
 type FilterStatus = 'all' | ApprovalStatus
@@ -63,6 +67,7 @@ export default function SubmissionsAdminPage() {
   const [actionLoading, setActionLoading] = useState<string | null>(null)
   const [showRejectModal, setShowRejectModal] = useState(false)
   const [showChangesModal, setShowChangesModal] = useState(false)
+  const [showEditModal, setShowEditModal] = useState(false)
   const [rejectionReason, setRejectionReason] = useState('')
   const [reviewNotes, setReviewNotes] = useState('')
   const [error, setError] = useState('')
@@ -276,6 +281,11 @@ export default function SubmissionsAdminPage() {
                         {statusConfig[submission.status]?.label ||
                           submission.status}
                       </span>
+                      {submission.last_edited_at && (
+                        <span className="inline-flex items-center px-2 py-1 text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300 rounded">
+                          Von Admin bearbeitet
+                        </span>
+                      )}
                     </div>
                     <h3 className="font-semibold text-gray-900 dark:text-white mb-1 line-clamp-2">
                       {submission.title}
@@ -395,6 +405,15 @@ export default function SubmissionsAdminPage() {
                 {/* Actions */}
                 {selectedSubmission.status === 'pending' && (
                   <div className="space-y-3">
+                    {/* Edit Button */}
+                    <button
+                      onClick={() => setShowEditModal(true)}
+                      disabled={actionLoading !== null}
+                      className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 transition-colors"
+                    >
+                      <Edit className="w-4 h-4" />
+                      Bearbeiten
+                    </button>
                     <div className="grid grid-cols-2 gap-3">
                       <button
                         onClick={() =>
@@ -595,6 +614,18 @@ export default function SubmissionsAdminPage() {
             </div>
           </div>
         </div>
+      )}
+
+      {/* Edit Modal */}
+      {showEditModal && selectedSubmission && (
+        <EditSubmissionModal
+          submission={selectedSubmission}
+          onClose={() => setShowEditModal(false)}
+          onSaved={() => {
+            setShowEditModal(false);
+            fetchSubmissions();
+          }}
+        />
       )}
     </div>
   )

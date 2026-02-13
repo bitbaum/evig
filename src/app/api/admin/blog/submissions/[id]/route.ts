@@ -20,6 +20,7 @@ import {
 } from '@/lib/api/helpers'
 import { canAccessSection } from '@/lib/permissions'
 import { sendEmail } from '@/lib/email'
+import { createEditSnapshot, appendEditHistory } from '@/lib/admin/edit-utils'
 
 interface RouteParams {
   params: Promise<{
@@ -103,6 +104,7 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
       category_id: string | null
       tags: string[]
       status: string
+      edit_history?: any[]
     }>(
       `SELECT * FROM ${TABLE_NAMES.BLOG_SUBMISSIONS} WHERE id = $1`,
       [id]
@@ -144,6 +146,79 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
         })
 
         return apiSuccess({ status: 'approved', message: 'Einreichung genehmigt' })
+      }
+
+      case 'edit': {
+        // Admin editing before approval
+        const { fields } = body
+
+        if (!fields || typeof fields !== 'object' || Object.keys(fields).length === 0) {
+          return apiBadRequest('Keine Felder zum Bearbeiten angegeben')
+        }
+
+        // Only allow editing pending submissions
+        if (submission.status !== 'pending') {
+          return apiBadRequest(
+            `Einreichung kann nicht bearbeitet werden (Status: ${submission.status})`
+          )
+        }
+
+        // Create edit snapshot
+        const editorName = session!.user!.name || session!.user!.email || 'Admin'
+        const editEntry = createEditSnapshot(
+          submission,
+          fields,
+          reviewerId,
+          editorName
+        )
+
+        // Only create entry if there are actual changes
+        if (editEntry.fields_changed.length === 0) {
+          return apiSuccess({
+            submission,
+            message: 'Keine Änderungen erkannt',
+          })
+        }
+
+        const updatedHistory = appendEditHistory(
+          submission.edit_history || null,
+          editEntry
+        )
+
+        // Build dynamic UPDATE query
+        const updateFields = Object.keys(fields)
+        const setClause = updateFields
+          .map((field, idx) => `${field} = $${idx + 2}`)
+          .join(', ')
+        const values = [id, ...updateFields.map((f) => fields[f])]
+
+        const updateQuery = `
+          UPDATE ${TABLE_NAMES.BLOG_SUBMISSIONS}
+          SET ${setClause},
+              edit_history = $${values.length + 1},
+              last_edited_by = $${values.length + 2},
+              last_edited_at = NOW(),
+              updated_at = NOW()
+          WHERE id = $1
+          RETURNING *
+        `
+
+        const updateResult = await query(updateQuery, [
+          ...values,
+          JSON.stringify(updatedHistory),
+          reviewerId,
+        ])
+
+        logger.info('Blog submission edited by admin', {
+          submissionId: id,
+          editorId: reviewerId,
+          fieldsChanged: editEntry.fields_changed,
+        })
+
+        return apiSuccess({
+          submission: updateResult.rows[0],
+          message: 'Einreichung erfolgreich aktualisiert',
+        })
       }
 
       case 'reject': {

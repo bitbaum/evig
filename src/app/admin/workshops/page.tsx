@@ -285,6 +285,11 @@ export default function AdminWorkshopsPage() {
                       <span className="text-sm text-gray-600">
                         {getStatusText(proposal.status)}
                       </span>
+                      {proposal.last_edited_at && (
+                        <span className="inline-flex items-center px-2 py-1 text-xs font-medium bg-blue-100 text-blue-800 rounded">
+                          Von Admin bearbeitet
+                        </span>
+                      )}
                     </div>
 
                     <div className="flex flex-wrap items-center gap-4 text-sm text-gray-600 mb-3">
