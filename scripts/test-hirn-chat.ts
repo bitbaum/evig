@@ -1,6 +1,6 @@
 #!/usr/bin/env npx tsx
 /**
- * Test script for HIRN chat (RAG)
+ * Test script for HIRN chat
  */
 import * as path from 'path'
 import * as fs from 'fs'
@@ -57,8 +57,6 @@ async function test() {
 
     const response = await chat(question, {
       sessionId,
-      topK: 5,
-      minSimilarity: 0.4,
     })
 
     console.log('Response:')
@@ -69,11 +67,6 @@ async function test() {
 
     if (response.usage) {
       console.log(`Tokens: ${response.usage.totalTokens} (prompt: ${response.usage.promptTokens}, completion: ${response.usage.completionTokens})`)
-    }
-
-    console.log(`\nContext used (${response.contextUsed.length} chunks):`)
-    for (const ctx of response.contextUsed) {
-      console.log(`  - [${(ctx.similarity * 100).toFixed(1)}%] ${ctx.document.title || ctx.document.sourcePath}`)
     }
   } catch (error) {
     console.error('Error:', error)

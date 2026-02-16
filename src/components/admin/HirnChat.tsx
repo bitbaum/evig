@@ -1,19 +1,13 @@
 'use client'
 
 import { useState, useRef, useEffect } from 'react'
-import { Send, Loader2, Bot, User, FileText, Sparkles, Trash2 } from 'lucide-react'
+import { Send, Loader2, Bot, User, Sparkles, Trash2 } from 'lucide-react'
 
 interface Message {
   id: string
   role: 'user' | 'assistant'
   content: string
   createdAt: Date
-  contextUsed?: Array<{
-    chunkId: string
-    content: string
-    similarity: number
-    source: string
-  }>
   model?: string
   provider?: string
 }
@@ -30,7 +24,6 @@ export function HirnChat({ sessionId, onSessionChange, compact = false }: HirnCh
   const [input, setInput] = useState('')
   const [loading, setLoading] = useState(false)
   const [loadingHistory, setLoadingHistory] = useState(true)
-  const [showContext, setShowContext] = useState<string | null>(null)
   const [error, setError] = useState('')
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
@@ -94,24 +87,30 @@ export function HirnChat({ sessionId, onSessionChange, compact = false }: HirnCh
         }),
       })
 
-      const data = await response.json()
+      let data: Record<string, unknown>
+      try {
+        data = await response.json()
+      } catch {
+        throw new Error('Server hat eine ungültige Antwort gesendet')
+      }
 
       if (!response.ok) {
-        throw new Error(data.error || 'Fehler beim Senden')
+        throw new Error((data.error as string) || 'Fehler beim Senden')
       }
+
+      const responseData = (data.data || {}) as Record<string, unknown>
 
       const assistantMessage: Message = {
         id: `assistant-${Date.now()}`,
         role: 'assistant',
-        content: data.data.content,
+        content: (responseData.content as string) || 'Keine Antwort erhalten.',
         createdAt: new Date(),
-        contextUsed: data.data.contextUsed,
-        model: data.data.model,
-        provider: data.data.provider,
+        model: (responseData.model as string) || undefined,
+        provider: (responseData.provider as string) || undefined,
       }
 
       setMessages(prev => [...prev, assistantMessage])
-      // Note: Don't call onSessionChange here - it's only for when the session is cleared/changed
+      setError('')  // Clear any previous error on success
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Unbekannter Fehler')
     } finally {
@@ -173,8 +172,8 @@ export function HirnChat({ sessionId, onSessionChange, compact = false }: HirnCh
             <Sparkles className="w-12 h-12 mb-4 text-purple-500" />
             <h3 className="text-lg font-medium">Willkommen bei Hirn</h3>
             <p className="text-sm max-w-md mt-2">
-              Stelle Fragen zu RevampIT - ich durchsuche die Dokumentation und den Code,
-              um dir hilfreiche Antworten zu geben.
+              Stelle Fragen zu RevampIT — ich kenne unsere Mission, Geschichte, Zahlen,
+              Dienstleistungen und Preise und helfe dir gerne weiter.
             </p>
           </div>
         ) : (
@@ -198,42 +197,10 @@ export function HirnChat({ sessionId, onSessionChange, compact = false }: HirnCh
               >
                 <div className="whitespace-pre-wrap">{message.content}</div>
 
-                {/* Context indicator */}
-                {message.role === 'assistant' && message.contextUsed && message.contextUsed.length > 0 && (
-                  <div className="mt-2 pt-2 border-t border-gray-200 dark:border-gray-700">
-                    <button
-                      onClick={() => setShowContext(showContext === message.id ? null : message.id)}
-                      className="flex items-center gap-1 text-xs text-purple-600 dark:text-purple-400 hover:underline"
-                    >
-                      <FileText className="w-3 h-3" />
-                      {message.contextUsed.length} Quellen verwendet
-                    </button>
-
-                    {showContext === message.id && (
-                      <div className="mt-2 space-y-2">
-                        {message.contextUsed.map((ctx, i) => (
-                          <div
-                            key={ctx.chunkId}
-                            className="text-xs p-2 bg-white dark:bg-gray-900 rounded border border-gray-200 dark:border-gray-700"
-                          >
-                            <div className="flex items-center justify-between mb-1">
-                              <span className="font-medium text-purple-600">{ctx.source}</span>
-                              <span className="text-gray-500">
-                                {(ctx.similarity * 100).toFixed(0)}% Relevanz
-                              </span>
-                            </div>
-                            <p className="text-gray-600 dark:text-gray-400">{ctx.content}</p>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-
-                    {message.model && (
-                      <p className="mt-1 text-xs text-gray-500">
-                        via {message.provider}/{message.model}
-                      </p>
-                    )}
-                  </div>
+                {message.role === 'assistant' && message.model && (
+                  <p className="mt-2 text-xs text-gray-400 dark:text-gray-500">
+                    via {message.provider}/{message.model}
+                  </p>
                 )}
               </div>
 

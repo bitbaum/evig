@@ -1,31 +1,25 @@
 /**
  * Hirn AI Knowledge System
  *
- * RAG-powered AI assistant for RevampIT administrators.
- * Provides context-aware responses based on project documentation.
+ * AI assistant for RevampIT administrators with baked-in organizational knowledge.
+ * The system prompt contains all org data directly (no runtime retrieval needed).
  *
  * Architecture:
+ * - system-prompt.ts: Baked-in organizational knowledge
+ * - chat.ts: Chat engine (system prompt + conversation history)
  * - providers/: AI provider abstraction (Groq, Ollama, OpenAI, etc.)
+ * - ingestion.ts: Document ingestion pipeline (for document management)
+ * - retrieval.ts: Vector similarity search (for document management)
  * - chunking.ts: Document chunking strategies
- * - ingestion.ts: Document ingestion pipeline
- * - retrieval.ts: Vector similarity search
- * - chat.ts: RAG chat engine
  *
  * Usage:
  * ```typescript
- * import { chat, ingestFile, searchSimilar } from '@/lib/hirn'
+ * import { chat } from '@/lib/hirn'
  *
- * // Chat with context
  * const response = await chat('Was ist RevampIT?', {
  *   sessionId: 'session-123',
  *   userId: 'user-456',
  * })
- *
- * // Ingest a file
- * await ingestFile('/path/to/doc.md')
- *
- * // Search for similar content
- * const results = await searchSimilar('nachhaltige IT')
  * ```
  */
 

@@ -1,29 +1,25 @@
 /**
  * Hirn Chat Engine
  *
- * RAG-powered chat for admin users.
- * Retrieves relevant context and generates responses.
+ * AI chat for admin users with baked-in organizational knowledge.
  */
 
 import { query } from '@/lib/auth/db'
 import { logger } from '@/lib/logger'
 import { TABLE_NAMES } from '@/config/database'
-import { getDefaultChatProvider, type Message, type ChatCompletionResponse } from './providers'
-import { searchSimilar, formatContext, type RetrievalResult } from './retrieval'
+import { getDefaultChatProvider, type Message } from './providers'
+import { SYSTEM_PROMPT } from './system-prompt'
 
 export interface ChatOptions {
   sessionId: string
   userId?: string
   temperature?: number
   maxTokens?: number
-  topK?: number               // Number of context chunks to retrieve
-  minSimilarity?: number      // Minimum similarity threshold
-  systemPrompt?: string       // Custom system prompt
+  systemPrompt?: string       // Custom system prompt override
 }
 
 export interface ChatResponse {
   content: string
-  contextUsed: RetrievalResult[]
   usage?: {
     promptTokens: number
     completionTokens: number
@@ -32,22 +28,6 @@ export interface ChatResponse {
   model: string
   provider: string
 }
-
-const DEFAULT_SYSTEM_PROMPT = `Du bist Hirn, ein KI-Assistent für RevampIT, einen Schweizer Non-Profit-Verein für nachhaltige IT.
-
-Du hilfst Administratoren bei Fragen zu:
-- Interne Prozesse und Dokumentation
-- Technische Details der Plattform
-- Projekt-Informationen und Kontext
-
-Verwende den bereitgestellten Kontext, um präzise und hilfreiche Antworten zu geben.
-Wenn du dir bei einer Antwort nicht sicher bist, sage es ehrlich.
-Antworte auf Deutsch, es sei denn, der Benutzer stellt die Frage auf Englisch.
-
-Wichtig:
-- Verwende "ss" statt "ß" (Schweizer Deutsch)
-- Sei präzise und hilfreich
-- Verweise auf die Quellen, wenn relevant`
 
 /**
  * Send a chat message and get a response
@@ -61,37 +41,16 @@ export async function chat(
     userId,
     temperature = 0.7,
     maxTokens = 2048,
-    topK = 5,
-    minSimilarity = 0.5,
-    systemPrompt = DEFAULT_SYSTEM_PROMPT,
+    systemPrompt = SYSTEM_PROMPT,
   } = options
 
-  // Retrieve relevant context (gracefully handle missing embeddings)
-  let contextResults: RetrievalResult[] = []
-  try {
-    contextResults = await searchSimilar(message, {
-      topK,
-      minSimilarity,
-    })
-  } catch (error) {
-    // Embeddings not available (e.g., no Ollama in production)
-    // Continue without RAG context - chat still works
-    logger.warn('RAG context unavailable, proceeding without document retrieval', {
-      error: error instanceof Error ? error.message : 'Unknown error',
-    })
-  }
-
-  const contextText = contextResults.length > 0
-    ? formatContext(contextResults)
-    : 'Kein Dokumentkontext verfügbar. Antworte basierend auf deinem allgemeinen Wissen.'
-
-  // Get chat history for this session
+  // Get chat history for this session (scoped by user_id for defense in depth)
   const historyResult = await query<{ role: string; content: string }>(
     `SELECT role, content FROM ${TABLE_NAMES.HIRN_CHAT_HISTORY}
-     WHERE session_id = $1
+     WHERE session_id = $1 AND (user_id = $2 OR user_id IS NULL)
      ORDER BY created_at ASC
      LIMIT 20`,
-    [sessionId]
+    [sessionId, userId || null]
   )
 
   const history: Message[] = historyResult.rows.map(h => ({
@@ -103,7 +62,7 @@ export async function chat(
   const messages: Message[] = [
     {
       role: 'system',
-      content: `${systemPrompt}\n\n--- Relevanter Kontext ---\n\n${contextText}`,
+      content: systemPrompt,
     },
     ...history,
     {
@@ -120,41 +79,44 @@ export async function chat(
     maxTokens,
   })
 
-  // Store the conversation in history
-  const contextChunkIds = contextResults.map(r => r.chunkId)
+  // Store conversation history (best-effort — don't let DB errors kill the response)
+  try {
+    // Store user message
+    await query(
+      `INSERT INTO ${TABLE_NAMES.HIRN_CHAT_HISTORY} (user_id, session_id, role, content)
+       VALUES ($1, $2, 'user', $3)`,
+      [userId || null, sessionId, message]
+    )
 
-  // Store user message
-  await query(
-    `INSERT INTO ${TABLE_NAMES.HIRN_CHAT_HISTORY} (user_id, session_id, role, content)
-     VALUES ($1, $2, 'user', $3)`,
-    [userId || null, sessionId, message]
-  )
-
-  // Store assistant response with context reference
-  await query(
-    `INSERT INTO ${TABLE_NAMES.HIRN_CHAT_HISTORY} (user_id, session_id, role, content, context_chunks, provider, model)
-     VALUES ($1, $2, 'assistant', $3, $4, $5, $6)`,
-    [
-      userId || null,
+    // Store assistant response
+    await query(
+      `INSERT INTO ${TABLE_NAMES.HIRN_CHAT_HISTORY} (user_id, session_id, role, content, provider, model)
+       VALUES ($1, $2, 'assistant', $3, $4, $5)`,
+      [
+        userId || null,
+        sessionId,
+        response.content,
+        response.provider,
+        response.model,
+      ]
+    )
+  } catch (dbError) {
+    // Log but don't throw — the AI response is still valid
+    logger.error('Failed to save chat history', {
+      error: dbError instanceof Error ? dbError.message : 'Unknown DB error',
       sessionId,
-      response.content,
-      contextChunkIds,
-      response.provider,
-      response.model,
-    ]
-  )
+    })
+  }
 
   logger.info('Chat response generated', {
     sessionId,
     userId,
-    contextChunks: contextChunkIds.length,
     provider: response.provider,
     model: response.model,
   })
 
   return {
     content: response.content,
-    contextUsed: contextResults,
     usage: response.usage,
     model: response.model,
     provider: response.provider,

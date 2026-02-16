@@ -2,7 +2,7 @@
  * API: Hirn Chat
  *
  * POST /api/admin/hirn/chat
- * Send a message and get an AI response with RAG context.
+ * Send a message and get an AI response.
  */
 
 import { NextRequest } from 'next/server'
@@ -19,7 +19,7 @@ export const POST = withAdmin(async (request: NextRequest, session) => {
     } catch {
       return apiBadRequest('Ungültiger JSON-Body')
     }
-    const { message, sessionId, temperature, maxTokens, topK, minSimilarity } = body
+    const { message, sessionId, temperature, maxTokens } = body
 
     if (!message || typeof message !== 'string') {
       return apiBadRequest('Nachricht ist erforderlich')
@@ -29,23 +29,21 @@ export const POST = withAdmin(async (request: NextRequest, session) => {
       return apiBadRequest('Session-ID ist erforderlich')
     }
 
+    // Validate optional numeric params at API boundary
+    const parsedTemp = typeof temperature === 'number' && temperature >= 0 && temperature <= 2
+      ? temperature : undefined
+    const parsedMaxTokens = typeof maxTokens === 'number' && Number.isInteger(maxTokens) && maxTokens > 0 && maxTokens <= 8192
+      ? maxTokens : undefined
+
     const response = await chat(message, {
       sessionId,
       userId: session.user.id,
-      temperature: temperature as number | undefined,
-      maxTokens: maxTokens as number | undefined,
-      topK: topK as number | undefined,
-      minSimilarity: minSimilarity as number | undefined,
+      temperature: parsedTemp,
+      maxTokens: parsedMaxTokens,
     })
 
     return apiSuccess({
       content: response.content,
-      contextUsed: response.contextUsed.map(c => ({
-        chunkId: c.chunkId,
-        content: c.content.slice(0, 200) + (c.content.length > 200 ? '...' : ''),
-        similarity: c.similarity,
-        source: c.document.title || c.document.sourcePath,
-      })),
       usage: response.usage,
       model: response.model,
       provider: response.provider,
