@@ -21,7 +21,7 @@ jobs:
       run:
         working-directory: medusa-backend
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Setup Fly.io
         uses: superfly/flyctl-actions/setup-flyctl@master
