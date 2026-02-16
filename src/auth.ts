@@ -88,11 +88,14 @@ declare module 'next-auth' {
 export const authConfig = {
   // Secret for signing cookies and tokens
   secret: process.env.AUTH_SECRET || process.env.NEXTAUTH_SECRET,
-  
+
+  // Required for Auth.js v5 on non-localhost deployments (Vercel, etc.)
+  trustHost: true,
+
   // Skip adapter for now - JWT strategy works without it
   // Uncomment when OAuth providers are added:
   // adapter: PostgresAdapter(getAuthPool()),
-  
+
   session: {
     // JWT strategy required for credentials provider
     strategy: 'jwt' as const,
@@ -103,7 +106,7 @@ export const authConfig = {
   pages: {
     signIn: '/auth/login',
     signOut: '/auth/logout',
-    error: '/auth/error',
+    error: '/auth/login',
     verifyRequest: '/auth/verify-request',
     newUser: '/dashboard/profile', // Redirect new users to complete profile
   },

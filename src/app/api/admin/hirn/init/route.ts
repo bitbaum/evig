@@ -58,7 +58,7 @@ export const POST = withAdmin(async (request: NextRequest, session) => {
       VALUES ('system', 'ollama', true, false, $1::jsonb)
       ON CONFLICT (scope, user_id, provider) DO NOTHING
     `, [JSON.stringify({
-      base_url: 'http://localhost:11434',
+      base_url: process.env.OLLAMA_URL || 'http://localhost:11434',
       model: 'llama3.2',
       embedding_model: 'nomic-embed-text',
       description: 'Self-hosted, privacy-focused'
