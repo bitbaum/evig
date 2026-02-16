@@ -165,6 +165,9 @@ export const TABLE_NAMES = {
   LISTING_IMAGES: 'listing_images',
   LISTING_FAVORITES: 'listing_favorites',
   MARKETPLACE_ORDERS: 'marketplace_orders',
+
+  // Organizational Numbers (shared SSOT)
+  ORG_NUMBERS: 'org_numbers',
 } as const;
 
 /**

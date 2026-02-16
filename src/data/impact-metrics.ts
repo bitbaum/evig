@@ -1,10 +1,14 @@
 /**
- * Single Source of Truth for Impact Metrics
+ * Impact Metrics — Presentation Layer
  *
- * IMPORTANT: These numbers must be updated annually based on actual data.
- * All calculations should be documented and verifiable.
- * Last updated: 2024-12-01
+ * Numbers sourced from org-numbers SSOT (shared Neon DB).
+ * This file provides the presentation config (titles, descriptions, icons)
+ * and computed display values. Does NOT define raw numbers.
+ *
+ * Last reconciled: 2026-02-16 (aligned with revamp-info NUMBERS_REGISTRY)
  */
+
+import { getDefaultNumeric } from '@/lib/org-numbers'
 
 export interface ImpactMetric {
   id: string
@@ -15,50 +19,45 @@ export interface ImpactMetric {
   category: 'environmental' | 'social' | 'economic'
   verified: boolean
   lastUpdated: string
-  shortLabel?: string // For compact homepage display
+  shortLabel?: string
 }
 
-/**
- * Core Impact Numbers - UPDATE THESE ANNUALLY
- */
-// TODO: Replace with actual tracked data — these are estimates, not verified
-const ANNUAL_DEVICES_SAVED = 150 // Conservative estimate based on known throughput
-const AVERAGE_DEVICE_LIFESPAN_YEARS = 5
-const REUSE_SUCCESS_RATE = 0.75 // 75%
-const ANNUAL_PEOPLE_TRAINED = 20
-const INTERNSHIP_SUCCESS_RATE = 0.40 // ~40% — historical estimate, not systematically tracked
-const ANNUAL_CAREER_REENTRIES = 4 // Derived from ~40% of ~10 practitioners/year
+// ============================================================================
+// Derived values from org-numbers defaults
+// ============================================================================
 
-/**
- * Environmental Calculations
- * Sources:
- * - Fraunhofer IZM: Laptop production ~300kg CO₂
- * - UN E-Waste Monitor: Average laptop weight ~2.5kg
- */
-const LAPTOP_PRODUCTION_CO2_KG = 300 // Conservative estimate from Fraunhofer IZM
-const LAPTOP_AVERAGE_WEIGHT_KG = 2.5
-const REPAIR_CO2_KG = 15 // Estimated CO₂ for repair/refurbishment
-const CO2_SAVINGS_PER_DEVICE_KG = LAPTOP_PRODUCTION_CO2_KG - REPAIR_CO2_KG // 285kg
+const ANNUAL_DEVICES_SAVED = getDefaultNumeric('devices_sold_per_year')
+const AVERAGE_DEVICE_LIFESPAN_YEARS = getDefaultNumeric('device_lifespan_extension_years')
+const REUSE_RATE_PERCENT = getDefaultNumeric('reuse_rate')
+const ANNUAL_PEOPLE_TRAINED = getDefaultNumeric('annual_people_trained')
+const INTERNSHIP_SUCCESS_RATE_PERCENT = getDefaultNumeric('internship_success_rate')
+const ANNUAL_CAREER_REENTRIES = getDefaultNumeric('annual_career_reentries')
 
-// Annual calculations
-const ANNUAL_CO2_SAVED_TONS = Math.round((ANNUAL_DEVICES_SAVED * CO2_SAVINGS_PER_DEVICE_KG) / 1000)
-const ANNUAL_EWASTE_PREVENTED_TONS = (ANNUAL_DEVICES_SAVED * LAPTOP_AVERAGE_WEIGHT_KG) / 1000
+// CO₂ numbers — now using Fraunhofer IZM 2023 via org-numbers
+const CO2_PRODUCTION_KG = getDefaultNumeric('co2_production_new_laptop')   // 350kg
+const CO2_REFURBISHMENT_KG = getDefaultNumeric('co2_refurbishment')         // 65kg
+const CO2_SAVINGS_PER_DEVICE_KG = getDefaultNumeric('co2_savings_per_device') // 285kg
+const AVG_DEVICE_WEIGHT_KG = getDefaultNumeric('avg_device_weight_kg')       // 5kg
 
-/**
- * All Impact Metrics
- */
+const ANNUAL_CO2_SAVED_TONS = getDefaultNumeric('annual_co2_saved_tons')     // ~43
+const ANNUAL_EWASTE_PREVENTED_TONS = (ANNUAL_DEVICES_SAVED * AVG_DEVICE_WEIGHT_KG) / 1000
+
+// ============================================================================
+// Impact Metrics (presentation config)
+// ============================================================================
+
 export const IMPACT_METRICS: ImpactMetric[] = [
-  // Environmental Metrics
+  // Environmental
   {
     id: 'devices-recycled',
     title: 'Geräte jährlich gerettet',
     value: `${ANNUAL_DEVICES_SAVED}+`,
     shortLabel: 'Geräte jährlich gerettet',
-    description: 'Anzahl der IT-Geräte, die wir jährlich vor dem Entsorgen retten',
-    methodology: `Konservative Schätzung basierend auf bekanntem Durchsatz. Systematisches Tracking wird aufgebaut.`,
+    description: 'Anzahl der IT-Geräte, die wir jährlich vor dem Entsorgen retten (verkauft)',
+    methodology: 'Konservative Schätzung basierend auf Warenverkauf-Umsatz ÷ Durchschnittspreis. Systematisches Tracking wird aufgebaut.',
     category: 'environmental',
     verified: false,
-    lastUpdated: '2024-12-01'
+    lastUpdated: '2026-02-16'
   },
   {
     id: 'device-lifespan',
@@ -66,32 +65,32 @@ export const IMPACT_METRICS: ImpactMetric[] = [
     value: `${AVERAGE_DEVICE_LIFESPAN_YEARS}+`,
     shortLabel: 'Jahre Lebensverlängerung',
     description: 'Durchschnittliche Lebensdauerverlängerung pro Gerät (in Jahren)',
-    methodology: `Basiert auf Nachverfolgung von ${Math.round(ANNUAL_DEVICES_SAVED * 0.3)} Geräten über 3 Jahre. Geräte werden im Durchschnitt ${AVERAGE_DEVICE_LIFESPAN_YEARS} Jahre länger genutzt als ohne unsere Intervention.`,
+    methodology: `Erfahrungswerte aus 20+ Jahren Refurbishing: Linux verlängert Lebensdauer älterer Hardware signifikant. Geräte werden im Durchschnitt ${AVERAGE_DEVICE_LIFESPAN_YEARS} Jahre länger genutzt.`,
     category: 'environmental',
-    verified: true,
-    lastUpdated: '2024-12-01'
+    verified: false,
+    lastUpdated: '2026-02-16'
   },
   {
     id: 'reuse-rate',
     title: 'Wiederverwendungsrate',
-    value: `${Math.round(REUSE_SUCCESS_RATE * 100)}%`,
+    value: `${REUSE_RATE_PERCENT}%`,
     shortLabel: 'Wiederverwendungsrate',
     description: 'Anteil der gespendeten Geräte, die wir erfolgreich wiederverwenden',
-    methodology: `Von allen gespendeten Geräten werden ${Math.round(REUSE_SUCCESS_RATE * 100)}% erfolgreich repariert und wiederverwendet. Die restlichen ${100 - Math.round(REUSE_SUCCESS_RATE * 100)}% werden fachgerecht recycelt (defekte Mainboards, nicht reparierbare Schäden).`,
+    methodology: `Von allen gespendeten Geräten werden ${REUSE_RATE_PERCENT}% erfolgreich repariert und wiederverwendet. Die restlichen ${100 - REUSE_RATE_PERCENT}% werden fachgerecht recycelt.`,
     category: 'environmental',
-    verified: true,
-    lastUpdated: '2024-12-01'
+    verified: false,
+    lastUpdated: '2026-02-16'
   },
   {
     id: 'co2-savings',
     title: 'CO₂-Einsparung jährlich',
-    value: `${ANNUAL_CO2_SAVED_TONS} Tonnen`,
+    value: `~${ANNUAL_CO2_SAVED_TONS} Tonnen`,
     shortLabel: 'Tonnen CO₂ eingespart',
-    description: `Geschätzte jährliche CO₂-Einsparung durch Wiederverwendung statt Neuproduktion`,
-    methodology: `Berechnung: Produktion eines neuen Laptops verursacht ca. ${LAPTOP_PRODUCTION_CO2_KG}kg CO₂ (Quelle: Fraunhofer IZM). Reparatur/Refurbishment verursacht ca. ${REPAIR_CO2_KG}kg CO₂. Einsparung pro Gerät: ${CO2_SAVINGS_PER_DEVICE_KG}kg. Bei ${ANNUAL_DEVICES_SAVED} Geräten/Jahr = ${ANNUAL_CO2_SAVED_TONS} Tonnen CO₂ eingespart.`,
+    description: 'Geschätzte jährliche CO₂-Einsparung durch Wiederverwendung statt Neuproduktion',
+    methodology: `Produktion eines neuen Laptops: ${CO2_PRODUCTION_KG}kg CO₂ (Fraunhofer IZM 2023). Refurbishment: ${CO2_REFURBISHMENT_KG}kg CO₂. Einsparung pro Gerät: ${CO2_SAVINGS_PER_DEVICE_KG}kg. Bei ${ANNUAL_DEVICES_SAVED} verkauften Geräten/Jahr ≈ ${ANNUAL_CO2_SAVED_TONS} Tonnen.`,
     category: 'environmental',
-    verified: false, // Conservative - based on industry estimates
-    lastUpdated: '2024-12-01'
+    verified: false,
+    lastUpdated: '2026-02-16'
   },
   {
     id: 'ewaste-prevented',
@@ -99,34 +98,34 @@ export const IMPACT_METRICS: ImpactMetric[] = [
     value: `${ANNUAL_EWASTE_PREVENTED_TONS.toFixed(1)} Tonnen`,
     shortLabel: 'Tonnen E-Waste verhindert',
     description: 'Menge an Elektroschrott, die wir jährlich verhindern',
-    methodology: `Durchschnittsgewicht eines Laptops: ${LAPTOP_AVERAGE_WEIGHT_KG}kg (UN E-Waste Monitor). ${ANNUAL_DEVICES_SAVED} Geräte × ${LAPTOP_AVERAGE_WEIGHT_KG}kg = ${ANNUAL_EWASTE_PREVENTED_TONS.toFixed(1)} Tonnen Elektroschrott pro Jahr verhindert.`,
+    methodology: `Durchschnittsgewicht pro Gerät inkl. Peripherie: ${AVG_DEVICE_WEIGHT_KG}kg. ${ANNUAL_DEVICES_SAVED} Geräte × ${AVG_DEVICE_WEIGHT_KG}kg = ${ANNUAL_EWASTE_PREVENTED_TONS.toFixed(1)} Tonnen pro Jahr.`,
     category: 'environmental',
-    verified: true,
-    lastUpdated: '2024-12-01'
+    verified: false,
+    lastUpdated: '2026-02-16'
   },
 
-  // Social Metrics
+  // Social
   {
     id: 'people-trained',
     title: 'Personen geschult',
     value: `${ANNUAL_PEOPLE_TRAINED}+`,
     shortLabel: 'Personen geschult',
     description: 'Personen, die wir jährlich in Open Source und nachhaltiger IT schulen',
-    methodology: `Teilnehmer:innen an Workshops, Praktika und Weiterbildungsprogrammen pro Jahr. Umfasst: ${Math.round(ANNUAL_PEOPLE_TRAINED * 0.6)} Praktikant:innen, ${Math.round(ANNUAL_PEOPLE_TRAINED * 0.3)} Workshop-Teilnehmer, ${Math.round(ANNUAL_PEOPLE_TRAINED * 0.1)} Langzeit-Teilnehmer.`,
+    methodology: 'Teilnehmer:innen an Workshops, Praktika und Weiterbildungsprogrammen pro Jahr. Umfasst Praktikant:innen, Workshop-Teilnehmer und Langzeit-Teilnehmer.',
     category: 'social',
-    verified: true,
-    lastUpdated: '2024-12-01'
+    verified: false,
+    lastUpdated: '2026-02-16'
   },
   {
     id: 'internship-success',
     title: 'Erfolgreiche Praktika',
-    value: `~${Math.round(INTERNSHIP_SUCCESS_RATE * 100)}%`,
+    value: `~${INTERNSHIP_SUCCESS_RATE_PERCENT}%`,
     shortLabel: 'Erfolgreiche Praktika',
     description: 'Unserer Praktikant:innen finden den Einstieg in die IT oder eine Weiterbildung',
-    methodology: `Geschätzt auf Basis historischer Erfahrungswerte, nicht systematisch erhoben. Systematisches Tracking wird aufgebaut.`,
+    methodology: 'Geschätzt auf Basis historischer Erfahrungswerte, nicht systematisch erhoben. Systematisches Tracking wird aufgebaut.',
     category: 'social',
     verified: false,
-    lastUpdated: '2024-12-01'
+    lastUpdated: '2026-02-16'
   },
   {
     id: 'career-reentries',
@@ -134,78 +133,54 @@ export const IMPACT_METRICS: ImpactMetric[] = [
     value: `~${ANNUAL_CAREER_REENTRIES}`,
     shortLabel: 'Berufliche Wiedereinstiege',
     description: 'Erfolgreiche Wiedereinstiege ins Berufsleben durch unser Programm',
-    methodology: `Geschätzt auf Basis von ~${Math.round(ANNUAL_PEOPLE_TRAINED * 0.5)} Praktikant:innen/Jahr mit erschwertem Arbeitsmarktzugang und ~${Math.round(INTERNSHIP_SUCCESS_RATE * 100)}% Erfolgsrate. Nicht systematisch erhoben.`,
+    methodology: `Geschätzt auf Basis von ~10 Praktikant:innen/Jahr mit erschwertem Arbeitsmarktzugang und ~${INTERNSHIP_SUCCESS_RATE_PERCENT}% Erfolgsrate. Nicht systematisch erhoben.`,
     category: 'social',
     verified: false,
-    lastUpdated: '2024-12-01'
+    lastUpdated: '2026-02-16'
   }
 ]
 
-/**
- * Get metrics for compact homepage display
- */
+// ============================================================================
+// Helper functions
+// ============================================================================
+
 export function getCompactMetrics() {
   return [
-    {
-      value: IMPACT_METRICS.find(m => m.id === 'devices-recycled')?.value || '150+',
-      label: 'Geräte jährlich gerettet'
-    },
-    {
-      value: IMPACT_METRICS.find(m => m.id === 'people-trained')?.value || '20+',
-      label: 'Personen geschult'
-    },
-    {
-      value: IMPACT_METRICS.find(m => m.id === 'reuse-rate')?.value || '75%',
-      label: 'Wiederverwendungsrate'
-    },
-    {
-      value: IMPACT_METRICS.find(m => m.id === 'device-lifespan')?.value || '5+',
-      label: 'Jahre Lebensverlängerung'
-    },
-    {
-      value: IMPACT_METRICS.find(m => m.id === 'internship-success')?.value || '~40%',
-      label: 'Erfolgreiche Praktika'
-    },
-    {
-      value: IMPACT_METRICS.find(m => m.id === 'career-reentries')?.value || '~4',
-      label: 'Berufliche Wiedereinstiege'
-    }
+    { value: IMPACT_METRICS.find(m => m.id === 'devices-recycled')?.value || '150+', label: 'Geräte jährlich gerettet' },
+    { value: IMPACT_METRICS.find(m => m.id === 'people-trained')?.value || '20+', label: 'Personen geschult' },
+    { value: IMPACT_METRICS.find(m => m.id === 'reuse-rate')?.value || '75%', label: 'Wiederverwendungsrate' },
+    { value: IMPACT_METRICS.find(m => m.id === 'device-lifespan')?.value || '5+', label: 'Jahre Lebensverlängerung' },
+    { value: IMPACT_METRICS.find(m => m.id === 'internship-success')?.value || '~40%', label: 'Erfolgreiche Praktika' },
+    { value: IMPACT_METRICS.find(m => m.id === 'career-reentries')?.value || '~4', label: 'Berufliche Wiedereinstiege' }
   ]
 }
 
-/**
- * Get metrics by category
- */
 export function getMetricsByCategory(category: ImpactMetric['category']) {
   return IMPACT_METRICS.filter(m => m.category === category)
 }
 
-/**
- * Get environmental metrics summary for display
- */
 export function getEnvironmentalSummary() {
   return {
     devicesSaved: ANNUAL_DEVICES_SAVED,
     co2SavedTons: ANNUAL_CO2_SAVED_TONS,
     ewastePreventedTons: ANNUAL_EWASTE_PREVENTED_TONS,
-    reuseRate: REUSE_SUCCESS_RATE,
-    co2PerDevice: CO2_SAVINGS_PER_DEVICE_KG
+    reuseRate: REUSE_RATE_PERCENT / 100,
+    co2PerDevice: CO2_SAVINGS_PER_DEVICE_KG,
+    co2ProductionKg: CO2_PRODUCTION_KG,
+    co2RefurbishmentKg: CO2_REFURBISHMENT_KG,
   }
 }
 
-/**
- * Get social impact summary
- */
 export function getSocialSummary() {
   return {
     peopleTrained: ANNUAL_PEOPLE_TRAINED,
-    internshipSuccessRate: INTERNSHIP_SUCCESS_RATE,
+    internshipSuccessRate: INTERNSHIP_SUCCESS_RATE_PERCENT / 100,
     careerReentries: ANNUAL_CAREER_REENTRIES
   }
 }
 
 // ============================================================================
-// E-WASTE GLOBAL STATISTICS (Verified Sources)
+// E-WASTE GLOBAL STATISTICS (Verified Sources — not org numbers)
 // ============================================================================
 
 export interface EWasteStat {
@@ -222,7 +197,6 @@ export interface EWasteStat {
 /**
  * Global E-Waste Statistics
  * Source: UN Global E-waste Monitor 2024
- * URL: https://ewastemonitor.info/the-global-e-waste-monitor-2024/
  */
 export const EWASTE_GLOBAL_STATS: EWasteStat[] = [
   {
@@ -259,7 +233,7 @@ export const EWASTE_GLOBAL_STATS: EWasteStat[] = [
     id: 'laptop-co2',
     value: '331',
     unit: 'kg CO₂',
-    label: 'CO₂ pro Laptop',
+    label: 'CO₂ pro Laptop (Circular Computing)',
     description: 'Durchschnittlicher CO₂-Fussabdruck bei der Herstellung eines neuen Laptops',
     source: 'Circular Computing (Studie mit 230 Laptops)',
     sourceUrl: 'https://circularcomputing.com/news/carbon-footprint-laptop/',
@@ -276,14 +250,9 @@ export interface ZeroWastePrinciple {
   title: string
   description: string
   icon: 'wrench' | 'refresh' | 'recycle' | 'heart'
-  priority: number // 1 = highest priority
+  priority: number
 }
 
-/**
- * Zero-Waste Hierarchy
- * Based on the waste management hierarchy: Reduce > Reuse > Recycle
- * Applied to electronics: Repair > Refurbish > Recycle
- */
 export const ZERO_WASTE_PRINCIPLES: ZeroWastePrinciple[] = [
   {
     id: 'repair',
@@ -339,10 +308,6 @@ export interface PhysicalSpaceInfo {
   }
 }
 
-/**
- * Physical Community Space Information
- * Current location and future vision
- */
 export const PHYSICAL_SPACE: PhysicalSpaceInfo = {
   current: {
     name: 'RevampIT Laden',
@@ -381,9 +346,6 @@ export const PHYSICAL_SPACE: PhysicalSpaceInfo = {
   }
 }
 
-/**
- * Get formatted address string
- */
 export function getFormattedAddress(): string {
   const { address, postalCode, city } = PHYSICAL_SPACE.current
   return `${address}, ${postalCode} ${city}`

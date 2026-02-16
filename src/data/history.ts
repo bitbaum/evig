@@ -39,7 +39,7 @@ export const HISTORY_CONFIG: HistoryConfig = {
     paragraphs: [
       'RevampIT wurde im Dezember 2003 in Zürich gegründet – geboren aus einer einfachen Beobachtung: Immer mehr brauchbare Computer landeten im Müll. "Da muss etwas passieren", war der Gedanke, der alles ins Rollen brachte.',
       'Der erste Standort war ein alter Käsekeller in der Toni Molkerei. Dort entstand die Idee, die bis heute trägt: Hardware-Recycling und Linux kombinieren. Denn mit Open-Source-Software funktionieren auch ältere Geräte noch jahrelang.',
-      'Was als kleines Projekt begann, wurde zur Bewegung. Ohne gross nach Leuten zu suchen, kamen immer wieder Menschen dazu, die sagten: "Toll, was ihr da macht." Heute, über 20 Jahre später, retten wir jährlich über 1000 Geräte.',
+      'Was als kleines Projekt begann, wurde zur Bewegung. Ohne gross nach Leuten zu suchen, kamen immer wieder Menschen dazu, die sagten: "Toll, was ihr da macht." Heute, über 20 Jahre später, verarbeiten wir jährlich rund 1000 Geräte – davon werden etwa 150 aufbereitet und verkauft, der Rest geht in Ersatzteilgewinnung und fachgerechtes Recycling.',
     ],
   },
 
@@ -114,7 +114,7 @@ export const HISTORY_CONFIG: HistoryConfig = {
       year: 2024,
       title: '21 Jahre nachhaltige IT',
       description:
-        'Über 1000 Geräte pro Jahr, 285 Tonnen CO₂ eingespart, 90% Erfolgsquote bei Praktika. RevampIT ist Vorbild für nachhaltige IT in der Schweiz.',
+        'Rund 1000 Geräte pro Jahr verarbeitet, davon ~150 verkauft. Über 43 Tonnen CO₂ pro Jahr eingespart. ~40% Erfolgsquote bei Praktika. RevampIT ist Vorbild für nachhaltige IT in der Schweiz.',
       type: 'achievement',
       highlight: true,
     },

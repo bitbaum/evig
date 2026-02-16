@@ -299,55 +299,55 @@ export const services: Record<string, ServiceDefinition> = {
       }
     ],
     pricing: {
-      base: 'CHF 70/hour',
+      base: 'CHF 70/Stunde',
       details: [
-        'Free initial consultation',
-        'Custom Linux distributions',
-        'Migration assistance',
-        'Ongoing support available'
+        'Kostenlose Erstberatung',
+        'Individuelle Linux-Distributionen',
+        'Migrationsunterstützung',
+        'Laufender Support verfügbar'
       ]
     }
   },
   'web-design-development': {
     slug: 'web-design-development',
     title: 'Webdesign & Entwicklung',
-    description: 'Modern web design and development using open-source technologies. Fast, responsive websites built with Next.js, Headless CMS, and sustainable practices.',
+    description: 'Modernes Webdesign und Entwicklung mit Open-Source-Technologien. Schnelle, responsive Websites mit Next.js, Headless CMS und nachhaltigen Praktiken.',
     icon: Globe,
     hero: {
       title: 'Webdesign & Entwicklung',
-      subtitle: 'Modern, Sustainable Web Solutions',
-      description: 'We create fast, beautiful, and functional websites using the latest open-source technologies. From landing pages to complex web applications, we deliver scalable solutions that prioritize performance and sustainability.'
+      subtitle: 'Moderne, nachhaltige Web-Lösungen',
+      description: 'Wir erstellen schnelle, ansprechende und funktionale Websites mit den neusten Open-Source-Technologien. Von Landingpages bis zu komplexen Webanwendungen liefern wir skalierbare Lösungen mit Fokus auf Performance und Nachhaltigkeit.'
     },
     features: [
       {
-        title: 'Modern Stack',
-        description: 'Next.js 14+, React 18, TypeScript, Tailwind CSS - we use cutting-edge technologies for optimal performance.',
+        title: 'Moderner Stack',
+        description: 'Next.js, React, TypeScript, Tailwind CSS — wir setzen modernste Technologien für optimale Performance ein.',
         icon: Code
       },
       {
         title: 'Open Source CMS',
-        description: 'Headless CMS solutions with Strapi, Payload, or TinaCMS for flexible content management.',
+        description: 'Headless CMS-Lösungen mit Strapi, Payload oder TinaCMS für flexible Inhaltsverwaltung.',
         icon: Database
       },
       {
         title: 'Responsive Design',
-        description: 'Mobile-first approach ensuring your website looks great on all devices.',
+        description: 'Mobile-First-Ansatz, damit Ihre Website auf allen Geräten optimal aussieht.',
         icon: Palette
       },
       {
-        title: 'Ongoing Support',
-        description: 'Comprehensive maintenance and support to keep your website secure, updated, and performing optimally.',
+        title: 'Laufender Support',
+        description: 'Umfassende Wartung und Support, damit Ihre Website sicher, aktuell und performant bleibt.',
         icon: Shield
       }
     ],
     pricing: {
-      base: 'CHF 70/hour',
+      base: 'CHF 70/Stunde',
       details: [
-        'Free initial consultation',
-        'Open source technologies',
-        'Responsive design included',
-        'SEO optimization',
-        'Ongoing support available'
+        'Kostenlose Erstberatung',
+        'Open-Source-Technologien',
+        'Responsive Design inklusive',
+        'SEO-Optimierung',
+        'Laufender Support verfügbar'
       ]
     }
   }

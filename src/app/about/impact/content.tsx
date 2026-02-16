@@ -6,7 +6,8 @@ import { HeroBanner } from '@/components/ui/hero-banner'
 import { AboutSubNav } from '@/components/about'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { IMPACT_METRICS, getEnvironmentalSummary, type ImpactMetric } from '@/data/impact-metrics'
+import { IMPACT_METRICS, getEnvironmentalSummary, getSocialSummary, type ImpactMetric } from '@/data/impact-metrics'
+import { getDefaultValue, getDefaultNumeric } from '@/lib/org-numbers'
 // Simple Badge component replacement
 const Badge = ({ children, className = "" }: { children: React.ReactNode, className?: string }) => (
   <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${className}`}>
@@ -83,6 +84,7 @@ interface DonationMethod {
 export default function ImpactPageContent() {
   const [selectedDonationMethod, setSelectedDonationMethod] = useState<string | null>(null)
   const envSummary = getEnvironmentalSummary()
+  const socialSummary = getSocialSummary()
 
   const donationMethods: DonationMethod[] = [
     {
@@ -255,11 +257,11 @@ export default function ImpactPageContent() {
                       <div className="space-y-3 text-sm">
                         <div className="flex justify-between">
                           <span>Herstellung eines neuen Laptops:</span>
-                          <span className="font-semibold">300kg CO₂</span>
+                          <span className="font-semibold">{envSummary.co2ProductionKg}kg CO₂</span>
                         </div>
                         <div className="flex justify-between">
-                          <span>Reparatur eines bestehenden Geräts:</span>
-                          <span className="font-semibold text-green-600">15kg CO₂</span>
+                          <span>Refurbishment eines Geräts:</span>
+                          <span className="font-semibold text-green-600">{envSummary.co2RefurbishmentKg}kg CO₂</span>
                         </div>
                         <div className="flex justify-between border-t pt-2">
                           <span>CO₂-Einsparung pro Gerät:</span>
@@ -277,15 +279,15 @@ export default function ImpactPageContent() {
                       <ul className="space-y-2 text-sm">
                         <li className="flex items-start gap-2">
                           <CheckCircle className="h-4 w-4 text-blue-600 mt-0.5 flex-shrink-0" />
-                          <span>90% unserer Praktikant:innen finden IT-Jobs oder Weiterbildung</span>
+                          <span>~{Math.round(socialSummary.internshipSuccessRate * 100)}% unserer Praktikant:innen finden IT-Jobs oder Weiterbildung</span>
                         </li>
                         <li className="flex items-start gap-2">
                           <CheckCircle className="h-4 w-4 text-blue-600 mt-0.5 flex-shrink-0" />
-                          <span>15 Menschen haben durch uns den Wiedereinstieg geschafft</span>
+                          <span>~{socialSummary.careerReentries} berufliche Wiedereinstiege pro Jahr durch unser Programm</span>
                         </li>
                         <li className="flex items-start gap-2">
                           <CheckCircle className="h-4 w-4 text-blue-600 mt-0.5 flex-shrink-0" />
-                          <span>347 Menschen in nachhaltiger IT ausgebildet seit 2003</span>
+                          <span>{getDefaultValue('people_helped_total')} Menschen in nachhaltiger IT begleitet seit 2003</span>
                         </li>
                       </ul>
                     </div>
@@ -306,7 +308,7 @@ export default function ImpactPageContent() {
                       <ul className="space-y-2 text-sm">
                         <li className="flex items-start gap-2">
                           <CheckCircle className="h-4 w-4 text-purple-600 mt-0.5 flex-shrink-0" />
-                          <span>Kunden sparen durchschnittlich CHF 800 pro repariertem Gerät</span>
+                          <span>Kunden sparen durchschnittlich CHF {getDefaultNumeric('customer_savings_chf')} pro repariertem Gerät</span>
                         </li>
                         <li className="flex items-start gap-2">
                           <CheckCircle className="h-4 w-4 text-purple-600 mt-0.5 flex-shrink-0" />
@@ -314,7 +316,7 @@ export default function ImpactPageContent() {
                         </li>
                         <li className="flex items-start gap-2">
                           <CheckCircle className="h-4 w-4 text-purple-600 mt-0.5 flex-shrink-0" />
-                          <span>23 sinnvolle Arbeitsplätze in der Schweiz erhalten</span>
+                          <span>{getDefaultValue('team_size_community')} sinnvolle Arbeitsplätze in der Schweiz</span>
                         </li>
                       </ul>
                     </div>
@@ -323,15 +325,15 @@ export default function ImpactPageContent() {
                       <div className="space-y-3 text-sm">
                         <div className="flex justify-between">
                           <span>Durchschnittliche Reparaturkosten:</span>
-                          <span className="font-semibold">CHF 150</span>
+                          <span className="font-semibold">CHF {getDefaultNumeric('avg_repair_cost_chf')}</span>
                         </div>
                         <div className="flex justify-between">
                           <span>Neugerät-Preis (vergleichbar):</span>
-                          <span className="font-semibold">CHF 950</span>
+                          <span className="font-semibold">CHF {getDefaultNumeric('new_device_comparison_chf')}</span>
                         </div>
                         <div className="flex justify-between border-t pt-2">
                           <span>Einsparung pro Kunde:</span>
-                          <span className="font-semibold text-green-600">CHF 800</span>
+                          <span className="font-semibold text-green-600">CHF {getDefaultNumeric('customer_savings_chf')}</span>
                         </div>
                       </div>
                     </div>
@@ -406,15 +408,15 @@ export default function ImpactPageContent() {
             <CardContent>
               <div className="grid md:grid-cols-3 gap-6 text-center">
                 <div className="space-y-2">
-                  <p className="text-2xl font-bold text-green-600">CHF 50</p>
+                  <p className="text-2xl font-bold text-green-600">CHF {getDefaultNumeric('donation_impact_laptop_chf')}</p>
                   <p className="text-sm text-gray-600">Reparatur eines Laptops für eine Familie</p>
                 </div>
                 <div className="space-y-2">
-                  <p className="text-2xl font-bold text-green-600">CHF 150</p>
+                  <p className="text-2xl font-bold text-green-600">CHF {getDefaultNumeric('donation_impact_internship_chf')}</p>
                   <p className="text-sm text-gray-600">Ein Monat Praktikumsstelle für Wiedereinsteiger:in</p>
                 </div>
                 <div className="space-y-2">
-                  <p className="text-2xl font-bold text-green-600">CHF 500</p>
+                  <p className="text-2xl font-bold text-green-600">CHF {getDefaultNumeric('donation_impact_data_recovery_chf')}</p>
                   <p className="text-sm text-gray-600">Vollständige Datenrettung für KMU-Kunde</p>
                 </div>
               </div>

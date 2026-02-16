@@ -1,15 +1,13 @@
 /**
  * About Page Data Layer
- * 
- * Single source of truth for all about page content.
- * Follows DRY principles with type-safe, modular data structure.
- * 
- * Architecture:
- * - Data layer completely separated from presentation
- * - Reusable interfaces for type safety
- * - Easy to extend without modifying components
- * - Ready for CMS integration (markdown/database)
+ *
+ * Presentation config for about page.
+ * Numbers sourced from org-numbers SSOT.
+ *
+ * Last reconciled: 2026-02-16
  */
+
+import { getDefaultValue, getDefaultNumeric } from '@/lib/org-numbers'
 
 export interface AboutMetric {
   value: string
@@ -65,7 +63,7 @@ export interface AboutPageConfig {
 export const aboutConfig: AboutPageConfig = {
   hero: {
     title: 'Technik ein zweites Leben geben',
-    description: 'Seit über 20 Jahren setzen wir uns gegen die vorschnelle Ausmusterung von Computern ein und fördern nachhaltige IT-Praktiken.',
+    description: `Seit über ${new Date().getFullYear() - getDefaultNumeric('founding_year')} Jahren setzen wir uns gegen die vorschnelle Ausmusterung von Computern ein und fördern nachhaltige IT-Praktiken.`,
     backgroundColor: 'bg-gradient-to-r from-green-600 to-green-800',
     ctas: [
       {
@@ -162,7 +160,7 @@ export const aboutConfig: AboutPageConfig = {
           title: 'Soziale Wirkung',
           description: 'Unser Beitrag zur Gemeinschaft',
           features: [
-            '100+ Menschen seit der Gründung geschult und engagiert',
+            `${getDefaultValue('people_helped_total')} Menschen seit der Gründung geschult und engagiert`,
             'Ein bedeutender Teil der Praktikant:innen findet den Einstieg in die IT',
             'Zahlreiche erfolgreiche Wiedereinstiege ins Berufsleben'
           ]
@@ -177,11 +175,11 @@ export const aboutConfig: AboutPageConfig = {
       cards: [
         {
           title: 'Seit 2003 für nachhaltige IT',
-          description: 'Was mit einer einfachen Idee begann – Technik länger nutzen – ist heute ein Vorbild für nachhaltige IT in der Schweiz. Unser Team aus 20 engagierten Menschen setzt sich täglich für nachhaltige IT ein. Wir sind Anlaufstelle für Privatpersonen und Unternehmen, die ihren ökologischen Fussabdruck reduzieren und trotzdem auf zuverlässige Technik setzen wollen.',
+          description: `Was mit einer einfachen Idee begann – Technik länger nutzen – ist heute ein Vorbild für nachhaltige IT in der Schweiz. Unser Team aus ${getDefaultValue('team_size_community')} engagierten Menschen setzt sich täglich für nachhaltige IT ein. Wir sind Anlaufstelle für Privatpersonen und Unternehmen, die ihren ökologischen Fussabdruck reduzieren und trotzdem auf zuverlässige Technik setzen wollen.`,
           features: [
-            'Gegründet 2003 in der Toni Molkerei',
+            `Gegründet ${getDefaultNumeric('founding_year')} in der Toni Molkerei`,
             'Heute eine Bewegung für nachhaltige IT',
-            'Team aus 20 engagierten Menschen',
+            `Team aus ${getDefaultValue('team_size_community')} engagierten Menschen`,
             'Anlaufstelle für Privatpersonen und Unternehmen'
           ]
         }
@@ -200,7 +198,7 @@ export const aboutConfig: AboutPageConfig = {
     {
       title: 'Soziale Wirkung',
       metrics: [
-        { value: '100+', label: 'Menschen seit der Gründung geschult/engagiert' },
+        { value: getDefaultValue('people_helped_total'), label: 'Menschen seit der Gründung geschult/engagiert' },
         { value: 'Viele', label: 'Praktikant:innen finden den Einstieg in die IT oder eine Weiterbildung' },
         { value: 'Zahlreiche', label: 'Erfolgreiche Wiedereinstiege ins Berufsleben durch unser Programm' }
       ]
