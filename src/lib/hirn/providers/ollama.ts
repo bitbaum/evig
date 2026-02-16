@@ -20,6 +20,9 @@ import type {
 const DEFAULT_BASE_URL = 'http://localhost:11434'
 const DEFAULT_MODEL = 'llama3.2'
 const DEFAULT_EMBEDDING_MODEL = 'nomic-embed-text'
+const REQUEST_TIMEOUT_MS = 60_000  // Ollama can be slower (local)
+const EMBEDDING_TIMEOUT_MS = 30_000
+const AVAILABILITY_TIMEOUT_MS = 3_000
 
 export class OllamaProvider implements AIProvider {
   name = 'ollama'
@@ -34,37 +37,57 @@ export class OllamaProvider implements AIProvider {
   }
 
   async chat(options: ChatCompletionOptions): Promise<ChatCompletionResponse> {
-    const response = await fetch(`${this.baseUrl}/api/chat`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
+    const controller = new AbortController()
+    const timeoutId = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS)
+
+    try {
+      const response = await fetch(`${this.baseUrl}/api/chat`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          model: this.model,
+          messages: options.messages,
+          stream: false,
+          options: {
+            temperature: options.temperature ?? 0.7,
+            num_predict: options.maxTokens ?? 2048,
+          },
+        }),
+        signal: controller.signal,
+      })
+
+      if (!response.ok) {
+        const error = await response.text().catch(() => '')
+        logger.error('Ollama API error', { status: response.status, error: error.substring(0, 200) })
+        throw new Error(`Ollama API error: ${response.status} - ${error.substring(0, 200)}`)
+      }
+
+      let data: Record<string, unknown>
+      try {
+        data = await response.json()
+      } catch {
+        throw new Error('Ollama returned invalid JSON response')
+      }
+
+      const message = data.message as { content?: string } | undefined
+
+      return {
+        content: message?.content || '',
+        usage: data.eval_count ? {
+          promptTokens: (data.prompt_eval_count as number) || 0,
+          completionTokens: (data.eval_count as number) || 0,
+          totalTokens: ((data.prompt_eval_count as number) || 0) + ((data.eval_count as number) || 0),
+        } : undefined,
         model: this.model,
-        messages: options.messages,
-        stream: false,
-        options: {
-          temperature: options.temperature ?? 0.7,
-          num_predict: options.maxTokens ?? 2048,
-        },
-      }),
-    })
-
-    if (!response.ok) {
-      const error = await response.text()
-      logger.error('Ollama API error', { status: response.status, error })
-      throw new Error(`Ollama API error: ${response.status} - ${error}`)
-    }
-
-    const data = await response.json()
-
-    return {
-      content: data.message?.content || '',
-      usage: data.eval_count ? {
-        promptTokens: data.prompt_eval_count || 0,
-        completionTokens: data.eval_count || 0,
-        totalTokens: (data.prompt_eval_count || 0) + (data.eval_count || 0),
-      } : undefined,
-      model: this.model,
-      provider: this.name,
+        provider: this.name,
+      }
+    } catch (error) {
+      if (error instanceof Error && error.name === 'AbortError') {
+        throw new Error(`Ollama Zeitüberschreitung nach ${REQUEST_TIMEOUT_MS / 1000}s`)
+      }
+      throw error
+    } finally {
+      clearTimeout(timeoutId)
     }
   }
 
@@ -74,23 +97,46 @@ export class OllamaProvider implements AIProvider {
 
     // Ollama processes one embedding at a time
     for (const input of inputs) {
-      const response = await fetch(`${this.baseUrl}/api/embeddings`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          model: options.model || this.embeddingModel,
-          prompt: input,
-        }),
-      })
+      const controller = new AbortController()
+      const timeoutId = setTimeout(() => controller.abort(), EMBEDDING_TIMEOUT_MS)
 
-      if (!response.ok) {
-        const error = await response.text()
-        logger.error('Ollama embeddings error', { status: response.status, error })
-        throw new Error(`Ollama embeddings error: ${response.status} - ${error}`)
+      try {
+        const response = await fetch(`${this.baseUrl}/api/embeddings`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            model: options.model || this.embeddingModel,
+            prompt: input,
+          }),
+          signal: controller.signal,
+        })
+
+        if (!response.ok) {
+          const error = await response.text().catch(() => '')
+          logger.error('Ollama embeddings error', { status: response.status, error: error.substring(0, 200) })
+          throw new Error(`Ollama embeddings error: ${response.status} - ${error.substring(0, 200)}`)
+        }
+
+        let data: Record<string, unknown>
+        try {
+          data = await response.json()
+        } catch {
+          throw new Error('Ollama returned invalid JSON for embedding')
+        }
+
+        if (!Array.isArray(data.embedding)) {
+          throw new Error('Ollama returned no embedding array')
+        }
+
+        embeddings.push(data.embedding as number[])
+      } catch (error) {
+        if (error instanceof Error && error.name === 'AbortError') {
+          throw new Error(`Ollama embedding Zeitüberschreitung nach ${EMBEDDING_TIMEOUT_MS / 1000}s`)
+        }
+        throw error
+      } finally {
+        clearTimeout(timeoutId)
       }
-
-      const data = await response.json()
-      embeddings.push(data.embedding)
     }
 
     return {
@@ -102,11 +148,16 @@ export class OllamaProvider implements AIProvider {
   }
 
   async isAvailable(): Promise<boolean> {
+    const controller = new AbortController()
+    const timeoutId = setTimeout(() => controller.abort(), AVAILABILITY_TIMEOUT_MS)
+
     try {
-      const response = await fetch(`${this.baseUrl}/api/tags`)
+      const response = await fetch(`${this.baseUrl}/api/tags`, { signal: controller.signal })
       return response.ok
     } catch {
       return false
+    } finally {
+      clearTimeout(timeoutId)
     }
   }
 

@@ -17,6 +17,8 @@ import type {
 
 const GROQ_API_URL = 'https://api.groq.com/openai/v1'
 const DEFAULT_MODEL = 'llama-3.3-70b-versatile'
+const REQUEST_TIMEOUT_MS = 30_000
+const AVAILABILITY_TIMEOUT_MS = 5_000
 
 export class GroqProvider implements AIProvider {
   name = 'groq'
@@ -33,38 +35,59 @@ export class GroqProvider implements AIProvider {
       throw new Error('Groq API key not configured')
     }
 
-    const response = await fetch(`${GROQ_API_URL}/chat/completions`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${this.apiKey}`,
-      },
-      body: JSON.stringify({
+    const controller = new AbortController()
+    const timeoutId = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS)
+
+    try {
+      const response = await fetch(`${GROQ_API_URL}/chat/completions`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${this.apiKey}`,
+        },
+        body: JSON.stringify({
+          model: this.model,
+          messages: options.messages,
+          temperature: options.temperature ?? 0.7,
+          max_tokens: options.maxTokens ?? 2048,
+          stream: false,
+        }),
+        signal: controller.signal,
+      })
+
+      if (!response.ok) {
+        const error = await response.text().catch(() => '')
+        logger.error('Groq API error', { status: response.status, error: error.substring(0, 200) })
+        throw new Error(`Groq API error: ${response.status} - ${error.substring(0, 200)}`)
+      }
+
+      let data: Record<string, unknown>
+      try {
+        data = await response.json()
+      } catch {
+        throw new Error('Groq returned invalid JSON response')
+      }
+
+      const choices = data.choices as Array<{ message?: { content?: string } }> | undefined
+      const usage = data.usage as { prompt_tokens?: number; completion_tokens?: number; total_tokens?: number } | undefined
+
+      return {
+        content: choices?.[0]?.message?.content || '',
+        usage: usage ? {
+          promptTokens: usage.prompt_tokens || 0,
+          completionTokens: usage.completion_tokens || 0,
+          totalTokens: usage.total_tokens || 0,
+        } : undefined,
         model: this.model,
-        messages: options.messages,
-        temperature: options.temperature ?? 0.7,
-        max_tokens: options.maxTokens ?? 2048,
-        stream: false,
-      }),
-    })
-
-    if (!response.ok) {
-      const error = await response.text()
-      logger.error('Groq API error', { status: response.status, error })
-      throw new Error(`Groq API error: ${response.status} - ${error}`)
-    }
-
-    const data = await response.json()
-
-    return {
-      content: data.choices[0]?.message?.content || '',
-      usage: data.usage ? {
-        promptTokens: data.usage.prompt_tokens,
-        completionTokens: data.usage.completion_tokens,
-        totalTokens: data.usage.total_tokens,
-      } : undefined,
-      model: this.model,
-      provider: this.name,
+        provider: this.name,
+      }
+    } catch (error) {
+      if (error instanceof Error && error.name === 'AbortError') {
+        throw new Error(`Groq Zeitüberschreitung nach ${REQUEST_TIMEOUT_MS / 1000}s`)
+      }
+      throw error
+    } finally {
+      clearTimeout(timeoutId)
     }
   }
 
@@ -77,13 +100,19 @@ export class GroqProvider implements AIProvider {
   async isAvailable(): Promise<boolean> {
     if (!this.apiKey) return false
 
+    const controller = new AbortController()
+    const timeoutId = setTimeout(() => controller.abort(), AVAILABILITY_TIMEOUT_MS)
+
     try {
       const response = await fetch(`${GROQ_API_URL}/models`, {
         headers: { 'Authorization': `Bearer ${this.apiKey}` },
+        signal: controller.signal,
       })
       return response.ok
     } catch {
       return false
+    } finally {
+      clearTimeout(timeoutId)
     }
   }
 

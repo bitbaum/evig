@@ -91,8 +91,6 @@ async function callGroq(opts: CallOptions): Promise<ProviderResult | ProviderErr
       signal: controller.signal,
     })
 
-    clearTimeout(timeoutId)
-
     if (!response.ok) {
       const errorText = await response.text().catch(() => '')
       if (response.status === 401 || response.status === 403) {
@@ -104,15 +102,22 @@ async function callGroq(opts: CallOptions): Promise<ProviderResult | ProviderErr
       return { provider: 'groq', reason: 'unknown', message: `HTTP ${response.status}: ${errorText.substring(0, 200)}` }
     }
 
-    const result = await response.json()
-    const text = result.choices?.[0]?.message?.content || ''
+    let result: Record<string, unknown>
+    try {
+      result = await response.json()
+    } catch {
+      return { provider: 'groq', reason: 'parse', message: 'Ungültige JSON-Antwort von Groq' }
+    }
+
+    const text = (result.choices as Array<{ message?: { content?: string } }>)?.[0]?.message?.content || ''
     return { text, model: `groq:${GROQ_MODEL}`, provider: 'groq' }
   } catch (error) {
-    clearTimeout(timeoutId)
     if (error instanceof Error && error.name === 'AbortError') {
       return { provider: 'groq', reason: 'timeout', message: `Zeitüberschreitung nach ${(opts.timeoutMs || DEFAULT_TIMEOUT_MS) / 1000}s` }
     }
     return { provider: 'groq', reason: 'network', message: error instanceof Error ? error.message : 'Netzwerkfehler' }
+  } finally {
+    clearTimeout(timeoutId)
   }
 }
 
@@ -145,8 +150,6 @@ async function callOpenRouter(opts: CallOptions): Promise<ProviderResult | Provi
       signal: controller.signal,
     })
 
-    clearTimeout(timeoutId)
-
     if (!response.ok) {
       const errorText = await response.text().catch(() => '')
       if (response.status === 401 || response.status === 403) {
@@ -161,15 +164,22 @@ async function callOpenRouter(opts: CallOptions): Promise<ProviderResult | Provi
       return { provider: 'openrouter', reason: 'unknown', message: `HTTP ${response.status}: ${errorText.substring(0, 200)}` }
     }
 
-    const result = await response.json()
-    const text = result.choices?.[0]?.message?.content || ''
+    let result: Record<string, unknown>
+    try {
+      result = await response.json()
+    } catch {
+      return { provider: 'openrouter', reason: 'parse', message: 'Ungültige JSON-Antwort von OpenRouter' }
+    }
+
+    const text = (result.choices as Array<{ message?: { content?: string } }>)?.[0]?.message?.content || ''
     return { text, model: `openrouter:${OPENROUTER_MODEL}`, provider: 'openrouter' }
   } catch (error) {
-    clearTimeout(timeoutId)
     if (error instanceof Error && error.name === 'AbortError') {
       return { provider: 'openrouter', reason: 'timeout', message: `Zeitüberschreitung nach ${(opts.timeoutMs || DEFAULT_TIMEOUT_MS) / 1000}s` }
     }
     return { provider: 'openrouter', reason: 'network', message: error instanceof Error ? error.message : 'Netzwerkfehler' }
+  } finally {
+    clearTimeout(timeoutId)
   }
 }
 
@@ -193,21 +203,26 @@ async function callOllama(opts: CallOptions): Promise<ProviderResult | ProviderE
       signal: controller.signal,
     })
 
-    clearTimeout(timeoutId)
-
     if (!response.ok) {
       return { provider: 'ollama', reason: 'unknown', message: `HTTP ${response.status}` }
     }
 
-    const result = await response.json()
-    const text = result.response || ''
+    let result: Record<string, unknown>
+    try {
+      result = await response.json()
+    } catch {
+      return { provider: 'ollama', reason: 'parse', message: 'Ungültige JSON-Antwort von Ollama' }
+    }
+
+    const text = (result.response as string) || ''
     return { text, model: `ollama:${OLLAMA_MODEL}`, provider: 'ollama' }
   } catch (error) {
-    clearTimeout(timeoutId)
     if (error instanceof Error && error.name === 'AbortError') {
       return { provider: 'ollama', reason: 'timeout', message: `Zeitüberschreitung nach ${(opts.timeoutMs || DEFAULT_TIMEOUT_MS) / 1000}s` }
     }
     return { provider: 'ollama', reason: 'network', message: 'Ollama nicht erreichbar (läuft der Service?)' }
+  } finally {
+    clearTimeout(timeoutId)
   }
 }
 

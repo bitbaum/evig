@@ -48,9 +48,13 @@ export type ExtractResult = AIExtractionResult | AIExtractionError
 export function robustJsonExtract<T = Record<string, unknown>>(text: string): T | null {
   if (!text) return null
 
+  // Limit input to prevent ReDoS on extremely large responses
+  const maxLen = 100_000
+  const bounded = text.length > maxLen ? text.substring(0, maxLen) : text
+
   // 1. Strip markdown code block wrappers
-  let cleaned = text
-  const codeBlockMatch = text.match(/```(?:json)?\s*([\s\S]*?)```/)
+  let cleaned = bounded
+  const codeBlockMatch = bounded.match(/```(?:json)?\s*([\s\S]*?)```/)
   if (codeBlockMatch) {
     cleaned = codeBlockMatch[1].trim()
   }
@@ -84,21 +88,25 @@ export function robustJsonExtract<T = Record<string, unknown>>(text: string): T 
   try {
     const result: Record<string, unknown> = {}
     const raw = jsonMatch[0]
+    const MAX_ITERATIONS = 500  // Safety bound
 
     // Extract string fields
     const stringPattern = /"(\w+)"\s*:\s*"((?:[^"\\]|\\.)*)"/g
     let match
-    while ((match = stringPattern.exec(raw)) !== null) {
+    let iterations = 0
+    while ((match = stringPattern.exec(raw)) !== null && ++iterations < MAX_ITERATIONS) {
       result[match[1]] = match[2].replace(/\\n/g, '\n').replace(/\\"/g, '"').replace(/\\t/g, '\t')
     }
 
     // Extract array fields
     const arrayPattern = /"(\w+)"\s*:\s*\[((?:[^\]])*)\]/g
-    while ((match = arrayPattern.exec(raw)) !== null) {
+    iterations = 0
+    while ((match = arrayPattern.exec(raw)) !== null && ++iterations < MAX_ITERATIONS) {
       const items: string[] = []
       const itemPattern = /"([^"]+)"/g
       let itemMatch
-      while ((itemMatch = itemPattern.exec(match[2])) !== null) {
+      let innerIterations = 0
+      while ((itemMatch = itemPattern.exec(match[2])) !== null && ++innerIterations < MAX_ITERATIONS) {
         items.push(itemMatch[1])
       }
       result[match[1]] = items
@@ -106,7 +114,8 @@ export function robustJsonExtract<T = Record<string, unknown>>(text: string): T 
 
     // Extract number fields
     const numPattern = /"(\w+)"\s*:\s*(\d+(?:\.\d+)?)/g
-    while ((match = numPattern.exec(raw)) !== null) {
+    iterations = 0
+    while ((match = numPattern.exec(raw)) !== null && ++iterations < MAX_ITERATIONS) {
       if (!(match[1] in result)) {
         result[match[1]] = Number(match[2])
       }
@@ -114,7 +123,8 @@ export function robustJsonExtract<T = Record<string, unknown>>(text: string): T 
 
     // Extract boolean fields
     const boolPattern = /"(\w+)"\s*:\s*(true|false)/g
-    while ((match = boolPattern.exec(raw)) !== null) {
+    iterations = 0
+    while ((match = boolPattern.exec(raw)) !== null && ++iterations < MAX_ITERATIONS) {
       if (!(match[1] in result)) {
         result[match[1]] = match[2] === 'true'
       }
@@ -195,16 +205,26 @@ export async function registryExtract(
 
   const mode = opts.mode || 'extract'
 
+  // Safely serialize currentData with size bound
+  const safeCurrentData = (() => {
+    try {
+      const json = JSON.stringify(opts.currentData || {}, null, 2)
+      return json.length > 10_000 ? json.substring(0, 10_000) + '\n...(abgeschnitten)' : json
+    } catch {
+      return '{}'
+    }
+  })()
+
   // Build the user prompt based on mode
   let userPrompt: string
   if (mode === 'refine' && config.refine && opts.instruction) {
     userPrompt = fillPromptTemplate(config.refine, {
-      currentData: JSON.stringify(opts.currentData || {}, null, 2),
+      currentData: safeCurrentData,
       instruction: opts.instruction,
     })
   } else if (mode === 'refine' && opts.quickAction && config.quickActions?.[opts.quickAction]) {
     userPrompt = fillPromptTemplate(config.refine || config.extract, {
-      currentData: JSON.stringify(opts.currentData || {}, null, 2),
+      currentData: safeCurrentData,
       instruction: config.quickActions[opts.quickAction],
     })
   } else {

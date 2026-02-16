@@ -34,7 +34,16 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Nicht autorisiert' }, { status: 401 })
     }
 
-    const body = await request.json()
+    let body: unknown
+    try {
+      body = await request.json()
+    } catch {
+      return NextResponse.json(
+        { success: false, error: 'Ungültiger JSON-Body' },
+        { status: 400 }
+      )
+    }
+
     const result = extractRequestSchema.safeParse(body)
 
     if (!result.success) {
@@ -62,14 +71,20 @@ export async function POST(request: NextRequest) {
       userId: session.user.id,
     })
 
-    const extractionResult = await registryExtract({
-      formType,
-      text,
-      mode: mode as ExtractMode,
-      currentData,
-      instruction,
-      quickAction,
-    })
+    const EXTRACT_TIMEOUT_MS = 45_000
+    const extractionResult = await Promise.race([
+      registryExtract({
+        formType,
+        text,
+        mode: mode as ExtractMode,
+        currentData,
+        instruction,
+        quickAction,
+      }),
+      new Promise<never>((_, reject) =>
+        setTimeout(() => reject(new Error('Zeitüberschreitung')), EXTRACT_TIMEOUT_MS)
+      ),
+    ])
 
     return NextResponse.json(extractionResult)
   } catch (error) {

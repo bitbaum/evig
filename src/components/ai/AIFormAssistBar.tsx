@@ -15,7 +15,7 @@
  */
 
 import { useState } from 'react'
-import { Sparkles, Loader2, AlertCircle, ChevronDown, ChevronUp } from 'lucide-react'
+import { Sparkles, Loader2, AlertCircle, CheckCircle2, ChevronDown, ChevronUp } from 'lucide-react'
 import { useAIFormAssist, type AIFieldMetadataEntry } from '@/hooks/useAIFormAssist'
 
 interface QuickAction {
@@ -43,7 +43,7 @@ export function AIFormAssistBar<T = Record<string, unknown>>({
   const [inputText, setInputText] = useState('')
   const [isExpanded, setIsExpanded] = useState(false)
 
-  const { extractFromText, runQuickAction, isExtracting, error } = useAIFormAssist<T>({
+  const { extractFromText, runQuickAction, isExtracting, error, success } = useAIFormAssist<T>({
     formType,
     onFieldsFilled,
   })
@@ -139,11 +139,17 @@ export function AIFormAssistBar<T = Record<string, unknown>>({
             )}
           </div>
 
-          {/* Error display */}
+          {/* Status display */}
           {error && (
             <div className="flex items-start gap-2 text-sm text-red-600 dark:text-red-400">
               <AlertCircle className="w-4 h-4 flex-shrink-0 mt-0.5" />
               <span>{error}</span>
+            </div>
+          )}
+          {success && !error && (
+            <div className="flex items-center gap-2 text-sm text-green-600 dark:text-green-400">
+              <CheckCircle2 className="w-4 h-4 flex-shrink-0" />
+              <span>Felder ausgefüllt!</span>
             </div>
           )}
 

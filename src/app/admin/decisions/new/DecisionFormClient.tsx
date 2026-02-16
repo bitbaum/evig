@@ -138,7 +138,7 @@ export default function DecisionFormClient() {
         formType="decision"
         placeholder="Beschreibe den Vorschlag in 1-2 Sätzen..."
         onFieldsFilled={handleAIFieldsFilled}
-        currentData={{ title, description }}
+        currentData={{ title, description, options }}
       />
 
       {/* Decision Type Selector */}
