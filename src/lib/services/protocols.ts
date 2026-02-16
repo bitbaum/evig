@@ -309,7 +309,7 @@ export async function processTranscript(
        WHERE id = $1`,
       [protocolId]
     )
-    return { success: false, error: 'KI-Verarbeitung fehlgeschlagen' }
+    return { success: false, error: 'KI-Verarbeitung fehlgeschlagen. Kein Provider erreichbar (Groq, OpenRouter, Ollama). Details im Server-Log.' }
   }
 
   // Try to resolve attendee names
@@ -415,7 +415,7 @@ export async function processNotes(
        WHERE id = $1`,
       [protocolId]
     )
-    return { success: false, error: 'KI-Verarbeitung der Notizen fehlgeschlagen' }
+    return { success: false, error: 'KI-Verarbeitung der Notizen fehlgeschlagen. Kein Provider erreichbar. Details im Server-Log.' }
   }
 
   const resolvedNotes = await resolveAttendeeNames(aiResult.notes)
@@ -480,7 +480,7 @@ export async function importTasks(
     const aiResult = await processTaskList(prompt)
 
     if (!aiResult) {
-      return { success: false, error: 'KI-Verarbeitung der Aufgabenliste fehlgeschlagen' }
+      return { success: false, error: 'KI-Verarbeitung der Aufgabenliste fehlgeschlagen. Kein Provider erreichbar. Details im Server-Log.' }
     }
 
     tasks = aiResult.tasks

@@ -67,6 +67,7 @@ export const PATCH = withAdmin<RouteParams>(async (
       if (result.error === 'not_found') return apiNotFound('Entscheidung')
       if (result.error === 'not_editable') return apiBadRequest(ERROR_MESSAGES.DECISION_NOT_EDITABLE)
       if (result.error === 'not_creator') return apiBadRequest(ERROR_MESSAGES.DECISION_NOT_EDITABLE)
+      return apiBadRequest(ERROR_MESSAGES.DECISION_UPDATE_FAILED)
     }
 
     logger.info('Decision updated', { decisionId, userId: dbUserId })

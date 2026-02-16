@@ -251,7 +251,7 @@ export default async function TasksAdminPage({
       </Suspense>
 
       {/* Task List */}
-      <div className="bg-white rounded-lg border overflow-hidden">
+      <div className="bg-white rounded-lg border overflow-hidden overflow-x-auto">
         {tasks.length === 0 ? (
           <div className="p-12 text-center">
             <ClipboardList className="w-12 h-12 text-gray-300 mx-auto mb-4" />

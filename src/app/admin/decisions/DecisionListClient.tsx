@@ -61,21 +61,21 @@ export default function DecisionListClient() {
     <div>
       {/* Stats */}
       <div className="mb-6 grid grid-cols-2 gap-4 sm:grid-cols-4">
-        <div className="rounded-lg bg-white p-4 shadow-sm">
+        <div className="rounded-lg bg-white p-4 border">
           <p className="text-2xl font-bold text-amber-600">{activeVoting}</p>
           <p className="text-xs text-gray-500">Aktive Abstimmungen</p>
         </div>
-        <div className="rounded-lg bg-white p-4 shadow-sm">
+        <div className="rounded-lg bg-white p-4 border">
           <p className="text-2xl font-bold text-blue-600">{openDiscussion}</p>
           <p className="text-xs text-gray-500">Offene Diskussionen</p>
         </div>
-        <div className="rounded-lg bg-white p-4 shadow-sm">
+        <div className="rounded-lg bg-white p-4 border">
           <p className="text-2xl font-bold text-green-600">
             {decisions.filter((d) => d.status === 'closed').length}
           </p>
           <p className="text-xs text-gray-500">Abgeschlossen</p>
         </div>
-        <div className="rounded-lg bg-white p-4 shadow-sm">
+        <div className="rounded-lg bg-white p-4 border">
           <p className="text-2xl font-bold text-red-600">{pendingVotes}</p>
           <p className="text-xs text-gray-500">Deine ausstehenden Stimmen</p>
         </div>
@@ -123,7 +123,7 @@ export default function DecisionListClient() {
           </Link>
         </div>
       ) : (
-        <div className="overflow-hidden rounded-lg bg-white shadow-sm">
+        <div className="overflow-hidden overflow-x-auto rounded-lg bg-white border">
           <table className="w-full text-left text-sm">
             <thead className="border-b bg-gray-50 text-xs uppercase text-gray-500">
               <tr>

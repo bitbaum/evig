@@ -10,7 +10,7 @@ import { NextRequest } from 'next/server';
 import { withAdmin, ValidSession } from '@/lib/api/middleware';
 import { apiSuccess, apiError, apiBadRequest } from '@/lib/api/helpers';
 import { getDbUserId, getActiveTask } from '@/lib/api/task-helpers';
-import { query } from '@/lib/auth/db';
+import { query, transaction } from '@/lib/auth/db';
 import { TABLE_NAMES } from '@/config/database';
 import { TASK_STATUSES } from '@/config/tasks';
 import { attentionFlagSchema } from '@/lib/schemas/tasks';
@@ -52,26 +52,27 @@ export const POST = withAdmin<RouteParams>(async (
     if ('error' in userLookup) return userLookup.error;
     const { dbUserId } = userLookup;
 
-    // Create attention flag
-    const flagResult = await query<{ id: string }>(
-      `INSERT INTO ${TABLE_NAMES.TASK_ATTENTION_FLAGS} (
-        task_id,
-        flagged_by,
-        message
-      ) VALUES ($1, $2, $3)
-      RETURNING *`,
-      [taskId, dbUserId, data.message || null]
-    );
+    // Create attention flag + update task status atomically
+    const flag = await transaction(async (client) => {
+      const flagResult = await client.query<{ id: string }>(
+        `INSERT INTO ${TABLE_NAMES.TASK_ATTENTION_FLAGS} (
+          task_id,
+          flagged_by,
+          message
+        ) VALUES ($1, $2, $3)
+        RETURNING *`,
+        [taskId, dbUserId, data.message || null]
+      );
 
-    const flag = flagResult.rows[0];
+      await client.query(
+        `UPDATE ${TABLE_NAMES.TASKS}
+         SET current_status = $1, updated_at = NOW()
+         WHERE id = $2`,
+        [TASK_STATUSES.NEEDS_ATTENTION, taskId]
+      );
 
-    // Update task status to needs_attention
-    await query(
-      `UPDATE ${TABLE_NAMES.TASKS}
-       SET current_status = $1, updated_at = NOW()
-       WHERE id = $2`,
-      [TASK_STATUSES.NEEDS_ATTENTION, taskId]
-    );
+      return flagResult.rows[0];
+    });
 
     // TODO: Send notifications
     // - Notify task creator if different from flagger

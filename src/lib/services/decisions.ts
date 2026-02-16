@@ -6,7 +6,7 @@
  * COUNT(*) returns string from pg — parse with parseInt().
  */
 
-import { query } from '@/lib/auth/db';
+import { query, transaction } from '@/lib/auth/db';
 import { TABLE_NAMES } from '@/config/database';
 import { logger } from '@/lib/logger';
 import {
@@ -468,28 +468,48 @@ export async function transitionDecision(
   }
 
   if (newStatus === 'closed') {
-    // Fetch votes for tally computation
-    const votesResult = await query<{ vote_data: VoteData }>(
-      `SELECT vote_data FROM ${TABLE_NAMES.DECISION_VOTES} WHERE decision_id = $1`,
-      [id]
-    );
-    const options = asArray<DecisionOption>(decision.options, []);
-    const tallies = computeTallies(
-      decision.voting_method as VotingMethod,
-      votesResult.rows.map(v => v.vote_data),
-      options
-    );
+    // Closing requires reading votes + computing tallies + updating atomically
+    const result = await transaction(async (client) => {
+      const votesResult = await client.query<{ vote_data: VoteData }>(
+        `SELECT vote_data FROM ${TABLE_NAMES.DECISION_VOTES} WHERE decision_id = $1`,
+        [id]
+      );
+      const options = asArray<DecisionOption>(decision.options, []);
+      const tallies = computeTallies(
+        decision.voting_method as VotingMethod,
+        votesResult.rows.map(v => v.vote_data),
+        options
+      );
 
-    setClauses.push(`outcome = $${paramIndex++}`);
-    params.push(JSON.stringify(tallies));
-    setClauses.push(`outcome_summary = $${paramIndex++}`);
-    params.push(extra?.outcomeSummary || null);
-    setClauses.push(`revealed_at = $${paramIndex++}`);
-    params.push(new Date());
-    setClauses.push(`closed_at = $${paramIndex++}`);
-    params.push(new Date());
-    setClauses.push(`closed_by = $${paramIndex++}`);
-    params.push(userId);
+      setClauses.push(`outcome = $${paramIndex++}`);
+      params.push(JSON.stringify(tallies));
+      setClauses.push(`outcome_summary = $${paramIndex++}`);
+      params.push(extra?.outcomeSummary || null);
+      setClauses.push(`revealed_at = $${paramIndex++}`);
+      params.push(new Date());
+      setClauses.push(`closed_at = $${paramIndex++}`);
+      params.push(new Date());
+      setClauses.push(`closed_by = $${paramIndex++}`);
+      params.push(userId);
+
+      params.push(id);
+      params.push(currentStatus);
+      const updated = await client.query<DbDecisionRow>(
+        `UPDATE ${TABLE_NAMES.DECISIONS}
+         SET ${setClauses.join(', ')}
+         WHERE id = $${paramIndex} AND status = $${paramIndex + 1}
+         RETURNING *`,
+        params
+      );
+
+      return updated.rows[0] || null;
+    });
+
+    if (!result) {
+      return { error: 'invalid_transition' as const };
+    }
+
+    return { decision: result };
   }
 
   params.push(id);

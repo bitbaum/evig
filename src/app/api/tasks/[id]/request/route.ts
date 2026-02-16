@@ -13,7 +13,7 @@ import { NextRequest } from 'next/server';
 import { withAdmin, ValidSession } from '@/lib/api/middleware';
 import { apiSuccess, apiError, apiNotFound, apiBadRequest } from '@/lib/api/helpers';
 import { getDbUserId, getActiveTask } from '@/lib/api/task-helpers';
-import { query } from '@/lib/auth/db';
+import { query, transaction } from '@/lib/auth/db';
 import { TABLE_NAMES } from '@/config/database';
 import { TASK_STATUSES } from '@/config/tasks';
 import { taskRequestSchema } from '@/lib/schemas/tasks';
@@ -68,33 +68,34 @@ export const POST = withAdmin<RouteParams>(async (
       }
     }
 
-    // Create request record
-    const requestResult = await query<{ id: string }>(
-      `INSERT INTO ${TABLE_NAMES.TASK_REQUESTS} (
-        task_id,
-        requested_by,
-        requested_user_id,
-        message,
-        status
-      ) VALUES ($1, $2, $3, $4, 'pending')
-      RETURNING *`,
-      [
-        taskId,
-        dbUserId,
-        data.requested_user_id || null,
-        data.message || null,
-      ]
-    );
+    // Create request record + update task status atomically
+    const taskRequest = await transaction(async (client) => {
+      const requestResult = await client.query<{ id: string }>(
+        `INSERT INTO ${TABLE_NAMES.TASK_REQUESTS} (
+          task_id,
+          requested_by,
+          requested_user_id,
+          message,
+          status
+        ) VALUES ($1, $2, $3, $4, 'pending')
+        RETURNING *`,
+        [
+          taskId,
+          dbUserId,
+          data.requested_user_id || null,
+          data.message || null,
+        ]
+      );
 
-    const taskRequest = requestResult.rows[0];
+      await client.query(
+        `UPDATE ${TABLE_NAMES.TASKS}
+         SET current_status = $1, updated_at = NOW()
+         WHERE id = $2`,
+        [TASK_STATUSES.REQUESTED, taskId]
+      );
 
-    // Update task status to requested
-    await query(
-      `UPDATE ${TABLE_NAMES.TASKS}
-       SET current_status = $1, updated_at = NOW()
-       WHERE id = $2`,
-      [TASK_STATUSES.REQUESTED, taskId]
-    );
+      return requestResult.rows[0];
+    });
 
     // TODO: Send notifications
     // - If specific user: notify that user

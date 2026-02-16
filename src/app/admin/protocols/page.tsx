@@ -155,7 +155,7 @@ export default async function ProtocolsAdminPage({
       </Suspense>
 
       {/* Protocol List */}
-      <div className="bg-white rounded-lg border overflow-hidden">
+      <div className="bg-white rounded-lg border overflow-hidden overflow-x-auto">
         {protocols.length === 0 ? (
           <div className="p-12 text-center">
             <FileText className="w-12 h-12 text-gray-300 mx-auto mb-4" />
