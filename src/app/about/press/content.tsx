@@ -10,7 +10,7 @@
 import { ExternalLink, Quote, Newspaper, Award, Star, ArrowLeft } from 'lucide-react'
 import Link from 'next/link'
 import { HeroBanner } from '@/components/ui/hero-banner'
-import { AboutSubNav } from '@/components/about'
+import AboutSubNav from '@/components/about/AboutSubNav'
 import {
   MEDIA_COVERAGE,
   getTier1Sources,

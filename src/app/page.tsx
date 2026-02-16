@@ -3,7 +3,7 @@ import Link from 'next/link'
 import type { Metadata } from 'next'
 import { getCompactMetrics } from '@/data/impact-metrics'
 import { VALUE_PROPS, TESTIMONIALS } from '@/data/homepage'
-import { AsSeenInLogos } from '@/components/about'
+import AsSeenInLogos from '@/components/about/AsSeenInLogos'
 import Heading from '@/components/ui/Heading'
 import { PageHero } from '@/components/layout/PageHero'
 

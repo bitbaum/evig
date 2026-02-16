@@ -3,11 +3,11 @@
 import { useState } from 'react'
 import Image from 'next/image'
 import { HeroBanner } from '@/components/ui/hero-banner'
-import { AboutSubNav } from '@/components/about'
+import AboutSubNav from '@/components/about/AboutSubNav'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { IMPACT_METRICS, getEnvironmentalSummary, getSocialSummary, type ImpactMetric } from '@/data/impact-metrics'
-import { getDefaultValue, getDefaultNumeric } from '@/lib/org-numbers'
+import { getDefaultValue, getDefaultNumeric } from '@/lib/org-numbers.defaults'
 // Simple Badge component replacement
 const Badge = ({ children, className = "" }: { children: React.ReactNode, className?: string }) => (
   <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${className}`}>

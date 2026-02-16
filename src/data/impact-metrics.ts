@@ -8,7 +8,7 @@
  * Last reconciled: 2026-02-16 (aligned with revamp-info NUMBERS_REGISTRY)
  */
 
-import { getDefaultNumeric } from '@/lib/org-numbers'
+import { getDefaultNumeric } from '@/lib/org-numbers.defaults'
 
 export interface ImpactMetric {
   id: string

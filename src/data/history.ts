@@ -5,6 +5,8 @@
  * Used for the Geschichte (history) section and about pages.
  */
 
+import { getDefaultNumeric } from '@/lib/org-numbers.defaults'
+
 export interface Milestone {
   year: number
   title: string
@@ -121,9 +123,9 @@ export const HISTORY_CONFIG: HistoryConfig = {
   ],
 
   currentState: {
-    teamSize: 20,
+    teamSize: getDefaultNumeric('team_size_community'),
     location: 'Birmensdorferstrasse 379, 8055 Zürich',
-    yearsActive: new Date().getFullYear() - 2003,
+    yearsActive: new Date().getFullYear() - getDefaultNumeric('founding_year'),
   },
 }
 

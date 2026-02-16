@@ -7,7 +7,7 @@
  * Values are synced with org_numbers table (economic category).
  */
 
-import { getDefaultNumeric } from '@/lib/org-numbers'
+import { getDefaultNumeric } from '@/lib/org-numbers.defaults'
 
 // Core pricing constants (from org-numbers defaults)
 export const HOURLY_RATE = getDefaultNumeric('hourly_rate_chf')

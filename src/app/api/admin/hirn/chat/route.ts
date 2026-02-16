@@ -13,7 +13,12 @@ import { logger } from '@/lib/logger'
 
 export const POST = withAdmin(async (request: NextRequest, session) => {
   try {
-    const body = await request.json()
+    let body: Record<string, unknown>
+    try {
+      body = await request.json()
+    } catch {
+      return apiBadRequest('Ungültiger JSON-Body')
+    }
     const { message, sessionId, temperature, maxTokens, topK, minSimilarity } = body
 
     if (!message || typeof message !== 'string') {
@@ -27,10 +32,10 @@ export const POST = withAdmin(async (request: NextRequest, session) => {
     const response = await chat(message, {
       sessionId,
       userId: session.user.id,
-      temperature,
-      maxTokens,
-      topK,
-      minSimilarity,
+      temperature: temperature as number | undefined,
+      maxTokens: maxTokens as number | undefined,
+      topK: topK as number | undefined,
+      minSimilarity: minSimilarity as number | undefined,
     })
 
     return apiSuccess({

@@ -7,7 +7,7 @@
  * Last reconciled: 2026-02-16
  */
 
-import { getDefaultValue, getDefaultNumeric } from '@/lib/org-numbers'
+import { getDefaultValue, getDefaultNumeric } from '@/lib/org-numbers.defaults'
 
 export interface AboutMetric {
   value: string
