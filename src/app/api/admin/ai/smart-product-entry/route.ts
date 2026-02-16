@@ -16,7 +16,9 @@ import { NextRequest } from 'next/server'
 import { withAdmin } from '@/lib/api/middleware'
 import { apiError, apiSuccess } from '@/lib/api/helpers'
 import { logger } from '@/lib/logger'
-import { GroqProvider } from '@/lib/hirn/providers/groq'
+import { callWithFallback } from '@/lib/ai/providers'
+import { robustJsonExtract } from '@/lib/ai/extract'
+import { BRAND_CONTEXT } from '@/lib/ai/config/prompts'
 
 interface ProductFormData {
   title: string
@@ -30,7 +32,9 @@ interface ProductFormData {
   condition: string
 }
 
-const SYSTEM_PROMPT = `Du bist ein Experte für IT-Hardware, insbesondere für gebrauchte Business-Laptops, Desktop-PCs und Monitore.
+const SYSTEM_PROMPT = `${BRAND_CONTEXT}
+
+Du bist ein Experte für IT-Hardware, insbesondere für gebrauchte Business-Laptops, Desktop-PCs und Monitore.
 
 Wenn der Benutzer ein Produkt nennt (z.B. "Dell Latitude e7470" oder "ThinkPad T480"), identifiziere das genaue Produkt und liefere detaillierte Informationen.
 
@@ -81,52 +85,30 @@ export const POST = withAdmin(async (request: NextRequest) => {
       inputType,
     })
 
-    // Initialize Groq provider
-    const groq = new GroqProvider()
-    const isAvailable = await groq.isAvailable()
-
-    if (!isAvailable) {
-      logger.error('Groq provider not available')
-      return apiError(
-        new Error('AI service unavailable'),
-        'KI-Service nicht verfügbar. Bitte GROQ_API_KEY konfigurieren.',
-        503
-      )
-    }
-
-    // Call Groq for product lookup
-    const response = await groq.chat({
-      messages: [
-        { role: 'system', content: SYSTEM_PROMPT },
-        { role: 'user', content: `Produkt: ${trimmedQuery}` },
-      ],
+    const result = await callWithFallback({
+      systemPrompt: SYSTEM_PROMPT,
+      userPrompt: `Produkt: ${trimmedQuery}`,
       temperature: 0.3,
       maxTokens: 1024,
     })
 
-    const processingTime = Date.now() - startTime
-
-    // Parse JSON from response
-    const responseText = response.content
-    const jsonMatch = responseText.match(/\{[\s\S]*\}/)
-
-    if (!jsonMatch) {
-      logger.error('No JSON in Groq response', { response: responseText })
+    if (!result) {
       return apiError(
-        new Error('Invalid AI response'),
-        'Konnte Produktdaten nicht extrahieren',
-        500
+        new Error('All AI providers failed'),
+        'KI-Service nicht verfügbar. Bitte später erneut versuchen.',
+        503
       )
     }
 
-    let productData: ProductFormData
-    try {
-      productData = JSON.parse(jsonMatch[0])
-    } catch (parseError) {
-      logger.error('JSON parse error', { error: parseError, json: jsonMatch[0] })
+    const processingTime = Date.now() - startTime
+
+    // Parse JSON from response
+    const productData = robustJsonExtract<ProductFormData>(result.text)
+    if (!productData) {
+      logger.error('Failed to parse AI response', { response: result.text.substring(0, 500) })
       return apiError(
-        new Error('JSON parse error'),
-        'Fehler beim Verarbeiten der KI-Antwort',
+        new Error('Invalid AI response'),
+        'Konnte Produktdaten nicht extrahieren',
         500
       )
     }
@@ -163,7 +145,8 @@ export const POST = withAdmin(async (request: NextRequest) => {
     logger.info('Smart product entry successful', {
       product: productData.title,
       processingTime,
-      model: response.model,
+      provider: result.provider,
+      model: result.model,
     })
 
     return apiSuccess({
@@ -172,22 +155,13 @@ export const POST = withAdmin(async (request: NextRequest) => {
         query: trimmedQuery,
         inputType,
         processingTime,
-        model: response.model,
-        provider: response.provider,
+        model: result.model,
+        provider: result.provider,
       },
     })
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Unknown error'
     logger.error('Smart product entry error', { error: message })
-
-    // Handle rate limiting
-    if (message.includes('rate') || message.includes('429')) {
-      return apiError(
-        error,
-        'Zu viele Anfragen. Bitte warte einen Moment.',
-        429
-      )
-    }
 
     return apiError(error, 'Fehler bei der Produkterkennung')
   }

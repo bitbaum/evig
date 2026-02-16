@@ -19,6 +19,7 @@ import {
 } from '@/config/tasks'
 import { getErrorMessage } from '@/lib/utils/error'
 import { Loader2, Save } from 'lucide-react'
+import { AIFormAssistBar } from '@/components/ai/AIFormAssistBar'
 
 interface TaskFormData {
   title: string
@@ -53,6 +54,19 @@ export default function TaskFormClient() {
   ) => {
     const { name, value } = e.target
     setFormData((prev) => ({ ...prev, [name]: value }))
+  }
+
+  const handleAIFieldsFilled = (data: Partial<Record<string, unknown>>) => {
+    setFormData(prev => {
+      const updated = { ...prev }
+      if (data.title) updated.title = String(data.title)
+      if (data.description) updated.description = String(data.description)
+      if (data.instructions) updated.instructions = String(data.instructions)
+      if (data.category) updated.category = String(data.category)
+      if (data.priority) updated.priority = String(data.priority)
+      if (data.estimated_minutes !== undefined) updated.estimated_minutes = String(data.estimated_minutes)
+      return updated
+    })
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -106,6 +120,14 @@ export default function TaskFormClient() {
       )}
 
       <div className="bg-white rounded-lg border p-6 space-y-6">
+        {/* AI Assistant */}
+        <AIFormAssistBar
+          formType="task"
+          placeholder="Beschreibe die Aufgabe in 1-2 Sätzen..."
+          onFieldsFilled={handleAIFieldsFilled}
+          currentData={formData as unknown as Record<string, unknown>}
+        />
+
         {/* Title */}
         <div>
           <label

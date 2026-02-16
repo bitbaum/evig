@@ -15,16 +15,10 @@
 import { logger } from '@/lib/logger'
 import type { VoiceProductData, AIFieldSource, AIFieldMetadata, ErfassungFormData, VerificationSource } from '@/types/erfassung'
 import { ERFASSUNG_PROMPTS, fillPromptTemplate } from '@/lib/ai/config/prompts'
+import { callWithFallback } from '@/lib/ai/providers'
 
-// AI Provider configuration - prefer Groq (cloud) over Ollama (local)
-const GROQ_API_KEY = process.env.GROQ_API_KEY || ''
-const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions'
-const GROQ_MODEL = 'llama-3.3-70b-versatile'
-
-// Ollama fallback for local development
-const OLLAMA_URL = process.env.OLLAMA_URL || 'http://localhost:11434'
 const OLLAMA_MODEL = process.env.OLLAMA_MODEL || 'llama3.2'
-const AI_TIMEOUT_MS = 15000 // 15 second timeout
+const OLLAMA_URL = process.env.OLLAMA_URL || 'http://localhost:11434'
 
 // =============================================================================
 // VERIFICATION SOURCES
@@ -256,27 +250,6 @@ const buildExtractionPrompt = (text: string) => fillPromptTemplate(ERFASSUNG_PRO
   schema: ERFASSUNG_PROMPTS.schema,
 })
 
-// Ollama-specific prompt (wraps the SSOT extract prompt)
-const OLLAMA_PROMPT = `${ERFASSUNG_PROMPTS.system}
-
-Der Benutzer hat folgendes eingegeben:
-"{TEXT}"
-
-Extrahiere die Produktinformationen und fülle folgendes JSON-Schema aus. Wenn Informationen fehlen, nutze sinnvolle Standardwerte basierend auf dem Produkttyp.
-
-Schema:
-${ERFASSUNG_PROMPTS.schema}
-
-Wichtige Regeln:
-- Preise in CHF ohne Währungssymbol
-- Zustand mappen: "gut" -> "good", "wie neu" -> "like_new", "neu" -> "new", "akzeptabel" -> "fair", "schlecht" -> "poor"
-- Bei Laptops: Kategorien 10 (Hauptkategorie) und 101/102/103 (Unterkategorie je nach Typ)
-- Kundenprofile basierend auf Gerät wählen (z.B. ThinkPad -> buero, dev; Gaming Laptop -> gamer)
-- Beschreibung auf Deutsch
-- Specs basierend auf bekanntem Modell ergänzen falls nicht genannt
-
-Antworte NUR mit dem ausgefüllten JSON, keine Erklärungen.`
-
 export interface ExtractionResult {
   success: true
   data: VoiceProductData
@@ -284,7 +257,7 @@ export interface ExtractionResult {
   sourceType: 'voice' | 'text' | 'image'
   inputText: string
   model: string
-  verificationSources?: VerificationSource[] // Links for admin to verify AI-generated data
+  verificationSources?: VerificationSource[]
 }
 
 export interface ExtractionError {
@@ -303,10 +276,10 @@ export type ExtractProductResult = ExtractionResult | ExtractionError
 function calculateFieldConfidence(
   inputText: string,
   data: VoiceProductData,
-  sourceType: 'voice' | 'text' | 'image'
+  sourceType: 'voice' | 'text' | 'image',
+  modelName: string = OLLAMA_MODEL
 ): { metadata: AIFieldMetadata; allSources: VerificationSource[] } {
   const timestamp = Date.now()
-  const model = OLLAMA_MODEL
   const inputLower = inputText.toLowerCase()
 
   // Generate verification sources
@@ -316,7 +289,6 @@ function calculateFieldConfidence(
   const wasExplicitlyMentioned = (value: string): boolean => {
     if (!value) return false
     const valueLower = value.toLowerCase()
-    // Check for exact match or partial match of significant words
     const words = valueLower.split(/\s+/).filter(w => w.length > 2)
     return words.some(word => inputLower.includes(word))
   }
@@ -326,62 +298,46 @@ function calculateFieldConfidence(
     type: sourceType,
     inputText,
     confidence,
-    model,
+    model: modelName,
     timestamp,
     sources: fieldSources[fieldName] || [],
   })
 
   const metadata: AIFieldMetadata = {}
 
-  // Hersteller - high confidence if brand name mentioned
   if (data.hersteller) {
     const mentioned = wasExplicitlyMentioned(data.hersteller)
     metadata.hersteller = createSource(mentioned ? 0.95 : 0.7, 'hersteller')
   }
-
-  // Produktname - high confidence if model number/name mentioned
   if (data.produktname) {
     const mentioned = wasExplicitlyMentioned(data.produktname)
     metadata.produktname = createSource(mentioned ? 0.9 : 0.6, 'produktname')
   }
-
-  // Kurzbeschreibung - lower confidence as it's generated
   if (data.kurzbeschreibung) {
     metadata.kurzbeschreibung = createSource(0.75, 'kurzbeschreibung')
   }
-
-  // Specs - check each spec for confidence
   if (data.specs?.length) {
-    // Check if common spec keywords mentioned
     const specsConfidence = ['ram', 'gb', 'ssd', 'cpu', 'i5', 'i7', 'ghz', 'core'].some(
       kw => inputLower.includes(kw)
     ) ? 0.85 : 0.5
     metadata.specs = createSource(specsConfidence, 'specs')
   }
-
-  // Verkaufspreis - high if number mentioned with currency indicators
   if (data.verkaufspreis) {
     const pricePattern = /\d+\s*(chf|franken|fr|sfr|.-)?/i
     const priceMatch = inputLower.match(pricePattern)
     metadata.verkaufspreis = createSource(priceMatch ? 0.9 : 0.4, 'verkaufspreis')
   }
-
-  // Zustand - check for condition keywords
   if (data.zustand) {
     const conditionKeywords = ['neu', 'new', 'gut', 'good', 'gebraucht', 'used', 'zustand', 'condition']
     const mentioned = conditionKeywords.some(kw => inputLower.includes(kw))
     metadata.zustand = createSource(mentioned ? 0.85 : 0.5, 'zustand')
   }
-
-  // Categories - medium confidence as often inferred
   if (data.hauptkategorie) {
     metadata.hauptkategorie = createSource(0.8, 'hauptkategorie')
   }
   if (data.unterkategorie) {
     metadata.unterkategorie = createSource(0.7, 'unterkategorie')
   }
-
-  // Kundenprofile - lower confidence as it's AI-inferred
   if (data.kundenprofile?.length) {
     metadata.kundenprofile = createSource(0.6, 'kundenprofile')
   }
@@ -390,171 +346,9 @@ function calculateFieldConfidence(
 }
 
 /**
- * Try Groq (cloud) API for extraction
- */
-async function tryGroqExtraction(
-  text: string,
-  sourceType: 'voice' | 'text' | 'image'
-): Promise<ExtractProductResult | null> {
-  if (!GROQ_API_KEY) {
-    logger.info('Groq API key not configured, skipping cloud AI')
-    return null
-  }
-
-  const controller = new AbortController()
-  const timeoutId = setTimeout(() => controller.abort(), AI_TIMEOUT_MS)
-
-  try {
-    logger.info('Sending text to Groq for extraction', {
-      textLength: text.length,
-      model: GROQ_MODEL,
-    })
-
-    const response = await fetch(GROQ_API_URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${GROQ_API_KEY}`,
-      },
-      body: JSON.stringify({
-        model: GROQ_MODEL,
-        messages: [
-          {
-            role: 'system',
-            content: ERFASSUNG_PROMPTS.system,
-          },
-          {
-            role: 'user',
-            content: buildExtractionPrompt(text.trim()),
-          },
-        ],
-        temperature: 0.3,
-        max_tokens: 1024,
-      }),
-      signal: controller.signal,
-    })
-
-    clearTimeout(timeoutId)
-
-    if (!response.ok) {
-      const errorText = await response.text()
-      logger.warn('Groq API error', { status: response.status, error: errorText })
-      return null
-    }
-
-    const groqResult = await response.json()
-    const responseText = groqResult.choices?.[0]?.message?.content || ''
-
-    // Extract JSON from response
-    const jsonMatch = responseText.match(/\{[\s\S]*\}/)
-    if (!jsonMatch) {
-      logger.warn('No JSON in Groq response', { response: responseText })
-      return null
-    }
-
-    const productData = JSON.parse(jsonMatch[0]) as VoiceProductData
-    const { metadata, allSources } = calculateFieldConfidence(text, productData, sourceType)
-
-    logger.info('Groq extraction successful', {
-      product: productData.produktname,
-      hersteller: productData.hersteller,
-      sourcesCount: allSources.length,
-    })
-
-    return {
-      success: true,
-      data: productData,
-      metadata,
-      sourceType,
-      inputText: text,
-      model: GROQ_MODEL,
-      verificationSources: allSources,
-    }
-  } catch (error) {
-    clearTimeout(timeoutId)
-    const message = error instanceof Error ? error.message : 'unknown'
-    logger.warn('Groq extraction failed', { error: message })
-    return null
-  }
-}
-
-/**
- * Try Ollama (local) API for extraction
- */
-async function tryOllamaExtraction(
-  text: string,
-  sourceType: 'voice' | 'text' | 'image'
-): Promise<ExtractProductResult | null> {
-  const prompt = OLLAMA_PROMPT.replace('{TEXT}', text.trim())
-  const controller = new AbortController()
-  const timeoutId = setTimeout(() => controller.abort(), AI_TIMEOUT_MS)
-
-  try {
-    logger.info('Sending text to Ollama for extraction', {
-      textLength: text.length,
-      model: OLLAMA_MODEL,
-    })
-
-    const response = await fetch(`${OLLAMA_URL}/api/generate`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        model: OLLAMA_MODEL,
-        prompt,
-        stream: false,
-        options: {
-          temperature: 0.3,
-          num_predict: 500,
-        },
-      }),
-      signal: controller.signal,
-    })
-
-    clearTimeout(timeoutId)
-
-    if (!response.ok) {
-      return null
-    }
-
-    const ollamaResult = await response.json()
-    const responseText = ollamaResult.response
-
-    const jsonMatch = responseText.match(/\{[\s\S]*\}/)
-    if (!jsonMatch) {
-      return null
-    }
-
-    const productData = JSON.parse(jsonMatch[0]) as VoiceProductData
-    const { metadata, allSources } = calculateFieldConfidence(text, productData, sourceType)
-
-    logger.info('Ollama extraction successful', {
-      product: productData.produktname,
-      hersteller: productData.hersteller,
-      sourcesCount: allSources.length,
-    })
-
-    return {
-      success: true,
-      data: productData,
-      metadata,
-      sourceType,
-      inputText: text,
-      model: OLLAMA_MODEL,
-      verificationSources: allSources,
-    }
-  } catch (error) {
-    clearTimeout(timeoutId)
-    return null
-  }
-}
-
-/**
  * Extract structured product data from text using AI
- * Priority: Groq (cloud) -> Ollama (local) -> Fast regex parser (fallback)
- *
- * @param text - Raw text input (from voice, typing, or OCR)
- * @param sourceType - Where the text came from (voice transcription, direct text, or image OCR)
- * @returns Structured product data with confidence metadata or error
+ * Uses centralized callWithFallback (Groq → OpenRouter → Ollama).
+ * Falls back to fast regex parser if all AI providers fail.
  */
 export async function extractProductFromText(
   text: string,
@@ -564,26 +358,55 @@ export async function extractProductFromText(
     return { success: false, error: 'Kein Text zum Verarbeiten' }
   }
 
-  // 1. Try Groq (cloud) first - works for all users
-  const groqResult = await tryGroqExtraction(text, sourceType)
-  if (groqResult) {
-    return groqResult
+  // Try AI providers in cascade via centralized provider
+  const result = await callWithFallback({
+    systemPrompt: ERFASSUNG_PROMPTS.system,
+    userPrompt: buildExtractionPrompt(text.trim()),
+    temperature: 0.3,
+    maxTokens: 1024,
+    timeoutMs: 15000,
+  })
+
+  if (result) {
+    // Extract JSON from response
+    const jsonMatch = result.text.match(/\{[\s\S]*\}/)
+    if (jsonMatch) {
+      try {
+        const productData = JSON.parse(jsonMatch[0]) as VoiceProductData
+        const { metadata, allSources } = calculateFieldConfidence(text, productData, sourceType, result.model)
+
+        logger.info('AI extraction successful', {
+          product: productData.produktname,
+          hersteller: productData.hersteller,
+          provider: result.provider,
+          sourcesCount: allSources.length,
+        })
+
+        return {
+          success: true,
+          data: productData,
+          metadata,
+          sourceType,
+          inputText: text,
+          model: result.model,
+          verificationSources: allSources,
+        }
+      } catch {
+        logger.warn('Failed to parse AI JSON response', {
+          provider: result.provider,
+          responsePreview: result.text.substring(0, 200),
+        })
+      }
+    }
   }
 
-  // 2. Try Ollama (local) as fallback for development
-  const ollamaResult = await tryOllamaExtraction(text, sourceType)
-  if (ollamaResult) {
-    return ollamaResult
-  }
-
-  // 3. Fall back to fast regex-based parser
+  // Fall back to fast regex-based parser
   logger.warn('All AI providers failed, using fast parser', {
     text: text.substring(0, 50),
-    hasGroqKey: !!GROQ_API_KEY,
   })
 
   const productData = fastParseProductText(text)
-  const { metadata, allSources } = calculateFieldConfidence(text, productData, sourceType)
+  const { metadata, allSources } = calculateFieldConfidence(text, productData, sourceType, 'fast-parser')
 
   // Adjust confidence for fallback parser (slightly lower)
   Object.keys(metadata).forEach(key => {

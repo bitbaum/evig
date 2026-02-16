@@ -23,6 +23,7 @@ import {
   PricingSection,
 } from './service-form'
 import type { Feature, ProcessStep, ServiceFormData } from './service-form'
+import { AIFormAssistBar } from '@/components/ai/AIFormAssistBar'
 
 interface ServiceFormProps {
   initialData?: Partial<ServiceFormData>
@@ -99,6 +100,20 @@ export function ServiceForm({ initialData, isEdit = false }: ServiceFormProps) {
     setFormData((prev) => ({ ...prev, [field]: value }))
   }
 
+  const handleAIFieldsFilled = (data: Partial<Record<string, unknown>>) => {
+    setFormData(prev => {
+      const updated = { ...prev }
+      if (data.name) updated.name = String(data.name)
+      if (data.description) updated.description = String(data.description)
+      if (data.heroTitle) updated.heroTitle = String(data.heroTitle)
+      if (data.heroSubtitle) updated.heroSubtitle = String(data.heroSubtitle)
+      if (data.heroDescription) updated.heroDescription = String(data.heroDescription)
+      if (Array.isArray(data.features)) updated.features = data.features as Feature[]
+      if (Array.isArray(data.process)) updated.process = data.process as ProcessStep[]
+      return updated
+    })
+  }
+
   // Feature management
   const addFeature = () => updateField('features', [...formData.features, { title: '', description: '', icon: 'Wrench' }])
   const updateFeature = (index: number, field: keyof Feature, value: string) => {
@@ -166,6 +181,18 @@ export function ServiceForm({ initialData, isEdit = false }: ServiceFormProps) {
           {success}
         </div>
       )}
+
+      {/* AI Assistant */}
+      <AIFormAssistBar
+        formType="service"
+        placeholder="Beschreibe die Dienstleistung in 1-2 Sätzen..."
+        onFieldsFilled={handleAIFieldsFilled}
+        quickActions={[
+          { key: 'addFeatures', label: 'Features generieren' },
+          { key: 'generateSteps', label: 'Prozessschritte' },
+        ]}
+        currentData={formData as unknown as Record<string, unknown>}
+      />
 
       {/* Basic Info */}
       <CollapsibleSection title="Grundinformationen" defaultOpen={true}>

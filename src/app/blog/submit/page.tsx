@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { ArrowLeft, Send, Lightbulb, FileText, Edit } from 'lucide-react'
 import { PageHero } from '@/components/layout/PageHero'
+import { AIFormAssistBar } from '@/components/ai/AIFormAssistBar'
 
 type SubmissionType = 'idea' | 'draft'
 
@@ -42,6 +43,18 @@ export default function SubmitPostPage() {
         // Silently fail - categories are optional
       })
   }, [])
+
+  const handleAIFieldsFilled = (data: Partial<Record<string, unknown>>) => {
+    setFormData(prev => {
+      const updated = { ...prev }
+      if (data.title) updated.title = String(data.title)
+      if (data.content) updated.content = String(data.content)
+      if (data.category) updated.category = String(data.category)
+      if (Array.isArray(data.tags)) updated.tags = data.tags.join(', ')
+      else if (data.tags) updated.tags = String(data.tags)
+      return updated
+    })
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -152,6 +165,15 @@ export default function SubmitPostPage() {
           <h2 className="text-2xl font-bold text-gray-900 mb-6">
             {submissionType === 'idea' ? 'Ihre Idee' : 'Ihr Entwurf'}
           </h2>
+
+          {/* AI Assistant */}
+          <AIFormAssistBar
+            formType="blog-submit"
+            placeholder={submissionType === 'idea' ? 'Beschreibe deine Artikelidee...' : 'Beschreibe worum es in deinem Artikel geht...'}
+            onFieldsFilled={handleAIFieldsFilled}
+            currentData={formData}
+            className="mb-6"
+          />
 
           {/* Personal Info */}
           <div className="grid md:grid-cols-2 gap-6 mb-6">

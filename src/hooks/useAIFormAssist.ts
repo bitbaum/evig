@@ -3,7 +3,7 @@
 /**
  * useAIFormAssist Hook
  *
- * Generic hook for AI-powered form field extraction.
+ * Generic hook for AI-powered form field extraction, refinement, and quick actions.
  * Calls POST /api/ai/extract and returns structured data for any form type.
  */
 
@@ -16,12 +16,14 @@ export interface AIFieldMetadataEntry {
 }
 
 export interface UseAIFormAssistOptions<T> {
-  formType: 'erfassung' | 'it-hilfe'
+  formType: string
   onFieldsFilled: (data: Partial<T>, metadata: Record<string, AIFieldMetadataEntry>) => void
 }
 
 export interface UseAIFormAssistReturn {
   extractFromText: (text: string) => Promise<void>
+  refineFields: (currentData: Record<string, unknown>, instruction: string) => Promise<void>
+  runQuickAction: (currentData: Record<string, unknown>, actionKey: string) => Promise<void>
   isExtracting: boolean
   error: string | null
 }
@@ -33,12 +35,7 @@ export function useAIFormAssist<T>({
   const [isExtracting, setIsExtracting] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
-  const extractFromText = async (text: string) => {
-    if (!text.trim()) {
-      setError('Bitte gib eine Beschreibung ein.')
-      return
-    }
-
+  const callAPI = async (body: Record<string, unknown>) => {
     setIsExtracting(true)
     setError(null)
 
@@ -46,7 +43,7 @@ export function useAIFormAssist<T>({
       const response = await fetch('/api/ai/extract', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ formType, text }),
+        body: JSON.stringify({ formType, ...body }),
       })
 
       const result = await response.json()
@@ -77,5 +74,25 @@ export function useAIFormAssist<T>({
     }
   }
 
-  return { extractFromText, isExtracting, error }
+  const extractFromText = async (text: string) => {
+    if (!text.trim()) {
+      setError('Bitte gib eine Beschreibung ein.')
+      return
+    }
+    await callAPI({ text, mode: 'extract' })
+  }
+
+  const refineFields = async (currentData: Record<string, unknown>, instruction: string) => {
+    if (!instruction.trim()) {
+      setError('Bitte gib eine Anweisung ein.')
+      return
+    }
+    await callAPI({ text: instruction, mode: 'refine', currentData, instruction })
+  }
+
+  const runQuickAction = async (currentData: Record<string, unknown>, actionKey: string) => {
+    await callAPI({ text: actionKey, mode: 'refine', currentData, quickAction: actionKey })
+  }
+
+  return { extractFromText, refineFields, runQuickAction, isExtracting, error }
 }

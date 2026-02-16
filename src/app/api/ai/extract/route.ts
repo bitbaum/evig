@@ -2,19 +2,29 @@
  * AI Form Extraction API
  *
  * POST /api/ai/extract
- * Generic endpoint for AI-powered form field extraction.
- * Dispatches to form-specific extraction services based on formType.
+ * Universal endpoint for AI-powered form field extraction.
+ * Dispatches to form-specific prompts via FORM_AI_REGISTRY.
  */
 
 import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@/auth'
 import { z } from 'zod'
 import { logger } from '@/lib/logger'
-import { extractITHilfeFromText } from '@/lib/it-hilfe/ai-extraction'
+import { registryExtract, type ExtractMode } from '@/lib/ai/extract'
+import { FORM_AI_REGISTRY } from '@/lib/ai/config/prompts'
+import { isStaffEmail } from '@/lib/permissions'
+
+const VALID_FORM_TYPES = Object.keys(FORM_AI_REGISTRY)
 
 const extractRequestSchema = z.object({
-  formType: z.enum(['erfassung', 'it-hilfe']),
-  text: z.string().min(3, 'Text zu kurz').max(2000, 'Text zu lang'),
+  formType: z.string().refine(v => VALID_FORM_TYPES.includes(v), {
+    message: `Gültiger formType erforderlich: ${VALID_FORM_TYPES.join(', ')}`,
+  }),
+  text: z.string().min(3, 'Text zu kurz').max(5000, 'Text zu lang'),
+  mode: z.enum(['extract', 'generate', 'refine']).optional(),
+  currentData: z.record(z.string(), z.unknown()).optional(),
+  instruction: z.string().max(2000).optional(),
+  quickAction: z.string().max(100).optional(),
 })
 
 export async function POST(request: NextRequest) {
@@ -34,24 +44,34 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const { formType, text } = result.data
+    const { formType, text, mode, currentData, instruction, quickAction } = result.data
+
+    // Check auth level from registry
+    const config = FORM_AI_REGISTRY[formType]
+    if (config.auth === 'staff' && !isStaffEmail(session.user.email || '')) {
+      return NextResponse.json(
+        { success: false, error: 'Nur für Staff-Mitglieder verfügbar' },
+        { status: 403 }
+      )
+    }
 
     logger.info('AI extraction requested', {
       formType,
+      mode: mode || 'extract',
       textLength: text.length,
       userId: session.user.id,
     })
 
-    if (formType === 'it-hilfe') {
-      const extractionResult = await extractITHilfeFromText(text)
-      return NextResponse.json(extractionResult)
-    }
+    const extractionResult = await registryExtract({
+      formType,
+      text,
+      mode: mode as ExtractMode,
+      currentData,
+      instruction,
+      quickAction,
+    })
 
-    // erfassung uses its own dedicated routes (voice/text/image)
-    return NextResponse.json(
-      { success: false, error: 'Erfassung nutzt eigene API-Routen' },
-      { status: 400 }
-    )
+    return NextResponse.json(extractionResult)
   } catch (error) {
     logger.error('AI extraction error', { error })
     return NextResponse.json(

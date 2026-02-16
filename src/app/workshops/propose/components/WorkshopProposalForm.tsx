@@ -11,6 +11,7 @@ import { PracticalDetailsSection } from './PracticalDetailsSection'
 import { MaterialsSection } from './MaterialsSection'
 import { LocationSection } from './LocationSection'
 import { TermsSection } from './TermsSection'
+import { AIFormAssistBar } from '@/components/ai/AIFormAssistBar'
 
 interface WorkshopLocation {
   id: string
@@ -138,6 +139,21 @@ export function WorkshopProposalForm() {
     }))
   }
 
+  const handleAIFieldsFilled = (data: Partial<Record<string, unknown>>) => {
+    setFormData(prev => {
+      const updated = { ...prev }
+      if (data.title) updated.title = String(data.title)
+      if (data.description) updated.description = String(data.description)
+      if (data.shortDescription) updated.shortDescription = String(data.shortDescription)
+      if (data.category) updated.category = String(data.category)
+      if (data.level) updated.level = String(data.level) as FormData['level']
+      if (data.targetAudience) updated.targetAudience = String(data.targetAudience)
+      if (data.prerequisites) updated.prerequisites = String(data.prerequisites)
+      if (Array.isArray(data.learningObjectives)) updated.learningObjectives = data.learningObjectives.map(String)
+      return updated
+    })
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
@@ -200,6 +216,18 @@ export function WorkshopProposalForm() {
 
   return (
     <form onSubmit={handleSubmit} className="bg-white rounded-xl shadow-lg p-8">
+      <AIFormAssistBar
+        formType="workshop"
+        placeholder="Beschreibe deine Workshop-Idee in 1-2 Sätzen..."
+        onFieldsFilled={handleAIFieldsFilled}
+        quickActions={[
+          { key: 'addObjectives', label: 'Lernziele vorschlagen' },
+          { key: 'suggestPrerequisites', label: 'Voraussetzungen' },
+        ]}
+        currentData={formData as unknown as Record<string, unknown>}
+        className="mb-8"
+      />
+
       <BasicInfoSection
         title={formData.title}
         category={formData.category}

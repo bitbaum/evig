@@ -12,11 +12,7 @@ import type { BulkProduct, ErfassungFormData } from '@/types/erfassung'
 import type { VoiceProductData, AIFieldMetadata } from '@/types/erfassung'
 import { BULK_LIMITS, KATEGORIEN } from '@/config/erfassung'
 import { CONDITION_ALIASES } from '@/config/erfassung/conditions'
-
-const GROQ_API_KEY = process.env.GROQ_API_KEY || ''
-const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions'
-const GROQ_MODEL = 'llama-3.3-70b-versatile'
-const AI_TIMEOUT_MS = 30000 // 30 seconds for multi-product (longer than single)
+import { callWithFallback } from '@/lib/ai/providers'
 
 /**
  * Client-side heuristic to detect if text contains multiple products.
@@ -92,47 +88,26 @@ async function extractChunk(
   text: string,
   sourceType: 'text' | 'voice',
 ): Promise<BulkProduct[]> {
-  if (!GROQ_API_KEY) {
-    logger.warn('Groq API key not configured, using line-based fallback')
-    return fallbackParse(text, sourceType)
-  }
-
-  const controller = new AbortController()
-  const timeoutId = setTimeout(() => controller.abort(), AI_TIMEOUT_MS)
-
   try {
     const prompt = fillPromptTemplate(ERFASSUNG_PROMPTS.extractMulti, {
       text,
       schema: ERFASSUNG_PROMPTS.schema,
     })
 
-    const response = await fetch(GROQ_API_URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${GROQ_API_KEY}`,
-      },
-      body: JSON.stringify({
-        model: GROQ_MODEL,
-        messages: [
-          { role: 'system', content: ERFASSUNG_PROMPTS.system },
-          { role: 'user', content: prompt },
-        ],
-        temperature: 0.3,
-        max_tokens: 4096,
-      }),
-      signal: controller.signal,
+    const result = await callWithFallback({
+      systemPrompt: ERFASSUNG_PROMPTS.system,
+      userPrompt: prompt,
+      temperature: 0.3,
+      maxTokens: 4096,
+      timeoutMs: 30000,
     })
 
-    clearTimeout(timeoutId)
-
-    if (!response.ok) {
-      logger.warn('Groq multi-extract API error', { status: response.status })
+    if (!result) {
+      logger.warn('All AI providers failed for multi-extract')
       return fallbackParse(text, sourceType)
     }
 
-    const result = await response.json()
-    const responseText = result.choices?.[0]?.message?.content || ''
+    const responseText = result.text
 
     // Extract JSON array from response
     const jsonMatch = responseText.match(/\[[\s\S]*\]/)
@@ -148,11 +123,10 @@ async function extractChunk(
     }
 
     const products = JSON.parse(jsonMatch[0]) as VoiceProductData[]
-    logger.info('Multi-extract successful', { count: products.length })
+    logger.info('Multi-extract successful', { count: products.length, provider: result.provider })
 
     return products.map(p => voiceDataToBulkProduct(p, sourceType))
   } catch (error) {
-    clearTimeout(timeoutId)
     logger.warn('Multi-extract failed, using fallback', {
       error: error instanceof Error ? error.message : 'unknown',
     })

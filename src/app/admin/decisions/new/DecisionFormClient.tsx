@@ -13,6 +13,7 @@ import {
   type DecisionType,
   type VotingMethod,
 } from '@/config/decisions';
+import { AIFormAssistBar } from '@/components/ai/AIFormAssistBar'
 
 interface OptionItem {
   id: string;
@@ -44,6 +45,17 @@ export default function DecisionFormClient() {
   );
   const [quorumValue, setQuorumValue] = useState(50);
   const initialStatusRef = useRef<'draft' | 'discussion' | 'voting'>('draft');
+
+  const handleAIFieldsFilled = (data: Partial<Record<string, unknown>>) => {
+    if (data.title) setTitle(String(data.title))
+    if (data.description) setDescription(String(data.description))
+    if (Array.isArray(data.options)) {
+      setOptions(data.options.map((opt: unknown) => {
+        const o = opt as Record<string, string>
+        return { id: crypto.randomUUID(), label: o.label || '', description: o.description || '' }
+      }))
+    }
+  }
 
   function handleTypeChange(type: DecisionType) {
     setDecisionType(type);
@@ -120,6 +132,14 @@ export default function DecisionFormClient() {
           {error}
         </div>
       )}
+
+      {/* AI Assistant */}
+      <AIFormAssistBar
+        formType="decision"
+        placeholder="Beschreibe den Vorschlag in 1-2 Sätzen..."
+        onFieldsFilled={handleAIFieldsFilled}
+        currentData={{ title, description }}
+      />
 
       {/* Decision Type Selector */}
       <div>

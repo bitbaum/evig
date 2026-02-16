@@ -26,6 +26,7 @@ import {
   formatCHF,
 } from '@/config/marketplace'
 import { ZUSTAND_OPTIONS } from '@/config/erfassung/conditions'
+import { AIFormAssistBar } from '@/components/ai/AIFormAssistBar'
 
 type Step = 'form' | 'preview'
 
@@ -238,6 +239,16 @@ function SellPageContent() {
     }
   }
 
+  const handleAIFieldsFilled = (data: Partial<Record<string, unknown>>) => {
+    if (data.title) setTitle(String(data.title))
+    if (data.description) setDescription(String(data.description))
+    if (data.category) setCategory(String(data.category))
+    if (data.price !== undefined) setPrice(String(data.price))
+    if (data.condition) setCondition(String(data.condition))
+    if (data.brand) setBrand(String(data.brand))
+    if (data.model) setModel(String(data.model))
+  }
+
   // Preview step
   if (step === 'preview') {
     const conditionLabel = ZUSTAND_OPTIONS.find(o => o.value === condition)?.label || condition
@@ -361,6 +372,18 @@ function SellPageContent() {
         </div>
 
         <div className="p-6 space-y-6">
+          {/* AI Assistant */}
+          <AIFormAssistBar
+            formType="marketplace"
+            placeholder="Beschreibe dein Produkt in 1-2 Sätzen..."
+            onFieldsFilled={handleAIFieldsFilled}
+            quickActions={[
+              { key: 'improveDescription', label: 'Beschreibung verbessern' },
+              { key: 'suggestPrice', label: 'Preis vorschlagen' },
+            ]}
+            currentData={{ title, description, price, category, condition, brand, model }}
+          />
+
           {/* Images */}
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">

@@ -9,6 +9,7 @@ import { NextRequest } from 'next/server'
 import { withAdmin } from '@/lib/api/middleware'
 import { chat } from '@/lib/hirn'
 import { apiSuccess, apiError, apiBadRequest } from '@/lib/api/helpers'
+import { logger } from '@/lib/logger'
 
 export const POST = withAdmin(async (request: NextRequest, session) => {
   try {
@@ -45,6 +46,8 @@ export const POST = withAdmin(async (request: NextRequest, session) => {
       provider: response.provider,
     })
   } catch (error) {
-    return apiError(error, 'Chat-Nachricht konnte nicht verarbeitet werden')
+    const detail = error instanceof Error ? error.message : 'Unbekannter Fehler'
+    logger.error('Chat error detail', { error: detail, stack: error instanceof Error ? error.stack : undefined })
+    return apiError(error, `Chat-Fehler: ${detail}`)
   }
 })

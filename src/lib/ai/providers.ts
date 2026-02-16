@@ -20,7 +20,7 @@ const GROQ_MODEL = 'llama-3.3-70b-versatile'
 
 const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY || ''
 const OPENROUTER_API_URL = 'https://openrouter.ai/api/v1/chat/completions'
-const OPENROUTER_MODEL = 'meta-llama/llama-3.3-70b-instruct'
+const OPENROUTER_MODEL = 'meta-llama/llama-3.3-70b-instruct:free'
 
 const OLLAMA_URL = process.env.OLLAMA_URL || 'http://localhost:11434'
 const OLLAMA_MODEL = process.env.OLLAMA_MODEL || 'llama3.2'
@@ -153,7 +153,7 @@ async function callOpenRouter(opts: CallOptions): Promise<ProviderResult | Provi
         return { provider: 'openrouter', reason: 'auth', message: `API-Schlüssel ungültig (${response.status})` }
       }
       if (response.status === 402) {
-        return { provider: 'openrouter', reason: 'auth', message: 'Kein Guthaben auf OpenRouter-Konto' }
+        return { provider: 'openrouter', reason: 'auth', message: 'OpenRouter: Datenschutz-Einstellungen prüfen oder Guthaben kaufen (openrouter.ai/settings)' }
       }
       if (response.status === 429) {
         return { provider: 'openrouter', reason: 'rate_limit', message: 'Rate-Limit erreicht' }

@@ -539,6 +539,272 @@ Antworte NUR mit dem JSON-Array, keine Erklärungen.`,
 } as const
 
 // =============================================================================
+// FORM AI REGISTRY
+// =============================================================================
+
+export interface FormAIConfig {
+  system: string
+  extract: string
+  schema: string | null
+  refine?: string
+  quickActions?: Record<string, string>
+  maxTokens?: number
+  temperature?: number
+  auth?: 'user' | 'staff'
+}
+
+/**
+ * FORM_AI_REGISTRY - SSOT for all form types that support AI assistance.
+ * Adding AI to a new form = add entry here + drop AIFormAssistBar in the component.
+ */
+export const FORM_AI_REGISTRY: Record<string, FormAIConfig> = {
+  'erfassung': {
+    system: ERFASSUNG_PROMPTS.system,
+    extract: ERFASSUNG_PROMPTS.extract,
+    schema: ERFASSUNG_PROMPTS.schema,
+    refine: ERFASSUNG_PROMPTS.refine,
+    quickActions: { ...ERFASSUNG_PROMPTS.quickActions },
+    auth: 'staff',
+  },
+  'it-hilfe': {
+    system: IT_HILFE_PROMPTS.system,
+    extract: IT_HILFE_PROMPTS.extract,
+    schema: IT_HILFE_PROMPTS.schema,
+    auth: 'user',
+  },
+  'blog-admin': {
+    system: BLOG_PROMPTS.system,
+    extract: BLOG_PROMPTS.generate,
+    schema: null,
+    refine: BLOG_PROMPTS.refine,
+    quickActions: { ...BLOG_PROMPTS.quickActions },
+    maxTokens: 4096,
+    temperature: 0.7,
+    auth: 'staff',
+  },
+  'protocol': {
+    system: PROTOCOL_PROMPTS.system,
+    extract: PROTOCOL_PROMPTS.extract,
+    schema: PROTOCOL_PROMPTS.schema,
+    quickActions: { ...PROTOCOL_PROMPTS.quickActions },
+    maxTokens: 4096,
+    auth: 'staff',
+  },
+  'marketplace': {
+    system: `${BRAND_CONTEXT}
+
+Du bist ein Assistent für den RevampIT Marketplace.
+Hilf Benutzern, ihre Inserate für gebrauchte IT-Geräte zu erstellen.
+Extrahiere Produktinformationen und generiere ansprechende Beschreibungen.`,
+    extract: `Der Benutzer möchte ein IT-Produkt auf dem Marketplace verkaufen.
+Aus der folgenden Beschreibung, extrahiere die Produktinformationen:
+
+Beschreibung: "{text}"
+
+Antworte NUR mit folgendem JSON:
+{
+  "title": "Aussagekräftiger Inseratstitel",
+  "description": "Detaillierte, ansprechende Beschreibung für Käufer (2-4 Sätze)",
+  "price": "Geschätzter Preis in CHF (nur Zahl, basierend auf Schweizer Gebrauchtmarkt)",
+  "category": "Kategorie (Laptops, Desktop PCs, Monitore, Zubehör, Smartphones, Tablets)",
+  "condition": "Zustand: new, like_new, good, fair, poor",
+  "brand": "Marke/Hersteller",
+  "model": "Modellbezeichnung"
+}
+
+Wichtig: Preise für den Schweizer Gebrauchtmarkt schätzen. Schweizer Deutsch (ss statt ß).`,
+    schema: null,
+    refine: `Verbessere das folgende Marketplace-Inserat gemäss der Anweisung.
+
+AKTUELLE DATEN:
+{currentData}
+
+ANWEISUNG:
+{instruction}
+
+Antworte NUR mit dem verbesserten JSON (gleiche Felder wie oben).`,
+    quickActions: {
+      improveDescription: 'Verbessere die Beschreibung: Mache sie ansprechender und hebe Verkaufsargumente hervor.',
+      suggestPrice: 'Schätze einen realistischen Preis basierend auf dem Schweizer Gebrauchtmarkt (ricardo.ch, tutti.ch).',
+    },
+    auth: 'user',
+  },
+  'workshop': {
+    system: `${BRAND_CONTEXT}
+
+Du bist ein Assistent für Workshop-Vorschläge bei RevampIT.
+Hilf Benutzern, strukturierte Workshop-Vorschläge zu erstellen.`,
+    extract: `Der Benutzer möchte einen Workshop bei RevampIT vorschlagen.
+Aus der folgenden Beschreibung, erstelle einen strukturierten Workshop-Vorschlag:
+
+Beschreibung: "{text}"
+
+Antworte NUR mit folgendem JSON:
+{
+  "title": "Workshop-Titel",
+  "shortDescription": "Kurze Zusammenfassung (1-2 Sätze)",
+  "description": "Ausführliche Workshop-Beschreibung (3-5 Sätze)",
+  "category": "Kategorie: repair, software, hardware, sustainability, digital-literacy, other",
+  "level": "Level: beginner, intermediate, advanced",
+  "durationHours": "Dauer in Stunden (Zahl)",
+  "learningObjectives": ["Lernziel 1", "Lernziel 2", "Lernziel 3"],
+  "targetAudience": "Zielgruppe beschreiben",
+  "prerequisites": "Voraussetzungen (leer wenn keine)",
+  "materialsRequired": "Benötigte Materialien"
+}
+
+Wichtig: Schweizer Deutsch (ss statt ß). Praxisorientiert und Community-freundlich formulieren.`,
+    schema: null,
+    refine: `Verbessere den folgenden Workshop-Vorschlag gemäss der Anweisung.
+
+AKTUELLE DATEN:
+{currentData}
+
+ANWEISUNG:
+{instruction}
+
+Antworte NUR mit dem verbesserten JSON (gleiche Felder wie oben).`,
+    quickActions: {
+      addObjectives: 'Ergänze 2-3 weitere konkrete, messbare Lernziele.',
+      suggestPrerequisites: 'Schlage sinnvolle Voraussetzungen und benötigte Materialien vor.',
+    },
+    auth: 'user',
+  },
+  'service': {
+    system: `${BRAND_CONTEXT}
+
+Du bist ein Assistent für die Erstellung von Dienstleistungs-Seiten bei RevampIT.
+Generiere professionelle, ansprechende Service-Beschreibungen.`,
+    extract: `Der Admin möchte eine neue Dienstleistung erstellen.
+Aus der folgenden Beschreibung, generiere die Service-Seite:
+
+Beschreibung: "{text}"
+
+Antworte NUR mit folgendem JSON:
+{
+  "name": "Dienstleistungsname",
+  "description": "Kurzbeschreibung (1-2 Sätze)",
+  "heroTitle": "Ansprechender Hero-Titel",
+  "heroSubtitle": "Kurzer Slogan",
+  "heroDescription": "Ausführliche Beschreibung für die Service-Seite (3-5 Sätze)",
+  "features": [
+    { "title": "Feature 1", "description": "Beschreibung", "icon": "Wrench" },
+    { "title": "Feature 2", "description": "Beschreibung", "icon": "Shield" },
+    { "title": "Feature 3", "description": "Beschreibung", "icon": "Clock" }
+  ],
+  "process": [
+    { "step": 1, "title": "Schritt 1", "description": "Was passiert" },
+    { "step": 2, "title": "Schritt 2", "description": "Was passiert" },
+    { "step": 3, "title": "Schritt 3", "description": "Was passiert" }
+  ]
+}
+
+Wichtig: Schweizer Deutsch (ss statt ß). Icons aus: Wrench, Shield, Clock, Zap, Heart, Star, Cpu, Monitor.`,
+    schema: null,
+    refine: `Verbessere die folgende Dienstleistung gemäss der Anweisung.
+
+AKTUELLE DATEN:
+{currentData}
+
+ANWEISUNG:
+{instruction}
+
+Antworte NUR mit dem verbesserten JSON (gleiche Felder wie oben).`,
+    quickActions: {
+      addFeatures: 'Ergänze 2-3 weitere überzeugende Features/Vorteile.',
+      generateSteps: 'Erstelle einen klaren 3-5 Schritte Prozessablauf.',
+    },
+    auth: 'staff',
+  },
+  'task': {
+    system: `${BRAND_CONTEXT}
+
+Du bist ein Assistent für die Aufgabenverwaltung bei RevampIT.
+Strukturiere Aufgabenbeschreibungen und schlage Prioritäten vor.`,
+    extract: `Der Admin möchte eine neue Aufgabe erstellen.
+Aus der folgenden Beschreibung, strukturiere die Aufgabe:
+
+Beschreibung: "{text}"
+
+Antworte NUR mit folgendem JSON:
+{
+  "title": "Klarer, kurzer Aufgabentitel (max 200 Zeichen)",
+  "description": "Strukturierte Beschreibung der Aufgabe",
+  "instructions": "Schritt-für-Schritt Anleitung zur Erledigung",
+  "category": "Kategorie: cleaning, maintenance, inventory, repair, admin, communication, events, other",
+  "priority": "Priorität: low, normal, high, urgent",
+  "estimated_minutes": "Geschätzte Dauer in Minuten (Zahl)",
+  "tags": "Relevante Tags, kommagetrennt"
+}
+
+Wichtig: Schweizer Deutsch (ss statt ß). Anleitungen klar und für Freiwillige verständlich formulieren.`,
+    schema: null,
+    auth: 'staff',
+  },
+  'decision': {
+    system: `${BRAND_CONTEXT}
+
+Du bist ein Assistent für die Entscheidungsfindung bei RevampIT.
+Strukturiere Vorschläge und Entscheidungsgrundlagen.`,
+    extract: `Der Admin möchte eine Entscheidung zur Abstimmung stellen.
+Aus der folgenden Beschreibung, strukturiere den Vorschlag:
+
+Beschreibung: "{text}"
+
+Antworte NUR mit folgendem JSON:
+{
+  "title": "Klarer Entscheidungstitel (max 200 Zeichen)",
+  "description": "Ausführliche Beschreibung mit Kontext, Hintergrund und was zur Entscheidung steht (3-5 Sätze)",
+  "options": [
+    { "label": "Option 1", "description": "Kurze Beschreibung" },
+    { "label": "Option 2", "description": "Kurze Beschreibung" }
+  ]
+}
+
+Wichtig: Schweizer Deutsch (ss statt ß). Neutral formulieren, alle Seiten fair darstellen.`,
+    schema: null,
+    auth: 'staff',
+  },
+  'blog-submit': {
+    system: `${BRAND_CONTEXT}
+
+Du bist ein Assistent für Blog-Einreichungen bei RevampIT.
+Hilf Benutzern, ihre Artikel-Ideen und Entwürfe zu strukturieren.`,
+    extract: `Der Benutzer möchte einen Blog-Beitrag einreichen.
+Aus der folgenden Beschreibung, erstelle einen strukturierten Entwurf:
+
+Beschreibung: "{text}"
+
+Antworte NUR mit folgendem JSON:
+{
+  "title": "Ansprechender Artikel-Titel",
+  "content": "Artikel-Entwurf in Markdown (mindestens 200 Wörter)",
+  "tags": "Relevante Tags, kommagetrennt",
+  "category": "Vorgeschlagene Kategorie"
+}
+
+Wichtig: Schweizer Deutsch (ss statt ß). Informativ, zugänglich, mit praktischen Tipps.`,
+    schema: null,
+    refine: `Verbessere den folgenden Blog-Entwurf gemäss der Anweisung.
+
+AKTUELLE DATEN:
+{currentData}
+
+ANWEISUNG:
+{instruction}
+
+Antworte NUR mit dem verbesserten JSON (gleiche Felder wie oben).`,
+    quickActions: {
+      improveWriting: 'Verbessere den Schreibstil: Klarer, ansprechender, mit besserer Struktur.',
+      suggestTitle: 'Schlage 3 alternative, SEO-freundliche Titel vor.',
+    },
+    maxTokens: 4096,
+    temperature: 0.7,
+    auth: 'user',
+  },
+} as const satisfies Record<string, FormAIConfig>
+
+// =============================================================================
 // HELPER TYPES
 // =============================================================================
 
