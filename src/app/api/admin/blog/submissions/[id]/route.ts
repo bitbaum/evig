@@ -7,55 +7,39 @@
  */
 
 import { NextRequest } from 'next/server'
-import { auth } from '@/auth'
-import { query } from '@/lib/auth/db'
+import { withAdmin } from '@/lib/api/middleware'
+import { query, transaction } from '@/lib/auth/db'
 import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
 import {
   apiSuccess,
   apiError,
-  apiUnauthorized,
   apiNotFound,
   apiBadRequest,
+  apiForbidden,
 } from '@/lib/api/helpers'
 import { canAccessSection } from '@/lib/permissions'
 import { sendEmail } from '@/lib/email'
 import { createEditSnapshot, appendEditHistory } from '@/lib/admin/edit-utils'
 
-interface RouteParams {
-  params: Promise<{
-    id: string
-  }>
-}
-
-// Helper to check admin access
-async function checkAdminAccess(session: { user?: { email?: string | null; isStaff?: boolean; staffPermissions?: string[] } } | null) {
-  if (!session?.user) {
-    return { allowed: false, error: 'Anmeldung erforderlich' }
-  }
-
+// Helper to check content section access
+function checkContentAccess(session: { user: { email: string; isStaff: boolean; staffPermissions: string[] } }) {
   const userForPermissions = {
-    email: session.user.email || '',
-    is_staff: session.user.isStaff || false,
-    staff_permissions: session.user.staffPermissions || [],
+    email: session.user.email,
+    is_staff: session.user.isStaff,
+    staff_permissions: session.user.staffPermissions,
   }
 
-  if (!canAccessSection(userForPermissions, 'content')) {
-    return { allowed: false, error: 'Keine Berechtigung für diesen Bereich' }
-  }
-
-  return { allowed: true, error: null }
+  return canAccessSection(userForPermissions, 'content')
 }
 
-export async function GET(request: NextRequest, { params }: RouteParams) {
+export const GET = withAdmin<{ id: string }>(async (request, session, context) => {
   try {
-    const session = await auth()
-    const access = await checkAdminAccess(session)
-    if (!access.allowed) {
-      return apiUnauthorized(access.error!)
+    if (!checkContentAccess(session)) {
+      return apiForbidden('Keine Berechtigung für diesen Bereich')
     }
 
-    const { id } = await params
+    const { id } = context!.params!
 
     const result = await query(
       `SELECT
@@ -79,17 +63,15 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
     logger.error('Failed to get blog submission', { error })
     return apiError(error, 'Fehler beim Laden der Einreichung')
   }
-}
+})
 
-export async function PATCH(request: NextRequest, { params }: RouteParams) {
+export const PATCH = withAdmin<{ id: string }>(async (request, session, context) => {
   try {
-    const session = await auth()
-    const access = await checkAdminAccess(session)
-    if (!access.allowed) {
-      return apiUnauthorized(access.error!)
+    if (!checkContentAccess(session)) {
+      return apiForbidden('Keine Berechtigung für diesen Bereich')
     }
 
-    const { id } = await params
+    const { id } = context!.params!
     const body = await request.json()
     const { action, review_notes, rejection_reason } = body
 
@@ -115,7 +97,7 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
     }
 
     const submission = existing.rows[0]
-    const reviewerId = session!.user!.id
+    const reviewerId = session.user.id
 
     // Handle different actions
     switch (action) {
@@ -164,7 +146,7 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
         }
 
         // Create edit snapshot
-        const editorName = session!.user!.name || session!.user!.email || 'Admin'
+        const editorName = session.user.name || session.user.email || 'Admin'
         const editEntry = createEditSnapshot(
           submission,
           fields,
@@ -257,36 +239,40 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
       }
 
       case 'publish': {
-        // Create blog post from submission
-        const postResult = await query<{ id: string }>(
-          `INSERT INTO ${TABLE_NAMES.BLOG_POSTS}
-           (slug, title, content, excerpt, category_id, tags, is_published, published_at,
-            created_by, seo_title, seo_description)
-           VALUES ($1, $2, $3, $4, $5, $6, true, NOW(), $7, $8, $9)
-           RETURNING id`,
-          [
-            submission.slug,
-            submission.title,
-            submission.content,
-            submission.content.substring(0, 200) + '...',
-            submission.category_id,
-            submission.tags || [],
-            reviewerId,
-            submission.title,
-            submission.content.substring(0, 160),
-          ]
-        )
+        // Wrap INSERT + UPDATE in transaction to prevent orphaned posts
+        const { postId, postSlug } = await transaction(async (client) => {
+          const postResult = await client.query(
+            `INSERT INTO ${TABLE_NAMES.BLOG_POSTS}
+             (slug, title, content, excerpt, category_id, tags, is_published, published_at,
+              created_by, seo_title, seo_description)
+             VALUES ($1, $2, $3, $4, $5, $6, true, NOW(), $7, $8, $9)
+             RETURNING id`,
+            [
+              submission.slug,
+              submission.title,
+              submission.content,
+              submission.content.substring(0, 200) + '...',
+              submission.category_id,
+              submission.tags || [],
+              reviewerId,
+              submission.title,
+              submission.content.substring(0, 160),
+            ]
+          )
 
-        const postId = postResult.rows[0].id
+          const createdPostId = (postResult.rows[0] as { id: string }).id
 
-        // Update submission with link to published post
-        await query(
-          `UPDATE ${TABLE_NAMES.BLOG_SUBMISSIONS}
-           SET status = 'published', reviewed_by = $1, reviewed_at = NOW(),
-               review_notes = $2, published_post_id = $3, published_at = NOW()
-           WHERE id = $4`,
-          [reviewerId, review_notes || 'Veröffentlicht', postId, id]
-        )
+          // Update submission with link to published post
+          await client.query(
+            `UPDATE ${TABLE_NAMES.BLOG_SUBMISSIONS}
+             SET status = 'published', reviewed_by = $1, reviewed_at = NOW(),
+                 review_notes = $2, published_post_id = $3, published_at = NOW()
+             WHERE id = $4`,
+            [reviewerId, review_notes || 'Veröffentlicht', createdPostId, id]
+          )
+
+          return { postId: createdPostId, postSlug: submission.slug }
+        })
 
         // Send published notification email
         try {
@@ -313,7 +299,7 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
           status: 'published',
           message: 'Beitrag veröffentlicht',
           postId,
-          postSlug: submission.slug,
+          postSlug,
         })
       }
 
@@ -362,17 +348,15 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
     logger.error('Failed to update blog submission', { error })
     return apiError(error, 'Fehler beim Aktualisieren der Einreichung')
   }
-}
+})
 
-export async function DELETE(request: NextRequest, { params }: RouteParams) {
+export const DELETE = withAdmin<{ id: string }>(async (request, session, context) => {
   try {
-    const session = await auth()
-    const access = await checkAdminAccess(session)
-    if (!access.allowed) {
-      return apiUnauthorized(access.error!)
+    if (!checkContentAccess(session)) {
+      return apiForbidden('Keine Berechtigung für diesen Bereich')
     }
 
-    const { id } = await params
+    const { id } = context!.params!
 
     // Check if submission exists
     const existing = await query<{ id: string; title: string }>(
@@ -392,7 +376,7 @@ export async function DELETE(request: NextRequest, { params }: RouteParams) {
     logger.info('Blog submission deleted', {
       submissionId: id,
       title: existing.rows[0].title,
-      deletedBy: session!.user!.id,
+      deletedBy: session.user.id,
     })
 
     return apiSuccess({ deleted: true })
@@ -400,4 +384,4 @@ export async function DELETE(request: NextRequest, { params }: RouteParams) {
     logger.error('Failed to delete blog submission', { error })
     return apiError(error, 'Fehler beim Löschen der Einreichung')
   }
-}
+})

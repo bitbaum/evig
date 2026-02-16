@@ -6,10 +6,10 @@
  */
 
 import { NextRequest } from 'next/server'
-import { auth } from '@/auth'
+import { withAdmin } from '@/lib/api/middleware'
 import { canAccessSection } from '@/lib/permissions'
 import { logger } from '@/lib/logger'
-import { apiSuccess, apiError, apiUnauthorized, apiForbidden, apiBadRequest } from '@/lib/api/helpers'
+import { apiSuccess, apiError, apiForbidden, apiBadRequest } from '@/lib/api/helpers'
 import { BLOG_PROMPTS, fillPromptTemplate } from '@/lib/ai/config/prompts'
 
 const GROQ_API_KEY = process.env.GROQ_API_KEY || ''
@@ -35,14 +35,8 @@ interface RefineRequest {
   instruction: string
 }
 
-export async function POST(request: NextRequest) {
+export const POST = withAdmin(async (request, session) => {
   try {
-    const session = await auth()
-
-    if (!session?.user) {
-      return apiUnauthorized()
-    }
-
     // Check blog/content permission
     const user = {
       email: session.user.email,
@@ -292,4 +286,4 @@ export async function POST(request: NextRequest) {
     logger.error('Failed to refine blog post', { error })
     return apiError(error, 'Blog-Verbesserung fehlgeschlagen')
   }
-}
+})

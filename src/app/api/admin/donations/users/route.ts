@@ -7,36 +7,17 @@
  */
 
 import { NextRequest } from 'next/server'
-import { auth } from '@/auth'
+import { withAdmin } from '@/lib/api/middleware'
 import { query } from '@/lib/auth/db'
-import { canAccessSection } from '@/lib/permissions'
 import { TABLE_NAMES } from '@/config/database'
 import {
   apiSuccess,
   apiError,
-  apiUnauthorized,
-  apiForbidden,
 } from '@/lib/api/helpers'
 import { logger } from '@/lib/logger'
 
-export async function GET(request: NextRequest) {
+export const GET = withAdmin(async (request: NextRequest, session) => {
   try {
-    const session = await auth()
-
-    if (!session?.user) {
-      return apiUnauthorized()
-    }
-
-    const user = {
-      email: session.user.email,
-      is_staff: session.user.isStaff,
-      staff_permissions: session.user.staffPermissions,
-    }
-
-    if (!canAccessSection(user, 'donations')) {
-      return apiForbidden('Kein Zugriff auf Spenden-Bereich')
-    }
-
     const { searchParams } = new URL(request.url)
     const search = searchParams.get('search')?.trim()
 
@@ -69,4 +50,4 @@ export async function GET(request: NextRequest) {
     logger.error('User search for donations failed', { error })
     return apiError(error, 'Benutzersuche fehlgeschlagen')
   }
-}
+})

@@ -6,20 +6,14 @@
  */
 
 import { NextRequest } from 'next/server'
-import { apiSuccess, apiError, apiUnauthorized } from '@/lib/api/helpers'
+import { withAdmin } from '@/lib/api/middleware'
+import { apiSuccess, apiError } from '@/lib/api/helpers'
 import { query } from '@/lib/auth/db'
 import { logger } from '@/lib/logger'
 import { TABLE_NAMES } from '@/config/database'
-import { auth } from '@/auth'
 
-export async function GET(request: NextRequest) {
+export const GET = withAdmin(async (request: NextRequest, session) => {
   try {
-    // Check authentication
-    const session = await auth()
-    if (!session?.user?.id) {
-      return apiUnauthorized('Nicht angemeldet')
-    }
-
     // Parse query params
     const { searchParams } = new URL(request.url)
     const limit = parseInt(searchParams.get('limit') || '50')
@@ -149,4 +143,4 @@ export async function GET(request: NextRequest) {
     logger.error('Failed to fetch inventory products', { error })
     return apiError(error, 'Fehler beim Laden der Produkte')
   }
-}
+})

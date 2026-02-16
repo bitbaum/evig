@@ -6,25 +6,14 @@
  */
 
 import { NextRequest } from 'next/server'
-import { auth } from '@/auth'
+import { withAdmin } from '@/lib/api/middleware'
 import { query } from '@/lib/auth/db'
 import { TABLE_NAMES } from '@/config/database'
-import { isStaffEmail, ADMIN_SECTIONS, type AdminSection } from '@/lib/permissions'
-import { apiSuccess, apiError, apiUnauthorized, apiForbidden, apiBadRequest } from '@/lib/api/helpers'
+import { ADMIN_SECTIONS, type AdminSection } from '@/lib/permissions'
+import { apiSuccess, apiError, apiBadRequest } from '@/lib/api/helpers'
 
-export async function POST(request: NextRequest) {
+export const POST = withAdmin(async (request, session) => {
   try {
-    const session = await auth()
-
-    if (!session?.user) {
-      return apiUnauthorized()
-    }
-
-    // Only staff can request permissions
-    if (!session.user.isStaff && !isStaffEmail(session.user.email)) {
-      return apiForbidden('Nur Mitarbeiter können Berechtigungen anfordern')
-    }
-
     const body = await request.json()
     const { sections, reason } = body
 
@@ -73,4 +62,4 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     return apiError(error, 'Berechtigungsanfrage konnte nicht eingereicht werden')
   }
-}
+})

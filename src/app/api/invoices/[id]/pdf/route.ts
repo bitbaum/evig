@@ -2,7 +2,6 @@ import { NextRequest } from 'next/server'
 import { auth } from '@/auth'
 import { query } from '@/lib/auth/db'
 import { apiError, apiSuccess, apiUnauthorized, apiNotFound } from '@/lib/api/helpers'
-import { isAdminRole } from '@/lib/constants'
 import { logger } from '@/lib/logger'
 import { formatDateShort } from '@/lib/date-formats'
 import { TABLE_NAMES } from '@/config/database'
@@ -21,10 +20,6 @@ interface CustomerAddress {
   city?: string
   postal_code?: string
   country?: string
-}
-
-interface UserRow {
-  role: string
 }
 
 interface InvoiceData {
@@ -63,9 +58,7 @@ export async function GET(
     }
 
     // Check if user is admin
-    const userRoleResult = await query(`SELECT role FROM ${TABLE_NAMES.USERS} WHERE id = $1`, [session.user.id])
-    const user = userRoleResult.rows[0] as UserRow | undefined
-    const isAdmin = isAdminRole(user?.role)
+    const isAdmin = session.user.isStaff
 
     // Get invoice details
     const invoiceResult = await query(`
@@ -138,9 +131,7 @@ export async function POST(
     }
 
     // Check if user is admin
-    const userRoleResult = await query(`SELECT role FROM ${TABLE_NAMES.USERS} WHERE id = $1`, [session.user.id])
-    const user = userRoleResult.rows[0] as UserRow | undefined
-    const isAdmin = isAdminRole(user?.role)
+    const isAdmin = session.user.isStaff
 
     // Get invoice details
     const invoiceResult = await query(`

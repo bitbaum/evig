@@ -4,8 +4,7 @@ import { query } from '@/lib/auth/db'
 import { apiError, apiSuccess, apiBadRequest, apiUnauthorized, apiForbidden, apiNotFound } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES } from '@/config/database'
-import { getUserRole } from '@/lib/api/role-checks'
-import { isAdminRole, ROLES } from '@/lib/constants'
+
 
 interface LocationOwnerRow {
   created_by: string
@@ -94,7 +93,6 @@ export async function PUT(
     const body = await request.json()
 
     // Check if user owns this location or is admin
-    const userRole = await getUserRole(session.user.id)
     const ownershipCheck = await query(`
       SELECT created_by, approval_status FROM ${TABLE_NAMES.LOCATIONS}
       WHERE id = $1
@@ -106,7 +104,7 @@ export async function PUT(
 
     const location = ownershipCheck.rows[0] as LocationOwnerRow
     const isOwner = location.created_by === session.user.id
-    const isAdmin = isAdminRole(userRole) || userRole === ROLES.MODERATOR
+    const isAdmin = session.user.isStaff
 
     if (!isOwner && !isAdmin) {
       return apiForbidden('Keine Berechtigung diesen Ort zu bearbeiten')
@@ -175,7 +173,6 @@ export async function DELETE(
     const { id: locationId } = await params
 
     // Check ownership and permissions
-    const userRole = await getUserRole(session.user.id)
     const locationCheck = await query(`
       SELECT created_by, approval_status FROM ${TABLE_NAMES.LOCATIONS}
       WHERE id = $1
@@ -187,7 +184,7 @@ export async function DELETE(
 
     const location = locationCheck.rows[0] as LocationOwnerRow
     const isOwner = location.created_by === session.user.id
-    const isAdmin = isAdminRole(userRole) || userRole === ROLES.MODERATOR
+    const isAdmin = session.user.isStaff
 
     if (!isOwner && !isAdmin) {
       return apiForbidden('Keine Berechtigung diesen Ort zu löschen')

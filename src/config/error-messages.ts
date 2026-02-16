@@ -6,11 +6,18 @@
  */
 
 export const ERROR_MESSAGES = {
-  // Authentication
+  // Authentication & Authorization
   UNAUTHORIZED: 'Nicht authentifiziert',
   FORBIDDEN: 'Keine Berechtigung',
-  ADMIN_REQUIRED: 'Admin access required',
-  
+  ADMIN_REQUIRED: 'Nur Administratoren haben Zugriff',
+  STAFF_ONLY: 'Nur Mitarbeiter können diese Aktion ausführen',
+
+  // Section-specific access (repeated 3+ times across routes)
+  NO_ACCESS_TEAM: 'Kein Zugriff auf Team-Bereich',
+  NO_ACCESS_HIRN: 'Keine Berechtigung für Hirn',
+  NO_ACCESS_ERFASSUNG: 'Keine Berechtigung für Produkterfassung',
+  NO_ACCESS_CONTENT: 'Keine Berechtigung für diesen Bereich',
+
   // Not Found
   NOT_FOUND: 'nicht gefunden',
   CONVERSATION_NOT_FOUND: 'Unterhaltung nicht gefunden',
@@ -18,7 +25,12 @@ export const ERROR_MESSAGES = {
   PRODUCT_NOT_FOUND: 'Produkt nicht gefunden',
   USER_NOT_FOUND: 'Benutzer nicht gefunden',
   APPOINTMENT_NOT_FOUND: 'Termin nicht gefunden',
-  
+  DOCUMENT_NOT_FOUND: 'Dokument nicht gefunden',
+  CERTIFICATION_NOT_FOUND: 'Zertifizierung nicht gefunden',
+  APPLICATION_NOT_FOUND: 'Bewerbung nicht gefunden',
+  WORKSHOP_NOT_FOUND: 'Workshop nicht gefunden',
+  LOCATION_NOT_FOUND: 'Ort nicht gefunden',
+
   // Validation
   EMAIL_REQUIRED: 'E-Mail erforderlich',
   PASSWORD_REQUIRED: 'Passwort erforderlich',
@@ -26,13 +38,15 @@ export const ERROR_MESSAGES = {
   MESSAGE_REQUIRED: 'Nachricht erforderlich',
   SERVICE_SLUG_REQUIRED: 'Service-Slug erforderlich',
   ALL_FIELDS_REQUIRED: 'Alle erforderlichen Felder müssen ausgefüllt sein',
-  IMAGE_REQUIRED: 'Image data or URL required',
-  
+  IMAGE_REQUIRED: 'Bilddaten oder URL erforderlich',
+  ADMIN_NOTES_MUST_BE_STRING: 'Admin-Notizen müssen ein Text sein',
+  REJECTION_REASON_REQUIRED: 'Ein Ablehnungsgrund ist erforderlich',
+
   // Server Errors
   INTERNAL_SERVER_ERROR: 'Interner Serverfehler',
   REGISTRATION_FAILED: 'Ein unerwarteter Fehler ist aufgetreten',
   STATUS_CHECK_FAILED: 'Statusprüfung fehlgeschlagen',
-  
+
   // Business Logic
   SELLER_ONLY: 'Nur Verkäufer können Produkte erstellen',
   REPAIRER_ONLY: 'Nur Reparateure können diesen Bereich nutzen',
@@ -45,15 +59,15 @@ export const ERROR_MESSAGES = {
   PENDING_APPLICATION: 'Sie haben bereits eine ausstehende Bewerbung',
   CANNOT_CANCEL_COMPLETED: 'Abgeschlossene Termine können nicht storniert werden',
   CAN_ONLY_EDIT_REQUESTED: 'Nur angefragte Termine können bearbeitet werden',
-  
-  // Medusa/External Services
-  MEDUSA_FETCH_FAILED: 'Failed to fetch products from Medusa',
-  MEDUSA_CONNECTION_FAILED: 'Failed to connect to Medusa backend',
-  MEDUSA_CREATE_FAILED: 'Failed to create product',
-  AI_ANALYSIS_FAILED: 'Failed to analyze product image',
-  
+
+  // Medusa/External Services (internal, not user-facing)
+  MEDUSA_FETCH_FAILED: 'Medusa-Produkte konnten nicht geladen werden',
+  MEDUSA_CONNECTION_FAILED: 'Verbindung zu Medusa fehlgeschlagen',
+  MEDUSA_CREATE_FAILED: 'Produkt konnte nicht erstellt werden',
+  AI_ANALYSIS_FAILED: 'KI-Bildanalyse fehlgeschlagen',
+
   // Configuration
-  CONFIGURATION_MISSING: 'Medusa configuration is missing',
+  CONFIGURATION_MISSING: 'Medusa-Konfiguration fehlt',
 
   // Protocols
   PROTOCOL_NOT_FOUND: 'Protokoll nicht gefunden',

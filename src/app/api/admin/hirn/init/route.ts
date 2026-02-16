@@ -7,25 +7,14 @@
  */
 
 import { NextRequest } from 'next/server'
-import { auth } from '@/auth'
-import { isSuperAdmin } from '@/lib/permissions'
+import { withAdmin } from '@/lib/api/middleware'
 import { query } from '@/lib/auth/db'
 import { logger } from '@/lib/logger'
-import { apiSuccess, apiError, apiUnauthorized, apiForbidden } from '@/lib/api/helpers'
+import { apiSuccess, apiError } from '@/lib/api/helpers'
 import { TABLE_NAMES } from '@/config/database'
 
-export async function POST(request: NextRequest) {
+export const POST = withAdmin(async (request: NextRequest, session) => {
   try {
-    const session = await auth()
-
-    if (!session?.user) {
-      return apiUnauthorized()
-    }
-
-    if (!isSuperAdmin(session.user.email)) {
-      return apiForbidden('Nur Super-Admins können Hirn initialisieren')
-    }
-
     // Create provider settings table
     await query(`
       CREATE TABLE IF NOT EXISTS ${TABLE_NAMES.HIRN_PROVIDER_SETTINGS} (
@@ -92,4 +81,4 @@ export async function POST(request: NextRequest) {
     logger.error('Failed to initialize Hirn', { error })
     return apiError(error, 'Hirn konnte nicht initialisiert werden')
   }
-}
+})

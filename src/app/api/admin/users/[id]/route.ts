@@ -9,36 +9,26 @@
  */
 
 import { NextRequest } from 'next/server'
-import { auth } from '@/auth'
+import { withAdmin } from '@/lib/api/middleware'
 import { query } from '@/lib/auth/db'
 import { isSuperAdmin, SUPER_ADMIN_EMAILS } from '@/lib/permissions'
 import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
-import { apiSuccess, apiError, apiUnauthorized, apiForbidden, apiNotFound, apiBadRequest } from '@/lib/api/helpers'
+import { apiSuccess, apiError, apiForbidden, apiNotFound, apiBadRequest } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { validateBody, AdminUpdateUserSchema } from '@/lib/schemas'
-
-interface RequestContext {
-  params: Promise<{ id: string }>
-}
 
 /**
  * GET /api/admin/users/[id]
  * Get detailed user information
  */
-export async function GET(request: NextRequest, context: RequestContext) {
+export const GET = withAdmin<{ id: string }>(async (request, session, context) => {
   try {
-    const session = await auth()
-
-    if (!session?.user) {
-      return apiUnauthorized()
-    }
-
     if (!isSuperAdmin(session.user.email, session.user.isSuperAdmin)) {
       return apiForbidden('Nur Super-Admins können Benutzerdetails einsehen')
     }
 
-    const { id } = await context.params
+    const { id } = context!.params!
 
     const result = await query<{
       id: string
@@ -69,25 +59,19 @@ export async function GET(request: NextRequest, context: RequestContext) {
   } catch (error) {
     return apiError(error, 'Benutzer konnte nicht geladen werden')
   }
-}
+})
 
 /**
  * PATCH /api/admin/users/[id]
  * Update user profile (name, email, phone, address, staff status)
  */
-export async function PATCH(request: NextRequest, context: RequestContext) {
+export const PATCH = withAdmin<{ id: string }>(async (request, session, context) => {
   try {
-    const session = await auth()
-
-    if (!session?.user) {
-      return apiUnauthorized()
-    }
-
     if (!isSuperAdmin(session.user.email, session.user.isSuperAdmin)) {
       return apiForbidden('Nur Super-Admins können Benutzer bearbeiten')
     }
 
-    const { id } = await context.params
+    const { id } = context!.params!
     const body = await request.json()
     const validation = validateBody(AdminUpdateUserSchema, body)
     if (!validation.success) return validation.error
@@ -172,25 +156,19 @@ export async function PATCH(request: NextRequest, context: RequestContext) {
   } catch (error) {
     return apiError(error, 'Benutzer konnte nicht aktualisiert werden')
   }
-}
+})
 
 /**
  * DELETE /api/admin/users/[id]
  * Delete a user and all associated data
  */
-export async function DELETE(request: NextRequest, context: RequestContext) {
+export const DELETE = withAdmin<{ id: string }>(async (request, session, context) => {
   try {
-    const session = await auth()
-
-    if (!session?.user) {
-      return apiUnauthorized()
-    }
-
     if (!isSuperAdmin(session.user.email, session.user.isSuperAdmin)) {
       return apiForbidden('Nur Super-Admins können Benutzer löschen')
     }
 
-    const { id } = await context.params
+    const { id } = context!.params!
 
     // Get user to check if they exist and for logging
     const userResult = await query<{ id: string; email: string; name: string | null }>(
@@ -245,4 +223,4 @@ export async function DELETE(request: NextRequest, context: RequestContext) {
   } catch (error) {
     return apiError(error, 'Benutzer konnte nicht gelöscht werden')
   }
-}
+})

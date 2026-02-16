@@ -1,7 +1,7 @@
 import { NextRequest } from 'next/server'
-import { auth } from '@/auth'
+import { withAdmin } from '@/lib/api/middleware'
 import { query } from '@/lib/auth/db'
-import { apiError, apiSuccess, apiUnauthorized, apiForbidden } from '@/lib/api/helpers'
+import { apiError, apiSuccess } from '@/lib/api/helpers'
 import { logger } from '@/lib/logger'
 import { TABLE_NAMES } from '@/config/database'
 
@@ -18,19 +18,8 @@ interface WorkshopRow {
 }
 
 // GET /api/admin/workshops/list - List all workshops for admin selection
-export async function GET(request: NextRequest) {
+export const GET = withAdmin(async (request, session) => {
   try {
-    const session = await auth()
-    if (!session?.user?.id) {
-      return apiUnauthorized('Authentication required')
-    }
-
-    // Check if user is staff (admin/super admin)
-    // Using new simplified permission system (is_staff field)
-    if (!session.user.isStaff) {
-      return apiForbidden('Admin access required')
-    }
-
     const searchParams = request.nextUrl.searchParams
     const activeOnly = searchParams.get('activeOnly') !== 'false'
 
@@ -56,4 +45,4 @@ export async function GET(request: NextRequest) {
     logger.error('Error fetching workshops list', { error })
     return apiError(error, 'Failed to fetch workshops')
   }
-}
+})

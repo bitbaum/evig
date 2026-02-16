@@ -9,7 +9,7 @@
  */
 
 import { NextRequest } from 'next/server'
-import { auth } from '@/auth'
+import { withAdmin } from '@/lib/api/middleware'
 import { query } from '@/lib/auth/db'
 import { canAccessSection, isSuperAdmin } from '@/lib/permissions'
 import { TABLE_NAMES } from '@/config/database'
@@ -17,29 +17,18 @@ import { logger } from '@/lib/logger'
 import {
   apiSuccess,
   apiError,
-  apiUnauthorized,
   apiForbidden,
   apiNotFound,
   apiBadRequest,
 } from '@/lib/api/helpers'
 import { validateUpdateTeamProfile } from '@/lib/schemas/team'
 
-interface RequestContext {
-  params: Promise<{ id: string }>
-}
-
 /**
  * GET /api/admin/team/profiles/[id]
  * Get detailed team profile information
  */
-export async function GET(request: NextRequest, context: RequestContext) {
+export const GET = withAdmin<{ id: string }>(async (request, session, context) => {
   try {
-    const session = await auth()
-
-    if (!session?.user) {
-      return apiUnauthorized()
-    }
-
     const user = {
       email: session.user.email,
       is_staff: session.user.isStaff,
@@ -50,7 +39,7 @@ export async function GET(request: NextRequest, context: RequestContext) {
       return apiForbidden('Kein Zugriff auf Team-Bereich')
     }
 
-    const { id } = await context.params
+    const { id } = context!.params!
     const isSuperAdminUser = isSuperAdmin(session.user.email, session.user.isSuperAdmin)
 
     // Select columns - exclude hr_notes for non-super-admins
@@ -124,20 +113,14 @@ export async function GET(request: NextRequest, context: RequestContext) {
   } catch (error) {
     return apiError(error, 'Team-Profil konnte nicht geladen werden')
   }
-}
+})
 
 /**
  * PUT /api/admin/team/profiles/[id]
  * Update team profile
  */
-export async function PUT(request: NextRequest, context: RequestContext) {
+export const PUT = withAdmin<{ id: string }>(async (request, session, context) => {
   try {
-    const session = await auth()
-
-    if (!session?.user) {
-      return apiUnauthorized()
-    }
-
     const user = {
       email: session.user.email,
       is_staff: session.user.isStaff,
@@ -148,7 +131,7 @@ export async function PUT(request: NextRequest, context: RequestContext) {
       return apiForbidden('Kein Zugriff auf Team-Bereich')
     }
 
-    const { id } = await context.params
+    const { id } = context!.params!
     const body = await request.json()
 
     // Validate input
@@ -235,20 +218,14 @@ export async function PUT(request: NextRequest, context: RequestContext) {
   } catch (error) {
     return apiError(error, 'Team-Profil konnte nicht aktualisiert werden')
   }
-}
+})
 
 /**
  * DELETE /api/admin/team/profiles/[id]
  * Delete team profile
  */
-export async function DELETE(request: NextRequest, context: RequestContext) {
+export const DELETE = withAdmin<{ id: string }>(async (request, session, context) => {
   try {
-    const session = await auth()
-
-    if (!session?.user) {
-      return apiUnauthorized()
-    }
-
     const user = {
       email: session.user.email,
       is_staff: session.user.isStaff,
@@ -259,7 +236,7 @@ export async function DELETE(request: NextRequest, context: RequestContext) {
       return apiForbidden('Kein Zugriff auf Team-Bereich')
     }
 
-    const { id } = await context.params
+    const { id } = context!.params!
 
     // Check if profile exists
     const existingProfile = await query<{ id: string; user_id: string }>(
@@ -290,4 +267,4 @@ export async function DELETE(request: NextRequest, context: RequestContext) {
   } catch (error) {
     return apiError(error, 'Team-Profil konnte nicht gelöscht werden')
   }
-}
+})

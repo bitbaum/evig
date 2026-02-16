@@ -7,33 +7,20 @@
  */
 
 import { NextRequest } from 'next/server'
-import { auth } from '@/auth'
+import { withAdmin } from '@/lib/api/middleware'
 import { query } from '@/lib/auth/db'
 import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
 import {
   apiSuccess,
   apiError,
-  apiUnauthorized,
   apiNotFound,
   apiBadRequest,
 } from '@/lib/api/helpers'
 
-interface RouteParams {
-  params: Promise<{
-    id: string
-  }>
-}
-
-export async function GET(request: NextRequest, { params }: RouteParams) {
+export const GET = withAdmin<{ id: string }>(async (request, session, context) => {
   try {
-    const session = await auth()
-
-    if (!session?.user) {
-      return apiUnauthorized()
-    }
-
-    const { id } = await params
+    const { id } = context!.params!
 
     const result = await query<{
       id: string
@@ -59,17 +46,11 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
     logger.error('Failed to get blog category', { error })
     return apiError(error, 'Kategorie konnte nicht geladen werden')
   }
-}
+})
 
-export async function PATCH(request: NextRequest, { params }: RouteParams) {
+export const PATCH = withAdmin<{ id: string }>(async (request, session, context) => {
   try {
-    const session = await auth()
-
-    if (!session?.user) {
-      return apiUnauthorized()
-    }
-
-    const { id } = await params
+    const { id } = context!.params!
     const body = await request.json()
     const { name, slug, description, color, sort_order, is_active } = body
 
@@ -126,17 +107,11 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
     logger.error('Failed to update blog category', { error })
     return apiError(error, 'Kategorie konnte nicht aktualisiert werden')
   }
-}
+})
 
-export async function DELETE(request: NextRequest, { params }: RouteParams) {
+export const DELETE = withAdmin<{ id: string }>(async (request, session, context) => {
   try {
-    const session = await auth()
-
-    if (!session?.user) {
-      return apiUnauthorized()
-    }
-
-    const { id } = await params
+    const { id } = context!.params!
 
     // Check if category exists
     const existing = await query<{ id: string; name: string }>(
@@ -178,4 +153,4 @@ export async function DELETE(request: NextRequest, { params }: RouteParams) {
     logger.error('Failed to delete blog category', { error })
     return apiError(error, 'Kategorie konnte nicht gelöscht werden')
   }
-}
+})

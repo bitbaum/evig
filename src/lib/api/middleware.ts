@@ -1,15 +1,14 @@
 /**
  * API route middleware helpers
  *
- * Provides reusable middleware for common API route patterns
- * Following dev guide: docs/development/DEV_GUIDE.md
+ * Provides reusable middleware for common API route patterns.
+ * SSOT for auth checks — all admin routes should use withAdmin(),
+ * all authenticated routes should use withAuth().
  */
 
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/auth';
-import { apiUnauthorized } from './helpers';
-import { isAdminRole } from '@/lib/constants';
-import { hasAdminAccessUnified, type UnifiedUser } from '@/lib/auth/unified-permissions';
+import { apiUnauthorized, apiForbidden } from './helpers';
 
 export type AuthSession = Awaited<ReturnType<typeof auth>>;
 
@@ -21,6 +20,9 @@ export interface ValidSession {
     name?: string | null
     image?: string | null
     role?: string
+    isStaff: boolean
+    staffPermissions: string[]
+    isSuperAdmin: boolean
   }
   expires: string
 }
@@ -95,19 +97,9 @@ export function withAdmin<TParams = Record<string, never>>(
     // Session is guaranteed non-null after the check above
     const validSession = session as unknown as ValidSession;
 
-    // Check admin access using unified permissions (checks both old role AND new is_staff)
-    const user: UnifiedUser = {
-      email: validSession.user.email || '',
-      role: validSession.user.role,
-      isStaff: (session.user as { isStaff?: boolean }).isStaff,
-      staffPermissions: (session.user as { staffPermissions?: string[] }).staffPermissions,
-      isSuperAdmin: (session.user as { isSuperAdmin?: boolean }).isSuperAdmin,
-    }
-    if (!hasAdminAccessUnified(user)) {
-      return NextResponse.json(
-        { success: false, error: 'Nur Administratoren können diese Funktion verwenden' },
-        { status: 403 }
-      );
+    // Check staff access from session (set in JWT callback in src/auth.ts)
+    if (!validSession.user.isStaff) {
+      return apiForbidden('Nur Administratoren haben Zugriff');
     }
 
     // Await params if they exist (Next.js 15+ async params)

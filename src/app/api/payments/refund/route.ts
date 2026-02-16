@@ -2,16 +2,11 @@ import { NextRequest } from 'next/server'
 import Stripe from 'stripe'
 import { auth } from '@/auth'
 import { requireStripeClient } from '@/lib/payments/stripe-client'
-import { query } from '@/lib/auth/db'
+import { query, transaction } from '@/lib/auth/db'
 import { apiError, apiSuccess, apiUnauthorized, apiBadRequest, apiNotFound } from '@/lib/api/helpers'
-import { isAdminRole } from '@/lib/constants'
 import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
 import { validateBody, RefundSchema } from '@/lib/schemas'
-
-interface UserRow {
-  role: string
-}
 
 interface TransactionRow {
   id: string
@@ -72,20 +67,18 @@ export async function POST(request: NextRequest) {
       return apiNotFound('Transaktion nicht gefunden oder nicht erstattungsfähig')
     }
 
-    const transaction = transactionResult.rows[0] as TransactionRow
+    const txn = transactionResult.rows[0] as TransactionRow
 
     // Check if user owns the transaction or is admin
-    const userRoleResult = await query(`SELECT role FROM ${TABLE_NAMES.USERS} WHERE id = $1`, [session.user.id])
-    const user = userRoleResult.rows[0] as UserRow | undefined
-    const isAdmin = isAdminRole(user?.role)
+    const isAdmin = session.user.isStaff
 
-    if (transaction.user_id !== session.user.id && !isAdmin) {
+    if (txn.user_id !== session.user.id && !isAdmin) {
       return apiUnauthorized('Sie können nur eigene Transaktionen erstatten')
     }
 
     const refundAmountCents = Math.round(amount * 100)
 
-    if (refundAmountCents > transaction.amount_cents) {
+    if (refundAmountCents > txn.amount_cents) {
       return apiBadRequest('Erstattungsbetrag darf den ursprünglichen Transaktionsbetrag nicht übersteigen')
     }
 
@@ -98,10 +91,10 @@ export async function POST(request: NextRequest) {
 
     const refundTotals = existingRefundsResult.rows[0] as RefundTotalRow
     const totalRefunded = refundTotals.total_refunded
-    const remainingAmount = transaction.amount_cents - totalRefunded
+    const remainingAmount = txn.amount_cents - totalRefunded
 
     if (refundAmountCents > remainingAmount) {
-      return apiBadRequest(`Erstattungsbetrag übersteigt das verbleibende Guthaben. Maximal erstattbar: ${(remainingAmount / 100).toFixed(2)} ${transaction.currency}`)
+      return apiBadRequest(`Erstattungsbetrag übersteigt das verbleibende Guthaben. Maximal erstattbar: ${(remainingAmount / 100).toFixed(2)} ${txn.currency}`)
     }
 
     // Create refund record
@@ -124,7 +117,7 @@ export async function POST(request: NextRequest) {
     `, [
       transactionId,
       refundAmountCents,
-      transaction.currency,
+      txn.currency,
       reason,
       reasonDetails || null,
       session.user.id,
@@ -141,7 +134,7 @@ export async function POST(request: NextRequest) {
       try {
         // Process refund with Stripe
         const stripeRefund = await stripe.refunds.create({
-          payment_intent: transaction.provider_transaction_id,
+          payment_intent: txn.provider_transaction_id,
           amount: refundAmountCents,
           reason: mapRefundReason(reason),
           metadata: {
@@ -151,45 +144,48 @@ export async function POST(request: NextRequest) {
           }
         })
 
-        // Update refund with Stripe refund ID
-        await query(`
-          UPDATE ${TABLE_NAMES.REFUNDS}
-          SET
-            refund_transaction_id = $1,
-            status = 'processing',
-            processed_by = $2,
-            processed_at = CURRENT_TIMESTAMP,
-            approved_at = CURRENT_TIMESTAMP,
-            approved_by = $2
-          WHERE id = $3
-        `, [stripeRefund.id, session.user.id, refundId])
+        // Wrap refund record update + transaction insert in DB transaction
+        await transaction(async (client) => {
+          // Update refund with Stripe refund ID
+          await client.query(`
+            UPDATE ${TABLE_NAMES.REFUNDS}
+            SET
+              refund_transaction_id = $1,
+              status = 'processing',
+              processed_by = $2,
+              processed_at = CURRENT_TIMESTAMP,
+              approved_at = CURRENT_TIMESTAMP,
+              approved_by = $2
+            WHERE id = $3
+          `, [stripeRefund.id, session.user.id, refundId])
 
-        // Create refund transaction record
-        await query(`
-          INSERT INTO ${TABLE_NAMES.PAYMENT_TRANSACTIONS} (
-            user_id,
-            provider_id,
-            provider_transaction_id,
-            type,
-            status,
-            amount_cents,
-            currency,
-            description,
-            provider_response
-          ) VALUES (
-            $1, $2, $3, $4, $5, $6, $7, $8, $9
-          )
-        `, [
-          transaction.user_id,
-          transaction.provider_id,
-          stripeRefund.id,
-          'refund',
-          'processing',
-          refundAmountCents,
-          transaction.currency,
-          `Refund for transaction ${transaction.provider_transaction_id}`,
-          JSON.stringify(stripeRefund)
-        ])
+          // Create refund transaction record
+          await client.query(`
+            INSERT INTO ${TABLE_NAMES.PAYMENT_TRANSACTIONS} (
+              user_id,
+              provider_id,
+              provider_transaction_id,
+              type,
+              status,
+              amount_cents,
+              currency,
+              description,
+              provider_response
+            ) VALUES (
+              $1, $2, $3, $4, $5, $6, $7, $8, $9
+            )
+          `, [
+            txn.user_id,
+            txn.provider_id,
+            stripeRefund.id,
+            'refund',
+            'processing',
+            refundAmountCents,
+            txn.currency,
+            `Refund for transaction ${txn.provider_transaction_id}`,
+            JSON.stringify(stripeRefund)
+          ])
+        })
 
       } catch (stripeError: unknown) {
         logger.error('Stripe refund error', { error: stripeError })

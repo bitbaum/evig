@@ -2,9 +2,9 @@
 
 import { useState } from 'react'
 import { Metadata } from 'next'
-import { HeroBanner } from '@/components/ui/hero-banner'
 import Link from 'next/link'
-import { ArrowRight, Filter, CheckCircle2, Calendar, Users, Code, Globe, Wrench } from 'lucide-react'
+import { PageHero } from '@/components/layout/PageHero'
+import { ArrowRight, Filter, CheckCircle2, Calendar, Users, Code, Globe, Wrench, Rocket } from 'lucide-react'
 
 // Note: metadata export removed since this is now a client component
 // const metadata: Metadata = {
@@ -128,9 +128,11 @@ export default function ProjectsPage() {
 
   return (
     <main className="min-h-screen bg-gray-50">
-      <HeroBanner
+      <PageHero
+        theme="projects"
+        icon={Rocket}
         title="Unsere Projekte"
-        description="Entdecken Sie unser vielfältiges Spektrum an Projekten, von Open-Source-Beiträgen bis hin zu Gemeinschaftsinitiativen und Hardware-Entwicklung."
+        subtitle="Entdecken Sie unser vielfältiges Spektrum an Projekten, von Open-Source-Beiträgen bis hin zu Gemeinschaftsinitiativen und Hardware-Entwicklung."
       />
 
       {/* Projects Section with Filtering */}

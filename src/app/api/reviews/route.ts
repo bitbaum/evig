@@ -1,18 +1,13 @@
 import { NextRequest } from 'next/server'
 import { auth } from '@/auth'
 import { query } from '@/lib/auth/db'
-import { apiError, apiSuccess, apiUnauthorized, apiBadRequest, apiNotFound } from '@/lib/api/helpers'
+import { apiError, apiSuccess, apiUnauthorized, apiBadRequest, apiNotFound, apiForbidden } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES, REVIEW_TARGET_TYPES } from '@/config/database'
 import { logger } from '@/lib/logger'
 import { APP_URL } from '@/config/urls'
-import { isAdminRole } from '@/lib/constants'
 import { sendEmail } from '@/lib/email'
 import { validateBody, validateQuery, CreateReviewSchema, GetReviewsQuerySchema } from '@/lib/schemas'
-
-interface UserRow {
-  role: string
-}
 
 interface ReviewAttachment {
   id: string
@@ -99,14 +94,8 @@ export async function GET(request: NextRequest) {
         return apiUnauthorized(ERROR_MESSAGES.UNAUTHORIZED)
       }
 
-      const userResult = await query(
-        `SELECT role FROM ${TABLE_NAMES.USERS} WHERE id = $1`,
-        [session.user.id]
-      )
-
-      const user = userResult.rows[0] as UserRow | undefined
-      if (!isAdminRole(user?.role)) {
-        return apiUnauthorized('Nur Administratoren können nicht-veröffentlichte Bewertungen einsehen')
+      if (!session.user.isStaff) {
+        return apiForbidden('Nur Administratoren haben Zugriff')
       }
       isAdmin = true
     }

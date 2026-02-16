@@ -6,25 +6,18 @@
  */
 
 import { NextRequest } from 'next/server'
-import { auth } from '@/auth'
+import { withAdmin } from '@/lib/api/middleware'
 import { query } from '@/lib/auth/db'
 import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
 import {
   apiSuccess,
   apiError,
-  apiUnauthorized,
   apiBadRequest,
 } from '@/lib/api/helpers'
 
-export async function GET(request: NextRequest) {
+export const GET = withAdmin(async (request, session) => {
   try {
-    const session = await auth()
-
-    if (!session?.user) {
-      return apiUnauthorized()
-    }
-
     const result = await query<{
       id: string
       slug: string
@@ -43,16 +36,10 @@ export async function GET(request: NextRequest) {
     logger.error('Failed to list blog categories', { error })
     return apiError(error, 'Kategorien konnten nicht geladen werden')
   }
-}
+})
 
-export async function POST(request: NextRequest) {
+export const POST = withAdmin(async (request, session) => {
   try {
-    const session = await auth()
-
-    if (!session?.user) {
-      return apiUnauthorized()
-    }
-
     const body = await request.json()
     const { name, slug, description, color, sort_order, is_active } = body
 
@@ -106,4 +93,4 @@ export async function POST(request: NextRequest) {
     logger.error('Failed to create blog category', { error })
     return apiError(error, 'Kategorie konnte nicht erstellt werden')
   }
-}
+})

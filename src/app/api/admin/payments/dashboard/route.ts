@@ -1,14 +1,9 @@
 import { NextRequest } from 'next/server'
-import { auth } from '@/auth'
+import { withAdmin } from '@/lib/api/middleware'
 import { query } from '@/lib/auth/db'
-import { apiError, apiSuccess, apiUnauthorized } from '@/lib/api/helpers'
-import { isAdminRole } from '@/lib/constants'
+import { apiError, apiSuccess } from '@/lib/api/helpers'
 import { logger } from '@/lib/logger'
 import { TABLE_NAMES } from '@/config/database'
-
-interface UserRow {
-  role: string
-}
 
 interface OverviewRow {
   total_transactions: number
@@ -75,20 +70,8 @@ interface DisputeRow {
 }
 
 // GET /api/admin/payments/dashboard - Get payment dashboard data
-export async function GET(request: NextRequest) {
+export const GET = withAdmin(async (request: NextRequest) => {
   try {
-    const session = await auth()
-    if (!session?.user?.id) {
-      return apiUnauthorized('Authentication required')
-    }
-
-    // Check if user is admin
-    const userRoleResult = await query(`SELECT role FROM ${TABLE_NAMES.USERS} WHERE id = $1`, [session.user.id])
-    const userRow = userRoleResult.rows[0] as UserRow | undefined
-    if (!isAdminRole(userRow?.role)) {
-      return apiUnauthorized('Admin access required')
-    }
-
     const { searchParams } = new URL(request.url)
     const periodRaw = searchParams.get('period') || '30' // days
     const startDate = searchParams.get('startDate')
@@ -304,4 +287,4 @@ export async function GET(request: NextRequest) {
     logger.error('Payment dashboard error', { error })
     return apiError(error, 'Failed to load payment dashboard data')
   }
-}
+})

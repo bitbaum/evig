@@ -1,17 +1,13 @@
 import { NextRequest } from 'next/server'
-import { auth } from '@/auth'
+import { withAdmin } from '@/lib/api/middleware'
 import { query } from '@/lib/auth/db'
-import { apiError, apiSuccess, apiUnauthorized, apiBadRequest, apiNotFound } from '@/lib/api/helpers'
+import { apiError, apiSuccess, apiBadRequest, apiNotFound } from '@/lib/api/helpers'
 import { ERROR_MESSAGES, SUCCESS_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES } from '@/config/database'
 import { sendEmail } from '@/lib/email'
 import { logger } from '@/lib/logger'
-import { isAdminRole, ROLES } from '@/lib/constants'
+import { ROLES } from '@/lib/constants'
 import { APP_URL } from '@/config/urls'
-
-interface UserRow {
-  role: string
-}
 
 interface ExistsRow {
   exists: boolean
@@ -57,27 +53,9 @@ interface DocumentRow {
   document_type: string
 }
 
-export async function PUT(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
-  const { id: applicationId } = await params
+export const PUT = withAdmin<{ id: string }>(async (request, session, context) => {
+  const { id: applicationId } = context!.params!
   try {
-    const session = await auth()
-    if (!session?.user?.id) {
-      return apiUnauthorized(ERROR_MESSAGES.UNAUTHORIZED)
-    }
-
-    // Check if user is admin using SSOT helper
-    const userResult = await query(
-      `SELECT role FROM ${TABLE_NAMES.USERS} WHERE id = $1`,
-      [session.user.id]
-    )
-
-    const user = userResult.rows[0] as UserRow | undefined
-    if (!user || !isAdminRole(user.role)) {
-      return apiUnauthorized('Nur Administratoren können diese Funktion verwenden')
-    }
     const body = await request.json()
     const { adminNotes } = body
 
@@ -300,4 +278,4 @@ export async function PUT(
     logger.error('Error approving repairer application', { error, applicationId })
     return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)
   }
-}
+})

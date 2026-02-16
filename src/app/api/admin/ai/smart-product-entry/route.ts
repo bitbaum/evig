@@ -13,6 +13,7 @@
  */
 
 import { NextRequest } from 'next/server'
+import { withAdmin } from '@/lib/api/middleware'
 import { apiError, apiSuccess } from '@/lib/api/helpers'
 import { logger } from '@/lib/logger'
 import { GroqProvider } from '@/lib/hirn/providers/groq'
@@ -59,7 +60,7 @@ Wichtige Regeln:
 - Wenn du das genaue Modell nicht kennst, nutze dein Wissen über ähnliche Modelle
 - Handle muss URL-freundlich sein (kleinbuchstaben, bindestriche)`
 
-export async function POST(request: NextRequest) {
+export const POST = withAdmin(async (request: NextRequest) => {
   const startTime = Date.now()
 
   try {
@@ -190,4 +191,4 @@ export async function POST(request: NextRequest) {
 
     return apiError(error, 'Fehler bei der Produkterkennung')
   }
-}
+})

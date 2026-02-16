@@ -1,15 +1,10 @@
-import { NextRequest, NextResponse } from 'next/server'
-import { auth } from '@/auth'
+import { NextRequest } from 'next/server'
+import { withAdmin } from '@/lib/api/middleware'
 import { query } from '@/lib/auth/db'
-import { apiError, apiSuccess, apiUnauthorized, apiBadRequest } from '@/lib/api/helpers'
+import { apiError, apiSuccess, apiBadRequest } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES, REVIEW_TARGET_TYPES } from '@/config/database'
 import { logger } from '@/lib/logger'
-import { isAdminRole } from '@/lib/constants'
-
-interface UserRow {
-  role: string
-}
 
 interface OverallStatsRow {
   total_reviews: string
@@ -44,24 +39,8 @@ interface ReviewerRow {
   avg_rating_given: string
 }
 
-export async function GET(request: NextRequest) {
+export const GET = withAdmin(async (request, session) => {
   try {
-    const session = await auth()
-    if (!session?.user?.id) {
-      return apiUnauthorized(ERROR_MESSAGES.UNAUTHORIZED)
-    }
-
-    // Check if user is admin using SSOT helper
-    const userResult = await query(
-      `SELECT role FROM ${TABLE_NAMES.USERS} WHERE id = $1`,
-      [session.user.id]
-    )
-
-    const user = userResult.rows[0] as UserRow | undefined
-    if (!user || !isAdminRole(user.role)) {
-      return apiUnauthorized('Nur Administratoren können Analytics einsehen')
-    }
-
     const { searchParams } = new URL(request.url)
     const period = searchParams.get('period') || '30' // days
     const targetType = searchParams.get('targetType') || REVIEW_TARGET_TYPES.REPAIRER
@@ -197,4 +176,4 @@ export async function GET(request: NextRequest) {
     logger.error('Error fetching review analytics', { error })
     return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)
   }
-}
+})

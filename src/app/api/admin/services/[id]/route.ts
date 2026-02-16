@@ -7,28 +7,19 @@
  */
 
 import { NextRequest } from 'next/server'
-import { auth } from '@/auth'
+import { withAdmin } from '@/lib/api/middleware'
 import { canAccessSection } from '@/lib/permissions'
 import { logger } from '@/lib/logger'
-import { apiSuccess, apiError, apiUnauthorized, apiForbidden, apiBadRequest, apiNotFound } from '@/lib/api/helpers'
+import { apiSuccess, apiError, apiForbidden, apiBadRequest, apiNotFound } from '@/lib/api/helpers'
 import {
   getAdminServiceById,
   updateServiceType,
   deleteServiceType,
 } from '@/lib/services'
 
-interface RouteParams {
-  params: Promise<{ id: string }>
-}
-
-export async function GET(request: NextRequest, { params }: RouteParams) {
+export const GET = withAdmin<{ id: string }>(async (request, session, context) => {
   try {
-    const session = await auth()
-    const { id } = await params
-
-    if (!session?.user) {
-      return apiUnauthorized()
-    }
+    const { id } = context!.params!
 
     const user = {
       email: session.user.email,
@@ -51,16 +42,11 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
     logger.error('Failed to get service', { error })
     return apiError(error, 'Dienstleistung konnte nicht geladen werden')
   }
-}
+})
 
-export async function PUT(request: NextRequest, { params }: RouteParams) {
+export const PUT = withAdmin<{ id: string }>(async (request, session, context) => {
   try {
-    const session = await auth()
-    const { id } = await params
-
-    if (!session?.user) {
-      return apiUnauthorized()
-    }
+    const { id } = context!.params!
 
     const user = {
       email: session.user.email,
@@ -145,16 +131,11 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
     logger.error('Failed to update service', { error })
     return apiError(error, 'Dienstleistung konnte nicht aktualisiert werden')
   }
-}
+})
 
-export async function DELETE(request: NextRequest, { params }: RouteParams) {
+export const DELETE = withAdmin<{ id: string }>(async (request, session, context) => {
   try {
-    const session = await auth()
-    const { id } = await params
-
-    if (!session?.user) {
-      return apiUnauthorized()
-    }
+    const { id } = context!.params!
 
     const user = {
       email: session.user.email,
@@ -179,4 +160,4 @@ export async function DELETE(request: NextRequest, { params }: RouteParams) {
     logger.error('Failed to delete service', { error })
     return apiError(error, 'Dienstleistung konnte nicht gelöscht werden')
   }
-}
+})

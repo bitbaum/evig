@@ -1,7 +1,6 @@
 import { NextRequest } from 'next/server'
 import { cookies } from 'next/headers'
-import jwt from 'jsonwebtoken'
-import { getJwtSecret } from '@/lib/admin-auth'
+import { withAdmin } from '@/lib/api/middleware'
 import { apiSuccess, apiError, apiNotFound } from '@/lib/api/helpers'
 import { logger } from '@/lib/logger'
 import { CMS_CONFIG } from '@/config/cms'
@@ -11,52 +10,12 @@ export const dynamic = 'force-dynamic'
 const REBOOT_CONTENT_URL = CMS_CONFIG.URL
 const ENABLE_CMS = CMS_CONFIG.ENABLED
 
-interface User {
-  id: string
-  email: string
-  role: string
-}
-
-interface DecodedToken {
-  userId: string;
-  email: string;
-  role: string;
-}
-
-async function authenticateUser(): Promise<User> {
-  try {
-    const cookieStore = await cookies()
-    const token = cookieStore.get('admin_token')?.value
-
-    if (!token) {
-      throw new Error('Not authenticated')
-    }
-
-    const decoded = jwt.verify(
-      token,
-      getJwtSecret()
-    ) as DecodedToken
-
-    return {
-      id: decoded.userId,
-      email: decoded.email,
-      role: decoded.role,
-    }
-  } catch (error) {
-    throw new Error('Invalid token')
-  }
-}
-
-export async function GET(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
-  const { id } = await params
+export const GET = withAdmin<{ id: string }>(async (request, session, context) => {
+  const { id } = context!.params!
   try {
     if (!ENABLE_CMS) {
       return apiError(new Error('CMS is disabled'), 'CMS is disabled', 501)
     }
-    const user = await authenticateUser()
     const cookieStore = await cookies()
 
     // Forward to Reboot Content API
@@ -75,18 +34,14 @@ export async function GET(
   } catch (error) {
     return apiError(error, error instanceof Error ? error.message : 'Internal server error')
   }
-}
+})
 
-export async function PUT(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
-  const { id } = await params
+export const PUT = withAdmin<{ id: string }>(async (request, session, context) => {
+  const { id } = context!.params!
   try {
     if (!ENABLE_CMS) {
       return apiError(new Error('CMS is disabled'), 'CMS is disabled', 501)
     }
-    const user = await authenticateUser()
     const body = await request.json()
     const cookieStore = await cookies()
 
@@ -114,4 +69,4 @@ export async function PUT(
   } catch (error) {
     return apiError(error, error instanceof Error ? error.message : 'Internal server error')
   }
-}
+})

@@ -1,7 +1,7 @@
 import { NextRequest } from 'next/server'
-import { auth } from '@/auth'
+import { withAdmin } from '@/lib/api/middleware'
 import { query } from '@/lib/auth/db'
-import { apiError, apiSuccess, apiUnauthorized, apiForbidden, apiNotFound, apiBadRequest } from '@/lib/api/helpers'
+import { apiError, apiSuccess, apiNotFound, apiBadRequest } from '@/lib/api/helpers'
 import { validateBody, AdminWorkshopRegistrationUpdateSchema } from '@/lib/schemas'
 import { logger } from '@/lib/logger'
 import { TABLE_NAMES } from '@/config/database'
@@ -17,27 +17,9 @@ interface RegistrationDetailsRow {
 }
 
 // PUT /api/admin/workshops/registrations/[id] - Update registration status
-export async function PUT(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export const PUT = withAdmin<{ id: string }>(async (request, session, context) => {
   try {
-    const session = await auth()
-    if (!session?.user?.id) {
-      return apiUnauthorized('Authentication required')
-    }
-
-    // Check if user is admin
-    const userResult = await query(
-      `SELECT role FROM ${TABLE_NAMES.USERS} WHERE id = $1`,
-      [session.user.id]
-    )
-    const userRole = (userResult.rows[0] as { role: string })?.role
-    if (userRole !== 'admin') {
-      return apiForbidden('Admin access required')
-    }
-
-    const { id } = await params
+    const { id } = context!.params!
     const body = await request.json()
     const validation = validateBody(AdminWorkshopRegistrationUpdateSchema, body)
     if (!validation.success) return validation.error
@@ -158,4 +140,4 @@ export async function PUT(
     logger.error('Error updating workshop registration', { error })
     return apiError(error, 'Failed to update registration')
   }
-}
+})

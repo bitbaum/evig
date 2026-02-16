@@ -57,6 +57,7 @@ import {
   getServicePresentation,
   getServicePricing,
   formatPrice as formatPriceUtil,
+  servicePresentation,
 } from './presentation'
 import { getIconByName } from '@/config/service-icons'
 import type {
@@ -200,17 +201,56 @@ function toListItem(service: UnifiedService): ServiceListItem {
 }
 
 // ============================================================================
+// Presentation-only fallback
+// ============================================================================
+
+/**
+ * Create a UnifiedService from presentation data alone (no DB entry required).
+ * Used as fallback when a service has presentation config but no DB record yet.
+ */
+function createPresentationOnlyService(slug: string): UnifiedService | null {
+  const presentation = servicePresentation[slug]
+  if (!presentation) return null
+
+  const pricing = presentation.pricingOverride || { base: 'Auf Anfrage', details: [] }
+
+  return {
+    id: `presentation-${slug}`,
+    slug,
+    name: presentation.hero.title,
+    description: presentation.hero.description,
+    category: null,
+    durationMinutes: 60,
+    priceCents: null,
+    requiresApproval: false,
+    isActive: true,
+    isBookable: false,
+    isFeatured: true,
+    displayOrder: 99,
+    icon: presentation.icon,
+    hero: presentation.hero,
+    features: presentation.features,
+    process: presentation.process,
+    pricing,
+    createdAt: new Date(),
+    updatedAt: null,
+  }
+}
+
+// ============================================================================
 // Public API
 // ============================================================================
 
 /**
  * Get a single service by slug
  * Returns full unified service with all presentation data
+ * Falls back to presentation-only data if not in database
  */
 export async function getService(slug: string): Promise<UnifiedService | null> {
   const dbService = await getServiceTypeBySlug(slug)
-  if (!dbService) return null
-  return mergeServiceData(dbService)
+  if (dbService) return mergeServiceData(dbService)
+  // Fallback: create from presentation config if available
+  return createPresentationOnlyService(slug)
 }
 
 /**
@@ -280,9 +320,14 @@ export async function getBookableServiceList(): Promise<ServiceListItem[]> {
 
 /**
  * Get all service slugs (for static generation)
+ * Merges DB slugs with presentation config slugs to ensure all nav-linked services are covered
  */
 export async function getAllServiceSlugs(): Promise<string[]> {
-  return getAllServiceSlugsFromDb()
+  const dbSlugs = await getAllServiceSlugsFromDb()
+  // Add any presentation-only slugs not already in DB results
+  const presentationSlugs = Object.keys(servicePresentation)
+  const allSlugs = new Set([...dbSlugs, ...presentationSlugs])
+  return Array.from(allSlugs)
 }
 
 // ============================================================================

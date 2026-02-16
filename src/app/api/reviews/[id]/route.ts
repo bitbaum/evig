@@ -5,11 +5,6 @@ import { apiError, apiSuccess, apiUnauthorized, apiBadRequest, apiNotFound, apiF
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES, REVIEW_TARGET_TYPES } from '@/config/database'
 import { logger } from '@/lib/logger'
-import { isAdminRole } from '@/lib/constants'
-
-interface UserRow {
-  role: string
-}
 
 interface ReviewRow {
   id: string
@@ -272,13 +267,7 @@ export async function DELETE(
     const review = reviewResult.rows[0] as ReviewOwnerRow
 
     // Check if user owns this review or is admin
-    const userResult = await query(
-      `SELECT role FROM ${TABLE_NAMES.USERS} WHERE id = $1`,
-      [session.user.id]
-    )
-
-    const user = userResult.rows[0] as UserRow | undefined
-    const isAdmin = isAdminRole(user?.role)
+    const isAdmin = !!session.user.isStaff
     const isOwner = review.reviewer_id === session.user.id
 
     if (!isOwner && !isAdmin) {

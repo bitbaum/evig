@@ -1,6 +1,6 @@
 import { NextRequest } from 'next/server'
 import { auth } from '@/auth'
-import { query } from '@/lib/auth/db'
+import { query, transaction } from '@/lib/auth/db'
 import { apiError, apiSuccess, apiUnauthorized, apiBadRequest, apiNotFound, apiForbidden } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES, CONVERSATION_TYPES } from '@/config/database'
@@ -78,30 +78,30 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
       return apiBadRequest('Dieses Angebot kann nicht mehr akzeptiert werden')
     }
 
-    // Start transaction-like operations
-    // 1. Update the accepted offer status
-    await query(`
-      UPDATE ${TABLE_NAMES.IT_HILFE_OFFERS}
-      SET status = 'accepted'
-      WHERE id = $1
-    `, [offerId])
+    // Wrap all state changes in a transaction
+    await transaction(async (client) => {
+      // 1. Update the accepted offer status
+      await client.query(`
+        UPDATE ${TABLE_NAMES.IT_HILFE_OFFERS}
+        SET status = 'accepted'
+        WHERE id = $1
+      `, [offerId])
 
-    // 2. Reject all other pending offers for this request
-    await query(`
-      UPDATE ${TABLE_NAMES.IT_HILFE_OFFERS}
-      SET status = 'rejected'
-      WHERE request_id = $1 AND id != $2 AND status = 'pending'
-    `, [id, offerId])
+      // 2. Reject all other pending offers for this request
+      await client.query(`
+        UPDATE ${TABLE_NAMES.IT_HILFE_OFFERS}
+        SET status = 'rejected'
+        WHERE request_id = $1 AND id != $2 AND status = 'pending'
+      `, [id, offerId])
 
-    // 3. Update request status to matched
-    await query(`
-      UPDATE ${TABLE_NAMES.IT_HILFE_REQUESTS}
-      SET status = 'matched', matched_offer_id = $1
-      WHERE id = $2
-    `, [offerId, id])
+      // 3. Update request status to matched
+      await client.query(`
+        UPDATE ${TABLE_NAMES.IT_HILFE_REQUESTS}
+        SET status = 'matched', matched_offer_id = $1
+        WHERE id = $2
+      `, [offerId, id])
 
-    // 4. Create a conversation between requester and helper
-    try {
+      // 4. Create a conversation between requester and helper
       // Ensure consistent participant ordering (required by CHECK constraint)
       const participant_1 = session.user.id < offerData.helper_id
         ? session.user.id
@@ -111,19 +111,14 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
         : session.user.id
 
       // Check if conversation already exists
-      const existingConv = await query(`
+      const existingConv = await client.query(`
         SELECT id FROM ${TABLE_NAMES.CONVERSATIONS}
         WHERE participant_1 = $1 AND participant_2 = $2
           AND type = $3 AND context_id = $4
       `, [participant_1, participant_2, CONVERSATION_TYPES.IT_HILFE, id])
 
-      let conversationId: string
-
-      if (existingConv.rows.length > 0) {
-        conversationId = (existingConv.rows[0] as { id: string }).id
-      } else {
-        // Create new conversation
-        const convResult = await query(`
+      if (existingConv.rows.length === 0) {
+        await client.query(`
           INSERT INTO ${TABLE_NAMES.CONVERSATIONS} (
             participant_1,
             participant_2,
@@ -133,7 +128,6 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
           ) VALUES (
             $1, $2, $3, $4, $5
           )
-          RETURNING id
         `, [
           participant_1,
           participant_2,
@@ -141,21 +135,8 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
           id,
           `IT-Hilfe: ${requestData.title}`,
         ])
-        conversationId = (convResult.rows[0] as { id: string }).id
       }
-
-      logger.info('Created conversation for IT-Hilfe', {
-        conversationId,
-        requestId: id,
-        participants: [session.user.id, offerData.helper_id],
-      })
-    } catch (convError) {
-      // Log but don't fail the request if conversation creation fails
-      logger.error('Failed to create conversation for IT-Hilfe', {
-        error: convError,
-        requestId: id,
-      })
-    }
+    })
 
     logger.info('Accepted peer repair offer', {
       requestId: id,

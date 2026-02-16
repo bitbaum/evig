@@ -7,23 +7,18 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server'
-import { auth } from '@/auth'
+import { withAdmin } from '@/lib/api/middleware'
 import { canAccessSection } from '@/lib/permissions'
 import { logger } from '@/lib/logger'
 import { transaction } from '@/lib/auth/db'
-import { apiUnauthorized, apiForbidden, apiBadRequest } from '@/lib/api/helpers'
+import { apiForbidden, apiBadRequest } from '@/lib/api/helpers'
 import { validateBody, BulkSaveSchema } from '@/lib/schemas'
 import { createErfassungProduct } from '@/lib/erfassung/create-product'
 import { BULK_LIMITS } from '@/config/erfassung'
 import type { BulkSaveRequest, BulkSaveResponse } from '@/types/erfassung'
 
-export async function POST(request: NextRequest) {
+export const POST = withAdmin(async (request, session) => {
   try {
-    const session = await auth()
-    if (!session?.user?.id) {
-      return apiUnauthorized()
-    }
-
     const user = {
       email: session.user.email,
       is_staff: session.user.isStaff,
@@ -149,4 +144,4 @@ export async function POST(request: NextRequest) {
       { status: 500 }
     )
   }
-}
+})

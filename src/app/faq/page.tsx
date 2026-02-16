@@ -1,5 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
+import { HelpCircle } from 'lucide-react'
+import { PageHero } from '@/components/layout/PageHero'
 
 export const metadata: Metadata = {
   title: 'FAQ – Häufige Fragen | RevampIT',
@@ -171,16 +173,15 @@ export default function FAQPage() {
   return (
     <main className="min-h-screen bg-gradient-to-b from-white to-gray-50">
       <FAQSchema />
+      <PageHero
+        theme="faq"
+        icon={HelpCircle}
+        title="Häufige Fragen (FAQ)"
+        subtitle="Unsere Antworten zu Linux & Open Source, Reparatur, Nachhaltigkeit und fairem Umgang mit Ressourcen – im Sinne unserer Mission gegen Elektroschrott."
+      />
       <section className="py-12 sm:py-16">
         <div className="container mx-auto px-4 sm:px-6">
           <div className="max-w-5xl mx-auto">
-            <header className="mb-8 sm:mb-10 text-center">
-              <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900">Häufige Fragen (FAQ)</h1>
-              <p className="mt-3 text-sm sm:text-base text-gray-600">
-                Unsere Antworten zu Linux & Open Source, Reparatur, Nachhaltigkeit und fairem Umgang mit
-                Ressourcen – im Sinne unserer Mission gegen Elektroschrott.
-              </p>
-            </header>
 
             <div className="space-y-8 sm:space-y-10">
               {faqs.map((group) => (

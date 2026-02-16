@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { Suspense } from 'react'
+import { BookOpen } from 'lucide-react'
 import { getAllPosts, getAllCategories, type BlogCategory } from '@/lib/blog-db'
 import { getAllPosts as getFilePosts } from '@/lib/blog'
 import BlogHero from '@/components/blog/BlogHero'
@@ -7,6 +8,7 @@ import BlogFeaturedGrid from '@/components/blog/BlogFeaturedGrid'
 import BlogLatestList from '@/components/blog/BlogLatestList'
 import BlogNavigationClient from '@/components/blog/BlogNavigationClient'
 import Heading from '@/components/ui/Heading'
+import { PageHero } from '@/components/layout/PageHero'
 
 // Revalidate every 60 seconds to show new posts
 export const revalidate = 60
@@ -79,12 +81,19 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
 
   return (
     <main className="min-h-screen bg-white">
+      <PageHero
+        theme="blog"
+        icon={BookOpen}
+        title="Blog"
+        subtitle="Tipps, Geschichten und Best Practices rund um nachhaltige Technologie."
+      />
+
       {/* Navigation */}
       <Suspense fallback={
         <nav className="border-b border-gray-200 bg-white sticky top-0 z-40">
           <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex items-center justify-between h-14 sm:h-16">
-              <h1 className="text-xl sm:text-2xl font-bold text-gray-900">Blog</h1>
+              <span className="text-xl sm:text-2xl font-bold text-gray-900">Blog</span>
             </div>
           </div>
         </nav>

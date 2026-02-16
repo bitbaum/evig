@@ -1,7 +1,7 @@
 import { NextRequest } from 'next/server'
-import { auth } from '@/auth'
+import { withAdmin } from '@/lib/api/middleware'
 import { query } from '@/lib/auth/db'
-import { apiError, apiSuccess, apiUnauthorized, apiForbidden, apiBadRequest } from '@/lib/api/helpers'
+import { apiError, apiSuccess, apiBadRequest } from '@/lib/api/helpers'
 import { logger } from '@/lib/logger'
 import { TABLE_NAMES } from '@/config/database'
 
@@ -31,19 +31,8 @@ interface InstanceRow {
 }
 
 // GET /api/admin/workshops/instances - List all workshop instances
-export async function GET(request: NextRequest) {
+export const GET = withAdmin(async (request, session) => {
   try {
-    const session = await auth()
-    if (!session?.user?.id) {
-      return apiUnauthorized('Authentication required')
-    }
-
-    // Check if user is staff (admin/super admin)
-    // Using new simplified permission system (is_staff field)
-    if (!session.user.isStaff) {
-      return apiForbidden('Admin access required')
-    }
-
     const searchParams = request.nextUrl.searchParams
     const workshopId = searchParams.get('workshopId')
     const status = searchParams.get('status') || 'all'
@@ -121,22 +110,11 @@ export async function GET(request: NextRequest) {
     logger.error('Error fetching workshop instances', { error })
     return apiError(error, 'Failed to fetch workshop instances')
   }
-}
+})
 
 // POST /api/admin/workshops/instances - Create new workshop instance
-export async function POST(request: NextRequest) {
+export const POST = withAdmin(async (request, session) => {
   try {
-    const session = await auth()
-    if (!session?.user?.id) {
-      return apiUnauthorized('Authentication required')
-    }
-
-    // Check if user is staff (admin/super admin)
-    // Using new simplified permission system (is_staff field)
-    if (!session.user.isStaff) {
-      return apiForbidden('Admin access required')
-    }
-
     const body = await request.json()
     const {
       workshopId,
@@ -203,4 +181,4 @@ export async function POST(request: NextRequest) {
     logger.error('Error creating workshop instance', { error })
     return apiError(error, 'Failed to create workshop instance')
   }
-}
+})

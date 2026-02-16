@@ -13,9 +13,11 @@ import {
   CheckCircle,
   Sparkles,
   BookOpen,
+  GraduationCap,
 } from 'lucide-react'
 import { getCategoryIcon, getLevelBadgeClass } from '@/config/workshops'
 import Heading from '@/components/ui/Heading'
+import { PageHero } from '@/components/layout/PageHero'
 import { formatDateShort } from '@/lib/date-formats'
 import type { Workshop, WorkshopInstanceWithCount, WorkshopWithInstances } from '@/components/workshops/types'
 
@@ -111,18 +113,15 @@ export default function WorkshopsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12">
-      <div className="max-w-7xl mx-auto px-4">
-        {/* Header */}
-        <div className="text-center mb-12">
-          <Heading level={1} className="text-gray-900 mb-4">
-            RevampIT Workshops
-          </Heading>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Erweitere dein Wissen in nachhaltiger Technologie. Von Linux über Open-Source bis hin zu Blockchain und KI.
-          </p>
-        </div>
+    <div className="min-h-screen bg-gray-50">
+      <PageHero
+        theme="workshops"
+        icon={GraduationCap}
+        title="RevampIT Workshops"
+        subtitle="Erweitere dein Wissen in nachhaltiger Technologie. Von Linux über Open-Source bis hin zu Blockchain und KI."
+      />
 
+      <div className="max-w-7xl mx-auto px-4 pt-12">
         {/* Filters */}
         <div className="flex flex-wrap justify-center gap-2 mb-8">
           {categories.map(category => (

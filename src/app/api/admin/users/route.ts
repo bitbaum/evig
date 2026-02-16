@@ -14,14 +14,13 @@
  */
 
 import { NextRequest } from 'next/server'
-import { auth } from '@/auth'
+import { withAdmin } from '@/lib/api/middleware'
 import { query } from '@/lib/auth/db'
 import { canAccessSection, isSuperAdmin } from '@/lib/permissions'
 import { TABLE_NAMES } from '@/config/database'
 import {
   apiSuccess,
   apiError,
-  apiUnauthorized,
   apiForbidden,
 } from '@/lib/api/helpers'
 import { z } from 'zod'
@@ -35,14 +34,8 @@ const usersFilterSchema = z.object({
   limit: z.coerce.number().int().min(1).max(100).optional().default(25),
 })
 
-export async function GET(request: NextRequest) {
+export const GET = withAdmin(async (request, session) => {
   try {
-    const session = await auth()
-
-    if (!session?.user) {
-      return apiUnauthorized()
-    }
-
     const user = {
       email: session.user.email,
       is_staff: session.user.isStaff,
@@ -147,4 +140,4 @@ export async function GET(request: NextRequest) {
   } catch (error) {
     return apiError(error, 'Benutzer konnten nicht geladen werden')
   }
-}
+})

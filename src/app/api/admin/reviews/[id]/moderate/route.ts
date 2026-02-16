@@ -1,41 +1,18 @@
-import { NextRequest, NextResponse } from 'next/server'
-import { auth } from '@/auth'
+import { NextRequest } from 'next/server'
+import { withAdmin } from '@/lib/api/middleware'
 import { query } from '@/lib/auth/db'
-import { apiError, apiSuccess, apiUnauthorized, apiBadRequest, apiNotFound } from '@/lib/api/helpers'
+import { apiError, apiSuccess, apiBadRequest, apiNotFound } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
-import { isAdminRole } from '@/lib/constants'
-
-interface UserRow {
-  role: string
-}
 
 interface ReviewStatusRow {
   status: string
 }
 
-export async function PUT(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
-  const { id: reviewId } = await params
+export const PUT = withAdmin<{ id: string }>(async (request, session, context) => {
+  const { id: reviewId } = context!.params!
   try {
-    const session = await auth()
-    if (!session?.user?.id) {
-      return apiUnauthorized(ERROR_MESSAGES.UNAUTHORIZED)
-    }
-
-    // Check if user is admin using SSOT helper
-    const userResult = await query(
-      `SELECT role FROM ${TABLE_NAMES.USERS} WHERE id = $1`,
-      [session.user.id]
-    )
-
-    const user = userResult.rows[0] as UserRow | undefined
-    if (!user || !isAdminRole(user.role)) {
-      return apiUnauthorized('Nur Administratoren können Bewertungen moderieren')
-    }
     const body = await request.json()
     const { action, reason } = body
 
@@ -119,4 +96,4 @@ export async function PUT(
     logger.error('Error moderating review', { error, reviewId })
     return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)
   }
-}
+})

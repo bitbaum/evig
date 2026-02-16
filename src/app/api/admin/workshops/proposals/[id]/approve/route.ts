@@ -1,7 +1,7 @@
-import { NextRequest, NextResponse } from 'next/server'
-import { auth } from '@/auth'
+import { NextRequest } from 'next/server'
+import { withAdmin } from '@/lib/api/middleware'
 import { query } from '@/lib/auth/db'
-import { apiError, apiSuccess, apiBadRequest, apiUnauthorized, apiForbidden, apiNotFound } from '@/lib/api/helpers'
+import { apiError, apiSuccess, apiBadRequest, apiNotFound } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
@@ -11,19 +11,20 @@ interface ProposalRow {
   user_id: string
   title: string
   description: string
-  short_description: string
-  category: string
+  short_description: string | null
+  category: string | null
   duration_minutes: number
   level: string
   max_participants: number
   min_participants: number
   price_cents: number
-  prerequisites: string[]
-  learning_objectives: string[]
-  target_audience: string
-  materials_provided: string[]
-  materials_required: string[]
-  proposed_date: Date | null
+  prerequisites: string | null
+  learning_objectives: string[] | null
+  target_audience: string | null
+  materials_provided: string | null
+  materials_required: string | null
+  proposed_date: string | null
+  proposed_time: string | null
   selected_location_id: string | null
   proposed_location: string | null
   proposer_name: string
@@ -35,22 +36,9 @@ interface WorkshopIdRow {
 }
 
 // POST /api/admin/workshops/proposals/[id]/approve - Approve or reject workshop proposal
-export async function POST(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
-  const { id: proposalId } = await params
+export const POST = withAdmin<{ id: string }>(async (request, session, context) => {
+  const { id: proposalId } = context!.params!
   try {
-    const session = await auth()
-    if (!session?.user?.id) {
-      return apiUnauthorized(ERROR_MESSAGES.UNAUTHORIZED)
-    }
-
-    // Check if user is staff (admin/super admin)
-    // Using new simplified permission system (is_staff field)
-    if (!session.user.isStaff) {
-      return apiForbidden('Keine Berechtigung für Workshop-Genehmigungen')
-    }
     const body = await request.json()
     const { action, review_notes, required_changes } = body
 
@@ -154,7 +142,21 @@ export async function POST(
 
         // Create initial workshop instance if location is specified
         if (proposal.selected_location_id || proposal.proposed_location) {
-          const proposedDate = proposal.proposed_date || new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
+          // Combine proposed_date and proposed_time into a proper timestamp
+          let proposedDate: Date
+          if (proposal.proposed_date) {
+            const dateStr = typeof proposal.proposed_date === 'string'
+              ? proposal.proposed_date
+              : String(proposal.proposed_date)
+            const timeStr = proposal.proposed_time || '09:00'
+            proposedDate = new Date(`${dateStr}T${timeStr}`)
+            // Fallback if parsing failed
+            if (isNaN(proposedDate.getTime())) {
+              proposedDate = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
+            }
+          } else {
+            proposedDate = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
+          }
           const endDate = new Date(proposedDate.getTime() + proposal.duration_minutes * 60 * 1000)
 
           await query(`
@@ -208,4 +210,4 @@ export async function POST(
   } catch (error) {
     return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)
   }
-}
+})

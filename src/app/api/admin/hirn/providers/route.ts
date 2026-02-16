@@ -9,31 +9,13 @@
  */
 
 import { NextRequest } from 'next/server'
-import { auth } from '@/auth'
-import { canAccessSection } from '@/lib/permissions'
+import { withAdmin } from '@/lib/api/middleware'
 import { getProviderSettings, setDefaultProvider, createProvider, type ProviderName } from '@/lib/hirn/providers'
 import { logger } from '@/lib/logger'
-import { apiSuccess, apiError, apiUnauthorized, apiForbidden, apiBadRequest, apiNotFound } from '@/lib/api/helpers'
+import { apiSuccess, apiError, apiBadRequest, apiNotFound } from '@/lib/api/helpers'
 
-export async function GET(request: NextRequest) {
+export const GET = withAdmin(async (request: NextRequest) => {
   try {
-    const session = await auth()
-
-    if (!session?.user) {
-      return apiUnauthorized()
-    }
-
-    const user = {
-      email: session.user.email,
-      is_staff: session.user.isStaff,
-      staff_permissions: session.user.staffPermissions,
-      is_super_admin: session.user.isSuperAdmin,
-    }
-
-    if (!canAccessSection(user, 'hirn')) {
-      return apiForbidden('Keine Berechtigung für Hirn')
-    }
-
     // Get system settings and check availability
     const settings = await getProviderSettings('system')
 
@@ -66,27 +48,10 @@ export async function GET(request: NextRequest) {
   } catch (error) {
     return apiError(error, 'Provider konnten nicht geladen werden')
   }
-}
+})
 
-export async function PATCH(request: NextRequest) {
+export const PATCH = withAdmin(async (request: NextRequest, session) => {
   try {
-    const session = await auth()
-
-    if (!session?.user) {
-      return apiUnauthorized()
-    }
-
-    const user = {
-      email: session.user.email,
-      is_staff: session.user.isStaff,
-      staff_permissions: session.user.staffPermissions,
-      is_super_admin: session.user.isSuperAdmin,
-    }
-
-    if (!canAccessSection(user, 'hirn')) {
-      return apiForbidden('Keine Berechtigung für Hirn')
-    }
-
     const body = await request.json()
     const { provider, isDefault } = body
 
@@ -132,4 +97,4 @@ export async function PATCH(request: NextRequest) {
   } catch (error) {
     return apiError(error, 'Provider konnte nicht aktualisiert werden')
   }
-}
+})

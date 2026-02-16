@@ -7,10 +7,9 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server'
-import { auth } from '@/auth'
-import { canAccessSection } from '@/lib/permissions'
+import { withAdmin } from '@/lib/api/middleware'
 import { logger } from '@/lib/logger'
-import { apiUnauthorized, apiForbidden, apiBadRequest } from '@/lib/api/helpers'
+import { apiBadRequest } from '@/lib/api/helpers'
 import { validateBody, BulkEnrichSchema } from '@/lib/schemas'
 import { extractMultipleProducts } from '@/lib/erfassung/bulk-extraction'
 import { BULK_LIMITS } from '@/config/erfassung'
@@ -25,23 +24,8 @@ interface EnrichmentItem {
   verkaufspreis?: string
 }
 
-export async function POST(request: NextRequest) {
+export const POST = withAdmin(async (request: NextRequest, session) => {
   try {
-    const session = await auth()
-    if (!session?.user) {
-      return apiUnauthorized()
-    }
-
-    const user = {
-      email: session.user.email,
-      is_staff: session.user.isStaff,
-      staff_permissions: session.user.staffPermissions,
-    }
-
-    if (!canAccessSection(user, 'products')) {
-      return apiForbidden('Keine Berechtigung für Produkterfassung')
-    }
-
     const raw = await request.json()
     const validation = validateBody(BulkEnrichSchema, raw)
     if (!validation.success) return validation.error
@@ -108,4 +92,4 @@ export async function POST(request: NextRequest) {
       { status: 500 }
     )
   }
-}
+})

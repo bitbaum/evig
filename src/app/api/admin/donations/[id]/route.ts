@@ -1,10 +1,9 @@
 import { NextRequest } from 'next/server'
-import { auth } from '@/auth'
+import { withAdmin } from '@/lib/api/middleware'
 import { query } from '@/lib/auth/db'
-import { apiError, apiSuccess, apiUnauthorized, apiForbidden, apiBadRequest, apiNotFound } from '@/lib/api/helpers'
+import { apiError, apiSuccess, apiBadRequest, apiNotFound } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES } from '@/config/database'
-import { canAccessSection, type StaffUser } from '@/lib/permissions'
 import { UpdateDonationSchema } from '@/lib/schemas/donations'
 import { logger } from '@/lib/logger'
 
@@ -50,33 +49,13 @@ interface DonationRow {
   recorded_by_name: string | null
 }
 
-interface RouteParams {
-  params: Promise<{ id: string }>
-}
-
 /**
  * GET /api/admin/donations/[id]
  * Get a single donation by ID
  */
-export async function GET(request: NextRequest, { params }: RouteParams) {
+export const GET = withAdmin<{ id: string }>(async (request, session, context) => {
   try {
-    const session = await auth()
-    if (!session?.user?.id) {
-      return apiUnauthorized(ERROR_MESSAGES.UNAUTHORIZED)
-    }
-
-    const staffUser: StaffUser = {
-      email: session.user.email || '',
-      is_staff: session.user.isStaff || false,
-      staff_permissions: session.user.staffPermissions || [],
-      is_super_admin: session.user.isSuperAdmin,
-    }
-
-    if (!canAccessSection(staffUser, 'donations')) {
-      return apiForbidden('Keine Berechtigung für Spenden')
-    }
-
-    const { id } = await params
+    const { id } = context!.params!
 
     const result = await query<DonationRow>(`
       SELECT
@@ -141,31 +120,15 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
     logger.error('Failed to fetch donation', { error })
     return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)
   }
-}
+})
 
 /**
  * PATCH /api/admin/donations/[id]
  * Update a donation (status, notes, receipt_sent, etc.)
  */
-export async function PATCH(request: NextRequest, { params }: RouteParams) {
+export const PATCH = withAdmin<{ id: string }>(async (request, session, context) => {
   try {
-    const session = await auth()
-    if (!session?.user?.id) {
-      return apiUnauthorized(ERROR_MESSAGES.UNAUTHORIZED)
-    }
-
-    const staffUser: StaffUser = {
-      email: session.user.email || '',
-      is_staff: session.user.isStaff || false,
-      staff_permissions: session.user.staffPermissions || [],
-      is_super_admin: session.user.isSuperAdmin,
-    }
-
-    if (!canAccessSection(staffUser, 'donations')) {
-      return apiForbidden('Keine Berechtigung für Spenden')
-    }
-
-    const { id } = await params
+    const { id } = context!.params!
     const body = await request.json()
     const parsed = UpdateDonationSchema.safeParse(body)
 
@@ -243,31 +206,15 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
     logger.error('Failed to update donation', { error })
     return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)
   }
-}
+})
 
 /**
  * DELETE /api/admin/donations/[id]
  * Soft-delete a donation (marks as archived)
  */
-export async function DELETE(request: NextRequest, { params }: RouteParams) {
+export const DELETE = withAdmin<{ id: string }>(async (request, session, context) => {
   try {
-    const session = await auth()
-    if (!session?.user?.id) {
-      return apiUnauthorized(ERROR_MESSAGES.UNAUTHORIZED)
-    }
-
-    const staffUser: StaffUser = {
-      email: session.user.email || '',
-      is_staff: session.user.isStaff || false,
-      staff_permissions: session.user.staffPermissions || [],
-      is_super_admin: session.user.isSuperAdmin,
-    }
-
-    if (!canAccessSection(staffUser, 'donations')) {
-      return apiForbidden('Keine Berechtigung für Spenden')
-    }
-
-    const { id } = await params
+    const { id } = context!.params!
 
     // Check donation exists
     const existing = await query<{ id: string }>(`
@@ -293,4 +240,4 @@ export async function DELETE(request: NextRequest, { params }: RouteParams) {
     logger.error('Failed to delete donation', { error })
     return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)
   }
-}
+})

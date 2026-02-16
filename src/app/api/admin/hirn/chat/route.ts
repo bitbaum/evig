@@ -6,31 +6,12 @@
  */
 
 import { NextRequest } from 'next/server'
-import { auth } from '@/auth'
-import { canAccessSection } from '@/lib/permissions'
+import { withAdmin } from '@/lib/api/middleware'
 import { chat } from '@/lib/hirn'
-import { apiSuccess, apiError, apiUnauthorized, apiForbidden, apiBadRequest } from '@/lib/api/helpers'
+import { apiSuccess, apiError, apiBadRequest } from '@/lib/api/helpers'
 
-export async function POST(request: NextRequest) {
+export const POST = withAdmin(async (request: NextRequest, session) => {
   try {
-    const session = await auth()
-
-    if (!session?.user) {
-      return apiUnauthorized()
-    }
-
-    // Check hirn permission
-    const user = {
-      email: session.user.email,
-      is_staff: session.user.isStaff,
-      staff_permissions: session.user.staffPermissions,
-      is_super_admin: session.user.isSuperAdmin,
-    }
-
-    if (!canAccessSection(user, 'hirn')) {
-      return apiForbidden('Keine Berechtigung für Hirn')
-    }
-
     const body = await request.json()
     const { message, sessionId, temperature, maxTokens, topK, minSimilarity } = body
 
@@ -66,4 +47,4 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     return apiError(error, 'Chat-Nachricht konnte nicht verarbeitet werden')
   }
-}
+})

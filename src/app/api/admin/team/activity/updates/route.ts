@@ -8,7 +8,7 @@
  */
 
 import { NextRequest } from 'next/server'
-import { auth } from '@/auth'
+import { withAdmin } from '@/lib/api/middleware'
 import { query } from '@/lib/auth/db'
 import { canAccessSection } from '@/lib/permissions'
 import { TABLE_NAMES } from '@/config/database'
@@ -16,7 +16,6 @@ import { logger } from '@/lib/logger'
 import {
   apiSuccess,
   apiError,
-  apiUnauthorized,
   apiForbidden,
   apiBadRequest,
 } from '@/lib/api/helpers'
@@ -44,14 +43,8 @@ interface ActivityUpdate {
  * GET /api/admin/team/activity/updates
  * List activity updates with optional filters
  */
-export async function GET(request: NextRequest) {
+export const GET = withAdmin(async (request, session) => {
   try {
-    const session = await auth()
-
-    if (!session?.user) {
-      return apiUnauthorized()
-    }
-
     const user = {
       email: session.user.email,
       is_staff: session.user.isStaff,
@@ -154,20 +147,14 @@ export async function GET(request: NextRequest) {
   } catch (error) {
     return apiError(error, 'Aktivitäten konnten nicht geladen werden')
   }
-}
+})
 
 /**
  * POST /api/admin/team/activity/updates
  * Create a new activity update
  */
-export async function POST(request: NextRequest) {
+export const POST = withAdmin(async (request, session) => {
   try {
-    const session = await auth()
-
-    if (!session?.user) {
-      return apiUnauthorized()
-    }
-
     const user = {
       email: session.user.email,
       is_staff: session.user.isStaff,
@@ -237,4 +224,4 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     return apiError(error, 'Aktivität konnte nicht erstellt werden')
   }
-}
+})

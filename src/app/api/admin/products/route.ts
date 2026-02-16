@@ -1,18 +1,12 @@
 import { NextRequest } from "next/server";
-import { hasAdminRole } from '@/middleware/admin'
+import { withAdmin } from '@/lib/api/middleware'
 import { MEDUSA_CONFIG } from "@/config/medusa";
 import { logger } from "@/lib/logger";
-import { apiError, apiSuccess, apiForbidden } from "@/lib/api/helpers";
+import { apiError, apiSuccess } from "@/lib/api/helpers";
 
 // GET /api/admin/products - List all products for admin
-export async function GET(request: NextRequest) {
+export const GET = withAdmin(async (request, session) => {
   try {
-    // UNIFIED: Check admin access (supports both old role and new is_staff system)
-    const isAdmin = await hasAdminRole()
-    if (!isAdmin) {
-      return apiForbidden("Admin access required");
-    }
-
     if (!MEDUSA_CONFIG.PUBLISHABLE_KEY) {
       logger.error("Medusa publishable key not configured");
       return apiError(
@@ -69,17 +63,11 @@ export async function GET(request: NextRequest) {
       "Failed to connect to Medusa backend"
     );
   }
-}
+})
 
 // POST /api/admin/products - Create new product
-export async function POST(request: NextRequest) {
+export const POST = withAdmin(async (request, session) => {
   try {
-    // UNIFIED: Check admin access (supports both old role and new is_staff system)
-    const isAdmin = await hasAdminRole()
-    if (!isAdmin) {
-      return apiForbidden("Admin access required");
-    }
-
     if (!MEDUSA_CONFIG.PUBLISHABLE_KEY) {
       logger.error("Medusa publishable key not configured");
       return apiError(
@@ -123,4 +111,4 @@ export async function POST(request: NextRequest) {
       "Failed to create product"
     );
   }
-}
+})

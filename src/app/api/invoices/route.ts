@@ -2,7 +2,6 @@ import { NextRequest } from 'next/server'
 import { auth } from '@/auth'
 import { query } from '@/lib/auth/db'
 import { apiError, apiSuccess, apiUnauthorized, apiBadRequest, apiNotFound } from '@/lib/api/helpers'
-import { isAdminRole } from '@/lib/constants'
 import { logger } from '@/lib/logger'
 import { calculateTaxes, generateTaxInvoiceData } from '@/lib/payments/tax-compliance'
 import { TABLE_NAMES } from '@/config/database'
@@ -11,10 +10,6 @@ interface LineItemInput {
   description: string
   quantity: number | string
   unitPrice: number | string
-}
-
-interface UserRow {
-  role: string
 }
 
 interface InvoiceCreatedRow {
@@ -52,9 +47,7 @@ export async function POST(request: NextRequest) {
     } = await request.json()
 
     // Check if user is admin or creating invoice for themselves
-    const userRoleResult = await query(`SELECT role FROM ${TABLE_NAMES.USERS} WHERE id = $1`, [session.user.id])
-    const user = userRoleResult.rows[0] as UserRow | undefined
-    const isAdmin = isAdminRole(user?.role)
+    const isAdmin = session.user.isStaff
     const targetUserId = isAdmin && userId ? userId : session.user.id
 
     if (!targetUserId) {
@@ -187,9 +180,7 @@ export async function GET(request: NextRequest) {
     const offset = parseInt(searchParams.get('offset') || '0')
 
     // Check if user is admin
-    const userRoleResult = await query(`SELECT role FROM ${TABLE_NAMES.USERS} WHERE id = $1`, [session.user.id])
-    const user = userRoleResult.rows[0] as UserRow | undefined
-    const isAdmin = isAdminRole(user?.role)
+    const isAdmin = session.user.isStaff
 
     let whereClause = 'WHERE 1=1'
     const params = []

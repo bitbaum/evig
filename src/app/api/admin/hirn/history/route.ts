@@ -12,30 +12,12 @@
  */
 
 import { NextRequest } from 'next/server'
-import { auth } from '@/auth'
-import { canAccessSection } from '@/lib/permissions'
+import { withAdmin } from '@/lib/api/middleware'
 import { getChatHistory, getUserSessions, deleteSession } from '@/lib/hirn'
-import { apiSuccess, apiError, apiUnauthorized, apiForbidden, apiBadRequest } from '@/lib/api/helpers'
+import { apiSuccess, apiError, apiBadRequest } from '@/lib/api/helpers'
 
-export async function GET(request: NextRequest) {
+export const GET = withAdmin(async (request: NextRequest, session) => {
   try {
-    const session = await auth()
-
-    if (!session?.user) {
-      return apiUnauthorized()
-    }
-
-    const user = {
-      email: session.user.email,
-      is_staff: session.user.isStaff,
-      staff_permissions: session.user.staffPermissions,
-      is_super_admin: session.user.isSuperAdmin,
-    }
-
-    if (!canAccessSection(user, 'hirn')) {
-      return apiForbidden('Keine Berechtigung für Hirn')
-    }
-
     const { searchParams } = new URL(request.url)
     const sessionId = searchParams.get('sessionId')
 
@@ -51,27 +33,10 @@ export async function GET(request: NextRequest) {
   } catch (error) {
     return apiError(error, 'Chat-Verlauf konnte nicht geladen werden')
   }
-}
+})
 
-export async function DELETE(request: NextRequest) {
+export const DELETE = withAdmin(async (request: NextRequest) => {
   try {
-    const session = await auth()
-
-    if (!session?.user) {
-      return apiUnauthorized()
-    }
-
-    const user = {
-      email: session.user.email,
-      is_staff: session.user.isStaff,
-      staff_permissions: session.user.staffPermissions,
-      is_super_admin: session.user.isSuperAdmin,
-    }
-
-    if (!canAccessSection(user, 'hirn')) {
-      return apiForbidden('Keine Berechtigung für Hirn')
-    }
-
     const { searchParams } = new URL(request.url)
     const sessionId = searchParams.get('sessionId')
 
@@ -85,4 +50,4 @@ export async function DELETE(request: NextRequest) {
   } catch (error) {
     return apiError(error, 'Session konnte nicht gelöscht werden')
   }
-}
+})

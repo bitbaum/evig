@@ -9,7 +9,7 @@
  */
 
 import { NextRequest } from 'next/server'
-import { auth } from '@/auth'
+import { withAdmin } from '@/lib/api/middleware'
 import { query } from '@/lib/auth/db'
 import { canAccessSection } from '@/lib/permissions'
 import { TABLE_NAMES } from '@/config/database'
@@ -17,16 +17,11 @@ import { logger } from '@/lib/logger'
 import {
   apiSuccess,
   apiError,
-  apiUnauthorized,
   apiForbidden,
   apiNotFound,
   apiBadRequest,
 } from '@/lib/api/helpers'
 import { validateUpdateActivityUpdate } from '@/lib/schemas/activity'
-
-interface RequestContext {
-  params: Promise<{ id: string }>
-}
 
 interface ActivityUpdate {
   id: string
@@ -47,14 +42,8 @@ interface ActivityUpdate {
  * GET /api/admin/team/activity/updates/[id]
  * Get activity update details
  */
-export async function GET(request: NextRequest, context: RequestContext) {
+export const GET = withAdmin<{ id: string }>(async (request, session, context) => {
   try {
-    const session = await auth()
-
-    if (!session?.user) {
-      return apiUnauthorized()
-    }
-
     const user = {
       email: session.user.email,
       is_staff: session.user.isStaff,
@@ -65,7 +54,7 @@ export async function GET(request: NextRequest, context: RequestContext) {
       return apiForbidden('Kein Zugriff auf Team-Bereich')
     }
 
-    const { id } = await context.params
+    const { id } = context!.params!
 
     const result = await query<ActivityUpdate>(
       `SELECT
@@ -95,21 +84,15 @@ export async function GET(request: NextRequest, context: RequestContext) {
   } catch (error) {
     return apiError(error, 'Aktivität konnte nicht geladen werden')
   }
-}
+})
 
 /**
  * PUT /api/admin/team/activity/updates/[id]
  * Update an activity update
  */
-export async function PUT(request: NextRequest, context: RequestContext) {
+export const PUT = withAdmin<{ id: string }>(async (request, session, context) => {
   try {
-    const session = await auth()
-
-    if (!session?.user) {
-      return apiUnauthorized()
-    }
-
-    const { id } = await context.params
+    const { id } = context!.params!
     const body = await request.json()
 
     // Validate input
@@ -189,21 +172,15 @@ export async function PUT(request: NextRequest, context: RequestContext) {
   } catch (error) {
     return apiError(error, 'Aktivität konnte nicht aktualisiert werden')
   }
-}
+})
 
 /**
  * DELETE /api/admin/team/activity/updates/[id]
  * Delete an activity update
  */
-export async function DELETE(request: NextRequest, context: RequestContext) {
+export const DELETE = withAdmin<{ id: string }>(async (request, session, context) => {
   try {
-    const session = await auth()
-
-    if (!session?.user) {
-      return apiUnauthorized()
-    }
-
-    const { id } = await context.params
+    const { id } = context!.params!
 
     // Get existing update to check ownership
     const existing = await query<{ id: string; user_id: string; user_email: string }>(
@@ -247,4 +224,4 @@ export async function DELETE(request: NextRequest, context: RequestContext) {
   } catch (error) {
     return apiError(error, 'Aktivität konnte nicht gelöscht werden')
   }
-}
+})

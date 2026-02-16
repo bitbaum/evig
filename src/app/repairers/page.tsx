@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from 'react'
 import Link from 'next/link'
 import { logger } from '@/lib/logger'
 import { formatDateShort } from '@/lib/date-formats'
+import { PageHero } from '@/components/layout/PageHero'
 import {
   Search,
   MapPin,
@@ -222,21 +223,15 @@ export default function RepairersPage() {
   ]
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12">
-      <div className="max-w-7xl mx-auto px-4">
-        {/* Header */}
-        <div className="text-center mb-12">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-100 rounded-full mb-6">
-            <Wrench className="w-8 h-8 text-blue-600" />
-          </div>
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">
-            Reparateure finden
-          </h1>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Finden Sie zertifizierte Reparateure in Ihrer Nähe für alle Arten von Elektronik-Reparaturen.
-          </p>
-        </div>
+    <div className="min-h-screen bg-gray-50">
+      <PageHero
+        theme="repairers"
+        icon={Wrench}
+        title="Reparateure finden"
+        subtitle="Finden Sie zertifizierte Reparateure in Ihrer Nähe für alle Arten von Elektronik-Reparaturen."
+      />
 
+      <div className="max-w-7xl mx-auto px-4 py-12">
         {/* Search and Filters */}
         <div className="bg-white rounded-xl shadow-sm p-6 mb-8">
           <div className="flex flex-col md:flex-row gap-4">

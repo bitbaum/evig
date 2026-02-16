@@ -1,6 +1,6 @@
 import { NextRequest } from 'next/server'
 import { auth } from '@/auth'
-import { query } from '@/lib/auth/db'
+import { query, transaction } from '@/lib/auth/db'
 import { apiError, apiSuccess, apiUnauthorized } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES } from '@/config/database'
@@ -105,97 +105,101 @@ export const POST = withSecurePayment(async (request: NextRequest) => {
       description: description || `RevampIT Payment - ${currency} ${finalTotal.toFixed(2)}`,
     })
 
-    // Create payment transaction record with detailed breakdown
-    const transactionResult = await query(`
-      INSERT INTO ${TABLE_NAMES.PAYMENT_TRANSACTIONS} (
-        user_id,
-        provider_id,
-        provider_transaction_id,
-        type,
-        status,
-        amount_cents,
-        currency,
-        fee_cents,
-        net_amount_cents,
-        order_id,
-        service_appointment_id,
-        workshop_registration_id,
-        description,
-        escrow_release_date,
-        metadata,
-        provider_response
-      ) VALUES (
-        $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13,
-        CASE WHEN $14 THEN CURRENT_TIMESTAMP + INTERVAL '1 day' * $15 ELSE NULL END,
-        $16, $17
-      )
-      RETURNING id
-    `, [
-      session.user.id,
-      provider.id,
-      paymentIntent.id,
-      'payment',
-      'pending',
-      totalCents,
-      currency,
-      providerFeeCents,
-      subtotalCents,
-      orderId || null,
-      serviceAppointmentId || null,
-      workshopRegistrationId || null,
-      description || `Payment for ${orderId || serviceAppointmentId || workshopRegistrationId || 'service'}`,
-      escrowEnabled,
-      autoReleaseDays,
-      JSON.stringify({
-        includeVAT,
-        businessType,
-        subtotalCents,
-        vatCents,
-        vatRate,
-        providerFeeCents,
-        breakdown: {
-          subtotal: subtotal.toFixed(2),
-          vat: vat.toFixed(2),
-          providerFee: providerFee.toFixed(2),
-          total: finalTotal.toFixed(2)
-        }
-      }),
-      JSON.stringify(paymentIntent)
-    ])
-
-    const transactionId = (transactionResult.rows[0] as IdRow).id
-
-    // Create escrow account if enabled
-    if (escrowEnabled) {
-      await query(`
-        INSERT INTO ${TABLE_NAMES.ESCROW_ACCOUNTS} (
-          transaction_id,
-          total_amount_cents,
+    // Wrap DB writes in transaction (payment record + optional escrow)
+    const transactionId = await transaction(async (client) => {
+      const transactionResult = await client.query(`
+        INSERT INTO ${TABLE_NAMES.PAYMENT_TRANSACTIONS} (
+          user_id,
+          provider_id,
+          provider_transaction_id,
+          type,
+          status,
+          amount_cents,
           currency,
-          auto_release_days,
-          release_deadline,
-          buyer_id,
-          seller_id
+          fee_cents,
+          net_amount_cents,
+          order_id,
+          service_appointment_id,
+          workshop_registration_id,
+          description,
+          escrow_release_date,
+          metadata,
+          provider_response
         ) VALUES (
-          $1, $2, $3, $4,
-          CURRENT_TIMESTAMP + INTERVAL '1 day' * $4,
-          $5,
-          CASE
-            WHEN $6 IS NOT NULL THEN (SELECT technician_id FROM ${TABLE_NAMES.SERVICE_APPOINTMENTS} WHERE id = $6)
-            WHEN $7 IS NOT NULL THEN (SELECT instructor_id FROM ${TABLE_NAMES.WORKSHOP_REGISTRATIONS} wr JOIN ${TABLE_NAMES.WORKSHOP_INSTANCES} wi ON wr.workshop_instance_id = wi.id WHERE wr.id = $7)
-            ELSE NULL
-          END
+          $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13,
+          CASE WHEN $14 THEN CURRENT_TIMESTAMP + INTERVAL '1 day' * $15 ELSE NULL END,
+          $16, $17
         )
+        RETURNING id
       `, [
-        transactionId,
+        session.user.id,
+        provider.id,
+        paymentIntent.id,
+        'payment',
+        'pending',
         totalCents,
         currency,
+        providerFeeCents,
+        subtotalCents,
+        orderId || null,
+        serviceAppointmentId || null,
+        workshopRegistrationId || null,
+        description || `Payment for ${orderId || serviceAppointmentId || workshopRegistrationId || 'service'}`,
+        escrowEnabled,
         autoReleaseDays,
-        session.user.id,
-        serviceAppointmentId,
-        workshopRegistrationId
+        JSON.stringify({
+          includeVAT,
+          businessType,
+          subtotalCents,
+          vatCents,
+          vatRate,
+          providerFeeCents,
+          breakdown: {
+            subtotal: subtotal.toFixed(2),
+            vat: vat.toFixed(2),
+            providerFee: providerFee.toFixed(2),
+            total: finalTotal.toFixed(2)
+          }
+        }),
+        JSON.stringify(paymentIntent)
       ])
-    }
+
+      const txId = (transactionResult.rows[0] as IdRow).id
+
+      // Create escrow account if enabled
+      if (escrowEnabled) {
+        await client.query(`
+          INSERT INTO ${TABLE_NAMES.ESCROW_ACCOUNTS} (
+            transaction_id,
+            total_amount_cents,
+            currency,
+            auto_release_days,
+            release_deadline,
+            buyer_id,
+            seller_id
+          ) VALUES (
+            $1, $2, $3, $4,
+            CURRENT_TIMESTAMP + INTERVAL '1 day' * $4,
+            $5,
+            CASE
+              WHEN $6 IS NOT NULL THEN (SELECT technician_id FROM ${TABLE_NAMES.SERVICE_APPOINTMENTS} WHERE id = $6)
+              WHEN $7 IS NOT NULL THEN (SELECT instructor_id FROM ${TABLE_NAMES.WORKSHOP_REGISTRATIONS} wr JOIN ${TABLE_NAMES.WORKSHOP_INSTANCES} wi ON wr.workshop_instance_id = wi.id WHERE wr.id = $7)
+              ELSE NULL
+            END
+          )
+        `, [
+          txId,
+          totalCents,
+          currency,
+          autoReleaseDays,
+          session.user.id,
+          serviceAppointmentId,
+          workshopRegistrationId
+        ])
+      }
+
+      return txId
+    })
 
     return apiSuccess({
       clientSecret: paymentIntent.client_secret,

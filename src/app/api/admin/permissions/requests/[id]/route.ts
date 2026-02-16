@@ -6,30 +6,20 @@
  */
 
 import { NextRequest } from 'next/server'
-import { auth } from '@/auth'
+import { withAdmin } from '@/lib/api/middleware'
 import { query } from '@/lib/auth/db'
 import { isSuperAdmin } from '@/lib/permissions'
 import { TABLE_NAMES } from '@/config/database'
-import { apiSuccess, apiError, apiUnauthorized, apiForbidden, apiBadRequest, apiNotFound } from '@/lib/api/helpers'
+import { apiSuccess, apiError, apiForbidden, apiBadRequest, apiNotFound } from '@/lib/api/helpers'
 
-interface RequestContext {
-  params: Promise<{ id: string }>
-}
-
-export async function POST(request: NextRequest, context: RequestContext) {
+export const POST = withAdmin<{ id: string }>(async (request, session, context) => {
   try {
-    const session = await auth()
-
-    if (!session?.user) {
-      return apiUnauthorized()
-    }
-
     // Only super admins can approve/reject
     if (!isSuperAdmin(session.user.email)) {
       return apiForbidden('Nur Super-Admins können Berechtigungsanfragen genehmigen')
     }
 
-    const { id } = await context.params
+    const { id } = context!.params!
     const body = await request.json()
     const { action, notes } = body
 
@@ -102,4 +92,4 @@ export async function POST(request: NextRequest, context: RequestContext) {
   } catch (error) {
     return apiError(error, 'Berechtigungsanfrage konnte nicht verarbeitet werden')
   }
-}
+})

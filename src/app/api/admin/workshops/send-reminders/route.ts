@@ -1,7 +1,7 @@
 import { NextRequest } from 'next/server'
-import { auth } from '@/auth'
+import { withAdmin } from '@/lib/api/middleware'
 import { query } from '@/lib/auth/db'
-import { apiError, apiSuccess, apiUnauthorized, apiForbidden } from '@/lib/api/helpers'
+import { apiError, apiSuccess } from '@/lib/api/helpers'
 import { validateBody, AdminSendRemindersSchema } from '@/lib/schemas'
 import { logger } from '@/lib/logger'
 import { TABLE_NAMES } from '@/config/database'
@@ -22,23 +22,8 @@ interface UpcomingWorkshopRow {
 }
 
 // POST /api/admin/workshops/send-reminders - Send reminders for upcoming workshops
-export async function POST(request: NextRequest) {
+export const POST = withAdmin(async (request, session) => {
   try {
-    const session = await auth()
-    if (!session?.user?.id) {
-      return apiUnauthorized('Authentication required')
-    }
-
-    // Check if user is admin
-    const userResult = await query(
-      `SELECT role FROM ${TABLE_NAMES.USERS} WHERE id = $1`,
-      [session.user.id]
-    )
-    const userRole = (userResult.rows[0] as { role: string })?.role
-    if (userRole !== 'admin') {
-      return apiForbidden('Admin access required')
-    }
-
     const body = await request.json()
     const validation = validateBody(AdminSendRemindersSchema, body)
     if (!validation.success) return validation.error
@@ -121,4 +106,4 @@ export async function POST(request: NextRequest) {
     logger.error('Error sending workshop reminders', { error })
     return apiError(error, 'Failed to send reminders')
   }
-}
+})

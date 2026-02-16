@@ -7,26 +7,17 @@
  */
 
 import { NextRequest } from 'next/server'
-import { auth } from '@/auth'
+import { withAdmin } from '@/lib/api/middleware'
 import { canAccessSection } from '@/lib/permissions'
 import { query } from '@/lib/auth/db'
 import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
-import { apiSuccess, apiError, apiUnauthorized, apiForbidden, apiBadRequest, apiNotFound } from '@/lib/api/helpers'
+import { apiSuccess, apiError, apiForbidden, apiBadRequest, apiNotFound } from '@/lib/api/helpers'
 
-export async function GET(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
-  const { id: postId } = await params
+export const GET = withAdmin<{ id: string }>(async (request, session, context) => {
+  const { id: postId } = context!.params!
 
   try {
-    const session = await auth()
-
-    if (!session?.user) {
-      return apiUnauthorized()
-    }
-
     const user = {
       email: session.user.email,
       is_staff: session.user.isStaff,
@@ -76,21 +67,12 @@ export async function GET(
     logger.error('Failed to get blog post', { postId, error })
     return apiError(error, 'Blog-Artikel konnte nicht geladen werden')
   }
-}
+})
 
-export async function PATCH(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
-  const { id: postId } = await params
+export const PATCH = withAdmin<{ id: string }>(async (request, session, context) => {
+  const { id: postId } = context!.params!
 
   try {
-    const session = await auth()
-
-    if (!session?.user) {
-      return apiUnauthorized()
-    }
-
     const user = {
       email: session.user.email,
       is_staff: session.user.isStaff,
@@ -216,21 +198,12 @@ export async function PATCH(
     logger.error('Failed to update blog post', { postId, error })
     return apiError(error, 'Blog-Artikel konnte nicht aktualisiert werden')
   }
-}
+})
 
-export async function DELETE(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
-  const { id: postId } = await params
+export const DELETE = withAdmin<{ id: string }>(async (request, session, context) => {
+  const { id: postId } = context!.params!
 
   try {
-    const session = await auth()
-
-    if (!session?.user) {
-      return apiUnauthorized()
-    }
-
     const user = {
       email: session.user.email,
       is_staff: session.user.isStaff,
@@ -257,4 +230,4 @@ export async function DELETE(
     logger.error('Failed to delete blog post', { postId, error })
     return apiError(error, 'Blog-Artikel konnte nicht gelöscht werden')
   }
-}
+})

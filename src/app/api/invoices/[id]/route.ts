@@ -2,13 +2,8 @@ import { NextRequest } from 'next/server'
 import { auth } from '@/auth'
 import { query } from '@/lib/auth/db'
 import { apiError, apiSuccess, apiUnauthorized, apiNotFound, apiBadRequest } from '@/lib/api/helpers'
-import { isAdminRole } from '@/lib/constants'
 import { logger } from '@/lib/logger'
 import { TABLE_NAMES } from '@/config/database'
-
-interface UserRow {
-  role: string
-}
 
 interface InvoiceRow {
   id: string
@@ -44,9 +39,7 @@ export async function GET(
     }
 
     // Check if user is admin
-    const userRoleResult = await query(`SELECT role FROM ${TABLE_NAMES.USERS} WHERE id = $1`, [session.user.id])
-    const user = userRoleResult.rows[0] as UserRow | undefined
-    const isAdmin = isAdminRole(user?.role)
+    const isAdmin = session.user.isStaff
 
     // Get invoice details
     const invoiceResult = await query(`
@@ -95,9 +88,7 @@ export async function PUT(
     const updates = await request.json()
 
     // Check if user is admin
-    const userRoleResult = await query(`SELECT role FROM ${TABLE_NAMES.USERS} WHERE id = $1`, [session.user.id])
-    const user = userRoleResult.rows[0] as UserRow | undefined
-    const isAdmin = isAdminRole(user?.role)
+    const isAdmin = session.user.isStaff
 
     // Get current invoice
     const invoiceResult = await query(`SELECT * FROM ${TABLE_NAMES.INVOICES} WHERE id = $1`, [invoiceId])
@@ -181,9 +172,7 @@ export async function DELETE(
     }
 
     // Check if user is admin
-    const userRoleResult = await query(`SELECT role FROM ${TABLE_NAMES.USERS} WHERE id = $1`, [session.user.id])
-    const user = userRoleResult.rows[0] as UserRow | undefined
-    const isAdmin = isAdminRole(user?.role)
+    const isAdmin = session.user.isStaff
 
     // Get invoice
     const invoiceResult = await query(`SELECT * FROM ${TABLE_NAMES.INVOICES} WHERE id = $1`, [invoiceId])

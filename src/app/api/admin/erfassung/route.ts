@@ -6,22 +6,16 @@
  */
 
 import { NextRequest } from 'next/server'
-import { apiSuccess, apiError, apiUnauthorized } from '@/lib/api/helpers'
+import { withAdmin } from '@/lib/api/middleware'
+import { apiSuccess, apiError } from '@/lib/api/helpers'
 import { validateBody, ErfassungCreateSchema } from '@/lib/schemas'
 import { transaction } from '@/lib/auth/db'
 import { logger } from '@/lib/logger'
-import { auth } from '@/auth'
 import { createErfassungProduct } from '@/lib/erfassung/create-product'
 import type { ErfassungPayload } from '@/types/erfassung'
 
-export async function POST(request: NextRequest) {
+export const POST = withAdmin(async (request, session) => {
   try {
-    // Check authentication
-    const session = await auth()
-    if (!session?.user?.id) {
-      return apiUnauthorized('Nicht angemeldet')
-    }
-
     const raw = await request.json()
     const validation = validateBody(ErfassungCreateSchema, raw)
     if (!validation.success) return validation.error
@@ -61,4 +55,4 @@ export async function POST(request: NextRequest) {
     logger.error('Erfassung failed', { error })
     return apiError(error, 'Fehler beim Erfassen des Produkts')
   }
-}
+})

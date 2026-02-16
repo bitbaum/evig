@@ -1,15 +1,10 @@
-import { NextRequest, NextResponse } from 'next/server'
-import { auth } from '@/auth'
+import { NextRequest } from 'next/server'
+import { withAdmin } from '@/lib/api/middleware'
 import { query } from '@/lib/auth/db'
-import { apiError, apiSuccess, apiUnauthorized, apiNotFound } from '@/lib/api/helpers'
+import { apiError, apiSuccess, apiNotFound } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
-import { isAdminRole } from '@/lib/constants'
-
-interface UserRow {
-  role: string
-}
 
 interface RepairerRow {
   id: string
@@ -23,28 +18,9 @@ interface RatingRow {
   review_summary: Record<string, unknown>
 }
 
-export async function POST(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
-  const { id: repairerId } = await params
+export const POST = withAdmin<{ id: string }>(async (request, session, context) => {
+  const { id: repairerId } = context!.params!
   try {
-    const session = await auth()
-    if (!session?.user?.id) {
-      return apiUnauthorized(ERROR_MESSAGES.UNAUTHORIZED)
-    }
-
-    // Check if user is admin using SSOT helper
-    const userResult = await query(
-      `SELECT role FROM ${TABLE_NAMES.USERS} WHERE id = $1`,
-      [session.user.id]
-    )
-
-    const user = userResult.rows[0] as UserRow | undefined
-    if (!user || !isAdminRole(user.role)) {
-      return apiUnauthorized('Nur Administratoren können Bewertungen neu berechnen')
-    }
-
     // Check if repairer exists
     const repairerResult = await query(
       `SELECT id, business_name FROM ${TABLE_NAMES.REPAIRER_PROFILES} WHERE id = $1`,
@@ -89,4 +65,4 @@ export async function POST(
     logger.error('Error recalculating repairer ratings', { error, repairerId })
     return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)
   }
-}
+})

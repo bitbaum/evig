@@ -7,17 +7,13 @@
  */
 
 import { NextRequest } from 'next/server'
-import { auth } from '@/auth'
+import { withAdmin } from '@/lib/api/middleware'
 import { query } from '@/lib/auth/db'
 import { isSuperAdmin, ADMIN_SECTIONS, SUPER_ADMIN_EMAILS, type AdminSection } from '@/lib/permissions'
 import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
 import { logPermissionsChange, logSuperAdminChange } from '@/lib/auth/audit'
-import { apiSuccess, apiError, apiUnauthorized, apiForbidden, apiBadRequest, apiNotFound } from '@/lib/api/helpers'
-
-interface RequestContext {
-  params: Promise<{ id: string }>
-}
+import { apiSuccess, apiError, apiForbidden, apiBadRequest, apiNotFound } from '@/lib/api/helpers'
 
 /**
  * Get request context for audit logging
@@ -30,20 +26,14 @@ function getAuditContext(request: NextRequest, userId: string | null) {
   }
 }
 
-export async function PATCH(request: NextRequest, context: RequestContext) {
+export const PATCH = withAdmin<{ id: string }>(async (request, session, context) => {
   try {
-    const session = await auth()
-
-    if (!session?.user) {
-      return apiUnauthorized()
-    }
-
     // Only super admins can manage permissions
     if (!isSuperAdmin(session.user.email, session.user.isSuperAdmin)) {
       return apiForbidden('Nur Super-Admins können Berechtigungen verwalten')
     }
 
-    const { id } = await context.params
+    const { id } = context!.params!
     const body = await request.json()
     const { permissions, isSuperAdmin: newSuperAdminStatus } = body
 
@@ -162,4 +152,4 @@ export async function PATCH(request: NextRequest, context: RequestContext) {
   } catch (error) {
     return apiError(error, 'Benutzerberechtigungen konnten nicht aktualisiert werden')
   }
-}
+})

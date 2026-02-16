@@ -1,7 +1,7 @@
 import { NextRequest } from 'next/server'
-import { auth } from '@/auth'
+import { withAdmin } from '@/lib/api/middleware'
 import { query } from '@/lib/auth/db'
-import { apiError, apiSuccess, apiUnauthorized, apiForbidden, apiBadRequest } from '@/lib/api/helpers'
+import { apiError, apiSuccess, apiBadRequest } from '@/lib/api/helpers'
 import { logger } from '@/lib/logger'
 import { TABLE_NAMES } from '@/config/database'
 
@@ -21,27 +21,9 @@ interface MaterialRow {
 }
 
 // GET /api/admin/workshops/[workshopId]/materials - List all materials for a workshop
-export async function GET(
-  request: NextRequest,
-  { params }: { params: Promise<{ workshopId: string }> }
-) {
+export const GET = withAdmin<{ workshopId: string }>(async (request, session, context) => {
   try {
-    const session = await auth()
-    if (!session?.user?.id) {
-      return apiUnauthorized('Authentication required')
-    }
-
-    // Check if user is admin
-    const userResult = await query(
-      `SELECT role FROM ${TABLE_NAMES.USERS} WHERE id = $1`,
-      [session.user.id]
-    )
-    const userRole = (userResult.rows[0] as { role: string })?.role
-    if (userRole !== 'admin') {
-      return apiForbidden('Admin access required')
-    }
-
-    const { workshopId } = await params
+    const { workshopId } = context!.params!
 
     const materialsResult = await query(`
       SELECT * FROM ${TABLE_NAMES.WORKSHOP_MATERIALS}
@@ -57,30 +39,12 @@ export async function GET(
     logger.error('Error fetching workshop materials', { error })
     return apiError(error, 'Failed to fetch materials')
   }
-}
+})
 
 // POST /api/admin/workshops/[workshopId]/materials - Add a new material
-export async function POST(
-  request: NextRequest,
-  { params }: { params: Promise<{ workshopId: string }> }
-) {
+export const POST = withAdmin<{ workshopId: string }>(async (request, session, context) => {
   try {
-    const session = await auth()
-    if (!session?.user?.id) {
-      return apiUnauthorized('Authentication required')
-    }
-
-    // Check if user is admin
-    const userResult = await query(
-      `SELECT role FROM ${TABLE_NAMES.USERS} WHERE id = $1`,
-      [session.user.id]
-    )
-    const userRole = (userResult.rows[0] as { role: string })?.role
-    if (userRole !== 'admin') {
-      return apiForbidden('Admin access required')
-    }
-
-    const { workshopId } = await params
+    const { workshopId } = context!.params!
     const body = await request.json()
     const {
       title,
@@ -154,4 +118,4 @@ export async function POST(
     logger.error('Error adding workshop material', { error })
     return apiError(error, 'Failed to add material')
   }
-}
+})

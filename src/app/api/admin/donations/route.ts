@@ -1,10 +1,9 @@
 import { NextRequest } from 'next/server'
-import { auth } from '@/auth'
+import { withAdmin } from '@/lib/api/middleware'
 import { query } from '@/lib/auth/db'
-import { apiError, apiSuccess, apiUnauthorized, apiForbidden, apiBadRequest } from '@/lib/api/helpers'
+import { apiError, apiSuccess, apiBadRequest } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES } from '@/config/database'
-import { canAccessSection, type StaffUser } from '@/lib/permissions'
 import { CreateDonationSchema, GetDonationsQuerySchema } from '@/lib/schemas/donations'
 import { logger } from '@/lib/logger'
 import { DONATION_TYPES, getEstimatedValue } from '@/config/donations'
@@ -59,24 +58,8 @@ interface CountRow {
  * GET /api/admin/donations
  * List all donations with filtering and pagination
  */
-export async function GET(request: NextRequest) {
+export const GET = withAdmin(async (request: NextRequest, session) => {
   try {
-    const session = await auth()
-    if (!session?.user?.id) {
-      return apiUnauthorized(ERROR_MESSAGES.UNAUTHORIZED)
-    }
-
-    const staffUser: StaffUser = {
-      email: session.user.email || '',
-      is_staff: session.user.isStaff || false,
-      staff_permissions: session.user.staffPermissions || [],
-      is_super_admin: session.user.isSuperAdmin,
-    }
-
-    if (!canAccessSection(staffUser, 'donations')) {
-      return apiForbidden('Keine Berechtigung für Spenden')
-    }
-
     // Parse query params
     const { searchParams } = new URL(request.url)
     const queryParsed = GetDonationsQuerySchema.safeParse({
@@ -206,30 +189,14 @@ export async function GET(request: NextRequest) {
     logger.error('Failed to fetch donations', { error })
     return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)
   }
-}
+})
 
 /**
  * POST /api/admin/donations
  * Create a new donation (monetary or device)
  */
-export async function POST(request: NextRequest) {
+export const POST = withAdmin(async (request: NextRequest, session) => {
   try {
-    const session = await auth()
-    if (!session?.user?.id) {
-      return apiUnauthorized(ERROR_MESSAGES.UNAUTHORIZED)
-    }
-
-    const staffUser: StaffUser = {
-      email: session.user.email || '',
-      is_staff: session.user.isStaff || false,
-      staff_permissions: session.user.staffPermissions || [],
-      is_super_admin: session.user.isSuperAdmin,
-    }
-
-    if (!canAccessSection(staffUser, 'donations')) {
-      return apiForbidden('Keine Berechtigung für Spenden')
-    }
-
     const body = await request.json()
     const parsed = CreateDonationSchema.safeParse(body)
 
@@ -339,4 +306,4 @@ export async function POST(request: NextRequest) {
     logger.error('Failed to create donation', { error })
     return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)
   }
-}
+})

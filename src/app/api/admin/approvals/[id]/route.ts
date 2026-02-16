@@ -4,36 +4,17 @@
  */
 
 import { NextRequest } from 'next/server'
-import { auth } from '@/auth'
+import { withAdmin } from '@/lib/api/middleware'
 import { query } from '@/lib/auth/db'
-import { apiError, apiSuccess, apiBadRequest, apiForbidden, apiNotFound } from '@/lib/api/helpers'
+import { apiError, apiSuccess, apiBadRequest, apiNotFound } from '@/lib/api/helpers'
 import { validateBody, AdminApprovalActionSchema } from '@/lib/schemas'
 import { TABLE_NAMES } from '@/config/database'
 import { MEDUSA_CONFIG } from '@/config/medusa'
-import { canAccessSection } from '@/lib/permissions'
 import { logger } from '@/lib/logger'
 
-export async function PATCH(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export const PATCH = withAdmin<{ id: string }>(async (request, session, context) => {
   try {
-    const session = await auth()
-    if (!session?.user) {
-      return apiForbidden('Nicht authentifiziert')
-    }
-
-    const user = {
-      email: session.user.email || '',
-      is_staff: (session.user as Record<string, unknown>).isStaff as boolean,
-      staff_permissions: (session.user as Record<string, unknown>).staffPermissions as string[],
-    }
-
-    if (!canAccessSection(user, 'approvals')) {
-      return apiForbidden('Keine Berechtigung für Freigaben')
-    }
-
-    const { id } = await params
+    const { id } = context!.params!
     const body = await request.json()
     const validation = validateBody(AdminApprovalActionSchema, body)
     if (!validation.success) return validation.error
@@ -110,4 +91,4 @@ export async function PATCH(
     logger.error('Error processing approval', { error })
     return apiError(error, 'Freigabe konnte nicht verarbeitet werden')
   }
-}
+})

@@ -1,34 +1,17 @@
 import { NextRequest } from 'next/server'
-import { auth } from '@/auth'
+import { withAdmin } from '@/lib/api/middleware'
 import { query } from '@/lib/auth/db'
-import { apiError, apiSuccess, apiUnauthorized, apiNotFound, apiBadRequest } from '@/lib/api/helpers'
-import { isAdminRole } from '@/lib/constants'
+import { apiError, apiSuccess } from '@/lib/api/helpers'
 import { logger } from '@/lib/logger'
 import { TABLE_NAMES } from '@/config/database'
-
-interface UserRow {
-  role: string
-}
 
 interface CountRow {
   total: string
 }
 
 // GET /api/admin/refunds - List all refunds for admin review
-export async function GET(request: NextRequest) {
+export const GET = withAdmin(async (request: NextRequest) => {
   try {
-    const session = await auth()
-    if (!session?.user?.id) {
-      return apiUnauthorized('Authentication required')
-    }
-
-    // Check if user is admin
-    const userRoleResult = await query(`SELECT role FROM ${TABLE_NAMES.USERS} WHERE id = $1`, [session.user.id])
-    const user = userRoleResult.rows[0] as UserRow | undefined
-    if (!isAdminRole(user?.role)) {
-      return apiUnauthorized('Admin access required')
-    }
-
     const { searchParams } = new URL(request.url)
     const status = searchParams.get('status')
     const limit = parseInt(searchParams.get('limit') || '20')
@@ -80,4 +63,4 @@ export async function GET(request: NextRequest) {
     logger.error('List admin refunds error', { error })
     return apiError(error, 'Failed to retrieve refunds')
   }
-}
+})

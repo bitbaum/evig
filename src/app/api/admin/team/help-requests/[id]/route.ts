@@ -8,7 +8,7 @@
  */
 
 import { NextRequest } from 'next/server'
-import { auth } from '@/auth'
+import { withAdmin } from '@/lib/api/middleware'
 import { query } from '@/lib/auth/db'
 import { canAccessSection } from '@/lib/permissions'
 import { TABLE_NAMES } from '@/config/database'
@@ -16,16 +16,11 @@ import { logger } from '@/lib/logger'
 import {
   apiSuccess,
   apiError,
-  apiUnauthorized,
   apiForbidden,
   apiNotFound,
   apiBadRequest,
 } from '@/lib/api/helpers'
 import { validateUpdateHelpRequest } from '@/lib/schemas/activity'
-
-interface RequestContext {
-  params: Promise<{ id: string }>
-}
 
 interface HelpRequest {
   id: string
@@ -53,14 +48,8 @@ interface HelpRequest {
  * GET /api/admin/team/help-requests/[id]
  * Get help request details
  */
-export async function GET(request: NextRequest, context: RequestContext) {
+export const GET = withAdmin<{ id: string }>(async (request, session, context) => {
   try {
-    const session = await auth()
-
-    if (!session?.user) {
-      return apiUnauthorized()
-    }
-
     const user = {
       email: session.user.email,
       is_staff: session.user.isStaff,
@@ -71,7 +60,7 @@ export async function GET(request: NextRequest, context: RequestContext) {
       return apiForbidden('Kein Zugriff auf Team-Bereich')
     }
 
-    const { id } = await context.params
+    const { id } = context!.params!
 
     const result = await query<HelpRequest>(
       `SELECT
@@ -110,21 +99,15 @@ export async function GET(request: NextRequest, context: RequestContext) {
   } catch (error) {
     return apiError(error, 'Hilfsanfrage konnte nicht geladen werden')
   }
-}
+})
 
 /**
  * PUT /api/admin/team/help-requests/[id]
  * Update a help request
  */
-export async function PUT(request: NextRequest, context: RequestContext) {
+export const PUT = withAdmin<{ id: string }>(async (request, session, context) => {
   try {
-    const session = await auth()
-
-    if (!session?.user) {
-      return apiUnauthorized()
-    }
-
-    const { id } = await context.params
+    const { id } = context!.params!
     const body = await request.json()
 
     // Validate input
@@ -204,4 +187,4 @@ export async function PUT(request: NextRequest, context: RequestContext) {
   } catch (error) {
     return apiError(error, 'Hilfsanfrage konnte nicht aktualisiert werden')
   }
-}
+})

@@ -1,6 +1,6 @@
 import { NextRequest } from 'next/server'
 import { auth } from '@/auth'
-import { query } from '@/lib/auth/db'
+import { query, transaction } from '@/lib/auth/db'
 import { apiError, apiSuccess, apiUnauthorized, apiNotFound, apiBadRequest } from '@/lib/api/helpers'
 import { logger } from '@/lib/logger'
 import { requireStripeClient } from '@/lib/payments/stripe-client'
@@ -117,35 +117,38 @@ export async function POST(request: NextRequest) {
 
     const baseAmount = workshop.price_cents
 
-    // Create workshop registration
-    const registrationResult = await query(`
-      INSERT INTO ${TABLE_NAMES.WORKSHOP_REGISTRATIONS} (
-        user_id,
-        workshop_instance_id,
-        status,
-        payment_status,
-        payment_amount_cents
-      ) VALUES (
-        $1, $2, 'pending', 'pending', $3
-      )
-      RETURNING id, created_at
-    `, [
-      session.user.id,
-      registrationTarget,
-      baseAmount
-    ])
+    // Wrap registration + participant count update in transaction
+    const registrationId = await transaction(async (client) => {
+      const registrationResult = await client.query(`
+        INSERT INTO ${TABLE_NAMES.WORKSHOP_REGISTRATIONS} (
+          user_id,
+          workshop_instance_id,
+          status,
+          payment_status,
+          payment_amount_cents
+        ) VALUES (
+          $1, $2, 'pending', 'pending', $3
+        )
+        RETURNING id, created_at
+      `, [
+        session.user.id,
+        registrationTarget,
+        baseAmount
+      ])
 
-    const createdReg = registrationResult.rows[0] as { id: string; created_at: string }
-    const registrationId = createdReg.id
+      const createdReg = registrationResult.rows[0] as { id: string; created_at: string }
 
-    // Update instance participant count if registering for specific instance
-    if (instanceId) {
-      await query(`
-        UPDATE ${TABLE_NAMES.WORKSHOP_INSTANCES}
-        SET current_participants = current_participants + 1
-        WHERE id = $1
-      `, [instanceId])
-    }
+      // Update instance participant count if registering for specific instance
+      if (instanceId) {
+        await client.query(`
+          UPDATE ${TABLE_NAMES.WORKSHOP_INSTANCES}
+          SET current_participants = current_participants + 1
+          WHERE id = $1
+        `, [instanceId])
+      }
+
+      return createdReg.id
+    })
 
     // Process payment using shared utility
     // Note: Workshops use 1-day escrow if enabled (rare case)

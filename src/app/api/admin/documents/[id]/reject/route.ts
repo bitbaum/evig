@@ -1,15 +1,10 @@
 import { NextRequest } from 'next/server'
-import { auth } from '@/auth'
-import { query } from '@/lib/auth/db'
-import { apiError, apiSuccess, apiUnauthorized, apiBadRequest, apiNotFound } from '@/lib/api/helpers'
-import { ERROR_MESSAGES, SUCCESS_MESSAGES } from '@/config/error-messages'
+import { withAdmin } from '@/lib/api/middleware'
+import { query, transaction } from '@/lib/auth/db'
+import { apiError, apiSuccess, apiBadRequest, apiNotFound } from '@/lib/api/helpers'
+import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
-import { isAdminRole } from '@/lib/constants'
-
-interface UserRow {
-  role: string
-}
 
 interface DocumentRow {
   id: string
@@ -19,27 +14,9 @@ interface DocumentRow {
   document_verification_status: string
 }
 
-export async function PUT(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
-  const { id: documentId } = await params
+export const PUT = withAdmin<{ id: string }>(async (request, session, context) => {
+  const { id: documentId } = context!.params!
   try {
-    const session = await auth()
-    if (!session?.user?.id) {
-      return apiUnauthorized(ERROR_MESSAGES.UNAUTHORIZED)
-    }
-
-    // Check if user is admin using SSOT helper
-    const userResult = await query(
-      `SELECT role FROM ${TABLE_NAMES.USERS} WHERE id = $1`,
-      [session.user.id]
-    )
-
-    const user = userResult.rows[0] as UserRow | undefined
-    if (!user || !isAdminRole(user.role)) {
-      return apiUnauthorized('Nur Administratoren können diese Funktion verwenden')
-    }
     const body = await request.json()
     const { adminNotes, rejectionReason } = body
 
@@ -52,7 +29,7 @@ export async function PUT(
       return apiBadRequest('Admin-Notizen müssen ein Text sein')
     }
 
-    // Get document details
+    // Get document details (read-only, outside transaction)
     const documentResult = await query(`
       SELECT vd.*, ra.user_id, ra.document_verification_status
       FROM ${TABLE_NAMES.VERIFICATION_DOCUMENTS} vd
@@ -74,24 +51,27 @@ export async function PUT(
       return apiBadRequest('Dieses Dokument wurde bereits abgelehnt')
     }
 
-    // Update document status with rejection details
-    await query(`
-      UPDATE ${TABLE_NAMES.VERIFICATION_DOCUMENTS}
-      SET
-        status = 'rejected',
-        admin_notes = COALESCE($1, admin_notes) || E'\n\nAblehnungsgrund: ' || $2,
-        reviewed_by = $3,
-        reviewed_at = CURRENT_TIMESTAMP,
-        updated_at = CURRENT_TIMESTAMP
-      WHERE id = $4
-    `, [adminNotes, rejectionReason, session.user.id, documentId])
+    // Wrap all writes in a transaction for consistency
+    await transaction(async (client) => {
+      // Update document status with rejection details
+      await client.query(`
+        UPDATE ${TABLE_NAMES.VERIFICATION_DOCUMENTS}
+        SET
+          status = 'rejected',
+          admin_notes = COALESCE($1, admin_notes) || E'\n\nAblehnungsgrund: ' || $2,
+          reviewed_by = $3,
+          reviewed_at = CURRENT_TIMESTAMP,
+          updated_at = CURRENT_TIMESTAMP
+        WHERE id = $4
+      `, [adminNotes, rejectionReason, session.user.id, documentId])
 
-    // Update application document verification status to incomplete
-    await query(`
-      UPDATE ${TABLE_NAMES.REPAIRER_APPLICATIONS}
-      SET document_verification_status = 'incomplete', updated_at = CURRENT_TIMESTAMP
-      WHERE id = $1
-    `, [document.application_id])
+      // Update application document verification status to incomplete
+      await client.query(`
+        UPDATE ${TABLE_NAMES.REPAIRER_APPLICATIONS}
+        SET document_verification_status = 'incomplete', updated_at = CURRENT_TIMESTAMP
+        WHERE id = $1
+      `, [document.application_id])
+    })
 
     logger.info('Document rejected', {
       documentId,
@@ -111,4 +91,4 @@ export async function PUT(
     logger.error('Error rejecting document', { error, documentId })
     return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)
   }
-}
+})

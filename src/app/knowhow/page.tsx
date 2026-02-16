@@ -1,6 +1,7 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
-import { BookOpen, FileText, Users, LinkIcon } from 'lucide-react'
+import { BookOpen, FileText, Users, LinkIcon, Lightbulb } from 'lucide-react'
+import { PageHero } from '@/components/layout/PageHero'
 
 export const metadata: Metadata = {
   title: 'Knowhow - Guides, Blog, Workshops | revamp-it',
@@ -86,18 +87,12 @@ export default function WissenPage() {
 
   return (
     <main className="min-h-screen bg-white">
-      {/* Hero Section */}
-      <section className="px-4 sm:px-6 py-12 sm:py-16 md:py-20 lg:py-32 lg:px-8">
-        <div className="mx-auto max-w-3xl text-center">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-gray-900 mb-4 sm:mb-6">
-            Knowhow teilen über Vintage Hardware, Linux und Open Source
-          </h1>
-          <p className="text-base sm:text-lg leading-7 sm:leading-8 text-gray-600 mb-6 sm:mb-8">
-            Wir teilen unser 16+ Jahre Knowhow, damit du Technologie besser verstehen und nutzen kannst. 
-            Egal ob du gerade anfängst oder bereits ein Experte bist – hier findest du Ressourcen für deine Lernreise.
-          </p>
-        </div>
-      </section>
+      <PageHero
+        theme="knowhow"
+        icon={Lightbulb}
+        title="Knowhow teilen über Vintage Hardware, Linux und Open Source"
+        subtitle="Wir teilen unser 16+ Jahre Knowhow, damit du Technologie besser verstehen und nutzen kannst. Egal ob du gerade anfängst oder bereits ein Experte bist – hier findest du Ressourcen für deine Lernreise."
+      />
 
       {/* Main Sections Grid */}
       <section className="px-4 sm:px-6 py-12 sm:py-16 lg:px-8">

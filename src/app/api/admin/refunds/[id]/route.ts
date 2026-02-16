@@ -1,16 +1,11 @@
 import { NextRequest } from 'next/server'
-import { auth } from '@/auth'
+import { withAdmin } from '@/lib/api/middleware'
 import { query } from '@/lib/auth/db'
-import { apiError, apiSuccess, apiUnauthorized, apiNotFound, apiBadRequest } from '@/lib/api/helpers'
-import { isAdminRole } from '@/lib/constants'
+import { apiError, apiSuccess, apiNotFound, apiBadRequest } from '@/lib/api/helpers'
 import { logger } from '@/lib/logger'
 import { TABLE_NAMES } from '@/config/database'
 import { getStripeClient } from '@/lib/payments/stripe-client'
 import type Stripe from 'stripe'
-
-interface UserRow {
-  role: string
-}
 
 interface RefundRow {
   id: string
@@ -27,24 +22,9 @@ interface RefundRow {
 }
 
 // GET /api/admin/refunds/[id] - Get refund details
-export async function GET(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
-  const { id: refundId } = await params
+export const GET = withAdmin<{ id: string }>(async (request, session, context) => {
+  const { id: refundId } = context!.params!
   try {
-    const session = await auth()
-    if (!session?.user?.id) {
-      return apiUnauthorized('Authentication required')
-    }
-
-    // Check if user is admin
-    const userRoleResult = await query(`SELECT role FROM ${TABLE_NAMES.USERS} WHERE id = $1`, [session.user.id])
-    const userRow = userRoleResult.rows[0] as UserRow | undefined
-    if (!isAdminRole(userRow?.role)) {
-      return apiUnauthorized('Admin access required')
-    }
-
     // Get refund details with related data
     const refundResult = await query(`
       SELECT
@@ -79,26 +59,12 @@ export async function GET(
     logger.error('Get admin refund error', { error })
     return apiError(error, 'Failed to retrieve refund')
   }
-}
+})
 
 // PUT /api/admin/refunds/[id] - Approve/reject/process refund
-export async function PUT(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
-  const { id: refundId } = await params
+export const PUT = withAdmin<{ id: string }>(async (request, session, context) => {
+  const { id: refundId } = context!.params!
   try {
-    const session = await auth()
-    if (!session?.user?.id) {
-      return apiUnauthorized('Authentication required')
-    }
-
-    // Check if user is admin
-    const userRoleResult = await query(`SELECT role FROM ${TABLE_NAMES.USERS} WHERE id = $1`, [session.user.id])
-    const adminUser = userRoleResult.rows[0] as UserRow | undefined
-    if (!isAdminRole(adminUser?.role)) {
-      return apiUnauthorized('Admin access required')
-    }
     const { action, notes } = await request.json() // action: 'approve', 'reject', 'process'
 
     if (!['approve', 'reject', 'process'].includes(action)) {
@@ -281,7 +247,7 @@ export async function PUT(
     logger.error('Admin refund action error', { error })
     return apiError(error, 'Failed to process refund action')
   }
-}
+})
 
 // Helper function to map our refund reasons to Stripe's format
 function mapRefundReason(reason: string): Stripe.RefundCreateParams.Reason {

@@ -2,7 +2,6 @@ import { NextRequest } from 'next/server'
 import { auth } from '@/auth'
 import { query } from '@/lib/auth/db'
 import { apiError, apiSuccess, apiUnauthorized, apiNotFound, apiBadRequest } from '@/lib/api/helpers'
-import { isAdminRole } from '@/lib/constants'
 import { logger } from '@/lib/logger'
 import { getStripeClient } from '@/lib/payments/stripe-client'
 import { TABLE_NAMES } from '@/config/database'
@@ -23,10 +22,6 @@ interface AppointmentRow {
   requires_approval: boolean
   customer_name: string
   customer_email: string
-}
-
-interface UserRow {
-  role: string
 }
 
 interface PaidRow {
@@ -71,16 +66,9 @@ export async function POST(request: NextRequest) {
 
     const appointment = appointmentResult.rows[0] as AppointmentRow
 
-    // Check ownership
-    if (appointment.user_id !== session.user.id) {
-      const userRoleResult = await query(
-        `SELECT role FROM ${TABLE_NAMES.USERS} WHERE id = $1`,
-        [session.user.id]
-      )
-      const user = userRoleResult.rows[0] as UserRow | undefined
-      if (!isAdminRole(user?.role)) {
-        return apiUnauthorized('You can only pay for your own appointments')
-      }
+    // Check ownership - owner or admin can pay
+    if (appointment.user_id !== session.user.id && !session.user.isStaff) {
+      return apiUnauthorized('You can only pay for your own appointments')
     }
 
     // Check if appointment is in payable status

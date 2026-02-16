@@ -4,8 +4,7 @@ import { query } from '@/lib/auth/db'
 import { apiError, apiSuccess, apiBadRequest, apiUnauthorized, apiForbidden, apiNotFound } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES } from '@/config/database'
-import { getUserRole } from '@/lib/api/role-checks'
-import { isAdminRole, ROLES } from '@/lib/constants'
+
 import { logger } from '@/lib/logger'
 import { sendEmail } from '@/lib/email'
 
@@ -30,10 +29,7 @@ export async function POST(
     }
 
     // Check if user has approval permissions
-    const userRole = await getUserRole(session.user.id)
-    const hasApprovalPermission = isAdminRole(userRole) || userRole === ROLES.MODERATOR
-
-    if (!hasApprovalPermission) {
+    if (!session.user.isStaff) {
       return apiForbidden('Keine Berechtigung für Genehmigungen')
     }
     const body = await request.json()

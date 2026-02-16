@@ -1,10 +1,11 @@
-import { ArrowRight, Wrench, Store, ShoppingBag, DollarSign, Users } from 'lucide-react'
+import { ArrowRight, Recycle, Wrench, Store, ShoppingBag, DollarSign, Users } from 'lucide-react'
 import Link from 'next/link'
 import type { Metadata } from 'next'
 import { getCompactMetrics } from '@/data/impact-metrics'
 import { VALUE_PROPS, TESTIMONIALS } from '@/data/homepage'
 import { AsSeenInLogos } from '@/components/about'
 import Heading from '@/components/ui/Heading'
+import { PageHero } from '@/components/layout/PageHero'
 
 export const metadata: Metadata = {
   title: 'revamp-it – Alte Hardware. Neues Leben. | Computer-Reparatur & Linux in der Schweiz',
@@ -97,29 +98,24 @@ export default function Home() {
       />
 
       {/* Hero section */}
-      <div className="relative isolate px-4 sm:px-6 pt-14 lg:px-8">
-        <div className="mx-auto max-w-2xl py-16 sm:py-24 md:py-32 lg:py-48">
-          <div className="text-center">
-            <Heading level={1} className="tracking-tight text-gray-900">
-              Alte Hardware. Neues Leben.
-            </Heading>
-            <p className="mt-4 sm:mt-6 text-base sm:text-lg leading-7 sm:leading-8 text-gray-600">
-              Alte Computer reparieren, aufrüsten und wiederherstellen. Gebrauchte Hardware bekommt mit Linux und Open Source ein zweites Leben. Für eine nachhaltigere Zukunft und mehr Technologie für alle.
-            </p>
-            <div className="mt-6 sm:mt-10 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-x-6">
-              <Link
-                href="/shop"
-                className="w-full sm:w-auto rounded-md bg-green-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600 text-center"
-              >
-                Zum Shop
-              </Link>
-              <Link href="/services" className="text-sm font-semibold leading-6 text-gray-900">
-                Unsere Dienstleistungen <span aria-hidden="true">→</span>
-              </Link>
-            </div>
-          </div>
+      <PageHero
+        theme="home"
+        icon={Recycle}
+        title="Alte Hardware. Neues Leben."
+        subtitle="Alte Computer reparieren, aufrüsten und wiederherstellen. Gebrauchte Hardware bekommt mit Linux und Open Source ein zweites Leben. Für eine nachhaltigere Zukunft und mehr Technologie für alle."
+      >
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-x-6">
+          <Link
+            href="/shop"
+            className="w-full sm:w-auto rounded-md bg-green-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600 text-center"
+          >
+            Zum Shop
+          </Link>
+          <Link href="/services" className="text-sm font-semibold leading-6 text-gray-900">
+            Unsere Dienstleistungen <span aria-hidden="true">→</span>
+          </Link>
         </div>
-      </div>
+      </PageHero>
 
       {/* As Seen In - Media Logos */}
       <AsSeenInLogos />

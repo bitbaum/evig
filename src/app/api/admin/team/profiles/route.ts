@@ -8,7 +8,7 @@
  */
 
 import { NextRequest } from 'next/server'
-import { auth } from '@/auth'
+import { withAdmin } from '@/lib/api/middleware'
 import { query } from '@/lib/auth/db'
 import { canAccessSection, isSuperAdmin } from '@/lib/permissions'
 import { TABLE_NAMES } from '@/config/database'
@@ -16,7 +16,6 @@ import { logger } from '@/lib/logger'
 import {
   apiSuccess,
   apiError,
-  apiUnauthorized,
   apiForbidden,
   apiBadRequest,
 } from '@/lib/api/helpers'
@@ -32,14 +31,8 @@ import { validateCreateTeamProfile, teamProfileFilterSchema } from '@/lib/schema
  * - is_active: 'true', 'false', or 'all' (default)
  * - search: Search by name or position
  */
-export async function GET(request: NextRequest) {
+export const GET = withAdmin(async (request, session) => {
   try {
-    const session = await auth()
-
-    if (!session?.user) {
-      return apiUnauthorized()
-    }
-
     const user = {
       email: session.user.email,
       is_staff: session.user.isStaff,
@@ -163,20 +156,14 @@ export async function GET(request: NextRequest) {
   } catch (error) {
     return apiError(error, 'Team-Profile konnten nicht geladen werden')
   }
-}
+})
 
 /**
  * POST /api/admin/team/profiles
  * Create a new team profile for a user
  */
-export async function POST(request: NextRequest) {
+export const POST = withAdmin(async (request, session) => {
   try {
-    const session = await auth()
-
-    if (!session?.user) {
-      return apiUnauthorized()
-    }
-
     const user = {
       email: session.user.email,
       is_staff: session.user.isStaff,
@@ -285,4 +272,4 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     return apiError(error, 'Team-Profil konnte nicht erstellt werden')
   }
-}
+})

@@ -1,32 +1,14 @@
 import { NextRequest } from 'next/server'
-import { auth } from '@/auth'
+import { withAdmin } from '@/lib/api/middleware'
 import { query } from '@/lib/auth/db'
-import { apiError, apiSuccess, apiUnauthorized, apiForbidden, apiNotFound, apiBadRequest } from '@/lib/api/helpers'
+import { apiError, apiSuccess, apiNotFound, apiBadRequest } from '@/lib/api/helpers'
 import { logger } from '@/lib/logger'
 import { TABLE_NAMES } from '@/config/database'
 
 // PUT /api/admin/workshops/materials/[id] - Update a material
-export async function PUT(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export const PUT = withAdmin<{ id: string }>(async (request, session, context) => {
   try {
-    const session = await auth()
-    if (!session?.user?.id) {
-      return apiUnauthorized('Authentication required')
-    }
-
-    // Check if user is admin
-    const userResult = await query(
-      `SELECT role FROM ${TABLE_NAMES.USERS} WHERE id = $1`,
-      [session.user.id]
-    )
-    const userRole = (userResult.rows[0] as { role: string })?.role
-    if (userRole !== 'admin') {
-      return apiForbidden('Admin access required')
-    }
-
-    const { id } = await params
+    const { id } = context!.params!
     const body = await request.json()
     const {
       title,
@@ -138,30 +120,12 @@ export async function PUT(
     logger.error('Error updating workshop material', { error })
     return apiError(error, 'Failed to update material')
   }
-}
+})
 
 // DELETE /api/admin/workshops/materials/[id] - Delete a material
-export async function DELETE(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export const DELETE = withAdmin<{ id: string }>(async (request, session, context) => {
   try {
-    const session = await auth()
-    if (!session?.user?.id) {
-      return apiUnauthorized('Authentication required')
-    }
-
-    // Check if user is admin
-    const userResult = await query(
-      `SELECT role FROM ${TABLE_NAMES.USERS} WHERE id = $1`,
-      [session.user.id]
-    )
-    const userRole = (userResult.rows[0] as { role: string })?.role
-    if (userRole !== 'admin') {
-      return apiForbidden('Admin access required')
-    }
-
-    const { id } = await params
+    const { id } = context!.params!
 
     const result = await query(
       `DELETE FROM ${TABLE_NAMES.WORKSHOP_MATERIALS} WHERE id = $1 RETURNING id`,
@@ -185,4 +149,4 @@ export async function DELETE(
     logger.error('Error deleting workshop material', { error })
     return apiError(error, 'Failed to delete material')
   }
-}
+})

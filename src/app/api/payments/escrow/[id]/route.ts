@@ -4,13 +4,8 @@ import { requireStripeClient } from '@/lib/payments/stripe-client'
 import { query } from '@/lib/auth/db'
 import { apiError, apiSuccess, apiUnauthorized, apiNotFound, apiBadRequest } from '@/lib/api/helpers'
 import { TABLE_NAMES } from '@/config/database'
-import { isAdminRole } from '@/lib/constants'
 import { logger } from '@/lib/logger'
 import { validateBody, EscrowReleaseSchema } from '@/lib/schemas'
-
-interface UserRow {
-  role: string
-}
 
 interface EscrowRow {
   id: string
@@ -107,9 +102,7 @@ export async function GET(
     const escrow = escrowResult.rows[0] as EscrowRow
 
     // Check permissions - buyer, seller, or admin can view
-    const userRoleResult = await query(`SELECT role FROM ${TABLE_NAMES.USERS} WHERE id = $1`, [session.user.id])
-    const user = userRoleResult.rows[0] as UserRow | undefined
-    const isAdmin = isAdminRole(user?.role)
+    const isAdmin = session.user.isStaff
 
     if (escrow.buyer_id !== session.user.id && escrow.seller_id !== session.user.id && !isAdmin) {
       return apiUnauthorized('Keine Berechtigung, dieses Treuhandkonto einzusehen')
@@ -186,9 +179,7 @@ export async function POST(
     const escrow = escrowResult.rows[0] as EscrowReleaseRow
 
     // Check permissions - only buyer or admin can release funds
-    const userRoleResult = await query(`SELECT role FROM ${TABLE_NAMES.USERS} WHERE id = $1`, [session.user.id])
-    const userRole = userRoleResult.rows[0] as UserRow | undefined
-    const isAdmin = isAdminRole(userRole?.role)
+    const isAdmin = session.user.isStaff
 
     if (escrow.buyer_id !== session.user.id && !isAdmin) {
       return apiUnauthorized('Nur der Käufer kann Treuhandgelder freigeben')

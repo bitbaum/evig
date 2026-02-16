@@ -15,7 +15,6 @@ import { Menu } from 'lucide-react'
 import Link from 'next/link'
 import { Logo } from '@/components/ui/Logo'
 import { MobileMenu } from '../MobileMenu'
-import { WelcomeModal } from '@/components/ui/WelcomeModal'
 import { UserMenu } from '@/components/auth/UserMenu'
 import { cn } from '@/lib/utils'
 import { mainNavigation } from '@/config/navigation'
@@ -54,8 +53,6 @@ export function Header() {
 
   return (
     <>
-      <WelcomeModal />
-
       <header
         ref={headerRef}
         className={cn(

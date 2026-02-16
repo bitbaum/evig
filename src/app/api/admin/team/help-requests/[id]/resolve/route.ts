@@ -7,7 +7,7 @@
  */
 
 import { NextRequest } from 'next/server'
-import { auth } from '@/auth'
+import { withAdmin } from '@/lib/api/middleware'
 import { query } from '@/lib/auth/db'
 import { canAccessSection } from '@/lib/permissions'
 import { TABLE_NAMES } from '@/config/database'
@@ -15,29 +15,18 @@ import { logger } from '@/lib/logger'
 import {
   apiSuccess,
   apiError,
-  apiUnauthorized,
   apiForbidden,
   apiNotFound,
   apiBadRequest,
 } from '@/lib/api/helpers'
 import { validateResolveHelpRequest } from '@/lib/schemas/activity'
 
-interface RequestContext {
-  params: Promise<{ id: string }>
-}
-
 /**
  * POST /api/admin/team/help-requests/[id]/resolve
  * Mark a help request as resolved
  */
-export async function POST(request: NextRequest, context: RequestContext) {
+export const POST = withAdmin<{ id: string }>(async (request, session, context) => {
   try {
-    const session = await auth()
-
-    if (!session?.user) {
-      return apiUnauthorized()
-    }
-
     const user = {
       email: session.user.email,
       is_staff: session.user.isStaff,
@@ -48,7 +37,7 @@ export async function POST(request: NextRequest, context: RequestContext) {
       return apiForbidden('Kein Zugriff auf Team-Bereich')
     }
 
-    const { id } = await context.params
+    const { id } = context!.params!
     const body = await request.json()
 
     // Validate input
@@ -120,4 +109,4 @@ export async function POST(request: NextRequest, context: RequestContext) {
   } catch (error) {
     return apiError(error, 'Hilfsanfrage konnte nicht gelöst werden')
   }
-}
+})

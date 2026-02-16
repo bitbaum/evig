@@ -1,15 +1,10 @@
 import { NextRequest } from 'next/server'
-import { auth } from '@/auth'
-import { query } from '@/lib/auth/db'
-import { apiError, apiSuccess, apiUnauthorized, apiBadRequest, apiNotFound } from '@/lib/api/helpers'
-import { ERROR_MESSAGES, SUCCESS_MESSAGES } from '@/config/error-messages'
+import { withAdmin } from '@/lib/api/middleware'
+import { query, transaction } from '@/lib/auth/db'
+import { apiError, apiSuccess, apiBadRequest, apiNotFound } from '@/lib/api/helpers'
+import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
-import { isAdminRole } from '@/lib/constants'
-
-interface UserRow {
-  role: string
-}
 
 interface DocumentRow {
   id: string
@@ -24,27 +19,9 @@ interface RequiredDocsRow {
   approved_required: string
 }
 
-export async function PUT(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
-  const { id: documentId } = await params
+export const PUT = withAdmin<{ id: string }>(async (request, session, context) => {
+  const { id: documentId } = context!.params!
   try {
-    const session = await auth()
-    if (!session?.user?.id) {
-      return apiUnauthorized(ERROR_MESSAGES.UNAUTHORIZED)
-    }
-
-    // Check if user is admin using SSOT helper
-    const userResult = await query(
-      `SELECT role FROM ${TABLE_NAMES.USERS} WHERE id = $1`,
-      [session.user.id]
-    )
-
-    const user = userResult.rows[0] as UserRow | undefined
-    if (!user || !isAdminRole(user.role)) {
-      return apiUnauthorized('Nur Administratoren können diese Funktion verwenden')
-    }
     const body = await request.json()
     const { adminNotes, expiresAt } = body
 
@@ -57,7 +34,7 @@ export async function PUT(
       return apiBadRequest('Ungültiges Ablaufdatum')
     }
 
-    // Get document details and check if it exists
+    // Get document details and check if it exists (read-only, outside transaction)
     const documentResult = await query(`
       SELECT vd.*, ra.user_id, ra.document_verification_status
       FROM ${TABLE_NAMES.VERIFICATION_DOCUMENTS} vd
@@ -75,46 +52,52 @@ export async function PUT(
       return apiBadRequest('Dieses Dokument wurde bereits genehmigt')
     }
 
-    // Update document status
-    await query(`
-      UPDATE ${TABLE_NAMES.VERIFICATION_DOCUMENTS}
-      SET
-        status = 'approved',
-        admin_notes = COALESCE($1, admin_notes),
-        reviewed_by = $2,
-        reviewed_at = CURRENT_TIMESTAMP,
-        expires_at = $3,
-        updated_at = CURRENT_TIMESTAMP
-      WHERE id = $4
-    `, [adminNotes, session.user.id, expiresAt || null, documentId])
+    // Wrap all writes in a transaction for consistency
+    const newStatus = await transaction(async (client) => {
+      // Update document status
+      await client.query(`
+        UPDATE ${TABLE_NAMES.VERIFICATION_DOCUMENTS}
+        SET
+          status = 'approved',
+          admin_notes = COALESCE($1, admin_notes),
+          reviewed_by = $2,
+          reviewed_at = CURRENT_TIMESTAMP,
+          expires_at = $3,
+          updated_at = CURRENT_TIMESTAMP
+        WHERE id = $4
+      `, [adminNotes, session.user.id, expiresAt || null, documentId])
 
-    // Check if all required documents for this application are now approved
-    const requiredDocsResult = await query(`
-      SELECT COUNT(*) as total_required,
-             COUNT(CASE WHEN vd.status = 'approved' THEN 1 END) as approved_required
-      FROM ${TABLE_NAMES.DOCUMENT_TYPES} dt
-      LEFT JOIN ${TABLE_NAMES.VERIFICATION_DOCUMENTS} vd ON dt.id = vd.document_type_id
-        AND vd.application_id = $1
-      WHERE dt.is_required = true
-    `, [document.application_id])
+      // Check if all required documents for this application are now approved
+      const requiredDocsResult = await client.query(`
+        SELECT COUNT(*) as total_required,
+               COUNT(CASE WHEN vd.status = 'approved' THEN 1 END) as approved_required
+        FROM ${TABLE_NAMES.DOCUMENT_TYPES} dt
+        LEFT JOIN ${TABLE_NAMES.VERIFICATION_DOCUMENTS} vd ON dt.id = vd.document_type_id
+          AND vd.application_id = $1
+        WHERE dt.is_required = true
+      `, [document.application_id])
 
-    const requiredDocs = requiredDocsResult.rows[0] as RequiredDocsRow
-    const totalRequired = parseInt(requiredDocs.total_required) || 0
-    const approvedRequired = parseInt(requiredDocs.approved_required) || 0
+      const requiredDocs = requiredDocsResult.rows[0] as RequiredDocsRow
+      const totalRequired = parseInt(requiredDocs.total_required) || 0
+      const approvedRequired = parseInt(requiredDocs.approved_required) || 0
 
-    // Update application document verification status
-    let newStatus = 'pending'
-    if (approvedRequired === totalRequired && totalRequired > 0) {
-      newStatus = 'approved'
-    } else if (approvedRequired > 0 && approvedRequired < totalRequired) {
-      newStatus = 'in_review'
-    }
+      // Determine new application document verification status
+      let status = 'pending'
+      if (approvedRequired === totalRequired && totalRequired > 0) {
+        status = 'approved'
+      } else if (approvedRequired > 0 && approvedRequired < totalRequired) {
+        status = 'in_review'
+      }
 
-    await query(`
-      UPDATE ${TABLE_NAMES.REPAIRER_APPLICATIONS}
-      SET document_verification_status = $1, updated_at = CURRENT_TIMESTAMP
-      WHERE id = $2
-    `, [newStatus, document.application_id])
+      // Update application document verification status
+      await client.query(`
+        UPDATE ${TABLE_NAMES.REPAIRER_APPLICATIONS}
+        SET document_verification_status = $1, updated_at = CURRENT_TIMESTAMP
+        WHERE id = $2
+      `, [status, document.application_id])
+
+      return status
+    })
 
     logger.info('Document approved', {
       documentId,
@@ -134,4 +117,4 @@ export async function PUT(
     logger.error('Error approving document', { error, documentId })
     return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)
   }
-}
+})

@@ -13,14 +13,13 @@
  */
 
 import { NextRequest } from 'next/server'
-import { auth } from '@/auth'
+import { withAdmin } from '@/lib/api/middleware'
 import { query } from '@/lib/auth/db'
 import { canAccessSection } from '@/lib/permissions'
 import { TABLE_NAMES } from '@/config/database'
 import {
   apiSuccess,
   apiError,
-  apiUnauthorized,
   apiForbidden,
   apiBadRequest,
 } from '@/lib/api/helpers'
@@ -70,14 +69,8 @@ interface DigestSummary {
  * GET /api/admin/team/digest
  * Get weekly activity digest for management
  */
-export async function GET(request: NextRequest) {
+export const GET = withAdmin(async (request, session) => {
   try {
-    const session = await auth()
-
-    if (!session?.user) {
-      return apiUnauthorized()
-    }
-
     const user = {
       email: session.user.email,
       is_staff: session.user.isStaff,
@@ -336,4 +329,4 @@ export async function GET(request: NextRequest) {
   } catch (error) {
     return apiError(error, 'Wochenübersicht konnte nicht geladen werden')
   }
-}
+})

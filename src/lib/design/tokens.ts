@@ -12,6 +12,13 @@ export const DESIGN_TOKENS = {
     contact: 'from-gray-50 to-slate-50',
     getInvolved: 'from-purple-50 to-pink-50',
     workshops: 'from-yellow-50 to-orange-50',
+    blog: 'from-rose-50 to-pink-50',
+    faq: 'from-sky-50 to-blue-50',
+    space: 'from-teal-50 to-cyan-50',
+    projects: 'from-indigo-50 to-violet-50',
+    repairers: 'from-amber-50 to-yellow-50',
+    knowhow: 'from-cyan-50 to-sky-50',
+    home: 'from-emerald-50 to-teal-50',
   },
 
   iconBadges: {
@@ -22,6 +29,13 @@ export const DESIGN_TOKENS = {
     contact: { bg: 'bg-gray-100', text: 'text-gray-600' },
     getInvolved: { bg: 'bg-purple-100', text: 'text-purple-600' },
     workshops: { bg: 'bg-yellow-100', text: 'text-yellow-600' },
+    blog: { bg: 'bg-rose-100', text: 'text-rose-600' },
+    faq: { bg: 'bg-sky-100', text: 'text-sky-600' },
+    space: { bg: 'bg-teal-100', text: 'text-teal-600' },
+    projects: { bg: 'bg-indigo-100', text: 'text-indigo-600' },
+    repairers: { bg: 'bg-amber-100', text: 'text-amber-600' },
+    knowhow: { bg: 'bg-cyan-100', text: 'text-cyan-600' },
+    home: { bg: 'bg-emerald-100', text: 'text-emerald-600' },
   },
 
   buttons: {
@@ -33,6 +47,13 @@ export const DESIGN_TOKENS = {
       contact: 'bg-gray-600 hover:bg-gray-500',
       getInvolved: 'bg-purple-600 hover:bg-purple-500',
       workshops: 'bg-yellow-600 hover:bg-yellow-500',
+      blog: 'bg-rose-600 hover:bg-rose-500',
+      faq: 'bg-sky-600 hover:bg-sky-500',
+      space: 'bg-teal-600 hover:bg-teal-500',
+      projects: 'bg-indigo-600 hover:bg-indigo-500',
+      repairers: 'bg-amber-600 hover:bg-amber-500',
+      knowhow: 'bg-cyan-600 hover:bg-cyan-500',
+      home: 'bg-emerald-600 hover:bg-emerald-500',
     },
     secondary: {
       marketplace: 'border-orange-300 text-orange-700 hover:bg-orange-50',
@@ -42,6 +63,13 @@ export const DESIGN_TOKENS = {
       contact: 'border-gray-300 text-gray-700 hover:bg-gray-50',
       getInvolved: 'border-purple-300 text-purple-700 hover:bg-purple-50',
       workshops: 'border-yellow-300 text-yellow-700 hover:bg-yellow-50',
+      blog: 'border-rose-300 text-rose-700 hover:bg-rose-50',
+      faq: 'border-sky-300 text-sky-700 hover:bg-sky-50',
+      space: 'border-teal-300 text-teal-700 hover:bg-teal-50',
+      projects: 'border-indigo-300 text-indigo-700 hover:bg-indigo-50',
+      repairers: 'border-amber-300 text-amber-700 hover:bg-amber-50',
+      knowhow: 'border-cyan-300 text-cyan-700 hover:bg-cyan-50',
+      home: 'border-emerald-300 text-emerald-700 hover:bg-emerald-50',
     }
   }
 } as const;

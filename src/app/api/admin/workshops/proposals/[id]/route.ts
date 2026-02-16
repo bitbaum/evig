@@ -1,12 +1,10 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { auth } from '@/auth';
+import { NextRequest } from 'next/server';
+import { withAdmin } from '@/lib/api/middleware';
 import { query } from '@/lib/auth/db';
 import {
   apiError,
   apiSuccess,
   apiBadRequest,
-  apiUnauthorized,
-  apiForbidden,
   apiNotFound,
 } from '@/lib/api/helpers';
 import { ERROR_MESSAGES } from '@/config/error-messages';
@@ -19,24 +17,10 @@ import { WorkshopProposal } from '@/components/workshops/types';
  * GET /api/admin/workshops/proposals/[id]
  * Fetch a single workshop proposal with full details
  */
-export async function GET(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
-  const { id: proposalId } = await params;
+export const GET = withAdmin<{ id: string }>(async (request, session, context) => {
+  const { id: proposalId } = context!.params!;
 
   try {
-    const session = await auth();
-    if (!session?.user?.id) {
-      return apiUnauthorized(ERROR_MESSAGES.UNAUTHORIZED);
-    }
-
-    // Check if user is staff (admin/super admin)
-    // Using new simplified permission system (is_staff field)
-    if (!session.user.isStaff) {
-      return apiForbidden('Keine Berechtigung zum Anzeigen von Vorschlägen');
-    }
-
     // Fetch proposal with submitter info
     const result = await query(
       `
@@ -71,30 +55,16 @@ export async function GET(
     logger.error('Error fetching workshop proposal', { error, proposalId });
     return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR);
   }
-}
+})
 
 /**
  * PATCH /api/admin/workshops/proposals/[id]
  * Edit workshop proposal fields before approval
  */
-export async function PATCH(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
-  const { id: proposalId } = await params;
+export const PATCH = withAdmin<{ id: string }>(async (request, session, context) => {
+  const { id: proposalId } = context!.params!;
 
   try {
-    const session = await auth();
-    if (!session?.user?.id) {
-      return apiUnauthorized(ERROR_MESSAGES.UNAUTHORIZED);
-    }
-
-    // Check if user is staff (admin/super admin)
-    // Using new simplified permission system (is_staff field)
-    if (!session.user.isStaff) {
-      return apiForbidden('Keine Berechtigung zum Bearbeiten von Vorschlägen');
-    }
-
     const body = await request.json();
     const { action, fields } = body;
 
@@ -185,4 +155,4 @@ export async function PATCH(
     logger.error('Error editing workshop proposal', { error, proposalId });
     return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR);
   }
-}
+})

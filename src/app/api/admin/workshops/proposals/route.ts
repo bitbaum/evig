@@ -1,28 +1,17 @@
-import { NextRequest, NextResponse } from 'next/server'
-import { auth } from '@/auth'
+import { NextRequest } from 'next/server'
+import { withAdmin } from '@/lib/api/middleware'
 import { query } from '@/lib/auth/db'
-import { apiError, apiSuccess, apiBadRequest, apiUnauthorized, apiForbidden } from '@/lib/api/helpers'
+import { apiError, apiSuccess } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES } from '@/config/database'
-import { isStaffEmail } from '@/lib/permissions'
 
 interface CountRow {
   total: string
 }
 
 // GET /api/admin/workshops/proposals - List workshop proposals with filtering
-export async function GET(request: NextRequest) {
+export const GET = withAdmin(async (request, session) => {
   try {
-    const session = await auth()
-    if (!session?.user?.id) {
-      return apiUnauthorized(ERROR_MESSAGES.UNAUTHORIZED)
-    }
-
-    // Check if user is staff (has @revamp-it.ch email)
-    if (!isStaffEmail(session.user.email)) {
-      return apiForbidden('Keine Berechtigung für Workshop-Verwaltung')
-    }
-
     const { searchParams } = new URL(request.url)
     const status = searchParams.get('status') || 'pending'
     const category = searchParams.get('category')
@@ -92,4 +81,4 @@ export async function GET(request: NextRequest) {
   } catch (error) {
     return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)
   }
-}
+})

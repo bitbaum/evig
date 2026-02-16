@@ -1,15 +1,10 @@
 import { NextRequest } from 'next/server'
-import { auth } from '@/auth'
+import { withAdmin } from '@/lib/api/middleware'
 import { query } from '@/lib/auth/db'
-import { apiError, apiSuccess, apiUnauthorized } from '@/lib/api/helpers'
+import { apiError, apiSuccess } from '@/lib/api/helpers'
 import { generateTaxReport, TAX_CONFIGURATIONS, TaxTransaction } from '@/lib/payments/tax-compliance'
-import { isAdminRole } from '@/lib/constants'
 import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
-
-interface UserRow {
-  role: string
-}
 
 interface CountRow {
   count: string
@@ -33,20 +28,8 @@ interface TaxTransactionWithJoins {
 }
 
 // GET /api/admin/tax-reports - Generate tax reports
-export async function GET(request: NextRequest) {
+export const GET = withAdmin(async (request: NextRequest) => {
   try {
-    const session = await auth()
-    if (!session?.user?.id) {
-      return apiUnauthorized('Authentication required')
-    }
-
-    // Check if user is admin
-    const userRoleResult = await query(`SELECT role FROM ${TABLE_NAMES.USERS} WHERE id = $1`, [session.user.id])
-    const user = userRoleResult.rows[0] as UserRow | undefined
-    if (!isAdminRole(user?.role)) {
-      return apiUnauthorized('Admin access required')
-    }
-
     const { searchParams } = new URL(request.url)
     const reportType = searchParams.get('type') || 'vat' // vat, transactions, compliance
     const period = searchParams.get('period') || 'monthly' // monthly, quarterly, yearly
@@ -144,7 +127,7 @@ export async function GET(request: NextRequest) {
     logger.error('Tax report generation error', { error })
     return apiError(error, 'Failed to generate tax report')
   }
-}
+})
 
 function calculatePeriodDates(period: string, year: number, month: number) {
   const startDate = new Date()

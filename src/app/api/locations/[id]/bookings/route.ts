@@ -4,7 +4,7 @@ import { query } from '@/lib/auth/db'
 import { apiError, apiSuccess, apiBadRequest, apiUnauthorized, apiForbidden, apiNotFound } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES } from '@/config/database'
-import { getUserRole } from '@/lib/api/role-checks'
+
 
 interface LocationStatusRow {
   id: string

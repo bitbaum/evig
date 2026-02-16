@@ -7,26 +7,16 @@
  */
 
 import { NextRequest } from 'next/server'
-import { apiSuccess, apiError, apiNotFound, apiUnauthorized, apiForbidden } from '@/lib/api/helpers'
+import { withAdmin } from '@/lib/api/middleware'
+import { apiSuccess, apiError, apiNotFound } from '@/lib/api/helpers'
 import { query } from '@/lib/auth/db'
 import { logger } from '@/lib/logger'
 import { TABLE_NAMES } from '@/config/database'
-import { auth } from '@/auth'
-import { canAccessSection } from '@/lib/permissions'
 import { uploadImage, deleteImage } from '@/lib/storage/image-upload'
 
-export async function GET(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export const GET = withAdmin<{ id: string }>(async (request, session, context) => {
   try {
-    // Check authentication
-    const session = await auth()
-    if (!session?.user?.id) {
-      return apiUnauthorized('Nicht angemeldet')
-    }
-
-    const { id: productId } = await params
+    const { id: productId } = context!.params!
 
     // Fetch product with inventory and customer profiles
     const productResult = await query<{
@@ -115,33 +105,15 @@ export async function GET(
     logger.error('Failed to fetch inventory product', { error })
     return apiError(error, 'Fehler beim Laden des Produkts')
   }
-}
+})
 
 /**
  * DELETE /api/admin/inventory/[id]
  * Deletes an inventory product and all related records
  */
-export async function DELETE(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export const DELETE = withAdmin<{ id: string }>(async (request, session, context) => {
   try {
-    const session = await auth()
-    if (!session?.user?.id) {
-      return apiUnauthorized('Nicht angemeldet')
-    }
-
-    // Check permission
-    const user = {
-      email: session.user.email,
-      is_staff: session.user.isStaff,
-      staff_permissions: session.user.staffPermissions,
-    }
-    if (!canAccessSection(user, 'products')) {
-      return apiForbidden('Keine Berechtigung')
-    }
-
-    const { id: productId } = await params
+    const { id: productId } = context!.params!
 
     // Delete in order: child tables first, then main table
     // 1. Delete product customer profiles
@@ -192,33 +164,15 @@ export async function DELETE(
     logger.error('Failed to delete inventory product', { error })
     return apiError(error, 'Fehler beim Löschen des Produkts')
   }
-}
+})
 
 /**
  * PUT /api/admin/inventory/[id]
  * Updates an inventory product
  */
-export async function PUT(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export const PUT = withAdmin<{ id: string }>(async (request, session, context) => {
   try {
-    const session = await auth()
-    if (!session?.user?.id) {
-      return apiUnauthorized('Nicht angemeldet')
-    }
-
-    // Check permission
-    const user = {
-      email: session.user.email,
-      is_staff: session.user.isStaff,
-      staff_permissions: session.user.staffPermissions,
-    }
-    if (!canAccessSection(user, 'products')) {
-      return apiForbidden('Keine Berechtigung')
-    }
-
-    const { id: productId } = await params
+    const { id: productId } = context!.params!
     const body = await request.json() as Record<string, unknown>
 
     // Build dynamic update query based on provided fields
@@ -368,33 +322,15 @@ export async function PUT(
     logger.error('Failed to update inventory product', { error })
     return apiError(error, 'Fehler beim Aktualisieren des Produkts')
   }
-}
+})
 
 /**
  * PATCH /api/admin/inventory/[id]
  * Quick status updates (publish/unpublish, approve/reject)
  */
-export async function PATCH(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export const PATCH = withAdmin<{ id: string }>(async (request, session, context) => {
   try {
-    const session = await auth()
-    if (!session?.user?.id) {
-      return apiUnauthorized('Nicht angemeldet')
-    }
-
-    // Check permission
-    const user = {
-      email: session.user.email,
-      is_staff: session.user.isStaff,
-      staff_permissions: session.user.staffPermissions,
-    }
-    if (!canAccessSection(user, 'products')) {
-      return apiForbidden('Keine Berechtigung')
-    }
-
-    const { id: productId } = await params
+    const { id: productId } = context!.params!
     const body = await request.json() as {
       marketplace_status?: 'draft' | 'published'
       status?: 'pending_review' | 'approved' | 'rejected'
@@ -533,4 +469,4 @@ export async function PATCH(
     logger.error('Failed to patch inventory product', { error })
     return apiError(error, 'Fehler beim Aktualisieren des Produkts')
   }
-}
+})

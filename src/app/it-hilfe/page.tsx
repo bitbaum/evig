@@ -15,6 +15,7 @@ import {
   Heart,
   Users,
   HelpCircle,
+  HeartHandshake,
 } from 'lucide-react'
 import {
   IT_HILFE,
@@ -28,7 +29,7 @@ import { RequestCard, RequestCardGrid } from '@/components/it-hilfe/RequestCard'
 import { EmptyState } from '@/components/common/EmptyState'
 import { LoadingSkeleton } from '@/components/common/LoadingState'
 import { ErrorAlert } from '@/components/common/ErrorAlert'
-import Heading from '@/components/ui/Heading'
+import { PageHero } from '@/components/layout/PageHero'
 
 interface ITHilfeRequest {
   id: string
@@ -147,62 +148,48 @@ export default function ITHilfePage() {
 
   return (
     <div className="bg-white min-h-screen">
-      {/* Hero Section - Matching homepage style */}
-      <div className="bg-gradient-to-br from-emerald-50 to-green-50 py-12 sm:py-16 lg:py-20">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            {/* Icon Badge */}
-            <div className="flex justify-center mb-6">
-              <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-emerald-100 shadow-sm">
-                <Wrench className="h-8 w-8 text-emerald-600" />
-              </div>
-            </div>
+      <PageHero
+        theme="itHilfe"
+        icon={HeartHandshake}
+        title="IT-Hilfe"
+        subtitle={`${IT_HILFE.description}. Finde Hilfe in deiner Nähe oder biete deine Skills an.`}
+      >
+        {/* Search Bar */}
+        <form onSubmit={handleSearch} className="max-w-2xl mx-auto">
+          <div className="relative">
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+            <input
+              type="text"
+              value={searchInput}
+              onChange={(e) => setSearchInput(e.target.value)}
+              placeholder="Anfragen durchsuchen..."
+              className="w-full pl-12 pr-24 py-3.5 rounded-lg border border-gray-300 text-gray-900 placeholder-gray-500 focus:ring-2 focus:ring-emerald-500 focus:border-transparent shadow-sm"
+            />
+            <button
+              type="submit"
+              className="absolute right-2 top-1/2 -translate-y-1/2 bg-emerald-600 hover:bg-emerald-500 text-white px-5 py-2 rounded-md transition-colors text-sm font-semibold shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600"
+            >
+              Suchen
+            </button>
+          </div>
+        </form>
 
-            <Heading level={1} className="tracking-tight text-gray-900">
-              IT-Hilfe
-            </Heading>
-            <p className="mx-auto mt-4 sm:mt-6 max-w-2xl text-base sm:text-lg leading-7 sm:leading-8 text-gray-600">
-              {IT_HILFE.description}. Finde Hilfe in deiner Nähe oder biete deine Skills an.
-            </p>
-
-            {/* Search Bar */}
-            <form onSubmit={handleSearch} className="mt-8 max-w-2xl mx-auto">
-              <div className="relative">
-                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                <input
-                  type="text"
-                  value={searchInput}
-                  onChange={(e) => setSearchInput(e.target.value)}
-                  placeholder="Anfragen durchsuchen..."
-                  className="w-full pl-12 pr-24 py-3.5 rounded-lg border border-gray-300 text-gray-900 placeholder-gray-500 focus:ring-2 focus:ring-emerald-500 focus:border-transparent shadow-sm"
-                />
-                <button
-                  type="submit"
-                  className="absolute right-2 top-1/2 -translate-y-1/2 bg-emerald-600 hover:bg-emerald-500 text-white px-5 py-2 rounded-md transition-colors text-sm font-semibold shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600"
-                >
-                  Suchen
-                </button>
-              </div>
-            </form>
-
-            {/* Quick Stats */}
-            <div className="mt-8 flex flex-wrap items-center justify-center gap-6 text-sm text-gray-600">
-              <div className="flex items-center gap-2">
-                <HelpCircle className="h-5 w-5 text-emerald-600" />
-                <span><strong>{total}</strong> {total === 1 ? 'Anfrage' : 'Anfragen'}</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Users className="h-5 w-5 text-emerald-600" />
-                <span>Community-Techniker</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Heart className="h-5 w-5 text-emerald-600" />
-                <span>Kostenlos helfen</span>
-              </div>
-            </div>
+        {/* Quick Stats */}
+        <div className="mt-4 flex flex-wrap items-center justify-center gap-6 text-sm text-gray-600">
+          <div className="flex items-center gap-2">
+            <HelpCircle className="h-5 w-5 text-emerald-600" />
+            <span><strong>{total}</strong> {total === 1 ? 'Anfrage' : 'Anfragen'}</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <Users className="h-5 w-5 text-emerald-600" />
+            <span>Community-Techniker</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <Heart className="h-5 w-5 text-emerald-600" />
+            <span>Kostenlos helfen</span>
           </div>
         </div>
-      </div>
+      </PageHero>
 
       {/* Main Content */}
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8 sm:py-12">

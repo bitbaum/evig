@@ -9,30 +9,13 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server'
-import { auth } from '@/auth'
-import { canAccessSection, isSuperAdmin } from '@/lib/permissions'
+import { withAdmin } from '@/lib/api/middleware'
+import { isSuperAdmin } from '@/lib/permissions'
 import { listDocuments, deleteDocument, getIngestionStats } from '@/lib/hirn'
-import { apiSuccess, apiError, apiUnauthorized, apiForbidden, apiBadRequest } from '@/lib/api/helpers'
+import { apiSuccess, apiError, apiForbidden, apiBadRequest } from '@/lib/api/helpers'
 
-export async function GET(request: NextRequest) {
+export const GET = withAdmin(async (request: NextRequest) => {
   try {
-    const session = await auth()
-
-    if (!session?.user) {
-      return apiUnauthorized()
-    }
-
-    const user = {
-      email: session.user.email,
-      is_staff: session.user.isStaff,
-      staff_permissions: session.user.staffPermissions,
-      is_super_admin: session.user.isSuperAdmin,
-    }
-
-    if (!canAccessSection(user, 'hirn')) {
-      return apiForbidden('Keine Berechtigung für Hirn')
-    }
-
     const { searchParams } = new URL(request.url)
     const limit = parseInt(searchParams.get('limit') || '50')
     const offset = parseInt(searchParams.get('offset') || '0')
@@ -54,16 +37,10 @@ export async function GET(request: NextRequest) {
   } catch (error) {
     return apiError(error, 'Dokumente konnten nicht geladen werden')
   }
-}
+})
 
-export async function DELETE(request: NextRequest) {
+export const DELETE = withAdmin(async (request: NextRequest, session) => {
   try {
-    const session = await auth()
-
-    if (!session?.user) {
-      return apiUnauthorized()
-    }
-
     // Only super admins can delete documents
     if (!isSuperAdmin(session.user.email, session.user.isSuperAdmin)) {
       return apiForbidden('Nur Super-Admins können Dokumente löschen')
@@ -82,4 +59,4 @@ export async function DELETE(request: NextRequest) {
   } catch (error) {
     return apiError(error, 'Dokument konnte nicht gelöscht werden')
   }
-}
+})

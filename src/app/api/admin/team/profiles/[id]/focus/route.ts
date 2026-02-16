@@ -7,7 +7,7 @@
  */
 
 import { NextRequest } from 'next/server'
-import { auth } from '@/auth'
+import { withAdmin } from '@/lib/api/middleware'
 import { query } from '@/lib/auth/db'
 import { canAccessSection } from '@/lib/permissions'
 import { TABLE_NAMES } from '@/config/database'
@@ -15,30 +15,19 @@ import { logger } from '@/lib/logger'
 import {
   apiSuccess,
   apiError,
-  apiUnauthorized,
   apiForbidden,
   apiNotFound,
   apiBadRequest,
 } from '@/lib/api/helpers'
 import { validateCurrentFocus } from '@/lib/schemas/activity'
 
-interface RequestContext {
-  params: Promise<{ id: string }>
-}
-
 /**
  * PUT /api/admin/team/profiles/[id]/focus
  * Update current focus for a team member
  */
-export async function PUT(request: NextRequest, context: RequestContext) {
+export const PUT = withAdmin<{ id: string }>(async (request, session, context) => {
   try {
-    const session = await auth()
-
-    if (!session?.user) {
-      return apiUnauthorized()
-    }
-
-    const { id } = await context.params
+    const { id } = context!.params!
     const body = await request.json()
 
     // Validate input
@@ -104,4 +93,4 @@ export async function PUT(request: NextRequest, context: RequestContext) {
   } catch (error) {
     return apiError(error, 'Fokus konnte nicht aktualisiert werden')
   }
-}
+})

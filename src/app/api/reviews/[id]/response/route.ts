@@ -5,7 +5,6 @@ import { apiError, apiSuccess, apiUnauthorized, apiBadRequest, apiNotFound, apiF
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES, REVIEW_TARGET_TYPES } from '@/config/database'
 import { logger } from '@/lib/logger'
-import { isAdminRole } from '@/lib/constants'
 import { validateBody, ReviewResponseSchema } from '@/lib/schemas'
 
 interface ReviewRow {
@@ -13,10 +12,6 @@ interface ReviewRow {
   target_type: string
   target_id: string
   repairer_user_id: string | null
-}
-
-interface UserRow {
-  role: string
 }
 
 interface ResponseIdRow {
@@ -66,13 +61,7 @@ export async function POST(
     }
 
     // Check if user is admin (admins can respond on behalf of repairers)
-    const userResult = await query(
-      `SELECT role FROM ${TABLE_NAMES.USERS} WHERE id = $1`,
-      [session.user.id]
-    )
-
-    const user = userResult.rows[0] as UserRow | undefined
-    const isAdmin = isAdminRole(user?.role)
+    const isAdmin = !!session.user.isStaff
 
     if (review.target_type !== REVIEW_TARGET_TYPES.REPAIRER && !isAdmin) {
       return apiForbidden('Antworten sind derzeit nur für Reparatur-Bewertungen verfügbar')
@@ -147,13 +136,7 @@ export async function PUT(
     const response = responseResult.rows[0] as ResponseRow
 
     // Check if user can edit this response
-    const userResult = await query(
-      `SELECT role FROM ${TABLE_NAMES.USERS} WHERE id = $1`,
-      [session.user.id]
-    )
-
-    const userForEdit = userResult.rows[0] as UserRow | undefined
-    const isAdmin = isAdminRole(userForEdit?.role)
+    const isAdmin = !!session.user.isStaff
     const isOwner = response.responder_id === session.user.id
     const isRepairer = response.target_type === REVIEW_TARGET_TYPES.REPAIRER && response.repairer_user_id === session.user.id
 
@@ -212,13 +195,7 @@ export async function DELETE(
     const responseToDelete = responseResult.rows[0] as ResponseRow
 
     // Check if user can delete this response
-    const userResult = await query(
-      `SELECT role FROM ${TABLE_NAMES.USERS} WHERE id = $1`,
-      [session.user.id]
-    )
-
-    const userForDelete = userResult.rows[0] as UserRow | undefined
-    const isAdmin = isAdminRole(userForDelete?.role)
+    const isAdmin = !!session.user.isStaff
     const isOwner = responseToDelete.responder_id === session.user.id
     const isRepairer = responseToDelete.target_type === REVIEW_TARGET_TYPES.REPAIRER && responseToDelete.repairer_user_id === session.user.id
 

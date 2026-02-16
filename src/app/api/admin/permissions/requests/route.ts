@@ -6,11 +6,11 @@
  */
 
 import { NextRequest } from 'next/server'
-import { auth } from '@/auth'
+import { withAdmin } from '@/lib/api/middleware'
 import { query } from '@/lib/auth/db'
 import { isSuperAdmin } from '@/lib/permissions'
 import { TABLE_NAMES } from '@/config/database'
-import { apiSuccess, apiError, apiUnauthorized, apiForbidden } from '@/lib/api/helpers'
+import { apiSuccess, apiError, apiForbidden } from '@/lib/api/helpers'
 
 interface PermissionRequest {
   id: string
@@ -27,14 +27,8 @@ interface PermissionRequest {
   review_notes: string | null
 }
 
-export async function GET(request: NextRequest) {
+export const GET = withAdmin(async (request, session) => {
   try {
-    const session = await auth()
-
-    if (!session?.user) {
-      return apiUnauthorized()
-    }
-
     // Only super admins can view permission requests
     if (!isSuperAdmin(session.user.email)) {
       return apiForbidden('Nur Super-Admins können Berechtigungsanfragen einsehen')
@@ -70,4 +64,4 @@ export async function GET(request: NextRequest) {
   } catch (error) {
     return apiError(error, 'Berechtigungsanfragen konnten nicht geladen werden')
   }
-}
+})
