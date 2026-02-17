@@ -21,6 +21,7 @@ test('credentials login flow creates a session', async ({ request }) => {
   const password = process.env.AUTH_TEST_PASSWORD
 
   test.skip(!email || !password, 'Set AUTH_TEST_EMAIL and AUTH_TEST_PASSWORD for auth smoke test')
+  if (!email || !password) return
 
   const csrfRes = await request.get('/api/auth/csrf')
   expect(csrfRes.ok()).toBeTruthy()
