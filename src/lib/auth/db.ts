@@ -15,11 +15,12 @@ import type { QueryParams, SocialLinks, Availability, PurchaseHistoryItem, Prefe
 // Get database configuration from centralized config
 const dbConfig = {
   ...getDbConfig(),
-  max: 20,
-  idleTimeoutMillis: 30000,
-  connectionTimeoutMillis: 5000,
-  statement_timeout: 30000,                    // 30s max per query
-  idle_in_transaction_session_timeout: 60000,   // 60s max idle in transaction
+  // Keep pool conservative for Neon to avoid connection saturation under load.
+  max: parseInt(process.env.DB_POOL_MAX || '10', 10),
+  idleTimeoutMillis: parseInt(process.env.DB_IDLE_TIMEOUT_MS || '30000', 10),
+  connectionTimeoutMillis: parseInt(process.env.DB_CONNECT_TIMEOUT_MS || '5000', 10),
+  statement_timeout: parseInt(process.env.DB_STATEMENT_TIMEOUT_MS || '30000', 10),
+  idle_in_transaction_session_timeout: parseInt(process.env.DB_IDLE_TX_TIMEOUT_MS || '60000', 10),
 }
 
 // Connection error patterns for retry logic

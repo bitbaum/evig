@@ -35,14 +35,45 @@ jobs:
 
       - name: Type check
         run: npx tsc --noEmit
-        continue-on-error: true
 
       - name: Build verification
         run: npm run build
         env:
           NEXT_PUBLIC_VERCEL_ENV: preview
 
-  # Run tests (optional - can be enabled when tests are ready)
+  # Auth smoke gate: verifies login flow end-to-end when secrets are present
+  auth-smoke:
+    name: Auth Smoke Test
+    runs-on: ubuntu-latest
+    needs: quality
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browser
+        run: npx playwright install --with-deps chromium
+
+      - name: Run auth smoke (if auth test secrets configured)
+        env:
+          AUTH_TEST_EMAIL: ${{ secrets.AUTH_TEST_EMAIL }}
+          AUTH_TEST_PASSWORD: ${{ secrets.AUTH_TEST_PASSWORD }}
+        run: |
+          if [ -z "$AUTH_TEST_EMAIL" ] || [ -z "$AUTH_TEST_PASSWORD" ]; then
+            echo "AUTH_TEST_EMAIL/AUTH_TEST_PASSWORD not set in repo secrets; skipping auth smoke."
+            exit 0
+          fi
+          npx playwright test tests/e2e/auth-smoke.spec.ts --project=chromium
+
+  # Unit tests (still non-blocking while suite matures)
   test:
     name: Run Tests
     runs-on: ubuntu-latest
