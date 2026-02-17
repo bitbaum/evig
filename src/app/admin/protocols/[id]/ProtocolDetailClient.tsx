@@ -31,7 +31,7 @@ import {
 import type { ProtocolDetail, ActionLinkRecord, StructuredNotes, DecisionVoteRecord, DecisionOutcomeRecord } from '@/lib/schemas/protocols'
 import { getErrorMessage } from '@/lib/utils/error'
 import { validateAudioUpload } from '@/lib/protocols/audio-validation'
-import { PROTOCOL_WORKFLOW_STEPS, getProtocolWorkflowProgress } from '@/lib/protocols/workflow'
+import { PROTOCOL_WORKFLOW_STEPS, getProtocolWorkflowProgress, type ProtocolWorkflowStepId } from '@/lib/protocols/workflow'
 import DecisionActions from './DecisionActions'
 import {
   Loader2,
@@ -123,6 +123,20 @@ export default function ProtocolDetailClient({ protocol, actionLinks, teamMember
     unlinkedTaskCount: unlinkedTaskItems.length,
   })
   const currentStepIndex = PROTOCOL_WORKFLOW_STEPS.findIndex((step) => step.id === workflowProgress.currentStepId)
+
+  const STEP_SECTION_IDS: Record<ProtocolWorkflowStepId, string> = {
+    input: 'protocol-step-input',
+    ai: 'protocol-step-ai',
+    review: 'protocol-step-review',
+    tasks: 'protocol-step-tasks',
+    done: 'protocol-step-done',
+  }
+
+  const scrollToStep = (stepId: ProtocolWorkflowStepId) => {
+    const section = document.getElementById(STEP_SECTION_IDS[stepId])
+    if (!section) return
+    section.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }
 
   const toggleTopic = (id: string) => {
     setExpandedTopics(prev => {
@@ -404,18 +418,21 @@ export default function ProtocolDetailClient({ protocol, actionLinks, teamMember
             const isDone = index < currentStepIndex
             const isCurrent = index === currentStepIndex
             return (
-              <div
+              <button
                 key={step.id}
-                className={`rounded-lg border px-3 py-2 text-xs ${
+                type="button"
+                onClick={() => scrollToStep(step.id)}
+                className={`rounded-lg border px-3 py-2 text-xs text-left transition-colors ${
                   isCurrent
                     ? 'border-blue-300 bg-blue-50 text-blue-800'
                     : isDone
-                    ? 'border-green-200 bg-green-50 text-green-700'
-                    : 'border-gray-200 bg-gray-50 text-gray-500'
+                    ? 'border-green-200 bg-green-50 text-green-700 hover:bg-green-100'
+                    : 'border-gray-200 bg-gray-50 text-gray-500 hover:bg-gray-100'
                 }`}
               >
                 <p className="font-semibold">{index + 1}. {step.label}</p>
-              </div>
+                <p className="text-[11px] opacity-80 mt-1">Zum Schritt springen</p>
+              </button>
             )
           })}
         </div>
@@ -428,9 +445,11 @@ export default function ProtocolDetailClient({ protocol, actionLinks, teamMember
         )}
       </div>
 
+      <div id="protocol-step-ai" className="-mt-2" />
+
       {/* Re-process section — shown at top for visibility in review mode */}
       {isReview && (
-        <details className="bg-amber-50 rounded-lg border border-amber-200">
+        <details id="protocol-step-input" className="bg-amber-50 rounded-lg border border-amber-200">
           <summary className="p-4 cursor-pointer text-sm font-medium text-amber-800 hover:text-amber-900">
             Nicht zufrieden? {protocol.input_method === 'tasks'
               ? 'Aufgaben erneut importieren'
@@ -518,7 +537,7 @@ export default function ProtocolDetailClient({ protocol, actionLinks, teamMember
 
       {/* Draft: Show transcript input */}
       {isDraft && !notes && (
-        <div className="bg-white rounded-lg border p-6 space-y-4">
+        <div id="protocol-step-input" className="bg-white rounded-lg border p-6 space-y-4">
           <h2 className="text-lg font-semibold text-gray-900">
             {protocol.input_method === 'audio' ? 'Audio hochladen' : 'Transkript einfügen'}
           </h2>
@@ -612,7 +631,7 @@ export default function ProtocolDetailClient({ protocol, actionLinks, teamMember
       {notes && (
         <>
           {/* Summary */}
-          <div className="bg-white rounded-lg border p-6">
+          <div id="protocol-step-review" className="bg-white rounded-lg border p-6">
             <h2 className="text-lg font-semibold text-gray-900 mb-3">
               <MessageSquare className="w-5 h-5 inline mr-2 text-gray-400" />
               Zusammenfassung
@@ -711,7 +730,7 @@ export default function ProtocolDetailClient({ protocol, actionLinks, teamMember
 
           {/* Action Items */}
           {notes.action_items && notes.action_items.length > 0 ? (
-            <div className="bg-white rounded-lg border overflow-hidden">
+            <div id="protocol-step-tasks" className="bg-white rounded-lg border overflow-hidden">
               <div className="p-4 border-b bg-gray-50 flex items-center justify-between gap-3">
                 <h2 className="text-lg font-semibold text-gray-900">
                   <ListChecks className="w-5 h-5 inline mr-2 text-gray-400" />
@@ -814,7 +833,7 @@ export default function ProtocolDetailClient({ protocol, actionLinks, teamMember
               </div>
             </div>
           ) : (
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+            <div id="protocol-step-tasks" className="bg-blue-50 border border-blue-200 rounded-lg p-4">
               <h3 className="text-sm font-semibold text-blue-900 mb-1">Keine Aktionen erkannt</h3>
               <p className="text-sm text-blue-800">
                 Die KI hat keine konkreten Aufgaben oder Entscheidungen extrahiert. Überarbeiten Sie den Inhalt oben und starten Sie die Verarbeitung erneut.
@@ -843,7 +862,7 @@ export default function ProtocolDetailClient({ protocol, actionLinks, teamMember
 
           {/* Action Buttons */}
           {(isReview || (isProtocolCreator || isSuperAdmin)) && (
-            <div className="flex justify-between pt-4">
+            <div id="protocol-step-done" className="flex justify-between pt-4">
               <div>
                 {(isProtocolCreator || isSuperAdmin) && (
                   <button

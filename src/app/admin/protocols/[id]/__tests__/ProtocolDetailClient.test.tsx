@@ -12,6 +12,8 @@ jest.mock('next/navigation', () => ({
 }))
 
 describe('ProtocolDetailClient', () => {
+  const scrollIntoViewMock = jest.fn()
+
   const baseProtocol: ProtocolDetail = {
     id: 'p-1',
     title: 'Team Meeting',
@@ -39,6 +41,8 @@ describe('ProtocolDetailClient', () => {
 
   beforeEach(() => {
     refreshMock.mockReset()
+    scrollIntoViewMock.mockReset()
+    Element.prototype.scrollIntoView = scrollIntoViewMock
     global.fetch = jest.fn().mockResolvedValue({
       json: async () => ({ success: true }),
     }) as jest.Mock
@@ -139,6 +143,24 @@ describe('ProtocolDetailClient', () => {
     expect(screen.getByText('Workflow')).toBeInTheDocument()
     expect(screen.getByText(/Schritt 3 von 5/i)).toBeInTheDocument()
     expect(screen.getByText(/Nächster Schritt: Aufgaben erstellen/i)).toBeInTheDocument()
+  })
+
+  it('jumps to selected step when clicking the workflow stepper', () => {
+    render(
+      <ProtocolDetailClient
+        protocol={baseProtocol}
+        actionLinks={[]}
+        teamMembers={[]}
+        decisionVotes={[]}
+        decisionOutcomes={[]}
+        currentUserId="u-1"
+        isProtocolCreator
+        isSuperAdmin={false}
+      />
+    )
+
+    fireEvent.click(screen.getByRole('button', { name: /4\. Aufgaben erstellen/i }))
+    expect(scrollIntoViewMock).toHaveBeenCalled()
   })
 
   it('shows actionable empty state when no action items were extracted', () => {
