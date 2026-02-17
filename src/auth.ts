@@ -7,8 +7,6 @@
 
 import NextAuth from 'next-auth'
 import Credentials from 'next-auth/providers/credentials'
-import PostgresAdapter from '@auth/pg-adapter'
-import { Pool } from 'pg'
 import type { JWT } from 'next-auth/jwt'
 import type { Session, User } from 'next-auth'
 import { getUserByEmail, createUser, getOrCreateProfile, createVerificationCode, type DbUser } from '@/lib/auth/db'
@@ -19,33 +17,9 @@ import { updateUser } from '@/lib/auth/db'
 import { logger } from '@/lib/logger'
 import { sendEmail } from '@/lib/email'
 
-// Create PostgreSQL pool for Auth.js adapter with optimized connection settings
-// Use lazy connection to avoid blocking page loads
-let pool: Pool | null = null
-
-function getAuthPool(): Pool {
-  if (!pool) {
-    pool = new Pool({
-      host: process.env.AUTH_DB_HOST || process.env.DB_HOST,
-      port: parseInt(process.env.AUTH_DB_PORT || process.env.DB_PORT || '5432'),
-      database: process.env.AUTH_DB_NAME || process.env.DB_NAME,
-      user: process.env.AUTH_DB_USER || process.env.DB_USER,
-      password: process.env.AUTH_DB_PASSWORD || process.env.DB_PASSWORD,
-      max: 20,
-      idleTimeoutMillis: 30000,
-      connectionTimeoutMillis: 2000, // Reduced from 5000 to fail faster
-      // Don't connect immediately - let it connect on first use
-      allowExitOnIdle: true,
-    })
-
-    // Handle pool errors gracefully without crashing
-    pool.on('error', (err) => {
-      logger.error('Unexpected error on idle database pool', { error: err })
-      // Don't throw - let the app continue
-    })
-  }
-  return pool
-}
+// Database pool: uses the shared pool from @/lib/auth/db (single pool for the entire app)
+// The Auth.js adapter is currently disabled (JWT strategy doesn't need it).
+// When OAuth providers are added, use: adapter: PostgresAdapter(getPool())
 
 // Extend the built-in Auth.js types
 declare module 'next-auth' {
@@ -94,7 +68,7 @@ export const authConfig = {
 
   // Skip adapter for now - JWT strategy works without it
   // Uncomment when OAuth providers are added:
-  // adapter: PostgresAdapter(getAuthPool()),
+  // adapter: PostgresAdapter(getPool()),  // import { getPool } from '@/lib/auth/db'
 
   session: {
     // JWT strategy required for credentials provider

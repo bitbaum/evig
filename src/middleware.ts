@@ -11,7 +11,8 @@ export function middleware(request: NextRequest) {
   if (pathname.startsWith('/api/') &&
       !pathname.startsWith('/api/webhooks/') &&
       !pathname.startsWith('/api/public/') &&
-      !pathname.startsWith('/api/auth/')) {
+      !pathname.startsWith('/api/auth/') &&
+      !pathname.startsWith('/api/health')) {
     const csrfResult = csrfMiddleware(request)
     if (csrfResult) {
       return csrfResult // CSRF validation failed

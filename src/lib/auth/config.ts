@@ -165,17 +165,38 @@ export function getAuthSecret(): string {
 }
 
 /**
- * Get database configuration
+ * Get database configuration.
+ * Validates that required connection parameters are present.
+ * Fails early with a clear error instead of silently passing undefined to pg.Pool.
  */
 export function getDbConfig() {
   const sslEnabled = process.env.DB_SSL !== 'false'
 
+  const host = process.env.AUTH_DB_HOST || process.env.DB_HOST
+  const database = process.env.AUTH_DB_NAME || process.env.DB_NAME
+  const user = process.env.AUTH_DB_USER || process.env.DB_USER
+  const password = process.env.AUTH_DB_PASSWORD || process.env.DB_PASSWORD
+
+  // Validate required vars — fail loud at startup, not silently at first query
+  const missing: string[] = []
+  if (!host) missing.push('DB_HOST')
+  if (!database) missing.push('DB_NAME')
+  if (!user) missing.push('DB_USER')
+  if (!password) missing.push('DB_PASSWORD')
+
+  if (missing.length > 0) {
+    throw new Error(
+      `Missing required database config: ${missing.join(', ')}. ` +
+      `Set these in .env.local (or prefixed with AUTH_DB_ for auth-specific overrides).`
+    )
+  }
+
   return {
-    host: process.env.AUTH_DB_HOST || process.env.DB_HOST,
+    host,
     port: parseInt(process.env.AUTH_DB_PORT || process.env.DB_PORT || '5432'),
-    database: process.env.AUTH_DB_NAME || process.env.DB_NAME,
-    user: process.env.AUTH_DB_USER || process.env.DB_USER,
-    password: process.env.AUTH_DB_PASSWORD || process.env.DB_PASSWORD,
+    database,
+    user,
+    password,
     ssl: sslEnabled ? { rejectUnauthorized: false } : false,
     max: 20,
     idleTimeoutMillis: 30000,

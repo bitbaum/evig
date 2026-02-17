@@ -54,8 +54,9 @@ export function LoginForm() {
     switch (error) {
       case 'CredentialsSignin':
       case 'Configuration':
-        // Generic message to prevent user enumeration
         return 'Ungültige E-Mail-Adresse oder Passwort'
+      case 'AccessDenied':
+        return 'Zugriff verweigert. Bitte kontaktieren Sie den Administrator.'
       case 'OAuthAccountNotLinked':
         return 'Diese E-Mail ist bereits mit einem anderen Konto verknüpft'
       case 'invalid_token':
@@ -65,6 +66,10 @@ export function LoginForm() {
       case 'verification_error':
         return 'Ein Fehler ist bei der E-Mail-Verifizierung aufgetreten'
       default:
+        // Show database/connection errors in a user-friendly way
+        if (error.includes('Datenbankverbindung') || error.includes('connect') || error.includes('timeout')) {
+          return 'Verbindungsproblem. Bitte versuchen Sie es in einer Minute erneut.'
+        }
         return error
     }
   }
