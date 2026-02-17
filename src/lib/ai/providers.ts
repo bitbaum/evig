@@ -25,6 +25,9 @@ const OPENROUTER_MODEL = 'meta-llama/llama-3.3-70b-instruct:free'
 const DEFAULT_TIMEOUT_MS = 30000
 
 interface ProviderRuntimeConfig {
+  groqEnabled: boolean
+  openRouterEnabled: boolean
+  ollamaEnabled: boolean
   groqApiKey: string
   openRouterApiKey: string
   ollamaUrl: string
@@ -44,6 +47,9 @@ interface DbProviderSettingsRow {
 
 async function loadProviderRuntimeConfig(): Promise<ProviderRuntimeConfig> {
   const envConfig: ProviderRuntimeConfig = {
+    groqEnabled: true,
+    openRouterEnabled: true,
+    ollamaEnabled: true,
     groqApiKey: process.env.GROQ_API_KEY || '',
     openRouterApiKey: process.env.OPENROUTER_API_KEY || '',
     ollamaUrl: process.env.OLLAMA_URL || process.env.OLLAMA_BASE_URL || 'http://localhost:11434',
@@ -52,9 +58,10 @@ async function loadProviderRuntimeConfig(): Promise<ProviderRuntimeConfig> {
 
   try {
     const result = await query<DbProviderSettingsRow>(
-      `SELECT provider, is_enabled, settings
+      `SELECT DISTINCT ON (provider) provider, is_enabled, settings
        FROM ${TABLE_NAMES.HIRN_PROVIDER_SETTINGS}
-       WHERE scope = 'system'`,
+       WHERE scope = 'system'
+       ORDER BY provider, is_default DESC, updated_at DESC`,
       []
     )
 
@@ -65,10 +72,21 @@ async function loadProviderRuntimeConfig(): Promise<ProviderRuntimeConfig> {
     const ollama = byProvider.get('ollama')
 
     return {
-      groqApiKey: (groq?.is_enabled ? groq.settings?.api_key : undefined) || envConfig.groqApiKey,
-      openRouterApiKey: (openrouter?.is_enabled ? openrouter.settings?.api_key : undefined) || envConfig.openRouterApiKey,
-      ollamaUrl: (ollama?.is_enabled ? ollama.settings?.base_url : undefined) || envConfig.ollamaUrl,
-      ollamaModel: (ollama?.is_enabled ? ollama.settings?.model : undefined) || envConfig.ollamaModel,
+      groqEnabled: groq ? groq.is_enabled : envConfig.groqEnabled,
+      openRouterEnabled: openrouter ? openrouter.is_enabled : envConfig.openRouterEnabled,
+      ollamaEnabled: ollama ? ollama.is_enabled : envConfig.ollamaEnabled,
+      groqApiKey: groq?.is_enabled
+        ? (groq.settings?.api_key || '')
+        : (groq ? '' : envConfig.groqApiKey),
+      openRouterApiKey: openrouter?.is_enabled
+        ? (openrouter.settings?.api_key || '')
+        : (openrouter ? '' : envConfig.openRouterApiKey),
+      ollamaUrl: ollama?.is_enabled
+        ? ((ollama.settings?.base_url as string | undefined) || envConfig.ollamaUrl)
+        : (ollama ? '' : envConfig.ollamaUrl),
+      ollamaModel: ollama?.is_enabled
+        ? ((ollama.settings?.model as string | undefined) || envConfig.ollamaModel)
+        : (ollama ? '' : envConfig.ollamaModel),
     }
   } catch (error) {
     logger.warn('AI provider settings table unavailable; falling back to environment config', { error })
@@ -114,6 +132,10 @@ export interface CallOptions {
 // =============================================================================
 
 async function callGroq(opts: CallOptions, cfg: ProviderRuntimeConfig): Promise<ProviderResult | ProviderError> {
+  if (!cfg.groqEnabled) {
+    return { provider: 'groq', reason: 'no_key', message: 'Groq ist deaktiviert' }
+  }
+
   if (!cfg.groqApiKey) {
     return { provider: 'groq', reason: 'no_key', message: 'GROQ_API_KEY nicht konfiguriert' }
   }
@@ -171,6 +193,10 @@ async function callGroq(opts: CallOptions, cfg: ProviderRuntimeConfig): Promise<
 }
 
 async function callOpenRouter(opts: CallOptions, cfg: ProviderRuntimeConfig): Promise<ProviderResult | ProviderError> {
+  if (!cfg.openRouterEnabled) {
+    return { provider: 'openrouter', reason: 'no_key', message: 'OpenRouter ist deaktiviert' }
+  }
+
   if (!cfg.openRouterApiKey) {
     return { provider: 'openrouter', reason: 'no_key', message: 'OPENROUTER_API_KEY nicht konfiguriert' }
   }
@@ -233,6 +259,10 @@ async function callOpenRouter(opts: CallOptions, cfg: ProviderRuntimeConfig): Pr
 }
 
 async function callOllama(opts: CallOptions, cfg: ProviderRuntimeConfig): Promise<ProviderResult | ProviderError> {
+  if (!cfg.ollamaEnabled || !cfg.ollamaUrl) {
+    return { provider: 'ollama', reason: 'no_key', message: 'Ollama ist deaktiviert' }
+  }
+
   const controller = new AbortController()
   const timeoutId = setTimeout(() => controller.abort(), opts.timeoutMs || DEFAULT_TIMEOUT_MS)
 

@@ -91,7 +91,11 @@ export default async function ProtocolsAdminPage({
     ? stepFilter
     : undefined
   const filteredProtocols = validStepFilter
-    ? protocols.filter((protocol) => getProtocolWorkflowStep(protocol.status) === validStepFilter)
+    ? protocols.filter((protocol) => getProtocolWorkflowStep({
+      status: protocol.status,
+      hasStructuredNotes: protocol.has_structured_notes,
+      unlinkedTaskCount: protocol.unlinked_action_item_count,
+    }) === validStepFilter)
     : protocols
 
   return (
@@ -254,7 +258,11 @@ export default async function ProtocolsAdminPage({
                     </td>
                     <td className="px-4 py-3">
                       {(() => {
-                        const workflowStep = getProtocolWorkflowStep(protocol.status)
+                        const workflowStep = getProtocolWorkflowStep({
+                          status: protocol.status,
+                          hasStructuredNotes: protocol.has_structured_notes,
+                          unlinkedTaskCount: protocol.unlinked_action_item_count,
+                        })
                         const workflowIndex = PROTOCOL_WORKFLOW_STEPS.findIndex((step) => step.id === workflowStep) + 1
                         const workflowLabel = PROTOCOL_WORKFLOW_STEPS.find((step) => step.id === workflowStep)?.label || 'Workflow'
                         return (

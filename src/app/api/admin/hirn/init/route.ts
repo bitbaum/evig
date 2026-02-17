@@ -46,7 +46,7 @@ export const POST = withAdmin(async (request: NextRequest, session) => {
     await query(`
       INSERT INTO ${TABLE_NAMES.HIRN_PROVIDER_SETTINGS} (scope, provider, is_enabled, is_default, settings)
       VALUES ('system', 'groq', true, true, $1::jsonb)
-      ON CONFLICT (scope, user_id, provider) DO NOTHING
+      ON CONFLICT DO NOTHING
     `, [JSON.stringify({
       model: 'llama-3.3-70b-versatile',
       description: 'Free tier, fast inference'
@@ -56,7 +56,7 @@ export const POST = withAdmin(async (request: NextRequest, session) => {
     await query(`
       INSERT INTO ${TABLE_NAMES.HIRN_PROVIDER_SETTINGS} (scope, provider, is_enabled, is_default, settings)
       VALUES ('system', 'ollama', true, false, $1::jsonb)
-      ON CONFLICT (scope, user_id, provider) DO NOTHING
+      ON CONFLICT DO NOTHING
     `, [JSON.stringify({
       base_url: process.env.OLLAMA_URL || 'http://localhost:11434',
       model: 'llama3.2',
@@ -68,7 +68,7 @@ export const POST = withAdmin(async (request: NextRequest, session) => {
     await query(`
       INSERT INTO ${TABLE_NAMES.HIRN_PROVIDER_SETTINGS} (scope, provider, is_enabled, is_default, settings)
       VALUES ('system', 'openrouter', true, false, $1::jsonb)
-      ON CONFLICT (scope, user_id, provider) DO NOTHING
+      ON CONFLICT DO NOTHING
     `, [JSON.stringify({
       model: 'meta-llama/llama-3.3-70b-instruct',
       description: 'Pay-per-token, many models available'

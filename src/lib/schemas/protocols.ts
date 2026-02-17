@@ -175,6 +175,8 @@ export interface ProtocolListItem {
   created_by_name: string | null;
   created_at: string;
   action_item_count: number;
+  unlinked_action_item_count: number;
+  has_structured_notes: boolean;
 }
 
 /** Protocol row for detail page */

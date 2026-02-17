@@ -8,6 +8,14 @@ describe('protocol workflow mapping', () => {
     expect(getProtocolWorkflowStep('finalized')).toBe('done')
   })
 
+  it('maps review protocols with unlinked items to task step', () => {
+    expect(getProtocolWorkflowStep({
+      status: 'review',
+      hasStructuredNotes: true,
+      unlinkedTaskCount: 3,
+    })).toBe('tasks')
+  })
+
   it('returns task-oriented CTA during review with unlinked tasks', () => {
     const progress = getProtocolWorkflowProgress({
       status: 'review',

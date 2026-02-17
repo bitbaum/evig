@@ -5,18 +5,24 @@
  * List available AI providers and their status.
  *
  * PATCH /api/admin/hirn/providers
- * Update provider settings (set default, enable/disable).
+ * Update provider settings (set default, enable/disable, store API key).
  */
 
 import { NextRequest } from 'next/server'
 import { withAdmin } from '@/lib/api/middleware'
-import { getProviderSettings, setDefaultProvider, createProvider, updateProviderSettings, type ProviderName } from '@/lib/hirn/providers'
+import {
+  getProviderSettings,
+  setDefaultProvider,
+  createProvider,
+  updateProviderSettings,
+  setProviderEnabled,
+  type ProviderName,
+} from '@/lib/hirn/providers'
 import { logger } from '@/lib/logger'
 import { apiSuccess, apiError, apiBadRequest, apiNotFound } from '@/lib/api/helpers'
 
-export const GET = withAdmin(async (request: NextRequest) => {
+export const GET = withAdmin(async (_request: NextRequest) => {
   try {
-    // Get system settings and check availability
     const settings = await getProviderSettings('system')
 
     const providersWithStatus = await Promise.all(
@@ -53,7 +59,12 @@ export const GET = withAdmin(async (request: NextRequest) => {
 export const PATCH = withAdmin(async (request: NextRequest, session) => {
   try {
     const body = await request.json()
-    const { provider, isDefault, apiKey } = body
+    const { provider, isDefault, apiKey, isEnabled } = body as {
+      provider?: string
+      isDefault?: boolean
+      apiKey?: string
+      isEnabled?: boolean
+    }
 
     if (!provider) {
       return apiBadRequest('Provider ist erforderlich')
@@ -63,53 +74,61 @@ export const PATCH = withAdmin(async (request: NextRequest, session) => {
       return apiBadRequest('apiKey muss ein String sein')
     }
 
-    // Check if provider is available before setting as default
-    const settings = await getProviderSettings('system')
-    const providerSettings = settings.find(s => s.provider === provider)
+    if (isEnabled !== undefined && typeof isEnabled !== 'boolean') {
+      return apiBadRequest('isEnabled muss true oder false sein')
+    }
 
+    const settings = await getProviderSettings('system')
+    const providerSettings = settings.find((s) => s.provider === provider)
     if (!providerSettings) {
       return apiNotFound('Provider')
     }
 
-    if (!providerSettings.is_enabled) {
-      return apiBadRequest('Provider ist nicht aktiviert')
-    }
-
+    const providerName = provider as ProviderName
     const effectiveApiKey = apiKey !== undefined
       ? apiKey.trim()
       : (providerSettings.settings.api_key || '')
 
-    // Check availability
-    try {
-      const providerInstance = createProvider(provider as ProviderName, {
-        apiKey: effectiveApiKey,
-        baseUrl: providerSettings.settings.base_url,
-        model: providerSettings.settings.model,
-      })
-      const isAvailable = await providerInstance.isAvailable()
-
-      if (!isAvailable) {
-        return apiBadRequest(`Provider ${provider} ist nicht verfügbar. Prüfe API-Key oder Ollama-Status.`)
-      }
-    } catch (_err) {
-      return apiBadRequest(`Provider ${provider} konnte nicht geprüft werden`)
-    }
-
     if (apiKey !== undefined) {
       await updateProviderSettings(
-        provider as ProviderName,
+        providerName,
         { api_key: effectiveApiKey || undefined },
         'system'
       )
     }
 
+    if (isEnabled !== undefined) {
+      await setProviderEnabled(providerName, isEnabled, 'system')
+    }
+
+    const enabledForDefault = isEnabled ?? providerSettings.is_enabled
     if (isDefault) {
-      await setDefaultProvider(provider as ProviderName, 'system')
+      if (!enabledForDefault) {
+        return apiBadRequest('Ein deaktivierter Provider kann nicht Standard sein')
+      }
+
+      try {
+        const providerInstance = createProvider(providerName, {
+          apiKey: effectiveApiKey,
+          baseUrl: providerSettings.settings.base_url,
+          model: providerSettings.settings.model,
+        })
+        const available = await providerInstance.isAvailable()
+
+        if (!available) {
+          return apiBadRequest(`Provider ${provider} ist nicht verfügbar. Prüfe API-Key oder Ollama-Status.`)
+        }
+      } catch {
+        return apiBadRequest(`Provider ${provider} konnte nicht geprüft werden`)
+      }
+
+      await setDefaultProvider(providerName, 'system')
     }
 
     logger.info('Provider updated', {
       provider,
       isDefault,
+      isEnabled,
       hasApiKeyUpdate: apiKey !== undefined,
       userId: session.user.id,
     })

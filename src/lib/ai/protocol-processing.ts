@@ -61,7 +61,7 @@ export async function processProtocolTranscript(
       failure: {
         code: 'NO_PROVIDER',
         retryable: true,
-        error: 'Kein KI-Provider erreichbar (Groq, OpenRouter, Ollama).',
+        error: 'Kein KI-Service erreichbar. Bitte in Admin > Hirn Provider und API-Schlüssel prüfen.',
       },
     }
   }

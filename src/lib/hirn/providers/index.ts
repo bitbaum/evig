@@ -171,6 +171,25 @@ export async function updateProviderSettings(
   )
 }
 
+
+/**
+ * Enable or disable a provider.
+ */
+export async function setProviderEnabled(
+  provider: ProviderName,
+  isEnabled: boolean,
+  scope: 'system' | 'user' = 'system',
+  userId?: string
+): Promise<void> {
+  await query(
+    `UPDATE ${TABLE_NAMES.HIRN_PROVIDER_SETTINGS}
+     SET is_enabled = $1,
+         updated_at = NOW()
+     WHERE provider = $2 AND scope = $3 AND ($4::uuid IS NULL OR user_id = $4)`,
+    [isEnabled, provider, scope, userId || null]
+  )
+}
+
 /**
  * Set the default provider
  */

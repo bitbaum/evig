@@ -12,15 +12,23 @@ export type ProtocolWorkflowStepId = (typeof PROTOCOL_WORKFLOW_STEPS)[number]['i
 
 interface WorkflowContext {
   status: ProtocolStatus
-  hasStructuredNotes: boolean
+  hasStructuredNotes?: boolean
   unlinkedTaskCount?: number
 }
 
-export function getProtocolWorkflowStep(status: ProtocolStatus): ProtocolWorkflowStepId {
-  if (status === 'draft') return 'input'
-  if (status === 'processing') return 'ai'
-  if (status === 'review') return 'review'
-  return 'done'
+export function getProtocolWorkflowStep(input: ProtocolStatus | WorkflowContext): ProtocolWorkflowStepId {
+  const context: WorkflowContext = typeof input === 'string' ? { status: input } : input
+
+  if (context.status === 'draft') return 'input'
+  if (context.status === 'processing') return 'ai'
+  if (context.status === 'finalized') return 'done'
+
+  if (context.status === 'review') {
+    if ((context.unlinkedTaskCount || 0) > 0) return 'tasks'
+    return 'review'
+  }
+
+  return 'review'
 }
 
 export function getProtocolWorkflowProgress({

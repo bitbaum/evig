@@ -114,6 +114,32 @@ export function HirnProviderSelector() {
     }
   }
 
+
+  const saveApiKey = async (provider: string, currentValue = '') => {
+    const nextKey = window.prompt('API-Key eingeben', currentValue)
+    if (nextKey === null) return
+
+    setChanging(true)
+    setError('')
+    try {
+      const response = await fetch('/api/admin/hirn/providers', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ provider, apiKey: nextKey }),
+      })
+      const data = await response.json()
+      if (data.success) {
+        await loadProviders()
+      } else {
+        setError(data.error || 'API-Key konnte nicht gespeichert werden')
+      }
+    } catch {
+      setError('Netzwerkfehler beim Speichern des API-Keys')
+    } finally {
+      setChanging(false)
+    }
+  }
+
   const currentProvider = providers.find(p => p.isDefault)
   const currentMeta = currentProvider ? PROVIDER_META[currentProvider.provider] : null
 
@@ -224,18 +250,31 @@ export function HirnProviderSelector() {
                               </div>
                             </div>
 
-                            {!canSelect && meta.keyName && (
-                              <a
-                                href={meta.keyUrl}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                onClick={e => e.stopPropagation()}
-                                className="flex items-center gap-1 px-2 py-1 text-xs text-purple-600 hover:text-purple-700 bg-purple-50 dark:bg-purple-900/30 rounded-lg"
-                              >
-                                <Key className="w-3 h-3" />
-                                Key
-                                <ExternalLink className="w-3 h-3" />
-                              </a>
+                            {meta.keyName && (
+                              <div className="flex items-center gap-1">
+                                <button
+                                  type="button"
+                                  onClick={(e) => {
+                                    e.stopPropagation()
+                                    void saveApiKey(provider.provider)
+                                  }}
+                                  className="flex items-center gap-1 px-2 py-1 text-xs text-purple-600 hover:text-purple-700 bg-purple-50 dark:bg-purple-900/30 rounded-lg"
+                                >
+                                  <Key className="w-3 h-3" />
+                                  Key speichern
+                                </button>
+                                {meta.keyUrl && (
+                                  <a
+                                    href={meta.keyUrl}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    onClick={e => e.stopPropagation()}
+                                    className="flex items-center gap-1 px-2 py-1 text-xs text-purple-600 hover:text-purple-700 bg-purple-50 dark:bg-purple-900/30 rounded-lg"
+                                  >
+                                    <ExternalLink className="w-3 h-3" />
+                                  </a>
+                                )}
+                              </div>
                             )}
                           </button>
                         )

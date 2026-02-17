@@ -107,7 +107,18 @@ export async function getProtocols(
       (
         SELECT COUNT(*)::int
         FROM jsonb_array_elements(COALESCE(mp.structured_notes->'action_items', '[]'::jsonb)) ai
-      ) as action_item_count
+      ) as action_item_count,
+      (
+        SELECT COUNT(*)::int
+        FROM jsonb_array_elements(COALESCE(mp.structured_notes->'action_items', '[]'::jsonb)) ai
+        WHERE NOT EXISTS (
+          SELECT 1
+          FROM ${TABLE_NAMES.PROTOCOL_ACTION_LINKS} pal
+          WHERE pal.protocol_id = mp.id
+            AND pal.action_item_id = ai->>'id'
+        )
+      ) as unlinked_action_item_count,
+      (mp.structured_notes IS NOT NULL) as has_structured_notes
     FROM ${TABLE_NAMES.MEETING_PROTOCOLS} mp
     LEFT JOIN ${TABLE_NAMES.USERS} u ON mp.created_by = u.id
     WHERE (
