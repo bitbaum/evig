@@ -1,6 +1,6 @@
 import React from 'react'
 import { Metadata } from 'next'
-import { Leaf, Monitor, Building2 } from 'lucide-react'
+import { Leaf, Monitor, Building2, ArrowDown } from 'lucide-react'
 import { NewsletterSignup } from '@/components/community/NewsletterSignup'
 import { CopyButton } from '@/components/community/CopyButton'
 import { getEnvironmentalSummary } from '@/data/impact-metrics'
@@ -9,6 +9,9 @@ export const metadata: Metadata = {
   title: 'Spenden | RevampIT',
   description: 'Direkt helfen. Jede Spende rettet Geräte vor dem Elektroschrott und macht Technologie für alle zugänglich.'
 }
+
+// Bypass Next.js page cache so Verwendungszweck always shows the current month
+export const revalidate = 0
 
 const BANK_IBAN = 'CH16 0900 0000 8725 0971 7'
 const BANK_BIC = 'POFICHBEXXX'
@@ -46,7 +49,7 @@ const IMPACT_TIERS: Array<{
   {
     amount: 500,
     icon: Building2,
-    title: 'Corporate — 10 Geräte',
+    title: 'Firmenspende — 10 Geräte',
     description: '10 Geräte für Bildungseinrichtungen, Sozialprojekte oder einkommensschwache Haushalte.',
     color: 'purple',
   },
@@ -61,18 +64,46 @@ export default function DonatePage() {
       <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
 
         {/* Hero */}
-        <div className="text-center mb-12">
+        <div className="text-center mb-10">
           <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
             Direkt helfen.
           </h1>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+          <p className="text-lg text-gray-600 max-w-2xl mx-auto mb-8">
             Jede Spende rettet Geräte vor dem Elektroschrott, verlängert Lebenszyklen
             und ermöglicht Technologie für Menschen, die sich das sonst nicht leisten können.
           </p>
+          {/* Primary CTA — anchors to bank transfer box */}
+          <a
+            href="#bankueberweisung"
+            className="inline-flex items-center gap-2 rounded-md bg-green-600 px-6 py-3 text-base font-semibold text-white shadow-sm hover:bg-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600"
+          >
+            Jetzt überweisen <ArrowDown className="h-4 w-4" />
+          </a>
         </div>
 
+        {/* Transparency row — trust signals before the ask */}
+        <section className="mb-12 rounded-xl bg-gray-50 border border-gray-200 px-6 py-5">
+          <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide text-center mb-4">
+            Transparenz
+          </p>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">
+            <div>
+              <p className="text-2xl font-bold text-gray-900">CHF 60k</p>
+              <p className="text-xs text-gray-500 mt-1">Jahresbudget (gemeinnütziger Verein)</p>
+            </div>
+            <div>
+              <p className="text-2xl font-bold text-gray-900">{env.devicesSaved}+</p>
+              <p className="text-xs text-gray-500 mt-1">Geräte jährlich gerettet</p>
+            </div>
+            <div>
+              <p className="text-2xl font-bold text-gray-900">{env.co2SavedTons} t CO₂</p>
+              <p className="text-xs text-gray-500 mt-1">eingespart pro Jahr</p>
+            </div>
+          </div>
+        </section>
+
         {/* Impact tiers */}
-        <section className="mb-12">
+        <section className="mb-4">
           <h2 className="text-xl font-semibold text-gray-900 mb-6 text-center">Was deine Spende bewirkt</h2>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             {IMPACT_TIERS.map((tier) => (
@@ -108,16 +139,28 @@ export default function DonatePage() {
           </div>
         </section>
 
+        {/* Bridge CTA — connects tiers to the bank box */}
+        <div className="text-center mb-12">
+          <a
+            href="#bankueberweisung"
+            className="inline-flex items-center gap-1.5 text-sm font-semibold text-green-700 hover:text-green-600"
+          >
+            Betrag wählen und überweisen <ArrowDown className="h-4 w-4" />
+          </a>
+        </div>
+
         {/* Bank transfer box — primary CTA */}
-        <section className="mb-12">
+        <section id="bankueberweisung" className="mb-12 scroll-mt-8">
           <div className="rounded-xl border-2 border-green-200 bg-green-50 p-6 sm:p-8">
-            <h2 className="text-xl font-semibold text-gray-900 mb-6">Banküberweisung</h2>
+            <h2 className="text-xl font-semibold text-gray-900 mb-2">Banküberweisung</h2>
+            <p className="text-sm text-gray-500 mb-6">Überweisen Sie auf folgendes Konto:</p>
             <div className="space-y-4">
               <div className="flex items-start justify-between gap-4">
                 <div>
                   <p className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-0.5">Empfänger</p>
                   <p className="text-sm font-semibold text-gray-900">{BANK_EMPFAENGER}</p>
                 </div>
+                <CopyButton value={BANK_EMPFAENGER} label="Kopieren" />
               </div>
               <div className="flex items-start justify-between gap-4">
                 <div>
@@ -129,8 +172,9 @@ export default function DonatePage() {
               <div className="flex items-start justify-between gap-4">
                 <div>
                   <p className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-0.5">Bank</p>
-                  <p className="text-sm text-gray-700">PostFinance AG, BIC {BANK_BIC}</p>
+                  <p className="text-sm text-gray-700">PostFinance AG</p>
                 </div>
+                <CopyButton value={BANK_BIC} label={`BIC ${BANK_BIC}`} />
               </div>
               <div className="flex items-start justify-between gap-4">
                 <div>
@@ -143,45 +187,13 @@ export default function DonatePage() {
           </div>
         </section>
 
-        {/* Coming soon pills */}
-        <div className="flex flex-wrap items-center gap-3 mb-12 justify-center">
-          <span className="text-sm text-gray-500">Weitere Zahlungsmethoden — bald verfügbar:</span>
-          <span className="inline-flex items-center gap-1.5 rounded-full border border-gray-300 bg-white px-3 py-1 text-xs font-medium text-gray-500">
-            TWINT <span className="rounded bg-gray-100 px-1 text-xs">bald</span>
-          </span>
-          <span className="inline-flex items-center gap-1.5 rounded-full border border-gray-300 bg-white px-3 py-1 text-xs font-medium text-gray-500">
-            Kreditkarte <span className="rounded bg-gray-100 px-1 text-xs">bald</span>
-          </span>
-        </div>
-
         {/* Newsletter signup — secondary CTA */}
-        <section className="mb-12 rounded-xl border border-gray-200 bg-gray-50 p-6 sm:p-8">
+        <section className="mb-0 rounded-xl border border-gray-200 bg-gray-50 p-6 sm:p-8">
           <NewsletterSignup
             title="Wir informieren dich, wie deine Spende wirkt."
             description="Keine Werbung. Nur echte Updates zu Geräten gerettet, CO₂ eingespart und Menschen unterstützt."
             source="donate-page"
           />
-        </section>
-
-        {/* Transparency row */}
-        <section>
-          <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide text-center mb-6">
-            Transparenz
-          </h2>
-          <div className="grid grid-cols-3 gap-4 text-center">
-            <div>
-              <p className="text-2xl font-bold text-gray-900">CHF 60k</p>
-              <p className="text-xs text-gray-500 mt-1">Jahresbudget</p>
-            </div>
-            <div>
-              <p className="text-2xl font-bold text-gray-900">~{env.devicesSaved}</p>
-              <p className="text-xs text-gray-500 mt-1">Geräte jährlich gerettet</p>
-            </div>
-            <div>
-              <p className="text-2xl font-bold text-gray-900">~{env.co2SavedTons} t</p>
-              <p className="text-xs text-gray-500 mt-1">CO₂ eingespart / Jahr</p>
-            </div>
-          </div>
         </section>
 
       </div>
