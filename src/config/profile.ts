@@ -63,7 +63,7 @@ export const PROFILE_CONFIG = {
     displayName: {
       minLength: 2,
       maxLength: 50,
-      pattern: /^[a-zA-ZäöüÄÖÜß\s'-]+$/,
+      pattern: /^[a-zA-ZäöüÄÖÜ\s'-]+$/,
       errorMessages: {
         required: 'Anzeigename ist erforderlich',
         minLength: 'Anzeigename muss mindestens 2 Zeichen lang sein',

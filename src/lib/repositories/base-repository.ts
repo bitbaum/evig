@@ -173,7 +173,9 @@ export abstract class BaseRepository {
   /**
    * Build ORDER BY clause from sort parameters
    *
-   * @param sortBy - Column to sort by
+   * Only allows alphanumeric column names and underscores to prevent SQL injection.
+   *
+   * @param sortBy - Column to sort by (must match /^[a-zA-Z_][a-zA-Z0-9_.]*$/)
    * @param sortOrder - 'ASC' or 'DESC'
    * @returns ORDER BY clause string
    *
@@ -188,26 +190,45 @@ export abstract class BaseRepository {
     sortOrder: 'ASC' | 'DESC' = 'DESC'
   ): string {
     if (!sortBy) return ''
+    if (!/^[a-zA-Z_][a-zA-Z0-9_.]*$/.test(sortBy)) {
+      throw new Error(`Invalid sort column: ${sortBy}`)
+    }
     return `ORDER BY ${sortBy} ${sortOrder}`
   }
 
   /**
    * Build LIMIT and OFFSET clause for pagination
    *
+   * Returns parameterized placeholders and values to prevent injection.
+   *
    * @param limit - Maximum number of rows to return
    * @param offset - Number of rows to skip
-   * @returns LIMIT/OFFSET clause string
+   * @param startIndex - Starting parameter index (for $N placeholders)
+   * @returns Object with clause string and param values
    *
    * @example
    * ```typescript
-   * const pagination = this.buildPagination(20, 40)
-   * // "LIMIT 20 OFFSET 40"
+   * const { clause, values } = this.buildPagination(20, 40, 3)
+   * // clause: "LIMIT $3 OFFSET $4"
+   * // values: [20, 40]
    * ```
    */
-  protected buildPagination(limit?: number, offset?: number): string {
+  protected buildPagination(
+    limit?: number,
+    offset?: number,
+    startIndex = 1
+  ): { clause: string; values: QueryParams } {
     const parts: string[] = []
-    if (limit !== undefined) parts.push(`LIMIT ${limit}`)
-    if (offset !== undefined) parts.push(`OFFSET ${offset}`)
-    return parts.join(' ')
+    const values: QueryParams = []
+    let idx = startIndex
+    if (limit !== undefined) {
+      parts.push(`LIMIT $${idx++}`)
+      values.push(limit)
+    }
+    if (offset !== undefined) {
+      parts.push(`OFFSET $${idx++}`)
+      values.push(offset)
+    }
+    return { clause: parts.join(' '), values }
   }
 }

@@ -26,11 +26,11 @@ let pool: Pool | null = null
 function getAuthPool(): Pool {
   if (!pool) {
     pool = new Pool({
-      host: process.env.AUTH_DB_HOST || process.env.DB_HOST || 'localhost',
-      port: parseInt(process.env.AUTH_DB_PORT || process.env.DB_PORT || '5433'),
-      database: process.env.AUTH_DB_NAME || process.env.DB_NAME || 'revampit_cms',
-      user: process.env.AUTH_DB_USER || process.env.DB_USER || 'postgres',
-      password: process.env.AUTH_DB_PASSWORD || process.env.DB_PASSWORD || 'postgres',
+      host: process.env.AUTH_DB_HOST || process.env.DB_HOST,
+      port: parseInt(process.env.AUTH_DB_PORT || process.env.DB_PORT || '5432'),
+      database: process.env.AUTH_DB_NAME || process.env.DB_NAME,
+      user: process.env.AUTH_DB_USER || process.env.DB_USER,
+      password: process.env.AUTH_DB_PASSWORD || process.env.DB_PASSWORD,
       max: 20,
       idleTimeoutMillis: 30000,
       connectionTimeoutMillis: 2000, // Reduced from 5000 to fail faster
