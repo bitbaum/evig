@@ -163,10 +163,23 @@ export const authConfig = {
         } catch (dbError) {
           // Handle database connection errors gracefully
           const errorMessage = dbError instanceof Error ? dbError.message : String(dbError)
+
           if (errorMessage.includes('connect') || errorMessage.includes('ECONNREFUSED') || errorMessage.includes('timeout')) {
+            logger.error('AUTH_DB_UNAVAILABLE', {
+              email,
+              provider: 'credentials',
+              reason: errorMessage,
+            })
             throw new Error('Datenbankverbindung fehlgeschlagen. Bitte versuchen Sie es später erneut.')
           }
-          // Re-throw other errors (like "user not found", "wrong password", etc.)
+
+          logger.warn('AUTH_LOGIN_REJECTED', {
+            email,
+            provider: 'credentials',
+            reason: errorMessage,
+          })
+
+          // Re-throw other errors (like invalid credentials)
           throw dbError
         }
       },
