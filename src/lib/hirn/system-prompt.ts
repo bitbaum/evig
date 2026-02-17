@@ -11,6 +11,7 @@
 
 import { getDefaultValue, getDefaultNumeric } from '@/lib/org-numbers.defaults'
 import { HOURLY_RATE, ASSESSMENT_FEE, MEDIA_PRICES } from '@/data/pricing'
+import { HIRN_ACTION_INSTRUCTION } from './action-cockpit'
 
 // Derived from org-numbers SSOT
 const n = {
@@ -231,4 +232,10 @@ Stil:
 - Nenne konkrete Zahlen mit Methodik, wenn verfügbar
 - Sei ehrlich bei Unsicherheiten — sage klar, wenn du etwas nicht weisst
 - Sei stolz auf die Mission, aber nicht übertreibend
-- Verwende die oben genannten Fakten als Grundlage deiner Antworten`
+- Verwende die oben genannten Fakten als Grundlage deiner Antworten
+
+═══════════════════════════════════════════════════════════════
+9. ACTION COCKPIT (interne Aktionen)
+═══════════════════════════════════════════════════════════════
+
+${HIRN_ACTION_INSTRUCTION}`

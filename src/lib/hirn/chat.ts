@@ -9,6 +9,7 @@ import { logger } from '@/lib/logger'
 import { TABLE_NAMES } from '@/config/database'
 import { getDefaultChatProvider, type Message } from './providers'
 import { SYSTEM_PROMPT } from './system-prompt'
+import { parseActionEnvelope, stripActionBlock } from './action-cockpit'
 
 export interface ChatOptions {
   sessionId: string
@@ -20,6 +21,15 @@ export interface ChatOptions {
 
 export interface ChatResponse {
   content: string
+  actions?: Array<{
+    id: string
+    type: 'create_task' | 'create_product_draft' | 'create_decision_draft' | 'create_protocol_draft'
+    title: string
+    summary: string
+    cta: string
+    risky: boolean
+    payload: Record<string, unknown>
+  }>
   usage?: {
     promptTokens: number
     completionTokens: number
@@ -108,15 +118,21 @@ export async function chat(
     })
   }
 
+  const parsedActions = parseActionEnvelope(response.content)
+  const cleanedContent = stripActionBlock(response.content)
+
   logger.info('Chat response generated', {
     sessionId,
     userId,
     provider: response.provider,
     model: response.model,
+    actionCount: parsedActions.actions.length,
+    actionParsingError: parsedActions.parsingError,
   })
 
   return {
-    content: response.content,
+    content: cleanedContent,
+    actions: parsedActions.actions,
     usage: response.usage,
     model: response.model,
     provider: response.provider,

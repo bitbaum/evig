@@ -44,6 +44,7 @@ export const POST = withAdmin(async (request: NextRequest, session) => {
 
     return apiSuccess({
       content: response.content,
+      actions: response.actions || [],
       usage: response.usage,
       model: response.model,
       provider: response.provider,

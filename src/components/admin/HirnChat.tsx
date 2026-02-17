@@ -1,7 +1,17 @@
 'use client'
 
 import { useState, useRef, useEffect } from 'react'
-import { Send, Loader2, Bot, User, Sparkles, Trash2 } from 'lucide-react'
+import { Send, Loader2, Bot, User, Sparkles, Trash2, Rocket, TriangleAlert } from 'lucide-react'
+
+interface HirnActionCard {
+  id: string
+  type: 'create_task' | 'create_product_draft' | 'create_decision_draft' | 'create_protocol_draft'
+  title: string
+  summary: string
+  cta: string
+  risky: boolean
+  payload: Record<string, unknown>
+}
 
 interface Message {
   id: string
@@ -10,6 +20,7 @@ interface Message {
   createdAt: Date
   model?: string
   provider?: string
+  actions?: HirnActionCard[]
 }
 
 interface HirnChatProps {
@@ -107,6 +118,7 @@ export function HirnChat({ sessionId, onSessionChange, compact = false }: HirnCh
         createdAt: new Date(),
         model: (responseData.model as string) || undefined,
         provider: (responseData.provider as string) || undefined,
+        actions: (responseData.actions as HirnActionCard[]) || [],
       }
 
       setMessages(prev => [...prev, assistantMessage])
@@ -133,6 +145,65 @@ export function HirnChat({ sessionId, onSessionChange, compact = false }: HirnCh
       onSessionChange?.()
     } catch {
       setError('Fehler beim Löschen')
+    }
+  }
+
+  const executeAction = async (action: HirnActionCard) => {
+    setError('')
+    try {
+      const csrfMatch = document.cookie.match(/__Host-csrf=([^;]+)/)
+      const csrfToken = csrfMatch ? csrfMatch[1] : ''
+
+      const dryRunFirst = action.risky
+      const firstResponse = await fetch('/api/admin/hirn/actions/execute', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-csrf-token': csrfToken,
+        },
+        body: JSON.stringify({
+          actionId: action.id,
+          actionType: action.type,
+          payload: action.payload,
+          dryRun: dryRunFirst,
+        }),
+      })
+
+      const firstData = await firstResponse.json()
+      if (!firstResponse.ok) throw new Error(firstData.error || 'Aktion fehlgschlage')
+
+      if (firstData.data?.mode === 'dry-run') {
+        const confirmed = confirm('Vorschau passt. Jetzt usfüehre?')
+        if (!confirmed) return
+
+        const executeResponse = await fetch('/api/admin/hirn/actions/execute', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-csrf-token': csrfToken,
+          },
+          body: JSON.stringify({
+            actionId: action.id,
+            actionType: action.type,
+            payload: action.payload,
+            dryRun: false,
+          }),
+        })
+
+        const executeData = await executeResponse.json()
+        if (!executeResponse.ok) throw new Error(executeData.error || 'Aktion fehlgschlage')
+
+        const link = executeData.data?.entity?.link
+        const message = `${executeData.data?.entity?.title || 'Element'} erstellt ✅\n${executeData.data?.suggestedNextStep || ''}`
+        alert(link ? `${message}\n\nÖffne: ${link}` : message)
+        return
+      }
+
+      const link = firstData.data?.entity?.link
+      const message = `${firstData.data?.entity?.title || 'Element'} erstellt ✅\n${firstData.data?.suggestedNextStep || ''}`
+      alert(link ? `${message}\n\nÖffne: ${link}` : message)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Aktion fehlgschlage')
     }
   }
 
@@ -196,6 +267,30 @@ export function HirnChat({ sessionId, onSessionChange, compact = false }: HirnCh
                 }`}
               >
                 <div className="whitespace-pre-wrap">{message.content}</div>
+
+                {message.role === 'assistant' && message.actions && message.actions.length > 0 && (
+                  <div className="mt-3 space-y-2">
+                    {message.actions.map(action => (
+                      <div key={action.id} className="rounded-xl border border-purple-200 dark:border-purple-700 p-3 bg-white/70 dark:bg-gray-900/40">
+                        <div className="flex items-start justify-between gap-2">
+                          <div>
+                            <p className="text-sm font-semibold">{action.title}</p>
+                            <p className="text-xs text-gray-600 dark:text-gray-300 mt-1">{action.summary}</p>
+                          </div>
+                          {action.risky && <TriangleAlert className="w-4 h-4 text-amber-500" />}
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => executeAction(action)}
+                          className="mt-3 inline-flex items-center gap-2 px-3 py-1.5 text-xs font-medium rounded-lg bg-purple-600 hover:bg-purple-700 text-white"
+                        >
+                          <Rocket className="w-3.5 h-3.5" />
+                          {action.cta}
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
 
                 {message.role === 'assistant' && message.model && (
                   <p className="mt-2 text-xs text-gray-400 dark:text-gray-500">
