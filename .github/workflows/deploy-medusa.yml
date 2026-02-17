@@ -1,11 +1,6 @@
 name: Deploy Medusa
 
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - 'medusa-backend/**'
   workflow_dispatch:
 
 env:
