@@ -157,6 +157,7 @@ export default async function ProtocolDetailPage({
             decisionOutcomes={decisionData.outcomes}
             currentUserId={dbUserId}
             isProtocolCreator={protocol.created_by === dbUserId}
+            isSuperAdmin={isAdmin}
           />
         </div>
 

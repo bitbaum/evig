@@ -434,6 +434,44 @@ export async function updateDecision(
   return { decision: updated.rows[0] };
 }
 
+/**
+ * Delete a decision and all related records (cascade).
+ * Only the creator or a super admin may delete.
+ */
+export async function deleteDecision(
+  decisionId: string,
+  userId: string,
+  isSuperAdmin: boolean,
+): Promise<{ deleted: true } | { error: 'not_found' | 'not_authorized' }> {
+  const existing = await query<{ id: string; created_by: string }>(
+    `SELECT id, created_by FROM ${TABLE_NAMES.DECISIONS} WHERE id = $1`,
+    [decisionId]
+  );
+  if (existing.rows.length === 0) return { error: 'not_found' };
+
+  if (existing.rows[0].created_by !== userId && !isSuperAdmin) {
+    return { error: 'not_authorized' };
+  }
+
+  await transaction(async (client) => {
+    await client.query(
+      `DELETE FROM ${TABLE_NAMES.DECISION_COMMENTS} WHERE decision_id = $1`,
+      [decisionId]
+    );
+    await client.query(
+      `DELETE FROM ${TABLE_NAMES.DECISION_VOTES} WHERE decision_id = $1`,
+      [decisionId]
+    );
+    await client.query(
+      `DELETE FROM ${TABLE_NAMES.DECISIONS} WHERE id = $1`,
+      [decisionId]
+    );
+  });
+
+  logger.info('Decision deleted', { decisionId, userId });
+  return { deleted: true };
+}
+
 export async function transitionDecision(
   id: string,
   newStatus: DecisionStatus,

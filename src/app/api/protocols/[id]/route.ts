@@ -3,6 +3,7 @@
  *
  * GET /api/protocols/[id] - Get single protocol
  * PATCH /api/protocols/[id] - Update protocol (draft/review only)
+ * DELETE /api/protocols/[id] - Delete protocol (creator or super admin)
  *
  * Created: 2026-02-10
  */
@@ -13,7 +14,7 @@ import { apiSuccess, apiError, apiNotFound, apiBadRequest } from '@/lib/api/help
 import { getDbUserId } from '@/lib/api/task-helpers'
 import { isSuperAdmin } from '@/lib/permissions'
 import { updateProtocolSchema } from '@/lib/schemas/protocols'
-import { getProtocolById, updateProtocol } from '@/lib/services/protocols'
+import { getProtocolById, updateProtocol, deleteProtocol } from '@/lib/services/protocols'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { logger } from '@/lib/logger'
 
@@ -92,5 +93,37 @@ export const PATCH = withAdmin<RouteParams>(async (
     }
     logger.error('Error updating protocol', { error, userId: session.user.id })
     return apiError(error, 'Fehler beim Aktualisieren des Protokolls')
+  }
+})
+
+/**
+ * DELETE /api/protocols/[id]
+ */
+export const DELETE = withAdmin<RouteParams>(async (
+  request: NextRequest,
+  session: ValidSession,
+  context
+) => {
+  try {
+    const protocolId = context?.params?.id
+    if (!protocolId) return apiBadRequest('Protokoll-ID erforderlich')
+
+    const userLookup = await getDbUserId(session)
+    if ('error' in userLookup) return userLookup.error
+    const { dbUserId } = userLookup
+
+    const isAdmin = isSuperAdmin(session.user.email)
+
+    const result = await deleteProtocol(protocolId, dbUserId, isAdmin)
+
+    if ('error' in result) {
+      if (result.error === 'not_found') return apiNotFound('Protokoll')
+      return apiBadRequest('Keine Berechtigung zum Löschen dieses Protokolls')
+    }
+
+    return apiSuccess({ deleted: true })
+  } catch (error) {
+    logger.error('Error deleting protocol', { error, userId: session.user.id })
+    return apiError(error, 'Fehler beim Löschen des Protokolls')
   }
 })

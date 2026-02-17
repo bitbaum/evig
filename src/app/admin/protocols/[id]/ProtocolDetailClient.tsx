@@ -42,6 +42,7 @@ import {
   ExternalLink,
   FileText,
   Upload,
+  Trash2,
 } from 'lucide-react'
 
 interface Props {
@@ -52,9 +53,10 @@ interface Props {
   decisionOutcomes: DecisionOutcomeRecord[]
   currentUserId: string
   isProtocolCreator: boolean
+  isSuperAdmin: boolean
 }
 
-export default function ProtocolDetailClient({ protocol, actionLinks, teamMembers, decisionVotes, decisionOutcomes, currentUserId, isProtocolCreator }: Props) {
+export default function ProtocolDetailClient({ protocol, actionLinks, teamMembers, decisionVotes, decisionOutcomes, currentUserId, isProtocolCreator, isSuperAdmin }: Props) {
   const router = useRouter()
   const [finalizing, setFinalizing] = useState(false)
   const [showFinalizeDialog, setShowFinalizeDialog] = useState(false)
@@ -63,6 +65,8 @@ export default function ProtocolDetailClient({ protocol, actionLinks, teamMember
   const [creatingTask, setCreatingTask] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [transcript, setTranscript] = useState('')
+  const [deleting, setDeleting] = useState(false)
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false)
 
   const notes = protocol.structured_notes as StructuredNotes | null
   const isReview = protocol.status === 'review'
@@ -226,6 +230,28 @@ export default function ProtocolDetailClient({ protocol, actionLinks, teamMember
       setError(getErrorMessage(err))
     } finally {
       setCreatingTask(null)
+    }
+  }
+
+  const handleDelete = async () => {
+    setDeleting(true)
+    setError(null)
+
+    try {
+      const res = await fetch(`/api/protocols/${protocol.id}`, {
+        method: 'DELETE',
+      })
+      const data = await res.json()
+
+      if (!data.success) {
+        throw new Error(data.error || 'Fehler beim Löschen')
+      }
+
+      router.push('/admin/protocols')
+    } catch (err) {
+      setError(getErrorMessage(err))
+      setDeleting(false)
+      setShowDeleteDialog(false)
     }
   }
 
@@ -566,16 +592,31 @@ export default function ProtocolDetailClient({ protocol, actionLinks, teamMember
             </div>
           )}
 
-          {/* Finalize Button (review status only) */}
-          {isReview && (
-            <div className="flex justify-end pt-4">
-              <button
-                onClick={() => setShowFinalizeDialog(true)}
-                className="flex items-center gap-2 px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
-              >
-                <CheckCircle2 className="w-4 h-4" />
-                Protokoll abschliessen
-              </button>
+          {/* Action Buttons */}
+          {(isReview || (isProtocolCreator || isSuperAdmin)) && (
+            <div className="flex justify-between pt-4">
+              <div>
+                {(isProtocolCreator || isSuperAdmin) && (
+                  <button
+                    onClick={() => setShowDeleteDialog(true)}
+                    className="flex items-center gap-2 px-4 py-2 text-red-600 border border-red-300 rounded-lg hover:bg-red-50 transition-colors"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                    Löschen
+                  </button>
+                )}
+              </div>
+              <div>
+                {isReview && (
+                  <button
+                    onClick={() => setShowFinalizeDialog(true)}
+                    className="flex items-center gap-2 px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+                  >
+                    <CheckCircle2 className="w-4 h-4" />
+                    Protokoll abschliessen
+                  </button>
+                )}
+              </div>
             </div>
           )}
         </>
@@ -605,6 +646,20 @@ export default function ProtocolDetailClient({ protocol, actionLinks, teamMember
         isLoading={finalizing}
         onConfirm={handleFinalize}
         onClose={() => setShowFinalizeDialog(false)}
+      />
+
+      {/* Delete Confirmation Dialog */}
+      <ConfirmDialog
+        isOpen={showDeleteDialog}
+        title="Protokoll löschen"
+        message="Das Protokoll und alle verknüpften Daten (Abstimmungen, Entscheidungen) werden unwiderruflich gelöscht."
+        itemName={protocol.title}
+        confirmLabel="Löschen"
+        cancelLabel="Abbrechen"
+        variant="danger"
+        isLoading={deleting}
+        onConfirm={handleDelete}
+        onClose={() => setShowDeleteDialog(false)}
       />
     </div>
   )

@@ -1,8 +1,9 @@
 /**
  * Decision Detail API
  *
- * GET   /api/decisions/[id] - Get single decision
- * PATCH /api/decisions/[id] - Update decision (draft/discussion only)
+ * GET    /api/decisions/[id] - Get single decision
+ * PATCH  /api/decisions/[id] - Update decision (draft/discussion only)
+ * DELETE /api/decisions/[id] - Delete decision (creator or super admin)
  */
 
 import { NextRequest } from 'next/server'
@@ -10,7 +11,8 @@ import { withAdmin, ValidSession } from '@/lib/api/middleware'
 import { apiSuccess, apiError, apiNotFound, apiBadRequest } from '@/lib/api/helpers'
 import { getDbUserId } from '@/lib/api/task-helpers'
 import { updateDecisionSchema } from '@/lib/schemas/decisions'
-import { getDecisionById, updateDecision } from '@/lib/services/decisions'
+import { getDecisionById, updateDecision, deleteDecision } from '@/lib/services/decisions'
+import { isSuperAdmin } from '@/lib/permissions'
 import { ERROR_MESSAGES, SUCCESS_MESSAGES } from '@/config/error-messages'
 import { logger } from '@/lib/logger'
 
@@ -75,5 +77,35 @@ export const PATCH = withAdmin<RouteParams>(async (
   } catch (error) {
     logger.error('Error updating decision', { error, userId: session.user.id })
     return apiError(error, ERROR_MESSAGES.DECISION_UPDATE_FAILED)
+  }
+})
+
+export const DELETE = withAdmin<RouteParams>(async (
+  request: NextRequest,
+  session: ValidSession,
+  context,
+) => {
+  try {
+    const decisionId = context?.params?.id
+    if (!decisionId) return apiBadRequest('Entscheidungs-ID erforderlich')
+
+    const userLookup = await getDbUserId(session)
+    if ('error' in userLookup) return userLookup.error
+    const { dbUserId } = userLookup
+
+    const isAdmin = isSuperAdmin(session.user.email)
+
+    const result = await deleteDecision(decisionId, dbUserId, isAdmin)
+
+    if ('error' in result) {
+      if (result.error === 'not_found') return apiNotFound('Entscheidung')
+      return apiBadRequest('Keine Berechtigung zum Löschen dieser Entscheidung')
+    }
+
+    logger.info('Decision deleted', { decisionId, userId: dbUserId })
+    return apiSuccess({ deleted: true })
+  } catch (error) {
+    logger.error('Error deleting decision', { error, userId: session.user.id })
+    return apiError(error, 'Fehler beim Löschen der Entscheidung')
   }
 })

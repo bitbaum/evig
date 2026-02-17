@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState, useCallback } from 'react';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import {
   DECISION_STATUS_CONFIG,
@@ -14,6 +15,7 @@ import {
   type DecisionType,
   type VotingMethod,
 } from '@/config/decisions';
+import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import VotingPanel from './VotingPanel';
 import DiscussionThread from './DiscussionThread';
 import ParticipationCard from './ParticipationCard';
@@ -50,8 +52,12 @@ interface DecisionDetail {
 
 export default function DecisionDetailClient({
   decisionId,
+  currentUserId,
+  isSuperAdmin,
 }: {
   decisionId: string;
+  currentUserId: string;
+  isSuperAdmin: boolean;
 }) {
   const [decision, setDecision] = useState<DecisionDetail | null>(null);
   const [loading, setLoading] = useState(true);
@@ -60,6 +66,9 @@ export default function DecisionDetailClient({
   const [closeSummary, setCloseSummary] = useState('');
   const [showCancelInput, setShowCancelInput] = useState(false);
   const [cancelReason, setCancelReason] = useState('');
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const [deleting, setDeleting] = useState(false);
+  const router = useRouter();
 
   const fetchDecision = useCallback(() => {
     fetch(`/api/decisions/${decisionId}`)
@@ -91,6 +100,32 @@ export default function DecisionDetailClient({
     }
     fetchDecision();
   }
+
+  async function handleDelete() {
+    setDeleting(true);
+    setActionError('');
+    try {
+      const res = await fetch(`/api/decisions/${decisionId}`, {
+        method: 'DELETE',
+      });
+      const json = await res.json();
+      if (!json.success) {
+        setActionError(json.error || 'Fehler beim Löschen');
+        setDeleting(false);
+        setShowDeleteDialog(false);
+        return;
+      }
+      router.push('/admin/decisions');
+    } catch {
+      setActionError('Netzwerkfehler');
+      setDeleting(false);
+      setShowDeleteDialog(false);
+    }
+  }
+
+  const canDelete = decision
+    ? decision.creator.id === currentUserId || isSuperAdmin
+    : false;
 
   if (loading) {
     return <div className="py-12 text-center text-gray-400">Laden...</div>;
@@ -180,6 +215,14 @@ export default function DecisionDetailClient({
                 className="rounded-md border border-red-300 px-3 py-1.5 text-sm text-red-600 hover:bg-red-50"
               >
                 Abbrechen
+              </button>
+            )}
+            {canDelete && (
+              <button
+                onClick={() => setShowDeleteDialog(true)}
+                className="rounded-md border border-red-300 px-3 py-1.5 text-sm text-red-600 hover:bg-red-50"
+              >
+                Löschen
               </button>
             )}
           </div>
@@ -326,8 +369,23 @@ export default function DecisionDetailClient({
         <DiscussionThread
           decisionId={decisionId}
           readOnly={(READ_ONLY_STATUSES as readonly string[]).includes(decision.status)}
+          currentUserId={currentUserId}
         />
       )}
+
+      {/* Delete Confirmation Dialog */}
+      <ConfirmDialog
+        isOpen={showDeleteDialog}
+        title="Entscheidung löschen"
+        message="Die Entscheidung und alle verknüpften Daten (Abstimmungen, Kommentare) werden unwiderruflich gelöscht."
+        itemName={decision.title}
+        confirmLabel="Löschen"
+        cancelLabel="Abbrechen"
+        variant="danger"
+        isLoading={deleting}
+        onConfirm={handleDelete}
+        onClose={() => setShowDeleteDialog(false)}
+      />
     </div>
   );
 }

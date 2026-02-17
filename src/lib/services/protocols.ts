@@ -258,6 +258,55 @@ export async function updateProtocol(
 }
 
 // =============================================================================
+// DELETE
+// =============================================================================
+
+/**
+ * Delete a protocol and all related records (cascade).
+ * Only the creator or a super admin may delete.
+ */
+export async function deleteProtocol(
+  protocolId: string,
+  userId: string,
+  isSuperAdmin: boolean,
+): Promise<{ deleted: true } | { error: 'not_found' | 'not_authorized' }> {
+  const existing = await query<{ id: string; created_by: string }>(
+    `SELECT id, created_by FROM ${TABLE_NAMES.MEETING_PROTOCOLS} WHERE id = $1`,
+    [protocolId]
+  )
+
+  if (existing.rows.length === 0) {
+    return { error: 'not_found' }
+  }
+
+  if (existing.rows[0].created_by !== userId && !isSuperAdmin) {
+    return { error: 'not_authorized' }
+  }
+
+  await transaction(async (client) => {
+    await client.query(
+      `DELETE FROM ${TABLE_NAMES.PROTOCOL_ACTION_LINKS} WHERE protocol_id = $1`,
+      [protocolId]
+    )
+    await client.query(
+      `DELETE FROM ${TABLE_NAMES.PROTOCOL_DECISION_VOTES} WHERE protocol_id = $1`,
+      [protocolId]
+    )
+    await client.query(
+      `DELETE FROM ${TABLE_NAMES.PROTOCOL_DECISION_OUTCOMES} WHERE protocol_id = $1`,
+      [protocolId]
+    )
+    await client.query(
+      `DELETE FROM ${TABLE_NAMES.MEETING_PROTOCOLS} WHERE id = $1`,
+      [protocolId]
+    )
+  })
+
+  logger.info('Protocol deleted', { protocolId, userId })
+  return { deleted: true }
+}
+
+// =============================================================================
 // AI PROCESSING
 // =============================================================================
 
