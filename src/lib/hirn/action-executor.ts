@@ -145,7 +145,7 @@ export async function executeHirnAction(input: ExecuteActionInput, dbUserId: str
   }
 }
 
-function buildPreview(actionType: HirnActionType, payload: Record<string, unknown>) {
+function buildPreview(actionType: ExecuteActionInput['actionType'], payload: Record<string, unknown>) {
   switch (actionType) {
     case 'create_product_draft':
       return {
