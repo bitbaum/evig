@@ -40,6 +40,12 @@ jobs:
         run: npm run build
         env:
           NEXT_PUBLIC_VERCEL_ENV: preview
+          # Build-time placeholders so strict env validation doesn't fail during CI compile.
+          AUTH_SECRET: ci-build-placeholder-secret-32chars
+          DB_HOST: localhost
+          DB_NAME: revampit_ci
+          DB_USER: ci
+          DB_PASSWORD: ci
 
   # Auth smoke gate: verifies login flow end-to-end when secrets are present
   auth-smoke:
