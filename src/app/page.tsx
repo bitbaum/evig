@@ -6,6 +6,7 @@ import { VALUE_PROPS, TESTIMONIALS } from '@/data/homepage'
 import AsSeenInLogos from '@/components/about/AsSeenInLogos'
 import Heading from '@/components/ui/Heading'
 import { PageHero } from '@/components/layout/PageHero'
+import { NewsletterSignup } from '@/components/community/NewsletterSignup'
 
 export const metadata: Metadata = {
   title: 'revamp-it – Alte Hardware. Neues Leben. | Computer-Reparatur & Linux in der Schweiz',
@@ -376,6 +377,13 @@ export default function Home() {
             <Link href="/about" className="text-sm font-semibold leading-6 text-gray-900">
               Mehr erfahren <ArrowRight className="inline h-4 w-4" />
             </Link>
+          </div>
+          <div className="mt-10 max-w-md mx-auto">
+            <NewsletterSignup
+              title="Updates bleiben"
+              description="Erfahre, wie wir Technologie nachhaltig machen — kein Spam."
+              source="homepage-cta"
+            />
           </div>
         </div>
       </div>

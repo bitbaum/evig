@@ -129,6 +129,40 @@ export async function POST(request: NextRequest) {
       })
     }
 
+    // Sync to Listmonk if enabled
+    if (process.env.LISTMONK_ENABLED === 'true') {
+      const listmonkUrl = process.env.LISTMONK_URL || 'http://localhost:9090'
+      const listmonkUser = process.env.LISTMONK_USERNAME || 'admin'
+      const listmonkPassword = process.env.LISTMONK_PASSWORD || ''
+      const credentials = Buffer.from(`${listmonkUser}:${listmonkPassword}`).toString('base64')
+
+      try {
+        const lmResponse = await fetch(`${listmonkUrl}/api/subscribers`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Basic ${credentials}`,
+          },
+          body: JSON.stringify({
+            email: normalizedEmail,
+            name: normalizedEmail.split('@')[0],
+            lists: [1],
+            status: 'enabled',
+            preconfirm_subscriptions: false,
+            attribs: { source: body.source || 'website' },
+          }),
+        })
+
+        if (!lmResponse.ok && lmResponse.status !== 409) {
+          logger.warn('Listmonk sync failed', { status: lmResponse.status, email: normalizedEmail })
+        } else {
+          logger.info('Listmonk subscriber synced', { email: normalizedEmail })
+        }
+      } catch (lmError) {
+        logger.warn('Listmonk sync error', { error: lmError, email: normalizedEmail })
+      }
+    }
+
     return apiSuccess({
       message: 'Bestätigungs-E-Mail gesendet',
     })

@@ -5,6 +5,7 @@ import { mainNavigation, socialLinks } from '@/config/navigation'
 import { Logo } from '@/components/ui/Logo'
 import { Mail, Phone, MapPin, Clock } from 'lucide-react'
 import { siteConfig } from '@/config/site'
+import { NewsletterSignup } from '@/components/community/NewsletterSignup'
 
 export default function Footer() {
   return (
@@ -89,6 +90,16 @@ export default function Footer() {
               </div>
             </div>
           </div>
+        </div>
+
+        {/* Newsletter */}
+        <div className="mt-10 pt-8 border-t border-gray-800">
+          <NewsletterSignup
+            title="Newsletter"
+            description="Updates zu unserer Arbeit — keine Werbung."
+            source="footer"
+            variant="dark"
+          />
         </div>
 
         {/* Social Links */}
