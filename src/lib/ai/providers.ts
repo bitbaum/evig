@@ -9,23 +9,72 @@
  */
 
 import { logger } from '@/lib/logger'
+import { query } from '@/lib/auth/db'
+import { TABLE_NAMES } from '@/config/database'
 
 // =============================================================================
 // CONFIGURATION (SSOT - all AI provider settings in one place)
 // =============================================================================
 
-const GROQ_API_KEY = process.env.GROQ_API_KEY || ''
 const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions'
 const GROQ_MODEL = 'llama-3.3-70b-versatile'
 
-const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY || ''
 const OPENROUTER_API_URL = 'https://openrouter.ai/api/v1/chat/completions'
 const OPENROUTER_MODEL = 'meta-llama/llama-3.3-70b-instruct:free'
 
-const OLLAMA_URL = process.env.OLLAMA_URL || 'http://localhost:11434'
-const OLLAMA_MODEL = process.env.OLLAMA_MODEL || 'llama3.2'
-
 const DEFAULT_TIMEOUT_MS = 30000
+
+interface ProviderRuntimeConfig {
+  groqApiKey: string
+  openRouterApiKey: string
+  ollamaUrl: string
+  ollamaModel: string
+}
+
+interface DbProviderSettingsRow {
+  provider: ProviderName
+  is_enabled: boolean
+  settings: {
+    api_key?: string
+    base_url?: string
+    model?: string
+    [key: string]: unknown
+  } | null
+}
+
+async function loadProviderRuntimeConfig(): Promise<ProviderRuntimeConfig> {
+  const envConfig: ProviderRuntimeConfig = {
+    groqApiKey: process.env.GROQ_API_KEY || '',
+    openRouterApiKey: process.env.OPENROUTER_API_KEY || '',
+    ollamaUrl: process.env.OLLAMA_URL || process.env.OLLAMA_BASE_URL || 'http://localhost:11434',
+    ollamaModel: process.env.OLLAMA_MODEL || 'llama3.2',
+  }
+
+  try {
+    const result = await query<DbProviderSettingsRow>(
+      `SELECT provider, is_enabled, settings
+       FROM ${TABLE_NAMES.HIRN_PROVIDER_SETTINGS}
+       WHERE scope = 'system'`,
+      []
+    )
+
+    const byProvider = new Map(result.rows.map(r => [r.provider, r]))
+
+    const groq = byProvider.get('groq')
+    const openrouter = byProvider.get('openrouter')
+    const ollama = byProvider.get('ollama')
+
+    return {
+      groqApiKey: (groq?.is_enabled ? groq.settings?.api_key : undefined) || envConfig.groqApiKey,
+      openRouterApiKey: (openrouter?.is_enabled ? openrouter.settings?.api_key : undefined) || envConfig.openRouterApiKey,
+      ollamaUrl: (ollama?.is_enabled ? ollama.settings?.base_url : undefined) || envConfig.ollamaUrl,
+      ollamaModel: (ollama?.is_enabled ? ollama.settings?.model : undefined) || envConfig.ollamaModel,
+    }
+  } catch (error) {
+    logger.warn('AI provider settings table unavailable; falling back to environment config', { error })
+    return envConfig
+  }
+}
 
 // =============================================================================
 // TYPES
@@ -64,8 +113,8 @@ export interface CallOptions {
 // PROVIDER IMPLEMENTATIONS
 // =============================================================================
 
-async function callGroq(opts: CallOptions): Promise<ProviderResult | ProviderError> {
-  if (!GROQ_API_KEY) {
+async function callGroq(opts: CallOptions, cfg: ProviderRuntimeConfig): Promise<ProviderResult | ProviderError> {
+  if (!cfg.groqApiKey) {
     return { provider: 'groq', reason: 'no_key', message: 'GROQ_API_KEY nicht konfiguriert' }
   }
 
@@ -77,7 +126,7 @@ async function callGroq(opts: CallOptions): Promise<ProviderResult | ProviderErr
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${GROQ_API_KEY}`,
+        'Authorization': `Bearer ${cfg.groqApiKey}`,
       },
       body: JSON.stringify({
         model: GROQ_MODEL,
@@ -121,8 +170,8 @@ async function callGroq(opts: CallOptions): Promise<ProviderResult | ProviderErr
   }
 }
 
-async function callOpenRouter(opts: CallOptions): Promise<ProviderResult | ProviderError> {
-  if (!OPENROUTER_API_KEY) {
+async function callOpenRouter(opts: CallOptions, cfg: ProviderRuntimeConfig): Promise<ProviderResult | ProviderError> {
+  if (!cfg.openRouterApiKey) {
     return { provider: 'openrouter', reason: 'no_key', message: 'OPENROUTER_API_KEY nicht konfiguriert' }
   }
 
@@ -134,7 +183,7 @@ async function callOpenRouter(opts: CallOptions): Promise<ProviderResult | Provi
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${OPENROUTER_API_KEY}`,
+        'Authorization': `Bearer ${cfg.openRouterApiKey}`,
         'HTTP-Referer': process.env.NEXT_PUBLIC_APP_URL || 'https://revamp-it.ch',
         'X-Title': 'RevampIT',
       },
@@ -183,16 +232,16 @@ async function callOpenRouter(opts: CallOptions): Promise<ProviderResult | Provi
   }
 }
 
-async function callOllama(opts: CallOptions): Promise<ProviderResult | ProviderError> {
+async function callOllama(opts: CallOptions, cfg: ProviderRuntimeConfig): Promise<ProviderResult | ProviderError> {
   const controller = new AbortController()
   const timeoutId = setTimeout(() => controller.abort(), opts.timeoutMs || DEFAULT_TIMEOUT_MS)
 
   try {
-    const response = await fetch(`${OLLAMA_URL}/api/generate`, {
+    const response = await fetch(`${cfg.ollamaUrl}/api/generate`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        model: OLLAMA_MODEL,
+        model: cfg.ollamaModel,
         prompt: `${opts.systemPrompt}\n\n${opts.userPrompt}`,
         stream: false,
         options: {
@@ -215,7 +264,7 @@ async function callOllama(opts: CallOptions): Promise<ProviderResult | ProviderE
     }
 
     const text = (result.response as string) || ''
-    return { text, model: `ollama:${OLLAMA_MODEL}`, provider: 'ollama' }
+    return { text, model: `ollama:${cfg.ollamaModel}`, provider: 'ollama' }
   } catch (error) {
     if (error instanceof Error && error.name === 'AbortError') {
       return { provider: 'ollama', reason: 'timeout', message: `Zeitüberschreitung nach ${(opts.timeoutMs || DEFAULT_TIMEOUT_MS) / 1000}s` }
@@ -239,7 +288,9 @@ function isError(result: ProviderResult | ProviderError): result is ProviderErro
  * Returns the first successful response with info about which providers failed.
  */
 export async function callWithFallback(opts: CallOptions): Promise<CallResult | null> {
-  const providers: Array<(o: CallOptions) => Promise<ProviderResult | ProviderError>> = [
+  const cfg = await loadProviderRuntimeConfig()
+
+  const providers: Array<(o: CallOptions, c: ProviderRuntimeConfig) => Promise<ProviderResult | ProviderError>> = [
     callGroq,
     callOpenRouter,
     callOllama,
@@ -248,7 +299,7 @@ export async function callWithFallback(opts: CallOptions): Promise<CallResult | 
   const failedProviders: ProviderError[] = []
 
   for (const provider of providers) {
-    const result = await provider(opts)
+    const result = await provider(opts, cfg)
 
     if (isError(result)) {
       failedProviders.push(result)

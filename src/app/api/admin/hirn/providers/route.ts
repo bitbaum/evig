@@ -10,7 +10,7 @@
 
 import { NextRequest } from 'next/server'
 import { withAdmin } from '@/lib/api/middleware'
-import { getProviderSettings, setDefaultProvider, createProvider, type ProviderName } from '@/lib/hirn/providers'
+import { getProviderSettings, setDefaultProvider, createProvider, updateProviderSettings, type ProviderName } from '@/lib/hirn/providers'
 import { logger } from '@/lib/logger'
 import { apiSuccess, apiError, apiBadRequest, apiNotFound } from '@/lib/api/helpers'
 
@@ -53,10 +53,14 @@ export const GET = withAdmin(async (request: NextRequest) => {
 export const PATCH = withAdmin(async (request: NextRequest, session) => {
   try {
     const body = await request.json()
-    const { provider, isDefault } = body
+    const { provider, isDefault, apiKey } = body
 
     if (!provider) {
       return apiBadRequest('Provider ist erforderlich')
+    }
+
+    if (apiKey !== undefined && typeof apiKey !== 'string') {
+      return apiBadRequest('apiKey muss ein String sein')
     }
 
     // Check if provider is available before setting as default
@@ -71,10 +75,14 @@ export const PATCH = withAdmin(async (request: NextRequest, session) => {
       return apiBadRequest('Provider ist nicht aktiviert')
     }
 
+    const effectiveApiKey = apiKey !== undefined
+      ? apiKey.trim()
+      : (providerSettings.settings.api_key || '')
+
     // Check availability
     try {
       const providerInstance = createProvider(provider as ProviderName, {
-        apiKey: providerSettings.settings.api_key,
+        apiKey: effectiveApiKey,
         baseUrl: providerSettings.settings.base_url,
         model: providerSettings.settings.model,
       })
@@ -83,15 +91,28 @@ export const PATCH = withAdmin(async (request: NextRequest, session) => {
       if (!isAvailable) {
         return apiBadRequest(`Provider ${provider} ist nicht verfügbar. Prüfe API-Key oder Ollama-Status.`)
       }
-    } catch (err) {
+    } catch (_err) {
       return apiBadRequest(`Provider ${provider} konnte nicht geprüft werden`)
+    }
+
+    if (apiKey !== undefined) {
+      await updateProviderSettings(
+        provider as ProviderName,
+        { api_key: effectiveApiKey || undefined },
+        'system'
+      )
     }
 
     if (isDefault) {
       await setDefaultProvider(provider as ProviderName, 'system')
     }
 
-    logger.info('Provider updated', { provider, isDefault, userId: session.user.id })
+    logger.info('Provider updated', {
+      provider,
+      isDefault,
+      hasApiKeyUpdate: apiKey !== undefined,
+      userId: session.user.id,
+    })
 
     return apiSuccess({ message: 'Provider aktualisiert' })
   } catch (error) {
