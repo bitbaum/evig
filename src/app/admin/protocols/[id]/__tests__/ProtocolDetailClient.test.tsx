@@ -112,7 +112,7 @@ describe('ProtocolDetailClient', () => {
       />
     )
 
-    fireEvent.click(screen.getByRole('button', { name: /1 Aufgaben auf einmal erstellen/i }))
+    fireEvent.click(screen.getByRole('button', { name: /Schritt 4: 1 Aufgaben erstellen/i }))
 
     await waitFor(() => {
       expect(global.fetch).toHaveBeenCalledWith(
@@ -120,6 +120,25 @@ describe('ProtocolDetailClient', () => {
         expect.objectContaining({ method: 'POST' })
       )
     })
+  })
+
+  it('shows workflow stepper with next-step guidance', () => {
+    render(
+      <ProtocolDetailClient
+        protocol={baseProtocol}
+        actionLinks={[]}
+        teamMembers={[]}
+        decisionVotes={[]}
+        decisionOutcomes={[]}
+        currentUserId="u-1"
+        isProtocolCreator
+        isSuperAdmin={false}
+      />
+    )
+
+    expect(screen.getByText('Workflow')).toBeInTheDocument()
+    expect(screen.getByText(/Schritt 3 von 5/i)).toBeInTheDocument()
+    expect(screen.getByText(/Nächster Schritt: Aufgaben erstellen/i)).toBeInTheDocument()
   })
 
   it('shows actionable empty state when no action items were extracted', () => {

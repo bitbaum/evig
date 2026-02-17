@@ -13,6 +13,7 @@ import {
   MEETING_TYPE_LABELS,
   PROTOCOL_STATUS_LABELS,
 } from '@/config/protocols'
+import { PROTOCOL_WORKFLOW_STEPS } from '@/lib/protocols/workflow'
 
 export default function ProtocolListClient() {
   const router = useRouter()
@@ -84,6 +85,23 @@ export default function ProtocolListClient() {
             {Object.entries(PROTOCOL_STATUS_LABELS).map(([key, label]) => (
               <option key={key} value={key}>
                 {label}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        {/* Workflow step filter */}
+        <div className="flex items-center gap-2">
+          <label className="text-sm text-gray-600">Schritt:</label>
+          <select
+            className="text-sm border rounded px-2 py-1"
+            value={searchParams.get('step') || ''}
+            onChange={(e) => handleFilterChange('step', e.target.value)}
+          >
+            <option value="">Alle</option>
+            {PROTOCOL_WORKFLOW_STEPS.map((step, index) => (
+              <option key={step.id} value={step.id}>
+                {index + 1}) {step.label}
               </option>
             ))}
           </select>

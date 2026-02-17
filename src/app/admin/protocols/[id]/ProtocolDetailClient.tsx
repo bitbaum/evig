@@ -31,6 +31,7 @@ import {
 import type { ProtocolDetail, ActionLinkRecord, StructuredNotes, DecisionVoteRecord, DecisionOutcomeRecord } from '@/lib/schemas/protocols'
 import { getErrorMessage } from '@/lib/utils/error'
 import { validateAudioUpload } from '@/lib/protocols/audio-validation'
+import { PROTOCOL_WORKFLOW_STEPS, getProtocolWorkflowProgress } from '@/lib/protocols/workflow'
 import DecisionActions from './DecisionActions'
 import {
   Loader2,
@@ -115,6 +116,13 @@ export default function ProtocolDetailClient({ protocol, actionLinks, teamMember
   const unlinkedTaskItems = (notes?.action_items || []).filter(
     item => item.item_type === 'task' && !linkedActionIds.has(item.id)
   )
+
+  const workflowProgress = getProtocolWorkflowProgress({
+    status: protocol.status,
+    hasStructuredNotes: Boolean(notes),
+    unlinkedTaskCount: unlinkedTaskItems.length,
+  })
+  const currentStepIndex = PROTOCOL_WORKFLOW_STEPS.findIndex((step) => step.id === workflowProgress.currentStepId)
 
   const toggleTopic = (id: string) => {
     setExpandedTopics(prev => {
@@ -384,6 +392,42 @@ export default function ProtocolDetailClient({ protocol, actionLinks, teamMember
         </div>
       )}
 
+      <div className="bg-white rounded-lg border p-4 sm:p-5 space-y-3">
+        <div className="flex items-center justify-between gap-3">
+          <h2 className="text-sm font-semibold text-gray-900">Workflow</h2>
+          <span className="text-xs text-gray-500">
+            Schritt {currentStepIndex + 1} von {PROTOCOL_WORKFLOW_STEPS.length}
+          </span>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-5 gap-2">
+          {PROTOCOL_WORKFLOW_STEPS.map((step, index) => {
+            const isDone = index < currentStepIndex
+            const isCurrent = index === currentStepIndex
+            return (
+              <div
+                key={step.id}
+                className={`rounded-lg border px-3 py-2 text-xs ${
+                  isCurrent
+                    ? 'border-blue-300 bg-blue-50 text-blue-800'
+                    : isDone
+                    ? 'border-green-200 bg-green-50 text-green-700'
+                    : 'border-gray-200 bg-gray-50 text-gray-500'
+                }`}
+              >
+                <p className="font-semibold">{index + 1}. {step.label}</p>
+              </div>
+            )
+          })}
+        </div>
+        {workflowProgress.nextStepId && (
+          <div className="rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-900">
+            <p className="font-medium">Nächster Schritt: {PROTOCOL_WORKFLOW_STEPS.find((step) => step.id === workflowProgress.nextStepId)?.label}</p>
+            {workflowProgress.ctaHint && <p className="text-amber-800">{workflowProgress.ctaHint}</p>}
+            {workflowProgress.ctaLabel && <p className="text-amber-800">Aktion: {workflowProgress.ctaLabel}</p>}
+          </div>
+        )}
+      </div>
+
       {/* Re-process section — shown at top for visibility in review mode */}
       {isReview && (
         <details className="bg-amber-50 rounded-lg border border-amber-200">
@@ -545,7 +589,7 @@ export default function ProtocolDetailClient({ protocol, actionLinks, teamMember
               ) : (
                 <>
                   <Wand2 className="w-4 h-4" />
-                  Verarbeiten
+                  Schritt 2 starten: KI-Strukturierung
                 </>
               )}
             </button>
@@ -679,7 +723,7 @@ export default function ProtocolDetailClient({ protocol, actionLinks, teamMember
                     disabled={bulkCreatingTasks}
                     className="text-sm px-3 py-1.5 rounded-lg border border-blue-300 text-blue-700 hover:bg-blue-50 disabled:opacity-50"
                   >
-                    {bulkCreatingTasks ? 'Erstellt...' : `${unlinkedTaskItems.length} Aufgaben auf einmal erstellen`}
+                    {bulkCreatingTasks ? 'Erstellt...' : `Schritt 4: ${unlinkedTaskItems.length} Aufgaben erstellen`}
                   </button>
                 )}
               </div>
@@ -818,7 +862,7 @@ export default function ProtocolDetailClient({ protocol, actionLinks, teamMember
                     className="flex items-center gap-2 px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
                   >
                     <CheckCircle2 className="w-4 h-4" />
-                    Protokoll abschliessen
+                    Schritt 5: Protokoll abschliessen
                   </button>
                 )}
               </div>

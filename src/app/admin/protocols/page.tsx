@@ -23,6 +23,10 @@ import {
 } from '@/config/protocols'
 import type { MeetingType } from '@/config/protocols'
 import {
+  PROTOCOL_WORKFLOW_STEPS,
+  getProtocolWorkflowStep,
+} from '@/lib/protocols/workflow'
+import {
   Plus,
   FileText,
   Clock,
@@ -53,7 +57,7 @@ const MEETING_TYPE_ICON_MAP: Record<string, React.ComponentType<{ className?: st
 export default async function ProtocolsAdminPage({
   searchParams,
 }: {
-  searchParams: Promise<{ meeting_type?: string; status?: string; q?: string }>
+  searchParams: Promise<{ meeting_type?: string; status?: string; step?: string; q?: string }>
 }) {
   const params = await searchParams
 
@@ -81,6 +85,14 @@ export default async function ProtocolsAdminPage({
       q: params.q,
     }),
   ])
+
+  const stepFilter = params.step
+  const validStepFilter = PROTOCOL_WORKFLOW_STEPS.some((step) => step.id === stepFilter)
+    ? stepFilter
+    : undefined
+  const filteredProtocols = validStepFilter
+    ? protocols.filter((protocol) => getProtocolWorkflowStep(protocol.status) === validStepFilter)
+    : protocols
 
   return (
     <AdminPageWrapper
@@ -156,7 +168,7 @@ export default async function ProtocolsAdminPage({
 
       {/* Protocol List */}
       <div className="bg-white rounded-lg border overflow-hidden overflow-x-auto">
-        {protocols.length === 0 ? (
+        {filteredProtocols.length === 0 ? (
           <div className="p-12 text-center">
             <FileText className="w-12 h-12 text-gray-300 mx-auto mb-4" />
             <h3 className="text-lg font-medium text-gray-900 mb-2">
@@ -189,13 +201,16 @@ export default async function ProtocolsAdminPage({
                 <th className="text-left px-4 py-3 text-sm font-medium text-gray-600">
                   Status
                 </th>
+                <th className="text-left px-4 py-3 text-sm font-medium text-gray-600">
+                  Workflow
+                </th>
                 <th className="text-right px-4 py-3 text-sm font-medium text-gray-600">
                   Aktionen
                 </th>
               </tr>
             </thead>
             <tbody className="divide-y">
-              {protocols.map((protocol) => {
+              {filteredProtocols.map((protocol) => {
                 const iconName = MEETING_TYPE_ICONS[protocol.meeting_type as MeetingType]
                 const TypeIcon = MEETING_TYPE_ICON_MAP[iconName]
                 return (
@@ -236,6 +251,21 @@ export default async function ProtocolsAdminPage({
                       >
                         {PROTOCOL_STATUS_LABELS[protocol.status]}
                       </span>
+                    </td>
+                    <td className="px-4 py-3">
+                      {(() => {
+                        const workflowStep = getProtocolWorkflowStep(protocol.status)
+                        const workflowIndex = PROTOCOL_WORKFLOW_STEPS.findIndex((step) => step.id === workflowStep) + 1
+                        const workflowLabel = PROTOCOL_WORKFLOW_STEPS.find((step) => step.id === workflowStep)?.label || 'Workflow'
+                        return (
+                          <span className="inline-flex items-center gap-1.5 px-2 py-1 text-xs font-medium rounded-full bg-slate-100 text-slate-700">
+                            <span className="inline-flex items-center justify-center w-4 h-4 rounded-full bg-slate-200 text-[10px] font-semibold">
+                              {workflowIndex}
+                            </span>
+                            {workflowLabel}
+                          </span>
+                        )
+                      })()}
                     </td>
                     <td className="px-4 py-3 text-right">
                       <div className="inline-flex items-center gap-3">
