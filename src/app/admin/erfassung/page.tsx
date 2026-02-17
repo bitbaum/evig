@@ -49,6 +49,7 @@ export default function ErfassungPage() {
   const [aiInstruction, setAiInstruction] = useState('')
   const [aiRefining, setAiRefining] = useState(false)
   const [aiError, setAiError] = useState('')
+  const [saveError, setSaveError] = useState('')
   const [aiSuccess, setAiSuccess] = useState('')
   const [dataEntryCollapsed, setDataEntryCollapsed] = useState(false)
 
@@ -281,6 +282,7 @@ export default function ErfassungPage() {
   const handleSubmit = async (e: React.FormEvent, action: 'draft' | 'erfassen' | 'publish' = 'draft') => {
     e.preventDefault()
     setIsLoading(true)
+    setSaveError('')
 
     try {
       const specifications: Record<string, string> = {}
@@ -318,7 +320,7 @@ export default function ErfassungPage() {
         })
 
         if (!response.ok) {
-          throw new Error('Failed to update product')
+          throw new Error('Produkt konnte nicht aktualisiert werden')
         }
 
         router.push('/admin/products')
@@ -332,7 +334,7 @@ export default function ErfassungPage() {
         })
 
         if (!response.ok) {
-          throw new Error('Failed to save product')
+          throw new Error('Produkt konnte nicht gespeichert werden')
         }
 
         const result = await response.json()
@@ -345,7 +347,7 @@ export default function ErfassungPage() {
       }
     } catch (error) {
       logger.error('Error saving product', { error })
-      alert('Fehler beim Speichern. Bitte erneut versuchen.')
+      setSaveError(error instanceof Error ? error.message : 'Fehler beim Speichern. Bitte erneut versuchen.')
     } finally {
       setIsLoading(false)
     }
@@ -660,6 +662,11 @@ export default function ErfassungPage() {
           )}
 
           <form onSubmit={(e) => handleSubmit(e, 'draft')} className="space-y-6">
+            {saveError && (
+              <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-300 px-4 py-3 rounded-lg text-sm">
+                {saveError}
+              </div>
+            )}
             <ProductForm
               formData={formData}
               aiMetadata={aiMetadata}

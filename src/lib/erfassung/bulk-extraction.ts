@@ -204,19 +204,19 @@ function fallbackParse(text: string, sourceType: 'text' | 'voice'): BulkProduct[
       }
     }
 
-    // 4. Detect category from known product patterns
+    // 4. Detect category from known product patterns (values from KATEGORIEN SSOT)
     let hauptkategorie = ''
+    const catLaptops = KATEGORIEN.find(k => k.label === 'Laptops')!.value
+    const catDesktops = KATEGORIEN.find(k => k.label === 'Desktop PCs')!.value
+    const catMonitors = KATEGORIEN.find(k => k.label === 'Monitore')!.value
+    const catTablets = KATEGORIEN.find(k => k.label === 'Tablets')!.value
+    const catPhones = KATEGORIEN.find(k => k.label === 'Smartphones')!.value
     const categoryPatterns: [RegExp, string][] = [
-      // Laptops (category '10')
-      [/\b(thinkpad|latitude|elitebook|probook|macbook|ideapad|inspiron|pavilion|vivobook|zenbook|chromebook|swift|aspire|travelmate|lifebook)\b/i, '10'],
-      // Desktop PCs (category '20')
-      [/\b(optiplex|prodesk|thinkcentre|imac|mac\s*mini|nuc|elitedesk)\b/i, '20'],
-      // Monitors (category '30')
-      [/\b(ultrasharp|ultrawide|monitor|bildschirm|display|eizo)\b/i, '30'],
-      // Tablets (category '40')
-      [/\b(ipad|galaxy\s*tab|surface\s*(go|pro)|tablet)\b/i, '40'],
-      // Phones (category '50')
-      [/\b(iphone|galaxy\s*s\d|pixel\s*\d|smartphone)\b/i, '50'],
+      [/\b(thinkpad|latitude|elitebook|probook|macbook|ideapad|inspiron|pavilion|vivobook|zenbook|chromebook|swift|aspire|travelmate|lifebook)\b/i, catLaptops],
+      [/\b(optiplex|prodesk|thinkcentre|imac|mac\s*mini|nuc|elitedesk)\b/i, catDesktops],
+      [/\b(ultrasharp|ultrawide|monitor|bildschirm|display|eizo)\b/i, catMonitors],
+      [/\b(ipad|galaxy\s*tab|surface\s*(go|pro)|tablet)\b/i, catTablets],
+      [/\b(iphone|galaxy\s*s\d|pixel\s*\d|smartphone)\b/i, catPhones],
     ]
     for (const [pattern, catValue] of categoryPatterns) {
       if (pattern.test(line)) {

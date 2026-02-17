@@ -16,6 +16,7 @@ import { logger } from '@/lib/logger'
 import type { VoiceProductData, AIFieldSource, AIFieldMetadata, ErfassungFormData, VerificationSource } from '@/types/erfassung'
 import { ERFASSUNG_PROMPTS, fillPromptTemplate } from '@/lib/ai/config/prompts'
 import { callWithFallback } from '@/lib/ai/providers'
+import { KATEGORIEN } from '@/config/erfassung/categories'
 
 const OLLAMA_MODEL = process.env.OLLAMA_MODEL || 'llama3.2'
 const OLLAMA_URL = process.env.OLLAMA_URL || 'http://localhost:11434'
@@ -211,13 +212,21 @@ function fastParseProductText(text: string): VoiceProductData {
   else if (textLower.includes('akzeptabel') || textLower.includes('fair')) zustand = 'fair'
   else if (textLower.includes('schlecht')) zustand = 'poor'
 
-  // Category - default to laptops
-  const hauptkategorie = textLower.includes('monitor') ? '30'
-    : textLower.includes('desktop') || textLower.includes('pc') ? '20'
-    : '10'
+  // Category - default to laptops (values derived from KATEGORIEN SSOT)
+  const catLaptops = KATEGORIEN.find(k => k.label === 'Laptops')!
+  const catDesktops = KATEGORIEN.find(k => k.label === 'Desktop PCs')!
+  const catMonitors = KATEGORIEN.find(k => k.label === 'Monitore')!
 
-  const unterkategorie = hauptkategorie === '10'
-    ? (textLower.includes('gaming') ? '103' : textLower.includes('business') || textLower.includes('latitude') || textLower.includes('thinkpad') ? '101' : '102')
+  const hauptkategorie = textLower.includes('monitor') ? catMonitors.value
+    : textLower.includes('desktop') || textLower.includes('pc') ? catDesktops.value
+    : catLaptops.value
+
+  const subBusiness = catLaptops.subs.find(s => s.label === 'Business Laptops')?.value || ''
+  const subConsumer = catLaptops.subs.find(s => s.label === 'Consumer Laptops')?.value || ''
+  const subGaming = catLaptops.subs.find(s => s.label === 'Gaming Laptops')?.value || ''
+
+  const unterkategorie = hauptkategorie === catLaptops.value
+    ? (textLower.includes('gaming') ? subGaming : textLower.includes('business') || textLower.includes('latitude') || textLower.includes('thinkpad') ? subBusiness : subConsumer)
     : ''
 
   // Customer profiles based on product type

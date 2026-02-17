@@ -45,7 +45,7 @@ const CORE_TABS: TabConfig[] = [
     id: 'form',
     label: 'Text',
     icon: <Zap className="w-4 h-4" />,
-    description: 'Produktinfos eingeben, KI fuellt aus',
+    description: 'Produktinfos eingeben, KI füllt aus',
   },
   {
     id: 'file',
@@ -250,7 +250,7 @@ export function DataEntryTabs({
           <Zap className="w-5 h-5 text-purple-600 dark:text-purple-400" />
           <span className="font-semibold text-gray-900 dark:text-white">KI-Schnelleingabe</span>
           {isCollapsed && quickEntryState === 'success' && (
-            <span className="text-sm text-green-600 dark:text-green-400">(Ausgefuellt)</span>
+            <span className="text-sm text-green-600 dark:text-green-400">(Ausgefüllt)</span>
           )}
         </div>
         {isCollapsed ? (
