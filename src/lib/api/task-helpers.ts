@@ -14,6 +14,7 @@ import { ValidSession } from '@/lib/api/middleware';
 import { apiBadRequest, apiNotFound } from '@/lib/api/helpers';
 import { query } from '@/lib/auth/db';
 import { TABLE_NAMES } from '@/config/database';
+import { logger } from '@/lib/logger';
 
 /**
  * Resolve the database user ID from the Auth.js session email.
@@ -60,6 +61,64 @@ export async function getActiveTask(
   }
 
   return { task };
+}
+
+interface InAppNotificationInput {
+  recipientIds: string[]
+  title: string
+  content: string
+  relatedType?: string
+  relatedId?: string
+}
+
+/**
+ * Create in-app notifications for one or more users.
+ * Non-critical side effect: failures are logged and should not break the caller flow.
+ */
+export async function createInAppNotifications({
+  recipientIds,
+  title,
+  content,
+  relatedType,
+  relatedId,
+}: InAppNotificationInput): Promise<void> {
+  const uniqueRecipientIds = Array.from(new Set(recipientIds.filter(Boolean)))
+
+  if (uniqueRecipientIds.length === 0) {
+    return
+  }
+
+  try {
+    await query(
+      `INSERT INTO ${TABLE_NAMES.NOTIFICATIONS} (
+        user_id,
+        type,
+        title,
+        content,
+        related_type,
+        related_id,
+        sent_in_app
+      )
+      SELECT
+        u.id,
+        'system',
+        $1,
+        $2,
+        $3,
+        $4,
+        true
+      FROM ${TABLE_NAMES.USERS} u
+      WHERE u.id = ANY($5::uuid[])`,
+      [title, content, relatedType || null, relatedId || null, uniqueRecipientIds]
+    )
+  } catch (error) {
+    logger.warn('Failed to create in-app notifications', {
+      error,
+      recipientCount: uniqueRecipientIds.length,
+      relatedType,
+      relatedId,
+    })
+  }
 }
 
 // Re-export client-safe utility for convenience in server code

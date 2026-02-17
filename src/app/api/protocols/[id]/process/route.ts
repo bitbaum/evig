@@ -6,7 +6,7 @@
  * Created: 2026-02-10
  */
 
-import { NextRequest } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 import { withAdmin, ValidSession } from '@/lib/api/middleware'
 import { apiSuccess, apiError, apiBadRequest, apiNotFound } from '@/lib/api/helpers'
 import { getDbUserId } from '@/lib/api/task-helpers'
@@ -66,10 +66,22 @@ export const POST = withAdmin<RouteParams>(async (
     const processingResult = await processTranscript(protocolId, result.data.raw_transcript)
 
     if (!processingResult.success) {
-      return apiError(
-        new Error(processingResult.error || 'Processing failed'),
-        ERROR_MESSAGES.PROCESSING_FAILED
-      )
+      logger.warn('Protocol transcript processing failed', {
+        protocolId,
+        userId: dbUserId,
+        code: processingResult.code,
+        retryable: processingResult.retryable,
+        error: processingResult.error,
+      })
+
+      return NextResponse.json({
+        success: false,
+        error: processingResult.error || ERROR_MESSAGES.PROCESSING_FAILED,
+        code: processingResult.code || 'UNKNOWN',
+        retryable: processingResult.retryable ?? true,
+      }, {
+        status: processingResult.retryable ? 503 : 422,
+      })
     }
 
     return apiSuccess({

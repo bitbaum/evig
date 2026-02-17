@@ -64,10 +64,13 @@ const INPUT_METHOD_ICON_MAP: Record<string, React.ComponentType<{ className?: st
 
 export default async function ProtocolDetailPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ id: string }>
+  searchParams: Promise<{ processing?: string; error?: string; retryable?: string }>
 }) {
   const { id } = await params
+  const qp = await searchParams
 
   const session = await auth()
   if (!session?.user?.email) {
@@ -158,6 +161,10 @@ export default async function ProtocolDetailPage({
             currentUserId={dbUserId}
             isProtocolCreator={protocol.created_by === dbUserId}
             isSuperAdmin={isAdmin}
+            initialProcessingError={qp.processing === 'failed' ? {
+              message: qp.error || 'Die KI-Verarbeitung ist fehlgeschlagen.',
+              retryable: qp.retryable !== 'false',
+            } : null}
           />
         </div>
 

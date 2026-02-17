@@ -12,7 +12,7 @@
 import { NextRequest } from 'next/server';
 import { withAdmin, ValidSession } from '@/lib/api/middleware';
 import { apiSuccess, apiError, apiNotFound, apiBadRequest } from '@/lib/api/helpers';
-import { getDbUserId, getActiveTask } from '@/lib/api/task-helpers';
+import { getDbUserId, getActiveTask, createInAppNotifications } from '@/lib/api/task-helpers';
 import { query, transaction } from '@/lib/auth/db';
 import { TABLE_NAMES } from '@/config/database';
 import { TASK_STATUSES } from '@/config/tasks';
@@ -97,9 +97,30 @@ export const POST = withAdmin<RouteParams>(async (
       return requestResult.rows[0];
     });
 
-    // TODO: Send notifications
-    // - If specific user: notify that user
-    // - If broadcast: notify all staff except requester
+    // In-app notifications (non-blocking for API success)
+    let notificationRecipientIds: string[] = []
+
+    if (data.requested_user_id) {
+      // Specific user request
+      if (data.requested_user_id !== dbUserId) {
+        notificationRecipientIds = [data.requested_user_id]
+      }
+    } else {
+      // Broadcast request to all staff except requester
+      const staffResult = await query<{ id: string }>(
+        `SELECT id FROM ${TABLE_NAMES.USERS} WHERE is_staff = true AND id != $1`,
+        [dbUserId]
+      )
+      notificationRecipientIds = staffResult.rows.map(row => row.id)
+    }
+
+    await createInAppNotifications({
+      recipientIds: notificationRecipientIds,
+      title: `Aufgabenanfrage: ${task.title}`,
+      content: data.message?.trim() || 'Eine Aufgabe wurde zur Bearbeitung angefragt.',
+      relatedType: 'task',
+      relatedId: taskId,
+    })
 
     logger.info('Task request created', {
       taskId,
@@ -107,6 +128,7 @@ export const POST = withAdmin<RouteParams>(async (
       userId: session.user.id,
       isBroadcast,
       requestedUserId: data.requested_user_id || null,
+      notificationRecipients: notificationRecipientIds.length,
       taskTitle: task.title
     });
 

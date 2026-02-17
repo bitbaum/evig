@@ -203,7 +203,7 @@ export default async function ProtocolsAdminPage({
                     <td className="px-4 py-3">
                       <Link
                         href={`/admin/protocols/${protocol.id}`}
-                        className="font-medium text-gray-900 hover:text-blue-600"
+                        className="font-medium text-gray-900 hover:text-blue-600 underline-offset-2 hover:underline"
                       >
                         {protocol.title}
                       </Link>
@@ -238,11 +238,17 @@ export default async function ProtocolsAdminPage({
                       </span>
                     </td>
                     <td className="px-4 py-3 text-right">
-                      <span className="text-sm text-gray-500">
+                      <div className="inline-flex items-center gap-3">
                         {protocol.action_item_count > 0 && (
-                          <span>{protocol.action_item_count} Aktionen</span>
+                          <span className="text-sm text-gray-500">{protocol.action_item_count} Aktionen</span>
                         )}
-                      </span>
+                        <Link
+                          href={`/admin/protocols/${protocol.id}`}
+                          className="text-sm text-blue-600 hover:text-blue-800 underline"
+                        >
+                          Öffnen
+                        </Link>
+                      </div>
                     </td>
                   </tr>
                 )

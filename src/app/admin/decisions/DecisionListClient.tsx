@@ -13,6 +13,7 @@ import {
   type VotingMethod,
 } from '@/config/decisions';
 import { formatDeadline } from '@/lib/utils/date';
+import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 
 interface DecisionListItem {
   id: string;
@@ -29,24 +30,87 @@ interface DecisionListItem {
   createdAt: string;
 }
 
-export default function DecisionListClient() {
+export default function DecisionListClient({
+  currentUserId,
+  isSuperAdmin,
+}: {
+  currentUserId: string;
+  isSuperAdmin: boolean;
+}) {
   const [decisions, setDecisions] = useState<DecisionListItem[]>([]);
   const [loading, setLoading] = useState(true);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [statusFilter, setStatusFilter] = useState<string>('');
   const [typeFilter, setTypeFilter] = useState<string>('');
+  const [reloadToken, setReloadToken] = useState(0);
+  const [deleteTarget, setDeleteTarget] = useState<DecisionListItem | null>(null);
+  const [deleting, setDeleting] = useState(false);
+  const [deleteError, setDeleteError] = useState<string | null>(null);
 
   useEffect(() => {
-    const params = new URLSearchParams();
-    if (statusFilter) params.set('status', statusFilter);
-    if (typeFilter) params.set('decisionType', typeFilter);
+    let cancelled = false;
 
-    fetch(`/api/decisions?${params}`)
-      .then((res) => res.json())
-      .then((json) => {
-        if (json.success) setDecisions(json.data);
-        setLoading(false);
-      });
-  }, [statusFilter, typeFilter]);
+    const loadDecisions = async () => {
+      setLoading(true);
+      setErrorMessage(null);
+
+      try {
+        const params = new URLSearchParams();
+        if (statusFilter) params.set('status', statusFilter);
+        if (typeFilter) params.set('decisionType', typeFilter);
+
+        const response = await fetch(`/api/decisions?${params.toString()}`);
+        const json = await response.json();
+
+        if (!response.ok || !json?.success) {
+          throw new Error(json?.error || 'Entscheidungen konnten nicht geladen werden.');
+        }
+
+        if (!cancelled) {
+          setDecisions(Array.isArray(json.data) ? json.data : []);
+        }
+      } catch (error) {
+        if (!cancelled) {
+          setDecisions([]);
+          setErrorMessage(
+            error instanceof Error
+              ? error.message
+              : 'Entscheidungen konnten nicht geladen werden.'
+          );
+        }
+      } finally {
+        if (!cancelled) {
+          setLoading(false);
+        }
+      }
+    };
+
+    void loadDecisions();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [statusFilter, typeFilter, reloadToken]);
+
+  async function handleDelete() {
+    if (!deleteTarget) return;
+    setDeleting(true);
+    setDeleteError(null);
+    try {
+      const res = await fetch(`/api/decisions/${deleteTarget.id}`, { method: 'DELETE' });
+      const json = await res.json();
+      if (!res.ok || !json?.success) {
+        setDeleteError(json?.error || 'Fehler beim Löschen');
+        return;
+      }
+      setDeleteTarget(null);
+      setReloadToken((prev) => prev + 1);
+    } catch {
+      setDeleteError('Netzwerkfehler');
+    } finally {
+      setDeleting(false);
+    }
+  }
 
   // Compute stats
   const activeVoting = decisions.filter((d) => d.status === 'voting').length;
@@ -112,6 +176,16 @@ export default function DecisionListClient() {
       {/* Table */}
       {loading ? (
         <div className="py-12 text-center text-gray-400">Laden...</div>
+      ) : errorMessage ? (
+        <div className="rounded-lg border border-red-200 bg-red-50 p-6 text-center">
+          <p className="text-sm font-medium text-red-700">{errorMessage}</p>
+          <button
+            onClick={() => setReloadToken((prev) => prev + 1)}
+            className="mt-3 inline-flex items-center rounded-md bg-red-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-red-700"
+          >
+            Erneut versuchen
+          </button>
+        </div>
       ) : decisions.length === 0 ? (
         <div className="rounded-lg bg-white py-12 text-center shadow-sm">
           <p className="text-gray-500">Keine Entscheidungen gefunden</p>
@@ -134,6 +208,7 @@ export default function DecisionListClient() {
                 <th className="px-4 py-3">Frist</th>
                 <th className="px-4 py-3">Beteiligung</th>
                 <th className="px-4 py-3">Erstellt von</th>
+                <th className="px-4 py-3"></th>
               </tr>
             </thead>
             <tbody className="divide-y">
@@ -176,6 +251,16 @@ export default function DecisionListClient() {
                     <td className="px-4 py-3 text-gray-600">
                       {d.creator.email}
                     </td>
+                    <td className="px-4 py-3 text-right">
+                      {(d.creator.id === currentUserId || isSuperAdmin) && (
+                        <button
+                          onClick={() => setDeleteTarget(d)}
+                          className="text-xs text-red-600 hover:text-red-800 hover:underline"
+                        >
+                          Löschen
+                        </button>
+                      )}
+                    </td>
                   </tr>
                 );
               })}
@@ -183,6 +268,28 @@ export default function DecisionListClient() {
           </table>
         </div>
       )}
+
+      {deleteError && (
+        <div className="mt-3 rounded-md bg-red-50 p-3 text-sm text-red-700">
+          {deleteError}
+        </div>
+      )}
+
+      <ConfirmDialog
+        isOpen={deleteTarget !== null}
+        title="Entscheidung löschen"
+        message="Die Entscheidung und alle verknüpften Daten (Abstimmungen, Kommentare) werden unwiderruflich gelöscht."
+        itemName={deleteTarget?.title ?? ''}
+        confirmLabel="Löschen"
+        cancelLabel="Abbrechen"
+        variant="danger"
+        isLoading={deleting}
+        onConfirm={handleDelete}
+        onClose={() => {
+          setDeleteTarget(null);
+          setDeleteError(null);
+        }}
+      />
     </div>
   );
 }

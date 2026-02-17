@@ -316,72 +316,98 @@ export async function deleteProtocol(
 export async function processTranscript(
   protocolId: string,
   rawTranscript: string,
-): Promise<{ success: boolean; model?: string; error?: string }> {
-  // Set status to processing
-  await query(
-    `UPDATE ${TABLE_NAMES.MEETING_PROTOCOLS}
-     SET status = 'processing', raw_transcript = $2
-     WHERE id = $1`,
-    [protocolId, rawTranscript]
-  )
-
-  // Get protocol metadata for prompt context
-  const protocolResult = await query<{ meeting_type: MeetingType }>(
-    `SELECT meeting_type FROM ${TABLE_NAMES.MEETING_PROTOCOLS} WHERE id = $1`,
-    [protocolId]
-  )
-
-  if (protocolResult.rows.length === 0) {
-    return { success: false, error: 'Protokoll nicht gefunden' }
-  }
-
-  const { meeting_type } = protocolResult.rows[0]
-  const template = MEETING_TYPE_TEMPLATES[meeting_type]
-  const meetingTypeLabel = MEETING_TYPE_LABELS[meeting_type]
-
-  // Build prompt
-  const prompt = fillPromptTemplate(PROTOCOL_PROMPTS.extract, {
-    transcript: rawTranscript,
-    meetingType: meetingTypeLabel,
-    agendaHints: template.agenda_hints.join(', ') || 'Keine',
-    schema: PROTOCOL_PROMPTS.schema,
-  })
-
-  // Call AI module
-  const aiResult = await processProtocolTranscript(prompt)
-
-  if (!aiResult) {
-    // Reset status on failure
+): Promise<{
+  success: boolean
+  model?: string
+  error?: string
+  retryable?: boolean
+  code?: 'PROTOCOL_NOT_FOUND' | 'NO_PROVIDER' | 'INVALID_JSON' | 'INVALID_SCHEMA' | 'UNKNOWN'
+}> {
+  const resetToDraft = async () => {
     await query(
       `UPDATE ${TABLE_NAMES.MEETING_PROTOCOLS}
        SET status = 'draft'
        WHERE id = $1`,
       [protocolId]
     )
-    return { success: false, error: 'KI-Verarbeitung fehlgeschlagen. Kein Provider erreichbar (Groq, OpenRouter, Ollama). Details im Server-Log.' }
   }
 
-  // Try to resolve attendee names
-  const resolvedNotes = await resolveAttendeeNames(aiResult.notes)
+  try {
+    // Set status to processing
+    await query(
+      `UPDATE ${TABLE_NAMES.MEETING_PROTOCOLS}
+       SET status = 'processing', raw_transcript = $2
+       WHERE id = $1`,
+      [protocolId, rawTranscript]
+    )
 
-  // Store results
-  await query(
-    `UPDATE ${TABLE_NAMES.MEETING_PROTOCOLS}
-     SET structured_notes = $2::jsonb,
-         processing_model = $3,
-         status = 'review'
-     WHERE id = $1`,
-    [protocolId, JSON.stringify(resolvedNotes), aiResult.model]
-  )
+    // Get protocol metadata for prompt context
+    const protocolResult = await query<{ meeting_type: MeetingType }>(
+      `SELECT meeting_type FROM ${TABLE_NAMES.MEETING_PROTOCOLS} WHERE id = $1`,
+      [protocolId]
+    )
 
-  logger.info('Protocol transcript processed', {
-    protocolId,
-    model: aiResult.model,
-    topicCount: resolvedNotes.topics.length,
-    actionItemCount: resolvedNotes.action_items.length,
-  })
+    if (protocolResult.rows.length === 0) {
+      await resetToDraft()
+      return { success: false, code: 'PROTOCOL_NOT_FOUND', retryable: false, error: 'Protokoll nicht gefunden' }
+    }
 
-  return { success: true, model: aiResult.model }
+    const { meeting_type } = protocolResult.rows[0]
+    const template = MEETING_TYPE_TEMPLATES[meeting_type]
+    const meetingTypeLabel = MEETING_TYPE_LABELS[meeting_type]
+
+    // Build prompt
+    const prompt = fillPromptTemplate(PROTOCOL_PROMPTS.extract, {
+      transcript: rawTranscript,
+      meetingType: meetingTypeLabel,
+      agendaHints: template.agenda_hints.join(', ') || 'Keine',
+      schema: PROTOCOL_PROMPTS.schema,
+    })
+
+    // Call AI module
+    const aiResult = await processProtocolTranscript(prompt)
+
+    if (!aiResult.success) {
+      await resetToDraft()
+      return {
+        success: false,
+        code: aiResult.failure.code,
+        retryable: aiResult.failure.retryable,
+        error: aiResult.failure.error,
+      }
+    }
+
+    // Try to resolve attendee names
+    const resolvedNotes = await resolveAttendeeNames(aiResult.result.notes)
+
+    // Store results
+    await query(
+      `UPDATE ${TABLE_NAMES.MEETING_PROTOCOLS}
+       SET structured_notes = $2::jsonb,
+           processing_model = $3,
+           status = 'review'
+       WHERE id = $1`,
+      [protocolId, JSON.stringify(resolvedNotes), aiResult.result.model]
+    )
+
+    logger.info('Protocol transcript processed', {
+      protocolId,
+      model: aiResult.result.model,
+      topicCount: resolvedNotes.topics.length,
+      actionItemCount: resolvedNotes.action_items.length,
+    })
+
+    return { success: true, model: aiResult.result.model }
+  } catch (error) {
+    logger.error('Unexpected error while processing protocol transcript', { protocolId, error })
+    await resetToDraft()
+    return {
+      success: false,
+      code: 'UNKNOWN',
+      retryable: true,
+      error: 'Unerwarteter Fehler bei der Verarbeitung. Bitte erneut versuchen.',
+    }
+  }
 }
 
 // =============================================================================

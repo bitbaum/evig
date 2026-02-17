@@ -1,0 +1,124 @@
+import { NextRequest, NextResponse } from 'next/server'
+import { withAdmin, ValidSession } from '@/lib/api/middleware'
+import { apiBadRequest, apiNotFound } from '@/lib/api/helpers'
+import { getDbUserId } from '@/lib/api/task-helpers'
+import { isSuperAdmin } from '@/lib/permissions'
+import { getProtocolById, processTranscript } from '@/lib/services/protocols'
+import { ERROR_MESSAGES } from '@/config/error-messages'
+import { logger } from '@/lib/logger'
+import { validateAudioUpload } from '@/lib/protocols/audio-validation'
+
+type RouteParams = { id: string }
+
+const TRANSCRIPTION_URL = process.env.TRANSCRIPTION_URL || 'http://localhost:5111'
+
+export const POST = withAdmin<RouteParams>(async (
+  request: NextRequest,
+  session: ValidSession,
+  context
+) => {
+  try {
+    const protocolId = context?.params?.id
+    if (!protocolId) return apiBadRequest('Protokoll-ID erforderlich')
+
+    const formData = await request.formData()
+    const audioFile = formData.get('audio') as File | null
+
+    if (!audioFile) {
+      return apiBadRequest('Keine Audiodatei empfangen')
+    }
+
+    const validationError = validateAudioUpload(audioFile)
+    if (validationError) {
+      return apiBadRequest(validationError)
+    }
+
+    const userLookup = await getDbUserId(session)
+    if ('error' in userLookup) return userLookup.error
+    const { dbUserId } = userLookup
+
+    const isAdmin = isSuperAdmin(session.user.email)
+    const protocol = await getProtocolById(protocolId, dbUserId, isAdmin)
+
+    if (!protocol) {
+      return apiNotFound('Protokoll')
+    }
+
+    if (protocol.status !== 'draft' && protocol.status !== 'review') {
+      return apiBadRequest(ERROR_MESSAGES.PROTOCOL_NOT_EDITABLE)
+    }
+
+    logger.info('Processing protocol audio', {
+      protocolId,
+      userId: dbUserId,
+      audioSize: audioFile.size,
+      audioType: audioFile.type,
+    })
+
+    const transcribeFormData = new FormData()
+    transcribeFormData.append('audio', audioFile)
+
+    const transcribeResponse = await fetch(`${TRANSCRIPTION_URL}/transcribe?language=de`, {
+      method: 'POST',
+      body: transcribeFormData,
+    })
+
+    if (!transcribeResponse.ok) {
+      const errorBody = await transcribeResponse.text()
+      logger.error('Protocol audio transcription failed', {
+        protocolId,
+        userId: dbUserId,
+        status: transcribeResponse.status,
+        errorBody,
+      })
+
+      return NextResponse.json({
+        success: false,
+        error: 'Transkription fehlgeschlagen. Bitte erneut versuchen.',
+        code: 'TRANSCRIPTION_FAILED',
+        retryable: true,
+      }, { status: 503 })
+    }
+
+    const transcription = await transcribeResponse.json() as { text?: string }
+    const transcribedText = transcription.text?.trim()
+
+    if (!transcribedText) {
+      return NextResponse.json({
+        success: false,
+        error: 'Keine Sprache erkannt. Bitte deutlicher sprechen oder eine andere Aufnahme verwenden.',
+        code: 'EMPTY_TRANSCRIPTION',
+        retryable: true,
+      }, { status: 422 })
+    }
+
+    const processingResult = await processTranscript(protocolId, transcribedText)
+
+    if (!processingResult.success) {
+      return NextResponse.json({
+        success: false,
+        error: processingResult.error || ERROR_MESSAGES.PROCESSING_FAILED,
+        code: processingResult.code || 'UNKNOWN',
+        retryable: processingResult.retryable ?? true,
+      }, {
+        status: processingResult.retryable ? 503 : 422,
+      })
+    }
+
+    return NextResponse.json({
+      success: true,
+      data: {
+        processed: true,
+        model: processingResult.model,
+        transcriptLength: transcribedText.length,
+      },
+    })
+  } catch (error) {
+    logger.error('Error processing protocol audio', { error, userId: session.user.id })
+    return NextResponse.json({
+      success: false,
+      error: 'Fehler bei der Audio-Verarbeitung',
+      retryable: true,
+    }, { status: 500 })
+  }
+})

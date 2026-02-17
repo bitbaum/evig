@@ -33,19 +33,38 @@ interface ProcessingResult {
   failureDetails?: string
 }
 
+interface ProcessingFailure {
+  error: string
+  retryable: boolean
+  code: 'NO_PROVIDER' | 'INVALID_JSON' | 'INVALID_SCHEMA'
+}
+
+export type TranscriptProcessingOutcome =
+  | { success: true; result: ProcessingResult }
+  | { success: false; failure: ProcessingFailure }
+
 /**
  * Process a protocol transcript through AI and validate output.
- * Returns null if all providers fail or output is invalid.
+ * Returns explicit failure metadata for API/UI handling.
  */
 export async function processProtocolTranscript(
   prompt: string,
-): Promise<ProcessingResult | null> {
+): Promise<TranscriptProcessingOutcome> {
   const result = await callWithFallback({
     systemPrompt: PROTOCOL_PROMPTS.system,
     userPrompt: prompt,
   })
 
-  if (!result) return null
+  if (!result) {
+    return {
+      success: false,
+      failure: {
+        code: 'NO_PROVIDER',
+        retryable: true,
+        error: 'Kein KI-Provider erreichbar (Groq, OpenRouter, Ollama).',
+      },
+    }
+  }
 
   const raw = extractJson(result.text, /\{[\s\S]*\}/)
   if (!raw) {
@@ -53,11 +72,27 @@ export async function processProtocolTranscript(
       provider: result.provider,
       responsePreview: result.text.substring(0, 200),
     })
-    return null
+    return {
+      success: false,
+      failure: {
+        code: 'INVALID_JSON',
+        retryable: true,
+        error: 'KI-Antwort enthielt kein gültiges JSON. Bitte erneut versuchen.',
+      },
+    }
   }
 
   const validated = validateNotes(raw)
-  if (!validated) return null
+  if (!validated) {
+    return {
+      success: false,
+      failure: {
+        code: 'INVALID_SCHEMA',
+        retryable: true,
+        error: 'KI-Antwort entsprach nicht dem erwarteten Protokoll-Format. Bitte erneut versuchen.',
+      },
+    }
+  }
 
   logger.info('Protocol transcript processed', {
     model: result.model,
@@ -68,12 +103,15 @@ export async function processProtocolTranscript(
   })
 
   return {
-    notes: validated,
-    model: result.model,
-    provider: result.provider,
-    failureDetails: result.failedProviders.length > 0
-      ? buildFailureMessage(result.failedProviders)
-      : undefined,
+    success: true,
+    result: {
+      notes: validated,
+      model: result.model,
+      provider: result.provider,
+      failureDetails: result.failedProviders.length > 0
+        ? buildFailureMessage(result.failedProviders)
+        : undefined,
+    },
   }
 }
 

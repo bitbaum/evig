@@ -9,7 +9,7 @@
 import { NextRequest } from 'next/server';
 import { withAdmin, ValidSession } from '@/lib/api/middleware';
 import { apiSuccess, apiError, apiBadRequest } from '@/lib/api/helpers';
-import { getDbUserId, getActiveTask } from '@/lib/api/task-helpers';
+import { getDbUserId, getActiveTask, createInAppNotifications } from '@/lib/api/task-helpers';
 import { query, transaction } from '@/lib/auth/db';
 import { TABLE_NAMES } from '@/config/database';
 import { TASK_STATUSES } from '@/config/tasks';
@@ -74,14 +74,30 @@ export const POST = withAdmin<RouteParams>(async (
       return flagResult.rows[0];
     });
 
-    // TODO: Send notifications
-    // - Notify task creator if different from flagger
-    // - Broadcast to all staff members
+    // In-app notifications (non-blocking for API success)
+    const staffResult = await query<{ id: string }>(
+      `SELECT id FROM ${TABLE_NAMES.USERS} WHERE is_staff = true AND id != $1`,
+      [dbUserId]
+    )
+
+    const notificationRecipientIds = [
+      task.created_by,
+      ...staffResult.rows.map(row => row.id),
+    ].filter((id, index, all) => id !== dbUserId && all.indexOf(id) === index)
+
+    await createInAppNotifications({
+      recipientIds: notificationRecipientIds,
+      title: `Aufgabe braucht Aufmerksamkeit: ${task.title}`,
+      content: data.message?.trim() || 'Eine Aufgabe wurde als aufmerksamkeitsbedürftig markiert.',
+      relatedType: 'task',
+      relatedId: taskId,
+    })
 
     logger.info('Task flagged for attention', {
       taskId,
       flagId: flag.id,
       userId: session.user.id,
+      notificationRecipients: notificationRecipientIds.length,
       taskTitle: task.title
     });
 

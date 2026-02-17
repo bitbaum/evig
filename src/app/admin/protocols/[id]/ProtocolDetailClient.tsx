@@ -30,6 +30,7 @@ import {
 } from '@/config/protocols'
 import type { ProtocolDetail, ActionLinkRecord, StructuredNotes, DecisionVoteRecord, DecisionOutcomeRecord } from '@/lib/schemas/protocols'
 import { getErrorMessage } from '@/lib/utils/error'
+import { validateAudioUpload } from '@/lib/protocols/audio-validation'
 import DecisionActions from './DecisionActions'
 import {
   Loader2,
@@ -54,17 +55,21 @@ interface Props {
   currentUserId: string
   isProtocolCreator: boolean
   isSuperAdmin: boolean
+  initialProcessingError?: { message: string; retryable: boolean } | null
 }
 
-export default function ProtocolDetailClient({ protocol, actionLinks, teamMembers, decisionVotes, decisionOutcomes, currentUserId, isProtocolCreator, isSuperAdmin }: Props) {
+export default function ProtocolDetailClient({ protocol, actionLinks, teamMembers, decisionVotes, decisionOutcomes, currentUserId, isProtocolCreator, isSuperAdmin, initialProcessingError = null }: Props) {
   const router = useRouter()
   const [finalizing, setFinalizing] = useState(false)
   const [showFinalizeDialog, setShowFinalizeDialog] = useState(false)
   const [processing, setProcessing] = useState(false)
   const [savingMapping, setSavingMapping] = useState(false)
   const [creatingTask, setCreatingTask] = useState<string | null>(null)
-  const [error, setError] = useState<string | null>(null)
+  const [error, setError] = useState<string | null>(initialProcessingError?.message || null)
   const [transcript, setTranscript] = useState('')
+  const [audioFile, setAudioFile] = useState<File | null>(null)
+  const [bulkCreatingTasks, setBulkCreatingTasks] = useState(false)
+  const [bulkTaskErrors, setBulkTaskErrors] = useState<string[]>([])
   const [deleting, setDeleting] = useState(false)
   const [showDeleteDialog, setShowDeleteDialog] = useState(false)
 
@@ -85,6 +90,13 @@ export default function ProtocolDetailClient({ protocol, actionLinks, teamMember
     }
   }, [isReview, notes?.topics]) // eslint-disable-line react-hooks/exhaustive-deps
 
+  // Prefill reprocess input with raw transcript/content when available.
+  useEffect(() => {
+    if (!transcript && protocol.raw_transcript) {
+      setTranscript(protocol.raw_transcript)
+    }
+  }, [protocol.raw_transcript, transcript])
+
   // Attendee mapping state
   const [attendeeMapping, setAttendeeMapping] = useState<Record<string, string>>(() => {
     if (!notes?.action_items) return {}
@@ -100,6 +112,9 @@ export default function ProtocolDetailClient({ protocol, actionLinks, teamMember
 
   // Track which action items already have linked tasks
   const linkedActionIds = new Set(actionLinks.map(l => l.action_item_id))
+  const unlinkedTaskItems = (notes?.action_items || []).filter(
+    item => item.item_type === 'task' && !linkedActionIds.has(item.id)
+  )
 
   const toggleTopic = (id: string) => {
     setExpandedTopics(prev => {
@@ -171,24 +186,67 @@ export default function ProtocolDetailClient({ protocol, actionLinks, teamMember
     }
   }
 
+  const getReprocessEndpoint = () => {
+    switch (protocol.input_method) {
+      case 'notes': return 'process-notes'
+      case 'tasks': return 'import-tasks'
+      case 'audio': return 'process-audio'
+      default: return 'process'
+    }
+  }
+
+  const getReprocessMinLength = () => {
+    switch (protocol.input_method) {
+      case 'tasks': return 10
+      case 'notes': return 20
+      default: return 50
+    }
+  }
+
+  const getReprocessBody = () => {
+    if (protocol.input_method === 'transcript' || protocol.input_method === 'audio') {
+      return { raw_transcript: transcript }
+    }
+    return { content: transcript }
+  }
+
   const handleProcess = async () => {
-    if (transcript.length < 50) return
+    if (protocol.input_method !== 'audio' && transcript.length < getReprocessMinLength()) return
 
     setProcessing(true)
     setError(null)
 
     try {
-      const res = await fetch(`/api/protocols/${protocol.id}/process`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ raw_transcript: transcript }),
-      })
+      const endpoint = getReprocessEndpoint()
+
+      let res: Response
+      if (protocol.input_method === 'audio') {
+        if (!audioFile) throw new Error('Bitte wählen Sie eine Audiodatei aus.')
+
+        const validationError = validateAudioUpload(audioFile)
+        if (validationError) throw new Error(validationError)
+
+        const formData = new FormData()
+        formData.append('audio', audioFile)
+        res = await fetch(`/api/protocols/${protocol.id}/${endpoint}`, {
+          method: 'POST',
+          body: formData,
+        })
+      } else {
+        res = await fetch(`/api/protocols/${protocol.id}/${endpoint}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(getReprocessBody()),
+        })
+      }
+
       const data = await res.json()
 
       if (!data.success) {
         throw new Error(data.error || 'Verarbeitung fehlgeschlagen')
       }
 
+      setAudioFile(null)
       router.refresh()
     } catch (err) {
       setError(getErrorMessage(err))
@@ -233,6 +291,52 @@ export default function ProtocolDetailClient({ protocol, actionLinks, teamMember
     }
   }
 
+  const handleCreateAllTasks = async () => {
+    if (!notes || unlinkedTaskItems.length === 0) return
+
+    setBulkCreatingTasks(true)
+    setError(null)
+    setBulkTaskErrors([])
+
+    const failures: string[] = []
+
+    for (const item of unlinkedTaskItems) {
+      try {
+        const topicTitle = notes.topics.find(t => t.id === item.topic_id)?.title || ''
+
+        const res = await fetch(`/api/protocols/${protocol.id}/actions`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            action_item_id: item.id,
+            link_type: 'task',
+            task_data: {
+              title: item.description,
+              description: `Aus Protokoll: ${protocol.title} (${new Date(protocol.meeting_date).toLocaleDateString('de-CH')})${topicTitle ? `\nThema: ${topicTitle}` : ''}`,
+              task_type: 'one_time',
+              category: 'admin',
+              priority: item.priority_hint || 'normal',
+            },
+          }),
+        })
+        const data = await res.json()
+        if (!data.success) {
+          failures.push(item.description)
+        }
+      } catch {
+        failures.push(item.description)
+      }
+    }
+
+    if (failures.length > 0) {
+      setBulkTaskErrors(failures)
+      setError(`${failures.length} Aufgaben konnten nicht erstellt werden. Bitte erneut versuchen.`)
+    }
+
+    setBulkCreatingTasks(false)
+    router.refresh()
+  }
+
   const handleDelete = async () => {
     setDeleting(true)
     setError(null)
@@ -273,7 +377,10 @@ export default function ProtocolDetailClient({ protocol, actionLinks, teamMember
     <div className="space-y-6">
       {error && (
         <div className="p-4 bg-red-50 border border-red-200 rounded-lg text-red-700">
-          {error}
+          <p>{error}</p>
+          {initialProcessingError?.retryable && (
+            <p className="text-sm mt-1 text-red-600">Sie können das Transkript unten direkt erneut verarbeiten.</p>
+          )}
         </div>
       )}
 
@@ -285,32 +392,73 @@ export default function ProtocolDetailClient({ protocol, actionLinks, teamMember
               ? 'Aufgaben erneut importieren'
               : protocol.input_method === 'notes'
               ? 'Notizen erneut verarbeiten'
+              : protocol.input_method === 'audio'
+              ? 'Audio erneut transkribieren'
               : 'Transkript erneut verarbeiten'}
           </summary>
           <div className="px-4 pb-4 space-y-3">
-            <div className="flex items-center justify-between">
-              <label className="text-sm text-amber-700">Überarbeitetes Transkript</label>
-              <label className="flex items-center gap-1.5 text-sm text-amber-700 hover:text-amber-900 cursor-pointer">
-                <Upload className="w-3.5 h-3.5" />
-                .txt hochladen
-                <input
-                  type="file"
-                  accept=".txt,.md,.text"
-                  onChange={handleFileUpload}
-                  className="hidden"
+            {protocol.input_method === 'audio' ? (
+              <>
+                <label className="flex items-center gap-1.5 text-sm text-amber-700 hover:text-amber-900 cursor-pointer">
+                  <Upload className="w-3.5 h-3.5" />
+                  Neue Audiodatei hochladen
+                  <input
+                    type="file"
+                    accept="audio/*,.mp3,.m4a,.wav,.ogg,.webm"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0]
+                      if (!file) return
+                      const validationError = validateAudioUpload(file)
+                      if (validationError) {
+                        setError(validationError)
+                        return
+                      }
+                      setError(null)
+                      setAudioFile(file)
+                    }}
+                    className="hidden"
+                  />
+                </label>
+                {audioFile && (
+                  <p className="text-xs text-amber-700">
+                    Gewählt: {audioFile.name} ({(audioFile.size / (1024 * 1024)).toFixed(1)} MB)
+                  </p>
+                )}
+              </>
+            ) : (
+              <>
+                <div className="flex items-center justify-between">
+                  <label className="text-sm text-amber-700">Überarbeiteter Inhalt</label>
+                  <label className="flex items-center gap-1.5 text-sm text-amber-700 hover:text-amber-900 cursor-pointer">
+                    <Upload className="w-3.5 h-3.5" />
+                    .txt hochladen
+                    <input
+                      type="file"
+                      accept=".txt,.md,.text"
+                      onChange={handleFileUpload}
+                      className="hidden"
+                    />
+                  </label>
+                </div>
+                <textarea
+                  value={transcript}
+                  onChange={(e) => setTranscript(e.target.value)}
+                  rows={6}
+                  placeholder={protocol.input_method === 'tasks'
+                    ? 'Überarbeitete Aufgabenliste einfügen...'
+                    : protocol.input_method === 'notes'
+                    ? 'Überarbeitete Notizen einfügen...'
+                    : 'Überarbeitetes Transkript einfügen...'}
+                  className="w-full px-3 py-2 border border-amber-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 font-mono text-sm"
                 />
-              </label>
-            </div>
-            <textarea
-              value={transcript}
-              onChange={(e) => setTranscript(e.target.value)}
-              rows={4}
-              placeholder="Überarbeitetes Transkript einfügen..."
-              className="w-full px-3 py-2 border border-amber-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 font-mono text-sm"
-            />
+                <p className="text-xs text-amber-700">
+                  {transcript.length.toLocaleString()} Zeichen • mindestens {getReprocessMinLength()} Zeichen
+                </p>
+              </>
+            )}
             <button
               onClick={handleProcess}
-              disabled={processing || transcript.length < 50}
+              disabled={processing || (protocol.input_method === 'audio' ? !audioFile : transcript.length < getReprocessMinLength())}
               className="flex items-center gap-2 px-4 py-2 text-sm text-amber-800 border border-amber-300 rounded-lg hover:bg-amber-100 disabled:opacity-50"
             >
               {processing ? (
@@ -327,35 +475,66 @@ export default function ProtocolDetailClient({ protocol, actionLinks, teamMember
       {/* Draft: Show transcript input */}
       {isDraft && !notes && (
         <div className="bg-white rounded-lg border p-6 space-y-4">
-          <h2 className="text-lg font-semibold text-gray-900">Transkript einfügen</h2>
+          <h2 className="text-lg font-semibold text-gray-900">
+            {protocol.input_method === 'audio' ? 'Audio hochladen' : 'Transkript einfügen'}
+          </h2>
           <p className="text-sm text-gray-600">
-            Fügen Sie das Transkript ein, um es von der KI strukturieren zu lassen.
+            {protocol.input_method === 'audio'
+              ? 'Laden Sie eine Audiodatei hoch, damit sie transkribiert und strukturiert werden kann.'
+              : 'Fügen Sie das Transkript ein, um es von der KI strukturieren zu lassen.'}
           </p>
-          <div className="flex items-center justify-between">
-            <label className="text-sm text-gray-600">Transkript</label>
+
+          {protocol.input_method === 'audio' ? (
             <label className="flex items-center gap-1.5 text-sm text-blue-600 hover:text-blue-800 cursor-pointer">
               <Upload className="w-3.5 h-3.5" />
-              .txt hochladen
+              Audiodatei wählen
               <input
                 type="file"
-                accept=".txt,.md,.text"
-                onChange={handleFileUpload}
+                accept="audio/*,.mp3,.m4a,.wav,.ogg,.webm"
+                onChange={(e) => {
+                  const file = e.target.files?.[0]
+                  if (!file) return
+                  const validationError = validateAudioUpload(file)
+                  if (validationError) {
+                    setError(validationError)
+                    return
+                  }
+                  setError(null)
+                  setAudioFile(file)
+                }}
                 className="hidden"
               />
             </label>
-          </div>
-          <textarea
-            value={transcript}
-            onChange={(e) => setTranscript(e.target.value)}
-            rows={10}
-            maxLength={100000}
-            placeholder="Transkript hier einfügen..."
-            className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 font-mono text-sm"
-          />
+          ) : (
+            <>
+              <div className="flex items-center justify-between">
+                <label className="text-sm text-gray-600">Transkript</label>
+                <label className="flex items-center gap-1.5 text-sm text-blue-600 hover:text-blue-800 cursor-pointer">
+                  <Upload className="w-3.5 h-3.5" />
+                  .txt hochladen
+                  <input
+                    type="file"
+                    accept=".txt,.md,.text"
+                    onChange={handleFileUpload}
+                    className="hidden"
+                  />
+                </label>
+              </div>
+              <textarea
+                value={transcript}
+                onChange={(e) => setTranscript(e.target.value)}
+                rows={10}
+                maxLength={100000}
+                placeholder="Transkript hier einfügen..."
+                className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 font-mono text-sm"
+              />
+            </>
+          )}
+
           <div className="flex justify-end">
             <button
               onClick={handleProcess}
-              disabled={processing || transcript.length < 50}
+              disabled={processing || (protocol.input_method === 'audio' ? !audioFile : transcript.length < 50)}
               className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
             >
               {processing ? (
@@ -487,14 +666,33 @@ export default function ProtocolDetailClient({ protocol, actionLinks, teamMember
           )}
 
           {/* Action Items */}
-          {notes.action_items && notes.action_items.length > 0 && (
+          {notes.action_items && notes.action_items.length > 0 ? (
             <div className="bg-white rounded-lg border overflow-hidden">
-              <div className="p-4 border-b bg-gray-50">
+              <div className="p-4 border-b bg-gray-50 flex items-center justify-between gap-3">
                 <h2 className="text-lg font-semibold text-gray-900">
                   <ListChecks className="w-5 h-5 inline mr-2 text-gray-400" />
                   Aktionen ({notes.action_items.length})
                 </h2>
+                {unlinkedTaskItems.length > 0 && (isReview || isFinalized) && (
+                  <button
+                    onClick={handleCreateAllTasks}
+                    disabled={bulkCreatingTasks}
+                    className="text-sm px-3 py-1.5 rounded-lg border border-blue-300 text-blue-700 hover:bg-blue-50 disabled:opacity-50"
+                  >
+                    {bulkCreatingTasks ? 'Erstellt...' : `${unlinkedTaskItems.length} Aufgaben auf einmal erstellen`}
+                  </button>
+                )}
               </div>
+              {bulkTaskErrors.length > 0 && (
+                <div className="mx-4 mt-3 rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-700">
+                  <p className="font-medium">Nicht erstellte Aufgaben:</p>
+                  <ul className="list-disc list-inside mt-1">
+                    {bulkTaskErrors.slice(0, 5).map((item) => (
+                      <li key={item}>{item}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
               <div className="divide-y">
                 {notes.action_items.map((item) => {
                   const isLinked = linkedActionIds.has(item.id)
@@ -570,6 +768,13 @@ export default function ProtocolDetailClient({ protocol, actionLinks, teamMember
                   )
                 })}
               </div>
+            </div>
+          ) : (
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+              <h3 className="text-sm font-semibold text-blue-900 mb-1">Keine Aktionen erkannt</h3>
+              <p className="text-sm text-blue-800">
+                Die KI hat keine konkreten Aufgaben oder Entscheidungen extrahiert. Überarbeiten Sie den Inhalt oben und starten Sie die Verarbeitung erneut.
+              </p>
             </div>
           )}
 

@@ -164,7 +164,7 @@ export const INPUT_METHOD_LABELS: Record<InputMethod, string> = {
 };
 
 export const INPUT_METHOD_DESCRIPTIONS: Record<InputMethod, string> = {
-  audio: 'Demnächst verfügbar',
+  audio: 'Audiodatei hochladen und automatisch transkribieren',
   transcript: 'Rohtext einfügen oder .txt hochladen',
   notes: 'JSON oder Freitext hochladen',
   tasks: 'Aufgaben direkt importieren',

@@ -45,6 +45,7 @@ import {
   ListTree,
   ListChecks,
 } from 'lucide-react'
+import { validateAudioUpload, AUDIO_UPLOAD_LIMITS } from '@/lib/protocols/audio-validation'
 
 const MEETING_TYPE_ICON_MAP: Record<string, React.ComponentType<{ className?: string }>> = {
   Users,
@@ -83,6 +84,8 @@ export default function ProtocolFormClient() {
   const [loading, setLoading] = useState(false)
   const [processing, setProcessing] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [audioFile, setAudioFile] = useState<File | null>(null)
+  const [audioStage, setAudioStage] = useState<'idle' | 'uploading' | 'transcribing' | 'processing'>('idle')
   const [formData, setFormData] = useState<FormData>({
     title: '',
     meeting_date: new Date().toISOString().split('T')[0],
@@ -135,6 +138,22 @@ export default function ProtocolFormClient() {
 
   const selectInputMethod = (method: InputMethod) => {
     setFormData(prev => ({ ...prev, input_method: method, content: '' }))
+    setAudioFile(null)
+    setAudioStage('idle')
+  }
+
+  const handleAudioUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    const validationError = validateAudioUpload(file)
+    if (validationError) {
+      setError(validationError)
+      return
+    }
+
+    setError(null)
+    setAudioFile(file)
   }
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -208,7 +227,31 @@ export default function ProtocolFormClient() {
 
       // 2. If content provided and meets minimum, process it
       const minLen = getMinContentLength()
-      if (formData.content.trim().length >= minLen && formData.input_method && formData.input_method !== 'audio') {
+      if (formData.input_method === 'audio' && audioFile) {
+        setProcessing(true)
+        setAudioStage('uploading')
+
+        const audioFormData = new FormData()
+        audioFormData.append('audio', audioFile)
+
+        setAudioStage('transcribing')
+        const processAudioRes = await fetch(`/api/protocols/${protocolId}/process-audio`, {
+          method: 'POST',
+          body: audioFormData,
+        })
+
+        const processAudioData = await processAudioRes.json()
+        if (!processAudioData.success) {
+          const params = new URLSearchParams()
+          params.set('processing', 'failed')
+          params.set('retryable', String(processAudioData.retryable ?? true))
+          if (processAudioData.error) {
+            params.set('error', String(processAudioData.error).slice(0, 250))
+          }
+          router.push(`/admin/protocols/${protocolId}?${params.toString()}`)
+          return
+        }
+      } else if (formData.content.trim().length >= minLen && formData.input_method && formData.input_method !== 'audio') {
         setProcessing(true)
 
         const endpoint = getProcessEndpoint()
@@ -220,8 +263,14 @@ export default function ProtocolFormClient() {
 
         const processData = await processRes.json()
         if (!processData.success) {
-          // Protocol was created, but processing failed — redirect anyway
-          router.push(`/admin/protocols/${protocolId}`)
+          // Protocol was created, but processing failed — redirect with explicit feedback
+          const params = new URLSearchParams()
+          params.set('processing', 'failed')
+          params.set('retryable', String(processData.retryable ?? true))
+          if (processData.error) {
+            params.set('error', String(processData.error).slice(0, 250))
+          }
+          router.push(`/admin/protocols/${protocolId}?${params.toString()}`)
           return
         }
       }
@@ -232,6 +281,7 @@ export default function ProtocolFormClient() {
     } finally {
       setLoading(false)
       setProcessing(false)
+      setAudioStage('idle')
     }
   }
 
@@ -423,7 +473,7 @@ export default function ProtocolFormClient() {
             {Object.values(INPUT_METHODS).map((method) => {
               const iconName = INPUT_METHOD_ICONS[method]
               const IconComponent = INPUT_METHOD_ICON_MAP[iconName]
-              const isDisabled = method === 'audio'
+              const isDisabled = false
 
               return (
                 <button
@@ -488,19 +538,80 @@ export default function ProtocolFormClient() {
 
       {/* Step 4: Content (adapts to input method) */}
       {hasInputMethod && formData.input_method === 'audio' && (
-        <div className="bg-white rounded-lg border p-6 text-center">
-          <Mic className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-          <h3 className="text-lg font-medium text-gray-900 mb-2">Audio-Aufnahme</h3>
-          <p className="text-gray-500">
-            Diese Funktion ist demnächst verfügbar.
-            Whisper-Integration für automatische Transkription wird implementiert.
+        <div className="bg-white rounded-lg border p-6 space-y-5">
+          <h2 className="text-lg font-semibold text-gray-900">Audio hochladen</h2>
+          <p className="text-sm text-gray-600">
+            Laden Sie eine Audiodatei hoch. Die Aufnahme wird automatisch transkribiert und danach in Aufgaben umgewandelt.
           </p>
-          <div className="flex justify-center mt-6">
+
+          <div className="rounded-lg border border-blue-200 bg-blue-50 p-4">
+            <p className="text-sm font-medium text-blue-800 mb-1">Ablauf</p>
+            <ol className="list-decimal list-inside text-sm text-blue-700 space-y-0.5">
+              <li>Audio hochladen</li>
+              <li>Automatische Transkription</li>
+              <li>KI strukturiert Protokoll und Aktionen</li>
+              <li>Aufgaben prüfen und mit einem Klick erstellen</li>
+            </ol>
+          </div>
+
+          <div className="space-y-2">
+            <label className="flex items-center gap-1.5 text-sm text-blue-700 hover:text-blue-900 cursor-pointer">
+              <Upload className="w-3.5 h-3.5" />
+              Audiodatei wählen (.mp3, .m4a, .wav, .ogg, .webm)
+              <input
+                type="file"
+                accept="audio/*,.mp3,.m4a,.wav,.ogg,.webm"
+                onChange={handleAudioUpload}
+                className="hidden"
+              />
+            </label>
+            <p className="text-xs text-gray-500">Maximale Dateigrösse: {(AUDIO_UPLOAD_LIMITS.maxSizeBytes / (1024 * 1024)).toFixed(0)} MB</p>
+            {audioFile && (
+              <p className="text-sm text-gray-700">
+                Gewählt: <span className="font-medium">{audioFile.name}</span> ({(audioFile.size / (1024 * 1024)).toFixed(1)} MB)
+              </p>
+            )}
+          </div>
+
+          {processing && (
+            <div className="rounded-lg border border-amber-200 bg-amber-50 p-3 text-sm text-amber-800">
+              {audioStage === 'uploading' && 'Audio wird hochgeladen...'}
+              {audioStage === 'transcribing' && 'Audio wird transkribiert...'}
+              {audioStage === 'processing' && 'Transkript wird in Protokoll und Aufgaben umgewandelt...'}
+            </div>
+          )}
+
+          <div className="flex justify-end gap-3 pt-4 border-t">
             <button
-              onClick={() => setFormData(prev => ({ ...prev, input_method: '', content: '' }))}
+              type="button"
+              onClick={() => {
+                setFormData(prev => ({ ...prev, input_method: '', content: '' }))
+                setAudioFile(null)
+              }}
               className="px-4 py-2 text-gray-600 hover:text-gray-900 border border-gray-200 rounded-lg"
             >
               Zurück
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setAudioStage('processing')
+                handleCreateAndProcess()
+              }}
+              disabled={loading || !formData.title || !audioFile}
+              className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50"
+            >
+              {loading ? (
+                <>
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                  Wird verarbeitet...
+                </>
+              ) : (
+                <>
+                  <Wand2 className="w-4 h-4" />
+                  Erstellen & Verarbeiten
+                </>
+              )}
             </button>
           </div>
         </div>
