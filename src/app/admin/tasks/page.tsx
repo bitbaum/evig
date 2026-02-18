@@ -32,6 +32,7 @@ import {
 } from 'lucide-react'
 import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
 import TaskFiltersClient from './TaskFiltersClient'
+import { Pagination } from '@/components/ui/Pagination'
 
 export const metadata: Metadata = {
   title: 'Aufgaben | RevampIT Admin',
@@ -78,98 +79,131 @@ async function getTaskStats(): Promise<TaskStats> {
   }
 }
 
+const TASKS_PAGE_SIZE = 20
+
 async function getTasks(
   category?: string,
   status?: string,
   q?: string,
   priority?: string,
-): Promise<TaskListItem[]> {
-  let queryText = `
-      SELECT
-        t.id,
-        t.title,
-        t.description,
-        t.task_type,
-        t.category,
-        t.priority,
-        t.current_status,
-        t.estimated_minutes,
-        t.is_completed,
-        t.created_at,
-        u.name as created_by_name,
-        (
-          SELECT COUNT(*)::int
-          FROM ${TABLE_NAMES.TASK_COMPLETIONS} tc
-          WHERE tc.task_id = t.id
-        ) as completion_count
-      FROM ${TABLE_NAMES.TASKS} t
-      LEFT JOIN ${TABLE_NAMES.USERS} u ON t.created_by = u.id
-      WHERE NOT t.is_archived
-    `
+  page = 1,
+): Promise<{ rows: TaskListItem[]; total: number }> {
+  let filterClause = `WHERE NOT t.is_archived`
 
-    const params: string[] = []
-    let paramIndex = 1
+  const params: (string | number)[] = []
+  let paramIndex = 1
 
-    if (category) {
-      queryText += ` AND t.category = $${paramIndex++}`
-      params.push(category)
-    }
+  if (category) {
+    filterClause += ` AND t.category = $${paramIndex++}`
+    params.push(category)
+  }
 
-    if (status) {
-      queryText += ` AND t.current_status = $${paramIndex++}`
-      params.push(status)
-    }
+  if (status) {
+    filterClause += ` AND t.current_status = $${paramIndex++}`
+    params.push(status)
+  }
 
-    if (q) {
-      queryText += ` AND (t.title ILIKE $${paramIndex} OR t.description ILIKE $${paramIndex})`
-      params.push(`%${q}%`)
-      paramIndex++
-    }
+  if (q) {
+    filterClause += ` AND (t.title ILIKE $${paramIndex} OR t.description ILIKE $${paramIndex})`
+    params.push(`%${q}%`)
+    paramIndex++
+  }
 
-    if (priority) {
-      queryText += ` AND t.priority = $${paramIndex++}`
-      params.push(priority)
-    }
+  if (priority) {
+    filterClause += ` AND t.priority = $${paramIndex++}`
+    params.push(priority)
+  }
 
-    // CASE/WHEN values are compile-time constants from config, not user input.
-    // SQL CASE expressions don't support parameterized values ($N).
-    queryText += `
-      ORDER BY
-        CASE t.current_status
-          WHEN '${TASK_STATUSES.NEEDS_ATTENTION}' THEN 0
-          WHEN '${TASK_STATUSES.REQUESTED}' THEN 1
-          WHEN '${TASK_STATUSES.IN_PROGRESS}' THEN 2
-          WHEN '${TASK_STATUSES.IDLE}' THEN 3
-        END,
-        CASE t.priority
-          WHEN '${TASK_PRIORITIES.URGENT}' THEN 0
-          WHEN '${TASK_PRIORITIES.HIGH}' THEN 1
-          WHEN '${TASK_PRIORITIES.NORMAL}' THEN 2
-          WHEN '${TASK_PRIORITIES.LOW}' THEN 3
-        END,
-        t.created_at DESC
-      LIMIT 100
-    `
+  const countText = `
+    SELECT COUNT(*)::text as total
+    FROM ${TABLE_NAMES.TASKS} t
+    ${filterClause}
+  `
 
-  const result = await query<TaskListItem>(queryText, params)
-  return result.rows
+  const offset = (page - 1) * TASKS_PAGE_SIZE
+
+  // CASE/WHEN values are compile-time constants from config, not user input.
+  // SQL CASE expressions don't support parameterized values ($N).
+  const listText = `
+    SELECT
+      t.id,
+      t.title,
+      t.description,
+      t.task_type,
+      t.category,
+      t.priority,
+      t.current_status,
+      t.estimated_minutes,
+      t.is_completed,
+      t.created_at,
+      u.name as created_by_name,
+      (
+        SELECT COUNT(*)::int
+        FROM ${TABLE_NAMES.TASK_COMPLETIONS} tc
+        WHERE tc.task_id = t.id
+      ) as completion_count
+    FROM ${TABLE_NAMES.TASKS} t
+    LEFT JOIN ${TABLE_NAMES.USERS} u ON t.created_by = u.id
+    ${filterClause}
+    ORDER BY
+      CASE t.current_status
+        WHEN '${TASK_STATUSES.NEEDS_ATTENTION}' THEN 0
+        WHEN '${TASK_STATUSES.REQUESTED}' THEN 1
+        WHEN '${TASK_STATUSES.IN_PROGRESS}' THEN 2
+        WHEN '${TASK_STATUSES.IDLE}' THEN 3
+      END,
+      CASE t.priority
+        WHEN '${TASK_PRIORITIES.URGENT}' THEN 0
+        WHEN '${TASK_PRIORITIES.HIGH}' THEN 1
+        WHEN '${TASK_PRIORITIES.NORMAL}' THEN 2
+        WHEN '${TASK_PRIORITIES.LOW}' THEN 3
+      END,
+      t.created_at DESC
+    LIMIT $${paramIndex++} OFFSET $${paramIndex++}
+  `
+
+  const [countResult, listResult] = await Promise.all([
+    query<{ total: string }>(countText, params),
+    query<TaskListItem>(listText, [...params, TASKS_PAGE_SIZE, offset]),
+  ])
+
+  return {
+    rows: listResult.rows,
+    total: parseInt(countResult.rows[0]?.total || '0', 10),
+  }
 }
 
 export default async function TasksAdminPage({
   searchParams,
 }: {
-  searchParams: Promise<{ category?: string; status?: string; q?: string; priority?: string }>
+  searchParams: Promise<{ category?: string; status?: string; q?: string; priority?: string; page?: string }>
 }) {
   const params = await searchParams
+  const currentPage = Math.max(1, parseInt(params.page ?? '1', 10) || 1)
   const stats = await getTaskStats()
 
   let tasks: TaskListItem[] = []
+  let totalTasks = 0
   let listError = false
   try {
-    tasks = await getTasks(params.category, params.status, params.q, params.priority)
+    const result = await getTasks(params.category, params.status, params.q, params.priority, currentPage)
+    tasks = result.rows
+    totalTasks = result.total
   } catch (error) {
     logger.error('Error fetching tasks', { error })
     listError = true
+  }
+
+  const totalPages = Math.ceil(totalTasks / TASKS_PAGE_SIZE)
+
+  function buildTasksHref(page: number) {
+    const p = new URLSearchParams()
+    if (params.category) p.set('category', params.category)
+    if (params.status) p.set('status', params.status)
+    if (params.q) p.set('q', params.q)
+    if (params.priority) p.set('priority', params.priority)
+    p.set('page', String(page))
+    return `/admin/tasks?${p.toString()}`
   }
 
   return (
@@ -366,6 +400,13 @@ export default async function TasksAdminPage({
             </tbody>
           </table>
         )}
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          totalItems={totalTasks}
+          pageSize={TASKS_PAGE_SIZE}
+          buildHref={buildTasksHref}
+        />
       </div>
     </AdminPageWrapper>
   )

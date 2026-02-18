@@ -86,13 +86,16 @@ export async function getTeamMembers(): Promise<Array<{ id: string; name: string
 }
 
 /**
- * List protocols with visibility filtering
+ * List protocols with visibility filtering and pagination
  */
 export async function getProtocols(
   userId: string,
   isSuperAdmin: boolean,
-  filters?: { meeting_type?: string; status?: string; q?: string }
-): Promise<ProtocolListItem[]> {
+  filters?: { meeting_type?: string; status?: string; q?: string; page?: number; limit?: number }
+): Promise<{ protocols: ProtocolListItem[]; total: number }> {
+  const page = filters?.page ?? 1
+  const limit = filters?.limit ?? 20
+
   let queryText = `
     SELECT
       mp.id,
@@ -129,7 +132,7 @@ export async function getProtocols(
     )
   `
 
-  const params: (string | boolean)[] = [userId, isSuperAdmin]
+  const params: (string | boolean | number)[] = [userId, isSuperAdmin]
   let paramIndex = 3
 
   if (filters?.meeting_type) {
@@ -147,10 +150,28 @@ export async function getProtocols(
     params.push(filters.q)
   }
 
-  queryText += ` ORDER BY mp.meeting_date DESC, mp.created_at DESC LIMIT 100`
+  const whereClause = queryText.slice(queryText.indexOf('WHERE'))
 
-  const result = await query<ProtocolListItem>(queryText, params)
-  return result.rows
+  // Count query reuses the same WHERE clause
+  const countText = `
+    SELECT COUNT(*)::text as total
+    FROM ${TABLE_NAMES.MEETING_PROTOCOLS} mp
+    ${whereClause}
+  `
+
+  const offset = (page - 1) * limit
+  queryText += ` ORDER BY mp.meeting_date DESC, mp.created_at DESC LIMIT $${paramIndex++} OFFSET $${paramIndex++}`
+  params.push(limit, offset)
+
+  const [countResult, listResult] = await Promise.all([
+    query<{ total: string }>(countText, params.slice(0, params.length - 2)),
+    query<ProtocolListItem>(queryText, params),
+  ])
+
+  return {
+    protocols: listResult.rows,
+    total: parseInt(countResult.rows[0]?.total || '0', 10),
+  }
 }
 
 /**

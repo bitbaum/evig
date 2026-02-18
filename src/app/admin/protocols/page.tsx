@@ -38,16 +38,19 @@ import {
 } from 'lucide-react'
 import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
 import ProtocolListClient from './ProtocolListClient'
+import { Pagination } from '@/components/ui/Pagination'
 
 export const metadata: Metadata = {
   title: 'Protokolle | RevampIT Admin',
   description: 'Sitzungsprotokolle verwalten.',
 }
 
+const PROTOCOLS_PAGE_SIZE = 20
+
 export default async function ProtocolsAdminPage({
   searchParams,
 }: {
-  searchParams: Promise<{ meeting_type?: string; status?: string; step?: string; q?: string }>
+  searchParams: Promise<{ meeting_type?: string; status?: string; step?: string; q?: string; page?: string }>
 }) {
   const params = await searchParams
 
@@ -67,27 +70,39 @@ export default async function ProtocolsAdminPage({
     return null
   }
 
+  const stepFilter = params.step
+  const validStepFilter = PROTOCOL_WORKFLOW_STEPS.some((step) => step.id === stepFilter)
+    ? stepFilter
+    : undefined
+
+  // When step filter is active, fetch all (step is derived — can't paginate at DB level).
+  // When no step filter, paginate normally.
+  const currentPage = validStepFilter ? 1 : Math.max(1, parseInt(params.page ?? '1', 10) || 1)
+  const pageLimit = validStepFilter ? 200 : PROTOCOLS_PAGE_SIZE
+
   let stats = { total: 0, draft: 0, review: 0, finalized: 0 }
   let protocols: ProtocolListItem[] = []
+  let totalProtocols = 0
   let listError = false
   try {
-    ;[stats, protocols] = await Promise.all([
+    const [fetchedStats, fetchedProtocols] = await Promise.all([
       getProtocolStats(dbUserId, isAdmin),
       getProtocols(dbUserId, isAdmin, {
         meeting_type: params.meeting_type,
         status: params.status,
         q: params.q,
+        page: currentPage,
+        limit: pageLimit,
       }),
     ])
+    stats = fetchedStats
+    protocols = fetchedProtocols.protocols
+    totalProtocols = fetchedProtocols.total
   } catch (error) {
     logger.error('Error fetching protocols', { error })
     listError = true
   }
 
-  const stepFilter = params.step
-  const validStepFilter = PROTOCOL_WORKFLOW_STEPS.some((step) => step.id === stepFilter)
-    ? stepFilter
-    : undefined
   const filteredProtocols = validStepFilter
     ? protocols.filter((protocol) => getProtocolWorkflowStep({
       status: protocol.status,
@@ -95,6 +110,17 @@ export default async function ProtocolsAdminPage({
       unlinkedTaskCount: protocol.unlinked_action_item_count,
     }) === validStepFilter)
     : protocols
+
+  const totalPages = validStepFilter ? 1 : Math.ceil(totalProtocols / PROTOCOLS_PAGE_SIZE)
+
+  function buildProtocolsHref(page: number) {
+    const p = new URLSearchParams()
+    if (params.meeting_type) p.set('meeting_type', params.meeting_type)
+    if (params.status) p.set('status', params.status)
+    if (params.q) p.set('q', params.q)
+    p.set('page', String(page))
+    return `/admin/protocols?${p.toString()}`
+  }
 
   return (
     <AdminPageWrapper
@@ -306,6 +332,15 @@ export default async function ProtocolsAdminPage({
               })}
             </tbody>
           </table>
+        )}
+        {!validStepFilter && (
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            totalItems={totalProtocols}
+            pageSize={PROTOCOLS_PAGE_SIZE}
+            buildHref={buildProtocolsHref}
+          />
         )}
       </div>
     </AdminPageWrapper>

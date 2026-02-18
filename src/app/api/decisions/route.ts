@@ -34,7 +34,7 @@ export const GET = withAdmin(async (
     }
 
     const result = await getDecisions(filters, dbUserId)
-    return apiSuccess(result.decisions)
+    return apiSuccess({ decisions: result.decisions, total: result.total, page: result.page, limit: result.limit })
   } catch (error) {
     logger.error('Error fetching decisions', { error })
     return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)

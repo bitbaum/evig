@@ -14,6 +14,7 @@ import {
 } from '@/config/decisions';
 import { formatDeadline } from '@/lib/utils/date';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
+import { Pagination } from '@/components/ui/Pagination';
 import type { DecisionStats } from '@/lib/services/decisions';
 
 interface DecisionListItem {
@@ -40,7 +41,11 @@ export default function DecisionListClient({
   isSuperAdmin: boolean;
   stats: DecisionStats;
 }) {
+  const DECISIONS_PAGE_SIZE = 20;
+
   const [decisions, setDecisions] = useState<DecisionListItem[]>([]);
+  const [total, setTotal] = useState(0);
+  const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [statusFilter, setStatusFilter] = useState<string>('');
@@ -58,11 +63,13 @@ export default function DecisionListClient({
       setErrorMessage(null);
 
       try {
-        const params = new URLSearchParams();
-        if (statusFilter) params.set('status', statusFilter);
-        if (typeFilter) params.set('decisionType', typeFilter);
+        const urlParams = new URLSearchParams();
+        if (statusFilter) urlParams.set('status', statusFilter);
+        if (typeFilter) urlParams.set('decisionType', typeFilter);
+        urlParams.set('page', String(page));
+        urlParams.set('limit', String(DECISIONS_PAGE_SIZE));
 
-        const response = await fetch(`/api/decisions?${params.toString()}`);
+        const response = await fetch(`/api/decisions?${urlParams.toString()}`);
         const json = await response.json();
 
         if (!response.ok || !json?.success) {
@@ -70,11 +77,14 @@ export default function DecisionListClient({
         }
 
         if (!cancelled) {
-          setDecisions(Array.isArray(json.data) ? json.data : []);
+          const data = json.data as { decisions: DecisionListItem[]; total: number };
+          setDecisions(Array.isArray(data?.decisions) ? data.decisions : []);
+          setTotal(typeof data?.total === 'number' ? data.total : 0);
         }
       } catch (error) {
         if (!cancelled) {
           setDecisions([]);
+          setTotal(0);
           setErrorMessage(
             error instanceof Error
               ? error.message
@@ -93,7 +103,8 @@ export default function DecisionListClient({
     return () => {
       cancelled = true;
     };
-  }, [statusFilter, typeFilter, reloadToken]);
+  }, [statusFilter, typeFilter, page, reloadToken]);
+
 
   async function handleDelete() {
     if (!deleteTarget) return;
@@ -141,7 +152,7 @@ export default function DecisionListClient({
       <div className="mb-4 flex gap-3">
         <select
           value={statusFilter}
-          onChange={(e) => setStatusFilter(e.target.value)}
+          onChange={(e) => { setStatusFilter(e.target.value); setPage(1); }}
           className="rounded-md border border-gray-300 px-3 py-1.5 text-sm"
         >
           <option value="">Alle Status</option>
@@ -153,7 +164,7 @@ export default function DecisionListClient({
         </select>
         <select
           value={typeFilter}
-          onChange={(e) => setTypeFilter(e.target.value)}
+          onChange={(e) => { setTypeFilter(e.target.value); setPage(1); }}
           className="rounded-md border border-gray-300 px-3 py-1.5 text-sm"
         >
           <option value="">Alle Typen</option>
@@ -258,6 +269,18 @@ export default function DecisionListClient({
               })}
             </tbody>
           </table>
+        </div>
+      )}
+
+      {!loading && !errorMessage && total > DECISIONS_PAGE_SIZE && (
+        <div className="mt-4 bg-white border rounded-lg overflow-hidden">
+          <Pagination
+            currentPage={page}
+            totalPages={Math.ceil(total / DECISIONS_PAGE_SIZE)}
+            totalItems={total}
+            pageSize={DECISIONS_PAGE_SIZE}
+            onPageChange={setPage}
+          />
         </div>
       )}
 
