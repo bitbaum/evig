@@ -42,8 +42,6 @@ export async function createNotification(
 
 /**
  * Notify every active staff member.
- * Skips users who already have an unread notification of the same type+related_id
- * to avoid duplicate pings on repeated transitions.
  */
 export async function notifyAllStaff(
   payload: NotificationPayload,
