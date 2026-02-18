@@ -17,7 +17,7 @@ interface UserPermissionsEditorProps {
 const SECTIONS = [
   { id: 'dashboard', label: 'Dashboard', sensitive: false },
   { id: 'products', label: 'Produkte', sensitive: false },
-  { id: 'workshops', label: 'Workshops', sensitive: false },
+  { id: 'workshops-admin', label: 'Workshops', sensitive: false },
   { id: 'services', label: 'Dienstleistungen', sensitive: false },
   { id: 'locations', label: 'Standorte', sensitive: false },
   { id: 'reviews', label: 'Bewertungen', sensitive: false },

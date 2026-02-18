@@ -261,7 +261,7 @@ export default async function AdminDashboard() {
     })
   }
 
-  if (canAccessSection(userForPermissions, 'workshops')) {
+  if (canAccessSection(userForPermissions, 'workshops-admin')) {
     quickActions.push({
       label: 'Neuer Workshop',
       href: '/admin/workshops/new',

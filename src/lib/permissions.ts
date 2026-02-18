@@ -109,6 +109,7 @@ export interface StaffUser {
  */
 const PERMISSION_ALIASES: Record<string, string> = {
   finances: 'finanzen', // Old finances -> new finanzen
+  'workshops-admin': 'workshops', // Old 'workshops' stored in DB maps to new canonical id
 }
 
 /**
@@ -169,8 +170,12 @@ export function getAccessibleSections(
     return ADMIN_SECTION_IDS
   }
 
-  // Filter to permitted sections
-  return user.staff_permissions.filter(perm => ADMIN_SECTION_IDS.includes(perm))
+  // Filter to permitted sections, checking aliases for backward compat
+  return ADMIN_SECTION_IDS.filter(sectionId => {
+    if (user.staff_permissions.includes(sectionId)) return true
+    const aliasedPerm = PERMISSION_ALIASES[sectionId]
+    return !!(aliasedPerm && user.staff_permissions.includes(aliasedPerm))
+  })
 }
 
 /**
@@ -245,7 +250,7 @@ export function migrateOldRole(oldRole: string | null | undefined): {
     admin: { is_staff: true, staff_permissions: ['*'] },
     revampit_editor: {
       is_staff: true,
-      staff_permissions: ['dashboard', 'content', 'products', 'workshops'],
+      staff_permissions: ['dashboard', 'content', 'products', 'workshops-admin'],
     },
     revampit_support: {
       is_staff: true,

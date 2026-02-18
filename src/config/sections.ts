@@ -427,7 +427,7 @@ export const SECTIONS: Record<string, SectionConfig> = {
   },
 
   'workshops-admin': {
-    id: 'workshops',
+    id: 'workshops-admin',
     path: '/admin/workshops',
     ui: {
       label: 'Workshops',

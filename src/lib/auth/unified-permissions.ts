@@ -232,7 +232,7 @@ export function canAccessSectionUnified(
     if (!sectionConfig.sensitive) {
       if (
         user.role === ROLES.REVAMPIT_EDITOR &&
-        ['dashboard', 'products', 'workshops', 'services', 'content', 'approvals'].includes(section)
+        ['dashboard', 'products', 'workshops-admin', 'services', 'content', 'approvals'].includes(section)
       ) {
         logger.debug('canAccessSectionUnified: Granted via editor role', {
           email: user.email,
@@ -381,7 +381,7 @@ export function convertRoleToPermissions(role: string): {
         staff_permissions: [
           'dashboard',
           'products',
-          'workshops',
+          'workshops-admin',
           'services',
           'content',
           'approvals',
