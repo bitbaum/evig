@@ -21,7 +21,7 @@ export default function TaskFiltersClient() {
   const searchParams = useSearchParams()
   const [searchValue, setSearchValue] = useState(searchParams.get('q') || '')
 
-  // Debounced search
+  // Debounced search — resets to page 1 on query change
   useEffect(() => {
     const timeout = setTimeout(() => {
       const params = new URLSearchParams(searchParams.toString())
@@ -30,6 +30,7 @@ export default function TaskFiltersClient() {
       } else {
         params.delete('q')
       }
+      params.delete('page')
       router.push(`/admin/tasks?${params.toString()}`)
     }, 300)
 
@@ -43,6 +44,8 @@ export default function TaskFiltersClient() {
     } else {
       params.delete(key)
     }
+    // Reset to page 1 when any filter changes
+    params.delete('page')
     router.push(`/admin/tasks?${params.toString()}`)
   }
 

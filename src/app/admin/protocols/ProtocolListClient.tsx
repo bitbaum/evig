@@ -26,6 +26,8 @@ export default function ProtocolListClient() {
     } else {
       params.delete(key)
     }
+    // Reset to page 1 when any filter changes
+    params.delete('page')
     router.push(`/admin/protocols?${params.toString()}`)
   }
 

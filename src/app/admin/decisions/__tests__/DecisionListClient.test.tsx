@@ -14,7 +14,7 @@ describe('DecisionListClient', () => {
       })
       .mockResolvedValueOnce({
         ok: true,
-        json: async () => ({ success: true, data: [] }),
+        json: async () => ({ success: true, data: { decisions: [], total: 0, page: 1, limit: 20 } }),
       })
 
     const stats = { voting: 0, discussion: 0, closed: 0, pendingVotes: 0 }
