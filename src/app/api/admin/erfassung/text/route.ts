@@ -13,7 +13,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { withAdmin } from '@/lib/api/middleware'
 import { canAccessSection } from '@/lib/permissions'
 import { logger } from '@/lib/logger'
-import { apiForbidden, apiBadRequest } from '@/lib/api/helpers'
+import { apiSuccess, apiForbidden, apiBadRequest } from '@/lib/api/helpers'
 import { extractProductFromText } from '@/lib/erfassung/ai-extraction'
 
 export const POST = withAdmin(async (request, session) => {
@@ -55,11 +55,7 @@ export const POST = withAdmin(async (request, session) => {
         error: result.error,
       })
       return NextResponse.json(
-        {
-          success: false,
-          error: result.error,
-          rawResponse: result.rawResponse,
-        },
+        { success: false, error: result.error },
         { status: 500 }
       )
     }
@@ -69,8 +65,7 @@ export const POST = withAdmin(async (request, session) => {
       product: result.data.produktname,
     })
 
-    return NextResponse.json({
-      success: true,
+    return apiSuccess({
       inputText: result.inputText,
       data: result.data,
       metadata: result.metadata,

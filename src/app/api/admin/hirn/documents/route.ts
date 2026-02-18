@@ -29,9 +29,8 @@ export const GET = withAdmin(async (request: NextRequest) => {
 
     const result = await listDocuments({ limit, offset, sourceType })
 
-    return NextResponse.json({
-      success: true,
-      data: result.documents,
+    return apiSuccess({
+      documents: result.documents,
       total: result.total,
     })
   } catch (error) {

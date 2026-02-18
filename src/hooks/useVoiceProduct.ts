@@ -41,8 +41,8 @@ export function useVoiceProduct(): UseVoiceProductResult {
       }
 
       return {
-        transcription: result.transcription,
-        data: result.data,
+        transcription: result.data.transcription,
+        data: result.data.data,
       }
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Verarbeitung fehlgeschlagen'

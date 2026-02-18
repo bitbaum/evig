@@ -15,7 +15,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { withAdmin } from '@/lib/api/middleware'
 import { canAccessSection } from '@/lib/permissions'
 import { logger } from '@/lib/logger'
-import { apiForbidden, apiBadRequest } from '@/lib/api/helpers'
+import { apiSuccess, apiForbidden, apiBadRequest } from '@/lib/api/helpers'
 import { extractProductFromText } from '@/lib/erfassung/ai-extraction'
 
 // Transcription service URL
@@ -91,12 +91,7 @@ export const POST = withAdmin(async (request, session) => {
         transcription: transcribedText,
       })
       return NextResponse.json(
-        {
-          success: false,
-          error: extractionResult.error,
-          transcription: transcribedText,
-          rawResponse: extractionResult.rawResponse,
-        },
+        { success: false, error: extractionResult.error },
         { status: 500 }
       )
     }
@@ -106,8 +101,7 @@ export const POST = withAdmin(async (request, session) => {
       product: extractionResult.data.produktname,
     })
 
-    return NextResponse.json({
-      success: true,
+    return apiSuccess({
       transcription: transcribedText,
       data: extractionResult.data,
       metadata: extractionResult.metadata,

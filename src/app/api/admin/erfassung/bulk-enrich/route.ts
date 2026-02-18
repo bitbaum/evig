@@ -9,7 +9,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { withAdmin } from '@/lib/api/middleware'
 import { logger } from '@/lib/logger'
-import { apiBadRequest } from '@/lib/api/helpers'
+import { apiSuccess, apiBadRequest } from '@/lib/api/helpers'
 import { validateBody, BulkEnrichSchema } from '@/lib/schemas'
 import { extractMultipleProducts } from '@/lib/erfassung/bulk-extraction'
 import { BULK_LIMITS } from '@/config/erfassung'
@@ -81,8 +81,7 @@ export const POST = withAdmin(async (request: NextRequest, session) => {
       enrichedCount: enrichedItems.filter(i => i.enriched).length,
     })
 
-    return NextResponse.json({
-      success: true,
+    return apiSuccess({
       items: enrichedItems,
     })
   } catch (error) {

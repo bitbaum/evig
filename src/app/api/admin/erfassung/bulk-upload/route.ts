@@ -9,7 +9,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { withAdmin } from '@/lib/api/middleware'
 import { canAccessSection } from '@/lib/permissions'
 import { logger } from '@/lib/logger'
-import { apiForbidden, apiBadRequest } from '@/lib/api/helpers'
+import { apiSuccess, apiForbidden, apiBadRequest } from '@/lib/api/helpers'
 import { parseCSV, parseExcel } from '@/lib/erfassung/file-parser'
 import { BULK_LIMITS } from '@/config/erfassung'
 
@@ -80,8 +80,7 @@ export const POST = withAdmin(async (request, session) => {
       unmappedColumns,
     })
 
-    return NextResponse.json({
-      success: true,
+    return apiSuccess({
       products,
       unmappedColumns,
     })

@@ -148,9 +148,9 @@ export function DataEntryTabs({
           throw new Error(result.error || 'Verarbeitung fehlgeschlagen')
         }
 
-        onBulkData(result.products)
+        onBulkData(result.data.products)
         setQuickEntryState('success')
-        logger.info('Bulk text entry successful', { count: result.productCount })
+        logger.info('Bulk text entry successful', { count: result.data.productCount })
 
         setTimeout(() => {
           setQuickEntryState('idle')
@@ -171,21 +171,22 @@ export function DataEntryTabs({
           throw new Error(result.error || 'Verarbeitung fehlgeschlagen')
         }
 
+        const productData = result.data.data
         const formData: Partial<ErfassungFormData> = {
-          hersteller: result.data.hersteller,
-          produktname: result.data.produktname,
-          kurzbeschreibung: result.data.kurzbeschreibung,
-          specs: result.data.specs,
-          verkaufspreis: result.data.verkaufspreis,
-          zustand: result.data.zustand,
-          hauptkategorie: result.data.hauptkategorie,
-          unterkategorie: result.data.unterkategorie,
-          kundenprofile: result.data.kundenprofile,
+          hersteller: productData.hersteller,
+          produktname: productData.produktname,
+          kurzbeschreibung: productData.kurzbeschreibung,
+          specs: productData.specs,
+          verkaufspreis: productData.verkaufspreis,
+          zustand: productData.zustand,
+          hauptkategorie: productData.hauptkategorie,
+          unterkategorie: productData.unterkategorie,
+          kundenprofile: productData.kundenprofile,
         }
 
-        onProductData(formData, result.metadata as AIFieldMetadata)
+        onProductData(formData, result.data.metadata as AIFieldMetadata)
         setQuickEntryState('success')
-        logger.info('Quick text entry successful', { product: result.data.produktname })
+        logger.info('Quick text entry successful', { product: productData.produktname })
 
         setTimeout(() => {
           setQuickEntryState('idle')
@@ -223,10 +224,10 @@ export function DataEntryTabs({
         throw new Error(result.error || 'Datei konnte nicht verarbeitet werden')
       }
 
-      onBulkData(result.products)
-      setUnmappedColumns(result.unmappedColumns || [])
+      onBulkData(result.data.products)
+      setUnmappedColumns(result.data.unmappedColumns || [])
       setIsCollapsed(true)
-      logger.info('File upload successful', { count: result.products.length, unmappedColumns: result.unmappedColumns })
+      logger.info('File upload successful', { count: result.data.products.length, unmappedColumns: result.data.unmappedColumns })
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Unbekannter Fehler'
       onError?.(message)

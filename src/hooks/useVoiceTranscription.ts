@@ -51,13 +51,13 @@ export function useVoiceTranscription({
         throw new Error(result.error || 'Unbekannter Fehler')
       }
 
-      setTranscribedText(result.transcription)
-      onTranscription?.(result.transcription)
-      onTranscriptionComplete?.(result.data, result.metadata as AIFieldMetadata)
+      setTranscribedText(result.data.transcription)
+      onTranscription?.(result.data.transcription)
+      onTranscriptionComplete?.(result.data.data, result.data.metadata as AIFieldMetadata)
       onSuccess?.()
 
       logger.info('Voice transcription completed', {
-        product: result.data?.produktname,
+        product: result.data.data?.produktname,
       })
 
       return true

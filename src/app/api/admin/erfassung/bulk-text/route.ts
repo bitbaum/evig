@@ -8,6 +8,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { withAdmin } from '@/lib/api/middleware'
 import { logger } from '@/lib/logger'
+import { apiSuccess } from '@/lib/api/helpers'
 import { validateBody, BulkTextSchema } from '@/lib/schemas'
 import { extractMultipleProducts } from '@/lib/erfassung/bulk-extraction'
 
@@ -30,8 +31,7 @@ export const POST = withAdmin(async (request: NextRequest, session) => {
       productCount: products.length,
     })
 
-    return NextResponse.json({
-      success: true,
+    return apiSuccess({
       productCount: products.length,
       products,
     })
