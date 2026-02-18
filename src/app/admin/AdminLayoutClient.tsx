@@ -31,6 +31,7 @@ import {
 import { getSensitivityReason } from '@/config/sensitive-areas'
 import { HirnFloatingButton } from '@/components/admin/HirnFloatingButton'
 import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { NotificationBell } from '@/components/admin/NotificationBell'
 
 interface AdminLayoutClientProps {
   children: React.ReactNode
@@ -366,6 +367,9 @@ export function AdminLayoutClient({
                 <Globe className="w-4 h-4" />
                 Website
               </Link>
+
+              {/* Notification Bell */}
+              <NotificationBell />
 
               {/* User Menu Dropdown */}
               <div className="relative" ref={userMenuRef}>
