@@ -326,7 +326,7 @@ export default function AdminWorkshopsPage() {
 
                   <div className="flex items-center gap-2 ml-4">
                     <Link
-                      href={`/admin/workshops/${proposal.id}`}
+                      href={`/admin/workshops/proposals/${proposal.id}`}
                       className="inline-flex items-center px-3 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50"
                     >
                       <Eye className="w-4 h-4 mr-1" />
