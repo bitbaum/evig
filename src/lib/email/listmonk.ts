@@ -101,10 +101,7 @@ export async function sendViaListmonk(
         error: errorText,
         to,
       });
-      return {
-        success: false,
-        error: `Listmonk API error: ${response.status} - ${errorText}`,
-      };
+      throw new Error(`Listmonk API error: ${response.status} - ${errorText}`);
     }
 
     const result = await response.json();
@@ -116,10 +113,7 @@ export async function sendViaListmonk(
     };
   } catch (error) {
     logger.error('Listmonk send error', { error, to });
-    return {
-      success: false,
-      error: error instanceof Error ? error.message : 'Unknown error',
-    };
+    throw error;
   }
 }
 
