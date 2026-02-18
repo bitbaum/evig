@@ -77,5 +77,8 @@ export {
   orderStatusUpdate,
 } from './marketplace';
 
+// Notification template (generic, used by notification service)
+export { notificationEmail } from './notification';
+
 // Base styles (for custom templates)
 export { BASE_STYLES, COPYRIGHT_TEXT, AUTO_GENERATED_TEXT, createEmailLayout, createTextFooter } from './base-styles';

@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { Bell, X, Check } from 'lucide-react'
+import { RELATED_TYPE_HREFS } from '@/config/notifications'
 
 interface Notification {
   id: string
@@ -27,16 +28,10 @@ function relativeTime(iso: string): string {
 }
 
 function relatedHref(notification: Notification): string | null {
-  if (notification.related_type === 'task' && notification.related_id) {
-    return `/admin/tasks/${notification.related_id}`
-  }
-  if (notification.related_type === 'protocol' && notification.related_id) {
-    return `/admin/protocols/${notification.related_id}`
-  }
-  if (notification.related_type === 'decision' && notification.related_id) {
-    return `/admin/decisions/${notification.related_id}`
-  }
-  return null
+  const { related_type, related_id } = notification
+  if (!related_type || !related_id) return null
+  const base = RELATED_TYPE_HREFS[related_type]
+  return base ? `${base}${related_id}` : null
 }
 
 export function NotificationBell() {
