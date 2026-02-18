@@ -14,6 +14,7 @@ import {
 } from '@/config/decisions';
 import { formatDeadline } from '@/lib/utils/date';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
+import type { DecisionStats } from '@/lib/services/decisions';
 
 interface DecisionListItem {
   id: string;
@@ -33,9 +34,11 @@ interface DecisionListItem {
 export default function DecisionListClient({
   currentUserId,
   isSuperAdmin,
+  stats,
 }: {
   currentUserId: string;
   isSuperAdmin: boolean;
+  stats: DecisionStats;
 }) {
   const [decisions, setDecisions] = useState<DecisionListItem[]>([]);
   const [loading, setLoading] = useState(true);
@@ -112,35 +115,24 @@ export default function DecisionListClient({
     }
   }
 
-  // Compute stats
-  const activeVoting = decisions.filter((d) => d.status === 'voting').length;
-  const openDiscussion = decisions.filter(
-    (d) => d.status === 'discussion'
-  ).length;
-  const pendingVotes = decisions.filter(
-    (d) => d.status === 'voting' && !d.hasUserVoted
-  ).length;
-
   return (
     <div>
-      {/* Stats */}
+      {/* Stats — always reflect full DB counts, independent of active filters */}
       <div className="mb-6 grid grid-cols-2 gap-4 sm:grid-cols-4">
         <div className="rounded-lg bg-white p-4 border">
-          <p className="text-2xl font-bold text-amber-600">{activeVoting}</p>
+          <p className="text-2xl font-bold text-amber-600">{stats.voting}</p>
           <p className="text-xs text-gray-500">Aktive Abstimmungen</p>
         </div>
         <div className="rounded-lg bg-white p-4 border">
-          <p className="text-2xl font-bold text-blue-600">{openDiscussion}</p>
+          <p className="text-2xl font-bold text-blue-600">{stats.discussion}</p>
           <p className="text-xs text-gray-500">Offene Diskussionen</p>
         </div>
         <div className="rounded-lg bg-white p-4 border">
-          <p className="text-2xl font-bold text-green-600">
-            {decisions.filter((d) => d.status === 'closed').length}
-          </p>
+          <p className="text-2xl font-bold text-green-600">{stats.closed}</p>
           <p className="text-xs text-gray-500">Abgeschlossen</p>
         </div>
         <div className="rounded-lg bg-white p-4 border">
-          <p className="text-2xl font-bold text-red-600">{pendingVotes}</p>
+          <p className="text-2xl font-bold text-red-600">{stats.pendingVotes}</p>
           <p className="text-xs text-gray-500">Deine ausstehenden Stimmen</p>
         </div>
       </div>

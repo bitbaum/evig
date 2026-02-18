@@ -113,6 +113,43 @@ interface DecisionFilters {
   limit?: number;
 }
 
+export interface DecisionStats {
+  voting: number;
+  discussion: number;
+  closed: number;
+  pendingVotes: number;
+}
+
+export async function getDecisionStats(requestingUserId: string): Promise<DecisionStats> {
+  const result = await query<{
+    voting: string;
+    discussion: string;
+    closed: string;
+    pending_votes: string;
+  }>(
+    `SELECT
+       COUNT(*) FILTER (WHERE status = 'voting')                                         AS voting,
+       COUNT(*) FILTER (WHERE status = 'discussion')                                     AS discussion,
+       COUNT(*) FILTER (WHERE status = 'closed')                                         AS closed,
+       COUNT(*) FILTER (
+         WHERE status = 'voting'
+         AND id NOT IN (
+           SELECT decision_id FROM ${TABLE_NAMES.DECISION_VOTES} WHERE user_id = $1
+         )
+       )                                                                                  AS pending_votes
+     FROM ${TABLE_NAMES.DECISIONS}`,
+    [requestingUserId]
+  );
+
+  const row = result.rows[0];
+  return {
+    voting: parseInt(row?.voting || '0', 10),
+    discussion: parseInt(row?.discussion || '0', 10),
+    closed: parseInt(row?.closed || '0', 10),
+    pendingVotes: parseInt(row?.pending_votes || '0', 10),
+  };
+}
+
 export async function getDecisions(
   filters: DecisionFilters,
   requestingUserId: string

@@ -13,6 +13,7 @@ import { isSuperAdmin } from '@/lib/permissions'
 import { Plus, Vote } from 'lucide-react'
 import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
 import DecisionListClient from './DecisionListClient'
+import { getDecisionStats } from '@/lib/services/decisions'
 
 export const metadata: Metadata = {
   title: 'Entscheidungen | RevampIT Admin',
@@ -32,6 +33,10 @@ export default async function DecisionsAdminPage() {
   const currentUserId = userResult.rows[0]?.id || ''
   const isAdmin = isSuperAdmin(session.user.email, session.user.isSuperAdmin)
 
+  const stats = currentUserId
+    ? await getDecisionStats(currentUserId)
+    : { voting: 0, discussion: 0, closed: 0, pendingVotes: 0 }
+
   return (
     <AdminPageWrapper
       title="Entscheidungen"
@@ -48,7 +53,7 @@ export default async function DecisionsAdminPage() {
         </Link>
       }
     >
-      <DecisionListClient currentUserId={currentUserId} isSuperAdmin={isAdmin} />
+      <DecisionListClient currentUserId={currentUserId} isSuperAdmin={isAdmin} stats={stats} />
     </AdminPageWrapper>
   )
 }

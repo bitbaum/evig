@@ -17,7 +17,8 @@ describe('DecisionListClient', () => {
         json: async () => ({ success: true, data: [] }),
       })
 
-    render(<DecisionListClient currentUserId="test-user-id" isSuperAdmin={false} />)
+    const stats = { voting: 0, discussion: 0, closed: 0, pendingVotes: 0 }
+    render(<DecisionListClient currentUserId="test-user-id" isSuperAdmin={false} stats={stats} />)
 
     expect(await screen.findByText('Kaputt')).toBeInTheDocument()
 
