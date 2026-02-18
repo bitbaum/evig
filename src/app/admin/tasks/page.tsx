@@ -84,8 +84,7 @@ async function getTasks(
   q?: string,
   priority?: string,
 ): Promise<TaskListItem[]> {
-  try {
-    let queryText = `
+  let queryText = `
       SELECT
         t.id,
         t.title,
@@ -152,12 +151,8 @@ async function getTasks(
       LIMIT 100
     `
 
-    const result = await query<TaskListItem>(queryText, params)
-    return result.rows
-  } catch (error) {
-    logger.error('Error fetching tasks', { error })
-    return []
-  }
+  const result = await query<TaskListItem>(queryText, params)
+  return result.rows
 }
 
 export default async function TasksAdminPage({
@@ -167,7 +162,15 @@ export default async function TasksAdminPage({
 }) {
   const params = await searchParams
   const stats = await getTaskStats()
-  const tasks = await getTasks(params.category, params.status, params.q, params.priority)
+
+  let tasks: TaskListItem[] = []
+  let listError = false
+  try {
+    tasks = await getTasks(params.category, params.status, params.q, params.priority)
+  } catch (error) {
+    logger.error('Error fetching tasks', { error })
+    listError = true
+  }
 
   return (
     <AdminPageWrapper
@@ -252,7 +255,23 @@ export default async function TasksAdminPage({
 
       {/* Task List */}
       <div className="bg-white rounded-lg border overflow-hidden overflow-x-auto">
-        {tasks.length === 0 ? (
+        {listError ? (
+          <div className="p-12 text-center">
+            <AlertTriangle className="w-12 h-12 text-red-300 mx-auto mb-4" />
+            <h3 className="text-lg font-medium text-gray-900 mb-2">
+              Aufgaben konnten nicht geladen werden
+            </h3>
+            <p className="text-gray-600 mb-4">
+              Es gab ein Problem beim Laden der Aufgaben. Bitte versuche es erneut.
+            </p>
+            <a
+              href=""
+              className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+            >
+              Seite neu laden
+            </a>
+          </div>
+        ) : tasks.length === 0 ? (
           <div className="p-12 text-center">
             <ClipboardList className="w-12 h-12 text-gray-300 mx-auto mb-4" />
             <h3 className="text-lg font-medium text-gray-900 mb-2">

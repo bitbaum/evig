@@ -13,7 +13,9 @@ import { auth } from '@/auth'
 import { query } from '@/lib/auth/db'
 import { TABLE_NAMES } from '@/config/database'
 import { isSuperAdmin } from '@/lib/permissions'
+import { logger } from '@/lib/logger'
 import { getProtocols, getProtocolStats } from '@/lib/services/protocols'
+import type { ProtocolListItem } from '@/lib/schemas/protocols'
 import {
   MEETING_TYPE_LABELS,
   MEETING_TYPE_COLORS,
@@ -32,6 +34,7 @@ import {
   Clock,
   CheckCircle2,
   Edit3,
+  AlertTriangle,
 } from 'lucide-react'
 import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
 import ProtocolListClient from './ProtocolListClient'
@@ -64,14 +67,22 @@ export default async function ProtocolsAdminPage({
     return null
   }
 
-  const [stats, protocols] = await Promise.all([
-    getProtocolStats(dbUserId, isAdmin),
-    getProtocols(dbUserId, isAdmin, {
-      meeting_type: params.meeting_type,
-      status: params.status,
-      q: params.q,
-    }),
-  ])
+  let stats = { total: 0, draft: 0, review: 0, finalized: 0 }
+  let protocols: ProtocolListItem[] = []
+  let listError = false
+  try {
+    ;[stats, protocols] = await Promise.all([
+      getProtocolStats(dbUserId, isAdmin),
+      getProtocols(dbUserId, isAdmin, {
+        meeting_type: params.meeting_type,
+        status: params.status,
+        q: params.q,
+      }),
+    ])
+  } catch (error) {
+    logger.error('Error fetching protocols', { error })
+    listError = true
+  }
 
   const stepFilter = params.step
   const validStepFilter = PROTOCOL_WORKFLOW_STEPS.some((step) => step.id === stepFilter)
@@ -159,7 +170,23 @@ export default async function ProtocolsAdminPage({
 
       {/* Protocol List */}
       <div className="bg-white rounded-lg border overflow-hidden overflow-x-auto">
-        {filteredProtocols.length === 0 ? (
+        {listError ? (
+          <div className="p-12 text-center">
+            <AlertTriangle className="w-12 h-12 text-red-300 mx-auto mb-4" />
+            <h3 className="text-lg font-medium text-gray-900 mb-2">
+              Protokolle konnten nicht geladen werden
+            </h3>
+            <p className="text-gray-600 mb-4">
+              Es gab ein Problem beim Laden der Protokolle. Bitte versuche es erneut.
+            </p>
+            <a
+              href=""
+              className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+            >
+              Seite neu laden
+            </a>
+          </div>
+        ) : filteredProtocols.length === 0 ? (
           <div className="p-12 text-center">
             <FileText className="w-12 h-12 text-gray-300 mx-auto mb-4" />
             <h3 className="text-lg font-medium text-gray-900 mb-2">
