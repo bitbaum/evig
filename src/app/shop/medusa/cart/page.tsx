@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { ArrowLeft, Trash2, Plus, Minus, ShoppingCart, Package } from "lucide-react";
@@ -14,7 +14,11 @@ import { cn } from "@/lib/utils";
 import type { MedusaCartItem } from "@/types/common";
 
 export default function CartPage() {
-  const [cartId] = useState<string | null>(() => getCartId());
+  const [cartId, setCartId] = useState<string | null>(null);
+
+  useEffect(() => {
+    setCartId(getCartId());
+  }, []);
 
   const { data: cart, isLoading } = useCart(cartId || undefined);
   const updateLineItem = useUpdateLineItem();

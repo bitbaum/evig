@@ -153,14 +153,15 @@ export async function publishToMedusa(
       collection_id: await getOrCreateCollection(aiProduct.category || 'general') || undefined,
       type_id: await getOrCreateType('physical') || undefined,
       tags: generateTags(aiProduct),
+      options: [{ title: 'Default', values: ['Standard'] }],
       variants: [{
         title: 'Default Variant',
         sku: item.kivitendo_article_number,
-        inventory_quantity: item.quantity_available || 1,
         prices: [{
           amount: Math.round((item.selling_price_chf || 0) * 100),
           currency_code: 'chf',
         }],
+        options: { Default: 'Standard' },
       }],
       images: images.map((img) => ({ url: img.file_path })),
       metadata: {
@@ -178,7 +179,7 @@ export async function publishToMedusa(
       headers: {
         'Content-Type': 'application/json',
         'x-publishable-key': MEDUSA_CONFIG.PUBLISHABLE_KEY,
-        'Authorization': `Bearer ${getAdminToken()}`,
+        'Authorization': `Bearer ${await getAdminToken()}`,
       },
       body: JSON.stringify(medusaProductData),
     })
@@ -204,6 +205,9 @@ export async function publishToMedusa(
       })
       return null
     }
+
+    // Set up inventory levels in Medusa so the product is purchasable
+    await setupMedusaInventory(medusaVariantId, item.quantity_available || 1)
 
     // Store both IDs on the inventory item
     await query(
@@ -257,11 +261,39 @@ export async function publishToMedusa(
 // Helpers
 // ============================================================================
 
-function getAdminToken(): string {
-  const token = MEDUSA_CONFIG.ADMIN_API_KEY
-  if (!token) {
-    throw new Error("MEDUSA_ADMIN_API_KEY not found. Run 'npm run medusa:bootstrap' first.")
+// Cache JWT to avoid re-authenticating on every call
+let _cachedJwt: { token: string; expiresAt: number } | null = null
+
+async function getAdminToken(): Promise<string> {
+  // Return cached JWT if still valid (with 60s buffer)
+  if (_cachedJwt && Date.now() < _cachedJwt.expiresAt - 60_000) {
+    return _cachedJwt.token
   }
+
+  const { ADMIN_EMAIL, ADMIN_PASSWORD, URL } = MEDUSA_CONFIG
+  if (!ADMIN_EMAIL || !ADMIN_PASSWORD) {
+    throw new Error("MEDUSA_ADMIN_EMAIL and MEDUSA_ADMIN_PASSWORD required. Set in .env.local.")
+  }
+
+  // Authenticate via Medusa emailpass endpoint
+  const resp = await fetch(`${URL}/auth/user/emailpass`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email: ADMIN_EMAIL, password: ADMIN_PASSWORD }),
+  })
+
+  if (!resp.ok) {
+    throw new Error(`Medusa admin login failed (${resp.status})`)
+  }
+
+  const data = await resp.json() as { token?: string }
+  const token = data.token
+  if (!token) {
+    throw new Error('Medusa admin login returned no token')
+  }
+
+  // JWT default expiry is 24h; cache for 23h
+  _cachedJwt = { token, expiresAt: Date.now() + 23 * 60 * 60_000 }
   return token
 }
 
@@ -272,7 +304,7 @@ function generateHandle(productName: string, articleNumber: string): string {
     .replace(/\s+/g, '-')
     .substring(0, 50)
 
-  return `${baseHandle}-${articleNumber}`
+  return `${baseHandle}-${articleNumber.toLowerCase()}`
 }
 
 function generateProductDescription(aiProduct: AIProductRow): string {
@@ -310,7 +342,7 @@ function generateProductDescription(aiProduct: AIProductRow): string {
 }
 
 async function getOrCreateCollection(category: string): Promise<string> {
-  const adminToken = getAdminToken()
+  const adminToken = await getAdminToken()
 
   try {
     const listResponse = await fetch(`${MEDUSA_CONFIG.URL}/admin/collections?limit=100`, {
@@ -357,7 +389,7 @@ async function getOrCreateCollection(category: string): Promise<string> {
 }
 
 async function getOrCreateType(type: string): Promise<string> {
-  const adminToken = getAdminToken()
+  const adminToken = await getAdminToken()
 
   try {
     const listResponse = await fetch(`${MEDUSA_CONFIG.URL}/admin/product-types?limit=100`, {
@@ -411,6 +443,71 @@ function generateTags(aiProduct: AIProductRow): Array<{ value: string }> {
   if (aiProduct.condition) tags.push({ value: `condition-${aiProduct.condition}` })
 
   return tags
+}
+
+/**
+ * Set up inventory levels in Medusa so the product is purchasable.
+ * Finds the Medusa inventory item for a variant and creates a location level
+ * at the first available stock location.
+ */
+async function setupMedusaInventory(variantId: string, quantity: number): Promise<void> {
+  try {
+    const adminToken = await getAdminToken()
+    const headers = {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${adminToken}`,
+    }
+
+    // Get inventory items for this variant's SKU (Medusa creates one automatically)
+    const itemsResp = await fetch(`${MEDUSA_CONFIG.URL}/admin/inventory-items?limit=100`, { headers })
+    if (!itemsResp.ok) return
+
+    const itemsData = await itemsResp.json() as {
+      inventory_items: Array<{ id: string; location_levels: Array<{ location_id: string }> }>
+    }
+
+    // Get stock locations
+    const locsResp = await fetch(`${MEDUSA_CONFIG.URL}/admin/stock-locations`, { headers })
+    if (!locsResp.ok) return
+    const locsData = await locsResp.json() as { stock_locations: Array<{ id: string }> }
+    const locationId = locsData.stock_locations[0]?.id
+    if (!locationId) return
+
+    // Find the variant's inventory item (the most recently created one without a location level)
+    // Medusa auto-creates an inventory item when a variant is created
+    const variantResp = await fetch(
+      `${MEDUSA_CONFIG.URL}/admin/products?variants.id=${variantId}&fields=variants.inventory_items.inventory.id`,
+      { headers },
+    )
+    if (!variantResp.ok) return
+    const variantData = await variantResp.json()
+    const inventoryLinks = variantData.products?.[0]?.variants?.[0]?.inventory_items
+    const medusaInventoryItemId = inventoryLinks?.[0]?.inventory?.id
+
+    if (!medusaInventoryItemId) {
+      logger.warn('setupMedusaInventory: No inventory item found for variant', { variantId })
+      return
+    }
+
+    // Create location level
+    const levelResp = await fetch(
+      `${MEDUSA_CONFIG.URL}/admin/inventory-items/${medusaInventoryItemId}/location-levels`,
+      {
+        method: 'POST',
+        headers,
+        body: JSON.stringify({ location_id: locationId, stocked_quantity: quantity }),
+      },
+    )
+
+    if (levelResp.ok) {
+      logger.info('Medusa inventory level set', { medusaInventoryItemId, locationId, quantity })
+    } else {
+      const err = await levelResp.text()
+      logger.warn('setupMedusaInventory: Failed to set location level', { error: err })
+    }
+  } catch (error) {
+    logger.warn('setupMedusaInventory: error (non-fatal)', { error, variantId })
+  }
 }
 
 async function getSustainabilityScore(aiProductId: string): Promise<number> {

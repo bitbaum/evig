@@ -14,6 +14,8 @@ export const MEDUSA_CONFIG = {
   ADMIN_URL: MEDUSA_ADMIN_URL,
   PUBLISHABLE_KEY: process.env.NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY || '',
   ADMIN_API_KEY: process.env.MEDUSA_ADMIN_API_KEY || '',
+  ADMIN_EMAIL: process.env.MEDUSA_ADMIN_EMAIL || '',
+  ADMIN_PASSWORD: process.env.MEDUSA_ADMIN_PASSWORD || '',
 } as const;
 
 /**

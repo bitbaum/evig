@@ -121,7 +121,9 @@ export function useRegions() {
       if (!response.ok) {
         throw new Error("Failed to fetch regions");
       }
-      const data = await response.json();
+      const json = await response.json();
+      // API wraps in { success, data: { regions } }
+      const data = json.data || json;
       return data.regions as Region[];
     },
     staleTime: 300000, // Cache for 5 minutes
@@ -142,7 +144,8 @@ export function useCart(cartId?: string | null) {
         }
         return null;
       }
-      const data = await response.json();
+      const json = await response.json();
+      const data = json.data || json;
       return data.cart as Cart;
     },
     enabled: !!cartId,
@@ -163,7 +166,9 @@ export function useCreateCart() {
       if (!response.ok) {
         throw new Error("Failed to create cart");
       }
-      const data = await response.json();
+      const json = await response.json();
+      // API wraps in { success, data: { cart } }
+      const data = json.data || json;
       return data.cart as Cart;
     },
     onSuccess: (cart) => {
@@ -199,7 +204,9 @@ export function useAddToCart() {
       if (!response.ok) {
         throw new Error("Failed to add item to cart");
       }
-      const data = await response.json();
+      const json = await response.json();
+      // API wraps in { success, data: { cart } }
+      const data = json.data || json;
       return data.cart as Cart;
     },
     onSuccess: (cart) => {
@@ -229,7 +236,8 @@ export function useUpdateLineItem() {
       if (!response.ok) {
         throw new Error("Failed to update item");
       }
-      const data = await response.json();
+      const json = await response.json();
+      const data = json.data || json;
       return data.cart as Cart;
     },
     onSuccess: (cart) => {
@@ -255,7 +263,8 @@ export function useRemoveLineItem() {
       if (!response.ok) {
         throw new Error("Failed to remove item");
       }
-      const data = await response.json();
+      const json = await response.json();
+      const data = json.data || json;
       return data.cart as Cart;
     },
     onSuccess: (cart) => {

@@ -107,8 +107,8 @@ export default function ProductPage() {
   const [addedToCart, setAddedToCart] = useState(false);
   const [selectedImage, setSelectedImage] = useState(0);
 
-  // Get default region for cart creation
-  const defaultRegion = regions?.[0];
+  // Get default region for cart creation (prefer CHF for Swiss shop)
+  const defaultRegion = regions?.find(r => r.currency_code === 'chf') || regions?.[0];
 
   // Determine if this inventory product can be added to Medusa cart
   const canAddToMedusaCart = isInventoryProduct && inventoryProduct?.medusa_variant_id;
