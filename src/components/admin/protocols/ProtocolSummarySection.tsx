@@ -1,0 +1,79 @@
+import { Loader2, CheckCircle2, MessageSquare } from 'lucide-react'
+import type { StructuredNotes } from '@/lib/schemas/protocols'
+
+interface Props {
+  notes: StructuredNotes
+  isReview: boolean
+  teamMembers: Array<{ id: string; name: string }>
+  attendeeMapping: Record<string, string>
+  mappingDirty: boolean
+  savingMapping: boolean
+  onMappingChange: (name: string, memberId: string) => void
+  onSaveMapping: () => void
+}
+
+export function ProtocolSummarySection({
+  notes,
+  isReview,
+  teamMembers,
+  attendeeMapping,
+  mappingDirty,
+  savingMapping,
+  onMappingChange,
+  onSaveMapping,
+}: Props) {
+  return (
+    <div id="protocol-step-review" className="bg-white rounded-lg border p-6">
+      <h2 className="text-lg font-semibold text-gray-900 mb-3">
+        <MessageSquare className="w-5 h-5 inline mr-2 text-gray-400" />
+        Zusammenfassung
+      </h2>
+      <p className="text-gray-700">{notes.summary}</p>
+
+      {notes.detected_attendees && notes.detected_attendees.length > 0 && (
+        <div className="mt-3 pt-3 border-t">
+          <p className="text-sm font-medium text-gray-600 mb-2">
+            Erkannte Teilnehmer:
+          </p>
+          {isReview ? (
+            <div className="space-y-2">
+              {notes.detected_attendees.map((name) => (
+                <div key={name} className="flex items-center gap-3">
+                  <span className="text-sm text-gray-700 min-w-[120px]">{name}</span>
+                  <select
+                    value={attendeeMapping[name] || ''}
+                    onChange={(e) => onMappingChange(name, e.target.value)}
+                    className="text-sm border rounded px-2 py-1 text-gray-600"
+                  >
+                    <option value="">— Nicht zugeordnet —</option>
+                    {teamMembers.map(m => (
+                      <option key={m.id} value={m.id}>{m.name}</option>
+                    ))}
+                  </select>
+                </div>
+              ))}
+              {mappingDirty && (
+                <button
+                  onClick={onSaveMapping}
+                  disabled={savingMapping}
+                  className="mt-2 flex items-center gap-2 px-3 py-1.5 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
+                >
+                  {savingMapping ? (
+                    <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                  ) : (
+                    <CheckCircle2 className="w-3.5 h-3.5" />
+                  )}
+                  Zuordnung speichern
+                </button>
+              )}
+            </div>
+          ) : (
+            <p className="text-sm text-gray-500">
+              {notes.detected_attendees.join(', ')}
+            </p>
+          )}
+        </div>
+      )}
+    </div>
+  )
+}
