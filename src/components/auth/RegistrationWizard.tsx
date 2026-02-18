@@ -37,12 +37,20 @@ export function RegistrationWizard() {
   // Restore saved state from localStorage (lazy initializer avoids effect)
   const savedData = useState(() => {
     if (typeof window === 'undefined') return null
-    const saved = localStorage.getItem(STORAGE_KEY)
-    if (!saved) return null
+
     try {
+      const saved = localStorage.getItem(STORAGE_KEY)
+      if (!saved) return null
+
       return JSON.parse(saved) as { name?: string; email?: string; userId?: string; emailVerified?: boolean }
     } catch {
-      localStorage.removeItem(STORAGE_KEY)
+      // localStorage can fail in privacy-restricted browser contexts
+      // or when stored JSON is malformed. Never crash the registration flow.
+      try {
+        localStorage.removeItem(STORAGE_KEY)
+      } catch {
+        // ignore localStorage cleanup failures
+      }
       return null
     }
   })[0]
@@ -66,6 +74,7 @@ export function RegistrationWizard() {
   const saveState = (newState: Partial<RegistrationState>) => {
     const updated = { ...state, ...newState }
     setState(updated)
+
     // Don't save passwords
     const toSave = {
       name: updated.name,
@@ -73,12 +82,21 @@ export function RegistrationWizard() {
       userId: updated.userId,
       emailVerified: updated.emailVerified,
     }
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(toSave))
+
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(toSave))
+    } catch {
+      // localStorage persistence is best-effort; registration must not crash if it fails
+    }
   }
 
   // Clear saved state
   const clearState = () => {
-    localStorage.removeItem(STORAGE_KEY)
+    try {
+      localStorage.removeItem(STORAGE_KEY)
+    } catch {
+      // ignore localStorage cleanup failures
+    }
   }
 
   // Step 1: Account Creation
