@@ -1,27 +1,54 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { signOut } from 'next-auth/react'
 import Link from 'next/link'
-import { LogOut, Loader2, CheckCircle2 } from 'lucide-react'
+import { LogOut, Loader2, AlertCircle } from 'lucide-react'
+
+const LOGOUT_CALLBACK = '/auth/login?logout=1'
+
+async function forceServerSignOut(callbackUrl: string): Promise<void> {
+  const csrfRes = await fetch('/api/auth/csrf', { credentials: 'same-origin' })
+  if (!csrfRes.ok) {
+    throw new Error('Failed to get CSRF token')
+  }
+
+  const csrfData = (await csrfRes.json()) as { csrfToken?: string }
+  if (!csrfData.csrfToken) {
+    throw new Error('Missing CSRF token')
+  }
+
+  const body = new URLSearchParams({
+    csrfToken: csrfData.csrfToken,
+    callbackUrl,
+    json: 'true',
+  })
+
+  const signOutRes = await fetch('/api/auth/signout', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    credentials: 'same-origin',
+    body,
+  })
+
+  if (!signOutRes.ok) {
+    throw new Error('Signout request failed')
+  }
+}
 
 export default function LogoutPage() {
-  const [isLoading, setIsLoading] = useState(true)
-  const [isLoggedOut, setIsLoggedOut] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
     document.title = 'Abmelden | RevampIT'
 
-    // Perform sign out
     const performSignOut = async () => {
       try {
-        await signOut({ redirect: false })
-        setIsLoggedOut(true)
+        await forceServerSignOut(LOGOUT_CALLBACK)
+        window.location.replace(LOGOUT_CALLBACK)
       } catch {
-        // Even if there's an error, consider user logged out
-        setIsLoggedOut(true)
-      } finally {
-        setIsLoading(false)
+        setError('Abmeldung fehlgeschlagen. Bitte versuchen Sie es erneut.')
       }
     }
 
@@ -48,7 +75,7 @@ export default function LogoutPage() {
         {/* Logout Card */}
         <div className="w-full max-w-md mx-auto">
           <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 border border-gray-100 dark:border-gray-700 text-center">
-            {isLoading ? (
+            {!error ? (
               <>
                 <div className="w-16 h-16 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center mx-auto mb-4">
                   <Loader2 className="w-8 h-8 text-green-600 animate-spin" />
@@ -56,55 +83,33 @@ export default function LogoutPage() {
                 <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
                   Abmeldung läuft...
                 </h2>
-                <p className="text-gray-600 dark:text-gray-400">
-                  Bitte warten Sie einen Moment.
-                </p>
-              </>
-            ) : isLoggedOut ? (
-              <>
-                <div className="w-16 h-16 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <CheckCircle2 className="w-8 h-8 text-green-600" />
-                </div>
-                <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
-                  Erfolgreich abgemeldet
-                </h2>
-                <p className="text-gray-600 dark:text-gray-400 mb-6">
-                  Sie wurden erfolgreich von Ihrem Konto abgemeldet.
-                </p>
-                <div className="space-y-3">
-                  <Link
-                    href="/"
-                    className="inline-flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white font-medium px-6 py-3 rounded-lg transition-colors w-full"
-                  >
-                    Zur Startseite
-                  </Link>
-                  <Link
-                    href="/auth/login"
-                    className="inline-flex items-center justify-center gap-2 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-900 dark:text-white font-medium px-6 py-3 rounded-lg transition-colors w-full"
-                  >
-                    <LogOut className="w-4 h-4" />
-                    Erneut anmelden
-                  </Link>
-                </div>
+                <p className="text-gray-600 dark:text-gray-400">Bitte warten Sie einen Moment.</p>
               </>
             ) : (
               <>
-                <div className="w-16 h-16 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <LogOut className="w-8 h-8 text-gray-600 dark:text-gray-400" />
+                <div className="w-16 h-16 bg-red-100 dark:bg-red-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <AlertCircle className="w-8 h-8 text-red-600" />
                 </div>
                 <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
-                  Abmelden
+                  Abmeldung fehlgeschlagen
                 </h2>
-                <p className="text-gray-600 dark:text-gray-400 mb-6">
-                  Möchten Sie sich wirklich abmelden?
-                </p>
+                <p className="text-gray-600 dark:text-gray-400 mb-6">{error}</p>
                 <div className="space-y-3">
                   <button
-                    onClick={() => signOut({ callbackUrl: '/' })}
+                    onClick={() => {
+                      setError(null)
+                      void forceServerSignOut(LOGOUT_CALLBACK)
+                        .then(() => {
+                          window.location.replace(LOGOUT_CALLBACK)
+                        })
+                        .catch(() => {
+                          setError('Abmeldung fehlgeschlagen. Bitte versuchen Sie es erneut.')
+                        })
+                    }}
                     className="inline-flex items-center justify-center gap-2 bg-red-600 hover:bg-red-700 text-white font-medium px-6 py-3 rounded-lg transition-colors w-full"
                   >
                     <LogOut className="w-4 h-4" />
-                    Abmelden
+                    Erneut abmelden
                   </button>
                   <Link
                     href="/dashboard"
