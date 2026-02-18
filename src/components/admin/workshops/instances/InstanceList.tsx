@@ -1,0 +1,150 @@
+'use client'
+
+import Link from 'next/link'
+import {
+  Calendar,
+  Plus,
+  GraduationCap,
+  Eye,
+  Edit,
+  Trash2,
+  Users,
+  MapPin,
+} from 'lucide-react'
+import type { WorkshopInstanceWithDetails } from './types'
+
+interface InstanceListProps {
+  instances: WorkshopInstanceWithDetails[]
+  loading: boolean
+  onEdit: (instance: WorkshopInstanceWithDetails) => void
+  onDelete: (instanceId: string) => void
+  onCreateNew: () => void
+  getStatusBadge: (status: string) => { label: string; className: string }
+}
+
+export function InstanceList({
+  instances,
+  loading,
+  onEdit,
+  onDelete,
+  onCreateNew,
+  getStatusBadge,
+}: InstanceListProps) {
+  return (
+    <div className="bg-white rounded-xl shadow-sm border">
+      <div className="px-6 py-4 border-b border-gray-200">
+        <h2 className="text-lg font-semibold text-gray-900">
+          Termine ({instances.length})
+        </h2>
+      </div>
+
+      <div className="divide-y divide-gray-200">
+        {instances.map((instance) => {
+          const badge = getStatusBadge(instance.status)
+          return (
+            <div key={instance.id} className="p-6 hover:bg-gray-50">
+              <div className="flex items-start justify-between">
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-3 mb-2">
+                    <GraduationCap className="w-5 h-5 text-blue-600" />
+                    <h3 className="text-lg font-semibold text-gray-900 truncate">
+                      {instance.workshop_title}
+                    </h3>
+                    <span className={`px-2 py-1 text-xs font-medium rounded-full ${badge.className}`}>
+                      {badge.label}
+                    </span>
+                  </div>
+
+                  <div className="flex flex-wrap items-center gap-4 text-sm text-gray-600 mb-3">
+                    <div className="flex items-center gap-1">
+                      <Calendar className="w-4 h-4" />
+                      {new Date(instance.start_date).toLocaleDateString('de-CH', {
+                        weekday: 'short',
+                        year: 'numeric',
+                        month: 'short',
+                        day: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit',
+                      })}
+                    </div>
+
+                    <div className="flex items-center gap-1">
+                      <Users className="w-4 h-4" />
+                      <span className={instance.current_participants >= (instance.max_participants || 10) ? 'text-red-600 font-medium' : ''}>
+                        {instance.current_participants}/{instance.max_participants || '\u221E'}
+                      </span>
+                      {instance.pending_count > 0 && (
+                        <span className="text-yellow-600">({instance.pending_count} ausstehend)</span>
+                      )}
+                    </div>
+
+                    {instance.location && (
+                      <div className="flex items-center gap-1">
+                        <MapPin className="w-4 h-4" />
+                        {instance.location}
+                      </div>
+                    )}
+
+                    {instance.instructor && (
+                      <div className="text-gray-500">
+                        Leitung: {instance.instructor}
+                      </div>
+                    )}
+                  </div>
+
+                  {instance.notes && (
+                    <p className="text-sm text-gray-500">{instance.notes}</p>
+                  )}
+                </div>
+
+                <div className="flex items-center gap-2 ml-4">
+                  <Link
+                    href={`/admin/workshops/instances/${instance.id}`}
+                    className="inline-flex items-center px-3 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50"
+                  >
+                    <Eye className="w-4 h-4 mr-1" />
+                    Details
+                  </Link>
+
+                  <button
+                    onClick={() => onEdit(instance)}
+                    className="inline-flex items-center px-3 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50"
+                  >
+                    <Edit className="w-4 h-4 mr-1" />
+                    Bearbeiten
+                  </button>
+
+                  {instance.current_participants === 0 && (
+                    <button
+                      onClick={() => onDelete(instance.id)}
+                      className="inline-flex items-center px-3 py-2 border border-red-300 rounded-lg text-sm font-medium text-red-700 hover:bg-red-50"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  )}
+                </div>
+              </div>
+            </div>
+          )
+        })}
+
+        {instances.length === 0 && !loading && (
+          <div className="px-6 py-12 text-center">
+            <Calendar className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+            <h3 className="text-lg font-medium text-gray-900 mb-2">Keine Termine gefunden</h3>
+            <p className="text-gray-600 mb-4">
+              Erstellen Sie einen neuen Termin für einen Workshop.
+            </p>
+            <button
+              onClick={onCreateNew}
+              className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+            >
+              <Plus className="w-4 h-4 mr-2" />
+              Neuer Termin
+            </button>
+          </div>
+        )}
+      </div>
+    </div>
+  )
+}
