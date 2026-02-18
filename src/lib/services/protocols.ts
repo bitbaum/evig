@@ -10,6 +10,7 @@
 import { query, transaction } from '@/lib/auth/db'
 import { TABLE_NAMES } from '@/config/database'
 import { MEETING_TYPE_LABELS, MEETING_TYPE_TEMPLATES } from '@/config/protocols'
+import { notifyUsers, fireNotification } from '@/lib/services/notifications'
 import { PROTOCOL_PROMPTS, fillPromptTemplate } from '@/lib/ai/config/prompts'
 import { processProtocolTranscript, processProtocolNotes, processTaskList, processDecisionProposal } from '@/lib/ai/protocol-processing'
 import { logger } from '@/lib/logger'
@@ -742,14 +743,33 @@ async function resolveAttendeeNames(notes: StructuredNotes): Promise<StructuredN
 export async function finalizeProtocol(
   id: string,
 ): Promise<boolean> {
-  const result = await query(
+  const result = await query<{ id: string; title: string; attendees: string[] }>(
     `UPDATE ${TABLE_NAMES.MEETING_PROTOCOLS}
      SET status = 'finalized'
      WHERE id = $1 AND status = 'review'
-     RETURNING id`,
+     RETURNING id, title, attendees`,
     [id]
   )
-  return result.rows.length > 0
+
+  if (result.rows.length === 0) return false
+
+  const { title, attendees } = result.rows[0]
+
+  // Notify all attendees that the protocol is available
+  if (attendees && attendees.length > 0) {
+    fireNotification(
+      () => notifyUsers(attendees, {
+        type: 'protocol_finalized',
+        title: 'Protokoll abgeschlossen',
+        content: `Das Protokoll "${title}" ist jetzt verfügbar.`,
+        related_type: 'protocol',
+        related_id: id,
+      }),
+      `protocol_finalized:${id}`
+    )
+  }
+
+  return true
 }
 
 // =============================================================================

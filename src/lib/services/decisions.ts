@@ -9,6 +9,7 @@
 import { query, transaction } from '@/lib/auth/db';
 import { TABLE_NAMES } from '@/config/database';
 import { logger } from '@/lib/logger';
+import { notifyAllStaff, createNotification, fireNotification } from '@/lib/services/notifications';
 import {
   VALID_TRANSITIONS,
   EDITABLE_STATUSES,
@@ -584,6 +585,18 @@ export async function transitionDecision(
       return { error: 'invalid_transition' as const };
     }
 
+    // Notify the creator when decision closes
+    fireNotification(
+      () => createNotification(result.created_by, {
+        type: 'decision_closed',
+        title: 'Entscheidung abgeschlossen',
+        content: `"${result.title}" wurde abgeschlossen.`,
+        related_type: 'decision',
+        related_id: result.id,
+      }),
+      `decision_closed:${result.id}`
+    )
+
     return { decision: result };
   }
 
@@ -596,7 +609,26 @@ export async function transitionDecision(
     params
   );
 
-  return { decision: updated.rows[0] };
+  const updatedDecision = updated.rows[0];
+
+  // Notify all staff when voting opens
+  if (newStatus === 'voting' && updatedDecision) {
+    fireNotification(
+      () => notifyAllStaff(
+        {
+          type: 'decision_voting',
+          title: 'Abstimmung geöffnet',
+          content: `"${updatedDecision.title}" wartet auf deine Stimme.`,
+          related_type: 'decision',
+          related_id: updatedDecision.id,
+        },
+        userId, // don't notify the person who opened voting
+      ),
+      `decision_voting:${updatedDecision.id}`
+    )
+  }
+
+  return { decision: updatedDecision };
 }
 
 // ─── Voting ───────────────────────────────────────────────────────────────
