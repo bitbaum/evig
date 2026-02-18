@@ -23,7 +23,7 @@ export const PATCH = withAdmin<{ id: string }>(async (request, session, context)
 
     // Verify submission exists and is pending
     const submissionResult = await query(
-      `SELECT id, status, title, content_type, content_data FROM ${TABLE_NAMES.USER_CONTENT_SUBMISSIONS} WHERE id = $1`,
+      `SELECT id, status, title, content_type, content_id FROM ${TABLE_NAMES.USER_CONTENT_SUBMISSIONS} WHERE id = $1`,
       [id]
     )
 
@@ -32,7 +32,7 @@ export const PATCH = withAdmin<{ id: string }>(async (request, session, context)
     }
 
     const submission = submissionResult.rows[0] as {
-      id: string; status: string; title: string; content_type: string; content_data: string | null
+      id: string; status: string; title: string; content_type: string; content_id: string | null
     }
 
     if (submission.status !== 'pending') {
@@ -49,28 +49,21 @@ export const PATCH = withAdmin<{ id: string }>(async (request, session, context)
     )
 
     // On product approval, publish to MedusaJS
-    if (action === 'approve' && submission.content_type === 'product' && submission.content_data) {
+    if (action === 'approve' && submission.content_type === 'product' && submission.content_id) {
       try {
-        const contentData = typeof submission.content_data === 'string'
-          ? JSON.parse(submission.content_data)
-          : submission.content_data
-        const inventoryId = contentData?.inventoryId
+        const publishResponse = await fetch(`${MEDUSA_CONFIG.BACKEND_URL}/api/inventory/publish-medusa`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Basic ${MEDUSA_CONFIG.ADMIN_API_KEY || ''}`
+          },
+          body: JSON.stringify({ inventoryItemId: submission.content_id })
+        })
 
-        if (inventoryId) {
-          const publishResponse = await fetch(`${MEDUSA_CONFIG.BACKEND_URL}/api/inventory/publish-medusa`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Basic ${MEDUSA_CONFIG.ADMIN_API_KEY || ''}`
-            },
-            body: JSON.stringify({ inventoryItemId: inventoryId })
-          })
-
-          if (publishResponse.ok) {
-            logger.info('Product published to MedusaJS after approval', { inventoryId, submissionId: id })
-          } else {
-            logger.warn('Failed to publish to MedusaJS after approval', { inventoryId, submissionId: id })
-          }
+        if (publishResponse.ok) {
+          logger.info('Product published to MedusaJS after approval', { inventoryId: submission.content_id, submissionId: id })
+        } else {
+          logger.warn('Failed to publish to MedusaJS after approval', { inventoryId: submission.content_id, submissionId: id })
         }
       } catch (publishError) {
         logger.warn('Error publishing to MedusaJS after approval', { submissionId: id, error: publishError })
