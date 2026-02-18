@@ -28,6 +28,9 @@ export {
   workshopCancellation,
   workshopFeedbackRequest,
   workshopProposalSubmitted,
+  workshopProposalApproved,
+  workshopProposalRejected,
+  workshopProposalChangesRequested,
 } from './workshop';
 
 // Admin notification templates
@@ -45,6 +48,8 @@ export {
   newReviewNotification,
   sellerApplicationSubmitted,
   locationApprovalNotification,
+  contentSubmissionApproved,
+  contentSubmissionRejected,
 } from './misc';
 
 // IT-Hilfe templates

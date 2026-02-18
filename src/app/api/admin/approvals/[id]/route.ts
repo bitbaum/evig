@@ -11,6 +11,7 @@ import { validateBody, AdminApprovalActionSchema } from '@/lib/schemas'
 import { TABLE_NAMES } from '@/config/database'
 import { MEDUSA_CONFIG } from '@/config/medusa'
 import { logger } from '@/lib/logger'
+import { sendEmail } from '@/lib/email'
 
 export const PATCH = withAdmin<{ id: string }>(async (request, session, context) => {
   try {
@@ -74,6 +75,29 @@ export const PATCH = withAdmin<{ id: string }>(async (request, session, context)
       } catch (publishError) {
         logger.warn('Error publishing to MedusaJS after approval', { submissionId: id, error: publishError })
       }
+    }
+
+    // Send notification email to submitter
+    try {
+      const submitterResult = await query(
+        `SELECT u.email, u.name FROM ${TABLE_NAMES.USERS} u
+         JOIN ${TABLE_NAMES.USER_CONTENT_SUBMISSIONS} s ON s.user_id = u.id
+         WHERE s.id = $1`,
+        [id]
+      )
+      if (submitterResult.rows.length > 0) {
+        const submitter = submitterResult.rows[0] as { email: string; name: string | null }
+        const templateName = action === 'approve' ? 'contentSubmissionApproved' : 'contentSubmissionRejected'
+        await sendEmail(
+          submitter.email,
+          templateName,
+          submitter.name || 'Benutzer',
+          submission.title,
+          submission.content_type
+        )
+      }
+    } catch (emailError) {
+      logger.warn('Failed to send content approval email', { error: emailError, submissionId: id, action })
     }
 
     logger.info('Content submission reviewed', {

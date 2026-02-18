@@ -379,3 +379,152 @@ Sie erhalten eine Benachrichtigung, sobald wir unsere Prüfung abgeschlossen hab
 ${createTextFooter()}
   `.trim(),
 });
+
+export const workshopProposalApproved = (
+  name: string,
+  workshopTitle: string
+): EmailContent => ({
+  subject: 'Workshop-Vorschlag genehmigt - RevampIT',
+  html: `
+    <!DOCTYPE html>
+    <html lang="de">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Workshop-Vorschlag genehmigt</title>
+      <style>${BASE_STYLES}</style>
+    </head>
+    <body>
+      <div class="container">
+        <div class="header header-green">
+          <h1>Workshop-Vorschlag genehmigt</h1>
+        </div>
+        <div class="content">
+          <h2>Hallo ${name},</h2>
+          <p>Gute Nachrichten! Ihr Workshop-Vorschlag wurde genehmigt.</p>
+          <p><strong>Workshop:</strong> ${workshopTitle}</p>
+          <p>Unser Team wird Ihren Workshop nun für die Planung vorbereiten. Sie erhalten weitere Informationen zu Terminen und Details.</p>
+          <p>Vielen Dank für Ihren Beitrag zur RevampIT Community!</p>
+        </div>
+        <div class="footer">
+          <p>${AUTO_GENERATED_TEXT}</p>
+          <p>${COPYRIGHT_TEXT}</p>
+        </div>
+      </div>
+    </body>
+    </html>
+  `,
+  text: `
+Hallo ${name},
+
+Gute Nachrichten! Ihr Workshop-Vorschlag wurde genehmigt.
+
+Workshop: ${workshopTitle}
+
+Unser Team wird Ihren Workshop nun für die Planung vorbereiten. Sie erhalten weitere Informationen zu Terminen und Details.
+
+Vielen Dank für Ihren Beitrag zur RevampIT Community!
+${createTextFooter()}
+  `.trim(),
+});
+
+export const workshopProposalRejected = (
+  name: string,
+  workshopTitle: string,
+  reason: string
+): EmailContent => ({
+  subject: 'Workshop-Vorschlag abgelehnt - RevampIT',
+  html: `
+    <!DOCTYPE html>
+    <html lang="de">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Workshop-Vorschlag abgelehnt</title>
+      <style>${BASE_STYLES}</style>
+    </head>
+    <body>
+      <div class="container">
+        <div class="header header-red">
+          <h1>Workshop-Vorschlag abgelehnt</h1>
+        </div>
+        <div class="content">
+          <h2>Hallo ${name},</h2>
+          <p>Leider können wir Ihren Workshop-Vorschlag derzeit nicht annehmen.</p>
+          <p><strong>Workshop:</strong> ${workshopTitle}</p>
+          <p><strong>Grund:</strong> ${reason}</p>
+          <p>Wir schätzen Ihr Engagement und ermutigen Sie, weitere Vorschläge einzureichen.</p>
+        </div>
+        <div class="footer">
+          <p>${AUTO_GENERATED_TEXT}</p>
+          <p>${COPYRIGHT_TEXT}</p>
+        </div>
+      </div>
+    </body>
+    </html>
+  `,
+  text: `
+Hallo ${name},
+
+Leider können wir Ihren Workshop-Vorschlag derzeit nicht annehmen.
+
+Workshop: ${workshopTitle}
+Grund: ${reason}
+
+Wir schätzen Ihr Engagement und ermutigen Sie, weitere Vorschläge einzureichen.
+${createTextFooter()}
+  `.trim(),
+});
+
+export const workshopProposalChangesRequested = (
+  name: string,
+  workshopTitle: string,
+  notes: string
+): EmailContent => ({
+  subject: 'Änderungen für Workshop-Vorschlag angefragt - RevampIT',
+  html: `
+    <!DOCTYPE html>
+    <html lang="de">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Änderungen angefragt</title>
+      <style>${BASE_STYLES}</style>
+    </head>
+    <body>
+      <div class="container">
+        <div class="header header-orange">
+          <h1>Änderungen angefragt</h1>
+        </div>
+        <div class="content">
+          <h2>Hallo ${name},</h2>
+          <p>Unser Team hat Ihren Workshop-Vorschlag überprüft und einige Änderungsvorschläge.</p>
+          <p><strong>Workshop:</strong> ${workshopTitle}</p>
+          <p><strong>Anmerkungen:</strong></p>
+          <div style="background: #f5f5f5; padding: 15px; border-radius: 5px; margin: 15px 0;">
+            ${notes.replace(/\n/g, '<br>')}
+          </div>
+          <p>Bitte überarbeiten Sie Ihren Vorschlag entsprechend und reichen Sie ihn erneut ein.</p>
+        </div>
+        <div class="footer">
+          <p>${AUTO_GENERATED_TEXT}</p>
+          <p>${COPYRIGHT_TEXT}</p>
+        </div>
+      </div>
+    </body>
+    </html>
+  `,
+  text: `
+Hallo ${name},
+
+Unser Team hat Ihren Workshop-Vorschlag überprüft und einige Änderungsvorschläge.
+
+Workshop: ${workshopTitle}
+
+Anmerkungen:
+${notes}
+
+Bitte überarbeiten Sie Ihren Vorschlag entsprechend und reichen Sie ihn erneut ein.
+${createTextFooter()}
+  `.trim(),
+});

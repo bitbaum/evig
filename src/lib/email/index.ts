@@ -82,6 +82,9 @@ export const emailTemplates = {
   workshopCancellation: workshopTemplates.workshopCancellation,
   workshopFeedbackRequest: workshopTemplates.workshopFeedbackRequest,
   workshopProposalSubmitted: workshopTemplates.workshopProposalSubmitted,
+  workshopProposalApproved: workshopTemplates.workshopProposalApproved,
+  workshopProposalRejected: workshopTemplates.workshopProposalRejected,
+  workshopProposalChangesRequested: workshopTemplates.workshopProposalChangesRequested,
 
   // Admin
   adminNewRepairerApplication: adminTemplates.adminNewRepairerApplication,
@@ -99,6 +102,8 @@ export const emailTemplates = {
   newReviewNotification: miscTemplates.newReviewNotification,
   sellerApplicationSubmitted: miscTemplates.sellerApplicationSubmitted,
   locationApprovalNotification: miscTemplates.locationApprovalNotification,
+  contentSubmissionApproved: miscTemplates.contentSubmissionApproved,
+  contentSubmissionRejected: miscTemplates.contentSubmissionRejected,
 
   // IT-Hilfe
   itHilfeRequestConfirmation: itHilfeTemplates.itHilfeRequestConfirmation,

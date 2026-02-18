@@ -5,6 +5,7 @@ import { apiError, apiSuccess, apiBadRequest, apiNotFound } from '@/lib/api/help
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
+import { sendEmail } from '@/lib/email'
 
 interface ProposalRow {
   id: string
@@ -185,6 +186,36 @@ export const POST = withAdmin<{ id: string }>(async (request, session, context) 
       }
 
       await query('COMMIT')
+
+      // Send notification email to proposer
+      try {
+        if (action === 'approve') {
+          await sendEmail(
+            proposal.proposer_email,
+            'workshopProposalApproved',
+            proposal.proposer_name,
+            proposal.title
+          )
+        } else if (action === 'reject') {
+          await sendEmail(
+            proposal.proposer_email,
+            'workshopProposalRejected',
+            proposal.proposer_name,
+            proposal.title,
+            review_notes || 'Kein Grund angegeben'
+          )
+        } else if (action === 'require_changes') {
+          await sendEmail(
+            proposal.proposer_email,
+            'workshopProposalChangesRequested',
+            proposal.proposer_name,
+            proposal.title,
+            required_changes || review_notes || ''
+          )
+        }
+      } catch (emailError) {
+        logger.warn('Failed to send workshop proposal email', { error: emailError, proposalId, action })
+      }
 
       logger.info('Workshop proposal processed', {
         proposalId,
