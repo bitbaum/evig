@@ -18,7 +18,7 @@ const dbConfig = {
   // Keep pool conservative for Neon to avoid connection saturation under load.
   max: parseInt(process.env.DB_POOL_MAX || '10', 10),
   idleTimeoutMillis: parseInt(process.env.DB_IDLE_TIMEOUT_MS || '30000', 10),
-  connectionTimeoutMillis: parseInt(process.env.DB_CONNECT_TIMEOUT_MS || '5000', 10),
+  connectionTimeoutMillis: parseInt(process.env.DB_CONNECT_TIMEOUT_MS || '10000', 10),
   statement_timeout: parseInt(process.env.DB_STATEMENT_TIMEOUT_MS || '30000', 10),
   idle_in_transaction_session_timeout: parseInt(process.env.DB_IDLE_TX_TIMEOUT_MS || '60000', 10),
 }
@@ -36,7 +36,7 @@ function isConnectionError(error: unknown): boolean {
 }
 
 const MAX_RETRIES = 2
-const RETRY_DELAYS = [100, 300] as const
+const RETRY_DELAYS = [500, 1500] as const
 
 // Create connection pool (singleton)
 let pool: Pool | null = null
@@ -135,12 +135,13 @@ export async function getClient(): Promise<PoolClient> {
   throw new Error('Datenbankverbindung fehlgeschlagen. Bitte versuchen Sie es später erneut.')
 }
 
-// Cache user columns to keep queries schema-safe across migrations
-let userColumnsCache: Set<string> | null = null
+// Cache user columns to keep queries schema-safe across migrations (5-minute TTL)
+const USER_COLUMNS_CACHE_TTL_MS = 5 * 60_000
+let _userColumnsCache: { columns: Set<string>; expiresAt: number } | null = null
 
 async function getUserColumns(): Promise<Set<string>> {
-  if (userColumnsCache) {
-    return userColumnsCache
+  if (_userColumnsCache && Date.now() < _userColumnsCache.expiresAt) {
+    return _userColumnsCache.columns
   }
 
   const result = await query<{ column_name: string }>(
@@ -150,8 +151,9 @@ async function getUserColumns(): Promise<Set<string>> {
     [TABLE_NAMES.USERS]
   )
 
-  userColumnsCache = new Set(result.rows.map((row) => row.column_name))
-  return userColumnsCache
+  const columns = new Set(result.rows.map((row) => row.column_name))
+  _userColumnsCache = { columns, expiresAt: Date.now() + USER_COLUMNS_CACHE_TTL_MS }
+  return columns
 }
 
 /**

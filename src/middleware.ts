@@ -32,7 +32,7 @@ export function middleware(request: NextRequest) {
 
     if (!sessionToken) {
       const loginUrl = new URL('/auth/login', request.url)
-      loginUrl.searchParams.set('callbackUrl', pathname)
+      loginUrl.searchParams.set('callbackUrl', pathname + request.nextUrl.search)
       return NextResponse.redirect(loginUrl)
     }
   }
@@ -45,7 +45,7 @@ export function middleware(request: NextRequest) {
 
     if (!sessionToken) {
       const loginUrl = new URL('/auth/login', request.url)
-      loginUrl.searchParams.set('callbackUrl', pathname)
+      loginUrl.searchParams.set('callbackUrl', pathname + request.nextUrl.search)
       return NextResponse.redirect(loginUrl)
     }
   }

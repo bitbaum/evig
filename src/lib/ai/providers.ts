@@ -45,7 +45,15 @@ interface DbProviderSettingsRow {
   } | null
 }
 
+// Cache provider config to avoid a DB query on every AI call
+const PROVIDER_CACHE_TTL_MS = 60_000
+let _providerCache: { config: ProviderRuntimeConfig; expiresAt: number } | null = null
+
 async function loadProviderRuntimeConfig(): Promise<ProviderRuntimeConfig> {
+  if (_providerCache && Date.now() < _providerCache.expiresAt) {
+    return _providerCache.config
+  }
+
   const envConfig: ProviderRuntimeConfig = {
     groqEnabled: true,
     openRouterEnabled: true,
@@ -71,7 +79,7 @@ async function loadProviderRuntimeConfig(): Promise<ProviderRuntimeConfig> {
     const openrouter = byProvider.get('openrouter')
     const ollama = byProvider.get('ollama')
 
-    return {
+    const resolved: ProviderRuntimeConfig = {
       groqEnabled: groq ? groq.is_enabled : envConfig.groqEnabled,
       openRouterEnabled: openrouter ? openrouter.is_enabled : envConfig.openRouterEnabled,
       ollamaEnabled: ollama ? ollama.is_enabled : envConfig.ollamaEnabled,
@@ -88,8 +96,11 @@ async function loadProviderRuntimeConfig(): Promise<ProviderRuntimeConfig> {
         ? ((ollama.settings?.model as string | undefined) || envConfig.ollamaModel)
         : (ollama ? '' : envConfig.ollamaModel),
     }
+    _providerCache = { config: resolved, expiresAt: Date.now() + PROVIDER_CACHE_TTL_MS }
+    return resolved
   } catch (error) {
     logger.warn('AI provider settings table unavailable; falling back to environment config', { error })
+    _providerCache = { config: envConfig, expiresAt: Date.now() + PROVIDER_CACHE_TTL_MS }
     return envConfig
   }
 }
