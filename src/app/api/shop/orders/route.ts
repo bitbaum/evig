@@ -21,7 +21,7 @@ const shippingAddressSchema = z.object({
 
 const createOrderSchema = z.object({
   cartId: z.string().min(1, 'Cart ID erforderlich'),
-  paymentIntentId: z.string().min(1, 'Payment Intent ID erforderlich'),
+  paymentIntentId: z.string().optional().default('pending'),
   shippingAddress: shippingAddressSchema,
 })
 

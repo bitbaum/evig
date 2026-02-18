@@ -27,6 +27,8 @@ interface InventoryProductDetail {
   subcategory: string | null
   quantity: number
   is_available: boolean
+  medusa_product_id: string | null
+  medusa_variant_id: string | null
   images: Array<{ id: string; url: string; is_primary: boolean }>
   customer_profiles: Array<{ slug: string; name_de: string; color: string; description_de: string }>
 }
@@ -108,30 +110,37 @@ export default function ProductPage() {
   // Get default region for cart creation
   const defaultRegion = regions?.[0];
 
-  const handleAddToCart = async () => {
-    // For inventory products, we don't use Medusa cart
-    if (isInventoryProduct) {
-      // For now, show a contact message - can implement inventory cart later
-      setAddedToCart(true);
-      setTimeout(() => setAddedToCart(false), 3000);
-      return;
-    }
+  // Determine if this inventory product can be added to Medusa cart
+  const canAddToMedusaCart = isInventoryProduct && inventoryProduct?.medusa_variant_id;
 
-    if (!medusaProduct || !medusaProduct.variants?.[0]) return;
+  const handleAddToCart = async () => {
+    // Determine which variant ID to use
+    let variantId: string | undefined;
+
+    if (isInventoryProduct) {
+      if (!inventoryProduct?.medusa_variant_id) {
+        // No Medusa variant — show contact info as fallback
+        setAddedToCart(true);
+        setTimeout(() => setAddedToCart(false), 3000);
+        return;
+      }
+      variantId = inventoryProduct.medusa_variant_id;
+    } else {
+      variantId = medusaProduct?.variants?.[0]?.id;
+      if (!variantId) return;
+    }
 
     try {
       let cartId = getCartId();
 
-      // Create cart if it doesn't exist
       if (!cartId) {
         const newCart = await createCart.mutateAsync(defaultRegion?.id);
         cartId = newCart.id;
       }
 
-      // Add to cart
       await addToCart.mutateAsync({
         cartId: cartId!,
-        variantId: medusaProduct.variants[0].id,
+        variantId,
         quantity,
       });
 
@@ -522,7 +531,7 @@ export default function ProductPage() {
                     className="flex items-center gap-2"
                   >
                     <Check className="h-5 w-5" />
-                    {isInventoryProduct ? "Anfrage gemerkt!" : "In den Warenkorb gelegt!"}
+                    {isInventoryProduct && !canAddToMedusaCart ? "Anfrage gemerkt!" : "In den Warenkorb gelegt!"}
                   </motion.span>
                 ) : (
                   <motion.span
@@ -533,7 +542,7 @@ export default function ProductPage() {
                     className="flex items-center gap-2"
                   >
                     <ShoppingCart className="h-5 w-5" />
-                    {!isAvailable ? "Nicht verfügbar" : isInventoryProduct ? "Anfrage senden" : "In den Warenkorb"}
+                    {!isAvailable ? "Nicht verfügbar" : (isInventoryProduct && !canAddToMedusaCart) ? "Anfrage senden" : "In den Warenkorb"}
                   </motion.span>
                 )}
               </AnimatePresence>
@@ -547,7 +556,7 @@ export default function ProductPage() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -10 }}
                 >
-                  {isInventoryProduct ? (
+                  {isInventoryProduct && !canAddToMedusaCart ? (
                     <div className="mt-4 text-center text-sm text-gray-600">
                       <p className="mb-2">Kontaktieren Sie uns für dieses Produkt:</p>
                       <a

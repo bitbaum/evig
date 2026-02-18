@@ -2,11 +2,13 @@
  * Order Service
  *
  * Business logic for order creation.
- * Handles inserting order records and order items into the database.
+ * Fetches real cart data from Medusa, creates order records,
+ * and decrements inventory.
  */
 
 import { query } from '@/lib/auth/db'
 import { TABLE_NAMES } from '@/config/database'
+import { MEDUSA_CONFIG } from '@/config/medusa'
 import { logger } from '@/lib/logger'
 
 // ============================================================================
@@ -25,7 +27,7 @@ export interface ShippingAddress {
 export interface CreateOrderParams {
   userId: string
   cartId: string
-  paymentIntentId: string
+  paymentIntentId?: string
   shippingAddress?: ShippingAddress
 }
 
@@ -39,19 +41,52 @@ export interface CreatedOrder {
   createdAt: string
 }
 
+interface MedusaCartItem {
+  id: string
+  title: string
+  description: string | null
+  thumbnail: string | null
+  quantity: number
+  unit_price: number
+  subtotal: number
+  variant_id: string
+  variant: {
+    id: string
+    sku: string | null
+  }
+}
+
+interface MedusaCart {
+  id: string
+  items: MedusaCartItem[]
+  total: number
+  subtotal: number
+  tax_total: number
+}
+
 // ============================================================================
 // Public API
 // ============================================================================
 
 /**
- * Create a new order from a completed payment.
+ * Create a new order from a Medusa cart.
  *
- * TODO: Integrate with MedusaJS to pull real cart items and totals.
- * Currently uses placeholder values for the order total and items.
+ * Fetches the cart from Medusa Store API, creates order + order items
+ * with real totals, looks up inventory items by medusa_variant_id,
+ * and decrements quantity_available.
  */
 export async function createOrder(params: CreateOrderParams): Promise<CreatedOrder> {
+  const { userId, cartId, paymentIntentId = 'pending', shippingAddress } = params
+
   try {
-    // Create order record
+    // Fetch real cart data from Medusa
+    const cart = await fetchMedusaCart(cartId)
+
+    if (!cart || cart.items.length === 0) {
+      throw new Error('Warenkorb ist leer oder nicht gefunden')
+    }
+
+    // Create order record with real totals
     const orderResult = await query<OrderRow>(
       `INSERT INTO ${TABLE_NAMES.ORDERS} (
         user_id,
@@ -59,52 +94,61 @@ export async function createOrder(params: CreateOrderParams): Promise<CreatedOrd
         total_amount_cents,
         currency,
         payment_intent_id,
-        shipping_address
-      ) VALUES (
-        $1,
-        'completed',
-        $2,
-        'CHF',
-        $3,
-        $4
-      )
+        shipping_address,
+        medusa_cart_id
+      ) VALUES ($1, 'confirmed', $2, 'CHF', $3, $4, $5)
       RETURNING id, created_at`,
       [
-        params.userId,
-        97092, // TODO: Pull from cart total
-        params.paymentIntentId,
-        params.shippingAddress ? JSON.stringify(params.shippingAddress) : null,
-      ]
+        userId,
+        cart.total,
+        paymentIntentId,
+        shippingAddress ? JSON.stringify(shippingAddress) : null,
+        cartId,
+      ],
     )
 
     const orderData = orderResult.rows[0]
     const orderId = orderData.id
 
-    // Create order items
-    // TODO: Pull items from cart via cartId
-    await query(
-      `INSERT INTO ${TABLE_NAMES.ORDER_ITEMS} (
-        order_id,
-        product_title,
-        quantity,
-        unit_price_cents,
-        total_price_cents
-      ) VALUES (
-        $1,
-        'Refurbished MacBook Air M1',
-        1,
-        89900,
-        89900
-      )`,
-      [orderId]
-    )
+    // Create order items from cart
+    for (const item of cart.items) {
+      await query(
+        `INSERT INTO ${TABLE_NAMES.ORDER_ITEMS} (
+          order_id,
+          product_title,
+          quantity,
+          unit_price_cents,
+          total_price_cents,
+          medusa_variant_id
+        ) VALUES ($1, $2, $3, $4, $5, $6)`,
+        [
+          orderId,
+          item.title,
+          item.quantity,
+          item.unit_price,
+          item.subtotal,
+          item.variant?.id || item.variant_id,
+        ],
+      )
 
-    // TODO: Update seller inventory (decrease quantity)
+      // Look up inventory item by medusa_variant_id and decrement quantity
+      const variantId = item.variant?.id || item.variant_id
+      if (variantId) {
+        await query(
+          `UPDATE ${TABLE_NAMES.INVENTORY_ITEMS}
+           SET quantity_available = GREATEST(quantity_available - $1, 0)
+           WHERE medusa_variant_id = $2`,
+          [item.quantity, variantId],
+        )
+      }
+    }
 
     logger.info('Order created', {
       orderId,
-      userId: params.userId,
-      paymentIntentId: params.paymentIntentId,
+      userId,
+      cartId,
+      totalCents: cart.total,
+      itemCount: cart.items.length,
     })
 
     return {
@@ -113,10 +157,42 @@ export async function createOrder(params: CreateOrderParams): Promise<CreatedOrd
     }
   } catch (error) {
     logger.error('Failed to create order', {
-      userId: params.userId,
-      paymentIntentId: params.paymentIntentId,
+      userId,
+      cartId,
       error,
     })
     throw error
+  }
+}
+
+// ============================================================================
+// Helpers
+// ============================================================================
+
+/**
+ * Fetch cart from Medusa Store API using the publishable key.
+ */
+async function fetchMedusaCart(cartId: string): Promise<MedusaCart | null> {
+  try {
+    const response = await fetch(`${MEDUSA_CONFIG.URL}/store/carts/${cartId}`, {
+      headers: {
+        'Content-Type': 'application/json',
+        'x-publishable-key': MEDUSA_CONFIG.PUBLISHABLE_KEY,
+      },
+    })
+
+    if (!response.ok) {
+      logger.error('Failed to fetch Medusa cart', {
+        cartId,
+        status: response.status,
+      })
+      return null
+    }
+
+    const data = await response.json()
+    return data.cart as MedusaCart
+  } catch (error) {
+    logger.error('Error fetching Medusa cart', { cartId, error })
+    return null
   }
 }

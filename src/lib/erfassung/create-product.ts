@@ -11,6 +11,7 @@ import { query } from '@/lib/auth/db'
 import { logger } from '@/lib/logger'
 import { TABLE_NAMES } from '@/config/database'
 import { uploadImage, generateImageFilename } from '@/lib/storage/image-upload'
+import { publishToMedusa } from '@/lib/services/medusa-publish-service'
 import type { ErfassungPayload } from '@/types/erfassung'
 import type { PoolClient } from 'pg'
 
@@ -116,7 +117,7 @@ export async function createErfassungProduct(
   const productId = productResult.rows[0].id
 
   // 2. Insert into INVENTORY_ITEMS
-  await client.query(
+  const inventoryResult = await client.query(
     `INSERT INTO ${TABLE_NAMES.INVENTORY_ITEMS} (
       ai_product_id,
       location,
@@ -125,7 +126,8 @@ export async function createErfassungProduct(
       status,
       selling_price_chf,
       marketplace_status
-    ) VALUES ($1, $2, $3, $4, $5, $6, $7)`,
+    ) VALUES ($1, $2, $3, $4, $5, $6, $7)
+    RETURNING id`,
     [
       productId,
       payload.location || null,
@@ -136,6 +138,7 @@ export async function createErfassungProduct(
       marketplaceStatus,
     ]
   )
+  const inventoryItemId = inventoryResult.rows[0].id
 
   // 3. Link customer profiles if provided (batch to avoid N+1)
   if (payload.kundenprofile && payload.kundenprofile.length > 0) {
@@ -172,24 +175,21 @@ export async function createErfassungProduct(
         status,
         published_at,
         created_by
-      ) VALUES (
-        (SELECT id FROM ${TABLE_NAMES.INVENTORY_ITEMS} WHERE ai_product_id = $1),
-        $2,
-        $3,
-        $4,
-        'internal',
-        'published',
-        NOW(),
-        $5
-      )`,
+      ) VALUES ($1, $2, $3, $4, 'internal', 'published', NOW(), $5)`,
       [
-        productId,
+        inventoryItemId,
         `${payload.hersteller} ${payload.produktname}`,
         payload.kurzbeschreibung || '',
         payload.verkaufspreis,
         userId,
       ]
     )
+
+    // Fire-and-forget: publish to Medusa after transaction commits.
+    // Uses global query(), not the transaction client.
+    publishToMedusa(inventoryItemId, userId).catch((err) => {
+      logger.warn('Auto-publish to Medusa failed', { productId, error: err })
+    })
   }
 
   // 5. Handle image upload if provided
