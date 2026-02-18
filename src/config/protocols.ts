@@ -7,6 +7,9 @@
  * Created: 2026-02-10
  */
 
+import { Users, FolderKanban, RefreshCw, Landmark, MessageSquare, Mic, FileText, ListTree, ListChecks } from 'lucide-react'
+import type { ComponentType } from 'react'
+
 // Meeting types
 export const MEETING_TYPES = {
   TEAM_WEEKLY: 'team_weekly',
@@ -38,6 +41,14 @@ export const MEETING_TYPE_ICONS: Record<MeetingType, string> = {
   retro: 'RefreshCw',
   board: 'Landmark',
   ad_hoc: 'MessageSquare',
+};
+
+export const MEETING_TYPE_ICON_COMPONENTS: Record<MeetingType, ComponentType<{ className?: string }>> = {
+  team_weekly: Users,
+  project_review: FolderKanban,
+  retro: RefreshCw,
+  board: Landmark,
+  ad_hoc: MessageSquare,
 };
 
 // Templates with defaults per meeting type
@@ -175,6 +186,13 @@ export const INPUT_METHOD_ICONS: Record<InputMethod, string> = {
   transcript: 'FileText',
   notes: 'ListTree',
   tasks: 'ListChecks',
+};
+
+export const INPUT_METHOD_ICON_COMPONENTS: Record<InputMethod, ComponentType<{ className?: string }>> = {
+  audio: Mic,
+  transcript: FileText,
+  notes: ListTree,
+  tasks: ListChecks,
 };
 
 // Priority hints

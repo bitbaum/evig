@@ -20,13 +20,13 @@ import {
   MEETING_TYPES,
   MEETING_TYPE_LABELS,
   MEETING_TYPE_COLORS,
-  MEETING_TYPE_ICONS,
+  MEETING_TYPE_ICON_COMPONENTS,
   MEETING_TYPE_TEMPLATES,
   PROTOCOL_VISIBILITY_LABELS,
   INPUT_METHODS,
   INPUT_METHOD_LABELS,
   INPUT_METHOD_DESCRIPTIONS,
-  INPUT_METHOD_ICONS,
+  INPUT_METHOD_ICON_COMPONENTS,
 } from '@/config/protocols'
 import type { MeetingType, ProtocolVisibility, InputMethod } from '@/config/protocols'
 import { getErrorMessage } from '@/lib/utils/error'
@@ -35,32 +35,8 @@ import {
   Save,
   Wand2,
   Upload,
-  Users,
-  FolderKanban,
-  RefreshCw,
-  Landmark,
-  MessageSquare,
-  Mic,
-  FileText,
-  ListTree,
-  ListChecks,
 } from 'lucide-react'
 import { validateAudioUpload, AUDIO_UPLOAD_LIMITS } from '@/lib/protocols/audio-validation'
-
-const MEETING_TYPE_ICON_MAP: Record<string, React.ComponentType<{ className?: string }>> = {
-  Users,
-  FolderKanban,
-  RefreshCw,
-  Landmark,
-  MessageSquare,
-}
-
-const INPUT_METHOD_ICON_MAP: Record<string, React.ComponentType<{ className?: string }>> = {
-  Mic,
-  FileText,
-  ListTree,
-  ListChecks,
-}
 
 const STEPS = [
   { label: 'Typ' },
@@ -317,8 +293,7 @@ export default function ProtocolFormClient() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             {Object.values(MEETING_TYPES).map((type) => {
               const template = MEETING_TYPE_TEMPLATES[type]
-              const iconName = MEETING_TYPE_ICONS[type]
-              const IconComponent = MEETING_TYPE_ICON_MAP[iconName]
+              const IconComponent = MEETING_TYPE_ICON_COMPONENTS[type]
               return (
                 <button
                   key={type}
@@ -352,8 +327,7 @@ export default function ProtocolFormClient() {
         <div className="bg-gray-50 rounded-lg border px-4 py-3 flex items-center justify-between">
           <div className="flex items-center gap-2 text-sm text-gray-700">
             {(() => {
-              const iconName = MEETING_TYPE_ICONS[formData.meeting_type as MeetingType]
-              const IconComponent = MEETING_TYPE_ICON_MAP[iconName]
+              const IconComponent = MEETING_TYPE_ICON_COMPONENTS[formData.meeting_type as MeetingType]
               return IconComponent ? <IconComponent className="w-4 h-4 text-gray-500" /> : null
             })()}
             <span className="font-medium">
@@ -471,8 +445,7 @@ export default function ProtocolFormClient() {
           <h2 className="text-lg font-semibold text-gray-900">Eingabemethode wählen</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             {Object.values(INPUT_METHODS).map((method) => {
-              const iconName = INPUT_METHOD_ICONS[method]
-              const IconComponent = INPUT_METHOD_ICON_MAP[iconName]
+              const IconComponent = INPUT_METHOD_ICON_COMPONENTS[method]
               const isDisabled = false
 
               return (
@@ -519,8 +492,7 @@ export default function ProtocolFormClient() {
         <div className="bg-gray-50 rounded-lg border px-4 py-3 flex items-center justify-between">
           <div className="flex items-center gap-2 text-sm text-gray-700">
             {(() => {
-              const iconName = INPUT_METHOD_ICONS[formData.input_method as InputMethod]
-              const IconComponent = INPUT_METHOD_ICON_MAP[iconName]
+              const IconComponent = INPUT_METHOD_ICON_COMPONENTS[formData.input_method as InputMethod]
               return IconComponent ? <IconComponent className="w-4 h-4 text-gray-500" /> : null
             })()}
             <span className="font-medium">

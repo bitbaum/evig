@@ -17,12 +17,12 @@ import { getProtocolById, getActionLinks, getTeamMembers, getDecisionData } from
 import {
   MEETING_TYPE_LABELS,
   MEETING_TYPE_COLORS,
-  MEETING_TYPE_ICONS,
+  MEETING_TYPE_ICON_COMPONENTS,
   PROTOCOL_STATUS_LABELS,
   PROTOCOL_STATUS_COLORS,
   PROTOCOL_VISIBILITY_LABELS,
   INPUT_METHOD_LABELS,
-  INPUT_METHOD_ICONS,
+  INPUT_METHOD_ICON_COMPONENTS,
 } from '@/config/protocols'
 import type { MeetingType, InputMethod } from '@/config/protocols'
 import {
@@ -32,34 +32,12 @@ import {
   User,
   Eye,
   Users,
-  FolderKanban,
-  RefreshCw,
-  Landmark,
-  MessageSquare,
-  Mic,
-  ListTree,
-  ListChecks,
 } from 'lucide-react'
 import ProtocolDetailClient from './ProtocolDetailClient'
 
 export const metadata: Metadata = {
   title: 'Protokoll Details | RevampIT Admin',
   description: 'Sitzungsprotokoll anzeigen und bearbeiten.',
-}
-
-const MEETING_TYPE_ICON_MAP: Record<string, React.ComponentType<{ className?: string }>> = {
-  Users,
-  FolderKanban,
-  RefreshCw,
-  Landmark,
-  MessageSquare,
-}
-
-const INPUT_METHOD_ICON_MAP: Record<string, React.ComponentType<{ className?: string }>> = {
-  Mic,
-  FileText,
-  ListTree,
-  ListChecks,
 }
 
 export default async function ProtocolDetailPage({
@@ -101,8 +79,7 @@ export default async function ProtocolDetailPage({
     getDecisionData(id),
   ])
 
-  const iconName = MEETING_TYPE_ICONS[protocol.meeting_type as MeetingType]
-  const MeetingIcon = MEETING_TYPE_ICON_MAP[iconName] || FileText
+  const MeetingIcon = MEETING_TYPE_ICON_COMPONENTS[protocol.meeting_type as MeetingType] || FileText
 
   return (
     <div className="space-y-6">
@@ -211,8 +188,7 @@ export default async function ProtocolDetailPage({
                   <dt className="text-sm text-gray-500">Eingabemethode</dt>
                   <dd className="flex items-center gap-2 mt-1">
                     {(() => {
-                      const iconName = INPUT_METHOD_ICONS[protocol.input_method as InputMethod]
-                      const InputIcon = INPUT_METHOD_ICON_MAP[iconName]
+                      const InputIcon = INPUT_METHOD_ICON_COMPONENTS[protocol.input_method as InputMethod]
                       return InputIcon ? <InputIcon className="w-4 h-4 text-gray-400" /> : null
                     })()}
                     <span className="text-gray-900">

@@ -17,7 +17,7 @@ import { getProtocols, getProtocolStats } from '@/lib/services/protocols'
 import {
   MEETING_TYPE_LABELS,
   MEETING_TYPE_COLORS,
-  MEETING_TYPE_ICONS,
+  MEETING_TYPE_ICON_COMPONENTS,
   PROTOCOL_STATUS_LABELS,
   PROTOCOL_STATUS_COLORS,
 } from '@/config/protocols'
@@ -32,11 +32,6 @@ import {
   Clock,
   CheckCircle2,
   Edit3,
-  Users,
-  FolderKanban,
-  RefreshCw,
-  Landmark,
-  MessageSquare,
 } from 'lucide-react'
 import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
 import ProtocolListClient from './ProtocolListClient'
@@ -44,14 +39,6 @@ import ProtocolListClient from './ProtocolListClient'
 export const metadata: Metadata = {
   title: 'Protokolle | RevampIT Admin',
   description: 'Sitzungsprotokolle verwalten.',
-}
-
-const MEETING_TYPE_ICON_MAP: Record<string, React.ComponentType<{ className?: string }>> = {
-  Users,
-  FolderKanban,
-  RefreshCw,
-  Landmark,
-  MessageSquare,
 }
 
 export default async function ProtocolsAdminPage({
@@ -215,8 +202,7 @@ export default async function ProtocolsAdminPage({
             </thead>
             <tbody className="divide-y">
               {filteredProtocols.map((protocol) => {
-                const iconName = MEETING_TYPE_ICONS[protocol.meeting_type as MeetingType]
-                const TypeIcon = MEETING_TYPE_ICON_MAP[iconName]
+                const TypeIcon = MEETING_TYPE_ICON_COMPONENTS[protocol.meeting_type as MeetingType]
                 return (
                   <tr key={protocol.id} className="hover:bg-gray-50">
                     <td className="px-4 py-3">
