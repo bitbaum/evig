@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import {
   Menu,
@@ -22,6 +22,8 @@ import {
   getCategoryBySlug,
   getCategoryUrl,
 } from "@/config/shop";
+import { useCart, getCartId } from "@/lib/medusa/hooks";
+import { useWishlist, useCompare } from "@/lib/hooks/useShopStore";
 
 interface ShopHeaderProps {
   showBackButton?: boolean;
@@ -37,6 +39,18 @@ export function ShopHeader({
   const pathname = usePathname();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+
+  // Cart badge
+  const [cartId, setCartId] = useState<string | null>(null);
+  useEffect(() => {
+    setCartId(getCartId());
+  }, []);
+  const { data: cart } = useCart(cartId);
+  const cartCount = cart?.items?.length ?? 0;
+
+  // Wishlist & compare badges
+  const { count: wishlistCount } = useWishlist();
+  const { count: compareCount } = useCompare();
 
   // Hide back button on main shop page (/shop/medusa) since we're already there
   const shouldShowBackButton = showBackButton && pathname !== "/shop/medusa";
@@ -142,35 +156,41 @@ export function ShopHeader({
               {/* Compare - hidden on small mobile */}
               <button
                 className="hidden sm:flex p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors relative"
-                aria-label="Vergleichsliste (0 Artikel)"
+                aria-label={`Vergleichsliste (${compareCount} Artikel)`}
               >
                 <BarChart3 className="w-5 h-5" />
-                <span className="absolute -top-1 -right-1 w-4 h-4 bg-blue-600 text-white text-[10px] font-bold rounded-full flex items-center justify-center">
-                  0
-                </span>
+                {compareCount > 0 && (
+                  <span className="absolute -top-1 -right-1 w-4 h-4 bg-blue-600 text-white text-[10px] font-bold rounded-full flex items-center justify-center">
+                    {compareCount}
+                  </span>
+                )}
               </button>
 
               {/* Wishlist - hidden on small mobile */}
               <button
                 className="hidden sm:flex p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors relative"
-                aria-label="Merkliste (0 Artikel)"
+                aria-label={`Merkliste (${wishlistCount} Artikel)`}
               >
                 <Heart className="w-5 h-5" />
-                <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center">
-                  0
-                </span>
+                {wishlistCount > 0 && (
+                  <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center">
+                    {wishlistCount}
+                  </span>
+                )}
               </button>
 
               {/* Cart - always visible */}
               <Link
                 href="/shop/medusa/cart"
                 className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors relative"
-                aria-label="Warenkorb (0 Artikel)"
+                aria-label={`Warenkorb (${cartCount} Artikel)`}
               >
                 <ShoppingCart className="w-5 h-5" />
-                <span className="absolute -top-1 -right-1 w-4 h-4 bg-emerald-600 text-white text-[10px] font-bold rounded-full flex items-center justify-center">
-                  0
-                </span>
+                {cartCount > 0 && (
+                  <span className="absolute -top-1 -right-1 w-4 h-4 bg-emerald-600 text-white text-[10px] font-bold rounded-full flex items-center justify-center">
+                    {cartCount}
+                  </span>
+                )}
               </Link>
 
               {/* Divider - hidden on mobile */}
