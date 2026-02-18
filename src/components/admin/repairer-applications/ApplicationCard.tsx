@@ -1,0 +1,115 @@
+import { CheckCircle, XCircle, Clock, AlertCircle, Mail, Phone, ExternalLink, MapPin } from 'lucide-react'
+import { getApprovalStatusBadge } from '@/config/approval-status'
+import { formatDateShort } from '@/lib/date-formats'
+import type { RepairerApplication, ActionDialogState } from './types'
+
+interface Props {
+  application: RepairerApplication
+  isPending: boolean
+  actionLoading: string | null
+  onOpenDialog: (type: ActionDialogState['type'], targetId: string) => void
+}
+
+function getStatusIcon(status: string) {
+  switch (status) {
+    case 'approved': return <CheckCircle className="w-5 h-5 text-green-500" />
+    case 'rejected': return <XCircle className="w-5 h-5 text-red-500" />
+    case 'requires_changes': return <AlertCircle className="w-5 h-5 text-orange-500" />
+    default: return <Clock className="w-5 h-5 text-blue-500" />
+  }
+}
+
+function getStatusBadge(status: string) {
+  const badge = getApprovalStatusBadge(status)
+  return (
+    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${badge.bg} ${badge.color}`}>
+      {getStatusIcon(status)}
+      <span className="ml-1">{badge.label}</span>
+    </span>
+  )
+}
+
+export function ApplicationCard({ application, isPending, actionLoading, onOpenDialog }: Props) {
+  return (
+    <div className="p-6 border-b border-gray-200">
+      <div className="flex items-start justify-between">
+        <div className="flex-1">
+          <div className="flex items-center gap-3 mb-2">
+            <h3 className="text-lg font-semibold text-gray-900">
+              {application.businessName || application.applicantName}
+            </h3>
+            {getStatusBadge(application.status)}
+            <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+              application.documentVerificationStatus === 'approved' ? 'bg-green-100 text-green-800' :
+              application.documentVerificationStatus === 'in_review' ? 'bg-blue-100 text-blue-800' :
+              application.documentVerificationStatus === 'incomplete' ? 'bg-red-100 text-red-800' :
+              'bg-gray-100 text-gray-800'
+            }`}>
+              Dokumente: {
+                application.documentVerificationStatus === 'approved' ? 'Verifiziert' :
+                application.documentVerificationStatus === 'in_review' ? 'In Prüfung' :
+                application.documentVerificationStatus === 'incomplete' ? 'Unvollständig' :
+                'Ausstehend'
+              }
+            </span>
+          </div>
+          <div className="flex items-center gap-4 text-sm text-gray-600">
+            <span className="flex items-center gap-1">
+              <Mail className="w-4 h-4" />
+              {application.applicantEmail}
+            </span>
+            <span className="flex items-center gap-1">
+              <Phone className="w-4 h-4" />
+              {application.phone}
+            </span>
+            {application.website && (
+              <a
+                href={application.website}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-1 text-green-600 hover:text-green-700"
+              >
+                <ExternalLink className="w-4 h-4" />
+                Website
+              </a>
+            )}
+          </div>
+          <div className="flex items-center gap-4 text-sm text-gray-500 mt-1">
+            <span>Bewerbung vom {formatDateShort(application.createdAt)}</span>
+            <span>{application.yearsExperience} Jahre Erfahrung</span>
+            <span className="flex items-center gap-1">
+              <MapPin className="w-4 h-4" />
+              {application.city} ({application.postalCode})
+            </span>
+          </div>
+        </div>
+
+        {isPending && (
+          <div className="flex gap-2">
+            <button
+              onClick={() => onOpenDialog('request_changes', application.id)}
+              disabled={actionLoading === application.id}
+              className="px-3 py-1.5 bg-orange-100 text-orange-700 rounded-lg hover:bg-orange-200 disabled:opacity-50 text-sm font-medium"
+            >
+              {actionLoading === application.id ? '...' : 'Änderungen anfordern'}
+            </button>
+            <button
+              onClick={() => onOpenDialog('reject_app', application.id)}
+              disabled={actionLoading === application.id}
+              className="px-3 py-1.5 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 disabled:opacity-50 text-sm font-medium"
+            >
+              {actionLoading === application.id ? '...' : 'Ablehnen'}
+            </button>
+            <button
+              onClick={() => onOpenDialog('approve_app', application.id)}
+              disabled={actionLoading === application.id}
+              className="px-3 py-1.5 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50 text-sm font-medium"
+            >
+              {actionLoading === application.id ? '...' : 'Genehmigen'}
+            </button>
+          </div>
+        )}
+      </div>
+    </div>
+  )
+}
