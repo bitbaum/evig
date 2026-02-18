@@ -21,7 +21,9 @@ import {
   CheckCircle2,
   TrendingUp,
   Clock,
+  AlertCircle,
 } from 'lucide-react'
+import { logger } from '@/lib/logger'
 
 export const metadata: Metadata = {
   title: 'Aufgaben Analyse | RevampIT Admin',
@@ -141,12 +143,30 @@ function getProgressBarColor(index: number): string {
 }
 
 export default async function TaskAnalyticsPage() {
-  const [stats, contributors, categories, recentCompletions] = await Promise.all([
-    getOverallStats(),
-    getContributorStats(30),
-    getCategoryStats(30),
-    getRecentCompletions(),
-  ])
+  let stats: OverallStats = {
+    total_tasks: 0,
+    total_completions: 0,
+    completions_today: 0,
+    completions_this_week: 0,
+    completions_this_month: 0,
+    avg_completion_time: null,
+  }
+  let contributors: ContributorStats[] = []
+  let categories: CategoryStats[] = []
+  let recentCompletions: RecentCompletion[] = []
+  let loadError = false
+
+  try {
+    ;[stats, contributors, categories, recentCompletions] = await Promise.all([
+      getOverallStats(),
+      getContributorStats(30),
+      getCategoryStats(30),
+      getRecentCompletions(),
+    ])
+  } catch (error) {
+    logger.error('Failed to load task analytics', { error })
+    loadError = true
+  }
 
   const maxContributions = contributors.length > 0
     ? Math.max(...contributors.map(c => c.completion_count))
@@ -178,6 +198,15 @@ export default async function TaskAnalyticsPage() {
           </div>
         </div>
       </div>
+
+      {loadError && (
+        <div className="bg-red-50 border border-red-200 rounded-lg p-4 flex items-center gap-3">
+          <AlertCircle className="w-5 h-5 text-red-500 shrink-0" />
+          <p className="text-red-700">
+            Statistiken konnten nicht geladen werden. Bitte versuche es später erneut.
+          </p>
+        </div>
+      )}
 
       {/* Stats Cards */}
       <div className="grid grid-cols-5 gap-4">
