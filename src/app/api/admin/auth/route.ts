@@ -36,7 +36,7 @@ export async function POST(request: NextRequest) {
       // Return appropriate error with retry info if available
       if (verification.retryAfter) {
         return NextResponse.json(
-          { error: verification.error, retryAfter: verification.retryAfter },
+          { success: false, error: verification.error, retryAfter: verification.retryAfter },
           { status: 429 }
         )
       }

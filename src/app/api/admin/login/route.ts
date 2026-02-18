@@ -30,7 +30,7 @@ export async function POST(request: NextRequest) {
     if (!response.ok) {
       const errorData = await response.json()
       return NextResponse.json(
-        { error: errorData.error || 'Invalid credentials' },
+        { success: false, error: errorData.error || 'Invalid credentials' },
         { status: response.status }
       )
     }

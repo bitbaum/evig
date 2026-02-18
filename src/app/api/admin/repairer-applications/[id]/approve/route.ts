@@ -109,9 +109,9 @@ export const PUT = withAdmin<{ id: string }>(async (request, session, context) =
       const profileTableExists = await query(`
         SELECT EXISTS (
           SELECT 1 FROM information_schema.tables
-          WHERE table_name = '${TABLE_NAMES.REPAIRER_PROFILES}'
+          WHERE table_name = $1
         )
-      `)
+      `, [TABLE_NAMES.REPAIRER_PROFILES])
 
       const exists = (profileTableExists.rows[0] as ExistsRow).exists
       if (exists) {

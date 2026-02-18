@@ -86,13 +86,13 @@ export const GET = withAdmin(async (request, session) => {
         rp.total_reviews,
         COUNT(r.id) as recent_reviews
       FROM ${TABLE_NAMES.REPAIRER_PROFILES} rp
-      LEFT JOIN ${TABLE_NAMES.REVIEWS} r ON r.target_type = '${REVIEW_TARGET_TYPES.REPAIRER}' AND r.target_id = rp.id
-        AND r.status = 'published' AND r.created_at >= $1
+      LEFT JOIN ${TABLE_NAMES.REVIEWS} r ON r.target_type = $1 AND r.target_id = rp.id
+        AND r.status = 'published' AND r.created_at >= $2
       WHERE rp.is_verified = true AND rp.total_reviews > 0
       GROUP BY rp.id, rp.business_name, rp.average_rating, rp.total_reviews
       ORDER BY rp.average_rating DESC, rp.total_reviews DESC
       LIMIT 10
-    `, [startDate.toISOString()])
+    `, [REVIEW_TARGET_TYPES.REPAIRER, startDate.toISOString()])
 
     // Get review trends (daily for the period)
     const reviewTrends = await query(`

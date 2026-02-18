@@ -17,7 +17,6 @@ import {
   FileText,
   Eye,
   Edit,
-  Trash2,
   CheckCircle,
   Clock,
   ArrowLeft,
@@ -249,9 +248,6 @@ export default async function AdminPagesPage() {
                         >
                           <Edit className="w-4 h-4" />
                         </Link>
-                        <button className="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300">
-                          <Trash2 className="w-4 h-4" />
-                        </button>
                       </div>
                     </td>
                   </tr>
