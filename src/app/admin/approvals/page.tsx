@@ -10,9 +10,11 @@ import { auth } from '@/auth'
 import { redirect } from 'next/navigation'
 import { query } from '@/lib/auth/db'
 import { TABLE_NAMES } from '@/config/database'
-import { CheckSquare, Clock, CheckCircle, XCircle, FileText } from 'lucide-react'
+import { CheckSquare, Clock, CheckCircle, XCircle, FileText, Shield } from 'lucide-react'
 import { formatDateShort } from '@/lib/date-formats'
+import { isSuperAdmin } from '@/lib/permissions'
 import { ApprovalActions } from './ApprovalActions'
+import { PermissionRequestsManager } from '@/components/admin/PermissionRequestsManager'
 import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
 
 export const metadata: Metadata = {
@@ -39,9 +41,13 @@ interface ApprovalStats {
 
 async function getApprovalStats(): Promise<ApprovalStats> {
   try {
-    // Get pending count
+    const allowedTypes = ['workshop', 'blog_post']
+
+    // Get pending count (workshops and blog posts only)
     const pendingResult = await query<{ count: string }>(
-      `SELECT COUNT(*) as count FROM ${TABLE_NAMES.USER_CONTENT_SUBMISSIONS} WHERE status = 'pending'`
+      `SELECT COUNT(*) as count FROM ${TABLE_NAMES.USER_CONTENT_SUBMISSIONS}
+       WHERE status = 'pending' AND content_type = ANY($1)`,
+      [allowedTypes]
     )
     const pending = parseInt(pendingResult.rows[0]?.count || '0')
 
@@ -49,7 +55,9 @@ async function getApprovalStats(): Promise<ApprovalStats> {
     const approvedResult = await query<{ count: string }>(
       `SELECT COUNT(*) as count FROM ${TABLE_NAMES.USER_CONTENT_SUBMISSIONS}
        WHERE status = 'approved'
-       AND reviewed_at >= NOW() - INTERVAL '30 days'`
+       AND content_type = ANY($1)
+       AND reviewed_at >= NOW() - INTERVAL '30 days'`,
+      [allowedTypes]
     )
     const approved = parseInt(approvedResult.rows[0]?.count || '0')
 
@@ -57,7 +65,9 @@ async function getApprovalStats(): Promise<ApprovalStats> {
     const rejectedResult = await query<{ count: string }>(
       `SELECT COUNT(*) as count FROM ${TABLE_NAMES.USER_CONTENT_SUBMISSIONS}
        WHERE status = 'rejected'
-       AND reviewed_at >= NOW() - INTERVAL '30 days'`
+       AND content_type = ANY($1)
+       AND reviewed_at >= NOW() - INTERVAL '30 days'`,
+      [allowedTypes]
     )
     const rejected = parseInt(rejectedResult.rows[0]?.count || '0')
 
@@ -70,6 +80,7 @@ async function getApprovalStats(): Promise<ApprovalStats> {
 
 async function getPendingSubmissions(): Promise<ContentSubmission[]> {
   try {
+    const allowedTypes = ['workshop', 'blog_post']
     const result = await query<ContentSubmission>(
       `SELECT
         s.id,
@@ -82,9 +93,10 @@ async function getPendingSubmissions(): Promise<ContentSubmission[]> {
         u.email as user_email
        FROM ${TABLE_NAMES.USER_CONTENT_SUBMISSIONS} s
        JOIN ${TABLE_NAMES.USERS} u ON s.user_id = u.id
-       WHERE s.status = 'pending'
+       WHERE s.status = 'pending' AND s.content_type = ANY($1)
        ORDER BY s.submitted_at DESC
-       LIMIT 50`
+       LIMIT 50`,
+      [allowedTypes]
     )
     return result.rows
   } catch {
@@ -94,8 +106,6 @@ async function getPendingSubmissions(): Promise<ContentSubmission[]> {
 }
 
 const contentTypeLabels: Record<string, string> = {
-  product: 'Produkt',
-  service: 'Dienstleistung',
   workshop: 'Workshop',
   blog_post: 'Blog-Artikel',
 }
@@ -106,6 +116,8 @@ export default async function ApprovalsPage() {
   if (!session?.user) {
     redirect('/auth/login?callbackUrl=/admin/approvals')
   }
+
+  const isSuper = isSuperAdmin(session.user.email)
 
   const [stats, pendingItems] = await Promise.all([
     getApprovalStats(),
@@ -188,10 +200,22 @@ export default async function ApprovalsPage() {
         )}
       </div>
 
+      {/* Permission Requests (super admin only) */}
+      {isSuper && (
+        <div>
+          <h2 className="font-semibold text-gray-900 dark:text-white mb-3 flex items-center gap-2">
+            <Shield className="w-5 h-5 text-orange-500" />
+            Berechtigungsanfragen
+          </h2>
+          <PermissionRequestsManager />
+        </div>
+      )}
+
       <div className="p-6 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-xl">
         <p className="text-sm text-blue-700 dark:text-blue-300">
-          <strong>Hinweis:</strong> Alle von Benutzern eingereichten Inhalte (Produkte, Workshops, Dienstleistungen, Blog-Artikel)
+          <strong>Hinweis:</strong> Workshop-Vorschläge und Blog-Artikel von Benutzern
           müssen hier geprüft und freigegeben werden, bevor sie öffentlich sichtbar sind.
+          {isSuper && ' Berechtigungsanfragen von Teammitgliedern können nur von Super-Admins bearbeitet werden.'}
         </p>
       </div>
     </AdminPageWrapper>

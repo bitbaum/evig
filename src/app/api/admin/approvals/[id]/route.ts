@@ -9,7 +9,6 @@ import { query } from '@/lib/auth/db'
 import { apiError, apiSuccess, apiBadRequest, apiNotFound } from '@/lib/api/helpers'
 import { validateBody, AdminApprovalActionSchema } from '@/lib/schemas'
 import { TABLE_NAMES } from '@/config/database'
-import { MEDUSA_CONFIG } from '@/config/medusa'
 import { logger } from '@/lib/logger'
 import { sendEmail } from '@/lib/email'
 
@@ -47,28 +46,6 @@ export const PATCH = withAdmin<{ id: string }>(async (request, session, context)
        WHERE id = $3`,
       [newStatus, session.user.id, id]
     )
-
-    // On product approval, publish to MedusaJS
-    if (action === 'approve' && submission.content_type === 'product' && submission.content_id) {
-      try {
-        const publishResponse = await fetch(`${MEDUSA_CONFIG.BACKEND_URL}/api/inventory/publish-medusa`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Basic ${MEDUSA_CONFIG.ADMIN_API_KEY || ''}`
-          },
-          body: JSON.stringify({ inventoryItemId: submission.content_id })
-        })
-
-        if (publishResponse.ok) {
-          logger.info('Product published to MedusaJS after approval', { inventoryId: submission.content_id, submissionId: id })
-        } else {
-          logger.warn('Failed to publish to MedusaJS after approval', { inventoryId: submission.content_id, submissionId: id })
-        }
-      } catch (publishError) {
-        logger.warn('Error publishing to MedusaJS after approval', { submissionId: id, error: publishError })
-      }
-    }
 
     // Send notification email to submitter
     try {

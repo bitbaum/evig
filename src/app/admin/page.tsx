@@ -83,10 +83,12 @@ async function getDashboardStats(isSuper: boolean): Promise<DashboardStats> {
     )
     stats.totalStaff = parseInt(staffResult.rows[0]?.count || '0')
 
-    // Get pending content approvals
+    // Get pending content approvals (workshops and blog posts only)
     try {
       const approvalsResult = await query<{ count: string }>(
-        `SELECT COUNT(*) as count FROM ${TABLE_NAMES.USER_CONTENT_SUBMISSIONS} WHERE status = 'pending'`
+        `SELECT COUNT(*) as count FROM ${TABLE_NAMES.USER_CONTENT_SUBMISSIONS}
+         WHERE status = 'pending' AND content_type = ANY($1)`,
+        [['workshop', 'blog_post']]
       )
       stats.pendingApprovals = parseInt(approvalsResult.rows[0]?.count || '0')
     } catch {
