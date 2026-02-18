@@ -267,8 +267,8 @@ export function useRemoveLineItem() {
       const data = json.data || json;
       return data.cart as Cart;
     },
-    onSuccess: (cart) => {
-      queryClient.invalidateQueries({ queryKey: ["cart", cart.id] });
+    onSuccess: (_data, variables) => {
+      queryClient.invalidateQueries({ queryKey: ["cart", variables.cartId] });
     },
   });
 }
