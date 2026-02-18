@@ -6,18 +6,17 @@
  */
 
 // Mock dependencies that bulk-extraction imports
-jest.mock('next/server', () => ({
-  NextRequest: class {},
-  NextResponse: {
-    json: (data: unknown, init?: { status?: number }) => ({
-      json: () => data,
-      status: init?.status || 200,
-    }),
-  },
-}))
-
 jest.mock('@/lib/logger', () => ({
   logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn() },
+}))
+
+jest.mock('@/lib/ai/providers', () => ({
+  callWithFallback: jest.fn(),
+}))
+
+jest.mock('@/lib/ai/config/prompts', () => ({
+  ERFASSUNG_PROMPTS: {},
+  fillPromptTemplate: jest.fn(),
 }))
 
 import { detectMultipleProducts } from '../bulk-extraction'
