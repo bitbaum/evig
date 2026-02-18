@@ -134,16 +134,22 @@ export async function sendEmail(
     const emailContent = templateFn(...args);
     const provider = getEmailProvider();
 
-    // Use Listmonk if enabled
+    // Try Listmonk first if enabled, fall back to SMTP on failure
     if (provider === 'listmonk') {
-      return sendViaListmonk(to, emailContent, {
-        template,
-        // Pass name if available in args (common pattern)
-        name: typeof args[0] === 'string' ? args[0] : undefined,
-      });
+      try {
+        return await sendViaListmonk(to, emailContent, {
+          template,
+          name: typeof args[0] === 'string' ? args[0] : undefined,
+        });
+      } catch (listmonkError) {
+        logger.warn('Listmonk failed, falling back to SMTP', {
+          error: listmonkError instanceof Error ? listmonkError.message : 'unknown',
+          to, template,
+        });
+      }
     }
 
-    // Fallback to SMTP/nodemailer
+    // SMTP (primary if provider=smtp, fallback if Listmonk failed)
     const transporter = await getTransporter();
     const mailOptions = {
       from: getFromEmail(),
@@ -180,12 +186,19 @@ export async function sendCustomEmail(
   try {
     const provider = getEmailProvider();
 
-    // Use Listmonk if enabled
+    // Try Listmonk first if enabled, fall back to SMTP on failure
     if (provider === 'listmonk') {
-      return sendViaListmonk(to, content);
+      try {
+        return await sendViaListmonk(to, content);
+      } catch (listmonkError) {
+        logger.warn('Listmonk failed for custom email, falling back to SMTP', {
+          error: listmonkError instanceof Error ? listmonkError.message : 'unknown',
+          to,
+        });
+      }
     }
 
-    // Fallback to SMTP/nodemailer
+    // SMTP (primary if provider=smtp, fallback if Listmonk failed)
     const transporter = await getTransporter();
     const mailOptions = {
       from: getFromEmail(),

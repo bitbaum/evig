@@ -14,6 +14,77 @@ interface PaginationProps {
   onPageChange?: (page: number) => void
 }
 
+const btnClass = (active: boolean, disabled = false) =>
+  `inline-flex items-center justify-center w-8 h-8 text-sm rounded-md transition-colors ${
+    disabled
+      ? 'text-gray-300 dark:text-gray-600 cursor-not-allowed'
+      : active
+      ? 'bg-blue-600 text-white font-medium'
+      : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700'
+  }`
+
+function PageItem({
+  page,
+  active,
+  buildHref,
+  onPageChange,
+}: {
+  page: number
+  active: boolean
+  buildHref?: (page: number) => string
+  onPageChange?: (page: number) => void
+}) {
+  if (buildHref) {
+    return (
+      <Link href={buildHref(page)} className={btnClass(active)}>
+        {page}
+      </Link>
+    )
+  }
+  return (
+    <button
+      onClick={() => onPageChange?.(page)}
+      disabled={active}
+      className={btnClass(active)}
+    >
+      {page}
+    </button>
+  )
+}
+
+function NavButton({
+  page,
+  disabled,
+  children,
+  buildHref,
+  onPageChange,
+}: {
+  page: number
+  disabled: boolean
+  children: React.ReactNode
+  buildHref?: (page: number) => string
+  onPageChange?: (page: number) => void
+}) {
+  if (buildHref) {
+    return disabled ? (
+      <span className={btnClass(false, true)}>{children}</span>
+    ) : (
+      <Link href={buildHref(page)} className={btnClass(false)}>
+        {children}
+      </Link>
+    )
+  }
+  return (
+    <button
+      onClick={() => onPageChange?.(page)}
+      disabled={disabled}
+      className={btnClass(false, disabled)}
+    >
+      {children}
+    </button>
+  )
+}
+
 export function Pagination({
   currentPage,
   totalPages,
@@ -36,63 +107,13 @@ export function Pagination({
   }
   const pageList = Array.from(pages).sort((a, b) => a - b)
 
-  const buttonClass = (active: boolean, disabled = false) =>
-    `inline-flex items-center justify-center w-8 h-8 text-sm rounded-md transition-colors ${
-      disabled
-        ? 'text-gray-300 dark:text-gray-600 cursor-not-allowed'
-        : active
-        ? 'bg-blue-600 text-white font-medium'
-        : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700'
-    }`
-
-  function PageItem({ page }: { page: number }) {
-    const active = page === currentPage
-    if (buildHref) {
-      return (
-        <Link href={buildHref(page)} className={buttonClass(active)}>
-          {page}
-        </Link>
-      )
-    }
-    return (
-      <button
-        onClick={() => onPageChange?.(page)}
-        disabled={active}
-        className={buttonClass(active)}
-      >
-        {page}
-      </button>
-    )
-  }
-
-  function NavButton({ page, disabled, children }: { page: number; disabled: boolean; children: React.ReactNode }) {
-    if (buildHref) {
-      return disabled ? (
-        <span className={buttonClass(false, true)}>{children}</span>
-      ) : (
-        <Link href={buildHref(page)} className={buttonClass(false)}>
-          {children}
-        </Link>
-      )
-    }
-    return (
-      <button
-        onClick={() => onPageChange?.(page)}
-        disabled={disabled}
-        className={buttonClass(false, disabled)}
-      >
-        {children}
-      </button>
-    )
-  }
-
   return (
     <div className="flex items-center justify-between px-4 py-3 border-t border-gray-100 dark:border-gray-700">
       <p className="text-sm text-gray-500 dark:text-gray-400">
         {from}–{to} von {totalItems}
       </p>
       <div className="flex items-center gap-1">
-        <NavButton page={currentPage - 1} disabled={currentPage <= 1}>
+        <NavButton page={currentPage - 1} disabled={currentPage <= 1} buildHref={buildHref} onPageChange={onPageChange}>
           <ChevronLeft className="w-4 h-4" />
         </NavButton>
 
@@ -101,14 +122,14 @@ export function Pagination({
           return (
             <div key={page} className="flex items-center gap-1">
               {prev && page - prev > 1 && (
-                <span className="w-8 text-center text-sm text-gray-400">…</span>
+                <span className="w-8 text-center text-sm text-gray-400">...</span>
               )}
-              <PageItem page={page} />
+              <PageItem page={page} active={page === currentPage} buildHref={buildHref} onPageChange={onPageChange} />
             </div>
           )
         })}
 
-        <NavButton page={currentPage + 1} disabled={currentPage >= totalPages}>
+        <NavButton page={currentPage + 1} disabled={currentPage >= totalPages} buildHref={buildHref} onPageChange={onPageChange}>
           <ChevronRight className="w-4 h-4" />
         </NavButton>
       </div>

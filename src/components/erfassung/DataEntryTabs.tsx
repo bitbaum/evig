@@ -16,7 +16,7 @@ import { useState, useCallback, useEffect } from 'react'
 import { Mic, Camera, Zap, Loader2, CheckCircle2, AlertCircle, ChevronDown, ChevronUp, FileUp } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { logger } from '@/lib/logger'
-import { detectMultipleProducts } from '@/lib/erfassung/bulk-extraction'
+import { detectMultipleProducts } from '@/lib/erfassung/detect-multi'
 import type { VoiceProductData, ErfassungFormData, AIFieldMetadata, BulkProduct } from '@/types/erfassung'
 
 export type EntryMode = 'speech' | 'picture' | 'form' | 'file'

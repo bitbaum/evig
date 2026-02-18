@@ -41,8 +41,8 @@ export const IT_HILFE = {
   routes: {
     browse: '/it-hilfe',
     create: '/it-hilfe/create',
-    my: '/it-hilfe/meine',
-    myOffers: '/it-hilfe/meine/angebote',
+    my: '/it-hilfe/my',
+    myOffers: '/it-hilfe/my/offers',
     detail: (id: string) => `/it-hilfe/${id}`,
     helpers: '/it-hilfe/helfer',
     register: '/profil/skills',
