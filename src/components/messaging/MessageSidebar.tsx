@@ -70,8 +70,8 @@ export function MessageSidebar({ isOpen, onClose }: MessageSidebarProps) {
     try {
       const response = await fetch('/api/messages/conversations')
       const data = await response.json()
-      if (data.success) {
-        setConversations(data.conversations)
+      if (data.success && data.data?.conversations) {
+        setConversations(data.data.conversations)
       }
     } catch (error) {
       logger.error('Error fetching conversations', { error })
@@ -83,8 +83,8 @@ export function MessageSidebar({ isOpen, onClose }: MessageSidebarProps) {
       setIsLoading(true)
       const response = await fetch(`/api/messages/${conversationId}`)
       const data = await response.json()
-      if (data.success) {
-        setMessages(data.messages)
+      if (data.success && data.data?.messages) {
+        setMessages(data.data.messages)
       }
     } catch (error) {
       logger.error('Error fetching messages', { error, conversationId })

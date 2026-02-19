@@ -67,11 +67,20 @@ export async function GET(request: NextRequest) {
     const budgetType = searchParams.get('budgetType')
     const serviceType = searchParams.get('serviceType')
     const skill = searchParams.get('skill')
+    const search = searchParams.get('search')
     const status = searchParams.get('status') || 'open'
     const limit = Math.min(parseInt(searchParams.get('limit') || '20'), 50)
     const offset = parseInt(searchParams.get('offset') || '0')
-    const sortBy = searchParams.get('sortBy') || 'created_at'
-    const sortOrder = searchParams.get('sortOrder') || 'desc'
+
+    // Map frontend sort values to DB columns
+    const sortMap: Record<string, { field: string; order: string }> = {
+      newest: { field: 'created_at', order: 'DESC' },
+      urgent: { field: 'urgency', order: 'DESC' },
+      budget_high: { field: 'budget_amount_cents', order: 'DESC' },
+      offers: { field: 'offer_count', order: 'DESC' },
+    }
+    const sortParam = searchParams.get('sort') || searchParams.get('sortBy') || 'newest'
+    const sortConfig = sortMap[sortParam] || sortMap.newest
 
     // Build WHERE conditions
     const conditions: string[] = ['r.status = $1', 'r.expires_at > NOW()']
@@ -115,12 +124,15 @@ export async function GET(request: NextRequest) {
       paramIndex++
     }
 
-    const whereClause = conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : ''
+    // Text search across title, description, device brand/model
+    if (search && search.trim().length >= 2) {
+      const searchPattern = `%${search.trim()}%`
+      conditions.push(`(r.title ILIKE $${paramIndex} OR r.description ILIKE $${paramIndex} OR r.device_brand ILIKE $${paramIndex} OR r.device_model ILIKE $${paramIndex})`)
+      params.push(searchPattern)
+      paramIndex++
+    }
 
-    // Validate sort field
-    const validSortFields = ['created_at', 'urgency', 'offer_count']
-    const sortField = validSortFields.includes(sortBy) ? sortBy : 'created_at'
-    const sortDirection = sortOrder === 'asc' ? 'ASC' : 'DESC'
+    const whereClause = conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : ''
 
     // Query requests with requester name
     const requestsResult = await query(`
@@ -130,7 +142,7 @@ export async function GET(request: NextRequest) {
       FROM ${TABLE_NAMES.IT_HILFE_REQUESTS} r
       JOIN ${TABLE_NAMES.USERS} u ON r.requester_id = u.id
       ${whereClause}
-      ORDER BY r.${sortField} ${sortDirection}
+      ORDER BY r.${sortConfig.field} ${sortConfig.order}
       LIMIT $${paramIndex} OFFSET $${paramIndex + 1}
     `, [...params, limit, offset])
 

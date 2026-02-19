@@ -185,8 +185,8 @@ export const mainNavigation: NavigationItem[] = [
       },
       {
         name: 'Meine Anfragen',
-        href: '/dashboard/repairer/bookings',
-        description: 'Buchungen verwalten',
+        href: '/it-hilfe/my',
+        description: 'Anfragen verwalten',
       },
     ],
   },

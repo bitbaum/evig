@@ -20,8 +20,8 @@ export function MessageButton() {
       try {
         const response = await fetch('/api/messages/conversations?limit=1')
         const data = await response.json()
-        if (data.success) {
-          const totalUnread = data.conversations.reduce(
+        if (data.success && data.data?.conversations) {
+          const totalUnread = data.data.conversations.reduce(
             (sum: number, conv: Conversation) => sum + (conv.unread_count || 0),
             0
           )

@@ -1,7 +1,6 @@
 'use client'
 
 import { useState } from 'react'
-import { useRouter } from 'next/navigation'
 import { MapPin, Euro, Users, Sparkles } from 'lucide-react'
 import { getSkillById, BUDGET_TIERS } from '@/config/it-hilfe'
 import { logger } from '@/lib/logger'
@@ -29,7 +28,6 @@ interface HelperCardProps {
 }
 
 export function HelperCard({ helper, requestId, requestTitle }: HelperCardProps) {
-  const router = useRouter()
   const [isContacting, setIsContacting] = useState(false)
 
   const displayedSkills = helper.skills.slice(0, 5)
@@ -70,11 +68,11 @@ export function HelperCard({ helper, requestId, requestTitle }: HelperCardProps)
       const data = await response.json()
       logger.info('Contacted helper', {
         helperId: helper.userId,
-        conversationId: data.conversation_id,
+        conversationId: data.data?.conversation_id,
       })
 
-      // Navigate to conversation
-      router.push(`/messages/${data.conversation_id}`)
+      // Notify user — conversation is accessible via the message sidebar
+      alert(`Nachricht an ${helper.name} gesendet! Klicke auf das Nachrichten-Symbol unten rechts, um die Unterhaltung zu öffnen.`)
     } catch (error) {
       logger.error('Error contacting helper', { error, helperId: helper.userId })
       alert('Fehler beim Kontaktieren des Technikers. Bitte versuche es erneut.')
