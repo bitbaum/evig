@@ -12,7 +12,9 @@ import { apiSuccess, apiError, apiNotFound, apiBadRequest } from '@/lib/api/help
 import { query } from '@/lib/auth/db';
 import { TABLE_NAMES } from '@/config/database';
 import { TASK_STATUSES, REQUEST_STATUSES } from '@/config/tasks';
+import { NOTIFICATION_TYPES } from '@/config/notifications';
 import { requestResponseSchema } from '@/lib/schemas/tasks';
+import { createNotification, fireNotification } from '@/lib/services/notifications';
 import { logger } from '@/lib/logger';
 
 type RouteParams = { id: string };
@@ -114,7 +116,25 @@ export const PATCH = withAdmin<RouteParams>(async (
       }
     }
 
-    // TODO: Send notification to requester about response
+    // Notify the person who created the request
+    const accepted = data.status === REQUEST_STATUSES.ACCEPTED;
+    const responderName = session.user.name || 'Ein Teammitglied';
+
+    fireNotification(
+      () => createNotification(taskRequest.requested_by, {
+        type: NOTIFICATION_TYPES.TASK_REQUEST_RESPONSE,
+        title: accepted
+          ? `Aufgabenanfrage angenommen: ${taskRequest.task_title}`
+          : `Aufgabenanfrage abgelehnt: ${taskRequest.task_title}`,
+        content: data.response_message
+          || (accepted
+            ? `${responderName} hat deine Anfrage angenommen.`
+            : `${responderName} hat deine Anfrage abgelehnt.`),
+        related_type: 'task',
+        related_id: taskRequest.task_id,
+      }),
+      'task-request-response',
+    );
 
     logger.info('Task request responded', {
       requestId,

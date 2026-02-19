@@ -16,6 +16,7 @@ export const NOTIFICATION_TYPES = {
   // Task management
   TASK_ATTENTION: 'task_attention',
   TASK_REQUEST: 'task_request',
+  TASK_REQUEST_RESPONSE: 'task_request_response',
   TASK_COMPLETED: 'task_completed',
   TASK_BROADCAST: 'task_broadcast',
 
