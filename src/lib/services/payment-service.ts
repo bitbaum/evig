@@ -346,9 +346,9 @@ export class PaymentService {
   ): Promise<void> {
     logger.info('Checkout session completed', { sessionId: session.id })
 
-    // Handle completed checkout sessions (e.g., for subscriptions or complex payments)
-    // This could trigger order fulfillment, etc.
-    // TODO: Implement based on business requirements
+    // No-op: payment provider decision pending (Stripe vs Payrexx).
+    // Current payment flows use PaymentIntents directly — this handler
+    // is registered for forward-compatibility only.
   }
 
   /**

@@ -39,6 +39,9 @@ export default function ProductManagement() {
   const [filterStatus, setFilterStatus] = useState<FilterStatus>('all')
   const [filterCategory, setFilterCategory] = useState('all')
 
+  // Selection state
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
+
   // Delete confirmation state
   const [deleteTarget, setDeleteTarget] = useState<{
     type: 'shop' | 'inventory'
@@ -47,6 +50,9 @@ export default function ProductManagement() {
   } | null>(null)
   const [isDeleting, setIsDeleting] = useState(false)
   const [deleteError, setDeleteError] = useState<string | null>(null)
+
+  // Bulk delete confirmation state
+  const [bulkDeletePending, setBulkDeletePending] = useState(false)
 
   // Unpublish confirmation state
   const [unpublishTarget, setUnpublishTarget] = useState<{
@@ -244,6 +250,61 @@ export default function ProductManagement() {
     }
   }
 
+  // Selection handlers
+  const handleToggleSelect = (id: string) => {
+    setSelectedIds(prev => {
+      const next = new Set(prev)
+      if (next.has(id)) next.delete(id)
+      else next.add(id)
+      return next
+    })
+  }
+
+  const handleSelectAll = (ids: string[]) => {
+    setSelectedIds(prev => {
+      const allSelected = ids.every(id => prev.has(id))
+      return allSelected ? new Set() : new Set(ids)
+    })
+  }
+
+  // Bulk delete
+  const handleBulkDelete = () => {
+    if (selectedIds.size === 0) return
+    setBulkDeletePending(true)
+    setDeleteError(null)
+  }
+
+  const handleConfirmBulkDelete = async () => {
+    setIsDeleting(true)
+    setDeleteError(null)
+
+    try {
+      const results = await Promise.allSettled(
+        Array.from(selectedIds).map(id =>
+          fetch(`/api/admin/inventory/${id}`, { method: 'DELETE' }).then(async res => {
+            const data = await res.json()
+            if (!res.ok || !data.success) throw new Error(data.error || 'Löschen fehlgeschlagen')
+          })
+        )
+      )
+
+      const failed = results.filter(r => r.status === 'rejected')
+      if (failed.length > 0) {
+        setDeleteError(`${failed.length} von ${selectedIds.size} Produkten konnten nicht gelöscht werden`)
+      } else {
+        setBulkDeletePending(false)
+        setSelectedIds(new Set())
+      }
+
+      refetchShop()
+      refetchInventory()
+    } catch {
+      setDeleteError('Unbekannter Fehler beim Löschen')
+    } finally {
+      setIsDeleting(false)
+    }
+  }
+
   const refetch = activeTab === 'shop' ? refetchShop : refetchInventory
 
   // Loading state
@@ -285,7 +346,7 @@ export default function ProductManagement() {
     <div className="space-y-6">
       <ProductTabSwitcher
         activeTab={activeTab}
-        onTabChange={setActiveTab}
+        onTabChange={(tab) => { setActiveTab(tab); setSelectedIds(new Set()) }}
         inventoryStats={inventoryStats}
         shopStats={shopStats}
       />
@@ -303,8 +364,8 @@ export default function ProductManagement() {
         onFilterStatusChange={setFilterStatus}
         filterCategory={filterCategory}
         onFilterCategoryChange={setFilterCategory}
-        selectedCount={0}
-        onBulkDelete={() => {/* TODO: implement */}}
+        selectedCount={selectedIds.size}
+        onBulkDelete={handleBulkDelete}
         activeTab={activeTab}
       />
 
@@ -312,6 +373,9 @@ export default function ProductManagement() {
         <InventoryProductsTable
           products={inventoryProducts}
           searchQuery={searchQuery}
+          selectedIds={selectedIds}
+          onToggleSelect={handleToggleSelect}
+          onSelectAll={handleSelectAll}
           onView={handleViewInventory}
           onEdit={handleEditInventory}
           onDelete={handleDeleteInventory}
@@ -321,6 +385,9 @@ export default function ProductManagement() {
         <ShopProductsTable
           products={shopProducts}
           searchQuery={searchQuery}
+          selectedIds={selectedIds}
+          onToggleSelect={handleToggleSelect}
+          onSelectAll={handleSelectAll}
           onView={handleViewShop}
           onEdit={handleEditShop}
           onUnpublish={handleUnpublishShop}
@@ -371,6 +438,20 @@ export default function ProductManagement() {
         variant="success"
         onConfirm={handleConfirmPublish}
         onClose={() => setPublishTarget(null)}
+      />
+
+      {/* Bulk delete confirmation dialog */}
+      <ConfirmDialog
+        isOpen={bulkDeletePending}
+        title={`${selectedIds.size} Produkte löschen`}
+        message={`Sind Sie sicher, dass Sie ${selectedIds.size} Produkte löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden.`}
+        confirmLabel={`${selectedIds.size} Produkte löschen`}
+        cancelLabel="Abbrechen"
+        isLoading={isDeleting}
+        error={deleteError}
+        variant="danger"
+        onConfirm={handleConfirmBulkDelete}
+        onClose={() => { setBulkDeletePending(false); setDeleteError(null) }}
       />
     </div>
   )

@@ -25,6 +25,9 @@ import {
 interface InventoryProductsTableProps {
   products: InventoryProduct[]
   searchQuery: string
+  selectedIds?: Set<string>
+  onToggleSelect?: (id: string) => void
+  onSelectAll?: (ids: string[]) => void
   onView?: (product: InventoryProduct) => void
   onEdit?: (product: InventoryProduct) => void
   onDelete?: (product: InventoryProduct) => void
@@ -34,6 +37,9 @@ interface InventoryProductsTableProps {
 export function InventoryProductsTable({
   products,
   searchQuery,
+  selectedIds,
+  onToggleSelect,
+  onSelectAll,
   onView,
   onEdit,
   onDelete,
@@ -47,12 +53,26 @@ export function InventoryProductsTable({
     return matchesSearch
   })
 
+  const selectable = !!selectedIds && !!onToggleSelect
+  const filteredIds = filteredProducts.map(p => p.id)
+  const allSelected = selectable && filteredIds.length > 0 && filteredIds.every(id => selectedIds.has(id))
+
   return (
     <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
       <div className="overflow-x-auto">
         <table className="w-full">
           <thead className="bg-gray-50 border-b border-gray-200">
             <tr>
+              {selectable && (
+                <th className="w-10 px-3 py-3">
+                  <input
+                    type="checkbox"
+                    checked={allSelected}
+                    onChange={() => onSelectAll?.(filteredIds)}
+                    className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                  />
+                </th>
+              )}
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Artikel-Nr.
               </th>
@@ -82,8 +102,18 @@ export function InventoryProductsTable({
                 key={product.id}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                className="hover:bg-gray-50"
+                className={cn("hover:bg-gray-50", selectable && selectedIds.has(product.id) && "bg-indigo-50")}
               >
+                {selectable && (
+                  <td className="w-10 px-3 py-4">
+                    <input
+                      type="checkbox"
+                      checked={selectedIds.has(product.id)}
+                      onChange={() => onToggleSelect(product.id)}
+                      className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                    />
+                  </td>
+                )}
                 <td className="px-6 py-4">
                   <code className="text-sm font-mono bg-gray-100 px-2 py-1 rounded">
                     {product.item_uuid}
