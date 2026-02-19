@@ -151,12 +151,15 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
       return apiForbidden('Sie können nur Ihre eigenen Anfragen bearbeiten')
     }
 
-    // Only allow editing open or in_discussion requests
-    if (!['open', 'in_discussion'].includes(existing.status)) {
+    const body = await request.json()
+
+    // Status-only updates (completion, cancellation) are allowed on matched requests
+    const isStatusOnlyUpdate = body.status && Object.keys(body).length === 1
+
+    // Only allow editing open or in_discussion requests (unless it's a status transition)
+    if (!['open', 'in_discussion'].includes(existing.status) && !isStatusOnlyUpdate) {
       return apiBadRequest('Diese Anfrage kann nicht mehr bearbeitet werden')
     }
-
-    const body = await request.json()
     const {
       categoryId,
       deviceBrand,
@@ -287,15 +290,22 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
       paramIndex++
     }
 
-    // Allow cancelling the request
+    // Status transitions
     if (status !== undefined) {
-      if (status === 'cancelled') {
-        updates.push(`status = $${paramIndex}`)
-        updateParams.push('cancelled')
-        paramIndex++
-      } else if (!REQUEST_STATUSES.some(s => s.id === status)) {
-        return apiBadRequest('Ungültiger Status')
+      const validTransitions: Record<string, string[]> = {
+        open: ['cancelled'],
+        in_discussion: ['cancelled'],
+        matched: ['completed', 'cancelled'],
       }
+      const allowed = validTransitions[existing.status] || []
+
+      if (!allowed.includes(status)) {
+        return apiBadRequest(`Status kann nicht von "${existing.status}" auf "${status}" geändert werden`)
+      }
+
+      updates.push(`status = $${paramIndex}`)
+      updateParams.push(status)
+      paramIndex++
     }
 
     if (updates.length === 0) {

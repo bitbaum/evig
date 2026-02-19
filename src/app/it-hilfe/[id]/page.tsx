@@ -639,6 +639,58 @@ export default function PeerRepairDetailPage() {
                   Aktionen
                 </h3>
                 <div className="space-y-2">
+                  {request.status === 'matched' && (
+                    <button
+                      onClick={async () => {
+                        if (!confirm('Anfrage als abgeschlossen markieren?')) return
+                        try {
+                          const res = await fetch(`/api/it-hilfe/requests/${request.id}`, {
+                            method: 'PUT',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ status: 'completed' }),
+                          })
+                          if (res.ok) {
+                            window.location.reload()
+                          } else {
+                            const data = await res.json()
+                            alert(data.error || 'Fehler beim Abschliessen')
+                          }
+                        } catch {
+                          alert('Fehler beim Abschliessen')
+                        }
+                      }}
+                      className="block w-full py-3 px-4 min-h-[44px] bg-emerald-600 text-white rounded-lg text-center font-medium hover:bg-emerald-700 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
+                    >
+                      <CheckCircle className="w-4 h-4 inline-block mr-2" />
+                      Als abgeschlossen markieren
+                    </button>
+                  )}
+                  {['open', 'in_discussion', 'matched'].includes(request.status) && (
+                    <button
+                      onClick={async () => {
+                        if (!confirm('Anfrage wirklich abbrechen?')) return
+                        try {
+                          const res = await fetch(`/api/it-hilfe/requests/${request.id}`, {
+                            method: 'PUT',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ status: 'cancelled' }),
+                          })
+                          if (res.ok) {
+                            window.location.reload()
+                          } else {
+                            const data = await res.json()
+                            alert(data.error || 'Fehler beim Abbrechen')
+                          }
+                        } catch {
+                          alert('Fehler beim Abbrechen')
+                        }
+                      }}
+                      className="block w-full py-3 px-4 min-h-[44px] bg-red-50 text-red-700 rounded-lg text-center font-medium hover:bg-red-100 transition-colors focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+                    >
+                      <XCircle className="w-4 h-4 inline-block mr-2" />
+                      Anfrage abbrechen
+                    </button>
+                  )}
                   <Link
                     href="/it-hilfe/my"
                     className="block w-full py-3 px-4 min-h-[44px] bg-gray-100 text-gray-700 rounded-lg text-center font-medium hover:bg-gray-200 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"

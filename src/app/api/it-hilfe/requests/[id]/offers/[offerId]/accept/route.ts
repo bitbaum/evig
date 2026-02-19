@@ -5,9 +5,12 @@ import { apiError, apiSuccess, apiUnauthorized, apiBadRequest, apiNotFound, apiF
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES, CONVERSATION_TYPES } from '@/config/database'
 import { logger } from '@/lib/logger'
+import { sendCustomEmail } from '@/lib/email'
+import { itHilfeOfferAccepted, itHilfeOfferRejected } from '@/lib/email/templates/it-hilfe'
 
 interface RequestRow {
   requester_id: string
+  requester_name: string
   status: string
   title: string
 }
@@ -15,7 +18,15 @@ interface RequestRow {
 interface OfferRow {
   id: string
   helper_id: string
+  helper_name: string
+  helper_email: string
   status: string
+}
+
+interface RejectedOfferRow {
+  helper_id: string
+  helper_name: string
+  helper_email: string
 }
 
 interface RouteParams {
@@ -43,8 +54,10 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
 
     // Get request details and verify ownership
     const requestResult = await query(`
-      SELECT requester_id, status, title FROM ${TABLE_NAMES.IT_HILFE_REQUESTS}
-      WHERE id = $1
+      SELECT r.requester_id, r.status, r.title, u.name as requester_name
+      FROM ${TABLE_NAMES.IT_HILFE_REQUESTS} r
+      JOIN ${TABLE_NAMES.USERS} u ON r.requester_id = u.id
+      WHERE r.id = $1
     `, [id])
 
     if (requestResult.rows.length === 0) {
@@ -62,10 +75,12 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
       return apiBadRequest('Diese Anfrage kann keine Angebote mehr akzeptieren')
     }
 
-    // Get offer details
+    // Get offer details with helper info
     const offerResult = await query(`
-      SELECT id, helper_id, status FROM ${TABLE_NAMES.IT_HILFE_OFFERS}
-      WHERE id = $1 AND request_id = $2
+      SELECT o.id, o.helper_id, o.status, u.name as helper_name, u.email as helper_email
+      FROM ${TABLE_NAMES.IT_HILFE_OFFERS} o
+      JOIN ${TABLE_NAMES.USERS} u ON o.helper_id = u.id
+      WHERE o.id = $1 AND o.request_id = $2
     `, [offerId, id])
 
     if (offerResult.rows.length === 0) {
@@ -144,6 +159,35 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
       requesterId: session.user.id,
       helperId: offerData.helper_id,
     })
+
+    // Send notifications (fire-and-forget, don't block the response)
+    const requestUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'https://revampit.ch'}/it-hilfe/${id}`
+
+    // Notify accepted helper
+    sendCustomEmail(
+      offerData.helper_email,
+      itHilfeOfferAccepted(
+        offerData.helper_name || 'Techniker',
+        requestData.title,
+        requestData.requester_name || 'Anfragender',
+        requestUrl
+      )
+    ).catch(err => logger.error('Failed to send offer accepted email', { err, helperId: offerData.helper_id }))
+
+    // Notify rejected helpers
+    query(`
+      SELECT o.helper_id, u.name as helper_name, u.email as helper_email
+      FROM ${TABLE_NAMES.IT_HILFE_OFFERS} o
+      JOIN ${TABLE_NAMES.USERS} u ON o.helper_id = u.id
+      WHERE o.request_id = $1 AND o.status = 'rejected' AND o.id != $2
+    `, [id, offerId]).then(result => {
+      for (const row of result.rows as RejectedOfferRow[]) {
+        sendCustomEmail(
+          row.helper_email,
+          itHilfeOfferRejected(row.helper_name || 'Techniker', requestData.title, requestUrl)
+        ).catch(err => logger.error('Failed to send offer rejected email', { err, helperId: row.helper_id }))
+      }
+    }).catch(err => logger.error('Failed to fetch rejected offers for notification', { err }))
 
     return apiSuccess({
       message: 'Angebot erfolgreich akzeptiert',

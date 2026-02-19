@@ -272,3 +272,131 @@ Mit freundlichen Grüssen,
 RevampIT System
   `.trim(),
 })
+
+/**
+ * Notification email sent to the technician when their offer is accepted
+ */
+export const itHilfeOfferAccepted = (
+  helperName: string,
+  requestTitle: string,
+  requesterName: string,
+  requestUrl: string
+): EmailContent => ({
+  subject: 'Dein Angebot wurde angenommen! - RevampIT IT-Hilfe',
+  html: `
+    <!DOCTYPE html>
+    <html lang="de">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Angebot angenommen</title>
+      <style>${BASE_STYLES}</style>
+    </head>
+    <body>
+      <div class="container">
+        <div class="header header-green">
+          <h1>Dein Angebot wurde angenommen!</h1>
+        </div>
+        <div class="content">
+          <p>Hallo ${helperName},</p>
+          <p>Gute Nachrichten! <strong>${requesterName}</strong> hat dein Angebot für die folgende Anfrage angenommen:</p>
+
+          <div class="highlight-box">
+            <p><strong>${requestTitle}</strong></p>
+          </div>
+
+          <p><strong>Nächste Schritte:</strong></p>
+          <ul>
+            <li>Eine Unterhaltung wurde automatisch erstellt</li>
+            <li>Klicke auf das Nachrichten-Symbol, um Kontakt aufzunehmen</li>
+            <li>Vereinbart einen Termin und die Details</li>
+          </ul>
+
+          <a href="${requestUrl}" class="button button-green">Anfrage ansehen</a>
+        </div>
+        <div class="footer">
+          <p>Vielen Dank, dass du der Community hilfst!</p>
+          <p>${COPYRIGHT_TEXT}</p>
+        </div>
+      </div>
+    </body>
+    </html>
+  `,
+  text: `
+Hallo ${helperName},
+
+Gute Nachrichten! ${requesterName} hat dein Angebot für die folgende Anfrage angenommen:
+
+"${requestTitle}"
+
+Nächste Schritte:
+- Eine Unterhaltung wurde automatisch erstellt
+- Klicke auf das Nachrichten-Symbol, um Kontakt aufzunehmen
+- Vereinbart einen Termin und die Details
+
+Anfrage ansehen: ${requestUrl}
+
+Vielen Dank, dass du der Community hilfst!
+
+Mit freundlichen Grüssen,
+Das RevampIT Team
+  `.trim(),
+})
+
+/**
+ * Notification email sent to technicians whose offers were rejected
+ * (auto-rejected when another offer is accepted)
+ */
+export const itHilfeOfferRejected = (
+  helperName: string,
+  requestTitle: string,
+  requestUrl: string
+): EmailContent => ({
+  subject: 'Anfrage vergeben - RevampIT IT-Hilfe',
+  html: `
+    <!DOCTYPE html>
+    <html lang="de">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Anfrage vergeben</title>
+      <style>${BASE_STYLES}</style>
+    </head>
+    <body>
+      <div class="container">
+        <div class="header header-green">
+          <h1>Anfrage vergeben</h1>
+        </div>
+        <div class="content">
+          <p>Hallo ${helperName},</p>
+          <p>Die folgende Anfrage wurde an einen anderen Techniker vergeben:</p>
+
+          <div class="highlight-box">
+            <p><strong>${requestTitle}</strong></p>
+          </div>
+
+          <p>Vielen Dank für dein Angebot! Es gibt bestimmt bald wieder passende Anfragen für dich.</p>
+
+          <a href="/it-hilfe" class="button button-green">Weitere Anfragen ansehen</a>
+        </div>
+        <div class="footer">
+          <p>Vielen Dank für dein Engagement in der Community!</p>
+          <p>${COPYRIGHT_TEXT}</p>
+        </div>
+      </div>
+    </body>
+    </html>
+  `,
+  text: `
+Hallo ${helperName},
+
+Die folgende Anfrage wurde an einen anderen Techniker vergeben:
+
+"${requestTitle}"
+
+Vielen Dank für dein Angebot! Es gibt bestimmt bald wieder passende Anfragen für dich.
+
+Mit freundlichen Grüssen,
+Das RevampIT Team
+  `.trim(),
+})
