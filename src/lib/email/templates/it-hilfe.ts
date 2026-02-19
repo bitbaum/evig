@@ -347,6 +347,71 @@ Das RevampIT Team
  * Notification email sent to technicians whose offers were rejected
  * (auto-rejected when another offer is accepted)
  */
+/**
+ * Notification email sent to the requester when a new offer is received
+ */
+export const itHilfeNewOfferReceived = (
+  requesterName: string,
+  requestTitle: string,
+  helperName: string,
+  offerMessage: string,
+  requestUrl: string
+): EmailContent => ({
+  subject: 'Neues Angebot für deine Anfrage - RevampIT IT-Hilfe',
+  html: `
+    <!DOCTYPE html>
+    <html lang="de">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Neues Angebot erhalten</title>
+      <style>${BASE_STYLES}</style>
+    </head>
+    <body>
+      <div class="container">
+        <div class="header header-green">
+          <h1>Neues Angebot erhalten!</h1>
+        </div>
+        <div class="content">
+          <p>Hallo ${requesterName},</p>
+          <p><strong>${helperName}</strong> hat ein Angebot für deine Anfrage abgegeben:</p>
+
+          <div class="highlight-box">
+            <p><strong>${requestTitle}</strong></p>
+          </div>
+
+          <p><strong>Nachricht des Technikers:</strong></p>
+          <p style="background-color: #f9fafb; padding: 12px; border-radius: 6px; border-left: 3px solid #10b981;">
+            ${offerMessage.length > 300 ? offerMessage.slice(0, 300) + '...' : offerMessage}
+          </p>
+
+          <a href="${requestUrl}" class="button button-green">Angebot ansehen</a>
+        </div>
+        <div class="footer">
+          <p>Du erhältst diese E-Mail, weil jemand ein Angebot für deine Anfrage abgegeben hat.</p>
+          <p>${COPYRIGHT_TEXT}</p>
+        </div>
+      </div>
+    </body>
+    </html>
+  `,
+  text: `
+Hallo ${requesterName},
+
+${helperName} hat ein Angebot für deine Anfrage abgegeben:
+
+"${requestTitle}"
+
+Nachricht des Technikers:
+${offerMessage.length > 300 ? offerMessage.slice(0, 300) + '...' : offerMessage}
+
+Angebot ansehen: ${requestUrl}
+
+Mit freundlichen Grüssen,
+Das RevampIT Team
+  `.trim(),
+})
+
 export const itHilfeOfferRejected = (
   helperName: string,
   requestTitle: string,

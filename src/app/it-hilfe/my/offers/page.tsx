@@ -50,6 +50,7 @@ export default function MyOffersPage() {
   const [loading, setLoading] = useState(true)
   const [total, setTotal] = useState(0)
   const [statusFilter, setStatusFilter] = useState('')
+  const [withdrawingId, setWithdrawingId] = useState<string | null>(null)
 
   // Redirect if not authenticated
   useEffect(() => {
@@ -83,6 +84,28 @@ export default function MyOffersPage() {
       fetchOffers()
     }
   }, [session?.user, fetchOffers])
+
+  const handleWithdraw = async (offer: OfferWithRequest) => {
+    if (!confirm('Angebot wirklich zurückziehen?')) return
+
+    setWithdrawingId(offer.id)
+    try {
+      const response = await fetch(`/api/it-hilfe/requests/${offer.requestId}/offers/${offer.id}`, {
+        method: 'DELETE',
+      })
+      const data = await response.json()
+      if (!response.ok) {
+        throw new Error(data.error || 'Fehler beim Zurückziehen')
+      }
+      fetchOffers()
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Ein Fehler ist aufgetreten'
+      alert(message)
+      logger.error('Error withdrawing offer', { error: err })
+    } finally {
+      setWithdrawingId(null)
+    }
+  }
 
   if (status === 'loading' || (status === 'authenticated' && loading)) {
     return (
@@ -181,60 +204,75 @@ export default function MyOffersPage() {
               const CategoryIcon = categoryConfig?.icon || Wrench
 
               return (
-                <Link
+                <div
                   key={offer.id}
-                  href={`/it-hilfe/${offer.requestId}`}
-                  className="block bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow group"
+                  className="bg-white rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow"
                 >
-                  <div className="flex items-start gap-4">
-                    <div className={`p-3 ${categoryConfig?.color || 'bg-gray-500'} rounded-xl`}>
-                      <CategoryIcon className="w-6 h-6 text-white" />
-                    </div>
-
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 mb-1">
-                        <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${offerStatusConfig?.badgeClass || 'bg-gray-100 text-gray-700'}`}>
-                          Angebot: {offerStatusConfig?.name || offer.status}
-                        </span>
-                        <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${requestStatusConfig?.badgeClass || 'bg-gray-100 text-gray-700'}`}>
-                          Anfrage: {requestStatusConfig?.name || offer.request.status}
-                        </span>
+                  <Link
+                    href={`/it-hilfe/${offer.requestId}`}
+                    className="block p-6 group"
+                  >
+                    <div className="flex items-start gap-4">
+                      <div className={`p-3 ${categoryConfig?.color || 'bg-gray-500'} rounded-xl`}>
+                        <CategoryIcon className="w-6 h-6 text-white" />
                       </div>
 
-                      <h3 className="font-semibold text-gray-900 mb-2 group-hover:text-emerald-600 transition-colors">
-                        {offer.request.title}
-                      </h3>
-
-                      <p className="text-sm text-gray-600 mb-3">
-                        <span className="font-medium">Dein Angebot:</span> {offer.message.slice(0, 150)}
-                        {offer.message.length > 150 && '...'}
-                      </p>
-
-                      <div className="flex flex-wrap items-center gap-4 text-sm text-gray-500">
-                        <div className="flex items-center gap-1">
-                          <MapPin className="w-4 h-4" />
-                          <span>{offer.request.city}, {offer.request.canton}</span>
-                        </div>
-                        {offer.estimatedTime && (
-                          <div className="flex items-center gap-1">
-                            <Clock className="w-4 h-4" />
-                            <span>{offer.estimatedTime}</span>
-                          </div>
-                        )}
-                        {offer.proposedCompensation && (
-                          <span className="text-emerald-600 font-medium">
-                            {offer.proposedCompensation}
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2 mb-1">
+                          <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${offerStatusConfig?.badgeClass || 'bg-gray-100 text-gray-700'}`}>
+                            Angebot: {offerStatusConfig?.name || offer.status}
                           </span>
-                        )}
-                        <span className="text-gray-400">
-                          Angefragt von {offer.request.requesterName}
-                        </span>
-                      </div>
-                    </div>
+                          <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${requestStatusConfig?.badgeClass || 'bg-gray-100 text-gray-700'}`}>
+                            Anfrage: {requestStatusConfig?.name || offer.request.status}
+                          </span>
+                        </div>
 
-                    <ArrowRight className="w-5 h-5 text-gray-400 group-hover:text-emerald-600 transition-colors" />
-                  </div>
-                </Link>
+                        <h3 className="font-semibold text-gray-900 mb-2 group-hover:text-emerald-600 transition-colors">
+                          {offer.request.title}
+                        </h3>
+
+                        <p className="text-sm text-gray-600 mb-3">
+                          <span className="font-medium">Dein Angebot:</span> {offer.message.slice(0, 150)}
+                          {offer.message.length > 150 && '...'}
+                        </p>
+
+                        <div className="flex flex-wrap items-center gap-4 text-sm text-gray-500">
+                          <div className="flex items-center gap-1">
+                            <MapPin className="w-4 h-4" />
+                            <span>{offer.request.city}, {offer.request.canton}</span>
+                          </div>
+                          {offer.estimatedTime && (
+                            <div className="flex items-center gap-1">
+                              <Clock className="w-4 h-4" />
+                              <span>{offer.estimatedTime}</span>
+                            </div>
+                          )}
+                          {offer.proposedCompensation && (
+                            <span className="text-emerald-600 font-medium">
+                              {offer.proposedCompensation}
+                            </span>
+                          )}
+                          <span className="text-gray-400">
+                            Angefragt von {offer.request.requesterName}
+                          </span>
+                        </div>
+                      </div>
+
+                      <ArrowRight className="w-5 h-5 text-gray-400 group-hover:text-emerald-600 transition-colors" />
+                    </div>
+                  </Link>
+                  {offer.status === 'pending' && (
+                    <div className="px-6 pb-4">
+                      <button
+                        onClick={() => handleWithdraw(offer)}
+                        disabled={withdrawingId === offer.id}
+                        className="px-4 py-2 min-h-[44px] bg-red-50 text-red-700 rounded-lg text-sm font-medium hover:bg-red-100 transition-colors disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+                      >
+                        {withdrawingId === offer.id ? 'Wird zurückgezogen...' : 'Angebot zurückziehen'}
+                      </button>
+                    </div>
+                  )}
+                </div>
               )
             })}
           </div>

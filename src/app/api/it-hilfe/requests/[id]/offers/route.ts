@@ -6,6 +6,8 @@ import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
 import { getSkillIds } from '@/config/it-hilfe'
+import { sendCustomEmail } from '@/lib/email'
+import { itHilfeNewOfferReceived } from '@/lib/email/templates/it-hilfe'
 
 interface OfferRow {
   id: string
@@ -123,15 +125,17 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
 
     // Check if request exists and is open
     const requestResult = await query(`
-      SELECT requester_id, status, title FROM ${TABLE_NAMES.IT_HILFE_REQUESTS}
-      WHERE id = $1
+      SELECT r.requester_id, r.status, r.title, u.name as requester_name, u.email as requester_email
+      FROM ${TABLE_NAMES.IT_HILFE_REQUESTS} r
+      JOIN ${TABLE_NAMES.USERS} u ON r.requester_id = u.id
+      WHERE r.id = $1
     `, [id])
 
     if (requestResult.rows.length === 0) {
       return apiNotFound('IT-Hilfe-Anfrage')
     }
 
-    const requestData = requestResult.rows[0] as RequestOwnerRow & { title: string }
+    const requestData = requestResult.rows[0] as RequestOwnerRow & { title: string; requester_name: string; requester_email: string }
 
     // Cannot offer on own request
     if (requestData.requester_id === session.user.id) {
@@ -141,6 +145,15 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
     // Only allow offers on open or in_discussion requests
     if (!['open', 'in_discussion'].includes(requestData.status)) {
       return apiBadRequest('Diese Anfrage akzeptiert keine neuen Angebote mehr')
+    }
+
+    // Check if request has expired
+    const expiryResult = await query(`
+      SELECT expires_at FROM ${TABLE_NAMES.IT_HILFE_REQUESTS}
+      WHERE id = $1 AND expires_at <= NOW()
+    `, [id])
+    if (expiryResult.rows.length > 0) {
+      return apiBadRequest('Diese Anfrage ist abgelaufen')
     }
 
     // Check if user already made an offer
@@ -215,6 +228,21 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
       requestId: id,
       helperId: session.user.id,
     })
+
+    // Notify requester about new offer (fire-and-forget)
+    if (requestData.requester_email) {
+      const requestUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'https://revampit.ch'}/it-hilfe/${id}`
+      sendCustomEmail(
+        requestData.requester_email,
+        itHilfeNewOfferReceived(
+          requestData.requester_name || 'Nutzer',
+          requestData.title,
+          session.user.name || 'Ein Techniker',
+          message,
+          requestUrl
+        )
+      ).catch(err => logger.error('Failed to send new offer notification', { err, requestId: id }))
+    }
 
     return apiSuccess({
       message: 'Angebot erfolgreich abgegeben',

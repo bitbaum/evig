@@ -98,6 +98,10 @@ export default function PeerRepairDetailPage() {
   // Accept offer state
   const [acceptingOfferId, setAcceptingOfferId] = useState<string | null>(null)
 
+  // User's own offer (for non-owners)
+  const [userOffer, setUserOffer] = useState<Offer | null>(null)
+  const [withdrawing, setWithdrawing] = useState(false)
+
   const fetchRequest = useCallback(async () => {
     try {
       setLoading(true)
@@ -142,6 +146,35 @@ export default function PeerRepairDetailPage() {
       fetchOffers()
     }
   }, [request?.isOwner, fetchOffers])
+
+  // Fetch current user's own offer on this request (non-owners only)
+  useEffect(() => {
+    if (!session?.user || !request || request.isOwner) return
+
+    fetch(`/api/it-hilfe/my-offers?status=pending`)
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          const match = data.data.offers.find((o: { requestId: string }) => o.requestId === id)
+          if (match) {
+            setUserOffer({
+              id: match.id,
+              requestId: match.requestId,
+              helperId: session.user!.id!,
+              helperName: session.user!.name || '',
+              helperEmail: '',
+              message: match.message,
+              estimatedTime: match.estimatedTime,
+              proposedCompensation: match.proposedCompensation,
+              relevantSkills: match.relevantSkills || [],
+              status: match.status,
+              createdAt: match.createdAt,
+            })
+          }
+        }
+      })
+      .catch(err => logger.error('Error fetching user offer', { error: err }))
+  }, [session?.user, request, id])
 
   const handleSkillToggle = (skillId: string) => {
     setOfferSkills((prev) =>
@@ -188,6 +221,29 @@ export default function PeerRepairDetailPage() {
       setOfferError(message)
     } finally {
       setSubmittingOffer(false)
+    }
+  }
+
+  const handleWithdrawOffer = async () => {
+    if (!userOffer) return
+    if (!confirm('Angebot wirklich zurückziehen?')) return
+
+    setWithdrawing(true)
+    try {
+      const response = await fetch(`/api/it-hilfe/requests/${id}/offers/${userOffer.id}`, {
+        method: 'DELETE',
+      })
+      const data = await response.json()
+      if (!response.ok) {
+        throw new Error(data.error || 'Fehler beim Zurückziehen')
+      }
+      setUserOffer(null)
+      fetchRequest()
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Ein Fehler ist aufgetreten'
+      alert(message)
+    } finally {
+      setWithdrawing(false)
     }
   }
 
@@ -253,7 +309,8 @@ export default function PeerRepairDetailPage() {
   const statusConfig = getRequestStatusById(request.status)
   const CategoryIcon = categoryConfig?.icon || Wrench
 
-  const canOffer = session?.user && !request.isOwner && ['open', 'in_discussion'].includes(request.status)
+  const isExpired = new Date(request.expiresAt) < new Date()
+  const canOffer = session?.user && !request.isOwner && ['open', 'in_discussion'].includes(request.status) && !isExpired
 
   return (
     <div className="min-h-screen bg-gray-50 py-8">
@@ -266,6 +323,16 @@ export default function PeerRepairDetailPage() {
           <ArrowLeft className="w-4 h-4" aria-hidden="true" />
           Zurück zur Übersicht
         </Link>
+
+        {/* Expiration Banner */}
+        {isExpired && ['open', 'in_discussion'].includes(request.status) && (
+          <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 mb-6 flex items-center gap-3">
+            <AlertCircle className="w-5 h-5 text-amber-600 flex-shrink-0" aria-hidden="true" />
+            <p className="text-amber-800 text-sm font-medium">
+              Diese Anfrage ist am {formatDate(request.expiresAt)} abgelaufen und akzeptiert keine neuen Angebote mehr.
+            </p>
+          </div>
+        )}
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Main Content */}
@@ -342,8 +409,41 @@ export default function PeerRepairDetailPage() {
               </div>
             )}
 
+            {/* User's existing offer (non-owner) */}
+            {userOffer && !request.isOwner && (
+              <div className="bg-white rounded-xl shadow-sm border border-emerald-200 p-6">
+                <div className="flex items-center justify-between mb-3">
+                  <h3 className="text-lg font-semibold text-gray-900">Dein Angebot</h3>
+                  <span className="px-2.5 py-1 rounded-full text-xs font-medium bg-amber-100 text-amber-700">
+                    Ausstehend
+                  </span>
+                </div>
+                <p className="text-gray-700 mb-3">{userOffer.message}</p>
+                {(userOffer.estimatedTime || userOffer.proposedCompensation) && (
+                  <div className="flex flex-wrap gap-4 text-sm text-gray-600 mb-4">
+                    {userOffer.estimatedTime && (
+                      <span className="flex items-center gap-1">
+                        <Clock className="w-4 h-4" aria-hidden="true" />
+                        {userOffer.estimatedTime}
+                      </span>
+                    )}
+                    {userOffer.proposedCompensation && (
+                      <span>{userOffer.proposedCompensation}</span>
+                    )}
+                  </div>
+                )}
+                <button
+                  onClick={handleWithdrawOffer}
+                  disabled={withdrawing}
+                  className="px-4 py-2.5 min-h-[44px] bg-red-50 text-red-700 rounded-lg text-sm font-medium hover:bg-red-100 transition-colors disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+                >
+                  {withdrawing ? 'Wird zurückgezogen...' : 'Angebot zurückziehen'}
+                </button>
+              </div>
+            )}
+
             {/* Offer Form */}
-            {canOffer && (
+            {canOffer && !userOffer && (
               <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
                 {!showOfferForm ? (
                   <button
