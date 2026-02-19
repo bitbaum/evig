@@ -1,5 +1,5 @@
 import { NextRequest } from 'next/server'
-import { auth } from '@/auth'
+import { withAuth } from '@/lib/api/middleware'
 import { query } from '@/lib/auth/db'
 import { apiError, apiSuccess, apiUnauthorized, apiNotFound, apiBadRequest } from '@/lib/api/helpers'
 import { logger } from '@/lib/logger'
@@ -27,16 +27,9 @@ interface InvoiceRow {
 }
 
 // GET /api/invoices/[id] - Get invoice details
-export async function GET(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
-  const { id: invoiceId } = await params
+export const GET = withAuth<{ id: string }>(async (request, session, context) => {
   try {
-    const session = await auth()
-    if (!session?.user?.id) {
-      return apiUnauthorized('Authentication required')
-    }
+    const { id: invoiceId } = context!.params!
 
     // Check if user is admin
     const isAdmin = session.user.isStaff
@@ -44,7 +37,11 @@ export async function GET(
     // Get invoice details
     const invoiceResult = await query(`
       SELECT
-        i.*,
+        i.id, i.user_id, i.status, i.invoice_number, i.type,
+        i.total_cents, i.subtotal_cents, i.tax_cents, i.currency, i.tax_rate,
+        i.line_items, i.notes, i.due_date, i.issue_date,
+        i.billing_address, i.shipping_address, i.payment_terms,
+        i.metadata, i.created_at, i.updated_at,
         u.name as customer_name,
         u.email as customer_email,
         ROUND(i.total_cents / 100.0, 2) as total,
@@ -72,31 +69,24 @@ export async function GET(
     logger.error('Get invoice error', { error })
     return apiError(error, 'Failed to retrieve invoice')
   }
-}
+})
 
 // PUT /api/invoices/[id] - Update invoice
-export async function PUT(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
-  const { id: invoiceId } = await params
+export const PUT = withAuth<{ id: string }>(async (request, session, context) => {
   try {
-    const session = await auth()
-    if (!session?.user?.id) {
-      return apiUnauthorized('Authentication required')
-    }
+    const { id: invoiceId } = context!.params!
     const updates = await request.json()
 
     // Check if user is admin
     const isAdmin = session.user.isStaff
 
     // Get current invoice
-    const invoiceResult = await query(`SELECT * FROM ${TABLE_NAMES.INVOICES} WHERE id = $1`, [invoiceId])
+    const invoiceResult = await query(`SELECT id, user_id, status FROM ${TABLE_NAMES.INVOICES} WHERE id = $1`, [invoiceId])
     if (invoiceResult.rows.length === 0) {
       return apiNotFound('Invoice not found')
     }
 
-    const invoice = invoiceResult.rows[0] as InvoiceRow
+    const invoice = invoiceResult.rows[0] as Pick<InvoiceRow, 'id' | 'user_id' | 'status'>
 
     // Check permissions - only admin can update others' invoices
     if (invoice.user_id !== session.user.id && !isAdmin) {
@@ -157,30 +147,23 @@ export async function PUT(
     logger.error('Update invoice error', { error })
     return apiError(error, 'Failed to update invoice')
   }
-}
+})
 
 // DELETE /api/invoices/[id] - Delete invoice (only draft invoices)
-export async function DELETE(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
-  const { id: invoiceId } = await params
+export const DELETE = withAuth<{ id: string }>(async (request, session, context) => {
   try {
-    const session = await auth()
-    if (!session?.user?.id) {
-      return apiUnauthorized('Authentication required')
-    }
+    const { id: invoiceId } = context!.params!
 
     // Check if user is admin
     const isAdmin = session.user.isStaff
 
     // Get invoice
-    const invoiceResult = await query(`SELECT * FROM ${TABLE_NAMES.INVOICES} WHERE id = $1`, [invoiceId])
+    const invoiceResult = await query(`SELECT id, user_id, status FROM ${TABLE_NAMES.INVOICES} WHERE id = $1`, [invoiceId])
     if (invoiceResult.rows.length === 0) {
       return apiNotFound('Invoice not found')
     }
 
-    const invoice = invoiceResult.rows[0] as InvoiceRow
+    const invoice = invoiceResult.rows[0] as Pick<InvoiceRow, 'id' | 'user_id' | 'status'>
 
     // Check permissions
     if (invoice.user_id !== session.user.id && !isAdmin) {
@@ -203,4 +186,4 @@ export async function DELETE(
     logger.error('Delete invoice error', { error })
     return apiError(error, 'Failed to delete invoice')
   }
-}
+})

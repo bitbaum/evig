@@ -54,7 +54,10 @@ export async function GET() {
     // Get technician profile
     const profileResult = await query(
       `
-      SELECT * FROM ${TABLE_NAMES.IT_HILFE_TECHNICIAN_PROFILES}
+      SELECT id, user_id, bio, hourly_rate_cents, accepts_gratis, accepts_kulturlegi,
+             service_types, location_postal_code, location_city, location_canton,
+             max_travel_km, is_active, created_at, updated_at
+      FROM ${TABLE_NAMES.IT_HILFE_TECHNICIAN_PROFILES}
       WHERE user_id = $1
     `,
       [session.user.id]

@@ -6,6 +6,7 @@ import { apiSuccess, apiError } from "@/lib/api/helpers";
 import { logger } from "@/lib/logger";
 import { withAuth, ValidSession } from "@/lib/api/middleware";
 import { validateBody, ImportCSVSchema } from '@/lib/schemas';
+import { APPROVAL_STATUS } from '@/config/approval-status';
 
 interface CSVRow {
   Artikelnummer: string;
@@ -96,7 +97,7 @@ export const POST = withAuth(async (request: NextRequest, session: ValidSession)
               analysis_method: 'rule_based'
             },
             created_by: session.user.id,
-            status: 'approved', // Auto-approve CSV imports
+            status: APPROVAL_STATUS.APPROVED, // Auto-approve CSV imports
             kivitendo_article_number: row.Artikelnummer
           })
           .select('id')

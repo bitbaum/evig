@@ -26,7 +26,9 @@ export const GET = withAdmin<{ workshopId: string }>(async (request, session, co
     const { workshopId } = context!.params!
 
     const materialsResult = await query(`
-      SELECT * FROM ${TABLE_NAMES.WORKSHOP_MATERIALS}
+      SELECT id, workshop_id, instance_id, title, description, material_type,
+             url, file_size_bytes, access_type, display_order, is_active, created_at
+      FROM ${TABLE_NAMES.WORKSHOP_MATERIALS}
       WHERE workshop_id = $1
       ORDER BY display_order ASC, created_at DESC
     `, [workshopId])

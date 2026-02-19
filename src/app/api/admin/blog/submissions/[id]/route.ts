@@ -19,6 +19,7 @@ import {
   apiForbidden,
 } from '@/lib/api/helpers'
 import { canAccessSection } from '@/lib/permissions'
+import { APPROVAL_STATUS } from '@/config/approval-status'
 import { sendEmail } from '@/lib/email'
 import { createEditSnapshot, appendEditHistory } from '@/lib/admin/edit-utils'
 
@@ -88,7 +89,11 @@ export const PATCH = withAdmin<{ id: string }>(async (request, session, context)
       status: string
       edit_history?: any[]
     }>(
-      `SELECT * FROM ${TABLE_NAMES.BLOG_SUBMISSIONS} WHERE id = $1`,
+      `SELECT id, title, slug, content, submitter_name, submitter_email,
+              category_id, tags, status, edit_history, reviewed_by, reviewed_at,
+              review_notes, rejection_reason, published_post_id, published_at,
+              created_at, updated_at
+       FROM ${TABLE_NAMES.BLOG_SUBMISSIONS} WHERE id = $1`,
       [id]
     )
 
@@ -105,7 +110,7 @@ export const PATCH = withAdmin<{ id: string }>(async (request, session, context)
         // Update submission status
         await query(
           `UPDATE ${TABLE_NAMES.BLOG_SUBMISSIONS}
-           SET status = 'approved', reviewed_by = $1, reviewed_at = NOW(), review_notes = $2
+           SET status = '${APPROVAL_STATUS.APPROVED}', reviewed_by = $1, reviewed_at = NOW(), review_notes = $2
            WHERE id = $3`,
           [reviewerId, review_notes || null, id]
         )
@@ -127,7 +132,7 @@ export const PATCH = withAdmin<{ id: string }>(async (request, session, context)
           reviewerId,
         })
 
-        return apiSuccess({ status: 'approved', message: 'Einreichung genehmigt' })
+        return apiSuccess({ status: APPROVAL_STATUS.APPROVED, message: 'Einreichung genehmigt' })
       }
 
       case 'edit': {
@@ -139,7 +144,7 @@ export const PATCH = withAdmin<{ id: string }>(async (request, session, context)
         }
 
         // Only allow editing pending submissions
-        if (submission.status !== 'pending') {
+        if (submission.status !== APPROVAL_STATUS.PENDING) {
           return apiBadRequest(
             `Einreichung kann nicht bearbeitet werden (Status: ${submission.status})`
           )
@@ -210,7 +215,7 @@ export const PATCH = withAdmin<{ id: string }>(async (request, session, context)
 
         await query(
           `UPDATE ${TABLE_NAMES.BLOG_SUBMISSIONS}
-           SET status = 'rejected', reviewed_by = $1, reviewed_at = NOW(),
+           SET status = '${APPROVAL_STATUS.REJECTED}', reviewed_by = $1, reviewed_at = NOW(),
                review_notes = $2, rejection_reason = $3
            WHERE id = $4`,
           [reviewerId, review_notes || null, rejection_reason, id]
@@ -235,7 +240,7 @@ export const PATCH = withAdmin<{ id: string }>(async (request, session, context)
           reason: rejection_reason,
         })
 
-        return apiSuccess({ status: 'rejected', message: 'Einreichung abgelehnt' })
+        return apiSuccess({ status: APPROVAL_STATUS.REJECTED, message: 'Einreichung abgelehnt' })
       }
 
       case 'publish': {
@@ -265,7 +270,7 @@ export const PATCH = withAdmin<{ id: string }>(async (request, session, context)
           // Update submission with link to published post
           await client.query(
             `UPDATE ${TABLE_NAMES.BLOG_SUBMISSIONS}
-             SET status = 'published', reviewed_by = $1, reviewed_at = NOW(),
+             SET status = '${APPROVAL_STATUS.PUBLISHED}', reviewed_by = $1, reviewed_at = NOW(),
                  review_notes = $2, published_post_id = $3, published_at = NOW()
              WHERE id = $4`,
             [reviewerId, review_notes || 'Veröffentlicht', createdPostId, id]
@@ -296,7 +301,7 @@ export const PATCH = withAdmin<{ id: string }>(async (request, session, context)
         })
 
         return apiSuccess({
-          status: 'published',
+          status: APPROVAL_STATUS.PUBLISHED,
           message: 'Beitrag veröffentlicht',
           postId,
           postSlug,
@@ -310,7 +315,7 @@ export const PATCH = withAdmin<{ id: string }>(async (request, session, context)
 
         await query(
           `UPDATE ${TABLE_NAMES.BLOG_SUBMISSIONS}
-           SET status = 'pending', reviewed_by = $1, reviewed_at = NOW(), review_notes = $2
+           SET status = '${APPROVAL_STATUS.PENDING}', reviewed_by = $1, reviewed_at = NOW(), review_notes = $2
            WHERE id = $3`,
           [reviewerId, review_notes, id]
         )
@@ -336,7 +341,7 @@ export const PATCH = withAdmin<{ id: string }>(async (request, session, context)
         })
 
         return apiSuccess({
-          status: 'pending',
+          status: APPROVAL_STATUS.PENDING,
           message: 'Änderungen angefragt',
         })
       }

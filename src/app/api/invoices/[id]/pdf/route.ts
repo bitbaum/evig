@@ -1,5 +1,5 @@
-import { NextRequest } from 'next/server'
-import { auth } from '@/auth'
+import { NextRequest, NextResponse } from 'next/server'
+import { withAuth } from '@/lib/api/middleware'
 import { query } from '@/lib/auth/db'
 import { apiError, apiSuccess, apiUnauthorized, apiNotFound } from '@/lib/api/helpers'
 import { logger } from '@/lib/logger'
@@ -46,16 +46,9 @@ interface InvoiceData {
 }
 
 // GET /api/invoices/[id]/pdf - Generate and return PDF
-export async function GET(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
-  const { id: invoiceId } = await params
+export const GET = withAuth<{ id: string }>(async (request, session, context) => {
   try {
-    const session = await auth()
-    if (!session?.user?.id) {
-      return apiUnauthorized('Authentication required')
-    }
+    const { id: invoiceId } = context!.params!
 
     // Check if user is admin
     const isAdmin = session.user.isStaff
@@ -105,7 +98,7 @@ export async function GET(
     `, [invoiceId])
 
     // Return PDF
-    return new Response(pdfBuffer, {
+    return new NextResponse(pdfBuffer, {
       headers: {
         'Content-Type': 'application/pdf',
         'Content-Disposition': `attachment; filename="invoice-${invoice.invoice_number}.pdf"`,
@@ -116,19 +109,12 @@ export async function GET(
     logger.error('Generate PDF error', { error })
     return apiError(error, 'Failed to generate PDF')
   }
-}
+})
 
 // POST /api/invoices/[id]/pdf - Generate and store PDF URL
-export async function POST(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
-  const { id: invoiceId } = await params
+export const POST = withAuth<{ id: string }>(async (request, session, context) => {
   try {
-    const session = await auth()
-    if (!session?.user?.id) {
-      return apiUnauthorized('Authentication required')
-    }
+    const { id: invoiceId } = context!.params!
 
     // Check if user is admin
     const isAdmin = session.user.isStaff
@@ -185,7 +171,7 @@ export async function POST(
     logger.error('Generate PDF error', { error })
     return apiError(error, 'Failed to generate PDF')
   }
-}
+})
 
 async function generateInvoicePDF(invoice: InvoiceData): Promise<Buffer> {
   try {

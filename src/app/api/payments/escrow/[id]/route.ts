@@ -1,5 +1,5 @@
 import { NextRequest } from 'next/server'
-import { auth } from '@/auth'
+import { withAuth } from '@/lib/api/middleware'
 import { requireStripeClient } from '@/lib/payments/stripe-client'
 import { query } from '@/lib/auth/db'
 import { apiError, apiSuccess, apiUnauthorized, apiNotFound, apiBadRequest } from '@/lib/api/helpers'
@@ -53,17 +53,9 @@ interface EscrowReleaseRow {
 }
 
 // GET /api/payments/escrow/[id] - Get escrow account details
-export async function GET(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export const GET = withAuth<{ id: string }>(async (request, session, context) => {
   try {
-    const session = await auth()
-    if (!session?.user?.id) {
-      return apiUnauthorized('Authentifizierung erforderlich')
-    }
-
-    const { id: escrowId } = await params
+    const { id: escrowId } = context!.params!
 
     // Get escrow account details
     const escrowResult = await query(`
@@ -138,23 +130,15 @@ export async function GET(
     logger.error('Get escrow error', { error })
     return apiError(error, 'Treuhandkonto konnte nicht abgerufen werden')
   }
-}
+})
 
 // POST /api/payments/escrow/[id]/release - Release escrow funds
-export async function POST(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export const POST = withAuth<{ id: string }>(async (request, session, context) => {
   // Initialize Stripe lazily inside handler to avoid build-time errors
   const stripe = requireStripeClient()
 
   try {
-    const session = await auth()
-    if (!session?.user?.id) {
-      return apiUnauthorized('Authentifizierung erforderlich')
-    }
-
-    const { id: escrowId } = await params
+    const { id: escrowId } = context!.params!
     const body = await request.json()
     const validation = validateBody(EscrowReleaseSchema, body)
     if (!validation.success) return validation.error
@@ -293,4 +277,4 @@ export async function POST(
     logger.error('Escrow release error', { error })
     return apiError(error, 'Treuhandgelder konnten nicht freigegeben werden')
   }
-}
+})

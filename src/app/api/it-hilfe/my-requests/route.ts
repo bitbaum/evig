@@ -65,7 +65,10 @@ export async function GET(request: NextRequest) {
 
     // Query user's requests
     const requestsResult = await query(`
-      SELECT *
+      SELECT id, category_id, device_brand, device_model, title, description,
+             urgency, budget_type, budget_amount_cents, postal_code, city, canton,
+             service_type, skills_needed, image_urls, status, matched_offer_id,
+             offer_count, expires_at, created_at, updated_at
       FROM ${TABLE_NAMES.IT_HILFE_REQUESTS}
       ${whereClause}
       ORDER BY created_at DESC

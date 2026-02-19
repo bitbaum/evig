@@ -1,7 +1,7 @@
 import { NextRequest } from 'next/server'
-import { auth } from '@/auth'
+import { withAuth } from '@/lib/api/middleware'
 import { query } from '@/lib/auth/db'
-import { apiError, apiSuccess, apiBadRequest, apiUnauthorized } from '@/lib/api/helpers'
+import { apiError, apiSuccess, apiBadRequest } from '@/lib/api/helpers'
 import { ERROR_MESSAGES, SUCCESS_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES } from '@/config/database'
 import { sendEmail } from '@/lib/email'
@@ -18,13 +18,8 @@ interface IdRow {
   id: string
 }
 
-export async function POST(request: NextRequest) {
+export const POST = withAuth(async (request, session) => {
   try {
-    const session = await auth()
-    if (!session?.user?.id) {
-      return apiUnauthorized(ERROR_MESSAGES.UNAUTHORIZED)
-    }
-
     const body = await request.json()
     const validation = validateBody(SellerApplicationSchema, body)
     if (!validation.success) return validation.error
@@ -140,4 +135,4 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)
   }
-}
+})

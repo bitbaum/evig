@@ -28,7 +28,7 @@ export function AvatarUpload({
 
   const validateFile = (file: File): string | null => {
     // Check file type
-    if (!config.allowedTypes.includes(file.type as any)) {
+    if (!(config.allowedTypes as readonly string[]).includes(file.type)) {
       return config.errorMessages.fileType
     }
 

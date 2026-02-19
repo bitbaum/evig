@@ -3,13 +3,14 @@ import fs from 'fs'
 import path from 'path'
 import { apiError, apiSuccess, apiBadRequest } from '@/lib/api/helpers'
 import { logger } from '@/lib/logger'
+import { NEWSLETTER_STATUS, type NewsletterStatus } from '@/config/newsletter-status'
 
 const subscribersDir = path.join(process.cwd(), 'content/newsletter')
 
 interface Subscriber {
   email: string
   subscribedAt: string
-  status: 'active' | 'pending'
+  status: NewsletterStatus
   confirmToken?: string
 }
 
@@ -44,7 +45,7 @@ export async function GET(request: NextRequest) {
 
     // Find subscriber with matching token
     const subscriberIndex = subscribers.findIndex(
-      (sub) => sub.confirmToken === token && sub.status === 'pending'
+      (sub) => sub.confirmToken === token && sub.status === NEWSLETTER_STATUS.PENDING
     )
 
     if (subscriberIndex === -1) {
@@ -52,7 +53,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Update subscriber status to active
-    subscribers[subscriberIndex].status = 'active'
+    subscribers[subscriberIndex].status = NEWSLETTER_STATUS.ACTIVE
     delete subscribers[subscriberIndex].confirmToken
 
     // Save updated subscribers

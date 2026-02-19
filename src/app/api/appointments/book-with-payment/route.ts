@@ -13,6 +13,7 @@ import {
   DEFAULT_AUTO_RELEASE_DAYS
 } from '@/lib/payments/payment-flow'
 import { validateBody, BookWithPaymentSchema } from '@/lib/schemas'
+import { APPOINTMENT_STATUS } from '@/config/appointment-status'
 
 interface ServiceRow {
   id: string
@@ -100,7 +101,7 @@ export async function POST(request: NextRequest) {
       urgency,
       preferredDate || null,
       preferredTimeSlots ? JSON.stringify(preferredTimeSlots) : null,
-      service.requires_approval ? 'requested' : 'confirmed',
+      service.requires_approval ? APPOINTMENT_STATUS.REQUESTED : APPOINTMENT_STATUS.CONFIRMED,
       baseAmount,
       DEFAULT_CURRENCY,
       service.duration_minutes
@@ -145,7 +146,7 @@ export async function POST(request: NextRequest) {
       amount: centsToDisplay(paymentResult.totalAmountCents),
       currency: paymentResult.currency,
       escrowEnabled: useEscrow,
-      status: service.requires_approval ? 'pending_approval' : 'confirmed',
+      status: service.requires_approval ? APPOINTMENT_STATUS.PENDING_APPROVAL : APPOINTMENT_STATUS.CONFIRMED,
       message: service.requires_approval
         ? 'Termin gebucht und Zahlung autorisiert. Wartet auf Genehmigung durch unsere Techniker.'
         : 'Termin gebucht und Zahlung erfolgreich verarbeitet!'

@@ -81,7 +81,14 @@ export const PATCH = withAdmin<{ id: string }>(async (request, session, context)
 
     // Fetch current proposal
     const currentResult = await query(
-      `SELECT * FROM ${TABLE_NAMES.WORKSHOP_PROPOSALS} WHERE id = $1`,
+      `SELECT id, user_id, title, description, short_description, category,
+              duration_minutes, level, max_participants, min_participants, price_cents,
+              prerequisites, learning_objectives, target_audience, materials_provided,
+              materials_required, location_type, selected_location_id, proposed_location,
+              proposed_date, proposed_time, special_requirements, terms_accepted,
+              status, admin_notes, reviewed_by, reviewed_at,
+              edit_history, last_edited_by, last_edited_at, created_at, updated_at
+       FROM ${TABLE_NAMES.WORKSHOP_PROPOSALS} WHERE id = $1`,
       [proposalId]
     );
 

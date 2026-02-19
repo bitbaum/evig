@@ -1,9 +1,9 @@
 import { NextRequest } from 'next/server'
-import { auth } from '@/auth'
+import { withAuth } from '@/lib/api/middleware'
 import { mkdir, writeFile } from 'fs/promises'
 import path from 'path'
 import sharp from 'sharp'
-import { apiError, apiSuccess, apiUnauthorized, apiBadRequest } from '@/lib/api/helpers'
+import { apiError, apiSuccess, apiBadRequest } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { logger } from '@/lib/logger'
 
@@ -19,14 +19,9 @@ interface ImageUrls {
 // Accepts multipart/form-data with one or more image files under field name "files"
 // Stores locally under public/uploads/<userId>/ and returns public URLs
 // Generates optimized thumbnail (200x200) and medium (800x600) versions as webp
-export async function POST(req: NextRequest) {
+export const POST = withAuth(async (request, session) => {
   try {
-    const session = await auth()
-    if (!session?.user?.id) {
-      return apiUnauthorized(ERROR_MESSAGES.UNAUTHORIZED)
-    }
-
-    const formData = await req.formData()
+    const formData = await request.formData()
     // Support either multiple files under 'files' or any file inputs
     const files: File[] = []
     for (const [, value] of formData.entries()) {
@@ -114,4 +109,4 @@ export async function POST(req: NextRequest) {
   } catch (error) {
     return apiError(error, 'Upload fehlgeschlagen')
   }
-}
+})

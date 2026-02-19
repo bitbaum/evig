@@ -1,6 +1,6 @@
 import { NextRequest } from 'next/server'
 import Stripe from 'stripe'
-import { auth } from '@/auth'
+import { withAuth } from '@/lib/api/middleware'
 import { requireStripeClient } from '@/lib/payments/stripe-client'
 import { query, transaction } from '@/lib/auth/db'
 import { apiError, apiSuccess, apiUnauthorized, apiBadRequest, apiNotFound } from '@/lib/api/helpers'
@@ -29,16 +29,11 @@ interface RefundCreatedRow {
   refund_number: string
 }
 
-export async function POST(request: NextRequest) {
+export const POST = withAuth(async (request, session) => {
   // Initialize Stripe lazily inside handler to avoid build-time errors
   const stripe = requireStripeClient()
 
   try {
-    const session = await auth()
-    if (!session?.user?.id) {
-      return apiUnauthorized('Authentifizierung erforderlich')
-    }
-
     const body = await request.json()
     const validation = validateBody(RefundSchema, body)
     if (!validation.success) return validation.error
@@ -215,7 +210,7 @@ export async function POST(request: NextRequest) {
     logger.error('Refund creation error', { error })
     return apiError(error, 'Erstattungsantrag konnte nicht erstellt werden')
   }
-}
+})
 
 // Helper function to map our refund reasons to Stripe's format
 function mapRefundReason(reason: string): Stripe.RefundCreateParams.Reason {

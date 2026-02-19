@@ -5,20 +5,13 @@
 
 import { NextRequest } from 'next/server'
 import { apiError, apiSuccess, apiUnauthorized } from '@/lib/api/helpers'
-import { auth } from '@/auth'
+import { withAuth } from '@/lib/api/middleware'
 import { ROLES } from '@/lib/constants'
 import { hasAdminAccessUnified, type UnifiedUser } from '@/lib/auth/unified-permissions'
 import { getSellerDashboard } from '@/lib/services/seller-service'
 
-export async function GET(request: NextRequest) {
+export const GET = withAuth(async (request, session) => {
   try {
-    // 1. Auth check
-    const session = await auth()
-
-    if (!session?.user) {
-      return apiUnauthorized('Anmeldung erforderlich')
-    }
-
     const userRole = session.user.role as string
 
     const user: UnifiedUser = {
@@ -43,4 +36,4 @@ export async function GET(request: NextRequest) {
   } catch (error) {
     return apiError(error, 'Dashboard konnte nicht geladen werden')
   }
-}
+})

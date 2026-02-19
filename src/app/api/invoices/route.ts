@@ -1,10 +1,11 @@
 import { NextRequest } from 'next/server'
-import { auth } from '@/auth'
+import { withAuth } from '@/lib/api/middleware'
 import { query } from '@/lib/auth/db'
-import { apiError, apiSuccess, apiUnauthorized, apiBadRequest, apiNotFound } from '@/lib/api/helpers'
+import { apiError, apiSuccess, apiBadRequest, apiNotFound } from '@/lib/api/helpers'
 import { logger } from '@/lib/logger'
 import { calculateTaxes, generateTaxInvoiceData } from '@/lib/payments/tax-compliance'
 import { TABLE_NAMES } from '@/config/database'
+import { INVOICE_STATUS } from '@/config/invoice-status'
 
 interface LineItemInput {
   description: string
@@ -23,13 +24,8 @@ interface CountRow {
 }
 
 // POST /api/invoices - Create new invoice
-export async function POST(request: NextRequest) {
+export const POST = withAuth(async (request, session) => {
   try {
-    const session = await auth()
-    if (!session?.user?.id) {
-      return apiUnauthorized('Authentication required')
-    }
-
     const {
       type = 'service',
       userId, // For admin creating invoices for others
@@ -118,7 +114,7 @@ export async function POST(request: NextRequest) {
       RETURNING id, invoice_number, created_at
     `, [
       type,
-      'draft',
+      INVOICE_STATUS.DRAFT,
       targetUserId,
       orderId || null,
       serviceAppointmentId || null,
@@ -153,7 +149,7 @@ export async function POST(request: NextRequest) {
     return apiSuccess({
       invoiceId: invoice.id,
       invoiceNumber: invoice.invoice_number,
-      status: 'draft',
+      status: INVOICE_STATUS.DRAFT,
       total: totalCents / 100,
       currency,
       createdAt: invoice.created_at
@@ -163,16 +159,11 @@ export async function POST(request: NextRequest) {
     logger.error('Invoice creation error', { error })
     return apiError(error, 'Failed to create invoice')
   }
-}
+})
 
 // GET /api/invoices - List invoices
-export async function GET(request: NextRequest) {
+export const GET = withAuth(async (request, session) => {
   try {
-    const session = await auth()
-    if (!session?.user?.id) {
-      return apiUnauthorized('Authentication required')
-    }
-
     const { searchParams } = new URL(request.url)
     const status = searchParams.get('status')
     const type = searchParams.get('type')
@@ -207,7 +198,9 @@ export async function GET(request: NextRequest) {
     // Get invoices with user info
     const invoicesResult = await query(`
       SELECT
-        i.*,
+        i.id, i.invoice_number, i.type, i.status, i.user_id,
+        i.total_cents, i.subtotal_cents, i.tax_cents, i.currency,
+        i.due_date, i.issue_date, i.created_at, i.updated_at,
         u.name as customer_name,
         u.email as customer_email,
         ROUND(i.total_cents / 100.0, 2) as total,
@@ -238,4 +231,4 @@ export async function GET(request: NextRequest) {
     logger.error('List invoices error', { error })
     return apiError(error, 'Failed to retrieve invoices')
   }
-}
+})

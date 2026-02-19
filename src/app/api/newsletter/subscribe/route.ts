@@ -9,6 +9,7 @@ import { checkRateLimit, getClientIp } from '@/lib/auth/rate-limiter'
 import { sendEmail } from '@/lib/email'
 import { APP_URL } from '@/config/urls'
 import { NewsletterSubscribeSchema, formatZodErrors } from '@/lib/schemas'
+import { NEWSLETTER_STATUS, type NewsletterStatus } from '@/config/newsletter-status'
 
 const subscribersDir = path.join(process.cwd(), 'content/newsletter')
 
@@ -21,7 +22,7 @@ if (!fs.existsSync(subscribersDir)) {
 interface Subscriber {
   email: string
   subscribedAt: string
-  status: 'active' | 'pending'
+  status: NewsletterStatus
   confirmToken?: string
 }
 
@@ -92,7 +93,7 @@ export async function POST(request: NextRequest) {
       (sub) => sub.email.toLowerCase() === normalizedEmail
     )
 
-    if (existing && existing.status === 'active') {
+    if (existing && existing.status === NEWSLETTER_STATUS.ACTIVE) {
       return apiBadRequest('Diese E-Mail-Adresse ist bereits registriert')
     }
 
@@ -100,7 +101,7 @@ export async function POST(request: NextRequest) {
     const newSubscriber: Subscriber = {
       email: normalizedEmail,
       subscribedAt: new Date().toISOString(),
-      status: 'pending' as const, // Will be 'active' after email confirmation
+      status: NEWSLETTER_STATUS.PENDING as NewsletterStatus, // Will be 'active' after email confirmation
       confirmToken: generateToken(),
     }
 
@@ -196,8 +197,8 @@ export const GET = requireAdminAuth(async (request: NextRequest) => {
 
       return apiSuccess({
         total: subscribers.length,
-        active: subscribers.filter((s) => s.status === 'active').length,
-        pending: subscribers.filter((s) => s.status === 'pending').length,
+        active: subscribers.filter((s) => s.status === NEWSLETTER_STATUS.ACTIVE).length,
+        pending: subscribers.filter((s) => s.status === NEWSLETTER_STATUS.PENDING).length,
         subscribers: subscribers,
       })
     } catch (parseError) {

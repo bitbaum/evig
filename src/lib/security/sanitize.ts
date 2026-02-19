@@ -45,7 +45,7 @@ export function sanitizeObject<T extends Record<string, any>>(
 
   for (const field of fields) {
     if (typeof result[field] === 'string') {
-      result[field] = sanitizeInput(result[field] as string, options) as any;
+      (result as Record<string, unknown>)[field as string] = sanitizeInput(result[field] as string, options);
     }
   }
 

@@ -20,6 +20,7 @@ import { apiError, apiSuccess } from '@/lib/api/helpers'
 import { logger } from '@/lib/logger'
 import { extractProductFromImage } from '@/lib/erfassung/ai-extraction'
 import { validateBody, AnalyzeProductSchema } from '@/lib/schemas'
+import { APPROVAL_STATUS } from '@/config/approval-status'
 
 // Map condition values to display format
 const CONDITION_MAP: Record<string, string> = {
@@ -235,7 +236,7 @@ export async function POST(request: NextRequest) {
           total_confidence: analysisResult.total_confidence,
           raw_ai_response: analysisResult.raw_ai_response,
           created_by: currentUserId,
-          status: 'pending_review',
+          status: APPROVAL_STATUS.PENDING,
         })
         .select('id')
         .single()

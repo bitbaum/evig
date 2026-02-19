@@ -4,9 +4,9 @@
  */
 import { NextRequest } from 'next/server'
 import { z } from 'zod'
-import { auth } from '@/auth'
+import { withAuth } from '@/lib/api/middleware'
 import { query } from '@/lib/auth/db'
-import { apiError, apiSuccess, apiUnauthorized, apiBadRequest } from '@/lib/api/helpers'
+import { apiError, apiSuccess, apiBadRequest } from '@/lib/api/helpers'
 import { requireSeller } from '@/lib/api/role-checks'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES } from '@/config/database'
@@ -28,13 +28,8 @@ interface IdRow {
   id: string
 }
 
-export async function POST(request: NextRequest) {
+export const POST = withAuth(async (request, session) => {
   try {
-    const session = await auth()
-    if (!session?.user?.id) {
-      return apiUnauthorized(ERROR_MESSAGES.UNAUTHORIZED)
-    }
-
     // Check if user is a seller
     const sellerError = await requireSeller(session.user.id)
     if (sellerError) {
@@ -202,4 +197,4 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)
   }
-}
+})

@@ -60,7 +60,13 @@ export async function GET(
     // Get review with full details
     const reviewResult = await query(`
       SELECT
-        r.*,
+        r.id, r.reviewer_id, r.target_type, r.target_id, r.booking_id,
+        r.overall_rating, r.communication_rating, r.professionalism_rating,
+        r.quality_rating, r.timeliness_rating, r.value_rating,
+        r.title, r.content, r.is_verified_purchase,
+        r.helpful_votes, r.total_votes, r.status,
+        r.moderation_reason, r.moderated_by, r.moderated_at,
+        r.created_at, r.updated_at,
         u.name as reviewer_name,
         u.email as reviewer_email,
         COALESCE(rp.business_name, '') as target_name,
@@ -84,7 +90,8 @@ export async function GET(
 
     // Get attachments
     const attachmentsResult = await query(
-      `SELECT * FROM ${TABLE_NAMES.REVIEW_ATTACHMENTS} WHERE review_id = $1 ORDER BY sort_order, created_at`,
+      `SELECT id, original_filename, file_path, mime_type, attachment_type
+       FROM ${TABLE_NAMES.REVIEW_ATTACHMENTS} WHERE review_id = $1 ORDER BY sort_order, created_at`,
       [reviewId]
     )
 
@@ -165,7 +172,7 @@ export async function PUT(
 
     // Get review and check ownership
     const reviewResult = await query(
-      `SELECT * FROM ${TABLE_NAMES.REVIEWS} WHERE id = $1`,
+      `SELECT id, reviewer_id, created_at, status FROM ${TABLE_NAMES.REVIEWS} WHERE id = $1`,
       [reviewId]
     )
 
@@ -173,7 +180,7 @@ export async function PUT(
       return apiNotFound('Bewertung nicht gefunden')
     }
 
-    const review = reviewResult.rows[0] as ReviewRow
+    const review = reviewResult.rows[0] as Pick<ReviewRow, 'id' | 'reviewer_id' | 'created_at' | 'status'>
 
     // Check if user owns this review
     if (review.reviewer_id !== session.user.id) {

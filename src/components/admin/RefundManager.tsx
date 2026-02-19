@@ -55,7 +55,7 @@ export default function RefundManager() {
   const pendingRefunds = refunds.filter(r => r.status === REFUND_STATUS.REQUESTED)
   const approvedRefunds = refunds.filter(r => r.status === REFUND_STATUS.APPROVED)
   const processingRefunds = refunds.filter(r => r.status === REFUND_STATUS.PROCESSING)
-  const completedRefunds = refunds.filter(r => [REFUND_STATUS.COMPLETED, REFUND_STATUS.REJECTED].includes(r.status as any))
+  const completedRefunds = refunds.filter(r => ([REFUND_STATUS.COMPLETED, REFUND_STATUS.REJECTED] as string[]).includes(r.status))
 
   return (
     <div className="space-y-6">
