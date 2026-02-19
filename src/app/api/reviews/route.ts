@@ -276,6 +276,12 @@ export async function POST(request: NextRequest) {
     } else if (targetType === 'workshop') {
       const result = await query(`SELECT id FROM ${TABLE_NAMES.WORKSHOPS} WHERE id = $1`, [targetId])
       targetExists = result.rows.length > 0
+    } else if (targetType === REVIEW_TARGET_TYPES.IT_HILFE) {
+      const result = await query(
+        `SELECT id FROM ${TABLE_NAMES.IT_HILFE_REQUESTS} WHERE id = $1 AND status = 'completed'`,
+        [targetId]
+      )
+      targetExists = result.rows.length > 0
     }
 
     if (!targetExists) {
@@ -319,6 +325,44 @@ export async function POST(request: NextRequest) {
 
     const createdReview = reviewResult.rows[0] as IdRow
     const reviewId = createdReview.id
+
+    // Update helper average_rating for IT-Hilfe reviews
+    if (targetType === REVIEW_TARGET_TYPES.IT_HILFE) {
+      try {
+        // Find the helper via matched offer
+        const helperResult = await query(`
+          SELECT o.helper_id
+          FROM ${TABLE_NAMES.IT_HILFE_OFFERS} o
+          JOIN ${TABLE_NAMES.IT_HILFE_REQUESTS} r ON r.matched_offer_id = o.id
+          WHERE r.id = $1
+        `, [targetId])
+
+        if (helperResult.rows.length > 0) {
+          const helperId = (helperResult.rows[0] as { helper_id: string }).helper_id
+
+          // Recalculate average from all published IT-Hilfe reviews for this helper
+          const avgResult = await query(`
+            SELECT AVG(rev.overall_rating) as avg_rating
+            FROM ${TABLE_NAMES.REVIEWS} rev
+            JOIN ${TABLE_NAMES.IT_HILFE_REQUESTS} req ON rev.target_id = req.id
+            JOIN ${TABLE_NAMES.IT_HILFE_OFFERS} off ON req.matched_offer_id = off.id
+            WHERE rev.target_type = $1
+              AND rev.status = 'published'
+              AND off.helper_id = $2
+          `, [REVIEW_TARGET_TYPES.IT_HILFE, helperId])
+
+          const avgRating = avgResult.rows[0] ? (avgResult.rows[0] as { avg_rating: string }).avg_rating : null
+          if (avgRating) {
+            await query(
+              `UPDATE ${TABLE_NAMES.IT_HILFE_TECHNICIAN_PROFILES} SET average_rating = $1 WHERE user_id = $2`,
+              [parseFloat(avgRating), helperId]
+            )
+          }
+        }
+      } catch (error) {
+        logger.error('Error updating helper average rating', { error, targetId })
+      }
+    }
 
     // Send notification to repairer if it's a repairer review
     if (targetType === REVIEW_TARGET_TYPES.REPAIRER) {

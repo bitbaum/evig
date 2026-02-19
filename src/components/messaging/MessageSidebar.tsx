@@ -43,9 +43,10 @@ interface Message {
 interface MessageSidebarProps {
   isOpen: boolean
   onClose: () => void
+  initialConversationId?: string | null
 }
 
-export function MessageSidebar({ isOpen, onClose }: MessageSidebarProps) {
+export function MessageSidebar({ isOpen, onClose, initialConversationId }: MessageSidebarProps) {
   const { data: session } = useSession()
   const [conversations, setConversations] = useState<Conversation[]>([])
   const [selectedConversation, setSelectedConversation] = useState<string | null>(null)
@@ -59,6 +60,12 @@ export function MessageSidebar({ isOpen, onClose }: MessageSidebarProps) {
       fetchConversations()
     }
   }, [isOpen, session])
+
+  useEffect(() => {
+    if (isOpen && initialConversationId) {
+      setSelectedConversation(initialConversationId)
+    }
+  }, [isOpen, initialConversationId])
 
   useEffect(() => {
     if (selectedConversation) {

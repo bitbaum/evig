@@ -32,6 +32,8 @@ import {
 } from '@/config/it-hilfe'
 import { TechnicianMapList } from '@/components/it-hilfe/TechnicianMapList'
 import { AIDiagnosisCard } from '@/components/it-hilfe/AIDiagnosisCard'
+import { ITHilfeReviewForm } from '@/components/it-hilfe/ITHilfeReviewForm'
+import { MessageSidebar } from '@/components/messaging/MessageSidebar'
 
 interface PeerRepairRequest {
   id: string
@@ -101,6 +103,14 @@ export default function PeerRepairDetailPage() {
   // User's own offer (for non-owners)
   const [userOffer, setUserOffer] = useState<Offer | null>(null)
   const [withdrawing, setWithdrawing] = useState(false)
+
+  // Messaging state
+  const [conversationId, setConversationId] = useState<string | null>(null)
+  const [showMessages, setShowMessages] = useState(false)
+
+  // Review state
+  const [hasReviewed, setHasReviewed] = useState(false)
+  const [reviewSubmitted, setReviewSubmitted] = useState(false)
 
   const fetchRequest = useCallback(async () => {
     try {
@@ -174,6 +184,37 @@ export default function PeerRepairDetailPage() {
         }
       })
       .catch(err => logger.error('Error fetching user offer', { error: err }))
+  }, [session?.user, request, id])
+
+  // Check if user has already reviewed this request
+  useEffect(() => {
+    if (!session?.user || !request || request.status !== 'completed') return
+
+    fetch(`/api/reviews?targetType=it_hilfe&targetId=${id}`)
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          const userReview = data.data.reviews.find(
+            (r: { reviewerId: string }) => r.reviewerId === session.user!.id
+          )
+          if (userReview) setHasReviewed(true)
+        }
+      })
+      .catch(err => logger.error('Error checking review status', { error: err }))
+  }, [session?.user, request, id])
+
+  // Find existing conversation for this request
+  useEffect(() => {
+    if (!session?.user || !request) return
+
+    fetch(`/api/messages?context_id=${id}`)
+      .then(res => res.json())
+      .then(data => {
+        if (data.success && data.data?.conversations?.length > 0) {
+          setConversationId(data.data.conversations[0].id)
+        }
+      })
+      .catch(err => logger.error('Error fetching conversation', { error: err }))
   }, [session?.user, request, id])
 
   const handleSkillToggle = (skillId: string) => {
@@ -368,6 +409,29 @@ export default function PeerRepairDetailPage() {
               <div className="prose prose-gray max-w-none">
                 <p className="whitespace-pre-wrap">{request.description}</p>
               </div>
+
+              {/* Images */}
+              {request.imageUrls.length > 0 && (
+                <div className="mt-6 pt-6 border-t border-gray-100">
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                    {request.imageUrls.map((url, index) => (
+                      <a
+                        key={url}
+                        href={url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="block"
+                      >
+                        <img
+                          src={url}
+                          alt={`Bild ${index + 1}`}
+                          className="w-full h-32 object-cover rounded-lg hover:opacity-90 transition-opacity"
+                        />
+                      </a>
+                    ))}
+                  </div>
+                </div>
+              )}
 
               {/* Skills needed */}
               {request.skillsNeeded.length > 0 && (
@@ -634,6 +698,24 @@ export default function PeerRepairDetailPage() {
                 </div>
               </div>
             )}
+
+            {/* Review Form (completed requests) */}
+            {request.status === 'completed' && session?.user && !hasReviewed && !reviewSubmitted && (
+              <ITHilfeReviewForm
+                requestId={request.id}
+                requestTitle={request.title}
+                onSuccess={() => setReviewSubmitted(true)}
+              />
+            )}
+
+            {/* Review submitted confirmation */}
+            {reviewSubmitted && (
+              <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-6 text-center">
+                <CheckCircle className="w-8 h-8 text-emerald-600 mx-auto mb-2" aria-hidden="true" />
+                <p className="text-emerald-800 font-medium">Bewertung abgegeben!</p>
+                <p className="text-sm text-emerald-600 mt-1">Vielen Dank für dein Feedback.</p>
+              </div>
+            )}
           </div>
 
           {/* Sidebar */}
@@ -732,6 +814,19 @@ export default function PeerRepairDetailPage() {
               </div>
             </div>
 
+            {/* Message Button */}
+            {conversationId && session?.user && (
+              <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+                <button
+                  onClick={() => setShowMessages(true)}
+                  className="w-full py-3 px-4 min-h-[44px] bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors flex items-center justify-center gap-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                >
+                  <MessageSquare className="w-4 h-4" aria-hidden="true" />
+                  Nachricht senden
+                </button>
+              </div>
+            )}
+
             {/* Owner Actions */}
             {request.isOwner && (
               <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
@@ -803,6 +898,13 @@ export default function PeerRepairDetailPage() {
           </div>
         </div>
       </div>
+
+      {/* Message Sidebar */}
+      <MessageSidebar
+        isOpen={showMessages}
+        onClose={() => setShowMessages(false)}
+        initialConversationId={conversationId}
+      />
     </div>
   )
 }

@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { MapPin, Euro, Users, Sparkles } from 'lucide-react'
+import { MapPin, Euro, Users, Sparkles, Star } from 'lucide-react'
 import { getSkillById, BUDGET_TIERS } from '@/config/it-hilfe'
 import { logger } from '@/lib/logger'
 import { CONVERSATION_TYPES } from '@/config/database'
@@ -19,6 +19,8 @@ interface Helper {
   canton: string | null
   maxTravelKm: number
   skills: string[]
+  averageRating?: number | null
+  totalHelpsCompleted?: number
 }
 
 interface HelperCardProps {
@@ -90,6 +92,21 @@ export function HelperCard({ helper, requestId, requestTitle }: HelperCardProps)
           <p className="text-gray-600 text-sm line-clamp-2 mb-3">{helper.bio}</p>
         )}
       </div>
+
+      {/* Rating & Help Count */}
+      {(helper.averageRating || helper.totalHelpsCompleted) ? (
+        <div className="flex items-center gap-3 text-sm text-gray-600 mb-3">
+          {helper.averageRating && (
+            <span className="flex items-center gap-1">
+              <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+              {helper.averageRating.toFixed(1)}
+            </span>
+          )}
+          {helper.totalHelpsCompleted ? (
+            <span>{helper.totalHelpsCompleted} {helper.totalHelpsCompleted === 1 ? 'Hilfe' : 'Hilfen'}</span>
+          ) : null}
+        </div>
+      ) : null}
 
       {/* Location */}
       {(helper.city || helper.canton) && (

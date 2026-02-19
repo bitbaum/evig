@@ -306,6 +306,22 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
       updates.push(`status = $${paramIndex}`)
       updateParams.push(status)
       paramIndex++
+
+      // Increment helper's total_helps_completed when completing
+      if (status === 'completed') {
+        try {
+          await query(`
+            UPDATE ${TABLE_NAMES.IT_HILFE_TECHNICIAN_PROFILES}
+            SET total_helps_completed = total_helps_completed + 1
+            FROM ${TABLE_NAMES.IT_HILFE_OFFERS} o
+            JOIN ${TABLE_NAMES.IT_HILFE_REQUESTS} r ON r.matched_offer_id = o.id
+            WHERE ${TABLE_NAMES.IT_HILFE_TECHNICIAN_PROFILES}.user_id = o.helper_id
+              AND r.id = $1
+          `, [id])
+        } catch (err) {
+          logger.error('Error incrementing total_helps_completed', { error: err, requestId: id })
+        }
+      }
     }
 
     if (updates.length === 0) {

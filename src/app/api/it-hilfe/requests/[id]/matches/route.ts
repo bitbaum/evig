@@ -34,6 +34,8 @@ interface HelperRow {
   location_city: string | null
   skills: string[]
   skill_count: number
+  average_rating: number | null
+  total_helps_completed: number
 }
 
 interface RouteParams {
@@ -148,6 +150,8 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
         hp.service_types,
         hp.location_canton,
         hp.location_city,
+        hp.average_rating,
+        hp.total_helps_completed,
         ARRAY_AGG(us.skill_id) FILTER (WHERE us.skill_id IS NOT NULL) as skills,
         COUNT(us.skill_id) as skill_count
       FROM ${TABLE_NAMES.IT_HILFE_TECHNICIAN_PROFILES} hp
@@ -162,7 +166,8 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
         )
       GROUP BY hp.user_id, u.name, hp.bio, hp.hourly_rate_cents,
                hp.accepts_gratis, hp.accepts_kulturlegi, hp.service_types,
-               hp.location_canton, hp.location_city
+               hp.location_canton, hp.location_city,
+               hp.average_rating, hp.total_helps_completed
     `, [
       requestData.requester_id,
       requestData.skills_needed || [],
@@ -183,6 +188,8 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
           canton: helper.location_canton,
           city: helper.location_city,
           skills: helper.skills || [],
+          averageRating: helper.average_rating,
+          totalHelpsCompleted: helper.total_helps_completed || 0,
           matchScore: score,
           matchReasons: reasons,
         }

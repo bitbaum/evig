@@ -24,6 +24,7 @@ import {
   getCategoryById,
 } from '@/config/it-hilfe'
 import { AIDiagnosisCard } from '@/components/it-hilfe/AIDiagnosisCard'
+import { ITHilfeImageUpload } from '@/components/it-hilfe/ITHilfeImageUpload'
 import { lookupSwissPostalCode } from '@/lib/swiss-postal-codes'
 
 export default function CreatePeerRepairPage() {
@@ -47,6 +48,7 @@ export default function CreatePeerRepairPage() {
   const [canton, setCanton] = useState('')
   const [serviceType, setServiceType] = useState('flexible')
   const [skillsNeeded, setSkillsNeeded] = useState<string[]>([])
+  const [imageUrls, setImageUrls] = useState<string[]>([])
 
   // AI assist state
   const [aiInput, setAiInput] = useState('')
@@ -168,6 +170,7 @@ export default function CreatePeerRepairPage() {
         canton,
         serviceType,
         skillsNeeded,
+        imageUrls: imageUrls.length > 0 ? imageUrls : undefined,
         aiDiagnosis: aiDiagnosis || null,
       }
 
@@ -402,6 +405,12 @@ export default function CreatePeerRepairPage() {
                   />
                 </div>
               </div>
+
+              {/* Image Upload */}
+              <ITHilfeImageUpload
+                imageUrls={imageUrls}
+                onImagesChange={setImageUrls}
+              />
 
               {/* Location */}
               <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
