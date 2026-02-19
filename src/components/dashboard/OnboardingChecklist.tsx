@@ -98,7 +98,7 @@ const getChecklistItems = (role: string, emailVerified: boolean, completedIds: s
       id: 'add-first-product',
       label: 'Erstes Produkt hinzufügen',
       description: 'Listen Sie Ihr erstes refurbished Gerät',
-      href: '/dashboard/seller/products/new',
+      href: '/marketplace/sell',
       completed: completedIds.includes('add-first-product'),
     },
     {

@@ -8,9 +8,6 @@
  * Last Modified Summary: Created index file for marketplace components
  */
 
-// Main form component
-export { default as ProductListingForm } from './ProductListingForm'
-
 // Form sections
 export { BasicInfoSection } from './sections/BasicInfoSection'
 export { ConditionSection } from './sections/ConditionSection'
@@ -19,11 +16,8 @@ export { ContactInfoSection } from './sections/ContactInfoSection'
 
 // Modals
 export { AISearchModal } from './modals/AISearchModal'
-export { SuccessModal } from './modals/SuccessModal'
-
 // Hooks
 export { useProductForm } from './hooks/useProductForm'
-export { useProductSubmission } from './hooks/useProductSubmission'
 export { useAISearch } from './hooks/useAISearch'
 
 // Types

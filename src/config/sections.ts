@@ -278,21 +278,6 @@ export const SECTIONS: Record<string, SectionConfig> = {
     category: 'commerce',
   },
 
-  'seller-onboarding': {
-    id: 'seller-onboarding',
-    path: '/dashboard/seller/onboarding',
-    ui: {
-      label: 'Auf Revamp-IT verkaufen',
-      description: 'Eigene Produkte anbieten - Versand direkt an Käufer',
-      icon: ShoppingBag,
-      emoji: '🏪',
-      color: 'secondary',
-    },
-    visibility: { admin: false, dashboard: true, hideIfRole: 'seller' },
-    priority: 21,
-    category: 'commerce',
-  },
-
   'my-listings': {
     id: 'my-listings',
     path: '/dashboard/listings',

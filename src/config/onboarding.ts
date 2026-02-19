@@ -1,11 +1,11 @@
 /**
  * Onboarding Configuration - Single Source of Truth
  *
- * Centralizes all onboarding page content for sellers and repairers.
+ * Centralizes onboarding page content for repairers.
  * Used by OnboardingInfoPage component.
  */
 
-import { LucideIcon, Store, Package, CreditCard, Shield, User, Wrench, Users, TrendingUp, Star, Clock, Award, CheckCircle, ArrowRight } from 'lucide-react'
+import { LucideIcon, Shield, Wrench, Users, TrendingUp, Star, Clock, Award, CheckCircle } from 'lucide-react'
 
 // ============================================================================
 // TYPES
@@ -96,103 +96,6 @@ export interface OnboardingConfig {
 // ============================================================================
 // SELLER ONBOARDING CONFIG
 // ============================================================================
-
-export const SELLER_ONBOARDING: OnboardingConfig = {
-  meta: {
-    title: 'Seller Onboarding | RevampIT',
-    description: 'Become a seller on the RevampIT marketplace and start selling refurbished electronics.'
-  },
-  header: {
-    icon: Store,
-    iconBgColor: 'bg-green-100',
-    iconColor: 'text-green-600',
-    title: 'Werden Sie Verkäufer bei RevampIT',
-    subtitle: 'Verkaufen Sie Ihre refurbished Elektronik an eine Community, die Wert auf Nachhaltigkeit legt. Einfach, sicher und profitabel.'
-  },
-  benefits: [
-    {
-      icon: Package,
-      iconColor: 'text-blue-600',
-      title: 'Einfache Produktverwaltung',
-      description: 'KI-gestützte Produktanalyse, automatische Kategorisierung und einfache Preisgestaltung. Veröffentlichen Sie Produkte mit wenigen Klicks.'
-    },
-    {
-      icon: CreditCard,
-      iconColor: 'text-green-600',
-      title: 'Sichere Zahlungen',
-      description: 'Sichere Zahlungsabwicklung mit transparenten Gebühren. Erhalten Sie Ihr Geld schnell und zuverlässig auf Ihr Konto.'
-    },
-    {
-      icon: Shield,
-      iconColor: 'text-purple-600',
-      title: 'Vertrauenswürdige Plattform',
-      description: 'Verifizierte Verkäufer, Bewertungssystem und Käuferschutz. Bauen Sie Vertrauen mit transparenten Bewertungen und Rezensionen auf.'
-    },
-    {
-      icon: User,
-      iconColor: 'text-orange-600',
-      title: 'Community fokussiert',
-      description: 'Verkaufen Sie an eine Community, die nachhaltige Technologie schätzt. Erreichen Sie Käufer, die Wert auf Qualität und Umwelt legen.'
-    }
-  ],
-  requirements: {
-    title: 'Voraussetzungen',
-    items: [
-      {
-        title: 'Konto verifizieren',
-        description: 'Bestätigen Sie Ihre E-Mail-Adresse und persönliche Informationen'
-      },
-      {
-        title: 'Produkte vorbereiten',
-        description: 'Stellen Sie sicher, dass Ihre Produkte funktionsfähig und gut beschrieben sind'
-      },
-      {
-        title: 'Versandoptionen',
-        description: 'Bereiten Sie sich auf den Versand Ihrer Produkte vor'
-      }
-    ]
-  },
-  pricing: {
-    icon: CreditCard,
-    iconColor: 'text-blue-600',
-    title: 'Faire Gebühren',
-    items: [
-      { label: '5%', value: 'Verkaufsprovision pro Transaktion' },
-      { label: 'Kostenlose', value: 'Produkteinführung für die ersten 10 Produkte' },
-      { label: 'Keine', value: 'monatlichen Gebühren oder Mindestumsätze' },
-      { label: 'Schnelle', value: 'Auszahlungen innerhalb von 3-5 Werktagen' }
-    ]
-  },
-  cta: {
-    href: '/dashboard/seller/onboarding/apply',
-    label: 'Als Verkäufer bewerben',
-    buttonColor: 'bg-green-600 hover:bg-green-700',
-    loginText: 'Bereits Verkäufer?',
-    loginHref: '/auth/login',
-    linkColor: 'text-green-600 hover:text-green-700'
-  },
-  faq: {
-    title: 'Häufige Fragen',
-    items: [
-      {
-        question: 'Wie lange dauert die Verifizierung?',
-        answer: 'Die Verifizierung dauert normalerweise 1-2 Werktage. Sie erhalten eine E-Mail-Bestätigung sobald Ihr Konto freigeschaltet ist.'
-      },
-      {
-        question: 'Kann ich Produkte zurückgeben?',
-        answer: 'Als Verkäufer sind Sie für die Produktqualität verantwortlich. Rückgaben werden über unser System abgewickelt, aber Sie müssen die Versandkosten tragen.'
-      },
-      {
-        question: 'Welche Produkte kann ich verkaufen?',
-        answer: 'Elektronik, Computer, Zubehör und refurbished Geräte. Alle Produkte müssen funktionstüchtig und korrekt beschrieben sein.'
-      }
-    ]
-  },
-  roleCheck: {
-    redirectRoles: ['seller', 'revampit_admin'],
-    redirectTo: '/dashboard/seller'
-  }
-}
 
 // ============================================================================
 // REPAIRER ONBOARDING CONFIG

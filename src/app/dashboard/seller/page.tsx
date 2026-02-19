@@ -113,7 +113,7 @@ export default function SellerDashboard() {
     {
       title: 'Meine Produkte',
       description: 'Alle Ihre Produkte verwalten',
-      href: '/dashboard/seller/products',
+      href: '/dashboard/listings',
       icon: Package,
       color: 'bg-blue-500',
     },
@@ -318,7 +318,7 @@ export default function SellerDashboard() {
             {products.length > 0 && (
               <div className="mt-6 pt-4 border-t border-gray-100 dark:border-gray-700">
                 <Link
-                  href="/dashboard/seller/products"
+                  href="/dashboard/listings"
                   className="text-sm text-green-600 hover:text-green-700 dark:text-green-400 font-medium flex items-center gap-1"
                 >
                   Alle Produkte verwalten
