@@ -39,6 +39,8 @@ export function ContentInputStep({
   onCreateWithoutContent,
   onBack,
 }: Props) {
+  const localFileRef = useRef<HTMLInputElement>(null)
+
   if (inputMethod === 'audio') {
     return (
       <div className="bg-white rounded-lg border p-6 space-y-5">
@@ -96,7 +98,6 @@ export function ContentInputStep({
     )
   }
 
-  const localFileRef = useRef<HTMLInputElement>(null)
   const config = CONTENT_CONFIG[inputMethod]
 
   return (

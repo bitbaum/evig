@@ -85,10 +85,10 @@ export function useWishlist() {
   return {
     items,
     count: items.length,
-    add: useCallback(wishlistStore.add, []),
-    remove: useCallback(wishlistStore.remove, []),
-    toggle: useCallback(wishlistStore.toggle, []),
-    has: useCallback(wishlistStore.has, []),
+    add: useCallback((id: string) => wishlistStore.add(id), []),
+    remove: useCallback((id: string) => wishlistStore.remove(id), []),
+    toggle: useCallback((id: string) => wishlistStore.toggle(id), []),
+    has: useCallback((id: string) => wishlistStore.has(id), []),
   };
 }
 
@@ -102,9 +102,9 @@ export function useCompare() {
   return {
     items,
     count: items.length,
-    add: useCallback(compareStore.add, []),
-    remove: useCallback(compareStore.remove, []),
-    toggle: useCallback(compareStore.toggle, []),
-    has: useCallback(compareStore.has, []),
+    add: useCallback((id: string) => compareStore.add(id), []),
+    remove: useCallback((id: string) => compareStore.remove(id), []),
+    toggle: useCallback((id: string) => compareStore.toggle(id), []),
+    has: useCallback((id: string) => compareStore.has(id), []),
   };
 }

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import {
@@ -32,11 +32,7 @@ export default function WorkshopProposalDetailPage() {
 
   const proposalId = params.id as string;
 
-  useEffect(() => {
-    fetchProposal();
-  }, [proposalId]);
-
-  const fetchProposal = async () => {
+  const fetchProposal = useCallback(async () => {
     try {
       setIsLoading(true);
       const response = await fetch(`/api/admin/workshops/proposals/${proposalId}`);
@@ -53,7 +49,11 @@ export default function WorkshopProposalDetailPage() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [proposalId]);
+
+  useEffect(() => {
+    fetchProposal();
+  }, [fetchProposal]);
 
   const handleEditSaved = () => {
     setShowEditModal(false);

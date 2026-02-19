@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { usePathname } from "next/navigation";
 import {
   Menu,
@@ -41,10 +41,7 @@ export function ShopHeader({
   const [isSearchOpen, setIsSearchOpen] = useState(false);
 
   // Cart badge
-  const [cartId, setCartId] = useState<string | null>(null);
-  useEffect(() => {
-    setCartId(getCartId());
-  }, []);
+  const [cartId] = useState(() => getCartId());
   const { data: cart } = useCart(cartId);
   const cartCount = cart?.items?.length ?? 0;
 
