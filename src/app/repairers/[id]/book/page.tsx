@@ -7,60 +7,18 @@ import { useSession } from 'next-auth/react'
 import { logger } from '@/lib/logger'
 import {
   ArrowLeft,
-  Calendar,
-  Clock,
   MapPin,
   Star,
   User,
   CheckCircle,
   AlertCircle,
-  Wrench,
-  Home,
-  Building,
   ChevronRight,
-  Loader2
 } from 'lucide-react'
-
-interface RepairerProfile {
-  id: string
-  business_name: string | null
-  business_type: string
-  city: string
-  postal_code: string
-  average_rating: number
-  total_reviews: number
-  is_verified: boolean
-  services_offered: string[]
-  hourly_rate_cents: number | null
-  home_visit_fee_cents: number | null
-}
-
-interface TimeSlot {
-  start_time: string
-  end_time: string
-  available: boolean
-}
-
-interface AvailabilitySlots {
-  [date: string]: TimeSlot[]
-}
-
-const SERVICE_CATEGORIES = [
-  { value: 'laptop_repair', label: 'Laptop-Reparatur', icon: '💻' },
-  { value: 'phone_repair', label: 'Smartphone-Reparatur', icon: '📱' },
-  { value: 'tablet_repair', label: 'Tablet-Reparatur', icon: '📱' },
-  { value: 'desktop_repair', label: 'Desktop-PC Reparatur', icon: '🖥️' },
-  { value: 'console_repair', label: 'Spielkonsole Reparatur', icon: '🎮' },
-  { value: 'audio_repair', label: 'Audio-Geräte Reparatur', icon: '🔊' },
-  { value: 'other', label: 'Anderes Gerät', icon: '🔧' }
-]
-
-const URGENCY_OPTIONS = [
-  { value: 'low', label: 'Niedrig', description: 'Innerhalb von 1-2 Wochen' },
-  { value: 'normal', label: 'Normal', description: 'Innerhalb einer Woche' },
-  { value: 'high', label: 'Dringend', description: 'So schnell wie möglich' },
-  { value: 'emergency', label: 'Notfall', description: 'Heute/Morgen (Aufpreis)' }
-]
+import { type RepairerProfile, type AvailabilitySlots } from '@/components/repairers/types'
+import { formatPrice } from '@/components/repairers/helpers'
+import { BookingStepProblem } from '@/components/repairers/BookingStepProblem'
+import { BookingStepSchedule } from '@/components/repairers/BookingStepSchedule'
+import { BookingStepConfirm } from '@/components/repairers/BookingStepConfirm'
 
 export default function BookRepairerPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params)
@@ -154,8 +112,8 @@ export default function BookRepairerPage({ params }: { params: Promise<{ id: str
           is_home_visit: isHomeVisit,
           visit_address: isHomeVisit ? visitAddress : null,
           visit_postal_code: isHomeVisit ? visitPostalCode : null,
-          visit_city: isHomeVisit ? visitCity : null
-        })
+          visit_city: isHomeVisit ? visitCity : null,
+        }),
       })
 
       const data = await response.json()
@@ -167,7 +125,6 @@ export default function BookRepairerPage({ params }: { params: Promise<{ id: str
 
       setSuccess(true)
       setAppointmentId(data.appointment?.id)
-
     } catch (err) {
       logger.error('Error booking appointment', { error: err })
       setError('Ein Fehler ist aufgetreten')
@@ -177,25 +134,7 @@ export default function BookRepairerPage({ params }: { params: Promise<{ id: str
   }
 
   const canProceedStep1 = serviceCategory && description.length >= 10
-  const canProceedStep2 = true // Date/time is optional
   const canProceedStep3 = !isHomeVisit || (visitAddress && visitPostalCode && visitCity)
-
-  const formatPrice = (cents: number | null) => {
-    if (!cents) return null
-    return `CHF ${(cents / 100).toFixed(0)}`
-  }
-
-  // Get next 14 days for date selection
-  const getAvailableDates = () => {
-    const dates: string[] = []
-    const today = new Date()
-    for (let i = 0; i < 14; i++) {
-      const date = new Date(today)
-      date.setDate(today.getDate() + i)
-      dates.push(date.toISOString().split('T')[0])
-    }
-    return dates
-  }
 
   if (loading) {
     return (
@@ -229,9 +168,7 @@ export default function BookRepairerPage({ params }: { params: Promise<{ id: str
           <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
             <CheckCircle className="w-8 h-8 text-green-600" />
           </div>
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">
-            Anfrage gesendet!
-          </h2>
+          <h2 className="text-2xl font-bold text-gray-900 mb-2">Anfrage gesendet!</h2>
           <p className="text-gray-600 mb-6">
             Ihre Reparaturanfrage wurde an {repairer?.business_name || 'den Reparateur'} gesendet.
             Sie erhalten in Kürze eine Bestätigung.
@@ -281,19 +218,17 @@ export default function BookRepairerPage({ params }: { params: Promise<{ id: str
             <div key={s} className="flex items-center">
               <div
                 className={`w-10 h-10 rounded-full flex items-center justify-center font-medium ${
-                  step >= s
-                    ? 'bg-blue-600 text-white'
-                    : 'bg-gray-200 text-gray-600'
+                  step >= s ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-600'
                 }`}
               >
                 {s}
               </div>
-              <span className={`ml-2 hidden sm:inline ${step >= s ? 'text-gray-900' : 'text-gray-500'}`}>
+              <span
+                className={`ml-2 hidden sm:inline ${step >= s ? 'text-gray-900' : 'text-gray-500'}`}
+              >
                 {s === 1 ? 'Problem' : s === 2 ? 'Termin' : 'Details'}
               </span>
-              {s < 3 && (
-                <ChevronRight className="w-5 h-5 text-gray-400 mx-2 sm:mx-4" />
-              )}
+              {s < 3 && <ChevronRight className="w-5 h-5 text-gray-400 mx-2 sm:mx-4" />}
             </div>
           ))}
         </div>
@@ -306,374 +241,56 @@ export default function BookRepairerPage({ params }: { params: Promise<{ id: str
           </div>
         )}
 
-        {/* Step 1: Problem Description */}
+        {/* Step Content */}
         {step === 1 && (
-          <div className="bg-white rounded-xl shadow-sm p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-6">
-              Beschreiben Sie Ihr Problem
-            </h2>
-
-            {/* Service Category */}
-            <div className="mb-6">
-              <label className="block text-sm font-medium text-gray-700 mb-3">
-                Gerätekategorie *
-              </label>
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                {SERVICE_CATEGORIES.map((cat) => (
-                  <button
-                    key={cat.value}
-                    type="button"
-                    onClick={() => setServiceCategory(cat.value)}
-                    className={`p-4 rounded-lg border-2 text-left transition-all ${
-                      serviceCategory === cat.value
-                        ? 'border-blue-600 bg-blue-50'
-                        : 'border-gray-200 hover:border-gray-300'
-                    }`}
-                  >
-                    <span className="text-2xl block mb-1">{cat.icon}</span>
-                    <span className="text-sm font-medium text-gray-900">{cat.label}</span>
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Device Info */}
-            <div className="mb-6">
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Geräteinformationen (optional)
-              </label>
-              <input
-                type="text"
-                value={deviceInfo}
-                onChange={(e) => setDeviceInfo(e.target.value)}
-                placeholder="z.B. MacBook Pro 2020, iPhone 13, Samsung Galaxy S22..."
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              />
-            </div>
-
-            {/* Description */}
-            <div className="mb-6">
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Problembeschreibung *
-              </label>
-              <textarea
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                rows={4}
-                placeholder="Beschreiben Sie das Problem so detailliert wie möglich..."
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
-              />
-              <p className="text-sm text-gray-500 mt-1">
-                Mindestens 10 Zeichen ({description.length}/10)
-              </p>
-            </div>
-
-            {/* Urgency */}
-            <div className="mb-6">
-              <label className="block text-sm font-medium text-gray-700 mb-3">
-                Dringlichkeit
-              </label>
-              <div className="grid grid-cols-2 gap-3">
-                {URGENCY_OPTIONS.map((opt) => (
-                  <button
-                    key={opt.value}
-                    type="button"
-                    onClick={() => setUrgency(opt.value)}
-                    className={`p-3 rounded-lg border-2 text-left transition-all ${
-                      urgency === opt.value
-                        ? 'border-blue-600 bg-blue-50'
-                        : 'border-gray-200 hover:border-gray-300'
-                    }`}
-                  >
-                    <span className="font-medium text-gray-900 block">{opt.label}</span>
-                    <span className="text-xs text-gray-500">{opt.description}</span>
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            <div className="flex justify-end">
-              <button
-                onClick={() => setStep(2)}
-                disabled={!canProceedStep1}
-                className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium disabled:bg-gray-300 disabled:cursor-not-allowed"
-              >
-                Weiter
-              </button>
-            </div>
-          </div>
+          <BookingStepProblem
+            serviceCategory={serviceCategory}
+            setServiceCategory={setServiceCategory}
+            deviceInfo={deviceInfo}
+            setDeviceInfo={setDeviceInfo}
+            description={description}
+            setDescription={setDescription}
+            urgency={urgency}
+            setUrgency={setUrgency}
+            onNext={() => setStep(2)}
+            canProceed={!!canProceedStep1}
+          />
         )}
 
-        {/* Step 2: Date & Time */}
         {step === 2 && (
-          <div className="bg-white rounded-xl shadow-sm p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-2">
-              Wunschtermin wählen
-            </h2>
-            <p className="text-gray-600 text-sm mb-6">
-              Optional - der Reparateur wird Ihnen verfügbare Termine vorschlagen
-            </p>
-
-            {/* Date Selection */}
-            <div className="mb-6">
-              <label className="block text-sm font-medium text-gray-700 mb-3">
-                Datum
-              </label>
-              <div className="grid grid-cols-4 sm:grid-cols-7 gap-2">
-                {getAvailableDates().map((date) => {
-                  const dateObj = new Date(date)
-                  const hasSlots = availability[date]?.some(s => s.available)
-
-                  return (
-                    <button
-                      key={date}
-                      type="button"
-                      onClick={() => {
-                        setSelectedDate(date)
-                        setSelectedTime('')
-                      }}
-                      className={`p-2 rounded-lg border text-center transition-all ${
-                        selectedDate === date
-                          ? 'border-blue-600 bg-blue-50'
-                          : hasSlots
-                          ? 'border-gray-200 hover:border-blue-300'
-                          : 'border-gray-100 bg-gray-50 text-gray-400'
-                      }`}
-                    >
-                      <div className="text-xs text-gray-500">
-                        {dateObj.toLocaleDateString('de-CH', { weekday: 'short' })}
-                      </div>
-                      <div className="font-medium">
-                        {dateObj.getDate()}
-                      </div>
-                    </button>
-                  )
-                })}
-              </div>
-            </div>
-
-            {/* Time Selection */}
-            {selectedDate && availability[selectedDate] && (
-              <div className="mb-6">
-                <label className="block text-sm font-medium text-gray-700 mb-3">
-                  Uhrzeit
-                </label>
-                <div className="grid grid-cols-4 sm:grid-cols-6 gap-2">
-                  {availability[selectedDate].map((slot, idx) => (
-                    <button
-                      key={idx}
-                      type="button"
-                      onClick={() => slot.available && setSelectedTime(slot.start_time.slice(0, 5))}
-                      disabled={!slot.available}
-                      className={`p-2 rounded-lg border text-sm transition-all ${
-                        selectedTime === slot.start_time.slice(0, 5)
-                          ? 'border-blue-600 bg-blue-50 text-blue-700'
-                          : slot.available
-                          ? 'border-gray-200 hover:border-blue-300'
-                          : 'border-gray-100 bg-gray-50 text-gray-400 cursor-not-allowed'
-                      }`}
-                    >
-                      {slot.start_time.slice(0, 5)}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {selectedDate && (!availability[selectedDate] || availability[selectedDate].length === 0) && (
-              <div className="mb-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
-                <p className="text-yellow-800 text-sm">
-                  Für dieses Datum sind keine spezifischen Zeitfenster hinterlegt.
-                  Der Reparateur wird Ihnen einen Termin vorschlagen.
-                </p>
-              </div>
-            )}
-
-            <div className="flex justify-between">
-              <button
-                onClick={() => setStep(1)}
-                className="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
-              >
-                Zurück
-              </button>
-              <button
-                onClick={() => setStep(3)}
-                className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
-              >
-                Weiter
-              </button>
-            </div>
-          </div>
+          <BookingStepSchedule
+            selectedDate={selectedDate}
+            setSelectedDate={setSelectedDate}
+            selectedTime={selectedTime}
+            setSelectedTime={setSelectedTime}
+            availability={availability}
+            onBack={() => setStep(1)}
+            onNext={() => setStep(3)}
+          />
         )}
 
-        {/* Step 3: Location & Confirm */}
-        {step === 3 && (
-          <div className="bg-white rounded-xl shadow-sm p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-6">
-              Reparaturort & Bestätigung
-            </h2>
-
-            {/* Location Type */}
-            <div className="mb-6">
-              <label className="block text-sm font-medium text-gray-700 mb-3">
-                Wo soll die Reparatur stattfinden?
-              </label>
-              <div className="grid grid-cols-2 gap-4">
-                <button
-                  type="button"
-                  onClick={() => setIsHomeVisit(false)}
-                  className={`p-4 rounded-lg border-2 text-left transition-all ${
-                    !isHomeVisit
-                      ? 'border-blue-600 bg-blue-50'
-                      : 'border-gray-200 hover:border-gray-300'
-                  }`}
-                >
-                  <Building className="w-6 h-6 text-gray-600 mb-2" />
-                  <span className="font-medium text-gray-900 block">Beim Reparateur</span>
-                  <span className="text-sm text-gray-500">
-                    {repairer?.city}
-                  </span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setIsHomeVisit(true)}
-                  className={`p-4 rounded-lg border-2 text-left transition-all ${
-                    isHomeVisit
-                      ? 'border-blue-600 bg-blue-50'
-                      : 'border-gray-200 hover:border-gray-300'
-                  }`}
-                >
-                  <Home className="w-6 h-6 text-gray-600 mb-2" />
-                  <span className="font-medium text-gray-900 block">Hausbesuch</span>
-                  <span className="text-sm text-gray-500">
-                    {repairer?.home_visit_fee_cents
-                      ? `+${formatPrice(repairer.home_visit_fee_cents)}`
-                      : 'Auf Anfrage'}
-                  </span>
-                </button>
-              </div>
-            </div>
-
-            {/* Home Visit Address */}
-            {isHomeVisit && (
-              <div className="mb-6 p-4 bg-gray-50 rounded-lg space-y-4">
-                <h3 className="font-medium text-gray-900">Ihre Adresse</h3>
-                <div>
-                  <label className="block text-sm text-gray-600 mb-1">Strasse & Hausnummer *</label>
-                  <input
-                    type="text"
-                    value={visitAddress}
-                    onChange={(e) => setVisitAddress(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                  />
-                </div>
-                <div className="grid grid-cols-3 gap-4">
-                  <div>
-                    <label className="block text-sm text-gray-600 mb-1">PLZ *</label>
-                    <input
-                      type="text"
-                      value={visitPostalCode}
-                      onChange={(e) => setVisitPostalCode(e.target.value)}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                    />
-                  </div>
-                  <div className="col-span-2">
-                    <label className="block text-sm text-gray-600 mb-1">Ort *</label>
-                    <input
-                      type="text"
-                      value={visitCity}
-                      onChange={(e) => setVisitCity(e.target.value)}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                    />
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* Summary */}
-            <div className="mb-6 p-4 bg-blue-50 rounded-lg">
-              <h3 className="font-medium text-gray-900 mb-3">Zusammenfassung</h3>
-              <dl className="space-y-2 text-sm">
-                <div className="flex justify-between">
-                  <dt className="text-gray-600">Reparateur:</dt>
-                  <dd className="font-medium">{repairer?.business_name}</dd>
-                </div>
-                <div className="flex justify-between">
-                  <dt className="text-gray-600">Kategorie:</dt>
-                  <dd className="font-medium">
-                    {SERVICE_CATEGORIES.find(c => c.value === serviceCategory)?.label}
-                  </dd>
-                </div>
-                {deviceInfo && (
-                  <div className="flex justify-between">
-                    <dt className="text-gray-600">Gerät:</dt>
-                    <dd className="font-medium">{deviceInfo}</dd>
-                  </div>
-                )}
-                <div className="flex justify-between">
-                  <dt className="text-gray-600">Dringlichkeit:</dt>
-                  <dd className="font-medium">
-                    {URGENCY_OPTIONS.find(u => u.value === urgency)?.label}
-                  </dd>
-                </div>
-                {selectedDate && (
-                  <div className="flex justify-between">
-                    <dt className="text-gray-600">Wunschtermin:</dt>
-                    <dd className="font-medium">
-                      {new Date(selectedDate).toLocaleDateString('de-CH', {
-                        weekday: 'long',
-                        day: 'numeric',
-                        month: 'long'
-                      })}
-                      {selectedTime && ` um ${selectedTime}`}
-                    </dd>
-                  </div>
-                )}
-                <div className="flex justify-between">
-                  <dt className="text-gray-600">Ort:</dt>
-                  <dd className="font-medium">
-                    {isHomeVisit ? 'Hausbesuch' : `Beim Reparateur (${repairer?.city})`}
-                  </dd>
-                </div>
-              </dl>
-            </div>
-
-            {/* Login Notice */}
-            {sessionStatus !== 'authenticated' && (
-              <div className="mb-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg flex items-start gap-3">
-                <AlertCircle className="w-5 h-5 text-yellow-600 flex-shrink-0 mt-0.5" />
-                <div>
-                  <p className="text-yellow-800 font-medium">Anmeldung erforderlich</p>
-                  <p className="text-yellow-700 text-sm">
-                    Sie werden zur Anmeldung weitergeleitet, um die Anfrage abzuschliessen.
-                  </p>
-                </div>
-              </div>
-            )}
-
-            <div className="flex justify-between">
-              <button
-                onClick={() => setStep(2)}
-                className="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
-              >
-                Zurück
-              </button>
-              <button
-                onClick={handleSubmit}
-                disabled={!canProceedStep3 || submitting}
-                className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium disabled:bg-gray-300 disabled:cursor-not-allowed flex items-center gap-2"
-              >
-                {submitting ? (
-                  <>
-                    <Loader2 className="w-4 h-4 animate-spin" />
-                    Wird gesendet...
-                  </>
-                ) : (
-                  'Anfrage senden'
-                )}
-              </button>
-            </div>
-          </div>
+        {step === 3 && repairer && (
+          <BookingStepConfirm
+            repairer={repairer}
+            serviceCategory={serviceCategory}
+            deviceInfo={deviceInfo}
+            urgency={urgency}
+            selectedDate={selectedDate}
+            selectedTime={selectedTime}
+            isHomeVisit={isHomeVisit}
+            setIsHomeVisit={setIsHomeVisit}
+            visitAddress={visitAddress}
+            setVisitAddress={setVisitAddress}
+            visitPostalCode={visitPostalCode}
+            setVisitPostalCode={setVisitPostalCode}
+            visitCity={visitCity}
+            setVisitCity={setVisitCity}
+            canProceed={!!canProceedStep3}
+            submitting={submitting}
+            isAuthenticated={sessionStatus === 'authenticated'}
+            onBack={() => setStep(2)}
+            onSubmit={handleSubmit}
+          />
         )}
 
         {/* Repairer Info Sidebar */}
