@@ -72,7 +72,7 @@ const mockAuth = auth as jest.MockedFunction<typeof auth>
 
 // Helper to create a NextRequest with URL
 function makeRequest(url: string, init?: RequestInit) {
-  return new NextRequest(new URL(url, 'http://localhost:3001'), init)
+  return new NextRequest(new URL(url, 'http://localhost:3001'), init as never)
 }
 
 // Helper: mock DB row for a request
@@ -231,7 +231,7 @@ describe('GET /api/it-hilfe/requests/[id]', () => {
   const makeCtx = (id: string) => ({ params: Promise.resolve({ id }) })
 
   it('returns request details for valid ID', async () => {
-    mockAuth.mockResolvedValue(null)
+    mockAuth.mockResolvedValue(null as never)
     mockQuery.mockResolvedValueOnce({
       rows: [mockRequestRow()],
       rowCount: 1,
@@ -289,7 +289,7 @@ describe('GET /api/it-hilfe/requests/[id]', () => {
   })
 
   it('returns 404 for non-existent request', async () => {
-    mockAuth.mockResolvedValue(null)
+    mockAuth.mockResolvedValue(null as never)
     mockQuery.mockResolvedValueOnce({ rows: [], rowCount: 0 } as never)
 
     const res = await GET(makeRequest(`/api/it-hilfe/requests/${validId}`), makeCtx(validId))
@@ -300,7 +300,7 @@ describe('GET /api/it-hilfe/requests/[id]', () => {
   })
 
   it('returns null arrays as empty arrays', async () => {
-    mockAuth.mockResolvedValue(null)
+    mockAuth.mockResolvedValue(null as never)
     mockQuery.mockResolvedValueOnce({
       rows: [mockRequestRow({ skills_needed: null, image_urls: null })],
       rowCount: 1,
@@ -333,7 +333,7 @@ describe('PUT /api/it-hilfe/requests/[id]', () => {
   const makeCtx = (id: string) => ({ params: Promise.resolve({ id }) })
 
   it('requires authentication', async () => {
-    mockAuth.mockResolvedValue(null)
+    mockAuth.mockResolvedValue(null as never)
 
     const res = await PUT(
       makeRequest(`/api/it-hilfe/requests/${validId}`, {

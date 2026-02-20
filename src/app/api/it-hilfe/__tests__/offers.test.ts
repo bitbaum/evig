@@ -40,7 +40,7 @@ const mockQuery = query as jest.MockedFunction<typeof query>
 const mockAuth = auth as jest.MockedFunction<typeof auth>
 
 function makeRequest(url: string, init?: RequestInit) {
-  return new NextRequest(new URL(url, 'http://localhost:3001'), init)
+  return new NextRequest(new URL(url, 'http://localhost:3001'), init as never)
 }
 
 const validRequestId = '11111111-1111-1111-1111-111111111111'
@@ -81,7 +81,7 @@ describe('GET /api/it-hilfe/requests/[id]/offers', () => {
   const makeCtx = (id: string) => ({ params: Promise.resolve({ id }) })
 
   it('requires authentication', async () => {
-    mockAuth.mockResolvedValue(null)
+    mockAuth.mockResolvedValue(null as never)
 
     const res = await GET(makeRequest(`/api/it-hilfe/requests/${validRequestId}/offers`), makeCtx(validRequestId))
 
@@ -186,7 +186,7 @@ describe('POST /api/it-hilfe/requests/[id]/offers', () => {
   }
 
   it('requires authentication', async () => {
-    mockAuth.mockResolvedValue(null)
+    mockAuth.mockResolvedValue(null as never)
 
     const res = await POST(
       makeRequest(`/api/it-hilfe/requests/${validRequestId}/offers`, {
@@ -399,7 +399,7 @@ describe('DELETE /api/it-hilfe/requests/[id]/offers/[offerId]', () => {
   const makeCtx = (id: string, offerId: string) => ({ params: Promise.resolve({ id, offerId }) })
 
   it('requires authentication', async () => {
-    mockAuth.mockResolvedValue(null)
+    mockAuth.mockResolvedValue(null as never)
 
     const res = await DELETE(
       makeRequest(`/api/it-hilfe/requests/${validRequestId}/offers/${validOfferId}`, { method: 'DELETE' }),
