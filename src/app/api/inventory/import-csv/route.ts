@@ -97,7 +97,7 @@ export const POST = withAuth(async (request: NextRequest, session: ValidSession)
               analysis_method: 'rule_based'
             },
             created_by: session.user.id,
-            status: APPROVAL_STATUS.APPROVED, // Auto-approve CSV imports
+            status: APPROVAL_STATUS.PENDING, // Require review before approval
             kivitendo_article_number: row.Artikelnummer
           })
           .select('id')

@@ -10,15 +10,13 @@ interface DiagnosticCheck {
 }
 
 interface Diagnostics {
-  medusaUrl: string
-  hasPublishableKey: boolean
+  ok: boolean
   checks: DiagnosticCheck[]
 }
 
 export async function GET() {
   const diagnostics: Diagnostics = {
-    medusaUrl: MEDUSA_CONFIG.URL,
-    hasPublishableKey: !!MEDUSA_CONFIG.PUBLISHABLE_KEY,
+    ok: false,
     checks: [],
   }
 
@@ -71,6 +69,6 @@ export async function GET() {
     })
   }
 
-  const ok = diagnostics.checks.every((c) => c.ok)
-  return NextResponse.json(diagnostics, { status: ok ? 200 : 500 })
+  diagnostics.ok = diagnostics.checks.every((c) => c.ok)
+  return NextResponse.json(diagnostics, { status: diagnostics.ok ? 200 : 500 })
 }

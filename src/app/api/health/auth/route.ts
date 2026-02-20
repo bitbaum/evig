@@ -8,7 +8,6 @@ type AuthHealth = {
     authSecret: 'ok' | 'missing'
     database: 'ok' | 'failed'
   }
-  message?: string
   timestamp: string
 }
 
@@ -27,12 +26,10 @@ export async function GET() {
     if (!secret || secret.length < 16) {
       response.status = 'unhealthy'
       response.checks.authSecret = 'missing'
-      response.message = 'AUTH_SECRET is missing or too short'
     }
   } catch {
     response.status = 'unhealthy'
     response.checks.authSecret = 'missing'
-    response.message = 'AUTH_SECRET is missing'
   }
 
   try {
@@ -40,7 +37,6 @@ export async function GET() {
   } catch {
     response.status = 'unhealthy'
     response.checks.database = 'failed'
-    response.message = response.message ?? 'Auth database check failed'
   }
 
   return NextResponse.json(response, {

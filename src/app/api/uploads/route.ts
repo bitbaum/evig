@@ -46,12 +46,14 @@ export const POST = withAuth(async (request, session) => {
     const timestamp = Date.now()
     const userPath = encodeURIComponent(session.user.id)
 
+    const ALLOWED_MIME_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/gif']
+
     for (let i = 0; i < files.length; i++) {
       const file = files[i]
-      // Basic validation: only images up to ~10 MB
-      const isImage = file.type?.startsWith('image/')
-      if (!isImage) {
-        return apiBadRequest('Nur Bilddateien sind erlaubt')
+
+      // Strict MIME type allowlist — no SVG (XSS vector)
+      if (!ALLOWED_MIME_TYPES.includes(file.type)) {
+        return apiBadRequest('Nur JPEG, PNG, WebP und GIF sind erlaubt')
       }
 
       const maxSize = 10 * 1024 * 1024 // 10 MB
@@ -62,8 +64,19 @@ export const POST = withAuth(async (request, session) => {
       const arrayBuffer = await file.arrayBuffer()
       const buffer = Buffer.from(arrayBuffer)
       const safeName = (file.name || `image_${i}`).replace(/[^a-zA-Z0-9_.-]/g, '_')
-      const ext = path.extname(safeName) || '.jpg'
+      const ext = path.extname(safeName).toLowerCase() || '.jpg'
       const base = path.basename(safeName, ext)
+
+      // Block double extensions (e.g. file.jpg.exe)
+      if (/\.[a-zA-Z]{2,}\./i.test(safeName)) {
+        return apiBadRequest('Dateinamen mit mehreren Erweiterungen sind nicht erlaubt')
+      }
+
+      // Block non-image extensions even if MIME type passed
+      const ALLOWED_EXTENSIONS = ['.jpg', '.jpeg', '.png', '.webp', '.gif']
+      if (!ALLOWED_EXTENSIONS.includes(ext)) {
+        return apiBadRequest('Nur JPEG, PNG, WebP und GIF sind erlaubt')
+      }
       const fileName = `${base}_${timestamp}_${i}${ext}`
       const filePath = path.join(uploadBaseDir, fileName)
 

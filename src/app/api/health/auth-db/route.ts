@@ -10,24 +10,12 @@ interface DiagnosticCheck {
 
 interface Diagnostics {
   ok: boolean;
-  config: {
-    host?: string;
-    port?: string;
-    database?: string;
-    user?: string;
-  };
   checks: DiagnosticCheck[];
 }
 
 export async function GET() {
   const diagnostics: Diagnostics = {
     ok: false,
-    config: {
-      host: process.env.AUTH_DB_HOST || process.env.DB_HOST,
-      port: process.env.AUTH_DB_PORT || process.env.DB_PORT,
-      database: process.env.AUTH_DB_NAME || process.env.DB_NAME,
-      user: process.env.AUTH_DB_USER || process.env.DB_USER,
-    },
     checks: [],
   }
 
