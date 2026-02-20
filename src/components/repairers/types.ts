@@ -32,6 +32,7 @@ export interface RepairerProfile {
   warranty_offered?: boolean
   warranty_duration_months?: number | null
   insurance_info?: string | null
+  distance_km?: number
   portfolio_images?: string[]
   rating_distribution?: { [key: string]: number }
   review_summary?: {
