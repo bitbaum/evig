@@ -13,11 +13,11 @@ export const GET = withAuth<{ id: string }>(async (request, session, context) =>
     const invoice = await fetchInvoice(invoiceId)
 
     if (!invoice) {
-      return apiNotFound('Invoice not found')
+      return apiNotFound('Rechnung')
     }
 
     if (invoice.user_id !== session.user.id && !session.user.isStaff) {
-      return apiUnauthorized('You do not have permission to view this invoice')
+      return apiUnauthorized('Sie haben keine Berechtigung, diese Rechnung anzuzeigen')
     }
 
     const pdfBuffer = await generateInvoicePDF(invoice)
@@ -47,11 +47,11 @@ export const POST = withAuth<{ id: string }>(async (request, session, context) =
     const invoice = await fetchInvoice(invoiceId)
 
     if (!invoice) {
-      return apiNotFound('Invoice not found')
+      return apiNotFound('Rechnung')
     }
 
     if (invoice.user_id !== session.user.id && !session.user.isStaff) {
-      return apiUnauthorized('You do not have permission to generate PDF for this invoice')
+      return apiUnauthorized('Sie haben keine Berechtigung, ein PDF für diese Rechnung zu generieren')
     }
 
     await generateInvoicePDF(invoice)

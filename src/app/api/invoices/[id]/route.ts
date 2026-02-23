@@ -53,7 +53,7 @@ export const GET = withAuth<{ id: string }>(async (request, session, context) =>
     `, [invoiceId])
 
     if (invoiceResult.rows.length === 0) {
-      return apiNotFound('Invoice not found')
+      return apiNotFound('Rechnung')
     }
 
     const invoice = invoiceResult.rows[0] as InvoiceRow
@@ -83,14 +83,14 @@ export const PUT = withAuth<{ id: string }>(async (request, session, context) =>
     // Get current invoice
     const invoiceResult = await query(`SELECT id, user_id, status FROM ${TABLE_NAMES.INVOICES} WHERE id = $1`, [invoiceId])
     if (invoiceResult.rows.length === 0) {
-      return apiNotFound('Invoice not found')
+      return apiNotFound('Rechnung')
     }
 
     const invoice = invoiceResult.rows[0] as Pick<InvoiceRow, 'id' | 'user_id' | 'status'>
 
     // Check permissions - only admin can update others' invoices
     if (invoice.user_id !== session.user.id && !isAdmin) {
-      return apiUnauthorized('You do not have permission to update this invoice')
+      return apiUnauthorized('Sie haben keine Berechtigung, diese Rechnung zu aktualisieren')
     }
 
     // Build update query
@@ -113,7 +113,7 @@ export const PUT = withAuth<{ id: string }>(async (request, session, context) =>
     }
 
     if (updateFields.length === 0) {
-      return apiBadRequest('No valid fields to update')
+      return apiBadRequest('Keine gültigen Felder zum Aktualisieren')
     }
 
     // Add updated_at
@@ -160,19 +160,19 @@ export const DELETE = withAuth<{ id: string }>(async (request, session, context)
     // Get invoice
     const invoiceResult = await query(`SELECT id, user_id, status FROM ${TABLE_NAMES.INVOICES} WHERE id = $1`, [invoiceId])
     if (invoiceResult.rows.length === 0) {
-      return apiNotFound('Invoice not found')
+      return apiNotFound('Rechnung')
     }
 
     const invoice = invoiceResult.rows[0] as Pick<InvoiceRow, 'id' | 'user_id' | 'status'>
 
     // Check permissions
     if (invoice.user_id !== session.user.id && !isAdmin) {
-      return apiUnauthorized('You do not have permission to delete this invoice')
+      return apiUnauthorized('Sie haben keine Berechtigung, diese Rechnung zu löschen')
     }
 
     // Only allow deletion of draft invoices
     if (invoice.status !== 'draft') {
-      return apiBadRequest('Only draft invoices can be deleted')
+      return apiBadRequest('Nur Rechnungsentwürfe können gelöscht werden')
     }
 
     // Delete invoice

@@ -47,12 +47,12 @@ export const POST = withAuth(async (request, session) => {
     const targetUserId = isAdmin && userId ? userId : session.user.id
 
     if (!targetUserId) {
-      return apiBadRequest('User ID required')
+      return apiBadRequest('Benutzer-ID erforderlich')
     }
 
     // Validate line items
     if (!lineItems || !Array.isArray(lineItems) || lineItems.length === 0) {
-      return apiBadRequest('At least one line item required')
+      return apiBadRequest('Mindestens ein Rechnungsposten erforderlich')
     }
 
     // Calculate totals with tax compliance

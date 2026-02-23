@@ -33,7 +33,7 @@ export async function POST(request: NextRequest) {
   try {
     const session = await auth()
     if (!session?.user?.id) {
-      return apiUnauthorized('Authentication required')
+      return apiUnauthorized('Authentifizierung erforderlich')
     }
 
     const appointmentId = request.nextUrl.pathname.split('/')[3] // Extract ID from URL
@@ -61,19 +61,19 @@ export async function POST(request: NextRequest) {
     `, [appointmentId])
 
     if (appointmentResult.rows.length === 0) {
-      return apiNotFound('Appointment not found')
+      return apiNotFound('Termin')
     }
 
     const appointment = appointmentResult.rows[0] as AppointmentRow
 
     // Check ownership - owner or admin can pay
     if (appointment.user_id !== session.user.id && !session.user.isStaff) {
-      return apiUnauthorized('You can only pay for your own appointments')
+      return apiUnauthorized('Sie können nur für Ihre eigenen Termine bezahlen')
     }
 
     // Check if appointment is in payable status
     if (!['confirmed', 'approved', 'in_progress'].includes(appointment.status)) {
-      return apiBadRequest(`Appointment status '${appointment.status}' is not payable`)
+      return apiBadRequest(`Terminstatus '${appointment.status}' ist nicht zahlbar`)
     }
 
     // Determine payment amount
@@ -95,7 +95,7 @@ export async function POST(request: NextRequest) {
       const remaining = paymentAmountCents - totalPaid
 
       if (remaining <= 0) {
-        return apiBadRequest('Appointment is already fully paid')
+        return apiBadRequest('Termin ist bereits vollständig bezahlt')
       }
 
       paymentAmountCents = remaining
@@ -110,7 +110,7 @@ export async function POST(request: NextRequest) {
     // Initialize Stripe
     const stripe = getStripeClient()
     if (!stripe) {
-      return apiError(new Error('Stripe not configured'), 'Stripe is not configured')
+      return apiError(new Error('Stripe not configured'), 'Stripe ist nicht konfiguriert')
     }
 
     // Capitalize first letter of payment type for description
@@ -164,12 +164,12 @@ export async function POST(request: NextRequest) {
       paymentType,
       escrowEnabled: useEscrow,
       message: useEscrow
-        ? `Payment authorized. Funds will be held in escrow until service completion.`
-        : `Payment processed successfully!`
+        ? `Zahlung autorisiert. Der Betrag wird bis zur Dienstleistungserbringung treuhänderisch verwahrt.`
+        : `Zahlung erfolgreich verarbeitet!`
     })
 
   } catch (error) {
     logger.error('Pay for appointment error', { error })
-    return apiError(error, 'Failed to process payment for appointment')
+    return apiError(error, 'Zahlung für Termin konnte nicht verarbeitet werden')
   }
 }
