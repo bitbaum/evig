@@ -1,7 +1,7 @@
 'use client'
 
 import { ReactNode } from 'react'
-import { Header } from './Header'
+import { Header } from './header'
 import Footer from './Footer'
 import { RevampCopilot, SuggestionButton } from '@/features/floating-ui'
 import { MessageButton } from '@/components/messaging/MessageButton'

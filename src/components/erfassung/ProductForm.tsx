@@ -23,7 +23,7 @@ import {
   ChevronDown,
   ChevronUp,
 } from 'lucide-react'
-import { AIFieldIndicator } from '@/components/erfassung/AIFieldIndicator'
+import { AIFieldIndicator } from '@/components/ai/AIFieldIndicator'
 import type { ErfassungFormData, AIFieldMetadata, SpecField } from '@/types/erfassung'
 import {
   ZUSTAND_OPTIONS,

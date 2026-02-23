@@ -12,6 +12,3 @@ export { ProductFilterBar } from './ProductFilterBar'
 export { InventoryProductsTable } from './InventoryProductsTable'
 export { ShopProductsTable } from './ShopProductsTable'
 export { BulkImportModal } from './BulkImportModal'
-
-// Legacy export for backwards compatibility (to be removed)
-export { MedusaProductsTable } from './MedusaProductsTable'

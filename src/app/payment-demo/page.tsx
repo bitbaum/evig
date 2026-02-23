@@ -2,7 +2,7 @@
 
 import { Suspense } from 'react'
 import { logger } from '@/lib/logger'
-import ServiceBookingPayment from '@/components/payments/ServiceBookingPayment'
+import { ServiceBookingPayment } from '@/components/payments/service-booking'
 
 export default function PaymentDemoPage() {
   // Mock service data for demonstration
