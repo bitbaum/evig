@@ -1,11 +1,10 @@
 import { test, expect } from '@playwright/test';
 
-const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
 
 test.describe('Security Features', () => {
   test('XSS Prevention - IT-Hilfe title should sanitize script tags', async ({ page }) => {
     // This test requires authentication - skip if not logged in
-    await page.goto(`${BASE_URL}/it-hilfe/create`);
+    await page.goto(`/it-hilfe/create`);
 
     // Check if redirected to login
     const currentUrl = page.url();
@@ -31,7 +30,7 @@ test.describe('Security Features', () => {
   });
 
   test('Input Validation - Invalid postal code should show error', async ({ page }) => {
-    await page.goto(`${BASE_URL}/it-hilfe/create`);
+    await page.goto(`/it-hilfe/create`);
 
     const currentUrl = page.url();
     if (currentUrl.includes('/auth/login') || currentUrl.includes('/api/auth')) {
@@ -64,7 +63,7 @@ test.describe('Security Features', () => {
     // 2. Submitting multiple requests rapidly
     // 3. Checking for rate limit error
 
-    await page.goto(`${BASE_URL}/it-hilfe/create`);
+    await page.goto(`/it-hilfe/create`);
 
     const currentUrl = page.url();
     if (currentUrl.includes('/auth/login') || currentUrl.includes('/api/auth')) {
@@ -77,7 +76,7 @@ test.describe('Security Features', () => {
   });
 
   test('SSOT Validation - Canton dropdown should only show valid Swiss cantons', async ({ page }) => {
-    await page.goto(`${BASE_URL}/it-hilfe/create`);
+    await page.goto(`/it-hilfe/create`);
 
     const currentUrl = page.url();
     if (currentUrl.includes('/auth/login') || currentUrl.includes('/api/auth')) {

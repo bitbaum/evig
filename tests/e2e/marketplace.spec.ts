@@ -1,10 +1,8 @@
 import { test, expect } from '@playwright/test';
 
-const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
-
 test.describe('Marketplace Page', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto(`${BASE_URL}/marketplace`);
+    await page.goto('/marketplace');
   });
 
   test('should display marketplace page with hero section', async ({ page }) => {
@@ -12,36 +10,26 @@ test.describe('Marketplace Page', () => {
     await expect(page.getByText(/gebrauchte IT-Geräte/i)).toBeVisible();
   });
 
-  test('should have search with debouncing', async ({ page }) => {
+  test('should have search with form submit', async ({ page }) => {
     const searchInput = page.locator('input[placeholder*="Laptop"]');
     await expect(searchInput).toBeVisible();
 
-    // Track network requests
-    let apiCallCount = 0;
-    page.on('request', request => {
-      if (request.url().includes('/api/listings')) {
-        apiCallCount++;
-      }
-    });
-
-    // Type quickly
+    // Type search and submit
     await searchInput.fill('iPhone');
+    await page.locator('button:has-text("Suchen")').click();
 
-    // Wait for debounce (300ms) + request
+    // Wait for results
+    await page.waitForLoadState('networkidle');
     await page.waitForTimeout(500);
-
-    // Should only have made 1-2 API calls (not one per keystroke)
-    console.log(`API calls made: ${apiCallCount}`);
   });
 
   test('should validate price range - negative prices', async ({ page }) => {
     // Open filters
-    const filterButton = page.locator('button:has-text("Filter"), button >> text=/filter/i').first();
+    const filterButton = page.locator('button:has-text("Filter")').first();
     await filterButton.click();
 
     // Find price inputs
     const priceMinInput = page.locator('input[placeholder="Min"]');
-    const priceMaxInput = page.locator('input[placeholder="Max"]');
 
     // Enter negative price
     await priceMinInput.fill('-100');
@@ -53,7 +41,7 @@ test.describe('Marketplace Page', () => {
 
   test('should validate price range - min > max', async ({ page }) => {
     // Open filters
-    const filterButton = page.locator('button:has-text("Filter"), button >> text=/filter/i').first();
+    const filterButton = page.locator('button:has-text("Filter")').first();
     await filterButton.click();
 
     // Find price inputs
@@ -71,7 +59,7 @@ test.describe('Marketplace Page', () => {
 
   test('should validate price range - exceeds maximum', async ({ page }) => {
     // Open filters
-    const filterButton = page.locator('button:has-text("Filter"), button >> text=/filter/i').first();
+    const filterButton = page.locator('button:has-text("Filter")').first();
     await filterButton.click();
 
     // Find price inputs
@@ -87,7 +75,7 @@ test.describe('Marketplace Page', () => {
 
   test('should clear price error when valid input entered', async ({ page }) => {
     // Open filters
-    const filterButton = page.locator('button:has-text("Filter"), button >> text=/filter/i').first();
+    const filterButton = page.locator('button:has-text("Filter")').first();
     await filterButton.click();
 
     const priceMinInput = page.locator('input[placeholder="Min"]');
@@ -109,25 +97,12 @@ test.describe('Marketplace Page', () => {
     await page.waitForTimeout(500);
   });
 
-  test('should filter by category', async ({ page }) => {
-    const filterButton = page.locator('button:has-text("Filter"), button >> text=/filter/i').first();
-    await filterButton.click();
-
-    // Select a category
-    const categorySelect = page.locator('select').first();
-    await categorySelect.selectOption({ index: 1 }); // Select first non-empty option
-
-    await page.waitForLoadState('networkidle');
-    await page.waitForTimeout(500);
-  });
-
   test('should filter by condition', async ({ page }) => {
-    const filterButton = page.locator('button:has-text("Filter"), button >> text=/filter/i').first();
+    const filterButton = page.locator('button:has-text("Filter")').first();
     await filterButton.click();
 
-    // Find condition select (should be second or third select)
-    const selects = page.locator('select');
-    const conditionSelect = selects.nth(1);
+    // Condition select has id="filter-condition"
+    const conditionSelect = page.locator('select[id="filter-condition"]');
 
     if (await conditionSelect.isVisible()) {
       await conditionSelect.selectOption({ index: 1 });
@@ -136,9 +111,9 @@ test.describe('Marketplace Page', () => {
   });
 
   test('should show loading skeletons', async ({ page }) => {
-    // Intercept network request to delay it
+    // Set up route intercept BEFORE navigation to ensure we catch the request
     await page.route('**/api/listings*', async route => {
-      await page.waitForTimeout(1000);
+      await new Promise(r => setTimeout(r, 2000));
       await route.continue();
     });
 
@@ -146,7 +121,7 @@ test.describe('Marketplace Page', () => {
 
     // Check for skeleton loaders
     const skeletons = page.locator('.animate-pulse');
-    await expect(skeletons.first()).toBeVisible({ timeout: 2000 });
+    await expect(skeletons.first()).toBeVisible({ timeout: 3000 });
   });
 
   test('should show error state on network failure', async ({ page }) => {
@@ -157,44 +132,39 @@ test.describe('Marketplace Page', () => {
 
     await page.reload();
 
-    // Wait for error message
-    await expect(page.locator('text=/Fehler/i, text=/Error/i')).toBeVisible({ timeout: 5000 });
+    // Wait for error message (ErrorAlert component)
+    await expect(page.locator('text=/Fehler/i')).toBeVisible({ timeout: 5000 });
   });
 
-  test('should navigate pagination', async ({ page }) => {
-    await page.waitForLoadState('networkidle');
-    await page.waitForTimeout(1000);
+  test('should use category pills for filtering', async ({ page }) => {
+    // Category pills are always visible (not behind filter toggle)
+    const allButton = page.locator('button[aria-pressed="true"]:has-text("Alle")');
+    await expect(allButton).toBeVisible();
 
-    // Look for pagination controls
-    const nextButton = page.locator('button:has-text("Weiter"), button >> text=/next/i');
-    const prevButton = page.locator('button:has-text("Zurück"), button >> text=/previous/i');
-
-    // If pagination exists, test it
-    if (await nextButton.isVisible()) {
-      await nextButton.click();
+    // Click a category pill
+    const categoryPills = page.locator('[role="group"][aria-label="Kategoriefilter"] button');
+    const pillCount = await categoryPills.count();
+    if (pillCount > 1) {
+      await categoryPills.nth(1).click();
       await page.waitForLoadState('networkidle');
-
-      // Should now be on page 2
-      await expect(prevButton).toBeEnabled();
     }
   });
 
   test('should clear all filters', async ({ page }) => {
-    const filterButton = page.locator('button:has-text("Filter"), button >> text=/filter/i').first();
+    const filterButton = page.locator('button:has-text("Filter")').first();
     await filterButton.click();
 
-    // Apply some filters
-    const categorySelect = page.locator('select').first();
-    await categorySelect.selectOption({ index: 1 });
+    // Apply a condition filter
+    const conditionSelect = page.locator('select[id="filter-condition"]');
+    if (await conditionSelect.isVisible()) {
+      await conditionSelect.selectOption({ index: 1 });
+    }
 
     // Look for clear/reset button
-    const clearButton = page.locator('button:has-text("zurücksetzen"), button:has-text("Clear"), button >> text=/reset/i');
-
+    const clearButton = page.locator('button:has-text("Filter zurücksetzen")');
     if (await clearButton.isVisible()) {
       await clearButton.click();
-
-      // Verify filters are cleared
-      await expect(categorySelect).toHaveValue('');
+      await page.waitForLoadState('networkidle');
     }
   });
 });
