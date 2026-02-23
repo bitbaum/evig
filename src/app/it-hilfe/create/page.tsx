@@ -110,7 +110,7 @@ export default function CreatePeerRepairPage() {
           if (p.canton && !canton) setCanton(p.canton)
         }
       })
-      .catch(() => {})
+      .catch(err => logger.warn('Failed to load technician profile', { error: err }))
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [status])
 

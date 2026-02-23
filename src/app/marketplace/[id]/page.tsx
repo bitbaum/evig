@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { logger } from '@/lib/logger'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
@@ -104,7 +105,7 @@ export default function ListingDetailPage({ params }: { params: Promise<{ id: st
             .then(simData => {
               if (simData.success && simData.data) setSimilarListings(simData.data)
             })
-            .catch(() => {})
+            .catch(err => logger.warn('Failed to load similar listings', { error: err }))
         } else {
           setError(data.error || 'Inserat nicht gefunden')
         }

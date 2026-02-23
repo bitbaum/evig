@@ -4,6 +4,7 @@ import { useState, useEffect, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { CheckCircle, Package, ArrowRight, Loader2 } from 'lucide-react'
+import { logger } from '@/lib/logger'
 import { formatCHF } from '@/config/marketplace'
 import { ORDER_STATUS_CONFIG } from '@/config/marketplace'
 import type { OrderStatus } from '@/config/marketplace'
@@ -37,7 +38,7 @@ function CheckoutSuccessContent() {
           setOrder(data.data)
         }
       })
-      .catch(() => {})
+      .catch(err => logger.warn('Failed to load order details', { error: err, orderId }))
       .finally(() => setIsLoading(false))
   }, [orderId])
 
