@@ -184,48 +184,59 @@ export async function GET(request: NextRequest) {
     const result = await query(repairersQuery, params)
     const repairers = result.rows as (RepairerRow & { distance_km?: number })[]
 
-    // Get rating distribution and review summaries for each repairer
-    const repairersWithDetails = await Promise.all(
-      repairers.map(async (repairer) => {
-        // Get rating distribution
-        const ratingDistResult = await query(`
-          SELECT rating, COUNT(*)::text as count
-          FROM ${TABLE_NAMES.REPAIRER_REVIEWS}
-          WHERE repairer_id = $1 AND is_public = true
-          GROUP BY rating
-        `, [repairer.id])
+    // Batch-fetch rating distributions and review summaries (avoids N+1 queries)
+    const repairerIds = repairers.map(r => r.id)
 
-        const ratingDistribution: { [key: string]: number } = {}
-        for (const row of ratingDistResult.rows as RatingRow[]) {
-          ratingDistribution[row.rating.toString()] = parseInt(row.count)
+    let ratingDistByRepairer: Record<string, Record<string, number>> = {}
+    let reviewSummaryByRepairer: Record<string, ReviewSummaryRow> = {}
+
+    if (repairerIds.length > 0) {
+      // Single query for all rating distributions
+      const ratingDistResult = await query(`
+        SELECT repairer_id, rating, COUNT(*)::text as count
+        FROM ${TABLE_NAMES.REPAIRER_REVIEWS}
+        WHERE repairer_id = ANY($1) AND is_public = true
+        GROUP BY repairer_id, rating
+      `, [repairerIds])
+
+      for (const row of ratingDistResult.rows as (RatingRow & { repairer_id: string })[]) {
+        if (!ratingDistByRepairer[row.repairer_id]) {
+          ratingDistByRepairer[row.repairer_id] = {}
         }
+        ratingDistByRepairer[row.repairer_id][row.rating.toString()] = parseInt(row.count)
+      }
 
-        // Get review summary (average sub-ratings)
-        const reviewSummaryResult = await query(`
-          SELECT
-            AVG(timeliness_rating)::decimal(3,2) as avg_timeliness,
-            AVG(quality_rating)::decimal(3,2) as avg_quality,
-            AVG(communication_rating)::decimal(3,2) as avg_communication
-          FROM ${TABLE_NAMES.REPAIRER_REVIEWS}
-          WHERE repairer_id = $1 AND is_public = true
-        `, [repairer.id])
+      // Single query for all review summaries
+      const reviewSummaryResult = await query(`
+        SELECT
+          repairer_id,
+          AVG(timeliness_rating)::decimal(3,2) as avg_timeliness,
+          AVG(quality_rating)::decimal(3,2) as avg_quality,
+          AVG(communication_rating)::decimal(3,2) as avg_communication
+        FROM ${TABLE_NAMES.REPAIRER_REVIEWS}
+        WHERE repairer_id = ANY($1) AND is_public = true
+        GROUP BY repairer_id
+      `, [repairerIds])
 
-        const summaryRow = reviewSummaryResult.rows[0] as ReviewSummaryRow | undefined
+      for (const row of reviewSummaryResult.rows as (ReviewSummaryRow & { repairer_id: string })[]) {
+        reviewSummaryByRepairer[row.repairer_id] = row
+      }
+    }
 
-        return {
-          ...repairer,
-          rating_distribution: ratingDistribution,
-          review_summary: {
-            timeliness: summaryRow?.avg_timeliness || 0,
-            quality: summaryRow?.avg_quality || 0,
-            communication: summaryRow?.avg_communication || 0,
-            // These aren't in the schema but frontend expects them
-            professionalism: summaryRow?.avg_quality || 0,
-            value: summaryRow?.avg_timeliness || 0
-          }
-        }
-      })
-    )
+    const repairersWithDetails = repairers.map((repairer) => {
+      const summaryRow = reviewSummaryByRepairer[repairer.id]
+      return {
+        ...repairer,
+        rating_distribution: ratingDistByRepairer[repairer.id] || {},
+        review_summary: {
+          timeliness: summaryRow?.avg_timeliness || 0,
+          quality: summaryRow?.avg_quality || 0,
+          communication: summaryRow?.avg_communication || 0,
+          professionalism: summaryRow?.avg_quality || 0,
+          value: summaryRow?.avg_timeliness || 0,
+        },
+      }
+    })
 
     // Get total count for pagination
     const countQuery = `

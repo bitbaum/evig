@@ -159,29 +159,29 @@ export async function GET(
 
     const reviews = reviewsResult.rows as ReviewRow[]
 
-    // Get rating distribution
-    const ratingDistResult = await query(`
-      SELECT rating, COUNT(*)::text as count
-      FROM ${TABLE_NAMES.REPAIRER_REVIEWS}
-      WHERE repairer_id = $1 AND is_public = true
-      GROUP BY rating
-      ORDER BY rating DESC
-    `, [id])
+    // Fetch rating distribution and review summary in parallel (same table, independent queries)
+    const [ratingDistResult, reviewSummaryResult] = await Promise.all([
+      query(`
+        SELECT rating, COUNT(*)::text as count
+        FROM ${TABLE_NAMES.REPAIRER_REVIEWS}
+        WHERE repairer_id = $1 AND is_public = true
+        GROUP BY rating
+        ORDER BY rating DESC
+      `, [id]),
+      query(`
+        SELECT
+          AVG(timeliness_rating)::decimal(3,2) as avg_timeliness,
+          AVG(quality_rating)::decimal(3,2) as avg_quality,
+          AVG(communication_rating)::decimal(3,2) as avg_communication
+        FROM ${TABLE_NAMES.REPAIRER_REVIEWS}
+        WHERE repairer_id = $1 AND is_public = true
+      `, [id]),
+    ])
 
     const ratingDistribution: { [key: string]: number } = {}
     for (const row of ratingDistResult.rows as RatingRow[]) {
       ratingDistribution[row.rating.toString()] = parseInt(row.count)
     }
-
-    // Get review summary (average sub-ratings)
-    const reviewSummaryResult = await query(`
-      SELECT
-        AVG(timeliness_rating)::decimal(3,2) as avg_timeliness,
-        AVG(quality_rating)::decimal(3,2) as avg_quality,
-        AVG(communication_rating)::decimal(3,2) as avg_communication
-      FROM ${TABLE_NAMES.REPAIRER_REVIEWS}
-      WHERE repairer_id = $1 AND is_public = true
-    `, [id])
 
     const summaryRow = reviewSummaryResult.rows[0] as ReviewSummaryRow | undefined
 
