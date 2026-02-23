@@ -114,6 +114,3 @@ export async function DELETE(
     return apiError(error, "Failed to connect to Medusa backend");
   }
 }
-
-
-

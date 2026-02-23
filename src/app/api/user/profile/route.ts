@@ -36,10 +36,3 @@ export const PUT = withAuth(async (request: NextRequest, session) => {
     return apiError(error, 'Profil konnte nicht aktualisiert werden')
   }
 })
-
-
-
-
-
-
-

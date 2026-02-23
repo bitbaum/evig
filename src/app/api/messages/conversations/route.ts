@@ -173,6 +173,3 @@ export async function POST(request: NextRequest) {
     return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)
   }
 }
-
-
-

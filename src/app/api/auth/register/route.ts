@@ -76,5 +76,3 @@ export async function POST(request: NextRequest) {
     return apiError(error, 'Ein unerwarteter Fehler ist aufgetreten')
   }
 }
-
-

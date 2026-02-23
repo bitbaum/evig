@@ -189,5 +189,3 @@ export async function DELETE(request: NextRequest) {
 
   return apiNotFound('Endpoint')
 }
-
-

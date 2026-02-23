@@ -79,8 +79,3 @@ export async function GET(request: NextRequest) {
     return NextResponse.redirect(new URL('/auth/login?error=verification_error', request.url))
   }
 }
-
-
-
-
-

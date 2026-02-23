@@ -62,9 +62,3 @@ export const POST = withAuth(async (request: NextRequest, session) => {
     return apiError(error, 'Passwort konnte nicht geändert werden')
   }
 })
-
-
-
-
-
-

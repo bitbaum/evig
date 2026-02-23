@@ -64,6 +64,3 @@ export async function POST(request: NextRequest) {
     return apiError(error, "Failed to connect to Medusa backend");
   }
 }
-
-
-

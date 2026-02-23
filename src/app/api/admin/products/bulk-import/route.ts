@@ -135,6 +135,3 @@ export const POST = withAdmin(async (request: NextRequest) => {
     return apiError(error, "Failed to process bulk import");
   }
 });
-
-
-

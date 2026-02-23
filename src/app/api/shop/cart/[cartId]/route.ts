@@ -52,6 +52,3 @@ export async function GET(
     return apiError(error, "Failed to connect to Medusa backend");
   }
 }
-
-
-
