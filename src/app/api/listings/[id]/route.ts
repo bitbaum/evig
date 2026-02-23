@@ -34,7 +34,7 @@ export async function GET(
     query(
       `UPDATE ${TABLE_NAMES.LISTINGS} SET view_count = view_count + 1 WHERE id = $1 AND status = 'active'`,
       [id]
-    ).catch(() => {});
+    ).catch(err => logger.error('Failed to increment view count', { error: err, listingId: id }));
 
     // Fetch listing with all images + seller info
     const result = await query(
@@ -168,7 +168,7 @@ export const PATCH = withAuth<{ id: string }>(async (
 
     // Fire-and-forget: update Meilisearch index
     if (data.status === 'removed' || data.status === 'sold' || data.status === 'draft') {
-      removeListing(id).catch(() => {});
+      removeListing(id).catch(err => logger.error('Failed to remove listing from Meilisearch', { error: err, listingId: id }));
     } else {
       query(
         `SELECT l.id, l.title, l.description, l.brand, l.model, l.category, l.condition,
@@ -182,8 +182,8 @@ export const PATCH = withAuth<{ id: string }>(async (
         WHERE l.id = $1 AND l.status = 'active'`,
         [id]
       ).then(res => {
-        if (res.rows[0]) indexListing(res.rows[0] as MeilisearchDocument).catch(() => {});
-      }).catch(() => {});
+        if (res.rows[0]) indexListing(res.rows[0] as MeilisearchDocument).catch(err => logger.error('Failed to index listing in Meilisearch', { error: err, listingId: id }));
+      }).catch(err => logger.error('Failed to fetch listing for Meilisearch index', { error: err, listingId: id }));
     }
 
     return apiSuccess({ id });
@@ -230,7 +230,7 @@ export const DELETE = withAuth<{ id: string }>(async (
     );
 
     // Fire-and-forget: remove from Meilisearch
-    removeListing(id).catch(() => {});
+    removeListing(id).catch(err => logger.error('Failed to remove listing from Meilisearch', { error: err, listingId: id }));
 
     logger.info('Listing removed', { listingId: id, userId: session.user.id, isOwner });
     return apiSuccess({ id, status: 'removed' });

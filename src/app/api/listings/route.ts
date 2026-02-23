@@ -218,7 +218,7 @@ export const POST = withAuth(async (request: NextRequest, session: ValidSession)
       favorite_count: 0,
       created_at: new Date().toISOString(),
       thumbnail: data.images?.[0] || null,
-    }).catch(() => {});
+    }).catch(err => logger.error('Failed to index listing in Meilisearch', { error: err, listingId: result }));
 
     // Fire-and-forget: send confirmation email
     if (session.user.email && data.status !== 'draft') {
@@ -230,7 +230,7 @@ export const POST = withAuth(async (request: NextRequest, session: ValidSession)
           listingTitle: sanitizedTitle,
           listingUrl: `${baseUrl}/marketplace/${result}`,
         })
-      ).catch(() => {});
+      ).catch(err => logger.error('Failed to send listing published email', { error: err, listingId: result }));
     }
 
     return apiSuccess({ id: result }, 201);

@@ -255,7 +255,7 @@ export const PATCH = withAuth<{ id: string }>(async (
           actionHint: actionHints[newStatus] || '',
           orderUrl: `${baseUrl}/dashboard/orders/${orderId}`,
         })
-      ).catch(() => {});
+      ).catch(err => logger.error('Failed to send order status update email', { error: err, orderId, newStatus }));
     }
 
     return apiSuccess({ orderId, status: newStatus });

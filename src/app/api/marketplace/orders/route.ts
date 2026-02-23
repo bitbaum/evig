@@ -171,7 +171,7 @@ export const POST = withAuth(async (request: NextRequest, session: ValidSession)
           deliveryMethod: deliveryLabel,
           orderUrl,
         })
-      ).catch(() => {});
+      ).catch(err => logger.error('Failed to send buyer order confirmation', { error: err, orderId }));
     }
 
     // Fetch seller email for notification
@@ -191,9 +191,9 @@ export const POST = withAuth(async (request: NextRequest, session: ValidSession)
             deliveryMethod: deliveryLabel,
             orderUrl: `${baseUrl}/dashboard/orders/${orderId}`,
           })
-        ).catch(() => {});
+        ).catch(err => logger.error('Failed to send seller order notification', { error: err, orderId }));
       }
-    }).catch(() => {});
+    }).catch(err => logger.error('Failed to fetch seller for order notification', { error: err, orderId }));
 
     return apiSuccess({
       orderId,

@@ -125,7 +125,7 @@ export const POST = withAuth<{ id: string }>(async (
           messagePreview: message.substring(0, 200),
           conversationUrl: `${baseUrl}/dashboard/messages`,
         })
-      ).catch(() => {});
+      ).catch(err => logger.error('Failed to send marketplace message notification', { error: err, listingId: id }));
     }
 
     return apiSuccess({
