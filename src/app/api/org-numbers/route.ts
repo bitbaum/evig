@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { logger } from '@/lib/logger'
+import { apiBadRequest, apiError } from '@/lib/api/helpers'
 import { getOrgNumbers, ORG_NUMBERS_DEFAULTS, type OrgNumberCategory } from '@/lib/org-numbers'
 
 const VALID_CATEGORIES: OrgNumberCategory[] = ['impact', 'social', 'economic', 'operations']
@@ -19,10 +20,7 @@ export async function GET(request: NextRequest) {
     const category = searchParams.get('category') as OrgNumberCategory | null
 
     if (category && !VALID_CATEGORIES.includes(category)) {
-      return NextResponse.json(
-        { success: false, error: `Invalid category. Must be one of: ${VALID_CATEGORIES.join(', ')}` },
-        { status: 400 }
-      )
+      return apiBadRequest(`Invalid category. Must be one of: ${VALID_CATEGORIES.join(', ')}`)
     }
 
     const numbers = await getOrgNumbers(category ?? undefined)
@@ -47,10 +45,6 @@ export async function GET(request: NextRequest) {
       meta: { source: 'database', count: numbers.length }
     })
   } catch (error) {
-    logger.error('Failed to fetch org numbers', { error })
-    return NextResponse.json(
-      { success: false, error: 'Server error' },
-      { status: 500 }
-    )
+    return apiError(error, 'Server error')
   }
 }

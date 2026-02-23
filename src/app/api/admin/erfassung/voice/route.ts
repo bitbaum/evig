@@ -11,11 +11,11 @@
  * 4. Return ErfassungFormData ready to fill the form
  */
 
-import { NextRequest, NextResponse } from 'next/server'
+import { NextRequest } from 'next/server'
 import { withAdmin } from '@/lib/api/middleware'
 import { canAccessSection } from '@/lib/permissions'
 import { logger } from '@/lib/logger'
-import { apiSuccess, apiForbidden, apiBadRequest } from '@/lib/api/helpers'
+import { apiSuccess, apiError, apiForbidden, apiBadRequest } from '@/lib/api/helpers'
 import { extractProductFromText } from '@/lib/erfassung/ai-extraction'
 
 // Transcription service URL
@@ -61,12 +61,8 @@ export const POST = withAdmin(async (request, session) => {
     )
 
     if (!transcribeResponse.ok) {
-      const error = await transcribeResponse.text()
-      logger.error('Transcription failed', { error })
-      return NextResponse.json(
-        { success: false, error: 'Transkription fehlgeschlagen', details: error },
-        { status: 500 }
-      )
+      const transcribeError = await transcribeResponse.text()
+      return apiError(new Error(transcribeError), 'Transkription fehlgeschlagen')
     }
 
     const transcription = await transcribeResponse.json()
@@ -86,14 +82,7 @@ export const POST = withAdmin(async (request, session) => {
     const extractionResult = await extractProductFromText(transcribedText, 'voice')
 
     if (!extractionResult.success) {
-      logger.error('Product extraction failed', {
-        error: extractionResult.error,
-        transcription: transcribedText,
-      })
-      return NextResponse.json(
-        { success: false, error: extractionResult.error },
-        { status: 500 }
-      )
+      return apiError(extractionResult.error, extractionResult.error || 'Extraktionsfehler')
     }
 
     logger.info('Voice erfassung complete', {
@@ -109,10 +98,6 @@ export const POST = withAdmin(async (request, session) => {
       sourceType: extractionResult.sourceType,
     })
   } catch (error) {
-    logger.error('Voice erfassung error', { error })
-    return NextResponse.json(
-      { success: false, error: 'Interner Serverfehler' },
-      { status: 500 }
-    )
+    return apiError(error, 'Interner Serverfehler')
   }
 })

@@ -6,12 +6,12 @@
  * Each chunk runs in its own transaction — failed rows don't block successful ones.
  */
 
-import { NextRequest, NextResponse } from 'next/server'
+import { NextRequest } from 'next/server'
 import { withAdmin } from '@/lib/api/middleware'
 import { canAccessSection } from '@/lib/permissions'
 import { logger } from '@/lib/logger'
 import { transaction } from '@/lib/auth/db'
-import { apiForbidden, apiBadRequest } from '@/lib/api/helpers'
+import { apiSuccess, apiError, apiForbidden, apiBadRequest } from '@/lib/api/helpers'
 import { validateBody, BulkSaveSchema } from '@/lib/schemas'
 import { createErfassungProduct } from '@/lib/erfassung/create-product'
 import { BULK_LIMITS } from '@/config/erfassung'
@@ -136,12 +136,8 @@ export const POST = withAdmin(async (request, session) => {
       results,
     }
 
-    return NextResponse.json({ success: true, data: response })
+    return apiSuccess(response)
   } catch (error) {
-    logger.error('Bulk save error', { error })
-    return NextResponse.json(
-      { success: false, error: 'Interner Serverfehler' },
-      { status: 500 }
-    )
+    return apiError(error, 'Interner Serverfehler')
   }
 })

@@ -5,10 +5,10 @@
  * Accepts text with multiple products and returns structured product data array.
  */
 
-import { NextRequest, NextResponse } from 'next/server'
+import { NextRequest } from 'next/server'
 import { withAdmin } from '@/lib/api/middleware'
 import { logger } from '@/lib/logger'
-import { apiSuccess } from '@/lib/api/helpers'
+import { apiSuccess, apiError } from '@/lib/api/helpers'
 import { validateBody, BulkTextSchema } from '@/lib/schemas'
 import { extractMultipleProducts } from '@/lib/erfassung/bulk-extraction'
 
@@ -36,10 +36,6 @@ export const POST = withAdmin(async (request: NextRequest, session) => {
       products,
     })
   } catch (error) {
-    logger.error('Bulk text erfassung error', { error })
-    return NextResponse.json(
-      { success: false, error: 'Interner Serverfehler' },
-      { status: 500 }
-    )
+    return apiError(error, 'Interner Serverfehler')
   }
 })

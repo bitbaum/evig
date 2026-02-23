@@ -10,6 +10,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@/auth'
 import { z } from 'zod'
 import { logger } from '@/lib/logger'
+import { apiUnauthorized, apiBadRequest, apiForbidden, apiError } from '@/lib/api/helpers'
 import { registryExtract, type ExtractMode } from '@/lib/ai/extract'
 import { FORM_AI_REGISTRY } from '@/lib/ai/config/prompts'
 import { isStaffEmail } from '@/lib/permissions'
@@ -31,26 +32,20 @@ export async function POST(request: NextRequest) {
   try {
     const session = await auth()
     if (!session?.user) {
-      return NextResponse.json({ error: 'Nicht autorisiert' }, { status: 401 })
+      return apiUnauthorized('Nicht autorisiert')
     }
 
     let body: unknown
     try {
       body = await request.json()
     } catch {
-      return NextResponse.json(
-        { success: false, error: 'Ungültiger JSON-Body' },
-        { status: 400 }
-      )
+      return apiBadRequest('Ungültiger JSON-Body')
     }
 
     const result = extractRequestSchema.safeParse(body)
 
     if (!result.success) {
-      return NextResponse.json(
-        { success: false, error: 'Ungültige Anfrage', details: result.error.flatten().fieldErrors },
-        { status: 400 }
-      )
+      return apiBadRequest('Ungültige Anfrage', result.error.flatten().fieldErrors)
     }
 
     const { formType, text, mode, currentData, instruction, quickAction } = result.data
@@ -58,10 +53,7 @@ export async function POST(request: NextRequest) {
     // Check auth level from registry
     const config = FORM_AI_REGISTRY[formType]
     if (config.auth === 'staff' && !isStaffEmail(session.user.email || '')) {
-      return NextResponse.json(
-        { success: false, error: 'Nur für Staff-Mitglieder verfügbar' },
-        { status: 403 }
-      )
+      return apiForbidden('Nur für Staff-Mitglieder verfügbar')
     }
 
     logger.info('AI extraction requested', {
@@ -86,12 +78,9 @@ export async function POST(request: NextRequest) {
       ),
     ])
 
+    // Return raw extraction result (has its own format from the AI service)
     return NextResponse.json(extractionResult)
   } catch (error) {
-    logger.error('AI extraction error', { error })
-    return NextResponse.json(
-      { success: false, error: 'Fehler bei der KI-Extraktion' },
-      { status: 500 }
-    )
+    return apiError(error, 'Fehler bei der KI-Extraktion')
   }
 }

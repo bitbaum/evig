@@ -6,10 +6,10 @@
  * specs, descriptions, categories, and price estimates.
  */
 
-import { NextRequest, NextResponse } from 'next/server'
+import { NextRequest } from 'next/server'
 import { withAdmin } from '@/lib/api/middleware'
 import { logger } from '@/lib/logger'
-import { apiSuccess, apiBadRequest } from '@/lib/api/helpers'
+import { apiSuccess, apiError, apiBadRequest } from '@/lib/api/helpers'
 import { validateBody, BulkEnrichSchema } from '@/lib/schemas'
 import { extractMultipleProducts } from '@/lib/erfassung/bulk-extraction'
 import { BULK_LIMITS } from '@/config/erfassung'
@@ -85,10 +85,6 @@ export const POST = withAdmin(async (request: NextRequest, session) => {
       items: enrichedItems,
     })
   } catch (error) {
-    logger.error('Bulk enrichment error', { error })
-    return NextResponse.json(
-      { success: false, error: 'Fehler bei der KI-Anreicherung' },
-      { status: 500 }
-    )
+    return apiError(error, 'Fehler bei der KI-Anreicherung')
   }
 })

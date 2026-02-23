@@ -5,11 +5,11 @@
  * Accepts a CSV or Excel file upload and returns parsed BulkProduct array.
  */
 
-import { NextRequest, NextResponse } from 'next/server'
+import { NextRequest } from 'next/server'
 import { withAdmin } from '@/lib/api/middleware'
 import { canAccessSection } from '@/lib/permissions'
 import { logger } from '@/lib/logger'
-import { apiSuccess, apiForbidden, apiBadRequest } from '@/lib/api/helpers'
+import { apiSuccess, apiError, apiForbidden, apiBadRequest } from '@/lib/api/helpers'
 import { parseCSV, parseExcel } from '@/lib/erfassung/file-parser'
 import { BULK_LIMITS } from '@/config/erfassung'
 
@@ -85,10 +85,6 @@ export const POST = withAdmin(async (request, session) => {
       unmappedColumns,
     })
   } catch (error) {
-    logger.error('Bulk upload error', { error })
-    return NextResponse.json(
-      { success: false, error: 'Fehler beim Verarbeiten der Datei' },
-      { status: 500 }
-    )
+    return apiError(error, 'Fehler beim Verarbeiten der Datei')
   }
 })
