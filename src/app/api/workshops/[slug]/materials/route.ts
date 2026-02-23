@@ -38,7 +38,7 @@ export async function GET(
     )
 
     if (workshopResult.rows.length === 0) {
-      return apiNotFound('Workshop not found')
+      return apiNotFound('Workshop')
     }
 
     const workshop = workshopResult.rows[0] as { id: string; title: string }

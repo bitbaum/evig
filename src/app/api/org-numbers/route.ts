@@ -20,7 +20,7 @@ export async function GET(request: NextRequest) {
     const category = searchParams.get('category') as OrgNumberCategory | null
 
     if (category && !VALID_CATEGORIES.includes(category)) {
-      return apiBadRequest(`Invalid category. Must be one of: ${VALID_CATEGORIES.join(', ')}`)
+      return apiBadRequest(`Ungültige Kategorie. Erlaubt: ${VALID_CATEGORIES.join(', ')}`)
     }
 
     const numbers = await getOrgNumbers(category ?? undefined)
@@ -45,6 +45,6 @@ export async function GET(request: NextRequest) {
       meta: { source: 'database', count: numbers.length }
     })
   } catch (error) {
-    return apiError(error, 'Server error')
+    return apiError(error, 'Serverfehler')
   }
 }
