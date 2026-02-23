@@ -8,7 +8,7 @@
  */
 
 // Connection layer
-export { getPool, query, getClient, getUserColumns, transaction } from './db-connection'
+export { getPool, query, paginatedQuery, getClient, getUserColumns, transaction } from './db-connection'
 
 // User & profile queries
 export type { DbUser, DbUserProfile, DbDonation } from './db-users'

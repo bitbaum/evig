@@ -15,7 +15,7 @@
 
 import { NextRequest } from 'next/server'
 import { withAdmin } from '@/lib/api/middleware'
-import { query } from '@/lib/auth/db'
+import { paginatedQuery } from '@/lib/auth/db'
 import { canAccessSection, isSuperAdmin } from '@/lib/permissions'
 import { TABLE_NAMES } from '@/config/database'
 import {
@@ -88,15 +88,8 @@ export const GET = withAdmin(async (request, session) => {
 
     const whereClause = conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : ''
 
-    // Get total count
-    const countResult = await query<{ count: string }>(
-      `SELECT COUNT(*) as count FROM ${TABLE_NAMES.USERS} ${whereClause}`,
-      values
-    )
-    const total = parseInt(countResult.rows[0]?.count || '0')
-
     // Get paginated users
-    const usersResult = await query<{
+    const { rows: usersRows, total } = await paginatedQuery<{
       id: string
       name: string | null
       email: string
@@ -123,7 +116,7 @@ export const GET = withAdmin(async (request, session) => {
     )
 
     // Add computed fields
-    const usersWithDetails = usersResult.rows.map(user => ({
+    const usersWithDetails = usersRows.map(user => ({
       ...user,
       is_super_admin_computed: isSuperAdmin(user.email, user.is_super_admin),
     }))

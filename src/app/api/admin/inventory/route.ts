@@ -8,7 +8,7 @@
 import { NextRequest } from 'next/server'
 import { withAdmin } from '@/lib/api/middleware'
 import { apiSuccess, apiError } from '@/lib/api/helpers'
-import { query } from '@/lib/auth/db'
+import { query, paginatedQuery } from '@/lib/auth/db'
 import { logger } from '@/lib/logger'
 import { TABLE_NAMES } from '@/config/database'
 
@@ -48,7 +48,7 @@ export const GET = withAdmin(async (request: NextRequest, session) => {
       : ''
 
     // Fetch products with inventory data
-    const productsResult = await query<{
+    const { rows: productRows, total } = await paginatedQuery<{
       id: string
       product_name: string
       brand: string
@@ -89,18 +89,8 @@ export const GET = withAdmin(async (request: NextRequest, session) => {
       [...params, limit, offset]
     )
 
-    // Get total count
-    const countResult = await query<{ count: string }>(
-      `SELECT COUNT(*) as count
-       FROM ${TABLE_NAMES.AI_EXTRACTED_PRODUCTS} p
-       ${whereClause}`,
-      params
-    )
-
-    const total = parseInt(countResult.rows[0]?.count || '0')
-
     // Fetch customer profiles for each product
-    const productIds = productsResult.rows.map(p => p.id)
+    const productIds = productRows.map(p => p.id)
     let profilesMap: Record<string, string[]> = {}
 
     if (productIds.length > 0) {
@@ -122,7 +112,7 @@ export const GET = withAdmin(async (request: NextRequest, session) => {
     }
 
     // Combine products with profiles
-    const products = productsResult.rows.map(product => ({
+    const products = productRows.map(product => ({
       ...product,
       customer_profiles: profilesMap[product.id] || [],
     }))

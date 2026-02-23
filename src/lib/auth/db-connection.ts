@@ -156,6 +156,47 @@ export async function getUserColumns(): Promise<Set<string>> {
 }
 
 /**
+ * Execute a paginated query using COUNT(*) OVER() window function.
+ * Combines the data query and count into a single DB round-trip.
+ *
+ * @param text - SQL query that MUST include LIMIT and OFFSET placeholders.
+ *   The function injects `COUNT(*) OVER() AS _total_count` into the SELECT.
+ * @param params - Query parameters (including limit and offset values)
+ * @returns Object with typed rows (without _total_count) and total count
+ *
+ * @example
+ * ```typescript
+ * const { rows, total } = await paginatedQuery<Listing>(
+ *   `SELECT l.id, l.title FROM listings l WHERE l.status = $1
+ *    ORDER BY l.created_at DESC LIMIT $2 OFFSET $3`,
+ *   ['active', 20, 0]
+ * )
+ * ```
+ */
+export async function paginatedQuery<T = unknown>(
+  text: string,
+  params?: QueryParams
+): Promise<{ rows: T[]; total: number }> {
+  // Inject COUNT(*) OVER() after the first SELECT keyword
+  const injectedQuery = text.replace(
+    /^(\s*SELECT\s)/i,
+    '$1COUNT(*) OVER() AS _total_count, '
+  )
+
+  const result = await query<T & { _total_count: string }>(injectedQuery, params)
+
+  // Extract total from first row (0 if no rows returned)
+  const total = result.rows.length > 0
+    ? parseInt(result.rows[0]._total_count || '0', 10)
+    : 0
+
+  // Strip _total_count from all rows
+  const rows = result.rows.map(({ _total_count, ...rest }) => rest as unknown as T)
+
+  return { rows, total }
+}
+
+/**
  * Execute a transaction with automatic rollback on error
  */
 export async function transaction<T>(

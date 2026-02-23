@@ -1,6 +1,6 @@
 import { NextRequest } from 'next/server'
 import { withAdmin } from '@/lib/api/middleware'
-import { query } from '@/lib/auth/db'
+import { query, paginatedQuery } from '@/lib/auth/db'
 import { apiError, apiSuccess, apiBadRequest } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES } from '@/config/database'
@@ -48,10 +48,6 @@ interface DonationRow {
   user_name: string | null
   user_email: string | null
   recorded_by_name: string | null
-}
-
-interface CountRow {
-  count: string
 }
 
 /**
@@ -115,14 +111,8 @@ export const GET = withAdmin(async (request: NextRequest, session) => {
     const sortBy = allowedSortColumns.includes(filters.sort_by) ? filters.sort_by : 'created_at'
     const sortOrder = filters.sort_order === 'asc' ? 'ASC' : 'DESC'
 
-    // Count total
-    const countResult = await query<CountRow>(`
-      SELECT COUNT(*) as count FROM ${TABLE_NAMES.DONATIONS} d ${whereClause}
-    `, params)
-    const total = parseInt(countResult.rows[0]?.count || '0', 10)
-
     // Fetch with pagination
-    const donations = await query<DonationRow>(`
+    const { rows: donationRows, total } = await paginatedQuery<DonationRow>(`
       SELECT
         d.*,
         u.name as user_name,
@@ -137,7 +127,7 @@ export const GET = withAdmin(async (request: NextRequest, session) => {
     `, [...params, filters.limit, filters.offset])
 
     return apiSuccess({
-      items: donations.rows.map(d => ({
+      items: donationRows.map(d => ({
         id: d.id,
         user_id: d.user_id,
         user_name: d.user_name,

@@ -1,6 +1,6 @@
 import { NextRequest } from 'next/server'
 import { auth } from '@/auth'
-import { query } from '@/lib/auth/db'
+import { query, paginatedQuery } from '@/lib/auth/db'
 import { apiError, apiSuccess, apiUnauthorized, apiBadRequest, apiNotFound, apiForbidden } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES, REVIEW_TARGET_TYPES } from '@/config/database'
@@ -81,7 +81,7 @@ export async function GET(request: NextRequest) {
     const sortField = validSortFields.includes(sortBy) ? sortBy : 'created_at'
     const sortDirection = sortOrder === 'asc' ? 'ASC' : 'DESC'
 
-    const reviewsResult = await query(`
+    const { rows: reviewRows, total } = await paginatedQuery<ReviewRow>(`
       SELECT
         r.*,
         u.name as reviewer_name,
@@ -125,13 +125,7 @@ export async function GET(request: NextRequest) {
       REVIEW_TARGET_TYPES.REPAIRER,
     ])
 
-    const countResult = await query<{ total: string }>(
-      `SELECT COUNT(*) as total FROM ${TABLE_NAMES.REVIEWS} WHERE target_type = $1 AND target_id = $2 AND status = $3`,
-      [targetType, targetId, status]
-    )
-
-    const reviews = (reviewsResult.rows as ReviewRow[]).map(mapReviewRow)
-    const total = parseInt(countResult.rows[0].total)
+    const reviews = reviewRows.map(mapReviewRow)
 
     logger.info('Fetched reviews', { targetType, targetId, status, count: reviews.length })
 

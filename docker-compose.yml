@@ -147,6 +147,27 @@ services:
   #     timeout: 10s
   #     retries: 5
 
+  # Voice Transcription Service (faster-whisper)
+  # Speech-to-text for product data entry via voice
+  transcription:
+    container_name: revampit_transcription
+    build:
+      context: ./services/transcription
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    environment:
+      WHISPER_MODEL: ${WHISPER_MODEL:-base}
+      PORT: 5111
+    ports:
+      - "${TRANSCRIPTION_PORT:-5111}:5111"
+    networks:
+      - revampit_network
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:5111/health')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
   # Mailpit - Local email testing (catches all emails, sends nothing)
   # Web UI: http://localhost:8025
   # SMTP: localhost:1025

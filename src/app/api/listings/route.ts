@@ -6,7 +6,7 @@
 import { NextRequest } from 'next/server';
 import { withAuth, ValidSession } from '@/lib/api/middleware';
 import { apiSuccess, apiError, apiBadRequest } from '@/lib/api/helpers';
-import { query, transaction } from '@/lib/auth/db';
+import { query, paginatedQuery, transaction } from '@/lib/auth/db';
 import { TABLE_NAMES } from '@/config/database';
 import { logger } from '@/lib/logger';
 import { validateBody, validateQuery, ListingsQuerySchema, CreateListingSchema } from '@/lib/schemas';
@@ -84,15 +84,8 @@ export async function GET(request: NextRequest) {
       default:           orderBy = 'l.created_at DESC';
     }
 
-    // Count total
-    const countResult = await query<{ count: string }>(
-      `SELECT COUNT(*) as count FROM ${TABLE_NAMES.LISTINGS} l WHERE ${whereClause}`,
-      params
-    );
-    const total = parseInt(countResult.rows[0]?.count || '0', 10);
-
-    // Fetch listings with seller info + primary image
-    const listingsResult = await query(
+    // Fetch listings with seller info + primary image (single query with COUNT(*) OVER())
+    const { rows: items, total } = await paginatedQuery(
       `SELECT
         l.id, l.title, l.price_chf, l.category, l.condition, l.brand, l.model,
         l.delivery_options, l.payment_mode, l.status, l.is_revampit,
@@ -112,7 +105,7 @@ export async function GET(request: NextRequest) {
     );
 
     return apiSuccess({
-      items: listingsResult.rows,
+      items,
       pagination: {
         total,
         limit: filters.limit,

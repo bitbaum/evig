@@ -1,6 +1,6 @@
 import { NextRequest } from 'next/server'
 import { auth } from '@/auth'
-import { query } from '@/lib/auth/db'
+import { query, paginatedQuery } from '@/lib/auth/db'
 import { apiError, apiSuccess, apiUnauthorized, apiBadRequest } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES } from '@/config/database'
@@ -99,8 +99,8 @@ export async function GET(request: NextRequest) {
 
     const whereClause = conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : ''
 
-    // Query requests with requester name
-    const requestsResult = await query(`
+    // Query requests with requester name (single query with COUNT(*) OVER())
+    const { rows: rawRequests, total } = await paginatedQuery<RequestRow>(`
       SELECT
         r.*,
         u.name as requester_name
@@ -111,16 +111,7 @@ export async function GET(request: NextRequest) {
       LIMIT $${paramIndex} OFFSET $${paramIndex + 1}
     `, [...params, limit, offset])
 
-    // Get total count
-    const countResult = await query(`
-      SELECT COUNT(*) as total
-      FROM ${TABLE_NAMES.IT_HILFE_REQUESTS} r
-      ${whereClause}
-    `, params)
-
-    const requests = (requestsResult.rows as RequestRow[]).map(mapRequestListRow)
-
-    const total = parseInt((countResult.rows[0] as { total: string }).total)
+    const requests = rawRequests.map(mapRequestListRow)
 
     logger.info('Fetched IT-Hilfe requests', {
       status,

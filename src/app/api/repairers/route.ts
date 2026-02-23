@@ -1,5 +1,5 @@
 import { NextRequest } from 'next/server'
-import { query } from '@/lib/auth/db'
+import { query, paginatedQuery } from '@/lib/auth/db'
 import { apiError, apiSuccessCached } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES } from '@/config/database'
@@ -181,8 +181,7 @@ export async function GET(request: NextRequest) {
 
     params.push(limit, offset)
 
-    const result = await query(repairersQuery, params)
-    const repairers = result.rows as (RepairerRow & { distance_km?: number })[]
+    const { rows: repairers, total } = await paginatedQuery<RepairerRow & { distance_km?: number }>(repairersQuery, params)
 
     // Batch-fetch rating distributions and review summaries (avoids N+1 queries)
     const repairerIds = repairers.map(r => r.id)
@@ -237,15 +236,6 @@ export async function GET(request: NextRequest) {
         },
       }
     })
-
-    // Get total count for pagination
-    const countQuery = `
-      SELECT COUNT(*) as total
-      FROM ${TABLE_NAMES.REPAIRER_PROFILES} rp
-      WHERE ${conditions.slice(0, -2).join(' AND ') || 'true'}
-    `
-    const countResult = await query(countQuery, params.slice(0, -2))
-    const total = parseInt((countResult.rows[0] as { total: string }).total)
 
     logger.info('Repairers search completed', {
       query: q,

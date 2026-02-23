@@ -7,7 +7,7 @@
 
 import { NextRequest } from 'next/server'
 import { withAdmin } from '@/lib/api/middleware'
-import { query } from '@/lib/auth/db'
+import { query, paginatedQuery } from '@/lib/auth/db'
 import { apiError, apiSuccess } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES } from '@/config/database'
@@ -61,7 +61,7 @@ export const GET = withAdmin(async (request, session) => {
     }
 
     // Fetch reviews with optional response data
-    const reviewsResult = await query<ReviewRow>(`
+    const { rows: reviewRows, total } = await paginatedQuery<ReviewRow>(`
       SELECT
         r.id,
         r.reviewer_id,
@@ -94,15 +94,8 @@ export const GET = withAdmin(async (request, session) => {
       LIMIT $2 OFFSET $3
     `, [status, limit, offset])
 
-    // Get total count
-    const countResult = await query<{ count: string }>(`
-      SELECT COUNT(*) as count FROM ${TABLE_NAMES.REVIEWS} WHERE status = $1
-    `, [status])
-
-    const total = parseInt(countResult.rows[0]?.count || '0')
-
     // Transform to camelCase for frontend
-    const reviews = reviewsResult.rows.map(row => ({
+    const reviews = reviewRows.map(row => ({
       id: row.id,
       reviewerId: row.reviewer_id,
       reviewerName: row.reviewer_name,

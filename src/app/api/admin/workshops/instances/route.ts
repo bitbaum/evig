@@ -1,6 +1,6 @@
 import { NextRequest } from 'next/server'
 import { withAdmin } from '@/lib/api/middleware'
-import { query } from '@/lib/auth/db'
+import { query, paginatedQuery } from '@/lib/auth/db'
 import { apiError, apiSuccess, apiBadRequest } from '@/lib/api/helpers'
 import { logger } from '@/lib/logger'
 import { TABLE_NAMES } from '@/config/database'
@@ -64,7 +64,7 @@ export const GET = withAdmin(async (request, session) => {
       ? `WHERE ${whereConditions.join(' AND ')}`
       : ''
 
-    const instancesResult = await query(`
+    const { rows: instanceRows, total } = await paginatedQuery<InstanceRow>(`
       SELECT
         wi.*,
         w.title as workshop_title,
@@ -81,18 +81,8 @@ export const GET = withAdmin(async (request, session) => {
       LIMIT $${paramIndex} OFFSET $${paramIndex + 1}
     `, [...params, limit, offset])
 
-    // Get total count
-    const countResult = await query(`
-      SELECT COUNT(DISTINCT wi.id) as total
-      FROM ${TABLE_NAMES.WORKSHOP_INSTANCES} wi
-      JOIN ${TABLE_NAMES.WORKSHOPS} w ON wi.workshop_id = w.id
-      ${whereClause}
-    `, params)
-
-    const total = parseInt((countResult.rows[0] as { total: string }).total)
-
     return apiSuccess({
-      instances: (instancesResult.rows as InstanceRow[]).map(inst => ({
+      instances: instanceRows.map(inst => ({
         ...inst,
         current_participants: parseInt(inst.current_participants) || 0,
         confirmed_count: parseInt(inst.confirmed_count) || 0,

@@ -10,6 +10,7 @@
 
 jest.mock('@/lib/auth/db', () => ({
   query: jest.fn(),
+  paginatedQuery: jest.fn(),
 }))
 
 jest.mock('@/lib/logger', () => ({
@@ -64,10 +65,11 @@ jest.mock('@/lib/email/templates/it-hilfe', () => ({
 }))
 
 import { NextRequest } from 'next/server'
-import { query } from '@/lib/auth/db'
+import { query, paginatedQuery } from '@/lib/auth/db'
 import { auth } from '@/auth'
 
 const mockQuery = query as jest.MockedFunction<typeof query>
+const mockPaginatedQuery = paginatedQuery as jest.MockedFunction<typeof paginatedQuery>
 const mockAuth = auth as jest.MockedFunction<typeof auth>
 
 // Helper to create a NextRequest with URL
@@ -119,13 +121,12 @@ describe('GET /api/it-hilfe/requests', () => {
 
   beforeEach(() => {
     mockQuery.mockReset()
+    mockPaginatedQuery.mockReset()
   })
 
   it('returns requests with default filters', async () => {
     const row = mockRequestRow()
-    mockQuery
-      .mockResolvedValueOnce({ rows: [row], rowCount: 1 } as never)
-      .mockResolvedValueOnce({ rows: [{ total: '1' }], rowCount: 1 } as never)
+    mockPaginatedQuery.mockResolvedValueOnce({ rows: [row], total: 1 } as never)
 
     const res = await GET(makeRequest('/api/it-hilfe/requests'))
     const body = await res.json()
@@ -139,26 +140,22 @@ describe('GET /api/it-hilfe/requests', () => {
   })
 
   it('applies category filter', async () => {
-    mockQuery
-      .mockResolvedValueOnce({ rows: [], rowCount: 0 } as never)
-      .mockResolvedValueOnce({ rows: [{ total: '0' }], rowCount: 1 } as never)
+    mockPaginatedQuery.mockResolvedValueOnce({ rows: [], total: 0 } as never)
 
     await GET(makeRequest('/api/it-hilfe/requests?category=smartphone'))
 
     // Verify category param was passed to query
-    const queryCall = mockQuery.mock.calls[0]
+    const queryCall = mockPaginatedQuery.mock.calls[0]
     const params = queryCall[1] as string[]
     expect(params).toContain('smartphone')
   })
 
   it('applies text search filter', async () => {
-    mockQuery
-      .mockResolvedValueOnce({ rows: [], rowCount: 0 } as never)
-      .mockResolvedValueOnce({ rows: [{ total: '0' }], rowCount: 1 } as never)
+    mockPaginatedQuery.mockResolvedValueOnce({ rows: [], total: 0 } as never)
 
     await GET(makeRequest('/api/it-hilfe/requests?search=ThinkPad'))
 
-    const queryCall = mockQuery.mock.calls[0]
+    const queryCall = mockPaginatedQuery.mock.calls[0]
     const sql = queryCall[0] as string
     expect(sql).toContain('ILIKE')
     const params = queryCall[1] as string[]
@@ -166,7 +163,7 @@ describe('GET /api/it-hilfe/requests', () => {
   })
 
   it('handles database errors gracefully', async () => {
-    mockQuery.mockRejectedValueOnce(new Error('DB connection failed'))
+    mockPaginatedQuery.mockRejectedValueOnce(new Error('DB connection failed'))
 
     const res = await GET(makeRequest('/api/it-hilfe/requests'))
     const body = await res.json()
@@ -175,9 +172,7 @@ describe('GET /api/it-hilfe/requests', () => {
   })
 
   it('returns empty result set', async () => {
-    mockQuery
-      .mockResolvedValueOnce({ rows: [], rowCount: 0 } as never)
-      .mockResolvedValueOnce({ rows: [{ total: '0' }], rowCount: 1 } as never)
+    mockPaginatedQuery.mockResolvedValueOnce({ rows: [], total: 0 } as never)
 
     const res = await GET(makeRequest('/api/it-hilfe/requests'))
     const body = await res.json()
@@ -188,9 +183,7 @@ describe('GET /api/it-hilfe/requests', () => {
   })
 
   it('respects pagination params', async () => {
-    mockQuery
-      .mockResolvedValueOnce({ rows: [], rowCount: 0 } as never)
-      .mockResolvedValueOnce({ rows: [{ total: '100' }], rowCount: 1 } as never)
+    mockPaginatedQuery.mockResolvedValueOnce({ rows: [], total: 100 } as never)
 
     const res = await GET(makeRequest('/api/it-hilfe/requests?limit=10&offset=20'))
     const body = await res.json()
@@ -201,9 +194,7 @@ describe('GET /api/it-hilfe/requests', () => {
   })
 
   it('caps limit at 50', async () => {
-    mockQuery
-      .mockResolvedValueOnce({ rows: [], rowCount: 0 } as never)
-      .mockResolvedValueOnce({ rows: [{ total: '0' }], rowCount: 1 } as never)
+    mockPaginatedQuery.mockResolvedValueOnce({ rows: [], total: 0 } as never)
 
     const res = await GET(makeRequest('/api/it-hilfe/requests?limit=999'))
     const body = await res.json()
