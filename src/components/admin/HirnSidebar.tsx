@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { Plus, MessageSquare, Loader2, ChevronRight, FileText, BarChart3 } from 'lucide-react'
 import { formatRelativeTime } from '@/lib/utils'
+import { logger } from '@/lib/logger'
 
 interface Session {
   sessionId: string
@@ -46,8 +47,8 @@ export function HirnSidebar({
           lastActivity: new Date(s.lastActivity),
         })))
       }
-    } catch {
-      // Ignore errors
+    } catch (err) {
+      logger.error('Failed to load Hirn sessions', { error: err })
     } finally {
       setLoading(false)
     }
@@ -60,8 +61,8 @@ export function HirnSidebar({
       if (data.success) {
         setStats(data.data)
       }
-    } catch {
-      // Ignore errors
+    } catch (err) {
+      logger.error('Failed to load Hirn stats', { error: err })
     }
   }
 

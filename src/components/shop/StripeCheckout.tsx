@@ -144,6 +144,14 @@ export default function StripeCheckout({
         })
       })
 
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}))
+        const errorMessage = errorData.error || 'Fehler beim Erstellen der Zahlung'
+        setError(errorMessage)
+        onPaymentError(errorMessage)
+        return
+      }
+
       const data = await response.json()
 
       if (data.clientSecret) {
