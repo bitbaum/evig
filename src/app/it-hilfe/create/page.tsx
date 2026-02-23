@@ -14,18 +14,18 @@ import {
   Loader2,
 } from 'lucide-react'
 import { useAIFormAssist, type AIFieldMetadataEntry } from '@/hooks/useAIFormAssist'
-import { AIFieldBadge } from '@/components/ai/AIFieldIndicator'
 import {
   DEVICE_CATEGORIES,
   URGENCY_LEVELS,
   SERVICE_TYPES,
-  IT_SKILLS,
-  SERVICE_CATEGORIES,
   getCategoryById,
 } from '@/config/it-hilfe'
 import { AIDiagnosisCard } from '@/components/it-hilfe/AIDiagnosisCard'
 import { ITHilfeImageUpload } from '@/components/it-hilfe/ITHilfeImageUpload'
 import { lookupSwissPostalCode } from '@/lib/swiss-postal-codes'
+import { ProblemDetailsSection } from '@/components/it-hilfe-create/ProblemDetailsSection'
+import { LocationSection } from '@/components/it-hilfe-create/LocationSection'
+import { SkillsSection } from '@/components/it-hilfe-create/SkillsSection'
 
 export default function CreatePeerRepairPage() {
   const { data: session, status } = useSession()
@@ -42,7 +42,7 @@ export default function CreatePeerRepairPage() {
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
   const [urgency, setUrgency] = useState('normal')
-  const [maxBudget, setMaxBudget] = useState('') // Empty = free/community help
+  const [maxBudget, setMaxBudget] = useState('')
   const [postalCode, setPostalCode] = useState('')
   const [city, setCity] = useState('')
   const [canton, setCanton] = useState('')
@@ -71,7 +71,6 @@ export default function CreatePeerRepairPage() {
     onFieldsFilled: (data, metadata) => {
       if (data.categoryId) {
         setCategoryId(data.categoryId)
-        // Also trigger the category side-effects (suggested skills)
         const category = getCategoryById(data.categoryId)
         if (category && !data.skillsNeeded?.length) {
           setSkillsNeeded(category.suggestedSkills)
@@ -95,7 +94,7 @@ export default function CreatePeerRepairPage() {
     }
   }, [status, router])
 
-  // Pre-fill location from user's technician profile (if exists)
+  // Pre-fill location from user's technician profile
   useEffect(() => {
     if (status !== 'authenticated') return
     fetch('/api/user/technician-profile')
@@ -108,7 +107,7 @@ export default function CreatePeerRepairPage() {
           if (p.canton && !canton) setCanton(p.canton)
         }
       })
-      .catch(() => {}) // Silent fail — user just fills manually
+      .catch(() => {})
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [status])
 
@@ -123,19 +122,16 @@ export default function CreatePeerRepairPage() {
     }
   }, [postalCode])
 
-  // Pre-fill form when category is selected
   const handleCategorySelect = (catId: string) => {
     setCategoryId(catId)
     const category = getCategoryById(catId)
     if (category) {
-      // Pre-fill title and description with editable templates
       if (!title || title === getCategoryById(categoryId)?.defaultTitle) {
         setTitle(category.defaultTitle)
       }
       if (!description || description === getCategoryById(categoryId)?.defaultDescription) {
         setDescription(category.defaultDescription)
       }
-      // Auto-select suggested skills
       setSkillsNeeded(category.suggestedSkills)
     }
   }
@@ -154,7 +150,6 @@ export default function CreatePeerRepairPage() {
     setLoading(true)
 
     try {
-      // Convert maxBudget to cents (null if empty = free)
       const maxBudgetCents = maxBudget ? Math.round(parseFloat(maxBudget) * 100) : null
 
       const payload = {
@@ -222,7 +217,6 @@ export default function CreatePeerRepairPage() {
   return (
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="max-w-3xl mx-auto px-4">
-        {/* Back link */}
         <Link
           href="/it-hilfe"
           className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-6"
@@ -244,7 +238,6 @@ export default function CreatePeerRepairPage() {
           </p>
         </div>
 
-        {/* Error message */}
         {error && (
           <div id="create-request-error" className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6 flex items-start gap-3">
             <AlertCircle className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />
@@ -252,9 +245,8 @@ export default function CreatePeerRepairPage() {
           </div>
         )}
 
-        {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-6">
-          {/* AI Assist Section */}
+          {/* AI Assist */}
           <div className="bg-gradient-to-r from-purple-50 to-indigo-50 rounded-xl border border-purple-200 p-6">
             <div className="flex items-center gap-2 mb-3">
               <Sparkles className="w-5 h-5 text-purple-600" />
@@ -298,7 +290,6 @@ export default function CreatePeerRepairPage() {
             )}
           </div>
 
-          {/* AI Diagnosis Card */}
           {aiDiagnosis && (
             <AIDiagnosisCard
               diagnosis={aiDiagnosis}
@@ -306,7 +297,7 @@ export default function CreatePeerRepairPage() {
             />
           )}
 
-          {/* Device Category - Primary selection */}
+          {/* Device Category */}
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
             <h2 className="text-lg font-semibold text-gray-900 mb-4">Was möchtest du reparieren?</h2>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
@@ -333,129 +324,35 @@ export default function CreatePeerRepairPage() {
             </div>
           </div>
 
-          {/* Only show rest of form after category selection */}
           {categoryId && (
             <>
-              {/* Device Details - Pre-filled */}
-              <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                <h2 className="text-lg font-semibold text-gray-900 mb-4">Beschreibe das Problem</h2>
+              <ProblemDetailsSection
+                deviceBrand={deviceBrand}
+                deviceModel={deviceModel}
+                title={title}
+                description={description}
+                onDeviceBrandChange={setDeviceBrand}
+                onDeviceModelChange={setDeviceModel}
+                onTitleChange={setTitle}
+                onDescriptionChange={setDescription}
+                aiFieldMeta={aiFieldMeta}
+              />
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center gap-2">
-                      Marke
-                      {aiFieldMeta.deviceBrand && (
-                        <AIFieldBadge source={{ type: 'text', confidence: aiFieldMeta.deviceBrand.confidence, model: aiFieldMeta.deviceBrand.model, timestamp: aiFieldMeta.deviceBrand.timestamp, inputText: '', sources: [] }} />
-                      )}
-                    </label>
-                    <input
-                      type="text"
-                      value={deviceBrand}
-                      onChange={(e) => setDeviceBrand(e.target.value)}
-                      placeholder="z.B. Apple, Samsung, Lenovo"
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center gap-2">
-                      Modell
-                      {aiFieldMeta.deviceModel && (
-                        <AIFieldBadge source={{ type: 'text', confidence: aiFieldMeta.deviceModel.confidence, model: aiFieldMeta.deviceModel.model, timestamp: aiFieldMeta.deviceModel.timestamp, inputText: '', sources: [] }} />
-                      )}
-                    </label>
-                    <input
-                      type="text"
-                      value={deviceModel}
-                      onChange={(e) => setDeviceModel(e.target.value)}
-                      placeholder="z.B. MacBook Pro 2020"
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
-                    />
-                  </div>
-                </div>
-
-                <div className="mb-4">
-                  <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center gap-2">
-                    Titel
-                    {aiFieldMeta.title && (
-                      <AIFieldBadge source={{ type: 'text', confidence: aiFieldMeta.title.confidence, model: aiFieldMeta.title.model, timestamp: aiFieldMeta.title.timestamp, inputText: '', sources: [] }} />
-                    )}
-                  </label>
-                  <input
-                    type="text"
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
-                    placeholder="Kurze Beschreibung"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center gap-2">
-                    Beschreibung
-                    {aiFieldMeta.description && (
-                      <AIFieldBadge source={{ type: 'text', confidence: aiFieldMeta.description.confidence, model: aiFieldMeta.description.model, timestamp: aiFieldMeta.description.timestamp, inputText: '', sources: [] }} />
-                    )}
-                  </label>
-                  <textarea
-                    value={description}
-                    onChange={(e) => setDescription(e.target.value)}
-                    placeholder="Was ist das Problem?"
-                    rows={5}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
-                  />
-                </div>
-              </div>
-
-              {/* Image Upload */}
               <ITHilfeImageUpload
                 imageUrls={imageUrls}
                 onImagesChange={setImageUrls}
               />
 
-              {/* Location */}
-              <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                <h2 className="text-lg font-semibold text-gray-900 mb-4">Wo bist du?</h2>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      PLZ
-                    </label>
-                    <input
-                      type="text"
-                      value={postalCode}
-                      onChange={(e) => setPostalCode(e.target.value.replace(/\D/g, '').slice(0, 4))}
-                      placeholder="8001"
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Stadt
-                    </label>
-                    <input
-                      type="text"
-                      value={city}
-                      onChange={(e) => setCity(e.target.value)}
-                      placeholder="Stadt"
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Kanton
-                    </label>
-                    <input
-                      type="text"
-                      value={canton}
-                      onChange={(e) => setCanton(e.target.value)}
-                      placeholder="Kanton"
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
-                    />
-                  </div>
-                </div>
-              </div>
+              <LocationSection
+                postalCode={postalCode}
+                city={city}
+                canton={canton}
+                onPostalCodeChange={setPostalCode}
+                onCityChange={setCity}
+                onCantonChange={setCanton}
+              />
 
-              {/* Budget - Simplified */}
+              {/* Budget */}
               <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
                 <h2 className="text-lg font-semibold text-gray-900 mb-2">Budget</h2>
                 <p className="text-sm text-gray-600 mb-4">
@@ -478,7 +375,7 @@ export default function CreatePeerRepairPage() {
                 </div>
               </div>
 
-              {/* Service Type & Urgency - Collapsible/Optional */}
+              {/* Service Type & Urgency */}
               <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
                 <h2 className="text-lg font-semibold text-gray-900 mb-4">Optionen</h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -517,41 +414,10 @@ export default function CreatePeerRepairPage() {
                 </div>
               </div>
 
-              {/* Skills - Pre-selected based on category */}
-              <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                <h2 className="text-lg font-semibold text-gray-900 mb-2">Benötigte Skills</h2>
-                <p className="text-sm text-gray-600 mb-4">
-                  Bereits vorausgewählt basierend auf deinem Gerät. Du kannst anpassen.
-                </p>
-
-                {SERVICE_CATEGORIES.map((serviceCategory) => {
-                  const skills = IT_SKILLS[serviceCategory.id] || []
-                  if (skills.length === 0) return null
-                  return (
-                    <div key={serviceCategory.id} className="mb-4">
-                      <h3 className="text-sm font-medium text-gray-700 mb-2">
-                        {serviceCategory.name}
-                      </h3>
-                      <div className="flex flex-wrap gap-2">
-                        {skills.map((skill) => (
-                          <button
-                            key={skill.id}
-                            type="button"
-                            onClick={() => handleSkillToggle(skill.id)}
-                            className={`px-3 py-1.5 rounded-full text-sm transition-all ${
-                              skillsNeeded.includes(skill.id)
-                                ? 'bg-emerald-100 text-emerald-700 border-2 border-emerald-500'
-                                : 'bg-gray-100 text-gray-700 border-2 border-transparent hover:bg-gray-200'
-                            }`}
-                          >
-                            {skill.name}
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-                  )
-                })}
-              </div>
+              <SkillsSection
+                skillsNeeded={skillsNeeded}
+                onSkillToggle={handleSkillToggle}
+              />
 
               {/* Submit */}
               <div className="flex justify-end gap-4">
