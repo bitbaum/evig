@@ -40,12 +40,6 @@ const FORM_SECTIONS: FormSection[] = [
   { id: 'emergency', label: 'Notfallkontakt', icon: <AlertCircle className="w-5 h-5" /> },
 ]
 
-const SECTION_COMPONENTS: Record<string, React.ComponentType<{ form: Record<string, unknown>; onChange: (field: string, value: string | boolean) => void }>> = {
-  basic: TeamBasicInfoSection,
-  availability: TeamAvailabilitySection,
-  emergency: TeamEmergencySection,
-}
-
 export function TeamProfileForm({
   initialData,
   users,

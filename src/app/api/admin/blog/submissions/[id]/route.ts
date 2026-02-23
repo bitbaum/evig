@@ -21,7 +21,7 @@ import {
 import { canAccessSection } from '@/lib/permissions'
 import { APPROVAL_STATUS } from '@/config/approval-status'
 import { sendEmail } from '@/lib/email'
-import { createEditSnapshot, appendEditHistory } from '@/lib/admin/edit-utils'
+import { createEditSnapshot, appendEditHistory, type EditHistoryEntry } from '@/lib/admin/edit-utils'
 
 // Helper to check content section access
 function checkContentAccess(session: { user: { email: string; isStaff: boolean; staffPermissions: string[] } }) {
@@ -87,7 +87,7 @@ export const PATCH = withAdmin<{ id: string }>(async (request, session, context)
       category_id: string | null
       tags: string[]
       status: string
-      edit_history?: any[]
+      edit_history?: EditHistoryEntry[]
     }>(
       `SELECT id, title, slug, content, submitter_name, submitter_email,
               category_id, tags, status, edit_history, reviewed_by, reviewed_at,

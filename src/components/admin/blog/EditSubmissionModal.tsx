@@ -19,7 +19,6 @@ interface BlogSubmission {
   excerpt?: string | null;
   category_id?: string | null;
   tags?: string[];
-  [key: string]: string | string[] | null | undefined;
 }
 
 interface EditSubmissionModalProps {
@@ -37,7 +36,7 @@ export function EditSubmissionModal({
   const [formData, setFormData] = useState<Record<string, any>>(() => {
     const data: Record<string, any> = {};
     Object.keys(BLOG_SUBMISSION_EDITABLE_FIELDS).forEach((field) => {
-      data[field] = submission[field] ?? '';
+      data[field] = (submission as Record<string, unknown>)[field] ?? '';
     });
     return data;
   });

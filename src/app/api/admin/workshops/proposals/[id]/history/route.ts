@@ -10,6 +10,7 @@ import { ERROR_MESSAGES } from '@/config/error-messages';
 import { TABLE_NAMES } from '@/config/database';
 
 import { logger } from '@/lib/logger';
+import type { EditHistoryEntry } from '@/lib/admin/edit-utils';
 
 /**
  * GET /api/admin/workshops/proposals/[id]/history
@@ -29,7 +30,7 @@ export const GET = withAdmin<{ id: string }>(async (request, session, context) =
       return apiNotFound('Workshop-Vorschlag nicht gefunden');
     }
 
-    const history = (result.rows[0] as { edit_history: any }).edit_history || [];
+    const history = (result.rows[0] as { edit_history: EditHistoryEntry[] | null }).edit_history || [];
 
     logger.info('Workshop proposal history fetched', {
       proposalId,
