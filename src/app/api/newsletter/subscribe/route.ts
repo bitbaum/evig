@@ -8,6 +8,7 @@ import { logger } from '@/lib/logger'
 import { checkRateLimit, getClientIp } from '@/lib/auth/rate-limiter'
 import { sendEmail } from '@/lib/email'
 import { APP_URL } from '@/config/urls'
+import { LISTMONK_CONFIG } from '@/config/email'
 import { NewsletterSubscribeSchema, formatZodErrors } from '@/lib/schemas'
 import { NEWSLETTER_STATUS, type NewsletterStatus } from '@/config/newsletter-status'
 
@@ -122,9 +123,9 @@ export async function POST(request: NextRequest) {
 
     // Sync to Listmonk if enabled
     if (process.env.LISTMONK_ENABLED === 'true') {
-      const listmonkUrl = process.env.LISTMONK_URL || 'http://localhost:9090'
-      const listmonkUser = process.env.LISTMONK_USERNAME || 'admin'
-      const listmonkPassword = process.env.LISTMONK_PASSWORD || ''
+      const listmonkUrl = LISTMONK_CONFIG.URL
+      const listmonkUser = LISTMONK_CONFIG.USERNAME
+      const listmonkPassword = LISTMONK_CONFIG.PASSWORD
       const credentials = Buffer.from(`${listmonkUser}:${listmonkPassword}`).toString('base64')
 
       try {

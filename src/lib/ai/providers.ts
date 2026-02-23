@@ -11,6 +11,7 @@
 import { logger } from '@/lib/logger'
 import { query } from '@/lib/auth/db'
 import { TABLE_NAMES } from '@/config/database'
+import { OLLAMA_URL } from '@/config/urls'
 
 // =============================================================================
 // CONFIGURATION (SSOT - all AI provider settings in one place)
@@ -60,7 +61,7 @@ async function loadProviderRuntimeConfig(): Promise<ProviderRuntimeConfig> {
     ollamaEnabled: true,
     groqApiKey: process.env.GROQ_API_KEY || '',
     openRouterApiKey: process.env.OPENROUTER_API_KEY || '',
-    ollamaUrl: process.env.OLLAMA_URL || process.env.OLLAMA_BASE_URL || 'http://localhost:11434',
+    ollamaUrl: OLLAMA_URL,
     ollamaModel: process.env.OLLAMA_MODEL || 'llama3.2',
   }
 

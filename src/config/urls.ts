@@ -41,6 +41,23 @@ export const CMS_API_URL =
   'http://localhost:3001'
 
 /**
+ * Meilisearch URL
+ * Used for full-text search on listings
+ */
+export const MEILISEARCH_URL =
+  process.env.MEILISEARCH_HOST ||
+  'http://localhost:7700'
+
+/**
+ * Ollama URL
+ * Used for local AI inference (chat + embeddings)
+ */
+export const OLLAMA_URL =
+  process.env.OLLAMA_URL ||
+  process.env.OLLAMA_BASE_URL ||
+  'http://localhost:11434'
+
+/**
  * URL Configuration Object
  * Export all URLs in one place for easy access
  */
@@ -49,6 +66,8 @@ export const URLS = {
   MEDUSA_ADMIN: MEDUSA_ADMIN_URL,
   MEDUSA_API: MEDUSA_API_URL,
   CMS_API: CMS_API_URL,
+  MEILISEARCH: MEILISEARCH_URL,
+  OLLAMA: OLLAMA_URL,
 } as const
 
 /**

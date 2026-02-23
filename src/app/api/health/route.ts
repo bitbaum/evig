@@ -8,6 +8,7 @@
 import { NextResponse } from 'next/server'
 import { query } from '@/lib/auth/db'
 import { MEDUSA_CONFIG } from '@/config/medusa'
+import { MEILISEARCH_URL } from '@/config/urls'
 import { logger } from '@/lib/logger'
 
 interface ServiceStatus {
@@ -83,7 +84,7 @@ async function checkMeilisearch(): Promise<ServiceStatus> {
     const controller = new AbortController()
     const timeoutId = setTimeout(() => controller.abort(), 5000)
 
-    const response = await fetch(`${process.env.MEILISEARCH_HOST || 'http://localhost:7700'}/health`, {
+    const response = await fetch(`${MEILISEARCH_URL}/health`, {
       signal: controller.signal,
     })
     clearTimeout(timeoutId)

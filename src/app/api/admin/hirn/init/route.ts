@@ -10,6 +10,7 @@ import { NextRequest } from 'next/server'
 import { withAdmin } from '@/lib/api/middleware'
 import { query } from '@/lib/auth/db'
 import { logger } from '@/lib/logger'
+import { OLLAMA_URL } from '@/config/urls'
 import { apiSuccess, apiError } from '@/lib/api/helpers'
 import { TABLE_NAMES } from '@/config/database'
 
@@ -58,7 +59,7 @@ export const POST = withAdmin(async (request: NextRequest, session) => {
       VALUES ('system', 'ollama', true, false, $1::jsonb)
       ON CONFLICT DO NOTHING
     `, [JSON.stringify({
-      base_url: process.env.OLLAMA_URL || 'http://localhost:11434',
+      base_url: OLLAMA_URL,
       model: 'llama3.2',
       embedding_model: 'nomic-embed-text',
       description: 'Self-hosted, privacy-focused'

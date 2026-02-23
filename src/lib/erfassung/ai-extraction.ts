@@ -17,9 +17,9 @@ import type { VoiceProductData, AIFieldSource, AIFieldMetadata, ErfassungFormDat
 import { ERFASSUNG_PROMPTS, fillPromptTemplate } from '@/lib/ai/config/prompts'
 import { callWithFallback } from '@/lib/ai/providers'
 import { KATEGORIEN } from '@/config/erfassung/categories'
+import { OLLAMA_URL } from '@/config/urls'
 
 const OLLAMA_MODEL = process.env.OLLAMA_MODEL || 'llama3.2'
-const OLLAMA_URL = process.env.OLLAMA_URL || 'http://localhost:11434'
 
 // =============================================================================
 // VERIFICATION SOURCES

@@ -6,8 +6,9 @@
  */
 
 import { logger } from '@/lib/logger';
+import { MEILISEARCH_URL } from '@/config/urls';
 
-const MEILISEARCH_HOST = process.env.MEILISEARCH_HOST || 'http://localhost:7700';
+const MEILISEARCH_HOST = MEILISEARCH_URL;
 const MEILISEARCH_KEY = process.env.MEILISEARCH_KEY || '';
 const LISTINGS_INDEX = 'listings';
 

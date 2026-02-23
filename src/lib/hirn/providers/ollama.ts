@@ -8,6 +8,7 @@
  */
 
 import { logger } from '@/lib/logger'
+import { OLLAMA_URL } from '@/config/urls'
 import type {
   AIProvider,
   ChatCompletionOptions,
@@ -17,7 +18,7 @@ import type {
   ProviderConfig,
 } from './types'
 
-const DEFAULT_BASE_URL = 'http://localhost:11434'
+const DEFAULT_BASE_URL = OLLAMA_URL
 const DEFAULT_MODEL = 'llama3.2'
 const DEFAULT_EMBEDDING_MODEL = 'nomic-embed-text'
 const REQUEST_TIMEOUT_MS = 60_000  // Ollama can be slower (local)
