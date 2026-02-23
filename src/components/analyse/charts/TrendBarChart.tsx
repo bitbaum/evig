@@ -51,7 +51,7 @@ function CustomTooltip({ active, payload, label }: {
           <span className="font-medium">{formatCHF(current)}</span>
         </div>
         <div className="flex justify-between gap-4">
-          <span className="text-gray-400">Vorjahr</span>
+          <span className="text-gray-500">Vorjahr</span>
           <span className="font-medium">{formatCHF(previous)}</span>
         </div>
         <div className="border-t pt-1 flex justify-between gap-4">

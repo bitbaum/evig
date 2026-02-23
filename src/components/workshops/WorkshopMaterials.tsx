@@ -108,7 +108,7 @@ export default function WorkshopMaterials({ workshopSlug }: WorkshopMaterialsPro
         <FileText className="w-10 h-10 text-gray-300 mx-auto mb-2" />
         <p className="text-gray-500 text-sm">Keine Materialien verfügbar</p>
         {accessLevel === 'public' && (
-          <p className="text-gray-400 text-xs mt-1">
+          <p className="text-gray-500 text-xs mt-1">
             Melden Sie sich an, um auf weitere Materialien zuzugreifen
           </p>
         )}
@@ -167,7 +167,7 @@ export default function WorkshopMaterials({ workshopSlug }: WorkshopMaterialsPro
                 {material.description}
               </p>
             )}
-            <div className="flex items-center gap-2 mt-1 text-xs text-gray-400">
+            <div className="flex items-center gap-2 mt-1 text-xs text-gray-500">
               <span className="uppercase">{material.material_type}</span>
               {material.file_size_bytes && (
                 <>

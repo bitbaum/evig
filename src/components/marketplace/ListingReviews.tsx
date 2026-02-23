@@ -127,7 +127,7 @@ export default function ListingReviews({ listingId, sellerId }: ListingReviewsPr
                     ))}
                   </div>
                 </div>
-                <span className="text-xs text-gray-400">
+                <span className="text-xs text-gray-500">
                   {formatDateShort(review.created_at)}
                 </span>
               </div>

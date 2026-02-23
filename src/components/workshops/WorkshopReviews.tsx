@@ -86,7 +86,7 @@ export default function WorkshopReviews({ workshopSlug }: WorkshopReviewsProps) 
       <div className="text-center py-8">
         <Star className="w-12 h-12 text-gray-300 mx-auto mb-3" />
         <p className="text-gray-500">Noch keine Bewertungen</p>
-        <p className="text-gray-400 text-sm mt-1">
+        <p className="text-gray-500 text-sm mt-1">
           Bewertungen erscheinen hier, sobald Teilnehmer Feedback geben.
         </p>
       </div>
@@ -128,7 +128,7 @@ export default function WorkshopReviews({ workshopSlug }: WorkshopReviewsProps) 
                   </div>
                 </div>
                 <p className="text-gray-700 text-sm">{review.feedback}</p>
-                <p className="text-gray-400 text-xs mt-2">
+                <p className="text-gray-500 text-xs mt-2">
                   {new Date(review.instance_date).toLocaleDateString('de-CH', {
                     year: 'numeric',
                     month: 'long'

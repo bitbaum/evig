@@ -97,7 +97,7 @@ export function ListingCard({ listing, variant = 'default', className = '' }: Li
 
         {/* Location */}
         {(listing.pickup_location || listing.seller_city) && (
-          <div className="flex items-center gap-1 mt-1 text-xs text-gray-400">
+          <div className="flex items-center gap-1 mt-1 text-xs text-gray-500">
             <MapPin className="w-3 h-3 flex-shrink-0" />
             <span className="truncate">{listing.pickup_location || listing.seller_city}</span>
           </div>
@@ -105,7 +105,7 @@ export function ListingCard({ listing, variant = 'default', className = '' }: Li
 
         {/* Stats */}
         {!isCompact && (
-          <div className="flex items-center gap-3 mt-2 text-xs text-gray-400">
+          <div className="flex items-center gap-3 mt-2 text-xs text-gray-500">
             <span>{listing.view_count} Aufrufe</span>
             {listing.favorite_count > 0 && (
               <span className="inline-flex items-center gap-0.5">
