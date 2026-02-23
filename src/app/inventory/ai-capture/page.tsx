@@ -14,9 +14,9 @@ import {
   Zap,
   Leaf,
   DollarSign,
-  Star,
   RefreshCw
 } from 'lucide-react'
+import { getConditionBadge } from '@/config/erfassung/conditions'
 
 interface ProductAnalysis {
   product_name: string
@@ -163,28 +163,6 @@ export default function AICapturePage() {
     if (fileInputRef.current) fileInputRef.current.value = ''
     if (cameraInputRef.current) cameraInputRef.current.value = ''
   }, [])
-
-  const getConditionColor = (condition: string) => {
-    switch (condition) {
-      case 'new': return 'text-green-600 bg-green-100'
-      case 'like_new': return 'text-blue-600 bg-blue-100'
-      case 'good': return 'text-yellow-600 bg-yellow-100'
-      case 'fair': return 'text-orange-600 bg-orange-100'
-      case 'poor': return 'text-red-600 bg-red-100'
-      default: return 'text-gray-600 bg-gray-100'
-    }
-  }
-
-  const getConditionLabel = (condition: string) => {
-    switch (condition) {
-      case 'new': return 'Neu'
-      case 'like_new': return 'Wie neu'
-      case 'good': return 'Gut'
-      case 'fair': return 'Akzeptabel'
-      case 'poor': return 'Schlecht'
-      default: return condition
-    }
-  }
 
   const getConfidenceColor = (confidence: number) => {
     if (confidence >= 0.9) return 'text-green-600'
@@ -350,8 +328,8 @@ export default function AICapturePage() {
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                       Zustand
                     </label>
-                    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getConditionColor(analysis.condition)}`}>
-                      {getConditionLabel(analysis.condition)}
+                    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getConditionBadge(analysis.condition).color}`}>
+                      {getConditionBadge(analysis.condition).label}
                     </span>
                   </div>
                 </div>
@@ -520,10 +498,6 @@ export default function AICapturePage() {
     </div>
   )
 }
-
-
-
-
 
 
 
