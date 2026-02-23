@@ -3,96 +3,21 @@
 import { useParams } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowLeft, ShoppingCart, Check, Heart, BarChart3, Truck, Shield, RefreshCw, Leaf, Star, Loader2, Package } from "lucide-react";
-import { useState, useEffect } from "react";
+import { ArrowLeft, ShoppingCart, Check, Heart, BarChart3, Truck, Shield, RefreshCw, Leaf, Star, Loader2 } from "lucide-react";
+import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useProduct, useAddToCart, useCreateCart, getCartId, useRegions } from "@/lib/medusa/hooks";
 import { cn } from "@/lib/utils";
 import { logger } from "@/lib/logger";
-
-// Inventory product type
-interface InventoryProductDetail {
-  id: string
-  item_uuid: string
-  title: string
-  brand: string
-  model: string
-  description: string | null
-  specifications: Record<string, string>
-  price: number
-  condition: string
-  dimensions: { laenge_mm?: number; breite_mm?: number; hoehe_mm?: number } | null
-  weight_grams: number | null
-  category: string | null
-  subcategory: string | null
-  quantity: number
-  is_available: boolean
-  medusa_product_id: string | null
-  medusa_variant_id: string | null
-  images: Array<{ id: string; url: string; is_primary: boolean }>
-  customer_profiles: Array<{ slug: string; name_de: string; color: string; description_de: string }>
-}
-
-// Check if ID looks like a UUID
-function isUUID(id: string): boolean {
-  const uuidPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
-  return uuidPattern.test(id)
-}
-
-// Custom hook for inventory products
-function useInventoryProduct(id: string) {
-  const [data, setData] = useState<InventoryProductDetail | null>(null)
-  const [isLoading, setIsLoading] = useState(true)
-  const [error, setError] = useState<Error | null>(null)
-
-  useEffect(() => {
-    async function fetchProduct() {
-      try {
-        setIsLoading(true)
-        const response = await fetch(`/api/shop/inventory/${id}`)
-        if (!response.ok) {
-          throw new Error('Product not found')
-        }
-        const result = await response.json()
-        // API returns { success: true, data: { product: {...} } }
-        if (result.success && result.data?.product) {
-          setData(result.data.product)
-        } else {
-          throw new Error(result.error || 'Product not found')
-        }
-        setError(null)
-      } catch (err) {
-        setError(err instanceof Error ? err : new Error('Unknown error'))
-      } finally {
-        setIsLoading(false)
-      }
-    }
-
-    if (id && isUUID(id)) {
-      fetchProduct()
-    }
-  }, [id])
-
-  return { data, isLoading: isUUID(id) ? isLoading : false, error }
-}
-
-// Condition labels
-const CONDITION_LABELS: Record<string, string> = {
-  new: 'Neu',
-  like_new: 'Wie neu',
-  good: 'Gut',
-  fair: 'Akzeptabel',
-  poor: 'Gebraucht',
-}
+import { getConditionLabel } from "@/config/erfassung/conditions";
+import { isUUID, useInventoryProduct } from "@/lib/shop/useInventoryProduct";
 
 export default function ProductPage() {
   const params = useParams();
   const handle = params.handle as string;
 
-  // Check if this is an inventory product (UUID) or Medusa product (handle)
   const isInventoryProduct = isUUID(handle)
 
-  // Fetch from appropriate source
   const { data: medusaProduct, isLoading: medusaLoading, error: medusaError } = useProduct(isInventoryProduct ? '' : handle);
   const { data: inventoryProduct, isLoading: inventoryLoading, error: inventoryError } = useInventoryProduct(handle)
 
@@ -107,19 +32,14 @@ export default function ProductPage() {
   const [addedToCart, setAddedToCart] = useState(false);
   const [selectedImage, setSelectedImage] = useState(0);
 
-  // Get default region for cart creation (prefer CHF for Swiss shop)
   const defaultRegion = regions?.find(r => r.currency_code === 'chf') || regions?.[0];
-
-  // Determine if this inventory product can be added to Medusa cart
   const canAddToMedusaCart = isInventoryProduct && inventoryProduct?.medusa_variant_id;
 
   const handleAddToCart = async () => {
-    // Determine which variant ID to use
     let variantId: string | undefined;
 
     if (isInventoryProduct) {
       if (!inventoryProduct?.medusa_variant_id) {
-        // No Medusa variant — show contact info as fallback
         setAddedToCart(true);
         setTimeout(() => setAddedToCart(false), 3000);
         return;
@@ -151,7 +71,6 @@ export default function ProductPage() {
     }
   };
 
-  // Skeleton loading state
   if (isLoading) {
     return (
       <div className="min-h-screen bg-gray-50">
@@ -173,7 +92,6 @@ export default function ProductPage() {
     );
   }
 
-  // Error or product not found
   if (error || !product) {
     return (
       <div className="min-h-screen bg-gray-50">
@@ -205,7 +123,7 @@ export default function ProductPage() {
     );
   }
 
-  // Handle both inventory and Medusa products
+  // Normalize both product sources to common variables
   let formattedPrice: string
   let isAvailable: boolean
   let category: string
@@ -218,7 +136,6 @@ export default function ProductPage() {
   let condition: string | null = null
 
   if (isInventoryProduct && inventoryProduct) {
-    // Inventory product
     formattedPrice = `CHF ${Number(inventoryProduct.price).toFixed(2)}`
     isAvailable = inventoryProduct.is_available
     category = inventoryProduct.category || 'Produkt'
@@ -232,7 +149,6 @@ export default function ProductPage() {
       ? inventoryProduct.images
       : [{ id: 'placeholder', url: '' }]
   } else if (medusaProduct) {
-    // Medusa product
     const prices = medusaProduct.variants?.[0]?.prices;
     const chfPrice = prices?.find((p) => p.currency_code === "chf");
     const eurPrice = prices?.find((p) => p.currency_code === "eur");
@@ -257,7 +173,6 @@ export default function ProductPage() {
       index === self.findIndex((t) => t.url === img.url)
     );
   } else {
-    // Fallback
     formattedPrice = 'Preis auf Anfrage'
     isAvailable = false
     category = 'Produkt'
@@ -270,7 +185,6 @@ export default function ProductPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
-        {/* Back link */}
         <Link
           href="/shop/medusa"
           className="inline-flex items-center text-sm text-gray-600 hover:text-emerald-600 mb-6 transition-colors"
@@ -282,8 +196,7 @@ export default function ProductPage() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-12">
           {/* Product Images */}
           <div className="relative space-y-4">
-            {/* Main Image */}
-            <motion.div 
+            <motion.div
               key={selectedImage}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -307,7 +220,6 @@ export default function ProductPage() {
               )}
             </motion.div>
 
-            {/* Image Thumbnails */}
             {allImages.length > 1 && (
               <div className="flex gap-2 overflow-x-auto pb-2">
                 {allImages.map((img, index) => (
@@ -316,8 +228,8 @@ export default function ProductPage() {
                     onClick={() => setSelectedImage(index)}
                     className={cn(
                       "relative w-16 h-16 sm:w-20 sm:h-20 rounded-lg overflow-hidden border-2 transition-all flex-shrink-0",
-                      selectedImage === index 
-                        ? "border-emerald-600 ring-2 ring-emerald-200" 
+                      selectedImage === index
+                        ? "border-emerald-600 ring-2 ring-emerald-200"
                         : "border-gray-200 hover:border-gray-300"
                     )}
                   >
@@ -333,14 +245,12 @@ export default function ProductPage() {
               </div>
             )}
 
-            {/* Category badge */}
             <div className="absolute top-4 left-4">
               <span className="inline-flex items-center px-3 py-1 text-xs font-medium bg-white/95 text-gray-700 rounded-full shadow-sm">
                 {category}
               </span>
             </div>
 
-            {/* Quick actions on image */}
             <div className="absolute top-4 right-4 flex flex-col gap-2">
               <button
                 className="p-2.5 bg-white/95 text-gray-600 hover:text-red-500 hover:bg-red-50 rounded-full shadow-sm transition-colors"
@@ -359,21 +269,18 @@ export default function ProductPage() {
 
           {/* Product Info */}
           <div className="flex flex-col">
-            {/* Title */}
             <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-3">
               {productTitle}
             </h1>
 
-            {/* Condition badge for inventory products */}
             {condition && (
               <div className="mb-3">
                 <span className="inline-flex items-center px-3 py-1 text-sm font-medium bg-gray-100 text-gray-700 rounded-full">
-                  Zustand: {CONDITION_LABELS[condition] || condition}
+                  Zustand: {getConditionLabel(condition)}
                 </span>
               </div>
             )}
 
-            {/* Customer Profiles for inventory products */}
             {customerProfiles.length > 0 && (
               <div className="mb-4">
                 <p className="text-sm text-gray-600 mb-2">Empfohlen für:</p>
@@ -392,7 +299,6 @@ export default function ProductPage() {
               </div>
             )}
 
-            {/* Rating placeholder */}
             <div className="flex items-center gap-2 mb-4">
               <div className="flex">
                 {[1, 2, 3, 4, 5].map((star) => (
@@ -408,7 +314,6 @@ export default function ProductPage() {
               <span className="text-sm text-gray-500">(4.0)</span>
             </div>
 
-            {/* Availability badge */}
             <div className="mb-4">
               <span
                 className={cn(
@@ -422,19 +327,16 @@ export default function ProductPage() {
               </span>
             </div>
 
-            {/* Price */}
             <p className="text-3xl sm:text-4xl font-bold text-gray-900 mb-6">
               {formattedPrice}
             </p>
 
-            {/* Description */}
             {productDescription && (
               <div className="mb-6">
                 <p className="text-gray-600 leading-relaxed">{productDescription}</p>
               </div>
             )}
 
-            {/* Specifications - Inventory products */}
             {specs && Object.keys(specs).length > 0 && (
               <div className="mb-6">
                 <h3 className="text-sm font-medium text-gray-700 mb-3">Technische Daten</h3>
@@ -449,7 +351,6 @@ export default function ProductPage() {
               </div>
             )}
 
-            {/* Product Options (Size, Color, etc.) - Medusa products only */}
             {hasOptions && medusaProduct?.options && (
               <div className="space-y-4 mb-6">
                 {medusaProduct.options.map((option) => (
@@ -472,7 +373,6 @@ export default function ProductPage() {
               </div>
             )}
 
-            {/* Quantity Selector */}
             <div className="mb-6">
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Anzahl
@@ -496,7 +396,6 @@ export default function ProductPage() {
               </div>
             </div>
 
-            {/* Add to Cart Button */}
             <motion.button
               onClick={handleAddToCart}
               disabled={addToCart.isPending || addedToCart || !isAvailable}
@@ -504,7 +403,7 @@ export default function ProductPage() {
               className={cn(
                 "w-full rounded-xl px-6 py-4 text-white font-semibold text-lg transition-all flex items-center justify-center gap-2 shadow-lg",
                 isAvailable
-                  ? addedToCart 
+                  ? addedToCart
                     ? "bg-emerald-700"
                     : "bg-emerald-600 hover:bg-emerald-700 hover:shadow-xl"
                   : "bg-gray-400 cursor-not-allowed shadow-none"
@@ -548,7 +447,6 @@ export default function ProductPage() {
               </AnimatePresence>
             </motion.button>
 
-            {/* View Cart Link / Contact Info */}
             <AnimatePresence>
               {addedToCart && (
                 <motion.div
@@ -600,7 +498,6 @@ export default function ProductPage() {
               </div>
             </div>
 
-            {/* Sustainability notice */}
             <div className="mt-6 p-4 bg-emerald-50 rounded-xl border border-emerald-200">
               <div className="flex items-start gap-3">
                 <Leaf className="w-5 h-5 text-emerald-600 mt-0.5 flex-shrink-0" />

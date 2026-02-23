@@ -1,7 +1,6 @@
 'use client'
 
 import { useState } from 'react'
-import { Metadata } from 'next'
 import {
   Computer,
   Cpu,
@@ -11,86 +10,25 @@ import {
   Globe,
   Recycle,
   CheckCircle2,
-  AlertCircle,
   TrendingUp,
   MapPin,
-  Calendar,
-  DollarSign,
   Leaf,
   Star,
   ArrowRight,
   Search,
   ShoppingCart,
   Award,
-  Shield,
   Sparkles
 } from 'lucide-react'
 import Link from 'next/link'
 import { PageHero } from '@/components/layout/PageHero'
-
-// Types for build result
-interface Component {
-  id: number
-  name: string
-  condition: 'used' | 'refurbished' | 'new'
-  location: string
-  price: number
-  performance: number
-  sustainability: number
-  inStock: number
-}
-
-interface BuildResult {
-  cpu: Component
-  gpu: Component
-  ram: Component
-  storage: Component
-  totalPrice: number
-  sustainabilityScore: number
-  performance: number
-  usedPartsPercent: number
-}
-
-// Mock inventory data to demonstrate the concept
-const mockInventory = {
-  cpus: [
-    { id: 1, name: 'Intel Core i7-10700K', condition: 'used' as const, location: 'Zürich, CH', price: 180, performance: 85, sustainability: 95, inStock: 3 },
-    { id: 2, name: 'AMD Ryzen 7 3700X', condition: 'refurbished' as const, location: 'Berlin, DE', price: 165, performance: 82, sustainability: 92, inStock: 2 },
-    { id: 3, name: 'Intel Core i5-11400F', condition: 'used' as const, location: 'London, UK', price: 120, performance: 75, sustainability: 88, inStock: 5 },
-    { id: 4, name: 'AMD Ryzen 5 5600X', condition: 'new' as const, location: 'Lieferant', price: 280, performance: 88, sustainability: 45, inStock: 99 }
-  ],
-  gpus: [
-    { id: 1, name: 'NVIDIA RTX 3070', condition: 'used' as const, location: 'Amsterdam, NL', price: 320, performance: 90, sustainability: 94, inStock: 1 },
-    { id: 2, name: 'AMD RX 6600 XT', condition: 'refurbished' as const, location: 'Paris, FR', price: 180, performance: 75, sustainability: 91, inStock: 2 },
-    { id: 3, name: 'NVIDIA GTX 1660 Super', condition: 'used' as const, location: 'Zürich, CH', price: 140, performance: 65, sustainability: 89, inStock: 4 }
-  ],
-  ram: [
-    { id: 1, name: '32GB DDR4-3200 (2x16GB)', condition: 'used' as const, location: 'Wien, AT', price: 85, performance: 85, sustainability: 93, inStock: 8 },
-    { id: 2, name: '16GB DDR4-3200 (2x8GB)', condition: 'refurbished' as const, location: 'München, DE', price: 45, performance: 80, sustainability: 90, inStock: 12 },
-    { id: 3, name: '64GB DDR4-3200 (4x16GB)', condition: 'used' as const, location: 'Stockholm, SE', price: 180, performance: 95, sustainability: 95, inStock: 2 }
-  ],
-  storage: [
-    { id: 1, name: '1TB NVMe SSD Samsung 980', condition: 'used' as const, location: 'Barcelona, ES', price: 65, performance: 88, sustainability: 87, inStock: 6 },
-    { id: 2, name: '2TB SATA SSD Crucial MX500', condition: 'refurbished' as const, location: 'Rom, IT', price: 120, performance: 82, sustainability: 89, inStock: 3 },
-    { id: 3, name: '512GB NVMe SSD WD Black', condition: 'new' as const, location: 'Lieferant', price: 85, performance: 90, sustainability: 40, inStock: 99 }
-  ]
-}
-
-const useCategories = [
-  { id: 'office', name: 'Büro & Business', description: 'E-Mail, Dokumente, Web-Browsing, Videoanrufe' },
-  { id: 'creative', name: 'Kreativarbeit', description: 'Foto-/Videobearbeitung, Design, Content-Erstellung' },
-  { id: 'gaming', name: 'Gaming', description: 'Moderne Spiele, Streaming, Hochleistungs-Computing' },
-  { id: 'development', name: 'Softwareentwicklung', description: 'Programmierung, Tests, mehrere VMs, Kompilierung' },
-  { id: 'server', name: 'Server/NAS', description: 'Dateiserver, Medienserver, Heimautomatisierung' },
-  { id: 'ai', name: 'KI/Maschinelles Lernen', description: 'Modelltraining, Datenverarbeitung, CUDA-Workloads' }
-]
-
-const performanceNeeds = [
-  { id: 'basic', name: 'Grundlegend', description: 'Leichte Aufgaben, ausreichende Leistung' },
-  { id: 'moderate', name: 'Moderat', description: 'Ausgewogene Leistung für die meisten Aufgaben' },
-  { id: 'high', name: 'Hoch', description: 'Starke Leistung für anspruchsvolle Aufgaben' },
-  { id: 'extreme', name: 'Extrem', description: 'Spitzenleistung, keine Kompromisse' }
-]
+import type { BuildResult } from '@/config/build-computer'
+import {
+  USE_CASE_OPTIONS,
+  PERFORMANCE_OPTIONS,
+  BUDGET_OPTIONS,
+  getMockRecommendation,
+} from '@/config/build-computer'
 
 export default function BuildYourComputerPage() {
   const [step, setStep] = useState(1)
@@ -106,50 +44,8 @@ export default function BuildYourComputerPage() {
 
   const handleAnalyze = async () => {
     setIsAnalyzing(true)
-    
-    // Simulate AI analysis
     await new Promise(resolve => setTimeout(resolve, 3000))
-    
-    // Mock AI recommendation based on user input
-    const getRecommendation = (): BuildResult => {
-      switch (formData.useCase) {
-        case 'gaming':
-          return {
-            cpu: mockInventory.cpus[0], // i7-10700K
-            gpu: mockInventory.gpus[0], // RTX 3070
-            ram: mockInventory.ram[1], // 16GB
-            storage: mockInventory.storage[0], // 1TB NVMe
-            totalPrice: 705,
-            sustainabilityScore: 91,
-            performance: 85,
-            usedPartsPercent: 100
-          }
-        case 'creative':
-          return {
-            cpu: mockInventory.cpus[1], // Ryzen 7 3700X
-            gpu: mockInventory.gpus[1], // RX 6600 XT
-            ram: mockInventory.ram[0], // 32GB
-            storage: mockInventory.storage[1], // 2TB SSD
-            totalPrice: 550,
-            sustainabilityScore: 93,
-            performance: 82,
-            usedPartsPercent: 100
-          }
-        default:
-          return {
-            cpu: mockInventory.cpus[2], // i5-11400F
-            gpu: mockInventory.gpus[2], // GTX 1660 Super
-            ram: mockInventory.ram[1], // 16GB
-            storage: mockInventory.storage[0], // 1TB NVMe
-            totalPrice: 370,
-            sustainabilityScore: 89,
-            performance: 72,
-            usedPartsPercent: 100
-          }
-      }
-    }
-
-    setBuildResult(getRecommendation())
+    setBuildResult(getMockRecommendation(formData.useCase))
     setIsAnalyzing(false)
     setStep(3)
   }
@@ -233,7 +129,7 @@ export default function BuildYourComputerPage() {
                   <h3 className="text-2xl font-bold mb-6">Wofür werden Sie Ihren Computer verwenden?</h3>
                   
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {useCategories.map((category) => (
+                    {USE_CASE_OPTIONS.map((category) => (
                       <div 
                         key={category.id}
                         onClick={() => setFormData({...formData, useCase: category.id})}
@@ -252,7 +148,7 @@ export default function BuildYourComputerPage() {
                   <div>
                     <h4 className="font-semibold mb-4">Leistungsanforderungen</h4>
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                      {performanceNeeds.map((perf) => (
+                      {PERFORMANCE_OPTIONS.map((perf) => (
                         <button
                           key={perf.id}
                           onClick={() => setFormData({...formData, performance: perf.id})}
@@ -277,10 +173,9 @@ export default function BuildYourComputerPage() {
                       className="w-full p-3 border border-gray-300 rounded-lg"
                     >
                       <option value="">Budgetbereich auswählen</option>
-                      <option value="300-500">CHF 300-500</option>
-                      <option value="500-800">CHF 500-800</option>
-                      <option value="800-1200">CHF 800-1200</option>
-                      <option value="1200+">CHF 1200+</option>
+                      {BUDGET_OPTIONS.map(opt => (
+                        <option key={opt.value} value={opt.value}>{opt.label}</option>
+                      ))}
                     </select>
                   </div>
 
@@ -314,8 +209,8 @@ export default function BuildYourComputerPage() {
                       <div className="bg-green-50 p-6 rounded-lg">
                         <h4 className="font-semibold mb-4">Zusammenfassung Ihrer Anforderungen:</h4>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-left">
-                          <div><strong>Anwendungsfall:</strong> {useCategories.find(c => c.id === formData.useCase)?.name}</div>
-                          <div><strong>Leistung:</strong> {performanceNeeds.find(p => p.id === formData.performance)?.name}</div>
+                          <div><strong>Anwendungsfall:</strong> {USE_CASE_OPTIONS.find(c => c.id === formData.useCase)?.name}</div>
+                          <div><strong>Leistung:</strong> {PERFORMANCE_OPTIONS.find(p => p.id === formData.performance)?.name}</div>
                           <div><strong>Budget:</strong> {formData.budget}</div>
                           <div><strong>Nachhaltigkeit:</strong> Hohe Priorität</div>
                         </div>
