@@ -2,20 +2,9 @@
 
 import {
   Wrench,
-  HardDrive,
-  Server,
-  Shield,
   ArrowRight,
   CheckCircle2,
   Zap,
-  Clock,
-  ShieldCheck,
-  Code,
-  Globe,
-  Brain,
-  Cloud,
-  Cpu,
-  Settings,
   Calendar,
   Loader2
 } from 'lucide-react'
@@ -24,232 +13,12 @@ import { useState } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { FilterableSection } from '@/components/ui/FilterableSection'
-import { FilterConfig } from '@/hooks/useFiltering'
 import Heading from '@/components/ui/Heading'
 import { PageHero } from '@/components/layout/PageHero'
+import { services, serviceFilters, type Service } from './data'
 
-// Service interface
-interface Service {
-  title: string
-  slug?: string
-  description: string
-  icon: React.ComponentType<React.SVGProps<SVGSVGElement>>
-  category: string
-  features: string[]
-  pricing: string
-  highlight: string
-  href: string
-  available: boolean
-  badge?: string
-  [key: string]: unknown  // Allow index access for FilterableItem compatibility
-}
-
-const services: Service[] = [
-  // Hardware Services
-  {
-    slug: 'computer-repair',
-    title: 'Computerreparatur & Aufrüstungen',
-    description: 'Expertenreparaturen für alle Arten von Computern und Komponenten. Wir spezialisieren uns darauf zu reparieren, was andere nicht können, einschliesslich Motherboard-Reparaturen und Bauteil-Level-Fixes.',
-    icon: Wrench,
-    category: 'Hardware-Dienstleistungen',
-    features: [
-      'Bauteil-Level-Reparaturen',
-      'Hardware-Aufrüstungen',
-      'Diagnosedienste',
-      'Professionelle Bewertung'
-    ],
-    pricing: 'CHF 70/hour + parts',
-    highlight: 'Professional assessment required',
-    href: '/services/computer-repair-upgrades',
-    available: true
-  },
-  {
-    slug: 'data-recovery',
-    title: 'Datenrettung & Transfer',
-    description: 'Sichere und zuverlässige Datentransferdienste für alle Arten von Speichermedien. Wir können Daten von beschädigten Geräten wiederherstellen und auf moderne Speicherlösungen übertragen.',
-    icon: HardDrive,
-    category: 'Hardware-Dienstleistungen',
-    features: [
-      'Sicherer Datentransfer',
-      'Datenwiederherstellung von beschädigten Geräten',
-      'Unterstützung für Legacy-Medien (Disketten, ZIP-Laufwerke, MO-Laufwerke, SCSI/IDE-Laufwerke)',
-      'Komplette Datensicherheit'
-    ],
-    pricing: 'CHF 70/hour',
-    highlight: 'Evaluation required before recovery',
-    href: '/services/data-recovery-transfer',
-    available: true
-  },
-  {
-    title: 'Hardware-Recycling',
-    description: 'Verantwortungsvolles Recycling und Aufbereitung von IT-Geräten. Wir geben Ihren alten Geräten ein neues Leben und sorgen für sichere Datenlöschung.',
-    icon: Shield,
-    category: 'Hardware-Dienstleistungen',
-    features: [
-      'Sichere Datenlöschung',
-      'Geräteaufbereitung',
-      'Komponenten-Recycling',
-      'Kostenloser Abholservice'
-    ],
-    pricing: 'Free for most items',
-    highlight: 'Free pickup service available',
-    href: '/services/hardware-recycling',
-    available: true
-  },
-
-  // Software Solutions
-  {
-    title: 'Webdesign & Entwicklung',
-    description: 'Professionelle Webdesign- und Entwicklungsdienstleistungen mit modernen Open-Source-Technologien. Schnelle, responsive Websites mit Next.js, Headless CMS und nachhaltigen Praktiken.',
-    icon: Globe,
-    category: 'Software-Lösungen',
-    features: [
-      'Moderne Frameworks (Next.js, React)',
-      'Headless CMS (Strapi, Payload, Tina)',
-      'Responsive Design & Tailwind CSS',
-      'E-Commerce-Lösungen (Medusa.js, Shopware 6)',
-      'SEO-Optimierung & Performance'
-    ],
-    pricing: 'CHF 70/hour',
-    highlight: 'Free initial consultation',
-    href: '/services/web-design-development',
-    available: true
-  },
-  {
-    slug: 'linux-installation',
-    title: 'Linux & Open Source',
-    description: 'Professionelle Linux-Installation, -Konfiguration und -Support-Dienstleistungen. Wir helfen Ihnen, das Beste aus Ihrem Linux-System mit fachkundiger Anleitung und Wartung herauszuholen.',
-    icon: Server,
-    category: 'Software-Lösungen',
-    features: [
-      'Linux-Installation & Konfiguration',
-      'Systemoptimierung & Wartung',
-      'Sicherheitshärtung',
-      'Performance-Tuning'
-    ],
-    pricing: 'CHF 70/hour',
-    highlight: 'Professional assessment required',
-    href: '/services/linux-open-source',
-    available: true
-  },
-  {
-    title: 'Open Source Solutions',
-    description: 'Fachkundige Implementierung und Support für Open-Source-Software. Wir helfen Ihnen beim Übergang zu und der Wartung von Open-Source-Lösungen für Ihre Geschäftsanforderungen.',
-    icon: Code,
-    category: 'Software-Lösungen',
-    features: [
-      'Open-Source-Beratung',
-      'Massgeschneiderte Entwicklung',
-      'Community-Integration',
-      'Sicherheit & Compliance'
-    ],
-    pricing: 'CHF 70/hour',
-    highlight: 'Free initial consultation',
-    href: '/services/open-source-solutions',
-    available: true
-  },
-
-  // Coming Soon
-  {
-    title: 'Build Your Computer',
-    description: 'Erhalten Sie einen massgeschneiderten Computer für Ihre spezifischen Bedürfnisse, unterstützt durch KI-Analyse unseres umfangreichen Inventars. Wir beziehen Teile global und bieten professionelle Montage.',
-    icon: Cpu,
-    category: 'Bald verfügbar',
-    features: [
-      'KI-gestützte Build-Empfehlungen',
-      'Globales Teile-Beschaffungsnetzwerk',
-      'Professionelle Montage und Tests',
-      'Qualitätsgarantie und Gewährleistung'
-    ],
-    pricing: '',
-    highlight: 'Bald verfügbar',
-    href: '/services/build-your-computer',
-    available: false,
-    badge: 'Soon'
-  },
-  {
-    title: 'Enterprise AI Solutions',
-    description: 'Private, vor-Ort KI-Systeme für professionelle Unternehmen. GPT-4-Level-Performance mit vollständigem Datenschutz und DSGVO-Compliance.',
-    icon: Brain,
-    category: 'Bald verfügbar',
-    features: [
-      'Selbstgehostete Llama 3 70B-Bereitstellung',
-      'RAG-unterstützte Dokumentensuche',
-      'Vollständiger Datenschutz & DSGVO-Compliance',
-      'Massgeschneiderte Schulung auf Ihren Dokumenten'
-    ],
-    pricing: '',
-    highlight: 'Bald verfügbar',
-    href: '/services/enterprise-ai-solutions',
-    available: false,
-    badge: 'Soon'
-  },
-  {
-    title: 'Cloud Infrastructure',
-    description: 'Nachhaltige Cloud-Hosting- und Infrastrukturlösungen. Wir bieten skalierbare, umweltfreundliche Hosting-Lösungen mit erneuerbarer Energie und Open-Source-Technologien.',
-    icon: Cloud,
-    category: 'Bald verfügbar',
-    features: [
-      'Hosting mit erneuerbarer Energie',
-      'Open-Source-Infrastruktur',
-      'Skalierbare Lösungen',
-      'Professionelle Überwachung'
-    ],
-    pricing: '',
-    highlight: 'Bald verfügbar',
-    href: '/services/cloud-infrastructure',
-    available: false,
-    badge: 'Soon'
-  },
-  {
-    title: 'Server Management',
-    description: 'Professionelle Server-Setup- und Wartungsdienste. Wir verwalten Ihre Server, damit Sie sich auf Ihr Geschäft konzentrieren können.',
-    icon: Server,
-    category: 'Bald verfügbar',
-    features: [
-      'Server-Setup & Konfiguration',
-      '24/7-Überwachung',
-      'Sicherheitsverwaltung',
-      'Performance-Optimierung'
-    ],
-    pricing: '',
-    highlight: 'Bald verfügbar',
-    href: '/services/server-management',
-    available: false,
-    badge: 'Soon'
-  },
-  {
-    title: 'IoT Solutions',
-    description: 'Internet-of-Things-Lösungen mit Open-Source-Hardware. Erstellen Sie vernetzte Geräte, die Ihre Privatsphäre und Dateneigentum respektieren.',
-    icon: Settings,
-    category: 'Bald verfügbar',
-    features: [
-      'Open-Source-Hardware',
-      'Datenschutz-fokussiertes Design',
-      'Massgeschneiderte IoT-Entwicklung',
-      'Dateneigentum garantiert'
-    ],
-    pricing: '',
-    highlight: 'Bald verfügbar',
-    href: '/services/iot-solutions',
-    available: false,
-    badge: 'Soon'
-  }
-]
-
-// Filter configuration
-const serviceFilters: FilterConfig[] = [
-  {
-    key: 'category',
-    label: 'Nach Kategorie filtern',
-    options: ['Hardware-Dienstleistungen', 'Software-Lösungen', 'Bald verfügbar'],
-    color: 'green'
-  }
-]
-
-// Service card component
 const ServiceCard: React.FC<{ service: Service }> = ({ service }) => {
-  const { data: session, status } = useSession()
+  const { data: session } = useSession()
   const router = useRouter()
   const [bookingStatus, setBookingStatus] = useState<'idle' | 'booking' | 'booked' | 'error'>('idle')
   const [errorMessage, setErrorMessage] = useState<string>('')
@@ -261,7 +30,6 @@ const ServiceCard: React.FC<{ service: Service }> = ({ service }) => {
     }
 
     if (!service.slug) {
-      // If no slug, redirect to details page
       router.push(service.href)
       return
     }
@@ -272,9 +40,7 @@ const ServiceCard: React.FC<{ service: Service }> = ({ service }) => {
     try {
       const response = await fetch('/api/appointments', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           serviceSlug: service.slug,
           description: `Termin für ${service.title}`,
@@ -284,7 +50,6 @@ const ServiceCard: React.FC<{ service: Service }> = ({ service }) => {
 
       if (response.ok) {
         setBookingStatus('booked')
-        // Redirect to dashboard to see the appointment
         setTimeout(() => {
           router.push('/dashboard/appointments')
         }, 1500)
@@ -293,7 +58,7 @@ const ServiceCard: React.FC<{ service: Service }> = ({ service }) => {
         setBookingStatus('error')
         setErrorMessage(error || 'Terminbuchung fehlgeschlagen')
       }
-    } catch (error) {
+    } catch {
       setBookingStatus('error')
       setErrorMessage('Netzwerkfehler. Bitte versuchen Sie es erneut.')
     }
@@ -339,7 +104,6 @@ const ServiceCard: React.FC<{ service: Service }> = ({ service }) => {
           ))}
         </div>
         <div className="mt-auto pt-6 border-t border-gray-200">
-          {/* Pricing */}
           <div className="flex items-center justify-between mb-4">
             {service.pricing ? (
               <span className={`text-lg font-semibold ${
@@ -348,14 +112,14 @@ const ServiceCard: React.FC<{ service: Service }> = ({ service }) => {
                 {service.pricing}
               </span>
             ) : (
-              <span className="text-gray-400 text-sm">Pricing TBD</span>
+              <span className="text-gray-500 text-sm">Pricing TBD</span>
             )}
             <Link
               href={service.href}
               className={`inline-flex items-center font-medium transition-colors duration-300 group text-sm ${
                 service.available
-                  ? 'text-gray-500 hover:text-gray-700'
-                  : 'text-gray-400 hover:text-gray-500'
+                  ? 'text-gray-600 hover:text-gray-700'
+                  : 'text-gray-500 hover:text-gray-600'
               }`}
             >
               <span>Details</span>
@@ -363,7 +127,6 @@ const ServiceCard: React.FC<{ service: Service }> = ({ service }) => {
             </Link>
           </div>
 
-          {/* Action Buttons */}
           {service.available && (
             <div className="flex gap-2">
               {bookingStatus === 'booked' ? (
@@ -372,7 +135,7 @@ const ServiceCard: React.FC<{ service: Service }> = ({ service }) => {
                   Termin angefragt!
                 </div>
               ) : bookingStatus === 'booking' ? (
-                <div className="w-full inline-flex items-center justify-center text-gray-500 font-semibold bg-gray-50 px-4 py-2 rounded-lg">
+                <div className="w-full inline-flex items-center justify-center text-gray-600 font-semibold bg-gray-50 px-4 py-2 rounded-lg">
                   <Loader2 className="w-4 h-4 mr-2 animate-spin" />
                   Wird gebucht...
                 </div>
@@ -385,16 +148,14 @@ const ServiceCard: React.FC<{ service: Service }> = ({ service }) => {
                   Termin buchen
                 </button>
               ) : service.slug ? (
-                <>
-                  <button
-                    onClick={handleBooking}
-                    className="flex-1 inline-flex items-center justify-center text-white font-semibold bg-green-600 hover:bg-green-700 px-4 py-2 rounded-lg transition-colors duration-300 disabled:opacity-50"
-                    disabled={bookingStatus !== 'idle' && bookingStatus !== 'error'}
-                  >
-                    <Calendar className="w-4 h-4 mr-2" />
-                    Termin buchen
-                  </button>
-                </>
+                <button
+                  onClick={handleBooking}
+                  className="flex-1 inline-flex items-center justify-center text-white font-semibold bg-green-600 hover:bg-green-700 px-4 py-2 rounded-lg transition-colors duration-300 disabled:opacity-50"
+                  disabled={bookingStatus !== 'idle' && bookingStatus !== 'error'}
+                >
+                  <Calendar className="w-4 h-4 mr-2" />
+                  Termin buchen
+                </button>
               ) : (
                 <Link
                   href={service.href}
@@ -407,7 +168,6 @@ const ServiceCard: React.FC<{ service: Service }> = ({ service }) => {
             </div>
           )}
 
-          {/* Error Message */}
           {bookingStatus === 'error' && errorMessage && (
             <div className="mt-2 text-xs text-red-600 bg-red-50 p-2 rounded">
               {errorMessage}
@@ -453,7 +213,6 @@ export default function ServicesPage() {
         }}
       />
       <main className="min-h-screen bg-gray-50">
-        {/* Hero Section */}
         <PageHero
           theme="services"
           icon={Wrench}
@@ -461,7 +220,6 @@ export default function ServicesPage() {
           subtitle="Nachhaltige Lösungen für Ihre Technologiebedürfnisse. Wir kombinieren technische Expertise mit Umweltverantwortung, um umfassende IT-Lösungen zu bieten, die Ihnen Geld sparen und Elektroschrott reduzieren."
         />
 
-        {/* Services Section with Reusable Filtering */}
         <FilterableSection
           title="Unsere Dienstleistungen"
           description="Die Reparaturdauer variiert je nach Teileverfügbarkeit und dauert in der Regel einige Wochen."
@@ -473,7 +231,6 @@ export default function ServicesPage() {
           showResultsCount={true}
         />
 
-        {/* CTA Section */}
         <section className="py-12 sm:py-16 md:py-20 bg-white border-t border-gray-200">
           <div className="container mx-auto px-4 sm:px-6 text-center">
             <Heading level={2} className="mb-4 sm:mb-6 text-gray-900">Bereit, Ihre Technologie zu erneuern?</Heading>
@@ -496,24 +253,6 @@ export default function ServicesPage() {
             </div>
           </div>
         </section>
-
-        {/* Add custom CSS for animations */}
-        <style jsx>{`
-          @keyframes fadeIn {
-            from {
-              opacity: 0;
-              transform: translateY(20px);
-            }
-            to {
-              opacity: 1;
-              transform: translateY(0);
-            }
-          }
-          
-          .animate-fadeIn {
-            animation: fadeIn 0.6s ease-out forwards;
-          }
-        `}</style>
       </main>
     </>
   )

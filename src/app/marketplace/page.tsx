@@ -1,9 +1,7 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
 import { useSession } from 'next-auth/react'
 import Link from 'next/link'
-import { useDebounce } from '@/hooks/useDebounce'
 import {
   Search,
   Package,
@@ -23,7 +21,6 @@ import {
   PAYMENT_MODES,
   PAYMENT_MODE_LABELS,
   SORT_OPTIONS,
-  MARKETPLACE_LIMITS,
 } from '@/config/marketplace'
 import { ZUSTAND_OPTIONS } from '@/config/erfassung/conditions'
 import { MARKETPLACE_CONTENT } from '@/config/page-content'
@@ -32,166 +29,29 @@ import { EmptyState } from '@/components/common/EmptyState'
 import { LoadingSkeleton } from '@/components/common/LoadingState'
 import { ErrorAlert } from '@/components/common/ErrorAlert'
 import { PageHero } from '@/components/layout/PageHero'
-
-interface ListingItem {
-  id: string
-  title: string
-  price_chf: number
-  category: string
-  condition: string
-  brand: string | null
-  model: string | null
-  delivery_options: string
-  payment_mode: string
-  is_revampit: boolean
-  pickup_location: string | null
-  view_count: number
-  favorite_count: number
-  created_at: string
-  seller_name: string
-  seller_display_name: string | null
-  seller_rating: number | null
-  seller_city: string | null
-  thumbnail: string | null
-}
-
-interface Pagination {
-  total: number
-  limit: number
-  offset: number
-}
+import { useMarketplaceListings } from '@/hooks/useMarketplaceListings'
+import { useState } from 'react'
 
 export default function MarketplacePage() {
   const { data: session } = useSession()
-  const [listings, setListings] = useState<ListingItem[]>([])
-  const [pagination, setPagination] = useState<Pagination>({ total: 0, limit: MARKETPLACE_LIMITS.DEFAULT_PAGE_SIZE, offset: 0 })
-  const [isLoading, setIsLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
   const [showFilters, setShowFilters] = useState(false)
 
-  // Filters
-  const [category, setCategory] = useState('')
-  const [condition, setCondition] = useState('')
-  const [delivery, setDelivery] = useState('')
-  const [payment, setPayment] = useState('')
-  const [sort, setSort] = useState('newest')
-  const [search, setSearch] = useState('')
-  const [searchInput, setSearchInput] = useState('')
-  const [priceMin, setPriceMin] = useState('')
-  const [priceMax, setPriceMax] = useState('')
-  const [priceError, setPriceError] = useState<string | null>(null)
-
-  // Debounce search input to prevent excessive API calls
-  const debouncedSearch = useDebounce(searchInput, 300)
-
-  // Validate price range
-  const validatePrices = useCallback(() => {
-    const min = Number(priceMin)
-    const max = Number(priceMax)
-
-    if (priceMin && min < 0) {
-      setPriceError('Preis kann nicht negativ sein')
-      return false
-    }
-    if (priceMax && max < 0) {
-      setPriceError('Preis kann nicht negativ sein')
-      return false
-    }
-    if (priceMin && priceMax && min > max) {
-      setPriceError('Mindestpreis darf nicht höher als Höchstpreis sein')
-      return false
-    }
-    if (priceMin && min > 50000) {
-      setPriceError('Preis darf maximal CHF 50\'000 sein')
-      return false
-    }
-    if (priceMax && max > 50000) {
-      setPriceError('Preis darf maximal CHF 50\'000 sein')
-      return false
-    }
-
-    setPriceError(null)
-    return true
-  }, [priceMin, priceMax])
-
-  const fetchListings = useCallback(async () => {
-    // Don't fetch if price validation fails
-    if (!validatePrices()) {
-      return
-    }
-    setIsLoading(true)
-    setError(null)
-
-    try {
-      const params = new URLSearchParams()
-      if (category) params.set('category', category)
-      if (condition) params.set('condition', condition)
-      if (delivery) params.set('delivery', delivery)
-      if (payment) params.set('payment', payment)
-      if (sort) params.set('sort', sort)
-      if (search) params.set('search', search)
-      if (priceMin) params.set('price_min', priceMin)
-      if (priceMax) params.set('price_max', priceMax)
-      params.set('limit', String(pagination.limit))
-      params.set('offset', String(pagination.offset))
-
-      const response = await fetch(`/api/listings?${params.toString()}`)
-      const data = await response.json()
-
-      if (data.success && data.data) {
-        setListings(data.data.items)
-        setPagination(data.data.pagination)
-      } else {
-        throw new Error(data.error || 'Fehler beim Laden der Inserate')
-      }
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Ein unerwarteter Fehler ist aufgetreten')
-      setListings([])
-    } finally {
-      setIsLoading(false)
-    }
-  }, [category, condition, delivery, payment, sort, search, priceMin, priceMax, pagination.limit, pagination.offset, validatePrices])
-
-  useEffect(() => {
-    fetchListings()
-  }, [fetchListings])
-
-  // Auto-search when debounced input changes
-  useEffect(() => {
-    if (debouncedSearch !== search) {
-      setSearch(debouncedSearch)
-      setPagination(prev => ({ ...prev, offset: 0 }))
-    }
-  }, [debouncedSearch, search])
-
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault()
-    // Form submission triggers immediate search (bypasses debounce)
-    setSearch(searchInput)
-    setPagination(prev => ({ ...prev, offset: 0 }))
-  }
-
-  const clearFilters = () => {
-    setCategory('')
-    setCondition('')
-    setDelivery('')
-    setPayment('')
-    setSort('newest')
-    setSearch('')
-    setSearchInput('')
-    setPriceMin('')
-    setPriceMax('')
-    setPagination(prev => ({ ...prev, offset: 0 }))
-  }
-
-  const hasActiveFilters = category || condition || delivery || payment || search || priceMin || priceMax
-
-  const totalPages = Math.ceil(pagination.total / pagination.limit)
-  const currentPage = Math.floor(pagination.offset / pagination.limit) + 1
-
-  const goToPage = (page: number) => {
-    setPagination(prev => ({ ...prev, offset: (page - 1) * prev.limit }))
-  }
+  const {
+    listings,
+    pagination,
+    isLoading,
+    error,
+    filters,
+    handleSearch,
+    clearFilters,
+    validatePrices,
+    fetchListings,
+    resetOffset,
+    goToPage,
+    hasActiveFilters,
+    totalPages,
+    currentPage,
+  } = useMarketplaceListings()
 
   return (
     <div className="bg-white min-h-screen">
@@ -207,8 +67,8 @@ export default function MarketplacePage() {
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
             <input
               type="text"
-              value={searchInput}
-              onChange={(e) => setSearchInput(e.target.value)}
+              value={filters.searchInput}
+              onChange={(e) => filters.setSearchInput(e.target.value)}
               placeholder="Laptop, Monitor, Smartphone..."
               aria-label="Im Marketplace suchen"
               className="w-full pl-12 pr-24 py-3.5 rounded-lg border border-gray-300 text-gray-900 placeholder-gray-500 focus:ring-2 focus:ring-orange-500 focus:border-transparent shadow-sm"
@@ -245,22 +105,22 @@ export default function MarketplacePage() {
         <div className="mb-8">
           <div className="flex gap-2 overflow-x-auto pb-2" role="group" aria-label="Kategoriefilter">
             <button
-              onClick={() => { setCategory(''); setPagination(prev => ({ ...prev, offset: 0 })); }}
+              onClick={() => { filters.setCategory(''); resetOffset(); }}
               className={`flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-                !category ? 'bg-orange-600 text-white shadow-sm' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                !filters.category ? 'bg-orange-600 text-white shadow-sm' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
               }`}
-              aria-pressed={!category}
+              aria-pressed={!filters.category}
             >
               Alle
             </button>
             {MARKETPLACE_CATEGORIES.map((cat) => (
               <button
                 key={cat}
-                onClick={() => { setCategory(cat); setPagination(prev => ({ ...prev, offset: 0 })); }}
+                onClick={() => { filters.setCategory(cat); resetOffset(); }}
                 className={`flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-                  category === cat ? 'bg-orange-600 text-white shadow-sm' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  filters.category === cat ? 'bg-orange-600 text-white shadow-sm' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                 }`}
-                aria-pressed={category === cat}
+                aria-pressed={filters.category === cat}
               >
                 {cat}
               </button>
@@ -285,8 +145,8 @@ export default function MarketplacePage() {
             </button>
 
             <select
-              value={sort}
-              onChange={(e) => { setSort(e.target.value); setPagination(prev => ({ ...prev, offset: 0 })); }}
+              value={filters.sort}
+              onChange={(e) => { filters.setSort(e.target.value); resetOffset(); }}
               className="px-3 py-2 rounded-lg border border-gray-300 bg-white text-sm text-gray-700 focus:ring-2 focus:ring-orange-500 focus:border-transparent"
               aria-label="Sortierung"
             >
@@ -326,8 +186,8 @@ export default function MarketplacePage() {
                   <label htmlFor="filter-condition" className="block text-xs font-medium text-gray-700 mb-2">Zustand</label>
                   <select
                     id="filter-condition"
-                    value={condition}
-                    onChange={(e) => { setCondition(e.target.value); setPagination(prev => ({ ...prev, offset: 0 })); }}
+                    value={filters.condition}
+                    onChange={(e) => { filters.setCondition(e.target.value); resetOffset(); }}
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-white text-sm text-gray-900 focus:ring-2 focus:ring-orange-500 focus:border-transparent"
                   >
                     <option value="">Alle Zustände</option>
@@ -340,8 +200,8 @@ export default function MarketplacePage() {
                   <label htmlFor="filter-delivery" className="block text-xs font-medium text-gray-700 mb-2">Lieferung</label>
                   <select
                     id="filter-delivery"
-                    value={delivery}
-                    onChange={(e) => { setDelivery(e.target.value); setPagination(prev => ({ ...prev, offset: 0 })); }}
+                    value={filters.delivery}
+                    onChange={(e) => { filters.setDelivery(e.target.value); resetOffset(); }}
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-white text-sm text-gray-900 focus:ring-2 focus:ring-orange-500 focus:border-transparent"
                   >
                     <option value="">Alle Optionen</option>
@@ -354,8 +214,8 @@ export default function MarketplacePage() {
                   <label htmlFor="filter-payment" className="block text-xs font-medium text-gray-700 mb-2">Zahlung</label>
                   <select
                     id="filter-payment"
-                    value={payment}
-                    onChange={(e) => { setPayment(e.target.value); setPagination(prev => ({ ...prev, offset: 0 })); }}
+                    value={filters.payment}
+                    onChange={(e) => { filters.setPayment(e.target.value); resetOffset(); }}
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-white text-sm text-gray-900 focus:ring-2 focus:ring-orange-500 focus:border-transparent"
                   >
                     <option value="">Alle</option>
@@ -373,19 +233,19 @@ export default function MarketplacePage() {
                       max="50000"
                       step="1"
                       placeholder="Min"
-                      value={priceMin}
+                      value={filters.priceMin}
                       onChange={(e) => {
-                        setPriceMin(e.target.value)
-                        setPriceError(null)
+                        filters.setPriceMin(e.target.value)
+                        filters.setPriceError(null)
                       }}
                       onBlur={() => {
                         validatePrices()
-                        setPagination(prev => ({ ...prev, offset: 0 }))
+                        resetOffset()
                       }}
                       aria-label="Mindestpreis in CHF"
-                      aria-invalid={!!priceError}
+                      aria-invalid={!!filters.priceError}
                       className={`w-1/2 px-3 py-2 border rounded-lg bg-white text-sm text-gray-900 focus:ring-2 focus:ring-orange-500 focus:border-transparent ${
-                        priceError ? 'border-red-500' : 'border-gray-300'
+                        filters.priceError ? 'border-red-500' : 'border-gray-300'
                       }`}
                     />
                     <input
@@ -394,24 +254,24 @@ export default function MarketplacePage() {
                       max="50000"
                       step="1"
                       placeholder="Max"
-                      value={priceMax}
+                      value={filters.priceMax}
                       onChange={(e) => {
-                        setPriceMax(e.target.value)
-                        setPriceError(null)
+                        filters.setPriceMax(e.target.value)
+                        filters.setPriceError(null)
                       }}
                       onBlur={() => {
                         validatePrices()
-                        setPagination(prev => ({ ...prev, offset: 0 }))
+                        resetOffset()
                       }}
                       aria-label="Höchstpreis in CHF"
-                      aria-invalid={!!priceError}
+                      aria-invalid={!!filters.priceError}
                       className={`w-1/2 px-3 py-2 border rounded-lg bg-white text-sm text-gray-900 focus:ring-2 focus:ring-orange-500 focus:border-transparent ${
-                        priceError ? 'border-red-500' : 'border-gray-300'
+                        filters.priceError ? 'border-red-500' : 'border-gray-300'
                       }`}
                     />
                   </div>
-                  {priceError && (
-                    <p className="text-xs text-red-600 mt-1">{priceError}</p>
+                  {filters.priceError && (
+                    <p className="text-xs text-red-600 mt-1">{filters.priceError}</p>
                   )}
                 </div>
               </div>
