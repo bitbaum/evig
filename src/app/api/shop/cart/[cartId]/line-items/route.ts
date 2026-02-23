@@ -19,7 +19,7 @@ export async function POST(
       logger.error("Medusa publishable key not configured");
       return apiError(
         new Error("Configuration error"),
-        "Medusa configuration is missing",
+        "Medusa-Konfiguration fehlt",
         500
       );
     }
@@ -46,7 +46,7 @@ export async function POST(
       });
       return apiError(
         new Error(`Medusa API returned ${response.status}`),
-        "Failed to add item to cart",
+        "Artikel konnte nicht zum Warenkorb hinzugefügt werden",
         response.status
       );
     }
@@ -54,6 +54,6 @@ export async function POST(
     const data = await response.json();
     return apiSuccess(data);
   } catch (error) {
-    return apiError(error, "Failed to connect to Medusa backend");
+    return apiError(error, "Verbindung zum Shop-Backend fehlgeschlagen");
   }
 }

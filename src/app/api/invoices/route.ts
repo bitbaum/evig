@@ -157,7 +157,7 @@ export const POST = withAuth(async (request, session) => {
 
   } catch (error) {
     logger.error('Invoice creation error', { error })
-    return apiError(error, 'Failed to create invoice')
+    return apiError(error, 'Rechnung konnte nicht erstellt werden')
   }
 })
 
@@ -229,6 +229,6 @@ export const GET = withAuth(async (request, session) => {
 
   } catch (error) {
     logger.error('List invoices error', { error })
-    return apiError(error, 'Failed to retrieve invoices')
+    return apiError(error, 'Rechnungen konnten nicht geladen werden')
   }
 })

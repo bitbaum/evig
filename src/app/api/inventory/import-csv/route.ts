@@ -161,7 +161,7 @@ export const POST = withAuth(async (request: NextRequest, session: ValidSession)
     return apiSuccess(result);
 
   } catch (error) {
-    return apiError(error, "Failed to import CSV data");
+    return apiError(error, "CSV-Daten konnten nicht importiert werden");
   }
 });
 
@@ -190,7 +190,7 @@ export const GET = withAuth(async (request: NextRequest, session: ValidSession) 
       .limit(50);
 
     if (error) {
-      return apiError(error, "Failed to fetch import history");
+      return apiError(error, "Importverlauf konnte nicht geladen werden");
     }
 
     return apiSuccess({
@@ -198,6 +198,6 @@ export const GET = withAuth(async (request: NextRequest, session: ValidSession) 
     });
 
   } catch (error) {
-    return apiError(error, "Failed to fetch import history");
+    return apiError(error, "Importverlauf konnte nicht geladen werden");
   }
 });

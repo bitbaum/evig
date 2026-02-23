@@ -106,6 +106,6 @@ export async function GET(
 
   } catch (error) {
     logger.error('Error fetching workshop materials', { error })
-    return apiError(error, 'Failed to fetch materials')
+    return apiError(error, 'Materialien konnten nicht geladen werden')
   }
 }

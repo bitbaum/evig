@@ -18,7 +18,7 @@ export async function GET(
       logger.error("Medusa publishable key not configured");
       return apiError(
         new Error("Configuration error"),
-        "Medusa configuration is missing",
+        "Medusa-Konfiguration fehlt",
         500
       );
     }
@@ -41,7 +41,7 @@ export async function GET(
       });
       return apiError(
         new Error(`Medusa API returned ${response.status}`),
-        "Failed to fetch cart",
+        "Warenkorb konnte nicht geladen werden",
         response.status
       );
     }
@@ -49,6 +49,6 @@ export async function GET(
     const data = await response.json();
     return apiSuccess(data);
   } catch (error) {
-    return apiError(error, "Failed to connect to Medusa backend");
+    return apiError(error, "Verbindung zum Shop-Backend fehlgeschlagen");
   }
 }

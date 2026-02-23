@@ -294,6 +294,6 @@ export async function POST(request: NextRequest) {
     })
   } catch (error) {
     logger.error('Image analysis error', { error })
-    return apiError(error, 'Failed to analyze product image')
+    return apiError(error, 'Produktbild konnte nicht analysiert werden')
   }
 }

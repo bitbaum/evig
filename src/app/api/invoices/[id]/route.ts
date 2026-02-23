@@ -60,14 +60,14 @@ export const GET = withAuth<{ id: string }>(async (request, session, context) =>
 
     // Check permissions
     if (invoice.user_id !== session.user.id && !isAdmin) {
-      return apiUnauthorized('You do not have permission to view this invoice')
+      return apiUnauthorized('Sie haben keine Berechtigung, diese Rechnung anzuzeigen')
     }
 
     return apiSuccess({ invoice })
 
   } catch (error) {
     logger.error('Get invoice error', { error })
-    return apiError(error, 'Failed to retrieve invoice')
+    return apiError(error, 'Rechnung konnte nicht geladen werden')
   }
 })
 
@@ -140,12 +140,12 @@ export const PUT = withAuth<{ id: string }>(async (request, session, context) =>
 
     return apiSuccess({
       invoice: updatedResult.rows[0],
-      message: 'Invoice updated successfully'
+      message: 'Rechnung erfolgreich aktualisiert'
     })
 
   } catch (error) {
     logger.error('Update invoice error', { error })
-    return apiError(error, 'Failed to update invoice')
+    return apiError(error, 'Rechnung konnte nicht aktualisiert werden')
   }
 })
 
@@ -179,11 +179,11 @@ export const DELETE = withAuth<{ id: string }>(async (request, session, context)
     await query(`DELETE FROM ${TABLE_NAMES.INVOICES} WHERE id = $1`, [invoiceId])
 
     return apiSuccess({
-      message: 'Invoice deleted successfully'
+      message: 'Rechnung erfolgreich gelöscht'
     })
 
   } catch (error) {
     logger.error('Delete invoice error', { error })
-    return apiError(error, 'Failed to delete invoice')
+    return apiError(error, 'Rechnung konnte nicht gelöscht werden')
   }
 })

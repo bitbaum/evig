@@ -24,7 +24,7 @@ export const POST = withAuth(async (request: NextRequest, session: ValidSession)
     const result = await publishToMedusa(inventoryItemId, session.user.id);
 
     if (!result) {
-      return apiError(null, "Failed to publish product to Medusa", 500);
+      return apiError(null, "Produkt konnte nicht in Medusa veröffentlicht werden", 500);
     }
 
     return apiSuccess({
@@ -34,7 +34,7 @@ export const POST = withAuth(async (request: NextRequest, session: ValidSession)
       handle: result.handle,
     });
   } catch (error) {
-    return apiError(error, "Failed to publish product to Medusa");
+    return apiError(error, "Produkt konnte nicht in Medusa veröffentlicht werden");
   }
 });
 
@@ -74,6 +74,6 @@ export const GET = withAuth(async (request: NextRequest) => {
     });
 
   } catch (error) {
-    return apiError(error, "Failed to check publishing status");
+    return apiError(error, "Veröffentlichungsstatus konnte nicht überprüft werden");
   }
 });

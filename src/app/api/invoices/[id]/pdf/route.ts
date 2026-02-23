@@ -36,7 +36,7 @@ export const GET = withAuth<{ id: string }>(async (request, session, context) =>
     })
   } catch (error) {
     logger.error('Generate PDF error', { error })
-    return apiError(error, 'Failed to generate PDF')
+    return apiError(error, 'PDF konnte nicht generiert werden')
   }
 })
 
@@ -64,10 +64,10 @@ export const POST = withAuth<{ id: string }>(async (request, session, context) =
       WHERE id = $2
     `, [pdfUrl, invoiceId])
 
-    return apiSuccess({ pdfUrl, message: 'PDF generated successfully' })
+    return apiSuccess({ pdfUrl, message: 'PDF erfolgreich generiert' })
   } catch (error) {
     logger.error('Generate PDF error', { error })
-    return apiError(error, 'Failed to generate PDF')
+    return apiError(error, 'PDF konnte nicht generiert werden')
   }
 })
 

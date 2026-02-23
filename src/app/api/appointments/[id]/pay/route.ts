@@ -104,7 +104,7 @@ export async function POST(request: NextRequest) {
     }
 
     if (paymentAmountCents <= 0) {
-      return apiBadRequest('Invalid payment amount')
+      return apiBadRequest('Ungültiger Zahlungsbetrag')
     }
 
     // Initialize Stripe

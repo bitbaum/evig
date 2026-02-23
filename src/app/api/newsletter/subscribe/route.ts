@@ -199,7 +199,7 @@ export const GET = requireAdminAuth(async (request: NextRequest) => {
       )
     }
   } catch (error) {
-    return apiError(error, 'Failed to fetch subscribers')
+    return apiError(error, 'Abonnenten konnten nicht geladen werden')
   }
 })
 

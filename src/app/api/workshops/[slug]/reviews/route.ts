@@ -81,6 +81,6 @@ export async function GET(
 
   } catch (error) {
     logger.error('Error fetching workshop reviews', { error })
-    return apiError(error, 'Failed to fetch reviews')
+    return apiError(error, 'Bewertungen konnten nicht geladen werden')
   }
 }
