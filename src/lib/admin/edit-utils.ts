@@ -112,7 +112,7 @@ function valuesAreEqual(a: unknown, b: unknown): boolean {
     const keysA = Object.keys(a);
     const keysB = Object.keys(b);
     if (keysA.length !== keysB.length) return false;
-    return keysA.every(key => valuesAreEqual(a[key], b[key]));
+    return keysA.every(key => valuesAreEqual((a as Record<string, unknown>)[key], (b as Record<string, unknown>)[key]));
   }
 
   // Primitives (already checked === above)

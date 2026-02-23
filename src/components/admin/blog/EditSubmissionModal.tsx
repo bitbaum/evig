@@ -36,7 +36,7 @@ export function EditSubmissionModal({
   const [formData, setFormData] = useState<Record<string, any>>(() => {
     const data: Record<string, any> = {};
     Object.keys(BLOG_SUBMISSION_EDITABLE_FIELDS).forEach((field) => {
-      data[field] = (submission as Record<string, unknown>)[field] ?? '';
+      data[field] = (submission as unknown as Record<string, unknown>)[field] ?? '';
     });
     return data;
   });
