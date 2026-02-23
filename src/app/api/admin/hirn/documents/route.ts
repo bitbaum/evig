@@ -8,7 +8,7 @@
  * Delete a document and its chunks.
  */
 
-import { NextRequest, NextResponse } from 'next/server'
+import { NextRequest } from 'next/server'
 import { withAdmin } from '@/lib/api/middleware'
 import { isSuperAdmin } from '@/lib/permissions'
 import { listDocuments, deleteDocument, getIngestionStats } from '@/lib/hirn'

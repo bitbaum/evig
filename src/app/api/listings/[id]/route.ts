@@ -4,7 +4,7 @@
  * DELETE /api/listings/[id] — Owner or admin: soft delete
  */
 
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest } from 'next/server';
 import { auth } from '@/auth';
 import { withAuth, ValidSession } from '@/lib/api/middleware';
 import { apiSuccess, apiError, apiNotFound, apiForbidden } from '@/lib/api/helpers';

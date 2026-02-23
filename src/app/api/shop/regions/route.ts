@@ -1,4 +1,3 @@
-import { NextResponse } from "next/server";
 import { MEDUSA_CONFIG } from "@/config/medusa";
 import { logger } from "@/lib/logger";
 import { apiError, apiSuccess } from "@/lib/api/helpers";
