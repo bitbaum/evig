@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, Suspense } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
@@ -12,7 +12,7 @@ import {
   CheckCircle,
 } from 'lucide-react'
 
-export default function NewStaticPagePage() {
+function NewStaticPageContent() {
   const { data: session, status: sessionStatus } = useSession()
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -253,5 +253,28 @@ export default function NewStaticPagePage() {
         </div>
       </form>
     </div>
+  )
+}
+
+function NewStaticPageFallback() {
+  return (
+    <div className="space-y-8">
+      <div className="h-8 bg-gray-200 rounded w-1/3 animate-pulse"></div>
+      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border p-8">
+        <div className="animate-pulse space-y-6">
+          {[...Array(4)].map((_, i) => (
+            <div key={i} className="h-12 bg-gray-200 rounded"></div>
+          ))}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+export default function NewStaticPagePage() {
+  return (
+    <Suspense fallback={<NewStaticPageFallback />}>
+      <NewStaticPageContent />
+    </Suspense>
   )
 }

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useCallback } from 'react'
+import { useState, useCallback, Suspense } from 'react'
 import Link from 'next/link'
 import { logger } from '@/lib/logger'
 import { ArrowLeft, Loader2 } from 'lucide-react'
@@ -17,7 +17,7 @@ import { useErfassungForm } from '@/components/erfassung/useErfassungForm'
 import type { BulkProduct, BulkSaveResponse } from '@/types/erfassung'
 import { formDataToPayload } from '@/types/erfassung'
 
-export default function ErfassungPage() {
+function ErfassungContent() {
   const form = useErfassungForm()
 
   // Bulk mode state
@@ -274,5 +274,24 @@ export default function ErfassungPage() {
         </>
       )}
     </div>
+  )
+}
+
+function ErfassungFallback() {
+  return (
+    <div className="min-h-screen flex items-center justify-center">
+      <div className="text-center">
+        <Loader2 className="w-8 h-8 text-green-600 animate-spin mx-auto mb-4" />
+        <p className="text-gray-600 dark:text-gray-400">Erfassung wird geladen...</p>
+      </div>
+    </div>
+  )
+}
+
+export default function ErfassungPage() {
+  return (
+    <Suspense fallback={<ErfassungFallback />}>
+      <ErfassungContent />
+    </Suspense>
   )
 }
