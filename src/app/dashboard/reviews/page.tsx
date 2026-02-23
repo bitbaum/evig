@@ -1,9 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { logger } from '@/lib/logger'
 import { useSession } from 'next-auth/react'
-import { redirect } from 'next/navigation'
 import {
   Star,
   MessageSquare,
@@ -17,251 +14,271 @@ import {
   EyeOff
 } from 'lucide-react'
 import { formatDateShort } from '@/lib/date-formats'
+import { useReviewManagement, type Review } from '@/hooks/useReviewManagement'
 
-interface Review {
-  id: string
-  targetType: string
-  targetId: string
-  targetName: string
-  overallRating: number
-  ratings: {
-    communication?: number
-    professionalism?: number
-    quality?: number
-    timeliness?: number
-    value?: number
-  }
-  title?: string
-  content: string
-  status: string
-  helpfulVotes: number
-  totalVotes: number
-  isVerifiedPurchase: boolean
-  createdAt: string
-  updatedAt: string
-  response?: {
-    content: string
-    responderName: string
-    createdAt: string
-  }
+const STATUS_STYLES: Record<string, string> = {
+  published: 'bg-green-100 text-green-800',
+  pending_moderation: 'bg-orange-100 text-orange-800',
+  hidden: 'bg-red-100 text-red-800',
+  deleted: 'bg-gray-100 text-gray-800'
 }
 
-interface UserVote {
-  reviewId: string
-  voteType: 'helpful' | 'unhelpful'
+const STATUS_LABELS: Record<string, string> = {
+  published: 'Veröffentlicht',
+  pending_moderation: 'Wartet auf Moderation',
+  hidden: 'Ausgeblendet',
+  deleted: 'Gelöscht'
+}
+
+const STATUS_ICONS: Record<string, React.ReactNode> = {
+  published: <CheckCircle className="w-3 h-3" />,
+  pending_moderation: <Clock className="w-3 h-3" />,
+  hidden: <EyeOff className="w-3 h-3" />,
+  deleted: <Trash2 className="w-3 h-3" />
+}
+
+function StatusBadge({ status }: { status: string }) {
+  return (
+    <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium gap-1 ${STATUS_STYLES[status] || STATUS_STYLES.published}`}>
+      {STATUS_ICONS[status] || <Eye className="w-3 h-3" />}
+      {STATUS_LABELS[status] || 'Unbekannt'}
+    </span>
+  )
+}
+
+function StarRating({ rating, interactive = false, onChange }: {
+  rating: number
+  interactive?: boolean
+  onChange?: (rating: number) => void
+}) {
+  return (
+    <div className="flex items-center gap-1">
+      {[1, 2, 3, 4, 5].map((star) => (
+        <button
+          key={star}
+          type="button"
+          disabled={!interactive}
+          onClick={() => onChange?.(star)}
+          className={`w-5 h-5 ${interactive ? 'cursor-pointer hover:scale-110 transition-transform' : ''} ${
+            star <= rating ? 'text-yellow-400 fill-current' : 'text-gray-300'
+          }`}
+        >
+          <Star className="w-full h-full" />
+        </button>
+      ))}
+      <span className="ml-2 text-sm text-gray-600">{rating}/5</span>
+    </div>
+  )
+}
+
+function ReviewEditForm({ editForm, setEditForm, onSave, onCancel }: {
+  editForm: { overallRating: number; communicationRating: number; professionalismRating: number; qualityRating: number; timelinessRating: number; valueRating: number; title: string; content: string }
+  setEditForm: (form: typeof editForm) => void
+  onSave: () => void
+  onCancel: () => void
+}) {
+  return (
+    <div className="space-y-4">
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-1">Gesamtbewertung</label>
+        <StarRating rating={editForm.overallRating} interactive onChange={(r) => setEditForm({...editForm, overallRating: r})} />
+      </div>
+
+      <div className="grid grid-cols-2 gap-4">
+        {[
+          { label: 'Kommunikation', key: 'communicationRating' as const },
+          { label: 'Professionalität', key: 'professionalismRating' as const },
+          { label: 'Qualität', key: 'qualityRating' as const },
+          { label: 'Pünktlichkeit', key: 'timelinessRating' as const },
+        ].map(({ label, key }) => (
+          <div key={key}>
+            <label className="block text-sm font-medium text-gray-700 mb-1">{label}</label>
+            <StarRating rating={editForm[key]} interactive onChange={(r) => setEditForm({...editForm, [key]: r})} />
+          </div>
+        ))}
+      </div>
+
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-1">Titel (optional)</label>
+        <input
+          type="text"
+          value={editForm.title}
+          onChange={(e) => setEditForm({...editForm, title: e.target.value})}
+          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+          placeholder="Zusammenfassung Ihrer Erfahrung..."
+        />
+      </div>
+
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-1">Bewertungstext</label>
+        <textarea
+          value={editForm.content}
+          onChange={(e) => setEditForm({...editForm, content: e.target.value})}
+          rows={4}
+          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+          placeholder="Teilen Sie Ihre Erfahrung..."
+        />
+      </div>
+
+      <div className="flex gap-2">
+        <button onClick={onSave} className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">
+          Speichern
+        </button>
+        <button onClick={onCancel} className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200">
+          Abbrechen
+        </button>
+      </div>
+    </div>
+  )
+}
+
+function ReviewCard({ review, editingReview, editForm, setEditForm, onEdit, onSaveEdit, onCancelEdit, onDelete, onVote, getUserVote, canEdit }: {
+  review: Review
+  editingReview: string | null
+  editForm: { overallRating: number; communicationRating: number; professionalismRating: number; qualityRating: number; timelinessRating: number; valueRating: number; title: string; content: string }
+  setEditForm: (form: typeof editForm) => void
+  onEdit: (review: Review) => void
+  onSaveEdit: () => void
+  onCancelEdit: () => void
+  onDelete: (id: string) => void
+  onVote: (id: string, type: 'helpful' | 'unhelpful') => void
+  getUserVote: (id: string) => 'helpful' | 'unhelpful' | undefined
+  canEdit: (createdAt: string) => boolean
+}) {
+  return (
+    <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+      <div className="p-6 border-b border-gray-200">
+        <div className="flex items-start justify-between">
+          <div className="flex-1">
+            <div className="flex items-center gap-3 mb-3">
+              <h3 className="text-lg font-semibold text-gray-900">
+                Bewertung für {review.targetName}
+              </h3>
+              <StatusBadge status={review.status} />
+              {review.isVerifiedPurchase && (
+                <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 gap-1">
+                  <CheckCircle className="w-3 h-3" />
+                  Verifizierter Kauf
+                </span>
+              )}
+            </div>
+
+            <div className="mb-3">
+              <StarRating rating={review.overallRating} />
+            </div>
+
+            {editingReview === review.id ? (
+              <ReviewEditForm
+                editForm={editForm}
+                setEditForm={setEditForm}
+                onSave={onSaveEdit}
+                onCancel={onCancelEdit}
+              />
+            ) : (
+              <>
+                {review.title && (
+                  <h4 className="font-medium text-gray-900 mb-2">{review.title}</h4>
+                )}
+                <p className="text-gray-700 mb-3 leading-relaxed">{review.content}</p>
+
+                {review.response && (
+                  <div className="mt-4 p-4 bg-blue-50 rounded-lg">
+                    <div className="flex items-center gap-2 mb-2">
+                      <MessageSquare className="w-4 h-4 text-blue-600" />
+                      <span className="text-sm font-medium text-blue-900">
+                        Antwort von {review.response.responderName}
+                      </span>
+                    </div>
+                    <p className="text-blue-800 text-sm">{review.response.content}</p>
+                  </div>
+                )}
+              </>
+            )}
+          </div>
+
+          {/* Action Buttons */}
+          {editingReview !== review.id && (
+            <div className="flex flex-col gap-2 ml-4">
+              {canEdit(review.createdAt) && review.status === 'published' && (
+                <button
+                  onClick={() => onEdit(review)}
+                  className="px-3 py-1.5 bg-blue-100 text-blue-700 rounded text-sm hover:bg-blue-200 flex items-center gap-1"
+                >
+                  <Edit3 className="w-3 h-3" />
+                  Bearbeiten
+                </button>
+              )}
+              <button
+                onClick={() => onDelete(review.id)}
+                className="px-3 py-1.5 bg-red-100 text-red-700 rounded text-sm hover:bg-red-200 flex items-center gap-1"
+              >
+                <Trash2 className="w-3 h-3" />
+                Löschen
+              </button>
+            </div>
+          )}
+        </div>
+
+        {/* Review Stats */}
+        <div className="flex items-center justify-between mt-4 pt-4 border-t border-gray-100">
+          <div className="flex items-center gap-4 text-sm text-gray-500">
+            <span>{review.helpfulVotes} hilfreiche Stimmen</span>
+            <span>Erstellt am {formatDateShort(review.createdAt)}</span>
+            {review.updatedAt !== review.createdAt && (
+              <span>Zuletzt bearbeitet am {formatDateShort(review.updatedAt)}</span>
+            )}
+          </div>
+
+          {/* Vote Buttons */}
+          {review.status === 'published' && (
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => onVote(review.id, 'helpful')}
+                className={`flex items-center gap-1 px-3 py-1 rounded text-sm ${
+                  getUserVote(review.id) === 'helpful'
+                    ? 'bg-green-100 text-green-700'
+                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                }`}
+              >
+                <ThumbsUp className="w-3 h-3" />
+                Hilfreich ({review.helpfulVotes})
+              </button>
+              <button
+                onClick={() => onVote(review.id, 'unhelpful')}
+                className={`flex items-center gap-1 px-3 py-1 rounded text-sm ${
+                  getUserVote(review.id) === 'unhelpful'
+                    ? 'bg-red-100 text-red-700'
+                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                }`}
+              >
+                <ThumbsDown className="w-3 h-3" />
+                Nicht hilfreich
+              </button>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  )
 }
 
 export default function UserReviewsPage() {
-  const { data: session, status } = useSession()
-  const [reviews, setReviews] = useState<Review[]>([])
-  const [userVotes, setUserVotes] = useState<UserVote[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
-  const [editingReview, setEditingReview] = useState<string | null>(null)
-  const [editForm, setEditForm] = useState({
-    overallRating: 5,
-    communicationRating: 5,
-    professionalismRating: 5,
-    qualityRating: 5,
-    timelinessRating: 5,
-    valueRating: 5,
-    title: '',
-    content: ''
-  })
-
-  useEffect(() => {
-    if (status === 'unauthenticated') {
-      redirect('/auth/login')
-    } else if (status === 'authenticated') {
-      fetchUserReviews()
-      fetchUserVotes()
-    }
-  }, [status])
-
-  const fetchUserReviews = async () => {
-    try {
-      setLoading(true)
-      const response = await fetch('/api/user/reviews')
-      if (!response.ok) {
-        throw new Error('Failed to fetch reviews')
-      }
-      const data = await response.json()
-      setReviews(data.reviews || [])
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Unknown error')
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  const fetchUserVotes = async () => {
-    try {
-      // This would need a separate API endpoint for user votes
-      // For now, we'll handle votes individually
-    } catch (err) {
-      logger.error('Error fetching user votes', { error: err })
-    }
-  }
-
-  const handleEditReview = (review: Review) => {
-    setEditingReview(review.id)
-    setEditForm({
-      overallRating: review.overallRating,
-      communicationRating: review.ratings.communication || 5,
-      professionalismRating: review.ratings.professionalism || 5,
-      qualityRating: review.ratings.quality || 5,
-      timelinessRating: review.ratings.timeliness || 5,
-      valueRating: review.ratings.value || 5,
-      title: review.title || '',
-      content: review.content
-    })
-  }
-
-  const handleSaveEdit = async () => {
-    if (!editingReview) return
-
-    try {
-      const response = await fetch(`/api/reviews/${editingReview}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(editForm)
-      })
-
-      if (!response.ok) {
-        throw new Error('Failed to update review')
-      }
-
-      await fetchUserReviews()
-      setEditingReview(null)
-      alert('Bewertung erfolgreich aktualisiert!')
-    } catch (err) {
-      alert('Fehler beim Aktualisieren der Bewertung: ' + (err instanceof Error ? err.message : 'Unknown error'))
-    }
-  }
-
-  const handleDeleteReview = async (reviewId: string) => {
-    if (!confirm('Sind Sie sicher, dass Sie diese Bewertung löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden.')) {
-      return
-    }
-
-    try {
-      const response = await fetch(`/api/reviews/${reviewId}`, {
-        method: 'DELETE'
-      })
-
-      if (!response.ok) {
-        throw new Error('Failed to delete review')
-      }
-
-      await fetchUserReviews()
-      alert('Bewertung erfolgreich gelöscht!')
-    } catch (err) {
-      alert('Fehler beim Löschen der Bewertung: ' + (err instanceof Error ? err.message : 'Unknown error'))
-    }
-  }
-
-  const handleVote = async (reviewId: string, voteType: 'helpful' | 'unhelpful') => {
-    try {
-      const response = await fetch(`/api/reviews/${reviewId}/vote`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ voteType })
-      })
-
-      if (!response.ok) {
-        throw new Error('Failed to vote on review')
-      }
-
-      const data = await response.json()
-
-      // Update local state
-      setReviews(reviews.map(review =>
-        review.id === reviewId
-          ? {
-              ...review,
-              helpfulVotes: voteType === 'helpful'
-                ? (data.action === 'added' ? review.helpfulVotes + 1 : review.helpfulVotes - 1)
-                : review.helpfulVotes,
-              totalVotes: data.action === 'added'
-                ? review.totalVotes + 1
-                : review.totalVotes - 1
-            }
-          : review
-      ))
-
-      // Update user votes
-      if (data.action === 'added') {
-        setUserVotes([...userVotes.filter(v => v.reviewId !== reviewId), { reviewId, voteType }])
-      } else if (data.action === 'removed') {
-        setUserVotes(userVotes.filter(v => v.reviewId !== reviewId))
-      }
-
-    } catch (err) {
-      alert('Fehler bei der Abstimmung: ' + (err instanceof Error ? err.message : 'Unknown error'))
-    }
-  }
-
-  const renderStars = (rating: number, interactive = false, onChange?: (rating: number) => void) => {
-    return (
-      <div className="flex items-center gap-1">
-        {[1, 2, 3, 4, 5].map((star) => (
-          <button
-            key={star}
-            type="button"
-            disabled={!interactive}
-            onClick={() => onChange?.(star)}
-            className={`w-5 h-5 ${interactive ? 'cursor-pointer hover:scale-110 transition-transform' : ''} ${
-              star <= rating ? 'text-yellow-400 fill-current' : 'text-gray-300'
-            }`}
-          >
-            <Star className="w-full h-full" />
-          </button>
-        ))}
-        <span className="ml-2 text-sm text-gray-600">{rating}/5</span>
-      </div>
-    )
-  }
-
-  const getUserVoteForReview = (reviewId: string) => {
-    return userVotes.find(vote => vote.reviewId === reviewId)?.voteType
-  }
-
-  const canEditReview = (createdAt: string) => {
-    const created = new Date(createdAt)
-    const now = new Date()
-    const daysSinceCreation = (now.getTime() - created.getTime()) / (1000 * 60 * 60 * 24)
-    return daysSinceCreation <= 30
-  }
-
-  const getStatusBadge = (status: string) => {
-    const styles = {
-      published: 'bg-green-100 text-green-800',
-      pending_moderation: 'bg-orange-100 text-orange-800',
-      hidden: 'bg-red-100 text-red-800',
-      deleted: 'bg-gray-100 text-gray-800'
-    }
-
-    const labels = {
-      published: 'Veröffentlicht',
-      pending_moderation: 'Wartet auf Moderation',
-      hidden: 'Ausgeblendet',
-      deleted: 'Gelöscht'
-    }
-
-    const icons = {
-      published: <CheckCircle className="w-3 h-3" />,
-      pending_moderation: <Clock className="w-3 h-3" />,
-      hidden: <EyeOff className="w-3 h-3" />,
-      deleted: <Trash2 className="w-3 h-3" />
-    }
-
-    return (
-      <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium gap-1 ${styles[status as keyof typeof styles] || styles.published}`}>
-        {icons[status as keyof typeof icons] || <Eye className="w-3 h-3" />}
-        {labels[status as keyof typeof labels] || 'Unbekannt'}
-      </span>
-    )
-  }
+  const { status } = useSession()
+  const {
+    reviews,
+    loading,
+    error,
+    editingReview,
+    editForm,
+    setEditForm,
+    handleEditReview,
+    handleSaveEdit,
+    handleDeleteReview,
+    handleVote,
+    cancelEdit,
+    getUserVoteForReview,
+    canEditReview,
+  } = useReviewManagement(status)
 
   if (status === 'loading' || loading) {
     return (
@@ -307,201 +324,20 @@ export default function UserReviewsPage() {
           </div>
         ) : (
           reviews.map((review) => (
-            <div key={review.id} className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
-              {/* Review Header */}
-              <div className="p-6 border-b border-gray-200">
-                <div className="flex items-start justify-between">
-                  <div className="flex-1">
-                    <div className="flex items-center gap-3 mb-3">
-                      <h3 className="text-lg font-semibold text-gray-900">
-                        Bewertung für {review.targetName}
-                      </h3>
-                      {getStatusBadge(review.status)}
-                      {review.isVerifiedPurchase && (
-                        <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 gap-1">
-                          <CheckCircle className="w-3 h-3" />
-                          Verifizierter Kauf
-                        </span>
-                      )}
-                    </div>
-
-                    <div className="mb-3">
-                      {renderStars(review.overallRating)}
-                    </div>
-
-                    {editingReview === review.id ? (
-                      <div className="space-y-4">
-                        <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-1">
-                            Gesamtbewertung
-                          </label>
-                          {renderStars(editForm.overallRating, true, (rating) =>
-                            setEditForm({...editForm, overallRating: rating})
-                          )}
-                        </div>
-
-                        <div className="grid grid-cols-2 gap-4">
-                          <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">
-                              Kommunikation
-                            </label>
-                            {renderStars(editForm.communicationRating, true, (rating) =>
-                              setEditForm({...editForm, communicationRating: rating})
-                            )}
-                          </div>
-                          <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">
-                              Professionalität
-                            </label>
-                            {renderStars(editForm.professionalismRating, true, (rating) =>
-                              setEditForm({...editForm, professionalismRating: rating})
-                            )}
-                          </div>
-                          <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">
-                              Qualität
-                            </label>
-                            {renderStars(editForm.qualityRating, true, (rating) =>
-                              setEditForm({...editForm, qualityRating: rating})
-                            )}
-                          </div>
-                          <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">
-                              Pünktlichkeit
-                            </label>
-                            {renderStars(editForm.timelinessRating, true, (rating) =>
-                              setEditForm({...editForm, timelinessRating: rating})
-                            )}
-                          </div>
-                        </div>
-
-                        <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-1">
-                            Titel (optional)
-                          </label>
-                          <input
-                            type="text"
-                            value={editForm.title}
-                            onChange={(e) => setEditForm({...editForm, title: e.target.value})}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                            placeholder="Zusammenfassung Ihrer Erfahrung..."
-                          />
-                        </div>
-
-                        <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-1">
-                            Bewertungstext
-                          </label>
-                          <textarea
-                            value={editForm.content}
-                            onChange={(e) => setEditForm({...editForm, content: e.target.value})}
-                            rows={4}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                            placeholder="Teilen Sie Ihre Erfahrung..."
-                          />
-                        </div>
-
-                        <div className="flex gap-2">
-                          <button
-                            onClick={handleSaveEdit}
-                            className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
-                          >
-                            Speichern
-                          </button>
-                          <button
-                            onClick={() => setEditingReview(null)}
-                            className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200"
-                          >
-                            Abbrechen
-                          </button>
-                        </div>
-                      </div>
-                    ) : (
-                      <>
-                        {review.title && (
-                          <h4 className="font-medium text-gray-900 mb-2">{review.title}</h4>
-                        )}
-                        <p className="text-gray-700 mb-3 leading-relaxed">{review.content}</p>
-
-                        {review.response && (
-                          <div className="mt-4 p-4 bg-blue-50 rounded-lg">
-                            <div className="flex items-center gap-2 mb-2">
-                              <MessageSquare className="w-4 h-4 text-blue-600" />
-                              <span className="text-sm font-medium text-blue-900">
-                                Antwort von {review.response.responderName}
-                              </span>
-                            </div>
-                            <p className="text-blue-800 text-sm">{review.response.content}</p>
-                          </div>
-                        )}
-                      </>
-                    )}
-                  </div>
-
-                  {/* Action Buttons */}
-                  {editingReview !== review.id && (
-                    <div className="flex flex-col gap-2 ml-4">
-                      {canEditReview(review.createdAt) && review.status === 'published' && (
-                        <button
-                          onClick={() => handleEditReview(review)}
-                          className="px-3 py-1.5 bg-blue-100 text-blue-700 rounded text-sm hover:bg-blue-200 flex items-center gap-1"
-                        >
-                          <Edit3 className="w-3 h-3" />
-                          Bearbeiten
-                        </button>
-                      )}
-
-                      <button
-                        onClick={() => handleDeleteReview(review.id)}
-                        className="px-3 py-1.5 bg-red-100 text-red-700 rounded text-sm hover:bg-red-200 flex items-center gap-1"
-                      >
-                        <Trash2 className="w-3 h-3" />
-                        Löschen
-                      </button>
-                    </div>
-                  )}
-                </div>
-
-                {/* Review Stats */}
-                <div className="flex items-center justify-between mt-4 pt-4 border-t border-gray-100">
-                  <div className="flex items-center gap-4 text-sm text-gray-500">
-                    <span>{review.helpfulVotes} hilfreiche Stimmen</span>
-                    <span>Erstellt am {formatDateShort(review.createdAt)}</span>
-                    {review.updatedAt !== review.createdAt && (
-                      <span>Zuletzt bearbeitet am {formatDateShort(review.updatedAt)}</span>
-                    )}
-                  </div>
-
-                  {/* Vote Buttons */}
-                  {review.status === 'published' && (
-                    <div className="flex items-center gap-2">
-                      <button
-                        onClick={() => handleVote(review.id, 'helpful')}
-                        className={`flex items-center gap-1 px-3 py-1 rounded text-sm ${
-                          getUserVoteForReview(review.id) === 'helpful'
-                            ? 'bg-green-100 text-green-700'
-                            : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                        }`}
-                      >
-                        <ThumbsUp className="w-3 h-3" />
-                        Hilfreich ({review.helpfulVotes})
-                      </button>
-                      <button
-                        onClick={() => handleVote(review.id, 'unhelpful')}
-                        className={`flex items-center gap-1 px-3 py-1 rounded text-sm ${
-                          getUserVoteForReview(review.id) === 'unhelpful'
-                            ? 'bg-red-100 text-red-700'
-                            : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                        }`}
-                      >
-                        <ThumbsDown className="w-3 h-3" />
-                        Nicht hilfreich
-                      </button>
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
+            <ReviewCard
+              key={review.id}
+              review={review}
+              editingReview={editingReview}
+              editForm={editForm}
+              setEditForm={setEditForm}
+              onEdit={handleEditReview}
+              onSaveEdit={handleSaveEdit}
+              onCancelEdit={cancelEdit}
+              onDelete={handleDeleteReview}
+              onVote={handleVote}
+              getUserVote={getUserVoteForReview}
+              canEdit={canEditReview}
+            />
           ))
         )}
       </div>
