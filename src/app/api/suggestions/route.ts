@@ -1,19 +1,16 @@
-import { NextResponse } from 'next/server'
+import { apiSuccess, apiError } from '@/lib/api/helpers'
+import { ERROR_MESSAGES } from '@/config/error-messages'
 
 export async function POST(request: Request) {
   try {
     const body = await request.json().catch(() => ({}))
-    return NextResponse.json({ ok: true, received: body }, { status: 200 })
+    return apiSuccess({ received: body })
   } catch (e) {
-    return NextResponse.json({ ok: false }, { status: 200 })
+    return apiError(e, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)
   }
 }
 
 export const dynamic = 'force-dynamic'
-
-
-
-
 
 
 

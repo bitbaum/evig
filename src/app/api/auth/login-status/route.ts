@@ -51,11 +51,7 @@ export async function POST(req: NextRequest) {
       // Handle database connection errors gracefully
       const errorMessage = dbError instanceof Error ? dbError.message : String(dbError)
       if (errorMessage.includes('connect') || errorMessage.includes('ECONNREFUSED') || errorMessage.includes('timeout')) {
-        return NextResponse.json({
-          success: false,
-          error: 'Datenbankverbindung fehlgeschlagen. Bitte versuchen Sie es später erneut.',
-          dbError: true
-        }, { status: 503 })
+        return apiError(dbError, 'Datenbankverbindung fehlgeschlagen. Bitte versuchen Sie es später erneut.', 503)
       }
       throw dbError
     }

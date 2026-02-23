@@ -3,7 +3,7 @@
  * Provides basic product and cart functionality
  */
 
-import { NextRequest, NextResponse } from 'next/server'
+import { NextRequest } from 'next/server'
 import { apiSuccess, apiNotFound } from '@/lib/api/helpers'
 
 // Mock products data
@@ -163,7 +163,7 @@ export async function POST(request: NextRequest) {
       return apiSuccess({ cart: existingCart })
 
     default:
-      return NextResponse.json({ error: 'Unknown endpoint' }, { status: 404 })
+      return apiNotFound('Endpoint')
   }
 }
 
@@ -189,9 +189,5 @@ export async function DELETE(request: NextRequest) {
 
   return apiNotFound('Endpoint')
 }
-
-
-
-
 
 
