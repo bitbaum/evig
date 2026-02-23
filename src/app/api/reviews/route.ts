@@ -5,9 +5,12 @@ import { apiError, apiSuccess, apiUnauthorized, apiBadRequest, apiNotFound, apiF
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES, REVIEW_TARGET_TYPES } from '@/config/database'
 import { logger } from '@/lib/logger'
-import { APP_URL } from '@/config/urls'
-import { sendEmail } from '@/lib/email'
 import { validateBody, validateQuery, CreateReviewSchema, GetReviewsQuerySchema } from '@/lib/schemas'
+import {
+  validateReviewTarget,
+  updateHelperAverageRating,
+  notifyRepairerOfReview,
+} from '@/lib/reviews/review-service'
 
 interface ReviewAttachment {
   id: string
@@ -49,28 +52,6 @@ interface ReviewRow {
   attachments: ReviewAttachment[] | null
 }
 
-interface AttachmentRow {
-  id: string
-  original_filename: string
-  file_path: string
-  mime_type: string
-  attachment_type: string
-}
-
-interface CountRow {
-  total: string
-}
-
-interface IdRow {
-  id: string
-}
-
-interface RepairerRow {
-  business_name: string
-  email: string
-  repairer_name: string | null
-}
-
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url)
@@ -86,17 +67,12 @@ export async function GET(request: NextRequest) {
     if (!queryValidation.success) return queryValidation.error
     const { targetType, targetId, status, limit, offset, sortBy, sortOrder } = queryValidation.data
 
-    // Check if current user is admin for non-published reviews
+    // Non-published reviews require admin
     let isAdmin = false
     if (status !== 'published') {
       const session = await auth()
-      if (!session?.user?.id) {
-        return apiUnauthorized(ERROR_MESSAGES.UNAUTHORIZED)
-      }
-
-      if (!session.user.isStaff) {
-        return apiForbidden('Nur Administratoren haben Zugriff')
-      }
+      if (!session?.user?.id) return apiUnauthorized(ERROR_MESSAGES.UNAUTHORIZED)
+      if (!session.user.isStaff) return apiForbidden('Nur Administratoren haben Zugriff')
       isAdmin = true
     }
 
@@ -105,7 +81,6 @@ export async function GET(request: NextRequest) {
     const sortField = validSortFields.includes(sortBy) ? sortBy : 'created_at'
     const sortDirection = sortOrder === 'asc' ? 'ASC' : 'DESC'
 
-    // Get reviews with user details, responses, and attachments (optimized - single query)
     const reviewsResult = await query(`
       SELECT
         r.*,
@@ -141,7 +116,7 @@ export async function GET(request: NextRequest) {
       ORDER BY r.${sortField} ${sortDirection}
       LIMIT $5 OFFSET $6
     `, [
-      isAdmin ? null : null, // voter_id for vote checking (will be handled differently)
+      isAdmin ? null : null,
       targetType,
       targetId,
       status,
@@ -150,80 +125,22 @@ export async function GET(request: NextRequest) {
       REVIEW_TARGET_TYPES.REPAIRER,
     ])
 
-    // Get total count for pagination
-    const countResult = await query(
+    const countResult = await query<{ total: string }>(
       `SELECT COUNT(*) as total FROM ${TABLE_NAMES.REVIEWS} WHERE target_type = $1 AND target_id = $2 AND status = $3`,
       [targetType, targetId, status]
     )
 
-    // Attachments are now included in the main query via json_agg
-    const reviews = (reviewsResult.rows as ReviewRow[]).map((review) => ({
-      id: review.id,
-      reviewerId: review.reviewer_id,
-      reviewerName: review.reviewer_name,
-      reviewerEmail: review.reviewer_email,
-      targetType: review.target_type,
-      targetId: review.target_id,
-      targetName: review.target_name,
-      bookingId: review.booking_id,
-      overallRating: review.overall_rating,
-      ratings: {
-        communication: review.communication_rating,
-        professionalism: review.professionalism_rating,
-        quality: review.quality_rating,
-        timeliness: review.timeliness_rating,
-        value: review.value_rating
-      },
-      title: review.title,
-      content: review.content,
-      isVerifiedPurchase: review.is_verified_purchase,
-      helpfulVotes: review.helpful_votes,
-      totalVotes: review.total_votes,
-      userHasVoted: review.user_has_voted,
-      userVote: review.user_vote,
-      status: review.status,
-      attachments: (review.attachments || []).map((att: ReviewAttachment) => ({
-        id: att.id,
-        filename: att.original_filename,
-        filePath: att.file_path,
-        mimeType: att.mime_type,
-        attachmentType: att.attachment_type
-      })),
-      response: review.response_id ? {
-        id: review.response_id,
-        content: review.response_content,
-        createdAt: review.response_created_at,
-        responderName: review.responder_name
-      } : null,
-      createdAt: review.created_at,
-      updatedAt: review.updated_at
-    }))
+    const reviews = (reviewsResult.rows as ReviewRow[]).map(mapReviewRow)
+    const total = parseInt(countResult.rows[0].total)
 
-    logger.info('Fetched reviews', {
-      targetType,
-      targetId,
-      status,
-      count: reviews.length
-    })
+    logger.info('Fetched reviews', { targetType, targetId, status, count: reviews.length })
 
-    const countData = countResult.rows[0] as CountRow
     return apiSuccess({
       reviews,
-      total: parseInt(countData.total),
-      pagination: {
-        limit,
-        offset,
-        hasMore: offset + limit < parseInt(countData.total)
-      },
-      filters: {
-        targetType,
-        targetId,
-        status,
-        sortBy: sortField,
-        sortOrder: sortDirection
-      }
+      total,
+      pagination: { limit, offset, hasMore: offset + limit < total },
+      filters: { targetType, targetId, status, sortBy: sortField, sortOrder: sortDirection },
     })
-
   } catch (error) {
     logger.error('Error fetching reviews', { error })
     return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)
@@ -233,190 +150,125 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const session = await auth()
-    if (!session?.user?.id) {
-      return apiUnauthorized(ERROR_MESSAGES.UNAUTHORIZED)
-    }
+    if (!session?.user?.id) return apiUnauthorized(ERROR_MESSAGES.UNAUTHORIZED)
 
     const body = await request.json()
     const validation = validateBody(CreateReviewSchema, body)
     if (!validation.success) return validation.error
+
     const {
-      targetType,
-      targetId,
-      bookingId,
-      overallRating,
-      communicationRating,
-      professionalismRating,
-      qualityRating,
-      timelinessRating,
-      valueRating,
-      title,
-      content
+      targetType, targetId, bookingId, overallRating,
+      communicationRating, professionalismRating, qualityRating,
+      timelinessRating, valueRating, title, content,
     } = validation.data
 
-    // Check if user already reviewed this target
-    const existingReview = await query(`
-      SELECT id FROM ${TABLE_NAMES.REVIEWS}
-      WHERE reviewer_id = $1 AND target_type = $2 AND target_id = $3
-        AND ($4::uuid IS NULL OR booking_id = $4)
-    `, [session.user.id, targetType, targetId, bookingId || null])
+    // Duplicate check
+    const existingReview = await query(
+      `SELECT id FROM ${TABLE_NAMES.REVIEWS}
+       WHERE reviewer_id = $1 AND target_type = $2 AND target_id = $3
+         AND ($4::uuid IS NULL OR booking_id = $4)`,
+      [session.user.id, targetType, targetId, bookingId || null]
+    )
 
     if (existingReview.rows.length > 0) {
       return apiBadRequest('Sie haben bereits eine Bewertung für dieses Ziel abgegeben')
     }
 
     // Verify target exists
-    let targetExists = false
-    if (targetType === REVIEW_TARGET_TYPES.REPAIRER) {
-      const result = await query(`SELECT id FROM ${TABLE_NAMES.REPAIRER_PROFILES} WHERE id = $1 AND is_verified = true`, [targetId])
-      targetExists = result.rows.length > 0
-    } else if (targetType === 'service') {
-      // Add service validation when services table exists
-      targetExists = true // Placeholder
-    } else if (targetType === 'workshop') {
-      const result = await query(`SELECT id FROM ${TABLE_NAMES.WORKSHOPS} WHERE id = $1`, [targetId])
-      targetExists = result.rows.length > 0
-    } else if (targetType === REVIEW_TARGET_TYPES.IT_HILFE) {
-      const result = await query(
-        `SELECT id FROM ${TABLE_NAMES.IT_HILFE_REQUESTS} WHERE id = $1 AND status = 'completed'`,
-        [targetId]
-      )
-      targetExists = result.rows.length > 0
-    }
-
-    if (!targetExists) {
+    if (!await validateReviewTarget(targetType, targetId)) {
       return apiNotFound('Das Bewertungsziel wurde nicht gefunden')
     }
 
-    // Check if booking exists and belongs to user (for verified purchase)
-    let verifiedPurchase = false
-    if (bookingId) {
-      // This would need to be implemented based on your booking system
-      // For now, we'll assume it's verified if bookingId is provided
-      verifiedPurchase = true
-    }
+    const verifiedPurchase = !!bookingId
 
     // Insert review
-    const reviewResult = await query(`
-      INSERT INTO ${TABLE_NAMES.REVIEWS} (
+    const reviewResult = await query<{ id: string }>(
+      `INSERT INTO ${TABLE_NAMES.REVIEWS} (
         reviewer_id, target_type, target_id, booking_id,
         overall_rating, communication_rating, professionalism_rating,
         quality_rating, timeliness_rating, value_rating,
         title, content, is_verified_purchase, status
-      ) VALUES (
-        $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, 'published'
-      )
-      RETURNING id
-    `, [
-      session.user.id,
-      targetType,
-      targetId,
-      bookingId || null,
-      overallRating,
-      communicationRating || null,
-      professionalismRating || null,
-      qualityRating || null,
-      timelinessRating || null,
-      valueRating || null,
-      title || null,
-      content,
-      verifiedPurchase
-    ])
+      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, 'published')
+      RETURNING id`,
+      [
+        session.user.id, targetType, targetId, bookingId || null,
+        overallRating,
+        communicationRating || null, professionalismRating || null,
+        qualityRating || null, timelinessRating || null, valueRating || null,
+        title || null, content, verifiedPurchase,
+      ]
+    )
 
-    const createdReview = reviewResult.rows[0] as IdRow
-    const reviewId = createdReview.id
+    const reviewId = reviewResult.rows[0].id
 
-    // Update helper average_rating for IT-Hilfe reviews
+    // Post-creation side-effects
     if (targetType === REVIEW_TARGET_TYPES.IT_HILFE) {
-      try {
-        // Find the helper via matched offer
-        const helperResult = await query(`
-          SELECT o.helper_id
-          FROM ${TABLE_NAMES.IT_HILFE_OFFERS} o
-          JOIN ${TABLE_NAMES.IT_HILFE_REQUESTS} r ON r.matched_offer_id = o.id
-          WHERE r.id = $1
-        `, [targetId])
-
-        if (helperResult.rows.length > 0) {
-          const helperId = (helperResult.rows[0] as { helper_id: string }).helper_id
-
-          // Recalculate average from all published IT-Hilfe reviews for this helper
-          const avgResult = await query(`
-            SELECT AVG(rev.overall_rating) as avg_rating
-            FROM ${TABLE_NAMES.REVIEWS} rev
-            JOIN ${TABLE_NAMES.IT_HILFE_REQUESTS} req ON rev.target_id = req.id
-            JOIN ${TABLE_NAMES.IT_HILFE_OFFERS} off ON req.matched_offer_id = off.id
-            WHERE rev.target_type = $1
-              AND rev.status = 'published'
-              AND off.helper_id = $2
-          `, [REVIEW_TARGET_TYPES.IT_HILFE, helperId])
-
-          const avgRating = avgResult.rows[0] ? (avgResult.rows[0] as { avg_rating: string }).avg_rating : null
-          if (avgRating) {
-            await query(
-              `UPDATE ${TABLE_NAMES.IT_HILFE_TECHNICIAN_PROFILES} SET average_rating = $1 WHERE user_id = $2`,
-              [parseFloat(avgRating), helperId]
-            )
-          }
-        }
-      } catch (error) {
-        logger.error('Error updating helper average rating', { error, targetId })
-      }
+      await updateHelperAverageRating(targetId)
     }
 
-    // Send notification to repairer if it's a repairer review
     if (targetType === REVIEW_TARGET_TYPES.REPAIRER) {
-      try {
-        // Get repairer details
-        const repairerResult = await query(`
-          SELECT rp.business_name, u.email, u.name as repairer_name
-          FROM ${TABLE_NAMES.REPAIRER_PROFILES} rp
-          JOIN ${TABLE_NAMES.USERS} u ON rp.user_id = u.id
-          WHERE rp.id = $1
-        `, [targetId])
-
-        if (repairerResult.rows.length > 0) {
-          const repairer = repairerResult.rows[0] as RepairerRow
-          const reviewUrl = `${APP_URL}/dashboard/repairer/reviews`
-
-          const notificationResult = await sendEmail(
-            repairer.email,
-            'newReviewNotification',
-            repairer.repairer_name || repairer.business_name || 'Reparateur',
-            session.user.name || 'Kunde',
-            overallRating,
-            content,
-            reviewUrl
-          )
-
-          if (!notificationResult.success) {
-            logger.warn('Failed to send new review notification', {
-              reviewId,
-              repairerEmail: repairer.email,
-              error: notificationResult.error
-            })
-          }
-        }
-      } catch (error) {
-        logger.error('Error sending review notification', { error, reviewId })
-      }
+      await notifyRepairerOfReview(
+        targetId,
+        reviewId,
+        session.user.name || 'Kunde',
+        overallRating,
+        content
+      )
     }
 
     logger.info('Review created', {
-      reviewId,
-      reviewerId: session.user.id,
-      targetType,
-      targetId,
-      overallRating
+      reviewId, reviewerId: session.user.id, targetType, targetId, overallRating,
     })
 
-    return apiSuccess({
-      message: 'Bewertung erfolgreich erstellt',
-      reviewId
-    }, 201)
-
+    return apiSuccess({ message: 'Bewertung erfolgreich erstellt', reviewId }, 201)
   } catch (error) {
     logger.error('Error creating review', { error })
     return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)
+  }
+}
+
+// ─── Helpers ────────────────────────────────────────────────────────
+
+function mapReviewRow(review: ReviewRow) {
+  return {
+    id: review.id,
+    reviewerId: review.reviewer_id,
+    reviewerName: review.reviewer_name,
+    reviewerEmail: review.reviewer_email,
+    targetType: review.target_type,
+    targetId: review.target_id,
+    targetName: review.target_name,
+    bookingId: review.booking_id,
+    overallRating: review.overall_rating,
+    ratings: {
+      communication: review.communication_rating,
+      professionalism: review.professionalism_rating,
+      quality: review.quality_rating,
+      timeliness: review.timeliness_rating,
+      value: review.value_rating,
+    },
+    title: review.title,
+    content: review.content,
+    isVerifiedPurchase: review.is_verified_purchase,
+    helpfulVotes: review.helpful_votes,
+    totalVotes: review.total_votes,
+    userHasVoted: review.user_has_voted,
+    userVote: review.user_vote,
+    status: review.status,
+    attachments: (review.attachments || []).map((att: ReviewAttachment) => ({
+      id: att.id,
+      filename: att.original_filename,
+      filePath: att.file_path,
+      mimeType: att.mime_type,
+      attachmentType: att.attachment_type,
+    })),
+    response: review.response_id ? {
+      id: review.response_id,
+      content: review.response_content,
+      createdAt: review.response_created_at,
+      responderName: review.responder_name,
+    } : null,
+    createdAt: review.created_at,
+    updatedAt: review.updated_at,
   }
 }
