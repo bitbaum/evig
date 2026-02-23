@@ -5,7 +5,6 @@ import { apiError, apiSuccess, apiBadRequest, apiUnauthorized, apiForbidden } fr
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES } from '@/config/database'
 
-
 interface CountRow {
   total: string
 }

@@ -19,7 +19,6 @@ export const GET = withAuth(async (request, session) => {
   }
 })
 
-
 export const PUT = withAuth(async (request: NextRequest, session) => {
   try {
     const body = await request.json()

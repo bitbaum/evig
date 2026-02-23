@@ -10,7 +10,6 @@ import {
   getSkillIds,
   URGENCY_LEVELS,
   SERVICE_TYPES,
-  REQUEST_STATUSES,
 } from '@/config/it-hilfe'
 import { type RequestRow, mapRequestDetailRow } from '@/lib/it-hilfe/request-mapper'
 

@@ -5,7 +5,6 @@ import { apiError, apiSuccess, apiBadRequest, apiUnauthorized, apiForbidden, api
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES } from '@/config/database'
 
-
 interface LocationOwnerRow {
   created_by: string
   approval_status: string
