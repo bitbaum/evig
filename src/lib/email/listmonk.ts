@@ -8,23 +8,14 @@
  */
 
 import { logger } from '@/lib/logger';
+import { LISTMONK_CONFIG } from '@/config/email';
 import type { EmailContent, SendEmailResult } from './types';
-
-// Listmonk configuration from environment
-const LISTMONK_CONFIG = {
-  url: process.env.LISTMONK_URL || 'http://localhost:9090',
-  username: process.env.LISTMONK_USERNAME || 'admin',
-  password: process.env.LISTMONK_PASSWORD || 'revampit2024',
-  fromEmail: process.env.LISTMONK_FROM_EMAIL || 'noreply@revamp-it.ch',
-  fromName: process.env.LISTMONK_FROM_NAME || 'RevampIT',
-  enabled: process.env.LISTMONK_ENABLED === 'true',
-};
 
 /**
  * Check if Listmonk is configured and enabled
  */
 export function isListmonkEnabled(): boolean {
-  return LISTMONK_CONFIG.enabled;
+  return LISTMONK_CONFIG.ENABLED;
 }
 
 /**
@@ -32,11 +23,11 @@ export function isListmonkEnabled(): boolean {
  */
 export function getListmonkConfig() {
   return {
-    url: LISTMONK_CONFIG.url,
-    username: LISTMONK_CONFIG.username,
-    fromEmail: LISTMONK_CONFIG.fromEmail,
-    fromName: LISTMONK_CONFIG.fromName,
-    enabled: LISTMONK_CONFIG.enabled,
+    url: LISTMONK_CONFIG.URL,
+    username: LISTMONK_CONFIG.USERNAME,
+    fromEmail: LISTMONK_CONFIG.FROM_EMAIL,
+    fromName: LISTMONK_CONFIG.FROM_NAME,
+    enabled: LISTMONK_CONFIG.ENABLED,
   };
 }
 
@@ -45,7 +36,7 @@ export function getListmonkConfig() {
  */
 function getAuthHeader(): string {
   const credentials = Buffer.from(
-    `${LISTMONK_CONFIG.username}:${LISTMONK_CONFIG.password}`
+    `${LISTMONK_CONFIG.USERNAME}:${LISTMONK_CONFIG.PASSWORD}`
   ).toString('base64');
   return `Basic ${credentials}`;
 }
@@ -62,7 +53,7 @@ export async function sendViaListmonk(
   content: EmailContent,
   subscriberAttrs?: Record<string, unknown>
 ): Promise<SendEmailResult> {
-  if (!LISTMONK_CONFIG.enabled) {
+  if (!LISTMONK_CONFIG.ENABLED) {
     logger.warn('Listmonk is not enabled, skipping email', { to });
     return {
       success: false,
@@ -74,7 +65,7 @@ export async function sendViaListmonk(
     const payload = {
       subscriber_email: to,
       subscriber_name: subscriberAttrs?.name || '',
-      from_email: LISTMONK_CONFIG.fromEmail,
+      from_email: LISTMONK_CONFIG.FROM_EMAIL,
       subject: content.subject,
       body: content.html,
       alt_body: content.text,
@@ -85,7 +76,7 @@ export async function sendViaListmonk(
       data: subscriberAttrs || {},
     };
 
-    const response = await fetch(`${LISTMONK_CONFIG.url}/api/tx`, {
+    const response = await fetch(`${LISTMONK_CONFIG.URL}/api/tx`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -125,7 +116,7 @@ export async function testListmonkConnection(): Promise<{
   error?: string;
 }> {
   try {
-    const response = await fetch(`${LISTMONK_CONFIG.url}/api/health`, {
+    const response = await fetch(`${LISTMONK_CONFIG.URL}/api/health`, {
       method: 'GET',
       headers: {
         Authorization: getAuthHeader(),
@@ -160,12 +151,12 @@ export async function subscribeToList(
   name: string,
   listIds: number[]
 ): Promise<{ success: boolean; error?: string }> {
-  if (!LISTMONK_CONFIG.enabled) {
+  if (!LISTMONK_CONFIG.ENABLED) {
     return { success: false, error: 'Listmonk is not enabled' };
   }
 
   try {
-    const response = await fetch(`${LISTMONK_CONFIG.url}/api/subscribers`, {
+    const response = await fetch(`${LISTMONK_CONFIG.URL}/api/subscribers`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

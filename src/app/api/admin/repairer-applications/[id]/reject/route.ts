@@ -6,6 +6,7 @@ import { ERROR_MESSAGES, SUCCESS_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES } from '@/config/database'
 import { sendEmail } from '@/lib/email'
 import { logger } from '@/lib/logger'
+import { SUPPORT_EMAIL } from '@/lib/constants'
 
 interface ApplicationRow {
   user_id: string
@@ -72,7 +73,7 @@ export const PUT = withAdmin<{ id: string }>(async (request, session, context) =
     })
 
     // Send rejection notification email to applicant
-    const supportEmail = process.env.SUPPORT_EMAIL || 'support@revampit.ch'
+    const supportEmail = SUPPORT_EMAIL
     const rejectionEmailResult = await sendEmail(
       application.email,
       'repairerApplicationRejected',

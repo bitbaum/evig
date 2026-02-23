@@ -55,6 +55,7 @@ export type UserRole = typeof ROLES[keyof typeof ROLES]
 // =============================================================================
 
 export const CONTACT_EMAIL = 'empfang@revamp-it.ch'
+export const SUPPORT_EMAIL = process.env.SUPPORT_EMAIL || 'support@revampit.ch'
 
 export const SHOP_ONLINE_URL = 'https://revamp-it.ch/shop'
 export const SHOPWARE_URL = 'https://revamp-it.ch/shop-sw'
