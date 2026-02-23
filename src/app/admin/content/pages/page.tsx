@@ -89,11 +89,6 @@ async function getStaticPages(): Promise<StaticPage[]> {
   }
 }
 
-function formatDate(dateStr: string | null): string {
-  if (!dateStr) return '-'
-  return formatDateNumeric(dateStr)
-}
-
 export default async function AdminPagesPage() {
   const session = await auth()
 
@@ -230,7 +225,7 @@ export default async function AdminPagesPage() {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="text-sm text-gray-900 dark:text-white">
-                        {formatDate(page.updated_at)}
+                        {page.updated_at ? formatDateNumeric(page.updated_at) : '-'}
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">

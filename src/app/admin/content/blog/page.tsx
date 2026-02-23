@@ -108,11 +108,6 @@ async function getBlogPosts(): Promise<BlogPost[]> {
   }
 }
 
-function formatDate(dateStr: string | null): string {
-  if (!dateStr) return '-'
-  return formatDateNumeric(dateStr)
-}
-
 export default async function AdminBlogPage() {
   const session = await auth()
 
@@ -259,7 +254,7 @@ export default async function AdminBlogPage() {
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="text-sm text-gray-900 dark:text-white flex items-center gap-1">
                         <Calendar className="w-4 h-4 text-gray-400" />
-                        {formatDate(post.published_at || post.created_at)}
+                        {formatDateNumeric(post.published_at || post.created_at)}
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">

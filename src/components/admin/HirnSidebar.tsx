@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { Plus, MessageSquare, Loader2, ChevronRight, FileText, BarChart3 } from 'lucide-react'
+import { formatRelativeTime } from '@/lib/utils'
 
 interface Session {
   sessionId: string
@@ -62,17 +63,6 @@ export function HirnSidebar({
     } catch {
       // Ignore errors
     }
-  }
-
-  const formatDate = (date: Date) => {
-    const now = new Date()
-    const diff = now.getTime() - date.getTime()
-    const days = Math.floor(diff / (1000 * 60 * 60 * 24))
-
-    if (days === 0) return 'Heute'
-    if (days === 1) return 'Gestern'
-    if (days < 7) return `Vor ${days} Tagen`
-    return date.toLocaleDateString('de-CH')
   }
 
   return (
@@ -143,7 +133,7 @@ export function HirnSidebar({
                     {session.firstMessage.length > 40 ? '...' : ''}
                   </p>
                   <p className="text-xs text-gray-500">
-                    {formatDate(session.lastActivity)} · {session.messageCount} Nachrichten
+                    {formatRelativeTime(session.lastActivity.toISOString())} · {session.messageCount} Nachrichten
                   </p>
                 </div>
                 <ChevronRight className="w-4 h-4 flex-shrink-0 opacity-50" />
