@@ -13,7 +13,7 @@ export interface Submission {
   category_name: string | null
   category_label: string | null
   tags: string[]
-  status: 'pending' | 'approved' | 'rejected' | 'published'
+  status: ApprovalStatus
   reviewed_by: string | null
   reviewed_at: string | null
   reviewer_name: string | null

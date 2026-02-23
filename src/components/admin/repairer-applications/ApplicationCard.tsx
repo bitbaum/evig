@@ -1,5 +1,5 @@
 import { CheckCircle, XCircle, Clock, AlertCircle, Mail, Phone, ExternalLink, MapPin } from 'lucide-react'
-import { getApprovalStatusBadge } from '@/config/approval-status'
+import { APPROVAL_STATUS, getApprovalStatusBadge } from '@/config/approval-status'
 import { formatDateShort } from '@/lib/date-formats'
 import type { RepairerApplication, ActionDialogState } from './types'
 
@@ -12,9 +12,9 @@ interface Props {
 
 function getStatusIcon(status: string) {
   switch (status) {
-    case 'approved': return <CheckCircle className="w-5 h-5 text-green-500" />
-    case 'rejected': return <XCircle className="w-5 h-5 text-red-500" />
-    case 'requires_changes': return <AlertCircle className="w-5 h-5 text-orange-500" />
+    case APPROVAL_STATUS.APPROVED: return <CheckCircle className="w-5 h-5 text-green-500" />
+    case APPROVAL_STATUS.REJECTED: return <XCircle className="w-5 h-5 text-red-500" />
+    case APPROVAL_STATUS.REQUIRES_CHANGES: return <AlertCircle className="w-5 h-5 text-orange-500" />
     default: return <Clock className="w-5 h-5 text-blue-500" />
   }
 }

@@ -25,6 +25,7 @@ import {
   type InventoryStats,
   type ShopStats,
 } from './products'
+import { MARKETPLACE_STATUS, PRODUCT_STATUS } from '@/config/marketplace-status'
 
 export default function ProductManagement() {
   const router = useRouter()
@@ -79,10 +80,10 @@ export default function ProductManagement() {
   // Calculate inventory stats
   const inventoryStats: InventoryStats = useMemo(() => ({
     total: inventoryProducts.length,
-    published: inventoryProducts.filter(p => p.marketplace_status === 'published').length,
-    draft: inventoryProducts.filter(p => p.marketplace_status === 'draft').length,
-    approved: inventoryProducts.filter(p => p.status === 'approved').length,
-    pending: inventoryProducts.filter(p => p.status === 'pending_review').length,
+    published: inventoryProducts.filter(p => p.marketplace_status === MARKETPLACE_STATUS.PUBLISHED).length,
+    draft: inventoryProducts.filter(p => p.marketplace_status === MARKETPLACE_STATUS.DRAFT).length,
+    approved: inventoryProducts.filter(p => p.status === PRODUCT_STATUS.APPROVED).length,
+    pending: inventoryProducts.filter(p => p.status === PRODUCT_STATUS.PENDING_REVIEW).length,
   }), [inventoryProducts])
 
   // Calculate shop stats
@@ -173,7 +174,7 @@ export default function ProductManagement() {
       const response = await fetch(`/api/admin/inventory/${publishTarget.id}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ marketplace_status: 'published' }),
+        body: JSON.stringify({ marketplace_status: MARKETPLACE_STATUS.PUBLISHED }),
       })
       const data = await response.json()
 
@@ -231,7 +232,7 @@ export default function ProductManagement() {
       const response = await fetch(`/api/admin/inventory/${unpublishTarget.id}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ marketplace_status: 'draft' }),
+        body: JSON.stringify({ marketplace_status: MARKETPLACE_STATUS.DRAFT }),
       })
       const data = await response.json()
 

@@ -1,11 +1,12 @@
 'use client'
 
 import { useState, useEffect, useCallback } from 'react'
+import { APPROVAL_STATUS } from '@/config/approval-status'
 import type { Submission, FilterStatus, SubmissionAction, StatusCounts } from './types'
 
 export function useSubmissions() {
   const [submissions, setSubmissions] = useState<Submission[]>([])
-  const [filter, setFilter] = useState<FilterStatus>('pending')
+  const [filter, setFilter] = useState<FilterStatus>(APPROVAL_STATUS.PENDING)
   const [selectedSubmission, setSelectedSubmission] = useState<Submission | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [actionLoading, setActionLoading] = useState<string | null>(null)
@@ -96,10 +97,10 @@ export function useSubmissions() {
 
   const counts: StatusCounts = {
     all: submissions.length,
-    pending: submissions.filter((s) => s.status === 'pending').length,
-    approved: submissions.filter((s) => s.status === 'approved').length,
-    rejected: submissions.filter((s) => s.status === 'rejected').length,
-    published: submissions.filter((s) => s.status === 'published').length,
+    pending: submissions.filter((s) => s.status === APPROVAL_STATUS.PENDING).length,
+    approved: submissions.filter((s) => s.status === APPROVAL_STATUS.APPROVED).length,
+    rejected: submissions.filter((s) => s.status === APPROVAL_STATUS.REJECTED).length,
+    published: submissions.filter((s) => s.status === APPROVAL_STATUS.PUBLISHED).length,
   }
 
   return {

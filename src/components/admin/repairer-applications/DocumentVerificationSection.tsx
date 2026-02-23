@@ -1,3 +1,4 @@
+import { APPROVAL_STATUS } from '@/config/approval-status'
 import type { RepairerApplication, VerificationDocument, DocumentType, ActionDialogState } from './types'
 
 interface Props {
@@ -41,8 +42,8 @@ export function DocumentVerificationSection({
                   <div key={doc.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                     <div className="flex items-center gap-3">
                       <div className={`w-3 h-3 rounded-full ${
-                        doc.status === 'approved' ? 'bg-green-500' :
-                        doc.status === 'rejected' ? 'bg-red-500' :
+                        doc.status === APPROVAL_STATUS.APPROVED ? 'bg-green-500' :
+                        doc.status === APPROVAL_STATUS.REJECTED ? 'bg-red-500' :
                         'bg-yellow-500'
                       }`} />
                       <div>
@@ -67,7 +68,7 @@ export function DocumentVerificationSection({
                       >
                         Anzeigen
                       </a>
-                      {doc.status === 'pending' && (
+                      {doc.status === APPROVAL_STATUS.PENDING && (
                         <>
                           <button
                             onClick={() => onOpenDialog('approve_doc', doc.id)}
@@ -85,10 +86,10 @@ export function DocumentVerificationSection({
                           </button>
                         </>
                       )}
-                      {doc.status === 'approved' && (
+                      {doc.status === APPROVAL_STATUS.APPROVED && (
                         <span className="text-xs text-green-600 font-medium">Genehmigt</span>
                       )}
-                      {doc.status === 'rejected' && (
+                      {doc.status === APPROVAL_STATUS.REJECTED && (
                         <span className="text-xs text-red-600 font-medium">Abgelehnt</span>
                       )}
                     </div>

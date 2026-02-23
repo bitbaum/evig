@@ -1,5 +1,6 @@
 'use client'
 
+import { APPROVAL_STATUS } from '@/config/approval-status'
 import { formatDateTime } from '@/lib/date-formats'
 import Link from 'next/link'
 import {
@@ -136,7 +137,7 @@ export function SubmissionDetail({
       </div>
 
       {/* Actions: pending */}
-      {submission.status === 'pending' && (
+      {submission.status === APPROVAL_STATUS.PENDING && (
         <div className="space-y-3">
           <button
             onClick={onShowEditModal}
@@ -194,7 +195,7 @@ export function SubmissionDetail({
       )}
 
       {/* Actions: approved */}
-      {submission.status === 'approved' && (
+      {submission.status === APPROVAL_STATUS.APPROVED && (
         <button
           onClick={() => onAction('publish', submission.id)}
           disabled={actionLoading !== null}
@@ -210,7 +211,7 @@ export function SubmissionDetail({
       )}
 
       {/* Actions: published */}
-      {submission.status === 'published' && submission.slug && (
+      {submission.status === APPROVAL_STATUS.PUBLISHED && submission.slug && (
         <Link
           href={`/blog/${submission.slug}`}
           target="_blank"

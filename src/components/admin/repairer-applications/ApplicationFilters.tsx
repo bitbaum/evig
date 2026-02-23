@@ -1,5 +1,5 @@
 import { Filter, Search } from 'lucide-react'
-import { getApprovalStatusLabel, type ApprovalStatus } from '@/config/approval-status'
+import { APPROVAL_STATUS, getApprovalStatusLabel } from '@/config/approval-status'
 import type { ApplicationStatus } from './types'
 
 interface Props {
@@ -9,7 +9,12 @@ interface Props {
   onSearchChange: (query: string) => void
 }
 
-const STATUS_OPTIONS: ApplicationStatus[] = ['pending', 'approved', 'rejected', 'requires_changes']
+const STATUS_OPTIONS: ApplicationStatus[] = [
+  APPROVAL_STATUS.PENDING,
+  APPROVAL_STATUS.APPROVED,
+  APPROVAL_STATUS.REJECTED,
+  APPROVAL_STATUS.REQUIRES_CHANGES,
+]
 
 export function ApplicationFilters({ selectedStatus, searchQuery, onStatusChange, onSearchChange }: Props) {
   return (

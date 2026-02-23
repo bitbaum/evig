@@ -1,9 +1,9 @@
 'use client'
 
-import { APPROVAL_STATUS_BADGES } from '@/config/approval-status'
+import { APPROVAL_STATUS, APPROVAL_STATUS_BADGES } from '@/config/approval-status'
 import type { FilterStatus, StatusCounts } from './types'
 
-const FILTER_OPTIONS = ['all', 'pending', 'approved', 'rejected', 'published'] as const
+const FILTER_OPTIONS = ['all', APPROVAL_STATUS.PENDING, APPROVAL_STATUS.APPROVED, APPROVAL_STATUS.REJECTED, APPROVAL_STATUS.PUBLISHED] as const
 
 interface SubmissionFiltersProps {
   filter: FilterStatus

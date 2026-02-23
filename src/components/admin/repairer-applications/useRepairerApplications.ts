@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react'
+import { APPROVAL_STATUS } from '@/config/approval-status'
 import { logger } from '@/lib/logger'
 import type {
   RepairerApplication,
@@ -13,7 +14,7 @@ export function useRepairerApplications() {
   const [applications, setApplications] = useState<RepairerApplication[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [selectedStatus, setSelectedStatus] = useState<ApplicationStatus>('pending')
+  const [selectedStatus, setSelectedStatus] = useState<ApplicationStatus>(APPROVAL_STATUS.PENDING)
   const [selectedApplication, setSelectedApplication] = useState<RepairerApplication | null>(null)
   const [selectedApplicationDocuments, setSelectedApplicationDocuments] = useState<VerificationDocument[]>([])
   const [selectedApplicationCertifications, setSelectedApplicationCertifications] = useState<Certification[]>([])
