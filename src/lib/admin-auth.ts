@@ -195,22 +195,6 @@ export async function verifyAdminPassword(
   }
 }
 
-/**
- * Legacy synchronous password verification
- * @deprecated Use verifyAdminPassword (async) instead
- */
-export function verifyAdminPasswordSync(password: string): boolean {
-  ensurePasswordConfigValid()
-  const hash = getAdminPasswordHash()
-  if (hash) {
-    // Cannot use bcrypt synchronously without blocking
-    logger.warn('Cannot verify hashed password synchronously. Use verifyAdminPassword().')
-    return false
-  }
-  const plainPassword = getAdminPassword()
-  return constantTimeCompare(password, plainPassword)
-}
-
 export function createAdminToken(email: string = 'admin@revampit.ch'): string {
   const payload: AdminUser = {
     id: 'admin-1',

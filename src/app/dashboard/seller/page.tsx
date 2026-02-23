@@ -106,7 +106,7 @@ export default function SellerDashboard() {
     {
       title: 'Neues Produkt',
       description: 'Produkt zum Marketplace hinzufügen',
-      href: '/marketplace/list',
+      href: '/marketplace/sell',
       icon: Plus,
       color: 'bg-green-500',
     },
@@ -278,7 +278,7 @@ export default function SellerDashboard() {
                   Sie haben noch keine Produkte erstellt.
                 </p>
                 <Link
-                  href="/marketplace/list"
+                  href="/marketplace/sell"
                   className="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg"
                 >
                   <Plus className="w-4 h-4" />
@@ -389,7 +389,7 @@ export default function SellerDashboard() {
                 Marketplace ansehen
               </Link>
               <Link
-                href="/marketplace/list"
+                href="/marketplace/sell"
                 className="text-sm bg-green-600 text-white px-3 py-1.5 rounded hover:bg-green-700 transition-colors"
               >
                 Produkt hinzufügen

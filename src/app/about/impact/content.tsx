@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import Image from 'next/image'
-import { HeroBanner } from '@/components/ui/hero-banner'
+import { ResponsiveHero } from '@/components/layout/ResponsiveHero'
 import AboutSubNav from '@/components/about/AboutSubNav'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -164,7 +164,7 @@ export default function ImpactPageContent() {
   return (
     <main className="min-h-screen">
       {/* Hero Section */}
-      <HeroBanner
+      <ResponsiveHero
         title="Unsere messbare Wirkung"
         description="Entdecken Sie, wie RevampIT seit 2003 die Schweizer IT-Landschaft nachhaltig verändert – transparent, messbar und wirksam."
       />

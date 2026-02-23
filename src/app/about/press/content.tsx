@@ -9,7 +9,7 @@
 
 import { ExternalLink, Quote, Newspaper, Award, Star, ArrowLeft } from 'lucide-react'
 import Link from 'next/link'
-import { HeroBanner } from '@/components/ui/hero-banner'
+import { ResponsiveHero } from '@/components/layout/ResponsiveHero'
 import AboutSubNav from '@/components/about/AboutSubNav'
 import {
   MEDIA_COVERAGE,
@@ -120,7 +120,7 @@ export default function PressPageContent() {
 
   return (
     <main className="min-h-screen">
-      <HeroBanner
+      <ResponsiveHero
         title="Presse & Medien"
         description="Was SRF, Beobachter und andere über RevampIT berichten. Seit über 20 Jahren setzen wir uns für nachhaltige IT ein."
       />

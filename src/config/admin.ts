@@ -200,7 +200,7 @@ export const ADMIN_SHORTCUTS: AdminShortcut[] = [
     id: 'list-product',
     title: 'Produkt auflisten',
     description: 'Neues Produkt als Benutzer auflisten',
-    href: '/marketplace/list',
+    href: '/marketplace/sell',
     icon: Plus,
     color: 'bg-green-500',
     category: 'quick',

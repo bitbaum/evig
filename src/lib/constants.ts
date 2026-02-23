@@ -8,7 +8,6 @@
  * This file keeps:
  * - ROLES object (for SELLER/REPAIRER community role checks)
  * - UserRole type (for type compatibility)
- * - isAdminRole() (backward compatible role check)
  * - Contact/shop constants
  * - Re-exports from permissions.ts
  */
@@ -50,34 +49,6 @@ export const ROLES = {
 } as const
 
 export type UserRole = typeof ROLES[keyof typeof ROLES]
-
-// =============================================================================
-// ADMIN/STAFF CHECKS - Simple role-based checks for backward compatibility
-// =============================================================================
-
-/**
- * Admin role values for backward compatibility
- * @deprecated Use is_staff field instead
- */
-const ADMIN_ROLE_VALUES = [
-  ROLES.REVAMPIT_ADMIN,
-  ROLES.REVAMPIT_SUPER_ADMIN,
-  'admin',  // Legacy
-  'REVAMPIT_ADMIN',  // Uppercase variant
-] as const
-
-/**
- * Check if a role has admin privileges
- *
- * This is a simple role string check for backward compatibility.
- * For full user objects, use hasAdminAccessUnified() from unified-permissions.ts
- *
- * @deprecated Prefer using is_staff field or hasAdminAccessUnified()
- */
-export function isAdminRole(role: string | undefined | null): boolean {
-  if (!role) return false
-  return ADMIN_ROLE_VALUES.includes(role as typeof ADMIN_ROLE_VALUES[number])
-}
 
 // =============================================================================
 // CONTACT & SHOP CONSTANTS

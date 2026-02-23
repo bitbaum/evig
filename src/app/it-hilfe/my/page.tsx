@@ -24,7 +24,7 @@ import {
   REQUEST_STATUSES,
 } from '@/config/it-hilfe'
 
-interface PeerRepairRequest {
+interface ITHilfeRequest {
   id: string
   categoryId: string
   deviceBrand: string | null
@@ -52,7 +52,7 @@ export default function MyRequestsPage() {
   const { data: session, status } = useSession()
   const router = useRouter()
 
-  const [requests, setRequests] = useState<PeerRepairRequest[]>([])
+  const [requests, setRequests] = useState<ITHilfeRequest[]>([])
   const [loading, setLoading] = useState(true)
   const [total, setTotal] = useState(0)
   const [statusFilter, setStatusFilter] = useState('')

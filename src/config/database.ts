@@ -112,13 +112,6 @@ export const TABLE_NAMES = {
   USER_SKILLS: 'user_skills',
   IT_HILFE_TECHNICIAN_PROFILES: 'helper_profiles',
 
-  /** @deprecated Use IT_HILFE_REQUESTS instead. Remove after 2026-06-01. */
-  PEER_REPAIR_REQUESTS: 'it_hilfe_requests',
-  /** @deprecated Use IT_HILFE_OFFERS instead. Remove after 2026-06-01. */
-  PEER_REPAIR_OFFERS: 'it_hilfe_offers',
-  /** @deprecated Use IT_HILFE_TECHNICIAN_PROFILES instead. Remove after 2026-06-01. */
-  HELPER_PROFILES: 'helper_profiles',
-
   // HIRN AI System
   HIRN_DOCUMENTS: 'hirn_documents',
   HIRN_CHUNKS: 'hirn_chunks',
@@ -194,8 +187,6 @@ export const REVIEW_TARGET_TYPES = {
   WORKSHOP: 'workshop',
   IT_HILFE: 'it_hilfe',
   LISTING: 'listing',
-  /** @deprecated Use IT_HILFE instead */
-  PEER_REPAIR: 'it_hilfe',
 } as const;
 
 export type ReviewTargetType = typeof REVIEW_TARGET_TYPES[keyof typeof REVIEW_TARGET_TYPES];
@@ -208,8 +199,6 @@ export const CONVERSATION_TYPES = {
   GENERAL: 'general',
   IT_HILFE: 'it_hilfe',
   MARKETPLACE: 'marketplace',
-  /** @deprecated Use IT_HILFE instead */
-  PEER_REPAIR: 'it_hilfe',
 } as const;
 
 export type ConversationType = typeof CONVERSATION_TYPES[keyof typeof CONVERSATION_TYPES];

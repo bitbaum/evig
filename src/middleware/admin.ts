@@ -42,19 +42,6 @@ export async function hasPermission(permission: string): Promise<boolean> {
 }
 
 /**
- * Check if user has role (legacy)
- * @deprecated Use hasPermission or hasAdminRole instead
- */
-export async function hasRole(role: UserRole): Promise<boolean> {
-  try {
-    const session = await auth()
-    return session?.user?.role === role
-  } catch {
-    return false
-  }
-}
-
-/**
  * Require specific permission
  *
  * The new system uses staff_permissions array instead of role-based permissions.

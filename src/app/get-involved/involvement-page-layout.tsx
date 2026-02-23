@@ -1,6 +1,6 @@
 import { ReactNode } from 'react'
 import { ContactLink } from '@/components/ui/contact-link'
-import { HeroBanner } from '@/components/ui/hero-banner'
+import { ResponsiveHero } from '@/components/layout/ResponsiveHero'
 import { responsiveTypography, responsiveSpacing, responsiveButtons } from '@/lib/responsive'
 
 interface InvolvementPageLayoutProps {
@@ -20,14 +20,14 @@ export function InvolvementPageLayout({
 }: InvolvementPageLayoutProps) {
   return (
     <main className="min-h-screen">
-      <HeroBanner title={title} description={description}>
+      <ResponsiveHero title={title} description={description}>
         <a
           href={ctaHref}
           className={`${responsiveButtons.primary} bg-white text-green-800 hover:bg-green-50 text-center`}
         >
           {ctaText}
         </a>
-      </HeroBanner>
+      </ResponsiveHero>
 
       {/* Content Section */}
       <section className={responsiveSpacing.section}>
