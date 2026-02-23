@@ -114,6 +114,32 @@ export function apiForbidden(message = 'Forbidden'): NextResponse {
 }
 
 /**
+ * Rate limited response helper (429)
+ * @param message - User-friendly error message
+ * @param options - Rate limit details (retryAfter, remaining, resetAt)
+ */
+export function apiRateLimited(
+  message = 'Zu viele Anfragen. Bitte versuchen Sie es später erneut.',
+  options?: { retryAfter?: number; remaining?: number; resetAt?: number }
+): NextResponse {
+  const retryAfter = options?.retryAfter || 60
+  const headers: Record<string, string> = {
+    'Retry-After': String(retryAfter),
+  }
+  if (options?.remaining !== undefined) {
+    headers['X-RateLimit-Remaining'] = String(options.remaining)
+  }
+  if (options?.resetAt !== undefined) {
+    headers['X-RateLimit-Reset'] = String(options.resetAt)
+  }
+
+  return NextResponse.json(
+    { success: false, error: message, retryAfter },
+    { status: 429, headers }
+  )
+}
+
+/**
  * Bad request response helper
  * @param message - Error message
  * @param errors - Optional validation errors

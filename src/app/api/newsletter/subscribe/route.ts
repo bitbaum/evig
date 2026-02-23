@@ -3,7 +3,7 @@ import fs from 'fs'
 import path from 'path'
 import { randomBytes } from 'crypto'
 import { requireAdminAuth } from '@/lib/admin-auth'
-import { apiError, apiSuccess, apiBadRequest } from '@/lib/api/helpers'
+import { apiError, apiSuccess, apiBadRequest, apiRateLimited } from '@/lib/api/helpers'
 import { logger } from '@/lib/logger'
 import { checkRateLimit, getClientIp } from '@/lib/auth/rate-limiter'
 import { sendEmail } from '@/lib/email'
@@ -34,21 +34,11 @@ export async function POST(request: NextRequest) {
 
     if (!rateLimitResult.allowed) {
       logger.warn('Newsletter subscription rate limit exceeded', { ip: clientIp })
-      return NextResponse.json(
-        {
-          success: false,
-          error: 'Zu viele Anfragen. Bitte versuchen Sie es später erneut.',
-          retryAfter: rateLimitResult.retryAfter,
-        },
-        {
-          status: 429,
-          headers: {
-            'Retry-After': String(rateLimitResult.retryAfter || 60),
-            'X-RateLimit-Remaining': String(rateLimitResult.remaining),
-            'X-RateLimit-Reset': String(rateLimitResult.resetAt),
-          },
-        }
-      )
+      return apiRateLimited('Zu viele Anfragen. Bitte versuchen Sie es später erneut.', {
+        retryAfter: rateLimitResult.retryAfter,
+        remaining: rateLimitResult.remaining,
+        resetAt: rateLimitResult.resetAt,
+      })
     }
 
     const body = await request.json()

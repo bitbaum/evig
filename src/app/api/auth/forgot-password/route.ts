@@ -3,10 +3,10 @@
  * POST /api/auth/forgot-password
  */
 
-import { NextRequest, NextResponse } from 'next/server'
+import { NextRequest } from 'next/server'
 import { getUserByEmail, createPasswordResetToken } from '@/lib/auth/db'
 import { sendEmail } from '@/lib/email'
-import { apiError, apiSuccess } from '@/lib/api/helpers'
+import { apiError, apiSuccess, apiRateLimited } from '@/lib/api/helpers'
 import { logger } from '@/lib/logger'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { checkRateLimit, getClientIp } from '@/lib/auth/rate-limiter'
@@ -20,19 +20,9 @@ export async function POST(request: NextRequest) {
 
     if (!rateLimitResult.allowed) {
       logger.warn('Password reset rate limit exceeded', { ip: clientIp })
-      return NextResponse.json(
-        {
-          success: false,
-          error: 'Zu viele Anfragen. Bitte versuchen Sie es später erneut.',
-          retryAfter: rateLimitResult.retryAfter,
-        },
-        {
-          status: 429,
-          headers: {
-            'Retry-After': String(rateLimitResult.retryAfter || 60),
-          },
-        }
-      )
+      return apiRateLimited('Zu viele Anfragen. Bitte versuchen Sie es später erneut.', {
+        retryAfter: rateLimitResult.retryAfter,
+      })
     }
 
     const body = await request.json()

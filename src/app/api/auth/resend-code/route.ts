@@ -5,8 +5,8 @@
  * Generates a new 6-digit verification code and sends it via email
  */
 
-import { NextRequest, NextResponse } from 'next/server'
-import { apiError, apiSuccess, apiBadRequest } from '@/lib/api/helpers'
+import { NextRequest } from 'next/server'
+import { apiError, apiSuccess, apiBadRequest, apiRateLimited } from '@/lib/api/helpers'
 import { logger } from '@/lib/logger'
 import { getUserByEmail, createVerificationCode } from '@/lib/auth/db'
 import { sendEmail } from '@/lib/email'
@@ -21,21 +21,11 @@ export async function POST(request: NextRequest) {
 
     if (!rateLimitResult.allowed) {
       logger.warn('Resend code rate limit exceeded', { ip: clientIp })
-      return NextResponse.json(
-        {
-          success: false,
-          error: 'Zu viele Anfragen. Bitte versuchen Sie es später erneut.',
-          retryAfter: rateLimitResult.retryAfter,
-        },
-        {
-          status: 429,
-          headers: {
-            'Retry-After': String(rateLimitResult.retryAfter || 60),
-            'X-RateLimit-Remaining': String(rateLimitResult.remaining),
-            'X-RateLimit-Reset': String(rateLimitResult.resetAt),
-          },
-        }
-      )
+      return apiRateLimited('Zu viele Anfragen. Bitte versuchen Sie es später erneut.', {
+        retryAfter: rateLimitResult.retryAfter,
+        remaining: rateLimitResult.remaining,
+        resetAt: rateLimitResult.resetAt,
+      })
     }
 
     const body = await request.json()

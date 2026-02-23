@@ -1,6 +1,6 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextRequest } from 'next/server'
 import { verifyAdminPassword, createAdminToken, createAuthCookie, clearAuthCookie } from '@/lib/admin-auth'
-import { apiSuccess, apiError, apiBadRequest, apiUnauthorized } from '@/lib/api/helpers'
+import { apiSuccess, apiError, apiBadRequest, apiUnauthorized, apiRateLimited } from '@/lib/api/helpers'
 import { logger } from '@/lib/logger'
 import { ROLES } from '@/lib/constants'
 
@@ -33,12 +33,10 @@ export async function POST(request: NextRequest) {
     const verification = await verifyAdminPassword(password, ipAddress, userAgent)
 
     if (!verification.valid) {
-      // Return appropriate error with retry info if available
       if (verification.retryAfter) {
-        return NextResponse.json(
-          { success: false, error: verification.error, retryAfter: verification.retryAfter },
-          { status: 429 }
-        )
+        return apiRateLimited(verification.error || 'Zu viele Anfragen.', {
+          retryAfter: verification.retryAfter,
+        })
       }
       return apiUnauthorized(verification.error || 'Invalid password')
     }

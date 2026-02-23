@@ -7,7 +7,7 @@
 
 import { NextRequest, NextResponse } from 'next/server'
 import { registerUser } from '@/auth'
-import { apiError, apiSuccess, apiBadRequest } from '@/lib/api/helpers'
+import { apiError, apiSuccess, apiBadRequest, apiRateLimited } from '@/lib/api/helpers'
 import { logger } from '@/lib/logger'
 import { checkRateLimit, getClientIp } from '@/lib/auth/rate-limiter'
 import { RegisterSchema, formatZodErrors, ZodError } from '@/lib/schemas'
@@ -20,21 +20,11 @@ export async function POST(request: NextRequest) {
 
     if (!rateLimitResult.allowed) {
       logger.warn('Registration rate limit exceeded', { ip: clientIp })
-      return NextResponse.json(
-        {
-          success: false,
-          error: 'Zu viele Registrierungsversuche. Bitte versuchen Sie es später erneut.',
-          retryAfter: rateLimitResult.retryAfter,
-        },
-        {
-          status: 429,
-          headers: {
-            'Retry-After': String(rateLimitResult.retryAfter || 60),
-            'X-RateLimit-Remaining': String(rateLimitResult.remaining),
-            'X-RateLimit-Reset': String(rateLimitResult.resetAt),
-          },
-        }
-      )
+      return apiRateLimited('Zu viele Registrierungsversuche. Bitte versuchen Sie es später erneut.', {
+        retryAfter: rateLimitResult.retryAfter,
+        remaining: rateLimitResult.remaining,
+        resetAt: rateLimitResult.resetAt,
+      })
     }
 
     const body = await request.json()
