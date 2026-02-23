@@ -19,7 +19,7 @@ interface BlogSubmission {
   excerpt?: string | null;
   category_id?: string | null;
   tags?: string[];
-  [key: string]: any;
+  [key: string]: string | string[] | null | undefined;
 }
 
 interface EditSubmissionModalProps {
@@ -91,7 +91,7 @@ export function EditSubmissionModal({
     }
   };
 
-  const handleFieldChange = (field: string, value: any) => {
+  const handleFieldChange = (field: string, value: string | string[] | null) => {
     setFormData((prev) => ({
       ...prev,
       [field]: value,

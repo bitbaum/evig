@@ -96,7 +96,7 @@ export function appendEditHistory(
  *
  * Handles arrays, objects, null, undefined, primitives.
  */
-function valuesAreEqual(a: any, b: any): boolean {
+function valuesAreEqual(a: unknown, b: unknown): boolean {
   // Exact same reference or both null/undefined
   if (a === b) return true;
   if (a == null || b == null) return false;

@@ -123,7 +123,7 @@ function FieldChange({
 }: {
   field: string;
   label: string;
-  previousValue: any;
+  previousValue: unknown;
 }) {
   const formattedValue = formatValue(previousValue);
 
@@ -141,7 +141,7 @@ function FieldChange({
 /**
  * Format a value for display (handles arrays, objects, null, etc.)
  */
-function formatValue(value: any): React.ReactNode {
+function formatValue(value: unknown): React.ReactNode {
   if (value === null || value === undefined) {
     return <span className="italic text-gray-400">(leer)</span>;
   }

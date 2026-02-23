@@ -65,7 +65,7 @@ export function EditProposalModal({ proposal, onClose, onSaved }: EditProposalMo
     }
   };
 
-  const handleFieldChange = (field: string, value: any) => {
+  const handleFieldChange = (field: string, value: string | string[] | null) => {
     setFormData((prev) => ({
       ...prev,
       [field]: value,

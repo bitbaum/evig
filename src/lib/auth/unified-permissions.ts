@@ -117,7 +117,7 @@ export function hasAdminAccessUnified(user: UnifiedUser | null | undefined): boo
 
   // Check old system (for backwards compatibility)
   if (user.role) {
-    const hasOldRoleAccess = [
+    const hasOldRoleAccess = ([
       ROLES.REVAMPIT_SUPER_ADMIN,
       ROLES.REVAMPIT_ADMIN,
       ROLES.REVAMPIT_EDITOR,
@@ -125,7 +125,7 @@ export function hasAdminAccessUnified(user: UnifiedUser | null | undefined): boo
       ROLES.HIRN_ADMIN,
       ROLES.HIRN_USER,
       ROLES.MODERATOR,
-    ].includes(user.role as any)
+    ] as readonly string[]).includes(user.role ?? '')
 
     if (hasOldRoleAccess) {
       logger.debug('hasAdminAccessUnified: Granted via old role system', {
@@ -335,12 +335,12 @@ export function isStaffUnified(
   if (isStaffEmail(user.email)) return true
 
   // Check old system
-  return [
+  return ([
     ROLES.REVAMPIT_SUPER_ADMIN,
     ROLES.REVAMPIT_ADMIN,
     ROLES.REVAMPIT_EDITOR,
     ROLES.REVAMPIT_SUPPORT,
-  ].includes(user.role as any)
+  ] as readonly string[]).includes(user.role ?? '')
 }
 
 // =============================================================================

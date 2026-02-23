@@ -177,7 +177,7 @@ export function getFieldLabel(
   const config = type === 'workshop'
     ? WORKSHOP_PROPOSAL_EDITABLE_FIELDS
     : BLOG_SUBMISSION_EDITABLE_FIELDS;
-  return (config as any)[field]?.label || field;
+  return (config as Record<string, { label: string }>)[field]?.label || field;
 }
 
 /**

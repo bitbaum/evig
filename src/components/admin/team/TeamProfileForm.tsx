@@ -40,10 +40,10 @@ const FORM_SECTIONS: FormSection[] = [
   { id: 'emergency', label: 'Notfallkontakt', icon: <AlertCircle className="w-5 h-5" /> },
 ]
 
-const SECTION_COMPONENTS: Record<string, React.ComponentType<{ form: any; onChange: any; [key: string]: any }>> = {
-  basic: TeamBasicInfoSection as any,
-  availability: TeamAvailabilitySection as any,
-  emergency: TeamEmergencySection as any,
+const SECTION_COMPONENTS: Record<string, React.ComponentType<{ form: Record<string, unknown>; onChange: (field: string, value: string | boolean) => void }>> = {
+  basic: TeamBasicInfoSection,
+  availability: TeamAvailabilitySection,
+  emergency: TeamEmergencySection,
 }
 
 export function TeamProfileForm({

@@ -86,6 +86,6 @@ export function getValidationMessage(
   field: string,
   error: string
 ): string {
-  const formMessages = VALIDATION_MESSAGES[form] as any
+  const formMessages = VALIDATION_MESSAGES[form] as Record<string, Record<string, string>> | undefined
   return formMessages?.[field]?.[error] || 'Ungültige Eingabe'
 }
