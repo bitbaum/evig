@@ -44,6 +44,7 @@ export function HirnChat({ sessionId, onSessionChange, compact = false }: HirnCh
       setLoadingHistory(true)
       try {
         const response = await fetch(`/api/admin/hirn/history?sessionId=${sessionId}`)
+        if (!response.ok) throw new Error(`HTTP ${response.status}`)
         const data = await response.json()
         if (data.success) {
           setMessages(data.data.map((m: { id: string; role: string; content: string; created_at?: string; createdAt?: string }) => ({

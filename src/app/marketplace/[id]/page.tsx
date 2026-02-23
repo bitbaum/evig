@@ -88,6 +88,7 @@ export default function ListingDetailPage({ params }: { params: Promise<{ id: st
       try {
         const { id } = await params
         const response = await fetch(`/api/listings/${id}`)
+        if (!response.ok) throw new Error(`HTTP ${response.status}`)
         const data = await response.json()
 
         if (data.success && data.data) {
@@ -96,7 +97,10 @@ export default function ListingDetailPage({ params }: { params: Promise<{ id: st
           setFavoriteCount(data.data.favorite_count)
           // Fetch similar listings
           fetch(`/api/listings/similar?listing_id=${data.data.id}&limit=4`)
-            .then(res => res.json())
+            .then(res => {
+              if (!res.ok) throw new Error(`HTTP ${res.status}`)
+              return res.json()
+            })
             .then(simData => {
               if (simData.success && simData.data) setSimilarListings(simData.data)
             })

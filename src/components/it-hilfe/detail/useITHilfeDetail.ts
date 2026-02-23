@@ -87,7 +87,10 @@ export function useITHilfeDetail(id: string) {
     if (!session?.user || !request || request.isOwner) return
 
     fetch(`/api/it-hilfe/my-offers?status=pending`)
-      .then(res => res.json())
+      .then(res => {
+        if (!res.ok) throw new Error(`HTTP ${res.status}`)
+        return res.json()
+      })
       .then(data => {
         if (data.success) {
           const match = data.data.offers.find((o: { requestId: string }) => o.requestId === id)
@@ -116,7 +119,10 @@ export function useITHilfeDetail(id: string) {
     if (!session?.user || !request || request.status !== 'completed') return
 
     fetch(`/api/reviews?targetType=it_hilfe&targetId=${id}`)
-      .then(res => res.json())
+      .then(res => {
+        if (!res.ok) throw new Error(`HTTP ${res.status}`)
+        return res.json()
+      })
       .then(data => {
         if (data.success) {
           const userReview = data.data.reviews.find(
@@ -133,7 +139,10 @@ export function useITHilfeDetail(id: string) {
     if (!session?.user || !request) return
 
     fetch(`/api/messages?context_id=${id}`)
-      .then(res => res.json())
+      .then(res => {
+        if (!res.ok) throw new Error(`HTTP ${res.status}`)
+        return res.json()
+      })
       .then(data => {
         if (data.success && data.data?.conversations?.length > 0) {
           setConversationId(data.data.conversations[0].id)

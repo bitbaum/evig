@@ -151,7 +151,10 @@ export default function InventoryDashboardPage() {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ inventoryItemId: item.id }),
-        }).then(res => res.json())
+        }).then(res => {
+          if (!res.ok) throw new Error(`HTTP ${res.status}`)
+          return res.json()
+        })
       )
 
       const results = await Promise.allSettled(publishPromises)

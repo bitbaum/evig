@@ -28,7 +28,10 @@ function CheckoutSuccessContent() {
     if (!orderId) return
 
     fetch(`/api/marketplace/orders/${orderId}`)
-      .then(res => res.json())
+      .then(res => {
+        if (!res.ok) throw new Error(`HTTP ${res.status}`)
+        return res.json()
+      })
       .then(data => {
         if (data.success && data.data) {
           setOrder(data.data)

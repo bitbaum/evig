@@ -98,7 +98,10 @@ export default function CreatePeerRepairPage() {
   useEffect(() => {
     if (status !== 'authenticated') return
     fetch('/api/user/technician-profile')
-      .then(res => res.json())
+      .then(res => {
+        if (!res.ok) throw new Error(`HTTP ${res.status}`)
+        return res.json()
+      })
       .then(data => {
         if (data.success && data.data.profile) {
           const p = data.data.profile

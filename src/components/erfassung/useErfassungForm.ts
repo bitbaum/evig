@@ -34,7 +34,10 @@ export function useErfassungForm() {
       setShowAdvanced(true)
 
       fetch(`/api/admin/inventory/${editId}`)
-        .then(res => res.json())
+        .then(res => {
+          if (!res.ok) throw new Error(`HTTP ${res.status}`)
+          return res.json()
+        })
         .then(data => {
           if (data.success && data.data?.product) {
             const p = data.data.product

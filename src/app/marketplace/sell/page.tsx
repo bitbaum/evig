@@ -45,7 +45,10 @@ function SellPageContent() {
     setError(null)
 
     fetch(`/api/listings/${id}`)
-      .then(res => res.json())
+      .then(res => {
+        if (!res.ok) throw new Error(`HTTP ${res.status}`)
+        return res.json()
+      })
       .then(data => {
         if (!data.success || !data.data) {
           setError('Inserat konnte nicht geladen werden')
