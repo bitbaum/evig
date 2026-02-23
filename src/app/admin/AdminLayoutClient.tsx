@@ -192,7 +192,7 @@ export function AdminLayoutClient({
                     className={`w-full flex items-center justify-between px-3 py-2 text-xs font-semibold uppercase tracking-wider rounded-lg transition-colors ${
                       hasActive
                         ? 'text-green-700 dark:text-green-400 bg-green-50 dark:bg-green-900/20'
-                        : 'text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700'
+                        : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700'
                     }`}
                   >
                     <span>{group.label}</span>
@@ -266,7 +266,7 @@ export function AdminLayoutClient({
                 {!sidebarCollapsed && (
                   <div className="flex-1">
                     <span className="text-sm font-semibold">Hirn AI</span>
-                    <p className="text-xs text-gray-500 dark:text-gray-400">KI-Assistent</p>
+                    <p className="text-xs text-gray-600 dark:text-gray-400">KI-Assistent</p>
                   </div>
                 )}
               </Link>
@@ -276,7 +276,7 @@ export function AdminLayoutClient({
           {/* User-facing site links */}
           <div className="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700">
             {!sidebarCollapsed && (
-              <p className="px-3 mb-2 text-xs font-semibold text-gray-400 uppercase tracking-wider">
+              <p className="px-3 mb-2 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                 Website
               </p>
             )}
@@ -392,7 +392,7 @@ export function AdminLayoutClient({
                     <p className="text-sm font-medium text-gray-900 dark:text-white">
                       {user?.name || 'Staff'}
                     </p>
-                    <p className="text-xs text-gray-500 dark:text-gray-400">
+                    <p className="text-xs text-gray-600 dark:text-gray-400">
                       {user?.email}
                     </p>
                   </div>
@@ -417,7 +417,7 @@ export function AdminLayoutClient({
                       <p className="text-sm font-semibold text-gray-900 dark:text-white truncate">
                         {user?.name || 'Staff'}
                       </p>
-                      <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
+                      <p className="text-xs text-gray-600 dark:text-gray-400 truncate">
                         {user?.email}
                       </p>
                     </div>

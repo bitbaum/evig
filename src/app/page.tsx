@@ -159,14 +159,14 @@ export default function Home() {
                   <ShoppingBag className="h-5 w-5 text-orange-600 mt-0.5 flex-shrink-0" />
                   <div>
                     <div className="text-sm font-semibold text-gray-900">Kaufen</div>
-                    <div className="text-xs text-gray-500">Faire Preise, grosse Auswahl</div>
+                    <div className="text-xs text-gray-600">Faire Preise, grosse Auswahl</div>
                   </div>
                 </div>
                 <div className="flex items-start gap-2">
                   <DollarSign className="h-5 w-5 text-orange-600 mt-0.5 flex-shrink-0" />
                   <div>
                     <div className="text-sm font-semibold text-gray-900">Verkaufen</div>
-                    <div className="text-xs text-gray-500">Alte Hardware weitergeben</div>
+                    <div className="text-xs text-gray-600">Alte Hardware weitergeben</div>
                   </div>
                 </div>
               </div>
@@ -208,14 +208,14 @@ export default function Home() {
                   <Users className="h-5 w-5 text-emerald-600 mt-0.5 flex-shrink-0" />
                   <div>
                     <div className="text-sm font-semibold text-gray-900">Hilfe finden</div>
-                    <div className="text-xs text-gray-500">Techniker in der Nähe</div>
+                    <div className="text-xs text-gray-600">Techniker in der Nähe</div>
                   </div>
                 </div>
                 <div className="flex items-start gap-2">
                   <Wrench className="h-5 w-5 text-emerald-600 mt-0.5 flex-shrink-0" />
                   <div>
                     <div className="text-sm font-semibold text-gray-900">Helfen</div>
-                    <div className="text-xs text-gray-500">Wissen teilen</div>
+                    <div className="text-xs text-gray-600">Wissen teilen</div>
                   </div>
                 </div>
               </div>
@@ -351,7 +351,7 @@ export default function Home() {
               </blockquote>
               <div className="mt-auto">
                 <div className="font-semibold text-gray-900">{testimonial.author}</div>
-                <div className="text-sm text-gray-500">{testimonial.role}</div>
+                <div className="text-sm text-gray-600">{testimonial.role}</div>
               </div>
             </div>
           ))}

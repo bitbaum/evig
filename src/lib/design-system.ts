@@ -29,19 +29,19 @@ export const contrastSafeColors = {
     text: {
       primary: 'text-neutral-900',      // High contrast on white
       secondary: 'text-neutral-700',    // Medium contrast
-      muted: 'text-neutral-500',       // Lower contrast for hints
+      muted: 'text-neutral-600',       // Muted but WCAG AA safe on white
       inverse: 'text-neutral-900',      // Same as primary
     },
     bg: 'bg-white',
     border: 'border-neutral-200',
   },
   
-  // Neutral/Light gray backgrounds
+  // Neutral/Light gray backgrounds (bg-neutral-50)
   neutral: {
     text: {
       primary: 'text-neutral-900',      // High contrast
       secondary: 'text-neutral-700',
-      muted: 'text-neutral-600',
+      muted: 'text-neutral-600',       // WCAG AA safe on neutral-50
       inverse: 'text-neutral-900',
     },
     bg: 'bg-neutral-50',

@@ -115,7 +115,7 @@ export function AsSeenInLogosMinimal() {
   return (
     <div className="py-8 bg-gray-50">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <p className="text-center text-xs font-medium text-gray-400 uppercase tracking-wider mb-6">
+        <p className="text-center text-xs font-medium text-gray-500 uppercase tracking-wider mb-6">
           Bekannt aus
         </p>
         <div className="flex flex-wrap items-center justify-center gap-x-10 gap-y-4">
@@ -129,7 +129,7 @@ export function AsSeenInLogosMinimal() {
               title={logo.fullName}
             >
               <span
-                className="text-lg font-semibold text-gray-400 group-hover:text-gray-900 transition-colors duration-300"
+                className="text-lg font-semibold text-gray-500 group-hover:text-gray-900 transition-colors duration-300"
               >
                 {logo.name}
               </span>

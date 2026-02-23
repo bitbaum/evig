@@ -150,7 +150,7 @@ function PermissionsCell({
   if (!userIsStaff) {
     return (
       <td className="px-6 py-4">
-        <span className="text-sm text-gray-400">-</span>
+        <span className="text-sm text-gray-500">-</span>
       </td>
     )
   }
@@ -168,7 +168,7 @@ function PermissionsCell({
   if (permissions.length === 0) {
     return (
       <td className="px-6 py-4">
-        <span className="text-sm text-gray-400">Keine Berechtigungen</span>
+        <span className="text-sm text-gray-500">Keine Berechtigungen</span>
       </td>
     )
   }

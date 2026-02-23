@@ -57,7 +57,7 @@ function MultiColumnLayout({
       {groups.map((group, idx) => (
         <div key={idx} className="p-6">
           {group.section && (
-            <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-4">
+            <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">
               {group.section.name}
             </h3>
           )}

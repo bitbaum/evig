@@ -122,7 +122,7 @@ export function Pagination({
           return (
             <div key={page} className="flex items-center gap-1">
               {prev && page - prev > 1 && (
-                <span className="w-8 text-center text-sm text-gray-400">...</span>
+                <span className="w-8 text-center text-sm text-gray-500">...</span>
               )}
               <PageItem page={page} active={page === currentPage} buildHref={buildHref} onPageChange={onPageChange} />
             </div>

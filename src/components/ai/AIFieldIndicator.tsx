@@ -161,7 +161,7 @@ export function AIFieldIndicator({
                       >
                         <ExternalLink className="w-3 h-3 flex-shrink-0" />
                         <span className="truncate">{verifySource.title}</span>
-                        <span className="text-gray-400 text-[10px] ml-auto flex-shrink-0">
+                        <span className="text-gray-500 text-[10px] ml-auto flex-shrink-0">
                           {verifySource.type}
                         </span>
                       </a>
@@ -171,7 +171,7 @@ export function AIFieldIndicator({
               )}
 
               {/* Timestamp */}
-              <div className="text-xs text-gray-400 mt-2">
+              <div className="text-xs text-gray-500 mt-2">
                 Extrahiert: {new Date(source.timestamp).toLocaleTimeString('de-CH')}
               </div>
             </div>

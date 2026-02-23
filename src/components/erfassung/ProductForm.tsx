@@ -93,7 +93,7 @@ export function ProductForm({
           ) : (
             <label className="flex flex-col items-center justify-center w-48 h-36 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg cursor-pointer hover:border-green-500 hover:bg-green-50 dark:hover:bg-green-900/20 transition-colors">
               <Camera className="w-8 h-8 text-gray-400 mb-2" />
-              <span className="text-sm text-gray-500 dark:text-gray-400">Bild hochladen</span>
+              <span className="text-sm text-gray-600 dark:text-gray-400">Bild hochladen</span>
               <span className="text-xs text-gray-400 dark:text-gray-500 mt-1">oder hierher ziehen</span>
               <input
                 type="file"
@@ -114,7 +114,7 @@ export function ProductForm({
             </label>
           )}
         </div>
-        <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">
+        <p className="mt-2 text-xs text-gray-600 dark:text-gray-400">
           JPG, PNG oder WebP. Max 5 MB.
         </p>
       </div>
@@ -450,7 +450,7 @@ export function ProductForm({
           <Users className="w-5 h-5" />
           Geeignet für (Kundenprofile)
         </h2>
-        <p className="text-sm text-gray-500 dark:text-gray-400 mb-3 sm:mb-4 hidden sm:block">
+        <p className="text-sm text-gray-600 dark:text-gray-400 mb-3 sm:mb-4 hidden sm:block">
           Wähle die Zielgruppen, für die dieses Produkt geeignet ist. Hover für Details.
         </p>
 

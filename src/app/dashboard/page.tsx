@@ -74,17 +74,17 @@ export default async function DashboardPage() {
           {/* Workshops Card */}
           <Link
             href="/dashboard/workshops"
-            className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6 hover:shadow-md transition-shadow"
+            className="bg-white dark:bg-neutral-800 rounded-lg shadow-sm border-2 border-neutral-200 dark:border-neutral-700 p-4 sm:p-6 hover:shadow-md transition-shadow"
           >
             <div className="flex items-center">
               <div className="w-12 h-12 bg-green-100 dark:bg-green-900 rounded-lg flex items-center justify-center">
                 <span className="text-green-600 dark:text-green-400 text-xl">🎓</span>
               </div>
               <div className="ml-4">
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                <h3 className={cn('text-lg font-semibold', getTextColor('white', 'primary'), 'dark:text-white')}>
                   Meine Workshops
                 </h3>
-                <p className="text-gray-600 dark:text-gray-400 text-sm">
+                <p className={cn('text-sm', getTextColor('white', 'muted'), 'dark:text-neutral-400')}>
                   Angemeldete Kurse verwalten
                 </p>
               </div>
@@ -94,17 +94,17 @@ export default async function DashboardPage() {
           {/* Appointments Card */}
           <Link
             href="/dashboard/appointments"
-            className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6 hover:shadow-md transition-shadow"
+            className="bg-white dark:bg-neutral-800 rounded-lg shadow-sm border-2 border-neutral-200 dark:border-neutral-700 p-4 sm:p-6 hover:shadow-md transition-shadow"
           >
             <div className="flex items-center">
               <div className="w-12 h-12 bg-orange-100 dark:bg-orange-900 rounded-lg flex items-center justify-center">
                 <span className="text-orange-600 dark:text-orange-400 text-xl">📅</span>
               </div>
               <div className="ml-4">
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                <h3 className={cn('text-lg font-semibold', getTextColor('white', 'primary'), 'dark:text-white')}>
                   Termine
                 </h3>
-                <p className="text-gray-600 dark:text-gray-400 text-sm">
+                <p className={cn('text-sm', getTextColor('white', 'muted'), 'dark:text-neutral-400')}>
                   Service-Termin buchen
                 </p>
               </div>

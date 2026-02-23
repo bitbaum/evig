@@ -213,7 +213,7 @@ export default function ImpactPageContent() {
                 <details className="text-xs text-gray-500">
                   <summary className="cursor-pointer font-medium mb-2">Methodik & Berechnung</summary>
                   <p className="mb-2">{metric.methodology}</p>
-                  <p className="text-gray-400">Letzte Aktualisierung: {metric.lastUpdated}</p>
+                  <p className="text-gray-500">Letzte Aktualisierung: {metric.lastUpdated}</p>
                 </details>
               </CardContent>
             </Card>
