@@ -45,6 +45,9 @@ export const rateLimiters = {
   // Messages: 20 per hour per user
   messageCreate: createRateLimiter(60 * 60 * 1000, 20),
 
+  // CSV import: 5 per hour per user
+  csvImport: createRateLimiter(60 * 60 * 1000, 5),
+
   // General API: 100 requests per 15 minutes per IP
   apiGeneral: createRateLimiter(15 * 60 * 1000, 100)
 };

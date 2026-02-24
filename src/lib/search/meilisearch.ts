@@ -64,6 +64,30 @@ async function meiliRequest(path: string, options?: RequestInit): Promise<Respon
   });
 }
 
+const MAX_RETRIES = 2;
+const RETRY_DELAY_MS = 500;
+
+/**
+ * Retry wrapper for write operations (index, delete) to handle transient failures.
+ * Read operations (search) don't need retries since they fall back to SQL.
+ */
+async function meiliWriteWithRetry(path: string, options: RequestInit): Promise<Response> {
+  let lastError: unknown;
+  for (let attempt = 0; attempt <= MAX_RETRIES; attempt++) {
+    try {
+      const response = await meiliRequest(path, options);
+      if (response.ok || response.status < 500) return response;
+      lastError = new Error(`Meilisearch returned ${response.status}`);
+    } catch (error) {
+      lastError = error;
+    }
+    if (attempt < MAX_RETRIES) {
+      await new Promise(resolve => setTimeout(resolve, RETRY_DELAY_MS * (attempt + 1)));
+    }
+  }
+  throw lastError;
+}
+
 /**
  * Configure the listings index with searchable, filterable, and sortable attributes
  */
@@ -107,12 +131,12 @@ export async function configureListingsIndex(): Promise<void> {
  */
 export async function indexListing(listing: MeilisearchDocument): Promise<void> {
   try {
-    await meiliRequest(`/indexes/${LISTINGS_INDEX}/documents`, {
+    await meiliWriteWithRetry(`/indexes/${LISTINGS_INDEX}/documents`, {
       method: 'POST',
       body: JSON.stringify([listing]),
     });
   } catch (error) {
-    logger.warn('Failed to index listing in Meilisearch', { listingId: listing.id, error });
+    logger.warn('Failed to index listing in Meilisearch after retries', { listingId: listing.id, error });
   }
 }
 
@@ -121,11 +145,11 @@ export async function indexListing(listing: MeilisearchDocument): Promise<void> 
  */
 export async function removeListing(id: string): Promise<void> {
   try {
-    await meiliRequest(`/indexes/${LISTINGS_INDEX}/documents/${id}`, {
+    await meiliWriteWithRetry(`/indexes/${LISTINGS_INDEX}/documents/${id}`, {
       method: 'DELETE',
     });
   } catch (error) {
-    logger.warn('Failed to remove listing from Meilisearch', { listingId: id, error });
+    logger.warn('Failed to remove listing from Meilisearch after retries', { listingId: id, error });
   }
 }
 

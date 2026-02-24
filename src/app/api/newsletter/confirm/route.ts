@@ -1,18 +1,8 @@
 import { NextRequest } from 'next/server'
-import fs from 'fs'
-import path from 'path'
 import { apiError, apiSuccess, apiBadRequest } from '@/lib/api/helpers'
 import { logger } from '@/lib/logger'
-import { NEWSLETTER_STATUS, type NewsletterStatus } from '@/config/newsletter-status'
-
-const subscribersDir = path.join(process.cwd(), 'content/newsletter')
-
-interface Subscriber {
-  email: string
-  subscribedAt: string
-  status: NewsletterStatus
-  confirmToken?: string
-}
+import { query } from '@/lib/auth/db'
+import { TABLE_NAMES } from '@/config/database'
 
 export async function GET(request: NextRequest) {
   try {
@@ -23,49 +13,20 @@ export async function GET(request: NextRequest) {
       return apiBadRequest('Bestätigungstoken fehlt')
     }
 
-    const subscribersFile = path.join(subscribersDir, 'subscribers.json')
-
-    if (!fs.existsSync(subscribersFile)) {
-      return apiBadRequest('Ungültiger Bestätigungslink')
-    }
-
-    let subscribers: Subscriber[] = []
-
-    try {
-      const content = fs.readFileSync(subscribersFile, 'utf-8')
-      subscribers = JSON.parse(content)
-
-      if (!Array.isArray(subscribers)) {
-        throw new Error('Invalid subscribers data format')
-      }
-    } catch (parseError) {
-      logger.error('Error parsing subscribers file', { error: parseError })
-      return apiError(parseError, 'Fehler beim Verarbeiten der Anfrage')
-    }
-
-    // Find subscriber with matching token
-    const subscriberIndex = subscribers.findIndex(
-      (sub) => sub.confirmToken === token && sub.status === NEWSLETTER_STATUS.PENDING
+    // Find pending subscriber with this token and confirm in one atomic operation
+    const { rows } = await query<{ email: string }>(
+      `UPDATE ${TABLE_NAMES.NEWSLETTER_SUBSCRIPTIONS}
+       SET is_active = true, confirmed_at = NOW(), confirm_token = NULL
+       WHERE confirm_token = $1 AND is_active = false
+       RETURNING email`,
+      [token]
     )
 
-    if (subscriberIndex === -1) {
+    if (rows.length === 0) {
       return apiBadRequest('Ungültiger oder bereits verwendeter Bestätigungslink')
     }
 
-    // Update subscriber status to active
-    subscribers[subscriberIndex].status = NEWSLETTER_STATUS.ACTIVE
-    delete subscribers[subscriberIndex].confirmToken
-
-    // Save updated subscribers
-    fs.writeFileSync(
-      subscribersFile,
-      JSON.stringify(subscribers, null, 2),
-      'utf-8'
-    )
-
-    logger.info('Newsletter subscription confirmed', {
-      email: subscribers[subscriberIndex].email
-    })
+    logger.info('Newsletter subscription confirmed', { email: rows[0].email })
 
     return apiSuccess({
       message: 'Newsletter-Anmeldung erfolgreich bestätigt! Sie erhalten ab sofort unsere Neuigkeiten.',

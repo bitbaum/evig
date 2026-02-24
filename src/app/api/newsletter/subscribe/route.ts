@@ -1,6 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server'
-import fs from 'fs'
-import path from 'path'
+import { NextRequest } from 'next/server'
 import { randomBytes } from 'crypto'
 import { requireAdminAuth } from '@/lib/admin-auth'
 import { apiError, apiSuccess, apiBadRequest, apiRateLimited } from '@/lib/api/helpers'
@@ -9,23 +7,9 @@ import { checkRateLimit, getClientIp } from '@/lib/auth/rate-limiter'
 import { sendEmail } from '@/lib/email'
 import { APP_URL } from '@/config/urls'
 import { LISTMONK_CONFIG } from '@/config/email'
-import { NewsletterSubscribeSchema, formatZodErrors } from '@/lib/schemas'
-import { NEWSLETTER_STATUS, type NewsletterStatus } from '@/config/newsletter-status'
-
-const subscribersDir = path.join(process.cwd(), 'content/newsletter')
-
-// Ensure directory exists
-if (!fs.existsSync(subscribersDir)) {
-  fs.mkdirSync(subscribersDir, { recursive: true })
-}
-
-// Type definitions
-interface Subscriber {
-  email: string
-  subscribedAt: string
-  status: NewsletterStatus
-  confirmToken?: string
-}
+import { validateBody, NewsletterSubscribeSchema } from '@/lib/schemas'
+import { query } from '@/lib/auth/db'
+import { TABLE_NAMES } from '@/config/database'
 
 export async function POST(request: NextRequest) {
   try {
@@ -43,76 +27,44 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json()
+    const validation = validateBody(NewsletterSubscribeSchema, body)
+    if (!validation.success) return validation.error
 
-    // Validate input with Zod schema
-    const validationResult = NewsletterSubscribeSchema.safeParse(body)
-    if (!validationResult.success) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: 'Validierung fehlgeschlagen',
-          errors: formatZodErrors(validationResult.error),
-        },
-        { status: 400 }
-      )
-    }
+    const normalizedEmail = validation.data.email
 
-    // Email is already normalized by the schema
-    const normalizedEmail = validationResult.data.email
-    const subscribersFile = path.join(subscribersDir, 'subscribers.json')
-
-    let subscribers: Subscriber[] = []
-
-    if (fs.existsSync(subscribersFile)) {
-      try {
-        const content = fs.readFileSync(subscribersFile, 'utf-8')
-        subscribers = JSON.parse(content)
-
-        // Validate parsed data
-        if (!Array.isArray(subscribers)) {
-          throw new Error('Invalid subscribers data format')
-        }
-      } catch (parseError) {
-        logger.error('Error parsing subscribers file', { error: parseError })
-        // Start fresh if file is corrupted
-        subscribers = []
-      }
-    }
-
-    // Check for duplicate
-    const existing = subscribers.find(
-      (sub) => sub.email.toLowerCase() === normalizedEmail
+    // Check for existing active subscriber
+    const { rows: existing } = await query<{ is_active: boolean; confirmed_at: string | null }>(
+      `SELECT is_active, confirmed_at FROM ${TABLE_NAMES.NEWSLETTER_SUBSCRIPTIONS} WHERE email = $1`,
+      [normalizedEmail]
     )
 
-    if (existing && existing.status === NEWSLETTER_STATUS.ACTIVE) {
+    if (existing.length > 0 && existing[0].is_active && existing[0].confirmed_at) {
       return apiBadRequest('Diese E-Mail-Adresse ist bereits registriert')
     }
 
-    // Add new subscriber
-    const newSubscriber: Subscriber = {
-      email: normalizedEmail,
-      subscribedAt: new Date().toISOString(),
-      status: NEWSLETTER_STATUS.PENDING as NewsletterStatus, // Will be 'active' after email confirmation
-      confirmToken: generateToken(),
+    const confirmToken = randomBytes(32).toString('hex')
+
+    if (existing.length > 0) {
+      // Re-subscribe: update existing row with new token
+      await query(
+        `UPDATE ${TABLE_NAMES.NEWSLETTER_SUBSCRIPTIONS}
+         SET is_active = false, confirm_token = $1, confirmed_at = NULL, unsubscribed_at = NULL, source = $2
+         WHERE email = $3`,
+        [confirmToken, body.source || 'website', normalizedEmail]
+      )
+    } else {
+      // New subscriber
+      await query(
+        `INSERT INTO ${TABLE_NAMES.NEWSLETTER_SUBSCRIPTIONS} (email, is_active, confirm_token, source)
+         VALUES ($1, false, $2, $3)`,
+        [normalizedEmail, confirmToken, body.source || 'website']
+      )
     }
-
-    subscribers.push(newSubscriber)
-
-    // Save to file
-    fs.writeFileSync(
-      subscribersFile,
-      JSON.stringify(subscribers, null, 2),
-      'utf-8'
-    )
 
     // Send confirmation email
     try {
-      const confirmUrl = `${APP_URL}/api/newsletter/confirm?token=${newSubscriber.confirmToken}`
-      await sendEmail(
-        normalizedEmail,
-        'newsletterConfirmation',
-        confirmUrl
-      )
+      const confirmUrl = `${APP_URL}/api/newsletter/confirm?token=${confirmToken}`
+      await sendEmail(normalizedEmail, 'newsletterConfirmation', confirmUrl)
       logger.info('Newsletter confirmation email sent', { email: normalizedEmail })
     } catch (emailError) {
       logger.warn('Failed to send newsletter confirmation email', {
@@ -164,47 +116,30 @@ export async function POST(request: NextRequest) {
 }
 
 // Protected admin endpoint to view subscribers
-export const GET = requireAdminAuth(async (request: NextRequest) => {
+export const GET = requireAdminAuth(async () => {
   try {
-    const subscribersFile = path.join(subscribersDir, 'subscribers.json')
+    const { rows } = await query<{
+      email: string
+      is_active: boolean
+      confirmed_at: string | null
+      source: string | null
+      created_at: string
+    }>(
+      `SELECT email, is_active, confirmed_at, source, created_at
+       FROM ${TABLE_NAMES.NEWSLETTER_SUBSCRIPTIONS}
+       ORDER BY created_at DESC`
+    )
 
-    if (!fs.existsSync(subscribersFile)) {
-      return apiSuccess({
-        total: 0,
-        active: 0,
-        pending: 0,
-        subscribers: []
-      })
-    }
+    const active = rows.filter(s => s.is_active && s.confirmed_at).length
+    const pending = rows.filter(s => !s.is_active && !s.confirmed_at).length
 
-    try {
-      const content = fs.readFileSync(subscribersFile, 'utf-8')
-      const subscribers: Subscriber[] = JSON.parse(content)
-
-      // Validate parsed data
-      if (!Array.isArray(subscribers)) {
-        throw new Error('Invalid subscribers data format')
-      }
-
-      return apiSuccess({
-        total: subscribers.length,
-        active: subscribers.filter((s) => s.status === NEWSLETTER_STATUS.ACTIVE).length,
-        pending: subscribers.filter((s) => s.status === NEWSLETTER_STATUS.PENDING).length,
-        subscribers: subscribers,
-      })
-    } catch (parseError) {
-      logger.error('Error parsing subscribers file', { error: parseError })
-      return apiError(
-        parseError instanceof Error ? parseError : new Error('Parse error'),
-        'Invalid subscribers data format'
-      )
-    }
+    return apiSuccess({
+      total: rows.length,
+      active,
+      pending,
+      subscribers: rows,
+    })
   } catch (error) {
     return apiError(error, 'Abonnenten konnten nicht geladen werden')
   }
 })
-
-// Generate cryptographically secure token
-function generateToken(): string {
-  return randomBytes(32).toString('hex')
-}

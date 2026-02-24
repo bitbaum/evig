@@ -2,12 +2,13 @@ import { NextRequest } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { parse } from 'csv-parse/sync';
 import { TABLE_NAMES } from "@/config/database";
-import { apiSuccess, apiError } from "@/lib/api/helpers";
+import { apiSuccess, apiError, apiBadRequest } from "@/lib/api/helpers";
 import { logger } from "@/lib/logger";
 import { withAuth, ValidSession } from "@/lib/api/middleware";
 import { validateBody, ImportCSVSchema } from '@/lib/schemas';
 import { APPROVAL_STATUS } from '@/config/approval-status';
 import { analyzeProductDescription, calculateSustainabilityScore } from '@/lib/inventory/csv-analysis';
+import { rateLimiters } from '@/lib/security/rate-limit';
 
 interface CSVRow {
   Artikelnummer: string;
@@ -25,8 +26,15 @@ interface ImportResult {
   duplicates: string[];
 }
 
+const MAX_CSV_ROWS = 1000;
+
 export const POST = withAuth(async (request: NextRequest, session: ValidSession) => {
   try {
+    // SECURITY: Rate limiting - 5 imports per hour per user
+    if (!rateLimiters.csvImport(`${session.user.id}:csv-import`)) {
+      return apiBadRequest('Zu viele Importe. Bitte warte 1 Stunde.');
+    }
+
     const supabase = await createClient();
     const body = await request.json();
     const validation = validateBody(ImportCSVSchema, body);
@@ -39,6 +47,11 @@ export const POST = withAuth(async (request: NextRequest, session: ValidSession)
       skip_empty_lines: true,
       trim: true,
     });
+
+    // SECURITY: Limit row count to prevent resource exhaustion
+    if (records.length > MAX_CSV_ROWS) {
+      return apiBadRequest(`CSV darf maximal ${MAX_CSV_ROWS} Zeilen enthalten (${records.length} gefunden).`);
+    }
 
     const result: ImportResult = {
       success: true,
