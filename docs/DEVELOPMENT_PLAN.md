@@ -115,6 +115,17 @@ All page files now under 500 lines. Component files all under 500 lines.
 
 ---
 
+## Phase 6: Security & Performance Hardening ✅ COMPLETE
+
+### Completed
+- [x] CSV import: 5MB schema limit, 1000 row cap, rate limiting (5/hr/user)
+- [x] 9 database indexes for marketplace performance (migration 041)
+- [x] Newsletter migrated from file I/O to `newsletter_subscriptions` table (migration 042)
+- [x] OG images added to marketplace listing detail metadata
+- [x] Meilisearch write operations: retry logic (2 retries with exponential backoff)
+
+---
+
 ## Current State (2026-02-23)
 
 | Metric | Status |
@@ -130,6 +141,10 @@ All page files now under 500 lines. Component files all under 500 lines.
 | Swiss German compliance | ✅ Complete |
 | Pagination optimization | ✅ 9 routes use COUNT(*) OVER() |
 | Docker transcription | ✅ Containerized |
+| CSV import security | ✅ Size + row limits + rate limiting |
+| DB indexes | ✅ 9 marketplace performance indexes |
+| Newsletter storage | ✅ Database (was file-based) |
+| Meilisearch reliability | ✅ Write retry logic |
 
 ## All Phases Complete
 
