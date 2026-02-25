@@ -23,10 +23,14 @@ import {
   AlertCircle,
   Eye,
   Cpu,
+  Share2,
+  Check,
+  Flag,
+  X,
 } from 'lucide-react'
 import { getConditionBadge } from '@/config/erfassung/conditions'
 import { ZUSTAND_OPTIONS } from '@/config/erfassung/conditions'
-import { DELIVERY_LABELS, PAYMENT_MODE_LABELS, formatCHF, getCategoryLabel, GRATIS_CONFIG, VERIFICATION_CONFIG } from '@/config/marketplace'
+import { DELIVERY_LABELS, PAYMENT_MODE_LABELS, formatCHF, getCategoryLabel, GRATIS_CONFIG, VERIFICATION_CONFIG, REPORT_REASONS } from '@/config/marketplace'
 import type { DeliveryOption, PaymentMode } from '@/config/marketplace'
 import { getConditionCriteria } from '@/config/marketplace/condition-criteria'
 import { formatDateShort } from '@/lib/date-formats'
@@ -92,6 +96,12 @@ export default function ListingDetailPage({ params }: { params: Promise<{ id: st
   const [sendingMessage, setSendingMessage] = useState(false)
   const [messageSent, setMessageSent] = useState(false)
   const [similarListings, setSimilarListings] = useState<Array<{ id: string; title: string; price_chf: number; condition: string; thumbnail: string | null }>>([])
+  const [shareConfirm, setShareConfirm] = useState(false)
+  const [showReportModal, setShowReportModal] = useState(false)
+  const [reportReason, setReportReason] = useState('')
+  const [reportDetails, setReportDetails] = useState('')
+  const [reportSending, setReportSending] = useState(false)
+  const [reportSent, setReportSent] = useState(false)
 
   useEffect(() => {
     const fetchListing = async () => {
@@ -158,6 +168,42 @@ export default function ListingDetailPage({ params }: { params: Promise<{ id: st
       }
     } finally {
       setSendingMessage(false)
+    }
+  }
+
+  const handleShare = async () => {
+    const url = window.location.href
+    if (navigator.share) {
+      try {
+        await navigator.share({ title: listing?.title, url })
+      } catch {
+        // User cancelled share — ignore
+      }
+    } else {
+      await navigator.clipboard.writeText(url)
+      setShareConfirm(true)
+      setTimeout(() => setShareConfirm(false), 2000)
+    }
+  }
+
+  const handleReport = async () => {
+    if (!listing || !reportReason || reportSending) return
+    setReportSending(true)
+    try {
+      const res = await fetch(`/api/listings/${listing.id}/report`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          reason: reportReason,
+          details: reportDetails.trim() || null,
+        }),
+      })
+      const data = await res.json()
+      if (data.success) {
+        setReportSent(true)
+      }
+    } finally {
+      setReportSending(false)
     }
   }
 
@@ -406,6 +452,18 @@ export default function ListingDetailPage({ params }: { params: Promise<{ id: st
                   {favoriteCount > 0 ? favoriteCount : 'Merken'}
                 </button>
               )}
+              <button
+                onClick={handleShare}
+                className="flex items-center justify-center gap-2 py-3 px-4 min-h-[44px] rounded-lg font-medium border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
+                title="Teilen"
+              >
+                {shareConfirm ? (
+                  <Check className="w-4 h-4 text-green-600" aria-hidden="true" />
+                ) : (
+                  <Share2 className="w-4 h-4" aria-hidden="true" />
+                )}
+                {shareConfirm ? 'Kopiert!' : 'Teilen'}
+              </button>
               {isOwner && (
                 <Link
                   href={`/marketplace/sell?edit=${listing.id}`}
@@ -413,6 +471,15 @@ export default function ListingDetailPage({ params }: { params: Promise<{ id: st
                 >
                   Bearbeiten
                 </Link>
+              )}
+              {session?.user && !isOwner && (
+                <button
+                  onClick={() => setShowReportModal(true)}
+                  className="flex items-center justify-center gap-2 py-3 px-4 min-h-[44px] rounded-lg font-medium border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
+                  title="Melden"
+                >
+                  <Flag className="w-4 h-4" aria-hidden="true" />
+                </button>
               )}
             </div>
           </div>
@@ -538,6 +605,80 @@ export default function ListingDetailPage({ params }: { params: Promise<{ id: st
       <div className="mt-6">
         <ListingReviews listingId={listing.id} sellerId={listing.seller_id} />
       </div>
+
+      {/* Report Modal */}
+      {showReportModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50">
+          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-xl max-w-md w-full p-6">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-bold text-gray-900 dark:text-white">Inserat melden</h3>
+              <button
+                onClick={() => {
+                  setShowReportModal(false)
+                  setReportReason('')
+                  setReportDetails('')
+                  setReportSent(false)
+                }}
+                className="p-1 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                aria-label="Schliessen"
+              >
+                <X className="w-5 h-5 text-gray-500" />
+              </button>
+            </div>
+            {reportSent ? (
+              <div className="text-center py-4">
+                <Check className="w-12 h-12 text-green-500 mx-auto mb-3" aria-hidden="true" />
+                <p className="text-green-700 dark:text-green-400 font-medium">Meldung wurde gesendet</p>
+                <p className="text-sm text-gray-500 mt-1">Vielen Dank für Ihre Mithilfe.</p>
+              </div>
+            ) : (
+              <>
+                <div className="space-y-2 mb-4">
+                  {REPORT_REASONS.map(r => (
+                    <label
+                      key={r.value}
+                      className={`flex items-center gap-3 p-3 rounded-lg border cursor-pointer transition-colors ${
+                        reportReason === r.value
+                          ? 'border-green-500 bg-green-50 dark:bg-green-900/20'
+                          : 'border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700/50'
+                      }`}
+                    >
+                      <input
+                        type="radio"
+                        name="report_reason"
+                        value={r.value}
+                        checked={reportReason === r.value}
+                        onChange={e => setReportReason(e.target.value)}
+                        className="accent-green-600"
+                      />
+                      <span className="text-sm text-gray-900 dark:text-white">{r.label}</span>
+                    </label>
+                  ))}
+                </div>
+                <textarea
+                  value={reportDetails}
+                  onChange={e => setReportDetails(e.target.value)}
+                  placeholder="Zusätzliche Details (optional)"
+                  rows={3}
+                  className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 resize-none mb-4"
+                />
+                <button
+                  onClick={handleReport}
+                  disabled={!reportReason || reportSending}
+                  className="w-full flex items-center justify-center gap-2 bg-red-600 text-white py-2.5 rounded-lg font-medium hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+                >
+                  {reportSending ? (
+                    <Loader2 className="w-4 h-4 animate-spin" aria-hidden="true" />
+                  ) : (
+                    <Flag className="w-4 h-4" aria-hidden="true" />
+                  )}
+                  Melden
+                </button>
+              </>
+            )}
+          </div>
+        </div>
+      )}
 
       {/* Similar Listings */}
       {similarListings.length > 0 && (

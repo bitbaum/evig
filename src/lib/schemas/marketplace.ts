@@ -14,6 +14,7 @@ import {
   MARKETPLACE_LIMITS,
   LISTING_STATUSES,
   ORDER_STATUSES,
+  REPORT_REASONS,
 } from '@/config/marketplace';
 import { paginationSchema } from './common';
 
@@ -196,3 +197,18 @@ export const VerifyListingSchema = z.object({
 });
 
 export type VerifyListingInput = z.infer<typeof VerifyListingSchema>;
+
+// ============================================================================
+// Report Listing
+// ============================================================================
+
+const reportReasonValues = REPORT_REASONS.map(r => r.value) as [string, ...string[]];
+
+export const ReportListingSchema = z.object({
+  reason: z.enum(reportReasonValues, {
+    error: 'Ungültiger Meldegrund',
+  }),
+  details: z.string().max(2000).optional().nullable(),
+});
+
+export type ReportListingInput = z.infer<typeof ReportListingSchema>;

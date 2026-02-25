@@ -14,6 +14,7 @@ import {
   RefreshCw,
   Pencil,
   Trash2,
+  Copy,
 } from 'lucide-react'
 import { LISTING_STATUS_CONFIG, formatCHF } from '@/config/marketplace'
 import type { ListingStatus } from '@/config/marketplace'
@@ -48,6 +49,7 @@ export default function MyListingsPage() {
   const [error, setError] = useState<string | null>(null)
   const [statusFilter, setStatusFilter] = useState('')
   const [deletingId, setDeletingId] = useState<string | null>(null)
+  const [duplicatingId, setDuplicatingId] = useState<string | null>(null)
 
   const fetchListings = useCallback(async () => {
     setIsLoading(true)
@@ -92,6 +94,19 @@ export default function MyListingsPage() {
       }
     } finally {
       setDeletingId(null)
+    }
+  }
+
+  const handleDuplicate = async (id: string) => {
+    setDuplicatingId(id)
+    try {
+      const response = await fetch(`/api/listings/${id}/duplicate`, { method: 'POST' })
+      const data = await response.json()
+      if (data.success && data.data?.id) {
+        router.push(`/marketplace/sell?edit=${data.data.id}`)
+      }
+    } finally {
+      setDuplicatingId(null)
     }
   }
 
@@ -250,6 +265,18 @@ export default function MyListingsPage() {
                   >
                     <Pencil className="w-4 h-4" />
                   </Link>
+                  <button
+                    onClick={() => handleDuplicate(listing.id)}
+                    disabled={duplicatingId === listing.id}
+                    className="p-2 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors disabled:opacity-50"
+                    title="Duplizieren"
+                  >
+                    {duplicatingId === listing.id ? (
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                    ) : (
+                      <Copy className="w-4 h-4" />
+                    )}
+                  </button>
                   <button
                     onClick={() => handleDelete(listing.id)}
                     disabled={deletingId === listing.id}

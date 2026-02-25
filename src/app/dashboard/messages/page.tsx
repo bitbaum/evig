@@ -1,0 +1,142 @@
+'use client'
+
+import { useState, useEffect, useCallback } from 'react'
+import { useSession } from 'next-auth/react'
+import { useRouter, useSearchParams } from 'next/navigation'
+import { MessageSquare, Loader2 } from 'lucide-react'
+import Link from 'next/link'
+import ConversationList from '@/components/messages/ConversationList'
+import type { Conversation } from '@/components/messages/ConversationList'
+import MessageThread from '@/components/messages/MessageThread'
+import { logger } from '@/lib/logger'
+
+export default function MessagesPage() {
+  const { data: session, status: sessionStatus } = useSession()
+  const router = useRouter()
+  const searchParams = useSearchParams()
+  const [conversations, setConversations] = useState<Conversation[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+  const [selectedConvId, setSelectedConvId] = useState<string | null>(
+    searchParams.get('conversation')
+  )
+
+  // Track the selected conversation's details for the thread
+  const selectedConv = conversations.find(c => c.id === selectedConvId)
+
+  const fetchConversations = useCallback(async () => {
+    try {
+      const res = await fetch('/api/messages')
+      const data = await res.json()
+      if (data.success) {
+        setConversations(data.data.conversations)
+        // If deep-link param but not yet in list, keep it
+        const deepLink = searchParams.get('conversation')
+        if (deepLink && data.data.conversations.some((c: Conversation) => c.id === deepLink)) {
+          setSelectedConvId(deepLink)
+        }
+      }
+    } catch (err) {
+      logger.error('Failed to load conversations', { error: err })
+    } finally {
+      setIsLoading(false)
+    }
+  }, [searchParams])
+
+  useEffect(() => {
+    if (sessionStatus === 'loading') return
+    if (!session?.user) {
+      router.push('/auth/login')
+      return
+    }
+    fetchConversations()
+  }, [session, sessionStatus, router, fetchConversations])
+
+  const handleSelectConversation = (id: string) => {
+    setSelectedConvId(id)
+    // Update URL without navigation
+    const url = new URL(window.location.href)
+    url.searchParams.set('conversation', id)
+    window.history.replaceState({}, '', url.toString())
+  }
+
+  const handleBack = () => {
+    setSelectedConvId(null)
+    const url = new URL(window.location.href)
+    url.searchParams.delete('conversation')
+    window.history.replaceState({}, '', url.toString())
+  }
+
+  if (sessionStatus === 'loading' || isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <Loader2 className="w-8 h-8 text-green-600 animate-spin" aria-hidden="true" />
+      </div>
+    )
+  }
+
+  return (
+    <div className="space-y-4">
+      <div>
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Nachrichten</h1>
+        <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+          Deine Konversationen mit Käufern und Verkäufern
+        </p>
+      </div>
+
+      {conversations.length === 0 ? (
+        <div className="bg-gray-50 dark:bg-gray-800 rounded-xl p-8 text-center border-2 border-dashed border-gray-300 dark:border-gray-600">
+          <MessageSquare className="w-16 h-16 text-gray-400 mx-auto mb-4" aria-hidden="true" />
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+            Keine Nachrichten
+          </h3>
+          <p className="text-gray-600 dark:text-gray-400 mb-6">
+            Stöbere im Marketplace und kontaktiere Verkäufer, um eine Konversation zu starten.
+          </p>
+          <Link
+            href="/marketplace"
+            className="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg font-medium transition-colors"
+          >
+            Zum Marketplace
+          </Link>
+        </div>
+      ) : (
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden" style={{ height: 'calc(100vh - 220px)', minHeight: '500px' }}>
+          <div className="flex h-full">
+            {/* Conversation list — hidden on mobile when thread is open */}
+            <div className={`w-full lg:w-80 lg:border-r border-gray-200 dark:border-gray-700 overflow-y-auto flex-shrink-0 ${
+              selectedConvId ? 'hidden lg:block' : 'block'
+            }`}>
+              <ConversationList
+                conversations={conversations}
+                selectedId={selectedConvId}
+                onSelect={handleSelectConversation}
+              />
+            </div>
+
+            {/* Message thread */}
+            <div className={`flex-1 ${
+              selectedConvId ? 'block' : 'hidden lg:flex lg:items-center lg:justify-center'
+            }`}>
+              {selectedConvId && selectedConv && session?.user?.id ? (
+                <MessageThread
+                  conversationId={selectedConvId}
+                  currentUserId={session.user.id}
+                  recipientId={selectedConv.other_user_id}
+                  recipientName={selectedConv.other_user_name || 'Unbekannt'}
+                  contextType={selectedConv.type}
+                  contextId={selectedConv.context_id}
+                  onBack={handleBack}
+                />
+              ) : (
+                <div className="text-center text-gray-400 dark:text-gray-500 p-8">
+                  <MessageSquare className="w-12 h-12 mx-auto mb-3 opacity-50" aria-hidden="true" />
+                  <p className="text-sm">Wähle eine Konversation aus</p>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}

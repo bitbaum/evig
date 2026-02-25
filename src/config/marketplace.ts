@@ -342,6 +342,20 @@ export function getSpecFiltersForCategory(categoryValue: string): SpecFilterDef[
 export const MARKETPLACE_CATEGORIES = MARKETPLACE_CATEGORY_VALUES
 
 // ============================================================================
+// Report Reasons
+// ============================================================================
+
+export const REPORT_REASONS = [
+  { value: 'inappropriate', label: 'Unangemessener Inhalt' },
+  { value: 'scam', label: 'Betrug / Scam' },
+  { value: 'wrong_category', label: 'Falsche Kategorie' },
+  { value: 'counterfeit', label: 'Fälschung' },
+  { value: 'other', label: 'Anderer Grund' },
+] as const
+
+export type ReportReason = typeof REPORT_REASONS[number]['value']
+
+// ============================================================================
 // Formatting helpers
 // ============================================================================
 
