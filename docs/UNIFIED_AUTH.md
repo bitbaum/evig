@@ -10,7 +10,7 @@
 
 The RevampIT unified authentication system provides a single account for all user interactions:
 
-- 🛒 **Shop purchases** (via Medusa integration)
+- 🛒 **Shop purchases**
 - 📚 **Workshop registration & management**
 - 🔧 **Service appointment booking**
 - 💝 **Donation tracking**
@@ -79,8 +79,6 @@ applications (user_id, type, status, motivation, ...)
 -- Newsletter (for users and non-users)
 newsletter_subscriptions (email, user_id, topics[], ...)
 
--- Medusa shop integration
-medusa_customer_links (user_id, medusa_customer_id)
 ```
 
 ## File Structure
@@ -212,15 +210,6 @@ open http://localhost:3000/auth/register
 | `supporter` | Donor, volunteer, or partner |
 | `admin` | Full administrative access |
 
-## Medusa Integration
-
-When a user makes their first shop purchase, the system:
-
-1. Checks if a Medusa customer exists with the same email
-2. If not, creates a new Medusa customer
-3. Links the accounts via `medusa_customer_links` table
-4. Future: Sync order history to user dashboard
-
 ## Future Enhancements
 
 ### Planned Features
@@ -268,7 +257,6 @@ When a user makes their first shop purchase, the system:
 To reset the auth tables (WARNING: deletes all user data):
 
 ```sql
-DROP TABLE IF EXISTS medusa_customer_links CASCADE;
 DROP TABLE IF EXISTS newsletter_subscriptions CASCADE;
 DROP TABLE IF EXISTS applications CASCADE;
 DROP TABLE IF EXISTS donations CASCADE;

@@ -9,7 +9,6 @@
 All critical systems verified and operational. The platform is **production-ready** with:
 - ✅ **Unified authentication** working seamlessly
 - ✅ **User profiles** fully functional (view/edit)
-- ✅ **MedusaJS e-commerce** backend and frontend operational
 - ✅ **Database** optimized with proper indexing
 - ✅ **Build** passing without errors
 - ✅ **Zero feature bloat** - clean, focused codebase
@@ -46,38 +45,7 @@ All critical systems verified and operational. The platform is **production-read
 
 ---
 
-### 2. MedusaJS E-Commerce Platform
-
-**Status**: ✅ **OPERATIONAL** (Setup Required)
-
-| Component | Status | URL |
-|-----------|--------|-----|
-| Backend Server | ✅ Running | http://localhost:9000 |
-| Admin Panel | ✅ Accessible | http://localhost:9000/app |
-| Store API | ✅ Working | http://localhost:9000/store/* |
-| PostgreSQL (Medusa) | ✅ Healthy | Port 5435 |
-| Redis (Medusa) | ✅ Healthy | Port 6380 |
-| Meilisearch | ⚠️ Running | Port 7700 (unhealthy status) |
-
-**Frontend Integration**:
-- ✅ Shop page: `/shop/medusa` - WORKING
-- ✅ Product detail: `/shop/medusa/products/[handle]` - WORKING
-- ✅ Cart: `/shop/medusa/cart` - WORKING
-- ✅ React Query hooks - CONFIGURED
-- ✅ Mock API fallback - AVAILABLE at `/api/medusa/mock`
-
-**Next Steps** (Manual):
-1. Access admin panel: http://localhost:9000/app
-2. Login: admin@revampit.ch / Admin123!
-3. Create publishable API key (Settings → API Keys)
-4. Add to `.env.local`: `NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY=pk_xxx`
-5. Add sample products via admin UI
-
-**Documentation**: See `SETUP_MEDUSA.md` for complete guide
-
----
-
-### 3. Database Schema & Integrity
+### 2. Database Schema & Integrity
 
 **Status**: ✅ **EXCELLENT**
 
@@ -107,7 +75,7 @@ All critical systems verified and operational. The platform is **production-read
 
 ---
 
-### 4. Build & Deployment
+### 3. Build & Deployment
 
 **Status**: ✅ **PASSING**
 
@@ -118,7 +86,6 @@ Route (app)                              Size     First Load JS
 ├ ○ /admin                               5.89 kB        154 kB
 ├ ○ /auth/login                          142 B          148 kB
 ├ ○ /dashboard                           142 B          148 kB
-├ ○ /shop/medusa                         11.2 kB        159 kB
 └ ...
 ```
 
@@ -133,7 +100,7 @@ Route (app)                              Size     First Load JS
 
 ---
 
-### 5. Code Quality & Best Practices
+### 4. Code Quality & Best Practices
 
 **Status**: ✅ **EXCELLENT**
 
@@ -166,7 +133,7 @@ Route (app)                              Size     First Load JS
 
 ---
 
-### 6. Feature Bloat Assessment
+### 5. Feature Bloat Assessment
 
 **Status**: ✅ **MINIMAL BLOAT**
 
@@ -179,7 +146,6 @@ Route (app)                              Size     First Load JS
 - ✅ Workshop system (6 workshops seeded)
 - ✅ Service appointments (6 service types)
 - ✅ User profiles (actively used)
-- ✅ MedusaJS shop (core feature)
 - ✅ Blog system (infrastructure only, no content yet)
 
 **Verdict**: Codebase is **lean and focused**. No unnecessary features detected.
@@ -190,8 +156,6 @@ Route (app)                              Size     First Load JS
 
 ### Must-Do Before Production
 
-- [ ] **Create Medusa API Key** (manual step, see SETUP_MEDUSA.md)
-- [ ] **Add products** to Medusa admin (at least 5-10 items)
 - [ ] **Test complete user flow**:
   - [ ] Register account
   - [ ] Verify email
@@ -199,8 +163,6 @@ Route (app)                              Size     First Load JS
   - [ ] Browse shop
   - [ ] Add to cart
 - [ ] **Environment variables** for production:
-  - [ ] `NEXT_PUBLIC_MEDUSA_URL` (production backend)
-  - [ ] `NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY`
   - [ ] `AUTH_SECRET` (generate new for prod)
   - [ ] `DATABASE_URL` (production PostgreSQL)
 
@@ -233,11 +195,7 @@ Route (app)                              Size     First Load JS
 
 ```
 ✅ Next.js Frontend        → http://localhost:3000
-✅ Medusa Backend          → http://localhost:9000
-✅ Medusa Admin UI         → http://localhost:9000/app
 ✅ PostgreSQL (RevampIT)   → Port 5433 (12 users, 9 profiles)
-✅ PostgreSQL (Medusa)     → Port 5435 (ready for products)
-✅ Redis (Medusa)          → Port 6380 (cache ready)
 ⚠️  Meilisearch            → Port 7700 (optional search)
 ```
 
@@ -247,12 +205,8 @@ Route (app)                              Size     First Load JS
 # Check Next.js
 curl http://localhost:3000/api/health
 
-# Check Medusa
-curl http://localhost:9000/health
-
 # Check databases
 docker compose ps
-docker compose -f docker-compose.medusa.yml ps
 ```
 
 ---
@@ -263,18 +217,14 @@ docker compose -f docker-compose.medusa.yml ps
 - `.env.local` - Local environment variables
 - `next.config.js` - Next.js configuration (API proxy, images)
 - `src/auth.ts` - Auth.js configuration
-- `medusa-backend/medusa-config.ts` - Medusa configuration
-
 ### Core Features
 - `src/app/dashboard/profile/page.tsx` - Profile editing (✅ WORKING)
 - `src/app/api/user/profile/route.ts` - Profile API (✅ TESTED)
-- `src/app/shop/medusa/` - E-commerce frontend (✅ READY)
+- `src/app/shop/` - E-commerce frontend (✅ READY)
 - `src/lib/auth/db.ts` - Database queries (✅ OPTIMIZED)
 
 ### Documentation
-- `SETUP_MEDUSA.md` - Complete Medusa setup guide
 - `docs/UNIFIED_AUTH.md` - Authentication system docs
-- `docs/REVAMPIT_SHOP_STATUS.md` - E-commerce status
 - `SYSTEM_STATUS_REPORT.md` - This file
 
 ---
@@ -296,11 +246,10 @@ docker compose -f docker-compose.medusa.yml ps
    - 6 service types available
    - Appointment booking system ready
 
-4. **E-Commerce** (After Medusa Setup)
+4. **E-Commerce**
    - Browse products
    - Add to cart
    - Manage cart (update quantities, remove items)
-   - (Checkout disabled per your requirements)
 
 ---
 
@@ -347,7 +296,7 @@ docker compose -f docker-compose.medusa.yml ps
 | **Robust database** | ✅ 22 tables, indexed, constrained |
 | **Best practices** | ✅ TypeScript, security, performance |
 | **Ready to scale** | ✅ Connection pooling, caching, indexing |
-| **MedusaJS works** | ✅ Backend running, frontend connected |
+| **Shop works** | ✅ Inventory-based shop operational |
 
 ---
 
@@ -359,7 +308,7 @@ docker compose -f docker-compose.medusa.yml ps
 ✅ Profile management
 ✅ Workshop browsing (registration ready)
 ✅ Service booking system
-✅ E-commerce (after completing Medusa setup)
+✅ E-commerce (shop with inventory system)
 
 **What's NOT included** (per your requirements):
 ❌ Payment processing
@@ -367,9 +316,8 @@ docker compose -f docker-compose.medusa.yml ps
 ❌ Stripe/PayPal integration
 
 **Immediate Action Required**:
-1. Complete Medusa API key setup (5 minutes, see `SETUP_MEDUSA.md`)
-2. Add products via admin panel (30 minutes)
-3. Test complete user flow (15 minutes)
+1. Add products via admin panel (30 minutes)
+2. Test complete user flow (15 minutes)
 
 **Then**: READY TO DEPLOY 🚀
 

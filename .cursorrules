@@ -84,7 +84,7 @@ For detailed, modular rules, see:
 
 **For specific features:**
 - `docs/UNIFIED_AUTH.md` - Authentication system
-- `docs/REVAMPIT_SHOP_STATUS.md` - Medusa shop integration
+- `docs/SHARED_CONTEXT.md` - Shop and platform status
 - `docs/guides/ARCHITECTURE.md` - System architecture
 
 ---

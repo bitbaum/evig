@@ -103,9 +103,8 @@ npm run setup-admins
 ### Access Points
 - **Frontend**: http://localhost:3000
 - **Unified Admin Dashboard**: http://localhost:3000/admin
-- **Medusa Shop Admin**: http://localhost:9000/app
 - **AI CMS Editor**: http://localhost:3000/ai-cms
-- **Shop Frontend**: http://localhost:3000/shop/medusa
+- **Shop Frontend**: http://localhost:3000/shop
 
 ## 📁 Project Structure
 

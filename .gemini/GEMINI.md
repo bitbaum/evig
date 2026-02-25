@@ -64,7 +64,6 @@ npm run test
 
 - `src/` — Next.js app router + UI
 - `cms-api/` — CMS backend
-- `medusa-backend/` — e-commerce backend
 - `docs/` — architecture and development guides
 
 **Full file structure**: See `docs/SHARED_CONTEXT.md`

@@ -44,7 +44,7 @@ last_modified_summary: Updated plan reflecting Phase 1 & 2 completion, remaining
 - ✅ `src/lib/api/helpers.ts` - Standardized API response helpers
 - ✅ `src/lib/api/middleware.ts` - Reusable auth middleware (with params support)
 - ✅ `src/config/database.ts` - Table name constants
-- ✅ `src/config/medusa.ts` - Medusa configuration
+- ✅ `src/config/shop.ts` - Shop configuration
 - ✅ `src/config/error-messages.ts` - Error message constants
 
 ---
@@ -65,7 +65,7 @@ last_modified_summary: Updated plan reflecting Phase 1 & 2 completion, remaining
 - `src/auth.ts` - 3 instances
 - `src/components/shop/StripeCheckout.tsx` - 2 instances
 - `src/app/shop/checkout/page.tsx` - 1 instance
-- `src/app/shop/medusa/cart/page.tsx` - 2 instances
+- `src/app/shop/cart/page.tsx` - 2 instances
 
 **Medium Priority (Components):**
 - `src/components/marketplace/ProductListingForm.tsx` - 2 instances
@@ -208,7 +208,7 @@ last_modified_summary: Updated plan reflecting Phase 1 & 2 completion, remaining
 - `src/app/workshops/[slug]/page.tsx` - 2 instances
 - `src/app/workshops/page.tsx` - 2 instances
 - `src/app/repairers/page.tsx` - 1 instance
-- `src/app/shop/medusa/products/[handle]/page.tsx` - 1 instance
+- `src/app/shop/products/[handle]/page.tsx` - 1 instance
 - `src/app/admin/products/new/page.tsx` - 2 instances
 - `src/app/blog/submit/page.tsx` - 1 instance
 - `src/app/blog/admin/submissions/page.tsx` - 1 instance
@@ -325,7 +325,7 @@ last_modified_summary: Updated plan reflecting Phase 1 & 2 completion, remaining
 ## Files Changed This Session
 
 ### API Routes Fixed (14 files)
-1. `src/app/api/inventory/publish-medusa/route.ts`
+1. `src/app/api/inventory/publish/route.ts`
 2. `src/app/api/inventory/import-csv/route.ts`
 3. `src/app/api/admin/promote-user/route.ts`
 4. `src/app/api/admin/products/bulk-import/route.ts`
@@ -340,7 +340,7 @@ last_modified_summary: Updated plan reflecting Phase 1 & 2 completion, remaining
 13. `src/app/api/newsletter/subscribe/route.ts`
 14. `src/app/api/health/route.ts`
 15. `src/app/api/health/auth-db/route.ts`
-16. `src/app/api/medusa/mock/route.ts`
+16. `src/app/api/shop/mock/route.ts`
 
 ### Components Fixed (8 files)
 1. `src/components/messaging/MessageSidebar.tsx`
@@ -370,7 +370,7 @@ last_modified_summary: Updated plan reflecting Phase 1 & 2 completion, remaining
 ### Infrastructure Updated
 - `src/lib/api/middleware.ts` - Added params support to `withAdmin`
 - `src/lib/supabase/server.ts` - Uses `SUPABASE_CONFIG`
-- `src/lib/medusa/client.ts` - Uses `MEDUSA_CONFIG`
+- `src/lib/shop/client.ts` - Uses `SHOP_CONFIG`
 - `src/lib/auth/db.ts` - Uses `getDbConfig()` from config
 
 ---

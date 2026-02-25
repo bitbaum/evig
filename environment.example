@@ -17,14 +17,6 @@ AUTH_DB_NAME=revampit_cms
 AUTH_DB_USER=postgres
 AUTH_DB_PASSWORD=postgres
 
-# Medusa Configuration
-MEDUSA_DB_HOST=localhost
-MEDUSA_DB_PORT=5435
-MEDUSA_DB_NAME=medusa_db
-MEDUSA_DB_USER=medusa
-MEDUSA_DB_PASSWORD=medusa_password
-
-MEDUSA_REDIS_URL=redis://localhost:6380
 # Optional Redis for Auth rate limiter/lockout
 REDIS_URL=redis://localhost:6380
 ENABLE_REDIS_RATE_LIMITER=true
@@ -62,7 +54,6 @@ NEXT_PUBLIC_ENABLE_ROLE_SELECTION_ON_REGISTER=false
 # Admin Setup (Optional - for setup scripts)
 # If not set, secure random passwords will be generated
 # ADMIN_PASSWORD=your-secure-admin-password-here
-# MEDUSA_ADMIN_PASSWORD=your-secure-medusa-admin-password-here
 # ADMIN_PASSWORD_FILE=/path/to/secure/password/file (optional - for saving generated passwords)
 
 # Email Configuration (Production)

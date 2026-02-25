@@ -101,7 +101,7 @@ This document verifies that the ProductListingForm component properly integrates
   3. Links inventory to AI product
   4. Creates `product_images` records
   5. Optionally creates sustainability scores and AI logs
-  6. Attempts to publish to MedusaJS (non-blocking)
+  6. Creates marketplace listing record
 
 ## Form Integration
 
@@ -148,8 +148,6 @@ API links inventory to AI product
   ↓
 API creates product_images records
   ↓
-API attempts MedusaJS publish (non-blocking)
-  ↓
 Returns success with IDs
   ↓
 Form shows success modal
@@ -191,10 +189,6 @@ Form shows success modal
 3. **Contact Info**
    - Form has `contactInfo` field but API doesn't use it
    - Consider storing in seller profile or product metadata
-
-4. **MedusaJS Integration**
-   - Currently non-blocking (errors are logged but don't fail)
-   - Consider making it optional or showing status to user
 
 ## Testing Recommendations
 

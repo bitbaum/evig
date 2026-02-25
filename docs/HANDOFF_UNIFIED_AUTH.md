@@ -158,8 +158,7 @@ donations (id, user_id, amount_cents, payment_method, ...)
 applications (id, user_id, type, status, motivation, ...)
 newsletter_subscriptions (id, email, user_id, topics[], ...)
 
--- Shop integration
-medusa_customer_links (user_id, medusa_customer_id)
+-- Shop integration (customer data stored in users table)
 ```
 
 ## 🔐 Environment Variables
@@ -179,7 +178,7 @@ DB_PASSWORD=postgres
 
 - `docs/UNIFIED_AUTH.md` - Complete setup guide
 - `docs/UNIFIED_AUTH_STATUS.md` - Implementation details
-- `docs/REVAMPIT_SHOP_STATUS.md` - Overall project status
+- `docs/SHARED_CONTEXT.md` - Overall project status
 
 ## 🐛 Common Issues
 

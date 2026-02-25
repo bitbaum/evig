@@ -6,7 +6,7 @@
 
 ## Overview
 
-RevampIT is a **Swiss non-profit** enabling free exchange of technology, promoting open-source hardware and software. Built with Next.js 16, Medusa e-commerce, and custom CMS.
+RevampIT is a **Swiss non-profit** enabling free exchange of technology, promoting open-source hardware and software. Built with Next.js 16, TypeScript, and Tailwind.
 
 ## Architecture
 
@@ -18,7 +18,6 @@ revampit/
 │   ├── lib/               # Utilities (logger, auth, db)
 │   └── config/            # Constants (TABLE_NAMES, URLS)
 ├── cms-api/               # Custom CMS backend (Express)
-├── medusa-backend/        # Medusa e-commerce
 ├── docs/                  # Documentation (SSOT files)
 └── docker-compose.yml     # Infrastructure
 ```
@@ -27,13 +26,10 @@ revampit/
 
 | Layer | Technology | Port |
 |-------|------------|------|
-| Frontend | Next.js 16, TypeScript, Tailwind | 3001 |
-| CMS API | Express.js | 3001 |
-| E-commerce | Medusa | 9000 |
+| Frontend | Next.js 16, TypeScript, Tailwind | 3000 |
 | **Main DB** | **Neon PostgreSQL (cloud)** | **Remote** |
-| Medusa DB | PostgreSQL | 5435 |
-| Cache | Redis | 6380 |
 | Search | Meilisearch | 7700 |
+| Payments | Payrexx (mock in dev) | — |
 
 ### Database Configuration
 
@@ -301,4 +297,4 @@ Run `scripts/db/migrations/002-simplified-auth.sql` to add:
 
 ---
 
-**Last Updated**: 2026-01-23
+**Last Updated**: 2026-02-24

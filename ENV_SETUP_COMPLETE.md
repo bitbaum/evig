@@ -28,13 +28,7 @@ ADMIN_PASSWORD (256-bit)
 └─ Value: Dh2qeGkmOdNf40OCbonfNfiLHtyn/OxB0icuao0oxeg=
 ```
 
-### 2. Found Existing Medusa Publishable Key
-
-✅ **Retrieved from database**: `pk_eee502aced5bea9f350f22cc90c2f98e74417fcfa17a35a230837b069e915a55`
-
-This key was already configured in the Medusa database and is now properly set in `.env.local` so the storefront can fetch products.
-
-### 3. Configured All Database Connections
+### 2. Configured All Database Connections
 
 ```bash
 Main Database (PostgreSQL)
@@ -43,15 +37,9 @@ Main Database (PostgreSQL)
 ├─ User: postgres
 └─ Status: ✅ Running and healthy
 
-Medusa Database (PostgreSQL)
-├─ Host: localhost:5435
-├─ Database: medusa_db
-├─ User: medusa
-└─ Status: ✅ Running and healthy
-
 Redis Cache
 ├─ Host: localhost:6380
-├─ Used for: Sessions, rate limiting, Medusa cache
+├─ Used for: Sessions, rate limiting
 └─ Status: ✅ Running and healthy
 
 Meilisearch
@@ -89,8 +77,7 @@ Location: `/home/g/dev/revampit/.env.local`
 
 **Sections included**:
 - ✅ Authentication & Security (AUTH_SECRET, JWT_SECRET, ADMIN_PASSWORD)
-- ✅ Database Configuration (Main DB + Medusa DB)
-- ✅ Medusa E-commerce (Backend URL + Publishable Key)
+- ✅ Database Configuration (Main DB)
 - ✅ Redis Configuration (Cache + Rate Limiting)
 - ✅ Meilisearch Configuration
 - ✅ Email Configuration (Template ready)
@@ -109,8 +96,7 @@ Location: `/home/g/dev/revampit/.env.local`
 | **AUTH_SECRET** | ✅ Set | 512-bit cryptographic key |
 | **JWT_SECRET** | ✅ Set | 512-bit cryptographic key |
 | **ADMIN_PASSWORD** | ✅ Set | 256-bit secure password |
-| **Database Connections** | ✅ Set | All 4 databases configured |
-| **Medusa Publishable Key** | ✅ Set | Found in database |
+| **Database Connections** | ✅ Set | Database configured |
 | **Redis** | ✅ Set | Configured for caching + rate limiting |
 | **Email Credentials** | ⚠️ Needs Update | Placeholder values (optional) |
 | **Stripe** | 📝 Optional | Commented out (ready when needed) |
@@ -145,8 +131,7 @@ Location: `/home/g/dev/revampit/.env.local`
    # Test pages:
    ✓ Homepage
    ✓ Login (will need to create account or use setup-admins)
-   ✓ Shop (http://localhost:3000/shop/medusa)
-   ✓ Medusa Admin (http://localhost:9000/app)
+   ✓ Shop (http://localhost:3000/shop)
    ```
 
 ### Setup Admin User (First Time)
@@ -221,12 +206,11 @@ npm run setup-admins
 - ✅ Admin authentication
 - ✅ Role-based access control
 
-### E-commerce (Medusa)
-- ✅ Browse products at `/shop/medusa`
+### E-commerce
+- ✅ Browse products at `/shop`
 - ✅ View product details
 - ✅ Add to cart
 - ✅ Manage cart
-- ✅ Access Medusa Admin at `localhost:9000/app`
 
 ### Database
 - ✅ Full PostgreSQL access
@@ -243,10 +227,9 @@ npm run setup-admins
 ## 📊 Configuration Summary
 
 ```bash
-Total Variables Configured: 45
+Total Variables Configured: 38
 ├─ Authentication: 5 variables
-├─ Database: 10 variables
-├─ Medusa: 7 variables
+├─ Database: 5 variables
 ├─ Redis: 2 variables
 ├─ Email: 5 variables
 ├─ Site Config: 8 variables
@@ -276,9 +259,8 @@ Agentic Development Ready: ✅ YES
 - Run `npm run setup-admins` to create admin user
 
 ### "Shop not loading products"
-- Verify `NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY` is set
-- Check Medusa is running: `curl http://localhost:9000/health`
-- Verify products exist in Medusa Admin
+- Verify products exist in the database
+- Check the shop API: `curl http://localhost:3000/api/shop/inventory`
 
 ### "Email not sending"
 - If using Gmail: Verify App Password is correct
@@ -287,7 +269,7 @@ Agentic Development Ready: ✅ YES
 
 ### "Database connection errors"
 - Verify Docker services are running: `docker compose ps`
-- Check ports: 5433 (main DB), 5435 (Medusa DB)
+- Check ports: 5433 (main DB)
 - Verify credentials match `.env.local`
 
 ---
@@ -297,7 +279,6 @@ Agentic Development Ready: ✅ YES
 - `.env.example` - Template for all environment variables
 - `environment.example` - Full configuration guide
 - `docs/SHARED_CONTEXT.md` - Technology stack overview
-- `SETUP_COMPLETE.md` - Medusa setup details
 - `README.md` - Project overview and quick start
 
 ---

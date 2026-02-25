@@ -8,7 +8,7 @@
 ## Context
 
 - **Project**: RevampIT - Swiss Non-Profit Tech Platform
-- **Tech Stack**: Next.js 16, Medusa, Express CMS API, PostgreSQL, Docker
+- **Tech Stack**: Next.js 16, Express CMS API, PostgreSQL, Docker
 - **Key Docs**: See `.claude/CLAUDE.md` and `docs/SHARED_CONTEXT.md`
 
 ## Task Requirements

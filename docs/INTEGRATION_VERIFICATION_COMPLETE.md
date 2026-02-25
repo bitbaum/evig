@@ -90,7 +90,7 @@ All components have been verified and fixed to ensure proper integration between
 - ✅ Links inventory to AI product
 - ✅ Creates `product_images` records
 - ✅ Optionally creates sustainability scores
-- ✅ Attempts MedusaJS publish (non-blocking)
+- ✅ Creates marketplace listing record
 - ✅ Returns proper response format
 
 ## Data Flow Verification
@@ -117,8 +117,6 @@ All components have been verified and fixed to ensure proper integration between
 ✅ API links inventory to AI product
   ↓
 ✅ API creates product_images records
-  ↓
-✅ API attempts MedusaJS publish (non-blocking)
   ↓
 ✅ Returns: { success: true, message, inventoryId, aiProductId }
   ↓
@@ -164,15 +162,12 @@ All components have been verified and fixed to ensure proper integration between
 1. **Brand Field**: Form has `brand` field but API doesn't store it in `ai_extracted_products.brand` (field exists but not populated)
 2. **Contact Info**: Form has `contactInfo` field but not stored anywhere
 3. **Marketplace Listings**: `marketplace_listings` table exists but not used (products go through inventory system)
-4. **MedusaJS**: Publishing to MedusaJS is non-blocking (errors don't fail the request)
-
 ## Next Steps
 
 1. **Add Brand Support**: Update API to store `brand` in `ai_extracted_products.brand`
 2. **Add Contact Info**: Store `contactInfo` in seller profile or product metadata
 3. **Use Marketplace Listings**: Consider creating `marketplace_listings` record for better separation
-4. **Improve MedusaJS Integration**: Show status to user or make it optional
-5. **Complete Refactoring**: Finish breaking down ProductListingForm into smaller components
+4. **Complete Refactoring**: Finish breaking down ProductListingForm into smaller components
 
 ## Related Documentation
 

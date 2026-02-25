@@ -71,15 +71,10 @@ import { TABLE_NAMES } from '@/config/database'
 **Dev Guide Reference:** Section "SSOT" - "Each piece of data/config should be defined in exactly one place"
 
 **Files Affected:**
-1. `src/config/medusa.ts` - Line 9: `'http://localhost:9000'`
-2. `src/config/cms.ts` - Line 9: `'http://localhost:3001'`
+1. `src/config/cms.ts` - Line 9: `'http://localhost:3001'`
 3. `src/auth.ts` - Line 322: `'http://localhost:3000'`
 4. `src/app/api/auth/verify-email/route.ts` - Line 24: `'http://localhost:3000'`
 5. `src/app/api/auth/forgot-password/route.ts` - Line 35: `'http://localhost:3001'`
-6. `src/lib/auth/config.ts` - Line 185: `'http://localhost:9000'`
-7. `src/components/admin/AdminShortcuts.tsx` - Lines 64, 126: `'http://localhost:9000'`
-8. `src/app/admin/products/page.tsx` - Line 48: `'http://localhost:9000'`
-9. `src/app/admin/page.tsx` - Line 120: `'http://localhost:9000'`
 
 **Impact:**
 - URLs scattered across codebase
@@ -92,7 +87,6 @@ Create `src/config/urls.ts`:
 ```typescript
 export const URLS = {
   APP_BASE: process.env.NEXTAUTH_URL || process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000',
-  MEDUSA_ADMIN: process.env.MEDUSA_ADMIN_URL || 'http://localhost:9000/app',
   CMS_API: process.env.CMS_API_URL || 'http://localhost:3001',
 } as const
 ```

@@ -138,9 +138,9 @@ function calculateSustainabilityScore(productData: ProductData): number {
 const PUBLISHABLE_KEY = "pk_eee502aced5bea9f350f22cc90c2f98e74417fcfa17a35a230837b069e915a55";
 
 // ✅ GOOD: Should be
-const PUBLISHABLE_KEY = process.env.NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY;
+const PUBLISHABLE_KEY = process.env.NEXT_PUBLIC_SHOP_PUBLISHABLE_KEY;
 if (!PUBLISHABLE_KEY) {
-  throw new Error('NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY is required');
+  throw new Error('NEXT_PUBLIC_SHOP_PUBLISHABLE_KEY is required');
 }
 ```
 
@@ -180,7 +180,7 @@ return NextResponse.json({ error: 'Interner Serverfehler' }, { status: 500 })
 return NextResponse.json({ error: 'Ein unerwarteter Fehler ist aufgetreten' }, { status: 500 })
 
 // ❌ Pattern 3: src/app/api/shop/products/route.ts:40
-return NextResponse.json({ error: "Failed to fetch products from Medusa" }, { status: response.status })
+return NextResponse.json({ error: "Failed to fetch products" }, { status: response.status })
 
 // ✅ GOOD: Should use standardized helper
 import { apiError, apiSuccess } from '@/lib/api/helpers';
@@ -204,7 +204,7 @@ return apiSuccess(data);
 - Typos not caught at compile time
 
 **Files Affected**:
-- `src/app/api/inventory/publish-medusa/route.ts` - Hardcoded table names
+- `src/app/api/inventory/publish/route.ts` - Hardcoded table names
 - `src/app/api/inventory/import-csv/route.ts` - Hardcoded table names
 - `src/app/api/ai/analyze-product/route.ts` - Hardcoded table names
 
@@ -298,11 +298,11 @@ export const POST = withAuth(async (request, session) => {
 **Example Violation**:
 ```typescript
 // ❌ BAD: src/app/api/shop/products/route.ts:3
-const MEDUSA_URL = process.env.MEDUSA_BACKEND_URL || "http://localhost:9000";
+const SHOP_URL = process.env.SHOP_BACKEND_URL || "http://localhost:3000";
 
 // ✅ GOOD: Should be in config
-import { MEDUSA_CONFIG } from '@/config/medusa';
-const MEDUSA_URL = MEDUSA_CONFIG.BACKEND_URL;
+import { SHOP_CONFIG } from '@/config/shop';
+const SHOP_URL = SHOP_CONFIG.BACKEND_URL;
 ```
 
 **Fix Required**: Move URLs to config files
@@ -361,7 +361,7 @@ return NextResponse.json({ success: true, message: '...', data });
 
 6. **Move hardcoded values to config** (Multiple files)
    - Table names → `src/config/database.ts`
-   - API URLs → `src/config/medusa.ts` or `src/config/api.ts`
+   - API URLs → `src/config/shop.ts` or `src/config/api.ts`
    - Constants → `src/config/constants.ts`
 
 ### Phase 3: Code Quality (Week 3)

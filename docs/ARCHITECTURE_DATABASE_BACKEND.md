@@ -16,21 +16,16 @@ RevampIT uses a **PostgreSQL-based unified backend** with **Next.js API routes**
 
 ### Database Setup
 
-The project uses **two separate PostgreSQL databases**:
+The project uses **PostgreSQL** as its primary database:
 
 1. **Main Database** (`revampit_db` - Port 5433)
    - User authentication & profiles
    - Workshops & registrations
    - Service appointments
    - Inventory & marketplace listings
+   - E-commerce products & orders
    - Messaging system
    - Blog & content
-
-2. **Medusa Database** (`revampit_medusa_db` - Port 5435)
-   - E-commerce products
-   - Orders & carts
-   - Customer data (linked to main DB)
-   - Inventory sync
 
 ### Database Connection
 
@@ -45,7 +40,7 @@ The project uses **two separate PostgreSQL databases**:
 
 **Configuration:**
 - **Host:** `localhost` (or `DB_HOST` env var)
-- **Port:** `5433` (main) / `5435` (Medusa)
+- **Port:** `5433`
 - **Pool Size:** 20 concurrent connections
 - **Timeout:** 5 seconds connection timeout
 - **Idle Timeout:** 30 seconds
@@ -67,7 +62,7 @@ src/app/api/
 ├── workshops/         # Workshop management
 │   └── route.ts       # GET /api/workshops
 ├── appointments/      # Service appointments
-├── shop/              # E-commerce (Medusa integration)
+├── shop/              # E-commerce
 └── user/              # User profile management
 ```
 
@@ -150,8 +145,6 @@ users
 ├── name
 ├── role (user, admin, seller, repairer)
 ├── email_verified
-└── medusa_customer_id (links to Medusa)
-
 user_profiles
 ├── user_id (FK → users)
 ├── first_name, last_name
@@ -197,8 +190,6 @@ service_appointments
 inventory_items
 ├── id, kivitendo_article_number
 ├── quantity_available, selling_price_chf
-└── medusa_product_id (FK → Medusa)
-
 ai_extracted_products
 ├── id, inventory_item_id (FK)
 ├── product_name, brand, category
@@ -265,48 +256,6 @@ try {
 
 ---
 
-## 🛒 E-Commerce Integration (Medusa)
-
-### Separate Database
-
-Medusa runs its own PostgreSQL database (`revampit_medusa_db`) with:
-- Products, variants, collections
-- Orders, carts, payments
-- Customer records (linked via `medusa_customer_id`)
-
-### Integration Pattern
-
-```typescript
-// 1. User registers in main DB
-const user = await createUser({ email, password })
-
-// 2. Create customer in Medusa
-const medusaCustomer = await medusaClient.customers.create({
-  email: user.email,
-  // ...
-})
-
-// 3. Link accounts
-await updateUser(user.id, { 
-  medusa_customer_id: medusaCustomer.id 
-})
-```
-
-### API Proxy Routes
-
-```typescript
-// src/app/api/shop/products/route.ts
-// Proxies requests to Medusa backend
-
-export async function GET() {
-  const medusa = getMedusaClient()
-  const products = await medusa.products.list()
-  return Response.json({ products })
-}
-```
-
----
-
 ## 🔒 Security Features
 
 ### Database Security
@@ -354,8 +303,7 @@ apiBadRequest('Validation failed', ['field1', 'field2'])
 ```
 Docker Compose
 ├── PostgreSQL (port 5433) - Main DB
-├── PostgreSQL (port 5435) - Medusa DB
-├── Redis (port 6380) - Medusa cache
+├── Redis (port 6380) - Cache
 └── Meilisearch (port 7700) - Product search
 
 Next.js Dev Server (port 3000)
@@ -418,10 +366,8 @@ logger.error('Database error', { error, query })
 - Connects directly to PostgreSQL via connection pool
 - Handles authentication, business logic, and data access
 
-**Database = PostgreSQL** (two databases)
-- Main DB: Users, workshops, services, content
-- Medusa DB: E-commerce products & orders
-- Linked via `medusa_customer_id` foreign key
+**Database = PostgreSQL**
+- Main DB: Users, workshops, services, content, e-commerce products & orders
 
 **Architecture Benefits:**
 - ✅ Serverless (scales automatically)

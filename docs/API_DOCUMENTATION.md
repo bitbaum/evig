@@ -6,7 +6,7 @@ Auto-generated from source code analysis.
 ## Overview
 
 Total endpoints: 116
-Categories: admin, ai, appointments, auth, blog, debug, health, invoices, locations, marketplace, medusa, messages, newsletter, payments, peer-repairs, repairer, repairers, reviews, seller, shop, suggestions, uploads, user, workshops
+Categories: admin, ai, appointments, auth, blog, debug, health, invoices, locations, marketplace, messages, newsletter, payments, peer-repairs, repairer, repairers, reviews, seller, shop, suggestions, uploads, user, workshops
 
 ## Authentication
 
@@ -1384,30 +1384,6 @@ export async function POST(request: NextRequest) {...
 
 </details>
 
-### Medusa
-
-#### `GET, POST, DELETE /api/medusa/mock`
-
-Mock Medusa API for development Provides basic product and cart functionality
-
-| Property | Value |
-|----------|-------|
-| File | `src/app/api/medusa/mock/route.ts` |
-| Auth | None |
-
-<details>
-<summary>Code Preview</summary>
-
-```typescript
-export async function GET(request: NextRequest) {...
-
-export async function POST(request: NextRequest) {...
-
-export async function DELETE(request: NextRequest) {...
-```
-
-</details>
-
 ### Messages
 
 #### `GET, POST /api/messages/conversations`
@@ -2092,7 +2068,7 @@ export async function POST(request: NextRequest) {...
 
 #### `GET /api/shop/products`
 
-GET /api/shop/products Proxy to Medusa store products API to avoid CORS issues
+GET /api/shop/products List shop products
 
 | Property | Value |
 |----------|-------|
@@ -2110,7 +2086,7 @@ export async function GET(request: NextRequest) {...
 
 #### `GET /api/shop/regions`
 
-GET /api/shop/regions Fetch available regions from Medusa
+GET /api/shop/regions Fetch available regions
 
 | Property | Value |
 |----------|-------|
@@ -2455,7 +2431,6 @@ export async function PATCH(
 | POST | `/api/locations/[id]/approve` | Authenticated users | API endpoint at /api/locations/[id]/approve |
 | GET/POST | `/api/locations/[id]/bookings` | Authenticated users | API endpoint at /api/locations/[id]/bookings |
 | GET/POST | `/api/marketplace/products` | None | Marketplace Products API GET /api/marketplace/prod... |
-| GET/POST/DELETE | `/api/medusa/mock` | None | Mock Medusa API for development Provides basic pro... |
 | GET/POST | `/api/messages/conversations` | Authenticated users | API endpoint at /api/messages/conversations |
 | GET | `/api/newsletter/confirm` | None | API endpoint at /api/newsletter/confirm |
 | POST | `/api/newsletter/subscribe` | None | API endpoint at /api/newsletter/subscribe |
@@ -2489,8 +2464,8 @@ export async function PATCH(
 | GET | `/api/shop/inventory` | None | Public Shop Inventory API GET /api/shop/inventory ... |
 | GET | `/api/shop/inventory/[id]` | None | Public Shop Inventory Product Detail API GET /api/... |
 | POST | `/api/shop/orders` | Authenticated users | API endpoint at /api/shop/orders |
-| GET | `/api/shop/products` | None | GET /api/shop/products Proxy to Medusa store produ... |
-| GET | `/api/shop/regions` | None | GET /api/shop/regions Fetch available regions from... |
+| GET | `/api/shop/products` | None | GET /api/shop/products List shop products |
+| GET | `/api/shop/regions` | None | GET /api/shop/regions Fetch available regions |
 | POST | `/api/suggestions` | None | API endpoint at /api/suggestions |
 | POST | `/api/uploads` | Authenticated users | API endpoint at /api/uploads |
 | GET | `/api/user/reviews` | Authenticated users | API endpoint at /api/user/reviews |

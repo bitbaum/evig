@@ -77,7 +77,6 @@ The database contains 62 tables across several domains:
 | reviewed_at | timestamp with time zone | ✓ |  |  |
 | review_notes | text | ✓ |  |  |
 | kivitendo_article_number | text | ✓ |  |  |
-| medusa_product_id | text | ✓ |  |  |
 | marketplace_listing_id | text | ✓ |  |  |
 | created_at | timestamp with time zone | ✓ | `CURRENT_TIMESTAMP` |  |
 | updated_at | timestamp with time zone | ✓ | `CURRENT_TIMESTAMP` |  |
@@ -427,7 +426,6 @@ Stores AI provider configurations
 | acquisition_cost_chf | numeric | ✓ |  |  |
 | selling_price_chf | numeric | ✓ |  |  |
 | min_selling_price_chf | numeric | ✓ |  |  |
-| medusa_product_id | text | ✓ |  |  |
 | marketplace_status | text | ✓ | `'draft'::text` |  |
 | assigned_to | uuid | ✓ |  |  |
 | assigned_at | timestamp with time zone | ✓ |  |  |
@@ -441,8 +439,6 @@ Stores AI provider configurations
 
 **Notable Indexes:**
 - `inventory_items_kivitendo_article_number_key`: UNIQUE 
-- `inventory_items_medusa_product_id_key`: UNIQUE 
-
 ### invoices
 
 | Column | Type | Nullable | Default | Description |
@@ -513,20 +509,6 @@ Stores AI provider configurations
 **Foreign Keys:**
 - `created_by` → `users.id`
 - `inventory_item_id` → `inventory_items.id`
-
-### medusa_customer_links
-
-| Column | Type | Nullable | Default | Description |
-|--------|------|----------|---------|-------------|
-| user_id | uuid |  |  |  |
-| medusa_customer_id | text |  |  |  |
-| synced_at | timestamp with time zone | ✓ | `now()` |  |
-
-**Foreign Keys:**
-- `user_id` → `users.id`
-
-**Notable Indexes:**
-- `medusa_customer_links_medusa_customer_id_key`: UNIQUE 
 
 ### message_reactions
 
@@ -633,7 +615,7 @@ Stores AI provider configurations
 | order_id | uuid |  |  |  |
 | product_title | text |  |  |  |
 | product_sku | text | ✓ |  |  |
-| medusa_variant_id | text | ✓ |  |  |
+| variant_id | text | ✓ |  |  |
 | inventory_item_id | uuid | ✓ |  |  |
 | quantity | integer |  |  |  |
 | unit_price_cents | bigint |  |  |  |
@@ -683,8 +665,8 @@ Stores AI provider configurations
 | tracking_number | text | ✓ |  |  |
 | estimated_delivery | date | ✓ |  |  |
 | seller_id | uuid | ✓ |  |  |
-| medusa_order_id | text | ✓ |  |  |
-| medusa_cart_id | text | ✓ |  |  |
+| external_order_id | text | ✓ |  |  |
+| cart_id | text | ✓ |  |  |
 | customer_notes | text | ✓ |  |  |
 | internal_notes | text | ✓ |  |  |
 | created_at | timestamp with time zone | ✓ | `CURRENT_TIMESTAMP` |  |

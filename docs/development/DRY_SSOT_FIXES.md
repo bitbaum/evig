@@ -83,15 +83,15 @@ const sellerError = await requireSeller(session.user.id);
 if (sellerError) return sellerError;
 ```
 
-### ✅ 4. Medusa Configuration SSOT (`src/config/medusa.ts`)
+### ✅ 4. Shop Configuration SSOT (`src/config/shop.ts`)
 
-**Problem**: Hardcoded Medusa URLs and API keys
+**Problem**: Hardcoded shop URLs and API keys
 
-**Solution**: Centralized Medusa configuration
+**Solution**: Centralized shop configuration
 
 **Impact**:
 - ✅ No hardcoded secrets
-- ✅ Single source for Medusa URLs
+- ✅ Single source for shop URLs
 - ✅ Environment variable validation
 
 ---
@@ -209,11 +209,11 @@ if (!session?.user?.id) {
 
 ### 4. ✅ API Configuration
 
-**Before**: Hardcoded Medusa URLs and keys
-**After**: Centralized in `MEDUSA_CONFIG`
+**Before**: Hardcoded shop URLs and keys
+**After**: Centralized in `SHOP_CONFIG`
 
 **Fixed**:
-- Medusa backend URL
+- Shop backend URL
 - Publishable key
 - Admin API key
 
@@ -227,7 +227,7 @@ if (!session?.user?.id) {
 2. ✅ `src/lib/api/middleware.ts` - Created (updated)
 3. ✅ `src/lib/api/role-checks.ts` - Created
 4. ✅ `src/config/database.ts` - Created
-5. ✅ `src/config/medusa.ts` - Created
+5. ✅ `src/config/shop.ts` - Created
 6. ✅ `src/config/error-messages.ts` - Created
 7. ✅ `src/app/api/shop/products/route.ts` - Fixed
 8. ✅ `src/app/api/admin/products/route.ts` - Fixed
@@ -283,7 +283,7 @@ if (!session?.user?.id) {
 
 3. **Configuration Files**
    - `src/config/database.ts` - Database constants
-   - `src/config/medusa.ts` - Medusa config
+   - `src/config/shop.ts` - Shop config
    - `src/config/error-messages.ts` - Error messages
 
 ### Benefits

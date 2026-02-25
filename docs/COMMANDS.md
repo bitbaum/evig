@@ -15,7 +15,7 @@ last_modified_summary: Created SSOT for all npm commands and scripts
 ```bash
 npm run d              # Start everything (databases + dev server)
 npm run dev            # Frontend only (port 3000)
-npm run services:up    # Start Docker services (db, medusa_db, redis, meilisearch)
+npm run services:up    # Start Docker services (db, redis, meilisearch)
 npm run services:down  # Stop Docker services
 npm run setup-admins   # Create admin users
 ```
@@ -26,9 +26,6 @@ npm run setup-admins   # Create admin users
 
 ```bash
 npm run dev            # Start Next.js dev server (port 3000)
-npm run dev:full       # Start Medusa + Next.js
-npm run dev:shop       # Start shop (Next.js + Medusa concurrently)
-npm run dev:medusa     # Start Medusa only
 npm run dev:cms        # Start CMS (currently disabled)
 ```
 
@@ -37,27 +34,12 @@ npm run dev:cms        # Start CMS (currently disabled)
 ## Docker Services
 
 ```bash
-npm run services:up    # Start all services (db, medusa_db, redis, meilisearch)
+npm run services:up    # Start all services (db, redis, meilisearch)
 npm run services:down  # Stop all services
 npm run db:up          # Start main database only
 npm run db:down        # Stop main database
 npm run setup          # Start database and wait 5 seconds
 npm run reset          # Stop all, remove volumes, and reset
-```
-
----
-
-## Medusa E-commerce
-
-```bash
-npm run medusa:start           # Start Medusa services (db, redis, meilisearch)
-npm run medusa:up              # Start Medusa Docker services
-npm run medusa:down            # Stop Medusa services
-npm run medusa:dev             # Start Medusa dev server (port 9000)
-npm run medusa:dev:9001        # Start Medusa dev server (port 9001)
-npm run medusa:setup           # Start services + bootstrap
-npm run medusa:bootstrap        # Bootstrap Medusa database
-npm run medusa:logs             # View Medusa logs
 ```
 
 ---

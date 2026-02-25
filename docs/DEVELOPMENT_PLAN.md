@@ -85,7 +85,7 @@ All page files now under 500 lines. Component files all under 500 lines.
 | reviews/page.tsx | 509 | 346 | `useReviewManagement` hook |
 
 ### Remaining Borderline Files (not worth refactoring)
-- `shop/medusa/products/[handle]/page.tsx` (519) — prop drilling overhead
+- `shop/products/[handle]/page.tsx` (519) — prop drilling overhead
 - `marketplace/[id]/page.tsx` (507) — minimal gain
 
 ### Largest Files (all config/data/lib, not page components)

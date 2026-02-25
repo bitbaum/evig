@@ -978,7 +978,7 @@ const { data } = await supabase.from(PRODUCT_TABLE).select('*');
 ```bash
 # Development
 npm run dev              # Start dev server
-npm run dev:full         # Start all services (Medusa + Next.js)
+npm run dev:full         # Start all services
 npm run d                # Alias for dev:full
 npm run build            # Build for production
 npm run test             # Run tests

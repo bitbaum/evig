@@ -60,7 +60,6 @@ Click **"Deploy"** to create the initial deployment.
 
    **Optional Variables:**
    ```
-   MEDUSA_API_URL=https://your-medusa-api.com
    NEXT_PUBLIC_ENABLE_ROLE_SELECTION_ON_REGISTER=false
    ```
 

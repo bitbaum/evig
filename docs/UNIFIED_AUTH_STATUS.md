@@ -9,7 +9,7 @@
 ## 🎯 Project Overview
 
 A self-hosted unified authentication system for RevampIT that provides a single account for:
-- Shop purchases (Medusa integration)
+- Shop purchases
 - Workshop registration
 - Service appointment booking
 - Donation tracking
@@ -45,7 +45,7 @@ A self-hosted unified authentication system for RevampIT that provides a single 
 | Workshop Registration | High | Add registration buttons to workshop cards |
 | Service Appointments | High | Build appointment booking UI |
 | Email Verification | Medium | Send verification emails on signup |
-| Medusa Customer Sync | Medium | Link shop customers to unified accounts |
+| Shop Customer Sync | Medium | Link shop customers to unified accounts |
 | OAuth Providers | Low | Google, GitHub login options |
 
 ## 🏗️ Architecture
@@ -76,7 +76,7 @@ PostgreSQL (localhost:5433, database: revampit_cms)
 ├── donations               # Donation records
 ├── applications            # Volunteer/intern applications
 ├── newsletter_subscriptions # Email preferences
-└── medusa_customer_links   # Shop customer mapping
+└── (shop customer data stored in users table)
 ```
 
 ### File Structure
@@ -180,7 +180,6 @@ All tables verified working:
 - `donations` - Donation tracking
 - `applications` - Volunteer applications
 - `newsletter_subscriptions` - Email preferences
-- `medusa_customer_links` - Shop integration
 
 ### Seeded Data
 
@@ -324,8 +323,6 @@ export async function getWorkshopRegistrations(userId: string) {
 ## 🔗 Related Documentation
 
 - `docs/UNIFIED_AUTH.md` - Detailed setup guide
-- `docs/REVAMPIT_SHOP_STATUS.md` - Shop integration status
-- `docs/REVAMPIT_SHOP_SETUP.md` - RevampIT e-commerce setup
 
 ---
 

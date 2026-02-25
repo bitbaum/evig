@@ -1,6 +1,6 @@
 /**
  * Add Sample Products Script
- * Adds a few sample products to the Medusa store for testing
+ * Adds a few sample products to the store for testing
  */
 
 import { createClient } from 'pg'
@@ -127,7 +127,7 @@ Ideal für Content Creation, Gaming oder professionelle Anwendungen. Mit origina
       }
     ]
 
-    console.log('Adding sample products to Medusa store...')
+    console.log('Adding sample products to store...')
 
     for (const product of products) {
       // Insert product

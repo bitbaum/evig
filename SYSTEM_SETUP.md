@@ -41,10 +41,6 @@ open http://localhost:3000
         │  (Port 5433)    │
         └─────────────────┘
                  │
-        ┌─────────────────┐
-        │   Medusa        │
-        │  (Port 9000)    │
-        └─────────────────┘
 ```
 
 ## 🔧 Detailed Setup
@@ -87,7 +83,6 @@ npm run start:all
 # Or start individual services
 npm run dev          # Next.js frontend
 npm run dev:cms      # CMS API backend
-npm run dev:medusa   # Medusa services
 
 # Check health
 curl http://localhost:3001/health

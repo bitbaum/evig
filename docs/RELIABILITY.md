@@ -18,7 +18,7 @@ This project is configured to favor reliability of Auth and Database while keepi
 - Redis-backed rate limiter and lockout (optional)
   - Enable via env:
     - `ENABLE_REDIS_RATE_LIMITER=true`
-    - `REDIS_URL=redis://localhost:6380` (or use `MEDUSA_REDIS_URL`)
+    - `REDIS_URL=redis://localhost:6380`
   - Falls back to in-memory if Redis client is not available.
 
 ## How to run migrations

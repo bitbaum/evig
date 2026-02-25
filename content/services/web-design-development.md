@@ -7,7 +7,7 @@ features:
   - Moderne Frameworks (Next.js, React)
   - Headless CMS (Strapi, Payload, Tina)
   - Responsive Design & Tailwind CSS
-  - E-Commerce-Lösungen (Medusa.js, Shopware 6)
+  - E-Commerce-Lösungen (WooCommerce, Shopware 6)
   - SEO-Optimierung & Performance
 pricing: CHF 70/hour
 ---
@@ -31,7 +31,7 @@ Wir erstellen schnelle, schöne und funktionale Websites mit den neuesten Open-S
 - API-first Ansatz
 
 **E-Commerce Lösungen**
-- Medusa.js für moderne E-Commerce
+- WooCommerce für flexible E-Commerce
 - Shopware 6 Integration
 - Payment Gateway Integration
 - Inventory Management

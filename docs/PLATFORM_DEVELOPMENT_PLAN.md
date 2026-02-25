@@ -175,7 +175,7 @@ This plan outlines the transformation of RevampIT from a basic website into a co
 - Direct shipping coordination
 
 **Transaction Processing**
-- Payment facilitation (integration with existing Medusa shop)
+- Payment facilitation (integration with shop)
 - Shipping coordination
 - Transaction status tracking
 - Dispute resolution

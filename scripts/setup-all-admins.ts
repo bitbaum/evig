@@ -1,6 +1,5 @@
 import { PrismaClient } from '@prisma/client'
 import bcrypt from 'bcryptjs'
-import { execSync } from 'child_process'
 import crypto from 'crypto'
 
 const prisma = new PrismaClient()
@@ -83,75 +82,16 @@ async function setupAllAdmins() {
       }
     }
 
-    // Setup Medusa Admin User
-    console.log('🛒 Setting up Medusa admin user...')
-    try {
-      // Check if Medusa containers are running
-      execSync('docker ps | grep -q revampit_medusa', { stdio: 'pipe' })
-
-      // Check if Medusa admin user exists by parsing query output
-      let medusaUserExists = false
-      try {
-        const queryOutput = execSync(
-          `docker exec revampit_medusa_db psql -U medusa -d medusa_db -t -c "SELECT COUNT(*) FROM public.user WHERE email = 'admin2@revampit.ch';"`,
-          { stdio: 'pipe', encoding: 'utf-8' }
-        )
-        // Parse output: should be a number (0 or 1)
-        const count = parseInt(queryOutput.trim(), 10)
-        medusaUserExists = count > 0
-      } catch (error) {
-        // Query failed, assume user doesn't exist
-        medusaUserExists = false
-      }
-
-      if (medusaUserExists) {
-        console.log('✅ Medusa admin user already exists')
-        console.log(`   Email: admin2@revampit.ch`)
-        console.log(`   Note: Password was set during initial setup. Use password reset if needed.`)
-      } else {
-        // User doesn't exist, create it
-        const medusaPassword = process.env.MEDUSA_ADMIN_PASSWORD || getAdminPassword()
-        console.log('   Creating Medusa admin user...')
-        
-        try {
-          execSync(`npx medusa user -e admin2@revampit.ch -p ${medusaPassword}`, {
-            stdio: 'pipe',
-            cwd: '/home/g/dev/revampit/medusa-backend'
-          })
-          console.log('✅ Medusa admin user created successfully')
-          console.log(`   Email: admin2@revampit.ch`)
-          console.log(`   Password: [SECURE - Check .env or script output file]`)
-          
-          // Write password to secure file if configured
-          if (typeof process.env.ADMIN_PASSWORD_FILE === 'string') {
-            const fs = await import('fs/promises')
-            await fs.appendFile(process.env.ADMIN_PASSWORD_FILE, `Medusa Admin Password: ${medusaPassword}\n`, { mode: 0o600 })
-          } else if (!process.env.MEDUSA_ADMIN_PASSWORD) {
-            console.log(`   ⚠️  Auto-generated password. Set MEDUSA_ADMIN_PASSWORD env var for reproducible setup.`)
-            console.log(`   ⚠️  Password not displayed for security. Use password reset if needed.`)
-          }
-        } catch (createError) {
-          console.error('❌ Failed to create Medusa admin user:', createError)
-          throw createError
-        }
-      }
-    } catch (error) {
-      console.log('⚠️  Medusa containers not running. Start them with: npm run medusa:up')
-      console.log('   Then run this script again to create the Medusa admin user.')
-    }
-
     console.log('')
     console.log('🎉 Admin setup complete!')
     console.log('')
     console.log('📋 Admin Access URLs:')
-    console.log(`   CMS Admin:    http://localhost:3000/admin`)
-    console.log(`   Medusa Admin: http://localhost:9000/app`)
-    console.log(`   Shop Frontend: http://localhost:3000/shop/medusa`)
+    console.log(`   CMS Admin: http://localhost:3000/admin`)
     console.log('')
     console.log('🔐 Admin Credentials:')
-    console.log(`   Email: admin@revampit.ch or admin2@revampit.ch`)
+    console.log(`   Email: admin@revampit.ch`)
     console.log(`   Password: [Not displayed for security]`)
-    console.log(`   Set ADMIN_PASSWORD or MEDUSA_ADMIN_PASSWORD env vars for reproducible setup.`)
+    console.log(`   Set ADMIN_PASSWORD env var for reproducible setup.`)
     console.log(`   Or check ADMIN_PASSWORD_FILE if configured.`)
 
   } catch (error) {

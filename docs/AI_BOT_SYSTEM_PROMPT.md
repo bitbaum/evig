@@ -71,7 +71,7 @@
 **Technologie-Stack**:
 - Frontend: Next.js 14+, React 18, TypeScript, Tailwind CSS
 - CMS: Headless CMS (Strapi, Payload, Tina)
-- E-Commerce: Medusa.js, Shopware 6 Integration
+- E-Commerce: WooCommerce, Shopware 6 Integration
 
 **Services**:
 - Website-Entwicklung (Landing Pages bis komplexe Anwendungen)

@@ -10,7 +10,7 @@
 |--------|---------|
 | Type | Non-profit tech platform |
 | Frontend | Next.js 16, TypeScript, Tailwind |
-| Backend | Custom CMS (Express), Medusa |
+| Backend | Custom CMS (Express), Next.js API Routes |
 | Database | PostgreSQL, Redis, Meilisearch |
 | Location | Zürich, Switzerland |
 | Language | Swiss High German |
@@ -32,9 +32,6 @@ npm run build          # Production build
 npm run test           # Jest tests
 npm run test:e2e       # Playwright E2E
 
-# Medusa
-npm run medusa:start   # Start Medusa services
-npm run medusa:dev     # Medusa dev server (port 9000)
 ```
 
 **Full reference**: `docs/COMMANDS.md`
@@ -59,7 +56,6 @@ revampit/
 │       └── urls.ts       # URL constants
 ├── cms-api/              # Custom CMS backend
 │   └── src/migrations/   # DB migrations (PROTECTED)
-├── medusa-backend/       # Medusa e-commerce
 ├── docs/                 # Documentation (SSOT)
 └── scripts/              # Utility scripts
 ```
@@ -159,8 +155,7 @@ TABLE_NAMES.SERVICES
 |---------|-----|
 | Frontend | http://localhost:3000 |
 | Admin | http://localhost:3000/admin |
-| Medusa Admin | http://localhost:9000/app |
-| Shop | http://localhost:3000/shop/medusa |
+| Shop | http://localhost:3000/shop |
 
 ## Protected Files - NEVER Delete
 

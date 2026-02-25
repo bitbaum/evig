@@ -18,14 +18,12 @@ This guide covers migrating RevampIT from the current **Vercel hosting** to a **
 - **Frontend:** Next.js on Vercel (serverless)
 - **Backend:** Next.js API Routes on Vercel (serverless)
 - **Database:** PostgreSQL (likely on separate VPS/cloud)
-- **Medusa:** E-commerce backend (likely on separate server)
 - **CDN:** Vercel Edge Network (global)
 
 ### Target Architecture (Frauenfeld Datacenter)
 - **Frontend:** Next.js (Docker container)
 - **Backend:** Next.js API Routes (same container)
 - **Database:** PostgreSQL (Docker container)
-- **Medusa:** E-commerce backend (Docker container)
 - **Redis:** Caching/sessions (Docker container)
 - **Meilisearch:** Search engine (Docker container)
 - **Reverse Proxy:** Nginx/Traefik (SSL termination, routing)
@@ -146,16 +144,8 @@ AUTH_SECRET=<generate-with-openssl-rand-base64-32>
 NEXTAUTH_SECRET=<generate-with-openssl-rand-base64-32>
 NEXTAUTH_URL=https://revampit.ch
 
-# Medusa
-MEDUSA_BACKEND_URL=http://medusa:9000
-MEDUSA_DB_HOST=medusa_db
-MEDUSA_DB_PORT=5432
-MEDUSA_DB_NAME=medusa_db
-MEDUSA_DB_USER=medusa_user
-MEDUSA_DB_PASSWORD=<strong-password>
-
 # Redis
-REDIS_URL=redis://medusa_redis:6379
+REDIS_URL=redis://redis:6379
 
 # Email (SMTP)
 SMTP_HOST=smtp.your-provider.com
@@ -196,26 +186,8 @@ services:
       timeout: 5s
       retries: 5
 
-  # PostgreSQL for Medusa
-  medusa_db:
-    image: postgres:16-alpine
-    restart: unless-stopped
-    environment:
-      POSTGRES_USER: ${MEDUSA_DB_USER}
-      POSTGRES_PASSWORD: ${MEDUSA_DB_PASSWORD}
-      POSTGRES_DB: ${MEDUSA_DB_NAME}
-    volumes:
-      - medusa_db_data:/var/lib/postgresql/data
-    networks:
-      - revampit_network
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${MEDUSA_DB_USER}"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-
-  # Redis for Medusa
-  medusa_redis:
+  # Redis
+  redis:
     image: redis:7-alpine
     restart: unless-stopped
     volumes:
@@ -246,28 +218,6 @@ services:
       timeout: 10s
       retries: 3
 
-  # Medusa Backend
-  medusa:
-    build:
-      context: ./medusa-backend
-      dockerfile: Dockerfile
-    restart: unless-stopped
-    environment:
-      DATABASE_URL: postgres://${MEDUSA_DB_USER}:${MEDUSA_DB_PASSWORD}@medusa_db:5432/${MEDUSA_DB_NAME}
-      REDIS_URL: redis://medusa_redis:6379
-      JWT_SECRET: ${MEDUSA_JWT_SECRET}
-      COOKIE_SECRET: ${MEDUSA_COOKIE_SECRET}
-      MEDUSA_BACKEND_URL: ${MEDUSA_BACKEND_URL}
-    depends_on:
-      medusa_db:
-        condition: service_healthy
-      medusa_redis:
-        condition: service_healthy
-    networks:
-      - revampit_network
-    volumes:
-      - medusa_uploads:/app/uploads
-
   # Next.js Application
   app:
     build:
@@ -277,14 +227,9 @@ services:
     environment:
       NODE_ENV: production
       DATABASE_URL: postgres://${DB_USER}:${DB_PASSWORD}@db:5432/${DB_NAME}
-      MEDUSA_BACKEND_URL: ${MEDUSA_BACKEND_URL}
       # ... all other env vars
     depends_on:
       db:
-        condition: service_healthy
-      medusa_db:
-        condition: service_healthy
-      medusa_redis:
         condition: service_healthy
     networks:
       - revampit_network
@@ -293,10 +238,8 @@ services:
 
 volumes:
   db_data:
-  medusa_db_data:
   redis_data:
   meilisearch_data:
-  medusa_uploads:
 
 networks:
   revampit_network:
@@ -377,10 +320,6 @@ upstream revampit_app {
     server localhost:3000;
 }
 
-upstream medusa_backend {
-    server localhost:9000;
-}
-
 server {
     listen 80;
     server_name revampit.ch www.revampit.ch;
@@ -429,16 +368,6 @@ server {
         proxy_connect_timeout 75s;
     }
 
-    # Medusa backend API
-    location /api/medusa/ {
-        proxy_pass http://medusa_backend/;
-        proxy_http_version 1.1;
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto $scheme;
-    }
-
     # Static files caching
     location /_next/static/ {
         proxy_pass http://revampit_app;
@@ -482,11 +411,9 @@ certbot renew --dry-run
 ```bash
 # On current database server
 pg_dump -h current-db-host -U postgres -d revampit_cms -F c -f revampit_cms_backup.dump
-pg_dump -h current-db-host -U postgres -d medusa_db -F c -f medusa_db_backup.dump
 
 # Transfer to new server
 scp revampit_cms_backup.dump revampit@new-server:/opt/revampit/
-scp medusa_db_backup.dump revampit@new-server:/opt/revampit/
 ```
 
 #### 4.2 Import Database on New Server
@@ -494,7 +421,7 @@ scp medusa_db_backup.dump revampit@new-server:/opt/revampit/
 ```bash
 # Start services first
 cd /opt/revampit
-docker compose -f docker-compose.prod.yml up -d db medusa_db
+docker compose -f docker-compose.prod.yml up -d db
 
 # Wait for databases to be ready
 sleep 10
@@ -502,8 +429,6 @@ sleep 10
 # Import main database
 docker exec -i revampit_db_1 pg_restore -U revampit_user -d revampit_cms < revampit_cms_backup.dump
 
-# Import Medusa database
-docker exec -i revampit_medusa_db_1 pg_restore -U medusa_user -d medusa_db < medusa_db_backup.dump
 ```
 
 ---
@@ -573,10 +498,6 @@ mkdir -p $BACKUP_DIR
 
 # Backup databases
 docker exec revampit_db_1 pg_dump -U revampit_user revampit_cms | gzip > $BACKUP_DIR/db_$DATE.sql.gz
-docker exec revampit_medusa_db_1 pg_dump -U medusa_user medusa_db | gzip > $BACKUP_DIR/medusa_db_$DATE.sql.gz
-
-# Backup uploads
-tar -czf $BACKUP_DIR/uploads_$DATE.tar.gz /opt/revampit/medusa-backend/uploads
 
 # Keep only last 7 days
 find $BACKUP_DIR -type f -mtime +7 -delete

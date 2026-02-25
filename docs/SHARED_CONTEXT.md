@@ -27,7 +27,7 @@ last_modified_summary: Created SSOT for project context (mission, tech stack, lo
 |-------|------------|-------|
 | Frontend | Next.js 14 (App Router), TypeScript, Tailwind CSS | Port 3000 |
 | Backend | Next.js API Routes, Express CMS API | Port 3001 |
-| E-commerce | Medusa | Port 9000 |
+| E-commerce | Custom (inventory-based) | Integrated |
 | Database | PostgreSQL (5433), Redis (6380), Meilisearch (7700) | |
 | Deploy | Vercel, Docker, GitHub Actions | |
 
@@ -38,7 +38,6 @@ last_modified_summary: Created SSOT for project context (mission, tech stack, lo
 | Database | Port | Name | User | Password Env Var |
 |----------|------|------|------|------------------|
 | Main | 5433 | `revampit_cms` | postgres | `$POSTGRES_PASSWORD` |
-| Medusa | 5435 | `medusa_db` | medusa | `$MEDUSA_PASSWORD` |
 | Redis | 6380 | - | - | - |
 | Meilisearch | 7700 | - | - | - |
 
@@ -48,9 +47,8 @@ last_modified_summary: Created SSOT for project context (mission, tech stack, lo
 
 - **Frontend**: http://localhost:3000
 - **Admin Dashboard**: http://localhost:3000/admin
-- **Medusa Admin**: http://localhost:9000/app
 - **AI CMS Editor**: http://localhost:3000/ai-cms
-- **Shop**: http://localhost:3000/shop/medusa
+- **Shop**: http://localhost:3000/shop
 
 ---
 

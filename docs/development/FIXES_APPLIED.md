@@ -51,10 +51,10 @@ Created Single Source of Truth for table names:
 - Easy refactoring
 - Compile-time safety
 
-### ✅ 4. Medusa Configuration (`src/config/medusa.ts`)
+### ✅ 4. Shop Configuration (`src/config/shop.ts`)
 
-Created centralized Medusa config:
-- `MEDUSA_CONFIG` with backend URL, publishable key, admin key
+Created centralized shop config:
+- `SHOP_CONFIG` with backend URL, publishable key
 - Environment variable validation
 
 **Benefits**:
@@ -71,12 +71,12 @@ Created centralized Medusa config:
 1. **`src/app/api/shop/products/route.ts`**
    - ❌ Removed hardcoded publishable key
    - ❌ Replaced 2x `console.error` with `logger.error`
-   - ✅ Now uses `MEDUSA_CONFIG` and `apiError`/`apiSuccess`
+   - ✅ Now uses `SHOP_CONFIG` and `apiError`/`apiSuccess`
 
 2. **`src/app/api/admin/products/route.ts`**
    - ❌ Removed hardcoded publishable key (with fallback)
    - ❌ Replaced 4x `console.error` with `logger.error`
-   - ✅ Now uses `MEDUSA_CONFIG` and standardized helpers
+   - ✅ Now uses `SHOP_CONFIG` and standardized helpers
    - ✅ Both GET and POST methods fixed
 
 ### ✅ Error Handling Standardization
@@ -128,7 +128,7 @@ Created centralized Medusa config:
    - ❌ Removed duplicate seller role check (now uses `requireSeller()`)
    - ❌ Replaced hardcoded error messages with `ERROR_MESSAGES`
    - ❌ Replaced hardcoded table names with `TABLE_NAMES`
-   - ❌ Removed hardcoded Medusa URL and API key
+   - ❌ Removed hardcoded shop URL and API key
    - ❌ Replaced 3x `console.*` with `logger.*`
    - ✅ Uses standardized helpers, config, and role checks
 
@@ -176,7 +176,7 @@ Created centralized Medusa config:
 - ✅ `src/lib/api/middleware.ts` - API middleware
 - ✅ `src/lib/api/role-checks.ts` - Role checking utilities (DRY)
 - ✅ `src/config/database.ts` - Database table names (SSOT)
-- ✅ `src/config/medusa.ts` - Medusa configuration (SSOT)
+- ✅ `src/config/shop.ts` - Shop configuration (SSOT)
 - ✅ `src/config/error-messages.ts` - Error messages (SSOT)
 
 ### Files Fixed

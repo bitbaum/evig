@@ -8,7 +8,7 @@
 
 ## 🎯 Mission Accomplished
 
-RevampIT is now **production-ready** with **one-command migration** to Frauenfeld datacenter. Everything (frontend, backend, databases, Medusa, monitoring) runs on a single server at revampit.ch.
+RevampIT is now **production-ready** with **one-command migration** to Frauenfeld datacenter. Everything (frontend, backend, database, monitoring) runs on a single server at revampit.ch.
 
 ---
 
@@ -37,7 +37,6 @@ RevampIT is now **production-ready** with **one-command migration** to Frauenfel
 - **Frontend:** Next.js (Docker container)
 - **Backend:** Next.js API Routes (same container)
 - **Database:** PostgreSQL (Docker container)
-- **Medusa:** E-commerce backend (Docker container)
 - **Redis:** Caching/sessions (Docker container)
 - **Meilisearch:** Search engine (Docker container)
 - **All services:** Running on single Frauenfeld server
@@ -97,7 +96,7 @@ The `./scripts/migrate-to-production.sh` script automatically:
    - Sets up production environment variables
 
 4. **Service Configuration** ✅
-   - Starts all Docker services (app, databases, Medusa, Redis, Meilisearch)
+   - Starts all Docker services (app, database, Redis, Meilisearch)
    - Configures health checks
    - Waits for services to be ready
 

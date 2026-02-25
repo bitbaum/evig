@@ -22,8 +22,8 @@
   - Files: `src/app/api/workshops/registrations/[id]/route.ts`, `src/app/dashboard/workshops/page.tsx`, `src/app/api/appointments/[id]/route.ts`, `src/app/dashboard/appointments/page.tsx`, `src/app/dashboard/page.tsx`.
 
 - Webshop Integration Stability
-  - Health endpoint: `GET /api/shop/health` checks `regions`/`products` with publishable key.
-  - Fixed publishable‑key header (sends both `x-publishable-key` and `x-publishable-api-key`). Files: `src/app/api/shop/{products,regions}/route.ts`, `src/app/api/shop/cart/**`, `src/app/api/shop/health/route.ts`.
+  - Health endpoint: `GET /api/shop/health` checks `regions`/`products`.
+  - Files: `src/app/api/shop/{products,regions}/route.ts`, `src/app/api/shop/cart/**`, `src/app/api/shop/health/route.ts`.
 
 - System Health
   - Auth DB health: `GET /api/health/auth-db` verifies connection + core tables and shows effective DB config (without secrets).
@@ -47,20 +47,15 @@
   - Users can submit a blog post from the dashboard.
 
 - Webshop
-  - `/shop/medusa` page no longer fails due to header mismatch; health endpoint returns 200 for `regions` and `products` when key is valid.
+  - Shop page working; health endpoint returns 200 for `regions` and `products`.
 
 ## What Still Needs to Be Done (Next)
 
 - Webshop: Sell on Revamp‑IT (End‑to‑End)
   - `POST /api/uploads`: Multipart image upload (dev: local `/public/uploads`, prod: S3 later). Returns public URLs.
-  - `POST /api/seller/products`: Server‑side product creation via admin API using CHF, single variant, image URLs, and metadata (`seller_user_id`, `seller_type: 'private'`, `condition`, `location`, `fulfillment: 'direct_seller'`).
+  - `POST /api/seller/products`: Server‑side product creation using CHF, single variant, image URLs, and metadata (`seller_user_id`, `seller_type: 'private'`, `condition`, `location`, `fulfillment: 'direct_seller'`).
   - Wire `ProductListingForm` submit → upload images → create product → success + link to listing.
   - Optional moderation: create as draft with `review_status: 'pending'`.
-
-- Seamless Webshop Auth (with RevampIT Auth)
-  - Ensure Medusa customer is created/linked on registration (we already attempt this in `registerUser`).
-  - Implement server‑side cart/session bridging: when signed in on RevampIT, auto‑create cart in webshop region (CH/CHF) and associate customer record.
-  - Keep all tokens server‑side; never expose admin credentials.
 
 - Edit Responses from Dashboard
   - Workshops: “Feedback bearbeiten” modal – `PATCH /api/workshops/registrations/:id` for `{ feedback, rating }`.
@@ -90,11 +85,6 @@
   - Visit `GET /api/health/auth-db` → expect `{ ok: true }`.
 
 - Webshop
-  - `docker compose -f docker-compose.medusa.yml up -d medusa_db medusa_redis meilisearch`
-  - `cd medusa-backend && npx medusa db:migrate && npx medusa user -e admin@revampit.ch -p admin123 && npx medusa dev`
-  - Ensure `.env.local` has:
-    - `MEDUSA_BACKEND_URL=http://localhost:9000`
-    - `NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY=<valid>`
   - Visit `GET /api/shop/health` → expect `ok: true`.
 
 ## Open Questions / Decisions
