@@ -1,6 +1,7 @@
 import { NextRequest } from "next/server";
-import { MEDUSA_CONFIG } from "@/config/medusa";
-import { apiSuccess, apiError, apiBadRequest, apiForbidden } from "@/lib/api/helpers";
+import { query } from "@/lib/auth/db";
+import { TABLE_NAMES } from "@/config/database";
+import { apiSuccess, apiError, apiBadRequest } from "@/lib/api/helpers";
 import { logger } from "@/lib/logger";
 import { withAdmin } from "@/lib/api/middleware";
 
@@ -24,9 +25,7 @@ export const POST = withAdmin(async (request: NextRequest) => {
 
     // Parse CSV (simple implementation - in production use a proper CSV parser)
     const headers = lines[0].split(',').map(h => h.trim());
-    const expectedHeaders = ['Titel', 'Beschreibung', 'Preis (CHF)', 'Kategorie', 'Marke', 'Bild-URL'];
 
-    // Check if headers match (optional - could be more flexible)
     const products = [];
     const errors = [];
 
@@ -41,10 +40,10 @@ export const POST = withAdmin(async (request: NextRequest) => {
       const product = {
         title: values[0],
         description: values[1],
-        price: Math.round(parseFloat(values[2]) * 100), // Convert CHF to cents
+        price: parseFloat(values[2]),
         category: values[3],
         brand: values[4],
-        images: values[5] ? [{ url: values[5] }] : []
+        imageUrl: values[5] || null
       };
 
       // Basic validation
@@ -60,61 +59,34 @@ export const POST = withAdmin(async (request: NextRequest) => {
       return apiBadRequest(`CSV validation errors (${products.length} products processed)`, { csv: errors });
     }
 
-    // Create products in Medusa
+    // Create products in local database
     const createdProducts = [];
     const creationErrors = [];
 
     for (const product of products) {
       try {
-        // First, create the product
-        const createResponse = await fetch(`${MEDUSA_CONFIG.URL}/admin/products`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "x-publishable-api-key": MEDUSA_CONFIG.PUBLISHABLE_KEY,
-            "Authorization": `Basic ${MEDUSA_CONFIG.ADMIN_API_KEY}`
-          },
-          body: JSON.stringify({
-            title: product.title,
-            description: product.description,
-            handle: product.title.toLowerCase().replace(/[^a-z0-9]/g, '-'),
-            status: "published",
-            images: product.images
-          }),
-        });
+        const handle = product.title.toLowerCase().replace(/[^a-z0-9]/g, '-');
 
-        if (!createResponse.ok) {
-          throw new Error(`Failed to create product: ${createResponse.status}`);
-        }
+        // Insert into ai_extracted_products
+        const productResult = await query<{ id: string }>(
+          `INSERT INTO ${TABLE_NAMES.AI_EXTRACTED_PRODUCTS}
+            (item_uuid, product_name, brand, short_description, estimated_price_chf, category, condition, status)
+           VALUES (gen_random_uuid(), $1, $2, $3, $4, $5, 'unknown', 'draft')
+           RETURNING id`,
+          [product.title, product.brand, product.description, product.price, product.category]
+        );
 
-        const createdProduct = await createResponse.json();
+        const productId = productResult.rows[0].id;
 
-        // Then, add variant with price
-        const variantResponse = await fetch(`${MEDUSA_CONFIG.URL}/admin/products/${createdProduct.product.id}/variants`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "x-publishable-api-key": MEDUSA_CONFIG.PUBLISHABLE_KEY,
-            "Authorization": `Basic ${MEDUSA_CONFIG.ADMIN_API_KEY}`
-          },
-          body: JSON.stringify({
-            title: "Default",
-            prices: [{
-              amount: product.price,
-              currency_code: "CHF"
-            }],
-            inventory_quantity: 1 // Default inventory
-          }),
-        });
+        // Insert into inventory_items
+        await query(
+          `INSERT INTO ${TABLE_NAMES.INVENTORY_ITEMS}
+            (ai_product_id, quantity_available, marketplace_status)
+           VALUES ($1, 1, 'draft')`,
+          [productId]
+        );
 
-        if (!variantResponse.ok) {
-          logger.warn(`Failed to add variant for product ${product.title}`, { 
-            productId: createdProduct.product.id,
-            status: variantResponse.status 
-          });
-        }
-
-        createdProducts.push(createdProduct.product);
+        createdProducts.push({ id: productId, title: product.title });
 
       } catch (error) {
         logger.error(`Error creating product "${product.title}"`, { error, product });

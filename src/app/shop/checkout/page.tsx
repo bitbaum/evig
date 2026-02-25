@@ -1,8 +1,7 @@
 'use client'
 
 import { useState, useEffect, Suspense } from 'react'
-import { useSession } from 'next-auth/react'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import {
   ArrowLeft,
@@ -13,8 +12,6 @@ import {
   AlertCircle,
   Loader2
 } from 'lucide-react'
-import StripeCheckout from '@/components/shop/StripeCheckout'
-import type { StripePaymentIntent } from '@/types/common'
 import { logger } from '@/lib/logger'
 
 interface CartItem {
@@ -43,20 +40,15 @@ interface Cart {
 }
 
 function CheckoutContent() {
-  const { data: session } = useSession()
-  const router = useRouter()
   const searchParams = useSearchParams()
   const cartId = searchParams.get('cartId')
 
   const [cart, setCart] = useState<Cart | null>(null)
   const [loading, setLoading] = useState(true)
-  const [paymentStatus, setPaymentStatus] = useState<'idle' | 'processing' | 'success' | 'error'>('idle')
-  const [paymentError, setPaymentError] = useState<string>('')
 
   useEffect(() => {
     const getOrCreateCart = async () => {
-      // This would integrate with MedusaJS cart API
-      // For now, we'll simulate with sample data
+      // Sample data placeholder
       setCart({
         id: 'sample-cart-id',
         items: [
@@ -78,8 +70,6 @@ function CheckoutContent() {
 
     const fetchCart = async () => {
       try {
-        // This would fetch cart from MedusaJS
-        // For now, simulate with sample data
         await getOrCreateCart()
       } catch (error) {
         logger.error('Error fetching cart', { error })
@@ -90,48 +80,9 @@ function CheckoutContent() {
     if (cartId) {
       fetchCart()
     } else {
-      // Try to get cart from localStorage or create new one
       getOrCreateCart()
     }
   }, [cartId])
-
-  const handlePaymentSuccess = async (paymentIntent: StripePaymentIntent) => {
-    setPaymentStatus('success')
-
-    try {
-      // Create order in MedusaJS
-      const orderResponse = await fetch('/api/shop/orders', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          cartId: cart?.id,
-          paymentIntentId: paymentIntent.id,
-          shippingAddress: cart?.shipping_address
-        })
-      })
-
-      if (orderResponse.ok) {
-        const orderData = await orderResponse.json()
-        // Redirect to success page
-        router.push(`/shop/checkout/success?orderId=${orderData.orderId}`)
-      } else {
-        logger.error('Order creation failed')
-        // Still show success since payment went through
-        router.push('/shop/checkout/success')
-      }
-    } catch (error) {
-      logger.error('Error creating order', { error })
-      // Still redirect to success since payment succeeded
-      router.push('/shop/checkout/success')
-    }
-  }
-
-  const handlePaymentError = (error: string) => {
-    setPaymentStatus('error')
-    setPaymentError(error)
-  }
 
   if (loading) {
     return (
@@ -152,7 +103,7 @@ function CheckoutContent() {
               Fügen Sie Produkte zu Ihrem Warenkorb hinzu, um fortzufahren.
             </p>
             <Link
-              href="/shop/medusa"
+              href="/marketplace"
               className="inline-block bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition-colors"
             >
               Zum Shop
@@ -169,7 +120,7 @@ function CheckoutContent() {
         {/* Header */}
         <div className="mb-8">
           <Link
-            href="/shop/medusa/cart"
+            href="/marketplace"
             className="inline-flex items-center text-gray-600 hover:text-gray-800 mb-4"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
@@ -200,7 +151,7 @@ function CheckoutContent() {
                 Kontakt aufnehmen
               </Link>
               <Link
-                href="/shop/medusa"
+                href="/marketplace"
                 className="border border-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-50 transition-colors text-sm"
               >
                 Weiter einkaufen
@@ -262,34 +213,6 @@ function CheckoutContent() {
               </div>
             </div>
 
-            {/* Shipping Address */}
-            <div className="bg-white rounded-xl shadow-sm p-6">
-              <h2 className="text-xl font-semibold text-gray-900 mb-4">Lieferadresse</h2>
-
-              {cart.shipping_address ? (
-                <div className="text-gray-700">
-                  <p className="font-medium">
-                    {cart.shipping_address.first_name} {cart.shipping_address.last_name}
-                  </p>
-                  <p>{cart.shipping_address.address_1}</p>
-                  <p>
-                    {cart.shipping_address.postal_code} {cart.shipping_address.city}
-                  </p>
-                  <p>{cart.shipping_address.country_code?.toUpperCase()}</p>
-                </div>
-              ) : (
-                <div className="text-center py-8">
-                  <Truck className="w-12 h-12 text-gray-400 mx-auto mb-3" />
-                  <p className="text-gray-600 mb-4">
-                    Lieferadresse wird bei der Zahlung abgefragt
-                  </p>
-                  <p className="text-sm text-gray-500">
-                    Stripe sammelt Ihre Versandinformationen sicher
-                  </p>
-                </div>
-              )}
-            </div>
-
             {/* Trust Badges */}
             <div className="bg-white rounded-xl shadow-sm p-6">
               <div className="grid grid-cols-3 gap-4 text-center">
@@ -312,7 +235,7 @@ function CheckoutContent() {
             </div>
           </div>
 
-          {/* Payment Section */}
+          {/* Payment Section — placeholder until payment provider is integrated */}
           <div className="space-y-6">
             <div className="bg-white rounded-xl shadow-sm p-6">
               <h2 className="text-xl font-semibold text-gray-900 mb-4 flex items-center">
@@ -320,36 +243,15 @@ function CheckoutContent() {
                 Zahlung
               </h2>
 
-              {paymentStatus === 'success' && (
-                <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-4">
-                  <div className="flex items-center text-green-800">
-                    <CheckCircle className="w-5 h-5 mr-2" />
-                    <span className="font-medium">Zahlung erfolgreich!</span>
-                  </div>
-                  <p className="text-green-700 text-sm mt-1">
-                    Ihre Bestellung wird bearbeitet...
-                  </p>
-                </div>
-              )}
-
-              {paymentStatus === 'error' && (
-                <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-4">
-                  <div className="flex items-center text-red-800">
-                    <AlertCircle className="w-5 h-5 mr-2" />
-                    <span className="font-medium">Zahlungsfehler</span>
-                  </div>
-                  <p className="text-red-700 text-sm mt-1">{paymentError}</p>
-                </div>
-              )}
-
-              {paymentStatus !== 'success' && (
-                <StripeCheckout
-                  cartId={cart.id}
-                  total={cart.total / 100} // Convert from cents to CHF
-                  onPaymentSuccess={handlePaymentSuccess}
-                  onPaymentError={handlePaymentError}
-                />
-              )}
+              <div className="text-center py-8">
+                <CreditCard className="w-12 h-12 text-gray-400 mx-auto mb-3" />
+                <p className="text-gray-600 mb-2">
+                  Online-Zahlung wird bald verfügbar sein
+                </p>
+                <p className="text-sm text-gray-500">
+                  Kontaktieren Sie uns direkt für Bestellungen
+                </p>
+              </div>
             </div>
 
             {/* Terms */}

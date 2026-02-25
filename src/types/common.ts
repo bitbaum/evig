@@ -1,33 +1,11 @@
 /**
  * Common Type Definitions
- * 
+ *
  * Shared type definitions used across the application
- * 
+ *
  * Created: 2026-01-30
- * Last Modified: 2026-01-30
- * Last Modified Summary: Initial creation for Dev Guide compliance
+ * Last Modified: 2026-02-24
  */
-
-import type { PaymentIntent } from '@stripe/stripe-js'
-
-/**
- * Stripe Payment Intent type
- */
-export type StripePaymentIntent = PaymentIntent
-
-/**
- * Medusa Cart Item type
- */
-export interface MedusaCartItem {
-  id: string
-  title: string
-  description?: string
-  thumbnail?: string
-  unit_price: number
-  quantity: number
-  variant_id?: string
-  product_id?: string
-}
 
 /**
  * Database query parameter types
@@ -74,4 +52,13 @@ export type PreferenceValue = string | number | boolean | null | Record<string, 
  */
 export interface SegmentCriteria {
   [key: string]: unknown
+}
+
+/**
+ * Payment result from payment provider (provider-agnostic)
+ */
+export interface PaymentResult {
+  id: string
+  status: string
+  amount?: number
 }

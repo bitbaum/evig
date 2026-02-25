@@ -1,12 +1,4 @@
 import { z } from 'zod'
-import { uuidSchema } from './common'
-
-export const PublishMedusaSchema = z.object({
-  inventoryItemId: uuidSchema,
-  options: z.record(z.string(), z.unknown()).optional().default({}),
-})
-
-export type PublishMedusaInput = z.infer<typeof PublishMedusaSchema>
 
 // 5MB max CSV content size
 const MAX_CSV_SIZE = 5 * 1024 * 1024
@@ -19,9 +11,3 @@ export const ImportCSVSchema = z.object({
 })
 
 export type ImportCSVInput = z.infer<typeof ImportCSVSchema>
-
-export const PublishMedusaQuerySchema = z.object({
-  inventoryItemId: uuidSchema,
-})
-
-export type PublishMedusaQuery = z.infer<typeof PublishMedusaQuerySchema>

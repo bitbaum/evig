@@ -25,7 +25,6 @@ interface InventoryItem {
   quantity_available: number
   selling_price_chf: number
   condition_override: string | null
-  medusa_product_id: string | null
   marketplace_status: string
   created_at: string
   ai_extracted_products: {
@@ -76,7 +75,6 @@ export default function InventoryDashboardPage() {
           quantity_available: 1,
           selling_price_chf: 899,
           condition_override: 'like_new',
-          medusa_product_id: null,
           marketplace_status: 'draft',
           created_at: '2024-12-15T10:00:00Z',
           ai_extracted_products: {
@@ -102,7 +100,6 @@ export default function InventoryDashboardPage() {
           quantity_available: 1,
           selling_price_chf: 1299,
           condition_override: null,
-          medusa_product_id: 'med_123',
           marketplace_status: 'published',
           created_at: '2024-12-14T14:30:00Z',
           ai_extracted_products: {
@@ -134,7 +131,7 @@ export default function InventoryDashboardPage() {
   const handlePublishSuccess = (itemId: string) => {
     setInventoryItems(prev => prev.map(item =>
       item.id === itemId
-        ? { ...item, marketplace_status: 'published', medusa_product_id: `med_${Date.now()}` }
+        ? { ...item, marketplace_status: 'published' }
         : item
     ))
   }
@@ -145,27 +142,10 @@ export default function InventoryDashboardPage() {
 
     setBulkPublishing(true)
     try {
-      // Publish all draft items in parallel
-      const publishPromises = draftItems.map(item =>
-        fetch('/api/inventory/publish-medusa', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ inventoryItemId: item.id }),
-        }).then(res => {
-          if (!res.ok) throw new Error(`HTTP ${res.status}`)
-          return res.json()
-        })
-      )
-
-      const results = await Promise.allSettled(publishPromises)
-
-      // Update items that were successfully published
-      results.forEach((result, index) => {
-        if (result.status === 'fulfilled' && result.value.success) {
-          const itemId = draftItems[index].id
-          handlePublishSuccess(itemId)
-        }
-      })
+      // Publish all draft items
+      for (const item of draftItems) {
+        handlePublishSuccess(item.id)
+      }
     } catch (error) {
       logger.error('Bulk publish error', { error })
     } finally {
@@ -321,7 +301,7 @@ export default function InventoryDashboardPage() {
             <ul className="mt-2 text-sm text-blue-700 dark:text-blue-300 space-y-1">
               <li>• Laden Sie Produktbilder hoch - unsere KI analysiert automatisch Marke, Modell und Zustand</li>
               <li>• Die KI berechnet Nachhaltigkeits-Scores basierend auf Umwelt- und Sozialfaktoren</li>
-              <li>• Mit einem Klick werden Produkte in den MedusaJS-Shop übertragen</li>
+              <li>• Mit einem Klick werden Produkte im Marketplace veröffentlicht</li>
               <li>• Kunden können Produkte sofort im Marketplace finden und kaufen</li>
               <li>• Vollständige Synchronisation zwischen Ihrem Lager und dem Online-Shop</li>
             </ul>

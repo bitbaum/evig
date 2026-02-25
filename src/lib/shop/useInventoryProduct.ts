@@ -16,8 +16,6 @@ export interface InventoryProductDetail {
   subcategory: string | null
   quantity: number
   is_available: boolean
-  medusa_product_id: string | null
-  medusa_variant_id: string | null
   images: Array<{ id: string; url: string; is_primary: boolean }>
   customer_profiles: Array<{ slug: string; name_de: string; color: string; description_de: string }>
 }

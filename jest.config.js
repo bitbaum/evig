@@ -21,7 +21,7 @@ const customJestConfig = {
   ],
   moduleDirectories: ['node_modules', '<rootDir>/'],
   transformIgnorePatterns: [
-    '/node_modules/(?!(@auth|@medusajs|next-auth)/)',
+    '/node_modules/(?!(@auth|next-auth)/)',
   ],
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1',
@@ -32,7 +32,6 @@ const customJestConfig = {
   testPathIgnorePatterns: [
     '<rootDir>/.next/',
     '<rootDir>/node_modules/',
-    '<rootDir>/medusa-backend/',
     '<rootDir>/cms-api/',
   ],
 }

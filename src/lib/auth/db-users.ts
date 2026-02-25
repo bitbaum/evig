@@ -21,7 +21,6 @@ export interface DbUser {
   role: string  // Legacy - kept for backward compatibility
   status: string
   role_id: string | null
-  medusa_customer_id: string | null
   account_type: string
   last_activity_at: Date | null
   createdAt: Date  // camelCase for Auth.js
@@ -167,7 +166,6 @@ export async function createUser(data: {
   role?: string
   status?: string
   account_type?: string
-  medusa_customer_id?: string
   emailVerified?: boolean
   // New simplified auth fields
   is_staff?: boolean
@@ -223,11 +221,6 @@ export async function createUser(data: {
     values.push(data.account_type || 'individual')
   }
 
-  if (userColumns.has('medusa_customer_id')) {
-    columns.push('medusa_customer_id')
-    values.push(data.medusa_customer_id || null)
-  }
-
   if (userColumns.has('role_id')) {
     columns.push('role_id')
     values.push(roleId)
@@ -260,7 +253,7 @@ export async function createUser(data: {
  */
 export async function updateUser(
   id: string,
-  data: Partial<Pick<DbUser, 'name' | 'email' | 'emailVerified' | 'password_hash' | 'image' | 'role' | 'status' | 'account_type' | 'medusa_customer_id'>>
+  data: Partial<Pick<DbUser, 'name' | 'email' | 'emailVerified' | 'password_hash' | 'image' | 'role' | 'status' | 'account_type'>>
 ): Promise<DbUser | null> {
   const userColumns = await getUserColumns()
   const fields: string[] = []
@@ -310,11 +303,6 @@ export async function updateUser(
     fields.push(`account_type = $${paramIndex++}`)
     values.push(data.account_type)
   }
-  if (data.medusa_customer_id !== undefined && userColumns.has('medusa_customer_id')) {
-    fields.push(`medusa_customer_id = $${paramIndex++}`)
-    values.push(data.medusa_customer_id)
-  }
-
   if (fields.length === 0) return getUserById(id)
 
   values.push(id)

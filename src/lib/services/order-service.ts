@@ -2,13 +2,12 @@
  * Order Service
  *
  * Business logic for order creation.
- * Fetches real cart data from Medusa, creates order records,
+ * Creates order records from local inventory items
  * and decrements inventory.
  */
 
 import { query } from '@/lib/auth/db'
 import { TABLE_NAMES } from '@/config/database'
-import { MEDUSA_CONFIG } from '@/config/medusa'
 import { logger } from '@/lib/logger'
 
 // ============================================================================
@@ -24,10 +23,15 @@ export interface ShippingAddress {
   country: string
 }
 
+export interface OrderItem {
+  inventoryItemId: string
+  quantity: number
+}
+
 export interface CreateOrderParams {
   userId: string
-  cartId: string
-  paymentIntentId?: string
+  items: OrderItem[]
+  paymentTransactionId?: string
   shippingAddress?: ShippingAddress
 }
 
@@ -41,27 +45,11 @@ export interface CreatedOrder {
   createdAt: string
 }
 
-interface MedusaCartItem {
+interface InventoryRow {
   id: string
-  title: string
-  description: string | null
-  thumbnail: string | null
-  quantity: number
-  unit_price: number
-  subtotal: number
-  variant_id: string
-  variant: {
-    id: string
-    sku: string | null
-  }
-}
-
-interface MedusaCart {
-  id: string
-  items: MedusaCartItem[]
-  total: number
-  subtotal: number
-  tax_total: number
+  selling_price_chf: number | null
+  quantity_available: number
+  product_name: string
 }
 
 // ============================================================================
@@ -69,24 +57,47 @@ interface MedusaCart {
 // ============================================================================
 
 /**
- * Create a new order from a Medusa cart.
+ * Create a new order from local inventory items.
  *
- * Fetches the cart from Medusa Store API, creates order + order items
- * with real totals, looks up inventory items by medusa_variant_id,
- * and decrements quantity_available.
+ * Looks up inventory items, creates order + order items
+ * with real totals, and decrements quantity_available.
  */
 export async function createOrder(params: CreateOrderParams): Promise<CreatedOrder> {
-  const { userId, cartId, paymentIntentId = 'pending', shippingAddress } = params
+  const { userId, items, paymentTransactionId = 'pending', shippingAddress } = params
 
   try {
-    // Fetch real cart data from Medusa
-    const cart = await fetchMedusaCart(cartId)
-
-    if (!cart || cart.items.length === 0) {
-      throw new Error('Warenkorb ist leer oder nicht gefunden')
+    if (!items || items.length === 0) {
+      throw new Error('Warenkorb ist leer')
     }
 
-    // Create order record with real totals
+    // Look up inventory items
+    const itemIds = items.map(i => i.inventoryItemId)
+    const placeholders = itemIds.map((_, i) => `$${i + 1}`).join(', ')
+
+    const inventoryResult = await query<InventoryRow>(
+      `SELECT ii.id, ii.selling_price_chf, ii.quantity_available, aep.product_name
+       FROM ${TABLE_NAMES.INVENTORY_ITEMS} ii
+       JOIN ${TABLE_NAMES.AI_EXTRACTED_PRODUCTS} aep ON aep.id = ii.ai_product_id
+       WHERE ii.id IN (${placeholders})`,
+      itemIds,
+    )
+
+    const inventoryMap = new Map(inventoryResult.rows.map(r => [r.id, r]))
+
+    // Calculate total
+    let totalCents = 0
+    for (const item of items) {
+      const inv = inventoryMap.get(item.inventoryItemId)
+      if (!inv) {
+        throw new Error(`Artikel nicht gefunden: ${item.inventoryItemId}`)
+      }
+      if (inv.quantity_available < item.quantity) {
+        throw new Error(`Nicht genügend Lagerbestand für: ${inv.product_name}`)
+      }
+      totalCents += (inv.selling_price_chf || 0) * 100 * item.quantity
+    }
+
+    // Create order record
     const orderResult = await query<OrderRow>(
       `INSERT INTO ${TABLE_NAMES.ORDERS} (
         user_id,
@@ -94,24 +105,24 @@ export async function createOrder(params: CreateOrderParams): Promise<CreatedOrd
         total_amount_cents,
         currency,
         payment_intent_id,
-        shipping_address,
-        medusa_cart_id
-      ) VALUES ($1, 'confirmed', $2, 'CHF', $3, $4, $5)
+        shipping_address
+      ) VALUES ($1, 'confirmed', $2, 'CHF', $3, $4)
       RETURNING id, created_at`,
       [
         userId,
-        cart.total,
-        paymentIntentId,
+        totalCents,
+        paymentTransactionId,
         shippingAddress ? JSON.stringify(shippingAddress) : null,
-        cartId,
       ],
     )
 
     const orderData = orderResult.rows[0]
     const orderId = orderData.id
 
-    // Create order items from cart
-    for (const item of cart.items) {
+    // Create order items and decrement inventory
+    for (const item of items) {
+      const inv = inventoryMap.get(item.inventoryItemId)!
+
       await query(
         `INSERT INTO ${TABLE_NAMES.ORDER_ITEMS} (
           order_id,
@@ -119,36 +130,32 @@ export async function createOrder(params: CreateOrderParams): Promise<CreatedOrd
           quantity,
           unit_price_cents,
           total_price_cents,
-          medusa_variant_id
+          inventory_item_id
         ) VALUES ($1, $2, $3, $4, $5, $6)`,
         [
           orderId,
-          item.title,
+          inv.product_name,
           item.quantity,
-          item.unit_price,
-          item.subtotal,
-          item.variant?.id || item.variant_id,
+          (inv.selling_price_chf || 0) * 100,
+          (inv.selling_price_chf || 0) * 100 * item.quantity,
+          item.inventoryItemId,
         ],
       )
 
-      // Look up inventory item by medusa_variant_id and decrement quantity
-      const variantId = item.variant?.id || item.variant_id
-      if (variantId) {
-        await query(
-          `UPDATE ${TABLE_NAMES.INVENTORY_ITEMS}
-           SET quantity_available = GREATEST(quantity_available - $1, 0)
-           WHERE medusa_variant_id = $2`,
-          [item.quantity, variantId],
-        )
-      }
+      // Decrement inventory
+      await query(
+        `UPDATE ${TABLE_NAMES.INVENTORY_ITEMS}
+         SET quantity_available = GREATEST(quantity_available - $1, 0)
+         WHERE id = $2`,
+        [item.quantity, item.inventoryItemId],
+      )
     }
 
     logger.info('Order created', {
       orderId,
       userId,
-      cartId,
-      totalCents: cart.total,
-      itemCount: cart.items.length,
+      totalCents,
+      itemCount: items.length,
     })
 
     return {
@@ -158,41 +165,9 @@ export async function createOrder(params: CreateOrderParams): Promise<CreatedOrd
   } catch (error) {
     logger.error('Failed to create order', {
       userId,
-      cartId,
+      itemCount: items.length,
       error,
     })
     throw error
-  }
-}
-
-// ============================================================================
-// Helpers
-// ============================================================================
-
-/**
- * Fetch cart from Medusa Store API using the publishable key.
- */
-async function fetchMedusaCart(cartId: string): Promise<MedusaCart | null> {
-  try {
-    const response = await fetch(`${MEDUSA_CONFIG.URL}/store/carts/${cartId}`, {
-      headers: {
-        'Content-Type': 'application/json',
-        'x-publishable-key': MEDUSA_CONFIG.PUBLISHABLE_KEY,
-      },
-    })
-
-    if (!response.ok) {
-      logger.error('Failed to fetch Medusa cart', {
-        cartId,
-        status: response.status,
-      })
-      return null
-    }
-
-    const data = await response.json()
-    return data.cart as MedusaCart
-  } catch (error) {
-    logger.error('Error fetching Medusa cart', { cartId, error })
-    return null
   }
 }

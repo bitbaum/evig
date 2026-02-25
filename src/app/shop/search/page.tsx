@@ -96,8 +96,7 @@ function Breadcrumbs({ query }: { query?: string }) {
  * Search results component (placeholder for now)
  */
 function SearchResults({ query }: { query: string }) {
-  // In the future, this will fetch from Medusa API
-  // const results = await searchProducts(query);
+  // Product search will be connected to the marketplace API
 
   return (
     <div className="bg-white rounded-xl border border-gray-200 p-8 text-center">
@@ -114,7 +113,7 @@ function SearchResults({ query }: { query: string }) {
         </p>
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
           <Link
-            href="/shop/medusa"
+            href="/marketplace"
             className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-emerald-600 text-white font-semibold rounded-lg hover:bg-emerald-700 transition-colors"
           >
             <Package className="w-5 h-5" />

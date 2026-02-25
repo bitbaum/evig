@@ -1,21 +1,13 @@
 'use client'
 
-import { useState } from 'react'
-import Link from 'next/link'
 import { getConditionBadge } from '@/config/erfassung/conditions'
 import {
-  Package,
-  Eye,
   Edit,
   Trash2,
-  ExternalLink,
   CheckCircle,
   AlertCircle,
   Clock,
-  Loader2,
-  Zap
 } from 'lucide-react'
-import { logger } from '@/lib/logger'
 import { MARKETPLACE_STATUS, getMarketplaceStatusLabel } from '@/config/marketplace-status'
 
 interface InventoryItem {
@@ -24,7 +16,6 @@ interface InventoryItem {
   quantity_available: number
   selling_price_chf: number
   condition_override: string | null
-  medusa_product_id: string | null
   marketplace_status: string
   created_at: string
   ai_extracted_products: {
@@ -53,41 +44,6 @@ interface InventoryTableProps {
 }
 
 export function InventoryTable({ items, onPublishSuccess }: InventoryTableProps) {
-  const [publishingItems, setPublishingItems] = useState<Set<string>>(new Set())
-
-  const handlePublish = async (itemId: string) => {
-    setPublishingItems(prev => new Set(prev).add(itemId))
-
-    try {
-      const response = await fetch('/api/inventory/publish-medusa', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ inventoryItemId: itemId }),
-      })
-
-      const result = await response.json()
-
-      if (result.success) {
-        onPublishSuccess?.(itemId)
-        // Could show success toast here
-      } else {
-        logger.error('Publish failed', { errors: result.errors, itemId })
-        // Could show error toast here
-      }
-    } catch (error) {
-      logger.error('Publish error', { error, itemId })
-      // Could show error toast here
-    } finally {
-      setPublishingItems(prev => {
-        const newSet = new Set(prev)
-        newSet.delete(itemId)
-        return newSet
-      })
-    }
-  }
-
   const getConditionLabel = (condition: string) => getConditionBadge(condition)
 
   const getStatusIcon = (status: string) => {
@@ -132,7 +88,6 @@ export function InventoryTable({ items, onPublishSuccess }: InventoryTableProps)
               const aiProduct = item.ai_extracted_products;
               const conditionInfo = getConditionLabel(item.condition_override || aiProduct?.condition || 'unknown');
               const sustainabilityScore = aiProduct?.sustainability_scores?.[0];
-              const isPublishing = publishingItems.has(item.id);
 
               return (
                 <tr key={item.id} className="hover:bg-gray-50 dark:hover:bg-gray-700/50">
@@ -190,31 +145,6 @@ export function InventoryTable({ items, onPublishSuccess }: InventoryTableProps)
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                     <div className="flex items-center justify-end gap-2">
-                      {item.marketplace_status === MARKETPLACE_STATUS.PUBLISHED && item.medusa_product_id && (
-                        <Link
-                          href={`/shop/products/${item.medusa_product_id}`}
-                          className="text-gray-400 hover:text-blue-600 dark:hover:text-blue-400"
-                          title="Im Shop ansehen"
-                        >
-                          <ExternalLink className="w-4 h-4" />
-                        </Link>
-                      )}
-
-                      {item.marketplace_status === MARKETPLACE_STATUS.DRAFT && (
-                        <button
-                          onClick={() => handlePublish(item.id)}
-                          disabled={isPublishing}
-                          className="text-gray-400 hover:text-green-600 dark:hover:text-green-400 disabled:opacity-50"
-                          title="Zu MedusaJS veröffentlichen"
-                        >
-                          {isPublishing ? (
-                            <Loader2 className="w-4 h-4 animate-spin" />
-                          ) : (
-                            <Zap className="w-4 h-4" />
-                          )}
-                        </button>
-                      )}
-
                       <button
                         className="text-gray-400 hover:text-blue-600 dark:hover:text-blue-400"
                         title="Bearbeiten"

@@ -7,7 +7,6 @@
 
 import { NextResponse } from 'next/server'
 import { query } from '@/lib/auth/db'
-import { MEDUSA_CONFIG } from '@/config/medusa'
 import { MEILISEARCH_URL } from '@/config/urls'
 import { logger } from '@/lib/logger'
 
@@ -22,7 +21,6 @@ interface HealthResponse {
   timestamp: string
   services: {
     database: ServiceStatus
-    medusa: ServiceStatus
     meilisearch: ServiceStatus
   }
 }
@@ -40,40 +38,6 @@ async function checkDatabase(): Promise<ServiceStatus> {
     return {
       status: 'unhealthy',
       message: 'Cannot connect to database',
-    }
-  }
-}
-
-async function checkMedusa(): Promise<ServiceStatus> {
-  const start = Date.now()
-  try {
-    const controller = new AbortController()
-    const timeoutId = setTimeout(() => controller.abort(), 5000)
-
-    const response = await fetch(`${MEDUSA_CONFIG.BACKEND_URL}/health`, {
-      signal: controller.signal,
-    })
-    clearTimeout(timeoutId)
-
-    if (response.ok) {
-      return {
-        status: 'healthy',
-        latency: Date.now() - start,
-      }
-    }
-    return {
-      status: 'unhealthy',
-      message: `HTTP ${response.status}`,
-    }
-  } catch (error) {
-    const isConnectionRefused = error instanceof Error &&
-      (error.cause as { code?: string })?.code === 'ECONNREFUSED'
-
-    return {
-      status: 'unhealthy',
-      message: isConnectionRefused
-        ? 'Service not running (start with: npm run medusa:dev)'
-        : 'Connection failed',
     }
   }
 }
@@ -108,13 +72,12 @@ async function checkMeilisearch(): Promise<ServiceStatus> {
 }
 
 export async function GET() {
-  const [database, medusa, meilisearch] = await Promise.all([
+  const [database, meilisearch] = await Promise.all([
     checkDatabase(),
-    checkMedusa(),
     checkMeilisearch(),
   ])
 
-  const services = { database, medusa, meilisearch }
+  const services = { database, meilisearch }
 
   // Determine overall status
   const statuses = Object.values(services).map(s => s.status)

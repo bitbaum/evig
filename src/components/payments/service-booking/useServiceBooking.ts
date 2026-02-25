@@ -3,7 +3,7 @@
  */
 
 import { useState, useMemo } from 'react'
-import type { StripePaymentIntent } from '@/types/common'
+import type { PaymentResult } from '@/types/common'
 import type {
   BookingStep,
   BookingData,
@@ -36,7 +36,7 @@ interface UseServiceBookingReturn {
   setBookingData: React.Dispatch<React.SetStateAction<BookingData>>
   handleCurrencyChange: (currency: SupportedCurrency, pricing: ServicePricing) => void
   handleBookingSubmit: () => Promise<void>
-  handlePaymentSuccess: (paymentIntent: StripePaymentIntent) => Promise<void>
+  handlePaymentSuccess: (paymentIntent: PaymentResult) => Promise<void>
   handlePaymentError: (error: string) => void
 }
 
@@ -125,7 +125,7 @@ export function useServiceBooking({
     }
   }
 
-  const handlePaymentSuccess = async (paymentIntent: StripePaymentIntent) => {
+  const handlePaymentSuccess = async (paymentIntent: PaymentResult) => {
     setStep('processing')
 
     try {

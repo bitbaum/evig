@@ -16,11 +16,6 @@ export default function ConditionalMainLayout({ children }: ConditionalMainLayou
     return <>{children}</>
   }
   
-  // Don't apply MainLayout to Medusa shop pages (they have their own layout)
-  if (pathname?.startsWith('/shop/medusa')) {
-    return <>{children}</>
-  }
-  
   // Don't apply MainLayout to auth pages (they have their own layout)
   // This prevents session checks from blocking auth page loads
   if (pathname?.startsWith('/auth')) {

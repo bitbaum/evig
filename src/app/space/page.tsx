@@ -461,7 +461,7 @@ export default function SpacePage() {
                 <Store className="w-4 h-4 mr-2" /> Shop-Übersicht
               </Button>
             </Link>
-            <Link href="/shop/medusa">
+            <Link href="/marketplace">
               <Button>
                 Online-Shop <ChevronRight className="w-4 h-4 ml-1" />
               </Button>

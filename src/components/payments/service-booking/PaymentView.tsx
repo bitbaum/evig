@@ -1,26 +1,24 @@
 'use client'
 
 /**
- * Payment view with Stripe checkout
+ * Payment view — placeholder until payment provider is integrated
  */
 
+import { CreditCard } from 'lucide-react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import StripeCheckout from '@/components/shop/StripeCheckout'
-import type { StripePaymentIntent } from '@/types/common'
+import type { PaymentResult } from '@/types/common'
 import type { ServiceInfo, PaymentData } from './types'
 
 interface PaymentViewProps {
   service: ServiceInfo
   paymentData: PaymentData
-  onPaymentSuccess: (paymentIntent: StripePaymentIntent) => void
+  onPaymentSuccess: (paymentResult: PaymentResult) => void
   onPaymentError: (error: string) => void
 }
 
 export function PaymentView({
   service,
   paymentData,
-  onPaymentSuccess,
-  onPaymentError,
 }: PaymentViewProps) {
   return (
     <Card className="w-full max-w-2xl mx-auto">
@@ -58,12 +56,16 @@ export function PaymentView({
           )}
         </div>
 
-        <StripeCheckout
-          cartId={paymentData.appointmentId}
-          total={paymentData.amount}
-          onPaymentSuccess={onPaymentSuccess}
-          onPaymentError={onPaymentError}
-        />
+        {/* Placeholder until payment provider is integrated */}
+        <div className="text-center py-8 border border-dashed border-gray-300 rounded-lg">
+          <CreditCard className="w-12 h-12 text-gray-400 mx-auto mb-3" />
+          <p className="text-gray-600 mb-2">
+            Online-Zahlung wird bald verfügbar sein
+          </p>
+          <p className="text-sm text-gray-500">
+            Kontaktieren Sie uns direkt für Buchungen
+          </p>
+        </div>
       </CardContent>
     </Card>
   )

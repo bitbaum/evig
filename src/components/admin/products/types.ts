@@ -2,13 +2,17 @@
  * Shared types for product management components
  */
 
-import type { MedusaProduct } from '@/lib/medusa/hooks'
 import type { ShopProduct } from '@/hooks/useShopProducts'
 
 // Re-export ShopProduct for convenience
 export type { ShopProduct } from '@/hooks/useShopProducts'
 
-export interface ProductWithOwner extends MedusaProduct {
+export interface ProductWithOwner {
+  id: string
+  title: string
+  description?: string
+  handle?: string
+  thumbnail?: string | null
   owner_id?: string
   owner_name?: string
   status?: 'published' | 'draft'

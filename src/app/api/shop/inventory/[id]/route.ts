@@ -35,8 +35,6 @@ export async function GET(
       quantity_available: number
       marketplace_status: string
       status: string
-      medusa_product_id: string | null
-      medusa_variant_id: string | null
       created_at: string
     }>(
       `SELECT
@@ -55,8 +53,6 @@ export async function GET(
         p.created_at,
         i.quantity_available,
         i.marketplace_status,
-        i.medusa_product_id,
-        i.medusa_variant_id,
         p.status
       FROM ${TABLE_NAMES.AI_EXTRACTED_PRODUCTS} p
       JOIN ${TABLE_NAMES.INVENTORY_ITEMS} i ON i.ai_product_id = p.id
@@ -118,8 +114,6 @@ export async function GET(
       subcategory: product.subcategory,
       quantity: product.quantity_available,
       is_available: product.quantity_available > 0,
-      medusa_product_id: product.medusa_product_id || null,
-      medusa_variant_id: product.medusa_variant_id || null,
       images: imagesResult.rows.map(img => ({
         id: img.id,
         url: img.file_path,

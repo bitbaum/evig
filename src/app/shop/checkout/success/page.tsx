@@ -154,7 +154,7 @@ export default function CheckoutSuccessPage() {
           </Link>
 
           <Link
-            href="/shop/medusa"
+            href="/marketplace"
             className="inline-flex items-center px-6 py-3 border border-gray-300 text-gray-700 text-lg font-semibold rounded-lg hover:bg-gray-50 transition-colors"
           >
             Weiter einkaufen

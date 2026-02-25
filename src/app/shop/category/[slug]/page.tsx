@@ -212,13 +212,12 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
               Produkte werden geladen
             </h2>
             <p className="text-gray-600 mb-6">
-              Unsere Produktdatenbank wird mit dem Medusa-Backend verbunden.
               Bald finden Sie hier aufbereitete IT-Geräte in der Kategorie{" "}
-              <strong>{category.name}</strong>.
+              <strong>{category.name}</strong> auf unserem Marketplace.
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <Link
-                href="/shop/medusa"
+                href="/marketplace"
                 className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-emerald-600 text-white font-semibold rounded-lg hover:bg-emerald-700 transition-colors"
               >
                 Zum Online-Shop

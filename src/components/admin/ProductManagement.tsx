@@ -112,7 +112,7 @@ export default function ProductManagement() {
   // Shop product handlers
   const handleViewShop = (product: ShopProduct) => {
     // Open in customer shop
-    window.open(`/shop/medusa/${product.id}`, '_blank')
+    window.open(`/marketplace/${product.id}`, '_blank')
   }
 
   const handleEditShop = (product: ShopProduct) => {

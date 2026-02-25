@@ -90,7 +90,7 @@ export const services: Service[] = [
       'Moderne Frameworks (Next.js, React)',
       'Headless CMS (Strapi, Payload, Tina)',
       'Responsive Design & Tailwind CSS',
-      'E-Commerce-Lösungen (Medusa.js, Shopware 6)',
+      'E-Commerce-Lösungen (WooCommerce, Shopware 6)',
       'SEO-Optimierung & Performance'
     ],
     pricing: 'CHF 70/hour',

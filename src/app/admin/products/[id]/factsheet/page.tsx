@@ -132,7 +132,7 @@ export default function FactSheetPage() {
   }
   const specs = product.specifications || {}
   const specEntries = Object.entries(specs).slice(0, 8) // Limit to 8 specs for layout
-  const shopUrl = `${typeof window !== 'undefined' ? window.location.origin : ''}/shop/medusa/products/${product.id}`
+  const shopUrl = `${typeof window !== 'undefined' ? window.location.origin : ''}/marketplace/${product.id}`
   const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(shopUrl)}&bgcolor=ffffff&color=16a34a`
 
   return (

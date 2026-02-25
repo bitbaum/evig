@@ -102,12 +102,12 @@ export const technologies = [
     url: 'https://www.joomla.org'
   },
   {
-    name: 'Medusa.js',
-    description: 'Moderne, quelloffene E-Commerce-Plattform für Entwickler. Headless Commerce mit leistungsstarken APIs und Anpassungsmöglichkeiten.',
+    name: 'WooCommerce',
+    description: 'Weit verbreitete, quelloffene E-Commerce-Plattform auf WordPress-Basis. Flexible Erweiterungen und grosse Community.',
     icon: Globe,
     category: 'E-Commerce',
-    benefits: ['Headless-Architektur', 'Entwicklerfreundlich', 'Sehr anpassbar', 'Moderner Tech-Stack'],
-    url: 'https://medusajs.com'
+    benefits: ['Grosse Community', 'Viele Erweiterungen', 'Einfache Verwaltung', 'WordPress-Integration'],
+    url: 'https://woocommerce.com'
   },
   {
     name: 'Shopware 6',

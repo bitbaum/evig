@@ -3,8 +3,6 @@ import nextConfig from "eslint-config-next";
 const eslintConfig = [
   {
     ignores: [
-      "medusa-backend/.medusa/**",
-      "medusa-backend/node_modules/**",
       ".next/**",
       "node_modules/**",
     ],

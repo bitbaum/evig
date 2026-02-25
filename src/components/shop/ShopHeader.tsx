@@ -22,7 +22,6 @@ import {
   getCategoryBySlug,
   getCategoryUrl,
 } from "@/config/shop";
-import { useCart, getCartId } from "@/lib/medusa/hooks";
 import { useWishlist, useCompare } from "@/lib/hooks/useShopStore";
 
 interface ShopHeaderProps {
@@ -40,17 +39,12 @@ export function ShopHeader({
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
 
-  // Cart badge
-  const [cartId] = useState(() => getCartId());
-  const { data: cart } = useCart(cartId);
-  const cartCount = cart?.items?.length ?? 0;
-
   // Wishlist & compare badges
   const { count: wishlistCount } = useWishlist();
   const { count: compareCount } = useCompare();
 
-  // Hide back button on main shop page (/shop/medusa) since we're already there
-  const shouldShowBackButton = showBackButton && pathname !== "/shop/medusa";
+  // Hide back button on main shop page since we're already there
+  const shouldShowBackButton = showBackButton && pathname !== "/marketplace";
 
   return (
     <>
@@ -178,16 +172,11 @@ export function ShopHeader({
 
               {/* Cart - always visible */}
               <Link
-                href="/shop/medusa/cart"
+                href="/marketplace"
                 className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors relative"
-                aria-label={`Warenkorb (${cartCount} Artikel)`}
+                aria-label="Warenkorb"
               >
                 <ShoppingCart className="w-5 h-5" />
-                {cartCount > 0 && (
-                  <span className="absolute -top-1 -right-1 w-4 h-4 bg-emerald-600 text-white text-[10px] font-bold rounded-full flex items-center justify-center">
-                    {cartCount}
-                  </span>
-                )}
               </Link>
 
               {/* Divider - hidden on mobile */}

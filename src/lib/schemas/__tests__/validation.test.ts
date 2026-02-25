@@ -42,9 +42,7 @@ import {
   // AI schemas
   AnalyzeProductSchema,
   // Inventory schemas
-  PublishMedusaSchema,
   ImportCSVSchema,
-  PublishMedusaQuerySchema,
 } from '@/lib/schemas'
 import { ZodError } from 'zod'
 
@@ -589,32 +587,6 @@ describe('AnalyzeProductSchema', () => {
 
 // ── Inventory schemas ─────────────────────────────────────────
 
-describe('PublishMedusaSchema', () => {
-  it('accepts valid publish request', () => {
-    const result = PublishMedusaSchema.safeParse({
-      inventoryItemId: '550e8400-e29b-41d4-a716-446655440000',
-    })
-    expect(result.success).toBe(true)
-  })
-
-  it('rejects non-UUID inventoryItemId', () => {
-    const result = PublishMedusaSchema.safeParse({
-      inventoryItemId: 'not-a-uuid',
-    })
-    expect(result.success).toBe(false)
-  })
-
-  it('defaults options to empty object', () => {
-    const result = PublishMedusaSchema.safeParse({
-      inventoryItemId: '550e8400-e29b-41d4-a716-446655440000',
-    })
-    expect(result.success).toBe(true)
-    if (result.success) {
-      expect(result.data.options).toEqual({})
-    }
-  })
-})
-
 describe('ImportCSVSchema', () => {
   it('accepts valid CSV import', () => {
     const result = ImportCSVSchema.safeParse({
@@ -636,16 +608,3 @@ describe('ImportCSVSchema', () => {
   })
 })
 
-describe('PublishMedusaQuerySchema', () => {
-  it('accepts valid query', () => {
-    const result = PublishMedusaQuerySchema.safeParse({
-      inventoryItemId: '550e8400-e29b-41d4-a716-446655440000',
-    })
-    expect(result.success).toBe(true)
-  })
-
-  it('rejects missing inventoryItemId', () => {
-    const result = PublishMedusaQuerySchema.safeParse({})
-    expect(result.success).toBe(false)
-  })
-})

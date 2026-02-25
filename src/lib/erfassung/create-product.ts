@@ -11,7 +11,6 @@ import { query } from '@/lib/auth/db'
 import { logger } from '@/lib/logger'
 import { TABLE_NAMES } from '@/config/database'
 import { uploadImage, generateImageFilename } from '@/lib/storage/image-upload'
-import { publishToMedusa } from '@/lib/services/medusa-publish-service'
 import type { ErfassungPayload } from '@/types/erfassung'
 import type { PoolClient } from 'pg'
 
@@ -185,11 +184,6 @@ export async function createErfassungProduct(
       ]
     )
 
-    // Fire-and-forget: publish to Medusa after transaction commits.
-    // Uses global query(), not the transaction client.
-    publishToMedusa(inventoryItemId, userId).catch((err) => {
-      logger.warn('Auto-publish to Medusa failed', { productId, error: err })
-    })
   }
 
   // 5. Handle image upload if provided

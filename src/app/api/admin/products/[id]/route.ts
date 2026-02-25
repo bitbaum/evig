@@ -1,6 +1,7 @@
 import { NextRequest } from "next/server";
-import { MEDUSA_CONFIG } from "@/config/medusa";
-import { apiSuccess, apiError, apiForbidden } from "@/lib/api/helpers";
+import { query } from "@/lib/auth/db";
+import { TABLE_NAMES } from "@/config/database";
+import { apiSuccess, apiError, apiNotFound } from "@/lib/api/helpers";
 import { logger } from "@/lib/logger";
 import { withAdmin } from "@/lib/api/middleware";
 
@@ -16,33 +17,62 @@ export const GET = withAdmin<{ id: string }>(async (
       return apiError(new Error("Product ID required"), "Product ID required", 400);
     }
 
-    const response = await fetch(`${MEDUSA_CONFIG.URL}/admin/products/${params.id}`, {
-      headers: {
-        "Content-Type": "application/json",
-        "x-publishable-api-key": MEDUSA_CONFIG.PUBLISHABLE_KEY,
-        "Authorization": `Basic ${MEDUSA_CONFIG.ADMIN_API_KEY}`
-      },
-    });
+    const result = await query<{
+      id: string;
+      item_uuid: string;
+      product_name: string;
+      brand: string;
+      short_description: string | null;
+      specifications: Record<string, string>;
+      estimated_price_chf: number;
+      condition: string;
+      dimensions: Record<string, number | null>;
+      weight_grams: number | null;
+      category: string | null;
+      subcategory: string | null;
+      status: string;
+      quantity_available: number | null;
+      marketplace_status: string | null;
+      created_at: string;
+      updated_at: string;
+    }>(
+      `SELECT
+        p.id,
+        p.item_uuid,
+        p.product_name,
+        p.brand,
+        p.short_description,
+        p.specifications,
+        p.estimated_price_chf,
+        p.condition,
+        p.dimensions,
+        p.weight_grams,
+        p.category,
+        p.subcategory,
+        p.status,
+        i.quantity_available,
+        i.marketplace_status,
+        p.created_at,
+        p.updated_at
+       FROM ${TABLE_NAMES.AI_EXTRACTED_PRODUCTS} p
+       LEFT JOIN ${TABLE_NAMES.INVENTORY_ITEMS} i ON i.ai_product_id = p.id
+       WHERE p.id = $1`,
+      [params.id]
+    );
 
-    if (!response.ok) {
-      const errorText = await response.text();
-      logger.error("Medusa Admin API error", { status: response.status, error: errorText, productId: params.id });
-      return apiError(
-        new Error(errorText),
-        "Failed to fetch product",
-        response.status
-      );
+    if (result.rows.length === 0) {
+      return apiNotFound("Produkt nicht gefunden");
     }
 
-    const data = await response.json();
-    return apiSuccess(data);
+    return apiSuccess({ product: result.rows[0] });
   } catch (error) {
-    return apiError(error, "Failed to fetch product");
+    logger.error("Failed to fetch product", { error, productId: context?.params?.id });
+    return apiError(error, "Fehler beim Laden des Produkts");
   }
 });
 
-// POST /api/admin/products/[id] - Update product
-export const POST = withAdmin<{ id: string }>(async (
+// PUT /api/admin/products/[id] - Update product
+export const PUT = withAdmin<{ id: string }>(async (
   request: NextRequest,
   session,
   context
@@ -55,30 +85,74 @@ export const POST = withAdmin<{ id: string }>(async (
 
     const updateData = await request.json();
 
-    const response = await fetch(`${MEDUSA_CONFIG.URL}/admin/products/${params.id}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "x-publishable-api-key": MEDUSA_CONFIG.PUBLISHABLE_KEY,
-        "Authorization": `Basic ${MEDUSA_CONFIG.ADMIN_API_KEY}`
-      },
-      body: JSON.stringify(updateData),
-    });
+    // Build dynamic SET clause for product fields
+    const setClauses: string[] = [];
+    const values: (string | number | null)[] = [];
+    let paramIndex = 1;
 
-    if (!response.ok) {
-      const errorText = await response.text();
-      logger.error("Medusa Admin API error", { status: response.status, error: errorText, productId: params.id });
-      return apiError(
-        new Error(errorText),
-        "Failed to update product",
-        response.status
+    const allowedFields: Record<string, string> = {
+      product_name: 'product_name',
+      title: 'product_name',
+      brand: 'brand',
+      short_description: 'short_description',
+      description: 'short_description',
+      estimated_price_chf: 'estimated_price_chf',
+      price: 'estimated_price_chf',
+      condition: 'condition',
+      category: 'category',
+      subcategory: 'subcategory',
+      status: 'status',
+    };
+
+    for (const [inputKey, dbColumn] of Object.entries(allowedFields)) {
+      if (updateData[inputKey] !== undefined) {
+        setClauses.push(`${dbColumn} = $${paramIndex++}`);
+        values.push(updateData[inputKey]);
+      }
+    }
+
+    if (setClauses.length > 0) {
+      setClauses.push(`updated_at = NOW()`);
+      values.push(params.id);
+
+      await query(
+        `UPDATE ${TABLE_NAMES.AI_EXTRACTED_PRODUCTS}
+         SET ${setClauses.join(', ')}
+         WHERE id = $${paramIndex}`,
+        values
       );
     }
 
-    const data = await response.json();
-    return apiSuccess(data);
+    // Update inventory fields if provided
+    if (updateData.quantity_available !== undefined || updateData.marketplace_status !== undefined) {
+      const invSets: string[] = [];
+      const invValues: (string | number | null)[] = [];
+      let invIndex = 1;
+
+      if (updateData.quantity_available !== undefined) {
+        invSets.push(`quantity_available = $${invIndex++}`);
+        invValues.push(updateData.quantity_available);
+      }
+      if (updateData.marketplace_status !== undefined) {
+        invSets.push(`marketplace_status = $${invIndex++}`);
+        invValues.push(updateData.marketplace_status);
+      }
+
+      invValues.push(params.id);
+      await query(
+        `UPDATE ${TABLE_NAMES.INVENTORY_ITEMS}
+         SET ${invSets.join(', ')}
+         WHERE ai_product_id = $${invIndex}`,
+        invValues
+      );
+    }
+
+    logger.info("Product updated", { productId: params.id, user: session.user?.email });
+
+    return apiSuccess({ success: true });
   } catch (error) {
-    return apiError(error, "Failed to update product");
+    logger.error("Failed to update product", { error, productId: context?.params?.id });
+    return apiError(error, "Fehler beim Aktualisieren des Produkts");
   }
 });
 
@@ -94,27 +168,27 @@ export const DELETE = withAdmin<{ id: string }>(async (
       return apiError(new Error("Product ID required"), "Product ID required", 400);
     }
 
-    const response = await fetch(`${MEDUSA_CONFIG.URL}/admin/products/${params.id}`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-        "x-publishable-api-key": MEDUSA_CONFIG.PUBLISHABLE_KEY,
-        "Authorization": `Basic ${MEDUSA_CONFIG.ADMIN_API_KEY}`
-      },
-    });
+    // Delete inventory item first (foreign key)
+    await query(
+      `DELETE FROM ${TABLE_NAMES.INVENTORY_ITEMS} WHERE ai_product_id = $1`,
+      [params.id]
+    );
 
-    if (!response.ok) {
-      const errorText = await response.text();
-      logger.error("Medusa Admin API error", { status: response.status, error: errorText, productId: params.id });
-      return apiError(
-        new Error(errorText),
-        "Failed to delete product",
-        response.status
-      );
+    // Delete product
+    const result = await query(
+      `DELETE FROM ${TABLE_NAMES.AI_EXTRACTED_PRODUCTS} WHERE id = $1`,
+      [params.id]
+    );
+
+    if (result.rowCount === 0) {
+      return apiNotFound("Produkt nicht gefunden");
     }
+
+    logger.info("Product deleted", { productId: params.id, user: session.user?.email });
 
     return apiSuccess({ success: true });
   } catch (error) {
-    return apiError(error, "Failed to delete product");
+    logger.error("Failed to delete product", { error, productId: context?.params?.id });
+    return apiError(error, "Fehler beim Löschen des Produkts");
   }
 });

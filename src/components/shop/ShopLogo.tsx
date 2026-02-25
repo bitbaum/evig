@@ -13,7 +13,7 @@ interface ShopLogoProps {
  * ShopLogo - Responsive logo for the shop header
  * Shows only the yellow chip icon on mobile, full logo on desktop
  */
-export function ShopLogo({ href = "/shop/medusa", className }: ShopLogoProps) {
+export function ShopLogo({ href = "/shop", className }: ShopLogoProps) {
   return (
     <Link 
       href={href} 

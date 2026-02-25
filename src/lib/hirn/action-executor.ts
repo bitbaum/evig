@@ -1,7 +1,5 @@
-import { z } from 'zod'
 import { query } from '@/lib/auth/db'
 import { TABLE_NAMES } from '@/config/database'
-import { MEDUSA_CONFIG } from '@/config/medusa'
 import { createTaskSchema } from '@/lib/schemas/tasks'
 import { createDecisionSchema } from '@/lib/schemas/decisions'
 import { createProtocolSchema } from '@/lib/schemas/protocols'
@@ -87,60 +85,8 @@ export async function executeHirnAction(input: ExecuteActionInput, dbUserId: str
     }
 
     case 'create_product_draft': {
-      if (!MEDUSA_CONFIG.PUBLISHABLE_KEY) {
-        throw new Error('Medusa-Konfiguration fehlt')
-      }
-
-      const payloadSchema = z.object({
-        title: z.string().min(1).max(255),
-        subtitle: z.string().max(255).optional(),
-        description: z.string().max(5000).optional(),
-      })
-      const parsed = payloadSchema.safeParse(input.payload)
-      if (!parsed.success) {
-        throw new Error(parsed.error.issues[0]?.message || 'Ungültigi Produkt-Date')
-      }
-
-      const medusaResponse = await fetch(`${MEDUSA_CONFIG.BACKEND_URL}/admin/products`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-publishable-api-key': MEDUSA_CONFIG.PUBLISHABLE_KEY,
-          Authorization: `Basic ${MEDUSA_CONFIG.ADMIN_API_KEY || ''}`,
-        },
-        body: JSON.stringify({
-          title: parsed.data.title,
-          subtitle: parsed.data.subtitle,
-          description: parsed.data.description,
-          status: 'draft',
-        }),
-      })
-
-      if (!medusaResponse.ok) {
-        const details = await medusaResponse.text()
-        logger.error('Hirn action product create failed', {
-          status: medusaResponse.status,
-          details,
-        })
-        throw new Error('Produkt-Entwurf konnte nöd erstellt werde')
-      }
-
-      const created = await medusaResponse.json() as { product?: { id?: string; title?: string } }
-      const productId = created.product?.id
-      if (!productId) {
-        throw new Error('Produkt-ID fehlt i de Antwort')
-      }
-
-      return {
-        mode: 'executed' as const,
-        entity: {
-          type: 'product',
-          id: productId,
-          title: created.product?.title || parsed.data.title,
-          link: `/admin/products`,
-        },
-        suggestedNextStep: 'Prüef Bilder, Preis und Lagerbestand, bevor du veröffentlichsch.',
-      }
+      logger.warn('create_product_draft action is deprecated — use Erfassung instead')
+      throw new Error('Produkt-Entwurf über Hirn ist nöd meh verfügbar. Benutz d Erfassung.')
     }
   }
 }
@@ -149,13 +95,8 @@ function buildPreview(actionType: ExecuteActionInput['actionType'], payload: Rec
   switch (actionType) {
     case 'create_product_draft':
       return {
-        title: 'Produkt-Entwurf wird erstellt (nöd veröffentlicht)',
-        fields: {
-          titel: payload.title,
-          untertitel: payload.subtitle,
-          beschrieb: payload.description,
-          status: 'draft',
-        },
+        title: 'Produkt-Entwurf (veraltet — benutz Erfassung)',
+        fields: payload,
       }
     default:
       return {

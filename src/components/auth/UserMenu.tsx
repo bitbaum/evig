@@ -19,7 +19,6 @@ import { cn } from '@/lib/utils'
 
 /**
  * UserMenu Component
- * Clean, minimal design matching Medusa.js style
  * - Subtle text links for login/register when logged out
  * - Single primary CTA (Registrieren)
  * - Elegant dropdown when logged in
