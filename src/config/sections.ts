@@ -411,6 +411,22 @@ export const SECTIONS: Record<string, SectionConfig> = {
     sidebarGroup: 'angebot',
   },
 
+  marketplace: {
+    id: 'marketplace',
+    path: '/admin/marketplace',
+    ui: {
+      label: 'Marketplace',
+      description: 'Inserate prüfen und verifizieren',
+      icon: Store,
+      emoji: '🏪',
+      color: 'secondary',
+    },
+    visibility: { admin: true, dashboard: false, requiresStaff: true },
+    priority: 100.5,
+    category: 'management',
+    sidebarGroup: 'angebot',
+  },
+
   'workshops-admin': {
     id: 'workshops-admin',
     path: '/admin/workshops',
