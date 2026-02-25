@@ -13,7 +13,6 @@
 import {
   Rocket,
   Database,
-  Settings,
   Users,
   Package,
   FileText,
@@ -25,7 +24,6 @@ import {
   GraduationCap,
   type LucideIcon,
 } from 'lucide-react'
-import { MEDUSA_ADMIN_URL } from '@/config/urls'
 import { getAdminSections, SECTIONS, type SectionConfig } from '@/config/sections'
 
 // =============================================================================
@@ -89,7 +87,7 @@ export const ADMIN_SHORTCUTS: AdminShortcut[] = [
   {
     id: 'start-services',
     title: 'Alle Services starten',
-    description: 'Startet Frontend, CMS und Medusa mit einem Befehl',
+    description: 'Startet Frontend und CMS mit einem Befehl',
     command: 'npm run d',
     icon: Rocket,
     color: 'bg-green-500',
@@ -98,7 +96,7 @@ export const ADMIN_SHORTCUTS: AdminShortcut[] = [
   {
     id: 'setup-admins',
     title: 'Admin Benutzer einrichten',
-    description: 'Erstellt Admin-Benutzer für CMS und Medusa',
+    description: 'Erstellt Admin-Benutzer für CMS',
     command: 'npm run setup-admins',
     icon: Shield,
     color: 'bg-blue-500',
@@ -136,16 +134,6 @@ export const ADMIN_SHORTCUTS: AdminShortcut[] = [
 
   // External Admin Interfaces
   {
-    id: 'medusa-admin',
-    title: 'Medusa Admin',
-    description: 'Direkter Zugriff auf Medusa Admin-Interface',
-    href: MEDUSA_ADMIN_URL,
-    icon: Settings,
-    color: 'bg-gray-500',
-    external: true,
-    category: 'external',
-  },
-  {
     id: 'cms',
     title: 'CMS Inhalte bearbeiten',
     description: 'Seiten, Blog-Artikel und Inhalte verwalten',
@@ -169,7 +157,7 @@ export const ADMIN_SHORTCUTS: AdminShortcut[] = [
     id: 'logs',
     title: 'Logs anzeigen',
     description: 'Container-Logs für Fehlerbehebung',
-    command: 'npm run medusa:logs',
+    command: 'docker logs',
     icon: Terminal,
     color: 'bg-gray-500',
     category: 'system',
@@ -191,7 +179,7 @@ export const ADMIN_SHORTCUTS: AdminShortcut[] = [
     id: 'shop-frontend',
     title: 'Shop Frontend',
     description: 'E-Commerce Shop in neuem Tab öffnen',
-    href: '/shop/medusa',
+    href: '/shop',
     icon: Eye,
     color: 'bg-emerald-500',
     category: 'quick',
@@ -203,16 +191,6 @@ export const ADMIN_SHORTCUTS: AdminShortcut[] = [
     href: '/marketplace/sell',
     icon: Plus,
     color: 'bg-green-500',
-    category: 'quick',
-  },
-  {
-    id: 'new-product-medusa',
-    title: 'Neues Produkt',
-    description: 'Schnellzugriff für neue Produkte im Medusa Admin',
-    href: `${MEDUSA_ADMIN_URL}/products/new`,
-    icon: Plus,
-    color: 'bg-purple-500',
-    external: true,
     category: 'quick',
   },
 ]
@@ -232,10 +210,6 @@ export const ADMIN_QUICK_COMMANDS: AdminQuickCommand[] = [
   {
     title: 'Container-Status prüfen',
     command: 'docker ps',
-  },
-  {
-    title: 'Medusa-Logs anzeigen',
-    command: 'npm run medusa:logs',
   },
 ]
 

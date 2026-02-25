@@ -19,7 +19,6 @@ export {
   getJwtSecret,
   getAuthSecret,
   getDbConfig,
-  getMedusaConfig,
   UNIFIED_ROLES,
   ROLE_HIERARCHY,
   hasMinimumRole,

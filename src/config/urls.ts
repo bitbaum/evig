@@ -15,23 +15,6 @@ export const APP_URL =
   'http://localhost:3000'
 
 /**
- * Medusa Admin URL
- * Used for admin shortcuts and Medusa integration
- */
-export const MEDUSA_ADMIN_URL = 
-  process.env.MEDUSA_ADMIN_URL || 
-  process.env.MEDUSA_BACKEND_URL ? `${process.env.MEDUSA_BACKEND_URL}/app` : 
-  'http://localhost:9000/app'
-
-/**
- * Medusa Backend API URL
- * Used for API calls to Medusa
- */
-export const MEDUSA_API_URL = 
-  process.env.MEDUSA_BACKEND_URL || 
-  'http://localhost:9000'
-
-/**
  * CMS API URL
  * Used for CMS API integration
  */
@@ -63,8 +46,6 @@ export const OLLAMA_URL =
  */
 export const URLS = {
   APP: APP_URL,
-  MEDUSA_ADMIN: MEDUSA_ADMIN_URL,
-  MEDUSA_API: MEDUSA_API_URL,
   CMS_API: CMS_API_URL,
   MEILISEARCH: MEILISEARCH_URL,
   OLLAMA: OLLAMA_URL,

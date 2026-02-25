@@ -60,14 +60,11 @@ export const ERROR_MESSAGES = {
   CANNOT_CANCEL_COMPLETED: 'Abgeschlossene Termine können nicht storniert werden',
   CAN_ONLY_EDIT_REQUESTED: 'Nur angefragte Termine können bearbeitet werden',
 
-  // Medusa/External Services (internal, not user-facing)
-  MEDUSA_FETCH_FAILED: 'Medusa-Produkte konnten nicht geladen werden',
-  MEDUSA_CONNECTION_FAILED: 'Verbindung zu Medusa fehlgeschlagen',
-  MEDUSA_CREATE_FAILED: 'Produkt konnte nicht erstellt werden',
+  // External Services (internal, not user-facing)
   AI_ANALYSIS_FAILED: 'KI-Bildanalyse fehlgeschlagen',
 
   // Configuration
-  CONFIGURATION_MISSING: 'Medusa-Konfiguration fehlt',
+  CONFIGURATION_MISSING: 'Erforderliche Konfiguration fehlt',
 
   // Protocols
   PROTOCOL_NOT_FOUND: 'Protokoll nicht gefunden',

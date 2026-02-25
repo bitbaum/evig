@@ -31,7 +31,7 @@ export interface NavigationItem {
  * Strategic positioning (7 items):
  * 1. Über uns - About, mission, history, projects
  * 2. Dienstleistungen - Professional services (B2C)
- * 3. Shop - revamp-it's Medusa e-commerce (B2C)
+ * 3. Shop - revamp-it's marketplace and e-commerce (B2C)
  * 4. Community - P2P platforms: Marketplace + IT-Hilfe (C2C) 🆕
  * 5. Lernen - Workshops, guides, blog
  * 6. Mitmachen - Volunteer, donate, partner

@@ -204,26 +204,6 @@ export function getDbConfig() {
   }
 }
 
-/**
- * Get Medusa API configuration
- * Throws if required keys are not set (no hardcoded fallbacks!)
- */
-export function getMedusaConfig() {
-  const backendUrl = process.env.MEDUSA_BACKEND_URL || process.env.NEXT_PUBLIC_MEDUSA_URL
-  const publishableKey = process.env.NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY
-  const adminApiKey = process.env.MEDUSA_ADMIN_API_KEY
-
-  // Use URL config for SSOT compliance (synchronous import)
-  const { MEDUSA_API_URL } = require('@/config/urls')
-  
-  return {
-    backendUrl: backendUrl || MEDUSA_API_URL,
-    publishableKey,
-    adminApiKey,
-    isConfigured: !!(publishableKey && backendUrl),
-  }
-}
-
 // =============================================================================
 // Role Definitions (Single Source of Truth)
 // =============================================================================

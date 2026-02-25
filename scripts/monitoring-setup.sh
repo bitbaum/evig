@@ -195,12 +195,6 @@ else
     echo "  ❌ Frontend: Unhealthy"
 fi
 
-if curl -f -s "http://localhost:9000/health" > /dev/null 2>&1; then
-    echo "  ✅ Medusa: Healthy"
-else
-    echo "  ❌ Medusa: Unhealthy"
-fi
-
 # Database connectivity
 echo "Database Connectivity:"
 if PGPASSWORD="$AUTH_DB_PASSWORD" psql -h "$AUTH_DB_HOST" -p "$AUTH_DB_PORT" -U "$AUTH_DB_USER" -d "$AUTH_DB_NAME" -c "SELECT 1;" --quiet --no-align --tuples-only > /dev/null 2>&1; then
@@ -211,12 +205,6 @@ fi
 
 # Services
 echo "Services:"
-if docker ps | grep -q revampit_medusa; then
-    echo "  ✅ Medusa Services: Running"
-else
-    echo "  ❌ Medusa Services: Not running"
-fi
-
 if pm2 list | grep -q online; then
     echo "  ✅ PM2 Processes: Running"
 else

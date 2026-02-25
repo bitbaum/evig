@@ -25,43 +25,6 @@ services:
       timeout: 5s
       retries: 5
 
-  # PostgreSQL for Medusa (separate database)
-  medusa_db:
-    container_name: revampit_medusa_db
-    image: postgres:16-alpine
-    restart: unless-stopped
-    environment:
-      POSTGRES_USER: ${MEDUSA_DB_USER:-medusa}
-      POSTGRES_PASSWORD: ${MEDUSA_DB_PASSWORD:-medusa_password}
-      POSTGRES_DB: ${MEDUSA_DB_NAME:-medusa_db}
-      POSTGRES_INITDB_ARGS: "--encoding=UTF-8"
-    volumes:
-      - medusa_db_data:/var/lib/postgresql/data
-    ports:
-      - "${MEDUSA_DB_PORT:-5435}:5432"
-    networks:
-      - medusa_network
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${MEDUSA_DB_USER:-medusa}"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-
-  # Redis/Valkey for Medusa
-  medusa_redis:
-    container_name: revampit_medusa_redis
-    image: redis:7-alpine
-    restart: unless-stopped
-    ports:
-      - "${MEDUSA_REDIS_PORT:-6380}:6379"
-    networks:
-      - medusa_network
-    healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-
   # Meilisearch for fast product search
   meilisearch:
     container_name: revampit_meilisearch
@@ -76,76 +39,12 @@ services:
     ports:
       - "${MEILI_PORT:-7700}:7700"
     networks:
-      - medusa_network
+      - revampit_network
     healthcheck:
       test: ["CMD", "wget", "--spider", "-q", "http://127.0.0.1:7700/health"]
       interval: 30s
       timeout: 10s
       retries: 3
-
-  # Medusa E-commerce Backend
-  medusa:
-    container_name: revampit_medusa
-    build:
-      context: ./medusa-backend
-      dockerfile: Dockerfile
-    restart: unless-stopped
-    environment:
-      NODE_ENV: development
-      MEDUSA_ADMIN_ONBOARDING_TYPE: default
-      STORE_CORS: http://localhost:3000,http://localhost:3001,https://revampit.vercel.app
-      ADMIN_CORS: http://localhost:9000,http://localhost:7001
-      AUTH_CORS: http://localhost:9000,http://localhost:3000
-      REDIS_URL: redis://medusa_redis:6379
-      JWT_SECRET: ${MEDUSA_JWT_SECRET:-supersecret_change_in_production}
-      COOKIE_SECRET: ${MEDUSA_COOKIE_SECRET:-supersecret_change_in_production}
-      DATABASE_URL: postgresql://medusa:medusa_password@medusa_db:5432/medusa_db
-    ports:
-      - "9000:9000"
-    networks:
-      - medusa_network
-    depends_on:
-      medusa_db:
-        condition: service_healthy
-      medusa_redis:
-        condition: service_healthy
-    healthcheck:
-      test: ["CMD", "wget", "--spider", "-q", "http://127.0.0.1:9000/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 5
-
-  # CMS API Service (disabled by default; requires explicit approval)
-  # cms_api:
-  #   build:
-  #     context: ./cms-api
-  #     dockerfile: Dockerfile
-  #   container_name: revampit_cms_api
-  #   restart: unless-stopped
-  #   environment:
-  #     NODE_ENV: production
-  #     PORT: 3001
-  #     DB_HOST: db
-  #     DB_PORT: 5432
-  #     DB_USER: ${DB_USER:-postgres}
-  #     DB_PASSWORD: ${DB_PASSWORD:-postgres}
-  #     DB_NAME: ${DB_NAME:-revampit_cms}
-  #     JWT_SECRET: ${JWT_SECRET:-dev-jwt-secret-min-32-chars-please-change}
-  #     FRONTEND_URL: http://localhost:3000
-  #   ports:
-  #     - "${CMS_API_PORT:-3001}:3001"
-  #   networks:
-  #     - revampit_network
-  #   depends_on:
-  #     db:
-  #       condition: service_healthy
-  #   volumes:
-  #     - ./cms-api/uploads:/app/uploads
-  #   healthcheck:
-  #     test: ["CMD", "curl", "-fsS", "http://localhost:3001/health"]
-  #     interval: 30s
-  #     timeout: 10s
-  #     retries: 5
 
   # Voice Transcription Service (faster-whisper)
   # Speech-to-text for product data entry via voice
@@ -211,8 +110,6 @@ services:
 volumes:
   revampit_db_data:
     driver: local
-  medusa_db_data:
-    driver: local
   meilisearch_data:
     driver: local
   listmonk_uploads:
@@ -222,6 +119,3 @@ networks:
   revampit_network:
     driver: bridge
     name: revampit_network
-  medusa_network:
-    driver: bridge
-    name: medusa_network 

@@ -24,18 +24,10 @@ if [ -f "$PROJECT_DIR/.nextjs.pid" ]; then
 fi
 pkill -f "next dev" 2>/dev/null || true
 
-# Stop Medusa
-if [ -f "$PROJECT_DIR/.medusa.pid" ]; then
-    PID=$(cat "$PROJECT_DIR/.medusa.pid")
-    kill $PID 2>/dev/null || true
-    rm "$PROJECT_DIR/.medusa.pid"
-fi
-pkill -f "medusa develop" 2>/dev/null || true
-
 # Optionally stop Docker (uncomment if needed)
 # cd "$PROJECT_DIR"
 # docker compose down
 
 echo -e "${GREEN}✓${NC} All application services stopped"
-echo -e "${BLUE}Note:${NC} Docker containers (databases, Redis, Meilisearch) are still running"
+echo -e "${BLUE}Note:${NC} Docker containers (databases, Meilisearch) are still running"
 echo -e "      Run 'docker compose down' to stop infrastructure"

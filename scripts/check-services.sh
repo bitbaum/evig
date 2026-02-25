@@ -84,21 +84,9 @@ if ! check_database "${AUTH_DB_HOST:-localhost}" "${AUTH_DB_PORT:-5433}" "${AUTH
     all_healthy=false
 fi
 
-# Check Medusa database
-if ! check_database "${MEDUSA_DB_HOST:-localhost}" "${MEDUSA_DB_PORT:-5435}" "${MEDUSA_DB_USER:-medusa}" "${MEDUSA_DB_NAME:-medusa_db}" "Medusa Database"; then
-    all_healthy=false
-fi
-
 # Check Redis
 if [ -n "$REDIS_URL" ]; then
     if ! check_redis "$REDIS_URL" "Redis"; then
-        all_healthy=false
-    fi
-fi
-
-# Check Medusa backend
-if [ -n "$MEDUSA_BACKEND_URL" ]; then
-    if ! check_http "${MEDUSA_BACKEND_URL}/health" "Medusa Backend" 3; then
         all_healthy=false
     fi
 fi

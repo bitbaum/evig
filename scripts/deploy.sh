@@ -113,13 +113,6 @@ run_migrations() {
         npm run db:migrate
     fi
 
-    # Run Medusa migrations (if needed)
-    if [ -d "medusa-backend" ]; then
-        cd medusa-backend
-        npx medusa migrations run
-        cd ..
-    fi
-
     echo -e "${GREEN}✅ Migrations completed${NC}"
 }
 

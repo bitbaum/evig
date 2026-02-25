@@ -2,7 +2,7 @@
  * Marketplace & Product Status Configuration
  *
  * SSOT for product publication status and inventory product approval status.
- * Used by: InventoryTable, InventoryProductsTable, MedusaProductsTable
+ * Used by: InventoryTable, InventoryProductsTable
  */
 
 export const MARKETPLACE_STATUS = {

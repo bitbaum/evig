@@ -57,7 +57,6 @@ export const TABLE_NAMES = {
   REPAIRER_REVIEWS: 'repairer_reviews',
   REPAIRER_CERTIFICATIONS: 'repairer_certifications',
   TECHNICIAN_PROFILES: 'technician_profiles',
-  MEDUSA_CUSTOMER_LINKS: 'medusa_customer_links',
 
   // Other
   DONATIONS: 'donations',

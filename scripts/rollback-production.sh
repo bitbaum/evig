@@ -35,8 +35,6 @@ docker compose -f docker-compose.prod.yml down || true
 if [ -d "${BACKUP_DIR}" ]; then
     echo "Looking for recent backups..."
     LATEST_DB_BACKUP=$(ls -t ${BACKUP_DIR}/db_*.sql.gz 2>/dev/null | head -1)
-    LATEST_MEDUSA_BACKUP=$(ls -t ${BACKUP_DIR}/medusa_db_*.sql.gz 2>/dev/null | head -1)
-
     if [ -n "$LATEST_DB_BACKUP" ]; then
         echo "Found database backup: $LATEST_DB_BACKUP"
         read -p "Restore database from backup? (YES/no): " -r
@@ -46,14 +44,6 @@ if [ -d "${BACKUP_DIR}" ]; then
         fi
     fi
 
-    if [ -n "$LATEST_MEDUSA_BACKUP" ]; then
-        echo "Found Medusa database backup: $LATEST_MEDUSA_BACKUP"
-        read -p "Restore Medusa database from backup? (YES/no): " -r
-        if [[ ! $REPLY =~ ^[Nn][Oo]$ ]]; then
-            echo "Restoring Medusa database..."
-            gunzip < "$LATEST_MEDUSA_BACKUP" | docker exec -i revampit_medusa_db_prod psql -U medusa_prod -d medusa_db
-        fi
-    fi
 else
     echo "No backup directory found at ${BACKUP_DIR}"
 fi

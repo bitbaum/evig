@@ -6,7 +6,7 @@
  */
 
 export const REDIS_CONFIG = {
-  URL: process.env.REDIS_URL || process.env.MEDUSA_REDIS_URL || '',
+  URL: process.env.REDIS_URL || '',
   ENABLE_RATE_LIMITER: process.env.ENABLE_REDIS_RATE_LIMITER === 'true',
 } as const;
 

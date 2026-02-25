@@ -154,20 +154,6 @@ AUTH_SECRET=$(openssl rand -base64 32)
 NEXTAUTH_SECRET=$(openssl rand -base64 32)
 NEXTAUTH_URL=https://${DOMAIN}
 
-# Medusa E-commerce
-MEDUSA_BACKEND_URL=http://medusa:9000
-MEDUSA_DB_HOST=medusa_db
-MEDUSA_DB_PORT=5432
-MEDUSA_DB_NAME=medusa_db
-MEDUSA_DB_USER=medusa_prod
-MEDUSA_DB_PASSWORD=$(openssl rand -base64 32)
-MEDUSA_JWT_SECRET=$(openssl rand -base64 32)
-MEDUSA_COOKIE_SECRET=$(openssl rand -base64 32)
-
-# Redis
-REDIS_URL=redis://medusa_redis:6379
-MEDUSA_REDIS_PORT=6380
-
 # Search
 MEILI_MASTER_KEY=$(openssl rand -base64 32)
 MEILI_PORT=7700
@@ -272,16 +258,6 @@ server {
         proxy_connect_timeout 75s;
     }
 
-    # Medusa backend API
-    location /api/medusa/ {
-        proxy_pass http://localhost:9000/;
-        proxy_http_version 1.1;
-        proxy_set_header Host \$host;
-        proxy_set_header X-Real-IP \$remote_addr;
-        proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto \$scheme;
-    }
-
     # Health check
     location /health {
         access_log off;
@@ -330,11 +306,9 @@ migrate_data() {
         warning "Please manually migrate your databases:"
         echo "1. Export from current server:"
         echo "   pg_dump -h current-db-host -U postgres -d revampit_cms -F c -f revampit_cms_backup.dump"
-        echo "   pg_dump -h current-db-host -U postgres -d medusa_db -F c -f medusa_db_backup.dump"
         echo ""
         echo "2. Transfer to new server:"
         echo "   scp revampit_cms_backup.dump ${REMOTE_USER}@${SERVER_IP}:${REMOTE_DIR}/"
-        echo "   scp medusa_db_backup.dump ${REMOTE_USER}@${SERVER_IP}:${REMOTE_DIR}/"
         echo ""
         echo "3. Import on new server:"
         echo "   ssh ${REMOTE_USER}@${SERVER_IP}"
@@ -366,12 +340,6 @@ mkdir -p \$BACKUP_DIR
 
 # Backup databases
 docker compose -f docker-compose.prod.yml exec -T db pg_dump -U revampit_prod revampit_cms | gzip > \$BACKUP_DIR/db_\$DATE.sql.gz
-docker compose -f docker-compose.prod.yml exec -T medusa_db pg_dump -U medusa_prod medusa_db | gzip > \$BACKUP_DIR/medusa_db_\$DATE.sql.gz
-
-# Backup uploads (if any)
-if [ -d "/opt/revampit/medusa-backend/uploads" ]; then
-    tar -czf \$BACKUP_DIR/uploads_\$DATE.tar.gz /opt/revampit/medusa-backend/uploads
-fi
 
 # Clean old backups (keep last 7 days)
 find \$BACKUP_DIR -type f -mtime +7 -delete
@@ -389,7 +357,7 @@ BACKUP_EOF
 #!/bin/bash
 # Health check script for RevampIT
 
-SERVICES=("db" "medusa_db" "medusa_redis" "meilisearch" "medusa" "app")
+SERVICES=("db" "meilisearch" "app")
 FAILED_SERVICES=""
 
 for service in "\${SERVICES[@]}"; do
