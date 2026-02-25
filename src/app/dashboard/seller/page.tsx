@@ -18,6 +18,8 @@ import {
   RefreshCw
 } from 'lucide-react'
 import { ROLES } from '@/lib/constants'
+import { LISTING_STATUS_CONFIG } from '@/config/marketplace'
+import type { ListingStatus } from '@/config/marketplace'
 
 interface Product {
   id: string
@@ -120,7 +122,7 @@ export default function SellerDashboard() {
     {
       title: 'Verkäufe',
       description: 'Bestellungen und Verkäufe anzeigen',
-      href: '/dashboard/seller/orders',
+      href: '/dashboard/orders',
       icon: TrendingUp,
       color: 'bg-purple-500',
     },
@@ -134,13 +136,9 @@ export default function SellerDashboard() {
   ]
 
   const getStatusLabel = (status: string) => {
-    switch (status) {
-      case 'published': return { label: 'Aktiv', className: 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300' }
-      case 'draft': return { label: 'Entwurf', className: 'bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-300' }
-      case 'sold': return { label: 'Verkauft', className: 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300' }
-      case 'paused': return { label: 'Pausiert', className: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300' }
-      default: return { label: status, className: 'bg-gray-100 text-gray-800' }
-    }
+    const config = LISTING_STATUS_CONFIG[status as ListingStatus]
+    if (config) return { label: config.label, className: config.color }
+    return { label: status, className: 'bg-gray-100 text-gray-800' }
   }
 
   if (status === 'loading' || isLoading) {

@@ -14,6 +14,7 @@ interface ProductSuccessModalProps {
 }
 
 export function ProductSuccessModal({ suggestion, onClose }: ProductSuccessModalProps) {
+  const IconComponent = suggestion.icon
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.9 }}
@@ -36,7 +37,11 @@ export function ProductSuccessModal({ suggestion, onClose }: ProductSuccessModal
         </p>
         <div className="bg-gray-50 rounded-lg p-4 mb-6">
           <div className="flex items-center gap-3 mb-2">
-            <suggestion.icon className="w-6 h-6 text-blue-600" />
+            {IconComponent ? (
+              <IconComponent className="w-6 h-6 text-blue-600" />
+            ) : (
+              <CheckCircle className="w-6 h-6 text-blue-600" />
+            )}
             <span className="font-medium text-gray-900">{suggestion.name}</span>
           </div>
           <p className="text-sm text-gray-600">CHF {suggestion.estimatedPrice}</p>

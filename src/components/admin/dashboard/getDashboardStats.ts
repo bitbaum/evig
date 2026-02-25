@@ -12,6 +12,9 @@ export async function getDashboardStats(isSuper: boolean): Promise<DashboardStat
     totalUsers: 0,
     totalStaff: 0,
     totalTechnicians: 0,
+    totalListings: 0,
+    activeListings: 0,
+    unverifiedListings: 0,
   }
 
   try {
@@ -95,6 +98,23 @@ export async function getDashboardStats(isSuper: boolean): Promise<DashboardStat
         [weekAgo.toISOString()]
       )
       stats.postsPublishedThisWeek = parseInt(postsResult.rows[0]?.count || '0')
+    } catch {
+      // Table might not exist
+    }
+
+    // Get marketplace listing stats
+    try {
+      const listingsResult = await query<{ total: string; active: string; unverified: string }>(
+        `SELECT
+           COUNT(*) as total,
+           COUNT(*) FILTER (WHERE status = 'active') as active,
+           COUNT(*) FILTER (WHERE status = 'active' AND verified_at IS NULL) as unverified
+         FROM ${TABLE_NAMES.LISTINGS}`
+      )
+      const lr = listingsResult.rows[0]
+      stats.totalListings = parseInt(lr?.total || '0')
+      stats.activeListings = parseInt(lr?.active || '0')
+      stats.unverifiedListings = parseInt(lr?.unverified || '0')
     } catch {
       // Table might not exist
     }

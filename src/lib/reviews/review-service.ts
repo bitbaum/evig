@@ -30,11 +30,19 @@ export async function validateReviewTarget(
     return result.rows.length > 0
   }
 
-  if (targetType === 'service') {
+  if (targetType === REVIEW_TARGET_TYPES.LISTING) {
+    const result = await query(
+      `SELECT id FROM ${TABLE_NAMES.LISTINGS} WHERE id = $1`,
+      [targetId]
+    )
+    return result.rows.length > 0
+  }
+
+  if (targetType === REVIEW_TARGET_TYPES.SERVICE) {
     return true // Placeholder until services table exists
   }
 
-  if (targetType === 'workshop') {
+  if (targetType === REVIEW_TARGET_TYPES.WORKSHOP) {
     const result = await query(
       `SELECT id FROM ${TABLE_NAMES.WORKSHOPS} WHERE id = $1`,
       [targetId]

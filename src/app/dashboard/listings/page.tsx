@@ -15,6 +15,8 @@ import {
   Pencil,
   Trash2,
   Copy,
+  ChevronLeft,
+  ChevronRight,
 } from 'lucide-react'
 import { LISTING_STATUS_CONFIG, formatCHF } from '@/config/marketplace'
 import type { ListingStatus } from '@/config/marketplace'
@@ -50,20 +52,27 @@ export default function MyListingsPage() {
   const [statusFilter, setStatusFilter] = useState('')
   const [deletingId, setDeletingId] = useState<string | null>(null)
   const [duplicatingId, setDuplicatingId] = useState<string | null>(null)
+  const [page, setPage] = useState(1)
+  const [totalPages, setTotalPages] = useState(1)
+  const [total, setTotal] = useState(0)
 
-  const fetchListings = useCallback(async () => {
+  const fetchListings = useCallback(async (fetchPage = 1) => {
     setIsLoading(true)
     setError(null)
 
     try {
       const params = new URLSearchParams()
       if (statusFilter) params.set('status', statusFilter)
+      params.set('page', String(fetchPage))
 
       const response = await fetch(`/api/listings/mine?${params.toString()}`)
       const data = await response.json()
 
-      if (data.success) {
-        setListings(data.data)
+      if (data.success && data.data) {
+        setListings(data.data.items)
+        setPage(data.data.page)
+        setTotalPages(data.data.totalPages)
+        setTotal(data.data.total)
       } else {
         throw new Error(data.error || 'Fehler beim Laden')
       }
@@ -80,8 +89,13 @@ export default function MyListingsPage() {
       router.push('/auth/login')
       return
     }
-    fetchListings()
+    fetchListings(1)
   }, [session, sessionStatus, router, fetchListings])
+
+  const handleStatusFilterChange = (value: string) => {
+    setStatusFilter(value)
+    setPage(1)
+  }
 
   const handleDelete = async (id: string) => {
     if (!confirm('Möchten Sie dieses Inserat wirklich löschen?')) return
@@ -91,6 +105,7 @@ export default function MyListingsPage() {
       const data = await response.json()
       if (data.success) {
         setListings(prev => prev.filter(l => l.id !== id))
+        setTotal(prev => prev - 1)
       }
     } finally {
       setDeletingId(null)
@@ -142,7 +157,7 @@ export default function MyListingsPage() {
         {STATUS_TABS.map(tab => (
           <button
             key={tab.value}
-            onClick={() => setStatusFilter(tab.value)}
+            onClick={() => handleStatusFilterChange(tab.value)}
             className={`flex-1 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
               statusFilter === tab.value
                 ? 'bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm'
@@ -168,7 +183,7 @@ export default function MyListingsPage() {
           <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-4" />
           <p className="text-red-600 dark:text-red-300 mb-4">{error}</p>
           <button
-            onClick={fetchListings}
+            onClick={() => fetchListings(page)}
             className="inline-flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg"
           >
             <RefreshCw className="w-4 h-4" />
@@ -293,6 +308,36 @@ export default function MyListingsPage() {
               </div>
             )
           })}
+        </div>
+      )}
+
+      {/* Pagination */}
+      {!isLoading && !error && totalPages > 1 && (
+        <div className="flex items-center justify-between pt-4">
+          <p className="text-sm text-gray-500 dark:text-gray-400">
+            {total} Inserat{total !== 1 ? 'e' : ''} insgesamt
+          </p>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => fetchListings(page - 1)}
+              disabled={page <= 1}
+              className="inline-flex items-center gap-1 px-3 py-1.5 text-sm rounded-lg border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            >
+              <ChevronLeft className="w-4 h-4" />
+              Zurück
+            </button>
+            <span className="text-sm text-gray-600 dark:text-gray-400">
+              Seite {page} von {totalPages}
+            </span>
+            <button
+              onClick={() => fetchListings(page + 1)}
+              disabled={page >= totalPages}
+              className="inline-flex items-center gap-1 px-3 py-1.5 text-sm rounded-lg border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            >
+              Weiter
+              <ChevronRight className="w-4 h-4" />
+            </button>
+          </div>
         </div>
       )}
     </div>

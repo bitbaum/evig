@@ -40,5 +40,16 @@ export function buildActionItems(
     })
   }
 
+  // Unverified marketplace listings
+  if (stats.unverifiedListings > 0) {
+    items.push({
+      type: 'warning',
+      label: `${stats.unverifiedListings} Inserat${stats.unverifiedListings > 1 ? 'e' : ''} zur Prüfung`,
+      count: stats.unverifiedListings,
+      href: '/admin/marketplace',
+      actionLabel: 'Prüfen',
+    })
+  }
+
   return items
 }

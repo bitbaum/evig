@@ -67,13 +67,14 @@ export async function GET(request: NextRequest) {
     if (!queryValidation.success) return queryValidation.error
     const { targetType, targetId, status, limit, offset, sortBy, sortOrder } = queryValidation.data
 
+    // Fetch session (optional — needed for voter_id and admin checks)
+    const session = await auth()
+    const voterId = session?.user?.id ?? null
+
     // Non-published reviews require admin
-    let isAdmin = false
     if (status !== 'published') {
-      const session = await auth()
       if (!session?.user?.id) return apiUnauthorized(ERROR_MESSAGES.UNAUTHORIZED)
       if (!session.user.isStaff) return apiForbidden('Nur Administratoren haben Zugriff')
-      isAdmin = true
     }
 
     // Build sort clause
@@ -86,7 +87,7 @@ export async function GET(request: NextRequest) {
         r.*,
         u.name as reviewer_name,
         u.email as reviewer_email,
-        COALESCE(rp.business_name, '') as target_name,
+        COALESCE(rp.business_name, l.title, '') as target_name,
         rr.id as response_id,
         rr.content as response_content,
         rr.created_at as response_created_at,
@@ -109,6 +110,7 @@ export async function GET(request: NextRequest) {
       FROM ${TABLE_NAMES.REVIEWS} r
       JOIN ${TABLE_NAMES.USERS} u ON r.reviewer_id = u.id
       LEFT JOIN ${TABLE_NAMES.REPAIRER_PROFILES} rp ON r.target_type = $7 AND r.target_id = rp.id
+      LEFT JOIN ${TABLE_NAMES.LISTINGS} l ON r.target_type = 'listing' AND r.target_id::text = l.id::text
       LEFT JOIN ${TABLE_NAMES.REVIEW_RESPONSES} rr ON r.id = rr.review_id AND rr.status = 'published'
       LEFT JOIN ${TABLE_NAMES.USERS} ru ON rr.responder_id = ru.id
       LEFT JOIN ${TABLE_NAMES.REVIEW_VOTES} rv ON r.id = rv.review_id AND rv.voter_id = $1
@@ -116,7 +118,7 @@ export async function GET(request: NextRequest) {
       ORDER BY r.${sortField} ${sortDirection}
       LIMIT $5 OFFSET $6
     `, [
-      isAdmin ? null : null,
+      voterId,
       targetType,
       targetId,
       status,

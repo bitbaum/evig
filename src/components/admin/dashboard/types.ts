@@ -14,6 +14,11 @@ export interface DashboardStats {
   totalUsers: number
   totalStaff: number
   totalTechnicians: number
+
+  // Marketplace
+  totalListings: number
+  activeListings: number
+  unverifiedListings: number
 }
 
 export type ActionItem = {

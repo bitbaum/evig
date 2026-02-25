@@ -10,6 +10,7 @@ import {
   Package,
   Loader2,
   AlertCircle,
+  Camera,
 } from 'lucide-react'
 import { MARKETPLACE_LIMITS } from '@/config/marketplace'
 import { AIFormAssistBar } from '@/components/ai/AIFormAssistBar'
@@ -18,6 +19,8 @@ import { INITIAL_LISTING_FORM } from '@/components/marketplace-sell/types'
 import { ImageUploadGrid } from '@/components/marketplace-sell/ImageUploadGrid'
 import { ListingFormFields } from '@/components/marketplace-sell/ListingFormFields'
 import { ListingPreview } from '@/components/marketplace-sell/ListingPreview'
+import { AICameraProductListing } from '@/components/marketplace/ai-camera'
+import type { DetectedProductData } from '@/components/marketplace/ai-camera/types'
 
 type Step = 'form' | 'preview'
 
@@ -34,6 +37,7 @@ function SellPageContent() {
   const [editId, setEditId] = useState<string | null>(null)
   const [isLoadingEdit, setIsLoadingEdit] = useState(false)
   const [formData, setFormData] = useState<ListingFormData>(INITIAL_LISTING_FORM)
+  const [showCamera, setShowCamera] = useState(false)
 
   // Load existing listing data when editing
   useEffect(() => {
@@ -236,6 +240,19 @@ function SellPageContent() {
     }
   }
 
+  const handleCameraProductDetected = (product: DetectedProductData) => {
+    setFormData(prev => ({
+      ...prev,
+      title: product.title || prev.title,
+      description: product.description || prev.description,
+      price: product.price || prev.price,
+      category: product.category || prev.category,
+      condition: product.condition || prev.condition,
+      brand: product.brand || prev.brand,
+    }))
+    setShowCamera(false)
+  }
+
   const handleAIFieldsFilled = (data: Partial<Record<string, unknown>>) => {
     setFormData(prev => {
       const updated = { ...prev }
@@ -297,6 +314,26 @@ function SellPageContent() {
         </div>
 
         <div className="p-6 space-y-6">
+          {/* AI Camera overlay */}
+          {showCamera && (
+            <AICameraProductListing
+              onProductDetected={handleCameraProductDetected}
+              onClose={() => setShowCamera(false)}
+            />
+          )}
+
+          {/* AI Camera button */}
+          {!editId && !showCamera && (
+            <button
+              type="button"
+              onClick={() => setShowCamera(true)}
+              className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-lg border-2 border-dashed border-green-300 dark:border-green-800 text-green-700 dark:text-green-400 hover:bg-green-50 dark:hover:bg-green-900/20 transition-colors"
+            >
+              <Camera className="w-5 h-5" />
+              Mit Kamera erfassen
+            </button>
+          )}
+
           <AIFormAssistBar
             formType="marketplace"
             placeholder="Beschreibe dein Produkt in 1-2 Sätzen..."

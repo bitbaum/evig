@@ -10,16 +10,16 @@ import {
 } from '@stripe/react-stripe-js'
 import { Loader2, Shield, CheckCircle } from 'lucide-react'
 
-const stripePromise = loadStripe(
-  process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || 'pk_test_placeholder'
-)
+const stripeKey = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
+const stripePromise = stripeKey ? loadStripe(stripeKey) : null
 
 interface CheckoutFormInnerProps {
+  orderId?: string
   onSuccess: () => void
   onError: (message: string) => void
 }
 
-function CheckoutFormInner({ onSuccess, onError }: CheckoutFormInnerProps) {
+function CheckoutFormInner({ orderId, onSuccess, onError }: CheckoutFormInnerProps) {
   const stripe = useStripe()
   const elements = useElements()
   const [isLoading, setIsLoading] = useState(false)
@@ -36,7 +36,7 @@ function CheckoutFormInner({ onSuccess, onError }: CheckoutFormInnerProps) {
     const { error, paymentIntent } = await stripe.confirmPayment({
       elements,
       confirmParams: {
-        return_url: `${window.location.origin}/marketplace/checkout/success`,
+        return_url: `${window.location.origin}/marketplace/checkout/success${orderId ? `?orderId=${orderId}` : ''}`,
       },
       redirect: 'if_required',
     })
@@ -107,12 +107,14 @@ function CheckoutFormInner({ onSuccess, onError }: CheckoutFormInnerProps) {
 
 interface MarketplaceCheckoutFormProps {
   clientSecret: string
+  orderId?: string
   onSuccess: () => void
   onError: (message: string) => void
 }
 
 export default function MarketplaceCheckoutForm({
   clientSecret,
+  orderId,
   onSuccess,
   onError,
 }: MarketplaceCheckoutFormProps) {
@@ -126,9 +128,17 @@ export default function MarketplaceCheckoutForm({
     },
   }
 
+  if (!stripePromise) {
+    return (
+      <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4 text-red-700 dark:text-red-300">
+        Zahlungssystem nicht konfiguriert. Bitte kontaktieren Sie den Support.
+      </div>
+    )
+  }
+
   return (
     <Elements stripe={stripePromise} options={options}>
-      <CheckoutFormInner onSuccess={onSuccess} onError={onError} />
+      <CheckoutFormInner orderId={orderId} onSuccess={onSuccess} onError={onError} />
     </Elements>
   )
 }

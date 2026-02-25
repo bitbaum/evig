@@ -11,6 +11,8 @@ import {
   AlertCircle,
   CheckCircle,
   Save,
+  Upload,
+  X,
 } from 'lucide-react'
 
 interface SellerProfileData {
@@ -35,6 +37,7 @@ export default function SellerProfileEditPage() {
   const [avatarUrl, setAvatarUrl] = useState('')
   const [city, setCity] = useState('')
   const [canton, setCanton] = useState('')
+  const [isUploading, setIsUploading] = useState(false)
 
   useEffect(() => {
     if (status === 'loading') return
@@ -100,6 +103,28 @@ export default function SellerProfileEditPage() {
     }
   }
 
+  const handleAvatarUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+    setIsUploading(true)
+    setError(null)
+    try {
+      const formData = new FormData()
+      formData.append('files', file)
+      const response = await fetch('/api/uploads', { method: 'POST', body: formData })
+      const data = await response.json()
+      if (data.success && data.data?.urls?.[0]) {
+        setAvatarUrl(data.data.urls[0])
+      } else {
+        setError(data.error || 'Fehler beim Hochladen')
+      }
+    } catch {
+      setError('Fehler beim Hochladen des Bildes')
+    } finally {
+      setIsUploading(false)
+    }
+  }
+
   if (status === 'loading' || isLoading) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
@@ -160,14 +185,51 @@ export default function SellerProfileEditPage() {
 
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Profilbild-URL
+              Profilbild
             </label>
+            <div className="flex items-center gap-4">
+              {avatarUrl ? (
+                <div className="relative">
+                  <img
+                    src={avatarUrl}
+                    alt="Profilbild"
+                    className="w-16 h-16 rounded-full object-cover border-2 border-gray-200 dark:border-gray-600"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setAvatarUrl('')}
+                    className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white rounded-full flex items-center justify-center hover:bg-red-600"
+                  >
+                    <X className="w-3 h-3" />
+                  </button>
+                </div>
+              ) : (
+                <div className="w-16 h-16 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center border-2 border-dashed border-gray-300 dark:border-gray-600">
+                  <User className="w-6 h-6 text-gray-400" />
+                </div>
+              )}
+              <label className="cursor-pointer inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                {isUploading ? (
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                ) : (
+                  <Upload className="w-4 h-4" />
+                )}
+                {isUploading ? 'Wird hochgeladen...' : 'Bild hochladen'}
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleAvatarUpload}
+                  disabled={isUploading}
+                  className="hidden"
+                />
+              </label>
+            </div>
             <input
               type="url"
               value={avatarUrl}
               onChange={(e) => setAvatarUrl(e.target.value)}
-              placeholder="https://..."
-              className="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+              placeholder="Oder URL eingeben: https://..."
+              className="mt-2 w-full px-4 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
             />
           </div>
 

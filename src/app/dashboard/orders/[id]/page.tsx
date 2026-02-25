@@ -181,6 +181,32 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
         </div>
       )}
 
+      {/* Pending payment info banner */}
+      {order.status === 'pending_payment' && (
+        <div className="mb-6 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-xl p-4 flex items-start gap-3">
+          <Clock className="w-5 h-5 text-yellow-600 flex-shrink-0 mt-0.5" />
+          <div className="flex-1">
+            <h3 className="font-medium text-yellow-800 dark:text-yellow-200">
+              Zahlung ausstehend
+            </h3>
+            <p className="text-sm text-yellow-700 dark:text-yellow-300 mt-1">
+              {order.role === 'buyer'
+                ? 'Ihre Zahlung wird noch verarbeitet. Bitte schliessen Sie den Zahlungsvorgang ab, um die Bestellung zu bestätigen.'
+                : 'Der Käufer hat die Zahlung noch nicht abgeschlossen. Sie werden benachrichtigt, sobald die Zahlung eingegangen ist.'}
+            </p>
+            {order.role === 'buyer' && (
+              <Link
+                href={`/marketplace/checkout/${order.listing_id}`}
+                className="inline-flex items-center gap-2 mt-3 px-4 py-2 bg-yellow-600 hover:bg-yellow-700 text-white text-sm font-medium rounded-lg transition-colors"
+              >
+                <Shield className="w-4 h-4" />
+                Zahlung wiederholen
+              </Link>
+            )}
+          </div>
+        </div>
+      )}
+
       {/* Status timeline */}
       {!isCancelled && (
         <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm mb-6">

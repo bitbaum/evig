@@ -331,6 +331,7 @@ export default function CheckoutPage({ params }: { params: Promise<{ listingId: 
               )}
               <MarketplaceCheckoutForm
                 clientSecret={clientSecret}
+                orderId={orderId || undefined}
                 onSuccess={handlePaymentSuccess}
                 onError={handlePaymentError}
               />
