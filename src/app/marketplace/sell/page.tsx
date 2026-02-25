@@ -79,6 +79,20 @@ function SellPageContent() {
           images: Array.isArray(listing.images)
             ? listing.images.map((img: { url: string }) => img.url)
             : [],
+          specs: Array.isArray(listing.specs)
+            ? listing.specs.map((s: { key: string; value: string; unit?: string }) => ({
+                key: s.key,
+                value: s.value || '',
+                unit: s.unit,
+              }))
+            : [],
+          conditionChecks: Array.isArray(listing.condition_checks)
+            ? listing.condition_checks.map((c: { key: string; label: string; checked: boolean }) => ({
+                key: c.key,
+                label: c.label,
+                checked: c.checked,
+              }))
+            : [],
         })
       })
       .catch(() => {
@@ -187,6 +201,14 @@ function SellPageContent() {
         shipping_cost_chf: formData.shippingCost ? parseFloat(formData.shippingCost) : null,
         pickup_location: formData.pickupLocation.trim() || null,
         payment_mode: formData.paymentMode,
+        specs: formData.specs.filter(s => s.value.trim()).map(s => ({
+          key: s.key,
+          value: s.value.trim(),
+          unit: s.unit || null,
+        })),
+        condition_checks: formData.conditionChecks.length > 0
+          ? formData.conditionChecks.map(c => ({ key: c.key, label: c.label, checked: c.checked }))
+          : null,
       }
 
       const url = editId ? `/api/listings/${editId}` : '/api/listings'
@@ -215,16 +237,24 @@ function SellPageContent() {
   }
 
   const handleAIFieldsFilled = (data: Partial<Record<string, unknown>>) => {
-    setFormData(prev => ({
-      ...prev,
-      ...(data.title ? { title: String(data.title) } : {}),
-      ...(data.description ? { description: String(data.description) } : {}),
-      ...(data.category ? { category: String(data.category) } : {}),
-      ...(data.price !== undefined ? { price: String(data.price) } : {}),
-      ...(data.condition ? { condition: String(data.condition) } : {}),
-      ...(data.brand ? { brand: String(data.brand) } : {}),
-      ...(data.model ? { model: String(data.model) } : {}),
-    }))
+    setFormData(prev => {
+      const updated = { ...prev }
+      if (data.title) updated.title = String(data.title)
+      if (data.description) updated.description = String(data.description)
+      if (data.category) updated.category = String(data.category)
+      if (data.price !== undefined) updated.price = String(data.price)
+      if (data.condition) updated.condition = String(data.condition)
+      if (data.brand) updated.brand = String(data.brand)
+      if (data.model) updated.model = String(data.model)
+      if (Array.isArray(data.specs)) {
+        updated.specs = data.specs.map((s: Record<string, unknown>) => ({
+          key: String(s.key || ''),
+          value: String(s.value || ''),
+          unit: s.unit ? String(s.unit) : undefined,
+        }))
+      }
+      return updated
+    })
   }
 
   // Preview step
@@ -274,8 +304,9 @@ function SellPageContent() {
             quickActions={[
               { key: 'improveDescription', label: 'Beschreibung verbessern' },
               { key: 'suggestPrice', label: 'Preis vorschlagen' },
+              { key: 'extractSpecs', label: 'Spezifikationen erkennen' },
             ]}
-            currentData={{ title: formData.title, description: formData.description, price: formData.price, category: formData.category, condition: formData.condition, brand: formData.brand, model: formData.model }}
+            currentData={{ title: formData.title, description: formData.description, price: formData.price, category: formData.category, condition: formData.condition, brand: formData.brand, model: formData.model, specs: formData.specs }}
           />
 
           <ImageUploadGrid

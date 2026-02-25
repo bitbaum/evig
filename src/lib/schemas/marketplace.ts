@@ -7,7 +7,7 @@
 
 import { z } from 'zod';
 import {
-  MARKETPLACE_CATEGORIES,
+  MARKETPLACE_CATEGORY_VALUES,
   LISTING_CONDITIONS,
   DELIVERY_OPTIONS,
   PAYMENT_MODES,
@@ -18,11 +18,34 @@ import {
 import { paginationSchema } from './common';
 
 // ============================================================================
+// Listing Spec (for create/update payloads)
+// ============================================================================
+
+export const ListingSpecSchema = z.object({
+  key: z.string().min(1).max(100),
+  value: z.string().max(500),
+  unit: z.string().max(50).optional().nullable(),
+});
+
+export type ListingSpecInput = z.infer<typeof ListingSpecSchema>;
+
+// ============================================================================
+// Condition Checks (category-specific condition criteria)
+// ============================================================================
+
+export const ConditionCheckSchema = z.object({
+  key: z.string().min(1).max(100),
+  checked: z.boolean(),
+});
+
+export type ConditionCheckInput = z.infer<typeof ConditionCheckSchema>;
+
+// ============================================================================
 // Browse / Query
 // ============================================================================
 
 export const ListingsQuerySchema = z.object({
-  category: z.enum(MARKETPLACE_CATEGORIES as unknown as [string, ...string[]]).optional(),
+  category: z.string().optional(),
   condition: z.enum(LISTING_CONDITIONS as unknown as [string, ...string[]]).optional(),
   delivery: z.enum(DELIVERY_OPTIONS as unknown as [string, ...string[]]).optional(),
   payment: z.enum(PAYMENT_MODES as unknown as [string, ...string[]]).optional(),
@@ -32,6 +55,13 @@ export const ListingsQuerySchema = z.object({
   price_max: z.coerce.number().max(MARKETPLACE_LIMITS.MAX_PRICE_CHF).optional(),
   seller_type: z.enum(['revampit', 'community']).optional(),
   status: z.enum(LISTING_STATUSES as unknown as [string, ...string[]]).optional(),
+  // Phase 1 additions
+  gratis_only: z.coerce.boolean().optional(),
+  verified_only: z.coerce.boolean().optional(),
+  // Spec filters (min values for numeric specs)
+  spec_ram_min: z.coerce.number().min(0).optional(),
+  spec_storage_min: z.coerce.number().min(0).optional(),
+  spec_display_min: z.coerce.number().min(0).optional(),
 }).merge(paginationSchema);
 
 export type ListingsQuery = z.infer<typeof ListingsQuerySchema>;
@@ -50,9 +80,7 @@ export const CreateListingSchema = z.object({
   price_chf: z.number()
     .min(0, 'Preis muss mindestens 0 sein')
     .max(MARKETPLACE_LIMITS.MAX_PRICE_CHF, `Preis darf maximal ${MARKETPLACE_LIMITS.MAX_PRICE_CHF} CHF sein`),
-  category: z.enum(MARKETPLACE_CATEGORIES as unknown as [string, ...string[]], {
-    error: 'Ungültige Kategorie',
-  }),
+  category: z.string().min(1, 'Kategorie erforderlich'),
   condition: z.enum(LISTING_CONDITIONS as unknown as [string, ...string[]], {
     error: 'Ungültiger Zustand',
   }),
@@ -66,6 +94,9 @@ export const CreateListingSchema = z.object({
   pickup_location: z.string().max(200).optional().nullable(),
   payment_mode: z.enum(PAYMENT_MODES as unknown as [string, ...string[]]).default('direct'),
   status: z.enum(['active', 'draft'] as const).default('active'),
+  // Phase 1 additions
+  specs: z.array(ListingSpecSchema).max(30).optional(),
+  condition_checks: z.array(ConditionCheckSchema).max(20).optional(),
 });
 
 export type CreateListingInput = z.infer<typeof CreateListingSchema>;
@@ -84,7 +115,7 @@ export const UpdateListingSchema = z.object({
     .max(MARKETPLACE_LIMITS.MAX_DESCRIPTION_LENGTH)
     .optional(),
   price_chf: z.number().min(0).max(MARKETPLACE_LIMITS.MAX_PRICE_CHF).optional(),
-  category: z.enum(MARKETPLACE_CATEGORIES as unknown as [string, ...string[]]).optional(),
+  category: z.string().optional(),
   condition: z.enum(LISTING_CONDITIONS as unknown as [string, ...string[]]).optional(),
   brand: z.string().max(100).optional().nullable(),
   model: z.string().max(100).optional().nullable(),
@@ -94,6 +125,9 @@ export const UpdateListingSchema = z.object({
   pickup_location: z.string().max(200).optional().nullable(),
   payment_mode: z.enum(PAYMENT_MODES as unknown as [string, ...string[]]).optional(),
   status: z.enum(LISTING_STATUSES as unknown as [string, ...string[]]).optional(),
+  // Phase 1 additions
+  specs: z.array(ListingSpecSchema).max(30).optional(),
+  condition_checks: z.array(ConditionCheckSchema).max(20).optional(),
 });
 
 export type UpdateListingInput = z.infer<typeof UpdateListingSchema>;
@@ -152,3 +186,13 @@ export const UpdateOrderStatusSchema = z.object({
 });
 
 export type UpdateOrderStatusInput = z.infer<typeof UpdateOrderStatusSchema>;
+
+// ============================================================================
+// Admin Verify Listing
+// ============================================================================
+
+export const VerifyListingSchema = z.object({
+  verification_notes: z.string().max(2000).optional().nullable(),
+});
+
+export type VerifyListingInput = z.infer<typeof VerifyListingSchema>;

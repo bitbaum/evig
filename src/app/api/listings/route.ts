@@ -8,6 +8,7 @@ import { withAuth, ValidSession } from '@/lib/api/middleware';
 import { apiSuccess, apiError, apiBadRequest } from '@/lib/api/helpers';
 import { query, paginatedQuery, transaction } from '@/lib/auth/db';
 import { TABLE_NAMES } from '@/config/database';
+import { normalizeSpecValue, SPEC_MEILI_FIELD_MAP } from '@/config/marketplace';
 import { logger } from '@/lib/logger';
 import { validateBody, validateQuery, ListingsQuerySchema, CreateListingSchema } from '@/lib/schemas';
 import { indexListing } from '@/lib/search/meilisearch';
@@ -66,11 +67,31 @@ export async function GET(request: NextRequest) {
     } else if (filters.seller_type === 'community') {
       conditions.push(`l.is_revampit = false`);
     }
+    if (filters.gratis_only) {
+      conditions.push(`l.price_chf = 0`);
+    }
+    if (filters.verified_only) {
+      conditions.push(`l.verified_at IS NOT NULL`);
+    }
     if (filters.search) {
       conditions.push(
         `to_tsvector('german', coalesce(l.title, '') || ' ' || coalesce(l.description, '') || ' ' || coalesce(l.brand, '') || ' ' || coalesce(l.model, '')) @@ plainto_tsquery('german', $${paramIndex++})`
       );
       params.push(filters.search);
+    }
+
+    // Spec filters via subquery on listing_specs
+    if (filters.spec_ram_min !== undefined) {
+      conditions.push(`EXISTS (SELECT 1 FROM ${TABLE_NAMES.LISTING_SPECS} s WHERE s.listing_id = l.id AND s.spec_key = 'RAM' AND s.normalized_value >= $${paramIndex++})`);
+      params.push(filters.spec_ram_min);
+    }
+    if (filters.spec_storage_min !== undefined) {
+      conditions.push(`EXISTS (SELECT 1 FROM ${TABLE_NAMES.LISTING_SPECS} s WHERE s.listing_id = l.id AND s.spec_key = 'Speicher' AND s.normalized_value >= $${paramIndex++})`);
+      params.push(filters.spec_storage_min);
+    }
+    if (filters.spec_display_min !== undefined) {
+      conditions.push(`EXISTS (SELECT 1 FROM ${TABLE_NAMES.LISTING_SPECS} s WHERE s.listing_id = l.id AND (s.spec_key = 'Display' OR s.spec_key = 'Grösse') AND s.normalized_value >= $${paramIndex++})`);
+      params.push(filters.spec_display_min);
     }
 
     const whereClause = conditions.join(' AND ');
@@ -90,6 +111,7 @@ export async function GET(request: NextRequest) {
         l.id, l.title, l.price_chf, l.category, l.condition, l.brand, l.model,
         l.delivery_options, l.payment_mode, l.status, l.is_revampit,
         l.pickup_location, l.view_count, l.favorite_count, l.created_at,
+        l.verified_at,
         u.name as seller_name,
         sp.display_name as seller_display_name,
         sp.average_rating as seller_rating,
@@ -103,6 +125,32 @@ export async function GET(request: NextRequest) {
       LIMIT $${paramIndex++} OFFSET $${paramIndex++}`,
       [...params, filters.limit, filters.offset]
     );
+
+    // For items returned, fetch key specs (up to 3 per listing) for card display
+    if (items.length > 0) {
+      const listingIds = items.map((item) => (item as Record<string, unknown>).id);
+      const specsResult = await query(
+        `SELECT listing_id, spec_key, spec_value, spec_unit
+         FROM ${TABLE_NAMES.LISTING_SPECS}
+         WHERE listing_id = ANY($1)
+         ORDER BY listing_id`,
+        [listingIds]
+      );
+
+      // Group specs by listing_id
+      const specsMap = new Map<string, Array<{ key: string; value: string; unit: string | null }>>();
+      for (const row of specsResult.rows) {
+        const r = row as { listing_id: string; spec_key: string; spec_value: string; spec_unit: string | null };
+        if (!specsMap.has(r.listing_id)) specsMap.set(r.listing_id, []);
+        specsMap.get(r.listing_id)!.push({ key: r.spec_key, value: r.spec_value, unit: r.spec_unit });
+      }
+
+      // Attach specs to items
+      for (const item of items) {
+        const i = item as Record<string, unknown>;
+        i.specs = specsMap.get(i.id as string) || [];
+      }
+    }
 
     return apiSuccess({
       items,
@@ -146,8 +194,8 @@ export const POST = withAuth(async (request: NextRequest, session: ValidSession)
         `INSERT INTO ${TABLE_NAMES.LISTINGS} (
           seller_id, title, description, price_chf, category, condition,
           brand, model, delivery_options, shipping_cost_chf, pickup_location,
-          payment_mode, status
-        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
+          payment_mode, status, condition_checks
+        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
         RETURNING id`,
         [
           session.user.id,
@@ -163,6 +211,7 @@ export const POST = withAuth(async (request: NextRequest, session: ValidSession)
           data.pickup_location || null,
           data.payment_mode,
           data.status,
+          data.condition_checks ? JSON.stringify(data.condition_checks) : null,
         ]
       );
 
@@ -185,10 +234,42 @@ export const POST = withAuth(async (request: NextRequest, session: ValidSession)
         );
       }
 
+      // Batch insert specs
+      if (data.specs && data.specs.length > 0) {
+        const specValues: string[] = [];
+        const specParams: unknown[] = [];
+        let idx = 1;
+        for (const spec of data.specs) {
+          if (!spec.value.trim()) continue; // Skip empty specs
+          const normalized = normalizeSpecValue(spec.key, spec.value);
+          specValues.push(`($${idx++}, $${idx++}, $${idx++}, $${idx++}, $${idx++})`);
+          specParams.push(listingId, spec.key, spec.value, spec.unit || null, normalized);
+        }
+
+        if (specValues.length > 0) {
+          await client.query(
+            `INSERT INTO ${TABLE_NAMES.LISTING_SPECS} (listing_id, spec_key, spec_value, spec_unit, normalized_value)
+            VALUES ${specValues.join(', ')}`,
+            specParams
+          );
+        }
+      }
+
       return listingId;
     });
 
     logger.info('Listing created', { listingId: result, userId: session.user.id });
+
+    // Build denormalized spec fields for Meilisearch
+    const meiliSpecs: Record<string, number | null> = {};
+    if (data.specs) {
+      for (const spec of data.specs) {
+        const meiliField = SPEC_MEILI_FIELD_MAP[spec.key];
+        if (meiliField && spec.value) {
+          meiliSpecs[meiliField] = normalizeSpecValue(spec.key, spec.value);
+        }
+      }
+    }
 
     // Fire-and-forget: index in Meilisearch
     indexListing({
@@ -204,6 +285,7 @@ export const POST = withAuth(async (request: NextRequest, session: ValidSession)
       payment_mode: data.payment_mode,
       status: data.status || 'active',
       is_revampit: false,
+      is_verified: false,
       pickup_location: data.pickup_location || null,
       seller_name: session.user.name || null,
       seller_city: null,
@@ -211,6 +293,7 @@ export const POST = withAuth(async (request: NextRequest, session: ValidSession)
       favorite_count: 0,
       created_at: new Date().toISOString(),
       thumbnail: data.images?.[0] || null,
+      ...meiliSpecs,
     }).catch(err => logger.error('Failed to index listing in Meilisearch', { error: err, listingId: result }));
 
     // Fire-and-forget: send confirmation email

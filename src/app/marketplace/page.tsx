@@ -15,12 +15,15 @@ import {
   DollarSign,
 } from 'lucide-react'
 import {
-  MARKETPLACE_CATEGORIES,
+  MARKETPLACE_CATEGORY_VALUES,
+  CATEGORY_LABELS,
+  CATEGORY_ICONS,
   DELIVERY_OPTIONS,
   DELIVERY_LABELS,
   PAYMENT_MODES,
   PAYMENT_MODE_LABELS,
   SORT_OPTIONS,
+  getSpecFiltersForCategory,
 } from '@/config/marketplace'
 import { ZUSTAND_OPTIONS } from '@/config/erfassung/conditions'
 import { MARKETPLACE_CONTENT } from '@/config/page-content'
@@ -101,6 +104,37 @@ export default function MarketplacePage() {
 
       {/* Main Content */}
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+        {/* Seller Type Toggle */}
+        <div className="mb-4 flex gap-2" role="group" aria-label="Verkäufertyp">
+          <button
+            onClick={() => { filters.setSellerType(''); resetOffset(); }}
+            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+              !filters.sellerType ? 'bg-orange-600 text-white shadow-sm' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+            }`}
+            aria-pressed={!filters.sellerType}
+          >
+            Alle
+          </button>
+          <button
+            onClick={() => { filters.setSellerType('revampit'); resetOffset(); }}
+            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+              filters.sellerType === 'revampit' ? 'bg-green-600 text-white shadow-sm' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+            }`}
+            aria-pressed={filters.sellerType === 'revampit'}
+          >
+            RevampIT Geräte
+          </button>
+          <button
+            onClick={() => { filters.setSellerType('community'); resetOffset(); }}
+            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+              filters.sellerType === 'community' ? 'bg-blue-600 text-white shadow-sm' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+            }`}
+            aria-pressed={filters.sellerType === 'community'}
+          >
+            Community Inserate
+          </button>
+        </div>
+
         {/* Category Pills */}
         <div className="mb-8">
           <div className="flex gap-2 overflow-x-auto pb-2" role="group" aria-label="Kategoriefilter">
@@ -113,16 +147,16 @@ export default function MarketplacePage() {
             >
               Alle
             </button>
-            {MARKETPLACE_CATEGORIES.map((cat) => (
+            {MARKETPLACE_CATEGORY_VALUES.map((val) => (
               <button
-                key={cat}
-                onClick={() => { filters.setCategory(cat); resetOffset(); }}
+                key={val}
+                onClick={() => { filters.setCategory(val); resetOffset(); }}
                 className={`flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-                  filters.category === cat ? 'bg-orange-600 text-white shadow-sm' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  filters.category === val ? 'bg-orange-600 text-white shadow-sm' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                 }`}
-                aria-pressed={filters.category === cat}
+                aria-pressed={filters.category === val}
               >
-                {cat}
+                {CATEGORY_ICONS[val] ? `${CATEGORY_ICONS[val]} ` : ''}{CATEGORY_LABELS[val] || val}
               </button>
             ))}
           </div>
@@ -275,6 +309,64 @@ export default function MarketplacePage() {
                   )}
                 </div>
               </div>
+
+              {/* Toggle Filters: Gratis + Verified */}
+              <div className="flex flex-wrap gap-4 mt-4 pt-4 border-t border-gray-100">
+                <label className="inline-flex items-center gap-2 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={filters.gratisOnly}
+                    onChange={(e) => { filters.setGratisOnly(e.target.checked); resetOffset(); }}
+                    className="rounded border-gray-300 text-teal-600 focus:ring-teal-500"
+                  />
+                  <span className="text-sm text-gray-700">Nur Gratis</span>
+                </label>
+                <label className="inline-flex items-center gap-2 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={filters.verifiedOnly}
+                    onChange={(e) => { filters.setVerifiedOnly(e.target.checked); resetOffset(); }}
+                    className="rounded border-gray-300 text-green-600 focus:ring-green-500"
+                  />
+                  <span className="text-sm text-gray-700">Nur geprüfte Geräte</span>
+                </label>
+              </div>
+
+              {/* Spec Filters (shown when category is selected) */}
+              {filters.category && getSpecFiltersForCategory(filters.category).length > 0 && (
+                <div className="mt-4 pt-4 border-t border-gray-100">
+                  <p className="text-xs font-medium text-gray-700 mb-3">Technische Filter</p>
+                  <div className="flex flex-wrap gap-3">
+                    {getSpecFiltersForCategory(filters.category).map(spec => {
+                      const filterValue =
+                        spec.meiliField === 'spec_ram_gb' ? filters.specRamMin :
+                        spec.meiliField === 'spec_storage_gb' ? filters.specStorageMin :
+                        spec.meiliField === 'spec_display_inches' ? filters.specDisplayMin : ''
+                      const setFilter =
+                        spec.meiliField === 'spec_ram_gb' ? filters.setSpecRamMin :
+                        spec.meiliField === 'spec_storage_gb' ? filters.setSpecStorageMin :
+                        spec.meiliField === 'spec_display_inches' ? filters.setSpecDisplayMin : null
+
+                      if (!setFilter) return null
+                      return (
+                        <div key={spec.key}>
+                          <label className="block text-xs text-gray-500 mb-1">{spec.label}</label>
+                          <select
+                            value={filterValue}
+                            onChange={(e) => { setFilter(e.target.value); resetOffset(); }}
+                            className="px-3 py-1.5 border border-gray-300 rounded-lg bg-white text-sm text-gray-900 focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                          >
+                            <option value="">Alle</option>
+                            {spec.options.map(opt => (
+                              <option key={opt.value} value={String(opt.value)}>{opt.label}</option>
+                            ))}
+                          </select>
+                        </div>
+                      )
+                    })}
+                  </div>
+                </div>
+              )}
             </div>
           )}
         </div>

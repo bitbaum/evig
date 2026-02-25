@@ -595,9 +595,18 @@ export const FORM_AI_REGISTRY: Record<string, FormAIConfig> = {
 
 Du bist ein Assistent für den RevampIT Marketplace.
 Hilf Benutzern, ihre Inserate für gebrauchte IT-Geräte zu erstellen.
-Extrahiere Produktinformationen und generiere ansprechende Beschreibungen.`,
+Extrahiere Produktinformationen, technische Spezifikationen und generiere ansprechende Beschreibungen.
+
+Kategorie-IDs: 10=Laptops, 20=Desktop PCs, 30=Monitore, 40=Tablets, 50=Smartphones, 60=Drucker/Scanner, 70=Netzwerk, 80=Peripherie, 90=Komponenten, 99=Sonstiges
+
+Typische Specs je Kategorie:
+- Laptops (10): CPU, RAM, RAM-Typ, Speicher, Display, Auflösung, Grafik, Akku, Anschlüsse, WLAN, OS
+- Desktop PCs (20): CPU, RAM, RAM-Typ, Speicher, Grafik, Anschlüsse, Netzteil, OS
+- Monitore (30): Grösse, Auflösung, Panel, Helligkeit, Refresh Rate, Anschlüsse
+- Smartphones (50): Prozessor, RAM, Speicher, Display, Hauptkamera, Frontkamera, Akku, OS
+- Tablets (40): Prozessor, RAM, Speicher, Display, Kamera, Akku, OS`,
     extract: `Der Benutzer möchte ein IT-Produkt auf dem Marketplace verkaufen.
-Aus der folgenden Beschreibung, extrahiere die Produktinformationen:
+Aus der folgenden Beschreibung, extrahiere die Produktinformationen und technischen Spezifikationen:
 
 Beschreibung: "{text}"
 
@@ -606,13 +615,23 @@ Antworte NUR mit folgendem JSON:
   "title": "Aussagekräftiger Inseratstitel",
   "description": "Detaillierte, ansprechende Beschreibung für Käufer (2-4 Sätze)",
   "price": "Geschätzter Preis in CHF (nur Zahl, basierend auf Schweizer Gebrauchtmarkt)",
-  "category": "Kategorie (Laptops, Desktop PCs, Monitore, Zubehör, Smartphones, Tablets)",
+  "category": "Kategorie-ID als String: 10, 20, 30, 40, 50, 60, 70, 80, 90, 99",
   "condition": "Zustand: new, like_new, good, fair, poor",
   "brand": "Marke/Hersteller",
-  "model": "Modellbezeichnung"
+  "model": "Modellbezeichnung",
+  "specs": [
+    { "key": "CPU", "value": "z.B. Intel i5-8350U" },
+    { "key": "RAM", "value": "z.B. 16 GB" },
+    { "key": "Speicher", "value": "z.B. 512 GB SSD" }
+  ]
 }
 
-Wichtig: Preise für den Schweizer Gebrauchtmarkt schätzen. Schweizer Deutsch (ss statt ß).`,
+Wichtig:
+- Preise für den Schweizer Gebrauchtmarkt schätzen
+- Kategorie als numerische ID (10, 20, 30, etc.)
+- Specs basierend auf bekanntem Modell ergänzen falls nicht explizit genannt
+- Spec-Keys müssen exakt den oben genannten entsprechen (CPU, RAM, Speicher, Display, etc.)
+- Schweizer Deutsch (ss statt ß)`,
     schema: null,
     refine: `Verbessere das folgende Marketplace-Inserat gemäss der Anweisung.
 
@@ -622,10 +641,11 @@ AKTUELLE DATEN:
 ANWEISUNG:
 {instruction}
 
-Antworte NUR mit dem verbesserten JSON (gleiche Felder wie oben).`,
+Antworte NUR mit dem verbesserten JSON (gleiche Felder wie bei der Extraktion, inkl. specs-Array).`,
     quickActions: {
       improveDescription: 'Verbessere die Beschreibung: Mache sie ansprechender und hebe Verkaufsargumente hervor.',
       suggestPrice: 'Schätze einen realistischen Preis basierend auf dem Schweizer Gebrauchtmarkt (ricardo.ch, tutti.ch).',
+      extractSpecs: 'Ergänze die technischen Spezifikationen basierend auf dem Produktmodell. Füge CPU, RAM, Speicher, Display und andere relevante Specs hinzu. Nutze die aktuellen Daten (brand, model, title) um fehlende Specs zu recherchieren.',
     },
     auth: 'user',
   },

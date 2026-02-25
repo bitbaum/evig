@@ -24,6 +24,8 @@ export interface ListingItem {
   seller_rating: number | null
   seller_city: string | null
   thumbnail: string | null
+  verified_at: string | null
+  specs?: Array<{ key: string; value: string; unit: string | null }>
 }
 
 interface Pagination {
@@ -41,6 +43,12 @@ export interface MarketplaceFilters {
   searchInput: string
   priceMin: string
   priceMax: string
+  sellerType: string
+  gratisOnly: boolean
+  verifiedOnly: boolean
+  specRamMin: string
+  specStorageMin: string
+  specDisplayMin: string
 }
 
 export function useMarketplaceListings() {
@@ -64,6 +72,13 @@ export function useMarketplaceListings() {
   const [priceMin, setPriceMin] = useState('')
   const [priceMax, setPriceMax] = useState('')
   const [priceError, setPriceError] = useState<string | null>(null)
+  // Phase 1 additions
+  const [sellerType, setSellerType] = useState('')
+  const [gratisOnly, setGratisOnly] = useState(false)
+  const [verifiedOnly, setVerifiedOnly] = useState(false)
+  const [specRamMin, setSpecRamMin] = useState('')
+  const [specStorageMin, setSpecStorageMin] = useState('')
+  const [specDisplayMin, setSpecDisplayMin] = useState('')
 
   const debouncedSearch = useDebounce(searchInput, 300)
 
@@ -111,6 +126,12 @@ export function useMarketplaceListings() {
       if (search) params.set('search', search)
       if (priceMin) params.set('price_min', priceMin)
       if (priceMax) params.set('price_max', priceMax)
+      if (sellerType) params.set('seller_type', sellerType)
+      if (gratisOnly) params.set('gratis_only', 'true')
+      if (verifiedOnly) params.set('verified_only', 'true')
+      if (specRamMin) params.set('spec_ram_min', specRamMin)
+      if (specStorageMin) params.set('spec_storage_min', specStorageMin)
+      if (specDisplayMin) params.set('spec_display_min', specDisplayMin)
       params.set('limit', String(pagination.limit))
       params.set('offset', String(pagination.offset))
 
@@ -129,7 +150,7 @@ export function useMarketplaceListings() {
     } finally {
       setIsLoading(false)
     }
-  }, [category, condition, delivery, payment, sort, search, priceMin, priceMax, pagination.limit, pagination.offset, validatePrices])
+  }, [category, condition, delivery, payment, sort, search, priceMin, priceMax, sellerType, gratisOnly, verifiedOnly, specRamMin, specStorageMin, specDisplayMin, pagination.limit, pagination.offset, validatePrices])
 
   useEffect(() => {
     fetchListings()
@@ -161,10 +182,16 @@ export function useMarketplaceListings() {
     setSearchInput('')
     setPriceMin('')
     setPriceMax('')
+    setSellerType('')
+    setGratisOnly(false)
+    setVerifiedOnly(false)
+    setSpecRamMin('')
+    setSpecStorageMin('')
+    setSpecDisplayMin('')
     resetOffset()
   }
 
-  const hasActiveFilters = !!(category || condition || delivery || payment || search || priceMin || priceMax)
+  const hasActiveFilters = !!(category || condition || delivery || payment || search || priceMin || priceMax || sellerType || gratisOnly || verifiedOnly || specRamMin || specStorageMin || specDisplayMin)
 
   const totalPages = Math.ceil(pagination.total / pagination.limit)
   const currentPage = Math.floor(pagination.offset / pagination.limit) + 1
@@ -190,6 +217,12 @@ export function useMarketplaceListings() {
       priceMin, setPriceMin,
       priceMax, setPriceMax,
       priceError, setPriceError,
+      sellerType, setSellerType,
+      gratisOnly, setGratisOnly,
+      verifiedOnly, setVerifiedOnly,
+      specRamMin, setSpecRamMin,
+      specStorageMin, setSpecStorageMin,
+      specDisplayMin, setSpecDisplayMin,
     },
     // Actions
     handleSearch,

@@ -25,6 +25,7 @@ export interface MeilisearchDocument {
   payment_mode: string;
   status: string;
   is_revampit: boolean;
+  is_verified: boolean;
   pickup_location: string | null;
   seller_name: string | null;
   seller_city: string | null;
@@ -32,6 +33,12 @@ export interface MeilisearchDocument {
   favorite_count: number;
   created_at: string;
   thumbnail: string | null;
+  // Denormalized spec fields for filtering
+  spec_ram_gb?: number | null;
+  spec_storage_gb?: number | null;
+  spec_display_inches?: number | null;
+  // Allow arbitrary spec fields
+  [key: string]: unknown;
 }
 
 interface SearchFilters {
@@ -42,6 +49,11 @@ interface SearchFilters {
   price_min?: number;
   price_max?: number;
   seller_type?: 'revampit' | 'community';
+  gratis_only?: boolean;
+  verified_only?: boolean;
+  spec_ram_min?: number;
+  spec_storage_min?: number;
+  spec_display_min?: number;
 }
 
 interface SearchResult {
@@ -105,12 +117,13 @@ export async function configureListingsIndex(): Promise<void> {
       body: JSON.stringify(['title', 'description', 'brand', 'model']),
     });
 
-    // Set filterable attributes
+    // Set filterable attributes (including spec fields and verification)
     await meiliRequest(`/indexes/${LISTINGS_INDEX}/settings/filterable-attributes`, {
       method: 'PUT',
       body: JSON.stringify([
         'category', 'condition', 'delivery_options', 'payment_mode',
-        'status', 'price_chf', 'is_revampit',
+        'status', 'price_chf', 'is_revampit', 'is_verified',
+        'spec_ram_gb', 'spec_storage_gb', 'spec_display_inches',
       ]),
     });
 
@@ -179,6 +192,12 @@ export async function searchListings(
     if (filters.price_max !== undefined) filterParts.push(`price_chf <= ${filters.price_max}`);
     if (filters.seller_type === 'revampit') filterParts.push('is_revampit = true');
     if (filters.seller_type === 'community') filterParts.push('is_revampit = false');
+    if (filters.gratis_only) filterParts.push('price_chf = 0');
+    if (filters.verified_only) filterParts.push('is_verified = true');
+    // Spec filters
+    if (filters.spec_ram_min !== undefined) filterParts.push(`spec_ram_gb >= ${filters.spec_ram_min}`);
+    if (filters.spec_storage_min !== undefined) filterParts.push(`spec_storage_gb >= ${filters.spec_storage_min}`);
+    if (filters.spec_display_min !== undefined) filterParts.push(`spec_display_inches >= ${filters.spec_display_min}`);
 
     // Map sort option to Meilisearch format
     let sortArray: string[] = [];

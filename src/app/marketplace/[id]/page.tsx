@@ -16,15 +16,19 @@ import {
   MessageSquare,
   Send,
   Shield,
+  ShieldCheck,
   Truck,
   CreditCard,
   Loader2,
   AlertCircle,
   Eye,
+  Cpu,
 } from 'lucide-react'
 import { getConditionBadge } from '@/config/erfassung/conditions'
-import { DELIVERY_LABELS, PAYMENT_MODE_LABELS, formatCHF } from '@/config/marketplace'
+import { ZUSTAND_OPTIONS } from '@/config/erfassung/conditions'
+import { DELIVERY_LABELS, PAYMENT_MODE_LABELS, formatCHF, getCategoryLabel, GRATIS_CONFIG, VERIFICATION_CONFIG } from '@/config/marketplace'
 import type { DeliveryOption, PaymentMode } from '@/config/marketplace'
+import { getConditionCriteria } from '@/config/marketplace/condition-criteria'
 import { formatDateShort } from '@/lib/date-formats'
 import ListingReviews from '@/components/marketplace/ListingReviews'
 
@@ -66,6 +70,11 @@ interface ListingDetail {
   seller_total_reviews: number | null
   images: ListingImage[]
   is_favorited: boolean
+  verified_at: string | null
+  verified_by: string | null
+  verification_notes: string | null
+  condition_checks: Array<{ key: string; label: string; checked: boolean }> | null
+  specs: Array<{ key: string; value: string; unit: string | null }> | null
 }
 
 export default function ListingDetailPage({ params }: { params: Promise<{ id: string }> }) {
@@ -179,6 +188,9 @@ export default function ListingDetailPage({ params }: { params: Promise<{ id: st
   const sellerName = listing.seller_display_name || listing.seller_name
   const images = listing.images.length > 0 ? listing.images : [{ id: 'placeholder', url: '', position: 0, is_primary: true }]
   const isOwner = session?.user?.id === listing.seller_id
+  const isGratis = Number(listing.price_chf) === 0
+  const isVerified = !!listing.verified_at
+  const conditionCriteria = getConditionCriteria(listing.category, listing.condition)
 
   return (
     <div className="max-w-6xl mx-auto">
@@ -234,11 +246,22 @@ export default function ListingDetailPage({ params }: { params: Promise<{ id: st
               {conditionBadge.label}
             </span>
             <span className="px-3 py-1 rounded-full text-xs font-medium bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300">
-              {listing.category}
+              {getCategoryLabel(listing.category)}
             </span>
-            {listing.is_revampit && (
+            {isVerified && (
+              <span className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium ${VERIFICATION_CONFIG.badge.color}`}>
+                <ShieldCheck className="w-3.5 h-3.5" aria-hidden="true" />
+                {VERIFICATION_CONFIG.badge.label}
+              </span>
+            )}
+            {listing.is_revampit && !isVerified && (
               <span className="px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
                 RevampIT
+              </span>
+            )}
+            {isGratis && (
+              <span className={`px-3 py-1 rounded-full text-xs font-bold ${GRATIS_CONFIG.color}`}>
+                {GRATIS_CONFIG.label}
               </span>
             )}
           </div>
@@ -248,7 +271,7 @@ export default function ListingDetailPage({ params }: { params: Promise<{ id: st
             <h1 className="text-2xl lg:text-3xl font-bold text-gray-900 dark:text-white mb-2">
               {listing.title}
             </h1>
-            <p className="text-3xl font-bold text-green-600">
+            <p className={`text-3xl font-bold ${isGratis ? 'text-teal-600' : 'text-green-600'}`}>
               {formatCHF(Number(listing.price_chf))}
             </p>
           </div>
@@ -455,6 +478,61 @@ export default function ListingDetailPage({ params }: { params: Promise<{ id: st
           {listing.description}
         </div>
       </div>
+
+      {/* Technische Daten (Specs) */}
+      {listing.specs && listing.specs.length > 0 && (
+        <div className="mt-6 bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
+          <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-3 flex items-center gap-2">
+            <Cpu className="w-5 h-5 text-gray-400" aria-hidden="true" />
+            Technische Daten
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-2">
+            {listing.specs.filter(s => s.value).map(spec => (
+              <div key={spec.key} className="flex justify-between py-1.5 border-b border-gray-100 dark:border-gray-700 last:border-0">
+                <span className="text-sm text-gray-500 dark:text-gray-400">{spec.key}</span>
+                <span className="text-sm font-medium text-gray-900 dark:text-white">
+                  {spec.value}{spec.unit ? ` ${spec.unit}` : ''}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Verification Details */}
+      {isVerified && (
+        <div className={`mt-6 rounded-xl p-6 shadow-sm border ${VERIFICATION_CONFIG.badge.borderColor} bg-green-50 dark:bg-green-900/10`}>
+          <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-2 flex items-center gap-2">
+            <ShieldCheck className="w-5 h-5 text-green-600" aria-hidden="true" />
+            {VERIFICATION_CONFIG.badge.label}
+          </h2>
+          <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">
+            Geprüft am {formatDateShort(listing.verified_at!)}
+          </p>
+          {listing.verification_notes && (
+            <p className="text-sm text-gray-700 dark:text-gray-300 mt-2 whitespace-pre-line">
+              {listing.verification_notes}
+            </p>
+          )}
+        </div>
+      )}
+
+      {/* Condition Criteria */}
+      {conditionCriteria && conditionCriteria.length > 0 && (
+        <div className="mt-6 bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
+          <h2 className="text-base font-bold text-gray-900 dark:text-white mb-3">
+            Was bedeutet &quot;{ZUSTAND_OPTIONS.find(o => o.value === listing.condition)?.label || listing.condition}&quot; für {getCategoryLabel(listing.category)}?
+          </h2>
+          <ul className="space-y-1.5">
+            {conditionCriteria.map(c => (
+              <li key={c.key} className="flex items-start gap-2 text-sm text-gray-600 dark:text-gray-300">
+                <span className="text-green-500 mt-0.5">&#10003;</span>
+                {c.label}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
 
       {/* Reviews */}
       <div className="mt-6">

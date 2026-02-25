@@ -1,5 +1,17 @@
 import type { Dispatch, SetStateAction } from 'react'
 
+export interface SpecFieldData {
+  key: string
+  value: string
+  unit?: string
+}
+
+export interface ConditionCheckData {
+  key: string
+  label: string
+  checked: boolean
+}
+
 export interface ListingFormData {
   title: string
   description: string
@@ -13,6 +25,8 @@ export interface ListingFormData {
   shippingCost: string
   pickupLocation: string
   paymentMode: string
+  specs: SpecFieldData[]
+  conditionChecks: ConditionCheckData[]
 }
 
 export type ListingFormUpdater = Dispatch<SetStateAction<ListingFormData>>
@@ -30,4 +44,6 @@ export const INITIAL_LISTING_FORM: ListingFormData = {
   shippingCost: '',
   pickupLocation: '',
   paymentMode: 'direct',
+  specs: [],
+  conditionChecks: [],
 }

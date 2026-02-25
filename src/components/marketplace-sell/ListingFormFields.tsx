@@ -1,13 +1,17 @@
 import {
-  MARKETPLACE_CATEGORIES,
   MARKETPLACE_LIMITS,
   DELIVERY_OPTIONS,
   DELIVERY_LABELS,
   PAYMENT_MODES,
   PAYMENT_MODE_LABELS,
+  MARKETPLACE_CATEGORY_VALUES,
+  CATEGORY_LABELS,
+  CATEGORY_ICONS,
 } from '@/config/marketplace'
 import { ZUSTAND_OPTIONS } from '@/config/erfassung/conditions'
-import type { ListingFormData, ListingFormUpdater } from './types'
+import { getConditionCriteria } from '@/config/marketplace/condition-criteria'
+import { SpecFields } from './SpecFields'
+import type { ListingFormData, ListingFormUpdater, SpecFieldData, ConditionCheckData } from './types'
 
 interface Props {
   formData: ListingFormData
@@ -17,6 +21,33 @@ interface Props {
 export function ListingFormFields({ formData, setFormData }: Props) {
   const update = <K extends keyof ListingFormData>(key: K, value: ListingFormData[K]) =>
     setFormData(prev => ({ ...prev, [key]: value }))
+
+  const handleCategoryChange = (value: string) => {
+    // Reset specs when category changes
+    setFormData(prev => ({ ...prev, category: value, specs: [], conditionChecks: [] }))
+  }
+
+  const handleConditionChange = (value: string) => {
+    // Load condition criteria for the selected category + condition
+    const criteria = getConditionCriteria(formData.category, value)
+    const checks: ConditionCheckData[] = criteria
+      ? criteria.map(c => ({ key: c.key, label: c.label, checked: false }))
+      : []
+    setFormData(prev => ({ ...prev, condition: value, conditionChecks: checks }))
+  }
+
+  const handleConditionCheckToggle = (key: string) => {
+    setFormData(prev => ({
+      ...prev,
+      conditionChecks: prev.conditionChecks.map(c =>
+        c.key === key ? { ...c, checked: !c.checked } : c
+      ),
+    }))
+  }
+
+  const handleSpecsChange = (specs: SpecFieldData[]) => {
+    update('specs', specs)
+  }
 
   return (
     <>
@@ -62,9 +93,12 @@ export function ListingFormFields({ formData, setFormData }: Props) {
             min="0"
             value={formData.price}
             onChange={(e) => update('price', e.target.value)}
-            placeholder="0.00"
+            placeholder="0 = Gratis"
             className="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
           />
+          {formData.price === '0' && (
+            <p className="text-xs text-teal-600 mt-1">Dieses Inserat wird als &quot;Gratis&quot; angezeigt</p>
+          )}
         </div>
         <div>
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
@@ -72,12 +106,14 @@ export function ListingFormFields({ formData, setFormData }: Props) {
           </label>
           <select
             value={formData.category}
-            onChange={(e) => update('category', e.target.value)}
+            onChange={(e) => handleCategoryChange(e.target.value)}
             className="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
           >
             <option value="">Wählen...</option>
-            {MARKETPLACE_CATEGORIES.map(cat => (
-              <option key={cat} value={cat}>{cat}</option>
+            {MARKETPLACE_CATEGORY_VALUES.map(val => (
+              <option key={val} value={val}>
+                {CATEGORY_ICONS[val] ? `${CATEGORY_ICONS[val]} ` : ''}{CATEGORY_LABELS[val] || val}
+              </option>
             ))}
           </select>
         </div>
@@ -87,7 +123,7 @@ export function ListingFormFields({ formData, setFormData }: Props) {
           </label>
           <select
             value={formData.condition}
-            onChange={(e) => update('condition', e.target.value)}
+            onChange={(e) => handleConditionChange(e.target.value)}
             className="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
           >
             <option value="">Wählen...</option>
@@ -97,6 +133,28 @@ export function ListingFormFields({ formData, setFormData }: Props) {
           </select>
         </div>
       </div>
+
+      {/* Condition Criteria Checklist */}
+      {formData.conditionChecks.length > 0 && (
+        <div className="rounded-lg border border-blue-200 dark:border-blue-800 bg-blue-50 dark:bg-blue-900/20 p-4">
+          <p className="text-sm font-medium text-blue-800 dark:text-blue-300 mb-3">
+            Was bedeutet &quot;{ZUSTAND_OPTIONS.find(o => o.value === formData.condition)?.label}&quot; für diese Kategorie?
+          </p>
+          <div className="space-y-2">
+            {formData.conditionChecks.map(check => (
+              <label key={check.key} className="flex items-start gap-2 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={check.checked}
+                  onChange={() => handleConditionCheckToggle(check.key)}
+                  className="mt-0.5 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                />
+                <span className="text-sm text-gray-700 dark:text-gray-300">{check.label}</span>
+              </label>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Brand + Model */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -125,6 +183,15 @@ export function ListingFormFields({ formData, setFormData }: Props) {
           />
         </div>
       </div>
+
+      {/* Spec Fields (dynamic based on category) */}
+      {formData.category && (
+        <SpecFields
+          categoryValue={formData.category}
+          specs={formData.specs}
+          onSpecsChange={handleSpecsChange}
+        />
+      )}
 
       {/* Delivery + Payment */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

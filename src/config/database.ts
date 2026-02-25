@@ -155,6 +155,7 @@ export const TABLE_NAMES = {
   // P2P Marketplace
   LISTINGS: 'listings',
   LISTING_IMAGES: 'listing_images',
+  LISTING_SPECS: 'listing_specs',
   LISTING_FAVORITES: 'listing_favorites',
   MARKETPLACE_ORDERS: 'marketplace_orders',
 

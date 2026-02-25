@@ -10,6 +10,7 @@ import { withAuth, ValidSession } from '@/lib/api/middleware';
 import { apiSuccess, apiError, apiNotFound, apiForbidden } from '@/lib/api/helpers';
 import { query, transaction } from '@/lib/auth/db';
 import { TABLE_NAMES } from '@/config/database';
+import { normalizeSpecValue, SPEC_MEILI_FIELD_MAP } from '@/config/marketplace';
 import { logger } from '@/lib/logger';
 import { validateBody, UpdateListingSchema } from '@/lib/schemas';
 import { hasAdminAccessUnified, type UnifiedUser } from '@/lib/auth/unified-permissions';
@@ -36,7 +37,7 @@ export async function GET(
       [id]
     ).catch(err => logger.error('Failed to increment view count', { error: err, listingId: id }));
 
-    // Fetch listing with all images + seller info
+    // Fetch listing with all images + seller info + verification data
     const result = await query(
       `SELECT
         l.id, l.seller_id, l.title, l.description, l.price_chf,
@@ -44,6 +45,8 @@ export async function GET(
         l.delivery_options, l.shipping_cost_chf, l.pickup_location,
         l.payment_mode, l.status, l.is_revampit,
         l.view_count, l.favorite_count, l.created_at, l.updated_at,
+        l.verified_at, l.verified_by, l.verification_notes,
+        l.condition_checks,
         u.name as seller_name,
         u.email as seller_email,
         sp.display_name as seller_display_name,
@@ -72,6 +75,15 @@ export async function GET(
       [id]
     );
 
+    // Fetch specs
+    const specsResult = await query(
+      `SELECT spec_key, spec_value, spec_unit, normalized_value
+       FROM ${TABLE_NAMES.LISTING_SPECS}
+       WHERE listing_id = $1
+       ORDER BY spec_key ASC`,
+      [id]
+    );
+
     // Check if current user has favorited
     let isFavorited = false;
     const session = await auth();
@@ -87,6 +99,7 @@ export async function GET(
     return apiSuccess({
       ...listing,
       images: imagesResult.rows,
+      specs: specsResult.rows,
       is_favorited: isFavorited,
     });
   } catch (error) {
@@ -122,12 +135,18 @@ export const PATCH = withAuth<{ id: string }>(async (
     if (!validation.success) return validation.error;
     const data = validation.data;
 
-    // Extract images separately
-    const { images, ...updateFields } = data;
+    // Extract images and specs separately
+    const { images, specs, condition_checks, ...updateFields } = data;
 
     await transaction(async (client) => {
-      // Dynamic UPDATE for non-image fields
+      // Build SET clauses for listing fields
       const entries = Object.entries(updateFields).filter(([, v]) => v !== undefined);
+
+      // Add condition_checks if provided
+      if (condition_checks !== undefined) {
+        entries.push(['condition_checks', condition_checks ? JSON.stringify(condition_checks) : null]);
+      }
+
       if (entries.length > 0) {
         const setClauses: string[] = [];
         const values: unknown[] = [];
@@ -162,6 +181,32 @@ export const PATCH = withAuth<{ id: string }>(async (
           imageParams
         );
       }
+
+      // Replace specs if provided
+      if (specs !== undefined) {
+        await client.query(
+          `DELETE FROM ${TABLE_NAMES.LISTING_SPECS} WHERE listing_id = $1`,
+          [id]
+        );
+        if (specs.length > 0) {
+          const specValues: string[] = [];
+          const specParams: unknown[] = [];
+          let idx = 1;
+          for (const spec of specs) {
+            if (!spec.value.trim()) continue;
+            const normalized = normalizeSpecValue(spec.key, spec.value);
+            specValues.push(`($${idx++}, $${idx++}, $${idx++}, $${idx++}, $${idx++})`);
+            specParams.push(id, spec.key, spec.value, spec.unit || null, normalized);
+          }
+          if (specValues.length > 0) {
+            await client.query(
+              `INSERT INTO ${TABLE_NAMES.LISTING_SPECS} (listing_id, spec_key, spec_value, spec_unit, normalized_value)
+              VALUES ${specValues.join(', ')}`,
+              specParams
+            );
+          }
+        }
+      }
     });
 
     logger.info('Listing updated', { listingId: id, userId: session.user.id });
@@ -174,6 +219,7 @@ export const PATCH = withAuth<{ id: string }>(async (
         `SELECT l.id, l.title, l.description, l.brand, l.model, l.category, l.condition,
           l.price_chf, l.delivery_options, l.payment_mode, l.status, l.is_revampit,
           l.pickup_location, l.view_count, l.favorite_count, l.created_at,
+          l.verified_at,
           u.name as seller_name, sp.city as seller_city,
           (SELECT li.url FROM ${TABLE_NAMES.LISTING_IMAGES} li WHERE li.listing_id = l.id AND li.is_primary = true LIMIT 1) as thumbnail
         FROM ${TABLE_NAMES.LISTINGS} l
@@ -181,8 +227,28 @@ export const PATCH = withAuth<{ id: string }>(async (
         LEFT JOIN ${TABLE_NAMES.SELLER_PROFILES} sp ON l.seller_id = sp.user_id
         WHERE l.id = $1 AND l.status = 'active'`,
         [id]
-      ).then(res => {
-        if (res.rows[0]) indexListing(res.rows[0] as MeilisearchDocument).catch(err => logger.error('Failed to index listing in Meilisearch', { error: err, listingId: id }));
+      ).then(async res => {
+        if (res.rows[0]) {
+          const row = res.rows[0] as Record<string, unknown>;
+          // Fetch specs for Meilisearch
+          const specsRes = await query(
+            `SELECT spec_key, spec_value FROM ${TABLE_NAMES.LISTING_SPECS} WHERE listing_id = $1`,
+            [id]
+          );
+          const meiliSpecs: Record<string, number | null> = {};
+          for (const specRow of specsRes.rows) {
+            const s = specRow as { spec_key: string; spec_value: string };
+            const meiliField = SPEC_MEILI_FIELD_MAP[s.spec_key];
+            if (meiliField) {
+              meiliSpecs[meiliField] = normalizeSpecValue(s.spec_key, s.spec_value);
+            }
+          }
+          indexListing({
+            ...row,
+            is_verified: !!row.verified_at,
+            ...meiliSpecs,
+          } as MeilisearchDocument).catch(err => logger.error('Failed to index listing in Meilisearch', { error: err, listingId: id }));
+        }
       }).catch(err => logger.error('Failed to fetch listing for Meilisearch index', { error: err, listingId: id }));
     }
 

@@ -2,13 +2,13 @@
  * ListingCard Component
  *
  * Reusable card component for marketplace listings.
- * Eliminates ~150 lines of duplicated code across marketplace pages.
+ * Shows spec tags, gratis badge, and verified badge.
  */
 
 import Link from 'next/link'
-import { Package, TrendingUp, Star, MapPin, Heart } from 'lucide-react'
+import { Package, Star, MapPin, Heart, ShieldCheck } from 'lucide-react'
 import { getConditionBadge } from '@/config/erfassung/conditions'
-import { formatCHF } from '@/config/marketplace'
+import { formatCHF, GRATIS_CONFIG, VERIFICATION_CONFIG } from '@/config/marketplace'
 
 export interface ListingCardData {
   id: string
@@ -24,6 +24,8 @@ export interface ListingCardData {
   seller_rating: number | null
   seller_city: string | null
   thumbnail: string | null
+  verified_at?: string | null
+  specs?: Array<{ key: string; value: string; unit: string | null }>
 }
 
 interface ListingCardProps {
@@ -32,10 +34,28 @@ interface ListingCardProps {
   className?: string
 }
 
+/** Pick the most important specs to show as tags on the card (max 3) */
+function getSpecTags(specs?: Array<{ key: string; value: string; unit: string | null }>): string[] {
+  if (!specs || specs.length === 0) return []
+  const priority = ['RAM', 'Speicher', 'Display', 'Grösse', 'CPU', 'Prozessor']
+  const tags: string[] = []
+  for (const key of priority) {
+    const spec = specs.find(s => s.key === key && s.value)
+    if (spec) {
+      tags.push(spec.value)
+      if (tags.length >= 3) break
+    }
+  }
+  return tags
+}
+
 export function ListingCard({ listing, variant = 'default', className = '' }: ListingCardProps) {
   const conditionInfo = getConditionBadge(listing.condition)
   const sellerName = listing.seller_display_name || listing.seller_name
   const isCompact = variant === 'compact'
+  const isGratis = Number(listing.price_chf) === 0
+  const isVerified = !!listing.verified_at
+  const specTags = getSpecTags(listing.specs)
 
   return (
     <Link
@@ -63,12 +83,30 @@ export function ListingCard({ listing, variant = 'default', className = '' }: Li
           </span>
         </div>
 
-        {/* RevampIT Badge */}
-        {listing.is_revampit && (
+        {/* Verified Badge (top right) */}
+        {isVerified && (
+          <div className="absolute top-2 right-2">
+            <span className={`inline-flex items-center gap-1 px-2 py-0.5 text-xs font-semibold rounded-full ${VERIFICATION_CONFIG.badge.color}`}>
+              <ShieldCheck className="w-3 h-3" />
+              {!isCompact && VERIFICATION_CONFIG.badge.shortLabel}
+            </span>
+          </div>
+        )}
+
+        {/* RevampIT Badge (top right, only if not verified — avoid overlap) */}
+        {listing.is_revampit && !isVerified && (
           <div className="absolute top-2 right-2">
             <span className="inline-flex items-center gap-1 px-2 py-0.5 text-xs font-semibold rounded-full bg-green-100 text-green-800">
-              <TrendingUp className="w-3 h-3" />
               {!isCompact && 'RevampIT'}
+            </span>
+          </div>
+        )}
+
+        {/* Gratis Badge (bottom left) */}
+        {isGratis && (
+          <div className="absolute bottom-2 left-2">
+            <span className={`inline-flex px-2 py-0.5 text-xs font-bold rounded-full ${GRATIS_CONFIG.color}`}>
+              {GRATIS_CONFIG.label}
             </span>
           </div>
         )}
@@ -80,9 +118,20 @@ export function ListingCard({ listing, variant = 'default', className = '' }: Li
           {listing.title}
         </h3>
 
-        <p className={`${isCompact ? 'text-base' : 'text-lg'} font-bold text-gray-900 dark:text-white mb-2`}>
+        <p className={`${isCompact ? 'text-base' : 'text-lg'} font-bold mb-1 ${isGratis ? 'text-teal-600' : 'text-gray-900 dark:text-white'}`}>
           {formatCHF(Number(listing.price_chf))}
         </p>
+
+        {/* Spec Tags */}
+        {specTags.length > 0 && !isCompact && (
+          <div className="flex flex-wrap gap-1 mb-2">
+            {specTags.map((tag, idx) => (
+              <span key={idx} className="inline-flex px-1.5 py-0.5 text-[10px] font-medium rounded bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300">
+                {tag}
+              </span>
+            ))}
+          </div>
+        )}
 
         {/* Seller Info */}
         <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400">
