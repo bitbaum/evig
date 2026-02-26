@@ -1,239 +1,184 @@
-# RevampIT - Sustainable Technology for Everyone
+# RevampIT
 
-<div align="center">
+Technology deserves a second life. So does the right to use it.
 
-![RevampIT Logo](https://revamp-it.ch/assets/logo.png)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6.svg)](https://www.typescriptlang.org/)
+[![Next.js](https://img.shields.io/badge/Next.js-16-000.svg)](https://nextjs.org/)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Neon-336791.svg)](https://neon.tech/)
+[![Live](https://img.shields.io/badge/Live-revamp--it.ch-green.svg)](https://revamp-it.ch)
 
-**Giving Technology a Second Life Through Sustainable IT Practices**
+## Mission
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Next.js](https://img.shields.io/badge/Next.js-13+-black)](https://nextjs.org/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-4.9+-blue)](https://www.typescriptlang.org/)
-[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15+-blue)](https://www.postgresql.org/)
-[![Docker](https://img.shields.io/badge/Docker-Ready-blue)](https://www.docker.com/)
+RevampIT is a Swiss nonprofit enabling the free exchange of technology on a nonprofit basis. We redistribute computers, hardware, and software while promoting open-source as the ideal form of human collaboration. Based in Zurich, everything we build serves that mission -- including this codebase.
 
-[Website](https://revamp-it.ch) • [Contribute](#contributing) • [Documentation](#documentation) • [Report Bug](https://github.com/g-but/revampit/issues)
+## Architecture
 
-</div>
+### Why a Custom CMS
 
----
+We built a lightweight CMS instead of adopting Strapi. The reasoning:
 
-## 🌟 About RevampIT
+- **Complete control** over features and TypeScript integration -- no fighting the framework
+- **Lighter footprint** -- simpler deployment, lower resource usage
+- **No complexity tax** -- Strapi's setup conflicts and over-engineering weren't worth it
 
-RevampIT is a Swiss non-profit organization dedicated to **enabling free exchange of technology** between individuals and groups, promoting **open-source hardware and software** as the ideal form of human collaboration.
+The CMS runs as an Express.js backend (port 3001) with JWT authentication, role-based access control (Admin / Editor / Viewer), and a RESTful API.
 
-### Our Mission
+### TABLE_NAMES as Single Source of Truth
 
-**Primary Goal**: Enable free exchange of technology on a nonprofit basis, promoting open-source solutions that can compete fairly with proprietary software.
+`src/config/database.ts` defines 165 table name constants. Every database query references `TABLE_NAMES` -- never a hardcoded string. The constants are organized into logical groups:
 
-#### Core Activities
+```
+User & Auth | Inventory | Messaging | Services | Workshops | Locations
+Applications | Payments | Reviews | Documents | IT-Hilfe | HIRN AI
+Staff | Tasks | Content | Activity Stream | Meeting Protocols
+P2P Marketplace | Organizational Numbers
+```
 
-- ♻️ **Technology Redistribution**: Redistribute computers, hardware, software, compute resources, and memory resources (servers) on a nonprofit, free basis
-- 🔓 **Open Source Advocacy**: Enable open-source hardware and software to compete with proprietary solutions, demonstrating that decentralized development can exceed centralized corporations
-- 🌍 **Environmental Impact Measurement**: Track CO2 impact of all electricity use (toasters, TVs, computers, AI, robotics, food production) to enable true individual environmental awareness
-- 💱 **Subscription Exchange**: Facilitate community funding of subscriptions when needed, while maintaining open-source alternatives until maturity
-- 🏫 **Education**: Provide workshops on Linux, open-source software, hardware repair, and sustainable technology practices
-- 🤝 **Community**: Build a network of volunteers, technical experts, and partners across national boundaries
-- 🌱 **Sustainability**: Promote responsible technology consumption, circular economy, and environmental consciousness
+Related SSOT exports live alongside: `APPOINTMENT_ROLES`, `REVIEW_TARGET_TYPES`, `CONVERSATION_TYPES`, `SERVICE_CATEGORIES`, `FEATURED_SERVICE_SLUGS`.
 
-#### Technology We Redistribute
+Adding a new domain means adding constants to one file. If a table name is wrong, it's wrong in one place.
 
-- Old computers and computer parts
-- Old synthesizers and DJ controllers
-- Old hardware (computers, peripherals)
-- Old software (proprietary software given away for free)
-- Compute resources (servers, cloud infrastructure)
-- Memory resources (servers, storage)
-- Bicycles and furniture (supporting sustainable living)
+### Permission System
 
-#### Vision
+Three tiers, zero ambiguity:
 
-As development becomes more decentralized and can be done without big teams, **open source will ultimately exceed the capacities of big, centralized corporations**. The most beautiful way for this to happen is through **technological collaboration and exchange beyond national boundaries**, making it easy and simple for individuals and groups to share technology, knowledge, and resources.
+```
+Users  -->  Staff (@revamp-it.ch email)  -->  Super Admins (hardcoded list)
+```
 
-**See [Nonprofit Legal Compliance Documentation](docs/LEGAL_NONPROFIT_COMPLIANCE.md) for full mission statement and legal requirements.**
+- `is_staff` boolean + `staff_permissions` text array on the users table
+- Staff detection by email domain; super admins by explicit list
+- Sensitive sections require permission checks -- no implicit trust
 
-## 🚀 Technology Stack
+### Content Approval Flow
 
-### Frontend
-- **[Next.js 13+](https://nextjs.org/)** - React framework with server-side rendering
-- **[TypeScript](https://www.typescriptlang.org/)** - Type-safe JavaScript
-- **[Tailwind CSS](https://tailwindcss.com/)** - Utility-first CSS framework
-- **[React Hook Form](https://react-hook-form.com/)** - Forms with validation
+```
+draft --> pending --> approved / rejected
+```
 
-### Backend & CMS
-- **[Node.js](https://nodejs.org/)** - JavaScript runtime
-- **[Express.js](https://expressjs.com/)** - Web application framework
-- **[PostgreSQL](https://www.postgresql.org/)** - Relational database
-- **[JWT](https://jwt.io/)** - Authentication and authorization
-- **Custom CMS** - Content management for non-technical users
+Stored in `user_content_submissions`. Nothing goes live without review.
 
-### Infrastructure
-- **[Docker](https://www.docker.com/)** - Containerization
-- **[Vercel](https://vercel.com/)** - Frontend hosting and deployment
-- **[GitHub Actions](https://github.com/features/actions)** - CI/CD workflows
+### HIRN AI
 
-## 🛠️ Quick Start
+In-house AI knowledge management system with an action cockpit and executor. Handles organizational intelligence -- not a chatbot wrapper.
+
+### Development Standards
+
+These are enforced, not suggested:
+
+- **Logger** -- `import { logger } from '@/lib/logger'`. Never `console.log`.
+- **TABLE_NAMES** -- never hardcoded table strings. Import from `src/config/database.ts`.
+- **Parameterized queries** -- never string concatenation. No exceptions.
+- **Swiss German** -- user-facing text uses `ss` (not `ß`), proper `ä/ö/ü` (never `ae/oe/ue`). `npm run lint:umlauts` catches violations.
+
+## Tech Stack
+
+| Layer | Technology |
+|-------|------------|
+| Frontend | Next.js 16, React 18, TypeScript 5, Tailwind 3 |
+| CMS | Express.js, JWT, RBAC |
+| Database | PostgreSQL (Neon), Redis, Meilisearch |
+| Payments | Stripe |
+| Email | Nodemailer (Listmonk / Brevo) |
+| AI | HIRN (in-house), OpenAI |
+| Maps | Leaflet |
+| Testing | Jest (312 tests), Playwright (E2E) |
+| CI/CD | GitHub Actions, Vercel |
+
+<details>
+<summary><strong>Quick Start</strong></summary>
 
 ### Prerequisites
-- Node.js 18+ 
-- PostgreSQL 13+
-- Docker (optional)
 
-### Installation
+- Node.js 20+
+- PostgreSQL (or a Neon account)
+- Redis
+
+### Setup
 
 ```bash
-# Clone the repository
-git clone https://github.com/g-but/revampit.git
+git clone https://github.com/revamp-it/revampit.git
 cd revampit
-
-# Install dependencies
+cp .env.example .env.local    # fill in your database URL, Stripe keys, etc.
 npm install
-
-# Set up environment variables
-cp environment.example .env.local
-# Edit .env.local with your configuration
-
-# 🚀 One-command setup (starts everything!)
-npm run d
-
-# Setup admin users
-npm run setup-admins
+npm run db:migrate
+npm run dev                    # Next.js on :3000, CMS on :3001
 ```
 
-### Access Points
-- **Frontend**: http://localhost:3000
-- **Unified Admin Dashboard**: http://localhost:3000/admin
-- **AI CMS Editor**: http://localhost:3000/ai-cms
-- **Shop Frontend**: http://localhost:3000/shop
+### Environment Variables
 
-## 📁 Project Structure
+At minimum, configure:
+
+- `DATABASE_URL` -- PostgreSQL connection string
+- `REDIS_URL` -- Redis connection string
+- `STRIPE_SECRET_KEY` / `STRIPE_WEBHOOK_SECRET`
+- `JWT_SECRET`
+
+See `.env.example` for the full list.
+
+</details>
+
+## Testing
+
+312 tests across 24 suites.
+
+| Category | Coverage |
+|----------|----------|
+| API routes | Notifications, admin, IT-Hilfe |
+| Business logic | Protocols, payments, currency, tax compliance, HIRN AI |
+| Auth | Password handling, permissions, rate limiter |
+| Data processing | Bulk extraction, file parsing, CSV export/import |
+| Validation | Schema tests |
+| E2E (Playwright) | Auth smoke, marketplace, IT-Hilfe, security |
+
+```bash
+npm test              # run all Jest tests
+npm run test:e2e      # run Playwright E2E suite
+```
+
+### CI Pipeline
+
+Defined in `.github/workflows/ci.yml`:
+
+1. **Code Quality** -- ESLint + TypeScript type check + Next.js build
+2. **Auth Smoke Test** -- Playwright, runs conditionally
+3. **Unit Tests** -- Jest, PR only
+
+Vercel handles production deployment on merge to `main`.
+
+## Project Structure
 
 ```
-revampit/
-├── src/                      # Frontend source code
-│   ├── app/                  # Next.js app directory
-│   ├── components/           # Reusable UI components
-│   └── lib/                  # Utilities and configurations
-├── cms-api/                  # Custom CMS backend
-│   ├── src/                  # API source code
-│   ├── migrations/           # Database migrations
-│   └── uploads/              # File storage
-├── public/                   # Static assets
-├── docs/                     # Documentation
-├── tests/                    # Test files
-└── docker-compose.yml        # Development services
+src/
+  app/              # Next.js pages and API routes
+  components/       # React components (UI only, no business logic)
+  config/
+    database.ts     # TABLE_NAMES SSOT (165 constants)
+  lib/
+    auth/           # JWT, permissions, staff detection
+    domain/         # Business logic (no HTTP, no UI)
+    email/          # Templates and delivery
+    logger.ts       # Structured logging
+  hooks/            # Data fetching, state management
+scripts/
+  db/migrations/    # Sequential SQL migrations
+tests/              # Jest test suites
+e2e/                # Playwright E2E tests
+cms/                # Express.js CMS backend
 ```
 
-## 🎯 Features
+## Contributing
 
-### Public Website
-- 📱 **Responsive Design** - Mobile-first approach
-- 🔍 **SEO Optimized** - Server-side rendering and meta tags
-- 🌐 **Multilingual** - German and English support
-- ⚡ **Performance** - Optimized images and lazy loading
-- ♿ **Accessibility** - WCAG 2.1 compliant
+1. Fork and create a feature branch
+2. Follow the development standards (TABLE_NAMES, logger, parameterized queries, Swiss German rules)
+3. Run `npm test` and `npm run lint:umlauts` before pushing
+4. Open a PR against `main` -- CI will validate code quality and tests
 
-### Content Management
-- 🔐 **Secure Authentication** - JWT-based admin access
-- ✏️ **Rich Text Editor** - WYSIWYG content editing
-- 📄 **Page Management** - Create and edit static pages
-- 👥 **User Management** - Role-based access control
-- 🖼️ **Media Management** - Image upload and optimization
+## License
 
-### Services
-- 🛠️ **Hardware Services** - Computer repair and refurbishment
-- 🐧 **Linux Support** - Open-source software consulting
-- 🏢 **Enterprise Solutions** - Custom IT solutions for businesses
-- 📚 **Workshops** - Educational programs and training
-- 🌐 **Web Development** - Modern web solutions
-
-## 🤝 Contributing
-
-We welcome contributions from developers, designers, translators, and anyone passionate about sustainable technology!
-
-### How to Contribute
-1. **Fork** the repository
-2. **Create** a feature branch (`git checkout -b feature/amazing-feature`)
-3. **Commit** your changes (`git commit -m 'Add amazing feature'`)
-4. **Push** to the branch (`git push origin feature/amazing-feature`)
-5. **Open** a Pull Request
-
-### Areas for Contribution
-- 💻 **Frontend Development** - React/Next.js components and pages
-- 🔧 **Backend Development** - API endpoints and database design
-- 🎨 **UI/UX Design** - Interface design and user experience
-- 📝 **Documentation** - Technical writing and guides
-- 🌐 **Translations** - German ↔ English localization
-- 🧪 **Testing** - Unit tests, integration tests, and E2E tests
-- 📊 **Analytics** - Performance monitoring and optimization
-
-### Development Guidelines
-- Follow TypeScript best practices
-- Write meaningful commit messages
-- Add tests for new features
-- Ensure accessibility standards
-- Maintain responsive design
-- Update documentation
-
-## 📚 Documentation
-
-- [Installation Guide](docs/installation.md)
-- [System Integration](docs/system-integration.md)
-- [Migration Guide](docs/migration.md)
-- [Deployment Guide](docs/deployment.md)
-- [CMS Solution](docs/cms-solution.md)
-- [Contributing Guidelines](CONTRIBUTING.md)
-
-## 🗺️ Roadmap
-
-### Current Focus
-- ✅ Custom CMS Implementation
-- ✅ Admin Interface
-- ✅ Content Management
-- ⏳ User Authentication
-- ⏳ Media Management
-
-### Upcoming Features
-- 📝 **Blog System** - News and updates
-- 🛒 **E-commerce Integration** - Online shop for refurbished devices
-- 📅 **Event Management** - Workshop scheduling and registration
-- 📊 **Analytics Dashboard** - Website and service metrics
-- 🔔 **Notification System** - Email newsletters and alerts
-- 🌍 **Multi-language Support** - Expanded localization
-
-## 📞 Support & Community
-
-### Get Help
-- 📧 **Email**: info@revamp-it.ch
-- 🐛 **Issues**: [GitHub Issues](https://github.com/g-but/revampit/issues)
-- 💬 **Discussions**: [GitHub Discussions](https://github.com/g-but/revampit/discussions)
-
-### Visit Us
-**RevampIT Headquarters**  
-Badenerstrasse 816  
-8048 Zürich, Switzerland
-
-**Office Hours**  
-Monday - Friday: 13:00 - 17:00  
-Workshops: By appointment
-
-## 📜 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 🙏 Acknowledgments
-
-- Thanks to all our **volunteers** and **contributors**
-- **Open Source Community** for the amazing tools and libraries
-- **Swiss Non-Profit Sector** for supporting our mission
-- **Local Community** in Zürich for their continuous support
+MIT
 
 ---
 
-<div align="center">
-
-**Made with ❤️ by the RevampIT community**
-
-[🌐 Website](https://revamp-it.ch) • [📧 Contact](mailto:info@revamp-it.ch) • [𝕏 X](https://twitter.com/revampit) • [💼 LinkedIn](https://linkedin.com/company/revampit)
-
-</div>
+RevampIT -- Badenerstrasse 816, 8048 Zurich -- [revamp-it.ch](https://revamp-it.ch)
