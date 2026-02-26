@@ -11,7 +11,7 @@ import { useState } from 'react'
 import { X } from 'lucide-react'
 import { ProductForm } from '@/components/erfassung/ProductForm'
 import type { BulkProduct, ErfassungFormData } from '@/types/erfassung'
-import { SPEC_TEMPLATES } from '@/config/erfassung'
+import { SPEC_TEMPLATES, templateToSpecFields } from '@/config/erfassung'
 
 interface BulkDetailPanelProps {
   product: BulkProduct
@@ -32,7 +32,7 @@ export function BulkDetailPanel({ product, onUpdate, onClose }: BulkDetailPanelP
       ...prev,
       hauptkategorie: kategorie,
       unterkategorie: '',
-      specs: SPEC_TEMPLATES[kategorie] || SPEC_TEMPLATES.default,
+      specs: templateToSpecFields(SPEC_TEMPLATES[kategorie] || SPEC_TEMPLATES.default),
     }))
   }
 

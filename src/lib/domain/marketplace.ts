@@ -5,7 +5,7 @@
  * Handles form-to-API transformation and validation.
  */
 
-import { CreateListingSchema, type CreateListingInput } from '@/lib/schemas/marketplace'
+import { CreateListingSchema } from '@/lib/schemas/marketplace'
 import type { ListingFormData } from '@/components/marketplace-sell/types'
 
 /**
@@ -23,8 +23,9 @@ export function validateListingForm(formData: ListingFormData): string | null {
 
 /**
  * Transform client-side form data to the API payload shape.
+ * Returns a plain object — validated by CreateListingSchema.safeParse in validateListingForm.
  */
-export function transformListingFormToPayload(formData: ListingFormData): CreateListingInput {
+export function transformListingFormToPayload(formData: ListingFormData) {
   return {
     title: formData.title.trim(),
     description: formData.description.trim(),
@@ -34,16 +35,16 @@ export function transformListingFormToPayload(formData: ListingFormData): Create
     brand: formData.brand.trim() || null,
     model: formData.model.trim() || null,
     images: formData.images,
-    delivery_options: formData.deliveryOptions as CreateListingInput['delivery_options'],
+    delivery_options: formData.deliveryOptions,
     shipping_cost_chf: formData.shippingCost ? parseFloat(formData.shippingCost) : null,
     pickup_location: formData.pickupLocation.trim() || null,
-    payment_mode: formData.paymentMode as CreateListingInput['payment_mode'],
+    payment_mode: formData.paymentMode,
     specs: formData.specs.filter(s => s.value.trim()).map(s => ({
       key: s.key,
       value: s.value.trim(),
       unit: s.unit || null,
     })),
-    status: 'active' as const,
+    status: 'active',
     condition_checks: formData.conditionChecks.length > 0
       ? formData.conditionChecks.map(c => ({ key: c.key, checked: c.checked }))
       : undefined,

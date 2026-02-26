@@ -81,7 +81,9 @@ export const CreateListingSchema = z.object({
   price_chf: z.number()
     .min(0, 'Preis muss mindestens 0 sein')
     .max(MARKETPLACE_LIMITS.MAX_PRICE_CHF, `Preis darf maximal ${MARKETPLACE_LIMITS.MAX_PRICE_CHF} CHF sein`),
-  category: z.string().min(1, 'Kategorie erforderlich'),
+  category: z.enum(MARKETPLACE_CATEGORY_VALUES, {
+    error: 'Ungültige Kategorie',
+  }),
   condition: z.enum(LISTING_CONDITIONS as unknown as [string, ...string[]], {
     error: 'Ungültiger Zustand',
   }),

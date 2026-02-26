@@ -6,6 +6,7 @@
 import { NextRequest } from 'next/server'
 import { query } from '@/lib/auth/db'
 import { apiError, apiSuccess } from '@/lib/api/helpers'
+import { QueryParams } from '@/lib/api/query-builder'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
@@ -57,46 +58,22 @@ export async function GET(request: NextRequest) {
     const offset = parseInt(searchParams.get('offset') || '0')
 
     // Build WHERE conditions
-    const conditions: string[] = ['hp.is_active = true']
-    const params: (string | string[] | number | boolean)[] = []
-    let paramIndex = 1
+    const qb = new QueryParams()
+    qb.addRaw('hp.is_active = true')
 
     if (skills.length > 0) {
-      conditions.push(`EXISTS (
+      qb.add(`EXISTS (
         SELECT 1 FROM ${TABLE_NAMES.USER_SKILLS} us
-        WHERE us.user_id = hp.user_id AND us.skill_id = ANY($${paramIndex}::text[])
-      )`)
-      params.push(skills)
-      paramIndex++
+        WHERE us.user_id = hp.user_id AND us.skill_id = ANY($P::text[])
+      )`, skills)
     }
+    if (canton) qb.add('hp.location_canton = $P', canton)
+    if (postalCode) qb.add('hp.location_postal_code = $P', postalCode)
+    if (acceptsGratis) qb.addRaw('hp.accepts_gratis = true')
+    if (acceptsKulturlegi) qb.addRaw('hp.accepts_kulturlegi = true')
+    if (serviceType) qb.add('$P = ANY(hp.service_types)', serviceType)
 
-    if (canton) {
-      conditions.push(`hp.location_canton = $${paramIndex}`)
-      params.push(canton)
-      paramIndex++
-    }
-
-    if (postalCode) {
-      conditions.push(`hp.location_postal_code = $${paramIndex}`)
-      params.push(postalCode)
-      paramIndex++
-    }
-
-    if (acceptsGratis) {
-      conditions.push(`hp.accepts_gratis = true`)
-    }
-
-    if (acceptsKulturlegi) {
-      conditions.push(`hp.accepts_kulturlegi = true`)
-    }
-
-    if (serviceType) {
-      conditions.push(`$${paramIndex} = ANY(hp.service_types)`)
-      params.push(serviceType)
-      paramIndex++
-    }
-
-    const whereClause = conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : ''
+    const { where: whereClause, params, nextIndex } = qb.build()
 
     // Query helpers with their skills
     const helpersResult = await query(
@@ -125,7 +102,7 @@ export async function GET(request: NextRequest) {
                hp.location_postal_code, hp.location_city, hp.location_canton,
                hp.max_travel_km
       ORDER BY skill_count DESC, u.name ASC
-      LIMIT $${paramIndex} OFFSET $${paramIndex + 1}
+      LIMIT $${nextIndex} OFFSET $${nextIndex + 1}
     `,
       [...params, limit, offset]
     )
@@ -144,7 +121,6 @@ export async function GET(request: NextRequest) {
     const helpers = (helpersResult.rows as HelperRow[]).map((row) => ({
       userId: row.user_id,
       name: row.user_name,
-      // Only expose email to authenticated users
       bio: row.bio,
       hourlyRateCents: row.hourly_rate_cents,
       acceptsGratis: row.accepts_gratis,

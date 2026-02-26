@@ -3,9 +3,12 @@
  *
  * Dynamic spec input fields based on the selected category.
  * Uses SPEC_TEMPLATES from erfassung config (SSOT).
+ *
+ * Template specs appear first (with placeholders), followed by
+ * any custom specs the user or AI added that aren't in the template.
  */
 
-import { getSpecTemplate } from '@/config/erfassung/spec-templates'
+import { getSpecTemplate, type SpecTemplate } from '@/config/erfassung/spec-templates'
 import type { SpecFieldData } from './types'
 
 interface SpecFieldsProps {
@@ -14,21 +17,24 @@ interface SpecFieldsProps {
   onSpecsChange: (specs: SpecFieldData[]) => void
 }
 
+interface MergedSpec {
+  key: string
+  value: string
+  unit?: string
+  placeholder?: string
+}
+
 export function SpecFields({ categoryValue, specs, onSpecsChange }: SpecFieldsProps) {
   if (!categoryValue) return null
 
   const template = getSpecTemplate(categoryValue)
   if (!template || template.length === 0) return null
 
-  // Merge template with existing specs (keep existing values, add missing)
-  const mergedSpecs = template.map(tmpl => {
-    const existing = specs.find(s => s.key === tmpl.key)
-    return { placeholder: tmpl.placeholder, ...(existing || { key: tmpl.key, value: '', unit: undefined }) }
-  })
+  const mergedSpecs = mergeSpecsWithTemplate(specs, template)
 
   const handleChange = (key: string, value: string) => {
-    const updated = mergedSpecs.map(s =>
-      s.key === key ? { ...s, value } : s
+    const updated: SpecFieldData[] = mergedSpecs.map(s =>
+      s.key === key ? { key: s.key, value, unit: s.unit } : { key: s.key, value: s.value, unit: s.unit }
     )
     onSpecsChange(updated)
   }
@@ -57,4 +63,31 @@ export function SpecFields({ categoryValue, specs, onSpecsChange }: SpecFieldsPr
       </div>
     </div>
   )
+}
+
+/**
+ * Merge existing specs with template.
+ * Template specs come first (with placeholders), preserving existing values.
+ * Custom specs (not in template) are appended at the end — never dropped.
+ */
+function mergeSpecsWithTemplate(specs: SpecFieldData[], template: SpecTemplate[]): MergedSpec[] {
+  const templateKeys = new Set(template.map(t => t.key))
+
+  // Template specs first — use existing value if present
+  const fromTemplate: MergedSpec[] = template.map(tmpl => {
+    const existing = specs.find(s => s.key === tmpl.key)
+    return {
+      key: tmpl.key,
+      value: existing?.value ?? '',
+      unit: existing?.unit,
+      placeholder: tmpl.placeholder,
+    }
+  })
+
+  // Custom specs that aren't in the template — preserve them
+  const custom: MergedSpec[] = specs
+    .filter(s => !templateKeys.has(s.key))
+    .map(s => ({ key: s.key, value: s.value, unit: s.unit }))
+
+  return [...fromTemplate, ...custom]
 }

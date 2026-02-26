@@ -9,7 +9,6 @@ import {
   Eye,
   Package,
   Loader2,
-  AlertCircle,
   Camera,
 } from 'lucide-react'
 import { MARKETPLACE_LIMITS } from '@/config/marketplace'
@@ -21,6 +20,7 @@ import { ImageUploadGrid } from '@/components/marketplace-sell/ImageUploadGrid'
 import { ListingFormFields } from '@/components/marketplace-sell/ListingFormFields'
 import { ListingPreview } from '@/components/marketplace-sell/ListingPreview'
 import { AICameraProductListing } from '@/components/marketplace/ai-camera'
+import { ErrorAlert } from '@/components/common/ErrorAlert'
 import type { DetectedProductData } from '@/components/marketplace/ai-camera/types'
 
 type Step = 'form' | 'preview'
@@ -327,10 +327,7 @@ function SellPageContent() {
         {/* Form Footer */}
         <div className="p-6 border-t border-gray-100 dark:border-gray-700">
           {error && (
-            <div className="mb-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-3 flex items-center gap-2">
-              <AlertCircle className="w-4 h-4 text-red-500 flex-shrink-0" />
-              <p className="text-sm text-red-800 dark:text-red-200">{error}</p>
-            </div>
+            <ErrorAlert message={error} variant="inline" className="mb-4" />
           )}
           <div className="flex gap-3">
             <Link

@@ -3,7 +3,7 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import { logger } from '@/lib/logger'
 import type { ErfassungFormData, AIFieldMetadata } from '@/types/erfassung'
 import { DEFAULT_FORM_DATA, formDataToPayload } from '@/types/erfassung'
-import { SPEC_TEMPLATES } from '@/config/erfassung'
+import { SPEC_TEMPLATES, templateToSpecFields } from '@/config/erfassung'
 
 /**
  * Merge partial AI/refined data into existing form data.
@@ -109,7 +109,7 @@ export function useErfassungForm() {
       ...prev,
       hauptkategorie: kategorie,
       unterkategorie: '',
-      specs: SPEC_TEMPLATES[kategorie] || SPEC_TEMPLATES.default,
+      specs: templateToSpecFields(SPEC_TEMPLATES[kategorie] || SPEC_TEMPLATES.default),
     }))
   }
 

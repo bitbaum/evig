@@ -41,9 +41,6 @@ const nextConfig = {
       },
     ];
   },
-  async rewrites() {
-    return [];
-  },
   webpack: (config, { isServer, dev }) => {
     // Font loader configuration
     config.module.rules.push({

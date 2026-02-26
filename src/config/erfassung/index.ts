@@ -56,6 +56,8 @@ export {
   getSpecTemplate,
   getSpecTemplateForSubcategory,
   mergeWithTemplate,
+  templateToSpecFields,
+  type SpecTemplate,
 } from './spec-templates'
 
 // Bulk erfassung config

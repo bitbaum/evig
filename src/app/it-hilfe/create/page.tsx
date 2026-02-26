@@ -8,7 +8,6 @@ import { logger } from '@/lib/logger'
 import {
   ArrowLeft,
   Wrench,
-  AlertCircle,
   CheckCircle,
   Sparkles,
   Loader2,
@@ -26,8 +25,13 @@ import { lookupSwissPostalCode } from '@/lib/swiss-postal-codes'
 import { ProblemDetailsSection } from '@/components/it-hilfe-create/ProblemDetailsSection'
 import { LocationSection } from '@/components/it-hilfe-create/LocationSection'
 import { SkillsSection } from '@/components/it-hilfe-create/SkillsSection'
+import { ErrorAlert } from '@/components/common/ErrorAlert'
+import { validateITHilfeForm, transformITHilfeFormToPayload } from '@/lib/domain/it-hilfe'
+import type { ITHilfeCreateFormData } from '@/components/it-hilfe-create/types'
+import { INITIAL_IT_HILFE_FORM } from '@/components/it-hilfe-create/types'
 
-interface ITHilfeFormData {
+/** Subset of fields the AI form assist can fill. */
+interface AIFormFields {
   categoryId: string
   deviceBrand: string
   deviceModel: string
@@ -45,44 +49,38 @@ export default function CreatePeerRepairPage() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [success, setSuccess] = useState(false)
-
-  // Form state
-  const [categoryId, setCategoryId] = useState('')
-  const [deviceBrand, setDeviceBrand] = useState('')
-  const [deviceModel, setDeviceModel] = useState('')
-  const [title, setTitle] = useState('')
-  const [description, setDescription] = useState('')
-  const [urgency, setUrgency] = useState('normal')
-  const [maxBudget, setMaxBudget] = useState('')
-  const [postalCode, setPostalCode] = useState('')
-  const [city, setCity] = useState('')
-  const [canton, setCanton] = useState('')
-  const [serviceType, setServiceType] = useState('flexible')
-  const [skillsNeeded, setSkillsNeeded] = useState<string[]>([])
-  const [imageUrls, setImageUrls] = useState<string[]>([])
+  const [formData, setFormData] = useState<ITHilfeCreateFormData>(INITIAL_IT_HILFE_FORM)
 
   // AI assist state
   const [aiInput, setAiInput] = useState('')
   const [aiFieldMeta, setAiFieldMeta] = useState<Record<string, AIFieldMetadataEntry>>({})
-  const [aiDiagnosis, setAiDiagnosis] = useState('')
 
-  const { extractFromText, isExtracting, error: aiError } = useAIFormAssist<ITHilfeFormData>({
+  const updateField = <K extends keyof ITHilfeCreateFormData>(
+    key: K,
+    value: ITHilfeCreateFormData[K],
+  ) => setFormData(prev => ({ ...prev, [key]: value }))
+
+  const { extractFromText, isExtracting, error: aiError } = useAIFormAssist<AIFormFields>({
     formType: 'it-hilfe',
     onFieldsFilled: (data, metadata) => {
-      if (data.categoryId) {
-        setCategoryId(data.categoryId)
-        const category = getCategoryById(data.categoryId)
-        if (category && !data.skillsNeeded?.length) {
-          setSkillsNeeded(category.suggestedSkills)
+      setFormData(prev => {
+        const updated = { ...prev }
+        if (data.categoryId) {
+          updated.categoryId = data.categoryId
+          const category = getCategoryById(data.categoryId)
+          if (category && !data.skillsNeeded?.length) {
+            updated.skillsNeeded = category.suggestedSkills
+          }
         }
-      }
-      if (data.deviceBrand) setDeviceBrand(data.deviceBrand)
-      if (data.deviceModel) setDeviceModel(data.deviceModel)
-      if (data.title) setTitle(data.title)
-      if (data.description) setDescription(data.description)
-      if (data.urgency) setUrgency(data.urgency)
-      if (data.skillsNeeded?.length) setSkillsNeeded(data.skillsNeeded)
-      if (data.diagnosis) setAiDiagnosis(data.diagnosis)
+        if (data.deviceBrand) updated.deviceBrand = data.deviceBrand
+        if (data.deviceModel) updated.deviceModel = data.deviceModel
+        if (data.title) updated.title = data.title
+        if (data.description) updated.description = data.description
+        if (data.urgency) updated.urgency = data.urgency
+        if (data.skillsNeeded?.length) updated.skillsNeeded = data.skillsNeeded
+        if (data.diagnosis) updated.aiDiagnosis = data.diagnosis
+        return updated
+      })
       setAiFieldMeta(metadata)
     },
   })
@@ -105,72 +103,68 @@ export default function CreatePeerRepairPage() {
       .then(data => {
         if (data.success && data.data.profile) {
           const p = data.data.profile
-          if (p.postalCode && !postalCode) setPostalCode(p.postalCode)
-          if (p.city && !city) setCity(p.city)
-          if (p.canton && !canton) setCanton(p.canton)
+          setFormData(prev => ({
+            ...prev,
+            postalCode: prev.postalCode || p.postalCode || '',
+            city: prev.city || p.city || '',
+            canton: prev.canton || p.canton || '',
+          }))
         }
       })
       .catch(err => logger.warn('Failed to load technician profile', { error: err }))
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [status])
 
   // Auto-fill city and canton from postal code
   useEffect(() => {
-    if (postalCode.length === 4) {
-      const data = lookupSwissPostalCode(postalCode)
+    if (formData.postalCode.length === 4) {
+      const data = lookupSwissPostalCode(formData.postalCode)
       if (data) {
-        setCity(data.city)
-        setCanton(data.canton)
+        setFormData(prev => ({ ...prev, city: data.city, canton: data.canton }))
       }
     }
-  }, [postalCode])
+  }, [formData.postalCode])
 
   const handleCategorySelect = (catId: string) => {
-    setCategoryId(catId)
     const category = getCategoryById(catId)
-    if (category) {
-      if (!title || title === getCategoryById(categoryId)?.defaultTitle) {
-        setTitle(category.defaultTitle)
+    setFormData(prev => {
+      const updated = { ...prev, categoryId: catId }
+      if (category) {
+        const prevCategory = getCategoryById(prev.categoryId)
+        if (!prev.title || prev.title === prevCategory?.defaultTitle) {
+          updated.title = category.defaultTitle
+        }
+        if (!prev.description || prev.description === prevCategory?.defaultDescription) {
+          updated.description = category.defaultDescription
+        }
+        updated.skillsNeeded = category.suggestedSkills
       }
-      if (!description || description === getCategoryById(categoryId)?.defaultDescription) {
-        setDescription(category.defaultDescription)
-      }
-      setSkillsNeeded(category.suggestedSkills)
-    }
+      return updated
+    })
   }
 
   const handleSkillToggle = (skillId: string) => {
-    setSkillsNeeded((prev) =>
-      prev.includes(skillId)
-        ? prev.filter((s) => s !== skillId)
-        : [...prev, skillId]
-    )
+    setFormData(prev => ({
+      ...prev,
+      skillsNeeded: prev.skillsNeeded.includes(skillId)
+        ? prev.skillsNeeded.filter(s => s !== skillId)
+        : [...prev.skillsNeeded, skillId],
+    }))
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError('')
+
+    const validationError = validateITHilfeForm(formData)
+    if (validationError) {
+      setError(validationError)
+      return
+    }
+
     setLoading(true)
 
     try {
-      const maxBudgetCents = maxBudget ? Math.round(parseFloat(maxBudget) * 100) : null
-
-      const payload = {
-        categoryId,
-        deviceBrand: deviceBrand || null,
-        deviceModel: deviceModel || null,
-        title,
-        description,
-        urgency,
-        maxBudgetCents,
-        postalCode,
-        city,
-        canton,
-        serviceType,
-        skillsNeeded,
-        imageUrls: imageUrls.length > 0 ? imageUrls : undefined,
-        aiDiagnosis: aiDiagnosis || null,
-      }
+      const payload = transformITHilfeFormToPayload(formData)
 
       const response = await fetch('/api/it-hilfe/requests', {
         method: 'POST',
@@ -242,10 +236,7 @@ export default function CreatePeerRepairPage() {
         </div>
 
         {error && (
-          <div id="create-request-error" className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6 flex items-start gap-3">
-            <AlertCircle className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />
-            <p className="text-red-700">{error}</p>
-          </div>
+          <ErrorAlert message={error} variant="inline" className="mb-6" />
         )}
 
         <form onSubmit={handleSubmit} className="space-y-6">
@@ -293,10 +284,10 @@ export default function CreatePeerRepairPage() {
             )}
           </div>
 
-          {aiDiagnosis && (
+          {formData.aiDiagnosis && (
             <AIDiagnosisCard
-              diagnosis={aiDiagnosis}
-              deviceInfo={[deviceBrand, deviceModel].filter(Boolean).join(' ') || undefined}
+              diagnosis={formData.aiDiagnosis}
+              deviceInfo={[formData.deviceBrand, formData.deviceModel].filter(Boolean).join(' ') || undefined}
             />
           )}
 
@@ -312,7 +303,7 @@ export default function CreatePeerRepairPage() {
                     type="button"
                     onClick={() => handleCategorySelect(cat.id)}
                     className={`p-4 rounded-xl border-2 transition-all ${
-                      categoryId === cat.id
+                      formData.categoryId === cat.id
                         ? 'border-emerald-500 bg-emerald-50'
                         : 'border-gray-200 hover:border-gray-300'
                     }`}
@@ -327,32 +318,32 @@ export default function CreatePeerRepairPage() {
             </div>
           </div>
 
-          {categoryId && (
+          {formData.categoryId && (
             <>
               <ProblemDetailsSection
-                deviceBrand={deviceBrand}
-                deviceModel={deviceModel}
-                title={title}
-                description={description}
-                onDeviceBrandChange={setDeviceBrand}
-                onDeviceModelChange={setDeviceModel}
-                onTitleChange={setTitle}
-                onDescriptionChange={setDescription}
+                deviceBrand={formData.deviceBrand}
+                deviceModel={formData.deviceModel}
+                title={formData.title}
+                description={formData.description}
+                onDeviceBrandChange={(v) => updateField('deviceBrand', v)}
+                onDeviceModelChange={(v) => updateField('deviceModel', v)}
+                onTitleChange={(v) => updateField('title', v)}
+                onDescriptionChange={(v) => updateField('description', v)}
                 aiFieldMeta={aiFieldMeta}
               />
 
               <ITHilfeImageUpload
-                imageUrls={imageUrls}
-                onImagesChange={setImageUrls}
+                imageUrls={formData.imageUrls}
+                onImagesChange={(v) => updateField('imageUrls', v)}
               />
 
               <LocationSection
-                postalCode={postalCode}
-                city={city}
-                canton={canton}
-                onPostalCodeChange={setPostalCode}
-                onCityChange={setCity}
-                onCantonChange={setCanton}
+                postalCode={formData.postalCode}
+                city={formData.city}
+                canton={formData.canton}
+                onPostalCodeChange={(v) => updateField('postalCode', v)}
+                onCityChange={(v) => updateField('city', v)}
+                onCantonChange={(v) => updateField('canton', v)}
               />
 
               {/* Budget */}
@@ -365,15 +356,15 @@ export default function CreatePeerRepairPage() {
                   <span className="text-gray-500">CHF</span>
                   <input
                     type="number"
-                    value={maxBudget}
-                    onChange={(e) => setMaxBudget(e.target.value)}
+                    value={formData.maxBudget}
+                    onChange={(e) => updateField('maxBudget', e.target.value)}
                     placeholder="0 = gratis"
                     min="0"
                     step="5"
                     className="w-32 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
                   />
                   <span className="text-sm text-gray-500">
-                    {!maxBudget ? 'Community-Hilfe (gratis)' : `bis CHF ${maxBudget}`}
+                    {!formData.maxBudget ? 'Community-Hilfe (gratis)' : `bis CHF ${formData.maxBudget}`}
                   </span>
                 </div>
               </div>
@@ -387,8 +378,8 @@ export default function CreatePeerRepairPage() {
                       Wie soll die Reparatur erfolgen?
                     </label>
                     <select
-                      value={serviceType}
-                      onChange={(e) => setServiceType(e.target.value)}
+                      value={formData.serviceType}
+                      onChange={(e) => updateField('serviceType', e.target.value)}
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
                     >
                       {SERVICE_TYPES.map((s) => (
@@ -403,8 +394,8 @@ export default function CreatePeerRepairPage() {
                       Wie dringend?
                     </label>
                     <select
-                      value={urgency}
-                      onChange={(e) => setUrgency(e.target.value)}
+                      value={formData.urgency}
+                      onChange={(e) => updateField('urgency', e.target.value)}
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
                     >
                       {URGENCY_LEVELS.map((u) => (
@@ -418,7 +409,7 @@ export default function CreatePeerRepairPage() {
               </div>
 
               <SkillsSection
-                skillsNeeded={skillsNeeded}
+                skillsNeeded={formData.skillsNeeded}
                 onSkillToggle={handleSkillToggle}
               />
 
@@ -432,7 +423,7 @@ export default function CreatePeerRepairPage() {
                 </Link>
                 <button
                   type="submit"
-                  disabled={loading || !categoryId || !title || !postalCode}
+                  disabled={loading || !formData.categoryId || !formData.title || !formData.postalCode}
                   className="px-6 py-3 bg-emerald-600 text-white rounded-lg font-medium hover:bg-emerald-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {loading ? 'Wird erstellt...' : 'Anfrage erstellen'}
