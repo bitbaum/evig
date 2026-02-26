@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "WATCHPACK_POLLING=1 next dev",
+    "dev": "next dev",
     "dev:frontend": "npm run dev",
     "dev:full": "./scripts/start-all.sh",
     "d": "npm run services:up && npm run dev",

@@ -30,30 +30,7 @@ import { EmptyState } from '@/components/common/EmptyState'
 import { LoadingSkeleton } from '@/components/common/LoadingState'
 import { ErrorAlert } from '@/components/common/ErrorAlert'
 import { PageHero } from '@/components/layout/PageHero'
-
-interface ITHilfeRequest {
-  id: string
-  requesterId: string
-  requesterName: string
-  categoryId: string
-  deviceBrand: string | null
-  deviceModel: string | null
-  title: string
-  description: string
-  urgency: string
-  budgetType: string
-  budgetAmountCents: number | null
-  postalCode: string
-  city: string
-  canton: string
-  serviceType: string
-  skillsNeeded: string[]
-  imageUrls: string[]
-  status: string
-  offerCount: number
-  expiresAt: string
-  createdAt: string
-}
+import type { ITHilfeRequest } from '@/components/it-hilfe/detail/types'
 
 export default function ITHilfePage() {
   const { data: session } = useSession()

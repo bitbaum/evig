@@ -92,7 +92,7 @@ const nextConfig = {
   output: 'standalone',
   // Ensure proper CSS handling
   experimental: {
-    optimizeCss: true,
+    optimizeCss: process.env.NODE_ENV === 'production',
   },
   // Turbopack configuration (moved from experimental.turbo in Next.js 16)
   turbopack: {

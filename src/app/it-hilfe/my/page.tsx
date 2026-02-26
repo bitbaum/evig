@@ -23,30 +23,7 @@ import {
   getRequestStatusById,
   REQUEST_STATUSES,
 } from '@/config/it-hilfe'
-
-interface ITHilfeRequest {
-  id: string
-  categoryId: string
-  deviceBrand: string | null
-  deviceModel: string | null
-  title: string
-  description: string
-  urgency: string
-  budgetType: string
-  budgetAmountCents: number | null
-  postalCode: string
-  city: string
-  canton: string
-  serviceType: string
-  skillsNeeded: string[]
-  imageUrls: string[]
-  status: string
-  matchedOfferId: string | null
-  offerCount: number
-  expiresAt: string
-  createdAt: string
-  updatedAt: string
-}
+import type { ITHilfeRequest } from '@/components/it-hilfe/detail/types'
 
 export default function MyRequestsPage() {
   const { data: session, status } = useSession()

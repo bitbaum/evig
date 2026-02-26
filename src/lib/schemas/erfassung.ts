@@ -16,6 +16,7 @@ import { z } from 'zod';
 export const specFieldSchema = z.object({
   key: z.string(),
   value: z.string(),
+  placeholder: z.string().optional(),
 });
 
 const verificationSourceTypeSchema = z.enum([

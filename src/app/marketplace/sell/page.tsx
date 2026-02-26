@@ -13,6 +13,7 @@ import {
   Camera,
 } from 'lucide-react'
 import { MARKETPLACE_LIMITS } from '@/config/marketplace'
+import { validateListingForm, transformListingFormToPayload } from '@/lib/domain/marketplace'
 import { AIFormAssistBar } from '@/components/ai/AIFormAssistBar'
 import type { ListingFormData } from '@/components/marketplace-sell/types'
 import { INITIAL_LISTING_FORM } from '@/components/marketplace-sell/types'
@@ -165,20 +166,8 @@ function SellPageContent() {
     setFormData(prev => ({ ...prev, images: prev.images.filter((_, i) => i !== index) }))
   }
 
-  const validateForm = (): string | null => {
-    if (!formData.title.trim()) return 'Titel ist erforderlich'
-    if (formData.title.length < 3) return 'Titel muss mindestens 3 Zeichen lang sein'
-    if (!formData.description.trim()) return 'Beschreibung ist erforderlich'
-    if (formData.description.length < 10) return 'Beschreibung muss mindestens 10 Zeichen lang sein'
-    if (!formData.price || parseFloat(formData.price) < 0) return 'Gültiger Preis ist erforderlich'
-    if (!formData.category) return 'Kategorie ist erforderlich'
-    if (!formData.condition) return 'Zustand ist erforderlich'
-    if (formData.images.length < 1) return 'Mindestens ein Bild ist erforderlich'
-    return null
-  }
-
   const handlePreview = () => {
-    const validationError = validateForm()
+    const validationError = validateListingForm(formData)
     if (validationError) {
       setError(validationError)
       return
@@ -192,28 +181,7 @@ function SellPageContent() {
     setError(null)
 
     try {
-      const body = {
-        title: formData.title.trim(),
-        description: formData.description.trim(),
-        price_chf: parseFloat(formData.price),
-        category: formData.category,
-        condition: formData.condition,
-        brand: formData.brand.trim() || null,
-        model: formData.model.trim() || null,
-        images: formData.images,
-        delivery_options: formData.deliveryOptions,
-        shipping_cost_chf: formData.shippingCost ? parseFloat(formData.shippingCost) : null,
-        pickup_location: formData.pickupLocation.trim() || null,
-        payment_mode: formData.paymentMode,
-        specs: formData.specs.filter(s => s.value.trim()).map(s => ({
-          key: s.key,
-          value: s.value.trim(),
-          unit: s.unit || null,
-        })),
-        condition_checks: formData.conditionChecks.length > 0
-          ? formData.conditionChecks.map(c => ({ key: c.key, label: c.label, checked: c.checked }))
-          : null,
-      }
+      const body = transformListingFormToPayload(formData)
 
       const url = editId ? `/api/listings/${editId}` : '/api/listings'
       const method = editId ? 'PATCH' : 'POST'

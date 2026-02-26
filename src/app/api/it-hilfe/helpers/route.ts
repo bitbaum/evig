@@ -9,6 +9,7 @@ import { apiError, apiSuccess } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
+import { getSkillIds } from '@/config/it-hilfe'
 
 interface HelperRow {
   user_id: string
@@ -42,9 +43,11 @@ export async function GET(request: NextRequest) {
     // Parse filters
     const skillsParam = searchParams.get('skills')
     const skillParam = searchParams.get('skill')
-    const skills: string[] = skillsParam
+    const validSkillIds = getSkillIds()
+    const skills: string[] = (skillsParam
       ? skillsParam.split(',').filter(Boolean)
       : skillParam ? [skillParam] : []
+    ).filter(s => validSkillIds.includes(s))
     const canton = searchParams.get('canton')
     const postalCode = searchParams.get('postalCode')
     const acceptsGratis = searchParams.get('acceptsGratis') === 'true'

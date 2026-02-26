@@ -27,6 +27,17 @@ import { ProblemDetailsSection } from '@/components/it-hilfe-create/ProblemDetai
 import { LocationSection } from '@/components/it-hilfe-create/LocationSection'
 import { SkillsSection } from '@/components/it-hilfe-create/SkillsSection'
 
+interface ITHilfeFormData {
+  categoryId: string
+  deviceBrand: string
+  deviceModel: string
+  title: string
+  description: string
+  urgency: string
+  skillsNeeded: string[]
+  diagnosis: string
+}
+
 export default function CreatePeerRepairPage() {
   const { data: session, status } = useSession()
   const router = useRouter()
@@ -54,17 +65,6 @@ export default function CreatePeerRepairPage() {
   const [aiInput, setAiInput] = useState('')
   const [aiFieldMeta, setAiFieldMeta] = useState<Record<string, AIFieldMetadataEntry>>({})
   const [aiDiagnosis, setAiDiagnosis] = useState('')
-
-  interface ITHilfeFormData {
-    categoryId: string
-    deviceBrand: string
-    deviceModel: string
-    title: string
-    description: string
-    urgency: string
-    skillsNeeded: string[]
-    diagnosis: string
-  }
 
   const { extractFromText, isExtracting, error: aiError } = useAIFormAssist<ITHilfeFormData>({
     formType: 'it-hilfe',
