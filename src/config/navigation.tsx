@@ -28,16 +28,17 @@ export interface NavigationItem {
 /**
  * Main navigation structure
  *
- * Strategic positioning (7 items):
+ * Strategic positioning (6 items):
  * 1. Über uns - About, mission, history, projects
  * 2. Dienstleistungen - Professional services (B2C)
- * 3. Shop - revamp-it's marketplace and e-commerce (B2C)
- * 4. Community - P2P platforms: Marketplace + IT-Hilfe (C2C) 🆕
- * 5. Lernen - Workshops, guides, blog
- * 6. Mitmachen - Volunteer, donate, partner
- * 7. Kontakt - CTA (highlighted)
+ * 3. Marktplatz - ALL customer-facing buy/sell/help: Shop + Marketplace + IT-Hilfe
+ * 4. Lernen - Workshops, guides, blog
+ * 5. Mitmachen - Volunteer, donate, partner
+ * 6. Kontakt - CTA (highlighted)
  *
- * Framing: "Community" language resonates with team, builds scalable P2P ecosystem
+ * Key decision: Shop (team's legacy) + Marketplace (P2P) + IT-Hilfe (services marketplace)
+ * live together under "Marktplatz" because a customer looking for tech or help doesn't care
+ * about the organizational boundary between RevampIT inventory vs community listings.
  */
 export const mainNavigation: NavigationItem[] = [
   {
@@ -123,49 +124,48 @@ export const mainNavigation: NavigationItem[] = [
     ],
   },
   {
-    name: 'Shop',
-    href: '/shop',
-    description: 'Geräte und Zubehör kaufen',
+    name: 'Marktplatz',
+    href: '/marketplace',
+    description: 'Kaufen, verkaufen und IT-Hilfe',
+    badge: 'Neu',
+    isMultiColumn: true,
     subItems: [
+      // Section: Geräte kaufen
       {
-        name: 'Online-Shop',
+        name: 'Geräte kaufen',
+        href: '/marketplace',
+        isSection: true,
+      },
+      {
+        name: 'Community-Inserate',
+        href: '/marketplace',
+        description: 'Gebrauchte IT von Privat — 0% Gebühren',
+      },
+      {
+        name: 'RevampIT Shop',
         href: '/shop',
-        description: 'Geräte und Zubehör bestellen',
+        description: 'Geprüfte, aufbereitete Geräte',
       },
       {
         name: 'Ladenlokal Zürich',
         href: '/shop#ladenlokal',
         description: 'Vor Ort stöbern und beraten lassen',
       },
-    ],
-  },
-  {
-    name: 'Community',
-    href: '/marketplace',
-    description: 'Peer-to-Peer Plattformen',
-    badge: 'Neu',
-    isMultiColumn: true,
-    subItems: [
-      // Section: Marketplace
+      // Section: Verkaufen
       {
-        name: 'Marketplace',
-        href: '/marketplace',
+        name: 'Verkaufen',
+        href: '/marketplace/sell',
         isSection: true,
-      },
-      {
-        name: 'Inserate durchsuchen',
-        href: '/marketplace',
-        description: 'Gebrauchte IT-Geräte kaufen',
       },
       {
         name: 'Inserat erstellen',
         href: '/marketplace/sell',
-        description: 'Eigene Geräte verkaufen',
+        description: 'Eigene Geräte verkaufen — kostenlos',
       },
       {
-        name: 'Meine Verkäufe',
+        name: 'Meine Inserate',
         href: '/dashboard/listings',
-        description: 'Inserate verwalten',
+        description: 'Inserate und Verkäufe verwalten',
       },
       // Section: IT-Hilfe
       {
@@ -176,17 +176,12 @@ export const mainNavigation: NavigationItem[] = [
       {
         name: 'Hilfe suchen',
         href: '/it-hilfe',
-        description: 'Community-Techniker finden',
+        description: 'Community-Techniker in deiner Nähe',
       },
       {
         name: 'Techniker werden',
         href: '/profil/skills',
         description: 'IT-Wissen teilen und helfen',
-      },
-      {
-        name: 'Meine Anfragen',
-        href: '/it-hilfe/my',
-        description: 'Anfragen verwalten',
       },
     ],
   },

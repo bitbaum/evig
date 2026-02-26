@@ -110,3 +110,4 @@ tina/__generated__
 public/uploads/
 *.sh
 daten/
+docker-compose.override.yml

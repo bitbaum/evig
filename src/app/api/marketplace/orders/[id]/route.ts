@@ -14,7 +14,7 @@ import { formatCHF, DELIVERY_LABELS } from '@/config/marketplace';
 import type { DeliveryOption } from '@/config/marketplace';
 import { logger } from '@/lib/logger';
 import { validateBody, UpdateOrderStatusSchema } from '@/lib/schemas';
-import { getStripeClient } from '@/lib/payments/stripe-client';
+import { captureTransaction, cancelTransaction } from '@/lib/payments/payrexx-client';
 import { sendCustomEmail } from '@/lib/email';
 import { orderStatusUpdate } from '@/lib/email/templates/marketplace';
 
@@ -27,6 +27,8 @@ interface OrderRow {
   commission_chf: number;
   seller_payout_chf: number;
   stripe_payment_intent_id: string | null;
+  payrexx_transaction_id: string | null;
+  payment_provider: string;
   status: string;
   delivery_method: string;
   shipping_address: unknown;
@@ -159,26 +161,24 @@ export const PATCH = withAuth<{ id: string }>(async (
       );
     }
 
-    const stripe = getStripeClient();
-
-    // Handle Stripe operations for specific transitions
-    if (newStatus === 'completed' && order.stripe_payment_intent_id && stripe) {
-      // Capture the held payment
+    // Handle payment operations for specific transitions
+    if (newStatus === 'completed' && order.payrexx_transaction_id) {
+      // Capture the held Payrexx reservation
       try {
-        await stripe.paymentIntents.capture(order.stripe_payment_intent_id);
-      } catch (stripeError) {
-        logger.error('Failed to capture PaymentIntent', { stripeError, orderId });
-        return apiError(stripeError, 'Zahlung konnte nicht abgeschlossen werden');
+        await captureTransaction(order.payrexx_transaction_id, Math.round(Number(order.amount_chf) * 100));
+      } catch (captureError) {
+        logger.error('Failed to capture Payrexx transaction', { captureError, orderId });
+        return apiError(captureError, 'Zahlung konnte nicht abgeschlossen werden');
       }
     }
 
-    if (newStatus === 'cancelled' && order.status !== 'pending_payment' && order.stripe_payment_intent_id && stripe) {
-      // Cancel/refund the PaymentIntent
+    if (newStatus === 'cancelled' && order.status !== 'pending_payment' && order.payrexx_transaction_id) {
+      // Cancel/release the Payrexx reservation
       try {
-        await stripe.paymentIntents.cancel(order.stripe_payment_intent_id);
-      } catch (stripeError) {
-        logger.error('Failed to cancel PaymentIntent', { stripeError, orderId });
-        return apiError(stripeError, 'Zahlung konnte nicht storniert werden');
+        await cancelTransaction(order.payrexx_transaction_id);
+      } catch (cancelError) {
+        logger.error('Failed to cancel Payrexx transaction', { cancelError, orderId });
+        return apiError(cancelError, 'Zahlung konnte nicht storniert werden');
       }
     }
 

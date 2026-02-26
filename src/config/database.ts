@@ -17,8 +17,6 @@ export const TABLE_NAMES = {
   INVENTORY_ITEMS: 'inventory_items',
   AI_EXTRACTED_PRODUCTS: 'ai_extracted_products',
   PRODUCT_IMAGES: 'product_images',
-  PRODUCT_CATEGORIES: 'product_categories',
-  PRODUCT_ATTRIBUTES: 'product_attributes',
   MARKETPLACE_LISTINGS: 'marketplace_listings',
   SUSTAINABILITY_SCORES: 'sustainability_scores',
   AI_PROCESSING_LOGS: 'ai_processing_logs',
@@ -27,8 +25,6 @@ export const TABLE_NAMES = {
   MESSAGES: 'messages',
   CONVERSATIONS: 'conversations',
   NOTIFICATIONS: 'notifications',
-  MESSAGE_REACTIONS: 'message_reactions',
-  USER_NOTIFICATION_PREFERENCES: 'user_notification_preferences',
   
   // Services & Appointments
   SERVICE_TYPES: 'service_types',
@@ -47,7 +43,6 @@ export const TABLE_NAMES = {
   LOCATION_BOOKINGS: 'location_bookings',
   
   // Applications & Profiles
-  APPLICATIONS: 'applications',
   SELLER_APPLICATIONS: 'seller_applications',
   SELLER_PROFILES: 'seller_profiles',
   REPAIRER_APPLICATIONS: 'repairer_applications',
@@ -56,7 +51,6 @@ export const TABLE_NAMES = {
   REPAIRER_AVAILABILITY: 'repairer_availability',
   REPAIRER_REVIEWS: 'repairer_reviews',
   REPAIRER_CERTIFICATIONS: 'repairer_certifications',
-  TECHNICIAN_PROFILES: 'technician_profiles',
 
   // Other
   DONATIONS: 'donations',
@@ -65,7 +59,6 @@ export const TABLE_NAMES = {
   BLOG_SUBMISSIONS: 'blog_submissions',
   BLOG_CATEGORIES: 'blog_categories',
   STATIC_PAGES: 'static_pages',
-  SERVICES: 'services',
 
   // User Roles & Permissions
   USER_ROLES: 'user_roles',
@@ -79,15 +72,12 @@ export const TABLE_NAMES = {
   PAYMENT_TRANSACTIONS: 'payment_transactions',
   PAYMENT_PROVIDERS: 'payment_providers',
   PAYMENT_DISPUTES: 'payment_disputes',
-  PAYMENT_METHODS: 'payment_methods',
-  PAYMENT_ANALYTICS: 'payment_analytics',
   ESCROW_ACCOUNTS: 'escrow_accounts',
   ESCROW_RELEASES: 'escrow_releases',
   REFUNDS: 'refunds',
   INVOICES: 'invoices',
   ORDERS: 'orders',
   ORDER_ITEMS: 'order_items',
-  ORDER_STATUS_HISTORY: 'order_status_history',
 
   // Reviews
   REVIEWS: 'reviews',

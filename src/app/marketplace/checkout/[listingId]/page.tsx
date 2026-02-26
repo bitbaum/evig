@@ -15,7 +15,6 @@ import {
 } from 'lucide-react'
 import { formatCHF, MARKETPLACE_LIMITS, DELIVERY_LABELS } from '@/config/marketplace'
 import type { DeliveryOption } from '@/config/marketplace'
-import MarketplaceCheckoutForm from '@/components/marketplace/MarketplaceCheckoutForm'
 
 interface ListingForCheckout {
   id: string
@@ -44,8 +43,6 @@ export default function CheckoutPage({ params }: { params: Promise<{ listingId: 
     country: 'CH',
   })
   const [creatingOrder, setCreatingOrder] = useState(false)
-  const [clientSecret, setClientSecret] = useState<string | null>(null)
-  const [orderId, setOrderId] = useState<string | null>(null)
 
   useEffect(() => {
     if (sessionStatus === 'unauthenticated') {
@@ -105,27 +102,17 @@ export default function CheckoutPage({ params }: { params: Promise<{ listingId: 
 
       const data = await response.json()
 
-      if (data.success && data.data) {
-        setClientSecret(data.data.clientSecret)
-        setOrderId(data.data.orderId)
+      if (data.success && data.data?.paymentUrl) {
+        // Redirect to Payrexx hosted payment page
+        window.location.href = data.data.paymentUrl
       } else {
         setError(data.error || 'Bestellung konnte nicht erstellt werden')
+        setCreatingOrder(false)
       }
     } catch {
       setError('Netzwerkfehler beim Erstellen der Bestellung')
-    } finally {
       setCreatingOrder(false)
     }
-  }
-
-  const handlePaymentSuccess = () => {
-    if (orderId) {
-      router.push(`/marketplace/checkout/success?orderId=${orderId}`)
-    }
-  }
-
-  const handlePaymentError = (message: string) => {
-    setError(message)
   }
 
   if (isLoading || sessionStatus === 'loading') {
@@ -177,166 +164,143 @@ export default function CheckoutPage({ params }: { params: Promise<{ listingId: 
       <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Sichere Zahlung</h1>
 
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
-        {/* Left: Form / Payment */}
+        {/* Left: Form */}
         <div className="lg:col-span-3 space-y-6">
-          {/* Step 1: Delivery (if not yet paying) */}
-          {!clientSecret && (
-            <>
-              {/* Delivery method selection */}
-              {canSelectDelivery && (
-                <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
-                  <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Lieferart wählen</h2>
-                  <div className="space-y-3">
-                    <label className={`flex items-center gap-3 p-4 rounded-lg border-2 cursor-pointer transition-colors ${
-                      deliveryMethod === 'pickup'
-                        ? 'border-green-500 bg-green-50 dark:bg-green-900/20'
-                        : 'border-gray-200 dark:border-gray-700 hover:border-gray-300'
-                    }`}>
-                      <input
-                        type="radio"
-                        name="delivery"
-                        value="pickup"
-                        checked={deliveryMethod === 'pickup'}
-                        onChange={() => setDeliveryMethod('pickup')}
-                        className="text-green-600 focus:ring-green-500"
-                      />
-                      <MapPin className="w-5 h-5 text-gray-500" />
-                      <div>
-                        <p className="font-medium text-gray-900 dark:text-white">Abholung</p>
-                        {listing.pickup_location && (
-                          <p className="text-sm text-gray-500 dark:text-gray-400">{listing.pickup_location}</p>
-                        )}
-                      </div>
-                      <span className="ml-auto font-medium text-green-600">Kostenlos</span>
-                    </label>
-
-                    <label className={`flex items-center gap-3 p-4 rounded-lg border-2 cursor-pointer transition-colors ${
-                      deliveryMethod === 'shipping'
-                        ? 'border-green-500 bg-green-50 dark:bg-green-900/20'
-                        : 'border-gray-200 dark:border-gray-700 hover:border-gray-300'
-                    }`}>
-                      <input
-                        type="radio"
-                        name="delivery"
-                        value="shipping"
-                        checked={deliveryMethod === 'shipping'}
-                        onChange={() => setDeliveryMethod('shipping')}
-                        className="text-green-600 focus:ring-green-500"
-                      />
-                      <Truck className="w-5 h-5 text-gray-500" />
-                      <div>
-                        <p className="font-medium text-gray-900 dark:text-white">Versand</p>
-                        <p className="text-sm text-gray-500 dark:text-gray-400">Schweizweit</p>
-                      </div>
-                      <span className="ml-auto font-medium text-gray-900 dark:text-white">
-                        {listing.shipping_cost_chf ? formatCHF(listing.shipping_cost_chf) : 'Kostenlos'}
-                      </span>
-                    </label>
-                  </div>
-                </div>
-              )}
-
-              {/* Shipping address form */}
-              {deliveryMethod === 'shipping' && (
-                <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
-                  <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Lieferadresse</h2>
-                  <div className="space-y-4">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Name</label>
-                      <input
-                        type="text"
-                        value={shippingAddress.name}
-                        onChange={(e) => setShippingAddress(prev => ({ ...prev, name: e.target.value }))}
-                        className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white px-4 py-2.5 focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                        placeholder="Max Muster"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Strasse</label>
-                      <input
-                        type="text"
-                        value={shippingAddress.street}
-                        onChange={(e) => setShippingAddress(prev => ({ ...prev, street: e.target.value }))}
-                        className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white px-4 py-2.5 focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                        placeholder="Musterstrasse 1"
-                      />
-                    </div>
-                    <div className="grid grid-cols-3 gap-4">
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">PLZ</label>
-                        <input
-                          type="text"
-                          value={shippingAddress.postal_code}
-                          onChange={(e) => setShippingAddress(prev => ({ ...prev, postal_code: e.target.value }))}
-                          maxLength={4}
-                          className={`w-full rounded-lg border bg-white dark:bg-gray-700 text-gray-900 dark:text-white px-4 py-2.5 focus:ring-2 focus:ring-green-500 focus:border-transparent ${
-                            shippingAddress.postal_code && !postalCodeValid
-                              ? 'border-red-500'
-                              : 'border-gray-300 dark:border-gray-600'
-                          }`}
-                          placeholder="8000"
-                        />
-                      </div>
-                      <div className="col-span-2">
-                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Ort</label>
-                        <input
-                          type="text"
-                          value={shippingAddress.city}
-                          onChange={(e) => setShippingAddress(prev => ({ ...prev, city: e.target.value }))}
-                          className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white px-4 py-2.5 focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                          placeholder="Zürich"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {/* Error message */}
-              {error && (
-                <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4 text-red-700 dark:text-red-300">
-                  {error}
-                </div>
-              )}
-
-              {/* Proceed button */}
-              <button
-                onClick={handleCreateOrder}
-                disabled={creatingOrder || !shippingFormValid}
-                className="w-full flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed text-white py-3 px-6 rounded-lg font-semibold text-lg transition-colors"
-              >
-                {creatingOrder ? (
-                  <>
-                    <Loader2 className="w-5 h-5 animate-spin" />
-                    Bestellung wird erstellt...
-                  </>
-                ) : (
-                  <>
-                    <Shield className="w-5 h-5" />
-                    Weiter zur Zahlung
-                  </>
-                )}
-              </button>
-            </>
-          )}
-
-          {/* Step 2: Payment form */}
-          {clientSecret && (
+          {/* Delivery method selection */}
+          {canSelectDelivery && (
             <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
-              <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Zahlungsinformationen</h2>
-              {error && (
-                <div className="mb-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4 text-red-700 dark:text-red-300">
-                  {error}
-                </div>
-              )}
-              <MarketplaceCheckoutForm
-                clientSecret={clientSecret}
-                orderId={orderId || undefined}
-                onSuccess={handlePaymentSuccess}
-                onError={handlePaymentError}
-              />
+              <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Lieferart wählen</h2>
+              <div className="space-y-3">
+                <label className={`flex items-center gap-3 p-4 rounded-lg border-2 cursor-pointer transition-colors ${
+                  deliveryMethod === 'pickup'
+                    ? 'border-green-500 bg-green-50 dark:bg-green-900/20'
+                    : 'border-gray-200 dark:border-gray-700 hover:border-gray-300'
+                }`}>
+                  <input
+                    type="radio"
+                    name="delivery"
+                    value="pickup"
+                    checked={deliveryMethod === 'pickup'}
+                    onChange={() => setDeliveryMethod('pickup')}
+                    className="text-green-600 focus:ring-green-500"
+                  />
+                  <MapPin className="w-5 h-5 text-gray-500" />
+                  <div>
+                    <p className="font-medium text-gray-900 dark:text-white">Abholung</p>
+                    {listing.pickup_location && (
+                      <p className="text-sm text-gray-500 dark:text-gray-400">{listing.pickup_location}</p>
+                    )}
+                  </div>
+                  <span className="ml-auto font-medium text-green-600">Kostenlos</span>
+                </label>
+
+                <label className={`flex items-center gap-3 p-4 rounded-lg border-2 cursor-pointer transition-colors ${
+                  deliveryMethod === 'shipping'
+                    ? 'border-green-500 bg-green-50 dark:bg-green-900/20'
+                    : 'border-gray-200 dark:border-gray-700 hover:border-gray-300'
+                }`}>
+                  <input
+                    type="radio"
+                    name="delivery"
+                    value="shipping"
+                    checked={deliveryMethod === 'shipping'}
+                    onChange={() => setDeliveryMethod('shipping')}
+                    className="text-green-600 focus:ring-green-500"
+                  />
+                  <Truck className="w-5 h-5 text-gray-500" />
+                  <div>
+                    <p className="font-medium text-gray-900 dark:text-white">Versand</p>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">Schweizweit</p>
+                  </div>
+                  <span className="ml-auto font-medium text-gray-900 dark:text-white">
+                    {listing.shipping_cost_chf ? formatCHF(listing.shipping_cost_chf) : 'Kostenlos'}
+                  </span>
+                </label>
+              </div>
             </div>
           )}
+
+          {/* Shipping address form */}
+          {deliveryMethod === 'shipping' && (
+            <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
+              <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Lieferadresse</h2>
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Name</label>
+                  <input
+                    type="text"
+                    value={shippingAddress.name}
+                    onChange={(e) => setShippingAddress(prev => ({ ...prev, name: e.target.value }))}
+                    className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white px-4 py-2.5 focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                    placeholder="Max Muster"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Strasse</label>
+                  <input
+                    type="text"
+                    value={shippingAddress.street}
+                    onChange={(e) => setShippingAddress(prev => ({ ...prev, street: e.target.value }))}
+                    className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white px-4 py-2.5 focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                    placeholder="Musterstrasse 1"
+                  />
+                </div>
+                <div className="grid grid-cols-3 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">PLZ</label>
+                    <input
+                      type="text"
+                      value={shippingAddress.postal_code}
+                      onChange={(e) => setShippingAddress(prev => ({ ...prev, postal_code: e.target.value }))}
+                      maxLength={4}
+                      className={`w-full rounded-lg border bg-white dark:bg-gray-700 text-gray-900 dark:text-white px-4 py-2.5 focus:ring-2 focus:ring-green-500 focus:border-transparent ${
+                        shippingAddress.postal_code && !postalCodeValid
+                          ? 'border-red-500'
+                          : 'border-gray-300 dark:border-gray-600'
+                      }`}
+                      placeholder="8000"
+                    />
+                  </div>
+                  <div className="col-span-2">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Ort</label>
+                    <input
+                      type="text"
+                      value={shippingAddress.city}
+                      onChange={(e) => setShippingAddress(prev => ({ ...prev, city: e.target.value }))}
+                      className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white px-4 py-2.5 focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                      placeholder="Zürich"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Error message */}
+          {error && (
+            <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4 text-red-700 dark:text-red-300">
+              {error}
+            </div>
+          )}
+
+          {/* Proceed button */}
+          <button
+            onClick={handleCreateOrder}
+            disabled={creatingOrder || !shippingFormValid}
+            className="w-full flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed text-white py-3 px-6 rounded-lg font-semibold text-lg transition-colors"
+          >
+            {creatingOrder ? (
+              <>
+                <Loader2 className="w-5 h-5 animate-spin" />
+                Weiterleitung zur Zahlung...
+              </>
+            ) : (
+              <>
+                <Shield className="w-5 h-5" />
+                Weiter zur Zahlung
+              </>
+            )}
+          </button>
         </div>
 
         {/* Right: Order summary */}

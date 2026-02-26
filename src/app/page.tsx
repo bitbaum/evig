@@ -107,10 +107,10 @@ export default function Home() {
       >
         <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-x-6">
           <Link
-            href="/shop"
+            href="/marketplace"
             className="w-full sm:w-auto rounded-md bg-green-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600 text-center"
           >
-            Zum Shop
+            Zum Marktplatz
           </Link>
           <Link href="/services" className="text-sm font-semibold leading-6 text-gray-900">
             Unsere Dienstleistungen <span aria-hidden="true">→</span>

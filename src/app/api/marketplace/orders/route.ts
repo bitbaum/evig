@@ -1,5 +1,5 @@
 /**
- * POST /api/marketplace/orders — Create order + Stripe PaymentIntent
+ * POST /api/marketplace/orders — Create order + Payrexx reservation gateway
  * GET  /api/marketplace/orders — List my orders (buyer or seller)
  */
 
@@ -9,20 +9,12 @@ import { apiSuccess, apiError, apiBadRequest, apiForbidden } from '@/lib/api/hel
 import { query, transaction } from '@/lib/auth/db';
 import { TABLE_NAMES } from '@/config/database';
 import { MARKETPLACE_LIMITS } from '@/config/marketplace';
-import { DELIVERY_LABELS } from '@/config/marketplace';
-import type { DeliveryOption } from '@/config/marketplace';
 import { logger } from '@/lib/logger';
 import { validateBody, validateQuery, CreateOrderSchema, OrdersQuerySchema } from '@/lib/schemas';
-import { getStripeClient } from '@/lib/payments/stripe-client';
-import { sendCustomEmail } from '@/lib/email';
-import {
-  orderConfirmationBuyer,
-  newOrderNotificationSeller,
-} from '@/lib/email/templates/marketplace';
-import { formatCHF } from '@/config/marketplace';
+import { createGateway } from '@/lib/payments/payrexx-client';
 
 // ============================================================================
-// POST — Create order + PaymentIntent
+// POST — Create order + Payrexx Gateway
 // ============================================================================
 
 export const POST = withAuth(async (request: NextRequest, session: ValidSession) => {
@@ -89,20 +81,14 @@ export const POST = withAuth(async (request: NextRequest, session: ValidSession)
     const commissionChf = Math.round(totalChf * MARKETPLACE_LIMITS.COMMISSION_RATE * 100) / 100;
     const payoutChf = Math.round((totalChf - commissionChf) * 100) / 100;
 
-    // Create Stripe PaymentIntent
-    const stripe = getStripeClient();
-    if (!stripe) {
-      return apiError(null, 'Zahlungssystem ist nicht konfiguriert', 503);
-    }
-
     const orderId = await transaction(async (client) => {
       // Insert order
       const orderResult = await client.query(
         `INSERT INTO ${TABLE_NAMES.MARKETPLACE_ORDERS} (
           buyer_id, seller_id, listing_id,
           amount_chf, commission_chf, seller_payout_chf,
-          status, delivery_method, shipping_address
-        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+          status, delivery_method, shipping_address, payment_provider
+        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
         RETURNING id`,
         [
           session.user.id,
@@ -114,6 +100,7 @@ export const POST = withAuth(async (request: NextRequest, session: ValidSession)
           'pending_payment',
           data.delivery_method,
           data.shipping_address ? JSON.stringify(data.shipping_address) : null,
+          'payrexx',
         ]
       );
 
@@ -128,23 +115,22 @@ export const POST = withAuth(async (request: NextRequest, session: ValidSession)
       return newOrderId;
     });
 
-    // Create Stripe PaymentIntent (manual capture for escrow)
-    const paymentIntent = await stripe.paymentIntents.create({
-      amount: Math.round(totalChf * 100), // CHF cents
-      currency: 'chf',
-      capture_method: 'manual',
-      metadata: {
-        marketplaceOrderId: orderId,
-        listingId: listing.id,
-        buyerId: session.user.id,
-        sellerId: listing.seller_id,
-      },
+    // Create Payrexx Gateway (reservation mode)
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
+    const gateway = await createGateway({
+      amount: Math.round(totalChf * 100), // CHF Rappen
+      currency: 'CHF',
+      referenceId: orderId,
+      purpose: `RevampIT: ${listing.title}`,
+      successRedirectUrl: `${baseUrl}/marketplace/checkout/success?orderId=${orderId}`,
+      failedRedirectUrl: `${baseUrl}/marketplace/checkout/${listing.id}?error=payment_failed`,
+      cancelRedirectUrl: `${baseUrl}/marketplace/checkout/${listing.id}?error=cancelled`,
     });
 
-    // Store PaymentIntent ID on order
+    // Store gateway ID on order
     await query(
-      `UPDATE ${TABLE_NAMES.MARKETPLACE_ORDERS} SET stripe_payment_intent_id = $1 WHERE id = $2`,
-      [paymentIntent.id, orderId]
+      `UPDATE ${TABLE_NAMES.MARKETPLACE_ORDERS} SET payrexx_gateway_id = $1 WHERE id = $2`,
+      [String(gateway.id), orderId]
     );
 
     logger.info('Marketplace order created', {
@@ -153,51 +139,15 @@ export const POST = withAuth(async (request: NextRequest, session: ValidSession)
       buyerId: session.user.id,
       sellerId: listing.seller_id,
       amountChf: totalChf,
+      payrexxGatewayId: gateway.id,
     });
 
-    // Fire-and-forget: email notifications
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
-    const orderUrl = `${baseUrl}/dashboard/orders/${orderId}`;
-    const deliveryLabel = DELIVERY_LABELS[data.delivery_method as DeliveryOption] || data.delivery_method;
-
-    if (session.user.email) {
-      sendCustomEmail(
-        session.user.email,
-        orderConfirmationBuyer({
-          recipientName: session.user.name || 'Käufer',
-          listingTitle: listing.title,
-          amountChf: formatCHF(totalChf),
-          commissionChf: formatCHF(commissionChf),
-          deliveryMethod: deliveryLabel,
-          orderUrl,
-        })
-      ).catch(err => logger.error('Failed to send buyer order confirmation', { error: err, orderId }));
-    }
-
-    // Fetch seller email for notification
-    query<{ email: string; name: string | null }>(
-      `SELECT email, name FROM ${TABLE_NAMES.USERS} WHERE id = $1`,
-      [listing.seller_id]
-    ).then(result => {
-      const seller = result.rows[0];
-      if (seller?.email) {
-        sendCustomEmail(
-          seller.email,
-          newOrderNotificationSeller({
-            recipientName: seller.name || 'Verkäufer',
-            buyerName: session.user.name || 'Käufer',
-            listingTitle: listing.title,
-            payoutAmountChf: formatCHF(payoutChf),
-            deliveryMethod: deliveryLabel,
-            orderUrl: `${baseUrl}/dashboard/orders/${orderId}`,
-          })
-        ).catch(err => logger.error('Failed to send seller order notification', { error: err, orderId }));
-      }
-    }).catch(err => logger.error('Failed to fetch seller for order notification', { error: err, orderId }));
+    // Email notifications are now sent by the webhook handler after payment
+    // is confirmed (reserved status), since payment is asynchronous.
 
     return apiSuccess({
       orderId,
-      clientSecret: paymentIntent.client_secret,
+      paymentUrl: gateway.link,
     }, 201);
   } catch (error) {
     return apiError(error, 'Fehler beim Erstellen der Bestellung');
