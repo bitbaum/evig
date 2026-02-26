@@ -11,6 +11,7 @@ import { apiSuccess, apiError } from '@/lib/api/helpers'
 import { query, paginatedQuery } from '@/lib/auth/db'
 import { logger } from '@/lib/logger'
 import { TABLE_NAMES } from '@/config/database'
+import { QueryParams } from '@/lib/api/query-builder'
 
 export const GET = withAdmin(async (request: NextRequest, session) => {
   try {
@@ -22,30 +23,19 @@ export const GET = withAdmin(async (request: NextRequest, session) => {
     const search = searchParams.get('search')
 
     // Build WHERE clause
-    const conditions: string[] = []
-    const params: (string | number)[] = []
-    let paramIndex = 1
+    const qb = new QueryParams()
 
-    if (status) {
-      conditions.push(`p.status = $${paramIndex}`)
-      params.push(status)
-      paramIndex++
-    }
-
+    if (status) qb.add('p.status = $P', status)
     if (search) {
-      conditions.push(`(
-        p.product_name ILIKE $${paramIndex}
-        OR p.brand ILIKE $${paramIndex}
-        OR p.model ILIKE $${paramIndex}
-        OR CAST(p.id AS TEXT) ILIKE $${paramIndex}
-      )`)
-      params.push(`%${search}%`)
-      paramIndex++
+      qb.add(`(
+        p.product_name ILIKE $P
+        OR p.brand ILIKE $P
+        OR p.model ILIKE $P
+        OR CAST(p.id AS TEXT) ILIKE $P
+      )`, `%${search}%`)
     }
 
-    const whereClause = conditions.length > 0
-      ? `WHERE ${conditions.join(' AND ')}`
-      : ''
+    const { where: whereClause, params, nextIndex } = qb.build()
 
     // Fetch products with inventory data
     const { rows: productRows, total } = await paginatedQuery<{
@@ -85,7 +75,7 @@ export const GET = withAdmin(async (request: NextRequest, session) => {
       LEFT JOIN ${TABLE_NAMES.INVENTORY_ITEMS} i ON i.ai_product_id = p.id
       ${whereClause}
       ORDER BY p.created_at DESC
-      LIMIT $${paramIndex} OFFSET $${paramIndex + 1}`,
+      LIMIT $${nextIndex} OFFSET $${nextIndex + 1}`,
       [...params, limit, offset]
     )
 

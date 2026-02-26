@@ -4,6 +4,7 @@ import { query } from '@/lib/auth/db'
 import { apiError, apiSuccess, apiBadRequest, apiUnauthorized, apiForbidden } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES } from '@/config/database'
+import { QueryParams } from '@/lib/api/query-builder'
 
 interface CountRow {
   total: string
@@ -25,23 +26,18 @@ export async function GET(request: NextRequest) {
     const offset = parseInt(searchParams.get('offset') || '0')
 
     // Build query conditions
-    const conditions = ['approval_status = $1']
-    const params = [status]
-    let paramIndex = 2
+    const qb = new QueryParams()
+    qb.add('approval_status = $P', status)
 
     if (type) {
-      conditions.push(`type = $${paramIndex}`)
-      params.push(type)
-      paramIndex++
+      qb.add('type = $P', type)
     }
 
     if (city) {
-      conditions.push(`city ILIKE $${paramIndex}`)
-      params.push(`%${city}%`)
-      paramIndex++
+      qb.add('city ILIKE $P', `%${city}%`)
     }
 
-    const whereClause = conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : ''
+    const { where: whereClause, params, nextIndex } = qb.build()
 
     // Get locations
     const locationsQuery = `
@@ -58,21 +54,18 @@ export async function GET(request: NextRequest) {
       ${whereClause}
       GROUP BY l.id, u.name, u.email
       ORDER BY l.created_at DESC
-      LIMIT $${paramIndex} OFFSET $${paramIndex + 1}
+      LIMIT $${nextIndex} OFFSET $${nextIndex + 1}
     `
 
-    params.push(String(limit), String(offset))
-
-    const locations = await query(locationsQuery, params)
+    const locations = await query(locationsQuery, [...params, String(limit), String(offset)])
 
     // Get total count
     const countQuery = `
       SELECT COUNT(*) as total
       FROM ${TABLE_NAMES.LOCATIONS} l
-      ${whereClause.replace('$1', `$${params.indexOf(status) + 1}`)}
+      ${whereClause}
     `
-    const countParams = params.slice(0, -2) // Remove limit and offset
-    const countResult = await query(countQuery, countParams)
+    const countResult = await query(countQuery, params)
     const totalCount = parseInt((countResult.rows[0] as CountRow).total)
 
     return apiSuccess({

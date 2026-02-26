@@ -6,6 +6,7 @@ import { logger } from '@/lib/logger'
 import { calculateTaxes, generateTaxInvoiceData } from '@/lib/payments/tax-compliance'
 import { TABLE_NAMES } from '@/config/database'
 import { INVOICE_STATUS } from '@/config/invoice-status'
+import { QueryParams } from '@/lib/api/query-builder'
 
 interface LineItemInput {
   description: string
@@ -173,27 +174,19 @@ export const GET = withAuth(async (request, session) => {
     // Check if user is admin
     const isAdmin = session.user.isStaff
 
-    let whereClause = 'WHERE 1=1'
-    const params = []
-    let paramIndex = 1
+    const qb = new QueryParams()
 
     if (!isAdmin) {
-      whereClause += ` AND i.user_id = $${paramIndex}`
-      params.push(session.user.id)
-      paramIndex++
+      qb.add('i.user_id = $P', session.user.id)
     }
-
     if (status) {
-      whereClause += ` AND i.status = $${paramIndex}`
-      params.push(status)
-      paramIndex++
+      qb.add('i.status = $P', status)
+    }
+    if (type) {
+      qb.add('i.type = $P', type)
     }
 
-    if (type) {
-      whereClause += ` AND i.type = $${paramIndex}`
-      params.push(type)
-      paramIndex++
-    }
+    const { where: whereClause, params, nextIndex } = qb.build()
 
     // Get invoices with user info
     const invoicesResult = await query(`
@@ -210,7 +203,7 @@ export const GET = withAuth(async (request, session) => {
       JOIN ${TABLE_NAMES.USERS} u ON i.user_id = u.id
       ${whereClause}
       ORDER BY i.created_at DESC
-      LIMIT $${paramIndex} OFFSET $${paramIndex + 1}
+      LIMIT $${nextIndex} OFFSET $${nextIndex + 1}
     `, [...params, limit, offset])
 
     // Get total count

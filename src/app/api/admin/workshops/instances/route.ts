@@ -4,6 +4,7 @@ import { query, paginatedQuery } from '@/lib/auth/db'
 import { apiError, apiSuccess, apiBadRequest } from '@/lib/api/helpers'
 import { logger } from '@/lib/logger'
 import { TABLE_NAMES } from '@/config/database'
+import { QueryParams } from '@/lib/api/query-builder'
 
 interface WorkshopRow {
   id: string
@@ -40,29 +41,13 @@ export const GET = withAdmin(async (request, session) => {
     const limit = parseInt(searchParams.get('limit') || '50')
     const offset = parseInt(searchParams.get('offset') || '0')
 
-    let whereConditions = []
-    const params: (string | number)[] = []
-    let paramIndex = 1
+    const qb = new QueryParams()
 
-    if (workshopId) {
-      whereConditions.push(`wi.workshop_id = $${paramIndex}`)
-      params.push(workshopId)
-      paramIndex++
-    }
+    if (workshopId) qb.add('wi.workshop_id = $P', workshopId)
+    if (status !== 'all') qb.add('wi.status = $P', status)
+    if (upcoming) qb.addRaw('wi.start_date > NOW()')
 
-    if (status !== 'all') {
-      whereConditions.push(`wi.status = $${paramIndex}`)
-      params.push(status)
-      paramIndex++
-    }
-
-    if (upcoming) {
-      whereConditions.push(`wi.start_date > NOW()`)
-    }
-
-    const whereClause = whereConditions.length > 0
-      ? `WHERE ${whereConditions.join(' AND ')}`
-      : ''
+    const { where: whereClause, params, nextIndex } = qb.build()
 
     const { rows: instanceRows, total } = await paginatedQuery<InstanceRow>(`
       SELECT
@@ -78,7 +63,7 @@ export const GET = withAdmin(async (request, session) => {
       ${whereClause}
       GROUP BY wi.id, w.title, w.slug
       ORDER BY wi.start_date DESC
-      LIMIT $${paramIndex} OFFSET $${paramIndex + 1}
+      LIMIT $${nextIndex} OFFSET $${nextIndex + 1}
     `, [...params, limit, offset])
 
     return apiSuccess({

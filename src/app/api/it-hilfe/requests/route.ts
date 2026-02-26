@@ -16,6 +16,7 @@ import { sanitizeInput } from '@/lib/security/sanitize'
 import { itHilfeRequestSchema, validateAndRespond } from '@/lib/validation/schemas'
 import { type RequestRow, mapRequestListRow } from '@/lib/it-hilfe/request-mapper'
 import { sendRequestCreatedNotifications } from '@/lib/it-hilfe/notifications'
+import { QueryParams } from '@/lib/api/query-builder'
 
 /**
  * GET /api/it-hilfe/requests
@@ -48,56 +49,44 @@ export async function GET(request: NextRequest) {
     const sortConfig = sortMap[sortParam] || sortMap.newest
 
     // Build WHERE conditions
-    const conditions: string[] = ['r.status = $1', 'r.expires_at > NOW()']
-    const params: (string | number)[] = [status]
-    let paramIndex = 2
+    const qb = new QueryParams()
+    qb.add('r.status = $P', status)
+    qb.addRaw('r.expires_at > NOW()')
 
     if (category && getCategoryIds().includes(category)) {
-      conditions.push(`r.category_id = $${paramIndex}`)
-      params.push(category)
-      paramIndex++
+      qb.add('r.category_id = $P', category)
     }
 
     if (canton) {
-      conditions.push(`r.canton = $${paramIndex}`)
-      params.push(canton)
-      paramIndex++
+      qb.add('r.canton = $P', canton)
     }
 
     if (urgency && URGENCY_LEVELS.some(u => u.id === urgency)) {
-      conditions.push(`r.urgency = $${paramIndex}`)
-      params.push(urgency)
-      paramIndex++
+      qb.add('r.urgency = $P', urgency)
     }
 
     // Budget filter: 'free' for null/0, 'paid' for amount > 0
     if (budgetType === 'free') {
-      conditions.push(`(r.budget_amount_cents IS NULL OR r.budget_amount_cents = 0)`)
+      qb.addRaw('(r.budget_amount_cents IS NULL OR r.budget_amount_cents = 0)')
     } else if (budgetType === 'paid') {
-      conditions.push(`r.budget_amount_cents > 0`)
+      qb.addRaw('r.budget_amount_cents > 0')
     }
 
     if (serviceType && SERVICE_TYPES.some(s => s.id === serviceType)) {
-      conditions.push(`r.service_type = $${paramIndex}`)
-      params.push(serviceType)
-      paramIndex++
+      qb.add('r.service_type = $P', serviceType)
     }
 
     if (skill && getSkillIds().includes(skill)) {
-      conditions.push(`$${paramIndex} = ANY(r.skills_needed)`)
-      params.push(skill)
-      paramIndex++
+      qb.add('$P = ANY(r.skills_needed)', skill)
     }
 
     // Text search across title, description, device brand/model
     if (search && search.trim().length >= 2) {
       const searchPattern = `%${search.trim()}%`
-      conditions.push(`(r.title ILIKE $${paramIndex} OR r.description ILIKE $${paramIndex} OR r.device_brand ILIKE $${paramIndex} OR r.device_model ILIKE $${paramIndex})`)
-      params.push(searchPattern)
-      paramIndex++
+      qb.add('(r.title ILIKE $P OR r.description ILIKE $P OR r.device_brand ILIKE $P OR r.device_model ILIKE $P)', searchPattern)
     }
 
-    const whereClause = conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : ''
+    const { where: whereClause, params, nextIndex } = qb.build()
 
     // Query requests with requester name (single query with COUNT(*) OVER())
     const { rows: rawRequests, total } = await paginatedQuery<RequestRow>(`
@@ -108,7 +97,7 @@ export async function GET(request: NextRequest) {
       JOIN ${TABLE_NAMES.USERS} u ON r.requester_id = u.id
       ${whereClause}
       ORDER BY r.${sortConfig.field} ${sortConfig.order}
-      LIMIT $${paramIndex} OFFSET $${paramIndex + 1}
+      LIMIT $${nextIndex} OFFSET $${nextIndex + 1}
     `, [...params, limit, offset])
 
     const requests = rawRequests.map(mapRequestListRow)

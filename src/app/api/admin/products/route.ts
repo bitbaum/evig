@@ -4,6 +4,7 @@ import { query } from "@/lib/auth/db";
 import { TABLE_NAMES } from "@/config/database";
 import { logger } from "@/lib/logger";
 import { apiError, apiSuccess } from "@/lib/api/helpers";
+import { QueryParams } from '@/lib/api/query-builder';
 
 // GET /api/admin/products - List all products for admin
 export const GET = withAdmin(async (request, session) => {
@@ -14,20 +15,12 @@ export const GET = withAdmin(async (request, session) => {
     const status = searchParams.get("status");
     const q = searchParams.get("q");
 
-    let whereClause = "WHERE 1=1";
-    const params: (string | number)[] = [];
-    let paramIndex = 1;
+    const qb = new QueryParams();
 
-    if (status) {
-      whereClause += ` AND p.status = $${paramIndex++}`;
-      params.push(status);
-    }
+    if (status) qb.add('p.status = $P', status);
+    if (q) qb.add('(p.product_name ILIKE $P OR p.brand ILIKE $P)', `%${q}%`);
 
-    if (q) {
-      whereClause += ` AND (p.product_name ILIKE $${paramIndex} OR p.brand ILIKE $${paramIndex})`;
-      paramIndex++;
-      params.push(`%${q}%`);
-    }
+    const { where: whereClause, params, nextIndex } = qb.build();
 
     // Count total
     const countResult = await query<{ count: string }>(
@@ -72,7 +65,7 @@ export const GET = withAdmin(async (request, session) => {
        LEFT JOIN ${TABLE_NAMES.INVENTORY_ITEMS} i ON i.ai_product_id = p.id
        ${whereClause}
        ORDER BY p.created_at DESC
-       LIMIT $${paramIndex++} OFFSET $${paramIndex++}`,
+       LIMIT $${nextIndex} OFFSET $${nextIndex + 1}`,
       [...params, limit, offset]
     );
 

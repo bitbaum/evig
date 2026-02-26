@@ -12,6 +12,7 @@ import { MARKETPLACE_LIMITS } from '@/config/marketplace';
 import { logger } from '@/lib/logger';
 import { validateBody, validateQuery, CreateOrderSchema, OrdersQuerySchema } from '@/lib/schemas';
 import { createGateway } from '@/lib/payments/payrexx-client';
+import { QueryParams } from '@/lib/api/query-builder';
 
 // ============================================================================
 // POST — Create order + Payrexx Gateway
@@ -168,24 +169,20 @@ export const GET = withAuth(async (request: NextRequest, session: ValidSession) 
     if (!validation.success) return validation.error;
     const filters = validation.data;
 
-    const conditions: string[] = [];
-    const params: unknown[] = [];
-    let paramIndex = 1;
+    const qb = new QueryParams();
 
     // Role determines perspective
     if (filters.role === 'seller') {
-      conditions.push(`o.seller_id = $${paramIndex++}`);
+      qb.add('o.seller_id = $P', session.user.id);
     } else {
-      conditions.push(`o.buyer_id = $${paramIndex++}`);
+      qb.add('o.buyer_id = $P', session.user.id);
     }
-    params.push(session.user.id);
 
     if (filters.status) {
-      conditions.push(`o.status = $${paramIndex++}`);
-      params.push(filters.status);
+      qb.add('o.status = $P', filters.status);
     }
 
-    const whereClause = conditions.join(' AND ');
+    const { where: whereClause, params, nextIndex } = qb.build('');
 
     // Count total
     const countResult = await query<{ count: string }>(
@@ -201,15 +198,15 @@ export const GET = withAuth(async (request: NextRequest, session: ValidSession) 
         o.status, o.delivery_method, o.shipping_address, o.created_at, o.updated_at,
         l.title as listing_title,
         (SELECT li.url FROM ${TABLE_NAMES.LISTING_IMAGES} li WHERE li.listing_id = l.id AND li.is_primary = true LIMIT 1) as thumbnail,
-        CASE WHEN $${paramIndex} = 'seller' THEN bu.name ELSE su.name END as counterparty_name,
-        CASE WHEN $${paramIndex} = 'seller' THEN o.buyer_id ELSE o.seller_id END as counterparty_id
+        CASE WHEN $${nextIndex} = 'seller' THEN bu.name ELSE su.name END as counterparty_name,
+        CASE WHEN $${nextIndex} = 'seller' THEN o.buyer_id ELSE o.seller_id END as counterparty_id
       FROM ${TABLE_NAMES.MARKETPLACE_ORDERS} o
       JOIN ${TABLE_NAMES.LISTINGS} l ON o.listing_id = l.id
       JOIN ${TABLE_NAMES.USERS} bu ON o.buyer_id = bu.id
       JOIN ${TABLE_NAMES.USERS} su ON o.seller_id = su.id
       WHERE ${whereClause}
       ORDER BY o.created_at DESC
-      LIMIT $${paramIndex + 1} OFFSET $${paramIndex + 2}`,
+      LIMIT $${nextIndex + 1} OFFSET $${nextIndex + 2}`,
       [...params, filters.role, filters.limit, filters.offset]
     );
 

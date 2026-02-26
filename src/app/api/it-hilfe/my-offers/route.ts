@@ -5,6 +5,7 @@ import { apiError, apiSuccess, apiUnauthorized } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
+import { QueryParams } from '@/lib/api/query-builder'
 
 interface OfferWithRequestRow {
   id: string
@@ -47,17 +48,14 @@ export async function GET(request: NextRequest) {
     const offset = parseInt(searchParams.get('offset') || '0')
 
     // Build WHERE conditions
-    const conditions: string[] = ['o.helper_id = $1']
-    const params: (string | number)[] = [session.user.id]
-    let paramIndex = 2
+    const qb = new QueryParams()
+    qb.add('o.helper_id = $P', session.user.id)
 
     if (status) {
-      conditions.push(`o.status = $${paramIndex}`)
-      params.push(status)
-      paramIndex++
+      qb.add('o.status = $P', status)
     }
 
-    const whereClause = `WHERE ${conditions.join(' AND ')}`
+    const { where: whereClause, params, nextIndex } = qb.build()
 
     // Query user's offers with request details
     const offersResult = await query(`
@@ -76,7 +74,7 @@ export async function GET(request: NextRequest) {
       JOIN ${TABLE_NAMES.USERS} u ON r.requester_id = u.id
       ${whereClause}
       ORDER BY o.created_at DESC
-      LIMIT $${paramIndex} OFFSET $${paramIndex + 1}
+      LIMIT $${nextIndex} OFFSET $${nextIndex + 1}
     `, [...params, limit, offset])
 
     // Get total count

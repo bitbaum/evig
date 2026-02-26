@@ -18,6 +18,7 @@ import { withAdmin } from '@/lib/api/middleware'
 import { paginatedQuery } from '@/lib/auth/db'
 import { canAccessSection, isSuperAdmin } from '@/lib/permissions'
 import { TABLE_NAMES } from '@/config/database'
+import { QueryParams } from '@/lib/api/query-builder'
 import {
   apiSuccess,
   apiError,
@@ -64,29 +65,25 @@ export const GET = withAdmin(async (request, session) => {
     const offset = (filters.page - 1) * filters.limit
 
     // Build query with filters
-    const conditions: string[] = []
-    const values: (string | boolean)[] = []
-    let paramIndex = 1
+    const qb = new QueryParams()
 
     if (filters.search) {
-      conditions.push(`(name ILIKE $${paramIndex} OR email ILIKE $${paramIndex})`)
-      values.push(`%${filters.search}%`)
-      paramIndex++
+      qb.add('(name ILIKE $P OR email ILIKE $P)', `%${filters.search}%`)
     }
 
     if (filters.type === 'staff') {
-      conditions.push(`is_staff = true`)
+      qb.addRaw('is_staff = true')
     } else if (filters.type === 'regular') {
-      conditions.push(`(is_staff = false OR is_staff IS NULL)`)
+      qb.addRaw('(is_staff = false OR is_staff IS NULL)')
     }
 
     if (filters.verified === 'yes') {
-      conditions.push(`"emailVerified" IS NOT NULL`)
+      qb.addRaw('"emailVerified" IS NOT NULL')
     } else if (filters.verified === 'no') {
-      conditions.push(`"emailVerified" IS NULL`)
+      qb.addRaw('"emailVerified" IS NULL')
     }
 
-    const whereClause = conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : ''
+    const { where: whereClause, params, nextIndex } = qb.build()
 
     // Get paginated users
     const { rows: usersRows, total } = await paginatedQuery<{
@@ -111,8 +108,8 @@ export const GET = withAdmin(async (request, session) => {
        FROM ${TABLE_NAMES.USERS}
        ${whereClause}
        ORDER BY is_staff DESC, "createdAt" DESC
-       LIMIT $${paramIndex} OFFSET $${paramIndex + 1}`,
-      [...values, filters.limit, offset]
+       LIMIT $${nextIndex} OFFSET $${nextIndex + 1}`,
+      [...params, filters.limit, offset]
     )
 
     // Add computed fields

@@ -4,6 +4,7 @@ import { query } from '@/lib/auth/db'
 import { apiError, apiSuccess, apiBadRequest, apiUnauthorized, apiForbidden, apiNotFound } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES } from '@/config/database'
+import { QueryParams } from '@/lib/api/query-builder'
 
 
 interface LocationStatusRow {
@@ -57,29 +58,21 @@ export async function GET(
     }
 
     // Build query
-    const conditions = ['lb.location_id = $1']
-    const params = [locationId]
-    let paramIndex = 2
+    const qb = new QueryParams()
+
+    qb.add('lb.location_id = $P', locationId)
 
     if (status) {
-      conditions.push(`lb.status = $${paramIndex}`)
-      params.push(status)
-      paramIndex++
+      qb.add('lb.status = $P', status)
     }
-
     if (startDate) {
-      conditions.push(`lb.start_time >= $${paramIndex}`)
-      params.push(startDate)
-      paramIndex++
+      qb.add('lb.start_time >= $P', startDate)
     }
-
     if (endDate) {
-      conditions.push(`lb.end_time <= $${paramIndex}`)
-      params.push(endDate)
-      paramIndex++
+      qb.add('lb.end_time <= $P', endDate)
     }
 
-    const whereClause = conditions.join(' AND ')
+    const { where: whereClause, params: queryParams } = qb.build()
 
     const bookingsQuery = `
       SELECT
@@ -90,11 +83,11 @@ export async function GET(
       FROM ${TABLE_NAMES.LOCATION_BOOKINGS} lb
       LEFT JOIN ${TABLE_NAMES.USERS} u ON lb.booked_by = u.id
       LEFT JOIN ${TABLE_NAMES.LOCATIONS} l ON lb.location_id = l.id
-      WHERE ${whereClause}
+      ${whereClause}
       ORDER BY lb.start_time ASC
     `
 
-    const bookings = await query(bookingsQuery, params)
+    const bookings = await query(bookingsQuery, queryParams)
 
     return apiSuccess({
       bookings: bookings.rows,

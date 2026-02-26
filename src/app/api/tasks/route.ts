@@ -15,6 +15,7 @@ import { query } from '@/lib/auth/db';
 import { TABLE_NAMES } from '@/config/database';
 import { TASK_PRIORITIES } from '@/config/tasks';
 import { createTaskSchema } from '@/lib/schemas/tasks';
+import { QueryParams } from '@/lib/api/query-builder';
 import { logger } from '@/lib/logger';
 
 /**
@@ -31,7 +32,27 @@ export const GET = withAdmin(async (request: NextRequest, session: ValidSession)
     const includeArchived = searchParams.get('include_archived') === 'true';
 
     // Build query with filters
-    let queryText = `
+    const qb = new QueryParams();
+
+    if (!includeArchived) {
+      qb.addRaw('t.is_archived = false');
+    }
+    if (category) {
+      qb.add('t.category = $P', category);
+    }
+    if (status) {
+      qb.add('t.current_status = $P', status);
+    }
+    if (taskType) {
+      qb.add('t.task_type = $P', taskType);
+    }
+    if (projectId) {
+      qb.add('t.project_id = $P', projectId);
+    }
+
+    const { where: whereClause, params } = qb.build();
+
+    const queryText = `
       SELECT
         t.*,
         u.name as created_by_name,
@@ -55,44 +76,15 @@ export const GET = withAdmin(async (request: NextRequest, session: ValidSession)
         ) as recent_completions
       FROM ${TABLE_NAMES.TASKS} t
       LEFT JOIN ${TABLE_NAMES.USERS} u ON t.created_by = u.id
-      WHERE 1=1
-    `;
-
-    const params: (string | boolean)[] = [];
-    let paramIndex = 1;
-
-    if (!includeArchived) {
-      queryText += ` AND t.is_archived = false`;
-    }
-
-    if (category) {
-      queryText += ` AND t.category = $${paramIndex++}`;
-      params.push(category);
-    }
-
-    if (status) {
-      queryText += ` AND t.current_status = $${paramIndex++}`;
-      params.push(status);
-    }
-
-    if (taskType) {
-      queryText += ` AND t.task_type = $${paramIndex++}`;
-      params.push(taskType);
-    }
-
-    if (projectId) {
-      queryText += ` AND t.project_id = $${paramIndex++}`;
-      params.push(projectId);
-    }
-
-    queryText += ` ORDER BY
-      CASE t.priority
-        WHEN '${TASK_PRIORITIES.URGENT}' THEN 0
-        WHEN '${TASK_PRIORITIES.HIGH}' THEN 1
-        WHEN '${TASK_PRIORITIES.NORMAL}' THEN 2
-        WHEN '${TASK_PRIORITIES.LOW}' THEN 3
-      END,
-      t.created_at DESC
+      ${whereClause}
+      ORDER BY
+        CASE t.priority
+          WHEN '${TASK_PRIORITIES.URGENT}' THEN 0
+          WHEN '${TASK_PRIORITIES.HIGH}' THEN 1
+          WHEN '${TASK_PRIORITIES.NORMAL}' THEN 2
+          WHEN '${TASK_PRIORITIES.LOW}' THEN 3
+        END,
+        t.created_at DESC
     `;
 
     const result = await query(queryText, params);

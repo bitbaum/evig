@@ -7,6 +7,7 @@ import { TABLE_NAMES } from '@/config/database'
 import { CreateDonationSchema, GetDonationsQuerySchema } from '@/lib/schemas/donations'
 import { logger } from '@/lib/logger'
 import { DONATION_TYPES, getEstimatedValue } from '@/config/donations'
+import { QueryParams } from '@/lib/api/query-builder'
 
 interface DonationRow {
   id: string
@@ -75,36 +76,15 @@ export const GET = withAdmin(async (request: NextRequest, session) => {
     }
 
     const filters = queryParsed.data
-    const conditions: string[] = []
-    const params: (string | number | Date)[] = []
-    let paramIndex = 1
+    const qb = new QueryParams()
 
-    if (filters.donation_type) {
-      conditions.push(`d.donation_type = $${paramIndex++}`)
-      params.push(filters.donation_type)
-    }
+    if (filters.donation_type) qb.add('d.donation_type = $P', filters.donation_type)
+    if (filters.status) qb.add('d.status = $P', filters.status)
+    if (filters.user_id) qb.add('d.user_id = $P', filters.user_id)
+    if (filters.from_date) qb.add('d.created_at >= $P', filters.from_date)
+    if (filters.to_date) qb.add('d.created_at <= $P', filters.to_date)
 
-    if (filters.status) {
-      conditions.push(`d.status = $${paramIndex++}`)
-      params.push(filters.status)
-    }
-
-    if (filters.user_id) {
-      conditions.push(`d.user_id = $${paramIndex++}`)
-      params.push(filters.user_id)
-    }
-
-    if (filters.from_date) {
-      conditions.push(`d.created_at >= $${paramIndex++}`)
-      params.push(filters.from_date)
-    }
-
-    if (filters.to_date) {
-      conditions.push(`d.created_at <= $${paramIndex++}`)
-      params.push(filters.to_date)
-    }
-
-    const whereClause = conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : ''
+    const { where: whereClause, params, nextIndex } = qb.build()
 
     // Validate sort column to prevent injection
     const allowedSortColumns = ['created_at', 'amount_cents', 'status']
@@ -123,7 +103,7 @@ export const GET = withAdmin(async (request: NextRequest, session) => {
       LEFT JOIN ${TABLE_NAMES.USERS} recorder ON d.recorded_by = recorder.id
       ${whereClause}
       ORDER BY d.${sortBy} ${sortOrder}
-      LIMIT $${paramIndex++} OFFSET $${paramIndex++}
+      LIMIT $${nextIndex} OFFSET $${nextIndex + 1}
     `, [...params, filters.limit, filters.offset])
 
     return apiSuccess({

@@ -12,6 +12,7 @@ import { withAdmin } from '@/lib/api/middleware'
 import { query } from '@/lib/auth/db'
 import { canAccessSection } from '@/lib/permissions'
 import { TABLE_NAMES } from '@/config/database'
+import { QueryParams } from '@/lib/api/query-builder'
 import { logger } from '@/lib/logger'
 import {
   apiSuccess,
@@ -80,54 +81,33 @@ export const GET = withAdmin(async (request, session) => {
     }
 
     const filters = filterResult.data
-    const conditions: string[] = []
-    const values: (string | number | boolean)[] = []
-    let paramIndex = 1
+    const qb = new QueryParams()
 
     if (filters.status) {
-      conditions.push(`hr.status = $${paramIndex}`)
-      values.push(filters.status)
-      paramIndex++
+      qb.add('hr.status = $P', filters.status)
     }
 
     if (filters.urgency) {
-      conditions.push(`hr.urgency = $${paramIndex}`)
-      values.push(filters.urgency)
-      paramIndex++
+      qb.add('hr.urgency = $P', filters.urgency)
     }
 
     if (filters.category) {
-      conditions.push(`hr.category = $${paramIndex}`)
-      values.push(filters.category)
-      paramIndex++
+      qb.add('hr.category = $P', filters.category)
     }
 
     if (filters.requester_id) {
-      conditions.push(`hr.requester_id = $${paramIndex}`)
-      values.push(filters.requester_id)
-      paramIndex++
+      qb.add('hr.requester_id = $P', filters.requester_id)
     }
 
     if (filters.requested_user_id) {
-      conditions.push(`hr.requested_user_id = $${paramIndex}`)
-      values.push(filters.requested_user_id)
-      paramIndex++
+      qb.add('hr.requested_user_id = $P', filters.requested_user_id)
     }
 
     if (filters.is_broadcast !== undefined) {
-      conditions.push(`hr.is_broadcast = $${paramIndex}`)
-      values.push(filters.is_broadcast)
-      paramIndex++
+      qb.add('hr.is_broadcast = $P', filters.is_broadcast)
     }
 
-    const whereClause = conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : ''
-
-    // Add pagination params
-    values.push(filters.limit)
-    const limitParam = paramIndex
-    paramIndex++
-    values.push(filters.offset)
-    const offsetParam = paramIndex
+    const { where: whereClause, params, nextIndex } = qb.build()
 
     const result = await query<HelpRequest>(
       `SELECT
@@ -163,8 +143,8 @@ export const GET = withAdmin(async (request, session) => {
            WHEN 'low' THEN 4
          END,
          hr.created_at DESC
-       LIMIT $${limitParam} OFFSET $${offsetParam}`,
-      values
+       LIMIT $${nextIndex} OFFSET $${nextIndex + 1}`,
+      [...params, filters.limit, filters.offset]
     )
 
     // Get total count for pagination
@@ -172,7 +152,7 @@ export const GET = withAdmin(async (request, session) => {
       `SELECT COUNT(*) as count
        FROM ${TABLE_NAMES.HELP_REQUESTS} hr
        ${whereClause}`,
-      values.slice(0, -2) // exclude limit/offset
+      params
     )
 
     return apiSuccess({

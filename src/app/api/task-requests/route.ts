@@ -13,6 +13,7 @@ import { withAdmin, ValidSession } from '@/lib/api/middleware';
 import { apiSuccess, apiError } from '@/lib/api/helpers';
 import { query } from '@/lib/auth/db';
 import { TABLE_NAMES } from '@/config/database';
+import { QueryParams } from '@/lib/api/query-builder';
 import { logger } from '@/lib/logger';
 
 /**
@@ -28,7 +29,25 @@ export const GET = withAdmin(async (request: NextRequest, session: ValidSession)
     // Build query for requests
     // Include direct requests (requested_user_id = current user)
     // AND broadcasts (requested_user_id is null) if includeBroadcasts is true
-    let queryText = `
+    const qb = new QueryParams();
+
+    qb.add('r.requested_by != $P', session.user.id);
+
+    // Filter by status
+    if (status !== 'all') {
+      qb.add('r.status = $P', status);
+    }
+
+    // Filter to show requests for this user OR broadcasts
+    if (includeBroadcasts) {
+      qb.add('(r.requested_user_id = $P OR r.requested_user_id IS NULL)', session.user.id);
+    } else {
+      qb.add('r.requested_user_id = $P', session.user.id);
+    }
+
+    const { where: whereClause, params } = qb.build();
+
+    const queryText = `
       SELECT
         r.*,
         rb.name as requested_by_name,
@@ -43,28 +62,9 @@ export const GET = withAdmin(async (request: NextRequest, session: ValidSession)
       FROM ${TABLE_NAMES.TASK_REQUESTS} r
       LEFT JOIN ${TABLE_NAMES.USERS} rb ON r.requested_by = rb.id
       LEFT JOIN ${TABLE_NAMES.TASKS} t ON r.task_id = t.id
-      WHERE r.requested_by != $1
+      ${whereClause}
+      ORDER BY r.created_at DESC
     `;
-
-    const params: (string | null)[] = [session.user.id];
-    let paramIndex = 2;
-
-    // Filter by status
-    if (status !== 'all') {
-      queryText += ` AND r.status = $${paramIndex++}`;
-      params.push(status);
-    }
-
-    // Filter to show requests for this user OR broadcasts
-    if (includeBroadcasts) {
-      queryText += ` AND (r.requested_user_id = $${paramIndex++} OR r.requested_user_id IS NULL)`;
-      params.push(session.user.id);
-    } else {
-      queryText += ` AND r.requested_user_id = $${paramIndex++}`;
-      params.push(session.user.id);
-    }
-
-    queryText += ` ORDER BY r.created_at DESC`;
 
     const result = await query(queryText, params);
 

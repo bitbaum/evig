@@ -13,6 +13,7 @@ import { apiSuccess, apiError, apiBadRequest } from '@/lib/api/helpers';
 import { query } from '@/lib/auth/db';
 import { TABLE_NAMES } from '@/config/database';
 import { createProjectSchema } from '@/lib/schemas/tasks';
+import { QueryParams } from '@/lib/api/query-builder';
 import { logger } from '@/lib/logger';
 
 /**
@@ -24,7 +25,15 @@ export const GET = withAdmin(async (request: NextRequest, session: ValidSession)
     const { searchParams } = new URL(request.url);
     const status = searchParams.get('status');
 
-    let queryText = `
+    const qb = new QueryParams();
+
+    if (status) {
+      qb.add('p.status = $P', status);
+    }
+
+    const { where: whereClause, params } = qb.build();
+
+    const queryText = `
       SELECT
         p.*,
         u.name as created_by_name,
@@ -41,26 +50,16 @@ export const GET = withAdmin(async (request: NextRequest, session: ValidSession)
         ) as completed_task_count
       FROM ${TABLE_NAMES.TASK_PROJECTS} p
       LEFT JOIN ${TABLE_NAMES.USERS} u ON p.created_by = u.id
-      WHERE 1=1
-    `;
-
-    const params: string[] = [];
-    let paramIndex = 1;
-
-    if (status) {
-      queryText += ` AND p.status = $${paramIndex++}`;
-      params.push(status);
-    }
-
-    queryText += ` ORDER BY
-      CASE p.status
-        WHEN 'active' THEN 0
-        WHEN 'planning' THEN 1
-        WHEN 'on_hold' THEN 2
-        WHEN 'completed' THEN 3
-        WHEN 'cancelled' THEN 4
-      END,
-      p.created_at DESC
+      ${whereClause}
+      ORDER BY
+        CASE p.status
+          WHEN 'active' THEN 0
+          WHEN 'planning' THEN 1
+          WHEN 'on_hold' THEN 2
+          WHEN 'completed' THEN 3
+          WHEN 'cancelled' THEN 4
+        END,
+        p.created_at DESC
     `;
 
     const result = await query(queryText, params);

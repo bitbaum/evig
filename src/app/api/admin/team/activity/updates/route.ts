@@ -12,6 +12,7 @@ import { withAdmin } from '@/lib/api/middleware'
 import { query } from '@/lib/auth/db'
 import { canAccessSection } from '@/lib/permissions'
 import { TABLE_NAMES } from '@/config/database'
+import { QueryParams } from '@/lib/api/query-builder'
 import { logger } from '@/lib/logger'
 import {
   apiSuccess,
@@ -71,42 +72,25 @@ export const GET = withAdmin(async (request, session) => {
     }
 
     const filters = filterResult.data
-    const conditions: string[] = []
-    const values: (string | number)[] = []
-    let paramIndex = 1
+    const qb = new QueryParams()
 
     if (filters.user_id) {
-      conditions.push(`au.user_id = $${paramIndex}`)
-      values.push(filters.user_id)
-      paramIndex++
+      qb.add('au.user_id = $P', filters.user_id)
     }
 
     if (filters.category) {
-      conditions.push(`au.category = $${paramIndex}`)
-      values.push(filters.category)
-      paramIndex++
+      qb.add('au.category = $P', filters.category)
     }
 
     if (filters.since) {
-      conditions.push(`au.occurred_at >= $${paramIndex}`)
-      values.push(filters.since)
-      paramIndex++
+      qb.add('au.occurred_at >= $P', filters.since)
     }
 
     if (filters.until) {
-      conditions.push(`au.occurred_at <= $${paramIndex}`)
-      values.push(filters.until)
-      paramIndex++
+      qb.add('au.occurred_at <= $P', filters.until)
     }
 
-    const whereClause = conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : ''
-
-    // Add pagination params
-    values.push(filters.limit)
-    const limitParam = paramIndex
-    paramIndex++
-    values.push(filters.offset)
-    const offsetParam = paramIndex
+    const { where: whereClause, params, nextIndex } = qb.build()
 
     const result = await query<ActivityUpdate>(
       `SELECT
@@ -126,8 +110,8 @@ export const GET = withAdmin(async (request, session) => {
        JOIN ${TABLE_NAMES.USERS} u ON au.user_id = u.id
        ${whereClause}
        ORDER BY au.occurred_at DESC
-       LIMIT $${limitParam} OFFSET $${offsetParam}`,
-      values
+       LIMIT $${nextIndex} OFFSET $${nextIndex + 1}`,
+      [...params, filters.limit, filters.offset]
     )
 
     // Get total count for pagination
@@ -135,7 +119,7 @@ export const GET = withAdmin(async (request, session) => {
       `SELECT COUNT(*) as count
        FROM ${TABLE_NAMES.ACTIVITY_UPDATES} au
        ${whereClause}`,
-      values.slice(0, -2) // exclude limit/offset
+      params
     )
 
     return apiSuccess({

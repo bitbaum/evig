@@ -16,6 +16,7 @@ import { sendCustomEmail } from '@/lib/email';
 import { listingPublishedConfirmation } from '@/lib/email/templates/marketplace';
 import { rateLimiters } from '@/lib/security/rate-limit';
 import { sanitizeInput } from '@/lib/security/sanitize';
+import { QueryParams } from '@/lib/api/query-builder';
 
 // ============================================================================
 // GET — Public browse
@@ -32,69 +33,57 @@ export async function GET(request: NextRequest) {
     const filters = validation.data;
 
     // Build dynamic WHERE clauses
-    const conditions: string[] = [`l.status = 'active'`];
-    const params: unknown[] = [];
-    let paramIndex = 1;
+    const qb = new QueryParams();
+    qb.addRaw("l.status = 'active'");
 
     if (filters.category) {
-      conditions.push(`l.category = $${paramIndex++}`);
-      params.push(filters.category);
+      qb.add('l.category = $P', filters.category);
     }
     if (filters.condition) {
-      conditions.push(`l.condition = $${paramIndex++}`);
-      params.push(filters.condition);
+      qb.add('l.condition = $P', filters.condition);
     }
     if (filters.delivery) {
-      conditions.push(`(l.delivery_options = $${paramIndex} OR l.delivery_options = 'both')`);
-      params.push(filters.delivery);
-      paramIndex++;
+      qb.add("(l.delivery_options = $P OR l.delivery_options = 'both')", filters.delivery);
     }
     if (filters.payment) {
-      conditions.push(`(l.payment_mode = $${paramIndex} OR l.payment_mode = 'both')`);
-      params.push(filters.payment);
-      paramIndex++;
+      qb.add("(l.payment_mode = $P OR l.payment_mode = 'both')", filters.payment);
     }
     if (filters.price_min !== undefined) {
-      conditions.push(`l.price_chf >= $${paramIndex++}`);
-      params.push(filters.price_min);
+      qb.add('l.price_chf >= $P', filters.price_min);
     }
     if (filters.price_max !== undefined) {
-      conditions.push(`l.price_chf <= $${paramIndex++}`);
-      params.push(filters.price_max);
+      qb.add('l.price_chf <= $P', filters.price_max);
     }
     if (filters.seller_type === 'revampit') {
-      conditions.push(`l.is_revampit = true`);
+      qb.addRaw('l.is_revampit = true');
     } else if (filters.seller_type === 'community') {
-      conditions.push(`l.is_revampit = false`);
+      qb.addRaw('l.is_revampit = false');
     }
     if (filters.gratis_only) {
-      conditions.push(`l.price_chf = 0`);
+      qb.addRaw('l.price_chf = 0');
     }
     if (filters.verified_only) {
-      conditions.push(`l.verified_at IS NOT NULL`);
+      qb.addRaw('l.verified_at IS NOT NULL');
     }
     if (filters.search) {
-      conditions.push(
-        `to_tsvector('german', coalesce(l.title, '') || ' ' || coalesce(l.description, '') || ' ' || coalesce(l.brand, '') || ' ' || coalesce(l.model, '')) @@ plainto_tsquery('german', $${paramIndex++})`
+      qb.add(
+        `to_tsvector('german', coalesce(l.title, '') || ' ' || coalesce(l.description, '') || ' ' || coalesce(l.brand, '') || ' ' || coalesce(l.model, '')) @@ plainto_tsquery('german', $P)`,
+        filters.search
       );
-      params.push(filters.search);
     }
 
     // Spec filters via subquery on listing_specs
     if (filters.spec_ram_min !== undefined) {
-      conditions.push(`EXISTS (SELECT 1 FROM ${TABLE_NAMES.LISTING_SPECS} s WHERE s.listing_id = l.id AND s.spec_key = 'RAM' AND s.normalized_value >= $${paramIndex++})`);
-      params.push(filters.spec_ram_min);
+      qb.add(`EXISTS (SELECT 1 FROM ${TABLE_NAMES.LISTING_SPECS} s WHERE s.listing_id = l.id AND s.spec_key = 'RAM' AND s.normalized_value >= $P)`, filters.spec_ram_min);
     }
     if (filters.spec_storage_min !== undefined) {
-      conditions.push(`EXISTS (SELECT 1 FROM ${TABLE_NAMES.LISTING_SPECS} s WHERE s.listing_id = l.id AND s.spec_key = 'Speicher' AND s.normalized_value >= $${paramIndex++})`);
-      params.push(filters.spec_storage_min);
+      qb.add(`EXISTS (SELECT 1 FROM ${TABLE_NAMES.LISTING_SPECS} s WHERE s.listing_id = l.id AND s.spec_key = 'Speicher' AND s.normalized_value >= $P)`, filters.spec_storage_min);
     }
     if (filters.spec_display_min !== undefined) {
-      conditions.push(`EXISTS (SELECT 1 FROM ${TABLE_NAMES.LISTING_SPECS} s WHERE s.listing_id = l.id AND (s.spec_key = 'Display' OR s.spec_key = 'Grösse') AND s.normalized_value >= $${paramIndex++})`);
-      params.push(filters.spec_display_min);
+      qb.add(`EXISTS (SELECT 1 FROM ${TABLE_NAMES.LISTING_SPECS} s WHERE s.listing_id = l.id AND (s.spec_key = 'Display' OR s.spec_key = 'Grösse') AND s.normalized_value >= $P)`, filters.spec_display_min);
     }
 
-    const whereClause = conditions.join(' AND ');
+    const { where: whereClause, params, nextIndex } = qb.build('');
 
     // Sort
     let orderBy: string;
@@ -122,7 +111,7 @@ export async function GET(request: NextRequest) {
       LEFT JOIN ${TABLE_NAMES.SELLER_PROFILES} sp ON l.seller_id = sp.user_id
       WHERE ${whereClause}
       ORDER BY ${orderBy}
-      LIMIT $${paramIndex++} OFFSET $${paramIndex++}`,
+      LIMIT $${nextIndex} OFFSET $${nextIndex + 1}`,
       [...params, filters.limit, filters.offset]
     );
 

@@ -10,6 +10,7 @@ import { apiSuccess, apiError } from '@/lib/api/helpers';
 import { query } from '@/lib/auth/db';
 import { TABLE_NAMES } from '@/config/database';
 import { LISTING_STATUSES, MARKETPLACE_LIMITS } from '@/config/marketplace';
+import { QueryParams } from '@/lib/api/query-builder';
 
 export const GET = withAuth(async (request: NextRequest, session: ValidSession) => {
   try {
@@ -22,20 +23,18 @@ export const GET = withAuth(async (request: NextRequest, session: ValidSession) 
     );
     const offset = (page - 1) * limit;
 
-    const conditions: string[] = ['l.seller_id = $1'];
-    const params: unknown[] = [session.user.id];
-    let paramIndex = 2;
+    const qb = new QueryParams();
+    qb.add('l.seller_id = $P', session.user.id);
 
     // Filter by status if provided (and valid)
     if (status && (LISTING_STATUSES as readonly string[]).includes(status)) {
-      conditions.push(`l.status = $${paramIndex++}`);
-      params.push(status);
+      qb.add('l.status = $P', status);
     } else {
       // By default exclude removed
-      conditions.push(`l.status != 'removed'`);
+      qb.addRaw("l.status != 'removed'");
     }
 
-    const whereClause = conditions.join(' AND ');
+    const { where: whereClause, params, nextIndex } = qb.build('');
 
     // Get total count
     const countResult = await query<{ count: string }>(
@@ -54,7 +53,7 @@ export const GET = withAuth(async (request: NextRequest, session: ValidSession) 
       FROM ${TABLE_NAMES.LISTINGS} l
       WHERE ${whereClause}
       ORDER BY l.created_at DESC
-      LIMIT $${paramIndex++} OFFSET $${paramIndex++}`,
+      LIMIT $${nextIndex} OFFSET $${nextIndex + 1}`,
       [...params, limit, offset]
     );
 

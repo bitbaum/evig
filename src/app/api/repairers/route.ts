@@ -4,6 +4,7 @@ import { apiError, apiSuccessCached } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
+import { QueryParams } from '@/lib/api/query-builder'
 
 interface RepairerRow {
   id: string
@@ -63,79 +64,69 @@ export async function GET(request: NextRequest) {
     const limit = Math.min(parseInt(searchParams.get('limit') || '50'), 100)
     const offset = parseInt(searchParams.get('offset') || '0')
 
-    // Build the query
-    const conditions: string[] = [
-      'rp.is_active = true',
-      "rp.status = 'active'"
-    ]
-    const params: (string | number)[] = []
-    let paramIndex = 1
+    // Build WHERE conditions
+    const qb = new QueryParams()
+    qb.addRaw('rp.is_active = true')
+    qb.addRaw("rp.status = 'active'")
 
     // Search by business name or description
     if (q) {
-      conditions.push(`(
-        rp.business_name ILIKE $${paramIndex} OR
-        rp.description ILIKE $${paramIndex} OR
-        rp.city ILIKE $${paramIndex}
-      )`)
-      params.push(`%${q}%`)
-      paramIndex++
+      qb.add('(rp.business_name ILIKE $P OR rp.description ILIKE $P OR rp.city ILIKE $P)', `%${q}%`)
     }
 
     // Filter by service type
     if (service) {
-      conditions.push(`$${paramIndex} = ANY(rp.services_offered)`)
-      params.push(service)
-      paramIndex++
+      qb.add('$P = ANY(rp.services_offered)', service)
     }
 
     // Filter by location (postal code or city)
     if (location) {
-      conditions.push(`(rp.postal_code ILIKE $${paramIndex} OR rp.city ILIKE $${paramIndex})`)
-      params.push(`%${location}%`)
-      paramIndex++
+      qb.add('(rp.postal_code ILIKE $P OR rp.city ILIKE $P)', `%${location}%`)
     }
 
     // Filter by minimum rating
     if (minRating > 0) {
-      conditions.push(`rp.average_rating >= $${paramIndex}`)
-      params.push(minRating)
-      paramIndex++
+      qb.add('rp.average_rating >= $P', minRating)
     }
 
     // Build distance calculation if coordinates provided
+    // Haversine params live outside QueryParams because they span SELECT + WHERE
     let distanceSelect = ''
     let distanceOrder = ''
+    const extraParams: (string | number)[] = []
+    let idx = qb.nextIndex
 
     if (lat !== 0 && lng !== 0) {
-      // Haversine formula for distance calculation
+      // Haversine formula for distance calculation (SELECT clause)
       distanceSelect = `,
         CASE
           WHEN rp.latitude IS NOT NULL AND rp.longitude IS NOT NULL THEN
             111.32 * SQRT(
-              POWER(rp.latitude - $${paramIndex}, 2) +
-              POWER((rp.longitude - $${paramIndex + 1}) * COS((rp.latitude + $${paramIndex}) / 2 / 57.29577951), 2)
+              POWER(rp.latitude - $${idx}, 2) +
+              POWER((rp.longitude - $${idx + 1}) * COS((rp.latitude + $${idx}) / 2 / 57.29577951), 2)
             )
           ELSE NULL
         END as distance_km`
-      params.push(lat, lng)
-      paramIndex += 2
+      extraParams.push(lat, lng)
+      idx += 2
 
       // Filter by max distance if provided
       if (maxDistance > 0) {
-        conditions.push(`
+        qb.addRaw(`
           (rp.latitude IS NULL OR rp.longitude IS NULL OR
            111.32 * SQRT(
-             POWER(rp.latitude - $${paramIndex}, 2) +
-             POWER((rp.longitude - $${paramIndex + 1}) * COS((rp.latitude + $${paramIndex}) / 2 / 57.29577951), 2)
-           ) <= $${paramIndex + 2})
+             POWER(rp.latitude - $${idx}, 2) +
+             POWER((rp.longitude - $${idx + 1}) * COS((rp.latitude + $${idx}) / 2 / 57.29577951), 2)
+           ) <= $${idx + 2})
         `)
-        params.push(lat, lng, maxDistance)
-        paramIndex += 3
+        extraParams.push(lat, lng, maxDistance)
+        idx += 3
       }
 
       distanceOrder = 'distance_km ASC NULLS LAST,'
     }
+
+    const { where: whereClause, params } = qb.build('WHERE')
 
     // Main query
     const repairersQuery = `
@@ -170,18 +161,18 @@ export async function GET(request: NextRequest) {
         rp.warranty_duration_months
         ${distanceSelect}
       FROM ${TABLE_NAMES.REPAIRER_PROFILES} rp
-      WHERE ${conditions.join(' AND ')}
+      ${whereClause}
       ORDER BY
         ${distanceOrder}
         rp.is_verified DESC,
         rp.average_rating DESC,
         rp.total_reviews DESC
-      LIMIT $${paramIndex} OFFSET $${paramIndex + 1}
+      LIMIT $${idx} OFFSET $${idx + 1}
     `
 
-    params.push(limit, offset)
+    const allParams = [...params, ...extraParams, limit, offset]
 
-    const { rows: repairers, total } = await paginatedQuery<RepairerRow & { distance_km?: number }>(repairersQuery, params)
+    const { rows: repairers, total } = await paginatedQuery<RepairerRow & { distance_km?: number }>(repairersQuery, allParams)
 
     // Batch-fetch rating distributions and review summaries (avoids N+1 queries)
     const repairerIds = repairers.map(r => r.id)

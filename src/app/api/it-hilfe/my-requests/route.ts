@@ -5,6 +5,7 @@ import { apiError, apiSuccess, apiUnauthorized } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
+import { QueryParams } from '@/lib/api/query-builder'
 
 interface RequestRow {
   id: string
@@ -51,17 +52,14 @@ export async function GET(request: NextRequest) {
     const offset = parseInt(searchParams.get('offset') || '0')
 
     // Build WHERE conditions
-    const conditions: string[] = ['requester_id = $1']
-    const params: (string | number)[] = [session.user.id]
-    let paramIndex = 2
+    const qb = new QueryParams()
+    qb.add('requester_id = $P', session.user.id)
 
     if (status) {
-      conditions.push(`status = $${paramIndex}`)
-      params.push(status)
-      paramIndex++
+      qb.add('status = $P', status)
     }
 
-    const whereClause = `WHERE ${conditions.join(' AND ')}`
+    const { where: whereClause, params, nextIndex } = qb.build()
 
     // Query user's requests
     const requestsResult = await query(`
@@ -72,7 +70,7 @@ export async function GET(request: NextRequest) {
       FROM ${TABLE_NAMES.IT_HILFE_REQUESTS}
       ${whereClause}
       ORDER BY created_at DESC
-      LIMIT $${paramIndex} OFFSET $${paramIndex + 1}
+      LIMIT $${nextIndex} OFFSET $${nextIndex + 1}
     `, [...params, limit, offset])
 
     // Get total count

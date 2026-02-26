@@ -12,6 +12,7 @@ import { withAdmin } from '@/lib/api/middleware'
 import { query } from '@/lib/auth/db'
 import { canAccessSection, isSuperAdmin } from '@/lib/permissions'
 import { TABLE_NAMES } from '@/config/database'
+import { QueryParams } from '@/lib/api/query-builder'
 import { logger } from '@/lib/logger'
 import {
   apiSuccess,
@@ -60,35 +61,25 @@ export const GET = withAdmin(async (request, session) => {
     const isSuperAdminUser = isSuperAdmin(session.user.email, session.user.isSuperAdmin)
 
     // Build query with filters
-    const conditions: string[] = []
-    const values: (string | boolean)[] = []
-    let paramIndex = 1
+    const qb = new QueryParams()
 
     if (filters.department) {
-      conditions.push(`tp.department = $${paramIndex}`)
-      values.push(filters.department)
-      paramIndex++
+      qb.add('tp.department = $P', filters.department)
     }
 
     if (filters.employment_type) {
-      conditions.push(`tp.employment_type = $${paramIndex}`)
-      values.push(filters.employment_type)
-      paramIndex++
+      qb.add('tp.employment_type = $P', filters.employment_type)
     }
 
     if (filters.is_active !== 'all') {
-      conditions.push(`tp.is_active = $${paramIndex}`)
-      values.push(filters.is_active === 'true')
-      paramIndex++
+      qb.add('tp.is_active = $P', filters.is_active === 'true')
     }
 
     if (filters.search) {
-      conditions.push(`(u.name ILIKE $${paramIndex} OR tp.position ILIKE $${paramIndex})`)
-      values.push(`%${filters.search}%`)
-      paramIndex++
+      qb.add('(u.name ILIKE $P OR tp.position ILIKE $P)', `%${filters.search}%`)
     }
 
-    const whereClause = conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : ''
+    const { where: whereClause, params } = qb.build()
 
     // Select columns - exclude hr_notes for non-super-admins
     const hrNotesColumn = isSuperAdminUser ? ', tp.hr_notes' : ''
@@ -149,7 +140,7 @@ export const GET = withAdmin(async (request, session) => {
        JOIN ${TABLE_NAMES.USERS} u ON tp.user_id = u.id
        ${whereClause}
        ORDER BY u.name ASC NULLS LAST, u.email ASC`,
-      values
+      params
     )
 
     return apiSuccess(result.rows)
