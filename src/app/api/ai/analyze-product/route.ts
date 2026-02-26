@@ -2,7 +2,7 @@
  * API: Image Product Analysis
  *
  * POST /api/ai/analyze-product
- * Analyzes product images using Ollama vision model.
+ * Analyzes product images using AI vision model.
  *
  * Accepts:
  *   - image: Base64 encoded image data
@@ -15,12 +15,14 @@
  */
 
 import { NextRequest } from 'next/server'
-import { createClient } from '@/lib/supabase/server'
+import { query } from '@/lib/auth/db'
+import { auth } from '@/auth'
 import { apiError, apiSuccess } from '@/lib/api/helpers'
 import { logger } from '@/lib/logger'
 import { extractProductFromImage } from '@/lib/erfassung/ai-extraction'
 import { validateBody, AnalyzeProductSchema } from '@/lib/schemas'
 import { APPROVAL_STATUS } from '@/config/approval-status'
+import { TABLE_NAMES } from '@/config/database'
 
 // Map condition values to display format
 const CONDITION_MAP: Record<string, string> = {
@@ -117,20 +119,14 @@ export async function POST(request: NextRequest) {
   const startTime = Date.now()
 
   try {
-    const supabase = await createClient()
     const body = await request.json()
     const validation = validateBody(AnalyzeProductSchema, body)
     if (!validation.success) return validation.error
-    const { image, imageUrl, saveToDatabase, userId } = validation.data
+    const { image, imageUrl, saveToDatabase } = validation.data
 
-    // Get current user if not provided
-    let currentUserId = userId
-    if (!currentUserId) {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser()
-      currentUserId = user?.id
-    }
+    // Get current user from session
+    const session = await auth()
+    const currentUserId = session?.user?.id
 
     // Use shared AI extraction service for image analysis
     // Zod refine guarantees at least one of image/imageUrl is present
@@ -202,79 +198,111 @@ export async function POST(request: NextRequest) {
 
     // Save to database if requested
     if (saveToDatabase && currentUserId) {
-      const { data: savedProduct, error: saveError } = await supabase
-        .from('ai_extracted_products')
-        .insert({
-          original_image_url: imageUrl,
-          extracted_at: new Date().toISOString(),
-          product_name: analysisResult.product_name,
-          product_name_confidence: analysisResult.product_name_confidence,
-          brand: analysisResult.brand,
-          brand_confidence: analysisResult.brand_confidence,
-          model: analysisResult.model,
-          model_confidence: analysisResult.model_confidence,
-          category: analysisResult.category,
-          category_confidence: analysisResult.category_confidence,
-          subcategory: analysisResult.subcategory,
-          subcategory_confidence: analysisResult.subcategory_confidence,
-          estimated_price_chf: analysisResult.estimated_price_chf,
-          price_confidence: analysisResult.price_confidence,
-          condition: analysisResult.condition,
-          condition_confidence: analysisResult.condition_confidence,
-          specifications: analysisResult.specifications,
-          specs_confidence: analysisResult.specs_confidence,
-          color: analysisResult.color,
-          color_confidence: analysisResult.color_confidence,
-          material: analysisResult.material,
-          material_confidence: analysisResult.material_confidence,
-          dimensions: analysisResult.dimensions,
-          weight_grams: analysisResult.weight_grams,
-          weight_confidence: analysisResult.weight_confidence,
-          ai_provider: analysisResult.ai_provider,
-          ai_model: analysisResult.ai_model,
-          processing_time_ms: analysisResult.processing_time_ms,
-          total_confidence: analysisResult.total_confidence,
-          raw_ai_response: analysisResult.raw_ai_response,
-          created_by: currentUserId,
-          status: APPROVAL_STATUS.PENDING,
-        })
-        .select('id')
-        .single()
+      try {
+        const insertResult = await query<{ id: string }>(
+          `INSERT INTO ${TABLE_NAMES.AI_EXTRACTED_PRODUCTS} (
+            original_image_url, extracted_at, product_name, product_name_confidence,
+            brand, brand_confidence, model, model_confidence,
+            category, category_confidence, subcategory, subcategory_confidence,
+            estimated_price_chf, price_confidence, condition, condition_confidence,
+            specifications, specs_confidence, color, color_confidence,
+            material, material_confidence, dimensions, weight_grams, weight_confidence,
+            ai_provider, ai_model, processing_time_ms, total_confidence,
+            raw_ai_response, created_by, status
+          ) VALUES (
+            $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12,
+            $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24, $25,
+            $26, $27, $28, $29, $30, $31, $32
+          ) RETURNING id`,
+          [
+            imageUrl || null,
+            new Date().toISOString(),
+            analysisResult.product_name,
+            analysisResult.product_name_confidence,
+            analysisResult.brand,
+            analysisResult.brand_confidence,
+            analysisResult.model,
+            analysisResult.model_confidence,
+            analysisResult.category,
+            analysisResult.category_confidence,
+            analysisResult.subcategory,
+            analysisResult.subcategory_confidence,
+            analysisResult.estimated_price_chf,
+            analysisResult.price_confidence,
+            analysisResult.condition,
+            analysisResult.condition_confidence,
+            JSON.stringify(analysisResult.specifications),
+            analysisResult.specs_confidence,
+            analysisResult.color,
+            analysisResult.color_confidence,
+            analysisResult.material,
+            analysisResult.material_confidence,
+            analysisResult.dimensions,
+            analysisResult.weight_grams,
+            analysisResult.weight_confidence,
+            analysisResult.ai_provider,
+            analysisResult.ai_model,
+            analysisResult.processing_time_ms,
+            analysisResult.total_confidence,
+            JSON.stringify(analysisResult.raw_ai_response),
+            currentUserId,
+            APPROVAL_STATUS.PENDING,
+          ]
+        )
 
-      if (saveError) {
-        logger.error('Error saving product analysis', { error: saveError })
-      } else {
-        savedProductId = savedProduct.id
+        savedProductId = insertResult.rows[0]?.id
 
-        // Calculate and save sustainability score
-        const sustainabilityScore = calculateSustainabilityScore(analysisResult)
-        await supabase.from('sustainability_scores').insert({
-          product_id: savedProductId,
-          overall_score: sustainabilityScore.overall_score,
-          environmental_score: sustainabilityScore.environmental_score,
-          social_score: sustainabilityScore.social_score,
-          economic_score: sustainabilityScore.economic_score,
-          factors: sustainabilityScore.factors,
-          recommendations: sustainabilityScore.recommendations,
-          improvement_suggestions: sustainabilityScore.improvement_suggestions,
-          ai_analysis: sustainabilityScore.ai_analysis,
-          assessed_by: 'ai',
-        })
+        if (savedProductId) {
+          // Calculate and save sustainability score
+          const sustainabilityScore = calculateSustainabilityScore(analysisResult)
+          await query(
+            `INSERT INTO ${TABLE_NAMES.SUSTAINABILITY_SCORES} (
+              product_id, overall_score, environmental_score, social_score,
+              economic_score, factors, recommendations, improvement_suggestions,
+              ai_analysis, assessed_by
+            ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)`,
+            [
+              savedProductId,
+              sustainabilityScore.overall_score,
+              sustainabilityScore.environmental_score,
+              sustainabilityScore.social_score,
+              sustainabilityScore.economic_score,
+              JSON.stringify(sustainabilityScore.factors),
+              JSON.stringify(sustainabilityScore.recommendations),
+              JSON.stringify(sustainabilityScore.improvement_suggestions),
+              JSON.stringify(sustainabilityScore.ai_analysis),
+              'ai',
+            ]
+          )
+        }
+      } catch (dbError) {
+        // DB save failure should not block the analysis response
+        logger.error('Error saving product analysis to DB', { error: dbError })
       }
     }
 
-    // Log AI processing for analytics
+    // Log AI processing for analytics (non-blocking)
     if (currentUserId) {
-      await supabase.from('ai_processing_logs').insert({
-        request_type: 'image_analysis',
-        provider: 'ollama',
-        model: analysisResult.ai_model,
-        input_data: { image_provided: !!image, image_url_provided: !!imageUrl },
-        response_data: analysisResult,
-        processing_time_ms: analysisResult.processing_time_ms,
-        confidence_score: analysisResult.total_confidence,
-        user_id: currentUserId,
-      })
+      try {
+        await query(
+          `INSERT INTO ${TABLE_NAMES.AI_PROCESSING_LOGS} (
+            request_type, provider, model, input_data, response_data,
+            processing_time_ms, confidence_score, user_id
+          ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
+          [
+            'image_analysis',
+            'ollama',
+            analysisResult.ai_model,
+            JSON.stringify({ image_provided: !!image, image_url_provided: !!imageUrl }),
+            JSON.stringify(analysisResult),
+            analysisResult.processing_time_ms,
+            analysisResult.total_confidence,
+            currentUserId,
+          ]
+        )
+      } catch (logError) {
+        logger.error('Error logging AI processing', { error: logError })
+      }
     }
 
     logger.info('Image analysis completed', {

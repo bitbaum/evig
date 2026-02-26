@@ -29,6 +29,7 @@ export function AICameraProductListing({ onProductDetected, onClose }: AICameraP
     capturedImage,
     isAnalyzing,
     suggestions,
+    analysisError,
     videoRef,
     canvasRef,
     fileInputRef,
@@ -95,13 +96,20 @@ export function AICameraProductListing({ onProductDetected, onClose }: AICameraP
             ) : isAnalyzing ? (
               <AIAnalysisLoader />
             ) : (
-              <AIProductResults
-                capturedImage={capturedImage}
-                suggestions={suggestions}
-                onSelectProduct={selectProduct}
-                onRetry={resetCapture}
-                onClose={onClose}
-              />
+              <>
+                {analysisError && (
+                  <div className="mb-4 p-3 bg-amber-50 border border-amber-200 rounded-lg text-sm text-amber-800">
+                    {analysisError}
+                  </div>
+                )}
+                <AIProductResults
+                  capturedImage={capturedImage}
+                  suggestions={suggestions}
+                  onSelectProduct={selectProduct}
+                  onRetry={resetCapture}
+                  onClose={onClose}
+                />
+              </>
             )}
           </div>
         </motion.div>

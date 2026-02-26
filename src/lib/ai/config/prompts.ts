@@ -10,6 +10,9 @@
  * - Keep prompts modular and composable
  */
 
+import { voiceProductDataSchema } from '@/lib/schemas/erfassung'
+import { zodSchemaToPromptString } from '@/lib/ai/schema-to-prompt'
+
 // =============================================================================
 // SHARED BRAND CONTEXT
 // =============================================================================
@@ -125,6 +128,25 @@ Wichtig:
 // ERFASSUNG PROMPTS
 // =============================================================================
 
+/**
+ * SSOT for AI-facing field descriptions used in extraction prompts.
+ * Adding a field = add to Zod schema (erfassung.ts) + add description here.
+ */
+export const ERFASSUNG_FIELD_DESCRIPTIONS = {
+  hersteller: 'Herstellername (Dell, Lenovo, HP, Apple, etc.)',
+  produktname: 'Produktmodell-Name',
+  kurzbeschreibung: 'Kurze deutsche Beschreibung des Produkts',
+  specs: { key: 'Spec-Name (CPU, RAM, Speicher, Display)', value: 'Spec-Wert' },
+  verkaufspreis: 'Preis in CHF als Zahl ohne Währungssymbol',
+  zustand: 'Einer von: new, like_new, good, fair, poor',
+  hauptkategorie: '10 für Laptops, 20 für Desktop PCs, 30 für Monitore, 40 für Peripherie',
+  unterkategorie: '101 für Business Laptops, 102 für Consumer, 103 für Gaming',
+  kundenprofile: 'Passende Profile: oma, buero, chiller, gamer, kreativ, dev, student',
+  bemerkungen: 'Zusätzliche Hinweise zu Zustand oder Besonderheiten',
+} as const
+
+const ERFASSUNG_SCHEMA = zodSchemaToPromptString(voiceProductDataSchema, ERFASSUNG_FIELD_DESCRIPTIONS)
+
 export const ERFASSUNG_PROMPTS = {
   /**
    * System prompt for product data extraction
@@ -140,25 +162,9 @@ Bei fehlenden Informationen:
 - Ergänze typische Specs für bekannte Modelle`,
 
   /**
-   * Schema for product data extraction
+   * Schema for product data extraction — derived from voiceProductDataSchema
    */
-  schema: `{
-  "hersteller": "Herstellername (Dell, Lenovo, HP, Apple, etc.)",
-  "produktname": "Produktmodell-Name",
-  "kurzbeschreibung": "Kurze deutsche Beschreibung des Produkts",
-  "specs": [
-    { "key": "CPU", "value": "Prozessormodell" },
-    { "key": "RAM", "value": "Arbeitsspeicher" },
-    { "key": "Speicher", "value": "Speichertyp und -grösse" },
-    { "key": "Display", "value": "Bildschirmgrösse und Auflösung" }
-  ],
-  "verkaufspreis": "Preis in CHF als Zahl ohne Währungssymbol",
-  "zustand": "Einer von: new, like_new, good, fair, poor",
-  "hauptkategorie": "10 für Laptops, 20 für Desktop PCs, 30 für Monitore, 40 für Peripherie",
-  "unterkategorie": "101 für Business Laptops, 102 für Consumer, 103 für Gaming",
-  "kundenprofile": ["Passende Profile: oma, buero, chiller, gamer, kreativ, dev, student"],
-  "bemerkungen": "Zusätzliche Hinweise zu Zustand oder Besonderheiten"
-}`,
+  schema: ERFASSUNG_SCHEMA,
 
   /**
    * Prompt for extracting product data from text

@@ -1,11 +1,11 @@
 /**
  * Hook for AI Camera functionality
- * Handles camera capture, file upload, and AI analysis
+ * Handles camera capture, file upload, and AI analysis via /api/ai/analyze-product
  */
 
 import { useState, useRef, useCallback } from 'react'
 import { logger } from '@/lib/logger'
-import { MOCK_AI_SUGGESTIONS } from '@/components/marketplace/ai-camera/config'
+import { getCategoryIcon } from '@/components/marketplace/ai-camera/config'
 import type { ProductSuggestion } from '@/components/marketplace/ai-camera/types'
 
 interface UseAICameraReturn {
@@ -14,6 +14,7 @@ interface UseAICameraReturn {
   capturedImage: string | null
   isAnalyzing: boolean
   suggestions: ProductSuggestion[]
+  analysisError: string | null
 
   // Refs - using MutableRefObject for DOM element refs
   videoRef: React.MutableRefObject<HTMLVideoElement | null>
@@ -33,20 +34,65 @@ export function useAICamera(): UseAICameraReturn {
   const [capturedImage, setCapturedImage] = useState<string | null>(null)
   const [isAnalyzing, setIsAnalyzing] = useState(false)
   const [suggestions, setSuggestions] = useState<ProductSuggestion[]>([])
+  const [analysisError, setAnalysisError] = useState<string | null>(null)
 
   const videoRef = useRef<HTMLVideoElement | null>(null)
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
   const fileInputRef = useRef<HTMLInputElement | null>(null)
 
-  const analyzeImage = useCallback(async (_imageData: string) => {
+  const analyzeImage = useCallback(async (imageData: string) => {
     setIsAnalyzing(true)
+    setAnalysisError(null)
+    setSuggestions([])
 
-    // Simulate AI analysis delay
-    // In production, this would call an AI service
-    await new Promise(resolve => setTimeout(resolve, 3000))
+    try {
+      const res = await fetch('/api/ai/analyze-product', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          image: imageData,
+          saveToDatabase: false,
+        }),
+      })
 
-    setSuggestions(MOCK_AI_SUGGESTIONS)
-    setIsAnalyzing(false)
+      const data = await res.json()
+
+      if (!res.ok || !data.success) {
+        setAnalysisError(data.error || 'Analyse fehlgeschlagen')
+        return
+      }
+
+      const analysis = data.data?.analysis
+      if (!analysis) {
+        setAnalysisError('Keine Produktdaten erkannt. Versuche es mit der Text-Eingabe.')
+        return
+      }
+
+      // Map API response to ProductSuggestion
+      const suggestion: ProductSuggestion = {
+        id: `ai-${Date.now()}`,
+        name: analysis.product_name || 'Unbekanntes Produkt',
+        category: analysis.category || 'Electronics',
+        estimatedPrice: analysis.estimated_price_chf || 0,
+        confidence: analysis.total_confidence || 0.5,
+        brand: analysis.brand,
+        model: analysis.model,
+        condition: analysis.condition || 'good',
+        features: analysis.specifications
+          ? Object.entries(analysis.specifications).map(
+              ([key, value]) => `${key}: ${value}`
+            )
+          : [],
+        icon: getCategoryIcon(analysis.category || ''),
+      }
+
+      setSuggestions([suggestion])
+    } catch (error) {
+      logger.error('AI image analysis failed', { error })
+      setAnalysisError('Netzwerkfehler. Bitte versuche es erneut.')
+    } finally {
+      setIsAnalyzing(false)
+    }
   }, [])
 
   const startCamera = useCallback(async () => {
@@ -109,6 +155,7 @@ export function useAICamera(): UseAICameraReturn {
   const resetCapture = useCallback(() => {
     setCapturedImage(null)
     setSuggestions([])
+    setAnalysisError(null)
   }, [])
 
   return {
@@ -116,6 +163,7 @@ export function useAICamera(): UseAICameraReturn {
     capturedImage,
     isAnalyzing,
     suggestions,
+    analysisError,
     videoRef,
     canvasRef,
     fileInputRef,

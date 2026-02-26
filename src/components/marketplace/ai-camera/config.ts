@@ -10,7 +10,7 @@ import {
   HardDrive,
   Router
 } from 'lucide-react'
-import type { ProductSuggestion } from './types'
+import type { ProductSuggestion } from './types' // Used by generateProductDescription
 
 /**
  * Condition labels (German)
@@ -38,49 +38,6 @@ export const CATEGORY_ICONS: Record<string, React.ComponentType<React.SVGProps<S
  * Default icon when category not found
  */
 export const DEFAULT_CATEGORY_ICON = Smartphone
-
-/**
- * Mock AI suggestions for demo
- * In production, this would come from an AI service
- */
-export const MOCK_AI_SUGGESTIONS: ProductSuggestion[] = [
-  {
-    id: 'iphone13promax',
-    name: 'iPhone 13 Pro Max',
-    category: 'Smartphones',
-    estimatedPrice: 850,
-    confidence: 0.92,
-    brand: 'Apple',
-    model: 'iPhone 13 Pro Max',
-    condition: 'excellent',
-    features: ['256GB Speicher', 'Triple-Kamera', 'Pro Motion Display', '5G'],
-    icon: Smartphone
-  },
-  {
-    id: 'iphone12promax',
-    name: 'iPhone 12 Pro Max',
-    category: 'Smartphones',
-    estimatedPrice: 650,
-    confidence: 0.78,
-    brand: 'Apple',
-    model: 'iPhone 12 Pro Max',
-    condition: 'good',
-    features: ['128GB Speicher', 'Triple-Kamera', 'OLED Display', 'Face ID'],
-    icon: Smartphone
-  },
-  {
-    id: 'samsungs21',
-    name: 'Samsung Galaxy S21',
-    category: 'Smartphones',
-    estimatedPrice: 450,
-    confidence: 0.65,
-    brand: 'Samsung',
-    model: 'Galaxy S21',
-    condition: 'good',
-    features: ['128GB Speicher', 'Triple-Kamera', '120Hz Display'],
-    icon: Smartphone
-  }
-]
 
 /**
  * Get condition label in German

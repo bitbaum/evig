@@ -5,6 +5,23 @@ import type { ErfassungFormData, AIFieldMetadata } from '@/types/erfassung'
 import { DEFAULT_FORM_DATA, formDataToPayload } from '@/types/erfassung'
 import { SPEC_TEMPLATES } from '@/config/erfassung'
 
+/**
+ * Merge partial AI/refined data into existing form data.
+ * Skips empty/null/undefined values so existing data is preserved.
+ * Adding a new field to ErfassungFormData = this handles it automatically.
+ */
+function mergeFormData(prev: ErfassungFormData, data: Partial<ErfassungFormData>): ErfassungFormData {
+  const updated = { ...prev }
+  for (const key of Object.keys(data) as Array<keyof ErfassungFormData>) {
+    const value = data[key]
+    if (value === undefined || value === null) continue
+    if (Array.isArray(value) && value.length === 0) continue
+    if (typeof value === 'string' && value === '') continue
+    ;(updated as Record<string, unknown>)[key] = value
+  }
+  return updated
+}
+
 export function useErfassungForm() {
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -130,20 +147,7 @@ export function useErfassungForm() {
   const handleProductData = useCallback((data: Partial<ErfassungFormData>, metadata?: AIFieldMetadata) => {
     logger.info('Product data received', { product: data.produktname, hasMetadata: !!metadata })
 
-    setFormData(prev => ({
-      ...prev,
-      hersteller: data.hersteller || prev.hersteller,
-      produktname: data.produktname || prev.produktname,
-      kurzbeschreibung: data.kurzbeschreibung || prev.kurzbeschreibung,
-      verkaufspreis: data.verkaufspreis || prev.verkaufspreis,
-      zustand: data.zustand || prev.zustand,
-      hauptkategorie: data.hauptkategorie || prev.hauptkategorie,
-      unterkategorie: data.unterkategorie || prev.unterkategorie,
-      kundenprofile: data.kundenprofile?.length ? data.kundenprofile : prev.kundenprofile,
-      specs: data.specs?.length
-        ? data.specs.map(s => ({ key: s.key, value: s.value }))
-        : prev.specs,
-    }))
+    setFormData(prev => mergeFormData(prev, data))
 
     if (metadata) {
       setAiMetadata(prev => ({ ...prev, ...metadata }))
@@ -199,18 +203,7 @@ export function useErfassungForm() {
 
       if (data.success && data.data?.refined) {
         const ref = data.data.refined
-        setFormData(prev => ({
-          ...prev,
-          hersteller: ref.hersteller || prev.hersteller,
-          produktname: ref.produktname || prev.produktname,
-          kurzbeschreibung: ref.kurzbeschreibung || prev.kurzbeschreibung,
-          specs: ref.specs?.length ? ref.specs : prev.specs,
-          verkaufspreis: ref.verkaufspreis || prev.verkaufspreis,
-          zustand: ref.zustand || prev.zustand,
-          hauptkategorie: ref.hauptkategorie || prev.hauptkategorie,
-          unterkategorie: ref.unterkategorie || prev.unterkategorie,
-          kundenprofile: ref.kundenprofile?.length ? ref.kundenprofile : prev.kundenprofile,
-        }))
+        setFormData(prev => mergeFormData(prev, ref))
         setAiInstruction('')
         const changedFields = data.data.fieldsChanged || []
         setAiSuccess(`KI hat ${changedFields.length} Felder verbessert: ${changedFields.join(', ')}`)
