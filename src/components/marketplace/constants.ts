@@ -34,4 +34,3 @@ export const PRODUCT_CONDITIONS: ProductCondition[] = SELLER_CONDITION_VALUES.ma
   }
 })
 
-export const MAX_IMAGES = 5

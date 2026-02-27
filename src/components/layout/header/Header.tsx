@@ -123,6 +123,7 @@ export function Header() {
                 )}
                 onClick={() => setMobileMenuOpen(true)}
                 aria-label="Menü öffnen"
+                aria-expanded={mobileMenuOpen}
               >
                 <Menu className="h-5 w-5" />
               </button>

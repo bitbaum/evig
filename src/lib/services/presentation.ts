@@ -9,6 +9,8 @@
  * belong in a database (icons, detailed feature lists, process steps).
  */
 
+import { formatPriceCents } from '@/config/marketplace'
+
 import {
   HardDrive,
   Server,
@@ -379,19 +381,8 @@ export function getServicePresentation(slug: string): ServicePresentation {
   return servicePresentation[slug] || defaultPresentation
 }
 
-/**
- * Format price from cents to display string
- */
-export function formatPrice(priceCents: number | null): string {
-  if (priceCents === null) {
-    return 'Auf Anfrage'
-  }
-  if (priceCents === 0) {
-    return 'Kostenlos'
-  }
-  const francs = priceCents / 100
-  return `CHF ${francs.toFixed(francs % 1 === 0 ? 0 : 2)}`
-}
+/** @deprecated Use formatPriceCents from @/config/marketplace directly */
+export const formatPrice = formatPriceCents
 
 /**
  * Get pricing info for a service

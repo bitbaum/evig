@@ -17,12 +17,13 @@
 import { NextRequest } from 'next/server'
 import { query } from '@/lib/auth/db'
 import { auth } from '@/auth'
-import { apiError, apiSuccess } from '@/lib/api/helpers'
+import { apiError, apiSuccess, apiUnauthorized } from '@/lib/api/helpers'
 import { logger } from '@/lib/logger'
 import { extractProductFromImage } from '@/lib/erfassung/ai-extraction'
 import { validateBody, AnalyzeProductSchema } from '@/lib/schemas'
 import { APPROVAL_STATUS } from '@/config/approval-status'
 import { TABLE_NAMES } from '@/config/database'
+import { rateLimiters } from '@/lib/security/rate-limit'
 
 // Map condition values to display format
 const CONDITION_MAP: Record<string, string> = {
@@ -119,14 +120,23 @@ export async function POST(request: NextRequest) {
   const startTime = Date.now()
 
   try {
+    // Auth gate — AI inference is expensive, require login
+    const session = await auth()
+    if (!session?.user?.id) {
+      return apiUnauthorized('Anmeldung erforderlich für Produktanalyse')
+    }
+
+    // Rate limit — 5 AI analyses per hour per user
+    if (!rateLimiters.aiAnalyze(session.user.id + ':ai-analyze')) {
+      return apiError(new Error('Rate limit'), 'Zu viele Anfragen. Bitte versuchen Sie es später erneut.', 429)
+    }
+
     const body = await request.json()
     const validation = validateBody(AnalyzeProductSchema, body)
     if (!validation.success) return validation.error
     const { image, imageUrl, saveToDatabase } = validation.data
 
-    // Get current user from session
-    const session = await auth()
-    const currentUserId = session?.user?.id
+    const currentUserId = session.user.id
 
     // Use shared AI extraction service for image analysis
     // Zod refine guarantees at least one of image/imageUrl is present

@@ -5,10 +5,7 @@ import { apiError, apiSuccess } from '@/lib/api/helpers'
 import { generateTaxReport, TAX_CONFIGURATIONS, TaxTransaction } from '@/lib/payments/tax-compliance'
 import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
-
-interface CountRow {
-  count: string
-}
+import { CountAsCountRow } from '@/lib/api/db-types'
 
 // Extended transaction type with joined data from query
 interface TaxTransactionWithJoins {
@@ -174,9 +171,9 @@ async function generateComplianceReport(transactions: TaxTransactionWithJoins[],
     WHERE created_at >= $1 AND created_at <= $2
   `, [startDate, endDate])
 
-  const refundRow = refundCount.rows[0] as CountRow
-  const escrowRow = escrowCount.rows[0] as CountRow
-  const disputeRow = disputeCount.rows[0] as CountRow
+  const refundRow = refundCount.rows[0] as CountAsCountRow
+  const escrowRow = escrowCount.rows[0] as CountAsCountRow
+  const disputeRow = disputeCount.rows[0] as CountAsCountRow
 
   return {
     period: {

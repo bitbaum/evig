@@ -6,6 +6,7 @@ import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES, CONVERSATION_TYPES } from '@/config/database'
 import { logger } from '@/lib/logger'
 import { validateBody, SendMessageSchema } from '@/lib/schemas'
+import { rateLimiters } from '@/lib/security/rate-limit'
 
 interface ConversationRow {
   id: string
@@ -87,6 +88,10 @@ export const POST = withAuth(async (
   session: ValidSession
 ) => {
   try {
+    if (!rateLimiters.messageCreate(session.user.id + ':message')) {
+      return apiError(new Error('Rate limit'), 'Zu viele Nachrichten. Bitte versuchen Sie es später erneut.', 429)
+    }
+
     const body = await request.json()
     const validation = validateBody(SendMessageSchema, body)
     if (!validation.success) return validation.error

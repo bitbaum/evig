@@ -11,6 +11,7 @@ import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
 import { getSkillIds } from '@/config/it-hilfe'
+import { CountRow } from '@/lib/api/db-types'
 
 interface HelperRow {
   user_id: string
@@ -27,10 +28,6 @@ interface HelperRow {
   max_travel_km: number
   skills: string[] | null
   skill_count: number
-}
-
-interface CountRow {
-  total: string
 }
 
 /**

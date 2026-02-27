@@ -39,7 +39,7 @@ jest.mock('@/lib/security/sanitize', () => ({
   sanitizeInput: jest.fn((input: string) => input),
 }))
 
-jest.mock('@/lib/validation/schemas', () => ({
+jest.mock('@/lib/schemas/it-hilfe', () => ({
   itHilfeRequestSchema: {},
   validateAndRespond: jest.fn().mockReturnValue({
     success: true,

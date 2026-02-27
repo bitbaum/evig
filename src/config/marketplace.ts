@@ -379,6 +379,19 @@ export function formatPrice(amount: number): string {
   return formatCHF(amount)
 }
 
+/**
+ * Format a price stored in cents (Rappen) to a display string.
+ * - null → "Auf Anfrage"
+ * - 0    → "Kostenlos"
+ * - else → "CHF X" (smart decimals: 0 if whole, 2 if fractional)
+ */
+export function formatPriceCents(priceCents: number | null): string {
+  if (priceCents === null) return 'Auf Anfrage'
+  if (priceCents === 0) return 'Kostenlos'
+  const francs = priceCents / 100
+  return `CHF ${francs.toFixed(francs % 1 === 0 ? 0 : 2)}`
+}
+
 // ============================================================================
 // Spec normalization helpers
 // ============================================================================

@@ -25,6 +25,39 @@ import {
 import { formatCHF, DELIVERY_LABELS } from '@/config/marketplace';
 import type { DeliveryOption } from '@/config/marketplace';
 
+const PAYREXX_WEBHOOK_SECRET = process.env.PAYREXX_WEBHOOK_SECRET;
+
+/**
+ * Verify Payrexx webhook signature using HMAC-SHA256.
+ * Returns true if signature is valid or if no secret is configured (dev mode).
+ */
+async function verifyPayrexxSignature(rawBody: string, signature: string | null): Promise<boolean> {
+  if (!PAYREXX_WEBHOOK_SECRET) {
+    logger.warn('PAYREXX_WEBHOOK_SECRET not set — skipping signature verification');
+    return true;
+  }
+  if (!signature) return false;
+
+  const encoder = new TextEncoder();
+  const key = await crypto.subtle.importKey(
+    'raw',
+    encoder.encode(PAYREXX_WEBHOOK_SECRET),
+    { name: 'HMAC', hash: 'SHA-256' },
+    false,
+    ['sign']
+  );
+  const mac = await crypto.subtle.sign('HMAC', key, encoder.encode(rawBody));
+  const computed = Array.from(new Uint8Array(mac), b => b.toString(16).padStart(2, '0')).join('');
+
+  // Constant-time comparison
+  if (computed.length !== signature.length) return false;
+  let result = 0;
+  for (let i = 0; i < computed.length; i++) {
+    result |= computed.charCodeAt(i) ^ signature.charCodeAt(i);
+  }
+  return result === 0;
+}
+
 interface WebhookTransaction {
   id?: number;
   status?: string;
@@ -35,7 +68,15 @@ interface WebhookTransaction {
 
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json().catch(() => null);
+    const rawBody = await request.text();
+    const signature = request.headers.get('payrexx-signature');
+
+    if (!await verifyPayrexxSignature(rawBody, signature)) {
+      logger.warn('Payrexx webhook: invalid signature', { signature });
+      return NextResponse.json({ error: 'Invalid signature' }, { status: 401 });
+    }
+
+    const body = (() => { try { return JSON.parse(rawBody); } catch { return null; } })();
     if (!body) {
       return NextResponse.json({ error: 'Invalid body' }, { status: 400 });
     }

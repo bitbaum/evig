@@ -5,10 +5,7 @@ import { apiError, apiSuccess, apiBadRequest } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
-
-interface CountRow {
-  total: string
-}
+import { CountRow } from '@/lib/api/db-types'
 
 interface ApplicationRow {
   id: string

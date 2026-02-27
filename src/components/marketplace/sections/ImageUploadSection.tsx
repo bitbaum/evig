@@ -9,7 +9,7 @@
  */
 
 import { Image as ImageIcon, X } from 'lucide-react'
-import { MAX_IMAGES } from '../constants'
+import { MARKETPLACE_LIMITS } from '@/config/marketplace'
 import { cn } from '@/lib/utils'
 import { getTextColor } from '@/lib/design-system'
 
@@ -26,7 +26,7 @@ export function ImageUploadSection({ images, onImageUpload, onImageRemove }: Ima
         Produkt-Bilder
       </h3>
       <p className={cn('text-sm', getTextColor('white', 'muted'))}>
-        Fügen Sie bis zu {MAX_IMAGES} klare Bilder Ihres Produkts hinzu
+        Fügen Sie bis zu {MARKETPLACE_LIMITS.MAX_IMAGES} klare Bilder Ihres Produkts hinzu
       </p>
 
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
@@ -50,7 +50,7 @@ export function ImageUploadSection({ images, onImageUpload, onImageRemove }: Ima
         ))}
 
         {/* Upload button */}
-        {images.length < MAX_IMAGES && (
+        {images.length < MARKETPLACE_LIMITS.MAX_IMAGES && (
           <div className="border-2 border-dashed border-neutral-300 rounded-lg p-4 flex flex-col items-center justify-center hover:border-neutral-400 transition-colors cursor-pointer">
             <ImageIcon className="w-8 h-8 text-neutral-400 mb-2" />
             <label className="cursor-pointer">
@@ -70,9 +70,9 @@ export function ImageUploadSection({ images, onImageUpload, onImageRemove }: Ima
         )}
       </div>
       
-      {images.length >= MAX_IMAGES && (
+      {images.length >= MARKETPLACE_LIMITS.MAX_IMAGES && (
         <p className={cn('text-sm', getTextColor('white', 'muted'))}>
-          Maximum {MAX_IMAGES} Bilder erreicht
+          Maximum {MARKETPLACE_LIMITS.MAX_IMAGES} Bilder erreicht
         </p>
       )}
     </div>

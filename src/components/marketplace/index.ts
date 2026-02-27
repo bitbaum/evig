@@ -24,7 +24,7 @@ export { useAISearch } from './hooks/useAISearch'
 export type { ProductFormData, ProductCondition, ProductCategory, ProductListingErrors } from './types'
 
 // Constants
-export { PRODUCT_CATEGORIES, PRODUCT_CONDITIONS, MAX_IMAGES } from './constants'
+export { PRODUCT_CATEGORIES, PRODUCT_CONDITIONS } from './constants'
 
 
 

@@ -13,7 +13,7 @@ import {
 } from '@/config/it-hilfe'
 import { rateLimiters } from '@/lib/security/rate-limit'
 import { sanitizeInput } from '@/lib/security/sanitize'
-import { itHilfeRequestSchema, validateAndRespond } from '@/lib/validation/schemas'
+import { itHilfeRequestSchema, validateAndRespond } from '@/lib/schemas/it-hilfe'
 import { type RequestRow, mapRequestListRow } from '@/lib/it-hilfe/request-mapper'
 import { sendRequestCreatedNotifications } from '@/lib/it-hilfe/notifications'
 import { QueryParams } from '@/lib/api/query-builder'

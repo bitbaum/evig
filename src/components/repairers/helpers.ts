@@ -2,6 +2,8 @@
  * Shared helpers for repairer pages
  */
 
+import { formatPriceCents } from '@/config/marketplace'
+
 export const SERVICE_CATEGORIES = [
   { value: 'laptop_repair', label: 'Laptop-Reparatur', icon: '💻' },
   { value: 'phone_repair', label: 'Smartphone-Reparatur', icon: '📱' },
@@ -19,10 +21,8 @@ export const URGENCY_OPTIONS = [
   { value: 'emergency', label: 'Notfall', description: 'Heute/Morgen (Aufpreis)' },
 ] as const
 
-export function formatPrice(cents: number | null): string {
-  if (!cents) return 'Auf Anfrage'
-  return `CHF ${(cents / 100).toFixed(0)}`
-}
+/** @deprecated Use formatPriceCents from @/config/marketplace directly */
+export const formatPrice = formatPriceCents
 
 export function getServiceIcon(category: string): string {
   const found = SERVICE_CATEGORIES.find(

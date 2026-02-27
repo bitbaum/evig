@@ -452,18 +452,10 @@ export const OFFER_STATUSES: OfferStatus[] = [
 ]
 
 // ============================================================================
-// SWISS CANTONS
+// SWISS CANTONS — re-exported from SSOT
 // ============================================================================
 
-export const SWISS_CANTONS = [
-  'Aargau', 'Appenzell Ausserrhoden', 'Appenzell Innerrhoden', 'Basel-Landschaft',
-  'Basel-Stadt', 'Bern', 'Freiburg', 'Genf', 'Glarus', 'Graubünden',
-  'Jura', 'Luzern', 'Neuenburg', 'Nidwalden', 'Obwalden', 'Schaffhausen',
-  'Schwyz', 'Solothurn', 'St. Gallen', 'Tessin', 'Thurgau', 'Uri',
-  'Waadt', 'Wallis', 'Zug', 'Zürich'
-] as const
-
-export type SwissCanton = typeof SWISS_CANTONS[number]
+export { SWISS_CANTONS, type SwissCanton } from '@/config/swiss-cantons'
 
 // ============================================================================
 // HELPER FUNCTIONS

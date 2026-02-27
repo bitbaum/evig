@@ -8,6 +8,7 @@ import { logger } from '@/lib/logger'
 import { getSkillIds } from '@/config/it-hilfe'
 import { sendCustomEmail } from '@/lib/email'
 import { itHilfeNewOfferReceived } from '@/lib/email/templates/it-hilfe'
+import { rateLimiters } from '@/lib/security/rate-limit'
 
 interface OfferRow {
   id: string
@@ -114,6 +115,10 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
     const session = await auth()
     if (!session?.user?.id) {
       return apiUnauthorized(ERROR_MESSAGES.UNAUTHORIZED)
+    }
+
+    if (!rateLimiters.offerCreate(session.user.id + ':offer')) {
+      return apiError(new Error('Rate limit'), 'Zu viele Angebote. Bitte versuchen Sie es später erneut.', 429)
     }
 
     const { id } = await params

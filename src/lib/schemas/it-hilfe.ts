@@ -70,42 +70,6 @@ export const itHilfeRequestSchema = z.object({
 });
 
 /**
- * Marketplace Listing Schema
- * SSOT for validating marketplace listings
- */
-export const marketplaceListingSchema = z.object({
-  title: z
-    .string()
-    .min(10, 'Titel muss mindestens 10 Zeichen lang sein')
-    .max(200, 'Titel darf maximal 200 Zeichen lang sein'),
-  description: z
-    .string()
-    .min(20, 'Beschreibung muss mindestens 20 Zeichen lang sein')
-    .max(5000, 'Beschreibung darf maximal 5000 Zeichen lang sein'),
-  priceChf: z
-    .number()
-    .min(0, 'Preis muss positiv sein')
-    .max(50000, 'Preis darf maximal CHF 50\'000 sein'),
-  category: z.string().min(1, 'Kategorie ist erforderlich'),
-  condition: z.enum(['neu', 'wie_neu', 'gut', 'akzeptabel', 'defekt'] as const, {
-    message: 'Ungültiger Zustand',
-  }),
-  delivery: z.enum(['pickup', 'shipping', 'both'] as const, {
-    message: 'Ungültige Lieferoption',
-  }),
-  payment: z.enum(['cash', 'twint', 'bank', 'paypal', 'flexible'] as const, {
-    message: 'Ungültige Zahlungsoption',
-  }),
-  postalCode: z
-    .string()
-    .regex(/^\d{4}$/, 'Postleitzahl muss 4 Ziffern haben'),
-  city: z
-    .string()
-    .min(2, 'Stadt muss mindestens 2 Zeichen lang sein')
-    .max(100, 'Stadt darf maximal 100 Zeichen lang sein'),
-});
-
-/**
  * Helper function to validate data and return typed result
  */
 export function validateAndRespond<T>(

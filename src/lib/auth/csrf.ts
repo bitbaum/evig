@@ -59,6 +59,8 @@ const CSRF_CONFIG = {
     '/api/protocols', // Protocols APIs, protected by withAdmin middleware
     '/api/decisions', // Decisions APIs, protected by withAdmin middleware
     '/api/shop/',     // Shop APIs (cart, orders) — cart is tied to cart ID, not session
+    '/api/payments/payrexx-webhook', // External Payrexx webhook — no CSRF cookie
+    '/api/payments/webhook',         // Generic payment webhook
   ],
 }
 

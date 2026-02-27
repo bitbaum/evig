@@ -127,9 +127,9 @@ export function MobileMenu({
               "focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500"
             )}
             onClick={onClose}
+            aria-label="Menü schliessen"
           >
-            <span className="sr-only">Menü schliessen</span>
-            <X className="h-5 w-5" />
+            <X className="h-5 w-5" aria-hidden="true" />
           </button>
         </div>
 

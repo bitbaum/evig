@@ -11,6 +11,7 @@ import { redirect } from 'next/navigation'
 import { query } from '@/lib/auth/db'
 import { TABLE_NAMES } from '@/config/database'
 import { CATEGORY_LABELS } from '@/config/service-categories'
+import { formatPriceCents } from '@/config/marketplace'
 import {
   Plus,
   Wrench,
@@ -109,10 +110,7 @@ async function getServices(): Promise<ServiceType[]> {
   }
 }
 
-function formatPrice(cents: number | null): string {
-  if (cents === null) return 'Auf Anfrage'
-  return `CHF ${(cents / 100).toFixed(2)}`
-}
+const formatPrice = formatPriceCents
 
 function formatDuration(minutes: number | null): string {
   if (minutes === null) return '-'

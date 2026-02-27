@@ -5,10 +5,7 @@ import { apiError, apiSuccess, apiBadRequest, apiUnauthorized, apiForbidden } fr
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES } from '@/config/database'
 import { QueryParams } from '@/lib/api/query-builder'
-
-interface CountRow {
-  total: string
-}
+import { CountRow } from '@/lib/api/db-types'
 
 // GET /api/locations - List locations with filtering
 export async function GET(request: NextRequest) {

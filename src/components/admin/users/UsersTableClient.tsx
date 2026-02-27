@@ -12,7 +12,7 @@ import { UserPermissionsEditor } from '../UserPermissionsEditor'
 import { UserTableRow } from './UserTableRow'
 import { EditProfileModal } from './EditProfileModal'
 import { DeleteUserModal } from './DeleteUserModal'
-import { EmptyState } from './EmptyState'
+import { EmptyState } from '@/components/common/EmptyState'
 import { useUserManagement } from './useUserManagement'
 import type { UsersTableClientProps } from './types'
 
@@ -81,7 +81,7 @@ export function UsersTableClient({ users, currentUserIsSuperAdmin }: UsersTableC
           </table>
         </div>
 
-        {users.length === 0 && <EmptyState />}
+        {users.length === 0 && <EmptyState title="Noch keine Benutzer" message="Es wurden noch keine Benutzer registriert." />}
       </div>
 
       {/* Permission Editor Modal */}

@@ -4,14 +4,11 @@ import { query } from '@/lib/auth/db'
 import { apiError, apiSuccess, apiBadRequest, apiUnauthorized, apiForbidden, apiNotFound } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES } from '@/config/database'
+import { CountAsCountRow } from '@/lib/api/db-types'
 
 interface LocationOwnerRow {
   created_by: string
   approval_status: string
-}
-
-interface CountRow {
-  count: string
 }
 
 // GET /api/locations/[id] - Get location details
@@ -195,7 +192,7 @@ export async function DELETE(
       WHERE location_id = $1 AND status IN ('pending', 'confirmed') AND start_time > CURRENT_TIMESTAMP
     `, [locationId])
 
-    if (parseInt((activeBookings.rows[0] as CountRow).count) > 0) {
+    if (parseInt((activeBookings.rows[0] as CountAsCountRow).count) > 0) {
       return apiBadRequest('Ort kann nicht gelöscht werden, da aktive Buchungen existieren')
     }
 

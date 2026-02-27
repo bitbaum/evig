@@ -6,6 +6,7 @@ import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
 import { QueryParams } from '@/lib/api/query-builder'
+import { CountRow } from '@/lib/api/db-types'
 
 interface RequestRow {
   id: string
@@ -29,10 +30,6 @@ interface RequestRow {
   expires_at: string
   created_at: string
   updated_at: string
-}
-
-interface CountRow {
-  total: string
 }
 
 /**

@@ -3,7 +3,7 @@
  * Business logic for IT help requests — no HTTP, no UI.
  */
 
-import { itHilfeRequestSchema } from '@/lib/validation/schemas'
+import { itHilfeRequestSchema } from '@/lib/schemas/it-hilfe'
 import type { ITHilfeCreateFormData } from '@/components/it-hilfe-create/types'
 
 /**

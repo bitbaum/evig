@@ -5,6 +5,7 @@ import { apiError, apiSuccess, apiUnauthorized } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES, REVIEW_TARGET_TYPES } from '@/config/database'
 import { logger } from '@/lib/logger'
+import { CountRow } from '@/lib/api/db-types'
 
 interface ReviewRow {
   id: string
@@ -29,10 +30,6 @@ interface ReviewRow {
   response_content: string | null
   response_created_at: string | null
   responder_name: string | null
-}
-
-interface CountRow {
-  total: string
 }
 
 export async function GET(request: NextRequest) {

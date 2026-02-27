@@ -4,10 +4,7 @@ import { query } from '@/lib/auth/db'
 import { apiError, apiSuccess } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES } from '@/config/database'
-
-interface CountRow {
-  total: string
-}
+import { CountRow } from '@/lib/api/db-types'
 
 // GET /api/admin/workshops/proposals - List workshop proposals with filtering
 export const GET = withAdmin(async (request, session) => {

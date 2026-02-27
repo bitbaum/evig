@@ -11,6 +11,7 @@ import {
   updateHelperAverageRating,
   notifyRepairerOfReview,
 } from '@/lib/reviews/review-service'
+import { rateLimiters } from '@/lib/security/rate-limit'
 
 interface ReviewAttachment {
   id: string
@@ -147,6 +148,10 @@ export async function POST(request: NextRequest) {
   try {
     const session = await auth()
     if (!session?.user?.id) return apiUnauthorized(ERROR_MESSAGES.UNAUTHORIZED)
+
+    if (!rateLimiters.reviewCreate(session.user.id + ':review')) {
+      return apiError(new Error('Rate limit'), 'Zu viele Bewertungen. Bitte versuchen Sie es später erneut.', 429)
+    }
 
     const body = await request.json()
     const validation = validateBody(CreateReviewSchema, body)

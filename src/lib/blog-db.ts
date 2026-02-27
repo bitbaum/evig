@@ -11,23 +11,9 @@
 import { query } from '@/lib/auth/db'
 import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
+import type { BlogPost } from '@/lib/blog'
 
-/**
- * Blog post interface - matches src/lib/blog.ts for component compatibility
- */
-export interface BlogPost {
-  slug: string
-  title: string
-  excerpt?: string
-  featuredImage?: string
-  author: string
-  category?: string
-  tags?: string[]
-  publishedAt?: string
-  published?: boolean
-  body: string
-  createdAt: string
-}
+export type { BlogPost }
 
 export interface BlogCategory {
   id: string

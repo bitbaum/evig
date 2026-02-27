@@ -48,6 +48,18 @@ export const rateLimiters = {
   // CSV import: 5 per hour per user
   csvImport: createRateLimiter(60 * 60 * 1000, 5),
 
+  // AI product analysis: 5 per hour per user (expensive inference)
+  aiAnalyze: createRateLimiter(60 * 60 * 1000, 5),
+
+  // Reviews: 10 per hour per user
+  reviewCreate: createRateLimiter(60 * 60 * 1000, 10),
+
+  // Repairer bookings: 5 per hour per user
+  bookingCreate: createRateLimiter(60 * 60 * 1000, 5),
+
+  // IT-Hilfe offers: 10 per hour per user
+  offerCreate: createRateLimiter(60 * 60 * 1000, 10),
+
   // General API: 100 requests per 15 minutes per IP
   apiGeneral: createRateLimiter(15 * 60 * 1000, 100)
 };

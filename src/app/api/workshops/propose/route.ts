@@ -8,10 +8,7 @@ import { sendEmail } from '@/lib/email'
 import { logger } from '@/lib/logger'
 import { APP_URL } from '@/config/urls'
 import { validateBody, WorkshopProposalSchema } from '@/lib/schemas'
-
-interface CountRow {
-  count: string
-}
+import { CountAsCountRow } from '@/lib/api/db-types'
 
 interface LocationRow {
   id: string
@@ -63,7 +60,7 @@ export async function POST(request: NextRequest) {
       [session.user.id]
     )
 
-    const proposalCount = existingProposals.rows[0] as CountRow
+    const proposalCount = existingProposals.rows[0] as CountAsCountRow
     if (parseInt(proposalCount.count) >= 3) {
       return apiBadRequest('Sie haben bereits 3 ausstehende oder genehmigte Workshop-Vorschläge. Bitte warten Sie auf deren Bearbeitung.')
     }

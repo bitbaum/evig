@@ -6,6 +6,7 @@ import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
 import { sendCustomEmail, appointmentNewBooking } from '@/lib/email'
+import { rateLimiters } from '@/lib/security/rate-limit'
 
 interface RepairerRow {
   id: string
@@ -34,6 +35,10 @@ export const POST = withAuth<{ id: string }>(async (
   context?: { params?: { id: string } }
 ) => {
   try {
+    if (!rateLimiters.bookingCreate(session.user.id + ':booking')) {
+      return apiError(new Error('Rate limit'), 'Zu viele Buchungsanfragen. Bitte versuchen Sie es später erneut.', 429)
+    }
+
     const repairerId = context?.params?.id
     if (!repairerId) {
       return apiBadRequest('Repairer ID erforderlich')

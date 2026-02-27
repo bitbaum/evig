@@ -7,6 +7,7 @@ import { calculateTaxes, generateTaxInvoiceData } from '@/lib/payments/tax-compl
 import { TABLE_NAMES } from '@/config/database'
 import { INVOICE_STATUS } from '@/config/invoice-status'
 import { QueryParams } from '@/lib/api/query-builder'
+import { CountRow } from '@/lib/api/db-types'
 
 interface LineItemInput {
   description: string
@@ -18,10 +19,6 @@ interface InvoiceCreatedRow {
   id: string
   invoice_number: string
   created_at: string
-}
-
-interface CountRow {
-  total: string
 }
 
 // POST /api/invoices - Create new invoice
