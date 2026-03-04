@@ -161,10 +161,11 @@ export interface ServiceListItem {
 }
 
 // ============================================================================
-// Category Type
+// Category Type — re-exported from SSOT (config/database.ts)
 // ============================================================================
 
-export type ServiceCategory = 'repair' | 'data' | 'recycling' | 'software' | 'web' | 'general'
+import type { ServiceCategory } from '@/config/database'
+export type { ServiceCategory }
 
 export const SERVICE_CATEGORY_LABELS: Record<ServiceCategory, string> = {
   repair: 'Reparatur',

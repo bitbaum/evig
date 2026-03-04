@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
 import { formatDateShort } from '@/lib/date-formats'
+import { getApprovalStatusLabel } from '@/config/approval-status'
 import {
   MapPin,
   Building2,
@@ -143,9 +144,9 @@ export default function LocationDetailPage() {
 
   const getStatusBadge = (status: string) => {
     const configs: Record<string, { icon: typeof CheckCircle; label: string; className: string }> = {
-      approved: { icon: CheckCircle, label: 'Genehmigt', className: 'bg-green-100 text-green-800' },
-      pending: { icon: Clock, label: 'Ausstehend', className: 'bg-yellow-100 text-yellow-800' },
-      rejected: { icon: XCircle, label: 'Abgelehnt', className: 'bg-red-100 text-red-800' },
+      approved: { icon: CheckCircle, label: getApprovalStatusLabel('approved'), className: 'bg-green-100 text-green-800' },
+      pending: { icon: Clock, label: getApprovalStatusLabel('pending'), className: 'bg-yellow-100 text-yellow-800' },
+      rejected: { icon: XCircle, label: getApprovalStatusLabel('rejected'), className: 'bg-red-100 text-red-800' },
       suspended: { icon: AlertCircle, label: 'Suspendiert', className: 'bg-orange-100 text-orange-800' },
     }
     const config = configs[status] || { icon: AlertCircle, label: status, className: 'bg-gray-100 text-gray-800' }

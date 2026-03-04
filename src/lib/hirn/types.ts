@@ -6,7 +6,8 @@ export type NumberFormat = 'CHF' | 'percent' | 'number';
 
 export type SourceType = 'source' | 'derived' | 'estimated' | 'target';
 
-export type ConfidenceLevel = 'high' | 'medium' | 'low' | 'target';
+import type { ConfidenceLevel } from './data/methodology-ssot';
+export type { ConfidenceLevel };
 
 export interface NumberSource {
   id: string;

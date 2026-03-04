@@ -16,30 +16,13 @@ import {
   apiError,
   apiNotFound,
   apiBadRequest,
-  apiForbidden,
 } from '@/lib/api/helpers'
-import { canAccessSection } from '@/lib/permissions'
 import { APPROVAL_STATUS } from '@/config/approval-status'
 import { sendEmail } from '@/lib/email'
 import { createEditSnapshot, appendEditHistory, type EditHistoryEntry } from '@/lib/admin/edit-utils'
 
-// Helper to check content section access
-function checkContentAccess(session: { user: { email: string; isStaff: boolean; staffPermissions: string[] } }) {
-  const userForPermissions = {
-    email: session.user.email,
-    is_staff: session.user.isStaff,
-    staff_permissions: session.user.staffPermissions,
-  }
-
-  return canAccessSection(userForPermissions, 'content')
-}
-
-export const GET = withAdmin<{ id: string }>(async (request, session, context) => {
+export const GET = withAdmin<{ id: string }>('content', async (request, session, context) => {
   try {
-    if (!checkContentAccess(session)) {
-      return apiForbidden('Keine Berechtigung für diesen Bereich')
-    }
-
     const { id } = context!.params!
 
     const result = await query(
@@ -66,12 +49,8 @@ export const GET = withAdmin<{ id: string }>(async (request, session, context) =
   }
 })
 
-export const PATCH = withAdmin<{ id: string }>(async (request, session, context) => {
+export const PATCH = withAdmin<{ id: string }>('content', async (request, session, context) => {
   try {
-    if (!checkContentAccess(session)) {
-      return apiForbidden('Keine Berechtigung für diesen Bereich')
-    }
-
     const { id } = context!.params!
     const body = await request.json()
     const { action, review_notes, rejection_reason } = body
@@ -355,12 +334,8 @@ export const PATCH = withAdmin<{ id: string }>(async (request, session, context)
   }
 })
 
-export const DELETE = withAdmin<{ id: string }>(async (request, session, context) => {
+export const DELETE = withAdmin<{ id: string }>('content', async (request, session, context) => {
   try {
-    if (!checkContentAccess(session)) {
-      return apiForbidden('Keine Berechtigung für diesen Bereich')
-    }
-
     const { id } = context!.params!
 
     // Check if submission exists

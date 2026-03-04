@@ -28,7 +28,17 @@ import {
   isSensitiveSection,
   type SidebarGroupId,
 } from '@/config/sections'
-import { getSensitivityReason } from '@/config/sensitive-areas'
+/** Sensitivity reason descriptions (for UI tooltips) */
+const SENSITIVITY_REASONS: Record<string, string> = {
+  users: 'Enthält personenbezogene Daten und Kontoinformationen',
+  team: 'Enthält Mitarbeiter- und HR-Daten',
+  finances: 'Enthält vertrauliche Finanzdaten',
+  hirn: 'Enthält strategische Geschäftsinformationen',
+  settings: 'Kann Systemkonfiguration ändern',
+}
+function getSensitivityReason(section: string): string | undefined {
+  return SENSITIVITY_REASONS[section]
+}
 import { HirnFloatingButton } from '@/components/admin/HirnFloatingButton'
 import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
 import { NotificationBell } from '@/components/admin/NotificationBell'
@@ -81,6 +91,18 @@ export function AdminLayoutClient({
     document.addEventListener('keydown', handleEscape)
     return () => document.removeEventListener('keydown', handleEscape)
   }, [])
+
+  // Body scroll lock when mobile sidebar is open
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = ''
+    }
+    return () => {
+      document.body.style.overflow = ''
+    }
+  }, [mobileMenuOpen])
 
   // Get grouped sections from SSOT
   const groupedSections = getSidebarGroupsWithSections()

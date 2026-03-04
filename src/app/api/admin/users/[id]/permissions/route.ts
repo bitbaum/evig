@@ -26,7 +26,7 @@ function getAuditContext(request: NextRequest, userId: string | null) {
   }
 }
 
-export const PATCH = withAdmin<{ id: string }>(async (request, session, context) => {
+export const PATCH = withAdmin<{ id: string }>('users', async (request, session, context) => {
   try {
     // Only super admins can manage permissions
     if (!isSuperAdmin(session.user.email, session.user.isSuperAdmin)) {

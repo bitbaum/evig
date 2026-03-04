@@ -21,7 +21,7 @@ import {
 import { logger } from '@/lib/logger'
 import { apiSuccess, apiError, apiBadRequest, apiNotFound } from '@/lib/api/helpers'
 
-export const GET = withAdmin(async (_request: NextRequest) => {
+export const GET = withAdmin('hirn', async (_request: NextRequest) => {
   try {
     const settings = await getProviderSettings('system')
 
@@ -56,7 +56,7 @@ export const GET = withAdmin(async (_request: NextRequest) => {
   }
 })
 
-export const PATCH = withAdmin(async (request: NextRequest, session) => {
+export const PATCH = withAdmin('hirn', async (request: NextRequest, session) => {
   try {
     const body = await request.json()
     const { provider, isDefault, apiKey, isEnabled } = body as {

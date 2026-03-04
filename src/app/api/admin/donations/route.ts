@@ -55,7 +55,7 @@ interface DonationRow {
  * GET /api/admin/donations
  * List all donations with filtering and pagination
  */
-export const GET = withAdmin(async (request: NextRequest, session) => {
+export const GET = withAdmin('donations', async (request: NextRequest, session) => {
   try {
     // Parse query params
     const { searchParams } = new URL(request.url)
@@ -165,7 +165,7 @@ export const GET = withAdmin(async (request: NextRequest, session) => {
  * POST /api/admin/donations
  * Create a new donation (monetary or device)
  */
-export const POST = withAdmin(async (request: NextRequest, session) => {
+export const POST = withAdmin('donations', async (request: NextRequest, session) => {
   try {
     const body = await request.json()
     const parsed = CreateDonationSchema.safeParse(body)

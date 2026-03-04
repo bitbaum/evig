@@ -4,19 +4,17 @@
  * GET /api/admin/team/help-requests/[id] - Get request details
  * PUT /api/admin/team/help-requests/[id] - Update request
  *
- * Access: Staff with 'team' permission (or own request)
+ * Access: Staff with 'team' permission
  */
 
 import { NextRequest } from 'next/server'
 import { withAdmin } from '@/lib/api/middleware'
 import { query } from '@/lib/auth/db'
-import { canAccessSection } from '@/lib/permissions'
 import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
 import {
   apiSuccess,
   apiError,
-  apiForbidden,
   apiNotFound,
   apiBadRequest,
 } from '@/lib/api/helpers'
@@ -48,18 +46,8 @@ interface HelpRequest {
  * GET /api/admin/team/help-requests/[id]
  * Get help request details
  */
-export const GET = withAdmin<{ id: string }>(async (request, session, context) => {
+export const GET = withAdmin<{ id: string }>('team', async (request, session, context) => {
   try {
-    const user = {
-      email: session.user.email,
-      is_staff: session.user.isStaff,
-      staff_permissions: session.user.staffPermissions,
-    }
-
-    if (!canAccessSection(user, 'team')) {
-      return apiForbidden('Kein Zugriff auf Team-Bereich')
-    }
-
     const { id } = context!.params!
 
     const result = await query<HelpRequest>(
@@ -105,7 +93,7 @@ export const GET = withAdmin<{ id: string }>(async (request, session, context) =
  * PUT /api/admin/team/help-requests/[id]
  * Update a help request
  */
-export const PUT = withAdmin<{ id: string }>(async (request, session, context) => {
+export const PUT = withAdmin<{ id: string }>('team', async (request, session, context) => {
   try {
     const { id } = context!.params!
     const body = await request.json()
@@ -121,7 +109,7 @@ export const PUT = withAdmin<{ id: string }>(async (request, session, context) =
 
     const data = validation.data
 
-    // Get existing request to check ownership
+    // Get existing request to check existence
     const existing = await query<{ id: string; requester_id: string; requester_email: string }>(
       `SELECT hr.id, hr.requester_id, u.email as requester_email
        FROM ${TABLE_NAMES.HELP_REQUESTS} hr
@@ -132,21 +120,6 @@ export const PUT = withAdmin<{ id: string }>(async (request, session, context) =
 
     if (existing.rows.length === 0) {
       return apiNotFound('Hilfsanfrage')
-    }
-
-    const isOwnRequest = existing.rows[0].requester_email === session.user.email
-
-    // Allow if own request OR has team permission
-    if (!isOwnRequest) {
-      const user = {
-        email: session.user.email,
-        is_staff: session.user.isStaff,
-        staff_permissions: session.user.staffPermissions,
-      }
-
-      if (!canAccessSection(user, 'team')) {
-        return apiForbidden('Kein Zugriff')
-      }
     }
 
     // Build dynamic update query

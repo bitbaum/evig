@@ -10,7 +10,7 @@ export const dynamic = 'force-dynamic'
 const REBOOT_CONTENT_URL = CMS_CONFIG.URL
 const ENABLE_CMS = CMS_CONFIG.ENABLED
 
-export const GET = withAdmin<{ id: string }>(async (request, session, context) => {
+export const GET = withAdmin<{ id: string }>('content', async (request, session, context) => {
   const { id } = context!.params!
   try {
     if (!ENABLE_CMS) {
@@ -36,7 +36,7 @@ export const GET = withAdmin<{ id: string }>(async (request, session, context) =
   }
 })
 
-export const PUT = withAdmin<{ id: string }>(async (request, session, context) => {
+export const PUT = withAdmin<{ id: string }>('content', async (request, session, context) => {
   const { id } = context!.params!
   try {
     if (!ENABLE_CMS) {

@@ -8,27 +8,16 @@
 
 import { NextRequest } from 'next/server'
 import { withAdmin } from '@/lib/api/middleware'
-import { canAccessSection } from '@/lib/permissions'
 import { logger } from '@/lib/logger'
 import { transaction } from '@/lib/auth/db'
-import { apiSuccess, apiError, apiForbidden, apiBadRequest } from '@/lib/api/helpers'
+import { apiSuccess, apiError, apiBadRequest } from '@/lib/api/helpers'
 import { validateBody, BulkSaveSchema } from '@/lib/schemas'
 import { createErfassungProduct } from '@/lib/erfassung/create-product'
 import { BULK_LIMITS } from '@/config/erfassung'
 import type { BulkSaveRequest, BulkSaveResponse } from '@/types/erfassung'
 
-export const POST = withAdmin(async (request, session) => {
+export const POST = withAdmin('products', async (request, session) => {
   try {
-    const user = {
-      email: session.user.email,
-      is_staff: session.user.isStaff,
-      staff_permissions: session.user.staffPermissions,
-    }
-
-    if (!canAccessSection(user, 'products')) {
-      return apiForbidden('Keine Berechtigung für Produkterfassung')
-    }
-
     const raw = await request.json()
     const validation = validateBody(BulkSaveSchema, raw)
     if (!validation.success) return validation.error

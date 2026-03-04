@@ -21,7 +21,7 @@ interface MaterialRow {
 }
 
 // GET /api/admin/workshops/[workshopId]/materials - List all materials for a workshop
-export const GET = withAdmin<{ workshopId: string }>(async (request, session, context) => {
+export const GET = withAdmin<{ workshopId: string }>('workshops-admin', async (request, session, context) => {
   try {
     const { workshopId } = context!.params!
 
@@ -44,7 +44,7 @@ export const GET = withAdmin<{ workshopId: string }>(async (request, session, co
 })
 
 // POST /api/admin/workshops/[workshopId]/materials - Add a new material
-export const POST = withAdmin<{ workshopId: string }>(async (request, session, context) => {
+export const POST = withAdmin<{ workshopId: string }>('workshops-admin', async (request, session, context) => {
   try {
     const { workshopId } = context!.params!
     const body = await request.json()

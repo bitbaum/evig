@@ -20,7 +20,7 @@ interface CompletedWorkshopRow {
 }
 
 // POST /api/admin/workshops/send-feedback-requests - Send feedback requests for completed workshops
-export const POST = withAdmin(async (request, session) => {
+export const POST = withAdmin('workshops-admin', async (request, session) => {
   try {
     const body = await request.json()
     const validation = validateBody(AdminSendFeedbackRequestsSchema, body)

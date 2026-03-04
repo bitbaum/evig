@@ -42,7 +42,7 @@ export default function Home() {
             "name": "revamp-it",
             "description": "Computer-Reparatur, Linux-Installation und Datenrettung. Nachhaltige IT-Lösungen für Privatpersonen, Vereine und KMU.",
             "url": "https://revampit.vercel.app",
-            "telephone": "+41-XX-XXX-XX-XX",
+            "telephone": "+41-43-960-32-64",
             "address": {
               "@type": "PostalAddress",
               "addressLocality": "Zürich",

@@ -5,19 +5,17 @@
  * PUT    /api/admin/team/activity/updates/[id] - Update activity
  * DELETE /api/admin/team/activity/updates/[id] - Delete activity
  *
- * Access: Staff with 'team' permission (or own update)
+ * Access: Staff with 'team' permission
  */
 
 import { NextRequest } from 'next/server'
 import { withAdmin } from '@/lib/api/middleware'
 import { query } from '@/lib/auth/db'
-import { canAccessSection } from '@/lib/permissions'
 import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
 import {
   apiSuccess,
   apiError,
-  apiForbidden,
   apiNotFound,
   apiBadRequest,
 } from '@/lib/api/helpers'
@@ -42,18 +40,8 @@ interface ActivityUpdate {
  * GET /api/admin/team/activity/updates/[id]
  * Get activity update details
  */
-export const GET = withAdmin<{ id: string }>(async (request, session, context) => {
+export const GET = withAdmin<{ id: string }>('team', async (request, session, context) => {
   try {
-    const user = {
-      email: session.user.email,
-      is_staff: session.user.isStaff,
-      staff_permissions: session.user.staffPermissions,
-    }
-
-    if (!canAccessSection(user, 'team')) {
-      return apiForbidden('Kein Zugriff auf Team-Bereich')
-    }
-
     const { id } = context!.params!
 
     const result = await query<ActivityUpdate>(
@@ -90,7 +78,7 @@ export const GET = withAdmin<{ id: string }>(async (request, session, context) =
  * PUT /api/admin/team/activity/updates/[id]
  * Update an activity update
  */
-export const PUT = withAdmin<{ id: string }>(async (request, session, context) => {
+export const PUT = withAdmin<{ id: string }>('team', async (request, session, context) => {
   try {
     const { id } = context!.params!
     const body = await request.json()
@@ -106,7 +94,7 @@ export const PUT = withAdmin<{ id: string }>(async (request, session, context) =
 
     const data = validation.data
 
-    // Get existing update to check ownership
+    // Get existing update to check existence
     const existing = await query<{ id: string; user_id: string; user_email: string }>(
       `SELECT au.id, au.user_id, u.email as user_email
        FROM ${TABLE_NAMES.ACTIVITY_UPDATES} au
@@ -117,21 +105,6 @@ export const PUT = withAdmin<{ id: string }>(async (request, session, context) =
 
     if (existing.rows.length === 0) {
       return apiNotFound('Aktivität')
-    }
-
-    const isOwnUpdate = existing.rows[0].user_email === session.user.email
-
-    // Allow if own update OR has team permission
-    if (!isOwnUpdate) {
-      const user = {
-        email: session.user.email,
-        is_staff: session.user.isStaff,
-        staff_permissions: session.user.staffPermissions,
-      }
-
-      if (!canAccessSection(user, 'team')) {
-        return apiForbidden('Kein Zugriff')
-      }
     }
 
     // Build dynamic update query
@@ -178,11 +151,11 @@ export const PUT = withAdmin<{ id: string }>(async (request, session, context) =
  * DELETE /api/admin/team/activity/updates/[id]
  * Delete an activity update
  */
-export const DELETE = withAdmin<{ id: string }>(async (request, session, context) => {
+export const DELETE = withAdmin<{ id: string }>('team', async (request, session, context) => {
   try {
     const { id } = context!.params!
 
-    // Get existing update to check ownership
+    // Get existing update to check existence
     const existing = await query<{ id: string; user_id: string; user_email: string }>(
       `SELECT au.id, au.user_id, u.email as user_email
        FROM ${TABLE_NAMES.ACTIVITY_UPDATES} au
@@ -193,21 +166,6 @@ export const DELETE = withAdmin<{ id: string }>(async (request, session, context
 
     if (existing.rows.length === 0) {
       return apiNotFound('Aktivität')
-    }
-
-    const isOwnUpdate = existing.rows[0].user_email === session.user.email
-
-    // Allow if own update OR has team permission
-    if (!isOwnUpdate) {
-      const user = {
-        email: session.user.email,
-        is_staff: session.user.isStaff,
-        staff_permissions: session.user.staffPermissions,
-      }
-
-      if (!canAccessSection(user, 'team')) {
-        return apiForbidden('Kein Zugriff')
-      }
     }
 
     await query(

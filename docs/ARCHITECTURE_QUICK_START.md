@@ -142,56 +142,34 @@ if (session.user.role === ROLES.REVAMPIT_ADMIN) {
 return NextResponse.redirect('/unauthorized')
 ```
 
-**After**:
+**After** (current approach — direct permissions):
 ```typescript
-// ✅ GOOD: Checks BOTH old and new systems
-import { hasAdminAccessUnified } from '@/lib/auth/unified-permissions'
+// ✅ GOOD: Uses session fields directly
+import { isStaffEmail } from '@/lib/permissions'
 
-if (hasAdminAccessUnified(session.user)) {
+if (session.user.isStaff || isStaffEmail(session.user.email || '')) {
   return NextResponse.next()
 }
 return NextResponse.redirect('/unauthorized')
 ```
 
-**Available Functions**:
-
-1. **`hasAdminAccessUnified(user)`** - Check ANY admin access
-   ```typescript
-   // Returns true if user has admin access via:
-   // - Old role system (role === 'REVAMPIT_ADMIN')
-   // - New staff system (is_staff === true)
-   // - Email domain (@revamp-it.ch)
-   if (!hasAdminAccessUnified(session.user)) {
-     return apiUnauthorized('Admin access required')
-   }
-   ```
-
-2. **`canAccessSectionUnified(user, section)`** - Check section-specific access
-   ```typescript
-   // Check if user can access 'users' section
-   if (!canAccessSectionUnified(session.user, 'users')) {
-     return apiError(null, 'Unauthorized', 403)
-   }
-   ```
-
-3. **`getAccessibleSectionsUnified(user)`** - Get all accessible sections
-   ```typescript
-   const sections = getAccessibleSectionsUnified(session.user)
-   // Returns: ['dashboard', 'products', 'workshops', ...]
-   ```
-
-**Migration Checklist for Files**:
+**For API routes**, use the `withAdmin` middleware with section-level auth:
 ```typescript
-// 1. Import unified function
-import { hasAdminAccessUnified } from '@/lib/auth/unified-permissions'
+import { withAdmin } from '@/lib/api/middleware'
 
-// 2. Replace old check
-- if (session.user.role === ROLES.REVAMPIT_ADMIN) {
-+ if (hasAdminAccessUnified(session.user)) {
+// Staff-only (any section):
+export const GET = withAdmin(async (request, session) => { ... })
 
-// 3. Test with both old and new users
-// 4. Deploy (zero breaking changes!)
+// Section-specific access:
+export const GET = withAdmin('products', async (request, session) => { ... })
 ```
+
+**Available Functions** (from `@/lib/permissions`):
+
+1. **`isStaffEmail(email)`** — Check if email domain is @revamp-it.ch
+2. **`isSuperAdmin(email)`** — Check if user has full admin access
+3. **`canAccessSection(user, section)`** — Check section-specific access
+4. **`getAccessibleSections(user)`** — Get all accessible sections
 
 ---
 

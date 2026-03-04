@@ -10,7 +10,7 @@ export const dynamic = 'force-dynamic'
 const REBOOT_CONTENT_URL = CMS_CONFIG.URL
 const ENABLE_CMS = CMS_CONFIG.ENABLED
 
-export const GET = withAdmin(async (request, session) => {
+export const GET = withAdmin('content', async (request, session) => {
   try {
     if (!ENABLE_CMS) {
       return apiError(new Error('CMS is disabled'), 'CMS is disabled', 501)
@@ -39,7 +39,7 @@ export const GET = withAdmin(async (request, session) => {
   }
 })
 
-export const POST = withAdmin(async (request, session) => {
+export const POST = withAdmin('content', async (request, session) => {
   try {
     if (!ENABLE_CMS) {
       return apiError(new Error('CMS is disabled'), 'CMS is disabled', 501)

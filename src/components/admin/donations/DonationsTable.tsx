@@ -1,4 +1,5 @@
-import { Heart, Package, CheckCircle, Clock, Receipt } from 'lucide-react'
+import Link from 'next/link'
+import { Heart, Package, CheckCircle, Clock, Receipt, ArrowRight } from 'lucide-react'
 import { formatDateNumeric } from '@/lib/date-formats'
 import {
   DONATION_TYPES,
@@ -47,7 +48,7 @@ function getDonorDisplay(donation: Donation): string {
 
 export function DonationsTable({ donations, onMarkThanked, onMarkReceiptSent }: Props) {
   return (
-    <div className="bg-white rounded-lg shadow overflow-hidden">
+    <div className="bg-white rounded-lg shadow overflow-x-auto">
       <table className="min-w-full divide-y divide-gray-200">
         <thead className="bg-gray-50">
           <tr>
@@ -132,6 +133,15 @@ export function DonationsTable({ donations, onMarkThanked, onMarkReceiptSent }: 
                     >
                       Quittung
                     </button>
+                  )}
+                  {donation.donation_type === DONATION_TYPES.DEVICE && (
+                    <Link
+                      href={`/admin/intake?donation_id=${donation.id}&donor_name=${encodeURIComponent(donation.donor_name || '')}&donor_email=${encodeURIComponent(donation.donor_email || '')}`}
+                      className="text-xs px-2 py-1 bg-purple-100 text-purple-700 rounded hover:bg-purple-200 inline-flex items-center gap-1"
+                      title="Im Geräte-Eingang erfassen"
+                    >
+                      Eingang <ArrowRight className="w-3 h-3" />
+                    </Link>
                   )}
                 </div>
               </td>

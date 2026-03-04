@@ -3,19 +3,17 @@
  *
  * PUT /api/admin/team/profiles/[id]/focus - Update current focus status
  *
- * Access: Staff with 'team' permission (or own profile)
+ * Access: Staff with 'team' permission
  */
 
 import { NextRequest } from 'next/server'
 import { withAdmin } from '@/lib/api/middleware'
 import { query } from '@/lib/auth/db'
-import { canAccessSection } from '@/lib/permissions'
 import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
 import {
   apiSuccess,
   apiError,
-  apiForbidden,
   apiNotFound,
   apiBadRequest,
 } from '@/lib/api/helpers'
@@ -25,7 +23,7 @@ import { validateCurrentFocus } from '@/lib/schemas/activity'
  * PUT /api/admin/team/profiles/[id]/focus
  * Update current focus for a team member
  */
-export const PUT = withAdmin<{ id: string }>(async (request, session, context) => {
+export const PUT = withAdmin<{ id: string }>('team', async (request, session, context) => {
   try {
     const { id } = context!.params!
     const body = await request.json()
@@ -41,7 +39,7 @@ export const PUT = withAdmin<{ id: string }>(async (request, session, context) =
 
     const { current_focus } = validation.data
 
-    // Get the profile to check ownership
+    // Get the profile to check existence
     const profile = await query<{ id: string; user_id: string; user_email: string }>(
       `SELECT tp.id, tp.user_id, u.email as user_email
        FROM ${TABLE_NAMES.TEAM_PROFILES} tp
@@ -52,21 +50,6 @@ export const PUT = withAdmin<{ id: string }>(async (request, session, context) =
 
     if (profile.rows.length === 0) {
       return apiNotFound('Team-Profil')
-    }
-
-    const isOwnProfile = profile.rows[0].user_email === session.user.email
-
-    // Allow if own profile OR has team permission
-    if (!isOwnProfile) {
-      const user = {
-        email: session.user.email,
-        is_staff: session.user.isStaff,
-        staff_permissions: session.user.staffPermissions,
-      }
-
-      if (!canAccessSection(user, 'team')) {
-        return apiForbidden('Kein Zugriff')
-      }
     }
 
     // Update current focus

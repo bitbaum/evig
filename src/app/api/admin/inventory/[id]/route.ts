@@ -14,7 +14,7 @@ import { logger } from '@/lib/logger'
 import { TABLE_NAMES } from '@/config/database'
 import { publishProduct, unpublishProduct, updateProductImage } from '@/lib/admin/inventory-actions'
 
-export const GET = withAdmin<{ id: string }>(async (request, session, context) => {
+export const GET = withAdmin<{ id: string }>('products', async (request, session, context) => {
   try {
     const { id: productId } = context!.params!
 
@@ -85,7 +85,7 @@ export const GET = withAdmin<{ id: string }>(async (request, session, context) =
   }
 })
 
-export const DELETE = withAdmin<{ id: string }>(async (request, session, context) => {
+export const DELETE = withAdmin<{ id: string }>('products', async (request, session, context) => {
   try {
     const { id: productId } = context!.params!
 
@@ -121,7 +121,7 @@ export const DELETE = withAdmin<{ id: string }>(async (request, session, context
   }
 })
 
-export const PUT = withAdmin<{ id: string }>(async (request, session, context) => {
+export const PUT = withAdmin<{ id: string }>('products', async (request, session, context) => {
   try {
     const { id: productId } = context!.params!
     const body = await request.json() as Record<string, unknown>
@@ -205,7 +205,7 @@ export const PUT = withAdmin<{ id: string }>(async (request, session, context) =
   }
 })
 
-export const PATCH = withAdmin<{ id: string }>(async (request, session, context) => {
+export const PATCH = withAdmin<{ id: string }>('products', async (request, session, context) => {
   try {
     const { id: productId } = context!.params!
     const body = await request.json() as {

@@ -13,7 +13,7 @@ import { logger } from '@/lib/logger'
 import { TABLE_NAMES } from '@/config/database'
 import { QueryParams } from '@/lib/api/query-builder'
 
-export const GET = withAdmin(async (request: NextRequest, session) => {
+export const GET = withAdmin('products', async (request: NextRequest, session) => {
   try {
     // Parse query params
     const { searchParams } = new URL(request.url)

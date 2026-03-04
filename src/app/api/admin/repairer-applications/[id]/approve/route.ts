@@ -53,7 +53,7 @@ interface DocumentRow {
   document_type: string
 }
 
-export const PUT = withAdmin<{ id: string }>(async (request, session, context) => {
+export const PUT = withAdmin<{ id: string }>('services', async (request, session, context) => {
   const { id: applicationId } = context!.params!
   try {
     const body = await request.json()

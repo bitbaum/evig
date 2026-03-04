@@ -196,15 +196,15 @@ export default async function TasksAdminPage({
 
   const totalPages = Math.ceil(totalTasks / TASKS_PAGE_SIZE)
 
-  function buildTasksHref(page: number) {
+  const tasksHrefBase = (() => {
     const p = new URLSearchParams()
     if (params.category) p.set('category', params.category)
     if (params.status) p.set('status', params.status)
     if (params.q) p.set('q', params.q)
     if (params.priority) p.set('priority', params.priority)
-    p.set('page', String(page))
-    return `/admin/tasks?${p.toString()}`
-  }
+    const qs = p.toString()
+    return `/admin/tasks${qs ? `?${qs}` : ''}`
+  })()
 
   return (
     <AdminPageWrapper
@@ -405,7 +405,7 @@ export default async function TasksAdminPage({
           totalPages={totalPages}
           totalItems={totalTasks}
           pageSize={TASKS_PAGE_SIZE}
-          buildHref={buildTasksHref}
+          hrefBase={tasksHrefBase}
         />
       </div>
     </AdminPageWrapper>

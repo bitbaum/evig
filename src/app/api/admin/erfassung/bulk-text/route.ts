@@ -12,7 +12,7 @@ import { apiSuccess, apiError } from '@/lib/api/helpers'
 import { validateBody, BulkTextSchema } from '@/lib/schemas'
 import { extractMultipleProducts } from '@/lib/erfassung/bulk-extraction'
 
-export const POST = withAdmin(async (request: NextRequest, session) => {
+export const POST = withAdmin('products', async (request: NextRequest, session) => {
   try {
     const raw = await request.json()
     const validation = validateBody(BulkTextSchema, raw)

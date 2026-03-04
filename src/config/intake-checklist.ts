@@ -1,0 +1,508 @@
+/**
+ * Device Intake Checklist Configuration
+ *
+ * SINGLE SOURCE OF TRUTH for the checklist-driven intake process.
+ * Based on RevampIT's three-tier value cascade:
+ *   1. Refurbishing (~60%) — full diagnostics, upgrades, Linux, QA → sell
+ *   2. Ersatzteile (~25%) — disassemble, test components, catalog → reuse
+ *   3. Recycling (~15%) — SWICO-certified disposal, NIST data wipe → recycle
+ *
+ * The checklist formalizes processes and gates marketplace publishing:
+ * A device CANNOT be published until all required checklist items are completed.
+ *
+ * Device categories reference KATEGORIEN values from @/config/erfassung/categories.ts
+ */
+
+// =============================================================================
+// INTAKE TIERS
+// =============================================================================
+
+export const INTAKE_TIERS = {
+  REFURBISH: 'refurbish',
+  PARTS: 'parts',
+  RECYCLE: 'recycle',
+} as const
+
+export type IntakeTier = typeof INTAKE_TIERS[keyof typeof INTAKE_TIERS]
+
+export const INTAKE_TIER_LABELS: Record<IntakeTier, string> = {
+  [INTAKE_TIERS.REFURBISH]: 'Refurbishing',
+  [INTAKE_TIERS.PARTS]: 'Ersatzteile',
+  [INTAKE_TIERS.RECYCLE]: 'Recycling',
+}
+
+export const INTAKE_TIER_DESCRIPTIONS: Record<IntakeTier, string> = {
+  [INTAKE_TIERS.REFURBISH]: 'Aufbereitung für Verkauf im Shop',
+  [INTAKE_TIERS.PARTS]: 'Ausschlachtung für Ersatzteile und Komponenten',
+  [INTAKE_TIERS.RECYCLE]: 'SWICO-zertifizierte Entsorgung',
+}
+
+export const INTAKE_TIER_ICONS: Record<IntakeTier, string> = {
+  [INTAKE_TIERS.REFURBISH]: '🔧',
+  [INTAKE_TIERS.PARTS]: '🔩',
+  [INTAKE_TIERS.RECYCLE]: '♻️',
+}
+
+// =============================================================================
+// CHECKLIST CATEGORIES
+// =============================================================================
+
+export const CHECKLIST_CATEGORIES = {
+  INTAKE: 'intake',
+  SECURITY: 'security',
+  TESTING: 'testing',
+  REFURBISHMENT: 'refurbishment',
+  QUALITY: 'quality',
+  LISTING: 'listing',
+  PARTS: 'parts',
+  RECYCLING: 'recycling',
+} as const
+
+export type ChecklistCategory = typeof CHECKLIST_CATEGORIES[keyof typeof CHECKLIST_CATEGORIES]
+
+export const CHECKLIST_CATEGORY_LABELS: Record<ChecklistCategory, string> = {
+  [CHECKLIST_CATEGORIES.INTAKE]: 'Eingang',
+  [CHECKLIST_CATEGORIES.SECURITY]: 'Datensicherheit',
+  [CHECKLIST_CATEGORIES.TESTING]: 'Hardware-Tests',
+  [CHECKLIST_CATEGORIES.REFURBISHMENT]: 'Aufbereitung',
+  [CHECKLIST_CATEGORIES.QUALITY]: 'Qualitätskontrolle',
+  [CHECKLIST_CATEGORIES.LISTING]: 'Inserat',
+  [CHECKLIST_CATEGORIES.PARTS]: 'Ersatzteile',
+  [CHECKLIST_CATEGORIES.RECYCLING]: 'Recycling',
+}
+
+// =============================================================================
+// CHECKLIST ITEM DEFINITIONS
+// =============================================================================
+
+export interface ChecklistItemConfig {
+  /** Unique identifier */
+  id: string
+  /** Display label (Swiss German) */
+  label: string
+  /** Explanation of what this step involves */
+  description: string
+  /** Grouping category */
+  category: ChecklistCategory
+  /** Which tiers require this item */
+  tiers: IntakeTier[]
+  /** Must be completed before publishing (for refurbish tier) */
+  required: boolean
+  /**
+   * Only show for these device categories (KATEGORIEN main values: '10'=Laptops, '20'=Desktop, etc.)
+   * If undefined, show for ALL device categories.
+   */
+  deviceCategories?: string[]
+}
+
+/**
+ * All checklist items — SSOT
+ *
+ * Each item specifies which tiers and device categories it applies to.
+ * The UI derives the visible checklist from this + the device's tier + category.
+ */
+export const CHECKLIST_ITEMS: ChecklistItemConfig[] = [
+  // ---------------------------------------------------------------------------
+  // INTAKE — Universal first steps (all tiers)
+  // ---------------------------------------------------------------------------
+  {
+    id: 'visual_inspection',
+    label: 'Sichtprüfung durchgeführt',
+    description: 'Äusseren Zustand dokumentieren: Gehäuse, Display, Anschlüsse, Kratzer, Beschädigungen',
+    category: 'intake',
+    tiers: ['refurbish', 'parts', 'recycle'],
+    required: true,
+  },
+  {
+    id: 'condition_graded',
+    label: 'Zustand bewertet',
+    description: 'Zustandsgrad festgelegt (Neu / Wie neu / Gut / Akzeptabel / Schlecht / Defekt)',
+    category: 'intake',
+    tiers: ['refurbish', 'parts', 'recycle'],
+    required: true,
+  },
+  {
+    id: 'serial_noted',
+    label: 'Seriennummer notiert',
+    description: 'Seriennummer des Geräts erfasst (falls vorhanden)',
+    category: 'intake',
+    tiers: ['refurbish', 'parts', 'recycle'],
+    required: false,
+  },
+
+  // ---------------------------------------------------------------------------
+  // SECURITY — Data wipe (all tiers)
+  // ---------------------------------------------------------------------------
+  {
+    id: 'data_wipe',
+    label: 'Datenlöschung (NIST 800-88)',
+    description: 'Sicheres Löschen aller Daten gemäss NIST 800-88 Standard. Bei SSDs: Secure Erase. Bei HDDs: Überschreiben.',
+    category: 'security',
+    tiers: ['refurbish', 'parts', 'recycle'],
+    required: true,
+    deviceCategories: ['10', '20', '40', '50'], // Laptops, Desktops, Tablets, Smartphones
+  },
+
+  // ---------------------------------------------------------------------------
+  // TESTING — Hardware diagnostics (refurbish tier)
+  // ---------------------------------------------------------------------------
+  {
+    id: 'power_test',
+    label: 'Gerät startet und bootet',
+    description: 'Gerät einschalten, BIOS/UEFI erreichbar, bootet vollständig',
+    category: 'testing',
+    tiers: ['refurbish'],
+    required: true,
+    deviceCategories: ['10', '20', '40', '50'], // Laptops, Desktops, Tablets, Smartphones
+  },
+  {
+    id: 'cpu_test',
+    label: 'CPU-Test bestanden',
+    description: 'CPU-Stresstest durchgeführt, keine Überhitzung oder Fehler',
+    category: 'testing',
+    tiers: ['refurbish'],
+    required: true,
+    deviceCategories: ['10', '20'], // Laptops, Desktops
+  },
+  {
+    id: 'ram_test',
+    label: 'RAM-Test bestanden',
+    description: 'Arbeitsspeicher mit memtest86+ oder ähnlichem getestet',
+    category: 'testing',
+    tiers: ['refurbish'],
+    required: true,
+    deviceCategories: ['10', '20'], // Laptops, Desktops
+  },
+  {
+    id: 'storage_test',
+    label: 'Speicher-Test bestanden',
+    description: 'SSD/HDD Gesundheitsstatus geprüft (SMART-Werte, Lese-/Schreibtest)',
+    category: 'testing',
+    tiers: ['refurbish'],
+    required: true,
+    deviceCategories: ['10', '20', '40', '50'], // Laptops, Desktops, Tablets, Smartphones
+  },
+  {
+    id: 'battery_test',
+    label: 'Akku-Test',
+    description: 'Akkukapazität messen, Ladezyklen prüfen, Mindestlaufzeit verifizieren',
+    category: 'testing',
+    tiers: ['refurbish'],
+    required: true,
+    deviceCategories: ['10', '40', '50'], // Laptops, Tablets, Smartphones
+  },
+  {
+    id: 'display_test',
+    label: 'Display-Test',
+    description: 'Tote Pixel, Backlight Bleeding, Touch-Funktion, Farbdarstellung prüfen',
+    category: 'testing',
+    tiers: ['refurbish'],
+    required: true,
+    deviceCategories: ['10', '30', '40', '50'], // Laptops, Monitore, Tablets, Smartphones
+  },
+  {
+    id: 'keyboard_test',
+    label: 'Tastatur/Trackpad-Test',
+    description: 'Alle Tasten und Trackpad auf Funktion testen',
+    category: 'testing',
+    tiers: ['refurbish'],
+    required: true,
+    deviceCategories: ['10'], // Laptops only
+  },
+  {
+    id: 'ports_test',
+    label: 'Anschlüsse getestet',
+    description: 'USB, HDMI, Ethernet, Audio, Kartenleser — alle vorhandenen Ports testen',
+    category: 'testing',
+    tiers: ['refurbish'],
+    required: true,
+    deviceCategories: ['10', '20', '30'], // Laptops, Desktops, Monitore
+  },
+  {
+    id: 'wifi_test',
+    label: 'WLAN/Bluetooth-Test',
+    description: 'WLAN-Verbindung und Bluetooth-Kopplung testen',
+    category: 'testing',
+    tiers: ['refurbish'],
+    required: false,
+    deviceCategories: ['10', '40', '50'], // Laptops, Tablets, Smartphones
+  },
+  {
+    id: 'camera_test',
+    label: 'Kamera-Test',
+    description: 'Front- und Rückkamera auf Funktion prüfen',
+    category: 'testing',
+    tiers: ['refurbish'],
+    required: false,
+    deviceCategories: ['40', '50'], // Tablets, Smartphones
+  },
+  {
+    id: 'speaker_test',
+    label: 'Lautsprecher/Mikrofon-Test',
+    description: 'Audio-Ausgabe und Mikrofon-Eingabe testen',
+    category: 'testing',
+    tiers: ['refurbish'],
+    required: false,
+    deviceCategories: ['10', '40', '50'], // Laptops, Tablets, Smartphones
+  },
+  {
+    id: 'printer_test',
+    label: 'Drucktest',
+    description: 'Testseite drucken, Qualität prüfen, Scanner testen (falls vorhanden)',
+    category: 'testing',
+    tiers: ['refurbish'],
+    required: true,
+    deviceCategories: ['60'], // Drucker & Scanner
+  },
+
+  // ---------------------------------------------------------------------------
+  // REFURBISHMENT — Upgrades and prep (refurbish tier)
+  // ---------------------------------------------------------------------------
+  {
+    id: 'cleaning',
+    label: 'Gerät gereinigt',
+    description: 'Gehäuse, Tastatur, Lüfter, Anschlüsse gründlich reinigen',
+    category: 'refurbishment',
+    tiers: ['refurbish'],
+    required: true,
+  },
+  {
+    id: 'upgrades_applied',
+    label: 'Upgrades durchgeführt',
+    description: 'Falls nötig: RAM aufgerüstet, SSD eingebaut, Akku ersetzt',
+    category: 'refurbishment',
+    tiers: ['refurbish'],
+    required: false,
+    deviceCategories: ['10', '20'], // Laptops, Desktops
+  },
+  {
+    id: 'os_installed',
+    label: 'Betriebssystem installiert',
+    description: 'Linux installiert (100% Open Source), alle Treiber konfiguriert, Updates eingespielt',
+    category: 'refurbishment',
+    tiers: ['refurbish'],
+    required: true,
+    deviceCategories: ['10', '20'], // Laptops, Desktops
+  },
+
+  // ---------------------------------------------------------------------------
+  // QUALITY — Final checks (refurbish tier)
+  // ---------------------------------------------------------------------------
+  {
+    id: 'final_qa',
+    label: 'Qualitätskontrolle bestanden',
+    description: 'Abschlusskontrolle: Gerät vollständig funktionsfähig, alle Tests bestanden, bereit für Verkauf',
+    category: 'quality',
+    tiers: ['refurbish'],
+    required: true,
+  },
+  {
+    id: 'warranty_label',
+    label: 'Garantie-Label angebracht',
+    description: '6-Monate-Garantie-Label aufgeklebt, Garantiekarte beigelegt',
+    category: 'quality',
+    tiers: ['refurbish'],
+    required: true,
+  },
+
+  // ---------------------------------------------------------------------------
+  // LISTING — Marketplace prep (refurbish tier)
+  // ---------------------------------------------------------------------------
+  {
+    id: 'photos_taken',
+    label: 'Produktfotos erstellt',
+    description: 'Mindestens 3 Fotos: Vorderseite, Rückseite, Detail/Zustandsbild',
+    category: 'listing',
+    tiers: ['refurbish'],
+    required: true,
+  },
+  {
+    id: 'description_written',
+    label: 'Beschreibung verfasst',
+    description: 'Aussagekräftige Produktbeschreibung mit Spezifikationen und Zustandsdetails',
+    category: 'listing',
+    tiers: ['refurbish'],
+    required: true,
+  },
+  {
+    id: 'price_set',
+    label: 'Preis festgelegt',
+    description: 'Verkaufspreis gemäss Solidaritäts-Preismodell festgelegt',
+    category: 'listing',
+    tiers: ['refurbish'],
+    required: true,
+  },
+
+  // ---------------------------------------------------------------------------
+  // PARTS — Parts harvesting tier
+  // ---------------------------------------------------------------------------
+  {
+    id: 'disassembly',
+    label: 'Demontage durchgeführt',
+    description: 'Gerät systematisch zerlegt, Komponenten separiert',
+    category: 'parts',
+    tiers: ['parts'],
+    required: true,
+  },
+  {
+    id: 'components_tested',
+    label: 'Komponenten getestet',
+    description: 'Jede ausgebaute Komponente einzeln auf Funktion geprüft',
+    category: 'parts',
+    tiers: ['parts'],
+    required: true,
+  },
+  {
+    id: 'components_cataloged',
+    label: 'Komponenten katalogisiert',
+    description: 'Funktionsfähige Teile im Inventar erfasst (RAM, SSD, Netzteil, etc.)',
+    category: 'parts',
+    tiers: ['parts'],
+    required: true,
+  },
+
+  // ---------------------------------------------------------------------------
+  // RECYCLING — Certified disposal tier
+  // ---------------------------------------------------------------------------
+  {
+    id: 'swico_documented',
+    label: 'SWICO-Dokumentation erstellt',
+    description: 'Dokumentation für SWICO-zertifizierte Entsorgung vorbereitet',
+    category: 'recycling',
+    tiers: ['recycle'],
+    required: true,
+  },
+  {
+    id: 'handed_to_recycler',
+    label: 'An Recycling-Partner übergeben',
+    description: 'Gerät an zertifizierten Recycling-Partner übergeben, Übergabeprotokoll erstellt',
+    category: 'recycling',
+    tiers: ['recycle'],
+    required: true,
+  },
+]
+
+// =============================================================================
+// CHECKLIST STATE TYPE (stored in JSONB)
+// =============================================================================
+
+export interface ChecklistItemState {
+  completed: boolean
+  completedBy: string | null
+  completedAt: string | null
+  notes: string
+}
+
+export type ChecklistState = Record<string, ChecklistItemState>
+
+// =============================================================================
+// HELPER FUNCTIONS
+// =============================================================================
+
+/**
+ * Get checklist items applicable to a given tier and device category.
+ *
+ * @param tier - The intake tier (refurbish, parts, recycle)
+ * @param deviceCategory - Main category value from KATEGORIEN ('10', '20', etc.)
+ * @returns Filtered checklist items, grouped by category
+ */
+export function getChecklistForDevice(
+  tier: IntakeTier,
+  deviceCategory?: string | null,
+): ChecklistItemConfig[] {
+  return CHECKLIST_ITEMS.filter(item => {
+    // Must match tier
+    if (!item.tiers.includes(tier)) return false
+    // If item has device category restriction, must match
+    if (item.deviceCategories && deviceCategory) {
+      return item.deviceCategories.includes(deviceCategory)
+    }
+    // If item has device category restriction but device has no category, skip it
+    if (item.deviceCategories && !deviceCategory) return false
+    return true
+  })
+}
+
+/**
+ * Get checklist items grouped by category
+ */
+export function getChecklistGrouped(
+  tier: IntakeTier,
+  deviceCategory?: string | null,
+): Record<ChecklistCategory, ChecklistItemConfig[]> {
+  const items = getChecklistForDevice(tier, deviceCategory)
+  const grouped: Partial<Record<ChecklistCategory, ChecklistItemConfig[]>> = {}
+
+  for (const item of items) {
+    if (!grouped[item.category]) {
+      grouped[item.category] = []
+    }
+    grouped[item.category]!.push(item)
+  }
+
+  return grouped as Record<ChecklistCategory, ChecklistItemConfig[]>
+}
+
+/**
+ * Check if all required checklist items are completed.
+ *
+ * @param state - Current checklist JSONB from database
+ * @param tier - Device's intake tier
+ * @param deviceCategory - Device's main category
+ * @returns true if all required items are completed
+ */
+export function isChecklistComplete(
+  state: ChecklistState,
+  tier: IntakeTier,
+  deviceCategory?: string | null,
+): boolean {
+  const items = getChecklistForDevice(tier, deviceCategory)
+  const requiredItems = items.filter(i => i.required)
+
+  return requiredItems.every(item => state[item.id]?.completed === true)
+}
+
+/**
+ * Calculate checklist progress.
+ *
+ * @returns { completed, total, requiredCompleted, requiredTotal, percentage }
+ */
+export function getChecklistProgress(
+  state: ChecklistState,
+  tier: IntakeTier,
+  deviceCategory?: string | null,
+): {
+  completed: number
+  total: number
+  requiredCompleted: number
+  requiredTotal: number
+  percentage: number
+} {
+  const items = getChecklistForDevice(tier, deviceCategory)
+  const requiredItems = items.filter(i => i.required)
+
+  const completed = items.filter(i => state[i.id]?.completed).length
+  const requiredCompleted = requiredItems.filter(i => state[i.id]?.completed).length
+
+  return {
+    completed,
+    total: items.length,
+    requiredCompleted,
+    requiredTotal: requiredItems.length,
+    percentage: requiredItems.length > 0
+      ? Math.round((requiredCompleted / requiredItems.length) * 100)
+      : 100,
+  }
+}
+
+/**
+ * Get intake tier options for select dropdowns
+ */
+export function getIntakeTierOptions(): Array<{ value: IntakeTier; label: string; description: string; icon: string }> {
+  return Object.values(INTAKE_TIERS).map(value => ({
+    value,
+    label: INTAKE_TIER_LABELS[value],
+    description: INTAKE_TIER_DESCRIPTIONS[value],
+    icon: INTAKE_TIER_ICONS[value],
+  }))
+}

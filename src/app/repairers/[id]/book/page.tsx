@@ -15,7 +15,7 @@ import {
   ChevronRight,
 } from 'lucide-react'
 import { type RepairerProfile, type AvailabilitySlots } from '@/components/repairers/types'
-import { formatPrice } from '@/components/repairers/helpers'
+import { formatPriceCents as formatPrice } from '@/config/marketplace'
 import { BookingStepProblem } from '@/components/repairers/BookingStepProblem'
 import { BookingStepSchedule } from '@/components/repairers/BookingStepSchedule'
 import { BookingStepConfirm } from '@/components/repairers/BookingStepConfirm'

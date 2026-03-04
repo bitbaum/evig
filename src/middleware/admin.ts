@@ -1,9 +1,8 @@
 /**
  * Multi-role authorization system for RevampIT
  *
- * MIGRATION: Now uses unified permissions to support BOTH old role system
- * and new is_staff + staff_permissions system during migration period.
- * @see src/lib/auth/unified-permissions.ts
+ * Uses the simplified permission system: is_staff + staff_permissions.
+ * @see src/lib/permissions.ts
  */
 
 import { auth } from '@/auth'
@@ -11,10 +10,7 @@ import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 import { ROLES, type UserRole } from '@/lib/constants'
 import { logger } from '@/lib/logger'
-import {
-  hasAdminAccessUnified,
-  type UnifiedUser
-} from '@/lib/auth/unified-permissions'
+import { isStaffEmail } from '@/lib/permissions'
 
 /**
  * Check if user has permission (now checks staff_permissions)
@@ -103,17 +99,8 @@ export async function adminMiddleware(request: NextRequest) {
       return NextResponse.redirect(loginUrl)
     }
 
-    // UNIFIED: Build user object with both old and new fields
-    const user: UnifiedUser = {
-      email: session.user.email || '',
-      role: session.user.role,
-      isStaff: session.user.isStaff,
-      staffPermissions: session.user.staffPermissions,
-      isSuperAdmin: session.user.isSuperAdmin,
-    }
-
-    // UNIFIED: Check both old and new auth systems
-    if (!hasAdminAccessUnified(user)) {
+    // Check staff access via new permission system
+    if (!session.user.isStaff && !isStaffEmail(session.user.email || '')) {
       const dashboardUrl = new URL('/dashboard', request.url)
       dashboardUrl.searchParams.set('error', 'access_denied')
       return NextResponse.redirect(dashboardUrl)
@@ -140,30 +127,15 @@ export async function getCurrentUserRole(): Promise<UserRole | null> {
 }
 
 /**
- * UNIFIED: Check if current user has admin access
+ * Check if current user has admin access
  *
- * Unlike hasRole() which checks exact role match, this checks BOTH:
- * - Old system: role in admin roles list
- * - New system: is_staff === true OR email @revamp-it.ch
- *
- * Use this for admin-level permission checks instead of hasRole(ROLES.REVAMPIT_ADMIN)
- *
- * @returns true if user has admin access via either system
+ * @returns true if user is staff
  */
 export async function hasAdminRole(): Promise<boolean> {
   try {
     const session = await auth()
     if (!session?.user) return false
-
-    const user: UnifiedUser = {
-      email: session.user.email || '',
-      role: session.user.role,
-      isStaff: session.user.isStaff,
-      staffPermissions: session.user.staffPermissions,
-      isSuperAdmin: session.user.isSuperAdmin,
-    }
-
-    return hasAdminAccessUnified(user)
+    return session.user.isStaff || isStaffEmail(session.user.email || '')
   } catch {
     return false
   }

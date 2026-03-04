@@ -7,7 +7,7 @@ import { TABLE_NAMES } from '@/config/database'
 import { CountRow } from '@/lib/api/db-types'
 
 // GET /api/admin/refunds - List all refunds for admin review
-export const GET = withAdmin(async (request: NextRequest) => {
+export const GET = withAdmin('finanzen', async (request: NextRequest) => {
   try {
     const { searchParams } = new URL(request.url)
     const status = searchParams.get('status')

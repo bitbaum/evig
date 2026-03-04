@@ -30,6 +30,14 @@ export const ERROR_MESSAGES = {
   APPLICATION_NOT_FOUND: 'Bewerbung nicht gefunden',
   WORKSHOP_NOT_FOUND: 'Workshop nicht gefunden',
   LOCATION_NOT_FOUND: 'Ort nicht gefunden',
+  LISTING_NOT_FOUND: 'Inserat nicht gefunden',
+  REPORT_NOT_FOUND: 'Meldung nicht gefunden',
+  IT_HILFE_REQUEST_NOT_FOUND: 'IT-Hilfe-Anfrage nicht gefunden',
+  HELPER_NOT_FOUND: 'Helfer nicht gefunden',
+  INTAKE_ITEM_NOT_FOUND: 'Gerät nicht gefunden',
+  INTAKE_CHECKLIST_INCOMPLETE: 'Checkliste nicht vollständig — alle Pflichtpunkte müssen abgehakt sein',
+  INTAKE_ALREADY_PUBLISHED: 'Gerät ist bereits im Shop veröffentlicht',
+  INTAKE_INVALID_CHECKLIST_ITEM: 'Ungültiger Checklist-Eintrag',
 
   // Validation
   EMAIL_REQUIRED: 'E-Mail erforderlich',

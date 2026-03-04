@@ -32,7 +32,7 @@ interface InstanceRow {
 }
 
 // GET /api/admin/workshops/instances - List all workshop instances
-export const GET = withAdmin(async (request, session) => {
+export const GET = withAdmin('workshops-admin', async (request, session) => {
   try {
     const searchParams = request.nextUrl.searchParams
     const workshopId = searchParams.get('workshopId')
@@ -88,7 +88,7 @@ export const GET = withAdmin(async (request, session) => {
 })
 
 // POST /api/admin/workshops/instances - Create new workshop instance
-export const POST = withAdmin(async (request, session) => {
+export const POST = withAdmin('workshops-admin', async (request, session) => {
   try {
     const body = await request.json()
     const {

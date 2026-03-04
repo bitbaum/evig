@@ -7,24 +7,13 @@
 
 import { NextRequest } from 'next/server'
 import { withAdmin } from '@/lib/api/middleware'
-import { canAccessSection } from '@/lib/permissions'
 import { logger } from '@/lib/logger'
-import { apiSuccess, apiError, apiForbidden, apiBadRequest } from '@/lib/api/helpers'
+import { apiSuccess, apiError, apiBadRequest } from '@/lib/api/helpers'
 import { parseCSV, parseExcel } from '@/lib/erfassung/file-parser'
 import { BULK_LIMITS } from '@/config/erfassung'
 
-export const POST = withAdmin(async (request, session) => {
+export const POST = withAdmin('products', async (request, session) => {
   try {
-    const user = {
-      email: session.user.email,
-      is_staff: session.user.isStaff,
-      staff_permissions: session.user.staffPermissions,
-    }
-
-    if (!canAccessSection(user, 'products')) {
-      return apiForbidden('Keine Berechtigung für Produkterfassung')
-    }
-
     const formData = await request.formData()
     const file = formData.get('file') as File | null
 

@@ -185,6 +185,18 @@ function ErfassungContent() {
         )}
       </div>
 
+      {/* Intake cross-link banner */}
+      {!form.isEditMode && (
+        <div className="flex items-center gap-3 bg-blue-50 border border-blue-200 rounded-lg px-4 py-3 text-sm">
+          <span className="text-blue-800">
+            Für Geräte-Eingang mit Checkliste und Spenden-Erfassung →{' '}
+            <Link href="/admin/intake" className="font-medium underline hover:text-blue-900">
+              Geräte-Eingang verwenden
+            </Link>
+          </span>
+        </div>
+      )}
+
       {/* Data Entry Tabs (always at top) */}
       <DataEntryTabs
         onProductData={form.handleProductData}

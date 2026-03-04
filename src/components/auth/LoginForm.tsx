@@ -11,7 +11,9 @@ import { cn } from '@/lib/utils'
 export function LoginForm() {
   const router = useRouter()
   const searchParams = useSearchParams()
-  const callbackUrl = searchParams.get('callbackUrl') || '/dashboard'
+  const rawCallbackUrl = searchParams.get('callbackUrl') || '/dashboard'
+  // Prevent open redirect: only allow relative paths (same-origin)
+  const callbackUrl = rawCallbackUrl.startsWith('/') && !rawCallbackUrl.startsWith('//') ? rawCallbackUrl : '/dashboard'
   const error = searchParams.get('error')
   const verified = searchParams.get('verified')
   const reset = searchParams.get('reset')

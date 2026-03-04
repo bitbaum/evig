@@ -4,14 +4,14 @@ import { apiBadRequest, apiForbidden, apiSuccess, apiError } from '@/lib/api/hel
 import { canAccessSection } from '@/lib/permissions'
 import { getDbUserId } from '@/lib/api/task-helpers'
 import { executeHirnAction } from '@/lib/hirn/action-executor'
-import { isRiskyAction, validateExecuteActionInput } from '@/lib/hirn/action-executor-contracts'
+import { validateExecuteActionInput } from '@/lib/hirn/action-executor-contracts'
 import type { HirnActionType } from '@/lib/hirn/action-cockpit'
 
 const ACTION_SECTION_REQUIREMENTS: Record<HirnActionType, string> = {
   create_task: 'tasks',
-  create_product_draft: 'products',
   create_decision_draft: 'decisions',
   create_protocol_draft: 'protocols',
+  navigate: 'dashboard',
 }
 
 export const POST = withAdmin(async (request: NextRequest, session: ValidSession) => {
@@ -23,7 +23,7 @@ export const POST = withAdmin(async (request: NextRequest, session: ValidSession
       return apiBadRequest(parsed.error.issues[0]?.message || 'Ungültigi Aktions-Date')
     }
 
-    const { actionType, dryRun } = parsed.data
+    const { actionType } = parsed.data
     const requiredSection = ACTION_SECTION_REQUIREMENTS[actionType]
 
     if (!canAccessSection({
@@ -35,10 +35,6 @@ export const POST = withAdmin(async (request: NextRequest, session: ValidSession
       return apiForbidden('Du hesch kei Berechtigung für die Aktion')
     }
 
-    if (isRiskyAction(actionType) && !dryRun) {
-      return apiBadRequest('Für die Aktion isch zerscht en Dry-Run nötig')
-    }
-
     const userLookup = await getDbUserId(session)
     if ('error' in userLookup) return userLookup.error
 
@@ -46,6 +42,8 @@ export const POST = withAdmin(async (request: NextRequest, session: ValidSession
 
     return apiSuccess(result)
   } catch (error) {
+    const { logger } = await import('@/lib/logger')
+    logger.error('Hirn action execution failed', { error: error instanceof Error ? error.message : error })
     return apiError(error, 'Aktion konnt nöd usgführt werde')
   }
 })

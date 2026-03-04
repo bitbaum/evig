@@ -18,7 +18,7 @@ interface WorkshopRow {
 }
 
 // GET /api/admin/workshops/list - List all workshops for admin selection
-export const GET = withAdmin(async (request, session) => {
+export const GET = withAdmin('workshops-admin', async (request, session) => {
   try {
     const searchParams = request.nextUrl.searchParams
     const activeOnly = searchParams.get('activeOnly') !== 'false'

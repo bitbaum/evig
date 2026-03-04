@@ -1,6 +1,6 @@
 import {
   FileText,
-  Package,
+  PackageCheck,
   GraduationCap,
   Wrench,
   MapPin,
@@ -21,11 +21,11 @@ export function buildQuickActions(
     })
   }
 
-  if (canAccessSection('products')) {
+  if (canAccessSection('intake')) {
     actions.push({
-      label: 'Neues Produkt',
-      href: '/admin/products/new',
-      icon: Package,
+      label: 'Neues Gerät',
+      href: '/admin/intake',
+      icon: PackageCheck,
       color: 'bg-green-100 dark:bg-green-900/30 text-green-600 hover:bg-green-200 dark:hover:bg-green-900/50',
     })
   }

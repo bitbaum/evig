@@ -8,8 +8,8 @@ interface PaginationProps {
   totalPages: number
   totalItems: number
   pageSize: number
-  /** For server-rendered pages: builds the href for a given page number */
-  buildHref?: (page: number) => string
+  /** For server-rendered pages: base URL with query params (page param will be appended/replaced) */
+  hrefBase?: string
   /** For client components: called when user selects a page */
   onPageChange?: (page: number) => void
 }
@@ -23,20 +23,28 @@ const btnClass = (active: boolean, disabled = false) =>
       : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700'
   }`
 
+/** Build a page href by replacing or appending the `page` param in `hrefBase` */
+function makeHref(hrefBase: string, page: number): string {
+  const [path, qs] = hrefBase.split('?')
+  const p = new URLSearchParams(qs || '')
+  p.set('page', String(page))
+  return `${path}?${p.toString()}`
+}
+
 function PageItem({
   page,
   active,
-  buildHref,
+  hrefBase,
   onPageChange,
 }: {
   page: number
   active: boolean
-  buildHref?: (page: number) => string
+  hrefBase?: string
   onPageChange?: (page: number) => void
 }) {
-  if (buildHref) {
+  if (hrefBase) {
     return (
-      <Link href={buildHref(page)} className={btnClass(active)}>
+      <Link href={makeHref(hrefBase, page)} className={btnClass(active)}>
         {page}
       </Link>
     )
@@ -56,20 +64,20 @@ function NavButton({
   page,
   disabled,
   children,
-  buildHref,
+  hrefBase,
   onPageChange,
 }: {
   page: number
   disabled: boolean
   children: React.ReactNode
-  buildHref?: (page: number) => string
+  hrefBase?: string
   onPageChange?: (page: number) => void
 }) {
-  if (buildHref) {
+  if (hrefBase) {
     return disabled ? (
       <span className={btnClass(false, true)}>{children}</span>
     ) : (
-      <Link href={buildHref(page)} className={btnClass(false)}>
+      <Link href={makeHref(hrefBase, page)} className={btnClass(false)}>
         {children}
       </Link>
     )
@@ -90,7 +98,7 @@ export function Pagination({
   totalPages,
   totalItems,
   pageSize,
-  buildHref,
+  hrefBase,
   onPageChange,
 }: PaginationProps) {
   if (totalPages <= 1) return null
@@ -113,7 +121,7 @@ export function Pagination({
         {from}–{to} von {totalItems}
       </p>
       <div className="flex items-center gap-1">
-        <NavButton page={currentPage - 1} disabled={currentPage <= 1} buildHref={buildHref} onPageChange={onPageChange}>
+        <NavButton page={currentPage - 1} disabled={currentPage <= 1} hrefBase={hrefBase} onPageChange={onPageChange}>
           <ChevronLeft className="w-4 h-4" />
         </NavButton>
 
@@ -124,12 +132,12 @@ export function Pagination({
               {prev && page - prev > 1 && (
                 <span className="w-8 text-center text-sm text-gray-500">...</span>
               )}
-              <PageItem page={page} active={page === currentPage} buildHref={buildHref} onPageChange={onPageChange} />
+              <PageItem page={page} active={page === currentPage} hrefBase={hrefBase} onPageChange={onPageChange} />
             </div>
           )
         })}
 
-        <NavButton page={currentPage + 1} disabled={currentPage >= totalPages} buildHref={buildHref} onPageChange={onPageChange}>
+        <NavButton page={currentPage + 1} disabled={currentPage >= totalPages} hrefBase={hrefBase} onPageChange={onPageChange}>
           <ChevronRight className="w-4 h-4" />
         </NavButton>
       </div>

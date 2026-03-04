@@ -16,7 +16,7 @@ import type { EditHistoryEntry } from '@/lib/admin/edit-utils';
  * GET /api/admin/workshops/proposals/[id]/history
  * Fetch edit history for a workshop proposal
  */
-export const GET = withAdmin<{ id: string }>(async (request, session, context) => {
+export const GET = withAdmin<{ id: string }>('workshops-admin', async (request, session, context) => {
   const { id: proposalId } = context!.params!;
 
   try {

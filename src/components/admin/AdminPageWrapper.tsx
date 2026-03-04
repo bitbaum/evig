@@ -35,32 +35,32 @@ export default function AdminPageWrapper({
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div className="flex items-center gap-4 min-w-0">
           {backButton && (
             <>
               <Link
                 href={backButton.href}
-                className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors"
+                className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors shrink-0"
               >
                 <ArrowLeft className="w-5 h-5" />
-                {backButton.label}
+                <span className="hidden sm:inline">{backButton.label}</span>
               </Link>
-              <div className="w-px h-6 bg-gray-300" />
+              <div className="w-px h-6 bg-gray-300 shrink-0" />
             </>
           )}
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 min-w-0">
             {Icon && (
-              <div className={`w-12 h-12 rounded-lg flex items-center justify-center ${ICON_COLOR_CLASSES[iconColor]}`}>
-                <Icon className="w-6 h-6" />
+              <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-lg flex items-center justify-center shrink-0 ${ICON_COLOR_CLASSES[iconColor]}`}>
+                <Icon className="w-5 h-5 sm:w-6 sm:h-6" />
               </div>
             )}
-            <div>
-              <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+            <div className="min-w-0">
+              <h1 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white truncate">
                 {title}
               </h1>
               {description && (
-                <p className="text-gray-600 dark:text-gray-400">
+                <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400 line-clamp-2">
                   {description}
                 </p>
               )}
@@ -68,7 +68,7 @@ export default function AdminPageWrapper({
           </div>
         </div>
         {actions && (
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 shrink-0">
             {actions}
           </div>
         )}

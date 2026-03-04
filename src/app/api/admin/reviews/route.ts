@@ -38,7 +38,7 @@ interface ReviewRow {
   response_created_at: string | null
 }
 
-export const GET = withAdmin(async (request, session) => {
+export const GET = withAdmin('reviews', async (request, session) => {
   try {
     // Parse query params
     const { searchParams } = new URL(request.url)

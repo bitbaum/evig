@@ -24,7 +24,7 @@ interface EnrichmentItem {
   verkaufspreis?: string
 }
 
-export const POST = withAdmin(async (request: NextRequest, session) => {
+export const POST = withAdmin('products', async (request: NextRequest, session) => {
   try {
     const raw = await request.json()
     const validation = validateBody(BulkEnrichSchema, raw)

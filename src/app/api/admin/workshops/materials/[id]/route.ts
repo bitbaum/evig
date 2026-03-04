@@ -6,7 +6,7 @@ import { logger } from '@/lib/logger'
 import { TABLE_NAMES } from '@/config/database'
 
 // PUT /api/admin/workshops/materials/[id] - Update a material
-export const PUT = withAdmin<{ id: string }>(async (request, session, context) => {
+export const PUT = withAdmin<{ id: string }>('workshops-admin', async (request, session, context) => {
   try {
     const { id } = context!.params!
     const body = await request.json()
@@ -123,7 +123,7 @@ export const PUT = withAdmin<{ id: string }>(async (request, session, context) =
 })
 
 // DELETE /api/admin/workshops/materials/[id] - Delete a material
-export const DELETE = withAdmin<{ id: string }>(async (request, session, context) => {
+export const DELETE = withAdmin<{ id: string }>('workshops-admin', async (request, session, context) => {
   try {
     const { id } = context!.params!
 

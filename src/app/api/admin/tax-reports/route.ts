@@ -25,7 +25,7 @@ interface TaxTransactionWithJoins {
 }
 
 // GET /api/admin/tax-reports - Generate tax reports
-export const GET = withAdmin(async (request: NextRequest) => {
+export const GET = withAdmin('finanzen', async (request: NextRequest) => {
   try {
     const { searchParams } = new URL(request.url)
     const reportType = searchParams.get('type') || 'vat' // vat, transactions, compliance

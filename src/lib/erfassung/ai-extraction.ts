@@ -463,7 +463,7 @@ Beschreibe:
 - Produktname/Modell (z.B. "Latitude E7470", "ThinkPad T480")
 - Sichtbare Specs (CPU-Sticker, RAM-Aufkleber, etc.)
 - Zustand (Kratzer, Abnutzung, wie neu)
-- Geschätzer Preis für Schweizer Markt (CHF)
+- Geschätzter Preis für Schweizer Markt (CHF)
 
 Dann fülle folgendes JSON-Schema aus:
 ${PRODUCT_SCHEMA}

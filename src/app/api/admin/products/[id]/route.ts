@@ -6,7 +6,7 @@ import { logger } from "@/lib/logger";
 import { withAdmin } from "@/lib/api/middleware";
 
 // GET /api/admin/products/[id] - Get single product
-export const GET = withAdmin<{ id: string }>(async (
+export const GET = withAdmin<{ id: string }>('products', async (
   request: NextRequest,
   session,
   context
@@ -72,7 +72,7 @@ export const GET = withAdmin<{ id: string }>(async (
 });
 
 // PUT /api/admin/products/[id] - Update product
-export const PUT = withAdmin<{ id: string }>(async (
+export const PUT = withAdmin<{ id: string }>('products', async (
   request: NextRequest,
   session,
   context
@@ -157,7 +157,7 @@ export const PUT = withAdmin<{ id: string }>(async (
 });
 
 // DELETE /api/admin/products/[id] - Delete product
-export const DELETE = withAdmin<{ id: string }>(async (
+export const DELETE = withAdmin<{ id: string }>('products', async (
   request: NextRequest,
   session,
   context

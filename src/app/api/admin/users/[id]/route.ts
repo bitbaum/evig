@@ -22,7 +22,7 @@ import { validateBody, AdminUpdateUserSchema } from '@/lib/schemas'
  * GET /api/admin/users/[id]
  * Get detailed user information
  */
-export const GET = withAdmin<{ id: string }>(async (request, session, context) => {
+export const GET = withAdmin<{ id: string }>('users', async (request, session, context) => {
   try {
     if (!isSuperAdmin(session.user.email, session.user.isSuperAdmin)) {
       return apiForbidden('Nur Super-Admins können Benutzerdetails einsehen')
@@ -65,7 +65,7 @@ export const GET = withAdmin<{ id: string }>(async (request, session, context) =
  * PATCH /api/admin/users/[id]
  * Update user profile (name, email, phone, address, staff status)
  */
-export const PATCH = withAdmin<{ id: string }>(async (request, session, context) => {
+export const PATCH = withAdmin<{ id: string }>('users', async (request, session, context) => {
   try {
     if (!isSuperAdmin(session.user.email, session.user.isSuperAdmin)) {
       return apiForbidden('Nur Super-Admins können Benutzer bearbeiten')
@@ -162,7 +162,7 @@ export const PATCH = withAdmin<{ id: string }>(async (request, session, context)
  * DELETE /api/admin/users/[id]
  * Delete a user and all associated data
  */
-export const DELETE = withAdmin<{ id: string }>(async (request, session, context) => {
+export const DELETE = withAdmin<{ id: string }>('users', async (request, session, context) => {
   try {
     if (!isSuperAdmin(session.user.email, session.user.isSuperAdmin)) {
       return apiForbidden('Nur Super-Admins können Benutzer löschen')

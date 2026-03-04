@@ -7,27 +7,16 @@
 
 import { NextRequest } from 'next/server'
 import { withAdmin } from '@/lib/api/middleware'
-import { canAccessSection } from '@/lib/permissions'
 import { logger } from '@/lib/logger'
-import { apiSuccess, apiError, apiForbidden, apiBadRequest } from '@/lib/api/helpers'
+import { apiSuccess, apiError, apiBadRequest } from '@/lib/api/helpers'
 import {
   getAdminServices,
   createServiceType,
 } from '@/lib/services'
 import { validateBody, AdminCreateServiceSchema } from '@/lib/schemas'
 
-export const GET = withAdmin(async (request, session) => {
+export const GET = withAdmin('services', async (request, session) => {
   try {
-    const user = {
-      email: session.user.email,
-      is_staff: session.user.isStaff,
-      staff_permissions: session.user.staffPermissions,
-    }
-
-    if (!canAccessSection(user, 'services')) {
-      return apiForbidden('Kein Zugriff auf Dienstleistungen')
-    }
-
     const services = await getAdminServices()
 
     return apiSuccess(services)
@@ -37,18 +26,8 @@ export const GET = withAdmin(async (request, session) => {
   }
 })
 
-export const POST = withAdmin(async (request, session) => {
+export const POST = withAdmin('services', async (request, session) => {
   try {
-    const user = {
-      email: session.user.email,
-      is_staff: session.user.isStaff,
-      staff_permissions: session.user.staffPermissions,
-    }
-
-    if (!canAccessSection(user, 'services')) {
-      return apiForbidden('Kein Zugriff auf Dienstleistungen')
-    }
-
     const body = await request.json()
     const validation = validateBody(AdminCreateServiceSchema, body)
     if (!validation.success) return validation.error

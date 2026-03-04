@@ -15,7 +15,7 @@ interface UserIdRow {
   id: string
 }
 
-export const POST = withAdmin(async (request: NextRequest) => {
+export const POST = withAdmin('users', async (request: NextRequest) => {
   try {
     const body = await request.json()
     const { userId, email } = body

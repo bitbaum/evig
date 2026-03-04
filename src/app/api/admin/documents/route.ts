@@ -43,7 +43,7 @@ interface ApplicationRow {
   document_verification_status: string
 }
 
-export const GET = withAdmin(async (request, session) => {
+export const GET = withAdmin('content', async (request, session) => {
   try {
     const { searchParams } = new URL(request.url)
     const applicationId = searchParams.get('applicationId')

@@ -18,7 +18,7 @@ import { apiError, apiSuccess } from '@/lib/api/helpers'
 import { logger } from '@/lib/logger'
 import { callWithFallback } from '@/lib/ai/providers'
 import { robustJsonExtract } from '@/lib/ai/extract'
-import { BRAND_CONTEXT } from '@/lib/ai/config/prompts'
+import { FORM_AI_REGISTRY, fillPromptTemplate } from '@/lib/ai/config/prompts'
 
 interface ProductFormData {
   title: string
@@ -32,39 +32,9 @@ interface ProductFormData {
   condition: string
 }
 
-const SYSTEM_PROMPT = `${BRAND_CONTEXT}
+const AI_CONFIG = FORM_AI_REGISTRY['smart-product-entry']
 
-Du bist ein Experte für IT-Hardware, insbesondere für gebrauchte Business-Laptops, Desktop-PCs und Monitore.
-
-Wenn der Benutzer ein Produkt nennt (z.B. "Dell Latitude e7470" oder "ThinkPad T480"), identifiziere das genaue Produkt und liefere detaillierte Informationen.
-
-Antworte NUR mit validem JSON im folgenden Format:
-{
-  "title": "Voller Produktname mit Hersteller",
-  "handle": "url-freundlicher-slug",
-  "description": "Ausführliche deutsche Produktbeschreibung für Schweizer Markt (2-3 Sätze)",
-  "price": "geschätzter Preis in CHF für gebrauchtes Gerät in gutem Zustand (nur Zahl)",
-  "category": "Kategorie (Laptops, Desktop PCs, Monitore, Zubehör, Server, Netzwerk, Software)",
-  "sku": "Hersteller-Modellnummer",
-  "specs": [
-    { "key": "CPU", "value": "Prozessor-Details" },
-    { "key": "RAM", "value": "Arbeitsspeicher" },
-    { "key": "Speicher", "value": "SSD/HDD Kapazität" },
-    { "key": "Display", "value": "Bildschirmgrösse und Auflösung" },
-    { "key": "Baujahr", "value": "Erscheinungsjahr" }
-  ],
-  "tags": ["relevante", "suchbegriffe"],
-  "condition": "good"
-}
-
-Wichtige Regeln:
-- Preise sind für den Schweizer Gebrauchtmarkt (CHF), basierend auf typischen refurbished Preisen
-- Business-Laptops (Latitude, ThinkPad, EliteBook) sind wertvoller als Consumer-Geräte
-- Beschreibung auf Deutsch für Schweizer Kunden
-- Wenn du das genaue Modell nicht kennst, nutze dein Wissen über ähnliche Modelle
-- Handle muss URL-freundlich sein (kleinbuchstaben, bindestriche)`
-
-export const POST = withAdmin(async (request: NextRequest) => {
+export const POST = withAdmin('products', async (request: NextRequest) => {
   const startTime = Date.now()
 
   try {
@@ -86,10 +56,10 @@ export const POST = withAdmin(async (request: NextRequest) => {
     })
 
     const result = await callWithFallback({
-      systemPrompt: SYSTEM_PROMPT,
-      userPrompt: `Produkt: ${trimmedQuery}`,
-      temperature: 0.3,
-      maxTokens: 1024,
+      systemPrompt: AI_CONFIG.system,
+      userPrompt: fillPromptTemplate(AI_CONFIG.extract, { text: trimmedQuery }),
+      temperature: AI_CONFIG.temperature ?? 0.3,
+      maxTokens: AI_CONFIG.maxTokens ?? 1024,
     })
 
     if (!result) {

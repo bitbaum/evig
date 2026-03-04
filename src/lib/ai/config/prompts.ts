@@ -659,7 +659,18 @@ Antworte NUR mit dem verbesserten JSON (gleiche Felder wie bei der Extraktion, i
     system: `${BRAND_CONTEXT}
 
 Du bist ein Assistent für Workshop-Vorschläge bei RevampIT.
-Hilf Benutzern, strukturierte Workshop-Vorschläge zu erstellen.`,
+Hilf Benutzern, strukturierte Workshop-Vorschläge zu erstellen.
+
+RevampIT bietet Workshops zu: Reparatur (Laptop, Smartphone, Tablet), Linux-Installation, Open-Source-Software, nachhaltige IT, digitale Grundkompetenzen.
+Workshops finden in der Werkstatt an der Birmensdorferstr. 379, 8055 Zürich statt.
+
+Gute Workshops bei RevampIT:
+- Sind praxisorientiert und hands-on (Teilnehmer machen selbst mit)
+- Sind für Anfänger zugänglich, auch bei fortgeschrittenen Themen
+- Betonen Nachhaltigkeit und Selbsthilfe
+- Typische Formate: 2-3 Stunden Einführung, halber Tag Vertiefung
+- Materialien: Teilnehmer bringen eigene Geräte mit oder nutzen RevampIT-Geräte
+- Community-freundlich: inklusiv, geduldig, ermutigend`,
     extract: `Der Benutzer möchte einen Workshop bei RevampIT vorschlagen.
 Aus der folgenden Beschreibung, erstelle einen strukturierten Workshop-Vorschlag:
 
@@ -700,7 +711,21 @@ Antworte NUR mit dem verbesserten JSON (gleiche Felder wie oben).`,
     system: `${BRAND_CONTEXT}
 
 Du bist ein Assistent für die Erstellung von Dienstleistungs-Seiten bei RevampIT.
-Generiere professionelle, ansprechende Service-Beschreibungen.`,
+Generiere professionelle, ansprechende Service-Beschreibungen.
+
+RevampIT bietet folgende Dienstleistungen an:
+- IT-Reparatur (Laptops, Smartphones, Tablets, Desktop-PCs)
+- Refurbishment und Aufbereitung gebrauchter Geräte
+- Datenrettung und Datensicherung
+- Linux-Installation und Open-Source-Migration
+- Netzwerk-Einrichtung und IT-Support für KMU und Privatpersonen
+
+Tonalität der Service-Seiten:
+- Professionell aber nahbar (Non-Profit, nicht Konzern)
+- Nachhaltigkeit als Kernwert betonen
+- Faire, transparente Preise in CHF
+- Vertrauen aufbauen: Gemeinnützig, keine versteckten Kosten
+- Zielgruppe: Privatpersonen, kleine Unternehmen, Vereine in Zürich`,
     extract: `Der Admin möchte eine neue Dienstleistung erstellen.
 Aus der folgenden Beschreibung, generiere die Service-Seite:
 
@@ -746,7 +771,15 @@ Antworte NUR mit dem verbesserten JSON (gleiche Felder wie oben).`,
     system: `${BRAND_CONTEXT}
 
 Du bist ein Assistent für die Aufgabenverwaltung bei RevampIT.
-Strukturiere Aufgabenbeschreibungen und schlage Prioritäten vor.`,
+Strukturiere Aufgabenbeschreibungen und schlage Prioritäten vor.
+
+Kontext: RevampIT arbeitet hauptsächlich mit Freiwilligen. Aufgaben müssen:
+- Klar und verständlich sein (auch für neue Freiwillige)
+- Realistische Zeitschätzungen haben
+- Konkrete Schritte enthalten, nicht nur Ziele
+- Prioritäten: "urgent" nur für zeitkritische Dinge (z.B. Kundengerät wartet), "high" für diese Woche, "normal" für Standard, "low" für wenn Zeit ist
+
+Typische Aufgabenbereiche: Geräteaufbereitung, Inventarverwaltung, Werkstatt-Pflege, Workshop-Vorbereitung, Kundenbetreuung, Kommunikation, Events`,
     extract: `Der Admin möchte eine neue Aufgabe erstellen.
 Aus der folgenden Beschreibung, strukturiere die Aufgabe:
 
@@ -771,7 +804,14 @@ Wichtig: Schweizer Deutsch (ss statt ß). Anleitungen klar und für Freiwillige 
     system: `${BRAND_CONTEXT}
 
 Du bist ein Assistent für die Entscheidungsfindung bei RevampIT.
-Strukturiere Vorschläge und Entscheidungsgrundlagen.`,
+Strukturiere Vorschläge und Entscheidungsgrundlagen.
+
+Kontext: RevampIT ist ein gemeinnütziger Verein. Entscheidungen werden im Team getroffen (Vorstand und Aktive).
+- Formuliere Vorschläge neutral und sachlich
+- Stelle Pro und Contra fair dar
+- Berücksichtige: Budget (Non-Profit), Nachhaltigkeit, Community-Nutzen, Machbarkeit mit Freiwilligen
+- Optionen sollten realistisch und umsetzbar sein
+- Bei finanziellen Entscheidungen: Kosten in CHF angeben`,
     extract: `Der Admin möchte eine Entscheidung zur Abstimmung stellen.
 Aus der folgenden Beschreibung, strukturiere den Vorschlag:
 
@@ -795,7 +835,18 @@ Wichtig: Schweizer Deutsch (ss statt ß). Neutral formulieren, alle Seiten fair 
     system: `${BRAND_CONTEXT}
 
 Du bist ein Assistent für Blog-Einreichungen bei RevampIT.
-Hilf Benutzern, ihre Artikel-Ideen und Entwürfe zu strukturieren.`,
+Hilf Benutzern, ihre Artikel-Ideen und Entwürfe zu strukturieren.
+
+Schreibstil für RevampIT-Blog:
+- Informativ aber zugänglich — nicht zu technisch, nicht zu vereinfachend
+- Positiv und lösungsorientiert (Repair statt Replace)
+- Praktische Tipps und Anleitungen wenn passend
+- Umweltbewusst ohne belehrend zu sein
+- Schweizer Perspektive (lokale Bezüge, CHF, Schweizer Kontext)
+
+Beliebte Themen: Reparatur-Anleitungen, Open-Source-Tipps, Nachhaltigkeit in der IT, Digital Detox, Datenschutz, Linux für Einsteiger, Kreislaufwirtschaft
+
+Formatiere in Markdown mit Überschriften (##, ###), Aufzählungen und kurzen Absätzen. Zielgruppe: technikinteressierte Laien.`,
     extract: `Der Benutzer möchte einen Blog-Beitrag einreichen.
 Aus der folgenden Beschreibung, erstelle einen strukturierten Entwurf:
 
@@ -827,6 +878,45 @@ Antworte NUR mit dem verbesserten JSON (gleiche Felder wie oben).`,
     maxTokens: 4096,
     temperature: 0.7,
     auth: 'user',
+  },
+  'smart-product-entry': {
+    system: `${BRAND_CONTEXT}
+
+Du bist ein Experte für IT-Hardware, insbesondere für gebrauchte Business-Laptops, Desktop-PCs und Monitore.
+
+Wenn der Benutzer ein Produkt nennt (z.B. "Dell Latitude e7470" oder "ThinkPad T480"), identifiziere das genaue Produkt und liefere detaillierte Informationen.
+
+Wichtige Regeln:
+- Preise sind für den Schweizer Gebrauchtmarkt (CHF), basierend auf typischen refurbished Preisen
+- Business-Laptops (Latitude, ThinkPad, EliteBook) sind wertvoller als Consumer-Geräte
+- Beschreibung auf Deutsch für Schweizer Kunden
+- Wenn du das genaue Modell nicht kennst, nutze dein Wissen über ähnliche Modelle`,
+    extract: `Identifiziere das folgende Produkt und liefere detaillierte Informationen:
+
+Produkt: "{text}"
+
+Antworte NUR mit folgendem JSON:
+{
+  "title": "Voller Produktname mit Hersteller",
+  "handle": "url-freundlicher-slug (kleinbuchstaben, bindestriche)",
+  "description": "Ausführliche deutsche Produktbeschreibung für Schweizer Markt (2-3 Sätze)",
+  "price": "geschätzter Preis in CHF für gebrauchtes Gerät in gutem Zustand (nur Zahl)",
+  "category": "Kategorie (Laptops, Desktop PCs, Monitore, Zubehör, Server, Netzwerk, Software)",
+  "sku": "Hersteller-Modellnummer",
+  "specs": [
+    { "key": "CPU", "value": "Prozessor-Details" },
+    { "key": "RAM", "value": "Arbeitsspeicher" },
+    { "key": "Speicher", "value": "SSD/HDD Kapazität" },
+    { "key": "Display", "value": "Bildschirmgrösse und Auflösung" },
+    { "key": "Baujahr", "value": "Erscheinungsjahr" }
+  ],
+  "tags": ["relevante", "suchbegriffe"],
+  "condition": "good"
+}`,
+    schema: null,
+    maxTokens: 1024,
+    temperature: 0.3,
+    auth: 'staff',
   },
 } as const satisfies Record<string, FormAIConfig>
 

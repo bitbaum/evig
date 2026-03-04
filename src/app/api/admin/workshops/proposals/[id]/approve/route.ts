@@ -37,7 +37,7 @@ interface WorkshopIdRow {
 }
 
 // POST /api/admin/workshops/proposals/[id]/approve - Approve or reject workshop proposal
-export const POST = withAdmin<{ id: string }>(async (request, session, context) => {
+export const POST = withAdmin<{ id: string }>('workshops-admin', async (request, session, context) => {
   const { id: proposalId } = context!.params!
   try {
     const body = await request.json()

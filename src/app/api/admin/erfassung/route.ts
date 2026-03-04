@@ -14,7 +14,7 @@ import { logger } from '@/lib/logger'
 import { createErfassungProduct } from '@/lib/erfassung/create-product'
 import type { ErfassungPayload } from '@/types/erfassung'
 
-export const POST = withAdmin(async (request, session) => {
+export const POST = withAdmin('products', async (request, session) => {
   try {
     const raw = await request.json()
     const validation = validateBody(ErfassungCreateSchema, raw)

@@ -18,7 +18,7 @@ interface RatingRow {
   review_summary: Record<string, unknown>
 }
 
-export const POST = withAdmin<{ id: string }>(async (request, session, context) => {
+export const POST = withAdmin<{ id: string }>('services', async (request, session, context) => {
   const { id: repairerId } = context!.params!
   try {
     // Check if repairer exists

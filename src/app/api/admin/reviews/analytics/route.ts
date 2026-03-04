@@ -39,7 +39,7 @@ interface ReviewerRow {
   avg_rating_given: string
 }
 
-export const GET = withAdmin(async (request, session) => {
+export const GET = withAdmin('reviews', async (request, session) => {
   try {
     const { searchParams } = new URL(request.url)
     const period = searchParams.get('period') || '30' // days

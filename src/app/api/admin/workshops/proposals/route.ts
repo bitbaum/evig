@@ -7,7 +7,7 @@ import { TABLE_NAMES } from '@/config/database'
 import { CountRow } from '@/lib/api/db-types'
 
 // GET /api/admin/workshops/proposals - List workshop proposals with filtering
-export const GET = withAdmin(async (request, session) => {
+export const GET = withAdmin('workshops-admin', async (request, session) => {
   try {
     const { searchParams } = new URL(request.url)
     const status = searchParams.get('status') || 'pending'

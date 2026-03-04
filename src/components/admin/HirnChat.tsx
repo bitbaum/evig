@@ -5,7 +5,7 @@ import { Send, Loader2, Bot, User, Sparkles, Trash2, Rocket, TriangleAlert } fro
 
 interface HirnActionCard {
   id: string
-  type: 'create_task' | 'create_product_draft' | 'create_decision_draft' | 'create_protocol_draft'
+  type: 'create_task' | 'create_decision_draft' | 'create_protocol_draft' | 'navigate'
   title: string
   summary: string
   cta: string
@@ -83,16 +83,9 @@ export function HirnChat({ sessionId, onSessionChange, compact = false }: HirnCh
     setError('')
 
     try {
-      // Get CSRF token from cookie
-      const csrfMatch = document.cookie.match(/__Host-csrf=([^;]+)/)
-      const csrfToken = csrfMatch ? csrfMatch[1] : ''
-
       const response = await fetch('/api/admin/hirn/chat', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-csrf-token': csrfToken,
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           message: userMessage.content,
           sessionId,
@@ -135,12 +128,8 @@ export function HirnChat({ sessionId, onSessionChange, compact = false }: HirnCh
     if (!confirm('Möchtest du dieses Gespräch wirklich löschen?')) return
 
     try {
-      const csrfMatch = document.cookie.match(/__Host-csrf=([^;]+)/)
-      const csrfToken = csrfMatch ? csrfMatch[1] : ''
-
       await fetch(`/api/admin/hirn/history?sessionId=${sessionId}`, {
         method: 'DELETE',
-        headers: { 'x-csrf-token': csrfToken },
       })
       setMessages([])
       onSessionChange?.()
@@ -151,58 +140,33 @@ export function HirnChat({ sessionId, onSessionChange, compact = false }: HirnCh
 
   const executeAction = async (action: HirnActionCard) => {
     setError('')
-    try {
-      const csrfMatch = document.cookie.match(/__Host-csrf=([^;]+)/)
-      const csrfToken = csrfMatch ? csrfMatch[1] : ''
 
-      const dryRunFirst = action.risky
-      const firstResponse = await fetch('/api/admin/hirn/actions/execute', {
+    // Navigate actions just redirect — no API call needed
+    if (action.type === 'navigate') {
+      const url = typeof action.payload.url === 'string' ? action.payload.url : '/admin'
+      window.location.href = url
+      return
+    }
+
+    try {
+      const response = await fetch('/api/admin/hirn/actions/execute', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-csrf-token': csrfToken,
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           actionId: action.id,
           actionType: action.type,
           payload: action.payload,
-          dryRun: dryRunFirst,
+          dryRun: false,
         }),
       })
 
-      const firstData = await firstResponse.json()
-      if (!firstResponse.ok) throw new Error(firstData.error || 'Aktion fehlgschlage')
+      const data = await response.json()
+      if (!response.ok) throw new Error(data.error || 'Aktion fehlgschlage')
 
-      if (firstData.data?.mode === 'dry-run') {
-        const confirmed = confirm('Vorschau passt. Jetzt usfüehre?')
-        if (!confirmed) return
-
-        const executeResponse = await fetch('/api/admin/hirn/actions/execute', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'x-csrf-token': csrfToken,
-          },
-          body: JSON.stringify({
-            actionId: action.id,
-            actionType: action.type,
-            payload: action.payload,
-            dryRun: false,
-          }),
-        })
-
-        const executeData = await executeResponse.json()
-        if (!executeResponse.ok) throw new Error(executeData.error || 'Aktion fehlgschlage')
-
-        const link = executeData.data?.entity?.link
-        const message = `${executeData.data?.entity?.title || 'Element'} erstellt ✅\n${executeData.data?.suggestedNextStep || ''}`
-        alert(link ? `${message}\n\nÖffne: ${link}` : message)
-        return
+      const link = data.data?.entity?.link
+      if (link) {
+        window.location.href = link
       }
-
-      const link = firstData.data?.entity?.link
-      const message = `${firstData.data?.entity?.title || 'Element'} erstellt ✅\n${firstData.data?.suggestedNextStep || ''}`
-      alert(link ? `${message}\n\nÖffne: ${link}` : message)
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Aktion fehlgschlage')
     }

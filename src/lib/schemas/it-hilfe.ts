@@ -6,7 +6,9 @@ import {
   SERVICE_TYPES,
   SWISS_CANTONS,
   BUDGET_TIERS,
+  REQUEST_STATUSES,
 } from '@/config/it-hilfe';
+import { paginationSchema } from './common';
 
 /**
  * IT-Hilfe Request Schema
@@ -68,6 +70,49 @@ export const itHilfeRequestSchema = z.object({
     )
     .optional(),
 });
+
+// ============================================================================
+// Admin Schemas
+// ============================================================================
+
+const requestStatusIds = REQUEST_STATUSES.map(s => s.id) as [string, ...string[]];
+const urgencyIds = URGENCY_LEVELS.map(u => u.id) as [string, ...string[]];
+const categoryIds = getCategoryIds() as [string, ...string[]];
+
+export const AdminITHilfeQuerySchema = z.object({
+  status: z.enum(['all', ...requestStatusIds] as [string, ...string[]]).default('all'),
+  category: z.enum(['all', ...categoryIds] as [string, ...string[]]).default('all'),
+  urgency: z.enum(['all', ...urgencyIds] as [string, ...string[]]).default('all'),
+  canton: z.string().optional(),
+  search: z.string().max(200).optional(),
+}).merge(paginationSchema);
+
+export type AdminITHilfeQuery = z.infer<typeof AdminITHilfeQuerySchema>;
+
+export const AdminEditRequestSchema = z.object({
+  title: z.string().min(10).max(200).optional(),
+  description: z.string().min(20).max(5000).optional(),
+  status: z.enum(requestStatusIds).optional(),
+  urgency: z.enum(urgencyIds).optional(),
+  admin_notes: z.string().max(5000).optional().nullable(),
+});
+
+export type AdminEditRequestInput = z.infer<typeof AdminEditRequestSchema>;
+
+export const AdminHelperActionSchema = z.object({
+  action: z.enum(['verify', 'suspend', 'reactivate'] as const),
+  admin_notes: z.string().max(2000).optional().nullable(),
+});
+
+export type AdminHelperActionInput = z.infer<typeof AdminHelperActionSchema>;
+
+export const AdminHelpersQuerySchema = z.object({
+  status: z.enum(['all', 'active', 'verified', 'suspended'] as const).default('all'),
+  canton: z.string().optional(),
+  skill: z.string().optional(),
+}).merge(paginationSchema);
+
+export type AdminHelpersQuery = z.infer<typeof AdminHelpersQuerySchema>;
 
 /**
  * Helper function to validate data and return typed result

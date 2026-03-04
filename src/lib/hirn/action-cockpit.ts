@@ -2,9 +2,9 @@ import { z } from 'zod'
 
 const actionTypeSchema = z.enum([
   'create_task',
-  'create_product_draft',
   'create_decision_draft',
   'create_protocol_draft',
+  'navigate',
 ])
 
 const baseActionSchema = z.object({
@@ -60,10 +60,18 @@ Format:
 {"version":"1.0","actions":[{"id":"a1","type":"create_task","title":"...","summary":"...","cta":"Aufgabe erstellen","risky":false,"payload":{...}}]}
 \`\`\`
 
+Verfügbare Typen:
+- create_task: Neue Aufgabe erstellen. payload: {title, description, task_type, category, priority, ...}
+- create_decision_draft: Entscheid-Entwurf erstellen. payload: {title, description, category, ...}
+- create_protocol_draft: Protokoll-Entwurf erstellen. payload: {title, meeting_date, participants, ...}
+- navigate: Zur passenden Seite navigieren. payload: {url: "/admin/...", label: "Seitenname"}
+
 Regeln:
 - Nur bei konkretem Ausführungswunsch Actions ausgeben, sonst kein Block.
 - Maximal 4 Actions.
 - payload muss für den Typ vollständig sein.
-- Produkt-Entwürfe immer als risky=true markieren.
+- Für Produkt-Erfassung: navigate mit url="/admin/erfassung" und cta="Produkt erfassen".
+- Für Workshop-Verwaltung: navigate mit url="/admin/workshops" und cta="Workshops verwalten".
+- Für Marketplace: navigate mit url="/marketplace/sell" und cta="Inserat erstellen".
 - Text ausserhalb des Blocks bleibt normal menschlich.
 `.trim()

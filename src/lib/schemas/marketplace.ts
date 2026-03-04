@@ -89,7 +89,11 @@ export const CreateListingSchema = z.object({
   }),
   brand: z.string().max(100).optional().nullable(),
   model: z.string().max(100).optional().nullable(),
-  images: z.array(z.string().url('Ungültige Bild-URL'))
+  images: z.array(
+    z.string().refine(
+      (s) => s.startsWith('/uploads/') || s.startsWith('http://') || s.startsWith('https://'),
+      'Ungültige Bild-URL',
+    ))
     .min(MARKETPLACE_LIMITS.MIN_IMAGES, `Mindestens ${MARKETPLACE_LIMITS.MIN_IMAGES} Bild erforderlich`)
     .max(MARKETPLACE_LIMITS.MAX_IMAGES, `Maximal ${MARKETPLACE_LIMITS.MAX_IMAGES} Bilder erlaubt`),
   delivery_options: z.enum(DELIVERY_OPTIONS as unknown as [string, ...string[]]).default('pickup'),
@@ -122,7 +126,10 @@ export const UpdateListingSchema = z.object({
   condition: z.enum(LISTING_CONDITIONS as unknown as [string, ...string[]]).optional(),
   brand: z.string().max(100).optional().nullable(),
   model: z.string().max(100).optional().nullable(),
-  images: z.array(z.string().url()).min(1).max(MARKETPLACE_LIMITS.MAX_IMAGES).optional(),
+  images: z.array(z.string().refine(
+    (s) => s.startsWith('/uploads/') || s.startsWith('http://') || s.startsWith('https://'),
+    'Ungültige Bild-URL',
+  )).min(1).max(MARKETPLACE_LIMITS.MAX_IMAGES).optional(),
   delivery_options: z.enum(DELIVERY_OPTIONS as unknown as [string, ...string[]]).optional(),
   shipping_cost_chf: z.number().min(0).optional().nullable(),
   pickup_location: z.string().max(200).optional().nullable(),
@@ -214,3 +221,43 @@ export const ReportListingSchema = z.object({
 });
 
 export type ReportListingInput = z.infer<typeof ReportListingSchema>;
+
+// ============================================================================
+// Admin Schemas
+// ============================================================================
+
+export const AdminListingsQuerySchema = z.object({
+  status: z.enum(['all', ...LISTING_STATUSES] as [string, ...string[]]).default('all'),
+  category: z.string().optional(),
+  seller_type: z.enum(['all', 'revampit', 'community'] as const).default('all'),
+  verified: z.enum(['all', 'yes', 'no'] as const).default('all'),
+  reported: z.enum(['all', 'yes'] as const).default('all'),
+  search: z.string().max(200).optional(),
+}).merge(paginationSchema);
+
+export type AdminListingsQuery = z.infer<typeof AdminListingsQuerySchema>;
+
+export const AdminEditListingSchema = z.object({
+  title: z.string().min(3).max(MARKETPLACE_LIMITS.MAX_TITLE_LENGTH).optional(),
+  description: z.string().min(10).max(MARKETPLACE_LIMITS.MAX_DESCRIPTION_LENGTH).optional(),
+  price_chf: z.number().min(0).max(MARKETPLACE_LIMITS.MAX_PRICE_CHF).optional(),
+  category: z.string().optional(),
+  condition: z.enum(LISTING_CONDITIONS as unknown as [string, ...string[]]).optional(),
+  status: z.enum(LISTING_STATUSES as unknown as [string, ...string[]]).optional(),
+  admin_notes: z.string().max(5000).optional().nullable(),
+});
+
+export type AdminEditListingInput = z.infer<typeof AdminEditListingSchema>;
+
+export const HandleReportSchema = z.object({
+  action: z.enum(['dismiss', 'warn_seller', 'remove_listing'] as const),
+  admin_notes: z.string().max(2000).optional().nullable(),
+});
+
+export type HandleReportInput = z.infer<typeof HandleReportSchema>;
+
+export const AdminOrdersQuerySchema = z.object({
+  status: z.enum(['all', ...ORDER_STATUSES] as [string, ...string[]]).default('all'),
+}).merge(paginationSchema);
+
+export type AdminOrdersQuery = z.infer<typeof AdminOrdersQuerySchema>;

@@ -11,13 +11,12 @@
 import { NextRequest } from 'next/server'
 import { withAdmin } from '@/lib/api/middleware'
 import { query } from '@/lib/auth/db'
-import { canAccessSection, isSuperAdmin } from '@/lib/permissions'
+import { isSuperAdmin } from '@/lib/permissions'
 import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
 import {
   apiSuccess,
   apiError,
-  apiForbidden,
   apiNotFound,
   apiBadRequest,
 } from '@/lib/api/helpers'
@@ -27,18 +26,8 @@ import { validateUpdateTeamProfile } from '@/lib/schemas/team'
  * GET /api/admin/team/profiles/[id]
  * Get detailed team profile information
  */
-export const GET = withAdmin<{ id: string }>(async (request, session, context) => {
+export const GET = withAdmin<{ id: string }>('team', async (request, session, context) => {
   try {
-    const user = {
-      email: session.user.email,
-      is_staff: session.user.isStaff,
-      staff_permissions: session.user.staffPermissions,
-    }
-
-    if (!canAccessSection(user, 'team')) {
-      return apiForbidden('Kein Zugriff auf Team-Bereich')
-    }
-
     const { id } = context!.params!
     const isSuperAdminUser = isSuperAdmin(session.user.email, session.user.isSuperAdmin)
 
@@ -119,18 +108,8 @@ export const GET = withAdmin<{ id: string }>(async (request, session, context) =
  * PUT /api/admin/team/profiles/[id]
  * Update team profile
  */
-export const PUT = withAdmin<{ id: string }>(async (request, session, context) => {
+export const PUT = withAdmin<{ id: string }>('team', async (request, session, context) => {
   try {
-    const user = {
-      email: session.user.email,
-      is_staff: session.user.isStaff,
-      staff_permissions: session.user.staffPermissions,
-    }
-
-    if (!canAccessSection(user, 'team')) {
-      return apiForbidden('Kein Zugriff auf Team-Bereich')
-    }
-
     const { id } = context!.params!
     const body = await request.json()
 
@@ -224,18 +203,8 @@ export const PUT = withAdmin<{ id: string }>(async (request, session, context) =
  * DELETE /api/admin/team/profiles/[id]
  * Delete team profile
  */
-export const DELETE = withAdmin<{ id: string }>(async (request, session, context) => {
+export const DELETE = withAdmin<{ id: string }>('team', async (request, session, context) => {
   try {
-    const user = {
-      email: session.user.email,
-      is_staff: session.user.isStaff,
-      staff_permissions: session.user.staffPermissions,
-    }
-
-    if (!canAccessSection(user, 'team')) {
-      return apiForbidden('Kein Zugriff auf Team-Bereich')
-    }
-
     const { id } = context!.params!
 
     // Check if profile exists

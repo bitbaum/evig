@@ -22,7 +22,7 @@ interface UpcomingWorkshopRow {
 }
 
 // POST /api/admin/workshops/send-reminders - Send reminders for upcoming workshops
-export const POST = withAdmin(async (request, session) => {
+export const POST = withAdmin('workshops-admin', async (request, session) => {
   try {
     const body = await request.json()
     const validation = validateBody(AdminSendRemindersSchema, body)

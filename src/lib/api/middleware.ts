@@ -9,6 +9,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/auth';
 import { apiUnauthorized, apiForbidden } from './helpers';
+import { canAccessSection, toStaffUser, ADMIN_SECTIONS } from '@/lib/permissions';
 
 export type AuthSession = Awaited<ReturnType<typeof auth>>;
 
@@ -71,19 +72,41 @@ export function withAuth<TParams = Record<string, never>>(
 
 /**
  * Middleware wrapper for admin-only routes
- * Checks authentication and admin role
+ * Checks authentication and staff role, with optional section-level permission check.
+ *
+ * Usage:
+ * - withAdmin(handler)              — staff-only (any staff member)
+ * - withAdmin('products', handler)  — staff + must have 'products' section permission
  *
  * Supports routes with params (Next.js 15+ async params):
  * - withAdmin((req, session) => handler(req, session))
- * - withAdmin((req, session, { params }) => handler(req, session, params))
+ * - withAdmin('products', (req, session, { params }) => handler(req, session, params))
  */
+type AdminHandler<TParams> = (
+  request: NextRequest,
+  session: ValidSession,
+  context?: { params?: TParams }
+) => Promise<NextResponse>;
+
+// Overload: withAdmin(handler)
 export function withAdmin<TParams = Record<string, never>>(
-  handler: (
-    request: NextRequest,
-    session: ValidSession,
-    context?: { params?: TParams }
-  ) => Promise<NextResponse>
+  handler: AdminHandler<TParams>
+): RouteHandler<TParams>;
+
+// Overload: withAdmin(section, handler)
+export function withAdmin<TParams = Record<string, never>>(
+  section: string,
+  handler: AdminHandler<TParams>
+): RouteHandler<TParams>;
+
+// Implementation
+export function withAdmin<TParams = Record<string, never>>(
+  sectionOrHandler: string | AdminHandler<TParams>,
+  maybeHandler?: AdminHandler<TParams>
 ): RouteHandler<TParams> {
+  const section = typeof sectionOrHandler === 'string' ? sectionOrHandler : undefined;
+  const handler = typeof sectionOrHandler === 'function' ? sectionOrHandler : maybeHandler!;
+
   return async (
     request: NextRequest,
     context?: { params?: Promise<TParams> }
@@ -100,6 +123,15 @@ export function withAdmin<TParams = Record<string, never>>(
     // Check staff access from session (set in JWT callback in src/auth.ts)
     if (!validSession.user.isStaff) {
       return apiForbidden('Nur Administratoren haben Zugriff');
+    }
+
+    // Section-level permission check (when section is specified)
+    if (section) {
+      const staffUser = toStaffUser(validSession.user);
+      if (!canAccessSection(staffUser, section)) {
+        const sectionLabel = ADMIN_SECTIONS[section]?.label ?? section;
+        return apiForbidden(`Kein Zugriff auf den Bereich «${sectionLabel}»`);
+      }
     }
 
     // Await params if they exist (Next.js 15+ async params)

@@ -32,7 +32,9 @@ import {
   User,
   PenTool,
   Store,
+  HelpCircle,
   Hammer,
+  PackageCheck,
   PiggyBank,
   TrendingUp,
   Target,
@@ -395,6 +397,22 @@ export const SECTIONS: Record<string, SectionConfig> = {
   // ---------------------------------------------------------------------------
   // ADMIN MANAGEMENT - Staff sections (non-sensitive)
   // ---------------------------------------------------------------------------
+  intake: {
+    id: 'intake',
+    path: '/admin/intake',
+    ui: {
+      label: 'Geräte-Eingang',
+      description: 'Geräte erfassen, prüfen und freigeben',
+      icon: PackageCheck,
+      emoji: '📋',
+      color: 'primary',
+    },
+    visibility: { admin: true, dashboard: false, requiresStaff: true },
+    priority: 99,
+    category: 'management',
+    sidebarGroup: 'angebot',
+  },
+
   products: {
     id: 'products',
     path: '/admin/products',
@@ -405,10 +423,11 @@ export const SECTIONS: Record<string, SectionConfig> = {
       emoji: '📦',
       color: 'primary',
     },
-    visibility: { admin: true, dashboard: false, requiresStaff: true },
+    // Hidden from sidebar — functionality covered by Geräte-Eingang + Marketplace.
+    // Route still exists for direct access/backwards compatibility.
+    visibility: { admin: false, dashboard: false, requiresStaff: true },
     priority: 100,
     category: 'management',
-    sidebarGroup: 'angebot',
   },
 
   marketplace: {
@@ -423,6 +442,22 @@ export const SECTIONS: Record<string, SectionConfig> = {
     },
     visibility: { admin: true, dashboard: false, requiresStaff: true },
     priority: 100.5,
+    category: 'management',
+    sidebarGroup: 'angebot',
+  },
+
+  'it-hilfe-admin': {
+    id: 'it-hilfe-admin',
+    path: '/admin/it-hilfe',
+    ui: {
+      label: 'IT-Hilfe',
+      description: 'Hilfsanfragen und Helfer verwalten',
+      icon: HelpCircle,
+      emoji: '🆘',
+      color: 'info',
+    },
+    visibility: { admin: true, dashboard: false, requiresStaff: true },
+    priority: 100.7,
     category: 'management',
     sidebarGroup: 'angebot',
   },

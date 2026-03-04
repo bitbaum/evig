@@ -8,26 +8,15 @@
 
 import { NextRequest } from 'next/server'
 import { withAdmin } from '@/lib/api/middleware'
-import { canAccessSection } from '@/lib/permissions'
 import { query } from '@/lib/auth/db'
 import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
-import { apiSuccess, apiError, apiForbidden, apiBadRequest, apiNotFound } from '@/lib/api/helpers'
+import { apiSuccess, apiError, apiBadRequest, apiNotFound } from '@/lib/api/helpers'
 
-export const GET = withAdmin<{ id: string }>(async (request, session, context) => {
+export const GET = withAdmin<{ id: string }>('content', async (request, session, context) => {
   const { id: postId } = context!.params!
 
   try {
-    const user = {
-      email: session.user.email,
-      is_staff: session.user.isStaff,
-      staff_permissions: session.user.staffPermissions,
-    }
-
-    if (!canAccessSection(user, 'content')) {
-      return apiForbidden('Kein Zugriff auf Inhalte')
-    }
-
     const result = await query<{
       id: string
       slug: string
@@ -69,20 +58,10 @@ export const GET = withAdmin<{ id: string }>(async (request, session, context) =
   }
 })
 
-export const PATCH = withAdmin<{ id: string }>(async (request, session, context) => {
+export const PATCH = withAdmin<{ id: string }>('content', async (request, session, context) => {
   const { id: postId } = context!.params!
 
   try {
-    const user = {
-      email: session.user.email,
-      is_staff: session.user.isStaff,
-      staff_permissions: session.user.staffPermissions,
-    }
-
-    if (!canAccessSection(user, 'content')) {
-      return apiForbidden('Kein Zugriff auf Inhalte')
-    }
-
     const body = await request.json()
     const {
       title,
@@ -200,20 +179,10 @@ export const PATCH = withAdmin<{ id: string }>(async (request, session, context)
   }
 })
 
-export const DELETE = withAdmin<{ id: string }>(async (request, session, context) => {
+export const DELETE = withAdmin<{ id: string }>('content', async (request, session, context) => {
   const { id: postId } = context!.params!
 
   try {
-    const user = {
-      email: session.user.email,
-      is_staff: session.user.isStaff,
-      staff_permissions: session.user.staffPermissions,
-    }
-
-    if (!canAccessSection(user, 'content')) {
-      return apiForbidden('Kein Zugriff auf Inhalte')
-    }
-
     const result = await query(
       `DELETE FROM ${TABLE_NAMES.BLOG_POSTS} WHERE id = $1 RETURNING id`,
       [postId]

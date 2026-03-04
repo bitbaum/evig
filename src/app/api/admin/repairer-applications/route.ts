@@ -43,7 +43,7 @@ interface ApplicationRow {
   updated_at: string
 }
 
-export const GET = withAdmin(async (request, session) => {
+export const GET = withAdmin('services', async (request, session) => {
   try {
     const { searchParams } = new URL(request.url)
     const status = searchParams.get('status') || 'pending'

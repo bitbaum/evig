@@ -16,13 +16,12 @@
 import { NextRequest } from 'next/server'
 import { withAdmin } from '@/lib/api/middleware'
 import { paginatedQuery } from '@/lib/auth/db'
-import { canAccessSection, isSuperAdmin } from '@/lib/permissions'
+import { isSuperAdmin } from '@/lib/permissions'
 import { TABLE_NAMES } from '@/config/database'
 import { QueryParams } from '@/lib/api/query-builder'
 import {
   apiSuccess,
   apiError,
-  apiForbidden,
 } from '@/lib/api/helpers'
 import { z } from 'zod'
 
@@ -35,18 +34,8 @@ const usersFilterSchema = z.object({
   limit: z.coerce.number().int().min(1).max(100).optional().default(25),
 })
 
-export const GET = withAdmin(async (request, session) => {
+export const GET = withAdmin('users', async (request, session) => {
   try {
-    const user = {
-      email: session.user.email,
-      is_staff: session.user.isStaff,
-      staff_permissions: session.user.staffPermissions,
-    }
-
-    if (!canAccessSection(user, 'users')) {
-      return apiForbidden('Kein Zugriff auf Benutzer-Bereich')
-    }
-
     // Parse and validate query params
     const { searchParams } = new URL(request.url)
     const filterResult = usersFilterSchema.safeParse({

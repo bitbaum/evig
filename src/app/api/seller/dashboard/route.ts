@@ -7,22 +7,13 @@ import { NextRequest } from 'next/server'
 import { apiError, apiSuccess, apiUnauthorized } from '@/lib/api/helpers'
 import { withAuth } from '@/lib/api/middleware'
 import { ROLES } from '@/lib/constants'
-import { hasAdminAccessUnified, type UnifiedUser } from '@/lib/auth/unified-permissions'
 import { getSellerDashboard } from '@/lib/services/seller-service'
 
 export const GET = withAuth(async (request, session) => {
   try {
     const userRole = session.user.role as string
 
-    const user: UnifiedUser = {
-      email: session.user.email || '',
-      role: userRole,
-      isStaff: session.user.isStaff,
-      staffPermissions: session.user.staffPermissions,
-      isSuperAdmin: session.user.isSuperAdmin,
-    }
-
-    const hasAccess = userRole === ROLES.SELLER || hasAdminAccessUnified(user)
+    const hasAccess = userRole === ROLES.SELLER || session.user.isStaff
 
     if (!hasAccess) {
       return apiUnauthorized('Seller-Berechtigung erforderlich')

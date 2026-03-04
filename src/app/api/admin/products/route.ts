@@ -7,7 +7,7 @@ import { apiError, apiSuccess } from "@/lib/api/helpers";
 import { QueryParams } from '@/lib/api/query-builder';
 
 // GET /api/admin/products - List all products for admin
-export const GET = withAdmin(async (request, session) => {
+export const GET = withAdmin('products', async (request, session) => {
   try {
     const { searchParams } = new URL(request.url);
     const limit = parseInt(searchParams.get("limit") || "50", 10);
@@ -82,7 +82,7 @@ export const GET = withAdmin(async (request, session) => {
 })
 
 // POST /api/admin/products - Create new product
-export const POST = withAdmin(async (request, session) => {
+export const POST = withAdmin('products', async (request, session) => {
   try {
     const productData = await request.json();
 

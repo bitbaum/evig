@@ -10,7 +10,7 @@ interface ReviewStatusRow {
   status: string
 }
 
-export const PUT = withAdmin<{ id: string }>(async (request, session, context) => {
+export const PUT = withAdmin<{ id: string }>('reviews', async (request, session, context) => {
   const { id: reviewId } = context!.params!
   try {
     const body = await request.json()

@@ -40,7 +40,7 @@ export function ListingPreview({ formData, editId, isSubmitting, success, error,
 
         <div className="p-6 space-y-6">
           {formData.images.length > 0 && (
-            <div className="grid grid-cols-4 gap-2">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
               {formData.images.map((url, idx) => (
                 <img key={idx} src={url} alt="" className="w-full aspect-square object-cover rounded-lg" />
               ))}

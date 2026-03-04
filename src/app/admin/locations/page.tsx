@@ -5,18 +5,16 @@ import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { formatDateShort } from '@/lib/date-formats'
+import { getApprovalStatusLabel } from '@/config/approval-status'
 import {
   MapPin,
   Plus,
   Search,
-  Filter,
   CheckCircle,
   XCircle,
   Clock,
   AlertCircle,
   Eye,
-  Edit,
-  Trash2,
   Calendar,
   Users,
   Building2
@@ -68,9 +66,10 @@ export default function AdminLocationsPage() {
 
       const response = await fetch(`/api/locations?${params}`)
       if (response.ok) {
-        const data = await response.json()
-        setLocations(data.locations)
-        setTotalPages(Math.ceil(data.pagination.total / 20))
+        const json = await response.json()
+        const payload = json.data ?? json
+        setLocations(payload.locations ?? [])
+        setTotalPages(Math.ceil((payload.pagination?.total ?? 0) / 20))
       } else {
         setError('Fehler beim Laden der Orte')
       }
@@ -128,18 +127,8 @@ export default function AdminLocationsPage() {
   }
 
   const getStatusText = (status: string) => {
-    switch (status) {
-      case 'approved':
-        return 'Genehmigt'
-      case 'pending':
-        return 'Ausstehend'
-      case 'rejected':
-        return 'Abgelehnt'
-      case 'suspended':
-        return 'Suspendiert'
-      default:
-        return status
-    }
+    if (status === 'suspended') return 'Suspendiert'
+    return getApprovalStatusLabel(status)
   }
 
   const getTypeIcon = (type: string) => {

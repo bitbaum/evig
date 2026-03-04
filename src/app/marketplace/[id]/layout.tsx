@@ -51,7 +51,7 @@ export async function generateMetadata({
   }
 
   const price = listing.price_chf ? `CHF ${listing.price_chf}` : 'Preis auf Anfrage'
-  const brand = listing.brand ? `${listing.brand} ` : ''
+  const brand = listing.brand && !listing.title.startsWith(listing.brand) ? `${listing.brand} ` : ''
   return {
     title: `${brand}${listing.title} | RevampIT Marktplatz`,
     description: `${brand}${listing.title} — ${price}. Gebrauchte Elektronik nachhaltig kaufen auf dem RevampIT Marktplatz.`,
@@ -79,7 +79,7 @@ export default async function MarketplaceDetailLayout({
   if (!listing) return children
 
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://revamp-it.ch'
-  const brand = listing.brand ? `${listing.brand} ` : ''
+  const brand = listing.brand && !listing.title.startsWith(listing.brand) ? `${listing.brand} ` : ''
   const isGratis = listing.price_chf !== null && Number(listing.price_chf) === 0
 
   const jsonLd = {

@@ -381,9 +381,6 @@ export function getServicePresentation(slug: string): ServicePresentation {
   return servicePresentation[slug] || defaultPresentation
 }
 
-/** @deprecated Use formatPriceCents from @/config/marketplace directly */
-export const formatPrice = formatPriceCents
-
 /**
  * Get pricing info for a service
  * Uses override from presentation config if available,
@@ -402,7 +399,7 @@ export function getServicePricing(
 
   // Generate from price
   return {
-    base: formatPrice(priceCents),
+    base: formatPriceCents(priceCents),
     details: [],
   }
 }

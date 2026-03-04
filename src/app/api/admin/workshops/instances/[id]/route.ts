@@ -36,7 +36,7 @@ interface RegistrationRow {
 }
 
 // GET /api/admin/workshops/instances/[id] - Get instance details
-export const GET = withAdmin<{ id: string }>(async (request, session, context) => {
+export const GET = withAdmin<{ id: string }>('workshops-admin', async (request, session, context) => {
   try {
     const { id } = context!.params!
 
@@ -88,7 +88,7 @@ export const GET = withAdmin<{ id: string }>(async (request, session, context) =
 })
 
 // PUT /api/admin/workshops/instances/[id] - Update instance
-export const PUT = withAdmin<{ id: string }>(async (request, session, context) => {
+export const PUT = withAdmin<{ id: string }>('workshops-admin', async (request, session, context) => {
   try {
     const { id } = context!.params!
     const body = await request.json()
@@ -192,7 +192,7 @@ export const PUT = withAdmin<{ id: string }>(async (request, session, context) =
 })
 
 // DELETE /api/admin/workshops/instances/[id] - Delete instance
-export const DELETE = withAdmin<{ id: string }>(async (request, session, context) => {
+export const DELETE = withAdmin<{ id: string }>('workshops-admin', async (request, session, context) => {
   try {
     const { id } = context!.params!
 

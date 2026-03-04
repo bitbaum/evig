@@ -14,7 +14,7 @@ import { OLLAMA_URL } from '@/config/urls'
 import { apiSuccess, apiError } from '@/lib/api/helpers'
 import { TABLE_NAMES } from '@/config/database'
 
-export const POST = withAdmin(async (request: NextRequest, session) => {
+export const POST = withAdmin('hirn', async (request: NextRequest, session) => {
   try {
     // Create provider settings table
     await query(`

@@ -11,7 +11,7 @@ import { chat } from '@/lib/hirn'
 import { apiSuccess, apiError, apiBadRequest } from '@/lib/api/helpers'
 import { logger } from '@/lib/logger'
 
-export const POST = withAdmin(async (request: NextRequest, session) => {
+export const POST = withAdmin('hirn', async (request: NextRequest, session) => {
   try {
     let body: Record<string, unknown>
     try {

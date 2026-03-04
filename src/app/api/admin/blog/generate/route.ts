@@ -9,9 +9,8 @@
 
 import { NextRequest } from 'next/server'
 import { withAdmin } from '@/lib/api/middleware'
-import { canAccessSection } from '@/lib/permissions'
 import { logger } from '@/lib/logger'
-import { apiSuccess, apiError, apiForbidden, apiBadRequest } from '@/lib/api/helpers'
+import { apiSuccess, apiError, apiBadRequest } from '@/lib/api/helpers'
 import { BLOG_PROMPTS, fillPromptTemplate } from '@/lib/ai/config/prompts'
 import { callWithFallback, buildFailureMessage } from '@/lib/ai/providers'
 import { robustJsonExtract } from '@/lib/ai/extract'
@@ -25,21 +24,8 @@ interface GeneratedBlogPost {
   seoDescription: string
 }
 
-export const POST = withAdmin(async (request, session) => {
+export const POST = withAdmin('content', async (request, session) => {
   try {
-    // Check blog/content permission
-    const user = {
-      email: session.user.email,
-      is_staff: session.user.isStaff,
-      staff_permissions: session.user.staffPermissions,
-      is_super_admin: session.user.isSuperAdmin,
-    }
-
-    // Allow access if user can access dashboard (all staff) since blog is content creation
-    if (!canAccessSection(user, 'dashboard')) {
-      return apiForbidden('Keine Berechtigung für Blog-Erstellung')
-    }
-
     const body = await request.json()
     const { topic, category } = body
 

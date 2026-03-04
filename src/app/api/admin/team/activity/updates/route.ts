@@ -10,14 +10,12 @@
 import { NextRequest } from 'next/server'
 import { withAdmin } from '@/lib/api/middleware'
 import { query } from '@/lib/auth/db'
-import { canAccessSection } from '@/lib/permissions'
 import { TABLE_NAMES } from '@/config/database'
 import { QueryParams } from '@/lib/api/query-builder'
 import { logger } from '@/lib/logger'
 import {
   apiSuccess,
   apiError,
-  apiForbidden,
   apiBadRequest,
 } from '@/lib/api/helpers'
 import {
@@ -44,18 +42,8 @@ interface ActivityUpdate {
  * GET /api/admin/team/activity/updates
  * List activity updates with optional filters
  */
-export const GET = withAdmin(async (request, session) => {
+export const GET = withAdmin('team', async (request, session) => {
   try {
-    const user = {
-      email: session.user.email,
-      is_staff: session.user.isStaff,
-      staff_permissions: session.user.staffPermissions,
-    }
-
-    if (!canAccessSection(user, 'team')) {
-      return apiForbidden('Kein Zugriff auf Team-Bereich')
-    }
-
     // Parse filters from query params
     const { searchParams } = new URL(request.url)
     const filterResult = activityStreamFilterSchema.safeParse({
@@ -137,18 +125,8 @@ export const GET = withAdmin(async (request, session) => {
  * POST /api/admin/team/activity/updates
  * Create a new activity update
  */
-export const POST = withAdmin(async (request, session) => {
+export const POST = withAdmin('team', async (request, session) => {
   try {
-    const user = {
-      email: session.user.email,
-      is_staff: session.user.isStaff,
-      staff_permissions: session.user.staffPermissions,
-    }
-
-    if (!canAccessSection(user, 'team')) {
-      return apiForbidden('Kein Zugriff auf Team-Bereich')
-    }
-
     const body = await request.json()
 
     // Validate input

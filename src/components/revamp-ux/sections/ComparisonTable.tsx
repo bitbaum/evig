@@ -54,7 +54,7 @@ export function ComparisonTable() {
 
         <div className="max-w-4xl mx-auto">
           <div className="bg-white rounded-xl shadow-sm overflow-hidden">
-            <div className="grid grid-cols-3 gap-0">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-0">
               {/* Header */}
               <div className="bg-gray-100 p-6 font-semibold text-gray-900 border-b border-gray-200">
                 Funktion

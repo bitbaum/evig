@@ -53,7 +53,7 @@ interface DonationRow {
  * GET /api/admin/donations/[id]
  * Get a single donation by ID
  */
-export const GET = withAdmin<{ id: string }>(async (request, session, context) => {
+export const GET = withAdmin<{ id: string }>('donations', async (request, session, context) => {
   try {
     const { id } = context!.params!
 
@@ -126,7 +126,7 @@ export const GET = withAdmin<{ id: string }>(async (request, session, context) =
  * PATCH /api/admin/donations/[id]
  * Update a donation (status, notes, receipt_sent, etc.)
  */
-export const PATCH = withAdmin<{ id: string }>(async (request, session, context) => {
+export const PATCH = withAdmin<{ id: string }>('donations', async (request, session, context) => {
   try {
     const { id } = context!.params!
     const body = await request.json()
@@ -212,7 +212,7 @@ export const PATCH = withAdmin<{ id: string }>(async (request, session, context)
  * DELETE /api/admin/donations/[id]
  * Soft-delete a donation (marks as archived)
  */
-export const DELETE = withAdmin<{ id: string }>(async (request, session, context) => {
+export const DELETE = withAdmin<{ id: string }>('donations', async (request, session, context) => {
   try {
     const { id } = context!.params!
 

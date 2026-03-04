@@ -16,7 +16,7 @@ import { withAdmin } from '@/lib/api/middleware'
 import { getChatHistory, getUserSessions, deleteSession } from '@/lib/hirn'
 import { apiSuccess, apiError, apiBadRequest } from '@/lib/api/helpers'
 
-export const GET = withAdmin(async (request: NextRequest, session) => {
+export const GET = withAdmin('hirn', async (request: NextRequest, session) => {
   try {
     const { searchParams } = new URL(request.url)
     const sessionId = searchParams.get('sessionId')
@@ -35,7 +35,7 @@ export const GET = withAdmin(async (request: NextRequest, session) => {
   }
 })
 
-export const DELETE = withAdmin(async (request: NextRequest) => {
+export const DELETE = withAdmin('hirn', async (request: NextRequest) => {
   try {
     const { searchParams } = new URL(request.url)
     const sessionId = searchParams.get('sessionId')

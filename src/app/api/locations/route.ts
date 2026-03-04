@@ -1,7 +1,7 @@
 import { NextRequest } from 'next/server'
 import { auth } from '@/auth'
 import { query } from '@/lib/auth/db'
-import { apiError, apiSuccess, apiBadRequest, apiUnauthorized, apiForbidden } from '@/lib/api/helpers'
+import { apiError, apiSuccess, apiBadRequest, apiUnauthorized } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES } from '@/config/database'
 import { QueryParams } from '@/lib/api/query-builder'
@@ -22,9 +22,13 @@ export async function GET(request: NextRequest) {
     const limit = parseInt(searchParams.get('limit') || '50')
     const offset = parseInt(searchParams.get('offset') || '0')
 
-    // Build query conditions
+    // Build query conditions — DB uses is_approved boolean, map status param
     const qb = new QueryParams()
-    qb.add('approval_status = $P', status)
+    if (status === 'approved') {
+      qb.add('is_approved = $P', 'true')
+    } else if (status === 'pending') {
+      qb.add('is_approved = $P', 'false')
+    }
 
     if (type) {
       qb.add('type = $P', type)
@@ -38,18 +42,9 @@ export async function GET(request: NextRequest) {
 
     // Get locations
     const locationsQuery = `
-      SELECT
-        l.*,
-        u.name as creator_name,
-        u.email as creator_email,
-        COUNT(lb.id) as active_bookings
+      SELECT l.*
       FROM ${TABLE_NAMES.LOCATIONS} l
-      LEFT JOIN ${TABLE_NAMES.USERS} u ON l.created_by = u.id
-      LEFT JOIN ${TABLE_NAMES.LOCATION_BOOKINGS} lb ON l.id = lb.location_id
-        AND lb.status IN ('pending', 'confirmed')
-        AND lb.start_time > CURRENT_TIMESTAMP
       ${whereClause}
-      GROUP BY l.id, u.name, u.email
       ORDER BY l.created_at DESC
       LIMIT $${nextIndex} OFFSET $${nextIndex + 1}
     `
@@ -103,7 +98,6 @@ export async function POST(request: NextRequest) {
       longitude,
       max_capacity,
       facilities = [],
-      accessibility_info = {},
       contact_name,
       contact_phone,
       contact_email
@@ -136,7 +130,6 @@ export async function POST(request: NextRequest) {
     const existingLocation = await query(`
       SELECT id FROM ${TABLE_NAMES.LOCATIONS}
       WHERE city = $1 AND postal_code = $2 AND name ILIKE $3
-        AND approval_status IN ('pending', 'approved')
     `, [city, postal_code, name])
 
     if (existingLocation.rows.length > 0) {
@@ -148,13 +141,13 @@ export async function POST(request: NextRequest) {
       INSERT INTO ${TABLE_NAMES.LOCATIONS} (
         name, type, description, address_line1, address_line2, postal_code,
         city, canton, country, latitude, longitude, max_capacity, facilities,
-        accessibility_info, contact_name, contact_phone, contact_email, created_by
-      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18)
+        contact_name, contact_phone, contact_email
+      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16)
       RETURNING *
     `, [
       name, type, description, address_line1, address_line2, postal_code,
       city, canton, country, latitude, longitude, max_capacity, facilities,
-      JSON.stringify(accessibility_info), contact_name, contact_phone, contact_email, session.user.id
+      contact_name, contact_phone, contact_email,
     ])
 
     return apiSuccess({

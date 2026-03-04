@@ -70,7 +70,7 @@ interface DisputeRow {
 }
 
 // GET /api/admin/payments/dashboard - Get payment dashboard data
-export const GET = withAdmin(async (request: NextRequest) => {
+export const GET = withAdmin('finanzen', async (request: NextRequest) => {
   try {
     const { searchParams } = new URL(request.url)
     const periodRaw = searchParams.get('period') || '30' // days

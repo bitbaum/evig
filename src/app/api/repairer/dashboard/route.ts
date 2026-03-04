@@ -12,7 +12,6 @@ import { apiError, apiSuccess, apiUnauthorized } from '@/lib/api/helpers'
 import { logger } from '@/lib/logger'
 import { auth } from '@/auth'
 import { ROLES } from '@/lib/constants'
-import { hasAdminAccessUnified, type UnifiedUser } from '@/lib/auth/unified-permissions'
 
 interface BookingRow {
   id: string
@@ -61,17 +60,8 @@ export async function GET(request: NextRequest) {
 
     const userRole = session.user.role as string
 
-    // UNIFIED: Build user object for admin check
-    const user: UnifiedUser = {
-      email: session.user.email || '',
-      role: userRole,
-      isStaff: session.user.isStaff,
-      staffPermissions: session.user.staffPermissions,
-      isSuperAdmin: session.user.isSuperAdmin,
-    }
-
-    // Access granted if: repairer role OR admin access (via old or new system)
-    const hasAccess = userRole === ROLES.REPAIRER || hasAdminAccessUnified(user)
+    // Access granted if: repairer role OR staff
+    const hasAccess = userRole === ROLES.REPAIRER || session.user.isStaff
 
     if (!hasAccess) {
       return apiUnauthorized('Repairer-Berechtigung erforderlich')

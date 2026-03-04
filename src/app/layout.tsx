@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Providers } from "@/components/providers/providers";
 import ConditionalMainLayout from "@/components/layout/ConditionalMainLayout";
+import { CSRF_SCRIPT } from "@/lib/auth/csrf";
 import "./globals.css";
 
 // Use system fonts to avoid build-time network fetches
@@ -20,6 +21,7 @@ export default function RootLayout({
   return (
     <html lang="de" suppressHydrationWarning>
       <body className={`${interClassName} fix-text-rendering`}>
+        <script dangerouslySetInnerHTML={{ __html: CSRF_SCRIPT }} />
         <Providers>
           <ConditionalMainLayout>
             {children}

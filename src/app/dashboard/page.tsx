@@ -8,7 +8,7 @@ import { getTextColor } from '@/lib/design-system'
 import { cn } from '@/lib/utils'
 import { EmailVerificationBanner } from '@/components/dashboard/EmailVerificationBanner'
 import { OnboardingChecklist } from '@/components/dashboard/OnboardingChecklist'
-import { hasAdminAccessUnified, type UnifiedUser } from '@/lib/auth/unified-permissions'
+import { isStaffEmail } from '@/lib/permissions'
 
 export const metadata: Metadata = {
   title: 'Dashboard | RevampIT',
@@ -197,14 +197,8 @@ export default async function DashboardPage() {
             </Link>
           )}
 
-          {/* UNIFIED: Show admin card for users with admin access via old role OR new is_staff system */}
-          {hasAdminAccessUnified({
-            email: session.user.email || '',
-            role: userRole || undefined,
-            isStaff: session.user.isStaff,
-            staffPermissions: session.user.staffPermissions,
-            isSuperAdmin: session.user.isSuperAdmin,
-          } as UnifiedUser) && (
+          {/* Show admin card for staff users */}
+          {(session.user.isStaff || isStaffEmail(session.user.email || '')) && (
             <Link
               href="/admin"
               className="bg-white dark:bg-neutral-800 rounded-lg shadow-sm border-2 border-neutral-200 dark:border-neutral-700 p-4 sm:p-6 hover:shadow-md transition-shadow"

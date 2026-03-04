@@ -50,6 +50,16 @@ interface DbProviderSettingsRow {
 const PROVIDER_CACHE_TTL_MS = 60_000
 let _providerCache: { config: ProviderRuntimeConfig; expiresAt: number } | null = null
 
+/** @internal — exposed for testing only */
+export function __resetProviderCache(): void {
+  _providerCache = null
+}
+
+/** @internal — exposed for testing only */
+export async function __loadProviderRuntimeConfig(): Promise<ProviderRuntimeConfig> {
+  return loadProviderRuntimeConfig()
+}
+
 async function loadProviderRuntimeConfig(): Promise<ProviderRuntimeConfig> {
   if (_providerCache && Date.now() < _providerCache.expiresAt) {
     return _providerCache.config
@@ -84,11 +94,12 @@ async function loadProviderRuntimeConfig(): Promise<ProviderRuntimeConfig> {
       groqEnabled: groq ? groq.is_enabled : envConfig.groqEnabled,
       openRouterEnabled: openrouter ? openrouter.is_enabled : envConfig.openRouterEnabled,
       ollamaEnabled: ollama ? ollama.is_enabled : envConfig.ollamaEnabled,
+      // API keys: DB value takes priority, then env var fallback, then empty if disabled
       groqApiKey: groq?.is_enabled
-        ? (groq.settings?.api_key || '')
+        ? (groq.settings?.api_key || envConfig.groqApiKey)
         : (groq ? '' : envConfig.groqApiKey),
       openRouterApiKey: openrouter?.is_enabled
-        ? (openrouter.settings?.api_key || '')
+        ? (openrouter.settings?.api_key || envConfig.openRouterApiKey)
         : (openrouter ? '' : envConfig.openRouterApiKey),
       ollamaUrl: ollama?.is_enabled
         ? ((ollama.settings?.base_url as string | undefined) || envConfig.ollamaUrl)

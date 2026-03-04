@@ -17,7 +17,7 @@ interface RegistrationDetailsRow {
 }
 
 // PUT /api/admin/workshops/registrations/[id] - Update registration status
-export const PUT = withAdmin<{ id: string }>(async (request, session, context) => {
+export const PUT = withAdmin<{ id: string }>('workshops-admin', async (request, session, context) => {
   try {
     const { id } = context!.params!
     const body = await request.json()

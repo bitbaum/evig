@@ -7,9 +7,8 @@
 
 import { NextRequest } from 'next/server'
 import { withAdmin } from '@/lib/api/middleware'
-import { canAccessSection } from '@/lib/permissions'
 import { logger } from '@/lib/logger'
-import { apiSuccess, apiError, apiForbidden, apiBadRequest } from '@/lib/api/helpers'
+import { apiSuccess, apiError, apiBadRequest } from '@/lib/api/helpers'
 import { ERFASSUNG_PROMPTS, fillPromptTemplate } from '@/lib/ai/config/prompts'
 import { callWithFallback } from '@/lib/ai/providers'
 import { robustJsonExtract } from '@/lib/ai/extract'
@@ -36,20 +35,8 @@ interface RefineRequest {
   instruction: string
 }
 
-export const POST = withAdmin(async (request, session) => {
+export const POST = withAdmin('products', async (request, session) => {
   try {
-    // Check erfassung permission
-    const user = {
-      email: session.user.email,
-      is_staff: session.user.isStaff,
-      staff_permissions: session.user.staffPermissions,
-      is_super_admin: session.user.isSuperAdmin,
-    }
-
-    if (!canAccessSection(user, 'dashboard')) {
-      return apiForbidden('Keine Berechtigung für Produktbearbeitung')
-    }
-
     const body: RefineRequest = await request.json()
     const { currentProduct, instruction } = body
 

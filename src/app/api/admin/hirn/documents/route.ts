@@ -14,7 +14,7 @@ import { isSuperAdmin } from '@/lib/permissions'
 import { listDocuments, deleteDocument, getIngestionStats } from '@/lib/hirn'
 import { apiSuccess, apiError, apiForbidden, apiBadRequest } from '@/lib/api/helpers'
 
-export const GET = withAdmin(async (request: NextRequest) => {
+export const GET = withAdmin('hirn', async (request: NextRequest) => {
   try {
     const { searchParams } = new URL(request.url)
     const limit = parseInt(searchParams.get('limit') || '50')
@@ -38,7 +38,7 @@ export const GET = withAdmin(async (request: NextRequest) => {
   }
 })
 
-export const DELETE = withAdmin(async (request: NextRequest, session) => {
+export const DELETE = withAdmin('hirn', async (request: NextRequest, session) => {
   try {
     // Only super admins can delete documents
     if (!isSuperAdmin(session.user.email, session.user.isSuperAdmin)) {

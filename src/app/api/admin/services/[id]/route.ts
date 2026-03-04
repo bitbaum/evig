@@ -8,28 +8,17 @@
 
 import { NextRequest } from 'next/server'
 import { withAdmin } from '@/lib/api/middleware'
-import { canAccessSection } from '@/lib/permissions'
 import { logger } from '@/lib/logger'
-import { apiSuccess, apiError, apiForbidden, apiBadRequest, apiNotFound } from '@/lib/api/helpers'
+import { apiSuccess, apiError, apiBadRequest, apiNotFound } from '@/lib/api/helpers'
 import {
   getAdminServiceById,
   updateServiceType,
   deleteServiceType,
 } from '@/lib/services'
 
-export const GET = withAdmin<{ id: string }>(async (request, session, context) => {
+export const GET = withAdmin<{ id: string }>('services', async (request, session, context) => {
   try {
     const { id } = context!.params!
-
-    const user = {
-      email: session.user.email,
-      is_staff: session.user.isStaff,
-      staff_permissions: session.user.staffPermissions,
-    }
-
-    if (!canAccessSection(user, 'services')) {
-      return apiForbidden('Kein Zugriff auf Dienstleistungen')
-    }
 
     const service = await getAdminServiceById(id)
 
@@ -44,19 +33,9 @@ export const GET = withAdmin<{ id: string }>(async (request, session, context) =
   }
 })
 
-export const PUT = withAdmin<{ id: string }>(async (request, session, context) => {
+export const PUT = withAdmin<{ id: string }>('services', async (request, session, context) => {
   try {
     const { id } = context!.params!
-
-    const user = {
-      email: session.user.email,
-      is_staff: session.user.isStaff,
-      staff_permissions: session.user.staffPermissions,
-    }
-
-    if (!canAccessSection(user, 'services')) {
-      return apiForbidden('Kein Zugriff auf Dienstleistungen')
-    }
 
     const body = await request.json()
     const {
@@ -133,19 +112,9 @@ export const PUT = withAdmin<{ id: string }>(async (request, session, context) =
   }
 })
 
-export const DELETE = withAdmin<{ id: string }>(async (request, session, context) => {
+export const DELETE = withAdmin<{ id: string }>('services', async (request, session, context) => {
   try {
     const { id } = context!.params!
-
-    const user = {
-      email: session.user.email,
-      is_staff: session.user.isStaff,
-      staff_permissions: session.user.staffPermissions,
-    }
-
-    if (!canAccessSection(user, 'services')) {
-      return apiForbidden('Kein Zugriff auf Dienstleistungen')
-    }
 
     const success = await deleteServiceType(id)
 

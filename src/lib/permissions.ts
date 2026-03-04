@@ -158,6 +158,24 @@ export function canAccessSensitive(user: StaffUser | null | undefined): boolean 
 }
 
 /**
+ * Convert a session user (camelCase) to StaffUser (snake_case)
+ * Used by middleware to bridge session shape to permission checks.
+ */
+export function toStaffUser(sessionUser: {
+  email: string
+  isStaff: boolean
+  staffPermissions: string[]
+  isSuperAdmin?: boolean
+}): StaffUser {
+  return {
+    email: sessionUser.email,
+    is_staff: sessionUser.isStaff,
+    staff_permissions: sessionUser.staffPermissions,
+    is_super_admin: sessionUser.isSuperAdmin,
+  }
+}
+
+/**
  * Get all sections a user can access
  */
 export function getAccessibleSections(

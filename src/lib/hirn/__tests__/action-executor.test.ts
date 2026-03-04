@@ -23,8 +23,8 @@ describe('hirn action executor contracts', () => {
     expect(parsed.success).toBe(false)
   })
 
-  it('marks product draft as risky', () => {
-    expect(isRiskyAction('create_product_draft')).toBe(true)
+  it('no current actions are risky', () => {
     expect(isRiskyAction('create_task')).toBe(false)
+    expect(isRiskyAction('navigate')).toBe(false)
   })
 })

@@ -37,30 +37,24 @@ function constantTimeCompareEdge(a: string, b: string): boolean {
 // Configuration
 // =============================================================================
 
+const isProduction = process.env.NODE_ENV === 'production'
+
 const CSRF_CONFIG = {
-  cookieName: '__Host-csrf',  // __Host- prefix for additional security
+  // __Host- prefix requires Secure (HTTPS). Use plain name on localhost HTTP.
+  cookieName: isProduction ? '__Host-csrf' : 'csrf',
   headerName: 'x-csrf-token',
   formFieldName: '_csrf',
   tokenLength: 32,
   cookieMaxAge: 24 * 60 * 60, // 24 hours
   // Methods that require CSRF protection
   protectedMethods: ['POST', 'PUT', 'PATCH', 'DELETE'],
-  // Paths that don't require CSRF (e.g., webhooks, API with API key auth)
-  // Admin APIs use session auth with super admin checks, CSRF not needed
+  // Only exclude paths that receive external (non-browser) requests.
+  // All other routes are protected via Double Submit Cookie pattern
+  // (CSRF_SCRIPT patches window.fetch to send the token automatically).
   excludedPaths: [
-    '/api/webhooks/',
-    '/api/public/',
-    '/api/admin/',  // All admin APIs use session auth with permission checks
-    '/api/tasks',   // Staff-only, protected by session auth (withAdmin middleware)
-    '/api/task-',   // task-requests, task-analytics, task-projects
-    '/api/ai/',     // AI extraction APIs, protected by session auth
-    '/api/it-hilfe/', // IT-Hilfe APIs, protected by session auth
-    '/api/user/',     // User profile APIs, protected by session auth
-    '/api/protocols', // Protocols APIs, protected by withAdmin middleware
-    '/api/decisions', // Decisions APIs, protected by withAdmin middleware
-    '/api/shop/',     // Shop APIs (cart, orders) — cart is tied to cart ID, not session
-    '/api/payments/payrexx-webhook', // External Payrexx webhook — no CSRF cookie
-    '/api/payments/webhook',         // Generic payment webhook
+    '/api/webhooks/',                // External webhook callers
+    '/api/payments/payrexx-webhook', // External Payrexx webhook
+    '/api/payments/webhook',         // External payment webhook
   ],
 }
 
@@ -106,7 +100,7 @@ export async function validateCsrfToken(token: string, hash: string): Promise<bo
  */
 export function createCsrfCookie(token: string): string {
   return serialize(CSRF_CONFIG.cookieName, token, {
-    httpOnly: true,
+    httpOnly: false, // Must be false: Double Submit Cookie pattern requires JS to read the token
     secure: process.env.NODE_ENV === 'production',
     sameSite: 'strict',
     path: '/',

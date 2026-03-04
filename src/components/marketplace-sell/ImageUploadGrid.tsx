@@ -18,15 +18,15 @@ export function ImageUploadGrid({ images, isUploading, onUpload, onRemove }: Pro
         Bilder <span className="text-red-500">*</span>
         <span className="text-xs text-gray-400 ml-1">({images.length}/{MARKETPLACE_LIMITS.MAX_IMAGES})</span>
       </label>
-      <div className="grid grid-cols-4 gap-3">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         {images.map((url, idx) => (
           <div key={idx} className="relative aspect-square rounded-lg overflow-hidden border border-gray-200 dark:border-gray-600">
             <img src={url} alt="" className="w-full h-full object-cover" />
             <button
               onClick={() => onRemove(idx)}
-              className="absolute top-1 right-1 p-1 bg-red-500 text-white rounded-full hover:bg-red-600"
+              className="absolute top-1 right-1 p-2 bg-red-500 text-white rounded-full hover:bg-red-600"
             >
-              <X className="w-3 h-3" />
+              <X className="w-4 h-4" />
             </button>
             {idx === 0 && (
               <span className="absolute bottom-1 left-1 px-1.5 py-0.5 bg-black/50 text-white text-xs rounded">

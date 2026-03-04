@@ -13,27 +13,15 @@
 
 import { NextRequest } from 'next/server'
 import { withAdmin } from '@/lib/api/middleware'
-import { canAccessSection } from '@/lib/permissions'
 import { logger } from '@/lib/logger'
-import { apiSuccess, apiError, apiForbidden, apiBadRequest } from '@/lib/api/helpers'
+import { apiSuccess, apiError, apiBadRequest } from '@/lib/api/helpers'
 import { extractProductFromText } from '@/lib/erfassung/ai-extraction'
 
 // Transcription service URL
 const TRANSCRIPTION_URL = process.env.TRANSCRIPTION_URL || 'http://localhost:5111'
 
-export const POST = withAdmin(async (request, session) => {
+export const POST = withAdmin('products', async (request, session) => {
   try {
-    const user = {
-      email: session.user.email,
-      is_staff: session.user.isStaff,
-      staff_permissions: session.user.staffPermissions,
-    }
-
-    // Check permission - erfassung is part of products section
-    if (!canAccessSection(user, 'products')) {
-      return apiForbidden('Keine Berechtigung für Produkterfassung')
-    }
-
     // Get audio from form data
     const formData = await request.formData()
     const audioFile = formData.get('audio') as File | null

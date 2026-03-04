@@ -10,14 +10,13 @@
 import { NextRequest } from 'next/server'
 import { withAdmin } from '@/lib/api/middleware'
 import { query } from '@/lib/auth/db'
-import { canAccessSection, isSuperAdmin } from '@/lib/permissions'
+import { isSuperAdmin } from '@/lib/permissions'
 import { TABLE_NAMES } from '@/config/database'
 import { QueryParams } from '@/lib/api/query-builder'
 import { logger } from '@/lib/logger'
 import {
   apiSuccess,
   apiError,
-  apiForbidden,
   apiBadRequest,
 } from '@/lib/api/helpers'
 import { validateCreateTeamProfile, teamProfileFilterSchema } from '@/lib/schemas/team'
@@ -32,18 +31,8 @@ import { validateCreateTeamProfile, teamProfileFilterSchema } from '@/lib/schema
  * - is_active: 'true', 'false', or 'all' (default)
  * - search: Search by name or position
  */
-export const GET = withAdmin(async (request, session) => {
+export const GET = withAdmin('team', async (request, session) => {
   try {
-    const user = {
-      email: session.user.email,
-      is_staff: session.user.isStaff,
-      staff_permissions: session.user.staffPermissions,
-    }
-
-    if (!canAccessSection(user, 'team')) {
-      return apiForbidden('Kein Zugriff auf Team-Bereich')
-    }
-
     // Parse and validate query params
     const { searchParams } = new URL(request.url)
     const filterResult = teamProfileFilterSchema.safeParse({
@@ -153,18 +142,8 @@ export const GET = withAdmin(async (request, session) => {
  * POST /api/admin/team/profiles
  * Create a new team profile for a user
  */
-export const POST = withAdmin(async (request, session) => {
+export const POST = withAdmin('team', async (request, session) => {
   try {
-    const user = {
-      email: session.user.email,
-      is_staff: session.user.isStaff,
-      staff_permissions: session.user.staffPermissions,
-    }
-
-    if (!canAccessSection(user, 'team')) {
-      return apiForbidden('Kein Zugriff auf Team-Bereich')
-    }
-
     const body = await request.json()
 
     // Validate input

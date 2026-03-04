@@ -14,7 +14,7 @@ interface DocumentRow {
   document_verification_status: string
 }
 
-export const PUT = withAdmin<{ id: string }>(async (request, session, context) => {
+export const PUT = withAdmin<{ id: string }>('content', async (request, session, context) => {
   const { id: documentId } = context!.params!
   try {
     const body = await request.json()

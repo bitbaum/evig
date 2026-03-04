@@ -16,7 +16,7 @@ import {
   apiBadRequest,
 } from '@/lib/api/helpers'
 
-export const GET = withAdmin(async (request, session) => {
+export const GET = withAdmin('content', async (request, session) => {
   try {
     const result = await query<{
       id: string
@@ -38,7 +38,7 @@ export const GET = withAdmin(async (request, session) => {
   }
 })
 
-export const POST = withAdmin(async (request, session) => {
+export const POST = withAdmin('content', async (request, session) => {
   try {
     const body = await request.json()
     const { name, slug, description, color, sort_order, is_active } = body

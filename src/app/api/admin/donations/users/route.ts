@@ -16,7 +16,7 @@ import {
 } from '@/lib/api/helpers'
 import { logger } from '@/lib/logger'
 
-export const GET = withAdmin(async (request: NextRequest, session) => {
+export const GET = withAdmin('donations', async (request: NextRequest, session) => {
   try {
     const { searchParams } = new URL(request.url)
     const search = searchParams.get('search')?.trim()

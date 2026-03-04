@@ -7,24 +7,13 @@
 
 import { NextRequest } from 'next/server'
 import { withAdmin } from '@/lib/api/middleware'
-import { canAccessSection } from '@/lib/permissions'
 import { query } from '@/lib/auth/db'
 import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
-import { apiSuccess, apiError, apiForbidden, apiBadRequest } from '@/lib/api/helpers'
+import { apiSuccess, apiError, apiBadRequest } from '@/lib/api/helpers'
 
-export const GET = withAdmin(async (request, session) => {
+export const GET = withAdmin('content', async (request, session) => {
   try {
-    const user = {
-      email: session.user.email,
-      is_staff: session.user.isStaff,
-      staff_permissions: session.user.staffPermissions,
-    }
-
-    if (!canAccessSection(user, 'content')) {
-      return apiForbidden('Kein Zugriff auf Inhalte')
-    }
-
     const result = await query<{
       id: string
       slug: string
@@ -58,18 +47,8 @@ export const GET = withAdmin(async (request, session) => {
   }
 })
 
-export const POST = withAdmin(async (request, session) => {
+export const POST = withAdmin('content', async (request, session) => {
   try {
-    const user = {
-      email: session.user.email,
-      is_staff: session.user.isStaff,
-      staff_permissions: session.user.staffPermissions,
-    }
-
-    if (!canAccessSection(user, 'content')) {
-      return apiForbidden('Kein Zugriff auf Inhalte')
-    }
-
     const body = await request.json()
     const { title, slug, excerpt, content, featuredImage, categoryId, tags, isPublished } = body
 

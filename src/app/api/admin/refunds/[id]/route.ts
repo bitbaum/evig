@@ -22,7 +22,7 @@ interface RefundRow {
 }
 
 // GET /api/admin/refunds/[id] - Get refund details
-export const GET = withAdmin<{ id: string }>(async (request, session, context) => {
+export const GET = withAdmin<{ id: string }>('finanzen', async (request, session, context) => {
   const { id: refundId } = context!.params!
   try {
     // Get refund details with related data
@@ -62,7 +62,7 @@ export const GET = withAdmin<{ id: string }>(async (request, session, context) =
 })
 
 // PUT /api/admin/refunds/[id] - Approve/reject/process refund
-export const PUT = withAdmin<{ id: string }>(async (request, session, context) => {
+export const PUT = withAdmin<{ id: string }>('finanzen', async (request, session, context) => {
   const { id: refundId } = context!.params!
   try {
     const { action, notes } = await request.json() // action: 'approve', 'reject', 'process'

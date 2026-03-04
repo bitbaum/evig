@@ -109,7 +109,7 @@ export default function Footer() {
               <a
                 key={social.name}
                 href={social.href}
-                className="text-gray-400 hover:text-white transition-colors"
+                className="p-2 text-gray-400 hover:text-white transition-colors"
                 target="_blank"
                 rel="noopener noreferrer"
               >

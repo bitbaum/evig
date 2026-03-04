@@ -13,7 +13,7 @@ interface CertificationRow {
   verification_status: string
 }
 
-export const PUT = withAdmin<{ id: string }>(async (request, session, context) => {
+export const PUT = withAdmin<{ id: string }>('services', async (request, session, context) => {
   const { id: certificationId } = context!.params!
   try {
     const body = await request.json()

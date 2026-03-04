@@ -13,7 +13,7 @@ import { TABLE_NAMES } from '@/config/database';
 import { normalizeSpecValue, SPEC_MEILI_FIELD_MAP } from '@/config/marketplace';
 import { logger } from '@/lib/logger';
 import { validateBody, UpdateListingSchema } from '@/lib/schemas';
-import { hasAdminAccessUnified, type UnifiedUser } from '@/lib/auth/unified-permissions';
+import { isStaffEmail } from '@/lib/permissions';
 import { indexListing, removeListing, type MeilisearchDocument } from '@/lib/search/meilisearch';
 
 type RouteContext = { params?: { id: string } };
@@ -281,11 +281,7 @@ export const DELETE = withAuth<{ id: string }>(async (
 
     // Check admin access for non-owners
     if (!isOwner) {
-      const user: UnifiedUser = {
-        email: session.user.email || '',
-        role: session.user.role,
-      };
-      if (!hasAdminAccessUnified(user)) {
+      if (!session.user.isStaff && !isStaffEmail(session.user.email || '')) {
         return apiForbidden('Nur der Eigentümer oder ein Admin kann dieses Inserat löschen');
       }
     }

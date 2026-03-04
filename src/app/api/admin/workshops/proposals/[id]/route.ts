@@ -17,7 +17,7 @@ import { WorkshopProposal } from '@/components/workshops/types';
  * GET /api/admin/workshops/proposals/[id]
  * Fetch a single workshop proposal with full details
  */
-export const GET = withAdmin<{ id: string }>(async (request, session, context) => {
+export const GET = withAdmin<{ id: string }>('workshops-admin', async (request, session, context) => {
   const { id: proposalId } = context!.params!;
 
   try {
@@ -61,7 +61,7 @@ export const GET = withAdmin<{ id: string }>(async (request, session, context) =
  * PATCH /api/admin/workshops/proposals/[id]
  * Edit workshop proposal fields before approval
  */
-export const PATCH = withAdmin<{ id: string }>(async (request, session, context) => {
+export const PATCH = withAdmin<{ id: string }>('workshops-admin', async (request, session, context) => {
   const { id: proposalId } = context!.params!;
 
   try {

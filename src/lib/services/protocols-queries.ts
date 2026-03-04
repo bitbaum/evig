@@ -81,6 +81,42 @@ export async function getProtocols(
   const page = filters?.page ?? 1
   const limit = filters?.limit ?? 20
 
+  // Build visibility WHERE clause separately so the count query can reuse it
+  // without accidentally grabbing a subquery WHERE from the SELECT columns.
+  let visibilityClause = `WHERE (
+      mp.visibility = 'team'
+      OR mp.created_by = $1
+      OR mp.attendees @> to_jsonb($1::text)
+      OR $2 = true
+    )`
+
+  const params: (string | boolean | number)[] = [userId, isSuperAdmin]
+  let paramIndex = 3
+
+  if (filters?.meeting_type) {
+    visibilityClause += ` AND mp.meeting_type = $${paramIndex++}`
+    params.push(filters.meeting_type)
+  }
+
+  if (filters?.status) {
+    visibilityClause += ` AND mp.status = $${paramIndex++}`
+    params.push(filters.status)
+  }
+
+  if (filters?.q) {
+    visibilityClause += ` AND mp.title ILIKE '%' || $${paramIndex++} || '%'`
+    params.push(filters.q)
+  }
+
+  // Count query uses the same WHERE clause
+  const countText = `
+    SELECT COUNT(*)::text as total
+    FROM ${TABLE_NAMES.MEETING_PROTOCOLS} mp
+    ${visibilityClause}
+  `
+
+  const offset = (page - 1) * limit
+
   let queryText = `
     SELECT
       mp.id,
@@ -109,43 +145,10 @@ export async function getProtocols(
       (mp.structured_notes IS NOT NULL) as has_structured_notes
     FROM ${TABLE_NAMES.MEETING_PROTOCOLS} mp
     LEFT JOIN ${TABLE_NAMES.USERS} u ON mp.created_by = u.id
-    WHERE (
-      mp.visibility = 'team'
-      OR mp.created_by = $1
-      OR mp.attendees @> to_jsonb($1::text)
-      OR $2 = true
-    )
+    ${visibilityClause}
+    ORDER BY mp.meeting_date DESC, mp.created_at DESC
+    LIMIT $${paramIndex++} OFFSET $${paramIndex++}
   `
-
-  const params: (string | boolean | number)[] = [userId, isSuperAdmin]
-  let paramIndex = 3
-
-  if (filters?.meeting_type) {
-    queryText += ` AND mp.meeting_type = $${paramIndex++}`
-    params.push(filters.meeting_type)
-  }
-
-  if (filters?.status) {
-    queryText += ` AND mp.status = $${paramIndex++}`
-    params.push(filters.status)
-  }
-
-  if (filters?.q) {
-    queryText += ` AND mp.title ILIKE '%' || $${paramIndex++} || '%'`
-    params.push(filters.q)
-  }
-
-  const whereClause = queryText.slice(queryText.indexOf('WHERE'))
-
-  // Count query reuses the same WHERE clause
-  const countText = `
-    SELECT COUNT(*)::text as total
-    FROM ${TABLE_NAMES.MEETING_PROTOCOLS} mp
-    ${whereClause}
-  `
-
-  const offset = (page - 1) * limit
-  queryText += ` ORDER BY mp.meeting_date DESC, mp.created_at DESC LIMIT $${paramIndex++} OFFSET $${paramIndex++}`
   params.push(limit, offset)
 
   const [countResult, listResult] = await Promise.all([

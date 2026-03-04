@@ -12,7 +12,7 @@ import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
 import { sendEmail } from '@/lib/email'
 
-export const PATCH = withAdmin<{ id: string }>(async (request, session, context) => {
+export const PATCH = withAdmin<{ id: string }>('approvals', async (request, session, context) => {
   try {
     const { id } = context!.params!
     const body = await request.json()

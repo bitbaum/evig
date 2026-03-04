@@ -56,7 +56,6 @@ import {
 import {
   getServicePresentation,
   getServicePricing,
-  formatPrice as formatPriceUtil,
   servicePresentation,
 } from './presentation'
 import { getIconByName } from '@/config/service-icons'
@@ -80,11 +79,6 @@ export type {
 } from './types'
 
 export { SERVICE_CATEGORY_LABELS } from './types'
-
-/**
- * Format price from cents to display string
- */
-export const formatPrice = formatPriceUtil
 
 // ============================================================================
 // Internal: Merge DB + Presentation

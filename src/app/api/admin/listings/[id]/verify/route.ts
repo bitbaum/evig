@@ -19,7 +19,7 @@ type RouteContext = { params?: { id: string } };
 // POST — Verify listing
 // ============================================================================
 
-export const POST = withAdmin<{ id: string }>(async (
+export const POST = withAdmin<{ id: string }>('marketplace', async (
   request: NextRequest,
   session: ValidSession,
   context?: RouteContext
@@ -60,7 +60,7 @@ export const POST = withAdmin<{ id: string }>(async (
 // DELETE — Remove verification
 // ============================================================================
 
-export const DELETE = withAdmin<{ id: string }>(async (
+export const DELETE = withAdmin<{ id: string }>('marketplace', async (
   request: NextRequest,
   session: ValidSession,
   context?: RouteContext

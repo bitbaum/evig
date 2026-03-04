@@ -33,8 +33,8 @@ const PAYREXX_WEBHOOK_SECRET = process.env.PAYREXX_WEBHOOK_SECRET;
  */
 async function verifyPayrexxSignature(rawBody: string, signature: string | null): Promise<boolean> {
   if (!PAYREXX_WEBHOOK_SECRET) {
-    logger.warn('PAYREXX_WEBHOOK_SECRET not set — skipping signature verification');
-    return true;
+    logger.error('PAYREXX_WEBHOOK_SECRET not set — rejecting webhook (fail closed)');
+    return false;
   }
   if (!signature) return false;
 

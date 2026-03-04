@@ -15,12 +15,10 @@
 import { NextRequest } from 'next/server'
 import { withAdmin } from '@/lib/api/middleware'
 import { query } from '@/lib/auth/db'
-import { canAccessSection } from '@/lib/permissions'
 import { TABLE_NAMES } from '@/config/database'
 import {
   apiSuccess,
   apiError,
-  apiForbidden,
   apiBadRequest,
 } from '@/lib/api/helpers'
 import { validateDigestFilter } from '@/lib/schemas/activity'
@@ -69,18 +67,8 @@ interface DigestSummary {
  * GET /api/admin/team/digest
  * Get weekly activity digest for management
  */
-export const GET = withAdmin(async (request, session) => {
+export const GET = withAdmin('team', async (request, session) => {
   try {
-    const user = {
-      email: session.user.email,
-      is_staff: session.user.isStaff,
-      staff_permissions: session.user.staffPermissions,
-    }
-
-    if (!canAccessSection(user, 'team')) {
-      return apiForbidden('Kein Zugriff auf Team-Bereich')
-    }
-
     // Parse filters from query params
     const { searchParams } = new URL(request.url)
 

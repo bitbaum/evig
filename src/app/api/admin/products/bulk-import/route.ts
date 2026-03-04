@@ -6,7 +6,7 @@ import { logger } from "@/lib/logger";
 import { withAdmin } from "@/lib/api/middleware";
 
 // POST /api/admin/products/bulk-import - Bulk import products from CSV
-export const POST = withAdmin(async (request: NextRequest) => {
+export const POST = withAdmin('products', async (request: NextRequest) => {
   try {
     const formData = await request.formData();
     const file = formData.get('file') as File;

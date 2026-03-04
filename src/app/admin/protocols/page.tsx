@@ -113,14 +113,14 @@ export default async function ProtocolsAdminPage({
 
   const totalPages = validStepFilter ? 1 : Math.ceil(totalProtocols / PROTOCOLS_PAGE_SIZE)
 
-  function buildProtocolsHref(page: number) {
+  const protocolsHrefBase = (() => {
     const p = new URLSearchParams()
     if (params.meeting_type) p.set('meeting_type', params.meeting_type)
     if (params.status) p.set('status', params.status)
     if (params.q) p.set('q', params.q)
-    p.set('page', String(page))
-    return `/admin/protocols?${p.toString()}`
-  }
+    const qs = p.toString()
+    return `/admin/protocols${qs ? `?${qs}` : ''}`
+  })()
 
   return (
     <AdminPageWrapper
@@ -339,7 +339,7 @@ export default async function ProtocolsAdminPage({
             totalPages={totalPages}
             totalItems={totalProtocols}
             pageSize={PROTOCOLS_PAGE_SIZE}
-            buildHref={buildProtocolsHref}
+            hrefBase={protocolsHrefBase}
           />
         )}
       </div>
