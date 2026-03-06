@@ -10,11 +10,11 @@ import { withAuth, ValidSession } from '@/lib/api/middleware';
 import { apiSuccess, apiError, apiNotFound, apiForbidden } from '@/lib/api/helpers';
 import { query, transaction } from '@/lib/auth/db';
 import { TABLE_NAMES } from '@/config/database';
-import { normalizeSpecValue, SPEC_MEILI_FIELD_MAP } from '@/config/marketplace';
 import { logger } from '@/lib/logger';
 import { validateBody, UpdateListingSchema } from '@/lib/schemas';
 import { isStaffEmail } from '@/lib/permissions';
 import { indexListing, removeListing, type MeilisearchDocument } from '@/lib/search/meilisearch';
+import { insertListingImages, upsertListingSpecs, buildMeiliSpecs } from '@/lib/marketplace/listing-helpers';
 
 type RouteContext = { params?: { id: string } };
 
@@ -168,44 +168,12 @@ export const PATCH = withAuth<{ id: string }>(async (
           `DELETE FROM ${TABLE_NAMES.LISTING_IMAGES} WHERE listing_id = $1`,
           [id]
         );
-        const imageValues: string[] = [];
-        const imageParams: unknown[] = [];
-        let idx = 1;
-        images.forEach((url, position) => {
-          imageValues.push(`($${idx++}, $${idx++}, $${idx++}, $${idx++})`);
-          imageParams.push(id, url, position, position === 0);
-        });
-        await client.query(
-          `INSERT INTO ${TABLE_NAMES.LISTING_IMAGES} (listing_id, url, position, is_primary)
-          VALUES ${imageValues.join(', ')}`,
-          imageParams
-        );
+        await insertListingImages(client, id, images);
       }
 
       // Replace specs if provided
       if (specs !== undefined) {
-        await client.query(
-          `DELETE FROM ${TABLE_NAMES.LISTING_SPECS} WHERE listing_id = $1`,
-          [id]
-        );
-        if (specs.length > 0) {
-          const specValues: string[] = [];
-          const specParams: unknown[] = [];
-          let idx = 1;
-          for (const spec of specs) {
-            if (!spec.value.trim()) continue;
-            const normalized = normalizeSpecValue(spec.key, spec.value);
-            specValues.push(`($${idx++}, $${idx++}, $${idx++}, $${idx++}, $${idx++})`);
-            specParams.push(id, spec.key, spec.value, spec.unit || null, normalized);
-          }
-          if (specValues.length > 0) {
-            await client.query(
-              `INSERT INTO ${TABLE_NAMES.LISTING_SPECS} (listing_id, spec_key, spec_value, spec_unit, normalized_value)
-              VALUES ${specValues.join(', ')}`,
-              specParams
-            );
-          }
-        }
+        await upsertListingSpecs(client, id, specs);
       }
     });
 
@@ -235,14 +203,11 @@ export const PATCH = withAuth<{ id: string }>(async (
             `SELECT spec_key, spec_value FROM ${TABLE_NAMES.LISTING_SPECS} WHERE listing_id = $1`,
             [id]
           );
-          const meiliSpecs: Record<string, number | null> = {};
-          for (const specRow of specsRes.rows) {
-            const s = specRow as { spec_key: string; spec_value: string };
-            const meiliField = SPEC_MEILI_FIELD_MAP[s.spec_key];
-            if (meiliField) {
-              meiliSpecs[meiliField] = normalizeSpecValue(s.spec_key, s.spec_value);
-            }
-          }
+          const specInputs = specsRes.rows.map(r => {
+            const s = r as { spec_key: string; spec_value: string };
+            return { key: s.spec_key, value: s.spec_value };
+          });
+          const meiliSpecs = buildMeiliSpecs(specInputs);
           indexListing({
             ...row,
             is_verified: !!row.verified_at,

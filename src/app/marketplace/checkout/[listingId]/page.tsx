@@ -6,14 +6,14 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import {
   ArrowLeft,
-  Package,
   Truck,
   MapPin,
   Shield,
   Loader2,
   AlertCircle,
 } from 'lucide-react'
-import { formatCHF, MARKETPLACE_LIMITS, DELIVERY_LABELS } from '@/config/marketplace'
+import { ListingImage } from '@/components/marketplace/ListingImage'
+import { formatCHF, COMMISSION_RATE, DELIVERY_LABELS } from '@/config/marketplace'
 import type { DeliveryOption } from '@/config/marketplace'
 
 interface ListingForCheckout {
@@ -26,6 +26,7 @@ interface ListingForCheckout {
   pickup_location: string | null
   thumbnail: string | null
   seller_name: string
+  seller_id: string
 }
 
 export default function CheckoutPage({ params }: { params: Promise<{ listingId: string }> }) {
@@ -68,6 +69,7 @@ export default function CheckoutPage({ params }: { params: Promise<{ listingId: 
             pickup_location: l.pickup_location,
             thumbnail: l.images?.[0]?.url || null,
             seller_name: l.seller_display_name || l.seller_name,
+            seller_id: l.seller_id,
           })
           // Set default delivery method
           if (l.delivery_options === 'shipping') setDeliveryMethod('shipping')
@@ -138,10 +140,29 @@ export default function CheckoutPage({ params }: { params: Promise<{ listingId: 
 
   if (!listing) return null
 
+  // Guard: prevent self-purchase
+  const isOwnListing = session?.user?.id === listing.seller_id
+  if (isOwnListing) {
+    return (
+      <div className="max-w-2xl mx-auto py-12 text-center">
+        <AlertCircle className="w-16 h-16 text-yellow-400 mx-auto mb-4" />
+        <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
+          Eigenes Inserat
+        </h2>
+        <p className="text-gray-600 dark:text-gray-400 mb-4">
+          Sie können Ihr eigenes Inserat nicht kaufen.
+        </p>
+        <Link href={`/marketplace/${listing.id}`} className="text-green-600 hover:text-green-700 font-medium">
+          Zurück zum Inserat
+        </Link>
+      </div>
+    )
+  }
+
   const shippingCost = deliveryMethod === 'shipping' && listing.shipping_cost_chf
     ? listing.shipping_cost_chf : 0
   const totalAmount = listing.price_chf + shippingCost
-  const commission = Math.round(totalAmount * MARKETPLACE_LIMITS.COMMISSION_RATE * 100) / 100
+  const commission = Math.round(totalAmount * COMMISSION_RATE * 100) / 100
   const canSelectDelivery = listing.delivery_options === 'both'
   const postalCodeValid = /^\d{4}$/.test(shippingAddress.postal_code)
   const shippingFormValid = deliveryMethod !== 'shipping' || (
@@ -260,6 +281,9 @@ export default function CheckoutPage({ params }: { params: Promise<{ listingId: 
                       }`}
                       placeholder="8000"
                     />
+                    {shippingAddress.postal_code && !postalCodeValid && (
+                      <p className="text-xs text-red-500 mt-1">PLZ muss 4 Ziffern haben</p>
+                    )}
                   </div>
                   <div className="col-span-2">
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Ort</label>
@@ -311,13 +335,7 @@ export default function CheckoutPage({ params }: { params: Promise<{ listingId: 
             {/* Listing preview */}
             <div className="flex gap-3 mb-4">
               <div className="w-16 h-16 rounded-lg overflow-hidden flex-shrink-0 bg-gray-100 dark:bg-gray-700">
-                {listing.thumbnail ? (
-                  <img src={listing.thumbnail} alt={listing.title} className="w-full h-full object-cover" />
-                ) : (
-                  <div className="w-full h-full flex items-center justify-center">
-                    <Package className="w-6 h-6 text-gray-400" />
-                  </div>
-                )}
+                <ListingImage src={listing.thumbnail} alt={listing.title} fallbackIconSize="w-6 h-6" />
               </div>
               <div className="min-w-0">
                 <h3 className="font-medium text-gray-900 dark:text-white text-sm line-clamp-2">{listing.title}</h3>
@@ -348,7 +366,7 @@ export default function CheckoutPage({ params }: { params: Promise<{ listingId: 
                 </div>
               )}
               <div className="flex justify-between text-xs text-gray-400 dark:text-gray-500">
-                <span>Servicegebühr ({MARKETPLACE_LIMITS.COMMISSION_RATE * 100}%)</span>
+                <span>Servicegebühr ({COMMISSION_RATE * 100}%)</span>
                 <span>inkl. {formatCHF(commission)}</span>
               </div>
             </div>

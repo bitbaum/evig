@@ -35,6 +35,7 @@ import type { DeliveryOption, PaymentMode } from '@/config/marketplace'
 import { getConditionCriteria } from '@/config/marketplace/condition-criteria'
 import { formatDateShort } from '@/lib/date-formats'
 import ListingReviews from '@/components/marketplace/ListingReviews'
+import { ListingImage } from '@/components/marketplace/ListingImage'
 
 interface ListingImage {
   id: string
@@ -153,7 +154,11 @@ export default function ListingDetailPage({ params }: { params: Promise<{ id: st
   }
 
   const sendMessage = async () => {
-    if (!session?.user || !listing || sendingMessage || !contactMessage.trim()) return
+    if (!session?.user) {
+      router.push(`/auth/login?callbackUrl=${encodeURIComponent(window.location.pathname)}`)
+      return
+    }
+    if (!listing || sendingMessage || !contactMessage.trim()) return
     setSendingMessage(true)
     try {
       const response = await fetch(`/api/listings/${listing.id}/contact`, {
@@ -253,17 +258,12 @@ export default function ListingDetailPage({ params }: { params: Promise<{ id: st
         {/* Image Gallery */}
         <div className="space-y-3">
           <div className="bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-sm">
-            {images[selectedImage]?.url ? (
-              <img
-                src={images[selectedImage].url}
-                alt={listing.title}
-                className="w-full aspect-square object-cover"
-              />
-            ) : (
-              <div className="w-full aspect-square bg-gray-100 dark:bg-gray-700 flex items-center justify-center">
-                <Package className="w-24 h-24 text-gray-300 dark:text-gray-500" aria-hidden="true" />
-              </div>
-            )}
+            <ListingImage
+              src={images[selectedImage]?.url}
+              alt={listing.title}
+              className="w-full aspect-square object-cover"
+              fallbackIconSize="w-24 h-24"
+            />
           </div>
           {/* Thumbnails */}
           {images.length > 1 && (
@@ -277,7 +277,7 @@ export default function ListingDetailPage({ params }: { params: Promise<{ id: st
                   }`}
                   aria-label={`Bild ${idx + 1} anzeigen`}
                 >
-                  <img src={img.url} alt="" className="w-full h-full object-cover" />
+                  <ListingImage src={img.url} alt="" fallbackIconSize="w-4 h-4" />
                 </button>
               ))}
             </div>
@@ -373,7 +373,13 @@ export default function ListingDetailPage({ params }: { params: Promise<{ id: st
             {!isOwner && listing.payment_mode !== 'direct' && (
               <button
                 className="w-full flex items-center justify-center gap-2 bg-green-600 text-white py-3 px-6 min-h-[44px] rounded-lg font-semibold hover:bg-green-700 transition-colors focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
-                onClick={() => router.push(`/marketplace/checkout/${listing.id}`)}
+                onClick={() => {
+                  if (!session?.user) {
+                    router.push(`/auth/login?callbackUrl=${encodeURIComponent(window.location.pathname)}`)
+                    return
+                  }
+                  router.push(`/marketplace/checkout/${listing.id}`)
+                }}
               >
                 <Shield className="w-5 h-5" aria-hidden="true" />
                 Jetzt kaufen (sicher)
@@ -428,7 +434,13 @@ export default function ListingDetailPage({ params }: { params: Promise<{ id: st
                   </div>
                 ) : (
                   <button
-                    onClick={() => setShowMessageForm(true)}
+                    onClick={() => {
+                      if (!session?.user) {
+                        router.push(`/auth/login?callbackUrl=${encodeURIComponent(window.location.pathname)}`)
+                        return
+                      }
+                      setShowMessageForm(true)
+                    }}
                     className="w-full flex items-center justify-center gap-2 bg-blue-600 text-white py-3 px-6 min-h-[44px] rounded-lg font-semibold hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
                   >
                     <MessageSquare className="w-5 h-5" aria-hidden="true" />
@@ -694,13 +706,7 @@ export default function ListingDetailPage({ params }: { params: Promise<{ id: st
                   className="group bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden hover:shadow-md transition-shadow focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
                 >
                   <div className="relative aspect-[4/3]">
-                    {sim.thumbnail ? (
-                      <img src={sim.thumbnail} alt={sim.title} className="w-full h-full object-cover" />
-                    ) : (
-                      <div className="w-full h-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center">
-                        <Package className="w-10 h-10 text-gray-300 dark:text-gray-500" aria-hidden="true" />
-                      </div>
-                    )}
+                    <ListingImage src={sim.thumbnail} alt={sim.title} fallbackIconSize="w-10 h-10" />
                     <div className="absolute top-2 left-2">
                       <span className={`inline-flex px-2 py-0.5 text-xs font-semibold rounded-full ${simCondition.color}`}>
                         {simCondition.label}

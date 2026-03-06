@@ -8,7 +8,7 @@ import { withAuth, ValidSession } from '@/lib/api/middleware';
 import { apiSuccess, apiError, apiBadRequest, apiForbidden } from '@/lib/api/helpers';
 import { query, transaction } from '@/lib/auth/db';
 import { TABLE_NAMES } from '@/config/database';
-import { MARKETPLACE_LIMITS } from '@/config/marketplace';
+import { COMMISSION_RATE } from '@/config/marketplace';
 import { logger } from '@/lib/logger';
 import { validateBody, validateQuery, CreateOrderSchema, OrdersQuerySchema } from '@/lib/schemas';
 import { createGateway } from '@/lib/payments/payrexx-client';
@@ -79,7 +79,7 @@ export const POST = withAuth(async (request: NextRequest, session: ValidSession)
       ? Number(listing.shipping_cost_chf)
       : 0;
     const totalChf = priceChf + shippingChf;
-    const commissionChf = Math.round(totalChf * MARKETPLACE_LIMITS.COMMISSION_RATE * 100) / 100;
+    const commissionChf = Math.round(totalChf * COMMISSION_RATE * 100) / 100;
     const payoutChf = Math.round((totalChf - commissionChf) * 100) / 100;
 
     const orderId = await transaction(async (client) => {

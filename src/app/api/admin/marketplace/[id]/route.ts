@@ -7,6 +7,8 @@ import { validateBody } from '@/lib/schemas'
 import { AdminEditListingSchema } from '@/lib/schemas/marketplace'
 import { removeListing } from '@/lib/search/meilisearch'
 import { logger } from '@/lib/logger'
+import { logAdminAction } from '@/lib/auth/audit'
+import { getClientIdentifier } from '@/lib/security/rate-limit'
 
 // GET /api/admin/marketplace/[id] - Full listing detail
 export const GET = withAdmin<{ id: string }>('marketplace', async (_request, _session, context) => {
@@ -112,6 +114,17 @@ export const PATCH = withAdmin<{ id: string }>('marketplace', async (request, se
       changes: Object.keys(data),
     })
 
+    // Audit trail
+    logAdminAction({
+      userId: session.user.id,
+      ipAddress: getClientIdentifier(request),
+      userAgent: request.headers.get('user-agent') || 'unknown',
+    }, 'marketplace_listing_edited', {
+      listingId: id,
+      changes: Object.keys(data),
+      newValues: data,
+    })
+
     return apiSuccess(result.rows[0])
   } catch (error) {
     return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)
@@ -119,7 +132,7 @@ export const PATCH = withAdmin<{ id: string }>('marketplace', async (request, se
 })
 
 // DELETE /api/admin/marketplace/[id] - Soft delete (set status='removed')
-export const DELETE = withAdmin<{ id: string }>('marketplace', async (_request, session, context) => {
+export const DELETE = withAdmin<{ id: string }>('marketplace', async (request, session, context) => {
   try {
     const id = context?.params?.id
     if (!id) return apiBadRequest('ID erforderlich')
@@ -142,6 +155,15 @@ export const DELETE = withAdmin<{ id: string }>('marketplace', async (_request, 
     logger.info('Admin removed listing', {
       listingId: id,
       adminEmail: session.user.email,
+    })
+
+    // Audit trail
+    logAdminAction({
+      userId: session.user.id,
+      ipAddress: getClientIdentifier(request),
+      userAgent: request.headers.get('user-agent') || 'unknown',
+    }, 'marketplace_listing_removed', {
+      listingId: id,
     })
 
     return apiSuccess({ removed: true })

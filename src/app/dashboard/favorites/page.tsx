@@ -6,13 +6,12 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import {
   Heart,
-  Package,
   Loader2,
   AlertCircle,
   RefreshCw,
   MapPin,
-  Star,
 } from 'lucide-react'
+import { ListingImage } from '@/components/marketplace/ListingImage'
 import { getConditionBadge } from '@/config/erfassung/conditions'
 import { formatCHF } from '@/config/marketplace'
 
@@ -154,17 +153,7 @@ export default function FavoritesPage() {
               >
                 <Link href={`/marketplace/${listing.id}`}>
                   <div className="relative aspect-[4/3]">
-                    {listing.thumbnail ? (
-                      <img
-                        src={listing.thumbnail}
-                        alt={listing.title}
-                        className="w-full h-full object-cover"
-                      />
-                    ) : (
-                      <div className="w-full h-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center">
-                        <Package className="w-12 h-12 text-gray-300 dark:text-gray-500" />
-                      </div>
-                    )}
+                    <ListingImage src={listing.thumbnail} alt={listing.title} fallbackIconSize="w-12 h-12" />
                     <div className="absolute top-2 left-2">
                       <span className={`inline-flex px-2 py-0.5 text-xs font-semibold rounded-full ${conditionInfo.color}`}>
                         {conditionInfo.label}

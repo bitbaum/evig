@@ -120,8 +120,6 @@ export const MARKETPLACE_LIMITS = {
   MAX_PRICE_CHF: 50000,
   DEFAULT_PAGE_SIZE: 20,
   MAX_PAGE_SIZE: 100,
-  /** @deprecated Use COMMISSION_RATE export instead. Kept for backward compat. */
-  COMMISSION_RATE: 0,
 } as const;
 
 /**

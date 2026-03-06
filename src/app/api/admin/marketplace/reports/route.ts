@@ -4,14 +4,16 @@ import { apiError, apiSuccess } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES } from '@/config/database'
 import { CountRow } from '@/lib/api/db-types'
+import { validateQuery, AdminReportsQuerySchema } from '@/lib/schemas'
 
 // GET /api/admin/marketplace/reports - List all reports
 export const GET = withAdmin('marketplace', async (request) => {
   try {
     const { searchParams } = new URL(request.url)
-    const status = searchParams.get('status') || 'pending'
-    const limit = parseInt(searchParams.get('limit') || '50')
-    const offset = parseInt(searchParams.get('offset') || '0')
+    const validation = validateQuery(AdminReportsQuerySchema, Object.fromEntries(searchParams))
+    if (!validation.success) return validation.error
+
+    const { status, limit, offset } = validation.data
 
     const conditions: string[] = []
     const params: (string | number)[] = []

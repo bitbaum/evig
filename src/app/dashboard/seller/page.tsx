@@ -17,6 +17,7 @@ import {
   AlertCircle,
   RefreshCw
 } from 'lucide-react'
+import { ListingImage } from '@/components/marketplace/ListingImage'
 import { ROLES } from '@/lib/constants'
 import { LISTING_STATUS_CONFIG } from '@/config/marketplace'
 import type { ListingStatus } from '@/config/marketplace'
@@ -31,6 +32,7 @@ interface Product {
   condition: string
   category: string
   image: string | null
+  createdAt: string
 }
 
 interface Stats {
@@ -289,11 +291,9 @@ export default function SellerDashboard() {
                   const statusInfo = getStatusLabel(product.status)
                   return (
                     <div key={product.id} className="flex items-center gap-4 p-3 rounded-lg border border-gray-100 dark:border-gray-700">
-                      <img
-                        src={product.image || 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=100'}
-                        alt={product.title}
-                        className="w-12 h-12 rounded-lg object-cover"
-                      />
+                      <div className="w-12 h-12 rounded-lg overflow-hidden">
+                        <ListingImage src={product.image} alt={product.title} fallbackIconSize="w-5 h-5" />
+                      </div>
                       <div className="flex-1 min-w-0">
                         <h3 className="font-medium text-gray-900 dark:text-white truncate">
                           {product.title}

@@ -14,6 +14,7 @@ import { logger } from '@/lib/logger';
 import { validateBody, ContactSellerSchema } from '@/lib/schemas';
 import { sendCustomEmail } from '@/lib/email';
 import { newMarketplaceMessage } from '@/lib/email/templates/marketplace';
+import { rateLimiters } from '@/lib/security/rate-limit';
 
 type RouteContext = { params?: { id: string } };
 
@@ -25,6 +26,11 @@ export const POST = withAuth<{ id: string }>(async (
   try {
     const id = context?.params?.id;
     if (!id) return apiNotFound('Inserat');
+
+    // SECURITY: Rate limiting — 10 contact messages per hour per user
+    if (!rateLimiters.contactSeller(`${session.user.id}:contact-seller`)) {
+      return apiBadRequest('Zu viele Nachrichten gesendet. Bitte warte 1 Stunde.');
+    }
 
     const body = await request.json();
     const validation = validateBody(ContactSellerSchema, body);

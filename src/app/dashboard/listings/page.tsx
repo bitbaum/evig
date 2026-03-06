@@ -18,6 +18,7 @@ import {
   ChevronLeft,
   ChevronRight,
 } from 'lucide-react'
+import { ListingImage } from '@/components/marketplace/ListingImage'
 import { LISTING_STATUS_CONFIG, formatCHF } from '@/config/marketplace'
 import type { ListingStatus } from '@/config/marketplace'
 import { getConditionBadge } from '@/config/erfassung/conditions'
@@ -224,18 +225,8 @@ export default function MyListingsPage() {
                 className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-4 flex items-center gap-4"
               >
                 {/* Thumbnail */}
-                <Link href={`/marketplace/${listing.id}`} className="flex-shrink-0">
-                  {listing.thumbnail ? (
-                    <img
-                      src={listing.thumbnail}
-                      alt={listing.title}
-                      className="w-16 h-16 rounded-lg object-cover"
-                    />
-                  ) : (
-                    <div className="w-16 h-16 rounded-lg bg-gray-100 dark:bg-gray-700 flex items-center justify-center">
-                      <Package className="w-6 h-6 text-gray-300" />
-                    </div>
-                  )}
+                <Link href={`/marketplace/${listing.id}`} className="flex-shrink-0 w-16 h-16 rounded-lg overflow-hidden">
+                  <ListingImage src={listing.thumbnail} alt={listing.title} fallbackIconSize="w-6 h-6" />
                 </Link>
 
                 {/* Info */}

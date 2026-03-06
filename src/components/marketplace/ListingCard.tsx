@@ -6,9 +6,10 @@
  */
 
 import Link from 'next/link'
-import { Package, Star, MapPin, Heart, ShieldCheck } from 'lucide-react'
+import { Star, MapPin, Heart, ShieldCheck } from 'lucide-react'
 import { getConditionBadge } from '@/config/erfassung/conditions'
 import { formatCHF, GRATIS_CONFIG, VERIFICATION_CONFIG } from '@/config/marketplace'
+import { ListingImage } from './ListingImage'
 
 export interface ListingCardData {
   id: string
@@ -64,17 +65,11 @@ export function ListingCard({ listing, variant = 'default', className = '' }: Li
     >
       {/* Image */}
       <div className={`relative ${isCompact ? 'aspect-square' : 'aspect-[4/3]'}`}>
-        {listing.thumbnail ? (
-          <img
-            src={listing.thumbnail}
-            alt={listing.title}
-            className="w-full h-full object-cover"
-          />
-        ) : (
-          <div className="w-full h-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center">
-            <Package className={`${isCompact ? 'w-8 h-8' : 'w-12 h-12'} text-gray-300 dark:text-gray-500`} />
-          </div>
-        )}
+        <ListingImage
+          src={listing.thumbnail}
+          alt={listing.title}
+          fallbackIconSize={isCompact ? 'w-8 h-8' : 'w-12 h-12'}
+        />
 
         {/* Condition Badge */}
         <div className="absolute top-2 left-2">

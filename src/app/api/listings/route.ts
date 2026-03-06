@@ -8,13 +8,12 @@ import { withAuth, ValidSession } from '@/lib/api/middleware';
 import { apiSuccess, apiError, apiBadRequest } from '@/lib/api/helpers';
 import { query, paginatedQuery, transaction } from '@/lib/auth/db';
 import { TABLE_NAMES } from '@/config/database';
-import { normalizeSpecValue, SPEC_MEILI_FIELD_MAP } from '@/config/marketplace';
 import { logger } from '@/lib/logger';
 import { validateBody, validateQuery, ListingsQuerySchema, CreateListingSchema } from '@/lib/schemas';
-import { indexListing } from '@/lib/search/meilisearch';
+import { insertListingImages, upsertListingSpecs, indexListingInSearch } from '@/lib/marketplace/listing-helpers';
 import { sendCustomEmail } from '@/lib/email';
 import { listingPublishedConfirmation } from '@/lib/email/templates/marketplace';
-import { rateLimiters } from '@/lib/security/rate-limit';
+import { rateLimiters, getClientIdentifier } from '@/lib/security/rate-limit';
 import { sanitizeInput } from '@/lib/security/sanitize';
 import { QueryParams } from '@/lib/api/query-builder';
 
@@ -24,6 +23,12 @@ import { QueryParams } from '@/lib/api/query-builder';
 
 export async function GET(request: NextRequest) {
   try {
+    // SECURITY: Rate limiting — 200 requests per 15 minutes per IP
+    const clientIp = getClientIdentifier(request);
+    if (!rateLimiters.listingBrowse(clientIp)) {
+      return apiBadRequest('Zu viele Anfragen. Bitte versuche es später erneut.');
+    }
+
     const { searchParams } = new URL(request.url);
     const rawParams: Record<string, string | null> = {};
     searchParams.forEach((value, key) => { rawParams[key] = value; });
@@ -207,41 +212,11 @@ export const POST = withAuth(async (request: NextRequest, session: ValidSession)
       const listingId = listingResult.rows[0].id;
 
       // Batch insert images
-      if (data.images.length > 0) {
-        const imageValues: string[] = [];
-        const imageParams: unknown[] = [];
-        let idx = 1;
-        data.images.forEach((url, position) => {
-          imageValues.push(`($${idx++}, $${idx++}, $${idx++}, $${idx++})`);
-          imageParams.push(listingId, url, position, position === 0);
-        });
+      await insertListingImages(client, listingId, data.images);
 
-        await client.query(
-          `INSERT INTO ${TABLE_NAMES.LISTING_IMAGES} (listing_id, url, position, is_primary)
-          VALUES ${imageValues.join(', ')}`,
-          imageParams
-        );
-      }
-
-      // Batch insert specs
+      // Batch insert specs (upsert deletes first, but table is empty for new listings)
       if (data.specs && data.specs.length > 0) {
-        const specValues: string[] = [];
-        const specParams: unknown[] = [];
-        let idx = 1;
-        for (const spec of data.specs) {
-          if (!spec.value.trim()) continue; // Skip empty specs
-          const normalized = normalizeSpecValue(spec.key, spec.value);
-          specValues.push(`($${idx++}, $${idx++}, $${idx++}, $${idx++}, $${idx++})`);
-          specParams.push(listingId, spec.key, spec.value, spec.unit || null, normalized);
-        }
-
-        if (specValues.length > 0) {
-          await client.query(
-            `INSERT INTO ${TABLE_NAMES.LISTING_SPECS} (listing_id, spec_key, spec_value, spec_unit, normalized_value)
-            VALUES ${specValues.join(', ')}`,
-            specParams
-          );
-        }
+        await upsertListingSpecs(client, listingId, data.specs);
       }
 
       return listingId;
@@ -249,41 +224,32 @@ export const POST = withAuth(async (request: NextRequest, session: ValidSession)
 
     logger.info('Listing created', { listingId: result, userId: session.user.id });
 
-    // Build denormalized spec fields for Meilisearch
-    const meiliSpecs: Record<string, number | null> = {};
-    if (data.specs) {
-      for (const spec of data.specs) {
-        const meiliField = SPEC_MEILI_FIELD_MAP[spec.key];
-        if (meiliField && spec.value) {
-          meiliSpecs[meiliField] = normalizeSpecValue(spec.key, spec.value);
-        }
-      }
-    }
-
     // Fire-and-forget: index in Meilisearch
-    indexListing({
-      id: result,
-      title: sanitizedTitle,
-      description: sanitizedDescription,
-      brand: data.brand || null,
-      model: data.model || null,
-      category: data.category,
-      condition: data.condition,
-      price_chf: data.price_chf,
-      delivery_options: data.delivery_options,
-      payment_mode: data.payment_mode,
-      status: data.status || 'active',
-      is_revampit: false,
-      is_verified: false,
-      pickup_location: data.pickup_location || null,
-      seller_name: session.user.name || null,
-      seller_city: null,
-      view_count: 0,
-      favorite_count: 0,
-      created_at: new Date().toISOString(),
-      thumbnail: data.images?.[0] || null,
-      ...meiliSpecs,
-    }).catch(err => logger.error('Failed to index listing in Meilisearch', { error: err, listingId: result }));
+    indexListingInSearch(
+      {
+        id: result,
+        title: sanitizedTitle,
+        description: sanitizedDescription,
+        brand: data.brand || null,
+        model: data.model || null,
+        category: data.category,
+        condition: data.condition,
+        price_chf: data.price_chf,
+        delivery_options: data.delivery_options,
+        payment_mode: data.payment_mode,
+        status: data.status || 'active',
+        is_revampit: false,
+        is_verified: false,
+        pickup_location: data.pickup_location || null,
+        seller_name: session.user.name || null,
+        seller_city: null,
+        view_count: 0,
+        favorite_count: 0,
+        created_at: new Date().toISOString(),
+        thumbnail: data.images?.[0] || null,
+      },
+      data.specs
+    );
 
     // Fire-and-forget: send confirmation email
     if (session.user.email && data.status !== 'draft') {

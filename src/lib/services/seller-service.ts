@@ -16,37 +16,27 @@ import { logger } from '@/lib/logger'
 
 interface SellerProductRow {
   id: string
-  inventory_item_id: string
   title: string
-  description: string
   price_chf: number
   status: string
-  views_count: number
-  favorites_count: number
-  published_at: string
+  view_count: number
+  favorite_count: number
   created_at: string
   condition: string
-  quantity_available: number
   category: string
-  brand: string
-  original_image_url: string
+  thumbnail: string | null
 }
 
 export interface SellerProduct {
   id: string
-  inventoryItemId: string
   title: string
-  description: string
   price: number
   status: string
   viewsCount: number
   favoritesCount: number
   condition: string
-  quantityAvailable: number
   category: string
-  brand: string
   image: string | null
-  publishedAt: string
   createdAt: string
 }
 
@@ -70,50 +60,38 @@ export interface SellerDashboardData {
 // ============================================================================
 
 /**
- * Fetch the seller's recent marketplace listings with product details.
+ * Fetch the seller's recent marketplace listings.
  */
 async function fetchSellerProducts(userId: string): Promise<SellerProduct[]> {
   const result = await query<SellerProductRow>(
     `SELECT
-      ml.id,
-      ml.inventory_item_id,
-      ml.title,
-      ml.description,
-      ml.price_chf,
-      ml.status,
-      ml.views_count,
-      ml.favorites_count,
-      ml.published_at,
-      ml.created_at,
-      COALESCE(ii.condition_override, aep.condition) as condition,
-      ii.quantity_available,
-      aep.category,
-      aep.brand,
-      aep.original_image_url
-     FROM ${TABLE_NAMES.MARKETPLACE_LISTINGS} ml
-     LEFT JOIN ${TABLE_NAMES.INVENTORY_ITEMS} ii ON ml.inventory_item_id = ii.id
-     LEFT JOIN ${TABLE_NAMES.AI_EXTRACTED_PRODUCTS} aep ON ii.ai_product_id = aep.id
-     WHERE ml.created_by = $1
-     ORDER BY ml.created_at DESC
+      l.id,
+      l.title,
+      l.price_chf,
+      l.status,
+      l.view_count,
+      l.favorite_count,
+      l.created_at,
+      l.condition,
+      l.category,
+      (SELECT li.url FROM ${TABLE_NAMES.LISTING_IMAGES} li WHERE li.listing_id = l.id AND li.is_primary = true LIMIT 1) as thumbnail
+     FROM ${TABLE_NAMES.LISTINGS} l
+     WHERE l.seller_id = $1
+     ORDER BY l.created_at DESC
      LIMIT 10`,
     [userId]
   )
 
   return result.rows.map((row) => ({
     id: row.id,
-    inventoryItemId: row.inventory_item_id,
     title: row.title,
-    description: row.description,
     price: parseFloat(String(row.price_chf)),
     status: row.status,
-    viewsCount: row.views_count || 0,
-    favoritesCount: row.favorites_count || 0,
+    viewsCount: row.view_count || 0,
+    favoritesCount: row.favorite_count || 0,
     condition: row.condition || 'good',
-    quantityAvailable: row.quantity_available || 0,
     category: row.category || 'Allgemein',
-    brand: row.brand,
-    image: row.original_image_url || null,
-    publishedAt: row.published_at,
+    image: row.thumbnail || null,
     createdAt: row.created_at,
   }))
 }
@@ -130,11 +108,11 @@ async function fetchListingStats(userId: string) {
   }>(
     `SELECT
       COUNT(*) as total_products,
-      COUNT(*) FILTER (WHERE status = 'published') as active_products,
-      COALESCE(SUM(views_count), 0) as total_views,
-      COALESCE(SUM(favorites_count), 0) as total_favorites
-     FROM ${TABLE_NAMES.MARKETPLACE_LISTINGS}
-     WHERE created_by = $1`,
+      COUNT(*) FILTER (WHERE status = 'active') as active_products,
+      COALESCE(SUM(view_count), 0) as total_views,
+      COALESCE(SUM(favorite_count), 0) as total_favorites
+     FROM ${TABLE_NAMES.LISTINGS}
+     WHERE seller_id = $1 AND status != 'removed'`,
     [userId]
   )
 
@@ -148,7 +126,7 @@ async function fetchListingStats(userId: string) {
 }
 
 /**
- * Fetch order-related stats for a seller's products.
+ * Fetch order-related stats for a seller.
  * Gracefully returns defaults if the orders table doesn't exist yet.
  */
 async function fetchOrderStats(userId: string) {
@@ -159,13 +137,11 @@ async function fetchOrderStats(userId: string) {
       total_revenue: string
     }>(
       `SELECT
-        COUNT(DISTINCT o.id) as total_orders,
-        COUNT(DISTINCT o.id) FILTER (WHERE o.status IN ('pending', 'processing')) as pending_orders,
-        COALESCE(SUM(oi.price_at_purchase * oi.quantity), 0) as total_revenue
-       FROM ${TABLE_NAMES.ORDERS} o
-       JOIN ${TABLE_NAMES.ORDER_ITEMS} oi ON o.id = oi.order_id
-       JOIN ${TABLE_NAMES.MARKETPLACE_LISTINGS} ml ON oi.product_id::uuid = ml.id
-       WHERE ml.created_by = $1`,
+        COUNT(*) as total_orders,
+        COUNT(*) FILTER (WHERE status IN ('pending_payment', 'paid')) as pending_orders,
+        COALESCE(SUM(seller_payout_chf), 0) as total_revenue
+       FROM ${TABLE_NAMES.MARKETPLACE_ORDERS}
+       WHERE seller_id = $1`,
       [userId]
     )
 

@@ -60,6 +60,12 @@ export const rateLimiters = {
   // IT-Hilfe offers: 10 per hour per user
   offerCreate: createRateLimiter(60 * 60 * 1000, 10),
 
+  // Marketplace browse: 200 per 15 minutes per IP (public, generous)
+  listingBrowse: createRateLimiter(15 * 60 * 1000, 200),
+
+  // Contact seller: 10 per hour per user
+  contactSeller: createRateLimiter(60 * 60 * 1000, 10),
+
   // General API: 100 requests per 15 minutes per IP
   apiGeneral: createRateLimiter(15 * 60 * 1000, 100)
 };

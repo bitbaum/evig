@@ -4,19 +4,16 @@ import { apiError, apiSuccess } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES } from '@/config/database'
 import { CountRow } from '@/lib/api/db-types'
+import { validateQuery, AdminListingsQuerySchema } from '@/lib/schemas'
 
 // GET /api/admin/marketplace - List all listings with admin filters
 export const GET = withAdmin('marketplace', async (request) => {
   try {
     const { searchParams } = new URL(request.url)
-    const status = searchParams.get('status') || 'all'
-    const category = searchParams.get('category')
-    const sellerType = searchParams.get('seller_type') || 'all'
-    const verified = searchParams.get('verified') || 'all'
-    const reported = searchParams.get('reported') || 'all'
-    const search = searchParams.get('search')
-    const limit = parseInt(searchParams.get('limit') || '50')
-    const offset = parseInt(searchParams.get('offset') || '0')
+    const validation = validateQuery(AdminListingsQuerySchema, Object.fromEntries(searchParams))
+    if (!validation.success) return validation.error
+
+    const { status, category, seller_type, verified, reported, search, limit, offset } = validation.data
 
     const conditions: string[] = []
     const params: (string | number | boolean)[] = []
@@ -31,9 +28,9 @@ export const GET = withAdmin('marketplace', async (request) => {
       params.push(category)
     }
 
-    if (sellerType === 'revampit') {
+    if (seller_type === 'revampit') {
       conditions.push(`l.is_revampit = true`)
-    } else if (sellerType === 'community') {
+    } else if (seller_type === 'community') {
       conditions.push(`l.is_revampit = false`)
     }
 

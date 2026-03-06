@@ -23,6 +23,7 @@ import {
   PAYMENT_MODES,
   PAYMENT_MODE_LABELS,
   SORT_OPTIONS,
+  MARKETPLACE_LIMITS,
   getSpecFiltersForCategory,
 } from '@/config/marketplace'
 import { ZUSTAND_OPTIONS } from '@/config/erfassung/conditions'
@@ -264,7 +265,7 @@ export default function MarketplacePage() {
                     <input
                       type="number"
                       min="0"
-                      max="50000"
+                      max={MARKETPLACE_LIMITS.MAX_PRICE_CHF}
                       step="1"
                       placeholder="Min"
                       value={filters.priceMin}
@@ -285,7 +286,7 @@ export default function MarketplacePage() {
                     <input
                       type="number"
                       min="0"
-                      max="50000"
+                      max={MARKETPLACE_LIMITS.MAX_PRICE_CHF}
                       step="1"
                       placeholder="Max"
                       value={filters.priceMax}

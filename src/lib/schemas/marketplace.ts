@@ -261,3 +261,9 @@ export const AdminOrdersQuerySchema = z.object({
 }).merge(paginationSchema);
 
 export type AdminOrdersQuery = z.infer<typeof AdminOrdersQuerySchema>;
+
+export const AdminReportsQuerySchema = z.object({
+  status: z.enum(['all', 'pending', 'reviewed'] as const).default('pending'),
+}).merge(paginationSchema);
+
+export type AdminReportsQuery = z.infer<typeof AdminReportsQuerySchema>;

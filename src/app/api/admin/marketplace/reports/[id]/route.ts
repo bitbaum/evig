@@ -7,6 +7,8 @@ import { validateBody } from '@/lib/schemas'
 import { HandleReportSchema } from '@/lib/schemas/marketplace'
 import { removeListing } from '@/lib/search/meilisearch'
 import { logger } from '@/lib/logger'
+import { logAdminAction } from '@/lib/auth/audit'
+import { getClientIdentifier } from '@/lib/security/rate-limit'
 
 // PATCH /api/admin/marketplace/reports/[id] - Handle a report
 export const PATCH = withAdmin<{ id: string }>('marketplace', async (request, session, context) => {
@@ -62,6 +64,18 @@ export const PATCH = withAdmin<{ id: string }>('marketplace', async (request, se
       listingId: report.listing_id,
       action,
       adminEmail: session.user.email,
+    })
+
+    // Audit trail
+    logAdminAction({
+      userId: session.user.id,
+      ipAddress: getClientIdentifier(request),
+      userAgent: request.headers.get('user-agent') || 'unknown',
+    }, 'marketplace_report_handled', {
+      reportId: id,
+      listingId: report.listing_id,
+      action,
+      adminNotes: admin_notes,
     })
 
     return apiSuccess({ handled: true, action })
