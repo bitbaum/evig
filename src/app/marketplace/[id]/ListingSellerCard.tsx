@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
 import {
   MapPin,
   Star,
@@ -24,7 +25,7 @@ export function ListingSellerCard({ listing, sellerName }: ListingSellerCardProp
       <div className="flex items-center gap-3">
         <div className="w-10 h-10 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center">
           {listing.seller_avatar_url ? (
-            <img src={listing.seller_avatar_url} alt="" className="w-10 h-10 rounded-full object-cover" />
+            <Image src={listing.seller_avatar_url} alt="Verkäufer" width={40} height={40} className="w-10 h-10 rounded-full object-cover" />
           ) : (
             <User className="w-5 h-5 text-green-600" aria-hidden="true" />
           )}

@@ -3,6 +3,7 @@
 import { useState, useEffect, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
+import Image from 'next/image'
 import { CheckCircle, Package, ArrowRight, Loader2 } from 'lucide-react'
 import { logger } from '@/lib/logger'
 import { formatCHF } from '@/config/marketplace'
@@ -69,7 +70,7 @@ function CheckoutSuccessContent() {
             <div className="flex gap-3">
               <div className="w-12 h-12 rounded-lg overflow-hidden flex-shrink-0 bg-gray-200 dark:bg-gray-600">
                 {order.thumbnail ? (
-                  <img src={order.thumbnail} alt="" className="w-full h-full object-cover" />
+                  <Image src={order.thumbnail} alt={order.listing_title || 'Artikelbild'} width={48} height={48} className="w-full h-full object-cover" />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center">
                     <Package className="w-5 h-5 text-gray-400" />

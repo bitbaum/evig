@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import {
   ArrowLeft,
   User,
@@ -125,7 +126,7 @@ export default function SellerProfilePage({ params }: { params: Promise<{ id: st
         <div className="flex items-start gap-4">
           <div className="w-16 h-16 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center flex-shrink-0">
             {seller.avatar_url ? (
-              <img src={seller.avatar_url} alt="" className="w-16 h-16 rounded-full object-cover" />
+              <Image src={seller.avatar_url} alt={displayName || 'Verkäufer'} width={64} height={64} className="w-16 h-16 rounded-full object-cover" />
             ) : (
               <User className="w-8 h-8 text-green-600" />
             )}

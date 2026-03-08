@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import Image from 'next/image'
 import {
   ShoppingBag,
   Package,
@@ -170,7 +171,7 @@ export default function DashboardOrdersPage() {
               >
                 <div className="w-14 h-14 rounded-lg overflow-hidden flex-shrink-0 bg-gray-100 dark:bg-gray-700">
                   {order.thumbnail ? (
-                    <img src={order.thumbnail} alt="" className="w-full h-full object-cover" />
+                    <Image src={order.thumbnail} alt={order.listing_title || 'Artikelbild'} width={56} height={56} className="w-full h-full object-cover" />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center">
                       <Package className="w-6 h-6 text-gray-400" />

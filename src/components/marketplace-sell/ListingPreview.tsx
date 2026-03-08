@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import { ArrowLeft, Eye, Loader2, CheckCircle, AlertCircle } from 'lucide-react'
 import { formatCHF, DELIVERY_LABELS, PAYMENT_MODE_LABELS } from '@/config/marketplace'
 import type { DeliveryOption, PaymentMode } from '@/config/marketplace'
@@ -42,7 +43,7 @@ export function ListingPreview({ formData, editId, isSubmitting, success, error,
           {formData.images.length > 0 && (
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
               {formData.images.map((url, idx) => (
-                <img key={idx} src={url} alt="" className="w-full aspect-square object-cover rounded-lg" />
+                <Image key={idx} src={url} alt={`Bild ${idx + 1}`} width={200} height={200} className="w-full aspect-square object-cover rounded-lg" />
               ))}
             </div>
           )}

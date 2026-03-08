@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import Image from 'next/image'
 import {
   ArrowLeft,
   Package,
@@ -254,7 +255,7 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
           >
             <div className="w-16 h-16 rounded-lg overflow-hidden flex-shrink-0 bg-gray-100 dark:bg-gray-700">
               {order.thumbnail ? (
-                <img src={order.thumbnail} alt="" className="w-full h-full object-cover" />
+                <Image src={order.thumbnail} alt={order.listing_title || 'Artikelbild'} width={64} height={64} className="w-full h-full object-cover" />
               ) : (
                 <div className="w-full h-full flex items-center justify-center">
                   <Package className="w-6 h-6 text-gray-400" />
