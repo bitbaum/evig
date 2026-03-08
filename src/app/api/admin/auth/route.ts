@@ -3,13 +3,16 @@ import { verifyAdminPassword, createAdminToken, createAuthCookie, clearAuthCooki
 import { apiSuccess, apiError, apiBadRequest, apiUnauthorized, apiRateLimited } from '@/lib/api/helpers'
 import { logger } from '@/lib/logger'
 import { ROLES } from '@/lib/constants'
+import { validateBody, AdminAuthActionSchema } from '@/lib/schemas'
 
 export const dynamic = 'force-dynamic'
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
-    const { password, action } = body
+    const validation = validateBody(AdminAuthActionSchema, body)
+    if (!validation.success) return validation.error
+    const { password, action } = validation.data
 
     // Handle logout
     if (action === 'logout') {

@@ -5,12 +5,8 @@ import { apiError, apiSuccess, apiUnauthorized, apiBadRequest, apiNotFound, apiF
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
-import {
-  getCategoryIds,
-  getSkillIds,
-  URGENCY_LEVELS,
-  SERVICE_TYPES,
-} from '@/config/it-hilfe'
+import { REQUEST_STATUS } from '@/config/it-hilfe'
+import { validateBody, UpdateITHilfeRequestSchema } from '@/lib/schemas'
 import { type RequestRow, mapRequestDetailRow } from '@/lib/it-hilfe/request-mapper'
 
 interface RouteParams {
@@ -95,14 +91,8 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
     }
 
     const body = await request.json()
-
-    // Status-only updates (completion, cancellation) are allowed on matched requests
-    const isStatusOnlyUpdate = body.status && Object.keys(body).length === 1
-
-    // Only allow editing open or in_discussion requests (unless it's a status transition)
-    if (!['open', 'in_discussion'].includes(existing.status) && !isStatusOnlyUpdate) {
-      return apiBadRequest('Diese Anfrage kann nicht mehr bearbeitet werden')
-    }
+    const validation = validateBody(UpdateITHilfeRequestSchema, body)
+    if (!validation.success) return validation.error
     const {
       categoryId,
       deviceBrand,
@@ -111,7 +101,7 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
       description,
       urgency,
       budgetAmountCents,
-      maxBudgetCents, // Alias for budgetAmountCents (simplified model)
+      maxBudgetCents,
       postalCode,
       city,
       canton,
@@ -119,7 +109,15 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
       skillsNeeded,
       imageUrls,
       status,
-    } = body
+    } = validation.data
+
+    // Status-only updates (completion, cancellation) are allowed on matched requests
+    const isStatusOnlyUpdate = status && Object.keys(body).length === 1
+
+    // Only allow editing open or in_discussion requests (unless it's a status transition)
+    if (existing.status !== REQUEST_STATUS.OPEN && existing.status !== REQUEST_STATUS.IN_DISCUSSION && !isStatusOnlyUpdate) {
+      return apiBadRequest('Diese Anfrage kann nicht mehr bearbeitet werden')
+    }
 
     // Support both old and new field names
     const effectiveBudgetCents = maxBudgetCents ?? budgetAmountCents
@@ -131,9 +129,6 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
 
     // Validate and add each field if provided
     if (categoryId !== undefined) {
-      if (!getCategoryIds().includes(categoryId)) {
-        return apiBadRequest('Ungültige Gerätekategorie')
-      }
       updates.push(`category_id = $${paramIndex}`)
       updateParams.push(categoryId)
       paramIndex++
@@ -164,9 +159,6 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
     }
 
     if (urgency !== undefined) {
-      if (!URGENCY_LEVELS.some(u => u.id === urgency)) {
-        return apiBadRequest('Ungültige Dringlichkeitsstufe')
-      }
       updates.push(`urgency = $${paramIndex}`)
       updateParams.push(urgency)
       paramIndex++
@@ -174,7 +166,7 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
 
     // Simplified budget: just maxBudget amount (null/0 = free, >0 = paid)
     if (effectiveBudgetCents !== undefined) {
-      const amount = effectiveBudgetCents > 0 ? effectiveBudgetCents : null
+      const amount = effectiveBudgetCents && effectiveBudgetCents > 0 ? effectiveBudgetCents : null
       const derivedBudgetType = amount ? 'fixed' : 'free'
 
       updates.push(`budget_amount_cents = $${paramIndex}`)
@@ -187,9 +179,6 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
     }
 
     if (postalCode !== undefined) {
-      if (!/^\d{4}$/.test(postalCode)) {
-        return apiBadRequest('Ungültige Postleitzahl (4 Ziffern erforderlich)')
-      }
       updates.push(`postal_code = $${paramIndex}`)
       updateParams.push(postalCode)
       paramIndex++
@@ -208,20 +197,12 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
     }
 
     if (serviceType !== undefined) {
-      if (!SERVICE_TYPES.some(s => s.id === serviceType)) {
-        return apiBadRequest('Ungültiger Service-Typ')
-      }
       updates.push(`service_type = $${paramIndex}`)
       updateParams.push(serviceType)
       paramIndex++
     }
 
     if (skillsNeeded !== undefined) {
-      const validSkillIds = getSkillIds()
-      const invalidSkills = skillsNeeded.filter((s: string) => !validSkillIds.includes(s))
-      if (invalidSkills.length > 0) {
-        return apiBadRequest(`Ungültige Skills: ${invalidSkills.join(', ')}`)
-      }
       updates.push(`skills_needed = $${paramIndex}`)
       updateParams.push(skillsNeeded.length > 0 ? skillsNeeded : null)
       paramIndex++
@@ -236,9 +217,9 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
     // Status transitions
     if (status !== undefined) {
       const validTransitions: Record<string, string[]> = {
-        open: ['cancelled'],
-        in_discussion: ['cancelled'],
-        matched: ['completed', 'cancelled'],
+        [REQUEST_STATUS.OPEN]: [REQUEST_STATUS.CANCELLED],
+        [REQUEST_STATUS.IN_DISCUSSION]: [REQUEST_STATUS.CANCELLED],
+        [REQUEST_STATUS.MATCHED]: [REQUEST_STATUS.COMPLETED, REQUEST_STATUS.CANCELLED],
       }
       const allowed = validTransitions[existing.status] || []
 
@@ -251,7 +232,7 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
       paramIndex++
 
       // Increment helper's total_helps_completed when completing
-      if (status === 'completed') {
+      if (status === REQUEST_STATUS.COMPLETED) {
         try {
           await query(`
             UPDATE ${TABLE_NAMES.IT_HILFE_TECHNICIAN_PROFILES}

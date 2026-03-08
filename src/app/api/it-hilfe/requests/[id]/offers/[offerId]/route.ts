@@ -5,6 +5,7 @@ import { apiError, apiSuccess, apiUnauthorized, apiBadRequest, apiNotFound, apiF
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
+import { OFFER_STATUS } from '@/config/it-hilfe'
 
 interface OfferRow {
   helper_id: string
@@ -52,14 +53,14 @@ export async function DELETE(request: NextRequest, { params }: RouteParams) {
       return apiForbidden('Sie können nur Ihre eigenen Angebote zurückziehen')
     }
 
-    if (offer.status !== 'pending') {
+    if (offer.status !== OFFER_STATUS.PENDING) {
       return apiBadRequest('Nur ausstehende Angebote können zurückgezogen werden')
     }
 
     // Update offer status to withdrawn
     await query(`
       UPDATE ${TABLE_NAMES.IT_HILFE_OFFERS}
-      SET status = 'withdrawn'
+      SET status = '${OFFER_STATUS.WITHDRAWN}'
       WHERE id = $1
     `, [offerId])
 

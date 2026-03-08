@@ -4,6 +4,7 @@ import { query } from '@/lib/auth/db'
 import { apiError, apiSuccess, apiBadRequest, apiNotFound } from '@/lib/api/helpers'
 import { ERROR_MESSAGES, SUCCESS_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES } from '@/config/database'
+import { APPROVAL_STATUS } from '@/config/approval-status'
 import { sendEmail } from '@/lib/email'
 import { logger } from '@/lib/logger'
 import { SUPPORT_EMAIL } from '@/lib/constants'
@@ -44,11 +45,11 @@ export const PUT = withAdmin<{ id: string }>('services', async (request, session
 
     const application = applicationResult.rows[0] as ApplicationRow
 
-    if (application.status === 'approved') {
+    if (application.status === APPROVAL_STATUS.APPROVED) {
       return apiBadRequest('Eine bereits genehmigte Bewerbung kann nicht abgelehnt werden')
     }
 
-    if (application.status === 'rejected') {
+    if (application.status === APPROVAL_STATUS.REJECTED) {
       return apiBadRequest('Diese Bewerbung wurde bereits abgelehnt')
     }
 
@@ -56,7 +57,7 @@ export const PUT = withAdmin<{ id: string }>('services', async (request, session
     await query(`
       UPDATE ${TABLE_NAMES.REPAIRER_APPLICATIONS}
       SET
-        status = 'rejected',
+        status = '${APPROVAL_STATUS.REJECTED}',
         admin_notes = COALESCE($1, admin_notes) || E'\n\nAblehnungsgrund: ' || $2,
         reviewed_by = $3,
         reviewed_at = CURRENT_TIMESTAMP,

@@ -4,6 +4,8 @@ import { query } from '@/lib/auth/db'
 import { apiError, apiSuccess, apiBadRequest, apiUnauthorized } from '@/lib/api/helpers'
 import { ERROR_MESSAGES, SUCCESS_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES } from '@/config/database'
+import { APPROVAL_STATUS } from '@/config/approval-status'
+import { LOCATION_STATUS } from '@/config/location-status'
 import { sendEmail } from '@/lib/email'
 import { logger } from '@/lib/logger'
 import { APP_URL } from '@/config/urls'
@@ -56,7 +58,7 @@ export async function POST(request: NextRequest) {
     // Check if user already has pending proposals (limit to prevent spam)
     const existingProposals = await query(
       `SELECT COUNT(*) as count FROM ${TABLE_NAMES.WORKSHOP_PROPOSALS}
-       WHERE user_id = $1 AND status IN ('pending', 'approved') AND created_at > NOW() - INTERVAL '30 days'`,
+       WHERE user_id = $1 AND status IN ('${APPROVAL_STATUS.PENDING}', '${APPROVAL_STATUS.APPROVED}') AND created_at > NOW() - INTERVAL '30 days'`,
       [session.user.id]
     )
 
@@ -80,7 +82,7 @@ export async function POST(request: NextRequest) {
       }
 
       const location = locationCheck.rows[0] as LocationRow
-      if (location.approval_status !== 'approved') {
+      if (location.approval_status !== LOCATION_STATUS.APPROVED) {
         return apiBadRequest('Ausgewählter Ort ist nicht zur Buchung freigegeben')
       }
     }
@@ -113,7 +115,7 @@ export async function POST(request: NextRequest) {
         status
       ) VALUES (
         $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15,
-        $16, $17, $18, $19, $20, $21, 'pending'
+        $16, $17, $18, $19, $20, $21, '${APPROVAL_STATUS.PENDING}'
       )
       RETURNING id
     `, [

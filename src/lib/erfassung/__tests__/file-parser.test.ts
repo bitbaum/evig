@@ -133,7 +133,7 @@ HP;EliteBook
   })
 
   it('maps dimension columns', () => {
-    const csv = `Hersteller;Produktname;Laenge;Breite;Hoehe;Gewicht
+    const csv = `Hersteller;Produktname;Länge;Breite;Höhe;Gewicht
 Dell;Laptop;350;250;20;1.5`
 
     const { products } = parseCSV(csv)

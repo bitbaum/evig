@@ -353,7 +353,7 @@ describe('POST /api/it-hilfe/requests/[id]/offers', () => {
 
     expect(res.status).toBe(400)
     const body = await res.json()
-    expect(body.error).toContain('20')
+    expect(JSON.stringify(body)).toContain('20')
   })
 
   it('rejects empty message', async () => {

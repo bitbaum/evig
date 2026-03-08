@@ -4,6 +4,7 @@ import { query, transaction } from '@/lib/auth/db'
 import { apiError, apiSuccess, apiUnauthorized } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES } from '@/config/database'
+import { PAYMENT_STATUS } from '@/config/payment-status'
 import { logger } from '@/lib/logger'
 import {
   SupportedCurrency,
@@ -136,7 +137,7 @@ export const POST = withSecurePayment(async (request: NextRequest) => {
         provider.id,
         paymentIntent.id,
         'payment',
-        'pending',
+        PAYMENT_STATUS.PENDING,
         totalCents,
         currency,
         providerFeeCents,

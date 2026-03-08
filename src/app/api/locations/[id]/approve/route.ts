@@ -4,7 +4,8 @@ import { query } from '@/lib/auth/db'
 import { apiError, apiSuccess, apiBadRequest, apiUnauthorized, apiForbidden, apiNotFound } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES } from '@/config/database'
-
+import { LOCATION_STATUS } from '@/config/location-status'
+import { validateBody, ApproveLocationSchema } from '@/lib/schemas'
 import { logger } from '@/lib/logger'
 import { sendEmail } from '@/lib/email'
 
@@ -33,12 +34,9 @@ export async function POST(
       return apiForbidden('Keine Berechtigung für Genehmigungen')
     }
     const body = await request.json()
-    const { action, review_notes, required_changes } = body
-
-    // Validate action
-    if (!['approve', 'reject', 'suspend', 'reinstate'].includes(action)) {
-      return apiBadRequest('Ungültige Aktion')
-    }
+    const validation = validateBody(ApproveLocationSchema, body)
+    if (!validation.success) return validation.error
+    const { action, review_notes, required_changes } = validation.data
 
     // Check if location exists and get creator info
     const locationCheck = await query(`
@@ -53,24 +51,22 @@ export async function POST(
 
     const location = locationCheck.rows[0] as LocationRow
 
-    // Determine new status based on action
-    let newStatus: string
-    switch (action) {
-      case 'approve':
-        newStatus = 'approved'
-        break
-      case 'reject':
-        newStatus = 'rejected'
-        break
-      case 'suspend':
-        newStatus = 'suspended'
-        break
-      case 'reinstate':
-        newStatus = 'approved'
-        break
-      default:
-        return apiBadRequest('Ungültige Aktion')
+    // Valid status transitions
+    const VALID_TRANSITIONS: Record<string, Record<string, string>> = {
+      [LOCATION_STATUS.PENDING]:   { approve: LOCATION_STATUS.APPROVED, reject: LOCATION_STATUS.REJECTED },
+      [LOCATION_STATUS.APPROVED]:  { suspend: LOCATION_STATUS.SUSPENDED },
+      [LOCATION_STATUS.REJECTED]:  { approve: LOCATION_STATUS.APPROVED },
+      [LOCATION_STATUS.SUSPENDED]: { reinstate: LOCATION_STATUS.APPROVED },
     }
+
+    const transitions = VALID_TRANSITIONS[location.approval_status]
+    if (!transitions || !(action in transitions)) {
+      return apiBadRequest(
+        `Ungültiger Übergang: "${location.approval_status}" kann nicht mit Aktion "${action}" geändert werden`
+      )
+    }
+
+    const newStatus = transitions[action]
 
     // Execute in transaction
     try {

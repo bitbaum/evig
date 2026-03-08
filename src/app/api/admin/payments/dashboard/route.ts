@@ -4,6 +4,8 @@ import { query } from '@/lib/auth/db'
 import { apiError, apiSuccess } from '@/lib/api/helpers'
 import { logger } from '@/lib/logger'
 import { TABLE_NAMES } from '@/config/database'
+import { PAYMENT_STATUS, ESCROW_STATUS } from '@/config/payment-status'
+import { REFUND_STATUS } from '@/config/refund'
 
 interface OverviewRow {
   total_transactions: number
@@ -100,13 +102,13 @@ export const GET = withAdmin('finanzen', async (request: NextRequest) => {
     const overviewResult = await query(`
       SELECT
         COUNT(*) as total_transactions,
-        COUNT(CASE WHEN status = 'succeeded' THEN 1 END) as successful_transactions,
-        COUNT(CASE WHEN status = 'failed' THEN 1 END) as failed_transactions,
-        COALESCE(SUM(CASE WHEN status = 'succeeded' THEN amount_cents END), 0) as total_volume_cents,
-        COALESCE(SUM(CASE WHEN status = 'succeeded' THEN fee_cents END), 0) as total_fees_cents,
-        COALESCE(SUM(CASE WHEN type = 'refund' AND status IN ('succeeded', 'completed') THEN amount_cents END), 0) as total_refunds_cents,
+        COUNT(CASE WHEN status = '${PAYMENT_STATUS.SUCCEEDED}' THEN 1 END) as successful_transactions,
+        COUNT(CASE WHEN status = '${PAYMENT_STATUS.FAILED}' THEN 1 END) as failed_transactions,
+        COALESCE(SUM(CASE WHEN status = '${PAYMENT_STATUS.SUCCEEDED}' THEN amount_cents END), 0) as total_volume_cents,
+        COALESCE(SUM(CASE WHEN status = '${PAYMENT_STATUS.SUCCEEDED}' THEN fee_cents END), 0) as total_fees_cents,
+        COALESCE(SUM(CASE WHEN type = 'refund' AND status IN ('${PAYMENT_STATUS.SUCCEEDED}', '${REFUND_STATUS.COMPLETED}') THEN amount_cents END), 0) as total_refunds_cents,
         ROUND(
-          AVG(CASE WHEN status = 'succeeded' THEN EXTRACT(EPOCH FROM (processed_at - created_at)) END) / 60,
+          AVG(CASE WHEN status = '${PAYMENT_STATUS.SUCCEEDED}' THEN EXTRACT(EPOCH FROM (processed_at - created_at)) END) / 60,
           2
         ) as avg_processing_time_minutes
       FROM ${TABLE_NAMES.PAYMENT_TRANSACTIONS} pt
@@ -120,9 +122,9 @@ export const GET = withAdmin('finanzen', async (request: NextRequest) => {
       SELECT
         currency,
         COUNT(*) as transaction_count,
-        COALESCE(SUM(CASE WHEN status = 'succeeded' THEN amount_cents END), 0) as volume_cents
+        COALESCE(SUM(CASE WHEN status = '${PAYMENT_STATUS.SUCCEEDED}' THEN amount_cents END), 0) as volume_cents
       FROM ${TABLE_NAMES.PAYMENT_TRANSACTIONS} pt
-      WHERE status = 'succeeded' ${dateFilter.replace('pt.', '')}
+      WHERE status = '${PAYMENT_STATUS.SUCCEEDED}' ${dateFilter.replace('pt.', '')}
       GROUP BY currency
       ORDER BY volume_cents DESC
     `, params)
@@ -132,9 +134,9 @@ export const GET = withAdmin('finanzen', async (request: NextRequest) => {
       SELECT
         pp.name as provider_name,
         COUNT(*) as transaction_count,
-        COALESCE(SUM(CASE WHEN pt.status = 'succeeded' THEN pt.amount_cents END), 0) as volume_cents,
+        COALESCE(SUM(CASE WHEN pt.status = '${PAYMENT_STATUS.SUCCEEDED}' THEN pt.amount_cents END), 0) as volume_cents,
         ROUND(
-          AVG(CASE WHEN pt.status = 'succeeded' THEN pt.fee_cents END),
+          AVG(CASE WHEN pt.status = '${PAYMENT_STATUS.SUCCEEDED}' THEN pt.fee_cents END),
           2
         ) as avg_fee_cents
       FROM ${TABLE_NAMES.PAYMENT_TRANSACTIONS} pt
@@ -149,7 +151,7 @@ export const GET = withAdmin('finanzen', async (request: NextRequest) => {
       SELECT
         DATE(created_at) as date,
         COUNT(*) as transaction_count,
-        COALESCE(SUM(CASE WHEN status = 'succeeded' THEN amount_cents END), 0) as volume_cents
+        COALESCE(SUM(CASE WHEN status = '${PAYMENT_STATUS.SUCCEEDED}' THEN amount_cents END), 0) as volume_cents
       FROM ${TABLE_NAMES.PAYMENT_TRANSACTIONS} pt
       WHERE created_at >= CURRENT_DATE - INTERVAL '30 days'
       GROUP BY DATE(created_at)
@@ -180,8 +182,8 @@ export const GET = withAdmin('finanzen', async (request: NextRequest) => {
     const escrowResult = await query(`
       SELECT
         COUNT(*) as total_escrows,
-        COUNT(CASE WHEN status = 'active' THEN 1 END) as active_escrows,
-        COUNT(CASE WHEN status = 'released' THEN 1 END) as released_escrows,
+        COUNT(CASE WHEN status = '${ESCROW_STATUS.ACTIVE}' THEN 1 END) as active_escrows,
+        COUNT(CASE WHEN status = '${ESCROW_STATUS.RELEASED}' THEN 1 END) as released_escrows,
         COALESCE(SUM(total_amount_cents), 0) as total_escrow_amount_cents,
         COALESCE(SUM(released_amount_cents), 0) as total_released_amount_cents
       FROM ${TABLE_NAMES.ESCROW_ACCOUNTS} ea
@@ -192,9 +194,9 @@ export const GET = withAdmin('finanzen', async (request: NextRequest) => {
     const refundResult = await query(`
       SELECT
         COUNT(*) as total_refunds,
-        COUNT(CASE WHEN status = 'completed' THEN 1 END) as completed_refunds,
-        COUNT(CASE WHEN status = 'requested' THEN 1 END) as pending_refunds,
-        COALESCE(SUM(CASE WHEN status IN ('completed', 'processing') THEN amount_cents END), 0) as total_refund_amount_cents
+        COUNT(CASE WHEN status = '${REFUND_STATUS.COMPLETED}' THEN 1 END) as completed_refunds,
+        COUNT(CASE WHEN status = '${REFUND_STATUS.REQUESTED}' THEN 1 END) as pending_refunds,
+        COALESCE(SUM(CASE WHEN status IN ('${REFUND_STATUS.COMPLETED}', '${REFUND_STATUS.PROCESSING}') THEN amount_cents END), 0) as total_refund_amount_cents
       FROM ${TABLE_NAMES.REFUNDS} r
       WHERE created_at >= CURRENT_DATE - INTERVAL '30 days'
     `)

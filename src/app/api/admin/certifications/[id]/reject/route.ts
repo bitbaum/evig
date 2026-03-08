@@ -4,6 +4,7 @@ import { query } from '@/lib/auth/db'
 import { apiError, apiSuccess, apiBadRequest, apiNotFound } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES } from '@/config/database'
+import { CERTIFICATION_STATUS } from '@/config/certification-status'
 import { logger } from '@/lib/logger'
 
 interface CertificationRow {
@@ -42,11 +43,11 @@ export const PUT = withAdmin<{ id: string }>('services', async (request, session
 
     const certification = certificationResult.rows[0] as CertificationRow
 
-    if (certification.verification_status === 'verified') {
+    if (certification.verification_status === CERTIFICATION_STATUS.VERIFIED) {
       return apiBadRequest('Eine bereits verifizierte Zertifizierung kann nicht abgelehnt werden')
     }
 
-    if (certification.verification_status === 'rejected') {
+    if (certification.verification_status === CERTIFICATION_STATUS.REJECTED) {
       return apiBadRequest('Diese Zertifizierung wurde bereits abgelehnt')
     }
 
@@ -54,7 +55,7 @@ export const PUT = withAdmin<{ id: string }>('services', async (request, session
     await query(`
       UPDATE ${TABLE_NAMES.REPAIRER_CERTIFICATIONS}
       SET
-        verification_status = 'rejected',
+        verification_status = '${CERTIFICATION_STATUS.REJECTED}',
         verification_result = jsonb_build_object('rejectionReason', $1, 'rejectedAt', CURRENT_TIMESTAMP),
         admin_notes = COALESCE($2, admin_notes),
         verified_by = $3,

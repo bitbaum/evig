@@ -10,6 +10,7 @@ import {
   getSkillIds,
   URGENCY_LEVELS,
   SERVICE_TYPES,
+  REQUEST_STATUS,
 } from '@/config/it-hilfe'
 import { rateLimiters } from '@/lib/security/rate-limit'
 import { sanitizeInput } from '@/lib/security/sanitize'
@@ -34,7 +35,7 @@ export async function GET(request: NextRequest) {
     const serviceType = searchParams.get('serviceType')
     const skill = searchParams.get('skill')
     const search = searchParams.get('search')
-    const status = searchParams.get('status') || 'open'
+    const status = searchParams.get('status') || REQUEST_STATUS.OPEN
     const limit = Math.min(parseInt(searchParams.get('limit') || '20'), 50)
     const offset = parseInt(searchParams.get('offset') || '0')
 

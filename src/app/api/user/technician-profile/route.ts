@@ -16,7 +16,8 @@ import {
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
-import { getSkillIds, IT_SKILLS } from '@/config/it-hilfe'
+import { IT_SKILLS } from '@/config/it-hilfe'
+import { validateBody, TechnicianProfileSchema } from '@/lib/schemas'
 
 interface TechnicianProfileRow {
   id: string
@@ -114,35 +115,21 @@ export async function PUT(request: NextRequest) {
     }
 
     const body = await request.json()
+    const validation = validateBody(TechnicianProfileSchema, body)
+    if (!validation.success) return validation.error
     const {
-      skills = [],
-      bio = '',
-      hourlyRateCents = null,
-      acceptsGratis = true,
-      acceptsKulturlegi = true,
-      serviceTypes = ['flexible'],
-      postalCode = '',
-      city = '',
-      canton = '',
-      maxTravelKm = 10,
-      isActive = false,
-    } = body
-
-    // Validate skills
-    const validSkillIds = getSkillIds()
-    const invalidSkills = skills.filter((s: string) => !validSkillIds.includes(s))
-    if (invalidSkills.length > 0) {
-      return apiBadRequest(`Ungültige Skills: ${invalidSkills.join(', ')}`)
-    }
-
-    // Validate service types
-    const validServiceTypes = ['remote', 'onsite', 'pickup', 'dropoff', 'flexible']
-    const invalidTypes = serviceTypes.filter(
-      (t: string) => !validServiceTypes.includes(t)
-    )
-    if (invalidTypes.length > 0) {
-      return apiBadRequest(`Ungültige Service-Typen: ${invalidTypes.join(', ')}`)
-    }
+      skills,
+      bio,
+      hourlyRateCents,
+      acceptsGratis,
+      acceptsKulturlegi,
+      serviceTypes,
+      postalCode,
+      city,
+      canton,
+      maxTravelKm,
+      isActive,
+    } = validation.data
 
     // Upsert technician profile
     await query(

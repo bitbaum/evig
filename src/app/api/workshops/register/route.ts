@@ -4,6 +4,7 @@ import { query } from '@/lib/auth/db'
 import { apiError, apiSuccess, apiUnauthorized, apiBadRequest, apiNotFound } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES } from '@/config/database'
+import { WORKSHOP_REGISTRATION_STATUS } from '@/config/workshop-registration-status'
 import { sendEmail } from '@/lib/email'
 import { logger } from '@/lib/logger'
 import { formatDateTimeWithWeekday } from '@/lib/date-formats'
@@ -96,7 +97,7 @@ export async function POST(request: NextRequest) {
     // Create the registration
     const registrationResult = await query(
       `INSERT INTO ${TABLE_NAMES.WORKSHOP_REGISTRATIONS} (user_id, workshop_instance_id, status)
-       VALUES ($1, $2, 'pending')
+       VALUES ($1, $2, '${WORKSHOP_REGISTRATION_STATUS.PENDING}')
        RETURNING id, created_at`,
       [session.user.id, workshopInstanceId]
     )

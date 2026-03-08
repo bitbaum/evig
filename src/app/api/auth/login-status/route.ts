@@ -2,11 +2,19 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getUserByEmail, query } from '@/lib/auth/db'
 import { logger } from '@/lib/logger'
 import { TABLE_NAMES } from '@/config/database'
-import { apiBadRequest, apiError } from '@/lib/api/helpers'
+import { apiBadRequest, apiError, apiRateLimited } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
+import { createRateLimiter, getClientIdentifier } from '@/lib/security/rate-limit'
+
+const loginStatusLimiter = createRateLimiter(60 * 1000, 10) // 10 requests/minute per IP
 
 export async function POST(req: NextRequest) {
   try {
+    const clientId = getClientIdentifier(req)
+    if (!loginStatusLimiter(clientId)) {
+      return apiRateLimited('Zu viele Anfragen. Bitte versuchen Sie es später erneut.')
+    }
+
     const { email } = await req.json()
     if (!email) {
       return apiBadRequest(ERROR_MESSAGES.EMAIL_REQUIRED)

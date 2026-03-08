@@ -4,7 +4,10 @@ import { query } from '@/lib/auth/db'
 import { apiError, apiSuccess, apiBadRequest, apiUnauthorized, apiForbidden, apiNotFound } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES } from '@/config/database'
+import { LOCATION_STATUS } from '@/config/location-status'
+import { BOOKING_STATUS } from '@/config/booking-status'
 import { CountAsCountRow } from '@/lib/api/db-types'
+import { validateBody, UpdateLocationSchema } from '@/lib/schemas'
 
 interface LocationOwnerRow {
   created_by: string
@@ -33,7 +36,7 @@ export async function GET(
         ua.reviewed_at as last_reviewed_at,
         ua.review_notes as last_review_notes,
         COUNT(DISTINCT lb.id) as total_bookings,
-        COUNT(DISTINCT CASE WHEN lb.start_time > CURRENT_TIMESTAMP AND lb.status IN ('pending', 'confirmed') THEN lb.id END) as upcoming_bookings
+        COUNT(DISTINCT CASE WHEN lb.start_time > CURRENT_TIMESTAMP AND lb.status IN ('${BOOKING_STATUS.PENDING}', '${BOOKING_STATUS.CONFIRMED}') THEN lb.id END) as upcoming_bookings
       FROM ${TABLE_NAMES.LOCATIONS} l
       LEFT JOIN ${TABLE_NAMES.USERS} u ON l.created_by = u.id
       LEFT JOIN ${TABLE_NAMES.LOCATION_APPROVALS} ua ON l.id = ua.location_id
@@ -87,6 +90,9 @@ export async function PUT(
 
     const { id: locationId } = await params
     const body = await request.json()
+    const validation = validateBody(UpdateLocationSchema, body)
+    if (!validation.success) return validation.error
+    const validatedBody = validation.data
 
     // Check if user owns this location or is admin
     const ownershipCheck = await query(`
@@ -107,7 +113,7 @@ export async function PUT(
     }
 
     // Prevent editing approved locations unless admin
-    if (location.approval_status === 'approved' && !isAdmin) {
+    if (location.approval_status === LOCATION_STATUS.APPROVED && !isAdmin) {
       return apiForbidden('Genehmigte Orte können nur von Administratoren bearbeitet werden')
     }
 
@@ -122,7 +128,7 @@ export async function PUT(
       'facilities', 'accessibility_info', 'contact_name', 'contact_phone', 'contact_email'
     ]
 
-    for (const [key, value] of Object.entries(body)) {
+    for (const [key, value] of Object.entries(validatedBody)) {
       if (allowedFields.includes(key)) {
         updateFields.push(`${key} = $${paramIndex}`)
         updateValues.push(key === 'accessibility_info' ? JSON.stringify(value) : value)
@@ -189,7 +195,7 @@ export async function DELETE(
     // Check for active bookings
     const activeBookings = await query(`
       SELECT COUNT(*) as count FROM ${TABLE_NAMES.LOCATION_BOOKINGS}
-      WHERE location_id = $1 AND status IN ('pending', 'confirmed') AND start_time > CURRENT_TIMESTAMP
+      WHERE location_id = $1 AND status IN ('${BOOKING_STATUS.PENDING}', '${BOOKING_STATUS.CONFIRMED}') AND start_time > CURRENT_TIMESTAMP
     `, [locationId])
 
     if (parseInt((activeBookings.rows[0] as CountAsCountRow).count) > 0) {

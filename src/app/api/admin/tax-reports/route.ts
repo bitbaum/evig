@@ -4,6 +4,7 @@ import { query } from '@/lib/auth/db'
 import { apiError, apiSuccess } from '@/lib/api/helpers'
 import { generateTaxReport, TAX_CONFIGURATIONS, TaxTransaction } from '@/lib/payments/tax-compliance'
 import { TABLE_NAMES } from '@/config/database'
+import { PAYMENT_STATUS } from '@/config/payment-status'
 import { logger } from '@/lib/logger'
 import { CountAsCountRow } from '@/lib/api/db-types'
 
@@ -55,7 +56,7 @@ export const GET = withAdmin('finanzen', async (request: NextRequest) => {
       LEFT JOIN ${TABLE_NAMES.USER_PROFILES} up ON u.id = up.user_id
       WHERE pt.created_at >= $1
         AND pt.created_at <= $2
-        AND pt.status = 'succeeded'
+        AND pt.status = '${PAYMENT_STATUS.SUCCEEDED}'
         AND pt.type = 'payment'
       ORDER BY pt.created_at DESC
     `, [startDate, endDate])

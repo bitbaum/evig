@@ -12,6 +12,7 @@ import { apiSuccess, apiError, apiNotFound } from '@/lib/api/helpers'
 import { query } from '@/lib/auth/db'
 import { logger } from '@/lib/logger'
 import { TABLE_NAMES } from '@/config/database'
+import { INTAKE_STATUS } from '@/config/intake-status'
 import { publishProduct, unpublishProduct, updateProductImage } from '@/lib/admin/inventory-actions'
 
 export const GET = withAdmin<{ id: string }>('products', async (request, session, context) => {
@@ -222,7 +223,7 @@ export const PATCH = withAdmin<{ id: string }>('products', async (request, sessi
         [body.marketplace_status, productId]
       )
 
-      if (body.marketplace_status === 'published') {
+      if (body.marketplace_status === INTAKE_STATUS.PUBLISHED) {
         await publishProduct(productId, session.user.id)
       } else {
         await unpublishProduct(productId, session.user.id)

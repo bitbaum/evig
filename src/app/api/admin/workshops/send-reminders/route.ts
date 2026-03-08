@@ -5,6 +5,7 @@ import { apiError, apiSuccess } from '@/lib/api/helpers'
 import { validateBody, AdminSendRemindersSchema } from '@/lib/schemas'
 import { logger } from '@/lib/logger'
 import { TABLE_NAMES } from '@/config/database'
+import { WORKSHOP_REGISTRATION_STATUS } from '@/config/workshop-registration-status'
 import { sendEmail } from '@/lib/email'
 import { formatDateWithWeekday } from '@/lib/date-formats'
 
@@ -46,7 +47,7 @@ export const POST = withAdmin('workshops-admin', async (request, session) => {
       JOIN ${TABLE_NAMES.WORKSHOP_INSTANCES} wi ON wr.workshop_instance_id = wi.id
       JOIN ${TABLE_NAMES.WORKSHOPS} w ON wi.workshop_id = w.id
       JOIN ${TABLE_NAMES.USERS} u ON wr.user_id = u.id
-      WHERE wr.status = 'confirmed'
+      WHERE wr.status = '${WORKSHOP_REGISTRATION_STATUS.CONFIRMED}'
         AND wi.status = 'scheduled'
         AND wi.start_date >= NOW()
         AND wi.start_date <= NOW() + make_interval(days => $1)

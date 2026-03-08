@@ -10,6 +10,7 @@ import { withAdmin } from '@/lib/api/middleware'
 import { query } from '@/lib/auth/db'
 import { isSuperAdmin } from '@/lib/permissions'
 import { TABLE_NAMES } from '@/config/database'
+import { PERMISSION_REQUEST_STATUS } from '@/config/permission-request-status'
 import { apiSuccess, apiError, apiForbidden, apiBadRequest, apiNotFound } from '@/lib/api/helpers'
 
 export const POST = withAdmin<{ id: string }>(async (request, session, context) => {
@@ -46,7 +47,7 @@ export const POST = withAdmin<{ id: string }>(async (request, session, context) 
 
     const permRequest = requestResult.rows[0]
 
-    if (permRequest.status !== 'pending') {
+    if (permRequest.status !== PERMISSION_REQUEST_STATUS.PENDING) {
       return apiBadRequest('Diese Anfrage wurde bereits bearbeitet')
     }
 

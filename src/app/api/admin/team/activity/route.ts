@@ -21,6 +21,7 @@ import {
   apiError,
   apiBadRequest,
 } from '@/lib/api/helpers'
+import { HELP_REQUEST_STATUSES } from '@/config/activity'
 import { validateActivityStreamFilter } from '@/lib/schemas/activity'
 
 interface UnifiedActivity {
@@ -192,8 +193,8 @@ export const GET = withAdmin('team', async (request, session) => {
             'request_id', hr.id,
             'urgency', hr.urgency,
             'is_broadcast', hr.is_broadcast,
-            'status', 'resolved',
-            'action', 'resolved',
+            'status', '${HELP_REQUEST_STATUSES.RESOLVED}',
+            'action', '${HELP_REQUEST_STATUSES.RESOLVED}',
             'requester_id', hr.requester_id
           ) as metadata,
           hr.resolved_at as occurred_at

@@ -4,6 +4,7 @@ import { query } from '@/lib/auth/db'
 import { apiError, apiSuccess, apiBadRequest, apiNotFound } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES } from '@/config/database'
+import { CERTIFICATION_STATUS } from '@/config/certification-status'
 import { logger } from '@/lib/logger'
 
 interface CertificationRow {
@@ -42,7 +43,7 @@ export const PUT = withAdmin<{ id: string }>('services', async (request, session
 
     const certification = certificationResult.rows[0] as CertificationRow
 
-    if (certification.verification_status === 'verified') {
+    if (certification.verification_status === CERTIFICATION_STATUS.VERIFIED) {
       return apiBadRequest('Diese Zertifizierung wurde bereits verifiziert')
     }
 
@@ -58,7 +59,7 @@ export const PUT = withAdmin<{ id: string }>('services', async (request, session
     await query(`
       UPDATE ${TABLE_NAMES.REPAIRER_CERTIFICATIONS}
       SET
-        verification_status = 'verified',
+        verification_status = '${CERTIFICATION_STATUS.VERIFIED}',
         verification_result = COALESCE($1, verification_result),
         admin_notes = COALESCE($2, admin_notes),
         verified_by = $3,

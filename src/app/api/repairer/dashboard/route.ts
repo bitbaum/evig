@@ -10,6 +10,8 @@ import { query } from '@/lib/auth/db'
 import { TABLE_NAMES } from '@/config/database'
 import { apiError, apiSuccess, apiUnauthorized } from '@/lib/api/helpers'
 import { logger } from '@/lib/logger'
+import { APPOINTMENT_STATUS } from '@/config/appointment-status'
+import { REVIEW_STATUS } from '@/config/review-status'
 import { auth } from '@/auth'
 import { ROLES } from '@/lib/constants'
 
@@ -109,9 +111,9 @@ export async function GET(request: NextRequest) {
     const statsResult = await query<StatsRow>(
       `SELECT
         COUNT(*) as total_bookings,
-        COUNT(*) FILTER (WHERE status = 'completed') as completed_bookings,
-        COUNT(*) FILTER (WHERE status IN ('requested', 'in_progress')) as pending_bookings,
-        COUNT(*) FILTER (WHERE status = 'confirmed') as confirmed_bookings,
+        COUNT(*) FILTER (WHERE status = '${APPOINTMENT_STATUS.COMPLETED}') as completed_bookings,
+        COUNT(*) FILTER (WHERE status IN ('${APPOINTMENT_STATUS.REQUESTED}', 'in_progress')) as pending_bookings,
+        COUNT(*) FILTER (WHERE status = '${APPOINTMENT_STATUS.CONFIRMED}') as confirmed_bookings,
         COALESCE(SUM(price_charged_cents), 0) as total_revenue
        FROM ${TABLE_NAMES.SERVICE_APPOINTMENTS}
        WHERE repairer_id = $1`,
@@ -127,7 +129,7 @@ export async function GET(request: NextRequest) {
             COALESCE(AVG(rating), 0) as average_rating,
             COUNT(*) as review_count
            FROM ${TABLE_NAMES.REPAIRER_REVIEWS}
-           WHERE repairer_id = $1 AND status = 'published'`,
+           WHERE repairer_id = $1 AND status = '${REVIEW_STATUS.PUBLISHED}'`,
           [repairerId]
         )
         if (ratingResult.rows[0]) {

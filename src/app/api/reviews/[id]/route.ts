@@ -4,7 +4,9 @@ import { query } from '@/lib/auth/db'
 import { apiError, apiSuccess, apiUnauthorized, apiBadRequest, apiNotFound, apiForbidden } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES, REVIEW_TARGET_TYPES } from '@/config/database'
+import { REVIEW_STATUS } from '@/config/review-status'
 import { logger } from '@/lib/logger'
+import { validateBody, UpdateReviewSchema } from '@/lib/schemas'
 
 interface ReviewRow {
   id: string
@@ -77,7 +79,7 @@ export async function GET(
       FROM ${TABLE_NAMES.REVIEWS} r
       JOIN ${TABLE_NAMES.USERS} u ON r.reviewer_id = u.id
       LEFT JOIN ${TABLE_NAMES.REPAIRER_PROFILES} rp ON r.target_type = '${REVIEW_TARGET_TYPES.REPAIRER}' AND r.target_id = rp.id
-      LEFT JOIN ${TABLE_NAMES.REVIEW_RESPONSES} rr ON r.id = rr.review_id AND rr.status = 'published'
+      LEFT JOIN ${TABLE_NAMES.REVIEW_RESPONSES} rr ON r.id = rr.review_id AND rr.status = '${REVIEW_STATUS.PUBLISHED}'
       LEFT JOIN ${TABLE_NAMES.USERS} ru ON rr.responder_id = ru.id
       WHERE r.id = $1
     `, [reviewId])
@@ -159,6 +161,8 @@ export async function PUT(
     }
 
     const body = await request.json()
+    const validation = validateBody(UpdateReviewSchema, body)
+    if (!validation.success) return validation.error
     const {
       overallRating,
       communicationRating,
@@ -168,7 +172,7 @@ export async function PUT(
       valueRating,
       title,
       content
-    } = body
+    } = validation.data
 
     // Get review and check ownership
     const reviewResult = await query(
@@ -194,18 +198,6 @@ export async function PUT(
 
     if (daysSinceCreation > 30) {
       return apiBadRequest('Bewertungen können nur innerhalb von 30 Tagen bearbeitet werden')
-    }
-
-    // Validate ratings
-    if (overallRating && (overallRating < 1 || overallRating > 5)) {
-      return apiBadRequest('Gesamtbewertung muss zwischen 1 und 5 liegen')
-    }
-
-    const ratingFields = [communicationRating, professionalismRating, qualityRating, timelinessRating, valueRating]
-    for (const rating of ratingFields) {
-      if (rating !== undefined && rating !== null && (rating < 1 || rating > 5)) {
-        return apiBadRequest('Einzelbewertungen müssen zwischen 1 und 5 liegen')
-      }
     }
 
     // Update review
@@ -284,7 +276,7 @@ export async function DELETE(
     // Soft delete by setting status to 'deleted'
     await query(`
       UPDATE ${TABLE_NAMES.REVIEWS} SET
-        status = 'deleted',
+        status = '${REVIEW_STATUS.DELETED}',
         updated_at = CURRENT_TIMESTAMP
       WHERE id = $1
     `, [reviewId])
@@ -294,7 +286,7 @@ export async function DELETE(
       await query(`
         INSERT INTO ${TABLE_NAMES.REVIEW_MODERATION_LOG} (
           review_id, action, reason, admin_id, old_status, new_status
-        ) VALUES ($1, 'delete', 'User requested deletion', $2, 'published', 'deleted')
+        ) VALUES ($1, 'delete', 'User requested deletion', $2, '${REVIEW_STATUS.PUBLISHED}', '${REVIEW_STATUS.DELETED}')
       `, [reviewId, session.user.id])
     }
 

@@ -1,3 +1,4 @@
+import { PROTOCOL_STATUSES } from '@/config/protocols'
 import type { ProtocolStatus } from '@/config/protocols'
 
 export const PROTOCOL_WORKFLOW_STEPS = [
@@ -19,11 +20,11 @@ interface WorkflowContext {
 export function getProtocolWorkflowStep(input: ProtocolStatus | WorkflowContext): ProtocolWorkflowStepId {
   const context: WorkflowContext = typeof input === 'string' ? { status: input } : input
 
-  if (context.status === 'draft') return 'input'
-  if (context.status === 'processing') return 'ai'
-  if (context.status === 'finalized') return 'done'
+  if (context.status === PROTOCOL_STATUSES.DRAFT) return 'input'
+  if (context.status === PROTOCOL_STATUSES.PROCESSING) return 'ai'
+  if (context.status === PROTOCOL_STATUSES.FINALIZED) return 'done'
 
-  if (context.status === 'review') {
+  if (context.status === PROTOCOL_STATUSES.REVIEW) {
     if ((context.unlinkedTaskCount || 0) > 0) return 'tasks'
     return 'review'
   }
@@ -41,7 +42,7 @@ export function getProtocolWorkflowProgress({
   ctaLabel: string | null
   ctaHint: string | null
 } {
-  if (status === 'draft') {
+  if (status === PROTOCOL_STATUSES.DRAFT) {
     return {
       currentStepId: 'input',
       nextStepId: 'ai',
@@ -50,7 +51,7 @@ export function getProtocolWorkflowProgress({
     }
   }
 
-  if (status === 'processing') {
+  if (status === PROTOCOL_STATUSES.PROCESSING) {
     return {
       currentStepId: 'ai',
       nextStepId: 'review',
@@ -59,7 +60,7 @@ export function getProtocolWorkflowProgress({
     }
   }
 
-  if (status === 'review') {
+  if (status === PROTOCOL_STATUSES.REVIEW) {
     if (!hasStructuredNotes) {
       return {
         currentStepId: 'review',

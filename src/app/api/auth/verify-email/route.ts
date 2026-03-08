@@ -4,14 +4,14 @@ import { sendEmail } from '@/lib/email'
 import { apiError, apiSuccess, apiBadRequest } from '@/lib/api/helpers'
 import { logger } from '@/lib/logger'
 import { ERROR_MESSAGES } from '@/config/error-messages'
+import { validateBody, VerifyEmailTokenSchema } from '@/lib/schemas'
 
 export async function POST(request: NextRequest) {
   try {
-    const { token } = await request.json()
-
-    if (!token) {
-      return apiBadRequest('Token ist erforderlich')
-    }
+    const body = await request.json()
+    const validation = validateBody(VerifyEmailTokenSchema, body)
+    if (!validation.success) return validation.error
+    const { token } = validation.data
 
     const result = await verifyEmailWithToken(token)
 

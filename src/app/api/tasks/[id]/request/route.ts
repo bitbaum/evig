@@ -15,7 +15,7 @@ import { apiSuccess, apiError, apiNotFound, apiBadRequest } from '@/lib/api/help
 import { getDbUserId, getActiveTask, createInAppNotifications } from '@/lib/api/task-helpers';
 import { query, transaction } from '@/lib/auth/db';
 import { TABLE_NAMES } from '@/config/database';
-import { TASK_STATUSES } from '@/config/tasks';
+import { TASK_STATUSES, REQUEST_STATUSES } from '@/config/tasks';
 import { taskRequestSchema } from '@/lib/schemas/tasks';
 import { logger } from '@/lib/logger';
 
@@ -77,7 +77,7 @@ export const POST = withAdmin<RouteParams>(async (
           requested_user_id,
           message,
           status
-        ) VALUES ($1, $2, $3, $4, 'pending')
+        ) VALUES ($1, $2, $3, $4, '${REQUEST_STATUSES.PENDING}')
         RETURNING *`,
         [
           taskId,

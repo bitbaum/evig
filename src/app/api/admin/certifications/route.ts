@@ -4,6 +4,7 @@ import { query } from '@/lib/auth/db'
 import { apiError, apiSuccess, apiBadRequest, apiNotFound } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES } from '@/config/database'
+import { CERTIFICATION_STATUS } from '@/config/certification-status'
 import { logger } from '@/lib/logger'
 
 interface CertificationRow {
@@ -40,14 +41,19 @@ export const GET = withAdmin('services', async (request, session) => {
   try {
     const { searchParams } = new URL(request.url)
     const applicationId = searchParams.get('applicationId')
-    const status = searchParams.get('status') || 'pending'
+    const status = searchParams.get('status') || CERTIFICATION_STATUS.PENDING
 
     if (!applicationId) {
       return apiBadRequest('applicationId Parameter ist erforderlich')
     }
 
     // Validate status parameter
-    const validStatuses = ['pending', 'verified', 'rejected', 'expired']
+    const validStatuses: string[] = [
+      CERTIFICATION_STATUS.PENDING,
+      CERTIFICATION_STATUS.VERIFIED,
+      CERTIFICATION_STATUS.REJECTED,
+      CERTIFICATION_STATUS.EXPIRED,
+    ]
     if (!validStatuses.includes(status)) {
       return apiBadRequest('Ungültiger Status-Filter')
     }

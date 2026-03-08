@@ -5,6 +5,7 @@ import { getJwtSecret } from '@/lib/admin-auth'
 import { apiSuccess, apiError, apiBadRequest } from '@/lib/api/helpers'
 import { logger } from '@/lib/logger'
 import { CMS_CONFIG } from '@/config/cms'
+import { validateBody, LoginSchema } from '@/lib/schemas'
 
 export const dynamic = 'force-dynamic'
 
@@ -12,11 +13,10 @@ const REBOOT_CONTENT_URL = CMS_CONFIG.URL
 
 export async function POST(request: NextRequest) {
   try {
-    const { email, password } = await request.json()
-
-    if (!email || !password) {
-      return apiBadRequest('Email and password are required')
-    }
+    const body = await request.json()
+    const validation = validateBody(LoginSchema, body)
+    if (!validation.success) return validation.error
+    const { email, password } = validation.data
 
     // Forward login request to Reboot Content API
     const response = await fetch(`${REBOOT_CONTENT_URL}/api/auth/login`, {

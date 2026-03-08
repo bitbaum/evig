@@ -4,6 +4,7 @@ import { query } from '@/lib/auth/db'
 import { apiError, apiSuccess, apiUnauthorized } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES } from '@/config/database'
+import { REVIEW_STATUS } from '@/config/review-status'
 import { logger } from '@/lib/logger'
 import { CountRow } from '@/lib/api/db-types'
 
@@ -65,7 +66,7 @@ export async function GET(request: NextRequest) {
       FROM ${TABLE_NAMES.REVIEWS} r
       LEFT JOIN ${TABLE_NAMES.REPAIRER_PROFILES} rp ON r.target_type = 'repairer' AND r.target_id = rp.id
       LEFT JOIN ${TABLE_NAMES.WORKSHOPS} ws ON r.target_type = 'workshop' AND r.target_id = ws.id
-      LEFT JOIN ${TABLE_NAMES.REVIEW_RESPONSES} rr ON r.id = rr.review_id AND rr.status = 'published'
+      LEFT JOIN ${TABLE_NAMES.REVIEW_RESPONSES} rr ON r.id = rr.review_id AND rr.status = '${REVIEW_STATUS.PUBLISHED}'
       LEFT JOIN ${TABLE_NAMES.USERS} ru ON rr.responder_id = ru.id
       WHERE ${whereClause}
       ORDER BY r.created_at DESC

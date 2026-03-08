@@ -100,3 +100,14 @@ export const AppointmentActionSchema = z.discriminatedUnion('action', [
 ])
 
 export type AppointmentActionInput = z.infer<typeof AppointmentActionSchema>
+
+// --- Pay for appointment ---
+
+export const PayAppointmentSchema = z.object({
+  useEscrow: z.boolean().default(true),
+  autoReleaseDays: z.number().int().min(1).max(90).default(7),
+  paymentType: z.enum(['full', 'deposit', 'remaining']).default('full'),
+  customAmount: z.union([z.string(), z.number()]).optional().nullable(),
+})
+
+export type PayAppointmentInput = z.infer<typeof PayAppointmentSchema>

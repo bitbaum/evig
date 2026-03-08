@@ -3,6 +3,7 @@ import { query } from '@/lib/auth/db'
 import { apiError, apiSuccess, apiNotFound } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES, REVIEW_TARGET_TYPES } from '@/config/database'
+import { REVIEW_STATUS } from '@/config/review-status'
 import { logger } from '@/lib/logger'
 
 interface ProfileRow {
@@ -78,10 +79,10 @@ export async function GET(
         rr.created_at as response_created_at
       FROM ${TABLE_NAMES.REVIEWS} r
       JOIN ${TABLE_NAMES.USERS} u ON r.reviewer_id = u.id
-      LEFT JOIN ${TABLE_NAMES.REVIEW_RESPONSES} rr ON r.id = rr.review_id AND rr.status = 'published'
+      LEFT JOIN ${TABLE_NAMES.REVIEW_RESPONSES} rr ON r.id = rr.review_id AND rr.status = '${REVIEW_STATUS.PUBLISHED}'
       WHERE r.target_type = '${REVIEW_TARGET_TYPES.REPAIRER}'
         AND r.target_id = $1
-        AND r.status = 'published'
+        AND r.status = '${REVIEW_STATUS.PUBLISHED}'
       ORDER BY r.created_at DESC
       LIMIT 10
     `, [repairerId])
@@ -94,7 +95,7 @@ export async function GET(
       FROM ${TABLE_NAMES.REVIEWS}
       WHERE target_type = '${REVIEW_TARGET_TYPES.REPAIRER}'
         AND target_id = $1
-        AND status = 'published'
+        AND status = '${REVIEW_STATUS.PUBLISHED}'
       GROUP BY overall_rating
       ORDER BY overall_rating DESC
     `, [repairerId])

@@ -8,6 +8,7 @@ import { logger } from '@/lib/logger'
 import { validateBody, validateQuery, CreateAppointmentSchema, GetAppointmentsQuerySchema } from '@/lib/schemas'
 import { sendCustomEmail, appointmentUnassignedAlert } from '@/lib/email'
 import { REVAMPIT_NOTIFICATION_EMAIL } from '@/config/it-hilfe'
+import { BOOKING_STATUS } from '@/config/booking-status'
 
 interface AppointmentRow {
   id: string
@@ -169,7 +170,7 @@ export const POST = withAuth(async (
     const values = [
       session.user.id,
       description,
-      'requested',
+      BOOKING_STATUS.REQUESTED,
       urgency || 'normal',
       is_home_visit || false,
       'NOW()',

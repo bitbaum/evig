@@ -9,6 +9,7 @@ import {
 } from '@/lib/api/helpers';
 import { ERROR_MESSAGES } from '@/config/error-messages';
 import { TABLE_NAMES } from '@/config/database';
+import { APPROVAL_STATUS } from '@/config/approval-status';
 import { logger } from '@/lib/logger';
 import { createEditSnapshot, appendEditHistory } from '@/lib/admin/edit-utils';
 import { WorkshopProposal } from '@/components/workshops/types';
@@ -99,7 +100,7 @@ export const PATCH = withAdmin<{ id: string }>('workshops-admin', async (request
     const currentProposal = currentResult.rows[0] as WorkshopProposal;
 
     // Only allow editing pending proposals
-    if (currentProposal.status !== 'pending') {
+    if (currentProposal.status !== APPROVAL_STATUS.PENDING) {
       return apiBadRequest(
         `Vorschlag kann nicht bearbeitet werden (Status: ${currentProposal.status})`
       );

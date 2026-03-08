@@ -14,6 +14,7 @@ import { isSuperAdmin } from '@/lib/permissions'
 import { processNotesSchema } from '@/lib/schemas/protocols'
 import { getProtocolById, processNotes } from '@/lib/services/protocols'
 import { ERROR_MESSAGES } from '@/config/error-messages'
+import { PROTOCOL_STATUSES } from '@/config/protocols'
 import { logger } from '@/lib/logger'
 
 type RouteParams = { id: string }
@@ -52,7 +53,7 @@ export const POST = withAdmin<RouteParams>(async (
       return apiNotFound('Protokoll')
     }
 
-    if (protocol.status !== 'draft' && protocol.status !== 'review') {
+    if (protocol.status !== PROTOCOL_STATUSES.DRAFT && protocol.status !== PROTOCOL_STATUSES.REVIEW) {
       return apiBadRequest(ERROR_MESSAGES.PROTOCOL_NOT_EDITABLE)
     }
 

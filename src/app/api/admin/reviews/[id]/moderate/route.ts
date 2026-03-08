@@ -4,6 +4,7 @@ import { query } from '@/lib/auth/db'
 import { apiError, apiSuccess, apiBadRequest, apiNotFound } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES } from '@/config/database'
+import { REVIEW_STATUS } from '@/config/review-status'
 import { logger } from '@/lib/logger'
 
 interface ReviewStatusRow {
@@ -41,20 +42,20 @@ export const PUT = withAdmin<{ id: string }>('reviews', async (request, session,
     // Determine new status based on action
     switch (action) {
       case 'approve':
-        newStatus = 'published'
+        newStatus = REVIEW_STATUS.PUBLISHED
         break
       case 'hide':
-        newStatus = 'hidden'
+        newStatus = REVIEW_STATUS.HIDDEN
         break
       case 'delete':
-        newStatus = 'deleted'
+        newStatus = REVIEW_STATUS.DELETED
         break
       case 'restore':
-        newStatus = 'published'
+        newStatus = REVIEW_STATUS.PUBLISHED
         break
       case 'flag_spam':
       case 'flag_inappropriate':
-        newStatus = 'hidden'
+        newStatus = REVIEW_STATUS.HIDDEN
         break
     }
 

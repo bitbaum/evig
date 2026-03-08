@@ -72,12 +72,69 @@ export const itHilfeRequestSchema = z.object({
 });
 
 // ============================================================================
-// Admin Schemas
+// Offer Schemas
+// ============================================================================
+
+export const CreateOfferSchema = z.object({
+  message: z
+    .string()
+    .min(20, 'Nachricht muss mindestens 20 Zeichen lang sein')
+    .max(2000, 'Nachricht darf maximal 2000 Zeichen lang sein'),
+  estimatedTime: z.string().max(200).optional().nullable(),
+  proposedCompensation: z.string().max(200).optional().nullable(),
+  relevantSkills: z
+    .array(z.enum(getSkillIds() as [string, ...string[]]))
+    .default([]),
+});
+
+export type CreateOfferInput = z.infer<typeof CreateOfferSchema>;
+
+// ============================================================================
+// Shared constants for schemas below
 // ============================================================================
 
 const requestStatusIds = REQUEST_STATUSES.map(s => s.id) as [string, ...string[]];
 const urgencyIds = URGENCY_LEVELS.map(u => u.id) as [string, ...string[]];
 const categoryIds = getCategoryIds() as [string, ...string[]];
+const skillIds = getSkillIds() as [string, ...string[]];
+const serviceTypeIds = SERVICE_TYPES.map((s) => s.id) as [string, ...string[]];
+
+// ============================================================================
+// User Update Schema
+// ============================================================================
+
+export const UpdateITHilfeRequestSchema = z.object({
+  categoryId: z.enum(categoryIds, {
+    message: 'Ungültige Gerätekategorie',
+  }).optional(),
+  deviceBrand: z.string().max(200).optional().nullable(),
+  deviceModel: z.string().max(200).optional().nullable(),
+  title: z.string().min(10).max(200).optional(),
+  description: z.string().max(5000).optional(),
+  urgency: z.enum(urgencyIds, {
+    message: 'Ungültige Dringlichkeitsstufe',
+  }).optional(),
+  budgetAmountCents: z.number().int().min(0).max(100000).nullable().optional(),
+  maxBudgetCents: z.number().int().min(0).max(100000).nullable().optional(),
+  postalCode: z.string().regex(/^\d{4}$/, 'Ungültige Postleitzahl (4 Ziffern erforderlich)').optional(),
+  city: z.string().max(100).optional(),
+  canton: z.string().max(2).optional(),
+  serviceType: z.enum(serviceTypeIds, {
+    message: 'Ungültiger Service-Typ',
+  }).optional(),
+  skillsNeeded: z
+    .array(z.enum(skillIds))
+    .max(10)
+    .optional(),
+  imageUrls: z.array(z.string().url()).max(10).optional(),
+  status: z.enum(requestStatusIds).optional(),
+});
+
+export type UpdateITHilfeRequestInput = z.infer<typeof UpdateITHilfeRequestSchema>;
+
+// ============================================================================
+// Admin Schemas
+// ============================================================================
 
 export const AdminITHilfeQuerySchema = z.object({
   status: z.enum(['all', ...requestStatusIds] as [string, ...string[]]).default('all'),

@@ -4,6 +4,7 @@ import { query, transaction } from '@/lib/auth/db'
 import { apiError, apiSuccess, apiBadRequest, apiNotFound } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES } from '@/config/database'
+import { DOCUMENT_STATUS, type DocumentStatus } from '@/config/document-status'
 import { logger } from '@/lib/logger'
 
 interface DocumentRow {
@@ -48,7 +49,7 @@ export const PUT = withAdmin<{ id: string }>('content', async (request, session,
 
     const document = documentResult.rows[0] as DocumentRow
 
-    if (document.status === 'approved') {
+    if (document.status === DOCUMENT_STATUS.APPROVED) {
       return apiBadRequest('Dieses Dokument wurde bereits genehmigt')
     }
 
@@ -58,7 +59,7 @@ export const PUT = withAdmin<{ id: string }>('content', async (request, session,
       await client.query(`
         UPDATE ${TABLE_NAMES.VERIFICATION_DOCUMENTS}
         SET
-          status = 'approved',
+          status = '${DOCUMENT_STATUS.APPROVED}',
           admin_notes = COALESCE($1, admin_notes),
           reviewed_by = $2,
           reviewed_at = CURRENT_TIMESTAMP,
@@ -70,7 +71,7 @@ export const PUT = withAdmin<{ id: string }>('content', async (request, session,
       // Check if all required documents for this application are now approved
       const requiredDocsResult = await client.query(`
         SELECT COUNT(*) as total_required,
-               COUNT(CASE WHEN vd.status = 'approved' THEN 1 END) as approved_required
+               COUNT(CASE WHEN vd.status = '${DOCUMENT_STATUS.APPROVED}' THEN 1 END) as approved_required
         FROM ${TABLE_NAMES.DOCUMENT_TYPES} dt
         LEFT JOIN ${TABLE_NAMES.VERIFICATION_DOCUMENTS} vd ON dt.id = vd.document_type_id
           AND vd.application_id = $1
@@ -82,11 +83,11 @@ export const PUT = withAdmin<{ id: string }>('content', async (request, session,
       const approvedRequired = parseInt(requiredDocs.approved_required) || 0
 
       // Determine new application document verification status
-      let status = 'pending'
+      let status: DocumentStatus = DOCUMENT_STATUS.PENDING
       if (approvedRequired === totalRequired && totalRequired > 0) {
-        status = 'approved'
+        status = DOCUMENT_STATUS.APPROVED
       } else if (approvedRequired > 0 && approvedRequired < totalRequired) {
-        status = 'in_review'
+        status = DOCUMENT_STATUS.IN_REVIEW
       }
 
       // Update application document verification status

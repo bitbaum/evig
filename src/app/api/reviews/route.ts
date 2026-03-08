@@ -4,6 +4,7 @@ import { query, paginatedQuery } from '@/lib/auth/db'
 import { apiError, apiSuccess, apiUnauthorized, apiBadRequest, apiNotFound, apiForbidden } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES, REVIEW_TARGET_TYPES } from '@/config/database'
+import { REVIEW_STATUS } from '@/config/review-status'
 import { logger } from '@/lib/logger'
 import { validateBody, validateQuery, CreateReviewSchema, GetReviewsQuerySchema } from '@/lib/schemas'
 import {
@@ -73,7 +74,7 @@ export async function GET(request: NextRequest) {
     const voterId = session?.user?.id ?? null
 
     // Non-published reviews require admin
-    if (status !== 'published') {
+    if (status !== REVIEW_STATUS.PUBLISHED) {
       if (!session?.user?.id) return apiUnauthorized(ERROR_MESSAGES.UNAUTHORIZED)
       if (!session.user.isStaff) return apiForbidden('Nur Administratoren haben Zugriff')
     }
@@ -112,7 +113,7 @@ export async function GET(request: NextRequest) {
       JOIN ${TABLE_NAMES.USERS} u ON r.reviewer_id = u.id
       LEFT JOIN ${TABLE_NAMES.REPAIRER_PROFILES} rp ON r.target_type = $7 AND r.target_id = rp.id
       LEFT JOIN ${TABLE_NAMES.LISTINGS} l ON r.target_type = 'listing' AND r.target_id::text = l.id::text
-      LEFT JOIN ${TABLE_NAMES.REVIEW_RESPONSES} rr ON r.id = rr.review_id AND rr.status = 'published'
+      LEFT JOIN ${TABLE_NAMES.REVIEW_RESPONSES} rr ON r.id = rr.review_id AND rr.status = '${REVIEW_STATUS.PUBLISHED}'
       LEFT JOIN ${TABLE_NAMES.USERS} ru ON rr.responder_id = ru.id
       LEFT JOIN ${TABLE_NAMES.REVIEW_VOTES} rv ON r.id = rv.review_id AND rv.voter_id = $1
       WHERE r.target_type = $2 AND r.target_id = $3 AND r.status = $4
@@ -189,7 +190,7 @@ export async function POST(request: NextRequest) {
         overall_rating, communication_rating, professionalism_rating,
         quality_rating, timeliness_rating, value_rating,
         title, content, is_verified_purchase, status
-      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, 'published')
+      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, '${REVIEW_STATUS.PUBLISHED}')
       RETURNING id`,
       [
         session.user.id, targetType, targetId, bookingId || null,

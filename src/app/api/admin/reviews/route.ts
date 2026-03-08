@@ -11,6 +11,7 @@ import { query, paginatedQuery } from '@/lib/auth/db'
 import { apiError, apiSuccess } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES } from '@/config/database'
+import { REVIEW_STATUS } from '@/config/review-status'
 import { logger } from '@/lib/logger'
 
 interface ReviewRow {
@@ -42,7 +43,7 @@ export const GET = withAdmin('reviews', async (request, session) => {
   try {
     // Parse query params
     const { searchParams } = new URL(request.url)
-    const status = searchParams.get('status') || 'pending_moderation'
+    const status = searchParams.get('status') || REVIEW_STATUS.PENDING_MODERATION
     const limit = parseInt(searchParams.get('limit') || '50')
     const offset = parseInt(searchParams.get('offset') || '0')
 

@@ -12,6 +12,7 @@ import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES } from '@/config/database'
 import { validateBody } from '@/lib/schemas'
 import { IntakePublishSchema } from '@/lib/schemas/intake'
+import { INTAKE_STATUS } from '@/config/intake-status'
 import { isChecklistComplete } from '@/config/intake-checklist'
 import type { ChecklistState, IntakeTier } from '@/config/intake-checklist'
 import { logger } from '@/lib/logger'
@@ -57,7 +58,7 @@ export const POST = withAdmin<{ id: string }>('intake', async (request, session,
     const row = existing.rows[0]
 
     // Gate: already published?
-    if (row.marketplace_status === 'published') {
+    if (row.marketplace_status === INTAKE_STATUS.PUBLISHED) {
       return apiBadRequest(ERROR_MESSAGES.INTAKE_ALREADY_PUBLISHED)
     }
 
@@ -76,7 +77,7 @@ export const POST = withAdmin<{ id: string }>('intake', async (request, session,
       // Update inventory item
       await client.query(
         `UPDATE ${TABLE_NAMES.INVENTORY_ITEMS}
-         SET marketplace_status = 'published', selling_price_chf = $1, updated_at = NOW()
+         SET marketplace_status = '${INTAKE_STATUS.PUBLISHED}', selling_price_chf = $1, updated_at = NOW()
          WHERE id = $2`,
         [price_chf, id]
       )

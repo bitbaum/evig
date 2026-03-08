@@ -7,7 +7,7 @@ import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
 import { validateBody, AppointmentActionSchema } from '@/lib/schemas'
 import { sendCustomEmail, appointmentStatusUpdate, appointmentQuoteReceived } from '@/lib/email'
-import { getBookingStatusLabel } from '@/config/booking-status'
+import { BOOKING_STATUS, getBookingStatusLabel } from '@/config/booking-status'
 
 interface AppointmentRow {
   id: string
@@ -107,22 +107,22 @@ export const PATCH = withAuth<{ id: string }>(async (
     switch (action) {
       case 'accept':
         if (!isRepairer) return apiForbidden('Nur der Reparateur kann annehmen')
-        if (appointment.status !== 'requested') return apiBadRequest('Termin kann nicht angenommen werden')
-        newStatus = 'accepted'
+        if (appointment.status !== BOOKING_STATUS.REQUESTED) return apiBadRequest('Termin kann nicht angenommen werden')
+        newStatus = BOOKING_STATUS.ACCEPTED
         break
 
       case 'reject':
         if (!isRepairer) return apiForbidden('Nur der Reparateur kann ablehnen')
-        if (appointment.status !== 'requested') return apiBadRequest('Termin kann nicht abgelehnt werden')
-        newStatus = 'rejected'
+        if (appointment.status !== BOOKING_STATUS.REQUESTED) return apiBadRequest('Termin kann nicht abgelehnt werden')
+        newStatus = BOOKING_STATUS.REJECTED
         break
 
       case 'quote':
         if (!isRepairer) return apiForbidden('Nur der Reparateur kann Angebote erstellen')
-        if (!['accepted', 'quote_rejected'].includes(appointment.status)) {
+        if (!([BOOKING_STATUS.ACCEPTED, BOOKING_STATUS.QUOTE_REJECTED] as string[]).includes(appointment.status)) {
           return apiBadRequest('Angebot kann in diesem Status nicht erstellt werden')
         }
-        newStatus = 'quoted'
+        newStatus = BOOKING_STATUS.QUOTED
         updates.push('quoted_price_chf = $' + paramIndex++)
         updateParams.push(actionData.quoted_price_chf)
         if (actionData.diagnosis_notes) {
@@ -133,24 +133,24 @@ export const PATCH = withAuth<{ id: string }>(async (
 
       case 'approve_quote':
         if (!isCustomer) return apiForbidden('Nur der Kunde kann Angebote bestätigen')
-        if (appointment.status !== 'quoted') return apiBadRequest('Kein Angebot zum Bestätigen')
-        newStatus = 'quote_approved'
+        if (appointment.status !== BOOKING_STATUS.QUOTED) return apiBadRequest('Kein Angebot zum Bestätigen')
+        newStatus = BOOKING_STATUS.QUOTE_APPROVED
         updates.push('quote_approved = true')
         updates.push('quote_approved_at = CURRENT_TIMESTAMP')
         break
 
       case 'reject_quote':
         if (!isCustomer) return apiForbidden('Nur der Kunde kann Angebote ablehnen')
-        if (appointment.status !== 'quoted') return apiBadRequest('Kein Angebot zum Ablehnen')
-        newStatus = 'quote_rejected'
+        if (appointment.status !== BOOKING_STATUS.QUOTED) return apiBadRequest('Kein Angebot zum Ablehnen')
+        newStatus = BOOKING_STATUS.QUOTE_REJECTED
         break
 
       case 'start':
         if (!isRepairer) return apiForbidden('Nur der Reparateur kann starten')
-        if (!['accepted', 'quote_approved'].includes(appointment.status)) {
+        if (!([BOOKING_STATUS.ACCEPTED, BOOKING_STATUS.QUOTE_APPROVED] as string[]).includes(appointment.status)) {
           return apiBadRequest('Termin kann nicht gestartet werden')
         }
-        newStatus = 'in_progress'
+        newStatus = BOOKING_STATUS.IN_PROGRESS
         if (actionData.confirmed_date) {
           updates.push('confirmed_date = $' + paramIndex++)
           updateParams.push(actionData.confirmed_date)
@@ -159,8 +159,8 @@ export const PATCH = withAuth<{ id: string }>(async (
 
       case 'complete':
         if (!isRepairer) return apiForbidden('Nur der Reparateur kann abschliessen')
-        if (appointment.status !== 'in_progress') return apiBadRequest('Termin ist nicht in Bearbeitung')
-        newStatus = 'completed'
+        if (appointment.status !== BOOKING_STATUS.IN_PROGRESS) return apiBadRequest('Termin ist nicht in Bearbeitung')
+        newStatus = BOOKING_STATUS.COMPLETED
         updates.push('completed_at = CURRENT_TIMESTAMP')
         if (actionData.completion_notes) {
           updates.push('completion_notes = $' + paramIndex++)
@@ -170,7 +170,7 @@ export const PATCH = withAuth<{ id: string }>(async (
 
       case 'update':
         if (!isCustomer) return apiForbidden('Nur der Kunde kann Angaben bearbeiten')
-        if (appointment.status !== 'requested') return apiBadRequest('Angaben können nur im Status "Angefragt" bearbeitet werden')
+        if (appointment.status !== BOOKING_STATUS.REQUESTED) return apiBadRequest('Angaben können nur im Status "Angefragt" bearbeitet werden')
         if (actionData.description) {
           updates.push('description = $' + paramIndex++)
           updateParams.push(actionData.description)
@@ -183,7 +183,7 @@ export const PATCH = withAuth<{ id: string }>(async (
 
       case 'rate':
         if (!isCustomer) return apiForbidden('Nur der Kunde kann bewerten')
-        if (appointment.status !== 'completed') return apiBadRequest('Nur abgeschlossene Termine können bewertet werden')
+        if (appointment.status !== BOOKING_STATUS.COMPLETED) return apiBadRequest('Nur abgeschlossene Termine können bewertet werden')
         // Prevent double-rating — checked via SQL WHERE clause below
         updates.push('customer_rating = $' + paramIndex++)
         updateParams.push(actionData.customer_rating)
@@ -194,10 +194,10 @@ export const PATCH = withAuth<{ id: string }>(async (
         break
 
       case 'cancel':
-        if (!['requested', 'accepted', 'quoted', 'quote_approved'].includes(appointment.status)) {
+        if (!([BOOKING_STATUS.REQUESTED, BOOKING_STATUS.ACCEPTED, BOOKING_STATUS.QUOTED, BOOKING_STATUS.QUOTE_APPROVED] as string[]).includes(appointment.status)) {
           return apiBadRequest('Termin kann nicht mehr storniert werden')
         }
-        newStatus = 'cancelled'
+        newStatus = BOOKING_STATUS.CANCELLED
         break
 
       default:

@@ -8,6 +8,7 @@
 
 import { query } from '@/lib/auth/db'
 import { TABLE_NAMES } from '@/config/database'
+import { PAYMENT_STATUS } from '@/config/payment-status'
 import { logger } from '@/lib/logger'
 
 // ============================================================================
@@ -63,7 +64,7 @@ interface InventoryRow {
  * with real totals, and decrements quantity_available.
  */
 export async function createOrder(params: CreateOrderParams): Promise<CreatedOrder> {
-  const { userId, items, paymentTransactionId = 'pending', shippingAddress } = params
+  const { userId, items, paymentTransactionId = PAYMENT_STATUS.PENDING, shippingAddress } = params
 
   try {
     if (!items || items.length === 0) {

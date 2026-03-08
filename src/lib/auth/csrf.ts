@@ -320,12 +320,6 @@ export function csrfMiddleware(request: NextRequest): NextResponse | null {
     return null
   }
 
-  // Skip for API routes that use other auth (e.g., Bearer tokens)
-  const authHeader = request.headers.get('authorization')
-  if (authHeader?.startsWith('Bearer ')) {
-    return null
-  }
-
   // Get tokens
   const cookieToken = getCsrfFromCookies(request.headers.get('cookie'))
   const headerToken = request.headers.get(CSRF_CONFIG.headerName)

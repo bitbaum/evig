@@ -14,7 +14,7 @@ const ACTION_SECTION_REQUIREMENTS: Record<HirnActionType, string> = {
   navigate: 'dashboard',
 }
 
-export const POST = withAdmin(async (request: NextRequest, session: ValidSession) => {
+export const POST = withAdmin('hirn', async (request: NextRequest, session: ValidSession) => {
   try {
     const body = await request.json()
     const parsed = validateExecuteActionInput(body)

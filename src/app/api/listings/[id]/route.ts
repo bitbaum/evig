@@ -12,6 +12,7 @@ import { query, transaction } from '@/lib/auth/db';
 import { TABLE_NAMES } from '@/config/database';
 import { logger } from '@/lib/logger';
 import { validateBody, UpdateListingSchema } from '@/lib/schemas';
+import { LISTING_STATUS } from '@/config/marketplace';
 import { isStaffEmail } from '@/lib/permissions';
 import { indexListing, removeListing, type MeilisearchDocument } from '@/lib/search/meilisearch';
 import { insertListingImages, upsertListingSpecs, buildMeiliSpecs } from '@/lib/marketplace/listing-helpers';
@@ -180,7 +181,7 @@ export const PATCH = withAuth<{ id: string }>(async (
     logger.info('Listing updated', { listingId: id, userId: session.user.id });
 
     // Fire-and-forget: update Meilisearch index
-    if (data.status === 'removed' || data.status === 'sold' || data.status === 'draft') {
+    if (data.status === LISTING_STATUS.REMOVED || data.status === LISTING_STATUS.SOLD || data.status === LISTING_STATUS.DRAFT) {
       removeListing(id).catch(err => logger.error('Failed to remove listing from Meilisearch', { error: err, listingId: id }));
     } else {
       query(

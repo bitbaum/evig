@@ -9,6 +9,7 @@ import { NextRequest } from 'next/server'
 import { withAdmin } from '@/lib/api/middleware'
 import { query } from '@/lib/auth/db'
 import { TABLE_NAMES } from '@/config/database'
+import { PERMISSION_REQUEST_STATUS } from '@/config/permission-request-status'
 import { ADMIN_SECTIONS, type AdminSection } from '@/lib/permissions'
 import { apiSuccess, apiError, apiBadRequest } from '@/lib/api/helpers'
 
@@ -38,7 +39,7 @@ export const POST = withAdmin(async (request, session) => {
     const existingResult = await query<{ id: string }>(
       `SELECT id FROM ${TABLE_NAMES.STAFF_PERMISSION_REQUESTS}
        WHERE user_id = $1
-       AND status = 'pending'
+       AND status = '${PERMISSION_REQUEST_STATUS.PENDING}'
        AND requested_sections && $2`,
       [session.user.id, sections]
     )

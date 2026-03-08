@@ -4,6 +4,7 @@ import { query, paginatedQuery } from '@/lib/auth/db'
 import { apiError, apiSuccess, apiBadRequest } from '@/lib/api/helpers'
 import { logger } from '@/lib/logger'
 import { TABLE_NAMES } from '@/config/database'
+import { WORKSHOP_REGISTRATION_STATUS } from '@/config/workshop-registration-status'
 import { QueryParams } from '@/lib/api/query-builder'
 
 interface WorkshopRow {
@@ -55,8 +56,8 @@ export const GET = withAdmin('workshops-admin', async (request, session) => {
         w.title as workshop_title,
         w.slug as workshop_slug,
         COUNT(wr.id) as current_participants,
-        COUNT(CASE WHEN wr.status = 'confirmed' THEN 1 END) as confirmed_count,
-        COUNT(CASE WHEN wr.status = 'pending' THEN 1 END) as pending_count
+        COUNT(CASE WHEN wr.status = '${WORKSHOP_REGISTRATION_STATUS.CONFIRMED}' THEN 1 END) as confirmed_count,
+        COUNT(CASE WHEN wr.status = '${WORKSHOP_REGISTRATION_STATUS.PENDING}' THEN 1 END) as pending_count
       FROM ${TABLE_NAMES.WORKSHOP_INSTANCES} wi
       JOIN ${TABLE_NAMES.WORKSHOPS} w ON wi.workshop_id = w.id
       LEFT JOIN ${TABLE_NAMES.WORKSHOP_REGISTRATIONS} wr ON wi.id = wr.workshop_instance_id

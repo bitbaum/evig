@@ -5,11 +5,15 @@ import { apiError, apiSuccess, apiUnauthorized, apiNotFound, apiBadRequest } fro
 import { logger } from '@/lib/logger'
 import { getStripeClient } from '@/lib/payments/stripe-client'
 import { TABLE_NAMES } from '@/config/database'
+import { PAYMENT_STATUS } from '@/config/payment-status'
 import {
   processPaymentWithoutInvoice,
   centsToDisplay,
   DEFAULT_AUTO_RELEASE_DAYS
 } from '@/lib/payments/payment-flow'
+import { APPOINTMENT_STATUS } from '@/config/appointment-status'
+import { BOOKING_STATUS } from '@/config/booking-status'
+import { validateBody, PayAppointmentSchema } from '@/lib/schemas'
 
 interface AppointmentRow {
   id: string
@@ -37,12 +41,15 @@ export async function POST(request: NextRequest) {
     }
 
     const appointmentId = request.nextUrl.pathname.split('/')[3] // Extract ID from URL
+    const body = await request.json()
+    const validation = validateBody(PayAppointmentSchema, body)
+    if (!validation.success) return validation.error
     const {
-      useEscrow = true,
-      autoReleaseDays = DEFAULT_AUTO_RELEASE_DAYS,
-      paymentType = 'full', // 'full', 'deposit', 'remaining'
-      customAmount // For custom payment amounts
-    } = await request.json()
+      useEscrow,
+      autoReleaseDays,
+      paymentType,
+      customAmount
+    } = validation.data
 
     // Get appointment details
     const appointmentResult = await query(`
@@ -72,7 +79,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Check if appointment is in payable status
-    if (!['confirmed', 'approved', 'in_progress'].includes(appointment.status)) {
+    if (![APPOINTMENT_STATUS.CONFIRMED, 'approved', BOOKING_STATUS.IN_PROGRESS].includes(appointment.status)) {
       return apiBadRequest(`Terminstatus '${appointment.status}' ist nicht zahlbar`)
     }
 
@@ -87,7 +94,7 @@ export async function POST(request: NextRequest) {
       const paidResult = await query(`
         SELECT COALESCE(SUM(amount_cents), 0) as total_paid
         FROM ${TABLE_NAMES.PAYMENT_TRANSACTIONS}
-        WHERE service_appointment_id = $1 AND status = 'succeeded' AND type = 'payment'
+        WHERE service_appointment_id = $1 AND status = '${PAYMENT_STATUS.SUCCEEDED}' AND type = 'payment'
       `, [appointmentId])
 
       const paid = paidResult.rows[0] as PaidRow
@@ -100,7 +107,7 @@ export async function POST(request: NextRequest) {
 
       paymentAmountCents = remaining
     } else if (customAmount) {
-      paymentAmountCents = Math.round(parseFloat(customAmount) * 100)
+      paymentAmountCents = Math.round(parseFloat(String(customAmount)) * 100)
     }
 
     if (paymentAmountCents <= 0) {
@@ -145,7 +152,7 @@ export async function POST(request: NextRequest) {
         UPDATE ${TABLE_NAMES.SERVICE_APPOINTMENTS}
         SET
           status = CASE
-            WHEN status = 'confirmed' THEN 'paid'
+            WHEN status = '${APPOINTMENT_STATUS.CONFIRMED}' THEN 'paid'
             WHEN status = 'approved' THEN 'paid'
             ELSE status
           END,

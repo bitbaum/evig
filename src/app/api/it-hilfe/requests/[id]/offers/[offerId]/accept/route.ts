@@ -7,6 +7,7 @@ import { TABLE_NAMES, CONVERSATION_TYPES } from '@/config/database'
 import { logger } from '@/lib/logger'
 import { sendCustomEmail } from '@/lib/email'
 import { itHilfeOfferAccepted, itHilfeOfferRejected } from '@/lib/email/templates/it-hilfe'
+import { REQUEST_STATUS, OFFER_STATUS } from '@/config/it-hilfe'
 
 interface RequestRow {
   requester_id: string
@@ -71,7 +72,7 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
     }
 
     // Check if request is in a state where offers can be accepted
-    if (!['open', 'in_discussion'].includes(requestData.status)) {
+    if (requestData.status !== REQUEST_STATUS.OPEN && requestData.status !== REQUEST_STATUS.IN_DISCUSSION) {
       return apiBadRequest('Diese Anfrage kann keine Angebote mehr akzeptieren')
     }
 
@@ -89,7 +90,7 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
 
     const offerData = offerResult.rows[0] as OfferRow
 
-    if (offerData.status !== 'pending') {
+    if (offerData.status !== OFFER_STATUS.PENDING) {
       return apiBadRequest('Dieses Angebot kann nicht mehr akzeptiert werden')
     }
 
@@ -98,21 +99,21 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
       // 1. Update the accepted offer status
       await client.query(`
         UPDATE ${TABLE_NAMES.IT_HILFE_OFFERS}
-        SET status = 'accepted'
+        SET status = '${OFFER_STATUS.ACCEPTED}'
         WHERE id = $1
       `, [offerId])
 
       // 2. Reject all other pending offers for this request
       await client.query(`
         UPDATE ${TABLE_NAMES.IT_HILFE_OFFERS}
-        SET status = 'rejected'
-        WHERE request_id = $1 AND id != $2 AND status = 'pending'
+        SET status = '${OFFER_STATUS.REJECTED}'
+        WHERE request_id = $1 AND id != $2 AND status = '${OFFER_STATUS.PENDING}'
       `, [id, offerId])
 
       // 3. Update request status to matched
       await client.query(`
         UPDATE ${TABLE_NAMES.IT_HILFE_REQUESTS}
-        SET status = 'matched', matched_offer_id = $1
+        SET status = '${REQUEST_STATUS.MATCHED}', matched_offer_id = $1
         WHERE id = $2
       `, [offerId, id])
 
@@ -179,7 +180,7 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
       SELECT o.helper_id, u.name as helper_name, u.email as helper_email
       FROM ${TABLE_NAMES.IT_HILFE_OFFERS} o
       JOIN ${TABLE_NAMES.USERS} u ON o.helper_id = u.id
-      WHERE o.request_id = $1 AND o.status = 'rejected' AND o.id != $2
+      WHERE o.request_id = $1 AND o.status = '${OFFER_STATUS.REJECTED}' AND o.id != $2
     `, [id, offerId]).then(result => {
       for (const row of result.rows as RejectedOfferRow[]) {
         sendCustomEmail(

@@ -3,6 +3,7 @@ import { query } from '@/lib/auth/db'
 import { apiError, apiSuccess } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES } from '@/config/database'
+import { REPORT_STATUS } from '@/config/report-status'
 
 // GET /api/admin/marketplace/stats - Dashboard statistics
 export const GET = withAdmin('marketplace', async () => {
@@ -33,7 +34,7 @@ export const GET = withAdmin('marketplace', async () => {
         COUNT(*) FILTER (WHERE l.verified_at IS NULL AND l.status = 'active') as unverified,
         COUNT(*) FILTER (WHERE l.is_revampit = true) as revampit,
         COUNT(*) FILTER (WHERE l.is_revampit = false) as community,
-        (SELECT COUNT(*) FROM ${TABLE_NAMES.LISTING_REPORTS} WHERE status = 'pending') as open_reports,
+        (SELECT COUNT(*) FROM ${TABLE_NAMES.LISTING_REPORTS} WHERE status = '${REPORT_STATUS.PENDING}') as open_reports,
         (SELECT COUNT(*) FROM ${TABLE_NAMES.MARKETPLACE_ORDERS}) as total_orders,
         (SELECT COALESCE(SUM(amount_chf * 100), 0) FROM ${TABLE_NAMES.MARKETPLACE_ORDERS} WHERE status IN ('paid', 'shipped', 'delivered', 'completed')) as revenue_cents
       FROM ${TABLE_NAMES.LISTINGS} l`

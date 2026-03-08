@@ -126,3 +126,10 @@ export const ResendCodeSchema = z.object({
 });
 
 export type ResendCodeInput = z.infer<typeof ResendCodeSchema>;
+
+// Verify email token schema (for token-based email verification)
+export const VerifyEmailTokenSchema = z.object({
+  token: z.string().min(1, 'Token ist erforderlich'),
+});
+
+export type VerifyEmailTokenInput = z.infer<typeof VerifyEmailTokenSchema>;

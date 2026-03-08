@@ -9,6 +9,17 @@ import { z } from 'zod';
 import { uuidSchema } from './common';
 
 // =============================================================================
+// ADMIN AUTH
+// =============================================================================
+
+export const AdminAuthActionSchema = z.object({
+  action: z.enum(['login', 'logout']).optional(),
+  password: z.string().optional(),
+});
+
+export type AdminAuthActionInput = z.infer<typeof AdminAuthActionSchema>;
+
+// =============================================================================
 // USER MANAGEMENT
 // =============================================================================
 
@@ -27,7 +38,7 @@ export type AdminUpdateUserInput = z.infer<typeof AdminUpdateUserSchema>;
 // =============================================================================
 
 export const AdminApprovalActionSchema = z.object({
-  action: z.enum(['approve', 'reject']),
+  action: z.enum(['approve', 'reject', 'reopen']),
 });
 
 export type AdminApprovalActionInput = z.infer<typeof AdminApprovalActionSchema>;

@@ -109,8 +109,8 @@ export const PATCH = withAdmin<RouteParams>(async (
       if (isBroadcast) {
         await query(
           `UPDATE ${TABLE_NAMES.TASK_REQUESTS}
-           SET status = 'declined', response_message = 'Anfrage von anderem Teammitglied angenommen', updated_at = NOW()
-           WHERE task_id = $1 AND id != $2 AND status = 'pending'`,
+           SET status = '${REQUEST_STATUSES.DECLINED}', response_message = 'Anfrage von anderem Teammitglied angenommen', updated_at = NOW()
+           WHERE task_id = $1 AND id != $2 AND status = '${REQUEST_STATUSES.PENDING}'`,
           [taskRequest.task_id, requestId]
         );
       }

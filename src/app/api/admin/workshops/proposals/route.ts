@@ -4,13 +4,14 @@ import { query } from '@/lib/auth/db'
 import { apiError, apiSuccess } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES } from '@/config/database'
+import { APPROVAL_STATUS } from '@/config/approval-status'
 import { CountRow } from '@/lib/api/db-types'
 
 // GET /api/admin/workshops/proposals - List workshop proposals with filtering
 export const GET = withAdmin('workshops-admin', async (request, session) => {
   try {
     const { searchParams } = new URL(request.url)
-    const status = searchParams.get('status') || 'pending'
+    const status = searchParams.get('status') || APPROVAL_STATUS.PENDING
     const category = searchParams.get('category')
     const limit = parseInt(searchParams.get('limit') || '50')
     const offset = parseInt(searchParams.get('offset') || '0')

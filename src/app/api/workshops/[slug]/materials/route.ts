@@ -4,6 +4,7 @@ import { query } from '@/lib/auth/db'
 import { apiError, apiSuccess, apiNotFound } from '@/lib/api/helpers'
 import { logger } from '@/lib/logger'
 import { TABLE_NAMES } from '@/config/database'
+import { WORKSHOP_REGISTRATION_STATUS } from '@/config/workshop-registration-status'
 
 interface MaterialRow {
   id: string
@@ -59,9 +60,9 @@ export async function GET(
 
       if (registrationResult.rows.length > 0) {
         const registration = registrationResult.rows[0] as RegistrationRow
-        if (registration.attended || registration.status === 'attended') {
+        if (registration.attended || registration.status === WORKSHOP_REGISTRATION_STATUS.ATTENDED) {
           accessLevel = 'attended'
-        } else if (['confirmed', 'pending'].includes(registration.status)) {
+        } else if (registration.status === WORKSHOP_REGISTRATION_STATUS.CONFIRMED || registration.status === WORKSHOP_REGISTRATION_STATUS.PENDING) {
           accessLevel = 'registered'
         }
       }

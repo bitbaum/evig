@@ -3,6 +3,7 @@ import { query } from '@/lib/auth/db'
 import { apiError, apiSuccess } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES } from '@/config/database'
+import { REQUEST_STATUS } from '@/config/it-hilfe'
 
 // GET /api/admin/it-hilfe/stats - Dashboard statistics
 export const GET = withAdmin('it-hilfe-admin', async () => {
@@ -24,11 +25,11 @@ export const GET = withAdmin('it-hilfe-admin', async () => {
     }>(
       `SELECT
         COUNT(*) as total,
-        COUNT(*) FILTER (WHERE r.status = 'open') as open,
-        COUNT(*) FILTER (WHERE r.status = 'in_discussion') as in_discussion,
-        COUNT(*) FILTER (WHERE r.status = 'matched') as matched,
-        COUNT(*) FILTER (WHERE r.status = 'completed') as completed,
-        COUNT(*) FILTER (WHERE r.status = 'cancelled') as cancelled,
+        COUNT(*) FILTER (WHERE r.status = '${REQUEST_STATUS.OPEN}') as open,
+        COUNT(*) FILTER (WHERE r.status = '${REQUEST_STATUS.IN_DISCUSSION}') as in_discussion,
+        COUNT(*) FILTER (WHERE r.status = '${REQUEST_STATUS.MATCHED}') as matched,
+        COUNT(*) FILTER (WHERE r.status = '${REQUEST_STATUS.COMPLETED}') as completed,
+        COUNT(*) FILTER (WHERE r.status = '${REQUEST_STATUS.CANCELLED}') as cancelled,
         COUNT(*) FILTER (WHERE r.urgency = 'low') as low,
         COUNT(*) FILTER (WHERE r.urgency = 'normal') as normal,
         COUNT(*) FILTER (WHERE r.urgency = 'high') as high,

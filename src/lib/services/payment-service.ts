@@ -24,6 +24,10 @@
 
 import { query } from '@/lib/auth/db'
 import { TABLE_NAMES } from '@/config/database'
+import { ORDER_STATUS } from '@/config/marketplace'
+import { PAYMENT_STATUS, ESCROW_STATUS } from '@/config/payment-status'
+import { REFUND_STATUS } from '@/config/refund'
+import { INVOICE_STATUS } from '@/config/invoice-status'
 import { logger } from '@/lib/logger'
 import type Stripe from 'stripe'
 
@@ -53,7 +57,7 @@ export class PaymentService {
     await query(
       `UPDATE ${TABLE_NAMES.PAYMENT_TRANSACTIONS}
        SET
-         status = 'succeeded',
+         status = '${PAYMENT_STATUS.SUCCEEDED}',
          processed_at = CURRENT_TIMESTAMP,
          provider_response = $2,
          updated_at = CURRENT_TIMESTAMP
@@ -81,7 +85,7 @@ export class PaymentService {
     await query(
       `UPDATE ${TABLE_NAMES.PAYMENT_TRANSACTIONS}
        SET
-         status = 'failed',
+         status = '${PAYMENT_STATUS.FAILED}',
          failure_reason = $2,
          provider_response = $3,
          processed_at = CURRENT_TIMESTAMP,
@@ -110,7 +114,7 @@ export class PaymentService {
     await query(
       `UPDATE ${TABLE_NAMES.PAYMENT_TRANSACTIONS}
        SET
-         status = 'cancelled',
+         status = '${PAYMENT_STATUS.CANCELLED}',
          provider_response = $2,
          processed_at = CURRENT_TIMESTAMP,
          updated_at = CURRENT_TIMESTAMP
@@ -138,7 +142,7 @@ export class PaymentService {
       `UPDATE ${TABLE_NAMES.ESCROW_ACCOUNTS}
        SET
          status = CASE
-           WHEN status = 'active' THEN 'active'
+           WHEN status = '${ESCROW_STATUS.ACTIVE}' THEN '${ESCROW_STATUS.ACTIVE}'
            ELSE status
          END,
          updated_at = CURRENT_TIMESTAMP
@@ -191,7 +195,7 @@ export class PaymentService {
     await query(
       `UPDATE ${TABLE_NAMES.PAYMENT_TRANSACTIONS}
        SET
-         status = 'failed',
+         status = '${PAYMENT_STATUS.FAILED}',
          failure_reason = $2,
          provider_response = jsonb_set(
            COALESCE(provider_response, '{}'),
@@ -320,9 +324,9 @@ export class PaymentService {
       `UPDATE ${TABLE_NAMES.REFUNDS}
        SET
          status = CASE
-           WHEN $2 = 'succeeded' THEN 'completed'
-           WHEN $2 = 'failed' THEN 'rejected'
-           WHEN $2 = 'canceled' THEN 'cancelled'
+           WHEN $2 = 'succeeded' THEN '${REFUND_STATUS.COMPLETED}'
+           WHEN $2 = 'failed' THEN '${REFUND_STATUS.REJECTED}'
+           WHEN $2 = 'canceled' THEN '${PAYMENT_STATUS.CANCELLED}'
            ELSE status
          END,
          processed_at = CASE
@@ -363,7 +367,7 @@ export class PaymentService {
     await query(
       `UPDATE ${TABLE_NAMES.INVOICES}
        SET
-         status = 'paid',
+         status = '${INVOICE_STATUS.PAID}',
          paid_at = CURRENT_TIMESTAMP,
          updated_at = CURRENT_TIMESTAMP
        WHERE id = $1`,
@@ -383,7 +387,7 @@ export class PaymentService {
     await query(
       `UPDATE ${TABLE_NAMES.INVOICES}
        SET
-         status = 'overdue',
+         status = '${INVOICE_STATUS.OVERDUE}',
          updated_at = CURRENT_TIMESTAMP
        WHERE id = $1`,
       [invoice.id]
@@ -409,9 +413,9 @@ export class PaymentService {
       await query(
         `UPDATE ${TABLE_NAMES.ORDERS}
          SET
-           payment_status = 'paid',
+           payment_status = '${PAYMENT_STATUS.SUCCEEDED}',
            status = CASE
-             WHEN status = 'pending' THEN 'confirmed'
+             WHEN status = '${PAYMENT_STATUS.PENDING}' THEN '${PAYMENT_STATUS.CONFIRMED}'
              ELSE status
            END,
            updated_at = CURRENT_TIMESTAMP
@@ -425,7 +429,7 @@ export class PaymentService {
       await query(
         `UPDATE ${TABLE_NAMES.SERVICE_APPOINTMENTS}
          SET
-           status = 'confirmed',
+           status = '${PAYMENT_STATUS.CONFIRMED}',
            updated_at = CURRENT_TIMESTAMP
          WHERE id = $1`,
         [metadata.serviceAppointmentId]
@@ -437,8 +441,8 @@ export class PaymentService {
       await query(
         `UPDATE ${TABLE_NAMES.WORKSHOP_REGISTRATIONS}
          SET
-           payment_status = 'paid',
-           status = 'confirmed',
+           payment_status = '${PAYMENT_STATUS.SUCCEEDED}',
+           status = '${PAYMENT_STATUS.CONFIRMED}',
            confirmed_at = CURRENT_TIMESTAMP,
            updated_at = CURRENT_TIMESTAMP
          WHERE id = $1`,
@@ -451,9 +455,9 @@ export class PaymentService {
       await query(
         `UPDATE ${TABLE_NAMES.MARKETPLACE_ORDERS}
          SET
-           status = 'paid',
+           status = '${ORDER_STATUS.PAID}',
            updated_at = CURRENT_TIMESTAMP
-         WHERE id = $1 AND status = 'pending_payment'`,
+         WHERE id = $1 AND status = '${ORDER_STATUS.PENDING_PAYMENT}'`,
         [metadata.marketplaceOrderId]
       )
       logger.info('Marketplace order marked as paid via webhook', {

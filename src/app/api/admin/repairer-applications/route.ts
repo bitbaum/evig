@@ -4,6 +4,7 @@ import { query } from '@/lib/auth/db'
 import { apiError, apiSuccess, apiBadRequest } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES } from '@/config/database'
+import { APPROVAL_STATUS } from '@/config/approval-status'
 import { logger } from '@/lib/logger'
 import { CountRow } from '@/lib/api/db-types'
 
@@ -46,12 +47,12 @@ interface ApplicationRow {
 export const GET = withAdmin('services', async (request, session) => {
   try {
     const { searchParams } = new URL(request.url)
-    const status = searchParams.get('status') || 'pending'
+    const status = searchParams.get('status') || APPROVAL_STATUS.PENDING
     const limit = parseInt(searchParams.get('limit') || '50')
     const offset = parseInt(searchParams.get('offset') || '0')
 
     // Validate status parameter
-    const validStatuses = ['pending', 'approved', 'rejected', 'requires_changes']
+    const validStatuses: string[] = [APPROVAL_STATUS.PENDING, APPROVAL_STATUS.APPROVED, APPROVAL_STATUS.REJECTED, APPROVAL_STATUS.REQUIRES_CHANGES]
     if (!validStatuses.includes(status)) {
       return apiBadRequest('Ungültiger Status-Filter')
     }
@@ -65,10 +66,10 @@ export const GET = withAdmin('services', async (request, session) => {
         u.created_at as user_created_at,
         COALESCE(ra.document_verification_status, 'pending') as document_verification_status,
         CASE
-          WHEN ra.status = 'pending' THEN 1
-          WHEN ra.status = 'requires_changes' THEN 2
-          WHEN ra.status = 'approved' THEN 3
-          WHEN ra.status = 'rejected' THEN 4
+          WHEN ra.status = '${APPROVAL_STATUS.PENDING}' THEN 1
+          WHEN ra.status = '${APPROVAL_STATUS.REQUIRES_CHANGES}' THEN 2
+          WHEN ra.status = '${APPROVAL_STATUS.APPROVED}' THEN 3
+          WHEN ra.status = '${APPROVAL_STATUS.REJECTED}' THEN 4
         END as priority_order
       FROM ${TABLE_NAMES.REPAIRER_APPLICATIONS} ra
       JOIN ${TABLE_NAMES.USERS} u ON ra.user_id = u.id

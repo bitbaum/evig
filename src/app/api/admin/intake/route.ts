@@ -12,6 +12,7 @@ import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES } from '@/config/database'
 import { validateBody, validateQuery } from '@/lib/schemas'
 import { IntakeCreateSchema, IntakeQuerySchema } from '@/lib/schemas/intake'
+import { INTAKE_STATUS } from '@/config/intake-status'
 import { getChecklistForDevice, isChecklistComplete, getChecklistProgress } from '@/config/intake-checklist'
 import type { ChecklistState } from '@/config/intake-checklist'
 import { generateItemUUID } from '@/lib/erfassung/create-product'
@@ -179,12 +180,12 @@ export const GET = withAdmin('intake', async (request) => {
       conditions.push(`ii.intake_tier = $${queryParams.length}`)
     }
 
-    if (status === 'in_progress') {
+    if (status === INTAKE_STATUS.IN_PROGRESS) {
       conditions.push(`ii.checklist_complete = false AND ii.marketplace_status = 'draft'`)
-    } else if (status === 'ready') {
+    } else if (status === INTAKE_STATUS.READY) {
       conditions.push(`ii.checklist_complete = true AND ii.marketplace_status = 'draft'`)
-    } else if (status === 'published') {
-      conditions.push(`ii.marketplace_status = 'published'`)
+    } else if (status === INTAKE_STATUS.PUBLISHED) {
+      conditions.push(`ii.marketplace_status = '${INTAKE_STATUS.PUBLISHED}'`)
     }
 
     if (category) {

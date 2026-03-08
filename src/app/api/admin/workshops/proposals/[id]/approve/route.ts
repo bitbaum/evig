@@ -4,6 +4,7 @@ import { query } from '@/lib/auth/db'
 import { apiError, apiSuccess, apiBadRequest, apiNotFound } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES } from '@/config/database'
+import { APPROVAL_STATUS } from '@/config/approval-status'
 import { logger } from '@/lib/logger'
 import { sendEmail } from '@/lib/email'
 
@@ -66,13 +67,13 @@ export const POST = withAdmin<{ id: string }>('workshops-admin', async (request,
     let newStatus: string
     switch (action) {
       case 'approve':
-        newStatus = 'approved'
+        newStatus = APPROVAL_STATUS.APPROVED
         break
       case 'reject':
-        newStatus = 'rejected'
+        newStatus = APPROVAL_STATUS.REJECTED
         break
       case 'require_changes':
-        newStatus = 'requires_changes'
+        newStatus = APPROVAL_STATUS.REQUIRES_CHANGES
         break
       default:
         return apiBadRequest('Ungültige Aktion')

@@ -5,7 +5,8 @@ import { apiError, apiSuccess, apiUnauthorized, apiBadRequest, apiNotFound, apiF
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
-import { getSkillIds } from '@/config/it-hilfe'
+import { REQUEST_STATUS } from '@/config/it-hilfe'
+import { validateBody, CreateOfferSchema } from '@/lib/schemas'
 import { sendCustomEmail } from '@/lib/email'
 import { itHilfeNewOfferReceived } from '@/lib/email/templates/it-hilfe'
 import { rateLimiters } from '@/lib/security/rate-limit'
@@ -148,7 +149,7 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
     }
 
     // Only allow offers on open or in_discussion requests
-    if (!['open', 'in_discussion'].includes(requestData.status)) {
+    if (requestData.status !== REQUEST_STATUS.OPEN && requestData.status !== REQUEST_STATUS.IN_DISCUSSION) {
       return apiBadRequest('Diese Anfrage akzeptiert keine neuen Angebote mehr')
     }
 
@@ -172,28 +173,9 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
     }
 
     const body = await request.json()
-    const {
-      message,
-      estimatedTime,
-      proposedCompensation,
-      relevantSkills = [],
-    } = body
-
-    // Validate required fields
-    if (!message) {
-      return apiBadRequest('Eine Nachricht ist erforderlich')
-    }
-
-    if (message.length < 20 || message.length > 2000) {
-      return apiBadRequest('Nachricht muss zwischen 20 und 2000 Zeichen lang sein')
-    }
-
-    // Validate skills if provided
-    const validSkillIds = getSkillIds()
-    const invalidSkills = relevantSkills.filter((s: string) => !validSkillIds.includes(s))
-    if (invalidSkills.length > 0) {
-      return apiBadRequest(`Ungültige Skills: ${invalidSkills.join(', ')}`)
-    }
+    const validation = validateBody(CreateOfferSchema, body)
+    if (!validation.success) return validation.error
+    const { message, estimatedTime, proposedCompensation, relevantSkills } = validation.data
 
     // Insert the offer
     const result = await query(`
@@ -220,10 +202,10 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
     const offerId = (result.rows[0] as { id: string }).id
 
     // Update request status to in_discussion if it was open
-    if (requestData.status === 'open') {
+    if (requestData.status === REQUEST_STATUS.OPEN) {
       await query(`
         UPDATE ${TABLE_NAMES.IT_HILFE_REQUESTS}
-        SET status = 'in_discussion'
+        SET status = '${REQUEST_STATUS.IN_DISCUSSION}'
         WHERE id = $1
       `, [id])
     }

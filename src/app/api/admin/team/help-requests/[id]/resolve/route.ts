@@ -17,6 +17,7 @@ import {
   apiNotFound,
   apiBadRequest,
 } from '@/lib/api/helpers'
+import { HELP_REQUEST_STATUS } from '@/config/help-request-status'
 import { validateResolveHelpRequest } from '@/lib/schemas/activity'
 
 /**
@@ -52,11 +53,11 @@ export const POST = withAdmin<{ id: string }>('team', async (request, session, c
       return apiNotFound('Hilfsanfrage')
     }
 
-    if (existing.rows[0].status === 'resolved') {
+    if (existing.rows[0].status === HELP_REQUEST_STATUS.RESOLVED) {
       return apiBadRequest('Hilfsanfrage ist bereits gelöst')
     }
 
-    if (existing.rows[0].status === 'cancelled') {
+    if (existing.rows[0].status === HELP_REQUEST_STATUS.CANCELLED) {
       return apiBadRequest('Hilfsanfrage wurde abgebrochen')
     }
 
@@ -75,7 +76,7 @@ export const POST = withAdmin<{ id: string }>('team', async (request, session, c
     // Update request as resolved
     await query(
       `UPDATE ${TABLE_NAMES.HELP_REQUESTS}
-       SET status = 'resolved',
+       SET status = '${HELP_REQUEST_STATUS.RESOLVED}',
            resolved_by = $1,
            resolved_at = NOW(),
            resolution_notes = $2,

@@ -4,6 +4,7 @@ import { query } from '@/lib/auth/db'
 import { apiError, apiSuccess, apiUnauthorized, apiBadRequest, apiNotFound } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES } from '@/config/database'
+import { WORKSHOP_REGISTRATION_STATUS } from '@/config/workshop-registration-status'
 
 interface UpdateBody {
   feedback?: string
@@ -65,8 +66,8 @@ export async function PATCH(
     // Default action: cancel registration if not already cancelled
     const res = await query(
       `UPDATE ${TABLE_NAMES.WORKSHOP_REGISTRATIONS}
-       SET status = 'cancelled', cancelled_at = NOW(), updated_at = NOW()
-       WHERE id = $1 AND user_id = $2 AND status != 'cancelled'
+       SET status = '${WORKSHOP_REGISTRATION_STATUS.CANCELLED}', cancelled_at = NOW(), updated_at = NOW()
+       WHERE id = $1 AND user_id = $2 AND status != '${WORKSHOP_REGISTRATION_STATUS.CANCELLED}'
        RETURNING id` ,
       [id, session.user.id]
     )

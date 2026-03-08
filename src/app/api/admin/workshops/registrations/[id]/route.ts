@@ -5,6 +5,7 @@ import { apiError, apiSuccess, apiNotFound, apiBadRequest } from '@/lib/api/help
 import { validateBody, AdminWorkshopRegistrationUpdateSchema } from '@/lib/schemas'
 import { logger } from '@/lib/logger'
 import { TABLE_NAMES } from '@/config/database'
+import { WORKSHOP_REGISTRATION_STATUS } from '@/config/workshop-registration-status'
 import { sendEmail } from '@/lib/email'
 import { formatDateTimeWithWeekday } from '@/lib/date-formats'
 
@@ -46,12 +47,12 @@ export const PUT = withAdmin<{ id: string }>('workshops-admin', async (request, 
       paramIndex++
 
       // Auto-set confirmed_at when confirming
-      if (status === 'confirmed') {
+      if (status === WORKSHOP_REGISTRATION_STATUS.CONFIRMED) {
         updates.push(`confirmed_at = NOW()`)
       }
 
       // Auto-set cancelled_at when cancelling
-      if (status === 'cancelled') {
+      if (status === WORKSHOP_REGISTRATION_STATUS.CANCELLED) {
         updates.push(`cancelled_at = NOW()`)
       }
     }
@@ -88,7 +89,7 @@ export const PUT = withAdmin<{ id: string }>('workshops-admin', async (request, 
     })
 
     // Send email notification for status changes
-    if (status && ['confirmed', 'cancelled', 'waitlist'].includes(status)) {
+    if (status && (status === WORKSHOP_REGISTRATION_STATUS.CONFIRMED || status === WORKSHOP_REGISTRATION_STATUS.CANCELLED || status === WORKSHOP_REGISTRATION_STATUS.WAITLIST)) {
       try {
         // Get registration details with user and workshop info
         const detailsResult = await query(`

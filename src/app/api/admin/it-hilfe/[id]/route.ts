@@ -3,6 +3,7 @@ import { query } from '@/lib/auth/db'
 import { apiError, apiSuccess, apiNotFound, apiBadRequest } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES } from '@/config/database'
+import { REQUEST_STATUS } from '@/config/it-hilfe'
 import { validateBody } from '@/lib/schemas'
 import { AdminEditRequestSchema } from '@/lib/schemas/it-hilfe'
 import { logger } from '@/lib/logger'
@@ -115,8 +116,8 @@ export const DELETE = withAdmin<{ id: string }>('it-hilfe-admin', async (_reques
 
     const result = await query(
       `UPDATE ${TABLE_NAMES.IT_HILFE_REQUESTS}
-       SET status = 'cancelled', updated_at = NOW(), admin_notes = COALESCE(admin_notes, '') || ' [Admin-storniert]'
-       WHERE id = $1 AND status NOT IN ('completed', 'cancelled')
+       SET status = '${REQUEST_STATUS.CANCELLED}', updated_at = NOW(), admin_notes = COALESCE(admin_notes, '') || ' [Admin-storniert]'
+       WHERE id = $1 AND status NOT IN ('${REQUEST_STATUS.COMPLETED}', '${REQUEST_STATUS.CANCELLED}')
        RETURNING id`,
       [id]
     )

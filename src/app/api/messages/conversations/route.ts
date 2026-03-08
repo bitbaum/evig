@@ -4,6 +4,7 @@ import { query } from '@/lib/auth/db'
 import { apiError, apiSuccess, apiUnauthorized, apiBadRequest } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES } from '@/config/database'
+import { validateBody, CreateConversationSchema } from '@/lib/schemas'
 
 interface ConversationRow {
   id: string
@@ -109,11 +110,10 @@ export async function POST(request: NextRequest) {
       return apiUnauthorized(ERROR_MESSAGES.UNAUTHORIZED)
     }
 
-    const { participantId, type, contextId, initialMessage } = await request.json()
-
-    if (!participantId) {
-      return apiBadRequest('Teilnehmer-ID erforderlich')
-    }
+    const body = await request.json()
+    const validation = validateBody(CreateConversationSchema, body)
+    if (!validation.success) return validation.error
+    const { participantId, type, contextId, initialMessage } = validation.data
 
     if (participantId === session.user.id) {
       return apiBadRequest('Sie können keine Unterhaltung mit sich selbst starten')
@@ -127,7 +127,7 @@ export async function POST(request: NextRequest) {
       SELECT id FROM ${TABLE_NAMES.CONVERSATIONS}
       WHERE participant_1 = $1 AND participant_2 = $2
       AND type = $3 AND context_id = $4
-    `, [participant1, participant2, type || 'direct', contextId])
+    `, [participant1, participant2, type, contextId])
 
     if (existingConv.rows.length > 0) {
       return apiSuccess({
@@ -147,7 +147,7 @@ export async function POST(request: NextRequest) {
     `, [
       participant1,
       participant2,
-      type || 'direct',
+      type,
       contextId,
       `Unterhaltung mit ${participantId}`, // Will be updated with proper name
       initialMessage ? initialMessage.substring(0, 100) : 'Neue Unterhaltung'

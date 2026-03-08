@@ -27,7 +27,7 @@ interface PermissionRequest {
   review_notes: string | null
 }
 
-export const GET = withAdmin(async (request, session) => {
+export const GET = withAdmin('users', async (request, session) => {
   try {
     // Only super admins can view permission requests
     if (!isSuperAdmin(session.user.email)) {

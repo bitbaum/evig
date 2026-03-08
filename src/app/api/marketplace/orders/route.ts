@@ -8,7 +8,7 @@ import { withAuth, ValidSession } from '@/lib/api/middleware';
 import { apiSuccess, apiError, apiBadRequest, apiForbidden } from '@/lib/api/helpers';
 import { query, transaction } from '@/lib/auth/db';
 import { TABLE_NAMES } from '@/config/database';
-import { COMMISSION_RATE } from '@/config/marketplace';
+import { COMMISSION_RATE, LISTING_STATUS, ORDER_STATUS } from '@/config/marketplace';
 import { logger } from '@/lib/logger';
 import { validateBody, validateQuery, CreateOrderSchema, OrdersQuerySchema } from '@/lib/schemas';
 import { createGateway } from '@/lib/payments/payrexx-client';
@@ -46,7 +46,7 @@ export const POST = withAuth(async (request: NextRequest, session: ValidSession)
       return apiBadRequest('Inserat nicht gefunden');
     }
 
-    if (listing.status !== 'active') {
+    if (listing.status !== LISTING_STATUS.ACTIVE) {
       return apiBadRequest('Inserat ist nicht mehr verfügbar');
     }
 
@@ -98,7 +98,7 @@ export const POST = withAuth(async (request: NextRequest, session: ValidSession)
           totalChf,
           commissionChf,
           payoutChf,
-          'pending_payment',
+          ORDER_STATUS.PENDING_PAYMENT,
           data.delivery_method,
           data.shipping_address ? JSON.stringify(data.shipping_address) : null,
           'payrexx',
@@ -109,7 +109,7 @@ export const POST = withAuth(async (request: NextRequest, session: ValidSession)
 
       // Reserve listing
       await client.query(
-        `UPDATE ${TABLE_NAMES.LISTINGS} SET status = 'reserved' WHERE id = $1 AND status = 'active'`,
+        `UPDATE ${TABLE_NAMES.LISTINGS} SET status = '${LISTING_STATUS.RESERVED}' WHERE id = $1 AND status = '${LISTING_STATUS.ACTIVE}'`,
         [listing.id]
       );
 

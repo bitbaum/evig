@@ -6,6 +6,7 @@ import { NextRequest } from 'next/server';
 import { apiSuccess, apiError, apiNotFound } from '@/lib/api/helpers';
 import { query } from '@/lib/auth/db';
 import { TABLE_NAMES, REVIEW_TARGET_TYPES } from '@/config/database';
+import { REVIEW_STATUS } from '@/config/review-status';
 
 // ============================================================================
 // GET — Public seller profile
@@ -77,7 +78,7 @@ export async function GET(
       JOIN ${TABLE_NAMES.LISTINGS} l ON r.target_id = l.id
       WHERE r.target_type = $1
         AND l.seller_id = $2
-        AND r.status = 'published'`,
+        AND r.status = '${REVIEW_STATUS.PUBLISHED}'`,
       [REVIEW_TARGET_TYPES.LISTING, id]
     );
 

@@ -4,6 +4,7 @@ import { query } from '@/lib/auth/db'
 import { apiError, apiSuccess, apiUnauthorized, apiBadRequest, apiNotFound } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES } from '@/config/database'
+import { REVIEW_STATUS } from '@/config/review-status'
 import { logger } from '@/lib/logger'
 import { validateBody, ReviewVoteSchema } from '@/lib/schemas'
 
@@ -43,7 +44,7 @@ export async function POST(
     }
 
     const review = reviewResult.rows[0] as ReviewRow
-    if (review.status !== 'published') {
+    if (review.status !== REVIEW_STATUS.PUBLISHED) {
       return apiBadRequest('Diese Bewertung ist nicht verfügbar')
     }
 

@@ -3,6 +3,7 @@ import { query } from '@/lib/auth/db'
 import { apiError, apiSuccess } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES } from '@/config/database'
+import { REPORT_STATUS } from '@/config/report-status'
 import { CountRow } from '@/lib/api/db-types'
 import { validateQuery, AdminListingsQuerySchema } from '@/lib/schemas'
 
@@ -41,7 +42,7 @@ export const GET = withAdmin('marketplace', async (request) => {
     }
 
     if (reported === 'yes') {
-      conditions.push(`EXISTS (SELECT 1 FROM ${TABLE_NAMES.LISTING_REPORTS} lr WHERE lr.listing_id = l.id AND lr.status = 'pending')`)
+      conditions.push(`EXISTS (SELECT 1 FROM ${TABLE_NAMES.LISTING_REPORTS} lr WHERE lr.listing_id = l.id AND lr.status = '${REPORT_STATUS.PENDING}')`)
     }
 
     if (search) {
@@ -57,7 +58,7 @@ export const GET = withAdmin('marketplace', async (request) => {
         l.is_revampit, l.verified_at, l.admin_notes, l.created_at,
         u.name as seller_name, u.email as seller_email,
         (SELECT COUNT(*) FROM ${TABLE_NAMES.LISTING_REPORTS} lr
-         WHERE lr.listing_id = l.id AND lr.status = 'pending') as report_count
+         WHERE lr.listing_id = l.id AND lr.status = '${REPORT_STATUS.PENDING}') as report_count
       FROM ${TABLE_NAMES.LISTINGS} l
       JOIN ${TABLE_NAMES.USERS} u ON l.seller_id = u.id
       ${whereClause}

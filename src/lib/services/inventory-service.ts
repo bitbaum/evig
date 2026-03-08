@@ -8,6 +8,7 @@
 
 import { query } from '@/lib/auth/db'
 import { TABLE_NAMES } from '@/config/database'
+import { APPROVAL_STATUS } from '@/config/approval-status'
 import { logger } from '@/lib/logger'
 
 // ============================================================================
@@ -89,8 +90,8 @@ interface BuiltQuery {
  */
 function buildInventoryQuery(filters: InventoryFilters): BuiltQuery {
   const conditions: string[] = [
-    "i.marketplace_status = 'published'",
-    "p.status = 'approved'",
+    `i.marketplace_status = '${APPROVAL_STATUS.PUBLISHED}'`,
+    `p.status = '${APPROVAL_STATUS.APPROVED}'`,
     'i.quantity_available > 0',
   ]
   const params: (string | number)[] = []

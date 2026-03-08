@@ -4,7 +4,10 @@ import { query } from '@/lib/auth/db'
 import { apiError, apiSuccess, apiBadRequest, apiUnauthorized, apiForbidden, apiNotFound } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES } from '@/config/database'
+import { LOCATION_STATUS } from '@/config/location-status'
+import { BOOKING_STATUS } from '@/config/booking-status'
 import { QueryParams } from '@/lib/api/query-builder'
+import { validateBody, CreateLocationBookingSchema } from '@/lib/schemas'
 
 
 interface LocationStatusRow {
@@ -53,7 +56,7 @@ export async function GET(
     }
 
     const locationStatus = locationCheck.rows[0] as LocationStatusRow
-    if (locationStatus.approval_status !== 'approved') {
+    if (locationStatus.approval_status !== LOCATION_STATUS.APPROVED) {
       return apiForbidden('Ort ist nicht zur Buchung freigegeben')
     }
 
@@ -112,6 +115,8 @@ export async function POST(
       return apiUnauthorized(ERROR_MESSAGES.UNAUTHORIZED)
     }
     const body = await request.json()
+    const validation = validateBody(CreateLocationBookingSchema, body)
+    if (!validation.success) return validation.error
     const {
       event_type,
       event_id,
@@ -121,17 +126,7 @@ export async function POST(
       end_time,
       expected_attendees,
       special_requirements
-    } = body
-
-    // Validate required fields
-    if (!event_type || !title || !start_time || !end_time) {
-      return apiBadRequest(ERROR_MESSAGES.ALL_FIELDS_REQUIRED)
-    }
-
-    // Validate event type
-    if (!['workshop', 'repair', 'meeting', 'other'].includes(event_type)) {
-      return apiBadRequest('Ungültiger Veranstaltungstyp')
-    }
+    } = validation.data
 
     // Parse and validate dates
     const startDate = new Date(start_time)
@@ -160,7 +155,7 @@ export async function POST(
     }
 
     const location = locationCheck.rows[0] as LocationCapacityRow
-    if (location.approval_status !== 'approved') {
+    if (location.approval_status !== LOCATION_STATUS.APPROVED) {
       return apiForbidden('Ort ist nicht zur Buchung freigegeben')
     }
 
@@ -173,7 +168,7 @@ export async function POST(
     const conflictCheck = await query(`
       SELECT id, title, start_time, end_time FROM ${TABLE_NAMES.LOCATION_BOOKINGS}
       WHERE location_id = $1
-        AND status IN ('pending', 'confirmed')
+        AND status IN ('${BOOKING_STATUS.PENDING}', '${BOOKING_STATUS.CONFIRMED}')
         AND (
           (start_time <= $2 AND end_time > $2) OR
           (start_time < $3 AND end_time >= $3) OR

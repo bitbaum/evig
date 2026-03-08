@@ -4,6 +4,8 @@ import { query } from '@/lib/auth/db'
 import { apiError, apiSuccess, apiNotFound, apiBadRequest } from '@/lib/api/helpers'
 import { logger } from '@/lib/logger'
 import { TABLE_NAMES } from '@/config/database'
+import { PAYMENT_STATUS } from '@/config/payment-status'
+import { REFUND_STATUS } from '@/config/refund'
 import { getStripeClient } from '@/lib/payments/stripe-client'
 import type Stripe from 'stripe'
 
@@ -93,7 +95,7 @@ export const PUT = withAdmin<{ id: string }>('finanzen', async (request, session
 
     // Handle different actions
     if (action === 'approve') {
-      if (refund.status !== 'requested') {
+      if (refund.status !== REFUND_STATUS.REQUESTED) {
         return apiBadRequest('Refund is not in requested status')
       }
 
@@ -101,7 +103,7 @@ export const PUT = withAdmin<{ id: string }>('finanzen', async (request, session
       await query(`
         UPDATE ${TABLE_NAMES.REFUNDS}
         SET
-          status = 'approved',
+          status = '${REFUND_STATUS.APPROVED}',
           approved_by = $1,
           approved_at = CURRENT_TIMESTAMP,
           internal_notes = COALESCE(internal_notes, '') || $2,
@@ -114,7 +116,7 @@ export const PUT = withAdmin<{ id: string }>('finanzen', async (request, session
       ])
 
     } else if (action === 'reject') {
-      if (!['requested', 'approved'].includes(refund.status)) {
+      if (refund.status !== REFUND_STATUS.REQUESTED && refund.status !== REFUND_STATUS.APPROVED) {
         return apiBadRequest('Refund cannot be rejected in current status')
       }
 
@@ -122,7 +124,7 @@ export const PUT = withAdmin<{ id: string }>('finanzen', async (request, session
       await query(`
         UPDATE ${TABLE_NAMES.REFUNDS}
         SET
-          status = 'rejected',
+          status = '${REFUND_STATUS.REJECTED}',
           processed_by = $1,
           processed_at = CURRENT_TIMESTAMP,
           internal_notes = COALESCE(internal_notes, '') || $2,
@@ -135,7 +137,7 @@ export const PUT = withAdmin<{ id: string }>('finanzen', async (request, session
       ])
 
     } else if (action === 'process') {
-      if (refund.status !== 'approved') {
+      if (refund.status !== REFUND_STATUS.APPROVED) {
         return apiBadRequest('Refund must be approved before processing')
       }
 
@@ -163,7 +165,7 @@ export const PUT = withAdmin<{ id: string }>('finanzen', async (request, session
           UPDATE ${TABLE_NAMES.REFUNDS}
           SET
             refund_transaction_id = $1,
-            status = 'processing',
+            status = '${REFUND_STATUS.PROCESSING}',
             processed_by = $2,
             processed_at = CURRENT_TIMESTAMP,
             internal_notes = COALESCE(internal_notes, '') || $3,
@@ -196,7 +198,7 @@ export const PUT = withAdmin<{ id: string }>('finanzen', async (request, session
           refund.provider_id,
           stripeRefund.id,
           'refund',
-          'processing',
+          REFUND_STATUS.PROCESSING,
           refund.amount_cents,
           refund.currency,
           `Refund for transaction ${refund.provider_transaction_id}`,
@@ -211,7 +213,7 @@ export const PUT = withAdmin<{ id: string }>('finanzen', async (request, session
         await query(`
           UPDATE ${TABLE_NAMES.REFUNDS}
           SET
-            status = 'rejected',
+            status = '${REFUND_STATUS.REJECTED}',
             processed_by = $1,
             processed_at = CURRENT_TIMESTAMP,
             internal_notes = COALESCE(internal_notes, '') || $2,

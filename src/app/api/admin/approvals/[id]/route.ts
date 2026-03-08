@@ -9,6 +9,7 @@ import { query } from '@/lib/auth/db'
 import { apiError, apiSuccess, apiBadRequest, apiNotFound } from '@/lib/api/helpers'
 import { validateBody, AdminApprovalActionSchema } from '@/lib/schemas'
 import { TABLE_NAMES } from '@/config/database'
+import { APPROVAL_STATUS } from '@/config/approval-status'
 import { logger } from '@/lib/logger'
 import { sendEmail } from '@/lib/email'
 
@@ -34,11 +35,22 @@ export const PATCH = withAdmin<{ id: string }>('approvals', async (request, sess
       id: string; status: string; title: string; content_type: string; content_id: string | null
     }
 
-    if (submission.status !== 'pending') {
-      return apiBadRequest('Diese Einreichung wurde bereits bearbeitet')
+    // Allow pending → approved/rejected, and rejected → pending (re-review)
+    const VALID_TRANSITIONS: Record<string, string[]> = {
+      [APPROVAL_STATUS.PENDING]: [APPROVAL_STATUS.APPROVED, APPROVAL_STATUS.REJECTED],
+      [APPROVAL_STATUS.REJECTED]: [APPROVAL_STATUS.PENDING],
     }
 
-    const newStatus = action === 'approve' ? 'approved' : 'rejected'
+    const newStatus = action === 'approve' ? APPROVAL_STATUS.APPROVED : action === 'reopen' ? APPROVAL_STATUS.PENDING : APPROVAL_STATUS.REJECTED
+    const allowedNext = VALID_TRANSITIONS[submission.status]
+
+    if (!allowedNext || !allowedNext.includes(newStatus)) {
+      return apiBadRequest(
+        submission.status === APPROVAL_STATUS.APPROVED
+          ? 'Genehmigte Einreichungen können nicht geändert werden'
+          : `Ungültiger Statusübergang: ${submission.status} → ${newStatus}`
+      )
+    }
 
     await query(
       `UPDATE ${TABLE_NAMES.USER_CONTENT_SUBMISSIONS}

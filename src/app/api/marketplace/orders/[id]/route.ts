@@ -8,7 +8,7 @@ import { withAuth, ValidSession } from '@/lib/api/middleware';
 import { apiSuccess, apiError, apiBadRequest, apiForbidden, apiNotFound } from '@/lib/api/helpers';
 import { query } from '@/lib/auth/db';
 import { TABLE_NAMES } from '@/config/database';
-import { ORDER_STATUS_CONFIG } from '@/config/marketplace';
+import { ORDER_STATUS_CONFIG, ORDER_STATUS, LISTING_STATUS } from '@/config/marketplace';
 import type { OrderStatus } from '@/config/marketplace';
 import { formatCHF, DELIVERY_LABELS } from '@/config/marketplace';
 import type { DeliveryOption } from '@/config/marketplace';
@@ -44,9 +44,9 @@ interface OrderRow {
 
 // Valid status transitions: { currentStatus: { role: [allowedNewStatuses] } }
 const STATUS_TRANSITIONS: Record<string, Record<string, string[]>> = {
-  paid:      { seller: ['shipped'],    buyer: ['cancelled'] },
-  shipped:   { seller: ['delivered'],  buyer: [] },
-  delivered: { buyer: ['completed'],   seller: [] },
+  [ORDER_STATUS.PAID]:      { seller: [ORDER_STATUS.SHIPPED],    buyer: [ORDER_STATUS.CANCELLED] },
+  [ORDER_STATUS.SHIPPED]:   { seller: [ORDER_STATUS.DELIVERED],  buyer: [] },
+  [ORDER_STATUS.DELIVERED]: { buyer: [ORDER_STATUS.COMPLETED],   seller: [] },
 };
 
 // ============================================================================
@@ -152,7 +152,7 @@ export const PATCH = withAuth<{ id: string }>(async (
     const allowedTransitions = STATUS_TRANSITIONS[currentStatus]?.[role] || [];
 
     // Allow cancellation from pending_payment for either role
-    if (currentStatus === 'pending_payment' && newStatus === 'cancelled') {
+    if (currentStatus === ORDER_STATUS.PENDING_PAYMENT && newStatus === ORDER_STATUS.CANCELLED) {
       // OK — allowed
     } else if (!allowedTransitions.includes(newStatus)) {
       return apiBadRequest(
@@ -162,7 +162,7 @@ export const PATCH = withAuth<{ id: string }>(async (
     }
 
     // Handle payment operations for specific transitions
-    if (newStatus === 'completed' && order.payrexx_transaction_id) {
+    if (newStatus === ORDER_STATUS.COMPLETED && order.payrexx_transaction_id) {
       // Capture the held Payrexx reservation
       try {
         await captureTransaction(order.payrexx_transaction_id, Math.round(Number(order.amount_chf) * 100));
@@ -172,7 +172,7 @@ export const PATCH = withAuth<{ id: string }>(async (
       }
     }
 
-    if (newStatus === 'cancelled' && order.status !== 'pending_payment' && order.payrexx_transaction_id) {
+    if (newStatus === ORDER_STATUS.CANCELLED && order.status !== ORDER_STATUS.PENDING_PAYMENT && order.payrexx_transaction_id) {
       // Cancel/release the Payrexx reservation
       try {
         await cancelTransaction(order.payrexx_transaction_id);
@@ -204,10 +204,10 @@ export const PATCH = withAuth<{ id: string }>(async (
       params
     );
 
-    // If completed: update listing status to 'sold' and increment seller total_sold
-    if (newStatus === 'completed') {
+    // If completed: update listing status to sold and increment seller total_sold
+    if (newStatus === ORDER_STATUS.COMPLETED) {
       await query(
-        `UPDATE ${TABLE_NAMES.LISTINGS} SET status = 'sold' WHERE id = $1`,
+        `UPDATE ${TABLE_NAMES.LISTINGS} SET status = '${LISTING_STATUS.SOLD}' WHERE id = $1`,
         [order.listing_id]
       );
       await query(
@@ -217,9 +217,9 @@ export const PATCH = withAuth<{ id: string }>(async (
     }
 
     // If cancelled: restore listing to active
-    if (newStatus === 'cancelled') {
+    if (newStatus === ORDER_STATUS.CANCELLED) {
       await query(
-        `UPDATE ${TABLE_NAMES.LISTINGS} SET status = 'active' WHERE id = $1 AND status = 'reserved'`,
+        `UPDATE ${TABLE_NAMES.LISTINGS} SET status = '${LISTING_STATUS.ACTIVE}' WHERE id = $1 AND status = '${LISTING_STATUS.RESERVED}'`,
         [order.listing_id]
       );
     }
@@ -239,10 +239,10 @@ export const PATCH = withAuth<{ id: string }>(async (
     const counterpartyName = role === 'buyer' ? order.seller_name : order.buyer_name;
 
     const actionHints: Record<string, string> = {
-      shipped: 'Ihr Paket ist unterwegs. Bitte bestätigen Sie den Empfang.',
-      delivered: 'Bitte überprüfen Sie den Artikel und bestätigen Sie den Empfang.',
-      completed: 'Die Zahlung wurde freigegeben. Vielen Dank!',
-      cancelled: 'Die Bestellung wurde storniert.',
+      [ORDER_STATUS.SHIPPED]: 'Ihr Paket ist unterwegs. Bitte bestätigen Sie den Empfang.',
+      [ORDER_STATUS.DELIVERED]: 'Bitte überprüfen Sie den Artikel und bestätigen Sie den Empfang.',
+      [ORDER_STATUS.COMPLETED]: 'Die Zahlung wurde freigegeben. Vielen Dank!',
+      [ORDER_STATUS.CANCELLED]: 'Die Bestellung wurde storniert.',
     };
 
     if (counterpartyEmail && statusConfig) {

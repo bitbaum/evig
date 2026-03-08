@@ -7,6 +7,7 @@ import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
 import { sendCustomEmail, appointmentNewBooking } from '@/lib/email'
 import { rateLimiters } from '@/lib/security/rate-limit'
+import { BOOKING_STATUS } from '@/config/booking-status'
 
 interface RepairerRow {
   id: string
@@ -143,7 +144,7 @@ export const POST = withAuth<{ id: string }>(async (
           visit_address,
           visit_postal_code,
           visit_city
-        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, 'requested', $9, $10, $11, $12)
+        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, '${BOOKING_STATUS.REQUESTED}', $9, $10, $11, $12)
         RETURNING id, created_at
       `, [
         session.user.id,
@@ -210,7 +211,7 @@ export const POST = withAuth<{ id: string }>(async (
           created_at: appointment.created_at,
           repairer_name: repairer.business_name,
           service_name: serviceType.name,
-          status: 'requested',
+          status: BOOKING_STATUS.REQUESTED,
           preferred_date: preferred_date || null
         }
       })

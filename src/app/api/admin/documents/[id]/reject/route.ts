@@ -4,6 +4,7 @@ import { query, transaction } from '@/lib/auth/db'
 import { apiError, apiSuccess, apiBadRequest, apiNotFound } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES } from '@/config/database'
+import { DOCUMENT_STATUS } from '@/config/document-status'
 import { logger } from '@/lib/logger'
 
 interface DocumentRow {
@@ -43,11 +44,11 @@ export const PUT = withAdmin<{ id: string }>('content', async (request, session,
 
     const document = documentResult.rows[0] as DocumentRow
 
-    if (document.status === 'approved') {
+    if (document.status === DOCUMENT_STATUS.APPROVED) {
       return apiBadRequest('Ein bereits genehmigtes Dokument kann nicht abgelehnt werden')
     }
 
-    if (document.status === 'rejected') {
+    if (document.status === DOCUMENT_STATUS.REJECTED) {
       return apiBadRequest('Dieses Dokument wurde bereits abgelehnt')
     }
 
@@ -57,7 +58,7 @@ export const PUT = withAdmin<{ id: string }>('content', async (request, session,
       await client.query(`
         UPDATE ${TABLE_NAMES.VERIFICATION_DOCUMENTS}
         SET
-          status = 'rejected',
+          status = '${DOCUMENT_STATUS.REJECTED}',
           admin_notes = COALESCE($1, admin_notes) || E'\n\nAblehnungsgrund: ' || $2,
           reviewed_by = $3,
           reviewed_at = CURRENT_TIMESTAMP,

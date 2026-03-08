@@ -12,3 +12,12 @@ export const SendMessageSchema = z.object({
 })
 
 export type SendMessageInput = z.infer<typeof SendMessageSchema>
+
+export const CreateConversationSchema = z.object({
+  participantId: uuidSchema,
+  type: z.string().max(50).default('direct'),
+  contextId: uuidSchema.optional().nullable(),
+  initialMessage: z.string().min(1).max(5000).optional(),
+})
+
+export type CreateConversationInput = z.infer<typeof CreateConversationSchema>

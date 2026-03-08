@@ -5,6 +5,8 @@ import { requireStripeClient } from '@/lib/payments/stripe-client'
 import { query, transaction } from '@/lib/auth/db'
 import { apiError, apiSuccess, apiUnauthorized, apiBadRequest, apiNotFound } from '@/lib/api/helpers'
 import { TABLE_NAMES } from '@/config/database'
+import { PAYMENT_STATUS } from '@/config/payment-status'
+import { REFUND_STATUS } from '@/config/refund'
 import { logger } from '@/lib/logger'
 import { validateBody, RefundSchema } from '@/lib/schemas'
 
@@ -55,7 +57,7 @@ export const POST = withAuth(async (request, session) => {
       FROM ${TABLE_NAMES.PAYMENT_TRANSACTIONS} pt
       JOIN ${TABLE_NAMES.PAYMENT_PROVIDERS} pp ON pt.provider_id = pp.id
       JOIN ${TABLE_NAMES.USERS} u ON pt.user_id = u.id
-      WHERE pt.id = $1 AND pt.status = 'succeeded'
+      WHERE pt.id = $1 AND pt.status = '${PAYMENT_STATUS.SUCCEEDED}'
     `, [transactionId])
 
     if (transactionResult.rows.length === 0) {
@@ -81,7 +83,7 @@ export const POST = withAuth(async (request, session) => {
     const existingRefundsResult = await query(`
       SELECT COALESCE(SUM(amount_cents), 0) as total_refunded
       FROM ${TABLE_NAMES.REFUNDS}
-      WHERE original_transaction_id = $1 AND status IN ('approved', 'processing', 'completed')
+      WHERE original_transaction_id = $1 AND status IN ('${REFUND_STATUS.APPROVED}', '${REFUND_STATUS.PROCESSING}', '${REFUND_STATUS.COMPLETED}')
     `, [transactionId])
 
     const refundTotals = existingRefundsResult.rows[0] as RefundTotalRow
@@ -117,7 +119,7 @@ export const POST = withAuth(async (request, session) => {
       reasonDetails || null,
       session.user.id,
       customerNotes || null,
-      isAdmin ? 'approved' : 'requested'
+      isAdmin ? REFUND_STATUS.APPROVED : REFUND_STATUS.REQUESTED
     ])
 
     const refund = refundResult.rows[0] as RefundCreatedRow
@@ -146,7 +148,7 @@ export const POST = withAuth(async (request, session) => {
             UPDATE ${TABLE_NAMES.REFUNDS}
             SET
               refund_transaction_id = $1,
-              status = 'processing',
+              status = '${REFUND_STATUS.PROCESSING}',
               processed_by = $2,
               processed_at = CURRENT_TIMESTAMP,
               approved_at = CURRENT_TIMESTAMP,
@@ -174,7 +176,7 @@ export const POST = withAuth(async (request, session) => {
             txn.provider_id,
             stripeRefund.id,
             'refund',
-            'processing',
+            REFUND_STATUS.PROCESSING,
             refundAmountCents,
             txn.currency,
             `Refund for transaction ${txn.provider_transaction_id}`,
@@ -190,7 +192,7 @@ export const POST = withAuth(async (request, session) => {
         await query(`
           UPDATE ${TABLE_NAMES.REFUNDS}
           SET
-            status = 'rejected',
+            status = '${REFUND_STATUS.REJECTED}',
             processed_at = CURRENT_TIMESTAMP,
             internal_notes = $1
           WHERE id = $2
@@ -203,7 +205,7 @@ export const POST = withAuth(async (request, session) => {
     return apiSuccess({
       refundId,
       refundNumber,
-      status: isAdmin ? 'processing' : 'requested',
+      status: isAdmin ? REFUND_STATUS.PROCESSING : REFUND_STATUS.REQUESTED,
       message: isAdmin ? 'Erstattung erfolgreich verarbeitet' : 'Erstattungsantrag zur Genehmigung eingereicht'
     })
   } catch (error) {

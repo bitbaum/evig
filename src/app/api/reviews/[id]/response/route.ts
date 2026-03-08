@@ -4,6 +4,7 @@ import { query } from '@/lib/auth/db'
 import { apiError, apiSuccess, apiUnauthorized, apiBadRequest, apiNotFound, apiForbidden } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES, REVIEW_TARGET_TYPES } from '@/config/database'
+import { REVIEW_STATUS } from '@/config/review-status'
 import { logger } from '@/lib/logger'
 import { validateBody, ReviewResponseSchema } from '@/lib/schemas'
 
@@ -81,7 +82,7 @@ export async function POST(
     const responseResult = await query(`
       INSERT INTO ${TABLE_NAMES.REVIEW_RESPONSES} (
         review_id, responder_id, content, status
-      ) VALUES ($1, $2, $3, 'published')
+      ) VALUES ($1, $2, $3, '${REVIEW_STATUS.PUBLISHED}')
       RETURNING id
     `, [reviewId, session.user.id, content.trim()])
 

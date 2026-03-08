@@ -4,6 +4,7 @@ import { requireStripeClient } from '@/lib/payments/stripe-client'
 import { query } from '@/lib/auth/db'
 import { apiError, apiSuccess, apiUnauthorized, apiNotFound, apiBadRequest } from '@/lib/api/helpers'
 import { TABLE_NAMES } from '@/config/database'
+import { PAYMENT_STATUS, ESCROW_STATUS } from '@/config/payment-status'
 import { logger } from '@/lib/logger'
 import { validateBody, EscrowReleaseSchema } from '@/lib/schemas'
 
@@ -153,7 +154,7 @@ export const POST = withAuth<{ id: string }>(async (request, session, context) =
         pt.currency
       FROM ${TABLE_NAMES.ESCROW_ACCOUNTS} ea
       JOIN ${TABLE_NAMES.PAYMENT_TRANSACTIONS} pt ON ea.transaction_id = pt.id
-      WHERE ea.id = $1 AND ea.status = 'active'
+      WHERE ea.id = $1 AND ea.status = '${ESCROW_STATUS.ACTIVE}'
     `, [escrowId])
 
     if (escrowResult.rows.length === 0) {
@@ -190,7 +191,7 @@ export const POST = withAuth<{ id: string }>(async (request, session, context) =
         await query(`
           UPDATE ${TABLE_NAMES.ESCROW_ACCOUNTS}
           SET
-            status = 'released',
+            status = '${ESCROW_STATUS.RELEASED}',
             released_amount_cents = total_amount_cents,
             released_at = CURRENT_TIMESTAMP,
             release_notes = $1,
@@ -256,7 +257,7 @@ export const POST = withAuth<{ id: string }>(async (request, session, context) =
         escrow.provider_id,
         `release_${escrow.provider_transaction_id}_${Date.now()}`,
         'transfer',
-        'succeeded',
+        PAYMENT_STATUS.SUCCEEDED,
         releaseAmountCents,
         escrow.currency,
         `Escrow release: ${reason || 'Released by buyer'}`,

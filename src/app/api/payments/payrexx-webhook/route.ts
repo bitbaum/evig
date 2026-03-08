@@ -22,7 +22,7 @@ import {
   orderConfirmationBuyer,
   newOrderNotificationSeller,
 } from '@/lib/email/templates/marketplace';
-import { formatCHF, DELIVERY_LABELS } from '@/config/marketplace';
+import { formatCHF, DELIVERY_LABELS, ORDER_STATUS } from '@/config/marketplace';
 import type { DeliveryOption } from '@/config/marketplace';
 
 const PAYREXX_WEBHOOK_SECRET = process.env.PAYREXX_WEBHOOK_SECRET;
@@ -123,7 +123,7 @@ export async function POST(request: NextRequest) {
     switch (status) {
       case 'reserved': {
         // Payment reserved — buyer has paid, amount is held
-        if (order.status !== 'pending_payment') {
+        if (order.status !== ORDER_STATUS.PENDING_PAYMENT) {
           logger.info('Payrexx webhook: order not in pending_payment, skipping', {
             orderId: order.id,
             currentStatus: order.status,
@@ -152,7 +152,7 @@ export async function POST(request: NextRequest) {
 
       case 'confirmed': {
         // Payment captured — order completed
-        if (order.status !== 'paid' && order.status !== 'delivered') {
+        if (order.status !== ORDER_STATUS.PAID && order.status !== ORDER_STATUS.DELIVERED) {
           logger.info('Payrexx webhook: unexpected confirmed status', {
             orderId: order.id,
             currentStatus: order.status,
@@ -172,7 +172,7 @@ export async function POST(request: NextRequest) {
       case 'cancelled':
       case 'declined': {
         // Payment cancelled or declined
-        if (order.status === 'completed' || order.status === 'cancelled') {
+        if (order.status === ORDER_STATUS.COMPLETED || order.status === ORDER_STATUS.CANCELLED) {
           return NextResponse.json({ received: true });
         }
 

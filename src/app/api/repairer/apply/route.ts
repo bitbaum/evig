@@ -7,6 +7,7 @@ import { TABLE_NAMES } from '@/config/database'
 import { sendEmail } from '@/lib/email'
 import { logger } from '@/lib/logger'
 import { APP_URL } from '@/config/urls'
+import { APPROVAL_STATUS } from '@/config/approval-status'
 import { validateBody, RepairerApplicationSchema } from '@/lib/schemas'
 
 interface ApplicationRow {
@@ -85,10 +86,10 @@ export async function POST(request: NextRequest) {
 
     if (existingApplication.rows.length > 0) {
       const app = existingApplication.rows[0] as ApplicationRow
-      if (app.status === 'approved') {
+      if (app.status === APPROVAL_STATUS.APPROVED) {
         return apiBadRequest('Ihr Profil wurde bereits freigeschaltet')
       }
-      if (app.status === 'pending') {
+      if (app.status === APPROVAL_STATUS.PENDING) {
         return apiBadRequest(ERROR_MESSAGES.PENDING_APPLICATION)
       }
     }
@@ -138,7 +139,7 @@ export async function POST(request: NextRequest) {
         status
       ) VALUES (
         $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15,
-        $16, $17, $18, $19, $20, $21, $22, 'pending'
+        $16, $17, $18, $19, $20, $21, $22, '${APPROVAL_STATUS.PENDING}'
       )
       RETURNING id
     `, [

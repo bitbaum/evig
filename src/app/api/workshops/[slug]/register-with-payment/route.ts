@@ -5,6 +5,7 @@ import { apiError, apiSuccess, apiUnauthorized, apiNotFound, apiBadRequest } fro
 import { logger } from '@/lib/logger'
 import { requireStripeClient } from '@/lib/payments/stripe-client'
 import { TABLE_NAMES } from '@/config/database'
+import { WORKSHOP_REGISTRATION_STATUS } from '@/config/workshop-registration-status'
 import {
   processPayment,
   buildInvoiceLineItem,
@@ -110,7 +111,7 @@ export async function POST(request: NextRequest) {
 
     if (existingRegistration.rows.length > 0) {
       const reg = existingRegistration.rows[0] as RegistrationRow
-      if (reg.status === 'confirmed' || reg.status === 'attended') {
+      if (reg.status === WORKSHOP_REGISTRATION_STATUS.CONFIRMED || reg.status === WORKSHOP_REGISTRATION_STATUS.ATTENDED) {
         return apiBadRequest('Sie sind bereits für diesen Workshop angemeldet')
       }
     }
@@ -127,7 +128,7 @@ export async function POST(request: NextRequest) {
           payment_status,
           payment_amount_cents
         ) VALUES (
-          $1, $2, 'pending', 'pending', $3
+          $1, $2, '${WORKSHOP_REGISTRATION_STATUS.PENDING}', 'pending', $3
         )
         RETURNING id, created_at
       `, [

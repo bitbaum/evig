@@ -4,8 +4,10 @@ import { query } from '@/lib/auth/db'
 import { apiError, apiSuccess, apiBadRequest, apiUnauthorized } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES } from '@/config/database'
+import { LOCATION_STATUS } from '@/config/location-status'
 import { QueryParams } from '@/lib/api/query-builder'
 import { CountRow } from '@/lib/api/db-types'
+import { validateBody, CreateLocationSchema } from '@/lib/schemas'
 
 // GET /api/locations - List locations with filtering
 export async function GET(request: NextRequest) {
@@ -18,15 +20,15 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url)
     const type = searchParams.get('type')
     const city = searchParams.get('city')
-    const status = searchParams.get('status') || 'approved'
+    const status = searchParams.get('status') || LOCATION_STATUS.APPROVED
     const limit = parseInt(searchParams.get('limit') || '50')
     const offset = parseInt(searchParams.get('offset') || '0')
 
     // Build query conditions — DB uses is_approved boolean, map status param
     const qb = new QueryParams()
-    if (status === 'approved') {
+    if (status === LOCATION_STATUS.APPROVED) {
       qb.add('is_approved = $P', 'true')
-    } else if (status === 'pending') {
+    } else if (status === LOCATION_STATUS.PENDING) {
       qb.add('is_approved = $P', 'false')
     }
 
@@ -84,6 +86,8 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json()
+    const validation = validateBody(CreateLocationSchema, body)
+    if (!validation.success) return validation.error
     const {
       name,
       type,
@@ -93,38 +97,15 @@ export async function POST(request: NextRequest) {
       postal_code,
       city,
       canton,
-      country = 'Switzerland',
+      country,
       latitude,
       longitude,
       max_capacity,
-      facilities = [],
+      facilities,
       contact_name,
       contact_phone,
       contact_email
-    } = body
-
-    // Validate required fields
-    if (!name || !type || !city) {
-      return apiBadRequest(ERROR_MESSAGES.ALL_FIELDS_REQUIRED)
-    }
-
-    // Validate Swiss postal code if provided
-    if (postal_code && !/^[0-9]{4}$/.test(postal_code)) {
-      return apiBadRequest('Ungültige Schweizer Postleitzahl')
-    }
-
-    // Validate coordinates if provided
-    if ((latitude && !longitude) || (!latitude && longitude)) {
-      return apiBadRequest('Beide Koordinaten (Breitengrad und Längengrad) müssen angegeben werden')
-    }
-
-    if (latitude && (latitude < -90 || latitude > 90)) {
-      return apiBadRequest('Ungültiger Breitengrad')
-    }
-
-    if (longitude && (longitude < -180 || longitude > 180)) {
-      return apiBadRequest('Ungültiger Längengrad')
-    }
+    } = validation.data
 
     // Check for duplicate locations in same area
     const existingLocation = await query(`

@@ -39,24 +39,27 @@ jest.mock('@/lib/security/sanitize', () => ({
   sanitizeInput: jest.fn((input: string) => input),
 }))
 
-jest.mock('@/lib/schemas/it-hilfe', () => ({
-  itHilfeRequestSchema: {},
-  validateAndRespond: jest.fn().mockReturnValue({
-    success: true,
-    data: {
-      categoryId: 'laptop',
-      title: 'Test Anfrage',
-      description: 'Mein Laptop startet nicht mehr',
-      urgency: 'medium',
-      maxBudgetCents: null,
-      postalCode: '8001',
-      city: 'Zürich',
-      canton: 'ZH',
-      serviceType: 'flexible',
-      skillsNeeded: [],
-    },
-  }),
-}))
+jest.mock('@/lib/schemas/it-hilfe', () => {
+  const actual = jest.requireActual('@/lib/schemas/it-hilfe')
+  return {
+    ...actual,
+    validateAndRespond: jest.fn().mockReturnValue({
+      success: true,
+      data: {
+        categoryId: 'laptop',
+        title: 'Test Anfrage',
+        description: 'Mein Laptop startet nicht mehr',
+        urgency: 'medium',
+        maxBudgetCents: null,
+        postalCode: '8001',
+        city: 'Zürich',
+        canton: 'ZH',
+        serviceType: 'flexible',
+        skillsNeeded: [],
+      },
+    }),
+  }
+})
 
 jest.mock('@/lib/email/templates/it-hilfe', () => ({
   itHilfeRequestConfirmation: jest.fn().mockReturnValue({ subject: '', html: '' }),
@@ -378,7 +381,6 @@ describe('PUT /api/it-hilfe/requests/[id]', () => {
       makeCtx(validId),
     )
     const body = await res.json()
-
     expect(body.success).toBe(true)
   })
 

@@ -10,6 +10,7 @@ import { query } from '@/lib/auth/db'
 import { apiError, apiSuccess, apiNotFound, apiBadRequest } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES } from '@/config/database'
+import { INTAKE_STATUS } from '@/config/intake-status'
 import { logger } from '@/lib/logger'
 import { z } from 'zod'
 import { validateBody } from '@/lib/schemas'
@@ -55,7 +56,7 @@ export const POST = withAdmin<{ id: string }>('intake', async (request, session,
     const row = existing.rows[0]
     const oldTier = row.intake_tier as IntakeTier
 
-    if (row.marketplace_status === 'published') {
+    if (row.marketplace_status === INTAKE_STATUS.PUBLISHED) {
       return apiBadRequest('Stufe kann nicht geändert werden — Gerät ist bereits publiziert')
     }
 

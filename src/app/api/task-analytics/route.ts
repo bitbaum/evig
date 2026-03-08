@@ -12,6 +12,7 @@ import { withAdmin, ValidSession } from '@/lib/api/middleware';
 import { apiSuccess, apiError, apiBadRequest } from '@/lib/api/helpers';
 import { query } from '@/lib/auth/db';
 import { TABLE_NAMES } from '@/config/database';
+import { TASK_STATUSES, REQUEST_STATUSES } from '@/config/tasks';
 import { logger } from '@/lib/logger';
 
 const analyticsQuerySchema = z.object({
@@ -36,9 +37,9 @@ export const GET = withAdmin(async (request: NextRequest, session: ValidSession)
     const statsResult = await query(`
       SELECT
         COUNT(*) FILTER (WHERE NOT is_archived) as total_active,
-        COUNT(*) FILTER (WHERE current_status = 'needs_attention' AND NOT is_archived) as needs_attention,
-        COUNT(*) FILTER (WHERE current_status = 'requested' AND NOT is_archived) as requested,
-        COUNT(*) FILTER (WHERE current_status = 'in_progress' AND NOT is_archived) as in_progress,
+        COUNT(*) FILTER (WHERE current_status = '${TASK_STATUSES.NEEDS_ATTENTION}' AND NOT is_archived) as needs_attention,
+        COUNT(*) FILTER (WHERE current_status = '${TASK_STATUSES.REQUESTED}' AND NOT is_archived) as requested,
+        COUNT(*) FILTER (WHERE current_status = '${TASK_STATUSES.IN_PROGRESS}' AND NOT is_archived) as in_progress,
         COUNT(*) FILTER (WHERE is_completed AND NOT is_archived) as completed_one_time
       FROM ${TABLE_NAMES.TASKS}
     `);
@@ -104,7 +105,7 @@ export const GET = withAdmin(async (request: NextRequest, session: ValidSession)
     const pendingRequestsResult = await query(`
       SELECT COUNT(*) as pending_requests
       FROM ${TABLE_NAMES.TASK_REQUESTS}
-      WHERE status = 'pending'
+      WHERE status = '${REQUEST_STATUSES.PENDING}'
     `);
 
     // Active attention flags

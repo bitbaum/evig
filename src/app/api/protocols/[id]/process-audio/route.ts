@@ -5,8 +5,10 @@ import { getDbUserId } from '@/lib/api/task-helpers'
 import { isSuperAdmin } from '@/lib/permissions'
 import { getProtocolById, processTranscript } from '@/lib/services/protocols'
 import { ERROR_MESSAGES } from '@/config/error-messages'
+import { PROTOCOL_STATUSES } from '@/config/protocols'
 import { logger } from '@/lib/logger'
 import { validateAudioUpload } from '@/lib/protocols/audio-validation'
+import { WHISPER_MODELS } from '@/config/transcription'
 
 type RouteParams = { id: string }
 
@@ -44,7 +46,7 @@ export const POST = withAdmin<RouteParams>(async (
       return apiNotFound('Protokoll')
     }
 
-    if (protocol.status !== 'draft' && protocol.status !== 'review') {
+    if (protocol.status !== PROTOCOL_STATUSES.DRAFT && protocol.status !== PROTOCOL_STATUSES.REVIEW) {
       return apiBadRequest(ERROR_MESSAGES.PROTOCOL_NOT_EDITABLE)
     }
 
@@ -58,7 +60,11 @@ export const POST = withAdmin<RouteParams>(async (
     const transcribeFormData = new FormData()
     transcribeFormData.append('audio', audioFile)
 
-    const transcribeResponse = await fetch(`${TRANSCRIPTION_URL}/transcribe?language=de`, {
+    const requestedModel = formData.get('model') as string | null
+    const validModel = WHISPER_MODELS.find(m => m.id === requestedModel)
+    const modelParam = validModel ? `&model=${validModel.id}` : ''
+
+    const transcribeResponse = await fetch(`${TRANSCRIPTION_URL}/transcribe?language=de${modelParam}`, {
       method: 'POST',
       body: transcribeFormData,
     })

@@ -3,6 +3,7 @@ import { query } from '@/lib/auth/db'
 import { apiError, apiSuccess } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES } from '@/config/database'
+import { HELPER_STATUS } from '@/config/helper-status'
 import { CountRow } from '@/lib/api/db-types'
 
 // GET /api/admin/it-hilfe/helpers - List all helper profiles
@@ -18,11 +19,11 @@ export const GET = withAdmin('it-hilfe-admin', async (request) => {
     const conditions: string[] = []
     const params: (string | number)[] = []
 
-    if (status === 'active') {
+    if (status === HELPER_STATUS.ACTIVE) {
       conditions.push(`hp.is_active = true AND hp.suspended_at IS NULL`)
-    } else if (status === 'verified') {
+    } else if (status === HELPER_STATUS.VERIFIED) {
       conditions.push(`hp.is_verified = true`)
-    } else if (status === 'suspended') {
+    } else if (status === HELPER_STATUS.SUSPENDED) {
       conditions.push(`hp.suspended_at IS NOT NULL`)
     }
 

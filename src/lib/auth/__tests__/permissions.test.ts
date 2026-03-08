@@ -247,11 +247,11 @@ describe('getAccessibleSections', () => {
     const staff: StaffUser = {
       email: 'staff@revamp-it.ch',
       is_staff: true,
-      staff_permissions: ['dashboard', 'products'],
+      staff_permissions: ['dashboard', 'marketplace'],
     }
     const sections = getAccessibleSections(staff)
     expect(sections).toContain('dashboard')
-    expect(sections).toContain('products')
+    expect(sections).toContain('marketplace')
     expect(sections).not.toContain('hirn')
   })
 
