@@ -1,0 +1,97 @@
+'use client'
+
+import { ExternalLink } from 'lucide-react'
+import { formatDateShort } from '@/lib/date-formats'
+import { REPORT_REASONS } from '@/config/marketplace'
+import { REPORT_STATUS } from '@/config/report-status'
+import type { ReportRow, PaginatedResponse } from './types'
+
+function getReportReasonLabel(reason: string): string {
+  return REPORT_REASONS.find(r => r.value === reason)?.label ?? reason
+}
+
+interface ReportsTabProps {
+  reports: PaginatedResponse<ReportRow> | null
+  filter: { status: string }
+  setFilter: React.Dispatch<React.SetStateAction<{ status: string }>>
+  offset: number
+  setOffset: React.Dispatch<React.SetStateAction<number>>
+  onHandle: (id: string) => void
+}
+
+export function ReportsTab({ reports, filter, setFilter, offset, setOffset, onHandle }: ReportsTabProps) {
+  return (
+    <div className="space-y-4">
+      <div className="flex gap-3">
+        <select value={filter.status} onChange={e => { setFilter({ status: e.target.value }); setOffset(0) }} className="px-3 py-2 text-sm border rounded-lg dark:bg-gray-800 dark:border-gray-600">
+          <option value="pending">Offen</option>
+          <option value="reviewed">Bearbeitet</option>
+          <option value="all">Alle</option>
+        </select>
+      </div>
+
+      <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 overflow-x-auto">
+        <table className="w-full text-sm">
+          <thead>
+            <tr className="border-b border-gray-200 dark:border-gray-700 text-left">
+              <th className="px-4 py-3 font-medium text-gray-600 dark:text-gray-400">Inserat</th>
+              <th className="px-4 py-3 font-medium text-gray-600 dark:text-gray-400">Grund</th>
+              <th className="px-4 py-3 font-medium text-gray-600 dark:text-gray-400">Melder</th>
+              <th className="px-4 py-3 font-medium text-gray-600 dark:text-gray-400">Datum</th>
+              <th className="px-4 py-3 font-medium text-gray-600 dark:text-gray-400">Status</th>
+              <th className="px-4 py-3 font-medium text-gray-600 dark:text-gray-400">Aktionen</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
+            {reports?.items.map(r => (
+              <tr key={r.id} className="hover:bg-gray-50 dark:hover:bg-gray-700/50">
+                <td className="px-4 py-3">
+                  <a href={`/marketplace/${r.listing_id}`} target="_blank" rel="noopener noreferrer" className="font-medium text-gray-900 dark:text-white hover:text-green-600 flex items-center gap-1">
+                    {r.listing_title} <ExternalLink className="w-3 h-3" />
+                  </a>
+                  <p className="text-xs text-gray-500">Verkäufer: {r.seller_name || r.seller_email}</p>
+                </td>
+                <td className="px-4 py-3">
+                  <span className="font-medium">{getReportReasonLabel(r.reason)}</span>
+                  {r.details && <p className="text-xs text-gray-500 mt-1 max-w-xs truncate">{r.details}</p>}
+                </td>
+                <td className="px-4 py-3 text-gray-600 dark:text-gray-400">{r.reporter_name || r.reporter_email}</td>
+                <td className="px-4 py-3 text-gray-500 whitespace-nowrap">{formatDateShort(r.created_at)}</td>
+                <td className="px-4 py-3">
+                  {r.status === REPORT_STATUS.PENDING ? (
+                    <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-700">Offen</span>
+                  ) : (
+                    <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-600">{r.resolution_action ?? 'Bearbeitet'}</span>
+                  )}
+                </td>
+                <td className="px-4 py-3">
+                  {r.status === REPORT_STATUS.PENDING && (
+                    <button
+                      onClick={() => onHandle(r.id)}
+                      className="px-3 py-1.5 text-sm rounded-lg border border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700"
+                    >
+                      Bearbeiten
+                    </button>
+                  )}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        {reports && reports.items.length === 0 && (
+          <div className="p-8 text-center text-gray-500">Keine Meldungen gefunden</div>
+        )}
+      </div>
+
+      {reports && reports.pagination.total > 50 && (
+        <div className="flex items-center justify-between">
+          <span className="text-sm text-gray-500">{reports.pagination.total} Meldungen</span>
+          <div className="flex gap-2">
+            <button disabled={offset === 0} onClick={() => setOffset(o => Math.max(0, o - 50))} className="px-3 py-1.5 text-sm border rounded-lg disabled:opacity-50">Zurück</button>
+            <button disabled={!reports.pagination.hasMore} onClick={() => setOffset(o => o + 50)} className="px-3 py-1.5 text-sm border rounded-lg disabled:opacity-50">Weiter</button>
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}

@@ -6,310 +6,28 @@
  * Two tabs:
  * - Erfasste Produkte: ALL products from Erfassung (draft + published)
  * - Shop Produkte: ONLY published products (mirrors customer shop exactly)
+ *
+ * Thin orchestrator — state lives in useProductActions,
+ * sub-components are purely presentational.
  */
 
-import React, { useState, useMemo } from 'react'
-import { useRouter } from 'next/navigation'
+import React from 'react'
 import { Loader2, AlertTriangle } from 'lucide-react'
-import { useInventoryProducts, type InventoryProduct } from '@/hooks/useInventoryProducts'
-import { useShopProducts, type ShopProduct } from '@/hooks/useShopProducts'
-import { ConfirmDialog } from '@/components/ui/ConfirmDialog'
 import {
   ProductTabSwitcher,
   ProductStatsCards,
   ProductFilterBar,
   InventoryProductsTable,
   ShopProductsTable,
-  type TabType,
-  type FilterStatus,
-  type InventoryStats,
-  type ShopStats,
 } from './products'
-import { MARKETPLACE_STATUS, PRODUCT_STATUS } from '@/config/marketplace-status'
+import { ProductConfirmDialogs } from './products/ProductConfirmDialogs'
+import { useProductActions } from './products/useProductActions'
 
 export default function ProductManagement() {
-  const router = useRouter()
-
-  // Data hooks
-  const { data: shopData, isLoading: shopLoading, error: shopError, refetch: refetchShop } = useShopProducts({ limit: 100 })
-  const { data: inventoryData, isLoading: inventoryLoading, error: inventoryError, refetch: refetchInventory } = useInventoryProducts()
-
-  // UI state
-  const [activeTab, setActiveTab] = useState<TabType>('inventory')
-  const [searchQuery, setSearchQuery] = useState('')
-  const [filterStatus, setFilterStatus] = useState<FilterStatus>('all')
-  const [filterCategory, setFilterCategory] = useState('all')
-
-  // Selection state
-  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
-
-  // Delete confirmation state
-  const [deleteTarget, setDeleteTarget] = useState<{
-    type: 'shop' | 'inventory'
-    id: string
-    name: string
-  } | null>(null)
-  const [isDeleting, setIsDeleting] = useState(false)
-  const [deleteError, setDeleteError] = useState<string | null>(null)
-
-  // Bulk delete confirmation state
-  const [bulkDeletePending, setBulkDeletePending] = useState(false)
-
-  // Unpublish confirmation state
-  const [unpublishTarget, setUnpublishTarget] = useState<{
-    id: string
-    name: string
-  } | null>(null)
-  const [isUnpublishing, setIsUnpublishing] = useState(false)
-  const [unpublishError, setUnpublishError] = useState<string | null>(null)
-
-  // Publish confirmation state
-  const [publishTarget, setPublishTarget] = useState<{
-    id: string
-    name: string
-  } | null>(null)
-  const [isPublishing, setIsPublishing] = useState(false)
-  const [publishError, setPublishError] = useState<string | null>(null)
-
-  // Derived state
-  const isLoading = activeTab === 'shop' ? shopLoading : inventoryLoading
-  const error = activeTab === 'shop' ? shopError : inventoryError
-  const shopProducts = useMemo(() => shopData?.products || [], [shopData?.products])
-  const inventoryProducts = useMemo(() => inventoryData?.products || [], [inventoryData?.products])
-
-  // Calculate inventory stats
-  const inventoryStats: InventoryStats = useMemo(() => ({
-    total: inventoryProducts.length,
-    published: inventoryProducts.filter(p => p.marketplace_status === MARKETPLACE_STATUS.PUBLISHED).length,
-    draft: inventoryProducts.filter(p => p.marketplace_status === MARKETPLACE_STATUS.DRAFT).length,
-    approved: inventoryProducts.filter(p => p.status === PRODUCT_STATUS.APPROVED).length,
-    pending: inventoryProducts.filter(p => p.status === PRODUCT_STATUS.PENDING_REVIEW).length,
-  }), [inventoryProducts])
-
-  // Calculate shop stats
-  const shopStats: ShopStats = useMemo(() => {
-    const byCondition: Record<string, number> = {}
-    const byCategory: Record<string, number> = {}
-
-    shopProducts.forEach(p => {
-      // Count by condition
-      byCondition[p.condition] = (byCondition[p.condition] || 0) + 1
-
-      // Count by category
-      if (p.category) {
-        byCategory[p.category] = (byCategory[p.category] || 0) + 1
-      }
-    })
-
-    return {
-      total: shopProducts.length,
-      byCondition,
-      byCategory,
-      lowStock: shopProducts.filter(p => p.quantity < 3).length,
-    }
-  }, [shopProducts])
-
-  // Shop product handlers
-  const handleViewShop = (product: ShopProduct) => {
-    // Open in customer shop
-    window.open(`/marketplace/${product.id}`, '_blank')
-  }
-
-  const handleEditShop = (product: ShopProduct) => {
-    // Navigate to erfassung with edit mode
-    router.push(`/admin/erfassung?edit=${product.id}`)
-  }
-
-  const handleUnpublishShop = (product: ShopProduct) => {
-    setUnpublishTarget({
-      id: product.id,
-      name: product.title,
-    })
-    setUnpublishError(null)
-  }
-
-  const handleDeleteShop = (product: ShopProduct) => {
-    setDeleteTarget({
-      type: 'shop',
-      id: product.id,
-      name: product.title,
-    })
-    setDeleteError(null)
-  }
-
-  // Inventory product handlers
-  const handleViewInventory = (product: InventoryProduct) => {
-    router.push(`/admin/products/${product.id}/factsheet`)
-  }
-
-  const handleEditInventory = (product: InventoryProduct) => {
-    router.push(`/admin/erfassung?edit=${product.id}`)
-  }
-
-  const handleDeleteInventory = (product: InventoryProduct) => {
-    setDeleteTarget({
-      type: 'inventory',
-      id: product.id,
-      name: `${product.brand} ${product.product_name}`,
-    })
-    setDeleteError(null)
-  }
-
-  const handlePublishInventory = (product: InventoryProduct) => {
-    setPublishTarget({
-      id: product.id,
-      name: `${product.brand} ${product.product_name}`,
-    })
-    setPublishError(null)
-  }
-
-  // Confirm publish
-  const handleConfirmPublish = async () => {
-    if (!publishTarget) return
-
-    setIsPublishing(true)
-    setPublishError(null)
-
-    try {
-      const response = await fetch(`/api/admin/inventory/${publishTarget.id}`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ marketplace_status: MARKETPLACE_STATUS.PUBLISHED }),
-      })
-      const data = await response.json()
-
-      if (!response.ok || !data.success) {
-        throw new Error(data.error || 'Veröffentlichen fehlgeschlagen')
-      }
-
-      // Refresh both lists
-      refetchShop()
-      refetchInventory()
-      setPublishTarget(null)
-    } catch (err) {
-      setPublishError(err instanceof Error ? err.message : 'Unbekannter Fehler')
-    } finally {
-      setIsPublishing(false)
-    }
-  }
-
-  // Confirm delete
-  const handleConfirmDelete = async () => {
-    if (!deleteTarget) return
-
-    setIsDeleting(true)
-    setDeleteError(null)
-
-    try {
-      const response = await fetch(`/api/admin/inventory/${deleteTarget.id}`, {
-        method: 'DELETE',
-      })
-      const data = await response.json()
-
-      if (!response.ok || !data.success) {
-        throw new Error(data.error || 'Löschen fehlgeschlagen')
-      }
-
-      // Refresh both lists since deleting affects both
-      refetchShop()
-      refetchInventory()
-      setDeleteTarget(null)
-    } catch (err) {
-      setDeleteError(err instanceof Error ? err.message : 'Unbekannter Fehler')
-    } finally {
-      setIsDeleting(false)
-    }
-  }
-
-  // Confirm unpublish
-  const handleConfirmUnpublish = async () => {
-    if (!unpublishTarget) return
-
-    setIsUnpublishing(true)
-    setUnpublishError(null)
-
-    try {
-      const response = await fetch(`/api/admin/inventory/${unpublishTarget.id}`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ marketplace_status: MARKETPLACE_STATUS.DRAFT }),
-      })
-      const data = await response.json()
-
-      if (!response.ok || !data.success) {
-        throw new Error(data.error || 'Zurückziehen fehlgeschlagen')
-      }
-
-      // Refresh both lists
-      refetchShop()
-      refetchInventory()
-      setUnpublishTarget(null)
-    } catch (err) {
-      setUnpublishError(err instanceof Error ? err.message : 'Unbekannter Fehler')
-    } finally {
-      setIsUnpublishing(false)
-    }
-  }
-
-  // Selection handlers
-  const handleToggleSelect = (id: string) => {
-    setSelectedIds(prev => {
-      const next = new Set(prev)
-      if (next.has(id)) next.delete(id)
-      else next.add(id)
-      return next
-    })
-  }
-
-  const handleSelectAll = (ids: string[]) => {
-    setSelectedIds(prev => {
-      const allSelected = ids.every(id => prev.has(id))
-      return allSelected ? new Set() : new Set(ids)
-    })
-  }
-
-  // Bulk delete
-  const handleBulkDelete = () => {
-    if (selectedIds.size === 0) return
-    setBulkDeletePending(true)
-    setDeleteError(null)
-  }
-
-  const handleConfirmBulkDelete = async () => {
-    setIsDeleting(true)
-    setDeleteError(null)
-
-    try {
-      const results = await Promise.allSettled(
-        Array.from(selectedIds).map(id =>
-          fetch(`/api/admin/inventory/${id}`, { method: 'DELETE' }).then(async res => {
-            const data = await res.json()
-            if (!res.ok || !data.success) throw new Error(data.error || 'Löschen fehlgeschlagen')
-          })
-        )
-      )
-
-      const failed = results.filter(r => r.status === 'rejected')
-      if (failed.length > 0) {
-        setDeleteError(`${failed.length} von ${selectedIds.size} Produkten konnten nicht gelöscht werden`)
-      } else {
-        setBulkDeletePending(false)
-        setSelectedIds(new Set())
-      }
-
-      refetchShop()
-      refetchInventory()
-    } catch {
-      setDeleteError('Unbekannter Fehler beim Löschen')
-    } finally {
-      setIsDeleting(false)
-    }
-  }
-
-  const refetch = activeTab === 'shop' ? refetchShop : refetchInventory
+  const actions = useProductActions()
 
   // Loading state
-  if (isLoading) {
+  if (actions.isLoading) {
     return (
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8">
         <div className="flex items-center justify-center">
@@ -321,7 +39,7 @@ export default function ProductManagement() {
   }
 
   // Error state
-  if (error) {
+  if (actions.error) {
     return (
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8">
         <div className="text-center">
@@ -330,10 +48,10 @@ export default function ProductManagement() {
             Fehler beim Laden der Produkte
           </h3>
           <p className="text-gray-600 mb-4">
-            {error.message || 'Bitte versuchen Sie es später erneut.'}
+            {actions.error.message || 'Bitte versuchen Sie es später erneut.'}
           </p>
           <button
-            onClick={() => refetch()}
+            onClick={() => actions.refetch()}
             className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
           >
             Erneut versuchen
@@ -346,113 +64,78 @@ export default function ProductManagement() {
   return (
     <div className="space-y-6">
       <ProductTabSwitcher
-        activeTab={activeTab}
-        onTabChange={(tab) => { setActiveTab(tab); setSelectedIds(new Set()) }}
-        inventoryStats={inventoryStats}
-        shopStats={shopStats}
+        activeTab={actions.activeTab}
+        onTabChange={actions.handleTabChange}
+        inventoryStats={actions.inventoryStats}
+        shopStats={actions.shopStats}
       />
 
       <ProductStatsCards
-        activeTab={activeTab}
-        inventoryStats={inventoryStats}
-        shopStats={shopStats}
+        activeTab={actions.activeTab}
+        inventoryStats={actions.inventoryStats}
+        shopStats={actions.shopStats}
       />
 
       <ProductFilterBar
-        searchQuery={searchQuery}
-        onSearchChange={setSearchQuery}
-        filterStatus={filterStatus}
-        onFilterStatusChange={setFilterStatus}
-        filterCategory={filterCategory}
-        onFilterCategoryChange={setFilterCategory}
-        selectedCount={selectedIds.size}
-        onBulkDelete={handleBulkDelete}
-        activeTab={activeTab}
+        searchQuery={actions.searchQuery}
+        onSearchChange={actions.setSearchQuery}
+        filterStatus={actions.filterStatus}
+        onFilterStatusChange={actions.setFilterStatus}
+        filterCategory={actions.filterCategory}
+        onFilterCategoryChange={actions.setFilterCategory}
+        selectedCount={actions.selectedIds.size}
+        onBulkDelete={actions.handleBulkDelete}
+        activeTab={actions.activeTab}
       />
 
-      {activeTab === 'inventory' ? (
+      {actions.activeTab === 'inventory' ? (
         <InventoryProductsTable
-          products={inventoryProducts}
-          searchQuery={searchQuery}
-          selectedIds={selectedIds}
-          onToggleSelect={handleToggleSelect}
-          onSelectAll={handleSelectAll}
-          onView={handleViewInventory}
-          onEdit={handleEditInventory}
-          onDelete={handleDeleteInventory}
-          onPublish={handlePublishInventory}
+          products={actions.inventoryProducts}
+          searchQuery={actions.searchQuery}
+          selectedIds={actions.selectedIds}
+          onToggleSelect={actions.handleToggleSelect}
+          onSelectAll={actions.handleSelectAll}
+          onView={actions.handleViewInventory}
+          onEdit={actions.handleEditInventory}
+          onDelete={actions.handleDeleteInventory}
+          onPublish={actions.handlePublishInventory}
         />
       ) : (
         <ShopProductsTable
-          products={shopProducts}
-          searchQuery={searchQuery}
-          selectedIds={selectedIds}
-          onToggleSelect={handleToggleSelect}
-          onSelectAll={handleSelectAll}
-          onView={handleViewShop}
-          onEdit={handleEditShop}
-          onUnpublish={handleUnpublishShop}
-          onDelete={handleDeleteShop}
+          products={actions.shopProducts}
+          searchQuery={actions.searchQuery}
+          selectedIds={actions.selectedIds}
+          onToggleSelect={actions.handleToggleSelect}
+          onSelectAll={actions.handleSelectAll}
+          onView={actions.handleViewShop}
+          onEdit={actions.handleEditShop}
+          onUnpublish={actions.handleUnpublishShop}
+          onDelete={actions.handleDeleteShop}
         />
       )}
 
-      {/* Delete confirmation dialog */}
-      <ConfirmDialog
-        isOpen={!!deleteTarget}
-        title="Produkt löschen"
-        message="Sind Sie sicher, dass Sie dieses Produkt löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden."
-        itemName={deleteTarget?.name}
-        confirmLabel="Endgültig löschen"
-        cancelLabel="Abbrechen"
-        isLoading={isDeleting}
-        error={deleteError}
-        variant="danger"
-        onConfirm={handleConfirmDelete}
-        onClose={() => setDeleteTarget(null)}
-      />
-
-      {/* Unpublish confirmation dialog */}
-      <ConfirmDialog
-        isOpen={!!unpublishTarget}
-        title="Aus Shop entfernen"
-        message="Möchten Sie dieses Produkt aus dem Shop entfernen? Es bleibt in den erfassten Produkten erhalten und kann jederzeit wieder veröffentlicht werden."
-        itemName={unpublishTarget?.name}
-        confirmLabel="Aus Shop entfernen"
-        cancelLabel="Abbrechen"
-        isLoading={isUnpublishing}
-        error={unpublishError}
-        variant="warning"
-        onConfirm={handleConfirmUnpublish}
-        onClose={() => setUnpublishTarget(null)}
-      />
-
-      {/* Publish confirmation dialog */}
-      <ConfirmDialog
-        isOpen={!!publishTarget}
-        title="Im Shop veröffentlichen"
-        message="Möchten Sie dieses Produkt im Shop veröffentlichen? Es wird sofort für Kunden sichtbar."
-        itemName={publishTarget?.name}
-        confirmLabel="Veröffentlichen"
-        cancelLabel="Abbrechen"
-        isLoading={isPublishing}
-        error={publishError}
-        variant="success"
-        onConfirm={handleConfirmPublish}
-        onClose={() => setPublishTarget(null)}
-      />
-
-      {/* Bulk delete confirmation dialog */}
-      <ConfirmDialog
-        isOpen={bulkDeletePending}
-        title={`${selectedIds.size} Produkte löschen`}
-        message={`Sind Sie sicher, dass Sie ${selectedIds.size} Produkte löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden.`}
-        confirmLabel={`${selectedIds.size} Produkte löschen`}
-        cancelLabel="Abbrechen"
-        isLoading={isDeleting}
-        error={deleteError}
-        variant="danger"
-        onConfirm={handleConfirmBulkDelete}
-        onClose={() => { setBulkDeletePending(false); setDeleteError(null) }}
+      <ProductConfirmDialogs
+        deleteTarget={actions.deleteTarget}
+        isDeleting={actions.isDeleting}
+        deleteError={actions.deleteError}
+        onConfirmDelete={actions.handleConfirmDelete}
+        onDismissDelete={actions.dismissDelete}
+        unpublishTarget={actions.unpublishTarget}
+        isUnpublishing={actions.isUnpublishing}
+        unpublishError={actions.unpublishError}
+        onConfirmUnpublish={actions.handleConfirmUnpublish}
+        onDismissUnpublish={actions.dismissUnpublish}
+        publishTarget={actions.publishTarget}
+        isPublishing={actions.isPublishing}
+        publishError={actions.publishError}
+        onConfirmPublish={actions.handleConfirmPublish}
+        onDismissPublish={actions.dismissPublish}
+        bulkDeletePending={actions.bulkDeletePending}
+        selectedCount={actions.selectedIds.size}
+        isBulkDeleting={actions.isBulkDeleting}
+        bulkDeleteError={actions.bulkDeleteError}
+        onConfirmBulkDelete={actions.handleConfirmBulkDelete}
+        onDismissBulkDelete={actions.dismissBulkDelete}
       />
     </div>
   )

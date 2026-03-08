@@ -1,6 +1,7 @@
 import { Metadata } from 'next'
 import { query } from '@/lib/auth/db'
 import { TABLE_NAMES } from '@/config/database'
+import { LISTING_STATUS } from '@/config/marketplace'
 
 interface ListingMeta {
   title: string
@@ -29,7 +30,7 @@ async function getListingMeta(id: string) {
          (SELECT li.url FROM ${TABLE_NAMES.LISTING_IMAGES} li WHERE li.listing_id = l.id AND li.is_primary = true LIMIT 1) as image_url
        FROM ${TABLE_NAMES.LISTINGS} l
        JOIN ${TABLE_NAMES.USERS} u ON l.seller_id = u.id
-       WHERE l.id = $1 AND l.status = 'active'`,
+       WHERE l.id = $1 AND l.status = '${LISTING_STATUS.ACTIVE}'`,
       [id]
     )
     return result.rows[0] ?? null

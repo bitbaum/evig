@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import { useSession } from 'next-auth/react'
 import { logger } from '@/lib/logger'
+import { REQUEST_STATUS } from '@/config/it-hilfe'
 import type { ITHilfeRequest, Offer } from './types'
 
 export function useITHilfeDetail(id: string) {
@@ -116,7 +117,7 @@ export function useITHilfeDetail(id: string) {
 
   // Check if user has already reviewed this request
   useEffect(() => {
-    if (!session?.user || !request || request.status !== 'completed') return
+    if (!session?.user || !request || request.status !== REQUEST_STATUS.COMPLETED) return
 
     fetch(`/api/reviews?targetType=it_hilfe&targetId=${id}`)
       .then(res => {
@@ -253,7 +254,7 @@ export function useITHilfeDetail(id: string) {
 
   const handleStatusChange = async (status: string) => {
     if (!request) return
-    const confirmMsg = status === 'completed'
+    const confirmMsg = status === REQUEST_STATUS.COMPLETED
       ? 'Anfrage als abgeschlossen markieren?'
       : 'Anfrage wirklich abbrechen?'
     if (!confirm(confirmMsg)) return
@@ -276,7 +277,7 @@ export function useITHilfeDetail(id: string) {
   }
 
   const isExpired = request ? new Date(request.expiresAt) < new Date() : false
-  const canOffer = !!(session?.user && request && !request.isOwner && ['open', 'in_discussion'].includes(request.status) && !isExpired)
+  const canOffer = !!(session?.user && request && !request.isOwner && (request.status === REQUEST_STATUS.OPEN || request.status === REQUEST_STATUS.IN_DISCUSSION) && !isExpired)
 
   return {
     session,

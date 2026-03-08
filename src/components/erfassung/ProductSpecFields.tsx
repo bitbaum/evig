@@ -1,0 +1,79 @@
+'use client'
+
+/**
+ * ProductSpecFields
+ *
+ * Technical specifications section with dynamic key-value pairs.
+ * Supports adding/removing spec rows.
+ */
+
+import { Plus, Trash2, FileText } from 'lucide-react'
+import { AIFieldIndicator } from '@/components/ai/AIFieldIndicator'
+import type { AIFieldMetadata, SpecField } from '@/types/erfassung'
+
+interface ProductSpecFieldsProps {
+  specs: SpecField[]
+  aiMetadata: AIFieldMetadata
+  onSpecChange: (index: number, field: 'key' | 'value', value: string) => void
+  onSpecAdd: () => void
+  onSpecRemove: (index: number) => void
+}
+
+export function ProductSpecFields({
+  specs,
+  aiMetadata,
+  onSpecChange,
+  onSpecAdd,
+  onSpecRemove,
+}: ProductSpecFieldsProps) {
+  return (
+    <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-4 sm:p-6">
+      <div className="flex items-center justify-between mb-4">
+        <h2 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+          <FileText className="w-5 h-5" />
+          <span>Technische Daten</span>
+          {aiMetadata.specs && (
+            <AIFieldIndicator source={aiMetadata.specs} fieldName="specs" />
+          )}
+        </h2>
+        <button
+          type="button"
+          onClick={onSpecAdd}
+          className="inline-flex items-center gap-1 text-sm text-green-600 hover:text-green-700 touch-manipulation p-2 -m-2"
+        >
+          <Plus className="w-4 h-4" />
+          <span className="hidden sm:inline">Feld hinzufügen</span>
+        </button>
+      </div>
+
+      <div className="space-y-3">
+        {specs.map((spec, index) => (
+          <div key={index} className="flex gap-2 sm:gap-3">
+            <input
+              type="text"
+              value={spec.key}
+              onChange={(e) => onSpecChange(index, 'key', e.target.value)}
+              className="w-1/3 px-3 py-2.5 sm:py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 text-sm touch-manipulation"
+              placeholder="Eigenschaft"
+            />
+            <input
+              type="text"
+              value={spec.value}
+              onChange={(e) => onSpecChange(index, 'value', e.target.value)}
+              className="flex-1 px-3 py-2.5 sm:py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 text-sm touch-manipulation"
+              placeholder="Wert"
+            />
+            <button
+              type="button"
+              onClick={() => onSpecRemove(index)}
+              className="p-2.5 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg touch-manipulation min-w-[44px] flex items-center justify-center"
+              disabled={specs.length <= 1}
+            >
+              <Trash2 className="w-4 h-4" />
+            </button>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}

@@ -11,7 +11,7 @@ import {
   Users,
 } from 'lucide-react'
 import { formatDate } from '@/lib/date-formats'
-import { formatBudget, getServiceTypeById } from '@/config/it-hilfe'
+import { formatBudget, getServiceTypeById, REQUEST_STATUS } from '@/config/it-hilfe'
 import type { ITHilfeRequest } from './types'
 
 interface RequestSidebarProps {
@@ -147,18 +147,18 @@ export function RequestSidebar({
             Aktionen
           </h3>
           <div className="space-y-2">
-            {request.status === 'matched' && (
+            {request.status === REQUEST_STATUS.MATCHED && (
               <button
-                onClick={() => onStatusChange('completed')}
+                onClick={() => onStatusChange(REQUEST_STATUS.COMPLETED)}
                 className="block w-full py-3 px-4 min-h-[44px] bg-emerald-600 text-white rounded-lg text-center font-medium hover:bg-emerald-700 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
               >
                 <CheckCircle className="w-4 h-4 inline-block mr-2" />
                 Als abgeschlossen markieren
               </button>
             )}
-            {['open', 'in_discussion', 'matched'].includes(request.status) && (
+            {(request.status === REQUEST_STATUS.OPEN || request.status === REQUEST_STATUS.IN_DISCUSSION || request.status === REQUEST_STATUS.MATCHED) && (
               <button
-                onClick={() => onStatusChange('cancelled')}
+                onClick={() => onStatusChange(REQUEST_STATUS.CANCELLED)}
                 className="block w-full py-3 px-4 min-h-[44px] bg-red-50 text-red-700 rounded-lg text-center font-medium hover:bg-red-100 transition-colors focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
               >
                 <XCircle className="w-4 h-4 inline-block mr-2" />

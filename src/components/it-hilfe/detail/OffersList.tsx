@@ -1,5 +1,5 @@
 import { Clock, User } from 'lucide-react'
-import { getOfferStatusById, getSkillById } from '@/config/it-hilfe'
+import { getOfferStatusById, getSkillById, OFFER_STATUS, REQUEST_STATUS } from '@/config/it-hilfe'
 import type { Offer } from './types'
 
 interface OffersListProps {
@@ -25,7 +25,7 @@ export function OffersList({
       <div className="space-y-4">
         {offers.map((offer) => {
           const offerStatusConfig = getOfferStatusById(offer.status)
-          const isAccepted = offer.status === 'accepted'
+          const isAccepted = offer.status === OFFER_STATUS.ACCEPTED
 
           return (
             <div
@@ -81,7 +81,7 @@ export function OffersList({
                 </div>
               )}
 
-              {offer.status === 'pending' && ['open', 'in_discussion'].includes(requestStatus) && (
+              {offer.status === OFFER_STATUS.PENDING && (requestStatus === REQUEST_STATUS.OPEN || requestStatus === REQUEST_STATUS.IN_DISCUSSION) && (
                 <button
                   onClick={() => onAcceptOffer(offer.id)}
                   disabled={acceptingOfferId === offer.id}
