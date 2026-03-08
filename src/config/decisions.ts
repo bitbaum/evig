@@ -4,15 +4,17 @@
 
 // ─── Statuses ─────────────────────────────────────────────────────────────
 
-export const DECISION_STATUSES = [
-  'draft',
-  'discussion',
-  'voting',
-  'closed',
-  'cancelled',
-] as const;
+export const DECISION_STATUS = {
+  DRAFT: 'draft',
+  DISCUSSION: 'discussion',
+  VOTING: 'voting',
+  CLOSED: 'closed',
+  CANCELLED: 'cancelled',
+} as const;
 
-export type DecisionStatus = (typeof DECISION_STATUSES)[number];
+export const DECISION_STATUSES = Object.values(DECISION_STATUS);
+
+export type DecisionStatus = typeof DECISION_STATUS[keyof typeof DECISION_STATUS];
 
 export const DECISION_STATUS_CONFIG: Record<
   DecisionStatus,

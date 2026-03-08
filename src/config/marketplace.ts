@@ -51,8 +51,16 @@ export function getCategoryLabel(value: string): string {
 // Listing Statuses
 // ============================================================================
 
-export const LISTING_STATUSES = ['active', 'sold', 'reserved', 'draft', 'removed'] as const;
-export type ListingStatus = typeof LISTING_STATUSES[number];
+export const LISTING_STATUS = {
+  ACTIVE: 'active',
+  SOLD: 'sold',
+  RESERVED: 'reserved',
+  DRAFT: 'draft',
+  REMOVED: 'removed',
+} as const;
+
+export const LISTING_STATUSES = Object.values(LISTING_STATUS);
+export type ListingStatus = typeof LISTING_STATUS[keyof typeof LISTING_STATUS];
 
 export const LISTING_STATUS_CONFIG: Record<ListingStatus, { label: string; color: string }> = {
   active:   { label: 'Aktiv',      color: 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300' },
@@ -133,17 +141,18 @@ export const COMMISSION_RATE = 0;
 // Order Statuses
 // ============================================================================
 
-export const ORDER_STATUSES = [
-  'pending_payment',
-  'paid',
-  'shipped',
-  'delivered',
-  'completed',
-  'cancelled',
-  'refunded',
-] as const;
+export const ORDER_STATUS = {
+  PENDING_PAYMENT: 'pending_payment',
+  PAID: 'paid',
+  SHIPPED: 'shipped',
+  DELIVERED: 'delivered',
+  COMPLETED: 'completed',
+  CANCELLED: 'cancelled',
+  REFUNDED: 'refunded',
+} as const;
 
-export type OrderStatus = typeof ORDER_STATUSES[number];
+export const ORDER_STATUSES = Object.values(ORDER_STATUS);
+export type OrderStatus = typeof ORDER_STATUS[keyof typeof ORDER_STATUS];
 
 export const ORDER_STATUS_CONFIG: Record<OrderStatus, { label: string; color: string }> = {
   pending_payment: { label: 'Zahlung ausstehend', color: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300' },

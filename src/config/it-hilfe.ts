@@ -426,12 +426,22 @@ export interface RequestStatus {
   badgeClass: string
 }
 
+export const REQUEST_STATUS = {
+  OPEN: 'open',
+  IN_DISCUSSION: 'in_discussion',
+  MATCHED: 'matched',
+  COMPLETED: 'completed',
+  CANCELLED: 'cancelled',
+} as const;
+
+export type RequestStatusId = typeof REQUEST_STATUS[keyof typeof REQUEST_STATUS];
+
 export const REQUEST_STATUSES: RequestStatus[] = [
-  { id: 'open', name: 'Offen', description: 'Anfrage ist offen für Angebote', badgeClass: 'bg-green-100 text-green-700' },
-  { id: 'in_discussion', name: 'In Gespräch', description: 'In Verhandlung mit Technikern', badgeClass: 'bg-yellow-100 text-yellow-700' },
-  { id: 'matched', name: 'Vergeben', description: 'Angebot akzeptiert, Hilfe läuft', badgeClass: 'bg-blue-100 text-blue-700' },
-  { id: 'completed', name: 'Abgeschlossen', description: 'Erfolgreich abgeschlossen', badgeClass: 'bg-emerald-100 text-emerald-700' },
-  { id: 'cancelled', name: 'Abgebrochen', description: 'Anfrage wurde abgebrochen', badgeClass: 'bg-gray-100 text-gray-500' },
+  { id: REQUEST_STATUS.OPEN, name: 'Offen', description: 'Anfrage ist offen für Angebote', badgeClass: 'bg-green-100 text-green-700' },
+  { id: REQUEST_STATUS.IN_DISCUSSION, name: 'In Gespräch', description: 'In Verhandlung mit Technikern', badgeClass: 'bg-yellow-100 text-yellow-700' },
+  { id: REQUEST_STATUS.MATCHED, name: 'Vergeben', description: 'Angebot akzeptiert, Hilfe läuft', badgeClass: 'bg-blue-100 text-blue-700' },
+  { id: REQUEST_STATUS.COMPLETED, name: 'Abgeschlossen', description: 'Erfolgreich abgeschlossen', badgeClass: 'bg-emerald-100 text-emerald-700' },
+  { id: REQUEST_STATUS.CANCELLED, name: 'Abgebrochen', description: 'Anfrage wurde abgebrochen', badgeClass: 'bg-gray-100 text-gray-500' },
 ]
 
 // ============================================================================
@@ -444,11 +454,20 @@ export interface OfferStatus {
   badgeClass: string
 }
 
+export const OFFER_STATUS = {
+  PENDING: 'pending',
+  ACCEPTED: 'accepted',
+  REJECTED: 'rejected',
+  WITHDRAWN: 'withdrawn',
+} as const;
+
+export type OfferStatusId = typeof OFFER_STATUS[keyof typeof OFFER_STATUS];
+
 export const OFFER_STATUSES: OfferStatus[] = [
-  { id: 'pending', name: 'Ausstehend', badgeClass: 'bg-yellow-100 text-yellow-700' },
-  { id: 'accepted', name: 'Akzeptiert', badgeClass: 'bg-green-100 text-green-700' },
-  { id: 'rejected', name: 'Abgelehnt', badgeClass: 'bg-red-100 text-red-700' },
-  { id: 'withdrawn', name: 'Zurückgezogen', badgeClass: 'bg-gray-100 text-gray-500' },
+  { id: OFFER_STATUS.PENDING, name: 'Ausstehend', badgeClass: 'bg-yellow-100 text-yellow-700' },
+  { id: OFFER_STATUS.ACCEPTED, name: 'Akzeptiert', badgeClass: 'bg-green-100 text-green-700' },
+  { id: OFFER_STATUS.REJECTED, name: 'Abgelehnt', badgeClass: 'bg-red-100 text-red-700' },
+  { id: OFFER_STATUS.WITHDRAWN, name: 'Zurückgezogen', badgeClass: 'bg-gray-100 text-gray-500' },
 ]
 
 // ============================================================================
@@ -532,7 +551,7 @@ export function getOfferStatusById(id: string): OfferStatus | undefined {
 
 /** Check if a request status allows new offers */
 export function isRequestAcceptingOffers(status: string): boolean {
-  return status === 'open' || status === 'in_discussion'
+  return status === REQUEST_STATUS.OPEN || status === REQUEST_STATUS.IN_DISCUSSION
 }
 
 /**
