@@ -11,6 +11,7 @@ import { redirect } from 'next/navigation'
 import { query } from '@/lib/auth/db'
 import { TABLE_NAMES } from '@/config/database'
 import { CheckSquare, Clock, CheckCircle, XCircle, FileText, Shield } from 'lucide-react'
+import { APPROVAL_STATUS } from '@/config/approval-status'
 import { formatDateShort } from '@/lib/date-formats'
 import { isSuperAdmin } from '@/lib/permissions'
 import { ApprovalActions } from './ApprovalActions'
@@ -46,7 +47,7 @@ async function getApprovalStats(): Promise<ApprovalStats> {
     // Get pending count (workshops and blog posts only)
     const pendingResult = await query<{ count: string }>(
       `SELECT COUNT(*) as count FROM ${TABLE_NAMES.USER_CONTENT_SUBMISSIONS}
-       WHERE status = 'pending' AND content_type = ANY($1)`,
+       WHERE status = '${APPROVAL_STATUS.PENDING}' AND content_type = ANY($1)`,
       [allowedTypes]
     )
     const pending = parseInt(pendingResult.rows[0]?.count || '0')
@@ -54,7 +55,7 @@ async function getApprovalStats(): Promise<ApprovalStats> {
     // Get approved count (last 30 days)
     const approvedResult = await query<{ count: string }>(
       `SELECT COUNT(*) as count FROM ${TABLE_NAMES.USER_CONTENT_SUBMISSIONS}
-       WHERE status = 'approved'
+       WHERE status = '${APPROVAL_STATUS.APPROVED}'
        AND content_type = ANY($1)
        AND reviewed_at >= NOW() - INTERVAL '30 days'`,
       [allowedTypes]
@@ -64,7 +65,7 @@ async function getApprovalStats(): Promise<ApprovalStats> {
     // Get rejected count (last 30 days)
     const rejectedResult = await query<{ count: string }>(
       `SELECT COUNT(*) as count FROM ${TABLE_NAMES.USER_CONTENT_SUBMISSIONS}
-       WHERE status = 'rejected'
+       WHERE status = '${APPROVAL_STATUS.REJECTED}'
        AND content_type = ANY($1)
        AND reviewed_at >= NOW() - INTERVAL '30 days'`,
       [allowedTypes]
@@ -93,7 +94,7 @@ async function getPendingSubmissions(): Promise<ContentSubmission[]> {
         u.email as user_email
        FROM ${TABLE_NAMES.USER_CONTENT_SUBMISSIONS} s
        JOIN ${TABLE_NAMES.USERS} u ON s.user_id = u.id
-       WHERE s.status = 'pending' AND s.content_type = ANY($1)
+       WHERE s.status = '${APPROVAL_STATUS.PENDING}' AND s.content_type = ANY($1)
        ORDER BY s.submitted_at DESC
        LIMIT 50`,
       [allowedTypes]

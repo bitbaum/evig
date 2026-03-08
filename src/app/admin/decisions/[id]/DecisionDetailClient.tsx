@@ -4,6 +4,7 @@ import { useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import {
+  DECISION_STATUS,
   DECISION_STATUS_CONFIG,
   DECISION_TYPE_CONFIG,
   VOTING_METHOD_CONFIG,
@@ -331,7 +332,7 @@ export default function DecisionDetailClient({
         )}
 
         {/* Cancel Reason */}
-        {decision.status === 'cancelled' && decision.cancelReason && (
+        {decision.status === DECISION_STATUS.CANCELLED && decision.cancelReason && (
           <div className="mt-4 rounded-md bg-red-50 p-3 text-sm text-red-700">
             <strong>Abbruchgrund:</strong> {decision.cancelReason}
           </div>
@@ -344,7 +345,7 @@ export default function DecisionDetailClient({
       )}
 
       {/* Voting Panel */}
-      {decision.status === 'voting' && (
+      {decision.status === DECISION_STATUS.VOTING && (
         <VotingPanel
           decisionId={decisionId}
           votingMethod={decision.votingMethod}
@@ -356,7 +357,7 @@ export default function DecisionDetailClient({
       )}
 
       {/* Results Panel */}
-      {decision.status === 'closed' && decision.outcome && (
+      {decision.status === DECISION_STATUS.CLOSED && decision.outcome && (
         <ResultsPanel
           outcome={decision.outcome}
           outcomeSummary={decision.outcomeSummary}

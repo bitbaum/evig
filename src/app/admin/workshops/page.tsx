@@ -233,10 +233,10 @@ export default function AdminWorkshopsPage() {
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
               >
                 <option value="all">Alle</option>
-                <option value="pending">Ausstehend</option>
-                <option value="approved">Genehmigt</option>
-                <option value="rejected">Abgelehnt</option>
-                <option value="requires_changes">Änderungen erforderlich</option>
+                <option value={PROPOSAL_STATUS.PENDING}>Ausstehend</option>
+                <option value={PROPOSAL_STATUS.APPROVED}>Genehmigt</option>
+                <option value={PROPOSAL_STATUS.REJECTED}>Abgelehnt</option>
+                <option value={PROPOSAL_STATUS.REQUIRES_CHANGES}>Änderungen erforderlich</option>
               </select>
             </div>
 
@@ -333,7 +333,7 @@ export default function AdminWorkshopsPage() {
                       Details
                     </Link>
 
-                    {proposal.status === 'pending' && (
+                    {proposal.status === PROPOSAL_STATUS.PENDING && (
                       <>
                         <button
                           onClick={() => handleApprove(proposal.id)}
@@ -392,7 +392,7 @@ export default function AdminWorkshopsPage() {
                 <GraduationCap className="w-12 h-12 text-gray-400 mx-auto mb-4" />
                 <h3 className="text-lg font-medium text-gray-900 mb-2">Keine Workshop-Vorschläge gefunden</h3>
                 <p className="text-gray-600 mb-4">
-                  {filters.status === 'pending' ? 'Keine ausstehenden Vorschläge vorhanden.' : `Keine Vorschläge mit Status "${filters.status}" gefunden.`}
+                  {filters.status === PROPOSAL_STATUS.PENDING ? 'Keine ausstehenden Vorschläge vorhanden.' : `Keine Vorschläge mit Status "${filters.status}" gefunden.`}
                 </p>
               </div>
             )}

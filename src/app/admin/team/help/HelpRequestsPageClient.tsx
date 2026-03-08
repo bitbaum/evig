@@ -16,6 +16,7 @@ import {
   type HelpRequestStatus,
   type HelpRequestUrgency,
 } from '@/config/activity'
+import { HELP_REQUEST_STATUS } from '@/config/help-request-status'
 import {
   useHelpRequests,
   useHelpRequestMutations,
@@ -59,7 +60,7 @@ export function HelpRequestsPageClient({
   }
 
   const handleTakeOn = async (id: string) => {
-    const success = await updateRequest(id, { status: 'in_progress' })
+    const success = await updateRequest(id, { status: HELP_REQUEST_STATUS.IN_PROGRESS })
     if (success) {
       refetch()
     }
@@ -81,9 +82,9 @@ export function HelpRequestsPageClient({
   const hasActiveFilters = filters.status || filters.urgency || filters.is_broadcast !== undefined
 
   // Separate requests by status
-  const openRequests = requests.filter((r) => r.status === 'open')
-  const inProgressRequests = requests.filter((r) => r.status === 'in_progress')
-  const resolvedRequests = requests.filter((r) => r.status === 'resolved' || r.status === 'cancelled')
+  const openRequests = requests.filter((r) => r.status === HELP_REQUEST_STATUS.OPEN)
+  const inProgressRequests = requests.filter((r) => r.status === HELP_REQUEST_STATUS.IN_PROGRESS)
+  const resolvedRequests = requests.filter((r) => r.status === HELP_REQUEST_STATUS.RESOLVED || r.status === HELP_REQUEST_STATUS.CANCELLED)
 
   return (
     <div className="space-y-6">
@@ -325,10 +326,10 @@ export function HelpRequestsPageClient({
             <HelpRequestCard
               key={request.id}
               request={request}
-              onResolve={request.status !== 'resolved' ? handleResolve : undefined}
-              onTakeOn={request.status === 'open' && request.is_broadcast ? handleTakeOn : undefined}
+              onResolve={request.status !== HELP_REQUEST_STATUS.RESOLVED ? handleResolve : undefined}
+              onTakeOn={request.status === HELP_REQUEST_STATUS.OPEN && request.is_broadcast ? handleTakeOn : undefined}
               isResolving={resolvingId === request.id}
-              showActions={request.status !== 'resolved' && request.status !== 'cancelled'}
+              showActions={request.status !== HELP_REQUEST_STATUS.RESOLVED && request.status !== HELP_REQUEST_STATUS.CANCELLED}
               currentUserEmail={currentUserEmail}
             />
           ))}

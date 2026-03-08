@@ -11,7 +11,7 @@ import {
   AlertCircle,
   ChevronRight,
 } from 'lucide-react'
-import { ORDER_STATUS_CONFIG, formatCHF } from '@/config/marketplace'
+import { ORDER_STATUS_CONFIG, ORDER_STATUS, formatCHF } from '@/config/marketplace'
 import type { OrderStatus } from '@/config/marketplace'
 import { formatDateShort } from '@/lib/date-formats'
 
@@ -30,10 +30,10 @@ interface OrderItem {
 
 const TABS = [
   { key: '', label: 'Alle' },
-  { key: 'pending_payment', label: 'Ausstehend' },
-  { key: 'paid', label: 'Bezahlt' },
-  { key: 'shipped', label: 'Versendet' },
-  { key: 'completed', label: 'Abgeschlossen' },
+  { key: ORDER_STATUS.PENDING_PAYMENT, label: 'Ausstehend' },
+  { key: ORDER_STATUS.PAID, label: 'Bezahlt' },
+  { key: ORDER_STATUS.SHIPPED, label: 'Versendet' },
+  { key: ORDER_STATUS.COMPLETED, label: 'Abgeschlossen' },
 ] as const
 
 export default function DashboardOrdersPage() {

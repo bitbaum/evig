@@ -18,6 +18,8 @@ import {
   Loader2
 } from 'lucide-react'
 import { logger } from '@/lib/logger'
+import { LISTING_STATUS } from '@/config/marketplace'
+import { INTAKE_STATUS } from '@/config/intake-status'
 
 interface InventoryItem {
   id: string
@@ -131,13 +133,13 @@ export default function InventoryDashboardPage() {
   const handlePublishSuccess = (itemId: string) => {
     setInventoryItems(prev => prev.map(item =>
       item.id === itemId
-        ? { ...item, marketplace_status: 'published' }
+        ? { ...item, marketplace_status: INTAKE_STATUS.PUBLISHED }
         : item
     ))
   }
 
   const handleBulkPublish = async () => {
-    const draftItems = inventoryItems.filter(item => item.marketplace_status === 'draft')
+    const draftItems = inventoryItems.filter(item => item.marketplace_status === LISTING_STATUS.DRAFT)
     if (draftItems.length === 0) return
 
     setBulkPublishing(true)
@@ -168,8 +170,8 @@ export default function InventoryDashboardPage() {
 
   const stats = {
     totalItems: inventoryItems.length,
-    publishedItems: inventoryItems.filter(item => item.marketplace_status === 'published').length,
-    draftItems: inventoryItems.filter(item => item.marketplace_status === 'draft').length,
+    publishedItems: inventoryItems.filter(item => item.marketplace_status === INTAKE_STATUS.PUBLISHED).length,
+    draftItems: inventoryItems.filter(item => item.marketplace_status === LISTING_STATUS.DRAFT).length,
     totalValue: inventoryItems.reduce((sum, item) => sum + (item.selling_price_chf * item.quantity_available), 0),
     averageScore: inventoryItems.length > 0 ? inventoryItems.reduce((sum, item) => {
       const score = item.ai_extracted_products?.sustainability_scores?.[0]?.overall_score || 0;

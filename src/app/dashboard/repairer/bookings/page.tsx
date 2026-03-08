@@ -8,7 +8,7 @@ import {
   Calendar, Clock, CheckCircle, XCircle, AlertCircle,
   User, Loader2, RefreshCw, Wrench, Home, ChevronRight, Send
 } from 'lucide-react'
-import { getBookingStatusBadge, getUrgencyBadge } from '@/config/booking-status'
+import { BOOKING_STATUS, getBookingStatusBadge, getUrgencyBadge } from '@/config/booking-status'
 import { formatDateShort } from '@/lib/date-formats'
 
 interface Appointment {
@@ -97,13 +97,14 @@ export default function RepairerBookingsPage() {
     }
   }
 
+  const terminalStatuses: string[] = [BOOKING_STATUS.COMPLETED, BOOKING_STATUS.REJECTED, BOOKING_STATUS.CANCELLED]
   const filteredAppointments = appointments.filter(apt => {
-    if (activeTab === 'active') return !['completed', 'rejected', 'cancelled'].includes(apt.status)
-    return ['completed', 'rejected', 'cancelled'].includes(apt.status)
+    if (activeTab === 'active') return !terminalStatuses.includes(apt.status)
+    return terminalStatuses.includes(apt.status)
   })
 
-  const activeCount = appointments.filter(a => !['completed', 'rejected', 'cancelled'].includes(a.status)).length
-  const requestedCount = appointments.filter(a => a.status === 'requested').length
+  const activeCount = appointments.filter(a => !terminalStatuses.includes(a.status)).length
+  const requestedCount = appointments.filter(a => a.status === BOOKING_STATUS.REQUESTED).length
 
   if (sessionStatus === 'loading' || loading) {
     return (
@@ -158,7 +159,7 @@ export default function RepairerBookingsPage() {
             <div>
               <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Neue Anfragen</p>
               <p className="text-2xl font-bold text-gray-900 dark:text-white">
-                {appointments.filter(a => a.status === 'requested').length}
+                {appointments.filter(a => a.status === BOOKING_STATUS.REQUESTED).length}
               </p>
             </div>
             <AlertCircle className="w-8 h-8 text-yellow-600" />
@@ -169,7 +170,7 @@ export default function RepairerBookingsPage() {
             <div>
               <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Angenommen</p>
               <p className="text-2xl font-bold text-gray-900 dark:text-white">
-                {appointments.filter(a => ['accepted', 'quoted', 'quote_approved'].includes(a.status)).length}
+                {appointments.filter(a => ([BOOKING_STATUS.ACCEPTED, BOOKING_STATUS.QUOTED, BOOKING_STATUS.QUOTE_APPROVED] as string[]).includes(a.status)).length}
               </p>
             </div>
             <Clock className="w-8 h-8 text-blue-600" />
@@ -180,7 +181,7 @@ export default function RepairerBookingsPage() {
             <div>
               <p className="text-sm font-medium text-gray-600 dark:text-gray-400">In Bearbeitung</p>
               <p className="text-2xl font-bold text-gray-900 dark:text-white">
-                {appointments.filter(a => a.status === 'in_progress').length}
+                {appointments.filter(a => a.status === BOOKING_STATUS.IN_PROGRESS).length}
               </p>
             </div>
             <Wrench className="w-8 h-8 text-purple-600" />
@@ -191,7 +192,7 @@ export default function RepairerBookingsPage() {
             <div>
               <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Abgeschlossen</p>
               <p className="text-2xl font-bold text-gray-900 dark:text-white">
-                {appointments.filter(a => a.status === 'completed').length}
+                {appointments.filter(a => a.status === BOOKING_STATUS.COMPLETED).length}
               </p>
             </div>
             <CheckCircle className="w-8 h-8 text-green-600" />
@@ -314,7 +315,7 @@ export default function RepairerBookingsPage() {
 
                   {/* Action Buttons */}
                   <div className="flex flex-wrap gap-2 pt-4 border-t border-gray-100 dark:border-gray-700">
-                    {apt.status === 'requested' && (
+                    {apt.status === BOOKING_STATUS.REQUESTED && (
                       <>
                         <button
                           onClick={() => handleAction(apt.id, 'accept')}
@@ -335,7 +336,7 @@ export default function RepairerBookingsPage() {
                       </>
                     )}
 
-                    {(['accepted', 'quote_rejected'].includes(apt.status)) && (
+                    {([BOOKING_STATUS.ACCEPTED, BOOKING_STATUS.QUOTE_REJECTED] as string[]).includes(apt.status) && (
                       <button
                         onClick={() => setQuoteModal({ appointmentId: apt.id, open: true })}
                         disabled={actionLoading === apt.id}
@@ -346,7 +347,7 @@ export default function RepairerBookingsPage() {
                       </button>
                     )}
 
-                    {(['accepted', 'quote_approved'].includes(apt.status)) && (
+                    {([BOOKING_STATUS.ACCEPTED, BOOKING_STATUS.QUOTE_APPROVED] as string[]).includes(apt.status) && (
                       <button
                         onClick={() => handleAction(apt.id, 'start')}
                         disabled={actionLoading === apt.id}
@@ -357,7 +358,7 @@ export default function RepairerBookingsPage() {
                       </button>
                     )}
 
-                    {apt.status === 'in_progress' && (
+                    {apt.status === BOOKING_STATUS.IN_PROGRESS && (
                       <button
                         onClick={() => handleAction(apt.id, 'complete')}
                         disabled={actionLoading === apt.id}

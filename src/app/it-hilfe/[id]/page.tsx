@@ -4,7 +4,7 @@ import { useParams } from 'next/navigation'
 import Link from 'next/link'
 import { ArrowLeft, AlertCircle, CheckCircle } from 'lucide-react'
 import { formatDate } from '@/lib/date-formats'
-import { getCategoryById } from '@/config/it-hilfe'
+import { getCategoryById, REQUEST_STATUS } from '@/config/it-hilfe'
 import { TechnicianMapList } from '@/components/it-hilfe/TechnicianMapList'
 import { AIDiagnosisCard } from '@/components/it-hilfe/AIDiagnosisCard'
 import { ITHilfeReviewForm } from '@/components/it-hilfe/ITHilfeReviewForm'
@@ -64,7 +64,7 @@ export default function ITHilfeDetailPage() {
         </Link>
 
         {/* Expiration Banner */}
-        {detail.isExpired && ['open', 'in_discussion'].includes(request.status) && (
+        {detail.isExpired && (request.status === REQUEST_STATUS.OPEN || request.status === REQUEST_STATUS.IN_DISCUSSION) && (
           <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 mb-6 flex items-center gap-3">
             <AlertCircle className="w-5 h-5 text-amber-600 flex-shrink-0" aria-hidden="true" />
             <p className="text-amber-800 text-sm font-medium">
@@ -91,7 +91,7 @@ export default function ITHilfeDetailPage() {
             )}
 
             {/* Technician Map */}
-            {['open', 'in_discussion'].includes(request.status) && (
+            {(request.status === REQUEST_STATUS.OPEN || request.status === REQUEST_STATUS.IN_DISCUSSION) && (
               <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
                 <TechnicianMapList requestId={request.id} requestTitle={request.title} />
               </div>
@@ -137,7 +137,7 @@ export default function ITHilfeDetailPage() {
             )}
 
             {/* Review Form (completed requests) */}
-            {request.status === 'completed' && detail.session?.user && !detail.hasReviewed && !detail.reviewSubmitted && (
+            {request.status === REQUEST_STATUS.COMPLETED && detail.session?.user && !detail.hasReviewed && !detail.reviewSubmitted && (
               <ITHilfeReviewForm
                 requestId={request.id}
                 requestTitle={request.title}

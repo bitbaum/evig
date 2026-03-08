@@ -11,6 +11,7 @@ import {
   DocumentVerificationSection,
   CertificationVerificationSection,
 } from '@/components/admin/repairer-applications'
+import { APPROVAL_STATUS } from '@/config/approval-status'
 
 export default function RepairerApplicationsAdmin() {
   const router = useRouter()
@@ -118,7 +119,7 @@ export default function RepairerApplicationsAdmin() {
             <div key={application.id} className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
               <ApplicationCard
                 application={application}
-                isPending={selectedStatus === 'pending'}
+                isPending={selectedStatus === APPROVAL_STATUS.PENDING}
                 actionLoading={actionLoading}
                 onOpenDialog={openDialog}
               />

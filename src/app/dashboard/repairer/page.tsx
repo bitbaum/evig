@@ -10,6 +10,7 @@ import {
   ChevronRight, Loader2, RefreshCw, Home, Building
 } from 'lucide-react'
 import { formatDateShort } from '@/lib/date-formats'
+import { BOOKING_STATUS } from '@/config/booking-status'
 
 interface Appointment {
   id: string
@@ -32,15 +33,15 @@ interface Appointment {
 }
 
 const STATUS_CONFIG: Record<string, { label: string; color: string; icon: React.ComponentType<{ className?: string }> }> = {
-  requested: { label: 'Anfrage', color: 'bg-yellow-100 text-yellow-800', icon: Clock },
-  accepted: { label: 'Angenommen', color: 'bg-blue-100 text-blue-800', icon: CheckCircle },
-  quoted: { label: 'Angebot gesendet', color: 'bg-purple-100 text-purple-800', icon: Euro },
-  quote_approved: { label: 'Angebot bestätigt', color: 'bg-green-100 text-green-800', icon: CheckCircle },
-  quote_rejected: { label: 'Angebot abgelehnt', color: 'bg-orange-100 text-orange-800', icon: XCircle },
-  in_progress: { label: 'In Bearbeitung', color: 'bg-blue-100 text-blue-800', icon: Wrench },
-  completed: { label: 'Abgeschlossen', color: 'bg-green-100 text-green-800', icon: CheckCircle },
-  rejected: { label: 'Abgelehnt', color: 'bg-red-100 text-red-800', icon: XCircle },
-  cancelled: { label: 'Storniert', color: 'bg-gray-100 text-gray-800', icon: XCircle }
+  [BOOKING_STATUS.REQUESTED]: { label: 'Anfrage', color: 'bg-yellow-100 text-yellow-800', icon: Clock },
+  [BOOKING_STATUS.ACCEPTED]: { label: 'Angenommen', color: 'bg-blue-100 text-blue-800', icon: CheckCircle },
+  [BOOKING_STATUS.QUOTED]: { label: 'Angebot gesendet', color: 'bg-purple-100 text-purple-800', icon: Euro },
+  [BOOKING_STATUS.QUOTE_APPROVED]: { label: 'Angebot bestätigt', color: 'bg-green-100 text-green-800', icon: CheckCircle },
+  [BOOKING_STATUS.QUOTE_REJECTED]: { label: 'Angebot abgelehnt', color: 'bg-orange-100 text-orange-800', icon: XCircle },
+  [BOOKING_STATUS.IN_PROGRESS]: { label: 'In Bearbeitung', color: 'bg-blue-100 text-blue-800', icon: Wrench },
+  [BOOKING_STATUS.COMPLETED]: { label: 'Abgeschlossen', color: 'bg-green-100 text-green-800', icon: CheckCircle },
+  [BOOKING_STATUS.REJECTED]: { label: 'Abgelehnt', color: 'bg-red-100 text-red-800', icon: XCircle },
+  [BOOKING_STATUS.CANCELLED]: { label: 'Storniert', color: 'bg-gray-100 text-gray-800', icon: XCircle }
 }
 
 export default function RepairerDashboard() {
@@ -112,14 +113,17 @@ export default function RepairerDashboard() {
     })
   }
 
+  const activeStatuses = [BOOKING_STATUS.ACCEPTED, BOOKING_STATUS.QUOTED, BOOKING_STATUS.QUOTE_APPROVED, BOOKING_STATUS.QUOTE_REJECTED, BOOKING_STATUS.IN_PROGRESS] as string[]
+  const terminalStatuses = [BOOKING_STATUS.COMPLETED, BOOKING_STATUS.REJECTED, BOOKING_STATUS.CANCELLED] as string[]
+
   const filteredAppointments = appointments.filter(apt => {
-    if (activeTab === 'pending') return ['requested'].includes(apt.status)
-    if (activeTab === 'active') return ['accepted', 'quoted', 'quote_approved', 'quote_rejected', 'in_progress'].includes(apt.status)
-    return ['completed', 'rejected', 'cancelled'].includes(apt.status)
+    if (activeTab === 'pending') return apt.status === BOOKING_STATUS.REQUESTED
+    if (activeTab === 'active') return activeStatuses.includes(apt.status)
+    return terminalStatuses.includes(apt.status)
   })
 
-  const pendingCount = appointments.filter(a => a.status === 'requested').length
-  const activeCount = appointments.filter(a => ['accepted', 'quoted', 'quote_approved', 'quote_rejected', 'in_progress'].includes(a.status)).length
+  const pendingCount = appointments.filter(a => a.status === BOOKING_STATUS.REQUESTED).length
+  const activeCount = appointments.filter(a => activeStatuses.includes(a.status)).length
 
   if (sessionStatus === 'loading' || loading) {
     return (
@@ -253,7 +257,7 @@ export default function RepairerDashboard() {
 
                   {/* Action Buttons */}
                   <div className="flex gap-2 pt-4 border-t">
-                    {apt.status === 'requested' && (
+                    {apt.status === BOOKING_STATUS.REQUESTED && (
                       <>
                         <button
                           onClick={() => handleAction(apt.id, 'accept')}
@@ -274,7 +278,7 @@ export default function RepairerDashboard() {
                       </>
                     )}
 
-                    {(apt.status === 'accepted' || apt.status === 'quote_rejected') && (
+                    {(apt.status === BOOKING_STATUS.ACCEPTED || apt.status === BOOKING_STATUS.QUOTE_REJECTED) && (
                       <>
                         <button
                           onClick={() => setQuoteModal({ appointmentId: apt.id, open: true })}
@@ -294,7 +298,7 @@ export default function RepairerDashboard() {
                       </>
                     )}
 
-                    {apt.status === 'quote_approved' && (
+                    {apt.status === BOOKING_STATUS.QUOTE_APPROVED && (
                       <button
                         onClick={() => handleAction(apt.id, 'start')}
                         disabled={actionLoading === apt.id}
@@ -305,7 +309,7 @@ export default function RepairerDashboard() {
                       </button>
                     )}
 
-                    {apt.status === 'in_progress' && (
+                    {apt.status === BOOKING_STATUS.IN_PROGRESS && (
                       <button
                         onClick={() => handleAction(apt.id, 'complete')}
                         disabled={actionLoading === apt.id}

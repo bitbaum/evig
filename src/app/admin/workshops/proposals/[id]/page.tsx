@@ -20,6 +20,7 @@ import { EditProposalModal } from '@/components/admin/workshops/EditProposalModa
 import { getEditableFieldLabels } from '@/config/editable-fields';
 import { formatDateTime, formatDateShort } from '@/lib/date-formats';
 import { logger } from '@/lib/logger';
+import { APPROVAL_STATUS } from '@/config/approval-status';
 import type { WorkshopProposalWithProposer } from '@/components/workshops/types';
 
 export default function WorkshopProposalDetailPage() {
@@ -117,7 +118,7 @@ export default function WorkshopProposalDetailPage() {
                 {formatDateShort(proposal.created_at)}
               </p>
             </div>
-            {proposal.status === 'pending' && (
+            {proposal.status === APPROVAL_STATUS.PENDING && (
               <button
                 onClick={() => setShowEditModal(true)}
                 className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
@@ -221,12 +222,12 @@ export default function WorkshopProposalDetailPage() {
             <section className="bg-white rounded-lg shadow-sm border p-6">
               <h3 className="font-semibold mb-4">Status</h3>
               <div className="flex items-center gap-2">
-                {proposal.status === 'approved' && (
+                {proposal.status === APPROVAL_STATUS.APPROVED && (
                   <Check className="w-5 h-5 text-green-600" />
                 )}
-                {proposal.status === 'pending' && <Clock className="w-5 h-5 text-yellow-600" />}
-                {proposal.status === 'rejected' && <X className="w-5 h-5 text-red-600" />}
-                {proposal.status === 'requires_changes' && (
+                {proposal.status === APPROVAL_STATUS.PENDING && <Clock className="w-5 h-5 text-yellow-600" />}
+                {proposal.status === APPROVAL_STATUS.REJECTED && <X className="w-5 h-5 text-red-600" />}
+                {proposal.status === APPROVAL_STATUS.REQUIRES_CHANGES && (
                   <AlertCircle className="w-5 h-5 text-orange-600" />
                 )}
                 <span className="font-medium capitalize">{proposal.status}</span>

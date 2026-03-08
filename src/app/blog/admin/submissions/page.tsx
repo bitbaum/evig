@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { ArrowLeft, Eye, Check, X, Edit, Calendar, User, Mail, Tag, Folder } from 'lucide-react'
 import { logger } from '@/lib/logger'
-import { getApprovalStatusBadge } from '@/config/approval-status'
+import { APPROVAL_STATUS, getApprovalStatusBadge } from '@/config/approval-status'
 import { formatDateTime } from '@/lib/date-formats'
 
 interface Submission {
@@ -25,7 +25,7 @@ interface Submission {
 
 export default function SubmissionsAdminPage() {
   const [submissions, setSubmissions] = useState<Submission[]>([])
-  const [filter, setFilter] = useState<'all' | 'pending' | 'approved' | 'rejected'>('all')
+  const [filter, setFilter] = useState<'all' | string>('all')
   const [selectedSubmission, setSelectedSubmission] = useState<Submission | null>(null)
   const [isLoading, setIsLoading] = useState(true)
 
@@ -49,9 +49,9 @@ export default function SubmissionsAdminPage() {
     filter === 'all' || sub.status === filter
   )
 
-  const pendingCount = submissions.filter(s => s.status === 'pending').length
-  const approvedCount = submissions.filter(s => s.status === 'approved').length
-  const rejectedCount = submissions.filter(s => s.status === 'rejected').length
+  const pendingCount = submissions.filter(s => s.status === APPROVAL_STATUS.PENDING).length
+  const approvedCount = submissions.filter(s => s.status === APPROVAL_STATUS.APPROVED).length
+  const rejectedCount = submissions.filter(s => s.status === APPROVAL_STATUS.REJECTED).length
 
 
   const handleConvertToPost = (submission: Submission) => {
@@ -134,9 +134,9 @@ ${submission.content}
               Alle ({submissions.length})
             </button>
             <button
-              onClick={() => setFilter('pending')}
+              onClick={() => setFilter(APPROVAL_STATUS.PENDING)}
               className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-                filter === 'pending'
+                filter === APPROVAL_STATUS.PENDING
                   ? 'bg-green-600 text-white'
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
               }`}
@@ -144,9 +144,9 @@ ${submission.content}
               Ausstehend ({pendingCount})
             </button>
             <button
-              onClick={() => setFilter('approved')}
+              onClick={() => setFilter(APPROVAL_STATUS.APPROVED)}
               className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-                filter === 'approved'
+                filter === APPROVAL_STATUS.APPROVED
                   ? 'bg-green-600 text-white'
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
               }`}
@@ -154,9 +154,9 @@ ${submission.content}
               Genehmigt ({approvedCount})
             </button>
             <button
-              onClick={() => setFilter('rejected')}
+              onClick={() => setFilter(APPROVAL_STATUS.REJECTED)}
               className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-                filter === 'rejected'
+                filter === APPROVAL_STATUS.REJECTED
                   ? 'bg-green-600 text-white'
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
               }`}

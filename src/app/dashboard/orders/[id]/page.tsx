@@ -18,7 +18,7 @@ import {
   AlertCircle,
   ExternalLink,
 } from 'lucide-react'
-import { ORDER_STATUS_CONFIG, formatCHF, DELIVERY_LABELS } from '@/config/marketplace'
+import { ORDER_STATUS_CONFIG, ORDER_STATUS, formatCHF, DELIVERY_LABELS } from '@/config/marketplace'
 import type { OrderStatus, DeliveryOption } from '@/config/marketplace'
 import { formatDateShort } from '@/lib/date-formats'
 
@@ -53,7 +53,7 @@ interface OrderDetail {
   counterparty_name: string | null
 }
 
-const STATUS_STEPS: OrderStatus[] = ['pending_payment', 'paid', 'shipped', 'delivered', 'completed']
+const STATUS_STEPS: OrderStatus[] = [ORDER_STATUS.PENDING_PAYMENT, ORDER_STATUS.PAID, ORDER_STATUS.SHIPPED, ORDER_STATUS.DELIVERED, ORDER_STATUS.COMPLETED]
 
 export default function OrderDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { data: session, status: sessionStatus } = useSession()
@@ -97,7 +97,7 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
 
     try {
       const body: Record<string, unknown> = { status: newStatus }
-      if (newStatus === 'shipped' && trackingNumber.trim()) {
+      if (newStatus === ORDER_STATUS.SHIPPED && trackingNumber.trim()) {
         body.tracking_number = trackingNumber.trim()
       }
 
@@ -146,7 +146,7 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
 
   const statusConfig = ORDER_STATUS_CONFIG[order.status as OrderStatus]
   const currentStepIndex = STATUS_STEPS.indexOf(order.status as OrderStatus)
-  const isCancelled = order.status === 'cancelled' || order.status === 'refunded'
+  const isCancelled = order.status === ORDER_STATUS.CANCELLED || order.status === ORDER_STATUS.REFUNDED
   const deliveryLabel = DELIVERY_LABELS[order.delivery_method as DeliveryOption] || order.delivery_method
 
   return (
@@ -182,7 +182,7 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
       )}
 
       {/* Pending payment info banner */}
-      {order.status === 'pending_payment' && (
+      {order.status === ORDER_STATUS.PENDING_PAYMENT && (
         <div className="mb-6 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-xl p-4 flex items-start gap-3">
           <Clock className="w-5 h-5 text-yellow-600 flex-shrink-0 mt-0.5" />
           <div className="flex-1">
@@ -365,7 +365,7 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
 
         <div className="space-y-3">
           {/* Seller: paid → shipped */}
-          {order.role === 'seller' && order.status === 'paid' && (
+          {order.role === 'seller' && order.status === ORDER_STATUS.PAID && (
             <div className="space-y-3">
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
@@ -380,7 +380,7 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
                 />
               </div>
               <button
-                onClick={() => updateStatus('shipped')}
+                onClick={() => updateStatus(ORDER_STATUS.SHIPPED)}
                 disabled={updatingStatus}
                 className="w-full flex items-center justify-center gap-2 bg-purple-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-purple-700 disabled:opacity-50 transition-colors"
               >
@@ -391,9 +391,9 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
           )}
 
           {/* Seller: shipped → delivered */}
-          {order.role === 'seller' && order.status === 'shipped' && (
+          {order.role === 'seller' && order.status === ORDER_STATUS.SHIPPED && (
             <button
-              onClick={() => updateStatus('delivered')}
+              onClick={() => updateStatus(ORDER_STATUS.DELIVERED)}
               disabled={updatingStatus}
               className="w-full flex items-center justify-center gap-2 bg-indigo-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-indigo-700 disabled:opacity-50 transition-colors"
             >
@@ -403,9 +403,9 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
           )}
 
           {/* Buyer: delivered → completed */}
-          {order.role === 'buyer' && order.status === 'delivered' && (
+          {order.role === 'buyer' && order.status === ORDER_STATUS.DELIVERED && (
             <button
-              onClick={() => updateStatus('completed')}
+              onClick={() => updateStatus(ORDER_STATUS.COMPLETED)}
               disabled={updatingStatus}
               className="w-full flex items-center justify-center gap-2 bg-green-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-green-700 disabled:opacity-50 transition-colors"
             >
@@ -415,11 +415,11 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
           )}
 
           {/* Cancel (buyer: pending_payment or paid) */}
-          {order.role === 'buyer' && (order.status === 'pending_payment' || order.status === 'paid') && (
+          {order.role === 'buyer' && (order.status === ORDER_STATUS.PENDING_PAYMENT || order.status === ORDER_STATUS.PAID) && (
             <button
               onClick={() => {
                 if (window.confirm('Bestellung wirklich stornieren?')) {
-                  updateStatus('cancelled')
+                  updateStatus(ORDER_STATUS.CANCELLED)
                 }
               }}
               disabled={updatingStatus}
@@ -433,11 +433,11 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
           {/* No actions available */}
           {isCancelled && (
             <p className="text-sm text-gray-500 dark:text-gray-400 text-center py-2">
-              Diese Bestellung wurde {order.status === 'cancelled' ? 'storniert' : 'erstattet'}.
+              Diese Bestellung wurde {order.status === ORDER_STATUS.CANCELLED ? 'storniert' : 'erstattet'}.
             </p>
           )}
 
-          {order.status === 'completed' && (
+          {order.status === ORDER_STATUS.COMPLETED && (
             <p className="text-sm text-green-600 text-center py-2 flex items-center justify-center gap-1.5">
               <CheckCircle className="w-4 h-4" />
               Bestellung abgeschlossen

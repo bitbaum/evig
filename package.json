@@ -6,7 +6,7 @@
     "dev": "next dev",
     "dev:frontend": "npm run dev",
     "dev:full": "./scripts/start-all.sh",
-    "d": "npm run services:up && npm run dev",
+    "d": "npm run services:up && npm run transcription:bg && npm run dev",
     "db:up": "docker compose up -d db",
     "db:down": "docker compose down db",
     "services:up": "docker compose up -d db meilisearch listmonk",
@@ -50,6 +50,7 @@
     "hirn:ingest:src": "npx tsx scripts/hirn-ingest.ts --dir ./src --extensions .ts,.tsx",
     "hirn:stats": "npx tsx scripts/hirn-ingest.ts --stats",
     "transcription:start": "./services/transcription/start.sh",
+    "transcription:bg": "[ -d services/transcription/.venv ] && (./services/transcription/start.sh &) || echo 'Transcription venv not found. Run: npm run transcription:setup'",
     "transcription:setup": "python3 -m venv services/transcription/.venv && services/transcription/.venv/bin/pip install faster-whisper flask"
   },
   "dependencies": {

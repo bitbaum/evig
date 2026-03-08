@@ -22,6 +22,7 @@ import {
 } from 'lucide-react'
 import { logger } from '@/lib/logger'
 import { formatDateShort, formatDateTimeWithWeekday } from '@/lib/date-formats'
+import { WORKSHOP_REGISTRATION_STATUS } from '@/config/workshop-registration-status'
 import type { WorkshopInstanceWithDetails } from '@/components/workshops/types'
 
 // Admin-specific registration view with user details
@@ -99,15 +100,15 @@ export default function AdminWorkshopInstanceDetailPage({
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case 'confirmed':
+      case WORKSHOP_REGISTRATION_STATUS.CONFIRMED:
         return <span className="px-2 py-1 text-xs font-medium bg-green-100 text-green-800 rounded-full">Bestätigt</span>
-      case 'pending':
+      case WORKSHOP_REGISTRATION_STATUS.PENDING:
         return <span className="px-2 py-1 text-xs font-medium bg-yellow-100 text-yellow-800 rounded-full">Ausstehend</span>
-      case 'cancelled':
+      case WORKSHOP_REGISTRATION_STATUS.CANCELLED:
         return <span className="px-2 py-1 text-xs font-medium bg-red-100 text-red-800 rounded-full">Abgesagt</span>
-      case 'attended':
+      case WORKSHOP_REGISTRATION_STATUS.ATTENDED:
         return <span className="px-2 py-1 text-xs font-medium bg-blue-100 text-blue-800 rounded-full">Teilgenommen</span>
-      case 'no_show':
+      case WORKSHOP_REGISTRATION_STATUS.NO_SHOW:
         return <span className="px-2 py-1 text-xs font-medium bg-gray-100 text-gray-800 rounded-full">Nicht erschienen</span>
       default:
         return <span className="px-2 py-1 text-xs font-medium bg-gray-100 text-gray-800 rounded-full">{status}</span>
@@ -219,7 +220,7 @@ export default function AdminWorkshopInstanceDetailPage({
               </div>
               <div>
                 <div className="text-2xl font-bold text-gray-900">
-                  {registrations.filter(r => r.status === 'confirmed' || r.status === 'attended').length}
+                  {registrations.filter(r => r.status === WORKSHOP_REGISTRATION_STATUS.CONFIRMED || r.status === WORKSHOP_REGISTRATION_STATUS.ATTENDED).length}
                 </div>
                 <div className="text-sm text-gray-600">Bestätigt</div>
               </div>
@@ -233,7 +234,7 @@ export default function AdminWorkshopInstanceDetailPage({
               </div>
               <div>
                 <div className="text-2xl font-bold text-gray-900">
-                  {registrations.filter(r => r.status === 'pending').length}
+                  {registrations.filter(r => r.status === WORKSHOP_REGISTRATION_STATUS.PENDING).length}
                 </div>
                 <div className="text-sm text-gray-600">Ausstehend</div>
               </div>
@@ -247,7 +248,7 @@ export default function AdminWorkshopInstanceDetailPage({
               </div>
               <div>
                 <div className="text-2xl font-bold text-gray-900">
-                  {registrations.filter(r => r.status === 'cancelled').length}
+                  {registrations.filter(r => r.status === WORKSHOP_REGISTRATION_STATUS.CANCELLED).length}
                 </div>
                 <div className="text-sm text-gray-600">Abgesagt</div>
               </div>
@@ -350,32 +351,32 @@ export default function AdminWorkshopInstanceDetailPage({
                       </td>
                       <td className="px-6 py-4">
                         <div className="flex gap-2">
-                          {reg.status === 'pending' && (
+                          {reg.status === WORKSHOP_REGISTRATION_STATUS.PENDING && (
                             <>
                               <button
-                                onClick={() => updateRegistrationStatus(reg.id, 'confirmed')}
+                                onClick={() => updateRegistrationStatus(reg.id, WORKSHOP_REGISTRATION_STATUS.CONFIRMED)}
                                 className="text-green-600 hover:text-green-800 text-sm"
                               >
                                 Bestätigen
                               </button>
                               <button
-                                onClick={() => updateRegistrationStatus(reg.id, 'cancelled')}
+                                onClick={() => updateRegistrationStatus(reg.id, WORKSHOP_REGISTRATION_STATUS.CANCELLED)}
                                 className="text-red-600 hover:text-red-800 text-sm"
                               >
                                 Absagen
                               </button>
                             </>
                           )}
-                          {reg.status === 'confirmed' && isPast && (
+                          {reg.status === WORKSHOP_REGISTRATION_STATUS.CONFIRMED && isPast && (
                             <>
                               <button
-                                onClick={() => updateRegistrationStatus(reg.id, 'attended')}
+                                onClick={() => updateRegistrationStatus(reg.id, WORKSHOP_REGISTRATION_STATUS.ATTENDED)}
                                 className="text-blue-600 hover:text-blue-800 text-sm"
                               >
                                 Teilgenommen
                               </button>
                               <button
-                                onClick={() => updateRegistrationStatus(reg.id, 'no_show')}
+                                onClick={() => updateRegistrationStatus(reg.id, WORKSHOP_REGISTRATION_STATUS.NO_SHOW)}
                                 className="text-gray-600 hover:text-gray-800 text-sm"
                               >
                                 Nicht erschienen

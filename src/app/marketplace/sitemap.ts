@@ -1,6 +1,7 @@
 import type { MetadataRoute } from 'next'
 import { query } from '@/lib/auth/db'
 import { TABLE_NAMES } from '@/config/database'
+import { LISTING_STATUS } from '@/config/marketplace'
 import { logger } from '@/lib/logger'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
@@ -9,7 +10,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   try {
     const result = await query<{ id: string; updated_at: string }>(
       `SELECT id, updated_at FROM ${TABLE_NAMES.LISTINGS}
-       WHERE status = 'active'
+       WHERE status = '${LISTING_STATUS.ACTIVE}'
        ORDER BY updated_at DESC`,
     )
 

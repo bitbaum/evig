@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import {
+  DECISION_STATUS,
   DECISION_STATUS_CONFIG,
   DECISION_TYPE_CONFIG,
   VOTING_METHOD_CONFIG,
@@ -218,7 +219,7 @@ export default function DecisionListClient({
               {decisions.map((d) => {
                 const statusConf = DECISION_STATUS_CONFIG[d.status];
                 const deadline =
-                  d.status === 'voting'
+                  d.status === DECISION_STATUS.VOTING
                     ? d.votingDeadline
                     : d.discussionDeadline;
 

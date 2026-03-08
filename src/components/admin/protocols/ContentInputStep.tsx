@@ -3,6 +3,7 @@ import { Loader2, Save, Wand2, Upload } from 'lucide-react'
 import { MEETING_TYPE_TEMPLATES } from '@/config/protocols'
 import type { MeetingType, InputMethod } from '@/config/protocols'
 import { AUDIO_UPLOAD_LIMITS } from '@/lib/protocols/audio-validation'
+import { WHISPER_MODELS } from '@/config/transcription'
 
 interface Props {
   inputMethod: InputMethod
@@ -12,9 +13,11 @@ interface Props {
   processing: boolean
   audioFile: File | null
   audioStage: string
+  whisperModel: string
   contentFormat: 'json' | 'text' | null
   submitButtonLabel: string
   onContentChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void
+  onWhisperModelChange: (model: string) => void
   onAudioUpload: (e: React.ChangeEvent<HTMLInputElement>) => void
   onFileUpload: (e: React.ChangeEvent<HTMLInputElement>) => void
   onCreateAndProcess: () => void
@@ -30,9 +33,11 @@ export function ContentInputStep({
   processing,
   audioFile,
   audioStage,
+  whisperModel,
   contentFormat,
   submitButtonLabel,
   onContentChange,
+  onWhisperModelChange,
   onAudioUpload,
   onFileUpload,
   onCreateAndProcess,
@@ -59,7 +64,25 @@ export function ContentInputStep({
           </ol>
         </div>
 
-        <div className="space-y-2">
+        <div className="space-y-3">
+          <div>
+            <label htmlFor="whisper-model" className="block text-sm font-medium text-gray-700 mb-1">
+              Whisper-Modell
+            </label>
+            <select
+              id="whisper-model"
+              value={whisperModel}
+              onChange={(e) => onWhisperModelChange(e.target.value)}
+              className="w-full px-3 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              {WHISPER_MODELS.map((m) => (
+                <option key={m.id} value={m.id}>
+                  {m.label} ({m.size}) — {m.hint}
+                </option>
+              ))}
+            </select>
+          </div>
+
           <label className="flex items-center gap-1.5 text-sm text-blue-700 hover:text-blue-900 cursor-pointer">
             <Upload className="w-3.5 h-3.5" />
             Audiodatei wählen (.mp3, .m4a, .wav, .ogg, .webm)

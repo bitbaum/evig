@@ -7,6 +7,8 @@ import Link from 'next/link'
 import { useParams } from 'next/navigation'
 import { formatDateShort } from '@/lib/date-formats'
 import { getApprovalStatusLabel } from '@/config/approval-status'
+import { LOCATION_STATUS } from '@/config/location-status'
+import { BOOKING_STATUS } from '@/config/booking-status'
 import {
   MapPin,
   Building2,
@@ -144,10 +146,10 @@ export default function LocationDetailPage() {
 
   const getStatusBadge = (status: string) => {
     const configs: Record<string, { icon: typeof CheckCircle; label: string; className: string }> = {
-      approved: { icon: CheckCircle, label: getApprovalStatusLabel('approved'), className: 'bg-green-100 text-green-800' },
-      pending: { icon: Clock, label: getApprovalStatusLabel('pending'), className: 'bg-yellow-100 text-yellow-800' },
-      rejected: { icon: XCircle, label: getApprovalStatusLabel('rejected'), className: 'bg-red-100 text-red-800' },
-      suspended: { icon: AlertCircle, label: 'Suspendiert', className: 'bg-orange-100 text-orange-800' },
+      [LOCATION_STATUS.APPROVED]: { icon: CheckCircle, label: getApprovalStatusLabel(LOCATION_STATUS.APPROVED), className: 'bg-green-100 text-green-800' },
+      [LOCATION_STATUS.PENDING]: { icon: Clock, label: getApprovalStatusLabel(LOCATION_STATUS.PENDING), className: 'bg-yellow-100 text-yellow-800' },
+      [LOCATION_STATUS.REJECTED]: { icon: XCircle, label: getApprovalStatusLabel(LOCATION_STATUS.REJECTED), className: 'bg-red-100 text-red-800' },
+      [LOCATION_STATUS.SUSPENDED]: { icon: AlertCircle, label: 'Suspendiert', className: 'bg-orange-100 text-orange-800' },
     }
     const config = configs[status] || { icon: AlertCircle, label: status, className: 'bg-gray-100 text-gray-800' }
     const Icon = config.icon
@@ -255,7 +257,7 @@ export default function LocationDetailPage() {
               </div>
             </div>
 
-            {location.approval_status === 'pending' && (
+            {location.approval_status === LOCATION_STATUS.PENDING && (
               <div className="flex gap-2">
                 <button
                   onClick={() => handleApproval('approve')}
@@ -476,12 +478,12 @@ export default function LocationDetailPage() {
                     )}
                   </div>
                   <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                    booking.status === 'confirmed' ? 'bg-green-100 text-green-800' :
-                    booking.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
+                    booking.status === BOOKING_STATUS.CONFIRMED ? 'bg-green-100 text-green-800' :
+                    booking.status === BOOKING_STATUS.PENDING ? 'bg-yellow-100 text-yellow-800' :
                     'bg-gray-100 text-gray-800'
                   }`}>
-                    {booking.status === 'confirmed' ? 'Bestätigt' :
-                     booking.status === 'pending' ? 'Ausstehend' : booking.status}
+                    {booking.status === BOOKING_STATUS.CONFIRMED ? 'Bestätigt' :
+                     booking.status === BOOKING_STATUS.PENDING ? 'Ausstehend' : booking.status}
                   </span>
                 </div>
               ))}

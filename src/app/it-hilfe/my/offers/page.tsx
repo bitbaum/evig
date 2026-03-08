@@ -18,6 +18,7 @@ import {
   getOfferStatusById,
   getRequestStatusById,
   OFFER_STATUSES,
+  OFFER_STATUS,
 } from '@/config/it-hilfe'
 
 interface OfferWithRequest {
@@ -261,7 +262,7 @@ export default function MyOffersPage() {
                       <ArrowRight className="w-5 h-5 text-gray-400 group-hover:text-emerald-600 transition-colors" />
                     </div>
                   </Link>
-                  {offer.status === 'pending' && (
+                  {offer.status === OFFER_STATUS.PENDING && (
                     <div className="px-6 pb-4">
                       <button
                         onClick={() => handleWithdraw(offer)}

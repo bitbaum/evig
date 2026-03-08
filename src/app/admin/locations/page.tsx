@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { formatDateShort } from '@/lib/date-formats'
 import { getApprovalStatusLabel } from '@/config/approval-status'
+import { LOCATION_STATUS } from '@/config/location-status'
 import {
   MapPin,
   Plus,
@@ -56,7 +57,7 @@ export default function AdminLocationsPage() {
     try {
       setLoading(true)
       const params = new URLSearchParams({
-        status: filters.status === 'all' ? 'approved' : filters.status,
+        status: filters.status === 'all' ? LOCATION_STATUS.APPROVED : filters.status,
         limit: '20',
         offset: ((currentPage - 1) * 20).toString()
       })
@@ -113,13 +114,13 @@ export default function AdminLocationsPage() {
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'approved':
+      case LOCATION_STATUS.APPROVED:
         return <CheckCircle className="w-5 h-5 text-green-600" />
-      case 'pending':
+      case LOCATION_STATUS.PENDING:
         return <Clock className="w-5 h-5 text-yellow-600" />
-      case 'rejected':
+      case LOCATION_STATUS.REJECTED:
         return <XCircle className="w-5 h-5 text-red-600" />
-      case 'suspended':
+      case LOCATION_STATUS.SUSPENDED:
         return <AlertCircle className="w-5 h-5 text-orange-600" />
       default:
         return <AlertCircle className="w-5 h-5 text-gray-400" />
@@ -127,7 +128,7 @@ export default function AdminLocationsPage() {
   }
 
   const getStatusText = (status: string) => {
-    if (status === 'suspended') return 'Suspendiert'
+    if (status === LOCATION_STATUS.SUSPENDED) return 'Suspendiert'
     return getApprovalStatusLabel(status)
   }
 
@@ -203,10 +204,10 @@ export default function AdminLocationsPage() {
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
               >
                 <option value="all">Alle</option>
-                <option value="pending">Ausstehend</option>
-                <option value="approved">Genehmigt</option>
-                <option value="rejected">Abgelehnt</option>
-                <option value="suspended">Suspendiert</option>
+                <option value={LOCATION_STATUS.PENDING}>Ausstehend</option>
+                <option value={LOCATION_STATUS.APPROVED}>Genehmigt</option>
+                <option value={LOCATION_STATUS.REJECTED}>Abgelehnt</option>
+                <option value={LOCATION_STATUS.SUSPENDED}>Suspendiert</option>
               </select>
             </div>
 
@@ -312,7 +313,7 @@ export default function AdminLocationsPage() {
                       Details
                     </Link>
 
-                    {location.approval_status === 'pending' && (
+                    {location.approval_status === LOCATION_STATUS.PENDING && (
                       <>
                         <button
                           onClick={() => handleApproval(location.id, 'approve')}

@@ -20,6 +20,7 @@ import {
 import type { MeetingType, ProtocolVisibility, InputMethod } from '@/config/protocols'
 import { getErrorMessage } from '@/lib/utils/error'
 import { validateAudioUpload } from '@/lib/protocols/audio-validation'
+import { DEFAULT_WHISPER_MODEL } from '@/config/transcription'
 import {
   MeetingTypeStep,
   ProtocolDetailsStep,
@@ -50,6 +51,7 @@ export default function ProtocolFormClient() {
   const [error, setError] = useState<string | null>(null)
   const [audioFile, setAudioFile] = useState<File | null>(null)
   const [audioStage, setAudioStage] = useState<'idle' | 'uploading' | 'transcribing' | 'processing'>('idle')
+  const [whisperModel, setWhisperModel] = useState(DEFAULT_WHISPER_MODEL)
   const [formData, setFormData] = useState<FormData>({
     title: '',
     meeting_date: new Date().toISOString().split('T')[0],
@@ -161,6 +163,7 @@ export default function ProtocolFormClient() {
         setAudioStage('uploading')
         const audioFormData = new FormData()
         audioFormData.append('audio', audioFile)
+        audioFormData.append('model', whisperModel)
         setAudioStage('transcribing')
 
         const processAudioRes = await fetch(`/api/protocols/${protocolId}/process-audio`, {
@@ -264,9 +267,11 @@ export default function ProtocolFormClient() {
           processing={processing}
           audioFile={audioFile}
           audioStage={audioStage}
+          whisperModel={whisperModel}
           contentFormat={contentFormat}
           submitButtonLabel={getSubmitButtonLabel()}
           onContentChange={handleChange}
+          onWhisperModelChange={setWhisperModel}
           onAudioUpload={handleAudioUpload}
           onFileUpload={handleFileUpload}
           onCreateAndProcess={() => {

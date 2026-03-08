@@ -134,9 +134,28 @@ print_success "Docker infrastructure is ready"
 echo ""
 
 # -----------------------------------------------------------------------------
-# Step 2: Start Next.js Frontend
+# Step 2: Start Transcription Service (optional)
 # -----------------------------------------------------------------------------
-print_status "Step 2: Starting Next.js frontend..."
+TRANSCRIPTION_PORT="${TRANSCRIPTION_PORT:-5111}"
+
+if port_in_use "$TRANSCRIPTION_PORT"; then
+    print_warning "Transcription service already running on port $TRANSCRIPTION_PORT"
+elif [ -d "$PROJECT_DIR/services/transcription/.venv" ]; then
+    print_status "Step 2: Starting transcription service..."
+    "$PROJECT_DIR/services/transcription/start.sh" &
+    TRANSCRIPTION_PID=$!
+    echo $TRANSCRIPTION_PID > "$PROJECT_DIR/.transcription.pid"
+    wait_for_service "Transcription" "localhost" "$TRANSCRIPTION_PORT" 30
+else
+    print_warning "Transcription service not set up (run: npm run transcription:setup)"
+fi
+
+echo ""
+
+# -----------------------------------------------------------------------------
+# Step 3: Start Next.js Frontend
+# -----------------------------------------------------------------------------
+print_status "Step 3: Starting Next.js frontend..."
 
 cd "$PROJECT_DIR"
 

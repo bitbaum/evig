@@ -5,6 +5,8 @@ import { useEffect, useState } from 'react'
 import { Calendar, Clock, Wrench, AlertCircle, CheckCircle, XCircle, ArrowLeft, Loader2 } from 'lucide-react'
 import Link from 'next/link'
 import { formatDateTime } from '@/lib/date-formats'
+import { APPOINTMENT_STATUS } from '@/config/appointment-status'
+import { BOOKING_STATUS } from '@/config/booking-status'
 
 interface ServiceAppointment {
   id: string
@@ -91,13 +93,13 @@ export default function AppointmentsDashboard() {
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'confirmed':
+      case APPOINTMENT_STATUS.CONFIRMED:
         return <CheckCircle className="w-5 h-5 text-success-600" />
-      case 'completed':
+      case APPOINTMENT_STATUS.COMPLETED:
         return <CheckCircle className="w-5 h-5 text-info-600" />
-      case 'requested':
+      case APPOINTMENT_STATUS.REQUESTED:
         return <AlertCircle className="w-5 h-5 text-warning-600" />
-      case 'cancelled':
+      case APPOINTMENT_STATUS.CANCELLED:
         return <XCircle className="w-5 h-5 text-error-600" />
       default:
         return <AlertCircle className="w-5 h-5 text-neutral-500" />
@@ -106,15 +108,15 @@ export default function AppointmentsDashboard() {
 
   const getStatusText = (status: string) => {
     switch (status) {
-      case 'requested':
+      case APPOINTMENT_STATUS.REQUESTED:
         return 'Angefragt'
-      case 'confirmed':
+      case APPOINTMENT_STATUS.CONFIRMED:
         return 'Bestätigt'
-      case 'in_progress':
+      case BOOKING_STATUS.IN_PROGRESS:
         return 'In Bearbeitung'
-      case 'completed':
+      case APPOINTMENT_STATUS.COMPLETED:
         return 'Abgeschlossen'
-      case 'cancelled':
+      case APPOINTMENT_STATUS.CANCELLED:
         return 'Storniert'
       default:
         return status
@@ -237,7 +239,7 @@ export default function AppointmentsDashboard() {
                 </div>
 
                 {/* Status specific content */}
-                {appointment.status === 'requested' && (
+                {appointment.status === APPOINTMENT_STATUS.REQUESTED && (
                   <div className="bg-warning-50 border-2 border-warning-200 rounded-lg p-3 sm:p-4">
                     <div className="flex items-center text-warning-800">
                       <AlertCircle className="w-5 h-5 mr-2 flex-shrink-0" />
@@ -249,7 +251,7 @@ export default function AppointmentsDashboard() {
                   </div>
                 )}
 
-                {appointment.status === 'confirmed' && (
+                {appointment.status === APPOINTMENT_STATUS.CONFIRMED && (
                   <div className="bg-success-50 border-2 border-success-200 rounded-lg p-3 sm:p-4">
                     <div className="flex items-center text-success-800">
                       <CheckCircle className="w-5 h-5 mr-2 flex-shrink-0" />
@@ -261,7 +263,7 @@ export default function AppointmentsDashboard() {
                   </div>
                 )}
 
-                {appointment.status === 'completed' && (
+                {appointment.status === APPOINTMENT_STATUS.COMPLETED && (
                   <div className="bg-info-50 border-2 border-info-200 rounded-lg p-3 sm:p-4">
                     <div className="flex items-center text-info-800">
                       <CheckCircle className="w-5 h-5 mr-2 flex-shrink-0" />
@@ -273,7 +275,7 @@ export default function AppointmentsDashboard() {
                   </div>
                 )}
 
-                {appointment.status === 'cancelled' && (
+                {appointment.status === APPOINTMENT_STATUS.CANCELLED && (
                   <div className="bg-error-50 border-2 border-error-200 rounded-lg p-3 sm:p-4">
                     <div className="flex items-center text-error-800">
                       <XCircle className="w-5 h-5 mr-2 flex-shrink-0" />
@@ -283,7 +285,7 @@ export default function AppointmentsDashboard() {
                 )}
 
                 {/* Actions */}
-                {appointment.status !== 'cancelled' && (
+                {appointment.status !== APPOINTMENT_STATUS.CANCELLED && (
                   <div className="mt-4 flex gap-3">
                     <button
                       onClick={async () => {
@@ -307,7 +309,7 @@ export default function AppointmentsDashboard() {
                     >
                       Termin stornieren
                     </button>
-                    {appointment.status === 'requested' && (
+                    {appointment.status === APPOINTMENT_STATUS.REQUESTED && (
                       <button
                         onClick={() => openEdit(appointment)}
                         className="px-4 py-2 rounded-lg border border-indigo-300 text-indigo-700 hover:bg-indigo-50"

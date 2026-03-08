@@ -19,7 +19,7 @@ import {
   ChevronRight,
 } from 'lucide-react'
 import { ListingImage } from '@/components/marketplace/ListingImage'
-import { LISTING_STATUS_CONFIG, formatCHF } from '@/config/marketplace'
+import { LISTING_STATUS_CONFIG, LISTING_STATUS, formatCHF } from '@/config/marketplace'
 import type { ListingStatus } from '@/config/marketplace'
 import { getConditionBadge } from '@/config/erfassung/conditions'
 
@@ -38,10 +38,10 @@ interface MyListing {
 
 const STATUS_TABS: { value: string; label: string }[] = [
   { value: '', label: 'Alle' },
-  { value: 'active', label: 'Aktiv' },
-  { value: 'sold', label: 'Verkauft' },
-  { value: 'draft', label: 'Entwurf' },
-  { value: 'reserved', label: 'Reserviert' },
+  { value: LISTING_STATUS.ACTIVE, label: 'Aktiv' },
+  { value: LISTING_STATUS.SOLD, label: 'Verkauft' },
+  { value: LISTING_STATUS.DRAFT, label: 'Entwurf' },
+  { value: LISTING_STATUS.RESERVED, label: 'Reserviert' },
 ]
 
 export default function MyListingsPage() {
