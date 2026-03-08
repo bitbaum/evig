@@ -12,6 +12,8 @@ import { TABLE_NAMES, REVIEW_TARGET_TYPES } from '@/config/database'
 import { APP_URL } from '@/config/urls'
 import { sendEmail } from '@/lib/email'
 import { logger } from '@/lib/logger'
+import { REQUEST_STATUS } from '@/config/it-hilfe'
+import { REVIEW_STATUS } from '@/config/review-status'
 
 // ─── Target Validation ─────────────────────────────────────────────
 
@@ -52,8 +54,8 @@ export async function validateReviewTarget(
 
   if (targetType === REVIEW_TARGET_TYPES.IT_HILFE) {
     const result = await query(
-      `SELECT id FROM ${TABLE_NAMES.IT_HILFE_REQUESTS} WHERE id = $1 AND status = 'completed'`,
-      [targetId]
+      `SELECT id FROM ${TABLE_NAMES.IT_HILFE_REQUESTS} WHERE id = $1 AND status = $2`,
+      [targetId, REQUEST_STATUS.COMPLETED]
     )
     return result.rows.length > 0
   }
@@ -86,9 +88,9 @@ export async function updateHelperAverageRating(targetId: string): Promise<void>
        JOIN ${TABLE_NAMES.IT_HILFE_REQUESTS} req ON rev.target_id = req.id
        JOIN ${TABLE_NAMES.IT_HILFE_OFFERS} off ON req.matched_offer_id = off.id
        WHERE rev.target_type = $1
-         AND rev.status = 'published'
+         AND rev.status = $3
          AND off.helper_id = $2`,
-      [REVIEW_TARGET_TYPES.IT_HILFE, helperId]
+      [REVIEW_TARGET_TYPES.IT_HILFE, helperId, REVIEW_STATUS.PUBLISHED]
     )
 
     const avgRating = avgResult.rows[0]?.avg_rating

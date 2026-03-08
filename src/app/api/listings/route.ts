@@ -11,6 +11,7 @@ import { TABLE_NAMES } from '@/config/database';
 import { logger } from '@/lib/logger';
 import { validateBody, validateQuery, ListingsQuerySchema, CreateListingSchema } from '@/lib/schemas';
 import { insertListingImages, upsertListingSpecs, indexListingInSearch } from '@/lib/marketplace/listing-helpers';
+import { LISTING_STATUS } from '@/config/marketplace';
 import { sendCustomEmail } from '@/lib/email';
 import { listingPublishedConfirmation } from '@/lib/email/templates/marketplace';
 import { rateLimiters, getClientIdentifier } from '@/lib/security/rate-limit';
@@ -39,7 +40,7 @@ export async function GET(request: NextRequest) {
 
     // Build dynamic WHERE clauses
     const qb = new QueryParams();
-    qb.addRaw("l.status = 'active'");
+    qb.addRaw(`l.status = '${LISTING_STATUS.ACTIVE}'`);
 
     if (filters.category) {
       qb.add('l.category = $P', filters.category);
@@ -237,7 +238,7 @@ export const POST = withAuth(async (request: NextRequest, session: ValidSession)
         price_chf: data.price_chf,
         delivery_options: data.delivery_options,
         payment_mode: data.payment_mode,
-        status: data.status || 'active',
+        status: data.status || LISTING_STATUS.ACTIVE,
         is_revampit: false,
         is_verified: false,
         pickup_location: data.pickup_location || null,
@@ -252,7 +253,7 @@ export const POST = withAuth(async (request: NextRequest, session: ValidSession)
     );
 
     // Fire-and-forget: send confirmation email
-    if (session.user.email && data.status !== 'draft') {
+    if (session.user.email && data.status !== LISTING_STATUS.DRAFT) {
       const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
       sendCustomEmail(
         session.user.email,

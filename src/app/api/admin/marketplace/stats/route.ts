@@ -3,6 +3,7 @@ import { query } from '@/lib/auth/db'
 import { apiError, apiSuccess } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES } from '@/config/database'
+import { LISTING_STATUS, ORDER_STATUS } from '@/config/marketplace'
 import { REPORT_STATUS } from '@/config/report-status'
 
 // GET /api/admin/marketplace/stats - Dashboard statistics
@@ -25,18 +26,18 @@ export const GET = withAdmin('marketplace', async () => {
     }>(
       `SELECT
         COUNT(*) as total,
-        COUNT(*) FILTER (WHERE l.status = 'active') as active,
-        COUNT(*) FILTER (WHERE l.status = 'sold') as sold,
-        COUNT(*) FILTER (WHERE l.status = 'draft') as draft,
-        COUNT(*) FILTER (WHERE l.status = 'reserved') as reserved,
-        COUNT(*) FILTER (WHERE l.status = 'removed') as removed,
+        COUNT(*) FILTER (WHERE l.status = '${LISTING_STATUS.ACTIVE}') as active,
+        COUNT(*) FILTER (WHERE l.status = '${LISTING_STATUS.SOLD}') as sold,
+        COUNT(*) FILTER (WHERE l.status = '${LISTING_STATUS.DRAFT}') as draft,
+        COUNT(*) FILTER (WHERE l.status = '${LISTING_STATUS.RESERVED}') as reserved,
+        COUNT(*) FILTER (WHERE l.status = '${LISTING_STATUS.REMOVED}') as removed,
         COUNT(*) FILTER (WHERE l.verified_at IS NOT NULL) as verified,
-        COUNT(*) FILTER (WHERE l.verified_at IS NULL AND l.status = 'active') as unverified,
+        COUNT(*) FILTER (WHERE l.verified_at IS NULL AND l.status = '${LISTING_STATUS.ACTIVE}') as unverified,
         COUNT(*) FILTER (WHERE l.is_revampit = true) as revampit,
         COUNT(*) FILTER (WHERE l.is_revampit = false) as community,
         (SELECT COUNT(*) FROM ${TABLE_NAMES.LISTING_REPORTS} WHERE status = '${REPORT_STATUS.PENDING}') as open_reports,
         (SELECT COUNT(*) FROM ${TABLE_NAMES.MARKETPLACE_ORDERS}) as total_orders,
-        (SELECT COALESCE(SUM(amount_chf * 100), 0) FROM ${TABLE_NAMES.MARKETPLACE_ORDERS} WHERE status IN ('paid', 'shipped', 'delivered', 'completed')) as revenue_cents
+        (SELECT COALESCE(SUM(amount_chf * 100), 0) FROM ${TABLE_NAMES.MARKETPLACE_ORDERS} WHERE status IN ('${ORDER_STATUS.PAID}', '${ORDER_STATUS.SHIPPED}', '${ORDER_STATUS.DELIVERED}', '${ORDER_STATUS.COMPLETED}')) as revenue_cents
       FROM ${TABLE_NAMES.LISTINGS} l`
     )
 

@@ -34,8 +34,8 @@ export async function GET(
 
     // Increment view count (fire and forget)
     query(
-      `UPDATE ${TABLE_NAMES.LISTINGS} SET view_count = view_count + 1 WHERE id = $1 AND status = 'active'`,
-      [id]
+      `UPDATE ${TABLE_NAMES.LISTINGS} SET view_count = view_count + 1 WHERE id = $1 AND status = $2`,
+      [id, LISTING_STATUS.ACTIVE]
     ).catch(err => logger.error('Failed to increment view count', { error: err, listingId: id }));
 
     // Fetch listing with all images + seller info + verification data
@@ -61,8 +61,8 @@ export async function GET(
       FROM ${TABLE_NAMES.LISTINGS} l
       JOIN ${TABLE_NAMES.USERS} u ON l.seller_id = u.id
       LEFT JOIN ${TABLE_NAMES.SELLER_PROFILES} sp ON l.seller_id = sp.user_id
-      WHERE l.id = $1 AND l.status != 'removed'`,
-      [id]
+      WHERE l.id = $1 AND l.status != $2`,
+      [id, LISTING_STATUS.REMOVED]
     );
 
     if (result.rows.length === 0) return apiNotFound('Inserat');
@@ -123,8 +123,8 @@ export const PATCH = withAuth<{ id: string }>(async (
 
     // Check ownership
     const ownerResult = await query<{ seller_id: string }>(
-      `SELECT seller_id FROM ${TABLE_NAMES.LISTINGS} WHERE id = $1 AND status != 'removed'`,
-      [id]
+      `SELECT seller_id FROM ${TABLE_NAMES.LISTINGS} WHERE id = $1 AND status != $2`,
+      [id, LISTING_STATUS.REMOVED]
     );
     if (ownerResult.rows.length === 0) return apiNotFound('Inserat');
     if (ownerResult.rows[0].seller_id !== session.user.id) {
@@ -194,8 +194,8 @@ export const PATCH = withAuth<{ id: string }>(async (
         FROM ${TABLE_NAMES.LISTINGS} l
         JOIN ${TABLE_NAMES.USERS} u ON l.seller_id = u.id
         LEFT JOIN ${TABLE_NAMES.SELLER_PROFILES} sp ON l.seller_id = sp.user_id
-        WHERE l.id = $1 AND l.status = 'active'`,
-        [id]
+        WHERE l.id = $1 AND l.status = $2`,
+        [id, LISTING_STATUS.ACTIVE]
       ).then(async res => {
         if (res.rows[0]) {
           const row = res.rows[0] as Record<string, unknown>;
@@ -238,8 +238,8 @@ export const DELETE = withAuth<{ id: string }>(async (
     if (!id) return apiNotFound('Inserat');
 
     const ownerResult = await query<{ seller_id: string }>(
-      `SELECT seller_id FROM ${TABLE_NAMES.LISTINGS} WHERE id = $1 AND status != 'removed'`,
-      [id]
+      `SELECT seller_id FROM ${TABLE_NAMES.LISTINGS} WHERE id = $1 AND status != $2`,
+      [id, LISTING_STATUS.REMOVED]
     );
     if (ownerResult.rows.length === 0) return apiNotFound('Inserat');
 
@@ -253,8 +253,8 @@ export const DELETE = withAuth<{ id: string }>(async (
     }
 
     await query(
-      `UPDATE ${TABLE_NAMES.LISTINGS} SET status = 'removed' WHERE id = $1`,
-      [id]
+      `UPDATE ${TABLE_NAMES.LISTINGS} SET status = $2 WHERE id = $1`,
+      [id, LISTING_STATUS.REMOVED]
     );
 
     // Fire-and-forget: remove from Meilisearch

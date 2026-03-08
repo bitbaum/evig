@@ -4,6 +4,7 @@
 
 import { query, transaction } from '@/lib/auth/db'
 import { TABLE_NAMES } from '@/config/database'
+import { PROTOCOL_STATUS } from '@/config/protocol-status'
 import { notifyUsers, fireNotification } from '@/lib/services/notifications'
 import { logger } from '@/lib/logger'
 import type {
@@ -39,9 +40,9 @@ export async function getProtocolStats(
   }>(`
     SELECT
       COUNT(*) as total,
-      COUNT(*) FILTER (WHERE status = 'draft') as draft,
-      COUNT(*) FILTER (WHERE status = 'review') as review,
-      COUNT(*) FILTER (WHERE status = 'finalized') as finalized
+      COUNT(*) FILTER (WHERE status = '${PROTOCOL_STATUS.DRAFT}') as draft,
+      COUNT(*) FILTER (WHERE status = '${PROTOCOL_STATUS.REVIEW}') as review,
+      COUNT(*) FILTER (WHERE status = '${PROTOCOL_STATUS.FINALIZED}') as finalized
     FROM ${TABLE_NAMES.MEETING_PROTOCOLS} mp
     WHERE (
       mp.visibility = 'team'
@@ -235,7 +236,7 @@ export async function updateProtocol(
   if (existing.rows.length === 0) return null
 
   const { status } = existing.rows[0]
-  if (status !== 'draft' && status !== 'review') {
+  if (status !== PROTOCOL_STATUS.DRAFT && status !== PROTOCOL_STATUS.REVIEW) {
     throw new Error('PROTOCOL_NOT_EDITABLE')
   }
 
@@ -342,8 +343,8 @@ export async function finalizeProtocol(
 ): Promise<boolean> {
   const result = await query<{ id: string; title: string; attendees: string[] }>(
     `UPDATE ${TABLE_NAMES.MEETING_PROTOCOLS}
-     SET status = 'finalized'
-     WHERE id = $1 AND status = 'review'
+     SET status = '${PROTOCOL_STATUS.FINALIZED}'
+     WHERE id = $1 AND status = '${PROTOCOL_STATUS.REVIEW}'
      RETURNING id, title, attendees`,
     [id]
   )

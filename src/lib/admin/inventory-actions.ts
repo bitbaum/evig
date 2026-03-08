@@ -9,6 +9,7 @@ import { query } from '@/lib/auth/db'
 import { TABLE_NAMES } from '@/config/database'
 import { uploadImage, deleteImage } from '@/lib/storage/image-upload'
 import { logger } from '@/lib/logger'
+import { PRODUCT_STATUS, MARKETPLACE_STATUS } from '@/config/marketplace-status'
 
 // ─── Publish/Unpublish ─────────────────────────────────────────────
 
@@ -20,9 +21,9 @@ export async function publishProduct(productId: string, userId: string): Promise
   // Ensure product is approved
   await query(
     `UPDATE ${TABLE_NAMES.AI_EXTRACTED_PRODUCTS}
-     SET status = 'approved', updated_at = NOW()
+     SET status = $2, updated_at = NOW()
      WHERE id = $1`,
-    [productId]
+    [productId, PRODUCT_STATUS.APPROVED]
   )
 
   // Get product info for listing
@@ -61,22 +62,23 @@ export async function publishProduct(productId: string, userId: string): Promise
   if (existingListing.rows.length > 0) {
     await query(
       `UPDATE ${TABLE_NAMES.MARKETPLACE_LISTINGS}
-       SET status = 'published', published_at = NOW(), updated_at = NOW()
+       SET status = $2, published_at = NOW(), updated_at = NOW()
        WHERE id = $1`,
-      [existingListing.rows[0].id]
+      [existingListing.rows[0].id, MARKETPLACE_STATUS.PUBLISHED]
     )
   } else {
     await query(
       `INSERT INTO ${TABLE_NAMES.MARKETPLACE_LISTINGS} (
         inventory_item_id, title, description, price_chf,
         platform, status, published_at, created_by
-      ) VALUES ($1, $2, $3, $4, 'internal', 'published', NOW(), $5)`,
+      ) VALUES ($1, $2, $3, $4, 'internal', $6, NOW(), $5)`,
       [
         inventoryItemId,
         `${p.brand} ${p.product_name}`,
         p.short_description || '',
         p.estimated_price_chf,
         userId,
+        MARKETPLACE_STATUS.PUBLISHED,
       ]
     )
   }
@@ -90,11 +92,11 @@ export async function publishProduct(productId: string, userId: string): Promise
 export async function unpublishProduct(productId: string, userId: string): Promise<void> {
   await query(
     `UPDATE ${TABLE_NAMES.MARKETPLACE_LISTINGS}
-     SET status = 'draft', updated_at = NOW()
+     SET status = $2, updated_at = NOW()
      WHERE inventory_item_id = (
        SELECT id FROM ${TABLE_NAMES.INVENTORY_ITEMS} WHERE ai_product_id = $1
      )`,
-    [productId]
+    [productId, MARKETPLACE_STATUS.DRAFT]
   )
 
   logger.info('Product unpublished', { productId, unpublishedBy: userId })

@@ -9,6 +9,7 @@ import { notifyAllStaff, createNotification, fireNotification } from '@/lib/serv
 import {
   VALID_TRANSITIONS,
   EDITABLE_STATUSES,
+  DECISION_STATUS,
   type VotingMethod,
   type DecisionStatus,
 } from '@/config/decisions';
@@ -94,11 +95,11 @@ export async function getDecisionStats(requestingUserId: string): Promise<Decisi
     pending_votes: string;
   }>(
     `SELECT
-       COUNT(*) FILTER (WHERE status = 'voting')                                         AS voting,
-       COUNT(*) FILTER (WHERE status = 'discussion')                                     AS discussion,
-       COUNT(*) FILTER (WHERE status = 'closed')                                         AS closed,
+       COUNT(*) FILTER (WHERE status = '${DECISION_STATUS.VOTING}')                      AS voting,
+       COUNT(*) FILTER (WHERE status = '${DECISION_STATUS.DISCUSSION}')                  AS discussion,
+       COUNT(*) FILTER (WHERE status = '${DECISION_STATUS.CLOSED}')                      AS closed,
        COUNT(*) FILTER (
-         WHERE status = 'voting'
+         WHERE status = '${DECISION_STATUS.VOTING}'
          AND id NOT IN (
            SELECT decision_id FROM ${TABLE_NAMES.DECISION_VOTES} WHERE user_id = $1
          )
@@ -309,7 +310,7 @@ export async function createDecision(
       JSON.stringify(data.invitedParticipants || []),
       data.discussionDeadline ? new Date(data.discussionDeadline) : null,
       data.votingDeadline ? new Date(data.votingDeadline) : null,
-      data.initialStatus || 'draft',
+      data.initialStatus || DECISION_STATUS.DRAFT,
       createdBy,
     ]
   );
@@ -359,7 +360,7 @@ export async function updateDecision(
   }
 
   // Allow outcomeSummary update on closed decisions
-  if (data.outcomeSummary !== undefined && decision.status === 'closed') {
+  if (data.outcomeSummary !== undefined && decision.status === DECISION_STATUS.CLOSED) {
     const updated = await query<DbDecisionRow>(
       `UPDATE ${TABLE_NAMES.DECISIONS} SET outcome_summary = $1 WHERE id = $2 RETURNING *`,
       [data.outcomeSummary, id]
@@ -499,7 +500,7 @@ export async function transitionDecision(
   const params: unknown[] = [newStatus];
   let paramIndex = 2;
 
-  if (newStatus === 'cancelled') {
+  if (newStatus === DECISION_STATUS.CANCELLED) {
     setClauses.push(`cancel_reason = $${paramIndex++}`);
     params.push(extra?.cancelReason || null);
     setClauses.push(`closed_at = $${paramIndex++}`);
@@ -508,7 +509,7 @@ export async function transitionDecision(
     params.push(userId);
   }
 
-  if (newStatus === 'closed') {
+  if (newStatus === DECISION_STATUS.CLOSED) {
     // Closing requires reading votes + computing tallies + updating atomically
     const result = await transaction(async (client) => {
       const votesResult = await client.query<{ vote_data: VoteData }>(
@@ -577,7 +578,7 @@ export async function transitionDecision(
   const updatedDecision = updated.rows[0];
 
   // Notify all staff when voting opens
-  if (newStatus === 'voting' && updatedDecision) {
+  if (newStatus === DECISION_STATUS.VOTING && updatedDecision) {
     fireNotification(
       () => notifyAllStaff(
         {

@@ -13,6 +13,7 @@ import { redirect } from 'next/navigation'
 import { query } from '@/lib/auth/db'
 import { TABLE_NAMES } from '@/config/database'
 import { canAccessSection } from '@/lib/permissions'
+import { HELP_REQUEST_STATUS } from '@/config/help-request-status'
 import { HelpCircle, ArrowLeft, Users, AlertTriangle, CheckCircle } from 'lucide-react'
 import Link from 'next/link'
 import { HelpRequestsPageClient } from './HelpRequestsPageClient'
@@ -35,17 +36,20 @@ async function getHelpStats(): Promise<HelpStats> {
 
     const [openResult, inProgressResult, resolvedResult, urgentResult] = await Promise.all([
       query<{ count: string }>(
-        `SELECT COUNT(*) as count FROM ${TABLE_NAMES.HELP_REQUESTS} WHERE status = 'open'`
+        `SELECT COUNT(*) as count FROM ${TABLE_NAMES.HELP_REQUESTS} WHERE status = $1`,
+        [HELP_REQUEST_STATUS.OPEN]
       ),
       query<{ count: string }>(
-        `SELECT COUNT(*) as count FROM ${TABLE_NAMES.HELP_REQUESTS} WHERE status = 'in_progress'`
+        `SELECT COUNT(*) as count FROM ${TABLE_NAMES.HELP_REQUESTS} WHERE status = $1`,
+        [HELP_REQUEST_STATUS.IN_PROGRESS]
       ),
       query<{ count: string }>(
-        `SELECT COUNT(*) as count FROM ${TABLE_NAMES.HELP_REQUESTS} WHERE status = 'resolved' AND resolved_at >= $1`,
-        [weekAgo]
+        `SELECT COUNT(*) as count FROM ${TABLE_NAMES.HELP_REQUESTS} WHERE status = $1 AND resolved_at >= $2`,
+        [HELP_REQUEST_STATUS.RESOLVED, weekAgo]
       ),
       query<{ count: string }>(
-        `SELECT COUNT(*) as count FROM ${TABLE_NAMES.HELP_REQUESTS} WHERE status = 'open' AND urgency = 'urgent'`
+        `SELECT COUNT(*) as count FROM ${TABLE_NAMES.HELP_REQUESTS} WHERE status = $1 AND urgency = 'urgent'`,
+        [HELP_REQUEST_STATUS.OPEN]
       ),
     ])
 

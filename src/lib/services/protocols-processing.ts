@@ -4,6 +4,7 @@
 
 import { query } from '@/lib/auth/db'
 import { TABLE_NAMES } from '@/config/database'
+import { PROTOCOL_STATUS } from '@/config/protocol-status'
 import { MEETING_TYPE_LABELS, MEETING_TYPE_TEMPLATES } from '@/config/protocols'
 import { PROTOCOL_PROMPTS, fillPromptTemplate } from '@/lib/ai/config/prompts'
 import { processProtocolTranscript, processProtocolNotes, processTaskList } from '@/lib/ai/protocol-processing'
@@ -33,7 +34,7 @@ export async function processTranscript(
   const resetToDraft = async () => {
     await query(
       `UPDATE ${TABLE_NAMES.MEETING_PROTOCOLS}
-       SET status = 'draft'
+       SET status = '${PROTOCOL_STATUS.DRAFT}'
        WHERE id = $1`,
       [protocolId]
     )
@@ -43,7 +44,7 @@ export async function processTranscript(
     // Set status to processing
     await query(
       `UPDATE ${TABLE_NAMES.MEETING_PROTOCOLS}
-       SET status = 'processing', raw_transcript = $2
+       SET status = '${PROTOCOL_STATUS.PROCESSING}', raw_transcript = $2
        WHERE id = $1`,
       [protocolId, rawTranscript]
     )
@@ -92,7 +93,7 @@ export async function processTranscript(
       `UPDATE ${TABLE_NAMES.MEETING_PROTOCOLS}
        SET structured_notes = $2::jsonb,
            processing_model = $3,
-           status = 'review'
+           status = '${PROTOCOL_STATUS.REVIEW}'
        WHERE id = $1`,
       [protocolId, JSON.stringify(resolvedNotes), aiResult.result.model]
     )
@@ -142,7 +143,7 @@ export async function processNotes(
         `UPDATE ${TABLE_NAMES.MEETING_PROTOCOLS}
          SET structured_notes = $2::jsonb,
              processing_model = 'json-import',
-             status = 'review'
+             status = '${PROTOCOL_STATUS.REVIEW}'
          WHERE id = $1`,
         [protocolId, JSON.stringify(resolvedNotes)]
       )
@@ -163,7 +164,7 @@ export async function processNotes(
   // Free text path
   await query(
     `UPDATE ${TABLE_NAMES.MEETING_PROTOCOLS}
-     SET status = 'processing'
+     SET status = '${PROTOCOL_STATUS.PROCESSING}'
      WHERE id = $1`,
     [protocolId]
   )
@@ -193,7 +194,7 @@ export async function processNotes(
   if (!aiResult) {
     await query(
       `UPDATE ${TABLE_NAMES.MEETING_PROTOCOLS}
-       SET status = 'draft'
+       SET status = '${PROTOCOL_STATUS.DRAFT}'
        WHERE id = $1`,
       [protocolId]
     )
@@ -206,7 +207,7 @@ export async function processNotes(
     `UPDATE ${TABLE_NAMES.MEETING_PROTOCOLS}
      SET structured_notes = $2::jsonb,
          processing_model = $3,
-         status = 'review'
+         status = '${PROTOCOL_STATUS.REVIEW}'
      WHERE id = $1`,
     [protocolId, JSON.stringify(resolvedNotes), aiResult.model]
   )
@@ -345,7 +346,7 @@ export async function importTasks(
     `UPDATE ${TABLE_NAMES.MEETING_PROTOCOLS}
      SET structured_notes = $2::jsonb,
          processing_model = $3,
-         status = 'review'
+         status = '${PROTOCOL_STATUS.REVIEW}'
      WHERE id = $1`,
     [protocolId, JSON.stringify(updatedNotes), model || 'json-import']
   )

@@ -1,5 +1,8 @@
 import { query } from '@/lib/auth/db'
 import { TABLE_NAMES } from '@/config/database'
+import { APPROVAL_STATUS } from '@/config/approval-status'
+import { PERMISSION_REQUEST_STATUS } from '@/config/permission-request-status'
+import { LISTING_STATUS } from '@/config/marketplace'
 import type { DashboardStats } from './types'
 
 export async function getDashboardStats(isSuper: boolean): Promise<DashboardStats> {
@@ -34,8 +37,8 @@ export async function getDashboardStats(isSuper: boolean): Promise<DashboardStat
     try {
       const approvalsResult = await query<{ count: string }>(
         `SELECT COUNT(*) as count FROM ${TABLE_NAMES.USER_CONTENT_SUBMISSIONS}
-         WHERE status = 'pending' AND content_type = ANY($1)`,
-        [['workshop', 'blog_post']]
+         WHERE status = $1 AND content_type = ANY($2)`,
+        [APPROVAL_STATUS.PENDING, ['workshop', 'blog_post']]
       )
       stats.pendingApprovals = parseInt(approvalsResult.rows[0]?.count || '0')
     } catch {
@@ -46,7 +49,8 @@ export async function getDashboardStats(isSuper: boolean): Promise<DashboardStat
     if (isSuper) {
       try {
         const permissionsResult = await query<{ count: string }>(
-          `SELECT COUNT(*) as count FROM ${TABLE_NAMES.STAFF_PERMISSION_REQUESTS} WHERE status = 'pending'`
+          `SELECT COUNT(*) as count FROM ${TABLE_NAMES.STAFF_PERMISSION_REQUESTS} WHERE status = $1`,
+          [PERMISSION_REQUEST_STATUS.PENDING]
         )
         stats.pendingPermissionRequests = parseInt(permissionsResult.rows[0]?.count || '0')
       } catch {
@@ -94,8 +98,8 @@ export async function getDashboardStats(isSuper: boolean): Promise<DashboardStat
       weekAgo.setDate(weekAgo.getDate() - 7)
       const postsResult = await query<{ count: string }>(
         `SELECT COUNT(*) as count FROM ${TABLE_NAMES.BLOG_POSTS}
-         WHERE status = 'published' AND published_at >= $1`,
-        [weekAgo.toISOString()]
+         WHERE status = $1 AND published_at >= $2`,
+        [APPROVAL_STATUS.PUBLISHED, weekAgo.toISOString()]
       )
       stats.postsPublishedThisWeek = parseInt(postsResult.rows[0]?.count || '0')
     } catch {
@@ -107,8 +111,8 @@ export async function getDashboardStats(isSuper: boolean): Promise<DashboardStat
       const listingsResult = await query<{ total: string; active: string; unverified: string }>(
         `SELECT
            COUNT(*) as total,
-           COUNT(*) FILTER (WHERE status = 'active') as active,
-           COUNT(*) FILTER (WHERE status = 'active' AND verified_at IS NULL) as unverified
+           COUNT(*) FILTER (WHERE status = '${LISTING_STATUS.ACTIVE}') as active,
+           COUNT(*) FILTER (WHERE status = '${LISTING_STATUS.ACTIVE}' AND verified_at IS NULL) as unverified
          FROM ${TABLE_NAMES.LISTINGS}`
       )
       const lr = listingsResult.rows[0]

@@ -22,7 +22,7 @@ import {
   orderConfirmationBuyer,
   newOrderNotificationSeller,
 } from '@/lib/email/templates/marketplace';
-import { formatCHF, DELIVERY_LABELS, ORDER_STATUS } from '@/config/marketplace';
+import { formatCHF, DELIVERY_LABELS, ORDER_STATUS, LISTING_STATUS } from '@/config/marketplace';
 import type { DeliveryOption } from '@/config/marketplace';
 
 const PAYREXX_WEBHOOK_SECRET = process.env.PAYREXX_WEBHOOK_SECRET;
@@ -133,9 +133,9 @@ export async function POST(request: NextRequest) {
 
         await query(
           `UPDATE ${TABLE_NAMES.MARKETPLACE_ORDERS}
-           SET status = 'paid', payrexx_transaction_id = $1, updated_at = NOW()
-           WHERE id = $2`,
-          [transactionId, order.id]
+           SET status = $1, payrexx_transaction_id = $2, updated_at = NOW()
+           WHERE id = $3`,
+          [ORDER_STATUS.PAID, transactionId, order.id]
         );
 
         logger.info('Marketplace order marked paid via Payrexx', {
@@ -162,9 +162,9 @@ export async function POST(request: NextRequest) {
 
         await query(
           `UPDATE ${TABLE_NAMES.MARKETPLACE_ORDERS}
-           SET status = 'completed', updated_at = NOW()
-           WHERE id = $1`,
-          [order.id]
+           SET status = $1, updated_at = NOW()
+           WHERE id = $2`,
+          [ORDER_STATUS.COMPLETED, order.id]
         );
         break;
       }
@@ -178,16 +178,16 @@ export async function POST(request: NextRequest) {
 
         await query(
           `UPDATE ${TABLE_NAMES.MARKETPLACE_ORDERS}
-           SET status = 'cancelled', updated_at = NOW()
-           WHERE id = $1`,
-          [order.id]
+           SET status = $1, updated_at = NOW()
+           WHERE id = $2`,
+          [ORDER_STATUS.CANCELLED, order.id]
         );
 
         // Restore listing to active
         await query(
-          `UPDATE ${TABLE_NAMES.LISTINGS} SET status = 'active'
-           WHERE id = $1 AND status = 'reserved'`,
-          [order.listing_id]
+          `UPDATE ${TABLE_NAMES.LISTINGS} SET status = $1
+           WHERE id = $2 AND status = $3`,
+          [LISTING_STATUS.ACTIVE, order.listing_id, LISTING_STATUS.RESERVED]
         );
 
         logger.info('Marketplace order cancelled via Payrexx webhook', {
@@ -201,9 +201,9 @@ export async function POST(request: NextRequest) {
       case 'partially-refunded': {
         await query(
           `UPDATE ${TABLE_NAMES.MARKETPLACE_ORDERS}
-           SET status = 'refunded', updated_at = NOW()
-           WHERE id = $1`,
-          [order.id]
+           SET status = $1, updated_at = NOW()
+           WHERE id = $2`,
+          [ORDER_STATUS.REFUNDED, order.id]
         );
 
         logger.info('Marketplace order refunded via Payrexx webhook', {

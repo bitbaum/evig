@@ -8,6 +8,7 @@
  */
 
 import { Users, FolderKanban, RefreshCw, Landmark, MessageSquare, Mic, FileText, ListTree, ListChecks } from 'lucide-react'
+import { PROTOCOL_STATUS, type ProtocolStatus } from './protocol-status'
 import type { ComponentType } from 'react'
 
 // Meeting types
@@ -90,13 +91,8 @@ export const MEETING_TYPE_TEMPLATES: Record<MeetingType, {
   },
 };
 
-// Protocol statuses
-export const PROTOCOL_STATUSES = {
-  DRAFT: 'draft',
-  PROCESSING: 'processing',
-  REVIEW: 'review',
-  FINALIZED: 'finalized',
-} as const;
+// Protocol statuses — canonical definition in protocol-status.ts
+export const PROTOCOL_STATUSES = PROTOCOL_STATUS;
 
 export const PROTOCOL_STATUS_LABELS: Record<ProtocolStatus, string> = {
   draft: 'Entwurf',
@@ -228,7 +224,7 @@ export const DECISION_RESULT_COLORS: Record<DecisionResult, string> = {
 
 // Types derived from constants
 export type MeetingType = (typeof MEETING_TYPES)[keyof typeof MEETING_TYPES];
-export type ProtocolStatus = (typeof PROTOCOL_STATUSES)[keyof typeof PROTOCOL_STATUSES];
+export type { ProtocolStatus };
 export type ProtocolVisibility = (typeof PROTOCOL_VISIBILITY)[keyof typeof PROTOCOL_VISIBILITY];
 export type ActionItemType = (typeof ACTION_ITEM_TYPES)[keyof typeof ACTION_ITEM_TYPES];
 export type InputMethod = (typeof INPUT_METHODS)[keyof typeof INPUT_METHODS];

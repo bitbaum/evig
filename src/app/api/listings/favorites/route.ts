@@ -7,6 +7,7 @@ import { withAuth, ValidSession } from '@/lib/api/middleware';
 import { apiSuccess, apiError } from '@/lib/api/helpers';
 import { query } from '@/lib/auth/db';
 import { TABLE_NAMES } from '@/config/database';
+import { LISTING_STATUS } from '@/config/marketplace';
 
 export const GET = withAuth(async (
   request: NextRequest,
@@ -20,8 +21,8 @@ export const GET = withAuth(async (
     const countResult = await query<{ count: string }>(
       `SELECT COUNT(*) as count FROM ${TABLE_NAMES.LISTING_FAVORITES} f
        JOIN ${TABLE_NAMES.LISTINGS} l ON f.listing_id = l.id
-       WHERE f.user_id = $1 AND l.status != 'removed'`,
-      [session.user.id]
+       WHERE f.user_id = $1 AND l.status != $2`,
+      [session.user.id, LISTING_STATUS.REMOVED]
     );
     const total = parseInt(countResult.rows[0]?.count || '0', 10);
 
@@ -39,10 +40,10 @@ export const GET = withAuth(async (
       JOIN ${TABLE_NAMES.LISTINGS} l ON f.listing_id = l.id
       JOIN ${TABLE_NAMES.USERS} u ON l.seller_id = u.id
       LEFT JOIN ${TABLE_NAMES.SELLER_PROFILES} sp ON l.seller_id = sp.user_id
-      WHERE f.user_id = $1 AND l.status != 'removed'
+      WHERE f.user_id = $1 AND l.status != $2
       ORDER BY f.created_at DESC
-      LIMIT $2 OFFSET $3`,
-      [session.user.id, limit, offset]
+      LIMIT $3 OFFSET $4`,
+      [session.user.id, LISTING_STATUS.REMOVED, limit, offset]
     );
 
     return apiSuccess({

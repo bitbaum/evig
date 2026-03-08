@@ -10,6 +10,7 @@ import { withAuth, ValidSession } from '@/lib/api/middleware';
 import { apiSuccess, apiError, apiNotFound } from '@/lib/api/helpers';
 import { query } from '@/lib/auth/db';
 import { TABLE_NAMES } from '@/config/database';
+import { LISTING_STATUS } from '@/config/marketplace';
 
 export const POST = withAuth<{ id: string }>(async (
   request: NextRequest,
@@ -22,8 +23,8 @@ export const POST = withAuth<{ id: string }>(async (
 
     // Check listing exists and is active
     const listingResult = await query(
-      `SELECT id FROM ${TABLE_NAMES.LISTINGS} WHERE id = $1 AND status = 'active'`,
-      [listingId]
+      `SELECT id FROM ${TABLE_NAMES.LISTINGS} WHERE id = $1 AND status = $2`,
+      [listingId, LISTING_STATUS.ACTIVE]
     );
     if (listingResult.rows.length === 0) return apiNotFound('Inserat');
 

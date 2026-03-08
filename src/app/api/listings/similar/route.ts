@@ -8,6 +8,7 @@ import { NextRequest } from 'next/server';
 import { apiSuccess, apiError, apiBadRequest } from '@/lib/api/helpers';
 import { query } from '@/lib/auth/db';
 import { TABLE_NAMES } from '@/config/database';
+import { LISTING_STATUS } from '@/config/marketplace';
 
 export async function GET(request: NextRequest) {
   try {
@@ -37,12 +38,12 @@ export async function GET(request: NextRequest) {
         (SELECT li.url FROM ${TABLE_NAMES.LISTING_IMAGES} li WHERE li.listing_id = l.id AND li.is_primary = true LIMIT 1) as thumbnail
       FROM ${TABLE_NAMES.LISTINGS} l
       WHERE l.id != $1
-        AND l.status = 'active'
-        AND l.category = $2
-        AND l.price_chf BETWEEN $3 AND $4
+        AND l.status = $2
+        AND l.category = $3
+        AND l.price_chf BETWEEN $4 AND $5
       ORDER BY l.view_count DESC
-      LIMIT $5`,
-      [listingId, category, Math.max(0, Number(price_chf) - priceRange), Number(price_chf) + priceRange, limit]
+      LIMIT $6`,
+      [listingId, LISTING_STATUS.ACTIVE, category, Math.max(0, Number(price_chf) - priceRange), Number(price_chf) + priceRange, limit]
     );
 
     return apiSuccess(result.rows);
