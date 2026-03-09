@@ -1,8 +1,9 @@
 import { NextRequest } from 'next/server'
 import { apiError, apiSuccess, apiBadRequest } from '@/lib/api/helpers'
 import { logger } from '@/lib/logger'
-import { query } from '@/lib/auth/db'
-import { TABLE_NAMES } from '@/config/database'
+import { db } from '@/db'
+import { newsletterSubscriptions } from '@/db/schema'
+import { eq, and, sql } from 'drizzle-orm'
 
 export async function GET(request: NextRequest) {
   try {
@@ -14,19 +15,24 @@ export async function GET(request: NextRequest) {
     }
 
     // Find pending subscriber with this token and confirm in one atomic operation
-    const { rows } = await query<{ email: string }>(
-      `UPDATE ${TABLE_NAMES.NEWSLETTER_SUBSCRIPTIONS}
-       SET is_active = true, confirmed_at = NOW(), confirm_token = NULL
-       WHERE confirm_token = $1 AND is_active = false
-       RETURNING email`,
-      [token]
-    )
+    const [confirmed] = await db
+      .update(newsletterSubscriptions)
+      .set({
+        isActive: true,
+        confirmedAt: sql`NOW()`,
+        confirmToken: null,
+      })
+      .where(and(
+        eq(newsletterSubscriptions.confirmToken, token),
+        eq(newsletterSubscriptions.isActive, false),
+      ))
+      .returning({ email: newsletterSubscriptions.email })
 
-    if (rows.length === 0) {
+    if (!confirmed) {
       return apiBadRequest('Ungültiger oder bereits verwendeter Bestätigungslink')
     }
 
-    logger.info('Newsletter subscription confirmed', { email: rows[0].email })
+    logger.info('Newsletter subscription confirmed', { email: confirmed.email })
 
     return apiSuccess({
       message: 'Newsletter-Anmeldung erfolgreich bestätigt! Sie erhalten ab sofort unsere Neuigkeiten.',

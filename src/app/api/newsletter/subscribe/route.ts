@@ -8,8 +8,9 @@ import { sendEmail } from '@/lib/email'
 import { APP_URL } from '@/config/urls'
 import { LISTMONK_CONFIG } from '@/config/email'
 import { validateBody, NewsletterSubscribeSchema } from '@/lib/schemas'
-import { query } from '@/lib/auth/db'
-import { TABLE_NAMES } from '@/config/database'
+import { db } from '@/db'
+import { newsletterSubscriptions } from '@/db/schema'
+import { eq, desc, sql } from 'drizzle-orm'
 
 export async function POST(request: NextRequest) {
   try {
@@ -33,32 +34,42 @@ export async function POST(request: NextRequest) {
     const normalizedEmail = validation.data.email
 
     // Check for existing active subscriber
-    const { rows: existing } = await query<{ is_active: boolean; confirmed_at: string | null }>(
-      `SELECT is_active, confirmed_at FROM ${TABLE_NAMES.NEWSLETTER_SUBSCRIPTIONS} WHERE email = $1`,
-      [normalizedEmail]
-    )
+    const [existing] = await db
+      .select({
+        isActive: newsletterSubscriptions.isActive,
+        confirmedAt: newsletterSubscriptions.confirmedAt,
+      })
+      .from(newsletterSubscriptions)
+      .where(eq(newsletterSubscriptions.email, normalizedEmail))
 
-    if (existing.length > 0 && existing[0].is_active && existing[0].confirmed_at) {
+    if (existing?.isActive && existing.confirmedAt) {
       return apiBadRequest('Diese E-Mail-Adresse ist bereits registriert')
     }
 
     const confirmToken = randomBytes(32).toString('hex')
 
-    if (existing.length > 0) {
+    if (existing) {
       // Re-subscribe: update existing row with new token
-      await query(
-        `UPDATE ${TABLE_NAMES.NEWSLETTER_SUBSCRIPTIONS}
-         SET is_active = false, confirm_token = $1, confirmed_at = NULL, unsubscribed_at = NULL, source = $2
-         WHERE email = $3`,
-        [confirmToken, body.source || 'website', normalizedEmail]
-      )
+      await db
+        .update(newsletterSubscriptions)
+        .set({
+          isActive: false,
+          confirmToken,
+          confirmedAt: null,
+          unsubscribedAt: null,
+          source: body.source || 'website',
+        })
+        .where(eq(newsletterSubscriptions.email, normalizedEmail))
     } else {
       // New subscriber
-      await query(
-        `INSERT INTO ${TABLE_NAMES.NEWSLETTER_SUBSCRIPTIONS} (email, is_active, confirm_token, source)
-         VALUES ($1, false, $2, $3)`,
-        [normalizedEmail, confirmToken, body.source || 'website']
-      )
+      await db
+        .insert(newsletterSubscriptions)
+        .values({
+          email: normalizedEmail,
+          isActive: false,
+          confirmToken,
+          source: body.source || 'website',
+        })
     }
 
     // Send confirmation email
@@ -118,20 +129,19 @@ export async function POST(request: NextRequest) {
 // Protected admin endpoint to view subscribers
 export const GET = withAdmin(async (_request, _session) => {
   try {
-    const { rows } = await query<{
-      email: string
-      is_active: boolean
-      confirmed_at: string | null
-      source: string | null
-      created_at: string
-    }>(
-      `SELECT email, is_active, confirmed_at, source, created_at
-       FROM ${TABLE_NAMES.NEWSLETTER_SUBSCRIPTIONS}
-       ORDER BY created_at DESC`
-    )
+    const rows = await db
+      .select({
+        email: newsletterSubscriptions.email,
+        isActive: newsletterSubscriptions.isActive,
+        confirmedAt: newsletterSubscriptions.confirmedAt,
+        source: newsletterSubscriptions.source,
+        createdAt: newsletterSubscriptions.createdAt,
+      })
+      .from(newsletterSubscriptions)
+      .orderBy(desc(newsletterSubscriptions.createdAt))
 
-    const active = rows.filter(s => s.is_active && s.confirmed_at).length
-    const pending = rows.filter(s => !s.is_active && !s.confirmed_at).length
+    const active = rows.filter(s => s.isActive && s.confirmedAt).length
+    const pending = rows.filter(s => !s.isActive && !s.confirmedAt).length
 
     return apiSuccess({
       total: rows.length,
