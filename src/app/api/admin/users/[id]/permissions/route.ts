@@ -7,10 +7,11 @@
  */
 
 import { NextRequest } from 'next/server'
+import { db } from '@/db'
+import { users } from '@/db/schema'
+import { eq, sql } from 'drizzle-orm'
 import { withAdmin } from '@/lib/api/middleware'
-import { query } from '@/lib/auth/db'
 import { isSuperAdmin, ADMIN_SECTIONS, SUPER_ADMIN_EMAILS, type AdminSection } from '@/lib/permissions'
-import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
 import { logPermissionsChange, logSuperAdminChange } from '@/lib/auth/audit'
 import { apiSuccess, apiError, apiForbidden, apiBadRequest, apiNotFound } from '@/lib/api/helpers'
@@ -52,22 +53,20 @@ export const PATCH = withAdmin<{ id: string }>('users', async (request, session,
     }
 
     // Get current user info including current permissions
-    const userResult = await query<{
-      id: string
-      email: string
-      is_super_admin: boolean
-      staff_permissions: string[]
-    }>(
-      `SELECT id, email, is_super_admin, COALESCE(staff_permissions, '{}') as staff_permissions
-       FROM ${TABLE_NAMES.USERS} WHERE id = $1`,
-      [id]
-    )
+    const [targetUser] = await db
+      .select({
+        id: users.id,
+        email: users.email,
+        is_super_admin: users.isSuperAdmin,
+        staff_permissions: sql<string[]>`COALESCE(${users.staffPermissions}, '{}')`,
+      })
+      .from(users)
+      .where(eq(users.id, id))
 
-    if (userResult.rows.length === 0) {
+    if (!targetUser) {
       return apiNotFound('Benutzer')
     }
 
-    const targetUser = userResult.rows[0]
     const auditContext = getAuditContext(request, session.user.id)
 
     // Prevent demoting users who are in the hardcoded super admin list
@@ -80,19 +79,15 @@ export const PATCH = withAdmin<{ id: string }>('users', async (request, session,
       return apiBadRequest('Sie können sich nicht selbst herabstufen')
     }
 
-    // Build the update query
-    const updates: string[] = []
-    const values: (string | string[] | boolean)[] = []
-    let paramIndex = 1
+    // Build the update object
+    const update: Record<string, unknown> = {}
 
     if (permissions !== undefined) {
-      updates.push(`staff_permissions = $${paramIndex}`)
-      values.push(permissions)
-      paramIndex++
+      update.staffPermissions = permissions
 
       // Also set is_staff = true if granting permissions
       if (permissions.length > 0) {
-        updates.push(`is_staff = true`)
+        update.isStaff = true
       }
 
       // Log permissions change
@@ -113,9 +108,7 @@ export const PATCH = withAdmin<{ id: string }>('users', async (request, session,
     }
 
     if (newSuperAdminStatus !== undefined) {
-      updates.push(`is_super_admin = $${paramIndex}`)
-      values.push(newSuperAdminStatus)
-      paramIndex++
+      update.isSuperAdmin = newSuperAdminStatus
 
       // Log super admin status change
       logSuperAdminChange(
@@ -133,18 +126,11 @@ export const PATCH = withAdmin<{ id: string }>('users', async (request, session,
       })
     }
 
-    if (updates.length === 0) {
+    if (Object.keys(update).length === 0) {
       return apiBadRequest('Keine Aktualisierungen angegeben')
     }
 
-    values.push(id)
-
-    await query(
-      `UPDATE ${TABLE_NAMES.USERS}
-       SET ${updates.join(', ')}
-       WHERE id = $${paramIndex}`,
-      values
-    )
+    await db.update(users).set(update).where(eq(users.id, id))
 
     return apiSuccess({ message: 'Benutzerberechtigungen erfolgreich aktualisiert' })
   } catch (error) {

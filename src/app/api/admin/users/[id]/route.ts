@@ -9,13 +9,13 @@
  */
 
 import { NextRequest } from 'next/server'
+import { db } from '@/db'
+import { users, sessions, accounts, userProfiles } from '@/db/schema'
+import { eq, and, ne } from 'drizzle-orm'
 import { withAdmin } from '@/lib/api/middleware'
-import { query } from '@/lib/auth/db'
 import { isSuperAdmin, SUPER_ADMIN_EMAILS } from '@/lib/permissions'
-import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
 import { apiSuccess, apiError, apiForbidden, apiNotFound, apiBadRequest } from '@/lib/api/helpers'
-import { ERROR_MESSAGES } from '@/config/error-messages'
 import { validateBody, AdminUpdateUserSchema } from '@/lib/schemas'
 
 /**
@@ -30,32 +30,28 @@ export const GET = withAdmin<{ id: string }>('users', async (request, session, c
 
     const { id } = context!.params!
 
-    const result = await query<{
-      id: string
-      name: string | null
-      email: string
-      is_staff: boolean
-      is_super_admin: boolean
-      staff_permissions: string[] | null
-      created_at: string
-      email_verified: string | null
-      phone: string | null
-      address: string | null
-    }>(
-      `SELECT
-        id, name, email, is_staff, is_super_admin,
-        staff_permissions, "createdAt" as created_at,
-        "emailVerified" as email_verified, phone, address
-       FROM ${TABLE_NAMES.USERS}
-       WHERE id = $1`,
-      [id]
-    )
+    const rows = await db
+      .select({
+        id: users.id,
+        name: users.name,
+        email: users.email,
+        is_staff: users.isStaff,
+        is_super_admin: users.isSuperAdmin,
+        staff_permissions: users.staffPermissions,
+        created_at: users.createdAt,
+        email_verified: users.emailVerified,
+        phone: userProfiles.phone,
+        address: userProfiles.addressLine1,
+      })
+      .from(users)
+      .leftJoin(userProfiles, eq(userProfiles.userId, users.id))
+      .where(eq(users.id, id))
 
-    if (result.rows.length === 0) {
+    if (rows.length === 0) {
       return apiNotFound('Benutzer')
     }
 
-    return apiSuccess({ user: result.rows[0] })
+    return apiSuccess({ user: rows[0] })
   } catch (error) {
     return apiError(error, 'Benutzer konnte nicht geladen werden')
   }
@@ -78,73 +74,59 @@ export const PATCH = withAdmin<{ id: string }>('users', async (request, session,
     const { name, email, phone, address, is_staff } = validation.data
 
     // Check if user exists
-    const existingUser = await query<{ id: string; email: string }>(
-      `SELECT id, email FROM ${TABLE_NAMES.USERS} WHERE id = $1`,
-      [id]
-    )
+    const existingRows = await db
+      .select({ id: users.id, email: users.email })
+      .from(users)
+      .where(eq(users.id, id))
 
-    if (existingUser.rows.length === 0) {
+    if (existingRows.length === 0) {
       return apiNotFound('Benutzer')
     }
 
     // If changing email, check if new email already exists
-    if (email && email !== existingUser.rows[0].email) {
-      const emailCheck = await query<{ id: string }>(
-        `SELECT id FROM ${TABLE_NAMES.USERS} WHERE email = $1 AND id != $2`,
-        [email, id]
-      )
-      if (emailCheck.rows.length > 0) {
+    if (email && email !== existingRows[0].email) {
+      const emailConflict = await db
+        .select({ id: users.id })
+        .from(users)
+        .where(and(eq(users.email, email), ne(users.id, id)))
+
+      if (emailConflict.length > 0) {
         return apiBadRequest('E-Mail wird bereits von einem anderen Benutzer verwendet')
       }
     }
 
-    // Build dynamic update query
-    const updates: string[] = []
-    const values: (string | boolean | null)[] = []
-    let paramIndex = 1
+    // Build user table update
+    const userUpdate: Record<string, unknown> = {}
+    if (name !== undefined) userUpdate.name = name
+    if (email !== undefined) userUpdate.email = email
+    if (is_staff !== undefined) userUpdate.isStaff = is_staff
 
-    if (name !== undefined) {
-      updates.push(`name = $${paramIndex}`)
-      values.push(name)
-      paramIndex++
-    }
+    // Build profile table update (phone and address live on user_profiles)
+    const profileUpdate: Record<string, unknown> = {}
+    if (phone !== undefined) profileUpdate.phone = phone
+    if (address !== undefined) profileUpdate.addressLine1 = address
 
-    if (email !== undefined) {
-      updates.push(`email = $${paramIndex}`)
-      values.push(email)
-      paramIndex++
-    }
+    const hasUserUpdate = Object.keys(userUpdate).length > 0
+    const hasProfileUpdate = Object.keys(profileUpdate).length > 0
 
-    if (phone !== undefined) {
-      updates.push(`phone = $${paramIndex}`)
-      values.push(phone)
-      paramIndex++
-    }
-
-    if (address !== undefined) {
-      updates.push(`address = $${paramIndex}`)
-      values.push(address)
-      paramIndex++
-    }
-
-    if (is_staff !== undefined) {
-      updates.push(`is_staff = $${paramIndex}`)
-      values.push(is_staff)
-      paramIndex++
-    }
-
-    if (updates.length === 0) {
+    if (!hasUserUpdate && !hasProfileUpdate) {
       return apiBadRequest('Keine Felder zum Aktualisieren')
     }
 
-    values.push(id)
+    if (hasUserUpdate) {
+      await db.update(users).set(userUpdate).where(eq(users.id, id))
+    }
 
-    await query(
-      `UPDATE ${TABLE_NAMES.USERS}
-       SET ${updates.join(', ')}
-       WHERE id = $${paramIndex}`,
-      values
-    )
+    if (hasProfileUpdate) {
+      // Upsert: create profile if it doesn't exist, update if it does
+      await db
+        .insert(userProfiles)
+        .values({ userId: id, ...profileUpdate })
+        .onConflictDoUpdate({
+          target: userProfiles.userId,
+          set: profileUpdate,
+        })
+    }
 
     logger.info('User updated by admin', {
       adminId: session.user.id,
@@ -171,16 +153,16 @@ export const DELETE = withAdmin<{ id: string }>('users', async (request, session
     const { id } = context!.params!
 
     // Get user to check if they exist and for logging
-    const userResult = await query<{ id: string; email: string; name: string | null }>(
-      `SELECT id, email, name FROM ${TABLE_NAMES.USERS} WHERE id = $1`,
-      [id]
-    )
+    const userRows = await db
+      .select({ id: users.id, email: users.email, name: users.name })
+      .from(users)
+      .where(eq(users.id, id))
 
-    if (userResult.rows.length === 0) {
+    if (userRows.length === 0) {
       return apiNotFound('Benutzer')
     }
 
-    const targetUser = userResult.rows[0]
+    const targetUser = userRows[0]
 
     // Prevent deleting super admins from the hardcoded list
     if (SUPER_ADMIN_EMAILS.includes(targetUser.email.toLowerCase() as typeof SUPER_ADMIN_EMAILS[number])) {
@@ -193,23 +175,9 @@ export const DELETE = withAdmin<{ id: string }>('users', async (request, session
     }
 
     // Delete related data first (foreign key constraints)
-    // Sessions
-    await query(
-      `DELETE FROM ${TABLE_NAMES.SESSIONS} WHERE "userId" = $1`,
-      [id]
-    )
-
-    // Accounts (OAuth links)
-    await query(
-      `DELETE FROM ${TABLE_NAMES.ACCOUNTS} WHERE "userId" = $1`,
-      [id]
-    )
-
-    // Finally delete the user
-    await query(
-      `DELETE FROM ${TABLE_NAMES.USERS} WHERE id = $1`,
-      [id]
-    )
+    await db.delete(sessions).where(eq(sessions.userId, id))
+    await db.delete(accounts).where(eq(accounts.userId, id))
+    await db.delete(users).where(eq(users.id, id))
 
     logger.info('User deleted by admin', {
       adminId: session.user.id,

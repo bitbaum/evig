@@ -1,8 +1,9 @@
+import { db } from '@/db'
+import { listings, listingImages, listingSpecs, listingReports, users } from '@/db/schema'
+import { eq, ne, sql } from 'drizzle-orm'
 import { withAdmin } from '@/lib/api/middleware'
-import { query } from '@/lib/auth/db'
 import { apiError, apiSuccess, apiNotFound, apiBadRequest } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
-import { TABLE_NAMES } from '@/config/database'
 import { validateBody } from '@/lib/schemas'
 import { AdminEditListingSchema } from '@/lib/schemas/marketplace'
 import { removeListing } from '@/lib/search/meilisearch'
@@ -16,31 +17,55 @@ export const GET = withAdmin<{ id: string }>('marketplace', async (_request, _se
     const id = context?.params?.id
     if (!id) return apiBadRequest('ID erforderlich')
 
-    const listingResult = await query(
-      `SELECT
-        l.*,
-        u.name as seller_name, u.email as seller_email,
-        (SELECT json_agg(json_build_object('id', li.id, 'url', li.image_url, 'position', li.position))
-         FROM ${TABLE_NAMES.LISTING_IMAGES} li WHERE li.listing_id = l.id) as images,
-        (SELECT json_agg(json_build_object('id', ls.id, 'key', ls.key, 'value', ls.value, 'unit', ls.unit))
-         FROM ${TABLE_NAMES.LISTING_SPECS} ls WHERE ls.listing_id = l.id) as specs,
-        (SELECT json_agg(json_build_object(
-           'id', lr.id, 'reason', lr.reason, 'details', lr.details, 'status', lr.status,
-           'created_at', lr.created_at, 'reporter_name', ru.name, 'reporter_email', ru.email
-         )) FROM ${TABLE_NAMES.LISTING_REPORTS} lr
-         JOIN ${TABLE_NAMES.USERS} ru ON lr.reporter_id = ru.id
-         WHERE lr.listing_id = l.id) as reports
-      FROM ${TABLE_NAMES.LISTINGS} l
-      JOIN ${TABLE_NAMES.USERS} u ON l.seller_id = u.id
-      WHERE l.id = $1`,
-      [id]
-    )
+    // Fetch listing with seller info
+    const [listing] = await db
+      .select()
+      .from(listings)
+      .where(eq(listings.id, id))
 
-    if (listingResult.rows.length === 0) {
+    if (!listing) {
       return apiNotFound(ERROR_MESSAGES.LISTING_NOT_FOUND)
     }
 
-    return apiSuccess(listingResult.rows[0])
+    // Fetch seller info
+    const [seller] = await db
+      .select({ name: users.name, email: users.email })
+      .from(users)
+      .where(eq(users.id, listing.sellerId))
+
+    // Fetch images, specs, reports in parallel
+    const [images, specs, reports] = await Promise.all([
+      db
+        .select({ id: listingImages.id, url: listingImages.url, position: listingImages.position })
+        .from(listingImages)
+        .where(eq(listingImages.listingId, id)),
+      db
+        .select({ id: listingSpecs.id, key: listingSpecs.specKey, value: listingSpecs.specValue, unit: listingSpecs.specUnit })
+        .from(listingSpecs)
+        .where(eq(listingSpecs.listingId, id)),
+      db
+        .select({
+          id: listingReports.id,
+          reason: listingReports.reason,
+          details: listingReports.details,
+          status: listingReports.status,
+          created_at: listingReports.createdAt,
+          reporter_name: users.name,
+          reporter_email: users.email,
+        })
+        .from(listingReports)
+        .innerJoin(users, eq(listingReports.reporterId, users.id))
+        .where(eq(listingReports.listingId, id)),
+    ])
+
+    return apiSuccess({
+      ...listing,
+      seller_name: seller?.name,
+      seller_email: seller?.email,
+      images: images.length > 0 ? images : null,
+      specs: specs.length > 0 ? specs : null,
+      reports: reports.length > 0 ? reports : null,
+    })
   } catch (error) {
     return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)
   }
@@ -57,54 +82,29 @@ export const PATCH = withAdmin<{ id: string }>('marketplace', async (request, se
     if (!validation.success) return validation.error
 
     const data = validation.data
-    const setClauses: string[] = []
-    const params: (string | number | null)[] = []
+    const update: Record<string, unknown> = {}
 
-    if (data.title !== undefined) {
-      setClauses.push(`title = $${params.length + 1}`)
-      params.push(data.title)
-    }
-    if (data.description !== undefined) {
-      setClauses.push(`description = $${params.length + 1}`)
-      params.push(data.description)
-    }
-    if (data.price_chf !== undefined) {
-      setClauses.push(`price_chf = $${params.length + 1}`)
-      params.push(data.price_chf)
-    }
-    if (data.category !== undefined) {
-      setClauses.push(`category = $${params.length + 1}`)
-      params.push(data.category)
-    }
-    if (data.condition !== undefined) {
-      setClauses.push(`condition = $${params.length + 1}`)
-      params.push(data.condition)
-    }
-    if (data.status !== undefined) {
-      setClauses.push(`status = $${params.length + 1}`)
-      params.push(data.status)
-    }
-    if (data.admin_notes !== undefined) {
-      setClauses.push(`admin_notes = $${params.length + 1}`)
-      params.push(data.admin_notes)
-    }
+    if (data.title !== undefined) update.title = data.title
+    if (data.description !== undefined) update.description = data.description
+    if (data.price_chf !== undefined) update.priceChf = String(data.price_chf)
+    if (data.category !== undefined) update.category = data.category
+    if (data.condition !== undefined) update.condition = data.condition
+    if (data.status !== undefined) update.status = data.status
+    if (data.admin_notes !== undefined) update.adminNotes = data.admin_notes
 
-    if (setClauses.length === 0) {
+    if (Object.keys(update).length === 0) {
       return apiBadRequest('Keine Änderungen angegeben')
     }
 
-    setClauses.push(`updated_at = NOW()`)
-    params.push(id)
+    update.updatedAt = sql`NOW()`
 
-    const result = await query(
-      `UPDATE ${TABLE_NAMES.LISTINGS}
-       SET ${setClauses.join(', ')}
-       WHERE id = $${params.length}
-       RETURNING *`,
-      params
-    )
+    const [updated] = await db
+      .update(listings)
+      .set(update)
+      .where(eq(listings.id, id))
+      .returning()
 
-    if (result.rows.length === 0) {
+    if (!updated) {
       return apiNotFound(ERROR_MESSAGES.LISTING_NOT_FOUND)
     }
 
@@ -125,7 +125,7 @@ export const PATCH = withAdmin<{ id: string }>('marketplace', async (request, se
       newValues: data,
     })
 
-    return apiSuccess(result.rows[0])
+    return apiSuccess(updated)
   } catch (error) {
     return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)
   }
@@ -137,15 +137,13 @@ export const DELETE = withAdmin<{ id: string }>('marketplace', async (request, s
     const id = context?.params?.id
     if (!id) return apiBadRequest('ID erforderlich')
 
-    const result = await query(
-      `UPDATE ${TABLE_NAMES.LISTINGS}
-       SET status = 'removed', updated_at = NOW()
-       WHERE id = $1 AND status != 'removed'
-       RETURNING id`,
-      [id]
-    )
+    const [removed] = await db
+      .update(listings)
+      .set({ status: 'removed', updatedAt: sql`NOW()` })
+      .where(eq(listings.id, id))
+      .returning({ id: listings.id })
 
-    if (result.rows.length === 0) {
+    if (!removed) {
       return apiNotFound(ERROR_MESSAGES.LISTING_NOT_FOUND)
     }
 

@@ -8,11 +8,11 @@
  * Access: Staff with 'team' permission
  */
 
-import { NextRequest } from 'next/server'
 import { withAdmin } from '@/lib/api/middleware'
-import { query } from '@/lib/auth/db'
+import { db } from '@/db'
+import { teamProfiles, users } from '@/db/schema'
+import { eq, sql } from 'drizzle-orm'
 import { isSuperAdmin } from '@/lib/permissions'
-import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
 import {
   apiSuccess,
@@ -31,74 +31,51 @@ export const GET = withAdmin<{ id: string }>('team', async (request, session, co
     const { id } = context!.params!
     const isSuperAdminUser = isSuperAdmin(session.user.email, session.user.isSuperAdmin)
 
-    // Select columns - exclude hr_notes for non-super-admins
-    const hrNotesColumn = isSuperAdminUser ? ', tp.hr_notes' : ''
+    // Build select columns - conditionally include hrNotes for super admins
+    const selectCols = {
+      id: teamProfiles.id,
+      user_id: teamProfiles.userId,
+      user_name: users.name,
+      user_email: users.email,
+      user_created_at: users.createdAt,
+      position: teamProfiles.position,
+      department: teamProfiles.department,
+      employment_type: teamProfiles.employmentType,
+      start_date: teamProfiles.startDate,
+      contract_hours: teamProfiles.contractHours,
+      skills: teamProfiles.skills,
+      interests: teamProfiles.interests,
+      goals: teamProfiles.goals,
+      strengths: teamProfiles.strengths,
+      development_areas: teamProfiles.developmentAreas,
+      availability: teamProfiles.availability,
+      working_hours: teamProfiles.workingHours,
+      preferred_contact: teamProfiles.preferredContact,
+      phone: teamProfiles.phone,
+      emergency_contact_name: teamProfiles.emergencyContactName,
+      emergency_contact_phone: teamProfiles.emergencyContactPhone,
+      emergency_contact_relation: teamProfiles.emergencyContactRelation,
+      is_active: teamProfiles.isActive,
+      created_at: teamProfiles.createdAt,
+      updated_at: teamProfiles.updatedAt,
+    }
 
-    const result = await query<{
-      id: string
-      user_id: string
-      user_name: string | null
-      user_email: string
-      user_created_at: string
-      position: string | null
-      department: string | null
-      employment_type: string | null
-      start_date: string | null
-      contract_hours: number | null
-      skills: string[]
-      interests: string[]
-      goals: string | null
-      strengths: string | null
-      development_areas: string | null
-      availability: string | null
-      working_hours: string | null
-      preferred_contact: string
-      phone: string | null
-      emergency_contact_name: string | null
-      emergency_contact_phone: string | null
-      emergency_contact_relation: string | null
-      hr_notes?: string | null
-      is_active: boolean
-      created_at: string
-      updated_at: string
-    }>(
-      `SELECT
-        tp.id,
-        tp.user_id,
-        u.name as user_name,
-        u.email as user_email,
-        u."createdAt" as user_created_at,
-        tp.position,
-        tp.department,
-        tp.employment_type,
-        tp.start_date,
-        tp.contract_hours,
-        tp.skills,
-        tp.interests,
-        tp.goals,
-        tp.strengths,
-        tp.development_areas,
-        tp.availability,
-        tp.working_hours,
-        tp.preferred_contact,
-        tp.phone,
-        tp.emergency_contact_name,
-        tp.emergency_contact_phone,
-        tp.emergency_contact_relation,
-        tp.is_active${hrNotesColumn},
-        tp.created_at,
-        tp.updated_at
-       FROM ${TABLE_NAMES.TEAM_PROFILES} tp
-       JOIN ${TABLE_NAMES.USERS} u ON tp.user_id = u.id
-       WHERE tp.id = $1`,
-      [id]
-    )
+    // Conditionally add hr_notes for super admins
+    if (isSuperAdminUser) {
+      (selectCols as Record<string, unknown>).hr_notes = teamProfiles.hrNotes
+    }
 
-    if (result.rows.length === 0) {
+    const [profile] = await db
+      .select(selectCols)
+      .from(teamProfiles)
+      .innerJoin(users, eq(teamProfiles.userId, users.id))
+      .where(eq(teamProfiles.id, id))
+
+    if (!profile) {
       return apiNotFound('Team-Profil')
     }
 
-    return apiSuccess(result.rows[0])
+    return apiSuccess(profile)
   } catch (error) {
     return apiError(error, 'Team-Profil konnte nicht geladen werden')
   }
@@ -126,66 +103,49 @@ export const PUT = withAdmin<{ id: string }>('team', async (request, session, co
     const isSuperAdminUser = isSuperAdmin(session.user.email, session.user.isSuperAdmin)
 
     // Check if profile exists
-    const existingProfile = await query<{ id: string }>(
-      `SELECT id FROM ${TABLE_NAMES.TEAM_PROFILES} WHERE id = $1`,
-      [id]
-    )
+    const [existingProfile] = await db
+      .select({ id: teamProfiles.id })
+      .from(teamProfiles)
+      .where(eq(teamProfiles.id, id))
 
-    if (existingProfile.rows.length === 0) {
+    if (!existingProfile) {
       return apiNotFound('Team-Profil')
     }
 
-    // Build dynamic update query
-    const updates: string[] = []
-    const values: (string | number | boolean | string[] | null)[] = []
-    let paramIndex = 1
+    // Build update object from validated data
+    const update: Record<string, unknown> = {}
 
-    const allowedFields = [
-      'position',
-      'department',
-      'employment_type',
-      'start_date',
-      'contract_hours',
-      'skills',
-      'interests',
-      'goals',
-      'strengths',
-      'development_areas',
-      'availability',
-      'working_hours',
-      'preferred_contact',
-      'phone',
-      'emergency_contact_name',
-      'emergency_contact_phone',
-      'emergency_contact_relation',
-      'is_active',
-    ]
+    if (data.position !== undefined) update.position = data.position
+    if (data.department !== undefined) update.department = data.department
+    if (data.employment_type !== undefined) update.employmentType = data.employment_type
+    if (data.start_date !== undefined) update.startDate = data.start_date
+    if (data.contract_hours !== undefined) update.contractHours = data.contract_hours
+    if (data.skills !== undefined) update.skills = data.skills
+    if (data.interests !== undefined) update.interests = data.interests
+    if (data.goals !== undefined) update.goals = data.goals
+    if (data.strengths !== undefined) update.strengths = data.strengths
+    if (data.development_areas !== undefined) update.developmentAreas = data.development_areas
+    if (data.availability !== undefined) update.availability = data.availability
+    if (data.working_hours !== undefined) update.workingHours = data.working_hours
+    if (data.preferred_contact !== undefined) update.preferredContact = data.preferred_contact
+    if (data.phone !== undefined) update.phone = data.phone
+    if (data.emergency_contact_name !== undefined) update.emergencyContactName = data.emergency_contact_name
+    if (data.emergency_contact_phone !== undefined) update.emergencyContactPhone = data.emergency_contact_phone
+    if (data.emergency_contact_relation !== undefined) update.emergencyContactRelation = data.emergency_contact_relation
+    if (data.is_active !== undefined) update.isActive = data.is_active
 
     // Add hr_notes only for super admins
-    if (isSuperAdminUser) {
-      allowedFields.push('hr_notes')
+    if (isSuperAdminUser && data.hr_notes !== undefined) {
+      update.hrNotes = data.hr_notes
     }
 
-    for (const field of allowedFields) {
-      if (data[field as keyof typeof data] !== undefined) {
-        updates.push(`${field} = $${paramIndex}`)
-        values.push(data[field as keyof typeof data] as string | number | boolean | string[] | null)
-        paramIndex++
-      }
-    }
-
-    if (updates.length === 0) {
+    if (Object.keys(update).length === 0) {
       return apiBadRequest('Keine Felder zum Aktualisieren')
     }
 
-    values.push(id)
+    update.updatedAt = sql`NOW()`
 
-    await query(
-      `UPDATE ${TABLE_NAMES.TEAM_PROFILES}
-       SET ${updates.join(', ')}, updated_at = NOW()
-       WHERE id = $${paramIndex}`,
-      values
-    )
+    await db.update(teamProfiles).set(update).where(eq(teamProfiles.id, id))
 
     logger.info('Team profile updated', {
       profileId: id,
@@ -207,28 +167,26 @@ export const DELETE = withAdmin<{ id: string }>('team', async (request, session,
   try {
     const { id } = context!.params!
 
-    // Check if profile exists
-    const existingProfile = await query<{ id: string; user_id: string }>(
-      `SELECT tp.id, tp.user_id, u.email as user_email
-       FROM ${TABLE_NAMES.TEAM_PROFILES} tp
-       JOIN ${TABLE_NAMES.USERS} u ON tp.user_id = u.id
-       WHERE tp.id = $1`,
-      [id]
-    )
+    // Check if profile exists and get user info for logging
+    const [profile] = await db
+      .select({
+        id: teamProfiles.id,
+        userId: teamProfiles.userId,
+        userEmail: users.email,
+      })
+      .from(teamProfiles)
+      .innerJoin(users, eq(teamProfiles.userId, users.id))
+      .where(eq(teamProfiles.id, id))
 
-    if (existingProfile.rows.length === 0) {
+    if (!profile) {
       return apiNotFound('Team-Profil')
     }
 
-    // Delete profile
-    await query(
-      `DELETE FROM ${TABLE_NAMES.TEAM_PROFILES} WHERE id = $1`,
-      [id]
-    )
+    await db.delete(teamProfiles).where(eq(teamProfiles.id, id))
 
     logger.info('Team profile deleted', {
       profileId: id,
-      userId: existingProfile.rows[0].user_id,
+      userId: profile.userId,
       deletedBy: session.user.email,
     })
 

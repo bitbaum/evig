@@ -9,9 +9,10 @@
  */
 
 import { NextRequest } from 'next/server'
+import { db } from '@/db'
+import { activityUpdates, users } from '@/db/schema'
+import { eq, sql } from 'drizzle-orm'
 import { withAdmin } from '@/lib/api/middleware'
-import { query } from '@/lib/auth/db'
-import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
 import {
   apiSuccess,
@@ -21,21 +22,6 @@ import {
 } from '@/lib/api/helpers'
 import { validateUpdateActivityUpdate } from '@/lib/schemas/activity'
 
-interface ActivityUpdate {
-  id: string
-  user_id: string
-  user_name: string | null
-  user_email: string
-  update_type: string
-  title: string
-  description: string | null
-  category: string | null
-  visibility: string
-  occurred_at: string
-  created_at: string
-  updated_at: string
-}
-
 /**
  * GET /api/admin/team/activity/updates/[id]
  * Get activity update details
@@ -44,31 +30,30 @@ export const GET = withAdmin<{ id: string }>('team', async (request, session, co
   try {
     const { id } = context!.params!
 
-    const result = await query<ActivityUpdate>(
-      `SELECT
-        au.id,
-        au.user_id,
-        u.name as user_name,
-        u.email as user_email,
-        au.update_type,
-        au.title,
-        au.description,
-        au.category,
-        au.visibility,
-        au.occurred_at,
-        au.created_at,
-        au.updated_at
-       FROM ${TABLE_NAMES.ACTIVITY_UPDATES} au
-       JOIN ${TABLE_NAMES.USERS} u ON au.user_id = u.id
-       WHERE au.id = $1`,
-      [id]
-    )
+    const [row] = await db
+      .select({
+        id: activityUpdates.id,
+        user_id: activityUpdates.userId,
+        user_name: users.name,
+        user_email: users.email,
+        update_type: activityUpdates.updateType,
+        title: activityUpdates.title,
+        description: activityUpdates.description,
+        category: activityUpdates.category,
+        visibility: activityUpdates.visibility,
+        occurred_at: activityUpdates.occurredAt,
+        created_at: activityUpdates.createdAt,
+        updated_at: activityUpdates.updatedAt,
+      })
+      .from(activityUpdates)
+      .innerJoin(users, eq(activityUpdates.userId, users.id))
+      .where(eq(activityUpdates.id, id))
 
-    if (result.rows.length === 0) {
+    if (!row) {
       return apiNotFound('Aktivität')
     }
 
-    return apiSuccess(result.rows[0])
+    return apiSuccess(row)
   } catch (error) {
     return apiError(error, 'Aktivität konnte nicht geladen werden')
   }
@@ -95,45 +80,31 @@ export const PUT = withAdmin<{ id: string }>('team', async (request, session, co
     const data = validation.data
 
     // Get existing update to check existence
-    const existing = await query<{ id: string; user_id: string; user_email: string }>(
-      `SELECT au.id, au.user_id, u.email as user_email
-       FROM ${TABLE_NAMES.ACTIVITY_UPDATES} au
-       JOIN ${TABLE_NAMES.USERS} u ON au.user_id = u.id
-       WHERE au.id = $1`,
-      [id]
-    )
+    const [existing] = await db
+      .select({ id: activityUpdates.id, userId: activityUpdates.userId, userEmail: users.email })
+      .from(activityUpdates)
+      .innerJoin(users, eq(activityUpdates.userId, users.id))
+      .where(eq(activityUpdates.id, id))
 
-    if (existing.rows.length === 0) {
+    if (!existing) {
       return apiNotFound('Aktivität')
     }
 
-    // Build dynamic update query
-    const updates: string[] = []
-    const values: (string | null)[] = []
-    let paramIndex = 1
+    // Build update object
+    const update: Record<string, unknown> = {}
+    if (data.update_type !== undefined) update.updateType = data.update_type
+    if (data.title !== undefined) update.title = data.title
+    if (data.description !== undefined) update.description = data.description
+    if (data.category !== undefined) update.category = data.category
+    if (data.visibility !== undefined) update.visibility = data.visibility
+    if (data.occurred_at !== undefined) update.occurredAt = data.occurred_at
 
-    const allowedFields = ['update_type', 'title', 'description', 'category', 'visibility', 'occurred_at']
-
-    for (const field of allowedFields) {
-      if (data[field as keyof typeof data] !== undefined) {
-        updates.push(`${field} = $${paramIndex}`)
-        values.push(data[field as keyof typeof data] as string | null)
-        paramIndex++
-      }
-    }
-
-    if (updates.length === 0) {
+    if (Object.keys(update).length === 0) {
       return apiBadRequest('Keine Felder zum Aktualisieren')
     }
 
-    values.push(id)
-
-    await query(
-      `UPDATE ${TABLE_NAMES.ACTIVITY_UPDATES}
-       SET ${updates.join(', ')}, updated_at = NOW()
-       WHERE id = $${paramIndex}`,
-      values
-    )
+    update.updatedAt = sql`NOW()`
+    await db.update(activityUpdates).set(update).where(eq(activityUpdates.id, id))
 
     logger.info('Activity update modified', {
       updateId: id,
@@ -156,22 +127,17 @@ export const DELETE = withAdmin<{ id: string }>('team', async (request, session,
     const { id } = context!.params!
 
     // Get existing update to check existence
-    const existing = await query<{ id: string; user_id: string; user_email: string }>(
-      `SELECT au.id, au.user_id, u.email as user_email
-       FROM ${TABLE_NAMES.ACTIVITY_UPDATES} au
-       JOIN ${TABLE_NAMES.USERS} u ON au.user_id = u.id
-       WHERE au.id = $1`,
-      [id]
-    )
+    const [existing] = await db
+      .select({ id: activityUpdates.id, userId: activityUpdates.userId, userEmail: users.email })
+      .from(activityUpdates)
+      .innerJoin(users, eq(activityUpdates.userId, users.id))
+      .where(eq(activityUpdates.id, id))
 
-    if (existing.rows.length === 0) {
+    if (!existing) {
       return apiNotFound('Aktivität')
     }
 
-    await query(
-      `DELETE FROM ${TABLE_NAMES.ACTIVITY_UPDATES} WHERE id = $1`,
-      [id]
-    )
+    await db.delete(activityUpdates).where(eq(activityUpdates.id, id))
 
     logger.info('Activity update deleted', {
       updateId: id,

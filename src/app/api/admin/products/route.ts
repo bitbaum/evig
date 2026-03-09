@@ -1,126 +1,114 @@
-import { NextRequest } from "next/server";
+import { NextRequest } from "next/server"
+import { db } from "@/db"
+import { aiExtractedProducts, inventoryItems } from "@/db/schema"
+import { eq, and, or, ilike, sql, desc } from "drizzle-orm"
 import { withAdmin } from '@/lib/api/middleware'
-import { query } from "@/lib/auth/db";
-import { TABLE_NAMES } from "@/config/database";
-import { logger } from "@/lib/logger";
-import { apiError, apiSuccess } from "@/lib/api/helpers";
-import { validateBody, AdminCreateProductSchema } from '@/lib/schemas';
-import { QueryParams } from '@/lib/api/query-builder';
+import { logger } from "@/lib/logger"
+import { apiError, apiSuccess } from "@/lib/api/helpers"
+import { validateBody, AdminCreateProductSchema } from '@/lib/schemas'
 
 // GET /api/admin/products - List all products for admin
 export const GET = withAdmin('products', async (request, session) => {
   try {
-    const { searchParams } = new URL(request.url);
-    const limit = parseInt(searchParams.get("limit") || "50", 10);
-    const offset = parseInt(searchParams.get("offset") || "0", 10);
-    const status = searchParams.get("status");
-    const q = searchParams.get("q");
+    const { searchParams } = new URL(request.url)
+    const limit = parseInt(searchParams.get("limit") || "50", 10)
+    const offset = parseInt(searchParams.get("offset") || "0", 10)
+    const status = searchParams.get("status")
+    const q = searchParams.get("q")
 
-    const qb = new QueryParams();
-
-    if (status) qb.add('p.status = $P', status);
-    if (q) qb.add('(p.product_name ILIKE $P OR p.brand ILIKE $P)', `%${q}%`);
-
-    const { where: whereClause, params, nextIndex } = qb.build();
+    // Build dynamic filters
+    const filters = []
+    if (status) filters.push(eq(aiExtractedProducts.status, status))
+    if (q) {
+      filters.push(
+        or(
+          ilike(aiExtractedProducts.productName, `%${q}%`),
+          ilike(aiExtractedProducts.brand, `%${q}%`)
+        )!
+      )
+    }
+    const where = filters.length > 0 ? and(...filters) : undefined
 
     // Count total
-    const countResult = await query<{ count: string }>(
-      `SELECT COUNT(*) as count
-       FROM ${TABLE_NAMES.AI_EXTRACTED_PRODUCTS} p
-       LEFT JOIN ${TABLE_NAMES.INVENTORY_ITEMS} i ON i.ai_product_id = p.id
-       ${whereClause}`,
-      params
-    );
+    const countResult = await db
+      .select({ count: sql<number>`count(*)` })
+      .from(aiExtractedProducts)
+      .leftJoin(inventoryItems, eq(inventoryItems.aiProductId, aiExtractedProducts.id))
+      .where(where)
 
     // Fetch products
-    const productsResult = await query<{
-      id: string;
-      item_uuid: string;
-      product_name: string;
-      brand: string;
-      short_description: string | null;
-      estimated_price_chf: number;
-      condition: string;
-      category: string | null;
-      subcategory: string | null;
-      status: string;
-      quantity_available: number | null;
-      marketplace_status: string | null;
-      created_at: string;
-    }>(
-      `SELECT
-        p.id,
-        p.item_uuid,
-        p.product_name,
-        p.brand,
-        p.short_description,
-        p.estimated_price_chf,
-        p.condition,
-        p.category,
-        p.subcategory,
-        p.status,
-        i.quantity_available,
-        i.marketplace_status,
-        p.created_at
-       FROM ${TABLE_NAMES.AI_EXTRACTED_PRODUCTS} p
-       LEFT JOIN ${TABLE_NAMES.INVENTORY_ITEMS} i ON i.ai_product_id = p.id
-       ${whereClause}
-       ORDER BY p.created_at DESC
-       LIMIT $${nextIndex} OFFSET $${nextIndex + 1}`,
-      [...params, limit, offset]
-    );
+    const products = await db
+      .select({
+        id: aiExtractedProducts.id,
+        item_uuid: aiExtractedProducts.itemUuid,
+        product_name: aiExtractedProducts.productName,
+        brand: aiExtractedProducts.brand,
+        short_description: aiExtractedProducts.shortDescription,
+        estimated_price_chf: aiExtractedProducts.estimatedPriceChf,
+        condition: aiExtractedProducts.condition,
+        category: aiExtractedProducts.category,
+        subcategory: aiExtractedProducts.subcategory,
+        status: aiExtractedProducts.status,
+        quantity_available: inventoryItems.quantityAvailable,
+        marketplace_status: inventoryItems.marketplaceStatus,
+        created_at: aiExtractedProducts.createdAt,
+      })
+      .from(aiExtractedProducts)
+      .leftJoin(inventoryItems, eq(inventoryItems.aiProductId, aiExtractedProducts.id))
+      .where(where)
+      .orderBy(desc(aiExtractedProducts.createdAt))
+      .limit(limit)
+      .offset(offset)
 
     return apiSuccess({
-      products: productsResult.rows,
-      count: parseInt(countResult.rows[0]?.count || "0", 10),
+      products,
+      count: Number(countResult[0]?.count ?? 0),
       limit,
       offset,
-    });
+    })
   } catch (error) {
-    logger.error("Failed to fetch products", { error });
-    return apiError(error, "Fehler beim Laden der Produkte");
+    logger.error("Failed to fetch products", { error })
+    return apiError(error, "Fehler beim Laden der Produkte")
   }
 })
 
 // POST /api/admin/products - Create new product
 export const POST = withAdmin('products', async (request, session) => {
   try {
-    const body = await request.json();
-    const validation = validateBody(AdminCreateProductSchema, body);
-    if (!validation.success) return validation.error;
-    const productData = validation.data;
+    const body = await request.json()
+    const validation = validateBody(AdminCreateProductSchema, body)
+    if (!validation.success) return validation.error
+    const data = validation.data
 
-    const result = await query<{ id: string }>(
-      `INSERT INTO ${TABLE_NAMES.AI_EXTRACTED_PRODUCTS}
-        (item_uuid, product_name, brand, short_description, estimated_price_chf, condition, category, subcategory, status)
-       VALUES (gen_random_uuid(), $1, $2, $3, $4, $5, $6, $7, 'draft')
-       RETURNING id`,
-      [
-        productData.title || productData.product_name,
-        productData.brand || '',
-        productData.description || productData.short_description || '',
-        productData.price || productData.estimated_price_chf || 0,
-        productData.condition || 'unknown',
-        productData.category || null,
-        productData.subcategory || null,
-      ]
-    );
-
-    const productId = result.rows[0].id;
+    const [product] = await db
+      .insert(aiExtractedProducts)
+      .values({
+        itemUuid: sql`gen_random_uuid()::text`,
+        productName: data.title || data.product_name,
+        brand: data.brand || '',
+        shortDescription: data.description || data.short_description || '',
+        estimatedPriceChf: String(data.price || data.estimated_price_chf || 0),
+        condition: data.condition || 'unknown',
+        category: data.category || null,
+        subcategory: data.subcategory || null,
+        status: 'draft',
+      })
+      .returning({ id: aiExtractedProducts.id })
 
     // Create inventory item
-    await query(
-      `INSERT INTO ${TABLE_NAMES.INVENTORY_ITEMS}
-        (ai_product_id, quantity_available, marketplace_status)
-       VALUES ($1, $2, 'draft')`,
-      [productId, productData.quantity || 1]
-    );
+    await db
+      .insert(inventoryItems)
+      .values({
+        aiProductId: product.id,
+        quantityAvailable: data.quantity || 1,
+        marketplaceStatus: 'draft',
+      })
 
-    logger.info("Product created", { productId, user: session.user?.email });
+    logger.info("Product created", { productId: product.id, user: session.user?.email })
 
-    return apiSuccess({ id: productId }, 201);
+    return apiSuccess({ id: product.id }, 201)
   } catch (error) {
-    logger.error("Failed to create product", { error });
-    return apiError(error, "Fehler beim Erstellen des Produkts");
+    logger.error("Failed to create product", { error })
+    return apiError(error, "Fehler beim Erstellen des Produkts")
   }
 })

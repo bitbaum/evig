@@ -7,11 +7,19 @@
  * PATCH  /api/admin/inventory/[id] - Quick status updates (publish/unpublish)
  */
 
+import { db } from '@/db'
+import {
+  aiExtractedProducts,
+  inventoryItems,
+  productImages,
+  productCustomerProfiles,
+  customerProfiles,
+  marketplaceListings,
+} from '@/db/schema'
+import { eq, sql, inArray, and } from 'drizzle-orm'
 import { withAdmin } from '@/lib/api/middleware'
 import { apiSuccess, apiError, apiNotFound } from '@/lib/api/helpers'
-import { query } from '@/lib/auth/db'
 import { logger } from '@/lib/logger'
-import { TABLE_NAMES } from '@/config/database'
 import { INTAKE_STATUS } from '@/config/intake-status'
 import { publishProduct, unpublishProduct, updateProductImage } from '@/lib/admin/inventory-actions'
 import { validateBody, InventoryUpdateSchema, InventoryPatchSchema } from '@/lib/schemas'
@@ -20,55 +28,46 @@ export const GET = withAdmin<{ id: string }>('products', async (request, session
   try {
     const { id: productId } = context!.params!
 
-    const productResult = await query<{
-      id: string
-      item_uuid: string
-      product_name: string
-      brand: string
-      short_description: string | null
-      specifications: Record<string, string>
-      estimated_price_chf: number
-      condition: string
-      dimensions: Record<string, number | null>
-      weight_grams: number | null
-      category: string | null
-      subcategory: string | null
-      created_at: string
-      location: string | null
-      box_id: string | null
-      quantity_available: number
-    }>(
-      `SELECT
-        p.id, p.item_uuid, p.product_name, p.brand, p.short_description,
-        p.specifications, p.estimated_price_chf, p.condition, p.dimensions,
-        p.weight_grams, p.category, p.subcategory, p.created_at,
-        i.location, i.box_id,
-        COALESCE(i.quantity_available, 1) as quantity_available
-      FROM ${TABLE_NAMES.AI_EXTRACTED_PRODUCTS} p
-      LEFT JOIN ${TABLE_NAMES.INVENTORY_ITEMS} i ON i.ai_product_id = p.id
-      WHERE p.id = $1`,
-      [productId]
-    )
+    const rows = await db
+      .select({
+        id: aiExtractedProducts.id,
+        item_uuid: aiExtractedProducts.itemUuid,
+        product_name: aiExtractedProducts.productName,
+        brand: aiExtractedProducts.brand,
+        short_description: aiExtractedProducts.shortDescription,
+        specifications: aiExtractedProducts.specifications,
+        estimated_price_chf: aiExtractedProducts.estimatedPriceChf,
+        condition: aiExtractedProducts.condition,
+        dimensions: aiExtractedProducts.dimensions,
+        weight_grams: aiExtractedProducts.weightGrams,
+        category: aiExtractedProducts.category,
+        subcategory: aiExtractedProducts.subcategory,
+        created_at: aiExtractedProducts.createdAt,
+        location: inventoryItems.location,
+        box_id: inventoryItems.boxId,
+        quantity_available: sql<number>`COALESCE(${inventoryItems.quantityAvailable}, 1)`,
+      })
+      .from(aiExtractedProducts)
+      .leftJoin(inventoryItems, eq(inventoryItems.aiProductId, aiExtractedProducts.id))
+      .where(eq(aiExtractedProducts.id, productId))
 
-    if (productResult.rows.length === 0) {
+    if (rows.length === 0) {
       return apiNotFound('Produkt nicht gefunden')
     }
 
-    const product = productResult.rows[0]
+    const product = rows[0]
 
-    const profilesResult = await query<{ slug: string }>(
-      `SELECT cp.slug
-       FROM ${TABLE_NAMES.PRODUCT_CUSTOMER_PROFILES} pcp
-       JOIN ${TABLE_NAMES.CUSTOMER_PROFILES} cp ON cp.id = pcp.profile_id
-       WHERE pcp.product_id = $1`,
-      [productId]
-    )
+    const profiles = await db
+      .select({ slug: customerProfiles.slug })
+      .from(productCustomerProfiles)
+      .innerJoin(customerProfiles, eq(customerProfiles.id, productCustomerProfiles.profileId))
+      .where(eq(productCustomerProfiles.productId, productId))
 
-    const imageResult = await query<{ file_path: string }>(
-      `SELECT file_path FROM ${TABLE_NAMES.PRODUCT_IMAGES}
-       WHERE product_id = $1 AND is_primary = true LIMIT 1`,
-      [productId]
-    )
+    const images = await db
+      .select({ file_path: productImages.filePath })
+      .from(productImages)
+      .where(and(eq(productImages.productId, productId), eq(productImages.isPrimary, true)))
+      .limit(1)
 
     logger.info('Inventory product fetched for factsheet', {
       productId, itemUuid: product.item_uuid, userId: session.user.id,
@@ -77,8 +76,8 @@ export const GET = withAdmin<{ id: string }>('products', async (request, session
     return apiSuccess({
       product: {
         ...product,
-        customer_profiles: profilesResult.rows.map(r => r.slug),
-        image_url: imageResult.rows[0]?.file_path ?? null,
+        customer_profiles: profiles.map(r => r.slug),
+        image_url: images[0]?.file_path ?? null,
       },
     })
   } catch (error) {
@@ -92,31 +91,37 @@ export const DELETE = withAdmin<{ id: string }>('products', async (request, sess
     const { id: productId } = context!.params!
 
     // Delete child tables first, then main record
-    await query(`DELETE FROM ${TABLE_NAMES.PRODUCT_CUSTOMER_PROFILES} WHERE product_id = $1`, [productId])
-    await query(`DELETE FROM ${TABLE_NAMES.PRODUCT_IMAGES} WHERE product_id = $1`, [productId])
-    await query(
-      `DELETE FROM ${TABLE_NAMES.MARKETPLACE_LISTINGS}
-       WHERE inventory_item_id IN (
-         SELECT id FROM ${TABLE_NAMES.INVENTORY_ITEMS} WHERE ai_product_id = $1
-       )`,
-      [productId]
-    )
-    await query(`DELETE FROM ${TABLE_NAMES.INVENTORY_ITEMS} WHERE ai_product_id = $1`, [productId])
+    await db.delete(productCustomerProfiles).where(eq(productCustomerProfiles.productId, productId))
+    await db.delete(productImages).where(eq(productImages.productId, productId))
 
-    const result = await query<{ id: string; item_uuid: string }>(
-      `DELETE FROM ${TABLE_NAMES.AI_EXTRACTED_PRODUCTS} WHERE id = $1 RETURNING id, item_uuid`,
-      [productId]
-    )
+    // Delete marketplace listings via inventory item subquery
+    const invIds = await db
+      .select({ id: inventoryItems.id })
+      .from(inventoryItems)
+      .where(eq(inventoryItems.aiProductId, productId))
 
-    if (result.rowCount === 0) {
+    if (invIds.length > 0) {
+      await db
+        .delete(marketplaceListings)
+        .where(inArray(marketplaceListings.inventoryItemId, invIds.map(r => r.id)))
+    }
+
+    await db.delete(inventoryItems).where(eq(inventoryItems.aiProductId, productId))
+
+    const deleted = await db
+      .delete(aiExtractedProducts)
+      .where(eq(aiExtractedProducts.id, productId))
+      .returning({ id: aiExtractedProducts.id, itemUuid: aiExtractedProducts.itemUuid })
+
+    if (deleted.length === 0) {
       return apiNotFound('Produkt nicht gefunden')
     }
 
     logger.info('Inventory product deleted', {
-      productId, itemUuid: result.rows[0].item_uuid, deletedBy: session.user.id,
+      productId, itemUuid: deleted[0].itemUuid, deletedBy: session.user.id,
     })
 
-    return apiSuccess({ success: true, deleted: result.rows[0] })
+    return apiSuccess({ success: true, deleted: deleted[0] })
   } catch (error) {
     logger.error('Failed to delete inventory product', { error })
     return apiError(error, 'Fehler beim Löschen des Produkts')
@@ -131,71 +136,61 @@ export const PUT = withAdmin<{ id: string }>('products', async (request, session
     if (!validation.success) return validation.error
     const body = validation.data as Record<string, unknown>
 
-    // Build dynamic update for product fields
-    const allowedFields = [
-      'product_name', 'brand', 'short_description', 'specifications',
-      'estimated_price_chf', 'condition', 'category', 'subcategory',
-      'dimensions', 'weight_grams', 'status',
-    ]
+    // Build dynamic update for product fields (map snake_case input to camelCase schema)
+    const productUpdate: Record<string, unknown> = {}
+    if (body.product_name !== undefined) productUpdate.productName = body.product_name
+    if (body.brand !== undefined) productUpdate.brand = body.brand
+    if (body.short_description !== undefined) productUpdate.shortDescription = body.short_description
+    if (body.specifications !== undefined) productUpdate.specifications = body.specifications
+    if (body.estimated_price_chf !== undefined) productUpdate.estimatedPriceChf = String(body.estimated_price_chf)
+    if (body.condition !== undefined) productUpdate.condition = body.condition
+    if (body.category !== undefined) productUpdate.category = body.category
+    if (body.subcategory !== undefined) productUpdate.subcategory = body.subcategory
+    if (body.dimensions !== undefined) productUpdate.dimensions = body.dimensions
+    if (body.weight_grams !== undefined) productUpdate.weightGrams = body.weight_grams
+    if (body.status !== undefined) productUpdate.status = body.status
 
-    const updates: string[] = []
-    const values: unknown[] = []
-    let paramIndex = 1
-
-    for (const field of allowedFields) {
-      if (body[field] !== undefined) {
-        updates.push(`${field} = $${paramIndex}`)
-        values.push(body[field])
-        paramIndex++
-      }
-    }
-
-    if (updates.length === 0) {
+    if (Object.keys(productUpdate).length === 0) {
       return apiError(new Error('No valid fields to update'), 'Keine gültigen Felder zum Aktualisieren', 400)
     }
 
-    updates.push(`updated_at = NOW()`)
-    values.push(productId)
+    productUpdate.updatedAt = sql`NOW()`
 
-    const result = await query(
-      `UPDATE ${TABLE_NAMES.AI_EXTRACTED_PRODUCTS}
-       SET ${updates.join(', ')}
-       WHERE id = $${paramIndex}
-       RETURNING *`,
-      values
-    )
+    const result = await db
+      .update(aiExtractedProducts)
+      .set(productUpdate)
+      .where(eq(aiExtractedProducts.id, productId))
+      .returning()
 
-    if (result.rowCount === 0) {
+    if (result.length === 0) {
       return apiNotFound('Produkt nicht gefunden')
     }
 
     // Update inventory item if location/quantity fields provided
-    if (body.location !== undefined || body.box_id !== undefined || body.quantity_available !== undefined) {
-      const invUpdates: string[] = []
-      const invValues: unknown[] = []
-      let invIdx = 1
+    const invUpdate: Record<string, unknown> = {}
+    if (body.location !== undefined) invUpdate.location = body.location
+    if (body.box_id !== undefined) invUpdate.boxId = body.box_id
+    if (body.quantity_available !== undefined) invUpdate.quantityAvailable = body.quantity_available
 
-      if (body.location !== undefined) { invUpdates.push(`location = $${invIdx}`); invValues.push(body.location); invIdx++ }
-      if (body.box_id !== undefined) { invUpdates.push(`box_id = $${invIdx}`); invValues.push(body.box_id); invIdx++ }
-      if (body.quantity_available !== undefined) { invUpdates.push(`quantity_available = $${invIdx}`); invValues.push(body.quantity_available); invIdx++ }
-
-      if (invUpdates.length > 0) {
-        invUpdates.push(`updated_at = NOW()`)
-        invValues.push(productId)
-        await query(
-          `UPDATE ${TABLE_NAMES.INVENTORY_ITEMS}
-           SET ${invUpdates.join(', ')}
-           WHERE ai_product_id = $${invIdx}`,
-          invValues
-        )
-      }
+    if (Object.keys(invUpdate).length > 0) {
+      invUpdate.updatedAt = sql`NOW()`
+      await db
+        .update(inventoryItems)
+        .set(invUpdate)
+        .where(eq(inventoryItems.aiProductId, productId))
     }
 
     // Handle image update
     let imageUrl: string | null = null
     if (body.image && typeof body.image === 'string') {
-      imageUrl = await updateProductImage(productId, body.image, session.user.id)
+      imageUrl = await updateProductImage(productId, body.image as string, session.user.id)
     }
+
+    const allowedFields = [
+      'product_name', 'brand', 'short_description', 'specifications',
+      'estimated_price_chf', 'condition', 'category', 'subcategory',
+      'dimensions', 'weight_grams', 'status',
+    ]
 
     logger.info('Inventory product updated', {
       productId,
@@ -203,7 +198,7 @@ export const PUT = withAdmin<{ id: string }>('products', async (request, session
       updatedBy: session.user.id,
     })
 
-    return apiSuccess({ success: true, product: result.rows[0], image_url: imageUrl })
+    return apiSuccess({ success: true, product: result[0], image_url: imageUrl })
   } catch (error) {
     logger.error('Failed to update inventory product', { error })
     return apiError(error, 'Fehler beim Aktualisieren des Produkts')
@@ -220,12 +215,10 @@ export const PATCH = withAdmin<{ id: string }>('products', async (request, sessi
 
     // Handle marketplace publish/unpublish
     if (body.marketplace_status !== undefined) {
-      await query(
-        `UPDATE ${TABLE_NAMES.INVENTORY_ITEMS}
-         SET marketplace_status = $1, updated_at = NOW()
-         WHERE ai_product_id = $2`,
-        [body.marketplace_status, productId]
-      )
+      await db
+        .update(inventoryItems)
+        .set({ marketplaceStatus: body.marketplace_status, updatedAt: sql`NOW()` })
+        .where(eq(inventoryItems.aiProductId, productId))
 
       if (body.marketplace_status === INTAKE_STATUS.PUBLISHED) {
         await publishProduct(productId, session.user.id)
@@ -236,12 +229,10 @@ export const PATCH = withAdmin<{ id: string }>('products', async (request, sessi
 
     // Handle product status change
     if (body.status !== undefined) {
-      await query(
-        `UPDATE ${TABLE_NAMES.AI_EXTRACTED_PRODUCTS}
-         SET status = $1, updated_at = NOW()
-         WHERE id = $2`,
-        [body.status, productId]
-      )
+      await db
+        .update(aiExtractedProducts)
+        .set({ status: body.status, updatedAt: sql`NOW()` })
+        .where(eq(aiExtractedProducts.id, productId))
 
       logger.info('Product status changed', {
         productId, newStatus: body.status, changedBy: session.user.id,

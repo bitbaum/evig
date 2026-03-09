@@ -1,0 +1,311 @@
+import { pgTable, uuid, text, boolean, timestamp, integer, decimal, jsonb, varchar, numeric, index, uniqueIndex } from 'drizzle-orm/pg-core'
+import { users } from './auth'
+import { inventoryItems } from './inventory'
+
+// =============================================================================
+// LISTINGS (P2P marketplace)
+// =============================================================================
+// Peer-to-peer marketplace listings. Any user can list items for sale.
+// Final state includes columns from 031 + 043 (verified_at, verified_by,
+// verification_notes, condition_checks).
+
+export const listings = pgTable('listings', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  sellerId: uuid('seller_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
+
+  // Product info
+  title: text('title').notNull(),
+  description: text('description').notNull(),
+  priceChf: decimal('price_chf', { precision: 10, scale: 2 }).notNull(),
+  category: text('category').notNull(),
+  // CHECK (condition IN ('new', 'like_new', 'good', 'fair', 'poor', 'defect'))
+  condition: text('condition').notNull(),
+  brand: text('brand'),
+  model: text('model'),
+
+  // Delivery
+  // CHECK (delivery_options IN ('pickup', 'shipping', 'both'))
+  deliveryOptions: text('delivery_options').notNull().default('pickup'),
+  shippingCostChf: decimal('shipping_cost_chf', { precision: 10, scale: 2 }),
+  pickupLocation: text('pickup_location'),
+
+  // Payment
+  // CHECK (payment_mode IN ('secure', 'direct', 'both'))
+  paymentMode: text('payment_mode').notNull().default('direct'),
+
+  // Status
+  // CHECK (status IN ('active', 'sold', 'reserved', 'draft', 'removed'))
+  status: text('status').notNull().default('active'),
+
+  // RevampIT inventory link (nullable — only for RevampIT's own stock)
+  isRevampit: boolean('is_revampit').notNull().default(false),
+  inventoryItemId: uuid('inventory_item_id').references(() => inventoryItems.id, { onDelete: 'set null' }),
+
+  // Denormalized counters
+  viewCount: integer('view_count').notNull().default(0),
+  favoriteCount: integer('favorite_count').notNull().default(0),
+
+  // Added by 043: verification columns for RevampIT-tested items
+  verifiedAt: timestamp('verified_at', { withTimezone: true, mode: 'string' }),
+  verifiedBy: uuid('verified_by').references(() => users.id),
+  verificationNotes: text('verification_notes'),
+
+  // Added by 043: category-specific condition criteria
+  conditionChecks: jsonb('condition_checks'),
+
+  // Added by 045: internal admin notes
+  adminNotes: text('admin_notes'),
+
+  createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' }).notNull().defaultNow(),
+  updatedAt: timestamp('updated_at', { withTimezone: true, mode: 'string' }).notNull().defaultNow(),
+}, (table) => [
+  // 031: partial composite index for active listings browse
+  index('idx_listings_active_browse').on(table.category, table.condition, table.createdAt),
+  // 031: seller's own listings
+  index('idx_listings_seller').on(table.sellerId, table.status),
+  // 041: status filter for active listings
+  index('idx_listings_status_created').on(table.status, table.createdAt),
+])
+
+export type Listing = typeof listings.$inferSelect
+export type NewListing = typeof listings.$inferInsert
+
+// =============================================================================
+// LISTING IMAGES
+// =============================================================================
+// Images attached to P2P listings. One primary image per listing (enforced by
+// unique partial index).
+
+export const listingImages = pgTable('listing_images', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  listingId: uuid('listing_id').notNull().references(() => listings.id, { onDelete: 'cascade' }),
+  url: text('url').notNull(),
+  position: integer('position').notNull().default(0),
+  isPrimary: boolean('is_primary').notNull().default(false),
+
+  createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' }).notNull().defaultNow(),
+}, (table) => [
+  // 031 + 041: general lookup by listing
+  index('idx_listing_images_listing').on(table.listingId, table.position),
+])
+
+export type ListingImage = typeof listingImages.$inferSelect
+export type NewListingImage = typeof listingImages.$inferInsert
+
+// =============================================================================
+// LISTING SPECS
+// =============================================================================
+// Structured technical specifications per listing (added by 043).
+
+export const listingSpecs = pgTable('listing_specs', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  listingId: uuid('listing_id').notNull().references(() => listings.id, { onDelete: 'cascade' }),
+  specKey: text('spec_key').notNull(),
+  specValue: text('spec_value').notNull(),
+  specUnit: text('spec_unit'),
+  normalizedValue: numeric('normalized_value'),
+}, (table) => [
+  uniqueIndex('listing_specs_listing_id_spec_key_unique').on(table.listingId, table.specKey),
+  index('idx_listing_specs_listing').on(table.listingId),
+  index('idx_listing_specs_filter').on(table.specKey, table.normalizedValue),
+])
+
+export type ListingSpec = typeof listingSpecs.$inferSelect
+export type NewListingSpec = typeof listingSpecs.$inferInsert
+
+// =============================================================================
+// LISTING FAVORITES
+// =============================================================================
+// User favorites/bookmarks for listings. Unique per user+listing pair.
+
+export const listingFavorites = pgTable('listing_favorites', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  userId: uuid('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
+  listingId: uuid('listing_id').notNull().references(() => listings.id, { onDelete: 'cascade' }),
+
+  createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' }).notNull().defaultNow(),
+}, (table) => [
+  uniqueIndex('listing_favorites_user_id_listing_id_unique').on(table.userId, table.listingId),
+  index('idx_listing_favorites_user').on(table.userId),
+  index('idx_listing_favorites_listing').on(table.listingId),
+  // 041: composite for user+listing lookups
+  index('idx_listing_favorites_user_listing').on(table.userId, table.listingId),
+])
+
+export type ListingFavorite = typeof listingFavorites.$inferSelect
+export type NewListingFavorite = typeof listingFavorites.$inferInsert
+
+// =============================================================================
+// LISTING REPORTS
+// =============================================================================
+// Moderation reports for marketplace listings (added by 044).
+
+export const listingReports = pgTable('listing_reports', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  listingId: uuid('listing_id').notNull().references(() => listings.id, { onDelete: 'cascade' }),
+  reporterId: uuid('reporter_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
+  reason: varchar('reason', { length: 50 }).notNull(),
+  details: text('details'),
+  status: varchar('status', { length: 20 }).notNull().default('pending'),
+
+  createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' }).defaultNow(),
+  reviewedAt: timestamp('reviewed_at', { withTimezone: true, mode: 'string' }),
+  reviewedBy: uuid('reviewed_by').references(() => users.id),
+}, (table) => [
+  uniqueIndex('listing_reports_listing_id_reporter_id_unique').on(table.listingId, table.reporterId),
+  index('idx_listing_reports_listing').on(table.listingId),
+  index('idx_listing_reports_status').on(table.status),
+])
+
+export type ListingReport = typeof listingReports.$inferSelect
+export type NewListingReport = typeof listingReports.$inferInsert
+
+// =============================================================================
+// MARKETPLACE ORDERS (secure payment mode only)
+// =============================================================================
+// Orders for P2P transactions using secure payment (escrow).
+// CONSTRAINT chk_payout_math: seller_payout_chf = amount_chf - commission_chf
+
+export const marketplaceOrders = pgTable('marketplace_orders', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  buyerId: uuid('buyer_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
+  sellerId: uuid('seller_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
+  listingId: uuid('listing_id').notNull().references(() => listings.id, { onDelete: 'cascade' }),
+
+  // Financial
+  amountChf: decimal('amount_chf', { precision: 10, scale: 2 }).notNull(),
+  commissionChf: decimal('commission_chf', { precision: 10, scale: 2 }).notNull(),
+  sellerPayoutChf: decimal('seller_payout_chf', { precision: 10, scale: 2 }).notNull(),
+
+  // Stripe
+  stripePaymentIntentId: text('stripe_payment_intent_id'),
+
+  // Status
+  // CHECK (status IN ('pending', 'paid', 'shipped', 'delivered', 'completed', 'cancelled', 'refunded'))
+  status: text('status').notNull().default('pending'),
+
+  // Delivery
+  // CHECK (delivery_method IN ('pickup', 'shipping'))
+  deliveryMethod: text('delivery_method').notNull(),
+  shippingAddress: jsonb('shipping_address'),
+
+  createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' }).notNull().defaultNow(),
+  updatedAt: timestamp('updated_at', { withTimezone: true, mode: 'string' }).notNull().defaultNow(),
+}, (table) => [
+  index('idx_marketplace_orders_buyer').on(table.buyerId, table.status),
+  index('idx_marketplace_orders_seller').on(table.sellerId, table.status),
+  index('idx_marketplace_orders_listing').on(table.listingId),
+])
+
+export type MarketplaceOrder = typeof marketplaceOrders.$inferSelect
+export type NewMarketplaceOrder = typeof marketplaceOrders.$inferInsert
+
+// =============================================================================
+// SELLER PROFILES
+// =============================================================================
+// Seller profiles for the marketplace. Created from approved seller applications
+// (006) or auto-created on first P2P listing (031).
+// Final state includes columns from 006 + 031 (display_name, bio, avatar_url,
+// canton, total_listings, total_sold). Columns made nullable by 031.
+
+export const sellerProfiles = pgTable('seller_profiles', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  userId: uuid('user_id').notNull().unique().references(() => users.id, { onDelete: 'cascade' }),
+
+  // Business information (nullable after 031 P2P migration)
+  businessName: text('business_name'),
+  // CHECK (business_type IN ('individual', 'business'))
+  businessType: text('business_type'),
+  taxId: text('tax_id'),
+
+  // Contact information (nullable after 031 P2P migration)
+  address: text('address'),
+  city: text('city'),
+  postalCode: text('postal_code'),
+  phone: text('phone'),
+
+  // Seller settings
+  productTypes: text('product_types').array().default([]),
+  isVerified: boolean('is_verified').default(false),
+  verificationDate: timestamp('verification_date', { withTimezone: true, mode: 'string' }),
+
+  // Performance metrics
+  totalSales: integer('total_sales').default(0),
+  totalRevenueCents: integer('total_revenue_cents').default(0),
+  averageRating: decimal('average_rating', { precision: 3, scale: 2 }).default('0.0'),
+  totalReviews: integer('total_reviews').default(0),
+
+  // Seller preferences
+  autoPublish: boolean('auto_publish').default(true),
+  notificationPreferences: jsonb('notification_preferences').default({ email: true, sms: false }),
+
+  // Added by 031: P2P-specific fields
+  displayName: text('display_name'),
+  bio: text('bio'),
+  avatarUrl: text('avatar_url'),
+  canton: text('canton'),
+  totalListings: integer('total_listings').default(0),
+  totalSold: integer('total_sold').default(0),
+
+  createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' }).defaultNow(),
+  updatedAt: timestamp('updated_at', { withTimezone: true, mode: 'string' }).defaultNow(),
+}, (table) => [
+  index('idx_seller_profiles_user').on(table.userId),
+  index('idx_seller_profiles_verified').on(table.isVerified),
+  index('idx_seller_profiles_rating').on(table.averageRating),
+])
+
+export type SellerProfile = typeof sellerProfiles.$inferSelect
+export type NewSellerProfile = typeof sellerProfiles.$inferInsert
+
+// =============================================================================
+// SELLER APPLICATIONS
+// =============================================================================
+// Application workflow for becoming a seller (legacy flow from 006).
+
+export const sellerApplications = pgTable('seller_applications', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  userId: uuid('user_id').notNull().unique().references(() => users.id, { onDelete: 'cascade' }),
+
+  // Business information
+  businessName: text('business_name'),
+  // CHECK (business_type IN ('individual', 'business'))
+  businessType: text('business_type').notNull(),
+  taxId: text('tax_id'),
+
+  // Contact information
+  address: text('address').notNull(),
+  city: text('city').notNull(),
+  postalCode: text('postal_code').notNull(),
+  phone: text('phone').notNull(),
+
+  // Application details
+  experience: text('experience'),
+  productTypes: text('product_types').array().notNull().default([]),
+  motivation: text('motivation'),
+
+  // Legal
+  termsAccepted: boolean('terms_accepted').notNull().default(false),
+
+  // Status
+  // CHECK (status IN ('pending', 'approved', 'rejected', 'suspended'))
+  status: text('status').notNull().default('pending'),
+  submittedAt: timestamp('submitted_at', { withTimezone: true, mode: 'string' }).defaultNow(),
+  reviewedAt: timestamp('reviewed_at', { withTimezone: true, mode: 'string' }),
+  reviewedBy: uuid('reviewed_by').references(() => users.id),
+  reviewNotes: text('review_notes'),
+
+  // Rejection/suspension details
+  rejectionReason: text('rejection_reason'),
+  suspensionReason: text('suspension_reason'),
+
+  createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' }).defaultNow(),
+  updatedAt: timestamp('updated_at', { withTimezone: true, mode: 'string' }).defaultNow(),
+}, (table) => [
+  index('idx_seller_applications_user_id').on(table.userId),
+  index('idx_seller_applications_status').on(table.status),
+  index('idx_seller_applications_submitted_at').on(table.submittedAt),
+])
+
+export type SellerApplication = typeof sellerApplications.$inferSelect
+export type NewSellerApplication = typeof sellerApplications.$inferInsert
