@@ -1,44 +1,18 @@
 import { NextRequest } from 'next/server'
 import { auth } from '@/auth'
-import { query } from '@/lib/auth/db'
+import { db } from '@/db'
+import { workshops, workshopInstances, workshopRegistrations, users } from '@/db/schema'
+import { eq, and } from 'drizzle-orm'
 import { apiError, apiSuccess, apiUnauthorized, apiBadRequest, apiNotFound } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
-import { TABLE_NAMES } from '@/config/database'
 import { WORKSHOP_REGISTRATION_STATUS } from '@/config/workshop-registration-status'
 import { sendEmail } from '@/lib/email'
 import { logger } from '@/lib/logger'
 import { formatDateTimeWithWeekday } from '@/lib/date-formats'
 import { validateBody, WorkshopRegistrationSchema } from '@/lib/schemas'
 
-interface WorkshopRow {
-  id: string
-  title: string
-  slug: string
-  price_cents: number
-}
-
-interface InstanceDetailsRow {
-  start_date: string
-  location: string | null
-}
-
-interface UserRow {
-  name: string
-  email: string
-}
-
-interface IdRow {
-  id: string
-}
-
-interface RegistrationRow {
-  id: string
-  created_at: string
-}
-
 export async function POST(request: NextRequest) {
   try {
-    // Check authentication
     const session = await auth()
 
     if (!session?.user?.id) {
@@ -51,30 +25,31 @@ export async function POST(request: NextRequest) {
     const { workshopSlug } = validation.data
 
     // Find the workshop
-    const workshopResult = await query(
-      `SELECT id, title, slug, price_cents FROM ${TABLE_NAMES.WORKSHOPS} WHERE slug = $1 AND is_active = true`,
-      [workshopSlug]
-    )
+    const [workshop] = await db
+      .select({
+        id: workshops.id,
+        title: workshops.title,
+        slug: workshops.slug,
+        priceCents: workshops.priceCents,
+      })
+      .from(workshops)
+      .where(and(eq(workshops.slug, workshopSlug), eq(workshops.isActive, true)))
 
-    if (workshopResult.rows.length === 0) {
+    if (!workshop) {
       return apiNotFound('Workshop')
     }
 
-    const workshop = workshopResult.rows[0] as WorkshopRow
-
-    // For now, we'll create a registration request without a specific instance
-    // In the future, this could be expanded to allow instance selection
-    // For now, we'll assume the workshop itself represents the registration
-
     // Check if user is already registered for this workshop
-    const existingResult = await query(
-      `SELECT wr.id FROM ${TABLE_NAMES.WORKSHOP_REGISTRATIONS} wr
-       JOIN ${TABLE_NAMES.WORKSHOP_INSTANCES} wi ON wr.workshop_instance_id = wi.id
-       WHERE wr.user_id = $1 AND wi.workshop_id = $2`,
-      [session.user.id, workshop.id]
-    )
+    const [existing] = await db
+      .select({ id: workshopRegistrations.id })
+      .from(workshopRegistrations)
+      .innerJoin(workshopInstances, eq(workshopRegistrations.workshopInstanceId, workshopInstances.id))
+      .where(and(
+        eq(workshopRegistrations.userId, session.user.id),
+        eq(workshopInstances.workshopId, workshop.id)
+      ))
 
-    if (existingResult.rows.length > 0) {
+    if (existing) {
       return apiError(
         new Error('Already registered'),
         'Bereits für diesen Workshop angemeldet',
@@ -83,44 +58,45 @@ export async function POST(request: NextRequest) {
     }
 
     // Find the next scheduled instance for this workshop
-    const instanceResult = await query(
-      `SELECT id FROM ${TABLE_NAMES.WORKSHOP_INSTANCES} WHERE workshop_id = $1 AND status = 'scheduled' ORDER BY start_date ASC LIMIT 1`,
-      [workshop.id]
-    )
+    const [instance] = await db
+      .select({ id: workshopInstances.id })
+      .from(workshopInstances)
+      .where(and(
+        eq(workshopInstances.workshopId, workshop.id),
+        eq(workshopInstances.status, 'scheduled')
+      ))
+      .orderBy(workshopInstances.startDate)
+      .limit(1)
 
-    if (instanceResult.rows.length === 0) {
+    if (!instance) {
       return apiBadRequest('Aktuell sind keine Termine für diesen Workshop verfügbar')
     }
 
-    const workshopInstanceId = (instanceResult.rows[0] as IdRow).id
-
     // Create the registration
-    const registrationResult = await query(
-      `INSERT INTO ${TABLE_NAMES.WORKSHOP_REGISTRATIONS} (user_id, workshop_instance_id, status)
-       VALUES ($1, $2, '${WORKSHOP_REGISTRATION_STATUS.PENDING}')
-       RETURNING id, created_at`,
-      [session.user.id, workshopInstanceId]
-    )
-
-    const registration = registrationResult.rows[0] as RegistrationRow
+    const [registration] = await db
+      .insert(workshopRegistrations)
+      .values({
+        userId: session.user.id,
+        workshopInstanceId: instance.id,
+        status: WORKSHOP_REGISTRATION_STATUS.PENDING,
+      })
+      .returning({ id: workshopRegistrations.id, createdAt: workshopRegistrations.createdAt })
 
     // Get user details and workshop instance for email
-    const userResult = await query(
-      `SELECT name, email FROM ${TABLE_NAMES.USERS} WHERE id = $1`,
-      [session.user.id]
-    )
-    const user = userResult.rows[0] as UserRow
+    const [user] = await db
+      .select({ name: users.name, email: users.email })
+      .from(users)
+      .where(eq(users.id, session.user.id))
 
-    const instanceDetailsResult = await query(
-      `SELECT start_date, location FROM ${TABLE_NAMES.WORKSHOP_INSTANCES} WHERE id = $1`,
-      [workshopInstanceId]
-    )
-    const instanceDetails = instanceDetailsResult.rows[0] as InstanceDetailsRow
+    const [instanceDetails] = await db
+      .select({ startDate: workshopInstances.startDate, location: workshopInstances.location })
+      .from(workshopInstances)
+      .where(eq(workshopInstances.id, instance.id))
 
     // Send registration confirmation email
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://revampit.ch'
     const workshopUrl = `${baseUrl}/workshops/${workshop.slug}`
-    const workshopDate = formatDateTimeWithWeekday(instanceDetails.start_date)
+    const workshopDate = formatDateTimeWithWeekday(instanceDetails.startDate)
 
     try {
       await sendEmail(
@@ -130,7 +106,7 @@ export async function POST(request: NextRequest) {
         workshop.title,
         workshopDate,
         instanceDetails.location || 'Wird noch bekannt gegeben',
-        workshop.price_cents || 0,
+        workshop.priceCents || 0,
         workshopUrl
       )
       logger.info('Workshop registration confirmation email sent', {
@@ -139,7 +115,6 @@ export async function POST(request: NextRequest) {
         registrationId: registration.id
       })
     } catch (emailError) {
-      // Don't fail registration if email fails
       logger.error('Failed to send workshop registration email', { error: emailError })
     }
 

@@ -5,8 +5,9 @@
 import { NextRequest } from 'next/server';
 import { withAuth, ValidSession } from '@/lib/api/middleware';
 import { apiSuccess, apiError, parsePagination } from '@/lib/api/helpers';
-import { query } from '@/lib/auth/db';
-import { TABLE_NAMES } from '@/config/database';
+import { db } from '@/db';
+import { listings, listingFavorites, listingImages, users, sellerProfiles } from '@/db/schema';
+import { eq, and, ne, sql } from 'drizzle-orm';
 import { LISTING_STATUS } from '@/config/marketplace';
 
 export const GET = withAuth(async (
@@ -16,36 +17,52 @@ export const GET = withAuth(async (
   try {
     const { limit, offset } = parsePagination(request, { defaultLimit: 20, maxLimit: 100 });
 
-    const countResult = await query<{ count: string }>(
-      `SELECT COUNT(*) as count FROM ${TABLE_NAMES.LISTING_FAVORITES} f
-       JOIN ${TABLE_NAMES.LISTINGS} l ON f.listing_id = l.id
-       WHERE f.user_id = $1 AND l.status != $2`,
-      [session.user.id, LISTING_STATUS.REMOVED]
-    );
-    const total = parseInt(countResult.rows[0]?.count || '0', 10);
+    // Count query
+    const [countRow] = await db
+      .select({ count: sql<number>`count(*)` })
+      .from(listingFavorites)
+      .innerJoin(listings, eq(listingFavorites.listingId, listings.id))
+      .where(and(
+        eq(listingFavorites.userId, session.user.id),
+        ne(listings.status, LISTING_STATUS.REMOVED)
+      ));
+    const total = Number(countRow?.count ?? 0);
 
-    const result = await query(
-      `SELECT
-        l.id, l.title, l.price_chf, l.category, l.condition,
-        l.delivery_options, l.payment_mode, l.status, l.is_revampit,
-        l.pickup_location, l.view_count, l.favorite_count, l.created_at,
-        u.name as seller_name,
-        sp.display_name as seller_display_name,
-        sp.city as seller_city,
-        (SELECT li.url FROM ${TABLE_NAMES.LISTING_IMAGES} li WHERE li.listing_id = l.id AND li.is_primary = true LIMIT 1) as thumbnail,
-        f.created_at as favorited_at
-      FROM ${TABLE_NAMES.LISTING_FAVORITES} f
-      JOIN ${TABLE_NAMES.LISTINGS} l ON f.listing_id = l.id
-      JOIN ${TABLE_NAMES.USERS} u ON l.seller_id = u.id
-      LEFT JOIN ${TABLE_NAMES.SELLER_PROFILES} sp ON l.seller_id = sp.user_id
-      WHERE f.user_id = $1 AND l.status != $2
-      ORDER BY f.created_at DESC
-      LIMIT $3 OFFSET $4`,
-      [session.user.id, LISTING_STATUS.REMOVED, limit, offset]
-    );
+    const rows = await db
+      .select({
+        id: listings.id,
+        title: listings.title,
+        price_chf: listings.priceChf,
+        category: listings.category,
+        condition: listings.condition,
+        delivery_options: listings.deliveryOptions,
+        payment_mode: listings.paymentMode,
+        status: listings.status,
+        is_revampit: listings.isRevampit,
+        pickup_location: listings.pickupLocation,
+        view_count: listings.viewCount,
+        favorite_count: listings.favoriteCount,
+        created_at: listings.createdAt,
+        seller_name: users.name,
+        seller_display_name: sellerProfiles.displayName,
+        seller_city: sellerProfiles.city,
+        thumbnail: sql<string | null>`(SELECT ${listingImages.url} FROM listing_images WHERE ${listingImages.listingId} = ${listings.id} AND ${listingImages.isPrimary} = true LIMIT 1)`,
+        favorited_at: listingFavorites.createdAt,
+      })
+      .from(listingFavorites)
+      .innerJoin(listings, eq(listingFavorites.listingId, listings.id))
+      .innerJoin(users, eq(listings.sellerId, users.id))
+      .leftJoin(sellerProfiles, eq(listings.sellerId, sellerProfiles.userId))
+      .where(and(
+        eq(listingFavorites.userId, session.user.id),
+        ne(listings.status, LISTING_STATUS.REMOVED)
+      ))
+      .orderBy(sql`${listingFavorites.createdAt} DESC`)
+      .limit(limit)
+      .offset(offset);
 
     return apiSuccess({
-      items: result.rows,
+      items: rows,
       pagination: { total, limit, offset },
     });
   } catch (error) {

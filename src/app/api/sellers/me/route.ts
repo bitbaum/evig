@@ -7,8 +7,9 @@ import { NextRequest } from 'next/server';
 import { z } from 'zod';
 import { withAuth, ValidSession } from '@/lib/api/middleware';
 import { apiSuccess, apiError, apiNotFound, apiBadRequest } from '@/lib/api/helpers';
-import { query } from '@/lib/auth/db';
-import { TABLE_NAMES } from '@/config/database';
+import { db } from '@/db';
+import { sellerProfiles } from '@/db/schema';
+import { eq, sql } from 'drizzle-orm';
 import { logger } from '@/lib/logger';
 
 // ============================================================================
@@ -29,32 +30,31 @@ const UpdateSellerProfileSchema = z.object({
 
 export const GET = withAuth(async (request: NextRequest, session: ValidSession) => {
   try {
-    const result = await query<Record<string, unknown>>(
-      `SELECT
-        sp.id,
-        sp.user_id,
-        sp.display_name,
-        sp.bio,
-        sp.avatar_url,
-        sp.city,
-        sp.canton,
-        sp.is_verified,
-        sp.average_rating,
-        sp.total_reviews,
-        sp.total_listings,
-        sp.total_sold,
-        sp.created_at,
-        sp.updated_at
-      FROM ${TABLE_NAMES.SELLER_PROFILES} sp
-      WHERE sp.user_id = $1`,
-      [session.user.id]
-    );
+    const [profile] = await db
+      .select({
+        id: sellerProfiles.id,
+        user_id: sellerProfiles.userId,
+        display_name: sellerProfiles.displayName,
+        bio: sellerProfiles.bio,
+        avatar_url: sellerProfiles.avatarUrl,
+        city: sellerProfiles.city,
+        canton: sellerProfiles.canton,
+        is_verified: sellerProfiles.isVerified,
+        average_rating: sellerProfiles.averageRating,
+        total_reviews: sellerProfiles.totalReviews,
+        total_listings: sellerProfiles.totalListings,
+        total_sold: sellerProfiles.totalSold,
+        created_at: sellerProfiles.createdAt,
+        updated_at: sellerProfiles.updatedAt,
+      })
+      .from(sellerProfiles)
+      .where(eq(sellerProfiles.userId, session.user.id));
 
-    if (result.rows.length === 0) {
+    if (!profile) {
       return apiNotFound('Verkäuferprofil');
     }
 
-    return apiSuccess(result.rows[0]);
+    return apiSuccess(profile);
   } catch (error) {
     return apiError(error, 'Fehler beim Laden des Verkäuferprofils');
   }
@@ -67,12 +67,12 @@ export const GET = withAuth(async (request: NextRequest, session: ValidSession) 
 export const PATCH = withAuth(async (request: NextRequest, session: ValidSession) => {
   try {
     // Verify the seller profile exists
-    const existsResult = await query<{ user_id: string }>(
-      `SELECT user_id FROM ${TABLE_NAMES.SELLER_PROFILES} WHERE user_id = $1`,
-      [session.user.id]
-    );
+    const [exists] = await db
+      .select({ userId: sellerProfiles.userId })
+      .from(sellerProfiles)
+      .where(eq(sellerProfiles.userId, session.user.id));
 
-    if (existsResult.rows.length === 0) {
+    if (!exists) {
       return apiNotFound('Verkäuferprofil');
     }
 
@@ -91,34 +91,42 @@ export const PATCH = withAuth(async (request: NextRequest, session: ValidSession
     const data = parsed.data;
 
     // Build dynamic UPDATE from validated fields
-    const entries = Object.entries(data).filter(([, v]) => v !== undefined);
-    if (entries.length === 0) {
+    const update: Record<string, unknown> = {};
+    if (data.display_name !== undefined) update.displayName = data.display_name;
+    if (data.bio !== undefined) update.bio = data.bio;
+    if (data.avatar_url !== undefined) update.avatarUrl = data.avatar_url;
+    if (data.city !== undefined) update.city = data.city;
+    if (data.canton !== undefined) update.canton = data.canton;
+
+    if (Object.keys(update).length === 0) {
       return apiBadRequest('Keine Änderungen angegeben');
     }
 
-    const setClauses: string[] = [];
-    const values: unknown[] = [];
-    let idx = 1;
+    update.updatedAt = sql`NOW()`;
 
-    for (const [key, value] of entries) {
-      setClauses.push(`${key} = $${idx++}`);
-      values.push(value);
-    }
-    setClauses.push('updated_at = NOW()');
-    values.push(session.user.id);
-
-    const updateResult = await query<Record<string, unknown>>(
-      `UPDATE ${TABLE_NAMES.SELLER_PROFILES}
-       SET ${setClauses.join(', ')}
-       WHERE user_id = $${idx}
-       RETURNING id, user_id, display_name, bio, avatar_url, city, canton,
-                 is_verified, average_rating, total_reviews, total_listings,
-                 total_sold, created_at, updated_at`,
-      values
-    );
+    const [updated] = await db
+      .update(sellerProfiles)
+      .set(update)
+      .where(eq(sellerProfiles.userId, session.user.id))
+      .returning({
+        id: sellerProfiles.id,
+        user_id: sellerProfiles.userId,
+        display_name: sellerProfiles.displayName,
+        bio: sellerProfiles.bio,
+        avatar_url: sellerProfiles.avatarUrl,
+        city: sellerProfiles.city,
+        canton: sellerProfiles.canton,
+        is_verified: sellerProfiles.isVerified,
+        average_rating: sellerProfiles.averageRating,
+        total_reviews: sellerProfiles.totalReviews,
+        total_listings: sellerProfiles.totalListings,
+        total_sold: sellerProfiles.totalSold,
+        created_at: sellerProfiles.createdAt,
+        updated_at: sellerProfiles.updatedAt,
+      });
 
     logger.info('Seller profile updated', { userId: session.user.id });
-    return apiSuccess(updateResult.rows[0]);
+    return apiSuccess(updated);
   } catch (error) {
     return apiError(error, 'Fehler beim Aktualisieren des Verkäuferprofils');
   }

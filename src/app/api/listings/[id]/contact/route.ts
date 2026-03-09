@@ -8,8 +8,10 @@
 import { NextRequest } from 'next/server';
 import { withAuth, ValidSession } from '@/lib/api/middleware';
 import { apiSuccess, apiError, apiNotFound, apiBadRequest } from '@/lib/api/helpers';
-import { query } from '@/lib/auth/db';
-import { TABLE_NAMES, CONVERSATION_TYPES } from '@/config/database';
+import { db } from '@/db';
+import { listings, users, conversations, messages } from '@/db/schema';
+import { eq, and, sql } from 'drizzle-orm';
+import { CONVERSATION_TYPES } from '@/config/database';
 import { logger } from '@/lib/logger';
 import { validateBody, ContactSellerSchema } from '@/lib/schemas';
 import { sendCustomEmail } from '@/lib/email';
@@ -38,94 +40,102 @@ export const POST = withAuth<{ id: string }>(async (
     const { message } = validation.data;
 
     // Get listing and seller info
-    const listingResult = await query<{ seller_id: string; title: string; status: string; seller_email: string; seller_name: string }>(
-      `SELECT l.seller_id, l.title, l.status, u.email as seller_email, u.name as seller_name
-       FROM ${TABLE_NAMES.LISTINGS} l
-       JOIN ${TABLE_NAMES.USERS} u ON l.seller_id = u.id
-       WHERE l.id = $1`,
-      [id]
-    );
+    const [listing] = await db
+      .select({
+        sellerId: listings.sellerId,
+        title: listings.title,
+        status: listings.status,
+        sellerEmail: users.email,
+        sellerName: users.name,
+      })
+      .from(listings)
+      .innerJoin(users, eq(listings.sellerId, users.id))
+      .where(eq(listings.id, id));
 
-    if (listingResult.rows.length === 0) return apiNotFound('Inserat');
-    const listing = listingResult.rows[0];
+    if (!listing) return apiNotFound('Inserat');
 
     if (listing.status !== 'active') {
       return apiBadRequest('Dieses Inserat ist nicht mehr verfügbar');
     }
 
-    if (listing.seller_id === session.user.id) {
+    if (listing.sellerId === session.user.id) {
       return apiBadRequest('Sie können sich nicht selbst kontaktieren');
     }
 
     // Consistent participant ordering (lower UUID first)
-    const participant_1 = session.user.id < listing.seller_id ? session.user.id : listing.seller_id;
-    const participant_2 = session.user.id < listing.seller_id ? listing.seller_id : session.user.id;
+    const participant_1 = session.user.id < listing.sellerId ? session.user.id : listing.sellerId;
+    const participant_2 = session.user.id < listing.sellerId ? listing.sellerId : session.user.id;
 
     // Find or create marketplace conversation for this listing
-    const existingConv = await query<{ id: string }>(
-      `SELECT id FROM ${TABLE_NAMES.CONVERSATIONS}
-       WHERE participant_1 = $1 AND participant_2 = $2
-       AND type = $3 AND context_id = $4`,
-      [participant_1, participant_2, CONVERSATION_TYPES.MARKETPLACE, id]
-    );
+    const [existingConv] = await db
+      .select({ id: conversations.id })
+      .from(conversations)
+      .where(and(
+        eq(conversations.participant1, participant_1),
+        eq(conversations.participant2, participant_2),
+        eq(conversations.type, CONVERSATION_TYPES.MARKETPLACE),
+        eq(conversations.contextId, id)
+      ));
 
     let conversationId: string;
 
-    if (existingConv.rows.length > 0) {
-      conversationId = existingConv.rows[0].id;
+    if (existingConv) {
+      conversationId = existingConv.id;
     } else {
       // Create new marketplace conversation
-      const createResult = await query<{ id: string }>(
-        `INSERT INTO ${TABLE_NAMES.CONVERSATIONS} (
-          participant_1, participant_2, type, context_id, title, last_message_preview
-        ) VALUES ($1, $2, $3, $4, $5, $6)
-        RETURNING id`,
-        [
-          participant_1,
-          participant_2,
-          CONVERSATION_TYPES.MARKETPLACE,
-          id,
-          listing.title,
-          message.substring(0, 100),
-        ]
-      );
-      conversationId = createResult.rows[0].id;
+      const [newConv] = await db
+        .insert(conversations)
+        .values({
+          participant1: participant_1,
+          participant2: participant_2,
+          type: CONVERSATION_TYPES.MARKETPLACE,
+          contextId: id,
+          title: listing.title,
+          lastMessagePreview: message.substring(0, 100),
+        })
+        .returning({ id: conversations.id });
+      conversationId = newConv.id;
     }
 
     // Send the message
-    const messageResult = await query<{ id: string; created_at: string }>(
-      `INSERT INTO ${TABLE_NAMES.MESSAGES} (conversation_id, sender_id, recipient_id, content)
-       VALUES ($1, $2, $3, $4)
-       RETURNING id, created_at`,
-      [conversationId, session.user.id, listing.seller_id, message]
-    );
+    const [newMessage] = await db
+      .insert(messages)
+      .values({
+        conversationId,
+        senderId: session.user.id,
+        recipientId: listing.sellerId,
+        content: message,
+      })
+      .returning({ id: messages.id, createdAt: messages.createdAt });
 
     // Update conversation metadata
     const unreadField = session.user.id === participant_1 ? 'unread_count_2' : 'unread_count_1';
-    await query(
-      `UPDATE ${TABLE_NAMES.CONVERSATIONS} SET
-        last_message_at = CURRENT_TIMESTAMP,
-        last_message_preview = $1,
-        ${unreadField} = ${unreadField} + 1,
-        updated_at = CURRENT_TIMESTAMP
-       WHERE id = $2`,
-      [message.substring(0, 100), conversationId]
-    );
+    await db
+      .update(conversations)
+      .set({
+        lastMessageAt: sql`CURRENT_TIMESTAMP`,
+        lastMessagePreview: message.substring(0, 100),
+        ...(unreadField === 'unread_count_2'
+          ? { unreadCount2: sql`${conversations.unreadCount2} + 1` }
+          : { unreadCount1: sql`${conversations.unreadCount1} + 1` }),
+        updatedAt: sql`CURRENT_TIMESTAMP`,
+      })
+      .where(eq(conversations.id, conversationId));
 
     logger.info('Marketplace message sent', {
       conversationId,
       listingId: id,
       senderId: session.user.id,
-      sellerId: listing.seller_id,
+      sellerId: listing.sellerId,
     });
 
     // Fire-and-forget: email notification to seller
-    if (listing.seller_email) {
+    if (listing.sellerEmail) {
       const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
       sendCustomEmail(
-        listing.seller_email,
+        listing.sellerEmail,
         newMarketplaceMessage({
-          recipientName: listing.seller_name || 'Verkäufer',
+          recipientName: listing.sellerName || 'Verkäufer',
           senderName: session.user.name || 'Nutzer',
           listingTitle: listing.title,
           messagePreview: message.substring(0, 200),
@@ -136,7 +146,7 @@ export const POST = withAuth<{ id: string }>(async (
 
     return apiSuccess({
       conversation_id: conversationId,
-      message_id: messageResult.rows[0].id,
+      message_id: newMessage.id,
     });
   } catch (error) {
     return apiError(error, 'Fehler beim Senden der Nachricht');

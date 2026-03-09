@@ -8,8 +8,9 @@
 import { NextRequest } from 'next/server';
 import { withAuth, ValidSession } from '@/lib/api/middleware';
 import { apiSuccess, apiError, apiNotFound } from '@/lib/api/helpers';
-import { query } from '@/lib/auth/db';
-import { TABLE_NAMES } from '@/config/database';
+import { db } from '@/db';
+import { listings, listingFavorites } from '@/db/schema';
+import { eq, and } from 'drizzle-orm';
 import { LISTING_STATUS } from '@/config/marketplace';
 
 export const POST = withAuth<{ id: string }>(async (
@@ -22,45 +23,49 @@ export const POST = withAuth<{ id: string }>(async (
     if (!listingId) return apiNotFound('Inserat');
 
     // Check listing exists and is active
-    const listingResult = await query(
-      `SELECT id FROM ${TABLE_NAMES.LISTINGS} WHERE id = $1 AND status = $2`,
-      [listingId, LISTING_STATUS.ACTIVE]
-    );
-    if (listingResult.rows.length === 0) return apiNotFound('Inserat');
+    const [listing] = await db
+      .select({ id: listings.id })
+      .from(listings)
+      .where(and(eq(listings.id, listingId), eq(listings.status, LISTING_STATUS.ACTIVE)));
+    if (!listing) return apiNotFound('Inserat');
 
     // Check if already favorited
-    const existing = await query(
-      `SELECT id FROM ${TABLE_NAMES.LISTING_FAVORITES} WHERE user_id = $1 AND listing_id = $2`,
-      [session.user.id, listingId]
-    );
+    const [existing] = await db
+      .select({ id: listingFavorites.id })
+      .from(listingFavorites)
+      .where(and(
+        eq(listingFavorites.userId, session.user.id),
+        eq(listingFavorites.listingId, listingId)
+      ));
 
     let favorited: boolean;
 
-    if (existing.rows.length > 0) {
+    if (existing) {
       // Remove favorite
-      await query(
-        `DELETE FROM ${TABLE_NAMES.LISTING_FAVORITES} WHERE user_id = $1 AND listing_id = $2`,
-        [session.user.id, listingId]
-      );
+      await db
+        .delete(listingFavorites)
+        .where(and(
+          eq(listingFavorites.userId, session.user.id),
+          eq(listingFavorites.listingId, listingId)
+        ));
       favorited = false;
     } else {
       // Add favorite
-      await query(
-        `INSERT INTO ${TABLE_NAMES.LISTING_FAVORITES} (user_id, listing_id) VALUES ($1, $2)`,
-        [session.user.id, listingId]
-      );
+      await db
+        .insert(listingFavorites)
+        .values({ userId: session.user.id, listingId });
       favorited = true;
     }
 
     // Get updated count
-    const countResult = await query<{ favorite_count: number }>(
-      `SELECT favorite_count FROM ${TABLE_NAMES.LISTINGS} WHERE id = $1`,
-      [listingId]
-    );
+    const [countRow] = await db
+      .select({ favoriteCount: listings.favoriteCount })
+      .from(listings)
+      .where(eq(listings.id, listingId));
 
     return apiSuccess({
       favorited,
-      favorite_count: countResult.rows[0]?.favorite_count ?? 0,
+      favorite_count: countRow?.favoriteCount ?? 0,
     });
   } catch (error) {
     return apiError(error, 'Fehler beim Aktualisieren der Favoriten');

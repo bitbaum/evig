@@ -7,8 +7,9 @@
 import { NextRequest } from 'next/server';
 import { withAuth, ValidSession } from '@/lib/api/middleware';
 import { apiSuccess, apiError, apiNotFound, apiBadRequest } from '@/lib/api/helpers';
-import { query } from '@/lib/auth/db';
-import { TABLE_NAMES } from '@/config/database';
+import { db } from '@/db';
+import { listings, listingReports } from '@/db/schema';
+import { eq, and } from 'drizzle-orm';
 import { logger } from '@/lib/logger';
 import { validateBody, ReportListingSchema } from '@/lib/schemas';
 
@@ -29,24 +30,27 @@ export const POST = withAuth<{ id: string }>(async (
     const { reason, details } = validation.data;
 
     // Check listing exists and is active
-    const listingResult = await query<{ seller_id: string }>(
-      `SELECT seller_id FROM ${TABLE_NAMES.LISTINGS} WHERE id = $1 AND status = 'active'`,
-      [id]
-    );
-    if (listingResult.rows.length === 0) return apiNotFound('Inserat');
+    const [listing] = await db
+      .select({ sellerId: listings.sellerId })
+      .from(listings)
+      .where(and(eq(listings.id, id), eq(listings.status, 'active')));
+    if (!listing) return apiNotFound('Inserat');
 
     // Prevent self-report
-    if (listingResult.rows[0].seller_id === session.user.id) {
+    if (listing.sellerId === session.user.id) {
       return apiBadRequest('Sie können Ihr eigenes Inserat nicht melden');
     }
 
     // Insert report (UNIQUE constraint prevents duplicates)
     try {
-      await query(
-        `INSERT INTO ${TABLE_NAMES.LISTING_REPORTS} (listing_id, reporter_id, reason, details)
-         VALUES ($1, $2, $3, $4)`,
-        [id, session.user.id, reason, details || null]
-      );
+      await db
+        .insert(listingReports)
+        .values({
+          listingId: id,
+          reporterId: session.user.id,
+          reason,
+          details: details || undefined,
+        });
     } catch (err: unknown) {
       if (err && typeof err === 'object' && 'code' in err && (err as { code: string }).code === '23505') {
         return apiBadRequest('Sie haben dieses Inserat bereits gemeldet');

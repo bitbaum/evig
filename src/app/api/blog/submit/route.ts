@@ -14,8 +14,10 @@ import {
 } from '@/lib/api/helpers'
 import { logger } from '@/lib/logger'
 import { auth } from '@/auth'
-import { query } from '@/lib/auth/db'
-import { TABLE_NAMES } from '@/config/database'
+import { db } from '@/db'
+import { blogSubmissions, blogCategories, users } from '@/db/schema'
+import { eq, desc, sql } from 'drizzle-orm'
+import { alias } from 'drizzle-orm/pg-core'
 import { canAccessSection } from '@/lib/permissions'
 
 export async function GET(request: NextRequest) {
@@ -41,47 +43,47 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url)
     const status = searchParams.get('status')
 
-    // Build query
-    let sql = `
-      SELECT
-        s.id,
-        s.submitter_name,
-        s.submitter_email,
-        s.user_id,
-        s.title,
-        s.slug,
-        s.content,
-        s.excerpt,
-        s.submission_type,
-        s.category_id,
-        s.category_name,
-        c.name as category_label,
-        s.tags,
-        s.status,
-        s.reviewed_by,
-        s.reviewed_at,
-        s.review_notes,
-        s.rejection_reason,
-        s.published_post_id,
-        s.published_at,
-        s.submitted_at,
-        r.name as reviewer_name
-      FROM ${TABLE_NAMES.BLOG_SUBMISSIONS} s
-      LEFT JOIN ${TABLE_NAMES.BLOG_CATEGORIES} c ON s.category_id = c.id
-      LEFT JOIN ${TABLE_NAMES.USERS} r ON s.reviewed_by = r.id
-    `
+    const reviewer = alias(users, 'reviewer')
 
-    const params: string[] = []
+    const conditions = []
     if (status && status !== 'all') {
-      sql += ` WHERE s.status = $1`
-      params.push(status)
+      conditions.push(eq(blogSubmissions.status, status))
     }
 
-    sql += ` ORDER BY s.submitted_at DESC`
+    const where = conditions.length > 0 ? conditions[0] : undefined
 
-    const result = await query(sql, params)
+    const rows = await db
+      .select({
+        id: blogSubmissions.id,
+        submitter_name: blogSubmissions.submitterName,
+        submitter_email: blogSubmissions.submitterEmail,
+        user_id: blogSubmissions.userId,
+        title: blogSubmissions.title,
+        slug: blogSubmissions.slug,
+        content: blogSubmissions.content,
+        excerpt: blogSubmissions.excerpt,
+        submission_type: blogSubmissions.submissionType,
+        category_id: blogSubmissions.categoryId,
+        category_name: blogSubmissions.categoryName,
+        category_label: blogCategories.name,
+        tags: blogSubmissions.tags,
+        status: blogSubmissions.status,
+        reviewed_by: blogSubmissions.reviewedBy,
+        reviewed_at: blogSubmissions.reviewedAt,
+        review_notes: blogSubmissions.reviewNotes,
+        rejection_reason: blogSubmissions.rejectionReason,
+        published_post_id: blogSubmissions.publishedPostId,
+        published_at: blogSubmissions.publishedAt,
+        submitted_at: blogSubmissions.submittedAt,
+        reviewer_name: reviewer.name,
+      })
+      .from(blogSubmissions)
+      .leftJoin(blogCategories, eq(blogSubmissions.categoryId, blogCategories.id))
+      .leftJoin(reviewer, eq(blogSubmissions.reviewedBy, reviewer.id))
+      .where(where)
+      .orderBy(desc(blogSubmissions.submittedAt))
 
-    return apiSuccess({ submissions: result.rows })
+    return apiSuccess({ submissions: rows })
   } catch (error) {
     logger.error('Failed to fetch blog submissions', { error })
     return apiError(error, 'Fehler beim Laden der Einreichungen')

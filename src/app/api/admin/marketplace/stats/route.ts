@@ -1,63 +1,49 @@
 import { withAdmin } from '@/lib/api/middleware'
-import { query } from '@/lib/auth/db'
+import { db } from '@/db'
+import { listings, listingReports, marketplaceOrders } from '@/db/schema'
+import { sql } from 'drizzle-orm'
 import { apiError, apiSuccess } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
-import { TABLE_NAMES } from '@/config/database'
 import { LISTING_STATUS, ORDER_STATUS } from '@/config/marketplace'
 import { REPORT_STATUS } from '@/config/report-status'
 
 // GET /api/admin/marketplace/stats - Dashboard statistics
 export const GET = withAdmin('marketplace', async () => {
   try {
-    const result = await query<{
-      total: string
-      active: string
-      sold: string
-      draft: string
-      reserved: string
-      removed: string
-      verified: string
-      unverified: string
-      revampit: string
-      community: string
-      open_reports: string
-      total_orders: string
-      revenue_cents: string
-    }>(
-      `SELECT
-        COUNT(*) as total,
-        COUNT(*) FILTER (WHERE l.status = '${LISTING_STATUS.ACTIVE}') as active,
-        COUNT(*) FILTER (WHERE l.status = '${LISTING_STATUS.SOLD}') as sold,
-        COUNT(*) FILTER (WHERE l.status = '${LISTING_STATUS.DRAFT}') as draft,
-        COUNT(*) FILTER (WHERE l.status = '${LISTING_STATUS.RESERVED}') as reserved,
-        COUNT(*) FILTER (WHERE l.status = '${LISTING_STATUS.REMOVED}') as removed,
-        COUNT(*) FILTER (WHERE l.verified_at IS NOT NULL) as verified,
-        COUNT(*) FILTER (WHERE l.verified_at IS NULL AND l.status = '${LISTING_STATUS.ACTIVE}') as unverified,
-        COUNT(*) FILTER (WHERE l.is_revampit = true) as revampit,
-        COUNT(*) FILTER (WHERE l.is_revampit = false) as community,
-        (SELECT COUNT(*) FROM ${TABLE_NAMES.LISTING_REPORTS} WHERE status = '${REPORT_STATUS.PENDING}') as open_reports,
-        (SELECT COUNT(*) FROM ${TABLE_NAMES.MARKETPLACE_ORDERS}) as total_orders,
-        (SELECT COALESCE(SUM(amount_chf * 100), 0) FROM ${TABLE_NAMES.MARKETPLACE_ORDERS} WHERE status IN ('${ORDER_STATUS.PAID}', '${ORDER_STATUS.SHIPPED}', '${ORDER_STATUS.DELIVERED}', '${ORDER_STATUS.COMPLETED}')) as revenue_cents
-      FROM ${TABLE_NAMES.LISTINGS} l`
-    )
+    const [row] = await db
+      .select({
+        total: sql<number>`count(*)`,
+        active: sql<number>`count(*) FILTER (WHERE ${listings.status} = ${LISTING_STATUS.ACTIVE})`,
+        sold: sql<number>`count(*) FILTER (WHERE ${listings.status} = ${LISTING_STATUS.SOLD})`,
+        draft: sql<number>`count(*) FILTER (WHERE ${listings.status} = ${LISTING_STATUS.DRAFT})`,
+        reserved: sql<number>`count(*) FILTER (WHERE ${listings.status} = ${LISTING_STATUS.RESERVED})`,
+        removed: sql<number>`count(*) FILTER (WHERE ${listings.status} = ${LISTING_STATUS.REMOVED})`,
+        verified: sql<number>`count(*) FILTER (WHERE ${listings.verifiedAt} IS NOT NULL)`,
+        unverified: sql<number>`count(*) FILTER (WHERE ${listings.verifiedAt} IS NULL AND ${listings.status} = ${LISTING_STATUS.ACTIVE})`,
+        revampit: sql<number>`count(*) FILTER (WHERE ${listings.isRevampit} = true)`,
+        community: sql<number>`count(*) FILTER (WHERE ${listings.isRevampit} = false)`,
+        openReports: sql<number>`(SELECT count(*) FROM listing_reports WHERE ${listingReports.status} = ${REPORT_STATUS.PENDING})`,
+        totalOrders: sql<number>`(SELECT count(*) FROM marketplace_orders)`,
+        revenueCents: sql<number>`(SELECT COALESCE(SUM(${marketplaceOrders.amountChf}::numeric * 100), 0) FROM marketplace_orders WHERE ${marketplaceOrders.status} IN (${ORDER_STATUS.PAID}, ${ORDER_STATUS.SHIPPED}, ${ORDER_STATUS.DELIVERED}, ${ORDER_STATUS.COMPLETED}))`,
+      })
+      .from(listings)
 
-    const row = result.rows[0]
     return apiSuccess({
-      total: parseInt(row.total),
+      total: Number(row.total),
       byStatus: {
-        active: parseInt(row.active),
-        sold: parseInt(row.sold),
-        draft: parseInt(row.draft),
-        reserved: parseInt(row.reserved),
-        removed: parseInt(row.removed),
+        active: Number(row.active),
+        sold: Number(row.sold),
+        draft: Number(row.draft),
+        reserved: Number(row.reserved),
+        removed: Number(row.removed),
       },
-      verified: parseInt(row.verified),
-      unverified: parseInt(row.unverified),
-      revampit: parseInt(row.revampit),
-      community: parseInt(row.community),
-      openReports: parseInt(row.open_reports),
-      totalOrders: parseInt(row.total_orders),
-      revenueCents: parseInt(row.revenue_cents),
+      verified: Number(row.verified),
+      unverified: Number(row.unverified),
+      revampit: Number(row.revampit),
+      community: Number(row.community),
+      openReports: Number(row.openReports),
+      totalOrders: Number(row.totalOrders),
+      revenueCents: Number(row.revenueCents),
     })
   } catch (error) {
     return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)

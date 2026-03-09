@@ -7,10 +7,10 @@
 import { NextRequest } from 'next/server';
 import { withAuth, ValidSession } from '@/lib/api/middleware';
 import { apiSuccess, apiError, parsePagination } from '@/lib/api/helpers';
-import { query } from '@/lib/auth/db';
-import { TABLE_NAMES } from '@/config/database';
-import { LISTING_STATUSES } from '@/config/marketplace';
-import { QueryParams } from '@/lib/api/query-builder';
+import { db } from '@/db';
+import { listings, listingImages } from '@/db/schema';
+import { eq, and, ne, sql } from 'drizzle-orm';
+import { LISTING_STATUS, LISTING_STATUSES } from '@/config/marketplace';
 
 export const GET = withAuth(async (request: NextRequest, session: ValidSession) => {
   try {
@@ -18,42 +18,48 @@ export const GET = withAuth(async (request: NextRequest, session: ValidSession) 
     const status = searchParams.get('status');
     const { limit, offset, page } = parsePagination(request, { defaultLimit: 20, maxLimit: 100 });
 
-    const qb = new QueryParams();
-    qb.add('l.seller_id = $P', session.user.id);
+    // Build conditions
+    const conditions = [eq(listings.sellerId, session.user.id)];
 
-    // Filter by status if provided (and valid)
     if (status && (LISTING_STATUSES as readonly string[]).includes(status)) {
-      qb.add('l.status = $P', status);
+      conditions.push(eq(listings.status, status));
     } else {
-      // By default exclude removed
-      qb.addRaw("l.status != 'removed'");
+      conditions.push(ne(listings.status, LISTING_STATUS.REMOVED));
     }
 
-    const { where: whereClause, params, nextIndex } = qb.build('');
+    const where = and(...conditions);
 
     // Get total count
-    const countResult = await query<{ count: string }>(
-      `SELECT COUNT(*) as count FROM ${TABLE_NAMES.LISTINGS} l WHERE ${whereClause}`,
-      params
-    );
-    const total = parseInt(countResult.rows[0]?.count || '0');
+    const [countRow] = await db
+      .select({ count: sql<number>`count(*)` })
+      .from(listings)
+      .where(where);
+    const total = Number(countRow?.count ?? 0);
     const totalPages = Math.ceil(total / limit);
 
     // Get paginated items
-    const result = await query(
-      `SELECT
-        l.id, l.title, l.price_chf, l.category, l.condition, l.status,
-        l.view_count, l.favorite_count, l.created_at, l.updated_at,
-        (SELECT li.url FROM ${TABLE_NAMES.LISTING_IMAGES} li WHERE li.listing_id = l.id AND li.is_primary = true LIMIT 1) as thumbnail
-      FROM ${TABLE_NAMES.LISTINGS} l
-      WHERE ${whereClause}
-      ORDER BY l.created_at DESC
-      LIMIT $${nextIndex} OFFSET $${nextIndex + 1}`,
-      [...params, limit, offset]
-    );
+    const rows = await db
+      .select({
+        id: listings.id,
+        title: listings.title,
+        price_chf: listings.priceChf,
+        category: listings.category,
+        condition: listings.condition,
+        status: listings.status,
+        view_count: listings.viewCount,
+        favorite_count: listings.favoriteCount,
+        created_at: listings.createdAt,
+        updated_at: listings.updatedAt,
+        thumbnail: sql<string | null>`(SELECT ${listingImages.url} FROM listing_images WHERE ${listingImages.listingId} = ${listings.id} AND ${listingImages.isPrimary} = true LIMIT 1)`,
+      })
+      .from(listings)
+      .where(where)
+      .orderBy(sql`${listings.createdAt} DESC`)
+      .limit(limit)
+      .offset(offset);
 
     return apiSuccess({
-      items: result.rows,
+      items: rows,
       total,
       page,
       totalPages,

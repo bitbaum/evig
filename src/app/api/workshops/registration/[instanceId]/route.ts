@@ -1,19 +1,10 @@
 import { NextRequest } from 'next/server'
 import { auth } from '@/auth'
-import { query } from '@/lib/auth/db'
+import { db } from '@/db'
+import { workshopRegistrations, workshopInstances, workshops } from '@/db/schema'
+import { eq, and } from 'drizzle-orm'
 import { apiError, apiSuccess } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
-import { TABLE_NAMES } from '@/config/database'
-
-interface RegistrationRow {
-  id: string
-  status: string
-  created_at: string
-  start_date: string
-  location: string
-  workshop_title: string
-  workshop_slug: string
-}
 
 export async function GET(
   request: NextRequest,
@@ -31,32 +22,36 @@ export async function GET(
     const { instanceId } = await params
 
     // Check if user is registered for this workshop instance
-    const registration = await query(`
-      SELECT
-        wr.*,
-        wi.start_date,
-        wi.location,
-        w.title as workshop_title,
-        w.slug as workshop_slug
-      FROM ${TABLE_NAMES.WORKSHOP_REGISTRATIONS} wr
-      JOIN ${TABLE_NAMES.WORKSHOP_INSTANCES} wi ON wr.workshop_instance_id = wi.id
-      JOIN ${TABLE_NAMES.WORKSHOPS} w ON wi.workshop_id = w.id
-      WHERE wr.user_id = $1 AND wr.workshop_instance_id = $2
-    `, [session.user.id, instanceId])
+    const [reg] = await db
+      .select({
+        id: workshopRegistrations.id,
+        status: workshopRegistrations.status,
+        createdAt: workshopRegistrations.createdAt,
+        startDate: workshopInstances.startDate,
+        location: workshopInstances.location,
+        workshopTitle: workshops.title,
+        workshopSlug: workshops.slug,
+      })
+      .from(workshopRegistrations)
+      .innerJoin(workshopInstances, eq(workshopRegistrations.workshopInstanceId, workshopInstances.id))
+      .innerJoin(workshops, eq(workshopInstances.workshopId, workshops.id))
+      .where(and(
+        eq(workshopRegistrations.userId, session.user.id),
+        eq(workshopRegistrations.workshopInstanceId, instanceId)
+      ))
 
-    if (registration.rows.length > 0) {
-      const reg = registration.rows[0] as RegistrationRow
+    if (reg) {
       return apiSuccess({
         registered: true,
         registration: {
           id: reg.id,
           status: reg.status,
-          registered_at: reg.created_at,
+          registered_at: reg.createdAt,
           workshop_instance: {
-            start_date: reg.start_date,
+            start_date: reg.startDate,
             location: reg.location,
-            workshop_title: reg.workshop_title,
-            workshop_slug: reg.workshop_slug
+            workshop_title: reg.workshopTitle,
+            workshop_slug: reg.workshopSlug
           }
         }
       })
