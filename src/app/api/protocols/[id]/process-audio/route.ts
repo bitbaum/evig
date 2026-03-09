@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { withAdmin, ValidSession } from '@/lib/api/middleware'
-import { apiBadRequest, apiNotFound } from '@/lib/api/helpers'
+import { apiSuccess, apiError, apiBadRequest, apiNotFound } from '@/lib/api/helpers'
 import { getDbUserId } from '@/lib/api/task-helpers'
 import { isSuperAdmin } from '@/lib/permissions'
 import { getProtocolById, processTranscript } from '@/lib/services/protocols'
@@ -111,20 +111,13 @@ export const POST = withAdmin<RouteParams>(async (
       })
     }
 
-    return NextResponse.json({
-      success: true,
-      data: {
-        processed: true,
-        model: processingResult.model,
-        transcriptLength: transcribedText.length,
-      },
+    return apiSuccess({
+      processed: true,
+      model: processingResult.model,
+      transcriptLength: transcribedText.length,
     })
   } catch (error) {
     logger.error('Error processing protocol audio', { error, userId: session.user.id })
-    return NextResponse.json({
-      success: false,
-      error: 'Fehler bei der Audio-Verarbeitung',
-      retryable: true,
-    }, { status: 500 })
+    return apiError(error, 'Fehler bei der Audio-Verarbeitung')
   }
 })

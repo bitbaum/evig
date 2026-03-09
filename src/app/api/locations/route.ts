@@ -1,7 +1,7 @@
 import { NextRequest } from 'next/server'
 import { auth } from '@/auth'
 import { query } from '@/lib/auth/db'
-import { apiError, apiSuccess, apiBadRequest, apiUnauthorized } from '@/lib/api/helpers'
+import { apiError, apiSuccess, apiBadRequest, apiUnauthorized, parsePagination } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES } from '@/config/database'
 import { LOCATION_STATUS } from '@/config/location-status'
@@ -21,8 +21,7 @@ export async function GET(request: NextRequest) {
     const type = searchParams.get('type')
     const city = searchParams.get('city')
     const status = searchParams.get('status') || LOCATION_STATUS.APPROVED
-    const limit = parseInt(searchParams.get('limit') || '50')
-    const offset = parseInt(searchParams.get('offset') || '0')
+    const { limit, offset } = parsePagination(request)
 
     // Build query conditions — DB uses is_approved boolean, map status param
     const qb = new QueryParams()

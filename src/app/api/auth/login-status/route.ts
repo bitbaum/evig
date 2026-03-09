@@ -1,8 +1,8 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextRequest } from 'next/server'
 import { getUserByEmail, query } from '@/lib/auth/db'
 import { logger } from '@/lib/logger'
 import { TABLE_NAMES } from '@/config/database'
-import { apiBadRequest, apiError, apiRateLimited } from '@/lib/api/helpers'
+import { apiSuccess, apiBadRequest, apiError, apiRateLimited } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { createRateLimiter, getClientIdentifier } from '@/lib/security/rate-limit'
 
@@ -23,8 +23,7 @@ export async function POST(req: NextRequest) {
     try {
       const user = await getUserByEmail(email)
       if (!user) {
-        return NextResponse.json({
-          ok: true,
+        return apiSuccess({
           exists: false,
           reason: 'EMAIL_NOT_FOUND'
         })
@@ -47,8 +46,7 @@ export async function POST(req: NextRequest) {
         // Lockout table might not exist, ignore
       }
 
-      return NextResponse.json({
-        ok: true,
+      return apiSuccess({
         exists: true,
         emailVerified: !!user.emailVerified,
         hasPassword: !!user.password_hash,

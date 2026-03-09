@@ -5,7 +5,7 @@
  */
 
 import { NextRequest } from 'next/server';
-import { apiSuccess, apiError, apiBadRequest } from '@/lib/api/helpers';
+import { apiSuccess, apiError, apiBadRequest, parsePagination } from '@/lib/api/helpers';
 import { query } from '@/lib/auth/db';
 import { TABLE_NAMES } from '@/config/database';
 import { LISTING_STATUS } from '@/config/marketplace';
@@ -14,7 +14,7 @@ export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
     const listingId = searchParams.get('listing_id');
-    const limit = Math.min(parseInt(searchParams.get('limit') || '4'), 12);
+    const { limit } = parsePagination(request, { defaultLimit: 4, maxLimit: 12 });
 
     if (!listingId) return apiBadRequest('listing_id ist erforderlich');
 

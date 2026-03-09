@@ -8,11 +8,11 @@
  * @see ARCHITECTURE_EVALUATION.md - Phase 3: Service Layer Extraction
  */
 
-import { NextRequest, NextResponse } from 'next/server'
+import { NextRequest } from 'next/server'
 import Stripe from 'stripe'
 import { headers } from 'next/headers'
 import { requireStripeClient } from '@/lib/payments/stripe-client'
-import { apiError } from '@/lib/api/helpers'
+import { apiSuccess, apiError } from '@/lib/api/helpers'
 import { logger } from '@/lib/logger'
 import { PaymentService } from '@/lib/services'
 
@@ -69,13 +69,13 @@ export async function POST(request: NextRequest) {
 
     // Acknowledge unhandled events immediately
     if (!HANDLED_EVENTS.includes(event.type as HandledEvent)) {
-      return NextResponse.json({ received: true, handled: false }, { status: 200 })
+      return apiSuccess({ received: true, handled: false })
     }
 
     // Delegate to PaymentService for business logic
     await handleWebhookEvent(paymentService, event)
 
-    return NextResponse.json({ received: true, handled: true }, { status: 200 })
+    return apiSuccess({ received: true, handled: true })
   } catch (error) {
     logger.error('Webhook processing error', { error })
     return apiError(error, 'Webhook processing failed', 500)

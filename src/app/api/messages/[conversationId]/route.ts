@@ -1,6 +1,6 @@
 import { NextRequest } from 'next/server'
 import { query } from '@/lib/auth/db'
-import { apiError, apiSuccess, apiForbidden, apiNotFound } from '@/lib/api/helpers'
+import { apiError, apiSuccess, apiForbidden, apiNotFound, parsePagination } from '@/lib/api/helpers'
 import { withAuth, ValidSession } from '@/lib/api/middleware'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES } from '@/config/database'
@@ -52,7 +52,7 @@ export const GET = withAuth<{ conversationId: string }>(async (
     }
 
     const { searchParams } = new URL(request.url)
-    const limit = Math.min(parseInt(searchParams.get('limit') || '50'), 100)
+    const { limit } = parsePagination(request, { defaultLimit: 50, maxLimit: 100 })
     const before = searchParams.get('before') // cursor for pagination
 
     let messagesQuery = 'SELECT m.id, m.sender_id, m.recipient_id, m.content, m.message_type, ' +

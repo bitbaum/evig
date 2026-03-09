@@ -1,7 +1,7 @@
 import { NextRequest } from 'next/server'
 import { auth } from '@/auth'
 import { query, paginatedQuery } from '@/lib/auth/db'
-import { apiError, apiSuccess, apiUnauthorized, apiBadRequest } from '@/lib/api/helpers'
+import { apiError, apiSuccess, apiUnauthorized, apiBadRequest, parsePagination } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
@@ -36,8 +36,7 @@ export async function GET(request: NextRequest) {
     const skill = searchParams.get('skill')
     const search = searchParams.get('search')
     const status = searchParams.get('status') || REQUEST_STATUS.OPEN
-    const limit = Math.min(parseInt(searchParams.get('limit') || '20'), 50)
-    const offset = parseInt(searchParams.get('offset') || '0')
+    const { limit, offset } = parsePagination(request, { defaultLimit: 20, maxLimit: 50 })
 
     // Map frontend sort values to DB columns
     const sortMap: Record<string, { field: string; order: string }> = {

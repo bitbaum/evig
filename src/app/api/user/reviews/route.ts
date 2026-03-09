@@ -1,7 +1,7 @@
 import { NextRequest } from 'next/server'
 import { auth } from '@/auth'
 import { query } from '@/lib/auth/db'
-import { apiError, apiSuccess, apiUnauthorized } from '@/lib/api/helpers'
+import { apiError, apiSuccess, apiUnauthorized, parsePagination } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES } from '@/config/database'
 import { REVIEW_STATUS } from '@/config/review-status'
@@ -42,8 +42,7 @@ export async function GET(request: NextRequest) {
 
     const { searchParams } = new URL(request.url)
     const status = searchParams.get('status') || 'all'
-    const limit = parseInt(searchParams.get('limit') || '50')
-    const offset = parseInt(searchParams.get('offset') || '0')
+    const { limit, offset } = parsePagination(request)
 
     // Build where clause
     let whereClause = 'r.reviewer_id = $1::uuid'

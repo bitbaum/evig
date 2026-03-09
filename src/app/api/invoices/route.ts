@@ -1,7 +1,7 @@
 import { NextRequest } from 'next/server'
 import { withAuth } from '@/lib/api/middleware'
 import { query } from '@/lib/auth/db'
-import { apiError, apiSuccess, apiBadRequest, apiNotFound } from '@/lib/api/helpers'
+import { apiError, apiSuccess, apiBadRequest, apiNotFound, parsePagination } from '@/lib/api/helpers'
 import { logger } from '@/lib/logger'
 import { calculateTaxes, generateTaxInvoiceData } from '@/lib/payments/tax-compliance'
 import { TABLE_NAMES } from '@/config/database'
@@ -165,8 +165,7 @@ export const GET = withAuth(async (request, session) => {
     const { searchParams } = new URL(request.url)
     const status = searchParams.get('status')
     const type = searchParams.get('type')
-    const limit = parseInt(searchParams.get('limit') || '20')
-    const offset = parseInt(searchParams.get('offset') || '0')
+    const { limit, offset } = parsePagination(request, { defaultLimit: 20 })
 
     // Check if user is admin
     const isAdmin = session.user.isStaff

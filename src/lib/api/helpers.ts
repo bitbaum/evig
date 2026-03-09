@@ -27,9 +27,10 @@
  * The endpoint path already tells you what the data is.
  */
 
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { logger } from '@/lib/logger';
 import { ERROR_MESSAGES } from '@/config/error-messages';
+import { API_DEFAULTS } from '@/config/api-defaults';
 
 /**
  * Success response helper
@@ -156,4 +157,54 @@ export function apiBadRequest(
     },
     { status: 400 }
   );
+}
+
+// ============================================================================
+// Pagination Helper
+// ============================================================================
+
+export interface PaginationParams {
+  limit: number
+  offset: number
+  page: number
+}
+
+/**
+ * Parse pagination params from request URL search params.
+ * Supports both offset-based (limit/offset) and page-based (page/limit) patterns.
+ *
+ * @param request - NextRequest or URLSearchParams
+ * @param defaults - Override default limit/maxLimit per route
+ * @returns { limit, offset, page } — all safe integers, clamped to bounds
+ *
+ * Usage:
+ *   const { limit, offset } = parsePagination(request)
+ *   const { limit, offset } = parsePagination(request, { defaultLimit: 20, maxLimit: 50 })
+ */
+export function parsePagination(
+  request: NextRequest | URLSearchParams,
+  defaults?: { defaultLimit?: number; maxLimit?: number }
+): PaginationParams {
+  const searchParams = request instanceof URLSearchParams
+    ? request
+    : new URL(request.url).searchParams
+
+  const defaultLimit = defaults?.defaultLimit ?? API_DEFAULTS.PAGINATION_LIMIT
+  const maxLimit = defaults?.maxLimit ?? API_DEFAULTS.PAGINATION_MAX_LIMIT
+
+  const rawLimit = parseInt(searchParams.get('limit') || String(defaultLimit), 10)
+  const limit = Math.min(Math.max(1, isNaN(rawLimit) ? defaultLimit : rawLimit), maxLimit)
+
+  const rawOffset = parseInt(searchParams.get('offset') || '0', 10)
+  const offset = Math.max(0, isNaN(rawOffset) ? 0 : rawOffset)
+
+  const rawPage = parseInt(searchParams.get('page') || '0', 10)
+  const page = Math.max(1, isNaN(rawPage) ? 1 : rawPage)
+
+  // If page param is provided and offset is not, derive offset from page
+  const finalOffset = searchParams.has('page') && !searchParams.has('offset')
+    ? (page - 1) * limit
+    : offset
+
+  return { limit, offset: finalOffset, page }
 }

@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextRequest } from 'next/server'
 import { cookies } from 'next/headers'
 import jwt from 'jsonwebtoken'
 import { getJwtSecret } from '@/lib/auth/config'
@@ -29,10 +29,7 @@ export async function POST(request: NextRequest) {
 
     if (!response.ok) {
       const errorData = await response.json()
-      return NextResponse.json(
-        { success: false, error: errorData.error || 'Invalid credentials' },
-        { status: response.status }
-      )
+      return apiError(null, errorData.error || 'Invalid credentials', response.status)
     }
 
     const data = await response.json()

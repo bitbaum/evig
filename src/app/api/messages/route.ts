@@ -1,6 +1,6 @@
 import { NextRequest } from 'next/server'
 import { query } from '@/lib/auth/db'
-import { apiError, apiSuccess, apiBadRequest } from '@/lib/api/helpers'
+import { apiError, apiSuccess, apiBadRequest, parsePagination } from '@/lib/api/helpers'
 import { withAuth, ValidSession } from '@/lib/api/middleware'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES, CONVERSATION_TYPES } from '@/config/database'
@@ -39,8 +39,7 @@ export const GET = withAuth(async (
   try {
     const { searchParams } = new URL(request.url)
     const contextId = searchParams.get('context_id') // Optional: filter by appointment
-    const limit = Math.min(parseInt(searchParams.get('limit') || '50'), 100)
-    const offset = parseInt(searchParams.get('offset') || '0')
+    const { limit, offset } = parsePagination(request, { defaultLimit: 50, maxLimit: 100 })
 
     let whereClause = '(c.participant_1 = $1 OR c.participant_2 = $1)'
     const params: (string | number)[] = [session.user.id]

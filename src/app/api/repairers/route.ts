@@ -1,6 +1,6 @@
 import { NextRequest } from 'next/server'
 import { query, paginatedQuery } from '@/lib/auth/db'
-import { apiError, apiSuccessCached } from '@/lib/api/helpers'
+import { apiError, apiSuccessCached, parsePagination } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
@@ -61,8 +61,7 @@ export async function GET(request: NextRequest) {
     const maxDistance = parseInt(searchParams.get('distance') || '0')
     const lat = parseFloat(searchParams.get('lat') || '0')
     const lng = parseFloat(searchParams.get('lng') || '0')
-    const limit = Math.min(parseInt(searchParams.get('limit') || '50'), 100)
-    const offset = parseInt(searchParams.get('offset') || '0')
+    const { limit, offset } = parsePagination(request, { defaultLimit: 50, maxLimit: 100 })
 
     // Build WHERE conditions
     const qb = new QueryParams()

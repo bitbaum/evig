@@ -5,10 +5,10 @@
  * Returns the health status of all services
  */
 
-import { NextResponse } from 'next/server'
 import { query } from '@/lib/auth/db'
 import { MEILISEARCH_URL } from '@/config/urls'
 import { logger } from '@/lib/logger'
+import { apiSuccess } from '@/lib/api/helpers'
 
 interface ServiceStatus {
   status: 'healthy' | 'unhealthy' | 'degraded'
@@ -99,7 +99,5 @@ export async function GET() {
     services,
   }
 
-  return NextResponse.json(response, {
-    status: overallStatus === 'unhealthy' ? 503 : 200,
-  })
+  return apiSuccess(response, overallStatus === 'unhealthy' ? 503 : 200)
 }

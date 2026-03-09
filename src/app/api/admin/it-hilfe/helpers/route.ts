@@ -1,6 +1,6 @@
 import { withAdmin } from '@/lib/api/middleware'
 import { query } from '@/lib/auth/db'
-import { apiError, apiSuccess } from '@/lib/api/helpers'
+import { apiError, apiSuccess, parsePagination } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES } from '@/config/database'
 import { HELPER_STATUS } from '@/config/helper-status'
@@ -13,8 +13,7 @@ export const GET = withAdmin('it-hilfe-admin', async (request) => {
     const status = searchParams.get('status') || 'all'
     const canton = searchParams.get('canton')
     const skill = searchParams.get('skill')
-    const limit = parseInt(searchParams.get('limit') || '50')
-    const offset = parseInt(searchParams.get('offset') || '0')
+    const { limit, offset } = parsePagination(request)
 
     const conditions: string[] = []
     const params: (string | number)[] = []

@@ -5,7 +5,7 @@
 
 import { NextRequest } from 'next/server'
 import { query } from '@/lib/auth/db'
-import { apiError, apiSuccess } from '@/lib/api/helpers'
+import { apiError, apiSuccess, parsePagination } from '@/lib/api/helpers'
 import { QueryParams } from '@/lib/api/query-builder'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES } from '@/config/database'
@@ -51,8 +51,7 @@ export async function GET(request: NextRequest) {
     const acceptsGratis = searchParams.get('acceptsGratis') === 'true'
     const acceptsKulturlegi = searchParams.get('acceptsKulturlegi') === 'true'
     const serviceType = searchParams.get('serviceType')
-    const limit = Math.min(parseInt(searchParams.get('limit') || '20'), 50)
-    const offset = parseInt(searchParams.get('offset') || '0')
+    const { limit, offset } = parsePagination(request, { defaultLimit: 20, maxLimit: 50 })
 
     // Build WHERE conditions
     const qb = new QueryParams()

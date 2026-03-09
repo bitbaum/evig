@@ -1,7 +1,7 @@
 import { NextRequest } from 'next/server'
 import { withAdmin } from '@/lib/api/middleware'
 import { query } from '@/lib/auth/db'
-import { apiError, apiSuccess } from '@/lib/api/helpers'
+import { apiError, apiSuccess, parsePagination } from '@/lib/api/helpers'
 import { logger } from '@/lib/logger'
 import { TABLE_NAMES } from '@/config/database'
 import { CountRow } from '@/lib/api/db-types'
@@ -11,8 +11,7 @@ export const GET = withAdmin('finanzen', async (request: NextRequest) => {
   try {
     const { searchParams } = new URL(request.url)
     const status = searchParams.get('status')
-    const limit = parseInt(searchParams.get('limit') || '20')
-    const offset = parseInt(searchParams.get('offset') || '0')
+    const { limit, offset } = parsePagination(request, { defaultLimit: 20 })
 
     let whereClause = 'WHERE 1=1'
     const params = []

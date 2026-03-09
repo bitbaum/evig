@@ -1,6 +1,6 @@
-import { NextResponse } from 'next/server'
 import { query } from '@/lib/auth/db'
 import { getAuthSecret } from '@/lib/auth/config'
+import { apiSuccess } from '@/lib/api/helpers'
 
 type AuthHealth = {
   status: 'healthy' | 'unhealthy'
@@ -39,7 +39,5 @@ export async function GET() {
     response.checks.database = 'failed'
   }
 
-  return NextResponse.json(response, {
-    status: response.status === 'healthy' ? 200 : 503,
-  })
+  return apiSuccess(response, response.status === 'healthy' ? 200 : 503)
 }

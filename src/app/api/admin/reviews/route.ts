@@ -8,7 +8,7 @@
 import { NextRequest } from 'next/server'
 import { withAdmin } from '@/lib/api/middleware'
 import { query, paginatedQuery } from '@/lib/auth/db'
-import { apiError, apiSuccess } from '@/lib/api/helpers'
+import { apiError, apiSuccess, parsePagination } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES } from '@/config/database'
 import { REVIEW_STATUS } from '@/config/review-status'
@@ -44,8 +44,7 @@ export const GET = withAdmin('reviews', async (request, session) => {
     // Parse query params
     const { searchParams } = new URL(request.url)
     const status = searchParams.get('status') || REVIEW_STATUS.PENDING_MODERATION
-    const limit = parseInt(searchParams.get('limit') || '50')
-    const offset = parseInt(searchParams.get('offset') || '0')
+    const { limit, offset } = parsePagination(request)
 
     // Check if reviews table exists
     const tableCheck = await query<{ exists: boolean }>(`

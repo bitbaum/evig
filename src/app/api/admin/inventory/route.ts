@@ -7,7 +7,7 @@
 
 import { NextRequest } from 'next/server'
 import { withAdmin } from '@/lib/api/middleware'
-import { apiSuccess, apiError } from '@/lib/api/helpers'
+import { apiSuccess, apiError, parsePagination } from '@/lib/api/helpers'
 import { query, paginatedQuery } from '@/lib/auth/db'
 import { logger } from '@/lib/logger'
 import { TABLE_NAMES } from '@/config/database'
@@ -17,8 +17,7 @@ export const GET = withAdmin('products', async (request: NextRequest, session) =
   try {
     // Parse query params
     const { searchParams } = new URL(request.url)
-    const limit = parseInt(searchParams.get('limit') || '50')
-    const offset = parseInt(searchParams.get('offset') || '0')
+    const { limit, offset } = parsePagination(request)
     const status = searchParams.get('status') // pending_review, approved, draft
     const search = searchParams.get('search')
 

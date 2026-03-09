@@ -1,6 +1,6 @@
-import { NextRequest, NextResponse } from 'next/server'
+import type { NextRequest } from 'next/server'
 import { logger } from '@/lib/logger'
-import { apiBadRequest, apiError } from '@/lib/api/helpers'
+import { apiSuccess, apiBadRequest, apiError } from '@/lib/api/helpers'
 import { getOrgNumbers, ORG_NUMBERS_DEFAULTS, type OrgNumberCategory } from '@/lib/org-numbers'
 
 const VALID_CATEGORIES: OrgNumberCategory[] = ['impact', 'social', 'economic', 'operations']
@@ -32,16 +32,14 @@ export async function GET(request: NextRequest) {
         ? defaults.filter(n => n.category === category)
         : defaults
 
-      return NextResponse.json({
-        success: true,
-        data: filtered,
+      return apiSuccess({
+        items: filtered,
         meta: { source: 'defaults', count: filtered.length }
       })
     }
 
-    return NextResponse.json({
-      success: true,
-      data: numbers,
+    return apiSuccess({
+      items: numbers,
       meta: { source: 'database', count: numbers.length }
     })
   } catch (error) {

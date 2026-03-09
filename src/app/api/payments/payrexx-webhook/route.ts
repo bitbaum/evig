@@ -13,10 +13,11 @@
  *   refunded / partially-refunded → refund processed
  */
 
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest } from 'next/server';
 import { query } from '@/lib/auth/db';
 import { TABLE_NAMES } from '@/config/database';
 import { logger } from '@/lib/logger';
+import { apiSuccess, apiError, apiBadRequest, apiUnauthorized, apiNotFound } from '@/lib/api/helpers';
 import { sendCustomEmail } from '@/lib/email';
 import {
   orderConfirmationBuyer,
@@ -73,12 +74,12 @@ export async function POST(request: NextRequest) {
 
     if (!await verifyPayrexxSignature(rawBody, signature)) {
       logger.warn('Payrexx webhook: invalid signature', { signature });
-      return NextResponse.json({ error: 'Invalid signature' }, { status: 401 });
+      return apiUnauthorized('Invalid signature');
     }
 
     const body = (() => { try { return JSON.parse(rawBody); } catch { return null; } })();
     if (!body) {
-      return NextResponse.json({ error: 'Invalid body' }, { status: 400 });
+      return apiBadRequest('Invalid body');
     }
 
     // Payrexx webhook sends transaction data in `transaction` field
@@ -89,7 +90,7 @@ export async function POST(request: NextRequest) {
 
     if (!referenceId || !status) {
       logger.warn('Payrexx webhook: missing referenceId or status', { body });
-      return NextResponse.json({ error: 'Missing referenceId or status' }, { status: 400 });
+      return apiBadRequest('Missing referenceId or status');
     }
 
     logger.info('Payrexx webhook received', { referenceId, transactionId, status });
@@ -116,7 +117,7 @@ export async function POST(request: NextRequest) {
     const order = orderResult.rows[0];
     if (!order) {
       logger.warn('Payrexx webhook: order not found', { referenceId });
-      return NextResponse.json({ error: 'Order not found' }, { status: 404 });
+      return apiNotFound('Order');
     }
 
     // Process based on Payrexx status
@@ -128,7 +129,7 @@ export async function POST(request: NextRequest) {
             orderId: order.id,
             currentStatus: order.status,
           });
-          return NextResponse.json({ received: true });
+          return apiSuccess({ received: true });
         }
 
         await query(
@@ -157,7 +158,7 @@ export async function POST(request: NextRequest) {
             orderId: order.id,
             currentStatus: order.status,
           });
-          return NextResponse.json({ received: true });
+          return apiSuccess({ received: true });
         }
 
         await query(
@@ -173,7 +174,7 @@ export async function POST(request: NextRequest) {
       case 'declined': {
         // Payment cancelled or declined
         if (order.status === ORDER_STATUS.COMPLETED || order.status === ORDER_STATUS.CANCELLED) {
-          return NextResponse.json({ received: true });
+          return apiSuccess({ received: true });
         }
 
         await query(
@@ -217,10 +218,9 @@ export async function POST(request: NextRequest) {
         logger.info('Payrexx webhook: unhandled status', { status, orderId: order.id });
     }
 
-    return NextResponse.json({ received: true });
+    return apiSuccess({ received: true });
   } catch (error) {
-    logger.error('Payrexx webhook error', { error });
-    return NextResponse.json({ error: 'Internal error' }, { status: 500 });
+    return apiError(error, 'Internal error');
   }
 }
 

@@ -4,7 +4,7 @@
 
 import { NextRequest } from 'next/server';
 import { withAuth, ValidSession } from '@/lib/api/middleware';
-import { apiSuccess, apiError } from '@/lib/api/helpers';
+import { apiSuccess, apiError, parsePagination } from '@/lib/api/helpers';
 import { query } from '@/lib/auth/db';
 import { TABLE_NAMES } from '@/config/database';
 import { LISTING_STATUS } from '@/config/marketplace';
@@ -14,9 +14,7 @@ export const GET = withAuth(async (
   session: ValidSession
 ) => {
   try {
-    const { searchParams } = new URL(request.url);
-    const limit = Math.min(parseInt(searchParams.get('limit') || '20'), 100);
-    const offset = parseInt(searchParams.get('offset') || '0');
+    const { limit, offset } = parsePagination(request, { defaultLimit: 20, maxLimit: 100 });
 
     const countResult = await query<{ count: string }>(
       `SELECT COUNT(*) as count FROM ${TABLE_NAMES.LISTING_FAVORITES} f

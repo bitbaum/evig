@@ -12,13 +12,12 @@ import { NextRequest } from 'next/server'
 import { withAdmin } from '@/lib/api/middleware'
 import { isSuperAdmin } from '@/lib/permissions'
 import { listDocuments, deleteDocument, getIngestionStats } from '@/lib/hirn'
-import { apiSuccess, apiError, apiForbidden, apiBadRequest } from '@/lib/api/helpers'
+import { apiSuccess, apiError, apiForbidden, apiBadRequest, parsePagination } from '@/lib/api/helpers'
 
 export const GET = withAdmin('hirn', async (request: NextRequest) => {
   try {
     const { searchParams } = new URL(request.url)
-    const limit = parseInt(searchParams.get('limit') || '50')
-    const offset = parseInt(searchParams.get('offset') || '0')
+    const { limit, offset } = parsePagination(request)
     const sourceType = searchParams.get('sourceType') || undefined
     const statsOnly = searchParams.get('stats') === 'true'
 

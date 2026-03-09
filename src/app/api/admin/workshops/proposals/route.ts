@@ -1,7 +1,7 @@
 import { NextRequest } from 'next/server'
 import { withAdmin } from '@/lib/api/middleware'
 import { query } from '@/lib/auth/db'
-import { apiError, apiSuccess } from '@/lib/api/helpers'
+import { apiError, apiSuccess, parsePagination } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES } from '@/config/database'
 import { APPROVAL_STATUS } from '@/config/approval-status'
@@ -13,8 +13,7 @@ export const GET = withAdmin('workshops-admin', async (request, session) => {
     const { searchParams } = new URL(request.url)
     const status = searchParams.get('status') || APPROVAL_STATUS.PENDING
     const category = searchParams.get('category')
-    const limit = parseInt(searchParams.get('limit') || '50')
-    const offset = parseInt(searchParams.get('offset') || '0')
+    const { limit, offset } = parsePagination(request)
 
     // Build query conditions
     const conditions = []

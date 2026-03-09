@@ -10,11 +10,12 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { logger } from '@/lib/logger';
+import { apiForbidden } from '@/lib/api/helpers';
 
 export async function GET(request: NextRequest) {
   // Block in production
   if (process.env.PAYREXX_INSTANCE) {
-    return NextResponse.json({ error: 'Mock not available in production' }, { status: 403 });
+    return apiForbidden('Mock not available in production');
   }
 
   const { searchParams } = new URL(request.url);

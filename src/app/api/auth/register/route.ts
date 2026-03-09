@@ -5,12 +5,12 @@
  * Includes rate limiting to prevent abuse
  */
 
-import { NextRequest, NextResponse } from 'next/server'
+import { NextRequest } from 'next/server'
 import { registerUser } from '@/auth'
 import { apiError, apiSuccess, apiBadRequest, apiRateLimited } from '@/lib/api/helpers'
 import { logger } from '@/lib/logger'
 import { checkRateLimit, getClientIp } from '@/lib/auth/rate-limiter'
-import { RegisterSchema, formatZodErrors, ZodError } from '@/lib/schemas'
+import { RegisterSchema } from '@/lib/schemas'
 
 export async function POST(request: NextRequest) {
   try {
@@ -32,14 +32,7 @@ export async function POST(request: NextRequest) {
     // Validate input with Zod schema
     const validationResult = RegisterSchema.safeParse(body)
     if (!validationResult.success) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: 'Validierung fehlgeschlagen',
-          errors: formatZodErrors(validationResult.error),
-        },
-        { status: 400 }
-      )
+      return apiBadRequest('Validierung fehlgeschlagen', validationResult.error.flatten().fieldErrors)
     }
 
     const { email, password, name, role } = validationResult.data

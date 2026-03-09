@@ -6,22 +6,17 @@
 
 import { NextRequest } from 'next/server';
 import { withAuth, ValidSession } from '@/lib/api/middleware';
-import { apiSuccess, apiError } from '@/lib/api/helpers';
+import { apiSuccess, apiError, parsePagination } from '@/lib/api/helpers';
 import { query } from '@/lib/auth/db';
 import { TABLE_NAMES } from '@/config/database';
-import { LISTING_STATUSES, MARKETPLACE_LIMITS } from '@/config/marketplace';
+import { LISTING_STATUSES } from '@/config/marketplace';
 import { QueryParams } from '@/lib/api/query-builder';
 
 export const GET = withAuth(async (request: NextRequest, session: ValidSession) => {
   try {
     const { searchParams } = new URL(request.url);
     const status = searchParams.get('status');
-    const page = Math.max(1, parseInt(searchParams.get('page') || '1', 10));
-    const limit = Math.min(
-      MARKETPLACE_LIMITS.MAX_PAGE_SIZE,
-      Math.max(1, parseInt(searchParams.get('limit') || String(MARKETPLACE_LIMITS.DEFAULT_PAGE_SIZE), 10))
-    );
-    const offset = (page - 1) * limit;
+    const { limit, offset, page } = parsePagination(request, { defaultLimit: 20, maxLimit: 100 });
 
     const qb = new QueryParams();
     qb.add('l.seller_id = $P', session.user.id);

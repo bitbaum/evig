@@ -6,11 +6,11 @@
  * Dispatches to form-specific prompts via FORM_AI_REGISTRY.
  */
 
-import { NextRequest, NextResponse } from 'next/server'
+import { NextRequest } from 'next/server'
 import { auth } from '@/auth'
 import { z } from 'zod'
 import { logger } from '@/lib/logger'
-import { apiUnauthorized, apiBadRequest, apiForbidden, apiError } from '@/lib/api/helpers'
+import { apiSuccess, apiUnauthorized, apiBadRequest, apiForbidden, apiError } from '@/lib/api/helpers'
 import { registryExtract, type ExtractMode } from '@/lib/ai/extract'
 import { FORM_AI_REGISTRY } from '@/lib/ai/config/prompts'
 import { isStaffEmail } from '@/lib/permissions'
@@ -78,8 +78,8 @@ export async function POST(request: NextRequest) {
       ),
     ])
 
-    // Return raw extraction result (has its own format from the AI service)
-    return NextResponse.json(extractionResult)
+    // Return extraction result wrapped in standard API format
+    return apiSuccess(extractionResult)
   } catch (error) {
     return apiError(error, 'Fehler bei der KI-Extraktion')
   }

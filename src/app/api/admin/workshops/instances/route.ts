@@ -1,7 +1,7 @@
 import { NextRequest } from 'next/server'
 import { withAdmin } from '@/lib/api/middleware'
 import { query, paginatedQuery } from '@/lib/auth/db'
-import { apiError, apiSuccess, apiBadRequest } from '@/lib/api/helpers'
+import { apiError, apiSuccess, apiBadRequest, parsePagination } from '@/lib/api/helpers'
 import { logger } from '@/lib/logger'
 import { TABLE_NAMES } from '@/config/database'
 import { WORKSHOP_REGISTRATION_STATUS } from '@/config/workshop-registration-status'
@@ -39,8 +39,7 @@ export const GET = withAdmin('workshops-admin', async (request, session) => {
     const workshopId = searchParams.get('workshopId')
     const status = searchParams.get('status') || 'all'
     const upcoming = searchParams.get('upcoming') === 'true'
-    const limit = parseInt(searchParams.get('limit') || '50')
-    const offset = parseInt(searchParams.get('offset') || '0')
+    const { limit, offset } = parsePagination(request)
 
     const qb = new QueryParams()
 
