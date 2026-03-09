@@ -75,7 +75,7 @@
     "exceljs": "^4.4.0",
     "framer-motion": "^12.23.25",
     "gray-matter": "^4.0.3",
-    "ioredis": "^5.8.2",
+    "ioredis": "^5.10.0",
     "isomorphic-dompurify": "^3.0.0-rc.2",
     "jsonwebtoken": "^9.0.2",
     "leaflet": "^1.9.4",
