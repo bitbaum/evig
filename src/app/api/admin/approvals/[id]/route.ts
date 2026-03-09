@@ -4,11 +4,12 @@
  */
 
 import { NextRequest } from 'next/server'
+import { db } from '@/db'
+import { userContentSubmissions, users } from '@/db/schema'
+import { eq, sql } from 'drizzle-orm'
 import { withAdmin } from '@/lib/api/middleware'
-import { query } from '@/lib/auth/db'
 import { apiError, apiSuccess, apiBadRequest, apiNotFound } from '@/lib/api/helpers'
 import { validateBody, AdminApprovalActionSchema } from '@/lib/schemas'
-import { TABLE_NAMES } from '@/config/database'
 import { APPROVAL_STATUS } from '@/config/approval-status'
 import { logger } from '@/lib/logger'
 import { sendEmail } from '@/lib/email'
@@ -22,17 +23,19 @@ export const PATCH = withAdmin<{ id: string }>('approvals', async (request, sess
     const { action } = validation.data
 
     // Verify submission exists and is pending
-    const submissionResult = await query(
-      `SELECT id, status, title, content_type, content_id FROM ${TABLE_NAMES.USER_CONTENT_SUBMISSIONS} WHERE id = $1`,
-      [id]
-    )
+    const [submission] = await db
+      .select({
+        id: userContentSubmissions.id,
+        status: userContentSubmissions.status,
+        title: userContentSubmissions.title,
+        contentType: userContentSubmissions.contentType,
+        contentId: userContentSubmissions.contentId,
+      })
+      .from(userContentSubmissions)
+      .where(eq(userContentSubmissions.id, id))
 
-    if (submissionResult.rows.length === 0) {
+    if (!submission) {
       return apiNotFound('Einreichung nicht gefunden')
-    }
-
-    const submission = submissionResult.rows[0] as {
-      id: string; status: string; title: string; content_type: string; content_id: string | null
     }
 
     // Allow pending → approved/rejected, and rejected → pending (re-review)
@@ -42,7 +45,7 @@ export const PATCH = withAdmin<{ id: string }>('approvals', async (request, sess
     }
 
     const newStatus = action === 'approve' ? APPROVAL_STATUS.APPROVED : action === 'reopen' ? APPROVAL_STATUS.PENDING : APPROVAL_STATUS.REJECTED
-    const allowedNext = VALID_TRANSITIONS[submission.status]
+    const allowedNext = VALID_TRANSITIONS[submission.status!]
 
     if (!allowedNext || !allowedNext.includes(newStatus)) {
       return apiBadRequest(
@@ -52,30 +55,32 @@ export const PATCH = withAdmin<{ id: string }>('approvals', async (request, sess
       )
     }
 
-    await query(
-      `UPDATE ${TABLE_NAMES.USER_CONTENT_SUBMISSIONS}
-       SET status = $1, reviewed_by = $2, reviewed_at = NOW(), updated_at = NOW()
-       WHERE id = $3`,
-      [newStatus, session.user.id, id]
-    )
+    await db
+      .update(userContentSubmissions)
+      .set({
+        status: newStatus,
+        reviewedBy: session.user.id,
+        reviewedAt: sql`NOW()`,
+        updatedAt: sql`NOW()`,
+      })
+      .where(eq(userContentSubmissions.id, id))
 
     // Send notification email to submitter
     try {
-      const submitterResult = await query(
-        `SELECT u.email, u.name FROM ${TABLE_NAMES.USERS} u
-         JOIN ${TABLE_NAMES.USER_CONTENT_SUBMISSIONS} s ON s.user_id = u.id
-         WHERE s.id = $1`,
-        [id]
-      )
-      if (submitterResult.rows.length > 0) {
-        const submitter = submitterResult.rows[0] as { email: string; name: string | null }
+      const [submitter] = await db
+        .select({ email: users.email, name: users.name })
+        .from(users)
+        .innerJoin(userContentSubmissions, eq(userContentSubmissions.userId, users.id))
+        .where(eq(userContentSubmissions.id, id))
+
+      if (submitter) {
         const templateName = action === 'approve' ? 'contentSubmissionApproved' : 'contentSubmissionRejected'
         await sendEmail(
           submitter.email,
           templateName,
           submitter.name || 'Benutzer',
           submission.title,
-          submission.content_type
+          submission.contentType
         )
       }
     } catch (emailError) {

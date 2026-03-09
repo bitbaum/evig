@@ -8,10 +8,12 @@
  */
 
 import { NextRequest } from 'next/server'
+import { db } from '@/db'
+import { helpRequests, users } from '@/db/schema'
+import { eq, desc, sql } from 'drizzle-orm'
+import type { SQL } from 'drizzle-orm'
+import { alias } from 'drizzle-orm/pg-core'
 import { withAdmin } from '@/lib/api/middleware'
-import { query } from '@/lib/auth/db'
-import { TABLE_NAMES } from '@/config/database'
-import { QueryParams } from '@/lib/api/query-builder'
 import { logger } from '@/lib/logger'
 import {
   apiSuccess,
@@ -23,27 +25,8 @@ import {
   validateHelpRequestFilter,
 } from '@/lib/schemas/activity'
 
-interface HelpRequest {
-  id: string
-  requester_id: string
-  requester_name: string | null
-  requester_email: string
-  title: string
-  description: string | null
-  category: string | null
-  urgency: string
-  requested_user_id: string | null
-  requested_user_name: string | null
-  requested_user_email: string | null
-  is_broadcast: boolean
-  status: string
-  resolved_by: string | null
-  resolved_by_name: string | null
-  resolved_at: string | null
-  resolution_notes: string | null
-  created_at: string
-  updated_at: string
-}
+const targetUser = alias(users, 'target_user')
+const resolverUser = alias(users, 'resolver_user')
 
 /**
  * GET /api/admin/team/help-requests
@@ -69,83 +52,65 @@ export const GET = withAdmin('team', async (request, session) => {
     }
 
     const filters = filterResult.data
-    const qb = new QueryParams()
+    const conditions: SQL[] = []
 
-    if (filters.status) {
-      qb.add('hr.status = $P', filters.status)
-    }
+    if (filters.status) conditions.push(eq(helpRequests.status, filters.status))
+    if (filters.urgency) conditions.push(eq(helpRequests.urgency, filters.urgency))
+    if (filters.category) conditions.push(eq(helpRequests.category, filters.category))
+    if (filters.requester_id) conditions.push(eq(helpRequests.requesterId, filters.requester_id))
+    if (filters.requested_user_id) conditions.push(eq(helpRequests.requestedUserId, filters.requested_user_id))
+    if (filters.is_broadcast !== undefined) conditions.push(eq(helpRequests.isBroadcast, filters.is_broadcast))
 
-    if (filters.urgency) {
-      qb.add('hr.urgency = $P', filters.urgency)
-    }
+    const where = conditions.length > 0 ? sql`${sql.join(conditions, sql` AND `)}` : undefined
 
-    if (filters.category) {
-      qb.add('hr.category = $P', filters.category)
-    }
-
-    if (filters.requester_id) {
-      qb.add('hr.requester_id = $P', filters.requester_id)
-    }
-
-    if (filters.requested_user_id) {
-      qb.add('hr.requested_user_id = $P', filters.requested_user_id)
-    }
-
-    if (filters.is_broadcast !== undefined) {
-      qb.add('hr.is_broadcast = $P', filters.is_broadcast)
-    }
-
-    const { where: whereClause, params, nextIndex } = qb.build()
-
-    const result = await query<HelpRequest>(
-      `SELECT
-        hr.id,
-        hr.requester_id,
-        req_u.name as requester_name,
-        req_u.email as requester_email,
-        hr.title,
-        hr.description,
-        hr.category,
-        hr.urgency,
-        hr.requested_user_id,
-        target_u.name as requested_user_name,
-        target_u.email as requested_user_email,
-        hr.is_broadcast,
-        hr.status,
-        hr.resolved_by,
-        resolver_u.name as resolved_by_name,
-        hr.resolved_at,
-        hr.resolution_notes,
-        hr.created_at,
-        hr.updated_at
-       FROM ${TABLE_NAMES.HELP_REQUESTS} hr
-       JOIN ${TABLE_NAMES.USERS} req_u ON hr.requester_id = req_u.id
-       LEFT JOIN ${TABLE_NAMES.USERS} target_u ON hr.requested_user_id = target_u.id
-       LEFT JOIN ${TABLE_NAMES.USERS} resolver_u ON hr.resolved_by = resolver_u.id
-       ${whereClause}
-       ORDER BY
-         CASE hr.urgency
-           WHEN 'urgent' THEN 1
-           WHEN 'high' THEN 2
-           WHEN 'normal' THEN 3
-           WHEN 'low' THEN 4
-         END,
-         hr.created_at DESC
-       LIMIT $${nextIndex} OFFSET $${nextIndex + 1}`,
-      [...params, filters.limit, filters.offset]
-    )
+    const rows = await db
+      .select({
+        id: helpRequests.id,
+        requester_id: helpRequests.requesterId,
+        requester_name: users.name,
+        requester_email: users.email,
+        title: helpRequests.title,
+        description: helpRequests.description,
+        category: helpRequests.category,
+        urgency: helpRequests.urgency,
+        requested_user_id: helpRequests.requestedUserId,
+        requested_user_name: targetUser.name,
+        requested_user_email: targetUser.email,
+        is_broadcast: helpRequests.isBroadcast,
+        status: helpRequests.status,
+        resolved_by: helpRequests.resolvedBy,
+        resolved_by_name: resolverUser.name,
+        resolved_at: helpRequests.resolvedAt,
+        resolution_notes: helpRequests.resolutionNotes,
+        created_at: helpRequests.createdAt,
+        updated_at: helpRequests.updatedAt,
+      })
+      .from(helpRequests)
+      .innerJoin(users, eq(helpRequests.requesterId, users.id))
+      .leftJoin(targetUser, eq(helpRequests.requestedUserId, targetUser.id))
+      .leftJoin(resolverUser, eq(helpRequests.resolvedBy, resolverUser.id))
+      .where(where)
+      .orderBy(
+        sql`CASE ${helpRequests.urgency}
+          WHEN 'urgent' THEN 1
+          WHEN 'high' THEN 2
+          WHEN 'normal' THEN 3
+          WHEN 'low' THEN 4
+        END`,
+        desc(helpRequests.createdAt),
+      )
+      .limit(filters.limit)
+      .offset(filters.offset)
 
     // Get total count for pagination
-    const countResult = await query<{ count: string }>(
-      `SELECT COUNT(*) as count
-       FROM ${TABLE_NAMES.HELP_REQUESTS} hr
-       ${whereClause}`,
-      params
-    )
+    const [countRow] = await db
+      .select({ count: sql<number>`count(*)` })
+      .from(helpRequests)
+      .where(where)
 
     return apiSuccess({
-      items: result.rows,
-      total: parseInt(countResult.rows[0]?.count || '0', 10),
+      items: rows,
+      total: Number(countRow?.count ?? 0),
       limit: filters.limit,
       offset: filters.offset,
     })
@@ -173,60 +138,50 @@ export const POST = withAdmin('team', async (request, session) => {
 
     const data = validation.data
 
-    // Look up requester user ID from session email (lowercase to match auth system)
-    const requesterResult = await query<{ id: string }>(
-      `SELECT id FROM ${TABLE_NAMES.USERS} WHERE email = $1`,
-      [session.user.email.toLowerCase()]
-    )
+    // Look up requester user ID from session email
+    const [requester] = await db
+      .select({ id: users.id })
+      .from(users)
+      .where(eq(users.email, session.user.email.toLowerCase()))
 
-    if (requesterResult.rows.length === 0) {
+    if (!requester) {
       return apiBadRequest('Benutzer nicht gefunden')
     }
 
-    const requesterId = requesterResult.rows[0].id
-
     // If targeted request, verify target user exists
     if (data.requested_user_id) {
-      const targetResult = await query<{ id: string }>(
-        `SELECT id FROM ${TABLE_NAMES.USERS} WHERE id = $1`,
-        [data.requested_user_id]
-      )
+      const [target] = await db
+        .select({ id: users.id })
+        .from(users)
+        .where(eq(users.id, data.requested_user_id))
 
-      if (targetResult.rows.length === 0) {
+      if (!target) {
         return apiBadRequest('Zielbenutzer nicht gefunden')
       }
     }
 
     // Insert help request
-    const result = await query<{ id: string }>(
-      `INSERT INTO ${TABLE_NAMES.HELP_REQUESTS} (
-        requester_id,
-        title,
-        description,
-        category,
-        urgency,
-        requested_user_id
-      ) VALUES ($1, $2, $3, $4, $5, $6)
-      RETURNING id`,
-      [
-        requesterId,
-        data.title,
-        data.description || null,
-        data.category || null,
-        data.urgency,
-        data.requested_user_id || null,
-      ]
-    )
+    const [created] = await db
+      .insert(helpRequests)
+      .values({
+        requesterId: requester.id,
+        title: data.title,
+        description: data.description || null,
+        category: data.category || null,
+        urgency: data.urgency,
+        requestedUserId: data.requested_user_id || null,
+      })
+      .returning({ id: helpRequests.id })
 
     logger.info('Help request created', {
-      requestId: result.rows[0].id,
-      requesterId,
+      requestId: created.id,
+      requesterId: requester.id,
       urgency: data.urgency,
       isBroadcast: !data.requested_user_id,
       title: data.title.substring(0, 50),
     })
 
-    return apiSuccess({ id: result.rows[0].id }, 201)
+    return apiSuccess({ id: created.id }, 201)
   } catch (error) {
     return apiError(error, 'Hilfsanfrage konnte nicht erstellt werden')
   }

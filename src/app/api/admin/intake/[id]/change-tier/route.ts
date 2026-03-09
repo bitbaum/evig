@@ -5,11 +5,12 @@
  * Resets all checklist progress and records a timeline event.
  */
 
+import { db } from '@/db'
+import { inventoryItems, aiExtractedProducts } from '@/db/schema'
+import { eq, and, isNotNull, sql } from 'drizzle-orm'
 import { withAdmin } from '@/lib/api/middleware'
-import { query } from '@/lib/auth/db'
 import { apiError, apiSuccess, apiNotFound, apiBadRequest } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
-import { TABLE_NAMES } from '@/config/database'
 import { INTAKE_STATUS } from '@/config/intake-status'
 import { logger } from '@/lib/logger'
 import { z } from 'zod'
@@ -23,13 +24,6 @@ const TierChangeSchema = z.object({
   reason: z.string().min(1, 'Begründung erforderlich'),
 })
 
-interface TierRow {
-  id: string
-  intake_tier: string
-  marketplace_status: string
-  category: string | null
-}
-
 export const POST = withAdmin<{ id: string }>('intake', async (request, session, context) => {
   try {
     const id = context?.params?.id
@@ -41,22 +35,24 @@ export const POST = withAdmin<{ id: string }>('intake', async (request, session,
     const { new_tier, reason } = validation.data
 
     // Get current state
-    const existing = await query<TierRow>(
-      `SELECT ii.id, ii.intake_tier, ii.marketplace_status, ap.category
-       FROM ${TABLE_NAMES.INVENTORY_ITEMS} ii
-       JOIN ${TABLE_NAMES.AI_EXTRACTED_PRODUCTS} ap ON ii.ai_product_id = ap.id
-       WHERE ii.id = $1 AND ii.intake_tier IS NOT NULL`,
-      [id]
-    )
+    const [row] = await db
+      .select({
+        id: inventoryItems.id,
+        intakeTier: inventoryItems.intakeTier,
+        marketplaceStatus: inventoryItems.marketplaceStatus,
+        category: aiExtractedProducts.category,
+      })
+      .from(inventoryItems)
+      .innerJoin(aiExtractedProducts, eq(inventoryItems.aiProductId, aiExtractedProducts.id))
+      .where(and(eq(inventoryItems.id, id), isNotNull(inventoryItems.intakeTier)))
 
-    if (existing.rows.length === 0) {
+    if (!row) {
       return apiNotFound(ERROR_MESSAGES.INTAKE_ITEM_NOT_FOUND)
     }
 
-    const row = existing.rows[0]
-    const oldTier = row.intake_tier as IntakeTier
+    const oldTier = row.intakeTier as IntakeTier
 
-    if (row.marketplace_status === INTAKE_STATUS.PUBLISHED) {
+    if (row.marketplaceStatus === INTAKE_STATUS.PUBLISHED) {
       return apiBadRequest('Stufe kann nicht geändert werden — Gerät ist bereits publiziert')
     }
 
@@ -77,12 +73,15 @@ export const POST = withAdmin<{ id: string }>('intake', async (request, session,
     }
 
     // Update tier + reset checklist
-    await query(
-      `UPDATE ${TABLE_NAMES.INVENTORY_ITEMS}
-       SET intake_tier = $1, intake_checklist = $2, checklist_complete = false, updated_at = NOW()
-       WHERE id = $3`,
-      [new_tier, JSON.stringify(newChecklist), id]
-    )
+    await db
+      .update(inventoryItems)
+      .set({
+        intakeTier: new_tier,
+        intakeChecklist: newChecklist,
+        checklistComplete: false,
+        updatedAt: sql`NOW()`,
+      })
+      .where(eq(inventoryItems.id, id))
 
     // Record timeline event
     await appendIntakeEvent(id, {

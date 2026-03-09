@@ -4,11 +4,12 @@
  * PATCH /api/admin/intake/[id]/checklist — Toggle a checklist item
  */
 
+import { db } from '@/db'
+import { inventoryItems, aiExtractedProducts } from '@/db/schema'
+import { eq, and, isNotNull, sql } from 'drizzle-orm'
 import { withAdmin } from '@/lib/api/middleware'
-import { query } from '@/lib/auth/db'
 import { apiError, apiSuccess, apiNotFound, apiBadRequest } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
-import { TABLE_NAMES } from '@/config/database'
 import { validateBody } from '@/lib/schemas'
 import { ChecklistUpdateSchema } from '@/lib/schemas/intake'
 import {
@@ -19,13 +20,6 @@ import {
 import type { ChecklistState, IntakeTier } from '@/config/intake-checklist'
 import { logger } from '@/lib/logger'
 import { appendIntakeEvent } from '@/lib/intake/timeline'
-
-interface InventoryRow {
-  id: string
-  intake_tier: string
-  intake_checklist: ChecklistState
-  category: string | null
-}
 
 export const PATCH = withAdmin<{ id: string }>('intake', async (request, session, context) => {
   try {
@@ -38,21 +32,23 @@ export const PATCH = withAdmin<{ id: string }>('intake', async (request, session
     const { item_id, completed, notes } = validation.data
 
     // Get current state
-    const existing = await query<InventoryRow>(
-      `SELECT ii.id, ii.intake_tier, ii.intake_checklist, ap.category
-       FROM ${TABLE_NAMES.INVENTORY_ITEMS} ii
-       JOIN ${TABLE_NAMES.AI_EXTRACTED_PRODUCTS} ap ON ii.ai_product_id = ap.id
-       WHERE ii.id = $1 AND ii.intake_tier IS NOT NULL`,
-      [id]
-    )
+    const [row] = await db
+      .select({
+        id: inventoryItems.id,
+        intakeTier: inventoryItems.intakeTier,
+        intakeChecklist: inventoryItems.intakeChecklist,
+        category: aiExtractedProducts.category,
+      })
+      .from(inventoryItems)
+      .innerJoin(aiExtractedProducts, eq(inventoryItems.aiProductId, aiExtractedProducts.id))
+      .where(and(eq(inventoryItems.id, id), isNotNull(inventoryItems.intakeTier)))
 
-    if (existing.rows.length === 0) {
+    if (!row) {
       return apiNotFound(ERROR_MESSAGES.INTAKE_ITEM_NOT_FOUND)
     }
 
-    const row = existing.rows[0]
-    const tier = row.intake_tier as IntakeTier
-    const checklist = (row.intake_checklist || {}) as ChecklistState
+    const tier = row.intakeTier as IntakeTier
+    const checklist = (row.intakeChecklist || {}) as ChecklistState
 
     // Validate that item_id is a valid checklist item for this device
     const applicableItems = getChecklistForDevice(tier, row.category)
@@ -74,12 +70,14 @@ export const PATCH = withAdmin<{ id: string }>('intake', async (request, session
     const progress = getChecklistProgress(checklist, tier, row.category)
 
     // Persist
-    await query(
-      `UPDATE ${TABLE_NAMES.INVENTORY_ITEMS}
-       SET intake_checklist = $1, checklist_complete = $2, updated_at = NOW()
-       WHERE id = $3`,
-      [JSON.stringify(checklist), complete, id]
-    )
+    await db
+      .update(inventoryItems)
+      .set({
+        intakeChecklist: checklist,
+        checklistComplete: complete,
+        updatedAt: sql`NOW()`,
+      })
+      .where(eq(inventoryItems.id, id))
 
     // Record timeline event
     await appendIntakeEvent(id, {

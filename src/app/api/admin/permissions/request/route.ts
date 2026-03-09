@@ -6,9 +6,10 @@
  */
 
 import { NextRequest } from 'next/server'
+import { db } from '@/db'
+import { staffPermissionRequests } from '@/db/schema'
+import { eq, and, sql } from 'drizzle-orm'
 import { withAdmin } from '@/lib/api/middleware'
-import { query } from '@/lib/auth/db'
-import { TABLE_NAMES } from '@/config/database'
 import { PERMISSION_REQUEST_STATUS } from '@/config/permission-request-status'
 import { ADMIN_SECTIONS, type AdminSection } from '@/lib/permissions'
 import { apiSuccess, apiError, apiBadRequest } from '@/lib/api/helpers'
@@ -36,28 +37,31 @@ export const POST = withAdmin(async (request, session) => {
     }
 
     // Check if user already has a pending request for any of these sections
-    const existingResult = await query<{ id: string }>(
-      `SELECT id FROM ${TABLE_NAMES.STAFF_PERMISSION_REQUESTS}
-       WHERE user_id = $1
-       AND status = '${PERMISSION_REQUEST_STATUS.PENDING}'
-       AND requested_sections && $2`,
-      [session.user.id, sections]
-    )
+    const [existing] = await db
+      .select({ id: staffPermissionRequests.id })
+      .from(staffPermissionRequests)
+      .where(and(
+        eq(staffPermissionRequests.userId, session.user.id),
+        eq(staffPermissionRequests.status, PERMISSION_REQUEST_STATUS.PENDING),
+        sql`${staffPermissionRequests.requestedSections} && ${sections}`,
+      ))
 
-    if (existingResult.rows.length > 0) {
+    if (existing) {
       return apiBadRequest('Sie haben bereits eine ausstehende Anfrage für einen oder mehrere dieser Bereiche')
     }
 
     // Create the permission request
-    const result = await query<{ id: string }>(
-      `INSERT INTO ${TABLE_NAMES.STAFF_PERMISSION_REQUESTS} (user_id, requested_sections, reason)
-       VALUES ($1, $2, $3)
-       RETURNING id`,
-      [session.user.id, sections, reason.trim()]
-    )
+    const [created] = await db
+      .insert(staffPermissionRequests)
+      .values({
+        userId: session.user.id,
+        requestedSections: sections,
+        reason: reason.trim(),
+      })
+      .returning({ id: staffPermissionRequests.id })
 
     return apiSuccess({
-      requestId: result.rows[0].id,
+      requestId: created.id,
       message: 'Berechtigungsanfrage eingereicht. Ein Super-Admin wird sie prüfen.',
     })
   } catch (error) {

@@ -8,9 +8,11 @@
  */
 
 import { NextRequest } from 'next/server'
+import { db } from '@/db'
+import { helpRequests, users } from '@/db/schema'
+import { eq, sql } from 'drizzle-orm'
+import { alias } from 'drizzle-orm/pg-core'
 import { withAdmin } from '@/lib/api/middleware'
-import { query } from '@/lib/auth/db'
-import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
 import {
   apiSuccess,
@@ -20,27 +22,8 @@ import {
 } from '@/lib/api/helpers'
 import { validateUpdateHelpRequest } from '@/lib/schemas/activity'
 
-interface HelpRequest {
-  id: string
-  requester_id: string
-  requester_name: string | null
-  requester_email: string
-  title: string
-  description: string | null
-  category: string | null
-  urgency: string
-  requested_user_id: string | null
-  requested_user_name: string | null
-  requested_user_email: string | null
-  is_broadcast: boolean
-  status: string
-  resolved_by: string | null
-  resolved_by_name: string | null
-  resolved_at: string | null
-  resolution_notes: string | null
-  created_at: string
-  updated_at: string
-}
+const targetUser = alias(users, 'target_user')
+const resolverUser = alias(users, 'resolver_user')
 
 /**
  * GET /api/admin/team/help-requests/[id]
@@ -50,40 +33,39 @@ export const GET = withAdmin<{ id: string }>('team', async (request, session, co
   try {
     const { id } = context!.params!
 
-    const result = await query<HelpRequest>(
-      `SELECT
-        hr.id,
-        hr.requester_id,
-        req_u.name as requester_name,
-        req_u.email as requester_email,
-        hr.title,
-        hr.description,
-        hr.category,
-        hr.urgency,
-        hr.requested_user_id,
-        target_u.name as requested_user_name,
-        target_u.email as requested_user_email,
-        hr.is_broadcast,
-        hr.status,
-        hr.resolved_by,
-        resolver_u.name as resolved_by_name,
-        hr.resolved_at,
-        hr.resolution_notes,
-        hr.created_at,
-        hr.updated_at
-       FROM ${TABLE_NAMES.HELP_REQUESTS} hr
-       JOIN ${TABLE_NAMES.USERS} req_u ON hr.requester_id = req_u.id
-       LEFT JOIN ${TABLE_NAMES.USERS} target_u ON hr.requested_user_id = target_u.id
-       LEFT JOIN ${TABLE_NAMES.USERS} resolver_u ON hr.resolved_by = resolver_u.id
-       WHERE hr.id = $1`,
-      [id]
-    )
+    const [row] = await db
+      .select({
+        id: helpRequests.id,
+        requester_id: helpRequests.requesterId,
+        requester_name: users.name,
+        requester_email: users.email,
+        title: helpRequests.title,
+        description: helpRequests.description,
+        category: helpRequests.category,
+        urgency: helpRequests.urgency,
+        requested_user_id: helpRequests.requestedUserId,
+        requested_user_name: targetUser.name,
+        requested_user_email: targetUser.email,
+        is_broadcast: helpRequests.isBroadcast,
+        status: helpRequests.status,
+        resolved_by: helpRequests.resolvedBy,
+        resolved_by_name: resolverUser.name,
+        resolved_at: helpRequests.resolvedAt,
+        resolution_notes: helpRequests.resolutionNotes,
+        created_at: helpRequests.createdAt,
+        updated_at: helpRequests.updatedAt,
+      })
+      .from(helpRequests)
+      .innerJoin(users, eq(helpRequests.requesterId, users.id))
+      .leftJoin(targetUser, eq(helpRequests.requestedUserId, targetUser.id))
+      .leftJoin(resolverUser, eq(helpRequests.resolvedBy, resolverUser.id))
+      .where(eq(helpRequests.id, id))
 
-    if (result.rows.length === 0) {
+    if (!row) {
       return apiNotFound('Hilfsanfrage')
     }
 
-    return apiSuccess(result.rows[0])
+    return apiSuccess(row)
   } catch (error) {
     return apiError(error, 'Hilfsanfrage konnte nicht geladen werden')
   }
@@ -109,46 +91,35 @@ export const PUT = withAdmin<{ id: string }>('team', async (request, session, co
 
     const data = validation.data
 
-    // Get existing request to check existence
-    const existing = await query<{ id: string; requester_id: string; requester_email: string }>(
-      `SELECT hr.id, hr.requester_id, u.email as requester_email
-       FROM ${TABLE_NAMES.HELP_REQUESTS} hr
-       JOIN ${TABLE_NAMES.USERS} u ON hr.requester_id = u.id
-       WHERE hr.id = $1`,
-      [id]
-    )
+    // Check existence
+    const [existing] = await db
+      .select({ id: helpRequests.id })
+      .from(helpRequests)
+      .where(eq(helpRequests.id, id))
 
-    if (existing.rows.length === 0) {
+    if (!existing) {
       return apiNotFound('Hilfsanfrage')
     }
 
-    // Build dynamic update query
-    const updates: string[] = []
-    const values: (string | null)[] = []
-    let paramIndex = 1
+    // Build dynamic update
+    const update: Record<string, unknown> = {}
 
-    const allowedFields = ['title', 'description', 'category', 'urgency', 'status']
+    if (data.title !== undefined) update.title = data.title
+    if (data.description !== undefined) update.description = data.description
+    if (data.category !== undefined) update.category = data.category
+    if (data.urgency !== undefined) update.urgency = data.urgency
+    if (data.status !== undefined) update.status = data.status
 
-    for (const field of allowedFields) {
-      if (data[field as keyof typeof data] !== undefined) {
-        updates.push(`${field} = $${paramIndex}`)
-        values.push(data[field as keyof typeof data] as string | null)
-        paramIndex++
-      }
-    }
-
-    if (updates.length === 0) {
+    if (Object.keys(update).length === 0) {
       return apiBadRequest('Keine Felder zum Aktualisieren')
     }
 
-    values.push(id)
+    update.updatedAt = sql`NOW()`
 
-    await query(
-      `UPDATE ${TABLE_NAMES.HELP_REQUESTS}
-       SET ${updates.join(', ')}, updated_at = NOW()
-       WHERE id = $${paramIndex}`,
-      values
-    )
+    await db
+      .update(helpRequests)
+      .set(update)
+      .where(eq(helpRequests.id, id))
 
     logger.info('Help request updated', {
       requestId: id,

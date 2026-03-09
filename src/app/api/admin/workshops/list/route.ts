@@ -1,21 +1,10 @@
 import { NextRequest } from 'next/server'
+import { db } from '@/db'
+import { workshops, workshopInstances } from '@/db/schema'
+import { eq, asc, sql } from 'drizzle-orm'
 import { withAdmin } from '@/lib/api/middleware'
-import { query } from '@/lib/auth/db'
 import { apiError, apiSuccess } from '@/lib/api/helpers'
 import { logger } from '@/lib/logger'
-import { TABLE_NAMES } from '@/config/database'
-
-interface WorkshopRow {
-  id: string
-  title: string
-  slug: string
-  category: string
-  level: string
-  max_participants: number
-  price_cents: number
-  is_active: boolean
-  instance_count: string
-}
 
 // GET /api/admin/workshops/list - List all workshops for admin selection
 export const GET = withAdmin('workshops-admin', async (request, session) => {
@@ -23,21 +12,28 @@ export const GET = withAdmin('workshops-admin', async (request, session) => {
     const searchParams = request.nextUrl.searchParams
     const activeOnly = searchParams.get('activeOnly') !== 'false'
 
-    const workshopsResult = await query(`
-      SELECT
-        w.*,
-        COUNT(wi.id) as instance_count
-      FROM ${TABLE_NAMES.WORKSHOPS} w
-      LEFT JOIN ${TABLE_NAMES.WORKSHOP_INSTANCES} wi ON w.id = wi.workshop_id
-      ${activeOnly ? 'WHERE w.is_active = true' : ''}
-      GROUP BY w.id
-      ORDER BY w.title ASC
-    `, [])
+    const rows = await db
+      .select({
+        id: workshops.id,
+        title: workshops.title,
+        slug: workshops.slug,
+        category: workshops.category,
+        level: workshops.level,
+        maxParticipants: workshops.maxParticipants,
+        priceCents: workshops.priceCents,
+        isActive: workshops.isActive,
+        instanceCount: sql<number>`count(${workshopInstances.id})`,
+      })
+      .from(workshops)
+      .leftJoin(workshopInstances, eq(workshops.id, workshopInstances.workshopId))
+      .where(activeOnly ? eq(workshops.isActive, true) : undefined)
+      .groupBy(workshops.id)
+      .orderBy(asc(workshops.title))
 
     return apiSuccess({
-      workshops: (workshopsResult.rows as WorkshopRow[]).map(w => ({
+      workshops: rows.map(w => ({
         ...w,
-        instance_count: parseInt(w.instance_count) || 0
+        instance_count: Number(w.instanceCount) || 0,
       }))
     })
 

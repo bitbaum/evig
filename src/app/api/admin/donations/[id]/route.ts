@@ -1,53 +1,15 @@
 import { NextRequest } from 'next/server'
+import { db } from '@/db'
+import { donations, users } from '@/db/schema'
+import { eq, sql } from 'drizzle-orm'
+import { alias } from 'drizzle-orm/pg-core'
 import { withAdmin } from '@/lib/api/middleware'
-import { query } from '@/lib/auth/db'
 import { apiError, apiSuccess, apiBadRequest, apiNotFound } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
-import { TABLE_NAMES } from '@/config/database'
 import { UpdateDonationSchema } from '@/lib/schemas/donations'
 import { logger } from '@/lib/logger'
 
-interface DonationRow {
-  id: string
-  user_id: string | null
-  donation_type: string
-  // Monetary
-  amount_cents: number | null
-  currency: string
-  payment_method: string | null
-  payment_reference: string | null
-  payment_date: Date | null
-  is_recurring: boolean
-  recurring_frequency: string | null
-  // Device
-  device_category: string | null
-  device_description: string | null
-  device_brand: string | null
-  device_model: string | null
-  device_condition: string | null
-  device_age_years: number | null
-  estimated_value_cents: number | null
-  // Anonymous donor
-  donor_name: string | null
-  donor_email: string | null
-  donor_address: string | null
-  // Status
-  status: string
-  recorded_by: string | null
-  receipt_requested: boolean
-  receipt_sent: boolean
-  receipt_sent_at: Date | null
-  thank_you_sent: boolean
-  thank_you_sent_at: Date | null
-  notes: string | null
-  // Timestamps
-  created_at: Date
-  updated_at: Date
-  // Joined fields
-  user_name: string | null
-  user_email: string | null
-  recorded_by_name: string | null
-}
+const recorder = alias(users, 'recorder')
 
 /**
  * GET /api/admin/donations/[id]
@@ -57,64 +19,52 @@ export const GET = withAdmin<{ id: string }>('donations', async (request, sessio
   try {
     const { id } = context!.params!
 
-    const result = await query<DonationRow>(`
-      SELECT
-        d.*,
-        u.name as user_name,
-        u.email as user_email,
-        recorder.name as recorded_by_name
-      FROM ${TABLE_NAMES.DONATIONS} d
-      LEFT JOIN ${TABLE_NAMES.USERS} u ON d.user_id = u.id
-      LEFT JOIN ${TABLE_NAMES.USERS} recorder ON d.recorded_by = recorder.id
-      WHERE d.id = $1
-    `, [id])
+    const [d] = await db
+      .select({
+        id: donations.id,
+        user_id: donations.userId,
+        user_name: users.name,
+        user_email: users.email,
+        donation_type: donations.donationType,
+        amount_cents: donations.amountCents,
+        currency: donations.currency,
+        payment_method: donations.paymentMethod,
+        payment_reference: donations.paymentReference,
+        payment_date: donations.paymentDate,
+        is_recurring: donations.isRecurring,
+        recurring_frequency: donations.recurringFrequency,
+        device_category: donations.deviceCategory,
+        device_description: donations.deviceDescription,
+        device_brand: donations.deviceBrand,
+        device_model: donations.deviceModel,
+        device_condition: donations.deviceCondition,
+        device_age_years: donations.deviceAgeYears,
+        estimated_value_cents: donations.estimatedValueCents,
+        donor_name: donations.donorName,
+        donor_email: donations.donorEmail,
+        donor_address: donations.donorAddress,
+        status: donations.status,
+        recorded_by: donations.recordedBy,
+        recorded_by_name: recorder.name,
+        receipt_requested: donations.receiptRequested,
+        receipt_sent: donations.receiptSent,
+        receipt_sent_at: donations.receiptSentAt,
+        thank_you_sent: donations.thankYouSent,
+        thank_you_sent_at: donations.thankYouSentAt,
+        notes: donations.notes,
+        created_at: donations.createdAt,
+        updated_at: donations.updatedAt,
+      })
+      .from(donations)
+      .leftJoin(users, eq(donations.userId, users.id))
+      .leftJoin(recorder, eq(donations.recordedBy, recorder.id))
+      .where(eq(donations.id, id))
 
-    if (result.rows.length === 0) {
+    if (!d) {
       return apiNotFound('Spende')
     }
 
-    const d = result.rows[0]
-
-    return apiSuccess({
-      id: d.id,
-      user_id: d.user_id,
-      user_name: d.user_name,
-      user_email: d.user_email,
-      donation_type: d.donation_type,
-      // Monetary
-      amount_cents: d.amount_cents,
-      currency: d.currency,
-      payment_method: d.payment_method,
-      payment_reference: d.payment_reference,
-      payment_date: d.payment_date?.toISOString(),
-      is_recurring: d.is_recurring,
-      recurring_frequency: d.recurring_frequency,
-      // Device
-      device_category: d.device_category,
-      device_description: d.device_description,
-      device_brand: d.device_brand,
-      device_model: d.device_model,
-      device_condition: d.device_condition,
-      device_age_years: d.device_age_years,
-      estimated_value_cents: d.estimated_value_cents,
-      // Anonymous
-      donor_name: d.donor_name,
-      donor_email: d.donor_email,
-      donor_address: d.donor_address,
-      // Status
-      status: d.status,
-      recorded_by: d.recorded_by,
-      recorded_by_name: d.recorded_by_name,
-      receipt_requested: d.receipt_requested,
-      receipt_sent: d.receipt_sent,
-      receipt_sent_at: d.receipt_sent_at?.toISOString(),
-      thank_you_sent: d.thank_you_sent,
-      thank_you_sent_at: d.thank_you_sent_at?.toISOString(),
-      notes: d.notes,
-      // Timestamps
-      created_at: d.created_at.toISOString(),
-      updated_at: d.updated_at.toISOString(),
-    })
+    return apiSuccess(d)
 
   } catch (error) {
     logger.error('Failed to fetch donation', { error })
@@ -137,66 +87,41 @@ export const PATCH = withAdmin<{ id: string }>('donations', async (request, sess
     }
 
     // Check donation exists
-    const existing = await query<{ id: string }>(`
-      SELECT id FROM ${TABLE_NAMES.DONATIONS} WHERE id = $1
-    `, [id])
+    const [existing] = await db
+      .select({ id: donations.id })
+      .from(donations)
+      .where(eq(donations.id, id))
 
-    if (existing.rows.length === 0) {
+    if (!existing) {
       return apiNotFound('Spende')
     }
 
     const data = parsed.data
-    const updates: string[] = []
-    const values: (string | number | boolean | null)[] = []
-    let paramIndex = 1
+    const update: Record<string, unknown> = {}
 
-    if (data.status !== undefined) {
-      updates.push(`status = $${paramIndex++}`)
-      values.push(data.status)
-    }
+    if (data.status !== undefined) update.status = data.status
+    if (data.notes !== undefined) update.notes = data.notes
+    if (data.estimated_value_cents !== undefined) update.estimatedValueCents = data.estimated_value_cents
+    if (data.user_id !== undefined) update.userId = data.user_id
 
     if (data.thank_you_sent !== undefined) {
-      updates.push(`thank_you_sent = $${paramIndex++}`)
-      values.push(data.thank_you_sent)
-      if (data.thank_you_sent) {
-        updates.push(`thank_you_sent_at = NOW()`)
-      }
+      update.thankYouSent = data.thank_you_sent
+      if (data.thank_you_sent) update.thankYouSentAt = sql`NOW()`
     }
 
     if (data.receipt_sent !== undefined) {
-      updates.push(`receipt_sent = $${paramIndex++}`)
-      values.push(data.receipt_sent)
-      if (data.receipt_sent) {
-        updates.push(`receipt_sent_at = NOW()`)
-      }
+      update.receiptSent = data.receipt_sent
+      if (data.receipt_sent) update.receiptSentAt = sql`NOW()`
     }
 
-    if (data.notes !== undefined) {
-      updates.push(`notes = $${paramIndex++}`)
-      values.push(data.notes)
-    }
-
-    if (data.estimated_value_cents !== undefined) {
-      updates.push(`estimated_value_cents = $${paramIndex++}`)
-      values.push(data.estimated_value_cents)
-    }
-
-    if (data.user_id !== undefined) {
-      updates.push(`user_id = $${paramIndex++}`)
-      values.push(data.user_id)
-    }
-
-    if (updates.length === 0) {
+    if (Object.keys(update).length === 0) {
       return apiBadRequest('Keine Änderungen angegeben')
     }
 
-    values.push(id)
-
-    await query(`
-      UPDATE ${TABLE_NAMES.DONATIONS}
-      SET ${updates.join(', ')}
-      WHERE id = $${paramIndex}
-    `, values)
+    await db
+      .update(donations)
+      .set(update)
+      .where(eq(donations.id, id))
 
     logger.info('Donation updated', { donationId: id, updatedBy: session.user.id, fields: Object.keys(data) })
 
@@ -217,20 +142,23 @@ export const DELETE = withAdmin<{ id: string }>('donations', async (request, ses
     const { id } = context!.params!
 
     // Check donation exists
-    const existing = await query<{ id: string }>(`
-      SELECT id FROM ${TABLE_NAMES.DONATIONS} WHERE id = $1
-    `, [id])
+    const [existing] = await db
+      .select({ id: donations.id })
+      .from(donations)
+      .where(eq(donations.id, id))
 
-    if (existing.rows.length === 0) {
+    if (!existing) {
       return apiNotFound('Spende')
     }
 
     // Soft delete by setting status to 'archived'
-    await query(`
-      UPDATE ${TABLE_NAMES.DONATIONS}
-      SET status = 'archived', notes = COALESCE(notes, '') || $1
-      WHERE id = $2
-    `, [` [Archiviert am ${new Date().toISOString()} durch ${session.user.email}]`, id])
+    await db
+      .update(donations)
+      .set({
+        status: 'archived',
+        notes: sql`COALESCE(${donations.notes}, '') || ${` [Archiviert am ${new Date().toISOString()} durch ${session.user.email}]`}`,
+      })
+      .where(eq(donations.id, id))
 
     logger.info('Donation archived', { donationId: id, archivedBy: session.user.id })
 

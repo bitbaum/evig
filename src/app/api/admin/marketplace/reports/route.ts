@@ -1,10 +1,15 @@
+import { db } from '@/db'
+import { listingReports, listings, users } from '@/db/schema'
+import { eq, desc, sql } from 'drizzle-orm'
+import type { SQL } from 'drizzle-orm'
+import { alias } from 'drizzle-orm/pg-core'
 import { withAdmin } from '@/lib/api/middleware'
-import { query } from '@/lib/auth/db'
 import { apiError, apiSuccess } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
-import { TABLE_NAMES } from '@/config/database'
-import { CountRow } from '@/lib/api/db-types'
 import { validateQuery, AdminReportsQuerySchema } from '@/lib/schemas'
+
+const reporter = alias(users, 'reporter')
+const seller = alias(users, 'seller')
 
 // GET /api/admin/marketplace/reports - List all reports
 export const GET = withAdmin('marketplace', async (request) => {
@@ -15,51 +20,56 @@ export const GET = withAdmin('marketplace', async (request) => {
 
     const { status, limit, offset } = validation.data
 
-    const conditions: string[] = []
-    const params: (string | number)[] = []
-
+    const conditions: SQL[] = []
     if (status !== 'all') {
-      conditions.push(`lr.status = $${conditions.length + 1}`)
-      params.push(status)
+      conditions.push(eq(listingReports.status, status))
     }
 
-    const whereClause = conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : ''
+    const where = conditions.length > 0 ? conditions[0] : undefined
 
-    const reportsQuery = `
-      SELECT
-        lr.id, lr.reason, lr.details, lr.status, lr.created_at,
-        lr.reviewed_at, lr.resolution_notes, lr.resolution_action,
-        l.id as listing_id, l.title as listing_title, l.status as listing_status,
-        ru.name as reporter_name, ru.email as reporter_email,
-        su.name as seller_name, su.email as seller_email
-      FROM ${TABLE_NAMES.LISTING_REPORTS} lr
-      JOIN ${TABLE_NAMES.LISTINGS} l ON lr.listing_id = l.id
-      JOIN ${TABLE_NAMES.USERS} ru ON lr.reporter_id = ru.id
-      JOIN ${TABLE_NAMES.USERS} su ON l.seller_id = su.id
-      ${whereClause}
-      ORDER BY lr.created_at DESC
-      LIMIT $${params.length + 1} OFFSET $${params.length + 2}
-    `
+    // Count total
+    const [countRow] = await db
+      .select({ count: sql<number>`count(*)` })
+      .from(listingReports)
+      .where(where)
 
-    params.push(limit, offset)
-    const reports = await query(reportsQuery, params)
+    const total = Number(countRow?.count ?? 0)
 
-    const countParams = params.slice(0, -2)
-    const countQuery = `
-      SELECT COUNT(*) as total
-      FROM ${TABLE_NAMES.LISTING_REPORTS} lr
-      ${whereClause}
-    `
-    const countResult = await query(countQuery, countParams)
-    const count = countResult.rows[0] as CountRow
+    // Fetch reports with joins
+    const rows = await db
+      .select({
+        id: listingReports.id,
+        reason: listingReports.reason,
+        details: listingReports.details,
+        status: listingReports.status,
+        created_at: listingReports.createdAt,
+        reviewed_at: listingReports.reviewedAt,
+        resolution_notes: listingReports.resolutionNotes,
+        resolution_action: listingReports.resolutionAction,
+        listing_id: listings.id,
+        listing_title: listings.title,
+        listing_status: listings.status,
+        reporter_name: reporter.name,
+        reporter_email: reporter.email,
+        seller_name: seller.name,
+        seller_email: seller.email,
+      })
+      .from(listingReports)
+      .innerJoin(listings, eq(listingReports.listingId, listings.id))
+      .innerJoin(reporter, eq(listingReports.reporterId, reporter.id))
+      .innerJoin(seller, eq(listings.sellerId, seller.id))
+      .where(where)
+      .orderBy(desc(listingReports.createdAt))
+      .limit(limit)
+      .offset(offset)
 
     return apiSuccess({
-      items: reports.rows,
+      items: rows,
       pagination: {
-        total: parseInt(count.total),
+        total,
         limit,
         offset,
-        hasMore: offset + limit < parseInt(count.total),
+        hasMore: offset + limit < total,
       },
     })
   } catch (error) {

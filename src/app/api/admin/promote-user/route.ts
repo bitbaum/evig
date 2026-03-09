@@ -4,16 +4,12 @@
  */
 
 import { NextRequest } from 'next/server'
-import { query } from '@/lib/auth/db'
-import { TABLE_NAMES } from '@/config/database'
-import { apiSuccess, apiError, apiBadRequest, apiNotFound, apiForbidden } from '@/lib/api/helpers'
-import { logger } from '@/lib/logger'
+import { db } from '@/db'
+import { users } from '@/db/schema'
+import { eq, sql } from 'drizzle-orm'
+import { apiSuccess, apiError, apiBadRequest, apiNotFound } from '@/lib/api/helpers'
 import { withAdmin } from '@/lib/api/middleware'
 import { ROLES } from '@/lib/constants'
-
-interface UserIdRow {
-  id: string
-}
 
 export const POST = withAdmin('users', async (request: NextRequest) => {
   try {
@@ -27,24 +23,28 @@ export const POST = withAdmin('users', async (request: NextRequest) => {
     // Find user by ID or email
     let userIdToPromote = userId
     if (email && !userId) {
-      const userResult = await query(
-        `SELECT id FROM ${TABLE_NAMES.USERS} WHERE email = $1`,
-        [email]
-      )
-      if (userResult.rows.length === 0) {
+      const [user] = await db
+        .select({ id: users.id })
+        .from(users)
+        .where(eq(users.email, email))
+
+      if (!user) {
         return apiNotFound('User')
       }
-      const row = userResult.rows[0] as UserIdRow
-      userIdToPromote = row.id
+      userIdToPromote = user.id
     }
 
     // Update user role to admin
-    const updateResult = await query(
-      `UPDATE ${TABLE_NAMES.USERS} SET role = $1, "updatedAt" = NOW() WHERE id = $2`,
-      [ROLES.REVAMPIT_ADMIN, userIdToPromote]
-    )
+    const [updated] = await db
+      .update(users)
+      .set({
+        role: ROLES.REVAMPIT_ADMIN,
+        updatedAt: sql`NOW()`,
+      })
+      .where(eq(users.id, userIdToPromote))
+      .returning({ id: users.id })
 
-    if (updateResult.rowCount === 0) {
+    if (!updated) {
       return apiNotFound('User')
     }
 

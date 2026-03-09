@@ -7,9 +7,10 @@
  */
 
 import { NextRequest } from 'next/server'
+import { db } from '@/db'
+import { users } from '@/db/schema'
+import { or, ilike, asc } from 'drizzle-orm'
 import { withAdmin } from '@/lib/api/middleware'
-import { query } from '@/lib/auth/db'
-import { TABLE_NAMES } from '@/config/database'
 import {
   apiSuccess,
   apiError,
@@ -25,27 +26,27 @@ export const GET = withAdmin('donations', async (request: NextRequest, session) 
       return apiSuccess({ users: [] })
     }
 
-    // Search users by name or email
-    const result = await query<{
-      id: string
-      name: string | null
-      email: string
-    }>(
-      `SELECT id, name, email
-       FROM ${TABLE_NAMES.USERS}
-       WHERE name ILIKE $1 OR email ILIKE $1
-       ORDER BY name ASC, email ASC
-       LIMIT 10`,
-      [`%${search}%`]
-    )
+    const rows = await db
+      .select({
+        id: users.id,
+        name: users.name,
+        email: users.email,
+      })
+      .from(users)
+      .where(or(
+        ilike(users.name, `%${search}%`),
+        ilike(users.email, `%${search}%`),
+      ))
+      .orderBy(asc(users.name), asc(users.email))
+      .limit(10)
 
     logger.info('User search for donations', {
       search,
-      resultCount: result.rows.length,
+      resultCount: rows.length,
       adminEmail: session.user.email,
     })
 
-    return apiSuccess({ users: result.rows })
+    return apiSuccess({ users: rows })
   } catch (error) {
     logger.error('User search for donations failed', { error })
     return apiError(error, 'Benutzersuche fehlgeschlagen')

@@ -147,6 +147,8 @@ export const listingReports = pgTable('listing_reports', {
   reason: varchar('reason', { length: 50 }).notNull(),
   details: text('details'),
   status: varchar('status', { length: 20 }).notNull().default('pending'),
+  resolutionAction: varchar('resolution_action', { length: 50 }),
+  resolutionNotes: text('resolution_notes'),
 
   createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' }).defaultNow(),
   reviewedAt: timestamp('reviewed_at', { withTimezone: true, mode: 'string' }),
@@ -187,6 +189,7 @@ export const marketplaceOrders = pgTable('marketplace_orders', {
   // Delivery
   // CHECK (delivery_method IN ('pickup', 'shipping'))
   deliveryMethod: text('delivery_method').notNull(),
+  trackingNumber: text('tracking_number'),
   shippingAddress: jsonb('shipping_address'),
 
   createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' }).notNull().defaultNow(),

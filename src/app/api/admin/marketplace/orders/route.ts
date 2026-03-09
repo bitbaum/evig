@@ -1,10 +1,15 @@
+import { db } from '@/db'
+import { marketplaceOrders, listings, users } from '@/db/schema'
+import { eq, desc, sql } from 'drizzle-orm'
+import type { SQL } from 'drizzle-orm'
+import { alias } from 'drizzle-orm/pg-core'
 import { withAdmin } from '@/lib/api/middleware'
-import { query } from '@/lib/auth/db'
 import { apiError, apiSuccess } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
-import { TABLE_NAMES } from '@/config/database'
-import { CountRow } from '@/lib/api/db-types'
 import { validateQuery, AdminOrdersQuerySchema } from '@/lib/schemas'
+
+const buyer = alias(users, 'buyer')
+const sellerUser = alias(users, 'seller')
 
 // GET /api/admin/marketplace/orders - List all orders
 export const GET = withAdmin('marketplace', async (request) => {
@@ -15,51 +20,54 @@ export const GET = withAdmin('marketplace', async (request) => {
 
     const { status, limit, offset } = validation.data
 
-    const conditions: string[] = []
-    const params: (string | number)[] = []
-
+    const conditions: SQL[] = []
     if (status !== 'all') {
-      conditions.push(`o.status = $${conditions.length + 1}`)
-      params.push(status)
+      conditions.push(eq(marketplaceOrders.status, status))
     }
 
-    const whereClause = conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : ''
+    const where = conditions.length > 0 ? conditions[0] : undefined
 
-    const ordersQuery = `
-      SELECT
-        o.id, o.status, (o.amount_chf * 100)::int as total_cents, o.delivery_method,
-        o.tracking_number, o.created_at, o.updated_at,
-        l.id as listing_id, l.title as listing_title,
-        bu.name as buyer_name, bu.email as buyer_email,
-        su.name as seller_name, su.email as seller_email
-      FROM ${TABLE_NAMES.MARKETPLACE_ORDERS} o
-      JOIN ${TABLE_NAMES.LISTINGS} l ON o.listing_id = l.id
-      JOIN ${TABLE_NAMES.USERS} bu ON o.buyer_id = bu.id
-      JOIN ${TABLE_NAMES.USERS} su ON l.seller_id = su.id
-      ${whereClause}
-      ORDER BY o.created_at DESC
-      LIMIT $${params.length + 1} OFFSET $${params.length + 2}
-    `
+    // Count total
+    const [countRow] = await db
+      .select({ count: sql<number>`count(*)` })
+      .from(marketplaceOrders)
+      .where(where)
 
-    params.push(limit, offset)
-    const orders = await query(ordersQuery, params)
+    const total = Number(countRow?.count ?? 0)
 
-    const countParams = params.slice(0, -2)
-    const countQuery = `
-      SELECT COUNT(*) as total
-      FROM ${TABLE_NAMES.MARKETPLACE_ORDERS} o
-      ${whereClause}
-    `
-    const countResult = await query(countQuery, countParams)
-    const count = countResult.rows[0] as CountRow
+    // Fetch orders with joins
+    const rows = await db
+      .select({
+        id: marketplaceOrders.id,
+        status: marketplaceOrders.status,
+        total_cents: sql<number>`(${marketplaceOrders.amountChf} * 100)::int`,
+        delivery_method: marketplaceOrders.deliveryMethod,
+        tracking_number: marketplaceOrders.trackingNumber,
+        created_at: marketplaceOrders.createdAt,
+        updated_at: marketplaceOrders.updatedAt,
+        listing_id: listings.id,
+        listing_title: listings.title,
+        buyer_name: buyer.name,
+        buyer_email: buyer.email,
+        seller_name: sellerUser.name,
+        seller_email: sellerUser.email,
+      })
+      .from(marketplaceOrders)
+      .innerJoin(listings, eq(marketplaceOrders.listingId, listings.id))
+      .innerJoin(buyer, eq(marketplaceOrders.buyerId, buyer.id))
+      .innerJoin(sellerUser, eq(listings.sellerId, sellerUser.id))
+      .where(where)
+      .orderBy(desc(marketplaceOrders.createdAt))
+      .limit(limit)
+      .offset(offset)
 
     return apiSuccess({
-      items: orders.rows,
+      items: rows,
       pagination: {
-        total: parseInt(count.total),
+        total,
         limit,
         offset,
-        hasMore: offset + limit < parseInt(count.total),
+        hasMore: offset + limit < total,
       },
     })
   } catch (error) {
