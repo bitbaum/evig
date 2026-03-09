@@ -1,28 +1,11 @@
 import { NextRequest } from 'next/server'
-import { query } from '@/lib/auth/db'
+import { db } from '@/db'
+import { conversations, messages, users } from '@/db/schema'
+import { eq, and, lt, desc, sql } from 'drizzle-orm'
 import { apiError, apiSuccess, apiForbidden, apiNotFound, parsePagination } from '@/lib/api/helpers'
 import { withAuth, ValidSession } from '@/lib/api/middleware'
 import { ERROR_MESSAGES } from '@/config/error-messages'
-import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
-
-interface MessageRow {
-  id: string
-  sender_id: string
-  recipient_id: string
-  content: string
-  message_type: string
-  is_read: boolean
-  created_at: string
-  sender_name: string
-}
-
-interface ConversationRow {
-  participant_1: string
-  participant_2: string
-  context_id: string | null
-  type: string
-}
 
 // GET /api/messages/[conversationId] - Get messages in conversation
 export const GET = withAuth<{ conversationId: string }>(async (
@@ -37,17 +20,21 @@ export const GET = withAuth<{ conversationId: string }>(async (
     }
 
     // Verify user is participant
-    const convResult = await query(
-      'SELECT participant_1, participant_2, context_id, type FROM ' + TABLE_NAMES.CONVERSATIONS + ' WHERE id = $1',
-      [conversationId]
-    )
+    const [conv] = await db
+      .select({
+        participant1: conversations.participant1,
+        participant2: conversations.participant2,
+        contextId: conversations.contextId,
+        type: conversations.type,
+      })
+      .from(conversations)
+      .where(eq(conversations.id, conversationId))
 
-    if (convResult.rows.length === 0) {
+    if (!conv) {
       return apiNotFound('Konversation nicht gefunden')
     }
 
-    const conv = convResult.rows[0] as ConversationRow
-    if (conv.participant_1 !== session.user.id && conv.participant_2 !== session.user.id) {
+    if (conv.participant1 !== session.user.id && conv.participant2 !== session.user.id) {
       return apiForbidden('Kein Zugriff auf diese Konversation')
     }
 
@@ -55,44 +42,51 @@ export const GET = withAuth<{ conversationId: string }>(async (
     const { limit } = parsePagination(request, { defaultLimit: 50, maxLimit: 100 })
     const before = searchParams.get('before') // cursor for pagination
 
-    let messagesQuery = 'SELECT m.id, m.sender_id, m.recipient_id, m.content, m.message_type, ' +
-      'm.is_read, m.created_at, u.name as sender_name ' +
-      'FROM ' + TABLE_NAMES.MESSAGES + ' m ' +
-      'LEFT JOIN ' + TABLE_NAMES.USERS + ' u ON m.sender_id = u.id ' +
-      'WHERE m.conversation_id = $1'
-    
-    const params: (string | number)[] = [conversationId]
-
+    const conditions = [eq(messages.conversationId, conversationId)]
     if (before) {
-      params.push(before)
-      messagesQuery += ' AND m.created_at < $' + params.length
+      conditions.push(lt(messages.createdAt, before))
     }
 
-    params.push(limit)
-    messagesQuery += ' ORDER BY m.created_at DESC LIMIT $' + params.length
-
-    const result = await query(messagesQuery, params)
-    const messages = result.rows as MessageRow[]
+    const rows = await db
+      .select({
+        id: messages.id,
+        sender_id: messages.senderId,
+        recipient_id: messages.recipientId,
+        content: messages.content,
+        message_type: messages.messageType,
+        is_read: messages.isRead,
+        created_at: messages.createdAt,
+        sender_name: users.name,
+      })
+      .from(messages)
+      .leftJoin(users, eq(messages.senderId, users.id))
+      .where(and(...conditions))
+      .orderBy(desc(messages.createdAt))
+      .limit(limit)
 
     // Mark messages as read
-    const unreadField = conv.participant_1 === session.user.id ? 'unread_count_1' : 'unread_count_2'
-    await query(
-      'UPDATE ' + TABLE_NAMES.CONVERSATIONS + ' SET ' + unreadField + ' = 0 WHERE id = $1',
-      [conversationId]
-    )
-    await query(
-      'UPDATE ' + TABLE_NAMES.MESSAGES + ' SET is_read = true, read_at = CURRENT_TIMESTAMP ' +
-      'WHERE conversation_id = $1 AND recipient_id = $2 AND is_read = false',
-      [conversationId, session.user.id]
-    )
+    const unreadField = conv.participant1 === session.user.id ? 'unreadCount1' : 'unreadCount2'
+    await db
+      .update(conversations)
+      .set({ [unreadField]: 0 } as Record<string, unknown>)
+      .where(eq(conversations.id, conversationId))
 
-    logger.info('Messages fetched', { conversationId, userId: session.user.id, count: messages.length })
+    await db
+      .update(messages)
+      .set({ isRead: true, readAt: sql`CURRENT_TIMESTAMP` })
+      .where(and(
+        eq(messages.conversationId, conversationId),
+        eq(messages.recipientId, session.user.id),
+        eq(messages.isRead, false)
+      ))
+
+    logger.info('Messages fetched', { conversationId, userId: session.user.id, count: rows.length })
 
     return apiSuccess({
-      messages: messages.reverse(), // Return in chronological order
+      messages: rows.reverse(), // Return in chronological order
       conversation: {
         id: conversationId,
-        context_id: conv.context_id,
+        context_id: conv.contextId,
         type: conv.type
       }
     })
