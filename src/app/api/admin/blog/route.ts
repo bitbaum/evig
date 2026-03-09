@@ -6,41 +6,36 @@
  */
 
 import { NextRequest } from 'next/server'
+import { db } from '@/db'
+import { blogPosts, blogCategories } from '@/db/schema'
+import { eq, desc } from 'drizzle-orm'
 import { withAdmin } from '@/lib/api/middleware'
-import { query } from '@/lib/auth/db'
-import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
 import { apiSuccess, apiError, apiBadRequest } from '@/lib/api/helpers'
 
 export const GET = withAdmin('content', async (request, session) => {
   try {
-    const result = await query<{
-      id: string
-      slug: string
-      title: string
-      excerpt: string | null
-      content: string
-      featured_image: string | null
-      category_id: string | null
-      category_name: string | null
-      tags: string[]
-      is_published: boolean
-      published_at: string | null
-      created_at: string
-      updated_at: string
-    }>(
-      `SELECT
-        bp.id, bp.slug, bp.title, bp.excerpt, bp.content,
-        bp.featured_image, bp.category_id,
-        c.name as category_name,
-        bp.tags, bp.is_published, bp.published_at,
-        bp.created_at, bp.updated_at
-      FROM ${TABLE_NAMES.BLOG_POSTS} bp
-      LEFT JOIN ${TABLE_NAMES.BLOG_CATEGORIES} c ON bp.category_id = c.id
-      ORDER BY bp.created_at DESC`
-    )
+    const posts = await db
+      .select({
+        id: blogPosts.id,
+        slug: blogPosts.slug,
+        title: blogPosts.title,
+        excerpt: blogPosts.excerpt,
+        content: blogPosts.content,
+        featured_image: blogPosts.featuredImage,
+        category_id: blogPosts.categoryId,
+        category_name: blogCategories.name,
+        tags: blogPosts.tags,
+        is_published: blogPosts.isPublished,
+        published_at: blogPosts.publishedAt,
+        created_at: blogPosts.createdAt,
+        updated_at: blogPosts.updatedAt,
+      })
+      .from(blogPosts)
+      .leftJoin(blogCategories, eq(blogPosts.categoryId, blogCategories.id))
+      .orderBy(desc(blogPosts.createdAt))
 
-    return apiSuccess(result.rows)
+    return apiSuccess(posts)
   } catch (error) {
     logger.error('Failed to list blog posts', { error })
     return apiError(error, 'Blog-Artikel konnten nicht geladen werden')
@@ -67,39 +62,35 @@ export const POST = withAdmin('content', async (request, session) => {
       .replace(/^-|-$/g, '')
 
     // Check slug uniqueness
-    const existing = await query(
-      `SELECT id FROM ${TABLE_NAMES.BLOG_POSTS} WHERE slug = $1`,
-      [postSlug]
-    )
+    const [existing] = await db
+      .select({ id: blogPosts.id })
+      .from(blogPosts)
+      .where(eq(blogPosts.slug, postSlug))
 
-    if (existing.rows.length > 0) {
+    if (existing) {
       return apiBadRequest('Ein Artikel mit diesem Slug existiert bereits')
     }
 
-    const result = await query<{ id: string }>(
-      `INSERT INTO ${TABLE_NAMES.BLOG_POSTS} (
-        slug, title, excerpt, content, featured_image,
-        category_id, tags, is_published, published_at,
-        created_by, updated_by
-      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $10)
-      RETURNING id`,
-      [
-        postSlug,
+    const [post] = await db
+      .insert(blogPosts)
+      .values({
+        slug: postSlug,
         title,
-        excerpt || null,
+        excerpt: excerpt || null,
         content,
-        featuredImage || null,
-        categoryId || null,
-        tags || [],
-        isPublished || false,
-        isPublished ? new Date().toISOString() : null,
-        session.user.id,
-      ]
-    )
+        featuredImage: featuredImage || null,
+        categoryId: categoryId || null,
+        tags: tags || [],
+        isPublished: isPublished || false,
+        publishedAt: isPublished ? new Date().toISOString() : null,
+        createdBy: session.user.id,
+        updatedBy: session.user.id,
+      })
+      .returning({ id: blogPosts.id })
 
-    logger.info('Blog post created', { postId: result.rows[0].id, userId: session.user.id })
+    logger.info('Blog post created', { postId: post.id, userId: session.user.id })
 
-    return apiSuccess({ id: result.rows[0].id, slug: postSlug }, 201)
+    return apiSuccess({ id: post.id, slug: postSlug }, 201)
   } catch (error) {
     logger.error('Failed to create blog post', { error })
     return apiError(error, 'Blog-Artikel konnte nicht erstellt werden')

@@ -1,86 +1,70 @@
 import { NextRequest } from 'next/server'
+import { db } from '@/db'
+import { workshopInstances, workshops, workshopRegistrations, users } from '@/db/schema'
+import { eq, sql, desc } from 'drizzle-orm'
 import { withAdmin } from '@/lib/api/middleware'
-import { query } from '@/lib/auth/db'
 import { apiError, apiSuccess, apiNotFound, apiBadRequest } from '@/lib/api/helpers'
 import { logger } from '@/lib/logger'
-import { TABLE_NAMES } from '@/config/database'
-
-interface InstanceRow {
-  id: string
-  workshop_id: string
-  workshop_title: string
-  workshop_slug: string
-  start_date: string
-  end_date: string | null
-  location: string | null
-  instructor: string | null
-  max_participants: number | null
-  notes: string | null
-  status: string
-  current_participants: string
-  created_at: string
-}
-
-interface RegistrationRow {
-  id: string
-  user_id: string
-  user_name: string
-  user_email: string
-  status: string
-  payment_status: string
-  payment_amount_cents: number | null
-  registered_at: string
-  attended: boolean
-  rating: number | null
-  feedback: string | null
-}
 
 // GET /api/admin/workshops/instances/[id] - Get instance details
 export const GET = withAdmin<{ id: string }>('workshops-admin', async (request, session, context) => {
   try {
     const { id } = context!.params!
 
-    // Get instance details
-    const instanceResult = await query(`
-      SELECT
-        wi.*,
-        w.title as workshop_title,
-        w.slug as workshop_slug,
-        COUNT(wr.id) as current_participants
-      FROM ${TABLE_NAMES.WORKSHOP_INSTANCES} wi
-      JOIN ${TABLE_NAMES.WORKSHOPS} w ON wi.workshop_id = w.id
-      LEFT JOIN ${TABLE_NAMES.WORKSHOP_REGISTRATIONS} wr ON wi.id = wr.workshop_instance_id
-      WHERE wi.id = $1
-      GROUP BY wi.id, w.title, w.slug
-    `, [id])
+    // Get instance details with workshop info and participant count
+    const [instance] = await db
+      .select({
+        id: workshopInstances.id,
+        workshop_id: workshopInstances.workshopId,
+        workshop_title: workshops.title,
+        workshop_slug: workshops.slug,
+        start_date: workshopInstances.startDate,
+        end_date: workshopInstances.endDate,
+        location: workshopInstances.location,
+        instructor: workshopInstances.instructor,
+        max_participants: workshopInstances.maxParticipants,
+        notes: workshopInstances.notes,
+        status: workshopInstances.status,
+        current_participants: sql<number>`count(${workshopRegistrations.id})`,
+        created_at: workshopInstances.createdAt,
+      })
+      .from(workshopInstances)
+      .innerJoin(workshops, eq(workshopInstances.workshopId, workshops.id))
+      .leftJoin(workshopRegistrations, eq(workshopInstances.id, workshopRegistrations.workshopInstanceId))
+      .where(eq(workshopInstances.id, id))
+      .groupBy(workshopInstances.id, workshops.title, workshops.slug)
 
-    if (instanceResult.rows.length === 0) {
+    if (!instance) {
       return apiNotFound('Workshop instance not found')
     }
 
-    const instance = instanceResult.rows[0] as InstanceRow
-
     // Get registrations for this instance
-    const registrationsResult = await query(`
-      SELECT
-        wr.*,
-        u.name as user_name,
-        u.email as user_email,
-        wr.created_at as registered_at
-      FROM ${TABLE_NAMES.WORKSHOP_REGISTRATIONS} wr
-      JOIN ${TABLE_NAMES.USERS} u ON wr.user_id = u.id
-      WHERE wr.workshop_instance_id = $1
-      ORDER BY wr.created_at DESC
-    `, [id])
+    const registrations = await db
+      .select({
+        id: workshopRegistrations.id,
+        user_id: workshopRegistrations.userId,
+        user_name: users.name,
+        user_email: users.email,
+        status: workshopRegistrations.status,
+        payment_status: workshopRegistrations.paymentStatus,
+        payment_amount_cents: workshopRegistrations.paymentAmountCents,
+        registered_at: workshopRegistrations.createdAt,
+        attended: workshopRegistrations.attended,
+        rating: workshopRegistrations.rating,
+        feedback: workshopRegistrations.feedback,
+      })
+      .from(workshopRegistrations)
+      .innerJoin(users, eq(workshopRegistrations.userId, users.id))
+      .where(eq(workshopRegistrations.workshopInstanceId, id))
+      .orderBy(desc(workshopRegistrations.createdAt))
 
     return apiSuccess({
       instance: {
         ...instance,
-        current_participants: parseInt(instance.current_participants) || 0
+        current_participants: Number(instance.current_participants) || 0,
       },
-      registrations: registrationsResult.rows as RegistrationRow[]
+      registrations,
     })
-
   } catch (error) {
     logger.error('Error fetching workshop instance', { error })
     return apiError(error, 'Failed to fetch workshop instance')
@@ -100,91 +84,51 @@ export const PUT = withAdmin<{ id: string }>('workshops-admin', async (request, 
       instructor,
       maxParticipants,
       notes,
-      status
+      status,
     } = body
 
     // Check instance exists
-    const existingResult = await query(
-      `SELECT id FROM ${TABLE_NAMES.WORKSHOP_INSTANCES} WHERE id = $1`,
-      [id]
-    )
+    const [existing] = await db
+      .select({ id: workshopInstances.id })
+      .from(workshopInstances)
+      .where(eq(workshopInstances.id, id))
 
-    if (existingResult.rows.length === 0) {
+    if (!existing) {
       return apiNotFound('Workshop instance not found')
     }
 
-    // Build update query
-    const updates: string[] = []
-    const values: (string | number | Date | null)[] = []
-    let paramIndex = 1
+    // Build update object
+    const update: Record<string, unknown> = {}
+    if (startDate !== undefined) update.startDate = new Date(startDate).toISOString()
+    if (endDate !== undefined) update.endDate = endDate ? new Date(endDate).toISOString() : null
+    if (location !== undefined) update.location = location
+    if (instructor !== undefined) update.instructor = instructor
+    if (maxParticipants !== undefined) update.maxParticipants = maxParticipants
+    if (notes !== undefined) update.notes = notes
+    if (status !== undefined) update.status = status
 
-    if (startDate !== undefined) {
-      updates.push(`start_date = $${paramIndex}`)
-      values.push(new Date(startDate))
-      paramIndex++
-    }
-
-    if (endDate !== undefined) {
-      updates.push(`end_date = $${paramIndex}`)
-      values.push(endDate ? new Date(endDate) : null)
-      paramIndex++
-    }
-
-    if (location !== undefined) {
-      updates.push(`location = $${paramIndex}`)
-      values.push(location)
-      paramIndex++
-    }
-
-    if (instructor !== undefined) {
-      updates.push(`instructor = $${paramIndex}`)
-      values.push(instructor)
-      paramIndex++
-    }
-
-    if (maxParticipants !== undefined) {
-      updates.push(`max_participants = $${paramIndex}`)
-      values.push(maxParticipants)
-      paramIndex++
-    }
-
-    if (notes !== undefined) {
-      updates.push(`notes = $${paramIndex}`)
-      values.push(notes)
-      paramIndex++
-    }
-
-    if (status !== undefined) {
-      updates.push(`status = $${paramIndex}`)
-      values.push(status)
-      paramIndex++
-    }
-
-    if (updates.length === 0) {
+    if (Object.keys(update).length === 0) {
       return apiBadRequest('No fields to update')
     }
 
-    updates.push(`updated_at = NOW()`)
-    values.push(id)
+    update.updatedAt = sql`NOW()`
 
-    const result = await query(`
-      UPDATE ${TABLE_NAMES.WORKSHOP_INSTANCES}
-      SET ${updates.join(', ')}
-      WHERE id = $${paramIndex}
-      RETURNING *
-    `, values)
+    const [updated] = await db
+      .update(workshopInstances)
+      .set(update)
+      .where(eq(workshopInstances.id, id))
+      .returning()
 
     logger.info('Workshop instance updated', {
       instanceId: id,
       updatedBy: session.user.id,
-      updates: Object.keys(body)
+      updates: Object.keys(body),
     })
 
     return apiSuccess({
-      instance: result.rows[0],
-      message: 'Workshop instance updated successfully'
+      instance: updated,
+      message: 'Workshop instance updated successfully',
     })
-
   } catch (error) {
     logger.error('Error updating workshop instance', { error })
     return apiError(error, 'Failed to update workshop instance')
@@ -197,12 +141,12 @@ export const DELETE = withAdmin<{ id: string }>('workshops-admin', async (reques
     const { id } = context!.params!
 
     // Check for existing registrations
-    const registrationsResult = await query(`
-      SELECT COUNT(*) as count FROM ${TABLE_NAMES.WORKSHOP_REGISTRATIONS}
-      WHERE workshop_instance_id = $1
-    `, [id])
+    const [countResult] = await db
+      .select({ count: sql<number>`count(*)` })
+      .from(workshopRegistrations)
+      .where(eq(workshopRegistrations.workshopInstanceId, id))
 
-    const registrationCount = parseInt((registrationsResult.rows[0] as { count: string }).count)
+    const registrationCount = Number(countResult?.count ?? 0)
 
     if (registrationCount > 0) {
       return apiBadRequest(
@@ -210,20 +154,16 @@ export const DELETE = withAdmin<{ id: string }>('workshops-admin', async (reques
       )
     }
 
-    await query(
-      `DELETE FROM ${TABLE_NAMES.WORKSHOP_INSTANCES} WHERE id = $1`,
-      [id]
-    )
+    await db.delete(workshopInstances).where(eq(workshopInstances.id, id))
 
     logger.info('Workshop instance deleted', {
       instanceId: id,
-      deletedBy: session.user.id
+      deletedBy: session.user.id,
     })
 
     return apiSuccess({
-      message: 'Workshop instance deleted successfully'
+      message: 'Workshop instance deleted successfully',
     })
-
   } catch (error) {
     logger.error('Error deleting workshop instance', { error })
     return apiError(error, 'Failed to delete workshop instance')
