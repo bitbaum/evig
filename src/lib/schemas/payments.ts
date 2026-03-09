@@ -33,3 +33,30 @@ export const EscrowReleaseSchema = z.object({
 })
 
 export type EscrowReleaseInput = z.infer<typeof EscrowReleaseSchema>
+
+// =============================================================================
+// INVOICE UPDATE
+// =============================================================================
+
+export const UpdateInvoiceSchema = z.object({
+  status: z.string().max(50).optional(),
+  notes: z.string().max(5000).optional().nullable(),
+  due_date: z.string().optional().nullable(),
+  billing_address: z.record(z.string(), z.unknown()).optional().nullable(),
+  shipping_address: z.record(z.string(), z.unknown()).optional().nullable(),
+  payment_terms: z.string().max(500).optional().nullable(),
+  line_items: z.array(z.record(z.string(), z.unknown())).optional().nullable(),
+})
+
+export type UpdateInvoiceInput = z.infer<typeof UpdateInvoiceSchema>
+
+// =============================================================================
+// REFUND ACTIONS
+// =============================================================================
+
+export const RefundActionSchema = z.object({
+  action: z.enum(['approve', 'reject', 'process']),
+  notes: z.string().max(2000).optional().nullable(),
+})
+
+export type RefundActionInput = z.infer<typeof RefundActionSchema>

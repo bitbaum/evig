@@ -202,3 +202,23 @@ export type BulkProduct = z.infer<typeof bulkProductSchema>;
 export type BulkSaveRequest = z.infer<typeof bulkSaveRequestSchema>;
 export type BulkSaveResponse = z.infer<typeof bulkSaveResponseSchema>;
 export type ErfassungAction = z.infer<typeof erfassungActionSchema>;
+
+// =============================================================================
+// ERFASSUNG AI OPERATIONS
+// =============================================================================
+
+export const ErfassungRefineSchema = z.object({
+  currentProduct: z.record(z.string(), z.unknown()).refine(
+    (obj) => Object.keys(obj).length > 0,
+    'Produktdaten sind erforderlich'
+  ),
+  instruction: z.string().min(1, 'Anweisung ist erforderlich').max(2000),
+});
+
+export type ErfassungRefineInput = z.infer<typeof ErfassungRefineSchema>;
+
+export const ErfassungTextSchema = z.object({
+  text: z.string().min(3, 'Text ist zu kurz. Bitte mehr Details eingeben.'),
+});
+
+export type ErfassungTextInput = z.infer<typeof ErfassungTextSchema>;

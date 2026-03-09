@@ -164,3 +164,106 @@ export const ErfassungCreateSchema = z
   .passthrough();
 
 export type ErfassungCreateInput = z.infer<typeof ErfassungCreateSchema>;
+
+// =============================================================================
+// ADMIN PRODUCT MANAGEMENT
+// =============================================================================
+
+export const AdminCreateProductSchema = z.object({
+  title: z.string().max(500).optional(),
+  product_name: z.string().max(500).optional(),
+  brand: z.string().max(200).optional().default(''),
+  description: z.string().max(5000).optional(),
+  short_description: z.string().max(5000).optional(),
+  price: z.coerce.number().min(0).optional(),
+  estimated_price_chf: z.coerce.number().min(0).optional(),
+  condition: z.string().max(100).optional().default('unknown'),
+  category: z.string().max(100).optional().nullable(),
+  subcategory: z.string().max(100).optional().nullable(),
+  quantity: z.coerce.number().int().min(1).optional().default(1),
+}).refine(
+  data => !!(data.title || data.product_name),
+  { message: 'Produktname oder Titel ist erforderlich', path: ['product_name'] }
+);
+
+export type AdminCreateProductInput = z.infer<typeof AdminCreateProductSchema>;
+
+export const AdminUpdateProductSchema = z.object({
+  product_name: z.string().max(500).optional(),
+  title: z.string().max(500).optional(),
+  brand: z.string().max(200).optional(),
+  short_description: z.string().max(5000).optional(),
+  description: z.string().max(5000).optional(),
+  estimated_price_chf: z.coerce.number().min(0).optional(),
+  price: z.coerce.number().min(0).optional(),
+  condition: z.string().max(100).optional(),
+  category: z.string().max(100).optional().nullable(),
+  subcategory: z.string().max(100).optional().nullable(),
+  status: z.string().max(50).optional(),
+  quantity_available: z.coerce.number().int().min(0).optional(),
+  marketplace_status: z.string().max(50).optional(),
+});
+
+export type AdminUpdateProductInput = z.infer<typeof AdminUpdateProductSchema>;
+
+// =============================================================================
+// HIRN AI CHAT
+// =============================================================================
+
+export const HirnChatSchema = z.object({
+  message: z.string().min(1, 'Nachricht ist erforderlich'),
+  sessionId: z.string().min(1, 'Session-ID ist erforderlich'),
+  temperature: z.number().min(0).max(2).optional(),
+  maxTokens: z.number().int().positive().max(8192).optional(),
+});
+
+export type HirnChatInput = z.infer<typeof HirnChatSchema>;
+
+export const HirnProviderUpdateSchema = z.object({
+  provider: z.string().min(1, 'Provider ist erforderlich'),
+  isDefault: z.boolean().optional(),
+  apiKey: z.string().optional(),
+  isEnabled: z.boolean().optional(),
+});
+
+export type HirnProviderUpdateInput = z.infer<typeof HirnProviderUpdateSchema>;
+
+// =============================================================================
+// CERTIFICATION MANAGEMENT
+// =============================================================================
+
+export const CertificationVerifySchema = z.object({
+  adminNotes: z.string().max(5000).optional().nullable(),
+  verificationResult: z.record(z.string(), z.unknown()).optional().nullable(),
+});
+
+export type CertificationVerifyInput = z.infer<typeof CertificationVerifySchema>;
+
+export const CertificationRejectSchema = z.object({
+  rejectionReason: z.string().min(1, 'Ein Ablehnungsgrund ist erforderlich').max(2000),
+  adminNotes: z.string().max(5000).optional().nullable(),
+});
+
+export type CertificationRejectInput = z.infer<typeof CertificationRejectSchema>;
+
+// =============================================================================
+// ADMIN PERMISSIONS
+// =============================================================================
+
+export const AdminPermissionsSchema = z.object({
+  permissions: z.array(z.string()).optional(),
+  isSuperAdmin: z.boolean().optional(),
+});
+
+export type AdminPermissionsInput = z.infer<typeof AdminPermissionsSchema>;
+
+// =============================================================================
+// SMART PRODUCT ENTRY (AI)
+// =============================================================================
+
+export const SmartProductEntrySchema = z.object({
+  query: z.string().min(1, 'Bitte gib einen Produktnamen ein').max(500),
+  inputType: z.enum(['text', 'voice', 'image']).optional().default('text'),
+});
+
+export type SmartProductEntryInput = z.infer<typeof SmartProductEntrySchema>;
