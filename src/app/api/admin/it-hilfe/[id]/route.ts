@@ -1,8 +1,9 @@
 import { withAdmin } from '@/lib/api/middleware'
-import { query } from '@/lib/auth/db'
+import { db } from '@/db'
+import { itHilfeRequests, itHilfeOffers, users } from '@/db/schema'
+import { eq, and, notInArray, sql } from 'drizzle-orm'
 import { apiError, apiSuccess, apiNotFound, apiBadRequest } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
-import { TABLE_NAMES } from '@/config/database'
 import { REQUEST_STATUS } from '@/config/it-hilfe'
 import { validateBody } from '@/lib/schemas'
 import { AdminEditRequestSchema } from '@/lib/schemas/it-hilfe'
@@ -14,29 +15,64 @@ export const GET = withAdmin<{ id: string }>('it-hilfe-admin', async (_request, 
     const id = context?.params?.id
     if (!id) return apiBadRequest('ID erforderlich')
 
-    const requestResult = await query(
-      `SELECT
-        r.*,
-        u.name as requester_name, u.email as requester_email,
-        (SELECT json_agg(json_build_object(
-           'id', o.id, 'message', o.message, 'status', o.status,
-           'estimated_time', o.estimated_time, 'proposed_compensation', o.proposed_compensation,
-           'created_at', o.created_at,
-           'helper_name', hu.name, 'helper_email', hu.email
-         )) FROM ${TABLE_NAMES.IT_HILFE_OFFERS} o
-         JOIN ${TABLE_NAMES.USERS} hu ON o.helper_id = hu.id
-         WHERE o.request_id = r.id) as offers
-      FROM ${TABLE_NAMES.IT_HILFE_REQUESTS} r
-      JOIN ${TABLE_NAMES.USERS} u ON r.requester_id = u.id
-      WHERE r.id = $1`,
-      [id]
-    )
+    const [request] = await db
+      .select({
+        id: itHilfeRequests.id,
+        requesterId: itHilfeRequests.requesterId,
+        categoryId: itHilfeRequests.categoryId,
+        deviceBrand: itHilfeRequests.deviceBrand,
+        deviceModel: itHilfeRequests.deviceModel,
+        title: itHilfeRequests.title,
+        description: itHilfeRequests.description,
+        urgency: itHilfeRequests.urgency,
+        budgetType: itHilfeRequests.budgetType,
+        budgetAmountCents: itHilfeRequests.budgetAmountCents,
+        postalCode: itHilfeRequests.postalCode,
+        city: itHilfeRequests.city,
+        canton: itHilfeRequests.canton,
+        serviceType: itHilfeRequests.serviceType,
+        skillsNeeded: itHilfeRequests.skillsNeeded,
+        imageUrls: itHilfeRequests.imageUrls,
+        status: itHilfeRequests.status,
+        matchedOfferId: itHilfeRequests.matchedOfferId,
+        offerCount: itHilfeRequests.offerCount,
+        serviceCategory: itHilfeRequests.serviceCategory,
+        aiDiagnosis: itHilfeRequests.aiDiagnosis,
+        adminNotes: itHilfeRequests.adminNotes,
+        expiresAt: itHilfeRequests.expiresAt,
+        createdAt: itHilfeRequests.createdAt,
+        updatedAt: itHilfeRequests.updatedAt,
+        requester_name: users.name,
+        requester_email: users.email,
+      })
+      .from(itHilfeRequests)
+      .innerJoin(users, eq(itHilfeRequests.requesterId, users.id))
+      .where(eq(itHilfeRequests.id, id))
 
-    if (requestResult.rows.length === 0) {
+    if (!request) {
       return apiNotFound(ERROR_MESSAGES.IT_HILFE_REQUEST_NOT_FOUND)
     }
 
-    return apiSuccess(requestResult.rows[0])
+    // Fetch offers with helper info
+    const offers = await db
+      .select({
+        id: itHilfeOffers.id,
+        message: itHilfeOffers.message,
+        status: itHilfeOffers.status,
+        estimatedTime: itHilfeOffers.estimatedTime,
+        proposedCompensation: itHilfeOffers.proposedCompensation,
+        createdAt: itHilfeOffers.createdAt,
+        helper_name: users.name,
+        helper_email: users.email,
+      })
+      .from(itHilfeOffers)
+      .innerJoin(users, eq(itHilfeOffers.helperId, users.id))
+      .where(eq(itHilfeOffers.requestId, id))
+
+    return apiSuccess({
+      ...request,
+      offers,
+    })
   } catch (error) {
     return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)
   }
@@ -53,46 +89,27 @@ export const PATCH = withAdmin<{ id: string }>('it-hilfe-admin', async (request,
     if (!validation.success) return validation.error
 
     const data = validation.data
-    const setClauses: string[] = []
-    const params: (string | null)[] = []
+    const update: Record<string, unknown> = {}
 
-    if (data.title !== undefined) {
-      setClauses.push(`title = $${params.length + 1}`)
-      params.push(data.title)
-    }
-    if (data.description !== undefined) {
-      setClauses.push(`description = $${params.length + 1}`)
-      params.push(data.description)
-    }
-    if (data.status !== undefined) {
-      setClauses.push(`status = $${params.length + 1}`)
-      params.push(data.status)
-    }
-    if (data.urgency !== undefined) {
-      setClauses.push(`urgency = $${params.length + 1}`)
-      params.push(data.urgency)
-    }
-    if (data.admin_notes !== undefined) {
-      setClauses.push(`admin_notes = $${params.length + 1}`)
-      params.push(data.admin_notes)
-    }
+    if (data.title !== undefined) update.title = data.title
+    if (data.description !== undefined) update.description = data.description
+    if (data.status !== undefined) update.status = data.status
+    if (data.urgency !== undefined) update.urgency = data.urgency
+    if (data.admin_notes !== undefined) update.adminNotes = data.admin_notes
 
-    if (setClauses.length === 0) {
+    if (Object.keys(update).length === 0) {
       return apiBadRequest('Keine Änderungen angegeben')
     }
 
-    setClauses.push(`updated_at = NOW()`)
-    params.push(id)
+    update.updatedAt = sql`NOW()`
 
-    const result = await query(
-      `UPDATE ${TABLE_NAMES.IT_HILFE_REQUESTS}
-       SET ${setClauses.join(', ')}
-       WHERE id = $${params.length}
-       RETURNING *`,
-      params
-    )
+    const [updated] = await db
+      .update(itHilfeRequests)
+      .set(update)
+      .where(eq(itHilfeRequests.id, id))
+      .returning()
 
-    if (result.rows.length === 0) {
+    if (!updated) {
       return apiNotFound(ERROR_MESSAGES.IT_HILFE_REQUEST_NOT_FOUND)
     }
 
@@ -102,7 +119,7 @@ export const PATCH = withAdmin<{ id: string }>('it-hilfe-admin', async (request,
       changes: Object.keys(data),
     })
 
-    return apiSuccess(result.rows[0])
+    return apiSuccess(updated)
   } catch (error) {
     return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)
   }
@@ -114,15 +131,20 @@ export const DELETE = withAdmin<{ id: string }>('it-hilfe-admin', async (_reques
     const id = context?.params?.id
     if (!id) return apiBadRequest('ID erforderlich')
 
-    const result = await query(
-      `UPDATE ${TABLE_NAMES.IT_HILFE_REQUESTS}
-       SET status = '${REQUEST_STATUS.CANCELLED}', updated_at = NOW(), admin_notes = COALESCE(admin_notes, '') || ' [Admin-storniert]'
-       WHERE id = $1 AND status NOT IN ('${REQUEST_STATUS.COMPLETED}', '${REQUEST_STATUS.CANCELLED}')
-       RETURNING id`,
-      [id]
-    )
+    const [cancelled] = await db
+      .update(itHilfeRequests)
+      .set({
+        status: REQUEST_STATUS.CANCELLED,
+        updatedAt: sql`NOW()`,
+        adminNotes: sql`COALESCE(${itHilfeRequests.adminNotes}, '') || ' [Admin-storniert]'`,
+      })
+      .where(and(
+        eq(itHilfeRequests.id, id),
+        notInArray(itHilfeRequests.status, [REQUEST_STATUS.COMPLETED, REQUEST_STATUS.CANCELLED])
+      ))
+      .returning({ id: itHilfeRequests.id })
 
-    if (result.rows.length === 0) {
+    if (!cancelled) {
       return apiNotFound(ERROR_MESSAGES.IT_HILFE_REQUEST_NOT_FOUND)
     }
 

@@ -1,67 +1,53 @@
 import { withAdmin } from '@/lib/api/middleware'
-import { query } from '@/lib/auth/db'
+import { db } from '@/db'
+import { itHilfeRequests, itHilfeOffers, helperProfiles } from '@/db/schema'
+import { sql } from 'drizzle-orm'
 import { apiError, apiSuccess } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
-import { TABLE_NAMES } from '@/config/database'
 import { REQUEST_STATUS } from '@/config/it-hilfe'
 
 // GET /api/admin/it-hilfe/stats - Dashboard statistics
 export const GET = withAdmin('it-hilfe-admin', async () => {
   try {
-    const result = await query<{
-      total: string
-      open: string
-      in_discussion: string
-      matched: string
-      completed: string
-      cancelled: string
-      low: string
-      normal: string
-      high: string
-      urgent: string
-      active_helpers: string
-      verified_helpers: string
-      total_offers: string
-    }>(
-      `SELECT
-        COUNT(*) as total,
-        COUNT(*) FILTER (WHERE r.status = '${REQUEST_STATUS.OPEN}') as open,
-        COUNT(*) FILTER (WHERE r.status = '${REQUEST_STATUS.IN_DISCUSSION}') as in_discussion,
-        COUNT(*) FILTER (WHERE r.status = '${REQUEST_STATUS.MATCHED}') as matched,
-        COUNT(*) FILTER (WHERE r.status = '${REQUEST_STATUS.COMPLETED}') as completed,
-        COUNT(*) FILTER (WHERE r.status = '${REQUEST_STATUS.CANCELLED}') as cancelled,
-        COUNT(*) FILTER (WHERE r.urgency = 'low') as low,
-        COUNT(*) FILTER (WHERE r.urgency = 'normal') as normal,
-        COUNT(*) FILTER (WHERE r.urgency = 'high') as high,
-        COUNT(*) FILTER (WHERE r.urgency = 'urgent') as urgent,
-        (SELECT COUNT(*) FROM ${TABLE_NAMES.IT_HILFE_TECHNICIAN_PROFILES} WHERE is_active = true AND suspended_at IS NULL) as active_helpers,
-        (SELECT COUNT(*) FROM ${TABLE_NAMES.IT_HILFE_TECHNICIAN_PROFILES} WHERE is_verified = true) as verified_helpers,
-        (SELECT COUNT(*) FROM ${TABLE_NAMES.IT_HILFE_OFFERS}) as total_offers
-      FROM ${TABLE_NAMES.IT_HILFE_REQUESTS} r`
-    )
+    const [row] = await db
+      .select({
+        total: sql<number>`count(*)`,
+        open: sql<number>`count(*) FILTER (WHERE ${itHilfeRequests.status} = ${REQUEST_STATUS.OPEN})`,
+        in_discussion: sql<number>`count(*) FILTER (WHERE ${itHilfeRequests.status} = ${REQUEST_STATUS.IN_DISCUSSION})`,
+        matched: sql<number>`count(*) FILTER (WHERE ${itHilfeRequests.status} = ${REQUEST_STATUS.MATCHED})`,
+        completed: sql<number>`count(*) FILTER (WHERE ${itHilfeRequests.status} = ${REQUEST_STATUS.COMPLETED})`,
+        cancelled: sql<number>`count(*) FILTER (WHERE ${itHilfeRequests.status} = ${REQUEST_STATUS.CANCELLED})`,
+        low: sql<number>`count(*) FILTER (WHERE ${itHilfeRequests.urgency} = 'low')`,
+        normal: sql<number>`count(*) FILTER (WHERE ${itHilfeRequests.urgency} = 'normal')`,
+        high: sql<number>`count(*) FILTER (WHERE ${itHilfeRequests.urgency} = 'high')`,
+        urgent: sql<number>`count(*) FILTER (WHERE ${itHilfeRequests.urgency} = 'urgent')`,
+        activeHelpers: sql<number>`(SELECT count(*) FROM helper_profiles WHERE ${helperProfiles.isActive} = true AND ${helperProfiles.suspendedAt} IS NULL)`,
+        verifiedHelpers: sql<number>`(SELECT count(*) FROM helper_profiles WHERE ${helperProfiles.isVerified} = true)`,
+        totalOffers: sql<number>`(SELECT count(*) FROM it_hilfe_offers)`,
+      })
+      .from(itHilfeRequests)
 
-    const row = result.rows[0]
-    const total = parseInt(row.total)
-    const completed = parseInt(row.completed)
+    const total = Number(row.total)
+    const completed = Number(row.completed)
 
     return apiSuccess({
       total,
       byStatus: {
-        open: parseInt(row.open),
-        in_discussion: parseInt(row.in_discussion),
-        matched: parseInt(row.matched),
+        open: Number(row.open),
+        in_discussion: Number(row.in_discussion),
+        matched: Number(row.matched),
         completed,
-        cancelled: parseInt(row.cancelled),
+        cancelled: Number(row.cancelled),
       },
       byUrgency: {
-        low: parseInt(row.low),
-        normal: parseInt(row.normal),
-        high: parseInt(row.high),
-        urgent: parseInt(row.urgent),
+        low: Number(row.low),
+        normal: Number(row.normal),
+        high: Number(row.high),
+        urgent: Number(row.urgent),
       },
-      activeHelpers: parseInt(row.active_helpers),
-      verifiedHelpers: parseInt(row.verified_helpers),
-      totalOffers: parseInt(row.total_offers),
+      activeHelpers: Number(row.activeHelpers),
+      verifiedHelpers: Number(row.verifiedHelpers),
+      totalOffers: Number(row.totalOffers),
       resolutionRate: total > 0 ? Math.round((completed / total) * 100) : 0,
     })
   } catch (error) {

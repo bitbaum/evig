@@ -1,9 +1,9 @@
 import { withAdmin } from '@/lib/api/middleware'
-import { query } from '@/lib/auth/db'
+import { db } from '@/db'
+import { itHilfeRequests, users } from '@/db/schema'
+import { eq, and, ilike, or, sql, desc } from 'drizzle-orm'
 import { apiError, apiSuccess, parsePagination } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
-import { TABLE_NAMES } from '@/config/database'
-import { CountRow } from '@/lib/api/db-types'
 
 // GET /api/admin/it-hilfe - List all IT-Hilfe requests with filters
 export const GET = withAdmin('it-hilfe-admin', async (request) => {
@@ -16,70 +16,76 @@ export const GET = withAdmin('it-hilfe-admin', async (request) => {
     const search = searchParams.get('search')
     const { limit, offset } = parsePagination(request)
 
-    const conditions: string[] = []
-    const params: (string | number)[] = []
+    const conditions = []
 
     if (status !== 'all') {
-      conditions.push(`r.status = $${conditions.length + 1}`)
-      params.push(status)
+      conditions.push(eq(itHilfeRequests.status, status))
     }
 
     if (category !== 'all') {
-      conditions.push(`r.category_id = $${conditions.length + 1}`)
-      params.push(category)
+      conditions.push(eq(itHilfeRequests.categoryId, category))
     }
 
     if (urgency !== 'all') {
-      conditions.push(`r.urgency = $${conditions.length + 1}`)
-      params.push(urgency)
+      conditions.push(eq(itHilfeRequests.urgency, urgency))
     }
 
     if (canton) {
-      conditions.push(`r.canton = $${conditions.length + 1}`)
-      params.push(canton)
+      conditions.push(eq(itHilfeRequests.canton, canton))
     }
 
     if (search) {
-      conditions.push(`(r.title ILIKE $${conditions.length + 1} OR r.description ILIKE $${conditions.length + 1} OR u.name ILIKE $${conditions.length + 1})`)
-      params.push(`%${search}%`)
+      const pattern = `%${search}%`
+      conditions.push(or(
+        ilike(itHilfeRequests.title, pattern),
+        ilike(itHilfeRequests.description, pattern),
+        ilike(users.name, pattern),
+      )!)
     }
 
-    const whereClause = conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : ''
+    const where = conditions.length > 0 ? and(...conditions) : undefined
 
-    const requestsQuery = `
-      SELECT
-        r.id, r.title, r.category_id, r.urgency, r.status,
-        r.postal_code, r.city, r.canton, r.budget_amount_cents,
-        r.budget_type, r.offer_count, r.admin_notes,
-        r.created_at, r.updated_at,
-        u.name as requester_name, u.email as requester_email
-      FROM ${TABLE_NAMES.IT_HILFE_REQUESTS} r
-      JOIN ${TABLE_NAMES.USERS} u ON r.requester_id = u.id
-      ${whereClause}
-      ORDER BY r.created_at DESC
-      LIMIT $${params.length + 1} OFFSET $${params.length + 2}
-    `
+    const rows = await db
+      .select({
+        id: itHilfeRequests.id,
+        title: itHilfeRequests.title,
+        category_id: itHilfeRequests.categoryId,
+        urgency: itHilfeRequests.urgency,
+        status: itHilfeRequests.status,
+        postal_code: itHilfeRequests.postalCode,
+        city: itHilfeRequests.city,
+        canton: itHilfeRequests.canton,
+        budget_amount_cents: itHilfeRequests.budgetAmountCents,
+        budget_type: itHilfeRequests.budgetType,
+        offer_count: itHilfeRequests.offerCount,
+        admin_notes: itHilfeRequests.adminNotes,
+        created_at: itHilfeRequests.createdAt,
+        updated_at: itHilfeRequests.updatedAt,
+        requester_name: users.name,
+        requester_email: users.email,
+      })
+      .from(itHilfeRequests)
+      .innerJoin(users, eq(itHilfeRequests.requesterId, users.id))
+      .where(where)
+      .orderBy(desc(itHilfeRequests.createdAt))
+      .limit(limit)
+      .offset(offset)
 
-    params.push(limit, offset)
-    const requests = await query(requestsQuery, params)
+    const [countRow] = await db
+      .select({ total: sql<number>`count(*)` })
+      .from(itHilfeRequests)
+      .innerJoin(users, eq(itHilfeRequests.requesterId, users.id))
+      .where(where)
 
-    const countParams = params.slice(0, -2)
-    const countQuery = `
-      SELECT COUNT(*) as total
-      FROM ${TABLE_NAMES.IT_HILFE_REQUESTS} r
-      JOIN ${TABLE_NAMES.USERS} u ON r.requester_id = u.id
-      ${whereClause}
-    `
-    const countResult = await query(countQuery, countParams)
-    const count = countResult.rows[0] as CountRow
+    const total = Number(countRow?.total ?? 0)
 
     return apiSuccess({
-      items: requests.rows,
+      items: rows,
       pagination: {
-        total: parseInt(count.total),
+        total,
         limit,
         offset,
-        hasMore: offset + limit < parseInt(count.total),
+        hasMore: offset + limit < total,
       },
     })
   } catch (error) {

@@ -45,6 +45,9 @@ export const itHilfeRequests = pgTable('it_hilfe_requests', {
   // AI diagnosis (added by 026)
   aiDiagnosis: text('ai_diagnosis'),
 
+  // Admin management (added by 045)
+  adminNotes: text('admin_notes'),
+
   // Timestamps
   expiresAt: timestamp('expires_at', { withTimezone: true, mode: 'string' }),
   createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' }).defaultNow(),
@@ -150,6 +153,13 @@ export const helperProfiles = pgTable('helper_profiles', {
 
   // Availability
   isActive: boolean('is_active').default(true),
+
+  // Verification and moderation (added by 045)
+  isVerified: boolean('is_verified').default(false),
+  verifiedAt: timestamp('verified_at', { withTimezone: true, mode: 'string' }),
+  verifiedBy: uuid('verified_by').references(() => users.id),
+  suspendedAt: timestamp('suspended_at', { withTimezone: true, mode: 'string' }),
+  adminNotes: text('admin_notes'),
 
   // Statistics
   totalHelpsCompleted: integer('total_helps_completed').default(0),

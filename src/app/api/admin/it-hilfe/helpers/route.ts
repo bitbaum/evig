@@ -1,10 +1,10 @@
 import { withAdmin } from '@/lib/api/middleware'
-import { query } from '@/lib/auth/db'
+import { db } from '@/db'
+import { helperProfiles, users, userSkills } from '@/db/schema'
+import { eq, and, isNull, isNotNull, sql, desc } from 'drizzle-orm'
 import { apiError, apiSuccess, parsePagination } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
-import { TABLE_NAMES } from '@/config/database'
 import { HELPER_STATUS } from '@/config/helper-status'
-import { CountRow } from '@/lib/api/db-types'
 
 // GET /api/admin/it-hilfe/helpers - List all helper profiles
 export const GET = withAdmin('it-hilfe-admin', async (request) => {
@@ -15,67 +15,73 @@ export const GET = withAdmin('it-hilfe-admin', async (request) => {
     const skill = searchParams.get('skill')
     const { limit, offset } = parsePagination(request)
 
-    const conditions: string[] = []
-    const params: (string | number)[] = []
+    const conditions = []
 
     if (status === HELPER_STATUS.ACTIVE) {
-      conditions.push(`hp.is_active = true AND hp.suspended_at IS NULL`)
+      conditions.push(eq(helperProfiles.isActive, true))
+      conditions.push(isNull(helperProfiles.suspendedAt))
     } else if (status === HELPER_STATUS.VERIFIED) {
-      conditions.push(`hp.is_verified = true`)
+      conditions.push(eq(helperProfiles.isVerified, true))
     } else if (status === HELPER_STATUS.SUSPENDED) {
-      conditions.push(`hp.suspended_at IS NOT NULL`)
+      conditions.push(isNotNull(helperProfiles.suspendedAt))
     }
 
     if (canton) {
-      conditions.push(`hp.location_canton = $${conditions.length + 1}`)
-      params.push(canton)
+      conditions.push(eq(helperProfiles.locationCanton, canton))
     }
 
     if (skill) {
-      conditions.push(`EXISTS (SELECT 1 FROM ${TABLE_NAMES.USER_SKILLS} us WHERE us.user_id = hp.user_id AND us.skill_id = $${conditions.length + 1})`)
-      params.push(skill)
+      conditions.push(
+        sql`EXISTS (SELECT 1 FROM user_skills us WHERE us.user_id = ${helperProfiles.userId} AND us.skill_id = ${skill})`
+      )
     }
 
-    const whereClause = conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : ''
+    const where = conditions.length > 0 ? and(...conditions) : undefined
 
-    const helpersQuery = `
-      SELECT
-        hp.id, hp.user_id, hp.bio, hp.hourly_rate_cents,
-        hp.accepts_gratis, hp.accepts_kulturlegi, hp.service_types,
-        hp.location_city, hp.location_canton, hp.is_active,
-        hp.is_verified, hp.verified_at, hp.suspended_at, hp.admin_notes,
-        hp.total_helps_completed, hp.average_rating,
-        hp.created_at,
-        u.name as helper_name, u.email as helper_email,
-        (SELECT array_agg(us.skill_id)
-         FROM ${TABLE_NAMES.USER_SKILLS} us
-         WHERE us.user_id = hp.user_id) as skills
-      FROM ${TABLE_NAMES.IT_HILFE_TECHNICIAN_PROFILES} hp
-      JOIN ${TABLE_NAMES.USERS} u ON hp.user_id = u.id
-      ${whereClause}
-      ORDER BY hp.created_at DESC
-      LIMIT $${params.length + 1} OFFSET $${params.length + 2}
-    `
+    const rows = await db
+      .select({
+        id: helperProfiles.id,
+        user_id: helperProfiles.userId,
+        bio: helperProfiles.bio,
+        hourly_rate_cents: helperProfiles.hourlyRateCents,
+        accepts_gratis: helperProfiles.acceptsGratis,
+        accepts_kulturlegi: helperProfiles.acceptsKulturlegi,
+        service_types: helperProfiles.serviceTypes,
+        location_city: helperProfiles.locationCity,
+        location_canton: helperProfiles.locationCanton,
+        is_active: helperProfiles.isActive,
+        is_verified: helperProfiles.isVerified,
+        verified_at: helperProfiles.verifiedAt,
+        suspended_at: helperProfiles.suspendedAt,
+        admin_notes: helperProfiles.adminNotes,
+        total_helps_completed: helperProfiles.totalHelpsCompleted,
+        average_rating: helperProfiles.averageRating,
+        created_at: helperProfiles.createdAt,
+        helper_name: users.name,
+        helper_email: users.email,
+        skills: sql<string[] | null>`(SELECT array_agg(us.skill_id) FROM user_skills us WHERE us.user_id = ${helperProfiles.userId})`,
+      })
+      .from(helperProfiles)
+      .innerJoin(users, eq(helperProfiles.userId, users.id))
+      .where(where)
+      .orderBy(desc(helperProfiles.createdAt))
+      .limit(limit)
+      .offset(offset)
 
-    params.push(limit, offset)
-    const helpers = await query(helpersQuery, params)
+    const [countRow] = await db
+      .select({ total: sql<number>`count(*)` })
+      .from(helperProfiles)
+      .where(where)
 
-    const countParams = params.slice(0, -2)
-    const countQuery = `
-      SELECT COUNT(*) as total
-      FROM ${TABLE_NAMES.IT_HILFE_TECHNICIAN_PROFILES} hp
-      ${whereClause}
-    `
-    const countResult = await query(countQuery, countParams)
-    const count = countResult.rows[0] as CountRow
+    const total = Number(countRow?.total ?? 0)
 
     return apiSuccess({
-      items: helpers.rows,
+      items: rows,
       pagination: {
-        total: parseInt(count.total),
+        total,
         limit,
         offset,
-        hasMore: offset + limit < parseInt(count.total),
+        hasMore: offset + limit < total,
       },
     })
   } catch (error) {
