@@ -39,21 +39,27 @@ export function NotificationBell() {
   const [unreadCount, setUnreadCount] = useState(0)
   const [open, setOpen] = useState(false)
   const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
   const [markingAll, setMarkingAll] = useState(false)
   const panelRef = useRef<HTMLDivElement>(null)
   const router = useRouter()
 
   const fetchNotifications = useCallback(async () => {
     setLoading(true)
+    setError(null)
     try {
       const res = await fetch('/api/notifications')
+      if (!res.ok) {
+        setError('Benachrichtigungen konnten nicht geladen werden')
+        return
+      }
       const json = await res.json()
       if (json?.success) {
         setNotifications(json.data.notifications)
         setUnreadCount(json.data.unreadCount)
       }
     } catch {
-      // Non-critical — bell just shows no notifications
+      setError('Netzwerkfehler beim Laden der Benachrichtigungen')
     } finally {
       setLoading(false)
     }
@@ -91,9 +97,9 @@ export function NotificationBell() {
       setUnreadCount(prev => Math.max(0, prev - 1))
 
       try {
-        await fetch(`/api/notifications/${notification.id}`, { method: 'PATCH' })
+        const res = await fetch(`/api/notifications/${notification.id}`, { method: 'PATCH' })
+        if (!res.ok) void fetchNotifications()
       } catch {
-        // Revert optimistic update on failure
         void fetchNotifications()
       }
     }
@@ -168,7 +174,17 @@ export function NotificationBell() {
 
           {/* List */}
           <div className="max-h-[400px] overflow-y-auto divide-y divide-gray-100 dark:divide-gray-700">
-            {loading && notifications.length === 0 ? (
+            {error && notifications.length === 0 ? (
+              <div className="py-8 text-center">
+                <p className="text-sm text-red-500 dark:text-red-400 mb-2">{error}</p>
+                <button
+                  onClick={() => void fetchNotifications()}
+                  className="text-xs text-blue-500 hover:text-blue-700 dark:hover:text-blue-400"
+                >
+                  Erneut versuchen
+                </button>
+              </div>
+            ) : loading && notifications.length === 0 ? (
               <div className="py-8 text-center text-sm text-gray-500">
                 Laden…
               </div>
