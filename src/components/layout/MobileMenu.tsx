@@ -115,9 +115,9 @@ export function MobileMenu({
       >
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
-          <div onClick={onClose} className="cursor-pointer">
+          <button type="button" onClick={onClose} className="cursor-pointer bg-transparent border-none p-0">
             <Logo />
-          </div>
+          </button>
           <button
             type="button"
             className={cn(

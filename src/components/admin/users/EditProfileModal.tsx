@@ -33,8 +33,8 @@ export function EditProfileModal({
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto">
       <div className="flex min-h-full items-center justify-center p-4">
-        <div className="fixed inset-0 bg-black/50" onClick={onClose} />
-        <div className="relative bg-white dark:bg-gray-800 rounded-xl shadow-xl max-w-md w-full p-6">
+        <div className="fixed inset-0 bg-black/50" aria-hidden="true" onClick={onClose} />
+        <div role="dialog" aria-modal="true" onKeyDown={(e) => { if (e.key === 'Escape') onClose() }} className="relative bg-white dark:bg-gray-800 rounded-xl shadow-xl max-w-md w-full p-6">
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
               Benutzer bearbeiten

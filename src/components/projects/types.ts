@@ -21,7 +21,7 @@ export interface ProjectHero {
 export interface ProjectCard {
   title: string
   description: string
-  icon?: string | React.ReactNode | React.ComponentType<any>
+  icon?: string | React.ReactNode | React.ComponentType<{ className?: string }>
   features?: string[]
   href?: string
   ctaText?: string
