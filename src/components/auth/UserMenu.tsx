@@ -220,7 +220,7 @@ export function UserMenu() {
                 "hover:bg-gray-50 transition-colors duration-150"
               )}
             >
-              <Settings className="w-4 h-4 text-gray-400 group-hover:text-emerald-600 transition-colors" />
+              <Settings className="w-4 h-4 text-gray-500 group-hover:text-emerald-600 transition-colors" />
               Einstellungen
             </Link>
             <button
@@ -234,7 +234,7 @@ export function UserMenu() {
                 "hover:bg-red-50 transition-colors duration-150"
               )}
             >
-              <LogOut className="w-4 h-4 text-gray-400 group-hover:text-red-500 transition-colors" />
+              <LogOut className="w-4 h-4 text-gray-500 group-hover:text-red-500 transition-colors" />
               Abmelden
             </button>
           </div>

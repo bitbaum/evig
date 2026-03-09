@@ -138,7 +138,7 @@ export default function DecisionEditFormClient({
   }
 
   if (loading) {
-    return <div className="py-12 text-center text-gray-400">Laden...</div>;
+    return <div className="py-12 text-center text-gray-500">Laden...</div>;
   }
 
   return (
@@ -244,7 +244,7 @@ export default function DecisionEditFormClient({
                   type="button"
                   onClick={() => removeOption(opt.id)}
                   disabled={options.length <= 2}
-                  className="rounded-md px-2 text-gray-400 hover:text-red-500 disabled:opacity-30"
+                  className="rounded-md px-2 text-gray-500 hover:text-red-500 disabled:opacity-30"
                 >
                   &times;
                 </button>

@@ -273,7 +273,7 @@ export default async function UserDetailPage({ params }: PageProps) {
       )}
 
       {/* Meta */}
-      <div className="text-xs text-gray-400 flex gap-4">
+      <div className="text-xs text-gray-500 flex gap-4">
         <span>Benutzer-ID: {user.id}</span>
         {user.email_verified && (
           <span>E-Mail verifiziert: {formatDateShort(user.email_verified)}</span>

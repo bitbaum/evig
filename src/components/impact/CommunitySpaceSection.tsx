@@ -57,7 +57,7 @@ export default function CommunitySpaceSection() {
           <h2 className="text-4xl md:text-5xl font-bold mb-6">
             Besuchen Sie uns
           </h2>
-          <p className="text-xl text-gray-400 max-w-3xl mx-auto">
+          <p className="text-xl text-gray-500 max-w-3xl mx-auto">
             Unser Laden in Zürich ist mehr als nur ein Geschäft – er ist ein Treffpunkt
             für alle, die sich für nachhaltige IT und Open Source interessieren.
           </p>

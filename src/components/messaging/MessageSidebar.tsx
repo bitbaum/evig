@@ -151,7 +151,7 @@ export function MessageSidebar({ isOpen, onClose, initialConversationId }: Messa
               {/* Search */}
               <div className="p-4 border-b border-gray-200">
                 <div className="relative">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
                   <input
                     type="text"
                     placeholder="Unterhaltungen suchen..."
@@ -192,7 +192,7 @@ export function MessageSidebar({ isOpen, onClose, initialConversationId }: Messa
                           {conversation.last_message_preview || 'Neue Unterhaltung'}
                         </p>
                         <div className="flex items-center gap-2">
-                          <span className="text-xs text-gray-400 capitalize">
+                          <span className="text-xs text-gray-500 capitalize">
                             {conversation.type}
                           </span>
                           {conversation.unread_count > 0 && (

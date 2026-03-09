@@ -181,7 +181,7 @@ export default async function ApprovalsPage() {
                     {' • '}{formatDateShort(item.submitted_at)}
                   </p>
                   {item.summary && (
-                    <p className="text-sm text-gray-400 mt-1 line-clamp-1">{item.summary}</p>
+                    <p className="text-sm text-gray-500 mt-1 line-clamp-1">{item.summary}</p>
                   )}
                 </div>
                 <ApprovalActions submissionId={item.id} title={item.title} />

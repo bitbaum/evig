@@ -39,7 +39,7 @@ export function UserSearchField({
           <button
             type="button"
             onClick={onClearUser}
-            className="text-gray-400 hover:text-gray-600"
+            className="text-gray-500 hover:text-gray-600"
           >
             <X className="w-4 h-4" />
           </button>
@@ -47,7 +47,7 @@ export function UserSearchField({
       ) : (
         <div className="relative">
           <div className="flex items-center">
-            <Search className="absolute left-3 w-4 h-4 text-gray-400" />
+            <Search className="absolute left-3 w-4 h-4 text-gray-500" />
             <input
               type="text"
               value={userSearch}

@@ -45,7 +45,7 @@ export function RequestsTab({
           {SWISS_CANTONS.map(c => <option key={c} value={c}>{c}</option>)}
         </select>
         <div className="relative flex-1 min-w-[200px]">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
           <input
             type="text"
             placeholder="Suchen..."
@@ -101,7 +101,7 @@ export function RequestsTab({
                 <td className="px-4 py-3">
                   <button
                     onClick={() => onEdit(r.id, r.status, r.urgency, r.admin_notes)}
-                    className="p-1.5 rounded hover:bg-gray-100 dark:hover:bg-gray-700"
+                    className="p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700"
                     title="Bearbeiten"
                   >
                     <Edit3 className="w-4 h-4 text-blue-500" />

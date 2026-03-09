@@ -93,7 +93,7 @@ export default function ReviewForm({ targetType, targetId, onSubmitted, onCancel
       {/* Title (optional) */}
       <div>
         <label className="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">
-          Titel <span className="text-xs text-gray-400">(optional)</span>
+          Titel <span className="text-xs text-gray-500">(optional)</span>
         </label>
         <input
           type="text"

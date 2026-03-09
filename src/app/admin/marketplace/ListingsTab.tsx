@@ -48,7 +48,7 @@ export function ListingsTab({ listings, filter, setFilter, offset, setOffset, on
           <option value="yes">Gemeldet</option>
         </select>
         <div className="relative flex-1 min-w-[200px]">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
           <input
             type="text"
             placeholder="Suchen..."
@@ -98,15 +98,15 @@ export function ListingsTab({ listings, filter, setFilter, offset, setOffset, on
                 <td className="px-4 py-3 text-gray-500 dark:text-gray-400 whitespace-nowrap">{formatDateShort(l.created_at)}</td>
                 <td className="px-4 py-3">
                   <div className="flex items-center gap-1">
-                    <a href={`/marketplace/${l.id}`} target="_blank" rel="noopener noreferrer" className="p-1.5 rounded hover:bg-gray-100 dark:hover:bg-gray-700" title="Ansehen">
+                    <a href={`/marketplace/${l.id}`} target="_blank" rel="noopener noreferrer" className="p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700" title="Ansehen">
                       <Eye className="w-4 h-4 text-gray-500" />
                     </a>
-                    <button onClick={() => onEdit(l.id, l.admin_notes || '', l.status)} className="p-1.5 rounded hover:bg-gray-100 dark:hover:bg-gray-700" title="Bearbeiten">
+                    <button onClick={() => onEdit(l.id, l.admin_notes || '', l.status)} className="p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700" title="Bearbeiten">
                       <Edit3 className="w-4 h-4 text-blue-500" />
                     </button>
                     <VerifyActions listingId={l.id} isVerified={!!l.verified_at} title={l.title} />
                     {l.status !== LISTING_STATUS.REMOVED && (
-                      <button onClick={() => onRemove(l.id, l.title)} className="p-1.5 rounded hover:bg-gray-100 dark:hover:bg-gray-700" title="Entfernen">
+                      <button onClick={() => onRemove(l.id, l.title)} className="p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700" title="Entfernen">
                         <Trash2 className="w-4 h-4 text-red-500" />
                       </button>
                     )}

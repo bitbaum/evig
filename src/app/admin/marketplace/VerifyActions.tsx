@@ -52,7 +52,7 @@ export function VerifyActions({ listingId, isVerified, title }: VerifyActionsPro
   if (loading) {
     return (
       <div className="flex items-center gap-2 px-3 py-2">
-        <Loader2 className="w-4 h-4 animate-spin text-gray-400" />
+        <Loader2 className="w-4 h-4 animate-spin text-gray-500" />
       </div>
     )
   }

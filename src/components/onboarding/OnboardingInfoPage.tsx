@@ -155,9 +155,9 @@ export function OnboardingInfoPage({ config }: OnboardingInfoPageProps) {
                 >
                   <span className="font-medium text-gray-900">{item.question}</span>
                   {expandedFaq === index ? (
-                    <ChevronUp className="w-5 h-5 text-gray-400" />
+                    <ChevronUp className="w-5 h-5 text-gray-500" />
                   ) : (
-                    <ChevronDown className="w-5 h-5 text-gray-400" />
+                    <ChevronDown className="w-5 h-5 text-gray-500" />
                   )}
                 </button>
                 {expandedFaq === index && (

@@ -54,7 +54,7 @@ export default function ITHilfeAdminClient() {
       {/* Tab Content */}
       {loading && !requests && !helpers ? (
         <div className="flex justify-center py-12">
-          <Loader2 className="w-6 h-6 animate-spin text-gray-400" />
+          <Loader2 className="w-6 h-6 animate-spin text-gray-500" />
         </div>
       ) : (
         <>

@@ -134,7 +134,7 @@ export default function ITHilfePage() {
         {/* Search Bar */}
         <form onSubmit={handleSearch} className="max-w-2xl mx-auto">
           <div className="relative">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
             <input
               type="text"
               value={searchInput}

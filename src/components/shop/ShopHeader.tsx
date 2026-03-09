@@ -124,7 +124,7 @@ export function ShopHeader({
             {/* Center: Search (desktop) */}
             <div className="hidden md:flex flex-1 max-w-xl mx-4">
               <div className="relative w-full">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-500" />
                 <input
                   type="search"
                   placeholder="Wonach suchst du?"
@@ -192,7 +192,7 @@ export function ShopHeader({
         {isSearchOpen && (
           <div className="md:hidden border-t border-gray-100 bg-white p-3">
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-500" />
               <input
                 type="search"
                 placeholder="Wonach suchst du?"
@@ -201,7 +201,7 @@ export function ShopHeader({
               />
               <button
                 onClick={() => setIsSearchOpen(false)}
-                className="absolute right-2 top-1/2 transform -translate-y-1/2 p-1 text-gray-400 hover:text-gray-600"
+                className="absolute right-2 top-1/2 transform -translate-y-1/2 p-1 text-gray-500 hover:text-gray-600"
                 aria-label="Suche schliessen"
               >
                 <X className="w-4 h-4" />

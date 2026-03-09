@@ -53,7 +53,7 @@ export function DonationFormModal({
         <div className="p-6">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-xl font-semibold text-gray-900">Spende erfassen</h2>
-            <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
+            <button onClick={onClose} className="text-gray-500 hover:text-gray-600">
               <X className="w-6 h-6" />
             </button>
           </div>

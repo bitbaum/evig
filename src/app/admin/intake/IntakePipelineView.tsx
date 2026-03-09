@@ -111,7 +111,7 @@ export function IntakePipelineView({
         </select>
 
         <div className="relative">
-          <Search className="w-4 h-4 absolute left-2 top-2 text-gray-400" />
+          <Search className="w-4 h-4 absolute left-2 top-2 text-gray-500" />
           <input
             type="text"
             placeholder="Suche..."

@@ -240,7 +240,7 @@ export default function LocationDetailPage() {
               <div className="flex items-center gap-3 mb-2">
                 <Link
                   href="/admin/locations"
-                  className="text-gray-400 hover:text-gray-600 transition-colors"
+                  className="text-gray-500 hover:text-gray-600 transition-colors"
                 >
                   <ArrowLeft className="w-5 h-5" />
                 </Link>
@@ -474,7 +474,7 @@ export default function LocationDetailPage() {
                       <p className="text-sm text-gray-500">{booking.purpose}</p>
                     )}
                     {booking.booked_by_name && (
-                      <p className="text-xs text-gray-400">{booking.booked_by_name}</p>
+                      <p className="text-xs text-gray-500">{booking.booked_by_name}</p>
                     )}
                   </div>
                   <span className={`px-2 py-1 rounded-full text-xs font-medium ${

@@ -17,7 +17,7 @@ export function EditListingModal({ editData, setEditData, editLoading, onSave, o
       <div className="bg-white dark:bg-gray-800 rounded-xl p-6 w-full max-w-md shadow-xl" onClick={e => e.stopPropagation()}>
         <div className="flex items-center justify-between mb-4">
           <h3 className="font-semibold text-gray-900 dark:text-white">Inserat bearbeiten</h3>
-          <button onClick={onClose} className="p-1 rounded hover:bg-gray-100 dark:hover:bg-gray-700">
+          <button onClick={onClose} className="p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700">
             <X className="w-5 h-5" />
           </button>
         </div>

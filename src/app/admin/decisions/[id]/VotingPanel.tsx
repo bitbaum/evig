@@ -287,7 +287,7 @@ export default function VotingPanel({
                     className={`h-9 w-9 rounded-md text-sm font-bold transition ${
                       (scores[opt.id] || 0) >= n
                         ? 'bg-amber-400 text-white'
-                        : 'border border-gray-300 text-gray-400 hover:border-amber-300'
+                        : 'border border-gray-300 text-gray-500 hover:border-amber-300'
                     }`}
                   >
                     {n}

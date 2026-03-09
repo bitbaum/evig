@@ -143,7 +143,7 @@ function FieldChange({
  */
 function formatValue(value: unknown): React.ReactNode {
   if (value === null || value === undefined) {
-    return <span className="italic text-gray-400">(leer)</span>;
+    return <span className="italic text-gray-500">(leer)</span>;
   }
 
   if (Array.isArray(value)) {
@@ -161,10 +161,10 @@ function formatValue(value: unknown): React.ReactNode {
     return (
       <>
         {strValue.substring(0, 300)}
-        <span className="text-gray-400 italic">... (gekürzt)</span>
+        <span className="text-gray-500 italic">... (gekürzt)</span>
       </>
     );
   }
 
-  return strValue || <span className="italic text-gray-400">(leer)</span>;
+  return strValue || <span className="italic text-gray-500">(leer)</span>;
 }

@@ -109,7 +109,7 @@ export function HirnSidebar({
 
         {loading ? (
           <div className="flex items-center justify-center py-8">
-            <Loader2 className="w-5 h-5 animate-spin text-gray-400" />
+            <Loader2 className="w-5 h-5 animate-spin text-gray-500" />
           </div>
         ) : sessions.length === 0 ? (
           <p className="px-2 py-4 text-sm text-gray-500 text-center">

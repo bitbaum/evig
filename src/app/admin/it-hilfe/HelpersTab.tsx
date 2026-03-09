@@ -74,7 +74,7 @@ export function HelpersTab({
                 <td className="px-4 py-3">
                   <div className="flex flex-wrap gap-1 max-w-xs">
                     {(h.skills ?? []).slice(0, 5).map(s => <SkillTag key={s} skillId={s} />)}
-                    {(h.skills ?? []).length > 5 && <span className="text-[10px] text-gray-400">+{(h.skills ?? []).length - 5}</span>}
+                    {(h.skills ?? []).length > 5 && <span className="text-[10px] text-gray-500">+{(h.skills ?? []).length - 5}</span>}
                   </div>
                 </td>
                 <td className="px-4 py-3 text-gray-500">{h.location_canton ?? '–'}</td>
@@ -100,7 +100,7 @@ export function HelpersTab({
                     {!h.is_verified && !h.suspended_at && (
                       <button
                         onClick={() => onAction(h.id, 'verify')}
-                        className="p-1.5 rounded hover:bg-gray-100 dark:hover:bg-gray-700"
+                        className="p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700"
                         title="Verifizieren"
                       >
                         <ShieldCheck className="w-4 h-4 text-green-500" />
@@ -109,7 +109,7 @@ export function HelpersTab({
                     {!h.suspended_at && (
                       <button
                         onClick={() => onAction(h.id, 'suspend')}
-                        className="p-1.5 rounded hover:bg-gray-100 dark:hover:bg-gray-700"
+                        className="p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700"
                         title="Sperren"
                       >
                         <Ban className="w-4 h-4 text-red-500" />
@@ -118,7 +118,7 @@ export function HelpersTab({
                     {h.suspended_at && (
                       <button
                         onClick={() => onAction(h.id, 'reactivate')}
-                        className="p-1.5 rounded hover:bg-gray-100 dark:hover:bg-gray-700"
+                        className="p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700"
                         title="Reaktivieren"
                       >
                         <UserCheck className="w-4 h-4 text-blue-500" />

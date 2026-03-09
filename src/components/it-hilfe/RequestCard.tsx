@@ -93,7 +93,7 @@ export function RequestCard({ request, className = '' }: RequestCardProps) {
         <span className="text-sm font-medium text-emerald-600 dark:text-emerald-400">
           {formatBudget(request.budgetAmountCents)}
         </span>
-        <span className="text-xs text-gray-400">
+        <span className="text-xs text-gray-500">
           {formatDateShort(request.createdAt)}
         </span>
       </div>

@@ -173,7 +173,7 @@ export function MobileMenu({
                       {item.name}
                       <ChevronDown 
                         className={cn(
-                          "h-4 w-4 text-gray-400 transition-transform duration-200",
+                          "h-4 w-4 text-gray-500 transition-transform duration-200",
                           openDropdown === item.name && "rotate-180 text-emerald-600"
                         )} 
                       />
@@ -209,7 +209,7 @@ export function MobileMenu({
                                     {subItem.badge}
                                   </span>
                                 )}
-                                <ExternalLink className="w-3 h-3 text-gray-400" />
+                                <ExternalLink className="w-3 h-3 text-gray-500" />
                               </a>
                             ) : (
                               <button
@@ -247,7 +247,7 @@ export function MobileMenu({
                     onClick={onClose}
                   >
                     {item.name}
-                    <ExternalLink className="w-4 h-4 text-gray-400" />
+                    <ExternalLink className="w-4 h-4 text-gray-500" />
                   </a>
                 ) : (
                   <button

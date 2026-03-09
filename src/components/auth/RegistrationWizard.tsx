@@ -182,7 +182,7 @@ export function RegistrationWizard() {
                   Hilfe bei IT-Problemen finden
                 </div>
               </div>
-              <ArrowRight className="w-5 h-5 text-gray-400" />
+              <ArrowRight className="w-5 h-5 text-gray-500" />
             </Link>
 
             <Link
@@ -200,7 +200,7 @@ export function RegistrationWizard() {
                   Deine Skills erfassen und anderen helfen
                 </div>
               </div>
-              <ArrowRight className="w-5 h-5 text-gray-400" />
+              <ArrowRight className="w-5 h-5 text-gray-500" />
             </Link>
 
             <Link
@@ -218,7 +218,7 @@ export function RegistrationWizard() {
                   Refurbished IT-Geräte entdecken
                 </div>
               </div>
-              <ArrowRight className="w-5 h-5 text-gray-400" />
+              <ArrowRight className="w-5 h-5 text-gray-500" />
             </Link>
           </div>
 

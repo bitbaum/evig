@@ -224,7 +224,7 @@ export function VerifyStep({
         >
           Später verifizieren
         </button>
-        <p className="text-xs text-gray-400 text-center mt-2">
+        <p className="text-xs text-gray-500 text-center mt-2">
           Sie können sich anmelden, aber einige Funktionen sind eingeschränkt
         </p>
       </div>

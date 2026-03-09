@@ -233,7 +233,7 @@ export function DigestPageClient() {
                         <p className="text-lg font-bold text-gray-900 dark:text-gray-100">
                           {user.total_score}
                         </p>
-                        <p className="text-xs text-gray-400">Punkte</p>
+                        <p className="text-xs text-gray-500">Punkte</p>
                       </div>
                     </div>
                   ))}

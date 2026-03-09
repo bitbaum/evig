@@ -333,7 +333,7 @@ export default function DecisionActions({
                     <span className="flex-1">
                       {task.title}
                       {task.priority && task.priority !== 'normal' && (
-                        <span className="ml-1 text-gray-400">
+                        <span className="ml-1 text-gray-500">
                           ({PRIORITY_HINT_LABELS[task.priority] || task.priority})
                         </span>
                       )}

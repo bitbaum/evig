@@ -9,6 +9,7 @@ import { getCategoryLabel, VERIFICATION_CONFIG } from '@/config/marketplace'
 import { getConditionCriteria } from '@/config/marketplace/condition-criteria'
 import { formatDateShort } from '@/lib/date-formats'
 import ListingReviews from '@/components/marketplace/ListingReviews'
+import { CO2Badge } from '@/components/marketplace/CO2Badge'
 import type { ListingDetail } from './types'
 
 interface ListingDetailsProps {
@@ -21,8 +22,13 @@ export function ListingDetails({ listing, isVerified }: ListingDetailsProps) {
 
   return (
     <>
+      {/* CO2 Impact Badge */}
+      <div className="mt-8">
+        <CO2Badge category={listing.category} />
+      </div>
+
       {/* Description */}
-      <div className="mt-8 bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
+      <div className="mt-4 bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
         <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-3">Beschreibung</h2>
         <div className="prose dark:prose-invert max-w-none text-gray-600 dark:text-gray-300 whitespace-pre-line text-sm">
           {listing.description}

@@ -176,7 +176,7 @@ export function AdminLayoutClient({
           {/* Desktop collapse button */}
           <button
             onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
-            className="hidden lg:flex w-8 h-8 items-center justify-center rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+            className="hidden lg:flex w-10 h-10 items-center justify-center rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
           >
             {sidebarCollapsed ? (
               <ChevronRight className="w-4 h-4 text-gray-600 dark:text-gray-400" />
@@ -188,7 +188,7 @@ export function AdminLayoutClient({
           {/* Mobile close button */}
           <button
             onClick={() => setMobileMenuOpen(false)}
-            className="lg:hidden w-8 h-8 flex items-center justify-center rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
+            className="lg:hidden w-10 h-10 flex items-center justify-center rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
           >
             <ChevronLeft className="w-4 h-4 text-gray-600 dark:text-gray-400" />
           </button>
@@ -370,7 +370,7 @@ export function AdminLayoutClient({
               {/* Desktop collapse button for small screens */}
               <button
                 onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
-                className="hidden lg:flex xl:hidden w-8 h-8 items-center justify-center rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
+                className="hidden lg:flex xl:hidden w-10 h-10 items-center justify-center rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
               >
                 <Menu className="w-4 h-4 text-gray-600 dark:text-gray-400" />
               </button>
@@ -452,7 +452,7 @@ export function AdminLayoutClient({
                         onClick={() => setUserMenuOpen(false)}
                         className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
                       >
-                        <ExternalLink className="w-4 h-4 text-gray-400" />
+                        <ExternalLink className="w-4 h-4 text-gray-500" />
                         Zur Website
                       </Link>
 
@@ -463,9 +463,9 @@ export function AdminLayoutClient({
                       >
                         <div className="flex items-center gap-3">
                           {theme === 'dark' ? (
-                            <Sun className="w-4 h-4 text-gray-400" />
+                            <Sun className="w-4 h-4 text-gray-500" />
                           ) : (
-                            <Moon className="w-4 h-4 text-gray-400" />
+                            <Moon className="w-4 h-4 text-gray-500" />
                           )}
                           Dark Mode
                         </div>

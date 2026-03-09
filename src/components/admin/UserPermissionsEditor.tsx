@@ -106,7 +106,7 @@ export function UserPermissionsEditor({
             </div>
             <button
               onClick={onClose}
-              className="p-2 text-gray-400 hover:text-gray-600 rounded-lg"
+              className="p-2 text-gray-500 hover:text-gray-600 rounded-lg"
             >
               <X className="w-5 h-5" />
             </button>

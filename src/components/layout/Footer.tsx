@@ -109,7 +109,7 @@ export default function Footer() {
               <a
                 key={social.name}
                 href={social.href}
-                className="p-2 text-gray-400 hover:text-white transition-colors"
+                className="p-2 text-gray-500 hover:text-white transition-colors"
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -121,7 +121,7 @@ export default function Footer() {
         </div>
 
         {/* Copyright */}
-        <div className="mt-8 text-center text-gray-400">
+        <div className="mt-8 text-center text-gray-500">
           <p>&copy; {new Date().getFullYear()} RevampIT. Alle Rechte vorbehalten.</p>
         </div>
       </div>

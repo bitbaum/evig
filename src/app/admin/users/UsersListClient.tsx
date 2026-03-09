@@ -152,7 +152,7 @@ export function UsersListClient({ currentUserIsSuperAdmin }: UsersListClientProp
       {/* Loading State */}
       {loading && (
         <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 p-8 text-center">
-          <RefreshCw className="w-8 h-8 text-gray-400 mx-auto animate-spin mb-4" />
+          <RefreshCw className="w-8 h-8 text-gray-500 mx-auto animate-spin mb-4" />
           <p className="text-gray-500">Lade Benutzer...</p>
         </div>
       )}

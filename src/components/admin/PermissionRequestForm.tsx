@@ -115,7 +115,7 @@ export function PermissionRequestForm({ availableSections, onClose }: Permission
           <button
             type="button"
             onClick={onClose}
-            className="ml-auto text-gray-400 hover:text-gray-600"
+            className="ml-auto text-gray-500 hover:text-gray-600"
           >
             <X className="w-5 h-5" />
           </button>

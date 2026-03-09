@@ -97,7 +97,7 @@ export function NavItem({ item, onAnyOpen, onAnyClose }: NavItemProps) {
         {item.name}
         <ChevronDown
           className={cn(
-            "w-3.5 h-3.5 text-gray-400 transition-transform duration-200",
+            "w-3.5 h-3.5 text-gray-500 transition-transform duration-200",
             isOpen && "rotate-180 text-emerald-600"
           )}
         />

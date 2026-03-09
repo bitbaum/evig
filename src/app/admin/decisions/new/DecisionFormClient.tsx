@@ -240,7 +240,7 @@ export default function DecisionFormClient() {
                   type="button"
                   onClick={() => removeOption(opt.id)}
                   disabled={options.length <= 2}
-                  className="rounded-md px-2 text-gray-400 hover:text-red-500 disabled:opacity-30"
+                  className="rounded-md px-2 text-gray-500 hover:text-red-500 disabled:opacity-30"
                 >
                   &times;
                 </button>

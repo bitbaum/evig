@@ -97,7 +97,7 @@ export function AIFieldIndicator({
                 onClick={() => setShowDetails(false)}
                 className="p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded"
               >
-                <X className="w-4 h-4 text-gray-400" />
+                <X className="w-4 h-4 text-gray-500" />
               </button>
             </div>
 

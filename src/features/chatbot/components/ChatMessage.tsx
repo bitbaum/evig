@@ -51,9 +51,9 @@ export function ChatMessage({ message, onSuggestionClick }: ChatMessageProps) {
                 </div>
                 <div className="flex items-center ml-2">
                   {suggestion.external ? (
-                    <ExternalLink className="w-3 h-3 text-gray-400 group-hover:text-green-600 transition-colors" />
+                    <ExternalLink className="w-3 h-3 text-gray-500 group-hover:text-green-600 transition-colors" />
                   ) : (
-                    <ArrowRight className="w-3 h-3 text-gray-400 group-hover:text-green-600 transition-colors" />
+                    <ArrowRight className="w-3 h-3 text-gray-500 group-hover:text-green-600 transition-colors" />
                   )}
                 </div>
               </button>

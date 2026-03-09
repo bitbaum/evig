@@ -129,7 +129,7 @@ export default function DecisionDetailClient({
     : false;
 
   if (loading) {
-    return <div className="py-12 text-center text-gray-400">Laden...</div>;
+    return <div className="py-12 text-center text-gray-500">Laden...</div>;
   }
 
   if (!decision) {
@@ -154,10 +154,10 @@ export default function DecisionDetailClient({
       )}
 
       {/* Header */}
-      <div className="rounded-lg bg-white p-6 shadow-sm">
-        <div className="flex items-start justify-between">
+      <div className="rounded-lg bg-white p-4 md:p-6 shadow-sm">
+        <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
           <div>
-            <div className="mb-2 flex items-center gap-2">
+            <div className="mb-2 flex flex-wrap items-center gap-2">
               <span
                 className={`rounded-full px-2.5 py-0.5 text-xs font-medium ${statusConf.color}`}
               >
@@ -177,7 +177,7 @@ export default function DecisionDetailClient({
           </div>
 
           {/* Action Buttons */}
-          <div className="flex gap-2">
+          <div className="flex flex-wrap gap-2">
             {(EDITABLE_STATUSES as readonly string[]).includes(decision.status) && (
               <Link
                 href={`/admin/decisions/${decision.id}/edit`}

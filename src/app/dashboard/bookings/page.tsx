@@ -116,7 +116,7 @@ export default function CustomerBookings() {
   return (
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="max-w-4xl mx-auto px-4">
-        <div className="flex justify-between items-center mb-8">
+        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-8">
           <div>
             <h1 className="text-2xl font-bold text-gray-900">Meine Buchungen</h1>
             <p className="text-gray-600">Ihre Reparaturaufträge im Überblick</p>
@@ -124,14 +124,14 @@ export default function CustomerBookings() {
           <div className="flex gap-2">
             <button
               onClick={fetchAppointments}
-              className="flex items-center gap-2 px-4 py-2 bg-white border rounded-lg hover:bg-gray-50"
+              className="flex items-center gap-2 px-3 md:px-4 py-2 bg-white border rounded-lg hover:bg-gray-50 text-sm md:text-base"
             >
               <RefreshCw className="h-4 w-4" />
-              Aktualisieren
+              <span className="hidden sm:inline">Aktualisieren</span>
             </button>
             <Link
               href="/repairers"
-              className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+              className="flex items-center gap-2 px-3 md:px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm md:text-base"
             >
               <Wrench className="h-4 w-4" />
               Neuer Auftrag
@@ -192,8 +192,8 @@ export default function CustomerBookings() {
             </div>
           ) : (
             filteredAppointments.map(apt => (
-              <div key={apt.id} className="bg-white rounded-lg shadow-sm border p-6">
-                <div className="flex justify-between items-start mb-4">
+              <div key={apt.id} className="bg-white rounded-lg shadow-sm border p-4 md:p-6">
+                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-2 mb-4">
                   <div>
                     <span className={'px-3 py-1 rounded-full text-sm font-medium ' +
                       (STATUS_CONFIG[apt.status]?.color || 'bg-gray-100')}>
@@ -220,13 +220,13 @@ export default function CustomerBookings() {
 
                 {apt.quoted_price_chf && (
                   <div className="bg-purple-50 rounded-lg p-4 mb-4">
-                    <div className="flex justify-between items-center">
+                    <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
                       <div>
                         <p className="text-sm text-purple-700 font-medium">Angebot</p>
                         <p className="text-2xl font-bold text-purple-900">CHF {apt.quoted_price_chf}</p>
                       </div>
                       {apt.diagnosis_notes && (
-                        <p className="text-sm text-purple-700 max-w-xs">{apt.diagnosis_notes}</p>
+                        <p className="text-sm text-purple-700 sm:max-w-xs">{apt.diagnosis_notes}</p>
                       )}
                     </div>
                   </div>
@@ -248,7 +248,7 @@ export default function CustomerBookings() {
                 </div>
 
                 {/* Action Buttons */}
-                <div className="flex gap-2 pt-4 border-t">
+                <div className="flex flex-wrap gap-2 pt-4 border-t">
                   {apt.status === 'quoted' && (
                     <>
                       <button
@@ -293,7 +293,7 @@ export default function CustomerBookings() {
 
                   <Link
                     href={'/dashboard/bookings/' + apt.id}
-                    className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 flex items-center gap-2 ml-auto"
+                    className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 flex items-center gap-2 sm:ml-auto"
                   >
                     Details
                     <ChevronRight className="h-4 w-4" />

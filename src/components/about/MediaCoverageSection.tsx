@@ -49,7 +49,7 @@ function MediaCard({ mention }: { mention: MediaMention }) {
             {mention.title}
           </h3>
         </div>
-        <ExternalLink className="h-4 w-4 text-gray-400 group-hover:text-green-500 flex-shrink-0 transition-colors" />
+        <ExternalLink className="h-4 w-4 text-gray-500 group-hover:text-green-500 flex-shrink-0 transition-colors" />
       </div>
 
       {/* Source and Date */}

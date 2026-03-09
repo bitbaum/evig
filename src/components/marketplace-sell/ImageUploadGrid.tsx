@@ -16,7 +16,7 @@ export function ImageUploadGrid({ images, isUploading, onUpload, onRemove }: Pro
     <div>
       <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
         Bilder <span className="text-red-500">*</span>
-        <span className="text-xs text-gray-400 ml-1">({images.length}/{MARKETPLACE_LIMITS.MAX_IMAGES})</span>
+        <span className="text-xs text-gray-500 ml-1">({images.length}/{MARKETPLACE_LIMITS.MAX_IMAGES})</span>
       </label>
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         {images.map((url, idx) => (
@@ -39,7 +39,7 @@ export function ImageUploadGrid({ images, isUploading, onUpload, onRemove }: Pro
           <button
             onClick={() => fileInputRef.current?.click()}
             disabled={isUploading}
-            className="aspect-square rounded-lg border-2 border-dashed border-gray-300 dark:border-gray-600 flex flex-col items-center justify-center gap-1 text-gray-400 hover:text-gray-500 hover:border-gray-400 transition-colors"
+            className="aspect-square rounded-lg border-2 border-dashed border-gray-300 dark:border-gray-600 flex flex-col items-center justify-center gap-1 text-gray-500 hover:text-gray-600 hover:border-gray-400 transition-colors"
           >
             {isUploading ? (
               <Loader2 className="w-6 h-6 animate-spin" />

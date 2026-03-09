@@ -23,7 +23,7 @@ export function HelperActionModal({
           <h3 className="font-semibold text-gray-900 dark:text-white">
             {helperAction === 'verify' ? 'Helfer verifizieren' : helperAction === 'suspend' ? 'Helfer sperren' : 'Helfer reaktivieren'}
           </h3>
-          <button onClick={onClose} className="p-1 rounded hover:bg-gray-100 dark:hover:bg-gray-700">
+          <button onClick={onClose} className="p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700">
             <X className="w-5 h-5" />
           </button>
         </div>

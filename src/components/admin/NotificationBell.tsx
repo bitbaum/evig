@@ -161,7 +161,7 @@ export function NotificationBell() {
                 onClick={() => setOpen(false)}
                 className="p-1 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
               >
-                <X className="w-4 h-4 text-gray-400" />
+                <X className="w-4 h-4 text-gray-500" />
               </button>
             </div>
           </div>
@@ -169,13 +169,13 @@ export function NotificationBell() {
           {/* List */}
           <div className="max-h-[400px] overflow-y-auto divide-y divide-gray-100 dark:divide-gray-700">
             {loading && notifications.length === 0 ? (
-              <div className="py-8 text-center text-sm text-gray-400">
+              <div className="py-8 text-center text-sm text-gray-500">
                 Laden…
               </div>
             ) : notifications.length === 0 ? (
               <div className="py-8 text-center">
                 <Bell className="w-8 h-8 text-gray-200 dark:text-gray-600 mx-auto mb-2" />
-                <p className="text-sm text-gray-400">Keine Benachrichtigungen</p>
+                <p className="text-sm text-gray-500">Keine Benachrichtigungen</p>
               </div>
             ) : (
               notifications.map(n => {
@@ -204,7 +204,7 @@ export function NotificationBell() {
                           {n.content}
                         </p>
                         <div className="flex items-center gap-2 mt-1">
-                          <span className="text-xs text-gray-400">
+                          <span className="text-xs text-gray-500">
                             {relativeTime(n.created_at)}
                           </span>
                           {href && (

@@ -1,7 +1,6 @@
 'use client'
 
 import { useState, useEffect, useCallback } from 'react'
-import { useSession } from 'next-auth/react'
 import Link from 'next/link'
 import { logger } from '@/lib/logger'
 import {
@@ -19,65 +18,27 @@ import { getCategoryIcon, getLevelBadgeClass } from '@/config/workshops'
 import Heading from '@/components/ui/Heading'
 import { PageHero } from '@/components/layout/PageHero'
 import { formatDateShort } from '@/lib/date-formats'
-import type { Workshop, WorkshopInstanceWithCount, WorkshopWithInstances } from '@/components/workshops/types'
+import type { WorkshopWithInstances } from '@/components/workshops/types'
 
 export default function WorkshopsPage() {
-  const { data: session } = useSession()
   const [workshops, setWorkshops] = useState<WorkshopWithInstances[]>([])
   const [loading, setLoading] = useState(true)
   const [filter, setFilter] = useState<string>('all')
 
   const fetchWorkshops = useCallback(async () => {
     try {
-      // Fetch workshops
-      const workshopsResponse = await fetch('/api/workshops')
-      const workshopsData = await workshopsResponse.json()
+      const response = await fetch('/api/workshops?include=instances')
+      const data = await response.json()
 
-      if (workshopsData.success && Array.isArray(workshopsData.data)) {
-        // Fetch instances for each workshop
-        const workshopsWithInstances = await Promise.all(
-          workshopsData.data.map(async (workshop: Workshop) => {
-            try {
-              const instancesResponse = await fetch(`/api/workshops/${workshop.slug}/instances`)
-              const instancesData = await instancesResponse.json()
-
-              const instances = instancesData.success && Array.isArray(instancesData.data)
-                ? instancesData.data
-                : []
-
-              let userRegistered = false
-              if (session?.user && instances.length > 0) {
-                // Check if user is registered for any instance
-                for (const instance of instances) {
-                  const registrationResponse = await fetch(`/api/workshops/registration/${instance.id}`)
-                  const registrationData = await registrationResponse.json()
-                  if (registrationData.registered) {
-                    userRegistered = true
-                    break
-                  }
-                }
-              }
-
-              return {
-                ...workshop,
-                instances,
-                user_registered: userRegistered
-              }
-            } catch (error) {
-              logger.error(`Error fetching instances for ${workshop.slug}`, { error })
-              return { ...workshop, instances: [], user_registered: false }
-            }
-          })
-        )
-
-        setWorkshops(workshopsWithInstances)
+      if (data.success && Array.isArray(data.data)) {
+        setWorkshops(data.data)
       }
     } catch (error) {
       logger.error('Error fetching workshops', { error })
     } finally {
       setLoading(false)
     }
-  }, [session])
+  }, [])
 
   useEffect(() => {
     fetchWorkshops()

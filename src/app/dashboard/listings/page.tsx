@@ -266,7 +266,7 @@ export default function MyListingsPage() {
                 <div className="flex items-center gap-1 flex-shrink-0">
                   <Link
                     href={`/marketplace/sell?edit=${listing.id}`}
-                    className="p-2 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                    className="p-2 rounded-lg text-gray-500 hover:text-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
                     title="Bearbeiten"
                   >
                     <Pencil className="w-4 h-4" />
@@ -274,7 +274,7 @@ export default function MyListingsPage() {
                   <button
                     onClick={() => handleDuplicate(listing.id)}
                     disabled={duplicatingId === listing.id}
-                    className="p-2 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors disabled:opacity-50"
+                    className="p-2 rounded-lg text-gray-500 hover:text-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors disabled:opacity-50"
                     title="Duplizieren"
                   >
                     {duplicatingId === listing.id ? (
@@ -286,7 +286,7 @@ export default function MyListingsPage() {
                   <button
                     onClick={() => handleDelete(listing.id)}
                     disabled={deletingId === listing.id}
-                    className="p-2 rounded-lg text-gray-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors disabled:opacity-50"
+                    className="p-2 rounded-lg text-gray-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors disabled:opacity-50"
                     title="Löschen"
                   >
                     {deletingId === listing.id ? (

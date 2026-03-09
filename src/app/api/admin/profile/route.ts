@@ -1,7 +1,7 @@
 import { NextRequest } from 'next/server'
 import { cookies } from 'next/headers'
 import jwt from 'jsonwebtoken'
-import { getJwtSecret } from '@/lib/admin-auth'
+import { getJwtSecret } from '@/lib/auth/config'
 import { apiSuccess, apiError, apiUnauthorized } from '@/lib/api/helpers'
 import { logger } from '@/lib/logger'
 

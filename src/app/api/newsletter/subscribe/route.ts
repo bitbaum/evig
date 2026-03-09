@@ -1,6 +1,6 @@
 import { NextRequest } from 'next/server'
 import { randomBytes } from 'crypto'
-import { requireAdminAuth } from '@/lib/admin-auth'
+import { withAdmin } from '@/lib/api/middleware'
 import { apiError, apiSuccess, apiBadRequest, apiRateLimited } from '@/lib/api/helpers'
 import { logger } from '@/lib/logger'
 import { checkRateLimit, getClientIp } from '@/lib/auth/rate-limiter'
@@ -116,7 +116,7 @@ export async function POST(request: NextRequest) {
 }
 
 // Protected admin endpoint to view subscribers
-export const GET = requireAdminAuth(async () => {
+export const GET = withAdmin(async (_request, _session) => {
   try {
     const { rows } = await query<{
       email: string

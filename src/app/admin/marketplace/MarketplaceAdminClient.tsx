@@ -51,7 +51,7 @@ export default function MarketplaceAdminClient() {
       {/* Tab Content */}
       {m.loading && !m.listings && !m.reports && !m.orders ? (
         <div className="flex justify-center py-12">
-          <Loader2 className="w-6 h-6 animate-spin text-gray-400" />
+          <Loader2 className="w-6 h-6 animate-spin text-gray-500" />
         </div>
       ) : (
         <>

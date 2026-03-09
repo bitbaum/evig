@@ -259,7 +259,7 @@ export default function MyOffersPage() {
                         </div>
                       </div>
 
-                      <ArrowRight className="w-5 h-5 text-gray-400 group-hover:text-emerald-600 transition-colors" />
+                      <ArrowRight className="w-5 h-5 text-gray-500 group-hover:text-emerald-600 transition-colors" />
                     </div>
                   </Link>
                   {offer.status === OFFER_STATUS.PENDING && (

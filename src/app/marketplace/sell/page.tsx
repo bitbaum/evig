@@ -269,7 +269,7 @@ function SellPageContent() {
       </Link>
 
       <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
-        <div className="p-6 border-b border-gray-100 dark:border-gray-700">
+        <div className="p-4 md:p-6 border-b border-gray-100 dark:border-gray-700">
           <h1 className="text-xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
             <Package className="w-5 h-5 text-green-600" />
             {editId ? 'Inserat bearbeiten' : 'Inserat erstellen'}
@@ -281,7 +281,7 @@ function SellPageContent() {
           </p>
         </div>
 
-        <div className="p-6 space-y-6">
+        <div className="p-4 md:p-6 space-y-6">
           {/* AI Camera overlay */}
           {showCamera && (
             <AICameraProductListing
@@ -325,11 +325,11 @@ function SellPageContent() {
         </div>
 
         {/* Form Footer */}
-        <div className="p-6 border-t border-gray-100 dark:border-gray-700">
+        <div className="p-4 md:p-6 border-t border-gray-100 dark:border-gray-700">
           {error && (
             <ErrorAlert message={error} variant="inline" className="mb-4" />
           )}
-          <div className="flex gap-3">
+          <div className="flex flex-col-reverse sm:flex-row gap-3">
             <Link
               href="/marketplace"
               className="px-6 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800"

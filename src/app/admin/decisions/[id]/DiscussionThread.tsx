@@ -163,7 +163,7 @@ export default function DiscussionThread({
       <h2 className="mb-4 text-lg font-semibold text-gray-900">Diskussion</h2>
 
       {loading ? (
-        <p className="text-sm text-gray-400">Laden...</p>
+        <p className="text-sm text-gray-500">Laden...</p>
       ) : comments.length === 0 ? (
         <p className="text-sm text-gray-500">Noch keine Kommentare</p>
       ) : (
@@ -205,14 +205,14 @@ export default function DiscussionThread({
                             <div className="flex items-center gap-1">
                               <button
                                 onClick={() => startEdit(c)}
-                                className="p-1 text-gray-400 hover:text-blue-600 rounded"
+                                className="p-2 text-gray-500 hover:text-blue-600 rounded"
                                 title="Bearbeiten"
                               >
                                 <Pencil className="w-3.5 h-3.5" />
                               </button>
                               <button
                                 onClick={() => setDeleteId(c.id)}
-                                className="p-1 text-gray-400 hover:text-red-600 rounded"
+                                className="p-2 text-gray-500 hover:text-red-600 rounded"
                                 title="Löschen"
                               >
                                 <Trash2 className="w-3.5 h-3.5" />

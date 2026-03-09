@@ -43,7 +43,7 @@ export function SpecFields({ categoryValue, specs, onSpecsChange }: SpecFieldsPr
     <div>
       <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
         Technische Daten
-        <span className="text-xs text-gray-400 ml-1">(optional)</span>
+        <span className="text-xs text-gray-500 ml-1">(optional)</span>
       </label>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         {mergedSpecs.map(spec => (

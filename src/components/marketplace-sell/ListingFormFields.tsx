@@ -160,7 +160,7 @@ export function ListingFormFields({ formData, setFormData }: Props) {
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-            Marke <span className="text-xs text-gray-400">(optional)</span>
+            Marke <span className="text-xs text-gray-500">(optional)</span>
           </label>
           <input
             type="text"
@@ -172,7 +172,7 @@ export function ListingFormFields({ formData, setFormData }: Props) {
         </div>
         <div>
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-            Modell <span className="text-xs text-gray-400">(optional)</span>
+            Modell <span className="text-xs text-gray-500">(optional)</span>
           </label>
           <input
             type="text"
@@ -246,7 +246,7 @@ export function ListingFormFields({ formData, setFormData }: Props) {
       {/* Pickup location */}
       <div>
         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-          Abholstandort <span className="text-xs text-gray-400">(optional)</span>
+          Abholstandort <span className="text-xs text-gray-500">(optional)</span>
         </label>
         <input
           type="text"

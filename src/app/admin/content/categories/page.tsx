@@ -220,7 +220,7 @@ export default async function AdminCategoriesPage() {
                             {category.description}
                           </div>
                         )}
-                        <div className="text-xs text-gray-400 dark:text-gray-500 mt-1">
+                        <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">
                           /{category.slug}
                         </div>
                       </div>

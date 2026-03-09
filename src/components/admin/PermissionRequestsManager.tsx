@@ -155,7 +155,7 @@ export function PermissionRequestsManager() {
         </div>
         <button
           onClick={fetchRequests}
-          className="text-gray-400 hover:text-gray-600"
+          className="text-gray-500 hover:text-gray-600"
         >
           <RefreshCw className="w-4 h-4" />
         </button>

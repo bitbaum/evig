@@ -31,7 +31,7 @@ export function InstanceFormModal({
           <h2 className="text-xl font-semibold text-gray-900">
             {editingInstance ? 'Termin bearbeiten' : 'Neuer Termin'}
           </h2>
-          <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
+          <button onClick={onClose} className="text-gray-500 hover:text-gray-600">
             <X className="w-5 h-5" />
           </button>
         </div>

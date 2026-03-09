@@ -173,7 +173,7 @@ export function HirnProviderSelector() {
         ) : (
           <span className="text-gray-500">Kein Provider</span>
         )}
-        <Settings className="w-4 h-4 text-gray-400 ml-1" />
+        <Settings className="w-4 h-4 text-gray-500 ml-1" />
       </button>
 
       {/* Dropdown */}
@@ -188,7 +188,7 @@ export function HirnProviderSelector() {
                 <p className="text-xs text-gray-500 mt-0.5">Welche KI soll antworten?</p>
               </div>
               <button onClick={() => setOpen(false)} className="p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg">
-                <X className="w-4 h-4 text-gray-400" />
+                <X className="w-4 h-4 text-gray-500" />
               </button>
             </div>
 
@@ -206,7 +206,7 @@ export function HirnProviderSelector() {
                       <span className="text-xs font-medium text-gray-500 uppercase tracking-wider">
                         {category.label}
                       </span>
-                      <span className="text-xs text-gray-400 ml-2">{category.description}</span>
+                      <span className="text-xs text-gray-500 ml-2">{category.description}</span>
                     </div>
 
                     <div className="space-y-1">

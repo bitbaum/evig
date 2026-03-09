@@ -146,14 +146,14 @@ export function InventoryTable({ items, onPublishSuccess }: InventoryTableProps)
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                     <div className="flex items-center justify-end gap-2">
                       <button
-                        className="text-gray-400 hover:text-blue-600 dark:hover:text-blue-400"
+                        className="text-gray-500 hover:text-blue-600 dark:hover:text-blue-400"
                         title="Bearbeiten"
                       >
                         <Edit className="w-4 h-4" />
                       </button>
 
                       <button
-                        className="text-gray-400 hover:text-red-600 dark:hover:text-red-400"
+                        className="text-gray-500 hover:text-red-600 dark:hover:text-red-400"
                         title="Löschen"
                       >
                         <Trash2 className="w-4 h-4" />

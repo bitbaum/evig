@@ -101,7 +101,7 @@ function SingleColumnLayout({
                 {subItem.name}
               </span>
               <ItemBadge badge={subItem.badge} />
-              {subItem.external && <ExternalLink className="w-3 h-3 text-gray-400" />}
+              {subItem.external && <ExternalLink className="w-3 h-3 text-gray-500" />}
             </div>
             {subItem.description && (
               <p className="mt-0.5 text-sm text-gray-500">
@@ -140,7 +140,7 @@ function MenuLink({
             {item.name}
           </span>
           <ItemBadge badge={item.badge} />
-          {item.external && <ExternalLink className="w-3 h-3 text-gray-400" />}
+          {item.external && <ExternalLink className="w-3 h-3 text-gray-500" />}
         </div>
         {item.description && (
           <p className="mt-1 text-sm text-gray-500 line-clamp-2">
