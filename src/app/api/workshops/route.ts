@@ -1,40 +1,10 @@
 import { NextRequest } from 'next/server'
 import { auth } from '@/auth'
-import { query } from '@/lib/auth/db'
+import { db } from '@/db'
+import { workshops, workshopInstances, workshopRegistrations } from '@/db/schema'
+import { eq, desc, asc, inArray, sql } from 'drizzle-orm'
 import { apiError, apiSuccess } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
-import { TABLE_NAMES } from '@/config/database'
-
-interface WorkshopRow {
-  id: string
-  slug: string
-  title: string
-  description: string | null
-  category: string | null
-  duration: string | null
-  level: string | null
-  max_participants: number
-  price_cents: number
-  is_active: boolean
-  created_at: string
-}
-
-interface InstanceRow {
-  id: string
-  workshop_id: string
-  start_date: string
-  end_date: string | null
-  location: string | null
-  max_participants: number | null
-  status: string
-  current_participants: string
-  created_at: string
-  updated_at: string
-}
-
-interface RegistrationRow {
-  workshop_id: string
-}
 
 export async function GET(request: NextRequest) {
   try {
@@ -43,98 +13,95 @@ export async function GET(request: NextRequest) {
     const activeOnly = searchParams.get('active') !== 'false'
     const includeInstances = searchParams.get('include') === 'instances'
 
-    let whereClause = activeOnly ? 'WHERE is_active = true' : ''
-    const params: string[] = []
+    // Build conditions
+    const conditions = []
+    if (activeOnly) conditions.push(eq(workshops.isActive, true))
+    if (category) conditions.push(eq(workshops.category, category))
 
-    if (category) {
-      whereClause += whereClause ? ' AND' : 'WHERE'
-      whereClause += ' category = $1'
-      params.push(category)
-    }
+    const where = conditions.length > 0 ? sql`${sql.join(conditions, sql` AND `)}` : undefined
 
-    const workshops = await query<WorkshopRow>(`
-      SELECT
-        id,
-        slug,
-        title,
-        description,
-        category,
-        duration,
-        level,
-        max_participants,
-        price_cents,
-        is_active,
-        created_at
-      FROM ${TABLE_NAMES.WORKSHOPS}
-      ${whereClause}
-      ORDER BY created_at DESC
-    `, params)
+    const workshopRows = await db
+      .select({
+        id: workshops.id,
+        slug: workshops.slug,
+        title: workshops.title,
+        description: workshops.description,
+        category: workshops.category,
+        duration: workshops.duration,
+        level: workshops.level,
+        max_participants: workshops.maxParticipants,
+        price_cents: workshops.priceCents,
+        is_active: workshops.isActive,
+        created_at: workshops.createdAt,
+      })
+      .from(workshops)
+      .where(where)
+      .orderBy(desc(workshops.createdAt))
 
     if (!includeInstances) {
-      return apiSuccess(workshops.rows)
+      return apiSuccess(workshopRows)
     }
 
-    // Fetch all instances for all workshops in one query
-    const workshopIds = workshops.rows.map(w => w.id)
+    const workshopIds = workshopRows.map(w => w.id)
 
     if (workshopIds.length === 0) {
       return apiSuccess([])
     }
 
-    const placeholders = workshopIds.map((_, i) => `$${i + 1}`).join(', ')
-
-    const instances = await query<InstanceRow>(`
-      SELECT
-        wi.id,
-        wi.workshop_id,
-        wi.start_date,
-        wi.end_date,
-        wi.location,
-        wi.max_participants,
-        wi.status,
-        wi.created_at,
-        wi.updated_at,
-        COUNT(wr.id) as current_participants
-      FROM ${TABLE_NAMES.WORKSHOP_INSTANCES} wi
-      LEFT JOIN ${TABLE_NAMES.WORKSHOP_REGISTRATIONS} wr ON wi.id = wr.workshop_instance_id
-      WHERE wi.workshop_id IN (${placeholders})
-      GROUP BY wi.id
-      ORDER BY wi.start_date ASC
-    `, workshopIds)
+    // Fetch all instances for all workshops in one query
+    const instanceRows = await db
+      .select({
+        id: workshopInstances.id,
+        workshop_id: workshopInstances.workshopId,
+        start_date: workshopInstances.startDate,
+        end_date: workshopInstances.endDate,
+        location: workshopInstances.location,
+        max_participants: workshopInstances.maxParticipants,
+        status: workshopInstances.status,
+        created_at: workshopInstances.createdAt,
+        updated_at: workshopInstances.updatedAt,
+        current_participants: sql<number>`count(${workshopRegistrations.id})`,
+      })
+      .from(workshopInstances)
+      .leftJoin(workshopRegistrations, eq(workshopInstances.id, workshopRegistrations.workshopInstanceId))
+      .where(inArray(workshopInstances.workshopId, workshopIds))
+      .groupBy(workshopInstances.id)
+      .orderBy(asc(workshopInstances.startDate))
 
     // Check user registrations in one query (if logged in)
     const session = await auth()
     const registeredWorkshopIds = new Set<string>()
 
     if (session?.user?.id) {
-      const registrations = await query<RegistrationRow>(`
-        SELECT DISTINCT wi.workshop_id
-        FROM ${TABLE_NAMES.WORKSHOP_REGISTRATIONS} wr
-        JOIN ${TABLE_NAMES.WORKSHOP_INSTANCES} wi ON wr.workshop_instance_id = wi.id
-        WHERE wr.user_id = $1 AND wi.workshop_id IN (${workshopIds.map((_, i) => `$${i + 2}`).join(', ')})
-      `, [session.user.id, ...workshopIds])
+      const registrations = await db
+        .select({
+          workshopId: workshopInstances.workshopId,
+        })
+        .from(workshopRegistrations)
+        .innerJoin(workshopInstances, eq(workshopRegistrations.workshopInstanceId, workshopInstances.id))
+        .where(sql`${workshopRegistrations.userId} = ${session.user.id} AND ${workshopInstances.workshopId} IN ${workshopIds}`)
 
-      for (const reg of registrations.rows) {
-        registeredWorkshopIds.add(reg.workshop_id)
+      for (const reg of registrations) {
+        registeredWorkshopIds.add(reg.workshopId)
       }
     }
 
     // Group instances by workshop_id
-    const instancesByWorkshop = new Map<string, InstanceRow[]>()
-    for (const inst of instances.rows) {
+    const instancesByWorkshop = new Map<string, typeof instanceRows>()
+    for (const inst of instanceRows) {
       const list = instancesByWorkshop.get(inst.workshop_id) || []
       list.push(inst)
       instancesByWorkshop.set(inst.workshop_id, list)
     }
 
     // Assemble response
-    const result = workshops.rows.map(workshop => ({
+    const result = workshopRows.map(workshop => ({
       ...workshop,
       instances: (instancesByWorkshop.get(workshop.id) || []).map(inst => ({
         ...inst,
-        current_participants: parseInt(inst.current_participants) || 0
+        current_participants: Number(inst.current_participants) || 0,
       })),
-      user_registered: registeredWorkshopIds.has(workshop.id)
+      user_registered: registeredWorkshopIds.has(workshop.id),
     }))
 
     return apiSuccess(result)
