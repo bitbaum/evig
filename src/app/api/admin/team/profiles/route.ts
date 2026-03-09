@@ -8,11 +8,12 @@
  */
 
 import { NextRequest } from 'next/server'
+import { db } from '@/db'
+import { teamProfiles, users } from '@/db/schema'
+import { eq, and, or, ilike, asc, sql } from 'drizzle-orm'
+import type { SQL } from 'drizzle-orm'
 import { withAdmin } from '@/lib/api/middleware'
-import { query } from '@/lib/auth/db'
 import { isSuperAdmin } from '@/lib/permissions'
-import { TABLE_NAMES } from '@/config/database'
-import { QueryParams } from '@/lib/api/query-builder'
 import { logger } from '@/lib/logger'
 import {
   apiSuccess,
@@ -24,12 +25,6 @@ import { validateCreateTeamProfile, teamProfileFilterSchema } from '@/lib/schema
 /**
  * GET /api/admin/team/profiles
  * List team profiles with optional filters
- *
- * Query params:
- * - department: Filter by department
- * - employment_type: Filter by employment type
- * - is_active: 'true', 'false', or 'all' (default)
- * - search: Search by name or position
  */
 export const GET = withAdmin('team', async (request, session) => {
   try {
@@ -49,90 +44,62 @@ export const GET = withAdmin('team', async (request, session) => {
     const filters = filterResult.data
     const isSuperAdminUser = isSuperAdmin(session.user.email, session.user.isSuperAdmin)
 
-    // Build query with filters
-    const qb = new QueryParams()
-
-    if (filters.department) {
-      qb.add('tp.department = $P', filters.department)
-    }
-
-    if (filters.employment_type) {
-      qb.add('tp.employment_type = $P', filters.employment_type)
-    }
-
-    if (filters.is_active !== 'all') {
-      qb.add('tp.is_active = $P', filters.is_active === 'true')
-    }
-
+    // Build dynamic filters
+    const conditions: SQL[] = []
+    if (filters.department) conditions.push(eq(teamProfiles.department, filters.department))
+    if (filters.employment_type) conditions.push(eq(teamProfiles.employmentType, filters.employment_type))
+    if (filters.is_active !== 'all') conditions.push(eq(teamProfiles.isActive, filters.is_active === 'true'))
     if (filters.search) {
-      qb.add('(u.name ILIKE $P OR tp.position ILIKE $P)', `%${filters.search}%`)
+      conditions.push(
+        or(
+          ilike(users.name, `%${filters.search}%`),
+          ilike(teamProfiles.position, `%${filters.search}%`)
+        )!
+      )
     }
 
-    const { where: whereClause, params } = qb.build()
+    const where = conditions.length > 0 ? and(...conditions) : undefined
 
-    // Select columns - exclude hr_notes for non-super-admins
-    const hrNotesColumn = isSuperAdminUser ? ', tp.hr_notes' : ''
+    // Always select all columns including hr_notes; strip for non-super-admins
+    const rows = await db
+      .select({
+        id: teamProfiles.id,
+        user_id: teamProfiles.userId,
+        user_name: users.name,
+        user_email: users.email,
+        position: teamProfiles.position,
+        department: teamProfiles.department,
+        employment_type: teamProfiles.employmentType,
+        start_date: teamProfiles.startDate,
+        contract_hours: teamProfiles.contractHours,
+        skills: teamProfiles.skills,
+        interests: teamProfiles.interests,
+        goals: teamProfiles.goals,
+        strengths: teamProfiles.strengths,
+        development_areas: teamProfiles.developmentAreas,
+        availability: teamProfiles.availability,
+        working_hours: teamProfiles.workingHours,
+        preferred_contact: teamProfiles.preferredContact,
+        phone: teamProfiles.phone,
+        emergency_contact_name: teamProfiles.emergencyContactName,
+        emergency_contact_phone: teamProfiles.emergencyContactPhone,
+        emergency_contact_relation: teamProfiles.emergencyContactRelation,
+        hr_notes: teamProfiles.hrNotes,
+        is_active: teamProfiles.isActive,
+        created_at: teamProfiles.createdAt,
+        updated_at: teamProfiles.updatedAt,
+      })
+      .from(teamProfiles)
+      .innerJoin(users, eq(teamProfiles.userId, users.id))
+      .where(where)
+      .orderBy(asc(users.name), asc(users.email))
 
-    const result = await query<{
-      id: string
-      user_id: string
-      user_name: string | null
-      user_email: string
-      position: string | null
-      department: string | null
-      employment_type: string | null
-      start_date: string | null
-      contract_hours: number | null
-      skills: string[]
-      interests: string[]
-      goals: string | null
-      strengths: string | null
-      development_areas: string | null
-      availability: string | null
-      working_hours: string | null
-      preferred_contact: string
-      phone: string | null
-      emergency_contact_name: string | null
-      emergency_contact_phone: string | null
-      emergency_contact_relation: string | null
-      hr_notes?: string | null
-      is_active: boolean
-      created_at: string
-      updated_at: string
-    }>(
-      `SELECT
-        tp.id,
-        tp.user_id,
-        u.name as user_name,
-        u.email as user_email,
-        tp.position,
-        tp.department,
-        tp.employment_type,
-        tp.start_date,
-        tp.contract_hours,
-        tp.skills,
-        tp.interests,
-        tp.goals,
-        tp.strengths,
-        tp.development_areas,
-        tp.availability,
-        tp.working_hours,
-        tp.preferred_contact,
-        tp.phone,
-        tp.emergency_contact_name,
-        tp.emergency_contact_phone,
-        tp.emergency_contact_relation,
-        tp.is_active${hrNotesColumn},
-        tp.created_at,
-        tp.updated_at
-       FROM ${TABLE_NAMES.TEAM_PROFILES} tp
-       JOIN ${TABLE_NAMES.USERS} u ON tp.user_id = u.id
-       ${whereClause}
-       ORDER BY u.name ASC NULLS LAST, u.email ASC`,
-      params
-    )
+    // Strip hr_notes for non-super-admins
+    const result = isSuperAdminUser
+      ? rows
+      : rows.map(({ hr_notes, ...rest }) => rest)
 
-    return apiSuccess(result.rows)
+    return apiSuccess(result)
   } catch (error) {
     return apiError(error, 'Team-Profile konnten nicht geladen werden')
   }
@@ -164,81 +131,59 @@ export const POST = withAdmin('team', async (request, session) => {
     }
 
     // Check if user exists
-    const userCheck = await query<{ id: string }>(
-      `SELECT id FROM ${TABLE_NAMES.USERS} WHERE id = $1`,
-      [data.user_id]
-    )
+    const [user] = await db
+      .select({ id: users.id })
+      .from(users)
+      .where(eq(users.id, data.user_id))
 
-    if (userCheck.rows.length === 0) {
+    if (!user) {
       return apiBadRequest('Benutzer nicht gefunden')
     }
 
     // Check if profile already exists for this user
-    const existingProfile = await query<{ id: string }>(
-      `SELECT id FROM ${TABLE_NAMES.TEAM_PROFILES} WHERE user_id = $1`,
-      [data.user_id]
-    )
+    const [existingProfile] = await db
+      .select({ id: teamProfiles.id })
+      .from(teamProfiles)
+      .where(eq(teamProfiles.userId, data.user_id))
 
-    if (existingProfile.rows.length > 0) {
+    if (existingProfile) {
       return apiBadRequest('Für diesen Benutzer existiert bereits ein Team-Profil')
     }
 
     // Insert new profile
-    const result = await query<{ id: string }>(
-      `INSERT INTO ${TABLE_NAMES.TEAM_PROFILES} (
-        user_id,
-        position,
-        department,
-        employment_type,
-        start_date,
-        contract_hours,
-        skills,
-        interests,
-        goals,
-        strengths,
-        development_areas,
-        availability,
-        working_hours,
-        preferred_contact,
-        phone,
-        emergency_contact_name,
-        emergency_contact_phone,
-        emergency_contact_relation,
-        hr_notes,
-        is_active
-      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20)
-      RETURNING id`,
-      [
-        data.user_id,
-        data.position || null,
-        data.department || null,
-        data.employment_type || null,
-        data.start_date || null,
-        data.contract_hours || null,
-        data.skills || [],
-        data.interests || [],
-        data.goals || null,
-        data.strengths || null,
-        data.development_areas || null,
-        data.availability || null,
-        data.working_hours || null,
-        data.preferred_contact || 'email',
-        data.phone || null,
-        data.emergency_contact_name || null,
-        data.emergency_contact_phone || null,
-        data.emergency_contact_relation || null,
-        data.hr_notes || null,
-        data.is_active ?? true,
-      ]
-    )
+    const [created] = await db
+      .insert(teamProfiles)
+      .values({
+        userId: data.user_id,
+        position: data.position || null,
+        department: data.department || null,
+        employmentType: data.employment_type || null,
+        startDate: data.start_date || null,
+        contractHours: data.contract_hours || null,
+        skills: data.skills || [],
+        interests: data.interests || [],
+        goals: data.goals || null,
+        strengths: data.strengths || null,
+        developmentAreas: data.development_areas || null,
+        availability: data.availability || null,
+        workingHours: data.working_hours || null,
+        preferredContact: data.preferred_contact || 'email',
+        phone: data.phone || null,
+        emergencyContactName: data.emergency_contact_name || null,
+        emergencyContactPhone: data.emergency_contact_phone || null,
+        emergencyContactRelation: data.emergency_contact_relation || null,
+        hrNotes: data.hr_notes || null,
+        isActive: data.is_active ?? true,
+      })
+      .returning({ id: teamProfiles.id })
 
     logger.info('Team profile created', {
-      profileId: result.rows[0].id,
+      profileId: created.id,
       userId: data.user_id,
       createdBy: session.user.email,
     })
 
-    return apiSuccess({ id: result.rows[0].id, message: 'Team-Profil erstellt' }, 201)
+    return apiSuccess({ id: created.id, message: 'Team-Profil erstellt' }, 201)
   } catch (error) {
     return apiError(error, 'Team-Profil konnte nicht erstellt werden')
   }

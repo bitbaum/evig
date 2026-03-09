@@ -8,10 +8,11 @@
  */
 
 import { NextRequest } from 'next/server'
+import { db } from '@/db'
+import { activityUpdates, users } from '@/db/schema'
+import { eq, and, gte, lte, desc, sql } from 'drizzle-orm'
+import type { SQL } from 'drizzle-orm'
 import { withAdmin } from '@/lib/api/middleware'
-import { query } from '@/lib/auth/db'
-import { TABLE_NAMES } from '@/config/database'
-import { QueryParams } from '@/lib/api/query-builder'
 import { logger } from '@/lib/logger'
 import {
   apiSuccess,
@@ -22,21 +23,6 @@ import {
   validateCreateActivityUpdate,
   activityStreamFilterSchema,
 } from '@/lib/schemas/activity'
-
-interface ActivityUpdate {
-  id: string
-  user_id: string
-  user_name: string | null
-  user_email: string
-  update_type: string
-  title: string
-  description: string | null
-  category: string | null
-  visibility: string
-  occurred_at: string
-  created_at: string
-  updated_at: string
-}
 
 /**
  * GET /api/admin/team/activity/updates
@@ -60,59 +46,48 @@ export const GET = withAdmin('team', async (request, session) => {
     }
 
     const filters = filterResult.data
-    const qb = new QueryParams()
 
-    if (filters.user_id) {
-      qb.add('au.user_id = $P', filters.user_id)
-    }
+    // Build dynamic filters
+    const conditions: SQL[] = []
+    if (filters.user_id) conditions.push(eq(activityUpdates.userId, filters.user_id))
+    if (filters.category) conditions.push(eq(activityUpdates.category, filters.category))
+    if (filters.since) conditions.push(gte(activityUpdates.occurredAt, filters.since))
+    if (filters.until) conditions.push(lte(activityUpdates.occurredAt, filters.until))
 
-    if (filters.category) {
-      qb.add('au.category = $P', filters.category)
-    }
+    const where = conditions.length > 0 ? and(...conditions) : undefined
 
-    if (filters.since) {
-      qb.add('au.occurred_at >= $P', filters.since)
-    }
-
-    if (filters.until) {
-      qb.add('au.occurred_at <= $P', filters.until)
-    }
-
-    const { where: whereClause, params, nextIndex } = qb.build()
-
-    const result = await query<ActivityUpdate>(
-      `SELECT
-        au.id,
-        au.user_id,
-        u.name as user_name,
-        u.email as user_email,
-        au.update_type,
-        au.title,
-        au.description,
-        au.category,
-        au.visibility,
-        au.occurred_at,
-        au.created_at,
-        au.updated_at
-       FROM ${TABLE_NAMES.ACTIVITY_UPDATES} au
-       JOIN ${TABLE_NAMES.USERS} u ON au.user_id = u.id
-       ${whereClause}
-       ORDER BY au.occurred_at DESC
-       LIMIT $${nextIndex} OFFSET $${nextIndex + 1}`,
-      [...params, filters.limit, filters.offset]
-    )
+    // Fetch items
+    const items = await db
+      .select({
+        id: activityUpdates.id,
+        user_id: activityUpdates.userId,
+        user_name: users.name,
+        user_email: users.email,
+        update_type: activityUpdates.updateType,
+        title: activityUpdates.title,
+        description: activityUpdates.description,
+        category: activityUpdates.category,
+        visibility: activityUpdates.visibility,
+        occurred_at: activityUpdates.occurredAt,
+        created_at: activityUpdates.createdAt,
+        updated_at: activityUpdates.updatedAt,
+      })
+      .from(activityUpdates)
+      .innerJoin(users, eq(activityUpdates.userId, users.id))
+      .where(where)
+      .orderBy(desc(activityUpdates.occurredAt))
+      .limit(filters.limit)
+      .offset(filters.offset)
 
     // Get total count for pagination
-    const countResult = await query<{ count: string }>(
-      `SELECT COUNT(*) as count
-       FROM ${TABLE_NAMES.ACTIVITY_UPDATES} au
-       ${whereClause}`,
-      params
-    )
+    const [countRow] = await db
+      .select({ count: sql<number>`count(*)` })
+      .from(activityUpdates)
+      .where(where)
 
     return apiSuccess({
-      items: result.rows,
-      total: parseInt(countResult.rows[0]?.count || '0', 10),
+      items,
+      total: Number(countRow?.count ?? 0),
       limit: filters.limit,
       offset: filters.offset,
     })
@@ -140,49 +115,38 @@ export const POST = withAdmin('team', async (request, session) => {
 
     const data = validation.data
 
-    // Look up user ID from session email (lowercase to match auth system)
-    const userResult = await query<{ id: string }>(
-      `SELECT id FROM ${TABLE_NAMES.USERS} WHERE email = $1`,
-      [session.user.email.toLowerCase()]
-    )
+    // Look up user ID from session email
+    const [user] = await db
+      .select({ id: users.id })
+      .from(users)
+      .where(eq(users.email, session.user.email.toLowerCase()))
 
-    if (userResult.rows.length === 0) {
+    if (!user) {
       return apiBadRequest('Benutzer nicht gefunden')
     }
 
-    const userId = userResult.rows[0].id
-
     // Insert activity update
-    const result = await query<{ id: string }>(
-      `INSERT INTO ${TABLE_NAMES.ACTIVITY_UPDATES} (
-        user_id,
-        update_type,
-        title,
-        description,
-        category,
-        visibility,
-        occurred_at
-      ) VALUES ($1, $2, $3, $4, $5, $6, $7)
-      RETURNING id`,
-      [
-        userId,
-        data.update_type,
-        data.title,
-        data.description || null,
-        data.category || null,
-        data.visibility,
-        data.occurred_at || new Date().toISOString(),
-      ]
-    )
+    const [created] = await db
+      .insert(activityUpdates)
+      .values({
+        userId: user.id,
+        updateType: data.update_type,
+        title: data.title,
+        description: data.description || null,
+        category: data.category || null,
+        visibility: data.visibility,
+        occurredAt: data.occurred_at || new Date().toISOString(),
+      })
+      .returning({ id: activityUpdates.id })
 
     logger.info('Activity update created', {
-      updateId: result.rows[0].id,
-      userId,
+      updateId: created.id,
+      userId: user.id,
       type: data.update_type,
       title: data.title.substring(0, 50),
     })
 
-    return apiSuccess({ id: result.rows[0].id }, 201)
+    return apiSuccess({ id: created.id }, 201)
   } catch (error) {
     return apiError(error, 'Aktivität konnte nicht erstellt werden')
   }

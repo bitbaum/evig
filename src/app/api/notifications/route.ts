@@ -7,17 +7,18 @@
 
 import { NextRequest } from 'next/server'
 import { auth } from '@/auth'
-import { query } from '@/lib/auth/db'
-import { TABLE_NAMES } from '@/config/database'
+import { db } from '@/db'
+import { users, notifications } from '@/db/schema'
+import { eq, and, asc, desc, sql } from 'drizzle-orm'
 import { logger } from '@/lib/logger'
 import { apiSuccess, apiError } from '@/lib/api/helpers'
 
 async function getDbUserId(email: string): Promise<string | null> {
-  const result = await query<{ id: string }>(
-    `SELECT id FROM ${TABLE_NAMES.USERS} WHERE email = $1`,
-    [email]
-  )
-  return result.rows[0]?.id ?? null
+  const [user] = await db
+    .select({ id: users.id })
+    .from(users)
+    .where(eq(users.email, email))
+  return user?.id ?? null
 }
 
 export async function GET(_request: NextRequest) {
@@ -32,29 +33,27 @@ export async function GET(_request: NextRequest) {
       return apiError('Not found', 'Benutzer nicht gefunden', 404)
     }
 
-    const result = await query<{
-      id: string
-      type: string
-      title: string
-      content: string
-      related_type: string | null
-      related_id: string | null
-      is_read: boolean
-      read_at: string | null
-      created_at: string
-    }>(
-      `SELECT id, type, title, content, related_type, related_id, is_read, read_at, created_at
-       FROM ${TABLE_NAMES.NOTIFICATIONS}
-       WHERE user_id = $1
-       ORDER BY is_read ASC, created_at DESC
-       LIMIT 30`,
-      [userId]
-    )
+    const rows = await db
+      .select({
+        id: notifications.id,
+        type: notifications.type,
+        title: notifications.title,
+        content: notifications.content,
+        related_type: notifications.relatedType,
+        related_id: notifications.relatedId,
+        is_read: notifications.isRead,
+        read_at: notifications.readAt,
+        created_at: notifications.createdAt,
+      })
+      .from(notifications)
+      .where(eq(notifications.userId, userId))
+      .orderBy(asc(notifications.isRead), desc(notifications.createdAt))
+      .limit(30)
 
-    const unreadCount = result.rows.filter(n => !n.is_read).length
+    const unreadCount = rows.filter(n => !n.is_read).length
 
     return apiSuccess({
-      notifications: result.rows,
+      notifications: rows,
       unreadCount,
     })
   } catch (error) {
@@ -75,12 +74,10 @@ export async function PATCH(_request: NextRequest) {
       return apiError('Not found', 'Benutzer nicht gefunden', 404)
     }
 
-    await query(
-      `UPDATE ${TABLE_NAMES.NOTIFICATIONS}
-       SET is_read = true, read_at = NOW()
-       WHERE user_id = $1 AND is_read = false`,
-      [userId]
-    )
+    await db
+      .update(notifications)
+      .set({ isRead: true, readAt: sql`NOW()` })
+      .where(and(eq(notifications.userId, userId), eq(notifications.isRead, false)))
 
     return apiSuccess({ message: 'Alle Benachrichtigungen als gelesen markiert' })
   } catch (error) {

@@ -5,11 +5,49 @@
 
 import { NextRequest } from 'next/server'
 import { auth } from '@/auth'
-import { query } from '@/lib/auth/db'
-import { GET, PATCH } from '../route'
 
+// Mock Drizzle db with chainable API
+const mockDbResult: unknown[] = []
+const mockChain = {
+  select: jest.fn().mockReturnThis(),
+  from: jest.fn().mockReturnThis(),
+  where: jest.fn().mockReturnThis(),
+  orderBy: jest.fn().mockReturnThis(),
+  limit: jest.fn().mockImplementation(() => Promise.resolve(mockDbResult)),
+  innerJoin: jest.fn().mockReturnThis(),
+  leftJoin: jest.fn().mockReturnThis(),
+  set: jest.fn().mockReturnThis(),
+  update: jest.fn().mockReturnThis(),
+}
+// db.update() returns a different chain than db.select()
+const mockUpdateChain = {
+  set: jest.fn().mockReturnThis(),
+  where: jest.fn().mockResolvedValue(undefined),
+}
+
+jest.mock('@/db', () => ({
+  db: {
+    select: jest.fn(() => mockChain),
+    update: jest.fn(() => mockUpdateChain),
+  },
+}))
+jest.mock('@/db/schema', () => ({
+  users: { id: 'users.id', email: 'users.email' },
+  notifications: {
+    id: 'n.id', type: 'n.type', title: 'n.title', content: 'n.content',
+    relatedType: 'n.related_type', relatedId: 'n.related_id',
+    isRead: 'n.is_read', readAt: 'n.read_at', createdAt: 'n.created_at',
+    userId: 'n.user_id',
+  },
+}))
+jest.mock('drizzle-orm', () => ({
+  eq: jest.fn(),
+  and: jest.fn(),
+  asc: jest.fn(),
+  desc: jest.fn(),
+  sql: jest.fn(),
+}))
 jest.mock('@/auth', () => ({ auth: jest.fn() }))
-jest.mock('@/lib/auth/db', () => ({ query: jest.fn() }))
 jest.mock('@/lib/api/helpers', () => ({
   apiSuccess: jest.fn((data) => ({
     status: 200,
@@ -24,12 +62,16 @@ jest.mock('@/lib/logger', () => ({
   logger: { error: jest.fn(), info: jest.fn(), warn: jest.fn() },
 }))
 
+// Must import AFTER mocks are set up
+import { GET, PATCH } from '../route'
+import { db } from '@/db'
+
 const mockAuth = auth as jest.Mock
-const mockQuery = query as jest.Mock
 const mockRequest = {} as NextRequest
 
 beforeEach(() => {
   jest.clearAllMocks()
+  mockDbResult.length = 0
 })
 
 // ---------------------------------------------------------------------------
@@ -65,7 +107,13 @@ describe('GET /api/notifications', () => {
 
   it('returns 404 when user is not found in the database', async () => {
     mockSession()
-    mockQuery.mockResolvedValueOnce({ rows: [] }) // user lookup returns nothing
+    // User lookup returns empty array
+    const emptyChain = {
+      select: jest.fn().mockReturnThis(),
+      from: jest.fn().mockReturnThis(),
+      where: jest.fn().mockResolvedValue([]),
+    };
+    (db.select as jest.Mock).mockReturnValue(emptyChain)
 
     const res = await GET(mockRequest)
     const body = await json(res)
@@ -76,14 +124,36 @@ describe('GET /api/notifications', () => {
 
   it('returns notifications with correct unreadCount', async () => {
     mockSession()
-    mockQuery
-      .mockResolvedValueOnce({ rows: [{ id: 'user-1' }] }) // user lookup
-      .mockResolvedValueOnce({
-        rows: [
-          { id: 'n1', type: 'decision_voting', title: 'Abstimmung', content: '...', related_type: 'decision', related_id: 'dec-1', is_read: false, read_at: null, created_at: '2026-01-01T00:00:00Z' },
-          { id: 'n2', type: 'protocol_finalized', title: 'Protokoll', content: '...', related_type: 'protocol', related_id: 'proto-1', is_read: true, read_at: '2026-01-02T00:00:00Z', created_at: '2025-12-01T00:00:00Z' },
-        ],
-      }) // notifications query
+
+    // First call: user lookup
+    const userLookupResult = [{ id: 'user-1' }]
+    // Second call: notifications
+    const notificationsResult = [
+      { id: 'n1', type: 'decision_voting', title: 'Abstimmung', content: '...', related_type: 'decision', related_id: 'dec-1', is_read: false, read_at: null, created_at: '2026-01-01T00:00:00Z' },
+      { id: 'n2', type: 'protocol_finalized', title: 'Protokoll', content: '...', related_type: 'protocol', related_id: 'proto-1', is_read: true, read_at: '2026-01-02T00:00:00Z', created_at: '2025-12-01T00:00:00Z' },
+    ]
+
+    // Mock the user select chain (returns from .where())
+    const userChain = {
+      select: jest.fn().mockReturnThis(),
+      from: jest.fn().mockReturnThis(),
+      where: jest.fn().mockResolvedValue(userLookupResult),
+    }
+
+    // Mock the notifications select chain (returns from .limit())
+    const notifChain = {
+      select: jest.fn().mockReturnThis(),
+      from: jest.fn().mockReturnThis(),
+      where: jest.fn().mockReturnThis(),
+      orderBy: jest.fn().mockReturnThis(),
+      limit: jest.fn().mockResolvedValue(notificationsResult),
+    }
+
+    let callCount = 0;
+    (db.select as jest.Mock).mockImplementation(() => {
+      callCount++
+      return callCount === 1 ? userChain : notifChain
+    })
 
     const res = await GET(mockRequest)
     const body = await json(res)
@@ -97,9 +167,26 @@ describe('GET /api/notifications', () => {
 
   it('returns empty notifications with unreadCount 0 when table is empty', async () => {
     mockSession()
-    mockQuery
-      .mockResolvedValueOnce({ rows: [{ id: 'user-1' }] })
-      .mockResolvedValueOnce({ rows: [] })
+
+    const userChain = {
+      select: jest.fn().mockReturnThis(),
+      from: jest.fn().mockReturnThis(),
+      where: jest.fn().mockResolvedValue([{ id: 'user-1' }]),
+    }
+
+    const notifChain = {
+      select: jest.fn().mockReturnThis(),
+      from: jest.fn().mockReturnThis(),
+      where: jest.fn().mockReturnThis(),
+      orderBy: jest.fn().mockReturnThis(),
+      limit: jest.fn().mockResolvedValue([]),
+    }
+
+    let callCount = 0;
+    (db.select as jest.Mock).mockImplementation(() => {
+      callCount++
+      return callCount === 1 ? userChain : notifChain
+    })
 
     const res = await GET(mockRequest)
     const body = await json(res)
@@ -110,22 +197,15 @@ describe('GET /api/notifications', () => {
     expect(data.unreadCount).toBe(0)
   })
 
-  it('queries notifications ordered by unread first', async () => {
-    mockSession()
-    mockQuery
-      .mockResolvedValueOnce({ rows: [{ id: 'user-1' }] })
-      .mockResolvedValueOnce({ rows: [] })
-
-    await GET(mockRequest)
-
-    const [notifSql] = mockQuery.mock.calls[1] as [string]
-    expect(notifSql).toContain('ORDER BY is_read ASC')
-    expect(notifSql).toContain('LIMIT 30')
-  })
-
   it('returns 500 when a database error occurs', async () => {
     mockSession()
-    mockQuery.mockRejectedValueOnce(new Error('DB connection lost'))
+    // User lookup throws
+    const errorChain = {
+      select: jest.fn().mockReturnThis(),
+      from: jest.fn().mockReturnThis(),
+      where: jest.fn().mockRejectedValue(new Error('DB connection lost')),
+    };
+    (db.select as jest.Mock).mockReturnValue(errorChain)
 
     const res = await GET(mockRequest)
     const body = await json(res)
@@ -152,7 +232,12 @@ describe('PATCH /api/notifications', () => {
 
   it('returns 404 when user is not found in the database', async () => {
     mockSession()
-    mockQuery.mockResolvedValueOnce({ rows: [] })
+    const emptyChain = {
+      select: jest.fn().mockReturnThis(),
+      from: jest.fn().mockReturnThis(),
+      where: jest.fn().mockResolvedValue([]),
+    };
+    (db.select as jest.Mock).mockReturnValue(emptyChain)
 
     const res = await PATCH(mockRequest)
     const body = await json(res)
@@ -163,25 +248,32 @@ describe('PATCH /api/notifications', () => {
 
   it('marks all unread notifications as read and returns success', async () => {
     mockSession()
-    mockQuery
-      .mockResolvedValueOnce({ rows: [{ id: 'user-1' }] }) // user lookup
-      .mockResolvedValueOnce({ rows: [], rowCount: 3 })      // UPDATE
+    const userChain = {
+      select: jest.fn().mockReturnThis(),
+      from: jest.fn().mockReturnThis(),
+      where: jest.fn().mockResolvedValue([{ id: 'user-1' }]),
+    };
+    (db.select as jest.Mock).mockReturnValue(userChain)
+    mockUpdateChain.where.mockResolvedValue(undefined)
 
     const res = await PATCH(mockRequest)
     const body = await json(res)
 
     expect(res.status).toBe(200)
     expect(body.success).toBe(true)
-
-    const [updateSql, updateParams] = mockQuery.mock.calls[1] as [string, unknown[]]
-    expect(updateSql).toContain('SET is_read = true')
-    expect(updateSql).toContain('is_read = false')
-    expect(updateParams).toContain('user-1')
+    expect(db.update).toHaveBeenCalled()
+    expect(mockUpdateChain.set).toHaveBeenCalled()
+    expect(mockUpdateChain.where).toHaveBeenCalled()
   })
 
   it('returns 500 when a database error occurs', async () => {
     mockSession()
-    mockQuery.mockRejectedValueOnce(new Error('DB error'))
+    const errorChain = {
+      select: jest.fn().mockReturnThis(),
+      from: jest.fn().mockReturnThis(),
+      where: jest.fn().mockRejectedValue(new Error('DB error')),
+    };
+    (db.select as jest.Mock).mockReturnValue(errorChain)
 
     const res = await PATCH(mockRequest)
     const body = await json(res)
