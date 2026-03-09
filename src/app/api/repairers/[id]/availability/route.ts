@@ -1,8 +1,9 @@
 import { NextRequest } from 'next/server'
-import { query } from '@/lib/auth/db'
+import { db } from '@/db'
+import { repairerProfiles, repairerAvailability } from '@/db/schema'
+import { eq, and, gte, lte, sql } from 'drizzle-orm'
 import { apiError, apiSuccess, apiNotFound } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
-import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
 
 interface AvailabilityRow {
@@ -10,16 +11,9 @@ interface AvailabilityRow {
   date: string
   start_time: string
   end_time: string
-  duration_hours: number | null
-  availability_type: string
+  duration_hours: string | null
+  availability_type: string | null
   notes: string | null
-}
-
-interface RepairerCheckRow {
-  id: string
-  status: string
-  is_active: boolean
-  availability_schedule: Record<string, unknown>
 }
 
 // GET /api/repairers/[id]/availability - Get repairer availability slots
@@ -43,64 +37,65 @@ export async function GET(
     })()
 
     // Verify repairer exists and is active
-    const repairerCheck = await query(`
-      SELECT id, status, is_active, availability_schedule
-      FROM ${TABLE_NAMES.REPAIRER_PROFILES}
-      WHERE id = $1
-    `, [id])
+    const [repairer] = await db
+      .select({
+        id: repairerProfiles.id,
+        status: repairerProfiles.status,
+        isActive: repairerProfiles.isActive,
+        availabilitySchedule: repairerProfiles.availabilitySchedule,
+      })
+      .from(repairerProfiles)
+      .where(eq(repairerProfiles.id, id))
 
-    if (repairerCheck.rows.length === 0) {
+    if (!repairer) {
       return apiNotFound('Reparateur nicht gefunden')
     }
 
-    const repairer = repairerCheck.rows[0] as RepairerCheckRow
-
-    if (!repairer.is_active || repairer.status !== 'active') {
+    if (!repairer.isActive || repairer.status !== 'active') {
       return apiNotFound('Reparateur ist derzeit nicht verfügbar')
     }
 
     // Get explicit availability slots
-    const availabilityResult = await query(`
-      SELECT
-        id,
-        date::text,
-        start_time::text,
-        end_time::text,
-        duration_hours,
-        availability_type,
-        notes
-      FROM ${TABLE_NAMES.REPAIRER_AVAILABILITY}
-      WHERE repairer_id = $1
-        AND date >= $2::date
-        AND date <= $3::date
-        AND availability_type = 'available'
-      ORDER BY date, start_time
-    `, [id, startDate, endDate])
-
-    const explicitSlots = availabilityResult.rows as AvailabilityRow[]
+    const explicitSlots = await db
+      .select({
+        id: repairerAvailability.id,
+        date: sql<string>`${repairerAvailability.date}::text`,
+        start_time: sql<string>`${repairerAvailability.startTime}::text`,
+        end_time: sql<string>`${repairerAvailability.endTime}::text`,
+        duration_hours: repairerAvailability.durationHours,
+        availability_type: repairerAvailability.availabilityType,
+        notes: repairerAvailability.notes,
+      })
+      .from(repairerAvailability)
+      .where(and(
+        eq(repairerAvailability.repairerId, id),
+        gte(repairerAvailability.date, sql`${startDate}::date`),
+        lte(repairerAvailability.date, sql`${endDate}::date`),
+        eq(repairerAvailability.availabilityType, 'available')
+      ))
+      .orderBy(repairerAvailability.date, repairerAvailability.startTime)
 
     // Get booked slots to exclude
-    const bookedResult = await query(`
-      SELECT
-        ra.date::text,
-        ra.start_time::text,
-        ra.end_time::text
-      FROM ${TABLE_NAMES.REPAIRER_AVAILABILITY} ra
-      WHERE ra.repairer_id = $1
-        AND ra.date >= $2::date
-        AND ra.date <= $3::date
-        AND ra.availability_type = 'booked'
-    `, [id, startDate, endDate])
-
-    const bookedSlots = bookedResult.rows as { date: string; start_time: string; end_time: string }[]
+    const bookedSlots = await db
+      .select({
+        date: sql<string>`${repairerAvailability.date}::text`,
+        start_time: sql<string>`${repairerAvailability.startTime}::text`,
+        end_time: sql<string>`${repairerAvailability.endTime}::text`,
+      })
+      .from(repairerAvailability)
+      .where(and(
+        eq(repairerAvailability.repairerId, id),
+        gte(repairerAvailability.date, sql`${startDate}::date`),
+        lte(repairerAvailability.date, sql`${endDate}::date`),
+        eq(repairerAvailability.availabilityType, 'booked')
+      ))
 
     // If no explicit slots defined, generate default slots from weekly schedule
-    let slots = explicitSlots
+    let slots: AvailabilityRow[] = explicitSlots as AvailabilityRow[]
 
-    if (explicitSlots.length === 0 && repairer.availability_schedule) {
-      // Generate slots from weekly schedule
+    if (explicitSlots.length === 0 && repairer.availabilitySchedule) {
       slots = generateSlotsFromSchedule(
-        repairer.availability_schedule,
+        repairer.availabilitySchedule as Record<string, unknown>,
         startDate,
         endDate,
         bookedSlots
@@ -112,7 +107,7 @@ export async function GET(
       id?: string
       start_time: string
       end_time: string
-      duration_hours?: number | null
+      duration_hours?: string | null
       available: boolean
     }>> = {}
 
@@ -203,7 +198,7 @@ function generateSlotsFromSchedule(
             date: dateStr,
             start_time: startTime,
             end_time: endTime,
-            duration_hours: slotDuration,
+            duration_hours: String(slotDuration),
             availability_type: 'available',
             notes: null
           })

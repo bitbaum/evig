@@ -1,94 +1,10 @@
 import { NextRequest } from 'next/server'
-import { query } from '@/lib/auth/db'
+import { db } from '@/db'
+import { repairerProfiles, repairerServices, repairerReviews, repairerAvailability, users } from '@/db/schema'
+import { eq, and, sql, desc, gte, lte } from 'drizzle-orm'
 import { apiError, apiSuccessCached, apiNotFound } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
-import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
-
-interface RepairerProfileRow {
-  id: string
-  user_id: string
-  business_name: string | null
-  business_type: string
-  description: string | null
-  years_experience: number
-  phone: string
-  website: string | null
-  address: string
-  city: string
-  postal_code: string
-  latitude: number | null
-  longitude: number | null
-  service_radius_km: number
-  remote_services: boolean
-  hourly_rate_cents: number | null
-  emergency_fee_cents: number | null
-  home_visit_fee_cents: number | null
-  average_rating: number
-  total_reviews: number
-  total_jobs_completed: number
-  completion_rate: number
-  services_offered: string[]
-  specializations: string[]
-  certifications: string[]
-  is_verified: boolean
-  verification_date: string | null
-  response_time_hours: number
-  typical_turnaround_days: number
-  warranty_offered: boolean
-  warranty_duration_months: number | null
-  insurance_info: string | null
-  portfolio_images: string[]
-  availability_schedule: Record<string, unknown>
-  status: string
-  created_at: string
-}
-
-interface ServiceRow {
-  id: string
-  service_category: string
-  service_name: string
-  description: string | null
-  base_price_cents: number | null
-  hourly_rate_cents: number | null
-  parts_included: boolean
-  estimated_hours: number | null
-  estimated_days: number | null
-  is_active: boolean
-}
-
-interface ReviewRow {
-  id: string
-  customer_name: string
-  rating: number
-  title: string | null
-  comment: string | null
-  timeliness_rating: number | null
-  quality_rating: number | null
-  communication_rating: number | null
-  is_verified: boolean
-  repairer_response: string | null
-  repairer_response_date: string | null
-  created_at: string
-}
-
-interface RatingRow {
-  rating: number
-  count: string
-}
-
-interface ReviewSummaryRow {
-  avg_timeliness: number | null
-  avg_quality: number | null
-  avg_communication: number | null
-}
-
-interface AvailabilityRow {
-  date: string
-  start_time: string
-  end_time: string
-  availability_type: string
-}
 
 // GET /api/repairers/[id] - Get detailed repairer profile
 export async function GET(
@@ -99,108 +15,152 @@ export async function GET(
     const { id } = await params
 
     // Get repairer profile
-    const profileResult = await query(`
-      SELECT
-        rp.*,
-        u.name as user_name,
-        u.email as user_email
-      FROM ${TABLE_NAMES.REPAIRER_PROFILES} rp
-      LEFT JOIN ${TABLE_NAMES.USERS} u ON rp.user_id = u.id
-      WHERE rp.id = $1 AND rp.is_active = true
-    `, [id])
+    const [profile] = await db
+      .select({
+        id: repairerProfiles.id,
+        user_id: repairerProfiles.userId,
+        business_name: repairerProfiles.businessName,
+        business_type: repairerProfiles.businessType,
+        description: repairerProfiles.description,
+        years_experience: repairerProfiles.yearsExperience,
+        phone: repairerProfiles.phone,
+        website: repairerProfiles.website,
+        address: repairerProfiles.address,
+        city: repairerProfiles.city,
+        postal_code: repairerProfiles.postalCode,
+        latitude: repairerProfiles.latitude,
+        longitude: repairerProfiles.longitude,
+        service_radius_km: repairerProfiles.serviceRadiusKm,
+        remote_services: repairerProfiles.remoteServices,
+        hourly_rate_cents: repairerProfiles.hourlyRateCents,
+        emergency_fee_cents: repairerProfiles.emergencyFeeCents,
+        home_visit_fee_cents: repairerProfiles.homeVisitFeeCents,
+        average_rating: repairerProfiles.averageRating,
+        total_reviews: repairerProfiles.totalReviews,
+        total_jobs_completed: repairerProfiles.totalJobsCompleted,
+        completion_rate: repairerProfiles.completionRate,
+        services_offered: repairerProfiles.servicesOffered,
+        specializations: repairerProfiles.specializations,
+        certifications: repairerProfiles.certifications,
+        is_verified: repairerProfiles.isVerified,
+        verification_date: repairerProfiles.verificationDate,
+        response_time_hours: repairerProfiles.responseTimeHours,
+        typical_turnaround_days: repairerProfiles.typicalTurnaroundDays,
+        warranty_offered: repairerProfiles.warrantyOffered,
+        warranty_duration_months: repairerProfiles.warrantyDurationMonths,
+        insurance_info: repairerProfiles.insuranceInfo,
+        portfolio_images: repairerProfiles.portfolioImages,
+        availability_schedule: repairerProfiles.availabilitySchedule,
+        status: repairerProfiles.status,
+        created_at: repairerProfiles.createdAt,
+        user_name: users.name,
+        user_email: users.email,
+      })
+      .from(repairerProfiles)
+      .leftJoin(users, eq(repairerProfiles.userId, users.id))
+      .where(and(
+        eq(repairerProfiles.id, id),
+        eq(repairerProfiles.isActive, true)
+      ))
 
-    if (profileResult.rows.length === 0) {
+    if (!profile) {
       return apiNotFound('Reparateur nicht gefunden')
     }
 
-    const profile = profileResult.rows[0] as RepairerProfileRow & { user_name: string; user_email: string }
-
     // Get services offered by this repairer
-    const servicesResult = await query(`
-      SELECT
-        id,
-        service_category,
-        service_name,
-        description,
-        base_price_cents,
-        hourly_rate_cents,
-        parts_included,
-        estimated_hours,
-        estimated_days,
-        is_active
-      FROM ${TABLE_NAMES.REPAIRER_SERVICES}
-      WHERE repairer_id = $1 AND is_active = true
-      ORDER BY service_category, service_name
-    `, [id])
-
-    const services = servicesResult.rows as ServiceRow[]
+    const services = await db
+      .select({
+        id: repairerServices.id,
+        service_category: repairerServices.serviceCategory,
+        service_name: repairerServices.serviceName,
+        description: repairerServices.description,
+        base_price_cents: repairerServices.basePriceCents,
+        hourly_rate_cents: repairerServices.hourlyRateCents,
+        parts_included: repairerServices.partsIncluded,
+        estimated_hours: repairerServices.estimatedHours,
+        estimated_days: repairerServices.estimatedDays,
+        is_active: repairerServices.isActive,
+      })
+      .from(repairerServices)
+      .where(and(
+        eq(repairerServices.repairerId, id),
+        eq(repairerServices.isActive, true)
+      ))
+      .orderBy(repairerServices.serviceCategory, repairerServices.serviceName)
 
     // Get recent reviews
-    const reviewsResult = await query(`
-      SELECT
-        rr.id,
-        u.name as customer_name,
-        rr.rating,
-        rr.title,
-        rr.comment,
-        rr.timeliness_rating,
-        rr.quality_rating,
-        rr.communication_rating,
-        rr.is_verified,
-        rr.repairer_response,
-        rr.repairer_response_date,
-        rr.created_at
-      FROM ${TABLE_NAMES.REPAIRER_REVIEWS} rr
-      LEFT JOIN ${TABLE_NAMES.USERS} u ON rr.customer_id = u.id
-      WHERE rr.repairer_id = $1 AND rr.is_public = true
-      ORDER BY rr.created_at DESC
-      LIMIT 10
-    `, [id])
+    const reviews = await db
+      .select({
+        id: repairerReviews.id,
+        customer_name: users.name,
+        rating: repairerReviews.rating,
+        title: repairerReviews.title,
+        comment: repairerReviews.comment,
+        timeliness_rating: repairerReviews.timelinessRating,
+        quality_rating: repairerReviews.qualityRating,
+        communication_rating: repairerReviews.communicationRating,
+        is_verified: repairerReviews.isVerified,
+        repairer_response: repairerReviews.repairerResponse,
+        repairer_response_date: repairerReviews.repairerResponseDate,
+        created_at: repairerReviews.createdAt,
+      })
+      .from(repairerReviews)
+      .leftJoin(users, eq(repairerReviews.customerId, users.id))
+      .where(and(
+        eq(repairerReviews.repairerId, id),
+        eq(repairerReviews.isPublic, true)
+      ))
+      .orderBy(desc(repairerReviews.createdAt))
+      .limit(10)
 
-    const reviews = reviewsResult.rows as ReviewRow[]
-
-    // Fetch rating distribution and review summary in parallel (same table, independent queries)
-    const [ratingDistResult, reviewSummaryResult] = await Promise.all([
-      query(`
-        SELECT rating, COUNT(*)::text as count
-        FROM ${TABLE_NAMES.REPAIRER_REVIEWS}
-        WHERE repairer_id = $1 AND is_public = true
-        GROUP BY rating
-        ORDER BY rating DESC
-      `, [id]),
-      query(`
-        SELECT
-          AVG(timeliness_rating)::decimal(3,2) as avg_timeliness,
-          AVG(quality_rating)::decimal(3,2) as avg_quality,
-          AVG(communication_rating)::decimal(3,2) as avg_communication
-        FROM ${TABLE_NAMES.REPAIRER_REVIEWS}
-        WHERE repairer_id = $1 AND is_public = true
-      `, [id]),
+    // Fetch rating distribution and review summary in parallel
+    const [ratingDistRows, [reviewSummary]] = await Promise.all([
+      db
+        .select({
+          rating: repairerReviews.rating,
+          count: sql<string>`COUNT(*)::text`,
+        })
+        .from(repairerReviews)
+        .where(and(
+          eq(repairerReviews.repairerId, id),
+          eq(repairerReviews.isPublic, true)
+        ))
+        .groupBy(repairerReviews.rating)
+        .orderBy(desc(repairerReviews.rating)),
+      db
+        .select({
+          avg_timeliness: sql<string>`AVG(${repairerReviews.timelinessRating})::decimal(3,2)`,
+          avg_quality: sql<string>`AVG(${repairerReviews.qualityRating})::decimal(3,2)`,
+          avg_communication: sql<string>`AVG(${repairerReviews.communicationRating})::decimal(3,2)`,
+        })
+        .from(repairerReviews)
+        .where(and(
+          eq(repairerReviews.repairerId, id),
+          eq(repairerReviews.isPublic, true)
+        )),
     ])
 
-    const ratingDistribution: { [key: string]: number } = {}
-    for (const row of ratingDistResult.rows as RatingRow[]) {
+    const ratingDistribution: Record<string, number> = {}
+    for (const row of ratingDistRows) {
       ratingDistribution[row.rating.toString()] = parseInt(row.count)
     }
 
-    const summaryRow = reviewSummaryResult.rows[0] as ReviewSummaryRow | undefined
-
     // Get upcoming availability (next 14 days)
-    const availabilityResult = await query(`
-      SELECT
-        date,
-        start_time,
-        end_time,
-        availability_type
-      FROM ${TABLE_NAMES.REPAIRER_AVAILABILITY}
-      WHERE repairer_id = $1
-        AND date >= CURRENT_DATE
-        AND date <= CURRENT_DATE + INTERVAL '14 days'
-        AND availability_type = 'available'
-      ORDER BY date, start_time
-    `, [id])
-
-    const availability = availabilityResult.rows as AvailabilityRow[]
+    const availability = await db
+      .select({
+        date: sql<string>`${repairerAvailability.date}::text`,
+        start_time: sql<string>`${repairerAvailability.startTime}::text`,
+        end_time: sql<string>`${repairerAvailability.endTime}::text`,
+        availability_type: repairerAvailability.availabilityType,
+      })
+      .from(repairerAvailability)
+      .where(and(
+        eq(repairerAvailability.repairerId, id),
+        gte(repairerAvailability.date, sql`CURRENT_DATE`),
+        lte(repairerAvailability.date, sql`CURRENT_DATE + INTERVAL '14 days'`),
+        eq(repairerAvailability.availabilityType, 'available')
+      ))
+      .orderBy(repairerAvailability.date, repairerAvailability.startTime)
 
     logger.info('Repairer profile fetched', { repairerId: id })
 
@@ -210,11 +170,11 @@ export async function GET(
         ...profile,
         rating_distribution: ratingDistribution,
         review_summary: {
-          timeliness: summaryRow?.avg_timeliness || 0,
-          quality: summaryRow?.avg_quality || 0,
-          communication: summaryRow?.avg_communication || 0,
-          professionalism: summaryRow?.avg_quality || 0,
-          value: summaryRow?.avg_timeliness || 0
+          timeliness: reviewSummary?.avg_timeliness || 0,
+          quality: reviewSummary?.avg_quality || 0,
+          communication: reviewSummary?.avg_communication || 0,
+          professionalism: reviewSummary?.avg_quality || 0,
+          value: reviewSummary?.avg_timeliness || 0
         }
       },
       services,
