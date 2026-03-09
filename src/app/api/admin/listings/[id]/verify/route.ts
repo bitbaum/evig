@@ -5,15 +5,16 @@
  * Only staff members can verify listings (RevampIT workshop-tested items).
  */
 
-import { NextRequest } from 'next/server';
-import { withAdmin, ValidSession } from '@/lib/api/middleware';
-import { apiSuccess, apiError, apiNotFound } from '@/lib/api/helpers';
-import { query } from '@/lib/auth/db';
-import { TABLE_NAMES } from '@/config/database';
-import { logger } from '@/lib/logger';
-import { validateBody, VerifyListingSchema } from '@/lib/schemas';
+import { NextRequest } from 'next/server'
+import { db } from '@/db'
+import { listings } from '@/db/schema'
+import { eq, and, ne, sql } from 'drizzle-orm'
+import { withAdmin, ValidSession } from '@/lib/api/middleware'
+import { apiSuccess, apiError, apiNotFound } from '@/lib/api/helpers'
+import { logger } from '@/lib/logger'
+import { validateBody, VerifyListingSchema } from '@/lib/schemas'
 
-type RouteContext = { params?: { id: string } };
+type RouteContext = { params?: { id: string } }
 
 // ============================================================================
 // POST — Verify listing
@@ -25,36 +26,39 @@ export const POST = withAdmin<{ id: string }>('marketplace', async (
   context?: RouteContext
 ) => {
   try {
-    const id = context?.params?.id;
-    if (!id) return apiNotFound('Inserat');
+    const id = context?.params?.id
+    if (!id) return apiNotFound('Inserat')
 
-    const body = await request.json();
-    const validation = validateBody(VerifyListingSchema, body);
-    if (!validation.success) return validation.error;
-    const data = validation.data;
+    const body = await request.json()
+    const validation = validateBody(VerifyListingSchema, body)
+    if (!validation.success) return validation.error
+    const data = validation.data
 
     // Check listing exists
-    const existing = await query(
-      `SELECT id, status FROM ${TABLE_NAMES.LISTINGS} WHERE id = $1 AND status != 'removed'`,
-      [id]
-    );
-    if (existing.rows.length === 0) return apiNotFound('Inserat');
+    const [existing] = await db
+      .select({ id: listings.id, status: listings.status })
+      .from(listings)
+      .where(and(eq(listings.id, id), ne(listings.status, 'removed')))
+
+    if (!existing) return apiNotFound('Inserat')
 
     // Set verification
-    await query(
-      `UPDATE ${TABLE_NAMES.LISTINGS}
-       SET verified_at = NOW(), verified_by = $1, verification_notes = $2
-       WHERE id = $3`,
-      [session.user.id, data.verification_notes || null, id]
-    );
+    await db
+      .update(listings)
+      .set({
+        verifiedAt: sql`NOW()`,
+        verifiedBy: session.user.id,
+        verificationNotes: data.verification_notes || null,
+      })
+      .where(eq(listings.id, id))
 
-    logger.info('Listing verified', { listingId: id, verifiedBy: session.user.id });
+    logger.info('Listing verified', { listingId: id, verifiedBy: session.user.id })
 
-    return apiSuccess({ id, verified: true });
+    return apiSuccess({ id, verified: true })
   } catch (error) {
-    return apiError(error, 'Fehler beim Verifizieren des Inserats');
+    return apiError(error, 'Fehler beim Verifizieren des Inserats')
   }
-});
+})
 
 // ============================================================================
 // DELETE — Remove verification
@@ -66,20 +70,22 @@ export const DELETE = withAdmin<{ id: string }>('marketplace', async (
   context?: RouteContext
 ) => {
   try {
-    const id = context?.params?.id;
-    if (!id) return apiNotFound('Inserat');
+    const id = context?.params?.id
+    if (!id) return apiNotFound('Inserat')
 
-    await query(
-      `UPDATE ${TABLE_NAMES.LISTINGS}
-       SET verified_at = NULL, verified_by = NULL, verification_notes = NULL
-       WHERE id = $1`,
-      [id]
-    );
+    await db
+      .update(listings)
+      .set({
+        verifiedAt: null,
+        verifiedBy: null,
+        verificationNotes: null,
+      })
+      .where(eq(listings.id, id))
 
-    logger.info('Listing verification removed', { listingId: id, removedBy: session.user.id });
+    logger.info('Listing verification removed', { listingId: id, removedBy: session.user.id })
 
-    return apiSuccess({ id, verified: false });
+    return apiSuccess({ id, verified: false })
   } catch (error) {
-    return apiError(error, 'Fehler beim Entfernen der Verifizierung');
+    return apiError(error, 'Fehler beim Entfernen der Verifizierung')
   }
-});
+})

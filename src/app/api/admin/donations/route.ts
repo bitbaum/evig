@@ -1,55 +1,17 @@
 import { NextRequest } from 'next/server'
+import { db } from '@/db'
+import { donations, users } from '@/db/schema'
+import { eq, and, gte, lte, desc, asc, sql } from 'drizzle-orm'
+import type { SQL } from 'drizzle-orm'
 import { withAdmin } from '@/lib/api/middleware'
-import { query, paginatedQuery } from '@/lib/auth/db'
 import { apiError, apiSuccess, apiBadRequest } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
-import { TABLE_NAMES } from '@/config/database'
 import { CreateDonationSchema, GetDonationsQuerySchema } from '@/lib/schemas/donations'
 import { logger } from '@/lib/logger'
 import { DONATION_TYPES, getEstimatedValue } from '@/config/donations'
-import { QueryParams } from '@/lib/api/query-builder'
+import { alias } from 'drizzle-orm/pg-core'
 
-interface DonationRow {
-  id: string
-  user_id: string | null
-  donation_type: string
-  // Monetary
-  amount_cents: number | null
-  currency: string
-  payment_method: string | null
-  payment_reference: string | null
-  payment_date: Date | null
-  is_recurring: boolean
-  recurring_frequency: string | null
-  // Device
-  device_category: string | null
-  device_description: string | null
-  device_brand: string | null
-  device_model: string | null
-  device_condition: string | null
-  device_age_years: number | null
-  estimated_value_cents: number | null
-  // Anonymous donor
-  donor_name: string | null
-  donor_email: string | null
-  donor_address: string | null
-  // Status
-  status: string
-  recorded_by: string | null
-  receipt_requested: boolean
-  receipt_sent: boolean
-  receipt_sent_at: Date | null
-  thank_you_sent: boolean
-  thank_you_sent_at: Date | null
-  notes: string | null
-  // Timestamps
-  created_at: Date
-  updated_at: Date
-  // Joined fields
-  user_name: string | null
-  user_email: string | null
-  recorded_by_name: string | null
-}
+const recorder = alias(users, 'recorder')
 
 /**
  * GET /api/admin/donations
@@ -76,77 +38,81 @@ export const GET = withAdmin('donations', async (request: NextRequest, session) 
     }
 
     const filters = queryParsed.data
-    const qb = new QueryParams()
 
-    if (filters.donation_type) qb.add('d.donation_type = $P', filters.donation_type)
-    if (filters.status) qb.add('d.status = $P', filters.status)
-    if (filters.user_id) qb.add('d.user_id = $P', filters.user_id)
-    if (filters.from_date) qb.add('d.created_at >= $P', filters.from_date)
-    if (filters.to_date) qb.add('d.created_at <= $P', filters.to_date)
+    // Build dynamic filters
+    const conditions: SQL[] = []
+    if (filters.donation_type) conditions.push(eq(donations.donationType, filters.donation_type))
+    if (filters.status) conditions.push(eq(donations.status, filters.status))
+    if (filters.user_id) conditions.push(eq(donations.userId, filters.user_id))
+    if (filters.from_date) conditions.push(gte(donations.createdAt, filters.from_date))
+    if (filters.to_date) conditions.push(lte(donations.createdAt, filters.to_date))
 
-    const { where: whereClause, params, nextIndex } = qb.build()
+    const where = conditions.length > 0 ? and(...conditions) : undefined
 
-    // Validate sort column to prevent injection
-    const allowedSortColumns = ['created_at', 'amount_cents', 'status']
-    const sortBy = allowedSortColumns.includes(filters.sort_by) ? filters.sort_by : 'created_at'
-    const sortOrder = filters.sort_order === 'asc' ? 'ASC' : 'DESC'
+    // Determine sort
+    const sortColumnMap: Record<string, SQL> = {
+      created_at: sql`${donations.createdAt}`,
+      amount_cents: sql`${donations.amountCents}`,
+      status: sql`${donations.status}`,
+    }
+    const sortCol = sortColumnMap[filters.sort_by] || sql`${donations.createdAt}`
+    const orderBy = filters.sort_order === 'asc' ? asc(sortCol) : desc(sortCol)
+
+    // Count total
+    const [countRow] = await db
+      .select({ count: sql<number>`count(*)` })
+      .from(donations)
+      .where(where)
+
+    const total = Number(countRow?.count ?? 0)
 
     // Fetch with pagination
-    const { rows: donationRows, total } = await paginatedQuery<DonationRow>(`
-      SELECT
-        d.*,
-        u.name as user_name,
-        u.email as user_email,
-        recorder.name as recorded_by_name
-      FROM ${TABLE_NAMES.DONATIONS} d
-      LEFT JOIN ${TABLE_NAMES.USERS} u ON d.user_id = u.id
-      LEFT JOIN ${TABLE_NAMES.USERS} recorder ON d.recorded_by = recorder.id
-      ${whereClause}
-      ORDER BY d.${sortBy} ${sortOrder}
-      LIMIT $${nextIndex} OFFSET $${nextIndex + 1}
-    `, [...params, filters.limit, filters.offset])
+    const rows = await db
+      .select({
+        id: donations.id,
+        user_id: donations.userId,
+        user_name: users.name,
+        user_email: users.email,
+        donation_type: donations.donationType,
+        amount_cents: donations.amountCents,
+        currency: donations.currency,
+        payment_method: donations.paymentMethod,
+        payment_reference: donations.paymentReference,
+        payment_date: donations.paymentDate,
+        is_recurring: donations.isRecurring,
+        recurring_frequency: donations.recurringFrequency,
+        device_category: donations.deviceCategory,
+        device_description: donations.deviceDescription,
+        device_brand: donations.deviceBrand,
+        device_model: donations.deviceModel,
+        device_condition: donations.deviceCondition,
+        device_age_years: donations.deviceAgeYears,
+        estimated_value_cents: donations.estimatedValueCents,
+        donor_name: donations.donorName,
+        donor_email: donations.donorEmail,
+        donor_address: donations.donorAddress,
+        status: donations.status,
+        recorded_by: donations.recordedBy,
+        recorded_by_name: recorder.name,
+        receipt_requested: donations.receiptRequested,
+        receipt_sent: donations.receiptSent,
+        receipt_sent_at: donations.receiptSentAt,
+        thank_you_sent: donations.thankYouSent,
+        thank_you_sent_at: donations.thankYouSentAt,
+        notes: donations.notes,
+        created_at: donations.createdAt,
+        updated_at: donations.updatedAt,
+      })
+      .from(donations)
+      .leftJoin(users, eq(donations.userId, users.id))
+      .leftJoin(recorder, eq(donations.recordedBy, recorder.id))
+      .where(where)
+      .orderBy(orderBy)
+      .limit(filters.limit)
+      .offset(filters.offset)
 
     return apiSuccess({
-      items: donationRows.map(d => ({
-        id: d.id,
-        user_id: d.user_id,
-        user_name: d.user_name,
-        user_email: d.user_email,
-        donation_type: d.donation_type,
-        // Monetary
-        amount_cents: d.amount_cents,
-        currency: d.currency,
-        payment_method: d.payment_method,
-        payment_reference: d.payment_reference,
-        payment_date: d.payment_date?.toISOString(),
-        is_recurring: d.is_recurring,
-        recurring_frequency: d.recurring_frequency,
-        // Device
-        device_category: d.device_category,
-        device_description: d.device_description,
-        device_brand: d.device_brand,
-        device_model: d.device_model,
-        device_condition: d.device_condition,
-        device_age_years: d.device_age_years,
-        estimated_value_cents: d.estimated_value_cents,
-        // Anonymous
-        donor_name: d.donor_name,
-        donor_email: d.donor_email,
-        donor_address: d.donor_address,
-        // Status
-        status: d.status,
-        recorded_by: d.recorded_by,
-        recorded_by_name: d.recorded_by_name,
-        receipt_requested: d.receipt_requested,
-        receipt_sent: d.receipt_sent,
-        receipt_sent_at: d.receipt_sent_at?.toISOString(),
-        thank_you_sent: d.thank_you_sent,
-        thank_you_sent_at: d.thank_you_sent_at?.toISOString(),
-        notes: d.notes,
-        // Timestamps
-        created_at: d.created_at.toISOString(),
-        updated_at: d.updated_at.toISOString(),
-      })),
+      items: rows,
       pagination: {
         total,
         limit: filters.limit,
@@ -176,101 +142,65 @@ export const POST = withAdmin('donations', async (request: NextRequest, session)
 
     const data = parsed.data
 
-    // Build insert query based on donation type
     if (data.donation_type === DONATION_TYPES.MONETARY) {
-      const result = await query<{ id: string }>(`
-        INSERT INTO ${TABLE_NAMES.DONATIONS} (
-          donation_type,
-          amount_cents,
-          currency,
-          payment_method,
-          payment_reference,
-          payment_date,
-          is_recurring,
-          recurring_frequency,
-          user_id,
-          donor_name,
-          donor_email,
-          donor_address,
-          receipt_requested,
-          notes,
-          status,
-          recorded_by
-        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16)
-        RETURNING id
-      `, [
-        data.donation_type,
-        data.amount_cents,
-        data.currency,
-        data.payment_method || null,
-        data.payment_reference || null,
-        data.payment_date || null,
-        data.is_recurring,
-        data.recurring_frequency || null,
-        data.user_id || null,
-        data.donor_name || null,
-        data.donor_email || null,
-        data.donor_address || null,
-        data.receipt_requested,
-        data.notes || null,
-        'recorded',
-        session.user.id,
-      ])
+      const [created] = await db
+        .insert(donations)
+        .values({
+          donationType: data.donation_type,
+          amountCents: data.amount_cents,
+          currency: data.currency,
+          paymentMethod: data.payment_method || null,
+          paymentReference: data.payment_reference || null,
+          paymentDate: data.payment_date || null,
+          isRecurring: data.is_recurring,
+          recurringFrequency: data.recurring_frequency || null,
+          userId: data.user_id || null,
+          donorName: data.donor_name || null,
+          donorEmail: data.donor_email || null,
+          donorAddress: data.donor_address || null,
+          receiptRequested: data.receipt_requested,
+          notes: data.notes || null,
+          status: 'recorded',
+          recordedBy: session.user.id,
+        })
+        .returning({ id: donations.id })
 
-      logger.info('Monetary donation created', { donationId: result.rows[0].id, recordedBy: session.user.id })
-
-      return apiSuccess({ id: result.rows[0].id }, 201)
+      logger.info('Monetary donation created', { donationId: created.id, recordedBy: session.user.id })
+      return apiSuccess({ id: created.id }, 201)
     }
 
     // Device donation
     const estimatedValue = data.estimated_value_cents ?? getEstimatedValue(data.device_category)
 
-    const result = await query<{ id: string }>(`
-      INSERT INTO ${TABLE_NAMES.DONATIONS} (
-        donation_type,
-        device_category,
-        device_description,
-        device_brand,
-        device_model,
-        device_condition,
-        device_age_years,
-        estimated_value_cents,
-        user_id,
-        donor_name,
-        donor_email,
-        donor_address,
-        receipt_requested,
-        notes,
-        status,
-        recorded_by
-      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16)
-      RETURNING id
-    `, [
-      data.donation_type,
-      data.device_category,
-      data.device_description || null,
-      data.device_brand || null,
-      data.device_model || null,
-      data.device_condition || null,
-      data.device_age_years || null,
-      estimatedValue,
-      data.user_id || null,
-      data.donor_name || null,
-      data.donor_email || null,
-      data.donor_address || null,
-      data.receipt_requested,
-      data.notes || null,
-      'recorded',
-      session.user.id,
-    ])
+    const [created] = await db
+      .insert(donations)
+      .values({
+        donationType: data.donation_type,
+        deviceCategory: data.device_category,
+        deviceDescription: data.device_description || null,
+        deviceBrand: data.device_brand || null,
+        deviceModel: data.device_model || null,
+        deviceCondition: data.device_condition || null,
+        deviceAgeYears: data.device_age_years || null,
+        estimatedValueCents: estimatedValue,
+        userId: data.user_id || null,
+        donorName: data.donor_name || null,
+        donorEmail: data.donor_email || null,
+        donorAddress: data.donor_address || null,
+        receiptRequested: data.receipt_requested,
+        notes: data.notes || null,
+        status: 'recorded',
+        recordedBy: session.user.id,
+      })
+      .returning({ id: donations.id })
 
     logger.info('Device donation created', {
-      donationId: result.rows[0].id,
+      donationId: created.id,
       category: data.device_category,
       recordedBy: session.user.id,
     })
 
-    return apiSuccess({ id: result.rows[0].id }, 201)
+    return apiSuccess({ id: created.id }, 201)
 
   } catch (error) {
     logger.error('Failed to create donation', { error })

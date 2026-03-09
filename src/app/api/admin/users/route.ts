@@ -14,11 +14,12 @@
  */
 
 import { NextRequest } from 'next/server'
+import { db } from '@/db'
+import { users } from '@/db/schema'
+import { eq, and, or, ilike, isNull, isNotNull, desc, sql } from 'drizzle-orm'
+import type { SQL } from 'drizzle-orm'
 import { withAdmin } from '@/lib/api/middleware'
-import { paginatedQuery } from '@/lib/auth/db'
 import { isSuperAdmin } from '@/lib/permissions'
-import { TABLE_NAMES } from '@/config/database'
-import { QueryParams } from '@/lib/api/query-builder'
 import {
   apiSuccess,
   apiError,
@@ -53,58 +54,62 @@ export const GET = withAdmin('users', async (request, session) => {
     const filters = filterResult.data
     const offset = (filters.page - 1) * filters.limit
 
-    // Build query with filters
-    const qb = new QueryParams()
+    // Build dynamic filters
+    const conditions: SQL[] = []
 
     if (filters.search) {
-      qb.add('(name ILIKE $P OR email ILIKE $P)', `%${filters.search}%`)
+      conditions.push(
+        or(
+          ilike(users.name, `%${filters.search}%`),
+          ilike(users.email, `%${filters.search}%`)
+        )!
+      )
     }
 
     if (filters.type === 'staff') {
-      qb.addRaw('is_staff = true')
+      conditions.push(eq(users.isStaff, true))
     } else if (filters.type === 'regular') {
-      qb.addRaw('(is_staff = false OR is_staff IS NULL)')
+      conditions.push(or(eq(users.isStaff, false), isNull(users.isStaff))!)
     }
 
     if (filters.verified === 'yes') {
-      qb.addRaw('"emailVerified" IS NOT NULL')
+      conditions.push(isNotNull(users.emailVerified))
     } else if (filters.verified === 'no') {
-      qb.addRaw('"emailVerified" IS NULL')
+      conditions.push(isNull(users.emailVerified))
     }
 
-    const { where: whereClause, params, nextIndex } = qb.build()
+    const where = conditions.length > 0 ? and(...conditions) : undefined
+
+    // Get total count
+    const [countRow] = await db
+      .select({ count: sql<number>`count(*)` })
+      .from(users)
+      .where(where)
+
+    const total = Number(countRow?.count ?? 0)
 
     // Get paginated users
-    const { rows: usersRows, total } = await paginatedQuery<{
-      id: string
-      name: string | null
-      email: string
-      is_staff: boolean
-      is_super_admin: boolean
-      staff_permissions: string[] | null
-      created_at: string
-      email_verified: string | null
-    }>(
-      `SELECT
-        id,
-        name,
-        email,
-        is_staff,
-        is_super_admin,
-        staff_permissions,
-        "createdAt" as created_at,
-        "emailVerified" as email_verified
-       FROM ${TABLE_NAMES.USERS}
-       ${whereClause}
-       ORDER BY is_staff DESC, "createdAt" DESC
-       LIMIT $${nextIndex} OFFSET $${nextIndex + 1}`,
-      [...params, filters.limit, offset]
-    )
+    const rows = await db
+      .select({
+        id: users.id,
+        name: users.name,
+        email: users.email,
+        is_staff: users.isStaff,
+        is_super_admin: users.isSuperAdmin,
+        staff_permissions: users.staffPermissions,
+        created_at: users.createdAt,
+        email_verified: users.emailVerified,
+      })
+      .from(users)
+      .where(where)
+      .orderBy(desc(users.isStaff), desc(users.createdAt))
+      .limit(filters.limit)
+      .offset(offset)
 
     // Add computed fields
-    const usersWithDetails = usersRows.map(user => ({
+    const usersWithDetails = rows.map(user => ({
       ...user,
-      is_super_admin_computed: isSuperAdmin(user.email, user.is_super_admin),
+      is_super_admin_computed: isSuperAdmin(user.email, user.is_super_admin ?? undefined),
     }))
 
     return apiSuccess({

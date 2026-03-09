@@ -7,9 +7,10 @@
  */
 
 import { NextRequest } from 'next/server'
+import { db } from '@/db'
+import { blogCategories, blogPosts } from '@/db/schema'
+import { eq, and, ne, sql } from 'drizzle-orm'
 import { withAdmin } from '@/lib/api/middleware'
-import { query } from '@/lib/auth/db'
-import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
 import {
   apiSuccess,
@@ -22,26 +23,23 @@ export const GET = withAdmin<{ id: string }>('content', async (request, session,
   try {
     const { id } = context!.params!
 
-    const result = await query<{
-      id: string
-      slug: string
-      name: string
-      description: string | null
-      color: string | null
-      sort_order: number
-      is_active: boolean
-    }>(
-      `SELECT id, slug, name, description, color, sort_order, is_active
-       FROM ${TABLE_NAMES.BLOG_CATEGORIES}
-       WHERE id = $1`,
-      [id]
-    )
+    const [category] = await db
+      .select({
+        id: blogCategories.id,
+        slug: blogCategories.slug,
+        name: blogCategories.name,
+        description: blogCategories.description,
+        color: blogCategories.color,
+        sort_order: blogCategories.sortOrder,
+      })
+      .from(blogCategories)
+      .where(eq(blogCategories.id, id))
 
-    if (result.rows.length === 0) {
+    if (!category) {
       return apiNotFound('Kategorie')
     }
 
-    return apiSuccess(result.rows[0])
+    return apiSuccess(category)
   } catch (error) {
     logger.error('Failed to get blog category', { error })
     return apiError(error, 'Kategorie konnte nicht geladen werden')
@@ -52,49 +50,51 @@ export const PATCH = withAdmin<{ id: string }>('content', async (request, sessio
   try {
     const { id } = context!.params!
     const body = await request.json()
-    const { name, slug, description, color, sort_order, is_active } = body
+    const { name, slug, description, color, sort_order } = body
 
     // Check if category exists
-    const existing = await query<{ id: string }>(
-      `SELECT id FROM ${TABLE_NAMES.BLOG_CATEGORIES} WHERE id = $1`,
-      [id]
-    )
+    const [existing] = await db
+      .select({ id: blogCategories.id })
+      .from(blogCategories)
+      .where(eq(blogCategories.id, id))
 
-    if (existing.rows.length === 0) {
+    if (!existing) {
       return apiNotFound('Kategorie')
     }
 
-    // Validation
     if (!name || !slug) {
       return apiBadRequest('Name und Slug sind erforderlich')
     }
 
     // Check if slug is unique (excluding current category)
-    const slugCheck = await query<{ id: string }>(
-      `SELECT id FROM ${TABLE_NAMES.BLOG_CATEGORIES} WHERE slug = $1 AND id != $2`,
-      [slug, id]
-    )
+    const [slugConflict] = await db
+      .select({ id: blogCategories.id })
+      .from(blogCategories)
+      .where(and(eq(blogCategories.slug, slug), ne(blogCategories.id, id)))
 
-    if (slugCheck.rows.length > 0) {
+    if (slugConflict) {
       return apiBadRequest('Eine andere Kategorie mit diesem Slug existiert bereits')
     }
 
-    // Update category
-    const result = await query<{
-      id: string
-      slug: string
-      name: string
-      description: string | null
-      color: string | null
-      sort_order: number
-      is_active: boolean
-    }>(
-      `UPDATE ${TABLE_NAMES.BLOG_CATEGORIES}
-       SET name = $1, slug = $2, description = $3, color = $4, sort_order = $5, is_active = $6, updated_at = NOW()
-       WHERE id = $7
-       RETURNING id, name, slug, description, color, sort_order, is_active`,
-      [name, slug, description || null, color || null, sort_order || 0, is_active !== false, id]
-    )
+    const [updated] = await db
+      .update(blogCategories)
+      .set({
+        name,
+        slug,
+        description: description || null,
+        color: color || null,
+        sortOrder: sort_order || 0,
+        updatedAt: sql`NOW()`,
+      })
+      .where(eq(blogCategories.id, id))
+      .returning({
+        id: blogCategories.id,
+        name: blogCategories.name,
+        slug: blogCategories.slug,
+        description: blogCategories.description,
+        color: blogCategories.color,
+        sort_order: blogCategories.sortOrder,
+      })
 
     logger.info('Blog category updated', {
       userId: session.user.id,
@@ -102,7 +102,7 @@ export const PATCH = withAdmin<{ id: string }>('content', async (request, sessio
       slug,
     })
 
-    return apiSuccess(result.rows[0])
+    return apiSuccess(updated)
   } catch (error) {
     logger.error('Failed to update blog category', { error })
     return apiError(error, 'Kategorie konnte nicht aktualisiert werden')
@@ -114,38 +114,34 @@ export const DELETE = withAdmin<{ id: string }>('content', async (request, sessi
     const { id } = context!.params!
 
     // Check if category exists
-    const existing = await query<{ id: string; name: string }>(
-      `SELECT id, name FROM ${TABLE_NAMES.BLOG_CATEGORIES} WHERE id = $1`,
-      [id]
-    )
+    const [existing] = await db
+      .select({ id: blogCategories.id, name: blogCategories.name })
+      .from(blogCategories)
+      .where(eq(blogCategories.id, id))
 
-    if (existing.rows.length === 0) {
+    if (!existing) {
       return apiNotFound('Kategorie')
     }
 
     // Check if category has posts
-    const postsCheck = await query<{ count: string }>(
-      `SELECT COUNT(*) as count FROM ${TABLE_NAMES.BLOG_POSTS} WHERE category_id = $1`,
-      [id]
-    )
+    const [countRow] = await db
+      .select({ count: sql<number>`count(*)` })
+      .from(blogPosts)
+      .where(eq(blogPosts.categoryId, id))
 
-    const postCount = parseInt(postsCheck.rows[0]?.count || '0')
+    const postCount = Number(countRow?.count ?? 0)
     if (postCount > 0) {
       return apiBadRequest(
         `Kategorie kann nicht gelöscht werden - ${postCount} Artikel zugewiesen`
       )
     }
 
-    // Delete category
-    await query(
-      `DELETE FROM ${TABLE_NAMES.BLOG_CATEGORIES} WHERE id = $1`,
-      [id]
-    )
+    await db.delete(blogCategories).where(eq(blogCategories.id, id))
 
     logger.info('Blog category deleted', {
       userId: session.user.id,
       categoryId: id,
-      categoryName: existing.rows[0].name,
+      categoryName: existing.name,
     })
 
     return apiSuccess({ deleted: true })
