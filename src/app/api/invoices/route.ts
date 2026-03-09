@@ -1,24 +1,17 @@
 import { NextRequest } from 'next/server'
 import { withAuth } from '@/lib/api/middleware'
-import { query } from '@/lib/auth/db'
-import { apiError, apiSuccess, apiBadRequest, apiNotFound, parsePagination } from '@/lib/api/helpers'
+import { db } from '@/db'
+import { invoices, users } from '@/db/schema'
+import { eq, and, sql, desc } from 'drizzle-orm'
+import { apiError, apiSuccess, apiBadRequest, parsePagination } from '@/lib/api/helpers'
 import { logger } from '@/lib/logger'
-import { calculateTaxes, generateTaxInvoiceData } from '@/lib/payments/tax-compliance'
-import { TABLE_NAMES } from '@/config/database'
+import { calculateTaxes } from '@/lib/payments/tax-compliance'
 import { INVOICE_STATUS } from '@/config/invoice-status'
-import { QueryParams } from '@/lib/api/query-builder'
-import { CountRow } from '@/lib/api/db-types'
 
 interface LineItemInput {
   description: string
   quantity: number | string
   unitPrice: number | string
-}
-
-interface InvoiceCreatedRow {
-  id: string
-  invoice_number: string
-  created_at: string
 }
 
 // POST /api/invoices - Create new invoice
@@ -85,72 +78,58 @@ export const POST = withAuth(async (request, session) => {
     const taxCents = Math.round(taxCalculation.vatAmount * 100)
     const totalCents = Math.round(taxCalculation.total * 100)
 
-    // Create invoice with tax compliance data
-    const invoiceResult = await query(`
-      INSERT INTO ${TABLE_NAMES.INVOICES} (
-        invoice_number,
-        type,
-        status,
-        user_id,
-        order_id,
-        service_appointment_id,
-        workshop_registration_id,
-        subtotal_cents,
-        tax_cents,
-        total_cents,
-        currency,
-        tax_rate,
-        line_items,
-        due_date,
-        notes,
-        issue_date,
-        metadata
-      ) VALUES (
-        generate_invoice_number(),
-        $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, CURRENT_DATE, $15
-      )
-      RETURNING id, invoice_number, created_at
-    `, [
-      type,
-      INVOICE_STATUS.DRAFT,
-      targetUserId,
-      orderId || null,
-      serviceAppointmentId || null,
-      workshopRegistrationId || null,
-      subtotalCents,
-      taxCents,
-      totalCents,
-      currency,
-      taxCalculation.vatRate,
-      JSON.stringify(processedLineItems),
-      dueDate || null,
-      notes || null,
-      JSON.stringify({
-        taxCompliance: {
-          customerCountry,
-          customerType,
-          businessType,
-          taxRegime: taxCalculation.regime,
-          reverseCharge: taxCalculation.regime === 'reverse_charge',
-          vatReportingRequired: taxCalculation.vatAmount > 0
-        },
-        taxBreakdown: {
-          taxableAmount: taxCalculation.breakdown.taxableAmount,
-          vatExemptAmount: taxCalculation.breakdown.vatExemptAmount,
-          reverseChargeAmount: taxCalculation.breakdown.reverseChargeAmount
-        }
-      })
-    ])
+    // Generate invoice number first
+    const numResult = await db.execute(sql`SELECT generate_invoice_number() as num`)
+    const num = (numResult.rows[0] as { num: string }).num
 
-    const invoice = invoiceResult.rows[0] as InvoiceCreatedRow
+    // Create invoice with tax compliance data
+    const [invoice] = await db
+      .insert(invoices)
+      .values({
+        invoiceNumber: num,
+        type,
+        status: INVOICE_STATUS.DRAFT,
+        userId: targetUserId,
+        orderId: orderId || undefined,
+        serviceAppointmentId: serviceAppointmentId || undefined,
+        workshopRegistrationId: workshopRegistrationId || undefined,
+        subtotalCents,
+        taxCents,
+        totalCents,
+        currency,
+        taxRate: String(taxCalculation.vatRate),
+        lineItems: processedLineItems,
+        dueDate: dueDate || undefined,
+        notes: notes || undefined,
+        metadata: {
+          taxCompliance: {
+            customerCountry,
+            customerType,
+            businessType,
+            taxRegime: taxCalculation.regime,
+            reverseCharge: taxCalculation.regime === 'reverse_charge',
+            vatReportingRequired: taxCalculation.vatAmount > 0
+          },
+          taxBreakdown: {
+            taxableAmount: taxCalculation.breakdown.taxableAmount,
+            vatExemptAmount: taxCalculation.breakdown.vatExemptAmount,
+            reverseChargeAmount: taxCalculation.breakdown.reverseChargeAmount
+          }
+        },
+      })
+      .returning({
+        id: invoices.id,
+        invoiceNumber: invoices.invoiceNumber,
+        createdAt: invoices.createdAt,
+      })
 
     return apiSuccess({
       invoiceId: invoice.id,
-      invoiceNumber: invoice.invoice_number,
+      invoiceNumber: invoice.invoiceNumber,
       status: INVOICE_STATUS.DRAFT,
       total: totalCents / 100,
       currency,
-      createdAt: invoice.created_at
+      createdAt: invoice.createdAt
     })
 
   } catch (error) {
@@ -160,7 +139,7 @@ export const POST = withAuth(async (request, session) => {
 })
 
 // GET /api/invoices - List invoices
-export const GET = withAuth(async (request, session) => {
+export const GET = withAuth(async (request: NextRequest, session) => {
   try {
     const { searchParams } = new URL(request.url)
     const status = searchParams.get('status')
@@ -170,48 +149,57 @@ export const GET = withAuth(async (request, session) => {
     // Check if user is admin
     const isAdmin = session.user.isStaff
 
-    const qb = new QueryParams()
-
+    const conditions = []
     if (!isAdmin) {
-      qb.add('i.user_id = $P', session.user.id)
+      conditions.push(eq(invoices.userId, session.user.id))
     }
     if (status) {
-      qb.add('i.status = $P', status)
+      conditions.push(eq(invoices.status, status))
     }
     if (type) {
-      qb.add('i.type = $P', type)
+      conditions.push(eq(invoices.type, type))
     }
 
-    const { where: whereClause, params, nextIndex } = qb.build()
+    const where = conditions.length > 0 ? and(...conditions) : undefined
 
     // Get invoices with user info
-    const invoicesResult = await query(`
-      SELECT
-        i.id, i.invoice_number, i.type, i.status, i.user_id,
-        i.total_cents, i.subtotal_cents, i.tax_cents, i.currency,
-        i.due_date, i.issue_date, i.created_at, i.updated_at,
-        u.name as customer_name,
-        u.email as customer_email,
-        ROUND(i.total_cents / 100.0, 2) as total,
-        ROUND(i.subtotal_cents / 100.0, 2) as subtotal,
-        ROUND(i.tax_cents / 100.0, 2) as tax
-      FROM ${TABLE_NAMES.INVOICES} i
-      JOIN ${TABLE_NAMES.USERS} u ON i.user_id = u.id
-      ${whereClause}
-      ORDER BY i.created_at DESC
-      LIMIT $${nextIndex} OFFSET $${nextIndex + 1}
-    `, [...params, limit, offset])
+    const rows = await db
+      .select({
+        id: invoices.id,
+        invoice_number: invoices.invoiceNumber,
+        type: invoices.type,
+        status: invoices.status,
+        user_id: invoices.userId,
+        total_cents: invoices.totalCents,
+        subtotal_cents: invoices.subtotalCents,
+        tax_cents: invoices.taxCents,
+        currency: invoices.currency,
+        due_date: invoices.dueDate,
+        issue_date: invoices.issueDate,
+        created_at: invoices.createdAt,
+        updated_at: invoices.updatedAt,
+        customer_name: users.name,
+        customer_email: users.email,
+        total: sql<string>`ROUND(${invoices.totalCents} / 100.0, 2)`,
+        subtotal: sql<string>`ROUND(${invoices.subtotalCents} / 100.0, 2)`,
+        tax: sql<string>`ROUND(${invoices.taxCents} / 100.0, 2)`,
+      })
+      .from(invoices)
+      .innerJoin(users, eq(invoices.userId, users.id))
+      .where(where)
+      .orderBy(desc(invoices.createdAt))
+      .limit(limit)
+      .offset(offset)
 
     // Get total count
-    const countResult = await query(`
-      SELECT COUNT(*) as total
-      FROM ${TABLE_NAMES.INVOICES} i
-      ${whereClause}
-    `, params)
+    const [countRow] = await db
+      .select({ total: sql<number>`count(*)` })
+      .from(invoices)
+      .where(where)
 
     return apiSuccess({
-      invoices: invoicesResult.rows,
-      total: parseInt((countResult.rows[0] as CountRow).total),
+      invoices: rows,
+      total: Number(countRow?.total ?? 0),
       limit,
       offset
     })

@@ -1,17 +1,12 @@
 import { NextRequest } from 'next/server'
 import { auth } from '@/auth'
-import { query } from '@/lib/auth/db'
+import { db } from '@/db'
+import { itHilfeOffers, itHilfeRequests } from '@/db/schema'
+import { eq, and, sql } from 'drizzle-orm'
 import { apiError, apiSuccess, apiUnauthorized, apiBadRequest, apiNotFound, apiForbidden } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
-import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
 import { OFFER_STATUS } from '@/config/it-hilfe'
-
-interface OfferRow {
-  helper_id: string
-  status: string
-  request_id: string
-}
 
 interface RouteParams {
   params: Promise<{ id: string; offerId: string }>
@@ -37,19 +32,23 @@ export async function DELETE(request: NextRequest, { params }: RouteParams) {
     }
 
     // Get offer and verify ownership
-    const offerResult = await query(`
-      SELECT helper_id, status, request_id
-      FROM ${TABLE_NAMES.IT_HILFE_OFFERS}
-      WHERE id = $1 AND request_id = $2
-    `, [offerId, id])
+    const [offer] = await db
+      .select({
+        helperId: itHilfeOffers.helperId,
+        status: itHilfeOffers.status,
+        requestId: itHilfeOffers.requestId,
+      })
+      .from(itHilfeOffers)
+      .where(and(
+        eq(itHilfeOffers.id, offerId),
+        eq(itHilfeOffers.requestId, id)
+      ))
 
-    if (offerResult.rows.length === 0) {
+    if (!offer) {
       return apiNotFound('Angebot')
     }
 
-    const offer = offerResult.rows[0] as OfferRow
-
-    if (offer.helper_id !== session.user.id) {
+    if (offer.helperId !== session.user.id) {
       return apiForbidden('Sie können nur Ihre eigenen Angebote zurückziehen')
     }
 
@@ -58,18 +57,16 @@ export async function DELETE(request: NextRequest, { params }: RouteParams) {
     }
 
     // Update offer status to withdrawn
-    await query(`
-      UPDATE ${TABLE_NAMES.IT_HILFE_OFFERS}
-      SET status = '${OFFER_STATUS.WITHDRAWN}'
-      WHERE id = $1
-    `, [offerId])
+    await db
+      .update(itHilfeOffers)
+      .set({ status: OFFER_STATUS.WITHDRAWN })
+      .where(eq(itHilfeOffers.id, offerId))
 
     // Decrement offer count on request
-    await query(`
-      UPDATE ${TABLE_NAMES.IT_HILFE_REQUESTS}
-      SET offer_count = GREATEST(offer_count - 1, 0)
-      WHERE id = $1
-    `, [id])
+    await db
+      .update(itHilfeRequests)
+      .set({ offerCount: sql`GREATEST(${itHilfeRequests.offerCount} - 1, 0)` })
+      .where(eq(itHilfeRequests.id, id))
 
     logger.info('Withdrew IT-Hilfe offer', {
       offerId,

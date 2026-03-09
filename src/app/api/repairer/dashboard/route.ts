@@ -1,13 +1,13 @@
 /**
  * Repairer Dashboard API
  * GET /api/repairer/dashboard - Get repairer dashboard stats and bookings
- *
- * MIGRATION: Now uses unified permissions for admin access check
  */
 
 import { NextRequest } from 'next/server'
-import { query } from '@/lib/auth/db'
-import { TABLE_NAMES } from '@/config/database'
+import { db } from '@/db'
+import { serviceAppointments, serviceTypes, users, repairerProfiles, repairerReviews, repairerServices } from '@/db/schema'
+import { eq, sql, desc, and, isNull } from 'drizzle-orm'
+import { alias } from 'drizzle-orm/pg-core'
 import { apiError, apiSuccess, apiUnauthorized } from '@/lib/api/helpers'
 import { logger } from '@/lib/logger'
 import { APPOINTMENT_STATUS } from '@/config/appointment-status'
@@ -15,42 +15,7 @@ import { REVIEW_STATUS } from '@/config/review-status'
 import { auth } from '@/auth'
 import { ROLES } from '@/lib/constants'
 
-interface BookingRow {
-  id: string
-  customer_name: string
-  customer_email: string
-  service_name: string
-  status: string
-  urgency: string
-  preferred_date: string
-  confirmed_date: string
-  description: string
-  device_info: string
-  price_charged_cents: number
-  created_at: string
-}
-
-interface ServiceRow {
-  id: string
-  service_name: string
-  description: string
-  base_price_chf: number
-  hourly_rate_chf: number
-  is_active: boolean
-}
-
-interface StatsRow {
-  total_bookings: string
-  completed_bookings: string
-  pending_bookings: string
-  confirmed_bookings: string
-  total_revenue: string
-}
-
-interface RatingRow {
-  average_rating: string
-  review_count: string
-}
+const customerUser = alias(users, 'customer')
 
 export async function GET(request: NextRequest) {
   try {
@@ -74,66 +39,71 @@ export async function GET(request: NextRequest) {
     // Get repairer profile
     let repairerId: string | null = null
     try {
-      const profileResult = await query<{ id: string }>(
-        `SELECT id FROM ${TABLE_NAMES.REPAIRER_PROFILES} WHERE user_id = $1`,
-        [userId]
-      )
-      repairerId = profileResult.rows[0]?.id || null
+      const [profile] = await db
+        .select({ id: repairerProfiles.id })
+        .from(repairerProfiles)
+        .where(eq(repairerProfiles.userId, userId))
+      repairerId = profile?.id || null
     } catch {
       logger.debug('Repairer profile query failed, continuing with user_id')
     }
 
     // Fetch bookings assigned to this repairer
-    const bookingsResult = await query<BookingRow>(
-      `SELECT
-        sa.id,
-        u.name as customer_name,
-        u.email as customer_email,
-        st.name as service_name,
-        sa.status,
-        sa.urgency,
-        sa.preferred_date,
-        sa.confirmed_date,
-        sa.description,
-        sa.device_info,
-        sa.price_charged_cents,
-        sa.created_at
-       FROM ${TABLE_NAMES.SERVICE_APPOINTMENTS} sa
-       JOIN ${TABLE_NAMES.USERS} u ON sa.user_id = u.id
-       JOIN ${TABLE_NAMES.SERVICE_TYPES} st ON sa.service_type_id = st.id
-       WHERE sa.repairer_id = $1 OR (sa.repairer_id IS NULL AND $2 = true)
-       ORDER BY sa.created_at DESC
-       LIMIT 10`,
-      [userId, userRole === ROLES.REVAMPIT_ADMIN]
-    )
+    const isAdmin = userRole === ROLES.REVAMPIT_ADMIN
+    const bookingCondition = isAdmin
+      ? sql`(${serviceAppointments.repairerId} = ${userId} OR ${serviceAppointments.repairerId} IS NULL)`
+      : eq(serviceAppointments.repairerId, userId)
+
+    const bookingRows = await db
+      .select({
+        id: serviceAppointments.id,
+        customer_name: customerUser.name,
+        customer_email: customerUser.email,
+        service_name: serviceTypes.name,
+        status: serviceAppointments.status,
+        urgency: serviceAppointments.urgency,
+        preferred_date: serviceAppointments.preferredDate,
+        confirmed_date: serviceAppointments.confirmedDate,
+        description: serviceAppointments.description,
+        device_info: serviceAppointments.deviceInfo,
+        price_charged_cents: serviceAppointments.priceChargedCents,
+        created_at: serviceAppointments.createdAt,
+      })
+      .from(serviceAppointments)
+      .innerJoin(customerUser, eq(serviceAppointments.userId, customerUser.id))
+      .innerJoin(serviceTypes, eq(serviceAppointments.serviceTypeId, serviceTypes.id))
+      .where(bookingCondition)
+      .orderBy(desc(serviceAppointments.createdAt))
+      .limit(10)
 
     // Fetch stats
-    const statsResult = await query<StatsRow>(
-      `SELECT
-        COUNT(*) as total_bookings,
-        COUNT(*) FILTER (WHERE status = '${APPOINTMENT_STATUS.COMPLETED}') as completed_bookings,
-        COUNT(*) FILTER (WHERE status IN ('${APPOINTMENT_STATUS.REQUESTED}', 'in_progress')) as pending_bookings,
-        COUNT(*) FILTER (WHERE status = '${APPOINTMENT_STATUS.CONFIRMED}') as confirmed_bookings,
-        COALESCE(SUM(price_charged_cents), 0) as total_revenue
-       FROM ${TABLE_NAMES.SERVICE_APPOINTMENTS}
-       WHERE repairer_id = $1`,
-      [userId]
-    )
+    const [stats] = await db
+      .select({
+        total_bookings: sql<string>`COUNT(*)`,
+        completed_bookings: sql<string>`COUNT(*) FILTER (WHERE ${serviceAppointments.status} = ${APPOINTMENT_STATUS.COMPLETED})`,
+        pending_bookings: sql<string>`COUNT(*) FILTER (WHERE ${serviceAppointments.status} IN (${APPOINTMENT_STATUS.REQUESTED}, 'in_progress'))`,
+        confirmed_bookings: sql<string>`COUNT(*) FILTER (WHERE ${serviceAppointments.status} = ${APPOINTMENT_STATUS.CONFIRMED})`,
+        total_revenue: sql<string>`COALESCE(SUM(${serviceAppointments.priceChargedCents}), 0)`,
+      })
+      .from(serviceAppointments)
+      .where(eq(serviceAppointments.repairerId, userId))
 
-    // Fetch rating info from repairer profile or reviews
-    let ratingInfo: RatingRow = { average_rating: '0', review_count: '0' }
+    // Fetch rating info from repairer reviews
+    let ratingInfo = { average_rating: '0', review_count: '0' }
     try {
       if (repairerId) {
-        const ratingResult = await query<RatingRow>(
-          `SELECT
-            COALESCE(AVG(rating), 0) as average_rating,
-            COUNT(*) as review_count
-           FROM ${TABLE_NAMES.REPAIRER_REVIEWS}
-           WHERE repairer_id = $1 AND status = '${REVIEW_STATUS.PUBLISHED}'`,
-          [repairerId]
-        )
-        if (ratingResult.rows[0]) {
-          ratingInfo = ratingResult.rows[0]
+        const [ratingRow] = await db
+          .select({
+            average_rating: sql<string>`COALESCE(AVG(${repairerReviews.rating}), 0)`,
+            review_count: sql<string>`COUNT(*)`,
+          })
+          .from(repairerReviews)
+          .where(and(
+            eq(repairerReviews.repairerId, repairerId),
+            eq(repairerReviews.isPublic, true)
+          ))
+        if (ratingRow) {
+          ratingInfo = ratingRow
         }
       }
     } catch {
@@ -141,29 +111,27 @@ export async function GET(request: NextRequest) {
     }
 
     // Fetch services offered by this repairer
-    let services: ServiceRow[] = []
+    let serviceRows: { id: string; service_name: string; description: string | null; base_price_cents: number | null; hourly_rate_cents: number | null; is_active: boolean | null }[] = []
     try {
       if (repairerId) {
-        const servicesResult = await query<ServiceRow>(
-          `SELECT
-            id,
-            service_name,
-            description,
-            base_price_chf,
-            hourly_rate_chf,
-            is_active
-           FROM ${TABLE_NAMES.REPAIRER_SERVICES}
-           WHERE repairer_id = $1
-           ORDER BY is_active DESC, service_name ASC`,
-          [repairerId]
-        )
-        services = servicesResult.rows
+        serviceRows = await db
+          .select({
+            id: repairerServices.id,
+            service_name: repairerServices.serviceName,
+            description: repairerServices.description,
+            base_price_cents: repairerServices.basePriceCents,
+            hourly_rate_cents: repairerServices.hourlyRateCents,
+            is_active: repairerServices.isActive,
+          })
+          .from(repairerServices)
+          .where(eq(repairerServices.repairerId, repairerId))
+          .orderBy(desc(repairerServices.isActive), repairerServices.serviceName)
       }
     } catch {
       logger.debug('Repairer services query failed')
     }
 
-    const stats = statsResult.rows[0] || {
+    const statsData = stats || {
       total_bookings: '0',
       completed_bookings: '0',
       pending_bookings: '0',
@@ -172,7 +140,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Transform bookings
-    const bookings = bookingsResult.rows.map(row => ({
+    const bookings = bookingRows.map(row => ({
       id: row.id,
       customer: row.customer_name || row.customer_email?.split('@')[0] || 'Kunde',
       service: row.service_name,
@@ -186,23 +154,23 @@ export async function GET(request: NextRequest) {
       createdAt: row.created_at,
     }))
 
-    // Transform services
-    const formattedServices = services.map(row => ({
+    // Transform services (fix column name bug: was base_price_chf, now correctly base_price_cents)
+    const formattedServices = serviceRows.map(row => ({
       id: row.id,
       name: row.service_name,
       description: row.description,
-      basePrice: parseFloat(String(row.base_price_chf)) || 0,
-      hourlyRate: parseFloat(String(row.hourly_rate_chf)) || 0,
+      basePrice: (row.base_price_cents || 0) / 100,
+      hourlyRate: (row.hourly_rate_cents || 0) / 100,
       isActive: row.is_active,
     }))
 
     return apiSuccess({
       stats: {
-        totalBookings: parseInt(stats.total_bookings),
-        completedBookings: parseInt(stats.completed_bookings),
-        pendingBookings: parseInt(stats.pending_bookings),
-        confirmedBookings: parseInt(stats.confirmed_bookings),
-        totalRevenue: parseInt(stats.total_revenue) / 100, // Convert cents to CHF
+        totalBookings: parseInt(statsData.total_bookings),
+        completedBookings: parseInt(statsData.completed_bookings),
+        pendingBookings: parseInt(statsData.pending_bookings),
+        confirmedBookings: parseInt(statsData.confirmed_bookings),
+        totalRevenue: parseInt(statsData.total_revenue) / 100,
         averageRating: parseFloat(ratingInfo.average_rating) || 0,
         reviewCount: parseInt(ratingInfo.review_count) || 0,
       },

@@ -1,20 +1,20 @@
 import { NextRequest } from 'next/server'
+import { db } from '@/db'
+import { serviceAppointments, serviceTypes, users, repairerProfiles } from '@/db/schema'
+import { eq } from 'drizzle-orm'
+import { alias } from 'drizzle-orm/pg-core'
 import { query } from '@/lib/auth/db'
+import { TABLE_NAMES } from '@/config/database'
 import { apiError, apiSuccess, apiBadRequest, apiNotFound, apiForbidden } from '@/lib/api/helpers'
 import { withAuth, ValidSession } from '@/lib/api/middleware'
 import { ERROR_MESSAGES } from '@/config/error-messages'
-import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
 import { validateBody, AppointmentActionSchema } from '@/lib/schemas'
 import { sendCustomEmail, appointmentStatusUpdate, appointmentQuoteReceived } from '@/lib/email'
 import { BOOKING_STATUS, getBookingStatusLabel } from '@/config/booking-status'
 
-interface AppointmentRow {
-  id: string
-  user_id: string
-  repairer_id: string
-  status: string
-}
+const customerUser = alias(users, 'customer')
+const repairerUser = alias(users, 'repairer')
 
 // GET /api/appointments/[id] - Get single appointment
 export const GET = withAuth<{ id: string }>(async (
@@ -28,24 +28,58 @@ export const GET = withAuth<{ id: string }>(async (
       return apiBadRequest('Termin-ID erforderlich')
     }
 
-    const result = await query(
-      'SELECT sa.*, c.name as customer_name, c.email as customer_email, ' +
-      'r.name as repairer_name, rp.business_name, rp.phone as repairer_phone, ' +
-      'st.name as service_name ' +
-      'FROM ' + TABLE_NAMES.SERVICE_APPOINTMENTS + ' sa ' +
-      'LEFT JOIN ' + TABLE_NAMES.USERS + ' c ON sa.user_id = c.id ' +
-      'LEFT JOIN ' + TABLE_NAMES.USERS + ' r ON sa.repairer_id = r.id ' +
-      'LEFT JOIN ' + TABLE_NAMES.REPAIRER_PROFILES + ' rp ON sa.repairer_profile_id = rp.id ' +
-      'LEFT JOIN ' + TABLE_NAMES.SERVICE_TYPES + ' st ON sa.service_type_id = st.id ' +
-      'WHERE sa.id = $1',
-      [appointmentId]
-    )
+    const [appointment] = await db
+      .select({
+        id: serviceAppointments.id,
+        user_id: serviceAppointments.userId,
+        repairer_id: serviceAppointments.repairerId,
+        repairer_profile_id: serviceAppointments.repairerProfileId,
+        service_type_id: serviceAppointments.serviceTypeId,
+        description: serviceAppointments.description,
+        device_info: serviceAppointments.deviceInfo,
+        preferred_date: serviceAppointments.preferredDate,
+        confirmed_date: serviceAppointments.confirmedDate,
+        urgency: serviceAppointments.urgency,
+        status: serviceAppointments.status,
+        outcome_notes: serviceAppointments.outcomeNotes,
+        price_charged_cents: serviceAppointments.priceChargedCents,
+        estimated_duration_hours: serviceAppointments.estimatedDurationHours,
+        quoted_price_chf: serviceAppointments.quotedPriceChf,
+        quote_approved: serviceAppointments.quoteApproved,
+        quote_approved_at: serviceAppointments.quoteApprovedAt,
+        diagnosis_notes: serviceAppointments.diagnosisNotes,
+        parts_needed: serviceAppointments.partsNeeded,
+        parts_ordered_at: serviceAppointments.partsOrderedAt,
+        completed_at: serviceAppointments.completedAt,
+        completion_notes: serviceAppointments.completionNotes,
+        customer_rating: serviceAppointments.customerRating,
+        customer_review: serviceAppointments.customerReview,
+        reviewed_at: serviceAppointments.reviewedAt,
+        last_contact_at: serviceAppointments.lastContactAt,
+        messages_count: serviceAppointments.messagesCount,
+        is_home_visit: serviceAppointments.isHomeVisit,
+        visit_address: serviceAppointments.visitAddress,
+        visit_postal_code: serviceAppointments.visitPostalCode,
+        visit_city: serviceAppointments.visitCity,
+        created_at: serviceAppointments.createdAt,
+        updated_at: serviceAppointments.updatedAt,
+        customer_name: customerUser.name,
+        customer_email: customerUser.email,
+        repairer_name: repairerUser.name,
+        business_name: repairerProfiles.businessName,
+        repairer_phone: repairerProfiles.phone,
+        service_name: serviceTypes.name,
+      })
+      .from(serviceAppointments)
+      .leftJoin(customerUser, eq(serviceAppointments.userId, customerUser.id))
+      .leftJoin(repairerUser, eq(serviceAppointments.repairerId, repairerUser.id))
+      .leftJoin(repairerProfiles, eq(serviceAppointments.repairerProfileId, repairerProfiles.id))
+      .leftJoin(serviceTypes, eq(serviceAppointments.serviceTypeId, serviceTypes.id))
+      .where(eq(serviceAppointments.id, appointmentId))
 
-    if (result.rows.length === 0) {
+    if (!appointment) {
       return apiNotFound('Termin nicht gefunden')
     }
-
-    const appointment = result.rows[0] as AppointmentRow
 
     // Check access - must be customer or repairer
     if (appointment.user_id !== session.user.id && appointment.repairer_id !== session.user.id) {
@@ -63,6 +97,7 @@ export const GET = withAuth<{ id: string }>(async (
 })
 
 // PATCH /api/appointments/[id] - Update appointment status
+// Kept as raw SQL due to complex dynamic field building per action type
 export const PATCH = withAuth<{ id: string }>(async (
   request: NextRequest,
   session: ValidSession,
@@ -90,7 +125,7 @@ export const PATCH = withAuth<{ id: string }>(async (
       return apiNotFound('Termin nicht gefunden')
     }
 
-    const appointment = currentResult.rows[0] as AppointmentRow
+    const appointment = currentResult.rows[0] as { id: string; user_id: string; repairer_id: string; status: string }
     const isCustomer = appointment.user_id === session.user.id
     const isRepairer = appointment.repairer_id === session.user.id
 
@@ -184,7 +219,6 @@ export const PATCH = withAuth<{ id: string }>(async (
       case 'rate':
         if (!isCustomer) return apiForbidden('Nur der Kunde kann bewerten')
         if (appointment.status !== BOOKING_STATUS.COMPLETED) return apiBadRequest('Nur abgeschlossene Termine können bewertet werden')
-        // Prevent double-rating — checked via SQL WHERE clause below
         updates.push('customer_rating = $' + paramIndex++)
         updateParams.push(actionData.customer_rating)
         if (actionData.customer_review) {
@@ -213,7 +247,6 @@ export const PATCH = withAuth<{ id: string }>(async (
     updateParams.push(appointmentId)
 
     let whereClause = 'WHERE id = $' + paramIndex
-    // Prevent double-rating at the SQL level
     if (action === 'rate') {
       whereClause += ' AND customer_rating IS NULL'
     }
@@ -259,7 +292,6 @@ export const PATCH = withAuth<{ id: string }>(async (
         const statusLabel = getBookingStatusLabel(newStatus)
 
         if (action === 'quote' && p.customer_email) {
-          // Quote → special email to customer
           const emailContent = appointmentQuoteReceived(
             p.customer_name || 'Kunde',
             p.repairer_name || 'Reparateur',
@@ -271,7 +303,6 @@ export const PATCH = withAuth<{ id: string }>(async (
             logger.warn('Failed to send quote email', { error: err, appointmentId })
           })
         } else if (['accept', 'reject', 'start', 'complete'].includes(action) && p.customer_email) {
-          // Repairer actions → notify customer
           const emailContent = appointmentStatusUpdate(
             p.customer_name || 'Kunde',
             p.repairer_name || 'Reparateur',
@@ -283,7 +314,6 @@ export const PATCH = withAuth<{ id: string }>(async (
             logger.warn('Failed to send status email to customer', { error: err, appointmentId })
           })
         } else if (['approve_quote', 'reject_quote', 'cancel'].includes(action) && p.repairer_email) {
-          // Customer actions → notify repairer
           const emailContent = appointmentStatusUpdate(
             p.repairer_name || 'Reparateur',
             p.customer_name || 'Kunde',

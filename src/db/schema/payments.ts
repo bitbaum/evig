@@ -379,6 +379,9 @@ export const invoices = pgTable('invoices', {
   notes: text('notes'),
   paymentTerms: text('payment_terms').default('Payment due within 30 days'),
 
+  // Metadata (tax compliance info, etc.)
+  metadata: jsonb('metadata').default({}),
+
   createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' }).defaultNow(),
   updatedAt: timestamp('updated_at', { withTimezone: true, mode: 'string' }).defaultNow(),
 }, (table) => [

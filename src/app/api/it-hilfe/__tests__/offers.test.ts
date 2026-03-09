@@ -35,10 +35,7 @@ jest.mock('@/db', () => ({
   },
 }))
 
-// Mock raw query for the delete route (still uses raw SQL)
-jest.mock('@/lib/auth/db', () => ({
-  query: jest.fn(),
-}))
+// DELETE route also uses Drizzle now (no raw SQL mock needed)
 
 jest.mock('@/lib/logger', () => ({
   logger: {
@@ -67,11 +64,11 @@ jest.mock('@/lib/security/rate-limit', () => ({
 }))
 
 import { NextRequest } from 'next/server'
-import { query } from '@/lib/auth/db'
 import { auth } from '@/auth'
+import { db } from '@/db'
 
-const mockQuery = query as jest.MockedFunction<typeof query>
 const mockAuth = auth as jest.MockedFunction<typeof auth>
+const mockDb = db as jest.Mocked<typeof db>
 
 function makeRequest(url: string, init?: RequestInit) {
   return new NextRequest(new URL(url, 'http://localhost:3001'), init as never)
@@ -418,8 +415,7 @@ describe('DELETE /api/it-hilfe/requests/[id]/offers/[offerId]', () => {
   })
 
   beforeEach(() => {
-    mockQuery.mockReset()
-    mockAuth.mockReset()
+    jest.clearAllMocks()
   })
 
   const makeCtx = (id: string, offerId: string) => ({ params: Promise.resolve({ id, offerId }) })
@@ -440,13 +436,14 @@ describe('DELETE /api/it-hilfe/requests/[id]/offers/[offerId]', () => {
       user: { id: 'user-helper' },
       expires: '',
     } as never)
-    mockQuery
-      .mockResolvedValueOnce({
-        rows: [{ helper_id: 'user-helper', status: 'pending', request_id: validRequestId }],
-        rowCount: 1,
-      } as never)
-      .mockResolvedValueOnce({ rows: [], rowCount: 1 } as never) // UPDATE offer
-      .mockResolvedValueOnce({ rows: [], rowCount: 1 } as never) // UPDATE request offer_count
+    // db.select().from().where() — returns offer
+    mockSelectChain.where.mockResolvedValueOnce([
+      { helperId: 'user-helper', status: 'pending', requestId: validRequestId }
+    ])
+    // db.update().set().where() — update offer status (2 calls: offer + request)
+    mockUpdateChain.where
+      .mockResolvedValueOnce([])
+      .mockResolvedValueOnce([])
 
     const res = await DELETE(
       makeRequest(`/api/it-hilfe/requests/${validRequestId}/offers/${validOfferId}`, { method: 'DELETE' }),
@@ -462,10 +459,9 @@ describe('DELETE /api/it-hilfe/requests/[id]/offers/[offerId]', () => {
       user: { id: 'user-other' },
       expires: '',
     } as never)
-    mockQuery.mockResolvedValueOnce({
-      rows: [{ helper_id: 'user-helper', status: 'pending', request_id: validRequestId }],
-      rowCount: 1,
-    } as never)
+    mockSelectChain.where.mockResolvedValueOnce([
+      { helperId: 'user-helper', status: 'pending', requestId: validRequestId }
+    ])
 
     const res = await DELETE(
       makeRequest(`/api/it-hilfe/requests/${validRequestId}/offers/${validOfferId}`, { method: 'DELETE' }),
@@ -480,10 +476,9 @@ describe('DELETE /api/it-hilfe/requests/[id]/offers/[offerId]', () => {
       user: { id: 'user-helper' },
       expires: '',
     } as never)
-    mockQuery.mockResolvedValueOnce({
-      rows: [{ helper_id: 'user-helper', status: 'accepted', request_id: validRequestId }],
-      rowCount: 1,
-    } as never)
+    mockSelectChain.where.mockResolvedValueOnce([
+      { helperId: 'user-helper', status: 'accepted', requestId: validRequestId }
+    ])
 
     const res = await DELETE(
       makeRequest(`/api/it-hilfe/requests/${validRequestId}/offers/${validOfferId}`, { method: 'DELETE' }),
@@ -500,7 +495,7 @@ describe('DELETE /api/it-hilfe/requests/[id]/offers/[offerId]', () => {
       user: { id: 'user-helper' },
       expires: '',
     } as never)
-    mockQuery.mockResolvedValueOnce({ rows: [], rowCount: 0 } as never)
+    mockSelectChain.where.mockResolvedValueOnce([])
 
     const res = await DELETE(
       makeRequest(`/api/it-hilfe/requests/${validRequestId}/offers/${validOfferId}`, { method: 'DELETE' }),

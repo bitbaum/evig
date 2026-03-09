@@ -6,40 +6,18 @@
 
 import { NextRequest } from 'next/server'
 import { auth } from '@/auth'
-import { query } from '@/lib/auth/db'
+import { db } from '@/db'
+import { helperProfiles, userSkills } from '@/db/schema'
+import { eq, sql } from 'drizzle-orm'
 import {
   apiError,
   apiSuccess,
   apiUnauthorized,
-  apiBadRequest,
 } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
-import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
 import { IT_SKILLS } from '@/config/it-hilfe'
 import { validateBody, TechnicianProfileSchema } from '@/lib/schemas'
-
-interface TechnicianProfileRow {
-  id: string
-  user_id: string
-  bio: string | null
-  hourly_rate_cents: number | null
-  accepts_gratis: boolean
-  accepts_kulturlegi: boolean
-  service_types: string[] | null
-  location_postal_code: string | null
-  location_city: string | null
-  location_canton: string | null
-  max_travel_km: number
-  is_active: boolean
-  created_at: string
-  updated_at: string
-}
-
-interface UserSkillRow {
-  skill_id: string
-  category_id: string
-}
 
 /**
  * GET /api/user/technician-profile
@@ -53,43 +31,45 @@ export async function GET() {
     }
 
     // Get technician profile
-    const profileResult = await query(
-      `
-      SELECT id, user_id, bio, hourly_rate_cents, accepts_gratis, accepts_kulturlegi,
-             service_types, location_postal_code, location_city, location_canton,
-             max_travel_km, is_active, created_at, updated_at
-      FROM ${TABLE_NAMES.IT_HILFE_TECHNICIAN_PROFILES}
-      WHERE user_id = $1
-    `,
-      [session.user.id]
-    )
+    const [profileRow] = await db
+      .select({
+        bio: helperProfiles.bio,
+        hourlyRateCents: helperProfiles.hourlyRateCents,
+        acceptsGratis: helperProfiles.acceptsGratis,
+        acceptsKulturlegi: helperProfiles.acceptsKulturlegi,
+        serviceTypes: helperProfiles.serviceTypes,
+        locationPostalCode: helperProfiles.locationPostalCode,
+        locationCity: helperProfiles.locationCity,
+        locationCanton: helperProfiles.locationCanton,
+        maxTravelKm: helperProfiles.maxTravelKm,
+        isActive: helperProfiles.isActive,
+      })
+      .from(helperProfiles)
+      .where(eq(helperProfiles.userId, session.user.id))
 
     // Get user skills
-    const skillsResult = await query(
-      `
-      SELECT skill_id, category_id FROM ${TABLE_NAMES.USER_SKILLS}
-      WHERE user_id = $1
-    `,
-      [session.user.id]
-    )
-
-    const profileRow = profileResult.rows[0] as TechnicianProfileRow | undefined
-    const skillRows = skillsResult.rows as UserSkillRow[]
+    const skillRows = await db
+      .select({
+        skillId: userSkills.skillId,
+        categoryId: userSkills.categoryId,
+      })
+      .from(userSkills)
+      .where(eq(userSkills.userId, session.user.id))
 
     // Map to response format
     const profile = profileRow
       ? {
-          skills: skillRows.map((r) => r.skill_id),
+          skills: skillRows.map((r) => r.skillId),
           bio: profileRow.bio || '',
-          hourlyRateCents: profileRow.hourly_rate_cents,
-          acceptsGratis: profileRow.accepts_gratis,
-          acceptsKulturlegi: profileRow.accepts_kulturlegi,
-          serviceTypes: profileRow.service_types || ['flexible'],
-          postalCode: profileRow.location_postal_code || '',
-          city: profileRow.location_city || '',
-          canton: profileRow.location_canton || '',
-          maxTravelKm: profileRow.max_travel_km,
-          isActive: profileRow.is_active,
+          hourlyRateCents: profileRow.hourlyRateCents,
+          acceptsGratis: profileRow.acceptsGratis,
+          acceptsKulturlegi: profileRow.acceptsKulturlegi,
+          serviceTypes: profileRow.serviceTypes || ['flexible'],
+          postalCode: profileRow.locationPostalCode || '',
+          city: profileRow.locationCity || '',
+          canton: profileRow.locationCanton || '',
+          maxTravelKm: profileRow.maxTravelKm,
+          isActive: profileRow.isActive,
         }
       : null
 
@@ -132,78 +112,53 @@ export async function PUT(request: NextRequest) {
     } = validation.data
 
     // Upsert technician profile
-    await query(
-      `
-      INSERT INTO ${TABLE_NAMES.IT_HILFE_TECHNICIAN_PROFILES} (
-        user_id,
-        bio,
-        hourly_rate_cents,
-        accepts_gratis,
-        accepts_kulturlegi,
-        service_types,
-        location_postal_code,
-        location_city,
-        location_canton,
-        max_travel_km,
-        is_active
-      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
-      ON CONFLICT (user_id) DO UPDATE SET
-        bio = EXCLUDED.bio,
-        hourly_rate_cents = EXCLUDED.hourly_rate_cents,
-        accepts_gratis = EXCLUDED.accepts_gratis,
-        accepts_kulturlegi = EXCLUDED.accepts_kulturlegi,
-        service_types = EXCLUDED.service_types,
-        location_postal_code = EXCLUDED.location_postal_code,
-        location_city = EXCLUDED.location_city,
-        location_canton = EXCLUDED.location_canton,
-        max_travel_km = EXCLUDED.max_travel_km,
-        is_active = EXCLUDED.is_active,
-        updated_at = NOW()
-    `,
-      [
-        session.user.id,
-        bio || null,
+    await db
+      .insert(helperProfiles)
+      .values({
+        userId: session.user.id,
+        bio: bio || undefined,
         hourlyRateCents,
         acceptsGratis,
         acceptsKulturlegi,
-        serviceTypes.length > 0 ? serviceTypes : null,
-        postalCode || null,
-        city || null,
-        canton || null,
+        serviceTypes: serviceTypes.length > 0 ? serviceTypes : undefined,
+        locationPostalCode: postalCode || undefined,
+        locationCity: city || undefined,
+        locationCanton: canton || undefined,
         maxTravelKm,
         isActive,
-      ]
-    )
-
-    // Update skills - delete existing and insert new
-    await query(
-      `DELETE FROM ${TABLE_NAMES.USER_SKILLS} WHERE user_id = $1`,
-      [session.user.id]
-    )
-
-    if (skills.length > 0) {
-      // Batch insert skills
-      const skillValues = skills
-        .map(
-          (_: string, i: number) =>
-            `($1, $${i * 2 + 2}, $${i * 2 + 3})`
-        )
-        .join(', ')
-
-      const skillParams: (string | null)[] = [session.user.id]
-      skills.forEach((skillId: string) => {
-        // Derive category from skill ID
-        const category = getCategoryForSkill(skillId)
-        skillParams.push(skillId, category)
+      })
+      .onConflictDoUpdate({
+        target: helperProfiles.userId,
+        set: {
+          bio: bio || null,
+          hourlyRateCents,
+          acceptsGratis,
+          acceptsKulturlegi,
+          serviceTypes: serviceTypes.length > 0 ? serviceTypes : null,
+          locationPostalCode: postalCode || null,
+          locationCity: city || null,
+          locationCanton: canton || null,
+          maxTravelKm,
+          isActive,
+          updatedAt: sql`NOW()`,
+        },
       })
 
-      await query(
-        `
-        INSERT INTO ${TABLE_NAMES.USER_SKILLS} (user_id, skill_id, category_id)
-        VALUES ${skillValues}
-      `,
-        skillParams
-      )
+    // Update skills - delete existing and insert new
+    await db
+      .delete(userSkills)
+      .where(eq(userSkills.userId, session.user.id))
+
+    if (skills.length > 0) {
+      const skillValues = skills.map((skillId: string) => ({
+        userId: session.user.id,
+        skillId,
+        categoryId: getCategoryForSkill(skillId),
+      }))
+
+      await db
+        .insert(userSkills)
+        .values(skillValues)
     }
 
     logger.info('Updated technician profile', {
