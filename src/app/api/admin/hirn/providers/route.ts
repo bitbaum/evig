@@ -20,6 +20,7 @@ import {
 } from '@/lib/hirn/providers'
 import { logger } from '@/lib/logger'
 import { apiSuccess, apiError, apiBadRequest, apiNotFound } from '@/lib/api/helpers'
+import { validateBody, HirnProviderUpdateSchema } from '@/lib/schemas'
 
 export const GET = withAdmin('hirn', async (_request: NextRequest) => {
   try {
@@ -59,24 +60,9 @@ export const GET = withAdmin('hirn', async (_request: NextRequest) => {
 export const PATCH = withAdmin('hirn', async (request: NextRequest, session) => {
   try {
     const body = await request.json()
-    const { provider, isDefault, apiKey, isEnabled } = body as {
-      provider?: string
-      isDefault?: boolean
-      apiKey?: string
-      isEnabled?: boolean
-    }
-
-    if (!provider) {
-      return apiBadRequest('Provider ist erforderlich')
-    }
-
-    if (apiKey !== undefined && typeof apiKey !== 'string') {
-      return apiBadRequest('apiKey muss ein String sein')
-    }
-
-    if (isEnabled !== undefined && typeof isEnabled !== 'boolean') {
-      return apiBadRequest('isEnabled muss true oder false sein')
-    }
+    const validation = validateBody(HirnProviderUpdateSchema, body)
+    if (!validation.success) return validation.error
+    const { provider, isDefault, apiKey, isEnabled } = validation.data
 
     const settings = await getProviderSettings('system')
     const providerSettings = settings.find((s) => s.provider === provider)

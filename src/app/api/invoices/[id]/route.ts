@@ -4,6 +4,7 @@ import { query } from '@/lib/auth/db'
 import { apiError, apiSuccess, apiUnauthorized, apiNotFound, apiBadRequest } from '@/lib/api/helpers'
 import { logger } from '@/lib/logger'
 import { TABLE_NAMES } from '@/config/database'
+import { validateBody, UpdateInvoiceSchema } from '@/lib/schemas'
 
 interface InvoiceRow {
   id: string
@@ -75,7 +76,10 @@ export const GET = withAuth<{ id: string }>(async (request, session, context) =>
 export const PUT = withAuth<{ id: string }>(async (request, session, context) => {
   try {
     const { id: invoiceId } = context!.params!
-    const updates = await request.json()
+    const body = await request.json()
+    const validation = validateBody(UpdateInvoiceSchema, body)
+    if (!validation.success) return validation.error
+    const updates = validation.data
 
     // Check if user is admin
     const isAdmin = session.user.isStaff

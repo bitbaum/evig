@@ -14,6 +14,7 @@ import { logger } from '@/lib/logger'
 import { TABLE_NAMES } from '@/config/database'
 import { INTAKE_STATUS } from '@/config/intake-status'
 import { publishProduct, unpublishProduct, updateProductImage } from '@/lib/admin/inventory-actions'
+import { validateBody, InventoryUpdateSchema, InventoryPatchSchema } from '@/lib/schemas'
 
 export const GET = withAdmin<{ id: string }>('products', async (request, session, context) => {
   try {
@@ -125,7 +126,10 @@ export const DELETE = withAdmin<{ id: string }>('products', async (request, sess
 export const PUT = withAdmin<{ id: string }>('products', async (request, session, context) => {
   try {
     const { id: productId } = context!.params!
-    const body = await request.json() as Record<string, unknown>
+    const rawBody = await request.json()
+    const validation = validateBody(InventoryUpdateSchema, rawBody)
+    if (!validation.success) return validation.error
+    const body = validation.data as Record<string, unknown>
 
     // Build dynamic update for product fields
     const allowedFields = [
@@ -209,10 +213,10 @@ export const PUT = withAdmin<{ id: string }>('products', async (request, session
 export const PATCH = withAdmin<{ id: string }>('products', async (request, session, context) => {
   try {
     const { id: productId } = context!.params!
-    const body = await request.json() as {
-      marketplace_status?: 'draft' | 'published'
-      status?: 'pending_review' | 'approved' | 'rejected'
-    }
+    const rawBody = await request.json()
+    const patchValidation = validateBody(InventoryPatchSchema, rawBody)
+    if (!patchValidation.success) return patchValidation.error
+    const body = patchValidation.data
 
     // Handle marketplace publish/unpublish
     if (body.marketplace_status !== undefined) {

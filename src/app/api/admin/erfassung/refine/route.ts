@@ -8,7 +8,8 @@
 import { NextRequest } from 'next/server'
 import { withAdmin } from '@/lib/api/middleware'
 import { logger } from '@/lib/logger'
-import { apiSuccess, apiError, apiBadRequest } from '@/lib/api/helpers'
+import { apiSuccess, apiError } from '@/lib/api/helpers'
+import { validateBody, ErfassungRefineSchema } from '@/lib/schemas'
 import { ERFASSUNG_PROMPTS, fillPromptTemplate } from '@/lib/ai/config/prompts'
 import { callWithFallback } from '@/lib/ai/providers'
 import { robustJsonExtract } from '@/lib/ai/extract'
@@ -30,19 +31,13 @@ interface RefinedProductData extends ProductData {
   fieldsChanged: string[]
 }
 
-interface RefineRequest {
-  currentProduct: ProductData
-  instruction: string
-}
-
 export const POST = withAdmin('products', async (request, session) => {
   try {
-    const body: RefineRequest = await request.json()
-    const { currentProduct, instruction } = body
-
-    if (!currentProduct || !instruction) {
-      return apiBadRequest('currentProduct und instruction sind erforderlich')
-    }
+    const body = await request.json()
+    const validation = validateBody(ErfassungRefineSchema, body)
+    if (!validation.success) return validation.error
+    const { currentProduct: currentProductRaw, instruction } = validation.data
+    const currentProduct = currentProductRaw as ProductData
 
     // Format current product as JSON string for the prompt
     const currentProductJson = JSON.stringify(currentProduct, null, 2)

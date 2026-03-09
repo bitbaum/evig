@@ -14,6 +14,7 @@ import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
 import { logPermissionsChange, logSuperAdminChange } from '@/lib/auth/audit'
 import { apiSuccess, apiError, apiForbidden, apiBadRequest, apiNotFound } from '@/lib/api/helpers'
+import { validateBody, AdminPermissionsSchema } from '@/lib/schemas'
 
 /**
  * Get request context for audit logging
@@ -35,15 +36,12 @@ export const PATCH = withAdmin<{ id: string }>('users', async (request, session,
 
     const { id } = context!.params!
     const body = await request.json()
-    const { permissions, isSuperAdmin: newSuperAdminStatus } = body
+    const validation = validateBody(AdminPermissionsSchema, body)
+    if (!validation.success) return validation.error
+    const { permissions, isSuperAdmin: newSuperAdminStatus } = validation.data
 
-    // Validate permissions if provided
+    // Validate each permission against ADMIN_SECTIONS
     if (permissions !== undefined) {
-      if (!Array.isArray(permissions)) {
-        return apiBadRequest('Berechtigungen müssen ein Array sein')
-      }
-
-      // Validate each permission
       const validSections = Object.keys(ADMIN_SECTIONS) as AdminSection[]
       const invalidPermissions = permissions.filter(
         (p: string) => p !== '*' && !validSections.includes(p as AdminSection)

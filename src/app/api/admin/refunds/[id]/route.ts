@@ -4,6 +4,7 @@ import { query } from '@/lib/auth/db'
 import { apiError, apiSuccess, apiNotFound, apiBadRequest } from '@/lib/api/helpers'
 import { logger } from '@/lib/logger'
 import { TABLE_NAMES } from '@/config/database'
+import { validateBody, RefundActionSchema } from '@/lib/schemas'
 import { PAYMENT_STATUS } from '@/config/payment-status'
 import { REFUND_STATUS } from '@/config/refund'
 import { getStripeClient } from '@/lib/payments/stripe-client'
@@ -67,11 +68,10 @@ export const GET = withAdmin<{ id: string }>('finanzen', async (request, session
 export const PUT = withAdmin<{ id: string }>('finanzen', async (request, session, context) => {
   const { id: refundId } = context!.params!
   try {
-    const { action, notes } = await request.json() // action: 'approve', 'reject', 'process'
-
-    if (!['approve', 'reject', 'process'].includes(action)) {
-      return apiBadRequest('Invalid action. Must be approve, reject, or process')
-    }
+    const body = await request.json()
+    const validation = validateBody(RefundActionSchema, body)
+    if (!validation.success) return validation.error
+    const { action, notes } = validation.data
 
     // Get refund details
     const refundResult = await query(`

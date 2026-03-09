@@ -4,6 +4,7 @@ import { TABLE_NAMES } from "@/config/database";
 import { apiSuccess, apiError, apiNotFound } from "@/lib/api/helpers";
 import { logger } from "@/lib/logger";
 import { withAdmin } from "@/lib/api/middleware";
+import { validateBody, AdminUpdateProductSchema } from '@/lib/schemas';
 
 // GET /api/admin/products/[id] - Get single product
 export const GET = withAdmin<{ id: string }>('products', async (
@@ -83,7 +84,10 @@ export const PUT = withAdmin<{ id: string }>('products', async (
       return apiError(new Error("Product ID required"), "Product ID required", 400);
     }
 
-    const updateData = await request.json();
+    const body = await request.json();
+    const validation = validateBody(AdminUpdateProductSchema, body);
+    if (!validation.success) return validation.error;
+    const updateData = validation.data as Record<string, unknown>;
 
     // Build dynamic SET clause for product fields
     const setClauses: string[] = [];
@@ -107,7 +111,7 @@ export const PUT = withAdmin<{ id: string }>('products', async (
     for (const [inputKey, dbColumn] of Object.entries(allowedFields)) {
       if (updateData[inputKey] !== undefined) {
         setClauses.push(`${dbColumn} = $${paramIndex++}`);
-        values.push(updateData[inputKey]);
+        values.push(updateData[inputKey] as string | number | null);
       }
     }
 
@@ -124,18 +128,20 @@ export const PUT = withAdmin<{ id: string }>('products', async (
     }
 
     // Update inventory fields if provided
-    if (updateData.quantity_available !== undefined || updateData.marketplace_status !== undefined) {
+    const quantityAvailable = updateData.quantity_available as number | undefined;
+    const marketplaceStatus = updateData.marketplace_status as string | undefined;
+    if (quantityAvailable !== undefined || marketplaceStatus !== undefined) {
       const invSets: string[] = [];
       const invValues: (string | number | null)[] = [];
       let invIndex = 1;
 
-      if (updateData.quantity_available !== undefined) {
+      if (quantityAvailable !== undefined) {
         invSets.push(`quantity_available = $${invIndex++}`);
-        invValues.push(updateData.quantity_available);
+        invValues.push(quantityAvailable);
       }
-      if (updateData.marketplace_status !== undefined) {
+      if (marketplaceStatus !== undefined) {
         invSets.push(`marketplace_status = $${invIndex++}`);
-        invValues.push(updateData.marketplace_status);
+        invValues.push(marketplaceStatus);
       }
 
       invValues.push(params.id);

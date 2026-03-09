@@ -4,6 +4,7 @@ import { query } from "@/lib/auth/db";
 import { TABLE_NAMES } from "@/config/database";
 import { logger } from "@/lib/logger";
 import { apiError, apiSuccess } from "@/lib/api/helpers";
+import { validateBody, AdminCreateProductSchema } from '@/lib/schemas';
 import { QueryParams } from '@/lib/api/query-builder';
 
 // GET /api/admin/products - List all products for admin
@@ -84,7 +85,10 @@ export const GET = withAdmin('products', async (request, session) => {
 // POST /api/admin/products - Create new product
 export const POST = withAdmin('products', async (request, session) => {
   try {
-    const productData = await request.json();
+    const body = await request.json();
+    const validation = validateBody(AdminCreateProductSchema, body);
+    if (!validation.success) return validation.error;
+    const productData = validation.data;
 
     const result = await query<{ id: string }>(
       `INSERT INTO ${TABLE_NAMES.AI_EXTRACTED_PRODUCTS}

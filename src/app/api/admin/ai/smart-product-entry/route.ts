@@ -16,6 +16,7 @@ import { NextRequest } from 'next/server'
 import { withAdmin } from '@/lib/api/middleware'
 import { apiError, apiSuccess } from '@/lib/api/helpers'
 import { logger } from '@/lib/logger'
+import { validateBody, SmartProductEntrySchema } from '@/lib/schemas'
 import { callWithFallback } from '@/lib/ai/providers'
 import { robustJsonExtract } from '@/lib/ai/extract'
 import { FORM_AI_REGISTRY, fillPromptTemplate } from '@/lib/ai/config/prompts'
@@ -38,15 +39,10 @@ export const POST = withAdmin('products', async (request: NextRequest) => {
   const startTime = Date.now()
 
   try {
-    const { query, inputType = 'text' } = await request.json()
-
-    if (!query || typeof query !== 'string' || query.trim().length === 0) {
-      return apiError(
-        new Error('Query required'),
-        'Bitte gib einen Produktnamen ein',
-        400
-      )
-    }
+    const body = await request.json()
+    const validation = validateBody(SmartProductEntrySchema, body)
+    if (!validation.success) return validation.error
+    const { query, inputType } = validation.data
 
     const trimmedQuery = query.trim()
 

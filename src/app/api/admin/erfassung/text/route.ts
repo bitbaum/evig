@@ -12,22 +12,16 @@
 import { NextRequest } from 'next/server'
 import { withAdmin } from '@/lib/api/middleware'
 import { logger } from '@/lib/logger'
-import { apiSuccess, apiError, apiBadRequest } from '@/lib/api/helpers'
+import { apiSuccess, apiError } from '@/lib/api/helpers'
+import { validateBody, ErfassungTextSchema } from '@/lib/schemas'
 import { extractProductFromText } from '@/lib/erfassung/ai-extraction'
 
 export const POST = withAdmin('products', async (request, session) => {
   try {
-    // Get text from request body
     const body = await request.json()
-    const { text } = body
-
-    if (!text || typeof text !== 'string') {
-      return apiBadRequest('Text ist erforderlich')
-    }
-
-    if (text.trim().length < 3) {
-      return apiBadRequest('Text ist zu kurz. Bitte mehr Details eingeben.')
-    }
+    const validation = validateBody(ErfassungTextSchema, body)
+    if (!validation.success) return validation.error
+    const { text } = validation.data
 
     logger.info('Text erfassung started', {
       userId: session.user.id,

@@ -6,6 +6,7 @@ import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES } from '@/config/database'
 import { CERTIFICATION_STATUS } from '@/config/certification-status'
 import { logger } from '@/lib/logger'
+import { validateBody, CertificationVerifySchema } from '@/lib/schemas'
 
 interface CertificationRow {
   id: string
@@ -21,12 +22,9 @@ export const PUT = withAdmin<{ id: string }>('services', async (request, session
   const { id: certificationId } = context!.params!
   try {
     const body = await request.json()
-    const { adminNotes, verificationResult } = body
-
-    // Validate inputs
-    if (adminNotes && typeof adminNotes !== 'string') {
-      return apiBadRequest('Admin-Notizen müssen ein Text sein')
-    }
+    const validation = validateBody(CertificationVerifySchema, body)
+    if (!validation.success) return validation.error
+    const { adminNotes, verificationResult } = validation.data
 
     // Get certification details
     const certificationResult = await query(`
