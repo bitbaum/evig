@@ -1,4 +1,4 @@
-import { pgTable, uuid, text, boolean, timestamp, integer, varchar, date, time, index, uniqueIndex } from 'drizzle-orm/pg-core'
+import { pgTable, uuid, text, boolean, timestamp, integer, varchar, date, time, jsonb, index, uniqueIndex } from 'drizzle-orm/pg-core'
 import { users } from './auth'
 
 // =============================================================================
@@ -164,6 +164,11 @@ export const workshopProposals = pgTable('workshop_proposals', {
   adminNotes: text('admin_notes'),
   reviewedBy: uuid('reviewed_by').references(() => users.id, { onDelete: 'set null' }),
   reviewedAt: timestamp('reviewed_at', { withTimezone: true, mode: 'string' }),
+
+  // Added by 034: admin edit tracking
+  editHistory: jsonb('edit_history').default([]),
+  lastEditedBy: uuid('last_edited_by').references(() => users.id, { onDelete: 'set null' }),
+  lastEditedAt: timestamp('last_edited_at', { withTimezone: true, mode: 'string' }),
 
   createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' }).defaultNow(),
   updatedAt: timestamp('updated_at', { withTimezone: true, mode: 'string' }).defaultNow(),

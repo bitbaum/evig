@@ -6,8 +6,9 @@
 
 import { NextRequest } from 'next/server'
 import { auth } from '@/auth'
-import { query } from '@/lib/auth/db'
-import { TABLE_NAMES } from '@/config/database'
+import { db } from '@/db'
+import { notifications, users } from '@/db/schema'
+import { eq, and, sql } from 'drizzle-orm'
 import { logger } from '@/lib/logger'
 import { apiSuccess, apiError } from '@/lib/api/helpers'
 
@@ -23,26 +24,30 @@ export async function PATCH(
 
     const { id } = await params
 
-    const userResult = await query<{ id: string }>(
-      `SELECT id FROM ${TABLE_NAMES.USERS} WHERE email = $1`,
-      [session.user.email]
-    )
-    const userId = userResult.rows[0]?.id
-    if (!userId) {
+    const [user] = await db
+      .select({ id: users.id })
+      .from(users)
+      .where(eq(users.email, session.user.email))
+
+    if (!user) {
       return apiError('Not found', 'Benutzer nicht gefunden', 404)
     }
 
     // Update only if owned by this user (prevents reading other users' notifications)
-    const result = await query<{ id: string }>(
-      `UPDATE ${TABLE_NAMES.NOTIFICATIONS}
-       SET is_read = true, read_at = NOW()
-       WHERE id = $1 AND user_id = $2 AND is_read = false
-       RETURNING id`,
-      [id, userId]
-    )
+    const [updated] = await db
+      .update(notifications)
+      .set({
+        isRead: true,
+        readAt: sql`NOW()`,
+      })
+      .where(and(
+        eq(notifications.id, id),
+        eq(notifications.userId, user.id),
+        eq(notifications.isRead, false),
+      ))
+      .returning({ id: notifications.id })
 
-    if (result.rows.length === 0) {
-      // Either not found, not owned, or already read — all acceptable
+    if (!updated) {
       return apiSuccess({ message: 'Bereits gelesen oder nicht gefunden' })
     }
 

@@ -1,11 +1,12 @@
 import { NextRequest } from 'next/server'
+import { db } from '@/db'
+import { workshopProposals, users, locations } from '@/db/schema'
+import { eq, desc, sql } from 'drizzle-orm'
+import type { SQL } from 'drizzle-orm'
 import { withAdmin } from '@/lib/api/middleware'
-import { query } from '@/lib/auth/db'
 import { apiError, apiSuccess, parsePagination } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
-import { TABLE_NAMES } from '@/config/database'
 import { APPROVAL_STATUS } from '@/config/approval-status'
-import { CountRow } from '@/lib/api/db-types'
 
 // GET /api/admin/workshops/proposals - List workshop proposals with filtering
 export const GET = withAdmin('workshops-admin', async (request, session) => {
@@ -15,64 +16,72 @@ export const GET = withAdmin('workshops-admin', async (request, session) => {
     const category = searchParams.get('category')
     const { limit, offset } = parsePagination(request)
 
-    // Build query conditions
-    const conditions = []
-    const params = []
+    const conditions: SQL[] = []
+    if (status !== 'all') conditions.push(eq(workshopProposals.status, status))
+    if (category) conditions.push(eq(workshopProposals.category, category))
 
-    if (status !== 'all') {
-      conditions.push(`wp.status = $${conditions.length + 1}`)
-      params.push(status)
-    }
+    const where = conditions.length > 0 ? sql`${sql.join(conditions, sql` AND `)}` : undefined
 
-    if (category) {
-      conditions.push(`wp.category = $${conditions.length + 1}`)
-      params.push(category)
-    }
+    // Count total
+    const [countRow] = await db
+      .select({ count: sql<number>`count(*)` })
+      .from(workshopProposals)
+      .where(where)
 
-    const whereClause = conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : ''
+    const total = Number(countRow?.count ?? 0)
 
-    // Get workshop proposals with proposer info
-    const proposalsQuery = `
-      SELECT
-        wp.*,
-        u.name as proposer_name,
-        u.email as proposer_email,
-        l.name as selected_location_name
-      FROM ${TABLE_NAMES.WORKSHOP_PROPOSALS} wp
-      LEFT JOIN ${TABLE_NAMES.USERS} u ON wp.user_id = u.id
-      LEFT JOIN ${TABLE_NAMES.LOCATIONS} l ON wp.selected_location_id = l.id
-      ${whereClause}
-      ORDER BY wp.created_at DESC
-      LIMIT $${params.length + 1} OFFSET $${params.length + 2}
-    `
+    // Fetch proposals
+    const rows = await db
+      .select({
+        id: workshopProposals.id,
+        userId: workshopProposals.userId,
+        title: workshopProposals.title,
+        description: workshopProposals.description,
+        shortDescription: workshopProposals.shortDescription,
+        category: workshopProposals.category,
+        durationMinutes: workshopProposals.durationMinutes,
+        level: workshopProposals.level,
+        maxParticipants: workshopProposals.maxParticipants,
+        minParticipants: workshopProposals.minParticipants,
+        priceCents: workshopProposals.priceCents,
+        prerequisites: workshopProposals.prerequisites,
+        learningObjectives: workshopProposals.learningObjectives,
+        targetAudience: workshopProposals.targetAudience,
+        materialsProvided: workshopProposals.materialsProvided,
+        materialsRequired: workshopProposals.materialsRequired,
+        locationType: workshopProposals.locationType,
+        selectedLocationId: workshopProposals.selectedLocationId,
+        proposedLocation: workshopProposals.proposedLocation,
+        proposedDate: workshopProposals.proposedDate,
+        proposedTime: workshopProposals.proposedTime,
+        specialRequirements: workshopProposals.specialRequirements,
+        termsAccepted: workshopProposals.termsAccepted,
+        status: workshopProposals.status,
+        adminNotes: workshopProposals.adminNotes,
+        reviewedBy: workshopProposals.reviewedBy,
+        reviewedAt: workshopProposals.reviewedAt,
+        createdAt: workshopProposals.createdAt,
+        updatedAt: workshopProposals.updatedAt,
+        proposerName: users.name,
+        proposerEmail: users.email,
+        selectedLocationName: locations.name,
+      })
+      .from(workshopProposals)
+      .leftJoin(users, eq(workshopProposals.userId, users.id))
+      .leftJoin(locations, eq(workshopProposals.selectedLocationId, locations.id))
+      .where(where)
+      .orderBy(desc(workshopProposals.createdAt))
+      .limit(limit)
+      .offset(offset)
 
-    params.push(limit, offset)
-
-    const proposals = await query(proposalsQuery, params)
-
-    // Get total count
-    const countQuery = `
-      SELECT COUNT(*) as total
-      FROM ${TABLE_NAMES.WORKSHOP_PROPOSALS} wp
-      ${whereClause.replace(/\$\d+/g, (match) => {
-        const index = parseInt(match.slice(1)) - 1
-        return `$${index + 1}`
-      })}
-    `
-    const countParams = params.slice(0, -2) // Remove limit and offset
-    const countResult = await query(countQuery, countParams)
-
-    // Return with pagination metadata - this is an exception where wrapping makes sense
-    // because we need to return both data AND pagination info
-    const count = countResult.rows[0] as CountRow
     return apiSuccess({
-      items: proposals.rows,
+      items: rows,
       pagination: {
-        total: parseInt(count.total),
+        total,
         limit,
         offset,
-        hasMore: offset + limit < parseInt(count.total)
-      }
+        hasMore: offset + limit < total,
+      },
     })
 
   } catch (error) {

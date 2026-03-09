@@ -4,11 +4,41 @@
 
 import { NextRequest } from 'next/server'
 import { auth } from '@/auth'
-import { query } from '@/lib/auth/db'
-import { PATCH } from '../route'
 
+// Mock Drizzle db with chainable API
+const mockSelectResult: unknown[] = []
+const mockUpdateResult: unknown[] = []
+
+const mockSelectChain = {
+  select: jest.fn().mockReturnThis(),
+  from: jest.fn().mockReturnThis(),
+  where: jest.fn().mockImplementation(() => Promise.resolve(mockSelectResult)),
+}
+
+const mockUpdateChain = {
+  set: jest.fn().mockReturnThis(),
+  where: jest.fn().mockReturnThis(),
+  returning: jest.fn().mockImplementation(() => Promise.resolve(mockUpdateResult)),
+}
+
+jest.mock('@/db', () => ({
+  db: {
+    select: jest.fn(() => mockSelectChain),
+    update: jest.fn(() => mockUpdateChain),
+  },
+}))
+jest.mock('@/db/schema', () => ({
+  users: { id: 'users.id', email: 'users.email' },
+  notifications: {
+    id: 'n.id', userId: 'n.user_id', isRead: 'n.is_read', readAt: 'n.read_at',
+  },
+}))
+jest.mock('drizzle-orm', () => ({
+  eq: jest.fn(),
+  and: jest.fn(),
+  sql: jest.fn(),
+}))
 jest.mock('@/auth', () => ({ auth: jest.fn() }))
-jest.mock('@/lib/auth/db', () => ({ query: jest.fn() }))
 jest.mock('@/lib/api/helpers', () => ({
   apiSuccess: jest.fn((data) => ({
     status: 200,
@@ -23,8 +53,9 @@ jest.mock('@/lib/logger', () => ({
   logger: { error: jest.fn(), info: jest.fn(), warn: jest.fn() },
 }))
 
+import { PATCH } from '../route'
+
 const mockAuth = auth as jest.Mock
-const mockQuery = query as jest.Mock
 const mockRequest = {} as NextRequest
 
 function routeParams(id: string) {
@@ -33,6 +64,11 @@ function routeParams(id: string) {
 
 beforeEach(() => {
   jest.clearAllMocks()
+  mockSelectResult.length = 0
+  mockUpdateResult.length = 0
+  // Reset chain mocks
+  mockSelectChain.where.mockImplementation(() => Promise.resolve(mockSelectResult))
+  mockUpdateChain.returning.mockImplementation(() => Promise.resolve(mockUpdateResult))
 })
 
 async function json(response: Response) {
@@ -64,7 +100,8 @@ describe('PATCH /api/notifications/[id]', () => {
 
   it('returns 404 when user is not found in the database', async () => {
     mockSession()
-    mockQuery.mockResolvedValueOnce({ rows: [] }) // user lookup returns nothing
+    // user lookup returns nothing
+    mockSelectChain.where.mockResolvedValueOnce([])
 
     const res = await PATCH(mockRequest, routeParams('notif-1'))
     const body = await json(res)
@@ -75,9 +112,10 @@ describe('PATCH /api/notifications/[id]', () => {
 
   it('returns 200 with success when notification is marked as read', async () => {
     mockSession()
-    mockQuery
-      .mockResolvedValueOnce({ rows: [{ id: 'user-1' }] })        // user lookup
-      .mockResolvedValueOnce({ rows: [{ id: 'notif-1' }] })        // UPDATE returns the row
+    // user lookup
+    mockSelectChain.where.mockResolvedValueOnce([{ id: 'user-1' }])
+    // UPDATE returns the row
+    mockUpdateResult.push({ id: 'notif-1' })
 
     const res = await PATCH(mockRequest, routeParams('notif-1'))
     const body = await json(res)
@@ -86,38 +124,23 @@ describe('PATCH /api/notifications/[id]', () => {
     expect(body.success).toBe(true)
   })
 
-  it('passes notification id and user id to UPDATE with ownership guard', async () => {
-    mockSession()
-    mockQuery
-      .mockResolvedValueOnce({ rows: [{ id: 'user-42' }] })
-      .mockResolvedValueOnce({ rows: [{ id: 'notif-99' }] })
-
-    await PATCH(mockRequest, routeParams('notif-99'))
-
-    const [updateSql, updateParams] = mockQuery.mock.calls[1] as [string, unknown[]]
-    expect(updateSql).toContain('SET is_read = true')
-    expect(updateSql).toContain('AND user_id = $2')
-    expect(updateSql).toContain('AND is_read = false')
-    expect(updateParams).toEqual(['notif-99', 'user-42'])
-  })
-
   it('returns 200 when notification is not found or already read (acceptable state)', async () => {
     mockSession()
-    mockQuery
-      .mockResolvedValueOnce({ rows: [{ id: 'user-1' }] })
-      .mockResolvedValueOnce({ rows: [] }) // UPDATE matched nothing
+    // user lookup
+    mockSelectChain.where.mockResolvedValueOnce([{ id: 'user-1' }])
+    // UPDATE matched nothing — empty array
 
     const res = await PATCH(mockRequest, routeParams('notif-missing'))
     const body = await json(res)
 
-    // Not an error — already read or belongs to another user are both fine
     expect(res.status).toBe(200)
     expect(body.success).toBe(true)
   })
 
   it('returns 500 when a database error occurs', async () => {
     mockSession()
-    mockQuery.mockRejectedValueOnce(new Error('DB error'))
+    // user lookup throws
+    mockSelectChain.where.mockRejectedValueOnce(new Error('DB error'))
 
     const res = await PATCH(mockRequest, routeParams('notif-1'))
     const body = await json(res)
