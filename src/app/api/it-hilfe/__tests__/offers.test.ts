@@ -8,6 +8,34 @@
  *         DELETE /api/it-hilfe/requests/[id]/offers/[offerId] (withdraw offer)
  */
 
+// Mock Drizzle db for the offers route (GET + POST)
+const mockSelectChain = {
+  from: jest.fn().mockReturnThis(),
+  where: jest.fn().mockReturnThis(),
+  orderBy: jest.fn().mockReturnThis(),
+  limit: jest.fn().mockReturnThis(),
+  offset: jest.fn().mockReturnThis(),
+  innerJoin: jest.fn().mockReturnThis(),
+  leftJoin: jest.fn().mockReturnThis(),
+}
+const mockInsertChain = {
+  values: jest.fn().mockReturnThis(),
+  returning: jest.fn().mockResolvedValue([]),
+}
+const mockUpdateChain = {
+  set: jest.fn().mockReturnThis(),
+  where: jest.fn().mockResolvedValue([]),
+}
+
+jest.mock('@/db', () => ({
+  db: {
+    select: jest.fn(() => mockSelectChain),
+    insert: jest.fn(() => mockInsertChain),
+    update: jest.fn(() => mockUpdateChain),
+  },
+}))
+
+// Mock raw query for the delete route (still uses raw SQL)
 jest.mock('@/lib/auth/db', () => ({
   query: jest.fn(),
 }))
@@ -32,6 +60,12 @@ jest.mock('@/lib/email/templates/it-hilfe', () => ({
   itHilfeNewOfferReceived: jest.fn().mockReturnValue({ subject: '', html: '' }),
 }))
 
+jest.mock('@/lib/security/rate-limit', () => ({
+  rateLimiters: {
+    offerCreate: jest.fn().mockReturnValue(true),
+  },
+}))
+
 import { NextRequest } from 'next/server'
 import { query } from '@/lib/auth/db'
 import { auth } from '@/auth'
@@ -46,23 +80,6 @@ function makeRequest(url: string, init?: RequestInit) {
 const validRequestId = '11111111-1111-1111-1111-111111111111'
 const validOfferId = '22222222-2222-2222-2222-222222222222'
 
-function mockOfferRow(overrides = {}) {
-  return {
-    id: validOfferId,
-    request_id: validRequestId,
-    helper_id: 'user-helper',
-    helper_name: 'Lisa Techniker',
-    helper_email: 'lisa@example.com',
-    message: 'Ich kann dir mit dem Laptop helfen, habe viel Erfahrung damit.',
-    estimated_time: '1-2 Stunden',
-    proposed_compensation: 'CHF 30',
-    relevant_skills: ['hardware_repair'],
-    status: 'pending',
-    created_at: new Date().toISOString(),
-    ...overrides,
-  }
-}
-
 // --- List offers (GET /api/it-hilfe/requests/[id]/offers) ---
 
 describe('GET /api/it-hilfe/requests/[id]/offers', () => {
@@ -74,8 +91,7 @@ describe('GET /api/it-hilfe/requests/[id]/offers', () => {
   })
 
   beforeEach(() => {
-    mockQuery.mockReset()
-    mockAuth.mockReset()
+    jest.clearAllMocks()
   })
 
   const makeCtx = (id: string) => ({ params: Promise.resolve({ id }) })
@@ -93,15 +109,23 @@ describe('GET /api/it-hilfe/requests/[id]/offers', () => {
       user: { id: 'user-owner' },
       expires: '',
     } as never)
-    mockQuery
-      .mockResolvedValueOnce({
-        rows: [{ requester_id: 'user-owner', status: 'open' }],
-        rowCount: 1,
-      } as never)
-      .mockResolvedValueOnce({
-        rows: [mockOfferRow()],
-        rowCount: 1,
-      } as never)
+
+    // First select: check request ownership
+    mockSelectChain.where.mockResolvedValueOnce([{ requesterId: 'user-owner', status: 'open' }])
+    // Second select: get offers
+    mockSelectChain.orderBy.mockResolvedValueOnce([{
+      id: validOfferId,
+      requestId: validRequestId,
+      helperId: 'user-helper',
+      helperName: 'Lisa Techniker',
+      helperEmail: 'lisa@example.com',
+      message: 'Ich kann dir mit dem Laptop helfen, habe viel Erfahrung damit.',
+      estimatedTime: '1-2 Stunden',
+      proposedCompensation: 'CHF 30',
+      relevantSkills: ['hardware_repair'],
+      status: 'pending',
+      createdAt: new Date().toISOString(),
+    }])
 
     const res = await GET(makeRequest(`/api/it-hilfe/requests/${validRequestId}/offers`), makeCtx(validRequestId))
     const body = await res.json()
@@ -117,10 +141,7 @@ describe('GET /api/it-hilfe/requests/[id]/offers', () => {
       user: { id: 'user-other' },
       expires: '',
     } as never)
-    mockQuery.mockResolvedValueOnce({
-      rows: [{ requester_id: 'user-owner', status: 'open' }],
-      rowCount: 1,
-    } as never)
+    mockSelectChain.where.mockResolvedValueOnce([{ requesterId: 'user-owner', status: 'open' }])
 
     const res = await GET(makeRequest(`/api/it-hilfe/requests/${validRequestId}/offers`), makeCtx(validRequestId))
 
@@ -132,7 +153,7 @@ describe('GET /api/it-hilfe/requests/[id]/offers', () => {
       user: { id: 'user-owner' },
       expires: '',
     } as never)
-    mockQuery.mockResolvedValueOnce({ rows: [], rowCount: 0 } as never)
+    mockSelectChain.where.mockResolvedValueOnce([])
 
     const res = await GET(makeRequest(`/api/it-hilfe/requests/${validRequestId}/offers`), makeCtx(validRequestId))
 
@@ -144,15 +165,20 @@ describe('GET /api/it-hilfe/requests/[id]/offers', () => {
       user: { id: 'user-owner' },
       expires: '',
     } as never)
-    mockQuery
-      .mockResolvedValueOnce({
-        rows: [{ requester_id: 'user-owner', status: 'open' }],
-        rowCount: 1,
-      } as never)
-      .mockResolvedValueOnce({
-        rows: [mockOfferRow({ relevant_skills: null })],
-        rowCount: 1,
-      } as never)
+    mockSelectChain.where.mockResolvedValueOnce([{ requesterId: 'user-owner', status: 'open' }])
+    mockSelectChain.orderBy.mockResolvedValueOnce([{
+      id: validOfferId,
+      requestId: validRequestId,
+      helperId: 'user-helper',
+      helperName: 'Lisa Techniker',
+      helperEmail: 'lisa@example.com',
+      message: 'Hilfe anbieten',
+      estimatedTime: null,
+      proposedCompensation: null,
+      relevantSkills: null,
+      status: 'pending',
+      createdAt: new Date().toISOString(),
+    }])
 
     const res = await GET(makeRequest(`/api/it-hilfe/requests/${validRequestId}/offers`), makeCtx(validRequestId))
     const body = await res.json()
@@ -172,8 +198,7 @@ describe('POST /api/it-hilfe/requests/[id]/offers', () => {
   })
 
   beforeEach(() => {
-    mockQuery.mockReset()
-    mockAuth.mockReset()
+    jest.clearAllMocks()
   })
 
   const makeCtx = (id: string) => ({ params: Promise.resolve({ id }) })
@@ -206,18 +231,18 @@ describe('POST /api/it-hilfe/requests/[id]/offers', () => {
     } as never)
 
     // Request exists and is open
-    mockQuery.mockResolvedValueOnce({
-      rows: [{ requester_id: 'user-owner', status: 'open', title: 'Laptop', requester_name: 'Hans', requester_email: 'hans@test.ch' }],
-      rowCount: 1,
-    } as never)
+    mockSelectChain.where.mockResolvedValueOnce([{
+      requesterId: 'user-owner', status: 'open', title: 'Laptop',
+      requester_name: 'Hans', requester_email: 'hans@test.ch',
+    }])
     // Not expired
-    mockQuery.mockResolvedValueOnce({ rows: [], rowCount: 0 } as never)
+    mockSelectChain.where.mockResolvedValueOnce([])
     // No existing offer
-    mockQuery.mockResolvedValueOnce({ rows: [], rowCount: 0 } as never)
+    mockSelectChain.where.mockResolvedValueOnce([])
     // INSERT offer
-    mockQuery.mockResolvedValueOnce({ rows: [{ id: validOfferId }], rowCount: 1 } as never)
-    // UPDATE request status to in_discussion
-    mockQuery.mockResolvedValueOnce({ rows: [], rowCount: 1 } as never)
+    mockInsertChain.returning.mockResolvedValueOnce([{ id: validOfferId }])
+    // UPDATE request status (fire-and-forget)
+    mockUpdateChain.where.mockResolvedValueOnce([])
 
     const res = await POST(
       makeRequest(`/api/it-hilfe/requests/${validRequestId}/offers`, {
@@ -238,10 +263,10 @@ describe('POST /api/it-hilfe/requests/[id]/offers', () => {
       user: { id: 'user-owner', name: 'Hans', email: 'hans@test.ch' },
       expires: '',
     } as never)
-    mockQuery.mockResolvedValueOnce({
-      rows: [{ requester_id: 'user-owner', status: 'open', title: 'Laptop', requester_name: 'Hans', requester_email: 'hans@test.ch' }],
-      rowCount: 1,
-    } as never)
+    mockSelectChain.where.mockResolvedValueOnce([{
+      requesterId: 'user-owner', status: 'open', title: 'Laptop',
+      requester_name: 'Hans', requester_email: 'hans@test.ch',
+    }])
 
     const res = await POST(
       makeRequest(`/api/it-hilfe/requests/${validRequestId}/offers`, {
@@ -261,13 +286,13 @@ describe('POST /api/it-hilfe/requests/[id]/offers', () => {
       user: { id: 'user-helper', name: 'Lisa', email: 'lisa@test.ch' },
       expires: '',
     } as never)
-    mockQuery
-      .mockResolvedValueOnce({
-        rows: [{ requester_id: 'user-owner', status: 'open', title: 'Laptop', requester_name: 'Hans', requester_email: 'hans@test.ch' }],
-        rowCount: 1,
-      } as never)
-      .mockResolvedValueOnce({ rows: [], rowCount: 0 } as never) // not expired
-      .mockResolvedValueOnce({ rows: [{ id: 'existing-offer' }], rowCount: 1 } as never) // existing offer
+    mockSelectChain.where
+      .mockResolvedValueOnce([{
+        requesterId: 'user-owner', status: 'open', title: 'Laptop',
+        requester_name: 'Hans', requester_email: 'hans@test.ch',
+      }])
+      .mockResolvedValueOnce([]) // not expired
+      .mockResolvedValueOnce([{ id: 'existing-offer' }]) // existing offer
 
     const res = await POST(
       makeRequest(`/api/it-hilfe/requests/${validRequestId}/offers`, {
@@ -287,10 +312,10 @@ describe('POST /api/it-hilfe/requests/[id]/offers', () => {
       user: { id: 'user-helper', name: 'Lisa', email: 'lisa@test.ch' },
       expires: '',
     } as never)
-    mockQuery.mockResolvedValueOnce({
-      rows: [{ requester_id: 'user-owner', status: 'matched', title: 'Laptop', requester_name: 'Hans', requester_email: 'hans@test.ch' }],
-      rowCount: 1,
-    } as never)
+    mockSelectChain.where.mockResolvedValueOnce([{
+      requesterId: 'user-owner', status: 'matched', title: 'Laptop',
+      requester_name: 'Hans', requester_email: 'hans@test.ch',
+    }])
 
     const res = await POST(
       makeRequest(`/api/it-hilfe/requests/${validRequestId}/offers`, {
@@ -310,12 +335,12 @@ describe('POST /api/it-hilfe/requests/[id]/offers', () => {
       user: { id: 'user-helper', name: 'Lisa', email: 'lisa@test.ch' },
       expires: '',
     } as never)
-    mockQuery
-      .mockResolvedValueOnce({
-        rows: [{ requester_id: 'user-owner', status: 'open', title: 'Laptop', requester_name: 'Hans', requester_email: 'hans@test.ch' }],
-        rowCount: 1,
-      } as never)
-      .mockResolvedValueOnce({ rows: [{ expires_at: '2024-01-01' }], rowCount: 1 } as never) // expired
+    mockSelectChain.where
+      .mockResolvedValueOnce([{
+        requesterId: 'user-owner', status: 'open', title: 'Laptop',
+        requester_name: 'Hans', requester_email: 'hans@test.ch',
+      }])
+      .mockResolvedValueOnce([{ id: validRequestId }]) // expired
 
     const res = await POST(
       makeRequest(`/api/it-hilfe/requests/${validRequestId}/offers`, {
@@ -335,13 +360,13 @@ describe('POST /api/it-hilfe/requests/[id]/offers', () => {
       user: { id: 'user-helper', name: 'Lisa', email: 'lisa@test.ch' },
       expires: '',
     } as never)
-    mockQuery
-      .mockResolvedValueOnce({
-        rows: [{ requester_id: 'user-owner', status: 'open', title: 'Laptop', requester_name: 'Hans', requester_email: 'hans@test.ch' }],
-        rowCount: 1,
-      } as never)
-      .mockResolvedValueOnce({ rows: [], rowCount: 0 } as never)
-      .mockResolvedValueOnce({ rows: [], rowCount: 0 } as never)
+    mockSelectChain.where
+      .mockResolvedValueOnce([{
+        requesterId: 'user-owner', status: 'open', title: 'Laptop',
+        requester_name: 'Hans', requester_email: 'hans@test.ch',
+      }])
+      .mockResolvedValueOnce([])
+      .mockResolvedValueOnce([])
 
     const res = await POST(
       makeRequest(`/api/it-hilfe/requests/${validRequestId}/offers`, {
@@ -361,13 +386,13 @@ describe('POST /api/it-hilfe/requests/[id]/offers', () => {
       user: { id: 'user-helper', name: 'Lisa', email: 'lisa@test.ch' },
       expires: '',
     } as never)
-    mockQuery
-      .mockResolvedValueOnce({
-        rows: [{ requester_id: 'user-owner', status: 'open', title: 'Laptop', requester_name: 'Hans', requester_email: 'hans@test.ch' }],
-        rowCount: 1,
-      } as never)
-      .mockResolvedValueOnce({ rows: [], rowCount: 0 } as never)
-      .mockResolvedValueOnce({ rows: [], rowCount: 0 } as never)
+    mockSelectChain.where
+      .mockResolvedValueOnce([{
+        requesterId: 'user-owner', status: 'open', title: 'Laptop',
+        requester_name: 'Hans', requester_email: 'hans@test.ch',
+      }])
+      .mockResolvedValueOnce([])
+      .mockResolvedValueOnce([])
 
     const res = await POST(
       makeRequest(`/api/it-hilfe/requests/${validRequestId}/offers`, {
@@ -382,6 +407,7 @@ describe('POST /api/it-hilfe/requests/[id]/offers', () => {
 })
 
 // --- Withdraw offer (DELETE /api/it-hilfe/requests/[id]/offers/[offerId]) ---
+// This route still uses raw SQL, so we test with mockQuery
 
 describe('DELETE /api/it-hilfe/requests/[id]/offers/[offerId]', () => {
   let DELETE: (req: NextRequest, ctx: { params: Promise<{ id: string; offerId: string }> }) => Promise<Response>

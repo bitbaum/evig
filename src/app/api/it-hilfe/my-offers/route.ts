@@ -1,32 +1,11 @@
 import { NextRequest } from 'next/server'
 import { auth } from '@/auth'
-import { query } from '@/lib/auth/db'
+import { db } from '@/db'
+import { itHilfeOffers, itHilfeRequests, users } from '@/db/schema'
+import { eq, and, sql, desc } from 'drizzle-orm'
 import { apiError, apiSuccess, apiUnauthorized, parsePagination } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
-import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
-import { QueryParams } from '@/lib/api/query-builder'
-import { CountRow } from '@/lib/api/db-types'
-
-interface OfferWithRequestRow {
-  id: string
-  request_id: string
-  message: string
-  estimated_time: string | null
-  proposed_compensation: string | null
-  relevant_skills: string[] | null
-  status: string
-  created_at: string
-  // Request details
-  request_title: string
-  request_category_id: string
-  request_device_brand: string | null
-  request_device_model: string | null
-  request_status: string
-  request_city: string
-  request_canton: string
-  requester_name: string
-}
 
 /**
  * GET /api/it-hilfe/my-offers
@@ -43,54 +22,60 @@ export async function GET(request: NextRequest) {
     const status = searchParams.get('status')
     const { limit, offset } = parsePagination(request, { defaultLimit: 20, maxLimit: 50 })
 
-    // Build WHERE conditions
-    const qb = new QueryParams()
-    qb.add('o.helper_id = $P', session.user.id)
+    const conditions = [eq(itHilfeOffers.helperId, session.user.id)]
 
     if (status) {
-      qb.add('o.status = $P', status)
+      conditions.push(eq(itHilfeOffers.status, status))
     }
 
-    const { where: whereClause, params, nextIndex } = qb.build()
+    const where = and(...conditions)
 
-    // Query user's offers with request details
-    const offersResult = await query(`
-      SELECT
-        o.*,
-        r.title as request_title,
-        r.category_id as request_category_id,
-        r.device_brand as request_device_brand,
-        r.device_model as request_device_model,
-        r.status as request_status,
-        r.city as request_city,
-        r.canton as request_canton,
-        u.name as requester_name
-      FROM ${TABLE_NAMES.IT_HILFE_OFFERS} o
-      JOIN ${TABLE_NAMES.IT_HILFE_REQUESTS} r ON o.request_id = r.id
-      JOIN ${TABLE_NAMES.USERS} u ON r.requester_id = u.id
-      ${whereClause}
-      ORDER BY o.created_at DESC
-      LIMIT $${nextIndex} OFFSET $${nextIndex + 1}
-    `, [...params, limit, offset])
+    const rows = await db
+      .select({
+        id: itHilfeOffers.id,
+        requestId: itHilfeOffers.requestId,
+        message: itHilfeOffers.message,
+        estimatedTime: itHilfeOffers.estimatedTime,
+        proposedCompensation: itHilfeOffers.proposedCompensation,
+        relevantSkills: itHilfeOffers.relevantSkills,
+        status: itHilfeOffers.status,
+        createdAt: itHilfeOffers.createdAt,
+        // Request details
+        request_title: itHilfeRequests.title,
+        request_category_id: itHilfeRequests.categoryId,
+        request_device_brand: itHilfeRequests.deviceBrand,
+        request_device_model: itHilfeRequests.deviceModel,
+        request_status: itHilfeRequests.status,
+        request_city: itHilfeRequests.city,
+        request_canton: itHilfeRequests.canton,
+        requester_name: users.name,
+      })
+      .from(itHilfeOffers)
+      .innerJoin(itHilfeRequests, eq(itHilfeOffers.requestId, itHilfeRequests.id))
+      .innerJoin(users, eq(itHilfeRequests.requesterId, users.id))
+      .where(where)
+      .orderBy(desc(itHilfeOffers.createdAt))
+      .limit(limit)
+      .offset(offset)
 
-    // Get total count
-    const countResult = await query(`
-      SELECT COUNT(*) as total
-      FROM ${TABLE_NAMES.IT_HILFE_OFFERS} o
-      ${whereClause}
-    `, params)
+    const [countRow] = await db
+      .select({ total: sql<number>`count(*)` })
+      .from(itHilfeOffers)
+      .where(where)
 
-    const offers = (offersResult.rows as OfferWithRequestRow[]).map(row => ({
+    const total = Number(countRow?.total ?? 0)
+
+    const offers = rows.map(row => ({
       id: row.id,
-      requestId: row.request_id,
+      requestId: row.requestId,
       message: row.message,
-      estimatedTime: row.estimated_time,
-      proposedCompensation: row.proposed_compensation,
-      relevantSkills: row.relevant_skills || [],
+      estimatedTime: row.estimatedTime,
+      proposedCompensation: row.proposedCompensation,
+      relevantSkills: row.relevantSkills || [],
       status: row.status,
-      createdAt: row.created_at,
+      createdAt: row.createdAt,
       request: {
-        id: row.request_id,
+        id: row.requestId,
         title: row.request_title,
         categoryId: row.request_category_id,
         deviceBrand: row.request_device_brand,
@@ -101,9 +86,6 @@ export async function GET(request: NextRequest) {
         requesterName: row.requester_name,
       },
     }))
-
-    const countData = countResult.rows[0] as CountRow
-    const total = parseInt(countData.total)
 
     logger.info('Fetched user IT-Hilfe offers', {
       userId: session.user.id,

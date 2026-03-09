@@ -1,34 +1,16 @@
 import { NextRequest } from 'next/server'
 import { auth } from '@/auth'
-import { query } from '@/lib/auth/db'
+import { db } from '@/db'
+import { itHilfeOffers, itHilfeRequests, users } from '@/db/schema'
+import { eq, and, sql, desc } from 'drizzle-orm'
 import { apiError, apiSuccess, apiUnauthorized, apiBadRequest, apiNotFound, apiForbidden } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
-import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
 import { REQUEST_STATUS } from '@/config/it-hilfe'
 import { validateBody, CreateOfferSchema } from '@/lib/schemas'
 import { sendCustomEmail } from '@/lib/email'
 import { itHilfeNewOfferReceived } from '@/lib/email/templates/it-hilfe'
 import { rateLimiters } from '@/lib/security/rate-limit'
-
-interface OfferRow {
-  id: string
-  request_id: string
-  helper_id: string
-  helper_name: string
-  helper_email: string
-  message: string
-  estimated_time: string | null
-  proposed_compensation: string | null
-  relevant_skills: string[] | null
-  status: string
-  created_at: string
-}
-
-interface RequestOwnerRow {
-  requester_id: string
-  status: string
-}
 
 interface RouteParams {
   params: Promise<{ id: string }>
@@ -53,45 +35,42 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
     }
 
     // Check if request exists and user is owner
-    const requestResult = await query(`
-      SELECT requester_id, status FROM ${TABLE_NAMES.IT_HILFE_REQUESTS}
-      WHERE id = $1
-    `, [id])
+    const [requestData] = await db
+      .select({ requesterId: itHilfeRequests.requesterId, status: itHilfeRequests.status })
+      .from(itHilfeRequests)
+      .where(eq(itHilfeRequests.id, id))
 
-    if (requestResult.rows.length === 0) {
+    if (!requestData) {
       return apiNotFound('IT-Hilfe-Anfrage')
     }
 
-    const requestData = requestResult.rows[0] as RequestOwnerRow
-
-    if (requestData.requester_id !== session.user.id) {
+    if (requestData.requesterId !== session.user.id) {
       return apiForbidden('Sie können nur Angebote für Ihre eigenen Anfragen einsehen')
     }
 
     // Get offers with helper details
-    const offersResult = await query(`
-      SELECT
-        o.*,
-        u.name as helper_name,
-        u.email as helper_email
-      FROM ${TABLE_NAMES.IT_HILFE_OFFERS} o
-      JOIN ${TABLE_NAMES.USERS} u ON o.helper_id = u.id
-      WHERE o.request_id = $1
-      ORDER BY o.created_at DESC
-    `, [id])
+    const rows = await db
+      .select({
+        id: itHilfeOffers.id,
+        requestId: itHilfeOffers.requestId,
+        helperId: itHilfeOffers.helperId,
+        helperName: users.name,
+        helperEmail: users.email,
+        message: itHilfeOffers.message,
+        estimatedTime: itHilfeOffers.estimatedTime,
+        proposedCompensation: itHilfeOffers.proposedCompensation,
+        relevantSkills: itHilfeOffers.relevantSkills,
+        status: itHilfeOffers.status,
+        createdAt: itHilfeOffers.createdAt,
+      })
+      .from(itHilfeOffers)
+      .innerJoin(users, eq(itHilfeOffers.helperId, users.id))
+      .where(eq(itHilfeOffers.requestId, id))
+      .orderBy(desc(itHilfeOffers.createdAt))
 
-    const offers = (offersResult.rows as OfferRow[]).map(row => ({
-      id: row.id,
-      requestId: row.request_id,
-      helperId: row.helper_id,
-      helperName: row.helper_name,
-      helperEmail: row.helper_email,
-      message: row.message,
-      estimatedTime: row.estimated_time,
-      proposedCompensation: row.proposed_compensation,
-      relevantSkills: row.relevant_skills || [],
-      status: row.status,
-      createdAt: row.created_at,
+    const offers = rows.map(row => ({
+      ...row,
+      relevantSkills: row.relevantSkills || [],
     }))
 
     logger.info('Fetched offers for request', {
@@ -130,21 +109,24 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
     }
 
     // Check if request exists and is open
-    const requestResult = await query(`
-      SELECT r.requester_id, r.status, r.title, u.name as requester_name, u.email as requester_email
-      FROM ${TABLE_NAMES.IT_HILFE_REQUESTS} r
-      JOIN ${TABLE_NAMES.USERS} u ON r.requester_id = u.id
-      WHERE r.id = $1
-    `, [id])
+    const [requestData] = await db
+      .select({
+        requesterId: itHilfeRequests.requesterId,
+        status: itHilfeRequests.status,
+        title: itHilfeRequests.title,
+        requester_name: users.name,
+        requester_email: users.email,
+      })
+      .from(itHilfeRequests)
+      .innerJoin(users, eq(itHilfeRequests.requesterId, users.id))
+      .where(eq(itHilfeRequests.id, id))
 
-    if (requestResult.rows.length === 0) {
+    if (!requestData) {
       return apiNotFound('IT-Hilfe-Anfrage')
     }
 
-    const requestData = requestResult.rows[0] as RequestOwnerRow & { title: string; requester_name: string; requester_email: string }
-
     // Cannot offer on own request
-    if (requestData.requester_id === session.user.id) {
+    if (requestData.requesterId === session.user.id) {
       return apiBadRequest('Sie können kein Angebot für Ihre eigene Anfrage abgeben')
     }
 
@@ -154,21 +136,27 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
     }
 
     // Check if request has expired
-    const expiryResult = await query(`
-      SELECT expires_at FROM ${TABLE_NAMES.IT_HILFE_REQUESTS}
-      WHERE id = $1 AND expires_at <= NOW()
-    `, [id])
-    if (expiryResult.rows.length > 0) {
+    const [expired] = await db
+      .select({ id: itHilfeRequests.id })
+      .from(itHilfeRequests)
+      .where(and(
+        eq(itHilfeRequests.id, id),
+        sql`${itHilfeRequests.expiresAt} <= NOW()`
+      ))
+    if (expired) {
       return apiBadRequest('Diese Anfrage ist abgelaufen')
     }
 
     // Check if user already made an offer
-    const existingOfferResult = await query(`
-      SELECT id FROM ${TABLE_NAMES.IT_HILFE_OFFERS}
-      WHERE request_id = $1 AND helper_id = $2
-    `, [id, session.user.id])
+    const [existingOffer] = await db
+      .select({ id: itHilfeOffers.id })
+      .from(itHilfeOffers)
+      .where(and(
+        eq(itHilfeOffers.requestId, id),
+        eq(itHilfeOffers.helperId, session.user.id)
+      ))
 
-    if (existingOfferResult.rows.length > 0) {
+    if (existingOffer) {
       return apiBadRequest('Sie haben bereits ein Angebot für diese Anfrage abgegeben')
     }
 
@@ -178,40 +166,28 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
     const { message, estimatedTime, proposedCompensation, relevantSkills } = validation.data
 
     // Insert the offer
-    const result = await query(`
-      INSERT INTO ${TABLE_NAMES.IT_HILFE_OFFERS} (
-        request_id,
-        helper_id,
+    const [newOffer] = await db
+      .insert(itHilfeOffers)
+      .values({
+        requestId: id,
+        helperId: session.user.id,
         message,
-        estimated_time,
-        proposed_compensation,
-        relevant_skills
-      ) VALUES (
-        $1, $2, $3, $4, $5, $6
-      )
-      RETURNING id
-    `, [
-      id,
-      session.user.id,
-      message,
-      estimatedTime || null,
-      proposedCompensation || null,
-      relevantSkills.length > 0 ? relevantSkills : null,
-    ])
-
-    const offerId = (result.rows[0] as { id: string }).id
+        estimatedTime: estimatedTime || undefined,
+        proposedCompensation: proposedCompensation || undefined,
+        relevantSkills: relevantSkills.length > 0 ? relevantSkills : undefined,
+      })
+      .returning({ id: itHilfeOffers.id })
 
     // Update request status to in_discussion if it was open
     if (requestData.status === REQUEST_STATUS.OPEN) {
-      await query(`
-        UPDATE ${TABLE_NAMES.IT_HILFE_REQUESTS}
-        SET status = '${REQUEST_STATUS.IN_DISCUSSION}'
-        WHERE id = $1
-      `, [id])
+      await db
+        .update(itHilfeRequests)
+        .set({ status: REQUEST_STATUS.IN_DISCUSSION })
+        .where(eq(itHilfeRequests.id, id))
     }
 
     logger.info('Created IT-Hilfe offer', {
-      offerId,
+      offerId: newOffer.id,
       requestId: id,
       helperId: session.user.id,
     })
@@ -233,7 +209,7 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
 
     return apiSuccess({
       message: 'Angebot erfolgreich abgegeben',
-      offerId,
+      offerId: newOffer.id,
     }, 201)
   } catch (error) {
     // Handle unique constraint violation
