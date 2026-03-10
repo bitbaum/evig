@@ -1,10 +1,11 @@
 import { NextRequest } from 'next/server'
 import { auth } from '@/auth'
-import { query } from '@/lib/auth/db'
+import { db } from '@/db'
+import { serviceTypes, serviceAppointments } from '@/db/schema'
+import { eq, and, sql } from 'drizzle-orm'
 import { apiError, apiSuccess, apiBadRequest, apiNotFound } from '@/lib/api/helpers'
 import { logger } from '@/lib/logger'
 import { requireStripeClient } from '@/lib/payments/stripe-client'
-import { TABLE_NAMES } from '@/config/database'
 import {
   processPayment,
   buildInvoiceLineItem,
@@ -14,20 +15,6 @@ import {
 } from '@/lib/payments/payment-flow'
 import { validateBody, BookWithPaymentSchema } from '@/lib/schemas'
 import { APPOINTMENT_STATUS } from '@/config/appointment-status'
-
-interface ServiceRow {
-  id: string
-  name: string
-  slug: string
-  price_cents: number
-  duration_minutes: number
-  requires_approval: boolean
-}
-
-interface AppointmentIdRow {
-  id: string
-  created_at: string
-}
 
 // POST /api/appointments/book-with-payment - Book service with immediate payment
 export async function POST(request: NextRequest) {
@@ -54,61 +41,44 @@ export async function POST(request: NextRequest) {
     } = validation.data
 
     // Get service type details
-    const serviceResult = await query(`
-      SELECT
-        st.*,
-        COALESCE(st.price_cents, 0) as price_cents,
-        COALESCE(st.duration_minutes, 60) as duration_minutes
-      FROM ${TABLE_NAMES.SERVICE_TYPES} st
-      WHERE st.slug = $1 AND st.is_active = true
-    `, [serviceSlug])
+    const [service] = await db
+      .select({
+        id: serviceTypes.id,
+        name: serviceTypes.name,
+        slug: serviceTypes.slug,
+        priceCents: sql<number>`COALESCE(${serviceTypes.priceCents}, 0)`,
+        durationMinutes: sql<number>`COALESCE(${serviceTypes.durationMinutes}, 60)`,
+        requiresApproval: serviceTypes.requiresApproval,
+      })
+      .from(serviceTypes)
+      .where(and(eq(serviceTypes.slug, serviceSlug), eq(serviceTypes.isActive, true)))
 
-    if (serviceResult.rows.length === 0) {
+    if (!service) {
       return apiNotFound('Service-Typ nicht gefunden')
     }
 
-    const service = serviceResult.rows[0] as ServiceRow
-
-    if (!service.price_cents || service.price_cents <= 0) {
+    if (!service.priceCents || service.priceCents <= 0) {
       return apiBadRequest('Für diesen Service muss ein Preis für die Online-Buchung festgelegt sein')
     }
 
-    const baseAmount = service.price_cents
+    const baseAmount = service.priceCents
 
     // Create service appointment
-    const appointmentResult = await query(`
-      INSERT INTO ${TABLE_NAMES.SERVICE_APPOINTMENTS} (
-        user_id,
-        service_type_id,
-        description,
-        device_info,
+    const [createdAppointment] = await db
+      .insert(serviceAppointments)
+      .values({
+        userId: session.user.id,
+        serviceTypeId: service.id,
+        description: description || undefined,
+        deviceInfo: deviceInfo || undefined,
         urgency,
-        preferred_date,
-        preferred_time_slots,
-        status,
-        price_charged_cents,
-        currency,
-        estimated_duration_minutes
-      ) VALUES (
-        $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11
-      )
-      RETURNING id, created_at
-    `, [
-      session.user.id,
-      service.id,
-      description || null,
-      deviceInfo || null,
-      urgency,
-      preferredDate || null,
-      preferredTimeSlots ? JSON.stringify(preferredTimeSlots) : null,
-      service.requires_approval ? APPOINTMENT_STATUS.REQUESTED : APPOINTMENT_STATUS.CONFIRMED,
-      baseAmount,
-      DEFAULT_CURRENCY,
-      service.duration_minutes
-    ])
+        preferredDate: preferredDate || undefined,
+        status: service.requiresApproval ? APPOINTMENT_STATUS.REQUESTED : APPOINTMENT_STATUS.CONFIRMED,
+        priceChargedCents: baseAmount,
+      })
+      .returning({ id: serviceAppointments.id, createdAt: serviceAppointments.createdAt })
 
-    const appointmentRow = appointmentResult.rows[0] as AppointmentIdRow
-    const appointmentId = appointmentRow.id
+    const appointmentId = createdAppointment.id
 
     // Process payment using shared utility
     const paymentResult = await processPayment({
@@ -146,8 +116,8 @@ export async function POST(request: NextRequest) {
       amount: centsToDisplay(paymentResult.totalAmountCents),
       currency: paymentResult.currency,
       escrowEnabled: useEscrow,
-      status: service.requires_approval ? APPOINTMENT_STATUS.PENDING_APPROVAL : APPOINTMENT_STATUS.CONFIRMED,
-      message: service.requires_approval
+      status: service.requiresApproval ? APPOINTMENT_STATUS.PENDING_APPROVAL : APPOINTMENT_STATUS.CONFIRMED,
+      message: service.requiresApproval
         ? 'Termin gebucht und Zahlung autorisiert. Wartet auf Genehmigung durch unsere Techniker.'
         : 'Termin gebucht und Zahlung erfolgreich verarbeitet!'
     })

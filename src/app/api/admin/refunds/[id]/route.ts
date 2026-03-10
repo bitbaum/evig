@@ -1,60 +1,64 @@
 import { NextRequest } from 'next/server'
 import { withAdmin } from '@/lib/api/middleware'
-import { query } from '@/lib/auth/db'
+import { db } from '@/db'
+import { refunds, paymentTransactions, paymentProviders, users } from '@/db/schema'
+import { eq, sql } from 'drizzle-orm'
+import { alias } from 'drizzle-orm/pg-core'
 import { apiError, apiSuccess, apiNotFound, apiBadRequest } from '@/lib/api/helpers'
 import { logger } from '@/lib/logger'
-import { TABLE_NAMES } from '@/config/database'
 import { validateBody, RefundActionSchema } from '@/lib/schemas'
-import { PAYMENT_STATUS } from '@/config/payment-status'
 import { REFUND_STATUS } from '@/config/refund'
 import { getStripeClient } from '@/lib/payments/stripe-client'
 import type Stripe from 'stripe'
 
-interface RefundRow {
-  id: string
-  status: string
-  provider_transaction_id: string
-  currency: string
-  provider_id: string
-  provider_slug: string
-  amount_cents: number
-  reason: string
-  requested_by: string
-  refund_number: string
-  original_transaction_id: string
-}
+const approvedByUser = alias(users, 'approved_by_user')
+const requestedByUser = alias(users, 'requested_by_user')
+const processedByUser = alias(users, 'processed_by_user')
 
 // GET /api/admin/refunds/[id] - Get refund details
 export const GET = withAdmin<{ id: string }>('finanzen', async (request, session, context) => {
   const { id: refundId } = context!.params!
   try {
-    // Get refund details with related data
-    const refundResult = await query(`
-      SELECT
-        r.*,
-        u.name as customer_name,
-        u.email as customer_email,
-        pt.amount_cents / 100.0 as original_amount,
-        pt.currency,
-        pt.provider_transaction_id,
-        ROUND(r.amount_cents / 100.0, 2) as refund_amount,
-        ar.name as approved_by_name,
-        rr.name as requested_by_name,
-        pr.name as processed_by_name
-      FROM ${TABLE_NAMES.REFUNDS} r
-      JOIN ${TABLE_NAMES.USERS} u ON r.requested_by = u.id
-      JOIN ${TABLE_NAMES.PAYMENT_TRANSACTIONS} pt ON r.original_transaction_id = pt.id
-      LEFT JOIN ${TABLE_NAMES.USERS} ar ON r.approved_by = ar.id
-      LEFT JOIN ${TABLE_NAMES.USERS} rr ON r.requested_by = rr.id
-      LEFT JOIN ${TABLE_NAMES.USERS} pr ON r.processed_by = pr.id
-      WHERE r.id = $1
-    `, [refundId])
+    const [refund] = await db
+      .select({
+        id: refunds.id,
+        refundNumber: refunds.refundNumber,
+        originalTransactionId: refunds.originalTransactionId,
+        refundTransactionId: refunds.refundTransactionId,
+        amountCents: refunds.amountCents,
+        currency: refunds.currency,
+        reason: refunds.reason,
+        reasonDetails: refunds.reasonDetails,
+        status: refunds.status,
+        requestedBy: refunds.requestedBy,
+        approvedBy: refunds.approvedBy,
+        processedBy: refunds.processedBy,
+        customerNotes: refunds.customerNotes,
+        internalNotes: refunds.internalNotes,
+        createdAt: refunds.createdAt,
+        approvedAt: refunds.approvedAt,
+        processedAt: refunds.processedAt,
+        customer_name: users.name,
+        customer_email: users.email,
+        original_amount: sql<number>`${paymentTransactions.amountCents} / 100.0`,
+        provider_transaction_id: paymentTransactions.providerTransactionId,
+        transaction_currency: paymentTransactions.currency,
+        refund_amount: sql<number>`ROUND(${refunds.amountCents} / 100.0, 2)`,
+        approved_by_name: approvedByUser.name,
+        requested_by_name: requestedByUser.name,
+        processed_by_name: processedByUser.name,
+      })
+      .from(refunds)
+      .innerJoin(users, eq(refunds.requestedBy, users.id))
+      .innerJoin(paymentTransactions, eq(refunds.originalTransactionId, paymentTransactions.id))
+      .leftJoin(approvedByUser, eq(refunds.approvedBy, approvedByUser.id))
+      .leftJoin(requestedByUser, eq(refunds.requestedBy, requestedByUser.id))
+      .leftJoin(processedByUser, eq(refunds.processedBy, processedByUser.id))
+      .where(eq(refunds.id, refundId))
 
-    if (refundResult.rows.length === 0) {
+    if (!refund) {
       return apiNotFound('Refund not found')
     }
-
-    const refund = refundResult.rows[0]
 
     return apiSuccess({ refund })
 
@@ -73,68 +77,65 @@ export const PUT = withAdmin<{ id: string }>('finanzen', async (request, session
     if (!validation.success) return validation.error
     const { action, notes } = validation.data
 
-    // Get refund details
-    const refundResult = await query(`
-      SELECT
-        r.*,
-        pt.provider_transaction_id,
-        pt.currency,
-        pt.provider_id,
-        pp.slug as provider_slug
-      FROM ${TABLE_NAMES.REFUNDS} r
-      JOIN ${TABLE_NAMES.PAYMENT_TRANSACTIONS} pt ON r.original_transaction_id = pt.id
-      JOIN ${TABLE_NAMES.PAYMENT_PROVIDERS} pp ON pt.provider_id = pp.id
-      WHERE r.id = $1
-    `, [refundId])
+    // Get refund details with provider info
+    const [refund] = await db
+      .select({
+        id: refunds.id,
+        status: refunds.status,
+        amountCents: refunds.amountCents,
+        reason: refunds.reason,
+        requestedBy: refunds.requestedBy,
+        refundNumber: refunds.refundNumber,
+        originalTransactionId: refunds.originalTransactionId,
+        provider_transaction_id: paymentTransactions.providerTransactionId,
+        currency: paymentTransactions.currency,
+        provider_id: paymentTransactions.providerId,
+        provider_slug: paymentProviders.slug,
+      })
+      .from(refunds)
+      .innerJoin(paymentTransactions, eq(refunds.originalTransactionId, paymentTransactions.id))
+      .innerJoin(paymentProviders, eq(paymentTransactions.providerId, paymentProviders.id))
+      .where(eq(refunds.id, refundId))
 
-    if (refundResult.rows.length === 0) {
+    if (!refund) {
       return apiNotFound('Refund not found')
     }
 
-    const refund = refundResult.rows[0] as RefundRow
-
-    // Handle different actions
     if (action === 'approve') {
       if (refund.status !== REFUND_STATUS.REQUESTED) {
         return apiBadRequest('Refund is not in requested status')
       }
 
-      // Approve the refund
-      await query(`
-        UPDATE ${TABLE_NAMES.REFUNDS}
-        SET
-          status = '${REFUND_STATUS.APPROVED}',
-          approved_by = $1,
-          approved_at = CURRENT_TIMESTAMP,
-          internal_notes = COALESCE(internal_notes, '') || $2,
-          updated_at = CURRENT_TIMESTAMP
-        WHERE id = $3
-      `, [
-        session.user.id,
-        notes ? `\n[${new Date().toISOString()}] Approved by admin: ${notes}` : '',
-        refundId
-      ])
+      await db
+        .update(refunds)
+        .set({
+          status: REFUND_STATUS.APPROVED,
+          approvedBy: session.user.id,
+          approvedAt: sql`CURRENT_TIMESTAMP`,
+          internalNotes: notes
+            ? sql`COALESCE(${refunds.internalNotes}, '') || ${`\n[${new Date().toISOString()}] Approved by admin: ${notes}`}`
+            : refunds.internalNotes,
+          updatedAt: sql`CURRENT_TIMESTAMP`,
+        })
+        .where(eq(refunds.id, refundId))
 
     } else if (action === 'reject') {
       if (refund.status !== REFUND_STATUS.REQUESTED && refund.status !== REFUND_STATUS.APPROVED) {
         return apiBadRequest('Refund cannot be rejected in current status')
       }
 
-      // Reject the refund
-      await query(`
-        UPDATE ${TABLE_NAMES.REFUNDS}
-        SET
-          status = '${REFUND_STATUS.REJECTED}',
-          processed_by = $1,
-          processed_at = CURRENT_TIMESTAMP,
-          internal_notes = COALESCE(internal_notes, '') || $2,
-          updated_at = CURRENT_TIMESTAMP
-        WHERE id = $3
-      `, [
-        session.user.id,
-        notes ? `\n[${new Date().toISOString()}] Rejected by admin: ${notes}` : '',
-        refundId
-      ])
+      await db
+        .update(refunds)
+        .set({
+          status: REFUND_STATUS.REJECTED,
+          processedBy: session.user.id,
+          processedAt: sql`CURRENT_TIMESTAMP`,
+          internalNotes: notes
+            ? sql`COALESCE(${refunds.internalNotes}, '') || ${`\n[${new Date().toISOString()}] Rejected by admin: ${notes}`}`
+            : refunds.internalNotes,
+          updatedAt: sql`CURRENT_TIMESTAMP`,
+        })
+        .where(eq(refunds.id, refundId))
 
     } else if (action === 'process') {
       if (refund.status !== REFUND_STATUS.APPROVED) {
@@ -142,106 +143,94 @@ export const PUT = withAdmin<{ id: string }>('finanzen', async (request, session
       }
 
       try {
-        // Process refund with Stripe
         const stripe = getStripeClient()
         if (!stripe) {
           return apiError(new Error('Stripe not configured'), 'Stripe is not configured', 500)
         }
-        
+
         const stripeRefund = await stripe.refunds.create({
-          payment_intent: refund.provider_transaction_id,
-          amount: refund.amount_cents,
+          payment_intent: refund.provider_transaction_id ?? undefined,
+          amount: Number(refund.amountCents),
           reason: mapRefundReason(refund.reason),
           metadata: {
             refundId: refundId.toString(),
-            refundNumber: refund.refund_number,
-            originalTransactionId: refund.original_transaction_id.toString(),
+            refundNumber: refund.refundNumber,
+            originalTransactionId: refund.originalTransactionId,
             processedBy: session.user.id
           }
         })
 
         // Update refund with Stripe refund ID
-        await query(`
-          UPDATE ${TABLE_NAMES.REFUNDS}
-          SET
-            refund_transaction_id = $1,
-            status = '${REFUND_STATUS.PROCESSING}',
-            processed_by = $2,
-            processed_at = CURRENT_TIMESTAMP,
-            internal_notes = COALESCE(internal_notes, '') || $3,
-            updated_at = CURRENT_TIMESTAMP
-          WHERE id = $4
-        `, [
-          stripeRefund.id,
-          session.user.id,
-          `\n[${new Date().toISOString()}] Processed via Stripe: ${stripeRefund.id}`,
-          refundId
-        ])
+        await db
+          .update(refunds)
+          .set({
+            refundTransactionId: stripeRefund.id,
+            status: REFUND_STATUS.PROCESSING,
+            processedBy: session.user.id,
+            processedAt: sql`CURRENT_TIMESTAMP`,
+            approvedAt: sql`CURRENT_TIMESTAMP`,
+            approvedBy: session.user.id,
+            internalNotes: sql`COALESCE(${refunds.internalNotes}, '') || ${`\n[${new Date().toISOString()}] Processed via Stripe: ${stripeRefund.id}`}`,
+            updatedAt: sql`CURRENT_TIMESTAMP`,
+          })
+          .where(eq(refunds.id, refundId))
 
         // Create refund transaction record
-        await query(`
-          INSERT INTO ${TABLE_NAMES.PAYMENT_TRANSACTIONS} (
-            user_id,
-            provider_id,
-            provider_transaction_id,
-            type,
-            status,
-            amount_cents,
-            currency,
-            description,
-            provider_response
-          ) VALUES (
-            $1, $2, $3, $4, $5, $6, $7, $8, $9
-          )
-        `, [
-          refund.requested_by,
-          refund.provider_id,
-          stripeRefund.id,
-          'refund',
-          REFUND_STATUS.PROCESSING,
-          refund.amount_cents,
-          refund.currency,
-          `Refund for transaction ${refund.provider_transaction_id}`,
-          JSON.stringify(stripeRefund)
-        ])
+        await db
+          .insert(paymentTransactions)
+          .values({
+            userId: refund.requestedBy,
+            providerId: refund.provider_id,
+            providerTransactionId: stripeRefund.id,
+            type: 'refund',
+            status: REFUND_STATUS.PROCESSING,
+            amountCents: Number(refund.amountCents),
+            currency: refund.currency,
+            description: `Refund for transaction ${refund.provider_transaction_id}`,
+            providerResponse: stripeRefund as unknown as Record<string, unknown>,
+          })
 
       } catch (stripeError: unknown) {
         logger.error('Stripe refund processing error', { error: stripeError })
         const errorMessage = stripeError instanceof Error ? stripeError.message : 'Unknown Stripe error'
 
-        // Mark refund as rejected due to processing error
-        await query(`
-          UPDATE ${TABLE_NAMES.REFUNDS}
-          SET
-            status = '${REFUND_STATUS.REJECTED}',
-            processed_by = $1,
-            processed_at = CURRENT_TIMESTAMP,
-            internal_notes = COALESCE(internal_notes, '') || $2,
-            updated_at = CURRENT_TIMESTAMP
-          WHERE id = $3
-        `, [
-          session.user.id,
-          `\n[${new Date().toISOString()}] Processing failed: ${errorMessage}`,
-          refundId
-        ])
+        await db
+          .update(refunds)
+          .set({
+            status: REFUND_STATUS.REJECTED,
+            processedBy: session.user.id,
+            processedAt: sql`CURRENT_TIMESTAMP`,
+            internalNotes: sql`COALESCE(${refunds.internalNotes}, '') || ${`\n[${new Date().toISOString()}] Processing failed: ${errorMessage}`}`,
+            updatedAt: sql`CURRENT_TIMESTAMP`,
+          })
+          .where(eq(refunds.id, refundId))
 
         return apiError(stripeError, 'Refund processing failed')
       }
     }
 
     // Get updated refund
-    const updatedResult = await query(`
-      SELECT
-        r.*,
-        u.name as customer_name,
-        u.email as customer_email
-      FROM ${TABLE_NAMES.REFUNDS} r
-      JOIN ${TABLE_NAMES.USERS} u ON r.requested_by = u.id
-      WHERE r.id = $1
-    `, [refundId])
+    const [updated] = await db
+      .select({
+        id: refunds.id,
+        refundNumber: refunds.refundNumber,
+        status: refunds.status,
+        amountCents: refunds.amountCents,
+        currency: refunds.currency,
+        reason: refunds.reason,
+        internalNotes: refunds.internalNotes,
+        createdAt: refunds.createdAt,
+        approvedAt: refunds.approvedAt,
+        processedAt: refunds.processedAt,
+        customer_name: users.name,
+        customer_email: users.email,
+      })
+      .from(refunds)
+      .innerJoin(users, eq(refunds.requestedBy, users.id))
+      .where(eq(refunds.id, refundId))
 
     return apiSuccess({
-      refund: updatedResult.rows[0],
+      refund: updated,
       message: `Refund ${action}d successfully`
     })
 

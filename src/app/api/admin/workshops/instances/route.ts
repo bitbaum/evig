@@ -1,36 +1,11 @@
 import { NextRequest } from 'next/server'
 import { withAdmin } from '@/lib/api/middleware'
-import { query, paginatedQuery } from '@/lib/auth/db'
+import { db } from '@/db'
+import { workshopInstances, workshops, workshopRegistrations } from '@/db/schema'
+import { eq, and, gt, sql, desc } from 'drizzle-orm'
 import { apiError, apiSuccess, apiBadRequest, parsePagination } from '@/lib/api/helpers'
 import { logger } from '@/lib/logger'
-import { TABLE_NAMES } from '@/config/database'
 import { WORKSHOP_REGISTRATION_STATUS } from '@/config/workshop-registration-status'
-import { QueryParams } from '@/lib/api/query-builder'
-
-interface WorkshopRow {
-  id: string
-  title: string
-  slug: string
-  max_participants: number
-}
-
-interface InstanceRow {
-  id: string
-  workshop_id: string
-  workshop_title: string
-  workshop_slug: string
-  start_date: string
-  end_date: string | null
-  location: string | null
-  instructor: string | null
-  max_participants: number | null
-  notes: string | null
-  status: string
-  current_participants: string
-  confirmed_count: string
-  pending_count: string
-  created_at: string
-}
 
 // GET /api/admin/workshops/instances - List all workshop instances
 export const GET = withAdmin('workshops-admin', async (request, session) => {
@@ -41,30 +16,51 @@ export const GET = withAdmin('workshops-admin', async (request, session) => {
     const upcoming = searchParams.get('upcoming') === 'true'
     const { limit, offset } = parsePagination(request)
 
-    const qb = new QueryParams()
+    // Build conditions
+    const conditions = []
+    if (workshopId) conditions.push(eq(workshopInstances.workshopId, workshopId))
+    if (status !== 'all') conditions.push(eq(workshopInstances.status, status))
+    if (upcoming) conditions.push(gt(workshopInstances.startDate, sql`NOW()`))
 
-    if (workshopId) qb.add('wi.workshop_id = $P', workshopId)
-    if (status !== 'all') qb.add('wi.status = $P', status)
-    if (upcoming) qb.addRaw('wi.start_date > NOW()')
+    const where = conditions.length > 0 ? and(...conditions) : undefined
 
-    const { where: whereClause, params, nextIndex } = qb.build()
+    // Fetch instances with aggregated participant counts
+    const instanceRows = await db
+      .select({
+        id: workshopInstances.id,
+        workshopId: workshopInstances.workshopId,
+        startDate: workshopInstances.startDate,
+        endDate: workshopInstances.endDate,
+        location: workshopInstances.location,
+        instructor: workshopInstances.instructor,
+        maxParticipants: workshopInstances.maxParticipants,
+        notes: workshopInstances.notes,
+        status: workshopInstances.status,
+        createdAt: workshopInstances.createdAt,
+        updatedAt: workshopInstances.updatedAt,
+        workshop_title: workshops.title,
+        workshop_slug: workshops.slug,
+        current_participants: sql<string>`COUNT(${workshopRegistrations.id})`,
+        confirmed_count: sql<string>`COUNT(CASE WHEN ${workshopRegistrations.status} = ${WORKSHOP_REGISTRATION_STATUS.CONFIRMED} THEN 1 END)`,
+        pending_count: sql<string>`COUNT(CASE WHEN ${workshopRegistrations.status} = ${WORKSHOP_REGISTRATION_STATUS.PENDING} THEN 1 END)`,
+      })
+      .from(workshopInstances)
+      .innerJoin(workshops, eq(workshopInstances.workshopId, workshops.id))
+      .leftJoin(workshopRegistrations, eq(workshopInstances.id, workshopRegistrations.workshopInstanceId))
+      .where(where)
+      .groupBy(workshopInstances.id, workshops.title, workshops.slug)
+      .orderBy(desc(workshopInstances.startDate))
+      .limit(limit)
+      .offset(offset)
 
-    const { rows: instanceRows, total } = await paginatedQuery<InstanceRow>(`
-      SELECT
-        wi.*,
-        w.title as workshop_title,
-        w.slug as workshop_slug,
-        COUNT(wr.id) as current_participants,
-        COUNT(CASE WHEN wr.status = '${WORKSHOP_REGISTRATION_STATUS.CONFIRMED}' THEN 1 END) as confirmed_count,
-        COUNT(CASE WHEN wr.status = '${WORKSHOP_REGISTRATION_STATUS.PENDING}' THEN 1 END) as pending_count
-      FROM ${TABLE_NAMES.WORKSHOP_INSTANCES} wi
-      JOIN ${TABLE_NAMES.WORKSHOPS} w ON wi.workshop_id = w.id
-      LEFT JOIN ${TABLE_NAMES.WORKSHOP_REGISTRATIONS} wr ON wi.id = wr.workshop_instance_id
-      ${whereClause}
-      GROUP BY wi.id, w.title, w.slug
-      ORDER BY wi.start_date DESC
-      LIMIT $${nextIndex} OFFSET $${nextIndex + 1}
-    `, [...params, limit, offset])
+    // Get total count
+    const [countRow] = await db
+      .select({ total: sql<number>`count(DISTINCT ${workshopInstances.id})::int` })
+      .from(workshopInstances)
+      .innerJoin(workshops, eq(workshopInstances.workshopId, workshops.id))
+      .where(where)
+
+    const total = countRow?.total ?? 0
 
     return apiSuccess({
       instances: instanceRows.map(inst => ({
@@ -107,48 +103,37 @@ export const POST = withAdmin('workshops-admin', async (request, session) => {
     }
 
     // Verify workshop exists
-    const workshopResult = await query(
-      `SELECT id, title, max_participants FROM ${TABLE_NAMES.WORKSHOPS} WHERE id = $1`,
-      [workshopId]
-    )
+    const [workshop] = await db
+      .select({ id: workshops.id, maxParticipants: workshops.maxParticipants })
+      .from(workshops)
+      .where(eq(workshops.id, workshopId))
 
-    if (workshopResult.rows.length === 0) {
+    if (!workshop) {
       return apiBadRequest('Workshop not found')
     }
 
-    const workshop = workshopResult.rows[0] as WorkshopRow
-
-    const result = await query(`
-      INSERT INTO ${TABLE_NAMES.WORKSHOP_INSTANCES} (
-        workshop_id,
-        start_date,
-        end_date,
-        location,
-        instructor,
-        max_participants,
-        notes,
-        status
-      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
-      RETURNING *
-    `, [
-      workshopId,
-      new Date(startDate),
-      endDate ? new Date(endDate) : null,
-      location || 'RevampIT, Birmensdorferstr. 379, 8055 Zürich',
-      instructor || null,
-      maxParticipants || workshop.max_participants,
-      notes || null,
-      status
-    ])
+    const [instance] = await db
+      .insert(workshopInstances)
+      .values({
+        workshopId,
+        startDate: new Date(startDate).toISOString(),
+        endDate: endDate ? new Date(endDate).toISOString() : undefined,
+        location: location || 'RevampIT, Birmensdorferstr. 379, 8055 Zürich',
+        instructor: instructor || undefined,
+        maxParticipants: maxParticipants || workshop.maxParticipants,
+        notes: notes || undefined,
+        status,
+      })
+      .returning()
 
     logger.info('Workshop instance created', {
-      instanceId: result.rows[0],
+      instanceId: instance.id,
       workshopId,
       createdBy: session.user.id
     })
 
     return apiSuccess({
-      instance: result.rows[0],
+      instance,
       message: 'Workshop instance created successfully'
     })
 

@@ -1,10 +1,11 @@
 import { NextRequest } from 'next/server'
 import { auth } from '@/auth'
-import { query } from '@/lib/auth/db'
+import { db } from '@/db'
+import { serviceAppointments, serviceTypes, users, paymentTransactions } from '@/db/schema'
+import { eq, and, sql } from 'drizzle-orm'
 import { apiError, apiSuccess, apiUnauthorized, apiNotFound, apiBadRequest } from '@/lib/api/helpers'
 import { logger } from '@/lib/logger'
 import { getStripeClient } from '@/lib/payments/stripe-client'
-import { TABLE_NAMES } from '@/config/database'
 import { PAYMENT_STATUS } from '@/config/payment-status'
 import {
   processPaymentWithoutInvoice,
@@ -14,23 +15,6 @@ import {
 import { APPOINTMENT_STATUS } from '@/config/appointment-status'
 import { BOOKING_STATUS } from '@/config/booking-status'
 import { validateBody, PayAppointmentSchema } from '@/lib/schemas'
-
-interface AppointmentRow {
-  id: string
-  user_id: string
-  status: string
-  price_charged_cents: number
-  service_price_cents: number
-  service_name: string
-  service_slug: string
-  requires_approval: boolean
-  customer_name: string
-  customer_email: string
-}
-
-interface PaidRow {
-  total_paid: number
-}
 
 // POST /api/appointments/[id]/pay - Pay for existing appointment
 export async function POST(request: NextRequest) {
@@ -52,26 +36,27 @@ export async function POST(request: NextRequest) {
     } = validation.data
 
     // Get appointment details
-    const appointmentResult = await query(`
-      SELECT
-        sa.*,
-        st.name as service_name,
-        st.slug as service_slug,
-        st.price_cents as service_price_cents,
-        st.requires_approval,
-        u.name as customer_name,
-        u.email as customer_email
-      FROM ${TABLE_NAMES.SERVICE_APPOINTMENTS} sa
-      JOIN ${TABLE_NAMES.SERVICE_TYPES} st ON sa.service_type_id = st.id
-      JOIN ${TABLE_NAMES.USERS} u ON sa.user_id = u.id
-      WHERE sa.id = $1
-    `, [appointmentId])
+    const [appointment] = await db
+      .select({
+        id: serviceAppointments.id,
+        user_id: serviceAppointments.userId,
+        status: serviceAppointments.status,
+        price_charged_cents: serviceAppointments.priceChargedCents,
+        service_price_cents: serviceTypes.priceCents,
+        service_name: serviceTypes.name,
+        service_slug: serviceTypes.slug,
+        requires_approval: serviceTypes.requiresApproval,
+        customer_name: users.name,
+        customer_email: users.email,
+      })
+      .from(serviceAppointments)
+      .innerJoin(serviceTypes, eq(serviceAppointments.serviceTypeId, serviceTypes.id))
+      .innerJoin(users, eq(serviceAppointments.userId, users.id))
+      .where(eq(serviceAppointments.id, appointmentId))
 
-    if (appointmentResult.rows.length === 0) {
+    if (!appointment) {
       return apiNotFound('Termin')
     }
-
-    const appointment = appointmentResult.rows[0] as AppointmentRow
 
     // Check ownership - owner or admin can pay
     if (appointment.user_id !== session.user.id && !session.user.isStaff) {
@@ -79,7 +64,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Check if appointment is in payable status
-    if (![APPOINTMENT_STATUS.CONFIRMED, 'approved', BOOKING_STATUS.IN_PROGRESS].includes(appointment.status)) {
+    if (![APPOINTMENT_STATUS.CONFIRMED, 'approved', BOOKING_STATUS.IN_PROGRESS].includes(appointment.status!)) {
       return apiBadRequest(`Terminstatus '${appointment.status}' ist nicht zahlbar`)
     }
 
@@ -91,14 +76,18 @@ export async function POST(request: NextRequest) {
       paymentAmountCents = Math.round(paymentAmountCents * 0.3)
     } else if (paymentType === 'remaining') {
       // Calculate remaining balance
-      const paidResult = await query(`
-        SELECT COALESCE(SUM(amount_cents), 0) as total_paid
-        FROM ${TABLE_NAMES.PAYMENT_TRANSACTIONS}
-        WHERE service_appointment_id = $1 AND status = '${PAYMENT_STATUS.SUCCEEDED}' AND type = 'payment'
-      `, [appointmentId])
+      const [paidRow] = await db
+        .select({
+          total_paid: sql<number>`COALESCE(SUM(${paymentTransactions.amountCents}), 0)`,
+        })
+        .from(paymentTransactions)
+        .where(and(
+          eq(paymentTransactions.serviceAppointmentId, appointmentId),
+          eq(paymentTransactions.status, PAYMENT_STATUS.SUCCEEDED),
+          eq(paymentTransactions.type, 'payment')
+        ))
 
-      const paid = paidResult.rows[0] as PaidRow
-      const totalPaid = paid.total_paid
+      const totalPaid = paidRow?.total_paid ?? 0
       const remaining = paymentAmountCents - totalPaid
 
       if (remaining <= 0) {
@@ -148,17 +137,17 @@ export async function POST(request: NextRequest) {
 
     // Update appointment status if this completes the payment
     if (paymentType === 'full' || paymentType === 'remaining') {
-      await query(`
-        UPDATE ${TABLE_NAMES.SERVICE_APPOINTMENTS}
-        SET
-          status = CASE
-            WHEN status = '${APPOINTMENT_STATUS.CONFIRMED}' THEN 'paid'
-            WHEN status = 'approved' THEN 'paid'
-            ELSE status
-          END,
-          updated_at = CURRENT_TIMESTAMP
-        WHERE id = $1
-      `, [appointmentId])
+      await db
+        .update(serviceAppointments)
+        .set({
+          status: sql`CASE
+            WHEN ${serviceAppointments.status} = ${APPOINTMENT_STATUS.CONFIRMED} THEN 'paid'
+            WHEN ${serviceAppointments.status} = 'approved' THEN 'paid'
+            ELSE ${serviceAppointments.status}
+          END`,
+          updatedAt: sql`CURRENT_TIMESTAMP`,
+        })
+        .where(eq(serviceAppointments.id, appointmentId))
     }
 
     return apiSuccess({

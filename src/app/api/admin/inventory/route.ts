@@ -8,10 +8,10 @@
 import { NextRequest } from 'next/server'
 import { withAdmin } from '@/lib/api/middleware'
 import { apiSuccess, apiError, parsePagination } from '@/lib/api/helpers'
-import { query, paginatedQuery } from '@/lib/auth/db'
+import { db } from '@/db'
+import { aiExtractedProducts, inventoryItems, productCustomerProfiles, customerProfiles } from '@/db/schema'
+import { eq, ilike, or, sql, desc } from 'drizzle-orm'
 import { logger } from '@/lib/logger'
-import { TABLE_NAMES } from '@/config/database'
-import { QueryParams } from '@/lib/api/query-builder'
 
 export const GET = withAdmin('products', async (request: NextRequest, session) => {
   try {
@@ -21,77 +21,73 @@ export const GET = withAdmin('products', async (request: NextRequest, session) =
     const status = searchParams.get('status') // pending_review, approved, draft
     const search = searchParams.get('search')
 
-    // Build WHERE clause
-    const qb = new QueryParams()
-
-    if (status) qb.add('p.status = $P', status)
+    // Build conditions
+    const conditions = []
+    if (status) conditions.push(eq(aiExtractedProducts.status, status))
     if (search) {
-      qb.add(`(
-        p.product_name ILIKE $P
-        OR p.brand ILIKE $P
-        OR p.model ILIKE $P
-        OR CAST(p.id AS TEXT) ILIKE $P
-      )`, `%${search}%`)
+      const pattern = `%${search}%`
+      conditions.push(or(
+        ilike(aiExtractedProducts.productName, pattern),
+        ilike(aiExtractedProducts.brand, pattern),
+        ilike(aiExtractedProducts.model, pattern),
+        ilike(sql`CAST(${aiExtractedProducts.id} AS TEXT)`, pattern)
+      ))
     }
 
-    const { where: whereClause, params, nextIndex } = qb.build()
+    const where = conditions.length > 0
+      ? conditions.length === 1 ? conditions[0] : sql`${conditions[0]} AND ${conditions[1]}`
+      : undefined
 
     // Fetch products with inventory data
-    const { rows: productRows, total } = await paginatedQuery<{
-      id: string
-      product_name: string
-      brand: string
-      model: string | null
-      short_description: string | null
-      estimated_price_chf: number
-      condition: string
-      category: string | null
-      subcategory: string | null
-      status: string
-      created_at: string
-      location: string | null
-      quantity_available: number
-      marketplace_status: string
-      kivitendo_article_number: string | null
-    }>(
-      `SELECT
-        p.id,
-        p.product_name,
-        p.brand,
-        p.model,
-        p.specifications->>'short_description' as short_description,
-        p.estimated_price_chf,
-        p.condition,
-        p.category,
-        p.subcategory,
-        p.status,
-        p.created_at,
-        i.location,
-        COALESCE(i.quantity_available, 1) as quantity_available,
-        COALESCE(i.marketplace_status, 'draft') as marketplace_status,
-        p.kivitendo_article_number
-      FROM ${TABLE_NAMES.AI_EXTRACTED_PRODUCTS} p
-      LEFT JOIN ${TABLE_NAMES.INVENTORY_ITEMS} i ON i.ai_product_id = p.id
-      ${whereClause}
-      ORDER BY p.created_at DESC
-      LIMIT $${nextIndex} OFFSET $${nextIndex + 1}`,
-      [...params, limit, offset]
-    )
+    const productRows = await db
+      .select({
+        id: aiExtractedProducts.id,
+        product_name: aiExtractedProducts.productName,
+        brand: aiExtractedProducts.brand,
+        model: aiExtractedProducts.model,
+        short_description: sql<string | null>`${aiExtractedProducts.specifications}->>'short_description'`,
+        estimated_price_chf: aiExtractedProducts.estimatedPriceChf,
+        condition: aiExtractedProducts.condition,
+        category: aiExtractedProducts.category,
+        subcategory: aiExtractedProducts.subcategory,
+        status: aiExtractedProducts.status,
+        created_at: aiExtractedProducts.createdAt,
+        location: inventoryItems.location,
+        quantity_available: sql<number>`COALESCE(${inventoryItems.quantityAvailable}, 1)`,
+        marketplace_status: sql<string>`COALESCE(${inventoryItems.marketplaceStatus}, 'draft')`,
+        kivitendo_article_number: aiExtractedProducts.kivitendoArticleNumber,
+      })
+      .from(aiExtractedProducts)
+      .leftJoin(inventoryItems, eq(inventoryItems.aiProductId, aiExtractedProducts.id))
+      .where(where)
+      .orderBy(desc(aiExtractedProducts.createdAt))
+      .limit(limit)
+      .offset(offset)
+
+    // Get total count
+    const [countRow] = await db
+      .select({ total: sql<number>`count(*)::int` })
+      .from(aiExtractedProducts)
+      .leftJoin(inventoryItems, eq(inventoryItems.aiProductId, aiExtractedProducts.id))
+      .where(where)
+
+    const total = countRow?.total ?? 0
 
     // Fetch customer profiles for each product
     const productIds = productRows.map(p => p.id)
     let profilesMap: Record<string, string[]> = {}
 
     if (productIds.length > 0) {
-      const profilesResult = await query<{ product_id: string; slug: string }>(
-        `SELECT pcp.product_id, cp.slug
-         FROM ${TABLE_NAMES.PRODUCT_CUSTOMER_PROFILES} pcp
-         JOIN ${TABLE_NAMES.CUSTOMER_PROFILES} cp ON cp.id = pcp.profile_id
-         WHERE pcp.product_id = ANY($1)`,
-        [productIds]
-      )
+      const profilesResult = await db
+        .select({
+          product_id: productCustomerProfiles.productId,
+          slug: customerProfiles.slug,
+        })
+        .from(productCustomerProfiles)
+        .innerJoin(customerProfiles, eq(customerProfiles.id, productCustomerProfiles.profileId))
+        .where(sql`${productCustomerProfiles.productId} = ANY(${productIds})`)
 
-      profilesMap = profilesResult.rows.reduce((acc, row) => {
+      profilesMap = profilesResult.reduce((acc, row) => {
         if (!acc[row.product_id]) {
           acc[row.product_id] = []
         }

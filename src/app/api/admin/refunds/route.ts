@@ -1,10 +1,14 @@
 import { NextRequest } from 'next/server'
 import { withAdmin } from '@/lib/api/middleware'
-import { query } from '@/lib/auth/db'
+import { db } from '@/db'
+import { refunds, paymentTransactions, users } from '@/db/schema'
+import { eq, sql, desc } from 'drizzle-orm'
+import { alias } from 'drizzle-orm/pg-core'
 import { apiError, apiSuccess, parsePagination } from '@/lib/api/helpers'
 import { logger } from '@/lib/logger'
-import { TABLE_NAMES } from '@/config/database'
-import { CountRow } from '@/lib/api/db-types'
+
+const approvedByUser = alias(users, 'approved_by_user')
+const requestedByUser = alias(users, 'requested_by_user')
 
 // GET /api/admin/refunds - List all refunds for admin review
 export const GET = withAdmin('finanzen', async (request: NextRequest) => {
@@ -13,44 +17,58 @@ export const GET = withAdmin('finanzen', async (request: NextRequest) => {
     const status = searchParams.get('status')
     const { limit, offset } = parsePagination(request, { defaultLimit: 20 })
 
-    let whereClause = 'WHERE 1=1'
-    const params = []
-
+    const conditions = []
     if (status) {
-      whereClause += ` AND r.status = $${params.length + 1}`
-      params.push(status)
+      conditions.push(eq(refunds.status, status))
     }
+    const where = conditions.length > 0 ? conditions[0] : undefined
 
     // Get refunds with related data
-    const refundsResult = await query(`
-      SELECT
-        r.*,
-        u.name as customer_name,
-        u.email as customer_email,
-        pt.amount_cents / 100.0 as original_amount,
-        pt.currency,
-        ROUND(r.amount_cents / 100.0, 2) as refund_amount,
-        ar.name as approved_by_name,
-        rr.name as requested_by_name
-      FROM ${TABLE_NAMES.REFUNDS} r
-      JOIN ${TABLE_NAMES.USERS} u ON r.requested_by = u.id
-      JOIN ${TABLE_NAMES.PAYMENT_TRANSACTIONS} pt ON r.original_transaction_id = pt.id
-      LEFT JOIN ${TABLE_NAMES.USERS} ar ON r.approved_by = ar.id
-      LEFT JOIN ${TABLE_NAMES.USERS} rr ON r.requested_by = rr.id
-      ${whereClause}
-      ORDER BY r.created_at DESC
-      LIMIT $${params.length + 1} OFFSET $${params.length + 2}
-    `, [...params, limit, offset])
+    const refundRows = await db
+      .select({
+        id: refunds.id,
+        refundNumber: refunds.refundNumber,
+        originalTransactionId: refunds.originalTransactionId,
+        amountCents: refunds.amountCents,
+        currency: refunds.currency,
+        reason: refunds.reason,
+        reasonDetails: refunds.reasonDetails,
+        status: refunds.status,
+        requestedBy: refunds.requestedBy,
+        approvedBy: refunds.approvedBy,
+        processedBy: refunds.processedBy,
+        customerNotes: refunds.customerNotes,
+        internalNotes: refunds.internalNotes,
+        createdAt: refunds.createdAt,
+        approvedAt: refunds.approvedAt,
+        processedAt: refunds.processedAt,
+        customer_name: users.name,
+        customer_email: users.email,
+        original_amount: sql<number>`${paymentTransactions.amountCents} / 100.0`,
+        transaction_currency: paymentTransactions.currency,
+        refund_amount: sql<number>`ROUND(${refunds.amountCents} / 100.0, 2)`,
+        approved_by_name: approvedByUser.name,
+        requested_by_name: requestedByUser.name,
+      })
+      .from(refunds)
+      .innerJoin(users, eq(refunds.requestedBy, users.id))
+      .innerJoin(paymentTransactions, eq(refunds.originalTransactionId, paymentTransactions.id))
+      .leftJoin(approvedByUser, eq(refunds.approvedBy, approvedByUser.id))
+      .leftJoin(requestedByUser, eq(refunds.requestedBy, requestedByUser.id))
+      .where(where)
+      .orderBy(desc(refunds.createdAt))
+      .limit(limit)
+      .offset(offset)
 
     // Get total count
-    const countResult = await query(`
-      SELECT COUNT(*) as total FROM ${TABLE_NAMES.REFUNDS} r ${whereClause}
-    `, params)
+    const [countRow] = await db
+      .select({ total: sql<number>`count(*)::int` })
+      .from(refunds)
+      .where(where)
 
-    const count = countResult.rows[0] as CountRow
     return apiSuccess({
-      refunds: refundsResult.rows,
-      total: parseInt(count.total),
+      refunds: refundRows,
+      total: countRow?.total ?? 0,
       limit,
       offset
     })

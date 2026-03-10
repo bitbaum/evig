@@ -4,7 +4,9 @@
 
 import { NextRequest } from 'next/server';
 import { apiSuccess, apiError, apiNotFound } from '@/lib/api/helpers';
-import { query } from '@/lib/auth/db';
+import { db } from '@/db';
+import { sellerProfiles, listings, listingImages, users } from '@/db/schema';
+import { eq, and, sql } from 'drizzle-orm';
 import { TABLE_NAMES, REVIEW_TARGET_TYPES } from '@/config/database';
 import { REVIEW_STATUS } from '@/config/review-status';
 
@@ -22,71 +24,70 @@ export async function GET(
     if (!id) return apiNotFound('Verkäuferprofil');
 
     // Fetch seller profile joined with user data
-    const profileResult = await query<Record<string, unknown>>(
-      `SELECT
-        sp.id,
-        sp.user_id,
-        sp.display_name,
-        sp.bio,
-        sp.avatar_url,
-        sp.city,
-        sp.canton,
-        sp.is_verified,
-        sp.average_rating,
-        sp.total_reviews,
-        sp.total_listings,
-        sp.total_sold,
-        sp.created_at,
-        u.name as user_name
-      FROM ${TABLE_NAMES.SELLER_PROFILES} sp
-      JOIN ${TABLE_NAMES.USERS} u ON sp.user_id = u.id
-      WHERE sp.user_id = $1`,
-      [id]
-    );
+    const [profile] = await db
+      .select({
+        id: sellerProfiles.id,
+        user_id: sellerProfiles.userId,
+        display_name: sellerProfiles.displayName,
+        bio: sellerProfiles.bio,
+        avatar_url: sellerProfiles.avatarUrl,
+        city: sellerProfiles.city,
+        canton: sellerProfiles.canton,
+        is_verified: sellerProfiles.isVerified,
+        average_rating: sellerProfiles.averageRating,
+        total_reviews: sellerProfiles.totalReviews,
+        total_listings: sellerProfiles.totalListings,
+        total_sold: sellerProfiles.totalSold,
+        created_at: sellerProfiles.createdAt,
+        user_name: users.name,
+      })
+      .from(sellerProfiles)
+      .innerJoin(users, eq(sellerProfiles.userId, users.id))
+      .where(eq(sellerProfiles.userId, id));
 
-    if (profileResult.rows.length === 0) {
+    if (!profile) {
       return apiNotFound('Verkäuferprofil');
     }
 
-    const profile = profileResult.rows[0];
-
     // Fetch active listings with primary image thumbnail
-    const listingsResult = await query<Record<string, unknown>>(
-      `SELECT
-        l.id, l.title, l.price_chf, l.category, l.condition, l.brand, l.model,
-        l.created_at,
-        (SELECT li.url
-         FROM ${TABLE_NAMES.LISTING_IMAGES} li
-         WHERE li.listing_id = l.id AND li.is_primary = true
-         LIMIT 1) as thumbnail
-      FROM ${TABLE_NAMES.LISTINGS} l
-      WHERE l.seller_id = $1 AND l.status = 'active'
-      ORDER BY l.created_at DESC`,
-      [id]
-    );
+    const activeListings = await db
+      .select({
+        id: listings.id,
+        title: listings.title,
+        price_chf: listings.priceChf,
+        category: listings.category,
+        condition: listings.condition,
+        brand: listings.brand,
+        model: listings.model,
+        created_at: listings.createdAt,
+        thumbnail: sql<string | null>`(
+          SELECT ${listingImages.url}
+          FROM ${listingImages}
+          WHERE ${listingImages.listingId} = ${listings.id} AND ${listingImages.isPrimary} = true
+          LIMIT 1
+        )`,
+      })
+      .from(listings)
+      .where(and(eq(listings.sellerId, id), eq(listings.status, 'active')))
+      .orderBy(sql`${listings.createdAt} DESC`);
 
-    // Aggregate review stats from reviews where target_type='listing'
-    // and the listing belongs to this seller
-    const reviewStatsResult = await query<{
-      avg_rating: number | null;
-      review_count: string;
-    }>(
-      `SELECT
+    // Aggregate review stats — reviews table has no Drizzle schema, use raw SQL
+    const reviewStatsResult = await db.execute(sql`
+      SELECT
         ROUND(AVG(r.overall_rating)::numeric, 2) as avg_rating,
         COUNT(r.id) as review_count
-      FROM ${TABLE_NAMES.REVIEWS} r
-      JOIN ${TABLE_NAMES.LISTINGS} l ON r.target_id = l.id
-      WHERE r.target_type = $1
-        AND l.seller_id = $2
-        AND r.status = '${REVIEW_STATUS.PUBLISHED}'`,
-      [REVIEW_TARGET_TYPES.LISTING, id]
-    );
+      FROM ${sql.raw(TABLE_NAMES.REVIEWS)} r
+      JOIN ${listings} l ON r.target_id = l.id
+      WHERE r.target_type = ${REVIEW_TARGET_TYPES.LISTING}
+        AND l.seller_id = ${id}
+        AND r.status = ${REVIEW_STATUS.PUBLISHED}
+    `);
 
-    const reviewStats = reviewStatsResult.rows[0];
+    const reviewStats = reviewStatsResult.rows[0] as { avg_rating: string | null; review_count: string } | undefined;
 
     return apiSuccess({
       profile,
-      listings: listingsResult.rows,
+      listings: activeListings,
       review_stats: {
         average_rating: reviewStats?.avg_rating ? Number(reviewStats.avg_rating) : 0,
         total_reviews: reviewStats?.review_count ? Number(reviewStats.review_count) : 0,
