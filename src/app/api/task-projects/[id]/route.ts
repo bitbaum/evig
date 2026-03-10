@@ -11,8 +11,9 @@
 import { NextRequest } from 'next/server';
 import { withAdmin, ValidSession } from '@/lib/api/middleware';
 import { apiSuccess, apiError, apiNotFound, apiBadRequest } from '@/lib/api/helpers';
-import { query } from '@/lib/auth/db';
-import { TABLE_NAMES } from '@/config/database';
+import { db } from '@/db';
+import { taskProjects, tasks, taskCompletions, users } from '@/db/schema';
+import { eq, sql } from 'drizzle-orm';
 import { updateProjectSchema } from '@/lib/schemas/tasks';
 import { logger } from '@/lib/logger';
 
@@ -35,44 +36,66 @@ export const GET = withAdmin<RouteParams>(async (
     }
 
     // Get project with creator info
-    const projectResult = await query(
-      `SELECT
-        p.*,
-        u.name as created_by_name,
-        u.email as created_by_email
-      FROM ${TABLE_NAMES.TASK_PROJECTS} p
-      LEFT JOIN ${TABLE_NAMES.USERS} u ON p.created_by = u.id
-      WHERE p.id = $1`,
-      [projectId]
-    );
+    const [project] = await db
+      .select({
+        id: taskProjects.id,
+        title: taskProjects.title,
+        description: taskProjects.description,
+        status: taskProjects.status,
+        target_date: taskProjects.targetDate,
+        created_by: taskProjects.createdBy,
+        created_at: taskProjects.createdAt,
+        updated_at: taskProjects.updatedAt,
+        created_by_name: users.name,
+        created_by_email: users.email,
+      })
+      .from(taskProjects)
+      .leftJoin(users, eq(taskProjects.createdBy, users.id))
+      .where(eq(taskProjects.id, projectId))
 
-    if (projectResult.rows.length === 0) {
+    if (!project) {
       return apiNotFound('Projekt');
     }
 
-    const project = projectResult.rows[0];
-
     // Get tasks in this project
-    const tasksResult = await query(
-      `SELECT
-        t.*,
-        (
-          SELECT COUNT(*)::int
-          FROM ${TABLE_NAMES.TASK_COMPLETIONS} tc
-          WHERE tc.task_id = t.id
-        ) as completion_count
-      FROM ${TABLE_NAMES.TASKS} t
-      WHERE t.project_id = $1 AND NOT t.is_archived
-      ORDER BY
-        CASE t.priority
+    const taskRows = await db
+      .select({
+        id: tasks.id,
+        title: tasks.title,
+        description: tasks.description,
+        instructions: tasks.instructions,
+        task_type: tasks.taskType,
+        schedule_cron: tasks.scheduleCron,
+        schedule_human: tasks.scheduleHuman,
+        category: tasks.category,
+        tags: tasks.tags,
+        priority: tasks.priority,
+        estimated_minutes: tasks.estimatedMinutes,
+        current_status: tasks.currentStatus,
+        is_completed: tasks.isCompleted,
+        completed_at: tasks.completedAt,
+        completed_by: tasks.completedBy,
+        project_id: tasks.projectId,
+        created_by: tasks.createdBy,
+        is_archived: tasks.isArchived,
+        created_at: tasks.createdAt,
+        updated_at: tasks.updatedAt,
+        completion_count: sql<number>`(
+          SELECT COUNT(*)::int FROM ${taskCompletions} tc
+          WHERE tc.task_id = ${tasks.id}
+        )`,
+      })
+      .from(tasks)
+      .where(sql`${tasks.projectId} = ${projectId} AND NOT ${tasks.isArchived}`)
+      .orderBy(
+        sql`CASE ${tasks.priority}
           WHEN 'urgent' THEN 0
           WHEN 'high' THEN 1
           WHEN 'normal' THEN 2
           WHEN 'low' THEN 3
-        END,
-        t.created_at DESC`,
-      [projectId]
-    );
+        END`,
+        sql`${tasks.createdAt} DESC`
+      )
 
     logger.info('Project detail fetched', {
       projectId,
@@ -81,7 +104,7 @@ export const GET = withAdmin<RouteParams>(async (
 
     return apiSuccess({
       project,
-      tasks: tasksResult.rows,
+      tasks: taskRows,
     });
   } catch (error) {
     logger.error('Error fetching project', { error, userId: session.user.id });
@@ -115,43 +138,33 @@ export const PATCH = withAdmin<RouteParams>(async (
     const data = result.data;
 
     // Check if project exists
-    const existingResult = await query(
-      `SELECT id FROM ${TABLE_NAMES.TASK_PROJECTS} WHERE id = $1`,
-      [projectId]
-    );
+    const [existing] = await db
+      .select({ id: taskProjects.id })
+      .from(taskProjects)
+      .where(eq(taskProjects.id, projectId))
 
-    if (existingResult.rows.length === 0) {
+    if (!existing) {
       return apiNotFound('Projekt');
     }
 
-    // Build dynamic update query
-    const updates: string[] = [];
-    const params: unknown[] = [];
-    let paramIndex = 1;
+    // Build dynamic update set
+    const updateSet: Record<string, unknown> = {};
+    if ('title' in data) updateSet.title = data.title;
+    if ('description' in data) updateSet.description = data.description ?? null;
+    if ('status' in data) updateSet.status = data.status;
+    if ('target_date' in data) updateSet.targetDate = data.target_date ?? null;
 
-    const fields = ['title', 'description', 'status', 'target_date'];
-
-    for (const field of fields) {
-      if (field in data) {
-        updates.push(`${field} = $${paramIndex++}`);
-        params.push((data as Record<string, unknown>)[field] ?? null);
-      }
-    }
-
-    if (updates.length === 0) {
+    if (Object.keys(updateSet).length === 0) {
       return apiBadRequest('Keine Felder zum Aktualisieren');
     }
 
-    updates.push(`updated_at = NOW()`);
-    params.push(projectId);
+    updateSet.updatedAt = sql`NOW()`;
 
-    const updateResult = await query(
-      `UPDATE ${TABLE_NAMES.TASK_PROJECTS}
-       SET ${updates.join(', ')}
-       WHERE id = $${paramIndex}
-       RETURNING *`,
-      params
-    );
+    const [updated] = await db
+      .update(taskProjects)
+      .set(updateSet)
+      .where(eq(taskProjects.id, projectId))
+      .returning()
 
     logger.info('Project updated', {
       projectId,
@@ -159,7 +172,7 @@ export const PATCH = withAdmin<RouteParams>(async (
       updatedFields: Object.keys(data)
     });
 
-    return apiSuccess(updateResult.rows[0]);
+    return apiSuccess(updated);
   } catch (error) {
     logger.error('Error updating project', { error, userId: session.user.id });
     return apiError(error, 'Fehler beim Aktualisieren des Projekts');
@@ -182,14 +195,12 @@ export const DELETE = withAdmin<RouteParams>(async (
       return apiBadRequest('Project ID erforderlich');
     }
 
-    const result = await query(
-      `DELETE FROM ${TABLE_NAMES.TASK_PROJECTS}
-       WHERE id = $1
-       RETURNING id`,
-      [projectId]
-    );
+    const [result] = await db
+      .delete(taskProjects)
+      .where(eq(taskProjects.id, projectId))
+      .returning({ id: taskProjects.id })
 
-    if (result.rows.length === 0) {
+    if (!result) {
       return apiNotFound('Projekt');
     }
 

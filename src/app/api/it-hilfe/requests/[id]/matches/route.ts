@@ -4,38 +4,39 @@
  */
 
 import { NextRequest } from 'next/server'
-import { query } from '@/lib/auth/db'
+import { db } from '@/db'
+import { itHilfeRequests, helperProfiles, userSkills, users } from '@/db/schema'
+import { eq, and, ne, sql } from 'drizzle-orm'
 import { apiError, apiSuccess, apiNotFound } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
-import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
 import { getCategoryById, MATCH_SCORES } from '@/config/it-hilfe'
 
-interface RequestRow {
+interface RequestData {
   id: string
-  requester_id: string
-  category_id: string
-  skills_needed: string[]
+  requesterId: string
+  categoryId: string
+  skillsNeeded: string[] | null
   canton: string
-  budget_amount_cents: number | null
-  budget_type: string
-  service_type: string
+  budgetAmountCents: number | null
+  budgetType: string
+  serviceType: string | null
 }
 
-interface HelperRow {
-  user_id: string
-  user_name: string
+interface HelperData {
+  userId: string
+  userName: string | null
   bio: string | null
-  hourly_rate_cents: number | null
-  accepts_gratis: boolean
-  accepts_kulturlegi: boolean
-  service_types: string[]
-  location_canton: string | null
-  location_city: string | null
-  skills: string[]
-  skill_count: number
-  average_rating: number | null
-  total_helps_completed: number
+  hourlyRateCents: number | null
+  acceptsGratis: boolean | null
+  acceptsKulturlegi: boolean | null
+  serviceTypes: string[] | null
+  locationCanton: string | null
+  locationCity: string | null
+  averageRating: string | null
+  totalHelpsCompleted: number | null
+  skills: string[] | null
+  skillCount: number
 }
 
 interface RouteParams {
@@ -46,15 +47,15 @@ interface RouteParams {
  * Calculate match score for a helper
  */
 function calculateMatchScore(
-  request: RequestRow,
-  helper: HelperRow
+  request: RequestData,
+  helper: HelperData
 ): { score: number; reasons: string[] } {
   let score = 0
   const reasons: string[] = []
 
   // Skills overlap (most important)
   const helperSkills = new Set(helper.skills || [])
-  const requestedSkills = request.skills_needed || []
+  const requestedSkills = request.skillsNeeded || []
   const matchingSkills = requestedSkills.filter(skill => helperSkills.has(skill))
 
   if (matchingSkills.length > 0) {
@@ -63,7 +64,7 @@ function calculateMatchScore(
   }
 
   // Device category bonus: helper has skills from the request category's suggestedSkills
-  const category = getCategoryById(request.category_id)
+  const category = getCategoryById(request.categoryId)
   if (category) {
     const categorySuggested = new Set(category.suggestedSkills)
     const hasCategorySkill = (helper.skills || []).some(s => categorySuggested.has(s))
@@ -74,24 +75,24 @@ function calculateMatchScore(
   }
 
   // Same canton bonus
-  if (helper.location_canton === request.canton) {
+  if (helper.locationCanton === request.canton) {
     score += MATCH_SCORES.SAME_CANTON
     reasons.push('Gleicher Kanton')
   }
 
   // Budget compatibility
   const isBudgetCompatible =
-    (request.budget_type === 'gratis' && helper.accepts_gratis) ||
-    (request.budget_type === 'kulturlegi' && helper.accepts_kulturlegi) ||
-    (request.budget_amount_cents && helper.hourly_rate_cents &&
-     helper.hourly_rate_cents <= request.budget_amount_cents) ||
-    helper.accepts_gratis
+    (request.budgetType === 'gratis' && helper.acceptsGratis) ||
+    (request.budgetType === 'kulturlegi' && helper.acceptsKulturlegi) ||
+    (request.budgetAmountCents && helper.hourlyRateCents &&
+     helper.hourlyRateCents <= request.budgetAmountCents) ||
+    helper.acceptsGratis
 
   if (isBudgetCompatible) {
     score += MATCH_SCORES.BUDGET_COMPATIBLE
-    if (helper.accepts_gratis && (request.budget_type === 'gratis' || !request.budget_amount_cents)) {
+    if (helper.acceptsGratis && (request.budgetType === 'gratis' || !request.budgetAmountCents)) {
       reasons.push('Bietet kostenlose Hilfe an')
-    } else if (helper.accepts_kulturlegi && request.budget_type === 'kulturlegi') {
+    } else if (helper.acceptsKulturlegi && request.budgetType === 'kulturlegi') {
       reasons.push('Akzeptiert KulturLegi')
     } else {
       reasons.push('Budget passt')
@@ -99,9 +100,9 @@ function calculateMatchScore(
   }
 
   // Service type match
-  const helperServiceTypes = helper.service_types || []
-  if (helperServiceTypes.includes(request.service_type) ||
-      helperServiceTypes.includes('flexible')) {
+  const helperServiceTypes = helper.serviceTypes || []
+  if (request.serviceType && (helperServiceTypes.includes(request.serviceType) ||
+      helperServiceTypes.includes('flexible'))) {
     score += MATCH_SCORES.SERVICE_TYPE_MATCH
     reasons.push('Passende Service-Art')
   }
@@ -124,72 +125,84 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
     }
 
     // Get request details
-    const requestResult = await query(`
-      SELECT
-        id, requester_id, category_id, skills_needed, canton,
-        budget_amount_cents, budget_type, service_type
-      FROM ${TABLE_NAMES.IT_HILFE_REQUESTS}
-      WHERE id = $1
-    `, [id])
+    const [requestData] = await db
+      .select({
+        id: itHilfeRequests.id,
+        requesterId: itHilfeRequests.requesterId,
+        categoryId: itHilfeRequests.categoryId,
+        skillsNeeded: itHilfeRequests.skillsNeeded,
+        canton: itHilfeRequests.canton,
+        budgetAmountCents: itHilfeRequests.budgetAmountCents,
+        budgetType: itHilfeRequests.budgetType,
+        serviceType: itHilfeRequests.serviceType,
+      })
+      .from(itHilfeRequests)
+      .where(eq(itHilfeRequests.id, id))
 
-    if (requestResult.rows.length === 0) {
+    if (!requestData) {
       return apiNotFound('Anfrage')
     }
 
-    const requestData = requestResult.rows[0] as RequestRow
-
     // Find potential helpers with at least one matching skill
-    const helpersResult = await query(`
-      SELECT
-        hp.user_id,
-        u.name as user_name,
-        hp.bio,
-        hp.hourly_rate_cents,
-        hp.accepts_gratis,
-        hp.accepts_kulturlegi,
-        hp.service_types,
-        hp.location_canton,
-        hp.location_city,
-        hp.average_rating,
-        hp.total_helps_completed,
-        ARRAY_AGG(us.skill_id) FILTER (WHERE us.skill_id IS NOT NULL) as skills,
-        COUNT(us.skill_id) as skill_count
-      FROM ${TABLE_NAMES.IT_HILFE_TECHNICIAN_PROFILES} hp
-      JOIN ${TABLE_NAMES.USERS} u ON hp.user_id = u.id
-      LEFT JOIN ${TABLE_NAMES.USER_SKILLS} us ON hp.user_id = us.user_id
-      WHERE hp.is_active = true
-        AND hp.user_id != $1
-        AND EXISTS (
-          SELECT 1 FROM ${TABLE_NAMES.USER_SKILLS} us2
-          WHERE us2.user_id = hp.user_id
-          AND us2.skill_id = ANY($2::text[])
-        )
-      GROUP BY hp.user_id, u.name, hp.bio, hp.hourly_rate_cents,
-               hp.accepts_gratis, hp.accepts_kulturlegi, hp.service_types,
-               hp.location_canton, hp.location_city,
-               hp.average_rating, hp.total_helps_completed
-    `, [
-      requestData.requester_id,
-      requestData.skills_needed || [],
-    ])
+    const helpersResult = await db
+      .select({
+        userId: helperProfiles.userId,
+        userName: users.name,
+        bio: helperProfiles.bio,
+        hourlyRateCents: helperProfiles.hourlyRateCents,
+        acceptsGratis: helperProfiles.acceptsGratis,
+        acceptsKulturlegi: helperProfiles.acceptsKulturlegi,
+        serviceTypes: helperProfiles.serviceTypes,
+        locationCanton: helperProfiles.locationCanton,
+        locationCity: helperProfiles.locationCity,
+        averageRating: helperProfiles.averageRating,
+        totalHelpsCompleted: helperProfiles.totalHelpsCompleted,
+        skills: sql<string[]>`ARRAY_AGG(${userSkills.skillId}) FILTER (WHERE ${userSkills.skillId} IS NOT NULL)`,
+        skillCount: sql<number>`COUNT(${userSkills.skillId})`,
+      })
+      .from(helperProfiles)
+      .innerJoin(users, eq(helperProfiles.userId, users.id))
+      .leftJoin(userSkills, eq(helperProfiles.userId, userSkills.userId))
+      .where(and(
+        eq(helperProfiles.isActive, true),
+        ne(helperProfiles.userId, requestData.requesterId),
+        sql`EXISTS (
+          SELECT 1 FROM ${userSkills} us2
+          WHERE us2.user_id = ${helperProfiles.userId}
+          AND us2.skill_id = ANY(${requestData.skillsNeeded || []}::text[])
+        )`
+      ))
+      .groupBy(
+        helperProfiles.userId,
+        users.name,
+        helperProfiles.bio,
+        helperProfiles.hourlyRateCents,
+        helperProfiles.acceptsGratis,
+        helperProfiles.acceptsKulturlegi,
+        helperProfiles.serviceTypes,
+        helperProfiles.locationCanton,
+        helperProfiles.locationCity,
+        helperProfiles.averageRating,
+        helperProfiles.totalHelpsCompleted,
+      )
 
     // Calculate match scores and sort
-    const matchedHelpers = (helpersResult.rows as HelperRow[])
+    const matchedHelpers = (helpersResult as HelperData[])
       .map(helper => {
         const { score, reasons } = calculateMatchScore(requestData, helper)
         return {
-          userId: helper.user_id,
-          name: helper.user_name,
+          userId: helper.userId,
+          name: helper.userName,
           bio: helper.bio,
-          hourlyRateCents: helper.hourly_rate_cents,
-          acceptsGratis: helper.accepts_gratis,
-          acceptsKulturlegi: helper.accepts_kulturlegi,
-          serviceTypes: helper.service_types || [],
-          canton: helper.location_canton,
-          city: helper.location_city,
+          hourlyRateCents: helper.hourlyRateCents,
+          acceptsGratis: helper.acceptsGratis,
+          acceptsKulturlegi: helper.acceptsKulturlegi,
+          serviceTypes: helper.serviceTypes || [],
+          canton: helper.locationCanton,
+          city: helper.locationCity,
           skills: helper.skills || [],
-          averageRating: helper.average_rating,
-          totalHelpsCompleted: helper.total_helps_completed || 0,
+          averageRating: helper.averageRating,
+          totalHelpsCompleted: helper.totalHelpsCompleted || 0,
           matchScore: score,
           matchReasons: reasons,
         }

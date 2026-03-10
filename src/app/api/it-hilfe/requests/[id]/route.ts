@@ -1,9 +1,10 @@
 import { NextRequest } from 'next/server'
 import { auth } from '@/auth'
-import { query } from '@/lib/auth/db'
+import { db } from '@/db'
+import { itHilfeRequests, helperProfiles, itHilfeOffers, users } from '@/db/schema'
+import { eq, and, sql } from 'drizzle-orm'
 import { apiError, apiSuccess, apiUnauthorized, apiBadRequest, apiNotFound, apiForbidden } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
-import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
 import { REQUEST_STATUS } from '@/config/it-hilfe'
 import { validateBody, UpdateITHilfeRequestSchema } from '@/lib/schemas'
@@ -26,26 +27,47 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
       return apiBadRequest('Ungültige Anfrage-ID')
     }
 
-    const result = await query(`
-      SELECT
-        r.*,
-        u.name as requester_name,
-        u.email as requester_email
-      FROM ${TABLE_NAMES.IT_HILFE_REQUESTS} r
-      JOIN ${TABLE_NAMES.USERS} u ON r.requester_id = u.id
-      WHERE r.id = $1
-    `, [id])
+    // Use explicit snake_case aliases to match the RequestRow mapper interface
+    const [row] = await db
+      .select({
+        id: itHilfeRequests.id,
+        requester_id: itHilfeRequests.requesterId,
+        requester_name: users.name,
+        requester_email: users.email,
+        category_id: itHilfeRequests.categoryId,
+        device_brand: itHilfeRequests.deviceBrand,
+        device_model: itHilfeRequests.deviceModel,
+        title: itHilfeRequests.title,
+        description: itHilfeRequests.description,
+        urgency: itHilfeRequests.urgency,
+        budget_type: itHilfeRequests.budgetType,
+        budget_amount_cents: itHilfeRequests.budgetAmountCents,
+        postal_code: itHilfeRequests.postalCode,
+        city: itHilfeRequests.city,
+        canton: itHilfeRequests.canton,
+        service_type: itHilfeRequests.serviceType,
+        skills_needed: itHilfeRequests.skillsNeeded,
+        image_urls: itHilfeRequests.imageUrls,
+        status: itHilfeRequests.status,
+        matched_offer_id: itHilfeRequests.matchedOfferId,
+        offer_count: itHilfeRequests.offerCount,
+        ai_diagnosis: itHilfeRequests.aiDiagnosis,
+        expires_at: itHilfeRequests.expiresAt,
+        created_at: itHilfeRequests.createdAt,
+        updated_at: itHilfeRequests.updatedAt,
+      })
+      .from(itHilfeRequests)
+      .innerJoin(users, eq(itHilfeRequests.requesterId, users.id))
+      .where(eq(itHilfeRequests.id, id))
 
-    if (result.rows.length === 0) {
+    if (!row) {
       return apiNotFound('IT-Hilfe-Anfrage')
     }
-
-    const row = result.rows[0] as RequestRow
 
     // Get current user to check ownership
     const session = await auth()
     const isOwner = session?.user?.id === row.requester_id
-    const requestData = mapRequestDetailRow(row, isOwner)
+    const requestData = mapRequestDetailRow(row as RequestRow, isOwner)
 
     logger.info('Fetched IT-Hilfe request details', { requestId: id })
 
@@ -75,18 +97,19 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
     }
 
     // Check ownership and current status
-    const existingResult = await query(`
-      SELECT requester_id, status FROM ${TABLE_NAMES.IT_HILFE_REQUESTS}
-      WHERE id = $1
-    `, [id])
+    const [existing] = await db
+      .select({
+        requesterId: itHilfeRequests.requesterId,
+        status: itHilfeRequests.status,
+      })
+      .from(itHilfeRequests)
+      .where(eq(itHilfeRequests.id, id))
 
-    if (existingResult.rows.length === 0) {
+    if (!existing) {
       return apiNotFound('IT-Hilfe-Anfrage')
     }
 
-    const existing = existingResult.rows[0] as { requester_id: string; status: string }
-
-    if (existing.requester_id !== session.user.id) {
+    if (existing.requesterId !== session.user.id) {
       return apiForbidden('Sie können nur Ihre eigenen Anfragen bearbeiten')
     }
 
@@ -122,96 +145,27 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
     // Support both old and new field names
     const effectiveBudgetCents = maxBudgetCents ?? budgetAmountCents
 
-    // Build update fields
-    const updates: string[] = []
-    const updateParams: (string | number | string[] | null)[] = []
-    let paramIndex = 1
+    // Build dynamic update set
+    const updateSet: Record<string, unknown> = {}
 
-    // Validate and add each field if provided
-    if (categoryId !== undefined) {
-      updates.push(`category_id = $${paramIndex}`)
-      updateParams.push(categoryId)
-      paramIndex++
-    }
-
-    if (deviceBrand !== undefined) {
-      updates.push(`device_brand = $${paramIndex}`)
-      updateParams.push(deviceBrand || null)
-      paramIndex++
-    }
-
-    if (deviceModel !== undefined) {
-      updates.push(`device_model = $${paramIndex}`)
-      updateParams.push(deviceModel || null)
-      paramIndex++
-    }
-
-    if (title !== undefined) {
-      updates.push(`title = $${paramIndex}`)
-      updateParams.push(title)
-      paramIndex++
-    }
-
-    if (description !== undefined) {
-      updates.push(`description = $${paramIndex}`)
-      updateParams.push(description || '')
-      paramIndex++
-    }
-
-    if (urgency !== undefined) {
-      updates.push(`urgency = $${paramIndex}`)
-      updateParams.push(urgency)
-      paramIndex++
-    }
+    if (categoryId !== undefined) updateSet.categoryId = categoryId
+    if (deviceBrand !== undefined) updateSet.deviceBrand = deviceBrand || null
+    if (deviceModel !== undefined) updateSet.deviceModel = deviceModel || null
+    if (title !== undefined) updateSet.title = title
+    if (description !== undefined) updateSet.description = description || ''
+    if (urgency !== undefined) updateSet.urgency = urgency
+    if (postalCode !== undefined) updateSet.postalCode = postalCode
+    if (city !== undefined) updateSet.city = city
+    if (canton !== undefined) updateSet.canton = canton
+    if (serviceType !== undefined) updateSet.serviceType = serviceType
+    if (skillsNeeded !== undefined) updateSet.skillsNeeded = skillsNeeded.length > 0 ? skillsNeeded : null
+    if (imageUrls !== undefined) updateSet.imageUrls = imageUrls.length > 0 ? imageUrls : null
 
     // Simplified budget: just maxBudget amount (null/0 = free, >0 = paid)
     if (effectiveBudgetCents !== undefined) {
       const amount = effectiveBudgetCents && effectiveBudgetCents > 0 ? effectiveBudgetCents : null
-      const derivedBudgetType = amount ? 'fixed' : 'free'
-
-      updates.push(`budget_amount_cents = $${paramIndex}`)
-      updateParams.push(amount)
-      paramIndex++
-
-      updates.push(`budget_type = $${paramIndex}`)
-      updateParams.push(derivedBudgetType)
-      paramIndex++
-    }
-
-    if (postalCode !== undefined) {
-      updates.push(`postal_code = $${paramIndex}`)
-      updateParams.push(postalCode)
-      paramIndex++
-    }
-
-    if (city !== undefined) {
-      updates.push(`city = $${paramIndex}`)
-      updateParams.push(city)
-      paramIndex++
-    }
-
-    if (canton !== undefined) {
-      updates.push(`canton = $${paramIndex}`)
-      updateParams.push(canton)
-      paramIndex++
-    }
-
-    if (serviceType !== undefined) {
-      updates.push(`service_type = $${paramIndex}`)
-      updateParams.push(serviceType)
-      paramIndex++
-    }
-
-    if (skillsNeeded !== undefined) {
-      updates.push(`skills_needed = $${paramIndex}`)
-      updateParams.push(skillsNeeded.length > 0 ? skillsNeeded : null)
-      paramIndex++
-    }
-
-    if (imageUrls !== undefined) {
-      updates.push(`image_urls = $${paramIndex}`)
-      updateParams.push(imageUrls.length > 0 ? imageUrls : null)
-      paramIndex++
+      updateSet.budgetAmountCents = amount
+      updateSet.budgetType = amount ? 'fixed' : 'free'
     }
 
     // Status transitions
@@ -221,50 +175,44 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
         [REQUEST_STATUS.IN_DISCUSSION]: [REQUEST_STATUS.CANCELLED],
         [REQUEST_STATUS.MATCHED]: [REQUEST_STATUS.COMPLETED, REQUEST_STATUS.CANCELLED],
       }
-      const allowed = validTransitions[existing.status] || []
+      const allowed = validTransitions[existing.status as string] || []
 
       if (!allowed.includes(status)) {
         return apiBadRequest(`Status kann nicht von "${existing.status}" auf "${status}" geändert werden`)
       }
 
-      updates.push(`status = $${paramIndex}`)
-      updateParams.push(status)
-      paramIndex++
+      updateSet.status = status
 
       // Increment helper's total_helps_completed when completing
       if (status === REQUEST_STATUS.COMPLETED) {
         try {
-          await query(`
-            UPDATE ${TABLE_NAMES.IT_HILFE_TECHNICIAN_PROFILES}
-            SET total_helps_completed = total_helps_completed + 1
-            FROM ${TABLE_NAMES.IT_HILFE_OFFERS} o
-            JOIN ${TABLE_NAMES.IT_HILFE_REQUESTS} r ON r.matched_offer_id = o.id
-            WHERE ${TABLE_NAMES.IT_HILFE_TECHNICIAN_PROFILES}.user_id = o.helper_id
-              AND r.id = $1
-          `, [id])
+          await db
+            .update(helperProfiles)
+            .set({ totalHelpsCompleted: sql`${helperProfiles.totalHelpsCompleted} + 1` })
+            .where(sql`${helperProfiles.userId} IN (
+              SELECT o.helper_id FROM ${itHilfeOffers} o
+              JOIN ${itHilfeRequests} r ON r.matched_offer_id = o.id
+              WHERE r.id = ${id}
+            )`)
         } catch (err) {
           logger.error('Error incrementing total_helps_completed', { error: err, requestId: id })
         }
       }
     }
 
-    if (updates.length === 0) {
+    if (Object.keys(updateSet).length === 0) {
       return apiBadRequest('Keine Änderungen angegeben')
     }
 
-    // Add request ID as last parameter
-    updateParams.push(id)
-
-    await query(`
-      UPDATE ${TABLE_NAMES.IT_HILFE_REQUESTS}
-      SET ${updates.join(', ')}
-      WHERE id = $${paramIndex}
-    `, updateParams)
+    await db
+      .update(itHilfeRequests)
+      .set(updateSet)
+      .where(eq(itHilfeRequests.id, id))
 
     logger.info('Updated IT-Hilfe request', {
       requestId: id,
       userId: session.user.id,
-      updates: updates.length,
+      updates: Object.keys(updateSet).length,
     })
 
     return apiSuccess({

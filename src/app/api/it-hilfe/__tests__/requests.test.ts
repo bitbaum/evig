@@ -8,9 +8,32 @@
  *         PUT /api/it-hilfe/requests/[id] (update/status change)
  */
 
+// Browse route still uses paginatedQuery from @/lib/auth/db
 jest.mock('@/lib/auth/db', () => ({
   query: jest.fn(),
   paginatedQuery: jest.fn(),
+}))
+
+// Detail/update route now uses Drizzle
+const mockSelectChain = {
+  from: jest.fn().mockReturnThis(),
+  where: jest.fn().mockReturnThis(),
+  innerJoin: jest.fn().mockReturnThis(),
+  leftJoin: jest.fn().mockReturnThis(),
+  orderBy: jest.fn().mockReturnThis(),
+  limit: jest.fn().mockReturnThis(),
+  offset: jest.fn().mockReturnThis(),
+}
+const mockUpdateChain = {
+  set: jest.fn().mockReturnThis(),
+  where: jest.fn().mockResolvedValue([]),
+}
+
+jest.mock('@/db', () => ({
+  db: {
+    select: jest.fn(() => mockSelectChain),
+    update: jest.fn(() => mockUpdateChain),
+  },
 }))
 
 jest.mock('@/lib/logger', () => ({
@@ -68,10 +91,9 @@ jest.mock('@/lib/email/templates/it-hilfe', () => ({
 }))
 
 import { NextRequest } from 'next/server'
-import { query, paginatedQuery } from '@/lib/auth/db'
+import { paginatedQuery } from '@/lib/auth/db'
 import { auth } from '@/auth'
 
-const mockQuery = query as jest.MockedFunction<typeof query>
 const mockPaginatedQuery = paginatedQuery as jest.MockedFunction<typeof paginatedQuery>
 const mockAuth = auth as jest.MockedFunction<typeof auth>
 
@@ -80,7 +102,7 @@ function makeRequest(url: string, init?: RequestInit) {
   return new NextRequest(new URL(url, 'http://localhost:3001'), init as never)
 }
 
-// Helper: mock DB row for a request
+// Helper: mock DB row for a request (snake_case — matches Drizzle select aliases in GET)
 function mockRequestRow(overrides = {}) {
   return {
     id: '11111111-1111-1111-1111-111111111111',
@@ -123,7 +145,6 @@ describe('GET /api/it-hilfe/requests', () => {
   })
 
   beforeEach(() => {
-    mockQuery.mockReset()
     mockPaginatedQuery.mockReset()
   })
 
@@ -217,7 +238,10 @@ describe('GET /api/it-hilfe/requests/[id]', () => {
   })
 
   beforeEach(() => {
-    mockQuery.mockReset()
+    mockSelectChain.from.mockReturnThis()
+    mockSelectChain.where.mockReset().mockReturnThis()
+    mockSelectChain.innerJoin.mockReturnThis()
+    mockSelectChain.leftJoin.mockReturnThis()
     mockAuth.mockReset()
   })
 
@@ -226,10 +250,8 @@ describe('GET /api/it-hilfe/requests/[id]', () => {
 
   it('returns request details for valid ID', async () => {
     mockAuth.mockResolvedValue(null as never)
-    mockQuery.mockResolvedValueOnce({
-      rows: [mockRequestRow()],
-      rowCount: 1,
-    } as never)
+    // Drizzle chain: select().from().innerJoin().where() → returns array
+    mockSelectChain.where.mockResolvedValueOnce([mockRequestRow()])
 
     const res = await GET(makeRequest(`/api/it-hilfe/requests/${validId}`), makeCtx(validId))
     const body = await res.json()
@@ -245,10 +267,7 @@ describe('GET /api/it-hilfe/requests/[id]', () => {
       user: { id: 'user-owner', email: 'owner@test.ch', name: 'Owner' },
       expires: '',
     } as never)
-    mockQuery.mockResolvedValueOnce({
-      rows: [mockRequestRow()],
-      rowCount: 1,
-    } as never)
+    mockSelectChain.where.mockResolvedValueOnce([mockRequestRow()])
 
     const res = await GET(makeRequest(`/api/it-hilfe/requests/${validId}`), makeCtx(validId))
     const body = await res.json()
@@ -262,10 +281,7 @@ describe('GET /api/it-hilfe/requests/[id]', () => {
       user: { id: 'user-other', email: 'other@test.ch', name: 'Other' },
       expires: '',
     } as never)
-    mockQuery.mockResolvedValueOnce({
-      rows: [mockRequestRow()],
-      rowCount: 1,
-    } as never)
+    mockSelectChain.where.mockResolvedValueOnce([mockRequestRow()])
 
     const res = await GET(makeRequest(`/api/it-hilfe/requests/${validId}`), makeCtx(validId))
     const body = await res.json()
@@ -284,7 +300,7 @@ describe('GET /api/it-hilfe/requests/[id]', () => {
 
   it('returns 404 for non-existent request', async () => {
     mockAuth.mockResolvedValue(null as never)
-    mockQuery.mockResolvedValueOnce({ rows: [], rowCount: 0 } as never)
+    mockSelectChain.where.mockResolvedValueOnce([])
 
     const res = await GET(makeRequest(`/api/it-hilfe/requests/${validId}`), makeCtx(validId))
     const body = await res.json()
@@ -295,10 +311,7 @@ describe('GET /api/it-hilfe/requests/[id]', () => {
 
   it('returns null arrays as empty arrays', async () => {
     mockAuth.mockResolvedValue(null as never)
-    mockQuery.mockResolvedValueOnce({
-      rows: [mockRequestRow({ skills_needed: null, image_urls: null })],
-      rowCount: 1,
-    } as never)
+    mockSelectChain.where.mockResolvedValueOnce([mockRequestRow({ skills_needed: null, image_urls: null })])
 
     const res = await GET(makeRequest(`/api/it-hilfe/requests/${validId}`), makeCtx(validId))
     const body = await res.json()
@@ -319,7 +332,12 @@ describe('PUT /api/it-hilfe/requests/[id]', () => {
   })
 
   beforeEach(() => {
-    mockQuery.mockReset()
+    mockSelectChain.from.mockReturnThis()
+    mockSelectChain.where.mockReset().mockReturnThis()
+    mockSelectChain.innerJoin.mockReturnThis()
+    mockSelectChain.leftJoin.mockReturnThis()
+    mockUpdateChain.set.mockReturnThis()
+    mockUpdateChain.where.mockReset().mockResolvedValue([])
     mockAuth.mockReset()
   })
 
@@ -345,10 +363,8 @@ describe('PUT /api/it-hilfe/requests/[id]', () => {
       user: { id: 'user-other' },
       expires: '',
     } as never)
-    mockQuery.mockResolvedValueOnce({
-      rows: [{ requester_id: 'user-owner', status: 'open' }],
-      rowCount: 1,
-    } as never)
+    // PUT uses camelCase keys from Drizzle select
+    mockSelectChain.where.mockResolvedValueOnce([{ requesterId: 'user-owner', status: 'open' }])
 
     const res = await PUT(
       makeRequest(`/api/it-hilfe/requests/${validId}`, {
@@ -366,12 +382,10 @@ describe('PUT /api/it-hilfe/requests/[id]', () => {
       user: { id: 'user-owner' },
       expires: '',
     } as never)
-    mockQuery
-      .mockResolvedValueOnce({
-        rows: [{ requester_id: 'user-owner', status: 'open' }],
-        rowCount: 1,
-      } as never)
-      .mockResolvedValueOnce({ rows: [], rowCount: 1 } as never) // UPDATE
+    // Ownership check
+    mockSelectChain.where.mockResolvedValueOnce([{ requesterId: 'user-owner', status: 'open' }])
+    // Update resolves
+    mockUpdateChain.where.mockResolvedValueOnce([])
 
     const res = await PUT(
       makeRequest(`/api/it-hilfe/requests/${validId}`, {
@@ -389,13 +403,12 @@ describe('PUT /api/it-hilfe/requests/[id]', () => {
       user: { id: 'user-owner' },
       expires: '',
     } as never)
-    mockQuery
-      .mockResolvedValueOnce({
-        rows: [{ requester_id: 'user-owner', status: 'matched' }],
-        rowCount: 1,
-      } as never)
-      .mockResolvedValueOnce({ rows: [], rowCount: 0 } as never) // INCREMENT helper counter
-      .mockResolvedValueOnce({ rows: [], rowCount: 1 } as never) // UPDATE request
+    // Ownership check
+    mockSelectChain.where.mockResolvedValueOnce([{ requesterId: 'user-owner', status: 'matched' }])
+    // Drizzle update for helper counter increment
+    mockUpdateChain.where.mockResolvedValueOnce([])
+    // Drizzle update for request status
+    mockUpdateChain.where.mockResolvedValueOnce([])
 
     const res = await PUT(
       makeRequest(`/api/it-hilfe/requests/${validId}`, {
@@ -414,10 +427,7 @@ describe('PUT /api/it-hilfe/requests/[id]', () => {
       user: { id: 'user-owner' },
       expires: '',
     } as never)
-    mockQuery.mockResolvedValueOnce({
-      rows: [{ requester_id: 'user-owner', status: 'open' }],
-      rowCount: 1,
-    } as never)
+    mockSelectChain.where.mockResolvedValueOnce([{ requesterId: 'user-owner', status: 'open' }])
 
     const res = await PUT(
       makeRequest(`/api/it-hilfe/requests/${validId}`, {
@@ -437,10 +447,7 @@ describe('PUT /api/it-hilfe/requests/[id]', () => {
       user: { id: 'user-owner' },
       expires: '',
     } as never)
-    mockQuery.mockResolvedValueOnce({
-      rows: [{ requester_id: 'user-owner', status: 'completed' }],
-      rowCount: 1,
-    } as never)
+    mockSelectChain.where.mockResolvedValueOnce([{ requesterId: 'user-owner', status: 'completed' }])
 
     const res = await PUT(
       makeRequest(`/api/it-hilfe/requests/${validId}`, {

@@ -11,11 +11,16 @@
 import { NextRequest } from 'next/server';
 import { withAdmin, ValidSession } from '@/lib/api/middleware';
 import { apiSuccess, apiError, apiNotFound, apiBadRequest } from '@/lib/api/helpers';
-import { query } from '@/lib/auth/db';
-import { TABLE_NAMES } from '@/config/database';
+import { db } from '@/db';
+import { tasks, taskCompletions, taskAttentionFlags, taskRequests, users } from '@/db/schema';
+import { eq, and, desc, sql } from 'drizzle-orm';
+import { alias } from 'drizzle-orm/pg-core';
 import { REQUEST_STATUSES } from '@/config/tasks';
 import { updateTaskSchema } from '@/lib/schemas/tasks';
 import { logger } from '@/lib/logger';
+
+const requestedByUser = alias(users, 'requested_by_user');
+const requestedUser = alias(users, 'requested_user');
 
 type RouteParams = { id: string };
 
@@ -35,64 +40,110 @@ export const GET = withAdmin<RouteParams>(async (
       return apiBadRequest('Task ID erforderlich');
     }
 
-    // Get task with creator info
-    const taskResult = await query(
-      `SELECT
-        t.*,
-        u.name as created_by_name,
-        u.email as created_by_email
-      FROM ${TABLE_NAMES.TASKS} t
-      LEFT JOIN ${TABLE_NAMES.USERS} u ON t.created_by = u.id
-      WHERE t.id = $1`,
-      [taskId]
-    );
+    // Fetch task, completions, flags, and requests in parallel
+    const [taskRows, completionRows, flagRows, requestRows] = await Promise.all([
+      // Get task with creator info
+      db
+        .select({
+          id: tasks.id,
+          title: tasks.title,
+          description: tasks.description,
+          instructions: tasks.instructions,
+          task_type: tasks.taskType,
+          schedule_cron: tasks.scheduleCron,
+          schedule_human: tasks.scheduleHuman,
+          category: tasks.category,
+          tags: tasks.tags,
+          priority: tasks.priority,
+          estimated_minutes: tasks.estimatedMinutes,
+          current_status: tasks.currentStatus,
+          is_completed: tasks.isCompleted,
+          completed_at: tasks.completedAt,
+          completed_by: tasks.completedBy,
+          project_id: tasks.projectId,
+          created_by: tasks.createdBy,
+          is_archived: tasks.isArchived,
+          created_at: tasks.createdAt,
+          updated_at: tasks.updatedAt,
+          created_by_name: users.name,
+          created_by_email: users.email,
+        })
+        .from(tasks)
+        .leftJoin(users, eq(tasks.createdBy, users.id))
+        .where(eq(tasks.id, taskId)),
 
-    if (taskResult.rows.length === 0) {
+      // Get completion history
+      db
+        .select({
+          id: taskCompletions.id,
+          task_id: taskCompletions.taskId,
+          completed_by: taskCompletions.completedBy,
+          completed_at: taskCompletions.completedAt,
+          notes: taskCompletions.notes,
+          duration_minutes: taskCompletions.durationMinutes,
+          created_at: taskCompletions.createdAt,
+          completed_by_name: users.name,
+          completed_by_email: users.email,
+        })
+        .from(taskCompletions)
+        .leftJoin(users, eq(taskCompletions.completedBy, users.id))
+        .where(eq(taskCompletions.taskId, taskId))
+        .orderBy(desc(taskCompletions.completedAt))
+        .limit(50),
+
+      // Get active attention flags
+      db
+        .select({
+          id: taskAttentionFlags.id,
+          task_id: taskAttentionFlags.taskId,
+          flagged_by: taskAttentionFlags.flaggedBy,
+          message: taskAttentionFlags.message,
+          is_resolved: taskAttentionFlags.isResolved,
+          resolved_by: taskAttentionFlags.resolvedBy,
+          resolved_at: taskAttentionFlags.resolvedAt,
+          resolved_by_completion_id: taskAttentionFlags.resolvedByCompletionId,
+          created_at: taskAttentionFlags.createdAt,
+          flagged_by_name: users.name,
+          flagged_by_email: users.email,
+        })
+        .from(taskAttentionFlags)
+        .leftJoin(users, eq(taskAttentionFlags.flaggedBy, users.id))
+        .where(and(
+          eq(taskAttentionFlags.taskId, taskId),
+          eq(taskAttentionFlags.isResolved, false)
+        ))
+        .orderBy(desc(taskAttentionFlags.createdAt)),
+
+      // Get pending requests
+      db
+        .select({
+          id: taskRequests.id,
+          task_id: taskRequests.taskId,
+          requested_by: taskRequests.requestedBy,
+          requested_user_id: taskRequests.requestedUserId,
+          is_broadcast: taskRequests.isBroadcast,
+          message: taskRequests.message,
+          status: taskRequests.status,
+          response_message: taskRequests.responseMessage,
+          completion_id: taskRequests.completionId,
+          created_at: taskRequests.createdAt,
+          updated_at: taskRequests.updatedAt,
+          requested_by_name: requestedByUser.name,
+          requested_user_name: requestedUser.name,
+        })
+        .from(taskRequests)
+        .leftJoin(requestedByUser, eq(taskRequests.requestedBy, requestedByUser.id))
+        .leftJoin(requestedUser, eq(taskRequests.requestedUserId, requestedUser.id))
+        .where(and(
+          eq(taskRequests.taskId, taskId),
+          eq(taskRequests.status, REQUEST_STATUSES.PENDING)
+        ))
+        .orderBy(desc(taskRequests.createdAt)),
+    ])
+
+    if (taskRows.length === 0) {
       return apiNotFound('Aufgabe');
     }
-
-    const task = taskResult.rows[0];
-
-    // Get completion history
-    const completionsResult = await query(
-      `SELECT
-        tc.*,
-        u.name as completed_by_name,
-        u.email as completed_by_email
-      FROM ${TABLE_NAMES.TASK_COMPLETIONS} tc
-      LEFT JOIN ${TABLE_NAMES.USERS} u ON tc.completed_by = u.id
-      WHERE tc.task_id = $1
-      ORDER BY tc.completed_at DESC
-      LIMIT 50`,
-      [taskId]
-    );
-
-    // Get active attention flags
-    const flagsResult = await query(
-      `SELECT
-        f.*,
-        u.name as flagged_by_name,
-        u.email as flagged_by_email
-      FROM ${TABLE_NAMES.TASK_ATTENTION_FLAGS} f
-      LEFT JOIN ${TABLE_NAMES.USERS} u ON f.flagged_by = u.id
-      WHERE f.task_id = $1 AND f.is_resolved = false
-      ORDER BY f.created_at DESC`,
-      [taskId]
-    );
-
-    // Get pending requests
-    const requestsResult = await query(
-      `SELECT
-        r.*,
-        rb.name as requested_by_name,
-        ru.name as requested_user_name
-      FROM ${TABLE_NAMES.TASK_REQUESTS} r
-      LEFT JOIN ${TABLE_NAMES.USERS} rb ON r.requested_by = rb.id
-      LEFT JOIN ${TABLE_NAMES.USERS} ru ON r.requested_user_id = ru.id
-      WHERE r.task_id = $1 AND r.status = $2
-      ORDER BY r.created_at DESC`,
-      [taskId, REQUEST_STATUSES.PENDING]
-    );
 
     logger.info('Task detail fetched', {
       taskId,
@@ -100,10 +151,10 @@ export const GET = withAdmin<RouteParams>(async (
     });
 
     return apiSuccess({
-      task,
-      completions: completionsResult.rows,
-      attention_flags: flagsResult.rows,
-      pending_requests: requestsResult.rows,
+      task: taskRows[0],
+      completions: completionRows,
+      attention_flags: flagRows,
+      pending_requests: requestRows,
     });
   } catch (error) {
     logger.error('Error fetching task', { error, userId: session.user.id });
@@ -137,48 +188,50 @@ export const PATCH = withAdmin<RouteParams>(async (
     const data = result.data;
 
     // Check if task exists
-    const existingResult = await query(
-      `SELECT id FROM ${TABLE_NAMES.TASKS} WHERE id = $1`,
-      [taskId]
-    );
+    const [existing] = await db
+      .select({ id: tasks.id })
+      .from(tasks)
+      .where(eq(tasks.id, taskId))
 
-    if (existingResult.rows.length === 0) {
+    if (!existing) {
       return apiNotFound('Aufgabe');
     }
 
-    // Build dynamic update query
-    const updates: string[] = [];
-    const params: unknown[] = [];
-    let paramIndex = 1;
+    // Build dynamic update set
+    const updateSet: Record<string, unknown> = {};
+    const fieldMap: Record<string, string> = {
+      title: 'title',
+      description: 'description',
+      instructions: 'instructions',
+      task_type: 'taskType',
+      schedule_cron: 'scheduleCron',
+      schedule_human: 'scheduleHuman',
+      category: 'category',
+      tags: 'tags',
+      priority: 'priority',
+      estimated_minutes: 'estimatedMinutes',
+      project_id: 'projectId',
+      current_status: 'currentStatus',
+      is_archived: 'isArchived',
+    };
 
-    const fields = [
-      'title', 'description', 'instructions', 'task_type',
-      'schedule_cron', 'schedule_human', 'category', 'tags',
-      'priority', 'estimated_minutes', 'project_id',
-      'current_status', 'is_archived'
-    ];
-
-    for (const field of fields) {
-      if (field in data) {
-        updates.push(`${field} = $${paramIndex++}`);
-        params.push((data as Record<string, unknown>)[field] ?? null);
+    for (const [snakeField, camelField] of Object.entries(fieldMap)) {
+      if (snakeField in data) {
+        updateSet[camelField] = (data as Record<string, unknown>)[snakeField] ?? null;
       }
     }
 
-    if (updates.length === 0) {
+    if (Object.keys(updateSet).length === 0) {
       return apiBadRequest('Keine Felder zum Aktualisieren');
     }
 
-    updates.push(`updated_at = NOW()`);
-    params.push(taskId);
+    updateSet.updatedAt = sql`NOW()`;
 
-    const updateResult = await query(
-      `UPDATE ${TABLE_NAMES.TASKS}
-       SET ${updates.join(', ')}
-       WHERE id = $${paramIndex}
-       RETURNING *`,
-      params
-    );
+    const [updated] = await db
+      .update(tasks)
+      .set(updateSet)
+      .where(eq(tasks.id, taskId))
+      .returning()
 
     logger.info('Task updated', {
       taskId,
@@ -186,7 +239,7 @@ export const PATCH = withAdmin<RouteParams>(async (
       updatedFields: Object.keys(data)
     });
 
-    return apiSuccess(updateResult.rows[0]);
+    return apiSuccess(updated);
   } catch (error) {
     logger.error('Error updating task', { error, userId: session.user.id });
     return apiError(error, 'Fehler beim Aktualisieren der Aufgabe');
@@ -209,15 +262,13 @@ export const DELETE = withAdmin<RouteParams>(async (
       return apiBadRequest('Task ID erforderlich');
     }
 
-    const result = await query(
-      `UPDATE ${TABLE_NAMES.TASKS}
-       SET is_archived = true, updated_at = NOW()
-       WHERE id = $1
-       RETURNING id`,
-      [taskId]
-    );
+    const [result] = await db
+      .update(tasks)
+      .set({ isArchived: true, updatedAt: sql`NOW()` })
+      .where(eq(tasks.id, taskId))
+      .returning({ id: tasks.id })
 
-    if (result.rows.length === 0) {
+    if (!result) {
       return apiNotFound('Aufgabe');
     }
 

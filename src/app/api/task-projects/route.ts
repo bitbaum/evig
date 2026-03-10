@@ -10,10 +10,10 @@
 import { NextRequest } from 'next/server';
 import { withAdmin, ValidSession } from '@/lib/api/middleware';
 import { apiSuccess, apiError, apiBadRequest } from '@/lib/api/helpers';
-import { query } from '@/lib/auth/db';
-import { TABLE_NAMES } from '@/config/database';
+import { db } from '@/db';
+import { taskProjects, tasks, users } from '@/db/schema';
+import { eq, sql, and, not } from 'drizzle-orm';
 import { createProjectSchema } from '@/lib/schemas/tasks';
-import { QueryParams } from '@/lib/api/query-builder';
 import { logger } from '@/lib/logger';
 
 /**
@@ -25,51 +25,49 @@ export const GET = withAdmin(async (request: NextRequest, session: ValidSession)
     const { searchParams } = new URL(request.url);
     const status = searchParams.get('status');
 
-    const qb = new QueryParams();
+    const conditions = status ? [eq(taskProjects.status, status)] : [];
 
-    if (status) {
-      qb.add('p.status = $P', status);
-    }
-
-    const { where: whereClause, params } = qb.build();
-
-    const queryText = `
-      SELECT
-        p.*,
-        u.name as created_by_name,
-        u.email as created_by_email,
-        (
-          SELECT COUNT(*)::int
-          FROM ${TABLE_NAMES.TASKS} t
-          WHERE t.project_id = p.id AND NOT t.is_archived
-        ) as task_count,
-        (
-          SELECT COUNT(*)::int
-          FROM ${TABLE_NAMES.TASKS} t
-          WHERE t.project_id = p.id AND t.is_completed AND NOT t.is_archived
-        ) as completed_task_count
-      FROM ${TABLE_NAMES.TASK_PROJECTS} p
-      LEFT JOIN ${TABLE_NAMES.USERS} u ON p.created_by = u.id
-      ${whereClause}
-      ORDER BY
-        CASE p.status
+    const projectRows = await db
+      .select({
+        id: taskProjects.id,
+        title: taskProjects.title,
+        description: taskProjects.description,
+        status: taskProjects.status,
+        target_date: taskProjects.targetDate,
+        created_by: taskProjects.createdBy,
+        created_at: taskProjects.createdAt,
+        updated_at: taskProjects.updatedAt,
+        created_by_name: users.name,
+        created_by_email: users.email,
+        task_count: sql<number>`(
+          SELECT COUNT(*)::int FROM ${tasks} t
+          WHERE t.project_id = ${taskProjects.id} AND NOT t.is_archived
+        )`,
+        completed_task_count: sql<number>`(
+          SELECT COUNT(*)::int FROM ${tasks} t
+          WHERE t.project_id = ${taskProjects.id} AND t.is_completed AND NOT t.is_archived
+        )`,
+      })
+      .from(taskProjects)
+      .leftJoin(users, eq(taskProjects.createdBy, users.id))
+      .where(conditions.length > 0 ? and(...conditions) : undefined)
+      .orderBy(
+        sql`CASE ${taskProjects.status}
           WHEN 'active' THEN 0
           WHEN 'planning' THEN 1
           WHEN 'on_hold' THEN 2
           WHEN 'completed' THEN 3
           WHEN 'cancelled' THEN 4
-        END,
-        p.created_at DESC
-    `;
-
-    const result = await query(queryText, params);
+        END`,
+        sql`${taskProjects.createdAt} DESC`
+      )
 
     logger.info('Task projects fetched', {
       userId: session.user.id,
-      count: result.rows.length
+      count: projectRows.length
     });
 
-    return apiSuccess(result.rows);
+    return apiSuccess(projectRows);
   } catch (error) {
     logger.error('Error fetching projects', { error, userId: session.user.id });
     return apiError(error, 'Fehler beim Laden der Projekte');
@@ -93,36 +91,25 @@ export const POST = withAdmin(async (request: NextRequest, session: ValidSession
 
     // Look up the actual user ID from the database by email
     // (Auth.js session ID may not match the database user ID)
-    const userResult = await query<{ id: string }>(
-      `SELECT id FROM ${TABLE_NAMES.USERS} WHERE email = $1`,
-      [session.user.email]
-    );
+    const [userRow] = await db
+      .select({ id: users.id })
+      .from(users)
+      .where(eq(users.email, session.user.email))
 
-    if (userResult.rows.length === 0) {
+    if (!userRow) {
       return apiBadRequest('Benutzer nicht gefunden');
     }
 
-    const dbUserId = userResult.rows[0].id;
-
-    const insertResult = await query<{ id: string; title: string }>(
-      `INSERT INTO ${TABLE_NAMES.TASK_PROJECTS} (
-        title,
-        description,
-        status,
-        target_date,
-        created_by
-      ) VALUES ($1, $2, $3, $4, $5)
-      RETURNING *`,
-      [
-        data.title,
-        data.description || null,
-        data.status,
-        data.target_date || null,
-        dbUserId,
-      ]
-    );
-
-    const project = insertResult.rows[0];
+    const [project] = await db
+      .insert(taskProjects)
+      .values({
+        title: data.title,
+        description: data.description || undefined,
+        status: data.status,
+        targetDate: data.target_date || undefined,
+        createdBy: userRow.id,
+      })
+      .returning()
 
     logger.info('Project created', {
       projectId: project.id,

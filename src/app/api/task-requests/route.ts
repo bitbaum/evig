@@ -11,10 +11,13 @@
 import { NextRequest } from 'next/server';
 import { withAdmin, ValidSession } from '@/lib/api/middleware';
 import { apiSuccess, apiError } from '@/lib/api/helpers';
-import { query } from '@/lib/auth/db';
-import { TABLE_NAMES } from '@/config/database';
-import { QueryParams } from '@/lib/api/query-builder';
+import { db } from '@/db';
+import { taskRequests, tasks, users } from '@/db/schema';
+import { eq, and, ne, isNull, or, desc, sql, SQL } from 'drizzle-orm';
+import { alias } from 'drizzle-orm/pg-core';
 import { logger } from '@/lib/logger';
+
+const requestedByUser = alias(users, 'requested_by_user');
 
 /**
  * GET /api/task-requests
@@ -26,56 +29,61 @@ export const GET = withAdmin(async (request: NextRequest, session: ValidSession)
     const status = searchParams.get('status') || 'pending';
     const includeBroadcasts = searchParams.get('include_broadcasts') !== 'false';
 
-    // Build query for requests
-    // Include direct requests (requested_user_id = current user)
-    // AND broadcasts (requested_user_id is null) if includeBroadcasts is true
-    const qb = new QueryParams();
+    // Build conditions
+    const conditions: SQL[] = [
+      ne(taskRequests.requestedBy, session.user.id),
+    ];
 
-    qb.add('r.requested_by != $P', session.user.id);
-
-    // Filter by status
     if (status !== 'all') {
-      qb.add('r.status = $P', status);
+      conditions.push(eq(taskRequests.status, status));
     }
 
     // Filter to show requests for this user OR broadcasts
     if (includeBroadcasts) {
-      qb.add('(r.requested_user_id = $P OR r.requested_user_id IS NULL)', session.user.id);
+      conditions.push(or(
+        eq(taskRequests.requestedUserId, session.user.id),
+        isNull(taskRequests.requestedUserId)
+      )!);
     } else {
-      qb.add('r.requested_user_id = $P', session.user.id);
+      conditions.push(eq(taskRequests.requestedUserId, session.user.id));
     }
 
-    const { where: whereClause, params } = qb.build();
-
-    const queryText = `
-      SELECT
-        r.*,
-        rb.name as requested_by_name,
-        rb.email as requested_by_email,
-        t.id as task_id,
-        t.title as task_title,
-        t.description as task_description,
-        t.category as task_category,
-        t.priority as task_priority,
-        t.current_status as task_status,
-        t.estimated_minutes as task_estimated_minutes
-      FROM ${TABLE_NAMES.TASK_REQUESTS} r
-      LEFT JOIN ${TABLE_NAMES.USERS} rb ON r.requested_by = rb.id
-      LEFT JOIN ${TABLE_NAMES.TASKS} t ON r.task_id = t.id
-      ${whereClause}
-      ORDER BY r.created_at DESC
-    `;
-
-    const result = await query(queryText, params);
+    const rows = await db
+      .select({
+        id: taskRequests.id,
+        task_id: taskRequests.taskId,
+        requested_by: taskRequests.requestedBy,
+        requested_user_id: taskRequests.requestedUserId,
+        is_broadcast: taskRequests.isBroadcast,
+        message: taskRequests.message,
+        status: taskRequests.status,
+        response_message: taskRequests.responseMessage,
+        completion_id: taskRequests.completionId,
+        created_at: taskRequests.createdAt,
+        updated_at: taskRequests.updatedAt,
+        requested_by_name: requestedByUser.name,
+        requested_by_email: requestedByUser.email,
+        task_title: tasks.title,
+        task_description: tasks.description,
+        task_category: tasks.category,
+        task_priority: tasks.priority,
+        task_status: tasks.currentStatus,
+        task_estimated_minutes: tasks.estimatedMinutes,
+      })
+      .from(taskRequests)
+      .leftJoin(requestedByUser, eq(taskRequests.requestedBy, requestedByUser.id))
+      .leftJoin(tasks, eq(taskRequests.taskId, tasks.id))
+      .where(and(...conditions))
+      .orderBy(desc(taskRequests.createdAt))
 
     logger.info('Task requests fetched', {
       userId: session.user.id,
-      count: result.rows.length,
+      count: rows.length,
       status,
       includeBroadcasts
     });
 
-    return apiSuccess(result.rows);
+    return apiSuccess(rows);
   } catch (error) {
     logger.error('Error fetching task requests', { error, userId: session.user.id });
     return apiError(error, 'Fehler beim Laden der Anfragen');

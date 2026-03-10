@@ -11,11 +11,11 @@ import { NextRequest } from 'next/server';
 import { withAdmin, ValidSession } from '@/lib/api/middleware';
 import { apiSuccess, apiError, apiBadRequest } from '@/lib/api/helpers';
 import { getDbUserId } from '@/lib/api/task-helpers';
-import { query } from '@/lib/auth/db';
-import { TABLE_NAMES } from '@/config/database';
+import { db } from '@/db';
+import { tasks, taskCompletions, users } from '@/db/schema';
+import { eq, and, sql, desc, SQL } from 'drizzle-orm';
 import { TASK_PRIORITIES } from '@/config/tasks';
 import { createTaskSchema } from '@/lib/schemas/tasks';
-import { QueryParams } from '@/lib/api/query-builder';
 import { logger } from '@/lib/logger';
 
 /**
@@ -31,38 +31,44 @@ export const GET = withAdmin(async (request: NextRequest, session: ValidSession)
     const projectId = searchParams.get('project_id');
     const includeArchived = searchParams.get('include_archived') === 'true';
 
-    // Build query with filters
-    const qb = new QueryParams();
+    // Build conditions
+    const conditions: SQL[] = [];
+    if (!includeArchived) conditions.push(eq(tasks.isArchived, false));
+    if (category) conditions.push(eq(tasks.category, category));
+    if (status) conditions.push(eq(tasks.currentStatus, status));
+    if (taskType) conditions.push(eq(tasks.taskType, taskType));
+    if (projectId) conditions.push(eq(tasks.projectId, projectId));
 
-    if (!includeArchived) {
-      qb.addRaw('t.is_archived = false');
-    }
-    if (category) {
-      qb.add('t.category = $P', category);
-    }
-    if (status) {
-      qb.add('t.current_status = $P', status);
-    }
-    if (taskType) {
-      qb.add('t.task_type = $P', taskType);
-    }
-    if (projectId) {
-      qb.add('t.project_id = $P', projectId);
-    }
-
-    const { where: whereClause, params } = qb.build();
-
-    const queryText = `
-      SELECT
-        t.*,
-        u.name as created_by_name,
-        u.email as created_by_email,
-        (
+    const taskRows = await db
+      .select({
+        id: tasks.id,
+        title: tasks.title,
+        description: tasks.description,
+        instructions: tasks.instructions,
+        task_type: tasks.taskType,
+        schedule_cron: tasks.scheduleCron,
+        schedule_human: tasks.scheduleHuman,
+        category: tasks.category,
+        tags: tasks.tags,
+        priority: tasks.priority,
+        estimated_minutes: tasks.estimatedMinutes,
+        current_status: tasks.currentStatus,
+        is_completed: tasks.isCompleted,
+        completed_at: tasks.completedAt,
+        completed_by: tasks.completedBy,
+        project_id: tasks.projectId,
+        created_by: tasks.createdBy,
+        is_archived: tasks.isArchived,
+        created_at: tasks.createdAt,
+        updated_at: tasks.updatedAt,
+        created_by_name: users.name,
+        created_by_email: users.email,
+        completion_count: sql<number>`(
           SELECT COUNT(*)::int
-          FROM ${TABLE_NAMES.TASK_COMPLETIONS} tc
-          WHERE tc.task_id = t.id
-        ) as completion_count,
-        (
+          FROM ${taskCompletions} tc
+          WHERE tc.task_id = ${tasks.id}
+        )`,
+        recent_completions: sql`(
           SELECT json_agg(json_build_object(
             'id', tc.id,
             'completed_by', tc.completed_by,
@@ -70,32 +76,31 @@ export const GET = withAdmin(async (request: NextRequest, session: ValidSession)
             'notes', tc.notes,
             'duration_minutes', tc.duration_minutes
           ) ORDER BY tc.completed_at DESC)
-          FROM ${TABLE_NAMES.TASK_COMPLETIONS} tc
-          WHERE tc.task_id = t.id
+          FROM ${taskCompletions} tc
+          WHERE tc.task_id = ${tasks.id}
           LIMIT 5
-        ) as recent_completions
-      FROM ${TABLE_NAMES.TASKS} t
-      LEFT JOIN ${TABLE_NAMES.USERS} u ON t.created_by = u.id
-      ${whereClause}
-      ORDER BY
-        CASE t.priority
-          WHEN '${TASK_PRIORITIES.URGENT}' THEN 0
-          WHEN '${TASK_PRIORITIES.HIGH}' THEN 1
-          WHEN '${TASK_PRIORITIES.NORMAL}' THEN 2
-          WHEN '${TASK_PRIORITIES.LOW}' THEN 3
-        END,
-        t.created_at DESC
-    `;
-
-    const result = await query(queryText, params);
+        )`,
+      })
+      .from(tasks)
+      .leftJoin(users, eq(tasks.createdBy, users.id))
+      .where(conditions.length > 0 ? and(...conditions) : undefined)
+      .orderBy(
+        sql`CASE ${tasks.priority}
+          WHEN '${sql.raw(TASK_PRIORITIES.URGENT)}' THEN 0
+          WHEN '${sql.raw(TASK_PRIORITIES.HIGH)}' THEN 1
+          WHEN '${sql.raw(TASK_PRIORITIES.NORMAL)}' THEN 2
+          WHEN '${sql.raw(TASK_PRIORITIES.LOW)}' THEN 3
+        END`,
+        desc(tasks.createdAt)
+      )
 
     logger.info('Tasks fetched', {
       userId: session.user.id,
-      count: result.rows.length,
+      count: taskRows.length,
       filters: { category, status, taskType, projectId }
     });
 
-    return apiSuccess(result.rows);
+    return apiSuccess(taskRows);
   } catch (error) {
     logger.error('Error fetching tasks', { error, userId: session.user.id });
     return apiError(error, 'Fehler beim Laden der Aufgaben');
@@ -121,39 +126,23 @@ export const POST = withAdmin(async (request: NextRequest, session: ValidSession
     if ('error' in userLookup) return userLookup.error;
     const { dbUserId } = userLookup;
 
-    const insertResult = await query<{ id: string; title: string }>(
-      `INSERT INTO ${TABLE_NAMES.TASKS} (
-        title,
-        description,
-        instructions,
-        task_type,
-        schedule_cron,
-        schedule_human,
-        category,
-        tags,
-        priority,
-        estimated_minutes,
-        project_id,
-        created_by
-      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
-      RETURNING *`,
-      [
-        data.title,
-        data.description || null,
-        data.instructions || null,
-        data.task_type,
-        data.schedule_cron || null,
-        data.schedule_human || null,
-        data.category,
-        data.tags || [],
-        data.priority,
-        data.estimated_minutes || null,
-        data.project_id || null,
-        dbUserId,
-      ]
-    );
-
-    const task = insertResult.rows[0];
+    const [task] = await db
+      .insert(tasks)
+      .values({
+        title: data.title,
+        description: data.description || undefined,
+        instructions: data.instructions || undefined,
+        taskType: data.task_type,
+        scheduleCron: data.schedule_cron || undefined,
+        scheduleHuman: data.schedule_human || undefined,
+        category: data.category,
+        tags: data.tags || [],
+        priority: data.priority,
+        estimatedMinutes: data.estimated_minutes || undefined,
+        projectId: data.project_id || undefined,
+        createdBy: dbUserId,
+      })
+      .returning()
 
     logger.info('Task created', {
       taskId: task.id,

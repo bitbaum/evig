@@ -4,31 +4,13 @@
  */
 
 import { NextRequest } from 'next/server'
-import { query } from '@/lib/auth/db'
+import { db } from '@/db'
+import { helperProfiles, userSkills, users } from '@/db/schema'
+import { eq, and, sql, asc, SQL } from 'drizzle-orm'
 import { apiError, apiSuccess, parsePagination } from '@/lib/api/helpers'
-import { QueryParams } from '@/lib/api/query-builder'
 import { ERROR_MESSAGES } from '@/config/error-messages'
-import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
 import { getSkillIds } from '@/config/it-hilfe'
-import { CountRow } from '@/lib/api/db-types'
-
-interface HelperRow {
-  user_id: string
-  user_name: string
-  user_email: string
-  bio: string | null
-  hourly_rate_cents: number | null
-  accepts_gratis: boolean
-  accepts_kulturlegi: boolean
-  service_types: string[] | null
-  location_postal_code: string | null
-  location_city: string | null
-  location_canton: string | null
-  max_travel_km: number
-  skills: string[] | null
-  skill_count: number
-}
 
 /**
  * GET /api/it-hilfe/helpers
@@ -54,83 +36,86 @@ export async function GET(request: NextRequest) {
     const { limit, offset } = parsePagination(request, { defaultLimit: 20, maxLimit: 50 })
 
     // Build WHERE conditions
-    const qb = new QueryParams()
-    qb.addRaw('hp.is_active = true')
+    const conditions: SQL[] = [eq(helperProfiles.isActive, true)]
 
     if (skills.length > 0) {
-      qb.add(`EXISTS (
-        SELECT 1 FROM ${TABLE_NAMES.USER_SKILLS} us
-        WHERE us.user_id = hp.user_id AND us.skill_id = ANY($P::text[])
-      )`, skills)
+      conditions.push(sql`EXISTS (
+        SELECT 1 FROM ${userSkills}
+        WHERE ${userSkills.userId} = ${helperProfiles.userId}
+        AND ${userSkills.skillId} = ANY(${skills}::text[])
+      )`)
     }
-    if (canton) qb.add('hp.location_canton = $P', canton)
-    if (postalCode) qb.add('hp.location_postal_code = $P', postalCode)
-    if (acceptsGratis) qb.addRaw('hp.accepts_gratis = true')
-    if (acceptsKulturlegi) qb.addRaw('hp.accepts_kulturlegi = true')
-    if (serviceType) qb.add('$P = ANY(hp.service_types)', serviceType)
+    if (canton) conditions.push(eq(helperProfiles.locationCanton, canton))
+    if (postalCode) conditions.push(eq(helperProfiles.locationPostalCode, postalCode))
+    if (acceptsGratis) conditions.push(eq(helperProfiles.acceptsGratis, true))
+    if (acceptsKulturlegi) conditions.push(eq(helperProfiles.acceptsKulturlegi, true))
+    if (serviceType) conditions.push(sql`${serviceType} = ANY(${helperProfiles.serviceTypes})`)
 
-    const { where: whereClause, params, nextIndex } = qb.build()
+    const whereCondition = and(...conditions)
 
     // Query helpers with their skills
-    const helpersResult = await query(
-      `
-      SELECT
-        hp.user_id,
-        u.name as user_name,
-        u.email as user_email,
-        hp.bio,
-        hp.hourly_rate_cents,
-        hp.accepts_gratis,
-        hp.accepts_kulturlegi,
-        hp.service_types,
-        hp.location_postal_code,
-        hp.location_city,
-        hp.location_canton,
-        hp.max_travel_km,
-        ARRAY_AGG(us.skill_id) FILTER (WHERE us.skill_id IS NOT NULL) as skills,
-        COUNT(us.skill_id) as skill_count
-      FROM ${TABLE_NAMES.IT_HILFE_TECHNICIAN_PROFILES} hp
-      JOIN ${TABLE_NAMES.USERS} u ON hp.user_id = u.id
-      LEFT JOIN ${TABLE_NAMES.USER_SKILLS} us ON hp.user_id = us.user_id
-      ${whereClause}
-      GROUP BY hp.user_id, u.name, u.email, hp.bio, hp.hourly_rate_cents,
-               hp.accepts_gratis, hp.accepts_kulturlegi, hp.service_types,
-               hp.location_postal_code, hp.location_city, hp.location_canton,
-               hp.max_travel_km
-      ORDER BY skill_count DESC, u.name ASC
-      LIMIT $${nextIndex} OFFSET $${nextIndex + 1}
-    `,
-      [...params, limit, offset]
-    )
+    const helpersResult = await db
+      .select({
+        userId: helperProfiles.userId,
+        userName: users.name,
+        userEmail: users.email,
+        bio: helperProfiles.bio,
+        hourlyRateCents: helperProfiles.hourlyRateCents,
+        acceptsGratis: helperProfiles.acceptsGratis,
+        acceptsKulturlegi: helperProfiles.acceptsKulturlegi,
+        serviceTypes: helperProfiles.serviceTypes,
+        locationPostalCode: helperProfiles.locationPostalCode,
+        locationCity: helperProfiles.locationCity,
+        locationCanton: helperProfiles.locationCanton,
+        maxTravelKm: helperProfiles.maxTravelKm,
+        skills: sql<string[]>`ARRAY_AGG(${userSkills.skillId}) FILTER (WHERE ${userSkills.skillId} IS NOT NULL)`,
+        skillCount: sql<number>`COUNT(${userSkills.skillId})`,
+      })
+      .from(helperProfiles)
+      .innerJoin(users, eq(helperProfiles.userId, users.id))
+      .leftJoin(userSkills, eq(helperProfiles.userId, userSkills.userId))
+      .where(whereCondition)
+      .groupBy(
+        helperProfiles.userId,
+        users.name,
+        users.email,
+        helperProfiles.bio,
+        helperProfiles.hourlyRateCents,
+        helperProfiles.acceptsGratis,
+        helperProfiles.acceptsKulturlegi,
+        helperProfiles.serviceTypes,
+        helperProfiles.locationPostalCode,
+        helperProfiles.locationCity,
+        helperProfiles.locationCanton,
+        helperProfiles.maxTravelKm,
+      )
+      .orderBy(sql`COUNT(${userSkills.skillId}) DESC`, asc(users.name))
+      .limit(limit)
+      .offset(offset)
 
     // Get total count
-    const countResult = await query(
-      `
-      SELECT COUNT(DISTINCT hp.user_id) as total
-      FROM ${TABLE_NAMES.IT_HILFE_TECHNICIAN_PROFILES} hp
-      LEFT JOIN ${TABLE_NAMES.USER_SKILLS} us ON hp.user_id = us.user_id
-      ${whereClause}
-    `,
-      params
-    )
+    const [countRow] = await db
+      .select({ total: sql<string>`COUNT(DISTINCT ${helperProfiles.userId})` })
+      .from(helperProfiles)
+      .leftJoin(userSkills, eq(helperProfiles.userId, userSkills.userId))
+      .where(whereCondition)
 
-    const helpers = (helpersResult.rows as HelperRow[]).map((row) => ({
-      userId: row.user_id,
-      name: row.user_name,
+    const helpers = helpersResult.map((row) => ({
+      userId: row.userId,
+      name: row.userName,
       bio: row.bio,
-      hourlyRateCents: row.hourly_rate_cents,
-      acceptsGratis: row.accepts_gratis,
-      acceptsKulturlegi: row.accepts_kulturlegi,
-      serviceTypes: row.service_types || [],
-      postalCode: row.location_postal_code,
-      city: row.location_city,
-      canton: row.location_canton,
-      maxTravelKm: row.max_travel_km,
+      hourlyRateCents: row.hourlyRateCents,
+      acceptsGratis: row.acceptsGratis,
+      acceptsKulturlegi: row.acceptsKulturlegi,
+      serviceTypes: row.serviceTypes || [],
+      postalCode: row.locationPostalCode,
+      city: row.locationCity,
+      canton: row.locationCanton,
+      maxTravelKm: row.maxTravelKm,
       skills: row.skills || [],
     }))
 
-    const countData = countResult.rows[0] as CountRow
-    const total = parseInt(countData.total)
+    const total = parseInt(countRow?.total || '0')
 
     logger.info('Fetched IT helpers', {
       count: helpers.length,

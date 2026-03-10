@@ -9,8 +9,9 @@
 import { NextRequest } from 'next/server';
 import { withAdmin, ValidSession } from '@/lib/api/middleware';
 import { apiSuccess, apiError, apiNotFound, apiBadRequest } from '@/lib/api/helpers';
-import { query } from '@/lib/auth/db';
-import { TABLE_NAMES } from '@/config/database';
+import { db } from '@/db';
+import { taskRequests, tasks, users } from '@/db/schema';
+import { eq, and, ne, sql } from 'drizzle-orm';
 import { TASK_STATUSES, REQUEST_STATUSES } from '@/config/tasks';
 import { NOTIFICATION_TYPES } from '@/config/notifications';
 import { requestResponseSchema } from '@/lib/schemas/tasks';
@@ -45,27 +46,23 @@ export const PATCH = withAdmin<RouteParams>(async (
 
     const data = result.data;
 
-    // Get the request
-    const requestResult = await query(
-      `SELECT r.*, t.title as task_title
-       FROM ${TABLE_NAMES.TASK_REQUESTS} r
-       LEFT JOIN ${TABLE_NAMES.TASKS} t ON r.task_id = t.id
-       WHERE r.id = $1`,
-      [requestId]
-    );
+    // Get the request with task title
+    const [taskRequest] = await db
+      .select({
+        id: taskRequests.id,
+        taskId: taskRequests.taskId,
+        taskTitle: tasks.title,
+        status: taskRequests.status,
+        requestedUserId: taskRequests.requestedUserId,
+        requestedBy: taskRequests.requestedBy,
+      })
+      .from(taskRequests)
+      .leftJoin(tasks, eq(taskRequests.taskId, tasks.id))
+      .where(eq(taskRequests.id, requestId))
 
-    if (requestResult.rows.length === 0) {
+    if (!taskRequest) {
       return apiNotFound('Anfrage');
     }
-
-    const taskRequest = requestResult.rows[0] as {
-      id: string;
-      task_id: string;
-      task_title: string;
-      status: string;
-      requested_user_id: string | null;
-      requested_by: string;
-    };
 
     // Check if request is still pending
     if (taskRequest.status !== REQUEST_STATUSES.PENDING) {
@@ -73,9 +70,9 @@ export const PATCH = withAdmin<RouteParams>(async (
     }
 
     // Check if user can respond (either they're the target or it's a broadcast)
-    const isTargetUser = taskRequest.requested_user_id === session.user.id;
-    const isBroadcast = taskRequest.requested_user_id === null;
-    const isRequester = taskRequest.requested_by === session.user.id;
+    const isTargetUser = taskRequest.requestedUserId === session.user.id;
+    const isBroadcast = taskRequest.requestedUserId === null;
+    const isRequester = taskRequest.requestedBy === session.user.id;
 
     if (!isTargetUser && !isBroadcast) {
       return apiBadRequest('Sie können nur auf Anfragen antworten, die an Sie gerichtet sind');
@@ -86,33 +83,40 @@ export const PATCH = withAdmin<RouteParams>(async (
     }
 
     // Update request status
-    const updateResult = await query(
-      `UPDATE ${TABLE_NAMES.TASK_REQUESTS}
-       SET status = $1, response_message = $2, updated_at = NOW()
-       WHERE id = $3
-       RETURNING *`,
-      [data.status, data.response_message || null, requestId]
-    );
-
-    const updatedRequest = updateResult.rows[0];
+    const [updatedRequest] = await db
+      .update(taskRequests)
+      .set({
+        status: data.status,
+        responseMessage: data.response_message || null,
+        updatedAt: sql`NOW()`,
+      })
+      .where(eq(taskRequests.id, requestId))
+      .returning()
 
     // If accepted, update task status to in_progress
     if (data.status === REQUEST_STATUSES.ACCEPTED) {
-      await query(
-        `UPDATE ${TABLE_NAMES.TASKS}
-         SET current_status = $1, updated_at = NOW()
-         WHERE id = $2`,
-        [TASK_STATUSES.IN_PROGRESS, taskRequest.task_id]
-      );
+      await db
+        .update(tasks)
+        .set({
+          currentStatus: TASK_STATUSES.IN_PROGRESS,
+          updatedAt: sql`NOW()`,
+        })
+        .where(eq(tasks.id, taskRequest.taskId))
 
       // If this was a broadcast, cancel other pending requests for the same task
       if (isBroadcast) {
-        await query(
-          `UPDATE ${TABLE_NAMES.TASK_REQUESTS}
-           SET status = '${REQUEST_STATUSES.DECLINED}', response_message = 'Anfrage von anderem Teammitglied angenommen', updated_at = NOW()
-           WHERE task_id = $1 AND id != $2 AND status = '${REQUEST_STATUSES.PENDING}'`,
-          [taskRequest.task_id, requestId]
-        );
+        await db
+          .update(taskRequests)
+          .set({
+            status: REQUEST_STATUSES.DECLINED,
+            responseMessage: 'Anfrage von anderem Teammitglied angenommen',
+            updatedAt: sql`NOW()`,
+          })
+          .where(and(
+            eq(taskRequests.taskId, taskRequest.taskId),
+            ne(taskRequests.id, requestId),
+            eq(taskRequests.status, REQUEST_STATUSES.PENDING)
+          ))
       }
     }
 
@@ -121,27 +125,27 @@ export const PATCH = withAdmin<RouteParams>(async (
     const responderName = session.user.name || 'Ein Teammitglied';
 
     fireNotification(
-      () => createNotification(taskRequest.requested_by, {
+      () => createNotification(taskRequest.requestedBy, {
         type: NOTIFICATION_TYPES.TASK_REQUEST_RESPONSE,
         title: accepted
-          ? `Aufgabenanfrage angenommen: ${taskRequest.task_title}`
-          : `Aufgabenanfrage abgelehnt: ${taskRequest.task_title}`,
+          ? `Aufgabenanfrage angenommen: ${taskRequest.taskTitle}`
+          : `Aufgabenanfrage abgelehnt: ${taskRequest.taskTitle}`,
         content: data.response_message
           || (accepted
             ? `${responderName} hat deine Anfrage angenommen.`
             : `${responderName} hat deine Anfrage abgelehnt.`),
         related_type: 'task',
-        related_id: taskRequest.task_id,
+        related_id: taskRequest.taskId,
       }),
       'task-request-response',
     );
 
     logger.info('Task request responded', {
       requestId,
-      taskId: taskRequest.task_id,
+      taskId: taskRequest.taskId,
       userId: session.user.id,
       status: data.status,
-      taskTitle: taskRequest.task_title
+      taskTitle: taskRequest.taskTitle
     });
 
     return apiSuccess(updatedRequest);

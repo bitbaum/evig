@@ -10,8 +10,9 @@ import { NextRequest } from 'next/server';
 import { withAdmin, ValidSession } from '@/lib/api/middleware';
 import { apiSuccess, apiError, apiBadRequest } from '@/lib/api/helpers';
 import { getDbUserId, getActiveTask } from '@/lib/api/task-helpers';
-import { query } from '@/lib/auth/db';
-import { TABLE_NAMES } from '@/config/database';
+import { db } from '@/db';
+import { taskCompletions } from '@/db/schema';
+import { sql } from 'drizzle-orm';
 import { taskCompletionSchema } from '@/lib/schemas/tasks';
 import { logger } from '@/lib/logger';
 
@@ -58,24 +59,16 @@ export const POST = withAdmin<RouteParams>(async (
     // - Marking one-time tasks as completed
     // - Resolving attention flags
     // - Completing pending requests
-    const completionResult = await query<{ id: string }>(
-      `INSERT INTO ${TABLE_NAMES.TASK_COMPLETIONS} (
-        task_id,
-        completed_by,
-        completed_at,
-        notes,
-        duration_minutes
-      ) VALUES ($1, $2, NOW(), $3, $4)
-      RETURNING *`,
-      [
+    const [completion] = await db
+      .insert(taskCompletions)
+      .values({
         taskId,
-        dbUserId,
-        data.notes || null,
-        data.duration_minutes || null,
-      ]
-    );
-
-    const completion = completionResult.rows[0];
+        completedBy: dbUserId,
+        completedAt: sql`NOW()`,
+        notes: data.notes || undefined,
+        durationMinutes: data.duration_minutes || undefined,
+      })
+      .returning()
 
     logger.info('Task completed', {
       taskId,

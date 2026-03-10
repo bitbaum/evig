@@ -10,8 +10,9 @@ import { NextRequest } from 'next/server';
 import { z } from 'zod';
 import { withAdmin, ValidSession } from '@/lib/api/middleware';
 import { apiSuccess, apiError, apiBadRequest } from '@/lib/api/helpers';
-import { query } from '@/lib/auth/db';
-import { TABLE_NAMES } from '@/config/database';
+import { db } from '@/db';
+import { tasks, taskCompletions, taskRequests, taskAttentionFlags, users } from '@/db/schema';
+import { eq, sql } from 'drizzle-orm';
 import { TASK_STATUSES, REQUEST_STATUSES } from '@/config/tasks';
 import { logger } from '@/lib/logger';
 
@@ -33,113 +34,101 @@ export const GET = withAdmin(async (request: NextRequest, session: ValidSession)
     }
     const { days } = parsed.data;
 
-    // Overall stats
-    const statsResult = await query(`
-      SELECT
-        COUNT(*) FILTER (WHERE NOT is_archived) as total_active,
-        COUNT(*) FILTER (WHERE current_status = '${TASK_STATUSES.NEEDS_ATTENTION}' AND NOT is_archived) as needs_attention,
-        COUNT(*) FILTER (WHERE current_status = '${TASK_STATUSES.REQUESTED}' AND NOT is_archived) as requested,
-        COUNT(*) FILTER (WHERE current_status = '${TASK_STATUSES.IN_PROGRESS}' AND NOT is_archived) as in_progress,
-        COUNT(*) FILTER (WHERE is_completed AND NOT is_archived) as completed_one_time
-      FROM ${TABLE_NAMES.TASKS}
-    `);
+    // Run all queries in parallel
+    const [
+      [statsRow],
+      [completionsRow],
+      [todayRow],
+      [weekRow],
+      byCategoryRows,
+      contributionRows,
+      [pendingRow],
+      [flagsRow],
+    ] = await Promise.all([
+      // Overall stats
+      db
+        .select({
+          total_active: sql<string>`COUNT(*) FILTER (WHERE NOT ${tasks.isArchived})`,
+          needs_attention: sql<string>`COUNT(*) FILTER (WHERE ${tasks.currentStatus} = ${TASK_STATUSES.NEEDS_ATTENTION} AND NOT ${tasks.isArchived})`,
+          requested: sql<string>`COUNT(*) FILTER (WHERE ${tasks.currentStatus} = ${TASK_STATUSES.REQUESTED} AND NOT ${tasks.isArchived})`,
+          in_progress: sql<string>`COUNT(*) FILTER (WHERE ${tasks.currentStatus} = ${TASK_STATUSES.IN_PROGRESS} AND NOT ${tasks.isArchived})`,
+          completed_one_time: sql<string>`COUNT(*) FILTER (WHERE ${tasks.isCompleted} AND NOT ${tasks.isArchived})`,
+        })
+        .from(tasks),
 
-    // Completions in timeframe
-    const completionsResult = await query(`
-      SELECT
-        COUNT(*) as total_completions,
-        COUNT(DISTINCT completed_by) as unique_completers,
-        COALESCE(AVG(duration_minutes), 0)::int as avg_duration
-      FROM ${TABLE_NAMES.TASK_COMPLETIONS}
-      WHERE completed_at > NOW() - INTERVAL '1 day' * $1
-    `, [days]);
+      // Completions in timeframe
+      db
+        .select({
+          total_completions: sql<string>`COUNT(*)`,
+          unique_completers: sql<string>`COUNT(DISTINCT ${taskCompletions.completedBy})`,
+          avg_duration: sql<string>`COALESCE(AVG(${taskCompletions.durationMinutes}), 0)::int`,
+        })
+        .from(taskCompletions)
+        .where(sql`${taskCompletions.completedAt} > NOW() - INTERVAL '1 day' * ${days}`),
 
-    // Completions today
-    const todayResult = await query(`
-      SELECT COUNT(*) as completed_today
-      FROM ${TABLE_NAMES.TASK_COMPLETIONS}
-      WHERE DATE(completed_at) = CURRENT_DATE
-    `);
+      // Completions today
+      db
+        .select({ completed_today: sql<string>`COUNT(*)` })
+        .from(taskCompletions)
+        .where(sql`DATE(${taskCompletions.completedAt}) = CURRENT_DATE`),
 
-    // Completions this week
-    const weekResult = await query(`
-      SELECT COUNT(*) as completed_this_week
-      FROM ${TABLE_NAMES.TASK_COMPLETIONS}
-      WHERE completed_at > NOW() - INTERVAL '7 days'
-    `);
+      // Completions this week
+      db
+        .select({ completed_this_week: sql<string>`COUNT(*)` })
+        .from(taskCompletions)
+        .where(sql`${taskCompletions.completedAt} > NOW() - INTERVAL '7 days'`),
 
-    // By category
-    const byCategoryResult = await query(`
-      SELECT
-        t.category,
-        COUNT(*) FILTER (WHERE NOT t.is_archived) as task_count,
-        COUNT(tc.id) as completion_count
-      FROM ${TABLE_NAMES.TASKS} t
-      LEFT JOIN ${TABLE_NAMES.TASK_COMPLETIONS} tc ON tc.task_id = t.id
-        AND tc.completed_at > NOW() - INTERVAL '1 day' * $1
-      GROUP BY t.category
-      ORDER BY completion_count DESC
-    `, [days]);
+      // By category
+      db
+        .select({
+          category: tasks.category,
+          task_count: sql<string>`COUNT(*) FILTER (WHERE NOT ${tasks.isArchived})`,
+          completion_count: sql<string>`COUNT(${taskCompletions.id})`,
+        })
+        .from(tasks)
+        .leftJoin(taskCompletions, sql`${taskCompletions.taskId} = ${tasks.id} AND ${taskCompletions.completedAt} > NOW() - INTERVAL '1 day' * ${days}`)
+        .groupBy(tasks.category)
+        .orderBy(sql`COUNT(${taskCompletions.id}) DESC`),
 
-    // Contributions per person (fairness metric)
-    const contributionsResult = await query(`
-      SELECT
-        u.id as user_id,
-        u.name as user_name,
-        u.email as user_email,
-        COUNT(tc.id) as completion_count,
-        COUNT(DISTINCT tc.task_id) as unique_tasks_completed
-      FROM ${TABLE_NAMES.USERS} u
-      LEFT JOIN ${TABLE_NAMES.TASK_COMPLETIONS} tc ON tc.completed_by = u.id
-        AND tc.completed_at > NOW() - INTERVAL '1 day' * $1
-      WHERE u.is_staff = true OR EXISTS (
-        SELECT 1 FROM ${TABLE_NAMES.TASK_COMPLETIONS} tc2
-        WHERE tc2.completed_by = u.id
-      )
-      GROUP BY u.id, u.name, u.email
-      HAVING COUNT(tc.id) > 0 OR u.is_staff = true
-      ORDER BY completion_count DESC
-    `, [days]);
+      // Contributions per person (fairness metric)
+      db
+        .select({
+          user_id: users.id,
+          user_name: users.name,
+          user_email: users.email,
+          completion_count: sql<string>`COUNT(${taskCompletions.id})`,
+          unique_tasks_completed: sql<string>`COUNT(DISTINCT ${taskCompletions.taskId})`,
+        })
+        .from(users)
+        .leftJoin(taskCompletions, sql`${taskCompletions.completedBy} = ${users.id} AND ${taskCompletions.completedAt} > NOW() - INTERVAL '1 day' * ${days}`)
+        .where(sql`${users.isStaff} = true OR EXISTS (
+          SELECT 1 FROM ${taskCompletions} tc2
+          WHERE tc2.completed_by = ${users.id}
+        )`)
+        .groupBy(users.id, users.name, users.email)
+        .having(sql`COUNT(${taskCompletions.id}) > 0 OR ${users.isStaff} = true`)
+        .orderBy(sql`COUNT(${taskCompletions.id}) DESC`),
 
-    // Pending requests count
-    const pendingRequestsResult = await query(`
-      SELECT COUNT(*) as pending_requests
-      FROM ${TABLE_NAMES.TASK_REQUESTS}
-      WHERE status = '${REQUEST_STATUSES.PENDING}'
-    `);
+      // Pending requests count
+      db
+        .select({ pending_requests: sql<string>`COUNT(*)` })
+        .from(taskRequests)
+        .where(eq(taskRequests.status, REQUEST_STATUSES.PENDING)),
 
-    // Active attention flags
-    const attentionFlagsResult = await query(`
-      SELECT COUNT(*) as active_flags
-      FROM ${TABLE_NAMES.TASK_ATTENTION_FLAGS}
-      WHERE is_resolved = false
-    `);
+      // Active attention flags
+      db
+        .select({ active_flags: sql<string>`COUNT(*)` })
+        .from(taskAttentionFlags)
+        .where(eq(taskAttentionFlags.isResolved, false)),
+    ]);
 
     logger.info('Task analytics fetched', {
       userId: session.user.id,
       days
     });
 
-    interface StatsRow {
-      total_active: string;
-      needs_attention: string;
-      requested: string;
-      in_progress: string;
-      completed_one_time: string;
-    }
-
-    interface CompletionsRow {
-      total_completions: string;
-      unique_completers: string;
-      avg_duration: string;
-    }
-
-    const stats = (statsResult.rows[0] || {}) as StatsRow;
-    const completions = (completionsResult.rows[0] || {}) as CompletionsRow;
-    const todayRow = (todayResult.rows[0] || { completed_today: '0' }) as { completed_today: string };
-    const weekRow = (weekResult.rows[0] || { completed_this_week: '0' }) as { completed_this_week: string };
-    const pendingRow = (pendingRequestsResult.rows[0] || { pending_requests: '0' }) as { pending_requests: string };
-    const flagsRow = (attentionFlagsResult.rows[0] || { active_flags: '0' }) as { active_flags: string };
+    const stats = statsRow || { total_active: '0', needs_attention: '0', requested: '0', in_progress: '0', completed_one_time: '0' };
+    const completions = completionsRow || { total_completions: '0', unique_completers: '0', avg_duration: '0' };
 
     return apiSuccess({
       overview: {
@@ -151,13 +140,13 @@ export const GET = withAdmin(async (request: NextRequest, session: ValidSession)
         total_completions: parseInt(completions.total_completions || '0', 10),
         unique_completers: parseInt(completions.unique_completers || '0', 10),
         avg_duration: parseInt(completions.avg_duration || '0', 10),
-        completed_today: parseInt(todayRow.completed_today || '0', 10),
-        completed_this_week: parseInt(weekRow.completed_this_week || '0', 10),
-        pending_requests: parseInt(pendingRow.pending_requests || '0', 10),
-        active_attention_flags: parseInt(flagsRow.active_flags || '0', 10),
+        completed_today: parseInt(todayRow?.completed_today || '0', 10),
+        completed_this_week: parseInt(weekRow?.completed_this_week || '0', 10),
+        pending_requests: parseInt(pendingRow?.pending_requests || '0', 10),
+        active_attention_flags: parseInt(flagsRow?.active_flags || '0', 10),
       },
-      by_category: byCategoryResult.rows,
-      contributions: contributionsResult.rows,
+      by_category: byCategoryRows,
+      contributions: contributionRows,
       timeframe_days: days,
     });
   } catch (error) {
