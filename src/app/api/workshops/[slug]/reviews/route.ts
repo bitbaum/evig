@@ -1,22 +1,9 @@
 import { NextRequest } from 'next/server'
-import { query } from '@/lib/auth/db'
+import { db } from '@/db'
+import { workshops, workshopRegistrations, workshopInstances, users } from '@/db/schema'
+import { eq, and, isNotNull, ne, sql, desc } from 'drizzle-orm'
 import { apiError, apiSuccess, apiNotFound } from '@/lib/api/helpers'
 import { logger } from '@/lib/logger'
-import { TABLE_NAMES } from '@/config/database'
-
-interface ReviewRow {
-  id: string
-  user_name: string
-  rating: number
-  feedback: string
-  created_at: string
-  instance_date: string
-}
-
-interface StatsRow {
-  average_rating: string
-  review_count: string
-}
 
 // GET /api/workshops/[slug]/reviews - Get reviews for a workshop
 export async function GET(
@@ -26,57 +13,58 @@ export async function GET(
   try {
     const { slug } = await params
 
-    // First get the workshop ID
-    const workshopResult = await query(
-      `SELECT id FROM ${TABLE_NAMES.WORKSHOPS} WHERE slug = $1`,
-      [slug]
-    )
+    // Get the workshop ID
+    const [workshop] = await db
+      .select({ id: workshops.id })
+      .from(workshops)
+      .where(eq(workshops.slug, slug))
 
-    if (workshopResult.rows.length === 0) {
+    if (!workshop) {
       return apiNotFound('Workshop')
     }
 
-    const workshopId = (workshopResult.rows[0] as { id: string }).id
+    // Get reviews with user names + stats in parallel
+    const [reviews, [statsRow]] = await Promise.all([
+      db
+        .select({
+          id: workshopRegistrations.id,
+          user_name: sql<string>`COALESCE(${users.name}, 'Anonym')`,
+          rating: workshopRegistrations.rating,
+          feedback: workshopRegistrations.feedback,
+          created_at: workshopRegistrations.createdAt,
+          instance_date: workshopInstances.startDate,
+        })
+        .from(workshopRegistrations)
+        .innerJoin(workshopInstances, eq(workshopRegistrations.workshopInstanceId, workshopInstances.id))
+        .innerJoin(users, eq(workshopRegistrations.userId, users.id))
+        .where(and(
+          eq(workshopInstances.workshopId, workshop.id),
+          isNotNull(workshopRegistrations.rating),
+          isNotNull(workshopRegistrations.feedback),
+          ne(workshopRegistrations.feedback, ''),
+        ))
+        .orderBy(desc(workshopRegistrations.createdAt))
+        .limit(20),
 
-    // Get reviews with user names
-    const reviewsResult = await query(`
-      SELECT
-        wr.id,
-        COALESCE(u.name, 'Anonym') as user_name,
-        wr.rating,
-        wr.feedback,
-        wr.created_at,
-        wi.start_date as instance_date
-      FROM ${TABLE_NAMES.WORKSHOP_REGISTRATIONS} wr
-      JOIN ${TABLE_NAMES.WORKSHOP_INSTANCES} wi ON wr.workshop_instance_id = wi.id
-      JOIN ${TABLE_NAMES.USERS} u ON wr.user_id = u.id
-      WHERE wi.workshop_id = $1
-        AND wr.rating IS NOT NULL
-        AND wr.feedback IS NOT NULL
-        AND wr.feedback != ''
-      ORDER BY wr.created_at DESC
-      LIMIT 20
-    `, [workshopId])
-
-    // Get average rating and review count
-    const statsResult = await query(`
-      SELECT
-        ROUND(AVG(wr.rating)::numeric, 1) as average_rating,
-        COUNT(wr.id) as review_count
-      FROM ${TABLE_NAMES.WORKSHOP_REGISTRATIONS} wr
-      JOIN ${TABLE_NAMES.WORKSHOP_INSTANCES} wi ON wr.workshop_instance_id = wi.id
-      WHERE wi.workshop_id = $1
-        AND wr.rating IS NOT NULL
-    `, [workshopId])
-
-    const stats = statsResult.rows[0] as StatsRow
+      db
+        .select({
+          average_rating: sql<string>`ROUND(AVG(${workshopRegistrations.rating})::numeric, 1)`,
+          review_count: sql<string>`COUNT(${workshopRegistrations.id})`,
+        })
+        .from(workshopRegistrations)
+        .innerJoin(workshopInstances, eq(workshopRegistrations.workshopInstanceId, workshopInstances.id))
+        .where(and(
+          eq(workshopInstances.workshopId, workshop.id),
+          isNotNull(workshopRegistrations.rating),
+        )),
+    ])
 
     return apiSuccess({
-      reviews: reviewsResult.rows as ReviewRow[],
+      reviews,
       stats: {
-        averageRating: parseFloat(stats.average_rating) || 0,
-        reviewCount: parseInt(stats.review_count) || 0
-      }
+        averageRating: parseFloat(statsRow?.average_rating || '0') || 0,
+        reviewCount: parseInt(statsRow?.review_count || '0') || 0,
+      },
     })
 
   } catch (error) {

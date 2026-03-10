@@ -18,8 +18,9 @@ import { auth } from '@/auth'
 import { checkRateLimit, getClientIp } from '@/lib/auth/rate-limiter'
 import { sendEmail } from '@/lib/email'
 import { APP_URL } from '@/config/urls'
-import { query } from '@/lib/auth/db'
-import { TABLE_NAMES } from '@/config/database'
+import { db } from '@/db'
+import { blogCategories, blogSubmissions, users } from '@/db/schema'
+import { eq, or, and, isNotNull } from 'drizzle-orm'
 
 function generateSlug(title: string): string {
   return title
@@ -61,37 +62,37 @@ export async function POST(request: NextRequest) {
     const slug = generateSlug(data.title)
 
     // Look up category by name if provided
-    let categoryId = null
+    let categoryId: string | null = null
     if (data.category) {
-      const categoryResult = await query<{ id: string }>(
-        `SELECT id FROM ${TABLE_NAMES.BLOG_CATEGORIES} WHERE name = $1 OR slug = $1`,
-        [data.category]
-      )
-      categoryId = categoryResult.rows[0]?.id || null
+      const [category] = await db
+        .select({ id: blogCategories.id })
+        .from(blogCategories)
+        .where(or(
+          eq(blogCategories.name, data.category),
+          eq(blogCategories.slug, data.category),
+        ))
+      categoryId = category?.id || null
     }
 
     // Insert submission into database
-    const result = await query<{ id: string }>(
-      `INSERT INTO ${TABLE_NAMES.BLOG_SUBMISSIONS}
-       (submitter_name, submitter_email, user_id, title, slug, content,
-        submission_type, category_id, category_name, tags, status)
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, 'pending')
-       RETURNING id`,
-      [
-        data.name,
-        data.email,
+    const [inserted] = await db
+      .insert(blogSubmissions)
+      .values({
+        submitterName: data.name,
+        submitterEmail: data.email,
         userId,
-        data.title,
+        title: data.title,
         slug,
-        data.content,
-        data.submissionType,
+        content: data.content,
+        submissionType: data.submissionType,
         categoryId,
-        data.category || null,
-        data.tags,
-      ]
-    )
+        categoryName: data.category || null,
+        tags: data.tags,
+        status: 'pending',
+      })
+      .returning({ id: blogSubmissions.id })
 
-    const submissionId = result.rows[0].id
+    const submissionId = inserted.id
 
     logger.info('Blog submission created', {
       submissionId,
@@ -121,20 +122,24 @@ export async function POST(request: NextRequest) {
 
     // Send notification email to admins (staff users)
     try {
-      const adminEmailsResult = await query<{ email: string }>(
-        `SELECT email FROM ${TABLE_NAMES.USERS} WHERE is_staff = true AND email IS NOT NULL`
-      )
+      const adminRows = await db
+        .select({ email: users.email })
+        .from(users)
+        .where(and(eq(users.isStaff, true), isNotNull(users.email)))
+
       const adminDashboardUrl = `${APP_URL}/admin/content/submissions`
 
-      for (const admin of adminEmailsResult.rows) {
-        await sendEmail(
-          admin.email,
-          'adminNewBlogSubmission',
-          data.name,
-          data.email,
-          data.title,
-          adminDashboardUrl
-        )
+      for (const admin of adminRows) {
+        if (admin.email) {
+          await sendEmail(
+            admin.email,
+            'adminNewBlogSubmission',
+            data.name,
+            data.email,
+            data.title,
+            adminDashboardUrl
+          )
+        }
       }
     } catch (adminEmailError) {
       logger.warn('Failed to send blog submission admin notification', {

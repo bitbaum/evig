@@ -7,9 +7,10 @@
 
 import { NextRequest } from 'next/server'
 import { apiSuccess, apiError, apiNotFound } from '@/lib/api/helpers'
-import { query } from '@/lib/auth/db'
+import { db } from '@/db'
+import { aiExtractedProducts, inventoryItems, productCustomerProfiles, customerProfiles, productImages } from '@/db/schema'
+import { eq, desc } from 'drizzle-orm'
 import { logger } from '@/lib/logger'
-import { TABLE_NAMES } from '@/config/database'
 
 export async function GET(
   request: NextRequest,
@@ -18,85 +19,62 @@ export async function GET(
   try {
     const { id: productId } = await params
 
-    // Fetch published product with inventory data
-    const productResult = await query<{
-      id: string
-      item_uuid: string
-      product_name: string
-      brand: string
-      short_description: string | null
-      specifications: Record<string, string>
-      estimated_price_chf: number
-      condition: string
-      dimensions: Record<string, number | null>
-      weight_grams: number | null
-      category: string | null
-      subcategory: string | null
-      quantity_available: number
-      marketplace_status: string
-      status: string
-      created_at: string
-    }>(
-      `SELECT
-        p.id,
-        p.item_uuid,
-        p.product_name,
-        p.brand,
-        p.short_description,
-        p.specifications,
-        p.estimated_price_chf,
-        p.condition,
-        p.dimensions,
-        p.weight_grams,
-        p.category,
-        p.subcategory,
-        p.created_at,
-        i.quantity_available,
-        i.marketplace_status,
-        p.status
-      FROM ${TABLE_NAMES.AI_EXTRACTED_PRODUCTS} p
-      JOIN ${TABLE_NAMES.INVENTORY_ITEMS} i ON i.ai_product_id = p.id
-      WHERE p.id = $1`,
-      [productId]
-    )
+    // Fetch product with inventory data, customer profiles, and images in parallel
+    const [[product], profiles, images] = await Promise.all([
+      db
+        .select({
+          id: aiExtractedProducts.id,
+          item_uuid: aiExtractedProducts.itemUuid,
+          product_name: aiExtractedProducts.productName,
+          brand: aiExtractedProducts.brand,
+          short_description: aiExtractedProducts.shortDescription,
+          specifications: aiExtractedProducts.specifications,
+          estimated_price_chf: aiExtractedProducts.estimatedPriceChf,
+          condition: aiExtractedProducts.condition,
+          dimensions: aiExtractedProducts.dimensions,
+          weight_grams: aiExtractedProducts.weightGrams,
+          category: aiExtractedProducts.category,
+          subcategory: aiExtractedProducts.subcategory,
+          created_at: aiExtractedProducts.createdAt,
+          quantity_available: inventoryItems.quantityAvailable,
+          marketplace_status: inventoryItems.marketplaceStatus,
+          status: aiExtractedProducts.status,
+        })
+        .from(aiExtractedProducts)
+        .innerJoin(inventoryItems, eq(inventoryItems.aiProductId, aiExtractedProducts.id))
+        .where(eq(aiExtractedProducts.id, productId)),
 
-    if (productResult.rows.length === 0) {
+      db
+        .select({
+          slug: customerProfiles.slug,
+          name_de: customerProfiles.nameDe,
+          color: customerProfiles.color,
+          description_de: customerProfiles.descriptionDe,
+        })
+        .from(productCustomerProfiles)
+        .innerJoin(customerProfiles, eq(customerProfiles.id, productCustomerProfiles.profileId))
+        .where(eq(productCustomerProfiles.productId, productId)),
+
+      db
+        .select({
+          id: productImages.id,
+          file_path: productImages.filePath,
+          is_primary: productImages.isPrimary,
+        })
+        .from(productImages)
+        .where(eq(productImages.productId, productId))
+        .orderBy(desc(productImages.isPrimary)),
+    ])
+
+    if (!product) {
       return apiNotFound('Produkt nicht gefunden')
     }
 
-    const product = productResult.rows[0]
-
-    // Check if product is published
     if (product.marketplace_status !== 'published' || product.status !== 'approved') {
       return apiNotFound('Produkt nicht verfügbar')
     }
 
-    // Fetch customer profiles
-    const profilesResult = await query<{
-      slug: string
-      name_de: string
-      color: string
-      description_de: string
-    }>(
-      `SELECT cp.slug, cp.name_de, cp.color, cp.description_de
-       FROM ${TABLE_NAMES.PRODUCT_CUSTOMER_PROFILES} pcp
-       JOIN ${TABLE_NAMES.CUSTOMER_PROFILES} cp ON cp.id = pcp.profile_id
-       WHERE pcp.product_id = $1`,
-      [productId]
-    )
-
-    // Fetch product images
-    const imagesResult = await query<{
-      id: string
-      file_path: string
-      is_primary: boolean
-    }>(
-      `SELECT id, file_path, is_primary
-       FROM ${TABLE_NAMES.PRODUCT_IMAGES}
-       WHERE product_id = $1
-       ORDER BY is_primary DESC`,
-      [productId]
-    )
+    const quantityAvailable = Number(product.quantity_available ?? 0)
 
     const result = {
       id: product.id,
@@ -112,14 +90,14 @@ export async function GET(
       weight_grams: product.weight_grams,
       category: product.category,
       subcategory: product.subcategory,
-      quantity: product.quantity_available,
-      is_available: product.quantity_available > 0,
-      images: imagesResult.rows.map(img => ({
+      quantity: quantityAvailable,
+      is_available: quantityAvailable > 0,
+      images: images.map(img => ({
         id: img.id,
         url: img.file_path,
         is_primary: img.is_primary,
       })),
-      customer_profiles: profilesResult.rows,
+      customer_profiles: profiles,
       created_at: product.created_at,
     }
 

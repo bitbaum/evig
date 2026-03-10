@@ -1,10 +1,8 @@
 import { NextRequest } from 'next/server'
 import { db } from '@/db'
 import { serviceAppointments, serviceTypes, users, repairerProfiles } from '@/db/schema'
-import { eq } from 'drizzle-orm'
+import { eq, and, isNull, sql } from 'drizzle-orm'
 import { alias } from 'drizzle-orm/pg-core'
-import { query } from '@/lib/auth/db'
-import { TABLE_NAMES } from '@/config/database'
 import { apiError, apiSuccess, apiBadRequest, apiNotFound, apiForbidden } from '@/lib/api/helpers'
 import { withAuth, ValidSession } from '@/lib/api/middleware'
 import { ERROR_MESSAGES } from '@/config/error-messages'
@@ -97,7 +95,9 @@ export const GET = withAuth<{ id: string }>(async (
 })
 
 // PATCH /api/appointments/[id] - Update appointment status
-// Kept as raw SQL due to complex dynamic field building per action type
+const customerAlias = alias(users, 'customer_notify')
+const repairerAlias = alias(users, 'repairer_notify')
+
 export const PATCH = withAuth<{ id: string }>(async (
   request: NextRequest,
   session: ValidSession,
@@ -116,28 +116,30 @@ export const PATCH = withAuth<{ id: string }>(async (
     const { action } = actionData
 
     // Get current appointment
-    const currentResult = await query(
-      'SELECT id, user_id, repairer_id, status FROM ' + TABLE_NAMES.SERVICE_APPOINTMENTS + ' WHERE id = $1',
-      [appointmentId]
-    )
+    const [appointment] = await db
+      .select({
+        id: serviceAppointments.id,
+        userId: serviceAppointments.userId,
+        repairerId: serviceAppointments.repairerId,
+        status: serviceAppointments.status,
+      })
+      .from(serviceAppointments)
+      .where(eq(serviceAppointments.id, appointmentId))
 
-    if (currentResult.rows.length === 0) {
+    if (!appointment) {
       return apiNotFound('Termin nicht gefunden')
     }
 
-    const appointment = currentResult.rows[0] as { id: string; user_id: string; repairer_id: string; status: string }
-    const isCustomer = appointment.user_id === session.user.id
-    const isRepairer = appointment.repairer_id === session.user.id
+    const isCustomer = appointment.userId === session.user.id
+    const isRepairer = appointment.repairerId === session.user.id
 
     if (!isCustomer && !isRepairer) {
       return apiForbidden('Kein Zugriff auf diesen Termin')
     }
 
-    // Validate action based on role
+    // Build dynamic update set based on action
     let newStatus: string | null = null
-    const updates: string[] = []
-    const updateParams: (string | number | null)[] = []
-    let paramIndex = 1
+    const updateSet: Record<string, unknown> = {}
 
     switch (action) {
       case 'accept':
@@ -154,15 +156,13 @@ export const PATCH = withAuth<{ id: string }>(async (
 
       case 'quote':
         if (!isRepairer) return apiForbidden('Nur der Reparateur kann Angebote erstellen')
-        if (!([BOOKING_STATUS.ACCEPTED, BOOKING_STATUS.QUOTE_REJECTED] as string[]).includes(appointment.status)) {
+        if (!([BOOKING_STATUS.ACCEPTED, BOOKING_STATUS.QUOTE_REJECTED] as string[]).includes(appointment.status!)) {
           return apiBadRequest('Angebot kann in diesem Status nicht erstellt werden')
         }
         newStatus = BOOKING_STATUS.QUOTED
-        updates.push('quoted_price_chf = $' + paramIndex++)
-        updateParams.push(actionData.quoted_price_chf)
+        updateSet.quotedPriceChf = actionData.quoted_price_chf
         if (actionData.diagnosis_notes) {
-          updates.push('diagnosis_notes = $' + paramIndex++)
-          updateParams.push(actionData.diagnosis_notes)
+          updateSet.diagnosisNotes = actionData.diagnosis_notes
         }
         break
 
@@ -170,8 +170,8 @@ export const PATCH = withAuth<{ id: string }>(async (
         if (!isCustomer) return apiForbidden('Nur der Kunde kann Angebote bestätigen')
         if (appointment.status !== BOOKING_STATUS.QUOTED) return apiBadRequest('Kein Angebot zum Bestätigen')
         newStatus = BOOKING_STATUS.QUOTE_APPROVED
-        updates.push('quote_approved = true')
-        updates.push('quote_approved_at = CURRENT_TIMESTAMP')
+        updateSet.quoteApproved = true
+        updateSet.quoteApprovedAt = sql`CURRENT_TIMESTAMP`
         break
 
       case 'reject_quote':
@@ -182,13 +182,12 @@ export const PATCH = withAuth<{ id: string }>(async (
 
       case 'start':
         if (!isRepairer) return apiForbidden('Nur der Reparateur kann starten')
-        if (!([BOOKING_STATUS.ACCEPTED, BOOKING_STATUS.QUOTE_APPROVED] as string[]).includes(appointment.status)) {
+        if (!([BOOKING_STATUS.ACCEPTED, BOOKING_STATUS.QUOTE_APPROVED] as string[]).includes(appointment.status!)) {
           return apiBadRequest('Termin kann nicht gestartet werden')
         }
         newStatus = BOOKING_STATUS.IN_PROGRESS
         if (actionData.confirmed_date) {
-          updates.push('confirmed_date = $' + paramIndex++)
-          updateParams.push(actionData.confirmed_date)
+          updateSet.confirmedDate = actionData.confirmed_date
         }
         break
 
@@ -196,10 +195,9 @@ export const PATCH = withAuth<{ id: string }>(async (
         if (!isRepairer) return apiForbidden('Nur der Reparateur kann abschliessen')
         if (appointment.status !== BOOKING_STATUS.IN_PROGRESS) return apiBadRequest('Termin ist nicht in Bearbeitung')
         newStatus = BOOKING_STATUS.COMPLETED
-        updates.push('completed_at = CURRENT_TIMESTAMP')
+        updateSet.completedAt = sql`CURRENT_TIMESTAMP`
         if (actionData.completion_notes) {
-          updates.push('completion_notes = $' + paramIndex++)
-          updateParams.push(actionData.completion_notes)
+          updateSet.completionNotes = actionData.completion_notes
         }
         break
 
@@ -207,28 +205,24 @@ export const PATCH = withAuth<{ id: string }>(async (
         if (!isCustomer) return apiForbidden('Nur der Kunde kann Angaben bearbeiten')
         if (appointment.status !== BOOKING_STATUS.REQUESTED) return apiBadRequest('Angaben können nur im Status "Angefragt" bearbeitet werden')
         if (actionData.description) {
-          updates.push('description = $' + paramIndex++)
-          updateParams.push(actionData.description)
+          updateSet.description = actionData.description
         }
         if (actionData.preferred_date) {
-          updates.push('preferred_date = $' + paramIndex++)
-          updateParams.push(actionData.preferred_date)
+          updateSet.preferredDate = actionData.preferred_date
         }
         break
 
       case 'rate':
         if (!isCustomer) return apiForbidden('Nur der Kunde kann bewerten')
         if (appointment.status !== BOOKING_STATUS.COMPLETED) return apiBadRequest('Nur abgeschlossene Termine können bewertet werden')
-        updates.push('customer_rating = $' + paramIndex++)
-        updateParams.push(actionData.customer_rating)
+        updateSet.customerRating = actionData.customer_rating
         if (actionData.customer_review) {
-          updates.push('customer_review = $' + paramIndex++)
-          updateParams.push(actionData.customer_review)
+          updateSet.customerReview = actionData.customer_review
         }
         break
 
       case 'cancel':
-        if (!([BOOKING_STATUS.REQUESTED, BOOKING_STATUS.ACCEPTED, BOOKING_STATUS.QUOTED, BOOKING_STATUS.QUOTE_APPROVED] as string[]).includes(appointment.status)) {
+        if (!([BOOKING_STATUS.REQUESTED, BOOKING_STATUS.ACCEPTED, BOOKING_STATUS.QUOTED, BOOKING_STATUS.QUOTE_APPROVED] as string[]).includes(appointment.status!)) {
           return apiBadRequest('Termin kann nicht mehr storniert werden')
         }
         newStatus = BOOKING_STATUS.CANCELLED
@@ -238,25 +232,24 @@ export const PATCH = withAuth<{ id: string }>(async (
         return apiBadRequest('Ungültige Aktion: ' + action)
     }
 
-    // Build update query
     if (newStatus) {
-      updates.push('status = $' + paramIndex++)
-      updateParams.push(newStatus)
+      updateSet.status = newStatus
     }
-    updates.push('updated_at = CURRENT_TIMESTAMP')
-    updateParams.push(appointmentId)
+    updateSet.updatedAt = sql`CURRENT_TIMESTAMP`
 
-    let whereClause = 'WHERE id = $' + paramIndex
+    // For 'rate' action, add extra WHERE condition to prevent double-rating
+    const conditions = [eq(serviceAppointments.id, appointmentId)]
     if (action === 'rate') {
-      whereClause += ' AND customer_rating IS NULL'
+      conditions.push(isNull(serviceAppointments.customerRating))
     }
 
-    const updateQuery = 'UPDATE ' + TABLE_NAMES.SERVICE_APPOINTMENTS + ' SET ' +
-      updates.join(', ') + ' ' + whereClause + ' RETURNING *'
+    const [updated] = await db
+      .update(serviceAppointments)
+      .set(updateSet)
+      .where(and(...conditions))
+      .returning()
 
-    const updateResult = await query(updateQuery, updateParams)
-
-    if (updateResult.rows.length === 0 && action === 'rate') {
+    if (!updated && action === 'rate') {
       return apiBadRequest('Dieser Termin wurde bereits bewertet')
     }
 
@@ -270,58 +263,56 @@ export const PATCH = withAuth<{ id: string }>(async (
 
     // Fire-and-forget email notifications
     if (newStatus && action !== 'update') {
-      const partyResult = await query(
-        'SELECT c.name as customer_name, c.email as customer_email, ' +
-        'r.name as repairer_name, r.email as repairer_email, ' +
-        'st.name as service_name ' +
-        'FROM ' + TABLE_NAMES.SERVICE_APPOINTMENTS + ' sa ' +
-        'LEFT JOIN ' + TABLE_NAMES.USERS + ' c ON sa.user_id = c.id ' +
-        'LEFT JOIN ' + TABLE_NAMES.USERS + ' r ON sa.repairer_id = r.id ' +
-        'LEFT JOIN ' + TABLE_NAMES.SERVICE_TYPES + ' st ON sa.service_type_id = st.id ' +
-        'WHERE sa.id = $1',
-        [appointmentId]
-      )
-      if (partyResult.rows.length > 0) {
-        const p = partyResult.rows[0] as {
-          customer_name: string | null; customer_email: string;
-          repairer_name: string | null; repairer_email: string | null;
-          service_name: string | null
-        }
+      const [party] = await db
+        .select({
+          customer_name: customerAlias.name,
+          customer_email: customerAlias.email,
+          repairer_name: repairerAlias.name,
+          repairer_email: repairerAlias.email,
+          service_name: serviceTypes.name,
+        })
+        .from(serviceAppointments)
+        .leftJoin(customerAlias, eq(serviceAppointments.userId, customerAlias.id))
+        .leftJoin(repairerAlias, eq(serviceAppointments.repairerId, repairerAlias.id))
+        .leftJoin(serviceTypes, eq(serviceAppointments.serviceTypeId, serviceTypes.id))
+        .where(eq(serviceAppointments.id, appointmentId))
+
+      if (party) {
         const baseUrl = process.env.NEXT_PUBLIC_URL || 'https://revamp-it.ch'
-        const serviceName = p.service_name || 'Reparatur'
+        const serviceName = party.service_name || 'Reparatur'
         const statusLabel = getBookingStatusLabel(newStatus)
 
-        if (action === 'quote' && p.customer_email) {
+        if (action === 'quote' && party.customer_email) {
           const emailContent = appointmentQuoteReceived(
-            p.customer_name || 'Kunde',
-            p.repairer_name || 'Reparateur',
+            party.customer_name || 'Kunde',
+            party.repairer_name || 'Reparateur',
             actionData.quoted_price_chf,
             actionData.diagnosis_notes || null,
             baseUrl + '/dashboard/bookings/' + appointmentId
           )
-          sendCustomEmail(p.customer_email, emailContent).catch(err => {
+          sendCustomEmail(party.customer_email, emailContent).catch(err => {
             logger.warn('Failed to send quote email', { error: err, appointmentId })
           })
-        } else if (['accept', 'reject', 'start', 'complete'].includes(action) && p.customer_email) {
+        } else if (['accept', 'reject', 'start', 'complete'].includes(action) && party.customer_email) {
           const emailContent = appointmentStatusUpdate(
-            p.customer_name || 'Kunde',
-            p.repairer_name || 'Reparateur',
+            party.customer_name || 'Kunde',
+            party.repairer_name || 'Reparateur',
             statusLabel,
             serviceName,
             baseUrl + '/dashboard/bookings/' + appointmentId
           )
-          sendCustomEmail(p.customer_email, emailContent).catch(err => {
+          sendCustomEmail(party.customer_email, emailContent).catch(err => {
             logger.warn('Failed to send status email to customer', { error: err, appointmentId })
           })
-        } else if (['approve_quote', 'reject_quote', 'cancel'].includes(action) && p.repairer_email) {
+        } else if (['approve_quote', 'reject_quote', 'cancel'].includes(action) && party.repairer_email) {
           const emailContent = appointmentStatusUpdate(
-            p.repairer_name || 'Reparateur',
-            p.customer_name || 'Kunde',
+            party.repairer_name || 'Reparateur',
+            party.customer_name || 'Kunde',
             statusLabel,
             serviceName,
             baseUrl + '/dashboard/repairer/bookings'
           )
-          sendCustomEmail(p.repairer_email, emailContent).catch(err => {
+          sendCustomEmail(party.repairer_email, emailContent).catch(err => {
             logger.warn('Failed to send status email to repairer', { error: err, appointmentId })
           })
         }
@@ -330,7 +321,7 @@ export const PATCH = withAuth<{ id: string }>(async (
 
     return apiSuccess({
       message: 'Termin aktualisiert',
-      appointment: updateResult.rows[0]
+      appointment: updated
     })
 
   } catch (error) {

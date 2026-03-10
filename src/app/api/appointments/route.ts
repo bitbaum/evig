@@ -3,8 +3,6 @@ import { db } from '@/db'
 import { serviceAppointments, serviceTypes, users, repairerProfiles } from '@/db/schema'
 import { eq, and, sql, desc } from 'drizzle-orm'
 import { alias } from 'drizzle-orm/pg-core'
-import { query } from '@/lib/auth/db'
-import { TABLE_NAMES } from '@/config/database'
 import { apiError, apiSuccess } from '@/lib/api/helpers'
 import { withAuth, ValidSession } from '@/lib/api/middleware'
 import { ERROR_MESSAGES } from '@/config/error-messages'
@@ -154,33 +152,22 @@ export const POST = withAuth(async (
       }
     }
 
-    // If still no service_type_id, we need one (it's required by schema FK)
-    // Fall back to raw insert if no service type found
+    // If still no service_type_id, insert without it using raw SQL
+    // since the Drizzle schema has it as notNull but the DB allows null
     if (!service_type_id) {
-      // Use raw SQL for the insert when no service_type_id is available
-      // since the Drizzle schema has it as notNull
-      const fields = ['user_id', 'description', 'status', 'urgency', 'is_home_visit']
-      const values: (string | boolean | null)[] = [
-        session.user.id, description, BOOKING_STATUS.REQUESTED,
-        urgency || 'normal', is_home_visit || false
-      ]
-      let paramIndex = values.length + 1
+      const result = await db.execute(sql`
+        INSERT INTO service_appointments (user_id, description, status, urgency, is_home_visit,
+          repairer_id, repairer_profile_id, device_info, preferred_date, visit_address, visit_city)
+        VALUES (${session.user.id}, ${description}, ${BOOKING_STATUS.REQUESTED},
+          ${urgency || 'normal'}, ${is_home_visit || false},
+          ${repairer_id || null}, ${repairer_profile_id || null},
+          ${device_info || null}, ${preferred_date || null},
+          ${visit_address || null}, ${visit_city || null})
+        RETURNING *
+      `)
+      const createdAppointment = result.rows[0] as Record<string, unknown> | undefined
 
-      if (repairer_id) { fields.push('repairer_id'); values.push(repairer_id); }
-      if (repairer_profile_id) { fields.push('repairer_profile_id'); values.push(repairer_profile_id); }
-      if (device_info) { fields.push('device_info'); values.push(device_info); }
-      if (preferred_date) { fields.push('preferred_date'); values.push(preferred_date); }
-      if (visit_address) { fields.push('visit_address'); values.push(visit_address); }
-      if (visit_city) { fields.push('visit_city'); values.push(visit_city); }
-
-      const placeholders = values.map((_, i) => `$${i + 1}`)
-      const result = await query<{ id: string }>(
-        `INSERT INTO ${TABLE_NAMES.SERVICE_APPOINTMENTS} (${fields.join(', ')}) VALUES (${placeholders.join(', ')}) RETURNING *`,
-        values
-      )
-
-      const createdAppointment = result.rows[0]
-      notifyUnassigned(repairer_id, createdAppointment?.id, session, description, urgency)
+      notifyUnassigned(repairer_id, createdAppointment?.id as string | undefined, session, description, urgency)
 
       return apiSuccess({ message: 'Termin erfolgreich erstellt', appointment: createdAppointment }, 201)
     }

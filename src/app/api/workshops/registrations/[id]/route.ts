@@ -1,9 +1,10 @@
 import { NextRequest } from 'next/server'
 import { auth } from '@/auth'
-import { query } from '@/lib/auth/db'
+import { db } from '@/db'
+import { workshopRegistrations } from '@/db/schema'
+import { eq, and, ne, sql } from 'drizzle-orm'
 import { apiError, apiSuccess, apiUnauthorized, apiBadRequest, apiNotFound } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
-import { TABLE_NAMES } from '@/config/database'
 import { WORKSHOP_REGISTRATION_STATUS } from '@/config/workshop-registration-status'
 
 interface UpdateBody {
@@ -31,48 +32,50 @@ export async function PATCH(
     }
 
     if (body && (body.feedback !== undefined || body.rating !== undefined)) {
-      const updates: string[] = []
-      const paramsArr: unknown[] = []
-      let p = 1
+      const updateSet: Record<string, unknown> = { updatedAt: sql`NOW()` }
 
       if (body.feedback !== undefined) {
-        updates.push(`feedback = $${p++}`)
-        paramsArr.push(String(body.feedback))
+        updateSet.feedback = String(body.feedback)
       }
       if (body.rating !== undefined) {
         const r = Number(body.rating)
         if (!Number.isFinite(r) || r < 1 || r > 5) {
           return apiBadRequest('Ungültige Bewertung (1-5)')
         }
-        updates.push(`rating = $${p++}`)
-        paramsArr.push(Math.round(r))
+        updateSet.rating = Math.round(r)
       }
 
-      paramsArr.push(id, session.user.id)
-      const res = await query(
-        `UPDATE ${TABLE_NAMES.WORKSHOP_REGISTRATIONS}
-         SET ${updates.join(', ')}, updated_at = NOW()
-         WHERE id = $${p++} AND user_id = $${p}
-         RETURNING id`,
-        paramsArr
-      )
+      const result = await db
+        .update(workshopRegistrations)
+        .set(updateSet)
+        .where(and(
+          eq(workshopRegistrations.id, id),
+          eq(workshopRegistrations.userId, session.user.id),
+        ))
+        .returning({ id: workshopRegistrations.id })
 
-      if (res.rowCount === 0) {
+      if (result.length === 0) {
         return apiNotFound('Anmeldung')
       }
       return apiSuccess({})
     }
 
     // Default action: cancel registration if not already cancelled
-    const res = await query(
-      `UPDATE ${TABLE_NAMES.WORKSHOP_REGISTRATIONS}
-       SET status = '${WORKSHOP_REGISTRATION_STATUS.CANCELLED}', cancelled_at = NOW(), updated_at = NOW()
-       WHERE id = $1 AND user_id = $2 AND status != '${WORKSHOP_REGISTRATION_STATUS.CANCELLED}'
-       RETURNING id` ,
-      [id, session.user.id]
-    )
+    const result = await db
+      .update(workshopRegistrations)
+      .set({
+        status: WORKSHOP_REGISTRATION_STATUS.CANCELLED,
+        cancelledAt: sql`NOW()`,
+        updatedAt: sql`NOW()`,
+      })
+      .where(and(
+        eq(workshopRegistrations.id, id),
+        eq(workshopRegistrations.userId, session.user.id),
+        ne(workshopRegistrations.status, WORKSHOP_REGISTRATION_STATUS.CANCELLED),
+      ))
+      .returning({ id: workshopRegistrations.id })
 
-    if (res.rowCount === 0) {
+    if (result.length === 0) {
       return apiBadRequest('Anmeldung nicht gefunden oder bereits storniert')
     }
 

@@ -1,27 +1,11 @@
 import { NextRequest } from 'next/server'
 import { auth } from '@/auth'
-import { query } from '@/lib/auth/db'
+import { db } from '@/db'
+import { workshops, workshopMaterials, workshopRegistrations, workshopInstances } from '@/db/schema'
+import { eq, and, sql, asc, desc, inArray } from 'drizzle-orm'
 import { apiError, apiSuccess, apiNotFound } from '@/lib/api/helpers'
 import { logger } from '@/lib/logger'
-import { TABLE_NAMES } from '@/config/database'
 import { WORKSHOP_REGISTRATION_STATUS } from '@/config/workshop-registration-status'
-
-interface MaterialRow {
-  id: string
-  title: string
-  description: string | null
-  material_type: string
-  url: string
-  file_size_bytes: number | null
-  access_type: string
-  display_order: number
-  created_at: string
-}
-
-interface RegistrationRow {
-  status: string
-  attended: boolean
-}
 
 // GET /api/workshops/[slug]/materials - Get materials for a workshop (respecting access levels)
 export async function GET(
@@ -33,33 +17,34 @@ export async function GET(
     const { slug } = await params
 
     // Get the workshop
-    const workshopResult = await query(
-      `SELECT id, title FROM ${TABLE_NAMES.WORKSHOPS} WHERE slug = $1 AND is_active = true`,
-      [slug]
-    )
+    const [workshop] = await db
+      .select({ id: workshops.id, title: workshops.title })
+      .from(workshops)
+      .where(and(eq(workshops.slug, slug), eq(workshops.isActive, true)))
 
-    if (workshopResult.rows.length === 0) {
+    if (!workshop) {
       return apiNotFound('Workshop')
     }
-
-    const workshop = workshopResult.rows[0] as { id: string; title: string }
 
     // Determine user's access level
     let accessLevel: 'public' | 'registered' | 'attended' = 'public'
 
     if (session?.user?.id) {
-      // Check if user has registered for this workshop
-      const registrationResult = await query(`
-        SELECT wr.status, wr.attended
-        FROM ${TABLE_NAMES.WORKSHOP_REGISTRATIONS} wr
-        JOIN ${TABLE_NAMES.WORKSHOP_INSTANCES} wi ON wr.workshop_instance_id = wi.id
-        WHERE wi.workshop_id = $1 AND wr.user_id = $2
-        ORDER BY wr.created_at DESC
-        LIMIT 1
-      `, [workshop.id, session.user.id])
+      const [registration] = await db
+        .select({
+          status: workshopRegistrations.status,
+          attended: workshopRegistrations.attended,
+        })
+        .from(workshopRegistrations)
+        .innerJoin(workshopInstances, eq(workshopRegistrations.workshopInstanceId, workshopInstances.id))
+        .where(and(
+          eq(workshopInstances.workshopId, workshop.id),
+          eq(workshopRegistrations.userId, session.user.id),
+        ))
+        .orderBy(desc(workshopRegistrations.createdAt))
+        .limit(1)
 
-      if (registrationResult.rows.length > 0) {
-        const registration = registrationResult.rows[0] as RegistrationRow
+      if (registration) {
         if (registration.attended || registration.status === WORKSHOP_REGISTRATION_STATUS.ATTENDED) {
           accessLevel = 'attended'
         } else if (registration.status === WORKSHOP_REGISTRATION_STATUS.CONFIRMED || registration.status === WORKSHOP_REGISTRATION_STATUS.PENDING) {
@@ -68,41 +53,36 @@ export async function GET(
       }
     }
 
-    // Build access conditions based on user's level
-    // attended can see: public, registered, attended
-    // registered can see: public, registered
-    // public can see: public only
-    let accessCondition: string
-    if (accessLevel === 'attended') {
-      accessCondition = "access_type IN ('public', 'registered', 'attended')"
-    } else if (accessLevel === 'registered') {
-      accessCondition = "access_type IN ('public', 'registered')"
-    } else {
-      accessCondition = "access_type = 'public'"
-    }
+    // Build access filter
+    const accessTypes =
+      accessLevel === 'attended' ? ['public', 'registered', 'attended'] :
+      accessLevel === 'registered' ? ['public', 'registered'] :
+      ['public']
 
-    const materialsResult = await query(`
-      SELECT
-        id,
-        title,
-        description,
-        material_type,
-        url,
-        file_size_bytes,
-        access_type,
-        display_order,
-        created_at
-      FROM ${TABLE_NAMES.WORKSHOP_MATERIALS}
-      WHERE workshop_id = $1
-        AND is_active = true
-        AND ${accessCondition}
-      ORDER BY display_order ASC, created_at DESC
-    `, [workshop.id])
+    const rows = await db
+      .select({
+        id: workshopMaterials.id,
+        title: workshopMaterials.title,
+        description: workshopMaterials.description,
+        material_type: workshopMaterials.materialType,
+        url: workshopMaterials.url,
+        file_size_bytes: workshopMaterials.fileSizeBytes,
+        access_type: workshopMaterials.accessType,
+        display_order: workshopMaterials.displayOrder,
+        created_at: workshopMaterials.createdAt,
+      })
+      .from(workshopMaterials)
+      .where(and(
+        eq(workshopMaterials.workshopId, workshop.id),
+        eq(workshopMaterials.isActive, true),
+        inArray(workshopMaterials.accessType, accessTypes),
+      ))
+      .orderBy(asc(workshopMaterials.displayOrder), desc(workshopMaterials.createdAt))
 
     return apiSuccess({
-      materials: materialsResult.rows as MaterialRow[],
+      materials: rows,
       accessLevel,
-      workshopTitle: workshop.title
+      workshopTitle: workshop.title,
     })
 
   } catch (error) {
