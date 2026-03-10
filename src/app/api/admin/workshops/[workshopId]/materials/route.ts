@@ -1,41 +1,36 @@
 import { NextRequest } from 'next/server'
 import { withAdmin } from '@/lib/api/middleware'
-import { query } from '@/lib/auth/db'
+import { db } from '@/db'
+import { workshopMaterials } from '@/db/schema'
+import { eq, asc, desc } from 'drizzle-orm'
 import { apiError, apiSuccess, apiBadRequest } from '@/lib/api/helpers'
 import { logger } from '@/lib/logger'
-import { TABLE_NAMES } from '@/config/database'
-
-interface MaterialRow {
-  id: string
-  workshop_id: string
-  instance_id: string | null
-  title: string
-  description: string | null
-  material_type: string
-  url: string
-  file_size_bytes: number | null
-  access_type: string
-  display_order: number
-  is_active: boolean
-  created_at: string
-}
 
 // GET /api/admin/workshops/[workshopId]/materials - List all materials for a workshop
 export const GET = withAdmin<{ workshopId: string }>('workshops-admin', async (request, session, context) => {
   try {
     const { workshopId } = context!.params!
 
-    const materialsResult = await query(`
-      SELECT id, workshop_id, instance_id, title, description, material_type,
-             url, file_size_bytes, access_type, display_order, is_active, created_at
-      FROM ${TABLE_NAMES.WORKSHOP_MATERIALS}
-      WHERE workshop_id = $1
-      ORDER BY display_order ASC, created_at DESC
-    `, [workshopId])
+    const materials = await db
+      .select({
+        id: workshopMaterials.id,
+        workshop_id: workshopMaterials.workshopId,
+        instance_id: workshopMaterials.instanceId,
+        title: workshopMaterials.title,
+        description: workshopMaterials.description,
+        material_type: workshopMaterials.materialType,
+        url: workshopMaterials.url,
+        file_size_bytes: workshopMaterials.fileSizeBytes,
+        access_type: workshopMaterials.accessType,
+        display_order: workshopMaterials.displayOrder,
+        is_active: workshopMaterials.isActive,
+        created_at: workshopMaterials.createdAt,
+      })
+      .from(workshopMaterials)
+      .where(eq(workshopMaterials.workshopId, workshopId))
+      .orderBy(asc(workshopMaterials.displayOrder), desc(workshopMaterials.createdAt))
 
-    return apiSuccess({
-      materials: materialsResult.rows as MaterialRow[]
-    })
+    return apiSuccess({ materials })
 
   } catch (error) {
     logger.error('Error fetching workshop materials', { error })
@@ -78,41 +73,30 @@ export const POST = withAdmin<{ workshopId: string }>('workshops-admin', async (
       return apiBadRequest(`Invalid access type. Valid types: ${validAccessTypes.join(', ')}`)
     }
 
-    const result = await query(`
-      INSERT INTO ${TABLE_NAMES.WORKSHOP_MATERIALS} (
-        workshop_id,
-        instance_id,
-        title,
-        description,
-        material_type,
-        url,
-        file_size_bytes,
-        access_type,
-        display_order,
-        uploaded_by
-      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
-      RETURNING *
-    `, [
-      workshopId,
-      instanceId || null,
-      title.trim(),
-      description?.trim() || null,
-      materialType,
-      url.trim(),
-      fileSizeBytes || null,
-      accessType,
-      displayOrder,
-      session.user.id
-    ])
+    const [material] = await db
+      .insert(workshopMaterials)
+      .values({
+        workshopId,
+        instanceId: instanceId || null,
+        title: title.trim(),
+        description: description?.trim() || null,
+        materialType,
+        url: url.trim(),
+        fileSizeBytes: fileSizeBytes || null,
+        accessType,
+        displayOrder,
+        uploadedBy: session.user.id,
+      })
+      .returning()
 
     logger.info('Workshop material added', {
       workshopId,
-      materialId: (result.rows[0] as MaterialRow).id,
+      materialId: material.id,
       addedBy: session.user.id
     })
 
     return apiSuccess({
-      material: result.rows[0],
+      material,
       message: 'Material added successfully'
     })
 

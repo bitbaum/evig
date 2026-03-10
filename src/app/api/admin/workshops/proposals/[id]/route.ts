@@ -1,6 +1,9 @@
 import { NextRequest } from 'next/server';
 import { withAdmin } from '@/lib/api/middleware';
-import { query } from '@/lib/auth/db';
+import { db } from '@/db';
+import { workshopProposals, users } from '@/db/schema';
+import { eq, sql } from 'drizzle-orm';
+import { alias } from 'drizzle-orm/pg-core';
 import {
   apiError,
   apiSuccess,
@@ -8,11 +11,13 @@ import {
   apiNotFound,
 } from '@/lib/api/helpers';
 import { ERROR_MESSAGES } from '@/config/error-messages';
-import { TABLE_NAMES } from '@/config/database';
 import { APPROVAL_STATUS } from '@/config/approval-status';
 import { logger } from '@/lib/logger';
 import { createEditSnapshot, appendEditHistory } from '@/lib/admin/edit-utils';
 import { WorkshopProposal } from '@/components/workshops/types';
+
+const reviewer = alias(users, 'reviewer');
+const editor = alias(users, 'editor');
 
 /**
  * GET /api/admin/workshops/proposals/[id]
@@ -22,29 +27,54 @@ export const GET = withAdmin<{ id: string }>('workshops-admin', async (request, 
   const { id: proposalId } = context!.params!;
 
   try {
-    // Fetch proposal with submitter info
-    const result = await query(
-      `
-      SELECT
-        wp.*,
-        u.name as proposer_name,
-        u.email as proposer_email,
-        reviewer.name as reviewer_name,
-        editor.name as editor_name
-      FROM ${TABLE_NAMES.WORKSHOP_PROPOSALS} wp
-      LEFT JOIN ${TABLE_NAMES.USERS} u ON wp.user_id = u.id
-      LEFT JOIN ${TABLE_NAMES.USERS} reviewer ON wp.reviewed_by = reviewer.id
-      LEFT JOIN ${TABLE_NAMES.USERS} editor ON wp.last_edited_by = editor.id
-      WHERE wp.id = $1
-      `,
-      [proposalId]
-    );
+    const [proposal] = await db
+      .select({
+        id: workshopProposals.id,
+        userId: workshopProposals.userId,
+        title: workshopProposals.title,
+        description: workshopProposals.description,
+        shortDescription: workshopProposals.shortDescription,
+        category: workshopProposals.category,
+        durationMinutes: workshopProposals.durationMinutes,
+        level: workshopProposals.level,
+        maxParticipants: workshopProposals.maxParticipants,
+        minParticipants: workshopProposals.minParticipants,
+        priceCents: workshopProposals.priceCents,
+        prerequisites: workshopProposals.prerequisites,
+        learningObjectives: workshopProposals.learningObjectives,
+        targetAudience: workshopProposals.targetAudience,
+        materialsProvided: workshopProposals.materialsProvided,
+        materialsRequired: workshopProposals.materialsRequired,
+        locationType: workshopProposals.locationType,
+        selectedLocationId: workshopProposals.selectedLocationId,
+        proposedLocation: workshopProposals.proposedLocation,
+        proposedDate: workshopProposals.proposedDate,
+        proposedTime: workshopProposals.proposedTime,
+        specialRequirements: workshopProposals.specialRequirements,
+        termsAccepted: workshopProposals.termsAccepted,
+        status: workshopProposals.status,
+        adminNotes: workshopProposals.adminNotes,
+        reviewedBy: workshopProposals.reviewedBy,
+        reviewedAt: workshopProposals.reviewedAt,
+        editHistory: workshopProposals.editHistory,
+        lastEditedBy: workshopProposals.lastEditedBy,
+        lastEditedAt: workshopProposals.lastEditedAt,
+        createdAt: workshopProposals.createdAt,
+        updatedAt: workshopProposals.updatedAt,
+        proposer_name: users.name,
+        proposer_email: users.email,
+        reviewer_name: reviewer.name,
+        editor_name: editor.name,
+      })
+      .from(workshopProposals)
+      .leftJoin(users, eq(workshopProposals.userId, users.id))
+      .leftJoin(reviewer, eq(workshopProposals.reviewedBy, reviewer.id))
+      .leftJoin(editor, eq(workshopProposals.lastEditedBy, editor.id))
+      .where(eq(workshopProposals.id, proposalId));
 
-    if (result.rows.length === 0) {
+    if (!proposal) {
       return apiNotFound('Workshop-Vorschlag nicht gefunden');
     }
-
-    const proposal = result.rows[0];
 
     logger.info('Workshop proposal fetched', {
       proposalId,
@@ -69,7 +99,6 @@ export const PATCH = withAdmin<{ id: string }>('workshops-admin', async (request
     const body = await request.json();
     const { action, fields } = body;
 
-    // Validate action
     if (action !== 'edit') {
       return apiBadRequest(
         'Ungültige Aktion. Verwenden Sie /approve für Genehmigungsaktionen.'
@@ -81,23 +110,14 @@ export const PATCH = withAdmin<{ id: string }>('workshops-admin', async (request
     }
 
     // Fetch current proposal
-    const currentResult = await query(
-      `SELECT id, user_id, title, description, short_description, category,
-              duration_minutes, level, max_participants, min_participants, price_cents,
-              prerequisites, learning_objectives, target_audience, materials_provided,
-              materials_required, location_type, selected_location_id, proposed_location,
-              proposed_date, proposed_time, special_requirements, terms_accepted,
-              status, admin_notes, reviewed_by, reviewed_at,
-              edit_history, last_edited_by, last_edited_at, created_at, updated_at
-       FROM ${TABLE_NAMES.WORKSHOP_PROPOSALS} WHERE id = $1`,
-      [proposalId]
-    );
+    const [currentProposal] = await db
+      .select()
+      .from(workshopProposals)
+      .where(eq(workshopProposals.id, proposalId));
 
-    if (currentResult.rows.length === 0) {
+    if (!currentProposal) {
       return apiNotFound('Workshop-Vorschlag nicht gefunden');
     }
-
-    const currentProposal = currentResult.rows[0] as WorkshopProposal;
 
     // Only allow editing pending proposals
     if (currentProposal.status !== APPROVAL_STATUS.PENDING) {
@@ -109,13 +129,12 @@ export const PATCH = withAdmin<{ id: string }>('workshops-admin', async (request
     // Create edit snapshot
     const editorName = session.user.name || session.user.email || 'Admin';
     const editEntry = createEditSnapshot(
-      currentProposal,
+      currentProposal as unknown as WorkshopProposal,
       fields,
       session.user.id,
       editorName
     );
 
-    // Only create entry if there are actual changes
     if (editEntry.fields_changed.length === 0) {
       return apiSuccess({
         proposal: currentProposal,
@@ -123,31 +142,51 @@ export const PATCH = withAdmin<{ id: string }>('workshops-admin', async (request
       });
     }
 
-    const updatedHistory = appendEditHistory(currentProposal.edit_history, editEntry);
+    const updatedHistory = appendEditHistory(
+      currentProposal.editHistory as unknown as WorkshopProposal['edit_history'],
+      editEntry
+    );
 
-    // Build dynamic UPDATE query
-    const updateFields = Object.keys(fields);
-    const setClause = updateFields
-      .map((field, idx) => `${field} = $${idx + 2}`)
-      .join(', ');
-    const values = [proposalId, ...updateFields.map((f) => fields[f])];
+    // Build dynamic update — map snake_case field names to camelCase Drizzle columns
+    const fieldMap: Record<string, string> = {
+      title: 'title',
+      description: 'description',
+      short_description: 'shortDescription',
+      category: 'category',
+      duration_minutes: 'durationMinutes',
+      level: 'level',
+      max_participants: 'maxParticipants',
+      min_participants: 'minParticipants',
+      price_cents: 'priceCents',
+      prerequisites: 'prerequisites',
+      learning_objectives: 'learningObjectives',
+      target_audience: 'targetAudience',
+      materials_provided: 'materialsProvided',
+      materials_required: 'materialsRequired',
+      location_type: 'locationType',
+      selected_location_id: 'selectedLocationId',
+      proposed_location: 'proposedLocation',
+      proposed_date: 'proposedDate',
+      proposed_time: 'proposedTime',
+      special_requirements: 'specialRequirements',
+    };
 
-    const updateQuery = `
-      UPDATE ${TABLE_NAMES.WORKSHOP_PROPOSALS}
-      SET ${setClause},
-          edit_history = $${values.length + 1},
-          last_edited_by = $${values.length + 2},
-          last_edited_at = CURRENT_TIMESTAMP,
-          updated_at = CURRENT_TIMESTAMP
-      WHERE id = $1
-      RETURNING *
-    `;
+    const updateSet: Record<string, unknown> = {};
+    for (const [snakeField, value] of Object.entries(fields)) {
+      const camelField = fieldMap[snakeField] || snakeField;
+      updateSet[camelField] = value;
+    }
 
-    const updateResult = await query(updateQuery, [
-      ...values,
-      JSON.stringify(updatedHistory),
-      session.user.id,
-    ]);
+    updateSet.editHistory = updatedHistory;
+    updateSet.lastEditedBy = session.user.id;
+    updateSet.lastEditedAt = sql`CURRENT_TIMESTAMP`;
+    updateSet.updatedAt = sql`CURRENT_TIMESTAMP`;
+
+    const [updated] = await db
+      .update(workshopProposals)
+      .set(updateSet)
+      .where(eq(workshopProposals.id, proposalId))
+      .returning();
 
     logger.info('Workshop proposal edited by admin', {
       proposalId,
@@ -156,7 +195,7 @@ export const PATCH = withAdmin<{ id: string }>('workshops-admin', async (request
     });
 
     return apiSuccess({
-      proposal: updateResult.rows[0],
+      proposal: updated,
       message: 'Vorschlag erfolgreich aktualisiert',
     });
   } catch (error) {

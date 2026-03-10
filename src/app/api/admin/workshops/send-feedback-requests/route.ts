@@ -1,24 +1,14 @@
 import { NextRequest } from 'next/server'
 import { withAdmin } from '@/lib/api/middleware'
-import { query } from '@/lib/auth/db'
+import { db } from '@/db'
+import { workshopRegistrations, workshopInstances, workshops, users } from '@/db/schema'
+import { eq, and, or, lt, gte, isNull, sql } from 'drizzle-orm'
 import { apiError, apiSuccess } from '@/lib/api/helpers'
 import { validateBody, AdminSendFeedbackRequestsSchema } from '@/lib/schemas'
 import { logger } from '@/lib/logger'
-import { TABLE_NAMES } from '@/config/database'
 import { WORKSHOP_REGISTRATION_STATUS } from '@/config/workshop-registration-status'
 import { sendEmail } from '@/lib/email'
 import { formatDateWithWeekday } from '@/lib/date-formats'
-
-interface CompletedWorkshopRow {
-  instance_id: string
-  workshop_title: string
-  workshop_slug: string
-  start_date: string
-  user_id: string
-  user_name: string
-  user_email: string
-  registration_id: string
-}
 
 // POST /api/admin/workshops/send-feedback-requests - Send feedback requests for completed workshops
 export const POST = withAdmin('workshops-admin', async (request, session) => {
@@ -29,42 +19,45 @@ export const POST = withAdmin('workshops-admin', async (request, session) => {
     const { daysAfterWorkshop } = validation.data
 
     // Get all attended registrations for workshops that completed recently and have no feedback yet
-    const completedResult = await query(`
-      SELECT
-        wi.id as instance_id,
-        w.title as workshop_title,
-        w.slug as workshop_slug,
-        wi.start_date,
-        u.id as user_id,
-        u.name as user_name,
-        u.email as user_email,
-        wr.id as registration_id
-      FROM ${TABLE_NAMES.WORKSHOP_REGISTRATIONS} wr
-      JOIN ${TABLE_NAMES.WORKSHOP_INSTANCES} wi ON wr.workshop_instance_id = wi.id
-      JOIN ${TABLE_NAMES.WORKSHOPS} w ON wi.workshop_id = w.id
-      JOIN ${TABLE_NAMES.USERS} u ON wr.user_id = u.id
-      WHERE (wr.status = '${WORKSHOP_REGISTRATION_STATUS.ATTENDED}' OR wr.attended = true)
-        AND wr.rating IS NULL
-        AND wr.feedback IS NULL
-        AND wi.start_date < NOW()
-        AND wi.start_date >= NOW() - make_interval(days => $1)
-      ORDER BY wi.start_date DESC
-    `, [daysAfterWorkshop + 7])
+    const completed = await db
+      .select({
+        instance_id: workshopInstances.id,
+        workshop_title: workshops.title,
+        workshop_slug: workshops.slug,
+        start_date: workshopInstances.startDate,
+        user_id: users.id,
+        user_name: users.name,
+        user_email: users.email,
+        registration_id: workshopRegistrations.id,
+      })
+      .from(workshopRegistrations)
+      .innerJoin(workshopInstances, eq(workshopRegistrations.workshopInstanceId, workshopInstances.id))
+      .innerJoin(workshops, eq(workshopInstances.workshopId, workshops.id))
+      .innerJoin(users, eq(workshopRegistrations.userId, users.id))
+      .where(and(
+        or(
+          eq(workshopRegistrations.status, WORKSHOP_REGISTRATION_STATUS.ATTENDED),
+          eq(workshopRegistrations.attended, true)
+        ),
+        isNull(workshopRegistrations.rating),
+        isNull(workshopRegistrations.feedback),
+        lt(workshopInstances.startDate, sql`NOW()`),
+        gte(workshopInstances.startDate, sql`NOW() - make_interval(days => ${daysAfterWorkshop + 7})`)
+      ))
+      .orderBy(sql`${workshopInstances.startDate} DESC`)
 
-    const workshops = completedResult.rows as CompletedWorkshopRow[]
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://revampit.ch'
 
     let sentCount = 0
     let failedCount = 0
 
-    for (const registration of workshops) {
+    for (const registration of completed) {
       try {
         const workshopDate = formatDateWithWeekday(registration.start_date)
-        // Link to the workshop page where they can leave feedback
         const feedbackUrl = `${baseUrl}/workshops/${registration.workshop_slug}#feedback`
 
         await sendEmail(
-          registration.user_email,
+          registration.user_email!,
           'workshopFeedbackRequest',
           registration.user_name || 'Benutzer',
           registration.workshop_title,
@@ -89,7 +82,7 @@ export const POST = withAdmin('workshops-admin', async (request, session) => {
 
     return apiSuccess({
       message: `Feedback requests sent successfully`,
-      total: workshops.length,
+      total: completed.length,
       sent: sentCount,
       failed: failedCount
     })

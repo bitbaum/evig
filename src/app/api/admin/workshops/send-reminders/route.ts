@@ -1,26 +1,14 @@
 import { NextRequest } from 'next/server'
 import { withAdmin } from '@/lib/api/middleware'
-import { query } from '@/lib/auth/db'
+import { db } from '@/db'
+import { workshopRegistrations, workshopInstances, workshops, users } from '@/db/schema'
+import { eq, and, gte, lte, sql } from 'drizzle-orm'
 import { apiError, apiSuccess } from '@/lib/api/helpers'
 import { validateBody, AdminSendRemindersSchema } from '@/lib/schemas'
 import { logger } from '@/lib/logger'
-import { TABLE_NAMES } from '@/config/database'
 import { WORKSHOP_REGISTRATION_STATUS } from '@/config/workshop-registration-status'
 import { sendEmail } from '@/lib/email'
 import { formatDateWithWeekday } from '@/lib/date-formats'
-
-interface UpcomingWorkshopRow {
-  instance_id: string
-  workshop_title: string
-  workshop_slug: string
-  start_date: string
-  location: string | null
-  instructor: string | null
-  user_id: string
-  user_name: string
-  user_email: string
-  registration_id: string
-}
 
 // POST /api/admin/workshops/send-reminders - Send reminders for upcoming workshops
 export const POST = withAdmin('workshops-admin', async (request, session) => {
@@ -31,36 +19,37 @@ export const POST = withAdmin('workshops-admin', async (request, session) => {
     const { daysBeforeWorkshop } = validation.data
 
     // Get all confirmed registrations for workshops happening in the specified days
-    const upcomingResult = await query(`
-      SELECT
-        wi.id as instance_id,
-        w.title as workshop_title,
-        w.slug as workshop_slug,
-        wi.start_date,
-        wi.location,
-        wi.instructor,
-        u.id as user_id,
-        u.name as user_name,
-        u.email as user_email,
-        wr.id as registration_id
-      FROM ${TABLE_NAMES.WORKSHOP_REGISTRATIONS} wr
-      JOIN ${TABLE_NAMES.WORKSHOP_INSTANCES} wi ON wr.workshop_instance_id = wi.id
-      JOIN ${TABLE_NAMES.WORKSHOPS} w ON wi.workshop_id = w.id
-      JOIN ${TABLE_NAMES.USERS} u ON wr.user_id = u.id
-      WHERE wr.status = '${WORKSHOP_REGISTRATION_STATUS.CONFIRMED}'
-        AND wi.status = 'scheduled'
-        AND wi.start_date >= NOW()
-        AND wi.start_date <= NOW() + make_interval(days => $1)
-      ORDER BY wi.start_date ASC
-    `, [daysBeforeWorkshop])
+    const upcoming = await db
+      .select({
+        instance_id: workshopInstances.id,
+        workshop_title: workshops.title,
+        workshop_slug: workshops.slug,
+        start_date: workshopInstances.startDate,
+        location: workshopInstances.location,
+        instructor: workshopInstances.instructor,
+        user_id: users.id,
+        user_name: users.name,
+        user_email: users.email,
+        registration_id: workshopRegistrations.id,
+      })
+      .from(workshopRegistrations)
+      .innerJoin(workshopInstances, eq(workshopRegistrations.workshopInstanceId, workshopInstances.id))
+      .innerJoin(workshops, eq(workshopInstances.workshopId, workshops.id))
+      .innerJoin(users, eq(workshopRegistrations.userId, users.id))
+      .where(and(
+        eq(workshopRegistrations.status, WORKSHOP_REGISTRATION_STATUS.CONFIRMED),
+        eq(workshopInstances.status, 'scheduled'),
+        gte(workshopInstances.startDate, sql`NOW()`),
+        lte(workshopInstances.startDate, sql`NOW() + make_interval(days => ${daysBeforeWorkshop})`)
+      ))
+      .orderBy(workshopInstances.startDate)
 
-    const workshops = upcomingResult.rows as UpcomingWorkshopRow[]
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://revampit.ch'
 
     let sentCount = 0
     let failedCount = 0
 
-    for (const registration of workshops) {
+    for (const registration of upcoming) {
       try {
         const workshopDate = formatDateWithWeekday(registration.start_date)
         const workshopTime = new Date(registration.start_date).toLocaleTimeString('de-CH', {
@@ -70,7 +59,7 @@ export const POST = withAdmin('workshops-admin', async (request, session) => {
         const workshopUrl = `${baseUrl}/workshops/${registration.workshop_slug}`
 
         await sendEmail(
-          registration.user_email,
+          registration.user_email!,
           'workshopReminder',
           registration.user_name || 'Benutzer',
           registration.workshop_title,
@@ -98,7 +87,7 @@ export const POST = withAdmin('workshops-admin', async (request, session) => {
 
     return apiSuccess({
       message: `Reminders sent successfully`,
-      total: workshops.length,
+      total: upcoming.length,
       sent: sentCount,
       failed: failedCount
     })
