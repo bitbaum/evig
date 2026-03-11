@@ -1,7 +1,8 @@
 import { NextRequest } from "next/server";
-import { query } from "@/lib/auth/db";
+import { db } from "@/db";
 import { parse } from 'csv-parse/sync';
-import { TABLE_NAMES } from "@/config/database";
+import { aiExtractedProducts, inventoryItems, sustainabilityScores } from "@/db/schema";
+import { eq, desc } from "drizzle-orm";
 import { apiSuccess, apiError, apiBadRequest } from "@/lib/api/helpers";
 import { logger } from "@/lib/logger";
 import { withAuth, ValidSession } from "@/lib/api/middleware";
@@ -71,12 +72,13 @@ export const POST = withAuth(async (request: NextRequest, session: ValidSession)
         }
 
         // Check for existing product
-        const existingCheck = await query(
-          `SELECT id FROM ${TABLE_NAMES.INVENTORY_ITEMS} WHERE kivitendo_article_number = $1 LIMIT 1`,
-          [row.Artikelnummer]
-        );
+        const existing = await db
+          .select({ id: inventoryItems.id })
+          .from(inventoryItems)
+          .where(eq(inventoryItems.kivitendoArticleNumber, row.Artikelnummer))
+          .limit(1);
 
-        if (existingCheck.rows.length > 0) {
+        if (existing.length > 0) {
           result.duplicates.push(row.Artikelnummer);
           result.skipped++;
           continue;
@@ -86,92 +88,76 @@ export const POST = withAuth(async (request: NextRequest, session: ValidSession)
         const analysis = analyzeProductDescription(row.Artikelbeschreibung, row.Hersteller);
 
         // Create AI-extracted product record
-        const aiProductResult = await query<{ id: string }>(
-          `INSERT INTO ${TABLE_NAMES.AI_EXTRACTED_PRODUCTS} (
-            product_name, product_name_confidence, brand, brand_confidence,
-            category, category_confidence, estimated_price_chf, price_confidence,
-            condition, condition_confidence, ai_provider, ai_model,
-            processing_time_ms, total_confidence, raw_ai_response,
-            created_by, status, kivitendo_article_number
-          ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18)
-          RETURNING id`,
-          [
-            analysis.productName,
-            analysis.confidence,
-            row.Hersteller || analysis.brand,
-            row.Hersteller ? 0.9 : analysis.confidence,
-            analysis.category,
-            analysis.confidence,
-            parseFloat(row.Verkaufspreis) || 0,
-            row.Verkaufspreis && row.Verkaufspreis !== '0.00' ? 0.8 : 0.3,
-            analysis.condition,
-            0.6,
-            'csv_import',
-            'rule_based_parser',
-            100,
-            analysis.confidence,
-            JSON.stringify({
+        const [aiProduct] = await db
+          .insert(aiExtractedProducts)
+          .values({
+            productName: analysis.productName,
+            productNameConfidence: String(analysis.confidence),
+            brand: row.Hersteller || analysis.brand,
+            brandConfidence: row.Hersteller ? '0.90' : String(analysis.confidence),
+            category: analysis.category,
+            categoryConfidence: String(analysis.confidence),
+            estimatedPriceChf: String(parseFloat(row.Verkaufspreis) || 0),
+            priceConfidence: row.Verkaufspreis && row.Verkaufspreis !== '0.00' ? '0.80' : '0.30',
+            condition: analysis.condition,
+            conditionConfidence: '0.60',
+            aiProvider: 'csv_import',
+            aiModel: 'rule_based_parser',
+            processingTimeMs: 100,
+            totalConfidence: String(analysis.confidence),
+            rawAiResponse: {
               source: 'csv_import',
               original_data: row,
               analysis_method: 'rule_based'
-            }),
-            session.user.id,
-            APPROVAL_STATUS.PENDING,
-            row.Artikelnummer,
-          ]
-        );
+            },
+            createdBy: session.user.id,
+            status: APPROVAL_STATUS.PENDING,
+            kivitendoArticleNumber: row.Artikelnummer,
+          })
+          .returning({ id: aiExtractedProducts.id });
 
-        const aiProductId = aiProductResult.rows[0]?.id;
-        if (!aiProductId) {
+        if (!aiProduct) {
           result.errors.push(`Failed to create AI product for ${row.Artikelnummer}`);
           result.skipped++;
           continue;
         }
 
         // Calculate and save sustainability score
-        const sustainabilityScore = calculateSustainabilityScore(analysis);
-        await query(
-          `INSERT INTO ${TABLE_NAMES.SUSTAINABILITY_SCORES} (
-            product_id, overall_score, environmental_score, social_score,
-            economic_score, factors, recommendations, improvement_suggestions,
-            ai_analysis, assessed_by
-          ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)`,
-          [
-            aiProductId,
-            sustainabilityScore.overall_score,
-            sustainabilityScore.environmental_score,
-            sustainabilityScore.social_score,
-            sustainabilityScore.economic_score,
-            JSON.stringify(sustainabilityScore.factors),
-            JSON.stringify(sustainabilityScore.recommendations),
-            JSON.stringify(sustainabilityScore.improvement_suggestions),
-            JSON.stringify({
+        const sustainScore = calculateSustainabilityScore(analysis);
+        await db
+          .insert(sustainabilityScores)
+          .values({
+            productId: aiProduct.id,
+            overallScore: sustainScore.overall_score,
+            environmentalScore: sustainScore.environmental_score,
+            socialScore: sustainScore.social_score,
+            economicScore: sustainScore.economic_score,
+            factors: sustainScore.factors,
+            recommendations: sustainScore.recommendations,
+            improvementSuggestions: sustainScore.improvement_suggestions,
+            aiAnalysis: {
               assessment_method: 'rule_based',
               data_sources: ['product_description', 'brand_info'],
               confidence: 0.7
-            }),
-            'csv_import',
-          ]
-        );
+            },
+            assessedBy: 'csv_import',
+          });
 
         // Create inventory item
-        const inventoryResult = await query(
-          `INSERT INTO ${TABLE_NAMES.INVENTORY_ITEMS} (
-            ai_product_id, kivitendo_article_number, legacy_csv_data,
-            status, acquisition_cost_chf, selling_price_chf, assigned_to
-          ) VALUES ($1, $2, $3, $4, $5, $6, $7)`,
-          [
-            aiProductId,
-            row.Artikelnummer,
-            JSON.stringify(row),
-            'available',
-            parseFloat(row.Verkaufspreis) * 0.7 || 0,
-            parseFloat(row.Verkaufspreis) || 0,
-            session.user.id,
-          ]
-        );
+        const [inventoryRow] = await db
+          .insert(inventoryItems)
+          .values({
+            aiProductId: aiProduct.id,
+            kivitendoArticleNumber: row.Artikelnummer,
+            legacyCsvData: row,
+            status: 'available',
+            acquisitionCostChf: String(parseFloat(row.Verkaufspreis) * 0.7 || 0),
+            sellingPriceChf: String(parseFloat(row.Verkaufspreis) || 0),
+            assignedTo: session.user.id,
+          })
+          .returning({ id: inventoryItems.id });
 
-        if (inventoryResult.rowCount === 0) {
+        if (!inventoryRow) {
           result.errors.push(`Failed to create inventory item for ${row.Artikelnummer}`);
           result.skipped++;
           continue;
@@ -195,26 +181,25 @@ export const POST = withAuth(async (request: NextRequest, session: ValidSession)
 // GET endpoint to retrieve import history
 export const GET = withAuth(async (_request: NextRequest, session: ValidSession) => {
   try {
-    const importHistory = await query(
-      `SELECT
-        i.id,
-        i.kivitendo_article_number,
-        i.legacy_csv_data,
-        i.created_at,
-        a.product_name,
-        a.brand,
-        a.category,
-        a.status AS ai_status
-      FROM ${TABLE_NAMES.INVENTORY_ITEMS} i
-      LEFT JOIN ${TABLE_NAMES.AI_EXTRACTED_PRODUCTS} a ON a.id = i.ai_product_id
-      WHERE i.assigned_to = $1
-      ORDER BY i.created_at DESC
-      LIMIT 50`,
-      [session.user.id]
-    );
+    const importHistory = await db
+      .select({
+        id: inventoryItems.id,
+        kivitendoArticleNumber: inventoryItems.kivitendoArticleNumber,
+        legacyCsvData: inventoryItems.legacyCsvData,
+        createdAt: inventoryItems.createdAt,
+        productName: aiExtractedProducts.productName,
+        brand: aiExtractedProducts.brand,
+        category: aiExtractedProducts.category,
+        aiStatus: aiExtractedProducts.status,
+      })
+      .from(inventoryItems)
+      .leftJoin(aiExtractedProducts, eq(aiExtractedProducts.id, inventoryItems.aiProductId))
+      .where(eq(inventoryItems.assignedTo, session.user.id))
+      .orderBy(desc(inventoryItems.createdAt))
+      .limit(50);
 
     return apiSuccess({
-      imports: importHistory.rows
+      imports: importHistory
     });
 
   } catch (error) {

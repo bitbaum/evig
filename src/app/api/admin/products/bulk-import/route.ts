@@ -1,6 +1,7 @@
 import { NextRequest } from "next/server";
-import { query } from "@/lib/auth/db";
-import { TABLE_NAMES } from "@/config/database";
+import { db } from "@/db";
+import { aiExtractedProducts, inventoryItems } from "@/db/schema";
+import { sql } from "drizzle-orm";
 import { apiSuccess, apiError, apiBadRequest } from "@/lib/api/helpers";
 import { logger } from "@/lib/logger";
 import { withAdmin } from "@/lib/api/middleware";
@@ -65,28 +66,31 @@ export const POST = withAdmin('products', async (request: NextRequest) => {
 
     for (const product of products) {
       try {
-        const handle = product.title.toLowerCase().replace(/[^a-z0-9]/g, '-');
-
         // Insert into ai_extracted_products
-        const productResult = await query<{ id: string }>(
-          `INSERT INTO ${TABLE_NAMES.AI_EXTRACTED_PRODUCTS}
-            (item_uuid, product_name, brand, short_description, estimated_price_chf, category, condition, status)
-           VALUES (gen_random_uuid(), $1, $2, $3, $4, $5, 'unknown', 'draft')
-           RETURNING id`,
-          [product.title, product.brand, product.description, product.price, product.category]
-        );
-
-        const productId = productResult.rows[0].id;
+        const [productRow] = await db
+          .insert(aiExtractedProducts)
+          .values({
+            itemUuid: sql`gen_random_uuid()::text`,
+            productName: product.title,
+            brand: product.brand,
+            shortDescription: product.description,
+            estimatedPriceChf: String(product.price),
+            category: product.category,
+            condition: 'unknown',
+            status: 'draft',
+          })
+          .returning({ id: aiExtractedProducts.id });
 
         // Insert into inventory_items
-        await query(
-          `INSERT INTO ${TABLE_NAMES.INVENTORY_ITEMS}
-            (ai_product_id, quantity_available, marketplace_status)
-           VALUES ($1, 1, 'draft')`,
-          [productId]
-        );
+        await db
+          .insert(inventoryItems)
+          .values({
+            aiProductId: productRow.id,
+            quantityAvailable: 1,
+            marketplaceStatus: 'draft',
+          });
 
-        createdProducts.push({ id: productId, title: product.title });
+        createdProducts.push({ id: productRow.id, title: product.title });
 
       } catch (error) {
         logger.error(`Error creating product "${product.title}"`, { error, product });

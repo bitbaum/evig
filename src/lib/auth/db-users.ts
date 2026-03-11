@@ -1,11 +1,16 @@
 /**
  * User and profile database queries
+ *
+ * Migrated to Drizzle ORM. Mapping functions convert Drizzle camelCase
+ * results to the snake_case DbUser/DbUserProfile interfaces that
+ * consumers expect.
  */
 
-import { TABLE_NAMES } from '@/config/database'
-import type { QueryParams, SocialLinks, Availability, PurchaseHistoryItem } from '@/types/common'
-import { query, getUserColumns } from './db-connection'
-import type { DbUserRole } from './db-roles'
+import { db } from '@/db'
+import { users, userProfiles } from '@/db/schema/auth'
+import type { User, UserProfile } from '@/db/schema/auth'
+import { eq } from 'drizzle-orm'
+import type { SocialLinks, Availability, PurchaseHistoryItem } from '@/types/common'
 
 // ============================================================================
 // User queries
@@ -132,26 +137,124 @@ export interface DbDonation {
   updated_at: Date
 }
 
+// ============================================================================
+// Mapping helpers — Drizzle camelCase → consumer snake_case interfaces
+// ============================================================================
+
+function toDateOrNull(val: string | null | undefined): Date | null {
+  return val ? new Date(val) : null
+}
+
+function toDate(val: string | null | undefined): Date {
+  return val ? new Date(val) : new Date()
+}
+
+/**
+ * Map a Drizzle User row to the DbUser interface consumers expect.
+ */
+function mapUserToDbUser(row: User): DbUser {
+  return {
+    id: row.id,
+    name: row.name,
+    email: row.email,
+    emailVerified: toDateOrNull(row.emailVerified),
+    password_hash: row.passwordHash,
+    image: row.image,
+    role: row.role ?? 'user',
+    // These columns are not in the Drizzle schema; provide safe defaults
+    status: 'active',
+    role_id: null,
+    account_type: 'individual',
+    last_activity_at: null,
+    createdAt: toDate(row.createdAt),
+    updatedAt: toDate(row.updatedAt),
+    is_staff: row.isStaff ?? false,
+    staff_permissions: row.staffPermissions ?? [],
+    is_super_admin: row.isSuperAdmin ?? false,
+  }
+}
+
+/**
+ * Map a Drizzle UserProfile row to the DbUserProfile interface consumers expect.
+ */
+function mapProfileToDbUserProfile(row: UserProfile): DbUserProfile {
+  return {
+    user_id: row.userId,
+    first_name: row.firstName,
+    last_name: row.lastName,
+    company_name: row.companyName,
+    phone: row.phone,
+    mobile: row.mobile,
+    address_line1: row.addressLine1,
+    address_line2: row.addressLine2,
+    postal_code: row.postalCode,
+    city: row.city,
+    canton: row.canton,
+    country: row.country ?? 'Schweiz',
+    interests: row.interests,
+    preferred_language: row.preferredLanguage ?? 'de',
+    newsletter_subscribed: row.newsletterSubscribed ?? false,
+    is_supporter: row.isSupporter ?? false,
+    supporter_type: row.supporterType,
+    // These columns are not in the Drizzle schema; provide safe defaults
+    date_of_birth: null,
+    gender: null,
+    occupation: null,
+    // Public profile fields
+    avatar_url: row.avatarUrl,
+    display_name: row.displayName,
+    bio: row.bio,
+    profile_visibility: row.profileVisibility,
+    // Privacy settings
+    show_email: row.showEmail,
+    show_phone: row.showPhone,
+    // Notification preferences
+    email_notifications: row.emailNotifications,
+    sms_notifications: row.smsNotifications,
+    marketplace_updates: row.marketplaceUpdates,
+    workshop_reminders: row.workshopReminders,
+    // Service provider fields — not in Drizzle schema
+    website: null,
+    social_links: null,
+    skills: null,
+    expertise_areas: null,
+    availability: null,
+    service_radius_km: null,
+    // CRM fields — not in Drizzle schema
+    customer_segment: null,
+    purchase_history: null,
+    loyalty_points: null,
+    created_at: toDate(row.createdAt),
+    updated_at: toDate(row.updatedAt),
+  }
+}
+
+// ============================================================================
+// User queries
+// ============================================================================
+
 /**
  * Get user by email
  */
 export async function getUserByEmail(email: string): Promise<DbUser | null> {
-  const result = await query<DbUser>(
-    `SELECT * FROM ${TABLE_NAMES.USERS} WHERE email = $1`,
-    [email.toLowerCase()]
-  )
-  return result.rows[0] || null
+  const rows = await db
+    .select()
+    .from(users)
+    .where(eq(users.email, email.toLowerCase()))
+    .limit(1)
+  return rows[0] ? mapUserToDbUser(rows[0]) : null
 }
 
 /**
  * Get user by ID
  */
 export async function getUserById(id: string): Promise<DbUser | null> {
-  const result = await query<DbUser>(
-    `SELECT * FROM ${TABLE_NAMES.USERS} WHERE id = $1`,
-    [id]
-  )
-  return result.rows[0] || null
+  const rows = await db
+    .select()
+    .from(users)
+    .where(eq(users.id, id))
+    .limit(1)
+  return rows[0] ? mapUserToDbUser(rows[0]) : null
 }
 
 /**
@@ -171,81 +274,21 @@ export async function createUser(data: {
   is_staff?: boolean
   staff_permissions?: string[]
 }): Promise<DbUser> {
-  const userColumns = await getUserColumns()
+  const rows = await db
+    .insert(users)
+    .values({
+      email: data.email.toLowerCase(),
+      name: data.name ?? null,
+      passwordHash: data.password_hash ?? null,
+      image: data.image ?? null,
+      role: data.role ?? 'user',
+      emailVerified: data.emailVerified ? new Date().toISOString() : null,
+      isStaff: data.is_staff ?? false,
+      staffPermissions: data.staff_permissions ?? [],
+    })
+    .returning()
 
-  // Get default role if not specified
-  let roleId = null
-  if (userColumns.has('role_id')) {
-    if (data.role) {
-      const roleResult = await query<DbUserRole>(
-        `SELECT id FROM ${TABLE_NAMES.USER_ROLES} WHERE slug = $1 AND is_active = true`,
-        [data.role]
-      )
-      roleId = roleResult.rows[0]?.id || null
-    } else {
-      // Get default role
-      const defaultRoleResult = await query<DbUserRole>(
-        `SELECT id FROM ${TABLE_NAMES.USER_ROLES} WHERE is_default = true AND is_active = true LIMIT 1`
-      )
-      roleId = defaultRoleResult.rows[0]?.id || null
-    }
-  }
-
-  const columns: string[] = ['email', 'name', 'password_hash', 'image', 'role']
-  const values: QueryParams = [
-    data.email.toLowerCase(),
-    data.name || null,
-    data.password_hash || null,
-    data.image || null,
-    data.role || 'user'
-  ]
-
-  // Only set emailVerified if explicitly requested (for OAuth or admin-created accounts)
-  if (data.emailVerified) {
-    if (userColumns.has('emailVerified')) {
-      columns.push('"emailVerified"')
-      values.push(new Date())
-    } else if (userColumns.has('email_verified')) {
-      columns.push('email_verified')
-      values.push(new Date())
-    }
-  }
-
-  if (userColumns.has('status')) {
-    columns.push('status')
-    values.push(data.status || 'active')
-  }
-
-  if (userColumns.has('account_type')) {
-    columns.push('account_type')
-    values.push(data.account_type || 'individual')
-  }
-
-  if (userColumns.has('role_id')) {
-    columns.push('role_id')
-    values.push(roleId)
-  }
-
-  // New simplified auth fields
-  if (userColumns.has('is_staff')) {
-    columns.push('is_staff')
-    values.push(data.is_staff ?? false)
-  }
-
-  if (userColumns.has('staff_permissions')) {
-    columns.push('staff_permissions')
-    values.push(data.staff_permissions ?? [])
-  }
-
-  const placeholders = columns.map((_, idx) => `$${idx + 1}`)
-
-  const result = await query<DbUser>(
-    `INSERT INTO ${TABLE_NAMES.USERS} (${columns.join(', ')})
-     VALUES (${placeholders.join(', ')})
-     RETURNING *`,
-    values
-  )
-  return result.rows[0]
+  return mapUserToDbUser(rows[0])
 }
 
 /**
@@ -255,86 +298,73 @@ export async function updateUser(
   id: string,
   data: Partial<Pick<DbUser, 'name' | 'email' | 'emailVerified' | 'password_hash' | 'image' | 'role' | 'status' | 'account_type'>>
 ): Promise<DbUser | null> {
-  const userColumns = await getUserColumns()
-  const fields: string[] = []
-  const values: QueryParams = []
-  let paramIndex = 1
+  // Build the set object with only defined fields
+  const setValues: Record<string, unknown> = {}
 
   if (data.name !== undefined) {
-    fields.push(`name = $${paramIndex++}`)
-    values.push(data.name)
+    setValues.name = data.name
   }
   if (data.email !== undefined) {
-    fields.push(`email = $${paramIndex++}`)
-    values.push(data.email.toLowerCase())
+    setValues.email = data.email.toLowerCase()
   }
   if (data.emailVerified !== undefined) {
-    const emailVerifiedColumn = userColumns.has('emailVerified') ? '"emailVerified"' : 'email_verified'
-    fields.push(`${emailVerifiedColumn} = $${paramIndex++}`)
-    values.push(data.emailVerified)
+    setValues.emailVerified = data.emailVerified
+      ? (data.emailVerified instanceof Date ? data.emailVerified.toISOString() : String(data.emailVerified))
+      : null
   }
-  if (data.password_hash !== undefined && userColumns.has('password_hash')) {
-    fields.push(`password_hash = $${paramIndex++}`)
-    values.push(data.password_hash)
+  if (data.password_hash !== undefined) {
+    setValues.passwordHash = data.password_hash
   }
-  if (data.image !== undefined && userColumns.has('image')) {
-    fields.push(`image = $${paramIndex++}`)
-    values.push(data.image)
+  if (data.image !== undefined) {
+    setValues.image = data.image
   }
-  if (data.role !== undefined && userColumns.has('role')) {
-    fields.push(`role = $${paramIndex++}`)
-    values.push(data.role)
+  if (data.role !== undefined) {
+    setValues.role = data.role
+  }
+  // status and account_type are not in the Drizzle schema — skip silently
 
-    // Also update role_id if role is being changed
-    if (userColumns.has('role_id')) {
-      const roleResult = await query<DbUserRole>(
-        `SELECT id FROM ${TABLE_NAMES.USER_ROLES} WHERE slug = $1 AND is_active = true`,
-        [data.role]
-      )
-      fields.push(`role_id = $${paramIndex++}`)
-      values.push(roleResult.rows[0]?.id || null)
-    }
+  if (Object.keys(setValues).length === 0) {
+    return getUserById(id)
   }
-  if (data.status !== undefined && userColumns.has('status')) {
-    fields.push(`status = $${paramIndex++}`)
-    values.push(data.status)
-  }
-  if (data.account_type !== undefined && userColumns.has('account_type')) {
-    fields.push(`account_type = $${paramIndex++}`)
-    values.push(data.account_type)
-  }
-  if (fields.length === 0) return getUserById(id)
 
-  values.push(id)
-  const updatedAtColumn = userColumns.has('updatedAt') ? '"updatedAt"' : 'updated_at'
-  const updateSet = `${fields.join(', ')}${fields.length ? ', ' : ''}${updatedAtColumn} = NOW()`
-  const result = await query<DbUser>(
-    `UPDATE ${TABLE_NAMES.USERS} SET ${updateSet} WHERE id = $${paramIndex} RETURNING *`,
-    values
-  )
-  return result.rows[0] || null
+  // Always bump updatedAt
+  setValues.updatedAt = new Date().toISOString()
+
+  const rows = await db
+    .update(users)
+    .set(setValues)
+    .where(eq(users.id, id))
+    .returning()
+
+  return rows[0] ? mapUserToDbUser(rows[0]) : null
 }
+
+// ============================================================================
+// Profile queries
+// ============================================================================
 
 /**
  * Get or create user profile
  */
 export async function getOrCreateProfile(userId: string): Promise<DbUserProfile> {
   // Try to get existing profile
-  const existing = await query<DbUserProfile>(
-    `SELECT * FROM ${TABLE_NAMES.USER_PROFILES} WHERE user_id = $1`,
-    [userId]
-  )
+  const existing = await db
+    .select()
+    .from(userProfiles)
+    .where(eq(userProfiles.userId, userId))
+    .limit(1)
 
-  if (existing.rows[0]) {
-    return existing.rows[0]
+  if (existing[0]) {
+    return mapProfileToDbUserProfile(existing[0])
   }
 
   // Create new profile
-  const result = await query<DbUserProfile>(
-    `INSERT INTO ${TABLE_NAMES.USER_PROFILES} (user_id) VALUES ($1) RETURNING *`,
-    [userId]
-  )
-  return result.rows[0]
+  const rows = await db
+    .insert(userProfiles)
+    .values({ userId })
+    .returning()
+
+  return mapProfileToDbUserProfile(rows[0])
 }
 
 /**
@@ -344,69 +374,64 @@ export async function updateProfile(
   userId: string,
   data: Partial<Omit<DbUserProfile, 'user_id' | 'created_at' | 'updated_at'>>
 ): Promise<DbUserProfile | null> {
-  const fields: string[] = []
-  const values: QueryParams = []
-  let paramIndex = 1
+  // Map snake_case data keys to camelCase Drizzle column names
+  const setValues: Record<string, unknown> = {}
 
-  const fieldMap: Record<string, keyof typeof data> = {
-    first_name: 'first_name',
-    last_name: 'last_name',
-    company_name: 'company_name',
+  const fieldMapping: Record<string, string> = {
+    first_name: 'firstName',
+    last_name: 'lastName',
+    company_name: 'companyName',
     phone: 'phone',
     mobile: 'mobile',
-    address_line1: 'address_line1',
-    address_line2: 'address_line2',
-    postal_code: 'postal_code',
+    address_line1: 'addressLine1',
+    address_line2: 'addressLine2',
+    postal_code: 'postalCode',
     city: 'city',
     canton: 'canton',
     country: 'country',
     interests: 'interests',
-    preferred_language: 'preferred_language',
-    newsletter_subscribed: 'newsletter_subscribed',
-    is_supporter: 'is_supporter',
-    supporter_type: 'supporter_type',
-    date_of_birth: 'date_of_birth',
-    gender: 'gender',
-    occupation: 'occupation',
+    preferred_language: 'preferredLanguage',
+    newsletter_subscribed: 'newsletterSubscribed',
+    is_supporter: 'isSupporter',
+    supporter_type: 'supporterType',
     // Public profile fields
-    avatar_url: 'avatar_url',
-    display_name: 'display_name',
+    avatar_url: 'avatarUrl',
+    display_name: 'displayName',
     bio: 'bio',
-    profile_visibility: 'profile_visibility',
+    profile_visibility: 'profileVisibility',
     // Privacy settings
-    show_email: 'show_email',
-    show_phone: 'show_phone',
+    show_email: 'showEmail',
+    show_phone: 'showPhone',
     // Notification preferences
-    email_notifications: 'email_notifications',
-    sms_notifications: 'sms_notifications',
-    marketplace_updates: 'marketplace_updates',
-    workshop_reminders: 'workshop_reminders',
-    // Service provider fields
-    website: 'website',
-    social_links: 'social_links',
-    skills: 'skills',
-    expertise_areas: 'expertise_areas',
-    availability: 'availability',
-    service_radius_km: 'service_radius_km',
-    // CRM fields
-    customer_segment: 'customer_segment',
-    purchase_history: 'purchase_history',
-    loyalty_points: 'loyalty_points',
+    email_notifications: 'emailNotifications',
+    sms_notifications: 'smsNotifications',
+    marketplace_updates: 'marketplaceUpdates',
+    workshop_reminders: 'workshopReminders',
+    // Fields not in Drizzle schema are omitted:
+    // date_of_birth, gender, occupation, website, social_links,
+    // skills, expertise_areas, availability, service_radius_km,
+    // customer_segment, purchase_history, loyalty_points
   }
 
-  for (const [dbField, dataField] of Object.entries(fieldMap)) {
-    if (data[dataField] !== undefined) {
-      fields.push(`${dbField} = $${paramIndex++}`)
-      values.push(data[dataField])
+  for (const [snakeKey, camelKey] of Object.entries(fieldMapping)) {
+    const value = (data as Record<string, unknown>)[snakeKey]
+    if (value !== undefined) {
+      setValues[camelKey] = value
     }
   }
 
-  if (fields.length === 0) return getOrCreateProfile(userId)
+  if (Object.keys(setValues).length === 0) {
+    return getOrCreateProfile(userId)
+  }
 
-  values.push(userId)
-  const result = await query<DbUserProfile>(
-    `UPDATE ${TABLE_NAMES.USER_PROFILES} SET ${fields.join(', ')}, updated_at = NOW() WHERE user_id = $${paramIndex} RETURNING *`,
-    values
-  )
-  return result.rows[0] || null
+  // Always bump updatedAt
+  setValues.updatedAt = new Date().toISOString()
+
+  const rows = await db
+    .update(userProfiles)
+    .set(setValues)
+    .where(eq(userProfiles.userId, userId))
+    .returning()
+
+  return rows[0] ? mapProfileToDbUserProfile(rows[0]) : null
 }

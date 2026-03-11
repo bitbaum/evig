@@ -3,9 +3,10 @@
  */
 
 import { randomBytes } from 'crypto'
-import { TABLE_NAMES } from '@/config/database'
+import { eq, and, gt, sql, desc } from 'drizzle-orm'
+import { db } from '@/db'
+import { users, verificationTokens } from '@/db/schema/auth'
 import { logger } from '@/lib/logger'
-import { query, getUserColumns } from './db-connection'
 
 // ============================================================================
 // Email verification functions
@@ -27,13 +28,17 @@ export async function createVerificationToken(email: string): Promise<string> {
   // Set expiration to 24 hours from now
   const expires = new Date(Date.now() + 24 * 60 * 60 * 1000)
 
-  await query(
-    `INSERT INTO ${TABLE_NAMES.VERIFICATION_TOKENS} (identifier, token, expires)
-     VALUES ($1, $2, $3)
-     ON CONFLICT (identifier, token) DO UPDATE SET
-       expires = EXCLUDED.expires`,
-    [email, token, expires]
-  )
+  await db
+    .insert(verificationTokens)
+    .values({
+      identifier: email,
+      token,
+      expires: expires.toISOString(),
+    })
+    .onConflictDoUpdate({
+      target: [verificationTokens.identifier, verificationTokens.token],
+      set: { expires: expires.toISOString() },
+    })
 
   return token
 }
@@ -43,29 +48,33 @@ export async function createVerificationToken(email: string): Promise<string> {
  */
 export async function verifyEmailWithToken(token: string): Promise<{ success: boolean, email?: string, error?: string }> {
   try {
-    const result = await query<DbVerificationToken>(
-      `SELECT * FROM ${TABLE_NAMES.VERIFICATION_TOKENS} WHERE token = $1 AND expires > NOW()`,
-      [token]
-    )
+    const rows = await db
+      .select()
+      .from(verificationTokens)
+      .where(
+        and(
+          eq(verificationTokens.token, token),
+          gt(verificationTokens.expires, sql`NOW()`)
+        )
+      )
 
-    if (result.rows.length === 0) {
+    if (rows.length === 0) {
       return { success: false, error: 'Ungültiger oder abgelaufener Token' }
     }
 
-    const verificationToken = result.rows[0]
+    const verificationToken = rows[0]
     const email = verificationToken.identifier
 
     // Update user email verification status
-    await query(
-      `UPDATE ${TABLE_NAMES.USERS} SET "emailVerified" = NOW() WHERE email = $1`,
-      [email]
-    )
+    await db
+      .update(users)
+      .set({ emailVerified: sql`NOW()`.mapWith(String) })
+      .where(eq(users.email, email))
 
     // Delete the used token
-    await query(
-      `DELETE FROM ${TABLE_NAMES.VERIFICATION_TOKENS} WHERE token = $1`,
-      [token]
-    )
+    await db
+      .delete(verificationTokens)
+      .where(eq(verificationTokens.token, token))
 
     return { success: true, email }
   } catch (error) {
@@ -78,11 +87,22 @@ export async function verifyEmailWithToken(token: string): Promise<{ success: bo
  * Get verification token by email
  */
 export async function getVerificationToken(email: string): Promise<DbVerificationToken | null> {
-  const result = await query<DbVerificationToken>(
-    `SELECT * FROM ${TABLE_NAMES.VERIFICATION_TOKENS} WHERE identifier = $1 AND expires > NOW() ORDER BY expires DESC LIMIT 1`,
-    [email]
-  )
-  return result.rows[0] || null
+  const rows = await db
+    .select()
+    .from(verificationTokens)
+    .where(
+      and(
+        eq(verificationTokens.identifier, email),
+        gt(verificationTokens.expires, sql`NOW()`)
+      )
+    )
+    .orderBy(desc(verificationTokens.expires))
+    .limit(1)
+
+  if (rows.length === 0) return null
+
+  const row = rows[0]
+  return { identifier: row.identifier, token: row.token, expires: new Date(row.expires) }
 }
 
 /**
@@ -98,18 +118,21 @@ export async function createVerificationCode(email: string, expiresInMinutes = 1
   // Set expiration
   const expires = new Date(Date.now() + expiresInMinutes * 60 * 1000)
 
+  const lowerEmail = email.toLowerCase()
+
   // Delete any existing codes for this email
-  await query(
-    `DELETE FROM ${TABLE_NAMES.VERIFICATION_TOKENS} WHERE identifier = $1`,
-    [email.toLowerCase()]
-  )
+  await db
+    .delete(verificationTokens)
+    .where(eq(verificationTokens.identifier, lowerEmail))
 
   // Insert new code
-  await query(
-    `INSERT INTO ${TABLE_NAMES.VERIFICATION_TOKENS} (identifier, token, expires)
-     VALUES ($1, $2, $3)`,
-    [email.toLowerCase(), code, expires]
-  )
+  await db
+    .insert(verificationTokens)
+    .values({
+      identifier: lowerEmail,
+      token: code,
+      expires: expires.toISOString(),
+    })
 
   return code
 }
@@ -122,29 +145,33 @@ export async function createVerificationCode(email: string, expiresInMinutes = 1
  */
 export async function verifyEmailCode(email: string, code: string): Promise<{ success: boolean, error?: string }> {
   try {
-    const result = await query<DbVerificationToken>(
-      `SELECT * FROM ${TABLE_NAMES.VERIFICATION_TOKENS} WHERE identifier = $1 AND token = $2 AND expires > NOW()`,
-      [email.toLowerCase(), code]
-    )
+    const lowerEmail = email.toLowerCase()
 
-    if (result.rows.length === 0) {
+    const rows = await db
+      .select()
+      .from(verificationTokens)
+      .where(
+        and(
+          eq(verificationTokens.identifier, lowerEmail),
+          eq(verificationTokens.token, code),
+          gt(verificationTokens.expires, sql`NOW()`)
+        )
+      )
+
+    if (rows.length === 0) {
       return { success: false, error: 'Ungültiger oder abgelaufener Code' }
     }
 
     // Update user email verification status
-    const userColumns = await getUserColumns()
-    const emailVerifiedColumn = userColumns.has('emailVerified') ? '"emailVerified"' : 'email_verified'
-
-    await query(
-      `UPDATE ${TABLE_NAMES.USERS} SET ${emailVerifiedColumn} = NOW() WHERE LOWER(email) = $1`,
-      [email.toLowerCase()]
-    )
+    await db
+      .update(users)
+      .set({ emailVerified: sql`NOW()`.mapWith(String) })
+      .where(eq(users.email, lowerEmail))
 
     // Delete the used code
-    await query(
-      `DELETE FROM ${TABLE_NAMES.VERIFICATION_TOKENS} WHERE identifier = $1`,
-      [email.toLowerCase()]
-    )
+    await db
+      .delete(verificationTokens)
+      .where(eq(verificationTokens.identifier, lowerEmail))
 
     return { success: true }
   } catch (error) {
@@ -173,13 +200,17 @@ export async function createPasswordResetToken(email: string): Promise<string> {
   // Set expiration to 1 hour from now
   const expires = new Date(Date.now() + 60 * 60 * 1000)
 
-  await query(
-    `INSERT INTO ${TABLE_NAMES.VERIFICATION_TOKENS} (identifier, token, expires)
-     VALUES ($1, $2, $3)
-     ON CONFLICT (identifier, token) DO UPDATE SET
-       expires = EXCLUDED.expires`,
-    [email.toLowerCase(), token, expires]
-  )
+  await db
+    .insert(verificationTokens)
+    .values({
+      identifier: email.toLowerCase(),
+      token,
+      expires: expires.toISOString(),
+    })
+    .onConflictDoUpdate({
+      target: [verificationTokens.identifier, verificationTokens.token],
+      set: { expires: expires.toISOString() },
+    })
 
   return token
 }
@@ -189,23 +220,27 @@ export async function createPasswordResetToken(email: string): Promise<string> {
  */
 export async function verifyPasswordResetToken(token: string): Promise<{ success: boolean, email?: string, error?: string }> {
   try {
-    const result = await query<DbPasswordResetToken>(
-      `SELECT * FROM ${TABLE_NAMES.VERIFICATION_TOKENS} WHERE token = $1 AND expires > NOW()`,
-      [token]
-    )
+    const rows = await db
+      .select()
+      .from(verificationTokens)
+      .where(
+        and(
+          eq(verificationTokens.token, token),
+          gt(verificationTokens.expires, sql`NOW()`)
+        )
+      )
 
-    if (result.rows.length === 0) {
+    if (rows.length === 0) {
       return { success: false, error: 'Ungültiger oder abgelaufener Token' }
     }
 
-    const resetToken = result.rows[0]
+    const resetToken = rows[0]
     const email = resetToken.identifier
 
     // Delete the used token for security
-    await query(
-      `DELETE FROM ${TABLE_NAMES.VERIFICATION_TOKENS} WHERE token = $1`,
-      [token]
-    )
+    await db
+      .delete(verificationTokens)
+      .where(eq(verificationTokens.token, token))
 
     return { success: true, email }
   } catch (error) {
@@ -219,14 +254,16 @@ export async function verifyPasswordResetToken(token: string): Promise<{ success
  */
 export async function updateUserPassword(email: string, passwordHash: string): Promise<{ success: boolean, error?: string }> {
   try {
-    const userColumns = await getUserColumns()
-    const updatedAtColumn = userColumns.has('updatedAt') ? '"updatedAt"' : 'updated_at'
-    const result = await query(
-      `UPDATE ${TABLE_NAMES.USERS} SET password_hash = $1, ${updatedAtColumn} = NOW() WHERE email = $2`,
-      [passwordHash, email.toLowerCase()]
-    )
+    const result = await db
+      .update(users)
+      .set({
+        passwordHash,
+        updatedAt: sql`NOW()`.mapWith(String),
+      })
+      .where(eq(users.email, email.toLowerCase()))
+      .returning({ id: users.id })
 
-    if (result.rowCount === 0) {
+    if (result.length === 0) {
       return { success: false, error: 'Benutzer nicht gefunden' }
     }
 
@@ -241,9 +278,20 @@ export async function updateUserPassword(email: string, passwordHash: string): P
  * Get password reset token by email
  */
 export async function getPasswordResetToken(email: string): Promise<DbPasswordResetToken | null> {
-  const result = await query<DbPasswordResetToken>(
-    `SELECT * FROM ${TABLE_NAMES.VERIFICATION_TOKENS} WHERE identifier = $1 AND expires > NOW() ORDER BY expires DESC LIMIT 1`,
-    [email.toLowerCase()]
-  )
-  return result.rows[0] || null
+  const rows = await db
+    .select()
+    .from(verificationTokens)
+    .where(
+      and(
+        eq(verificationTokens.identifier, email.toLowerCase()),
+        gt(verificationTokens.expires, sql`NOW()`)
+      )
+    )
+    .orderBy(desc(verificationTokens.expires))
+    .limit(1)
+
+  if (rows.length === 0) return null
+
+  const row = rows[0]
+  return { identifier: row.identifier, token: row.token, expires: new Date(row.expires) }
 }
