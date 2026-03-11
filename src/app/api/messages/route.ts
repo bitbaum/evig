@@ -1,35 +1,14 @@
 import { NextRequest } from 'next/server'
-import { query } from '@/lib/auth/db'
+import { db } from '@/db'
+import { conversations, messages, users, serviceAppointments } from '@/db/schema'
+import { eq, and, or, sql, desc, isNull } from 'drizzle-orm'
 import { apiError, apiSuccess, apiBadRequest, parsePagination } from '@/lib/api/helpers'
 import { withAuth, ValidSession } from '@/lib/api/middleware'
 import { ERROR_MESSAGES } from '@/config/error-messages'
-import { TABLE_NAMES, CONVERSATION_TYPES } from '@/config/database'
+import { CONVERSATION_TYPES } from '@/config/database'
 import { logger } from '@/lib/logger'
 import { validateBody, SendMessageSchema } from '@/lib/schemas'
 import { rateLimiters } from '@/lib/security/rate-limit'
-
-interface ConversationRow {
-  id: string
-  type: string
-  context_id: string | null
-  participant_1: string
-  participant_2: string
-  last_message_at: string
-  last_message_preview: string | null
-  unread_count_1: number
-  unread_count_2: number
-  other_user_name: string
-  other_user_id: string
-}
-
-interface IdRow {
-  id: string
-}
-
-interface MessageResultRow {
-  id: string
-  created_at: string
-}
 
 // GET /api/messages - Get conversations for current user
 export const GET = withAuth(async (
@@ -41,39 +20,56 @@ export const GET = withAuth(async (
     const contextId = searchParams.get('context_id') // Optional: filter by appointment
     const { limit, offset } = parsePagination(request, { defaultLimit: 50, maxLimit: 100 })
 
-    let whereClause = '(c.participant_1 = $1 OR c.participant_2 = $1)'
-    const params: (string | number)[] = [session.user.id]
+    const conditions = [
+      or(
+        eq(conversations.participant1, session.user.id),
+        eq(conversations.participant2, session.user.id),
+      ),
+      eq(conversations.isActive, true),
+    ]
 
     if (contextId) {
-      params.push(contextId)
-      whereClause += ' AND c.context_id = $' + params.length
+      conditions.push(eq(conversations.contextId, contextId))
     }
 
-    params.push(limit)
-    params.push(offset)
+    const whereCondition = and(...conditions)
 
-    const result = await query(
-      'SELECT c.id, c.type, c.context_id, c.participant_1, c.participant_2, ' +
-      'c.last_message_at, c.last_message_preview, c.unread_count_1, c.unread_count_2, ' +
-      'CASE WHEN c.participant_1 = $1 THEN u2.name ELSE u1.name END as other_user_name, ' +
-      'CASE WHEN c.participant_1 = $1 THEN c.participant_2 ELSE c.participant_1 END as other_user_id ' +
-      'FROM ' + TABLE_NAMES.CONVERSATIONS + ' c ' +
-      'LEFT JOIN ' + TABLE_NAMES.USERS + ' u1 ON c.participant_1 = u1.id ' +
-      'LEFT JOIN ' + TABLE_NAMES.USERS + ' u2 ON c.participant_2 = u2.id ' +
-      'WHERE ' + whereClause + ' AND c.is_active = true ' +
-      'ORDER BY c.last_message_at DESC ' +
-      'LIMIT $' + (params.length - 1) + ' OFFSET $' + params.length,
-      params
-    )
+    const result = await db
+      .select({
+        id: conversations.id,
+        type: conversations.type,
+        contextId: conversations.contextId,
+        participant1: conversations.participant1,
+        participant2: conversations.participant2,
+        lastMessageAt: conversations.lastMessageAt,
+        lastMessagePreview: conversations.lastMessagePreview,
+        unreadCount1: conversations.unreadCount1,
+        unreadCount2: conversations.unreadCount2,
+        otherUserName: sql<string>`CASE WHEN ${conversations.participant1} = ${session.user.id} THEN u2.name ELSE u1.name END`,
+        otherUserId: sql<string>`CASE WHEN ${conversations.participant1} = ${session.user.id} THEN ${conversations.participant2} ELSE ${conversations.participant1} END`,
+      })
+      .from(conversations)
+      .leftJoin(
+        sql`${users} u1`,
+        sql`${conversations.participant1} = u1.id`
+      )
+      .leftJoin(
+        sql`${users} u2`,
+        sql`${conversations.participant2} = u2.id`
+      )
+      .where(whereCondition)
+      .orderBy(desc(conversations.lastMessageAt))
+      .limit(limit)
+      .offset(offset)
 
-    const conversations = (result.rows as ConversationRow[]).map(conv => ({
+    const conversationsWithUnread = result.map(conv => ({
       ...conv,
-      unread_count: conv.participant_1 === session.user.id ? conv.unread_count_1 : conv.unread_count_2
+      unread_count: conv.participant1 === session.user.id ? conv.unreadCount1 : conv.unreadCount2
     }))
 
-    logger.info('Conversations fetched', { userId: session.user.id, count: conversations.length })
+    logger.info('Conversations fetched', { userId: session.user.id, count: conversationsWithUnread.length })
 
-    return apiSuccess({ conversations })
+    return apiSuccess({ conversations: conversationsWithUnread })
 
   } catch (error) {
     logger.error('Error fetching conversations', { error })
@@ -102,83 +98,93 @@ export const POST = withAuth(async (
     const participant_1 = session.user.id < recipient_id ? session.user.id : recipient_id
     const participant_2 = session.user.id < recipient_id ? recipient_id : session.user.id
 
-    await query('BEGIN')
-
-    try {
+    const result = await db.transaction(async (tx) => {
       // Find or create conversation
-      let conversationResult = await query(
-        'SELECT id FROM ' + TABLE_NAMES.CONVERSATIONS + ' ' +
-        'WHERE participant_1 = $1 AND participant_2 = $2 AND type = $3 ' +
-        (context_id ? 'AND context_id = $4' : 'AND context_id IS NULL'),
-        context_id ? [participant_1, participant_2, context_type, context_id] : [participant_1, participant_2, context_type]
-      )
+      const contextCondition = context_id
+        ? eq(conversations.contextId, context_id)
+        : isNull(conversations.contextId)
+
+      const [existingConversation] = await tx
+        .select({ id: conversations.id })
+        .from(conversations)
+        .where(and(
+          eq(conversations.participant1, participant_1),
+          eq(conversations.participant2, participant_2),
+          eq(conversations.type, context_type),
+          contextCondition,
+        ))
 
       let conversationId: string
 
-      if (conversationResult.rows.length === 0) {
+      if (!existingConversation) {
         // Create new conversation
-        const createResult = await query(
-          'INSERT INTO ' + TABLE_NAMES.CONVERSATIONS + ' (participant_1, participant_2, type, context_id) ' +
-          'VALUES ($1, $2, $3, $4) RETURNING id',
-          [participant_1, participant_2, context_type, context_id || null]
-        )
-        conversationId = (createResult.rows[0] as IdRow).id
+        const [newConversation] = await tx
+          .insert(conversations)
+          .values({
+            participant1: participant_1,
+            participant2: participant_2,
+            type: context_type,
+            contextId: context_id || null,
+          })
+          .returning({ id: conversations.id })
+        conversationId = newConversation.id
       } else {
-        conversationId = (conversationResult.rows[0] as IdRow).id
+        conversationId = existingConversation.id
       }
 
       // Create message
-      const messageResult = await query(
-        'INSERT INTO ' + TABLE_NAMES.MESSAGES + ' (conversation_id, sender_id, recipient_id, content) ' +
-        'VALUES ($1, $2, $3, $4) RETURNING id, created_at',
-        [conversationId, session.user.id, recipient_id, content]
-      )
+      const [newMessage] = await tx
+        .insert(messages)
+        .values({
+          conversationId,
+          senderId: session.user.id,
+          recipientId: recipient_id,
+          content,
+        })
+        .returning({ id: messages.id, createdAt: messages.createdAt })
 
       // Update conversation with last message info
-      const unreadField = session.user.id === participant_1 ? 'unread_count_2' : 'unread_count_1'
-      await query(
-        'UPDATE ' + TABLE_NAMES.CONVERSATIONS + ' SET ' +
-        'last_message_at = CURRENT_TIMESTAMP, ' +
-        'last_message_preview = $1, ' +
-        unreadField + ' = ' + unreadField + ' + 1, ' +
-        'updated_at = CURRENT_TIMESTAMP ' +
-        'WHERE id = $2',
-        [content.substring(0, 100), conversationId]
-      )
+      const isParticipant1 = session.user.id === participant_1
+      await tx
+        .update(conversations)
+        .set({
+          lastMessageAt: sql`CURRENT_TIMESTAMP`,
+          lastMessagePreview: content.substring(0, 100),
+          ...(isParticipant1
+            ? { unreadCount2: sql`${conversations.unreadCount2} + 1` }
+            : { unreadCount1: sql`${conversations.unreadCount1} + 1` }
+          ),
+          updatedAt: sql`CURRENT_TIMESTAMP`,
+        })
+        .where(eq(conversations.id, conversationId))
 
       // Update appointment messages count if context is appointment
       if (context_id && context_type === CONVERSATION_TYPES.APPOINTMENT) {
-        await query(
-          'UPDATE ' + TABLE_NAMES.SERVICE_APPOINTMENTS + ' SET ' +
-          'messages_count = messages_count + 1, ' +
-          'last_contact_at = CURRENT_TIMESTAMP ' +
-          'WHERE id = $1',
-          [context_id]
-        )
+        await tx
+          .update(serviceAppointments)
+          .set({
+            messagesCount: sql`${serviceAppointments.messagesCount} + 1`,
+            lastContactAt: sql`CURRENT_TIMESTAMP`,
+          })
+          .where(eq(serviceAppointments.id, context_id))
       }
 
-      await query('COMMIT')
+      return { conversationId, messageId: newMessage.id, createdAt: newMessage.createdAt }
+    })
 
-      const messageRow = messageResult.rows[0] as MessageResultRow
+    logger.info('Message sent', {
+      conversationId: result.conversationId,
+      messageId: result.messageId,
+      senderId: session.user.id,
+      recipientId: recipient_id
+    })
 
-      logger.info('Message sent', {
-        conversationId,
-        messageId: messageRow.id,
-        senderId: session.user.id,
-        recipientId: recipient_id
-      })
-
-      return apiSuccess({
-        message: 'Nachricht gesendet',
-        conversation_id: conversationId,
-        message_id: messageRow.id,
-        created_at: messageRow.created_at
-      })
-
-    } catch (txError) {
-      await query('ROLLBACK')
-      throw txError
-    }
+    return apiSuccess({
+      message: 'Nachricht gesendet',
+      conversation_id: result.conversationId,
+      message_id: result.messageId,
+      created_at: result.createdAt
+    })
 
   } catch (error) {
     logger.error('Error sending message', { error })

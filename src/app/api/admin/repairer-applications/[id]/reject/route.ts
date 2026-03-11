@@ -1,6 +1,7 @@
 import { NextRequest } from 'next/server'
 import { withAdmin } from '@/lib/api/middleware'
-import { query } from '@/lib/auth/db'
+import { db } from '@/db'
+import { sql } from 'drizzle-orm'
 import { apiError, apiSuccess, apiBadRequest, apiNotFound } from '@/lib/api/helpers'
 import { ERROR_MESSAGES, SUCCESS_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES } from '@/config/database'
@@ -32,18 +33,18 @@ export const PUT = withAdmin<{ id: string }>('services', async (request, session
     }
 
     // Get application details
-    const applicationResult = await query(`
+    const applicationResult = await db.execute(sql`
       SELECT ra.*, u.email, u.name
-      FROM ${TABLE_NAMES.REPAIRER_APPLICATIONS} ra
-      JOIN ${TABLE_NAMES.USERS} u ON ra.user_id = u.id
-      WHERE ra.id = $1
-    `, [applicationId])
+      FROM ${sql.raw(TABLE_NAMES.REPAIRER_APPLICATIONS)} ra
+      JOIN ${sql.raw(TABLE_NAMES.USERS)} u ON ra.user_id = u.id
+      WHERE ra.id = ${applicationId}
+    `)
 
     if (applicationResult.rows.length === 0) {
       return apiNotFound('Reparateur-Bewerbung nicht gefunden')
     }
 
-    const application = applicationResult.rows[0] as ApplicationRow
+    const application = applicationResult.rows[0] as unknown as ApplicationRow
 
     if (application.status === APPROVAL_STATUS.APPROVED) {
       return apiBadRequest('Eine bereits genehmigte Bewerbung kann nicht abgelehnt werden')
@@ -54,16 +55,16 @@ export const PUT = withAdmin<{ id: string }>('services', async (request, session
     }
 
     // Update application status with rejection details
-    await query(`
-      UPDATE ${TABLE_NAMES.REPAIRER_APPLICATIONS}
+    await db.execute(sql`
+      UPDATE ${sql.raw(TABLE_NAMES.REPAIRER_APPLICATIONS)}
       SET
-        status = '${APPROVAL_STATUS.REJECTED}',
-        admin_notes = COALESCE($1, admin_notes) || E'\n\nAblehnungsgrund: ' || $2,
-        reviewed_by = $3,
+        status = ${APPROVAL_STATUS.REJECTED},
+        admin_notes = COALESCE(${adminNotes ?? null}, admin_notes) || E'\n\nAblehnungsgrund: ' || ${rejectionReason},
+        reviewed_by = ${session.user.id},
         reviewed_at = CURRENT_TIMESTAMP,
         updated_at = CURRENT_TIMESTAMP
-      WHERE id = $4
-    `, [adminNotes, rejectionReason, session.user.id, applicationId])
+      WHERE id = ${applicationId}
+    `)
 
     logger.info('Repairer application rejected', {
       applicationId,

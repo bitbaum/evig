@@ -1,52 +1,10 @@
 import { NextRequest } from 'next/server'
-import { query, paginatedQuery } from '@/lib/auth/db'
+import { db } from '@/db'
+import { repairerProfiles, repairerReviews } from '@/db/schema'
+import { eq, and, ilike, gte, sql, desc, SQL, inArray } from 'drizzle-orm'
 import { apiError, apiSuccessCached, parsePagination } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
-import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
-import { QueryParams } from '@/lib/api/query-builder'
-
-interface RepairerRow {
-  id: string
-  user_id: string
-  business_name: string | null
-  business_type: string
-  description: string | null
-  phone: string
-  website: string | null
-  address: string
-  city: string
-  postal_code: string
-  latitude: number | null
-  longitude: number | null
-  service_radius_km: number
-  remote_services: boolean
-  hourly_rate_cents: number | null
-  emergency_fee_cents: number | null
-  home_visit_fee_cents: number | null
-  average_rating: number
-  total_reviews: number
-  total_jobs_completed: number
-  services_offered: string[]
-  specializations: string[]
-  certifications: string[]
-  is_verified: boolean
-  response_time_hours: number
-  typical_turnaround_days: number
-  warranty_offered: boolean
-  warranty_duration_months: number | null
-}
-
-interface RatingRow {
-  rating: number
-  count: string
-}
-
-interface ReviewSummaryRow {
-  avg_timeliness: number | null
-  avg_quality: number | null
-  avg_communication: number | null
-}
 
 // GET /api/repairers - Search and list repairers
 export async function GET(request: NextRequest) {
@@ -64,151 +22,161 @@ export async function GET(request: NextRequest) {
     const { limit, offset } = parsePagination(request, { defaultLimit: 50, maxLimit: 100 })
 
     // Build WHERE conditions
-    const qb = new QueryParams()
-    qb.addRaw('rp.is_active = true')
-    qb.addRaw("rp.status = 'active'")
+    const conditions: SQL[] = [
+      eq(repairerProfiles.isActive, true),
+      sql`${repairerProfiles.status} = 'active'`,
+    ]
 
     // Search by business name or description
     if (q) {
-      qb.add('(rp.business_name ILIKE $P OR rp.description ILIKE $P OR rp.city ILIKE $P)', `%${q}%`)
+      const pattern = `%${q}%`
+      conditions.push(sql`(${repairerProfiles.businessName} ILIKE ${pattern} OR ${repairerProfiles.description} ILIKE ${pattern} OR ${repairerProfiles.city} ILIKE ${pattern})`)
     }
 
     // Filter by service type
     if (service) {
-      qb.add('$P = ANY(rp.services_offered)', service)
+      conditions.push(sql`${service} = ANY(${repairerProfiles.servicesOffered})`)
     }
 
     // Filter by location (postal code or city)
     if (location) {
-      qb.add('(rp.postal_code ILIKE $P OR rp.city ILIKE $P)', `%${location}%`)
+      const locPattern = `%${location}%`
+      conditions.push(sql`(${repairerProfiles.postalCode} ILIKE ${locPattern} OR ${repairerProfiles.city} ILIKE ${locPattern})`)
     }
 
     // Filter by minimum rating
     if (minRating > 0) {
-      qb.add('rp.average_rating >= $P', minRating)
+      conditions.push(gte(repairerProfiles.averageRating, minRating.toString()))
     }
 
-    // Build distance calculation if coordinates provided
-    // Haversine params live outside QueryParams because they span SELECT + WHERE
-    let distanceSelect = ''
-    let distanceOrder = ''
-    const extraParams: (string | number)[] = []
-    let idx = qb.nextIndex
+    // Distance filter (Haversine)
+    if (lat !== 0 && lng !== 0 && maxDistance > 0) {
+      conditions.push(sql`(
+        ${repairerProfiles.latitude} IS NULL OR ${repairerProfiles.longitude} IS NULL OR
+        111.32 * SQRT(
+          POWER(${repairerProfiles.latitude}::numeric - ${lat}, 2) +
+          POWER((${repairerProfiles.longitude}::numeric - ${lng}) * COS((${repairerProfiles.latitude}::numeric + ${lat}) / 2 / 57.29577951), 2)
+        ) <= ${maxDistance}
+      )`)
+    }
 
-    if (lat !== 0 && lng !== 0) {
-      // Haversine formula for distance calculation (SELECT clause)
-      distanceSelect = `,
-        CASE
-          WHEN rp.latitude IS NOT NULL AND rp.longitude IS NOT NULL THEN
+    const where = and(...conditions)
+
+    // Build distance select expression if coordinates provided
+    const distanceExpr = (lat !== 0 && lng !== 0)
+      ? sql<number>`CASE
+          WHEN ${repairerProfiles.latitude} IS NOT NULL AND ${repairerProfiles.longitude} IS NOT NULL THEN
             111.32 * SQRT(
-              POWER(rp.latitude - $${idx}, 2) +
-              POWER((rp.longitude - $${idx + 1}) * COS((rp.latitude + $${idx}) / 2 / 57.29577951), 2)
+              POWER(${repairerProfiles.latitude}::numeric - ${lat}, 2) +
+              POWER((${repairerProfiles.longitude}::numeric - ${lng}) * COS((${repairerProfiles.latitude}::numeric + ${lat}) / 2 / 57.29577951), 2)
             )
           ELSE NULL
-        END as distance_km`
-      extraParams.push(lat, lng)
-      idx += 2
-
-      // Filter by max distance if provided
-      if (maxDistance > 0) {
-        qb.addRaw(`
-          (rp.latitude IS NULL OR rp.longitude IS NULL OR
-           111.32 * SQRT(
-             POWER(rp.latitude - $${idx}, 2) +
-             POWER((rp.longitude - $${idx + 1}) * COS((rp.latitude + $${idx}) / 2 / 57.29577951), 2)
-           ) <= $${idx + 2})
-        `)
-        extraParams.push(lat, lng, maxDistance)
-        idx += 3
-      }
-
-      distanceOrder = 'distance_km ASC NULLS LAST,'
-    }
-
-    const { where: whereClause, params } = qb.build('WHERE')
+        END`
+      : sql<number>`NULL`
 
     // Main query
-    const repairersQuery = `
-      SELECT
-        rp.id,
-        rp.user_id,
-        rp.business_name,
-        rp.business_type,
-        rp.description,
-        rp.phone,
-        rp.website,
-        rp.address,
-        rp.city,
-        rp.postal_code,
-        rp.latitude,
-        rp.longitude,
-        rp.service_radius_km,
-        rp.remote_services,
-        rp.hourly_rate_cents,
-        rp.emergency_fee_cents,
-        rp.home_visit_fee_cents,
-        rp.average_rating,
-        rp.total_reviews,
-        rp.total_jobs_completed,
-        rp.services_offered,
-        rp.specializations,
-        rp.certifications,
-        rp.is_verified,
-        rp.response_time_hours,
-        rp.typical_turnaround_days,
-        rp.warranty_offered,
-        rp.warranty_duration_months
-        ${distanceSelect}
-      FROM ${TABLE_NAMES.REPAIRER_PROFILES} rp
-      ${whereClause}
-      ORDER BY
-        ${distanceOrder}
-        rp.is_verified DESC,
-        rp.average_rating DESC,
-        rp.total_reviews DESC
-      LIMIT $${idx} OFFSET $${idx + 1}
-    `
+    const repairers = await db
+      .select({
+        id: repairerProfiles.id,
+        userId: repairerProfiles.userId,
+        businessName: repairerProfiles.businessName,
+        businessType: repairerProfiles.businessType,
+        description: repairerProfiles.description,
+        phone: repairerProfiles.phone,
+        website: repairerProfiles.website,
+        address: repairerProfiles.address,
+        city: repairerProfiles.city,
+        postalCode: repairerProfiles.postalCode,
+        latitude: repairerProfiles.latitude,
+        longitude: repairerProfiles.longitude,
+        serviceRadiusKm: repairerProfiles.serviceRadiusKm,
+        remoteServices: repairerProfiles.remoteServices,
+        hourlyRateCents: repairerProfiles.hourlyRateCents,
+        emergencyFeeCents: repairerProfiles.emergencyFeeCents,
+        homeVisitFeeCents: repairerProfiles.homeVisitFeeCents,
+        averageRating: repairerProfiles.averageRating,
+        totalReviews: repairerProfiles.totalReviews,
+        totalJobsCompleted: repairerProfiles.totalJobsCompleted,
+        servicesOffered: repairerProfiles.servicesOffered,
+        specializations: repairerProfiles.specializations,
+        certifications: repairerProfiles.certifications,
+        isVerified: repairerProfiles.isVerified,
+        responseTimeHours: repairerProfiles.responseTimeHours,
+        typicalTurnaroundDays: repairerProfiles.typicalTurnaroundDays,
+        warrantyOffered: repairerProfiles.warrantyOffered,
+        warrantyDurationMonths: repairerProfiles.warrantyDurationMonths,
+        distanceKm: distanceExpr.as('distance_km'),
+      })
+      .from(repairerProfiles)
+      .where(where)
+      .orderBy(
+        ...(lat !== 0 && lng !== 0
+          ? [sql`distance_km ASC NULLS LAST`]
+          : []),
+        desc(repairerProfiles.isVerified),
+        desc(repairerProfiles.averageRating),
+        desc(repairerProfiles.totalReviews),
+      )
+      .limit(limit)
+      .offset(offset)
 
-    const allParams = [...params, ...extraParams, limit, offset]
+    // Count query
+    const [countRow] = await db
+      .select({ total: sql<number>`count(*)` })
+      .from(repairerProfiles)
+      .where(where)
 
-    const { rows: repairers, total } = await paginatedQuery<RepairerRow & { distance_km?: number }>(repairersQuery, allParams)
+    const total = Number(countRow?.total ?? 0)
 
     // Batch-fetch rating distributions and review summaries (avoids N+1 queries)
     const repairerIds = repairers.map(r => r.id)
 
     let ratingDistByRepairer: Record<string, Record<string, number>> = {}
-    let reviewSummaryByRepairer: Record<string, ReviewSummaryRow> = {}
+    let reviewSummaryByRepairer: Record<string, { avg_timeliness: number | null; avg_quality: number | null; avg_communication: number | null }> = {}
 
     if (repairerIds.length > 0) {
       // Single query for all rating distributions
-      const ratingDistResult = await query(`
-        SELECT repairer_id, rating, COUNT(*)::text as count
-        FROM ${TABLE_NAMES.REPAIRER_REVIEWS}
-        WHERE repairer_id = ANY($1) AND is_public = true
-        GROUP BY repairer_id, rating
-      `, [repairerIds])
+      const ratingDistRows = await db
+        .select({
+          repairerId: repairerReviews.repairerId,
+          rating: repairerReviews.rating,
+          count: sql<string>`count(*)`,
+        })
+        .from(repairerReviews)
+        .where(and(
+          inArray(repairerReviews.repairerId, repairerIds),
+          eq(repairerReviews.isPublic, true)
+        ))
+        .groupBy(repairerReviews.repairerId, repairerReviews.rating)
 
-      for (const row of ratingDistResult.rows as (RatingRow & { repairer_id: string })[]) {
-        if (!ratingDistByRepairer[row.repairer_id]) {
-          ratingDistByRepairer[row.repairer_id] = {}
+      for (const row of ratingDistRows) {
+        if (!ratingDistByRepairer[row.repairerId]) {
+          ratingDistByRepairer[row.repairerId] = {}
         }
-        ratingDistByRepairer[row.repairer_id][row.rating.toString()] = parseInt(row.count)
+        ratingDistByRepairer[row.repairerId][row.rating.toString()] = parseInt(row.count)
       }
 
       // Single query for all review summaries
-      const reviewSummaryResult = await query(`
-        SELECT
-          repairer_id,
-          AVG(timeliness_rating)::decimal(3,2) as avg_timeliness,
-          AVG(quality_rating)::decimal(3,2) as avg_quality,
-          AVG(communication_rating)::decimal(3,2) as avg_communication
-        FROM ${TABLE_NAMES.REPAIRER_REVIEWS}
-        WHERE repairer_id = ANY($1) AND is_public = true
-        GROUP BY repairer_id
-      `, [repairerIds])
+      const reviewSummaryRows = await db
+        .select({
+          repairerId: repairerReviews.repairerId,
+          avgTimeliness: sql<number>`AVG(${repairerReviews.timelinessRating})::decimal(3,2)`,
+          avgQuality: sql<number>`AVG(${repairerReviews.qualityRating})::decimal(3,2)`,
+          avgCommunication: sql<number>`AVG(${repairerReviews.communicationRating})::decimal(3,2)`,
+        })
+        .from(repairerReviews)
+        .where(and(
+          inArray(repairerReviews.repairerId, repairerIds),
+          eq(repairerReviews.isPublic, true)
+        ))
+        .groupBy(repairerReviews.repairerId)
 
-      for (const row of reviewSummaryResult.rows as (ReviewSummaryRow & { repairer_id: string })[]) {
-        reviewSummaryByRepairer[row.repairer_id] = row
+      for (const row of reviewSummaryRows) {
+        reviewSummaryByRepairer[row.repairerId] = {
+          avg_timeliness: row.avgTimeliness,
+          avg_quality: row.avgQuality,
+          avg_communication: row.avgCommunication,
+        }
       }
     }
 

@@ -1,6 +1,7 @@
 import { NextRequest } from 'next/server'
 import { withAdmin } from '@/lib/api/middleware'
-import { query } from '@/lib/auth/db'
+import { db } from '@/db'
+import { sql } from 'drizzle-orm'
 import { apiError, apiSuccess, apiBadRequest, apiNotFound } from '@/lib/api/helpers'
 import { ERROR_MESSAGES, SUCCESS_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES } from '@/config/database'
@@ -66,58 +67,56 @@ export const PUT = withAdmin<{ id: string }>('services', async (request, session
     }
 
     // Get application details
-    const applicationResult = await query(`
+    const applicationResult = await db.execute(sql`
       SELECT ra.*, u.email, u.name
-      FROM ${TABLE_NAMES.REPAIRER_APPLICATIONS} ra
-      JOIN ${TABLE_NAMES.USERS} u ON ra.user_id = u.id
-      WHERE ra.id = $1
-    `, [applicationId])
+      FROM ${sql.raw(TABLE_NAMES.REPAIRER_APPLICATIONS)} ra
+      JOIN ${sql.raw(TABLE_NAMES.USERS)} u ON ra.user_id = u.id
+      WHERE ra.id = ${applicationId}
+    `)
 
     if (applicationResult.rows.length === 0) {
       return apiNotFound('Reparateur-Bewerbung nicht gefunden')
     }
 
-    const application = applicationResult.rows[0] as ApplicationRow
+    const application = applicationResult.rows[0] as unknown as ApplicationRow
 
     if (application.status === APPROVAL_STATUS.APPROVED) {
       return apiBadRequest('Diese Bewerbung wurde bereits genehmigt')
     }
 
-    // Start transaction to update application and user role
-    await query('BEGIN')
-
-    try {
+    // Use Drizzle transaction instead of manual BEGIN/COMMIT/ROLLBACK
+    await db.transaction(async (tx) => {
       // Update application status
-      await query(`
-        UPDATE ${TABLE_NAMES.REPAIRER_APPLICATIONS}
+      await tx.execute(sql`
+        UPDATE ${sql.raw(TABLE_NAMES.REPAIRER_APPLICATIONS)}
         SET
-          status = '${APPROVAL_STATUS.APPROVED}',
-          admin_notes = COALESCE($1, admin_notes),
-          reviewed_by = $2,
+          status = ${APPROVAL_STATUS.APPROVED},
+          admin_notes = COALESCE(${adminNotes ?? null}, admin_notes),
+          reviewed_by = ${session.user.id},
           reviewed_at = CURRENT_TIMESTAMP,
           updated_at = CURRENT_TIMESTAMP
-        WHERE id = $3
-      `, [adminNotes, session.user.id, applicationId])
+        WHERE id = ${applicationId}
+      `)
 
       // Update user role to repairer
-      await query(`
-        UPDATE ${TABLE_NAMES.USERS}
-        SET role = $1, updated_at = CURRENT_TIMESTAMP
-        WHERE id = $2
-      `, [ROLES.REPAIRER, application.user_id])
+      await tx.execute(sql`
+        UPDATE ${sql.raw(TABLE_NAMES.USERS)}
+        SET role = ${ROLES.REPAIRER}, "updatedAt" = CURRENT_TIMESTAMP
+        WHERE id = ${application.user_id}
+      `)
 
       // Check if repairer_profiles table exists and create profile if needed
-      const profileTableExists = await query(`
+      const profileTableExists = await tx.execute(sql`
         SELECT EXISTS (
           SELECT 1 FROM information_schema.tables
-          WHERE table_name = $1
+          WHERE table_name = ${TABLE_NAMES.REPAIRER_PROFILES}
         )
-      `, [TABLE_NAMES.REPAIRER_PROFILES])
+      `)
 
-      const exists = (profileTableExists.rows[0] as ExistsRow).exists
+      const exists = (profileTableExists.rows[0] as unknown as ExistsRow).exists
       if (exists) {
         // Get verified certifications for the profile
-        const verifiedCertifications = await query(`
+        const verifiedCertifications = await tx.execute(sql`
           SELECT
             COALESCE(ct.name, rc.custom_name) as name,
             rc.issuing_authority,
@@ -125,20 +124,20 @@ export const PUT = withAdmin<{ id: string }>('services', async (request, session
             rc.issue_date,
             rc.expiry_date,
             ct.category
-          FROM ${TABLE_NAMES.REPAIRER_CERTIFICATIONS} rc
-          LEFT JOIN ${TABLE_NAMES.CERTIFICATION_TYPES} ct ON rc.certification_type_id = ct.id
-          WHERE rc.application_id = $1 AND rc.verification_status = 'verified'
-        `, [applicationId])
+          FROM ${sql.raw(TABLE_NAMES.REPAIRER_CERTIFICATIONS)} rc
+          LEFT JOIN ${sql.raw(TABLE_NAMES.CERTIFICATION_TYPES)} ct ON rc.certification_type_id = ct.id
+          WHERE rc.application_id = ${applicationId} AND rc.verification_status = 'verified'
+        `)
 
         // Get verified documents for the profile
-        const verifiedDocuments = await query(`
+        const verifiedDocuments = await tx.execute(sql`
           SELECT file_path, original_filename, dt.name as document_type
-          FROM ${TABLE_NAMES.VERIFICATION_DOCUMENTS} vd
-          LEFT JOIN ${TABLE_NAMES.DOCUMENT_TYPES} dt ON vd.document_type_id = dt.id
-          WHERE vd.application_id = $1 AND vd.status = 'approved'
-        `, [applicationId])
+          FROM ${sql.raw(TABLE_NAMES.VERIFICATION_DOCUMENTS)} vd
+          LEFT JOIN ${sql.raw(TABLE_NAMES.DOCUMENT_TYPES)} dt ON vd.document_type_id = dt.id
+          WHERE vd.application_id = ${applicationId} AND vd.status = 'approved'
+        `)
 
-        const certificationsData = (verifiedCertifications.rows as CertificationRow[]).map(cert => ({
+        const certificationsData = (verifiedCertifications.rows as unknown as CertificationRow[]).map(cert => ({
           name: cert.name,
           authority: cert.issuing_authority,
           number: cert.certification_number,
@@ -148,7 +147,7 @@ export const PUT = withAdmin<{ id: string }>('services', async (request, session
           verified: true
         }))
 
-        const documentsData = (verifiedDocuments.rows as DocumentRow[]).map(doc => ({
+        const documentsData = (verifiedDocuments.rows as unknown as DocumentRow[]).map(doc => ({
           type: doc.document_type,
           filename: doc.original_filename,
           path: doc.file_path,
@@ -156,8 +155,8 @@ export const PUT = withAdmin<{ id: string }>('services', async (request, session
         }))
 
         // Create or update repairer profile with verified data
-        await query(`
-          INSERT INTO ${TABLE_NAMES.REPAIRER_PROFILES} (
+        await tx.execute(sql`
+          INSERT INTO ${sql.raw(TABLE_NAMES.REPAIRER_PROFILES)} (
             user_id,
             business_name,
             business_type,
@@ -185,8 +184,32 @@ export const PUT = withAdmin<{ id: string }>('services', async (request, session
             created_at,
             updated_at
           ) VALUES (
-            $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15,
-            $16, $17, $18, $19, $20, $21, true, CURRENT_TIMESTAMP, $22, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
+            ${application.user_id},
+            ${application.business_name},
+            ${application.business_type},
+            ${application.description},
+            ${application.years_experience},
+            ${application.phone},
+            ${application.website},
+            ${application.address},
+            ${application.city},
+            ${application.postal_code},
+            ${application.service_radius_km},
+            ${application.remote_services},
+            ${application.hourly_rate_cents},
+            ${application.emergency_fee_cents},
+            ${application.home_visit_fee_cents},
+            ${application.services_offered},
+            ${application.specializations},
+            ${JSON.stringify(certificationsData)},
+            ${application.insurance_info as string},
+            ${application.portfolio_images},
+            ${JSON.stringify(documentsData)},
+            true,
+            CURRENT_TIMESTAMP,
+            ${session.user.id},
+            CURRENT_TIMESTAMP,
+            CURRENT_TIMESTAMP
           )
           ON CONFLICT (user_id) DO UPDATE SET
             business_name = EXCLUDED.business_name,
@@ -213,67 +236,38 @@ export const PUT = withAdmin<{ id: string }>('services', async (request, session
             verified_at = CURRENT_TIMESTAMP,
             verified_by = EXCLUDED.verified_by,
             updated_at = CURRENT_TIMESTAMP
-        `, [
-          application.user_id,
-          application.business_name,
-          application.business_type,
-          application.description,
-          application.years_experience,
-          application.phone,
-          application.website,
-          application.address,
-          application.city,
-          application.postal_code,
-          application.service_radius_km,
-          application.remote_services,
-          application.hourly_rate_cents,
-          application.emergency_fee_cents,
-          application.home_visit_fee_cents,
-          application.services_offered,
-          application.specializations,
-          JSON.stringify(certificationsData), // Store verified certifications
-          application.insurance_info,
-          application.portfolio_images,
-          JSON.stringify(documentsData), // Store verified documents
-          session.user.id
-        ])
+        `)
       }
+    })
 
-      await query('COMMIT')
+    logger.info('Repairer application approved', {
+      applicationId,
+      adminId: session.user.id,
+      userId: application.user_id,
+      applicantEmail: application.email
+    })
 
-      logger.info('Repairer application approved', {
+    // Send approval notification email to applicant
+    const dashboardUrl = `${APP_URL}/dashboard/repairer`
+    const approvalEmailResult = await sendEmail(
+      application.email,
+      'repairerApplicationApproved',
+      application.name || 'Reparateur',
+      dashboardUrl
+    )
+
+    if (!approvalEmailResult.success) {
+      logger.warn('Failed to send repairer application approval email', {
         applicationId,
-        adminId: session.user.id,
-        userId: application.user_id,
-        applicantEmail: application.email
+        applicantEmail: application.email,
+        error: approvalEmailResult.error
       })
-
-      // Send approval notification email to applicant
-      const dashboardUrl = `${APP_URL}/dashboard/repairer`
-      const approvalEmailResult = await sendEmail(
-        application.email,
-        'repairerApplicationApproved',
-        application.name || 'Reparateur',
-        dashboardUrl
-      )
-
-      if (!approvalEmailResult.success) {
-        logger.warn('Failed to send repairer application approval email', {
-          applicationId,
-          applicantEmail: application.email,
-          error: approvalEmailResult.error
-        })
-      }
-
-      return apiSuccess({
-        message: 'Reparateur-Bewerbung erfolgreich genehmigt',
-        applicationId
-      })
-
-    } catch (error) {
-      await query('ROLLBACK')
-      throw error
     }
+
+    return apiSuccess({
+      message: 'Reparateur-Bewerbung erfolgreich genehmigt',
+      applicationId
+    })
 
   } catch (error) {
     logger.error('Error approving repairer application', { error, applicationId })

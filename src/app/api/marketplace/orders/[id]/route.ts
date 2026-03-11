@@ -6,41 +6,16 @@
 import { NextRequest } from 'next/server';
 import { withAuth, ValidSession } from '@/lib/api/middleware';
 import { apiSuccess, apiError, apiBadRequest, apiForbidden, apiNotFound } from '@/lib/api/helpers';
-import { query } from '@/lib/auth/db';
-import { TABLE_NAMES } from '@/config/database';
+import { db } from '@/db';
+import { listings, listingImages, marketplaceOrders, sellerProfiles, users } from '@/db/schema';
+import { eq, and, sql } from 'drizzle-orm';
 import { ORDER_STATUS_CONFIG, ORDER_STATUS, LISTING_STATUS } from '@/config/marketplace';
 import type { OrderStatus } from '@/config/marketplace';
-import { formatCHF, DELIVERY_LABELS } from '@/config/marketplace';
-import type { DeliveryOption } from '@/config/marketplace';
 import { logger } from '@/lib/logger';
 import { validateBody, UpdateOrderStatusSchema } from '@/lib/schemas';
 import { captureTransaction, cancelTransaction } from '@/lib/payments/payrexx-client';
 import { sendCustomEmail } from '@/lib/email';
 import { orderStatusUpdate } from '@/lib/email/templates/marketplace';
-
-interface OrderRow {
-  id: string;
-  buyer_id: string;
-  seller_id: string;
-  listing_id: string;
-  amount_chf: number;
-  commission_chf: number;
-  seller_payout_chf: number;
-  stripe_payment_intent_id: string | null;
-  payrexx_transaction_id: string | null;
-  payment_provider: string;
-  status: string;
-  delivery_method: string;
-  shipping_address: unknown;
-  created_at: string;
-  updated_at: string;
-  listing_title: string;
-  thumbnail: string | null;
-  buyer_name: string | null;
-  buyer_email: string | null;
-  seller_name: string | null;
-  seller_email: string | null;
-}
 
 // Valid status transitions: { currentStatus: { role: [allowedNewStatuses] } }
 const STATUS_TRANSITIONS: Record<string, Record<string, string[]>> = {
@@ -48,6 +23,55 @@ const STATUS_TRANSITIONS: Record<string, Record<string, string[]>> = {
   [ORDER_STATUS.SHIPPED]:   { seller: [ORDER_STATUS.DELIVERED],  buyer: [] },
   [ORDER_STATUS.DELIVERED]: { buyer: [ORDER_STATUS.COMPLETED],   seller: [] },
 };
+
+/**
+ * Fetch order with full join data (listing, buyer, seller).
+ * Used by both GET and PATCH handlers.
+ */
+async function fetchOrderWithDetails(orderId: string) {
+  const [order] = await db
+    .select({
+      id: marketplaceOrders.id,
+      buyerId: marketplaceOrders.buyerId,
+      sellerId: marketplaceOrders.sellerId,
+      listingId: marketplaceOrders.listingId,
+      amountChf: marketplaceOrders.amountChf,
+      commissionChf: marketplaceOrders.commissionChf,
+      sellerPayoutChf: marketplaceOrders.sellerPayoutChf,
+      stripePaymentIntentId: marketplaceOrders.stripePaymentIntentId,
+      payrexxTransactionId: marketplaceOrders.payrexxTransactionId,
+      paymentProvider: marketplaceOrders.paymentProvider,
+      status: marketplaceOrders.status,
+      deliveryMethod: marketplaceOrders.deliveryMethod,
+      shippingAddress: marketplaceOrders.shippingAddress,
+      createdAt: marketplaceOrders.createdAt,
+      updatedAt: marketplaceOrders.updatedAt,
+      listingTitle: listings.title,
+      thumbnail: sql<string | null>`(
+        SELECT ${listingImages.url} FROM ${listingImages}
+        WHERE ${listingImages.listingId} = ${listings.id}
+          AND ${listingImages.isPrimary} = true
+        LIMIT 1
+      )`,
+      buyerName: sql<string | null>`bu.name`,
+      buyerEmail: sql<string | null>`bu.email`,
+      sellerName: sql<string | null>`su.name`,
+      sellerEmail: sql<string | null>`su.email`,
+    })
+    .from(marketplaceOrders)
+    .innerJoin(listings, eq(marketplaceOrders.listingId, listings.id))
+    .innerJoin(
+      sql`${users} bu`,
+      sql`${marketplaceOrders.buyerId} = bu.id`
+    )
+    .innerJoin(
+      sql`${users} su`,
+      sql`${marketplaceOrders.sellerId} = su.id`
+    )
+    .where(eq(marketplaceOrders.id, orderId));
+
+  return order ?? null;
+}
 
 // ============================================================================
 // GET — Order detail
@@ -62,37 +86,20 @@ export const GET = withAuth<{ id: string }>(async (
     const orderId = context?.params?.id;
     if (!orderId) return apiBadRequest('Bestell-ID fehlt');
 
-    const result = await query<OrderRow>(
-      `SELECT
-        o.*,
-        l.title as listing_title,
-        (SELECT li.url FROM ${TABLE_NAMES.LISTING_IMAGES} li WHERE li.listing_id = l.id AND li.is_primary = true LIMIT 1) as thumbnail,
-        bu.name as buyer_name,
-        bu.email as buyer_email,
-        su.name as seller_name,
-        su.email as seller_email
-      FROM ${TABLE_NAMES.MARKETPLACE_ORDERS} o
-      JOIN ${TABLE_NAMES.LISTINGS} l ON o.listing_id = l.id
-      JOIN ${TABLE_NAMES.USERS} bu ON o.buyer_id = bu.id
-      JOIN ${TABLE_NAMES.USERS} su ON o.seller_id = su.id
-      WHERE o.id = $1`,
-      [orderId]
-    );
-
-    const order = result.rows[0];
+    const order = await fetchOrderWithDetails(orderId);
     if (!order) return apiNotFound('Bestellung');
 
     // Must be buyer or seller
-    if (order.buyer_id !== session.user.id && order.seller_id !== session.user.id) {
+    if (order.buyerId !== session.user.id && order.sellerId !== session.user.id) {
       return apiForbidden('Kein Zugriff auf diese Bestellung');
     }
 
-    const role = order.buyer_id === session.user.id ? 'buyer' : 'seller';
+    const role = order.buyerId === session.user.id ? 'buyer' : 'seller';
 
     return apiSuccess({
       ...order,
       role,
-      counterparty_name: role === 'buyer' ? order.seller_name : order.buyer_name,
+      counterpartyName: role === 'buyer' ? order.sellerName : order.buyerName,
     });
   } catch (error) {
     return apiError(error, 'Fehler beim Laden der Bestellung');
@@ -118,30 +125,13 @@ export const PATCH = withAuth<{ id: string }>(async (
     const { status: newStatus, tracking_number, tracking_url } = validation.data;
 
     // Fetch current order
-    const result = await query<OrderRow>(
-      `SELECT
-        o.*,
-        l.title as listing_title,
-        (SELECT li.url FROM ${TABLE_NAMES.LISTING_IMAGES} li WHERE li.listing_id = l.id AND li.is_primary = true LIMIT 1) as thumbnail,
-        bu.name as buyer_name,
-        bu.email as buyer_email,
-        su.name as seller_name,
-        su.email as seller_email
-      FROM ${TABLE_NAMES.MARKETPLACE_ORDERS} o
-      JOIN ${TABLE_NAMES.LISTINGS} l ON o.listing_id = l.id
-      JOIN ${TABLE_NAMES.USERS} bu ON o.buyer_id = bu.id
-      JOIN ${TABLE_NAMES.USERS} su ON o.seller_id = su.id
-      WHERE o.id = $1`,
-      [orderId]
-    );
-
-    const order = result.rows[0];
+    const order = await fetchOrderWithDetails(orderId);
     if (!order) return apiNotFound('Bestellung');
 
     // Determine role
-    const role = order.buyer_id === session.user.id
+    const role = order.buyerId === session.user.id
       ? 'buyer'
-      : order.seller_id === session.user.id
+      : order.sellerId === session.user.id
       ? 'seller'
       : null;
 
@@ -162,66 +152,67 @@ export const PATCH = withAuth<{ id: string }>(async (
     }
 
     // Handle payment operations for specific transitions
-    if (newStatus === ORDER_STATUS.COMPLETED && order.payrexx_transaction_id) {
+    if (newStatus === ORDER_STATUS.COMPLETED && order.payrexxTransactionId) {
       // Capture the held Payrexx reservation
       try {
-        await captureTransaction(order.payrexx_transaction_id, Math.round(Number(order.amount_chf) * 100));
+        await captureTransaction(order.payrexxTransactionId, Math.round(Number(order.amountChf) * 100));
       } catch (captureError) {
         logger.error('Failed to capture Payrexx transaction', { captureError, orderId });
         return apiError(captureError, 'Zahlung konnte nicht abgeschlossen werden');
       }
     }
 
-    if (newStatus === ORDER_STATUS.CANCELLED && order.status !== ORDER_STATUS.PENDING_PAYMENT && order.payrexx_transaction_id) {
+    if (newStatus === ORDER_STATUS.CANCELLED && order.status !== ORDER_STATUS.PENDING_PAYMENT && order.payrexxTransactionId) {
       // Cancel/release the Payrexx reservation
       try {
-        await cancelTransaction(order.payrexx_transaction_id);
+        await cancelTransaction(order.payrexxTransactionId);
       } catch (cancelError) {
         logger.error('Failed to cancel Payrexx transaction', { cancelError, orderId });
         return apiError(cancelError, 'Zahlung konnte nicht storniert werden');
       }
     }
 
-    // Build update query
-    const updates: string[] = [`status = $1`];
-    const params: unknown[] = [newStatus];
-    let paramIndex = 2;
+    // Build update values
+    const updateValues: Record<string, unknown> = {
+      status: newStatus,
+      updatedAt: sql`NOW()`,
+    };
 
     // Store tracking info in shipping_address JSONB
     if (tracking_number || tracking_url) {
-      updates.push(`shipping_address = COALESCE(shipping_address, '{}') || $${paramIndex++}::jsonb`);
-      params.push(JSON.stringify({
+      updateValues.shippingAddress = sql`COALESCE(${marketplaceOrders.shippingAddress}, '{}') || ${JSON.stringify({
         ...(tracking_number && { tracking_number }),
         ...(tracking_url && { tracking_url }),
-      }));
+      })}::jsonb`;
     }
 
-    params.push(orderId);
-    await query(
-      `UPDATE ${TABLE_NAMES.MARKETPLACE_ORDERS}
-       SET ${updates.join(', ')}, updated_at = NOW()
-       WHERE id = $${paramIndex}`,
-      params
-    );
+    await db
+      .update(marketplaceOrders)
+      .set(updateValues)
+      .where(eq(marketplaceOrders.id, orderId));
 
     // If completed: update listing status to sold and increment seller total_sold
     if (newStatus === ORDER_STATUS.COMPLETED) {
-      await query(
-        `UPDATE ${TABLE_NAMES.LISTINGS} SET status = '${LISTING_STATUS.SOLD}' WHERE id = $1`,
-        [order.listing_id]
-      );
-      await query(
-        `UPDATE ${TABLE_NAMES.SELLER_PROFILES} SET total_sold = total_sold + 1 WHERE user_id = $1`,
-        [order.seller_id]
-      );
+      await db
+        .update(listings)
+        .set({ status: LISTING_STATUS.SOLD })
+        .where(eq(listings.id, order.listingId));
+
+      await db
+        .update(sellerProfiles)
+        .set({ totalSold: sql`${sellerProfiles.totalSold} + 1` })
+        .where(eq(sellerProfiles.userId, order.sellerId));
     }
 
     // If cancelled: restore listing to active
     if (newStatus === ORDER_STATUS.CANCELLED) {
-      await query(
-        `UPDATE ${TABLE_NAMES.LISTINGS} SET status = '${LISTING_STATUS.ACTIVE}' WHERE id = $1 AND status = '${LISTING_STATUS.RESERVED}'`,
-        [order.listing_id]
-      );
+      await db
+        .update(listings)
+        .set({ status: LISTING_STATUS.ACTIVE })
+        .where(and(
+          eq(listings.id, order.listingId),
+          eq(listings.status, LISTING_STATUS.RESERVED),
+        ));
     }
 
     logger.info('Marketplace order status updated', {
@@ -235,8 +226,8 @@ export const PATCH = withAuth<{ id: string }>(async (
     // Fire-and-forget: email notification to counterparty
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
     const statusConfig = ORDER_STATUS_CONFIG[newStatus as OrderStatus];
-    const counterpartyEmail = role === 'buyer' ? order.seller_email : order.buyer_email;
-    const counterpartyName = role === 'buyer' ? order.seller_name : order.buyer_name;
+    const counterpartyEmail = role === 'buyer' ? order.sellerEmail : order.buyerEmail;
+    const counterpartyName = role === 'buyer' ? order.sellerName : order.buyerName;
 
     const actionHints: Record<string, string> = {
       [ORDER_STATUS.SHIPPED]: 'Ihr Paket ist unterwegs. Bitte bestätigen Sie den Empfang.',
@@ -250,7 +241,7 @@ export const PATCH = withAuth<{ id: string }>(async (
         counterpartyEmail,
         orderStatusUpdate({
           recipientName: counterpartyName || 'Nutzer',
-          listingTitle: order.listing_title,
+          listingTitle: order.listingTitle,
           newStatusLabel: statusConfig.label,
           actionHint: actionHints[newStatus] || '',
           orderUrl: `${baseUrl}/dashboard/orders/${orderId}`,

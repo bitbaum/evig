@@ -8,7 +8,9 @@
 
 import { NextRequest } from 'next/server'
 import { withAdmin } from '@/lib/api/middleware'
-import { query, transaction } from '@/lib/auth/db'
+import { db } from '@/db'
+import { blogSubmissions, blogCategories, blogPosts, users } from '@/db/schema'
+import { eq, sql } from 'drizzle-orm'
 import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
 import {
@@ -25,24 +27,65 @@ export const GET = withAdmin<{ id: string }>('content', async (request, session,
   try {
     const { id } = context!.params!
 
-    const result = await query(
-      `SELECT
-        s.*,
-        c.name as category_label,
-        r.name as reviewer_name,
-        r.email as reviewer_email
-       FROM ${TABLE_NAMES.BLOG_SUBMISSIONS} s
-       LEFT JOIN ${TABLE_NAMES.BLOG_CATEGORIES} c ON s.category_id = c.id
-       LEFT JOIN ${TABLE_NAMES.USERS} r ON s.reviewed_by = r.id
-       WHERE s.id = $1`,
-      [id]
-    )
+    const aliasedReviewer = db
+      .select({
+        id: users.id,
+        name: users.name,
+        email: users.email,
+      })
+      .from(users)
+      .as('reviewer')
 
-    if (result.rows.length === 0) {
+    const rows = await db
+      .select({
+        // All blogSubmissions columns
+        id: blogSubmissions.id,
+        submitterName: blogSubmissions.submitterName,
+        submitterEmail: blogSubmissions.submitterEmail,
+        userId: blogSubmissions.userId,
+        title: blogSubmissions.title,
+        slug: blogSubmissions.slug,
+        content: blogSubmissions.content,
+        excerpt: blogSubmissions.excerpt,
+        submissionType: blogSubmissions.submissionType,
+        categoryId: blogSubmissions.categoryId,
+        categoryName: blogSubmissions.categoryName,
+        tags: blogSubmissions.tags,
+        status: blogSubmissions.status,
+        reviewedBy: blogSubmissions.reviewedBy,
+        reviewedAt: blogSubmissions.reviewedAt,
+        reviewNotes: blogSubmissions.reviewNotes,
+        rejectionReason: blogSubmissions.rejectionReason,
+        publishedPostId: blogSubmissions.publishedPostId,
+        publishedAt: blogSubmissions.publishedAt,
+        editHistory: blogSubmissions.editHistory,
+        lastEditedBy: blogSubmissions.lastEditedBy,
+        lastEditedAt: blogSubmissions.lastEditedAt,
+        submittedAt: blogSubmissions.submittedAt,
+        createdAt: blogSubmissions.createdAt,
+        updatedAt: blogSubmissions.updatedAt,
+        // Joined columns
+        categoryLabel: blogCategories.name,
+        reviewerName: aliasedReviewer.name,
+        reviewerEmail: aliasedReviewer.email,
+      })
+      .from(blogSubmissions)
+      .leftJoin(blogCategories, eq(blogSubmissions.categoryId, blogCategories.id))
+      .leftJoin(aliasedReviewer, eq(blogSubmissions.reviewedBy, aliasedReviewer.id))
+      .where(eq(blogSubmissions.id, id))
+
+    if (rows.length === 0) {
       return apiNotFound('Einreichung')
     }
 
-    return apiSuccess(result.rows[0])
+    // Flatten to match the old raw SQL output shape (s.*, plus joined fields)
+    const row = rows[0]
+    return apiSuccess({
+      ...row,
+      category_label: row.categoryLabel,
+      reviewer_name: row.reviewerName,
+      reviewer_email: row.reviewerEmail,
+    })
   } catch (error) {
     logger.error('Failed to get blog submission', { error })
     return apiError(error, 'Fehler beim Laden der Einreichung')
@@ -56,50 +99,38 @@ export const PATCH = withAdmin<{ id: string }>('content', async (request, sessio
     const { action, review_notes, rejection_reason } = body
 
     // Verify submission exists
-    const existing = await query<{
-      id: string
-      title: string
-      slug: string
-      content: string
-      submitter_name: string
-      submitter_email: string
-      category_id: string | null
-      tags: string[]
-      status: string
-      edit_history?: EditHistoryEntry[]
-    }>(
-      `SELECT id, title, slug, content, submitter_name, submitter_email,
-              category_id, tags, status, edit_history, reviewed_by, reviewed_at,
-              review_notes, rejection_reason, published_post_id, published_at,
-              created_at, updated_at
-       FROM ${TABLE_NAMES.BLOG_SUBMISSIONS} WHERE id = $1`,
-      [id]
-    )
+    const existingRows = await db
+      .select()
+      .from(blogSubmissions)
+      .where(eq(blogSubmissions.id, id))
 
-    if (existing.rows.length === 0) {
+    if (existingRows.length === 0) {
       return apiNotFound('Einreichung')
     }
 
-    const submission = existing.rows[0]
+    const submission = existingRows[0]
     const reviewerId = session.user.id
 
     // Handle different actions
     switch (action) {
       case 'approve': {
         // Update submission status
-        await query(
-          `UPDATE ${TABLE_NAMES.BLOG_SUBMISSIONS}
-           SET status = '${APPROVAL_STATUS.APPROVED}', reviewed_by = $1, reviewed_at = NOW(), review_notes = $2
-           WHERE id = $3`,
-          [reviewerId, review_notes || null, id]
-        )
+        await db
+          .update(blogSubmissions)
+          .set({
+            status: APPROVAL_STATUS.APPROVED,
+            reviewedBy: reviewerId,
+            reviewedAt: sql`NOW()`,
+            reviewNotes: review_notes || null,
+          })
+          .where(eq(blogSubmissions.id, id))
 
         // Send approval email to submitter
         try {
           await sendEmail(
-            submission.submitter_email,
+            submission.submitterEmail,
             'blogSubmissionApproved',
-            submission.submitter_name,
+            submission.submitterName,
             submission.title
           )
         } catch (emailError) {
@@ -147,33 +178,36 @@ export const PATCH = withAdmin<{ id: string }>('content', async (request, sessio
         }
 
         const updatedHistory = appendEditHistory(
-          submission.edit_history || null,
+          (submission.editHistory as EditHistoryEntry[] | null) || null,
           editEntry
         )
 
-        // Build dynamic UPDATE query
-        const updateFields = Object.keys(fields)
-        const setClause = updateFields
-          .map((field, idx) => `${field} = $${idx + 2}`)
-          .join(', ')
-        const values = [id, ...updateFields.map((f) => fields[f])]
+        // Build dynamic UPDATE using sql template for proper parameterization
+        // Field names are validated against a whitelist to prevent SQL injection
+        const allowedFields = ['title', 'slug', 'content', 'excerpt', 'category_id', 'category_name', 'tags', 'submission_type']
+        const updateFields = Object.keys(fields).filter(f => allowedFields.includes(f))
 
-        const updateQuery = `
-          UPDATE ${TABLE_NAMES.BLOG_SUBMISSIONS}
-          SET ${setClause},
-              edit_history = $${values.length + 1},
-              last_edited_by = $${values.length + 2},
-              last_edited_at = NOW(),
-              updated_at = NOW()
-          WHERE id = $1
+        if (updateFields.length === 0) {
+          return apiBadRequest('Keine gültigen Felder zum Bearbeiten')
+        }
+
+        const setFragments = updateFields.map((field) =>
+          sql`${sql.raw(field)} = ${fields[field]}`
+        )
+        const allSets = [
+          ...setFragments,
+          sql`edit_history = ${JSON.stringify(updatedHistory)}`,
+          sql`last_edited_by = ${reviewerId}`,
+          sql`last_edited_at = NOW()`,
+          sql`updated_at = NOW()`,
+        ]
+
+        const updateResult = await db.execute(sql`
+          UPDATE ${sql.raw(TABLE_NAMES.BLOG_SUBMISSIONS)}
+          SET ${sql.join(allSets, sql`, `)}
+          WHERE id = ${id}
           RETURNING *
-        `
-
-        const updateResult = await query(updateQuery, [
-          ...values,
-          JSON.stringify(updatedHistory),
-          reviewerId,
-        ])
+        `)
 
         logger.info('Blog submission edited by admin', {
           submissionId: id,
@@ -192,20 +226,23 @@ export const PATCH = withAdmin<{ id: string }>('content', async (request, sessio
           return apiBadRequest('Ablehnungsgrund ist erforderlich')
         }
 
-        await query(
-          `UPDATE ${TABLE_NAMES.BLOG_SUBMISSIONS}
-           SET status = '${APPROVAL_STATUS.REJECTED}', reviewed_by = $1, reviewed_at = NOW(),
-               review_notes = $2, rejection_reason = $3
-           WHERE id = $4`,
-          [reviewerId, review_notes || null, rejection_reason, id]
-        )
+        await db
+          .update(blogSubmissions)
+          .set({
+            status: APPROVAL_STATUS.REJECTED,
+            reviewedBy: reviewerId,
+            reviewedAt: sql`NOW()`,
+            reviewNotes: review_notes || null,
+            rejectionReason: rejection_reason,
+          })
+          .where(eq(blogSubmissions.id, id))
 
         // Send rejection email to submitter
         try {
           await sendEmail(
-            submission.submitter_email,
+            submission.submitterEmail,
             'blogSubmissionRejected',
-            submission.submitter_name,
+            submission.submitterName,
             submission.title,
             rejection_reason
           )
@@ -223,37 +260,39 @@ export const PATCH = withAdmin<{ id: string }>('content', async (request, sessio
       }
 
       case 'publish': {
-        // Wrap INSERT + UPDATE in transaction to prevent orphaned posts
-        const { postId, postSlug } = await transaction(async (client) => {
-          const postResult = await client.query(
-            `INSERT INTO ${TABLE_NAMES.BLOG_POSTS}
-             (slug, title, content, excerpt, category_id, tags, is_published, published_at,
-              created_by, seo_title, seo_description)
-             VALUES ($1, $2, $3, $4, $5, $6, true, NOW(), $7, $8, $9)
-             RETURNING id`,
-            [
-              submission.slug,
-              submission.title,
-              submission.content,
-              submission.content.substring(0, 200) + '...',
-              submission.category_id,
-              submission.tags || [],
-              reviewerId,
-              submission.title,
-              submission.content.substring(0, 160),
-            ]
-          )
+        // Wrap INSERT + UPDATE in Drizzle transaction
+        const { postId, postSlug } = await db.transaction(async (tx) => {
+          const [post] = await tx
+            .insert(blogPosts)
+            .values({
+              slug: submission.slug!,
+              title: submission.title,
+              content: submission.content,
+              excerpt: submission.content.substring(0, 200) + '...',
+              categoryId: submission.categoryId,
+              tags: submission.tags || [],
+              isPublished: true,
+              publishedAt: sql`NOW()`,
+              createdBy: reviewerId,
+              seoTitle: submission.title,
+              seoDescription: submission.content.substring(0, 160),
+            })
+            .returning({ id: blogPosts.id })
 
-          const createdPostId = (postResult.rows[0] as { id: string }).id
+          const createdPostId = post.id
 
           // Update submission with link to published post
-          await client.query(
-            `UPDATE ${TABLE_NAMES.BLOG_SUBMISSIONS}
-             SET status = '${APPROVAL_STATUS.PUBLISHED}', reviewed_by = $1, reviewed_at = NOW(),
-                 review_notes = $2, published_post_id = $3, published_at = NOW()
-             WHERE id = $4`,
-            [reviewerId, review_notes || 'Veröffentlicht', createdPostId, id]
-          )
+          await tx
+            .update(blogSubmissions)
+            .set({
+              status: APPROVAL_STATUS.PUBLISHED,
+              reviewedBy: reviewerId,
+              reviewedAt: sql`NOW()`,
+              reviewNotes: review_notes || 'Veröffentlicht',
+              publishedPostId: createdPostId,
+              publishedAt: sql`NOW()`,
+            })
+            .where(eq(blogSubmissions.id, id))
 
           return { postId: createdPostId, postSlug: submission.slug }
         })
@@ -261,9 +300,9 @@ export const PATCH = withAdmin<{ id: string }>('content', async (request, sessio
         // Send published notification email
         try {
           await sendEmail(
-            submission.submitter_email,
+            submission.submitterEmail,
             'blogSubmissionPublished',
-            submission.submitter_name,
+            submission.submitterName,
             submission.title,
             `/blog/${submission.slug}`
           )
@@ -292,19 +331,22 @@ export const PATCH = withAdmin<{ id: string }>('content', async (request, sessio
           return apiBadRequest('Änderungshinweise sind erforderlich')
         }
 
-        await query(
-          `UPDATE ${TABLE_NAMES.BLOG_SUBMISSIONS}
-           SET status = '${APPROVAL_STATUS.PENDING}', reviewed_by = $1, reviewed_at = NOW(), review_notes = $2
-           WHERE id = $3`,
-          [reviewerId, review_notes, id]
-        )
+        await db
+          .update(blogSubmissions)
+          .set({
+            status: APPROVAL_STATUS.PENDING,
+            reviewedBy: reviewerId,
+            reviewedAt: sql`NOW()`,
+            reviewNotes: review_notes,
+          })
+          .where(eq(blogSubmissions.id, id))
 
         // Send change request email
         try {
           await sendEmail(
-            submission.submitter_email,
+            submission.submitterEmail,
             'blogSubmissionChangesRequested',
-            submission.submitter_name,
+            submission.submitterName,
             submission.title,
             review_notes
           )
@@ -339,23 +381,23 @@ export const DELETE = withAdmin<{ id: string }>('content', async (request, sessi
     const { id } = context!.params!
 
     // Check if submission exists
-    const existing = await query<{ id: string; title: string }>(
-      `SELECT id, title FROM ${TABLE_NAMES.BLOG_SUBMISSIONS} WHERE id = $1`,
-      [id]
-    )
+    const existingRows = await db
+      .select({ id: blogSubmissions.id, title: blogSubmissions.title })
+      .from(blogSubmissions)
+      .where(eq(blogSubmissions.id, id))
 
-    if (existing.rows.length === 0) {
+    if (existingRows.length === 0) {
       return apiNotFound('Einreichung')
     }
 
     // Delete submission
-    await query(`DELETE FROM ${TABLE_NAMES.BLOG_SUBMISSIONS} WHERE id = $1`, [
-      id,
-    ])
+    await db
+      .delete(blogSubmissions)
+      .where(eq(blogSubmissions.id, id))
 
     logger.info('Blog submission deleted', {
       submissionId: id,
-      title: existing.rows[0].title,
+      title: existingRows[0].title,
       deletedBy: session.user.id,
     })
 

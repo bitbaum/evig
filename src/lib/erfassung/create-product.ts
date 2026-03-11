@@ -7,10 +7,18 @@
  * Extracted from app/api/admin/erfassung/route.ts to avoid duplication.
  */
 
-import { query } from '@/lib/auth/db'
+import { db } from '@/db'
+import { sql, getTableName } from 'drizzle-orm'
 import { logger } from '@/lib/logger'
-import { TABLE_NAMES } from '@/config/database'
 import { uploadImage, generateImageFilename } from '@/lib/storage/image-upload'
+import {
+  aiExtractedProducts,
+  inventoryItems,
+  customerProfiles,
+  productCustomerProfiles,
+  marketplaceListings,
+  productImages,
+} from '@/db/schema/inventory'
 import type { ErfassungPayload } from '@/types/erfassung'
 import type { PoolClient } from 'pg'
 
@@ -20,21 +28,48 @@ export interface CreateProductResult {
   imageUrl: string | null
 }
 
+/** Drizzle db or transaction object — both share insert/select/execute */
+type DbOrTx = Parameters<Parameters<typeof db.transaction>[0]>[0] | typeof db
+
+/** Check if value is a raw pg PoolClient (has .query but not .insert) */
+function isPoolClient(v: unknown): v is PoolClient {
+  return v != null && typeof (v as PoolClient).query === 'function' && !('insert' in (v as DbOrTx))
+}
+
 /**
  * Generate human-readable Item UUID in format I-YYMMDD-NNNN
+ *
+ * Accepts either a Drizzle tx/db or a raw PoolClient for backward compatibility
+ * with callers that haven't been migrated yet.
  */
-export async function generateItemUUID(client?: PoolClient): Promise<string> {
+export async function generateItemUUID(executor?: DbOrTx | PoolClient): Promise<string> {
   const today = new Date()
   const datePart = today.toISOString().slice(2, 10).replace(/-/g, '')
 
-  const sql = `SELECT COUNT(*) as count FROM ${TABLE_NAMES.AI_EXTRACTED_PRODUCTS}
-     WHERE DATE(created_at) = CURRENT_DATE`
+  const tableName = getTableName(aiExtractedProducts)
 
-  const result = client
-    ? await client.query<{ count: string }>(sql)
-    : await query<{ count: string }>(sql)
+  let count: string
+  if (!executor) {
+    const result = await db.execute(sql`
+      SELECT COUNT(*) as count FROM ${aiExtractedProducts}
+      WHERE DATE(created_at) = CURRENT_DATE
+    `)
+    count = (result.rows[0] as { count: string })?.count || '0'
+  } else if (isPoolClient(executor)) {
+    // Legacy PoolClient path (for callers not yet migrated to Drizzle)
+    const result = await executor.query<{ count: string }>(
+      `SELECT COUNT(*) as count FROM ${tableName} WHERE DATE(created_at) = CURRENT_DATE`
+    )
+    count = result.rows[0]?.count || '0'
+  } else {
+    const result = await executor.execute(sql`
+      SELECT COUNT(*) as count FROM ${aiExtractedProducts}
+      WHERE DATE(created_at) = CURRENT_DATE
+    `)
+    count = (result.rows[0] as { count: string })?.count || '0'
+  }
 
-  const seqNum = parseInt(result.rows[0]?.count || '0') + 1
+  const seqNum = parseInt(count) + 1
   const seqPart = seqNum.toString().padStart(4, '0')
 
   return `I-${datePart}-${seqPart}`
@@ -43,16 +78,15 @@ export async function generateItemUUID(client?: PoolClient): Promise<string> {
 /**
  * Create a product in the database from an ErfassungPayload.
  *
- * Can be used standalone (creates its own transaction) or within
- * an existing transaction by passing a PoolClient.
+ * Can be used standalone or within an existing Drizzle transaction.
  */
 export async function createErfassungProduct(
   payload: ErfassungPayload,
   userId: string,
-  client: PoolClient,
+  tx: DbOrTx,
 ): Promise<CreateProductResult> {
   // Generate Item UUID within the transaction to prevent race conditions
-  const itemUUID = await generateItemUUID(client)
+  const itemUUID = await generateItemUUID(tx)
 
   // Build dimensions JSON
   const dimensions = {
@@ -78,112 +112,79 @@ export async function createErfassungProduct(
   const productStatus = action === 'draft' ? 'pending_review' : 'approved'
   const marketplaceStatus = action === 'publish' ? 'published' : 'draft'
 
-  // 1. Insert into AI_EXTRACTED_PRODUCTS
-  const productResult = await client.query(
-    `INSERT INTO ${TABLE_NAMES.AI_EXTRACTED_PRODUCTS} (
-      item_uuid,
-      product_name,
-      brand,
-      short_description,
-      specifications,
-      estimated_price_chf,
-      condition,
-      dimensions,
-      weight_grams,
-      category,
-      subcategory,
-      status,
-      created_by
-    ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
-    RETURNING id`,
-    [
-      itemUUID,
-      payload.produktname,
-      payload.hersteller,
-      payload.kurzbeschreibung || null,
-      JSON.stringify(specifications),
-      payload.verkaufspreis,
-      payload.zustand || 'good',
-      JSON.stringify(dimensions),
-      payload.gewicht_kg ? Math.round(payload.gewicht_kg * 1000) : null,
-      payload.hauptkategorie || null,
-      payload.unterkategorie || null,
-      productStatus,
-      userId,
-    ]
-  )
+  // 1. Insert into ai_extracted_products
+  const [productRow] = await tx
+    .insert(aiExtractedProducts)
+    .values({
+      itemUuid: itemUUID,
+      productName: payload.produktname,
+      brand: payload.hersteller,
+      shortDescription: payload.kurzbeschreibung || null,
+      specifications: specifications,
+      estimatedPriceChf: String(payload.verkaufspreis),
+      condition: payload.zustand || 'good',
+      dimensions: dimensions,
+      weightGrams: payload.gewicht_kg ? Math.round(payload.gewicht_kg * 1000) : null,
+      category: payload.hauptkategorie || null,
+      subcategory: payload.unterkategorie || null,
+      status: productStatus,
+      createdBy: userId,
+    })
+    .returning({ id: aiExtractedProducts.id })
 
-  const productId = productResult.rows[0].id
+  const productId = productRow.id
 
-  // 2. Insert into INVENTORY_ITEMS
-  const inventoryResult = await client.query(
-    `INSERT INTO ${TABLE_NAMES.INVENTORY_ITEMS} (
-      ai_product_id,
-      location,
-      box_id,
-      quantity_available,
-      status,
-      selling_price_chf,
-      marketplace_status
-    ) VALUES ($1, $2, $3, $4, $5, $6, $7)
-    RETURNING id`,
-    [
-      productId,
-      payload.location || null,
-      payload.box_id || null,
-      payload.auf_lager || 1,
-      'available',
-      payload.verkaufspreis,
-      marketplaceStatus,
-    ]
-  )
-  const inventoryItemId = inventoryResult.rows[0].id
+  // 2. Insert into inventory_items
+  const [inventoryRow] = await tx
+    .insert(inventoryItems)
+    .values({
+      aiProductId: productId,
+      location: payload.location || null,
+      boxId: payload.box_id || null,
+      quantityAvailable: payload.auf_lager || 1,
+      status: 'available',
+      sellingPriceChf: String(payload.verkaufspreis),
+      marketplaceStatus: marketplaceStatus,
+    })
+    .returning({ id: inventoryItems.id })
+
+  const inventoryItemId = inventoryRow.id
 
   // 3. Link customer profiles if provided (batch to avoid N+1)
   if (payload.kundenprofile && payload.kundenprofile.length > 0) {
-    const slugPlaceholders = payload.kundenprofile.map((_: string, i: number) => `$${i + 1}`).join(', ')
-    const profileResult = await client.query(
-      `SELECT id FROM ${TABLE_NAMES.CUSTOMER_PROFILES} WHERE slug IN (${slugPlaceholders})`,
-      payload.kundenprofile
-    )
+    const profileRows = await tx
+      .select({ id: customerProfiles.id })
+      .from(customerProfiles)
+      .where(sql`${customerProfiles.slug} IN ${payload.kundenprofile}`)
 
-    if (profileResult.rows.length > 0) {
-      const profileIds = profileResult.rows.map((r: { id: string }) => r.id)
-      const values = profileIds.map((_: string, i: number) =>
-        `($${i * 2 + 1}, $${i * 2 + 2}, 'manual')`
-      ).join(', ')
-      const params = profileIds.flatMap((profileId: string) => [productId, profileId])
-      await client.query(
-        `INSERT INTO ${TABLE_NAMES.PRODUCT_CUSTOMER_PROFILES} (product_id, profile_id, assigned_by)
-         VALUES ${values}
-         ON CONFLICT (product_id, profile_id) DO NOTHING`,
-        params
-      )
+    if (profileRows.length > 0) {
+      await tx
+        .insert(productCustomerProfiles)
+        .values(
+          profileRows.map((r) => ({
+            productId: productId,
+            profileId: r.id,
+            assignedBy: 'manual' as const,
+          }))
+        )
+        .onConflictDoNothing()
     }
   }
 
   // 4. Create marketplace listing if publishing to shop
   if (action === 'publish') {
-    await client.query(
-      `INSERT INTO ${TABLE_NAMES.MARKETPLACE_LISTINGS} (
-        inventory_item_id,
-        title,
-        description,
-        price_chf,
-        platform,
-        status,
-        published_at,
-        created_by
-      ) VALUES ($1, $2, $3, $4, 'internal', 'published', NOW(), $5)`,
-      [
-        inventoryItemId,
-        `${payload.hersteller} ${payload.produktname}`,
-        payload.kurzbeschreibung || '',
-        payload.verkaufspreis,
-        userId,
-      ]
-    )
-
+    await tx
+      .insert(marketplaceListings)
+      .values({
+        inventoryItemId: inventoryItemId,
+        title: `${payload.hersteller} ${payload.produktname}`,
+        description: payload.kurzbeschreibung || '',
+        priceChf: String(payload.verkaufspreis),
+        platform: 'internal',
+        status: 'published',
+        publishedAt: new Date().toISOString(),
+        createdBy: userId,
+      })
   }
 
   // 5. Handle image upload if provided
@@ -195,22 +196,16 @@ export async function createErfassungProduct(
     if (uploadResult.success && uploadResult.url) {
       imageUrl = uploadResult.url
 
-      await client.query(
-        `INSERT INTO ${TABLE_NAMES.PRODUCT_IMAGES} (
-          product_id,
-          filename,
-          file_path,
-          is_primary,
-          uploaded_by,
-          upload_status
-        ) VALUES ($1, $2, $3, true, $4, 'ready')`,
-        [
-          productId,
-          filename,
-          uploadResult.url,
-          userId,
-        ]
-      )
+      await tx
+        .insert(productImages)
+        .values({
+          productId: productId,
+          filename: filename,
+          filePath: uploadResult.url,
+          isPrimary: true,
+          uploadedBy: userId,
+          uploadStatus: 'ready',
+        })
 
       logger.info('Product image uploaded', {
         productId,

@@ -5,11 +5,10 @@
  * Creates a new product in the inventory system
  */
 
-import { NextRequest } from 'next/server'
 import { withAdmin } from '@/lib/api/middleware'
 import { apiSuccess, apiError } from '@/lib/api/helpers'
 import { validateBody, ErfassungCreateSchema } from '@/lib/schemas'
-import { transaction } from '@/lib/auth/db'
+import { db } from '@/db'
 import { logger } from '@/lib/logger'
 import { createErfassungProduct } from '@/lib/erfassung/create-product'
 import type { ErfassungPayload } from '@/types/erfassung'
@@ -23,9 +22,9 @@ export const POST = withAdmin('products', async (request, session) => {
 
     const action = payload.action || (payload.publish ? 'publish' : 'draft')
 
-    // Use transaction for data integrity
-    const result = await transaction(async (client) => {
-      return createErfassungProduct(payload, session.user.id, client)
+    // Use Drizzle transaction for data integrity
+    const result = await db.transaction(async (tx) => {
+      return createErfassungProduct(payload, session.user.id, tx)
     })
 
     // Action-specific messages

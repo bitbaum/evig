@@ -1,44 +1,13 @@
 import { NextRequest } from 'next/server'
 import { withAdmin } from '@/lib/api/middleware'
-import { query } from '@/lib/auth/db'
+import { db } from '@/db'
+import { reviews, users, repairerProfiles } from '@/db/schema'
+import { eq, sql, and, gte, count, avg } from 'drizzle-orm'
 import { apiError, apiSuccess, apiBadRequest } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
-import { TABLE_NAMES, REVIEW_TARGET_TYPES } from '@/config/database'
+import { REVIEW_TARGET_TYPES } from '@/config/database'
 import { REVIEW_STATUS } from '@/config/review-status'
 import { logger } from '@/lib/logger'
-
-interface OverallStatsRow {
-  total_reviews: string
-  published_reviews: string
-  pending_reviews: string
-  hidden_reviews: string
-  average_rating: string
-  verified_reviews: string
-}
-
-interface RatingDistributionRow {
-  overall_rating: number
-  count: string
-}
-
-interface TopRatedRow {
-  business_name: string
-  average_rating: string
-  total_reviews: string
-  recent_reviews: string
-}
-
-interface TrendRow {
-  date: string
-  count: string
-  avg_rating: string
-}
-
-interface ReviewerRow {
-  name: string
-  review_count: string
-  avg_rating_given: string
-}
 
 export const GET = withAdmin('reviews', async (request, session) => {
   try {
@@ -54,76 +23,98 @@ export const GET = withAdmin('reviews', async (request, session) => {
     // Calculate date range
     const endDate = new Date()
     const startDate = new Date(endDate.getTime() - (days * 24 * 60 * 60 * 1000))
+    const startDateStr = startDate.toISOString()
 
     // Get overall review statistics
-    const overallStats = await query(`
-      SELECT
-        COUNT(*) as total_reviews,
-        COUNT(CASE WHEN status = '${REVIEW_STATUS.PUBLISHED}' THEN 1 END) as published_reviews,
-        COUNT(CASE WHEN status = '${REVIEW_STATUS.PENDING_MODERATION}' THEN 1 END) as pending_reviews,
-        COUNT(CASE WHEN status = '${REVIEW_STATUS.HIDDEN}' THEN 1 END) as hidden_reviews,
-        ROUND(AVG(overall_rating)::numeric, 2) as average_rating,
-        COUNT(CASE WHEN is_verified_purchase = true THEN 1 END) as verified_reviews
-      FROM ${TABLE_NAMES.REVIEWS}
-      WHERE target_type = $1 AND created_at >= $2
-    `, [targetType, startDate.toISOString()])
+    const [overallStats] = await db
+      .select({
+        totalReviews: count(),
+        publishedReviews: sql<number>`COUNT(CASE WHEN ${reviews.status} = ${REVIEW_STATUS.PUBLISHED} THEN 1 END)`,
+        pendingReviews: sql<number>`COUNT(CASE WHEN ${reviews.status} = ${REVIEW_STATUS.PENDING_MODERATION} THEN 1 END)`,
+        hiddenReviews: sql<number>`COUNT(CASE WHEN ${reviews.status} = ${REVIEW_STATUS.HIDDEN} THEN 1 END)`,
+        averageRating: sql<number>`ROUND(AVG(${reviews.overallRating})::numeric, 2)`,
+        verifiedReviews: sql<number>`COUNT(CASE WHEN ${reviews.isVerifiedPurchase} = true THEN 1 END)`,
+      })
+      .from(reviews)
+      .where(and(
+        eq(reviews.targetType, targetType),
+        gte(reviews.createdAt, startDateStr)
+      ))
 
     // Get rating distribution
-    const ratingDistribution = await query(`
-      SELECT
-        overall_rating,
-        COUNT(*) as count
-      FROM ${TABLE_NAMES.REVIEWS}
-      WHERE target_type = $1 AND status = '${REVIEW_STATUS.PUBLISHED}' AND created_at >= $2
-      GROUP BY overall_rating
-      ORDER BY overall_rating DESC
-    `, [targetType, startDate.toISOString()])
+    const ratingDistributionRows = await db
+      .select({
+        overallRating: reviews.overallRating,
+        count: count(),
+      })
+      .from(reviews)
+      .where(and(
+        eq(reviews.targetType, targetType),
+        eq(reviews.status, REVIEW_STATUS.PUBLISHED),
+        gte(reviews.createdAt, startDateStr)
+      ))
+      .groupBy(reviews.overallRating)
+      .orderBy(sql`${reviews.overallRating} DESC`)
 
     // Get top-rated repairers
-    const topRated = await query(`
-      SELECT
-        rp.business_name,
-        rp.average_rating,
-        rp.total_reviews,
-        COUNT(r.id) as recent_reviews
-      FROM ${TABLE_NAMES.REPAIRER_PROFILES} rp
-      LEFT JOIN ${TABLE_NAMES.REVIEWS} r ON r.target_type = $1 AND r.target_id = rp.id
-        AND r.status = '${REVIEW_STATUS.PUBLISHED}' AND r.created_at >= $2
-      WHERE rp.is_verified = true AND rp.total_reviews > 0
-      GROUP BY rp.id, rp.business_name, rp.average_rating, rp.total_reviews
-      ORDER BY rp.average_rating DESC, rp.total_reviews DESC
-      LIMIT 10
-    `, [REVIEW_TARGET_TYPES.REPAIRER, startDate.toISOString()])
+    const topRatedRows = await db
+      .select({
+        businessName: repairerProfiles.businessName,
+        averageRating: repairerProfiles.averageRating,
+        totalReviews: repairerProfiles.totalReviews,
+        recentReviews: count(reviews.id),
+      })
+      .from(repairerProfiles)
+      .leftJoin(reviews, and(
+        eq(reviews.targetType, REVIEW_TARGET_TYPES.REPAIRER),
+        eq(reviews.targetId, repairerProfiles.id),
+        eq(reviews.status, REVIEW_STATUS.PUBLISHED),
+        gte(reviews.createdAt, startDateStr)
+      ))
+      .where(and(
+        eq(repairerProfiles.isVerified, true),
+        sql`${repairerProfiles.totalReviews} > 0`
+      ))
+      .groupBy(repairerProfiles.id, repairerProfiles.businessName, repairerProfiles.averageRating, repairerProfiles.totalReviews)
+      .orderBy(sql`${repairerProfiles.averageRating} DESC, ${repairerProfiles.totalReviews} DESC`)
+      .limit(10)
 
     // Get review trends (daily for the period)
-    const reviewTrends = await query(`
-      SELECT
-        DATE(created_at) as date,
-        COUNT(*) as count,
-        ROUND(AVG(overall_rating)::numeric, 2) as avg_rating
-      FROM ${TABLE_NAMES.REVIEWS}
-      WHERE target_type = $1 AND status = '${REVIEW_STATUS.PUBLISHED}' AND created_at >= $2
-      GROUP BY DATE(created_at)
-      ORDER BY DATE(created_at) DESC
-    `, [targetType, startDate.toISOString()])
+    const trendRows = await db
+      .select({
+        date: sql<string>`DATE(${reviews.createdAt})`,
+        count: count(),
+        avgRating: sql<number>`ROUND(AVG(${reviews.overallRating})::numeric, 2)`,
+      })
+      .from(reviews)
+      .where(and(
+        eq(reviews.targetType, targetType),
+        eq(reviews.status, REVIEW_STATUS.PUBLISHED),
+        gte(reviews.createdAt, startDateStr)
+      ))
+      .groupBy(sql`DATE(${reviews.createdAt})`)
+      .orderBy(sql`DATE(${reviews.createdAt}) DESC`)
 
     // Get most active reviewers
-    const activeReviewers = await query(`
-      SELECT
-        u.name,
-        COUNT(r.id) as review_count,
-        ROUND(AVG(r.overall_rating)::numeric, 2) as avg_rating_given
-      FROM ${TABLE_NAMES.USERS} u
-      JOIN ${TABLE_NAMES.REVIEWS} r ON u.id = r.reviewer_id
-      WHERE r.target_type = $1 AND r.status = '${REVIEW_STATUS.PUBLISHED}' AND r.created_at >= $2
-      GROUP BY u.id, u.name
-      ORDER BY review_count DESC
-      LIMIT 10
-    `, [targetType, startDate.toISOString()])
+    const activeReviewerRows = await db
+      .select({
+        name: users.name,
+        reviewCount: count(reviews.id),
+        avgRatingGiven: sql<number>`ROUND(AVG(${reviews.overallRating})::numeric, 2)`,
+      })
+      .from(users)
+      .innerJoin(reviews, eq(users.id, reviews.reviewerId))
+      .where(and(
+        eq(reviews.targetType, targetType),
+        eq(reviews.status, REVIEW_STATUS.PUBLISHED),
+        gte(reviews.createdAt, startDateStr)
+      ))
+      .groupBy(users.id, users.name)
+      .orderBy(sql`COUNT(${reviews.id}) DESC`)
+      .limit(10)
 
-    const stats = overallStats.rows[0] as OverallStatsRow
-    const totalReviews = parseInt(stats.total_reviews)
-    const publishedReviews = parseInt(stats.published_reviews)
+    const totalReviews = Number(overallStats.totalReviews) || 0
+    const publishedReviews = Number(overallStats.publishedReviews) || 0
 
     const analytics = {
       period: {
@@ -134,33 +125,33 @@ export const GET = withAdmin('reviews', async (request, session) => {
       overview: {
         totalReviews,
         publishedReviews,
-        pendingReviews: parseInt(stats.pending_reviews),
-        hiddenReviews: parseInt(stats.hidden_reviews),
-        verifiedReviews: parseInt(stats.verified_reviews),
-        averageRating: parseFloat(stats.average_rating) || 0,
+        pendingReviews: Number(overallStats.pendingReviews) || 0,
+        hiddenReviews: Number(overallStats.hiddenReviews) || 0,
+        verifiedReviews: Number(overallStats.verifiedReviews) || 0,
+        averageRating: Number(overallStats.averageRating) || 0,
         publishRate: totalReviews > 0
           ? Math.round((publishedReviews / totalReviews) * 100)
           : 0
       },
-      ratingDistribution: (ratingDistribution.rows as RatingDistributionRow[]).reduce((acc: Record<number, number>, row) => {
-        acc[row.overall_rating] = parseInt(row.count)
+      ratingDistribution: ratingDistributionRows.reduce((acc: Record<number, number>, row) => {
+        acc[row.overallRating] = Number(row.count)
         return acc
       }, { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 } as Record<number, number>),
-      topRated: (topRated.rows as TopRatedRow[]).map(row => ({
-        name: row.business_name,
-        averageRating: parseFloat(row.average_rating),
-        totalReviews: parseInt(row.total_reviews),
-        recentReviews: parseInt(row.recent_reviews)
+      topRated: topRatedRows.map(row => ({
+        name: row.businessName,
+        averageRating: Number(row.averageRating),
+        totalReviews: Number(row.totalReviews),
+        recentReviews: Number(row.recentReviews)
       })),
-      trends: (reviewTrends.rows as TrendRow[]).map(row => ({
+      trends: trendRows.map(row => ({
         date: row.date,
-        count: parseInt(row.count),
-        averageRating: parseFloat(row.avg_rating)
+        count: Number(row.count),
+        averageRating: Number(row.avgRating)
       })),
-      activeReviewers: (activeReviewers.rows as ReviewerRow[]).map(row => ({
+      activeReviewers: activeReviewerRows.map(row => ({
         name: row.name,
-        reviewCount: parseInt(row.review_count),
-        averageRatingGiven: parseFloat(row.avg_rating_given)
+        reviewCount: Number(row.reviewCount),
+        averageRatingGiven: Number(row.avgRatingGiven)
       }))
     }
 

@@ -341,8 +341,75 @@ export type RepairerReview = typeof repairerReviews.$inferSelect
 export type NewRepairerReview = typeof repairerReviews.$inferInsert
 
 // =============================================================================
+// REPAIRER APPLICATIONS
+// =============================================================================
+// Applications from users to become repairers (pending admin approval).
+// From 003_comprehensive_schema_enhancement.sql.
+// CHECK (business_type IN ('individual', 'business', 'organization'))
+// CHECK (status IN ('pending', 'approved', 'rejected', 'requires_changes'))
+// UNIQUE (user_id)
+
+export const repairerApplications = pgTable('repairer_applications', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  userId: uuid('user_id').notNull().unique().references(() => users.id, { onDelete: 'cascade' }),
+
+  // Business information
+  businessName: text('business_name'),
+  // CHECK (business_type IN ('individual', 'business', 'organization'))
+  businessType: varchar('business_type', { length: 50 }).notNull(),
+  description: text('description').notNull(),
+  yearsExperience: integer('years_experience').default(0),
+
+  // Contact
+  phone: varchar('phone', { length: 50 }).notNull(),
+  website: varchar('website', { length: 255 }),
+  address: text('address').notNull(),
+  city: varchar('city', { length: 100 }).notNull(),
+  postalCode: varchar('postal_code', { length: 20 }).notNull(),
+
+  // Service area
+  serviceRadiusKm: integer('service_radius_km').default(50),
+  remoteServices: boolean('remote_services').notNull().default(false),
+
+  // Pricing
+  hourlyRateCents: integer('hourly_rate_cents'),
+  emergencyFeeCents: integer('emergency_fee_cents'),
+  homeVisitFeeCents: integer('home_visit_fee_cents'),
+
+  // Skills
+  servicesOffered: text('services_offered').array().default([]),
+  specializations: text('specializations').array().default([]),
+  certifications: jsonb('certifications').default([]),
+  insuranceInfo: text('insurance_info'),
+
+  // Documents
+  portfolioImages: text('portfolio_images').array().default([]),
+  verificationDocuments: text('verification_documents').array().default([]),
+
+  // Terms
+  termsAccepted: boolean('terms_accepted').notNull().default(false),
+
+  // Status — CHECK (status IN ('pending', 'approved', 'rejected', 'requires_changes'))
+  status: varchar('status', { length: 20 }).notNull().default('pending'),
+
+  // Admin review
+  adminNotes: text('admin_notes'),
+  reviewedBy: uuid('reviewed_by').references(() => users.id),
+  reviewedAt: timestamp('reviewed_at', { withTimezone: true, mode: 'string' }),
+
+  // Timestamps
+  createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' }).defaultNow(),
+  updatedAt: timestamp('updated_at', { withTimezone: true, mode: 'string' }).defaultNow(),
+}, (table) => [
+  index('idx_repairer_applications_user_id').on(table.userId),
+  index('idx_repairer_applications_status').on(table.status),
+])
+
+export type RepairerApplication = typeof repairerApplications.$inferSelect
+export type NewRepairerApplication = typeof repairerApplications.$inferInsert
+
+// =============================================================================
 // SKIPPED TABLES (referenced in TABLE_NAMES but no migration exists):
-//   - repairer_applications
 //   - repairer_certifications
 //   - certification_types
 //   - document_types

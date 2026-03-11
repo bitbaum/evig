@@ -12,10 +12,9 @@
  * Access: Staff with 'team' permission
  */
 
-import { NextRequest } from 'next/server'
 import { withAdmin } from '@/lib/api/middleware'
-import { query } from '@/lib/auth/db'
-import { TABLE_NAMES } from '@/config/database'
+import { db } from '@/db'
+import { sql, SQL, getTableName } from 'drizzle-orm'
 import {
   apiSuccess,
   apiError,
@@ -23,6 +22,9 @@ import {
 } from '@/lib/api/helpers'
 import { HELP_REQUEST_STATUSES } from '@/config/activity'
 import { validateActivityStreamFilter } from '@/lib/schemas/activity'
+import { taskCompletions, tasks } from '@/db/schema/misc'
+import { activityUpdates, helpRequests } from '@/db/schema/team'
+import { users } from '@/db/schema/auth'
 
 interface UnifiedActivity {
   id: string
@@ -66,44 +68,45 @@ export const GET = withAdmin('team', async (request, session) => {
       ? [filters.source_type]
       : ['task_completion', 'activity_update', 'help_request']
 
-    // Track parameters for parameterized queries
-    const params: (string | number)[] = []
-    let paramIndex = 1
+    // Table names for raw SQL fragments
+    const tcTable = getTableName(taskCompletions)
+    const uTable = getTableName(users)
+    const tTable = getTableName(tasks)
+    const auTable = getTableName(activityUpdates)
+    const hrTable = getTableName(helpRequests)
 
-    // Helper to add a parameter and return placeholder
-    const addParam = (value: string | number): string => {
-      params.push(value)
-      return `$${paramIndex++}`
-    }
-
-    // Build filter conditions with parameterized placeholders
+    // Build dynamic conditions as SQL fragments
     const buildConditions = (
-      userCol: string,
-      categoryCol: string,
-      dateCol: string
-    ): string => {
-      const conditions: string[] = []
+      userCol: SQL,
+      categoryCol: SQL,
+      dateCol: SQL
+    ): SQL => {
+      const parts: SQL[] = []
       if (filters.user_id) {
-        conditions.push(`${userCol} = ${addParam(filters.user_id)}`)
+        parts.push(sql` AND ${userCol} = ${filters.user_id}`)
       }
       if (filters.category) {
-        conditions.push(`${categoryCol} = ${addParam(filters.category)}`)
+        parts.push(sql` AND ${categoryCol} = ${filters.category}`)
       }
       if (filters.since) {
-        conditions.push(`${dateCol} >= ${addParam(filters.since)}`)
+        parts.push(sql` AND ${dateCol} >= ${filters.since}`)
       }
       if (filters.until) {
-        conditions.push(`${dateCol} <= ${addParam(filters.until)}`)
+        parts.push(sql` AND ${dateCol} <= ${filters.until}`)
       }
-      return conditions.length > 0 ? 'AND ' + conditions.join(' AND ') : ''
+      return parts.length > 0 ? sql.join(parts, sql``) : sql``
     }
 
-    const unionQueries: string[] = []
+    const unionQueries: SQL[] = []
 
     // Task completions
     if (sourceTypes.includes('task_completion')) {
-      const conditions = buildConditions('tc.completed_by', 't.category', 'tc.completed_at')
-      unionQueries.push(`
+      const conditions = buildConditions(
+        sql.raw(`tc.completed_by`),
+        sql.raw(`t.category`),
+        sql.raw(`tc.completed_at`)
+      )
+      unionQueries.push(sql`
         SELECT
           tc.id::text as id,
           'task_completion' as source_type,
@@ -119,17 +122,21 @@ export const GET = withAdmin('team', async (request, session) => {
             'task_type', t.task_type
           ) as metadata,
           tc.completed_at as occurred_at
-        FROM ${TABLE_NAMES.TASK_COMPLETIONS} tc
-        JOIN ${TABLE_NAMES.USERS} u ON tc.completed_by = u.id
-        JOIN ${TABLE_NAMES.TASKS} t ON tc.task_id = t.id
+        FROM ${sql.raw(tcTable)} tc
+        JOIN ${sql.raw(uTable)} u ON tc.completed_by = u.id
+        JOIN ${sql.raw(tTable)} t ON tc.task_id = t.id
         WHERE 1=1 ${conditions}
       `)
     }
 
     // Activity updates
     if (sourceTypes.includes('activity_update')) {
-      const conditions = buildConditions('au.user_id', 'au.category', 'au.occurred_at')
-      unionQueries.push(`
+      const conditions = buildConditions(
+        sql.raw(`au.user_id`),
+        sql.raw(`au.category`),
+        sql.raw(`au.occurred_at`)
+      )
+      unionQueries.push(sql`
         SELECT
           au.id::text as id,
           'activity_update' as source_type,
@@ -144,8 +151,8 @@ export const GET = withAdmin('team', async (request, session) => {
             'visibility', au.visibility
           ) as metadata,
           au.occurred_at
-        FROM ${TABLE_NAMES.ACTIVITY_UPDATES} au
-        JOIN ${TABLE_NAMES.USERS} u ON au.user_id = u.id
+        FROM ${sql.raw(auTable)} au
+        JOIN ${sql.raw(uTable)} u ON au.user_id = u.id
         WHERE 1=1 ${conditions}
       `)
     }
@@ -153,8 +160,12 @@ export const GET = withAdmin('team', async (request, session) => {
     // Help requests (both created and resolved)
     if (sourceTypes.includes('help_request')) {
       // Created help requests
-      const createdConditions = buildConditions('hr.requester_id', 'hr.category', 'hr.created_at')
-      unionQueries.push(`
+      const createdConditions = buildConditions(
+        sql.raw(`hr.requester_id`),
+        sql.raw(`hr.category`),
+        sql.raw(`hr.created_at`)
+      )
+      unionQueries.push(sql`
         SELECT
           hr.id::text || '_created' as id,
           'help_request' as source_type,
@@ -172,14 +183,18 @@ export const GET = withAdmin('team', async (request, session) => {
             'action', 'created'
           ) as metadata,
           hr.created_at as occurred_at
-        FROM ${TABLE_NAMES.HELP_REQUESTS} hr
-        JOIN ${TABLE_NAMES.USERS} u ON hr.requester_id = u.id
+        FROM ${sql.raw(hrTable)} hr
+        JOIN ${sql.raw(uTable)} u ON hr.requester_id = u.id
         WHERE 1=1 ${createdConditions}
       `)
 
       // Resolved help requests (show resolver)
-      const resolvedConditions = buildConditions('hr.resolved_by', 'hr.category', 'hr.resolved_at')
-      unionQueries.push(`
+      const resolvedConditions = buildConditions(
+        sql.raw(`hr.resolved_by`),
+        sql.raw(`hr.category`),
+        sql.raw(`hr.resolved_at`)
+      )
+      unionQueries.push(sql`
         SELECT
           hr.id::text || '_resolved' as id,
           'help_request' as source_type,
@@ -193,13 +208,13 @@ export const GET = withAdmin('team', async (request, session) => {
             'request_id', hr.id,
             'urgency', hr.urgency,
             'is_broadcast', hr.is_broadcast,
-            'status', '${HELP_REQUEST_STATUSES.RESOLVED}',
-            'action', '${HELP_REQUEST_STATUSES.RESOLVED}',
+            'status', ${HELP_REQUEST_STATUSES.RESOLVED},
+            'action', ${HELP_REQUEST_STATUSES.RESOLVED},
             'requester_id', hr.requester_id
           ) as metadata,
           hr.resolved_at as occurred_at
-        FROM ${TABLE_NAMES.HELP_REQUESTS} hr
-        JOIN ${TABLE_NAMES.USERS} u ON hr.resolved_by = u.id
+        FROM ${sql.raw(hrTable)} hr
+        JOIN ${sql.raw(uTable)} u ON hr.resolved_by = u.id
         WHERE hr.resolved_by IS NOT NULL ${resolvedConditions}
       `)
     }
@@ -213,36 +228,33 @@ export const GET = withAdmin('team', async (request, session) => {
       })
     }
 
-    // Add limit and offset as parameters
-    const limitParam = addParam(filters.limit)
-    const offsetParam = addParam(filters.offset)
-
     // Combine all queries with UNION ALL
-    const combinedQuery = `
+    const unionSql = sql.join(unionQueries, sql` UNION ALL `)
+
+    const combinedQuery = sql`
       WITH unified_activity AS (
-        ${unionQueries.join('\n        UNION ALL\n        ')}
+        ${unionSql}
       )
       SELECT * FROM unified_activity
       ORDER BY occurred_at DESC
-      LIMIT ${limitParam} OFFSET ${offsetParam}
+      LIMIT ${filters.limit} OFFSET ${filters.offset}
     `
 
-    const result = await query<UnifiedActivity>(combinedQuery, params)
+    const result = await db.execute(combinedQuery)
 
-    // Get total count (reuse same filter params, exclude limit/offset)
-    const countParams = params.slice(0, -2)
-    const countQuery = `
+    // Get total count
+    const countQuery = sql`
       WITH unified_activity AS (
-        ${unionQueries.join('\n        UNION ALL\n        ')}
+        ${unionSql}
       )
       SELECT COUNT(*) as count FROM unified_activity
     `
 
-    const countResult = await query<{ count: string }>(countQuery, countParams)
+    const countResult = await db.execute(countQuery)
 
     return apiSuccess({
-      items: result.rows,
-      total: parseInt(countResult.rows[0]?.count || '0', 10),
+      items: result.rows as unknown as UnifiedActivity[],
+      total: parseInt((countResult.rows[0] as { count: string })?.count || '0', 10),
       limit: filters.limit,
       offset: filters.offset,
     })

@@ -1,30 +1,15 @@
 import { NextRequest } from 'next/server'
 import { auth } from '@/auth'
-import { query } from '@/lib/auth/db'
+import { db } from '@/db'
+import { repairerApplications, users } from '@/db/schema'
+import { eq } from 'drizzle-orm'
 import { apiError, apiSuccess, apiBadRequest, apiUnauthorized } from '@/lib/api/helpers'
 import { ERROR_MESSAGES, SUCCESS_MESSAGES } from '@/config/error-messages'
-import { TABLE_NAMES } from '@/config/database'
 import { sendEmail } from '@/lib/email'
 import { logger } from '@/lib/logger'
 import { APP_URL } from '@/config/urls'
 import { APPROVAL_STATUS } from '@/config/approval-status'
 import { validateBody, RepairerApplicationSchema } from '@/lib/schemas'
-
-interface ApplicationRow {
-  id: string
-  status: string
-}
-
-interface ApplicationCreatedRow {
-  id: string
-  created_at: string
-}
-
-interface AdminRow {
-  id: string
-  name: string
-  email: string
-}
 
 export async function POST(request: NextRequest) {
   try {
@@ -69,29 +54,22 @@ export async function POST(request: NextRequest) {
       termsAccepted
     } = validation.data
 
-    // Check if user already has a repairer profile or application
-    const existingProfile = await query(
-      `SELECT id FROM ${TABLE_NAMES.REPAIRER_APPLICATIONS} WHERE user_id = $1`,
-      [session.user.id]
-    )
+    // Check if user already has a repairer application
+    const existingApplication = await db
+      .select({ id: repairerApplications.id, status: repairerApplications.status })
+      .from(repairerApplications)
+      .where(eq(repairerApplications.userId, session.user.id))
 
-    if (existingProfile.rows.length > 0) {
-      return apiBadRequest('Sie haben bereits ein Reparateur-Profil')
-    }
-
-    const existingApplication = await query(
-      `SELECT id, status FROM ${TABLE_NAMES.REPAIRER_APPLICATIONS} WHERE user_id = $1`,
-      [session.user.id]
-    )
-
-    if (existingApplication.rows.length > 0) {
-      const app = existingApplication.rows[0] as ApplicationRow
+    if (existingApplication.length > 0) {
+      const app = existingApplication[0]
       if (app.status === APPROVAL_STATUS.APPROVED) {
         return apiBadRequest('Ihr Profil wurde bereits freigeschaltet')
       }
       if (app.status === APPROVAL_STATUS.PENDING) {
         return apiBadRequest(ERROR_MESSAGES.PENDING_APPLICATION)
       }
+      // For any other status (rejected, etc.), they already have an application
+      return apiBadRequest('Sie haben bereits ein Reparateur-Profil')
     }
 
     // Handle file uploads (simplified - in production, you'd upload to cloud storage)
@@ -112,62 +90,34 @@ export async function POST(request: NextRequest) {
     }
 
     // Create repairer application
-    const applicationResult = await query(`
-      INSERT INTO ${TABLE_NAMES.REPAIRER_APPLICATIONS} (
-        user_id,
-        business_name,
-        business_type,
+    const [createdApplication] = await db
+      .insert(repairerApplications)
+      .values({
+        userId: session.user.id,
+        businessName: businessName || null,
+        businessType,
         description,
-        years_experience,
+        yearsExperience,
         phone,
-        website,
+        website: website || null,
         address,
         city,
-        postal_code,
-        service_radius_km,
-        remote_services,
-        hourly_rate_cents,
-        emergency_fee_cents,
-        home_visit_fee_cents,
-        services_offered,
+        postalCode,
+        serviceRadiusKm: serviceRadius,
+        remoteServices,
+        hourlyRateCents: hourlyRate ? Math.round(hourlyRate * 100) : null,
+        emergencyFeeCents: emergencyFee ? Math.round(emergencyFee * 100) : null,
+        homeVisitFeeCents: homeVisitFee ? Math.round(homeVisitFee * 100) : null,
+        servicesOffered,
         specializations,
         certifications,
-        insurance_info,
-        portfolio_images,
-        verification_documents,
-        terms_accepted,
-        status
-      ) VALUES (
-        $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15,
-        $16, $17, $18, $19, $20, $21, $22, '${APPROVAL_STATUS.PENDING}'
-      )
-      RETURNING id
-    `, [
-      session.user.id,
-      businessName || null,
-      businessType,
-      description,
-      yearsExperience,
-      phone,
-      website || null,
-      address,
-      city,
-      postalCode,
-      serviceRadius,
-      remoteServices,
-      hourlyRate ? Math.round(hourlyRate * 100) : null,
-      emergencyFee ? Math.round(emergencyFee * 100) : null,
-      homeVisitFee ? Math.round(homeVisitFee * 100) : null,
-      servicesOffered,
-      specializations,
-      certifications,
-      insuranceInfo || null,
-      portfolioImages,
-      certificationDocs,
-      termsAccepted
-    ])
-
-    const createdApplication = applicationResult.rows[0] as ApplicationCreatedRow
+        insuranceInfo: insuranceInfo || null,
+        portfolioImages,
+        verificationDocuments: certificationDocs,
+        termsAccepted,
+        status: APPROVAL_STATUS.PENDING,
+      })
+      .returning({ id: repairerApplications.id })
 
     // Send confirmation email to applicant
     const applicantEmailResult = await sendEmail(
@@ -186,15 +136,14 @@ export async function POST(request: NextRequest) {
 
     // Send notification email to admins (staff users)
     try {
-      // Get all admin emails (staff users)
-      const adminEmailsResult = await query(
-        `SELECT email FROM ${TABLE_NAMES.USERS} WHERE is_staff = true AND email IS NOT NULL`,
-        []
-      )
+      const adminEmails = await db
+        .select({ email: users.email })
+        .from(users)
+        .where(eq(users.isStaff, true))
 
       const adminDashboardUrl = `${APP_URL}/admin/repairer-applications`
 
-      for (const admin of adminEmailsResult.rows as AdminRow[]) {
+      for (const admin of adminEmails) {
         const adminEmailResult = await sendEmail(
           admin.email,
           'adminNewRepairerApplication',

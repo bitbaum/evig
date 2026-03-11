@@ -179,8 +179,11 @@ export const marketplaceOrders = pgTable('marketplace_orders', {
   commissionChf: decimal('commission_chf', { precision: 10, scale: 2 }).notNull(),
   sellerPayoutChf: decimal('seller_payout_chf', { precision: 10, scale: 2 }).notNull(),
 
-  // Stripe
+  // Payment
   stripePaymentIntentId: text('stripe_payment_intent_id'),
+  payrexxGatewayId: text('payrexx_gateway_id'),
+  payrexxTransactionId: text('payrexx_transaction_id'),
+  paymentProvider: text('payment_provider'),
 
   // Status
   // CHECK (status IN ('pending', 'paid', 'shipped', 'delivered', 'completed', 'cancelled', 'refunded'))

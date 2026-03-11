@@ -1,12 +1,12 @@
 import { NextRequest } from 'next/server'
 import { withAdmin } from '@/lib/api/middleware'
-import { query } from '@/lib/auth/db'
+import { db } from '@/db'
+import { sql } from 'drizzle-orm'
 import { apiError, apiSuccess, apiBadRequest, parsePagination } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES } from '@/config/database'
 import { APPROVAL_STATUS } from '@/config/approval-status'
 import { logger } from '@/lib/logger'
-import { CountRow } from '@/lib/api/db-types'
 
 interface ApplicationRow {
   id: string
@@ -44,6 +44,10 @@ interface ApplicationRow {
   updated_at: string
 }
 
+interface CountRow {
+  total: string
+}
+
 export const GET = withAdmin('services', async (request, session) => {
   try {
     const { searchParams } = new URL(request.url)
@@ -57,33 +61,32 @@ export const GET = withAdmin('services', async (request, session) => {
     }
 
     // Get repairer applications with user details
-    const applicationsResult = await query(`
+    const applicationsResult = await db.execute(sql`
       SELECT
         ra.*,
         u.name as applicant_name,
         u.email as applicant_email,
-        u.created_at as user_created_at,
+        u."createdAt" as user_created_at,
         COALESCE(ra.document_verification_status, 'pending') as document_verification_status,
         CASE
-          WHEN ra.status = '${APPROVAL_STATUS.PENDING}' THEN 1
-          WHEN ra.status = '${APPROVAL_STATUS.REQUIRES_CHANGES}' THEN 2
-          WHEN ra.status = '${APPROVAL_STATUS.APPROVED}' THEN 3
-          WHEN ra.status = '${APPROVAL_STATUS.REJECTED}' THEN 4
+          WHEN ra.status = ${APPROVAL_STATUS.PENDING} THEN 1
+          WHEN ra.status = ${APPROVAL_STATUS.REQUIRES_CHANGES} THEN 2
+          WHEN ra.status = ${APPROVAL_STATUS.APPROVED} THEN 3
+          WHEN ra.status = ${APPROVAL_STATUS.REJECTED} THEN 4
         END as priority_order
-      FROM ${TABLE_NAMES.REPAIRER_APPLICATIONS} ra
-      JOIN ${TABLE_NAMES.USERS} u ON ra.user_id = u.id
-      WHERE ra.status = $1
+      FROM ${sql.raw(TABLE_NAMES.REPAIRER_APPLICATIONS)} ra
+      JOIN ${sql.raw(TABLE_NAMES.USERS)} u ON ra.user_id = u.id
+      WHERE ra.status = ${status}
       ORDER BY priority_order ASC, ra.created_at ASC
-      LIMIT $2 OFFSET $3
-    `, [status, limit, offset])
+      LIMIT ${limit} OFFSET ${offset}
+    `)
 
     // Get total count for pagination
-    const countResult = await query(
-      `SELECT COUNT(*) as total FROM ${TABLE_NAMES.REPAIRER_APPLICATIONS} WHERE status = $1`,
-      [status]
-    )
+    const countResult = await db.execute(sql`
+      SELECT COUNT(*) as total FROM ${sql.raw(TABLE_NAMES.REPAIRER_APPLICATIONS)} WHERE status = ${status}
+    `)
 
-    const applications = (applicationsResult.rows as ApplicationRow[]).map(app => ({
+    const applications = (applicationsResult.rows as unknown as ApplicationRow[]).map(app => ({
       id: app.id,
       userId: app.user_id,
       applicantName: app.applicant_name,
@@ -125,7 +128,7 @@ export const GET = withAdmin('services', async (request, session) => {
       count: applications.length
     })
 
-    const count = countResult.rows[0] as CountRow
+    const count = countResult.rows[0] as unknown as CountRow
     return apiSuccess({
       applications,
       total: parseInt(count.total),

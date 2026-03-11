@@ -6,10 +6,9 @@
  * Each chunk runs in its own transaction — failed rows don't block successful ones.
  */
 
-import { NextRequest } from 'next/server'
 import { withAdmin } from '@/lib/api/middleware'
 import { logger } from '@/lib/logger'
-import { transaction } from '@/lib/auth/db'
+import { db } from '@/db'
 import { apiSuccess, apiError, apiBadRequest } from '@/lib/api/helpers'
 import { validateBody, BulkSaveSchema } from '@/lib/schemas'
 import { createErfassungProduct } from '@/lib/erfassung/create-product'
@@ -82,8 +81,8 @@ export const POST = withAdmin('products', async (request, session) => {
           // Set action on each product payload
           const payload = { ...product, verkaufspreis: price, action }
 
-          const result = await transaction(async (client) => {
-            return createErfassungProduct(payload, session.user.id, client)
+          const result = await db.transaction(async (tx) => {
+            return createErfassungProduct(payload, session.user.id, tx)
           })
 
           results.push({
