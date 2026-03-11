@@ -1,6 +1,7 @@
 import { NextRequest } from 'next/server'
 import { withAdmin } from '@/lib/api/middleware'
-import { query, transaction } from '@/lib/auth/db'
+import { db } from '@/db'
+import { sql } from 'drizzle-orm'
 import { apiError, apiSuccess, apiBadRequest, apiNotFound } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES } from '@/config/database'
@@ -31,18 +32,18 @@ export const PUT = withAdmin<{ id: string }>('content', async (request, session,
     }
 
     // Get document details (read-only, outside transaction)
-    const documentResult = await query(`
+    const documentResult = await db.execute(sql`
       SELECT vd.*, ra.user_id, ra.document_verification_status
-      FROM ${TABLE_NAMES.VERIFICATION_DOCUMENTS} vd
-      JOIN ${TABLE_NAMES.REPAIRER_APPLICATIONS} ra ON vd.application_id = ra.id
-      WHERE vd.id = $1
-    `, [documentId])
+      FROM ${sql.raw(TABLE_NAMES.VERIFICATION_DOCUMENTS)} vd
+      JOIN ${sql.raw(TABLE_NAMES.REPAIRER_APPLICATIONS)} ra ON vd.application_id = ra.id
+      WHERE vd.id = ${documentId}
+    `)
 
     if (documentResult.rows.length === 0) {
       return apiNotFound('Dokument nicht gefunden')
     }
 
-    const document = documentResult.rows[0] as DocumentRow
+    const document = documentResult.rows[0] as unknown as DocumentRow
 
     if (document.status === DOCUMENT_STATUS.APPROVED) {
       return apiBadRequest('Ein bereits genehmigtes Dokument kann nicht abgelehnt werden')
@@ -53,25 +54,25 @@ export const PUT = withAdmin<{ id: string }>('content', async (request, session,
     }
 
     // Wrap all writes in a transaction for consistency
-    await transaction(async (client) => {
+    await db.transaction(async (tx) => {
       // Update document status with rejection details
-      await client.query(`
-        UPDATE ${TABLE_NAMES.VERIFICATION_DOCUMENTS}
+      await tx.execute(sql`
+        UPDATE ${sql.raw(TABLE_NAMES.VERIFICATION_DOCUMENTS)}
         SET
-          status = '${DOCUMENT_STATUS.REJECTED}',
-          admin_notes = COALESCE($1, admin_notes) || E'\n\nAblehnungsgrund: ' || $2,
-          reviewed_by = $3,
+          status = ${DOCUMENT_STATUS.REJECTED},
+          admin_notes = COALESCE(${adminNotes ?? null}, admin_notes) || E'\n\nAblehnungsgrund: ' || ${rejectionReason},
+          reviewed_by = ${session.user.id},
           reviewed_at = CURRENT_TIMESTAMP,
           updated_at = CURRENT_TIMESTAMP
-        WHERE id = $4
-      `, [adminNotes, rejectionReason, session.user.id, documentId])
+        WHERE id = ${documentId}
+      `)
 
       // Update application document verification status to incomplete
-      await client.query(`
-        UPDATE ${TABLE_NAMES.REPAIRER_APPLICATIONS}
-        SET document_verification_status = 'incomplete', updated_at = CURRENT_TIMESTAMP
-        WHERE id = $1
-      `, [document.application_id])
+      await tx.execute(sql`
+        UPDATE ${sql.raw(TABLE_NAMES.REPAIRER_APPLICATIONS)}
+        SET document_verification_status = ${'incomplete'}, updated_at = CURRENT_TIMESTAMP
+        WHERE id = ${document.application_id}
+      `)
     })
 
     logger.info('Document rejected', {

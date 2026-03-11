@@ -134,6 +134,7 @@ export async function POST(request: NextRequest) {
         contactName: contact_name || undefined,
         contactPhone: contact_phone || undefined,
         contactEmail: contact_email || undefined,
+        createdBy: session.user.id,
       })
       .returning()
 

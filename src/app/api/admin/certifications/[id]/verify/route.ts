@@ -1,9 +1,9 @@
 import { NextRequest } from 'next/server'
 import { withAdmin } from '@/lib/api/middleware'
-import { query } from '@/lib/auth/db'
+import { db } from '@/db'
+import { sql } from 'drizzle-orm'
 import { apiError, apiSuccess, apiBadRequest, apiNotFound } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
-import { TABLE_NAMES } from '@/config/database'
 import { CERTIFICATION_STATUS } from '@/config/certification-status'
 import { logger } from '@/lib/logger'
 import { validateBody, CertificationVerifySchema } from '@/lib/schemas'
@@ -27,19 +27,19 @@ export const PUT = withAdmin<{ id: string }>('services', async (request, session
     const { adminNotes, verificationResult } = validation.data
 
     // Get certification details
-    const certificationResult = await query(`
+    const certificationResult = await db.execute(sql`
       SELECT rc.*, ra.user_id, ct.validity_period_months
-      FROM ${TABLE_NAMES.REPAIRER_CERTIFICATIONS} rc
-      JOIN ${TABLE_NAMES.REPAIRER_APPLICATIONS} ra ON rc.application_id = ra.id
-      LEFT JOIN ${TABLE_NAMES.CERTIFICATION_TYPES} ct ON rc.certification_type_id = ct.id
-      WHERE rc.id = $1
-    `, [certificationId])
+      FROM repairer_certifications rc
+      JOIN repairer_applications ra ON rc.application_id = ra.id
+      LEFT JOIN certification_types ct ON rc.certification_type_id = ct.id
+      WHERE rc.id = ${certificationId}
+    `)
 
     if (certificationResult.rows.length === 0) {
       return apiNotFound('Zertifizierung nicht gefunden')
     }
 
-    const certification = certificationResult.rows[0] as CertificationRow
+    const certification = certificationResult.rows[0] as unknown as CertificationRow
 
     if (certification.verification_status === CERTIFICATION_STATUS.VERIFIED) {
       return apiBadRequest('Diese Zertifizierung wurde bereits verifiziert')
@@ -54,24 +54,19 @@ export const PUT = withAdmin<{ id: string }>('services', async (request, session
     }
 
     // Update certification verification status
-    await query(`
-      UPDATE ${TABLE_NAMES.REPAIRER_CERTIFICATIONS}
+    const verificationResultJson = verificationResult ? JSON.stringify(verificationResult) : null
+    await db.execute(sql`
+      UPDATE repairer_certifications
       SET
-        verification_status = '${CERTIFICATION_STATUS.VERIFIED}',
-        verification_result = COALESCE($1, verification_result),
-        admin_notes = COALESCE($2, admin_notes),
-        verified_by = $3,
+        verification_status = ${CERTIFICATION_STATUS.VERIFIED},
+        verification_result = COALESCE(${verificationResultJson}, verification_result),
+        admin_notes = COALESCE(${adminNotes}, admin_notes),
+        verified_by = ${session.user.id},
         verified_at = CURRENT_TIMESTAMP,
-        expiry_date = COALESCE($4, expiry_date),
+        expiry_date = COALESCE(${calculatedExpiryDate}, expiry_date),
         updated_at = CURRENT_TIMESTAMP
-      WHERE id = $5
-    `, [
-      verificationResult ? JSON.stringify(verificationResult) : null,
-      adminNotes,
-      session.user.id,
-      calculatedExpiryDate,
-      certificationId
-    ])
+      WHERE id = ${certificationId}
+    `)
 
     logger.info('Certification verified', {
       certificationId,

@@ -1,20 +1,14 @@
 import { NextRequest } from 'next/server'
 import { auth } from '@/auth'
-import { query } from '@/lib/auth/db'
+import { db } from '@/db'
+import { locations, locationApprovals, users } from '@/db/schema'
+import { eq, sql } from 'drizzle-orm'
 import { apiError, apiSuccess, apiBadRequest, apiUnauthorized, apiForbidden, apiNotFound } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
-import { TABLE_NAMES } from '@/config/database'
 import { LOCATION_STATUS } from '@/config/location-status'
 import { validateBody, ApproveLocationSchema } from '@/lib/schemas'
 import { logger } from '@/lib/logger'
 import { sendEmail } from '@/lib/email'
-
-interface LocationRow {
-  id: string
-  approval_status: string
-  name: string
-  created_by: string
-}
 
 // POST /api/locations/[id]/approve - Approve or reject location
 export async function POST(
@@ -39,17 +33,19 @@ export async function POST(
     const { action, review_notes, required_changes } = validation.data
 
     // Check if location exists and get creator info
-    const locationCheck = await query(`
-      SELECT l.id, l.approval_status, l.name, l.created_by
-      FROM ${TABLE_NAMES.LOCATIONS} l
-      WHERE l.id = $1
-    `, [locationId])
+    const [locationRow] = await db
+      .select({
+        id: locations.id,
+        approvalStatus: locations.approvalStatus,
+        name: locations.name,
+        createdBy: locations.createdBy,
+      })
+      .from(locations)
+      .where(eq(locations.id, locationId))
 
-    if (locationCheck.rows.length === 0) {
+    if (!locationRow) {
       return apiNotFound('Ort nicht gefunden')
     }
-
-    const location = locationCheck.rows[0] as LocationRow
 
     // Valid status transitions
     const VALID_TRANSITIONS: Record<string, Record<string, string>> = {
@@ -59,85 +55,77 @@ export async function POST(
       [LOCATION_STATUS.SUSPENDED]: { reinstate: LOCATION_STATUS.APPROVED },
     }
 
-    const transitions = VALID_TRANSITIONS[location.approval_status]
+    const currentStatus = locationRow.approvalStatus ?? 'pending'
+    const transitions = VALID_TRANSITIONS[currentStatus]
     if (!transitions || !(action in transitions)) {
       return apiBadRequest(
-        `Ungültiger Übergang: "${location.approval_status}" kann nicht mit Aktion "${action}" geändert werden`
+        `Ungültiger Übergang: "${currentStatus}" kann nicht mit Aktion "${action}" geändert werden`
       )
     }
 
     const newStatus = transitions[action]
 
     // Execute in transaction
-    try {
-      await query('BEGIN')
-
+    await db.transaction(async (tx) => {
       // Update location status
-      await query(`
-        UPDATE ${TABLE_NAMES.LOCATIONS}
-        SET approval_status = $1, approved_by = $2, approved_at = CURRENT_TIMESTAMP, updated_at = CURRENT_TIMESTAMP
-        WHERE id = $3
-      `, [newStatus, session.user.id, locationId])
+      await tx
+        .update(locations)
+        .set({
+          approvalStatus: newStatus,
+          approvedBy: session.user.id,
+          approvedAt: sql`CURRENT_TIMESTAMP`,
+          updatedAt: sql`CURRENT_TIMESTAMP`,
+        })
+        .where(eq(locations.id, locationId))
 
       // Create approval record
-      await query(`
-        INSERT INTO ${TABLE_NAMES.LOCATION_APPROVALS} (
-          location_id, reviewer_id, action, status, review_notes, required_changes
-        ) VALUES ($1, $2, $3, $4, $5, $6)
-      `, [
-        locationId,
-        session.user.id,
-        action,
-        newStatus,
-        review_notes || null,
-        JSON.stringify(required_changes || [])
-      ])
+      await tx
+        .insert(locationApprovals)
+        .values({
+          locationId,
+          reviewerId: session.user.id,
+          action,
+          status: newStatus,
+          reviewNotes: review_notes || null,
+          requiredChanges: required_changes || [],
+        })
+    })
 
-      await query('COMMIT')
+    // Send notification to location creator
+    if (locationRow.createdBy) {
+      try {
+        const [creator] = await db
+          .select({ name: users.name, email: users.email })
+          .from(users)
+          .where(eq(users.id, locationRow.createdBy))
 
-      // Send notification to location creator
-      if (location.created_by) {
-        try {
-          const creatorResult = await query(
-            `SELECT name, email FROM ${TABLE_NAMES.USERS} WHERE id = $1`,
-            [location.created_by]
-          )
-          if (creatorResult.rows.length > 0) {
-            const creator = creatorResult.rows[0] as { name: string; email: string }
-            if (creator.email) {
-              await sendEmail(
-                creator.email,
-                'locationApprovalNotification',
-                creator.name || 'Benutzer',
-                location.name,
-                action,
-                review_notes || null
-              )
-            }
-          }
-        } catch (emailError) {
-          logger.warn('Failed to send location approval notification', {
-            locationId,
+        if (creator?.email) {
+          await sendEmail(
+            creator.email,
+            'locationApprovalNotification',
+            creator.name || 'Benutzer',
+            locationRow.name,
             action,
-            error: emailError
-          })
+            review_notes || null
+          )
         }
+      } catch (emailError) {
+        logger.warn('Failed to send location approval notification', {
+          locationId,
+          action,
+          error: emailError
+        })
       }
-
-      return apiSuccess({
-        message: `Ort erfolgreich ${action === 'approve' ? 'genehmigt' : action === 'reject' ? 'abgelehnt' : action === 'suspend' ? 'suspendiert' : 'wiederhergestellt'}`,
-        location: {
-          id: locationId,
-          name: location.name,
-          status: newStatus
-        }
-      })
-
-    } catch (txError) {
-      await query('ROLLBACK')
-      logger.error('Transaction error in location approval', { error: txError })
-      throw txError
     }
+
+    return apiSuccess({
+      message: `Ort erfolgreich ${action === 'approve' ? 'genehmigt' : action === 'reject' ? 'abgelehnt' : action === 'suspend' ? 'suspendiert' : 'wiederhergestellt'}`,
+      location: {
+        id: locationId,
+        name: locationRow.name,
+        status: newStatus
+      }
+    })
 
   } catch (error) {
     return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)

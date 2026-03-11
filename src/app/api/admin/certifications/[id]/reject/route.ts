@@ -1,9 +1,9 @@
 import { NextRequest } from 'next/server'
 import { withAdmin } from '@/lib/api/middleware'
-import { query } from '@/lib/auth/db'
+import { db } from '@/db'
+import { sql } from 'drizzle-orm'
 import { apiError, apiSuccess, apiBadRequest, apiNotFound } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
-import { TABLE_NAMES } from '@/config/database'
 import { CERTIFICATION_STATUS } from '@/config/certification-status'
 import { logger } from '@/lib/logger'
 import { validateBody, CertificationRejectSchema } from '@/lib/schemas'
@@ -24,18 +24,18 @@ export const PUT = withAdmin<{ id: string }>('services', async (request, session
     const { adminNotes, rejectionReason } = validation.data
 
     // Get certification details
-    const certificationResult = await query(`
+    const certificationResult = await db.execute(sql`
       SELECT rc.*, ra.user_id
-      FROM ${TABLE_NAMES.REPAIRER_CERTIFICATIONS} rc
-      JOIN ${TABLE_NAMES.REPAIRER_APPLICATIONS} ra ON rc.application_id = ra.id
-      WHERE rc.id = $1
-    `, [certificationId])
+      FROM repairer_certifications rc
+      JOIN repairer_applications ra ON rc.application_id = ra.id
+      WHERE rc.id = ${certificationId}
+    `)
 
     if (certificationResult.rows.length === 0) {
       return apiNotFound('Zertifizierung nicht gefunden')
     }
 
-    const certification = certificationResult.rows[0] as CertificationRow
+    const certification = certificationResult.rows[0] as unknown as CertificationRow
 
     if (certification.verification_status === CERTIFICATION_STATUS.VERIFIED) {
       return apiBadRequest('Eine bereits verifizierte Zertifizierung kann nicht abgelehnt werden')
@@ -46,17 +46,17 @@ export const PUT = withAdmin<{ id: string }>('services', async (request, session
     }
 
     // Update certification verification status with rejection details
-    await query(`
-      UPDATE ${TABLE_NAMES.REPAIRER_CERTIFICATIONS}
+    await db.execute(sql`
+      UPDATE repairer_certifications
       SET
-        verification_status = '${CERTIFICATION_STATUS.REJECTED}',
-        verification_result = jsonb_build_object('rejectionReason', $1, 'rejectedAt', CURRENT_TIMESTAMP),
-        admin_notes = COALESCE($2, admin_notes),
-        verified_by = $3,
+        verification_status = ${CERTIFICATION_STATUS.REJECTED},
+        verification_result = jsonb_build_object('rejectionReason', ${rejectionReason}, 'rejectedAt', CURRENT_TIMESTAMP),
+        admin_notes = COALESCE(${adminNotes}, admin_notes),
+        verified_by = ${session.user.id},
         verified_at = CURRENT_TIMESTAMP,
         updated_at = CURRENT_TIMESTAMP
-      WHERE id = $4
-    `, [rejectionReason, adminNotes, session.user.id, certificationId])
+      WHERE id = ${certificationId}
+    `)
 
     logger.info('Certification rejected', {
       certificationId,

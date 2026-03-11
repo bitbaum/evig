@@ -1,6 +1,7 @@
 import { NextRequest } from 'next/server'
 import { withAdmin } from '@/lib/api/middleware'
-import { query } from '@/lib/auth/db'
+import { db } from '@/db'
+import { sql } from 'drizzle-orm'
 import { apiError, apiSuccess, apiBadRequest, apiNotFound } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { TABLE_NAMES } from '@/config/database'
@@ -53,19 +54,19 @@ export const GET = withAdmin('content', async (request, session) => {
     }
 
     // Get application details
-    const applicationResult = await query(`
+    const applicationResult = await db.execute(sql`
       SELECT ra.*, u.name, u.email
-      FROM ${TABLE_NAMES.REPAIRER_APPLICATIONS} ra
-      JOIN ${TABLE_NAMES.USERS} u ON ra.user_id = u.id
-      WHERE ra.id = $1
-    `, [applicationId])
+      FROM ${sql.raw(TABLE_NAMES.REPAIRER_APPLICATIONS)} ra
+      JOIN ${sql.raw(TABLE_NAMES.USERS)} u ON ra.user_id = u.id
+      WHERE ra.id = ${applicationId}
+    `)
 
     if (applicationResult.rows.length === 0) {
       return apiNotFound('Reparateur-Bewerbung nicht gefunden')
     }
 
     // Get documents for this application
-    const documentsResult = await query(`
+    const documentsResult = await db.execute(sql`
       SELECT
         vd.*,
         dt.name as document_type_name,
@@ -73,24 +74,24 @@ export const GET = withAdmin('content', async (request, session) => {
         dt.is_required,
         dt.allowed_extensions,
         dt.max_file_size_mb
-      FROM ${TABLE_NAMES.VERIFICATION_DOCUMENTS} vd
-      LEFT JOIN ${TABLE_NAMES.DOCUMENT_TYPES} dt ON vd.document_type_id = dt.id
-      WHERE vd.application_id = $1
+      FROM ${sql.raw(TABLE_NAMES.VERIFICATION_DOCUMENTS)} vd
+      LEFT JOIN ${sql.raw(TABLE_NAMES.DOCUMENT_TYPES)} dt ON vd.document_type_id = dt.id
+      WHERE vd.application_id = ${applicationId}
       ORDER BY dt.is_required DESC, vd.created_at ASC
-    `, [applicationId])
+    `)
 
     // Get required document types that haven't been uploaded yet
-    const requiredTypesResult = await query(`
+    const requiredTypesResult = await db.execute(sql`
       SELECT dt.*
-      FROM ${TABLE_NAMES.DOCUMENT_TYPES} dt
+      FROM ${sql.raw(TABLE_NAMES.DOCUMENT_TYPES)} dt
       WHERE dt.is_required = true
         AND NOT EXISTS (
-          SELECT 1 FROM ${TABLE_NAMES.VERIFICATION_DOCUMENTS} vd
-          WHERE vd.application_id = $1 AND vd.document_type_id = dt.id
+          SELECT 1 FROM ${sql.raw(TABLE_NAMES.VERIFICATION_DOCUMENTS)} vd
+          WHERE vd.application_id = ${applicationId} AND vd.document_type_id = dt.id
         )
-    `, [applicationId])
+    `)
 
-    const documents = (documentsResult.rows as DocumentRow[]).map(doc => ({
+    const documents = (documentsResult.rows as unknown as DocumentRow[]).map(doc => ({
       id: doc.id,
       applicationId: doc.application_id,
       documentTypeId: doc.document_type_id,
@@ -111,7 +112,7 @@ export const GET = withAdmin('content', async (request, session) => {
       updatedAt: doc.updated_at
     }))
 
-    const missingRequiredDocuments = (requiredTypesResult.rows as DocumentTypeRow[]).map(type => ({
+    const missingRequiredDocuments = (requiredTypesResult.rows as unknown as DocumentTypeRow[]).map(type => ({
       id: type.id,
       slug: type.slug,
       name: type.name,
@@ -126,7 +127,7 @@ export const GET = withAdmin('content', async (request, session) => {
       documentCount: documents.length
     })
 
-    const application = applicationResult.rows[0] as ApplicationRow
+    const application = applicationResult.rows[0] as unknown as ApplicationRow
     return apiSuccess({
       application: {
         id: application.id,

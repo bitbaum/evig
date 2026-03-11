@@ -1,18 +1,15 @@
 import { NextRequest } from 'next/server'
 import { auth } from '@/auth'
-import { query } from '@/lib/auth/db'
+import { db } from '@/db'
+import { locations, locationApprovals, locationBookings } from '@/db/schema'
+import { eq, and, sql, inArray } from 'drizzle-orm'
+import { alias } from 'drizzle-orm/pg-core'
+import { users } from '@/db/schema'
 import { apiError, apiSuccess, apiBadRequest, apiUnauthorized, apiForbidden, apiNotFound } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
-import { TABLE_NAMES } from '@/config/database'
 import { LOCATION_STATUS } from '@/config/location-status'
 import { BOOKING_STATUS } from '@/config/booking-status'
-import { CountAsCountRow } from '@/lib/api/db-types'
 import { validateBody, UpdateLocationSchema } from '@/lib/schemas'
-
-interface LocationOwnerRow {
-  created_by: string
-  approval_status: string
-}
 
 // GET /api/locations/[id] - Get location details
 export async function GET(
@@ -26,50 +23,77 @@ export async function GET(
       return apiUnauthorized(ERROR_MESSAGES.UNAUTHORIZED)
     }
 
-    // Get location with creator and approval info
-    const locationResult = await query(`
-      SELECT
-        l.*,
-        u.name as creator_name,
-        u.email as creator_email,
-        ua.action as last_approval_action,
-        ua.reviewed_at as last_reviewed_at,
-        ua.review_notes as last_review_notes,
-        COUNT(DISTINCT lb.id) as total_bookings,
-        COUNT(DISTINCT CASE WHEN lb.start_time > CURRENT_TIMESTAMP AND lb.status IN ('${BOOKING_STATUS.PENDING}', '${BOOKING_STATUS.CONFIRMED}') THEN lb.id END) as upcoming_bookings
-      FROM ${TABLE_NAMES.LOCATIONS} l
-      LEFT JOIN ${TABLE_NAMES.USERS} u ON l.created_by = u.id
-      LEFT JOIN ${TABLE_NAMES.LOCATION_APPROVALS} ua ON l.id = ua.location_id
-        AND ua.reviewed_at = (
-          SELECT MAX(reviewed_at) FROM ${TABLE_NAMES.LOCATION_APPROVALS} WHERE location_id = l.id
-        )
-      LEFT JOIN ${TABLE_NAMES.LOCATION_BOOKINGS} lb ON l.id = lb.location_id
-      WHERE l.id = $1
-      GROUP BY l.id, u.name, u.email, ua.action, ua.reviewed_at, ua.review_notes
-    `, [locationId])
+    const creatorUser = alias(users, 'creator_user')
 
-    if (locationResult.rows.length === 0) {
+    // Get location with creator and approval info
+    const locationRows = await db
+      .select({
+        location: locations,
+        creatorName: creatorUser.name,
+        creatorEmail: creatorUser.email,
+        lastApprovalAction: locationApprovals.action,
+        lastReviewedAt: locationApprovals.reviewedAt,
+        lastReviewNotes: locationApprovals.reviewNotes,
+        totalBookings: sql<string>`COUNT(DISTINCT ${locationBookings.id})`,
+        upcomingBookings: sql<string>`COUNT(DISTINCT CASE WHEN ${locationBookings.startTime} > CURRENT_TIMESTAMP AND ${locationBookings.status} IN (${BOOKING_STATUS.PENDING}, ${BOOKING_STATUS.CONFIRMED}) THEN ${locationBookings.id} END)`,
+      })
+      .from(locations)
+      .leftJoin(creatorUser, eq(locations.createdBy, creatorUser.id))
+      .leftJoin(locationApprovals, and(
+        eq(locations.id, locationApprovals.locationId),
+        eq(locationApprovals.reviewedAt, sql`(SELECT MAX(reviewed_at) FROM location_approvals WHERE location_id = ${locations.id})`)
+      ))
+      .leftJoin(locationBookings, eq(locations.id, locationBookings.locationId))
+      .where(eq(locations.id, locationId))
+      .groupBy(
+        locations.id,
+        creatorUser.name,
+        creatorUser.email,
+        locationApprovals.action,
+        locationApprovals.reviewedAt,
+        locationApprovals.reviewNotes
+      )
+
+    if (locationRows.length === 0) {
       return apiNotFound('Ort nicht gefunden')
     }
 
-    const location = locationResult.rows[0]
+    const row = locationRows[0]
+    const location = {
+      ...row.location,
+      creator_name: row.creatorName,
+      creator_email: row.creatorEmail,
+      last_approval_action: row.lastApprovalAction,
+      last_reviewed_at: row.lastReviewedAt,
+      last_review_notes: row.lastReviewNotes,
+      total_bookings: row.totalBookings,
+      upcoming_bookings: row.upcomingBookings,
+    }
 
     // Get recent bookings
-    const bookingsResult = await query(`
-      SELECT
-        lb.*,
-        u.name as booked_by_name,
-        u.email as booked_by_email
-      FROM ${TABLE_NAMES.LOCATION_BOOKINGS} lb
-      LEFT JOIN ${TABLE_NAMES.USERS} u ON lb.booked_by = u.id
-      WHERE lb.location_id = $1 AND lb.start_time > CURRENT_TIMESTAMP
-      ORDER BY lb.start_time ASC
-      LIMIT 10
-    `, [locationId])
+    const bookedByUser = alias(users, 'booked_by_user')
+    const recentBookings = await db
+      .select({
+        booking: locationBookings,
+        bookedByName: bookedByUser.name,
+        bookedByEmail: bookedByUser.email,
+      })
+      .from(locationBookings)
+      .leftJoin(bookedByUser, eq(locationBookings.bookedBy, bookedByUser.id))
+      .where(and(
+        eq(locationBookings.locationId, locationId),
+        sql`${locationBookings.startTime} > CURRENT_TIMESTAMP`
+      ))
+      .orderBy(locationBookings.startTime)
+      .limit(10)
 
     return apiSuccess({
       location,
-      recentBookings: bookingsResult.rows
+      recentBookings: recentBookings.map(r => ({
+        ...r.booking,
+        booked_by_name: r.bookedByName,
+        booked_by_email: r.bookedByEmail,
+      }))
     })
 
   } catch (error) {
@@ -95,17 +119,19 @@ export async function PUT(
     const validatedBody = validation.data
 
     // Check if user owns this location or is admin
-    const ownershipCheck = await query(`
-      SELECT created_by, approval_status FROM ${TABLE_NAMES.LOCATIONS}
-      WHERE id = $1
-    `, [locationId])
+    const [locationRow] = await db
+      .select({
+        createdBy: locations.createdBy,
+        approvalStatus: locations.approvalStatus,
+      })
+      .from(locations)
+      .where(eq(locations.id, locationId))
 
-    if (ownershipCheck.rows.length === 0) {
+    if (!locationRow) {
       return apiNotFound('Ort nicht gefunden')
     }
 
-    const location = ownershipCheck.rows[0] as LocationOwnerRow
-    const isOwner = location.created_by === session.user.id
+    const isOwner = locationRow.createdBy === session.user.id
     const isAdmin = session.user.isStaff
 
     if (!isOwner && !isAdmin) {
@@ -113,46 +139,52 @@ export async function PUT(
     }
 
     // Prevent editing approved locations unless admin
-    if (location.approval_status === LOCATION_STATUS.APPROVED && !isAdmin) {
+    if (locationRow.approvalStatus === LOCATION_STATUS.APPROVED && !isAdmin) {
       return apiForbidden('Genehmigte Orte können nur von Administratoren bearbeitet werden')
     }
 
-    // Update location
-    const updateFields = []
-    const updateValues = []
-    let paramIndex = 1
+    // Build update set from allowed fields
+    const allowedFields: Record<string, keyof typeof locations.$inferInsert> = {
+      name: 'name',
+      description: 'description',
+      address_line1: 'addressLine1',
+      address_line2: 'addressLine2',
+      postal_code: 'postalCode',
+      city: 'city',
+      canton: 'canton',
+      country: 'country',
+      latitude: 'latitude',
+      longitude: 'longitude',
+      max_capacity: 'maxCapacity',
+      facilities: 'facilities',
+      accessibility_info: 'accessibilityInfo',
+      contact_name: 'contactName',
+      contact_phone: 'contactPhone',
+      contact_email: 'contactEmail',
+    }
 
-    const allowedFields = [
-      'name', 'description', 'address_line1', 'address_line2', 'postal_code',
-      'city', 'canton', 'country', 'latitude', 'longitude', 'max_capacity',
-      'facilities', 'accessibility_info', 'contact_name', 'contact_phone', 'contact_email'
-    ]
-
+    const updateSet: Record<string, unknown> = {}
     for (const [key, value] of Object.entries(validatedBody)) {
-      if (allowedFields.includes(key)) {
-        updateFields.push(`${key} = $${paramIndex}`)
-        updateValues.push(key === 'accessibility_info' ? JSON.stringify(value) : value)
-        paramIndex++
+      if (key in allowedFields) {
+        const drizzleKey = allowedFields[key]
+        updateSet[drizzleKey] = key === 'accessibility_info' ? JSON.stringify(value) : value
       }
     }
 
-    if (updateFields.length === 0) {
+    if (Object.keys(updateSet).length === 0) {
       return apiBadRequest('Keine gültigen Felder zum Aktualisieren')
     }
 
-    updateValues.push(locationId)
+    updateSet.updatedAt = sql`CURRENT_TIMESTAMP`
 
-    const updateQuery = `
-      UPDATE ${TABLE_NAMES.LOCATIONS}
-      SET ${updateFields.join(', ')}, updated_at = CURRENT_TIMESTAMP
-      WHERE id = $${paramIndex}
-      RETURNING *
-    `
-
-    const updateResult = await query(updateQuery, updateValues)
+    const [updated] = await db
+      .update(locations)
+      .set(updateSet)
+      .where(eq(locations.id, locationId))
+      .returning()
 
     return apiSuccess({
-      location: updateResult.rows[0],
+      location: updated,
       message: 'Ort erfolgreich aktualisiert'
     })
 
@@ -175,17 +207,19 @@ export async function DELETE(
     const { id: locationId } = await params
 
     // Check ownership and permissions
-    const locationCheck = await query(`
-      SELECT created_by, approval_status FROM ${TABLE_NAMES.LOCATIONS}
-      WHERE id = $1
-    `, [locationId])
+    const [locationRow] = await db
+      .select({
+        createdBy: locations.createdBy,
+        approvalStatus: locations.approvalStatus,
+      })
+      .from(locations)
+      .where(eq(locations.id, locationId))
 
-    if (locationCheck.rows.length === 0) {
+    if (!locationRow) {
       return apiNotFound('Ort nicht gefunden')
     }
 
-    const location = locationCheck.rows[0] as LocationOwnerRow
-    const isOwner = location.created_by === session.user.id
+    const isOwner = locationRow.createdBy === session.user.id
     const isAdmin = session.user.isStaff
 
     if (!isOwner && !isAdmin) {
@@ -193,17 +227,21 @@ export async function DELETE(
     }
 
     // Check for active bookings
-    const activeBookings = await query(`
-      SELECT COUNT(*) as count FROM ${TABLE_NAMES.LOCATION_BOOKINGS}
-      WHERE location_id = $1 AND status IN ('${BOOKING_STATUS.PENDING}', '${BOOKING_STATUS.CONFIRMED}') AND start_time > CURRENT_TIMESTAMP
-    `, [locationId])
+    const [activeBookingCount] = await db
+      .select({ count: sql<string>`COUNT(*)` })
+      .from(locationBookings)
+      .where(and(
+        eq(locationBookings.locationId, locationId),
+        inArray(locationBookings.status, [BOOKING_STATUS.PENDING, BOOKING_STATUS.CONFIRMED]),
+        sql`${locationBookings.startTime} > CURRENT_TIMESTAMP`
+      ))
 
-    if (parseInt((activeBookings.rows[0] as CountAsCountRow).count) > 0) {
+    if (parseInt(activeBookingCount.count) > 0) {
       return apiBadRequest('Ort kann nicht gelöscht werden, da aktive Buchungen existieren')
     }
 
     // Delete location
-    await query(`DELETE FROM ${TABLE_NAMES.LOCATIONS} WHERE id = $1`, [locationId])
+    await db.delete(locations).where(eq(locations.id, locationId))
 
     return apiSuccess({
       message: 'Ort erfolgreich gelöscht'

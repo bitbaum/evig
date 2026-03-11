@@ -5,7 +5,8 @@
  * Returns the health status of all services
  */
 
-import { query } from '@/lib/auth/db'
+import { db } from '@/db'
+import { sql } from 'drizzle-orm'
 import { MEILISEARCH_URL } from '@/config/urls'
 import { logger } from '@/lib/logger'
 import { apiSuccess } from '@/lib/api/helpers'
@@ -28,7 +29,7 @@ interface HealthResponse {
 async function checkDatabase(): Promise<ServiceStatus> {
   const start = Date.now()
   try {
-    await query<{ now: Date }>('SELECT NOW() as now')
+    await db.execute(sql`SELECT NOW() as now`)
     return {
       status: 'healthy',
       latency: Date.now() - start,

@@ -1,4 +1,5 @@
-import { query } from '@/lib/auth/db'
+import { db } from '@/db'
+import { sql } from 'drizzle-orm'
 import { getAuthSecret } from '@/lib/auth/config'
 import { apiSuccess } from '@/lib/api/helpers'
 
@@ -33,7 +34,7 @@ export async function GET() {
   }
 
   try {
-    await query('SELECT 1')
+    await db.execute(sql`SELECT 1`)
   } catch {
     response.status = 'unhealthy'
     response.checks.database = 'failed'

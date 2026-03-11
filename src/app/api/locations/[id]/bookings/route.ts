@@ -1,32 +1,16 @@
 import { NextRequest } from 'next/server'
 import { auth } from '@/auth'
-import { query } from '@/lib/auth/db'
+import { db } from '@/db'
+import { locations, locationBookings } from '@/db/schema'
+import { eq, and, sql, or, gte, lte } from 'drizzle-orm'
+import { alias } from 'drizzle-orm/pg-core'
+import { users } from '@/db/schema'
 import { apiError, apiSuccess, apiBadRequest, apiUnauthorized, apiForbidden, apiNotFound } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
-import { TABLE_NAMES } from '@/config/database'
 import { LOCATION_STATUS } from '@/config/location-status'
 import { BOOKING_STATUS } from '@/config/booking-status'
-import { QueryParams } from '@/lib/api/query-builder'
 import { validateBody, CreateLocationBookingSchema } from '@/lib/schemas'
 
-
-interface LocationStatusRow {
-  id: string
-  approval_status: string
-}
-
-interface LocationCapacityRow {
-  id: string
-  approval_status: string
-  max_capacity: number | null
-}
-
-interface BookingConflictRow {
-  id: string
-  title: string
-  start_time: string
-  end_time: string
-}
 
 // GET /api/locations/[id]/bookings - Get location bookings
 export async function GET(
@@ -46,55 +30,58 @@ export async function GET(
     const endDate = searchParams.get('end_date')
 
     // Verify location exists and is approved
-    const locationCheck = await query(`
-      SELECT id, approval_status FROM ${TABLE_NAMES.LOCATIONS}
-      WHERE id = $1
-    `, [locationId])
+    const [locationRow] = await db
+      .select({
+        id: locations.id,
+        approvalStatus: locations.approvalStatus,
+      })
+      .from(locations)
+      .where(eq(locations.id, locationId))
 
-    if (locationCheck.rows.length === 0) {
+    if (!locationRow) {
       return apiNotFound('Ort nicht gefunden')
     }
 
-    const locationStatus = locationCheck.rows[0] as LocationStatusRow
-    if (locationStatus.approval_status !== LOCATION_STATUS.APPROVED) {
+    if (locationRow.approvalStatus !== LOCATION_STATUS.APPROVED) {
       return apiForbidden('Ort ist nicht zur Buchung freigegeben')
     }
 
-    // Build query
-    const qb = new QueryParams()
-
-    qb.add('lb.location_id = $P', locationId)
+    // Build conditions
+    const conditions = [eq(locationBookings.locationId, locationId)]
 
     if (status) {
-      qb.add('lb.status = $P', status)
+      conditions.push(eq(locationBookings.status, status))
     }
     if (startDate) {
-      qb.add('lb.start_time >= $P', startDate)
+      conditions.push(gte(locationBookings.startTime, startDate))
     }
     if (endDate) {
-      qb.add('lb.end_time <= $P', endDate)
+      conditions.push(lte(locationBookings.endTime, endDate))
     }
 
-    const { where: whereClause, params: queryParams } = qb.build()
+    const bookedByUser = alias(users, 'booked_by_user')
 
-    const bookingsQuery = `
-      SELECT
-        lb.*,
-        u.name as booked_by_name,
-        u.email as booked_by_email,
-        l.name as location_name
-      FROM ${TABLE_NAMES.LOCATION_BOOKINGS} lb
-      LEFT JOIN ${TABLE_NAMES.USERS} u ON lb.booked_by = u.id
-      LEFT JOIN ${TABLE_NAMES.LOCATIONS} l ON lb.location_id = l.id
-      ${whereClause}
-      ORDER BY lb.start_time ASC
-    `
-
-    const bookings = await query(bookingsQuery, queryParams)
+    const bookings = await db
+      .select({
+        booking: locationBookings,
+        bookedByName: bookedByUser.name,
+        bookedByEmail: bookedByUser.email,
+        locationName: locations.name,
+      })
+      .from(locationBookings)
+      .leftJoin(bookedByUser, eq(locationBookings.bookedBy, bookedByUser.id))
+      .leftJoin(locations, eq(locationBookings.locationId, locations.id))
+      .where(and(...conditions))
+      .orderBy(locationBookings.startTime)
 
     return apiSuccess({
-      bookings: bookings.rows,
-      location: locationStatus
+      bookings: bookings.map(r => ({
+        ...r.booking,
+        booked_by_name: r.bookedByName,
+        booked_by_email: r.bookedByEmail,
+        location_name: r.locationName,
+      })),
+      location: locationRow
     })
 
   } catch (error) {
@@ -145,65 +132,85 @@ export async function POST(
     }
 
     // Check location exists and is approved
-    const locationCheck = await query(`
-      SELECT id, approval_status, max_capacity FROM ${TABLE_NAMES.LOCATIONS}
-      WHERE id = $1
-    `, [locationId])
+    const [locationRow] = await db
+      .select({
+        id: locations.id,
+        approvalStatus: locations.approvalStatus,
+        maxCapacity: locations.maxCapacity,
+      })
+      .from(locations)
+      .where(eq(locations.id, locationId))
 
-    if (locationCheck.rows.length === 0) {
+    if (!locationRow) {
       return apiNotFound('Ort nicht gefunden')
     }
 
-    const location = locationCheck.rows[0] as LocationCapacityRow
-    if (location.approval_status !== LOCATION_STATUS.APPROVED) {
+    if (locationRow.approvalStatus !== LOCATION_STATUS.APPROVED) {
       return apiForbidden('Ort ist nicht zur Buchung freigegeben')
     }
 
     // Check capacity if specified
-    if (expected_attendees && location.max_capacity && expected_attendees > location.max_capacity) {
-      return apiBadRequest(`Maximale Kapazität (${location.max_capacity}) würde überschritten`)
+    if (expected_attendees && locationRow.maxCapacity && expected_attendees > locationRow.maxCapacity) {
+      return apiBadRequest(`Maximale Kapazität (${locationRow.maxCapacity}) würde überschritten`)
     }
 
     // Check for booking conflicts
-    const conflictCheck = await query(`
-      SELECT id, title, start_time, end_time FROM ${TABLE_NAMES.LOCATION_BOOKINGS}
-      WHERE location_id = $1
-        AND status IN ('${BOOKING_STATUS.PENDING}', '${BOOKING_STATUS.CONFIRMED}')
-        AND (
-          (start_time <= $2 AND end_time > $2) OR
-          (start_time < $3 AND end_time >= $3) OR
-          (start_time >= $2 AND end_time <= $3)
-        )
-    `, [locationId, startDate.toISOString(), endDate.toISOString()])
+    const startIso = startDate.toISOString()
+    const endIso = endDate.toISOString()
 
-    if (conflictCheck.rows.length > 0) {
-      const conflict = conflictCheck.rows[0] as BookingConflictRow
+    const conflicts = await db
+      .select({
+        id: locationBookings.id,
+        title: locationBookings.title,
+        startTime: locationBookings.startTime,
+        endTime: locationBookings.endTime,
+      })
+      .from(locationBookings)
+      .where(and(
+        eq(locationBookings.locationId, locationId),
+        sql`${locationBookings.status} IN (${BOOKING_STATUS.PENDING}, ${BOOKING_STATUS.CONFIRMED})`,
+        or(
+          and(lte(locationBookings.startTime, startIso), sql`${locationBookings.endTime} > ${startIso}`),
+          and(sql`${locationBookings.startTime} < ${endIso}`, gte(locationBookings.endTime, endIso)),
+          and(gte(locationBookings.startTime, startIso), lte(locationBookings.endTime, endIso))
+        )
+      ))
+
+    if (conflicts.length > 0) {
+      const conflict = conflicts[0]
       return apiBadRequest(
-        `Zeitkonflikt mit bestehender Buchung: "${conflict.title}" (${conflict.start_time} - ${conflict.end_time})`
+        `Zeitkonflikt mit bestehender Buchung: "${conflict.title}" (${conflict.startTime} - ${conflict.endTime})`
       )
     }
 
     // Create booking
-    const bookingResult = await query(`
-      INSERT INTO ${TABLE_NAMES.LOCATION_BOOKINGS} (
-        location_id, booked_by, event_type, event_id, title, description,
-        start_time, end_time, expected_attendees, special_requirements
-      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
-      RETURNING *
-    `, [
-      locationId, session.user.id, event_type, event_id || null, title, description,
-      startDate.toISOString(), endDate.toISOString(), expected_attendees || null, special_requirements
-    ])
+    const [booking] = await db
+      .insert(locationBookings)
+      .values({
+        locationId,
+        bookedBy: session.user.id,
+        eventType: event_type,
+        eventId: event_id || null,
+        title,
+        description,
+        startTime: startIso,
+        endTime: endIso,
+        expectedAttendees: expected_attendees || null,
+        specialRequirements: special_requirements,
+      })
+      .returning()
 
     // Update location usage statistics
-    await query(`
-      UPDATE ${TABLE_NAMES.LOCATIONS}
-      SET usage_count = usage_count + 1, last_used_at = CURRENT_TIMESTAMP
-      WHERE id = $1
-    `, [locationId])
+    await db
+      .update(locations)
+      .set({
+        usageCount: sql`${locations.usageCount} + 1`,
+        lastUsedAt: sql`CURRENT_TIMESTAMP`,
+      })
+      .where(eq(locations.id, locationId))
 
     return apiSuccess({
-      booking: bookingResult.rows[0],
+      booking,
       message: 'Buchung erfolgreich erstellt'
     })
 

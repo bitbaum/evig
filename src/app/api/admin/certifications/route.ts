@@ -1,9 +1,9 @@
 import { NextRequest } from 'next/server'
 import { withAdmin } from '@/lib/api/middleware'
-import { query } from '@/lib/auth/db'
+import { db } from '@/db'
+import { sql } from 'drizzle-orm'
 import { apiError, apiSuccess, apiBadRequest, apiNotFound } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
-import { TABLE_NAMES } from '@/config/database'
 import { CERTIFICATION_STATUS } from '@/config/certification-status'
 import { logger } from '@/lib/logger'
 
@@ -59,7 +59,7 @@ export const GET = withAdmin('services', async (request, session) => {
     }
 
     // Get certifications for this application
-    const certificationsResult = await query(`
+    const certificationsResult = await db.execute(sql`
       SELECT
         rc.*,
         ct.name as certification_type_name,
@@ -68,25 +68,25 @@ export const GET = withAdmin('services', async (request, session) => {
         ct.issuing_authority as default_issuing_authority,
         ct.validity_period_months,
         ct.requires_verification
-      FROM ${TABLE_NAMES.REPAIRER_CERTIFICATIONS} rc
-      LEFT JOIN ${TABLE_NAMES.CERTIFICATION_TYPES} ct ON rc.certification_type_id = ct.id
-      WHERE rc.application_id = $1 AND rc.verification_status = $2
+      FROM repairer_certifications rc
+      LEFT JOIN certification_types ct ON rc.certification_type_id = ct.id
+      WHERE rc.application_id = ${applicationId} AND rc.verification_status = ${status}
       ORDER BY rc.created_at ASC
-    `, [applicationId, status])
+    `)
 
     // Get application details
-    const applicationResult = await query(`
+    const applicationResult = await db.execute(sql`
       SELECT ra.*, u.name, u.email
-      FROM ${TABLE_NAMES.REPAIRER_APPLICATIONS} ra
-      JOIN ${TABLE_NAMES.USERS} u ON ra.user_id = u.id
-      WHERE ra.id = $1
-    `, [applicationId])
+      FROM repairer_applications ra
+      JOIN users u ON ra.user_id = u.id
+      WHERE ra.id = ${applicationId}
+    `)
 
     if (applicationResult.rows.length === 0) {
       return apiNotFound('Reparatur-Bewerbung nicht gefunden')
     }
 
-    const certifications = (certificationsResult.rows as CertificationRow[]).map(cert => ({
+    const certifications = (certificationsResult.rows as unknown as CertificationRow[]).map(cert => ({
       id: cert.id,
       applicationId: cert.application_id,
       certificationTypeId: cert.certification_type_id,
@@ -121,7 +121,7 @@ export const GET = withAdmin('services', async (request, session) => {
       count: certifications.length
     })
 
-    const application = applicationResult.rows[0] as ApplicationRow
+    const application = applicationResult.rows[0] as unknown as ApplicationRow
     return apiSuccess({
       application: {
         id: application.id,
