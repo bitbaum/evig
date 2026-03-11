@@ -2,8 +2,10 @@
  * Meeting Protocols — CRUD & Query Operations
  */
 
-import { query, transaction } from '@/lib/auth/db'
-import { TABLE_NAMES } from '@/config/database'
+import { db } from '@/db'
+import { sql, getTableName } from 'drizzle-orm'
+import { meetingProtocols, protocolActionLinks, protocolDecisionVotes, protocolDecisionOutcomes } from '@/db/schema/misc'
+import { users } from '@/db/schema/auth'
 import { PROTOCOL_STATUS } from '@/config/protocol-status'
 import { notifyUsers, fireNotification } from '@/lib/services/notifications'
 import { logger } from '@/lib/logger'
@@ -13,6 +15,13 @@ import type {
   CreateProtocolInput,
   UpdateProtocolInput,
 } from '@/lib/schemas/protocols'
+
+// Table name refs
+const mpTable = getTableName(meetingProtocols)
+const palTable = getTableName(protocolActionLinks)
+const pdvTable = getTableName(protocolDecisionVotes)
+const pdoTable = getTableName(protocolDecisionOutcomes)
+const uTable = getTableName(users)
 
 // =============================================================================
 // QUERIES
@@ -32,27 +41,22 @@ export async function getProtocolStats(
   userId: string,
   isSuperAdmin: boolean,
 ): Promise<ProtocolStats> {
-  const result = await query<{
-    total: string
-    draft: string
-    review: string
-    finalized: string
-  }>(`
+  const result = await db.execute(sql`
     SELECT
       COUNT(*) as total,
-      COUNT(*) FILTER (WHERE status = '${PROTOCOL_STATUS.DRAFT}') as draft,
-      COUNT(*) FILTER (WHERE status = '${PROTOCOL_STATUS.REVIEW}') as review,
-      COUNT(*) FILTER (WHERE status = '${PROTOCOL_STATUS.FINALIZED}') as finalized
-    FROM ${TABLE_NAMES.MEETING_PROTOCOLS} mp
+      COUNT(*) FILTER (WHERE status = ${PROTOCOL_STATUS.DRAFT}) as draft,
+      COUNT(*) FILTER (WHERE status = ${PROTOCOL_STATUS.REVIEW}) as review,
+      COUNT(*) FILTER (WHERE status = ${PROTOCOL_STATUS.FINALIZED}) as finalized
+    FROM ${sql.raw(mpTable)} mp
     WHERE (
       mp.visibility = 'team'
-      OR mp.created_by = $1
-      OR mp.attendees @> to_jsonb($1::text)
-      OR $2 = true
+      OR mp.created_by = ${userId}
+      OR mp.attendees @> to_jsonb(${userId}::text)
+      OR ${isSuperAdmin} = true
     )
-  `, [userId, isSuperAdmin])
+  `)
 
-  const row = result.rows[0]
+  const row = result.rows[0] as unknown as { total: string; draft: string; review: string; finalized: string } | undefined
   return {
     total: parseInt(row?.total || '0'),
     draft: parseInt(row?.draft || '0'),
@@ -65,10 +69,10 @@ export async function getProtocolStats(
  * Get team members for attendee mapping
  */
 export async function getTeamMembers(): Promise<Array<{ id: string; name: string }>> {
-  const result = await query<{ id: string; name: string }>(
-    `SELECT id, name FROM ${TABLE_NAMES.USERS} WHERE name IS NOT NULL ORDER BY name`
-  )
-  return result.rows
+  const result = await db.execute(sql`
+    SELECT id, name FROM ${sql.raw(uTable)} WHERE name IS NOT NULL ORDER BY name
+  `)
+  return result.rows as unknown as Array<{ id: string; name: string }>
 }
 
 /**
@@ -81,85 +85,77 @@ export async function getProtocols(
 ): Promise<{ protocols: ProtocolListItem[]; total: number }> {
   const page = filters?.page ?? 1
   const limit = filters?.limit ?? 20
-
-  // Build visibility WHERE clause separately so the count query can reuse it
-  // without accidentally grabbing a subquery WHERE from the SELECT columns.
-  let visibilityClause = `WHERE (
-      mp.visibility = 'team'
-      OR mp.created_by = $1
-      OR mp.attendees @> to_jsonb($1::text)
-      OR $2 = true
-    )`
-
-  const params: (string | boolean | number)[] = [userId, isSuperAdmin]
-  let paramIndex = 3
-
-  if (filters?.meeting_type) {
-    visibilityClause += ` AND mp.meeting_type = $${paramIndex++}`
-    params.push(filters.meeting_type)
-  }
-
-  if (filters?.status) {
-    visibilityClause += ` AND mp.status = $${paramIndex++}`
-    params.push(filters.status)
-  }
-
-  if (filters?.q) {
-    visibilityClause += ` AND mp.title ILIKE '%' || $${paramIndex++} || '%'`
-    params.push(filters.q)
-  }
-
-  // Count query uses the same WHERE clause
-  const countText = `
-    SELECT COUNT(*)::text as total
-    FROM ${TABLE_NAMES.MEETING_PROTOCOLS} mp
-    ${visibilityClause}
-  `
-
   const offset = (page - 1) * limit
 
-  let queryText = `
-    SELECT
-      mp.id,
-      mp.title,
-      mp.meeting_date,
-      mp.meeting_type,
-      mp.visibility,
-      mp.attendees,
-      mp.status,
-      mp.created_at,
-      u.name as created_by_name,
-      (
-        SELECT COUNT(*)::int
-        FROM jsonb_array_elements(COALESCE(mp.structured_notes->'action_items', '[]'::jsonb)) ai
-      ) as action_item_count,
-      (
-        SELECT COUNT(*)::int
-        FROM jsonb_array_elements(COALESCE(mp.structured_notes->'action_items', '[]'::jsonb)) ai
-        WHERE NOT EXISTS (
-          SELECT 1
-          FROM ${TABLE_NAMES.PROTOCOL_ACTION_LINKS} pal
-          WHERE pal.protocol_id = mp.id
-            AND pal.action_item_id = ai->>'id'
-        )
-      ) as unlinked_action_item_count,
-      (mp.structured_notes IS NOT NULL) as has_structured_notes
-    FROM ${TABLE_NAMES.MEETING_PROTOCOLS} mp
-    LEFT JOIN ${TABLE_NAMES.USERS} u ON mp.created_by = u.id
-    ${visibilityClause}
-    ORDER BY mp.meeting_date DESC, mp.created_at DESC
-    LIMIT $${paramIndex++} OFFSET $${paramIndex++}
-  `
-  params.push(limit, offset)
+  // Build dynamic filter conditions
+  const conditions: ReturnType<typeof sql>[] = [
+    sql`(
+      mp.visibility = 'team'
+      OR mp.created_by = ${userId}
+      OR mp.attendees @> to_jsonb(${userId}::text)
+      OR ${isSuperAdmin} = true
+    )`
+  ]
+
+  if (filters?.meeting_type) {
+    conditions.push(sql`mp.meeting_type = ${filters.meeting_type}`)
+  }
+  if (filters?.status) {
+    conditions.push(sql`mp.status = ${filters.status}`)
+  }
+  if (filters?.q) {
+    conditions.push(sql`mp.title ILIKE '%' || ${filters.q} || '%'`)
+  }
+
+  // Join conditions with AND
+  let whereClause = conditions[0]
+  for (let i = 1; i < conditions.length; i++) {
+    whereClause = sql`${whereClause} AND ${conditions[i]}`
+  }
 
   const [countResult, listResult] = await Promise.all([
-    query<{ total: string }>(countText, params.slice(0, params.length - 2)),
-    query<ProtocolListItem>(queryText, params),
+    db.execute(sql`
+      SELECT COUNT(*)::text as total
+      FROM ${sql.raw(mpTable)} mp
+      WHERE ${whereClause}
+    `),
+    db.execute(sql`
+      SELECT
+        mp.id,
+        mp.title,
+        mp.meeting_date,
+        mp.meeting_type,
+        mp.visibility,
+        mp.attendees,
+        mp.status,
+        mp.created_at,
+        u.name as created_by_name,
+        (
+          SELECT COUNT(*)::int
+          FROM jsonb_array_elements(COALESCE(mp.structured_notes->'action_items', '[]'::jsonb)) ai
+        ) as action_item_count,
+        (
+          SELECT COUNT(*)::int
+          FROM jsonb_array_elements(COALESCE(mp.structured_notes->'action_items', '[]'::jsonb)) ai
+          WHERE NOT EXISTS (
+            SELECT 1
+            FROM ${sql.raw(palTable)} pal
+            WHERE pal.protocol_id = mp.id
+              AND pal.action_item_id = ai->>'id'
+          )
+        ) as unlinked_action_item_count,
+        (mp.structured_notes IS NOT NULL) as has_structured_notes
+      FROM ${sql.raw(mpTable)} mp
+      LEFT JOIN ${sql.raw(uTable)} u ON mp.created_by = u.id
+      WHERE ${whereClause}
+      ORDER BY mp.meeting_date DESC, mp.created_at DESC
+      LIMIT ${limit} OFFSET ${offset}
+    `),
   ])
 
   return {
-    protocols: listResult.rows,
-    total: parseInt(countResult.rows[0]?.total || '0', 10),
+    protocols: listResult.rows as unknown as ProtocolListItem[],
+    total: parseInt((countResult.rows[0] as unknown as { total: string })?.total || '0', 10),
   }
 }
 
@@ -171,23 +167,22 @@ export async function getProtocolById(
   userId: string,
   isSuperAdmin: boolean,
 ): Promise<ProtocolDetail | null> {
-  const result = await query<ProtocolDetail>(
-    `SELECT
+  const result = await db.execute(sql`
+    SELECT
       mp.*,
       u.name as created_by_name,
       u.email as created_by_email
-    FROM ${TABLE_NAMES.MEETING_PROTOCOLS} mp
-    LEFT JOIN ${TABLE_NAMES.USERS} u ON mp.created_by = u.id
-    WHERE mp.id = $1
+    FROM ${sql.raw(mpTable)} mp
+    LEFT JOIN ${sql.raw(uTable)} u ON mp.created_by = u.id
+    WHERE mp.id = ${id}
     AND (
       mp.visibility = 'team'
-      OR mp.created_by = $2
-      OR mp.attendees @> to_jsonb($2::text)
-      OR $3 = true
-    )`,
-    [id, userId, isSuperAdmin]
-  )
-  return result.rows[0] || null
+      OR mp.created_by = ${userId}
+      OR mp.attendees @> to_jsonb(${userId}::text)
+      OR ${isSuperAdmin} = true
+    )
+  `)
+  return (result.rows[0] as unknown as ProtocolDetail) || null
 }
 
 // =============================================================================
@@ -201,22 +196,21 @@ export async function createProtocol(
   data: CreateProtocolInput,
   createdBy: string
 ): Promise<{ id: string }> {
-  const result = await query<{ id: string }>(
-    `INSERT INTO ${TABLE_NAMES.MEETING_PROTOCOLS} (
+  const result = await db.execute(sql`
+    INSERT INTO ${sql.raw(mpTable)} (
       title, meeting_date, meeting_type, visibility, attendees, input_method, created_by
-    ) VALUES ($1, $2, $3, $4, $5::jsonb, $6, $7)
-    RETURNING id`,
-    [
-      data.title,
-      data.meeting_date,
-      data.meeting_type,
-      data.visibility,
-      JSON.stringify(data.attendees || []),
-      data.input_method || 'transcript',
-      createdBy,
-    ]
-  )
-  return result.rows[0]
+    ) VALUES (
+      ${data.title},
+      ${data.meeting_date},
+      ${data.meeting_type},
+      ${data.visibility},
+      ${JSON.stringify(data.attendees || [])}::jsonb,
+      ${data.input_method || 'transcript'},
+      ${createdBy}
+    )
+    RETURNING id
+  `)
+  return result.rows[0] as unknown as { id: string }
 }
 
 /**
@@ -228,58 +222,55 @@ export async function updateProtocol(
   userId: string,
 ): Promise<ProtocolDetail | null> {
   // Verify protocol exists and is editable
-  const existing = await query<{ status: string; created_by: string }>(
-    `SELECT status, created_by FROM ${TABLE_NAMES.MEETING_PROTOCOLS} WHERE id = $1`,
-    [id]
-  )
+  const existing = await db.execute(sql`
+    SELECT status, created_by FROM ${sql.raw(mpTable)} WHERE id = ${id}
+  `)
 
   if (existing.rows.length === 0) return null
 
-  const { status } = existing.rows[0]
+  const { status } = existing.rows[0] as unknown as { status: string; created_by: string }
   if (status !== PROTOCOL_STATUS.DRAFT && status !== PROTOCOL_STATUS.REVIEW) {
     throw new Error('PROTOCOL_NOT_EDITABLE')
   }
 
   // Build dynamic update
-  const updates: string[] = []
-  const params: unknown[] = []
-  let paramIndex = 1
+  const setClauses: ReturnType<typeof sql>[] = []
 
-  const fieldMap: Record<string, unknown> = {
-    title: data.title,
-    meeting_date: data.meeting_date,
-    meeting_type: data.meeting_type,
-    visibility: data.visibility,
-    attendees: data.attendees ? JSON.stringify(data.attendees) : undefined,
-    structured_notes: data.structured_notes ? JSON.stringify(data.structured_notes) : undefined,
+  if (data.title !== undefined) {
+    setClauses.push(sql`title = ${data.title}`)
+  }
+  if (data.meeting_date !== undefined) {
+    setClauses.push(sql`meeting_date = ${data.meeting_date}`)
+  }
+  if (data.meeting_type !== undefined) {
+    setClauses.push(sql`meeting_type = ${data.meeting_type}`)
+  }
+  if (data.visibility !== undefined) {
+    setClauses.push(sql`visibility = ${data.visibility}`)
+  }
+  if (data.attendees !== undefined) {
+    setClauses.push(sql`attendees = ${JSON.stringify(data.attendees)}::jsonb`)
+  }
+  if (data.structured_notes !== undefined) {
+    setClauses.push(sql`structured_notes = ${JSON.stringify(data.structured_notes)}::jsonb`)
   }
 
-  for (const [field, value] of Object.entries(fieldMap)) {
-    if (value !== undefined) {
-      if (field === 'attendees') {
-        updates.push(`${field} = $${paramIndex++}::jsonb`)
-      } else if (field === 'structured_notes') {
-        updates.push(`${field} = $${paramIndex++}::jsonb`)
-      } else {
-        updates.push(`${field} = $${paramIndex++}`)
-      }
-      params.push(value)
-    }
+  if (setClauses.length === 0) return null
+
+  // Join SET clauses with commas
+  let setFragment = setClauses[0]
+  for (let i = 1; i < setClauses.length; i++) {
+    setFragment = sql`${setFragment}, ${setClauses[i]}`
   }
 
-  if (updates.length === 0) return null
+  const result = await db.execute(sql`
+    UPDATE ${sql.raw(mpTable)}
+    SET ${setFragment}
+    WHERE id = ${id}
+    RETURNING *
+  `)
 
-  params.push(id)
-
-  const result = await query<ProtocolDetail>(
-    `UPDATE ${TABLE_NAMES.MEETING_PROTOCOLS}
-     SET ${updates.join(', ')}
-     WHERE id = $${paramIndex}
-     RETURNING *`,
-    params
-  )
-
-  return result.rows[0] || null
+  return (result.rows[0] as unknown as ProtocolDetail) || null
 }
 
 // =============================================================================
@@ -295,36 +286,32 @@ export async function deleteProtocol(
   userId: string,
   isSuperAdmin: boolean,
 ): Promise<{ deleted: true } | { error: 'not_found' | 'not_authorized' }> {
-  const existing = await query<{ id: string; created_by: string }>(
-    `SELECT id, created_by FROM ${TABLE_NAMES.MEETING_PROTOCOLS} WHERE id = $1`,
-    [protocolId]
-  )
+  const existing = await db.execute(sql`
+    SELECT id, created_by FROM ${sql.raw(mpTable)} WHERE id = ${protocolId}
+  `)
 
   if (existing.rows.length === 0) {
     return { error: 'not_found' }
   }
 
-  if (existing.rows[0].created_by !== userId && !isSuperAdmin) {
+  const row = existing.rows[0] as unknown as { id: string; created_by: string }
+  if (row.created_by !== userId && !isSuperAdmin) {
     return { error: 'not_authorized' }
   }
 
-  await transaction(async (client) => {
-    await client.query(
-      `DELETE FROM ${TABLE_NAMES.PROTOCOL_ACTION_LINKS} WHERE protocol_id = $1`,
-      [protocolId]
-    )
-    await client.query(
-      `DELETE FROM ${TABLE_NAMES.PROTOCOL_DECISION_VOTES} WHERE protocol_id = $1`,
-      [protocolId]
-    )
-    await client.query(
-      `DELETE FROM ${TABLE_NAMES.PROTOCOL_DECISION_OUTCOMES} WHERE protocol_id = $1`,
-      [protocolId]
-    )
-    await client.query(
-      `DELETE FROM ${TABLE_NAMES.MEETING_PROTOCOLS} WHERE id = $1`,
-      [protocolId]
-    )
+  await db.transaction(async (tx) => {
+    await tx.execute(sql`
+      DELETE FROM ${sql.raw(palTable)} WHERE protocol_id = ${protocolId}
+    `)
+    await tx.execute(sql`
+      DELETE FROM ${sql.raw(pdvTable)} WHERE protocol_id = ${protocolId}
+    `)
+    await tx.execute(sql`
+      DELETE FROM ${sql.raw(pdoTable)} WHERE protocol_id = ${protocolId}
+    `)
+    await tx.execute(sql`
+      DELETE FROM ${sql.raw(mpTable)} WHERE id = ${protocolId}
+    `)
   })
 
   logger.info('Protocol deleted', { protocolId, userId })
@@ -341,17 +328,16 @@ export async function deleteProtocol(
 export async function finalizeProtocol(
   id: string,
 ): Promise<boolean> {
-  const result = await query<{ id: string; title: string; attendees: string[] }>(
-    `UPDATE ${TABLE_NAMES.MEETING_PROTOCOLS}
-     SET status = '${PROTOCOL_STATUS.FINALIZED}'
-     WHERE id = $1 AND status = '${PROTOCOL_STATUS.REVIEW}'
-     RETURNING id, title, attendees`,
-    [id]
-  )
+  const result = await db.execute(sql`
+    UPDATE ${sql.raw(mpTable)}
+    SET status = ${PROTOCOL_STATUS.FINALIZED}
+    WHERE id = ${id} AND status = ${PROTOCOL_STATUS.REVIEW}
+    RETURNING id, title, attendees
+  `)
 
   if (result.rows.length === 0) return false
 
-  const { title, attendees } = result.rows[0]
+  const { title, attendees } = result.rows[0] as unknown as { id: string; title: string; attendees: string[] }
 
   // Notify all attendees that the protocol is available
   if (attendees && attendees.length > 0) {

@@ -2,10 +2,16 @@
  * Meeting Protocols — Action Item Linking (tasks & decisions)
  */
 
-import { query, transaction } from '@/lib/auth/db'
-import { TABLE_NAMES } from '@/config/database'
+import { db } from '@/db'
+import { sql, getTableName } from 'drizzle-orm'
+import { protocolActionLinks, tasks, decisions } from '@/db/schema/misc'
 import { logger } from '@/lib/logger'
 import type { ActionLinkRecord } from '@/lib/schemas/protocols'
+
+// Table name refs
+const palTable = getTableName(protocolActionLinks)
+const tTable = getTableName(tasks)
+const dTable = getTableName(decisions)
 
 // =============================================================================
 // ACTION ITEM LINKING
@@ -15,21 +21,20 @@ import type { ActionLinkRecord } from '@/lib/schemas/protocols'
  * Get action links for a protocol
  */
 export async function getActionLinks(protocolId: string): Promise<ActionLinkRecord[]> {
-  const result = await query<ActionLinkRecord>(
-    `SELECT
+  const result = await db.execute(sql`
+    SELECT
       pal.*,
       t.title as linked_task_title,
       t.current_status as linked_task_status,
       d.title as linked_decision_title,
       d.status as linked_decision_status
-    FROM ${TABLE_NAMES.PROTOCOL_ACTION_LINKS} pal
-    LEFT JOIN ${TABLE_NAMES.TASKS} t ON pal.linked_task_id = t.id
-    LEFT JOIN ${TABLE_NAMES.DECISIONS} d ON pal.linked_decision_id = d.id
-    WHERE pal.protocol_id = $1
-    ORDER BY pal.created_at`,
-    [protocolId]
-  )
-  return result.rows
+    FROM ${sql.raw(palTable)} pal
+    LEFT JOIN ${sql.raw(tTable)} t ON pal.linked_task_id = t.id
+    LEFT JOIN ${sql.raw(dTable)} d ON pal.linked_decision_id = d.id
+    WHERE pal.protocol_id = ${protocolId}
+    ORDER BY pal.created_at
+  `)
+  return result.rows as unknown as ActionLinkRecord[]
 }
 
 /**
@@ -47,42 +52,42 @@ export async function linkActionItemToTask(
   },
   createdBy: string,
 ): Promise<{ taskId: string; linkId: string }> {
-  return transaction(async (client) => {
+  return db.transaction(async (tx) => {
     // Create the task
-    const taskResult = await client.query<{ id: string }>(
-      `INSERT INTO ${TABLE_NAMES.TASKS} (
+    const taskResult = await tx.execute(sql`
+      INSERT INTO ${sql.raw(tTable)} (
         title, description, task_type, category, priority, created_by
-      ) VALUES ($1, $2, $3, $4, $5, $6)
-      RETURNING id`,
-      [
-        taskData.title,
-        taskData.description || null,
-        taskData.task_type || 'one_time',
-        taskData.category || 'admin',
-        taskData.priority || 'normal',
-        createdBy,
-      ]
-    )
+      ) VALUES (
+        ${taskData.title},
+        ${taskData.description || null},
+        ${taskData.task_type || 'one_time'},
+        ${taskData.category || 'admin'},
+        ${taskData.priority || 'normal'},
+        ${createdBy}
+      )
+      RETURNING id
+    `)
 
-    const taskId = taskResult.rows[0].id
+    const taskId = (taskResult.rows[0] as unknown as { id: string }).id
 
     // Create the link
-    const linkResult = await client.query<{ id: string }>(
-      `INSERT INTO ${TABLE_NAMES.PROTOCOL_ACTION_LINKS} (
+    const linkResult = await tx.execute(sql`
+      INSERT INTO ${sql.raw(palTable)} (
         protocol_id, action_item_id, link_type, linked_task_id
-      ) VALUES ($1, $2, 'task', $3)
-      RETURNING id`,
-      [protocolId, actionItemId, taskId]
-    )
+      ) VALUES (${protocolId}, ${actionItemId}, 'task', ${taskId})
+      RETURNING id
+    `)
+
+    const linkId = (linkResult.rows[0] as unknown as { id: string }).id
 
     logger.info('Action item linked to task', {
       protocolId,
       actionItemId,
       taskId,
-      linkId: linkResult.rows[0].id,
+      linkId,
     })
 
-    return { taskId, linkId: linkResult.rows[0].id }
+    return { taskId, linkId }
   })
 }
 
@@ -101,41 +106,41 @@ export async function linkActionItemToDecision(
   },
   createdBy: string,
 ): Promise<{ decisionId: string; linkId: string }> {
-  return transaction(async (client) => {
+  return db.transaction(async (tx) => {
     // Create the decision
-    const decisionResult = await client.query<{ id: string }>(
-      `INSERT INTO ${TABLE_NAMES.DECISIONS} (
+    const decisionResult = await tx.execute(sql`
+      INSERT INTO ${sql.raw(dTable)} (
         title, description, decision_type, voting_method, status, created_by
-      ) VALUES ($1, $2, $3, $4, $5, $6)
-      RETURNING id`,
-      [
-        decisionData.title,
-        decisionData.description,
-        decisionData.decisionType || 'sense_check',
-        decisionData.votingMethod || 'simple_majority',
-        decisionData.initialStatus || 'draft',
-        createdBy,
-      ]
-    )
+      ) VALUES (
+        ${decisionData.title},
+        ${decisionData.description},
+        ${decisionData.decisionType || 'sense_check'},
+        ${decisionData.votingMethod || 'simple_majority'},
+        ${decisionData.initialStatus || 'draft'},
+        ${createdBy}
+      )
+      RETURNING id
+    `)
 
-    const decisionId = decisionResult.rows[0].id
+    const decisionId = (decisionResult.rows[0] as unknown as { id: string }).id
 
     // Create the link
-    const linkResult = await client.query<{ id: string }>(
-      `INSERT INTO ${TABLE_NAMES.PROTOCOL_ACTION_LINKS} (
+    const linkResult = await tx.execute(sql`
+      INSERT INTO ${sql.raw(palTable)} (
         protocol_id, action_item_id, link_type, linked_decision_id
-      ) VALUES ($1, $2, 'decision', $3)
-      RETURNING id`,
-      [protocolId, actionItemId, decisionId]
-    )
+      ) VALUES (${protocolId}, ${actionItemId}, 'decision', ${decisionId})
+      RETURNING id
+    `)
+
+    const linkId = (linkResult.rows[0] as unknown as { id: string }).id
 
     logger.info('Action item linked to decision', {
       protocolId,
       actionItemId,
       decisionId,
-      linkId: linkResult.rows[0].id,
+      linkId,
     })
 
-    return { decisionId, linkId: linkResult.rows[0].id }
+    return { decisionId, linkId }
   })
 }

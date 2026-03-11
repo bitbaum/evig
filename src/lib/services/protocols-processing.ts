@@ -2,8 +2,10 @@
  * Meeting Protocols — AI Processing (transcript, notes, task import)
  */
 
-import { query } from '@/lib/auth/db'
-import { TABLE_NAMES } from '@/config/database'
+import { db } from '@/db'
+import { sql, getTableName } from 'drizzle-orm'
+import { meetingProtocols } from '@/db/schema/misc'
+import { users } from '@/db/schema/auth'
 import { PROTOCOL_STATUS } from '@/config/protocol-status'
 import { MEETING_TYPE_LABELS, MEETING_TYPE_TEMPLATES } from '@/config/protocols'
 import { PROTOCOL_PROMPTS, fillPromptTemplate } from '@/lib/ai/config/prompts'
@@ -13,6 +15,10 @@ import type { MeetingType } from '@/config/protocols'
 import type { StructuredNotes } from '@/lib/schemas/protocols'
 import { structuredNotesSchema, parsedTaskListSchema } from '@/lib/schemas/protocols'
 import { linkActionItemToTask } from './protocols-linking'
+
+// Table name refs
+const mpTable = getTableName(meetingProtocols)
+const uTable = getTableName(users)
 
 // =============================================================================
 // AI PROCESSING
@@ -32,35 +38,32 @@ export async function processTranscript(
   code?: 'PROTOCOL_NOT_FOUND' | 'NO_PROVIDER' | 'INVALID_JSON' | 'INVALID_SCHEMA' | 'UNKNOWN'
 }> {
   const resetToDraft = async () => {
-    await query(
-      `UPDATE ${TABLE_NAMES.MEETING_PROTOCOLS}
-       SET status = '${PROTOCOL_STATUS.DRAFT}'
-       WHERE id = $1`,
-      [protocolId]
-    )
+    await db.execute(sql`
+      UPDATE ${sql.raw(mpTable)}
+      SET status = ${PROTOCOL_STATUS.DRAFT}
+      WHERE id = ${protocolId}
+    `)
   }
 
   try {
     // Set status to processing
-    await query(
-      `UPDATE ${TABLE_NAMES.MEETING_PROTOCOLS}
-       SET status = '${PROTOCOL_STATUS.PROCESSING}', raw_transcript = $2
-       WHERE id = $1`,
-      [protocolId, rawTranscript]
-    )
+    await db.execute(sql`
+      UPDATE ${sql.raw(mpTable)}
+      SET status = ${PROTOCOL_STATUS.PROCESSING}, raw_transcript = ${rawTranscript}
+      WHERE id = ${protocolId}
+    `)
 
     // Get protocol metadata for prompt context
-    const protocolResult = await query<{ meeting_type: MeetingType }>(
-      `SELECT meeting_type FROM ${TABLE_NAMES.MEETING_PROTOCOLS} WHERE id = $1`,
-      [protocolId]
-    )
+    const protocolResult = await db.execute(sql`
+      SELECT meeting_type FROM ${sql.raw(mpTable)} WHERE id = ${protocolId}
+    `)
 
     if (protocolResult.rows.length === 0) {
       await resetToDraft()
       return { success: false, code: 'PROTOCOL_NOT_FOUND', retryable: false, error: 'Protokoll nicht gefunden' }
     }
 
-    const { meeting_type } = protocolResult.rows[0]
+    const { meeting_type } = protocolResult.rows[0] as unknown as { meeting_type: MeetingType }
     const template = MEETING_TYPE_TEMPLATES[meeting_type]
     const meetingTypeLabel = MEETING_TYPE_LABELS[meeting_type]
 
@@ -89,14 +92,13 @@ export async function processTranscript(
     const resolvedNotes = await resolveAttendeeNames(aiResult.result.notes)
 
     // Store results
-    await query(
-      `UPDATE ${TABLE_NAMES.MEETING_PROTOCOLS}
-       SET structured_notes = $2::jsonb,
-           processing_model = $3,
-           status = '${PROTOCOL_STATUS.REVIEW}'
-       WHERE id = $1`,
-      [protocolId, JSON.stringify(resolvedNotes), aiResult.result.model]
-    )
+    await db.execute(sql`
+      UPDATE ${sql.raw(mpTable)}
+      SET structured_notes = ${JSON.stringify(resolvedNotes)}::jsonb,
+          processing_model = ${aiResult.result.model},
+          status = ${PROTOCOL_STATUS.REVIEW}
+      WHERE id = ${protocolId}
+    `)
 
     logger.info('Protocol transcript processed', {
       protocolId,
@@ -139,14 +141,13 @@ export async function processNotes(
       // Valid structured notes JSON — store directly
       const resolvedNotes = await resolveAttendeeNames(validated.data)
 
-      await query(
-        `UPDATE ${TABLE_NAMES.MEETING_PROTOCOLS}
-         SET structured_notes = $2::jsonb,
-             processing_model = 'json-import',
-             status = '${PROTOCOL_STATUS.REVIEW}'
-         WHERE id = $1`,
-        [protocolId, JSON.stringify(resolvedNotes)]
-      )
+      await db.execute(sql`
+        UPDATE ${sql.raw(mpTable)}
+        SET structured_notes = ${JSON.stringify(resolvedNotes)}::jsonb,
+            processing_model = 'json-import',
+            status = ${PROTOCOL_STATUS.REVIEW}
+        WHERE id = ${protocolId}
+      `)
 
       logger.info('Notes imported from JSON', { protocolId })
       return { success: true, source: 'json' }
@@ -162,23 +163,21 @@ export async function processNotes(
   }
 
   // Free text path
-  await query(
-    `UPDATE ${TABLE_NAMES.MEETING_PROTOCOLS}
-     SET status = '${PROTOCOL_STATUS.PROCESSING}'
-     WHERE id = $1`,
-    [protocolId]
-  )
+  await db.execute(sql`
+    UPDATE ${sql.raw(mpTable)}
+    SET status = ${PROTOCOL_STATUS.PROCESSING}
+    WHERE id = ${protocolId}
+  `)
 
-  const protocolResult = await query<{ meeting_type: MeetingType }>(
-    `SELECT meeting_type FROM ${TABLE_NAMES.MEETING_PROTOCOLS} WHERE id = $1`,
-    [protocolId]
-  )
+  const protocolResult = await db.execute(sql`
+    SELECT meeting_type FROM ${sql.raw(mpTable)} WHERE id = ${protocolId}
+  `)
 
   if (protocolResult.rows.length === 0) {
     return { success: false, error: 'Protokoll nicht gefunden' }
   }
 
-  const { meeting_type } = protocolResult.rows[0]
+  const { meeting_type } = protocolResult.rows[0] as unknown as { meeting_type: MeetingType }
   const template = MEETING_TYPE_TEMPLATES[meeting_type]
   const meetingTypeLabel = MEETING_TYPE_LABELS[meeting_type]
 
@@ -192,25 +191,23 @@ export async function processNotes(
   const aiResult = await processProtocolNotes(prompt)
 
   if (!aiResult) {
-    await query(
-      `UPDATE ${TABLE_NAMES.MEETING_PROTOCOLS}
-       SET status = '${PROTOCOL_STATUS.DRAFT}'
-       WHERE id = $1`,
-      [protocolId]
-    )
+    await db.execute(sql`
+      UPDATE ${sql.raw(mpTable)}
+      SET status = ${PROTOCOL_STATUS.DRAFT}
+      WHERE id = ${protocolId}
+    `)
     return { success: false, error: 'KI-Verarbeitung der Notizen fehlgeschlagen. Kein Provider erreichbar. Details im Server-Log.' }
   }
 
   const resolvedNotes = await resolveAttendeeNames(aiResult.notes)
 
-  await query(
-    `UPDATE ${TABLE_NAMES.MEETING_PROTOCOLS}
-     SET structured_notes = $2::jsonb,
-         processing_model = $3,
-         status = '${PROTOCOL_STATUS.REVIEW}'
-     WHERE id = $1`,
-    [protocolId, JSON.stringify(resolvedNotes), aiResult.model]
-  )
+  await db.execute(sql`
+    UPDATE ${sql.raw(mpTable)}
+    SET structured_notes = ${JSON.stringify(resolvedNotes)}::jsonb,
+        processing_model = ${aiResult.model},
+        status = ${PROTOCOL_STATUS.REVIEW}
+    WHERE id = ${protocolId}
+  `)
 
   logger.info('Notes processed via AI', {
     protocolId,
@@ -276,10 +273,10 @@ export async function importTasks(
   }
 
   // Resolve assigned names to user IDs
-  const usersResult = await query<{ id: string; name: string }>(
-    `SELECT id, name FROM ${TABLE_NAMES.USERS} WHERE name IS NOT NULL`
-  )
-  const users = usersResult.rows
+  const usersResult = await db.execute(sql`
+    SELECT id, name FROM ${sql.raw(uTable)} WHERE name IS NOT NULL
+  `)
+  const userRows = usersResult.rows as unknown as Array<{ id: string; name: string }>
 
   // Build action items for structured_notes and create system tasks
   const actionItems = []
@@ -288,10 +285,10 @@ export async function importTasks(
   for (const task of tasks) {
     const actionItemId = crypto.randomUUID()
 
-    // Fuzzy match assigned_to_name → user ID
+    // Fuzzy match assigned_to_name -> user ID
     let assignedToId: string | null = null
     if (task.assigned_to_name) {
-      const match = users.find(u => {
+      const match = userRows.find(u => {
         const userName = u.name.toLowerCase()
         const assignedName = task.assigned_to_name!.toLowerCase()
         return userName.includes(assignedName) ||
@@ -328,12 +325,12 @@ export async function importTasks(
   }
 
   // Store action items in structured_notes
-  const existingResult = await query<{ structured_notes: StructuredNotes | null }>(
-    `SELECT structured_notes FROM ${TABLE_NAMES.MEETING_PROTOCOLS} WHERE id = $1`,
-    [protocolId]
-  )
+  const existingResult = await db.execute(sql`
+    SELECT structured_notes FROM ${sql.raw(mpTable)} WHERE id = ${protocolId}
+  `)
 
-  const existingNotes = existingResult.rows[0]?.structured_notes
+  const existingRow = existingResult.rows[0] as unknown as { structured_notes: StructuredNotes | null } | undefined
+  const existingNotes = existingRow?.structured_notes
   const updatedNotes: StructuredNotes = {
     summary: existingNotes?.summary || 'Aufgaben importiert',
     detected_attendees: existingNotes?.detected_attendees || [],
@@ -342,14 +339,13 @@ export async function importTasks(
     follow_ups: existingNotes?.follow_ups || [],
   }
 
-  await query(
-    `UPDATE ${TABLE_NAMES.MEETING_PROTOCOLS}
-     SET structured_notes = $2::jsonb,
-         processing_model = $3,
-         status = '${PROTOCOL_STATUS.REVIEW}'
-     WHERE id = $1`,
-    [protocolId, JSON.stringify(updatedNotes), model || 'json-import']
-  )
+  await db.execute(sql`
+    UPDATE ${sql.raw(mpTable)}
+    SET structured_notes = ${JSON.stringify(updatedNotes)}::jsonb,
+        processing_model = ${model || 'json-import'},
+        status = ${PROTOCOL_STATUS.REVIEW}
+    WHERE id = ${protocolId}
+  `)
 
   logger.info('Tasks imported', {
     protocolId,
@@ -375,19 +371,19 @@ async function resolveAttendeeNames(notes: StructuredNotes): Promise<StructuredN
 
   try {
     // Get all staff users
-    const usersResult = await query<{ id: string; name: string }>(
-      `SELECT id, name FROM ${TABLE_NAMES.USERS} WHERE name IS NOT NULL`
-    )
+    const usersResult = await db.execute(sql`
+      SELECT id, name FROM ${sql.raw(uTable)} WHERE name IS NOT NULL
+    `)
 
     if (usersResult.rows.length === 0) return notes
 
-    const users = usersResult.rows
+    const userRows = usersResult.rows as unknown as Array<{ id: string; name: string }>
 
     // For each action item with assigned_to_name, try to find matching user
     const resolvedActionItems = notes.action_items.map(item => {
       if (!item.assigned_to_name || item.assigned_to_id) return item
 
-      const match = users.find(u => {
+      const match = userRows.find(u => {
         const userName = u.name.toLowerCase()
         const assignedName = item.assigned_to_name!.toLowerCase()
         // Match on first name or full name

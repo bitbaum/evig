@@ -9,8 +9,9 @@
  * (email_notifications = true in user_profiles, which is the default).
  */
 
-import { query } from '@/lib/auth/db'
-import { TABLE_NAMES } from '@/config/database'
+import { db } from '@/db'
+import { notifications, users, userProfiles } from '@/db/schema'
+import { eq, inArray, and, ne, sql } from 'drizzle-orm'
 import { logger } from '@/lib/logger'
 import { sendCustomEmail } from '@/lib/email'
 import { notificationEmail } from '@/lib/email/templates/notification'
@@ -27,7 +28,7 @@ interface NotificationPayload {
 
 interface UserEmailInfo {
   user_id: string
-  email: string | null
+  email: string
   email_notifications: boolean | null
 }
 
@@ -55,13 +56,13 @@ async function trySendEmail(
 
   // Bulk-mark as emailed only if at least one email was sent (best-effort)
   if (anySent && notificationIds.length > 0) {
-    const placeholders = notificationIds.map((_, i) => `$${i + 1}`).join(', ')
-    await query(
-      `UPDATE ${TABLE_NAMES.NOTIFICATIONS} SET sent_email = true WHERE id IN (${placeholders})`,
-      notificationIds,
-    ).catch((err) => {
-      logger.error('Failed to mark sent_email', { error: err })
-    })
+    await db
+      .update(notifications)
+      .set({ sentEmail: true })
+      .where(inArray(notifications.id, notificationIds))
+      .catch((err) => {
+        logger.error('Failed to mark sent_email', { error: err })
+      })
   }
 }
 
@@ -74,34 +75,34 @@ export async function createNotification(
   userId: string,
   payload: NotificationPayload,
 ): Promise<void> {
-  const result = await query<{ id: string }>(
-    `INSERT INTO ${TABLE_NAMES.NOTIFICATIONS}
-       (user_id, type, title, content, related_type, related_id, sent_in_app)
-     VALUES ($1, $2, $3, $4, $5, $6, true)
-     RETURNING id`,
-    [
+  const [inserted] = await db
+    .insert(notifications)
+    .values({
       userId,
-      payload.type,
-      payload.title,
-      payload.content,
-      payload.related_type ?? null,
-      payload.related_id ?? null,
-    ]
-  )
+      type: payload.type,
+      title: payload.title,
+      content: payload.content,
+      relatedType: payload.related_type ?? null,
+      relatedId: payload.related_id ?? null,
+      sentInApp: true,
+    })
+    .returning({ id: notifications.id })
 
-  const notificationId = result.rows[0]?.id
+  const notificationId = inserted?.id
 
   // Fetch email + preference
-  const userResult = await query<UserEmailInfo>(
-    `SELECT u.id AS user_id, u.email, up.email_notifications
-     FROM ${TABLE_NAMES.USERS} u
-     LEFT JOIN ${TABLE_NAMES.USER_PROFILES} up ON up.user_id = u.id
-     WHERE u.id = $1`,
-    [userId],
-  )
+  const userRows = await db
+    .select({
+      user_id: users.id,
+      email: users.email,
+      email_notifications: userProfiles.emailNotifications,
+    })
+    .from(users)
+    .leftJoin(userProfiles, eq(userProfiles.userId, users.id))
+    .where(eq(users.id, userId))
 
-  if (userResult.rows.length > 0 && notificationId) {
-    await trySendEmail([notificationId], userResult.rows, payload.title, payload.content)
+  if (userRows.length > 0 && notificationId) {
+    await trySendEmail([notificationId], userRows, payload.title, payload.content)
   }
 }
 
@@ -112,47 +113,40 @@ export async function notifyAllStaff(
   payload: NotificationPayload,
   excludeUserId?: string,
 ): Promise<void> {
-  const staffResult = await query<UserEmailInfo>(
-    `SELECT u.id AS user_id, u.email, up.email_notifications
-     FROM ${TABLE_NAMES.USERS} u
-     LEFT JOIN ${TABLE_NAMES.USER_PROFILES} up ON up.user_id = u.id
-     WHERE u.is_staff = true
-     ${excludeUserId ? `AND u.id != $1` : ''}`,
-    excludeUserId ? [excludeUserId] : []
-  )
+  const conditions = [eq(users.isStaff, true)]
+  if (excludeUserId) {
+    conditions.push(ne(users.id, excludeUserId))
+  }
 
-  const staff = staffResult.rows
+  const staff = await db
+    .select({
+      user_id: users.id,
+      email: users.email,
+      email_notifications: userProfiles.emailNotifications,
+    })
+    .from(users)
+    .leftJoin(userProfiles, eq(userProfiles.userId, users.id))
+    .where(and(...conditions))
+
   if (staff.length === 0) return
 
   // Bulk insert — one row per staff member
-  const placeholders = staff
-    .map((_, i) => {
-      const base = i * 6
-      return `($${base + 1}, $${base + 2}, $${base + 3}, $${base + 4}, $${base + 5}, $${base + 6}, true)`
-    })
-    .join(', ')
+  const values = staff.map((s) => ({
+    userId: s.user_id,
+    type: payload.type,
+    title: payload.title,
+    content: payload.content,
+    relatedType: payload.related_type ?? null,
+    relatedId: payload.related_id ?? null,
+    sentInApp: true as const,
+  }))
 
-  const params: (string | null)[] = []
-  for (const s of staff) {
-    params.push(
-      s.user_id,
-      payload.type,
-      payload.title,
-      payload.content,
-      payload.related_type ?? null,
-      payload.related_id ?? null,
-    )
-  }
+  const insertResult = await db
+    .insert(notifications)
+    .values(values)
+    .returning({ id: notifications.id })
 
-  const insertResult = await query<{ id: string }>(
-    `INSERT INTO ${TABLE_NAMES.NOTIFICATIONS}
-       (user_id, type, title, content, related_type, related_id, sent_in_app)
-     VALUES ${placeholders}
-     RETURNING id`,
-    params
-  )
-
-  const ids = insertResult.rows.map(r => r.id)
+  const ids = insertResult.map(r => r.id)
   await trySendEmail(ids, staff, payload.title, payload.content)
 }
 
@@ -166,47 +160,36 @@ export async function notifyUsers(
   if (userIds.length === 0) return
 
   // Fetch email + preference for all target users
-  const idPlaceholders = userIds.map((_, i) => `$${i + 1}`).join(', ')
-  const usersResult = await query<UserEmailInfo>(
-    `SELECT u.id AS user_id, u.email, up.email_notifications
-     FROM ${TABLE_NAMES.USERS} u
-     LEFT JOIN ${TABLE_NAMES.USER_PROFILES} up ON up.user_id = u.id
-     WHERE u.id IN (${idPlaceholders})`,
-    userIds,
-  )
+  const usersResult = await db
+    .select({
+      user_id: users.id,
+      email: users.email,
+      email_notifications: userProfiles.emailNotifications,
+    })
+    .from(users)
+    .leftJoin(userProfiles, eq(userProfiles.userId, users.id))
+    .where(inArray(users.id, userIds))
 
   // Build a lookup for email info
-  const emailInfoMap = new Map(usersResult.rows.map(r => [r.user_id, r]))
+  const emailInfoMap = new Map(usersResult.map(r => [r.user_id, r]))
 
   // Bulk insert notifications
-  const placeholders = userIds
-    .map((_, i) => {
-      const base = i * 6
-      return `($${base + 1}, $${base + 2}, $${base + 3}, $${base + 4}, $${base + 5}, $${base + 6}, true)`
-    })
-    .join(', ')
+  const values = userIds.map((uid) => ({
+    userId: uid,
+    type: payload.type,
+    title: payload.title,
+    content: payload.content,
+    relatedType: payload.related_type ?? null,
+    relatedId: payload.related_id ?? null,
+    sentInApp: true as const,
+  }))
 
-  const params: (string | null)[] = []
-  for (const userId of userIds) {
-    params.push(
-      userId,
-      payload.type,
-      payload.title,
-      payload.content,
-      payload.related_type ?? null,
-      payload.related_id ?? null,
-    )
-  }
+  const insertResult = await db
+    .insert(notifications)
+    .values(values)
+    .returning({ id: notifications.id })
 
-  const insertResult = await query<{ id: string }>(
-    `INSERT INTO ${TABLE_NAMES.NOTIFICATIONS}
-       (user_id, type, title, content, related_type, related_id, sent_in_app)
-     VALUES ${placeholders}
-     RETURNING id`,
-    params
-  )
-
-  const ids = insertResult.rows.map(r => r.id)
+  const ids = insertResult.map(r => r.id)
   const recipients = userIds
     .map(id => emailInfoMap.get(id))
     .filter((r): r is UserEmailInfo => r !== undefined)

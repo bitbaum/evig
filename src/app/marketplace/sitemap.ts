@@ -1,6 +1,7 @@
 import type { MetadataRoute } from 'next'
-import { query } from '@/lib/auth/db'
-import { TABLE_NAMES } from '@/config/database'
+import { db } from '@/db'
+import { listings } from '@/db/schema'
+import { eq, desc } from 'drizzle-orm'
 import { LISTING_STATUS } from '@/config/marketplace'
 import { logger } from '@/lib/logger'
 
@@ -8,15 +9,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://revamp-it.ch'
 
   try {
-    const result = await query<{ id: string; updated_at: string }>(
-      `SELECT id, updated_at FROM ${TABLE_NAMES.LISTINGS}
-       WHERE status = '${LISTING_STATUS.ACTIVE}'
-       ORDER BY updated_at DESC`,
-    )
+    const rows = await db
+      .select({ id: listings.id, updatedAt: listings.updatedAt })
+      .from(listings)
+      .where(eq(listings.status, LISTING_STATUS.ACTIVE))
+      .orderBy(desc(listings.updatedAt))
 
-    return result.rows.map(row => ({
+    return rows.map(row => ({
       url: `${baseUrl}/marketplace/${row.id}`,
-      lastModified: new Date(row.updated_at),
+      lastModified: new Date(row.updatedAt),
       changeFrequency: 'weekly' as const,
       priority: 0.7,
     }))

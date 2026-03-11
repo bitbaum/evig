@@ -2,8 +2,10 @@
  * Decisions & Voting — Vote Submission, Retrieval, Participation
  */
 
-import { query } from '@/lib/auth/db';
-import { TABLE_NAMES } from '@/config/database';
+import { db } from '@/db';
+import { sql, getTableName } from 'drizzle-orm';
+import { decisions, decisionVotes } from '@/db/schema/misc';
+import { users } from '@/db/schema/auth';
 import {
   type VotingMethod,
 } from '@/config/decisions';
@@ -19,7 +21,12 @@ import {
 } from '@/lib/schemas/decisions';
 import { type DbDecisionRow, asArray, asObject } from './decisions-core';
 
-// ─── DB Row Interface ─────────────────────────────────────────────────────
+// Table name refs
+const dTable = getTableName(decisions);
+const dvTable = getTableName(decisionVotes);
+const uTable = getTableName(users);
+
+// ---- DB Row Interface ----
 
 interface DbVoteRow {
   id: string;
@@ -32,7 +39,7 @@ interface DbVoteRow {
   user_name?: string | null;
 }
 
-// ─── Voting ───────────────────────────────────────────────────────────────
+// ---- Voting ----
 
 export function validateVoteData(
   method: VotingMethod,
@@ -97,14 +104,13 @@ export async function submitVote(
   userId: string,
   voteData: VoteData
 ) {
-  const existing = await query<DbDecisionRow>(
-    `SELECT id, status, voting_method, options, dot_count, invited_participants
-     FROM ${TABLE_NAMES.DECISIONS} WHERE id = $1`,
-    [decisionId]
-  );
+  const existing = await db.execute(sql`
+    SELECT id, status, voting_method, options, dot_count, invited_participants
+    FROM ${sql.raw(dTable)} WHERE id = ${decisionId}
+  `);
   if (existing.rows.length === 0) return { error: 'not_found' as const };
 
-  const decision = existing.rows[0];
+  const decision = existing.rows[0] as unknown as DbDecisionRow;
   if (decision.status !== 'voting')
     return { error: 'not_voting_phase' as const };
 
@@ -123,18 +129,17 @@ export async function submitVote(
   if (!validation.success) return { error: 'invalid_data' as const, message: validation.error };
 
   // Upsert vote (INSERT ... ON CONFLICT DO UPDATE)
-  const voteResult = await query<DbVoteRow & { user_email: string; user_name: string | null }>(
-    `INSERT INTO ${TABLE_NAMES.DECISION_VOTES} (decision_id, user_id, vote_data)
-     VALUES ($1, $2, $3)
-     ON CONFLICT (decision_id, user_id)
-     DO UPDATE SET vote_data = $3, updated_at = now()
-     RETURNING *,
-       (SELECT email FROM ${TABLE_NAMES.USERS} WHERE id = $2) AS user_email,
-       (SELECT name FROM ${TABLE_NAMES.USERS} WHERE id = $2) AS user_name`,
-    [decisionId, userId, JSON.stringify(validation.data)]
-  );
+  const voteResult = await db.execute(sql`
+    INSERT INTO ${sql.raw(dvTable)} (decision_id, user_id, vote_data)
+    VALUES (${decisionId}, ${userId}, ${JSON.stringify(validation.data)}::jsonb)
+    ON CONFLICT (decision_id, user_id)
+    DO UPDATE SET vote_data = ${JSON.stringify(validation.data)}::jsonb, updated_at = now()
+    RETURNING *,
+      (SELECT email FROM ${sql.raw(uTable)} WHERE id = ${userId}) AS user_email,
+      (SELECT name FROM ${sql.raw(uTable)} WHERE id = ${userId}) AS user_name
+  `);
 
-  const vote = voteResult.rows[0];
+  const vote = voteResult.rows[0] as unknown as DbVoteRow & { user_email: string; user_name: string | null };
   return {
     vote: {
       ...vote,
@@ -144,23 +149,21 @@ export async function submitVote(
 }
 
 export async function getVotes(decisionId: string, requestingUserId: string) {
-  const existing = await query<{ id: string; blind_voting: boolean; status: string }>(
-    `SELECT id, blind_voting, status FROM ${TABLE_NAMES.DECISIONS} WHERE id = $1`,
-    [decisionId]
-  );
+  const existing = await db.execute(sql`
+    SELECT id, blind_voting, status FROM ${sql.raw(dTable)} WHERE id = ${decisionId}
+  `);
   if (existing.rows.length === 0) return { error: 'not_found' as const };
 
-  const decision = existing.rows[0];
+  const decision = existing.rows[0] as unknown as { id: string; blind_voting: boolean; status: string };
 
   // Get user's own vote
-  const userVoteResult = await query<DbVoteRow & { user_email: string; user_name: string | null }>(
-    `SELECT dv.*, u.email AS user_email, u.name AS user_name
-     FROM ${TABLE_NAMES.DECISION_VOTES} dv
-     JOIN ${TABLE_NAMES.USERS} u ON u.id = dv.user_id
-     WHERE dv.decision_id = $1 AND dv.user_id = $2`,
-    [decisionId, requestingUserId]
-  );
-  const userVote = userVoteResult.rows.length > 0 ? userVoteResult.rows[0] : null;
+  const userVoteResult = await db.execute(sql`
+    SELECT dv.*, u.email AS user_email, u.name AS user_name
+    FROM ${sql.raw(dvTable)} dv
+    JOIN ${sql.raw(uTable)} u ON u.id = dv.user_id
+    WHERE dv.decision_id = ${decisionId} AND dv.user_id = ${requestingUserId}
+  `);
+  const userVote = userVoteResult.rows.length > 0 ? userVoteResult.rows[0] as unknown as DbVoteRow : null;
 
   // Blind voting: only show all votes if blind=false, user has voted, or decision is closed
   const showAll = !decision.blind_voting || !!userVote || decision.status === 'closed';
@@ -173,17 +176,16 @@ export async function getVotes(decisionId: string, requestingUserId: string) {
     };
   }
 
-  const allVotesResult = await query<DbVoteRow & { user_email: string; user_name: string | null }>(
-    `SELECT dv.*, u.email AS user_email, u.name AS user_name
-     FROM ${TABLE_NAMES.DECISION_VOTES} dv
-     JOIN ${TABLE_NAMES.USERS} u ON u.id = dv.user_id
-     WHERE dv.decision_id = $1
-     ORDER BY dv.created_at ASC`,
-    [decisionId]
-  );
+  const allVotesResult = await db.execute(sql`
+    SELECT dv.*, u.email AS user_email, u.name AS user_name
+    FROM ${sql.raw(dvTable)} dv
+    JOIN ${sql.raw(uTable)} u ON u.id = dv.user_id
+    WHERE dv.decision_id = ${decisionId}
+    ORDER BY dv.created_at ASC
+  `);
 
   return {
-    votes: allVotesResult.rows.map(v => ({
+    votes: (allVotesResult.rows as unknown as (DbVoteRow & { user_email: string; user_name: string | null })[]).map(v => ({
       ...v,
       voteData: v.vote_data,
       user: { id: v.user_id, email: v.user_email, name: v.user_name },
@@ -193,38 +195,34 @@ export async function getVotes(decisionId: string, requestingUserId: string) {
 }
 
 export async function getParticipationStatus(decisionId: string) {
-  const existing = await query<{ id: string; invited_participants: string[]; quorum: QuorumConfig }>(
-    `SELECT id, invited_participants, quorum FROM ${TABLE_NAMES.DECISIONS} WHERE id = $1`,
-    [decisionId]
-  );
+  const existing = await db.execute(sql`
+    SELECT id, invited_participants, quorum FROM ${sql.raw(dTable)} WHERE id = ${decisionId}
+  `);
   if (existing.rows.length === 0) return null;
 
-  const decision = existing.rows[0];
+  const decision = existing.rows[0] as unknown as { id: string; invited_participants: string[]; quorum: QuorumConfig };
   const invited = asArray<string>(decision.invited_participants, []);
 
   // Get eligible participants
   let eligibleUsers: { id: string; email: string }[];
   if (invited.length > 0) {
-    const result = await query<{ id: string; email: string }>(
-      `SELECT id, email FROM ${TABLE_NAMES.USERS} WHERE id = ANY($1)`,
-      [invited]
-    );
-    eligibleUsers = result.rows;
+    const result = await db.execute(sql`
+      SELECT id, email FROM ${sql.raw(uTable)} WHERE id = ANY(${invited})
+    `);
+    eligibleUsers = result.rows as unknown as { id: string; email: string }[];
   } else {
     // Default: all staff users
-    const result = await query<{ id: string; email: string }>(
-      `SELECT id, email FROM ${TABLE_NAMES.USERS} WHERE is_staff = true`,
-      []
-    );
-    eligibleUsers = result.rows;
+    const result = await db.execute(sql`
+      SELECT id, email FROM ${sql.raw(uTable)} WHERE is_staff = true
+    `);
+    eligibleUsers = result.rows as unknown as { id: string; email: string }[];
   }
 
   // Get who voted
-  const votedResult = await query<{ user_id: string }>(
-    `SELECT user_id FROM ${TABLE_NAMES.DECISION_VOTES} WHERE decision_id = $1`,
-    [decisionId]
-  );
-  const votedIds = new Set(votedResult.rows.map(v => v.user_id));
+  const votedResult = await db.execute(sql`
+    SELECT user_id FROM ${sql.raw(dvTable)} WHERE decision_id = ${decisionId}
+  `);
+  const votedIds = new Set((votedResult.rows as unknown as Array<{ user_id: string }>).map(v => v.user_id));
 
   const voted = eligibleUsers.filter(u => votedIds.has(u.id));
   const notVoted = eligibleUsers.filter(u => !votedIds.has(u.id));

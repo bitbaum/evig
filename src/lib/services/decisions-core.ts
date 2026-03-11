@@ -2,8 +2,10 @@
  * Decisions & Voting — Core CRUD, Transitions, Tally Computation
  */
 
-import { query, transaction } from '@/lib/auth/db';
-import { TABLE_NAMES } from '@/config/database';
+import { db } from '@/db';
+import { sql, getTableName } from 'drizzle-orm';
+import { decisions, decisionVotes, decisionComments } from '@/db/schema/misc';
+import { users } from '@/db/schema/auth';
 import { logger } from '@/lib/logger';
 import { notifyAllStaff, createNotification, fireNotification } from '@/lib/services/notifications';
 import {
@@ -24,7 +26,13 @@ import {
   type QuorumConfig,
 } from '@/lib/schemas/decisions';
 
-// ─── DB Row Interfaces ────────────────────────────────────────────────────
+// Table name refs
+const dTable = getTableName(decisions);
+const dvTable = getTableName(decisionVotes);
+const dcTable = getTableName(decisionComments);
+const uTable = getTableName(users);
+
+// ---- DB Row Interfaces ----
 
 export interface DbDecisionRow {
   id: string;
@@ -58,7 +66,7 @@ export interface DbDecisionRow {
   has_user_voted?: boolean;
 }
 
-// ─── JSON Helpers ─────────────────────────────────────────────────────────
+// ---- JSON Helpers ----
 
 export function asArray<T>(value: unknown, fallback: T[]): T[] {
   if (Array.isArray(value)) return value as T[];
@@ -70,7 +78,7 @@ export function asObject<T>(value: unknown, fallback: T): T {
   return fallback;
 }
 
-// ─── Decisions CRUD ───────────────────────────────────────────────────────
+// ---- Decisions CRUD ----
 
 interface DecisionFilters {
   status?: DecisionStatus;
@@ -88,27 +96,21 @@ export interface DecisionStats {
 }
 
 export async function getDecisionStats(requestingUserId: string): Promise<DecisionStats> {
-  const result = await query<{
-    voting: string;
-    discussion: string;
-    closed: string;
-    pending_votes: string;
-  }>(
-    `SELECT
-       COUNT(*) FILTER (WHERE status = '${DECISION_STATUS.VOTING}')                      AS voting,
-       COUNT(*) FILTER (WHERE status = '${DECISION_STATUS.DISCUSSION}')                  AS discussion,
-       COUNT(*) FILTER (WHERE status = '${DECISION_STATUS.CLOSED}')                      AS closed,
-       COUNT(*) FILTER (
-         WHERE status = '${DECISION_STATUS.VOTING}'
-         AND id NOT IN (
-           SELECT decision_id FROM ${TABLE_NAMES.DECISION_VOTES} WHERE user_id = $1
-         )
-       )                                                                                  AS pending_votes
-     FROM ${TABLE_NAMES.DECISIONS}`,
-    [requestingUserId]
-  );
+  const result = await db.execute(sql`
+    SELECT
+      COUNT(*) FILTER (WHERE status = ${DECISION_STATUS.VOTING})                      AS voting,
+      COUNT(*) FILTER (WHERE status = ${DECISION_STATUS.DISCUSSION})                  AS discussion,
+      COUNT(*) FILTER (WHERE status = ${DECISION_STATUS.CLOSED})                      AS closed,
+      COUNT(*) FILTER (
+        WHERE status = ${DECISION_STATUS.VOTING}
+        AND id NOT IN (
+          SELECT decision_id FROM ${sql.raw(dvTable)} WHERE user_id = ${requestingUserId}
+        )
+      )                                                                                AS pending_votes
+    FROM ${sql.raw(dTable)}
+  `);
 
-  const row = result.rows[0];
+  const row = result.rows[0] as unknown as { voting: string; discussion: string; closed: string; pending_votes: string } | undefined;
   return {
     voting: parseInt(row?.voting || '0', 10),
     discussion: parseInt(row?.discussion || '0', 10),
@@ -123,65 +125,57 @@ export async function getDecisions(
 ) {
   const { status, decisionType, createdBy, page = 1, limit = 20 } = filters;
 
-  // Build dynamic WHERE clauses
-  const conditions: string[] = [];
-  const params: unknown[] = [];
-  let paramIndex = 1;
+  // Build dynamic WHERE conditions
+  const conditions: ReturnType<typeof sql>[] = [];
 
   if (status) {
-    conditions.push(`d.status = $${paramIndex++}`);
-    params.push(status);
+    conditions.push(sql`d.status = ${status}`);
   }
   if (decisionType) {
-    conditions.push(`d.decision_type = $${paramIndex++}`);
-    params.push(decisionType);
+    conditions.push(sql`d.decision_type = ${decisionType}`);
   }
   if (createdBy) {
-    conditions.push(`d.created_by = $${paramIndex++}`);
-    params.push(createdBy);
+    conditions.push(sql`d.created_by = ${createdBy}`);
   }
 
   const whereClause = conditions.length > 0
-    ? `WHERE ${conditions.join(' AND ')}`
-    : '';
+    ? sql`WHERE ${conditions.reduce((acc, cond, i) => i === 0 ? cond : sql`${acc} AND ${cond}`, sql``)}`
+    : sql``;
 
   const offset = (page - 1) * limit;
 
   // Main query with subqueries for counts
-  const decisionsResult = await query<DbDecisionRow & { vote_count: string; comment_count: string }>(
-    `SELECT d.*,
-            u.id AS creator_id, u.email AS creator_email, u.name AS creator_name,
-            (SELECT COUNT(*) FROM ${TABLE_NAMES.DECISION_VOTES} dv WHERE dv.decision_id = d.id) AS vote_count,
-            (SELECT COUNT(*) FROM ${TABLE_NAMES.DECISION_COMMENTS} dc WHERE dc.decision_id = d.id) AS comment_count
-     FROM ${TABLE_NAMES.DECISIONS} d
-     JOIN ${TABLE_NAMES.USERS} u ON u.id = d.created_by
-     ${whereClause}
-     ORDER BY d.created_at DESC
-     LIMIT $${paramIndex++} OFFSET $${paramIndex++}`,
-    [...params, limit, offset]
-  );
+  const decisionsResult = await db.execute(sql`
+    SELECT d.*,
+           u.id AS creator_id, u.email AS creator_email, u.name AS creator_name,
+           (SELECT COUNT(*) FROM ${sql.raw(dvTable)} dv WHERE dv.decision_id = d.id) AS vote_count,
+           (SELECT COUNT(*) FROM ${sql.raw(dcTable)} dc WHERE dc.decision_id = d.id) AS comment_count
+    FROM ${sql.raw(dTable)} d
+    JOIN ${sql.raw(uTable)} u ON u.id = d.created_by
+    ${whereClause}
+    ORDER BY d.created_at DESC
+    LIMIT ${limit} OFFSET ${offset}
+  `);
 
   // Count query
-  const countResult = await query<{ count: string }>(
-    `SELECT COUNT(*) AS count FROM ${TABLE_NAMES.DECISIONS} d ${whereClause}`,
-    params
-  );
-  const total = parseInt(countResult.rows[0]?.count || '0', 10);
+  const countResult = await db.execute(sql`
+    SELECT COUNT(*) AS count FROM ${sql.raw(dTable)} d ${whereClause}
+  `);
+  const total = parseInt((countResult.rows[0] as unknown as { count: string })?.count || '0', 10);
 
   // Check which decisions the requesting user has voted on
-  const decisionIds = decisionsResult.rows.map(d => d.id);
+  const decisionIds = (decisionsResult.rows as unknown as DbDecisionRow[]).map(d => d.id);
   let votedSet = new Set<string>();
   if (decisionIds.length > 0) {
-    const votedResult = await query<{ decision_id: string }>(
-      `SELECT decision_id FROM ${TABLE_NAMES.DECISION_VOTES}
-       WHERE user_id = $1 AND decision_id = ANY($2)`,
-      [requestingUserId, decisionIds]
-    );
-    votedSet = new Set(votedResult.rows.map(v => v.decision_id));
+    const votedResult = await db.execute(sql`
+      SELECT decision_id FROM ${sql.raw(dvTable)}
+      WHERE user_id = ${requestingUserId} AND decision_id = ANY(${decisionIds})
+    `);
+    votedSet = new Set((votedResult.rows as unknown as Array<{ decision_id: string }>).map(v => v.decision_id));
   }
 
   return {
-    decisions: decisionsResult.rows.map(d => ({
+    decisions: (decisionsResult.rows as unknown as (DbDecisionRow & { vote_count: string; comment_count: string })[]).map(d => ({
       id: d.id,
       title: d.title,
       description: d.description,
@@ -211,26 +205,24 @@ export async function getDecisions(
 }
 
 export async function getDecisionById(id: string, requestingUserId: string) {
-  const result = await query<DbDecisionRow & { vote_count: string; comment_count: string }>(
-    `SELECT d.*,
-            u.id AS creator_id, u.email AS creator_email, u.name AS creator_name,
-            (SELECT COUNT(*) FROM ${TABLE_NAMES.DECISION_VOTES} dv WHERE dv.decision_id = d.id) AS vote_count,
-            (SELECT COUNT(*) FROM ${TABLE_NAMES.DECISION_COMMENTS} dc WHERE dc.decision_id = d.id) AS comment_count
-     FROM ${TABLE_NAMES.DECISIONS} d
-     JOIN ${TABLE_NAMES.USERS} u ON u.id = d.created_by
-     WHERE d.id = $1`,
-    [id]
-  );
+  const result = await db.execute(sql`
+    SELECT d.*,
+           u.id AS creator_id, u.email AS creator_email, u.name AS creator_name,
+           (SELECT COUNT(*) FROM ${sql.raw(dvTable)} dv WHERE dv.decision_id = d.id) AS vote_count,
+           (SELECT COUNT(*) FROM ${sql.raw(dcTable)} dc WHERE dc.decision_id = d.id) AS comment_count
+    FROM ${sql.raw(dTable)} d
+    JOIN ${sql.raw(uTable)} u ON u.id = d.created_by
+    WHERE d.id = ${id}
+  `);
 
   if (result.rows.length === 0) return null;
-  const d = result.rows[0];
+  const d = result.rows[0] as unknown as DbDecisionRow & { vote_count: string; comment_count: string };
 
   // Check if user has voted
-  const voteCheck = await query<{ id: string }>(
-    `SELECT id FROM ${TABLE_NAMES.DECISION_VOTES}
-     WHERE decision_id = $1 AND user_id = $2`,
-    [id, requestingUserId]
-  );
+  const voteCheck = await db.execute(sql`
+    SELECT id FROM ${sql.raw(dvTable)}
+    WHERE decision_id = ${id} AND user_id = ${requestingUserId}
+  `);
 
   return {
     id: d.id,
@@ -285,37 +277,36 @@ export async function createDecision(
     id: opt.id || crypto.randomUUID(),
   }));
 
-  const result = await query<{ id: string; title: string; status: string; created_at: string; creator_email: string; creator_name: string | null }>(
-    `WITH inserted AS (
-       INSERT INTO ${TABLE_NAMES.DECISIONS}
-         (title, description, decision_type, voting_method, options, quorum,
-          blind_voting, dot_count, invited_participants, discussion_deadline,
-          voting_deadline, status, created_by)
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
-       RETURNING *
-     )
-     SELECT i.id, i.title, i.status, i.created_at,
-            u.email AS creator_email, u.name AS creator_name
-     FROM inserted i
-     JOIN ${TABLE_NAMES.USERS} u ON u.id = i.created_by`,
-    [
-      data.title,
-      data.description,
-      data.decisionType,
-      data.votingMethod,
-      JSON.stringify(options),
-      JSON.stringify(data.quorum || { type: 'percentage', value: 50 }),
-      data.blindVoting ?? true,
-      data.dotCount ?? null,
-      JSON.stringify(data.invitedParticipants || []),
-      data.discussionDeadline ? new Date(data.discussionDeadline) : null,
-      data.votingDeadline ? new Date(data.votingDeadline) : null,
-      data.initialStatus || DECISION_STATUS.DRAFT,
-      createdBy,
-    ]
-  );
+  const result = await db.execute(sql`
+    WITH inserted AS (
+      INSERT INTO ${sql.raw(dTable)}
+        (title, description, decision_type, voting_method, options, quorum,
+         blind_voting, dot_count, invited_participants, discussion_deadline,
+         voting_deadline, status, created_by)
+      VALUES (
+        ${data.title},
+        ${data.description},
+        ${data.decisionType},
+        ${data.votingMethod},
+        ${JSON.stringify(options)}::jsonb,
+        ${JSON.stringify(data.quorum || { type: 'percentage', value: 50 })}::jsonb,
+        ${data.blindVoting ?? true},
+        ${data.dotCount ?? null},
+        ${JSON.stringify(data.invitedParticipants || [])}::jsonb,
+        ${data.discussionDeadline ? new Date(data.discussionDeadline) : null},
+        ${data.votingDeadline ? new Date(data.votingDeadline) : null},
+        ${data.initialStatus || DECISION_STATUS.DRAFT},
+        ${createdBy}
+      )
+      RETURNING *
+    )
+    SELECT i.id, i.title, i.status, i.created_at,
+           u.email AS creator_email, u.name AS creator_name
+    FROM inserted i
+    JOIN ${sql.raw(uTable)} u ON u.id = i.created_by
+  `);
 
-  const row = result.rows[0];
+  const row = result.rows[0] as unknown as { id: string; title: string; status: string; created_at: string; creator_email: string; creator_name: string | null };
   return {
     id: row.id,
     title: row.title,
@@ -346,13 +337,12 @@ export async function updateDecision(
   userId: string
 ) {
   // Fetch current decision
-  const existing = await query<{ id: string; status: string; created_by: string }>(
-    `SELECT id, status, created_by FROM ${TABLE_NAMES.DECISIONS} WHERE id = $1`,
-    [id]
-  );
+  const existing = await db.execute(sql`
+    SELECT id, status, created_by FROM ${sql.raw(dTable)} WHERE id = ${id}
+  `);
   if (existing.rows.length === 0) return { error: 'not_found' as const };
 
-  const decision = existing.rows[0];
+  const decision = existing.rows[0] as unknown as { id: string; status: string; created_by: string };
 
   // Only creator can edit
   if (decision.created_by !== userId) {
@@ -361,81 +351,71 @@ export async function updateDecision(
 
   // Allow outcomeSummary update on closed decisions
   if (data.outcomeSummary !== undefined && decision.status === DECISION_STATUS.CLOSED) {
-    const updated = await query<DbDecisionRow>(
-      `UPDATE ${TABLE_NAMES.DECISIONS} SET outcome_summary = $1 WHERE id = $2 RETURNING *`,
-      [data.outcomeSummary, id]
-    );
-    return { decision: updated.rows[0] };
+    const updated = await db.execute(sql`
+      UPDATE ${sql.raw(dTable)} SET outcome_summary = ${data.outcomeSummary} WHERE id = ${id} RETURNING *
+    `);
+    return { decision: updated.rows[0] as unknown as DbDecisionRow };
   }
 
   if (!(EDITABLE_STATUSES as readonly string[]).includes(decision.status)) {
     return { error: 'not_editable' as const };
   }
 
-  // Build dynamic SET clause
-  const setClauses: string[] = [];
-  const params: unknown[] = [];
-  let paramIndex = 1;
+  // Build dynamic SET clauses
+  const setClauses: ReturnType<typeof sql>[] = [];
 
   if (data.title !== undefined) {
-    setClauses.push(`title = $${paramIndex++}`);
-    params.push(data.title);
+    setClauses.push(sql`title = ${data.title}`);
   }
   if (data.description !== undefined) {
-    setClauses.push(`description = $${paramIndex++}`);
-    params.push(data.description);
+    setClauses.push(sql`description = ${data.description}`);
   }
   if (data.decisionType !== undefined) {
-    setClauses.push(`decision_type = $${paramIndex++}`);
-    params.push(data.decisionType);
+    setClauses.push(sql`decision_type = ${data.decisionType}`);
   }
   if (data.votingMethod !== undefined) {
-    setClauses.push(`voting_method = $${paramIndex++}`);
-    params.push(data.votingMethod);
+    setClauses.push(sql`voting_method = ${data.votingMethod}`);
   }
   if (data.options !== undefined) {
-    setClauses.push(`options = $${paramIndex++}`);
-    params.push(JSON.stringify(data.options));
+    setClauses.push(sql`options = ${JSON.stringify(data.options)}::jsonb`);
   }
   if (data.quorum !== undefined) {
-    setClauses.push(`quorum = $${paramIndex++}`);
-    params.push(JSON.stringify(data.quorum));
+    setClauses.push(sql`quorum = ${JSON.stringify(data.quorum)}::jsonb`);
   }
   if (data.blindVoting !== undefined) {
-    setClauses.push(`blind_voting = $${paramIndex++}`);
-    params.push(data.blindVoting);
+    setClauses.push(sql`blind_voting = ${data.blindVoting}`);
   }
   if (data.dotCount !== undefined) {
-    setClauses.push(`dot_count = $${paramIndex++}`);
-    params.push(data.dotCount);
+    setClauses.push(sql`dot_count = ${data.dotCount}`);
   }
   if (data.invitedParticipants !== undefined) {
-    setClauses.push(`invited_participants = $${paramIndex++}`);
-    params.push(JSON.stringify(data.invitedParticipants));
+    setClauses.push(sql`invited_participants = ${JSON.stringify(data.invitedParticipants)}::jsonb`);
   }
   if (data.discussionDeadline !== undefined) {
-    setClauses.push(`discussion_deadline = $${paramIndex++}`);
-    params.push(data.discussionDeadline ? new Date(data.discussionDeadline) : null);
+    setClauses.push(sql`discussion_deadline = ${data.discussionDeadline ? new Date(data.discussionDeadline) : null}`);
   }
   if (data.votingDeadline !== undefined) {
-    setClauses.push(`voting_deadline = $${paramIndex++}`);
-    params.push(data.votingDeadline ? new Date(data.votingDeadline) : null);
+    setClauses.push(sql`voting_deadline = ${data.votingDeadline ? new Date(data.votingDeadline) : null}`);
   }
 
   if (setClauses.length === 0) {
-    return { decision: existing.rows[0] };
+    return { decision: existing.rows[0] as unknown as DbDecisionRow };
   }
 
-  params.push(id);
-  const updated = await query<DbDecisionRow>(
-    `UPDATE ${TABLE_NAMES.DECISIONS}
-     SET ${setClauses.join(', ')}
-     WHERE id = $${paramIndex}
-     RETURNING *`,
-    params
-  );
+  // Join SET clauses with commas
+  let setFragment = setClauses[0];
+  for (let i = 1; i < setClauses.length; i++) {
+    setFragment = sql`${setFragment}, ${setClauses[i]}`;
+  }
 
-  return { decision: updated.rows[0] };
+  const updated = await db.execute(sql`
+    UPDATE ${sql.raw(dTable)}
+    SET ${setFragment}
+    WHERE id = ${id}
+    RETURNING *
+  `);
+
+  return { decision: updated.rows[0] as unknown as DbDecisionRow };
 }
 
 /**
@@ -447,29 +427,26 @@ export async function deleteDecision(
   userId: string,
   isSuperAdmin: boolean,
 ): Promise<{ deleted: true } | { error: 'not_found' | 'not_authorized' }> {
-  const existing = await query<{ id: string; created_by: string }>(
-    `SELECT id, created_by FROM ${TABLE_NAMES.DECISIONS} WHERE id = $1`,
-    [decisionId]
-  );
+  const existing = await db.execute(sql`
+    SELECT id, created_by FROM ${sql.raw(dTable)} WHERE id = ${decisionId}
+  `);
   if (existing.rows.length === 0) return { error: 'not_found' };
 
-  if (existing.rows[0].created_by !== userId && !isSuperAdmin) {
+  const row = existing.rows[0] as unknown as { id: string; created_by: string };
+  if (row.created_by !== userId && !isSuperAdmin) {
     return { error: 'not_authorized' };
   }
 
-  await transaction(async (client) => {
-    await client.query(
-      `DELETE FROM ${TABLE_NAMES.DECISION_COMMENTS} WHERE decision_id = $1`,
-      [decisionId]
-    );
-    await client.query(
-      `DELETE FROM ${TABLE_NAMES.DECISION_VOTES} WHERE decision_id = $1`,
-      [decisionId]
-    );
-    await client.query(
-      `DELETE FROM ${TABLE_NAMES.DECISIONS} WHERE id = $1`,
-      [decisionId]
-    );
+  await db.transaction(async (tx) => {
+    await tx.execute(sql`
+      DELETE FROM ${sql.raw(dcTable)} WHERE decision_id = ${decisionId}
+    `);
+    await tx.execute(sql`
+      DELETE FROM ${sql.raw(dvTable)} WHERE decision_id = ${decisionId}
+    `);
+    await tx.execute(sql`
+      DELETE FROM ${sql.raw(dTable)} WHERE id = ${decisionId}
+    `);
   });
 
   logger.info('Decision deleted', { decisionId, userId });
@@ -482,13 +459,12 @@ export async function transitionDecision(
   userId: string,
   extra?: { cancelReason?: string; outcomeSummary?: string }
 ) {
-  const existing = await query<DbDecisionRow>(
-    `SELECT * FROM ${TABLE_NAMES.DECISIONS} WHERE id = $1`,
-    [id]
-  );
+  const existing = await db.execute(sql`
+    SELECT * FROM ${sql.raw(dTable)} WHERE id = ${id}
+  `);
   if (existing.rows.length === 0) return { error: 'not_found' as const };
 
-  const decision = existing.rows[0];
+  const decision = existing.rows[0] as unknown as DbDecisionRow;
   const currentStatus = decision.status as DecisionStatus;
   const validTargets = VALID_TRANSITIONS[currentStatus] || [];
 
@@ -496,86 +472,75 @@ export async function transitionDecision(
     return { error: 'invalid_transition' as const };
   }
 
-  const setClauses: string[] = ['status = $1'];
-  const params: unknown[] = [newStatus];
-  let paramIndex = 2;
-
   if (newStatus === DECISION_STATUS.CANCELLED) {
-    setClauses.push(`cancel_reason = $${paramIndex++}`);
-    params.push(extra?.cancelReason || null);
-    setClauses.push(`closed_at = $${paramIndex++}`);
-    params.push(new Date());
-    setClauses.push(`closed_by = $${paramIndex++}`);
-    params.push(userId);
+    const updated = await db.execute(sql`
+      UPDATE ${sql.raw(dTable)}
+      SET status = ${newStatus},
+          cancel_reason = ${extra?.cancelReason || null},
+          closed_at = ${new Date()},
+          closed_by = ${userId}
+      WHERE id = ${id}
+      RETURNING *
+    `);
+    return { decision: updated.rows[0] as unknown as DbDecisionRow };
   }
 
   if (newStatus === DECISION_STATUS.CLOSED) {
     // Closing requires reading votes + computing tallies + updating atomically
-    const result = await transaction(async (client) => {
-      const votesResult = await client.query<{ vote_data: VoteData }>(
-        `SELECT vote_data FROM ${TABLE_NAMES.DECISION_VOTES} WHERE decision_id = $1`,
-        [id]
-      );
+    const txResult = await db.transaction(async (tx) => {
+      const votesResult = await tx.execute(sql`
+        SELECT vote_data FROM ${sql.raw(dvTable)} WHERE decision_id = ${id}
+      `);
       const options = asArray<DecisionOption>(decision.options, []);
       const tallies = computeTallies(
         decision.voting_method as VotingMethod,
-        votesResult.rows.map(v => v.vote_data),
+        (votesResult.rows as unknown as Array<{ vote_data: VoteData }>).map(v => v.vote_data),
         options
       );
 
-      setClauses.push(`outcome = $${paramIndex++}`);
-      params.push(JSON.stringify(tallies));
-      setClauses.push(`outcome_summary = $${paramIndex++}`);
-      params.push(extra?.outcomeSummary || null);
-      setClauses.push(`revealed_at = $${paramIndex++}`);
-      params.push(new Date());
-      setClauses.push(`closed_at = $${paramIndex++}`);
-      params.push(new Date());
-      setClauses.push(`closed_by = $${paramIndex++}`);
-      params.push(userId);
+      const updated = await tx.execute(sql`
+        UPDATE ${sql.raw(dTable)}
+        SET status = ${newStatus},
+            outcome = ${JSON.stringify(tallies)}::jsonb,
+            outcome_summary = ${extra?.outcomeSummary || null},
+            revealed_at = ${new Date()},
+            closed_at = ${new Date()},
+            closed_by = ${userId}
+        WHERE id = ${id} AND status = ${currentStatus}
+        RETURNING *
+      `);
 
-      params.push(id);
-      params.push(currentStatus);
-      const updated = await client.query<DbDecisionRow>(
-        `UPDATE ${TABLE_NAMES.DECISIONS}
-         SET ${setClauses.join(', ')}
-         WHERE id = $${paramIndex} AND status = $${paramIndex + 1}
-         RETURNING *`,
-        params
-      );
-
-      return updated.rows[0] || null;
+      return (updated.rows[0] as unknown as DbDecisionRow) || null;
     });
 
-    if (!result) {
+    if (!txResult) {
       return { error: 'invalid_transition' as const };
     }
 
     // Notify the creator when decision closes
     fireNotification(
-      () => createNotification(result.created_by, {
+      () => createNotification(txResult.created_by, {
         type: 'decision_closed',
         title: 'Entscheidung abgeschlossen',
-        content: `"${result.title}" wurde abgeschlossen.`,
+        content: `"${txResult.title}" wurde abgeschlossen.`,
         related_type: 'decision',
-        related_id: result.id,
+        related_id: txResult.id,
       }),
-      `decision_closed:${result.id}`
+      `decision_closed:${txResult.id}`
     )
 
-    return { decision: result };
+    return { decision: txResult };
   }
 
-  params.push(id);
-  const updated = await query<DbDecisionRow>(
-    `UPDATE ${TABLE_NAMES.DECISIONS}
-     SET ${setClauses.join(', ')}
-     WHERE id = $${paramIndex}
-     RETURNING *`,
-    params
-  );
+  // Default transition (e.g. draft -> discussion, discussion -> voting)
+  const updated = await db.execute(sql`
+    UPDATE ${sql.raw(dTable)}
+    SET status = ${newStatus}
+    WHERE id = ${id}
+    RETURNING *
+  `);
 
-  const updatedDecision = updated.rows[0];
+  const updatedDecision = updated.rows[0] as unknown as DbDecisionRow;
 
   // Notify all staff when voting opens
   if (newStatus === DECISION_STATUS.VOTING && updatedDecision) {
@@ -597,7 +562,7 @@ export async function transitionDecision(
   return { decision: updatedDecision };
 }
 
-// ─── Tally Computation ────────────────────────────────────────────────────
+// ---- Tally Computation ----
 
 export function computeTallies(
   method: VotingMethod,

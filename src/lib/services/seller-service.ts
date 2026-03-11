@@ -6,9 +6,15 @@
  * for a given seller user.
  */
 
-import { query } from '@/lib/auth/db'
-import { TABLE_NAMES } from '@/config/database'
+import { db } from '@/db'
+import { sql, getTableName } from 'drizzle-orm'
+import { listings, listingImages, marketplaceOrders } from '@/db/schema'
 import { logger } from '@/lib/logger'
+
+// Table name refs for raw SQL
+const listingsTable = getTableName(listings)
+const listingImagesTable = getTableName(listingImages)
+const ordersTable = getTableName(marketplaceOrders)
 
 // ============================================================================
 // Types
@@ -63,8 +69,8 @@ export interface SellerDashboardData {
  * Fetch the seller's recent marketplace listings.
  */
 async function fetchSellerProducts(userId: string): Promise<SellerProduct[]> {
-  const result = await query<SellerProductRow>(
-    `SELECT
+  const result = await db.execute(sql`
+    SELECT
       l.id,
       l.title,
       l.price_chf,
@@ -74,15 +80,14 @@ async function fetchSellerProducts(userId: string): Promise<SellerProduct[]> {
       l.created_at,
       l.condition,
       l.category,
-      (SELECT li.url FROM ${TABLE_NAMES.LISTING_IMAGES} li WHERE li.listing_id = l.id AND li.is_primary = true LIMIT 1) as thumbnail
-     FROM ${TABLE_NAMES.LISTINGS} l
-     WHERE l.seller_id = $1
-     ORDER BY l.created_at DESC
-     LIMIT 10`,
-    [userId]
-  )
+      (SELECT li.url FROM ${sql.raw(listingImagesTable)} li WHERE li.listing_id = l.id AND li.is_primary = true LIMIT 1) as thumbnail
+    FROM ${sql.raw(listingsTable)} l
+    WHERE l.seller_id = ${userId}
+    ORDER BY l.created_at DESC
+    LIMIT 10
+  `)
 
-  return result.rows.map((row) => ({
+  return (result.rows as unknown as SellerProductRow[]).map((row) => ({
     id: row.id,
     title: row.title,
     price: parseFloat(String(row.price_chf)),
@@ -100,23 +105,23 @@ async function fetchSellerProducts(userId: string): Promise<SellerProduct[]> {
  * Fetch aggregate listing stats for a seller.
  */
 async function fetchListingStats(userId: string) {
-  const result = await query<{
-    total_products: string
-    active_products: string
-    total_views: string
-    total_favorites: string
-  }>(
-    `SELECT
+  const result = await db.execute(sql`
+    SELECT
       COUNT(*) as total_products,
       COUNT(*) FILTER (WHERE status = 'active') as active_products,
       COALESCE(SUM(view_count), 0) as total_views,
       COALESCE(SUM(favorite_count), 0) as total_favorites
-     FROM ${TABLE_NAMES.LISTINGS}
-     WHERE seller_id = $1 AND status != 'removed'`,
-    [userId]
-  )
+    FROM ${sql.raw(listingsTable)}
+    WHERE seller_id = ${userId} AND status != 'removed'
+  `)
 
-  const row = result.rows[0]
+  const row = (result.rows as unknown as {
+    total_products: string
+    active_products: string
+    total_views: string
+    total_favorites: string
+  }[])[0]
+
   return {
     totalProducts: parseInt(row?.total_products || '0'),
     activeProducts: parseInt(row?.active_products || '0'),
@@ -131,21 +136,21 @@ async function fetchListingStats(userId: string) {
  */
 async function fetchOrderStats(userId: string) {
   try {
-    const result = await query<{
-      total_orders: string
-      pending_orders: string
-      total_revenue: string
-    }>(
-      `SELECT
+    const result = await db.execute(sql`
+      SELECT
         COUNT(*) as total_orders,
         COUNT(*) FILTER (WHERE status IN ('pending_payment', 'paid')) as pending_orders,
         COALESCE(SUM(seller_payout_chf), 0) as total_revenue
-       FROM ${TABLE_NAMES.MARKETPLACE_ORDERS}
-       WHERE seller_id = $1`,
-      [userId]
-    )
+      FROM ${sql.raw(ordersTable)}
+      WHERE seller_id = ${userId}
+    `)
 
-    const row = result.rows[0]
+    const row = (result.rows as unknown as {
+      total_orders: string
+      pending_orders: string
+      total_revenue: string
+    }[])[0]
+
     return {
       totalOrders: parseInt(row?.total_orders || '0'),
       pendingOrders: parseInt(row?.pending_orders || '0'),
