@@ -5,9 +5,9 @@
 import { NextRequest } from 'next/server';
 import { apiSuccess, apiError, apiNotFound } from '@/lib/api/helpers';
 import { db } from '@/db';
-import { sellerProfiles, listings, listingImages, users } from '@/db/schema';
-import { eq, and, sql } from 'drizzle-orm';
-import { TABLE_NAMES, REVIEW_TARGET_TYPES } from '@/config/database';
+import { sellerProfiles, listings, listingImages, users, reviews } from '@/db/schema';
+import { eq, and, sql, getTableName } from 'drizzle-orm';
+import { REVIEW_TARGET_TYPES } from '@/config/database';
 import { REVIEW_STATUS } from '@/config/review-status';
 
 // ============================================================================
@@ -71,12 +71,12 @@ export async function GET(
       .where(and(eq(listings.sellerId, id), eq(listings.status, 'active')))
       .orderBy(sql`${listings.createdAt} DESC`);
 
-    // Aggregate review stats — reviews table has no Drizzle schema, use raw SQL
+    // Aggregate review stats via raw SQL (cross-table join with listings)
     const reviewStatsResult = await db.execute(sql`
       SELECT
         ROUND(AVG(r.overall_rating)::numeric, 2) as avg_rating,
         COUNT(r.id) as review_count
-      FROM ${sql.raw(TABLE_NAMES.REVIEWS)} r
+      FROM ${sql.raw(getTableName(reviews))} r
       JOIN ${listings} l ON r.target_id = l.id
       WHERE r.target_type = ${REVIEW_TARGET_TYPES.LISTING}
         AND l.seller_id = ${id}

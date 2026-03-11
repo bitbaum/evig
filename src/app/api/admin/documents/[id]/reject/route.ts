@@ -1,10 +1,10 @@
 import { NextRequest } from 'next/server'
 import { withAdmin } from '@/lib/api/middleware'
 import { db } from '@/db'
-import { sql } from 'drizzle-orm'
+import { sql, getTableName } from 'drizzle-orm'
+import { repairerApplications } from '@/db/schema'
 import { apiError, apiSuccess, apiBadRequest, apiNotFound } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
-import { TABLE_NAMES } from '@/config/database'
 import { DOCUMENT_STATUS } from '@/config/document-status'
 import { logger } from '@/lib/logger'
 
@@ -34,8 +34,8 @@ export const PUT = withAdmin<{ id: string }>('content', async (request, session,
     // Get document details (read-only, outside transaction)
     const documentResult = await db.execute(sql`
       SELECT vd.*, ra.user_id, ra.document_verification_status
-      FROM ${sql.raw(TABLE_NAMES.VERIFICATION_DOCUMENTS)} vd
-      JOIN ${sql.raw(TABLE_NAMES.REPAIRER_APPLICATIONS)} ra ON vd.application_id = ra.id
+      FROM ${sql.raw('verification_documents')} vd
+      JOIN ${sql.raw(getTableName(repairerApplications))} ra ON vd.application_id = ra.id
       WHERE vd.id = ${documentId}
     `)
 
@@ -57,7 +57,7 @@ export const PUT = withAdmin<{ id: string }>('content', async (request, session,
     await db.transaction(async (tx) => {
       // Update document status with rejection details
       await tx.execute(sql`
-        UPDATE ${sql.raw(TABLE_NAMES.VERIFICATION_DOCUMENTS)}
+        UPDATE ${sql.raw('verification_documents')}
         SET
           status = ${DOCUMENT_STATUS.REJECTED},
           admin_notes = COALESCE(${adminNotes ?? null}, admin_notes) || E'\n\nAblehnungsgrund: ' || ${rejectionReason},
@@ -69,7 +69,7 @@ export const PUT = withAdmin<{ id: string }>('content', async (request, session,
 
       // Update application document verification status to incomplete
       await tx.execute(sql`
-        UPDATE ${sql.raw(TABLE_NAMES.REPAIRER_APPLICATIONS)}
+        UPDATE ${sql.raw(getTableName(repairerApplications))}
         SET document_verification_status = ${'incomplete'}, updated_at = CURRENT_TIMESTAMP
         WHERE id = ${document.application_id}
       `)

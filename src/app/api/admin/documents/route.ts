@@ -1,10 +1,10 @@
 import { NextRequest } from 'next/server'
 import { withAdmin } from '@/lib/api/middleware'
 import { db } from '@/db'
-import { sql } from 'drizzle-orm'
+import { sql, getTableName } from 'drizzle-orm'
+import { repairerApplications, users } from '@/db/schema'
 import { apiError, apiSuccess, apiBadRequest, apiNotFound } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
-import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
 
 interface DocumentRow {
@@ -56,8 +56,8 @@ export const GET = withAdmin('content', async (request, session) => {
     // Get application details
     const applicationResult = await db.execute(sql`
       SELECT ra.*, u.name, u.email
-      FROM ${sql.raw(TABLE_NAMES.REPAIRER_APPLICATIONS)} ra
-      JOIN ${sql.raw(TABLE_NAMES.USERS)} u ON ra.user_id = u.id
+      FROM ${sql.raw(getTableName(repairerApplications))} ra
+      JOIN ${sql.raw(getTableName(users))} u ON ra.user_id = u.id
       WHERE ra.id = ${applicationId}
     `)
 
@@ -74,8 +74,8 @@ export const GET = withAdmin('content', async (request, session) => {
         dt.is_required,
         dt.allowed_extensions,
         dt.max_file_size_mb
-      FROM ${sql.raw(TABLE_NAMES.VERIFICATION_DOCUMENTS)} vd
-      LEFT JOIN ${sql.raw(TABLE_NAMES.DOCUMENT_TYPES)} dt ON vd.document_type_id = dt.id
+      FROM ${sql.raw('verification_documents')} vd
+      LEFT JOIN ${sql.raw('document_types')} dt ON vd.document_type_id = dt.id
       WHERE vd.application_id = ${applicationId}
       ORDER BY dt.is_required DESC, vd.created_at ASC
     `)
@@ -83,10 +83,10 @@ export const GET = withAdmin('content', async (request, session) => {
     // Get required document types that haven't been uploaded yet
     const requiredTypesResult = await db.execute(sql`
       SELECT dt.*
-      FROM ${sql.raw(TABLE_NAMES.DOCUMENT_TYPES)} dt
+      FROM ${sql.raw('document_types')} dt
       WHERE dt.is_required = true
         AND NOT EXISTS (
-          SELECT 1 FROM ${sql.raw(TABLE_NAMES.VERIFICATION_DOCUMENTS)} vd
+          SELECT 1 FROM ${sql.raw('verification_documents')} vd
           WHERE vd.application_id = ${applicationId} AND vd.document_type_id = dt.id
         )
     `)

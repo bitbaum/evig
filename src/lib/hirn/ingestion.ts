@@ -12,9 +12,10 @@
 import * as crypto from 'crypto'
 import * as fs from 'fs/promises'
 import * as path from 'path'
-import { query } from '@/lib/auth/db'
+import { db } from '@/db'
+import { hirnDocuments, hirnChunks } from '@/db/schema'
+import { eq, sql, count, max } from 'drizzle-orm'
 import { logger } from '@/lib/logger'
-import { TABLE_NAMES } from '@/config/database'
 import { chunkText, chunkMarkdown, chunkCode, type Chunk } from './chunking'
 import { generateEmbeddings } from './providers'
 
@@ -46,19 +47,19 @@ export async function ingestDocument(input: DocumentInput): Promise<IngestResult
   const contentHash = hashContent(input.content)
 
   // Check if document exists and if content changed
-  const existing = await query<{ id: string; content_hash: string }>(
-    `SELECT id, content_hash FROM ${TABLE_NAMES.HIRN_DOCUMENTS} WHERE source_path = $1`,
-    [input.sourcePath]
-  )
+  const existing = await db
+    .select({ id: hirnDocuments.id, contentHash: hirnDocuments.contentHash })
+    .from(hirnDocuments)
+    .where(eq(hirnDocuments.sourcePath, input.sourcePath))
 
   let documentId: string
   let wasUpdated = false
 
-  if (existing.rows.length > 0) {
-    const doc = existing.rows[0]
+  if (existing.length > 0) {
+    const doc = existing[0]
 
     // If content hasn't changed, skip re-indexing
-    if (doc.content_hash === contentHash) {
+    if (doc.contentHash === contentHash) {
       logger.debug('Document unchanged, skipping', { sourcePath: input.sourcePath })
       return {
         documentId: doc.id,
@@ -71,25 +72,35 @@ export async function ingestDocument(input: DocumentInput): Promise<IngestResult
     documentId = doc.id
     wasUpdated = true
 
-    await query(
-      `UPDATE ${TABLE_NAMES.HIRN_DOCUMENTS}
-       SET content = $1, content_hash = $2, title = $3, metadata = $4,
-           updated_at = NOW(), indexed_at = NULL
-       WHERE id = $5`,
-      [input.content, contentHash, input.title, JSON.stringify(input.metadata || {}), documentId]
-    )
+    await db
+      .update(hirnDocuments)
+      .set({
+        content: input.content,
+        contentHash,
+        title: input.title,
+        metadata: input.metadata || {},
+        updatedAt: sql`NOW()`,
+        indexedAt: null,
+      })
+      .where(eq(hirnDocuments.id, documentId))
 
     // Delete old chunks
-    await query(`DELETE FROM ${TABLE_NAMES.HIRN_CHUNKS} WHERE document_id = $1`, [documentId])
+    await db.delete(hirnChunks).where(eq(hirnChunks.documentId, documentId))
   } else {
     // Create new document
-    const result = await query<{ id: string }>(
-      `INSERT INTO ${TABLE_NAMES.HIRN_DOCUMENTS} (source_path, source_type, title, content, content_hash, metadata)
-       VALUES ($1, $2, $3, $4, $5, $6)
-       RETURNING id`,
-      [input.sourcePath, input.sourceType, input.title, input.content, contentHash, JSON.stringify(input.metadata || {})]
-    )
-    documentId = result.rows[0].id
+    const [result] = await db
+      .insert(hirnDocuments)
+      .values({
+        sourcePath: input.sourcePath,
+        sourceType: input.sourceType,
+        title: input.title,
+        content: input.content,
+        contentHash,
+        metadata: input.metadata || {},
+      })
+      .returning({ id: hirnDocuments.id })
+
+    documentId = result.id
   }
 
   // Chunk the content based on type
@@ -128,29 +139,22 @@ export async function ingestDocument(input: DocumentInput): Promise<IngestResult
       allEmbeddings.push(...response.embeddings)
     }
 
-    // Insert chunks with embeddings
+    // Insert chunks with embeddings (use raw SQL for vector column)
     for (let i = 0; i < chunks.length; i++) {
       const chunk = chunks[i]
       const embedding = allEmbeddings[i]
 
-      await query(
-        `INSERT INTO ${TABLE_NAMES.HIRN_CHUNKS} (document_id, content, chunk_index, embedding, metadata)
-         VALUES ($1, $2, $3, $4::vector, $5)`,
-        [
-          documentId,
-          chunk.content,
-          chunk.index,
-          `[${embedding.join(',')}]`,
-          JSON.stringify(chunk.metadata || {}),
-        ]
-      )
+      await db.execute(sql`
+        INSERT INTO ${hirnChunks} (document_id, content, chunk_index, embedding, metadata)
+        VALUES (${documentId}, ${chunk.content}, ${chunk.index}, ${`[${embedding.join(',')}]`}::vector, ${JSON.stringify(chunk.metadata || {})}::jsonb)
+      `)
     }
 
     // Mark document as indexed
-    await query(
-      `UPDATE ${TABLE_NAMES.HIRN_DOCUMENTS} SET indexed_at = NOW() WHERE id = $1`,
-      [documentId]
-    )
+    await db
+      .update(hirnDocuments)
+      .set({ indexedAt: sql`NOW()` })
+      .where(eq(hirnDocuments.id, documentId))
   }
 
   logger.info('Document ingested', {
@@ -289,31 +293,24 @@ export async function ingestDirectory(
 export async function getIngestionStats(): Promise<{
   totalDocuments: number
   totalChunks: number
-  lastIndexed: Date | null
+  lastIndexed: string | null
   byType: Record<string, number>
 }> {
-  const docsResult = await query<{ count: string }>(
-    `SELECT COUNT(*) as count FROM ${TABLE_NAMES.HIRN_DOCUMENTS}`
-  )
+  const [docsCount] = await db.select({ count: count() }).from(hirnDocuments)
+  const [chunksCount] = await db.select({ count: count() }).from(hirnChunks)
+  const [lastIndexed] = await db.select({ max: max(hirnDocuments.indexedAt) }).from(hirnDocuments)
 
-  const chunksResult = await query<{ count: string }>(
-    `SELECT COUNT(*) as count FROM ${TABLE_NAMES.HIRN_CHUNKS}`
-  )
-
-  const lastIndexedResult = await query<{ max: Date | null }>(
-    `SELECT MAX(indexed_at) as max FROM ${TABLE_NAMES.HIRN_DOCUMENTS}`
-  )
-
-  const byTypeResult = await query<{ source_type: string; count: string }>(
-    `SELECT source_type, COUNT(*) as count FROM ${TABLE_NAMES.HIRN_DOCUMENTS} GROUP BY source_type`
-  )
+  const byTypeRows = await db
+    .select({ sourceType: hirnDocuments.sourceType, count: count() })
+    .from(hirnDocuments)
+    .groupBy(hirnDocuments.sourceType)
 
   return {
-    totalDocuments: parseInt(docsResult.rows[0]?.count || '0'),
-    totalChunks: parseInt(chunksResult.rows[0]?.count || '0'),
-    lastIndexed: lastIndexedResult.rows[0]?.max || null,
+    totalDocuments: docsCount?.count ?? 0,
+    totalChunks: chunksCount?.count ?? 0,
+    lastIndexed: lastIndexed?.max || null,
     byType: Object.fromEntries(
-      byTypeResult.rows.map(r => [r.source_type, parseInt(r.count)])
+      byTypeRows.map(r => [r.sourceType, r.count])
     ),
   }
 }

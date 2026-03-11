@@ -7,8 +7,10 @@
  * - Notification to matching helpers
  */
 
-import { query } from '@/lib/auth/db'
-import { TABLE_NAMES } from '@/config/database'
+import { db } from '@/db'
+import { helperProfiles, userSkills } from '@/db/schema/itHilfe'
+import { users } from '@/db/schema/auth'
+import { eq, and, ne, sql, inArray } from 'drizzle-orm'
 import { logger } from '@/lib/logger'
 import { sendCustomEmail } from '@/lib/email'
 import {
@@ -78,37 +80,46 @@ export function sendRequestCreatedNotifications(params: NotifyParams): void {
   // 3. Matching helper notifications
   const serviceTypeName = getServiceTypeById(params.serviceType)?.name || params.serviceType
   if (params.skillsNeeded.length > 0) {
-    query(`
-      SELECT DISTINCT hp.user_id, u.name, u.email,
-        ARRAY_AGG(us.skill_id) FILTER (WHERE us.skill_id = ANY($1::text[])) as matching_skills
-      FROM ${TABLE_NAMES.IT_HILFE_TECHNICIAN_PROFILES} hp
-      JOIN ${TABLE_NAMES.USERS} u ON hp.user_id = u.id
-      JOIN ${TABLE_NAMES.USER_SKILLS} us ON hp.user_id = us.user_id
-      WHERE hp.is_active = true
-        AND hp.user_id != $2
-        AND us.skill_id = ANY($1::text[])
-      GROUP BY hp.user_id, u.name, u.email
-    `, [params.skillsNeeded, params.requesterId]).then(helpersResult => {
-      for (const helper of helpersResult.rows as Array<{ user_id: string; name: string; email: string; matching_skills: string[] }>) {
-        const matchingSkillNames = (helper.matching_skills || [])
-          .map(sid => getSkillById(sid)?.name || sid)
-        const helperContent = helperNewMatchingRequest(
-          helper.name || 'Techniker',
-          params.title,
-          categoryName,
-          urgencyName,
-          params.canton,
-          serviceTypeName,
-          matchingSkillNames,
-          requestUrl
+    // Find active helpers with matching skills (excluding requester)
+    db
+      .select({
+        userId: helperProfiles.userId,
+        name: users.name,
+        email: users.email,
+        matchingSkills: sql<string[]>`ARRAY_AGG(${userSkills.skillId}) FILTER (WHERE ${userSkills.skillId} = ANY(${params.skillsNeeded}::text[]))`,
+      })
+      .from(helperProfiles)
+      .innerJoin(users, eq(helperProfiles.userId, users.id))
+      .innerJoin(userSkills, eq(helperProfiles.userId, userSkills.userId))
+      .where(
+        and(
+          eq(helperProfiles.isActive, true),
+          ne(helperProfiles.userId, params.requesterId),
+          inArray(userSkills.skillId, params.skillsNeeded),
         )
-        sendCustomEmail(helper.email, helperContent).catch(err => {
-          logger.warn('Failed to send IT-Hilfe helper notification', { error: err, helperEmail: helper.email })
-        })
-      }
-      logger.info('Sent IT-Hilfe helper notifications', { requestId: params.requestId, helperCount: helpersResult.rows.length })
-    }).catch(err => {
-      logger.warn('Failed to fetch matching helpers for IT-Hilfe notifications', { error: err })
-    })
+      )
+      .groupBy(helperProfiles.userId, users.name, users.email)
+      .then(helpersResult => {
+        for (const helper of helpersResult) {
+          const matchingSkillNames = (helper.matchingSkills || [])
+            .map(sid => getSkillById(sid)?.name || sid)
+          const helperContent = helperNewMatchingRequest(
+            helper.name || 'Techniker',
+            params.title,
+            categoryName,
+            urgencyName,
+            params.canton,
+            serviceTypeName,
+            matchingSkillNames,
+            requestUrl
+          )
+          sendCustomEmail(helper.email, helperContent).catch(err => {
+            logger.warn('Failed to send IT-Hilfe helper notification', { error: err, helperEmail: helper.email })
+          })
+        }
+        logger.info('Sent IT-Hilfe helper notifications', { requestId: params.requestId, helperCount: helpersResult.length })
+      }).catch(err => {
+        logger.warn('Failed to fetch matching helpers for IT-Hilfe notifications', { error: err })
+      })
   }
 }

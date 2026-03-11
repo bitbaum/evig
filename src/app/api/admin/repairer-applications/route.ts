@@ -1,10 +1,10 @@
 import { NextRequest } from 'next/server'
 import { withAdmin } from '@/lib/api/middleware'
 import { db } from '@/db'
-import { sql } from 'drizzle-orm'
+import { sql, getTableName } from 'drizzle-orm'
+import { repairerApplications, users } from '@/db/schema'
 import { apiError, apiSuccess, apiBadRequest, parsePagination } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
-import { TABLE_NAMES } from '@/config/database'
 import { APPROVAL_STATUS } from '@/config/approval-status'
 import { logger } from '@/lib/logger'
 
@@ -74,8 +74,8 @@ export const GET = withAdmin('services', async (request, session) => {
           WHEN ra.status = ${APPROVAL_STATUS.APPROVED} THEN 3
           WHEN ra.status = ${APPROVAL_STATUS.REJECTED} THEN 4
         END as priority_order
-      FROM ${sql.raw(TABLE_NAMES.REPAIRER_APPLICATIONS)} ra
-      JOIN ${sql.raw(TABLE_NAMES.USERS)} u ON ra.user_id = u.id
+      FROM ${sql.raw(getTableName(repairerApplications))} ra
+      JOIN ${sql.raw(getTableName(users))} u ON ra.user_id = u.id
       WHERE ra.status = ${status}
       ORDER BY priority_order ASC, ra.created_at ASC
       LIMIT ${limit} OFFSET ${offset}
@@ -83,7 +83,7 @@ export const GET = withAdmin('services', async (request, session) => {
 
     // Get total count for pagination
     const countResult = await db.execute(sql`
-      SELECT COUNT(*) as total FROM ${sql.raw(TABLE_NAMES.REPAIRER_APPLICATIONS)} WHERE status = ${status}
+      SELECT COUNT(*) as total FROM ${sql.raw(getTableName(repairerApplications))} WHERE status = ${status}
     `)
 
     const applications = (applicationsResult.rows as unknown as ApplicationRow[]).map(app => ({

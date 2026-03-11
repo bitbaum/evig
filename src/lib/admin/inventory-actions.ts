@@ -5,8 +5,9 @@
  * Extracted from API route to keep handlers thin.
  */
 
-import { query } from '@/lib/auth/db'
-import { TABLE_NAMES } from '@/config/database'
+import { db } from '@/db'
+import { aiExtractedProducts, inventoryItems, marketplaceListings, productImages } from '@/db/schema/inventory'
+import { eq, and } from 'drizzle-orm'
 import { uploadImage, deleteImage } from '@/lib/storage/image-upload'
 import { logger } from '@/lib/logger'
 import { PRODUCT_STATUS, MARKETPLACE_STATUS } from '@/config/marketplace-status'
@@ -19,68 +20,65 @@ import { PRODUCT_STATUS, MARKETPLACE_STATUS } from '@/config/marketplace-status'
  */
 export async function publishProduct(productId: string, userId: string): Promise<void> {
   // Ensure product is approved
-  await query(
-    `UPDATE ${TABLE_NAMES.AI_EXTRACTED_PRODUCTS}
-     SET status = $2, updated_at = NOW()
-     WHERE id = $1`,
-    [productId, PRODUCT_STATUS.APPROVED]
-  )
+  await db
+    .update(aiExtractedProducts)
+    .set({ status: PRODUCT_STATUS.APPROVED, updatedAt: new Date().toISOString() })
+    .where(eq(aiExtractedProducts.id, productId))
 
   // Get product info for listing
-  const productInfo = await query<{
-    brand: string
-    product_name: string
-    short_description: string | null
-    estimated_price_chf: number
-  }>(
-    `SELECT brand, product_name, short_description, estimated_price_chf
-     FROM ${TABLE_NAMES.AI_EXTRACTED_PRODUCTS} WHERE id = $1`,
-    [productId]
-  )
+  const [productInfo] = await db
+    .select({
+      brand: aiExtractedProducts.brand,
+      productName: aiExtractedProducts.productName,
+      shortDescription: aiExtractedProducts.shortDescription,
+      estimatedPriceChf: aiExtractedProducts.estimatedPriceChf,
+    })
+    .from(aiExtractedProducts)
+    .where(eq(aiExtractedProducts.id, productId))
 
-  if (productInfo.rows.length === 0) return
-
-  const p = productInfo.rows[0]
+  if (!productInfo) return
 
   // Get inventory item id
-  const inventoryItem = await query<{ id: string }>(
-    `SELECT id FROM ${TABLE_NAMES.INVENTORY_ITEMS} WHERE ai_product_id = $1`,
-    [productId]
-  )
+  const [inventoryItem] = await db
+    .select({ id: inventoryItems.id })
+    .from(inventoryItems)
+    .where(eq(inventoryItems.aiProductId, productId))
 
-  if (inventoryItem.rows.length === 0) return
+  if (!inventoryItem) return
 
-  const inventoryItemId = inventoryItem.rows[0].id
+  const inventoryItemId = inventoryItem.id
 
   // Check if listing exists
-  const existingListing = await query<{ id: string }>(
-    `SELECT id FROM ${TABLE_NAMES.MARKETPLACE_LISTINGS}
-     WHERE inventory_item_id = $1 AND platform = 'internal'`,
-    [inventoryItemId]
-  )
+  const [existingListing] = await db
+    .select({ id: marketplaceListings.id })
+    .from(marketplaceListings)
+    .where(
+      and(
+        eq(marketplaceListings.inventoryItemId, inventoryItemId),
+        eq(marketplaceListings.platform, 'internal'),
+      )
+    )
 
-  if (existingListing.rows.length > 0) {
-    await query(
-      `UPDATE ${TABLE_NAMES.MARKETPLACE_LISTINGS}
-       SET status = $2, published_at = NOW(), updated_at = NOW()
-       WHERE id = $1`,
-      [existingListing.rows[0].id, MARKETPLACE_STATUS.PUBLISHED]
-    )
+  if (existingListing) {
+    await db
+      .update(marketplaceListings)
+      .set({
+        status: MARKETPLACE_STATUS.PUBLISHED,
+        publishedAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      })
+      .where(eq(marketplaceListings.id, existingListing.id))
   } else {
-    await query(
-      `INSERT INTO ${TABLE_NAMES.MARKETPLACE_LISTINGS} (
-        inventory_item_id, title, description, price_chf,
-        platform, status, published_at, created_by
-      ) VALUES ($1, $2, $3, $4, 'internal', $6, NOW(), $5)`,
-      [
-        inventoryItemId,
-        `${p.brand} ${p.product_name}`,
-        p.short_description || '',
-        p.estimated_price_chf,
-        userId,
-        MARKETPLACE_STATUS.PUBLISHED,
-      ]
-    )
+    await db.insert(marketplaceListings).values({
+      inventoryItemId,
+      title: `${productInfo.brand} ${productInfo.productName}`,
+      description: productInfo.shortDescription || '',
+      priceChf: productInfo.estimatedPriceChf || '0',
+      platform: 'internal',
+      status: MARKETPLACE_STATUS.PUBLISHED,
+      publishedAt: new Date().toISOString(),
+      createdBy: userId,
+    })
   }
 
   logger.info('Product published', { productId, publishedBy: userId })
@@ -90,14 +88,18 @@ export async function publishProduct(productId: string, userId: string): Promise
  * Unpublish a product from the marketplace.
  */
 export async function unpublishProduct(productId: string, userId: string): Promise<void> {
-  await query(
-    `UPDATE ${TABLE_NAMES.MARKETPLACE_LISTINGS}
-     SET status = $2, updated_at = NOW()
-     WHERE inventory_item_id = (
-       SELECT id FROM ${TABLE_NAMES.INVENTORY_ITEMS} WHERE ai_product_id = $1
-     )`,
-    [productId, MARKETPLACE_STATUS.DRAFT]
-  )
+  // Find the inventory item for this product
+  const [inventoryItem] = await db
+    .select({ id: inventoryItems.id })
+    .from(inventoryItems)
+    .where(eq(inventoryItems.aiProductId, productId))
+
+  if (inventoryItem) {
+    await db
+      .update(marketplaceListings)
+      .set({ status: MARKETPLACE_STATUS.DRAFT, updatedAt: new Date().toISOString() })
+      .where(eq(marketplaceListings.inventoryItemId, inventoryItem.id))
+  }
 
   logger.info('Product unpublished', { productId, unpublishedBy: userId })
 }
@@ -116,18 +118,18 @@ export async function updateProductImage(
   userId: string
 ): Promise<string | null> {
   // Get existing image
-  const existingImage = await query<{ id: string; file_path: string }>(
-    `SELECT id, file_path FROM ${TABLE_NAMES.PRODUCT_IMAGES}
-     WHERE product_id = $1 AND is_primary = true`,
-    [productId]
-  )
+  const [existingImage] = await db
+    .select({ id: productImages.id, filePath: productImages.filePath })
+    .from(productImages)
+    .where(and(eq(productImages.productId, productId), eq(productImages.isPrimary, true)))
 
   // Get item_uuid for filename
-  const productInfo = await query<{ item_uuid: string }>(
-    `SELECT item_uuid FROM ${TABLE_NAMES.AI_EXTRACTED_PRODUCTS} WHERE id = $1`,
-    [productId]
-  )
-  const itemUuid = productInfo.rows[0]?.item_uuid || productId
+  const [productInfo] = await db
+    .select({ itemUuid: aiExtractedProducts.itemUuid })
+    .from(aiExtractedProducts)
+    .where(eq(aiExtractedProducts.id, productId))
+
+  const itemUuid = productInfo?.itemUuid || productId
 
   const filename = `${itemUuid}.jpg`
   const uploadResult = await uploadImage(imageBase64, filename, 'products')
@@ -137,25 +139,25 @@ export async function updateProductImage(
   }
 
   // Delete old blob if applicable
-  if (existingImage.rows.length > 0) {
-    const oldUrl = existingImage.rows[0].file_path
+  if (existingImage) {
+    const oldUrl = existingImage.filePath
     if (oldUrl.includes('blob.vercel-storage.com')) {
       await deleteImage(oldUrl)
     }
 
-    await query(
-      `UPDATE ${TABLE_NAMES.PRODUCT_IMAGES}
-       SET file_path = $1, filename = $2, updated_at = NOW()
-       WHERE id = $3`,
-      [uploadResult.url, filename, existingImage.rows[0].id]
-    )
+    await db
+      .update(productImages)
+      .set({ filePath: uploadResult.url, filename, updatedAt: new Date().toISOString() })
+      .where(eq(productImages.id, existingImage.id))
   } else {
-    await query(
-      `INSERT INTO ${TABLE_NAMES.PRODUCT_IMAGES} (
-        product_id, filename, file_path, is_primary, uploaded_by, upload_status
-      ) VALUES ($1, $2, $3, true, $4, 'ready')`,
-      [productId, filename, uploadResult.url, userId]
-    )
+    await db.insert(productImages).values({
+      productId,
+      filename,
+      filePath: uploadResult.url,
+      isPrimary: true,
+      uploadedBy: userId,
+      uploadStatus: 'ready',
+    })
   }
 
   logger.info('Product image updated', { productId, imageUrl: uploadResult.url })

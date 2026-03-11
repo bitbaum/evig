@@ -9,8 +9,9 @@
  */
 
 import { logger } from '@/lib/logger'
-import { query } from '@/lib/auth/db'
-import { TABLE_NAMES } from '@/config/database'
+import { db } from '@/db'
+import { hirnProviderSettings } from '@/db/schema'
+import { eq, desc } from 'drizzle-orm'
 import { OLLAMA_URL } from '@/config/urls'
 
 // =============================================================================
@@ -76,15 +77,25 @@ async function loadProviderRuntimeConfig(): Promise<ProviderRuntimeConfig> {
   }
 
   try {
-    const result = await query<DbProviderSettingsRow>(
-      `SELECT DISTINCT ON (provider) provider, is_enabled, settings
-       FROM ${TABLE_NAMES.HIRN_PROVIDER_SETTINGS}
-       WHERE scope = 'system'
-       ORDER BY provider, is_default DESC, updated_at DESC`,
-      []
-    )
+    const rows = await db
+      .selectDistinctOn([hirnProviderSettings.provider], {
+        provider: hirnProviderSettings.provider,
+        isEnabled: hirnProviderSettings.isEnabled,
+        settings: hirnProviderSettings.settings,
+      })
+      .from(hirnProviderSettings)
+      .where(eq(hirnProviderSettings.scope, 'system'))
+      .orderBy(
+        hirnProviderSettings.provider,
+        desc(hirnProviderSettings.isDefault),
+        desc(hirnProviderSettings.updatedAt),
+      )
 
-    const byProvider = new Map(result.rows.map(r => [r.provider, r]))
+    const byProvider = new Map(rows.map(r => [r.provider as ProviderName, {
+      provider: r.provider as ProviderName,
+      is_enabled: r.isEnabled ?? true,
+      settings: r.settings as DbProviderSettingsRow['settings'],
+    }]))
 
     const groq = byProvider.get('groq')
     const openrouter = byProvider.get('openrouter')

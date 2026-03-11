@@ -1,5 +1,5 @@
-import { query } from '@/lib/auth/db'
-import { TABLE_NAMES } from '@/config/database'
+import { db } from '@/db'
+import { tasks } from '@/db/schema'
 import { TASK_TYPES, TASK_CATEGORIES, TASK_PRIORITIES } from '@/config/tasks'
 import { DECISION_TYPES, VOTING_METHODS } from '@/config/decisions'
 import { MEETING_TYPES, PROTOCOL_VISIBILITY } from '@/config/protocols'
@@ -91,28 +91,24 @@ export async function executeHirnAction(input: ExecuteActionInput, dbUserId: str
         throw new Error(parsed.error.issues[0]?.message || 'Ungültigi Task-Date')
       }
 
-      const result = await query<{ id: string; title: string }>(
-        `INSERT INTO ${TABLE_NAMES.TASKS} (
-          title, description, instructions, task_type, schedule_cron, schedule_human,
-          category, tags, priority, estimated_minutes, project_id, created_by
-        ) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12)
-        RETURNING id, title`,
-        [
-          parsed.data.title,
-          parsed.data.description || null,
-          parsed.data.instructions || null,
-          parsed.data.task_type,
-          parsed.data.schedule_cron || null,
-          parsed.data.schedule_human || null,
-          parsed.data.category,
-          parsed.data.tags || [],
-          parsed.data.priority,
-          parsed.data.estimated_minutes || null,
-          parsed.data.project_id || null,
-          dbUserId,
-        ]
-      )
-      const task = result.rows[0]
+      const [task] = await db
+        .insert(tasks)
+        .values({
+          title: parsed.data.title,
+          description: parsed.data.description || null,
+          instructions: parsed.data.instructions || null,
+          taskType: parsed.data.task_type,
+          scheduleCron: parsed.data.schedule_cron || null,
+          scheduleHuman: parsed.data.schedule_human || null,
+          category: parsed.data.category,
+          tags: parsed.data.tags || [],
+          priority: parsed.data.priority,
+          estimatedMinutes: parsed.data.estimated_minutes || null,
+          projectId: parsed.data.project_id || null,
+          createdBy: dbUserId,
+        })
+        .returning({ id: tasks.id, title: tasks.title })
+
       return {
         mode: 'executed' as const,
         entity: { type: 'task', id: task.id, title: task.title, link: `/admin/tasks/${task.id}` },

@@ -6,10 +6,18 @@
  * and response mapping for published marketplace products.
  */
 
-import { query } from '@/lib/auth/db'
-import { TABLE_NAMES } from '@/config/database'
+import { db } from '@/db'
+import { sql, getTableName, type SQL } from 'drizzle-orm'
+import { aiExtractedProducts, inventoryItems, productImages, productCustomerProfiles, customerProfiles } from '@/db/schema'
 import { APPROVAL_STATUS } from '@/config/approval-status'
 import { logger } from '@/lib/logger'
+
+// Table name refs
+const aepTable = getTableName(aiExtractedProducts)
+const iiTable = getTableName(inventoryItems)
+const piTable = getTableName(productImages)
+const pcpTable = getTableName(productCustomerProfiles)
+const cpTable = getTableName(customerProfiles)
 
 // ============================================================================
 // Types
@@ -78,10 +86,9 @@ export interface InventoryResult {
 // ============================================================================
 
 interface BuiltQuery {
-  whereClause: string
-  profileJoin: string
+  whereFragment: SQL
+  profileJoinFragment: SQL
   params: (string | number)[]
-  nextParamIndex: number
 }
 
 /**
@@ -89,45 +96,45 @@ interface BuiltQuery {
  * Only returns published, approved products with available stock.
  */
 function buildInventoryQuery(filters: InventoryFilters): BuiltQuery {
-  const conditions: string[] = [
-    `i.marketplace_status = '${APPROVAL_STATUS.PUBLISHED}'`,
-    `p.status = '${APPROVAL_STATUS.APPROVED}'`,
-    'i.quantity_available > 0',
+  const conditions: SQL[] = [
+    sql`i.marketplace_status = ${APPROVAL_STATUS.PUBLISHED}`,
+    sql`p.status = ${APPROVAL_STATUS.APPROVED}`,
+    sql`i.quantity_available > 0`,
   ]
   const params: (string | number)[] = []
-  let paramIndex = 1
 
   if (filters.category) {
-    conditions.push(`(p.category ILIKE $${paramIndex} OR p.subcategory ILIKE $${paramIndex})`)
-    params.push(`%${filters.category}%`)
-    paramIndex++
+    const catPattern = `%${filters.category}%`
+    conditions.push(sql`(p.category ILIKE ${catPattern} OR p.subcategory ILIKE ${catPattern})`)
   }
 
   if (filters.search) {
-    conditions.push(`(
-      p.product_name ILIKE $${paramIndex}
-      OR p.brand ILIKE $${paramIndex}
-      OR p.short_description ILIKE $${paramIndex}
+    const searchPattern = `%${filters.search}%`
+    conditions.push(sql`(
+      p.product_name ILIKE ${searchPattern}
+      OR p.brand ILIKE ${searchPattern}
+      OR p.short_description ILIKE ${searchPattern}
     )`)
-    params.push(`%${filters.search}%`)
-    paramIndex++
   }
 
-  let profileJoin = ''
+  let profileJoinFragment: SQL = sql``
   if (filters.profile) {
-    profileJoin = `
-      JOIN ${TABLE_NAMES.PRODUCT_CUSTOMER_PROFILES} pcp ON pcp.product_id = p.id
-      JOIN ${TABLE_NAMES.CUSTOMER_PROFILES} cp ON cp.id = pcp.profile_id AND cp.slug = $${paramIndex}
+    profileJoinFragment = sql`
+      JOIN ${sql.raw(pcpTable)} pcp ON pcp.product_id = p.id
+      JOIN ${sql.raw(cpTable)} cp ON cp.id = pcp.profile_id AND cp.slug = ${filters.profile}
     `
-    params.push(filters.profile)
-    paramIndex++
+  }
+
+  // Combine conditions with AND
+  let whereFragment = sql`WHERE ${conditions[0]}`
+  for (let i = 1; i < conditions.length; i++) {
+    whereFragment = sql`${whereFragment} AND ${conditions[i]}`
   }
 
   return {
-    whereClause: `WHERE ${conditions.join(' AND ')}`,
-    profileJoin,
+    whereFragment,
+    profileJoinFragment,
     params,
-    nextParamIndex: paramIndex,
   }
 }
 
@@ -144,15 +151,14 @@ async function fetchProfilesForProducts(
 ): Promise<Record<string, CustomerProfile[]>> {
   if (productIds.length === 0) return {}
 
-  const profilesResult = await query<ProfileRow>(
-    `SELECT pcp.product_id, cp.slug, cp.name_de, cp.color
-     FROM ${TABLE_NAMES.PRODUCT_CUSTOMER_PROFILES} pcp
-     JOIN ${TABLE_NAMES.CUSTOMER_PROFILES} cp ON cp.id = pcp.profile_id
-     WHERE pcp.product_id = ANY($1)`,
-    [productIds]
-  )
+  const profilesResult = await db.execute(sql`
+    SELECT pcp.product_id, cp.slug, cp.name_de, cp.color
+    FROM ${sql.raw(pcpTable)} pcp
+    JOIN ${sql.raw(cpTable)} cp ON cp.id = pcp.profile_id
+    WHERE pcp.product_id = ANY(${productIds})
+  `)
 
-  return profilesResult.rows.reduce((acc, row) => {
+  return (profilesResult.rows as unknown as ProfileRow[]).reduce((acc, row) => {
     if (!acc[row.product_id]) {
       acc[row.product_id] = []
     }
@@ -205,12 +211,12 @@ export async function getInventoryProducts(
   filters: InventoryFilters
 ): Promise<InventoryResult> {
   try {
-    const { whereClause, profileJoin, params, nextParamIndex } =
+    const { whereFragment, profileJoinFragment } =
       buildInventoryQuery(filters)
 
     // Fetch products
-    const productsResult = await query<ProductRow>(
-      `SELECT DISTINCT
+    const productsResult = await db.execute(sql`
+      SELECT DISTINCT
         p.id,
         p.item_uuid,
         p.product_name,
@@ -221,35 +227,35 @@ export async function getInventoryProducts(
         p.category,
         p.subcategory,
         i.quantity_available,
-        (SELECT file_path FROM ${TABLE_NAMES.PRODUCT_IMAGES} pi WHERE pi.product_id = p.id AND pi.is_primary = true LIMIT 1) as image_url,
+        (SELECT file_path FROM ${sql.raw(piTable)} pi WHERE pi.product_id = p.id AND pi.is_primary = true LIMIT 1) as image_url,
         p.created_at
-      FROM ${TABLE_NAMES.AI_EXTRACTED_PRODUCTS} p
-      JOIN ${TABLE_NAMES.INVENTORY_ITEMS} i ON i.ai_product_id = p.id
-      ${profileJoin}
-      ${whereClause}
+      FROM ${sql.raw(aepTable)} p
+      JOIN ${sql.raw(iiTable)} i ON i.ai_product_id = p.id
+      ${profileJoinFragment}
+      ${whereFragment}
       ORDER BY p.created_at DESC
-      LIMIT $${nextParamIndex} OFFSET $${nextParamIndex + 1}`,
-      [...params, filters.limit, filters.offset]
-    )
+      LIMIT ${filters.limit} OFFSET ${filters.offset}
+    `)
 
     // Get total count
-    const countResult = await query<{ count: string }>(
-      `SELECT COUNT(DISTINCT p.id) as count
-       FROM ${TABLE_NAMES.AI_EXTRACTED_PRODUCTS} p
-       JOIN ${TABLE_NAMES.INVENTORY_ITEMS} i ON i.ai_product_id = p.id
-       ${profileJoin}
-       ${whereClause}`,
-      params
-    )
+    const countResult = await db.execute(sql`
+      SELECT COUNT(DISTINCT p.id) as count
+      FROM ${sql.raw(aepTable)} p
+      JOIN ${sql.raw(iiTable)} i ON i.ai_product_id = p.id
+      ${profileJoinFragment}
+      ${whereFragment}
+    `)
 
-    const total = parseInt(countResult.rows[0]?.count || '0')
+    const countRows = countResult.rows as unknown as { count: string }[]
+    const total = parseInt(countRows[0]?.count || '0')
 
     // Fetch profiles for the returned products
-    const productIds = productsResult.rows.map((p) => p.id)
+    const productRows = productsResult.rows as unknown as ProductRow[]
+    const productIds = productRows.map((p) => p.id)
     const profilesMap = await fetchProfilesForProducts(productIds)
 
     // Map to public shape
-    const products = mapProducts(productsResult.rows, profilesMap)
+    const products = mapProducts(productRows, profilesMap)
 
     logger.info('Shop inventory products fetched', {
       count: products.length,

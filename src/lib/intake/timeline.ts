@@ -7,8 +7,9 @@
  * For client-safe types/constants, import from '@/lib/intake/timeline-types'.
  */
 
-import { query } from '@/lib/auth/db'
-import { TABLE_NAMES } from '@/config/database'
+import { db } from '@/db'
+import { inventoryItems } from '@/db/schema/inventory'
+import { eq, sql } from 'drizzle-orm'
 import { logger } from '@/lib/logger'
 
 // Re-export types so existing server-side imports still work
@@ -35,12 +36,12 @@ export async function appendIntakeEvent(
   }
 
   try {
-    await query(
-      `UPDATE ${TABLE_NAMES.INVENTORY_ITEMS}
-       SET intake_events = COALESCE(intake_events, '[]'::jsonb) || $1::jsonb
-       WHERE id = $2`,
-      [JSON.stringify([storedEvent]), inventoryId]
-    )
+    await db
+      .update(inventoryItems)
+      .set({
+        intakeEvents: sql`COALESCE(${inventoryItems.intakeEvents}, '[]'::jsonb) || ${JSON.stringify([storedEvent])}::jsonb`,
+      })
+      .where(eq(inventoryItems.id, inventoryId))
   } catch (error) {
     // Timeline is non-critical — log but don't throw
     logger.error('Failed to append intake event', {

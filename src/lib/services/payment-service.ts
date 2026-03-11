@@ -22,14 +22,36 @@
  * @see ARCHITECTURE_EVALUATION.md - Phase 3: Service Layer Extraction
  */
 
-import { query } from '@/lib/auth/db'
-import { TABLE_NAMES } from '@/config/database'
+import { db } from '@/db'
+import { sql, getTableName } from 'drizzle-orm'
+import {
+  paymentTransactions,
+  escrowAccounts,
+  paymentDisputes,
+  refunds,
+  invoices,
+  orders,
+  marketplaceOrders,
+} from '@/db/schema'
+import { serviceAppointments } from '@/db/schema/services'
+import { workshopRegistrations } from '@/db/schema/workshops'
 import { ORDER_STATUS } from '@/config/marketplace'
 import { PAYMENT_STATUS, ESCROW_STATUS } from '@/config/payment-status'
 import { REFUND_STATUS } from '@/config/refund'
 import { INVOICE_STATUS } from '@/config/invoice-status'
 import { logger } from '@/lib/logger'
 import type Stripe from 'stripe'
+
+// Table name refs
+const ptTable = getTableName(paymentTransactions)
+const eaTable = getTableName(escrowAccounts)
+const pdTable = getTableName(paymentDisputes)
+const rTable = getTableName(refunds)
+const invTable = getTableName(invoices)
+const ordersTable = getTableName(orders)
+const moTable = getTableName(marketplaceOrders)
+const saTable = getTableName(serviceAppointments)
+const wrTable = getTableName(workshopRegistrations)
 
 /**
  * Payment service for handling Stripe webhooks and payment operations
@@ -54,16 +76,15 @@ export class PaymentService {
     })
 
     // Update payment transaction status
-    await query(
-      `UPDATE ${TABLE_NAMES.PAYMENT_TRANSACTIONS}
-       SET
-         status = '${PAYMENT_STATUS.SUCCEEDED}',
-         processed_at = CURRENT_TIMESTAMP,
-         provider_response = $2,
-         updated_at = CURRENT_TIMESTAMP
-       WHERE provider_transaction_id = $1`,
-      [paymentIntent.id, JSON.stringify(paymentIntent)]
-    )
+    await db.execute(sql`
+      UPDATE ${sql.raw(ptTable)}
+      SET
+        status = ${PAYMENT_STATUS.SUCCEEDED},
+        processed_at = CURRENT_TIMESTAMP,
+        provider_response = ${JSON.stringify(paymentIntent)},
+        updated_at = CURRENT_TIMESTAMP
+      WHERE provider_transaction_id = ${paymentIntent.id}
+    `)
 
     // Update related entities based on metadata
     await this.updateRelatedEntitiesOnSuccess(paymentIntent)
@@ -82,21 +103,16 @@ export class PaymentService {
       error: paymentIntent.last_payment_error?.message,
     })
 
-    await query(
-      `UPDATE ${TABLE_NAMES.PAYMENT_TRANSACTIONS}
-       SET
-         status = '${PAYMENT_STATUS.FAILED}',
-         failure_reason = $2,
-         provider_response = $3,
-         processed_at = CURRENT_TIMESTAMP,
-         updated_at = CURRENT_TIMESTAMP
-       WHERE provider_transaction_id = $1`,
-      [
-        paymentIntent.id,
-        paymentIntent.last_payment_error?.message || 'Payment failed',
-        JSON.stringify(paymentIntent),
-      ]
-    )
+    await db.execute(sql`
+      UPDATE ${sql.raw(ptTable)}
+      SET
+        status = ${PAYMENT_STATUS.FAILED},
+        failure_reason = ${paymentIntent.last_payment_error?.message || 'Payment failed'},
+        provider_response = ${JSON.stringify(paymentIntent)},
+        processed_at = CURRENT_TIMESTAMP,
+        updated_at = CURRENT_TIMESTAMP
+      WHERE provider_transaction_id = ${paymentIntent.id}
+    `)
   }
 
   /**
@@ -111,16 +127,15 @@ export class PaymentService {
       paymentIntentId: paymentIntent.id,
     })
 
-    await query(
-      `UPDATE ${TABLE_NAMES.PAYMENT_TRANSACTIONS}
-       SET
-         status = '${PAYMENT_STATUS.CANCELLED}',
-         provider_response = $2,
-         processed_at = CURRENT_TIMESTAMP,
-         updated_at = CURRENT_TIMESTAMP
-       WHERE provider_transaction_id = $1`,
-      [paymentIntent.id, JSON.stringify(paymentIntent)]
-    )
+    await db.execute(sql`
+      UPDATE ${sql.raw(ptTable)}
+      SET
+        status = ${PAYMENT_STATUS.CANCELLED},
+        provider_response = ${JSON.stringify(paymentIntent)},
+        processed_at = CURRENT_TIMESTAMP,
+        updated_at = CURRENT_TIMESTAMP
+      WHERE provider_transaction_id = ${paymentIntent.id}
+    `)
   }
 
   /**
@@ -138,20 +153,19 @@ export class PaymentService {
     })
 
     // Update escrow account if this payment intent is part of escrow
-    await query(
-      `UPDATE ${TABLE_NAMES.ESCROW_ACCOUNTS}
-       SET
-         status = CASE
-           WHEN status = '${ESCROW_STATUS.ACTIVE}' THEN '${ESCROW_STATUS.ACTIVE}'
-           ELSE status
-         END,
-         updated_at = CURRENT_TIMESTAMP
-       WHERE transaction_id = (
-         SELECT id FROM ${TABLE_NAMES.PAYMENT_TRANSACTIONS}
-         WHERE provider_transaction_id = $1
-       )`,
-      [paymentIntent.id]
-    )
+    await db.execute(sql`
+      UPDATE ${sql.raw(eaTable)}
+      SET
+        status = CASE
+          WHEN status = ${ESCROW_STATUS.ACTIVE} THEN ${ESCROW_STATUS.ACTIVE}
+          ELSE status
+        END,
+        updated_at = CURRENT_TIMESTAMP
+      WHERE transaction_id = (
+        SELECT id FROM ${sql.raw(ptTable)}
+        WHERE provider_transaction_id = ${paymentIntent.id}
+      )
+    `)
   }
 
   /**
@@ -163,24 +177,19 @@ export class PaymentService {
     logger.info('Charge succeeded', { chargeId: charge.id })
 
     // Update payment transaction with charge details
-    await query(
-      `UPDATE ${TABLE_NAMES.PAYMENT_TRANSACTIONS}
-       SET
-         fee_cents = $2,
-         net_amount_cents = amount_cents - $2,
-         provider_response = jsonb_set(
-           COALESCE(provider_response, '{}'),
-           '{charge}',
-           $3
-         ),
-         updated_at = CURRENT_TIMESTAMP
-       WHERE provider_transaction_id = $1`,
-      [
-        charge.payment_intent as string,
-        0, // Fee is available in balance_transaction when expanded
-        JSON.stringify(charge),
-      ]
-    )
+    await db.execute(sql`
+      UPDATE ${sql.raw(ptTable)}
+      SET
+        fee_cents = ${0},
+        net_amount_cents = amount_cents - ${0},
+        provider_response = jsonb_set(
+          COALESCE(provider_response, '{}'),
+          '{charge}',
+          ${JSON.stringify(charge)}
+        ),
+        updated_at = CURRENT_TIMESTAMP
+      WHERE provider_transaction_id = ${charge.payment_intent as string}
+    `)
   }
 
   /**
@@ -192,24 +201,19 @@ export class PaymentService {
     logger.warn('Charge failed', { chargeId: charge.id })
 
     // Mark transaction as failed
-    await query(
-      `UPDATE ${TABLE_NAMES.PAYMENT_TRANSACTIONS}
-       SET
-         status = '${PAYMENT_STATUS.FAILED}',
-         failure_reason = $2,
-         provider_response = jsonb_set(
-           COALESCE(provider_response, '{}'),
-           '{charge}',
-           $3
-         ),
-         updated_at = CURRENT_TIMESTAMP
-       WHERE provider_transaction_id = $1`,
-      [
-        charge.payment_intent as string,
-        charge.failure_message || 'Charge failed',
-        JSON.stringify(charge),
-      ]
-    )
+    await db.execute(sql`
+      UPDATE ${sql.raw(ptTable)}
+      SET
+        status = ${PAYMENT_STATUS.FAILED},
+        failure_reason = ${charge.failure_message || 'Charge failed'},
+        provider_response = jsonb_set(
+          COALESCE(provider_response, '{}'),
+          '{charge}',
+          ${JSON.stringify(charge)}
+        ),
+        updated_at = CURRENT_TIMESTAMP
+      WHERE provider_transaction_id = ${charge.payment_intent as string}
+    `)
   }
 
   /**
@@ -224,48 +228,40 @@ export class PaymentService {
     })
 
     // Create dispute record
-    await query(
-      `INSERT INTO ${TABLE_NAMES.PAYMENT_DISPUTES} (
-         transaction_id,
-         provider_dispute_id,
-         amount_cents,
-         currency,
-         reason,
-         status,
-         evidence,
-         response_deadline
-       ) VALUES (
-         (SELECT id FROM ${TABLE_NAMES.PAYMENT_TRANSACTIONS}
-          WHERE provider_transaction_id = $1),
-         $2,
-         $3,
-         $4,
-         $5,
-         'opened',
-         '{}',
-         CURRENT_TIMESTAMP + INTERVAL '21 days'
-       )
-       ON CONFLICT (provider_dispute_id) DO UPDATE SET
-         status = 'opened',
-         updated_at = CURRENT_TIMESTAMP`,
-      [
-        dispute.payment_intent as string,
-        dispute.id,
-        dispute.amount,
-        dispute.currency,
-        dispute.reason,
-      ]
-    )
+    await db.execute(sql`
+      INSERT INTO ${sql.raw(pdTable)} (
+        transaction_id,
+        provider_dispute_id,
+        amount_cents,
+        currency,
+        reason,
+        status,
+        evidence,
+        response_deadline
+      ) VALUES (
+        (SELECT id FROM ${sql.raw(ptTable)}
+         WHERE provider_transaction_id = ${dispute.payment_intent as string}),
+        ${dispute.id},
+        ${dispute.amount},
+        ${dispute.currency},
+        ${dispute.reason},
+        'opened',
+        '{}',
+        CURRENT_TIMESTAMP + INTERVAL '21 days'
+      )
+      ON CONFLICT (provider_dispute_id) DO UPDATE SET
+        status = 'opened',
+        updated_at = CURRENT_TIMESTAMP
+    `)
 
     // Update transaction status to disputed
-    await query(
-      `UPDATE ${TABLE_NAMES.PAYMENT_TRANSACTIONS}
-       SET
-         status = 'disputed',
-         updated_at = CURRENT_TIMESTAMP
-       WHERE provider_transaction_id = $1`,
-      [dispute.payment_intent as string]
-    )
+    await db.execute(sql`
+      UPDATE ${sql.raw(ptTable)}
+      SET
+        status = 'disputed',
+        updated_at = CURRENT_TIMESTAMP
+      WHERE provider_transaction_id = ${dispute.payment_intent as string}
+    `)
   }
 
   /**
@@ -280,31 +276,29 @@ export class PaymentService {
     })
 
     // Update dispute status
-    await query(
-      `UPDATE ${TABLE_NAMES.PAYMENT_DISPUTES}
-       SET
-         status = CASE
-           WHEN $2 = 'won' THEN 'won'
-           WHEN $2 = 'lost' THEN 'lost'
-           ELSE 'cancelled'
-         END,
-         resolution = $2,
-         resolved_at = CURRENT_TIMESTAMP,
-         updated_at = CURRENT_TIMESTAMP
-       WHERE provider_dispute_id = $1`,
-      [dispute.id, dispute.status]
-    )
+    await db.execute(sql`
+      UPDATE ${sql.raw(pdTable)}
+      SET
+        status = CASE
+          WHEN ${dispute.status} = 'won' THEN 'won'
+          WHEN ${dispute.status} = 'lost' THEN 'lost'
+          ELSE 'cancelled'
+        END,
+        resolution = ${dispute.status},
+        resolved_at = CURRENT_TIMESTAMP,
+        updated_at = CURRENT_TIMESTAMP
+      WHERE provider_dispute_id = ${dispute.id}
+    `)
 
     // Update transaction status based on dispute outcome
     if (dispute.status === 'lost') {
-      await query(
-        `UPDATE ${TABLE_NAMES.PAYMENT_TRANSACTIONS}
-         SET
-           status = 'disputed',
-           updated_at = CURRENT_TIMESTAMP
-         WHERE provider_transaction_id = $1`,
-        [dispute.payment_intent as string]
-      )
+      await db.execute(sql`
+        UPDATE ${sql.raw(ptTable)}
+        SET
+          status = 'disputed',
+          updated_at = CURRENT_TIMESTAMP
+        WHERE provider_transaction_id = ${dispute.payment_intent as string}
+      `)
     }
   }
 
@@ -320,24 +314,23 @@ export class PaymentService {
     })
 
     // Update refund record
-    await query(
-      `UPDATE ${TABLE_NAMES.REFUNDS}
-       SET
-         status = CASE
-           WHEN $2 = 'succeeded' THEN '${REFUND_STATUS.COMPLETED}'
-           WHEN $2 = 'failed' THEN '${REFUND_STATUS.REJECTED}'
-           WHEN $2 = 'canceled' THEN '${PAYMENT_STATUS.CANCELLED}'
-           ELSE status
-         END,
-         processed_at = CASE
-           WHEN $2 IN ('succeeded', 'failed', 'canceled')
-           THEN CURRENT_TIMESTAMP
-           ELSE processed_at
-         END,
-         updated_at = CURRENT_TIMESTAMP
-       WHERE refund_transaction_id = $1`,
-      [refund.id, refund.status]
-    )
+    await db.execute(sql`
+      UPDATE ${sql.raw(rTable)}
+      SET
+        status = CASE
+          WHEN ${refund.status} = 'succeeded' THEN ${REFUND_STATUS.COMPLETED}
+          WHEN ${refund.status} = 'failed' THEN ${REFUND_STATUS.REJECTED}
+          WHEN ${refund.status} = 'canceled' THEN ${PAYMENT_STATUS.CANCELLED}
+          ELSE status
+        END,
+        processed_at = CASE
+          WHEN ${refund.status} IN ('succeeded', 'failed', 'canceled')
+          THEN CURRENT_TIMESTAMP
+          ELSE processed_at
+        END,
+        updated_at = CURRENT_TIMESTAMP
+      WHERE refund_transaction_id = ${refund.id}
+    `)
   }
 
   /**
@@ -364,15 +357,14 @@ export class PaymentService {
     logger.info('Invoice payment succeeded', { invoiceId: invoice.id })
 
     // Update invoice status
-    await query(
-      `UPDATE ${TABLE_NAMES.INVOICES}
-       SET
-         status = '${INVOICE_STATUS.PAID}',
-         paid_at = CURRENT_TIMESTAMP,
-         updated_at = CURRENT_TIMESTAMP
-       WHERE id = $1`,
-      [invoice.id]
-    )
+    await db.execute(sql`
+      UPDATE ${sql.raw(invTable)}
+      SET
+        status = ${INVOICE_STATUS.PAID},
+        paid_at = CURRENT_TIMESTAMP,
+        updated_at = CURRENT_TIMESTAMP
+      WHERE id = ${invoice.id}
+    `)
   }
 
   /**
@@ -384,14 +376,13 @@ export class PaymentService {
     logger.warn('Invoice payment failed', { invoiceId: invoice.id })
 
     // Update invoice status
-    await query(
-      `UPDATE ${TABLE_NAMES.INVOICES}
-       SET
-         status = '${INVOICE_STATUS.OVERDUE}',
-         updated_at = CURRENT_TIMESTAMP
-       WHERE id = $1`,
-      [invoice.id]
-    )
+    await db.execute(sql`
+      UPDATE ${sql.raw(invTable)}
+      SET
+        status = ${INVOICE_STATUS.OVERDUE},
+        updated_at = CURRENT_TIMESTAMP
+      WHERE id = ${invoice.id}
+    `)
   }
 
   // ==========================================================================
@@ -410,56 +401,52 @@ export class PaymentService {
 
     // Update related order if exists
     if (metadata.orderId) {
-      await query(
-        `UPDATE ${TABLE_NAMES.ORDERS}
-         SET
-           payment_status = '${PAYMENT_STATUS.SUCCEEDED}',
-           status = CASE
-             WHEN status = '${PAYMENT_STATUS.PENDING}' THEN '${PAYMENT_STATUS.CONFIRMED}'
-             ELSE status
-           END,
-           updated_at = CURRENT_TIMESTAMP
-         WHERE id = $1`,
-        [metadata.orderId]
-      )
+      await db.execute(sql`
+        UPDATE ${sql.raw(ordersTable)}
+        SET
+          payment_status = ${PAYMENT_STATUS.SUCCEEDED},
+          status = CASE
+            WHEN status = ${PAYMENT_STATUS.PENDING} THEN ${PAYMENT_STATUS.CONFIRMED}
+            ELSE status
+          END,
+          updated_at = CURRENT_TIMESTAMP
+        WHERE id = ${metadata.orderId}
+      `)
     }
 
     // Update service appointment if exists
     if (metadata.serviceAppointmentId) {
-      await query(
-        `UPDATE ${TABLE_NAMES.SERVICE_APPOINTMENTS}
-         SET
-           status = '${PAYMENT_STATUS.CONFIRMED}',
-           updated_at = CURRENT_TIMESTAMP
-         WHERE id = $1`,
-        [metadata.serviceAppointmentId]
-      )
+      await db.execute(sql`
+        UPDATE ${sql.raw(saTable)}
+        SET
+          status = ${PAYMENT_STATUS.CONFIRMED},
+          updated_at = CURRENT_TIMESTAMP
+        WHERE id = ${metadata.serviceAppointmentId}
+      `)
     }
 
     // Update workshop registration if exists
     if (metadata.workshopRegistrationId) {
-      await query(
-        `UPDATE ${TABLE_NAMES.WORKSHOP_REGISTRATIONS}
-         SET
-           payment_status = '${PAYMENT_STATUS.SUCCEEDED}',
-           status = '${PAYMENT_STATUS.CONFIRMED}',
-           confirmed_at = CURRENT_TIMESTAMP,
-           updated_at = CURRENT_TIMESTAMP
-         WHERE id = $1`,
-        [metadata.workshopRegistrationId]
-      )
+      await db.execute(sql`
+        UPDATE ${sql.raw(wrTable)}
+        SET
+          payment_status = ${PAYMENT_STATUS.SUCCEEDED},
+          status = ${PAYMENT_STATUS.CONFIRMED},
+          confirmed_at = CURRENT_TIMESTAMP,
+          updated_at = CURRENT_TIMESTAMP
+        WHERE id = ${metadata.workshopRegistrationId}
+      `)
     }
 
     // Update marketplace order if exists (P2P marketplace secure payment)
     if (metadata.marketplaceOrderId) {
-      await query(
-        `UPDATE ${TABLE_NAMES.MARKETPLACE_ORDERS}
-         SET
-           status = '${ORDER_STATUS.PAID}',
-           updated_at = CURRENT_TIMESTAMP
-         WHERE id = $1 AND status = '${ORDER_STATUS.PENDING_PAYMENT}'`,
-        [metadata.marketplaceOrderId]
-      )
+      await db.execute(sql`
+        UPDATE ${sql.raw(moTable)}
+        SET
+          status = ${ORDER_STATUS.PAID},
+          updated_at = CURRENT_TIMESTAMP
+        WHERE id = ${metadata.marketplaceOrderId} AND status = ${ORDER_STATUS.PENDING_PAYMENT}
+      `)
       logger.info('Marketplace order marked as paid via webhook', {
         orderId: metadata.marketplaceOrderId,
         paymentIntentId: paymentIntent.id,

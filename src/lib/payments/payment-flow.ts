@@ -12,8 +12,9 @@
  */
 
 import Stripe from 'stripe'
-import { query } from '@/lib/auth/db'
-import { TABLE_NAMES } from '@/config/database'
+import { db } from '@/db'
+import { paymentProviders, paymentTransactions, escrowAccounts, invoices } from '@/db/schema'
+import { eq, and, sql } from 'drizzle-orm'
 import { SWISS_VAT_RATES } from '@/lib/payments/tax-compliance'
 import { logger } from '@/lib/logger'
 import type { SupportedCurrency } from '@/lib/payments/currency'
@@ -111,15 +112,6 @@ export interface InvoiceResult {
   invoiceNumber: string
 }
 
-interface TransactionRow {
-  id: string
-}
-
-interface InvoiceRow {
-  id: string
-  invoice_number: string
-}
-
 // ============================================================================
 // Payment Provider Operations
 // ============================================================================
@@ -130,19 +122,33 @@ interface InvoiceRow {
 export async function getPaymentProvider(
   providerSlug: string = DEFAULT_PAYMENT_PROVIDER
 ): Promise<PaymentProvider | null> {
-  const result = await query(
-    `SELECT id, slug, fee_percentage, fee_fixed_cents
-     FROM ${TABLE_NAMES.PAYMENT_PROVIDERS}
-     WHERE slug = $1 AND is_active = true`,
-    [providerSlug]
-  )
+  const rows = await db
+    .select({
+      id: paymentProviders.id,
+      slug: paymentProviders.slug,
+      fee_percentage: paymentProviders.feePercentage,
+      fee_fixed_cents: paymentProviders.feeFixedCents,
+    })
+    .from(paymentProviders)
+    .where(
+      and(
+        eq(paymentProviders.slug, providerSlug),
+        eq(paymentProviders.isActive, true),
+      )
+    )
 
-  if (result.rows.length === 0) {
+  if (rows.length === 0) {
     logger.warn('Payment provider not found or inactive', { providerSlug })
     return null
   }
 
-  return result.rows[0] as PaymentProvider
+  const row = rows[0]
+  return {
+    id: row.id,
+    slug: row.slug,
+    fee_percentage: Number(row.fee_percentage ?? 0),
+    fee_fixed_cents: row.fee_fixed_cents ?? 0,
+  }
 }
 
 // ============================================================================
@@ -220,48 +226,29 @@ export async function createPaymentIntent(
 export async function createTransaction(
   params: TransactionParams
 ): Promise<TransactionResult> {
-  const result = await query(`
-    INSERT INTO ${TABLE_NAMES.PAYMENT_TRANSACTIONS} (
-      user_id,
-      provider_id,
-      provider_transaction_id,
-      type,
-      status,
-      amount_cents,
-      currency,
-      fee_cents,
-      net_amount_cents,
-      service_appointment_id,
-      workshop_registration_id,
-      description,
-      escrow_release_date,
-      metadata
-    ) VALUES (
-      $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12,
-      CASE WHEN $13 THEN CURRENT_TIMESTAMP + INTERVAL '1 day' * $14 ELSE NULL END,
-      $15
-    )
-    RETURNING id
-  `, [
-    params.userId,
-    params.providerId,
-    params.providerTransactionId,
-    'payment',
-    'pending',
-    params.amountCents,
-    params.currency,
-    params.feeCents,
-    params.netAmountCents,
-    params.serviceAppointmentId || null,
-    params.workshopRegistrationId || null,
-    params.description,
-    params.useEscrow,
-    params.autoReleaseDays,
-    params.metadata ? JSON.stringify(params.metadata) : null
-  ])
+  const rows = await db
+    .insert(paymentTransactions)
+    .values({
+      userId: params.userId,
+      providerId: params.providerId,
+      providerTransactionId: params.providerTransactionId,
+      type: 'payment',
+      status: 'pending',
+      amountCents: params.amountCents,
+      currency: params.currency,
+      feeCents: params.feeCents,
+      netAmountCents: params.netAmountCents,
+      serviceAppointmentId: params.serviceAppointmentId || null,
+      workshopRegistrationId: params.workshopRegistrationId || null,
+      description: params.description,
+      escrowReleaseDate: params.useEscrow
+        ? sql`CURRENT_TIMESTAMP + INTERVAL '1 day' * ${params.autoReleaseDays}`
+        : null,
+      metadata: params.metadata ? params.metadata : {},
+    })
+    .returning({ id: paymentTransactions.id })
 
-  const row = result.rows[0] as TransactionRow
-  const transactionId = row.id
+  const transactionId = rows[0].id
 
   logger.info('Payment transaction created', {
     transactionId,
@@ -281,27 +268,17 @@ export async function createTransaction(
  * Create an escrow account for a transaction
  */
 export async function createEscrowAccount(params: EscrowParams): Promise<void> {
-  await query(`
-    INSERT INTO ${TABLE_NAMES.ESCROW_ACCOUNTS} (
-      transaction_id,
-      total_amount_cents,
-      currency,
-      auto_release_days,
-      release_deadline,
-      buyer_id,
-      status
-    ) VALUES (
-      $1, $2, $3, $4,
-      CURRENT_TIMESTAMP + INTERVAL '1 day' * $4,
-      $5, 'active'
-    )
-  `, [
-    params.transactionId,
-    params.totalAmountCents,
-    params.currency,
-    params.autoReleaseDays,
-    params.buyerId
-  ])
+  await db
+    .insert(escrowAccounts)
+    .values({
+      transactionId: params.transactionId,
+      totalAmountCents: params.totalAmountCents,
+      currency: params.currency,
+      autoReleaseDays: params.autoReleaseDays,
+      releaseDeadline: sql`CURRENT_TIMESTAMP + INTERVAL '1 day' * ${params.autoReleaseDays}`,
+      buyerId: params.buyerId,
+      status: 'active',
+    })
 
   logger.info('Escrow account created', {
     transactionId: params.transactionId,
@@ -320,47 +297,32 @@ export async function createEscrowAccount(params: EscrowParams): Promise<void> {
 export async function createInvoice(params: InvoiceParams): Promise<InvoiceResult> {
   const taxCents = calculateSwissVAT(params.baseAmountCents)
 
-  const result = await query(`
-    INSERT INTO ${TABLE_NAMES.INVOICES} (
-      invoice_number,
-      type,
-      status,
-      user_id,
-      service_appointment_id,
-      workshop_registration_id,
-      subtotal_cents,
-      tax_cents,
-      total_cents,
-      currency,
-      tax_rate,
-      line_items,
-      issue_date,
-      notes,
-      payment_terms
-    ) VALUES (
-      generate_invoice_number(),
-      'service',
-      'draft',
-      $1, $2, $3, $4, $5, $6, $7, $8, $9, CURRENT_DATE, $10, $11
-    )
-    RETURNING id, invoice_number
-  `, [
-    params.userId,
-    params.serviceAppointmentId || null,
-    params.workshopRegistrationId || null,
-    params.baseAmountCents,
-    taxCents,
-    params.totalAmountCents,
-    params.currency,
-    SWISS_VAT_RATES.standard,
-    JSON.stringify(params.lineItems),
-    params.notes,
-    params.paymentTerms
-  ])
+  const rows = await db
+    .insert(invoices)
+    .values({
+      invoiceNumber: sql`generate_invoice_number()`,
+      type: 'service',
+      status: 'draft',
+      userId: params.userId,
+      serviceAppointmentId: params.serviceAppointmentId || null,
+      workshopRegistrationId: params.workshopRegistrationId || null,
+      subtotalCents: params.baseAmountCents,
+      taxCents,
+      totalCents: params.totalAmountCents,
+      currency: params.currency,
+      taxRate: String(SWISS_VAT_RATES.standard),
+      lineItems: params.lineItems,
+      issueDate: sql`CURRENT_DATE`,
+      notes: params.notes,
+      paymentTerms: params.paymentTerms,
+    })
+    .returning({
+      id: invoices.id,
+      invoiceNumber: invoices.invoiceNumber,
+    })
 
-  const row = result.rows[0] as InvoiceRow
-  const invoiceId = row.id
-  const invoiceNumber = row.invoice_number
+  const invoiceId = rows[0].id
+  const invoiceNumber = rows[0].invoiceNumber
 
   logger.info('Invoice created', {
     invoiceId,

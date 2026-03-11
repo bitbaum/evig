@@ -4,9 +4,10 @@
  * AI chat for admin users with baked-in organizational knowledge.
  */
 
-import { query } from '@/lib/auth/db'
+import { db } from '@/db'
+import { hirnChatHistory } from '@/db/schema'
+import { eq, and, asc, desc, sql, or, isNull, count } from 'drizzle-orm'
 import { logger } from '@/lib/logger'
-import { TABLE_NAMES } from '@/config/database'
 import { getDefaultChatProvider, type Message } from './providers'
 import { SYSTEM_PROMPT } from './system-prompt'
 import { parseActionEnvelope, stripActionBlock, type HirnActionCard } from './action-cockpit'
@@ -47,15 +48,18 @@ export async function chat(
   } = options
 
   // Get chat history for this session (scoped by user_id for defense in depth)
-  const historyResult = await query<{ role: string; content: string }>(
-    `SELECT role, content FROM ${TABLE_NAMES.HIRN_CHAT_HISTORY}
-     WHERE session_id = $1 AND (user_id = $2 OR user_id IS NULL)
-     ORDER BY created_at ASC
-     LIMIT 20`,
-    [sessionId, userId || null]
-  )
+  const userCondition = userId
+    ? or(eq(hirnChatHistory.userId, userId), isNull(hirnChatHistory.userId))
+    : isNull(hirnChatHistory.userId)
 
-  const history: Message[] = historyResult.rows.map(h => ({
+  const historyRows = await db
+    .select({ role: hirnChatHistory.role, content: hirnChatHistory.content })
+    .from(hirnChatHistory)
+    .where(and(eq(hirnChatHistory.sessionId, sessionId), userCondition))
+    .orderBy(asc(hirnChatHistory.createdAt))
+    .limit(20)
+
+  const history: Message[] = historyRows.map(h => ({
     role: h.role as 'user' | 'assistant' | 'system',
     content: h.content,
   }))
@@ -84,24 +88,22 @@ export async function chat(
   // Store conversation history (best-effort — don't let DB errors kill the response)
   try {
     // Store user message
-    await query(
-      `INSERT INTO ${TABLE_NAMES.HIRN_CHAT_HISTORY} (user_id, session_id, role, content)
-       VALUES ($1, $2, 'user', $3)`,
-      [userId || null, sessionId, message]
-    )
+    await db.insert(hirnChatHistory).values({
+      userId: userId || null,
+      sessionId,
+      role: 'user',
+      content: message,
+    })
 
     // Store assistant response
-    await query(
-      `INSERT INTO ${TABLE_NAMES.HIRN_CHAT_HISTORY} (user_id, session_id, role, content, provider, model)
-       VALUES ($1, $2, 'assistant', $3, $4, $5)`,
-      [
-        userId || null,
-        sessionId,
-        response.content,
-        response.provider,
-        response.model,
-      ]
-    )
+    await db.insert(hirnChatHistory).values({
+      userId: userId || null,
+      sessionId,
+      role: 'assistant',
+      content: response.content,
+      provider: response.provider,
+      model: response.model,
+    })
   } catch (dbError) {
     // Log but don't throw — the AI response is still valid
     logger.error('Failed to save chat history', {
@@ -140,30 +142,28 @@ export async function getChatHistory(
   id: string
   role: string
   content: string
-  createdAt: Date
+  createdAt: string
   provider?: string
   model?: string
 }>> {
-  const result = await query<{
-    id: string
-    role: string
-    content: string
-    created_at: Date
-    provider: string | null
-    model: string | null
-  }>(
-    `SELECT id, role, content, created_at, provider, model
-     FROM ${TABLE_NAMES.HIRN_CHAT_HISTORY}
-     WHERE session_id = $1
-     ORDER BY created_at ASC`,
-    [sessionId]
-  )
+  const rows = await db
+    .select({
+      id: hirnChatHistory.id,
+      role: hirnChatHistory.role,
+      content: hirnChatHistory.content,
+      createdAt: hirnChatHistory.createdAt,
+      provider: hirnChatHistory.provider,
+      model: hirnChatHistory.model,
+    })
+    .from(hirnChatHistory)
+    .where(eq(hirnChatHistory.sessionId, sessionId))
+    .orderBy(asc(hirnChatHistory.createdAt))
 
-  return result.rows.map(r => ({
+  return rows.map(r => ({
     id: r.id,
     role: r.role,
     content: r.content,
-    createdAt: r.created_at,
+    createdAt: r.createdAt!,
     provider: r.provider || undefined,
     model: r.model || undefined,
   }))
@@ -178,31 +178,31 @@ export async function getUserSessions(
 ): Promise<Array<{
   sessionId: string
   firstMessage: string
-  lastActivity: Date
+  lastActivity: string
   messageCount: number
 }>> {
-  const result = await query<{
+  const h = hirnChatHistory
+  const rows = await db.execute<{
     session_id: string
-    first_message: string
-    last_activity: Date
+    first_message: string | null
+    last_activity: string
     message_count: string
-  }>(
-    `SELECT
-       session_id,
-       (SELECT content FROM ${TABLE_NAMES.HIRN_CHAT_HISTORY} h2
-        WHERE h2.session_id = h.session_id AND h2.role = 'user'
-        ORDER BY created_at ASC LIMIT 1) as first_message,
-       MAX(created_at) as last_activity,
-       COUNT(*) as message_count
-     FROM ${TABLE_NAMES.HIRN_CHAT_HISTORY} h
-     WHERE user_id = $1
-     GROUP BY session_id
-     ORDER BY last_activity DESC
-     LIMIT $2`,
-    [userId, limit]
-  )
+  }>(sql`
+    SELECT
+      ${h.sessionId} as session_id,
+      (SELECT ${h.content} FROM ${h} h2
+       WHERE h2.session_id = h.session_id AND h2.role = 'user'
+       ORDER BY h2.created_at ASC LIMIT 1) as first_message,
+      MAX(${h.createdAt}) as last_activity,
+      COUNT(*) as message_count
+    FROM ${h}
+    WHERE ${h.userId} = ${userId}
+    GROUP BY ${h.sessionId}
+    ORDER BY last_activity DESC
+    LIMIT ${limit}
+  `)
 
-  return result.rows.map(r => ({
+  return rows.rows.map(r => ({
     sessionId: r.session_id,
     firstMessage: r.first_message || 'Neues Gespräch',
     lastActivity: r.last_activity,
@@ -214,7 +214,7 @@ export async function getUserSessions(
  * Delete a chat session
  */
 export async function deleteSession(sessionId: string): Promise<void> {
-  await query(`DELETE FROM ${TABLE_NAMES.HIRN_CHAT_HISTORY} WHERE session_id = $1`, [sessionId])
+  await db.delete(hirnChatHistory).where(eq(hirnChatHistory.sessionId, sessionId))
   logger.info('Chat session deleted', { sessionId })
 }
 
@@ -222,6 +222,6 @@ export async function deleteSession(sessionId: string): Promise<void> {
  * Clear all chat history for a user
  */
 export async function clearUserHistory(userId: string): Promise<void> {
-  await query(`DELETE FROM ${TABLE_NAMES.HIRN_CHAT_HISTORY} WHERE user_id = $1`, [userId])
+  await db.delete(hirnChatHistory).where(eq(hirnChatHistory.userId, userId))
   logger.info('User chat history cleared', { userId })
 }

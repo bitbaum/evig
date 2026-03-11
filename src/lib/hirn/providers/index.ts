@@ -5,9 +5,10 @@
  * Handles provider selection, fallbacks, and configuration.
  */
 
-import { query } from '@/lib/auth/db'
+import { db } from '@/db'
+import { hirnProviderSettings } from '@/db/schema'
+import { eq, and, desc, isNull, sql } from 'drizzle-orm'
 import { logger } from '@/lib/logger'
-import { TABLE_NAMES } from '@/config/database'
 import { GroqProvider } from './groq'
 import { OllamaProvider } from './ollama'
 import { OpenRouterProvider } from './openrouter'
@@ -60,14 +61,27 @@ export async function getProviderSettings(
   scope: 'system' | 'user' = 'system',
   userId?: string
 ): Promise<ProviderSettings[]> {
-  const result = await query<ProviderSettings>(
-    `SELECT provider, is_enabled, is_default, settings
-     FROM ${TABLE_NAMES.HIRN_PROVIDER_SETTINGS}
-     WHERE scope = $1 AND ($2::uuid IS NULL OR user_id = $2)
-     ORDER BY is_default DESC, provider`,
-    [scope, userId || null]
-  )
-  return result.rows
+  const userCondition = userId
+    ? eq(hirnProviderSettings.userId, userId)
+    : isNull(hirnProviderSettings.userId)
+
+  const rows = await db
+    .select({
+      provider: hirnProviderSettings.provider,
+      is_enabled: hirnProviderSettings.isEnabled,
+      is_default: hirnProviderSettings.isDefault,
+      settings: hirnProviderSettings.settings,
+    })
+    .from(hirnProviderSettings)
+    .where(and(eq(hirnProviderSettings.scope, scope), userCondition))
+    .orderBy(desc(hirnProviderSettings.isDefault), hirnProviderSettings.provider)
+
+  return rows.map(r => ({
+    provider: r.provider as ProviderName,
+    is_enabled: r.is_enabled ?? true,
+    is_default: r.is_default ?? false,
+    settings: (r.settings ?? {}) as ProviderSettings['settings'],
+  }))
 }
 
 /**
@@ -162,13 +176,23 @@ export async function updateProviderSettings(
   scope: 'system' | 'user' = 'system',
   userId?: string
 ): Promise<void> {
-  await query(
-    `UPDATE ${TABLE_NAMES.HIRN_PROVIDER_SETTINGS}
-     SET settings = settings || $1::jsonb,
-         updated_at = NOW()
-     WHERE provider = $2 AND scope = $3 AND ($4::uuid IS NULL OR user_id = $4)`,
-    [JSON.stringify(settings), provider, scope, userId || null]
-  )
+  const userCondition = userId
+    ? eq(hirnProviderSettings.userId, userId)
+    : isNull(hirnProviderSettings.userId)
+
+  await db
+    .update(hirnProviderSettings)
+    .set({
+      settings: sql`${hirnProviderSettings.settings} || ${JSON.stringify(settings)}::jsonb`,
+      updatedAt: sql`NOW()`,
+    })
+    .where(
+      and(
+        eq(hirnProviderSettings.provider, provider),
+        eq(hirnProviderSettings.scope, scope),
+        userCondition,
+      )
+    )
 }
 
 
@@ -181,13 +205,20 @@ export async function setProviderEnabled(
   scope: 'system' | 'user' = 'system',
   userId?: string
 ): Promise<void> {
-  await query(
-    `UPDATE ${TABLE_NAMES.HIRN_PROVIDER_SETTINGS}
-     SET is_enabled = $1,
-         updated_at = NOW()
-     WHERE provider = $2 AND scope = $3 AND ($4::uuid IS NULL OR user_id = $4)`,
-    [isEnabled, provider, scope, userId || null]
-  )
+  const userCondition = userId
+    ? eq(hirnProviderSettings.userId, userId)
+    : isNull(hirnProviderSettings.userId)
+
+  await db
+    .update(hirnProviderSettings)
+    .set({ isEnabled, updatedAt: sql`NOW()` })
+    .where(
+      and(
+        eq(hirnProviderSettings.provider, provider),
+        eq(hirnProviderSettings.scope, scope),
+        userCondition,
+      )
+    )
 }
 
 /**
@@ -198,21 +229,27 @@ export async function setDefaultProvider(
   scope: 'system' | 'user' = 'system',
   userId?: string
 ): Promise<void> {
+  const userCondition = userId
+    ? eq(hirnProviderSettings.userId, userId)
+    : isNull(hirnProviderSettings.userId)
+
   // First, unset all defaults for this scope
-  await query(
-    `UPDATE ${TABLE_NAMES.HIRN_PROVIDER_SETTINGS}
-     SET is_default = false, updated_at = NOW()
-     WHERE scope = $1 AND ($2::uuid IS NULL OR user_id = $2)`,
-    [scope, userId || null]
-  )
+  await db
+    .update(hirnProviderSettings)
+    .set({ isDefault: false, updatedAt: sql`NOW()` })
+    .where(and(eq(hirnProviderSettings.scope, scope), userCondition))
 
   // Then set the new default
-  await query(
-    `UPDATE ${TABLE_NAMES.HIRN_PROVIDER_SETTINGS}
-     SET is_default = true, updated_at = NOW()
-     WHERE provider = $1 AND scope = $2 AND ($3::uuid IS NULL OR user_id = $3)`,
-    [provider, scope, userId || null]
-  )
+  await db
+    .update(hirnProviderSettings)
+    .set({ isDefault: true, updatedAt: sql`NOW()` })
+    .where(
+      and(
+        eq(hirnProviderSettings.provider, provider),
+        eq(hirnProviderSettings.scope, scope),
+        userCondition,
+      )
+    )
 }
 
 /**
@@ -224,11 +261,22 @@ export async function addUserProvider(
   settings: ProviderSettings['settings'],
   isDefault: boolean = false
 ): Promise<void> {
-  await query(
-    `INSERT INTO ${TABLE_NAMES.HIRN_PROVIDER_SETTINGS} (scope, user_id, provider, is_enabled, is_default, settings)
-     VALUES ('user', $1, $2, true, $3, $4)
-     ON CONFLICT (scope, user_id, provider)
-     DO UPDATE SET settings = EXCLUDED.settings, is_default = EXCLUDED.is_default, updated_at = NOW()`,
-    [userId, provider, isDefault, JSON.stringify(settings)]
-  )
+  await db
+    .insert(hirnProviderSettings)
+    .values({
+      scope: 'user',
+      userId,
+      provider,
+      isEnabled: true,
+      isDefault: isDefault,
+      settings,
+    })
+    .onConflictDoUpdate({
+      target: [hirnProviderSettings.scope, hirnProviderSettings.userId, hirnProviderSettings.provider],
+      set: {
+        settings,
+        isDefault: isDefault,
+        updatedAt: sql`NOW()`,
+      },
+    })
 }

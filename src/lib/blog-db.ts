@@ -8,8 +8,10 @@
  * Interface matches src/lib/blog.ts for backward compatibility with components.
  */
 
-import { query } from '@/lib/auth/db'
-import { TABLE_NAMES } from '@/config/database'
+import { db } from '@/db'
+import { blogPosts, blogCategories } from '@/db/schema/content'
+import { users } from '@/db/schema/auth'
+import { eq, and, lte, desc, asc } from 'drizzle-orm'
 import { logger } from '@/lib/logger'
 import type { BlogPost } from '@/lib/blog'
 
@@ -24,40 +26,31 @@ export interface BlogCategory {
   isActive: boolean
 }
 
-// Database row type for blog posts (matches existing schema)
-interface DbBlogPost {
-  slug: string
-  title: string
-  excerpt: string | null
-  content: string
-  featured_image: string | null
-  author_name: string | null
-  category_name: string | null
-  tags: string[]
-  published_at: string | null
-  created_at: string
-}
-
 /**
  * Get all published blog posts
  */
 export async function getAllPosts(): Promise<BlogPost[]> {
   try {
-    const result = await query<DbBlogPost>(
-      `SELECT
-        p.slug, p.title, p.excerpt, p.content,
-        p.featured_image,
-        u.name as author_name,
-        c.name as category_name,
-        p.tags, p.published_at, p.created_at
-      FROM ${TABLE_NAMES.BLOG_POSTS} p
-      LEFT JOIN ${TABLE_NAMES.BLOG_CATEGORIES} c ON p.category_id = c.id
-      LEFT JOIN ${TABLE_NAMES.USERS} u ON p.created_by = u.id
-      WHERE p.is_published = true AND p.published_at <= NOW()
-      ORDER BY p.published_at DESC`
-    )
+    const rows = await db
+      .select({
+        slug: blogPosts.slug,
+        title: blogPosts.title,
+        excerpt: blogPosts.excerpt,
+        content: blogPosts.content,
+        featuredImage: blogPosts.featuredImage,
+        authorName: users.name,
+        categoryName: blogCategories.name,
+        tags: blogPosts.tags,
+        publishedAt: blogPosts.publishedAt,
+        createdAt: blogPosts.createdAt,
+      })
+      .from(blogPosts)
+      .leftJoin(blogCategories, eq(blogPosts.categoryId, blogCategories.id))
+      .leftJoin(users, eq(blogPosts.createdBy, users.id))
+      .where(and(eq(blogPosts.isPublished, true), lte(blogPosts.publishedAt, new Date().toISOString())))
+      .orderBy(desc(blogPosts.publishedAt))
 
-    return result.rows.map(mapPostFromDb)
+    return rows.map(mapPostFromDb)
   } catch (error) {
     logger.error('Failed to get published posts', { error })
     return []
@@ -69,22 +62,32 @@ export async function getAllPosts(): Promise<BlogPost[]> {
  */
 export async function getPostBySlug(slug: string): Promise<BlogPost | null> {
   try {
-    const result = await query<DbBlogPost>(
-      `SELECT
-        p.slug, p.title, p.excerpt, p.content,
-        p.featured_image,
-        u.name as author_name,
-        c.name as category_name,
-        p.tags, p.published_at, p.created_at
-      FROM ${TABLE_NAMES.BLOG_POSTS} p
-      LEFT JOIN ${TABLE_NAMES.BLOG_CATEGORIES} c ON p.category_id = c.id
-      LEFT JOIN ${TABLE_NAMES.USERS} u ON p.created_by = u.id
-      WHERE p.slug = $1 AND p.is_published = true AND p.published_at <= NOW()`,
-      [slug]
-    )
+    const rows = await db
+      .select({
+        slug: blogPosts.slug,
+        title: blogPosts.title,
+        excerpt: blogPosts.excerpt,
+        content: blogPosts.content,
+        featuredImage: blogPosts.featuredImage,
+        authorName: users.name,
+        categoryName: blogCategories.name,
+        tags: blogPosts.tags,
+        publishedAt: blogPosts.publishedAt,
+        createdAt: blogPosts.createdAt,
+      })
+      .from(blogPosts)
+      .leftJoin(blogCategories, eq(blogPosts.categoryId, blogCategories.id))
+      .leftJoin(users, eq(blogPosts.createdBy, users.id))
+      .where(
+        and(
+          eq(blogPosts.slug, slug),
+          eq(blogPosts.isPublished, true),
+          lte(blogPosts.publishedAt, new Date().toISOString()),
+        )
+      )
 
-    if (result.rows.length === 0) return null
-    return mapPostFromDb(result.rows[0])
+    if (rows.length === 0) return null
+    return mapPostFromDb(rows[0])
   } catch (error) {
     logger.error('Failed to get post by slug', { slug, error })
     return null
@@ -96,19 +99,18 @@ export async function getPostBySlug(slug: string): Promise<BlogPost | null> {
  */
 export async function getAllCategories(): Promise<BlogCategory[]> {
   try {
-    const result = await query<{
-      id: string
-      slug: string
-      name: string
-      description: string | null
-      color: string | null
-    }>(
-      `SELECT id, slug, name, description, color
-      FROM ${TABLE_NAMES.BLOG_CATEGORIES}
-      ORDER BY name`
-    )
+    const rows = await db
+      .select({
+        id: blogCategories.id,
+        slug: blogCategories.slug,
+        name: blogCategories.name,
+        description: blogCategories.description,
+        color: blogCategories.color,
+      })
+      .from(blogCategories)
+      .orderBy(asc(blogCategories.name))
 
-    return result.rows.map((row) => ({
+    return rows.map((row) => ({
       id: row.id,
       slug: row.slug,
       name: row.name,
@@ -127,22 +129,32 @@ export async function getAllCategories(): Promise<BlogCategory[]> {
  */
 export async function getPostsByCategory(categoryName: string): Promise<BlogPost[]> {
   try {
-    const result = await query<DbBlogPost>(
-      `SELECT
-        p.slug, p.title, p.excerpt, p.content,
-        p.featured_image,
-        u.name as author_name,
-        c.name as category_name,
-        p.tags, p.published_at, p.created_at
-      FROM ${TABLE_NAMES.BLOG_POSTS} p
-      JOIN ${TABLE_NAMES.BLOG_CATEGORIES} c ON p.category_id = c.id
-      LEFT JOIN ${TABLE_NAMES.USERS} u ON p.created_by = u.id
-      WHERE c.name = $1 AND p.is_published = true AND p.published_at <= NOW()
-      ORDER BY p.published_at DESC`,
-      [categoryName]
-    )
+    const rows = await db
+      .select({
+        slug: blogPosts.slug,
+        title: blogPosts.title,
+        excerpt: blogPosts.excerpt,
+        content: blogPosts.content,
+        featuredImage: blogPosts.featuredImage,
+        authorName: users.name,
+        categoryName: blogCategories.name,
+        tags: blogPosts.tags,
+        publishedAt: blogPosts.publishedAt,
+        createdAt: blogPosts.createdAt,
+      })
+      .from(blogPosts)
+      .innerJoin(blogCategories, eq(blogPosts.categoryId, blogCategories.id))
+      .leftJoin(users, eq(blogPosts.createdBy, users.id))
+      .where(
+        and(
+          eq(blogCategories.name, categoryName),
+          eq(blogPosts.isPublished, true),
+          lte(blogPosts.publishedAt, new Date().toISOString()),
+        )
+      )
+      .orderBy(desc(blogPosts.publishedAt))
 
-    return result.rows.map(mapPostFromDb)
+    return rows.map(mapPostFromDb)
   } catch (error) {
     logger.error('Failed to get posts by category', { categoryName, error })
     return []
@@ -152,18 +164,29 @@ export async function getPostsByCategory(categoryName: string): Promise<BlogPost
 /**
  * Map database row to BlogPost interface (compatible with src/lib/blog.ts)
  */
-function mapPostFromDb(row: DbBlogPost): BlogPost {
+function mapPostFromDb(row: {
+  slug: string
+  title: string
+  excerpt: string | null
+  content: string
+  featuredImage: string | null
+  authorName: string | null
+  categoryName: string | null
+  tags: string[] | null
+  publishedAt: string | null
+  createdAt: string | null
+}): BlogPost {
   return {
     slug: row.slug,
     title: row.title,
     excerpt: row.excerpt || undefined,
-    featuredImage: row.featured_image || undefined,
-    author: row.author_name || 'RevampIT Team',
-    category: row.category_name || undefined,
+    featuredImage: row.featuredImage || undefined,
+    author: row.authorName || 'RevampIT Team',
+    category: row.categoryName || undefined,
     tags: row.tags || [],
-    publishedAt: row.published_at || undefined,
+    publishedAt: row.publishedAt || undefined,
     published: true, // Only published posts are returned
     body: row.content,
-    createdAt: row.created_at,
+    createdAt: row.createdAt || '',
   }
 }

@@ -10,8 +10,7 @@ import { NextRequest } from 'next/server'
 import { withAdmin } from '@/lib/api/middleware'
 import { db } from '@/db'
 import { blogSubmissions, blogCategories, blogPosts, users } from '@/db/schema'
-import { eq, sql } from 'drizzle-orm'
-import { TABLE_NAMES } from '@/config/database'
+import { eq, sql, getTableName } from 'drizzle-orm'
 import { logger } from '@/lib/logger'
 import {
   apiSuccess,
@@ -203,7 +202,7 @@ export const PATCH = withAdmin<{ id: string }>('content', async (request, sessio
         ]
 
         const updateResult = await db.execute(sql`
-          UPDATE ${sql.raw(TABLE_NAMES.BLOG_SUBMISSIONS)}
+          UPDATE ${sql.raw(getTableName(blogSubmissions))}
           SET ${sql.join(allSets, sql`, `)}
           WHERE id = ${id}
           RETURNING *

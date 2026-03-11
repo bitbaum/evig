@@ -12,8 +12,11 @@
 import { NextResponse } from 'next/server';
 import { ValidSession } from '@/lib/api/middleware';
 import { apiBadRequest, apiNotFound } from '@/lib/api/helpers';
-import { query } from '@/lib/auth/db';
-import { TABLE_NAMES } from '@/config/database';
+import { db } from '@/db';
+import { users } from '@/db/schema/auth';
+import { tasks } from '@/db/schema/misc';
+import { notifications } from '@/db/schema/messaging';
+import { eq, inArray } from 'drizzle-orm';
 import { logger } from '@/lib/logger';
 
 /**
@@ -25,16 +28,16 @@ import { logger } from '@/lib/logger';
 export async function getDbUserId(
   session: ValidSession
 ): Promise<{ dbUserId: string } | { error: NextResponse }> {
-  const userResult = await query<{ id: string }>(
-    `SELECT id FROM ${TABLE_NAMES.USERS} WHERE email = $1`,
-    [session.user.email]
-  );
+  const [user] = await db
+    .select({ id: users.id })
+    .from(users)
+    .where(eq(users.email, session.user.email));
 
-  if (userResult.rows.length === 0) {
+  if (!user) {
     return { error: apiBadRequest('Benutzer nicht gefunden') };
   }
 
-  return { dbUserId: userResult.rows[0].id };
+  return { dbUserId: user.id };
 }
 
 /**
@@ -45,22 +48,25 @@ export async function getDbUserId(
 export async function getActiveTask(
   taskId: string
 ): Promise<{ task: { id: string; title: string; created_by: string; is_archived: boolean } } | { error: NextResponse }> {
-  const taskResult = await query<{ id: string; title: string; created_by: string; is_archived: boolean }>(
-    `SELECT id, title, created_by, is_archived FROM ${TABLE_NAMES.TASKS} WHERE id = $1`,
-    [taskId]
-  );
+  const [taskRow] = await db
+    .select({
+      id: tasks.id,
+      title: tasks.title,
+      created_by: tasks.createdBy,
+      is_archived: tasks.isArchived,
+    })
+    .from(tasks)
+    .where(eq(tasks.id, taskId));
 
-  if (taskResult.rows.length === 0) {
+  if (!taskRow) {
     return { error: apiNotFound('Aufgabe') };
   }
 
-  const task = taskResult.rows[0];
-
-  if (task.is_archived) {
+  if (taskRow.is_archived) {
     return { error: apiBadRequest('Archivierte Aufgaben können nicht bearbeitet werden') };
   }
 
-  return { task };
+  return { task: { ...taskRow, is_archived: taskRow.is_archived ?? false } };
 }
 
 interface InAppNotificationInput {
@@ -89,27 +95,24 @@ export async function createInAppNotifications({
   }
 
   try {
-    await query(
-      `INSERT INTO ${TABLE_NAMES.NOTIFICATIONS} (
-        user_id,
-        type,
+    // Find valid user IDs from the provided list
+    const validUsers = await db
+      .select({ id: users.id })
+      .from(users)
+      .where(inArray(users.id, uniqueRecipientIds))
+
+    if (validUsers.length === 0) return
+
+    await db.insert(notifications).values(
+      validUsers.map((u) => ({
+        userId: u.id,
+        type: 'system' as const,
         title,
         content,
-        related_type,
-        related_id,
-        sent_in_app
-      )
-      SELECT
-        u.id,
-        'system',
-        $1,
-        $2,
-        $3,
-        $4,
-        true
-      FROM ${TABLE_NAMES.USERS} u
-      WHERE u.id = ANY($5::uuid[])`,
-      [title, content, relatedType || null, relatedId || null, uniqueRecipientIds]
+        relatedType: relatedType || null,
+        relatedId: relatedId || null,
+        sentInApp: true,
+      }))
     )
   } catch (error) {
     logger.warn('Failed to create in-app notifications', {

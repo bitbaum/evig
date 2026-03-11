@@ -5,9 +5,10 @@
  * Returns relevant context for RAG queries.
  */
 
-import { query } from '@/lib/auth/db'
+import { db } from '@/db'
+import { hirnDocuments, hirnChunks } from '@/db/schema'
+import { eq, sql, count, desc } from 'drizzle-orm'
 import { logger } from '@/lib/logger'
-import { TABLE_NAMES } from '@/config/database'
 import { generateEmbeddings } from './providers'
 
 export interface RetrievalResult {
@@ -52,54 +53,25 @@ export async function searchSimilar(
     throw new Error('Failed to generate query embedding')
   }
 
-  // Build the query with optional filters
-  let filterClauses = ''
-  const params: (string | string[] | number)[] = [
-    `[${queryEmbedding.join(',')}]`,
-    minSimilarity,
-    topK,
-  ]
-  let paramIndex = 4
+  const embeddingLiteral = `[${queryEmbedding.join(',')}]`
+
+  // Build optional filter chunks
+  const filterParts: ReturnType<typeof sql>[] = []
 
   if (sourceTypes && sourceTypes.length > 0) {
-    filterClauses += ` AND d.source_type = ANY($${paramIndex})`
-    params.push(sourceTypes)
-    paramIndex++
+    filterParts.push(sql`AND d.source_type = ANY(${sourceTypes})`)
   }
 
   if (sourcePaths && sourcePaths.length > 0) {
-    // Support LIKE patterns in paths
-    const pathConditions = sourcePaths
-      .map(() => {
-        const condition = `d.source_path LIKE $${paramIndex}`
-        paramIndex++
-        return condition
-      })
-      .join(' OR ')
-    filterClauses += ` AND (${pathConditions})`
-    params.push(...sourcePaths)
+    const pathConditions = sourcePaths.map(p => sql`d.source_path LIKE ${p}`)
+    filterParts.push(sql`AND (${sql.join(pathConditions, sql` OR `)})`)
   }
 
-  const sql = `
-    SELECT
-      c.id as chunk_id,
-      c.document_id,
-      c.content,
-      c.metadata as chunk_metadata,
-      1 - (c.embedding <=> $1::vector) as similarity,
-      d.source_path,
-      d.source_type,
-      d.title
-    FROM ${TABLE_NAMES.HIRN_CHUNKS} c
-    JOIN ${TABLE_NAMES.HIRN_DOCUMENTS} d ON c.document_id = d.id
-    WHERE c.embedding IS NOT NULL
-      AND 1 - (c.embedding <=> $1::vector) >= $2
-      ${filterClauses}
-    ORDER BY c.embedding <=> $1::vector
-    LIMIT $3
-  `
+  const filterClause = filterParts.length > 0
+    ? sql.join(filterParts, sql` `)
+    : sql``
 
-  const result = await query<{
+  const result = await db.execute<{
     chunk_id: string
     document_id: string
     content: string
@@ -108,7 +80,24 @@ export async function searchSimilar(
     source_path: string
     source_type: string
     title: string | null
-  }>(sql, params)
+  }>(sql`
+    SELECT
+      c.id as chunk_id,
+      c.document_id,
+      c.content,
+      c.metadata as chunk_metadata,
+      1 - (c.embedding <=> ${embeddingLiteral}::vector) as similarity,
+      d.source_path,
+      d.source_type,
+      d.title
+    FROM ${hirnChunks} c
+    JOIN ${hirnDocuments} d ON c.document_id = d.id
+    WHERE c.embedding IS NOT NULL
+      AND 1 - (c.embedding <=> ${embeddingLiteral}::vector) >= ${minSimilarity}
+      ${filterClause}
+    ORDER BY c.embedding <=> ${embeddingLiteral}::vector
+    LIMIT ${topK}
+  `)
 
   logger.debug('Similarity search', {
     query: queryText.slice(0, 100),
@@ -159,47 +148,46 @@ export async function listDocuments(options: {
     sourcePath: string
     sourceType: string
     title: string | null
-    createdAt: Date
-    indexedAt: Date | null
+    createdAt: string
+    indexedAt: string | null
     chunkCount: number
   }>
   total: number
 }> {
   const { limit = 50, offset = 0, sourceType } = options
 
-  let whereClause = ''
-  const params: (string | number)[] = [limit, offset]
-  if (sourceType) {
-    whereClause = 'WHERE d.source_type = $3'
-    params.push(sourceType)
-  }
+  const whereClause = sourceType
+    ? sql`WHERE d.source_type = ${sourceType}`
+    : sql``
 
-  const docsResult = await query<{
+  const docsResult = await db.execute<{
     id: string
     source_path: string
     source_type: string
     title: string | null
-    created_at: Date
-    indexed_at: Date | null
+    created_at: string
+    indexed_at: string | null
     chunk_count: string
-  }>(
-    `SELECT
-       d.id, d.source_path, d.source_type, d.title, d.created_at, d.indexed_at,
-       COUNT(c.id) as chunk_count
-     FROM ${TABLE_NAMES.HIRN_DOCUMENTS} d
-     LEFT JOIN ${TABLE_NAMES.HIRN_CHUNKS} c ON c.document_id = d.id
-     ${whereClause}
-     GROUP BY d.id
-     ORDER BY d.created_at DESC
-     LIMIT $1 OFFSET $2`,
-    params
-  )
+  }>(sql`
+    SELECT
+      d.id, d.source_path, d.source_type, d.title, d.created_at, d.indexed_at,
+      COUNT(c.id) as chunk_count
+    FROM ${hirnDocuments} d
+    LEFT JOIN ${hirnChunks} c ON c.document_id = d.id
+    ${whereClause}
+    GROUP BY d.id
+    ORDER BY d.created_at DESC
+    LIMIT ${limit} OFFSET ${offset}
+  `)
 
-  const countParams = sourceType ? [sourceType] : []
-  const countResult = await query<{ count: string }>(
-    `SELECT COUNT(*) as count FROM ${TABLE_NAMES.HIRN_DOCUMENTS} ${sourceType ? 'WHERE source_type = $1' : ''}`,
-    countParams
-  )
+  const countCondition = sourceType
+    ? eq(hirnDocuments.sourceType, sourceType)
+    : undefined
+
+  const [countRow] = await db
+    .select({ count: count() })
+    .from(hirnDocuments)
+    .where(countCondition)
 
   return {
     documents: docsResult.rows.map(d => ({
@@ -211,7 +199,7 @@ export async function listDocuments(options: {
       indexedAt: d.indexed_at,
       chunkCount: parseInt(d.chunk_count),
     })),
-    total: parseInt(countResult.rows[0]?.count || '0'),
+    total: countRow?.count ?? 0,
   }
 }
 
@@ -219,6 +207,6 @@ export async function listDocuments(options: {
  * Delete a document and its chunks
  */
 export async function deleteDocument(documentId: string): Promise<void> {
-  await query(`DELETE FROM ${TABLE_NAMES.HIRN_DOCUMENTS} WHERE id = $1`, [documentId])
+  await db.delete(hirnDocuments).where(eq(hirnDocuments.id, documentId))
   logger.info('Document deleted', { documentId })
 }

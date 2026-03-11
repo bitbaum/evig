@@ -6,10 +6,17 @@
  * and decrements inventory.
  */
 
-import { query } from '@/lib/auth/db'
-import { TABLE_NAMES } from '@/config/database'
+import { db } from '@/db'
+import { sql, getTableName } from 'drizzle-orm'
+import { inventoryItems, aiExtractedProducts, orders, orderItems } from '@/db/schema'
 import { PAYMENT_STATUS } from '@/config/payment-status'
 import { logger } from '@/lib/logger'
+
+// Table name refs
+const iiTable = getTableName(inventoryItems)
+const aepTable = getTableName(aiExtractedProducts)
+const ordersTable = getTableName(orders)
+const oiTable = getTableName(orderItems)
 
 // ============================================================================
 // Types
@@ -73,17 +80,15 @@ export async function createOrder(params: CreateOrderParams): Promise<CreatedOrd
 
     // Look up inventory items
     const itemIds = items.map(i => i.inventoryItemId)
-    const placeholders = itemIds.map((_, i) => `$${i + 1}`).join(', ')
 
-    const inventoryResult = await query<InventoryRow>(
-      `SELECT ii.id, ii.selling_price_chf, ii.quantity_available, aep.product_name
-       FROM ${TABLE_NAMES.INVENTORY_ITEMS} ii
-       JOIN ${TABLE_NAMES.AI_EXTRACTED_PRODUCTS} aep ON aep.id = ii.ai_product_id
-       WHERE ii.id IN (${placeholders})`,
-      itemIds,
-    )
+    const inventoryResult = await db.execute(sql`
+      SELECT ii.id, ii.selling_price_chf, ii.quantity_available, aep.product_name
+      FROM ${sql.raw(iiTable)} ii
+      JOIN ${sql.raw(aepTable)} aep ON aep.id = ii.ai_product_id
+      WHERE ii.id = ANY(${itemIds})
+    `)
 
-    const inventoryMap = new Map(inventoryResult.rows.map(r => [r.id, r]))
+    const inventoryMap = new Map((inventoryResult.rows as unknown as InventoryRow[]).map(r => [r.id, r]))
 
     // Calculate total
     let totalCents = 0
@@ -98,71 +103,72 @@ export async function createOrder(params: CreateOrderParams): Promise<CreatedOrd
       totalCents += (inv.selling_price_chf || 0) * 100 * item.quantity
     }
 
-    // Create order record
-    const orderResult = await query<OrderRow>(
-      `INSERT INTO ${TABLE_NAMES.ORDERS} (
-        user_id,
-        status,
-        total_amount_cents,
-        currency,
-        payment_intent_id,
-        shipping_address
-      ) VALUES ($1, 'confirmed', $2, 'CHF', $3, $4)
-      RETURNING id, created_at`,
-      [
-        userId,
-        totalCents,
-        paymentTransactionId,
-        shippingAddress ? JSON.stringify(shippingAddress) : null,
-      ],
-    )
+    // Use a transaction for order creation + inventory decrement
+    const result = await db.transaction(async (tx) => {
+      // Create order record
+      const orderResult = await tx.execute(sql`
+        INSERT INTO ${sql.raw(ordersTable)} (
+          user_id,
+          status,
+          total_amount_cents,
+          currency,
+          payment_intent_id,
+          shipping_address
+        ) VALUES (
+          ${userId},
+          'confirmed',
+          ${totalCents},
+          'CHF',
+          ${paymentTransactionId},
+          ${shippingAddress ? JSON.stringify(shippingAddress) : null}
+        )
+        RETURNING id, created_at
+      `)
 
-    const orderData = orderResult.rows[0]
-    const orderId = orderData.id
+      const orderData = (orderResult.rows as unknown as OrderRow[])[0]
+      const orderId = orderData.id
 
-    // Create order items and decrement inventory
-    for (const item of items) {
-      const inv = inventoryMap.get(item.inventoryItemId)!
+      // Create order items and decrement inventory
+      for (const item of items) {
+        const inv = inventoryMap.get(item.inventoryItemId)!
 
-      await query(
-        `INSERT INTO ${TABLE_NAMES.ORDER_ITEMS} (
-          order_id,
-          product_title,
-          quantity,
-          unit_price_cents,
-          total_price_cents,
-          inventory_item_id
-        ) VALUES ($1, $2, $3, $4, $5, $6)`,
-        [
-          orderId,
-          inv.product_name,
-          item.quantity,
-          (inv.selling_price_chf || 0) * 100,
-          (inv.selling_price_chf || 0) * 100 * item.quantity,
-          item.inventoryItemId,
-        ],
-      )
+        await tx.execute(sql`
+          INSERT INTO ${sql.raw(oiTable)} (
+            order_id,
+            product_title,
+            quantity,
+            unit_price_cents,
+            total_price_cents,
+            inventory_item_id
+          ) VALUES (
+            ${orderId},
+            ${inv.product_name},
+            ${item.quantity},
+            ${(inv.selling_price_chf || 0) * 100},
+            ${(inv.selling_price_chf || 0) * 100 * item.quantity},
+            ${item.inventoryItemId}
+          )
+        `)
 
-      // Decrement inventory
-      await query(
-        `UPDATE ${TABLE_NAMES.INVENTORY_ITEMS}
-         SET quantity_available = GREATEST(quantity_available - $1, 0)
-         WHERE id = $2`,
-        [item.quantity, item.inventoryItemId],
-      )
-    }
+        // Decrement inventory
+        await tx.execute(sql`
+          UPDATE ${sql.raw(iiTable)}
+          SET quantity_available = GREATEST(quantity_available - ${item.quantity}, 0)
+          WHERE id = ${item.inventoryItemId}
+        `)
+      }
+
+      return { orderId, createdAt: orderData.created_at }
+    })
 
     logger.info('Order created', {
-      orderId,
+      orderId: result.orderId,
       userId,
       totalCents,
       itemCount: items.length,
     })
 
-    return {
-      orderId,
-      createdAt: orderData.created_at,
-    }
+    return result
   } catch (error) {
     logger.error('Failed to create order', {
       userId,

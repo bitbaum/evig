@@ -1,10 +1,10 @@
 import { NextRequest } from 'next/server'
 import { withAdmin } from '@/lib/api/middleware'
 import { db } from '@/db'
-import { sql } from 'drizzle-orm'
+import { sql, getTableName } from 'drizzle-orm'
+import { repairerApplications, repairerProfiles, users } from '@/db/schema'
 import { apiError, apiSuccess, apiBadRequest, apiNotFound } from '@/lib/api/helpers'
 import { ERROR_MESSAGES, SUCCESS_MESSAGES } from '@/config/error-messages'
-import { TABLE_NAMES } from '@/config/database'
 import { APPROVAL_STATUS } from '@/config/approval-status'
 import { sendEmail } from '@/lib/email'
 import { logger } from '@/lib/logger'
@@ -69,8 +69,8 @@ export const PUT = withAdmin<{ id: string }>('services', async (request, session
     // Get application details
     const applicationResult = await db.execute(sql`
       SELECT ra.*, u.email, u.name
-      FROM ${sql.raw(TABLE_NAMES.REPAIRER_APPLICATIONS)} ra
-      JOIN ${sql.raw(TABLE_NAMES.USERS)} u ON ra.user_id = u.id
+      FROM ${sql.raw(getTableName(repairerApplications))} ra
+      JOIN ${sql.raw(getTableName(users))} u ON ra.user_id = u.id
       WHERE ra.id = ${applicationId}
     `)
 
@@ -88,7 +88,7 @@ export const PUT = withAdmin<{ id: string }>('services', async (request, session
     await db.transaction(async (tx) => {
       // Update application status
       await tx.execute(sql`
-        UPDATE ${sql.raw(TABLE_NAMES.REPAIRER_APPLICATIONS)}
+        UPDATE ${sql.raw(getTableName(repairerApplications))}
         SET
           status = ${APPROVAL_STATUS.APPROVED},
           admin_notes = COALESCE(${adminNotes ?? null}, admin_notes),
@@ -100,7 +100,7 @@ export const PUT = withAdmin<{ id: string }>('services', async (request, session
 
       // Update user role to repairer
       await tx.execute(sql`
-        UPDATE ${sql.raw(TABLE_NAMES.USERS)}
+        UPDATE ${sql.raw(getTableName(users))}
         SET role = ${ROLES.REPAIRER}, "updatedAt" = CURRENT_TIMESTAMP
         WHERE id = ${application.user_id}
       `)
@@ -109,7 +109,7 @@ export const PUT = withAdmin<{ id: string }>('services', async (request, session
       const profileTableExists = await tx.execute(sql`
         SELECT EXISTS (
           SELECT 1 FROM information_schema.tables
-          WHERE table_name = ${TABLE_NAMES.REPAIRER_PROFILES}
+          WHERE table_name = ${getTableName(repairerProfiles)}
         )
       `)
 
@@ -124,16 +124,16 @@ export const PUT = withAdmin<{ id: string }>('services', async (request, session
             rc.issue_date,
             rc.expiry_date,
             ct.category
-          FROM ${sql.raw(TABLE_NAMES.REPAIRER_CERTIFICATIONS)} rc
-          LEFT JOIN ${sql.raw(TABLE_NAMES.CERTIFICATION_TYPES)} ct ON rc.certification_type_id = ct.id
+          FROM ${sql.raw('repairer_certifications')} rc
+          LEFT JOIN ${sql.raw('certification_types')} ct ON rc.certification_type_id = ct.id
           WHERE rc.application_id = ${applicationId} AND rc.verification_status = 'verified'
         `)
 
         // Get verified documents for the profile
         const verifiedDocuments = await tx.execute(sql`
           SELECT file_path, original_filename, dt.name as document_type
-          FROM ${sql.raw(TABLE_NAMES.VERIFICATION_DOCUMENTS)} vd
-          LEFT JOIN ${sql.raw(TABLE_NAMES.DOCUMENT_TYPES)} dt ON vd.document_type_id = dt.id
+          FROM ${sql.raw('verification_documents')} vd
+          LEFT JOIN ${sql.raw('document_types')} dt ON vd.document_type_id = dt.id
           WHERE vd.application_id = ${applicationId} AND vd.status = 'approved'
         `)
 
@@ -156,7 +156,7 @@ export const PUT = withAdmin<{ id: string }>('services', async (request, session
 
         // Create or update repairer profile with verified data
         await tx.execute(sql`
-          INSERT INTO ${sql.raw(TABLE_NAMES.REPAIRER_PROFILES)} (
+          INSERT INTO ${sql.raw(getTableName(repairerProfiles))} (
             user_id,
             business_name,
             business_type,

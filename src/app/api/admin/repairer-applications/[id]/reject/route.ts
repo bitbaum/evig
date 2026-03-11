@@ -1,10 +1,10 @@
 import { NextRequest } from 'next/server'
 import { withAdmin } from '@/lib/api/middleware'
 import { db } from '@/db'
-import { sql } from 'drizzle-orm'
+import { sql, getTableName } from 'drizzle-orm'
+import { repairerApplications, users } from '@/db/schema'
 import { apiError, apiSuccess, apiBadRequest, apiNotFound } from '@/lib/api/helpers'
 import { ERROR_MESSAGES, SUCCESS_MESSAGES } from '@/config/error-messages'
-import { TABLE_NAMES } from '@/config/database'
 import { APPROVAL_STATUS } from '@/config/approval-status'
 import { sendEmail } from '@/lib/email'
 import { logger } from '@/lib/logger'
@@ -35,8 +35,8 @@ export const PUT = withAdmin<{ id: string }>('services', async (request, session
     // Get application details
     const applicationResult = await db.execute(sql`
       SELECT ra.*, u.email, u.name
-      FROM ${sql.raw(TABLE_NAMES.REPAIRER_APPLICATIONS)} ra
-      JOIN ${sql.raw(TABLE_NAMES.USERS)} u ON ra.user_id = u.id
+      FROM ${sql.raw(getTableName(repairerApplications))} ra
+      JOIN ${sql.raw(getTableName(users))} u ON ra.user_id = u.id
       WHERE ra.id = ${applicationId}
     `)
 
@@ -56,7 +56,7 @@ export const PUT = withAdmin<{ id: string }>('services', async (request, session
 
     // Update application status with rejection details
     await db.execute(sql`
-      UPDATE ${sql.raw(TABLE_NAMES.REPAIRER_APPLICATIONS)}
+      UPDATE ${sql.raw(getTableName(repairerApplications))}
       SET
         status = ${APPROVAL_STATUS.REJECTED},
         admin_notes = COALESCE(${adminNotes ?? null}, admin_notes) || E'\n\nAblehnungsgrund: ' || ${rejectionReason},
