@@ -2,13 +2,13 @@
  * Database connection layer for RevampIT unified auth
  * Uses the pg package for PostgreSQL connection
  *
- * SSOT Compliance: All table names must use TABLE_NAMES from config
+ * Provides the raw Pool used by both Drizzle ORM (src/db/index.ts)
+ * and legacy query/transaction helpers during migration.
  */
 
 import { Pool, PoolClient } from 'pg'
 import { logger } from '@/lib/logger'
 import { getDbConfig } from './config'
-import { TABLE_NAMES } from '@/config/database'
 import type { QueryParams } from '@/types/common'
 
 // Get database configuration from centralized config
@@ -147,7 +147,7 @@ export async function getUserColumns(): Promise<Set<string>> {
     `SELECT column_name
      FROM information_schema.columns
      WHERE table_schema = 'public' AND table_name = $1`,
-    [TABLE_NAMES.USERS]
+    ['users']
   )
 
   const columns = new Set(result.rows.map((row) => row.column_name))

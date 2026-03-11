@@ -10,11 +10,15 @@
  */
 
 import { AUTH_CONFIG } from './config'
-import { query } from './db'
+import { db } from '@/db'
+import { userLockouts } from '@/db/schema'
+import { eq, sql, getTableName } from 'drizzle-orm'
 import { getRedis } from './redis'
 import { logger } from '@/lib/logger'
 import { isRedisConfigured, REDIS_CONFIG } from '@/config/redis'
-import { TABLE_NAMES } from '@/config/database'
+
+// Table name ref for raw SQL in complex upsert
+const lockoutsTable = getTableName(userLockouts)
 
 // =============================================================================
 // Types
@@ -290,28 +294,27 @@ export async function recordFailedAttemptDb(
   const now = new Date()
 
   try {
-    // Get or create lockout record
-    const result = await query<{
+    // Get or create lockout record (complex upsert with CASE expressions)
+    const result = await db.execute<{
       failed_attempts: number
-      locked_until: Date | null
+      locked_until: string | null
       lockout_count: number
-    }>(
-      `INSERT INTO ${TABLE_NAMES.USER_LOCKOUTS} (user_id, ip_address, failed_attempts, last_attempt)
-       VALUES ($1, $2, 1, $3)
-       ON CONFLICT (user_id)
-       DO UPDATE SET
-         failed_attempts = CASE
-           WHEN ${TABLE_NAMES.USER_LOCKOUTS}.locked_until < $3 THEN 1
-           ELSE ${TABLE_NAMES.USER_LOCKOUTS}.failed_attempts + 1
-         END,
-         last_attempt = $3,
-         locked_until = CASE
-           WHEN ${TABLE_NAMES.USER_LOCKOUTS}.locked_until < $3 THEN NULL
-           ELSE ${TABLE_NAMES.USER_LOCKOUTS}.locked_until
-         END
-       RETURNING failed_attempts, locked_until, lockout_count`,
-      [userId, ipAddress, now]
-    )
+    }>(sql`
+      INSERT INTO ${sql.raw(lockoutsTable)} (user_id, ip_address, failed_attempts, last_attempt)
+      VALUES (${userId}, ${ipAddress}, 1, ${now.toISOString()})
+      ON CONFLICT (user_id)
+      DO UPDATE SET
+        failed_attempts = CASE
+          WHEN ${sql.raw(lockoutsTable)}.locked_until < ${now.toISOString()} THEN 1
+          ELSE ${sql.raw(lockoutsTable)}.failed_attempts + 1
+        END,
+        last_attempt = ${now.toISOString()},
+        locked_until = CASE
+          WHEN ${sql.raw(lockoutsTable)}.locked_until < ${now.toISOString()} THEN NULL
+          ELSE ${sql.raw(lockoutsTable)}.locked_until
+        END
+      RETURNING failed_attempts, locked_until, lockout_count
+    `)
 
     const record = result.rows[0]
 
@@ -321,12 +324,13 @@ export async function recordFailedAttemptDb(
       const multiplier = config.progressiveLockout ? Math.pow(2, newLockoutCount - 1) : 1
       const lockoutUntil = new Date(now.getTime() + Math.min(config.lockoutDuration * multiplier, 24 * 60 * 60 * 1000))
 
-      await query(
-        `UPDATE ${TABLE_NAMES.USER_LOCKOUTS}
-         SET locked_until = $1, lockout_count = $2
-         WHERE user_id = $3`,
-        [lockoutUntil, newLockoutCount, userId]
-      )
+      await db
+        .update(userLockouts)
+        .set({
+          lockedUntil: lockoutUntil.toISOString(),
+          lockoutCount: newLockoutCount,
+        })
+        .where(eq(userLockouts.userId, userId))
 
       return {
         locked: true,
@@ -362,12 +366,13 @@ export async function recordFailedAttemptDb(
  */
 export async function clearLockoutDb(userId: string): Promise<void> {
   try {
-    await query(
-      `UPDATE ${TABLE_NAMES.USER_LOCKOUTS}
-       SET failed_attempts = 0, locked_until = NULL
-       WHERE user_id = $1`,
-      [userId]
-    )
+    await db
+      .update(userLockouts)
+      .set({
+        failedAttempts: 0,
+        lockedUntil: null,
+      })
+      .where(eq(userLockouts.userId, userId))
   } catch (error) {
     logger.error('Error clearing lockout from database', { error, userId })
   }

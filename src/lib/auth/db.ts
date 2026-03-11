@@ -4,7 +4,8 @@
  * Barrel re-export from focused modules.
  * All existing imports from '@/lib/auth/db' continue to work unchanged.
  *
- * SSOT Compliance: All table names must use TABLE_NAMES from config
+ * New code should prefer Drizzle ORM via '@/db' for type-safe queries.
+ * These legacy helpers remain for callers not yet migrated.
  */
 
 // Connection layer

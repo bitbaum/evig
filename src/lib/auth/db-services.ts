@@ -2,8 +2,9 @@
  * Service appointment database queries
  */
 
-import { TABLE_NAMES } from '@/config/database'
-import { query } from './db-connection'
+import { db } from '@/db'
+import { serviceAppointments, serviceTypes } from '@/db/schema'
+import { eq, and, inArray, desc } from 'drizzle-orm'
 
 // ============================================================================
 // Service appointment queries
@@ -13,16 +14,16 @@ export interface DbServiceAppointment {
   id: string
   user_id: string
   service_type_id: string
-  preferred_date: Date | null
-  confirmed_date: Date | null
+  preferred_date: string | null
+  confirmed_date: string | null
   description: string | null
   device_info: string | null
-  urgency: string
-  status: string
+  urgency: string | null
+  status: string | null
   outcome_notes: string | null
   price_charged_cents: number | null
-  created_at: Date
-  updated_at: Date
+  created_at: string | null
+  updated_at: string | null
 }
 
 export interface DbServiceType {
@@ -30,51 +31,81 @@ export interface DbServiceType {
   slug: string
   name: string
   description: string | null
-  duration_minutes: number
+  duration_minutes: number | null
   price_cents: number | null
-  requires_approval: boolean
-  is_active: boolean
-  created_at: Date
+  requires_approval: boolean | null
+  is_active: boolean | null
+  created_at: string | null
 }
 
 /**
  * Get service type by slug
  */
 export async function getServiceTypeBySlug(slug: string): Promise<DbServiceType | null> {
-  const result = await query<DbServiceType>(
-    `SELECT * FROM ${TABLE_NAMES.SERVICE_TYPES} WHERE slug = $1 AND is_active = true`,
-    [slug]
-  )
-  return result.rows[0] || null
+  const rows = await db
+    .select({
+      id: serviceTypes.id,
+      slug: serviceTypes.slug,
+      name: serviceTypes.name,
+      description: serviceTypes.description,
+      duration_minutes: serviceTypes.durationMinutes,
+      price_cents: serviceTypes.priceCents,
+      requires_approval: serviceTypes.requiresApproval,
+      is_active: serviceTypes.isActive,
+      created_at: serviceTypes.createdAt,
+    })
+    .from(serviceTypes)
+    .where(and(eq(serviceTypes.slug, slug), eq(serviceTypes.isActive, true)))
+
+  return rows[0] ?? null
 }
 
 /**
  * Get user's service appointments
  */
 export async function getUserServiceAppointments(userId: string): Promise<Array<DbServiceAppointment & { service_name: string, service_slug: string }>> {
-  const result = await query<DbServiceAppointment & { service_name: string, service_slug: string }>(
-    `SELECT
-       sa.*,
-       st.name as service_name,
-       st.slug as service_slug
-     FROM ${TABLE_NAMES.SERVICE_APPOINTMENTS} sa
-     JOIN ${TABLE_NAMES.SERVICE_TYPES} st ON sa.service_type_id = st.id
-     WHERE sa.user_id = $1
-     ORDER BY sa.created_at DESC`,
-    [userId]
-  )
-  return result.rows
+  const rows = await db
+    .select({
+      id: serviceAppointments.id,
+      user_id: serviceAppointments.userId,
+      service_type_id: serviceAppointments.serviceTypeId,
+      preferred_date: serviceAppointments.preferredDate,
+      confirmed_date: serviceAppointments.confirmedDate,
+      description: serviceAppointments.description,
+      device_info: serviceAppointments.deviceInfo,
+      urgency: serviceAppointments.urgency,
+      status: serviceAppointments.status,
+      outcome_notes: serviceAppointments.outcomeNotes,
+      price_charged_cents: serviceAppointments.priceChargedCents,
+      created_at: serviceAppointments.createdAt,
+      updated_at: serviceAppointments.updatedAt,
+      service_name: serviceTypes.name,
+      service_slug: serviceTypes.slug,
+    })
+    .from(serviceAppointments)
+    .innerJoin(serviceTypes, eq(serviceAppointments.serviceTypeId, serviceTypes.id))
+    .where(eq(serviceAppointments.userId, userId))
+    .orderBy(desc(serviceAppointments.createdAt))
+
+  return rows
 }
 
 /**
  * Check if user has pending appointment for service
  */
 export async function hasPendingAppointmentForService(userId: string, serviceSlug: string): Promise<boolean> {
-  const result = await query(
-    `SELECT 1 FROM ${TABLE_NAMES.SERVICE_APPOINTMENTS} sa
-     JOIN ${TABLE_NAMES.SERVICE_TYPES} st ON sa.service_type_id = st.id
-     WHERE sa.user_id = $1 AND st.slug = $2 AND sa.status IN ('requested', 'confirmed')`,
-    [userId, serviceSlug]
-  )
-  return result.rows.length > 0
+  const rows = await db
+    .select({ id: serviceAppointments.id })
+    .from(serviceAppointments)
+    .innerJoin(serviceTypes, eq(serviceAppointments.serviceTypeId, serviceTypes.id))
+    .where(
+      and(
+        eq(serviceAppointments.userId, userId),
+        eq(serviceTypes.slug, serviceSlug),
+        inArray(serviceAppointments.status, ['requested', 'confirmed'])
+      )
+    )
+    .limit(1)
+
+  return rows.length > 0
 }

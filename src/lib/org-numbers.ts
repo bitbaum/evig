@@ -13,7 +13,9 @@
 
 import 'server-only'
 
-import { TABLE_NAMES } from '@/config/database'
+import { eq, asc } from 'drizzle-orm'
+import { db } from '@/db'
+import { orgNumbers } from '@/db/schema'
 import { logger } from '@/lib/logger'
 
 // Re-export everything from client-safe defaults for backward compatibility
@@ -33,18 +35,13 @@ import { ORG_NUMBERS_DEFAULTS } from './org-numbers.defaults'
  */
 export async function getOrgNumber(key: string): Promise<OrgNumber | null> {
   try {
-    const { query } = await import('@/lib/auth/db')
-    const result = await query<Record<string, unknown>>(
-      `SELECT key, value, numeric_value, label, category, confidence,
-              methodology, calculation, source_document, external_link,
-              last_verified, updated_at
-       FROM ${TABLE_NAMES.ORG_NUMBERS}
-       WHERE key = $1`,
-      [key]
-    )
+    const [row] = await db
+      .select()
+      .from(orgNumbers)
+      .where(eq(orgNumbers.key, key))
 
-    if (result.rows.length === 0) return null
-    return mapRow(result.rows[0])
+    if (!row) return null
+    return mapRow(row)
   } catch (error) {
     logger.error('Failed to get org number', { key, error })
     return null
@@ -56,15 +53,13 @@ export async function getOrgNumber(key: string): Promise<OrgNumber | null> {
  */
 export async function getOrgNumbers(category?: OrgNumberCategory): Promise<OrgNumber[]> {
   try {
-    const { query } = await import('@/lib/auth/db')
+    const query = db.select().from(orgNumbers)
 
-    const sql = category
-      ? `SELECT * FROM ${TABLE_NAMES.ORG_NUMBERS} WHERE category = $1 ORDER BY key`
-      : `SELECT * FROM ${TABLE_NAMES.ORG_NUMBERS} ORDER BY key`
+    const rows = category
+      ? await query.where(eq(orgNumbers.category, category)).orderBy(asc(orgNumbers.key))
+      : await query.orderBy(asc(orgNumbers.key))
 
-    const params = category ? [category] : undefined
-    const result = await query<Record<string, unknown>>(sql, params)
-    return result.rows.map(mapRow)
+    return rows.map(mapRow)
   } catch (error) {
     logger.error('Failed to get org numbers', { category, error })
     return []
@@ -84,19 +79,21 @@ export async function getNumericValue(key: string): Promise<number> {
   throw new Error(`Org number "${key}" not found or not numeric`)
 }
 
-function mapRow(row: Record<string, unknown>): OrgNumber {
+type OrgNumberRow = typeof orgNumbers.$inferSelect
+
+function mapRow(row: OrgNumberRow): OrgNumber {
   return {
-    key: row.key as string,
-    value: row.value as string,
-    numericValue: row.numeric_value != null ? Number(row.numeric_value) : null,
-    label: row.label as string,
+    key: row.key,
+    value: row.value,
+    numericValue: row.numericValue != null ? Number(row.numericValue) : null,
+    label: row.label,
     category: row.category as OrgNumberCategory,
-    confidence: row.confidence as string as OrgNumber['confidence'],
-    methodology: (row.methodology as string) || null,
-    calculation: (row.calculation as string) || null,
-    sourceDocument: (row.source_document as string) || null,
-    externalLink: (row.external_link as string) || null,
-    lastVerified: String(row.last_verified),
-    updatedAt: String(row.updated_at),
+    confidence: row.confidence as OrgNumber['confidence'],
+    methodology: row.methodology || null,
+    calculation: row.calculation || null,
+    sourceDocument: row.sourceDocument || null,
+    externalLink: row.externalLink || null,
+    lastVerified: String(row.lastVerified),
+    updatedAt: String(row.updatedAt),
   }
 }

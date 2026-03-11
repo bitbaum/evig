@@ -9,9 +9,13 @@
  * - Suspicious activity detection
  */
 
-import { query } from './db'
+import { db } from '@/db'
+import { authAuditLog } from '@/db/schema'
+import { eq, and, inArray, gte, lte, desc, sql, getTableName } from 'drizzle-orm'
 import { logger } from '@/lib/logger'
-import { TABLE_NAMES } from '@/config/database'
+
+// Table name ref for raw SQL in interval queries
+const auditTable = getTableName(authAuditLog)
 
 // =============================================================================
 // Types
@@ -99,26 +103,16 @@ async function flushAuditBuffer(): Promise<void> {
   const entries = auditBuffer.splice(0, auditBuffer.length)
 
   try {
-    // Batch insert for performance
-    const values = entries.map((entry, i) => {
-      const offset = i * 7
-      return `($${offset + 1}, $${offset + 2}, $${offset + 3}, $${offset + 4}, $${offset + 5}, $${offset + 6}, $${offset + 7})`
-    }).join(', ')
-
-    const params = entries.flatMap(entry => [
-      entry.event_type,
-      entry.user_id,
-      entry.ip_address,
-      entry.user_agent,
-      JSON.stringify(entry.details),
-      entry.severity,
-      new Date(),
-    ])
-
-    await query(
-      `INSERT INTO ${TABLE_NAMES.AUTH_AUDIT_LOG} (event_type, user_id, ip_address, user_agent, details, severity, created_at)
-       VALUES ${values}`,
-      params
+    // Batch insert using Drizzle
+    await db.insert(authAuditLog).values(
+      entries.map(entry => ({
+        eventType: entry.event_type,
+        userId: entry.user_id,
+        ipAddress: entry.ip_address,
+        userAgent: entry.user_agent,
+        details: entry.details,
+        severity: entry.severity,
+      }))
     )
   } catch (error) {
     // On error, put entries back in buffer (at the front)
@@ -165,18 +159,14 @@ export async function logAuditEventSync(
   entry: Omit<AuditLogEntry, 'id' | 'created_at'>
 ): Promise<void> {
   try {
-    await query(
-      `INSERT INTO ${TABLE_NAMES.AUTH_AUDIT_LOG} (event_type, user_id, ip_address, user_agent, details, severity, created_at)
-       VALUES ($1, $2, $3, $4, $5, $6, NOW())`,
-      [
-        entry.event_type,
-        entry.user_id,
-        entry.ip_address,
-        entry.user_agent,
-        JSON.stringify(entry.details),
-        entry.severity,
-      ]
-    )
+    await db.insert(authAuditLog).values({
+      eventType: entry.event_type,
+      userId: entry.user_id,
+      ipAddress: entry.ip_address,
+      userAgent: entry.user_agent,
+      details: entry.details,
+      severity: entry.severity,
+    })
   } catch (error) {
     logger.error('Failed to write audit log', { error, entry })
     // Log to logger as fallback
@@ -428,58 +418,57 @@ interface AuditQueryOptions {
 export async function queryAuditLogs(
   options: AuditQueryOptions = {}
 ): Promise<AuditLogEntry[]> {
-  const conditions: string[] = []
-  const params: unknown[] = []
-  let paramIndex = 1
+  const conditions = []
 
   if (options.userId) {
-    conditions.push(`user_id = $${paramIndex++}`)
-    params.push(options.userId)
+    conditions.push(eq(authAuditLog.userId, options.userId))
   }
 
   if (options.eventType) {
     if (Array.isArray(options.eventType)) {
-      conditions.push(`event_type = ANY($${paramIndex++})`)
-      params.push(options.eventType)
+      conditions.push(inArray(authAuditLog.eventType, options.eventType))
     } else {
-      conditions.push(`event_type = $${paramIndex++}`)
-      params.push(options.eventType)
+      conditions.push(eq(authAuditLog.eventType, options.eventType))
     }
   }
 
   if (options.severity) {
-    conditions.push(`severity = $${paramIndex++}`)
-    params.push(options.severity)
+    conditions.push(eq(authAuditLog.severity, options.severity))
   }
 
   if (options.ipAddress) {
-    conditions.push(`ip_address = $${paramIndex++}`)
-    params.push(options.ipAddress)
+    conditions.push(eq(authAuditLog.ipAddress, options.ipAddress))
   }
 
   if (options.startDate) {
-    conditions.push(`created_at >= $${paramIndex++}`)
-    params.push(options.startDate)
+    conditions.push(gte(authAuditLog.createdAt, options.startDate.toISOString()))
   }
 
   if (options.endDate) {
-    conditions.push(`created_at <= $${paramIndex++}`)
-    params.push(options.endDate)
+    conditions.push(lte(authAuditLog.createdAt, options.endDate.toISOString()))
   }
 
-  const whereClause = conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : ''
-  const limit = options.limit || 100
-  const offset = options.offset || 0
+  const limitVal = options.limit || 100
+  const offsetVal = options.offset || 0
 
-  const result = await query<AuditLogEntry>(
-    `SELECT * FROM ${TABLE_NAMES.AUTH_AUDIT_LOG}
-     ${whereClause}
-     ORDER BY created_at DESC
-     LIMIT $${paramIndex++} OFFSET $${paramIndex++}`,
-    [...params, limit, offset]
-  )
+  const rows = await db
+    .select()
+    .from(authAuditLog)
+    .where(conditions.length > 0 ? and(...conditions) : undefined)
+    .orderBy(desc(authAuditLog.createdAt))
+    .limit(limitVal)
+    .offset(offsetVal)
 
-  return result.rows
+  return rows.map(row => ({
+    id: row.id,
+    event_type: row.eventType as AuditEventType,
+    user_id: row.userId,
+    ip_address: row.ipAddress,
+    user_agent: row.userAgent ?? '',
+    details: (row.details ?? {}) as Record<string, unknown>,
+    severity: row.severity as 'info' | 'warning' | 'critical',
+    created_at: row.createdAt ? new Date(row.createdAt) : undefined,
+  }))
 }
 
 /**
@@ -489,18 +478,35 @@ export async function getRecentSuspiciousActivity(
   ipAddress: string,
   hours: number = 24
 ): Promise<AuditLogEntry[]> {
-  // Validate hours to prevent SQL injection (1-168 hours = 1 week max)
+  // Validate hours to prevent abuse (1-168 hours = 1 week max)
   const safeHours = Math.max(1, Math.min(168, Math.floor(hours)))
-  const result = await query<AuditLogEntry>(
-    `SELECT * FROM ${TABLE_NAMES.AUTH_AUDIT_LOG}
-     WHERE ip_address = $1
-       AND severity IN ('warning', 'critical')
-       AND created_at > NOW() - INTERVAL '1 hour' * $2
-     ORDER BY created_at DESC
-     LIMIT 100`,
-    [ipAddress, safeHours]
-  )
-  return result.rows
+  const result = await db.execute<{
+    id: string
+    event_type: string
+    user_id: string | null
+    ip_address: string
+    user_agent: string | null
+    details: Record<string, unknown>
+    severity: string
+    created_at: string
+  }>(sql`
+    SELECT * FROM ${sql.raw(auditTable)}
+    WHERE ip_address = ${ipAddress}
+      AND severity IN ('warning', 'critical')
+      AND created_at > NOW() - INTERVAL '1 hour' * ${safeHours}
+    ORDER BY created_at DESC
+    LIMIT 100
+  `)
+  return result.rows.map(row => ({
+    id: row.id,
+    event_type: row.event_type as AuditEventType,
+    user_id: row.user_id,
+    ip_address: row.ip_address,
+    user_agent: row.user_agent ?? '',
+    details: (row.details ?? {}) as Record<string, unknown>,
+    severity: row.severity as 'info' | 'warning' | 'critical',
+    created_at: row.created_at ? new Date(row.created_at) : undefined,
+  }))
 }
 
 /**
@@ -510,15 +516,14 @@ export async function getFailedLoginAttempts(
   userId: string,
   hours: number = 24
 ): Promise<number> {
-  // Validate hours to prevent SQL injection (1-168 hours = 1 week max)
+  // Validate hours to prevent abuse (1-168 hours = 1 week max)
   const safeHours = Math.max(1, Math.min(168, Math.floor(hours)))
-  const result = await query<{ count: string }>(
-    `SELECT COUNT(*) as count FROM ${TABLE_NAMES.AUTH_AUDIT_LOG}
-     WHERE user_id = $1
-       AND event_type = 'login_failure'
-       AND created_at > NOW() - INTERVAL '1 hour' * $2`,
-    [userId, safeHours]
-  )
+  const result = await db.execute<{ count: string }>(sql`
+    SELECT COUNT(*) as count FROM ${sql.raw(auditTable)}
+    WHERE user_id = ${userId}
+      AND event_type = 'login_failure'
+      AND created_at > NOW() - INTERVAL '1 hour' * ${safeHours}
+  `)
   return parseInt(result.rows[0]?.count || '0', 10)
 }
 

@@ -2,8 +2,9 @@
  * Workshop database queries
  */
 
-import { TABLE_NAMES } from '@/config/database'
-import { query } from './db-connection'
+import { db } from '@/db'
+import { workshops, workshopInstances, workshopRegistrations } from '@/db/schema'
+import { eq, and, ne, desc } from 'drizzle-orm'
 
 // ============================================================================
 // Workshop queries
@@ -18,88 +19,140 @@ export interface DbWorkshop {
   duration: string | null
   level: string | null
   max_participants: number | null
-  price_cents: number
-  is_active: boolean
-  created_at: Date
-  updated_at: Date
+  price_cents: number | null
+  is_active: boolean | null
+  created_at: string | null
+  updated_at: string | null
 }
 
 export interface DbWorkshopRegistration {
   id: string
   user_id: string
   workshop_instance_id: string
-  status: string
-  payment_status: string
+  status: string | null
+  payment_status: string | null
   payment_amount_cents: number | null
   payment_reference: string | null
-  attended: boolean
+  attended: boolean | null
   rating: number | null
   feedback: string | null
   notes: string | null
-  confirmed_at: Date | null
-  cancelled_at: Date | null
-  created_at: Date
-  updated_at: Date
+  confirmed_at: string | null
+  cancelled_at: string | null
+  created_at: string | null
+  updated_at: string | null
 }
 
 /**
  * Get workshop by slug
  */
 export async function getWorkshopBySlug(slug: string): Promise<DbWorkshop | null> {
-  const result = await query<DbWorkshop>(
-    `SELECT * FROM ${TABLE_NAMES.WORKSHOPS} WHERE slug = $1 AND is_active = true`,
-    [slug]
-  )
-  return result.rows[0] || null
+  const rows = await db
+    .select({
+      id: workshops.id,
+      slug: workshops.slug,
+      title: workshops.title,
+      description: workshops.description,
+      category: workshops.category,
+      duration: workshops.duration,
+      level: workshops.level,
+      max_participants: workshops.maxParticipants,
+      price_cents: workshops.priceCents,
+      is_active: workshops.isActive,
+      created_at: workshops.createdAt,
+      updated_at: workshops.updatedAt,
+    })
+    .from(workshops)
+    .where(and(eq(workshops.slug, slug), eq(workshops.isActive, true)))
+
+  return rows[0] ?? null
 }
 
 /**
  * Get workshops for user (registered or not)
  */
 export async function getWorkshopsForUser(userId: string): Promise<Array<DbWorkshop & { registration_status?: string }>> {
-  const result = await query<DbWorkshop & { registration_status?: string }>(
-    `SELECT
-       w.*,
-       wr.status as registration_status
-     FROM ${TABLE_NAMES.WORKSHOPS} w
-     LEFT JOIN ${TABLE_NAMES.WORKSHOP_INSTANCES} wi ON w.id = wi.workshop_id
-     LEFT JOIN ${TABLE_NAMES.WORKSHOP_REGISTRATIONS} wr ON wi.id = wr.workshop_instance_id AND wr.user_id = $1
-     WHERE w.is_active = true
-     ORDER BY w.created_at DESC`,
-    [userId]
-  )
-  return result.rows
+  const rows = await db
+    .select({
+      id: workshops.id,
+      slug: workshops.slug,
+      title: workshops.title,
+      description: workshops.description,
+      category: workshops.category,
+      duration: workshops.duration,
+      level: workshops.level,
+      max_participants: workshops.maxParticipants,
+      price_cents: workshops.priceCents,
+      is_active: workshops.isActive,
+      created_at: workshops.createdAt,
+      updated_at: workshops.updatedAt,
+      registration_status: workshopRegistrations.status,
+    })
+    .from(workshops)
+    .leftJoin(workshopInstances, eq(workshops.id, workshopInstances.workshopId))
+    .leftJoin(
+      workshopRegistrations,
+      and(
+        eq(workshopInstances.id, workshopRegistrations.workshopInstanceId),
+        eq(workshopRegistrations.userId, userId)
+      )
+    )
+    .where(eq(workshops.isActive, true))
+    .orderBy(desc(workshops.createdAt))
+
+  return rows as Array<DbWorkshop & { registration_status?: string }>
 }
 
 /**
  * Get user's workshop registrations
  */
 export async function getUserWorkshopRegistrations(userId: string): Promise<Array<DbWorkshopRegistration & { workshop_title: string, workshop_slug: string }>> {
-  const result = await query<DbWorkshopRegistration & { workshop_title: string, workshop_slug: string }>(
-    `SELECT
-       wr.*,
-       w.title as workshop_title,
-       w.slug as workshop_slug
-     FROM ${TABLE_NAMES.WORKSHOP_REGISTRATIONS} wr
-     JOIN ${TABLE_NAMES.WORKSHOP_INSTANCES} wi ON wr.workshop_instance_id = wi.id
-     JOIN ${TABLE_NAMES.WORKSHOPS} w ON wi.workshop_id = w.id
-     WHERE wr.user_id = $1
-     ORDER BY wr.created_at DESC`,
-    [userId]
-  )
-  return result.rows
+  const rows = await db
+    .select({
+      id: workshopRegistrations.id,
+      user_id: workshopRegistrations.userId,
+      workshop_instance_id: workshopRegistrations.workshopInstanceId,
+      status: workshopRegistrations.status,
+      payment_status: workshopRegistrations.paymentStatus,
+      payment_amount_cents: workshopRegistrations.paymentAmountCents,
+      payment_reference: workshopRegistrations.paymentReference,
+      attended: workshopRegistrations.attended,
+      rating: workshopRegistrations.rating,
+      feedback: workshopRegistrations.feedback,
+      notes: workshopRegistrations.notes,
+      confirmed_at: workshopRegistrations.confirmedAt,
+      cancelled_at: workshopRegistrations.cancelledAt,
+      created_at: workshopRegistrations.createdAt,
+      updated_at: workshopRegistrations.updatedAt,
+      workshop_title: workshops.title,
+      workshop_slug: workshops.slug,
+    })
+    .from(workshopRegistrations)
+    .innerJoin(workshopInstances, eq(workshopRegistrations.workshopInstanceId, workshopInstances.id))
+    .innerJoin(workshops, eq(workshopInstances.workshopId, workshops.id))
+    .where(eq(workshopRegistrations.userId, userId))
+    .orderBy(desc(workshopRegistrations.createdAt))
+
+  return rows
 }
 
 /**
  * Check if user is registered for a workshop
  */
 export async function isUserRegisteredForWorkshop(userId: string, workshopSlug: string): Promise<boolean> {
-  const result = await query(
-    `SELECT 1 FROM ${TABLE_NAMES.WORKSHOP_REGISTRATIONS} wr
-     JOIN ${TABLE_NAMES.WORKSHOP_INSTANCES} wi ON wr.workshop_instance_id = wi.id
-     JOIN ${TABLE_NAMES.WORKSHOPS} w ON wi.workshop_id = w.id
-     WHERE wr.user_id = $1 AND w.slug = $2 AND wr.status != 'cancelled'`,
-    [userId, workshopSlug]
-  )
-  return result.rows.length > 0
+  const rows = await db
+    .select({ id: workshopRegistrations.id })
+    .from(workshopRegistrations)
+    .innerJoin(workshopInstances, eq(workshopRegistrations.workshopInstanceId, workshopInstances.id))
+    .innerJoin(workshops, eq(workshopInstances.workshopId, workshops.id))
+    .where(
+      and(
+        eq(workshopRegistrations.userId, userId),
+        eq(workshops.slug, workshopSlug),
+        ne(workshopRegistrations.status, 'cancelled')
+      )
+    )
+    .limit(1)
+
+  return rows.length > 0
 }
