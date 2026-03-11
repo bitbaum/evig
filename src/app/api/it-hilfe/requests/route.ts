@@ -1,9 +1,11 @@
 import { NextRequest } from 'next/server'
 import { auth } from '@/auth'
-import { query, paginatedQuery } from '@/lib/auth/db'
+import { db } from '@/db'
+import { sql, getTableName, SQL } from 'drizzle-orm'
+import { itHilfeRequests } from '@/db/schema/itHilfe'
+import { users } from '@/db/schema/auth'
 import { apiError, apiSuccess, apiUnauthorized, apiBadRequest, parsePagination } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
-import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
 import {
   getCategoryIds,
@@ -17,7 +19,10 @@ import { sanitizeInput } from '@/lib/security/sanitize'
 import { itHilfeRequestSchema, validateAndRespond } from '@/lib/schemas/it-hilfe'
 import { type RequestRow, mapRequestListRow } from '@/lib/it-hilfe/request-mapper'
 import { sendRequestCreatedNotifications } from '@/lib/it-hilfe/notifications'
-import { QueryParams } from '@/lib/api/query-builder'
+
+// Table name refs
+const rTable = getTableName(itHilfeRequests)
+const uTable = getTableName(users)
 
 /**
  * GET /api/it-hilfe/requests
@@ -39,68 +44,80 @@ export async function GET(request: NextRequest) {
     const { limit, offset } = parsePagination(request, { defaultLimit: 20, maxLimit: 50 })
 
     // Map frontend sort values to DB columns
-    const sortMap: Record<string, { field: string; order: string }> = {
-      newest: { field: 'created_at', order: 'DESC' },
-      urgent: { field: 'urgency', order: 'DESC' },
-      budget_high: { field: 'budget_amount_cents', order: 'DESC' },
-      offers: { field: 'offer_count', order: 'DESC' },
+    const sortMap: Record<string, string> = {
+      newest: 'r.created_at DESC',
+      urgent: 'r.urgency DESC',
+      budget_high: 'r.budget_amount_cents DESC',
+      offers: 'r.offer_count DESC',
     }
     const sortParam = searchParams.get('sort') || searchParams.get('sortBy') || 'newest'
-    const sortConfig = sortMap[sortParam] || sortMap.newest
+    const sortClause = sortMap[sortParam] || sortMap.newest
 
     // Build WHERE conditions
-    const qb = new QueryParams()
-    qb.add('r.status = $P', status)
-    qb.addRaw('r.expires_at > NOW()')
+    const conditions: SQL[] = [
+      sql`r.status = ${status}`,
+      sql`r.expires_at > NOW()`,
+    ]
 
     if (category && getCategoryIds().includes(category)) {
-      qb.add('r.category_id = $P', category)
+      conditions.push(sql`r.category_id = ${category}`)
     }
 
     if (canton) {
-      qb.add('r.canton = $P', canton)
+      conditions.push(sql`r.canton = ${canton}`)
     }
 
     if (urgency && URGENCY_LEVELS.some(u => u.id === urgency)) {
-      qb.add('r.urgency = $P', urgency)
+      conditions.push(sql`r.urgency = ${urgency}`)
     }
 
     // Budget filter: 'free' for null/0, 'paid' for amount > 0
     if (budgetType === 'free') {
-      qb.addRaw('(r.budget_amount_cents IS NULL OR r.budget_amount_cents = 0)')
+      conditions.push(sql`(r.budget_amount_cents IS NULL OR r.budget_amount_cents = 0)`)
     } else if (budgetType === 'paid') {
-      qb.addRaw('r.budget_amount_cents > 0')
+      conditions.push(sql`r.budget_amount_cents > 0`)
     }
 
     if (serviceType && SERVICE_TYPES.some(s => s.id === serviceType)) {
-      qb.add('r.service_type = $P', serviceType)
+      conditions.push(sql`r.service_type = ${serviceType}`)
     }
 
     if (skill && getSkillIds().includes(skill)) {
-      qb.add('$P = ANY(r.skills_needed)', skill)
+      conditions.push(sql`${skill} = ANY(r.skills_needed)`)
     }
 
     // Text search across title, description, device brand/model
     if (search && search.trim().length >= 2) {
       const searchPattern = `%${search.trim()}%`
-      qb.add('(r.title ILIKE $P OR r.description ILIKE $P OR r.device_brand ILIKE $P OR r.device_model ILIKE $P)', searchPattern)
+      conditions.push(sql`(r.title ILIKE ${searchPattern} OR r.description ILIKE ${searchPattern} OR r.device_brand ILIKE ${searchPattern} OR r.device_model ILIKE ${searchPattern})`)
     }
 
-    const { where: whereClause, params, nextIndex } = qb.build()
+    const whereClause = sql`WHERE ${sql.join(conditions, sql` AND `)}`
 
     // Query requests with requester name (single query with COUNT(*) OVER())
-    const { rows: rawRequests, total } = await paginatedQuery<RequestRow>(`
+    const result = await db.execute(sql`
       SELECT
+        COUNT(*) OVER() AS _total_count,
         r.*,
         u.name as requester_name
-      FROM ${TABLE_NAMES.IT_HILFE_REQUESTS} r
-      JOIN ${TABLE_NAMES.USERS} u ON r.requester_id = u.id
+      FROM ${sql.raw(rTable)} r
+      JOIN ${sql.raw(uTable)} u ON r.requester_id = u.id
       ${whereClause}
-      ORDER BY r.${sortConfig.field} ${sortConfig.order}
-      LIMIT $${nextIndex} OFFSET $${nextIndex + 1}
-    `, [...params, limit, offset])
+      ORDER BY ${sql.raw(sortClause)}
+      LIMIT ${limit} OFFSET ${offset}
+    `)
 
-    const requests = rawRequests.map(mapRequestListRow)
+    // Extract total from first row (0 if no rows returned)
+    type RowWithCount = RequestRow & { _total_count: string }
+    const rawRequests = result.rows as unknown as RowWithCount[]
+    const total = rawRequests.length > 0
+      ? parseInt(rawRequests[0]._total_count || '0', 10)
+      : 0
+
+    // Strip _total_count and map
+    const requests = rawRequests.map(({ _total_count, ...rest }) =>
+      mapRequestListRow(rest as unknown as RequestRow)
+    )
 
     logger.info('Fetched IT-Hilfe requests', {
       status,
@@ -182,35 +199,13 @@ export async function POST(request: NextRequest) {
     const budgetAmountCents = (maxBudgetCents && maxBudgetCents > 0) ? maxBudgetCents : null
 
     // Insert the request with sanitized data
-    const result = await query(`
-      INSERT INTO ${TABLE_NAMES.IT_HILFE_REQUESTS} (
-        requester_id,
-        category_id,
-        device_brand,
-        device_model,
-        title,
-        description,
-        urgency,
-        budget_type,
-        budget_amount_cents,
-        postal_code,
-        city,
-        canton,
-        service_type,
-        skills_needed,
-        image_urls,
-        ai_diagnosis
-      ) VALUES (
-        $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16
-      )
-      RETURNING id
-    `, [
-      session.user.id,
+    const [insertedRow] = await db.insert(itHilfeRequests).values({
+      requesterId: session.user.id,
       categoryId,
-      deviceBrand || null,
-      deviceModel || null,
-      sanitizedTitle,
-      sanitizedDescription,
+      deviceBrand: deviceBrand || null,
+      deviceModel: deviceModel || null,
+      title: sanitizedTitle,
+      description: sanitizedDescription,
       urgency,
       budgetType,
       budgetAmountCents,
@@ -218,12 +213,12 @@ export async function POST(request: NextRequest) {
       city,
       canton,
       serviceType,
-      skillsNeeded && skillsNeeded.length > 0 ? skillsNeeded : null,
-      imageUrls.length > 0 ? imageUrls : null,
-      aiDiagnosis || null,
-    ])
+      skillsNeeded: skillsNeeded && skillsNeeded.length > 0 ? skillsNeeded : null,
+      imageUrls: imageUrls.length > 0 ? imageUrls : null,
+      aiDiagnosis: aiDiagnosis || null,
+    }).returning({ id: itHilfeRequests.id })
 
-    const requestId = (result.rows[0] as { id: string }).id
+    const requestId = insertedRow.id
 
     logger.info('Created IT-Hilfe request', {
       requestId,

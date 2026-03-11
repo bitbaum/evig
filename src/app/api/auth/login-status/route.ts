@@ -1,7 +1,8 @@
 import { NextRequest } from 'next/server'
-import { getUserByEmail, query } from '@/lib/auth/db'
-import { logger } from '@/lib/logger'
-import { TABLE_NAMES } from '@/config/database'
+import { getUserByEmail } from '@/lib/auth/db'
+import { db } from '@/db'
+import { userLockouts } from '@/db/schema/auth'
+import { eq } from 'drizzle-orm'
 import { apiSuccess, apiBadRequest, apiError, apiRateLimited } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { createRateLimiter, getClientIdentifier } from '@/lib/security/rate-limit'
@@ -33,14 +34,14 @@ export async function POST(req: NextRequest) {
       let locked = false
       let lockedUntil: string | null = null
       try {
-        const res = await query<{ locked_until: Date | null }>(
-          `SELECT locked_until FROM ${TABLE_NAMES.USER_LOCKOUTS} WHERE user_id = $1`,
-          [user.id]
-        )
-        const rec = res.rows[0]
-        if (rec?.locked_until && new Date(rec.locked_until) > new Date()) {
+        const [lockout] = await db
+          .select({ lockedUntil: userLockouts.lockedUntil })
+          .from(userLockouts)
+          .where(eq(userLockouts.userId, user.id))
+
+        if (lockout?.lockedUntil && new Date(lockout.lockedUntil) > new Date()) {
           locked = true
-          lockedUntil = new Date(rec.locked_until).toISOString()
+          lockedUntil = new Date(lockout.lockedUntil).toISOString()
         }
       } catch {
         // Lockout table might not exist, ignore

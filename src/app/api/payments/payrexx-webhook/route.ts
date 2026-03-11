@@ -14,8 +14,9 @@
  */
 
 import { NextRequest } from 'next/server';
-import { query } from '@/lib/auth/db';
-import { TABLE_NAMES } from '@/config/database';
+import { db } from '@/db';
+import { marketplaceOrders, listings, users } from '@/db/schema';
+import { eq, and, sql } from 'drizzle-orm';
 import { logger } from '@/lib/logger';
 import { apiSuccess, apiError, apiBadRequest, apiUnauthorized, apiNotFound } from '@/lib/api/helpers';
 import { sendCustomEmail } from '@/lib/email';
@@ -96,25 +97,23 @@ export async function POST(request: NextRequest) {
     logger.info('Payrexx webhook received', { referenceId, transactionId, status });
 
     // Look up order by referenceId (= orderId)
-    const orderResult = await query<{
-      id: string;
-      buyer_id: string;
-      seller_id: string;
-      listing_id: string;
-      amount_chf: number;
-      commission_chf: number;
-      seller_payout_chf: number;
-      status: string;
-      delivery_method: string;
-      payment_provider: string;
-    }>(
-      `SELECT id, buyer_id, seller_id, listing_id, amount_chf, commission_chf,
-              seller_payout_chf, status, delivery_method, payment_provider
-       FROM ${TABLE_NAMES.MARKETPLACE_ORDERS} WHERE id = $1`,
-      [referenceId]
-    );
+    const orderRows = await db
+      .select({
+        id: marketplaceOrders.id,
+        buyerId: marketplaceOrders.buyerId,
+        sellerId: marketplaceOrders.sellerId,
+        listingId: marketplaceOrders.listingId,
+        amountChf: marketplaceOrders.amountChf,
+        commissionChf: marketplaceOrders.commissionChf,
+        sellerPayoutChf: marketplaceOrders.sellerPayoutChf,
+        status: marketplaceOrders.status,
+        deliveryMethod: marketplaceOrders.deliveryMethod,
+        paymentProvider: marketplaceOrders.paymentProvider,
+      })
+      .from(marketplaceOrders)
+      .where(eq(marketplaceOrders.id, referenceId))
 
-    const order = orderResult.rows[0];
+    const order = orderRows[0];
     if (!order) {
       logger.warn('Payrexx webhook: order not found', { referenceId });
       return apiNotFound('Order');
@@ -132,12 +131,14 @@ export async function POST(request: NextRequest) {
           return apiSuccess({ received: true });
         }
 
-        await query(
-          `UPDATE ${TABLE_NAMES.MARKETPLACE_ORDERS}
-           SET status = $1, payrexx_transaction_id = $2, updated_at = NOW()
-           WHERE id = $3`,
-          [ORDER_STATUS.PAID, transactionId, order.id]
-        );
+        await db
+          .update(marketplaceOrders)
+          .set({
+            status: ORDER_STATUS.PAID,
+            payrexxTransactionId: transactionId,
+            updatedAt: sql`NOW()`,
+          })
+          .where(eq(marketplaceOrders.id, order.id))
 
         logger.info('Marketplace order marked paid via Payrexx', {
           orderId: order.id,
@@ -161,12 +162,13 @@ export async function POST(request: NextRequest) {
           return apiSuccess({ received: true });
         }
 
-        await query(
-          `UPDATE ${TABLE_NAMES.MARKETPLACE_ORDERS}
-           SET status = $1, updated_at = NOW()
-           WHERE id = $2`,
-          [ORDER_STATUS.COMPLETED, order.id]
-        );
+        await db
+          .update(marketplaceOrders)
+          .set({
+            status: ORDER_STATUS.COMPLETED,
+            updatedAt: sql`NOW()`,
+          })
+          .where(eq(marketplaceOrders.id, order.id))
         break;
       }
 
@@ -177,19 +179,24 @@ export async function POST(request: NextRequest) {
           return apiSuccess({ received: true });
         }
 
-        await query(
-          `UPDATE ${TABLE_NAMES.MARKETPLACE_ORDERS}
-           SET status = $1, updated_at = NOW()
-           WHERE id = $2`,
-          [ORDER_STATUS.CANCELLED, order.id]
-        );
+        await db
+          .update(marketplaceOrders)
+          .set({
+            status: ORDER_STATUS.CANCELLED,
+            updatedAt: sql`NOW()`,
+          })
+          .where(eq(marketplaceOrders.id, order.id))
 
         // Restore listing to active
-        await query(
-          `UPDATE ${TABLE_NAMES.LISTINGS} SET status = $1
-           WHERE id = $2 AND status = $3`,
-          [LISTING_STATUS.ACTIVE, order.listing_id, LISTING_STATUS.RESERVED]
-        );
+        await db
+          .update(listings)
+          .set({ status: LISTING_STATUS.ACTIVE })
+          .where(
+            and(
+              eq(listings.id, order.listingId),
+              eq(listings.status, LISTING_STATUS.RESERVED)
+            )
+          )
 
         logger.info('Marketplace order cancelled via Payrexx webhook', {
           orderId: order.id,
@@ -200,12 +207,13 @@ export async function POST(request: NextRequest) {
 
       case 'refunded':
       case 'partially-refunded': {
-        await query(
-          `UPDATE ${TABLE_NAMES.MARKETPLACE_ORDERS}
-           SET status = $1, updated_at = NOW()
-           WHERE id = $2`,
-          [ORDER_STATUS.REFUNDED, order.id]
-        );
+        await db
+          .update(marketplaceOrders)
+          .set({
+            status: ORDER_STATUS.REFUNDED,
+            updatedAt: sql`NOW()`,
+          })
+          .where(eq(marketplaceOrders.id, order.id))
 
         logger.info('Marketplace order refunded via Payrexx webhook', {
           orderId: order.id,
@@ -230,49 +238,53 @@ export async function POST(request: NextRequest) {
 
 async function sendOrderEmails(order: {
   id: string;
-  buyer_id: string;
-  seller_id: string;
-  listing_id: string;
-  amount_chf: number;
-  commission_chf: number;
-  seller_payout_chf: number;
-  delivery_method: string;
+  buyerId: string;
+  sellerId: string;
+  listingId: string;
+  amountChf: string;
+  commissionChf: string;
+  sellerPayoutChf: string;
+  deliveryMethod: string;
 }) {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
   const orderUrl = `${baseUrl}/dashboard/orders/${order.id}`;
-  const deliveryLabel = DELIVERY_LABELS[order.delivery_method as DeliveryOption] || order.delivery_method;
+  const deliveryLabel = DELIVERY_LABELS[order.deliveryMethod as DeliveryOption] || order.deliveryMethod;
 
   // Fetch listing title + buyer/seller info
-  const infoResult = await query<{
-    title: string;
-    buyer_name: string | null;
-    buyer_email: string | null;
-    seller_name: string | null;
-    seller_email: string | null;
-  }>(
-    `SELECT l.title,
-            bu.name as buyer_name, bu.email as buyer_email,
-            su.name as seller_name, su.email as seller_email
-     FROM ${TABLE_NAMES.MARKETPLACE_ORDERS} o
-     JOIN ${TABLE_NAMES.LISTINGS} l ON o.listing_id = l.id
-     JOIN ${TABLE_NAMES.USERS} bu ON o.buyer_id = bu.id
-     JOIN ${TABLE_NAMES.USERS} su ON o.seller_id = su.id
-     WHERE o.id = $1`,
-    [order.id]
-  );
+  const infoRows = await db
+    .select({
+      title: listings.title,
+      buyerName: users.name,
+      buyerEmail: users.email,
+    })
+    .from(marketplaceOrders)
+    .innerJoin(listings, eq(marketplaceOrders.listingId, listings.id))
+    .innerJoin(users, eq(marketplaceOrders.buyerId, users.id))
+    .where(eq(marketplaceOrders.id, order.id))
 
-  const info = infoResult.rows[0];
-  if (!info) return;
+  const buyerInfo = infoRows[0];
+  if (!buyerInfo) return;
+
+  // Fetch seller info separately (different user join)
+  const sellerRows = await db
+    .select({
+      sellerName: users.name,
+      sellerEmail: users.email,
+    })
+    .from(users)
+    .where(eq(users.id, order.sellerId))
+
+  const sellerInfo = sellerRows[0];
 
   // Buyer confirmation
-  if (info.buyer_email) {
+  if (buyerInfo.buyerEmail) {
     await sendCustomEmail(
-      info.buyer_email,
+      buyerInfo.buyerEmail,
       orderConfirmationBuyer({
-        recipientName: info.buyer_name || 'Käufer',
-        listingTitle: info.title,
-        amountChf: formatCHF(Number(order.amount_chf)),
-        commissionChf: formatCHF(Number(order.commission_chf)),
+        recipientName: buyerInfo.buyerName || 'Käufer',
+        listingTitle: buyerInfo.title,
+        amountChf: formatCHF(Number(order.amountChf)),
+        commissionChf: formatCHF(Number(order.commissionChf)),
         deliveryMethod: deliveryLabel,
         orderUrl,
       })
@@ -280,14 +292,14 @@ async function sendOrderEmails(order: {
   }
 
   // Seller notification
-  if (info.seller_email) {
+  if (sellerInfo?.sellerEmail) {
     await sendCustomEmail(
-      info.seller_email,
+      sellerInfo.sellerEmail,
       newOrderNotificationSeller({
-        recipientName: info.seller_name || 'Verkäufer',
-        buyerName: info.buyer_name || 'Käufer',
-        listingTitle: info.title,
-        payoutAmountChf: formatCHF(Number(order.seller_payout_chf)),
+        recipientName: sellerInfo.sellerName || 'Verkäufer',
+        buyerName: buyerInfo.buyerName || 'Käufer',
+        listingTitle: buyerInfo.title,
+        payoutAmountChf: formatCHF(Number(order.sellerPayoutChf)),
         deliveryMethod: deliveryLabel,
         orderUrl: `${baseUrl}/dashboard/orders/${order.id}`,
       })

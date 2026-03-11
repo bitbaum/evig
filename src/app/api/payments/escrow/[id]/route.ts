@@ -1,14 +1,16 @@
 import { NextRequest } from 'next/server'
 import { withAuth } from '@/lib/api/middleware'
 import { requireStripeClient } from '@/lib/payments/stripe-client'
-import { query } from '@/lib/auth/db'
+import { db } from '@/db'
+import { escrowAccounts, escrowReleases, paymentTransactions, users } from '@/db/schema'
+import { eq, and, sql } from 'drizzle-orm'
 import { apiError, apiSuccess, apiUnauthorized, apiNotFound, apiBadRequest } from '@/lib/api/helpers'
-import { TABLE_NAMES } from '@/config/database'
 import { PAYMENT_STATUS, ESCROW_STATUS } from '@/config/payment-status'
 import { logger } from '@/lib/logger'
 import { validateBody, EscrowReleaseSchema } from '@/lib/schemas'
 
 interface EscrowRow {
+  [key: string]: unknown
   id: string
   transaction_id: string
   buyer_id: string
@@ -38,28 +40,13 @@ interface EscrowRow {
   }> | null
 }
 
-// Simpler escrow row for release operations
-interface EscrowReleaseRow {
-  id: string
-  transaction_id: string
-  buyer_id: string
-  seller_id: string | null
-  total_amount_cents: number
-  released_amount_cents: number
-  currency: string
-  status: string
-  provider_id: string
-  provider_transaction_id: string
-  transaction_amount: number
-}
-
 // GET /api/payments/escrow/[id] - Get escrow account details
 export const GET = withAuth<{ id: string }>(async (request, session, context) => {
   try {
     const { id: escrowId } = context!.params!
 
-    // Get escrow account details
-    const escrowResult = await query(`
+    // Complex query with ARRAY_AGG — use raw SQL via Drizzle sql template
+    const escrowResult = await db.execute<EscrowRow>(sql`
       SELECT
         ea.*,
         pt.provider_transaction_id,
@@ -79,20 +66,20 @@ export const GET = withAuth<{ id: string }>(async (request, session, context) =>
             'released_by', er.released_by
           )
         ) FILTER (WHERE er.id IS NOT NULL) as releases
-      FROM ${TABLE_NAMES.ESCROW_ACCOUNTS} ea
-      JOIN ${TABLE_NAMES.PAYMENT_TRANSACTIONS} pt ON ea.transaction_id = pt.id
-      JOIN ${TABLE_NAMES.USERS} b ON ea.buyer_id = b.id
-      LEFT JOIN ${TABLE_NAMES.USERS} s ON ea.seller_id = s.id
-      LEFT JOIN ${TABLE_NAMES.ESCROW_RELEASES} er ON ea.id = er.escrow_account_id
-      WHERE ea.id = $1
+      FROM ${escrowAccounts} ea
+      JOIN ${paymentTransactions} pt ON ea.transaction_id = pt.id
+      JOIN ${users} b ON ea.buyer_id = b.id
+      LEFT JOIN ${users} s ON ea.seller_id = s.id
+      LEFT JOIN ${escrowReleases} er ON ea.id = er.escrow_account_id
+      WHERE ea.id = ${escrowId}
       GROUP BY ea.id, pt.provider_transaction_id, pt.amount_cents, pt.currency, b.name, b.email, s.name, s.email
-    `, [escrowId])
+    `)
 
     if (escrowResult.rows.length === 0) {
       return apiNotFound('Treuhandkonto nicht gefunden')
     }
 
-    const escrow = escrowResult.rows[0] as EscrowRow
+    const escrow = escrowResult.rows[0]
 
     // Check permissions - buyer, seller, or admin can view
     const isAdmin = session.user.isStaff
@@ -133,6 +120,21 @@ export const GET = withAuth<{ id: string }>(async (request, session, context) =>
   }
 })
 
+// Simpler escrow row for release operations
+interface EscrowReleaseRow {
+  id: string
+  transactionId: string
+  buyerId: string
+  sellerId: string | null
+  totalAmountCents: number
+  releasedAmountCents: number
+  currency: string
+  status: string
+  providerId: string
+  providerTransactionId: string
+  transactionAmount: number
+}
+
 // POST /api/payments/escrow/[id]/release - Release escrow funds
 export const POST = withAuth<{ id: string }>(async (request, session, context) => {
   // Initialize Stripe lazily inside handler to avoid build-time errors
@@ -145,33 +147,45 @@ export const POST = withAuth<{ id: string }>(async (request, session, context) =
     if (!validation.success) return validation.error
     const { amount, reason, releaseType } = validation.data
 
-    // Get escrow account
-    const escrowResult = await query(`
-      SELECT
-        ea.*,
-        pt.provider_transaction_id,
-        pt.amount_cents as transaction_amount,
-        pt.currency
-      FROM ${TABLE_NAMES.ESCROW_ACCOUNTS} ea
-      JOIN ${TABLE_NAMES.PAYMENT_TRANSACTIONS} pt ON ea.transaction_id = pt.id
-      WHERE ea.id = $1 AND ea.status = '${ESCROW_STATUS.ACTIVE}'
-    `, [escrowId])
+    // Get escrow account with transaction details
+    const escrowRows = await db
+      .select({
+        id: escrowAccounts.id,
+        transactionId: escrowAccounts.transactionId,
+        buyerId: escrowAccounts.buyerId,
+        sellerId: escrowAccounts.sellerId,
+        totalAmountCents: escrowAccounts.totalAmountCents,
+        releasedAmountCents: escrowAccounts.releasedAmountCents,
+        currency: escrowAccounts.currency,
+        status: escrowAccounts.status,
+        providerId: paymentTransactions.providerId,
+        providerTransactionId: paymentTransactions.providerTransactionId,
+        transactionAmount: paymentTransactions.amountCents,
+      })
+      .from(escrowAccounts)
+      .innerJoin(paymentTransactions, eq(escrowAccounts.transactionId, paymentTransactions.id))
+      .where(
+        and(
+          eq(escrowAccounts.id, escrowId),
+          eq(escrowAccounts.status, ESCROW_STATUS.ACTIVE)
+        )
+      )
 
-    if (escrowResult.rows.length === 0) {
+    if (escrowRows.length === 0) {
       return apiNotFound('Aktives Treuhandkonto nicht gefunden')
     }
 
-    const escrow = escrowResult.rows[0] as EscrowReleaseRow
+    const escrow = escrowRows[0] as EscrowReleaseRow
 
     // Check permissions - only buyer or admin can release funds
     const isAdmin = session.user.isStaff
 
-    if (escrow.buyer_id !== session.user.id && !isAdmin) {
+    if (escrow.buyerId !== session.user.id && !isAdmin) {
       return apiUnauthorized('Nur der Käufer kann Treuhandgelder freigeben')
     }
 
     const releaseAmountCents = Math.round(amount * 100)
-    const availableAmount = escrow.total_amount_cents - escrow.released_amount_cents
+    const availableAmount = escrow.totalAmountCents - escrow.releasedAmountCents
 
     if (releaseAmountCents > availableAmount) {
       return apiBadRequest(`Freigabebetrag übersteigt verfügbares Guthaben. Maximum: ${(availableAmount / 100).toFixed(2)} ${escrow.currency}`)
@@ -183,85 +197,63 @@ export const POST = withAuth<{ id: string }>(async (request, session, context) =
     try {
       if (isFullRelease) {
         // Capture the full payment with Stripe
-        await stripe.paymentIntents.capture(escrow.provider_transaction_id, {
-          amount_to_capture: escrow.total_amount_cents - escrow.released_amount_cents
+        await stripe.paymentIntents.capture(escrow.providerTransactionId!, {
+          amount_to_capture: escrow.totalAmountCents - escrow.releasedAmountCents
         })
 
         // Update escrow status to released
-        await query(`
-          UPDATE ${TABLE_NAMES.ESCROW_ACCOUNTS}
-          SET
-            status = '${ESCROW_STATUS.RELEASED}',
-            released_amount_cents = total_amount_cents,
-            released_at = CURRENT_TIMESTAMP,
-            release_notes = $1,
-            updated_at = CURRENT_TIMESTAMP
-          WHERE id = $2
-        `, [reason || 'Funds released by buyer', escrowId])
+        await db
+          .update(escrowAccounts)
+          .set({
+            status: ESCROW_STATUS.RELEASED,
+            releasedAmountCents: sql`${escrowAccounts.totalAmountCents}`,
+            releasedAt: sql`CURRENT_TIMESTAMP`,
+            releaseNotes: reason || 'Funds released by buyer',
+            updatedAt: sql`CURRENT_TIMESTAMP`,
+          })
+          .where(eq(escrowAccounts.id, escrowId))
 
       } else {
         // Partial release - capture partial amount
-        await stripe.paymentIntents.capture(escrow.provider_transaction_id, {
+        await stripe.paymentIntents.capture(escrow.providerTransactionId!, {
           amount_to_capture: releaseAmountCents
         })
 
         // Update escrow released amount
-        await query(`
-          UPDATE ${TABLE_NAMES.ESCROW_ACCOUNTS}
-          SET
-            released_amount_cents = released_amount_cents + $1,
-            updated_at = CURRENT_TIMESTAMP
-          WHERE id = $2
-        `, [releaseAmountCents, escrowId])
+        await db
+          .update(escrowAccounts)
+          .set({
+            releasedAmountCents: sql`${escrowAccounts.releasedAmountCents} + ${releaseAmountCents}`,
+            updatedAt: sql`CURRENT_TIMESTAMP`,
+          })
+          .where(eq(escrowAccounts.id, escrowId))
       }
 
       // Create escrow release record
-      await query(`
-        INSERT INTO ${TABLE_NAMES.ESCROW_RELEASES} (
-          escrow_account_id,
-          transaction_id,
-          amount_cents,
-          release_type,
-          reason,
-          released_by
-        ) VALUES (
-          $1, $2, $3, $4, $5, $6
-        )
-      `, [
-        escrowId,
-        escrow.transaction_id,
-        releaseAmountCents,
-        isFullRelease ? 'full' : 'partial',
-        reason || 'Released by buyer',
-        session.user.id
-      ])
+      await db
+        .insert(escrowReleases)
+        .values({
+          escrowAccountId: escrowId,
+          transactionId: escrow.transactionId,
+          amountCents: releaseAmountCents,
+          releaseType: isFullRelease ? 'full' : 'partial',
+          reason: reason || 'Released by buyer',
+          releasedBy: session.user.id,
+        })
 
       // Create payment transaction record for the release
-      const releaseTransaction = await query(`
-        INSERT INTO ${TABLE_NAMES.PAYMENT_TRANSACTIONS} (
-          user_id,
-          provider_id,
-          provider_transaction_id,
-          type,
-          status,
-          amount_cents,
-          currency,
-          description,
-          provider_response
-        ) VALUES (
-          $1, $2, $3, $4, $5, $6, $7, $8, $9
-        )
-        RETURNING id
-      `, [
-        escrow.seller_id || escrow.buyer_id, // Pay to seller if exists, otherwise refund to buyer
-        escrow.provider_id,
-        `release_${escrow.provider_transaction_id}_${Date.now()}`,
-        'transfer',
-        PAYMENT_STATUS.SUCCEEDED,
-        releaseAmountCents,
-        escrow.currency,
-        `Escrow release: ${reason || 'Released by buyer'}`,
-      ])
+      await db
+        .insert(paymentTransactions)
+        .values({
+          userId: escrow.sellerId || escrow.buyerId,
+          providerId: escrow.providerId,
+          providerTransactionId: `release_${escrow.providerTransactionId}_${Date.now()}`,
+          type: 'transfer',
+          status: PAYMENT_STATUS.SUCCEEDED,
+          amountCents: releaseAmountCents,
+          currency: escrow.currency,
+          description: `Escrow release: ${reason || 'Released by buyer'}`,
+        })
 
       return apiSuccess({
         message: isFullRelease ? 'Treuhandgelder vollständig freigegeben' : 'Treuhandgelder teilweise freigegeben',

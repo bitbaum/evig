@@ -6,17 +6,18 @@
 import { NextRequest } from 'next/server';
 import { withAuth, ValidSession } from '@/lib/api/middleware';
 import { apiSuccess, apiError, apiBadRequest } from '@/lib/api/helpers';
-import { query, paginatedQuery, transaction } from '@/lib/auth/db';
-import { TABLE_NAMES } from '@/config/database';
+import { db } from '@/db';
+import { listings, listingImages, listingSpecs, users, sellerProfiles } from '@/db/schema';
+import { eq, and, sql, gte, lte, desc, asc, count, inArray, type SQL } from 'drizzle-orm';
 import { logger } from '@/lib/logger';
 import { validateBody, validateQuery, ListingsQuerySchema, CreateListingSchema } from '@/lib/schemas';
-import { insertListingImages, upsertListingSpecs, indexListingInSearch } from '@/lib/marketplace/listing-helpers';
+import { normalizeSpecValue } from '@/config/marketplace';
+import { indexListingInSearch } from '@/lib/marketplace/listing-helpers';
 import { LISTING_STATUS } from '@/config/marketplace';
 import { sendCustomEmail } from '@/lib/email';
 import { listingPublishedConfirmation } from '@/lib/email/templates/marketplace';
 import { rateLimiters, getClientIdentifier } from '@/lib/security/rate-limit';
 import { sanitizeInput } from '@/lib/security/sanitize';
-import { QueryParams } from '@/lib/api/query-builder';
 
 // ============================================================================
 // GET — Public browse
@@ -38,113 +39,154 @@ export async function GET(request: NextRequest) {
     if (!validation.success) return validation.error;
     const filters = validation.data;
 
-    // Build dynamic WHERE clauses
-    const qb = new QueryParams();
-    qb.addRaw(`l.status = '${LISTING_STATUS.ACTIVE}'`);
+    // Build dynamic WHERE conditions
+    const conditions: SQL[] = [eq(listings.status, LISTING_STATUS.ACTIVE)];
 
     if (filters.category) {
-      qb.add('l.category = $P', filters.category);
+      conditions.push(eq(listings.category, filters.category));
     }
     if (filters.condition) {
-      qb.add('l.condition = $P', filters.condition);
+      conditions.push(eq(listings.condition, filters.condition));
     }
     if (filters.delivery) {
-      qb.add("(l.delivery_options = $P OR l.delivery_options = 'both')", filters.delivery);
+      conditions.push(
+        sql`(${listings.deliveryOptions} = ${filters.delivery} OR ${listings.deliveryOptions} = 'both')`
+      );
     }
     if (filters.payment) {
-      qb.add("(l.payment_mode = $P OR l.payment_mode = 'both')", filters.payment);
+      conditions.push(
+        sql`(${listings.paymentMode} = ${filters.payment} OR ${listings.paymentMode} = 'both')`
+      );
     }
     if (filters.price_min !== undefined) {
-      qb.add('l.price_chf >= $P', filters.price_min);
+      conditions.push(gte(listings.priceChf, String(filters.price_min)));
     }
     if (filters.price_max !== undefined) {
-      qb.add('l.price_chf <= $P', filters.price_max);
+      conditions.push(lte(listings.priceChf, String(filters.price_max)));
     }
     if (filters.seller_type === 'revampit') {
-      qb.addRaw('l.is_revampit = true');
+      conditions.push(eq(listings.isRevampit, true));
     } else if (filters.seller_type === 'community') {
-      qb.addRaw('l.is_revampit = false');
+      conditions.push(eq(listings.isRevampit, false));
     }
     if (filters.gratis_only) {
-      qb.addRaw('l.price_chf = 0');
+      conditions.push(eq(listings.priceChf, '0'));
     }
     if (filters.verified_only) {
-      qb.addRaw('l.verified_at IS NOT NULL');
+      conditions.push(sql`${listings.verifiedAt} IS NOT NULL`);
     }
     if (filters.search) {
-      qb.add(
-        `to_tsvector('german', coalesce(l.title, '') || ' ' || coalesce(l.description, '') || ' ' || coalesce(l.brand, '') || ' ' || coalesce(l.model, '')) @@ plainto_tsquery('german', $P)`,
-        filters.search
+      conditions.push(
+        sql`to_tsvector('german', coalesce(${listings.title}, '') || ' ' || coalesce(${listings.description}, '') || ' ' || coalesce(${listings.brand}, '') || ' ' || coalesce(${listings.model}, '')) @@ plainto_tsquery('german', ${filters.search})`
       );
     }
 
     // Spec filters via subquery on listing_specs
     if (filters.spec_ram_min !== undefined) {
-      qb.add(`EXISTS (SELECT 1 FROM ${TABLE_NAMES.LISTING_SPECS} s WHERE s.listing_id = l.id AND s.spec_key = 'RAM' AND s.normalized_value >= $P)`, filters.spec_ram_min);
+      conditions.push(
+        sql`EXISTS (SELECT 1 FROM ${listingSpecs} s WHERE s.listing_id = ${listings.id} AND s.spec_key = 'RAM' AND s.normalized_value >= ${filters.spec_ram_min})`
+      );
     }
     if (filters.spec_storage_min !== undefined) {
-      qb.add(`EXISTS (SELECT 1 FROM ${TABLE_NAMES.LISTING_SPECS} s WHERE s.listing_id = l.id AND s.spec_key = 'Speicher' AND s.normalized_value >= $P)`, filters.spec_storage_min);
+      conditions.push(
+        sql`EXISTS (SELECT 1 FROM ${listingSpecs} s WHERE s.listing_id = ${listings.id} AND s.spec_key = 'Speicher' AND s.normalized_value >= ${filters.spec_storage_min})`
+      );
     }
     if (filters.spec_display_min !== undefined) {
-      qb.add(`EXISTS (SELECT 1 FROM ${TABLE_NAMES.LISTING_SPECS} s WHERE s.listing_id = l.id AND (s.spec_key = 'Display' OR s.spec_key = 'Grösse') AND s.normalized_value >= $P)`, filters.spec_display_min);
+      conditions.push(
+        sql`EXISTS (SELECT 1 FROM ${listingSpecs} s WHERE s.listing_id = ${listings.id} AND (s.spec_key = 'Display' OR s.spec_key = 'Grösse') AND s.normalized_value >= ${filters.spec_display_min})`
+      );
     }
 
-    const { where: whereClause, params, nextIndex } = qb.build('');
+    const whereCondition = and(...conditions);
 
     // Sort
-    let orderBy: string;
+    let orderByClause;
     switch (filters.sort) {
-      case 'price_asc':  orderBy = 'l.price_chf ASC'; break;
-      case 'price_desc': orderBy = 'l.price_chf DESC'; break;
-      case 'popular':    orderBy = 'l.view_count DESC'; break;
-      default:           orderBy = 'l.created_at DESC';
+      case 'price_asc':  orderByClause = asc(listings.priceChf); break;
+      case 'price_desc': orderByClause = desc(listings.priceChf); break;
+      case 'popular':    orderByClause = desc(listings.viewCount); break;
+      default:           orderByClause = desc(listings.createdAt);
     }
 
-    // Fetch listings with seller info + primary image (single query with COUNT(*) OVER())
-    const { rows: items, total } = await paginatedQuery(
-      `SELECT
-        l.id, l.title, l.price_chf, l.category, l.condition, l.brand, l.model,
-        l.delivery_options, l.payment_mode, l.status, l.is_revampit,
-        l.pickup_location, l.view_count, l.favorite_count, l.created_at,
-        l.verified_at,
-        u.name as seller_name,
-        sp.display_name as seller_display_name,
-        sp.average_rating as seller_rating,
-        sp.city as seller_city,
-        (SELECT li.url FROM ${TABLE_NAMES.LISTING_IMAGES} li WHERE li.listing_id = l.id AND li.is_primary = true LIMIT 1) as thumbnail
-      FROM ${TABLE_NAMES.LISTINGS} l
-      JOIN ${TABLE_NAMES.USERS} u ON l.seller_id = u.id
-      LEFT JOIN ${TABLE_NAMES.SELLER_PROFILES} sp ON l.seller_id = sp.user_id
-      WHERE ${whereClause}
-      ORDER BY ${orderBy}
-      LIMIT $${nextIndex} OFFSET $${nextIndex + 1}`,
-      [...params, filters.limit, filters.offset]
-    );
+    // Count total
+    const [countRow] = await db
+      .select({ total: count() })
+      .from(listings)
+      .where(whereCondition);
+    const total = Number(countRow?.total ?? 0);
+
+    // Fetch listings with seller info + primary image
+    const items = await db
+      .select({
+        id: listings.id,
+        title: listings.title,
+        price_chf: listings.priceChf,
+        category: listings.category,
+        condition: listings.condition,
+        brand: listings.brand,
+        model: listings.model,
+        delivery_options: listings.deliveryOptions,
+        payment_mode: listings.paymentMode,
+        status: listings.status,
+        is_revampit: listings.isRevampit,
+        pickup_location: listings.pickupLocation,
+        view_count: listings.viewCount,
+        favorite_count: listings.favoriteCount,
+        created_at: listings.createdAt,
+        verified_at: listings.verifiedAt,
+        seller_name: users.name,
+        seller_display_name: sellerProfiles.displayName,
+        seller_rating: sellerProfiles.averageRating,
+        seller_city: sellerProfiles.city,
+        thumbnail: sql<string | null>`(
+          SELECT ${listingImages.url} FROM ${listingImages}
+          WHERE ${listingImages.listingId} = ${listings.id}
+            AND ${listingImages.isPrimary} = true
+          LIMIT 1
+        )`,
+      })
+      .from(listings)
+      .innerJoin(users, eq(listings.sellerId, users.id))
+      .leftJoin(sellerProfiles, eq(listings.sellerId, sellerProfiles.userId))
+      .where(whereCondition)
+      .orderBy(orderByClause)
+      .limit(filters.limit)
+      .offset(filters.offset);
 
     // For items returned, fetch key specs (up to 3 per listing) for card display
     if (items.length > 0) {
-      const listingIds = items.map((item) => (item as Record<string, unknown>).id);
-      const specsResult = await query(
-        `SELECT listing_id, spec_key, spec_value, spec_unit
-         FROM ${TABLE_NAMES.LISTING_SPECS}
-         WHERE listing_id = ANY($1)
-         ORDER BY listing_id`,
-        [listingIds]
-      );
+      const listingIds = items.map((item) => item.id);
+      const specsResult = await db
+        .select({
+          listing_id: listingSpecs.listingId,
+          key: listingSpecs.specKey,
+          value: listingSpecs.specValue,
+          unit: listingSpecs.specUnit,
+        })
+        .from(listingSpecs)
+        .where(inArray(listingSpecs.listingId, listingIds))
+        .orderBy(asc(listingSpecs.listingId));
 
       // Group specs by listing_id
       const specsMap = new Map<string, Array<{ key: string; value: string; unit: string | null }>>();
-      for (const row of specsResult.rows) {
-        const r = row as { listing_id: string; spec_key: string; spec_value: string; spec_unit: string | null };
-        if (!specsMap.has(r.listing_id)) specsMap.set(r.listing_id, []);
-        specsMap.get(r.listing_id)!.push({ key: r.spec_key, value: r.spec_value, unit: r.spec_unit });
+      for (const row of specsResult) {
+        if (!specsMap.has(row.listing_id)) specsMap.set(row.listing_id, []);
+        specsMap.get(row.listing_id)!.push({ key: row.key, value: row.value, unit: row.unit });
       }
 
       // Attach specs to items
-      for (const item of items) {
-        const i = item as Record<string, unknown>;
-        i.specs = specsMap.get(i.id as string) || [];
-      }
+      return apiSuccess({
+        items: items.map(item => ({
+          ...item,
+          specs: specsMap.get(item.id) || [],
+        })),
+        pagination: {
+          total,
+          limit: filters.limit,
+          offset: filters.offset,
+        },
+      });
     }
 
     return apiSuccess({
@@ -183,41 +225,58 @@ export const POST = withAuth(async (request: NextRequest, session: ValidSession)
       maxLength: 5000,
     });
 
-    const result = await transaction(async (client) => {
+    const result = await db.transaction(async (tx) => {
       // Insert listing with sanitized data
-      const listingResult = await client.query(
-        `INSERT INTO ${TABLE_NAMES.LISTINGS} (
-          seller_id, title, description, price_chf, category, condition,
-          brand, model, delivery_options, shipping_cost_chf, pickup_location,
-          payment_mode, status, condition_checks
-        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
-        RETURNING id`,
-        [
-          session.user.id,
-          sanitizedTitle,
-          sanitizedDescription,
-          data.price_chf,
-          data.category,
-          data.condition,
-          data.brand || null,
-          data.model || null,
-          data.delivery_options,
-          data.shipping_cost_chf || null,
-          data.pickup_location || null,
-          data.payment_mode,
-          data.status,
-          data.condition_checks ? JSON.stringify(data.condition_checks) : null,
-        ]
-      );
+      const [newListing] = await tx
+        .insert(listings)
+        .values({
+          sellerId: session.user.id,
+          title: sanitizedTitle,
+          description: sanitizedDescription,
+          priceChf: String(data.price_chf),
+          category: data.category,
+          condition: data.condition,
+          brand: data.brand || null,
+          model: data.model || null,
+          deliveryOptions: data.delivery_options,
+          shippingCostChf: data.shipping_cost_chf != null ? String(data.shipping_cost_chf) : null,
+          pickupLocation: data.pickup_location || null,
+          paymentMode: data.payment_mode,
+          status: data.status,
+          conditionChecks: data.condition_checks ? data.condition_checks : null,
+        })
+        .returning({ id: listings.id });
 
-      const listingId = listingResult.rows[0].id;
+      const listingId = newListing.id;
 
       // Batch insert images
-      await insertListingImages(client, listingId, data.images);
+      if (data.images.length > 0) {
+        await tx
+          .insert(listingImages)
+          .values(
+            data.images.map((url, position) => ({
+              listingId,
+              url,
+              position,
+              isPrimary: position === 0,
+            }))
+          );
+      }
 
-      // Batch insert specs (upsert deletes first, but table is empty for new listings)
+      // Batch insert specs
       if (data.specs && data.specs.length > 0) {
-        await upsertListingSpecs(client, listingId, data.specs);
+        const specValues = data.specs
+          .filter(spec => spec.value.trim())
+          .map(spec => ({
+            listingId,
+            specKey: spec.key,
+            specValue: spec.value,
+            specUnit: spec.unit || null,
+            normalizedValue: normalizeSpecValue(spec.key, spec.value)?.toString() ?? null,
+          }));
+        if (specValues.length > 0) {
+          await tx.insert(listingSpecs).values(specValues);
+        }
       }
 
       return listingId;

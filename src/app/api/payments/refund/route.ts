@@ -2,34 +2,14 @@ import { NextRequest } from 'next/server'
 import Stripe from 'stripe'
 import { withAuth } from '@/lib/api/middleware'
 import { requireStripeClient } from '@/lib/payments/stripe-client'
-import { query, transaction } from '@/lib/auth/db'
+import { db } from '@/db'
+import { paymentTransactions, paymentProviders, refunds, users } from '@/db/schema'
+import { eq, and, sql, inArray } from 'drizzle-orm'
 import { apiError, apiSuccess, apiUnauthorized, apiBadRequest, apiNotFound } from '@/lib/api/helpers'
-import { TABLE_NAMES } from '@/config/database'
 import { PAYMENT_STATUS } from '@/config/payment-status'
 import { REFUND_STATUS } from '@/config/refund'
 import { logger } from '@/lib/logger'
 import { validateBody, RefundSchema } from '@/lib/schemas'
-
-interface TransactionRow {
-  id: string
-  user_id: string
-  provider_id: string
-  provider_transaction_id: string
-  amount_cents: number
-  currency: string
-  provider_slug: string
-  user_name: string
-  user_email: string
-}
-
-interface RefundTotalRow {
-  total_refunded: number
-}
-
-interface RefundCreatedRow {
-  id: string
-  refund_number: string
-}
 
 export const POST = withAuth(async (request, session) => {
   // Initialize Stripe lazily inside handler to avoid build-time errors
@@ -47,91 +27,93 @@ export const POST = withAuth(async (request, session) => {
       customerNotes
     } = validation.data
 
-    // Get transaction details
-    const transactionResult = await query(`
-      SELECT
-        pt.*,
-        pp.slug as provider_slug,
-        u.name as user_name,
-        u.email as user_email
-      FROM ${TABLE_NAMES.PAYMENT_TRANSACTIONS} pt
-      JOIN ${TABLE_NAMES.PAYMENT_PROVIDERS} pp ON pt.provider_id = pp.id
-      JOIN ${TABLE_NAMES.USERS} u ON pt.user_id = u.id
-      WHERE pt.id = $1 AND pt.status = '${PAYMENT_STATUS.SUCCEEDED}'
-    `, [transactionId])
+    // Get transaction details with provider and user info
+    const transactionRows = await db
+      .select({
+        id: paymentTransactions.id,
+        userId: paymentTransactions.userId,
+        providerId: paymentTransactions.providerId,
+        providerTransactionId: paymentTransactions.providerTransactionId,
+        amountCents: paymentTransactions.amountCents,
+        currency: paymentTransactions.currency,
+        providerSlug: paymentProviders.slug,
+        userName: users.name,
+        userEmail: users.email,
+      })
+      .from(paymentTransactions)
+      .innerJoin(paymentProviders, eq(paymentTransactions.providerId, paymentProviders.id))
+      .innerJoin(users, eq(paymentTransactions.userId, users.id))
+      .where(
+        and(
+          eq(paymentTransactions.id, transactionId),
+          eq(paymentTransactions.status, PAYMENT_STATUS.SUCCEEDED)
+        )
+      )
 
-    if (transactionResult.rows.length === 0) {
+    if (transactionRows.length === 0) {
       return apiNotFound('Transaktion nicht gefunden oder nicht erstattungsfähig')
     }
 
-    const txn = transactionResult.rows[0] as TransactionRow
+    const txn = transactionRows[0]
 
     // Check if user owns the transaction or is admin
     const isAdmin = session.user.isStaff
 
-    if (txn.user_id !== session.user.id && !isAdmin) {
+    if (txn.userId !== session.user.id && !isAdmin) {
       return apiUnauthorized('Sie können nur eigene Transaktionen erstatten')
     }
 
     const refundAmountCents = Math.round(amount * 100)
 
-    if (refundAmountCents > txn.amount_cents) {
+    if (refundAmountCents > txn.amountCents) {
       return apiBadRequest('Erstattungsbetrag darf den ursprünglichen Transaktionsbetrag nicht übersteigen')
     }
 
     // Check for existing refunds on this transaction
-    const existingRefundsResult = await query(`
-      SELECT COALESCE(SUM(amount_cents), 0) as total_refunded
-      FROM ${TABLE_NAMES.REFUNDS}
-      WHERE original_transaction_id = $1 AND status IN ('${REFUND_STATUS.APPROVED}', '${REFUND_STATUS.PROCESSING}', '${REFUND_STATUS.COMPLETED}')
-    `, [transactionId])
+    const existingRefundsResult = await db
+      .select({
+        totalRefunded: sql<number>`COALESCE(SUM(${refunds.amountCents}), 0)`,
+      })
+      .from(refunds)
+      .where(
+        and(
+          eq(refunds.originalTransactionId, transactionId),
+          inArray(refunds.status, [REFUND_STATUS.APPROVED, REFUND_STATUS.PROCESSING, REFUND_STATUS.COMPLETED])
+        )
+      )
 
-    const refundTotals = existingRefundsResult.rows[0] as RefundTotalRow
-    const totalRefunded = refundTotals.total_refunded
-    const remainingAmount = txn.amount_cents - totalRefunded
+    const totalRefunded = Number(existingRefundsResult[0]?.totalRefunded ?? 0)
+    const remainingAmount = txn.amountCents - totalRefunded
 
     if (refundAmountCents > remainingAmount) {
       return apiBadRequest(`Erstattungsbetrag übersteigt das verbleibende Guthaben. Maximal erstattbar: ${(remainingAmount / 100).toFixed(2)} ${txn.currency}`)
     }
 
-    // Create refund record
-    const refundResult = await query(`
-      INSERT INTO ${TABLE_NAMES.REFUNDS} (
-        refund_number,
-        original_transaction_id,
-        amount_cents,
-        currency,
+    // Create refund record using database function for refund_number
+    const [refundRow] = await db
+      .insert(refunds)
+      .values({
+        refundNumber: sql`generate_refund_number()`,
+        originalTransactionId: transactionId,
+        amountCents: refundAmountCents,
+        currency: txn.currency,
         reason,
-        reason_details,
-        requested_by,
-        customer_notes,
-        status
-      ) VALUES (
-        generate_refund_number(),
-        $1, $2, $3, $4, $5, $6, $7, $8
-      )
-      RETURNING id, refund_number
-    `, [
-      transactionId,
-      refundAmountCents,
-      txn.currency,
-      reason,
-      reasonDetails || null,
-      session.user.id,
-      customerNotes || null,
-      isAdmin ? REFUND_STATUS.APPROVED : REFUND_STATUS.REQUESTED
-    ])
+        reasonDetails: reasonDetails || null,
+        requestedBy: session.user.id,
+        customerNotes: customerNotes || null,
+        status: isAdmin ? REFUND_STATUS.APPROVED : REFUND_STATUS.REQUESTED,
+      })
+      .returning({ id: refunds.id, refundNumber: refunds.refundNumber })
 
-    const refund = refundResult.rows[0] as RefundCreatedRow
-    const refundId = refund.id
-    const refundNumber = refund.refund_number
+    const refundId = refundRow.id
+    const refundNumber = refundRow.refundNumber
 
     // If admin requested, process immediately
     if (isAdmin) {
       try {
         // Process refund with Stripe
         const stripeRefund = await stripe.refunds.create({
-          payment_intent: txn.provider_transaction_id,
+          payment_intent: txn.providerTransactionId!,
           amount: refundAmountCents,
           reason: mapRefundReason(reason),
           metadata: {
@@ -142,46 +124,34 @@ export const POST = withAuth(async (request, session) => {
         })
 
         // Wrap refund record update + transaction insert in DB transaction
-        await transaction(async (client) => {
+        await db.transaction(async (tx) => {
           // Update refund with Stripe refund ID
-          await client.query(`
-            UPDATE ${TABLE_NAMES.REFUNDS}
-            SET
-              refund_transaction_id = $1,
-              status = '${REFUND_STATUS.PROCESSING}',
-              processed_by = $2,
-              processed_at = CURRENT_TIMESTAMP,
-              approved_at = CURRENT_TIMESTAMP,
-              approved_by = $2
-            WHERE id = $3
-          `, [stripeRefund.id, session.user.id, refundId])
+          await tx
+            .update(refunds)
+            .set({
+              refundTransactionId: stripeRefund.id,
+              status: REFUND_STATUS.PROCESSING,
+              processedBy: session.user.id,
+              processedAt: sql`CURRENT_TIMESTAMP`,
+              approvedAt: sql`CURRENT_TIMESTAMP`,
+              approvedBy: session.user.id,
+            })
+            .where(eq(refunds.id, refundId))
 
           // Create refund transaction record
-          await client.query(`
-            INSERT INTO ${TABLE_NAMES.PAYMENT_TRANSACTIONS} (
-              user_id,
-              provider_id,
-              provider_transaction_id,
-              type,
-              status,
-              amount_cents,
-              currency,
-              description,
-              provider_response
-            ) VALUES (
-              $1, $2, $3, $4, $5, $6, $7, $8, $9
-            )
-          `, [
-            txn.user_id,
-            txn.provider_id,
-            stripeRefund.id,
-            'refund',
-            REFUND_STATUS.PROCESSING,
-            refundAmountCents,
-            txn.currency,
-            `Refund for transaction ${txn.provider_transaction_id}`,
-            JSON.stringify(stripeRefund)
-          ])
+          await tx
+            .insert(paymentTransactions)
+            .values({
+              userId: txn.userId,
+              providerId: txn.providerId,
+              providerTransactionId: stripeRefund.id,
+              type: 'refund',
+              status: REFUND_STATUS.PROCESSING,
+              amountCents: refundAmountCents,
+              currency: txn.currency,
+              description: `Refund for transaction ${txn.providerTransactionId}`,
+              providerResponse: stripeRefund as unknown as Record<string, unknown>,
+            })
         })
 
       } catch (stripeError: unknown) {
@@ -189,14 +159,14 @@ export const POST = withAuth(async (request, session) => {
         const errorMessage = stripeError instanceof Error ? stripeError.message : 'Unknown Stripe error'
 
         // Mark refund as rejected
-        await query(`
-          UPDATE ${TABLE_NAMES.REFUNDS}
-          SET
-            status = '${REFUND_STATUS.REJECTED}',
-            processed_at = CURRENT_TIMESTAMP,
-            internal_notes = $1
-          WHERE id = $2
-        `, [errorMessage, refundId])
+        await db
+          .update(refunds)
+          .set({
+            status: REFUND_STATUS.REJECTED,
+            processedAt: sql`CURRENT_TIMESTAMP`,
+            internalNotes: errorMessage,
+          })
+          .where(eq(refunds.id, refundId))
 
         return apiError(stripeError, 'Erstattung konnte nicht verarbeitet werden')
       }

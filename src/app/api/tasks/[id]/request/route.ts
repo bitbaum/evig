@@ -13,8 +13,10 @@ import { NextRequest } from 'next/server';
 import { withAdmin, ValidSession } from '@/lib/api/middleware';
 import { apiSuccess, apiError, apiNotFound, apiBadRequest } from '@/lib/api/helpers';
 import { getDbUserId, getActiveTask, createInAppNotifications } from '@/lib/api/task-helpers';
-import { query, transaction } from '@/lib/auth/db';
-import { TABLE_NAMES } from '@/config/database';
+import { db } from '@/db';
+import { eq, and, ne } from 'drizzle-orm';
+import { tasks, taskRequests } from '@/db/schema/misc';
+import { users } from '@/db/schema/auth';
 import { TASK_STATUSES, REQUEST_STATUSES } from '@/config/tasks';
 import { taskRequestSchema } from '@/lib/schemas/tasks';
 import { logger } from '@/lib/logger';
@@ -58,43 +60,30 @@ export const POST = withAdmin<RouteParams>(async (
 
     // If specific user requested, verify they exist
     if (data.requested_user_id) {
-      const userResult = await query(
-        `SELECT id FROM ${TABLE_NAMES.USERS} WHERE id = $1`,
-        [data.requested_user_id]
-      );
+      const userResult = await db.select({ id: users.id })
+        .from(users)
+        .where(eq(users.id, data.requested_user_id));
 
-      if (userResult.rows.length === 0) {
+      if (userResult.length === 0) {
         return apiNotFound('Angefragter Benutzer');
       }
     }
 
     // Create request record + update task status atomically
-    const taskRequest = await transaction(async (client) => {
-      const requestResult = await client.query<{ id: string }>(
-        `INSERT INTO ${TABLE_NAMES.TASK_REQUESTS} (
-          task_id,
-          requested_by,
-          requested_user_id,
-          message,
-          status
-        ) VALUES ($1, $2, $3, $4, '${REQUEST_STATUSES.PENDING}')
-        RETURNING *`,
-        [
-          taskId,
-          dbUserId,
-          data.requested_user_id || null,
-          data.message || null,
-        ]
-      );
+    const taskRequest = await db.transaction(async (tx) => {
+      const [requestRow] = await tx.insert(taskRequests).values({
+        taskId,
+        requestedBy: dbUserId,
+        requestedUserId: data.requested_user_id || null,
+        message: data.message || null,
+        status: REQUEST_STATUSES.PENDING,
+      }).returning();
 
-      await client.query(
-        `UPDATE ${TABLE_NAMES.TASKS}
-         SET current_status = $1, updated_at = NOW()
-         WHERE id = $2`,
-        [TASK_STATUSES.REQUESTED, taskId]
-      );
+      await tx.update(tasks)
+        .set({ currentStatus: TASK_STATUSES.REQUESTED, updatedAt: new Date().toISOString() })
+        .where(eq(tasks.id, taskId));
 
-      return requestResult.rows[0];
+      return requestRow;
     });
 
     // In-app notifications (non-blocking for API success)
@@ -107,11 +96,10 @@ export const POST = withAdmin<RouteParams>(async (
       }
     } else {
       // Broadcast request to all staff except requester
-      const staffResult = await query<{ id: string }>(
-        `SELECT id FROM ${TABLE_NAMES.USERS} WHERE is_staff = true AND id != $1`,
-        [dbUserId]
-      )
-      notificationRecipientIds = staffResult.rows.map(row => row.id)
+      const staffResult = await db.select({ id: users.id })
+        .from(users)
+        .where(and(eq(users.isStaff, true), ne(users.id, dbUserId)));
+      notificationRecipientIds = staffResult.map(row => row.id)
     }
 
     await createInAppNotifications({

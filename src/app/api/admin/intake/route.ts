@@ -6,10 +6,13 @@
  */
 
 import { withAdmin } from '@/lib/api/middleware'
-import { query, transaction } from '@/lib/auth/db'
-import { apiError, apiSuccess, apiBadRequest } from '@/lib/api/helpers'
+import { db } from '@/db'
+import { sql, getTableName, SQL } from 'drizzle-orm'
+import { aiExtractedProducts, inventoryItems, productImages } from '@/db/schema/inventory'
+import { donations } from '@/db/schema/misc'
+import { users } from '@/db/schema/auth'
+import { apiError, apiSuccess } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
-import { TABLE_NAMES } from '@/config/database'
 import { validateBody, validateQuery } from '@/lib/schemas'
 import { IntakeCreateSchema, IntakeQuerySchema } from '@/lib/schemas/intake'
 import { INTAKE_STATUS } from '@/config/intake-status'
@@ -18,7 +21,6 @@ import type { ChecklistState } from '@/config/intake-checklist'
 import { generateItemUUID } from '@/lib/erfassung/create-product'
 import { uploadImage, generateImageFilename } from '@/lib/storage/image-upload'
 import { logger } from '@/lib/logger'
-import { CountRow } from '@/lib/api/db-types'
 import { appendIntakeEvent } from '@/lib/intake/timeline'
 
 // POST — Unified intake: donation + erfassung in one transaction
@@ -29,56 +31,43 @@ export const POST = withAdmin('intake', async (request, session) => {
     if (!validation.success) return validation.error
     const data = validation.data
 
-    const result = await transaction(async (client) => {
+    const result = await db.transaction(async (tx) => {
       // 1. Generate Item UUID
-      const itemUUID = await generateItemUUID(client)
+      const itemUUID = await generateItemUUID(tx)
 
       // 2. Create ai_extracted_products entry
-      const productResult = await client.query(
-        `INSERT INTO ${TABLE_NAMES.AI_EXTRACTED_PRODUCTS} (
-          item_uuid, product_name, brand, short_description,
-          estimated_price_chf, condition, category, subcategory,
-          status, source_type, created_by
-        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, 'approved', 'intake', $9)
-        RETURNING id`,
-        [
-          itemUUID,
-          data.produktname,
-          data.hersteller,
-          data.kurzbeschreibung || null,
-          data.verkaufspreis || null,
-          data.zustand,
-          data.hauptkategorie || null,
-          data.unterkategorie || null,
-          session.user.id,
-        ]
-      )
-      const productId = productResult.rows[0].id
+      const [productRow] = await tx.insert(aiExtractedProducts).values({
+        itemUuid: itemUUID,
+        productName: data.produktname,
+        brand: data.hersteller,
+        shortDescription: data.kurzbeschreibung || null,
+        estimatedPriceChf: data.verkaufspreis ? String(data.verkaufspreis) : null,
+        condition: data.zustand,
+        category: data.hauptkategorie || null,
+        subcategory: data.unterkategorie || null,
+        status: 'approved',
+        sourceType: 'intake',
+        createdBy: session.user.id,
+      }).returning({ id: aiExtractedProducts.id })
+      const productId = productRow.id
 
       // 3. Create donation record if this is a donation
       let donationId: string | null = null
       if (data.is_donation) {
-        const donationResult = await client.query(
-          `INSERT INTO ${TABLE_NAMES.DONATIONS} (
-            donation_type, device_category, device_brand, device_model,
-            device_description, device_condition,
-            donor_name, donor_email, notes,
-            status, recorded_by
-          ) VALUES ('device', $1, $2, $3, $4, $5, $6, $7, $8, 'recorded', $9)
-          RETURNING id`,
-          [
-            data.hauptkategorie || 'other',
-            data.hersteller,
-            data.produktname,
-            data.kurzbeschreibung || null,
-            data.zustand,
-            data.donor_name || null,
-            data.donor_email || null,
-            data.donor_notes || null,
-            session.user.id,
-          ]
-        )
-        donationId = donationResult.rows[0].id
+        const [donationRow] = await tx.insert(donations).values({
+          donationType: 'device',
+          deviceCategory: data.hauptkategorie || 'other',
+          deviceBrand: data.hersteller,
+          deviceModel: data.produktname,
+          deviceDescription: data.kurzbeschreibung || null,
+          deviceCondition: data.zustand,
+          donorName: data.donor_name || null,
+          donorEmail: data.donor_email || null,
+          notes: data.donor_notes || null,
+          status: 'recorded',
+          recordedBy: session.user.id,
+        }).returning({ id: donations.id })
+        donationId = donationRow.id
       }
 
       // 4. Initialize checklist state (all items for this tier+category, all unchecked)
@@ -94,22 +83,18 @@ export const POST = withAdmin('intake', async (request, session) => {
       }
 
       // 5. Create inventory_items entry with intake metadata
-      const inventoryResult = await client.query(
-        `INSERT INTO ${TABLE_NAMES.INVENTORY_ITEMS} (
-          ai_product_id, quantity_available, status,
-          selling_price_chf, marketplace_status,
-          intake_tier, intake_checklist, checklist_complete, source_donation_id
-        ) VALUES ($1, 1, 'available', $2, 'draft', $3, $4, false, $5)
-        RETURNING id`,
-        [
-          productId,
-          data.verkaufspreis || null,
-          data.intake_tier,
-          JSON.stringify(checklistState),
-          donationId,
-        ]
-      )
-      const inventoryId = inventoryResult.rows[0].id
+      const [inventoryRow] = await tx.insert(inventoryItems).values({
+        aiProductId: productId,
+        quantityAvailable: 1,
+        status: 'available',
+        sellingPriceChf: data.verkaufspreis ? String(data.verkaufspreis) : null,
+        marketplaceStatus: 'draft',
+        intakeTier: data.intake_tier,
+        intakeChecklist: checklistState,
+        checklistComplete: false,
+        sourceDonationId: donationId,
+      }).returning({ id: inventoryItems.id })
+      const inventoryId = inventoryRow.id
 
       // 6. Handle image upload if provided
       let imageUrl: string | null = null
@@ -118,12 +103,14 @@ export const POST = withAdmin('intake', async (request, session) => {
         const uploadResult = await uploadImage(data.image, filename, 'products')
         if (uploadResult.success && uploadResult.url) {
           imageUrl = uploadResult.url
-          await client.query(
-            `INSERT INTO ${TABLE_NAMES.PRODUCT_IMAGES} (
-              product_id, filename, file_path, is_primary, uploaded_by, upload_status
-            ) VALUES ($1, $2, $3, true, $4, 'ready')`,
-            [productId, filename, uploadResult.url, session.user.id]
-          )
+          await tx.insert(productImages).values({
+            productId,
+            filename,
+            filePath: uploadResult.url,
+            isPrimary: true,
+            uploadedBy: session.user.id,
+            uploadStatus: 'ready',
+          })
         }
       }
 
@@ -172,37 +159,40 @@ export const GET = withAdmin('intake', async (request) => {
     if (!validation.success) return validation.error
     const { limit, offset, tier, status, category, search } = validation.data
 
-    const conditions: string[] = ['ii.intake_tier IS NOT NULL']
-    const queryParams: (string | number)[] = []
+    // Table names from Drizzle schema
+    const iiTable = getTableName(inventoryItems)
+    const apTable = getTableName(aiExtractedProducts)
+    const uTable = getTableName(users)
+    const dTable = getTableName(donations)
+
+    // Build dynamic conditions
+    const conditions: SQL[] = [sql`ii.intake_tier IS NOT NULL`]
 
     if (tier) {
-      queryParams.push(tier)
-      conditions.push(`ii.intake_tier = $${queryParams.length}`)
+      conditions.push(sql`ii.intake_tier = ${tier}`)
     }
 
     if (status === INTAKE_STATUS.IN_PROGRESS) {
-      conditions.push(`ii.checklist_complete = false AND ii.marketplace_status = 'draft'`)
+      conditions.push(sql`ii.checklist_complete = false AND ii.marketplace_status = 'draft'`)
     } else if (status === INTAKE_STATUS.READY) {
-      conditions.push(`ii.checklist_complete = true AND ii.marketplace_status = 'draft'`)
+      conditions.push(sql`ii.checklist_complete = true AND ii.marketplace_status = 'draft'`)
     } else if (status === INTAKE_STATUS.PUBLISHED) {
-      conditions.push(`ii.marketplace_status = '${INTAKE_STATUS.PUBLISHED}'`)
+      conditions.push(sql`ii.marketplace_status = ${INTAKE_STATUS.PUBLISHED}`)
     }
 
     if (category) {
-      queryParams.push(category)
-      conditions.push(`ap.category = $${queryParams.length}`)
+      conditions.push(sql`ap.category = ${category}`)
     }
 
     if (search) {
-      queryParams.push(`%${search}%`)
-      conditions.push(`(ap.brand ILIKE $${queryParams.length} OR ap.product_name ILIKE $${queryParams.length})`)
+      const pattern = `%${search}%`
+      conditions.push(sql`(ap.brand ILIKE ${pattern} OR ap.product_name ILIKE ${pattern})`)
     }
 
-    const whereClause = conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : ''
+    const whereClause = sql`WHERE ${sql.join(conditions, sql` AND `)}`
 
-    queryParams.push(limit, offset)
-    const itemsResult = await query(
-      `SELECT
+    const itemsResult = await db.execute(sql`
+      SELECT
         ii.id, ii.ai_product_id, ii.intake_tier, ii.intake_checklist,
         ii.checklist_complete, ii.marketplace_status, ii.selling_price_chf,
         ii.source_donation_id, ii.created_at,
@@ -210,15 +200,14 @@ export const GET = withAdmin('intake', async (request) => {
         ap.category, ap.subcategory, ap.short_description,
         u.name as created_by_name,
         d.donor_name
-      FROM ${TABLE_NAMES.INVENTORY_ITEMS} ii
-      JOIN ${TABLE_NAMES.AI_EXTRACTED_PRODUCTS} ap ON ii.ai_product_id = ap.id
-      LEFT JOIN ${TABLE_NAMES.USERS} u ON ap.created_by = u.id
-      LEFT JOIN ${TABLE_NAMES.DONATIONS} d ON ii.source_donation_id = d.id
+      FROM ${sql.raw(iiTable)} ii
+      JOIN ${sql.raw(apTable)} ap ON ii.ai_product_id = ap.id
+      LEFT JOIN ${sql.raw(uTable)} u ON ap.created_by = u.id
+      LEFT JOIN ${sql.raw(dTable)} d ON ii.source_donation_id = d.id
       ${whereClause}
       ORDER BY ii.created_at DESC
-      LIMIT $${queryParams.length - 1} OFFSET $${queryParams.length}`,
-      queryParams
-    )
+      LIMIT ${limit} OFFSET ${offset}
+    `)
 
     // Compute progress for each item
     interface IntakeRow {
@@ -237,16 +226,14 @@ export const GET = withAdmin('intake', async (request) => {
     })
 
     // Count
-    const countParams = queryParams.slice(0, -2)
-    const countResult = await query<CountRow>(
-      `SELECT COUNT(*) as total
-       FROM ${TABLE_NAMES.INVENTORY_ITEMS} ii
-       JOIN ${TABLE_NAMES.AI_EXTRACTED_PRODUCTS} ap ON ii.ai_product_id = ap.id
-       LEFT JOIN ${TABLE_NAMES.DONATIONS} d ON ii.source_donation_id = d.id
-       ${whereClause}`,
-      countParams
-    )
-    const total = parseInt(countResult.rows[0]?.total || '0')
+    const countResult = await db.execute(sql`
+      SELECT COUNT(*) as total
+       FROM ${sql.raw(iiTable)} ii
+       JOIN ${sql.raw(apTable)} ap ON ii.ai_product_id = ap.id
+       LEFT JOIN ${sql.raw(dTable)} d ON ii.source_donation_id = d.id
+       ${whereClause}
+    `)
+    const total = parseInt((countResult.rows[0] as { total: string })?.total || '0')
 
     return apiSuccess({
       items,

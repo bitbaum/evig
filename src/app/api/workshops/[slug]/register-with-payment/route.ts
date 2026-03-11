@@ -1,10 +1,11 @@
 import { NextRequest } from 'next/server'
 import { auth } from '@/auth'
-import { query, transaction } from '@/lib/auth/db'
+import { db } from '@/db'
+import { sql, eq, and, getTableName } from 'drizzle-orm'
+import { workshops, workshopInstances, workshopRegistrations } from '@/db/schema/workshops'
 import { apiError, apiSuccess, apiUnauthorized, apiNotFound, apiBadRequest } from '@/lib/api/helpers'
 import { logger } from '@/lib/logger'
 import { requireStripeClient } from '@/lib/payments/stripe-client'
-import { TABLE_NAMES } from '@/config/database'
 import { WORKSHOP_REGISTRATION_STATUS } from '@/config/workshop-registration-status'
 import {
   processPayment,
@@ -35,6 +36,11 @@ interface RegistrationRow {
   status: string
 }
 
+// Table name refs
+const wTable = getTableName(workshops)
+const wiTable = getTableName(workshopInstances)
+const wrTable = getTableName(workshopRegistrations)
+
 // POST /api/workshops/[slug]/register-with-payment - Register for workshop with payment
 export async function POST(request: NextRequest) {
   const stripe = requireStripeClient()
@@ -55,19 +61,19 @@ export async function POST(request: NextRequest) {
     } = validation.data
 
     // Get workshop details
-    const workshopResult = await query(`
+    const workshopResult = await db.execute(sql`
       SELECT
         w.*,
         COALESCE(w.price_cents, 0) as price_cents
-      FROM ${TABLE_NAMES.WORKSHOPS} w
-      WHERE w.slug = $1 AND w.is_active = true
-    `, [workshopSlug])
+      FROM ${sql.raw(wTable)} w
+      WHERE w.slug = ${workshopSlug} AND w.is_active = true
+    `)
 
     if (workshopResult.rows.length === 0) {
       return apiNotFound('Workshop nicht gefunden')
     }
 
-    const workshop = workshopResult.rows[0] as WorkshopRow
+    const workshop = workshopResult.rows[0] as unknown as WorkshopRow
 
     if (!workshop.price_cents || workshop.price_cents <= 0) {
       return apiBadRequest('Dieser Workshop ist nicht für die Online-Anmeldung mit Zahlung verfügbar')
@@ -79,21 +85,21 @@ export async function POST(request: NextRequest) {
     let registrationType = 'workshop'
 
     if (instanceId) {
-      const instanceResult = await query(`
+      const instanceResult = await db.execute(sql`
         SELECT
           wi.*,
           w.title,
           w.price_cents as workshop_price
-        FROM ${TABLE_NAMES.WORKSHOP_INSTANCES} wi
-        JOIN ${TABLE_NAMES.WORKSHOPS} w ON wi.workshop_id = w.id
-        WHERE wi.id = $1 AND wi.status = 'scheduled'
-      `, [instanceId])
+        FROM ${sql.raw(wiTable)} wi
+        JOIN ${sql.raw(wTable)} w ON wi.workshop_id = w.id
+        WHERE wi.id = ${instanceId} AND wi.status = 'scheduled'
+      `)
 
       if (instanceResult.rows.length === 0) {
         return apiNotFound('Workshop-Termin nicht gefunden oder nicht verfügbar')
       }
 
-      instanceDetails = instanceResult.rows[0] as InstanceRow
+      instanceDetails = instanceResult.rows[0] as unknown as InstanceRow
       registrationTarget = instanceId
       registrationType = 'instance'
 
@@ -104,13 +110,20 @@ export async function POST(request: NextRequest) {
     }
 
     // Check if user is already registered
-    const existingRegistration = await query(`
-      SELECT id, status FROM ${TABLE_NAMES.WORKSHOP_REGISTRATIONS}
-      WHERE user_id = $1 AND workshop_instance_id = $2
-    `, [session.user.id, registrationTarget])
+    const existingRegistration = await db.select({
+      id: workshopRegistrations.id,
+      status: workshopRegistrations.status,
+    })
+      .from(workshopRegistrations)
+      .where(
+        and(
+          eq(workshopRegistrations.userId, session.user.id),
+          eq(workshopRegistrations.workshopInstanceId, registrationTarget)
+        )
+      )
 
-    if (existingRegistration.rows.length > 0) {
-      const reg = existingRegistration.rows[0] as RegistrationRow
+    if (existingRegistration.length > 0) {
+      const reg = existingRegistration[0]
       if (reg.status === WORKSHOP_REGISTRATION_STATUS.CONFIRMED || reg.status === WORKSHOP_REGISTRATION_STATUS.ATTENDED) {
         return apiBadRequest('Sie sind bereits für diesen Workshop angemeldet')
       }
@@ -119,33 +132,22 @@ export async function POST(request: NextRequest) {
     const baseAmount = workshop.price_cents
 
     // Wrap registration + participant count update in transaction
-    const registrationId = await transaction(async (client) => {
-      const registrationResult = await client.query(`
-        INSERT INTO ${TABLE_NAMES.WORKSHOP_REGISTRATIONS} (
-          user_id,
-          workshop_instance_id,
-          status,
-          payment_status,
-          payment_amount_cents
-        ) VALUES (
-          $1, $2, '${WORKSHOP_REGISTRATION_STATUS.PENDING}', 'pending', $3
-        )
-        RETURNING id, created_at
-      `, [
-        session.user.id,
-        registrationTarget,
-        baseAmount
-      ])
-
-      const createdReg = registrationResult.rows[0] as { id: string; created_at: string }
+    const registrationId = await db.transaction(async (tx) => {
+      const [createdReg] = await tx.insert(workshopRegistrations).values({
+        userId: session.user.id,
+        workshopInstanceId: registrationTarget,
+        status: WORKSHOP_REGISTRATION_STATUS.PENDING,
+        paymentStatus: 'pending',
+        paymentAmountCents: baseAmount,
+      }).returning({ id: workshopRegistrations.id })
 
       // Update instance participant count if registering for specific instance
       if (instanceId) {
-        await client.query(`
-          UPDATE ${TABLE_NAMES.WORKSHOP_INSTANCES}
+        await tx.execute(sql`
+          UPDATE ${sql.raw(wiTable)}
           SET current_participants = current_participants + 1
-          WHERE id = $1
-        `, [instanceId])
+          WHERE id = ${instanceId}
+        `)
       }
 
       return createdReg.id

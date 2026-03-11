@@ -1,9 +1,10 @@
 import { NextRequest } from 'next/server'
 import { auth } from '@/auth'
-import { query, transaction } from '@/lib/auth/db'
+import { db } from '@/db'
+import { paymentProviders, paymentTransactions, escrowAccounts } from '@/db/schema'
+import { eq, and, sql } from 'drizzle-orm'
 import { apiError, apiSuccess, apiUnauthorized } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
-import { TABLE_NAMES } from '@/config/database'
 import { PAYMENT_STATUS } from '@/config/payment-status'
 import { logger } from '@/lib/logger'
 import {
@@ -16,18 +17,6 @@ import {
 import { withSecurePayment } from '@/lib/middleware/pci-compliance'
 import { requireStripeClient } from '@/lib/payments/stripe-client'
 import { validateBody, CreatePaymentIntentSchema } from '@/lib/schemas'
-
-interface ProviderRow {
-  id: string
-  fee_percentage: number
-  fee_fixed_cents: number
-  supported_currencies: string[]
-  config: Record<string, unknown>
-}
-
-interface IdRow {
-  id: string
-}
 
 export const POST = withSecurePayment(async (request: NextRequest) => {
   // Initialize Stripe lazily inside handler to avoid build-time errors
@@ -56,24 +45,38 @@ export const POST = withSecurePayment(async (request: NextRequest) => {
     } = validation.data
 
     // Get payment provider with currency support
-    const providerResult = await query(`
-      SELECT id, fee_percentage, fee_fixed_cents, supported_currencies, config
-      FROM ${TABLE_NAMES.PAYMENT_PROVIDERS}
-      WHERE slug = $1 AND is_active = true AND $2 = ANY(supported_currencies)
-    `, ['stripe', currency])
+    const providerRows = await db
+      .select({
+        id: paymentProviders.id,
+        feePercentage: paymentProviders.feePercentage,
+        feeFixedCents: paymentProviders.feeFixedCents,
+        supportedCurrencies: paymentProviders.supportedCurrencies,
+        config: paymentProviders.config,
+      })
+      .from(paymentProviders)
+      .where(
+        and(
+          eq(paymentProviders.slug, 'stripe'),
+          eq(paymentProviders.isActive, true),
+          sql`${currency} = ANY(${paymentProviders.supportedCurrencies})`
+        )
+      )
 
-    if (providerResult.rows.length === 0) {
+    if (providerRows.length === 0) {
       return apiError(null, `Payment provider unterstützt ${currency} nicht`, 400)
     }
 
-    const provider = providerResult.rows[0] as ProviderRow
+    const provider = providerRows[0]
 
     // Calculate VAT and pricing
     const vatRate = getVATRate(currency as SupportedCurrency, businessType)
     const { subtotal, vat, total } = calculateVAT(amount, currency as SupportedCurrency, includeVAT)
 
     // Calculate payment provider fees on the final amount
-    const { fee: providerFee, total: finalTotal } = calculatePaymentFees(total, provider)
+    const { fee: providerFee, total: finalTotal } = calculatePaymentFees(total, {
+      fee_percentage: Number(provider.feePercentage) || 0,
+      fee_fixed_cents: provider.feeFixedCents || 0,
+    })
 
     // Convert to cents for Stripe
     const subtotalCents = decimalToCents(subtotal)
@@ -107,96 +110,65 @@ export const POST = withSecurePayment(async (request: NextRequest) => {
     })
 
     // Wrap DB writes in transaction (payment record + optional escrow)
-    const transactionId = await transaction(async (client) => {
-      const transactionResult = await client.query(`
-        INSERT INTO ${TABLE_NAMES.PAYMENT_TRANSACTIONS} (
-          user_id,
-          provider_id,
-          provider_transaction_id,
-          type,
-          status,
-          amount_cents,
+    const transactionId = await db.transaction(async (tx) => {
+      const [txRow] = await tx
+        .insert(paymentTransactions)
+        .values({
+          userId: session.user.id,
+          providerId: provider.id,
+          providerTransactionId: paymentIntent.id,
+          type: 'payment',
+          status: PAYMENT_STATUS.PENDING,
+          amountCents: totalCents,
           currency,
-          fee_cents,
-          net_amount_cents,
-          order_id,
-          service_appointment_id,
-          workshop_registration_id,
-          description,
-          escrow_release_date,
-          metadata,
-          provider_response
-        ) VALUES (
-          $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13,
-          CASE WHEN $14 THEN CURRENT_TIMESTAMP + INTERVAL '1 day' * $15 ELSE NULL END,
-          $16, $17
-        )
-        RETURNING id
-      `, [
-        session.user.id,
-        provider.id,
-        paymentIntent.id,
-        'payment',
-        PAYMENT_STATUS.PENDING,
-        totalCents,
-        currency,
-        providerFeeCents,
-        subtotalCents,
-        orderId || null,
-        serviceAppointmentId || null,
-        workshopRegistrationId || null,
-        description || `Payment for ${orderId || serviceAppointmentId || workshopRegistrationId || 'service'}`,
-        escrowEnabled,
-        autoReleaseDays,
-        JSON.stringify({
-          includeVAT,
-          businessType,
-          subtotalCents,
-          vatCents,
-          vatRate,
-          providerFeeCents,
-          breakdown: {
-            subtotal: subtotal.toFixed(2),
-            vat: vat.toFixed(2),
-            providerFee: providerFee.toFixed(2),
-            total: finalTotal.toFixed(2)
-          }
-        }),
-        JSON.stringify(paymentIntent)
-      ])
+          feeCents: providerFeeCents,
+          netAmountCents: subtotalCents,
+          orderId: orderId || null,
+          serviceAppointmentId: serviceAppointmentId || null,
+          workshopRegistrationId: workshopRegistrationId || null,
+          description: description || `Payment for ${orderId || serviceAppointmentId || workshopRegistrationId || 'service'}`,
+          escrowReleaseDate: escrowEnabled
+            ? sql`CURRENT_TIMESTAMP + INTERVAL '1 day' * ${autoReleaseDays}`
+            : null,
+          metadata: {
+            includeVAT,
+            businessType,
+            subtotalCents,
+            vatCents,
+            vatRate,
+            providerFeeCents,
+            breakdown: {
+              subtotal: subtotal.toFixed(2),
+              vat: vat.toFixed(2),
+              providerFee: providerFee.toFixed(2),
+              total: finalTotal.toFixed(2)
+            }
+          },
+          providerResponse: paymentIntent as unknown as Record<string, unknown>,
+        })
+        .returning({ id: paymentTransactions.id })
 
-      const txId = (transactionResult.rows[0] as IdRow).id
+      const txId = txRow.id
 
       // Create escrow account if enabled
       if (escrowEnabled) {
-        await client.query(`
-          INSERT INTO ${TABLE_NAMES.ESCROW_ACCOUNTS} (
-            transaction_id,
-            total_amount_cents,
+        await tx
+          .insert(escrowAccounts)
+          .values({
+            transactionId: txId,
+            totalAmountCents: totalCents,
             currency,
-            auto_release_days,
-            release_deadline,
-            buyer_id,
-            seller_id
-          ) VALUES (
-            $1, $2, $3, $4,
-            CURRENT_TIMESTAMP + INTERVAL '1 day' * $4,
-            $5,
-            CASE
-              WHEN $6 IS NOT NULL THEN (SELECT technician_id FROM ${TABLE_NAMES.SERVICE_APPOINTMENTS} WHERE id = $6)
-              WHEN $7 IS NOT NULL THEN (SELECT instructor_id FROM ${TABLE_NAMES.WORKSHOP_REGISTRATIONS} wr JOIN ${TABLE_NAMES.WORKSHOP_INSTANCES} wi ON wr.workshop_instance_id = wi.id WHERE wr.id = $7)
-              ELSE NULL
-            END
-          )
-        `, [
-          txId,
-          totalCents,
-          currency,
-          autoReleaseDays,
-          session.user.id,
-          serviceAppointmentId,
-          workshopRegistrationId
-        ])
+            autoReleaseDays,
+            releaseDeadline: sql`CURRENT_TIMESTAMP + INTERVAL '1 day' * ${autoReleaseDays}`,
+            buyerId: session.user.id,
+            sellerId: sql`
+              CASE
+                WHEN ${serviceAppointmentId ?? null}::uuid IS NOT NULL THEN (SELECT repairer_id FROM service_appointments WHERE id = ${serviceAppointmentId ?? null}::uuid)
+                WHEN ${workshopRegistrationId ?? null}::uuid IS NOT NULL THEN (SELECT wi.instructor_id FROM workshop_registrations wr JOIN workshop_instances wi ON wr.workshop_instance_id = wi.id WHERE wr.id = ${workshopRegistrationId ?? null}::uuid)
+                ELSE NULL
+              END
+            `,
+          })
       }
 
       return txId

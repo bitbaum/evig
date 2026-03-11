@@ -10,8 +10,10 @@ import { NextRequest } from 'next/server';
 import { withAdmin, ValidSession } from '@/lib/api/middleware';
 import { apiSuccess, apiError, apiBadRequest } from '@/lib/api/helpers';
 import { getDbUserId, getActiveTask, createInAppNotifications } from '@/lib/api/task-helpers';
-import { query, transaction } from '@/lib/auth/db';
-import { TABLE_NAMES } from '@/config/database';
+import { db } from '@/db';
+import { eq } from 'drizzle-orm';
+import { tasks, taskAttentionFlags } from '@/db/schema/misc';
+import { users } from '@/db/schema/auth';
 import { TASK_STATUSES } from '@/config/tasks';
 import { attentionFlagSchema } from '@/lib/schemas/tasks';
 import { logger } from '@/lib/logger';
@@ -53,36 +55,28 @@ export const POST = withAdmin<RouteParams>(async (
     const { dbUserId } = userLookup;
 
     // Create attention flag + update task status atomically
-    const flag = await transaction(async (client) => {
-      const flagResult = await client.query<{ id: string }>(
-        `INSERT INTO ${TABLE_NAMES.TASK_ATTENTION_FLAGS} (
-          task_id,
-          flagged_by,
-          message
-        ) VALUES ($1, $2, $3)
-        RETURNING *`,
-        [taskId, dbUserId, data.message || null]
-      );
+    const flag = await db.transaction(async (tx) => {
+      const [flagRow] = await tx.insert(taskAttentionFlags).values({
+        taskId,
+        flaggedBy: dbUserId,
+        message: data.message || null,
+      }).returning();
 
-      await client.query(
-        `UPDATE ${TABLE_NAMES.TASKS}
-         SET current_status = $1, updated_at = NOW()
-         WHERE id = $2`,
-        [TASK_STATUSES.NEEDS_ATTENTION, taskId]
-      );
+      await tx.update(tasks)
+        .set({ currentStatus: TASK_STATUSES.NEEDS_ATTENTION, updatedAt: new Date().toISOString() })
+        .where(eq(tasks.id, taskId));
 
-      return flagResult.rows[0];
+      return flagRow;
     });
 
     // In-app notifications (non-blocking for API success)
-    const staffResult = await query<{ id: string }>(
-      `SELECT id FROM ${TABLE_NAMES.USERS} WHERE is_staff = true AND id != $1`,
-      [dbUserId]
-    )
+    const staffResult = await db.select({ id: users.id })
+      .from(users)
+      .where(eq(users.isStaff, true));
 
     const notificationRecipientIds = [
       task.created_by,
-      ...staffResult.rows.map(row => row.id),
+      ...staffResult.filter(row => row.id !== dbUserId).map(row => row.id),
     ].filter((id, index, all) => id !== dbUserId && all.indexOf(id) === index)
 
     await createInAppNotifications({

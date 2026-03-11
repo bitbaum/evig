@@ -1,9 +1,13 @@
 import { NextRequest } from 'next/server'
 import { auth } from '@/auth'
-import { query, transaction } from '@/lib/auth/db'
+import { db } from '@/db'
+import { sql, eq, and, ne, getTableName } from 'drizzle-orm'
+import { itHilfeRequests, itHilfeOffers } from '@/db/schema/itHilfe'
+import { users } from '@/db/schema/auth'
+import { conversations } from '@/db/schema/messaging'
 import { apiError, apiSuccess, apiUnauthorized, apiBadRequest, apiNotFound, apiForbidden } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
-import { TABLE_NAMES, CONVERSATION_TYPES } from '@/config/database'
+import { CONVERSATION_TYPES } from '@/config/database'
 import { logger } from '@/lib/logger'
 import { sendCustomEmail } from '@/lib/email'
 import { itHilfeOfferAccepted, itHilfeOfferRejected } from '@/lib/email/templates/it-hilfe'
@@ -34,6 +38,12 @@ interface RouteParams {
   params: Promise<{ id: string; offerId: string }>
 }
 
+// Table name refs
+const reqTable = getTableName(itHilfeRequests)
+const offTable = getTableName(itHilfeOffers)
+const uTable = getTableName(users)
+const convTable = getTableName(conversations)
+
 /**
  * POST /api/it-hilfe/requests/[id]/offers/[offerId]/accept
  * Accept an offer (request owner only)
@@ -54,18 +64,18 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
     }
 
     // Get request details and verify ownership
-    const requestResult = await query(`
+    const requestResult = await db.execute(sql`
       SELECT r.requester_id, r.status, r.title, u.name as requester_name
-      FROM ${TABLE_NAMES.IT_HILFE_REQUESTS} r
-      JOIN ${TABLE_NAMES.USERS} u ON r.requester_id = u.id
-      WHERE r.id = $1
-    `, [id])
+      FROM ${sql.raw(reqTable)} r
+      JOIN ${sql.raw(uTable)} u ON r.requester_id = u.id
+      WHERE r.id = ${id}
+    `)
 
     if (requestResult.rows.length === 0) {
       return apiNotFound('Reparaturanfrage')
     }
 
-    const requestData = requestResult.rows[0] as RequestRow
+    const requestData = requestResult.rows[0] as unknown as RequestRow
 
     if (requestData.requester_id !== session.user.id) {
       return apiForbidden('Sie können nur Angebote für Ihre eigenen Anfragen akzeptieren')
@@ -77,45 +87,45 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
     }
 
     // Get offer details with helper info
-    const offerResult = await query(`
+    const offerResult = await db.execute(sql`
       SELECT o.id, o.helper_id, o.status, u.name as helper_name, u.email as helper_email
-      FROM ${TABLE_NAMES.IT_HILFE_OFFERS} o
-      JOIN ${TABLE_NAMES.USERS} u ON o.helper_id = u.id
-      WHERE o.id = $1 AND o.request_id = $2
-    `, [offerId, id])
+      FROM ${sql.raw(offTable)} o
+      JOIN ${sql.raw(uTable)} u ON o.helper_id = u.id
+      WHERE o.id = ${offerId} AND o.request_id = ${id}
+    `)
 
     if (offerResult.rows.length === 0) {
       return apiNotFound('Angebot')
     }
 
-    const offerData = offerResult.rows[0] as OfferRow
+    const offerData = offerResult.rows[0] as unknown as OfferRow
 
     if (offerData.status !== OFFER_STATUS.PENDING) {
       return apiBadRequest('Dieses Angebot kann nicht mehr akzeptiert werden')
     }
 
     // Wrap all state changes in a transaction
-    await transaction(async (client) => {
+    await db.transaction(async (tx) => {
       // 1. Update the accepted offer status
-      await client.query(`
-        UPDATE ${TABLE_NAMES.IT_HILFE_OFFERS}
-        SET status = '${OFFER_STATUS.ACCEPTED}'
-        WHERE id = $1
-      `, [offerId])
+      await tx.update(itHilfeOffers)
+        .set({ status: OFFER_STATUS.ACCEPTED })
+        .where(eq(itHilfeOffers.id, offerId))
 
       // 2. Reject all other pending offers for this request
-      await client.query(`
-        UPDATE ${TABLE_NAMES.IT_HILFE_OFFERS}
-        SET status = '${OFFER_STATUS.REJECTED}'
-        WHERE request_id = $1 AND id != $2 AND status = '${OFFER_STATUS.PENDING}'
-      `, [id, offerId])
+      await tx.update(itHilfeOffers)
+        .set({ status: OFFER_STATUS.REJECTED })
+        .where(
+          and(
+            eq(itHilfeOffers.requestId, id),
+            ne(itHilfeOffers.id, offerId),
+            eq(itHilfeOffers.status, OFFER_STATUS.PENDING)
+          )
+        )
 
       // 3. Update request status to matched
-      await client.query(`
-        UPDATE ${TABLE_NAMES.IT_HILFE_REQUESTS}
-        SET status = '${REQUEST_STATUS.MATCHED}', matched_offer_id = $1
-        WHERE id = $2
-      `, [offerId, id])
+      await tx.update(itHilfeRequests)
+        .set({ status: REQUEST_STATUS.MATCHED, matchedOfferId: offerId })
+        .where(eq(itHilfeRequests.id, id))
 
       // 4. Create a conversation between requester and helper
       // Ensure consistent participant ordering (required by CHECK constraint)
@@ -127,30 +137,20 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
         : session.user.id
 
       // Check if conversation already exists
-      const existingConv = await client.query(`
-        SELECT id FROM ${TABLE_NAMES.CONVERSATIONS}
-        WHERE participant_1 = $1 AND participant_2 = $2
-          AND type = $3 AND context_id = $4
-      `, [participant_1, participant_2, CONVERSATION_TYPES.IT_HILFE, id])
+      const existingConv = await tx.execute(sql`
+        SELECT id FROM ${sql.raw(convTable)}
+        WHERE participant_1 = ${participant_1} AND participant_2 = ${participant_2}
+          AND type = ${CONVERSATION_TYPES.IT_HILFE} AND context_id = ${id}
+      `)
 
       if (existingConv.rows.length === 0) {
-        await client.query(`
-          INSERT INTO ${TABLE_NAMES.CONVERSATIONS} (
-            participant_1,
-            participant_2,
-            type,
-            context_id,
-            title
-          ) VALUES (
-            $1, $2, $3, $4, $5
-          )
-        `, [
-          participant_1,
-          participant_2,
-          CONVERSATION_TYPES.IT_HILFE,
-          id,
-          `IT-Hilfe: ${requestData.title}`,
-        ])
+        await tx.insert(conversations).values({
+          participant1: participant_1,
+          participant2: participant_2,
+          type: CONVERSATION_TYPES.IT_HILFE,
+          contextId: id,
+          title: `IT-Hilfe: ${requestData.title}`,
+        })
       }
     })
 
@@ -176,13 +176,13 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
     ).catch(err => logger.error('Failed to send offer accepted email', { err, helperId: offerData.helper_id }))
 
     // Notify rejected helpers
-    query(`
+    db.execute(sql`
       SELECT o.helper_id, u.name as helper_name, u.email as helper_email
-      FROM ${TABLE_NAMES.IT_HILFE_OFFERS} o
-      JOIN ${TABLE_NAMES.USERS} u ON o.helper_id = u.id
-      WHERE o.request_id = $1 AND o.status = '${OFFER_STATUS.REJECTED}' AND o.id != $2
-    `, [id, offerId]).then(result => {
-      for (const row of result.rows as RejectedOfferRow[]) {
+      FROM ${sql.raw(offTable)} o
+      JOIN ${sql.raw(uTable)} u ON o.helper_id = u.id
+      WHERE o.request_id = ${id} AND o.status = ${OFFER_STATUS.REJECTED} AND o.id != ${offerId}
+    `).then(result => {
+      for (const row of result.rows as unknown as RejectedOfferRow[]) {
         sendCustomEmail(
           row.helper_email,
           itHilfeOfferRejected(row.helper_name || 'Techniker', requestData.title, requestUrl)

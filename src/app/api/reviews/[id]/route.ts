@@ -1,56 +1,16 @@
 import { NextRequest } from 'next/server'
 import { auth } from '@/auth'
-import { query } from '@/lib/auth/db'
+import { db } from '@/db'
+import { reviews, reviewResponses, reviewAttachments, reviewModerationLog } from '@/db/schema/reviews'
+import { users } from '@/db/schema/auth'
+import { repairerProfiles } from '@/db/schema/services'
+import { eq, and, sql } from 'drizzle-orm'
 import { apiError, apiSuccess, apiUnauthorized, apiBadRequest, apiNotFound, apiForbidden } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
-import { TABLE_NAMES, REVIEW_TARGET_TYPES } from '@/config/database'
+import { REVIEW_TARGET_TYPES } from '@/config/database'
 import { REVIEW_STATUS } from '@/config/review-status'
 import { logger } from '@/lib/logger'
 import { validateBody, UpdateReviewSchema } from '@/lib/schemas'
-
-interface ReviewRow {
-  id: string
-  reviewer_id: string
-  reviewer_name: string
-  reviewer_email: string
-  target_type: string
-  target_id: string
-  target_name: string
-  booking_id: string
-  overall_rating: number
-  communication_rating: number
-  professionalism_rating: number
-  quality_rating: number
-  timeliness_rating: number
-  value_rating: number
-  title: string
-  content: string
-  is_verified_purchase: boolean
-  helpful_votes: number
-  total_votes: number
-  status: string
-  moderation_reason: string
-  moderated_by: string
-  moderated_at: string
-  response_id: string
-  response_content: string
-  response_created_at: string
-  responder_name: string
-  created_at: string
-  updated_at: string
-}
-
-interface AttachmentRow {
-  id: string
-  original_filename: string
-  file_path: string
-  mime_type: string
-  attachment_type: string
-}
-
-interface ReviewOwnerRow {
-  reviewer_id: string
-}
 
 export async function GET(
   request: NextRequest,
@@ -59,85 +19,130 @@ export async function GET(
   const { id: reviewId } = await params
 
   try {
-    // Get review with full details
-    const reviewResult = await query(`
-      SELECT
-        r.id, r.reviewer_id, r.target_type, r.target_id, r.booking_id,
-        r.overall_rating, r.communication_rating, r.professionalism_rating,
-        r.quality_rating, r.timeliness_rating, r.value_rating,
-        r.title, r.content, r.is_verified_purchase,
-        r.helpful_votes, r.total_votes, r.status,
-        r.moderation_reason, r.moderated_by, r.moderated_at,
-        r.created_at, r.updated_at,
-        u.name as reviewer_name,
-        u.email as reviewer_email,
-        COALESCE(rp.business_name, '') as target_name,
-        rr.id as response_id,
-        rr.content as response_content,
-        rr.created_at as response_created_at,
-        ru.name as responder_name
-      FROM ${TABLE_NAMES.REVIEWS} r
-      JOIN ${TABLE_NAMES.USERS} u ON r.reviewer_id = u.id
-      LEFT JOIN ${TABLE_NAMES.REPAIRER_PROFILES} rp ON r.target_type = '${REVIEW_TARGET_TYPES.REPAIRER}' AND r.target_id = rp.id
-      LEFT JOIN ${TABLE_NAMES.REVIEW_RESPONSES} rr ON r.id = rr.review_id AND rr.status = '${REVIEW_STATUS.PUBLISHED}'
-      LEFT JOIN ${TABLE_NAMES.USERS} ru ON rr.responder_id = ru.id
-      WHERE r.id = $1
-    `, [reviewId])
+    // Aliased users table for responder
+    const responder = db
+      .select({ id: users.id, name: users.name })
+      .from(users)
+      .as('responder')
 
-    if (reviewResult.rows.length === 0) {
+    // Subquery for published response
+    const publishedResponses = db
+      .select({
+        reviewId: reviewResponses.reviewId,
+        id: reviewResponses.id,
+        content: reviewResponses.content,
+        createdAt: reviewResponses.createdAt,
+        responderId: reviewResponses.responderId,
+      })
+      .from(reviewResponses)
+      .where(eq(reviewResponses.status, REVIEW_STATUS.PUBLISHED))
+      .as('rr')
+
+    const rows = await db
+      .select({
+        id: reviews.id,
+        reviewerId: reviews.reviewerId,
+        targetType: reviews.targetType,
+        targetId: reviews.targetId,
+        bookingId: reviews.bookingId,
+        overallRating: reviews.overallRating,
+        communicationRating: reviews.communicationRating,
+        professionalismRating: reviews.professionalismRating,
+        qualityRating: reviews.qualityRating,
+        timelinessRating: reviews.timelinessRating,
+        valueRating: reviews.valueRating,
+        title: reviews.title,
+        content: reviews.content,
+        isVerifiedPurchase: reviews.isVerifiedPurchase,
+        helpfulVotes: reviews.helpfulVotes,
+        totalVotes: reviews.totalVotes,
+        status: reviews.status,
+        moderationReason: reviews.moderationReason,
+        moderatedBy: reviews.moderatedBy,
+        moderatedAt: reviews.moderatedAt,
+        createdAt: reviews.createdAt,
+        updatedAt: reviews.updatedAt,
+        reviewerName: users.name,
+        reviewerEmail: users.email,
+        targetName: sql<string>`COALESCE(${repairerProfiles.businessName}, '')`,
+        responseId: publishedResponses.id,
+        responseContent: publishedResponses.content,
+        responseCreatedAt: publishedResponses.createdAt,
+        responderName: responder.name,
+      })
+      .from(reviews)
+      .innerJoin(users, eq(reviews.reviewerId, users.id))
+      .leftJoin(
+        repairerProfiles,
+        and(
+          eq(reviews.targetType, REVIEW_TARGET_TYPES.REPAIRER),
+          eq(reviews.targetId, repairerProfiles.id)
+        )
+      )
+      .leftJoin(publishedResponses, eq(reviews.id, publishedResponses.reviewId))
+      .leftJoin(responder, eq(publishedResponses.responderId, responder.id))
+      .where(eq(reviews.id, reviewId))
+
+    if (rows.length === 0) {
       return apiNotFound('Bewertung nicht gefunden')
     }
 
-    const review = reviewResult.rows[0] as ReviewRow
+    const review = rows[0]
 
     // Get attachments
-    const attachmentsResult = await query(
-      `SELECT id, original_filename, file_path, mime_type, attachment_type
-       FROM ${TABLE_NAMES.REVIEW_ATTACHMENTS} WHERE review_id = $1 ORDER BY sort_order, created_at`,
-      [reviewId]
-    )
+    const attachmentRows = await db
+      .select({
+        id: reviewAttachments.id,
+        originalFilename: reviewAttachments.originalFilename,
+        filePath: reviewAttachments.filePath,
+        mimeType: reviewAttachments.mimeType,
+        attachmentType: reviewAttachments.attachmentType,
+      })
+      .from(reviewAttachments)
+      .where(eq(reviewAttachments.reviewId, reviewId))
+      .orderBy(reviewAttachments.sortOrder, reviewAttachments.createdAt)
 
     const reviewData = {
       id: review.id,
-      reviewerId: review.reviewer_id,
-      reviewerName: review.reviewer_name,
-      reviewerEmail: review.reviewer_email,
-      targetType: review.target_type,
-      targetId: review.target_id,
-      targetName: review.target_name,
-      bookingId: review.booking_id,
-      overallRating: review.overall_rating,
+      reviewerId: review.reviewerId,
+      reviewerName: review.reviewerName,
+      reviewerEmail: review.reviewerEmail,
+      targetType: review.targetType,
+      targetId: review.targetId,
+      targetName: review.targetName,
+      bookingId: review.bookingId,
+      overallRating: review.overallRating,
       ratings: {
-        communication: review.communication_rating,
-        professionalism: review.professionalism_rating,
-        quality: review.quality_rating,
-        timeliness: review.timeliness_rating,
-        value: review.value_rating
+        communication: review.communicationRating,
+        professionalism: review.professionalismRating,
+        quality: review.qualityRating,
+        timeliness: review.timelinessRating,
+        value: review.valueRating,
       },
       title: review.title,
       content: review.content,
-      isVerifiedPurchase: review.is_verified_purchase,
-      helpfulVotes: review.helpful_votes,
-      totalVotes: review.total_votes,
+      isVerifiedPurchase: review.isVerifiedPurchase,
+      helpfulVotes: review.helpfulVotes,
+      totalVotes: review.totalVotes,
       status: review.status,
-      moderationReason: review.moderation_reason,
-      moderatedBy: review.moderated_by,
-      moderatedAt: review.moderated_at,
-      attachments: (attachmentsResult.rows as AttachmentRow[]).map(att => ({
+      moderationReason: review.moderationReason,
+      moderatedBy: review.moderatedBy,
+      moderatedAt: review.moderatedAt,
+      attachments: attachmentRows.map(att => ({
         id: att.id,
-        filename: att.original_filename,
-        filePath: att.file_path,
-        mimeType: att.mime_type,
-        attachmentType: att.attachment_type
+        filename: att.originalFilename,
+        filePath: att.filePath,
+        mimeType: att.mimeType,
+        attachmentType: att.attachmentType,
       })),
-      response: review.response_id ? {
-        id: review.response_id,
-        content: review.response_content,
-        createdAt: review.response_created_at,
-        responderName: review.responder_name
+      response: review.responseId ? {
+        id: review.responseId,
+        content: review.responseContent,
+        createdAt: review.responseCreatedAt,
+        responderName: review.responderName,
       } : null,
-      createdAt: review.created_at,
-      updatedAt: review.updated_at
+      createdAt: review.createdAt,
+      updatedAt: review.updatedAt,
     }
 
     return apiSuccess({ review: reviewData })
@@ -171,28 +176,33 @@ export async function PUT(
       timelinessRating,
       valueRating,
       title,
-      content
+      content,
     } = validation.data
 
     // Get review and check ownership
-    const reviewResult = await query(
-      `SELECT id, reviewer_id, created_at, status FROM ${TABLE_NAMES.REVIEWS} WHERE id = $1`,
-      [reviewId]
-    )
+    const existingRows = await db
+      .select({
+        id: reviews.id,
+        reviewerId: reviews.reviewerId,
+        createdAt: reviews.createdAt,
+        status: reviews.status,
+      })
+      .from(reviews)
+      .where(eq(reviews.id, reviewId))
 
-    if (reviewResult.rows.length === 0) {
+    if (existingRows.length === 0) {
       return apiNotFound('Bewertung nicht gefunden')
     }
 
-    const review = reviewResult.rows[0] as Pick<ReviewRow, 'id' | 'reviewer_id' | 'created_at' | 'status'>
+    const review = existingRows[0]
 
     // Check if user owns this review
-    if (review.reviewer_id !== session.user.id) {
+    if (review.reviewerId !== session.user.id) {
       return apiForbidden('Sie können nur Ihre eigenen Bewertungen bearbeiten')
     }
 
     // Check if review can still be edited (within time limit, e.g., 30 days)
-    const createdAt = new Date(review.created_at)
+    const createdAt = new Date(review.createdAt!)
     const now = new Date()
     const daysSinceCreation = (now.getTime() - createdAt.getTime()) / (1000 * 60 * 60 * 24)
 
@@ -200,39 +210,32 @@ export async function PUT(
       return apiBadRequest('Bewertungen können nur innerhalb von 30 Tagen bearbeitet werden')
     }
 
-    // Update review
-    await query(`
-      UPDATE ${TABLE_NAMES.REVIEWS} SET
-        overall_rating = COALESCE($1, overall_rating),
-        communication_rating = COALESCE($2, communication_rating),
-        professionalism_rating = COALESCE($3, professionalism_rating),
-        quality_rating = COALESCE($4, quality_rating),
-        timeliness_rating = COALESCE($5, timeliness_rating),
-        value_rating = COALESCE($6, value_rating),
-        title = COALESCE($7, title),
-        content = COALESCE($8, content),
-        updated_at = CURRENT_TIMESTAMP
-      WHERE id = $9
-    `, [
-      overallRating,
-      communicationRating,
-      professionalismRating,
-      qualityRating,
-      timelinessRating,
-      valueRating,
-      title,
-      content,
-      reviewId
-    ])
+    // Build partial update — only include fields that were provided
+    const updateFields: Record<string, unknown> = {
+      updatedAt: sql`CURRENT_TIMESTAMP`,
+    }
+    if (overallRating !== undefined) updateFields.overallRating = overallRating
+    if (communicationRating !== undefined) updateFields.communicationRating = communicationRating
+    if (professionalismRating !== undefined) updateFields.professionalismRating = professionalismRating
+    if (qualityRating !== undefined) updateFields.qualityRating = qualityRating
+    if (timelinessRating !== undefined) updateFields.timelinessRating = timelinessRating
+    if (valueRating !== undefined) updateFields.valueRating = valueRating
+    if (title !== undefined) updateFields.title = title
+    if (content !== undefined) updateFields.content = content
+
+    await db
+      .update(reviews)
+      .set(updateFields)
+      .where(eq(reviews.id, reviewId))
 
     logger.info('Review updated', {
       reviewId,
-      reviewerId: session.user.id
+      reviewerId: session.user.id,
     })
 
     return apiSuccess({
       message: 'Bewertung erfolgreich aktualisiert',
-      reviewId
+      reviewId,
     })
 
   } catch (error) {
@@ -254,51 +257,57 @@ export async function DELETE(
     }
 
     // Get review and check ownership
-    const reviewResult = await query(
-      `SELECT reviewer_id FROM ${TABLE_NAMES.REVIEWS} WHERE id = $1`,
-      [reviewId]
-    )
+    const existingRows = await db
+      .select({ reviewerId: reviews.reviewerId })
+      .from(reviews)
+      .where(eq(reviews.id, reviewId))
 
-    if (reviewResult.rows.length === 0) {
+    if (existingRows.length === 0) {
       return apiNotFound('Bewertung nicht gefunden')
     }
 
-    const review = reviewResult.rows[0] as ReviewOwnerRow
+    const review = existingRows[0]
 
     // Check if user owns this review or is admin
     const isAdmin = !!session.user.isStaff
-    const isOwner = review.reviewer_id === session.user.id
+    const isOwner = review.reviewerId === session.user.id
 
     if (!isOwner && !isAdmin) {
       return apiForbidden('Sie können nur Ihre eigenen Bewertungen löschen')
     }
 
     // Soft delete by setting status to 'deleted'
-    await query(`
-      UPDATE ${TABLE_NAMES.REVIEWS} SET
-        status = '${REVIEW_STATUS.DELETED}',
-        updated_at = CURRENT_TIMESTAMP
-      WHERE id = $1
-    `, [reviewId])
+    await db
+      .update(reviews)
+      .set({
+        status: REVIEW_STATUS.DELETED,
+        updatedAt: sql`CURRENT_TIMESTAMP`,
+      })
+      .where(eq(reviews.id, reviewId))
 
     // Log moderation action if admin
     if (isAdmin && !isOwner) {
-      await query(`
-        INSERT INTO ${TABLE_NAMES.REVIEW_MODERATION_LOG} (
-          review_id, action, reason, admin_id, old_status, new_status
-        ) VALUES ($1, 'delete', 'User requested deletion', $2, '${REVIEW_STATUS.PUBLISHED}', '${REVIEW_STATUS.DELETED}')
-      `, [reviewId, session.user.id])
+      await db
+        .insert(reviewModerationLog)
+        .values({
+          reviewId,
+          action: 'delete',
+          reason: 'User requested deletion',
+          adminId: session.user.id,
+          oldStatus: REVIEW_STATUS.PUBLISHED,
+          newStatus: REVIEW_STATUS.DELETED,
+        })
     }
 
     logger.info('Review deleted', {
       reviewId,
       deletedBy: session.user.id,
-      isAdmin
+      isAdmin,
     })
 
     return apiSuccess({
       message: 'Bewertung erfolgreich gelöscht',
-      reviewId
+      reviewId,
     })
 
   } catch (error) {

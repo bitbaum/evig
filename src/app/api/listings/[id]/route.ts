@@ -11,14 +11,13 @@ import { apiSuccess, apiError, apiNotFound, apiForbidden } from '@/lib/api/helpe
 import { db } from '@/db';
 import { listings, listingImages, listingSpecs, listingFavorites, users, sellerProfiles } from '@/db/schema';
 import { eq, and, ne, asc, sql } from 'drizzle-orm';
-import { query, transaction } from '@/lib/auth/db';
-import { TABLE_NAMES } from '@/config/database';
 import { logger } from '@/lib/logger';
 import { validateBody, UpdateListingSchema } from '@/lib/schemas';
-import { LISTING_STATUS } from '@/config/marketplace';
+import { LISTING_STATUS, normalizeSpecValue } from '@/config/marketplace';
 import { isStaffEmail } from '@/lib/permissions';
 import { indexListing, removeListing, type MeilisearchDocument } from '@/lib/search/meilisearch';
-import { insertListingImages, upsertListingSpecs, buildMeiliSpecs } from '@/lib/marketplace/listing-helpers';
+import { buildMeiliSpecs } from '@/lib/marketplace/listing-helpers';
+import type { NewListing } from '@/db/schema/marketplace';
 
 type RouteContext = { params?: { id: string } };
 
@@ -135,7 +134,26 @@ export async function GET(
 }
 
 // ============================================================================
-// PATCH — Update listing (owner only) — uses transaction(), kept as raw SQL
+// Map from UpdateListingSchema snake_case keys to Drizzle camelCase columns
+// ============================================================================
+
+const FIELD_MAP: Record<string, keyof NewListing> = {
+  title: 'title',
+  description: 'description',
+  price_chf: 'priceChf',
+  category: 'category',
+  condition: 'condition',
+  brand: 'brand',
+  model: 'model',
+  delivery_options: 'deliveryOptions',
+  shipping_cost_chf: 'shippingCostChf',
+  pickup_location: 'pickupLocation',
+  payment_mode: 'paymentMode',
+  status: 'status',
+};
+
+// ============================================================================
+// PATCH — Update listing (owner only)
 // ============================================================================
 
 export const PATCH = withAuth<{ id: string }>(async (
@@ -148,12 +166,12 @@ export const PATCH = withAuth<{ id: string }>(async (
     if (!id) return apiNotFound('Inserat');
 
     // Check ownership
-    const ownerResult = await query<{ seller_id: string }>(
-      `SELECT seller_id FROM ${TABLE_NAMES.LISTINGS} WHERE id = $1 AND status != $2`,
-      [id, LISTING_STATUS.REMOVED]
-    );
-    if (ownerResult.rows.length === 0) return apiNotFound('Inserat');
-    if (ownerResult.rows[0].seller_id !== session.user.id) {
+    const [owner] = await db
+      .select({ sellerId: listings.sellerId })
+      .from(listings)
+      .where(and(eq(listings.id, id), ne(listings.status, LISTING_STATUS.REMOVED)));
+    if (!owner) return apiNotFound('Inserat');
+    if (owner.sellerId !== session.user.id) {
       return apiForbidden('Nur der Eigentümer kann dieses Inserat bearbeiten');
     }
 
@@ -165,42 +183,72 @@ export const PATCH = withAuth<{ id: string }>(async (
     // Extract images and specs separately
     const { images, specs, condition_checks, ...updateFields } = data;
 
-    await transaction(async (client) => {
-      // Build SET clauses for listing fields
-      const entries = Object.entries(updateFields).filter(([, v]) => v !== undefined);
+    await db.transaction(async (tx) => {
+      // Build Drizzle set object from validated fields
+      const setValues: Partial<NewListing> = {};
+
+      for (const [key, value] of Object.entries(updateFields)) {
+        if (value === undefined) continue;
+        const drizzleKey = FIELD_MAP[key];
+        if (drizzleKey) {
+          // Decimal fields need string conversion
+          if (drizzleKey === 'priceChf' || drizzleKey === 'shippingCostChf') {
+            (setValues as Record<string, unknown>)[drizzleKey] = value != null ? String(value) : null;
+          } else {
+            (setValues as Record<string, unknown>)[drizzleKey] = value;
+          }
+        }
+      }
 
       // Add condition_checks if provided
       if (condition_checks !== undefined) {
-        entries.push(['condition_checks', condition_checks ? JSON.stringify(condition_checks) : null]);
+        setValues.conditionChecks = condition_checks ? condition_checks : null;
       }
 
-      if (entries.length > 0) {
-        const setClauses: string[] = [];
-        const values: unknown[] = [];
-        let idx = 1;
-        for (const [key, value] of entries) {
-          setClauses.push(`${key} = $${idx++}`);
-          values.push(value);
-        }
-        values.push(id);
-        await client.query(
-          `UPDATE ${TABLE_NAMES.LISTINGS} SET ${setClauses.join(', ')} WHERE id = $${idx}`,
-          values
-        );
+      if (Object.keys(setValues).length > 0) {
+        await tx
+          .update(listings)
+          .set(setValues)
+          .where(eq(listings.id, id));
       }
 
       // Replace images if provided
       if (images && images.length > 0) {
-        await client.query(
-          `DELETE FROM ${TABLE_NAMES.LISTING_IMAGES} WHERE listing_id = $1`,
-          [id]
-        );
-        await insertListingImages(client, id, images);
+        await tx
+          .delete(listingImages)
+          .where(eq(listingImages.listingId, id));
+        await tx
+          .insert(listingImages)
+          .values(
+            images.map((url, position) => ({
+              listingId: id,
+              url,
+              position,
+              isPrimary: position === 0,
+            }))
+          );
       }
 
       // Replace specs if provided
       if (specs !== undefined) {
-        await upsertListingSpecs(client, id, specs);
+        await tx
+          .delete(listingSpecs)
+          .where(eq(listingSpecs.listingId, id));
+
+        if (specs.length > 0) {
+          const specValues = specs
+            .filter(spec => spec.value.trim())
+            .map(spec => ({
+              listingId: id,
+              specKey: spec.key,
+              specValue: spec.value,
+              specUnit: spec.unit || null,
+              normalizedValue: normalizeSpecValue(spec.key, spec.value)?.toString() ?? null,
+            }));
+          if (specValues.length > 0) {
+            await tx.insert(listingSpecs).values(specValues);
+          }
+        }
       }
     });
 
@@ -210,38 +258,60 @@ export const PATCH = withAuth<{ id: string }>(async (
     if (data.status === LISTING_STATUS.REMOVED || data.status === LISTING_STATUS.SOLD || data.status === LISTING_STATUS.DRAFT) {
       removeListing(id).catch(err => logger.error('Failed to remove listing from Meilisearch', { error: err, listingId: id }));
     } else {
-      query(
-        `SELECT l.id, l.title, l.description, l.brand, l.model, l.category, l.condition,
-          l.price_chf, l.delivery_options, l.payment_mode, l.status, l.is_revampit,
-          l.pickup_location, l.view_count, l.favorite_count, l.created_at,
-          l.verified_at,
-          u.name as seller_name, sp.city as seller_city,
-          (SELECT li.url FROM ${TABLE_NAMES.LISTING_IMAGES} li WHERE li.listing_id = l.id AND li.is_primary = true LIMIT 1) as thumbnail
-        FROM ${TABLE_NAMES.LISTINGS} l
-        JOIN ${TABLE_NAMES.USERS} u ON l.seller_id = u.id
-        LEFT JOIN ${TABLE_NAMES.SELLER_PROFILES} sp ON l.seller_id = sp.user_id
-        WHERE l.id = $1 AND l.status = $2`,
-        [id, LISTING_STATUS.ACTIVE]
-      ).then(async res => {
-        if (res.rows[0]) {
-          const row = res.rows[0] as Record<string, unknown>;
-          // Fetch specs for Meilisearch
-          const specsRes = await query(
-            `SELECT spec_key, spec_value FROM ${TABLE_NAMES.LISTING_SPECS} WHERE listing_id = $1`,
-            [id]
-          );
-          const specInputs = specsRes.rows.map(r => {
-            const s = r as { spec_key: string; spec_value: string };
-            return { key: s.spec_key, value: s.spec_value };
-          });
-          const meiliSpecs = buildMeiliSpecs(specInputs);
-          indexListing({
-            ...row,
-            is_verified: !!row.verified_at,
-            ...meiliSpecs,
-          } as MeilisearchDocument).catch(err => logger.error('Failed to index listing in Meilisearch', { error: err, listingId: id }));
-        }
-      }).catch(err => logger.error('Failed to fetch listing for Meilisearch index', { error: err, listingId: id }));
+      // Fetch listing data for Meilisearch using Drizzle
+      db.select({
+        id: listings.id,
+        title: listings.title,
+        description: listings.description,
+        brand: listings.brand,
+        model: listings.model,
+        category: listings.category,
+        condition: listings.condition,
+        price_chf: listings.priceChf,
+        delivery_options: listings.deliveryOptions,
+        payment_mode: listings.paymentMode,
+        status: listings.status,
+        is_revampit: listings.isRevampit,
+        pickup_location: listings.pickupLocation,
+        view_count: listings.viewCount,
+        favorite_count: listings.favoriteCount,
+        created_at: listings.createdAt,
+        verified_at: listings.verifiedAt,
+        seller_name: users.name,
+        seller_city: sellerProfiles.city,
+        thumbnail: sql<string | null>`(
+          SELECT ${listingImages.url} FROM ${listingImages}
+          WHERE ${listingImages.listingId} = ${listings.id}
+            AND ${listingImages.isPrimary} = true
+          LIMIT 1
+        )`,
+      })
+        .from(listings)
+        .innerJoin(users, eq(listings.sellerId, users.id))
+        .leftJoin(sellerProfiles, eq(listings.sellerId, sellerProfiles.userId))
+        .where(and(eq(listings.id, id), eq(listings.status, LISTING_STATUS.ACTIVE)))
+        .then(async (rows) => {
+          if (rows[0]) {
+            const row = rows[0];
+            // Fetch specs for Meilisearch
+            const specsRes = await db
+              .select({
+                spec_key: listingSpecs.specKey,
+                spec_value: listingSpecs.specValue,
+              })
+              .from(listingSpecs)
+              .where(eq(listingSpecs.listingId, id));
+            const specInputs = specsRes.map(s => ({ key: s.spec_key, value: s.spec_value }));
+            const meiliSpecs = buildMeiliSpecs(specInputs);
+            indexListing({
+              ...row,
+              price_chf: Number(row.price_chf),
+              is_verified: !!row.verified_at,
+              ...meiliSpecs,
+            } as MeilisearchDocument).catch(err => logger.error('Failed to index listing in Meilisearch', { error: err, listingId: id }));
+          }
+        })
+        .catch(err => logger.error('Failed to fetch listing for Meilisearch index', { error: err, listingId: id }));
     }
 
     return apiSuccess({ id });

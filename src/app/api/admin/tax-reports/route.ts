@@ -1,12 +1,13 @@
 import { NextRequest } from 'next/server'
 import { withAdmin } from '@/lib/api/middleware'
-import { query } from '@/lib/auth/db'
+import { db } from '@/db'
+import { sql, getTableName } from 'drizzle-orm'
+import { paymentTransactions, refunds, escrowAccounts, paymentDisputes } from '@/db/schema/payments'
+import { users, userProfiles } from '@/db/schema/auth'
 import { apiError, apiSuccess } from '@/lib/api/helpers'
-import { generateTaxReport, TAX_CONFIGURATIONS, TaxTransaction } from '@/lib/payments/tax-compliance'
-import { TABLE_NAMES } from '@/config/database'
+import { generateTaxReport, TaxTransaction } from '@/lib/payments/tax-compliance'
 import { PAYMENT_STATUS } from '@/config/payment-status'
 import { logger } from '@/lib/logger'
-import { CountAsCountRow } from '@/lib/api/db-types'
 
 // Extended transaction type with joined data from query
 interface TaxTransactionWithJoins {
@@ -25,6 +26,14 @@ interface TaxTransactionWithJoins {
   }
 }
 
+// Table name refs
+const ptTable = getTableName(paymentTransactions)
+const uTable = getTableName(users)
+const upTable = getTableName(userProfiles)
+const rTable = getTableName(refunds)
+const eaTable = getTableName(escrowAccounts)
+const pdTable = getTableName(paymentDisputes)
+
 // GET /api/admin/tax-reports - Generate tax reports
 export const GET = withAdmin('finanzen', async (request: NextRequest) => {
   try {
@@ -39,7 +48,7 @@ export const GET = withAdmin('finanzen', async (request: NextRequest) => {
     const { startDate, endDate } = calculatePeriodDates(period, year, month)
 
     // Get transactions for the period
-    const transactionsResult = await query(`
+    const transactionsResult = await db.execute(sql`
       SELECT
         pt.*,
         u.email as customer_email,
@@ -51,18 +60,18 @@ export const GET = withAdmin('finanzen', async (request: NextRequest) => {
           'subtotalCents', (pt.metadata->>'subtotalCents')::int,
           'vatCents', (pt.metadata->>'vatCents')::int
         ) as tax_data
-      FROM ${TABLE_NAMES.PAYMENT_TRANSACTIONS} pt
-      JOIN ${TABLE_NAMES.USERS} u ON pt.user_id = u.id
-      LEFT JOIN ${TABLE_NAMES.USER_PROFILES} up ON u.id = up.user_id
-      WHERE pt.created_at >= $1
-        AND pt.created_at <= $2
-        AND pt.status = '${PAYMENT_STATUS.SUCCEEDED}'
+      FROM ${sql.raw(ptTable)} pt
+      JOIN ${sql.raw(uTable)} u ON pt.user_id = u.id
+      LEFT JOIN ${sql.raw(upTable)} up ON u.id = up.user_id
+      WHERE pt.created_at >= ${startDate}
+        AND pt.created_at <= ${endDate}
+        AND pt.status = ${PAYMENT_STATUS.SUCCEEDED}
         AND pt.type = 'payment'
       ORDER BY pt.created_at DESC
-    `, [startDate, endDate])
+    `)
 
     // Use extended type for database results, standard type for tax compliance functions
-    const transactionsWithJoins = transactionsResult.rows as TaxTransactionWithJoins[]
+    const transactionsWithJoins = transactionsResult.rows as unknown as TaxTransactionWithJoins[]
     const transactions: TaxTransaction[] = transactionsWithJoins.map(tx => ({
       id: tx.id,
       amount_cents: tx.amount_cents,
@@ -155,26 +164,30 @@ function calculatePeriodDates(period: string, year: number, month: number) {
   return { startDate, endDate }
 }
 
+interface CountRow {
+  count: string
+}
+
 async function generateComplianceReport(transactions: TaxTransactionWithJoins[], startDate: Date, endDate: Date) {
   // Get additional compliance data
-  const refundCount = await query(`
-    SELECT COUNT(*) as count FROM ${TABLE_NAMES.REFUNDS}
-    WHERE created_at >= $1 AND created_at <= $2
-  `, [startDate, endDate])
+  const refundCount = await db.execute(sql`
+    SELECT COUNT(*) as count FROM ${sql.raw(rTable)}
+    WHERE created_at >= ${startDate} AND created_at <= ${endDate}
+  `)
 
-  const escrowCount = await query(`
-    SELECT COUNT(*) as count FROM ${TABLE_NAMES.ESCROW_ACCOUNTS}
-    WHERE created_at >= $1 AND created_at <= $2
-  `, [startDate, endDate])
+  const escrowCount = await db.execute(sql`
+    SELECT COUNT(*) as count FROM ${sql.raw(eaTable)}
+    WHERE created_at >= ${startDate} AND created_at <= ${endDate}
+  `)
 
-  const disputeCount = await query(`
-    SELECT COUNT(*) as count FROM ${TABLE_NAMES.PAYMENT_DISPUTES}
-    WHERE created_at >= $1 AND created_at <= $2
-  `, [startDate, endDate])
+  const disputeCount = await db.execute(sql`
+    SELECT COUNT(*) as count FROM ${sql.raw(pdTable)}
+    WHERE created_at >= ${startDate} AND created_at <= ${endDate}
+  `)
 
-  const refundRow = refundCount.rows[0] as CountAsCountRow
-  const escrowRow = escrowCount.rows[0] as CountAsCountRow
-  const disputeRow = disputeCount.rows[0] as CountAsCountRow
+  const refundRow = refundCount.rows[0] as unknown as CountRow
+  const escrowRow = escrowCount.rows[0] as unknown as CountRow
+  const disputeRow = disputeCount.rows[0] as unknown as CountRow
 
   return {
     period: {

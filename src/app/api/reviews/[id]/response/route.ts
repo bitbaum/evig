@@ -1,30 +1,15 @@
 import { NextRequest } from 'next/server'
 import { auth } from '@/auth'
-import { query } from '@/lib/auth/db'
+import { db } from '@/db'
+import { reviews, reviewResponses } from '@/db/schema/reviews'
+import { repairerProfiles } from '@/db/schema/services'
+import { eq, and, sql } from 'drizzle-orm'
 import { apiError, apiSuccess, apiUnauthorized, apiBadRequest, apiNotFound, apiForbidden } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
-import { TABLE_NAMES, REVIEW_TARGET_TYPES } from '@/config/database'
+import { REVIEW_TARGET_TYPES } from '@/config/database'
 import { REVIEW_STATUS } from '@/config/review-status'
 import { logger } from '@/lib/logger'
 import { validateBody, ReviewResponseSchema } from '@/lib/schemas'
-
-interface ReviewRow {
-  id: string
-  target_type: string
-  target_id: string
-  repairer_user_id: string | null
-}
-
-interface ResponseIdRow {
-  id: string
-}
-
-interface ResponseRow {
-  id: string
-  responder_id: string
-  target_type: string
-  repairer_user_id: string | null
-}
 
 export async function POST(
   request: NextRequest,
@@ -43,60 +28,71 @@ export async function POST(
     const { content } = validation.data
 
     // Get review and check if user can respond
-    const reviewResult = await query(`
-      SELECT r.*, rp.user_id as repairer_user_id
-      FROM ${TABLE_NAMES.REVIEWS} r
-      LEFT JOIN ${TABLE_NAMES.REPAIRER_PROFILES} rp ON r.target_type = '${REVIEW_TARGET_TYPES.REPAIRER}' AND r.target_id = rp.id
-      WHERE r.id = $1
-    `, [reviewId])
+    const reviewRows = await db
+      .select({
+        id: reviews.id,
+        targetType: reviews.targetType,
+        targetId: reviews.targetId,
+        repairerUserId: repairerProfiles.userId,
+      })
+      .from(reviews)
+      .leftJoin(
+        repairerProfiles,
+        and(
+          eq(reviews.targetType, REVIEW_TARGET_TYPES.REPAIRER),
+          eq(reviews.targetId, repairerProfiles.id)
+        )
+      )
+      .where(eq(reviews.id, reviewId))
 
-    if (reviewResult.rows.length === 0) {
+    if (reviewRows.length === 0) {
       return apiNotFound('Bewertung nicht gefunden')
     }
 
-    const review = reviewResult.rows[0] as ReviewRow
+    const review = reviewRows[0]
 
     // Check if user is the repairer being reviewed
-    if (review.target_type === REVIEW_TARGET_TYPES.REPAIRER && review.repairer_user_id !== session.user.id) {
+    if (review.targetType === REVIEW_TARGET_TYPES.REPAIRER && review.repairerUserId !== session.user.id) {
       return apiForbidden('Nur der bewertete Reparateur kann auf Bewertungen antworten')
     }
 
     // Check if user is admin (admins can respond on behalf of repairers)
     const isAdmin = !!session.user.isStaff
 
-    if (review.target_type !== REVIEW_TARGET_TYPES.REPAIRER && !isAdmin) {
+    if (review.targetType !== REVIEW_TARGET_TYPES.REPAIRER && !isAdmin) {
       return apiForbidden('Antworten sind derzeit nur für Reparatur-Bewertungen verfügbar')
     }
 
     // Check if response already exists
-    const existingResponse = await query(
-      `SELECT id FROM ${TABLE_NAMES.REVIEW_RESPONSES} WHERE review_id = $1`,
-      [reviewId]
-    )
+    const existingResponse = await db
+      .select({ id: reviewResponses.id })
+      .from(reviewResponses)
+      .where(eq(reviewResponses.reviewId, reviewId))
 
-    if (existingResponse.rows.length > 0) {
+    if (existingResponse.length > 0) {
       return apiBadRequest('Eine Antwort für diese Bewertung existiert bereits')
     }
 
     // Create response
-    const responseResult = await query(`
-      INSERT INTO ${TABLE_NAMES.REVIEW_RESPONSES} (
-        review_id, responder_id, content, status
-      ) VALUES ($1, $2, $3, '${REVIEW_STATUS.PUBLISHED}')
-      RETURNING id
-    `, [reviewId, session.user.id, content.trim()])
-
-    const createdResponse = responseResult.rows[0] as ResponseIdRow
+    const [createdResponse] = await db
+      .insert(reviewResponses)
+      .values({
+        reviewId,
+        responderId: session.user.id,
+        content: content.trim(),
+        status: REVIEW_STATUS.PUBLISHED,
+      })
+      .returning({ id: reviewResponses.id })
 
     logger.info('Review response created', {
       reviewId,
       responseId: createdResponse.id,
-      responderId: session.user.id
+      responderId: session.user.id,
     })
 
     return apiSuccess({
       message: 'Antwort erfolgreich hinzugefügt',
-      responseId: createdResponse.id
+      responseId: createdResponse.id,
     }, 201)
 
   } catch (error) {
@@ -122,44 +118,55 @@ export async function PUT(
     const { content } = validation.data
 
     // Get response and check ownership
-    const responseResult = await query(`
-      SELECT rr.*, r.target_type, rp.user_id as repairer_user_id
-      FROM ${TABLE_NAMES.REVIEW_RESPONSES} rr
-      JOIN ${TABLE_NAMES.REVIEWS} r ON rr.review_id = r.id
-      LEFT JOIN ${TABLE_NAMES.REPAIRER_PROFILES} rp ON r.target_type = '${REVIEW_TARGET_TYPES.REPAIRER}' AND r.target_id = rp.id
-      WHERE rr.review_id = $1
-    `, [reviewId])
+    const responseRows = await db
+      .select({
+        id: reviewResponses.id,
+        responderId: reviewResponses.responderId,
+        targetType: reviews.targetType,
+        repairerUserId: repairerProfiles.userId,
+      })
+      .from(reviewResponses)
+      .innerJoin(reviews, eq(reviewResponses.reviewId, reviews.id))
+      .leftJoin(
+        repairerProfiles,
+        and(
+          eq(reviews.targetType, REVIEW_TARGET_TYPES.REPAIRER),
+          eq(reviews.targetId, repairerProfiles.id)
+        )
+      )
+      .where(eq(reviewResponses.reviewId, reviewId))
 
-    if (responseResult.rows.length === 0) {
+    if (responseRows.length === 0) {
       return apiNotFound('Antwort nicht gefunden')
     }
 
-    const response = responseResult.rows[0] as ResponseRow
+    const response = responseRows[0]
 
     // Check if user can edit this response
     const isAdmin = !!session.user.isStaff
-    const isOwner = response.responder_id === session.user.id
-    const isRepairer = response.target_type === REVIEW_TARGET_TYPES.REPAIRER && response.repairer_user_id === session.user.id
+    const isOwner = response.responderId === session.user.id
+    const isRepairer = response.targetType === REVIEW_TARGET_TYPES.REPAIRER && response.repairerUserId === session.user.id
 
     if (!isOwner && !isAdmin && !isRepairer) {
       return apiForbidden('Sie können diese Antwort nicht bearbeiten')
     }
 
     // Update response
-    await query(`
-      UPDATE ${TABLE_NAMES.REVIEW_RESPONSES} SET
-        content = $1,
-        updated_at = CURRENT_TIMESTAMP
-      WHERE review_id = $2
-    `, [content.trim(), reviewId])
+    await db
+      .update(reviewResponses)
+      .set({
+        content: content.trim(),
+        updatedAt: sql`CURRENT_TIMESTAMP`,
+      })
+      .where(eq(reviewResponses.reviewId, reviewId))
 
     logger.info('Review response updated', {
       reviewId,
-      responderId: session.user.id
+      responderId: session.user.id,
     })
 
     return apiSuccess({
-      message: 'Antwort erfolgreich aktualisiert'
+      message: 'Antwort erfolgreich aktualisiert',
     })
 
   } catch (error) {
@@ -181,42 +188,50 @@ export async function DELETE(
     }
 
     // Get response and check ownership
-    const responseResult = await query(`
-      SELECT rr.responder_id, r.target_type, rp.user_id as repairer_user_id
-      FROM ${TABLE_NAMES.REVIEW_RESPONSES} rr
-      JOIN ${TABLE_NAMES.REVIEWS} r ON rr.review_id = r.id
-      LEFT JOIN ${TABLE_NAMES.REPAIRER_PROFILES} rp ON r.target_type = '${REVIEW_TARGET_TYPES.REPAIRER}' AND r.target_id = rp.id
-      WHERE rr.review_id = $1
-    `, [reviewId])
+    const responseRows = await db
+      .select({
+        responderId: reviewResponses.responderId,
+        targetType: reviews.targetType,
+        repairerUserId: repairerProfiles.userId,
+      })
+      .from(reviewResponses)
+      .innerJoin(reviews, eq(reviewResponses.reviewId, reviews.id))
+      .leftJoin(
+        repairerProfiles,
+        and(
+          eq(reviews.targetType, REVIEW_TARGET_TYPES.REPAIRER),
+          eq(reviews.targetId, repairerProfiles.id)
+        )
+      )
+      .where(eq(reviewResponses.reviewId, reviewId))
 
-    if (responseResult.rows.length === 0) {
+    if (responseRows.length === 0) {
       return apiNotFound('Antwort nicht gefunden')
     }
 
-    const responseToDelete = responseResult.rows[0] as ResponseRow
+    const responseToDelete = responseRows[0]
 
     // Check if user can delete this response
     const isAdmin = !!session.user.isStaff
-    const isOwner = responseToDelete.responder_id === session.user.id
-    const isRepairer = responseToDelete.target_type === REVIEW_TARGET_TYPES.REPAIRER && responseToDelete.repairer_user_id === session.user.id
+    const isOwner = responseToDelete.responderId === session.user.id
+    const isRepairer = responseToDelete.targetType === REVIEW_TARGET_TYPES.REPAIRER && responseToDelete.repairerUserId === session.user.id
 
     if (!isOwner && !isAdmin && !isRepairer) {
       return apiForbidden('Sie können diese Antwort nicht löschen')
     }
 
     // Delete response
-    await query(
-      `DELETE FROM ${TABLE_NAMES.REVIEW_RESPONSES} WHERE review_id = $1`,
-      [reviewId]
-    )
+    await db
+      .delete(reviewResponses)
+      .where(eq(reviewResponses.reviewId, reviewId))
 
     logger.info('Review response deleted', {
       reviewId,
-      deletedBy: session.user.id
+      deletedBy: session.user.id,
     })
 
     return apiSuccess({
-      message: 'Antwort erfolgreich gelöscht'
+      message: 'Antwort erfolgreich gelöscht',
     })
 
   } catch (error) {

@@ -6,10 +6,11 @@
  */
 
 import { withAdmin } from '@/lib/api/middleware'
-import { query, transaction } from '@/lib/auth/db'
+import { db } from '@/db'
+import { sql, eq, getTableName } from 'drizzle-orm'
+import { aiExtractedProducts, inventoryItems, marketplaceListings } from '@/db/schema/inventory'
 import { apiError, apiSuccess, apiNotFound, apiBadRequest } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
-import { TABLE_NAMES } from '@/config/database'
 import { validateBody } from '@/lib/schemas'
 import { IntakePublishSchema } from '@/lib/schemas/intake'
 import { INTAKE_STATUS } from '@/config/intake-status'
@@ -41,21 +42,23 @@ export const POST = withAdmin<{ id: string }>('intake', async (request, session,
     const { price_chf, title, description } = validation.data
 
     // Get current state
-    const existing = await query<PublishRow>(
-      `SELECT ii.id, ii.ai_product_id, ii.intake_tier, ii.intake_checklist,
+    const iiTable = getTableName(inventoryItems)
+    const apTable = getTableName(aiExtractedProducts)
+
+    const existing = await db.execute(sql`
+      SELECT ii.id, ii.ai_product_id, ii.intake_tier, ii.intake_checklist,
               ii.marketplace_status,
               ap.brand, ap.product_name, ap.short_description, ap.category
-       FROM ${TABLE_NAMES.INVENTORY_ITEMS} ii
-       JOIN ${TABLE_NAMES.AI_EXTRACTED_PRODUCTS} ap ON ii.ai_product_id = ap.id
-       WHERE ii.id = $1 AND ii.intake_tier IS NOT NULL`,
-      [id]
-    )
+       FROM ${sql.raw(iiTable)} ii
+       JOIN ${sql.raw(apTable)} ap ON ii.ai_product_id = ap.id
+       WHERE ii.id = ${id} AND ii.intake_tier IS NOT NULL
+    `)
 
     if (existing.rows.length === 0) {
       return apiNotFound(ERROR_MESSAGES.INTAKE_ITEM_NOT_FOUND)
     }
 
-    const row = existing.rows[0]
+    const row = existing.rows[0] as unknown as PublishRow
 
     // Gate: already published?
     if (row.marketplace_status === INTAKE_STATUS.PUBLISHED) {
@@ -73,31 +76,35 @@ export const POST = withAdmin<{ id: string }>('intake', async (request, session,
     const listingTitle = title || `${row.brand} ${row.product_name}`
     const listingDesc = description || row.short_description || ''
 
-    await transaction(async (client) => {
+    await db.transaction(async (tx) => {
       // Update inventory item
-      await client.query(
-        `UPDATE ${TABLE_NAMES.INVENTORY_ITEMS}
-         SET marketplace_status = '${INTAKE_STATUS.PUBLISHED}', selling_price_chf = $1, updated_at = NOW()
-         WHERE id = $2`,
-        [price_chf, id]
-      )
+      await tx.update(inventoryItems)
+        .set({
+          marketplaceStatus: INTAKE_STATUS.PUBLISHED,
+          sellingPriceChf: String(price_chf),
+          updatedAt: new Date().toISOString(),
+        })
+        .where(eq(inventoryItems.id, id))
 
       // Create marketplace listing
-      await client.query(
-        `INSERT INTO ${TABLE_NAMES.MARKETPLACE_LISTINGS} (
-          inventory_item_id, title, description, price_chf,
-          platform, status, published_at, created_by
-        ) VALUES ($1, $2, $3, $4, 'internal', 'published', NOW(), $5)`,
-        [id, listingTitle, listingDesc, price_chf, session.user.id]
-      )
+      await tx.insert(marketplaceListings).values({
+        inventoryItemId: id,
+        title: listingTitle,
+        description: listingDesc,
+        priceChf: String(price_chf),
+        platform: 'internal',
+        status: 'published',
+        publishedAt: new Date().toISOString(),
+        createdBy: session.user.id,
+      })
 
       // Update product estimated price
-      await client.query(
-        `UPDATE ${TABLE_NAMES.AI_EXTRACTED_PRODUCTS}
-         SET estimated_price_chf = $1, updated_at = NOW()
-         WHERE id = $2`,
-        [price_chf, row.ai_product_id]
-      )
+      await tx.update(aiExtractedProducts)
+        .set({
+          estimatedPriceChf: String(price_chf),
+          updatedAt: new Date().toISOString(),
+        })
+        .where(eq(aiExtractedProducts.id, row.ai_product_id))
     })
 
     // Record timeline event
