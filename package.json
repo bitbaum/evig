@@ -68,7 +68,7 @@
     "@types/nodemailer": "^7.0.1",
     "@types/puppeteer": "^7.0.4",
     "@types/uuid": "^10.0.0",
-    "@vercel/blob": "^2.0.1",
+    "@vercel/blob": "^2.3.1",
     "bcryptjs": "^2.4.3",
     "cookie": "^1.0.2",
     "critters": "^0.0.25",
