@@ -6,9 +6,10 @@ import { eq, and, sql } from 'drizzle-orm'
 import { apiError, apiSuccess, apiUnauthorized, apiBadRequest, apiNotFound, apiForbidden } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { logger } from '@/lib/logger'
-import { REQUEST_STATUS } from '@/config/it-hilfe'
+import { REQUEST_STATUS, VALID_REQUEST_TRANSITIONS, deriveBudgetType } from '@/config/it-hilfe'
 import { validateBody, UpdateITHilfeRequestSchema } from '@/lib/schemas'
 import { type RequestRow, mapRequestDetailRow } from '@/lib/it-hilfe/request-mapper'
+import { sendItHilfeNotification } from '@/lib/it-hilfe/notifications'
 
 interface RouteParams {
   params: Promise<{ id: string }>
@@ -101,6 +102,8 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
       .select({
         requesterId: itHilfeRequests.requesterId,
         status: itHilfeRequests.status,
+        title: itHilfeRequests.title,
+        matchedOfferId: itHilfeRequests.matchedOfferId,
       })
       .from(itHilfeRequests)
       .where(eq(itHilfeRequests.id, id))
@@ -165,17 +168,12 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
     if (effectiveBudgetCents !== undefined) {
       const amount = effectiveBudgetCents && effectiveBudgetCents > 0 ? effectiveBudgetCents : null
       updateSet.budgetAmountCents = amount
-      updateSet.budgetType = amount ? 'fixed' : 'free'
+      updateSet.budgetType = deriveBudgetType(amount)
     }
 
     // Status transitions
     if (status !== undefined) {
-      const validTransitions: Record<string, string[]> = {
-        [REQUEST_STATUS.OPEN]: [REQUEST_STATUS.CANCELLED],
-        [REQUEST_STATUS.IN_DISCUSSION]: [REQUEST_STATUS.CANCELLED],
-        [REQUEST_STATUS.MATCHED]: [REQUEST_STATUS.COMPLETED, REQUEST_STATUS.CANCELLED],
-      }
-      const allowed = validTransitions[existing.status as string] || []
+      const allowed = VALID_REQUEST_TRANSITIONS[existing.status as string] || []
 
       if (!allowed.includes(status)) {
         return apiBadRequest(`Status kann nicht von "${existing.status}" auf "${status}" geändert werden`)
@@ -196,6 +194,24 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
             )`)
         } catch (err) {
           logger.error('Error incrementing total_helps_completed', { error: err, requestId: id })
+        }
+
+        // Notify matched helper about completion
+        if (existing.matchedOfferId) {
+          db.select({ helperId: itHilfeOffers.helperId })
+            .from(itHilfeOffers)
+            .where(eq(itHilfeOffers.id, existing.matchedOfferId))
+            .then(([offer]) => {
+              if (offer) {
+                sendItHilfeNotification({
+                  recipientIds: [offer.helperId],
+                  title: `Anfrage "${existing.title}" abgeschlossen`,
+                  content: 'Die Anfrage wurde als abgeschlossen markiert. Vielen Dank für deine Hilfe!',
+                  requestId: id,
+                })
+              }
+            })
+            .catch(err => logger.error('Failed to notify helper on completion', { error: err, requestId: id }))
         }
       }
     }

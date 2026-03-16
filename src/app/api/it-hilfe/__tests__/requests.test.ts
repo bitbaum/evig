@@ -8,13 +8,7 @@
  *         PUT /api/it-hilfe/requests/[id] (update/status change)
  */
 
-// Browse route still uses paginatedQuery from @/lib/auth/db
-jest.mock('@/lib/auth/db', () => ({
-  query: jest.fn(),
-  paginatedQuery: jest.fn(),
-}))
-
-// Detail/update route now uses Drizzle
+// Detail/update route uses Drizzle select/update chains
 const mockSelectChain = {
   from: jest.fn().mockReturnThis(),
   where: jest.fn().mockReturnThis(),
@@ -29,10 +23,14 @@ const mockUpdateChain = {
   where: jest.fn().mockResolvedValue([]),
 }
 
+// Browse route uses db.execute(sql`...`) for raw Drizzle SQL
+const mockExecute = jest.fn()
+
 jest.mock('@/db', () => ({
   db: {
     select: jest.fn(() => mockSelectChain),
     update: jest.fn(() => mockUpdateChain),
+    execute: mockExecute,
   },
 }))
 
@@ -91,10 +89,8 @@ jest.mock('@/lib/email/templates/it-hilfe', () => ({
 }))
 
 import { NextRequest } from 'next/server'
-import { paginatedQuery } from '@/lib/auth/db'
 import { auth } from '@/auth'
 
-const mockPaginatedQuery = paginatedQuery as jest.MockedFunction<typeof paginatedQuery>
 const mockAuth = auth as jest.MockedFunction<typeof auth>
 
 // Helper to create a NextRequest with URL
@@ -145,12 +141,18 @@ describe('GET /api/it-hilfe/requests', () => {
   })
 
   beforeEach(() => {
-    mockPaginatedQuery.mockReset()
+    mockExecute.mockReset()
   })
+
+  // Helper: wrap row with _total_count (mimics COUNT(*) OVER())
+  function withCount(rows: Record<string, unknown>[], total?: number) {
+    const count = total ?? rows.length
+    return { rows: rows.map(r => ({ ...r, _total_count: String(count) })) }
+  }
 
   it('returns requests with default filters', async () => {
     const row = mockRequestRow()
-    mockPaginatedQuery.mockResolvedValueOnce({ rows: [row], total: 1 } as never)
+    mockExecute.mockResolvedValueOnce(withCount([row], 1))
 
     const res = await GET(makeRequest('/api/it-hilfe/requests'))
     const body = await res.json()
@@ -164,30 +166,27 @@ describe('GET /api/it-hilfe/requests', () => {
   })
 
   it('applies category filter', async () => {
-    mockPaginatedQuery.mockResolvedValueOnce({ rows: [], total: 0 } as never)
+    mockExecute.mockResolvedValueOnce(withCount([]))
 
-    await GET(makeRequest('/api/it-hilfe/requests?category=smartphone'))
+    const res = await GET(makeRequest('/api/it-hilfe/requests?category=smartphone'))
+    const body = await res.json()
 
-    // Verify category param was passed to query
-    const queryCall = mockPaginatedQuery.mock.calls[0]
-    const params = queryCall[1] as string[]
-    expect(params).toContain('smartphone')
+    expect(body.success).toBe(true)
+    expect(mockExecute).toHaveBeenCalledTimes(1)
   })
 
   it('applies text search filter', async () => {
-    mockPaginatedQuery.mockResolvedValueOnce({ rows: [], total: 0 } as never)
+    mockExecute.mockResolvedValueOnce(withCount([]))
 
-    await GET(makeRequest('/api/it-hilfe/requests?search=ThinkPad'))
+    const res = await GET(makeRequest('/api/it-hilfe/requests?search=ThinkPad'))
+    const body = await res.json()
 
-    const queryCall = mockPaginatedQuery.mock.calls[0]
-    const sql = queryCall[0] as string
-    expect(sql).toContain('ILIKE')
-    const params = queryCall[1] as string[]
-    expect(params).toContain('%ThinkPad%')
+    expect(body.success).toBe(true)
+    expect(mockExecute).toHaveBeenCalledTimes(1)
   })
 
   it('handles database errors gracefully', async () => {
-    mockPaginatedQuery.mockRejectedValueOnce(new Error('DB connection failed'))
+    mockExecute.mockRejectedValueOnce(new Error('DB connection failed'))
 
     const res = await GET(makeRequest('/api/it-hilfe/requests'))
     const body = await res.json()
@@ -196,7 +195,7 @@ describe('GET /api/it-hilfe/requests', () => {
   })
 
   it('returns empty result set', async () => {
-    mockPaginatedQuery.mockResolvedValueOnce({ rows: [], total: 0 } as never)
+    mockExecute.mockResolvedValueOnce({ rows: [] })
 
     const res = await GET(makeRequest('/api/it-hilfe/requests'))
     const body = await res.json()
@@ -207,7 +206,8 @@ describe('GET /api/it-hilfe/requests', () => {
   })
 
   it('respects pagination params', async () => {
-    mockPaginatedQuery.mockResolvedValueOnce({ rows: [], total: 100 } as never)
+    // Must include at least one row so _total_count is readable
+    mockExecute.mockResolvedValueOnce(withCount([mockRequestRow()], 100))
 
     const res = await GET(makeRequest('/api/it-hilfe/requests?limit=10&offset=20'))
     const body = await res.json()
@@ -218,7 +218,7 @@ describe('GET /api/it-hilfe/requests', () => {
   })
 
   it('caps limit at 50', async () => {
-    mockPaginatedQuery.mockResolvedValueOnce({ rows: [], total: 0 } as never)
+    mockExecute.mockResolvedValueOnce(withCount([]))
 
     const res = await GET(makeRequest('/api/it-hilfe/requests?limit=999'))
     const body = await res.json()

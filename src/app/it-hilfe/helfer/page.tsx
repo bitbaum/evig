@@ -35,9 +35,13 @@ interface Helper {
 }
 
 export default function HelferPage() {
+  const HELPERS_PER_PAGE = 20
   const [helpers, setHelpers] = useState<Helper[]>([])
   const [loading, setLoading] = useState(true)
+  const [loadingMore, setLoadingMore] = useState(false)
   const [total, setTotal] = useState(0)
+  const [page, setPage] = useState(1)
+  const [hasMore, setHasMore] = useState(false)
   const [showFilters, setShowFilters] = useState(false)
 
   // Filters
@@ -48,9 +52,13 @@ export default function HelferPage() {
   const [serviceType, setServiceType] = useState('')
   const [expandedCategory, setExpandedCategory] = useState<string | null>(null)
 
-  const fetchHelpers = useCallback(async () => {
+  const fetchHelpers = useCallback(async (pageNum: number, append = false) => {
     try {
-      setLoading(true)
+      if (append) {
+        setLoadingMore(true)
+      } else {
+        setLoading(true)
+      }
       const params = new URLSearchParams()
 
       if (selectedSkills.length > 0) {
@@ -60,24 +68,35 @@ export default function HelferPage() {
       if (acceptsGratis) params.set('acceptsGratis', 'true')
       if (acceptsKulturlegi) params.set('acceptsKulturlegi', 'true')
       if (serviceType) params.set('serviceType', serviceType)
+      params.set('limit', String(HELPERS_PER_PAGE))
+      params.set('offset', String((pageNum - 1) * HELPERS_PER_PAGE))
 
       const response = await fetch(`${IT_HILFE.api.helpers}?${params}`)
       const data = await response.json()
 
       if (data.success) {
-        setHelpers(data.data.helpers)
+        setHelpers(prev => append ? [...prev, ...data.data.helpers] : data.data.helpers)
         setTotal(data.data.total)
+        setHasMore(data.data.pagination?.hasMore ?? false)
       }
     } catch (error) {
       logger.error('Error fetching helpers', { error })
     } finally {
       setLoading(false)
+      setLoadingMore(false)
     }
   }, [selectedSkills, canton, acceptsGratis, acceptsKulturlegi, serviceType])
 
   useEffect(() => {
-    fetchHelpers()
+    setPage(1)
+    fetchHelpers(1)
   }, [fetchHelpers])
+
+  const loadMore = () => {
+    const nextPage = page + 1
+    setPage(nextPage)
+    fetchHelpers(nextPage, true)
+  }
 
   const clearFilters = () => {
     setSelectedSkills([])
@@ -308,6 +327,19 @@ export default function HelferPage() {
             {helpers.map((helper) => (
               <HelperCard key={helper.userId} helper={helper} />
             ))}
+          </div>
+        )}
+
+        {/* Load More */}
+        {hasMore && !loading && (
+          <div className="flex justify-center mt-8">
+            <button
+              onClick={loadMore}
+              disabled={loadingMore}
+              className="px-6 py-3 bg-white border border-gray-200 rounded-lg text-gray-700 font-medium hover:bg-gray-50 transition-colors disabled:opacity-50"
+            >
+              {loadingMore ? 'Wird geladen...' : 'Mehr laden'}
+            </button>
           </div>
         )}
       </div>

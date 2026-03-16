@@ -1,7 +1,8 @@
 'use client'
 
 import { useState } from 'react'
-import { MapPin, Euro, Users, Sparkles, Star } from 'lucide-react'
+import Link from 'next/link'
+import { MapPin, Euro, Users, Sparkles, Star, CheckCircle } from 'lucide-react'
 import { getSkillById, BUDGET_TIERS } from '@/config/it-hilfe'
 import { logger } from '@/lib/logger'
 import { CONVERSATION_TYPES } from '@/config/database'
@@ -31,6 +32,7 @@ interface HelperCardProps {
 
 export function HelperCard({ helper, requestId, requestTitle }: HelperCardProps) {
   const [isContacting, setIsContacting] = useState(false)
+  const [contactSuccess, setContactSuccess] = useState(false)
 
   const displayedSkills = helper.skills.slice(0, 5)
   const remainingSkillsCount = helper.skills.length - 5
@@ -73,11 +75,9 @@ export function HelperCard({ helper, requestId, requestTitle }: HelperCardProps)
         conversationId: data.data?.conversation_id,
       })
 
-      // Notify user — conversation is accessible via the message sidebar
-      alert(`Nachricht an ${helper.name} gesendet! Klicke auf das Nachrichten-Symbol unten rechts, um die Unterhaltung zu öffnen.`)
+      setContactSuccess(true)
     } catch (error) {
       logger.error('Error contacting helper', { error, helperId: helper.userId })
-      alert('Fehler beim Kontaktieren des Technikers. Bitte versuche es erneut.')
     } finally {
       setIsContacting(false)
     }
@@ -87,7 +87,9 @@ export function HelperCard({ helper, requestId, requestTitle }: HelperCardProps)
     <div className="bg-white rounded-xl border border-gray-200 p-6 hover:shadow-lg transition-shadow">
       {/* Helper Info */}
       <div className="mb-4">
-        <h3 className="text-lg font-semibold text-gray-900 mb-2">{helper.name}</h3>
+        <Link href={`/it-hilfe/helfer/${helper.userId}`} className="hover:underline">
+          <h3 className="text-lg font-semibold text-gray-900 mb-2">{helper.name}</h3>
+        </Link>
         {helper.bio && (
           <p className="text-gray-600 text-sm line-clamp-2 mb-3">{helper.bio}</p>
         )}
@@ -166,13 +168,20 @@ export function HelperCard({ helper, requestId, requestTitle }: HelperCardProps)
       </div>
 
       {/* Contact Button */}
-      <button
-        onClick={handleContact}
-        disabled={isContacting}
-        className="w-full bg-gradient-to-r from-blue-600 to-cyan-600 text-white px-4 py-2.5 rounded-lg font-medium hover:from-blue-700 hover:to-cyan-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-      >
-        {isContacting ? 'Wird kontaktiert...' : 'Kontaktieren'}
-      </button>
+      {contactSuccess ? (
+        <div className="flex items-center gap-2 text-emerald-700 bg-emerald-50 px-4 py-2.5 rounded-lg text-sm font-medium">
+          <CheckCircle className="w-4 h-4 flex-shrink-0" />
+          Nachricht an {helper.name} gesendet!
+        </div>
+      ) : (
+        <button
+          onClick={handleContact}
+          disabled={isContacting}
+          className="w-full bg-gradient-to-r from-blue-600 to-cyan-600 text-white px-4 py-2.5 rounded-lg font-medium hover:from-blue-700 hover:to-cyan-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          {isContacting ? 'Wird kontaktiert...' : 'Kontaktieren'}
+        </button>
+      )}
     </div>
   )
 }

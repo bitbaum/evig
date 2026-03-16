@@ -12,6 +12,7 @@ import { logger } from '@/lib/logger'
 import { sendCustomEmail } from '@/lib/email'
 import { itHilfeOfferAccepted, itHilfeOfferRejected } from '@/lib/email/templates/it-hilfe'
 import { REQUEST_STATUS, OFFER_STATUS } from '@/config/it-hilfe'
+import { sendItHilfeNotification } from '@/lib/it-hilfe/notifications'
 
 interface RequestRow {
   requester_id: string
@@ -161,7 +162,32 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
       helperId: offerData.helper_id,
     })
 
-    // Send notifications (fire-and-forget, don't block the response)
+    // In-app notification: accepted helper
+    sendItHilfeNotification({
+      recipientIds: [offerData.helper_id],
+      title: 'Dein Angebot wurde angenommen!',
+      content: `Dein Angebot für "${requestData.title}" wurde angenommen. Eine Unterhaltung wurde erstellt.`,
+      requestId: id,
+    })
+
+    // In-app notification: auto-rejected helpers
+    db.execute(sql`
+      SELECT o.helper_id
+      FROM ${sql.raw(offTable)} o
+      WHERE o.request_id = ${id} AND o.status = ${OFFER_STATUS.REJECTED} AND o.id != ${offerId}
+    `).then(result => {
+      const rejectedIds = (result.rows as unknown as { helper_id: string }[]).map(r => r.helper_id)
+      if (rejectedIds.length > 0) {
+        sendItHilfeNotification({
+          recipientIds: rejectedIds,
+          title: `Anfrage "${requestData.title}" vergeben`,
+          content: 'Die Anfrage wurde an einen anderen Techniker vergeben. Danke für dein Angebot!',
+          requestId: id,
+        })
+      }
+    }).catch(err => logger.error('Failed to send rejected in-app notifications', { err }))
+
+    // Send email notifications (fire-and-forget, don't block the response)
     const requestUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'https://revampit.ch'}/it-hilfe/${id}`
 
     // Notify accepted helper

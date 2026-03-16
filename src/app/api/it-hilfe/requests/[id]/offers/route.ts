@@ -10,6 +10,7 @@ import { REQUEST_STATUS } from '@/config/it-hilfe'
 import { validateBody, CreateOfferSchema } from '@/lib/schemas'
 import { sendCustomEmail } from '@/lib/email'
 import { itHilfeNewOfferReceived } from '@/lib/email/templates/it-hilfe'
+import { sendItHilfeNotification } from '@/lib/it-hilfe/notifications'
 import { rateLimiters } from '@/lib/security/rate-limit'
 
 interface RouteParams {
@@ -178,6 +179,12 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
       })
       .returning({ id: itHilfeOffers.id })
 
+    // Increment offer count
+    await db
+      .update(itHilfeRequests)
+      .set({ offerCount: sql`${itHilfeRequests.offerCount} + 1` })
+      .where(eq(itHilfeRequests.id, id))
+
     // Update request status to in_discussion if it was open
     if (requestData.status === REQUEST_STATUS.OPEN) {
       await db
@@ -190,6 +197,14 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
       offerId: newOffer.id,
       requestId: id,
       helperId: session.user.id,
+    })
+
+    // In-app notification for requester
+    sendItHilfeNotification({
+      recipientIds: [requestData.requesterId],
+      title: `Neues Angebot für "${requestData.title}"`,
+      content: `${session.user.name || 'Ein Techniker'} hat ein Angebot für deine Anfrage abgegeben.`,
+      requestId: id,
     })
 
     // Notify requester about new offer (fire-and-forget)

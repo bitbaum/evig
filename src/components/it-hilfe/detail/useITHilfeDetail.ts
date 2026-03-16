@@ -23,8 +23,9 @@ export function useITHilfeDetail(id: string) {
   const [submittingOffer, setSubmittingOffer] = useState(false)
   const [offerError, setOfferError] = useState('')
 
-  // Accept offer state
+  // Accept/decline offer state
   const [acceptingOfferId, setAcceptingOfferId] = useState<string | null>(null)
+  const [decliningOfferId, setDecliningOfferId] = useState<string | null>(null)
 
   // User's own offer (for non-owners)
   const [userOffer, setUserOffer] = useState<Offer | null>(null)
@@ -252,6 +253,28 @@ export function useITHilfeDetail(id: string) {
     }
   }
 
+  const handleDeclineOffer = async (offerId: string) => {
+    if (!confirm('Dieses Angebot wirklich ablehnen?')) return
+
+    setDecliningOfferId(offerId)
+    try {
+      const response = await fetch(`/api/it-hilfe/requests/${id}/offers/${offerId}/decline`, {
+        method: 'POST',
+      })
+      const data = await response.json()
+      if (!response.ok) {
+        throw new Error(data.error || 'Fehler beim Ablehnen')
+      }
+      fetchRequest()
+      fetchOffers()
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Ein Fehler ist aufgetreten'
+      alert(message)
+    } finally {
+      setDecliningOfferId(null)
+    }
+  }
+
   const handleStatusChange = async (status: string) => {
     if (!request) return
     const confirmMsg = status === REQUEST_STATUS.COMPLETED
@@ -303,9 +326,11 @@ export function useITHilfeDetail(id: string) {
     handleSkillToggle,
     handleSubmitOffer,
 
-    // Accept
+    // Accept/Decline
     acceptingOfferId,
     handleAcceptOffer,
+    decliningOfferId,
+    handleDeclineOffer,
 
     // Status change (owner)
     handleStatusChange,

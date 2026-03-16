@@ -13,6 +13,7 @@ import { users } from '@/db/schema/auth'
 import { eq, and, ne, sql, inArray } from 'drizzle-orm'
 import { logger } from '@/lib/logger'
 import { sendCustomEmail } from '@/lib/email'
+import { createInAppNotifications } from '@/lib/api/task-helpers'
 import {
   itHilfeRequestConfirmation,
   adminNewITHilfeRequest,
@@ -122,4 +123,25 @@ export function sendRequestCreatedNotifications(params: NotifyParams): void {
         logger.warn('Failed to fetch matching helpers for IT-Hilfe notifications', { error: err })
       })
   }
+}
+
+/**
+ * Send an in-app notification for IT-Hilfe lifecycle events.
+ * Fire-and-forget: errors are logged but never thrown.
+ */
+export function sendItHilfeNotification(params: {
+  recipientIds: string[]
+  title: string
+  content: string
+  requestId: string
+}): void {
+  createInAppNotifications({
+    recipientIds: params.recipientIds,
+    title: params.title,
+    content: params.content,
+    relatedType: 'it_hilfe',
+    relatedId: params.requestId,
+  }).catch(err => {
+    logger.warn('Failed to send IT-Hilfe in-app notification', { error: err, requestId: params.requestId })
+  })
 }

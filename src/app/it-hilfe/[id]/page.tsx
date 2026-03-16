@@ -132,7 +132,9 @@ export default function ITHilfeDetailPage() {
                 offers={detail.offers}
                 requestStatus={request.status}
                 acceptingOfferId={detail.acceptingOfferId}
+                decliningOfferId={detail.decliningOfferId}
                 onAcceptOffer={detail.handleAcceptOffer}
+                onDeclineOffer={detail.handleDeclineOffer}
               />
             )}
 

@@ -6,14 +6,18 @@ interface OffersListProps {
   offers: Offer[]
   requestStatus: string
   acceptingOfferId: string | null
+  decliningOfferId: string | null
   onAcceptOffer: (offerId: string) => void
+  onDeclineOffer: (offerId: string) => void
 }
 
 export function OffersList({
   offers,
   requestStatus,
   acceptingOfferId,
+  decliningOfferId,
   onAcceptOffer,
+  onDeclineOffer,
 }: OffersListProps) {
   if (offers.length === 0) return null
 
@@ -82,13 +86,22 @@ export function OffersList({
               )}
 
               {offer.status === OFFER_STATUS.PENDING && (requestStatus === REQUEST_STATUS.OPEN || requestStatus === REQUEST_STATUS.IN_DISCUSSION) && (
-                <button
-                  onClick={() => onAcceptOffer(offer.id)}
-                  disabled={acceptingOfferId === offer.id}
-                  className="mt-2 px-4 py-3 min-h-[44px] bg-emerald-600 text-white rounded-lg text-sm font-medium hover:bg-emerald-700 transition-colors disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
-                >
-                  {acceptingOfferId === offer.id ? 'Wird akzeptiert...' : 'Angebot akzeptieren'}
-                </button>
+                <div className="mt-2 flex gap-2">
+                  <button
+                    onClick={() => onAcceptOffer(offer.id)}
+                    disabled={acceptingOfferId === offer.id}
+                    className="px-4 py-3 min-h-[44px] bg-emerald-600 text-white rounded-lg text-sm font-medium hover:bg-emerald-700 transition-colors disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
+                  >
+                    {acceptingOfferId === offer.id ? 'Wird akzeptiert...' : 'Akzeptieren'}
+                  </button>
+                  <button
+                    onClick={() => onDeclineOffer(offer.id)}
+                    disabled={decliningOfferId === offer.id}
+                    className="px-4 py-3 min-h-[44px] border border-gray-300 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-50 transition-colors disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2"
+                  >
+                    {decliningOfferId === offer.id ? 'Wird abgelehnt...' : 'Ablehnen'}
+                  </button>
+                </div>
               )}
             </div>
           )

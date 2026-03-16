@@ -13,6 +13,7 @@ import {
   URGENCY_LEVELS,
   SERVICE_TYPES,
   REQUEST_STATUS,
+  deriveBudgetType,
 } from '@/config/it-hilfe'
 import { rateLimiters } from '@/lib/security/rate-limit'
 import { sanitizeInput } from '@/lib/security/sanitize'
@@ -195,7 +196,7 @@ export async function POST(request: NextRequest) {
     const { deviceBrand, deviceModel, imageUrls = [], aiDiagnosis } = body
 
     // Derive budget_type from maxBudgetCents for backwards compatibility
-    const budgetType = (maxBudgetCents && maxBudgetCents > 0) ? 'fixed' : 'free'
+    const budgetType = deriveBudgetType(maxBudgetCents)
     const budgetAmountCents = (maxBudgetCents && maxBudgetCents > 0) ? maxBudgetCents : null
 
     // Insert the request with sanitized data
@@ -209,6 +210,7 @@ export async function POST(request: NextRequest) {
       urgency,
       budgetType,
       budgetAmountCents,
+      budgetTier: budgetTier || null,
       postalCode,
       city,
       canton,

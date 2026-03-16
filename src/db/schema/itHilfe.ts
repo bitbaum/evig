@@ -23,6 +23,7 @@ export const itHilfeRequests = pgTable('it_hilfe_requests', {
   urgency: varchar('urgency', { length: 20 }).default('normal'),
   budgetType: varchar('budget_type', { length: 20 }).notNull(),
   budgetAmountCents: integer('budget_amount_cents'),
+  budgetTier: varchar('budget_tier', { length: 20 }),
 
   // Location (Swiss postal code system)
   postalCode: varchar('postal_code', { length: 10 }).notNull(),

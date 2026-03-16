@@ -20,6 +20,7 @@ interface RequestData {
   canton: string
   budgetAmountCents: number | null
   budgetType: string
+  budgetTier: string | null
   serviceType: string | null
 }
 
@@ -80,19 +81,21 @@ function calculateMatchScore(
     reasons.push('Gleicher Kanton')
   }
 
-  // Budget compatibility
+  // Budget compatibility — use budgetTier when available for more accurate matching
+  const effectiveTier = request.budgetTier || request.budgetType
   const isBudgetCompatible =
-    (request.budgetType === 'gratis' && helper.acceptsGratis) ||
-    (request.budgetType === 'kulturlegi' && helper.acceptsKulturlegi) ||
+    (effectiveTier === 'gratis' && helper.acceptsGratis) ||
+    (effectiveTier === 'kulturlegi' && helper.acceptsKulturlegi) ||
+    (effectiveTier === 'free' && helper.acceptsGratis) ||
     (request.budgetAmountCents && helper.hourlyRateCents &&
      helper.hourlyRateCents <= request.budgetAmountCents) ||
     helper.acceptsGratis
 
   if (isBudgetCompatible) {
     score += MATCH_SCORES.BUDGET_COMPATIBLE
-    if (helper.acceptsGratis && (request.budgetType === 'gratis' || !request.budgetAmountCents)) {
+    if (helper.acceptsGratis && (effectiveTier === 'gratis' || effectiveTier === 'free' || !request.budgetAmountCents)) {
       reasons.push('Bietet kostenlose Hilfe an')
-    } else if (helper.acceptsKulturlegi && request.budgetType === 'kulturlegi') {
+    } else if (helper.acceptsKulturlegi && effectiveTier === 'kulturlegi') {
       reasons.push('Akzeptiert KulturLegi')
     } else {
       reasons.push('Budget passt')
@@ -134,6 +137,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
         canton: itHilfeRequests.canton,
         budgetAmountCents: itHilfeRequests.budgetAmountCents,
         budgetType: itHilfeRequests.budgetType,
+        budgetTier: itHilfeRequests.budgetTier,
         serviceType: itHilfeRequests.serviceType,
       })
       .from(itHilfeRequests)

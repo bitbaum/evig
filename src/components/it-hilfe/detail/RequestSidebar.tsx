@@ -9,10 +9,24 @@ import {
   XCircle,
   Wrench,
   Users,
+  Pencil,
 } from 'lucide-react'
 import { formatDate } from '@/lib/date-formats'
 import { formatBudget, getServiceTypeById, REQUEST_STATUS } from '@/config/it-hilfe'
 import type { ITHilfeRequest } from './types'
+
+function formatTimeRemaining(expiresAt: string): string | null {
+  const now = Date.now()
+  const expires = new Date(expiresAt).getTime()
+  const msLeft = expires - now
+  if (msLeft <= 0) return 'Abgelaufen'
+  const days = Math.floor(msLeft / (1000 * 60 * 60 * 24))
+  const hours = Math.floor((msLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
+  if (days > 7) return null // don't show for far-off dates
+  if (days > 0) return `Noch ${days} ${days === 1 ? 'Tag' : 'Tage'}`
+  if (hours > 0) return `Noch ${hours} ${hours === 1 ? 'Stunde' : 'Stunden'}`
+  return 'Weniger als 1 Stunde'
+}
 
 interface RequestSidebarProps {
   request: ITHilfeRequest
@@ -30,6 +44,7 @@ export function RequestSidebar({
   onStatusChange,
 }: RequestSidebarProps) {
   const serviceConfig = getServiceTypeById(request.serviceType)
+  const timeRemaining = formatTimeRemaining(request.expiresAt)
 
   return (
     <div className="space-y-6">
@@ -104,6 +119,11 @@ export function RequestSidebar({
               <p className="font-medium text-gray-900">
                 {formatDate(request.expiresAt)}
               </p>
+              {timeRemaining && (
+                <p className={`text-xs mt-0.5 ${timeRemaining === 'Abgelaufen' ? 'text-red-600 font-medium' : 'text-amber-600'}`}>
+                  {timeRemaining}
+                </p>
+              )}
             </div>
           </div>
         </div>
@@ -147,6 +167,15 @@ export function RequestSidebar({
             Aktionen
           </h3>
           <div className="space-y-2">
+            {(request.status === REQUEST_STATUS.OPEN || request.status === REQUEST_STATUS.IN_DISCUSSION) && (
+              <Link
+                href={`/it-hilfe/${request.id}/edit`}
+                className="block w-full py-3 px-4 min-h-[44px] bg-blue-600 text-white rounded-lg text-center font-medium hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+              >
+                <Pencil className="w-4 h-4 inline-block mr-2" />
+                Anfrage bearbeiten
+              </Link>
+            )}
             {request.status === REQUEST_STATUS.MATCHED && (
               <button
                 onClick={() => onStatusChange(REQUEST_STATUS.COMPLETED)}

@@ -436,6 +436,18 @@ export const REQUEST_STATUS = {
 
 export type RequestStatusId = typeof REQUEST_STATUS[keyof typeof REQUEST_STATUS];
 
+/** Valid status transitions (SSOT) — used in user + admin routes */
+export const VALID_REQUEST_TRANSITIONS: Record<string, string[]> = {
+  [REQUEST_STATUS.OPEN]: [REQUEST_STATUS.CANCELLED],
+  [REQUEST_STATUS.IN_DISCUSSION]: [REQUEST_STATUS.CANCELLED],
+  [REQUEST_STATUS.MATCHED]: [REQUEST_STATUS.COMPLETED, REQUEST_STATUS.CANCELLED],
+}
+
+/** Derive budgetType from amount — used in request creation and updates */
+export function deriveBudgetType(amountCents: number | null | undefined): 'free' | 'fixed' {
+  return (amountCents && amountCents > 0) ? 'fixed' : 'free'
+}
+
 export const REQUEST_STATUSES: RequestStatus[] = [
   { id: REQUEST_STATUS.OPEN, name: 'Offen', description: 'Anfrage ist offen für Angebote', badgeClass: 'bg-green-100 text-green-700' },
   { id: REQUEST_STATUS.IN_DISCUSSION, name: 'In Gespräch', description: 'In Verhandlung mit Technikern', badgeClass: 'bg-yellow-100 text-yellow-700' },
