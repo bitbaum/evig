@@ -1,0 +1,240 @@
+import Link from 'next/link'
+import { ArrowLeft, ExternalLink, Code2, CheckCircle2, AlertTriangle, ArrowRight } from 'lucide-react'
+import { cn } from '@/lib/utils'
+import {
+  type OSSAlternative,
+  getCategoryById,
+  getProprietaryAppById,
+  PRICING_MODEL_LABELS,
+} from '@/config/open-source-registry'
+import { MaturityBadge } from './MaturityBadge'
+import { MigrationDifficultyBadge } from './MigrationDifficultyBadge'
+import { PlatformIcons } from './PlatformIcons'
+import { RevampITServicesCTA } from './RevampITServicesCTA'
+import { RelatedAlternatives } from './RelatedAlternatives'
+
+interface AlternativeDetailProps {
+  alternative: OSSAlternative
+}
+
+export function AlternativeDetail({ alternative }: AlternativeDetailProps) {
+  const category = getCategoryById(alternative.categoryId)
+
+  return (
+    <main className="bg-gray-50 min-h-screen">
+      {/* Back nav */}
+      <div className="bg-white border-b border-gray-200">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-4">
+          <Link
+            href="/services/open-source-solutions"
+            className="inline-flex items-center gap-2 text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            Zurück zur Übersicht
+          </Link>
+        </div>
+      </div>
+
+      {/* Header */}
+      <div className="bg-white border-b border-gray-200">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+          <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
+            <div>
+              {category && (
+                <span className="text-sm text-gray-500 mb-2 block">
+                  {category.icon} {category.label}
+                </span>
+              )}
+              <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-2">
+                {alternative.name}
+              </h1>
+              <p className="text-lg text-gray-600 max-w-2xl">
+                {alternative.tagline}
+              </p>
+            </div>
+            <div className="flex items-center gap-3 shrink-0">
+              <MaturityBadge maturity={alternative.maturity} />
+              <PlatformIcons platforms={alternative.platforms} className="text-base" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Content grid */}
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Main content (2/3) */}
+          <div className="lg:col-span-2 space-y-8">
+            {/* Description */}
+            <section className="bg-white rounded-xl border border-gray-200 p-6">
+              <h2 className="text-xl font-bold text-gray-900 mb-4">Beschreibung</h2>
+              <p className="text-gray-700 leading-relaxed">{alternative.description}</p>
+            </section>
+
+            {/* What it replaces */}
+            {alternative.replaces.length > 0 && (
+              <section className="bg-white rounded-xl border border-gray-200 p-6">
+                <h2 className="text-xl font-bold text-gray-900 mb-4">Was es ersetzt</h2>
+                <div className="space-y-4">
+                  {alternative.replaces.map(r => {
+                    const app = getProprietaryAppById(r.appId)
+                    if (!app) return null
+                    return (
+                      <div key={r.appId} className="rounded-lg border border-gray-200 p-4">
+                        <div className="flex flex-wrap items-center gap-3 mb-2">
+                          <div className="flex items-center gap-2">
+                            <span className="font-semibold text-gray-900">{app.name}</span>
+                            <ArrowRight className="w-4 h-4 text-gray-400" />
+                            <span className="font-semibold text-blue-700">{alternative.name}</span>
+                          </div>
+                          <MigrationDifficultyBadge difficulty={r.migrationDifficulty} />
+                        </div>
+                        {app.typicalCost && (
+                          <p className="text-sm text-gray-500 mb-2">
+                            {PRICING_MODEL_LABELS[app.pricingModel]} — {app.typicalCost}
+                          </p>
+                        )}
+                        {r.compatibilityNote && (
+                          <p className="text-sm text-gray-600 mb-2">{r.compatibilityNote}</p>
+                        )}
+                        {r.migrationTips && r.migrationTips.length > 0 && (
+                          <div className="mt-3">
+                            <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1.5">
+                              Tipps für den Umstieg
+                            </p>
+                            <ul className="space-y-1">
+                              {r.migrationTips.map((tip, i) => (
+                                <li key={i} className="flex items-start gap-2 text-sm text-gray-600">
+                                  <span className="text-blue-500 mt-0.5">•</span>
+                                  {tip}
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        )}
+                      </div>
+                    )
+                  })}
+                </div>
+              </section>
+            )}
+
+            {/* Highlights */}
+            <section className="bg-white rounded-xl border border-gray-200 p-6">
+              <h2 className="text-xl font-bold text-gray-900 mb-4">Stärken</h2>
+              <ul className="space-y-2">
+                {alternative.highlights.map((h, i) => (
+                  <li key={i} className="flex items-start gap-3">
+                    <CheckCircle2 className="w-5 h-5 text-green-600 shrink-0 mt-0.5" />
+                    <span className="text-gray-700">{h}</span>
+                  </li>
+                ))}
+              </ul>
+            </section>
+
+            {/* Limitations */}
+            <section className="bg-white rounded-xl border border-gray-200 p-6">
+              <h2 className="text-xl font-bold text-gray-900 mb-4">Einschränkungen</h2>
+              <ul className="space-y-2">
+                {alternative.limitations.map((l, i) => (
+                  <li key={i} className="flex items-start gap-3">
+                    <AlertTriangle className="w-5 h-5 text-amber-500 shrink-0 mt-0.5" />
+                    <span className="text-gray-700">{l}</span>
+                  </li>
+                ))}
+              </ul>
+            </section>
+
+            {/* Related */}
+            <RelatedAlternatives current={alternative} />
+          </div>
+
+          {/* Sidebar (1/3) */}
+          <div className="space-y-6">
+            {/* Quick links */}
+            <div className="bg-white rounded-xl border border-gray-200 p-5">
+              <h3 className="text-base font-bold text-gray-900 mb-4">Links</h3>
+              <div className="space-y-3">
+                <a
+                  href={alternative.website}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={cn(
+                    'flex items-center gap-3 px-4 py-3 rounded-lg',
+                    'bg-blue-600 text-white font-medium text-sm',
+                    'hover:bg-blue-700 transition-colors'
+                  )}
+                >
+                  <ExternalLink className="w-4 h-4" />
+                  Website besuchen
+                </a>
+                {alternative.sourceCode && (
+                  <a
+                    href={alternative.sourceCode}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={cn(
+                      'flex items-center gap-3 px-4 py-3 rounded-lg',
+                      'border border-gray-200 text-gray-700 font-medium text-sm',
+                      'hover:bg-gray-50 transition-colors'
+                    )}
+                  >
+                    <Code2 className="w-4 h-4" />
+                    Quellcode ansehen
+                  </a>
+                )}
+              </div>
+            </div>
+
+            {/* Info */}
+            <div className="bg-white rounded-xl border border-gray-200 p-5">
+              <h3 className="text-base font-bold text-gray-900 mb-4">Details</h3>
+              <dl className="space-y-3 text-sm">
+                <div>
+                  <dt className="text-gray-500">Lizenz</dt>
+                  <dd className="font-medium text-gray-900">{alternative.license}</dd>
+                </div>
+                <div>
+                  <dt className="text-gray-500">Plattformen</dt>
+                  <dd className="font-medium text-gray-900">
+                    {alternative.platforms.map(p => {
+                      const labels: Record<string, string> = { windows: 'Windows', macos: 'macOS', linux: 'Linux', web: 'Web', android: 'Android', ios: 'iOS' }
+                      return labels[p] || p
+                    }).join(', ')}
+                  </dd>
+                </div>
+                <div>
+                  <dt className="text-gray-500">Reife</dt>
+                  <dd><MaturityBadge maturity={alternative.maturity} /></dd>
+                </div>
+              </dl>
+            </div>
+
+            {/* RevampIT CTA */}
+            <RevampITServicesCTA alternative={alternative} />
+
+            {/* General CTA */}
+            <div className="rounded-xl border-2 border-green-200 bg-green-50 p-5">
+              <h3 className="text-base font-bold text-green-900 mb-2">
+                Hilfe beim Umstieg?
+              </h3>
+              <p className="text-sm text-green-800 mb-3">
+                Unser Team unterstützt Sie bei der Migration auf Open-Source-Software.
+              </p>
+              <Link
+                href="/contact"
+                className={cn(
+                  'inline-flex items-center px-4 py-2 rounded-lg',
+                  'bg-green-600 text-white text-sm font-medium',
+                  'hover:bg-green-700 transition-colors'
+                )}
+              >
+                Kontakt aufnehmen
+              </Link>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  )
+}

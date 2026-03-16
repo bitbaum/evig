@@ -1,0 +1,118 @@
+'use client'
+
+import { useState, useMemo } from 'react'
+import { Search, X } from 'lucide-react'
+import { cn } from '@/lib/utils'
+import {
+  type OSSAlternative,
+  type OSSCategory,
+  searchAlternatives,
+} from '@/config/open-source-registry'
+import { AlternativeCard } from './AlternativeCard'
+import { EmptyState } from '@/components/common/EmptyState'
+
+interface RegistrySearchProps {
+  alternatives: OSSAlternative[]
+  categories: OSSCategory[]
+}
+
+export function RegistrySearch({ alternatives, categories }: RegistrySearchProps) {
+  const [query, setQuery] = useState('')
+  const [activeCategoryId, setActiveCategoryId] = useState<string | null>(null)
+
+  const filtered = useMemo(() => {
+    let results = query ? searchAlternatives(query) : alternatives
+    if (activeCategoryId) {
+      results = results.filter(a => a.categoryId === activeCategoryId)
+    }
+    return results
+  }, [query, activeCategoryId, alternatives])
+
+  return (
+    <div>
+      {/* Search bar */}
+      <div className="max-w-2xl mx-auto mb-8">
+        <div className="relative">
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+          <input
+            type="text"
+            value={query}
+            onChange={e => setQuery(e.target.value)}
+            placeholder="Welches Programm möchtest du ersetzen? z.B. Photoshop, Word, Zoom..."
+            aria-label="Open-Source-Alternativen durchsuchen"
+            className={cn(
+              'w-full pl-12 pr-10 py-3 sm:py-4 rounded-xl border-2 border-gray-200',
+              'bg-white text-gray-900 placeholder-gray-400',
+              'focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100',
+              'text-sm sm:text-base transition-colors'
+            )}
+          />
+          {query && (
+            <button
+              onClick={() => setQuery('')}
+              className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+              aria-label="Suche zurücksetzen"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          )}
+        </div>
+      </div>
+
+      {/* Category pills */}
+      <div className="flex gap-2 overflow-x-auto pb-2 mb-8 scrollbar-hide">
+        <button
+          onClick={() => setActiveCategoryId(null)}
+          className={cn(
+            'shrink-0 px-4 py-2 rounded-full text-sm font-medium transition-colors',
+            !activeCategoryId
+              ? 'bg-blue-600 text-white'
+              : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+          )}
+        >
+          Alle
+        </button>
+        {categories.map(cat => (
+          <button
+            key={cat.id}
+            onClick={() => setActiveCategoryId(activeCategoryId === cat.id ? null : cat.id)}
+            className={cn(
+              'shrink-0 px-4 py-2 rounded-full text-sm font-medium transition-colors whitespace-nowrap',
+              activeCategoryId === cat.id
+                ? 'bg-blue-600 text-white'
+                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+            )}
+          >
+            {cat.icon} {cat.label}
+          </button>
+        ))}
+      </div>
+
+      {/* Results count */}
+      <p className="text-sm text-gray-500 mb-6">
+        {filtered.length} {filtered.length === 1 ? 'Alternative' : 'Alternativen'}
+        {query && ` für «${query}»`}
+        {activeCategoryId && ` in ${categories.find(c => c.id === activeCategoryId)?.label}`}
+      </p>
+
+      {/* Results grid or empty state */}
+      {filtered.length > 0 ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+          {filtered.map(alt => (
+            <AlternativeCard key={alt.id} alternative={alt} />
+          ))}
+        </div>
+      ) : (
+        <EmptyState
+          icon={Search}
+          title="Keine Alternativen gefunden"
+          message={`Keine Ergebnisse für «${query}». Versuche einen anderen Suchbegriff oder entferne den Kategoriefilter.`}
+          action={{
+            label: 'Suche zurücksetzen',
+            onClick: () => { setQuery(''); setActiveCategoryId(null) },
+          }}
+        />
+      )}
+    </div>
+  )
+}
