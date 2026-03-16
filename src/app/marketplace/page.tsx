@@ -37,7 +37,7 @@ import { useMarketplaceListings } from '@/hooks/useMarketplaceListings'
 import { useState } from 'react'
 
 export default function MarketplacePage() {
-  const { data: session } = useSession()
+  const { data: session, status } = useSession()
   const [showFilters, setShowFilters] = useState(false)
 
   const {
@@ -442,7 +442,7 @@ export default function MarketplacePage() {
         )}
 
         {/* Sign-in CTA for non-logged-in users */}
-        {!session?.user && (
+        {status === 'unauthenticated' && (
           <div className="mt-12 bg-white rounded-2xl shadow-sm border border-gray-100 p-8 text-center">
             <div className="flex justify-center mb-4">
               <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-orange-100">

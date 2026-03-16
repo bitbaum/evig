@@ -19,7 +19,7 @@ import { ServicesPricingSection } from '@/components/repairer-apply/ServicesPric
 import { DocumentsSection } from '@/components/repairer-apply/DocumentsSection'
 
 export default function RepairerApplicationPage() {
-  const { data: session } = useSession()
+  const { data: session, status } = useSession()
   const router = useRouter()
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitResult, setSubmitResult] = useState<{
@@ -91,7 +91,7 @@ export default function RepairerApplicationPage() {
     }
   }
 
-  if (!session?.user) {
+  if (status === 'unauthenticated') {
     return (
       <div className="min-h-screen bg-gray-50 py-12">
         <div className="max-w-2xl mx-auto px-4">

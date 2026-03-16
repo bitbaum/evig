@@ -6,8 +6,14 @@
  */
 
 // Mock dependencies before imports
-jest.mock('@/lib/auth/db', () => ({
-  query: jest.fn(),
+jest.mock('@/db', () => ({
+  db: {
+    execute: jest.fn(),
+    update: jest.fn(() => ({
+      set: jest.fn().mockReturnThis(),
+      where: jest.fn().mockResolvedValue([]),
+    })),
+  },
 }))
 
 jest.mock('@/lib/logger', () => ({

@@ -1,4 +1,9 @@
+import { TextEncoder, TextDecoder } from 'util'
 import '@testing-library/jest-dom'
+
+// Polyfill TextEncoder/TextDecoder for jsdom environment (needed by pg/Drizzle)
+global.TextEncoder = TextEncoder
+global.TextDecoder = TextDecoder
 
 // Mock Next.js router
 jest.mock('next/router', () => ({

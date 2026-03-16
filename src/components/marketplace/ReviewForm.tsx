@@ -36,9 +36,9 @@ export default function ReviewForm({ targetType, targetId, onSubmitted, onCancel
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          target_type: targetType,
-          target_id: targetId,
-          overall_rating: rating,
+          targetType,
+          targetId,
+          overallRating: rating,
           title: title.trim() || null,
           content: content.trim(),
         }),

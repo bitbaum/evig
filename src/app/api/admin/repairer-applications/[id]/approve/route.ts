@@ -4,16 +4,12 @@ import { db } from '@/db'
 import { sql, getTableName } from 'drizzle-orm'
 import { repairerApplications, repairerProfiles, users } from '@/db/schema'
 import { apiError, apiSuccess, apiBadRequest, apiNotFound } from '@/lib/api/helpers'
-import { ERROR_MESSAGES, SUCCESS_MESSAGES } from '@/config/error-messages'
+import { ERROR_MESSAGES } from '@/config/error-messages'
 import { APPROVAL_STATUS } from '@/config/approval-status'
 import { sendEmail } from '@/lib/email'
 import { logger } from '@/lib/logger'
 import { ROLES } from '@/lib/constants'
 import { APP_URL } from '@/config/urls'
-
-interface ExistsRow {
-  exists: boolean
-}
 
 interface ApplicationRow {
   user_id: string
@@ -36,23 +32,10 @@ interface ApplicationRow {
   home_visit_fee_cents: number
   services_offered: string[]
   specializations: string[]
+  certifications: unknown[]
   insurance_info: unknown
   portfolio_images: string[]
-}
-
-interface CertificationRow {
-  name: string
-  issuing_authority: string
-  certification_number: string
-  issue_date: string
-  expiry_date: string
-  category: string
-}
-
-interface DocumentRow {
-  file_path: string
-  original_filename: string
-  document_type: string
+  verification_documents: string[]
 }
 
 export const PUT = withAdmin<{ id: string }>('services', async (request, session, context) => {
@@ -105,139 +88,93 @@ export const PUT = withAdmin<{ id: string }>('services', async (request, session
         WHERE id = ${application.user_id}
       `)
 
-      // Check if repairer_profiles table exists and create profile if needed
-      const profileTableExists = await tx.execute(sql`
-        SELECT EXISTS (
-          SELECT 1 FROM information_schema.tables
-          WHERE table_name = ${getTableName(repairerProfiles)}
-        )
-      `)
-
-      const exists = (profileTableExists.rows[0] as unknown as ExistsRow).exists
-      if (exists) {
-        // Get verified certifications for the profile
-        const verifiedCertifications = await tx.execute(sql`
-          SELECT
-            COALESCE(ct.name, rc.custom_name) as name,
-            rc.issuing_authority,
-            rc.certification_number,
-            rc.issue_date,
-            rc.expiry_date,
-            ct.category
-          FROM ${sql.raw('repairer_certifications')} rc
-          LEFT JOIN ${sql.raw('certification_types')} ct ON rc.certification_type_id = ct.id
-          WHERE rc.application_id = ${applicationId} AND rc.verification_status = 'verified'
-        `)
-
-        // Get verified documents for the profile
-        const verifiedDocuments = await tx.execute(sql`
-          SELECT file_path, original_filename, dt.name as document_type
-          FROM ${sql.raw('verification_documents')} vd
-          LEFT JOIN ${sql.raw('document_types')} dt ON vd.document_type_id = dt.id
-          WHERE vd.application_id = ${applicationId} AND vd.status = 'approved'
-        `)
-
-        const certificationsData = (verifiedCertifications.rows as unknown as CertificationRow[]).map(cert => ({
-          name: cert.name,
-          authority: cert.issuing_authority,
-          number: cert.certification_number,
-          issueDate: cert.issue_date,
-          expiryDate: cert.expiry_date,
-          category: cert.category,
-          verified: true
-        }))
-
-        const documentsData = (verifiedDocuments.rows as unknown as DocumentRow[]).map(doc => ({
-          type: doc.document_type,
-          filename: doc.original_filename,
-          path: doc.file_path,
-          verified: true
-        }))
-
-        // Create or update repairer profile with verified data
-        await tx.execute(sql`
-          INSERT INTO ${sql.raw(getTableName(repairerProfiles))} (
-            user_id,
-            business_name,
-            business_type,
-            description,
-            years_experience,
-            phone,
-            website,
-            address,
-            city,
-            postal_code,
-            service_radius_km,
-            remote_services,
-            hourly_rate_cents,
-            emergency_fee_cents,
-            home_visit_fee_cents,
-            services_offered,
-            specializations,
-            certifications,
-            insurance_info,
-            portfolio_images,
-            verification_documents,
-            is_verified,
-            verified_at,
-            verified_by,
-            created_at,
-            updated_at
-          ) VALUES (
-            ${application.user_id},
-            ${application.business_name},
-            ${application.business_type},
-            ${application.description},
-            ${application.years_experience},
-            ${application.phone},
-            ${application.website},
-            ${application.address},
-            ${application.city},
-            ${application.postal_code},
-            ${application.service_radius_km},
-            ${application.remote_services},
-            ${application.hourly_rate_cents},
-            ${application.emergency_fee_cents},
-            ${application.home_visit_fee_cents},
-            ${application.services_offered},
-            ${application.specializations},
-            ${JSON.stringify(certificationsData)},
-            ${application.insurance_info as string},
-            ${application.portfolio_images},
-            ${JSON.stringify(documentsData)},
-            true,
-            CURRENT_TIMESTAMP,
-            ${session.user.id},
-            CURRENT_TIMESTAMP,
-            CURRENT_TIMESTAMP
+      // Convert application certifications (jsonb) to text[] for the profile
+      const certNames = Array.isArray(application.certifications)
+        ? application.certifications.map((c: unknown) =>
+            typeof c === 'string' ? c : (c as { name?: string })?.name ?? String(c)
           )
-          ON CONFLICT (user_id) DO UPDATE SET
-            business_name = EXCLUDED.business_name,
-            business_type = EXCLUDED.business_type,
-            description = EXCLUDED.description,
-            years_experience = EXCLUDED.years_experience,
-            phone = EXCLUDED.phone,
-            website = EXCLUDED.website,
-            address = EXCLUDED.address,
-            city = EXCLUDED.city,
-            postal_code = EXCLUDED.postal_code,
-            service_radius_km = EXCLUDED.service_radius_km,
-            remote_services = EXCLUDED.remote_services,
-            hourly_rate_cents = EXCLUDED.hourly_rate_cents,
-            emergency_fee_cents = EXCLUDED.emergency_fee_cents,
-            home_visit_fee_cents = EXCLUDED.home_visit_fee_cents,
-            services_offered = EXCLUDED.services_offered,
-            specializations = EXCLUDED.specializations,
-            certifications = EXCLUDED.certifications,
-            insurance_info = EXCLUDED.insurance_info,
-            portfolio_images = EXCLUDED.portfolio_images,
-            verification_documents = EXCLUDED.verification_documents,
-            is_verified = true,
-            verified_at = CURRENT_TIMESTAMP,
-            verified_by = EXCLUDED.verified_by,
-            updated_at = CURRENT_TIMESTAMP
-        `)
-      }
+        : []
+
+      // Create or update repairer profile using application data directly
+      await tx.execute(sql`
+        INSERT INTO ${sql.raw(getTableName(repairerProfiles))} (
+          user_id,
+          business_name,
+          business_type,
+          description,
+          years_experience,
+          phone,
+          website,
+          address,
+          city,
+          postal_code,
+          service_radius_km,
+          remote_services,
+          hourly_rate_cents,
+          emergency_fee_cents,
+          home_visit_fee_cents,
+          services_offered,
+          specializations,
+          certifications,
+          insurance_info,
+          portfolio_images,
+          verification_documents,
+          is_verified,
+          verification_date,
+          created_at,
+          updated_at
+        ) VALUES (
+          ${application.user_id},
+          ${application.business_name},
+          ${application.business_type},
+          ${application.description},
+          ${application.years_experience},
+          ${application.phone},
+          ${application.website},
+          ${application.address},
+          ${application.city},
+          ${application.postal_code},
+          ${application.service_radius_km},
+          ${application.remote_services},
+          ${application.hourly_rate_cents},
+          ${application.emergency_fee_cents},
+          ${application.home_visit_fee_cents},
+          ${application.services_offered},
+          ${application.specializations},
+          ${certNames},
+          ${application.insurance_info as string},
+          ${application.portfolio_images},
+          ${application.verification_documents},
+          true,
+          CURRENT_TIMESTAMP,
+          CURRENT_TIMESTAMP,
+          CURRENT_TIMESTAMP
+        )
+        ON CONFLICT (user_id) DO UPDATE SET
+          business_name = EXCLUDED.business_name,
+          business_type = EXCLUDED.business_type,
+          description = EXCLUDED.description,
+          years_experience = EXCLUDED.years_experience,
+          phone = EXCLUDED.phone,
+          website = EXCLUDED.website,
+          address = EXCLUDED.address,
+          city = EXCLUDED.city,
+          postal_code = EXCLUDED.postal_code,
+          service_radius_km = EXCLUDED.service_radius_km,
+          remote_services = EXCLUDED.remote_services,
+          hourly_rate_cents = EXCLUDED.hourly_rate_cents,
+          emergency_fee_cents = EXCLUDED.emergency_fee_cents,
+          home_visit_fee_cents = EXCLUDED.home_visit_fee_cents,
+          services_offered = EXCLUDED.services_offered,
+          specializations = EXCLUDED.specializations,
+          certifications = EXCLUDED.certifications,
+          insurance_info = EXCLUDED.insurance_info,
+          portfolio_images = EXCLUDED.portfolio_images,
+          verification_documents = EXCLUDED.verification_documents,
+          is_verified = true,
+          verification_date = CURRENT_TIMESTAMP,
+          updated_at = CURRENT_TIMESTAMP
+      `)
     })
 
     logger.info('Repairer application approved', {
