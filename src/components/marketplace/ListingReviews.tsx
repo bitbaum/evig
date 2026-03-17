@@ -8,12 +8,12 @@ import { formatDateShort } from '@/lib/date-formats'
 
 interface Review {
   id: string
-  user_id: string
-  user_name: string
-  overall_rating: number
+  reviewerId: string
+  reviewerName: string
+  overallRating: number
   title: string | null
   content: string
-  created_at: string
+  createdAt: string
 }
 
 interface ReviewStats {
@@ -42,7 +42,7 @@ export default function ListingReviews({ listingId, sellerId }: ListingReviewsPr
         if (data.data.stats) {
           setStats(data.data.stats)
         } else if (Array.isArray(data.data)) {
-          const ratings = data.data.map((r: Review) => r.overall_rating)
+          const ratings = data.data.map((r: Review) => r.overallRating)
           setStats({
             average_rating: ratings.length > 0 ? ratings.reduce((a: number, b: number) => a + b, 0) / ratings.length : null,
             review_count: ratings.length,
@@ -61,7 +61,7 @@ export default function ListingReviews({ listingId, sellerId }: ListingReviewsPr
   }, [fetchReviews])
 
   const canReview = session?.user?.id && session.user.id !== sellerId
-  const hasReviewed = reviews.some(r => r.user_id === session?.user?.id)
+  const hasReviewed = reviews.some(r => r.reviewerId === session?.user?.id)
 
   const handleReviewSubmitted = () => {
     setShowForm(false)
@@ -112,14 +112,14 @@ export default function ListingReviews({ listingId, sellerId }: ListingReviewsPr
               <div className="flex items-center justify-between mb-1">
                 <div className="flex items-center gap-2">
                   <span className="font-medium text-sm text-gray-900 dark:text-white">
-                    {review.user_name}
+                    {review.reviewerName}
                   </span>
                   <div className="flex items-center gap-0.5">
                     {Array.from({ length: 5 }, (_, i) => (
                       <Star
                         key={i}
                         className={`w-3 h-3 ${
-                          i < review.overall_rating
+                          i < review.overallRating
                             ? 'text-yellow-400 fill-yellow-400'
                             : 'text-gray-300 dark:text-gray-600'
                         }`}
@@ -128,7 +128,7 @@ export default function ListingReviews({ listingId, sellerId }: ListingReviewsPr
                   </div>
                 </div>
                 <span className="text-xs text-gray-500">
-                  {formatDateShort(review.created_at)}
+                  {formatDateShort(review.createdAt)}
                 </span>
               </div>
               {review.title && (
