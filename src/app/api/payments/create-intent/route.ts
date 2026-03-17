@@ -1,9 +1,9 @@
 import { NextRequest } from 'next/server'
 import { auth } from '@/auth'
 import { db } from '@/db'
-import { paymentProviders, paymentTransactions, escrowAccounts } from '@/db/schema'
+import { paymentProviders, paymentTransactions, escrowAccounts, marketplaceOrders } from '@/db/schema'
 import { eq, and, sql } from 'drizzle-orm'
-import { apiError, apiSuccess, apiUnauthorized } from '@/lib/api/helpers'
+import { apiError, apiSuccess, apiUnauthorized, apiForbidden } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { PAYMENT_STATUS } from '@/config/payment-status'
 import { logger } from '@/lib/logger'
@@ -43,6 +43,20 @@ export const POST = withSecurePayment(async (request: NextRequest) => {
       includeVAT,
       businessType
     } = validation.data
+
+    // Verify order ownership if orderId provided
+    if (orderId) {
+      const [order] = await db
+        .select({ buyerId: marketplaceOrders.buyerId })
+        .from(marketplaceOrders)
+        .where(eq(marketplaceOrders.id, orderId))
+      if (!order) {
+        return apiError(null, 'Bestellung nicht gefunden', 400)
+      }
+      if (order.buyerId !== session.user.id) {
+        return apiForbidden('Sie sind nicht berechtigt, für diese Bestellung zu bezahlen')
+      }
+    }
 
     // Get payment provider with currency support
     const providerRows = await db

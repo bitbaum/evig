@@ -11,16 +11,14 @@ import {
   Router
 } from 'lucide-react'
 import type { ProductSuggestion } from './types' // Used by generateProductDescription
+import { ZUSTAND_OPTIONS, getConditionLabel as getConditionLabelFromSSOT } from '@/config/erfassung/conditions'
 
 /**
- * Condition labels (German)
+ * Condition labels (German) — derived from SSOT
  */
-export const CONDITION_LABELS: Record<string, string> = {
-  new: 'Neu',
-  excellent: 'Wie neu',
-  good: 'Gut',
-  fair: 'Akzeptabel'
-}
+export const CONDITION_LABELS: Record<string, string> = Object.fromEntries(
+  ZUSTAND_OPTIONS.map(c => [c.value, c.label])
+)
 
 /**
  * Category to icon mapping
@@ -40,10 +38,10 @@ export const CATEGORY_ICONS: Record<string, React.ComponentType<React.SVGProps<S
 export const DEFAULT_CATEGORY_ICON = Smartphone
 
 /**
- * Get condition label in German
+ * Get condition label in German (delegates to SSOT, supports aliases)
  */
 export function getConditionLabel(condition: string): string {
-  return CONDITION_LABELS[condition] || condition
+  return getConditionLabelFromSSOT(condition)
 }
 
 /**

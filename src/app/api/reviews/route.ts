@@ -80,7 +80,6 @@ export async function GET(request: NextRequest) {
         id: reviews.id,
         reviewerId: reviews.reviewerId,
         reviewerName: users.name,
-        reviewerEmail: users.email,
         targetType: reviews.targetType,
         targetId: reviews.targetId,
         targetName: sql<string>`COALESCE(${repairerProfiles.businessName}, ${listings.title}, '')`,
@@ -172,11 +171,12 @@ export async function GET(request: NextRequest) {
 
     const total = countRow?.total ?? 0
 
+    const isAdmin = !!session?.user?.isStaff
+
     const reviewList = rows.map(row => ({
       id: row.id,
       reviewerId: row.reviewerId,
       reviewerName: row.reviewerName,
-      reviewerEmail: row.reviewerEmail,
       targetType: row.targetType,
       targetId: row.targetId,
       targetName: row.targetName,

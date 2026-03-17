@@ -12,6 +12,7 @@ import { db } from '@/db';
 import { listings, users, conversations, messages } from '@/db/schema';
 import { eq, and, sql } from 'drizzle-orm';
 import { CONVERSATION_TYPES } from '@/config/database';
+import { LISTING_STATUS } from '@/config/marketplace';
 import { logger } from '@/lib/logger';
 import { validateBody, ContactSellerSchema } from '@/lib/schemas';
 import { sendCustomEmail } from '@/lib/email';
@@ -54,7 +55,7 @@ export const POST = withAuth<{ id: string }>(async (
 
     if (!listing) return apiNotFound('Inserat');
 
-    if (listing.status !== 'active') {
+    if (listing.status !== LISTING_STATUS.ACTIVE) {
       return apiBadRequest('Dieses Inserat ist nicht mehr verfügbar');
     }
 

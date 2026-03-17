@@ -1,5 +1,6 @@
 'use client'
 
+import { useEffect, useRef } from 'react'
 import {
   Loader2,
   Check,
@@ -29,11 +30,38 @@ export function ReportModal({
   onReport,
   onClose,
 }: ReportModalProps) {
+  const dialogRef = useRef<HTMLDivElement>(null)
+
+  // Auto-focus dialog on mount
+  useEffect(() => {
+    dialogRef.current?.focus()
+  }, [])
+
+  // Close on ESC key
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose()
+    }
+    document.addEventListener('keydown', handleKeyDown)
+    return () => document.removeEventListener('keydown', handleKeyDown)
+  }, [onClose])
+
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50">
-      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-xl max-w-md w-full p-6">
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50"
+      onClick={onClose}
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="report-modal-title"
+    >
+      <div
+        ref={dialogRef}
+        tabIndex={-1}
+        className="bg-white dark:bg-gray-800 rounded-xl shadow-xl max-w-md w-full p-6 outline-none"
+        onClick={e => e.stopPropagation()}
+      >
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-lg font-bold text-gray-900 dark:text-white">Inserat melden</h3>
+          <h3 id="report-modal-title" className="text-lg font-bold text-gray-900 dark:text-white">Inserat melden</h3>
           <button
             onClick={onClose}
             className="p-1 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"

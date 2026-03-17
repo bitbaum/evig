@@ -25,7 +25,6 @@ export interface ListingDetail {
   favorite_count: number
   created_at: string
   seller_name: string
-  seller_email: string | null
   seller_display_name: string | null
   seller_bio: string | null
   seller_avatar_url: string | null

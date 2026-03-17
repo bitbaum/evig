@@ -15,7 +15,7 @@ import type { ProductCondition, ProductCategory } from './types'
  * Derived from KATEGORIEN SSOT (main categories only).
  */
 export const PRODUCT_CATEGORIES: ProductCategory[] = KATEGORIEN.map(k => ({
-  value: k.label,
+  value: k.value,
   label: k.label,
 }))
 

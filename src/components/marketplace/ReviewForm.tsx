@@ -73,7 +73,7 @@ export default function ReviewForm({ targetType, targetId, onSubmitted, onCancel
               onMouseEnter={() => setHoverRating(i + 1)}
               onMouseLeave={() => setHoverRating(0)}
               onClick={() => setRating(i + 1)}
-              className="p-0.5"
+              className="p-2"
             >
               <Star
                 className={`w-6 h-6 transition-colors ${

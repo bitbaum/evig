@@ -47,7 +47,7 @@ export default function CheckoutPage({ params }: { params: Promise<{ listingId: 
 
   useEffect(() => {
     if (sessionStatus === 'unauthenticated') {
-      router.push('/auth/login')
+      router.push(`/auth/login?callbackUrl=${encodeURIComponent(window.location.pathname)}`)
       return
     }
 

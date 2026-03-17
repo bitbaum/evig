@@ -67,7 +67,6 @@ export async function GET(
         verification_notes: listings.verificationNotes,
         condition_checks: listings.conditionChecks,
         seller_name: users.name,
-        seller_email: users.email,
         seller_display_name: sellerProfiles.displayName,
         seller_bio: sellerProfiles.bio,
         seller_avatar_url: sellerProfiles.avatarUrl,

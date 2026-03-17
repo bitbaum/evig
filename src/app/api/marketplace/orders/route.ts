@@ -14,6 +14,14 @@ import { logger } from '@/lib/logger';
 import { validateBody, validateQuery, CreateOrderSchema, OrdersQuerySchema } from '@/lib/schemas';
 import { createGateway } from '@/lib/payments/payrexx-client';
 
+class OrderValidationError extends Error {
+  statusCode: number;
+  constructor(message: string, statusCode = 400) {
+    super(message);
+    this.statusCode = statusCode;
+  }
+}
+
 // ============================================================================
 // POST — Create order + Payrexx Gateway
 // ============================================================================
@@ -25,68 +33,64 @@ export const POST = withAuth(async (request: NextRequest, session: ValidSession)
     if (!validation.success) return validation.error;
     const data = validation.data;
 
-    // Fetch listing
-    const [listing] = await db
-      .select({
-        id: listings.id,
-        sellerId: listings.sellerId,
-        title: listings.title,
-        priceChf: listings.priceChf,
-        paymentMode: listings.paymentMode,
-        deliveryOptions: listings.deliveryOptions,
-        shippingCostChf: listings.shippingCostChf,
-        status: listings.status,
-      })
-      .from(listings)
-      .where(eq(listings.id, data.listing_id));
+    // All listing validation + order creation inside a single transaction
+    // with FOR UPDATE lock to prevent TOCTOU race conditions
+    const result = await db.transaction(async (tx) => {
+      // Lock the listing row to prevent concurrent purchases
+      const lockedRows = await tx.execute(
+        sql`SELECT id, seller_id, title, price_chf, payment_mode, delivery_options, shipping_cost_chf, status
+            FROM ${listings}
+            WHERE id = ${data.listing_id}
+            FOR UPDATE`
+      );
 
-    if (!listing) {
-      return apiBadRequest('Inserat nicht gefunden');
-    }
+      const listing = lockedRows.rows[0] as {
+        id: string; seller_id: string; title: string; price_chf: string;
+        payment_mode: string; delivery_options: string; shipping_cost_chf: string | null; status: string;
+      } | undefined;
 
-    if (listing.status !== LISTING_STATUS.ACTIVE) {
-      return apiBadRequest('Inserat ist nicht mehr verfügbar');
-    }
+      if (!listing) {
+        throw new OrderValidationError('Inserat nicht gefunden');
+      }
 
-    // Must allow secure payment
-    if (listing.paymentMode === 'direct') {
-      return apiBadRequest('Dieses Inserat unterstützt keine sichere Zahlung');
-    }
+      if (listing.status !== LISTING_STATUS.ACTIVE) {
+        throw new OrderValidationError('Inserat ist nicht mehr verfügbar');
+      }
 
-    // Can't buy your own listing
-    if (listing.sellerId === session.user.id) {
-      return apiForbidden('Sie können Ihr eigenes Inserat nicht kaufen');
-    }
+      if (listing.payment_mode === 'direct') {
+        throw new OrderValidationError('Dieses Inserat unterstützt keine sichere Zahlung');
+      }
 
-    // Validate delivery method against listing options
-    if (data.delivery_method === 'shipping' && listing.deliveryOptions === 'pickup') {
-      return apiBadRequest('Versand ist für dieses Inserat nicht verfügbar');
-    }
-    if (data.delivery_method === 'pickup' && listing.deliveryOptions === 'shipping') {
-      return apiBadRequest('Abholung ist für dieses Inserat nicht verfügbar');
-    }
+      if (listing.seller_id === session.user.id) {
+        throw new OrderValidationError('Sie können Ihr eigenes Inserat nicht kaufen', 403);
+      }
 
-    // Require shipping address for shipping delivery
-    if (data.delivery_method === 'shipping' && !data.shipping_address) {
-      return apiBadRequest('Lieferadresse ist für Versand erforderlich');
-    }
+      if (data.delivery_method === 'shipping' && listing.delivery_options === 'pickup') {
+        throw new OrderValidationError('Versand ist für dieses Inserat nicht verfügbar');
+      }
+      if (data.delivery_method === 'pickup' && listing.delivery_options === 'shipping') {
+        throw new OrderValidationError('Abholung ist für dieses Inserat nicht verfügbar');
+      }
 
-    // Calculate amounts
-    const priceChf = Number(listing.priceChf);
-    const shippingChf = data.delivery_method === 'shipping' && listing.shippingCostChf
-      ? Number(listing.shippingCostChf)
-      : 0;
-    const totalChf = priceChf + shippingChf;
-    const commissionChf = Math.round(totalChf * COMMISSION_RATE * 100) / 100;
-    const payoutChf = Math.round((totalChf - commissionChf) * 100) / 100;
+      if (data.delivery_method === 'shipping' && !data.shipping_address) {
+        throw new OrderValidationError('Lieferadresse ist für Versand erforderlich');
+      }
 
-    const orderId = await db.transaction(async (tx) => {
+      // Calculate amounts
+      const priceChf = Number(listing.price_chf);
+      const shippingChf = data.delivery_method === 'shipping' && listing.shipping_cost_chf
+        ? Number(listing.shipping_cost_chf)
+        : 0;
+      const totalChf = priceChf + shippingChf;
+      const commissionChf = Math.round(totalChf * COMMISSION_RATE * 100) / 100;
+      const payoutChf = Math.round((totalChf - commissionChf) * 100) / 100;
+
       // Insert order
       const [newOrder] = await tx
         .insert(marketplaceOrders)
         .values({
           buyerId: session.user.id,
-          sellerId: listing.sellerId,
+          sellerId: listing.seller_id,
           listingId: listing.id,
           amountChf: String(totalChf),
           commissionChf: String(commissionChf),
@@ -98,31 +102,45 @@ export const POST = withAuth(async (request: NextRequest, session: ValidSession)
         })
         .returning({ id: marketplaceOrders.id });
 
-      const newOrderId = newOrder.id;
-
-      // Reserve listing
+      // Reserve listing (already locked, guaranteed still ACTIVE)
       await tx
         .update(listings)
         .set({ status: LISTING_STATUS.RESERVED })
-        .where(and(
-          eq(listings.id, listing.id),
-          eq(listings.status, LISTING_STATUS.ACTIVE),
-        ));
+        .where(eq(listings.id, listing.id));
 
-      return newOrderId;
+      return {
+        orderId: newOrder.id,
+        listing: { id: listing.id, title: listing.title, seller_id: listing.seller_id },
+        totalChf,
+      };
     });
 
-    // Create Payrexx Gateway (reservation mode)
+    const { orderId, listing, totalChf } = result;
+
+    // Create Payrexx Gateway (reservation mode) — rollback on failure
+    let gateway: { id: number; link: string };
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
-    const gateway = await createGateway({
-      amount: Math.round(totalChf * 100), // CHF Rappen
-      currency: 'CHF',
-      referenceId: orderId,
-      purpose: `RevampIT: ${listing.title}`,
-      successRedirectUrl: `${baseUrl}/marketplace/checkout/success?orderId=${orderId}`,
-      failedRedirectUrl: `${baseUrl}/marketplace/checkout/${listing.id}?error=payment_failed`,
-      cancelRedirectUrl: `${baseUrl}/marketplace/checkout/${listing.id}?error=cancelled`,
-    });
+    try {
+      gateway = await createGateway({
+        amount: Math.round(totalChf * 100), // CHF Rappen
+        currency: 'CHF',
+        referenceId: orderId,
+        purpose: `RevampIT: ${listing.title}`,
+        successRedirectUrl: `${baseUrl}/marketplace/checkout/success?orderId=${orderId}`,
+        failedRedirectUrl: `${baseUrl}/marketplace/checkout/${listing.id}?error=payment_failed`,
+        cancelRedirectUrl: `${baseUrl}/marketplace/checkout/${listing.id}?error=cancelled`,
+      });
+    } catch (gatewayError) {
+      // Rollback: delete order and restore listing to ACTIVE
+      logger.error('Payrexx gateway creation failed, rolling back order', {
+        error: gatewayError, orderId, listingId: listing.id,
+      });
+      await db.delete(marketplaceOrders).where(eq(marketplaceOrders.id, orderId));
+      await db.update(listings)
+        .set({ status: LISTING_STATUS.ACTIVE })
+        .where(eq(listings.id, listing.id));
+      return apiError(gatewayError, 'Zahlungsgateway konnte nicht erstellt werden. Bitte versuchen Sie es erneut.');
+    }
 
     // Store gateway ID on order
     await db
@@ -134,7 +152,7 @@ export const POST = withAuth(async (request: NextRequest, session: ValidSession)
       orderId,
       listingId: listing.id,
       buyerId: session.user.id,
-      sellerId: listing.sellerId,
+      sellerId: listing.seller_id,
       amountChf: totalChf,
       payrexxGatewayId: gateway.id,
     });
@@ -147,6 +165,11 @@ export const POST = withAuth(async (request: NextRequest, session: ValidSession)
       paymentUrl: gateway.link,
     }, 201);
   } catch (error) {
+    if (error instanceof OrderValidationError) {
+      return error.statusCode === 403
+        ? apiForbidden(error.message)
+        : apiBadRequest(error.message);
+    }
     return apiError(error, 'Fehler beim Erstellen der Bestellung');
   }
 });

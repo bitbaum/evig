@@ -56,26 +56,27 @@ export async function POST(
 
       if (currentVote === voteType) {
         // User is trying to vote the same way again - remove the vote
-        await db
-          .delete(reviewVotes)
-          .where(
-            and(
-              eq(reviewVotes.reviewId, reviewId),
-              eq(reviewVotes.voterId, session.user.id)
+        await db.transaction(async (tx) => {
+          await tx
+            .delete(reviewVotes)
+            .where(
+              and(
+                eq(reviewVotes.reviewId, reviewId),
+                eq(reviewVotes.voterId, session.user.id)
+              )
             )
-          )
 
-        // Update review vote counts
-        await db
-          .update(reviews)
-          .set({
-            helpfulVotes: currentVote === 'helpful'
-              ? sql`${reviews.helpfulVotes} - 1`
-              : reviews.helpfulVotes,
-            totalVotes: sql`${reviews.totalVotes} - 1`,
-            updatedAt: sql`CURRENT_TIMESTAMP`,
-          })
-          .where(eq(reviews.id, reviewId))
+          await tx
+            .update(reviews)
+            .set({
+              helpfulVotes: currentVote === 'helpful'
+                ? sql`${reviews.helpfulVotes} - 1`
+                : reviews.helpfulVotes,
+              totalVotes: sql`${reviews.totalVotes} - 1`,
+              updatedAt: sql`CURRENT_TIMESTAMP`,
+            })
+            .where(eq(reviews.id, reviewId))
+        })
 
         return apiSuccess({
           message: 'Bewertung entfernt',
@@ -83,28 +84,29 @@ export async function POST(
         })
       } else {
         // User is changing their vote
-        await db
-          .update(reviewVotes)
-          .set({ voteType })
-          .where(
-            and(
-              eq(reviewVotes.reviewId, reviewId),
-              eq(reviewVotes.voterId, session.user.id)
+        await db.transaction(async (tx) => {
+          await tx
+            .update(reviewVotes)
+            .set({ voteType })
+            .where(
+              and(
+                eq(reviewVotes.reviewId, reviewId),
+                eq(reviewVotes.voterId, session.user.id)
+              )
             )
-          )
 
-        // Update review vote counts
-        await db
-          .update(reviews)
-          .set({
-            helpfulVotes: voteType === 'helpful' && currentVote === 'unhelpful'
-              ? sql`${reviews.helpfulVotes} + 1`
-              : voteType === 'unhelpful' && currentVote === 'helpful'
-                ? sql`${reviews.helpfulVotes} - 1`
-                : reviews.helpfulVotes,
-            updatedAt: sql`CURRENT_TIMESTAMP`,
-          })
-          .where(eq(reviews.id, reviewId))
+          await tx
+            .update(reviews)
+            .set({
+              helpfulVotes: voteType === 'helpful' && currentVote === 'unhelpful'
+                ? sql`${reviews.helpfulVotes} + 1`
+                : voteType === 'unhelpful' && currentVote === 'helpful'
+                  ? sql`${reviews.helpfulVotes} - 1`
+                  : reviews.helpfulVotes,
+              updatedAt: sql`CURRENT_TIMESTAMP`,
+            })
+            .where(eq(reviews.id, reviewId))
+        })
 
         return apiSuccess({
           message: 'Bewertung aktualisiert',
@@ -113,25 +115,26 @@ export async function POST(
       }
     } else {
       // New vote
-      await db
-        .insert(reviewVotes)
-        .values({
-          reviewId,
-          voterId: session.user.id,
-          voteType,
-        })
+      await db.transaction(async (tx) => {
+        await tx
+          .insert(reviewVotes)
+          .values({
+            reviewId,
+            voterId: session.user.id,
+            voteType,
+          })
 
-      // Update review vote counts
-      await db
-        .update(reviews)
-        .set({
-          helpfulVotes: voteType === 'helpful'
-            ? sql`${reviews.helpfulVotes} + 1`
-            : reviews.helpfulVotes,
-          totalVotes: sql`${reviews.totalVotes} + 1`,
-          updatedAt: sql`CURRENT_TIMESTAMP`,
-        })
-        .where(eq(reviews.id, reviewId))
+        await tx
+          .update(reviews)
+          .set({
+            helpfulVotes: voteType === 'helpful'
+              ? sql`${reviews.helpfulVotes} + 1`
+              : reviews.helpfulVotes,
+            totalVotes: sql`${reviews.totalVotes} + 1`,
+            updatedAt: sql`CURRENT_TIMESTAMP`,
+          })
+          .where(eq(reviews.id, reviewId))
+      })
 
       logger.info('Review vote added', {
         reviewId,

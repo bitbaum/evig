@@ -37,6 +37,9 @@ interface UseListingActionsReturn {
   setReportSent: (v: boolean) => void
   handleReport: () => Promise<void>
   closeReportModal: () => void
+  // Error feedback
+  actionError: string | null
+  clearActionError: () => void
 }
 
 export function useListingActions({
@@ -67,16 +70,24 @@ export function useListingActions({
   const [reportSending, setReportSending] = useState(false)
   const [reportSent, setReportSent] = useState(false)
 
+  // Error feedback
+  const [actionError, setActionError] = useState<string | null>(null)
+
   const toggleFavorite = async () => {
     if (!sessionUserId || !listing || togglingFav) return
     setTogglingFav(true)
+    setActionError(null)
     try {
       const response = await fetch(`/api/listings/${listing.id}/favorite`, { method: 'POST' })
       const data = await response.json()
       if (data.success) {
         setIsFavorited(data.data.favorited)
         setFavoriteCount(data.data.favorite_count)
+      } else {
+        setActionError(data.error || 'Fehler beim Aktualisieren des Favoriten')
       }
+    } catch {
+      setActionError('Netzwerkfehler beim Aktualisieren des Favoriten')
     } finally {
       setTogglingFav(false)
     }
@@ -89,6 +100,7 @@ export function useListingActions({
     }
     if (!listing || sendingMessage || !contactMessage.trim()) return
     setSendingMessage(true)
+    setActionError(null)
     try {
       const response = await fetch(`/api/listings/${listing.id}/contact`, {
         method: 'POST',
@@ -99,7 +111,11 @@ export function useListingActions({
       if (data.success) {
         setMessageSent(true)
         setContactMessage('')
+      } else {
+        setActionError(data.error || 'Fehler beim Senden der Nachricht')
       }
+    } catch {
+      setActionError('Netzwerkfehler beim Senden der Nachricht')
     } finally {
       setSendingMessage(false)
     }
@@ -123,6 +139,7 @@ export function useListingActions({
   const handleReport = async () => {
     if (!listing || !reportReason || reportSending) return
     setReportSending(true)
+    setActionError(null)
     try {
       const res = await fetch(`/api/listings/${listing.id}/report`, {
         method: 'POST',
@@ -135,7 +152,11 @@ export function useListingActions({
       const data = await res.json()
       if (data.success) {
         setReportSent(true)
+      } else {
+        setActionError(data.error || 'Fehler beim Melden des Inserats')
       }
+    } catch {
+      setActionError('Netzwerkfehler beim Melden des Inserats')
     } finally {
       setReportSending(false)
     }
@@ -171,5 +192,7 @@ export function useListingActions({
     setReportSent,
     handleReport,
     closeReportModal,
+    actionError,
+    clearActionError: () => setActionError(null),
   }
 }

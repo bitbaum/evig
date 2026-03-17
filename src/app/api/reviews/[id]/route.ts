@@ -19,6 +19,9 @@ export async function GET(
   const { id: reviewId } = await params
 
   try {
+    const session = await auth()
+    const isAdmin = !!session?.user?.isStaff
+
     // Aliased users table for responder
     const responder = db
       .select({ id: users.id, name: users.name })
@@ -89,6 +92,11 @@ export async function GET(
 
     const review = rows[0]
 
+    // Non-published reviews require admin
+    if (review.status !== REVIEW_STATUS.PUBLISHED && !isAdmin) {
+      return apiNotFound('Bewertung nicht gefunden')
+    }
+
     // Get attachments
     const attachmentRows = await db
       .select({
@@ -102,11 +110,10 @@ export async function GET(
       .where(eq(reviewAttachments.reviewId, reviewId))
       .orderBy(reviewAttachments.sortOrder, reviewAttachments.createdAt)
 
-    const reviewData = {
+    const reviewData: Record<string, unknown> = {
       id: review.id,
       reviewerId: review.reviewerId,
       reviewerName: review.reviewerName,
-      reviewerEmail: review.reviewerEmail,
       targetType: review.targetType,
       targetId: review.targetId,
       targetName: review.targetName,
@@ -125,9 +132,6 @@ export async function GET(
       helpfulVotes: review.helpfulVotes,
       totalVotes: review.totalVotes,
       status: review.status,
-      moderationReason: review.moderationReason,
-      moderatedBy: review.moderatedBy,
-      moderatedAt: review.moderatedAt,
       attachments: attachmentRows.map(att => ({
         id: att.id,
         filename: att.originalFilename,
@@ -143,6 +147,14 @@ export async function GET(
       } : null,
       createdAt: review.createdAt,
       updatedAt: review.updatedAt,
+    }
+
+    // Only expose sensitive moderation fields to admin
+    if (isAdmin) {
+      reviewData.reviewerEmail = review.reviewerEmail
+      reviewData.moderationReason = review.moderationReason
+      reviewData.moderatedBy = review.moderatedBy
+      reviewData.moderatedAt = review.moderatedAt
     }
 
     return apiSuccess({ review: reviewData })

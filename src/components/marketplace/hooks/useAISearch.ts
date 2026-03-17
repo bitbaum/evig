@@ -11,6 +11,7 @@
 import { useState } from 'react'
 import { ProductFormData } from '../types'
 import { logger } from '@/lib/logger'
+import { getConditionLabel, normalizeConditionValue } from '@/config/erfassung/conditions'
 
 interface SearchResult {
   id: string
@@ -50,11 +51,9 @@ export function useAISearch() {
   }
 
   const selectResult = (result: SearchResult) => {
-    // Returns the form data updates - parent component handles the update
-    const conditionText = 
-      result.condition === 'excellent' ? 'Wie neu' :
-      result.condition === 'good' ? 'Gut' :
-      result.condition === 'fair' ? 'Akzeptabel' : 'Neu'
+    // Normalize legacy condition values (e.g. 'excellent' → 'like_new')
+    const normalizedCondition = normalizeConditionValue(result.condition)
+    const conditionText = getConditionLabel(normalizedCondition)
 
     return {
       title: `${result.brand} ${result.name} - ${conditionText}`,
@@ -62,7 +61,7 @@ export function useAISearch() {
       price: result.estimatedPrice.toString(),
       category: result.category,
       brand: result.brand,
-      condition: result.condition
+      condition: normalizedCondition
     }
   }
 
