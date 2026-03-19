@@ -33,6 +33,7 @@ const STORAGE_KEY = 'revampit_registration_state'
 export function RegistrationWizard() {
   const { isLoading, errors, verifyError, register, verifyCode, resendCode } = useRegistration()
   const [isComplete, setIsComplete] = useState(false)
+  const [emailSendFailed, setEmailSendFailed] = useState(false)
 
   // Restore saved state from localStorage (lazy initializer avoids effect)
   const savedData = useState(() => {
@@ -110,6 +111,10 @@ export function RegistrationWizard() {
     if (result) {
       saveState({ userId: result.userId })
       setCurrentStep(1)
+      if (result.emailSent === false) {
+        // Email failed — user needs to know so they can resend
+        setEmailSendFailed(true)
+      }
     }
   }
 
@@ -280,6 +285,7 @@ export function RegistrationWizard() {
             onResend={handleResendCode}
             onSkip={handleSkipVerification}
             error={verifyError}
+            emailSendFailed={emailSendFailed}
           />
         )}
 

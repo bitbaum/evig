@@ -10,6 +10,7 @@ interface RegisterParams {
 
 interface RegisterResult {
   userId?: string
+  emailSent?: boolean
 }
 
 interface UseRegistrationResult {
@@ -48,7 +49,7 @@ export function useRegistration(): UseRegistrationResult {
         return null
       }
 
-      return { userId: data.data?.userId }
+      return { userId: data.data?.userId, emailSent: data.data?.emailSent }
     } catch {
       setErrors(['Ein Netzwerkfehler ist aufgetreten'])
       return null

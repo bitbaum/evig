@@ -275,6 +275,7 @@ export interface RegisterResult {
     email: string
     name: string | null
     emailVerified: boolean
+    emailSent: boolean
   }
   error?: string
   errors?: string[]
@@ -339,13 +340,18 @@ export async function registerUser(data: {
 
     // Generate 6-digit verification code and send email
     // Staff members get a different template with team-focused messaging
+    let emailSent = false
     try {
       const verificationCode = await createVerificationCode(email)
       const templateName = is_staff ? 'staffVerificationCode' : 'verificationCode'
-      await sendEmail(email, templateName, name || 'Benutzer', verificationCode)
-      logger.info('Verification code sent', { email, userId: user.id, isStaff: is_staff })
+      const emailResult = await sendEmail(email, templateName, name || 'Benutzer', verificationCode)
+      if (!emailResult.success) {
+        logger.error('Email send returned failure', { error: emailResult.error, email, userId: user.id })
+      } else {
+        emailSent = true
+        logger.info('Verification code sent', { email, userId: user.id, isStaff: is_staff })
+      }
     } catch (emailError) {
-      // Log but don't fail registration if email fails
       logger.error('Failed to send verification email', { error: emailError, userId: user.id })
     }
 
@@ -356,6 +362,7 @@ export async function registerUser(data: {
         email: user.email,
         name: user.name,
         emailVerified: false, // User needs to verify via code
+        emailSent,
       },
     }
   } catch (error) {

@@ -5,13 +5,14 @@ import { Mail, ArrowRight, RefreshCw, Loader2, CheckCircle2 } from 'lucide-react
 import { cn } from '@/lib/utils'
 import { getButtonVariant } from '@/lib/design-system'
 
-interface VerifyStepProps {
+export interface VerifyStepProps {
   email: string
   onVerify: (code: string) => Promise<boolean>
   onResend: () => Promise<boolean>
   onSkip: () => void
   isLoading?: boolean
   error?: string
+  emailSendFailed?: boolean
 }
 
 export function VerifyStep({
@@ -20,7 +21,8 @@ export function VerifyStep({
   onResend,
   onSkip,
   isLoading = false,
-  error
+  error,
+  emailSendFailed = false,
 }: VerifyStepProps) {
   const [code, setCode] = useState(['', '', '', '', '', ''])
   const [resendCooldown, setResendCooldown] = useState(0)
@@ -133,6 +135,18 @@ export function VerifyStep({
           gesendet
         </p>
       </div>
+
+      {/* Email send failure warning */}
+      {emailSendFailed && (
+        <div className="p-4 rounded-lg bg-amber-50 border border-amber-200">
+          <p className="text-sm text-amber-800 font-medium">
+            Der Bestätigungscode konnte nicht gesendet werden.
+          </p>
+          <p className="text-sm text-amber-700 mt-1">
+            Bitte klicken Sie unten auf «Code erneut senden».
+          </p>
+        </div>
+      )}
 
       {/* Error Message */}
       {error && (
