@@ -51,7 +51,11 @@ export async function POST(request: NextRequest) {
     // Generate new code and send email
     try {
       const verificationCode = await createVerificationCode(email)
-      await sendEmail(email, 'verificationCode', user.name || 'Benutzer', verificationCode)
+      const emailResult = await sendEmail(email, 'verificationCode', user.name || 'Benutzer', verificationCode)
+      if (!emailResult.success) {
+        logger.error('Resend verification email returned failure', { error: emailResult.error, email, userId: user.id })
+        return apiError(new Error(emailResult.error || 'Email send failed'), 'E-Mail konnte nicht gesendet werden. Bitte versuchen Sie es später erneut.')
+      }
       logger.info('Verification code resent', { email, userId: user.id })
     } catch (emailError) {
       logger.error('Failed to resend verification email', { error: emailError, email })
