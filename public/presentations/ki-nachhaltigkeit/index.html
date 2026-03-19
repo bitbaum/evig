@@ -296,14 +296,16 @@
     pointer-events: none;
   }
 
-  /* Print / PDF styles */
+  /* Print / PDF styles — keeps dark theme to match presentation */
   @media print {
     body {
       overflow: visible;
       height: auto;
       width: auto;
-      background: white;
-      color: #1a1a1a;
+      background: var(--bg);
+      color: var(--text);
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
     }
     .deck {
       position: static;
@@ -318,23 +320,55 @@
       page-break-inside: avoid;
       height: 100vh;
       width: 100%;
-      padding: 2rem;
-      background: white;
+      padding: 3rem 4rem;
+      background: var(--bg);
     }
     .slide:last-child { page-break-after: avoid; }
     .progress, .counter, .nav-arrow, .toolbar, .watermark, .has-notes::after { display: none !important; }
-    h1, h2, h3 { color: #1a1a1a; }
-    .accent { color: #16a34a; }
-    .orange { color: #d97706; }
-    p, li { color: #374151; }
-    .card, .vector-card, .prompt, .terminal, .takeaway, .timeline-item {
-      background: #f9fafb;
-      border-color: #d1d5db;
+
+    /* Keep original dark colors */
+    h1, h2 { color: var(--text); }
+    h3 { color: var(--green); }
+    .accent { color: var(--green); }
+    .orange { color: var(--orange); }
+    p, li { color: var(--text-dim); }
+
+    /* Cards and containers */
+    .card, .vector-card, .timeline-item {
+      background: var(--bg-card);
+      border-color: #334155;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
     }
-    .takeaway { border-left-color: #16a34a; background: #f0fdf4; }
-    .takeaway p { color: #1a1a1a; }
-    .demo-btn { background: #f59e0b; color: #000; }
-    .title-logo { filter: none; }
+    .prompt {
+      background: var(--bg-card);
+      border-color: #334155;
+    }
+    .terminal {
+      background: #0d1117;
+      border-color: #30363d;
+    }
+    .takeaway {
+      border-left-color: var(--green);
+      background: rgba(34,197,94,.08);
+    }
+    .takeaway p { color: var(--text); }
+    .demo-btn { background: var(--orange); color: #000; }
+
+    /* Grid layouts stay intact */
+    .grid-2, .grid-3 {
+      page-break-inside: avoid;
+    }
+    .cards {
+      page-break-inside: avoid;
+    }
+    .timeline {
+      page-break-inside: avoid;
+    }
+
+    /* Hide interactive elements */
+    .demo-btn { display: none; }
+    a.text-link { color: var(--orange); }
   }
 
   @page {
@@ -766,10 +800,9 @@
   // PPTX Export
   document.getElementById('btn-pptx').addEventListener('click', function(e) {
     e.stopPropagation();
-    if (typeof PptxGenJS === 'undefined') {
-      alert('PptxGenJS wird geladen, bitte kurz warten und erneut versuchen.');
-      return;
-    }
+    var btn = document.getElementById('btn-pptx');
+    
+    function doExport() {
     var pptx = new PptxGenJS();
     pptx.defineLayout({ name: 'WIDE', width: 13.33, height: 7.5 });
     pptx.layout = 'WIDE';
@@ -881,12 +914,32 @@
     });
 
     pptx.writeFile({ fileName: 'KI-im-Kontext-der-Nachhaltigkeit-RevampIT.pptx' });
+      btn.textContent = '\u2B07 PPTX';
+      btn.disabled = false;
+    }
+
+    if (typeof PptxGenJS !== 'undefined') {
+      doExport();
+      return;
+    }
+
+    // Load PptxGenJS on demand
+    btn.textContent = '\u23F3 Laden\u2026';
+    btn.disabled = true;
+    var script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/pptxgenjs@3.12.0/dist/pptxgen.umd.js';
+    script.onload = function() { doExport(); };
+    script.onerror = function() {
+      btn.textContent = '\u2B07 PPTX';
+      btn.disabled = false;
+      alert('PptxGenJS konnte nicht geladen werden. Bitte Internetverbindung prüfen.');
+    };
+    document.head.appendChild(script);
   });
 
   // Init
   show(0);
 })();
 </script>
-<script src="https://cdn.jsdelivr.net/npm/pptxgenjs@3.12.0/dist/pptxgen.umd.js"></script>
 </body>
 </html>
