@@ -46,17 +46,17 @@
   .slide.active { display: flex; opacity: 1; }
 
   /* Typography */
-  h1 { font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 800; line-height: 1.15; margin-bottom: .5rem; }
-  h2 { font-size: clamp(1.5rem, 4vw, 2.5rem); font-weight: 700; line-height: 1.2; margin-bottom: 1rem; }
-  h3 { font-size: clamp(1.1rem, 2.5vw, 1.5rem); font-weight: 600; color: var(--green); margin-bottom: .75rem; }
-  p, li { font-size: clamp(1rem, 2vw, 1.35rem); line-height: 1.6; color: var(--text-dim); }
+  h1 { font-size: clamp(2.5rem, 5vmin, 4.5rem); font-weight: 800; line-height: 1.15; margin-bottom: .5rem; }
+  h2 { font-size: clamp(2rem, 4vmin, 3.5rem); font-weight: 700; line-height: 1.2; margin-bottom: 1rem; }
+  h3 { font-size: clamp(1.3rem, 2.5vmin, 2rem); font-weight: 600; color: var(--green); margin-bottom: .75rem; }
+  p, li { font-size: clamp(1.2rem, 2.2vmin, 1.8rem); line-height: 1.6; color: var(--text-dim); }
   .slide li { text-align: left; margin-bottom: .5rem; }
   ul { list-style: none; padding: 0; }
   ul li::before { content: "→ "; color: var(--green); font-weight: 700; }
 
   .accent { color: var(--green); }
   .orange { color: var(--orange); }
-  .subtitle { color: var(--text-dim); font-size: clamp(.9rem, 1.8vw, 1.2rem); margin-top: .25rem; }
+  .subtitle { color: var(--text-dim); font-size: clamp(1rem, 2vmin, 1.4rem); margin-top: .25rem; }
 
   /* Cards for demo items */
   .cards { display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center; margin-top: 1.5rem; max-width: 1000px; }
@@ -70,7 +70,7 @@
     text-align: left;
   }
   .card h3 { margin-bottom: .4rem; }
-  .card p { font-size: clamp(.85rem, 1.5vw, 1rem); }
+  .card p { font-size: clamp(1rem, 1.8vmin, 1.3rem); }
 
   /* Demo button */
   .demo-btn {
@@ -80,7 +80,7 @@
     background: var(--orange);
     color: #000;
     font-weight: 700;
-    font-size: clamp(.85rem, 1.5vw, 1.05rem);
+    font-size: clamp(1rem, 1.8vmin, 1.2rem);
     border-radius: 8px;
     text-decoration: none;
     transition: transform .15s, box-shadow .15s;
@@ -158,7 +158,7 @@
     text-align: left;
     font-style: italic;
     color: var(--text);
-    font-size: clamp(.85rem, 1.5vw, 1.05rem);
+    font-size: clamp(1rem, 1.8vmin, 1.2rem);
   }
   .prompt::before { content: '\201C'; color: var(--green); font-weight: 700; }
   .prompt::after { content: '\201D'; color: var(--green); font-weight: 700; }
@@ -166,7 +166,7 @@
   /* Discussion questions */
   .questions { counter-reset: q; max-width: 700px; margin-top: 1.5rem; }
   .questions li::before { counter-increment: q; content: counter(q) ". "; color: var(--orange); font-weight: 700; }
-  .questions li { margin-bottom: 1rem; font-size: clamp(1rem, 2.2vw, 1.3rem); color: var(--text); }
+  .questions li { margin-bottom: 1rem; font-size: clamp(1.2rem, 2.5vmin, 1.6rem); color: var(--text); }
 
   /* Terminal mockup */
   .terminal {
@@ -176,7 +176,7 @@
     padding: 1rem 1.25rem;
     text-align: left;
     font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
-    font-size: clamp(.8rem, 1.4vw, .95rem);
+    font-size: clamp(.9rem, 1.6vmin, 1.1rem);
     color: var(--green);
     max-width: 650px;
     width: 100%;
@@ -260,7 +260,7 @@
     padding: 1.25rem;
   }
   .vector-card h3 { margin-bottom: .3rem; }
-  .vector-card p { font-size: clamp(.85rem, 1.5vw, 1rem); }
+  .vector-card p { font-size: clamp(1rem, 1.8vmin, 1.3rem); }
 
   /* Timeline comparison */
   .timeline {
@@ -296,6 +296,92 @@
     pointer-events: none;
   }
 
+  /* Notes panel — slides up from bottom */
+  .notes-panel {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: clamp(180px, 30vh, 350px);
+    background: #1e293b;
+    border-top: 3px solid var(--green);
+    transform: translateY(100%);
+    transition: transform .3s ease;
+    z-index: 50;
+    display: flex;
+    flex-direction: column;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+  .notes-panel.open { transform: translateY(0); }
+  .notes-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: .5rem 1rem;
+    border-bottom: 1px solid #334155;
+    flex-shrink: 0;
+  }
+  .notes-header-left { display: flex; gap: 1.5rem; align-items: center; }
+  .notes-slide-num { font-size: 1rem; font-weight: 700; color: var(--green); }
+  .notes-timer { font-size: .95rem; color: #94a3b8; font-variant-numeric: tabular-nums; cursor: pointer; }
+  .notes-timer:hover { color: var(--text); }
+  .notes-close {
+    background: none;
+    border: none;
+    color: #94a3b8;
+    font-size: 1.2rem;
+    cursor: pointer;
+    padding: .2rem .4rem;
+    border-radius: 4px;
+  }
+  .notes-close:hover { color: var(--text); background: rgba(255,255,255,.08); }
+  .notes-body {
+    flex: 1;
+    display: flex;
+    gap: 1rem;
+    padding: .75rem 1rem;
+    overflow: hidden;
+  }
+  .notes-text {
+    flex: 1;
+    font-size: 1.05rem;
+    line-height: 1.65;
+    color: #cbd5e1;
+    overflow-y: auto;
+  }
+  .notes-next {
+    width: 200px;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    gap: .25rem;
+  }
+  .notes-next-label { font-size: .7rem; color: #64748b; text-transform: uppercase; letter-spacing: .05em; }
+  .notes-next-title { font-size: .9rem; color: #94a3b8; }
+  .deck.notes-open .slide { bottom: clamp(180px, 30vh, 350px); }
+
+  /* Source footnotes */
+  .sources {
+    margin-top: 1rem;
+    font-size: clamp(.65rem, 1.2vmin, .8rem);
+    color: #64748b;
+    text-align: left;
+    max-width: 700px;
+  }
+  .sources a { color: #64748b; text-decoration: underline; text-underline-offset: 2px; }
+  .sources a:hover { color: var(--text-dim); }
+
+  /* Fullscreen boost — 30-50% larger text for projection */
+  :fullscreen h1 { font-size: clamp(3rem, 6vmin, 5.5rem); }
+  :fullscreen h2 { font-size: clamp(2.5rem, 5vmin, 4.5rem); }
+  :fullscreen h3 { font-size: clamp(1.6rem, 3vmin, 2.5rem); }
+  :fullscreen p, :fullscreen li { font-size: clamp(1.4rem, 2.8vmin, 2.2rem); }
+  :fullscreen .subtitle { font-size: clamp(1.2rem, 2.5vmin, 1.7rem); }
+  :fullscreen .card p, :fullscreen .vector-card p { font-size: clamp(1.1rem, 2.2vmin, 1.5rem); }
+  :fullscreen .prompt { font-size: clamp(1.1rem, 2.2vmin, 1.5rem); }
+  :fullscreen .terminal { font-size: clamp(1rem, 1.8vmin, 1.3rem); }
+  :fullscreen .questions li { font-size: clamp(1.4rem, 3vmin, 2rem); }
+
   /* Print / PDF styles — keeps dark theme to match presentation */
   @media print {
     body {
@@ -322,9 +408,11 @@
       width: 100%;
       padding: 3rem 4rem;
       background: var(--bg);
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
     }
     .slide:last-child { page-break-after: avoid; }
-    .progress, .counter, .nav-arrow, .toolbar, .watermark, .has-notes::after { display: none !important; }
+    .progress, .counter, .nav-arrow, .toolbar, .watermark, .has-notes::after, .notes-panel, .sources { display: none !important; }
 
     /* Keep original dark colors */
     h1, h2 { color: var(--text); }
@@ -341,19 +429,24 @@
       print-color-adjust: exact;
     }
     .prompt {
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
       background: var(--bg-card);
       border-color: #334155;
     }
     .terminal {
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
       background: #0d1117;
       border-color: #30363d;
     }
     .takeaway {
       border-left-color: var(--green);
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
       background: rgba(34,197,94,.08);
     }
     .takeaway p { color: var(--text); }
-    .demo-btn { background: var(--orange); color: #000; }
 
     /* Grid layouts stay intact */
     .grid-2, .grid-3 {
@@ -367,7 +460,8 @@
     }
 
     /* Hide interactive elements */
-    .demo-btn { display: none; }
+    .demo-btn {
+ display: none; }
     a.text-link { color: var(--orange); }
   }
 
@@ -390,9 +484,27 @@
 <!-- Toolbar -->
 <div class="toolbar">
   <button class="toolbar-btn" id="btn-fullscreen" title="Vollbild (F)">&#x26F6; Vollbild</button>
-  <button class="toolbar-btn" id="btn-print" title="PDF / Drucken (Ctrl+P)">&#x1F5B6; PDF</button>
   <button class="toolbar-btn" id="btn-notes" title="Sprechernotizen (S)">&#x1F4DD; Notizen</button>
+  <button class="toolbar-btn" id="btn-print" title="PDF herunterladen (Shift+Klick für Browser-Druck)">&#x1F5B6; PDF</button>
   <button class="toolbar-btn" id="btn-pptx" title="PowerPoint herunterladen">&#x2B07; PPTX</button>
+</div>
+
+<!-- Notes panel -->
+<div class="notes-panel" id="notes-panel">
+  <div class="notes-header">
+    <div class="notes-header-left">
+      <span class="notes-slide-num" id="notes-num"></span>
+      <span class="notes-timer" id="notes-timer" title="Klick zum Starten/Pausieren">00:00</span>
+    </div>
+    <button class="notes-close" id="notes-close" title="Schliessen">&times;</button>
+  </div>
+  <div class="notes-body">
+    <div class="notes-text" id="notes-text"></div>
+    <div class="notes-next">
+      <span class="notes-next-label">Nächste Folie</span>
+      <span class="notes-next-title" id="notes-next-title"></span>
+    </div>
+  </div>
 </div>
 
 <div class="deck" id="deck">
@@ -422,18 +534,18 @@
 
 
   <!-- 3: Der Elefant im Raum (NEW) -->
-  <div class="slide" data-notes="Bevor wir die schönen Seiten zeigen, müssen wir ehrlich sein. Diese Zahlen sind real. 300 Tonnen CO₂ für ein einziges Training — das ist enorm. Microsoft hat 34% mehr Wasser verbraucht wegen KI. Aber: Die Frage ist nicht ob KI Kosten hat, sondern ob der Nutzen überwiegt. Und ob die Technologie effizienter wird. Spoiler: Ja, wird sie — das zeigen wir später.">
+  <div class="slide" data-notes="Bevor wir die schönen Seiten zeigen, müssen wir ehrlich sein. Diese Zahlen sind real. 500 Tonnen CO₂ allein für GPT-3 — heutige Modelle brauchen ein Vielfaches davon. Microsoft hat 2022 34% mehr Wasser verbraucht wegen KI. Aber: Die Frage ist nicht ob KI Kosten hat, sondern ob der Nutzen überwiegt. Und ob die Technologie effizienter wird. Spoiler: Ja, wird sie — das zeigen wir später.">
     <div class="content">
       <h2>Der <span class="orange">Elefant</span> im Raum</h2>
       <p style="margin-bottom: 1rem;">KI hat reale Umweltkosten — und die sollten wir kennen.</p>
       <div class="grid-2">
         <div class="vector-card">
           <h3>⚡ Energie</h3>
-          <p>Training eines Frontier-Modells: ~300t CO₂ — so viel wie 5 Menschen in ihrem ganzen Leben</p>
+          <p>Training von GPT-3: ~500t CO₂ — heutige Modelle: tausende Tonnen</p>
         </div>
         <div class="vector-card">
           <h3>💧 Wasser</h3>
-          <p>Rechenzentren brauchen Millionen Liter Kühlwasser (Microsoft: +34% Wasserverbrauch)</p>
+          <p>Rechenzentren brauchen Millionen Liter Kühlwasser (Microsoft: +34% in 2022)</p>
         </div>
         <div class="vector-card">
           <h3>🔧 Hardware</h3>
@@ -441,11 +553,16 @@
         </div>
         <div class="vector-card">
           <h3>📈 Wachstum</h3>
-          <p>Globaler KI-Energiebedarf wächst ~25% jährlich</p>
+          <p>KI-Energiebedarf wächst ~30% jährlich (IEA, 2025)</p>
         </div>
       </div>
       <div class="takeaway">
         <p>Das sind reale Kosten. Die Frage ist: Überwiegt der Nutzen — und wird es besser?</p>
+      </div>
+      <div class="sources">
+        Quellen: <a href="https://arxiv.org/abs/2104.10350" target="_blank" rel="noopener">Patterson et al. 2021</a> · 
+        <a href="https://query.prod.cms.rt.microsoft.com/cms/api/am/binary/RW1lMjE" target="_blank" rel="noopener">Microsoft Sustainability Report 2022</a> · 
+        <a href="https://www.iea.org/reports/energy-and-ai" target="_blank" rel="noopener">IEA Energy and AI 2025</a>
       </div>
     </div>
   </div>
@@ -583,6 +700,10 @@
       <div class="takeaway">
         <p>Alle drei Vektoren verstärken sich — gleiche Fähigkeit, ein Bruchteil der Energie.</p>
       </div>
+      <div class="sources">
+        Quellen: <a href="https://www.iea.org/reports/world-energy-outlook-2020" target="_blank" rel="noopener">IEA World Energy Outlook 2020</a> · 
+        <a href="https://epoch.ai/data-insights/training-cost-trends" target="_blank" rel="noopener">Epoch AI</a>
+      </div>
     </div>
   </div>
 
@@ -688,126 +809,212 @@
     toggleFullscreen();
   });
 
-  // Print / PDF
+  // PDF Export — programmatic capture with html2canvas + jsPDF
+  var pdfLibState = 'idle';
+
+  function loadPdfLibs() {
+    if (pdfLibState !== 'idle') return;
+    if (typeof html2canvas !== 'undefined' && typeof jspdf !== 'undefined') { pdfLibState = 'ready'; return; }
+    pdfLibState = 'loading';
+    var loaded = 0;
+    function checkDone() { loaded++; if (loaded >= 2) pdfLibState = 'ready'; }
+
+    function loadScript(primary, fallback, cb) {
+      var s = document.createElement('script');
+      s.src = primary;
+      s.onload = cb;
+      s.onerror = function() {
+        var s2 = document.createElement('script');
+        s2.src = fallback;
+        s2.onload = cb;
+        s2.onerror = function() { pdfLibState = 'failed'; };
+        document.head.appendChild(s2);
+      };
+      document.head.appendChild(s);
+    }
+
+    loadScript(
+      'https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js',
+      'https://unpkg.com/html2canvas@1.4.1/dist/html2canvas.min.js',
+      checkDone
+    );
+    loadScript(
+      'https://cdn.jsdelivr.net/npm/jspdf@2.5.2/dist/jspdf.umd.min.js',
+      'https://unpkg.com/jspdf@2.5.2/dist/jspdf.umd.min.js',
+      checkDone
+    );
+  }
+
+  async function doExportPdf(btn) {
+    var jsPDF = jspdf.jsPDF;
+    var pdf = new jsPDF({ orientation: 'landscape', unit: 'px', format: [1920, 1080] });
+
+    // Create an offscreen container to render slides at fixed size
+    var container = document.createElement('div');
+    container.style.cssText = 'position:fixed;left:-9999px;top:0;width:1920px;height:1080px;overflow:hidden;z-index:-1;';
+    document.body.appendChild(container);
+
+    for (var i = 0; i < total; i++) {
+      btn.textContent = '\u23F3 ' + (i + 1) + '/' + total + '\u2026';
+
+      // Clone the slide
+      var clone = slides[i].cloneNode(true);
+      clone.style.cssText = 'position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:2rem 3rem;text-align:center;opacity:1;background:#0f172a;width:1920px;height:1080px;';
+      container.innerHTML = '';
+      container.appendChild(clone);
+
+      // Wait a frame for rendering
+      await new Promise(function(r) { requestAnimationFrame(function() { requestAnimationFrame(r); }); });
+
+      var canvas = await html2canvas(container, {
+        width: 1920,
+        height: 1080,
+        scale: 1,
+        backgroundColor: '#0f172a',
+        useCORS: true,
+        logging: false
+      });
+
+      if (i > 0) pdf.addPage([1920, 1080], 'landscape');
+      pdf.addImage(canvas.toDataURL('image/jpeg', 0.92), 'JPEG', 0, 0, 1920, 1080);
+    }
+
+    document.body.removeChild(container);
+    pdf.save('KI-im-Kontext-der-Nachhaltigkeit-RevampIT.pdf');
+    btn.textContent = '\uD83D\uDDB6 PDF';
+    btn.disabled = false;
+  }
+
   document.getElementById('btn-print').addEventListener('click', function(e) {
     e.stopPropagation();
-    window.print();
+
+    // Shift+click = fallback to window.print()
+    if (e.shiftKey) { window.print(); return; }
+
+    var btn = document.getElementById('btn-print');
+
+    if (pdfLibState === 'ready') {
+      btn.textContent = '\u23F3 Laden\u2026';
+      btn.disabled = true;
+      doExportPdf(btn);
+      return;
+    }
+
+    if (pdfLibState === 'failed') { pdfLibState = 'idle'; }
+    loadPdfLibs();
+
+    btn.textContent = '\u23F3 Laden\u2026';
+    btn.disabled = true;
+    var attempts = 0;
+    var poll = setInterval(function() {
+      attempts++;
+      if (pdfLibState === 'ready') {
+        clearInterval(poll);
+        doExportPdf(btn);
+      } else if (pdfLibState === 'failed' || attempts > 60) {
+        clearInterval(poll);
+        btn.textContent = '\uD83D\uDDB6 PDF';
+        btn.disabled = false;
+        alert('PDF-Bibliotheken konnten nicht geladen werden. Versuche Shift+Klick f\u00FCr Browser-Druck.');
+      }
+    }, 250);
   });
 
 
 
-  // Speaker notes — presenter view in separate window
-  var presenterWin = null;
+  // Speaker notes — inline panel
+  var notesPanel = document.getElementById('notes-panel');
+  var notesOpen = false;
+  var notesTimerInterval = null, notesTimerSeconds = 0, notesTimerRunning = false;
 
-  function openPresenterView() {
-    if (presenterWin && !presenterWin.closed) {
-      presenterWin.focus();
-      updatePresenterView();
-      return;
-    }
-    presenterWin = window.open('', 'presenter', 'width=500,height=700,menubar=no,toolbar=no');
-    if (!presenterWin) { alert('Popup blockiert — bitte Popup-Blocker deaktivieren.'); return; }
-    presenterWin.document.write(`<!DOCTYPE html>
-<html><head><meta charset="UTF-8"><title>Sprechernotizen</title>
-<style>
-  *{box-sizing:border-box;margin:0;padding:0}
-  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#0f172a;color:#f1f5f9;padding:1.5rem;height:100vh;display:flex;flex-direction:column}
-  .pv-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;padding-bottom:.75rem;border-bottom:1px solid #334155}
-  .pv-slide-num{font-size:1.5rem;font-weight:800;color:#22c55e}
-  .pv-timer{font-size:1.1rem;color:#94a3b8;font-variant-numeric:tabular-nums}
-  .pv-title{font-size:1.3rem;font-weight:700;margin-bottom:1rem;color:#f1f5f9}
-  .pv-notes{flex:1;font-size:1.15rem;line-height:1.7;color:#cbd5e1;overflow-y:auto;padding:1rem;background:#1e293b;border-radius:8px;border:1px solid #334155}
-  .pv-next{margin-top:1rem;padding-top:.75rem;border-top:1px solid #334155}
-  .pv-next-label{font-size:.8rem;color:#64748b;text-transform:uppercase;letter-spacing:.05em;margin-bottom:.25rem}
-  .pv-next-title{font-size:1rem;color:#94a3b8}
-  .pv-controls{margin-top:.75rem;display:flex;gap:.5rem}
-  .pv-btn{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:6px;color:#94a3b8;padding:.4rem .8rem;cursor:pointer;font-size:.85rem}
-  .pv-btn:hover{background:rgba(255,255,255,.15);color:#f1f5f9}
-</style></head>
-<body>
-  <div class="pv-header">
-    <span class="pv-slide-num" id="pv-num"></span>
-    <span class="pv-timer" id="pv-timer">00:00</span>
-  </div>
-  <div class="pv-title" id="pv-title"></div>
-  <div class="pv-notes" id="pv-notes"></div>
-  <div class="pv-next">
-    <div class="pv-next-label">Nächste Folie</div>
-    <div class="pv-next-title" id="pv-next"></div>
-  </div>
-  <div class="pv-controls">
-    <button class="pv-btn" onclick="window.opener.postMessage('prev','*')">← Zurück</button>
-    <button class="pv-btn" onclick="window.opener.postMessage('next','*')">Weiter →</button>
-    <button class="pv-btn" id="pv-timer-btn" onclick="toggleTimer()">Timer starten</button>
-  </div>
-  <script>
-    var timerInterval=null,timerSeconds=0,timerRunning=false;
-    function toggleTimer(){
-      if(timerRunning){clearInterval(timerInterval);timerRunning=false;document.getElementById('pv-timer-btn').textContent='Timer fortsetzen'}
-      else{timerInterval=setInterval(function(){timerSeconds++;var m=Math.floor(timerSeconds/60),s=timerSeconds%60;document.getElementById('pv-timer').textContent=(m<10?'0':'')+m+':'+(s<10?'0':'')+s},1000);timerRunning=true;document.getElementById('pv-timer-btn').textContent='Timer pausieren'}
-    }
-    document.addEventListener('keydown',function(e){
-      if(e.key==='ArrowRight'||e.key===' ')window.opener.postMessage('next','*');
-      else if(e.key==='ArrowLeft')window.opener.postMessage('prev','*');
-    });
-  <\/script>
-</body></html>`);
-    presenterWin.document.close();
-    updatePresenterView();
+  function toggleNotes() {
+    notesOpen = !notesOpen;
+    notesPanel.classList.toggle('open', notesOpen);
+    document.getElementById('deck').classList.toggle('notes-open', notesOpen);
+    if (notesOpen) updateNotesPanel();
   }
 
-  function updatePresenterView() {
-    if (!presenterWin || presenterWin.closed) return;
-    var doc = presenterWin.document;
+  function updateNotesPanel() {
+    if (!notesOpen) return;
     var s = slides[current];
-    var h = s.querySelector('h1') || s.querySelector('h2');
-    var title = h ? h.textContent.trim() : '';
     var note = s.getAttribute('data-notes') || 'Keine Notizen für diese Folie.';
     var nextTitle = '(Ende)';
     if (current + 1 < total) {
       var nh = slides[current + 1].querySelector('h1') || slides[current + 1].querySelector('h2');
       nextTitle = nh ? nh.textContent.trim() : '';
     }
-    doc.getElementById('pv-num').textContent = (current + 1) + ' / ' + total;
-    doc.getElementById('pv-title').textContent = title;
-    doc.getElementById('pv-notes').textContent = note;
-    doc.getElementById('pv-next').textContent = nextTitle;
+    document.getElementById('notes-num').textContent = (current + 1) + ' / ' + total;
+    document.getElementById('notes-text').textContent = note;
+    document.getElementById('notes-next-title').textContent = nextTitle;
   }
 
-  // Listen for navigation from presenter window
-  window.addEventListener('message', function(e) {
-    if (e.data === 'next') next();
-    else if (e.data === 'prev') prev();
+  // Timer toggle on click
+  document.getElementById('notes-timer').addEventListener('click', function() {
+    if (notesTimerRunning) {
+      clearInterval(notesTimerInterval);
+      notesTimerRunning = false;
+    } else {
+      notesTimerInterval = setInterval(function() {
+        notesTimerSeconds++;
+        var m = Math.floor(notesTimerSeconds / 60), s = notesTimerSeconds % 60;
+        document.getElementById('notes-timer').textContent = (m < 10 ? '0' : '') + m + ':' + (s < 10 ? '0' : '') + s;
+      }, 1000);
+      notesTimerRunning = true;
+    }
   });
 
-  // Patch show() to update presenter view
+  document.getElementById('notes-close').addEventListener('click', function(e) {
+    e.stopPropagation();
+    toggleNotes();
+  });
+
+  // Patch show() to update notes panel
   var _origShow = show;
   show = function(idx) {
     _origShow(idx);
-    updatePresenterView();
+    updateNotesPanel();
   };
 
   // Keyboard shortcut
   document.addEventListener('keydown', function(e) {
-    if (e.key === 's' || e.key === 'S') { if (!e.ctrlKey && !e.metaKey) { e.preventDefault(); openPresenterView(); } }
+    if (e.key === 'Escape' && notesOpen) { e.preventDefault(); toggleNotes(); }
+    else if (e.key === 's' || e.key === 'S') { if (!e.ctrlKey && !e.metaKey) { e.preventDefault(); toggleNotes(); } }
   });
 
   document.getElementById('btn-notes').addEventListener('click', function(e) {
     e.stopPropagation();
-    openPresenterView();
+    toggleNotes();
   });
 
-  // PPTX Export
-  document.getElementById('btn-pptx').addEventListener('click', function(e) {
-    e.stopPropagation();
-    var btn = document.getElementById('btn-pptx');
-    
-    function doExport() {
+  // PPTX Export — eagerly pre-load, CDN fallback, improved quality
+  var pptxState = 'idle'; // idle -> loading -> ready | failed
+
+  function loadPptxLib() {
+    if (pptxState !== 'idle') return;
+    if (typeof PptxGenJS !== 'undefined') { pptxState = 'ready'; return; }
+    pptxState = 'loading';
+    var s1 = document.createElement('script');
+    s1.src = 'https://cdn.jsdelivr.net/npm/pptxgenjs@3.12.0/dist/pptxgen.umd.js';
+    s1.onload = function() { pptxState = 'ready'; };
+    s1.onerror = function() {
+      var s2 = document.createElement('script');
+      s2.src = 'https://unpkg.com/pptxgenjs@3.12.0/dist/pptxgen.umd.js';
+      s2.onload = function() { pptxState = 'ready'; };
+      s2.onerror = function() { pptxState = 'failed'; };
+      document.head.appendChild(s2);
+    };
+    document.head.appendChild(s1);
+  }
+
+  if (document.readyState === 'complete') { loadPptxLib(); } else { window.addEventListener('load', loadPptxLib); }
+
+  function doExportPptx(btn) {
     var pptx = new PptxGenJS();
     pptx.defineLayout({ name: 'WIDE', width: 13.33, height: 7.5 });
     pptx.layout = 'WIDE';
 
     var bgColor = '0f172a';
+    var cardBg = '1e293b';
     var green = '22c55e';
     var orange = 'F7931A';
     var textColor = 'f1f5f9';
@@ -817,72 +1024,88 @@
       var s = pptx.addSlide();
       s.background = { color: bgColor };
 
+      // Footer
+      s.addText((idx + 1) + ' / ' + total + '  \u2014  RevampIT', { x: 0.5, y: 7.0, w: 12.33, h: 0.35, fontSize: 9, color: '64748b', align: 'right' });
+
       var h1 = slideEl.querySelector('h1');
       var h2 = slideEl.querySelector('h2');
       var title = h1 ? h1.textContent.trim() : (h2 ? h2.textContent.trim() : '');
 
       if (idx === 0) {
-        // Title slide
-        s.addText('RevampIT', { x: 0.5, y: 1.0, w: 12.33, h: 0.8, fontSize: 24, color: green, align: 'center', bold: true });
-        s.addText(title, { x: 0.5, y: 2.0, w: 12.33, h: 1.5, fontSize: 40, color: textColor, align: 'center', bold: true });
+        s.addText('RevampIT', { x: 0.5, y: 1.0, w: 12.33, h: 0.8, fontSize: 28, color: green, align: 'center', bold: true });
+        s.addText(title, { x: 0.5, y: 2.0, w: 12.33, h: 1.5, fontSize: 44, color: textColor, align: 'center', bold: true });
         var sub = slideEl.querySelector('.subtitle');
         if (sub) {
-          s.addText(sub.textContent.trim(), { x: 0.5, y: 3.8, w: 12.33, h: 0.6, fontSize: 18, color: dimColor, align: 'center' });
+          s.addText(sub.textContent.trim(), { x: 0.5, y: 3.8, w: 12.33, h: 0.6, fontSize: 20, color: dimColor, align: 'center' });
         }
       } else {
-        // Regular slide
-        s.addText(title, { x: 0.5, y: 0.3, w: 12.33, h: 0.8, fontSize: 28, color: textColor, bold: true });
+        // Title with green accent line
+        s.addText(title, { x: 0.5, y: 0.3, w: 12.33, h: 0.9, fontSize: 32, color: textColor, bold: true });
+        s.addShape(pptx.ShapeType.rect, { x: 0.5, y: 1.15, w: 2.5, h: 0.04, fill: { color: green } });
 
-        // Collect list items
+        var yPos = 1.5;
+
+        // List items
         var items = slideEl.querySelectorAll('ul:not(.questions) li');
-        var yPos = 1.4;
         if (items.length > 0) {
           var bullets = [];
           items.forEach(function(li) {
-            bullets.push({ text: li.textContent.trim().replace(/^→\s*/, ''), options: { bullet: { code: '2192', color: green }, color: textColor, fontSize: 16, breakLine: true } });
+            bullets.push({ text: li.textContent.trim().replace(/^\u2192\s*/, ''), options: { bullet: { code: '2192', color: green }, color: textColor, fontSize: 20, breakLine: true } });
           });
-          s.addText(bullets, { x: 0.8, y: yPos, w: 11.53, h: items.length * 0.6, valign: 'top' });
-          yPos += items.length * 0.55 + 0.3;
+          s.addText(bullets, { x: 0.8, y: yPos, w: 11.53, h: items.length * 0.7, valign: 'top' });
+          yPos += items.length * 0.65 + 0.3;
         }
 
         // Discussion questions
         var qItems = slideEl.querySelectorAll('.questions li');
         if (qItems.length > 0) {
           var qBullets = [];
-          qItems.forEach(function(li, i) {
-            qBullets.push({ text: li.textContent.trim(), options: { bullet: { code: '2022', color: orange }, color: textColor, fontSize: 16, breakLine: true } });
+          qItems.forEach(function(li) {
+            qBullets.push({ text: li.textContent.trim(), options: { bullet: { code: '2022', color: orange }, color: textColor, fontSize: 20, breakLine: true } });
           });
-          s.addText(qBullets, { x: 0.8, y: yPos, w: 11.53, h: qItems.length * 0.7, valign: 'top' });
-          yPos += qItems.length * 0.65 + 0.3;
+          s.addText(qBullets, { x: 0.8, y: yPos, w: 11.53, h: qItems.length * 0.8, valign: 'top' });
+          yPos += qItems.length * 0.75 + 0.3;
         }
 
-        // Body paragraphs (direct child p of .content, not inside cards/takeaway)
+        // Body paragraphs
         var contentDiv = slideEl.querySelector('.content');
         if (contentDiv) {
           var directPs = contentDiv.querySelectorAll(':scope > p');
           directPs.forEach(function(p) {
             if (!p.classList.contains('subtitle')) {
-              s.addText(p.textContent.trim(), { x: 0.8, y: yPos > 1.4 ? yPos : 1.4, w: 11.53, h: 0.5, fontSize: 14, color: dimColor });
-              yPos = Math.max(yPos, 1.4) + 0.5;
+              s.addText(p.textContent.trim(), { x: 0.8, y: yPos > 1.5 ? yPos : 1.5, w: 11.53, h: 0.5, fontSize: 16, color: dimColor });
+              yPos = Math.max(yPos, 1.5) + 0.55;
             }
           });
         }
 
-        // Cards / vector-cards
+        // Prompt boxes
+        var prompts = slideEl.querySelectorAll('.prompt');
+        if (prompts.length > 0) {
+          prompts.forEach(function(pr) {
+            s.addShape(pptx.ShapeType.rect, { x: 0.8, y: yPos, w: 11.53, h: 0.65, fill: { color: cardBg }, line: { color: '334155', width: 0.5 }, rectRadius: 0.08 });
+            s.addText('\u201C' + pr.textContent.trim() + '\u201D', { x: 1.0, y: yPos + 0.05, w: 11.13, h: 0.55, fontSize: 15, color: textColor, italic: true, valign: 'middle' });
+            yPos += 0.8;
+          });
+        }
+
+        // Cards with background rectangles
         var cards = slideEl.querySelectorAll('.card, .vector-card');
         if (cards.length > 0) {
-          var cardY = Math.max(yPos, 1.4);
+          var cardY = Math.max(yPos, 1.5);
           var cardW = cards.length <= 2 ? 5.5 : 3.7;
           var cardGap = cards.length <= 2 ? 6.0 : 4.1;
+          var cardH = 1.6;
           cards.forEach(function(card, ci) {
             var ch3 = card.querySelector('h3');
             var cp = card.querySelector('p');
             var cx = 0.8 + ci * cardGap;
-            if (ci >= 3) { cx = 0.8 + (ci - 3) * cardGap; cardY += 2.0; }
-            if (ch3) s.addText(ch3.textContent.trim(), { x: cx, y: cardY, w: cardW, h: 0.4, fontSize: 14, color: green, bold: true });
-            if (cp) s.addText(cp.textContent.trim(), { x: cx, y: cardY + 0.4, w: cardW, h: 0.8, fontSize: 12, color: dimColor, valign: 'top' });
+            if (ci >= 3) { cx = 0.8 + (ci - 3) * cardGap; cardY += 2.2; }
+            s.addShape(pptx.ShapeType.rect, { x: cx, y: cardY, w: cardW, h: cardH, fill: { color: cardBg }, line: { color: '334155', width: 0.5 }, rectRadius: 0.08 });
+            if (ch3) s.addText(ch3.textContent.trim(), { x: cx + 0.15, y: cardY + 0.1, w: cardW - 0.3, h: 0.45, fontSize: 16, color: green, bold: true });
+            if (cp) s.addText(cp.textContent.trim(), { x: cx + 0.15, y: cardY + 0.5, w: cardW - 0.3, h: 0.95, fontSize: 13, color: dimColor, valign: 'top' });
           });
-          yPos = cardY + 1.5;
+          yPos = cardY + cardH + 0.3;
         }
 
         // Timeline items
@@ -893,48 +1116,68 @@
             var th3 = ti.querySelector('h3');
             var tp = ti.querySelector('p');
             var tx = 1.5 + i * 5.5;
-            if (th3) s.addText(th3.textContent.trim(), { x: tx, y: tlY, w: 4.5, h: 0.5, fontSize: 16, color: i === 0 ? orange : green, bold: true, align: 'center' });
-            if (tp) s.addText(tp.textContent.trim().replace(/<br>/g, '\n'), { x: tx, y: tlY + 0.5, w: 4.5, h: 1.0, fontSize: 12, color: dimColor, align: 'center' });
+            s.addShape(pptx.ShapeType.rect, { x: tx, y: tlY, w: 4.5, h: 1.6, fill: { color: cardBg }, line: { color: '334155', width: 0.5 }, rectRadius: 0.08 });
+            if (th3) s.addText(th3.textContent.trim(), { x: tx, y: tlY + 0.1, w: 4.5, h: 0.5, fontSize: 18, color: i === 0 ? orange : green, bold: true, align: 'center' });
+            if (tp) s.addText(tp.textContent.trim().replace(/<br>/g, '\n'), { x: tx, y: tlY + 0.55, w: 4.5, h: 1.0, fontSize: 14, color: dimColor, align: 'center' });
           });
           if (timelineItems.length === 2) {
-            s.addText('→', { x: 5.9, y: tlY + 0.2, w: 1.0, h: 0.5, fontSize: 28, color: green, align: 'center', bold: true });
+            s.addText('\u2192', { x: 5.9, y: tlY + 0.3, w: 1.0, h: 0.5, fontSize: 32, color: green, align: 'center', bold: true });
           }
-          yPos = tlY + 1.8;
+          yPos = tlY + 2.0;
         }
 
-        // Takeaway box
+        // Takeaway box — green left border + dark bg
         var takeaway = slideEl.querySelector('.takeaway p');
         if (takeaway) {
           var tY = Math.max(yPos, 5.5);
-          if (tY > 6.5) tY = 6.5;
-          s.addShape(pptx.ShapeType.rect, { x: 0.8, y: tY, w: 11.53, h: 0.7, fill: { color: '1a3a2a' }, line: { color: green, width: 0.5 } });
-          s.addText(takeaway.textContent.trim(), { x: 1.0, y: tY + 0.05, w: 11.13, h: 0.6, fontSize: 14, color: textColor, bold: true, valign: 'middle' });
+          if (tY > 6.3) tY = 6.3;
+          s.addShape(pptx.ShapeType.rect, { x: 0.8, y: tY, w: 11.53, h: 0.75, fill: { color: '1a3a2a' }, rectRadius: 0.06 });
+          s.addShape(pptx.ShapeType.rect, { x: 0.8, y: tY, w: 0.06, h: 0.75, fill: { color: green } });
+          s.addText(takeaway.textContent.trim(), { x: 1.1, y: tY + 0.05, w: 11.03, h: 0.65, fontSize: 16, color: textColor, bold: true, valign: 'middle' });
         }
       }
+
+      // Speaker notes
+      var note = slideEl.getAttribute('data-notes');
+      if (note) s.addNotes(note);
     });
 
-    pptx.writeFile({ fileName: 'KI-im-Kontext-der-Nachhaltigkeit-RevampIT.pptx' });
+    btn.textContent = '\u23F3 Erstellen\u2026';
+    pptx.writeFile({ fileName: 'KI-im-Kontext-der-Nachhaltigkeit-RevampIT.pptx' }).then(function() {
       btn.textContent = '\u2B07 PPTX';
       btn.disabled = false;
-    }
+    });
+  }
 
-    if (typeof PptxGenJS !== 'undefined') {
-      doExport();
+  document.getElementById('btn-pptx').addEventListener('click', function(e) {
+    e.stopPropagation();
+    var btn = document.getElementById('btn-pptx');
+
+    if (pptxState === 'ready') {
+      btn.textContent = '\u23F3 Erstellen\u2026';
+      btn.disabled = true;
+      setTimeout(function() { doExportPptx(btn); }, 50);
       return;
     }
 
-    // Load PptxGenJS on demand
+    if (pptxState === 'failed') { pptxState = 'idle'; loadPptxLib(); }
+    if (pptxState === 'idle') { loadPptxLib(); }
+
     btn.textContent = '\u23F3 Laden\u2026';
     btn.disabled = true;
-    var script = document.createElement('script');
-    script.src = 'https://cdn.jsdelivr.net/npm/pptxgenjs@3.12.0/dist/pptxgen.umd.js';
-    script.onload = function() { doExport(); };
-    script.onerror = function() {
-      btn.textContent = '\u2B07 PPTX';
-      btn.disabled = false;
-      alert('PptxGenJS konnte nicht geladen werden. Bitte Internetverbindung prüfen.');
-    };
-    document.head.appendChild(script);
+    var attempts = 0;
+    var poll = setInterval(function() {
+      attempts++;
+      if (pptxState === 'ready') {
+        clearInterval(poll);
+        doExportPptx(btn);
+      } else if (pptxState === 'failed' || attempts > 60) {
+        clearInterval(poll);
+        btn.textContent = '\u2B07 PPTX';
+        btn.disabled = false;
+        alert('PptxGenJS konnte nicht geladen werden. Bitte Internetverbindung pr\u00FCfen.');
+      }
+    }, 250);
   });
 
   // Init
