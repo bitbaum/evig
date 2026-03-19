@@ -10,6 +10,26 @@ const nextConfig = {
       },
     ],
   },
+  async rewrites() {
+    return [
+      // Serve static presentations from public/ with clean URLs
+      {
+        source: '/presentations/:slug',
+        destination: '/presentations/:slug/index.html',
+      },
+    ];
+  },
+  async headers() {
+    return [
+      {
+        // Prevent search engines from indexing presentations (unlisted, share-by-link only)
+        source: '/presentations/:path*',
+        headers: [
+          { key: 'X-Robots-Tag', value: 'noindex, nofollow' },
+        ],
+      },
+    ];
+  },
   async redirects() {
     return [
       // Redirect old Hirn paths to new Analyse paths
