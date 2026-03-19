@@ -654,7 +654,36 @@
     </div>
   </div>
 
-  <!-- 8: RevampIT + KI — was möglich wird -->
+  <!-- 8: Jetzt Sie! -->
+  <div class="slide" data-notes="Jetzt sind die Teilnehmer dran. Alle drei Tools funktionieren ohne Registrierung, direkt im Browser. Am besten den Beobachter-Prompt kopieren und einfügen. 2-3 Minuten Zeit geben, dann Ergebnisse vergleichen. Verschiedene Tools geben unterschiedliche Antworten — das ist Teil der Übung.">
+    <div class="content">
+      <h2>Jetzt <span class="accent">Sie!</span></h2>
+      <p style="margin-bottom: 1rem;">Öffnen Sie eines dieser Tools — keine Registrierung nötig:</p>
+      <div class="cards">
+        <div class="card">
+          <h3>ChatGPT</h3>
+          <p>OpenAI</p>
+          <a class="demo-btn" href="https://chatgpt.com" target="_blank" rel="noopener">chatgpt.com →</a>
+        </div>
+        <div class="card">
+          <h3>Gemini</h3>
+          <p>Google</p>
+          <a class="demo-btn" href="https://gemini.google.com" target="_blank" rel="noopener">gemini.google.com →</a>
+        </div>
+        <div class="card">
+          <h3>Grok</h3>
+          <p>xAI</p>
+          <a class="demo-btn" href="https://grok.com" target="_blank" rel="noopener">grok.com →</a>
+        </div>
+      </div>
+      <div class="prompt" style="margin-top: 1.5rem;">Schreibe einen Artikel über KI und Nachhaltigkeit für den Beobachter — kritisch, faktenbasiert, im typischen Beobachter-Stil</div>
+      <div class="takeaway">
+        <p>Kopieren, einfügen, staunen. Vergleichen Sie die Ergebnisse!</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 9: RevampIT + KI — was möglich wird -->
   <div class="slide" data-notes="Das zeigt, was heute möglich ist. Früher brauchte man ein Entwicklerteam und Jahre. Heute kann eine einzelne Person mit KI-Unterstützung eine moderne Plattform aufbauen. Das heisst nicht, dass es einfach ist — aber die Hürde ist radikal gesunken. Wir sind noch mitten im Aufbau, aber die Demos haben gezeigt, was schon funktioniert.">
     <div class="content">
       <h2>RevampIT + <span class="accent">KI</span> — was möglich wird</h2>
@@ -1067,47 +1096,86 @@
     var textColor = 'f1f5f9';
     var dimColor = '94a3b8';
     var borderColor = '334155';
-    var W = 11.53; // content width
-    var LX = 0.8;  // left margin
+    var W = 11.53;
+    var LX = 0.8;
+    var F = 'Arial';
 
     slides.forEach(function(slideEl, idx) {
       var s = pptx.addSlide();
       s.background = { color: bgColor };
+      s.addText((idx + 1) + ' / ' + total + '  |  RevampIT', { x: 0.5, y: 7.0, w: 12.33, h: 0.35, fontSize: 9, color: '64748b', align: 'right', fontFace: F });
 
-      // Footer on every slide
-      s.addText((idx + 1) + ' / ' + total + '  |  RevampIT', { x: 0.5, y: 7.0, w: 12.33, h: 0.35, fontSize: 9, color: '64748b', align: 'right', fontFace: 'Arial' });
-
+      var contentDiv = slideEl.querySelector('.content');
       var h1 = slideEl.querySelector('h1');
       var h2 = slideEl.querySelector('h2');
-      var title = h1 ? h1.textContent.trim() : (h2 ? h2.textContent.trim() : '');
+
+      // Get title text WITHOUT inline subtitles (span.subtitle inside h2)
+      var titleText = '';
+      var inlineSubtitle = '';
+      if (h1) {
+        titleText = h1.textContent.trim();
+      } else if (h2) {
+        var subSpan = h2.querySelector('.subtitle');
+        if (subSpan) {
+          inlineSubtitle = subSpan.textContent.trim();
+          var h2Clone = h2.cloneNode(true);
+          var subClone = h2Clone.querySelector('.subtitle');
+          if (subClone) subClone.remove();
+          titleText = h2Clone.textContent.trim();
+        } else {
+          titleText = h2.textContent.trim();
+        }
+      }
 
       if (idx === 0) {
         // === TITLE SLIDE ===
-        s.addText('RevampIT', { x: 0.5, y: 1.5, w: 12.33, h: 0.8, fontSize: 28, color: green, align: 'center', bold: true, fontFace: 'Arial' });
-        s.addText(title, { x: 0.5, y: 2.5, w: 12.33, h: 1.5, fontSize: 44, color: textColor, align: 'center', bold: true, fontFace: 'Arial' });
+        s.addText('RevampIT', { x: 0.5, y: 1.5, w: 12.33, h: 0.8, fontSize: 28, color: green, align: 'center', bold: true, fontFace: F });
+        s.addText(titleText, { x: 0.5, y: 2.5, w: 12.33, h: 1.5, fontSize: 44, color: textColor, align: 'center', bold: true, fontFace: F });
         var subs = slideEl.querySelectorAll('.subtitle');
         var subY = 4.2;
         subs.forEach(function(sub) {
-          s.addText(sub.textContent.trim(), { x: 0.5, y: subY, w: 12.33, h: 0.5, fontSize: 20, color: dimColor, align: 'center', fontFace: 'Arial' });
+          s.addText(sub.textContent.trim(), { x: 0.5, y: subY, w: 12.33, h: 0.5, fontSize: 20, color: dimColor, align: 'center', fontFace: F });
           subY += 0.55;
         });
       } else {
         // === CONTENT SLIDES ===
-        s.addText(title, { x: 0.5, y: 0.3, w: 12.33, h: 0.9, fontSize: 32, color: textColor, bold: true, fontFace: 'Arial' });
-        s.addShape(pptx.ShapeType.rect, { x: 0.5, y: 1.15, w: 2.5, h: 0.04, fill: { color: green } });
+        var yPos = 0.3;
 
-        var yPos = 1.5;
-        var contentDiv = slideEl.querySelector('.content');
-
-        // Subtitle paragraphs
+        // Check if subtitle <p> appears BEFORE h2 (like "Lokale KI" slide)
+        var hasSubtitleBeforeTitle = false;
         if (contentDiv) {
-          contentDiv.querySelectorAll(':scope > .subtitle, :scope > p.subtitle').forEach(function(sub) {
-            s.addText(sub.textContent.trim(), { x: LX, y: yPos, w: W, h: 0.45, fontSize: 16, color: dimColor, fontFace: 'Arial' });
+          var firstChild = contentDiv.children[0];
+          if (firstChild && firstChild.classList && firstChild.classList.contains('subtitle') && firstChild.tagName !== 'SPAN') {
+            s.addText(firstChild.textContent.trim(), { x: LX, y: yPos, w: W, h: 0.4, fontSize: 16, color: dimColor, fontFace: F });
+            yPos += 0.45;
+            hasSubtitleBeforeTitle = true;
+          }
+        }
+
+        // Title
+        s.addText(titleText, { x: 0.5, y: yPos, w: 12.33, h: 0.9, fontSize: 32, color: textColor, bold: true, fontFace: F });
+        yPos += 0.85;
+
+        // Inline subtitle (e.g. "(Frontier-Modell)" next to title)
+        if (inlineSubtitle) {
+          s.addText(inlineSubtitle, { x: LX, y: yPos, w: W, h: 0.35, fontSize: 16, color: dimColor, fontFace: F });
+          yPos += 0.35;
+        }
+
+        // Green accent underline
+        s.addShape(pptx.ShapeType.rect, { x: 0.5, y: yPos, w: 2.5, h: 0.04, fill: { color: green } });
+        yPos += 0.25;
+
+        // Subtitle paragraphs (direct children, skip the one already rendered before title)
+        if (contentDiv) {
+          contentDiv.querySelectorAll(':scope > p.subtitle').forEach(function(sub) {
+            if (hasSubtitleBeforeTitle && sub === contentDiv.children[0]) return;
+            s.addText(sub.textContent.trim(), { x: LX, y: yPos, w: W, h: 0.45, fontSize: 16, color: dimColor, fontFace: F });
             yPos += 0.5;
           });
         }
 
-        // Body paragraphs (direct children, not inside cards/takeaway/sources)
+        // Body paragraphs - use getInnerText to preserve <br> as newlines
         if (contentDiv) {
           contentDiv.querySelectorAll(':scope > p:not(.subtitle)').forEach(function(p) {
             var fs = 16; var col = dimColor; var al = 'left';
@@ -1115,8 +1183,11 @@
             if (style.indexOf('3vw') > -1 || style.indexOf('1.8rem') > -1) {
               fs = 24; col = textColor; al = 'center';
             }
-            s.addText(p.textContent.trim(), { x: LX, y: yPos, w: W, h: 0.6, fontSize: fs, color: col, align: al, fontFace: 'Arial' });
-            yPos += 0.65;
+            var txt = getInnerText(p);
+            var lines = txt.split('\n').length;
+            var pH = Math.max(0.6, lines * 0.45);
+            s.addText(txt, { x: LX, y: yPos, w: W, h: pH, fontSize: fs, color: col, align: al, fontFace: F, lineSpacing: fs * 1.4 });
+            yPos += pH + 0.1;
           });
         }
 
@@ -1125,7 +1196,7 @@
         if (items.length > 0) {
           var bullets = [];
           items.forEach(function(li) {
-            bullets.push({ text: li.textContent.trim().replace(/^\u2192\s*/, ''), options: { bullet: { code: '2192', color: green }, color: textColor, fontSize: 20, breakLine: true, fontFace: 'Arial', lineSpacing: 28 } });
+            bullets.push({ text: li.textContent.trim().replace(/^\u2192\s*/, ''), options: { bullet: { code: '2192', color: green }, color: textColor, fontSize: 20, breakLine: true, fontFace: F, lineSpacing: 28 } });
           });
           s.addText(bullets, { x: LX, y: yPos, w: W, h: items.length * 0.7, valign: 'top' });
           yPos += items.length * 0.65 + 0.3;
@@ -1136,7 +1207,7 @@
         if (qItems.length > 0) {
           var qBullets = [];
           qItems.forEach(function(li) {
-            qBullets.push({ text: li.textContent.trim(), options: { bullet: { code: '2022', color: orange }, color: textColor, fontSize: 20, breakLine: true, fontFace: 'Arial', lineSpacing: 32 } });
+            qBullets.push({ text: li.textContent.trim(), options: { bullet: { code: '2022', color: orange }, color: textColor, fontSize: 20, breakLine: true, fontFace: F, lineSpacing: 32 } });
           });
           s.addText(qBullets, { x: LX, y: yPos, w: W, h: qItems.length * 0.9, valign: 'top' });
           yPos += qItems.length * 0.85 + 0.3;
@@ -1147,8 +1218,7 @@
         if (terminal) {
           var termH = 1.5;
           s.addShape(pptx.ShapeType.rect, { x: 1.5, y: yPos, w: 10.33, h: termH, fill: { color: '0d1117' }, line: { color: '30363d', width: 0.5 }, rectRadius: 0.08 });
-          // Terminal title bar dots
-          s.addText('\u25CF \u25CF \u25CF', { x: 1.7, y: yPos + 0.05, w: 2, h: 0.3, fontSize: 8, color: '6e7681', fontFace: 'Arial' });
+          s.addText('\u25CF \u25CF \u25CF', { x: 1.7, y: yPos + 0.05, w: 2, h: 0.3, fontSize: 8, color: '6e7681', fontFace: F });
           s.addText(getInnerText(terminal), { x: 1.7, y: yPos + 0.3, w: 9.93, h: termH - 0.4, fontSize: 13, color: green, fontFace: 'Consolas', valign: 'top', lineSpacing: 22 });
           yPos += termH + 0.3;
         }
@@ -1158,27 +1228,24 @@
         if (prompts.length > 0) {
           prompts.forEach(function(pr) {
             var txt = pr.textContent.trim();
-            var prH = txt.length > 80 ? 0.85 : 0.65;
+            var prH = txt.length > 100 ? 0.95 : (txt.length > 60 ? 0.8 : 0.65);
             s.addShape(pptx.ShapeType.rect, { x: LX, y: yPos, w: W, h: prH, fill: { color: cardBg }, line: { color: borderColor, width: 0.5 }, rectRadius: 0.08 });
-            s.addText('\u201C' + txt + '\u201D', { x: LX + 0.2, y: yPos + 0.05, w: W - 0.4, h: prH - 0.1, fontSize: 15, color: textColor, italic: true, valign: 'middle', fontFace: 'Arial' });
+            s.addText('\u201C' + txt + '\u201D', { x: LX + 0.2, y: yPos + 0.05, w: W - 0.4, h: prH - 0.1, fontSize: 15, color: textColor, italic: true, valign: 'middle', fontFace: F });
             yPos += prH + 0.15;
           });
         }
 
-        // Cards (.cards flex container = 3 cols) and vector-cards (.grid-2 = 2 cols, .grid-3 = 3 cols)
+        // Cards and vector-cards
         var cards = slideEl.querySelectorAll('.card, .vector-card');
         if (cards.length > 0) {
           var cardY = Math.max(yPos, 1.5);
-          // Determine columns from parent CSS class
           var numCols = 3;
-          var parentGrid = slideEl.querySelector('.grid-2');
-          if (parentGrid) numCols = 2;
-          var parentGrid3 = slideEl.querySelector('.grid-3');
-          if (parentGrid3) numCols = 3;
+          if (slideEl.querySelector('.grid-2')) numCols = 2;
+          else if (slideEl.querySelector('.grid-3')) numCols = 3;
           var gap = 0.25;
           var cardW = (W - gap * (numCols - 1)) / numCols;
-          // Taller cards for 2-col (more text per card)
-          var cardH = numCols === 2 ? 1.5 : 1.8;
+          var hasButtons = slideEl.querySelector('.card .demo-btn');
+          var cardH = hasButtons ? 1.5 : (numCols === 2 ? 1.5 : 1.8);
           cards.forEach(function(card, ci) {
             var col = ci % numCols;
             var row = Math.floor(ci / numCols);
@@ -1186,32 +1253,30 @@
             var cy = cardY + row * (cardH + 0.25);
             var ch3 = card.querySelector('h3');
             var allPs = card.querySelectorAll('p');
-            // Card background
             s.addShape(pptx.ShapeType.rect, { x: cx, y: cy, w: cardW, h: cardH, fill: { color: cardBg }, line: { color: borderColor, width: 0.5 }, rectRadius: 0.08 });
-            if (ch3) s.addText(ch3.textContent.trim(), { x: cx + 0.15, y: cy + 0.1, w: cardW - 0.3, h: 0.4, fontSize: 16, color: green, bold: true, fontFace: 'Arial' });
+            if (ch3) s.addText(ch3.textContent.trim(), { x: cx + 0.15, y: cy + 0.1, w: cardW - 0.3, h: 0.4, fontSize: 16, color: green, bold: true, fontFace: F });
             var pY = cy + 0.5;
             allPs.forEach(function(cp, pi) {
               var pFS = pi === 0 ? 13 : 11;
-              var pH = pi === 0 ? 0.75 : 0.4;
-              s.addText(cp.textContent.trim(), { x: cx + 0.15, y: pY, w: cardW - 0.3, h: pH, fontSize: pFS, color: dimColor, valign: 'top', fontFace: 'Arial', lineSpacing: 18 });
+              var pH = pi === 0 ? 0.6 : 0.35;
+              s.addText(cp.textContent.trim(), { x: cx + 0.15, y: pY, w: cardW - 0.3, h: pH, fontSize: pFS, color: dimColor, valign: 'top', fontFace: F, lineSpacing: 18 });
               pY += pH;
             });
-            // Demo button inside card
             var demoBtn = card.querySelector('.demo-btn');
             if (demoBtn) {
               s.addShape(pptx.ShapeType.rect, { x: cx + 0.15, y: pY, w: cardW - 0.3, h: 0.35, fill: { color: orange }, rectRadius: 0.04 });
-              s.addText(demoBtn.textContent.trim(), { x: cx + 0.15, y: pY, w: cardW - 0.3, h: 0.35, fontSize: 11, color: '000000', bold: true, align: 'center', valign: 'middle', fontFace: 'Arial' });
+              s.addText(demoBtn.textContent.trim(), { x: cx + 0.15, y: pY, w: cardW - 0.3, h: 0.35, fontSize: 11, color: '000000', bold: true, align: 'center', valign: 'middle', fontFace: F });
             }
           });
           var totalRows = Math.ceil(cards.length / numCols);
           yPos = cardY + totalRows * (cardH + 0.25);
         }
 
-        // Standalone demo button (not inside card)
+        // Standalone demo button (direct child of .content)
         if (contentDiv) {
-          contentDiv.querySelectorAll(':scope > a.demo-btn, :scope > .demo-btn').forEach(function(btn) {
+          contentDiv.querySelectorAll(':scope > a.demo-btn').forEach(function(b) {
             s.addShape(pptx.ShapeType.rect, { x: 4.5, y: yPos, w: 4.33, h: 0.45, fill: { color: orange }, rectRadius: 0.06 });
-            s.addText(btn.textContent.trim(), { x: 4.5, y: yPos, w: 4.33, h: 0.45, fontSize: 14, color: '000000', bold: true, align: 'center', valign: 'middle', fontFace: 'Arial' });
+            s.addText(b.textContent.trim(), { x: 4.5, y: yPos, w: 4.33, h: 0.45, fontSize: 14, color: '000000', bold: true, align: 'center', valign: 'middle', fontFace: F });
             yPos += 0.6;
           });
         }
@@ -1227,11 +1292,11 @@
             var tp = ti.querySelector('p');
             var tx = 1.5 + i * 5.5;
             s.addShape(pptx.ShapeType.rect, { x: tx, y: tlY, w: tlW, h: tlH, fill: { color: cardBg }, line: { color: borderColor, width: 0.5 }, rectRadius: 0.08 });
-            if (th3) s.addText(th3.textContent.trim(), { x: tx, y: tlY + 0.15, w: tlW, h: 0.5, fontSize: 18, color: i === 0 ? orange : green, bold: true, align: 'center', fontFace: 'Arial' });
-            if (tp) s.addText(getInnerText(tp), { x: tx + 0.2, y: tlY + 0.6, w: tlW - 0.4, h: 1.1, fontSize: 14, color: dimColor, align: 'center', fontFace: 'Arial', lineSpacing: 20 });
+            if (th3) s.addText(th3.textContent.trim(), { x: tx, y: tlY + 0.15, w: tlW, h: 0.5, fontSize: 18, color: i === 0 ? orange : green, bold: true, align: 'center', fontFace: F });
+            if (tp) s.addText(getInnerText(tp), { x: tx + 0.2, y: tlY + 0.6, w: tlW - 0.4, h: 1.1, fontSize: 14, color: dimColor, align: 'center', fontFace: F, lineSpacing: 20 });
           });
           if (timelineItems.length === 2) {
-            s.addText('\u2192', { x: 5.9, y: tlY + 0.4, w: 1.0, h: 0.6, fontSize: 32, color: green, align: 'center', bold: true, fontFace: 'Arial' });
+            s.addText('\u2192', { x: 5.9, y: tlY + 0.4, w: 1.0, h: 0.6, fontSize: 32, color: green, align: 'center', bold: true, fontFace: F });
           }
           yPos = tlY + tlH + 0.3;
         }
@@ -1239,13 +1304,13 @@
         // Takeaway box
         var takeaway = slideEl.querySelector('.takeaway p');
         if (takeaway) {
-          var tY = Math.max(yPos, 5.2);
+          var tY = Math.max(yPos, 5.0);
           if (tY > 6.3) tY = 6.3;
           var twText = takeaway.textContent.trim();
           var twH = twText.length > 80 ? 0.85 : 0.7;
           s.addShape(pptx.ShapeType.rect, { x: LX, y: tY, w: W, h: twH, fill: { color: '1a3a2a' }, rectRadius: 0.06 });
           s.addShape(pptx.ShapeType.rect, { x: LX, y: tY, w: 0.06, h: twH, fill: { color: green } });
-          s.addText(twText, { x: LX + 0.3, y: tY + 0.05, w: W - 0.5, h: twH - 0.1, fontSize: 15, color: textColor, bold: true, valign: 'middle', fontFace: 'Arial' });
+          s.addText(twText, { x: LX + 0.3, y: tY + 0.05, w: W - 0.5, h: twH - 0.1, fontSize: 15, color: textColor, bold: true, valign: 'middle', fontFace: F });
           yPos = tY + twH + 0.1;
         }
 
@@ -1255,7 +1320,7 @@
           var srcY = Math.max(yPos, 6.5);
           if (srcY > 6.8) srcY = 6.8;
           var srcText = sources.textContent.trim().replace(/\s+/g, ' ');
-          s.addText(srcText, { x: LX, y: srcY, w: W, h: 0.3, fontSize: 8, color: '64748b', fontFace: 'Arial' });
+          s.addText(srcText, { x: LX, y: srcY, w: W, h: 0.3, fontSize: 8, color: '64748b', fontFace: F });
         }
       }
 
