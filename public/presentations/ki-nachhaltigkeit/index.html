@@ -994,11 +994,12 @@
     if (typeof PptxGenJS !== 'undefined') { pptxState = 'ready'; return; }
     pptxState = 'loading';
     var s1 = document.createElement('script');
-    s1.src = 'https://cdn.jsdelivr.net/npm/pptxgenjs@3.12.0/dist/pptxgen.umd.js';
+    s1.src = '/presentations/_assets/pptxgen.bundle.js';
     s1.onload = function() { pptxState = 'ready'; };
     s1.onerror = function() {
+      // Fallback to CDN if local file not found
       var s2 = document.createElement('script');
-      s2.src = 'https://unpkg.com/pptxgenjs@3.12.0/dist/pptxgen.umd.js';
+      s2.src = 'https://cdn.jsdelivr.net/npm/pptxgenjs@3.12.0/dist/pptxgen.bundle.js';
       s2.onload = function() { pptxState = 'ready'; };
       s2.onerror = function() { pptxState = 'failed'; };
       document.head.appendChild(s2);
