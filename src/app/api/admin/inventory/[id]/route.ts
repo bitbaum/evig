@@ -121,7 +121,7 @@ export const DELETE = withAdmin<{ id: string }>('products', async (request, sess
       productId, itemUuid: deleted[0].itemUuid, deletedBy: session.user.id,
     })
 
-    return apiSuccess({ success: true, deleted: deleted[0] })
+    return apiSuccess({ deleted: deleted[0] })
   } catch (error) {
     logger.error('Failed to delete inventory product', { error })
     return apiError(error, 'Fehler beim Löschen des Produkts')
@@ -198,7 +198,7 @@ export const PUT = withAdmin<{ id: string }>('products', async (request, session
       updatedBy: session.user.id,
     })
 
-    return apiSuccess({ success: true, product: result[0], image_url: imageUrl })
+    return apiSuccess({ product: result[0], image_url: imageUrl })
   } catch (error) {
     logger.error('Failed to update inventory product', { error })
     return apiError(error, 'Fehler beim Aktualisieren des Produkts')
@@ -240,7 +240,6 @@ export const PATCH = withAdmin<{ id: string }>('products', async (request, sessi
     }
 
     return apiSuccess({
-      success: true,
       productId,
       marketplace_status: body.marketplace_status,
       status: body.status,

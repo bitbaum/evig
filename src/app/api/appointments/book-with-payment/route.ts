@@ -5,12 +5,10 @@ import { serviceTypes, serviceAppointments } from '@/db/schema'
 import { eq, and, sql } from 'drizzle-orm'
 import { apiError, apiSuccess, apiBadRequest, apiNotFound } from '@/lib/api/helpers'
 import { logger } from '@/lib/logger'
-import { requireStripeClient } from '@/lib/payments/stripe-client'
 import {
   processPayment,
   buildInvoiceLineItem,
   centsToDisplay,
-  DEFAULT_CURRENCY,
   DEFAULT_AUTO_RELEASE_DAYS
 } from '@/lib/payments/payment-flow'
 import { validateBody, BookWithPaymentSchema } from '@/lib/schemas'
@@ -18,8 +16,6 @@ import { APPOINTMENT_STATUS } from '@/config/appointment-status'
 
 // POST /api/appointments/book-with-payment - Book service with immediate payment
 export async function POST(request: NextRequest) {
-  const stripe = requireStripeClient()
-
   try {
     const session = await auth()
     if (!session?.user?.id) {
@@ -80,9 +76,11 @@ export async function POST(request: NextRequest) {
 
     const appointmentId = createdAppointment.id
 
+    // Build redirect URLs
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'
+
     // Process payment using shared utility
     const paymentResult = await processPayment({
-      stripe,
       userId: session.user.id,
       baseAmountCents: baseAmount,
       useEscrow,
@@ -96,6 +94,10 @@ export async function POST(request: NextRequest) {
         appointmentType: 'service_booking'
       },
       serviceAppointmentId: appointmentId,
+      successRedirectUrl: `${baseUrl}/dashboard/appointments?payment=success`,
+      failedRedirectUrl: `${baseUrl}/services/${service.slug}?payment=failed`,
+      cancelRedirectUrl: `${baseUrl}/services/${service.slug}?payment=cancelled`,
+      purpose: `Service: ${service.name}`,
       invoiceLineItems: [
         buildInvoiceLineItem(
           `${service.name} - ${urgency} priority service`,
@@ -108,8 +110,7 @@ export async function POST(request: NextRequest) {
 
     return apiSuccess({
       appointmentId,
-      paymentIntentId: paymentResult.paymentIntentId,
-      clientSecret: paymentResult.clientSecret,
+      paymentUrl: paymentResult.paymentUrl,
       transactionId: paymentResult.transactionId,
       invoiceId: paymentResult.invoiceId,
       invoiceNumber: paymentResult.invoiceNumber,

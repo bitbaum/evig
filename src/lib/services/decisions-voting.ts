@@ -207,7 +207,7 @@ export async function getParticipationStatus(decisionId: string) {
   let eligibleUsers: { id: string; email: string }[];
   if (invited.length > 0) {
     const result = await db.execute(sql`
-      SELECT id, email FROM ${sql.raw(uTable)} WHERE id = ANY(${invited})
+      SELECT id, email FROM ${sql.raw(uTable)} WHERE id IN (${sql.join(invited.map(id => sql`${id}`), sql`, `)})
     `);
     eligibleUsers = result.rows as unknown as { id: string; email: string }[];
   } else {

@@ -1,6 +1,5 @@
-import { NextRequest } from 'next/server'
 import { withAuth } from '@/lib/api/middleware'
-import { requireStripeClient } from '@/lib/payments/stripe-client'
+import { captureTransaction, cancelTransaction } from '@/lib/payments/payrexx-client'
 import { db } from '@/db'
 import { escrowAccounts, escrowReleases, paymentTransactions, users } from '@/db/schema'
 import { eq, and, sql } from 'drizzle-orm'
@@ -137,9 +136,6 @@ interface EscrowReleaseRow {
 
 // POST /api/payments/escrow/[id]/release - Release escrow funds
 export const POST = withAuth<{ id: string }>(async (request, session, context) => {
-  // Initialize Stripe lazily inside handler to avoid build-time errors
-  const stripe = requireStripeClient()
-
   try {
     const { id: escrowId } = context!.params!
     const body = await request.json()
@@ -196,10 +192,11 @@ export const POST = withAuth<{ id: string }>(async (request, session, context) =
 
     try {
       if (isFullRelease) {
-        // Capture the full payment with Stripe
-        await stripe.paymentIntents.capture(escrow.providerTransactionId!, {
-          amount_to_capture: escrow.totalAmountCents - escrow.releasedAmountCents
-        })
+        // Capture the full payment via Payrexx
+        await captureTransaction(
+          escrow.providerTransactionId!,
+          escrow.totalAmountCents - escrow.releasedAmountCents
+        )
 
         // Update escrow status to released
         await db
@@ -215,9 +212,10 @@ export const POST = withAuth<{ id: string }>(async (request, session, context) =
 
       } else {
         // Partial release - capture partial amount
-        await stripe.paymentIntents.capture(escrow.providerTransactionId!, {
-          amount_to_capture: releaseAmountCents
-        })
+        await captureTransaction(
+          escrow.providerTransactionId!,
+          releaseAmountCents
+        )
 
         // Update escrow released amount
         await db
@@ -261,9 +259,9 @@ export const POST = withAuth<{ id: string }>(async (request, session, context) =
         currency: escrow.currency,
         remainingBalance: (availableAmount - releaseAmountCents) / 100
       })
-    } catch (stripeError: unknown) {
-      logger.error('Stripe capture error', { error: stripeError })
-      return apiError(stripeError, 'Treuhandgelder konnten nicht freigegeben werden')
+    } catch (payrexxError: unknown) {
+      logger.error('Payrexx capture error', { error: payrexxError })
+      return apiError(payrexxError, 'Treuhandgelder konnten nicht freigegeben werden')
     }
 
   } catch (error) {

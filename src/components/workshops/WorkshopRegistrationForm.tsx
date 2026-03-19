@@ -4,7 +4,7 @@
  * Workshop Registration Form
  *
  * Refactored to use extracted components for better maintainability.
- * Original 590 lines -> ~250 lines
+ * Uses Payrexx redirect-based payment (no embedded Stripe Elements).
  *
  * Components extracted:
  * - PaymentForm
@@ -16,8 +16,6 @@
 import { useState, useEffect } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
-import { loadStripe } from '@stripe/stripe-js'
-import { Elements } from '@stripe/react-stripe-js'
 import {
   AlertCircle,
   Loader2,
@@ -35,9 +33,6 @@ import {
   type PaymentData,
   type RegistrationUIStatus,
 } from './index'
-
-// Initialize Stripe
-const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || '')
 
 interface WorkshopRegistrationFormProps {
   workshop: Workshop
@@ -156,7 +151,7 @@ export default function WorkshopRegistrationForm({ workshop, instance }: Worksho
       if (data.success) {
         setPaymentData({
           registrationId: data.registrationId,
-          clientSecret: data.clientSecret,
+          paymentUrl: data.paymentUrl,
           amount: data.amount,
           invoiceNumber: data.invoiceNumber
         })
@@ -169,30 +164,6 @@ export default function WorkshopRegistrationForm({ workshop, instance }: Worksho
       setRegistrationUIStatus('error')
       setError('Netzwerkfehler. Bitte versuchen Sie es erneut.')
     }
-  }
-
-  const handlePaymentSuccess = () => {
-    setRegistrationUIStatus('success')
-    setRegistrationData({
-      id: paymentData?.registrationId || '',
-      status: 'confirmed',
-      registered_at: new Date().toISOString(),
-      workshop_instance: {
-        start_date: instance.start_date,
-        location: instance.location,
-        workshop_title: workshop.title,
-        workshop_slug: workshop.slug
-      }
-    })
-
-    setTimeout(() => {
-      router.push('/dashboard/workshops')
-    }, 3000)
-  }
-
-  const handlePaymentError = (errorMessage: string) => {
-    setError(errorMessage)
-    setRegistrationUIStatus('error')
   }
 
   // Loading state
@@ -271,7 +242,7 @@ export default function WorkshopRegistrationForm({ workshop, instance }: Worksho
     )
   }
 
-  // Payment step
+  // Payment step — show summary + redirect button
   if (registrationStatus === 'payment' && paymentData) {
     return (
       <div>
@@ -291,25 +262,11 @@ export default function WorkshopRegistrationForm({ workshop, instance }: Worksho
           </div>
         </div>
 
-        {/* Stripe Payment Form */}
-        <Elements
-          stripe={stripePromise}
-          options={{
-            clientSecret: paymentData.clientSecret,
-            appearance: {
-              theme: 'stripe',
-              variables: {
-                colorPrimary: '#16a34a',
-              },
-            },
-          }}
-        >
-          <PaymentForm
-            clientSecret={paymentData.clientSecret}
-            onSuccess={handlePaymentSuccess}
-            onError={handlePaymentError}
-          />
-        </Elements>
+        {/* Payrexx Payment Form (redirect button) */}
+        <PaymentForm
+          paymentUrl={paymentData.paymentUrl}
+          amount={paymentData.amount}
+        />
 
         <button
           onClick={() => setRegistrationUIStatus('not-registered')}
@@ -365,7 +322,7 @@ export default function WorkshopRegistrationForm({ workshop, instance }: Worksho
       {/* Info */}
       <p className="text-xs text-gray-500 mt-3 text-center">
         {requiresPayment
-          ? 'Zahlung erfolgt sicher über Stripe.'
+          ? 'Sichere Zahlung über unseren Zahlungsanbieter.'
           : 'Sie erhalten eine Bestätigungs-E-Mail mit allen Details.'
         }
       </p>

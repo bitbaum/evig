@@ -6,19 +6,12 @@
  *
  * @example
  * ```typescript
- * // Payment service
- * import { PaymentService } from '@/lib/services'
- * const paymentService = new PaymentService()
- *
  * // Unified service data (services = Dienstleistungen)
  * import { getService, getFeaturedServices } from '@/lib/services'
  * const service = await getService('computer-repair-upgrades')
  * const featured = await getFeaturedServices()
  * ```
  */
-
-// Payment service
-export { PaymentService } from './payment-service'
 
 // Inventory service (public shop)
 export { getInventoryProducts } from './inventory-service'

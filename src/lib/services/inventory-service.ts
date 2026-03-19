@@ -155,7 +155,7 @@ async function fetchProfilesForProducts(
     SELECT pcp.product_id, cp.slug, cp.name_de, cp.color
     FROM ${sql.raw(pcpTable)} pcp
     JOIN ${sql.raw(cpTable)} cp ON cp.id = pcp.profile_id
-    WHERE pcp.product_id = ANY(${productIds})
+    WHERE pcp.product_id IN (${sql.join(productIds.map(id => sql`${id}`), sql`, `)})
   `)
 
   return (profilesResult.rows as unknown as ProfileRow[]).reduce((acc, row) => {

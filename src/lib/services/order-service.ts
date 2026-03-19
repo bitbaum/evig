@@ -85,7 +85,7 @@ export async function createOrder(params: CreateOrderParams): Promise<CreatedOrd
       SELECT ii.id, ii.selling_price_chf, ii.quantity_available, aep.product_name
       FROM ${sql.raw(iiTable)} ii
       JOIN ${sql.raw(aepTable)} aep ON aep.id = ii.ai_product_id
-      WHERE ii.id = ANY(${itemIds})
+      WHERE ii.id IN (${sql.join(itemIds.map(id => sql`${id}`), sql`, `)})
     `)
 
     const inventoryMap = new Map((inventoryResult.rows as unknown as InventoryRow[]).map(r => [r.id, r]))

@@ -169,7 +169,7 @@ export async function getDecisions(
   if (decisionIds.length > 0) {
     const votedResult = await db.execute(sql`
       SELECT decision_id FROM ${sql.raw(dvTable)}
-      WHERE user_id = ${requestingUserId} AND decision_id = ANY(${decisionIds})
+      WHERE user_id = ${requestingUserId} AND decision_id IN (${sql.join(decisionIds.map(id => sql`${id}`), sql`, `)})
     `);
     votedSet = new Set((votedResult.rows as unknown as Array<{ decision_id: string }>).map(v => v.decision_id));
   }

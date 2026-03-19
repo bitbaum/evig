@@ -1,4 +1,3 @@
-import { NextRequest } from 'next/server'
 import { withAdmin } from '@/lib/api/middleware'
 import { db } from '@/db'
 import { refunds, paymentTransactions, paymentProviders, users } from '@/db/schema'
@@ -8,8 +7,7 @@ import { apiError, apiSuccess, apiNotFound, apiBadRequest } from '@/lib/api/help
 import { logger } from '@/lib/logger'
 import { validateBody, RefundActionSchema } from '@/lib/schemas'
 import { REFUND_STATUS } from '@/config/refund'
-import { getStripeClient } from '@/lib/payments/stripe-client'
-import type Stripe from 'stripe'
+import { refundTransaction } from '@/lib/payments/payrexx-client'
 
 const approvedByUser = alias(users, 'approved_by_user')
 const requestedByUser = alias(users, 'requested_by_user')
@@ -143,34 +141,22 @@ export const PUT = withAdmin<{ id: string }>('finanzen', async (request, session
       }
 
       try {
-        const stripe = getStripeClient()
-        if (!stripe) {
-          return apiError(new Error('Stripe not configured'), 'Stripe is not configured', 500)
-        }
+        const payrexxRefund = await refundTransaction(
+          refund.provider_transaction_id!,
+          Number(refund.amountCents)
+        )
 
-        const stripeRefund = await stripe.refunds.create({
-          payment_intent: refund.provider_transaction_id ?? undefined,
-          amount: Number(refund.amountCents),
-          reason: mapRefundReason(refund.reason),
-          metadata: {
-            refundId: refundId.toString(),
-            refundNumber: refund.refundNumber,
-            originalTransactionId: refund.originalTransactionId,
-            processedBy: session.user.id
-          }
-        })
-
-        // Update refund with Stripe refund ID
+        // Update refund with Payrexx refund details
         await db
           .update(refunds)
           .set({
-            refundTransactionId: stripeRefund.id,
+            refundTransactionId: String(payrexxRefund.id),
             status: REFUND_STATUS.PROCESSING,
             processedBy: session.user.id,
             processedAt: sql`CURRENT_TIMESTAMP`,
             approvedAt: sql`CURRENT_TIMESTAMP`,
             approvedBy: session.user.id,
-            internalNotes: sql`COALESCE(${refunds.internalNotes}, '') || ${`\n[${new Date().toISOString()}] Processed via Stripe: ${stripeRefund.id}`}`,
+            internalNotes: sql`COALESCE(${refunds.internalNotes}, '') || ${`\n[${new Date().toISOString()}] Processed via Payrexx: ${payrexxRefund.id}`}`,
             updatedAt: sql`CURRENT_TIMESTAMP`,
           })
           .where(eq(refunds.id, refundId))
@@ -181,18 +167,17 @@ export const PUT = withAdmin<{ id: string }>('finanzen', async (request, session
           .values({
             userId: refund.requestedBy,
             providerId: refund.provider_id,
-            providerTransactionId: stripeRefund.id,
+            providerTransactionId: String(payrexxRefund.id),
             type: 'refund',
             status: REFUND_STATUS.PROCESSING,
             amountCents: Number(refund.amountCents),
             currency: refund.currency,
             description: `Refund for transaction ${refund.provider_transaction_id}`,
-            providerResponse: stripeRefund as unknown as Record<string, unknown>,
           })
 
-      } catch (stripeError: unknown) {
-        logger.error('Stripe refund processing error', { error: stripeError })
-        const errorMessage = stripeError instanceof Error ? stripeError.message : 'Unknown Stripe error'
+      } catch (refundError: unknown) {
+        logger.error('Payrexx refund processing error', { error: refundError })
+        const errorMessage = refundError instanceof Error ? refundError.message : 'Unknown refund error'
 
         await db
           .update(refunds)
@@ -205,7 +190,7 @@ export const PUT = withAdmin<{ id: string }>('finanzen', async (request, session
           })
           .where(eq(refunds.id, refundId))
 
-        return apiError(stripeError, 'Refund processing failed')
+        return apiError(refundError, 'Refund processing failed')
       }
     }
 
@@ -239,18 +224,3 @@ export const PUT = withAdmin<{ id: string }>('finanzen', async (request, session
     return apiError(error, 'Failed to process refund action')
   }
 })
-
-// Helper function to map our refund reasons to Stripe's format
-function mapRefundReason(reason: string): Stripe.RefundCreateParams.Reason {
-  switch (reason) {
-    case 'customer_request':
-      return 'requested_by_customer'
-    case 'service_cancelled':
-    case 'service_not_completed':
-      return 'duplicate' // Stripe doesn't have a perfect match
-    case 'fraud':
-      return 'fraudulent'
-    default:
-      return 'requested_by_customer'
-  }
-}

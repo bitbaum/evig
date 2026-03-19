@@ -10,7 +10,7 @@ import { withAdmin } from '@/lib/api/middleware'
 import { apiSuccess, apiError, parsePagination } from '@/lib/api/helpers'
 import { db } from '@/db'
 import { aiExtractedProducts, inventoryItems, productCustomerProfiles, customerProfiles } from '@/db/schema'
-import { eq, ilike, or, sql, desc } from 'drizzle-orm'
+import { eq, ilike, or, sql, desc, inArray } from 'drizzle-orm'
 import { logger } from '@/lib/logger'
 
 export const GET = withAdmin('products', async (request: NextRequest, session) => {
@@ -85,7 +85,7 @@ export const GET = withAdmin('products', async (request: NextRequest, session) =
         })
         .from(productCustomerProfiles)
         .innerJoin(customerProfiles, eq(customerProfiles.id, productCustomerProfiles.profileId))
-        .where(sql`${productCustomerProfiles.productId} = ANY(${productIds})`)
+        .where(inArray(productCustomerProfiles.productId, productIds))
 
       profilesMap = profilesResult.reduce((acc, row) => {
         if (!acc[row.product_id]) {

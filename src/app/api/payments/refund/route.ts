@@ -1,7 +1,5 @@
-import { NextRequest } from 'next/server'
-import Stripe from 'stripe'
 import { withAuth } from '@/lib/api/middleware'
-import { requireStripeClient } from '@/lib/payments/stripe-client'
+import { refundTransaction } from '@/lib/payments/payrexx-client'
 import { db } from '@/db'
 import { paymentTransactions, paymentProviders, refunds, users } from '@/db/schema'
 import { eq, and, sql, inArray } from 'drizzle-orm'
@@ -12,9 +10,6 @@ import { logger } from '@/lib/logger'
 import { validateBody, RefundSchema } from '@/lib/schemas'
 
 export const POST = withAuth(async (request, session) => {
-  // Initialize Stripe lazily inside handler to avoid build-time errors
-  const stripe = requireStripeClient()
-
   try {
     const body = await request.json()
     const validation = validateBody(RefundSchema, body)
@@ -108,28 +103,21 @@ export const POST = withAuth(async (request, session) => {
     const refundId = refundRow.id
     const refundNumber = refundRow.refundNumber
 
-    // If admin requested, process immediately
+    // If admin requested, process immediately via Payrexx
     if (isAdmin) {
       try {
-        // Process refund with Stripe
-        const stripeRefund = await stripe.refunds.create({
-          payment_intent: txn.providerTransactionId!,
-          amount: refundAmountCents,
-          reason: mapRefundReason(reason),
-          metadata: {
-            refundId: refundId.toString(),
-            refundNumber,
-            originalTransactionId: transactionId,
-          }
-        })
+        const payrexxRefund = await refundTransaction(
+          txn.providerTransactionId!,
+          refundAmountCents
+        )
 
         // Wrap refund record update + transaction insert in DB transaction
         await db.transaction(async (tx) => {
-          // Update refund with Stripe refund ID
+          // Update refund with Payrexx refund details
           await tx
             .update(refunds)
             .set({
-              refundTransactionId: stripeRefund.id,
+              refundTransactionId: String(payrexxRefund.id),
               status: REFUND_STATUS.PROCESSING,
               processedBy: session.user.id,
               processedAt: sql`CURRENT_TIMESTAMP`,
@@ -144,19 +132,18 @@ export const POST = withAuth(async (request, session) => {
             .values({
               userId: txn.userId,
               providerId: txn.providerId,
-              providerTransactionId: stripeRefund.id,
+              providerTransactionId: String(payrexxRefund.id),
               type: 'refund',
               status: REFUND_STATUS.PROCESSING,
               amountCents: refundAmountCents,
               currency: txn.currency,
               description: `Refund for transaction ${txn.providerTransactionId}`,
-              providerResponse: stripeRefund as unknown as Record<string, unknown>,
             })
         })
 
-      } catch (stripeError: unknown) {
-        logger.error('Stripe refund error', { error: stripeError })
-        const errorMessage = stripeError instanceof Error ? stripeError.message : 'Unknown Stripe error'
+      } catch (refundError: unknown) {
+        logger.error('Payrexx refund error', { error: refundError })
+        const errorMessage = refundError instanceof Error ? refundError.message : 'Unknown refund error'
 
         // Mark refund as rejected
         await db
@@ -168,7 +155,7 @@ export const POST = withAuth(async (request, session) => {
           })
           .where(eq(refunds.id, refundId))
 
-        return apiError(stripeError, 'Erstattung konnte nicht verarbeitet werden')
+        return apiError(refundError, 'Erstattung konnte nicht verarbeitet werden')
       }
     }
 
@@ -183,18 +170,3 @@ export const POST = withAuth(async (request, session) => {
     return apiError(error, 'Erstattungsantrag konnte nicht erstellt werden')
   }
 })
-
-// Helper function to map our refund reasons to Stripe's format
-function mapRefundReason(reason: string): Stripe.RefundCreateParams.Reason {
-  switch (reason) {
-    case 'customer_request':
-      return 'requested_by_customer'
-    case 'service_cancelled':
-    case 'service_not_completed':
-      return 'duplicate' // Stripe doesn't have a perfect match, using duplicate as closest
-    case 'fraud':
-      return 'fraudulent'
-    default:
-      return 'requested_by_customer'
-  }
-}

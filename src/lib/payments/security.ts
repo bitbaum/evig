@@ -13,7 +13,7 @@ export const PCI_COMPLIANCE = {
     'X-Frame-Options': 'DENY',
     'X-XSS-Protection': '1; mode=block',
     'Referrer-Policy': 'strict-origin-when-cross-origin',
-    'Content-Security-Policy': "default-src 'self'; script-src 'self' 'unsafe-inline' https://js.stripe.com; connect-src 'self' https://api.stripe.com; frame-src https://js.stripe.com https://hooks.stripe.com;",
+    'Content-Security-Policy': "default-src 'self'; script-src 'self' 'unsafe-inline'; connect-src 'self'; frame-src 'self';",
     'Permissions-Policy': 'camera=(), microphone=(), geolocation=()'
   },
 
@@ -31,7 +31,7 @@ export const SENSITIVE_PATTERNS = {
   CVC: /\b\d{3,4}\b/g,
   EXPIRY: /\b(0[1-9]|1[0-2])\/(\d{2}|\d{4})\b/g,
   CVV: /\b\d{3,4}\b/g,
-  API_KEY: /(sk|pk)_(test|live)_[a-zA-Z0-9]+/g,
+  API_KEY: /[a-zA-Z0-9]{20,}/g,
   TOKEN: /tok_[a-zA-Z0-9]+/g
 }
 
@@ -148,7 +148,7 @@ export function validatePaymentData(data: PaymentDataInput): { isValid: boolean;
     errors.push('Amount exceeds maximum limit')
   }
 
-  // Validate metadata size (Stripe limit)
+  // Validate metadata size
   if (data.metadata && JSON.stringify(data.metadata).length > 500) {
     errors.push('Metadata too large')
   }

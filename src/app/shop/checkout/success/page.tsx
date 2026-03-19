@@ -100,7 +100,7 @@ export default function CheckoutSuccessPage() {
               <h3 className="font-semibold text-gray-900 mb-3">Zahlungsmethode</h3>
               <div className="flex items-center text-gray-700">
                 <Package className="w-5 h-5 mr-2" />
-                <span>Stripe (Kreditkarte)</span>
+                <span>Payrexx (Kreditkarte)</span>
               </div>
             </div>
           </div>

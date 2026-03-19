@@ -5,7 +5,6 @@ import { sql, eq, and, getTableName } from 'drizzle-orm'
 import { workshops, workshopInstances, workshopRegistrations } from '@/db/schema/workshops'
 import { apiError, apiSuccess, apiUnauthorized, apiNotFound, apiBadRequest } from '@/lib/api/helpers'
 import { logger } from '@/lib/logger'
-import { requireStripeClient } from '@/lib/payments/stripe-client'
 import { WORKSHOP_REGISTRATION_STATUS } from '@/config/workshop-registration-status'
 import {
   processPayment,
@@ -31,20 +30,12 @@ interface InstanceRow {
   status: string
 }
 
-interface RegistrationRow {
-  id: string
-  status: string
-}
-
 // Table name refs
 const wTable = getTableName(workshops)
 const wiTable = getTableName(workshopInstances)
-const wrTable = getTableName(workshopRegistrations)
 
 // POST /api/workshops/[slug]/register-with-payment - Register for workshop with payment
 export async function POST(request: NextRequest) {
-  const stripe = requireStripeClient()
-
   try {
     const session = await auth()
     if (!session?.user?.id) {
@@ -153,11 +144,12 @@ export async function POST(request: NextRequest) {
       return createdReg.id
     })
 
+    // Build redirect URLs
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'
+
     // Process payment using shared utility
-    // Note: Workshops use 1-day escrow if enabled (rare case)
     const autoReleaseDays = 1
     const paymentResult = await processPayment({
-      stripe,
       userId: session.user.id,
       baseAmountCents: baseAmount,
       useEscrow,
@@ -172,6 +164,10 @@ export async function POST(request: NextRequest) {
         registrationType
       },
       workshopRegistrationId: registrationId,
+      successRedirectUrl: `${baseUrl}/dashboard/workshops?payment=success`,
+      failedRedirectUrl: `${baseUrl}/workshops/${workshopSlug}?payment=failed`,
+      cancelRedirectUrl: `${baseUrl}/workshops/${workshopSlug}?payment=cancelled`,
+      purpose: `Workshop: ${workshop.title}`,
       invoiceLineItems: [
         buildInvoiceLineItem(
           `Workshop: ${workshop.title}`,
@@ -184,8 +180,7 @@ export async function POST(request: NextRequest) {
 
     return apiSuccess({
       registrationId,
-      paymentIntentId: paymentResult.paymentIntentId,
-      clientSecret: paymentResult.clientSecret,
+      paymentUrl: paymentResult.paymentUrl,
       transactionId: paymentResult.transactionId,
       invoiceId: paymentResult.invoiceId,
       invoiceNumber: paymentResult.invoiceNumber,

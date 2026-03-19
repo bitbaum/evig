@@ -5,18 +5,21 @@
  * Eliminates DRY violations across payment routes by providing
  * a single source of truth for payment operations.
  *
+ * Uses Payrexx (redirect-based) for all payment processing.
+ * In dev mode (no PAYREXX_INSTANCE env var), falls back to mock gateway.
+ *
  * Used by:
  * - /api/appointments/book-with-payment
  * - /api/workshops/[slug]/register-with-payment
  * - /api/appointments/[id]/pay
  */
 
-import Stripe from 'stripe'
 import { db } from '@/db'
 import { paymentProviders, paymentTransactions, escrowAccounts, invoices } from '@/db/schema'
 import { eq, and, sql } from 'drizzle-orm'
 import { SWISS_VAT_RATES } from '@/lib/payments/tax-compliance'
 import { logger } from '@/lib/logger'
+import { createGateway } from '@/lib/payments/payrexx-client'
 import type { SupportedCurrency } from '@/lib/payments/currency'
 
 // ============================================================================
@@ -24,7 +27,7 @@ import type { SupportedCurrency } from '@/lib/payments/currency'
 // ============================================================================
 
 export const DEFAULT_CURRENCY: SupportedCurrency = 'CHF'
-export const DEFAULT_PAYMENT_PROVIDER = 'stripe'
+export const DEFAULT_PAYMENT_PROVIDER = 'payrexx'
 export const DEFAULT_AUTO_RELEASE_DAYS = 7
 
 // ============================================================================
@@ -45,23 +48,10 @@ export interface FeeCalculation {
   currency: SupportedCurrency
 }
 
-export interface PaymentIntentParams {
-  amountCents: number
-  currency: SupportedCurrency
-  metadata: Record<string, string>
-  description: string
-  useEscrow: boolean
-}
-
-export interface PaymentIntentResult {
-  paymentIntentId: string
-  clientSecret: string
-}
-
 export interface TransactionParams {
   userId: string
   providerId: string
-  providerTransactionId: string
+  providerTransactionId?: string
   amountCents: number
   feeCents: number
   netAmountCents: number
@@ -182,41 +172,6 @@ export function calculateSwissVAT(baseAmountCents: number): number {
 }
 
 // ============================================================================
-// Stripe Operations
-// ============================================================================
-
-/**
- * Create a Stripe payment intent
- */
-export async function createPaymentIntent(
-  stripe: Stripe,
-  params: PaymentIntentParams
-): Promise<PaymentIntentResult> {
-  const paymentIntent = await stripe.paymentIntents.create({
-    amount: params.amountCents,
-    currency: params.currency.toLowerCase(),
-    metadata: params.metadata,
-    automatic_payment_methods: {
-      enabled: true,
-    },
-    capture_method: params.useEscrow ? 'manual' : 'automatic',
-    description: params.description,
-  })
-
-  logger.info('Payment intent created', {
-    paymentIntentId: paymentIntent.id,
-    amount: params.amountCents,
-    currency: params.currency,
-    useEscrow: params.useEscrow
-  })
-
-  return {
-    paymentIntentId: paymentIntent.id,
-    clientSecret: paymentIntent.client_secret || ''
-  }
-}
-
-// ============================================================================
 // Transaction Operations
 // ============================================================================
 
@@ -231,7 +186,7 @@ export async function createTransaction(
     .values({
       userId: params.userId,
       providerId: params.providerId,
-      providerTransactionId: params.providerTransactionId,
+      providerTransactionId: params.providerTransactionId || null,
       type: 'payment',
       status: 'pending',
       amountCents: params.amountCents,
@@ -339,7 +294,6 @@ export async function createInvoice(params: InvoiceParams): Promise<InvoiceResul
 // ============================================================================
 
 export interface ProcessPaymentParams {
-  stripe: Stripe
   userId: string
   baseAmountCents: number
   currency?: SupportedCurrency
@@ -347,6 +301,12 @@ export interface ProcessPaymentParams {
   autoReleaseDays?: number
   paymentDescription: string
   paymentMetadata: Record<string, string>
+  // Payrexx redirect URLs
+  successRedirectUrl: string
+  failedRedirectUrl: string
+  cancelRedirectUrl: string
+  /** Purpose shown on payment page */
+  purpose?: string
   // One of these contexts should be provided
   serviceAppointmentId?: string
   workshopRegistrationId?: string
@@ -359,8 +319,8 @@ export interface ProcessPaymentParams {
 }
 
 export interface ProcessPaymentResult {
-  paymentIntentId: string
-  clientSecret: string
+  gatewayId: number
+  paymentUrl: string
   transactionId: string
   invoiceId: string
   invoiceNumber: string
@@ -373,10 +333,11 @@ export interface ProcessPaymentResult {
  * Process a complete payment flow:
  * 1. Get payment provider
  * 2. Calculate fees
- * 3. Create Stripe payment intent
- * 4. Create payment transaction record
- * 5. Create escrow account (if enabled)
- * 6. Create invoice
+ * 3. Create payment transaction record (need ID as referenceId)
+ * 4. Create Payrexx gateway
+ * 5. Update transaction with gateway ID
+ * 6. Create escrow account (if enabled)
+ * 7. Create invoice
  */
 export async function processPayment(
   params: ProcessPaymentParams
@@ -393,20 +354,10 @@ export async function processPayment(
   // 2. Calculate fees
   const fees = calculateFees(params.baseAmountCents, provider, currency)
 
-  // 3. Create Stripe payment intent
-  const paymentIntent = await createPaymentIntent(params.stripe, {
-    amountCents: fees.totalAmountCents,
-    currency,
-    metadata: params.paymentMetadata,
-    description: params.paymentDescription,
-    useEscrow: params.useEscrow
-  })
-
-  // 4. Create payment transaction record
+  // 3. Create payment transaction record first (need ID as referenceId)
   const transaction = await createTransaction({
     userId: params.userId,
     providerId: provider.id,
-    providerTransactionId: paymentIntent.paymentIntentId,
     amountCents: fees.totalAmountCents,
     feeCents: fees.feeCents,
     netAmountCents: fees.baseAmountCents,
@@ -419,7 +370,24 @@ export async function processPayment(
     metadata: params.transactionMetadata
   })
 
-  // 5. Create escrow account if enabled
+  // 4. Create Payrexx gateway
+  const gateway = await createGateway({
+    amount: fees.totalAmountCents,
+    currency,
+    referenceId: transaction.transactionId,
+    purpose: params.purpose || params.paymentDescription,
+    successRedirectUrl: params.successRedirectUrl,
+    failedRedirectUrl: params.failedRedirectUrl,
+    cancelRedirectUrl: params.cancelRedirectUrl,
+  })
+
+  // 5. Update transaction with gateway ID
+  await db
+    .update(paymentTransactions)
+    .set({ providerTransactionId: String(gateway.id) })
+    .where(eq(paymentTransactions.id, transaction.transactionId))
+
+  // 6. Create escrow account if enabled
   if (params.useEscrow) {
     await createEscrowAccount({
       transactionId: transaction.transactionId,
@@ -430,7 +398,7 @@ export async function processPayment(
     })
   }
 
-  // 6. Create invoice
+  // 7. Create invoice
   const invoice = await createInvoice({
     userId: params.userId,
     baseAmountCents: fees.baseAmountCents,
@@ -444,7 +412,7 @@ export async function processPayment(
   })
 
   logger.info('Payment flow completed', {
-    paymentIntentId: paymentIntent.paymentIntentId,
+    gatewayId: gateway.id,
     transactionId: transaction.transactionId,
     invoiceId: invoice.invoiceId,
     totalAmount: fees.totalAmountCents,
@@ -452,8 +420,8 @@ export async function processPayment(
   })
 
   return {
-    paymentIntentId: paymentIntent.paymentIntentId,
-    clientSecret: paymentIntent.clientSecret,
+    gatewayId: gateway.id,
+    paymentUrl: gateway.link,
     transactionId: transaction.transactionId,
     invoiceId: invoice.invoiceId,
     invoiceNumber: invoice.invoiceNumber,
@@ -482,20 +450,10 @@ export async function processPaymentWithoutInvoice(
   // 2. Calculate fees
   const fees = calculateFees(params.baseAmountCents, provider, currency)
 
-  // 3. Create Stripe payment intent
-  const paymentIntent = await createPaymentIntent(params.stripe, {
-    amountCents: fees.totalAmountCents,
-    currency,
-    metadata: params.paymentMetadata,
-    description: params.paymentDescription,
-    useEscrow: params.useEscrow
-  })
-
-  // 4. Create payment transaction record
+  // 3. Create payment transaction record first (need ID as referenceId)
   const transaction = await createTransaction({
     userId: params.userId,
     providerId: provider.id,
-    providerTransactionId: paymentIntent.paymentIntentId,
     amountCents: fees.totalAmountCents,
     feeCents: fees.feeCents,
     netAmountCents: fees.baseAmountCents,
@@ -508,7 +466,24 @@ export async function processPaymentWithoutInvoice(
     metadata: params.transactionMetadata
   })
 
-  // 5. Create escrow account if enabled
+  // 4. Create Payrexx gateway
+  const gateway = await createGateway({
+    amount: fees.totalAmountCents,
+    currency,
+    referenceId: transaction.transactionId,
+    purpose: params.purpose || params.paymentDescription,
+    successRedirectUrl: params.successRedirectUrl,
+    failedRedirectUrl: params.failedRedirectUrl,
+    cancelRedirectUrl: params.cancelRedirectUrl,
+  })
+
+  // 5. Update transaction with gateway ID
+  await db
+    .update(paymentTransactions)
+    .set({ providerTransactionId: String(gateway.id) })
+    .where(eq(paymentTransactions.id, transaction.transactionId))
+
+  // 6. Create escrow account if enabled
   if (params.useEscrow) {
     await createEscrowAccount({
       transactionId: transaction.transactionId,
@@ -520,8 +495,8 @@ export async function processPaymentWithoutInvoice(
   }
 
   return {
-    paymentIntentId: paymentIntent.paymentIntentId,
-    clientSecret: paymentIntent.clientSecret,
+    gatewayId: gateway.id,
+    paymentUrl: gateway.link,
     transactionId: transaction.transactionId,
     totalAmountCents: fees.totalAmountCents,
     feeCents: fees.feeCents,

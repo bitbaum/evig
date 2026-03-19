@@ -51,7 +51,7 @@ export async function getDashboardStats(isSuper: boolean): Promise<DashboardStat
     try {
       const approvalsResult = await db.execute(sql`
         SELECT COUNT(*) as count FROM ${sql.raw(ucsTable)}
-        WHERE status = ${APPROVAL_STATUS.PENDING} AND content_type = ANY(${['workshop', 'blog_post']})
+        WHERE status = ${APPROVAL_STATUS.PENDING} AND content_type IN (${sql.join(['workshop', 'blog_post'].map(v => sql`${v}`), sql`, `)})
       `)
       stats.pendingApprovals = parseInt((approvalsResult.rows as unknown as { count: string }[])[0]?.count || '0')
     } catch {

@@ -248,11 +248,11 @@ export interface Location {
 // =============================================================================
 
 /**
- * Payment data for Stripe integration
+ * Payment data for Payrexx redirect integration
  */
 export interface PaymentData {
   registrationId: string
-  clientSecret: string
+  paymentUrl: string
   amount: string
   invoiceNumber: string
 }

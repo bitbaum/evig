@@ -5,7 +5,6 @@ import { serviceAppointments, serviceTypes, users, paymentTransactions } from '@
 import { eq, and, sql } from 'drizzle-orm'
 import { apiError, apiSuccess, apiUnauthorized, apiNotFound, apiBadRequest } from '@/lib/api/helpers'
 import { logger } from '@/lib/logger'
-import { getStripeClient } from '@/lib/payments/stripe-client'
 import { PAYMENT_STATUS } from '@/config/payment-status'
 import {
   processPaymentWithoutInvoice,
@@ -103,18 +102,14 @@ export async function POST(request: NextRequest) {
       return apiBadRequest('Ungültiger Zahlungsbetrag')
     }
 
-    // Initialize Stripe
-    const stripe = getStripeClient()
-    if (!stripe) {
-      return apiError(new Error('Stripe not configured'), 'Stripe ist nicht konfiguriert')
-    }
+    // Build redirect URLs
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'
 
     // Capitalize first letter of payment type for description
     const paymentTypeLabel = paymentType.charAt(0).toUpperCase() + paymentType.slice(1)
 
     // Process payment using shared utility (without invoice - appointment already has one)
     const paymentResult = await processPaymentWithoutInvoice({
-      stripe,
       userId: session.user.id,
       baseAmountCents: paymentAmountCents,
       useEscrow,
@@ -129,6 +124,10 @@ export async function POST(request: NextRequest) {
         appointmentType: 'service_payment'
       },
       serviceAppointmentId: appointmentId,
+      successRedirectUrl: `${baseUrl}/dashboard/appointments?payment=success`,
+      failedRedirectUrl: `${baseUrl}/dashboard/appointments/${appointmentId}?payment=failed`,
+      cancelRedirectUrl: `${baseUrl}/dashboard/appointments/${appointmentId}?payment=cancelled`,
+      purpose: `${paymentTypeLabel}: ${appointment.service_name}`,
       transactionMetadata: {
         paymentType,
         originalAppointmentStatus: appointment.status
@@ -152,8 +151,7 @@ export async function POST(request: NextRequest) {
 
     return apiSuccess({
       appointmentId,
-      paymentIntentId: paymentResult.paymentIntentId,
-      clientSecret: paymentResult.clientSecret,
+      paymentUrl: paymentResult.paymentUrl,
       transactionId: paymentResult.transactionId,
       amount: centsToDisplay(paymentResult.totalAmountCents),
       currency: paymentResult.currency,

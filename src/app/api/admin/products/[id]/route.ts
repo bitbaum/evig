@@ -110,7 +110,7 @@ export const PUT = withAdmin<{ id: string }>('products', async (
 
     logger.info("Product updated", { productId: params.id, user: session.user?.email })
 
-    return apiSuccess({ success: true })
+    return apiSuccess({ productId: params.id })
   } catch (error) {
     logger.error("Failed to update product", { error, productId: context?.params?.id })
     return apiError(error, "Fehler beim Aktualisieren des Produkts")
@@ -145,7 +145,7 @@ export const DELETE = withAdmin<{ id: string }>('products', async (
 
     logger.info("Product deleted", { productId: params.id, user: session.user?.email })
 
-    return apiSuccess({ success: true })
+    return apiSuccess({ deleted: true })
   } catch (error) {
     logger.error("Failed to delete product", { error, productId: context?.params?.id })
     return apiError(error, "Fehler beim Löschen des Produkts")
