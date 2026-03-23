@@ -1,12 +1,47 @@
-import DOMPurify from 'isomorphic-dompurify';
-
 /**
  * Sanitizes user input to prevent XSS attacks
+ *
+ * Uses a lightweight regex-based approach that works reliably on both
+ * client and server (Edge, Node, Vercel serverless) without jsdom.
+ *
+ * Previous implementation used isomorphic-dompurify which breaks on
+ * Vercel due to ESM/CJS incompatibility in the jsdom dependency chain.
  *
  * @param input - The string to sanitize
  * @param options - Configuration options
  * @returns Sanitized string safe for rendering
  */
+
+const ALLOWED_TAGS = ['b', 'i', 'em', 'strong', 'p', 'br', 'ul', 'ol', 'li'];
+
+function stripAllHtml(html: string): string {
+  return html.replace(/<[^>]*>/g, '');
+}
+
+function sanitizeHtml(html: string): string {
+  // Remove all tags except allowed ones
+  return html.replace(/<\/?([a-zA-Z][a-zA-Z0-9]*)\b[^>]*>/gi, (match, tag) => {
+    const lower = tag.toLowerCase();
+    if (ALLOWED_TAGS.includes(lower)) {
+      // Only keep the tag itself, strip all attributes
+      const isClosing = match.startsWith('</');
+      const isSelfClosing = lower === 'br';
+      if (isClosing) return `</${lower}>`;
+      if (isSelfClosing) return `<${lower} />`;
+      return `<${lower}>`;
+    }
+    return '';
+  });
+}
+
+function escapeHtmlEntities(str: string): string {
+  // Neutralize dangerous patterns that survive tag stripping
+  return str
+    .replace(/javascript:/gi, '')
+    .replace(/on\w+\s*=/gi, '')
+    .replace(/data:/gi, '');
+}
+
 export function sanitizeInput(input: string, options?: {
   allowHtml?: boolean;
   maxLength?: number;
@@ -17,18 +52,12 @@ export function sanitizeInput(input: string, options?: {
   let sanitized = input.trim().slice(0, maxLength);
 
   if (allowHtml) {
-    // For descriptions (allow safe HTML formatting)
-    sanitized = DOMPurify.sanitize(sanitized, {
-      ALLOWED_TAGS: ['b', 'i', 'em', 'strong', 'p', 'br', 'ul', 'ol', 'li'],
-      ALLOWED_ATTR: []
-    });
+    sanitized = sanitizeHtml(sanitized);
   } else {
-    // For titles, names (strip all HTML)
-    sanitized = DOMPurify.sanitize(sanitized, {
-      ALLOWED_TAGS: [],
-      KEEP_CONTENT: true
-    });
+    sanitized = stripAllHtml(sanitized);
   }
+
+  sanitized = escapeHtmlEntities(sanitized);
 
   return sanitized;
 }

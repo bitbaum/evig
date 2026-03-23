@@ -141,10 +141,12 @@ export const authConfig = {
           // Users can log in immediately after registration
 
           // Determine staff status from email or database
-          const userIsStaff = user.is_staff ?? isStaffEmail(user.email)
+          // SECURITY: Only grant staff privileges if email is verified
+          const emailVerified = !!user.emailVerified
+          const userIsStaff = emailVerified ? (user.is_staff ?? isStaffEmail(user.email)) : false
           const userPermissions = user.staff_permissions ?? (userIsStaff ? getInitialStaffPermissions(user.email) : [])
           // Super admin status from database or check email list
-          const userIsSuperAdmin = user.is_super_admin ?? false
+          const userIsSuperAdmin = emailVerified ? (user.is_super_admin ?? false) : false
 
           // Return user object with new simplified auth fields
           return {
@@ -208,13 +210,15 @@ export const authConfig = {
         token.id = user.id
         // Legacy role - kept for backward compatibility
         // Staff get REVAMPIT_ADMIN, others get CUSTOMER
-        const userIsStaff = user.is_staff ?? isStaffEmail(user.email ?? '')
+        // SECURITY: Only grant staff privileges if email is verified
+        const emailVerified = !!user.emailVerified
+        const userIsStaff = emailVerified ? (user.is_staff ?? isStaffEmail(user.email ?? '')) : false
         token.role = user.role || (userIsStaff ? ROLES.REVAMPIT_ADMIN : ROLES.CUSTOMER)
-        token.emailVerified = !!user.emailVerified
+        token.emailVerified = emailVerified
         // New simplified auth fields
         token.isStaff = userIsStaff
         token.staffPermissions = user.staff_permissions ?? (userIsStaff ? getInitialStaffPermissions(user.email ?? '') : [])
-        token.isSuperAdmin = user.is_super_admin ?? isSuperAdmin(user.email ?? '')
+        token.isSuperAdmin = emailVerified ? (user.is_super_admin ?? isSuperAdmin(user.email ?? '')) : false
       }
       return token
     },
