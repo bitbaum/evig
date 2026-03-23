@@ -1,4 +1,5 @@
-import { Clock, User } from 'lucide-react'
+import Link from 'next/link'
+import { Clock, User, Wrench, CheckCircle, Star } from 'lucide-react'
 import { getOfferStatusById, getSkillById, OFFER_STATUS, REQUEST_STATUS } from '@/config/it-hilfe'
 import type { Offer } from './types'
 
@@ -40,12 +41,39 @@ export function OffersList({
             >
               <div className="flex items-start justify-between mb-3">
                 <div className="flex items-center gap-2">
-                  <div className="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center">
-                    <User className="w-5 h-5 text-gray-500" aria-hidden="true" />
+                  <div className={`w-10 h-10 rounded-full flex items-center justify-center ${offer.repairerProfile ? 'bg-blue-100' : 'bg-gray-200'}`}>
+                    {offer.repairerProfile ? (
+                      <Wrench className="w-5 h-5 text-blue-600" aria-hidden="true" />
+                    ) : (
+                      <User className="w-5 h-5 text-gray-500" aria-hidden="true" />
+                    )}
                   </div>
                   <div>
-                    <p className="font-medium text-gray-900">{offer.helperName}</p>
-                    <p className="text-sm text-gray-500">{offer.helperEmail}</p>
+                    <div className="flex items-center gap-2">
+                      <p className="font-medium text-gray-900">{offer.helperName}</p>
+                      {offer.repairerProfile?.isVerified && (
+                        <CheckCircle className="w-4 h-4 text-green-600" aria-label="Verifizierter Reparateur" />
+                      )}
+                    </div>
+                    {offer.repairerProfile ? (
+                      <div className="flex items-center gap-2 text-sm">
+                        <Link
+                          href={`/repairers/${offer.repairerProfile.id}`}
+                          className="text-blue-600 hover:text-blue-700 font-medium"
+                        >
+                          {offer.repairerProfile.businessName || 'Reparateur-Profil'}
+                        </Link>
+                        {Number(offer.repairerProfile.averageRating) > 0 && (
+                          <span className="flex items-center gap-0.5 text-gray-500">
+                            <Star className="w-3 h-3 text-amber-400 fill-amber-400" aria-hidden="true" />
+                            {Number(offer.repairerProfile.averageRating).toFixed(1)}
+                            <span className="text-gray-400">({offer.repairerProfile.totalReviews})</span>
+                          </span>
+                        )}
+                      </div>
+                    ) : (
+                      <p className="text-sm text-gray-500">{offer.helperEmail}</p>
+                    )}
                   </div>
                 </div>
                 <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${offerStatusConfig?.badgeClass || 'bg-gray-100 text-gray-700'}`}>

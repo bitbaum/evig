@@ -24,6 +24,7 @@ import { ServicesTab } from '@/components/repairers/ServicesTab'
 import { ReviewsTab } from '@/components/repairers/ReviewsTab'
 import { AboutTab } from '@/components/repairers/AboutTab'
 import { RepairerSidebar } from '@/components/repairers/RepairerSidebar'
+import { MatchingRequestsTab } from '@/components/repairers/MatchingRequestsTab'
 
 export default function RepairerDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params)
@@ -33,7 +34,7 @@ export default function RepairerDetailPage({ params }: { params: Promise<{ id: s
   const [availability, setAvailability] = useState<AvailabilitySlot[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [activeTab, setActiveTab] = useState<'services' | 'reviews' | 'about'>('services')
+  const [activeTab, setActiveTab] = useState<'services' | 'reviews' | 'about' | 'requests'>('services')
 
   useEffect(() => {
     const fetchRepairerDetails = async () => {
@@ -182,11 +183,12 @@ export default function RepairerDetailPage({ params }: { params: Promise<{ id: s
 
             {/* Tabs */}
             <div className="bg-white rounded-xl shadow-sm overflow-hidden">
-              <div className="flex border-b">
-                {(['services', 'reviews', 'about'] as const).map((tab) => {
+              <div className="flex border-b overflow-x-auto">
+                {(['services', 'reviews', 'requests', 'about'] as const).map((tab) => {
                   const labels = {
                     services: `Angebotene Services (${services.length})`,
                     reviews: `Bewertungen (${repairer.total_reviews})`,
+                    requests: 'IT-Hilfe-Anfragen',
                     about: 'Details',
                   }
                   return (
@@ -219,6 +221,9 @@ export default function RepairerDetailPage({ params }: { params: Promise<{ id: s
                     totalReviews={repairer.total_reviews}
                     ratingDistribution={repairer.rating_distribution}
                   />
+                )}
+                {activeTab === 'requests' && (
+                  <MatchingRequestsTab repairerId={repairer.id} />
                 )}
                 {activeTab === 'about' && <AboutTab repairer={repairer} />}
               </div>

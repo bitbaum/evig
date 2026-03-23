@@ -1,7 +1,7 @@
 import { NextRequest } from 'next/server'
 import { auth } from '@/auth'
 import { db } from '@/db'
-import { itHilfeOffers, itHilfeRequests, users } from '@/db/schema'
+import { itHilfeOffers, itHilfeRequests, users, repairerProfiles } from '@/db/schema'
 import { eq, and, sql, desc } from 'drizzle-orm'
 import { apiError, apiSuccess, apiUnauthorized, apiBadRequest, apiNotFound, apiForbidden } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
@@ -49,7 +49,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
       return apiForbidden('Sie können nur Angebote für Ihre eigenen Anfragen einsehen')
     }
 
-    // Get offers with helper details
+    // Get offers with helper details + repairer profile info
     const rows = await db
       .select({
         id: itHilfeOffers.id,
@@ -63,15 +63,37 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
         relevantSkills: itHilfeOffers.relevantSkills,
         status: itHilfeOffers.status,
         createdAt: itHilfeOffers.createdAt,
+        repairerProfileId: itHilfeOffers.repairerProfileId,
+        repairerBusinessName: repairerProfiles.businessName,
+        repairerIsVerified: repairerProfiles.isVerified,
+        repairerAverageRating: repairerProfiles.averageRating,
+        repairerTotalReviews: repairerProfiles.totalReviews,
       })
       .from(itHilfeOffers)
       .innerJoin(users, eq(itHilfeOffers.helperId, users.id))
+      .leftJoin(repairerProfiles, eq(itHilfeOffers.repairerProfileId, repairerProfiles.id))
       .where(eq(itHilfeOffers.requestId, id))
       .orderBy(desc(itHilfeOffers.createdAt))
 
     const offers = rows.map(row => ({
-      ...row,
+      id: row.id,
+      requestId: row.requestId,
+      helperId: row.helperId,
+      helperName: row.helperName,
+      helperEmail: row.helperEmail,
+      message: row.message,
+      estimatedTime: row.estimatedTime,
+      proposedCompensation: row.proposedCompensation,
       relevantSkills: row.relevantSkills || [],
+      status: row.status,
+      createdAt: row.createdAt,
+      repairerProfile: row.repairerProfileId ? {
+        id: row.repairerProfileId,
+        businessName: row.repairerBusinessName,
+        isVerified: row.repairerIsVerified,
+        averageRating: row.repairerAverageRating,
+        totalReviews: row.repairerTotalReviews,
+      } : null,
     }))
 
     logger.info('Fetched offers for request', {
@@ -166,6 +188,15 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
     if (!validation.success) return validation.error
     const { message, estimatedTime, proposedCompensation, relevantSkills } = validation.data
 
+    // Check if the user has an active repairer profile — auto-link if so
+    const [repairerProfile] = await db
+      .select({ id: repairerProfiles.id })
+      .from(repairerProfiles)
+      .where(and(
+        eq(repairerProfiles.userId, session.user.id),
+        eq(repairerProfiles.isActive, true)
+      ))
+
     // Insert the offer
     const [newOffer] = await db
       .insert(itHilfeOffers)
@@ -176,6 +207,7 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
         estimatedTime: estimatedTime || undefined,
         proposedCompensation: proposedCompensation || undefined,
         relevantSkills: relevantSkills.length > 0 ? relevantSkills : undefined,
+        repairerProfileId: repairerProfile?.id || undefined,
       })
       .returning({ id: itHilfeOffers.id })
 

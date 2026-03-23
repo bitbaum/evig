@@ -27,6 +27,14 @@ export interface ITHilfeRequest {
   isOwner: boolean
 }
 
+export interface OfferRepairerProfile {
+  id: string
+  businessName: string | null
+  isVerified: boolean | null
+  averageRating: string | null
+  totalReviews: number | null
+}
+
 export interface Offer {
   id: string
   requestId: string
@@ -39,4 +47,5 @@ export interface Offer {
   relevantSkills: string[]
   status: string
   createdAt: string
+  repairerProfile?: OfferRepairerProfile | null
 }

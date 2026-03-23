@@ -1,5 +1,6 @@
 import { pgTable, uuid, text, boolean, timestamp, integer, decimal, varchar, index } from 'drizzle-orm/pg-core'
 import { users } from './auth'
+import { repairerProfiles } from './services'
 
 // =============================================================================
 // IT-HILFE REQUESTS (originally peer_repair_requests, renamed in migration 013)
@@ -85,12 +86,16 @@ export const itHilfeOffers = pgTable('it_hilfe_offers', {
   // Status
   status: varchar('status', { length: 20 }).default('pending'),
 
+  // Added by 051: Link to repairer profile (if offer is from a registered repairer)
+  repairerProfileId: uuid('repairer_profile_id').references(() => repairerProfiles.id, { onDelete: 'set null' }),
+
   // Timestamps
   createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' }).defaultNow(),
 }, (table) => [
   index('idx_it_hilfe_offers_request_id').on(table.requestId),
   index('idx_it_hilfe_offers_helper_id').on(table.helperId),
   index('idx_it_hilfe_offers_status').on(table.status),
+  index('idx_it_hilfe_offers_repairer_profile').on(table.repairerProfileId),
 ])
 
 export type ItHilfeOffer = typeof itHilfeOffers.$inferSelect
@@ -128,6 +133,12 @@ export type NewUserSkill = typeof userSkills.$inferInsert
 // =============================================================================
 // HELPER PROFILES (TABLE_NAME: IT_HILFE_TECHNICIAN_PROFILES, actual table: helper_profiles)
 // =============================================================================
+// DEPRECATED: This table overlaps with repairer_profiles from services.ts.
+// Repairers ARE helpers — use repairer_profiles as the single profile table.
+// TODO: Migrate existing helper_profiles data into repairer_profiles, then
+// drop this table. Keep it for now to avoid breaking existing queries.
+// See migration 051_connect_ithilfe_repairers.sql for the first step.
+//
 // Optional profile for users who want to offer IT help services.
 
 export const helperProfiles = pgTable('helper_profiles', {
