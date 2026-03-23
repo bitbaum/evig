@@ -76,7 +76,7 @@ export function RepairerCard({ repairer, onViewReviews }: RepairerCardProps) {
           <div className="flex items-center gap-3">
             <StarRating rating={repairer.average_rating} />
             <span className="ml-1 text-sm text-gray-600">
-              {repairer.average_rating.toFixed(1)}
+              {(repairer.average_rating ?? 0).toFixed(1)}
             </span>
             <span className="text-sm text-gray-600">
               ({repairer.total_reviews} Bewertungen)
@@ -133,7 +133,7 @@ export function RepairerCard({ repairer, onViewReviews }: RepairerCardProps) {
           </span>
           {repairer.distance_km && (
             <span className="ml-2 text-blue-600">
-              ({repairer.distance_km.toFixed(1)} km entfernt)
+              ({(repairer.distance_km ?? 0).toFixed(1)} km entfernt)
             </span>
           )}
         </div>

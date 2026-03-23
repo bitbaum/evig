@@ -29,7 +29,7 @@ export function RepairerReviewsModal({
               <div className="flex items-center gap-2 mt-1">
                 <StarRating rating={repairer.average_rating} />
                 <span className="ml-1 text-sm text-gray-600">
-                  {repairer.average_rating.toFixed(1)}
+                  {(repairer.average_rating ?? 0).toFixed(1)}
                 </span>
                 <span className="text-sm text-gray-600">
                   ({repairer.total_reviews} Bewertungen)

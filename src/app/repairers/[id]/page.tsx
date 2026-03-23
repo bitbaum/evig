@@ -126,7 +126,7 @@ export default function RepairerDetailPage({ params }: { params: Promise<{ id: s
                   <div className="flex items-center gap-1">
                     <StarRating rating={repairer.average_rating} />
                     <span className="ml-1 font-medium">
-                      {repairer.average_rating.toFixed(1)}
+                      {(repairer.average_rating ?? 0).toFixed(1)}
                     </span>
                     <span className="text-gray-500">
                       ({repairer.total_reviews} Bewertungen)

@@ -56,16 +56,33 @@ export default function RepairersPage() {
       const data = await response.json()
 
       if (data.success) {
-        // Normalize average_rating from string to number (API may return string)
-        const normalized = (data.data?.repairers || []).map(
-          (r: RepairerProfile & { average_rating: number | string }) => ({
-            ...r,
-            average_rating:
-              typeof r.average_rating === 'string'
-                ? parseFloat(r.average_rating) || 0
-                : r.average_rating,
-          })
-        )
+        // Normalize API response (camelCase from Drizzle) to snake_case expected by components
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const normalized = (data.data?.repairers || []).map((r: any) => ({
+          ...r,
+          // Map camelCase → snake_case for fields used by RepairerCard
+          business_name: r.business_name ?? r.businessName ?? null,
+          business_type: r.business_type ?? r.businessType ?? 'individual',
+          user_id: r.user_id ?? r.userId,
+          postal_code: r.postal_code ?? r.postalCode ?? '',
+          service_radius_km: r.service_radius_km ?? r.serviceRadiusKm,
+          remote_services: r.remote_services ?? r.remoteServices,
+          hourly_rate_cents: r.hourly_rate_cents ?? r.hourlyRateCents ?? null,
+          emergency_fee_cents: r.emergency_fee_cents ?? r.emergencyFeeCents ?? null,
+          home_visit_fee_cents: r.home_visit_fee_cents ?? r.homeVisitFeeCents ?? null,
+          total_reviews: r.total_reviews ?? r.totalReviews ?? 0,
+          total_jobs_completed: r.total_jobs_completed ?? r.totalJobsCompleted ?? 0,
+          services_offered: r.services_offered ?? r.servicesOffered ?? [],
+          is_verified: r.is_verified ?? r.isVerified ?? false,
+          response_time_hours: r.response_time_hours ?? r.responseTimeHours,
+          typical_turnaround_days: r.typical_turnaround_days ?? r.typicalTurnaroundDays,
+          warranty_offered: r.warranty_offered ?? r.warrantyOffered ?? false,
+          warranty_duration_months: r.warranty_duration_months ?? r.warrantyDurationMonths ?? null,
+          distance_km: r.distance_km ?? r.distanceKm ?? null,
+          rating_distribution: r.rating_distribution ?? r.ratingDistribution ?? {},
+          review_summary: r.review_summary ?? r.reviewSummary ?? {},
+          average_rating: parseFloat(String(r.average_rating ?? r.averageRating ?? 0)) || 0,
+        })) as RepairerProfile[]
         setRepairers(normalized)
       }
     } catch (error) {

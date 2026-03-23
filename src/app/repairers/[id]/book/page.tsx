@@ -314,7 +314,7 @@ export default function BookRepairerPage({ params }: { params: Promise<{ id: str
                   </span>
                   <span className="flex items-center gap-1">
                     <Star className="w-3 h-3 text-yellow-400 fill-current" />
-                    {repairer.average_rating.toFixed(1)} ({repairer.total_reviews})
+                    {(repairer.average_rating ?? 0).toFixed(1)} ({repairer.total_reviews})
                   </span>
                 </div>
               </div>
