@@ -59,7 +59,7 @@ export async function searchSimilar(
   const filterParts: ReturnType<typeof sql>[] = []
 
   if (sourceTypes && sourceTypes.length > 0) {
-    filterParts.push(sql`AND d.source_type = ANY(${sourceTypes})`)
+    filterParts.push(sql`AND d.source_type IN (${sql.join(sourceTypes.map(t => sql`${t}`), sql`, `)})`)
   }
 
   if (sourcePaths && sourcePaths.length > 0) {

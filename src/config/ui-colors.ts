@@ -7,7 +7,7 @@
  * NOT included here (acceptable hardcoded):
  * - Social media brand colors (ShareButtons.tsx)
  * - Media logos (AsSeenInLogos.tsx)
- * - Stripe theme colors (StripeCheckout.tsx, WorkshopRegistrationForm.tsx)
+ * - Payment provider theme colors
  */
 
 /** Revenue category colors used in financial charts */
