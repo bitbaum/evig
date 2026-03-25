@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Revamp-Info: Dashboard — RevampIT</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --green: #22c55e;
+    --green-dim: #16a34a;
+    --orange: #F7931A;
+    --bg: #0f172a;
+    --bg-card: #1e293b;
+    --text: #f1f5f9;
+    --text-dim: #94a3b8;
+    --radius: 12px;
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    overflow: hidden;
+    height: 100dvh;
+    width: 100vw;
+  }
+
+  .deck { position: relative; height: 100dvh; width: 100vw; }
+
+  .slide {
+    position: absolute;
+    inset: 0;
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem 3rem;
+    text-align: center;
+    opacity: 0;
+    transition: opacity .3s ease;
+  }
+  .slide.active { display: flex; opacity: 1; }
+
+  h1 { font-size: clamp(2.5rem, 5vmin, 4.5rem); font-weight: 800; line-height: 1.15; margin-bottom: .5rem; }
+  h2 { font-size: clamp(2rem, 4vmin, 3.5rem); font-weight: 700; line-height: 1.2; margin-bottom: 1rem; }
+  h3 { font-size: clamp(1.3rem, 2.5vmin, 2rem); font-weight: 600; color: var(--green); margin-bottom: .75rem; }
+  p, li { font-size: clamp(1.2rem, 2.2vmin, 1.8rem); line-height: 1.6; color: var(--text-dim); }
+  .slide li { text-align: left; margin-bottom: .5rem; }
+  ul { list-style: none; padding: 0; }
+  ul li::before { content: "→ "; color: var(--green); font-weight: 700; }
+
+  .accent { color: var(--green); }
+  .orange { color: var(--orange); }
+  .subtitle { color: var(--text-dim); font-size: clamp(1rem, 2vmin, 1.4rem); margin-top: .25rem; }
+
+  .cards { display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center; margin-top: 1.5rem; max-width: 1000px; }
+  .card {
+    background: var(--bg-card);
+    border: 1px solid #334155;
+    border-radius: var(--radius);
+    padding: 1.25rem 1.5rem;
+    flex: 1 1 280px;
+    max-width: 320px;
+    text-align: left;
+  }
+  .card h3 { margin-bottom: .4rem; }
+  .card p { font-size: clamp(1rem, 1.8vmin, 1.3rem); }
+
+  .demo-btn {
+    display: inline-block;
+    margin-top: .75rem;
+    padding: .6rem 1.4rem;
+    background: var(--orange);
+    color: #000;
+    font-weight: 700;
+    font-size: clamp(1rem, 1.8vmin, 1.2rem);
+    border-radius: 8px;
+    text-decoration: none;
+    transition: transform .15s, box-shadow .15s;
+  }
+  .demo-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 16px rgba(247,147,26,.35); }
+
+  a.text-link { color: var(--orange); text-decoration: underline; text-underline-offset: 3px; }
+
+  .takeaway {
+    margin-top: 1.5rem;
+    padding: 1rem 1.5rem;
+    border-left: 4px solid var(--green);
+    background: rgba(34,197,94,.08);
+    border-radius: 0 var(--radius) var(--radius) 0;
+    max-width: 700px;
+    text-align: left;
+  }
+  .takeaway p { color: var(--text); font-weight: 600; }
+
+  .counter {
+    position: fixed;
+    bottom: 1rem;
+    right: 1.5rem;
+    font-size: .85rem;
+    color: var(--text-dim);
+    z-index: 10;
+    user-select: none;
+  }
+
+  .progress {
+    position: fixed;
+    top: 0; left: 0;
+    height: 3px;
+    background: var(--green);
+    transition: width .3s ease;
+    z-index: 20;
+  }
+
+  .content { max-width: 900px; width: 100%; }
+
+  .grid-3 {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 1.5rem;
+    text-align: left;
+    margin-top: 1.5rem;
+  }
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    text-align: left;
+    margin-top: 1.5rem;
+  }
+  @media (max-width: 768px) {
+    .grid-3 { grid-template-columns: 1fr; }
+    .grid-2 { grid-template-columns: 1fr; }
+    .cards { flex-direction: column; align-items: center; }
+    .slide { padding: 1.5rem 1.25rem; }
+  }
+
+  .prompt {
+    background: var(--bg-card);
+    border: 1px solid #334155;
+    border-radius: 8px;
+    padding: .75rem 1rem;
+    margin-bottom: .75rem;
+    text-align: left;
+    font-style: italic;
+    color: var(--text);
+    font-size: clamp(1rem, 1.8vmin, 1.2rem);
+  }
+  .prompt::before { content: '\201C'; color: var(--green); font-weight: 700; }
+  .prompt::after { content: '\201D'; color: var(--green); font-weight: 700; }
+
+  .questions { counter-reset: q; max-width: 700px; margin-top: 1.5rem; }
+  .questions li::before { counter-increment: q; content: counter(q) ". "; color: var(--orange); font-weight: 700; }
+  .questions li { margin-bottom: 1rem; font-size: clamp(1.2rem, 2.5vmin, 1.6rem); color: var(--text); }
+
+  .terminal {
+    background: #0d1117;
+    border: 1px solid #30363d;
+    border-radius: var(--radius);
+    padding: 1rem 1.25rem;
+    text-align: left;
+    font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+    font-size: clamp(.9rem, 1.6vmin, 1.1rem);
+    color: var(--green);
+    max-width: 650px;
+    width: 100%;
+    margin-top: 1rem;
+    line-height: 1.7;
+  }
+  .terminal .dim { color: #6e7681; }
+  .terminal .white { color: #e6edf3; }
+
+  .title-logo {
+    width: clamp(100px, 20vw, 200px);
+    height: auto;
+    margin-bottom: 1.5rem;
+  }
+
+  .watermark {
+    position: fixed;
+    bottom: .75rem;
+    left: 1.5rem;
+    width: 36px;
+    height: auto;
+    opacity: .25;
+    z-index: 10;
+    user-select: none;
+    pointer-events: none;
+  }
+
+  .nav-arrow {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    width: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 15;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity .2s ease;
+    user-select: none;
+    background: transparent;
+    border: none;
+    color: var(--text-dim);
+    font-size: 2rem;
+  }
+  .nav-arrow:hover { opacity: .7; }
+  .nav-arrow:focus-visible { opacity: .7; outline: 2px solid var(--green); outline-offset: -2px; }
+  .nav-arrow--left { left: 0; }
+  .nav-arrow--right { right: 0; }
+
+  .toolbar {
+    position: fixed;
+    bottom: .75rem;
+    right: 5rem;
+    display: flex;
+    gap: .5rem;
+    z-index: 15;
+  }
+  .toolbar-btn {
+    background: rgba(255,255,255,.08);
+    border: 1px solid rgba(255,255,255,.12);
+    border-radius: 6px;
+    color: var(--text-dim);
+    font-size: .75rem;
+    padding: .3rem .5rem;
+    cursor: pointer;
+    transition: background .15s, color .15s;
+    user-select: none;
+  }
+  .toolbar-btn:hover { background: rgba(255,255,255,.15); color: var(--text); }
+
+  .vector-card {
+    background: var(--bg-card);
+    border: 1px solid #334155;
+    border-radius: var(--radius);
+    padding: 1.25rem;
+  }
+  .vector-card h3 { margin-bottom: .3rem; }
+  .vector-card p { font-size: clamp(1rem, 1.8vmin, 1.3rem); }
+
+  :fullscreen h1 { font-size: clamp(3rem, 6vmin, 5.5rem); }
+  :fullscreen h2 { font-size: clamp(2.5rem, 5vmin, 4.5rem); }
+  :fullscreen h3 { font-size: clamp(1.6rem, 3vmin, 2.5rem); }
+  :fullscreen p, :fullscreen li { font-size: clamp(1.4rem, 2.8vmin, 2.2rem); }
+  :fullscreen .subtitle { font-size: clamp(1.2rem, 2.5vmin, 1.7rem); }
+  :fullscreen .card p, :fullscreen .vector-card p { font-size: clamp(1.1rem, 2.2vmin, 1.5rem); }
+  :fullscreen .prompt { font-size: clamp(1.1rem, 2.2vmin, 1.5rem); }
+  :fullscreen .terminal { font-size: clamp(1rem, 1.8vmin, 1.3rem); }
+  :fullscreen .questions li { font-size: clamp(1.4rem, 3vmin, 2rem); }
+
+  @media print {
+    body {
+      overflow: visible;
+      height: auto;
+      width: auto;
+      background: var(--bg);
+      color: var(--text);
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+    .deck { position: static; height: auto; width: auto; }
+    .slide {
+      position: static !important;
+      display: flex !important;
+      opacity: 1 !important;
+      page-break-after: always;
+      page-break-inside: avoid;
+      height: 100vh;
+      width: 100%;
+      padding: 3rem 4rem;
+      background: var(--bg);
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+    .slide:last-child { page-break-after: avoid; }
+    .progress, .counter, .nav-arrow, .toolbar, .watermark { display: none !important; }
+    h1, h2 { color: var(--text); }
+    h3 { color: var(--green); }
+    .accent { color: var(--green); }
+    .orange { color: var(--orange); }
+    p, li { color: var(--text-dim); }
+    .card, .vector-card {
+      background: var(--bg-card);
+      border-color: #334155;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+    .prompt {
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+      background: var(--bg-card);
+      border-color: #334155;
+    }
+    .terminal {
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+      background: #0d1117;
+      border-color: #30363d;
+    }
+    .takeaway {
+      border-left-color: var(--green);
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+      background: rgba(34,197,94,.08);
+    }
+    .takeaway p { color: var(--text); }
+    .grid-2, .grid-3, .cards { page-break-inside: avoid; }
+    .demo-btn { display: none; }
+    a.text-link { color: var(--orange); }
+  }
+  @page { size: landscape; margin: 0; }
+</style>
+</head>
+<body>
+
+<div class="progress" id="progress"></div>
+<div class="counter" id="counter"></div>
+
+<button class="nav-arrow nav-arrow--left" id="prev" aria-label="Vorherige Folie">‹</button>
+<button class="nav-arrow nav-arrow--right" id="next" aria-label="Nächste Folie">›</button>
+
+<div class="toolbar">
+  <button class="toolbar-btn" id="btn-pdf" title="Als PDF exportieren">⬇ PDF</button>
+  <button class="toolbar-btn" id="btn-pptx" title="Als PPTX exportieren">⬇ PPTX</button>
+</div>
+
+<div class="deck">
+
+  <!-- 1: Title -->
+  <div class="slide">
+    <div class="content">
+      <h1>Revamp-Info: <span class="accent">Dashboard</span></h1>
+      <p class="subtitle">Fundraising-Pipeline, Investor-CRM, Export — alles in einem Tool</p>
+    </div>
+  </div>
+
+  <!-- 2: Was ist Revamp-Info? -->
+  <div class="slide">
+    <div class="content">
+      <h2>Was ist <span class="accent">Revamp-Info</span>?</h2>
+      <p style="margin-bottom: 1rem;">Internes Tool für Fundraising & Investoren-Management.</p>
+      <ul>
+        <li>Überblick: Pipeline, Kontakte, Status — alles auf einen Blick</li>
+        <li>CRM: Investoren-Profil, Interessen, Historie, Notizen</li>
+        <li>Export: CSV, PDF, direkter Datenexport für Berichte</li>
+        <li>Intern: nur für RevampIT-Team sichtbar</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 3: Warum brauchen wir das? -->
+  <div class="slide">
+    <div class="content">
+      <h2>Warum brauchen wir <span class="orange">das</span>?</h2>
+      <ul>
+        <li>Bisher: Excel-Chaos, verstreute Notizen, keine Übersicht</li>
+        <li>Jetzt: Alle Infos zentral, strukturiert, durchsuchbar</li>
+        <li>Effizienz: Schneller finden, weniger doppelte Arbeit</li>
+        <li>Transparenz: Jeder im Team weiss Bescheid</li>
+        <li>Export: Daten für Berichte, Präsentationen, Analysen</li>
+      </ul>
+      <div class="takeaway">
+        <p>Weniger Admin-Aufwand — mehr Zeit für echte Arbeit.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4: Features -->
+  <div class="slide">
+    <div class="content">
+      <h2>Features</h2>
+      <div class="grid-2">
+        <div class="vector-card">
+          <h3>📊 Pipeline-Übersicht</h3>
+          <p>Status: Erstgespräch, Interesse, Angebot, Zusage — visuell dargestellt.</p>
+        </div>
+        <div class="vector-card">
+          <h3>👤 Investor-Profile</h3>
+          <p>Name, Kontakt, Interessen, Investitionsschwerpunkt, Historie.</p>
+        </div>
+        <div class="vector-card">
+          <h3>📝 Notizen & Tags</h3>
+          <p>Interne Anmerkungen, Kategorien, Filter — schnell finden.</p>
+        </div>
+        <div class="vector-card">
+          <h3>📥 CSV-Export</h3>
+          <p>Daten herunterladen für Excel, Berichte, weitere Analysen.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5: Pipeline-Visualisierung -->
+  <div class="slide">
+    <div class="content">
+      <h2>Pipeline: <span class="accent">Visuell</span></h2>
+      <p style="margin-bottom: 1rem;">Alle Kontakte nach Status sortiert — Drag & Drop zwischen Spalten.</p>
+      <div class="grid-3">
+        <div class="card">
+          <h3>🔵 Erstgespräch</h3>
+          <p>12 Kontakte · Nächster Schritt: Follow-up E-Mail</p>
+        </div>
+        <div class="card">
+          <h3>🟡 Interesse</h3>
+          <p>7 Kontakte · Nächster Schritt: Angebot senden</p>
+        </div>
+        <div class="card">
+          <h3>🟢 Zusage</h3>
+          <p>3 Kontakte · Nächster Schritt: Vertrag finalisieren</p>
+        </div>
+      </div>
+      <div class="takeaway">
+        <p>Auf einen Blick sehen, wo wir stehen — keine versteckten Deals.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6: Investor-Profile -->
+  <div class="slide">
+    <div class="content">
+      <h2>Investor-<span class="accent">Profile</span></h2>
+      <p style="margin-bottom: 1rem;">Alles Wichtige zu jedem Kontakt — schnell abrufbar.</p>
+      <ul>
+        <li>Name, Firma, Kontaktdaten (E-Mail, Telefon, LinkedIn)</li>
+        <li>Investitionsschwerpunkt (z.B. Nachhaltigkeit, Circular Economy)</li>
+        <li>Interaktionshistorie (Meetings, E-Mails, Anrufe)</li>
+        <li>Interne Notizen (z.B. "Mag Zahlen, wenig Text", "Deadline: 15. April")</li>
+        <li>Tags (z.B. "High Priority", "Follow-up nötig", "Warteliste")</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 7: Export-Funktion -->
+  <div class="slide">
+    <div class="content">
+      <h2>Export: <span class="accent">CSV & PDF</span></h2>
+      <p style="margin-bottom: 1rem;">Daten raus — für Berichte, Analysen, externe Tools.</p>
+      <div class="grid-2">
+        <div class="vector-card">
+          <h3>📊 CSV-Export</h3>
+          <p>Gesamte Pipeline oder gefilterte Daten — öffnen in Excel, Google Sheets, etc.</p>
+        </div>
+        <div class="vector-card">
+          <h3>📄 PDF-Export</h3>
+          <p>Professionelle Reports für Präsentationen, Board Meetings, Pitches.</p>
+        </div>
+      </div>
+      <div class="takeaway">
+        <p>Keine manuellen Copy-Paste-Sessions mehr — ein Klick, fertig.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 8: Demo & Fragen -->
+  <div class="slide">
+    <div class="content">
+      <h2>Demo & <span class="accent">Fragen</span></h2>
+      <p style="margin-bottom: 1rem;">Kurzer Rundgang durchs Dashboard — dann eure Fragen.</p>
+      <div class="card" style="max-width: 500px; margin: 0 auto;">
+        <h3>🔗 Zugang</h3>
+        <p>Revamp-Info ist intern verfügbar — nur für autorisierte Team-Mitglieder.</p>
+        <a href="https://revampit.vercel.app/revamp-info" class="demo-btn" target="_blank">→ Dashboard öffnen</a>
+      </div>
+      <div class="takeaway" style="margin-top: 2rem;">
+        <p>Eure Wünsche? Fehlt etwas? Was können wir verbessern?</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+(function() {
+  var slides = document.querySelectorAll('.slide');
+  var total = slides.length;
+  var current = 0;
+  var progress = document.getElementById('progress');
+  var counter = document.getElementById('counter');
+  var prevBtn = document.getElementById('prev');
+  var nextBtn = document.getElementById('next');
+
+  function show(n) {
+    slides[current].classList.remove('active');
+    current = (n + total) % total;
+    slides[current].classList.add('active');
+    progress.style.width = ((current / (total - 1)) * 100) + '%';
+    counter.textContent = (current + 1) + ' / ' + total;
+  }
+
+  function next() { show(current + 1); }
+  function prev() { show(current - 1); }
+
+  prevBtn.addEventListener('click', function(e) { e.stopPropagation(); prev(); });
+  nextBtn.addEventListener('click', function(e) { e.stopPropagation(); next(); });
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); next(); }
+    if (e.key === 'ArrowLeft') { e.preventDefault(); prev(); }
+    if (e.key === 'Home') { e.preventDefault(); show(0); }
+    if (e.key === 'End') { e.preventDefault(); show(total - 1); }
+  });
+
+  document.getElementById('btn-pdf').addEventListener('click', function(e) {
+    e.stopPropagation();
+    window.print();
+  });
+
+  var pptxState = 'idle';
+  var PptxGenJS = null;
+
+  function loadPptxLib() {
+    if (pptxState !== 'idle') return;
+    pptxState = 'loading';
+    var script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/pptxgenjs@3.12.0/dist/pptxgen.bundle.js';
+    script.onload = function() { PptxGenJS = window.PptxGenJS || window.pptxgen; pptxState = 'ready'; };
+    script.onerror = function() { pptxState = 'failed'; };
+    document.head.appendChild(script);
+  }
+
+  function doExportPptx(btn) {
+    var pptx = new PptxGenJS();
+    pptx.layout = 'LAYOUT_16x9';
+    pptx.author = 'RevampIT';
+    pptx.title = 'Revamp-Info: Dashboard';
+    pptx.subject = 'Präsentation';
+
+    var bg = '0f172a';
+    var cardBg = '1e293b';
+    var green = '22c55e';
+    var orange = 'F7931A';
+    var textColor = 'f1f5f9';
+    var dimColor = '94a3b8';
+    var borderColor = '334155';
+    var F = 'Arial';
+
+    slides.forEach(function(slideEl, idx) {
+      var s = pptx.addSlide();
+      s.background = { color: bg };
+      var contentDiv = slideEl.querySelector('.content');
+      var h1 = slideEl.querySelector('h1');
+      var h2 = slideEl.querySelector('h2');
+      var subtitle = slideEl.querySelector('.subtitle');
+      var yPos = 1.0;
+      var LX = 1.5;
+      var W = 10.33;
+
+      if (h1) {
+        s.addText(h1.textContent.trim(), { x: LX, y: yPos, w: W, h: 1.2, fontSize: 44, bold: true, color: textColor, align: 'center', fontFace: F });
+        yPos += 1.3;
+      }
+      if (subtitle) {
+        s.addText(subtitle.textContent.trim(), { x: LX, y: yPos, w: W, h: 0.5, fontSize: 18, color: dimColor, align: 'center', fontFace: F });
+        yPos += 0.7;
+      }
+      if (h2) {
+        s.addText(h2.textContent.trim(), { x: LX, y: yPos, w: W, h: 0.9, fontSize: 36, bold: true, color: textColor, align: 'center', fontFace: F });
+        yPos += 1.1;
+      }
+
+      if (contentDiv) {
+        contentDiv.querySelectorAll(':scope > p:not(.subtitle)').forEach(function(p) {
+          var txt = p.textContent.trim();
+          s.addText(txt, { x: LX, y: yPos, w: W, h: 0.6, fontSize: 16, color: dimColor, align: 'left', fontFace: F });
+          yPos += 0.7;
+        });
+      }
+
+      var items = slideEl.querySelectorAll('ul:not(.questions) li');
+      if (items.length > 0) {
+        var bullets = [];
+        items.forEach(function(li) {
+          bullets.push({ text: li.textContent.trim().replace(/^\u2192\s*/, ''), options: { bullet: { code: '2192', color: green }, color: textColor, fontSize: 18, breakLine: true, fontFace: F, lineSpacing: 26 } });
+        });
+        s.addText(bullets, { x: LX, y: yPos, w: W, h: items.length * 0.6, valign: 'top' });
+        yPos += items.length * 0.6 + 0.3;
+      }
+
+      var cards = slideEl.querySelectorAll('.card, .vector-card');
+      if (cards.length > 0) {
+        var cardY = Math.max(yPos, 1.8);
+        var numCols = slideEl.querySelector('.grid-3') ? 3 : 2;
+        var gap = 0.25;
+        var cardW = (W - gap * (numCols - 1)) / numCols;
+        var cardH = 1.5;
+        cards.forEach(function(card, ci) {
+          var col = ci % numCols;
+          var row = Math.floor(ci / numCols);
+          var cx = LX + col * (cardW + gap);
+          var cy = cardY + row * (cardH + 0.25);
+          var ch3 = card.querySelector('h3');
+          var allPs = card.querySelectorAll('p');
+          s.addShape(pptx.ShapeType.rect, { x: cx, y: cy, w: cardW, h: cardH, fill: { color: cardBg }, line: { color: borderColor, width: 0.5 }, rectRadius: 0.08 });
+          if (ch3) s.addText(ch3.textContent.trim(), { x: cx + 0.15, y: cy + 0.1, w: cardW - 0.3, h: 0.4, fontSize: 14, color: green, bold: true, fontFace: F });
+          var pY = cy + 0.5;
+          allPs.forEach(function(cp) {
+            s.addText(cp.textContent.trim(), { x: cx + 0.15, y: pY, w: cardW - 0.3, h: 0.6, fontSize: 11, color: dimColor, valign: 'top', fontFace: F, lineSpacing: 16 });
+            pY += 0.6;
+          });
+          var demoBtn = card.querySelector('.demo-btn');
+          if (demoBtn) {
+            s.addShape(pptx.ShapeType.rect, { x: cx + 0.15, y: pY, w: cardW - 0.3, h: 0.35, fill: { color: orange }, rectRadius: 0.04 });
+            s.addText(demoBtn.textContent.trim(), { x: cx + 0.15, y: pY, w: cardW - 0.3, h: 0.35, fontSize: 10, color: '000000', bold: true, align: 'center', valign: 'middle', fontFace: F });
+          }
+        });
+      }
+
+      var takeaway = slideEl.querySelector('.takeaway p');
+      if (takeaway) {
+        var tY = Math.max(yPos, 4.5);
+        s.addShape(pptx.ShapeType.rect, { x: 2.0, y: tY, w: 9.33, h: 0.8, fill: { color: 'rgba(34,197,94,0.08)' }, line: { pt: 3, color: green }, rectRadius: 0.08 });
+        s.addText(takeaway.textContent.trim(), { x: 2.2, y: tY + 0.1, w: 8.93, h: 0.6, fontSize: 16, color: textColor, bold: true, fontFace: F });
+      }
+    });
+
+    btn.textContent = '\u23F3 Erstellen\u2026';
+    pptx.writeFile({ fileName: 'Revamp-Info-Dashboard.pptx' }).then(function() {
+      btn.textContent = '\u2B07 PPTX';
+      btn.disabled = false;
+    });
+  }
+
+  document.getElementById('btn-pptx').addEventListener('click', function(e) {
+    e.stopPropagation();
+    var btn = document.getElementById('btn-pptx');
+    if (pptxState === 'ready') {
+      btn.textContent = '\u23F3 Erstellen\u2026';
+      btn.disabled = true;
+      setTimeout(function() { doExportPptx(btn); }, 50);
+      return;
+    }
+    if (pptxState === 'failed') { pptxState = 'idle'; loadPptxLib(); }
+    if (pptxState === 'idle') { loadPptxLib(); }
+    btn.textContent = '\u23F3 Laden\u2026';
+    btn.disabled = true;
+    var attempts = 0;
+    var poll = setInterval(function() {
+      attempts++;
+      if (pptxState === 'ready') {
+        clearInterval(poll);
+        doExportPptx(btn);
+      } else if (pptxState === 'failed' || attempts > 60) {
+        clearInterval(poll);
+        btn.textContent = '\u2B07 PPTX';
+        btn.disabled = false;
+        alert('PptxGenJS konnte nicht geladen werden.');
+      }
+    }, 250);
+  });
+
+  show(0);
+})();
+</script>
+</body>
+</html>
