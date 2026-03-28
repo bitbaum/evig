@@ -31,7 +31,7 @@ export const GET = withAuth<{ id: string }>(async (request, session, context) =>
       })
       .where(eq(invoices.id, invoiceId))
 
-    return new NextResponse(pdfBuffer, {
+    return new NextResponse(new Uint8Array(pdfBuffer), {
       headers: {
         'Content-Type': 'application/pdf',
         'Content-Disposition': `attachment; filename="invoice-${invoice.invoice_number}.pdf"`,
