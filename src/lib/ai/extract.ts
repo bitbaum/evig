@@ -225,7 +225,7 @@ export async function registryExtract(
   } else if (mode === 'refine' && opts.quickAction && config.quickActions?.[opts.quickAction]) {
     userPrompt = fillPromptTemplate(config.refine || config.extract, {
       currentData: safeCurrentData,
-      instruction: config.quickActions[opts.quickAction],
+      instruction: config.quickActions[opts.quickAction].prompt,
     })
   } else {
     userPrompt = fillPromptTemplate(config.extract, {

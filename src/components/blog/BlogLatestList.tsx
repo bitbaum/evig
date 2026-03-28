@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import Link from 'next/link'
 import { BlogPost } from '@/lib/blog'
 import { formatDate, getReadingTime } from '@/lib/blog-utils'
@@ -18,11 +19,14 @@ export default function BlogLatestList({ posts }: BlogLatestListProps) {
             <article className="flex gap-4">
               {/* Thumbnail */}
               {post.featuredImage ? (
-                <div className="w-32 h-32 flex-shrink-0 overflow-hidden rounded-lg bg-gray-200">
-                  <img
+                <div className="w-32 h-32 flex-shrink-0 overflow-hidden rounded-lg bg-gray-200 relative">
+                  <Image
                     src={post.featuredImage}
                     alt={post.title}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    fill
+                    sizes="128px"
+                    className="object-cover group-hover:scale-105 transition-transform duration-500"
+                    unoptimized
                   />
                 </div>
               ) : (

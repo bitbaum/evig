@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import { Wrench } from 'lucide-react'
 import {
   getCategoryById,
@@ -61,10 +62,13 @@ export function RequestHeader({ request }: RequestHeaderProps) {
                 rel="noopener noreferrer"
                 className="block"
               >
-                <img
+                <Image
                   src={url}
                   alt={`Bild ${index + 1}`}
+                  width={400}
+                  height={128}
                   className="w-full h-32 object-cover rounded-lg hover:opacity-90 transition-opacity"
+                  unoptimized
                 />
               </a>
             ))}

@@ -214,7 +214,7 @@ export async function getInventoryProducts(
     const { whereFragment, profileJoinFragment } =
       buildInventoryQuery(filters)
 
-    // Fetch products
+    // Single query with COUNT(*) OVER() for pagination
     const productsResult = await db.execute(sql`
       SELECT DISTINCT
         p.id,
@@ -228,7 +228,8 @@ export async function getInventoryProducts(
         p.subcategory,
         i.quantity_available,
         (SELECT file_path FROM ${sql.raw(piTable)} pi WHERE pi.product_id = p.id AND pi.is_primary = true LIMIT 1) as image_url,
-        p.created_at
+        p.created_at,
+        COUNT(DISTINCT p.id) OVER() AS _total_count
       FROM ${sql.raw(aepTable)} p
       JOIN ${sql.raw(iiTable)} i ON i.ai_product_id = p.id
       ${profileJoinFragment}
@@ -237,17 +238,7 @@ export async function getInventoryProducts(
       LIMIT ${filters.limit} OFFSET ${filters.offset}
     `)
 
-    // Get total count
-    const countResult = await db.execute(sql`
-      SELECT COUNT(DISTINCT p.id) as count
-      FROM ${sql.raw(aepTable)} p
-      JOIN ${sql.raw(iiTable)} i ON i.ai_product_id = p.id
-      ${profileJoinFragment}
-      ${whereFragment}
-    `)
-
-    const countRows = countResult.rows as unknown as { count: string }[]
-    const total = parseInt(countRows[0]?.count || '0')
+    const total = parseInt((productsResult.rows[0] as unknown as { _total_count: string })?._total_count || '0')
 
     // Fetch profiles for the returned products
     const productRows = productsResult.rows as unknown as ProductRow[]

@@ -1,5 +1,6 @@
 "use client"
 
+import Image from 'next/image'
 import { motion } from 'framer-motion'
 import { getConditionBadge } from '@/config/erfassung/conditions'
 import {
@@ -113,10 +114,13 @@ export function ShopProductsTable({
                   <div className="flex items-center">
                     <div className="w-12 h-12 bg-gray-200 rounded-lg flex items-center justify-center mr-3 overflow-hidden">
                       {product.image_url ? (
-                        <img
+                        <Image
                           src={product.image_url}
                           alt={product.title}
+                          width={48}
+                          height={48}
                           className="w-full h-full object-cover"
+                          unoptimized
                         />
                       ) : (
                         <ImageIcon className="w-6 h-6 text-gray-400" />

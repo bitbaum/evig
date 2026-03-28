@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useRef, useEffect } from 'react'
+import Image from 'next/image'
 import { useSession, signOut } from 'next-auth/react'
 import Link from 'next/link'
 import {
@@ -129,10 +130,13 @@ export function UserMenu() {
         title={`${session.user.name || session.user.email} - Konto-Menü`}
       >
         {session.user.image ? (
-          <img
+          <Image
             src={session.user.image}
             alt={session.user.name || 'Profilbild'}
+            width={32}
+            height={32}
             className="w-8 h-8 rounded-full ring-2 ring-white"
+            unoptimized
           />
         ) : (
           <div className="w-8 h-8 rounded-full bg-gradient-to-br from-green-500 to-green-700 flex items-center justify-center text-white text-xs font-semibold ring-2 ring-white">
@@ -162,10 +166,13 @@ export function UserMenu() {
           <div className="px-5 py-4 bg-gradient-to-br from-gray-50 to-white border-b border-gray-100">
             <div className="flex items-center gap-3">
               {session.user.image ? (
-                <img
+                <Image
                   src={session.user.image}
                   alt={session.user.name || 'Profilbild'}
+                  width={40}
+                  height={40}
                   className="w-10 h-10 rounded-full"
+                  unoptimized
                 />
               ) : (
                 <div className="w-10 h-10 rounded-full bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center text-white text-sm font-semibold">

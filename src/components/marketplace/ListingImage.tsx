@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import Image from 'next/image'
 import { Package } from 'lucide-react'
 
 interface ListingImageProps {
@@ -28,11 +29,16 @@ export function ListingImage({ src, alt, className = 'w-full h-full object-cover
   }
 
   return (
-    <img
-      src={src}
-      alt={alt}
-      className={className}
-      onError={() => setHasError(true)}
-    />
+    <div className="relative w-full h-full">
+      <Image
+        src={src}
+        alt={alt}
+        className={className}
+        fill
+        sizes="(max-width: 768px) 100vw, 400px"
+        onError={() => setHasError(true)}
+        unoptimized
+      />
+    </div>
   )
 }

@@ -144,10 +144,11 @@ export async function getDecisions(
 
   const offset = (page - 1) * limit;
 
-  // Main query with subqueries for counts
+  // Single query with COUNT(*) OVER() for pagination
   const decisionsResult = await db.execute(sql`
     SELECT d.*,
            u.id AS creator_id, u.email AS creator_email, u.name AS creator_name,
+           COUNT(*) OVER() AS _total_count,
            (SELECT COUNT(*) FROM ${sql.raw(dvTable)} dv WHERE dv.decision_id = d.id) AS vote_count,
            (SELECT COUNT(*) FROM ${sql.raw(dcTable)} dc WHERE dc.decision_id = d.id) AS comment_count
     FROM ${sql.raw(dTable)} d
@@ -157,11 +158,7 @@ export async function getDecisions(
     LIMIT ${limit} OFFSET ${offset}
   `);
 
-  // Count query
-  const countResult = await db.execute(sql`
-    SELECT COUNT(*) AS count FROM ${sql.raw(dTable)} d ${whereClause}
-  `);
-  const total = parseInt((countResult.rows[0] as unknown as { count: string })?.count || '0', 10);
+  const total = parseInt((decisionsResult.rows[0] as unknown as { _total_count: string })?._total_count || '0', 10);
 
   // Check which decisions the requesting user has voted on
   const decisionIds = (decisionsResult.rows as unknown as DbDecisionRow[]).map(d => d.id);

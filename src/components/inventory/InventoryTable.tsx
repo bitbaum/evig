@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import { getConditionBadge } from '@/config/erfassung/conditions'
 import {
   Edit,
@@ -94,10 +95,13 @@ export function InventoryTable({ items, onPublishSuccess }: InventoryTableProps)
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center">
                       {aiProduct?.product_images?.[0] && (
-                        <img
+                        <Image
                           className="w-12 h-12 rounded-lg object-cover mr-4 flex-shrink-0"
                           src={aiProduct.product_images[0].file_path}
                           alt={aiProduct.product_name}
+                          width={48}
+                          height={48}
+                          unoptimized
                         />
                       )}
                       <div>

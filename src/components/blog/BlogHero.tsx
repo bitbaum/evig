@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import Link from 'next/link'
 import { BlogPost } from '@/lib/blog'
 import { formatDate, getReadingTime } from '@/lib/blog-utils'
@@ -15,11 +16,14 @@ export default function BlogHero({ post }: BlogHeroProps) {
       <article className="grid lg:grid-cols-2 gap-8 items-center">
         {/* Image */}
         {post.featuredImage ? (
-          <div className="aspect-[16/10] lg:aspect-[4/3] overflow-hidden rounded-lg bg-gray-200 order-2 lg:order-1">
-            <img
+          <div className="aspect-[16/10] lg:aspect-[4/3] overflow-hidden rounded-lg bg-gray-200 order-2 lg:order-1 relative">
+            <Image
               src={post.featuredImage}
               alt={post.title}
-              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+              fill
+              sizes="(max-width: 1024px) 100vw, 50vw"
+              className="object-cover group-hover:scale-105 transition-transform duration-500"
+              unoptimized
             />
           </div>
         ) : (

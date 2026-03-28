@@ -57,7 +57,6 @@ export default function RepairersPage() {
 
       if (data.success) {
         // Normalize API response (camelCase from Drizzle) to snake_case expected by components
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const normalized = (data.data?.repairers || []).map((r: any) => ({
           ...r,
           // Map camelCase → snake_case for fields used by RepairerCard

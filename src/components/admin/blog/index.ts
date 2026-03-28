@@ -8,5 +8,5 @@
 export { useBlogPostForm } from './useBlogPostForm'
 export { BlogPostEditor } from './BlogPostEditor'
 export { BlogPostSidebar } from './BlogPostSidebar'
-export { BlogAIModal } from './BlogAIModal'
+
 export type { BlogPostData, BlogPostFormProps, Category } from './types'

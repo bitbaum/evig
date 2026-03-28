@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { ArrowLeft, Send, Lightbulb, FileText, Edit } from 'lucide-react'
 import { PageHero } from '@/components/layout/PageHero'
-import { AIFormAssistBar } from '@/components/ai/AIFormAssistBar'
+import { AIFormAssist } from '@/components/ai/AIFormAssist'
 
 type SubmissionType = 'idea' | 'draft'
 
@@ -167,7 +167,7 @@ export default function SubmitPostPage() {
           </h2>
 
           {/* AI Assistant */}
-          <AIFormAssistBar
+          <AIFormAssist
             formType="blog-submit"
             placeholder={submissionType === 'idea' ? 'Beschreibe deine Artikelidee...' : 'Beschreibe worum es in deinem Artikel geht...'}
             onFieldsFilled={handleAIFieldsFilled}

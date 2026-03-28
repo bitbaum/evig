@@ -58,17 +58,10 @@ export const GET = withAdmin('donations', async (request: NextRequest, session) 
     const sortCol = sortColumnMap[filters.sort_by] || sql`${donations.createdAt}`
     const orderBy = filters.sort_order === 'asc' ? asc(sortCol) : desc(sortCol)
 
-    // Count total
-    const [countRow] = await db
-      .select({ count: sql<number>`count(*)` })
-      .from(donations)
-      .where(where)
-
-    const total = Number(countRow?.count ?? 0)
-
-    // Fetch with pagination
+    // Single query with COUNT(*) OVER() for pagination
     const rows = await db
       .select({
+        _total: sql<number>`count(*) over()`,
         id: donations.id,
         user_id: donations.userId,
         user_name: users.name,
@@ -111,8 +104,11 @@ export const GET = withAdmin('donations', async (request: NextRequest, session) 
       .limit(filters.limit)
       .offset(filters.offset)
 
+    const total = rows[0]?._total ?? 0;
+    const items = rows.map(({ _total, ...rest }) => rest);
+
     return apiSuccess({
-      items: rows,
+      items,
       pagination: {
         total,
         limit: filters.limit,

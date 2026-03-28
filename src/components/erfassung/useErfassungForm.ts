@@ -37,11 +37,7 @@ export function useErfassungForm() {
   const [aiMetadata, setAiMetadata] = useState<AIFieldMetadata>({})
 
   const [showAIRefine, setShowAIRefine] = useState(false)
-  const [aiInstruction, setAiInstruction] = useState('')
-  const [aiRefining, setAiRefining] = useState(false)
-  const [aiError, setAiError] = useState('')
   const [saveError, setSaveError] = useState('')
-  const [aiSuccess, setAiSuccess] = useState('')
   const [dataEntryCollapsed, setDataEntryCollapsed] = useState(false)
 
   useEffect(() => {
@@ -163,60 +159,6 @@ export function useErfassungForm() {
     setShowAIRefine(true)
   }, [])
 
-  const handleAIRefine = async (instruction?: string) => {
-    const refineInstruction = instruction || aiInstruction
-    if (!refineInstruction.trim()) {
-      setAiError('Bitte geben Sie eine Anweisung ein')
-      return
-    }
-
-    if (!formData.produktname && !formData.hersteller) {
-      setAiError('Bitte geben Sie zuerst Hersteller oder Produktname ein')
-      return
-    }
-
-    setAiError('')
-    setAiSuccess('')
-    setAiRefining(true)
-
-    try {
-      const res = await fetch('/api/admin/erfassung/refine', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          currentProduct: {
-            hersteller: formData.hersteller,
-            produktname: formData.produktname,
-            kurzbeschreibung: formData.kurzbeschreibung,
-            specs: formData.specs,
-            verkaufspreis: formData.verkaufspreis,
-            zustand: formData.zustand,
-            hauptkategorie: formData.hauptkategorie,
-            unterkategorie: formData.unterkategorie,
-            kundenprofile: formData.kundenprofile,
-          },
-          instruction: refineInstruction,
-        }),
-      })
-
-      const data = await res.json()
-
-      if (data.success && data.data?.refined) {
-        const ref = data.data.refined
-        setFormData(prev => mergeFormData(prev, ref))
-        setAiInstruction('')
-        const changedFields = data.data.fieldsChanged || []
-        setAiSuccess(`KI hat ${changedFields.length} Felder verbessert: ${changedFields.join(', ')}`)
-      } else {
-        setAiError(data.error || 'Verbesserung fehlgeschlagen')
-      }
-    } catch {
-      setAiError('Netzwerkfehler. Bitte versuchen Sie es erneut.')
-    } finally {
-      setAiRefining(false)
-    }
-  }
-
   const handleSubmit = async (e: React.FormEvent, action: 'draft' | 'erfassen' | 'publish' = 'draft') => {
     e.preventDefault()
     setIsLoading(true)
@@ -310,10 +252,6 @@ export function useErfassungForm() {
     savedProductId,
     showAdvanced,
     showAIRefine,
-    aiInstruction,
-    aiRefining,
-    aiError,
-    aiSuccess,
     saveError,
     dataEntryCollapsed,
     handleChange,
@@ -325,12 +263,10 @@ export function useErfassungForm() {
     handleProductData,
     handleImageCapture,
     handleDataFilled,
-    handleAIRefine,
     handleSubmit,
     handleReset,
     setShowAdvanced,
     setShowAIRefine,
-    setAiInstruction,
     setFormData,
   }
 }

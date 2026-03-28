@@ -23,7 +23,7 @@ import {
   PricingSection,
 } from './service-form'
 import type { Feature, ProcessStep, ServiceFormData } from './service-form'
-import { AIFormAssistBar } from '@/components/ai/AIFormAssistBar'
+import { AIFormAssist } from '@/components/ai/AIFormAssist'
 
 interface ServiceFormProps {
   initialData?: Partial<ServiceFormData>
@@ -183,14 +183,10 @@ export function ServiceForm({ initialData, isEdit = false }: ServiceFormProps) {
       )}
 
       {/* AI Assistant */}
-      <AIFormAssistBar
+      <AIFormAssist
         formType="service"
         placeholder="Beschreibe die Dienstleistung in 1-2 Sätzen..."
         onFieldsFilled={handleAIFieldsFilled}
-        quickActions={[
-          { key: 'addFeatures', label: 'Features generieren' },
-          { key: 'generateSteps', label: 'Prozessschritte' },
-        ]}
         currentData={formData as unknown as Record<string, unknown>}
       />
 

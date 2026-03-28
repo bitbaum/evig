@@ -56,9 +56,10 @@ export const GET = withAdmin('team', async (request, session) => {
 
     const where = conditions.length > 0 ? and(...conditions) : undefined
 
-    // Fetch items
-    const items = await db
+    // Single query with COUNT(*) OVER() for pagination
+    const rows = await db
       .select({
+        _total: sql<number>`count(*) over()`,
         id: activityUpdates.id,
         user_id: activityUpdates.userId,
         user_name: users.name,
@@ -79,15 +80,12 @@ export const GET = withAdmin('team', async (request, session) => {
       .limit(filters.limit)
       .offset(filters.offset)
 
-    // Get total count for pagination
-    const [countRow] = await db
-      .select({ count: sql<number>`count(*)` })
-      .from(activityUpdates)
-      .where(where)
+    const total = rows[0]?._total ?? 0;
+    const items = rows.map(({ _total, ...rest }) => rest);
 
     return apiSuccess({
       items,
-      total: Number(countRow?.count ?? 0),
+      total,
       limit: filters.limit,
       offset: filters.offset,
     })

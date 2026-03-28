@@ -8,7 +8,7 @@ import { withAuth, ValidSession } from '@/lib/api/middleware';
 import { apiSuccess, apiError, apiBadRequest } from '@/lib/api/helpers';
 import { db } from '@/db';
 import { listings, listingImages, listingSpecs, users, sellerProfiles } from '@/db/schema';
-import { eq, and, sql, gte, lte, desc, asc, count, inArray, type SQL } from 'drizzle-orm';
+import { eq, and, sql, gte, lte, desc, asc, inArray, type SQL } from 'drizzle-orm';
 import { logger } from '@/lib/logger';
 import { validateBody, validateQuery, ListingsQuerySchema, CreateListingSchema } from '@/lib/schemas';
 import { normalizeSpecValue } from '@/config/marketplace';
@@ -109,16 +109,10 @@ export async function GET(request: NextRequest) {
       default:           orderByClause = desc(listings.createdAt);
     }
 
-    // Count total
-    const [countRow] = await db
-      .select({ total: count() })
-      .from(listings)
-      .where(whereCondition);
-    const total = Number(countRow?.total ?? 0);
-
-    // Fetch listings with seller info + primary image
-    const items = await db
+    // Single query with COUNT(*) OVER() for pagination
+    const rows = await db
       .select({
+        _total: sql<number>`count(*) over()`,
         id: listings.id,
         title: listings.title,
         price_chf: listings.priceChf,
@@ -153,6 +147,9 @@ export async function GET(request: NextRequest) {
       .orderBy(orderByClause)
       .limit(filters.limit)
       .offset(filters.offset);
+
+    const total = rows[0]?._total ?? 0;
+    const items = rows.map(({ _total, ...rest }) => rest);
 
     // For items returned, fetch key specs (up to 3 per listing) for card display
     if (items.length > 0) {

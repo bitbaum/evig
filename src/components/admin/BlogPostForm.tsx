@@ -14,16 +14,15 @@ import {
   Eye,
   Loader2,
   Send,
-  Sparkles,
-  Wand2,
 } from 'lucide-react'
 import {
   useBlogPostForm,
   BlogPostEditor,
   BlogPostSidebar,
-  BlogAIModal,
 } from './blog'
 import type { BlogPostFormProps } from './blog'
+import { AIFormAssist } from '@/components/ai/AIFormAssist'
+import { generateSlug } from '@/lib/utils/slug'
 
 export function BlogPostForm({ initialData, isEdit = false }: BlogPostFormProps) {
   const {
@@ -39,19 +38,6 @@ export function BlogPostForm({ initialData, isEdit = false }: BlogPostFormProps)
     removeTag,
     handleTitleChange,
     handleSubmit,
-    showAIModal,
-    setShowAIModal,
-    aiMode,
-    aiTopic,
-    setAiTopic,
-    aiInstruction,
-    setAiInstruction,
-    aiGenerating,
-    aiError,
-    handleAIGenerate,
-    handleAIRefine,
-    openAIModal,
-    quickActions,
   } = useBlogPostForm({ initialData, isEdit })
 
   return (
@@ -76,23 +62,6 @@ export function BlogPostForm({ initialData, isEdit = false }: BlogPostFormProps)
         </div>
 
         <div className="flex items-center gap-3">
-          {isEdit ? (
-            <button
-              onClick={() => openAIModal('refine')}
-              className="inline-flex items-center gap-2 px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white font-medium rounded-lg transition-colors"
-            >
-              <Wand2 className="w-4 h-4" />
-              Mit KI verbessern
-            </button>
-          ) : (
-            <button
-              onClick={() => openAIModal('generate')}
-              className="inline-flex items-center gap-2 px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white font-medium rounded-lg transition-colors"
-            >
-              <Sparkles className="w-4 h-4" />
-              Mit KI generieren
-            </button>
-          )}
           {formData.slug && isEdit && (
             formData.isPublished ? (
               <Link
@@ -163,23 +132,38 @@ export function BlogPostForm({ initialData, isEdit = false }: BlogPostFormProps)
         />
       </div>
 
-      {/* AI Modal */}
-      {showAIModal && (
-        <BlogAIModal
-          aiMode={aiMode}
-          aiTopic={aiTopic}
-          aiInstruction={aiInstruction}
-          aiGenerating={aiGenerating}
-          aiError={aiError}
-          categoryName={categories.find(c => c.id === formData.categoryId)?.name}
-          quickActions={quickActions}
-          onTopicChange={setAiTopic}
-          onInstructionChange={setAiInstruction}
-          onGenerate={handleAIGenerate}
-          onRefine={handleAIRefine}
-          onClose={() => setShowAIModal(false)}
-        />
-      )}
+      {/* AI Assist */}
+      <AIFormAssist
+        formType="blog-admin"
+        variant="section"
+        currentData={formData.title || formData.content ? {
+          title: formData.title,
+          excerpt: formData.excerpt,
+          content: formData.content,
+          tags: formData.tags,
+          seoTitle: formData.seoTitle,
+          seoDescription: formData.seoDescription,
+        } : undefined}
+        onFieldsFilled={(data) => {
+          setFormData(prev => {
+            const updated = { ...prev }
+            if (data.title) {
+              updated.title = String(data.title)
+              updated.slug = generateSlug(String(data.title))
+            }
+            if (data.excerpt) updated.excerpt = String(data.excerpt)
+            if (data.content) updated.content = String(data.content)
+            if (Array.isArray(data.tags) && data.tags.length > 0) updated.tags = data.tags.map(String)
+            if (data.seoTitle) updated.seoTitle = String(data.seoTitle)
+            if (data.seoDescription) updated.seoDescription = String(data.seoDescription)
+            return updated
+          })
+        }}
+        placeholder={isEdit
+          ? 'z.B. "Füge einen Abschnitt über Reparatur-Tipps hinzu" oder "Mache den Text ansprechender"'
+          : 'Beschreibe das Thema oder die Idee für deinen Blog-Artikel...'
+        }
+      />
     </div>
   )
 }

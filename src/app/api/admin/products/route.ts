@@ -29,16 +29,10 @@ export const GET = withAdmin('products', async (request, session) => {
     }
     const where = filters.length > 0 ? and(...filters) : undefined
 
-    // Count total
-    const countResult = await db
-      .select({ count: sql<number>`count(*)` })
-      .from(aiExtractedProducts)
-      .leftJoin(inventoryItems, eq(inventoryItems.aiProductId, aiExtractedProducts.id))
-      .where(where)
-
-    // Fetch products
-    const products = await db
+    // Single query with COUNT(*) OVER() for pagination
+    const productRows = await db
       .select({
+        _total: sql<number>`count(*) over()`,
         id: aiExtractedProducts.id,
         item_uuid: aiExtractedProducts.itemUuid,
         product_name: aiExtractedProducts.productName,
@@ -60,9 +54,12 @@ export const GET = withAdmin('products', async (request, session) => {
       .limit(limit)
       .offset(offset)
 
+    const totalCount = productRows[0]?._total ?? 0;
+    const products = productRows.map(({ _total, ...rest }) => rest);
+
     return apiSuccess({
       products,
-      count: Number(countResult[0]?.count ?? 0),
+      count: Number(totalCount),
       limit,
       offset,
     })

@@ -19,7 +19,7 @@ import {
 } from '@/config/tasks'
 import { getErrorMessage } from '@/lib/utils/error'
 import { Loader2, Save } from 'lucide-react'
-import { AIFormAssistBar } from '@/components/ai/AIFormAssistBar'
+import { AIFormAssist } from '@/components/ai/AIFormAssist'
 
 interface TaskFormData {
   title: string
@@ -121,7 +121,7 @@ export default function TaskFormClient() {
 
       <div className="bg-white rounded-lg border p-6 space-y-6">
         {/* AI Assistant */}
-        <AIFormAssistBar
+        <AIFormAssist
           formType="task"
           placeholder="Beschreibe die Aufgabe in 1-2 Sätzen..."
           onFieldsFilled={handleAIFieldsFilled}

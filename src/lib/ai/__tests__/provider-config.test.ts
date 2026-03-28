@@ -7,15 +7,49 @@
 
 import { __resetProviderCache, __loadProviderRuntimeConfig } from '@/lib/ai/providers'
 
-// Mock the DB query module
-jest.mock('@/lib/auth/db', () => ({
-  query: jest.fn(),
+// Drizzle chain mock
+const mockSelectChain = {
+  from: jest.fn().mockReturnThis(),
+  where: jest.fn().mockReturnThis(),
+  orderBy: jest.fn().mockResolvedValue([]),
+}
+
+jest.mock('@/db', () => ({
+  db: {
+    selectDistinctOn: jest.fn(() => mockSelectChain),
+  },
 }))
 
-const { query } = jest.requireMock('@/lib/auth/db') as { query: jest.Mock }
+jest.mock('@/db/schema', () => ({
+  hirnProviderSettings: {
+    provider: 'provider',
+    isEnabled: 'is_enabled',
+    settings: 'settings',
+    scope: 'scope',
+    isDefault: 'is_default',
+    updatedAt: 'updated_at',
+  },
+}))
+
+jest.mock('drizzle-orm', () => ({
+  eq: jest.fn(),
+  desc: jest.fn(),
+}))
+
+jest.mock('@/lib/logger', () => ({
+  logger: { warn: jest.fn(), error: jest.fn(), info: jest.fn() },
+}))
+
+jest.mock('@/config/urls', () => ({
+  OLLAMA_URL: 'http://localhost:11434',
+}))
 
 // Save original env
 const originalEnv = { ...process.env }
+
+function makeRow(provider: string, isEnabled: boolean, settings: Record<string, unknown> | null) {
+  return { provider, isEnabled, settings }
+}
 
 beforeEach(() => {
   jest.clearAllMocks()
@@ -24,17 +58,16 @@ beforeEach(() => {
   process.env.GROQ_API_KEY = 'env-groq-key'
   process.env.OPENROUTER_API_KEY = 'env-openrouter-key'
   process.env.OLLAMA_MODEL = 'llama3.2'
+  // Default: empty DB
+  mockSelectChain.orderBy.mockResolvedValue([])
 })
 
 afterEach(() => {
-  // Restore env
   process.env = { ...originalEnv }
 })
 
 describe('loadProviderRuntimeConfig', () => {
   it('uses env vars when no DB rows exist', async () => {
-    query.mockResolvedValue({ rows: [] })
-
     const config = await __loadProviderRuntimeConfig()
 
     expect(config.groqApiKey).toBe('env-groq-key')
@@ -44,11 +77,9 @@ describe('loadProviderRuntimeConfig', () => {
   })
 
   it('uses DB api_key when present', async () => {
-    query.mockResolvedValue({
-      rows: [
-        { provider: 'groq', is_enabled: true, settings: { api_key: 'db-groq-key' } },
-      ],
-    })
+    mockSelectChain.orderBy.mockResolvedValueOnce([
+      makeRow('groq', true, { api_key: 'db-groq-key' }),
+    ])
 
     const config = await __loadProviderRuntimeConfig()
 
@@ -58,13 +89,10 @@ describe('loadProviderRuntimeConfig', () => {
   })
 
   it('falls back to env var when DB row is enabled but has no api_key', async () => {
-    // This is the exact bug scenario: DB has is_enabled=true but no api_key
-    query.mockResolvedValue({
-      rows: [
-        { provider: 'groq', is_enabled: true, settings: {} },
-        { provider: 'openrouter', is_enabled: true, settings: null },
-      ],
-    })
+    mockSelectChain.orderBy.mockResolvedValueOnce([
+      makeRow('groq', true, {}),
+      makeRow('openrouter', true, null),
+    ])
 
     const config = await __loadProviderRuntimeConfig()
 
@@ -74,11 +102,9 @@ describe('loadProviderRuntimeConfig', () => {
   })
 
   it('returns empty key when provider is explicitly disabled in DB', async () => {
-    query.mockResolvedValue({
-      rows: [
-        { provider: 'groq', is_enabled: false, settings: { api_key: 'db-groq-key' } },
-      ],
-    })
+    mockSelectChain.orderBy.mockResolvedValueOnce([
+      makeRow('groq', false, { api_key: 'db-groq-key' }),
+    ])
 
     const config = await __loadProviderRuntimeConfig()
 
@@ -88,7 +114,7 @@ describe('loadProviderRuntimeConfig', () => {
   })
 
   it('falls back to env vars when DB query fails', async () => {
-    query.mockRejectedValue(new Error('Connection refused'))
+    mockSelectChain.orderBy.mockRejectedValueOnce(new Error('Connection refused'))
 
     const config = await __loadProviderRuntimeConfig()
 
@@ -98,23 +124,21 @@ describe('loadProviderRuntimeConfig', () => {
   })
 
   it('caches config and reuses on second call', async () => {
-    query.mockResolvedValue({ rows: [] })
+    const { db } = jest.requireMock('@/db') as { db: { selectDistinctOn: jest.Mock } }
 
     await __loadProviderRuntimeConfig()
     await __loadProviderRuntimeConfig()
 
     // Only one DB query despite two calls
-    expect(query).toHaveBeenCalledTimes(1)
+    expect(db.selectDistinctOn).toHaveBeenCalledTimes(1)
   })
 
   it('respects DB disable even when env var is set', async () => {
     process.env.GROQ_API_KEY = 'env-groq-key'
 
-    query.mockResolvedValue({
-      rows: [
-        { provider: 'groq', is_enabled: false, settings: {} },
-      ],
-    })
+    mockSelectChain.orderBy.mockResolvedValueOnce([
+      makeRow('groq', false, {}),
+    ])
 
     const config = await __loadProviderRuntimeConfig()
 
@@ -123,13 +147,11 @@ describe('loadProviderRuntimeConfig', () => {
   })
 
   it('handles all three providers from DB correctly', async () => {
-    query.mockResolvedValue({
-      rows: [
-        { provider: 'groq', is_enabled: true, settings: { api_key: 'db-groq' } },
-        { provider: 'openrouter', is_enabled: true, settings: { api_key: 'db-or' } },
-        { provider: 'ollama', is_enabled: true, settings: { base_url: 'http://custom:11434', model: 'mistral' } },
-      ],
-    })
+    mockSelectChain.orderBy.mockResolvedValueOnce([
+      makeRow('groq', true, { api_key: 'db-groq' }),
+      makeRow('openrouter', true, { api_key: 'db-or' }),
+      makeRow('ollama', true, { base_url: 'http://custom:11434', model: 'mistral' }),
+    ])
 
     const config = await __loadProviderRuntimeConfig()
 

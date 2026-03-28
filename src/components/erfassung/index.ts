@@ -1,6 +1,6 @@
 export { DataEntryTabs } from './DataEntryTabs'
 export type { EntryMode } from './DataEntryTabs'
 export { ImageCapture } from './ImageCapture'
-export { AIRefinementSection } from './AIRefinementSection'
+
 export { ErfassungSubmitBar } from './ErfassungSubmitBar'
 export { useErfassungForm } from './useErfassungForm'

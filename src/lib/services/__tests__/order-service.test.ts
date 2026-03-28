@@ -1,22 +1,56 @@
 /**
  * Tests for order-service.ts
  *
- * Tests order creation with mocked database queries.
+ * Tests order creation with mocked Drizzle ORM (db.execute + db.transaction).
  */
 
-// Mock next/server
-jest.mock('next/server', () => ({
-  NextRequest: class {},
-  NextResponse: {
-    json: (data: unknown, init?: { status?: number }) => ({
-      json: () => data,
-      status: init?.status || 200,
-    }),
+// ---------------------------------------------------------------------------
+// Drizzle mock setup
+// ---------------------------------------------------------------------------
+
+// Use an object container so we can reference it inside hoisted jest.mock factories.
+// jest.mock is hoisted above const declarations, so direct references would hit TDZ.
+const mocks = {
+  execute: jest.fn(),
+  txExecute: jest.fn(),
+  transaction: jest.fn(),
+}
+
+// Wire up transaction to call the callback with a fake tx
+mocks.transaction.mockImplementation(async (cb: (tx: { execute: jest.Mock }) => Promise<unknown>) => {
+  return cb({ execute: mocks.txExecute })
+})
+
+jest.mock('@/db', () => ({
+  db: {
+    execute: (...args: unknown[]) => mocks.execute(...args),
+    transaction: (...args: unknown[]) => mocks.transaction(...args),
   },
 }))
 
-jest.mock('@/lib/auth/db', () => ({
-  query: jest.fn(),
+jest.mock('drizzle-orm', () => ({
+  sql: Object.assign(
+    (strings: TemplateStringsArray, ...values: unknown[]) => ({ strings, values }),
+    {
+      raw: (v: string) => v,
+      join: (items: unknown[], sep: unknown) => ({ items, sep }),
+    }
+  ),
+  getTableName: (table: unknown) => {
+    if (table && typeof table === 'object' && '_name' in table) return (table as { _name: string })._name
+    return 'mock_table'
+  },
+}))
+
+jest.mock('@/db/schema', () => ({
+  inventoryItems: { _name: 'inventory_items' },
+  aiExtractedProducts: { _name: 'ai_extracted_products' },
+  orders: { _name: 'orders' },
+  orderItems: { _name: 'order_items' },
+}))
+
+jest.mock('@/config/payment-status', () => ({
+  PAYMENT_STATUS: { PENDING: 'pending' },
 }))
 
 jest.mock('@/lib/logger', () => ({
@@ -29,38 +63,37 @@ jest.mock('@/lib/logger', () => ({
 
 import { createOrder } from '../order-service'
 import type { CreateOrderParams, ShippingAddress } from '../order-service'
-import { query } from '@/lib/auth/db'
-
-const mockQuery = query as jest.MockedFunction<typeof query>
 
 describe('createOrder', () => {
   beforeEach(() => {
-    mockQuery.mockReset()
+    mocks.execute.mockReset()
+    mocks.transaction.mockClear()
+    mocks.transaction.mockImplementation(async (cb: (tx: { execute: jest.Mock }) => Promise<unknown>) => {
+      return cb({ execute: mocks.txExecute })
+    })
+    mocks.txExecute.mockReset()
   })
 
   it('creates an order with inventory items and returns id + timestamp', async () => {
-    // Mock: SELECT inventory_items JOIN ai_extracted_products
-    mockQuery.mockResolvedValueOnce({
+    // db.execute: inventory lookup
+    mocks.execute.mockResolvedValueOnce({
       rows: [{
         id: 'inv-1',
         selling_price_chf: 50,
         quantity_available: 10,
         product_name: 'Test Product',
       }],
-      rowCount: 1,
-    } as never)
+    })
 
-    // Mock: INSERT INTO orders
-    mockQuery.mockResolvedValueOnce({
+    // tx.execute calls inside transaction:
+    // 1) INSERT INTO orders RETURNING id, created_at
+    mocks.txExecute.mockResolvedValueOnce({
       rows: [{ id: 'order-1', created_at: '2024-01-15T10:00:00Z' }],
-      rowCount: 1,
-    } as never)
-
-    // Mock: INSERT INTO order_items
-    mockQuery.mockResolvedValueOnce({ rows: [], rowCount: 1 } as never)
-
-    // Mock: UPDATE inventory_items (decrement)
-    mockQuery.mockResolvedValueOnce({ rows: [], rowCount: 1 } as never)
+    })
+    // 2) INSERT INTO order_items
+    mocks.txExecute.mockResolvedValueOnce({ rows: [] })
+    // 3) UPDATE inventory_items (decrement)
+    mocks.txExecute.mockResolvedValueOnce({ rows: [] })
 
     const params: CreateOrderParams = {
       userId: 'user-1',
@@ -72,33 +105,28 @@ describe('createOrder', () => {
     expect(result.orderId).toBe('order-1')
     expect(result.createdAt).toBe('2024-01-15T10:00:00Z')
 
-    // inventory lookup + order insert + order_item insert + inventory decrement
-    expect(mockQuery).toHaveBeenCalledTimes(4)
+    // 1 db.execute (inventory lookup) + 1 db.transaction call
+    expect(mocks.execute).toHaveBeenCalledTimes(1)
+    expect(mocks.transaction).toHaveBeenCalledTimes(1)
+    // Inside transaction: order insert + order_item insert + inventory decrement
+    expect(mocks.txExecute).toHaveBeenCalledTimes(3)
   })
 
   it('includes shipping address when provided', async () => {
-    // Mock: inventory lookup
-    mockQuery.mockResolvedValueOnce({
+    mocks.execute.mockResolvedValueOnce({
       rows: [{
         id: 'inv-1',
         selling_price_chf: 50,
         quantity_available: 10,
         product_name: 'Test Product',
       }],
-      rowCount: 1,
-    } as never)
+    })
 
-    // Mock: INSERT INTO orders
-    mockQuery.mockResolvedValueOnce({
+    mocks.txExecute.mockResolvedValueOnce({
       rows: [{ id: 'order-2', created_at: '2024-01-15' }],
-      rowCount: 1,
-    } as never)
-
-    // Mock: INSERT INTO order_items
-    mockQuery.mockResolvedValueOnce({ rows: [], rowCount: 1 } as never)
-
-    // Mock: UPDATE inventory_items (decrement)
-    mockQuery.mockResolvedValueOnce({ rows: [], rowCount: 1 } as never)
+    })
+    mocks.txExecute.mockResolvedValueOnce({ rows: [] })
+    mocks.txExecute.mockResolvedValueOnce({ rows: [] })
 
     const address: ShippingAddress = {
       firstName: 'Hans',
@@ -116,35 +144,27 @@ describe('createOrder', () => {
       shippingAddress: address,
     })
 
-    // Verify shipping address was JSON-serialized in the order insert (2nd query call)
-    const insertCall = mockQuery.mock.calls[1]
-    const params = insertCall[1] as unknown[]
-    expect(params[3]).toBe(JSON.stringify(address))
+    // The first tx.execute call is the order INSERT — its sql template
+    // should contain the JSON-serialized shipping address in its values
+    const orderInsertCall = mocks.txExecute.mock.calls[0][0]
+    expect(orderInsertCall.values).toContainEqual(JSON.stringify(address))
   })
 
   it('passes null when no shipping address', async () => {
-    // Mock: inventory lookup
-    mockQuery.mockResolvedValueOnce({
+    mocks.execute.mockResolvedValueOnce({
       rows: [{
         id: 'inv-1',
         selling_price_chf: 50,
         quantity_available: 10,
         product_name: 'Test Product',
       }],
-      rowCount: 1,
-    } as never)
+    })
 
-    // Mock: INSERT INTO orders
-    mockQuery.mockResolvedValueOnce({
+    mocks.txExecute.mockResolvedValueOnce({
       rows: [{ id: 'order-3', created_at: '2024-01-15' }],
-      rowCount: 1,
-    } as never)
-
-    // Mock: INSERT INTO order_items
-    mockQuery.mockResolvedValueOnce({ rows: [], rowCount: 1 } as never)
-
-    // Mock: UPDATE inventory_items (decrement)
-    mockQuery.mockResolvedValueOnce({ rows: [], rowCount: 1 } as never)
+    })
+    mocks.txExecute.mockResolvedValueOnce({ rows: [] })
+    mocks.txExecute.mockResolvedValueOnce({ rows: [] })
 
     await createOrder({
       userId: 'user-1',
@@ -152,10 +172,9 @@ describe('createOrder', () => {
       paymentTransactionId: 'txn_test',
     })
 
-    // Order insert is the 2nd query call
-    const insertCall = mockQuery.mock.calls[1]
-    const params = insertCall[1] as unknown[]
-    expect(params[3]).toBeNull()
+    // The first tx.execute call is the order INSERT — shipping_address should be null
+    const orderInsertCall = mocks.txExecute.mock.calls[0][0]
+    expect(orderInsertCall.values).toContainEqual(null)
   })
 
   it('throws when items array is empty', async () => {
@@ -168,11 +187,9 @@ describe('createOrder', () => {
   })
 
   it('throws when inventory item is not found', async () => {
-    // Mock: inventory lookup returns empty
-    mockQuery.mockResolvedValueOnce({
+    mocks.execute.mockResolvedValueOnce({
       rows: [],
-      rowCount: 0,
-    } as never)
+    })
 
     await expect(
       createOrder({
@@ -183,16 +200,14 @@ describe('createOrder', () => {
   })
 
   it('throws when insufficient inventory', async () => {
-    // Mock: inventory lookup with low quantity
-    mockQuery.mockResolvedValueOnce({
+    mocks.execute.mockResolvedValueOnce({
       rows: [{
         id: 'inv-1',
         selling_price_chf: 50,
         quantity_available: 1,
         product_name: 'Test Product',
       }],
-      rowCount: 1,
-    } as never)
+    })
 
     await expect(
       createOrder({
@@ -203,7 +218,7 @@ describe('createOrder', () => {
   })
 
   it('throws on database error', async () => {
-    mockQuery.mockRejectedValueOnce(new Error('DB connection failed'))
+    mocks.execute.mockRejectedValueOnce(new Error('DB connection failed'))
 
     await expect(
       createOrder({

@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import Link from 'next/link'
 import { BlogPost } from '@/lib/blog'
 import { formatDate, getReadingTime } from '@/lib/blog-utils'
@@ -18,11 +19,14 @@ export default function BlogFeaturedGrid({ posts }: BlogFeaturedGridProps) {
             <article>
               {/* Image */}
               {post.featuredImage ? (
-                <div className="aspect-[16/10] overflow-hidden rounded-lg bg-gray-200 mb-4">
-                  <img
+                <div className="aspect-[16/10] overflow-hidden rounded-lg bg-gray-200 mb-4 relative">
+                  <Image
                     src={post.featuredImage}
                     alt={post.title}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    fill
+                    sizes="(max-width: 768px) 100vw, 33vw"
+                    className="object-cover group-hover:scale-105 transition-transform duration-500"
+                    unoptimized
                   />
                 </div>
               ) : (

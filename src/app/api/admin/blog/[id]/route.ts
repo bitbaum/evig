@@ -71,7 +71,7 @@ export const PATCH = withAdmin<{ id: string }>('content', async (request, sessio
 
     // Check if post exists
     const [existing] = await db
-      .select({ id: blogPosts.id, isPublished: blogPosts.isPublished })
+      .select({ id: blogPosts.id, isPublished: blogPosts.isPublished, publishedAt: blogPosts.publishedAt })
       .from(blogPosts)
       .where(eq(blogPosts.id, postId))
 
@@ -104,8 +104,8 @@ export const PATCH = withAdmin<{ id: string }>('content', async (request, sessio
     if (tags !== undefined) update.tags = tags
     if (isPublished !== undefined) {
       update.isPublished = isPublished
-      // Set published_at when first publishing
-      if (isPublished && !wasPublished) {
+      // Set published_at when publishing (first time or if missing)
+      if (isPublished && (!wasPublished || !existing.publishedAt)) {
         update.publishedAt = new Date().toISOString()
       }
     }

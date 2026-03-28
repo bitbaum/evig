@@ -113,50 +113,48 @@ export async function getProtocols(
     whereClause = sql`${whereClause} AND ${conditions[i]}`
   }
 
-  const [countResult, listResult] = await Promise.all([
-    db.execute(sql`
-      SELECT COUNT(*)::text as total
-      FROM ${sql.raw(mpTable)} mp
-      WHERE ${whereClause}
-    `),
-    db.execute(sql`
-      SELECT
-        mp.id,
-        mp.title,
-        mp.meeting_date,
-        mp.meeting_type,
-        mp.visibility,
-        mp.attendees,
-        mp.status,
-        mp.created_at,
-        u.name as created_by_name,
-        (
-          SELECT COUNT(*)::int
-          FROM jsonb_array_elements(COALESCE(mp.structured_notes->'action_items', '[]'::jsonb)) ai
-        ) as action_item_count,
-        (
-          SELECT COUNT(*)::int
-          FROM jsonb_array_elements(COALESCE(mp.structured_notes->'action_items', '[]'::jsonb)) ai
-          WHERE NOT EXISTS (
-            SELECT 1
-            FROM ${sql.raw(palTable)} pal
-            WHERE pal.protocol_id = mp.id
-              AND pal.action_item_id = ai->>'id'
-          )
-        ) as unlinked_action_item_count,
-        (mp.structured_notes IS NOT NULL) as has_structured_notes
-      FROM ${sql.raw(mpTable)} mp
-      LEFT JOIN ${sql.raw(uTable)} u ON mp.created_by = u.id
-      WHERE ${whereClause}
-      ORDER BY mp.meeting_date DESC, mp.created_at DESC
-      LIMIT ${limit} OFFSET ${offset}
-    `),
-  ])
+  // Single query with COUNT(*) OVER() for pagination
+  const listResult = await db.execute(sql`
+    SELECT
+      mp.id,
+      mp.title,
+      mp.meeting_date,
+      mp.meeting_type,
+      mp.visibility,
+      mp.attendees,
+      mp.status,
+      mp.created_at,
+      u.name as created_by_name,
+      COUNT(*) OVER()::text as _total_count,
+      (
+        SELECT COUNT(*)::int
+        FROM jsonb_array_elements(COALESCE(mp.structured_notes->'action_items', '[]'::jsonb)) ai
+      ) as action_item_count,
+      (
+        SELECT COUNT(*)::int
+        FROM jsonb_array_elements(COALESCE(mp.structured_notes->'action_items', '[]'::jsonb)) ai
+        WHERE NOT EXISTS (
+          SELECT 1
+          FROM ${sql.raw(palTable)} pal
+          WHERE pal.protocol_id = mp.id
+            AND pal.action_item_id = ai->>'id'
+        )
+      ) as unlinked_action_item_count,
+      (mp.structured_notes IS NOT NULL) as has_structured_notes
+    FROM ${sql.raw(mpTable)} mp
+    LEFT JOIN ${sql.raw(uTable)} u ON mp.created_by = u.id
+    WHERE ${whereClause}
+    ORDER BY mp.meeting_date DESC, mp.created_at DESC
+    LIMIT ${limit} OFFSET ${offset}
+  `)
 
-  return {
-    protocols: listResult.rows as unknown as ProtocolListItem[],
-    total: parseInt((countResult.rows[0] as unknown as { total: string })?.total || '0', 10),
-  }
+  const total = parseInt((listResult.rows[0] as unknown as { _total_count: string })?._total_count || '0', 10)
+  // Strip _total_count from response rows
+  const protocols = (listResult.rows as unknown as (ProtocolListItem & { _total_count?: string })[]).map(
+    ({ _total_count, ...row }) => row
+  )
+
+  return { protocols, total }
 }
 
 /**

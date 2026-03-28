@@ -11,7 +11,7 @@ import { PracticalDetailsSection } from './PracticalDetailsSection'
 import { MaterialsSection } from './MaterialsSection'
 import { LocationSection } from './LocationSection'
 import { TermsSection } from './TermsSection'
-import { AIFormAssistBar } from '@/components/ai/AIFormAssistBar'
+import { AIFormAssist } from '@/components/ai/AIFormAssist'
 
 interface WorkshopLocation {
   id: string
@@ -216,14 +216,10 @@ export function WorkshopProposalForm() {
 
   return (
     <form onSubmit={handleSubmit} className="bg-white rounded-xl shadow-lg p-8">
-      <AIFormAssistBar
+      <AIFormAssist
         formType="workshop"
         placeholder="Beschreibe deine Workshop-Idee in 1-2 Sätzen..."
         onFieldsFilled={handleAIFieldsFilled}
-        quickActions={[
-          { key: 'addObjectives', label: 'Lernziele vorschlagen' },
-          { key: 'suggestPrerequisites', label: 'Voraussetzungen' },
-        ]}
         currentData={formData as unknown as Record<string, unknown>}
         className="mb-8"
       />

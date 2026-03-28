@@ -44,9 +44,6 @@ interface ApplicationRow {
   updated_at: string
 }
 
-interface CountRow {
-  total: string
-}
 
 export const GET = withAdmin('services', async (request, session) => {
   try {
@@ -60,7 +57,7 @@ export const GET = withAdmin('services', async (request, session) => {
       return apiBadRequest('Ungültiger Status-Filter')
     }
 
-    // Get repairer applications with user details
+    // Single query with COUNT(*) OVER() for pagination
     const applicationsResult = await db.execute(sql`
       SELECT
         ra.*,
@@ -68,6 +65,7 @@ export const GET = withAdmin('services', async (request, session) => {
         u.email as applicant_email,
         u."createdAt" as user_created_at,
         COALESCE(ra.document_verification_status, 'pending') as document_verification_status,
+        COUNT(*) OVER() as _total_count,
         CASE
           WHEN ra.status = ${APPROVAL_STATUS.PENDING} THEN 1
           WHEN ra.status = ${APPROVAL_STATUS.REQUIRES_CHANGES} THEN 2
@@ -79,11 +77,6 @@ export const GET = withAdmin('services', async (request, session) => {
       WHERE ra.status = ${status}
       ORDER BY priority_order ASC, ra.created_at ASC
       LIMIT ${limit} OFFSET ${offset}
-    `)
-
-    // Get total count for pagination
-    const countResult = await db.execute(sql`
-      SELECT COUNT(*) as total FROM ${sql.raw(getTableName(repairerApplications))} WHERE status = ${status}
     `)
 
     const applications = (applicationsResult.rows as unknown as ApplicationRow[]).map(app => ({
@@ -128,15 +121,16 @@ export const GET = withAdmin('services', async (request, session) => {
       count: applications.length
     })
 
-    const count = countResult.rows[0] as unknown as CountRow
+    const firstRow = applicationsResult.rows[0] as unknown as Record<string, unknown>
+    const total = Number(firstRow?._total_count ?? 0)
     return apiSuccess({
       applications,
-      total: parseInt(count.total),
+      total,
       status,
       pagination: {
         limit,
         offset,
-        hasMore: offset + limit < parseInt(count.total)
+        hasMore: offset + limit < total
       }
     })
 

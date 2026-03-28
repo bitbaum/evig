@@ -13,7 +13,7 @@ import {
 } from 'lucide-react'
 import { MARKETPLACE_LIMITS } from '@/config/marketplace'
 import { validateListingForm, transformListingFormToPayload } from '@/lib/domain/marketplace'
-import { AIFormAssistBar } from '@/components/ai/AIFormAssistBar'
+import { AIFormAssist } from '@/components/ai/AIFormAssist'
 import type { ListingFormData } from '@/components/marketplace-sell/types'
 import { INITIAL_LISTING_FORM } from '@/components/marketplace-sell/types'
 import { ImageUploadGrid } from '@/components/marketplace-sell/ImageUploadGrid'
@@ -302,15 +302,10 @@ function SellPageContent() {
             </button>
           )}
 
-          <AIFormAssistBar
+          <AIFormAssist
             formType="marketplace"
             placeholder="Beschreibe dein Produkt in 1-2 Sätzen..."
             onFieldsFilled={handleAIFieldsFilled}
-            quickActions={[
-              { key: 'improveDescription', label: 'Beschreibung verbessern' },
-              { key: 'suggestPrice', label: 'Preis vorschlagen' },
-              { key: 'extractSpecs', label: 'Spezifikationen erkennen' },
-            ]}
             currentData={{ title: formData.title, description: formData.description, price: formData.price, category: formData.category, condition: formData.condition, brand: formData.brand, model: formData.model, specs: formData.specs }}
           />
 

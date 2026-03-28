@@ -116,11 +116,11 @@ Wichtig:
    * Quick action prompts for common refinements
    */
   quickActions: {
-    shorter: 'Kürze den Artikel auf etwa die Hälfte der Länge. Behalte die wichtigsten Punkte bei.',
-    longer: 'Erweitere den Artikel mit mehr Details, Beispielen und praktischen Tipps. Verdopple etwa die Länge.',
-    seoOptimize: 'Optimiere den Artikel für Suchmaschinen: Verbessere Titel, füge relevante Keywords ein, strukturiere mit besseren Überschriften.',
-    addExamples: 'Füge 2-3 konkrete Beispiele oder Fallstudien hinzu, die die Punkte im Artikel illustrieren.',
-    simplify: 'Vereinfache den Text für ein breiteres Publikum. Erkläre Fachbegriffe und verwende einfachere Sprache.',
+    shorter: { label: 'Kürzen', prompt: 'Kürze den Artikel auf etwa die Hälfte der Länge. Behalte die wichtigsten Punkte bei.' },
+    longer: { label: 'Erweitern', prompt: 'Erweitere den Artikel mit mehr Details, Beispielen und praktischen Tipps. Verdopple etwa die Länge.' },
+    seoOptimize: { label: 'SEO optimieren', prompt: 'Optimiere den Artikel für Suchmaschinen: Verbessere Titel, füge relevante Keywords ein, strukturiere mit besseren Überschriften.' },
+    addExamples: { label: 'Beispiele hinzufügen', prompt: 'Füge 2-3 konkrete Beispiele oder Fallstudien hinzu, die die Punkte im Artikel illustrieren.' },
+    simplify: { label: 'Vereinfachen', prompt: 'Vereinfache den Text für ein breiteres Publikum. Erkläre Fachbegriffe und verwende einfachere Sprache.' },
   },
 } as const
 
@@ -243,11 +243,11 @@ Antworte NUR mit dem JSON-Array, keine Erklärungen.`,
    * Quick action prompts for common refinements
    */
   quickActions: {
-    addSpecs: 'Ergänze die technischen Spezifikationen basierend auf dem bekannten Produktmodell. Füge CPU, RAM, Speicher, Display-Grösse und andere relevante Specs hinzu.',
-    estimatePrice: 'Schätze einen realistischen Verkaufspreis für den Schweizer Markt für gebrauchte Geräte. Berücksichtige Zustand, Alter und aktuelle Marktpreise auf ricardo.ch und tutti.ch.',
-    improveDescription: 'Verbessere die Kurzbeschreibung: Mache sie ansprechender und informativer. Hebe die wichtigsten Verkaufsargumente hervor.',
-    suggestProfiles: 'Schlage passende Kundenprofile vor basierend auf den Produkteigenschaften. Berücksichtige Leistung, Portabilität und typische Anwendungsfälle.',
-    completeData: 'Vervollständige alle fehlenden Felder mit sinnvollen Werten basierend auf dem Produktmodell und typischen Eigenschaften.',
+    addSpecs: { label: 'Specs ergänzen', prompt: 'Ergänze die technischen Spezifikationen basierend auf dem bekannten Produktmodell. Füge CPU, RAM, Speicher, Display-Grösse und andere relevante Specs hinzu.' },
+    estimatePrice: { label: 'Preis schätzen', prompt: 'Schätze einen realistischen Verkaufspreis für den Schweizer Markt für gebrauchte Geräte. Berücksichtige Zustand, Alter und aktuelle Marktpreise auf ricardo.ch und tutti.ch.' },
+    improveDescription: { label: 'Beschreibung verbessern', prompt: 'Verbessere die Kurzbeschreibung: Mache sie ansprechender und informativer. Hebe die wichtigsten Verkaufsargumente hervor.' },
+    suggestProfiles: { label: 'Profile vorschlagen', prompt: 'Schlage passende Kundenprofile vor basierend auf den Produkteigenschaften. Berücksichtige Leistung, Portabilität und typische Anwendungsfälle.' },
+    completeData: { label: 'Daten vervollständigen', prompt: 'Vervollständige alle fehlenden Felder mit sinnvollen Werten basierend auf dem Produktmodell und typischen Eigenschaften.' },
   },
 } as const
 
@@ -487,9 +487,9 @@ Antworte NUR mit dem JSON-Array, keine Erklärungen.`,
    * Quick action prompts for common refinements
    */
   quickActions: {
-    addDetails: 'Ergänze die Diskussionspunkte mit mehr Details aus dem Transkript.',
-    splitTopics: 'Unterteile die Themen feiner — jedes Unterthema als eigenen Eintrag.',
-    clarifyActions: 'Präzisiere die Aufgaben: Mache Beschreibungen konkreter und füge fehlende Zeithinweise hinzu.',
+    addDetails: { label: 'Details ergänzen', prompt: 'Ergänze die Diskussionspunkte mit mehr Details aus dem Transkript.' },
+    splitTopics: { label: 'Themen aufteilen', prompt: 'Unterteile die Themen feiner — jedes Unterthema als eigenen Eintrag.' },
+    clarifyActions: { label: 'Aufgaben präzisieren', prompt: 'Präzisiere die Aufgaben: Mache Beschreibungen konkreter und füge fehlende Zeithinweise hinzu.' },
   },
 
   /**
@@ -553,7 +553,7 @@ export interface FormAIConfig {
   extract: string
   schema: string | null
   refine?: string
-  quickActions?: Record<string, string>
+  quickActions?: Record<string, { label: string; prompt: string }>
   maxTokens?: number
   temperature?: number
   auth?: 'user' | 'staff'
@@ -561,7 +561,7 @@ export interface FormAIConfig {
 
 /**
  * FORM_AI_REGISTRY - SSOT for all form types that support AI assistance.
- * Adding AI to a new form = add entry here + drop AIFormAssistBar in the component.
+ * Adding AI to a new form = add entry here + drop AIFormAssist in the component.
  */
 export const FORM_AI_REGISTRY: Record<string, FormAIConfig> = {
   'erfassung': {
@@ -649,9 +649,9 @@ ANWEISUNG:
 
 Antworte NUR mit dem verbesserten JSON (gleiche Felder wie bei der Extraktion, inkl. specs-Array).`,
     quickActions: {
-      improveDescription: 'Verbessere die Beschreibung: Mache sie ansprechender und hebe Verkaufsargumente hervor.',
-      suggestPrice: 'Schätze einen realistischen Preis basierend auf dem Schweizer Gebrauchtmarkt (ricardo.ch, tutti.ch).',
-      extractSpecs: 'Ergänze die technischen Spezifikationen basierend auf dem Produktmodell. Füge CPU, RAM, Speicher, Display und andere relevante Specs hinzu. Nutze die aktuellen Daten (brand, model, title) um fehlende Specs zu recherchieren.',
+      improveDescription: { label: 'Beschreibung verbessern', prompt: 'Verbessere die Beschreibung: Mache sie ansprechender und hebe Verkaufsargumente hervor.' },
+      suggestPrice: { label: 'Preis vorschlagen', prompt: 'Schätze einen realistischen Preis basierend auf dem Schweizer Gebrauchtmarkt (ricardo.ch, tutti.ch).' },
+      extractSpecs: { label: 'Specs erkennen', prompt: 'Ergänze die technischen Spezifikationen basierend auf dem Produktmodell. Füge CPU, RAM, Speicher, Display und andere relevante Specs hinzu. Nutze die aktuellen Daten (brand, model, title) um fehlende Specs zu recherchieren.' },
     },
     auth: 'user',
   },
@@ -702,8 +702,8 @@ ANWEISUNG:
 
 Antworte NUR mit dem verbesserten JSON (gleiche Felder wie oben).`,
     quickActions: {
-      addObjectives: 'Ergänze 2-3 weitere konkrete, messbare Lernziele.',
-      suggestPrerequisites: 'Schlage sinnvolle Voraussetzungen und benötigte Materialien vor.',
+      addObjectives: { label: 'Lernziele vorschlagen', prompt: 'Ergänze 2-3 weitere konkrete, messbare Lernziele.' },
+      suggestPrerequisites: { label: 'Voraussetzungen', prompt: 'Schlage sinnvolle Voraussetzungen und benötigte Materialien vor.' },
     },
     auth: 'user',
   },
@@ -762,8 +762,8 @@ ANWEISUNG:
 
 Antworte NUR mit dem verbesserten JSON (gleiche Felder wie oben).`,
     quickActions: {
-      addFeatures: 'Ergänze 2-3 weitere überzeugende Features/Vorteile.',
-      generateSteps: 'Erstelle einen klaren 3-5 Schritte Prozessablauf.',
+      addFeatures: { label: 'Features generieren', prompt: 'Ergänze 2-3 weitere überzeugende Features/Vorteile.' },
+      generateSteps: { label: 'Prozessschritte', prompt: 'Erstelle einen klaren 3-5 Schritte Prozessablauf.' },
     },
     auth: 'staff',
   },
@@ -872,8 +872,8 @@ ANWEISUNG:
 
 Antworte NUR mit dem verbesserten JSON (gleiche Felder wie oben).`,
     quickActions: {
-      improveWriting: 'Verbessere den Schreibstil: Klarer, ansprechender, mit besserer Struktur.',
-      suggestTitle: 'Schlage 3 alternative, SEO-freundliche Titel vor.',
+      improveWriting: { label: 'Schreibstil verbessern', prompt: 'Verbessere den Schreibstil: Klarer, ansprechender, mit besserer Struktur.' },
+      suggestTitle: { label: 'Titel vorschlagen', prompt: 'Schlage 3 alternative, SEO-freundliche Titel vor.' },
     },
     maxTokens: 4096,
     temperature: 0.7,
@@ -932,21 +932,21 @@ export type ProtocolQuickAction = keyof typeof PROTOCOL_PROMPTS.quickActions
  * Get a blog quick action prompt by key
  */
 export function getBlogQuickActionPrompt(action: BlogQuickAction): string {
-  return BLOG_PROMPTS.quickActions[action]
+  return BLOG_PROMPTS.quickActions[action].prompt
 }
 
 /**
  * Get an erfassung quick action prompt by key
  */
 export function getErfassungQuickActionPrompt(action: ErfassungQuickAction): string {
-  return ERFASSUNG_PROMPTS.quickActions[action]
+  return ERFASSUNG_PROMPTS.quickActions[action].prompt
 }
 
 /**
  * Get a protocol quick action prompt by key
  */
 export function getProtocolQuickActionPrompt(action: ProtocolQuickAction): string {
-  return PROTOCOL_PROMPTS.quickActions[action]
+  return PROTOCOL_PROMPTS.quickActions[action].prompt
 }
 
 /**

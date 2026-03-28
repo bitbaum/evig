@@ -63,6 +63,10 @@ jest.mock('@/lib/security/rate-limit', () => ({
   },
 }))
 
+jest.mock('@/lib/it-hilfe/notifications', () => ({
+  sendItHilfeNotification: jest.fn(),
+}))
+
 import { NextRequest } from 'next/server'
 import { auth } from '@/auth'
 import { db } from '@/db'
@@ -227,7 +231,7 @@ describe('POST /api/it-hilfe/requests/[id]/offers', () => {
       expires: '',
     } as never)
 
-    // Request exists and is open
+    // Request exists and is open (with innerJoin to users)
     mockSelectChain.where.mockResolvedValueOnce([{
       requesterId: 'user-owner', status: 'open', title: 'Laptop',
       requester_name: 'Hans', requester_email: 'hans@test.ch',
@@ -236,9 +240,13 @@ describe('POST /api/it-hilfe/requests/[id]/offers', () => {
     mockSelectChain.where.mockResolvedValueOnce([])
     // No existing offer
     mockSelectChain.where.mockResolvedValueOnce([])
+    // No repairer profile
+    mockSelectChain.where.mockResolvedValueOnce([])
     // INSERT offer
     mockInsertChain.returning.mockResolvedValueOnce([{ id: validOfferId }])
-    // UPDATE request status (fire-and-forget)
+    // UPDATE offerCount increment
+    mockUpdateChain.where.mockResolvedValueOnce([])
+    // UPDATE request status to in_discussion
     mockUpdateChain.where.mockResolvedValueOnce([])
 
     const res = await POST(

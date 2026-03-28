@@ -13,7 +13,7 @@ import {
   type DecisionType,
   type VotingMethod,
 } from '@/config/decisions';
-import { AIFormAssistBar } from '@/components/ai/AIFormAssistBar'
+import { AIFormAssist } from '@/components/ai/AIFormAssist'
 
 interface OptionItem {
   id: string;
@@ -134,7 +134,7 @@ export default function DecisionFormClient() {
       )}
 
       {/* AI Assistant */}
-      <AIFormAssistBar
+      <AIFormAssist
         formType="decision"
         placeholder="Beschreibe den Vorschlag in 1-2 Sätzen..."
         onFieldsFilled={handleAIFieldsFilled}

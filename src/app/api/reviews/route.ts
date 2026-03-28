@@ -5,7 +5,7 @@ import { reviews, reviewResponses, reviewVotes, reviewAttachments } from '@/db/s
 import { users } from '@/db/schema/auth'
 import { repairerProfiles } from '@/db/schema/services'
 import { listings } from '@/db/schema/marketplace'
-import { eq, and, sql, count, asc, desc, type SQL } from 'drizzle-orm'
+import { eq, and, sql, asc, desc, type SQL } from 'drizzle-orm'
 import { apiError, apiSuccess, apiUnauthorized, apiBadRequest, apiNotFound, apiForbidden } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { REVIEW_TARGET_TYPES } from '@/config/database'
@@ -77,6 +77,7 @@ export async function GET(request: NextRequest) {
 
     const rows = await db
       .select({
+        _total: sql<number>`count(*) over()`,
         id: reviews.id,
         reviewerId: reviews.reviewerId,
         reviewerName: users.name,
@@ -157,19 +158,7 @@ export async function GET(request: NextRequest) {
       .limit(limit)
       .offset(offset)
 
-    // Count query
-    const [countRow] = await db
-      .select({ total: count() })
-      .from(reviews)
-      .where(
-        and(
-          eq(reviews.targetType, targetType),
-          eq(reviews.targetId, targetId),
-          eq(reviews.status, status)
-        )
-      )
-
-    const total = countRow?.total ?? 0
+    const total = rows[0]?._total ?? 0
 
     const isAdmin = !!session?.user?.isStaff
 

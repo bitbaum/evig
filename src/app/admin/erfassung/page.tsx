@@ -11,7 +11,7 @@ import { BulkTable } from '@/components/erfassung/BulkTable'
 import { BulkDetailPanel } from '@/components/erfassung/BulkDetailPanel'
 import { BulkActionBar } from '@/components/erfassung/BulkActionBar'
 import { BulkSuccessScreen } from '@/components/erfassung/BulkSuccessScreen'
-import { AIRefinementSection } from '@/components/erfassung/AIRefinementSection'
+import { AIFormAssist } from '@/components/ai/AIFormAssist'
 import { ErfassungSubmitBar } from '@/components/erfassung/ErfassungSubmitBar'
 import { useErfassungForm } from '@/components/erfassung/useErfassungForm'
 import type { BulkProduct, BulkSaveResponse } from '@/types/erfassung'
@@ -244,17 +244,25 @@ function ErfassungContent() {
       {/* SINGLE MODE */}
       {viewMode === 'single' && (
         <>
-          <AIRefinementSection
-            visible={!!(form.formData.hersteller || form.formData.produktname)}
-            expanded={form.showAIRefine}
-            onToggle={() => form.setShowAIRefine(!form.showAIRefine)}
-            aiError={form.aiError}
-            aiSuccess={form.aiSuccess}
-            aiRefining={form.aiRefining}
-            aiInstruction={form.aiInstruction}
-            onInstructionChange={form.setAiInstruction}
-            onRefine={form.handleAIRefine}
-          />
+          {!!(form.formData.hersteller || form.formData.produktname) && (
+            <AIFormAssist
+              formType="erfassung"
+              variant="section"
+              defaultExpanded={form.showAIRefine}
+              currentData={{
+                hersteller: form.formData.hersteller,
+                produktname: form.formData.produktname,
+                kurzbeschreibung: form.formData.kurzbeschreibung,
+                specs: form.formData.specs,
+                verkaufspreis: form.formData.verkaufspreis,
+                zustand: form.formData.zustand,
+                hauptkategorie: form.formData.hauptkategorie,
+                unterkategorie: form.formData.unterkategorie,
+                kundenprofile: form.formData.kundenprofile,
+              }}
+              onFieldsFilled={form.handleProductData}
+            />
+          )}
 
           <form onSubmit={(e) => form.handleSubmit(e, 'draft')} className="space-y-6">
             {form.saveError && (
