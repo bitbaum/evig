@@ -167,7 +167,8 @@ export function getAuthSecret(): string {
 /**
  * Get database configuration.
  * Validates that required connection parameters are present.
- * Fails early with a clear error instead of silently passing undefined to pg.Pool.
+ * During next build (no DB env vars), returns placeholder config instead of
+ * throwing — the pool is never actually used at build time.
  */
 export function getDbConfig() {
   const sslEnabled = process.env.DB_SSL !== 'false'
@@ -177,7 +178,8 @@ export function getDbConfig() {
   const user = process.env.AUTH_DB_USER || process.env.DB_USER
   const password = process.env.AUTH_DB_PASSWORD || process.env.DB_PASSWORD
 
-  // Validate required vars — fail loud at startup, not silently at first query
+  // During build, DB env vars are absent — return placeholder config.
+  // The pool won't actually connect; routes only execute at request time.
   const missing: string[] = []
   if (!host) missing.push('DB_HOST')
   if (!database) missing.push('DB_NAME')
@@ -185,10 +187,25 @@ export function getDbConfig() {
   if (!password) missing.push('DB_PASSWORD')
 
   if (missing.length > 0) {
-    throw new Error(
-      `Missing required database config: ${missing.join(', ')}. ` +
-      `Set these in .env.local (or prefixed with AUTH_DB_ for auth-specific overrides).`
-    )
+    if (process.env.NODE_ENV === 'production' && !process.env.NEXT_PHASE) {
+      // Real runtime with missing config — fail loud
+      throw new Error(
+        `Missing required database config: ${missing.join(', ')}. ` +
+        `Set these in .env.local (or prefixed with AUTH_DB_ for auth-specific overrides).`
+      )
+    }
+    // Build time or dev without DB — return placeholder so module evaluation succeeds
+    return {
+      host: 'localhost',
+      port: 5432,
+      database: 'placeholder',
+      user: 'placeholder',
+      password: 'placeholder',
+      ssl: false as const,
+      max: 1,
+      idleTimeoutMillis: 1000,
+      connectionTimeoutMillis: 1000,
+    }
   }
 
   return {
