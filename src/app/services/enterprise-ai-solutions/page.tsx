@@ -44,8 +44,8 @@ export default function EnterpriseAIPage() {
             'description': 'Open-Source, souveräne KI-Systeme für professionelle Firmen mit vollständiger Datenprivatsphäre, digitaler Souveränität und nachhaltigen Computing-Praktiken.',
             'provider': {
               '@type': 'Organization',
-              'name': 'RevampIT',
-              'url': 'https://revampit.org'
+              'name': 'Revamp-IT',
+              'url': 'https://revamp-it.ch'
             },
             'serviceType': 'Nachhaltige KI-Lösungen für Unternehmen',
             'areaServed': {

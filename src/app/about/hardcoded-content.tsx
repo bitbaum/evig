@@ -38,7 +38,7 @@ export default function HardcodedAboutPage() {
               <div className="relative h-[400px] lg:h-[500px] rounded-2xl overflow-hidden shadow-2xl">
                 <Image
                   src="/images/Article Pics/storefront.png"
-                  alt="RevampIT Schaufenster mit Computern und Geräten"
+                  alt="Revamp-IT Schaufenster mit Computern und Geräten"
                   fill
                   className="object-cover"
                   sizes="(max-width: 1024px) 100vw, 50vw"

@@ -1,8 +1,9 @@
 import { Metadata } from 'next'
+import { ORG, LOCATIONS } from '@/config/org'
 
 export const metadata: Metadata = {
-  title: 'AGB | RevampIT',
-  description: 'Allgemeine Geschäftsbedingungen von RevampIT',
+  title: `AGB | ${ORG.name}`,
+  description: `Allgemeine Geschäftsbedingungen von ${ORG.name}`,
 }
 
 export default function AGBPage() {
@@ -14,7 +15,7 @@ export default function AGBPage() {
         <h2>1. Geltungsbereich</h2>
         <p>
           Diese Allgemeinen Geschäftsbedingungen (AGB) gelten für alle Dienstleistungen und Angebote
-          des Vereins RevampIT, Birmensdorferstrasse 379, 8055 Zürich, Schweiz.
+          des {ORG.legalName}, {LOCATIONS.store.fullWithCountry}.
         </p>
 
         <h2>2. Leistungen</h2>

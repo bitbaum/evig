@@ -5,6 +5,7 @@
 
 import { NavigationSuggestion, Language, SuggestionConfig } from './types'
 import { ensureIconInLabel } from './iconMapping'
+import { LOCATIONS } from '@/config/org'
 
 /**
  * Enhanced suggestion templates with consistent labels and descriptions
@@ -98,11 +99,11 @@ export const ENHANCED_SUGGESTIONS: Record<string, Record<Language, Pick<Navigati
   'partnerships': {
     'de': {
       label: 'Partnerschaft eingehen',
-      description: 'Unternehmerische Zusammenarbeit mit RevampIT'
+      description: 'Unternehmerische Zusammenarbeit mit Revamp-IT'
     },
     'en': {
       label: 'Become a Partner',
-      description: 'Business collaboration with RevampIT'
+      description: 'Business collaboration with Revamp-IT'
     }
   },
   'technical-expert': {
@@ -120,11 +121,11 @@ export const ENHANCED_SUGGESTIONS: Record<string, Record<Language, Pick<Navigati
   'about': {
     'de': {
       label: 'Über uns erfahren',
-      description: 'Mission, Werte und Team von RevampIT kennenlernen'
+      description: 'Mission, Werte und Team von Revamp-IT kennenlernen'
     },
     'en': {
       label: 'Learn About Us',
-      description: 'Get to know RevampIT\'s mission, values and team'
+      description: 'Get to know Revamp-IT\'s mission, values and team'
     }
   },
   'revamped': {
@@ -196,11 +197,11 @@ export const ENHANCED_SUGGESTIONS: Record<string, Record<Language, Pick<Navigati
   'location': {
     'de': {
       label: 'Standort besuchen',
-      description: 'Badenerstrasse 816, 8048 Zürich'
+      description: LOCATIONS.store.full,
     },
     'en': {
       label: 'Visit Our Location',
-      description: 'Badenerstrasse 816, 8048 Zurich'
+      description: LOCATIONS.store.full,
     }
   },
   'consultation': {

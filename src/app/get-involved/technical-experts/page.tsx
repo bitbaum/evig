@@ -5,10 +5,11 @@ import { InfoSection, NumberedSteps, Callout } from '@/components/community/Info
 import { PageSection } from '@/components/community/PageSection'
 import { TECHNICAL_EXPERTS_PAGE } from '@/config/community'
 import { responsiveTypography } from '@/lib/responsive'
+import { ORG, CONTACT } from '@/config/org'
 
 export const metadata: Metadata = {
-  title: 'Technische Experten | RevampIT',
-  description: 'Teilen Sie Ihre technische Expertise und helfen Sie uns, innovative Lösungen für nachhaltige Technologie zu entwickeln.'
+  title: `Technische Experten | ${ORG.name}`,
+  description: 'Teilen Sie Ihre technische Expertise und helfen Sie uns, innovative Lösungen für nachhaltige Technologie zu entwickeln.',
 }
 
 export default function TechnicalExpertsPage() {
@@ -17,7 +18,7 @@ export default function TechnicalExpertsPage() {
       title="Technische Experten"
       description="Teilen Sie Ihre Expertise und helfen Sie uns, innovative Lösungen für nachhaltige Technologie zu entwickeln."
       ctaText="Ihre Expertise teilen"
-      ctaHref="mailto:empfang@revamp-it.ch"
+      ctaHref={`mailto:${CONTACT.email}`}
     >
       <div className="space-y-16">
         {/* Overview Section */}

@@ -8,6 +8,7 @@
 import { ChatbotResponse, ConversationContext } from '../types'
 import type { Language, NavigationSuggestion } from '@/lib/suggestion-utils'
 import { createEnhancedSuggestions } from '@/lib/suggestion-utils'
+import { LOCATIONS } from '@/config/org'
 
 export class IntelligentResponder {
   private responsePatterns: Map<string, ResponsePattern[]>
@@ -225,8 +226,8 @@ export class IntelligentResponder {
           keywords: ['mitmachen', 'helfen', 'volunteer', 'help', 'contribute', 'spenden', 'donate'],
           phrases: ['wie kann ich helfen', 'how can i help', 'mitmachen bei', 'get involved'],
           responses: {
-            'de': 'Es gibt viele Wege bei RevampIT mitzumachen: als Freiwilliger, mit einer Spende, als technischer Experte oder durch eine Partnerschaft. Jeder Beitrag zählt!',
-            'en': 'There are many ways to get involved with RevampIT: as a volunteer, with a donation, as a technical expert, or through a partnership. Every contribution counts!'
+            'de': 'Es gibt viele Wege bei Revamp-IT mitzumachen: als Freiwilliger, mit einer Spende, als technischer Experte oder durch eine Partnerschaft. Jeder Beitrag zählt!',
+            'en': 'There are many ways to get involved with Revamp-IT: as a volunteer, with a donation, as a technical expert, or through a partnership. Every contribution counts!'
           },
           suggestionConfigs: [
             { key: 'volunteer', href: '/get-involved/volunteer', options: { priority: 10 } },
@@ -260,8 +261,8 @@ export class IntelligentResponder {
           keywords: ['wo', 'where', 'adresse', 'address', 'standort', 'location', 'zürich', 'zurich'],
           phrases: ['wo seid ihr', 'where are you', 'eure adresse', 'your address'],
           responses: {
-            'de': 'Sie finden uns an der Badenerstrasse 816 in 8048 Zürich. Wir sind gut mit öffentlichen Verkehrsmitteln erreichbar und freuen uns auf Ihren Besuch!',
-            'en': 'You can find us at Badenerstrasse 816 in 8048 Zurich. We are easily accessible by public transport and look forward to your visit!'
+            'de': `Sie finden uns an der ${LOCATIONS.store.full}. Wir sind gut mit öffentlichen Verkehrsmitteln erreichbar und freuen uns auf Ihren Besuch!`,
+            'en': `You can find us at ${LOCATIONS.store.full}. We are easily accessible by public transport and look forward to your visit!`,
           },
           suggestionConfigs: [
             { key: 'location', href: '/contact', options: { priority: 10 } },

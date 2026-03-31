@@ -181,7 +181,7 @@ function mapPostFromDb(row: {
     title: row.title,
     excerpt: row.excerpt || undefined,
     featuredImage: row.featuredImage || undefined,
-    author: row.authorName || 'RevampIT Team',
+    author: row.authorName || 'Revamp-IT Team',
     category: row.categoryName || undefined,
     tags: row.tags || [],
     publishedAt: row.publishedAt || undefined,

@@ -103,14 +103,14 @@ export interface OnboardingConfig {
 
 export const REPAIRER_ONBOARDING: OnboardingConfig = {
   meta: {
-    title: 'Repairer Onboarding | RevampIT',
-    description: 'Become a certified repair person on the RevampIT platform and connect with customers in need of repair services.'
+    title: 'Repairer Onboarding | Revamp-IT',
+    description: 'Become a certified repair person on the Revamp-IT platform and connect with customers in need of repair services.'
   },
   header: {
     icon: Wrench,
     iconBgColor: 'bg-blue-100',
     iconColor: 'text-blue-600',
-    title: 'Werden Sie Reparatur-Experte bei RevampIT',
+    title: 'Werden Sie Reparatur-Experte bei Revamp-IT',
     subtitle: 'Bieten Sie Ihre Reparaturdienste an und verbinden Sie sich mit Kunden, die Ihre Fachkenntnisse brauchen.'
   },
   benefits: [

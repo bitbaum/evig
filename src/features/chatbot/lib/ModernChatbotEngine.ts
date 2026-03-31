@@ -109,16 +109,16 @@ export class ModernChatbotEngine {
   getWelcomeMessage(currentPage: string, language: Language): ChatbotResponse {
     const welcomeMessages: Record<Language, Record<string, string>> = {
       de: {
-        'default': 'Hallo! Ich bin Ihr RevampIT Assistent und helfe Ihnen dabei, genau das zu finden, was Sie suchen. Wie kann ich Ihnen heute helfen?',
-        '/': 'Willkommen bei RevampIT! Ich helfe Ihnen gerne bei der Entdeckung unserer nachhaltigen IT-Lösungen.',
+        'default': 'Hallo! Ich bin Ihr Revamp-IT Assistent und helfe Ihnen dabei, genau das zu finden, was Sie suchen. Wie kann ich Ihnen heute helfen?',
+        '/': 'Willkommen bei Revamp-IT! Ich helfe Ihnen gerne bei der Entdeckung unserer nachhaltigen IT-Lösungen.',
         '/services': 'Sie schauen sich unsere Dienstleistungen an! Perfekt - ich kann Ihnen helfen, den passenden Service für Ihre Bedürfnisse zu finden.',
         '/about': 'Sie sind auf unserer Über-uns-Seite! Möchten Sie mehr über unsere Mission und unser Team erfahren?',
         '/contact': 'Sie möchten mit uns in Kontakt treten? Perfekt - ich helfe Ihnen gerne bei der Kontaktaufnahme!',
         '/projects': 'Unsere Projekte sind wirklich spannend! Lassen Sie mich Ihnen zeigen, welche Open-Source-Projekte für Sie interessant sein könnten.',
         '/blog': 'Sie lesen unsere Blog-Artikel! Hier finden Sie die neuesten Einblicke in nachhaltige IT. Kann ich Ihnen bei der Navigation helfen?',
         '/workshops': 'Interessieren Sie sich für unsere Workshops? Grossartig - Bildung ist der Schlüssel zur nachhaltigen IT!',
-        '/get-involved': 'Fantastisch, dass Sie sich engagieren möchten! Es gibt viele Wege, wie Sie bei RevampIT mitmachen können.',
-        '/get-involved/volunteer': 'Sie interessieren sich fürs Ehrenamt bei uns? Wunderbar - freiwillige Helfer sind das Herz von RevampIT!',
+        '/get-involved': 'Fantastisch, dass Sie sich engagieren möchten! Es gibt viele Wege, wie Sie bei Revamp-IT mitmachen können.',
+        '/get-involved/volunteer': 'Sie interessieren sich fürs Ehrenamt bei uns? Wunderbar - freiwillige Helfer sind das Herz von Revamp-IT!',
         '/get-involved/donate': 'Vielen Dank, dass Sie uns unterstützen möchten! Ihre Spende hilft uns, unsere Mission voranzutreiben.',
         '/get-involved/internships': 'Sie schauen sich unsere Praktikumsmöglichkeiten an? Perfekt - wir bieten spannende Lernerfahrungen!',
         '/get-involved/partnerships': 'Sie denken über eine Partnerschaft nach? Grossartig - gemeinsam können wir mehr erreichen!',
@@ -126,16 +126,16 @@ export class ModernChatbotEngine {
         '/get-involved/work-reintegration': 'Sie informieren sich über unsere Wiedereingliederungsprogramme? Das ist ein wichtiger Teil unserer Mission!'
       },
       en: {
-        'default': 'Hello! I\'m your RevampIT assistant and I\'m here to help you find exactly what you need. How can I assist you today?',
-        '/': 'Welcome to RevampIT! I\'m happy to help you discover our sustainable IT solutions.',
+        'default': 'Hello! I\'m your Revamp-IT assistant and I\'m here to help you find exactly what you need. How can I assist you today?',
+        '/': 'Welcome to Revamp-IT! I\'m happy to help you discover our sustainable IT solutions.',
         '/services': 'You\'re exploring our services! Perfect - I can help you find the right service for your specific needs.',
         '/about': 'You\'re on our About page! Would you like to learn more about our mission and team?',
         '/contact': 'Looking to get in touch with us? Perfect - I\'m happy to help you with contacting us!',
         '/projects': 'Our projects are really exciting! Let me show you which open-source projects might interest you most.',
         '/blog': 'You\'re reading our blog articles! Here you\'ll find the latest insights into sustainable IT. Can I help you navigate?',
         '/workshops': 'Interested in our workshops? Great - education is key to sustainable IT!',
-        '/get-involved': 'Fantastic that you want to get involved! There are many ways you can participate with RevampIT.',
-        '/get-involved/volunteer': 'You\'re interested in volunteering with us? Wonderful - volunteers are the heart of RevampIT!',
+        '/get-involved': 'Fantastic that you want to get involved! There are many ways you can participate with Revamp-IT.',
+        '/get-involved/volunteer': 'You\'re interested in volunteering with us? Wonderful - volunteers are the heart of Revamp-IT!',
         '/get-involved/donate': 'Thank you for wanting to support us! Your donation helps us advance our mission.',
         '/get-involved/internships': 'You\'re looking at our internship opportunities? Perfect - we offer exciting learning experiences!',
         '/get-involved/partnerships': 'Thinking about a partnership? Great - together we can achieve more!',
@@ -193,8 +193,8 @@ export class ModernChatbotEngine {
       case '/help':
         return {
           content: language === 'de' ?
-            'Ich helfe Ihnen gerne bei der Navigation auf unserer Website! Fragen Sie mich nach unseren Services, dem Online-Shop, Workshops oder wie Sie bei RevampIT mitmachen können.' :
-            'I\'m happy to help you navigate our website! Ask me about our services, online shop, workshops, or how to get involved with RevampIT.',
+            'Ich helfe Ihnen gerne bei der Navigation auf unserer Website! Fragen Sie mich nach unseren Services, dem Online-Shop, Workshops oder wie Sie bei Revamp-IT mitmachen können.' :
+            'I\'m happy to help you navigate our website! Ask me about our services, online shop, workshops, or how to get involved with Revamp-IT.',
           suggestions: this.getNavigationSuggestions(context),
           confidence: 1.0,
           responseType: 'informational'

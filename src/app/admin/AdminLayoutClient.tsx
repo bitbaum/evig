@@ -151,7 +151,7 @@ export function AdminLayoutClient({
             <Link href="/admin" className="flex items-center gap-2">
               <Image
                 src="/images/logo/revampit-favicon.png"
-                alt="RevampIT"
+                alt="Revamp-IT"
                 width={32}
                 height={32}
                 className="w-8 h-8 object-contain"
@@ -165,7 +165,7 @@ export function AdminLayoutClient({
             <Link href="/admin" className="mx-auto">
               <Image
                 src="/images/logo/revampit-favicon.png"
-                alt="RevampIT"
+                alt="Revamp-IT"
                 width={32}
                 height={32}
                 className="w-8 h-8 object-contain"

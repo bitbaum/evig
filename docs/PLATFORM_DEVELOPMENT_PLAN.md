@@ -12,7 +12,7 @@ This plan outlines the transformation of RevampIT from a basic website into a co
 
 ### Current Challenges
 1. **Limited Repair Capacity**: Insufficient repair technicians to meet demand
-2. **Space Constraints**: Limited workshop space at headquarters (Badenerstrasse 816, Zürich)
+2. **Space Constraints**: Limited workshop space at headquarters (Birmensdorferstrasse 379, Zürich)
 3. **Storage Limitations**: Inadequate storage for inventory and refurbished devices
 4. **Centralized Operations**: All services currently concentrated at single location
 

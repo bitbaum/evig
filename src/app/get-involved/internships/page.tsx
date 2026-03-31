@@ -5,10 +5,11 @@ import { InfoSection, NumberedSteps, Callout } from '@/components/community/Info
 import { PageSection } from '@/components/community/PageSection'
 import { INTERNSHIPS_PAGE } from '@/config/community'
 import { responsiveTypography } from '@/lib/responsive'
+import { ORG, CONTACT } from '@/config/org'
 
 export const metadata: Metadata = {
-  title: 'Praktika | RevampIT',
-  description: 'Sammeln Sie praktische Erfahrungen in Technologie und Nachhaltigkeit durch unser Praktikumsprogramm.'
+  title: `Praktika | ${ORG.name}`,
+  description: 'Sammeln Sie praktische Erfahrungen in Technologie und Nachhaltigkeit durch unser Praktikumsprogramm.',
 }
 
 export default function InternshipsPage() {
@@ -17,7 +18,7 @@ export default function InternshipsPage() {
       title="Praktikumsmöglichkeiten"
       description="Sammeln Sie wertvolle Erfahrungen in Technologie und Nachhaltigkeit und bewirken Sie echte Veränderungen."
       ctaText="Für Praktikum bewerben"
-      ctaHref="mailto:empfang@revamp-it.ch"
+      ctaHref={`mailto:${CONTACT.email}`}
     >
       <div className="space-y-16">
         {/* Overview Section */}

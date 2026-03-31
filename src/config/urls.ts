@@ -1,6 +1,6 @@
 /**
  * URL Configuration - Single Source of Truth
- * 
+ *
  * All application URLs should be defined here.
  * Following dev guide: docs/development/DEV_GUIDE.md - SSOT principle
  */
@@ -9,19 +9,10 @@
  * Application base URL
  * Used for email verification links, password reset links, etc.
  */
-export const APP_URL = 
-  process.env.NEXTAUTH_URL || 
-  process.env.NEXT_PUBLIC_APP_URL || 
+export const APP_URL =
+  process.env.NEXTAUTH_URL ||
+  process.env.NEXT_PUBLIC_APP_URL ||
   'http://localhost:3000'
-
-/**
- * CMS API URL
- * Used for CMS API integration
- */
-export const CMS_API_URL = 
-  process.env.NEXT_PUBLIC_REBOOT_CONTENT_URL || 
-  process.env.CMS_API_URL || 
-  'http://localhost:3001'
 
 /**
  * Meilisearch URL
@@ -46,7 +37,6 @@ export const OLLAMA_URL =
  */
 export const URLS = {
   APP: APP_URL,
-  CMS_API: CMS_API_URL,
   MEILISEARCH: MEILISEARCH_URL,
   OLLAMA: OLLAMA_URL,
 } as const

@@ -57,21 +57,24 @@ export const IT_HILFE = {
 
 // ============================================================================
 // REVAMPIT STORE (Physical location - Werkstatt & Laden)
+// Derived from SSOT: @/config/org
 // ============================================================================
 
+import { ORG, LOCATIONS, CONTACT } from '@/config/org'
+
 export const REVAMPIT_STORE = {
-  name: 'RevampIT Werkstatt',
-  address: 'Birmensdorferstr. 379',
-  postalCode: '8055',
-  city: 'Zürich',
-  canton: 'Zürich',
-  lat: 47.3815,
-  lng: 8.5237,
-  googleMapsUrl: 'https://www.google.com/maps/place/Birmensdorferstrasse+379,+8055+Zürich',
+  name: `${ORG.name} Werkstatt`,
+  address: LOCATIONS.store.street,
+  postalCode: LOCATIONS.store.postalCode,
+  city: LOCATIONS.store.city,
+  canton: LOCATIONS.store.canton,
+  lat: LOCATIONS.store.lat,
+  lng: LOCATIONS.store.lng,
+  googleMapsUrl: LOCATIONS.store.googleMapsUrl,
   description: 'Unser Laden und Werkstatt in Zürich Wiedikon',
 } as const
 
-export const REVAMPIT_NOTIFICATION_EMAIL = 'georgy.butaev@revamp-it.ch'
+export const REVAMPIT_NOTIFICATION_EMAIL = process.env.NOTIFICATION_EMAIL || CONTACT.email
 
 export const MATCH_SCORES = {
   PER_SKILL: 20,

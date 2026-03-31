@@ -1,4 +1,5 @@
 import React from 'react'
+import { EXTERNAL_LINKS } from '@/config/org'
 
 /**
  * Navigation Configuration - SSOT for all navigation data
@@ -207,7 +208,7 @@ export const mainNavigation: NavigationItem[] = [
       },
       {
         name: 'Wiki',
-        href: 'https://revamp-it.ch/index.php/de/wiki-de',
+        href: EXTERNAL_LINKS.wiki,
         description: 'Gemeinsames Wissensportal',
         external: true,
       },

@@ -1,8 +1,9 @@
 import { Metadata } from 'next'
+import { ORG, CONTACT, LOCATIONS } from '@/config/org'
 
 export const metadata: Metadata = {
-  title: 'Datenschutzerklärung | RevampIT',
-  description: 'Datenschutzerklärung von RevampIT',
+  title: `Datenschutzerklärung | ${ORG.name}`,
+  description: `Datenschutzerklärung von ${ORG.name}`,
 }
 
 export default function DatenschutzPage() {
@@ -13,10 +14,10 @@ export default function DatenschutzPage() {
       <section className="prose prose-neutral max-w-none space-y-6">
         <h2>1. Verantwortliche Stelle</h2>
         <p>
-          Verein RevampIT<br />
-          Birmensdorferstrasse 379<br />
-          8055 Zürich, Schweiz<br />
-          E-Mail: empfang@revamp-it.ch
+          {ORG.legalName}<br />
+          {LOCATIONS.store.street}<br />
+          {LOCATIONS.store.postalCode} {LOCATIONS.store.city}, {LOCATIONS.store.country}<br />
+          E-Mail: {CONTACT.email}
         </p>
 
         <h2>2. Erhebung und Verarbeitung personenbezogener Daten</h2>
@@ -73,7 +74,7 @@ export default function DatenschutzPage() {
           <li>Widerruf erteilter Einwilligungen</li>
         </ul>
         <p>
-          Wenden Sie sich dazu an: <a href="mailto:empfang@revamp-it.ch" className="text-green-700 underline">empfang@revamp-it.ch</a>
+          Wenden Sie sich dazu an: <a href={`mailto:${CONTACT.email}`} className="text-green-700 underline">{CONTACT.email}</a>
         </p>
 
         <h2>8. Anwendbares Recht</h2>

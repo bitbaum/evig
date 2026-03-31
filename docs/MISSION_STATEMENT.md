@@ -1,8 +1,8 @@
-# RevampIT Mission Statement
+# Revamp-IT Mission Statement
 
 ## Official Mission
 
-**RevampIT is a Swiss nonprofit organization dedicated to enabling free exchange of technology between individuals and groups, promoting open-source hardware and software as the ideal form of human collaboration.**
+**Revamp-IT is a Swiss nonprofit organization dedicated to enabling free exchange of technology between individuals and groups, promoting open-source hardware and software as the ideal form of human collaboration.**
 
 ---
 
@@ -64,7 +64,7 @@ We enable **free, nonprofit exchange** of technology between individuals and gro
 
 ## Nonprofit Status
 
-RevampIT operates as a **Swiss nonprofit organization** with the following principles:
+Revamp-IT operates as a **Swiss nonprofit organization** with the following principles:
 
 - ✅ **No Profit Distribution**: All surplus funds reinvested into mission
 - ✅ **Public Benefit**: Activities serve public good
@@ -112,8 +112,8 @@ RevampIT operates as a **Swiss nonprofit organization** with the following princ
 
 ## Contact
 
-- **Organization**: RevampIT
-- **Location**: Badenerstrasse 816, 8048 Zürich, Switzerland
+- **Organization**: Revamp-IT
+- **Location**: Birmensdorferstrasse 379, 8055 Zürich, Switzerland
 - **Website**: https://revamp-it.ch
 - **Legal Status**: Swiss Nonprofit Organization
 

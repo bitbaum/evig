@@ -92,7 +92,7 @@ export function ListingCard({ listing, variant = 'default', className = '' }: Li
         {listing.is_revampit && !isVerified && (
           <div className="absolute top-2 right-2">
             <span className="inline-flex items-center gap-1 px-2 py-0.5 text-xs font-semibold rounded-full bg-green-100 text-green-800">
-              {!isCompact && 'RevampIT'}
+              {!isCompact && 'Revamp-IT'}
             </span>
           </div>
         )}

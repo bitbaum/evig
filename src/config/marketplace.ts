@@ -180,7 +180,7 @@ export const GRATIS_CONFIG = {
 
 export const VERIFICATION_CONFIG = {
   badge: {
-    label: 'Geprüft von RevampIT',
+    label: 'Geprüft von Revamp-IT',
     shortLabel: 'Geprüft',
     color: 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300',
     borderColor: 'border-green-200 dark:border-green-800',
@@ -341,12 +341,6 @@ export const SPEC_FILTER_CONFIG: Record<string, SpecFilterDef[]> = {
 export function getSpecFiltersForCategory(categoryValue: string): SpecFilterDef[] {
   return SPEC_FILTER_CONFIG[categoryValue] || []
 }
-
-/**
- * @deprecated Use MARKETPLACE_CATEGORY_VALUES instead.
- * Backward-compatible alias — returns the same numeric ID array.
- */
-export const MARKETPLACE_CATEGORIES = MARKETPLACE_CATEGORY_VALUES
 
 // ============================================================================
 // Report Reasons

@@ -15,12 +15,13 @@ import {
   Clock
 } from 'lucide-react'
 import { PageHero } from '@/components/layout/PageHero'
+import { ORG, CONTACT, LOCATIONS, OPENING_HOURS } from '@/config/org'
 
 export const metadata: Metadata = {
-  title: 'Hardware-Recycling | RevampIT',
+  title: `Hardware-Recycling | ${ORG.name}`,
   description: 'Verantwortungsvolles Recycling und Aufbereitung von IT-Geräten. Sichere Datenlöschung, kostenloser Abholservice und nachhaltige IT-Lösungen.',
   openGraph: {
-    title: 'Hardware-Recycling | RevampIT',
+    title: `Hardware-Recycling | ${ORG.name}`,
     description: 'Nachhaltige IT-Lösungen durch verantwortungsvolles Recycling und Aufbereitung von IT-Geräten.',
     type: 'website',
   },
@@ -70,8 +71,8 @@ export default function HardwareRecyclingPage() {
             'description': 'Verantwortungsvolles Recycling und Aufbereitung von IT-Geräten',
             'provider': {
               '@type': 'Organization',
-              'name': 'RevampIT',
-              'url': 'https://revampit.org'
+              'name': ORG.name,
+              'url': ORG.website,
             },
             'serviceType': 'IT Equipment Recycling',
             'areaServed': {
@@ -202,8 +203,8 @@ export default function HardwareRecyclingPage() {
                   <MapPin className="w-6 h-6 sm:w-8 sm:h-8 text-green-600 mb-3 sm:mb-4" />
                   <h3 className="text-lg sm:text-xl font-bold mb-3 sm:mb-4">Standorte</h3>
                   <div className="space-y-2 sm:space-y-3 text-sm sm:text-base text-gray-600">
-                    <p><strong>Verkauf:</strong><br />Birmensdorferstr. 379, 8055 Zürich</p>
-                    <p><strong>Lager:</strong><br />Badenerstr. 816, 8048 Zürich<br />(Nur nach Vereinbarung)</p>
+                    <p><strong>Verkauf:</strong><br />{LOCATIONS.store.full}</p>
+                    <p><strong>Lager:</strong><br />{LOCATIONS.warehouse.full}<br />{LOCATIONS.warehouse.note}</p>
                   </div>
                 </div>
 
@@ -213,7 +214,7 @@ export default function HardwareRecyclingPage() {
                     <h3 className="text-lg sm:text-xl font-bold mb-3 sm:mb-4">Kontakt</h3>
                     <p className="text-sm sm:text-base text-gray-600">
                       <strong>Telefon:</strong><br />
-                      +41 44 586 86 86
+                      {CONTACT.phone}
                     </p>
                   </div>
 
@@ -221,8 +222,8 @@ export default function HardwareRecyclingPage() {
                     <Clock className="w-6 h-6 sm:w-8 sm:h-8 text-green-600 mb-3 sm:mb-4" />
                     <h3 className="text-lg sm:text-xl font-bold mb-3 sm:mb-4">Öffnungszeiten</h3>
                     <div className="text-sm sm:text-base text-gray-600 space-y-1">
-                      <p>Montag: 9:00-12:00</p>
-                      <p>Dienstag-Freitag: 13:00-17:00</p>
+                      <p>Montag: {OPENING_HOURS.monday}</p>
+                      <p>Dienstag - Freitag: {OPENING_HOURS.tuesdayToFriday}</p>
                     </div>
                   </div>
                 </div>

@@ -27,8 +27,8 @@ export default function IoTSolutionsPage() {
             'description': 'Ethische IoT-Entwicklungsvision für 2026-2028',
             'provider': {
               '@type': 'Organization',
-              'name': 'RevampIT',
-              'url': 'https://revampit.org'
+              'name': 'Revamp-IT',
+              'url': 'https://revamp-it.ch'
             },
             'serviceType': 'IoT-Lösungen',
             'areaServed': {

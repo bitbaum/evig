@@ -13,7 +13,7 @@ export function Logo({ className, href = '/', showText = true }: LogoProps) {
     <Link href={href} className={cn('group', className)}>
       <Image
         src="/images/logo/revampit-logo.png"
-        alt="RevampIT"
+        alt="Revamp-IT"
         width={200}
         height={48}
         className="h-12 w-auto object-contain transition-transform duration-200 group-hover:scale-105"

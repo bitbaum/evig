@@ -4,7 +4,7 @@ last_modified_date: 2026-01-07
 last_modified_summary: Created SSOT for project context (mission, tech stack, location, database)
 ---
 
-# RevampIT Shared Context (SSOT)
+# Revamp-IT Shared Context (SSOT)
 
 **Single Source of Truth** for project context used by all agent files and documentation.
 
@@ -12,9 +12,9 @@ last_modified_summary: Created SSOT for project context (mission, tech stack, lo
 
 ## Project Overview
 
-**RevampIT** is a Swiss non-profit organization dedicated to **enabling free exchange of technology** between individuals and groups, promoting **open-source hardware and software** as the ideal form of human collaboration.
+**Revamp-IT** is a Swiss non-profit organization dedicated to **enabling free exchange of technology** between individuals and groups, promoting **open-source hardware and software** as the ideal form of human collaboration.
 
-**Location**: Badenerstrasse 816, 8048 Zürich, Switzerland
+**Location**: Birmensdorferstrasse 379, 8055 Zürich, Switzerland
 
 **Full Mission Statement**: See `docs/MISSION_STATEMENT.md`  
 **Legal Compliance**: See `docs/LEGAL_NONPROFIT_COMPLIANCE.md`
@@ -25,8 +25,8 @@ last_modified_summary: Created SSOT for project context (mission, tech stack, lo
 
 | Layer | Technology | Notes |
 |-------|------------|-------|
-| Frontend | Next.js 14 (App Router), TypeScript, Tailwind CSS | Port 3000 |
-| Backend | Next.js API Routes, Express CMS API | Port 3001 |
+| Frontend | Next.js 16 (App Router), TypeScript, Tailwind CSS | Port 3000 |
+| Backend | Next.js API Routes | — |
 | E-commerce | Custom (inventory-based) | Integrated |
 | Database | PostgreSQL (5433), Redis (6380), Meilisearch (7700) | |
 | Deploy | Vercel, Docker, GitHub Actions | |
@@ -62,7 +62,6 @@ src/
 ├── config/               # Constants (database.ts, urls.ts)
 └── types/                # TypeScript definitions
 
-cms-api/src/migrations/   # Database migrations (PROTECTED)
 scripts/db/migrations/    # Migration scripts (PROTECTED)
 ```
 

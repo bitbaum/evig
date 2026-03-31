@@ -5,19 +5,20 @@ import { InfoSection, NumberedSteps, Callout } from '@/components/community/Info
 import { PageSection } from '@/components/community/PageSection'
 import { PARTNERSHIPS_PAGE } from '@/config/community'
 import { responsiveTypography } from '@/lib/responsive'
+import { ORG, CONTACT } from '@/config/org'
 
 export const metadata: Metadata = {
-  title: 'Partnerschaften | RevampIT',
-  description: 'Schliessen Sie sich mit RevampIT zusammen, um nachhaltige Technologielösungen zu schaffen und eine dauerhafte Wirkung zu erzielen.'
+  title: `Partnerschaften | ${ORG.name}`,
+  description: `Schliessen Sie sich mit ${ORG.name} zusammen, um nachhaltige Technologielösungen zu schaffen und eine dauerhafte Wirkung zu erzielen.`,
 }
 
 export default function PartnershipsPage() {
   return (
     <InvolvementPageLayout
       title="Partnerschaftsmöglichkeiten"
-      description="Schliessen Sie sich mit RevampIT zusammen, um nachhaltige Technologielösungen zu schaffen und eine dauerhafte Wirkung zu erzielen."
+      description={`Schliessen Sie sich mit ${ORG.name} zusammen, um nachhaltige Technologielösungen zu schaffen und eine dauerhafte Wirkung zu erzielen.`}
       ctaText="Partner werden"
-      ctaHref="mailto:empfang@revamp-it.ch"
+      ctaHref={`mailto:${CONTACT.email}`}
     >
       <div className="space-y-16">
         {/* Overview Section */}

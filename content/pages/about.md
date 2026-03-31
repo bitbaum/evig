@@ -1,12 +1,12 @@
 ---
-title: About RevampIT
+title: About Revamp-IT
 slug: about
-description: Seit 15 Jahren setzen wir uns gegen die vorschnelle Ausmusterung von Computern ein und fördern nachhaltige IT-Praktiken.
+description: Seit über 20 Jahren setzen wir uns gegen die vorschnelle Ausmusterung von Computern ein und fördern nachhaltige IT-Praktiken.
 ---
 
 # Technik ein zweites Leben geben
 
-Seit 15 Jahren setzen wir uns gegen die vorschnelle Ausmusterung von Computern ein und fördern nachhaltige IT-Praktiken.
+Seit über 20 Jahren setzen wir uns gegen die vorschnelle Ausmusterung von Computern ein und fördern nachhaltige IT-Praktiken.
 
 ## REVAMPED-Zertifizierung
 
@@ -18,9 +18,9 @@ Unser gemeinsames Wissensportal
 
 ## Unsere Mission
 
-Bei RevampIT glauben wir an das Motto "10 Jahre sind das Minimum für ein Velo – und für einen Laptop auch!" Als gemeinnütziger Verein verändern wir seit 2009 den Umgang mit Technik. Unsere Mission ist klar: Die Lebensdauer von IT-Geräten verlängern und Elektroschrott durch Reparatur, Wiederaufbereitung und nachhaltige Praktiken reduzieren.
+Bei Revamp-IT glauben wir an das Motto "10 Jahre sind das Minimum für ein Velo – und für einen Laptop auch!" Als gemeinnütziger Verein verändern wir seit 2003 den Umgang mit Technik. Unsere Mission ist klar: Die Lebensdauer von IT-Geräten verlängern und Elektroschrott durch Reparatur, Wiederaufbereitung und nachhaltige Praktiken reduzieren.
 
-RevampIT Schaufenster mit Computern und Geräten
+Revamp-IT Schaufenster mit Computern und Geräten
 
 In unseren Räumlichkeiten – einer ehemaligen Bank – haben wir einen Treffpunkt geschaffen, wo Technik und Nachhaltigkeit zusammenkommen. Unser Ansatz verbindet Hardware-Recycling mit Open Source-Software und schafft so nachhaltige IT-Lösungen für Mensch und Umwelt.
 
@@ -49,7 +49,7 @@ Wir schaffen sinnvolle Arbeitsplätze für Menschen, die es auf dem regulären A
 
 ## Unsere Geschichte
 
-2009 als kleine Reparaturwerkstatt gegründet, ist RevampIT heute eine Bewegung, die den Umgang mit Technik nachhaltig verändert. Was mit einer einfachen Idee begann – Technik länger nutzen – ist heute ein Vorbild für nachhaltige IT in der Schweiz.
+2003 als kleine Reparaturwerkstatt gegründet, ist Revamp-IT heute eine Bewegung, die den Umgang mit Technik nachhaltig verändert. Was mit einer einfachen Idee begann – Technik länger nutzen – ist heute ein Vorbild für nachhaltige IT in der Schweiz.
 
 Unser Team aus 8 engagierten Menschen setzt sich täglich für nachhaltige IT ein. Wir sind Anlaufstelle für Privatpersonen und Unternehmen, die ihren ökologischen Fussabdruck reduzieren und trotzdem auf zuverlässige Technik setzen wollen.
 
@@ -73,20 +73,20 @@ Kontaktieren Sie uns, wenn Sie mehr über unsere Arbeit erfahren möchten oder s
 ## Kontakt
 
 **Verkaufsstelle**
-Birmensdorferstr. 379
+Birmensdorferstrasse 379
 8055 Zürich
 Schweiz
 
 **Lager**
-Badenerstr. 816
+Badenerstrasse 816
 8048 Zürich
 (nur nach Terminvereinbarung)
 
-**Telefon:** +41 44 586 86 86
+**Telefon:** +41 (0)43 960 32 64
 **Email:** empfang@revamp-it.ch
 
 **Öffnungszeiten**
 Montag: 9:00 - 12:00
 Dienstag - Freitag: 13:00 - 17:00
 
-© 2025 RevampIT. Alle Rechte vorbehalten.
+© 2025 Revamp-IT. Alle Rechte vorbehalten.

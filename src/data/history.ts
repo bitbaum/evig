@@ -6,6 +6,7 @@
  */
 
 import { getDefaultNumeric } from '@/lib/org-numbers.defaults'
+import { ORG, LOCATIONS } from '@/config/org'
 
 export interface Milestone {
   year: number
@@ -36,10 +37,10 @@ export interface HistoryConfig {
  */
 export const HISTORY_CONFIG: HistoryConfig = {
   founding: {
-    title: 'Die Gründung von RevampIT',
+    title: `Die Gründung von ${ORG.name}`,
     subtitle: 'Vom Käsekeller zur Bewegung',
     paragraphs: [
-      'RevampIT wurde im Dezember 2003 in Zürich gegründet – geboren aus einer einfachen Beobachtung: Immer mehr brauchbare Computer landeten im Müll. "Da muss etwas passieren", war der Gedanke, der alles ins Rollen brachte.',
+      `${ORG.name} wurde im Dezember ${ORG.foundingYear} in Zürich gegründet – geboren aus einer einfachen Beobachtung: Immer mehr brauchbare Computer landeten im Müll. "Da muss etwas passieren", war der Gedanke, der alles ins Rollen brachte.`,
       'Der erste Standort war ein alter Käsekeller in der Toni Molkerei. Dort entstand die Idee, die bis heute trägt: Hardware-Recycling und Linux kombinieren. Denn mit Open-Source-Software funktionieren auch ältere Geräte noch jahrelang.',
       'Was als kleines Projekt begann, wurde zur Bewegung. Ohne gross nach Leuten zu suchen, kamen immer wieder Menschen dazu, die sagten: "Toll, was ihr da macht." Heute, über 20 Jahre später, verarbeiten wir jährlich rund 1000 Geräte – davon werden etwa 150 aufbereitet und verkauft, der Rest geht in Ersatzteilgewinnung und fachgerechtes Recycling.',
     ],
@@ -50,7 +51,7 @@ export const HISTORY_CONFIG: HistoryConfig = {
       year: 2003,
       title: 'Gründung',
       description:
-        'RevampIT wird in der Toni Molkerei in Zürich gegründet – in einem alten Käsekeller. Die Vision: Brauchbare Computer vor dem Müll retten.',
+        `${ORG.name} wird in der Toni Molkerei in Zürich gegründet – in einem alten Käsekeller. Die Vision: Brauchbare Computer vor dem Müll retten.`,
       type: 'founding',
       highlight: true,
     },
@@ -87,14 +88,14 @@ export const HISTORY_CONFIG: HistoryConfig = {
       year: 2015,
       title: 'Zwei Standorte',
       description:
-        'Laden an der Birmensdorferstrasse, Lager an der Badenerstrasse. RevampIT etabliert sich im Quartier.',
+        `Laden an der ${LOCATIONS.store.street}, Lager an der ${LOCATIONS.warehouse.street}. ${ORG.name} etabliert sich im Quartier.`,
       type: 'expansion',
     },
     {
       year: 2017,
       title: 'Neue Räumlichkeiten',
       description:
-        'Umzug in die ehemalige Bank an der Birmensdorferstrasse 379. Mehr Platz für Werkstatt, Laden und Community.',
+        `Umzug in die ehemalige Bank an der ${LOCATIONS.store.street}. Mehr Platz für Werkstatt, Laden und Community.`,
       type: 'expansion',
       highlight: true,
     },
@@ -116,7 +117,7 @@ export const HISTORY_CONFIG: HistoryConfig = {
       year: 2024,
       title: '21 Jahre nachhaltige IT',
       description:
-        'Rund 1000 Geräte pro Jahr verarbeitet, davon ~150 verkauft. Über 43 Tonnen CO₂ pro Jahr eingespart. ~40% Erfolgsquote bei Praktika. RevampIT ist Vorbild für nachhaltige IT in der Schweiz.',
+        `Rund 1000 Geräte pro Jahr verarbeitet, davon ~150 verkauft. Über 43 Tonnen CO₂ pro Jahr eingespart. ~40% Erfolgsquote bei Praktika. ${ORG.name} ist Vorbild für nachhaltige IT in der Schweiz.`,
       type: 'achievement',
       highlight: true,
     },
@@ -124,7 +125,7 @@ export const HISTORY_CONFIG: HistoryConfig = {
 
   currentState: {
     teamSize: getDefaultNumeric('team_size_community'),
-    location: 'Birmensdorferstrasse 379, 8055 Zürich',
+    location: LOCATIONS.store.full,
     yearsActive: new Date().getFullYear() - getDefaultNumeric('founding_year'),
   },
 }

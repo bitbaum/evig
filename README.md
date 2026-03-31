@@ -1,4 +1,4 @@
-# RevampIT
+# Revamp-IT
 
 Technology deserves a second life. So does the right to use it.
 
@@ -181,4 +181,4 @@ MIT
 
 ---
 
-RevampIT -- Badenerstrasse 816, 8048 Zurich -- [revamp-it.ch](https://revamp-it.ch)
+Revamp-IT -- Birmensdorferstrasse 379, 8055 Zürich -- [revamp-it.ch](https://revamp-it.ch)

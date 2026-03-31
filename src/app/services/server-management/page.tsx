@@ -27,8 +27,8 @@ export default function ServerManagementPage() {
             'description': 'Ethische Server-Management-Vision für 2026-2028',
             'provider': {
               '@type': 'Organization',
-              'name': 'RevampIT',
-              'url': 'https://revampit.org'
+              'name': 'Revamp-IT',
+              'url': 'https://revamp-it.ch'
             },
             'serviceType': 'Server-Management',
             'areaServed': {

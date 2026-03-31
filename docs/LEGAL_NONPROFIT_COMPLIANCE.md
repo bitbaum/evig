@@ -1,8 +1,8 @@
-# RevampIT - Nonprofit Legal Compliance & Mission Statement
+# Revamp-IT - Nonprofit Legal Compliance & Mission Statement
 
 ## Swiss Nonprofit Organization Status
 
-RevampIT operates as a **Swiss nonprofit organization (gemeinnützige Organisation)** under Swiss law. This document outlines our legal compliance framework and mission alignment.
+Revamp-IT operates as a **Swiss nonprofit organization (gemeinnützige Organisation)** under Swiss law. This document outlines our legal compliance framework and mission alignment.
 
 ---
 
@@ -11,7 +11,7 @@ RevampIT operates as a **Swiss nonprofit organization (gemeinnützige Organisati
 ### Core Legal Principles
 
 1. **No Profit Distribution**
-   - ✅ RevampIT **does not distribute profits** to members, founders, or shareholders
+   - ✅ Revamp-IT **does not distribute profits** to members, founders, or shareholders
    - ✅ All surplus funds are reinvested into the organization's mission
    - ✅ No dividends or profit-sharing schemes
 
@@ -32,11 +32,11 @@ RevampIT operates as a **Swiss nonprofit organization (gemeinnützige Organisati
 
 ---
 
-## RevampIT Mission Statement
+## Revamp-IT Mission Statement
 
 ### Primary Mission: Technology Redistribution & Open Source Advocacy
 
-RevampIT's mission is to **enable free exchange of technology** between individuals and groups, promoting open-source hardware and software as the ideal form of human collaboration.
+Revamp-IT's mission is to **enable free exchange of technology** between individuals and groups, promoting open-source hardware and software as the ideal form of human collaboration.
 
 ### Core Activities (Nonprofit-Compliant)
 
@@ -217,14 +217,14 @@ RevampIT's mission is to **enable free exchange of technology** between individu
 
 ## Mission Statement (Official)
 
-**RevampIT is a Swiss nonprofit organization dedicated to enabling free exchange of technology between individuals and groups, promoting open-source hardware and software as the ideal form of human collaboration. We redistribute technology (computers, hardware, software, compute resources) on a nonprofit basis, facilitate subscription exchange when needed, and provide environmental impact measurement tools to enable individuals to understand their true environmental footprint. Our goal is to enable open-source solutions to compete fairly with proprietary software, ultimately demonstrating that decentralized, open-source development can exceed the capacities of centralized corporations. We operate beyond national boundaries, promoting technological collaboration and exchange that serves the public good.**
+**Revamp-IT is a Swiss nonprofit organization dedicated to enabling free exchange of technology between individuals and groups, promoting open-source hardware and software as the ideal form of human collaboration. We redistribute technology (computers, hardware, software, compute resources) on a nonprofit basis, facilitate subscription exchange when needed, and provide environmental impact measurement tools to enable individuals to understand their true environmental footprint. Our goal is to enable open-source solutions to compete fairly with proprietary software, ultimately demonstrating that decentralized, open-source development can exceed the capacities of centralized corporations. We operate beyond national boundaries, promoting technological collaboration and exchange that serves the public good.**
 
 ---
 
 ## Contact & Legal
 
-- **Organization**: RevampIT
-- **Location**: Badenerstrasse 816, 8048 Zürich, Switzerland
+- **Organization**: Revamp-IT
+- **Location**: Birmensdorferstrasse 379, 8055 Zürich, Switzerland
 - **Legal Status**: Swiss Nonprofit Organization
 - **Mission**: Technology Redistribution & Open Source Advocacy
 

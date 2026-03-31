@@ -15,6 +15,7 @@ import { ResponseQualityService } from './ResponseQualityService'
 import { IntelligentResponder } from './IntelligentResponder'
 import { enhanceSuggestion } from '@/lib/suggestion-utils'
 import { logger } from '@/lib/logger'
+import { LOCATIONS } from '@/config/org'
 
 export class ChatbotOrchestrator {
   private semanticMatcher: SemanticMatchingService
@@ -251,8 +252,8 @@ export class ChatbotOrchestrator {
       if (messageLower.includes('how') || messageLower.includes('start') || messageLower.includes('wie') || messageLower.includes('anfangen')) {
         return {
           content: language === 'de' ?
-            'Sie sind bereits auf der richtigen Seite für Freiwilligenarbeit! Hier finden Sie alle Informationen, wie Sie bei RevampIT ehrenamtlich helfen können. Der erste Schritt ist oft ein Gespräch mit uns.' :
-            'You\'re already on the right page for volunteering! Here you\'ll find all information on how you can volunteer with RevampIT. The first step is often a conversation with us.',
+            'Sie sind bereits auf der richtigen Seite für Freiwilligenarbeit! Hier finden Sie alle Informationen, wie Sie bei Revamp-IT ehrenamtlich helfen können. Der erste Schritt ist oft ein Gespräch mit uns.' :
+            'You\'re already on the right page for volunteering! Here you\'ll find all information on how you can volunteer with Revamp-IT. The first step is often a conversation with us.',
           suggestions: [
             {
               label: language === 'de' ? '💬 Gespräch vereinbaren' : '💬 Schedule Meeting',
@@ -414,8 +415,8 @@ export class ChatbotOrchestrator {
 
       return {
         content: language === 'de' ?
-          `Sie finden uns an der Badenerstrasse 816 in 8048 Zürich. Wir sind gut mit öffentlichen Verkehrsmitteln erreichbar.${pageContext}` :
-          `You can find us at Badenerstrasse 816 in 8048 Zurich. We are easily accessible by public transport.${pageContext}`,
+          `Sie finden uns an der ${LOCATIONS.store.full}. Wir sind gut mit öffentlichen Verkehrsmitteln erreichbar.${pageContext}` :
+          `You can find us at ${LOCATIONS.store.full}. We are easily accessible by public transport.${pageContext}`,
         suggestions: [
           {
             label: language === 'de' ? '📍 Wegbeschreibung' : '📍 Directions',

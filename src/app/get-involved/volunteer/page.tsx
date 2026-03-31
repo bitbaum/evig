@@ -5,10 +5,11 @@ import { InfoSection, NumberedSteps, Callout } from '@/components/community/Info
 import { PageSection } from '@/components/community/PageSection'
 import { VOLUNTEER_PAGE } from '@/config/community'
 import { responsiveTypography } from '@/lib/responsive'
+import { ORG, CONTACT } from '@/config/org'
 
 export const metadata: Metadata = {
-  title: 'Freiwilligenarbeit | RevampIT',
-  description: 'Schliessen Sie sich unserem Team engagierter Freiwilliger an und bewirken Sie etwas in Ihrer Gemeinschaft durch Technologie und Nachhaltigkeit.'
+  title: `Freiwilligenarbeit | ${ORG.name}`,
+  description: 'Schliessen Sie sich unserem Team engagierter Freiwilliger an und bewirken Sie etwas in Ihrer Gemeinschaft durch Technologie und Nachhaltigkeit.',
 }
 
 export default function VolunteerPage() {
@@ -17,7 +18,7 @@ export default function VolunteerPage() {
       title="Freiwilliger werden"
       description="Schliessen Sie sich unserem Team engagierter Freiwilliger an und helfen Sie, Technologie nachhaltig und für alle zugänglich zu machen."
       ctaText="Freiwilligenarbeit beginnen"
-      ctaHref="mailto:empfang@revamp-it.ch"
+      ctaHref={`mailto:${CONTACT.email}`}
     >
       <div className="space-y-16">
         {/* Overview Section */}

@@ -5,10 +5,11 @@ import { InfoSection, NumberedSteps, Callout } from '@/components/community/Info
 import { PageSection } from '@/components/community/PageSection'
 import { WORK_REINTEGRATION_PAGE } from '@/config/community'
 import { responsiveTypography } from '@/lib/responsive'
+import { ORG, CONTACT } from '@/config/org'
 
 export const metadata: Metadata = {
-  title: 'Arbeitsreintegration | RevampIT',
-  description: 'Nehmen Sie an unserem Arbeitsreintegrationsprogramm teil, um wertvolle Fähigkeiten und Erfahrungen in der Technologie zu sammeln und dabei Ihre Karriere wieder aufzubauen.'
+  title: `Arbeitsreintegration | ${ORG.name}`,
+  description: 'Nehmen Sie an unserem Arbeitsreintegrationsprogramm teil, um wertvolle Fähigkeiten und Erfahrungen in der Technologie zu sammeln und dabei Ihre Karriere wieder aufzubauen.',
 }
 
 export default function WorkReintegrationPage() {
@@ -17,7 +18,7 @@ export default function WorkReintegrationPage() {
       title="Arbeitsreintegrationsprogramm"
       description="Schliessen Sie sich unserem unterstützenden Programm an, um Ihre Karriere in Technologie und Nachhaltigkeit wieder aufzubauen."
       ctaText="Ihre Reise beginnen"
-      ctaHref="mailto:empfang@revamp-it.ch"
+      ctaHref={`mailto:${CONTACT.email}`}
     >
       <div className="space-y-16">
         {/* Overview Section */}

@@ -1,6 +1,5 @@
 import { Metadata } from 'next'
-import { ROLES } from '@/lib/constants'
-import { requireRole } from '@/middleware/admin'
+import { requirePermission } from '@/middleware/admin'
 import Link from 'next/link'
 import {
   Wrench,
@@ -20,8 +19,8 @@ export const metadata: Metadata = {
 }
 
 export default async function RepairerServicesPage() {
-  // Require repairer role
-  await requireRole(ROLES.REPAIRER)
+  // Require repairer permission
+  await requirePermission('services')
 
   // Mock repairer services data
   const services = [

@@ -87,9 +87,9 @@ export default async function ServicePage({ params }: { params: Promise<{ servic
               'description': 'Professional data recovery and transfer services for all types of storage media.',
               'provider': {
                 '@type': 'Organization',
-                'name': 'RevampIT',
-                'url': 'https://revampit.org',
-                'logo': 'https://revampit.org/logo.png',
+                'name': 'Revamp-IT',
+                'url': 'https://revamp-it.ch',
+                'logo': 'https://revamp-it.ch/logo.png',
                 'address': {
                   '@type': 'PostalAddress',
                   'addressLocality': 'Zurich',

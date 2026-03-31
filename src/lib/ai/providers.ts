@@ -245,7 +245,7 @@ async function callOpenRouter(opts: CallOptions, cfg: ProviderRuntimeConfig): Pr
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${cfg.openRouterApiKey}`,
         'HTTP-Referer': process.env.NEXT_PUBLIC_APP_URL || 'https://revamp-it.ch',
-        'X-Title': 'RevampIT',
+        'X-Title': 'Revamp-IT',
       },
       body: JSON.stringify({
         model: OPENROUTER_MODEL,

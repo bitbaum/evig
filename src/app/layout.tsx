@@ -8,8 +8,8 @@ import "./globals.css";
 const interClassName = "";
 
 export const metadata: Metadata = {
-  title: "RevampIT",
-  description: "RevampIT - Nachhaltige Technologielösungen durch Aufarbeitung und Recycling. Helfen Sie mit, Elektroschrott zu reduzieren und Technologie für alle zugänglich zu machen.",
+  title: "Revamp-IT",
+  description: "Revamp-IT - Nachhaltige Technologielösungen durch Aufarbeitung und Recycling. Helfen Sie mit, Elektroschrott zu reduzieren und Technologie für alle zugänglich zu machen.",
   keywords: ["Elektroschrott", "Recycling", "Aufarbeitung", "nachhaltige Technologie", "Workshops", "Freiwilligenarbeit"],
 };
 

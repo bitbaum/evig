@@ -143,7 +143,7 @@ export const INVOLVEMENT_OPTIONS: InvolvementOption[] = [
 // Testimonials Configuration
 export const TESTIMONIALS: Testimonial[] = [
   {
-    quote: "As a refugee, RevampIT gave me the opportunity to work with them. I learn a lot and have the freedom to develop skills aligned with my goals. Now I write code and can learn anything I find interesting, as everyone is willing to share knowledge. This is a real community.",
+    quote: "As a refugee, Revamp-IT gave me the opportunity to work with them. I learn a lot and have the freedom to develop skills aligned with my goals. Now I write code and can learn anything I find interesting, as everyone is willing to share knowledge. This is a real community.",
     author: "G.",
     role: "Freiwilliger"
   }
@@ -177,7 +177,7 @@ export const GET_INVOLVED_CONFIG = {
   },
   coreValues: {
     title: 'Unsere Grundwerte',
-    description: 'Bei RevampIT arbeiten wir daran, Technologie zugänglich und nachhaltig zu machen, während wir unsere Gemeinschaft aufbauen.'
+    description: 'Bei Revamp-IT arbeiten wir daran, Technologie zugänglich und nachhaltig zu machen, während wir unsere Gemeinschaft aufbauen.'
   },
   cta: {
     title: 'Bereit anzufangen?',
@@ -190,8 +190,8 @@ export const GET_INVOLVED_CONFIG = {
 // Volunteer Page Content
 export const VOLUNTEER_PAGE: PageContent = {
   overview: {
-    title: 'Warum Freiwilligenarbeit bei RevampIT?',
-    content: 'Bei RevampIT glauben wir, dass jeder Zugang zu Technologie und den Fähigkeiten haben sollte, sie zu nutzen. Als Freiwilliger werden Sie Teil einer Gemeinschaft, die diese Vision verwirklicht. Ob Sie sich für Technologie, Nachhaltigkeit oder Gemeindedienst begeistern - in unserem Team ist Platz für Sie.'
+    title: 'Warum Freiwilligenarbeit bei Revamp-IT?',
+    content: 'Bei Revamp-IT glauben wir, dass jeder Zugang zu Technologie und den Fähigkeiten haben sollte, sie zu nutzen. Als Freiwilliger werden Sie Teil einer Gemeinschaft, die diese Vision verwirklicht. Ob Sie sich für Technologie, Nachhaltigkeit oder Gemeindedienst begeistern - in unserem Team ist Platz für Sie.'
   },
   benefits: [
     {
@@ -461,7 +461,7 @@ export const INTERNSHIPS_PAGE: PageContent = {
 export const PARTNERSHIPS_PAGE: PageContent = {
   overview: {
     title: 'Warum mit uns zusammenarbeiten?',
-    content: 'Bei RevampIT glauben wir an die Kraft der Zusammenarbeit, um sinnvolle Veränderungen zu bewirken. Unsere Partnerschaften kombinieren Expertise, Ressourcen und gemeinsame Werte, um nachhaltige Technologielösungen zu schaffen, die Gemeinschaften und der Umwelt zugutekommen.'
+    content: 'Bei Revamp-IT glauben wir an die Kraft der Zusammenarbeit, um sinnvolle Veränderungen zu bewirken. Unsere Partnerschaften kombinieren Expertise, Ressourcen und gemeinsame Werte, um nachhaltige Technologielösungen zu schaffen, die Gemeinschaften und der Umwelt zugutekommen.'
   },
   benefits: [
     {

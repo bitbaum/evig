@@ -2,37 +2,38 @@ import { Metadata } from 'next'
 import Link from 'next/link'
 import { Mail, Phone, MapPin, Clock, Map as MapIcon, Shield, MessageCircle } from 'lucide-react'
 import { STORE_GOOGLE_MAPS_URL, STORE_OSM_URL, WAREHOUSE_GOOGLE_MAPS_URL, WAREHOUSE_OSM_URL } from '@/lib/constants'
+import { ORG, CONTACT, LOCATIONS, OPENING_HOURS } from '@/config/org'
 import Heading from '@/components/ui/Heading'
 import { PageHero } from '@/components/layout/PageHero'
 
 export const metadata: Metadata = {
-  title: 'Kontakt | RevampIT',
-  description: 'Kontaktieren Sie RevampIT für Linux-Support, Workshops und Open-Source-Lösungen.'
+  title: `Kontakt | ${ORG.name}`,
+  description: `Kontaktieren Sie ${ORG.name} für Linux-Support, Workshops und Open-Source-Lösungen.`,
 }
 
 const contactInfo = [
   {
     title: 'E-Mail',
-    value: 'empfang@revamp-it.ch',
+    value: CONTACT.email,
     icon: Mail,
-    link: 'mailto:empfang@revamp-it.ch'
+    link: `mailto:${CONTACT.email}`,
   },
   {
     title: 'Telefon',
-    value: '+41 (0)43 960 32 64',
+    value: CONTACT.phone,
     icon: Phone,
-    link: 'tel:+41439603264'
+    link: CONTACT.phoneTel,
   },
   {
     title: 'Adresse',
-    value: 'Birmensdorferstr. 379\n8055 Zürich\nSchweiz',
+    value: `${LOCATIONS.store.street}\n${LOCATIONS.store.postalCode} ${LOCATIONS.store.city}\n${LOCATIONS.store.country}`,
     icon: MapPin,
-    link: 'https://www.google.com/maps/place/Birmensdorferstrasse+379,+8055+Z%C3%BCrich'
+    link: LOCATIONS.store.googleMapsUrl,
   },
   {
     title: 'Öffnungszeiten',
-    value: 'Montag: 9:00 - 12:00\nDienstag - Freitag: 13:00 - 17:00',
-    icon: Clock
+    value: OPENING_HOURS.formatted,
+    icon: Clock,
   }
 ]
 
@@ -91,7 +92,7 @@ export default function ContactPage() {
             <Heading level={2} className="mb-6 sm:mb-8 text-center">Finden Sie uns</Heading>
             <div className="aspect-w-16 aspect-h-9 rounded-xl overflow-hidden shadow-lg">
               <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2701.1234567890123!2d8.5237!3d47.3815!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x479aa0a7e8c7b8b9%3A0x1234567890abcdef!2sBirmensdorferstrasse%20379%2C%208055%20Z%C3%BCrich!5e0!3m2!1sen!2sch!4v1234567890123"
+                src={LOCATIONS.store.googleMapsEmbedUrl}
                 width="100%"
                 height="450"
                 style={{ border: 0 }}
@@ -135,7 +136,7 @@ export default function ContactPage() {
               </div>
 
               <div className="pt-4 border-t border-gray-200">
-                <p className="text-gray-600 mb-3">Wir haben auch einen Lagerstandort in der Badenerstr. 816, 8048 Zürich (nur nach Terminvereinbarung)</p>
+                <p className="text-gray-600 mb-3">Wir haben auch einen Lagerstandort an der {LOCATIONS.warehouse.full} {LOCATIONS.warehouse.note}</p>
                 <div className="flex flex-wrap justify-center gap-3">
                   <a
                     href={WAREHOUSE_GOOGLE_MAPS_URL}

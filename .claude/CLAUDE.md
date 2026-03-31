@@ -1,4 +1,4 @@
-# RevampIT - Swiss Non-Profit Tech Platform
+# Revamp-IT - Swiss Non-Profit Tech Platform
 
 @~/.claude/CLAUDE.md
 
@@ -6,18 +6,17 @@
 
 ## Overview
 
-RevampIT is a **Swiss non-profit** enabling free exchange of technology, promoting open-source hardware and software. Built with Next.js 16, TypeScript, and Tailwind.
+Revamp-IT is a **Swiss non-profit** enabling free exchange of technology, promoting open-source hardware and software. Built with Next.js 16, TypeScript, and Tailwind.
 
 ## Architecture
 
 ```
 revampit/
-├── src/                    # Next.js frontend
+├── src/                    # Next.js frontend + API routes
 │   ├── app/               # App Router pages + API routes
 │   ├── components/        # React components
 │   ├── lib/               # Utilities (logger, auth, db)
-│   └── config/            # Constants (TABLE_NAMES, URLS)
-├── cms-api/               # Custom CMS backend (Express)
+│   └── config/            # Constants (TABLE_NAMES, URLS, org.ts)
 ├── docs/                  # Documentation (SSOT files)
 └── docker-compose.yml     # Infrastructure
 ```
@@ -132,8 +131,11 @@ This is the #1 most common mistake. EVERY German word with ä, ö, ü MUST use t
 **Run `npm run lint:umlauts` to catch ASCII umlaut violations.**
 **ALWAYS run this before committing German text changes.**
 
-### 5. Protected Files - NEVER Delete
-- `cms-api/src/migrations/*`
+### 5. Organization Data — SSOT
+All org-level data (name, addresses, phone, email, hours, URLs) lives in
+`src/config/org.ts`. Never hardcode these values elsewhere — import from org.ts.
+
+### 6. Protected Files - NEVER Delete
 - `scripts/db/migrations/*`
 - `.env*` files
 
@@ -297,4 +299,4 @@ Run `scripts/db/migrations/002-simplified-auth.sql` to add:
 
 ---
 
-**Last Updated**: 2026-02-24
+**Last Updated**: 2026-03-31

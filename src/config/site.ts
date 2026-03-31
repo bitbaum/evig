@@ -1,34 +1,34 @@
-import { CONTACT_EMAIL } from '@/lib/constants'
+import { ORG, CONTACT, LOCATIONS, OPENING_HOURS } from '@/config/org'
 
 export const siteConfig = {
-  name: 'RevampIT',
-  description: 'Wir machen Technologie nachhaltig und für alle zugänglich.',
+  name: ORG.name,
+  description: ORG.description,
   contact: {
-    email: CONTACT_EMAIL,
-    phone: '+41 (0)43 960 32 64',
-    address: 'Birmensdorferstrasse 379, 8055 Zürich, Schweiz',
+    email: CONTACT.email,
+    phone: CONTACT.phone,
+    address: LOCATIONS.store.fullWithCountry,
     locations: [
       {
-        name: 'Verkaufsstelle',
+        name: LOCATIONS.store.name,
         addressLines: [
-          'Birmensdorferstr. 379',
-          '8055 Zürich',
-          'Schweiz'
+          LOCATIONS.store.street,
+          `${LOCATIONS.store.postalCode} ${LOCATIONS.store.city}`,
+          LOCATIONS.store.country,
         ]
       },
       {
-        name: 'Lager',
+        name: LOCATIONS.warehouse.name,
         addressLines: [
-          'Badenerstr. 816',
-          '8048 Zürich'
+          LOCATIONS.warehouse.street,
+          `${LOCATIONS.warehouse.postalCode} ${LOCATIONS.warehouse.city}`,
         ],
-        extra: '(nur nach Terminvereinbarung)'
+        extra: LOCATIONS.warehouse.note,
       }
     ]
   },
   openingHours: {
-    monday: '9:00 - 12:00',
-    tuesdayToFriday: '13:00 - 17:00'
+    monday: OPENING_HOURS.monday,
+    tuesdayToFriday: OPENING_HOURS.tuesdayToFriday,
   },
   social: {
     // Add social media links when available
@@ -36,4 +36,4 @@ export const siteConfig = {
 } as const
 
 // Type for the site configuration
-export type SiteConfig = typeof siteConfig 
+export type SiteConfig = typeof siteConfig

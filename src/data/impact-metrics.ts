@@ -9,6 +9,7 @@
  */
 
 import { getDefaultNumeric } from '@/lib/org-numbers.defaults'
+import { ORG, LOCATIONS } from '@/config/org'
 
 export interface ImpactMetric {
   id: string
@@ -310,11 +311,11 @@ export interface PhysicalSpaceInfo {
 
 export const PHYSICAL_SPACE: PhysicalSpaceInfo = {
   current: {
-    name: 'RevampIT Laden',
-    address: 'Birmensdorferstrasse 379',
-    city: 'Zürich',
-    postalCode: '8055',
-    country: 'Schweiz',
+    name: `${ORG.name} Laden`,
+    address: LOCATIONS.store.street,
+    city: LOCATIONS.store.city,
+    postalCode: LOCATIONS.store.postalCode,
+    country: LOCATIONS.store.country,
     offerings: [
       'Refurbished Hardware kaufen',
       'Vintage-Computer-Sammlung besichtigen',

@@ -27,8 +27,8 @@ export default function CloudInfrastructurePage() {
             'description': 'Nachhaltige Cloud-Hosting-Vision für 2026-2028',
             'provider': {
               '@type': 'Organization',
-              'name': 'RevampIT',
-              'url': 'https://revampit.org'
+              'name': 'Revamp-IT',
+              'url': 'https://revamp-it.ch'
             },
             'serviceType': 'Cloud-Infrastruktur',
             'areaServed': {

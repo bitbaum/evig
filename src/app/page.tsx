@@ -7,22 +7,23 @@ import AsSeenInLogos from '@/components/about/AsSeenInLogos'
 import Heading from '@/components/ui/Heading'
 import { PageHero } from '@/components/layout/PageHero'
 import { NewsletterSignup } from '@/components/community/NewsletterSignup'
+import { ORG, CONTACT, LOCATIONS, OPENING_HOURS } from '@/config/org'
 
 export const metadata: Metadata = {
-  title: 'revamp-it – Alte Hardware. Neues Leben. | Computer-Reparatur & Linux in der Schweiz',
+  title: `${ORG.name} – Alte Hardware. Neues Leben. | Computer-Reparatur & Linux in der Schweiz`,
   description: 'Wir geben alter Hardware ein zweites Leben. Computer reparieren, aufrüsten und mit Linux wiederherstellen. Nachhaltige IT-Lösungen für Privatpersonen, Vereine und KMU.',
   keywords: ['Computer Reparatur Schweiz', 'Linux Installation', 'Datenrettung', 'Vintage Computer', 'Open Source', 'nachhaltige IT', 'Zürich', 'Basel', 'Luzern', 'refurbished Computer'],
   openGraph: {
-    title: 'revamp-it – Alte Hardware. Neues Leben.',
+    title: `${ORG.name} – Alte Hardware. Neues Leben.`,
     description: 'Wir geben alter Hardware ein zweites Leben. Computer reparieren, aufrüsten und mit Linux wiederherstellen. Nachhaltige IT-Lösungen in der Schweiz.',
     type: 'website',
     locale: 'de_CH',
-    url: 'https://revampit.vercel.app',
-    siteName: 'revamp-it',
+    url: ORG.website,
+    siteName: ORG.name,
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'revamp-it – Alte Hardware. Neues Leben.',
+    title: `${ORG.name} – Alte Hardware. Neues Leben.`,
     description: 'Wir geben alter Hardware ein zweites Leben. Computer reparieren, aufrüsten und mit Linux wiederherstellen.',
   },
 }
@@ -39,19 +40,21 @@ export default function Home() {
           __html: JSON.stringify({
             "@context": "https://schema.org",
             "@type": "LocalBusiness",
-            "name": "revamp-it",
+            "name": ORG.name,
             "description": "Computer-Reparatur, Linux-Installation und Datenrettung. Nachhaltige IT-Lösungen für Privatpersonen, Vereine und KMU.",
-            "url": "https://revampit.vercel.app",
-            "telephone": "+41-43-960-32-64",
+            "url": ORG.website,
+            "telephone": CONTACT.phone,
             "address": {
               "@type": "PostalAddress",
-              "addressLocality": "Zürich",
+              "streetAddress": LOCATIONS.store.street,
+              "postalCode": LOCATIONS.store.postalCode,
+              "addressLocality": LOCATIONS.store.city,
               "addressRegion": "ZH",
               "addressCountry": "CH"
             },
             "areaServed": ["Zürich", "Basel", "Luzern", "Schweiz"],
             "priceRange": "$$",
-            "openingHours": "Mo-Fr 09:00-18:00",
+            "openingHours": OPENING_HOURS.schemaOrg,
             "sameAs": [
               "https://twitter.com/revampit",
               "https://linkedin.com/company/revampit"

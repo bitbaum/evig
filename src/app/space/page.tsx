@@ -24,10 +24,11 @@ import { Card, CardHeader, CardTitle, CardContent, CardDescription } from '@/com
 import { Button } from '@/components/ui/button'
 import { PageHero } from '@/components/layout/PageHero'
 import { STORE_ADDRESS, STORE_GOOGLE_MAPS_URL, STORE_OSM_URL } from '@/lib/constants'
+import { ORG, LOCATIONS } from '@/config/org'
 
 export const metadata: Metadata = {
-  title: 'Unsere Standorte | RevampIT',
-  description: 'Von der Toni Molkerei bis heute - die Geschichte unserer Standorte und unsere Vision für einen neuen Community Space in Zürich.'
+  title: `Unsere Standorte | ${ORG.name}`,
+  description: 'Von der Toni Molkerei bis heute - die Geschichte unserer Standorte und unsere Vision für einen neuen Community Space in Zürich.',
 }
 
 // Location history data
@@ -52,8 +53,8 @@ const locationHistory = [
   },
   {
     period: '2015 - heute',
-    name: 'Birmensdorferstrasse 379',
-    description: 'Unser aktuelles Ladenlokal mit Werkstatt. Zusätzliches Lager an der Badenerstrasse 816.',
+    name: LOCATIONS.store.street,
+    description: `Unser aktuelles Ladenlokal mit Werkstatt. Zusätzliches Lager an der ${LOCATIONS.warehouse.street}.`,
     highlight: 'Aktuell',
     current: true
   }

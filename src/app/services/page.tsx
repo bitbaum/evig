@@ -192,9 +192,9 @@ export default function ServicesPage() {
             'description': 'Professional computer repair, web development, data recovery, Linux support, and hardware recycling services.',
             'provider': {
               '@type': 'Organization',
-              'name': 'RevampIT',
-              'url': 'https://revampit.org',
-              'logo': 'https://revampit.org/logo.png'
+              'name': 'Revamp-IT',
+              'url': 'https://revamp-it.ch',
+              'logo': 'https://revamp-it.ch/logo.png'
             },
             'serviceType': [
               'Computer Repair',

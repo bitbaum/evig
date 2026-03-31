@@ -4,12 +4,13 @@ import { Store, ShoppingCart, MapPin, Clock, ExternalLink, Map as MapIcon, Shiel
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { SHOP_ONLINE_URL, SHOPWARE_URL, STORE_ADDRESS, STORE_GOOGLE_MAPS_URL, STORE_OSM_URL } from '@/lib/constants'
+import { ORG, OPENING_HOURS } from '@/config/org'
 import Heading from '@/components/ui/Heading'
 import { PageHero } from '@/components/layout/PageHero'
 
 export const metadata: Metadata = {
-  title: 'Shop | RevampIT',
-  description: 'Wählen Sie, wie Sie bei RevampIT einkaufen möchten – Online-Shop, Shopware-Kanal oder Ladenlokal in Zürich.'
+  title: `Shop | ${ORG.name}`,
+  description: `Wählen Sie, wie Sie bei ${ORG.name} einkaufen möchten – Online-Shop, Shopware-Kanal oder Ladenlokal in Zürich.`,
 }
 
 // URLs and address centralized in constants
@@ -58,7 +59,7 @@ export default function ShopPage() {
                   <Clock className="mt-0.5 w-5 h-5 text-green-700" />
                   <div>
                     <p className="font-medium text-gray-900">Öffnungszeiten</p>
-                    <p className="text-sm text-gray-600">Montag: 9:00 – 12:00<br />Dienstag – Freitag: 13:00 – 17:00</p>
+                    <p className="text-sm text-gray-600">Montag: {OPENING_HOURS.monday}<br />Dienstag - Freitag: {OPENING_HOURS.tuesdayToFriday}</p>
                   </div>
                 </div>
                 <div className="flex flex-wrap gap-3 pt-2">
@@ -122,12 +123,12 @@ export default function ShopPage() {
                   <a href={SHOPWARE_URL} target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2">
                     <ExternalLink className="w-4 h-4 mr-2" /> Zum Shopware‑Shop
                   </a>
-                  {/* RevampIT Online-Shop */}
+                  {/* Revamp-IT Online-Shop */}
                   <Link
                     href="/marketplace"
                     className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-emerald-600 text-white hover:bg-emerald-700 h-10 px-4 py-2"
                   >
-                    <ShoppingCart className="w-4 h-4 mr-2" /> RevampIT Online‑Shop
+                    <ShoppingCart className="w-4 h-4 mr-2" /> Revamp-IT Online‑Shop
                   </Link>
                 </div>
                 <div className="mt-4 rounded-lg border border-gray-200 bg-gray-50 p-4 text-sm text-gray-700">
@@ -136,7 +137,7 @@ export default function ShopPage() {
                     <div>
                       <p className="font-medium text-gray-900 mb-1">Mehrere Shop‑Kanäle?</p>
                       <p>
-                        Unser RevampIT Online-Shop bietet dir die beste Auswahl an aufgearbeiteter IT-Hardware. 
+                        Unser Revamp-IT Online-Shop bietet dir die beste Auswahl an aufgearbeiteter IT-Hardware. 
                         Alternativ findest du unser Sortiment auch im Shopware-Shop und im Legacy-System.
                       </p>
                     </div>
