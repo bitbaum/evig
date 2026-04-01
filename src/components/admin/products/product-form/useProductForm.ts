@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { logger } from '@/lib/logger'
+import { apiFetch } from '@/lib/api/client'
 import type { ProductFormData } from './types'
 import { INITIAL_PRODUCT_FORM_DATA } from './types'
 
@@ -94,19 +95,16 @@ export function useProductForm() {
         })),
       }
 
-      const response = await fetch('/api/admin/products', {
+      const result = await apiFetch<{ id: string }>('/api/admin/products', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(productData),
+        body: productData,
       })
 
-      if (!response.ok) {
-        const errorData = await response.json()
-        throw new Error(errorData.error || 'Failed to create product')
+      if (!result.success) {
+        throw new Error(result.error || 'Failed to create product')
       }
 
-      const result = await response.json()
-      logger.info('Product created successfully', { productId: result.id })
+      logger.info('Product created successfully', { productId: result.data?.id })
       router.push('/admin/products')
     } catch (error) {
       logger.error('Error saving product', { error })

@@ -11,6 +11,7 @@ import { useState, useEffect } from 'react';
 import { X, Save } from 'lucide-react';
 import { BLOG_SUBMISSION_EDITABLE_FIELDS } from '@/config/editable-fields';
 import { logger } from '@/lib/logger';
+import { apiFetch } from '@/lib/api/client';
 
 interface BlogSubmission {
   id: string;
@@ -49,10 +50,9 @@ export function EditSubmissionModal({
   useEffect(() => {
     const loadCategories = async () => {
       try {
-        const response = await fetch('/api/admin/blog/categories');
-        const data = await response.json();
-        if (data.success && data.data) {
-          setCategories(data.data);
+        const result = await apiFetch<Array<{ id: string; name: string }>>('/api/admin/blog/categories');
+        if (result.success && result.data) {
+          setCategories(result.data);
         }
       } catch (err) {
         logger.error('Error loading categories', { error: err });
@@ -66,21 +66,18 @@ export function EditSubmissionModal({
     setError(null);
 
     try {
-      const response = await fetch(`/api/admin/blog/submissions/${submission.id}`, {
+      const result = await apiFetch(`/api/admin/blog/submissions/${submission.id}`, {
         method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
+        body: {
           action: 'edit',
           fields: formData,
-        }),
+        },
       });
 
-      const data = await response.json();
-
-      if (data.success) {
+      if (result.success) {
         onSaved();
       } else {
-        setError(data.error || 'Fehler beim Speichern');
+        setError(result.error || 'Fehler beim Speichern');
       }
     } catch (err) {
       logger.error('Error saving submission edit', { error: err });

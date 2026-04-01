@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { Plus, MessageSquare, Loader2, ChevronRight, FileText, BarChart3 } from 'lucide-react'
 import { formatRelativeTime } from '@/lib/utils'
 import { logger } from '@/lib/logger'
+import { apiFetch } from '@/lib/api/client'
 
 interface Session {
   sessionId: string
@@ -39,10 +40,9 @@ export function HirnSidebar({
 
   const loadSessions = async () => {
     try {
-      const response = await fetch('/api/admin/hirn/history')
-      const data = await response.json()
-      if (data.success) {
-        setSessions(data.data.map((s: Session & { lastActivity?: string }) => ({
+      const result = await apiFetch<Array<Omit<Session, 'lastActivity'> & { lastActivity: string }>>('/api/admin/hirn/history')
+      if (result.success && result.data) {
+        setSessions(result.data.map((s) => ({
           ...s,
           lastActivity: new Date(s.lastActivity),
         })))
@@ -56,10 +56,9 @@ export function HirnSidebar({
 
   const loadStats = async () => {
     try {
-      const response = await fetch('/api/admin/hirn/documents?stats=true')
-      const data = await response.json()
-      if (data.success) {
-        setStats(data.data)
+      const result = await apiFetch<{ totalDocuments: number; totalChunks: number }>('/api/admin/hirn/documents?stats=true')
+      if (result.success && result.data) {
+        setStats(result.data)
       }
     } catch (err) {
       logger.error('Failed to load Hirn stats', { error: err })

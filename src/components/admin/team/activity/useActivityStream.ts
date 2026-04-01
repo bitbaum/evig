@@ -8,6 +8,7 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import { API_DEFAULTS } from '@/config/api-defaults'
+import { apiFetch } from '@/lib/api/client'
 import type { UnifiedActivity, ActivityStreamFilter } from './types'
 
 // Re-export sub-hooks for backward compatibility with barrel index
@@ -57,10 +58,9 @@ export function useActivityStream(
       params.set('limit', String(filters.limit))
       params.set('offset', String(filters.offset))
 
-      const response = await fetch(`/api/admin/team/activity?${params.toString()}`)
-      const result = await response.json()
+      const result = await apiFetch<{ items: UnifiedActivity[]; total: number }>(`/api/admin/team/activity?${params.toString()}`)
 
-      if (!response.ok) {
+      if (!result.success) {
         throw new Error(result.error || 'Fehler beim Laden der Aktivitäten')
       }
 

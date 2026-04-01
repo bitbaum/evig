@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { Shield, Crown, Check, X, Save } from 'lucide-react'
+import { apiFetch } from '@/lib/api/client'
 
 interface UserPermissionsEditorProps {
   userId: string
@@ -66,19 +67,16 @@ export function UserPermissionsEditor({
     try {
       const permissions = grantFullAccess ? ['*'] : selectedPermissions.filter(p => p !== '*')
 
-      const response = await fetch(`/api/admin/users/${userId}/permissions`, {
+      const result = await apiFetch(`/api/admin/users/${userId}/permissions`, {
         method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
+        body: {
           permissions,
           isSuperAdmin: superAdminStatus,
-        }),
+        },
       })
 
-      const data = await response.json()
-
-      if (!response.ok) {
-        throw new Error(data.error || 'Fehler beim Speichern')
+      if (!result.success) {
+        throw new Error(result.error || 'Fehler beim Speichern')
       }
 
       onSaved()

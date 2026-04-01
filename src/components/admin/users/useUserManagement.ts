@@ -6,6 +6,7 @@
  */
 
 import { useState } from 'react'
+import { apiFetch } from '@/lib/api/client'
 import type { UserRow } from './types'
 
 interface UseUserManagementReturn {
@@ -75,19 +76,16 @@ export function useUserManagement(): UseUserManagementReturn {
     setError(null)
 
     try {
-      const response = await fetch(`/api/admin/users/${editingProfile.id}`, {
+      const result = await apiFetch(`/api/admin/users/${editingProfile.id}`, {
         method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
+        body: {
           name: editName || null,
           email: editEmail,
-        }),
+        },
       })
 
-      const data = await response.json()
-
-      if (!response.ok) {
-        setError(data.error || 'Failed to update user')
+      if (!result.success) {
+        setError(result.error || 'Failed to update user')
         return
       }
 
@@ -106,14 +104,12 @@ export function useUserManagement(): UseUserManagementReturn {
     setError(null)
 
     try {
-      const response = await fetch(`/api/admin/users/${deletingUser.id}`, {
+      const result = await apiFetch(`/api/admin/users/${deletingUser.id}`, {
         method: 'DELETE',
       })
 
-      const data = await response.json()
-
-      if (!response.ok) {
-        setError(data.error || 'Failed to delete user')
+      if (!result.success) {
+        setError(result.error || 'Failed to delete user')
         return
       }
 

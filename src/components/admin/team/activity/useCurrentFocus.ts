@@ -7,6 +7,7 @@
  */
 
 import { useState, useCallback } from 'react'
+import { apiFetch } from '@/lib/api/client'
 
 // ============================================================================
 // Current Focus
@@ -27,14 +28,12 @@ export function useCurrentFocus(): UseCurrentFocusReturn {
     setError(null)
 
     try {
-      const response = await fetch(`/api/admin/team/profiles/${profileId}/focus`, {
+      const result = await apiFetch(`/api/admin/team/profiles/${profileId}/focus`, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ current_focus: focus }),
+        body: { current_focus: focus },
       })
-      const result = await response.json()
 
-      if (!response.ok) {
+      if (!result.success) {
         throw new Error(result.error || 'Fehler beim Aktualisieren')
       }
 

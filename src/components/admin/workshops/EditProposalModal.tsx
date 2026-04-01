@@ -15,6 +15,7 @@ import {
 } from '@/config/editable-fields';
 import { WORKSHOP_CATEGORIES, WORKSHOP_LEVELS } from '@/config/workshops';
 import { logger } from '@/lib/logger';
+import { apiFetch } from '@/lib/api/client';
 import type { WorkshopProposalWithProposer } from '@/components/workshops/types';
 
 interface EditProposalModalProps {
@@ -41,21 +42,18 @@ export function EditProposalModal({ proposal, onClose, onSaved }: EditProposalMo
     setError(null);
 
     try {
-      const response = await fetch(`/api/admin/workshops/proposals/${proposal.id}`, {
+      const result = await apiFetch(`/api/admin/workshops/proposals/${proposal.id}`, {
         method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
+        body: {
           action: 'edit',
           fields: formData,
-        }),
+        },
       });
 
-      const data = await response.json();
-
-      if (data.success) {
+      if (result.success) {
         onSaved();
       } else {
-        setError(data.error || 'Fehler beim Speichern');
+        setError(result.error || 'Fehler beim Speichern');
       }
     } catch (err) {
       logger.error('Error saving proposal edit', { error: err });

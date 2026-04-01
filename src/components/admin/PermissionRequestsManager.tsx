@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { Shield, Check, X, Clock, User, RefreshCw } from 'lucide-react'
 import { apiFetch } from '@/lib/api/client'
+import { getSection } from '@/config/sections'
 import { formatDateTimeNumeric } from '@/lib/date-formats'
 
 interface PermissionRequest {
@@ -16,21 +17,8 @@ interface PermissionRequest {
   created_at: string
 }
 
-const sectionLabels: Record<string, string> = {
-  dashboard: 'Dashboard',
-  products: 'Produkte',
-  workshops: 'Workshops',
-  services: 'Dienstleistungen',
-  locations: 'Standorte',
-  reviews: 'Bewertungen',
-  content: 'Inhalte',
-  approvals: 'Freigaben',
-  users: 'Benutzer',
-  team: 'Team & HR',
-  finances: 'Finanzen',
-  analytics: 'Analytics',
-  settings: 'Einstellungen',
-  hirn: 'Hirn',
+function getSectionLabel(id: string): string {
+  return getSection(id)?.ui.label ?? id
 }
 
 export function PermissionRequestsManager() {
@@ -178,7 +166,7 @@ export function PermissionRequestsManager() {
                       key={section}
                       className="px-2 py-0.5 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 text-xs rounded"
                     >
-                      {sectionLabels[section] || section}
+                      {getSectionLabel(section)}
                     </span>
                   ))}
                 </div>

@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { logger } from '@/lib/logger'
+import { apiFetch } from '@/lib/api/client'
 import type { ProductFormData, SmartEntryState } from './types'
 
 export function useSmartEntry(
@@ -27,19 +28,16 @@ export function useSmartEntry(
     setState(prev => ({ ...prev, isLoading: true, error: null, success: null }))
 
     try {
-      const response = await fetch('/api/admin/ai/smart-product-entry', {
+      const result = await apiFetch<{ product: any; metadata?: { processingTime?: number } }>('/api/admin/ai/smart-product-entry', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ query: state.query.trim() }),
+        body: { query: state.query.trim() },
       })
 
-      const result = await response.json()
-
-      if (!response.ok || !result.success) {
+      if (!result.success) {
         throw new Error(result.error || 'Fehler bei der Produkterkennung')
       }
 
-      const product = result.data.product
+      const product = result.data!.product
 
       const handle = product.handle || product.title
         .toLowerCase()
@@ -82,7 +80,7 @@ export function useSmartEntry(
 
       logger.info('Smart entry completed', {
         product: product.title,
-        processingTime: result.data.metadata?.processingTime,
+        processingTime: result.data?.metadata?.processingTime,
       })
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Unbekannter Fehler'

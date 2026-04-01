@@ -7,6 +7,7 @@
  */
 
 import { useState, useEffect, useCallback } from 'react'
+import { apiFetch } from '@/lib/api/client'
 import type { DigestSummary } from './types'
 
 // ============================================================================
@@ -35,14 +36,13 @@ export function useDigest(since?: string, until?: string, department?: string): 
       if (until) params.set('until', until)
       if (department) params.set('department', department)
 
-      const response = await fetch(`/api/admin/team/digest?${params.toString()}`)
-      const result = await response.json()
+      const result = await apiFetch<DigestSummary>(`/api/admin/team/digest?${params.toString()}`)
 
-      if (!response.ok) {
+      if (!result.success) {
         throw new Error(result.error || 'Fehler beim Laden')
       }
 
-      setDigest(result.data)
+      setDigest(result.data ?? null)
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Unbekannter Fehler')
     } finally {

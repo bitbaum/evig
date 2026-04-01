@@ -10,6 +10,7 @@
 
 import { useState, useCallback } from 'react'
 import { MARKETPLACE_STATUS } from '@/config/marketplace-status'
+import { apiFetch } from '@/lib/api/client'
 
 export interface DeleteTarget {
   type: 'shop' | 'inventory'
@@ -49,22 +50,19 @@ function useConfirmFlow<T>(onSuccess: () => void) {
 }
 
 async function patchInventory(id: string, body: Record<string, string>) {
-  const response = await fetch(`/api/admin/inventory/${id}`, {
+  const result = await apiFetch(`/api/admin/inventory/${id}`, {
     method: 'PATCH',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(body),
+    body,
   })
-  const data = await response.json()
-  if (!response.ok || !data.success) {
-    throw new Error(data.error || 'Aktion fehlgeschlagen')
+  if (!result.success) {
+    throw new Error(result.error || 'Aktion fehlgeschlagen')
   }
 }
 
 async function deleteInventory(id: string) {
-  const response = await fetch(`/api/admin/inventory/${id}`, { method: 'DELETE' })
-  const data = await response.json()
-  if (!response.ok || !data.success) {
-    throw new Error(data.error || 'Löschen fehlgeschlagen')
+  const result = await apiFetch(`/api/admin/inventory/${id}`, { method: 'DELETE' })
+  if (!result.success) {
+    throw new Error(result.error || 'Löschen fehlgeschlagen')
   }
 }
 
