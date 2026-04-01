@@ -1,281 +1,278 @@
 # Codebase Audit Report
 
-**Date**: 2026-03-13
+**Date**: 2026-03-31
 **Auditor**: Claude Code
 **Branch**: main
-**Commit**: d7606c0f (+ uncommitted quick-win fixes)
-**Previous Audit**: 2026-03-13 earlier session (score 7.4/10)
+**Commit**: 216dfc18
+**Previous Audit**: 2026-03-13 (score 7.1/10)
 **Baseline Audit**: 2026-03-08 (score 7.0/10)
 
 ## Executive Summary
 
-RevampIT continues on a strong upward trajectory. All critical security issues from the baseline audit remain fixed (CSRF, dual auth, mutation validation). The TextEncoder polyfill fix resolved 5 test suites that were crashing before tests could run, revealing the true test health: 325/360 passing (90.3%). The remaining 5 failing suites all share a single root cause — Drizzle migration left test mocks outdated.
+RevampIT shows continued improvement since the last audit. All automated checks pass cleanly — 0 TypeScript errors, 0 ESLint errors, 0 umlaut violations, and 357/357 tests passing (up from 325/360 last audit). The console.log discipline remains perfect, and parameterized queries are used throughout with no SQL injection risks.
 
-This deeper audit reveals two previously undercounted issues: WCAG contrast failures are ~1,079 lines (5x the prior estimate of ~200, which likely counted files not lines), and form label-input associations are completely broken (81 `htmlFor` attributes with 0 matching `id` on inputs). Mutation route validation is also less complete than previously reported — 34 of 43 mutation routes lack Zod schema validation, though many are justifiable (auth flows, webhooks, simple toggles). Roughly 12-15 user-facing routes with substantial request bodies need validation added.
+The main areas needing attention remain: SSOT violations (17 status config files exist but are bypassed by hardcoded strings in API routes, 21 raw table names in SQL), god components (5+ files over 350 lines), and accessibility gaps (broken label-input associations in ~50% of forms, WCAG contrast failures with text-gray-400, touch targets below 44x44px in several interactive elements).
 
-The open-source registry (43 alternatives, 12 categories) and subscription exchange schema (4 tables with governance) demonstrate strong mission alignment. The subscription exchange remains schema-only — no API or UI — making it the only unimplemented mission pillar.
+Mission alignment is strong across 6 of 7 pillars. The subscription exchange feature remains schema-only with no public UI — the only unimplemented mission area. The open-source registry has grown to 70+ alternatives. Financial transparency, environmental impact tracking, and Swiss localization are all well-implemented.
 
 ## Health Score
 
 | Area | Score | Δ from Last | Notes |
 |------|-------|-------------|-------|
-| First Principles | 7/10 | — | 0 dead code, 0 `any` types. ~44 hardcoded status strings, 83 god components |
-| Best Practices | 9/10 | — | All critical rules pass. 5 test suites failing (Drizzle mock debt) |
-| Mission Alignment | 6.5/10 | — | OSS registry strong (43 alternatives). Subscription exchange schema-only |
-| Functional Correctness | 7.5/10 | -1 | 12-15 user-facing mutation routes need Zod validation. Deeper count than before |
-| UI/UX & Responsive | 5.5/10 | -0.5 ¹ | 1,079 WCAG contrast lines, 749 untyped buttons, 0 form label associations |
-| **Overall** | **7.1/10** | **-0.3** | Deeper measurement lowered apparent scores; underlying code improved |
-
-¹ Score decrease reflects more accurate measurement methodology, not code regression. The sm: breakpoint count actually increased 31.8% (827→1,090).
+| First Principles | 7/10 | — | SSOT violations persist (17 status files bypassed, hardcoded config). 5 god components >350 lines |
+| Best Practices | 9.5/10 | +0.5 | All checks pass: 0 TS errors, 0 lint errors, 357/357 tests. 21 raw TABLE_NAMES violations |
+| Mission Alignment | 7/10 | +0.5 | OSS registry expanded to 70+ alternatives. Subscription exchange still schema-only |
+| Functional Correctness | 8/10 | +0.5 | Auth system solid, content approval flow complete, consistent error handling |
+| UI/UX & Responsive | 6/10 | +0.5 | Good mobile-first approach. Label-input broken in ~50% forms, contrast issues remain |
+| **Overall** | **7.5/10** | **+0.4** | Meaningful improvement in test health, lint compliance, and mission features |
 
 ## Phase 1: First Principles
 
 ### Ground Truth 1: Software Serves Humans — 8/10
 
-- **0 dead files** — `src/components/it-hilfe-create/types.ts` previously flagged as dead, confirmed to have 2 active consumers (`src/lib/domain/it-hilfe.ts:7`, `src/app/it-hilfe/create/page.tsx:30-31`)
 - **0 console.log violations** — full compliance
-- **0 explicit `any` types** — no `: any` or `as any` in production code
-- **10 `Record<string, any>`** across 4 files — all justified (generic sanitize, audit snapshots, dynamic form state)
+- **Silent error swallowing** in 6+ locations:
+  - `src/lib/auth/redis.ts:55` — empty `catch {}` with no logging
+  - `src/app/it-hilfe/helfer/[id]/page.tsx` — `.catch(() => {})` swallows errors
+  - `src/app/api/tasks/[id]/attention/route.ts` — `.catch(() => ({}))`
+  - `src/app/api/tasks/[id]/request/route.ts` — `.catch(() => ({}))`
+  - `src/app/api/tasks/[id]/complete/route.ts` — `.catch(() => ({}))`
+- **Incomplete migration**: `src/db/schema/itHilfe.ts:138-139` — `helper_profiles` table still exists alongside deprecated repairer_profiles
 
 ### Ground Truth 2: SSOT — 5/10 (stable)
 
-- **83 hardcoded status strings** in `src/lib/` and `src/app/api/` (excluding config/tests) — ~44 are genuine runtime violations where config constants exist but aren't used
-- Examples:
-  - `src/app/api/listings/[id]/contact/route.ts:57` uses `'active'` instead of `MARKETPLACE_STATUS.ACTIVE`
-  - `src/app/api/admin/intake/route.ts:48` uses `'approved'` instead of `PRODUCT_STATUS.APPROVED`
-  - `src/lib/payments/payment-flow.ts:236` uses `'pending'` instead of `PAYMENT_STATUS.PENDING`
-  - `src/lib/erfassung/create-product.ts:111-113` uses `'draft'`, `'approved'` literals
-- **17 status config files** exist in `src/config/` — all imported at least once (1-31 consumers each), but data layer bypasses them
-- **3 local PAGE_SIZE definitions** (all `= 20`) duplicate `API_DEFAULTS.ADMIN_PAGE_SIZE` (`= 25`) in `protocols/page.tsx:48`, `tasks/page.tsx:82`, `decisions/DecisionListClient.tsx:45`
-- **36 types.ts files** across codebase — co-located, none dead
+- **17 status config files** in `src/config/*-status.ts` (594 total lines) — all share the same structure but are independently maintained. A generic status config builder could reduce duplication.
+- **Types separate from schemas** (HIGH severity):
+  - `src/lib/schemas/team.ts:91-125` — `TeamProfile` interface defined separately from `teamProfileSchema`
+  - `src/components/admin/HirnChat.tsx:6-24` — `HirnActionCard` and `Message` interfaces with no schema validation
+  - `src/components/admin/users/types.ts` — `UserRow` interface not derived from database schema
+  - `src/app/repairers/page.tsx:20-33` — `ApiReviewResponse` defined locally
+- **Hardcoded config in components**:
+  - `src/app/admin/AdminLayoutClient.tsx:32-38` — `SENSITIVITY_REASONS` object inline
+  - `src/components/erfassung/DataEntryTabs.tsx:43-50` — `CORE_TABS` defined inline
+- **Normalization in UI**: `src/app/repairers/page.tsx:59-84` — camelCase→snake_case mapping in component (should be at API boundary)
+- **116 scattered `process.env` calls** — should be centralized in `src/config/env.ts`
+- **176 component-local interfaces** in `src/components/admin/` — makes reuse difficult
 
 ### Ground Truth 3: Design for Change — 5/10 (stable)
 
-- **83 god components** (>300 lines), up 1 from 82. Top component offenders:
-  - `DataEntryTabs.tsx` (419), `TeamProfileView.tsx` (375), `WorkshopRegistrationForm.tsx` (374), `MobileMenu.tsx` (365), `ServiceForm.tsx` (361)
-- Top page offenders: `AdminLayoutClient.tsx` (517), `impact/content.tsx` (512), `profil/skills/page.tsx` (498)
-- **Drizzle ORM migration nearly complete**: 205 files use `@/db` (Drizzle), 8 files still import from `@/lib/auth/db` barrel (all auth flows — barrel internally delegates to Drizzle)
-- **1 hybrid file**: `db-roles.ts` uses 18 raw SQL queries via `db.execute(sql`...`)` — last module not using Drizzle query builder
+- **God components (>300 lines)**:
+  - `src/app/admin/AdminLayoutClient.tsx` — 517 lines
+  - `src/components/erfassung/DataEntryTabs.tsx` — 419 lines
+  - `src/components/admin/team/TeamProfileView.tsx` — 375 lines
+  - `src/components/layout/MobileMenu.tsx` — 365 lines
+  - `src/components/admin/ServiceForm.tsx` — 357 lines
+- **46 components with direct `fetch()` calls** — no service layer abstraction, components tightly coupled to API paths
+- **Multiple independent form hook patterns** (`useProductForm`, `useWorkshopForm`, etc.) with no shared abstraction
 
-### Ground Truth 4: Automate the Mechanical — 9/10
+### Ground Truth 4: Automate the Mechanical — 8/10
 
-| Metric | Count |
-|--------|-------|
-| `: any` / `as any` types | **0** |
-| `Record<string, any>` | **10** (4 files, all justified) |
-| `@ts-ignore` / `@ts-expect-error` | **2** (both in `redis.ts` for dynamic imports) |
-| `eslint-disable` | **5** (all `react-hooks/exhaustive-deps`) |
+- **160+ uses of `z.infer`** show good schema→type derivation pattern
+- **Missing**: Lint rule to flag manual type definitions when Zod schema exists
+- **Missing**: Centralized env validation at startup (`process.env` accessed directly 116 times)
 
-### Ground Truth 5: Simplicity Scales — 7/10 (stable)
+### Ground Truth 5: Simplicity Scales — 7/10
 
-- Architecture remains pragmatic: config → service → API route → component
-- No over-engineered abstraction layers detected
-- The 17 status config files are well-designed but applied inconsistently — elaborate config infrastructure with partial enforcement
+- Large index files: `src/lib/services/index.ts` (379 lines), `src/lib/hirn/providers/index.ts` (282 lines)
+- 17 status config files could be reduced to a factory function + data
 
-### Ground Truth 6: Correctness — 6.5/10 (↑ from 6)
+### Ground Truth 6: Correctness Beats Speed — 7/10
 
-- **TypeScript**: 0 errors (clean)
-- **ESLint**: 0 errors, 0 warnings (clean)
-- **Tests**: 5 suites failing, 35 tests failing (325/360 passing = 90.3%)
-
-| Failing Suite | Tests | Root Cause |
-|--------------|-------|------------|
-| `notifications.test.ts` | 14 | Drizzle migration — mock uses string IDs, DB expects UUIDs |
-| `order-service.test.ts` | 6 | Mock not updated for `db.execute()` |
-| `provider-config.test.ts` | 5 | Runtime config loading changed, mock expectations stale |
-| `payment-flow.test.ts` | 9 | `getPaymentProvider` return shape changed |
-| `task-helpers.test.ts` | 1 | Notification insertion mock mismatch |
-
-All 35 failures share one root cause: test mocks written for old `query()` pattern, not updated for Drizzle ORM. The recently fixed `it-hilfe/requests.test.ts` demonstrates the pattern for updating them.
+- **2 `@ts-ignore`**: `src/lib/auth/redis.ts:32,59` — for dynamic imports (justifiable but could use better typing)
+- **`any` in API response**: `src/app/repairers/page.tsx:60` — `map((r: any) =>` with no validation
+- **5 `eslint-disable` without strong justification**: `src/app/admin/decisions/[id]/DiscussionThread.tsx:50`, `src/app/admin/tasks/TaskFiltersClient.tsx:38`, `src/components/map/LeafletMapInner.tsx:104`
 
 ## Phase 2: Best Practices
 
-### Critical Rules — All Pass
-
-| Rule | Status | Details |
-|------|--------|---------|
-| No console.log | **PASS** | 0 violations |
-| TABLE_NAMES / Drizzle schema | **PASS** | 0 raw table strings; all SQL uses Drizzle schema refs or `getTableName()` |
-| Parameterized queries | **PASS** | All `${...}` in SQL occurs inside Drizzle's `sql` tagged templates (auto-parameterized) |
-| Swiss German (umlauts) | **PASS** | `npm run lint:umlauts` clean |
-| Logger usage | **PASS** | 334 files import `@/lib/logger`, 0 console.* in production code |
-
-### Automated Checks
+### Automated Checks — All Pass ✓
 
 | Check | Result |
 |-------|--------|
-| `npm run typecheck` | 0 errors |
-| `npm run lint` | 0 errors, 0 warnings |
-| `npm run lint:umlauts` | Clean |
-| `npm test` | 5 failed, 22 passed (27 suites); 35 failed, 325 passed (360 tests) |
+| TypeScript (`npm run typecheck`) | **PASS** — 0 errors |
+| ESLint (`npm run lint`) | **PASS** — 0 warnings/errors |
+| Umlaut lint (`npm run lint:umlauts`) | **PASS** — No violations |
+| Tests (`npm test`) | **PASS** — 27 suites, 357 tests passing |
 
-### Code Quality
+### Critical Rules
 
-- **API response format**: 231/233 route files use `apiSuccess()`/`apiError()` (99.1%). 2 protocol processing routes use raw `NextResponse.json` for streaming — justified
-- **Auth checks**: 397 `withAdmin`/`withAuth` references + 53 manual `await auth()` calls across API routes
-- **Naming conventions**: PascalCase components, camelCase utils, kebab-case config, UPPER_SNAKE constants — all consistent
+| Rule | Status | Details |
+|------|--------|---------|
+| No console.log | ✅ PASS | Only in `src/lib/logger.ts` (correct location) |
+| TABLE_NAMES usage | ❌ **21 violations** | 10 files use raw table names in SQL (see below) |
+| Parameterized queries | ✅ PASS | All SQL uses Drizzle ORM or `sql` tagged templates |
+| Swiss German | ✅ PASS | Proper umlauts, no ß, no ASCII substitutes |
+| Logger usage | ✅ PASS | All production code uses `@/lib/logger` |
+
+### TABLE_NAMES Violations (21 instances in 10 files)
+
+- **Certifications routes** (6): `src/app/api/admin/certifications/route.ts:71-81`, `[id]/verify/route.ts:32-34`, `[id]/reject/route.ts:29-30`
+- **Listings routes** (3): `src/app/api/listings/mine/route.ts:53`, `favorites/route.ts:49`, `similar/route.ts:45` — `listing_images` hardcoded
+- **Location route** (1): `src/app/api/locations/[id]/route.ts:44` — `location_approvals` hardcoded
+- **IT-Hilfe routes** (5): `src/app/api/admin/it-hilfe/helpers/route.ts:35,62`, `stats/route.ts:24-26`
+- **Marketplace routes** (5): `src/app/api/admin/marketplace/route.ts:47,76`, `stats/route.ts:25-27`
+- **Messages route** (2): `src/app/api/messages/conversations/route.ts:56,61`
+
+### Admin Auth Coverage
+
+- **18/22 admin routes** use `withAdmin()` middleware — ✅
+- **4 exceptions** (all acceptable): `/admin/auth`, `/admin/login`, `/admin/logout`, `/admin/profile`
+- **Observation**: `/admin/profile` implements its own JWT verification instead of using shared middleware
+
+### API Response Format
+
+✅ All routes use `{ success, data/error }` format via `apiSuccess`/`apiError` helpers.
+
+### Naming Conventions
+
+✅ Generally compliant. 9 UI components use lowercase names (`alert.tsx`, `badge.tsx`, etc.) — these are shadcn/ui convention, acceptable.
 
 ## Phase 3: Mission Alignment
 
-| Mission Area | Rating | Key Evidence |
-|---|---|---|
-| **Free Exchange of Technology** | **Implemented** | Full marketplace with "Nur Gratis" filter, IT-Hilfe community help, multi-channel shop |
-| **Open-Source Advocacy** | **Implemented** | 43 OSS alternatives, 38 proprietary apps, 12 categories, migration tips, difficulty ratings, searchable registry with detail pages |
-| **Environmental Impact** | **Implemented** | CO2 config (Fraunhofer IZM 2023), CO2Badge on listings, full impact page with environmental/social/economic tabs |
-| **Education & Digital Inclusion** | **Implemented** | Workshop system with proposals, registration, payment, admin approval, category/level organization |
-| **Subscription Exchange** | **Schema Only** | 4 DB tables ready (subscription_pools, pool_memberships, pool_contributions, pool_votes with governance). Zero API endpoints, zero UI |
-| **Financial Transparency** | **Implemented** | Public `/about/finances` page, unauthenticated API, multi-year revenue breakdown in CHF from Kivitendo accounting |
-| **Swiss Context** | **Implemented** | CHF (62 refs), 4-digit PLZ validation, Swiss VAT (7.7%/2.5%/3.5%), Swiss German throughout |
+| Area | Status | Evidence | Gaps |
+|------|--------|----------|------|
+| **Free Exchange of Technology** | ✅ Implemented | Marketplace with "Nur Gratis" filter, multi-channel shop, P2P listings | No public "free hardware library" or donation request UI |
+| **Open-Source Advocacy** | ✅ Implemented | 70+ alternatives in registry, Linux guide, migration difficulty ratings | No migration tutorials or success stories |
+| **Environmental Impact** | ✅ Implemented | ~43 tons CO₂/yr tracked (Fraunhofer data), impact page with charts, donation calculator | No per-listing CO₂ badge on marketplace |
+| **Education & Digital Inclusion** | ✅ Implemented | Workshops with categories/levels, IT-Hilfe peer support, 20+ repair categories | No structured learning paths |
+| **Subscription Exchange** | 📋 Planned Only | DB schema complete (migration 048, 4 tables with governance) | **NO PUBLIC UI — Feature dormant** |
+| **Financial Transparency** | ✅ Implemented | Finances page with self-financing ratio, multi-year revenue breakdown, Kivitendo source | No annual report download, no cost breakdown |
+| **Swiss Context** | ✅ Implemented | CHF throughout, proper umlauts, Zürich address, canton selector, "Velo"/"Billett" vocabulary | None |
 
-**Key change since baseline**: The subscription exchange now has a well-designed DB schema with cost sharing and governance (voting), but still needs API and UI implementation to become functional.
+**Mission Score: 7/10** — 6 of 7 pillars implemented. Subscription exchange is the critical gap.
 
 ## Phase 4: Improvement Roadmap
 
-### Quick Wins (<1 hour)
+### Quick Wins (<1 hour each)
 
-1. **Fix 5 failing test suites** — All share one root cause (Drizzle mock update). Pattern demonstrated by recent `it-hilfe/requests.test.ts` fix
-2. **Add `type="button"` to buttons inside `<form>` elements** — 749/753 buttons lack explicit type. Prioritize forms to prevent unintended submissions
-3. **Add `id` attributes to form inputs** — 81 `htmlFor` on labels, 0 matching `id` on inputs. Label-input associations completely broken
-4. **Migrate `db-roles.ts` to Drizzle query builder** — Last file using raw SQL via `db.execute(sql`...`)`; 18 queries
+1. **Fix silent error catches** — Add `logger.error()` to 6 empty catch blocks (redis.ts, task routes)
+2. **Add viewport export** to `src/app/layout.tsx` — missing `export const viewport` for mobile responsiveness
+3. **Replace `text-gray-400` with `text-gray-600`** in empty states, help text — fix WCAG AA contrast failures
+4. **Increase touch targets** — Add `min-h-[44px] min-w-[44px]` to small buttons in BulkTable, AIFieldIndicator, ReviewForm
+5. **Add `aria-labelledby`** to ConfirmDialog and modal components
 
-### Medium Effort (1-5 hours)
+### Medium Effort (1-5 hours each)
 
-5. **Add Zod validation to ~12-15 user-facing mutation routes** — Priority targets: `reviews/route.ts` (POST), `locations/route.ts` (POST), `messages/conversations/route.ts` (POST), `it-hilfe/requests/[id]/offers/route.ts` (POST), `appointments/book-with-payment/route.ts`, `user/technician-profile/route.ts` (PUT), `public/blog/submit/route.ts`, `newsletter/subscribe/route.ts`
-6. **Replace ~44 hardcoded status strings** with config constants — Config files exist (`src/config/*-status.ts`), data layer just doesn't use them
-7. **Fix WCAG contrast** — Replace `text-gray-400` on light backgrounds (~671 instances) with `text-gray-500`/`text-gray-600`. Also `text-gray-300` (~409 instances)
-8. **Add rate limiting to `auth/forgot-password`** — Currently unprotected against brute-force email enumeration
+6. **Fix label-input associations** — Audit ~40 form components, add matching `htmlFor`/`id` pairs
+7. **Migrate 21 raw table names** to use `TABLE_NAMES` constants in 10 API route files
+8. **Derive types from schemas** — Convert `TeamProfile`, `UserRow`, `HirnActionCard` interfaces to `z.infer<>`
+9. **Create status config factory** — Replace 17 independent status config files with a generic builder + data
+10. **Centralize `process.env`** — Create `src/config/env.ts` with validation, replace 116 scattered calls
+11. **Split largest god components** — Start with `AdminLayoutClient.tsx` (517 lines) and `DataEntryTabs.tsx` (419 lines)
 
 ### Strategic Improvements
 
-9. **Design system adoption campaign** — Only 7.3% (46/634 files) use design system. New code (OSS registry) demonstrates the target quality bar
-10. **Split top 5 god components** — `AdminLayoutClient.tsx` (517), `DataEntryTabs.tsx` (419), `TeamProfileView.tsx` (375), `WorkshopRegistrationForm.tsx` (374), `MobileMenu.tsx` (365)
-11. **Implement subscription exchange API + UI** — DB schema ready with 4 tables. Only unimplemented mission pillar
-12. **Wire content approval flow** — `user_content_submissions` table exists but no API routes reference it
-13. **Admin responsive/touch target improvements** — Admin area 35.5% responsive, 357 potentially undersized interactive elements
+12. **Implement Subscription Exchange UI** — Schema exists (migration 048), needs API routes + public pages. Last unimplemented mission pillar.
+13. **Create service layer** — Abstract 46 component-level `fetch()` calls into centralized services
+14. **Add per-listing CO₂ badge** — Show environmental savings on marketplace items
+15. **Add automated accessibility testing** — Integrate axe/Lighthouse in CI pipeline
+16. **Create structured learning paths** — Workshop progression from beginner to advanced
 
 ## Phase 5: Functional Correctness
 
-### Authentication & Authorization — SOLID
+### Authentication & Authorization — ✅ PASS
 
-- Auth.js v5 with JWT strategy, 30-day expiry, 24-hour refresh (`src/auth.ts`)
-- 3-tier admin guard: authentication → staff role → section-level permission (`src/app/admin/layout.tsx`)
-- Permission system with staff detection, super admin, section-level access (`src/lib/permissions.ts`)
-- 397 `withAuth`/`withAdmin` + 53 manual `auth()` calls across API routes
-- All 11 unprotected mutation routes are appropriate exceptions (auth flows, webhooks, CMS proxy)
+- **Session shape**: Correct — `id`, `email`, `name`, `isStaff`, `staffPermissions`, `isSuperAdmin` all threaded through JWT/session callbacks (`src/auth.ts:38-51`)
+- **Staff detection**: `isStaffEmail()` checks `@revamp-it.ch` domain case-insensitively (`src/lib/permissions.ts:57-59`)
+- **Super admin**: Hardcoded email list + DB flag, checked at every permission gate (`src/lib/permissions.ts:70-88`)
+- **Admin layout**: Three-level server-side guard — auth → staff → section permissions (`src/app/admin/layout.tsx:13-56`)
+- **Permission aliases**: `finances` → `finanzen` mapping prevents breaking changes (`src/lib/permissions.ts:131-140`)
 
-### CSRF Protection — STRONG
+### Content Approval Flow — ✅ PASS
 
-- Synchronizer Token Pattern with Double Submit Cookie, constant-time comparison (`src/lib/auth/csrf.ts`)
-- Enforced on all `/api/` routes except webhooks, public endpoints, Auth.js routes (`src/middleware.ts`)
-- Edge-compatible (Web Crypto API)
+- State machine: `pending → [approved, rejected]`, `rejected → [pending]`, `approved → []` (immutable)
+- Implemented in `src/app/api/admin/approvals/[id]/route.ts:42-56`
+- Email notifications on status change with graceful failure handling
+- Reviewed-by and reviewed-at tracking
 
-### Mutation Route Validation — NEEDS IMPROVEMENT
+### API Route Quality — ✅ PASS
 
-- **43 mutation handlers** across API routes
-- **34 files** lack Zod schema validation
-- Justifiable exclusions: 7 auth flows (minimal/no body), 1 webhook (signature-verified), 2 admin login/logout, 2 notification routes (simple status), 2-3 simple toggles (approve, accept, vote)
-- **~12-15 user-facing routes with substantial request bodies** need Zod validation added:
-  - `reviews/route.ts` (POST), `reviews/[id]/route.ts` (PUT), `reviews/[id]/response/route.ts` (POST/PUT)
-  - `locations/route.ts` (POST), `locations/[id]/route.ts` (PUT), `locations/[id]/bookings/route.ts` (POST)
-  - `messages/conversations/route.ts` (POST)
-  - `it-hilfe/requests/[id]/offers/route.ts` (POST)
-  - `user/technician-profile/route.ts` (PUT)
-  - `appointments/book-with-payment/route.ts` (POST)
-  - `public/blog/submit/route.ts` (POST)
-  - `newsletter/subscribe/route.ts` (POST)
-  - `ai/analyze-product/route.ts` (POST)
+- All routes use consistent try-catch + `apiSuccess`/`apiError` pattern
+- Proper HTTP status codes: 200, 201, 400, 401, 403, 404, 429, 500
+- Rate limiting on public endpoints: registration, blog submission, listing browse/create
+- Input validation via Zod schemas on mutation routes
 
-### Rate Limiting — GOOD
+### Security — ✅ PASS
 
-- Two complementary systems: auth rate limiter (progressive lockout) + security rate limiter (LRU-cache, 11 pre-configured limiters)
-- 72 rate limiter references across codebase
-- **Gap**: `auth/forgot-password` lacks rate limiting (email enumeration risk)
+- Parameterized queries throughout (Drizzle ORM + `sql` tagged templates)
+- Password hashing with constant-time comparison
+- HTTP-only, Secure, SameSite=lax cookies
+- No information leakage in error responses
+- Generic auth error messages prevent user enumeration
 
-### Content Approval Flow — SCHEMA ONLY
+### Minor Observations
 
-- `user_content_submissions` table with proper schema (draft→pending→approved/rejected)
-- No API routes reference it — the approval flow is not wired up
+- **Dual auth systems**: Auth.js (main) + legacy CMS JWT (`/admin/login`, `/admin/profile`) — should document deprecation path
+- **Missing timeout**: External CMS API call in `/api/admin/login/route.ts` has no `AbortSignal.timeout()`
+- **Missing try-catch**: `/api/admin/auth/route.ts` — `auth()` call not wrapped
 
 ## Phase 6: UI/UX & Responsive Design
 
-### Responsive Coverage
+### Responsive Design — 7/10
 
-| Area | Responsive Files / Total | Percentage |
-|------|-------------------------|-----------|
-| Overall | 291 / 634 | **45.9%** |
-| `app/` directory | 154 / 321 | 48.0% |
-| `components/` directory | 133 / 296 | 44.9% |
-| `app/admin/` | 44 / 124 | **35.5%** (weakest) |
-| OSS Registry | 5 / 10 | 50.0% |
+**Strengths:**
+- Mobile-first Tailwind approach consistently applied
+- Header uses `hidden lg:flex` / `lg:hidden` for desktop/mobile navigation
+- Responsive grids: `grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4` pattern
+- Good responsive spacing: `gap-6 sm:gap-8 lg:gap-x-8`
 
-Breakpoint distribution (mobile-first confirmed):
+**Issues:**
+- Hardcoded px widths: `w-[500px]`, `min-w-[800px]` in panels/tables — should use responsive classes
+- Some tables require horizontal scroll on mobile (acceptable for data-heavy admin views)
 
-| Breakpoint | Previous | Current | Change |
-|------------|----------|---------|--------|
-| `sm:` | 827 | **1,090** | **+31.8%** |
-| `md:` | 406 | **421** | +3.7% |
-| `lg:` | 253 | **281** | +11.1% |
-| `xl:` | 6 | **6** | — |
+### Accessibility — 5/10
 
-While file-level responsive coverage is unchanged (291/634), breakpoint density within responsive files increased significantly (+263 `sm:` uses). Existing responsive files got more thorough treatment.
+**Critical Issues:**
+- **Broken label-input associations** in ~50% of form components — labels have `htmlFor` but inputs lack matching `id`
+  - Broken: `ProductBasicInfoSection.tsx`, `BasicInfoSection.tsx`, `TeamProfileForm.tsx`
+  - Working: `AccountStep.tsx`, `LoginForm.tsx`, `ProtocolDetailsStep.tsx`
+- **WCAG contrast failures** — `text-gray-400` on white background = ~4.2:1 ratio (needs 4.5:1 for AA)
+  - `src/components/common/EmptyState.tsx:27`
+  - `src/components/erfassung/ProductImageSection.tsx`
+  - Multiple admin tables with `text-gray-400`/`text-gray-500`
+- **Touch targets <44x44px**:
+  - `src/components/erfassung/BulkTable.tsx:60-68` — `p-1.5` = ~22x22px
+  - `src/components/ai/AIFieldIndicator.tsx:17` — `px-1 py-0.5` = ~16x12px
+  - `src/components/it-hilfe/ITHilfeReviewForm.tsx:43` — `p-0.5` = ~8x8px
+- **Missing `aria-labelledby`** on `ConfirmDialog.tsx` dialog
 
-### Accessibility
+**Strengths:**
+- Skip-to-content link in root layout (`src/app/layout.tsx:24-29`)
+- 254 instances of focus ring styling across codebase
+- Mobile menu has proper ARIA: `role="dialog"`, `aria-modal`, escape key, body scroll lock
+- All images have alt text (25+ verified)
+- Semantic HTML: `<main>`, `<nav>`, `<footer>` used correctly
+- Breadcrumbs with `aria-label="Breadcrumb"`
 
-| Issue | Count | Severity |
-|-------|-------|----------|
-| `text-gray-400` on light bg (WCAG AA fail, 2.9:1 ratio) | **671 lines** | **High** |
-| `text-gray-300` on light bg (WCAG AA fail, 1.8:1 ratio) | **409 lines** | **High** |
-| Buttons without `type=` attribute | **749 / 753** | **Medium** |
-| Form labels with `htmlFor` but no matching input `id` | **81 broken** | **High** |
-| Raw `<img>` tags (vs Next.js Image) | 2 (justified) | Low |
-| Missing `alt` text | **0** | Clean |
-| `aria-*` attributes | **322** | Good |
-| `role=` attributes | **40** | Reasonable |
-| Semantic HTML (`<nav>`, `<main>`, etc.) | **213** | Good |
-| Focus visible states | **43** | Needs improvement |
-| Dark mode (`dark:` classes) | **2,706** | Extensive |
+### UI States — 9/10
 
-**Critical new finding**: Form label-input association is completely broken. 81 `htmlFor` attributes exist on labels, but 0 form inputs have matching `id` attributes. Screen readers cannot programmatically associate any label with its input.
+- ✅ Reusable `LoadingState`, `EmptyState`, `ErrorAlert` components
+- ✅ Consistent use across pages
+- ✅ Empty states include helpful message + CTA
 
-### OSS Registry Pages — 8.5/10
+## Action Items
 
-Above-average quality for the codebase:
-- Responsive grids (`grid-cols-1 md:grid-cols-2 lg:grid-cols-3`), responsive spacing (`px-4 sm:px-6 lg:px-8`)
-- Semantic HTML (`<main>`, `<section>`, `<dl>`)
-- `aria-label` on search input and clear button
-- Mobile-first typography (`text-sm sm:text-base`)
-- Missing: `type="button"` on 3 buttons, `text-gray-400` on 3 elements, no focus indicators on cards
+Prioritized by: Mission impact → User impact → Code quality
 
-### Design System Adoption
+### Priority 1 — Mission Critical
+1. [ ] **Implement Subscription Exchange UI** — Last unimplemented mission pillar (schema ready in migration 048)
 
-| Import | Files |
-|--------|-------|
-| `@/lib/design-system` | 27 |
-| `@/lib/design/tokens` | 1 |
-| `@/lib/responsive` | 19 |
-| **Total unique files** | **~46 / 634 (7.3%)** |
+### Priority 2 — User-Facing Quality
+2. [ ] **Fix label-input associations** in ~40 form components (accessibility)
+3. [ ] **Fix WCAG contrast** — Replace `text-gray-400` with `text-gray-600` in body text
+4. [ ] **Fix touch targets** — Minimum `min-h-[44px] min-w-[44px]` on interactive elements
+5. [ ] **Add viewport export** to root layout
+6. [ ] **Add `aria-labelledby`** to dialog components
 
-Stalled at 7.3%. Ad-hoc Tailwind classes outnumber design token usage ~70:1.
+### Priority 3 — Code Quality
+7. [ ] **Migrate 21 raw table names** to `TABLE_NAMES` constants
+8. [ ] **Fix 6 silent error catches** — Add `logger.error()` calls
+9. [ ] **Derive types from Zod schemas** — `TeamProfile`, `UserRow`, `HirnActionCard`
+10. [ ] **Create status config factory** — Consolidate 17 files
+11. [ ] **Centralize `process.env`** — Create `src/config/env.ts`
+12. [ ] **Split god components** — Start with `AdminLayoutClient.tsx` (517 lines)
 
-## Action Items (Prioritized)
-
-### Urgent (Test Health + Accessibility)
-1. **Fix 5 failing test suites** — all Drizzle mock updates, pattern proven by it-hilfe fix
-2. **Fix form label-input associations** — add `id` to inputs matching existing `htmlFor` on labels
-3. **Fix WCAG contrast** — `text-gray-400`/`text-gray-300` on light backgrounds (~1,079 lines)
-
-### High (Security)
-4. **Add Zod validation to ~12-15 user-facing mutation routes** — reviews, locations, messages, offers, bookings, blog submit
-5. **Add rate limiting to `auth/forgot-password`** — email enumeration risk
-6. **Add `type="button"` to buttons inside forms** — prevent unintended submissions
-
-### Medium (SSOT/Quality)
-7. **Replace ~44 hardcoded status strings** with existing config constants
-8. **Migrate `db-roles.ts` to Drizzle query builder** — last raw SQL module (18 queries)
-
-### Strategic (Architecture/Mission)
-9. **Implement subscription exchange API + UI** — DB schema ready, only unimplemented mission pillar
-10. **Wire content approval flow** — schema exists, no API endpoints
-11. **Drive design system adoption** — 7.3% → target 25%+ incrementally
-12. **Split top 5 god components** — target <300 lines each
-13. **Improve admin responsive design** — 35.5% coverage, undersized touch targets
+### Priority 4 — Strategic
+13. [ ] **Create service layer** — Abstract 46 direct `fetch()` calls
+14. [ ] **Add per-listing CO₂ badge** on marketplace
+15. [ ] **Add accessibility CI** — axe/Lighthouse automated testing
+16. [ ] **Deprecate legacy CMS JWT** auth path
