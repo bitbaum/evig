@@ -4,6 +4,7 @@ import { db } from '@/db'
 import { sql, getTableName } from 'drizzle-orm'
 import { repairerApplications, users } from '@/db/schema'
 import { apiError, apiSuccess, apiBadRequest, apiNotFound } from '@/lib/api/helpers'
+import { TABLE_NAMES } from '@/config/database'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { logger } from '@/lib/logger'
 
@@ -74,8 +75,8 @@ export const GET = withAdmin('content', async (request, session) => {
         dt.is_required,
         dt.allowed_extensions,
         dt.max_file_size_mb
-      FROM ${sql.raw('verification_documents')} vd
-      LEFT JOIN ${sql.raw('document_types')} dt ON vd.document_type_id = dt.id
+      FROM ${sql.raw(TABLE_NAMES.VERIFICATION_DOCUMENTS)} vd
+      LEFT JOIN ${sql.raw(TABLE_NAMES.DOCUMENT_TYPES)} dt ON vd.document_type_id = dt.id
       WHERE vd.application_id = ${applicationId}
       ORDER BY dt.is_required DESC, vd.created_at ASC
     `)
@@ -83,10 +84,10 @@ export const GET = withAdmin('content', async (request, session) => {
     // Get required document types that haven't been uploaded yet
     const requiredTypesResult = await db.execute(sql`
       SELECT dt.*
-      FROM ${sql.raw('document_types')} dt
+      FROM ${sql.raw(TABLE_NAMES.DOCUMENT_TYPES)} dt
       WHERE dt.is_required = true
         AND NOT EXISTS (
-          SELECT 1 FROM ${sql.raw('verification_documents')} vd
+          SELECT 1 FROM ${sql.raw(TABLE_NAMES.VERIFICATION_DOCUMENTS)} vd
           WHERE vd.application_id = ${applicationId} AND vd.document_type_id = dt.id
         )
     `)

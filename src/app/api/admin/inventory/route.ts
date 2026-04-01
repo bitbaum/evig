@@ -10,7 +10,7 @@ import { withAdmin } from '@/lib/api/middleware'
 import { apiSuccess, apiError, parsePagination } from '@/lib/api/helpers'
 import { db } from '@/db'
 import { aiExtractedProducts, inventoryItems, productCustomerProfiles, customerProfiles } from '@/db/schema'
-import { eq, ilike, or, sql, desc, inArray } from 'drizzle-orm'
+import { and, eq, ilike, or, sql, desc, inArray } from 'drizzle-orm'
 import { logger } from '@/lib/logger'
 import { MARKETPLACE_STATUS } from '@/config/marketplace-status'
 
@@ -35,9 +35,9 @@ export const GET = withAdmin('products', async (request: NextRequest, session) =
       ))
     }
 
-    const where = conditions.length > 0
-      ? conditions.length === 1 ? conditions[0] : sql`${conditions[0]} AND ${conditions[1]}`
-      : undefined
+    const where = conditions.length > 1
+      ? and(...conditions)
+      : conditions[0] ?? undefined
 
     // Fetch products with inventory data
     const productRows = await db

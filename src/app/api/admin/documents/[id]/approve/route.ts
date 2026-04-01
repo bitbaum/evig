@@ -4,6 +4,7 @@ import { db } from '@/db'
 import { sql, getTableName } from 'drizzle-orm'
 import { repairerApplications } from '@/db/schema'
 import { apiError, apiSuccess, apiBadRequest, apiNotFound } from '@/lib/api/helpers'
+import { TABLE_NAMES } from '@/config/database'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { DOCUMENT_STATUS, type DocumentStatus } from '@/config/document-status'
 import { logger } from '@/lib/logger'
@@ -39,7 +40,7 @@ export const PUT = withAdmin<{ id: string }>('content', async (request, session,
     // Get document details and check if it exists (read-only, outside transaction)
     const documentResult = await db.execute(sql`
       SELECT vd.*, ra.user_id, ra.document_verification_status
-      FROM ${sql.raw('verification_documents')} vd
+      FROM ${sql.raw(TABLE_NAMES.VERIFICATION_DOCUMENTS)} vd
       JOIN ${sql.raw(getTableName(repairerApplications))} ra ON vd.application_id = ra.id
       WHERE vd.id = ${documentId}
     `)
@@ -58,7 +59,7 @@ export const PUT = withAdmin<{ id: string }>('content', async (request, session,
     const newStatus = await db.transaction(async (tx) => {
       // Update document status
       await tx.execute(sql`
-        UPDATE ${sql.raw('verification_documents')}
+        UPDATE ${sql.raw(TABLE_NAMES.VERIFICATION_DOCUMENTS)}
         SET
           status = ${DOCUMENT_STATUS.APPROVED},
           admin_notes = COALESCE(${adminNotes ?? null}, admin_notes),
@@ -73,8 +74,8 @@ export const PUT = withAdmin<{ id: string }>('content', async (request, session,
       const requiredDocsResult = await tx.execute(sql`
         SELECT COUNT(*) as total_required,
                COUNT(CASE WHEN vd.status = ${DOCUMENT_STATUS.APPROVED} THEN 1 END) as approved_required
-        FROM ${sql.raw('document_types')} dt
-        LEFT JOIN ${sql.raw('verification_documents')} vd ON dt.id = vd.document_type_id
+        FROM ${sql.raw(TABLE_NAMES.DOCUMENT_TYPES)} dt
+        LEFT JOIN ${sql.raw(TABLE_NAMES.VERIFICATION_DOCUMENTS)} vd ON dt.id = vd.document_type_id
           AND vd.application_id = ${document.application_id}
         WHERE dt.is_required = true
       `)
