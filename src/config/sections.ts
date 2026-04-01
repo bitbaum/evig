@@ -856,6 +856,21 @@ export function isSensitiveSection(id: string): boolean {
 }
 
 /**
+ * Sensitivity reason descriptions (for UI tooltips)
+ */
+export const SENSITIVITY_REASONS: Record<string, string> = {
+  users: 'Enthält personenbezogene Daten und Kontoinformationen',
+  team: 'Enthält Mitarbeiter- und HR-Daten',
+  finances: 'Enthält vertrauliche Finanzdaten',
+  hirn: 'Enthält strategische Geschäftsinformationen',
+  settings: 'Kann Systemkonfiguration ändern',
+}
+
+export function getSensitivityReason(section: string): string | undefined {
+  return SENSITIVITY_REASONS[section]
+}
+
+/**
  * Get sections by category
  */
 export function getSectionsByCategory(category: SectionCategory): SectionConfig[] {
