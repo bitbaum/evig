@@ -26,6 +26,7 @@ import {
 } from '@/lib/email/templates/marketplace';
 import { formatCHF, DELIVERY_LABELS, ORDER_STATUS, LISTING_STATUS } from '@/config/marketplace';
 import { PAYMENT_STATUS } from '@/config/payment-status';
+import { APPOINTMENT_STATUS } from '@/config/appointment-status';
 import { WORKSHOP_REGISTRATION_STATUS } from '@/config/workshop-registration-status';
 import { APP_URL } from '@/config/urls';
 import type { DeliveryOption } from '@/config/marketplace';
@@ -338,12 +339,12 @@ async function handleGenericPaymentWebhook(
         await db
           .update(serviceAppointments)
           .set({
-            status: 'paid',
+            status: APPOINTMENT_STATUS.CONFIRMED,
             updatedAt: sql`CURRENT_TIMESTAMP`,
           })
           .where(eq(serviceAppointments.id, paymentTx.serviceAppointmentId));
 
-        logger.info('Service appointment marked paid via Payrexx', {
+        logger.info('Service appointment confirmed via Payrexx payment', {
           appointmentId: paymentTx.serviceAppointmentId,
           transactionId: paymentTx.id,
         });
@@ -383,7 +384,7 @@ async function handleGenericPaymentWebhook(
         await db
           .update(serviceAppointments)
           .set({
-            status: PAYMENT_STATUS.CANCELLED,
+            status: APPOINTMENT_STATUS.CANCELLED,
             updatedAt: sql`CURRENT_TIMESTAMP`,
           })
           .where(eq(serviceAppointments.id, paymentTx.serviceAppointmentId));

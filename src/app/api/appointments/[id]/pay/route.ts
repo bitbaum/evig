@@ -63,7 +63,8 @@ export async function POST(request: NextRequest) {
     }
 
     // Check if appointment is in payable status
-    if (![APPOINTMENT_STATUS.CONFIRMED, 'approved', BOOKING_STATUS.IN_PROGRESS].includes(appointment.status!)) {
+    const payableStatuses: string[] = [APPOINTMENT_STATUS.CONFIRMED, BOOKING_STATUS.IN_PROGRESS]
+    if (!payableStatuses.includes(appointment.status!)) {
       return apiBadRequest(`Terminstatus '${appointment.status}' ist nicht zahlbar`)
     }
 
@@ -140,8 +141,7 @@ export async function POST(request: NextRequest) {
         .update(serviceAppointments)
         .set({
           status: sql`CASE
-            WHEN ${serviceAppointments.status} = ${APPOINTMENT_STATUS.CONFIRMED} THEN 'paid'
-            WHEN ${serviceAppointments.status} = 'approved' THEN 'paid'
+            WHEN ${serviceAppointments.status} = ${APPOINTMENT_STATUS.CONFIRMED} THEN ${APPOINTMENT_STATUS.COMPLETED}
             ELSE ${serviceAppointments.status}
           END`,
           updatedAt: sql`CURRENT_TIMESTAMP`,
