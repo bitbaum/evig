@@ -11,6 +11,7 @@ import {
   getReviewFilterLabel,
   getReviewActionLabel,
 } from '@/config/review-status'
+import { apiFetch } from '@/lib/api/client'
 import {
   Eye,
   EyeOff,
@@ -69,24 +70,33 @@ export default function AdminReviewsPage() {
   const [successMessage, setSuccessMessage] = useState<string | null>(null)
 
   const fetchReviews = useCallback(async () => {
-    try {
-      setLoading(true)
-      const response = await fetch(`/api/admin/reviews?status=${selectedStatus}&limit=50`)
-      if (!response.ok) {
-        throw new Error('Failed to fetch reviews')
-      }
-      const data = await response.json()
-      setReviews(data.reviews || [])
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Unknown error')
-    } finally {
-      setLoading(false)
+    setLoading(true)
+    const result = await apiFetch<{ reviews: Review[] }>(`/api/admin/reviews?status=${selectedStatus}&limit=50`)
+    setLoading(false)
+
+    if (result.success && result.data) {
+      setReviews(result.data.reviews || [])
+    } else {
+      setError(result.error || 'Fehler beim Laden der Bewertungen')
     }
   }, [selectedStatus])
 
   useEffect(() => {
-    fetchReviews()
-  }, [fetchReviews])
+    let cancelled = false
+    async function load() {
+      setLoading(true)
+      const result = await apiFetch<{ reviews: Review[] }>(`/api/admin/reviews?status=${selectedStatus}&limit=50`)
+      if (cancelled) return
+      setLoading(false)
+      if (result.success && result.data) {
+        setReviews(result.data.reviews || [])
+      } else {
+        setError(result.error || 'Fehler beim Laden der Bewertungen')
+      }
+    }
+    load()
+    return () => { cancelled = true }
+  }, [selectedStatus])
 
   const startModeration = (reviewId: string, action: string) => {
     setModeratingId(reviewId)
@@ -104,29 +114,23 @@ export default function AdminReviewsPage() {
     if (!moderatingId || !moderationReason.trim()) return
 
     setModerationAction(moderatingId)
-    try {
-      const response = await fetch(`/api/admin/reviews/${moderatingId}/moderate`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          action: moderatingAction,
-          reason: moderationReason
-        })
-      })
-
-      if (!response.ok) {
-        throw new Error('Failed to moderate review')
+    const result = await apiFetch<void>(`/api/admin/reviews/${moderatingId}/moderate`, {
+      method: 'PUT',
+      body: {
+        action: moderatingAction,
+        reason: moderationReason
       }
+    })
 
+    if (result.success) {
       cancelModeration()
       await fetchReviews()
       setSuccessMessage(`Bewertung erfolgreich ${getReviewActionLabel(moderatingAction)}`)
       setTimeout(() => setSuccessMessage(null), 3000)
-    } catch (err) {
-      setError('Fehler bei der Moderation: ' + (err instanceof Error ? err.message : 'Unbekannter Fehler'))
-    } finally {
-      setModerationAction(null)
+    } else {
+      setError('Fehler bei der Moderation: ' + (result.error || 'Unbekannter Fehler'))
     }
+    setModerationAction(null)
   }
 
 

@@ -7,6 +7,7 @@ import Link from 'next/link'
 import { formatDateShort } from '@/lib/date-formats'
 import { getApprovalStatusLabel } from '@/config/approval-status'
 import { LOCATION_STATUS } from '@/config/location-status'
+import { apiFetch } from '@/lib/api/client'
 import {
   MapPin,
   Plus,
@@ -54,61 +55,70 @@ export default function AdminLocationsPage() {
   const [totalPages, setTotalPages] = useState(1)
 
   const loadLocations = useCallback(async () => {
-    try {
+    setLoading(true)
+    const params = new URLSearchParams({
+      status: filters.status === 'all' ? LOCATION_STATUS.APPROVED : filters.status,
+      limit: '20',
+      offset: ((currentPage - 1) * 20).toString()
+    })
+
+    if (filters.type !== 'all') params.set('type', filters.type)
+    if (filters.city) params.set('city', filters.city)
+
+    const result = await apiFetch<{ locations: Location[]; pagination?: { total: number } }>(`/api/locations?${params}`)
+    setLoading(false)
+
+    if (result.success && result.data) {
+      setLocations(result.data.locations ?? [])
+      setTotalPages(Math.ceil((result.data.pagination?.total ?? 0) / 20))
+    } else {
+      setError(result.error || 'Fehler beim Laden der Orte')
+    }
+  }, [filters.status, filters.type, filters.city, currentPage])
+
+  useEffect(() => {
+    if (status !== 'authenticated') return
+    let cancelled = false
+    async function load() {
       setLoading(true)
       const params = new URLSearchParams({
         status: filters.status === 'all' ? LOCATION_STATUS.APPROVED : filters.status,
         limit: '20',
         offset: ((currentPage - 1) * 20).toString()
       })
-
       if (filters.type !== 'all') params.set('type', filters.type)
       if (filters.city) params.set('city', filters.city)
-
-      const response = await fetch(`/api/locations?${params}`)
-      if (response.ok) {
-        const json = await response.json()
-        const payload = json.data ?? json
-        setLocations(payload.locations ?? [])
-        setTotalPages(Math.ceil((payload.pagination?.total ?? 0) / 20))
-      } else {
-        setError('Fehler beim Laden der Orte')
-      }
-    } catch (error) {
-      setError('Netzwerkfehler')
-    } finally {
+      const result = await apiFetch<{ locations: Location[]; pagination?: { total: number } }>(`/api/locations?${params}`)
+      if (cancelled) return
       setLoading(false)
+      if (result.success && result.data) {
+        setLocations(result.data.locations ?? [])
+        setTotalPages(Math.ceil((result.data.pagination?.total ?? 0) / 20))
+      } else {
+        setError(result.error || 'Fehler beim Laden der Orte')
+      }
     }
-  }, [filters.status, filters.type, filters.city, currentPage])
-
-  useEffect(() => {
-    if (status === 'authenticated') {
-      loadLocations()
-    }
-  }, [status, loadLocations])
+    load()
+    return () => { cancelled = true }
+  }, [status, filters.status, filters.type, filters.city, currentPage])
 
   const handleApproval = async (locationId: string, action: 'approve' | 'reject') => {
     if (!confirm(`Möchten Sie diesen Ort wirklich ${action === 'approve' ? 'genehmigen' : 'ablehnen'}?`)) {
       return
     }
 
-    try {
-      const response = await fetch(`/api/locations/${locationId}/approve`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          action,
-          review_notes: action === 'reject' ? 'Administrative Prüfung' : 'Ort genehmigt'
-        })
-      })
-
-      if (response.ok) {
-        loadLocations() // Reload the list
-      } else {
-        alert('Fehler bei der Genehmigung')
+    const result = await apiFetch<void>(`/api/locations/${locationId}/approve`, {
+      method: 'POST',
+      body: {
+        action,
+        review_notes: action === 'reject' ? 'Administrative Prüfung' : 'Ort genehmigt'
       }
-    } catch (error) {
-      alert('Netzwerkfehler')
+    })
+
+    if (result.success) {
+      loadLocations()
+    } else {
+      alert(result.error || 'Fehler bei der Genehmigung')
     }
   }
 

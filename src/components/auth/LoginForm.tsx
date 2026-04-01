@@ -131,7 +131,7 @@ export function LoginForm() {
               E-Mail-Adresse
             </label>
             <div className="relative">
-              <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-400" />
+              <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-500" />
               <input
                 id="email"
                 type="email"
@@ -170,7 +170,7 @@ export function LoginForm() {
               </Link>
             </div>
             <div className="relative">
-              <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-400" />
+              <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-500" />
               <input
                 id="password"
                 type={showPassword ? 'text' : 'password'}
@@ -255,7 +255,7 @@ export function LoginForm() {
         <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">
           Mit einem Konto können Sie:
         </p>
-        <ul className="text-sm text-gray-500 dark:text-gray-500 space-y-1">
+        <ul className="text-sm text-gray-600 dark:text-gray-500 space-y-1">
           <li>✓ Sich für Workshops anmelden</li>
           <li>✓ Termine für Dienstleistungen buchen</li>
           <li>✓ Ihre Bestellungen im Shop verfolgen</li>

@@ -26,6 +26,7 @@ import {
   getSkillById,
   REVAMPIT_NOTIFICATION_EMAIL,
 } from '@/config/it-hilfe'
+import { APP_URL } from '@/config/urls'
 
 interface NotifyParams {
   requestId: string
@@ -46,7 +47,7 @@ interface NotifyParams {
  * All sends are fire-and-forget (errors logged but not thrown).
  */
 export function sendRequestCreatedNotifications(params: NotifyParams): void {
-  const requestUrl = `${process.env.NEXTAUTH_URL || 'https://revamp-it.ch'}/it-hilfe/${params.requestId}`
+  const requestUrl = `${APP_URL}/it-hilfe/${params.requestId}`
   const categoryName = getCategoryById(params.categoryId)?.name || params.categoryId
   const urgencyName = getUrgencyById(params.urgency)?.name || params.urgency
 

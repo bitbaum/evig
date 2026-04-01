@@ -18,6 +18,8 @@ import { db } from '@/db'
 import { paymentProviders, paymentTransactions, escrowAccounts, invoices } from '@/db/schema'
 import { eq, and, sql } from 'drizzle-orm'
 import { SWISS_VAT_RATES } from '@/lib/payments/tax-compliance'
+import { PAYMENT_STATUS } from '@/config/payment-status'
+import { INVOICE_STATUS } from '@/config/invoice-status'
 import { logger } from '@/lib/logger'
 import { createGateway } from '@/lib/payments/payrexx-client'
 import type { SupportedCurrency } from '@/lib/payments/currency'
@@ -188,7 +190,7 @@ export async function createTransaction(
       providerId: params.providerId,
       providerTransactionId: params.providerTransactionId || null,
       type: 'payment',
-      status: 'pending',
+      status: PAYMENT_STATUS.PENDING,
       amountCents: params.amountCents,
       currency: params.currency,
       feeCents: params.feeCents,
@@ -257,7 +259,7 @@ export async function createInvoice(params: InvoiceParams): Promise<InvoiceResul
     .values({
       invoiceNumber: sql`generate_invoice_number()`,
       type: 'service',
-      status: 'draft',
+      status: INVOICE_STATUS.DRAFT,
       userId: params.userId,
       serviceAppointmentId: params.serviceAppointmentId || null,
       workshopRegistrationId: params.workshopRegistrationId || null,

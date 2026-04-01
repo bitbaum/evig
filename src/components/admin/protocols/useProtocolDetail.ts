@@ -3,6 +3,7 @@ import { useRouter } from 'next/navigation'
 import { getErrorMessage } from '@/lib/utils/error'
 import { validateAudioUpload } from '@/lib/protocols/audio-validation'
 import { PROTOCOL_WORKFLOW_STEPS, getProtocolWorkflowProgress, type ProtocolWorkflowStepId } from '@/lib/protocols/workflow'
+import { apiFetch } from '@/lib/api/client'
 import type { StructuredNotes } from '@/lib/schemas/protocols'
 import type { ProtocolDetailProps } from './types'
 
@@ -105,13 +106,11 @@ export function useProtocolDetail({ protocol, actionLinks, initialProcessingErro
         }),
       }
 
-      const res = await fetch(`/api/protocols/${protocol.id}`, {
+      const result = await apiFetch<void>(`/api/protocols/${protocol.id}`, {
         method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ structured_notes: updatedNotes }),
+        body: { structured_notes: updatedNotes },
       })
-      const data = await res.json()
-      if (!data.success) throw new Error(data.error || 'Fehler beim Speichern')
+      if (!result.success) throw new Error(result.error || 'Fehler beim Speichern')
       setMappingDirty(false)
       router.refresh()
     } catch (err) {
@@ -126,9 +125,8 @@ export function useProtocolDetail({ protocol, actionLinks, initialProcessingErro
     setError(null)
 
     try {
-      const res = await fetch(`/api/protocols/${protocol.id}/finalize`, { method: 'POST' })
-      const data = await res.json()
-      if (!data.success) throw new Error(data.error || 'Fehler beim Abschliessen')
+      const result = await apiFetch<void>(`/api/protocols/${protocol.id}/finalize`, { method: 'POST' })
+      if (!result.success) throw new Error(result.error || 'Fehler beim Abschliessen')
       router.refresh()
     } catch (err) {
       setError(getErrorMessage(err))
@@ -169,29 +167,29 @@ export function useProtocolDetail({ protocol, actionLinks, initialProcessingErro
 
     try {
       const endpoint = getReprocessEndpoint()
-      let res: Response
 
       if (protocol.input_method === 'audio') {
+        // Audio upload uses FormData — cannot use apiFetch (it JSON.stringifies the body)
         if (!audioFile) throw new Error('Bitte wählen Sie eine Audiodatei aus.')
         const validationError = validateAudioUpload(audioFile)
         if (validationError) throw new Error(validationError)
 
         const formData = new FormData()
         formData.append('audio', audioFile)
-        res = await fetch(`/api/protocols/${protocol.id}/${endpoint}`, {
+        const res = await fetch(`/api/protocols/${protocol.id}/${endpoint}`, {
           method: 'POST',
           body: formData,
         })
+        const data = await res.json()
+        if (!data.success) throw new Error(data.error || 'Verarbeitung fehlgeschlagen')
       } else {
-        res = await fetch(`/api/protocols/${protocol.id}/${endpoint}`, {
+        const result = await apiFetch<void>(`/api/protocols/${protocol.id}/${endpoint}`, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(getReprocessBody()),
+          body: getReprocessBody(),
         })
+        if (!result.success) throw new Error(result.error || 'Verarbeitung fehlgeschlagen')
       }
 
-      const data = await res.json()
-      if (!data.success) throw new Error(data.error || 'Verarbeitung fehlgeschlagen')
       setAudioFile(null)
       router.refresh()
     } catch (err) {
@@ -207,10 +205,9 @@ export function useProtocolDetail({ protocol, actionLinks, initialProcessingErro
 
     try {
       const topicTitle = notes?.topics.find(t => t.id === actionItem.topic_id)?.title || ''
-      const res = await fetch(`/api/protocols/${protocol.id}/actions`, {
+      const result = await apiFetch<void>(`/api/protocols/${protocol.id}/actions`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
+        body: {
           action_item_id: actionItem.id,
           link_type: 'task',
           task_data: {
@@ -220,10 +217,9 @@ export function useProtocolDetail({ protocol, actionLinks, initialProcessingErro
             category: 'admin',
             priority: actionItem.priority_hint || 'normal',
           },
-        }),
+        },
       })
-      const data = await res.json()
-      if (!data.success) throw new Error(data.error || 'Fehler beim Erstellen der Aufgabe')
+      if (!result.success) throw new Error(result.error || 'Fehler beim Erstellen der Aufgabe')
       router.refresh()
     } catch (err) {
       setError(getErrorMessage(err))
@@ -242,10 +238,9 @@ export function useProtocolDetail({ protocol, actionLinks, initialProcessingErro
     for (const item of unlinkedTaskItems) {
       try {
         const topicTitle = notes.topics.find(t => t.id === item.topic_id)?.title || ''
-        const res = await fetch(`/api/protocols/${protocol.id}/actions`, {
+        const result = await apiFetch<void>(`/api/protocols/${protocol.id}/actions`, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
+          body: {
             action_item_id: item.id,
             link_type: 'task',
             task_data: {
@@ -255,10 +250,9 @@ export function useProtocolDetail({ protocol, actionLinks, initialProcessingErro
               category: 'admin',
               priority: item.priority_hint || 'normal',
             },
-          }),
+          },
         })
-        const data = await res.json()
-        if (!data.success) failures.push(item.description)
+        if (!result.success) failures.push(item.description)
       } catch {
         failures.push(item.description)
       }
@@ -277,9 +271,8 @@ export function useProtocolDetail({ protocol, actionLinks, initialProcessingErro
     setError(null)
 
     try {
-      const res = await fetch(`/api/protocols/${protocol.id}`, { method: 'DELETE' })
-      const data = await res.json()
-      if (!data.success) throw new Error(data.error || 'Fehler beim Löschen')
+      const result = await apiFetch<void>(`/api/protocols/${protocol.id}`, { method: 'DELETE' })
+      if (!result.success) throw new Error(result.error || 'Fehler beim Löschen')
       router.push('/admin/protocols')
     } catch (err) {
       setError(getErrorMessage(err))

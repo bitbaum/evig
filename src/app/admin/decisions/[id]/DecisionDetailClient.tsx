@@ -3,6 +3,7 @@
 import { useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { apiFetch } from '@/lib/api/client';
 import {
   DECISION_STATUS,
   DECISION_STATUS_CONFIG,
@@ -71,32 +72,35 @@ export default function DecisionDetailClient({
   const [deleting, setDeleting] = useState(false);
   const router = useRouter();
 
-  const fetchDecision = useCallback(() => {
-    fetch(`/api/decisions/${decisionId}`)
-      .then((res) => res.json())
-      .then((json) => {
-        if (json.success) setDecision(json.data);
-        setLoading(false);
-      });
+  const fetchDecision = useCallback(async () => {
+    const result = await apiFetch<DecisionDetail>(`/api/decisions/${decisionId}`);
+    if (result.success && result.data) setDecision(result.data);
+    setLoading(false);
   }, [decisionId]);
 
   useEffect(() => {
-    fetchDecision();
-  }, [fetchDecision]);
+    let cancelled = false;
+    async function load() {
+      const result = await apiFetch<DecisionDetail>(`/api/decisions/${decisionId}`);
+      if (cancelled) return;
+      if (result.success && result.data) setDecision(result.data);
+      setLoading(false);
+    }
+    load();
+    return () => { cancelled = true; };
+  }, [decisionId]);
 
   async function handleTransition(
     newStatus: DecisionStatus,
     extra?: { cancelReason?: string; outcomeSummary?: string }
   ) {
     setActionError('');
-    const res = await fetch(`/api/decisions/${decisionId}/transition`, {
+    const result = await apiFetch<void>(`/api/decisions/${decisionId}/transition`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ status: newStatus, ...extra }),
+      body: { status: newStatus, ...extra },
     });
-    const json = await res.json();
-    if (!json.success) {
-      setActionError(json.error || 'Fehler');
+    if (!result.success) {
+      setActionError(result.error || 'Fehler');
       return;
     }
     fetchDecision();
@@ -105,23 +109,16 @@ export default function DecisionDetailClient({
   async function handleDelete() {
     setDeleting(true);
     setActionError('');
-    try {
-      const res = await fetch(`/api/decisions/${decisionId}`, {
-        method: 'DELETE',
-      });
-      const json = await res.json();
-      if (!json.success) {
-        setActionError(json.error || 'Fehler beim Löschen');
-        setDeleting(false);
-        setShowDeleteDialog(false);
-        return;
-      }
-      router.push('/admin/decisions');
-    } catch {
-      setActionError('Netzwerkfehler');
+    const result = await apiFetch<void>(`/api/decisions/${decisionId}`, {
+      method: 'DELETE',
+    });
+    if (!result.success) {
+      setActionError(result.error || 'Fehler beim Löschen');
       setDeleting(false);
       setShowDeleteDialog(false);
+      return;
     }
+    router.push('/admin/decisions');
   }
 
   const canDelete = decision

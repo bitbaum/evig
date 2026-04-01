@@ -13,6 +13,7 @@ import { COMMISSION_RATE, LISTING_STATUS, ORDER_STATUS } from '@/config/marketpl
 import { logger } from '@/lib/logger';
 import { validateBody, validateQuery, CreateOrderSchema, OrdersQuerySchema } from '@/lib/schemas';
 import { createGateway } from '@/lib/payments/payrexx-client';
+import { APP_URL } from '@/config/urls';
 
 class OrderValidationError extends Error {
   statusCode: number;
@@ -119,16 +120,15 @@ export const POST = withAuth(async (request: NextRequest, session: ValidSession)
 
     // Create Payrexx Gateway (reservation mode) — rollback on failure
     let gateway: { id: number; link: string };
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
     try {
       gateway = await createGateway({
         amount: Math.round(totalChf * 100), // CHF Rappen
         currency: 'CHF',
         referenceId: orderId,
         purpose: `RevampIT: ${listing.title}`,
-        successRedirectUrl: `${baseUrl}/marketplace/checkout/success?orderId=${orderId}`,
-        failedRedirectUrl: `${baseUrl}/marketplace/checkout/${listing.id}?error=payment_failed`,
-        cancelRedirectUrl: `${baseUrl}/marketplace/checkout/${listing.id}?error=cancelled`,
+        successRedirectUrl: `${APP_URL}/marketplace/checkout/success?orderId=${orderId}`,
+        failedRedirectUrl: `${APP_URL}/marketplace/checkout/${listing.id}?error=payment_failed`,
+        cancelRedirectUrl: `${APP_URL}/marketplace/checkout/${listing.id}?error=cancelled`,
       });
     } catch (gatewayError) {
       // Rollback: delete order and restore listing to ACTIVE

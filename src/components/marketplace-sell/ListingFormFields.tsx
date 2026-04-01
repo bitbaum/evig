@@ -53,10 +53,11 @@ export function ListingFormFields({ formData, setFormData }: Props) {
     <>
       {/* Title */}
       <div>
-        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+        <label htmlFor="listing-title" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
           Titel <span className="text-red-500">*</span>
         </label>
         <input
+          id="listing-title"
           type="text"
           value={formData.title}
           onChange={(e) => update('title', e.target.value)}
@@ -68,10 +69,11 @@ export function ListingFormFields({ formData, setFormData }: Props) {
 
       {/* Description */}
       <div>
-        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+        <label htmlFor="listing-description" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
           Beschreibung <span className="text-red-500">*</span>
         </label>
         <textarea
+          id="listing-description"
           value={formData.description}
           onChange={(e) => update('description', e.target.value)}
           maxLength={MARKETPLACE_LIMITS.MAX_DESCRIPTION_LENGTH}
@@ -84,10 +86,11 @@ export function ListingFormFields({ formData, setFormData }: Props) {
       {/* Price + Category + Condition */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+          <label htmlFor="listing-price" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
             Preis (CHF) <span className="text-red-500">*</span>
           </label>
           <input
+            id="listing-price"
             type="number"
             step="0.01"
             min="0"
@@ -101,10 +104,11 @@ export function ListingFormFields({ formData, setFormData }: Props) {
           )}
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+          <label htmlFor="listing-category" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
             Kategorie <span className="text-red-500">*</span>
           </label>
           <select
+            id="listing-category"
             value={formData.category}
             onChange={(e) => handleCategoryChange(e.target.value)}
             className="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
@@ -118,10 +122,11 @@ export function ListingFormFields({ formData, setFormData }: Props) {
           </select>
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+          <label htmlFor="listing-condition" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
             Zustand <span className="text-red-500">*</span>
           </label>
           <select
+            id="listing-condition"
             value={formData.condition}
             onChange={(e) => handleConditionChange(e.target.value)}
             className="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"

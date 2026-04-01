@@ -9,10 +9,9 @@ import { PROTOCOL_STATUSES } from '@/config/protocols'
 import { logger } from '@/lib/logger'
 import { validateAudioUpload } from '@/lib/protocols/audio-validation'
 import { WHISPER_MODELS } from '@/config/transcription'
+import { SERVICE_URLS } from '@/config/services'
 
 type RouteParams = { id: string }
-
-const TRANSCRIPTION_URL = process.env.TRANSCRIPTION_URL || 'http://localhost:5111'
 
 export const POST = withAdmin<RouteParams>(async (
   request: NextRequest,
@@ -64,7 +63,7 @@ export const POST = withAdmin<RouteParams>(async (
     const validModel = WHISPER_MODELS.find(m => m.id === requestedModel)
     const modelParam = validModel ? `&model=${validModel.id}` : ''
 
-    const transcribeResponse = await fetch(`${TRANSCRIPTION_URL}/transcribe?language=de${modelParam}`, {
+    const transcribeResponse = await fetch(`${SERVICE_URLS.TRANSCRIPTION}/transcribe?language=de${modelParam}`, {
       method: 'POST',
       body: transcribeFormData,
     })

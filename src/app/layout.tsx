@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Providers } from "@/components/providers/providers";
 import ConditionalMainLayout from "@/components/layout/ConditionalMainLayout";
 import { CSRF_SCRIPT } from "@/lib/auth/csrf";
@@ -6,6 +6,12 @@ import "./globals.css";
 
 // Use system fonts to avoid build-time network fetches
 const interClassName = "";
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 5,
+};
 
 export const metadata: Metadata = {
   title: "Revamp-IT",

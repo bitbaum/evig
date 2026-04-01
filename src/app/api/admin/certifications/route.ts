@@ -3,6 +3,7 @@ import { withAdmin } from '@/lib/api/middleware'
 import { db } from '@/db'
 import { sql } from 'drizzle-orm'
 import { apiError, apiSuccess, apiBadRequest, apiNotFound } from '@/lib/api/helpers'
+import { TABLE_NAMES } from '@/config/database'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { CERTIFICATION_STATUS } from '@/config/certification-status'
 import { logger } from '@/lib/logger'
@@ -68,8 +69,8 @@ export const GET = withAdmin('services', async (request, session) => {
         ct.issuing_authority as default_issuing_authority,
         ct.validity_period_months,
         ct.requires_verification
-      FROM repairer_certifications rc
-      LEFT JOIN certification_types ct ON rc.certification_type_id = ct.id
+      FROM ${sql.raw(TABLE_NAMES.REPAIRER_CERTIFICATIONS)} rc
+      LEFT JOIN ${sql.raw(TABLE_NAMES.CERTIFICATION_TYPES)} ct ON rc.certification_type_id = ct.id
       WHERE rc.application_id = ${applicationId} AND rc.verification_status = ${status}
       ORDER BY rc.created_at ASC
     `)
@@ -77,8 +78,8 @@ export const GET = withAdmin('services', async (request, session) => {
     // Get application details
     const applicationResult = await db.execute(sql`
       SELECT ra.*, u.name, u.email
-      FROM repairer_applications ra
-      JOIN users u ON ra.user_id = u.id
+      FROM ${sql.raw(TABLE_NAMES.REPAIRER_APPLICATIONS)} ra
+      JOIN ${sql.raw(TABLE_NAMES.USERS)} u ON ra.user_id = u.id
       WHERE ra.id = ${applicationId}
     `)
 

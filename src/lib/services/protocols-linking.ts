@@ -6,6 +6,7 @@ import { db } from '@/db'
 import { sql, getTableName } from 'drizzle-orm'
 import { protocolActionLinks, tasks, decisions } from '@/db/schema/misc'
 import { logger } from '@/lib/logger'
+import { DECISION_STATUS } from '@/config/decisions'
 import type { ActionLinkRecord } from '@/lib/schemas/protocols'
 
 // Table name refs
@@ -116,7 +117,7 @@ export async function linkActionItemToDecision(
         ${decisionData.description},
         ${decisionData.decisionType || 'sense_check'},
         ${decisionData.votingMethod || 'simple_majority'},
-        ${decisionData.initialStatus || 'draft'},
+        ${decisionData.initialStatus || DECISION_STATUS.DRAFT},
         ${createdBy}
       )
       RETURNING id

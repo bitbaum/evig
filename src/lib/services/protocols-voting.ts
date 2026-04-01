@@ -6,7 +6,7 @@ import { db } from '@/db'
 import { sql, getTableName } from 'drizzle-orm'
 import { meetingProtocols, protocolDecisionVotes, protocolDecisionOutcomes } from '@/db/schema/misc'
 import { users } from '@/db/schema/auth'
-import { MEETING_TYPE_LABELS } from '@/config/protocols'
+import { MEETING_TYPE_LABELS, DECISION_RESULTS } from '@/config/protocols'
 import { PROTOCOL_PROMPTS, fillPromptTemplate } from '@/lib/ai/config/prompts'
 import { processDecisionProposal } from '@/lib/ai/protocol-processing'
 import { logger } from '@/lib/logger'
@@ -156,7 +156,7 @@ async function checkAutoClose(
     const outcomeRow = outcome.rows[0] as unknown as { is_closed: boolean; result: string } | undefined
     return {
       isClosed: outcomeRow?.is_closed || false,
-      result: outcomeRow?.result || 'pending',
+      result: outcomeRow?.result || DECISION_RESULTS.PENDING,
     }
   }
 
@@ -182,7 +182,7 @@ async function checkAutoClose(
   const outcomeRow = outcome.rows[0] as unknown as { is_closed: boolean; result: string } | undefined
   return {
     isClosed: outcomeRow?.is_closed || false,
-    result: outcomeRow?.result || 'pending',
+    result: outcomeRow?.result || DECISION_RESULTS.PENDING,
   }
 }
 
@@ -203,7 +203,7 @@ async function closeDecisionInternal(
   const outcomeRow = outcome.rows[0] as unknown as { votes_up: number; votes_down: number } | undefined
   const votesUp = outcomeRow?.votes_up || 0
   const votesDown = outcomeRow?.votes_down || 0
-  const result = votesUp > votesDown ? 'approved' : 'rejected'
+  const result = votesUp > votesDown ? DECISION_RESULTS.APPROVED : DECISION_RESULTS.REJECTED
 
   await db.execute(sql`
     UPDATE ${sql.raw(pdoTable)}
@@ -296,7 +296,7 @@ export async function generateTaskProposals(
   if (!outcome || !outcome.is_closed) {
     throw new Error('DECISION_NOT_FOUND')
   }
-  if (outcome.result !== 'approved') {
+  if (outcome.result !== DECISION_RESULTS.APPROVED) {
     throw new Error('DECISION_NOT_APPROVED')
   }
 
@@ -386,7 +386,7 @@ export async function createProposedTasks(
 
   const outcome = outcomeResult.rows[0] as unknown as DecisionOutcomeRecord | undefined
   if (!outcome) throw new Error('DECISION_NOT_FOUND')
-  if (outcome.result !== 'approved') throw new Error('DECISION_NOT_APPROVED')
+  if (outcome.result !== DECISION_RESULTS.APPROVED) throw new Error('DECISION_NOT_APPROVED')
   if (outcome.tasks_created) throw new Error('TASKS_ALREADY_CREATED')
   if (!outcome.proposed_tasks || outcome.proposed_tasks.length === 0) {
     throw new Error('AI_PROPOSAL_FAILED')

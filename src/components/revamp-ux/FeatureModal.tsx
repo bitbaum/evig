@@ -20,7 +20,7 @@ export function FeatureModal({ selectedFeature, featureDetails, onClose }: Featu
       />
 
       {/* Sliding Panel */}
-      <div className="fixed top-0 left-0 h-full w-full max-w-2xl bg-white shadow-2xl z-50 transform translate-x-0 transition-transform duration-300 ease-in-out">
+      <div role="dialog" aria-modal="true" aria-labelledby="feature-modal-title" className="fixed top-0 left-0 h-full w-full max-w-2xl bg-white shadow-2xl z-50 transform translate-x-0 transition-transform duration-300 ease-in-out">
         {/* Close Arrow Button */}
         <button
           onClick={onClose}
@@ -45,7 +45,7 @@ export function FeatureModal({ selectedFeature, featureDetails, onClose }: Featu
         {/* Panel Content */}
         <div className="h-full overflow-y-auto pt-20 pb-6">
           <div className="px-6">
-            <h3 className="text-xl font-bold text-gray-900 mb-6">{selectedFeature}</h3>
+            <h3 id="feature-modal-title" className="text-xl font-bold text-gray-900 mb-6">{selectedFeature}</h3>
             <div className="space-y-4">
               <ComparisonCard
                 title="WordPress"

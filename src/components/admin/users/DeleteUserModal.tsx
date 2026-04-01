@@ -26,9 +26,9 @@ export function DeleteUserModal({
     <div className="fixed inset-0 z-50 overflow-y-auto">
       <div className="flex min-h-full items-center justify-center p-4">
         <div className="fixed inset-0 bg-black/50" aria-hidden="true" onClick={onClose} />
-        <div role="dialog" aria-modal="true" onKeyDown={(e) => { if (e.key === 'Escape') onClose() }} className="relative bg-white dark:bg-gray-800 rounded-xl shadow-xl max-w-md w-full p-6">
+        <div role="dialog" aria-modal="true" aria-labelledby="delete-user-dialog-title" onKeyDown={(e) => { if (e.key === 'Escape') onClose() }} className="relative bg-white dark:bg-gray-800 rounded-xl shadow-xl max-w-md w-full p-6">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold text-red-600 dark:text-red-400">
+            <h3 id="delete-user-dialog-title" className="text-lg font-semibold text-red-600 dark:text-red-400">
               Benutzer löschen
             </h3>
             <button

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter, useParams } from 'next/navigation'
 import Link from 'next/link'
@@ -13,6 +13,8 @@ import {
   Eye,
   FileText,
 } from 'lucide-react'
+import { generateSlug } from '@/lib/utils/slug'
+import { apiFetch } from '@/lib/api/client'
 
 interface PageData {
   id: string
@@ -44,42 +46,31 @@ export default function EditStaticPagePage() {
     seo_description: '',
   })
 
-  const loadPage = useCallback(async () => {
-    try {
-      setLoading(true)
-      const response = await fetch(`/api/admin/pages/${pageId}`)
-      if (response.ok) {
-        const result = await response.json()
-        if (result.success && result.data) {
-          const page = result.data
-          setFormData({
-            title: page.title || '',
-            slug: page.slug || '',
-            content: page.content || '',
-            is_published: page.is_published || false,
-            seo_title: page.seo_title || '',
-            seo_description: page.seo_description || '',
-          })
-        } else {
-          setError('Seite nicht gefunden')
-        }
-      } else if (response.status === 404) {
-        setError('Seite nicht gefunden')
-      } else {
-        setError('Fehler beim Laden der Seite')
-      }
-    } catch {
-      setError('Netzwerkfehler')
-    } finally {
-      setLoading(false)
-    }
-  }, [pageId])
-
   useEffect(() => {
-    if (sessionStatus === 'authenticated' && pageId) {
-      loadPage()
+    if (sessionStatus !== 'authenticated' || !pageId) return
+    let cancelled = false
+    async function loadPage() {
+      setLoading(true)
+      const result = await apiFetch<PageData>(`/api/admin/pages/${pageId}`)
+      if (cancelled) return
+      setLoading(false)
+      if (result.success && result.data) {
+        const page = result.data
+        setFormData({
+          title: page.title || '',
+          slug: page.slug || '',
+          content: page.content || '',
+          is_published: page.is_published || false,
+          seo_title: page.seo_title || '',
+          seo_description: page.seo_description || '',
+        })
+      } else {
+        setError(result.error || 'Seite nicht gefunden')
+      }
     }
-  }, [sessionStatus, pageId, loadPage])
+    loadPage()
+    return () => { cancelled = true }
+  }, [sessionStatus, pageId])
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -91,36 +82,19 @@ export default function EditStaticPagePage() {
       return
     }
 
-    try {
-      setSaving(true)
-      const response = await fetch(`/api/admin/pages/${pageId}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
-      })
+    setSaving(true)
+    const result = await apiFetch<void>(`/api/admin/pages/${pageId}`, {
+      method: 'PUT',
+      body: formData,
+    })
+    setSaving(false)
 
-      if (response.ok) {
-        setSuccess('Seite erfolgreich gespeichert')
-        setTimeout(() => setSuccess(''), 3000)
-      } else {
-        const result = await response.json()
-        setError(result.error || 'Fehler beim Speichern')
-      }
-    } catch {
-      setError('Netzwerkfehler')
-    } finally {
-      setSaving(false)
+    if (result.success) {
+      setSuccess('Seite erfolgreich gespeichert')
+      setTimeout(() => setSuccess(''), 3000)
+    } else {
+      setError(result.error || 'Fehler beim Speichern')
     }
-  }
-
-  function generateSlug(title: string) {
-    return title
-      .toLowerCase()
-      .replace(/ä/g, 'ae')
-      .replace(/ö/g, 'oe')
-      .replace(/ü/g, 'ue')
-      .replace(/[^a-z0-9]+/g, '-')
-      .replace(/^-+|-+$/g, '')
   }
 
   if (sessionStatus === 'loading' || loading) {

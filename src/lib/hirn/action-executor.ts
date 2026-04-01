@@ -1,7 +1,7 @@
 import { db } from '@/db'
 import { tasks } from '@/db/schema'
 import { TASK_TYPES, TASK_CATEGORIES, TASK_PRIORITIES } from '@/config/tasks'
-import { DECISION_TYPES, VOTING_METHODS } from '@/config/decisions'
+import { DECISION_TYPES, VOTING_METHODS, DECISION_STATUS } from '@/config/decisions'
 import { MEETING_TYPES, PROTOCOL_VISIBILITY } from '@/config/protocols'
 import { createTaskSchema } from '@/lib/schemas/tasks'
 import { createDecisionSchema } from '@/lib/schemas/decisions'
@@ -122,7 +122,7 @@ export async function executeHirnAction(input: ExecuteActionInput, dbUserId: str
         throw new Error(parsed.error.issues[0]?.message || 'Ungültigi Entscheid-Date')
       }
 
-      const decision = await createDecision({ ...parsed.data, initialStatus: 'draft' }, dbUserId)
+      const decision = await createDecision({ ...parsed.data, initialStatus: DECISION_STATUS.DRAFT }, dbUserId)
       return {
         mode: 'executed' as const,
         entity: { type: 'decision', id: decision.id, title: decision.title, link: `/admin/decisions/${decision.id}` },

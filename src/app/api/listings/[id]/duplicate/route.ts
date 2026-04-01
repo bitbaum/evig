@@ -11,6 +11,7 @@ import { db } from '@/db';
 import { listings, listingSpecs } from '@/db/schema';
 import { eq, and, ne } from 'drizzle-orm';
 import { logger } from '@/lib/logger';
+import { MARKETPLACE_STATUS } from '@/config/marketplace-status';
 
 type RouteContext = { params?: { id: string } };
 
@@ -66,7 +67,7 @@ export const POST = withAuth<{ id: string }>(async (
           shippingCostChf: listing.shippingCostChf,
           pickupLocation: listing.pickupLocation,
           paymentMode: listing.paymentMode,
-          status: 'draft',
+          status: MARKETPLACE_STATUS.DRAFT,
           conditionChecks: listing.conditionChecks,
         })
         .returning({ id: listings.id });

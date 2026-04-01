@@ -13,26 +13,16 @@ import {
   apiError,
 } from '@/lib/api/helpers'
 import { logger } from '@/lib/logger'
+import { APPROVAL_STATUS } from '@/config/approval-status'
 import { validateBody, BlogSubmissionSchema } from '@/lib/schemas'
 import { auth } from '@/auth'
 import { checkRateLimit, getClientIp } from '@/lib/auth/rate-limiter'
 import { sendEmail } from '@/lib/email'
 import { APP_URL } from '@/config/urls'
+import { generateSlug } from '@/lib/utils/slug'
 import { db } from '@/db'
 import { blogCategories, blogSubmissions, users } from '@/db/schema'
 import { eq, or, and, isNotNull } from 'drizzle-orm'
-
-function generateSlug(title: string): string {
-  return title
-    .toLowerCase()
-    .replace(/[äàâ]/g, 'a')
-    .replace(/[öò]/g, 'o')
-    .replace(/[üù]/g, 'u')
-    .replace(/[éèêë]/g, 'e')
-    .replace(/[ß]/g, 'ss')
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-|-$/g, '')
-}
 
 export async function POST(request: NextRequest) {
   try {
@@ -88,7 +78,7 @@ export async function POST(request: NextRequest) {
         categoryId,
         categoryName: data.category || null,
         tags: data.tags,
-        status: 'pending',
+        status: APPROVAL_STATUS.PENDING,
       })
       .returning({ id: blogSubmissions.id })
 

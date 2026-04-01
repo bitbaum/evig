@@ -12,6 +12,7 @@ import {
   centsToDisplay
 } from '@/lib/payments/payment-flow'
 import { validateBody, WorkshopRegisterWithPaymentSchema } from '@/lib/schemas'
+import { APP_URL } from '@/config/urls'
 
 interface WorkshopRow {
   id: string
@@ -144,9 +145,6 @@ export async function POST(request: NextRequest) {
       return createdReg.id
     })
 
-    // Build redirect URLs
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'
-
     // Process payment using shared utility
     const autoReleaseDays = 1
     const paymentResult = await processPayment({
@@ -164,9 +162,9 @@ export async function POST(request: NextRequest) {
         registrationType
       },
       workshopRegistrationId: registrationId,
-      successRedirectUrl: `${baseUrl}/dashboard/workshops?payment=success`,
-      failedRedirectUrl: `${baseUrl}/workshops/${workshopSlug}?payment=failed`,
-      cancelRedirectUrl: `${baseUrl}/workshops/${workshopSlug}?payment=cancelled`,
+      successRedirectUrl: `${APP_URL}/dashboard/workshops?payment=success`,
+      failedRedirectUrl: `${APP_URL}/workshops/${workshopSlug}?payment=failed`,
+      cancelRedirectUrl: `${APP_URL}/workshops/${workshopSlug}?payment=cancelled`,
       purpose: `Workshop: ${workshop.title}`,
       invoiceLineItems: [
         buildInvoiceLineItem(

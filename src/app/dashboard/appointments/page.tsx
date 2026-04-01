@@ -2,6 +2,7 @@
 
 import { useSession } from 'next-auth/react'
 import { useEffect, useState } from 'react'
+import { apiFetch } from '@/lib/api/client'
 import { Calendar, Clock, Wrench, AlertCircle, CheckCircle, XCircle, ArrowLeft, Loader2 } from 'lucide-react'
 import Link from 'next/link'
 import { formatDateTime } from '@/lib/date-formats'
@@ -34,25 +35,30 @@ export default function AppointmentsDashboard() {
   const [saving, setSaving] = useState(false)
 
   useEffect(() => {
-    if (session?.user) {
-      fetchAppointments()
+    if (!session?.user) return
+    let cancelled = false
+    async function load() {
+      const result = await apiFetch<{ appointments: ServiceAppointment[] }>('/api/appointments')
+      if (cancelled) return
+      if (result.success && result.data) {
+        setAppointments(result.data.appointments || [])
+      } else {
+        setError(result.error || 'Fehler beim Laden der Termine')
+      }
+      setLoading(false)
     }
+    load()
+    return () => { cancelled = true }
   }, [session])
 
   const fetchAppointments = async () => {
-    try {
-      const response = await fetch('/api/appointments')
-      if (response.ok) {
-        const data = await response.json()
-        setAppointments(data.data?.appointments || [])
-      } else {
-        setError('Fehler beim Laden der Termine')
-      }
-    } catch (error) {
-      setError('Netzwerkfehler beim Laden der Daten')
-    } finally {
-      setLoading(false)
+    const result = await apiFetch<{ appointments: ServiceAppointment[] }>('/api/appointments')
+    if (result.success && result.data) {
+      setAppointments(result.data.appointments || [])
+    } else {
+      setError(result.error || 'Fehler beim Laden der Termine')
     }
+    setLoading(false)
   }
 
   const openEdit = (apt: ServiceAppointment) => {
@@ -64,31 +70,25 @@ export default function AppointmentsDashboard() {
   const saveEdit = async () => {
     if (!editingId) return
     setSaving(true)
-    try {
-      const payload: { action: string; description: string; preferred_date?: string } = {
-        action: 'update',
-        description: editDescription
-      }
-      if (editPreferredDate) {
-        const d = new Date(editPreferredDate)
-        payload.preferred_date = d.toISOString()
-      }
-      const resp = await fetch(`/api/appointments/${editingId}`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      })
-      if (resp.ok) {
-        setEditingId(null)
-        fetchAppointments()
-      } else {
-        alert('Speichern nicht möglich (nur im Status "Angefragt")')
-      }
-    } catch {
-      alert('Netzwerkfehler beim Speichern')
-    } finally {
-      setSaving(false)
+    const payload: { action: string; description: string; preferred_date?: string } = {
+      action: 'update',
+      description: editDescription
     }
+    if (editPreferredDate) {
+      const d = new Date(editPreferredDate)
+      payload.preferred_date = d.toISOString()
+    }
+    const result = await apiFetch<void>(`/api/appointments/${editingId}`, {
+      method: 'PATCH',
+      body: payload
+    })
+    if (result.success) {
+      setEditingId(null)
+      fetchAppointments()
+    } else {
+      alert(result.error || 'Speichern nicht möglich (nur im Status "Angefragt")')
+    }
+    setSaving(false)
   }
 
   const getStatusIcon = (status: string) => {
@@ -290,19 +290,14 @@ export default function AppointmentsDashboard() {
                     <button
                       onClick={async () => {
                         if (!confirm('Möchten Sie diesen Termin wirklich stornieren?')) return
-                        try {
-                          const resp = await fetch(`/api/appointments/${appointment.id}`, {
-                            method: 'PATCH',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ action: 'cancel' })
-                          })
-                          if (resp.ok) {
-                            fetchAppointments()
-                          } else {
-                            alert('Stornierung fehlgeschlagen')
-                          }
-                        } catch {
-                          alert('Netzwerkfehler bei der Stornierung')
+                        const result = await apiFetch<void>(`/api/appointments/${appointment.id}`, {
+                          method: 'PATCH',
+                          body: { action: 'cancel' }
+                        })
+                        if (result.success) {
+                          fetchAppointments()
+                        } else {
+                          alert(result.error || 'Stornierung fehlgeschlagen')
                         }
                       }}
                       className="px-4 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-50"

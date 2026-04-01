@@ -95,7 +95,7 @@ export function BulkTable({
                 />
               </th>
               {/* Row number */}
-              <th className="w-10 px-2 py-3 text-left text-gray-500 dark:text-gray-400 font-medium">#</th>
+              <th className="w-10 px-2 py-3 text-left text-gray-600 dark:text-gray-400 font-medium">#</th>
               {/* Dynamic columns */}
               {BULK_TABLE_COLUMNS.map(col => (
                 <th
@@ -225,7 +225,7 @@ export function BulkTable({
               type="button"
               onClick={() => onPageChange(page - 1)}
               disabled={page === 0}
-              className="p-1.5 rounded-lg border border-gray-300 dark:border-gray-600 disabled:opacity-30 hover:bg-gray-100 dark:hover:bg-gray-700"
+              className="p-2 rounded-lg border border-gray-300 dark:border-gray-600 disabled:opacity-30 hover:bg-gray-100 dark:hover:bg-gray-700"
             >
               <ChevronLeft className="w-4 h-4" />
             </button>
@@ -236,7 +236,7 @@ export function BulkTable({
               type="button"
               onClick={() => onPageChange(page + 1)}
               disabled={page >= totalPages - 1}
-              className="p-1.5 rounded-lg border border-gray-300 dark:border-gray-600 disabled:opacity-30 hover:bg-gray-100 dark:hover:bg-gray-700"
+              className="p-2 rounded-lg border border-gray-300 dark:border-gray-600 disabled:opacity-30 hover:bg-gray-100 dark:hover:bg-gray-700"
             >
               <ChevronRight className="w-4 h-4" />
             </button>

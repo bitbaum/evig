@@ -61,10 +61,10 @@ export function AddActivityModal({ onClose, onSuccess }: AddActivityModalProps) 
         <div className="fixed inset-0 bg-black/50" aria-hidden="true" onClick={onClose} />
 
         {/* Modal */}
-        <div role="dialog" aria-modal="true" onKeyDown={(e) => { if (e.key === 'Escape') onClose() }} className="relative bg-white dark:bg-gray-800 rounded-xl shadow-xl max-w-lg w-full p-6">
+        <div role="dialog" aria-modal="true" aria-labelledby="add-activity-dialog-title" onKeyDown={(e) => { if (e.key === 'Escape') onClose() }} className="relative bg-white dark:bg-gray-800 rounded-xl shadow-xl max-w-lg w-full p-6">
           {/* Header */}
           <div className="flex items-center justify-between mb-6">
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+            <h3 id="add-activity-dialog-title" className="text-lg font-semibold text-gray-900 dark:text-gray-100">
               Aktivität hinzufügen
             </h3>
             <button
@@ -86,10 +86,11 @@ export function AddActivityModal({ onClose, onSuccess }: AddActivityModalProps) 
           <form onSubmit={handleSubmit} className="space-y-4">
             {/* Type */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              <label htmlFor="activity-type" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                 Art der Aktivität
               </label>
               <select
+                id="activity-type"
                 value={updateType}
                 onChange={(e) => setUpdateType(e.target.value)}
                 className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -104,10 +105,11 @@ export function AddActivityModal({ onClose, onSuccess }: AddActivityModalProps) 
 
             {/* Title */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              <label htmlFor="activity-title" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                 Titel <span className="text-red-500">*</span>
               </label>
               <input
+                id="activity-title"
                 type="text"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
@@ -123,10 +125,11 @@ export function AddActivityModal({ onClose, onSuccess }: AddActivityModalProps) 
 
             {/* Description */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              <label htmlFor="activity-description" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                 Beschreibung
               </label>
               <textarea
+                id="activity-description"
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 placeholder="Weitere Details (optional)"
@@ -138,10 +141,11 @@ export function AddActivityModal({ onClose, onSuccess }: AddActivityModalProps) 
 
             {/* Category */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              <label htmlFor="activity-category" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                 Kategorie
               </label>
               <select
+                id="activity-category"
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
                 className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -157,10 +161,11 @@ export function AddActivityModal({ onClose, onSuccess }: AddActivityModalProps) 
 
             {/* Visibility */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              <label htmlFor="activity-visibility" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                 Sichtbarkeit
               </label>
               <select
+                id="activity-visibility"
                 value={visibility}
                 onChange={(e) => setVisibility(e.target.value)}
                 className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 focus:ring-2 focus:ring-blue-500 focus:border-transparent"

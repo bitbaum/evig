@@ -4,6 +4,7 @@ import { db } from '@/db'
 import { conversations, messages, users } from '@/db/schema'
 import { eq, and, or, sql, desc } from 'drizzle-orm'
 import { apiError, apiSuccess, apiUnauthorized, apiBadRequest, parsePagination } from '@/lib/api/helpers'
+import { TABLE_NAMES } from '@/config/database'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { validateBody, CreateConversationSchema } from '@/lib/schemas'
 
@@ -53,12 +54,12 @@ export async function GET(request: NextRequest) {
             WHEN ${conversations.participant1} = ${session.user.id} THEN (
               SELECT json_build_object(
                 'id', u2.id, 'name', COALESCE(u2.name, u2.email), 'email', u2.email, 'role', u2.role
-              ) FROM users u2 WHERE u2.id = ${conversations.participant2}
+              ) FROM ${sql.raw(TABLE_NAMES.USERS)} u2 WHERE u2.id = ${conversations.participant2}
             )
             ELSE (
               SELECT json_build_object(
                 'id', u1.id, 'name', COALESCE(u1.name, u1.email), 'email', u1.email, 'role', u1.role
-              ) FROM users u1 WHERE u1.id = ${conversations.participant1}
+              ) FROM ${sql.raw(TABLE_NAMES.USERS)} u1 WHERE u1.id = ${conversations.participant1}
             )
           END`,
         unread_count: sql<number>`

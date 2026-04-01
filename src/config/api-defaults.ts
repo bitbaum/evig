@@ -5,6 +5,8 @@
  * Import from here instead of hardcoding values.
  */
 
+import { FILE_SIZE_LIMITS } from '@/config/limits'
+
 export const API_DEFAULTS = {
   /** Default pagination limit for list endpoints */
   PAGINATION_LIMIT: 50,
@@ -30,8 +32,8 @@ export const API_DEFAULTS = {
   /** Default chunk size for batch processing */
   BATCH_CHUNK_SIZE: 10,
 
-  /** Maximum file upload size in bytes (10MB) */
-  MAX_UPLOAD_SIZE: 10 * 1024 * 1024,
+  /** Maximum file upload size in bytes (10MB) — re-exported from limits.ts SSOT */
+  MAX_UPLOAD_SIZE: FILE_SIZE_LIMITS.UPLOAD_MAX,
 
   /** Maximum number of images per product */
   MAX_IMAGES_PER_PRODUCT: 10,

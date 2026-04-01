@@ -33,8 +33,9 @@ export function ProductDimensionFields({
 
         <div className="grid grid-cols-2 gap-3">
           <div>
-            <label className="block text-sm text-gray-600 dark:text-gray-400 mb-1">Länge (mm)</label>
+            <label htmlFor="dimension-length" className="block text-sm text-gray-600 dark:text-gray-400 mb-1">Länge (mm)</label>
             <input
+              id="dimension-length"
               type="number"
               value={formData.laenge_mm}
               onChange={(e) => onFieldChange('laenge_mm', e.target.value)}
@@ -42,8 +43,9 @@ export function ProductDimensionFields({
             />
           </div>
           <div>
-            <label className="block text-sm text-gray-600 dark:text-gray-400 mb-1">Breite (mm)</label>
+            <label htmlFor="dimension-width" className="block text-sm text-gray-600 dark:text-gray-400 mb-1">Breite (mm)</label>
             <input
+              id="dimension-width"
               type="number"
               value={formData.breite_mm}
               onChange={(e) => onFieldChange('breite_mm', e.target.value)}
@@ -51,8 +53,9 @@ export function ProductDimensionFields({
             />
           </div>
           <div>
-            <label className="block text-sm text-gray-600 dark:text-gray-400 mb-1">Höhe (mm)</label>
+            <label htmlFor="dimension-height" className="block text-sm text-gray-600 dark:text-gray-400 mb-1">Höhe (mm)</label>
             <input
+              id="dimension-height"
               type="number"
               value={formData.hoehe_mm}
               onChange={(e) => onFieldChange('hoehe_mm', e.target.value)}
@@ -60,8 +63,9 @@ export function ProductDimensionFields({
             />
           </div>
           <div>
-            <label className="block text-sm text-gray-600 dark:text-gray-400 mb-1">Gewicht (kg)</label>
+            <label htmlFor="dimension-weight" className="block text-sm text-gray-600 dark:text-gray-400 mb-1">Gewicht (kg)</label>
             <input
+              id="dimension-weight"
               type="number"
               step="0.01"
               value={formData.gewicht_kg}
@@ -82,13 +86,14 @@ export function ProductDimensionFields({
         <div className="grid grid-cols-2 gap-3">
           {/* Desktop price */}
           <div className="hidden sm:block">
-            <label className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 mb-1">
+            <label htmlFor="dimension-price" className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 mb-1">
               <span>Verkaufspreis (CHF) *</span>
               {aiMetadata.verkaufspreis && (
                 <AIFieldIndicator source={aiMetadata.verkaufspreis} fieldName="verkaufspreis" />
               )}
             </label>
             <input
+              id="dimension-price"
               type="number"
               step="0.01"
               value={formData.verkaufspreis}
@@ -100,8 +105,9 @@ export function ProductDimensionFields({
             />
           </div>
           <div>
-            <label className="block text-sm text-gray-600 dark:text-gray-400 mb-1">Anzahl auf Lager</label>
+            <label htmlFor="dimension-stock" className="block text-sm text-gray-600 dark:text-gray-400 mb-1">Anzahl auf Lager</label>
             <input
+              id="dimension-stock"
               type="number"
               value={formData.auf_lager}
               onChange={(e) => onFieldChange('auf_lager', e.target.value)}
@@ -109,8 +115,9 @@ export function ProductDimensionFields({
             />
           </div>
           <div>
-            <label className="block text-sm text-gray-600 dark:text-gray-400 mb-1">Lagerort</label>
+            <label htmlFor="dimension-location" className="block text-sm text-gray-600 dark:text-gray-400 mb-1">Lagerort</label>
             <input
+              id="dimension-location"
               type="text"
               value={formData.location}
               onChange={(e) => onFieldChange('location', e.target.value)}
@@ -119,8 +126,9 @@ export function ProductDimensionFields({
             />
           </div>
           <div>
-            <label className="block text-sm text-gray-600 dark:text-gray-400 mb-1">Box ID</label>
+            <label htmlFor="dimension-box-id" className="block text-sm text-gray-600 dark:text-gray-400 mb-1">Box ID</label>
             <input
+              id="dimension-box-id"
               type="text"
               value={formData.box_id}
               onChange={(e) => onFieldChange('box_id', e.target.value)}

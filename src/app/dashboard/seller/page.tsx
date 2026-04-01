@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
+import { apiFetch } from '@/lib/api/client'
 import Link from 'next/link'
 import {
   Package,
@@ -91,8 +92,7 @@ export default function SellerDashboard() {
     setError(null)
 
     try {
-      const response = await fetch('/api/seller/dashboard')
-      const result = await response.json()
+      const result = await apiFetch<DashboardData>('/api/seller/dashboard')
 
       if (result.success && result.data) {
         setData(result.data)

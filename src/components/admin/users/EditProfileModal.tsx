@@ -34,9 +34,9 @@ export function EditProfileModal({
     <div className="fixed inset-0 z-50 overflow-y-auto">
       <div className="flex min-h-full items-center justify-center p-4">
         <div className="fixed inset-0 bg-black/50" aria-hidden="true" onClick={onClose} />
-        <div role="dialog" aria-modal="true" onKeyDown={(e) => { if (e.key === 'Escape') onClose() }} className="relative bg-white dark:bg-gray-800 rounded-xl shadow-xl max-w-md w-full p-6">
+        <div role="dialog" aria-modal="true" aria-labelledby="edit-profile-dialog-title" onKeyDown={(e) => { if (e.key === 'Escape') onClose() }} className="relative bg-white dark:bg-gray-800 rounded-xl shadow-xl max-w-md w-full p-6">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+            <h3 id="edit-profile-dialog-title" className="text-lg font-semibold text-gray-900 dark:text-white">
               Benutzer bearbeiten
             </h3>
             <button
@@ -55,10 +55,11 @@ export function EditProfileModal({
 
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              <label htmlFor="edit-profile-name" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                 Name
               </label>
               <input
+                id="edit-profile-name"
                 type="text"
                 value={editName}
                 onChange={(e) => onNameChange(e.target.value)}
@@ -68,10 +69,11 @@ export function EditProfileModal({
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              <label htmlFor="edit-profile-email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                 E-Mail
               </label>
               <input
+                id="edit-profile-email"
                 type="email"
                 value={editEmail}
                 onChange={(e) => onEmailChange(e.target.value)}

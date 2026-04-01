@@ -5,6 +5,7 @@ import { eq, and, or, ilike, sql, desc } from "drizzle-orm"
 import { withAdmin } from '@/lib/api/middleware'
 import { logger } from "@/lib/logger"
 import { apiError, apiSuccess } from "@/lib/api/helpers"
+import { MARKETPLACE_STATUS } from '@/config/marketplace-status'
 import { validateBody, AdminCreateProductSchema } from '@/lib/schemas'
 
 // GET /api/admin/products - List all products for admin
@@ -88,7 +89,7 @@ export const POST = withAdmin('products', async (request, session) => {
         condition: data.condition || 'unknown',
         category: data.category || null,
         subcategory: data.subcategory || null,
-        status: 'draft',
+        status: MARKETPLACE_STATUS.DRAFT,
       })
       .returning({ id: aiExtractedProducts.id })
 

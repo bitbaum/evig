@@ -13,6 +13,7 @@ import { apiError, apiSuccess, apiNotFound, apiBadRequest } from '@/lib/api/help
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { validateBody } from '@/lib/schemas'
 import { IntakePublishSchema } from '@/lib/schemas/intake'
+import { MARKETPLACE_STATUS } from '@/config/marketplace-status'
 import { INTAKE_STATUS } from '@/config/intake-status'
 import { isChecklistComplete } from '@/config/intake-checklist'
 import type { ChecklistState, IntakeTier } from '@/config/intake-checklist'
@@ -93,7 +94,7 @@ export const POST = withAdmin<{ id: string }>('intake', async (request, session,
         description: listingDesc,
         priceChf: String(price_chf),
         platform: 'internal',
-        status: 'published',
+        status: MARKETPLACE_STATUS.PUBLISHED,
         publishedAt: new Date().toISOString(),
         createdBy: session.user.id,
       })

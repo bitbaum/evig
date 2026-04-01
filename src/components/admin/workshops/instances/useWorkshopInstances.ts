@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import { useSession } from 'next-auth/react'
 import { logger } from '@/lib/logger'
+import { apiFetch } from '@/lib/api/client'
 import type { Workshop, WorkshopInstanceWithDetails, InstanceFormData, InstanceFiltersState } from './types'
 import { initialFormData } from './types'
 
@@ -27,10 +28,9 @@ export function useWorkshopInstances() {
 
   const loadWorkshops = useCallback(async () => {
     try {
-      const response = await fetch('/api/admin/workshops/list')
-      if (response.ok) {
-        const data = await response.json()
-        setWorkshops(data.data.workshops)
+      const result = await apiFetch<{ workshops: Workshop[] }>('/api/admin/workshops/list')
+      if (result.success && result.data) {
+        setWorkshops(result.data.workshops)
       }
     } catch (err) {
       logger.error('Error loading workshops', { error: err })
@@ -45,12 +45,11 @@ export function useWorkshopInstances() {
       if (filters.status !== 'all') params.set('status', filters.status)
       if (filters.upcoming) params.set('upcoming', 'true')
 
-      const response = await fetch(`/api/admin/workshops/instances?${params}`)
-      if (response.ok) {
-        const data = await response.json()
-        setInstances(data.data.instances)
+      const result = await apiFetch<{ instances: WorkshopInstanceWithDetails[] }>(`/api/admin/workshops/instances?${params}`)
+      if (result.success && result.data) {
+        setInstances(result.data.instances)
       } else {
-        setError('Fehler beim Laden der Workshop-Termine')
+        setError(result.error || 'Fehler beim Laden der Workshop-Termine')
       }
     } catch {
       setError('Netzwerkfehler')
@@ -76,10 +75,9 @@ export function useWorkshopInstances() {
         ? `/api/admin/workshops/instances/${editingInstance.id}`
         : '/api/admin/workshops/instances'
 
-      const response = await fetch(url, {
+      const result = await apiFetch<void>(url, {
         method: isEditing ? 'PUT' : 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
+        body: {
           workshopId: formData.workshopId,
           startDate: formData.startDate,
           endDate: formData.endDate || null,
@@ -88,17 +86,16 @@ export function useWorkshopInstances() {
           maxParticipants: formData.maxParticipants ? parseInt(formData.maxParticipants) : null,
           notes: formData.notes || null,
           status: formData.status,
-        }),
+        },
       })
 
-      if (response.ok) {
+      if (result.success) {
         setShowCreateModal(false)
         setEditingInstance(null)
         setFormData(initialFormData)
         loadInstances()
       } else {
-        const data = await response.json()
-        setError(data.message || 'Fehler beim Speichern')
+        setError(result.error || 'Fehler beim Speichern')
       }
     } catch {
       setError('Netzwerkfehler')
@@ -113,15 +110,14 @@ export function useWorkshopInstances() {
     }
 
     try {
-      const response = await fetch(`/api/admin/workshops/instances/${instanceId}`, {
+      const result = await apiFetch<void>(`/api/admin/workshops/instances/${instanceId}`, {
         method: 'DELETE',
       })
 
-      if (response.ok) {
+      if (result.success) {
         loadInstances()
       } else {
-        const data = await response.json()
-        alert(data.message || 'Fehler beim Löschen')
+        alert(result.error || 'Fehler beim Löschen')
       }
     } catch {
       alert('Netzwerkfehler')

@@ -30,7 +30,7 @@ export function EmptyState({
   return (
     <div className={`text-center ${SPACING.cardLarge} ${className}`}>
       <div className="mx-auto w-16 h-16 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center mb-4">
-        <Icon className="w-8 h-8 text-gray-400" />
+        <Icon className="w-8 h-8 text-gray-500" />
       </div>
       <h3 className={`${TYPOGRAPHY.sectionTitleSmall} text-gray-900 dark:text-gray-100 mb-2`}>
         {title}

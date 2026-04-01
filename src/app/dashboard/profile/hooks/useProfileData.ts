@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { ROLES } from '@/lib/constants'
+import { apiFetch } from '@/lib/api/client'
 import { logger } from '@/lib/logger'
 
 export interface ProfileData {
@@ -111,26 +112,24 @@ export function useProfileData() {
       logger.info('Profile loading', { userId: session?.user?.id })
 
       try {
-        const response = await fetch('/api/user/profile')
-        if (response.ok) {
-          const data = await response.json()
-          if (data.profile) {
-            setProfile(prev => ({ ...prev, ...data.profile }))
+        const result = await apiFetch<{ profile: Partial<ProfileData>; role?: string }>('/api/user/profile')
+        if (result.success && result.data) {
+          if (result.data.profile) {
+            setProfile(prev => ({ ...prev, ...result.data!.profile }))
             logger.info('Profile loaded successfully', {
               userId: session?.user?.id,
-              hasAvatar: !!data.profile.avatar_url,
-              hasDisplayName: !!data.profile.display_name,
+              hasAvatar: !!result.data.profile.avatar_url,
+              hasDisplayName: !!result.data.profile.display_name,
             })
           }
-          if (data.role) {
-            setUserRole(data.role)
+          if (result.data.role) {
+            setUserRole(result.data.role)
           }
-        } else if (response.status === 401) {
-          logger.warn('Unauthorized profile access, redirecting to login', {
+        } else if (result.error) {
+          logger.warn('Profile load failed', {
             userId: session?.user?.id,
+            error: result.error,
           })
-          router.push('/auth/login?callbackUrl=/dashboard/profile')
-          return
         }
       } catch (error) {
         logger.error('Failed to load profile', { error, userId: session?.user?.id })

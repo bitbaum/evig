@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { ArrowLeft, Send, Lightbulb, FileText, Edit } from 'lucide-react'
 import { PageHero } from '@/components/layout/PageHero'
 import { AIFormAssist } from '@/components/ai/AIFormAssist'
+import { logger } from '@/lib/logger'
 
 type SubmissionType = 'idea' | 'draft'
 
@@ -39,8 +40,8 @@ export default function SubmitPostPage() {
           setCategories(data.data)
         }
       })
-      .catch(() => {
-        // Silently fail - categories are optional
+      .catch((error) => {
+        logger.warn('Failed to load blog categories', { error })
       })
   }, [])
 

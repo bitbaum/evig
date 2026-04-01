@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import Link from 'next/link'
+import { apiFetch } from '@/lib/api/client'
 import { logger } from '@/lib/logger'
 import { Wrench } from 'lucide-react'
 import { PageHero } from '@/components/layout/PageHero'
@@ -52,12 +53,11 @@ export default function RepairersPage() {
       if (filters.service) params.set('service', filters.service)
       if (filters.location) params.set('location', filters.location)
 
-      const response = await fetch(`/api/repairers?${params}`)
-      const data = await response.json()
+      const result = await apiFetch<{ repairers: any[] }>(`/api/repairers?${params}`)
 
-      if (data.success) {
+      if (result.success) {
         // Normalize API response (camelCase from Drizzle) to snake_case expected by components
-        const normalized = (data.data?.repairers || []).map((r: any) => ({
+        const normalized = (result.data?.repairers || []).map((r: any) => ({
           ...r,
           // Map camelCase → snake_case for fields used by RepairerCard
           business_name: r.business_name ?? r.businessName ?? null,
@@ -102,12 +102,11 @@ export default function RepairersPage() {
   const handleViewReviews = async (repairer: RepairerProfile) => {
     setSelectedRepairer(repairer)
     try {
-      const response = await fetch(
+      const result = await apiFetch<{ reviews: ApiReviewResponse[] }>(
         `/api/reviews?targetType=repairer&targetId=${repairer.id}&limit=5`
       )
-      if (response.ok) {
-        const data = await response.json()
-        const reviews = data.data?.reviews || []
+      if (result.success) {
+        const reviews = result.data?.reviews || []
         setRepairerReviews(
           reviews.map((review: ApiReviewResponse) => ({
             id: review.id,

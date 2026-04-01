@@ -56,10 +56,11 @@ export function OfferForm({
 
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="offer-message" className="block text-sm font-medium text-gray-700 mb-1">
                 Nachricht an den Anfragenden <span className="text-red-500">*</span>
               </label>
               <textarea
+                id="offer-message"
                 value={offerMessage}
                 onChange={(e) => onMessageChange(e.target.value)}
                 placeholder="Beschreibe, wie du helfen kannst und warum du geeignet bist..."
@@ -76,10 +77,11 @@ export function OfferForm({
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label htmlFor="offer-estimated-time" className="block text-sm font-medium text-gray-700 mb-1">
                   Geschätzte Dauer (optional)
                 </label>
                 <input
+                  id="offer-estimated-time"
                   type="text"
                   value={offerEstimatedTime}
                   onChange={(e) => onEstimatedTimeChange(e.target.value)}
@@ -88,10 +90,11 @@ export function OfferForm({
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label htmlFor="offer-compensation" className="block text-sm font-medium text-gray-700 mb-1">
                   Vergütungsvorschlag (optional)
                 </label>
                 <input
+                  id="offer-compensation"
                   type="text"
                   value={offerCompensation}
                   onChange={(e) => onCompensationChange(e.target.value)}

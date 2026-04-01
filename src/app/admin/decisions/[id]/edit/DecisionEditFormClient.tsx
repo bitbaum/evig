@@ -151,9 +151,9 @@ export default function DecisionEditFormClient({
 
       {/* Decision Type */}
       <div>
-        <label className="mb-2 block text-sm font-medium text-gray-700">
+        <span className="mb-2 block text-sm font-medium text-gray-700">
           Entscheidungstyp
-        </label>
+        </span>
         <div className="grid grid-cols-2 gap-3">
           {DECISION_TYPES.map((type) => {
             const conf = DECISION_TYPE_CONFIG[type];
@@ -218,9 +218,9 @@ export default function DecisionEditFormClient({
       {/* Options */}
       {needsOptions && (
         <div>
-          <label className="mb-2 block text-sm font-medium text-gray-700">
+          <span className="mb-2 block text-sm font-medium text-gray-700">
             Optionen
-          </label>
+          </span>
           <div className="space-y-2">
             {options.map((opt, i) => (
               <div key={opt.id} className="flex gap-2">
@@ -274,10 +274,11 @@ export default function DecisionEditFormClient({
         {showAdvanced && (
           <div className="mt-3 space-y-4 rounded-lg border border-gray-200 bg-gray-50 p-4">
             <div>
-              <label className="mb-1 block text-sm font-medium text-gray-700">
+              <label htmlFor="decision-edit-voting-method" className="mb-1 block text-sm font-medium text-gray-700">
                 Abstimmungsmethode
               </label>
               <select
+                id="decision-edit-voting-method"
                 value={votingMethod}
                 onChange={(e) =>
                   setVotingMethod(e.target.value as VotingMethod)
@@ -294,10 +295,11 @@ export default function DecisionEditFormClient({
 
             {votingMethod === 'dot' && (
               <div>
-                <label className="mb-1 block text-sm font-medium text-gray-700">
+                <label htmlFor="decision-edit-dot-count" className="mb-1 block text-sm font-medium text-gray-700">
                   Punkte pro Person
                 </label>
                 <input
+                  id="decision-edit-dot-count"
                   type="number"
                   value={dotCount}
                   onChange={(e) => setDotCount(Number(e.target.value))}
@@ -310,10 +312,11 @@ export default function DecisionEditFormClient({
 
             <div className="flex gap-3">
               <div>
-                <label className="mb-1 block text-sm font-medium text-gray-700">
+                <label htmlFor="decision-edit-quorum-type" className="mb-1 block text-sm font-medium text-gray-700">
                   Quorum Typ
                 </label>
                 <select
+                  id="decision-edit-quorum-type"
                   value={quorumType}
                   onChange={(e) =>
                     setQuorumType(e.target.value as 'percentage' | 'absolute')
@@ -325,10 +328,11 @@ export default function DecisionEditFormClient({
                 </select>
               </div>
               <div>
-                <label className="mb-1 block text-sm font-medium text-gray-700">
+                <label htmlFor="decision-edit-quorum-value" className="mb-1 block text-sm font-medium text-gray-700">
                   Wert
                 </label>
                 <input
+                  id="decision-edit-quorum-value"
                   type="number"
                   value={quorumValue}
                   onChange={(e) => setQuorumValue(Number(e.target.value))}

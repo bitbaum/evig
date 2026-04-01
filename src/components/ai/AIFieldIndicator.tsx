@@ -65,7 +65,7 @@ export function AIFieldIndicator({
       <button
         type="button"
         onClick={() => setShowDetails(!showDetails)}
-        className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded border text-xs font-medium transition-all hover:opacity-80 ${colorClass}`}
+        className={`inline-flex items-center gap-1 px-2 py-1 min-h-[44px] min-w-[44px] rounded border text-xs font-medium transition-all hover:opacity-80 ${colorClass}`}
         title={`KI-Extraktion: ${confidencePercent}% Konfidenz`}
       >
         <Sparkles className="w-3 h-3" />
@@ -95,7 +95,7 @@ export function AIFieldIndicator({
               <button
                 type="button"
                 onClick={() => setShowDetails(false)}
-                className="p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded"
+                className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded"
               >
                 <X className="w-4 h-4 text-gray-500" />
               </button>

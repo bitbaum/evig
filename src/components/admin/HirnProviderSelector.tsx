@@ -1,7 +1,8 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { Settings, Check, Loader2, Cpu, Cloud, Zap, X, Key, ExternalLink } from 'lucide-react'
+import { apiFetch } from '@/lib/api/client'
 
 interface Provider {
   provider: string
@@ -73,45 +74,46 @@ export function HirnProviderSelector() {
   const [open, setOpen] = useState(false)
   const [error, setError] = useState('')
 
-  useEffect(() => {
-    loadProviders()
+  const loadProviders = useCallback(async () => {
+    const result = await apiFetch<Provider[]>('/api/admin/hirn/providers')
+    if (result.success && result.data) {
+      setProviders(result.data)
+    } else {
+      setError(result.error || 'Fehler beim Laden')
+    }
+    setLoading(false)
   }, [])
 
-  const loadProviders = async () => {
-    try {
-      const response = await fetch('/api/admin/hirn/providers')
-      const data = await response.json()
-      if (data.success) {
-        setProviders(data.data)
+  useEffect(() => {
+    let cancelled = false
+    async function load() {
+      const result = await apiFetch<Provider[]>('/api/admin/hirn/providers')
+      if (cancelled) return
+      if (result.success && result.data) {
+        setProviders(result.data)
+      } else {
+        setError(result.error || 'Fehler beim Laden')
       }
-    } catch {
-      setError('Fehler beim Laden')
-    } finally {
       setLoading(false)
     }
-  }
+    load()
+    return () => { cancelled = true }
+  }, [])
 
   const setDefaultProvider = async (provider: string) => {
     setChanging(true)
     setError('')
-    try {
-      const response = await fetch('/api/admin/hirn/providers', {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ provider, isDefault: true }),
-      })
-      const data = await response.json()
-      if (data.success) {
-        await loadProviders()
-        setOpen(false)
-      } else {
-        setError(data.error || 'Fehler')
-      }
-    } catch {
-      setError('Netzwerkfehler')
-    } finally {
-      setChanging(false)
+    const result = await apiFetch<void>('/api/admin/hirn/providers', {
+      method: 'PATCH',
+      body: { provider, isDefault: true },
+    })
+    if (result.success) {
+      await loadProviders()
+      setOpen(false)
+    } else {
+      setError(result.error || 'Fehler')
     }
+    setChanging(false)
   }
 
 
@@ -121,23 +123,16 @@ export function HirnProviderSelector() {
 
     setChanging(true)
     setError('')
-    try {
-      const response = await fetch('/api/admin/hirn/providers', {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ provider, apiKey: nextKey }),
-      })
-      const data = await response.json()
-      if (data.success) {
-        await loadProviders()
-      } else {
-        setError(data.error || 'API-Key konnte nicht gespeichert werden')
-      }
-    } catch {
-      setError('Netzwerkfehler beim Speichern des API-Keys')
-    } finally {
-      setChanging(false)
+    const result = await apiFetch<void>('/api/admin/hirn/providers', {
+      method: 'PATCH',
+      body: { provider, apiKey: nextKey },
+    })
+    if (result.success) {
+      await loadProviders()
+    } else {
+      setError(result.error || 'API-Key konnte nicht gespeichert werden')
     }
+    setChanging(false)
   }
 
   const currentProvider = providers.find(p => p.isDefault)
@@ -187,7 +182,7 @@ export function HirnProviderSelector() {
                 <h3 className="font-semibold text-gray-900 dark:text-white">Wähle dein Gehirn</h3>
                 <p className="text-xs text-gray-500 mt-0.5">Welche KI soll antworten?</p>
               </div>
-              <button onClick={() => setOpen(false)} className="p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg">
+              <button onClick={() => setOpen(false)} className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg">
                 <X className="w-4 h-4 text-gray-500" />
               </button>
             </div>

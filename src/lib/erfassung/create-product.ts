@@ -10,6 +10,7 @@
 import { db } from '@/db'
 import { sql, getTableName } from 'drizzle-orm'
 import { logger } from '@/lib/logger'
+import { PRODUCT_STATUS, MARKETPLACE_STATUS } from '@/config/marketplace-status'
 import { uploadImage, generateImageFilename } from '@/lib/storage/image-upload'
 import {
   aiExtractedProducts,
@@ -109,8 +110,8 @@ export async function createErfassungProduct(
 
   // Determine status based on action (with legacy publish support)
   const action = payload.action || (payload.publish ? 'publish' : 'draft')
-  const productStatus = action === 'draft' ? 'pending_review' : 'approved'
-  const marketplaceStatus = action === 'publish' ? 'published' : 'draft'
+  const productStatus = action === 'draft' ? PRODUCT_STATUS.PENDING_REVIEW : PRODUCT_STATUS.APPROVED
+  const marketplaceStatus = action === 'publish' ? MARKETPLACE_STATUS.PUBLISHED : MARKETPLACE_STATUS.DRAFT
 
   // 1. Insert into ai_extracted_products
   const [productRow] = await tx
@@ -181,7 +182,7 @@ export async function createErfassungProduct(
         description: payload.kurzbeschreibung || '',
         priceChf: String(payload.verkaufspreis),
         platform: 'internal',
-        status: 'published',
+        status: MARKETPLACE_STATUS.PUBLISHED,
         publishedAt: new Date().toISOString(),
         createdBy: userId,
       })

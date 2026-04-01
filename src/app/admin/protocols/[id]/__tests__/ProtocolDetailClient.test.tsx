@@ -44,6 +44,7 @@ describe('ProtocolDetailClient', () => {
     scrollIntoViewMock.mockReset()
     Element.prototype.scrollIntoView = scrollIntoViewMock
     global.fetch = jest.fn().mockResolvedValue({
+      ok: true,
       json: async () => ({ success: true }),
     }) as jest.Mock
   })

@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
+import { apiFetch } from '@/lib/api/client'
 import Link from 'next/link'
 import {
   ArrowLeft,
@@ -48,11 +49,10 @@ export default function SellerProfileEditPage() {
 
     const fetchProfile = async () => {
       try {
-        const response = await fetch('/api/sellers/me')
-        const data = await response.json()
+        const result = await apiFetch<SellerProfileData>('/api/sellers/me')
 
-        if (data.success && data.data) {
-          const p = data.data as SellerProfileData
+        if (result.success && result.data) {
+          const p = result.data
           setDisplayName(p.display_name || '')
           setBio(p.bio || '')
           setAvatarUrl(p.avatar_url || '')
@@ -76,25 +76,23 @@ export default function SellerProfileEditPage() {
     setSuccess(null)
 
     try {
-      const response = await fetch('/api/sellers/me', {
+      const result = await apiFetch<void>('/api/sellers/me', {
         method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
+        body: {
           display_name: displayName.trim() || null,
           bio: bio.trim() || null,
           avatar_url: avatarUrl.trim() || null,
           city: city.trim() || null,
           canton: canton.trim() || null,
-        }),
+        },
       })
-      const data = await response.json()
 
-      if (data.success) {
+      if (result.success) {
         setSuccess('Profil gespeichert')
         setNoProfile(false)
         setTimeout(() => setSuccess(null), 3000)
       } else {
-        setError(data.error || 'Fehler beim Speichern')
+        setError(result.error || 'Fehler beim Speichern')
       }
     } catch {
       setError('Ein unerwarteter Fehler ist aufgetreten')

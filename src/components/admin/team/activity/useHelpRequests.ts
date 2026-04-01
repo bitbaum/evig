@@ -7,6 +7,8 @@
  */
 
 import { useState, useEffect, useCallback } from 'react'
+import { apiFetch } from '@/lib/api/client'
+import { API_DEFAULTS } from '@/config/api-defaults'
 import type { HelpRequest, HelpRequestFilter } from './types'
 
 // ============================================================================
@@ -31,7 +33,7 @@ export function useHelpRequests(
   const [error, setError] = useState<string | null>(null)
   const [total, setTotal] = useState(0)
   const [filters, setFiltersState] = useState<HelpRequestFilter>({
-    limit: 50,
+    limit: API_DEFAULTS.PAGINATION_LIMIT,
     offset: 0,
     ...initialFilters,
   })
@@ -51,10 +53,9 @@ export function useHelpRequests(
       params.set('limit', String(filters.limit))
       params.set('offset', String(filters.offset))
 
-      const response = await fetch(`/api/admin/team/help-requests?${params.toString()}`)
-      const result = await response.json()
+      const result = await apiFetch<{ items: HelpRequest[]; total: number }>(`/api/admin/team/help-requests?${params.toString()}`)
 
-      if (!response.ok) {
+      if (!result.success) {
         throw new Error(result.error || 'Fehler beim Laden')
       }
 
@@ -121,14 +122,12 @@ export function useHelpRequestMutations(): UseHelpRequestMutationsReturn {
       setError(null)
 
       try {
-        const response = await fetch('/api/admin/team/help-requests', {
+        const result = await apiFetch<{ id: string }>('/api/admin/team/help-requests', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(data),
+          body: data,
         })
-        const result = await response.json()
 
-        if (!response.ok) {
+        if (!result.success) {
           throw new Error(result.error || 'Fehler beim Erstellen')
         }
 
@@ -158,14 +157,12 @@ export function useHelpRequestMutations(): UseHelpRequestMutationsReturn {
       setError(null)
 
       try {
-        const response = await fetch(`/api/admin/team/help-requests/${id}`, {
+        const result = await apiFetch<unknown>(`/api/admin/team/help-requests/${id}`, {
           method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(data),
+          body: data,
         })
-        const result = await response.json()
 
-        if (!response.ok) {
+        if (!result.success) {
           throw new Error(result.error || 'Fehler beim Aktualisieren')
         }
 
@@ -185,14 +182,12 @@ export function useHelpRequestMutations(): UseHelpRequestMutationsReturn {
     setError(null)
 
     try {
-      const response = await fetch(`/api/admin/team/help-requests/${id}/resolve`, {
+      const result = await apiFetch<unknown>(`/api/admin/team/help-requests/${id}/resolve`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ resolution_notes }),
+        body: { resolution_notes },
       })
-      const result = await response.json()
 
-      if (!response.ok) {
+      if (!result.success) {
         throw new Error(result.error || 'Fehler beim Lösen')
       }
 

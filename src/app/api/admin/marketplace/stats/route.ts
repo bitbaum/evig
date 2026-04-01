@@ -3,6 +3,7 @@ import { db } from '@/db'
 import { listings, listingReports, marketplaceOrders } from '@/db/schema'
 import { sql } from 'drizzle-orm'
 import { apiError, apiSuccess } from '@/lib/api/helpers'
+import { TABLE_NAMES } from '@/config/database'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { LISTING_STATUS, ORDER_STATUS } from '@/config/marketplace'
 import { REPORT_STATUS } from '@/config/report-status'
@@ -22,9 +23,9 @@ export const GET = withAdmin('marketplace', async () => {
         unverified: sql<number>`count(*) FILTER (WHERE ${listings.verifiedAt} IS NULL AND ${listings.status} = ${LISTING_STATUS.ACTIVE})`,
         revampit: sql<number>`count(*) FILTER (WHERE ${listings.isRevampit} = true)`,
         community: sql<number>`count(*) FILTER (WHERE ${listings.isRevampit} = false)`,
-        openReports: sql<number>`(SELECT count(*) FROM listing_reports WHERE ${listingReports.status} = ${REPORT_STATUS.PENDING})`,
-        totalOrders: sql<number>`(SELECT count(*) FROM marketplace_orders)`,
-        revenueCents: sql<number>`(SELECT COALESCE(SUM(${marketplaceOrders.amountChf}::numeric * 100), 0) FROM marketplace_orders WHERE ${marketplaceOrders.status} IN (${ORDER_STATUS.PAID}, ${ORDER_STATUS.SHIPPED}, ${ORDER_STATUS.DELIVERED}, ${ORDER_STATUS.COMPLETED}))`,
+        openReports: sql<number>`(SELECT count(*) FROM ${sql.raw(TABLE_NAMES.LISTING_REPORTS)} WHERE ${listingReports.status} = ${REPORT_STATUS.PENDING})`,
+        totalOrders: sql<number>`(SELECT count(*) FROM ${sql.raw(TABLE_NAMES.MARKETPLACE_ORDERS)})`,
+        revenueCents: sql<number>`(SELECT COALESCE(SUM(${marketplaceOrders.amountChf}::numeric * 100), 0) FROM ${sql.raw(TABLE_NAMES.MARKETPLACE_ORDERS)} WHERE ${marketplaceOrders.status} IN (${ORDER_STATUS.PAID}, ${ORDER_STATUS.SHIPPED}, ${ORDER_STATUS.DELIVERED}, ${ORDER_STATUS.COMPLETED}))`,
       })
       .from(listings)
 

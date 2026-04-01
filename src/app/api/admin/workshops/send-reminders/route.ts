@@ -9,6 +9,7 @@ import { logger } from '@/lib/logger'
 import { WORKSHOP_REGISTRATION_STATUS } from '@/config/workshop-registration-status'
 import { sendEmail } from '@/lib/email'
 import { formatDateWithWeekday } from '@/lib/date-formats'
+import { APP_URL } from '@/config/urls'
 
 // POST /api/admin/workshops/send-reminders - Send reminders for upcoming workshops
 export const POST = withAdmin('workshops-admin', async (request, session) => {
@@ -44,8 +45,6 @@ export const POST = withAdmin('workshops-admin', async (request, session) => {
       ))
       .orderBy(workshopInstances.startDate)
 
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://revampit.ch'
-
     let sentCount = 0
     let failedCount = 0
 
@@ -56,7 +55,7 @@ export const POST = withAdmin('workshops-admin', async (request, session) => {
           hour: '2-digit',
           minute: '2-digit'
         })
-        const workshopUrl = `${baseUrl}/workshops/${registration.workshop_slug}`
+        const workshopUrl = `${APP_URL}/workshops/${registration.workshop_slug}`
 
         await sendEmail(
           registration.user_email!,

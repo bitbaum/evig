@@ -32,7 +32,7 @@ function StarRating({
             onClick={() => onChange(star)}
             onMouseEnter={() => setHover(star)}
             onMouseLeave={() => setHover(0)}
-            className="p-0.5 focus:outline-none focus:ring-2 focus:ring-emerald-500 rounded"
+            className="p-2 focus:outline-none focus:ring-2 focus:ring-emerald-500 rounded"
           >
             <Star
               className={`w-6 h-6 transition-colors ${
@@ -134,10 +134,11 @@ export function ITHilfeReviewForm({ requestId, requestTitle, onSuccess }: ITHilf
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label htmlFor="review-comment" className="block text-sm font-medium text-gray-700 mb-1">
             Dein Erfahrungsbericht *
           </label>
           <textarea
+            id="review-comment"
             value={content}
             onChange={(e) => setContent(e.target.value)}
             placeholder="Beschreibe deine Erfahrung (min. 10 Zeichen)..."

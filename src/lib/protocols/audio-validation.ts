@@ -1,10 +1,10 @@
+import { FILE_SIZE_LIMITS } from '@/config/limits'
+
 export interface AudioFileLike {
   size: number
   type: string
   name: string
 }
-
-const MAX_AUDIO_SIZE_BYTES = 25 * 1024 * 1024
 const ALLOWED_AUDIO_MIME_TYPES = new Set([
   'audio/mpeg',
   'audio/mp3',
@@ -23,7 +23,7 @@ export function validateAudioUpload(file: AudioFileLike): string | null {
     return 'Die Audiodatei ist leer.'
   }
 
-  if (file.size > MAX_AUDIO_SIZE_BYTES) {
+  if (file.size > FILE_SIZE_LIMITS.AUDIO_MAX) {
     return 'Die Audiodatei ist zu gross (maximal 25 MB).'
   }
 
@@ -42,5 +42,5 @@ export function validateAudioUpload(file: AudioFileLike): string | null {
 }
 
 export const AUDIO_UPLOAD_LIMITS = {
-  maxSizeBytes: MAX_AUDIO_SIZE_BYTES,
+  maxSizeBytes: FILE_SIZE_LIMITS.AUDIO_MAX,
 }

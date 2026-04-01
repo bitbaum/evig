@@ -42,7 +42,7 @@ const VARIANT_STYLES = {
   default: {
     title: 'text-gray-900 dark:text-white',
     button: 'bg-indigo-600 hover:bg-indigo-700',
-    icon: 'text-gray-500',
+    icon: 'text-gray-600',
   },
 }
 
@@ -70,7 +70,7 @@ export function ConfirmDialog({
         <div className="fixed inset-0 bg-black/50" aria-hidden="true" onClick={onClose} />
 
         {/* Dialog */}
-        <div role="dialog" aria-modal="true" onKeyDown={(e) => { if (e.key === 'Escape') onClose() }} className="relative bg-white dark:bg-gray-800 rounded-xl shadow-xl max-w-md w-full p-6">
+        <div role="dialog" aria-modal="true" aria-labelledby="confirm-dialog-title" onKeyDown={(e) => { if (e.key === 'Escape') onClose() }} className="relative bg-white dark:bg-gray-800 rounded-xl shadow-xl max-w-md w-full p-6">
           {/* Header */}
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2">
@@ -79,13 +79,13 @@ export function ConfirmDialog({
               ) : (
                 <AlertTriangle className={`w-5 h-5 ${styles.icon}`} />
               )}
-              <h3 className={`text-lg font-semibold ${styles.title}`}>
+              <h3 id="confirm-dialog-title" className={`text-lg font-semibold ${styles.title}`}>
                 {title}
               </h3>
             </div>
             <button
               onClick={onClose}
-              className="text-gray-500 hover:text-gray-600 dark:hover:text-gray-300"
+              className="text-gray-600 hover:text-gray-700 dark:hover:text-gray-300"
             >
               <X className="w-5 h-5" />
             </button>

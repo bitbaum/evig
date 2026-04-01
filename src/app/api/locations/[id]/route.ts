@@ -7,6 +7,7 @@ import { alias } from 'drizzle-orm/pg-core'
 import { users } from '@/db/schema'
 import { apiError, apiSuccess, apiBadRequest, apiUnauthorized, apiForbidden, apiNotFound } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
+import { TABLE_NAMES } from '@/config/database'
 import { LOCATION_STATUS } from '@/config/location-status'
 import { BOOKING_STATUS } from '@/config/booking-status'
 import { validateBody, UpdateLocationSchema } from '@/lib/schemas'
@@ -41,7 +42,7 @@ export async function GET(
       .leftJoin(creatorUser, eq(locations.createdBy, creatorUser.id))
       .leftJoin(locationApprovals, and(
         eq(locations.id, locationApprovals.locationId),
-        eq(locationApprovals.reviewedAt, sql`(SELECT MAX(reviewed_at) FROM location_approvals WHERE location_id = ${locations.id})`)
+        eq(locationApprovals.reviewedAt, sql`(SELECT MAX(reviewed_at) FROM ${sql.raw(TABLE_NAMES.LOCATION_APPROVALS)} WHERE location_id = ${locations.id})`)
       ))
       .leftJoin(locationBookings, eq(locations.id, locationBookings.locationId))
       .where(eq(locations.id, locationId))

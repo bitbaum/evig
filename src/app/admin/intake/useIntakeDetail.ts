@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useCallback } from 'react'
+import { apiFetch } from '@/lib/api/client'
 import type { IntakeTier } from '@/config/intake-checklist'
 import type { DetailData } from './types'
 
@@ -22,11 +23,10 @@ export function useIntakeDetail() {
   const fetchDetail = useCallback(async (id: string) => {
     setDetailLoading(true)
     try {
-      const res = await fetch(`/api/admin/intake/${id}`)
-      const json = await res.json()
-      if (json.success) {
-        setDetail(json.data)
-        setPublishPrice(json.data.selling_price_chf || 0)
+      const result = await apiFetch<DetailData>(`/api/admin/intake/${id}`)
+      if (result.success && result.data) {
+        setDetail(result.data)
+        setPublishPrice(result.data.selling_price_chf || 0)
       }
     } finally {
       setDetailLoading(false)
@@ -47,13 +47,11 @@ export function useIntakeDetail() {
 
   const toggleChecklist = useCallback(async (itemId: string, completed: boolean) => {
     if (!selectedId) return
-    const res = await fetch(`/api/admin/intake/${selectedId}/checklist`, {
+    const result = await apiFetch<void>(`/api/admin/intake/${selectedId}/checklist`, {
       method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ item_id: itemId, completed }),
+      body: { item_id: itemId, completed },
     })
-    const json = await res.json()
-    if (json.success) {
+    if (result.success) {
       fetchDetail(selectedId)
     }
   }, [selectedId, fetchDetail])
@@ -62,13 +60,11 @@ export function useIntakeDetail() {
     if (!selectedId) return
     setPublishing(true)
     try {
-      const res = await fetch(`/api/admin/intake/${selectedId}/publish`, {
+      const result = await apiFetch<void>(`/api/admin/intake/${selectedId}/publish`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ price_chf: publishPrice }),
+        body: { price_chf: publishPrice },
       })
-      const json = await res.json()
-      if (json.success) {
+      if (result.success) {
         fetchDetail(selectedId)
       }
     } finally {
@@ -80,13 +76,11 @@ export function useIntakeDetail() {
     if (!selectedId || !tierChangeReason.trim()) return
     setTierChanging(true)
     try {
-      const res = await fetch(`/api/admin/intake/${selectedId}/change-tier`, {
+      const result = await apiFetch<void>(`/api/admin/intake/${selectedId}/change-tier`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ new_tier: newTier, reason: tierChangeReason }),
+        body: { new_tier: newTier, reason: tierChangeReason },
       })
-      const json = await res.json()
-      if (json.success) {
+      if (result.success) {
         setShowTierChange(false)
         setTierChangeReason('')
         fetchDetail(selectedId)

@@ -2,6 +2,7 @@
 
 import { useState, useEffect, use } from 'react'
 import Link from 'next/link'
+import { apiFetch } from '@/lib/api/client'
 import { logger } from '@/lib/logger'
 import {
   ArrowLeft,
@@ -37,29 +38,37 @@ export default function RepairerDetailPage({ params }: { params: Promise<{ id: s
   const [activeTab, setActiveTab] = useState<'services' | 'reviews' | 'about' | 'requests'>('services')
 
   useEffect(() => {
-    const fetchRepairerDetails = async () => {
+    let cancelled = false
+    async function load() {
       try {
         setLoading(true)
-        const response = await fetch(`/api/repairers/${id}`)
-        const data = await response.json()
+        const result = await apiFetch<{
+          repairer: RepairerProfile
+          services: RepairerService[]
+          reviews: RepairerReview[]
+          availability: AvailabilitySlot[]
+        }>(`/api/repairers/${id}`)
 
-        if (!response.ok || !data.success) {
-          setError(data.error || 'Reparateur nicht gefunden')
+        if (cancelled) return
+
+        if (!result.success) {
+          setError(result.error || 'Reparateur nicht gefunden')
           return
         }
 
-        setRepairer(data.repairer)
-        setServices(data.services || [])
-        setReviews(data.reviews || [])
-        setAvailability(data.availability || [])
+        setRepairer(result.data!.repairer)
+        setServices(result.data!.services || [])
+        setReviews(result.data!.reviews || [])
+        setAvailability(result.data!.availability || [])
       } catch (err) {
         logger.error('Error fetching repairer details', { error: err })
-        setError('Fehler beim Laden der Daten')
+        if (!cancelled) setError('Fehler beim Laden der Daten')
       } finally {
-        setLoading(false)
+        if (!cancelled) setLoading(false)
       }
     }
-    fetchRepairerDetails()
+    load()
+    return () => { cancelled = true }
   }, [id])
 
   if (loading) {

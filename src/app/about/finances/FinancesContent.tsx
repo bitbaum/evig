@@ -87,7 +87,7 @@ export default function FinancesContent() {
         ) : data.length === 0 ? (
           <div className="text-center py-12">
             <Wallet className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-            <p className="text-gray-500">Keine Finanzdaten verfügbar.</p>
+            <p className="text-gray-600">Keine Finanzdaten verfügbar.</p>
           </div>
         ) : (
           <>
@@ -96,7 +96,7 @@ export default function FinancesContent() {
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
                 <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-sm text-gray-500">Gesamteinnahmen {latest.year}</span>
+                    <span className="text-sm text-gray-600">Gesamteinnahmen {latest.year}</span>
                     {previous && <TrendIndicator current={latest.totals.total} previous={previous.totals.total} />}
                   </div>
                   <p className="text-2xl font-bold text-gray-900">{formatCHF(latest.totals.total)}</p>
@@ -104,26 +104,26 @@ export default function FinancesContent() {
 
                 <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-sm text-gray-500 flex items-center gap-1">
+                    <span className="text-sm text-gray-600 flex items-center gap-1">
                       <TrendingUp className="w-4 h-4" />
                       Eigenfinanzierung
                     </span>
                   </div>
                   <p className="text-2xl font-bold text-green-600">{latest.derived.eigenfinanzierungPct}%</p>
-                  <p className="text-xs text-gray-500 mt-1">
+                  <p className="text-xs text-gray-600 mt-1">
                     {formatCHF(latest.derived.earnedTotal)} selbst erwirtschaftet
                   </p>
                 </div>
 
                 <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-sm text-gray-500 flex items-center gap-1">
+                    <span className="text-sm text-gray-600 flex items-center gap-1">
                       <Heart className="w-4 h-4" />
                       Spenden & Förderung
                     </span>
                   </div>
                   <p className="text-2xl font-bold text-gray-900">{formatCHF(latest.derived.donationsTotal)}</p>
-                  <p className="text-xs text-gray-500 mt-1">
+                  <p className="text-xs text-gray-600 mt-1">
                     {(100 - latest.derived.eigenfinanzierungPct).toFixed(1)}% der Einnahmen
                   </p>
                 </div>
@@ -134,15 +134,15 @@ export default function FinancesContent() {
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden mb-10">
               <div className="px-6 py-4 border-b border-gray-100">
                 <h2 className="text-lg font-bold text-gray-900">Einnahmen nach Quelle</h2>
-                <p className="text-sm text-gray-500">Alle Beträge in CHF, basierend auf Buchhaltungsdaten (Kivitendo)</p>
+                <p className="text-sm text-gray-600">Alle Beträge in CHF, basierend auf Buchhaltungsdaten (Kivitendo)</p>
               </div>
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
                   <thead>
                     <tr className="bg-gray-50">
-                      <th className="text-left px-6 py-3 font-medium text-gray-500">Quelle</th>
+                      <th className="text-left px-6 py-3 font-medium text-gray-600">Quelle</th>
                       {data.map(d => (
-                        <th key={d.year} className="text-right px-6 py-3 font-medium text-gray-500">{d.year}</th>
+                        <th key={d.year} className="text-right px-6 py-3 font-medium text-gray-600">{d.year}</th>
                       ))}
                     </tr>
                   </thead>

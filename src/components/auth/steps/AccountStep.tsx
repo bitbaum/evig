@@ -86,7 +86,7 @@ export function AccountStep({
           Name <span className="text-neutral-400">(optional)</span>
         </label>
         <div className="relative">
-          <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-400" />
+          <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-500" />
           <input
             id="name"
             type="text"
@@ -105,7 +105,7 @@ export function AccountStep({
           E-Mail-Adresse *
         </label>
         <div className="relative">
-          <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-400" />
+          <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-500" />
           <input
             id="email"
             type="email"
@@ -128,7 +128,7 @@ export function AccountStep({
           Passwort *
         </label>
         <div className="relative">
-          <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-400" />
+          <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-500" />
           <input
             id="password"
             type={showPassword ? 'text' : 'password'}
@@ -177,7 +177,7 @@ export function AccountStep({
           Passwort bestätigen *
         </label>
         <div className="relative">
-          <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-400" />
+          <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-500" />
           <input
             id="confirmPassword"
             type={showConfirmPassword ? 'text' : 'password'}

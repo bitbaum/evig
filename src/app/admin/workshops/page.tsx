@@ -21,6 +21,7 @@ import {
   BookOpen,
   ArrowLeft
 } from 'lucide-react'
+import { apiFetch } from '@/lib/api/client'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { formatDateShort } from '@/lib/date-formats'
 import { PROPOSAL_STATUS, PROPOSAL_STATUS_LABELS, WORKSHOP_CATEGORIES, type ProposalStatus } from '@/config/workshops'
@@ -48,88 +49,87 @@ export default function AdminWorkshopsPage() {
   const [rejectionReason, setRejectionReason] = useState('')
 
   const loadProposals = useCallback(async () => {
-    try {
+    setLoading(true)
+    const params = new URLSearchParams({
+      status: filters.status,
+      limit: '20',
+      offset: ((currentPage - 1) * 20).toString()
+    })
+
+    if (filters.category !== 'all') params.set('category', filters.category)
+
+    const result = await apiFetch<{ items: WorkshopProposalWithProposer[]; pagination?: { total: number } }>(`/api/admin/workshops/proposals?${params}`)
+    if (result.success && result.data) {
+      setProposals(result.data.items || [])
+      setTotalPages(Math.ceil((result.data.pagination?.total || 0) / 20))
+    } else {
+      setError(result.error || ERROR_MESSAGES.WORKSHOP_PROPOSALS_LOAD_FAILED)
+    }
+    setLoading(false)
+  }, [filters.status, filters.category, currentPage])
+
+  useEffect(() => {
+    if (status !== 'authenticated') return
+    let cancelled = false
+    async function load() {
       setLoading(true)
       const params = new URLSearchParams({
         status: filters.status,
         limit: '20',
         offset: ((currentPage - 1) * 20).toString()
       })
-
       if (filters.category !== 'all') params.set('category', filters.category)
-
-      const response = await fetch(`/api/admin/workshops/proposals?${params}`)
-      if (response.ok) {
-        const result = await response.json()
-        if (result.success && result.data) {
-          setProposals(result.data.items || [])
-          setTotalPages(Math.ceil((result.data.pagination?.total || 0) / 20))
-        } else {
-          setError(ERROR_MESSAGES.WORKSHOP_PROPOSALS_LOAD_FAILED)
-        }
+      const result = await apiFetch<{ items: WorkshopProposalWithProposer[]; pagination?: { total: number } }>(`/api/admin/workshops/proposals?${params}`)
+      if (cancelled) return
+      if (result.success && result.data) {
+        setProposals(result.data.items || [])
+        setTotalPages(Math.ceil((result.data.pagination?.total || 0) / 20))
       } else {
-        setError(ERROR_MESSAGES.WORKSHOP_PROPOSALS_LOAD_FAILED)
+        setError(result.error || ERROR_MESSAGES.WORKSHOP_PROPOSALS_LOAD_FAILED)
       }
-    } catch (error) {
-      setError(ERROR_MESSAGES.NETWORK_ERROR)
-    } finally {
       setLoading(false)
     }
-  }, [filters.status, filters.category, currentPage])
-
-  useEffect(() => {
-    if (status === 'authenticated') {
-      loadProposals()
-    }
-  }, [status, loadProposals])
+    load()
+    return () => { cancelled = true }
+  }, [status, filters.status, filters.category, currentPage])
 
   const handleApprove = async (proposalId: string) => {
     if (!confirm('Möchten Sie diesen Workshop-Vorschlag wirklich genehmigen?')) {
       return
     }
 
-    try {
-      const response = await fetch(`/api/admin/workshops/proposals/${proposalId}/approve`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          action: 'approve',
-          review_notes: 'Workshop genehmigt'
-        })
-      })
-
-      if (response.ok) {
-        loadProposals()
-      } else {
-        setError('Fehler bei der Genehmigung')
+    const result = await apiFetch<void>(`/api/admin/workshops/proposals/${proposalId}/approve`, {
+      method: 'POST',
+      body: {
+        action: 'approve',
+        review_notes: 'Workshop genehmigt'
       }
-    } catch {
-      setError(ERROR_MESSAGES.NETWORK_ERROR)
+    })
+
+    if (result.success) {
+      loadProposals()
+    } else {
+      setError(result.error || 'Fehler bei der Genehmigung')
     }
   }
 
   const handleReject = async (proposalId: string) => {
     if (!rejectionReason.trim()) return
 
-    try {
-      const response = await fetch(`/api/admin/workshops/proposals/${proposalId}/approve`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          action: 'reject',
-          review_notes: rejectionReason
-        })
-      })
-
-      if (response.ok) {
-        setRejectingId(null)
-        setRejectionReason('')
-        loadProposals()
-      } else {
-        setError('Fehler bei der Ablehnung')
+    const result = await apiFetch<void>(`/api/admin/workshops/proposals/${proposalId}/approve`, {
+      method: 'POST',
+      body: {
+        action: 'reject',
+        review_notes: rejectionReason
       }
-    } catch {
-      setError(ERROR_MESSAGES.NETWORK_ERROR)
+    })
+
+    if (result.success) {
+      setRejectingId(null)
+      setRejectionReason('')
+      loadProposals()
+    } else {
+      setError(result.error || 'Fehler bei der Ablehnung')
     }
   }
 

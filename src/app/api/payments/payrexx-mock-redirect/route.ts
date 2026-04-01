@@ -11,6 +11,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { logger } from '@/lib/logger';
 import { apiForbidden } from '@/lib/api/helpers';
+import { APP_URL } from '@/config/urls';
 
 export async function GET(request: NextRequest) {
   // Block in production
@@ -26,8 +27,7 @@ export async function GET(request: NextRequest) {
   const cancelUrl = searchParams.get('cancelUrl') || '/';
 
   const amountFormatted = (Number(amount) / 100).toFixed(2);
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
-  const webhookUrl = `${baseUrl}/api/payments/payrexx-webhook`;
+  const webhookUrl = `${APP_URL}/api/payments/payrexx-webhook`;
 
   const html = `<!DOCTYPE html>
 <html lang="de">

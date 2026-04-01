@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { Camera, X, Loader2 } from 'lucide-react'
+import { FILE_SIZE_LIMITS } from '@/config/limits'
 import { logger } from '@/lib/logger'
 
 interface ITHilfeImageUploadProps {
@@ -31,7 +32,7 @@ export function ITHilfeImageUpload({
         alert('Nur Bilddateien sind erlaubt')
         return
       }
-      if (file.size > 10 * 1024 * 1024) {
+      if (file.size > FILE_SIZE_LIMITS.UPLOAD_MAX) {
         alert('Datei zu gross (max 10MB)')
         return
       }

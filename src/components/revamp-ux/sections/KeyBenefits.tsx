@@ -71,9 +71,9 @@ export function KeyBenefits() {
             Vertraut von führenden Unternehmen
           </h3>
           <div className="flex justify-center items-center space-x-8 opacity-60">
-            <div className="text-gray-500 font-semibold">WordPress</div>
-            <div className="text-gray-500 font-semibold">Strapi</div>
-            <div className="text-gray-500 font-semibold">Contentful</div>
+            <div className="text-gray-600 font-semibold">WordPress</div>
+            <div className="text-gray-600 font-semibold">Strapi</div>
+            <div className="text-gray-600 font-semibold">Contentful</div>
             <div className="text-green-600 font-semibold">Revamp-UX</div>
           </div>
           <p className="text-sm text-gray-600 mt-4">

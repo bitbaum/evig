@@ -5,6 +5,7 @@ import { sql } from "drizzle-orm";
 import { apiSuccess, apiError, apiBadRequest } from "@/lib/api/helpers";
 import { logger } from "@/lib/logger";
 import { withAdmin } from "@/lib/api/middleware";
+import { MARKETPLACE_STATUS } from '@/config/marketplace-status';
 
 // POST /api/admin/products/bulk-import - Bulk import products from CSV
 export const POST = withAdmin('products', async (request: NextRequest) => {
@@ -77,7 +78,7 @@ export const POST = withAdmin('products', async (request: NextRequest) => {
             estimatedPriceChf: String(product.price),
             category: product.category,
             condition: 'unknown',
-            status: 'draft',
+            status: MARKETPLACE_STATUS.DRAFT,
           })
           .returning({ id: aiExtractedProducts.id });
 

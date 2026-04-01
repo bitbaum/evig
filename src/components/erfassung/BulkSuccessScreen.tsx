@@ -74,17 +74,17 @@ export function BulkSuccessScreen({ result, onRetryFailed, onReset }: BulkSucces
         <div className="flex justify-center gap-8">
           <div className="text-center">
             <div className="text-3xl font-bold text-green-600 dark:text-green-400">{result.succeeded}</div>
-            <div className="text-sm text-gray-500 dark:text-gray-400">Erfolgreich</div>
+            <div className="text-sm text-gray-600 dark:text-gray-400">Erfolgreich</div>
           </div>
           {hasFailures && (
             <div className="text-center">
               <div className="text-3xl font-bold text-red-600 dark:text-red-400">{result.failed}</div>
-              <div className="text-sm text-gray-500 dark:text-gray-400">Fehlgeschlagen</div>
+              <div className="text-sm text-gray-600 dark:text-gray-400">Fehlgeschlagen</div>
             </div>
           )}
           <div className="text-center">
             <div className="text-3xl font-bold text-gray-900 dark:text-white">{result.total}</div>
-            <div className="text-sm text-gray-500 dark:text-gray-400">Gesamt</div>
+            <div className="text-sm text-gray-600 dark:text-gray-400">Gesamt</div>
           </div>
         </div>
 

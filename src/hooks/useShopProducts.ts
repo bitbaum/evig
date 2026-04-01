@@ -6,6 +6,7 @@
  */
 
 import { useState, useEffect, useCallback } from 'react'
+import { apiFetch } from '@/lib/api/client'
 
 export interface ShopProduct {
   id: string
@@ -62,18 +63,13 @@ export function useShopProducts(filters?: ShopProductFilters): UseShopProductsRe
       const queryString = params.toString()
       const url = `/api/shop/inventory${queryString ? `?${queryString}` : ''}`
 
-      const response = await fetch(url)
-      if (!response.ok) {
-        throw new Error('Failed to fetch shop products')
-      }
-
-      const result = await response.json()
+      const result = await apiFetch<{ products: ShopProduct[]; total: number; limit: number; offset: number }>(url)
 
       if (!result.success) {
         throw new Error(result.error || 'Failed to fetch shop products')
       }
 
-      setData(result.data)
+      setData(result.data!)
       setError(null)
     } catch (err) {
       setError(err instanceof Error ? err : new Error('Unknown error'))

@@ -21,6 +21,7 @@ import {
   Loader2,
   CreditCard,
 } from 'lucide-react'
+import { apiFetch } from '@/lib/api/client'
 import { logger } from '@/lib/logger'
 import {
   PaymentForm,
@@ -55,12 +56,11 @@ export default function WorkshopRegistrationForm({ workshop, instance }: Worksho
   useEffect(() => {
     const checkRegistrationUIStatus = async () => {
       try {
-        const response = await fetch(`/api/workshops/registration/${instance.id}`)
-        const data = await response.json()
+        const result = await apiFetch<{ registered: boolean; registration?: RegistrationData }>(`/api/workshops/registration/${instance.id}`)
 
-        if (data.registered) {
+        if (result.data?.registered) {
           setRegistrationUIStatus('registered')
-          setRegistrationData(data.registration)
+          setRegistrationData(result.data.registration ?? null)
         } else {
           setRegistrationUIStatus('not-registered')
         }
@@ -89,21 +89,18 @@ export default function WorkshopRegistrationForm({ workshop, instance }: Worksho
     setError('')
 
     try {
-      const response = await fetch('/api/workshops/register', {
+      const result = await apiFetch<{ registrationId: string }>('/api/workshops/register', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
+        body: {
           workshopSlug: workshop.slug,
           instanceId: instance.id
-        })
+        }
       })
 
-      const data = await response.json()
-
-      if (data.success) {
+      if (result.success) {
         setRegistrationUIStatus('registered')
         setRegistrationData({
-          id: data.registrationId,
+          id: result.data!.registrationId,
           status: 'confirmed',
           registered_at: new Date().toISOString(),
           workshop_instance: {
@@ -119,7 +116,7 @@ export default function WorkshopRegistrationForm({ workshop, instance }: Worksho
         }, 2000)
       } else {
         setRegistrationUIStatus('error')
-        setError(data.error || 'Anmeldung fehlgeschlagen')
+        setError(result.error || 'Anmeldung fehlgeschlagen')
       }
     } catch {
       setRegistrationUIStatus('error')
@@ -137,28 +134,25 @@ export default function WorkshopRegistrationForm({ workshop, instance }: Worksho
     setError('')
 
     try {
-      const response = await fetch(`/api/workshops/${workshop.slug}/register-with-payment`, {
+      const result = await apiFetch<{ registrationId: string; paymentUrl: string; amount: string; invoiceNumber: string }>(`/api/workshops/${workshop.slug}/register-with-payment`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
+        body: {
           instanceId: instance.id,
           useEscrow: false
-        })
+        }
       })
 
-      const data = await response.json()
-
-      if (data.success) {
+      if (result.success) {
         setPaymentData({
-          registrationId: data.registrationId,
-          paymentUrl: data.paymentUrl,
-          amount: data.amount,
-          invoiceNumber: data.invoiceNumber
+          registrationId: result.data!.registrationId,
+          paymentUrl: result.data!.paymentUrl,
+          amount: result.data!.amount,
+          invoiceNumber: result.data!.invoiceNumber
         })
         setRegistrationUIStatus('payment')
       } else {
         setRegistrationUIStatus('error')
-        setError(data.message || data.error || 'Fehler beim Erstellen der Registrierung')
+        setError(result.error || 'Fehler beim Erstellen der Registrierung')
       }
     } catch {
       setRegistrationUIStatus('error')

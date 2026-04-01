@@ -24,6 +24,7 @@ import {
 import { CONVERSATION_TYPES } from '@/config/database'
 import { formatDate } from '@/lib/date-formats'
 import { logger } from '@/lib/logger'
+import { apiFetch } from '@/lib/api/client'
 
 interface Review {
   id: string
@@ -63,64 +64,53 @@ export default function HelperDetailPage() {
   // Fetch reviews for this helper
   useEffect(() => {
     if (!id) return
-    fetch(`/api/reviews?targetType=it_hilfe&targetId=${id}`)
-      .then(res => res.json())
-      .then(data => {
-        if (data.success) setReviews(data.data.reviews || [])
+    apiFetch<{ reviews: Review[] }>(`/api/reviews?targetType=it_hilfe&targetId=${id}`)
+      .then(result => {
+        if (result.success && result.data) setReviews(result.data.reviews || [])
       })
-      .catch(() => {})
   }, [id])
 
   useEffect(() => {
+    if (!id) return
+    let cancelled = false
     async function fetchHelper() {
-      try {
-        const res = await fetch(`/api/it-hilfe/helpers/${id}`)
-        const data = await res.json()
-        if (data.success) {
-          setHelper(data.data.helper)
-        } else {
-          setError(data.error || 'Profil nicht gefunden')
-        }
-      } catch {
-        setError('Fehler beim Laden des Profils')
-      } finally {
-        setLoading(false)
+      const result = await apiFetch<{ helper: HelperProfile }>(`/api/it-hilfe/helpers/${id}`)
+      if (cancelled) return
+      if (result.success && result.data) {
+        setHelper(result.data.helper)
+      } else {
+        setError(result.error || 'Profil nicht gefunden')
       }
+      setLoading(false)
     }
-    if (id) fetchHelper()
+    fetchHelper()
+    return () => { cancelled = true }
   }, [id])
 
   async function handleContact() {
     if (!helper) return
     setIsContacting(true)
-    try {
-      const initialMessage = `Hallo ${helper.name},\n\nich brauche IT-Hilfe und habe gesehen, dass du folgende Fähigkeiten hast:\n\n${helper.skills.slice(0, 5).map(sid => {
-        const skill = getSkillById(sid)
-        return skill ? `- ${skill.name}` : ''
-      }).filter(Boolean).join('\n')}\n\nKönntest du mir helfen?`
 
-      const response = await fetch('/api/messages', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          recipient_id: helper.userId,
-          content: initialMessage,
-          context_type: CONVERSATION_TYPES.IT_HILFE,
-        }),
-      })
+    const initialMessage = `Hallo ${helper.name},\n\nich brauche IT-Hilfe und habe gesehen, dass du folgende Fähigkeiten hast:\n\n${helper.skills.slice(0, 5).map(sid => {
+      const skill = getSkillById(sid)
+      return skill ? `- ${skill.name}` : ''
+    }).filter(Boolean).join('\n')}\n\nKönntest du mir helfen?`
 
-      if (!response.ok) {
-        const err = await response.json()
-        throw new Error(err.error || 'Fehler beim Senden')
-      }
+    const result = await apiFetch<void>('/api/messages', {
+      method: 'POST',
+      body: {
+        recipient_id: helper.userId,
+        content: initialMessage,
+        context_type: CONVERSATION_TYPES.IT_HILFE,
+      },
+    })
 
+    if (result.success) {
       setContactSuccess(true)
-    } catch (err) {
-      logger.error('Error contacting helper', { error: err, helperId: helper.userId })
-      // Error already logged above
-    } finally {
-      setIsContacting(false)
+    } else {
+      logger.error('Error contacting helper', { error: result.error, helperId: helper.userId })
     }
+    setIsContacting(false)
   }
 
   if (loading) {

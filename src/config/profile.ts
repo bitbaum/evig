@@ -7,6 +7,8 @@
  * Ground Truth #2: One source of truth for every piece of data
  */
 
+import { FILE_SIZE_LIMITS } from '@/config/limits'
+
 // ============================================================================
 // PROFILE CONFIGURATION (Public View)
 // ============================================================================
@@ -80,7 +82,7 @@ export const PROFILE_CONFIG = {
   },
 
   avatar: {
-    maxSizeBytes: 5 * 1024 * 1024, // 5MB
+    maxSizeBytes: FILE_SIZE_LIMITS.AVATAR_MAX,
     maxSizeMB: 5,
     allowedTypes: ['image/jpeg', 'image/png', 'image/webp'] as const,
     allowedExtensions: ['.jpg', '.jpeg', '.png', '.webp'] as const,

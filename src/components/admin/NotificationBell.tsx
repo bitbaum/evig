@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { Bell, X, Check } from 'lucide-react'
+import { apiFetch } from '@/lib/api/client'
 import { RELATED_TYPE_HREFS } from '@/config/notifications'
 
 interface Notification {
@@ -47,30 +48,31 @@ export function NotificationBell() {
   const fetchNotifications = useCallback(async () => {
     setLoading(true)
     setError(null)
-    try {
-      const res = await fetch('/api/notifications')
-      if (!res.ok) {
-        setError('Benachrichtigungen konnten nicht geladen werden')
-        return
-      }
-      const json = await res.json()
-      if (json?.success) {
-        setNotifications(json.data.notifications)
-        setUnreadCount(json.data.unreadCount)
-      }
-    } catch {
-      setError('Netzwerkfehler beim Laden der Benachrichtigungen')
-    } finally {
-      setLoading(false)
+    const result = await apiFetch<{ notifications: Notification[]; unreadCount: number }>('/api/notifications')
+    if (result.success && result.data) {
+      setNotifications(result.data.notifications)
+      setUnreadCount(result.data.unreadCount)
+    } else {
+      setError(result.error || 'Benachrichtigungen konnten nicht geladen werden')
     }
+    setLoading(false)
   }, [])
 
   // Fetch on mount and every 60 seconds for live badge updates
   useEffect(() => {
-    void fetchNotifications()
-    const interval = setInterval(() => { void fetchNotifications() }, 60000)
-    return () => clearInterval(interval)
-  }, [fetchNotifications])
+    let cancelled = false
+    async function load() {
+      const result = await apiFetch<{ notifications: Notification[]; unreadCount: number }>('/api/notifications')
+      if (cancelled) return
+      if (result.success && result.data) {
+        setNotifications(result.data.notifications)
+        setUnreadCount(result.data.unreadCount)
+      }
+    }
+    load()
+    const interval = setInterval(() => { load() }, 60000)
+    return () => { cancelled = true; clearInterval(interval) }
+  }, [])
 
   // Close on outside click
   useEffect(() => {
@@ -96,12 +98,8 @@ export function NotificationBell() {
       )
       setUnreadCount(prev => Math.max(0, prev - 1))
 
-      try {
-        const res = await fetch(`/api/notifications/${notification.id}`, { method: 'PATCH' })
-        if (!res.ok) void fetchNotifications()
-      } catch {
-        void fetchNotifications()
-      }
+      const result = await apiFetch<void>(`/api/notifications/${notification.id}`, { method: 'PATCH' })
+      if (!result.success) void fetchNotifications()
     }
 
     const href = relatedHref(notification)
@@ -113,15 +111,14 @@ export function NotificationBell() {
 
   const markAllRead = async () => {
     setMarkingAll(true)
-    try {
-      await fetch('/api/notifications', { method: 'PATCH' })
+    const result = await apiFetch<void>('/api/notifications', { method: 'PATCH' })
+    if (result.success) {
       setNotifications(prev => prev.map(n => ({ ...n, is_read: true })))
       setUnreadCount(0)
-    } catch {
+    } else {
       void fetchNotifications()
-    } finally {
-      setMarkingAll(false)
     }
+    setMarkingAll(false)
   }
 
   return (

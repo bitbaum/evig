@@ -69,7 +69,7 @@ export default function ContactForm() {
             </label>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <User className="h-5 w-5 text-gray-400" />
+                <User className="h-5 w-5 text-gray-500" />
               </div>
               <input
                 type="text"
@@ -88,7 +88,7 @@ export default function ContactForm() {
             </label>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <Mail className="h-5 w-5 text-gray-400" />
+                <Mail className="h-5 w-5 text-gray-500" />
               </div>
               <input
                 type="email"
@@ -122,7 +122,7 @@ export default function ContactForm() {
           </label>
           <div className="relative">
             <div className="absolute top-3 left-3 pointer-events-none">
-              <MessageSquare className="h-5 w-5 text-gray-400" />
+              <MessageSquare className="h-5 w-5 text-gray-500" />
             </div>
             <textarea
               id="message"

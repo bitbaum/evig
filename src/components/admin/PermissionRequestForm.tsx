@@ -1,7 +1,7 @@
 'use client'
 
-import { useState } from 'react'
 import { Shield, Send, X, Check } from 'lucide-react'
+import { useFormHandler } from '@/hooks/useFormHandler'
 
 interface Section {
   id: string
@@ -14,62 +14,41 @@ interface PermissionRequestFormProps {
   onClose?: () => void
 }
 
+interface PermissionRequestData {
+  sections: string[]
+  reason: string
+}
+
 export function PermissionRequestForm({ availableSections, onClose }: PermissionRequestFormProps) {
-  const [selectedSections, setSelectedSections] = useState<string[]>([])
-  const [reason, setReason] = useState('')
-  const [submitting, setSubmitting] = useState(false)
-  const [success, setSuccess] = useState(false)
-  const [error, setError] = useState('')
+  const form = useFormHandler<PermissionRequestData>({
+    initialData: { sections: [], reason: '' },
+    apiEndpoint: '/api/admin/permissions/request',
+    createSuccessMessage: 'Anfrage gesendet',
+    validate: (data) => {
+      if (data.sections.length === 0) {
+        return 'Bitte wählen Sie mindestens einen Bereich aus.'
+      }
+      if (data.reason.trim().length < 10) {
+        return 'Bitte geben Sie einen Grund an (mindestens 10 Zeichen).'
+      }
+      return null
+    },
+    transformBeforeSubmit: (data) => ({
+      sections: data.sections,
+      reason: data.reason.trim(),
+    }),
+  })
 
   const toggleSection = (sectionId: string) => {
-    setSelectedSections(prev =>
-      prev.includes(sectionId)
-        ? prev.filter(s => s !== sectionId)
-        : [...prev, sectionId]
-    )
+    form.setData(prev => ({
+      ...prev,
+      sections: prev.sections.includes(sectionId)
+        ? prev.sections.filter(s => s !== sectionId)
+        : [...prev.sections, sectionId],
+    }))
   }
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setError('')
-
-    if (selectedSections.length === 0) {
-      setError('Bitte wählen Sie mindestens einen Bereich aus.')
-      return
-    }
-
-    if (reason.trim().length < 10) {
-      setError('Bitte geben Sie einen Grund an (mindestens 10 Zeichen).')
-      return
-    }
-
-    setSubmitting(true)
-
-    try {
-      const response = await fetch('/api/admin/permissions/request', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          sections: selectedSections,
-          reason: reason.trim(),
-        }),
-      })
-
-      const data = await response.json()
-
-      if (!response.ok) {
-        throw new Error(data.error || 'Fehler beim Senden der Anfrage')
-      }
-
-      setSuccess(true)
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Unbekannter Fehler')
-    } finally {
-      setSubmitting(false)
-    }
-  }
-
-  if (success) {
+  if (form.success) {
     return (
       <div className="p-6 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-xl">
         <div className="flex items-center gap-3 mb-4">
@@ -98,7 +77,7 @@ export function PermissionRequestForm({ availableSections, onClose }: Permission
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
+    <form onSubmit={form.handleSubmit} className="space-y-6">
       <div className="flex items-center gap-3 mb-4">
         <div className="w-10 h-10 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center">
           <Shield className="w-5 h-5 text-blue-600" />
@@ -134,7 +113,7 @@ export function PermissionRequestForm({ availableSections, onClose }: Permission
               type="button"
               onClick={() => toggleSection(section.id)}
               className={`p-3 text-left rounded-lg border transition-colors ${
-                selectedSections.includes(section.id)
+                form.data.sections.includes(section.id)
                   ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
                   : 'border-gray-200 dark:border-gray-700 hover:border-gray-300'
               }`}
@@ -156,31 +135,31 @@ export function PermissionRequestForm({ availableSections, onClose }: Permission
           Begründung
         </label>
         <textarea
-          value={reason}
-          onChange={e => setReason(e.target.value)}
+          value={form.data.reason}
+          onChange={e => form.updateField('reason', e.target.value)}
           placeholder="Warum benötigen Sie Zugriff auf diese Bereiche?"
           rows={3}
           aria-required="true"
-          aria-invalid={!!error}
-          aria-describedby={error ? 'permission-form-error' : undefined}
+          aria-invalid={!!form.error}
+          aria-describedby={form.error ? 'permission-form-error' : undefined}
           className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
         />
       </div>
 
       {/* Error */}
-      {error && (
+      {form.error && (
         <div id="permission-form-error" className="p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
-          <p className="text-sm text-red-700 dark:text-red-300">{error}</p>
+          <p className="text-sm text-red-700 dark:text-red-300">{form.error}</p>
         </div>
       )}
 
       {/* Submit */}
       <button
         type="submit"
-        disabled={submitting || selectedSections.length === 0}
+        disabled={form.isSubmitting || form.data.sections.length === 0}
         className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white font-medium rounded-lg transition-colors"
       >
-        {submitting ? (
+        {form.isSubmitting ? (
           <>
             <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
             Wird gesendet...

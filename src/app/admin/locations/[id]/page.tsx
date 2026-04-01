@@ -9,6 +9,7 @@ import { formatDateShort } from '@/lib/date-formats'
 import { getApprovalStatusLabel } from '@/config/approval-status'
 import { LOCATION_STATUS } from '@/config/location-status'
 import { BOOKING_STATUS } from '@/config/booking-status'
+import { apiFetch } from '@/lib/api/client'
 import {
   MapPin,
   Building2,
@@ -87,60 +88,56 @@ export default function LocationDetailPage() {
   const [actionLoading, setActionLoading] = useState(false)
 
   const loadLocation = useCallback(async () => {
-    try {
-      setLoading(true)
-      const response = await fetch(`/api/locations/${locationId}`)
-      if (response.ok) {
-        const data = await response.json()
-        if (data.success) {
-          setLocation(data.data.location)
-          setBookings(data.data.recentBookings || [])
-        } else {
-          setError('Ort nicht gefunden')
-        }
-      } else if (response.status === 404) {
-        setError('Ort nicht gefunden')
-      } else {
-        setError('Fehler beim Laden des Orts')
-      }
-    } catch {
-      setError('Netzwerkfehler')
-    } finally {
-      setLoading(false)
+    setLoading(true)
+    const result = await apiFetch<{ location: LocationDetail; recentBookings?: Booking[] }>(`/api/locations/${locationId}`)
+    setLoading(false)
+
+    if (result.success && result.data) {
+      setLocation(result.data.location)
+      setBookings(result.data.recentBookings || [])
+    } else {
+      setError(result.error || 'Ort nicht gefunden')
     }
   }, [locationId])
 
   useEffect(() => {
-    if (sessionStatus === 'authenticated' && locationId) {
-      loadLocation()
+    if (sessionStatus !== 'authenticated' || !locationId) return
+    let cancelled = false
+    async function load() {
+      setLoading(true)
+      const result = await apiFetch<{ location: LocationDetail; recentBookings?: Booking[] }>(`/api/locations/${locationId}`)
+      if (cancelled) return
+      setLoading(false)
+      if (result.success && result.data) {
+        setLocation(result.data.location)
+        setBookings(result.data.recentBookings || [])
+      } else {
+        setError(result.error || 'Ort nicht gefunden')
+      }
     }
-  }, [sessionStatus, locationId, loadLocation])
+    load()
+    return () => { cancelled = true }
+  }, [sessionStatus, locationId])
 
   async function handleApproval(action: 'approve' | 'reject') {
     if (!confirm(`Möchten Sie diesen Ort wirklich ${action === 'approve' ? 'genehmigen' : 'ablehnen'}?`)) {
       return
     }
 
-    try {
-      setActionLoading(true)
-      const response = await fetch(`/api/locations/${locationId}/approve`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          action,
-          review_notes: action === 'reject' ? 'Administrative Prüfung' : 'Ort genehmigt'
-        })
-      })
-
-      if (response.ok) {
-        loadLocation()
-      } else {
-        setError('Fehler bei der Genehmigung')
+    setActionLoading(true)
+    const result = await apiFetch<void>(`/api/locations/${locationId}/approve`, {
+      method: 'POST',
+      body: {
+        action,
+        review_notes: action === 'reject' ? 'Administrative Prüfung' : 'Ort genehmigt'
       }
-    } catch {
-      setError('Netzwerkfehler')
-    } finally {
-      setActionLoading(false)
+    })
+    setActionLoading(false)
+
+    if (result.success) {
+      loadLocation()
+    } else {
+      setError(result.error || 'Fehler bei der Genehmigung')
     }
   }
 

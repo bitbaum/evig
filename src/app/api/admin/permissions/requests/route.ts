@@ -13,6 +13,7 @@ import { alias } from 'drizzle-orm/pg-core'
 import { withAdmin } from '@/lib/api/middleware'
 import { isSuperAdmin } from '@/lib/permissions'
 import { apiSuccess, apiError, apiForbidden } from '@/lib/api/helpers'
+import { PERMISSION_REQUEST_STATUS } from '@/config/permission-request-status'
 
 const reviewer = alias(users, 'reviewer')
 
@@ -24,7 +25,7 @@ export const GET = withAdmin('users', async (request, session) => {
     }
 
     const { searchParams } = new URL(request.url)
-    const status = searchParams.get('status') || 'pending'
+    const status = searchParams.get('status') || PERMISSION_REQUEST_STATUS.PENDING
 
     const rows = await db
       .select({

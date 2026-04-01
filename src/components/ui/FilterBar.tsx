@@ -42,7 +42,7 @@ const FilterBarComponent: React.FC<FilterBarProps> = ({
     <div className={`max-w-3xl mx-auto text-center ${className}`}>
       {filters.map((filter, index) => (
         <div key={filter.key} className={`flex flex-wrap justify-center gap-3 ${index === 0 ? 'mb-8' : 'mb-12'}`}>
-          <div className="flex items-center text-gray-500 mr-4 mb-2">
+          <div className="flex items-center text-gray-600 mr-4 mb-2">
             <Filter className="w-4 h-4 mr-2" />
             <span className="text-sm font-medium">{filter.label}:</span>
           </div>

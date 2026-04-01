@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { Pencil, Trash2, Check, X } from 'lucide-react';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
+import { apiFetch } from '@/lib/api/client';
 import {
   COMMENT_POSITIONS,
   COMMENT_POSITION_CONFIG,
@@ -38,13 +39,10 @@ export default function DiscussionThread({
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
 
-  function fetchComments() {
-    fetch(`/api/decisions/${decisionId}/comments`)
-      .then((res) => res.json())
-      .then((json) => {
-        if (json.success) setComments(json.data);
-        setLoading(false);
-      });
+  async function fetchComments() {
+    const result = await apiFetch<Comment[]>(`/api/decisions/${decisionId}/comments`);
+    if (result.success && result.data) setComments(result.data);
+    setLoading(false);
   }
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -56,25 +54,19 @@ export default function DiscussionThread({
     setError('');
     setSubmitting(true);
 
-    try {
-      const res = await fetch(`/api/decisions/${decisionId}/comments`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ content, position }),
-      });
-      const json = await res.json();
+    const result = await apiFetch<void>(`/api/decisions/${decisionId}/comments`, {
+      method: 'POST',
+      body: { content, position },
+    });
 
-      if (!json.success) {
-        setError(json.error || 'Fehler');
-        setSubmitting(false);
-        return;
-      }
-
-      setContent('');
-      fetchComments();
-    } catch {
-      setError('Netzwerkfehler');
+    if (!result.success) {
+      setError(result.error || 'Fehler');
+      setSubmitting(false);
+      return;
     }
+
+    setContent('');
+    fetchComments();
     setSubmitting(false);
   }
 
@@ -100,26 +92,20 @@ export default function DiscussionThread({
     setEditSaving(true);
     setError('');
 
-    try {
-      const res = await fetch(`/api/decisions/${decisionId}/comments/${commentId}`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ content: editContent }),
-      });
-      const json = await res.json();
+    const result = await apiFetch<void>(`/api/decisions/${decisionId}/comments/${commentId}`, {
+      method: 'PATCH',
+      body: { content: editContent },
+    });
 
-      if (!json.success) {
-        setError(json.error || 'Fehler beim Bearbeiten');
-        setEditSaving(false);
-        return;
-      }
-
-      setEditingId(null);
-      setEditContent('');
-      fetchComments();
-    } catch {
-      setError('Netzwerkfehler');
+    if (!result.success) {
+      setError(result.error || 'Fehler beim Bearbeiten');
+      setEditSaving(false);
+      return;
     }
+
+    setEditingId(null);
+    setEditContent('');
+    fetchComments();
     setEditSaving(false);
   }
 
@@ -128,24 +114,19 @@ export default function DiscussionThread({
     setDeleteLoading(true);
     setError('');
 
-    try {
-      const res = await fetch(`/api/decisions/${decisionId}/comments/${deleteId}`, {
-        method: 'DELETE',
-      });
-      const json = await res.json();
+    const result = await apiFetch<void>(`/api/decisions/${decisionId}/comments/${deleteId}`, {
+      method: 'DELETE',
+    });
 
-      if (!json.success) {
-        setError(json.error || 'Fehler beim Löschen');
-        setDeleteLoading(false);
-        setDeleteId(null);
-        return;
-      }
-
+    if (!result.success) {
+      setError(result.error || 'Fehler beim Löschen');
+      setDeleteLoading(false);
       setDeleteId(null);
-      fetchComments();
-    } catch {
-      setError('Netzwerkfehler');
+      return;
     }
+
+    setDeleteId(null);
+    fetchComments();
     setDeleteLoading(false);
   }
 

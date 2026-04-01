@@ -52,7 +52,7 @@ export const POST = withAdmin<{ id: string }>(async (request, session, context) 
     await db
       .update(staffPermissionRequests)
       .set({
-        status: action === 'approve' ? 'approved' : 'rejected',
+        status: action === 'approve' ? PERMISSION_REQUEST_STATUS.APPROVED : PERMISSION_REQUEST_STATUS.REJECTED,
         reviewedBy: session.user.id,
         reviewedAt: sql`NOW()`,
         reviewNotes: notes || null,

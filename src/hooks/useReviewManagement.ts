@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { apiFetch } from '@/lib/api/client'
 import { logger } from '@/lib/logger'
 import { redirect } from 'next/navigation'
 
@@ -70,12 +71,12 @@ export function useReviewManagement(authStatus: string) {
   const fetchUserReviews = async () => {
     try {
       setLoading(true)
-      const response = await fetch('/api/user/reviews')
-      if (!response.ok) {
-        throw new Error('Failed to fetch reviews')
+      const result = await apiFetch<{ reviews: Review[] }>('/api/user/reviews')
+      if (result.success) {
+        setReviews(result.data?.reviews || [])
+      } else {
+        setError(result.error || 'Failed to fetch reviews')
       }
-      const data = await response.json()
-      setReviews(data.reviews || [])
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Unknown error')
     } finally {
@@ -109,14 +110,13 @@ export function useReviewManagement(authStatus: string) {
     if (!editingReview) return
 
     try {
-      const response = await fetch(`/api/reviews/${editingReview}`, {
+      const result = await apiFetch<void>(`/api/reviews/${editingReview}`, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(editForm)
+        body: editForm
       })
 
-      if (!response.ok) {
-        throw new Error('Failed to update review')
+      if (!result.success) {
+        throw new Error(result.error || 'Failed to update review')
       }
 
       await fetchUserReviews()
@@ -133,12 +133,12 @@ export function useReviewManagement(authStatus: string) {
     }
 
     try {
-      const response = await fetch(`/api/reviews/${reviewId}`, {
+      const result = await apiFetch<void>(`/api/reviews/${reviewId}`, {
         method: 'DELETE'
       })
 
-      if (!response.ok) {
-        throw new Error('Failed to delete review')
+      if (!result.success) {
+        throw new Error(result.error || 'Failed to delete review')
       }
 
       await fetchUserReviews()
@@ -150,35 +150,34 @@ export function useReviewManagement(authStatus: string) {
 
   const handleVote = async (reviewId: string, voteType: 'helpful' | 'unhelpful') => {
     try {
-      const response = await fetch(`/api/reviews/${reviewId}/vote`, {
+      const result = await apiFetch<{ action: string }>(`/api/reviews/${reviewId}/vote`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ voteType })
+        body: { voteType }
       })
 
-      if (!response.ok) {
-        throw new Error('Failed to vote on review')
+      if (!result.success) {
+        throw new Error(result.error || 'Failed to vote on review')
       }
 
-      const data = await response.json()
+      const action = result.data!.action
 
       setReviews(reviews.map(review =>
         review.id === reviewId
           ? {
               ...review,
               helpfulVotes: voteType === 'helpful'
-                ? (data.action === 'added' ? review.helpfulVotes + 1 : review.helpfulVotes - 1)
+                ? (action === 'added' ? review.helpfulVotes + 1 : review.helpfulVotes - 1)
                 : review.helpfulVotes,
-              totalVotes: data.action === 'added'
+              totalVotes: action === 'added'
                 ? review.totalVotes + 1
                 : review.totalVotes - 1
             }
           : review
       ))
 
-      if (data.action === 'added') {
+      if (action === 'added') {
         setUserVotes([...userVotes.filter(v => v.reviewId !== reviewId), { reviewId, voteType }])
-      } else if (data.action === 'removed') {
+      } else if (action === 'removed') {
         setUserVotes(userVotes.filter(v => v.reviewId !== reviewId))
       }
 

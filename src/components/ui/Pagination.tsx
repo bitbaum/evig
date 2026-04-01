@@ -117,7 +117,7 @@ export function Pagination({
 
   return (
     <div className="flex items-center justify-between px-4 py-3 border-t border-gray-100 dark:border-gray-700">
-      <p className="text-sm text-gray-500 dark:text-gray-400">
+      <p className="text-sm text-gray-600 dark:text-gray-400">
         {from}–{to} von {totalItems}
       </p>
       <div className="flex items-center gap-1">
@@ -130,7 +130,7 @@ export function Pagination({
           return (
             <div key={page} className="flex items-center gap-1">
               {prev && page - prev > 1 && (
-                <span className="w-8 text-center text-sm text-gray-500">...</span>
+                <span className="w-8 text-center text-sm text-gray-600">...</span>
               )}
               <PageItem page={page} active={page === currentPage} hrefBase={hrefBase} onPageChange={onPageChange} />
             </div>

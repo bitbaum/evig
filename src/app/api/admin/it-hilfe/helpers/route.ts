@@ -3,6 +3,7 @@ import { db } from '@/db'
 import { helperProfiles, users, userSkills } from '@/db/schema'
 import { eq, and, isNull, isNotNull, sql, desc } from 'drizzle-orm'
 import { apiError, apiSuccess, parsePagination } from '@/lib/api/helpers'
+import { TABLE_NAMES } from '@/config/database'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { HELPER_STATUS } from '@/config/helper-status'
 
@@ -32,7 +33,7 @@ export const GET = withAdmin('it-hilfe-admin', async (request) => {
 
     if (skill) {
       conditions.push(
-        sql`EXISTS (SELECT 1 FROM user_skills us WHERE us.user_id = ${helperProfiles.userId} AND us.skill_id = ${skill})`
+        sql`EXISTS (SELECT 1 FROM ${sql.raw(TABLE_NAMES.USER_SKILLS)} us WHERE us.user_id = ${helperProfiles.userId} AND us.skill_id = ${skill})`
       )
     }
 
@@ -59,7 +60,7 @@ export const GET = withAdmin('it-hilfe-admin', async (request) => {
         created_at: helperProfiles.createdAt,
         helper_name: users.name,
         helper_email: users.email,
-        skills: sql<string[] | null>`(SELECT array_agg(us.skill_id) FROM user_skills us WHERE us.user_id = ${helperProfiles.userId})`,
+        skills: sql<string[] | null>`(SELECT array_agg(us.skill_id) FROM ${sql.raw(TABLE_NAMES.USER_SKILLS)} us WHERE us.user_id = ${helperProfiles.userId})`,
       })
       .from(helperProfiles)
       .innerJoin(users, eq(helperProfiles.userId, users.id))

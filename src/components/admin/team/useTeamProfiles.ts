@@ -5,6 +5,7 @@
  */
 
 import { useState, useEffect, useCallback } from 'react'
+import { apiFetch } from '@/lib/api/client'
 import type { TeamProfileWithUser } from '@/lib/schemas/team'
 import type { TeamFilterState } from './types'
 
@@ -48,10 +49,9 @@ export function useTeamProfiles(options: UseTeamProfilesOptions = {}): UseTeamPr
       if (filters.isActive !== 'all') params.set('is_active', filters.isActive)
       if (filters.search) params.set('search', filters.search)
 
-      const response = await fetch(`/api/admin/team/profiles?${params.toString()}`)
-      const result = await response.json()
+      const result = await apiFetch<TeamProfileWithUser[]>(`/api/admin/team/profiles?${params.toString()}`)
 
-      if (!response.ok) {
+      if (!result.success) {
         throw new Error(result.error || 'Fehler beim Laden der Profile')
       }
 
@@ -100,14 +100,13 @@ export function useTeamProfile(profileId: string | null) {
       setLoading(true)
       setError(null)
 
-      const response = await fetch(`/api/admin/team/profiles/${profileId}`)
-      const result = await response.json()
+      const result = await apiFetch<TeamProfileWithUser>(`/api/admin/team/profiles/${profileId}`)
 
-      if (!response.ok) {
+      if (!result.success) {
         throw new Error(result.error || 'Profil nicht gefunden')
       }
 
-      setProfile(result.data)
+      setProfile(result.data ?? null)
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Unbekannter Fehler')
       setProfile(null)
@@ -140,15 +139,12 @@ export function useTeamProfileMutations() {
       setSaving(true)
       setError(null)
 
-      const response = await fetch('/api/admin/team/profiles', {
+      const result = await apiFetch<TeamProfileWithUser>('/api/admin/team/profiles', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
+        body: data,
       })
 
-      const result = await response.json()
-
-      if (!response.ok) {
+      if (!result.success) {
         throw new Error(result.error || 'Fehler beim Erstellen')
       }
 
@@ -167,15 +163,12 @@ export function useTeamProfileMutations() {
       setSaving(true)
       setError(null)
 
-      const response = await fetch(`/api/admin/team/profiles/${id}`, {
+      const result = await apiFetch<TeamProfileWithUser>(`/api/admin/team/profiles/${id}`, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
+        body: data,
       })
 
-      const result = await response.json()
-
-      if (!response.ok) {
+      if (!result.success) {
         throw new Error(result.error || 'Fehler beim Aktualisieren')
       }
 
@@ -194,13 +187,11 @@ export function useTeamProfileMutations() {
       setSaving(true)
       setError(null)
 
-      const response = await fetch(`/api/admin/team/profiles/${id}`, {
+      const result = await apiFetch<unknown>(`/api/admin/team/profiles/${id}`, {
         method: 'DELETE',
       })
 
-      const result = await response.json()
-
-      if (!response.ok) {
+      if (!result.success) {
         throw new Error(result.error || 'Fehler beim Löschen')
       }
 

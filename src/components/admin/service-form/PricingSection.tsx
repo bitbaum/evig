@@ -31,10 +31,11 @@ export function PricingSection({
   return (
     <CollapsibleSection title="Preisanzeige" defaultOpen={false}>
       <div>
-        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+        <label htmlFor="pricing-base" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
           Basis-Preis (Anzeige)
         </label>
         <input
+          id="pricing-base"
           type="text"
           value={pricingBase}
           onChange={(e) => onBaseChange(e.target.value)}
@@ -44,9 +45,9 @@ export function PricingSection({
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+        <span className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
           Preisdetails
-        </label>
+        </span>
         <div className="space-y-2">
           {pricingDetails.map((detail, index) => (
             <div key={index} className="flex gap-2">
@@ -78,9 +79,9 @@ export function PricingSection({
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+        <span className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
           Medienpreise (optional, für Datenrettung)
-        </label>
+        </span>
         <div className="space-y-2">
           {(pricingMediaPrices || []).map((price, index) => (
             <div key={index} className="flex gap-2">

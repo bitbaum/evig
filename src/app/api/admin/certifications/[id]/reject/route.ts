@@ -3,6 +3,7 @@ import { withAdmin } from '@/lib/api/middleware'
 import { db } from '@/db'
 import { sql } from 'drizzle-orm'
 import { apiError, apiSuccess, apiBadRequest, apiNotFound } from '@/lib/api/helpers'
+import { TABLE_NAMES } from '@/config/database'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { CERTIFICATION_STATUS } from '@/config/certification-status'
 import { logger } from '@/lib/logger'
@@ -26,8 +27,8 @@ export const PUT = withAdmin<{ id: string }>('services', async (request, session
     // Get certification details
     const certificationResult = await db.execute(sql`
       SELECT rc.*, ra.user_id
-      FROM repairer_certifications rc
-      JOIN repairer_applications ra ON rc.application_id = ra.id
+      FROM ${sql.raw(TABLE_NAMES.REPAIRER_CERTIFICATIONS)} rc
+      JOIN ${sql.raw(TABLE_NAMES.REPAIRER_APPLICATIONS)} ra ON rc.application_id = ra.id
       WHERE rc.id = ${certificationId}
     `)
 
@@ -47,7 +48,7 @@ export const PUT = withAdmin<{ id: string }>('services', async (request, session
 
     // Update certification verification status with rejection details
     await db.execute(sql`
-      UPDATE repairer_certifications
+      UPDATE ${sql.raw(TABLE_NAMES.REPAIRER_CERTIFICATIONS)}
       SET
         verification_status = ${CERTIFICATION_STATUS.REJECTED},
         verification_result = jsonb_build_object('rejectionReason', ${rejectionReason}, 'rejectedAt', CURRENT_TIMESTAMP),

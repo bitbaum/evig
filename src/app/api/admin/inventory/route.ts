@@ -12,6 +12,7 @@ import { db } from '@/db'
 import { aiExtractedProducts, inventoryItems, productCustomerProfiles, customerProfiles } from '@/db/schema'
 import { eq, ilike, or, sql, desc, inArray } from 'drizzle-orm'
 import { logger } from '@/lib/logger'
+import { MARKETPLACE_STATUS } from '@/config/marketplace-status'
 
 export const GET = withAdmin('products', async (request: NextRequest, session) => {
   try {
@@ -54,7 +55,7 @@ export const GET = withAdmin('products', async (request: NextRequest, session) =
         created_at: aiExtractedProducts.createdAt,
         location: inventoryItems.location,
         quantity_available: sql<number>`COALESCE(${inventoryItems.quantityAvailable}, 1)`,
-        marketplace_status: sql<string>`COALESCE(${inventoryItems.marketplaceStatus}, 'draft')`,
+        marketplace_status: sql<string>`COALESCE(${inventoryItems.marketplaceStatus}, ${MARKETPLACE_STATUS.DRAFT})`,
         kivitendo_article_number: aiExtractedProducts.kivitendoArticleNumber,
       })
       .from(aiExtractedProducts)

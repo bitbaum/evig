@@ -24,6 +24,7 @@ import type {
   DecisionOutcomeRecord,
   ProposedTask,
 } from '@/lib/schemas/protocols'
+import { apiFetch } from '@/lib/api/client'
 import { getErrorMessage } from '@/lib/utils/error'
 import {
   ThumbsUp,
@@ -76,19 +77,17 @@ export default function DecisionActions({
     setError(null)
 
     try {
-      const res = await fetch(`/api/protocols/${protocolId}/decisions/vote`, {
+      const res = await apiFetch<{ action: string; votesUp: number; votesDown: number; isClosed: boolean; result: DecisionResult }>(`/api/protocols/${protocolId}/decisions/vote`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action_item_id: actionItemId, vote_type: voteType }),
+        body: { action_item_id: actionItemId, vote_type: voteType },
       })
-      const data = await res.json()
 
-      if (!data.success) {
-        throw new Error(data.error || 'Abstimmung fehlgeschlagen')
+      if (!res.success) {
+        throw new Error(res.error || 'Abstimmung fehlgeschlagen')
       }
 
       // Update local state optimistically
-      const { action, votesUp: newUp, votesDown: newDown, isClosed: newClosed, result: newResult } = data.data
+      const { action, votesUp: newUp, votesDown: newDown, isClosed: newClosed, result: newResult } = res.data!
 
       // Update votes list
       if (action === 'removed') {
@@ -140,23 +139,21 @@ export default function DecisionActions({
     setError(null)
 
     try {
-      const res = await fetch(`/api/protocols/${protocolId}/decisions/close`, {
+      const res = await apiFetch<{ result: DecisionResult; votesUp: number; votesDown: number }>(`/api/protocols/${protocolId}/decisions/close`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action_item_id: actionItemId }),
+        body: { action_item_id: actionItemId },
       })
-      const data = await res.json()
 
-      if (!data.success) {
-        throw new Error(data.error || 'Schliessen fehlgeschlagen')
+      if (!res.success) {
+        throw new Error(res.error || 'Schliessen fehlgeschlagen')
       }
 
       setLocalOutcome(prev => prev ? {
         ...prev,
         is_closed: true,
-        result: data.data.result,
-        votes_up: data.data.votesUp,
-        votes_down: data.data.votesDown,
+        result: res.data!.result,
+        votes_up: res.data!.votesUp,
+        votes_down: res.data!.votesDown,
       } : prev)
 
       onRefresh()
@@ -172,21 +169,19 @@ export default function DecisionActions({
     setError(null)
 
     try {
-      const res = await fetch(`/api/protocols/${protocolId}/decisions/propose`, {
+      const res = await apiFetch<{ proposals: ProposedTask[]; model: string }>(`/api/protocols/${protocolId}/decisions/propose`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action_item_id: actionItemId }),
+        body: { action_item_id: actionItemId },
       })
-      const data = await res.json()
 
-      if (!data.success) {
-        throw new Error(data.error || 'Vorschlag fehlgeschlagen')
+      if (!res.success) {
+        throw new Error(res.error || 'Vorschlag fehlgeschlagen')
       }
 
       setLocalOutcome(prev => prev ? {
         ...prev,
-        proposed_tasks: data.data.proposals,
-        proposal_model: data.data.model,
+        proposed_tasks: res.data!.proposals,
+        proposal_model: res.data!.model,
       } : prev)
     } catch (err) {
       setError(getErrorMessage(err))
@@ -200,15 +195,13 @@ export default function DecisionActions({
     setError(null)
 
     try {
-      const res = await fetch(`/api/protocols/${protocolId}/decisions/create-tasks`, {
+      const res = await apiFetch<void>(`/api/protocols/${protocolId}/decisions/create-tasks`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action_item_id: actionItemId }),
+        body: { action_item_id: actionItemId },
       })
-      const data = await res.json()
 
-      if (!data.success) {
-        throw new Error(data.error || 'Erstellen fehlgeschlagen')
+      if (!res.success) {
+        throw new Error(res.error || 'Erstellen fehlgeschlagen')
       }
 
       setLocalOutcome(prev => prev ? {

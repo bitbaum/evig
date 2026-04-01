@@ -3,6 +3,9 @@
 // ---------------------------------------------------------------------------
 
 import { HelpCircle, Users } from 'lucide-react'
+import type { OffsetPaginatedResponse } from '@/lib/api/types'
+
+export type { OffsetPaginatedResponse as PaginatedResponse }
 
 export interface RequestRow {
   id: string
@@ -53,11 +56,6 @@ export interface Stats {
   verifiedHelpers: number
   totalOffers: number
   resolutionRate: number
-}
-
-export interface PaginatedResponse<T> {
-  items: T[]
-  pagination: { total: number; limit: number; offset: number; hasMore: boolean }
 }
 
 export type Tab = 'requests' | 'helpers'

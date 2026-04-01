@@ -16,6 +16,7 @@ import { validateBody, UpdateOrderStatusSchema } from '@/lib/schemas';
 import { captureTransaction, cancelTransaction } from '@/lib/payments/payrexx-client';
 import { sendCustomEmail } from '@/lib/email';
 import { orderStatusUpdate } from '@/lib/email/templates/marketplace';
+import { APP_URL } from '@/config/urls';
 
 // Valid status transitions: { currentStatus: { role: [allowedNewStatuses] } }
 const STATUS_TRANSITIONS: Record<string, Record<string, string[]>> = {
@@ -224,7 +225,6 @@ export const PATCH = withAuth<{ id: string }>(async (
     });
 
     // Fire-and-forget: email notification to counterparty
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
     const statusConfig = ORDER_STATUS_CONFIG[newStatus as OrderStatus];
     const counterpartyEmail = role === 'buyer' ? order.sellerEmail : order.buyerEmail;
     const counterpartyName = role === 'buyer' ? order.sellerName : order.buyerName;
@@ -244,7 +244,7 @@ export const PATCH = withAuth<{ id: string }>(async (
           listingTitle: order.listingTitle,
           newStatusLabel: statusConfig.label,
           actionHint: actionHints[newStatus] || '',
-          orderUrl: `${baseUrl}/dashboard/orders/${orderId}`,
+          orderUrl: `${APP_URL}/dashboard/orders/${orderId}`,
         })
       ).catch(err => logger.error('Failed to send order status update email', { error: err, orderId, newStatus }));
     }

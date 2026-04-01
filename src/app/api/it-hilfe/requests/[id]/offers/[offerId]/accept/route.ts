@@ -13,6 +13,7 @@ import { sendCustomEmail } from '@/lib/email'
 import { itHilfeOfferAccepted, itHilfeOfferRejected } from '@/lib/email/templates/it-hilfe'
 import { REQUEST_STATUS, OFFER_STATUS } from '@/config/it-hilfe'
 import { sendItHilfeNotification } from '@/lib/it-hilfe/notifications'
+import { APP_URL } from '@/config/urls'
 
 interface RequestRow {
   requester_id: string
@@ -188,7 +189,7 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
     }).catch(err => logger.error('Failed to send rejected in-app notifications', { err }))
 
     // Send email notifications (fire-and-forget, don't block the response)
-    const requestUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'https://revampit.ch'}/it-hilfe/${id}`
+    const requestUrl = `${APP_URL}/it-hilfe/${id}`
 
     // Notify accepted helper
     sendCustomEmail(

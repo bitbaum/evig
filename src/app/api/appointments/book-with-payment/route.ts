@@ -13,6 +13,7 @@ import {
 } from '@/lib/payments/payment-flow'
 import { validateBody, BookWithPaymentSchema } from '@/lib/schemas'
 import { APPOINTMENT_STATUS } from '@/config/appointment-status'
+import { APP_URL } from '@/config/urls'
 
 // POST /api/appointments/book-with-payment - Book service with immediate payment
 export async function POST(request: NextRequest) {
@@ -76,9 +77,6 @@ export async function POST(request: NextRequest) {
 
     const appointmentId = createdAppointment.id
 
-    // Build redirect URLs
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'
-
     // Process payment using shared utility
     const paymentResult = await processPayment({
       userId: session.user.id,
@@ -94,9 +92,9 @@ export async function POST(request: NextRequest) {
         appointmentType: 'service_booking'
       },
       serviceAppointmentId: appointmentId,
-      successRedirectUrl: `${baseUrl}/dashboard/appointments?payment=success`,
-      failedRedirectUrl: `${baseUrl}/services/${service.slug}?payment=failed`,
-      cancelRedirectUrl: `${baseUrl}/services/${service.slug}?payment=cancelled`,
+      successRedirectUrl: `${APP_URL}/dashboard/appointments?payment=success`,
+      failedRedirectUrl: `${APP_URL}/services/${service.slug}?payment=failed`,
+      cancelRedirectUrl: `${APP_URL}/services/${service.slug}?payment=cancelled`,
       purpose: `Service: ${service.name}`,
       invoiceLineItems: [
         buildInvoiceLineItem(

@@ -12,6 +12,7 @@ import {
   Check,
   CheckCheck
 } from 'lucide-react'
+import { apiFetch } from '@/lib/api/client'
 import { logger } from '@/lib/logger'
 import { formatDateShort } from '@/lib/date-formats'
 
@@ -75,10 +76,9 @@ export function MessageSidebar({ isOpen, onClose, initialConversationId }: Messa
 
   const fetchConversations = async () => {
     try {
-      const response = await fetch('/api/messages/conversations')
-      const data = await response.json()
-      if (data.success && data.data?.conversations) {
-        setConversations(data.data.conversations)
+      const result = await apiFetch<{ conversations: Conversation[] }>('/api/messages/conversations')
+      if (result.success && result.data?.conversations) {
+        setConversations(result.data.conversations)
       }
     } catch (error) {
       logger.error('Error fetching conversations', { error })
@@ -88,10 +88,9 @@ export function MessageSidebar({ isOpen, onClose, initialConversationId }: Messa
   const fetchMessages = async (conversationId: string) => {
     try {
       setIsLoading(true)
-      const response = await fetch(`/api/messages/${conversationId}`)
-      const data = await response.json()
-      if (data.success && data.data?.messages) {
-        setMessages(data.data.messages)
+      const result = await apiFetch<{ messages: Message[] }>(`/api/messages/${conversationId}`)
+      if (result.success && result.data?.messages) {
+        setMessages(result.data.messages)
       }
     } catch (error) {
       logger.error('Error fetching messages', { error, conversationId })
@@ -104,14 +103,12 @@ export function MessageSidebar({ isOpen, onClose, initialConversationId }: Messa
     if (!selectedConversation || !newMessage.trim()) return
 
     try {
-      const response = await fetch(`/api/messages/${selectedConversation}`, {
+      const result = await apiFetch<void>(`/api/messages/${selectedConversation}`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ content: newMessage.trim() })
+        body: { content: newMessage.trim() }
       })
 
-      const data = await response.json()
-      if (data.success) {
+      if (result.success) {
         setNewMessage('')
         // Refresh messages
         fetchMessages(selectedConversation)

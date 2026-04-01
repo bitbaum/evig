@@ -4,6 +4,7 @@ import { listings, listingReports, users } from '@/db/schema'
 import { eq, and, ilike, isNotNull, isNull, sql, or } from 'drizzle-orm'
 import { alias } from 'drizzle-orm/pg-core'
 import { apiError, apiSuccess } from '@/lib/api/helpers'
+import { TABLE_NAMES } from '@/config/database'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { REPORT_STATUS } from '@/config/report-status'
 import { validateQuery, AdminListingsQuerySchema } from '@/lib/schemas'
@@ -44,7 +45,7 @@ export const GET = withAdmin('marketplace', async (request) => {
 
     if (reported === 'yes') {
       conditions.push(
-        sql`EXISTS (SELECT 1 FROM listing_reports lr WHERE lr.listing_id = ${listings.id} AND lr.status = ${REPORT_STATUS.PENDING})`
+        sql`EXISTS (SELECT 1 FROM ${sql.raw(TABLE_NAMES.LISTING_REPORTS)} lr WHERE lr.listing_id = ${listings.id} AND lr.status = ${REPORT_STATUS.PENDING})`
       )
     }
 
@@ -73,7 +74,7 @@ export const GET = withAdmin('marketplace', async (request) => {
         created_at: listings.createdAt,
         seller_name: seller.name,
         seller_email: seller.email,
-        report_count: sql<number>`(SELECT COUNT(*) FROM listing_reports lr WHERE lr.listing_id = ${listings.id} AND lr.status = ${REPORT_STATUS.PENDING})`,
+        report_count: sql<number>`(SELECT COUNT(*) FROM ${sql.raw(TABLE_NAMES.LISTING_REPORTS)} lr WHERE lr.listing_id = ${listings.id} AND lr.status = ${REPORT_STATUS.PENDING})`,
       })
       .from(listings)
       .innerJoin(seller, eq(listings.sellerId, seller.id))

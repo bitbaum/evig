@@ -101,7 +101,7 @@ function ResetPasswordContent() {
               >
                 Neuen Reset-Link anfordern
               </Link>
-              <p className="text-sm text-gray-500">
+              <p className="text-sm text-gray-600">
                 <Link href="/auth/login" className="text-green-600 hover:text-green-500">
                   Zurück zur Anmeldung
                 </Link>
@@ -237,10 +237,10 @@ function ResetPasswordContent() {
             <div className="text-sm text-gray-600 space-y-1">
               <p className="font-medium">Passwort-Anforderungen:</p>
               <ul className="ml-4 space-y-0.5">
-                <li className={password.length >= 8 ? 'text-green-600' : 'text-gray-400'}>
+                <li className={password.length >= 8 ? 'text-green-600' : 'text-gray-500'}>
                   ✓ Mindestens 8 Zeichen
                 </li>
-                <li className={password === confirmPassword && password ? 'text-green-600' : 'text-gray-400'}>
+                <li className={password === confirmPassword && password ? 'text-green-600' : 'text-gray-500'}>
                   ✓ Passwörter stimmen überein
                 </li>
               </ul>

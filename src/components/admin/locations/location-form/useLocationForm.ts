@@ -1,22 +1,44 @@
 'use client'
 
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { useMemo } from 'react'
+import { useFormHandler } from '@/hooks/useFormHandler'
 import type { LocationFormData, SubmitResult } from './types'
 import { INITIAL_LOCATION_FORM_DATA } from './types'
 
 export function useLocationForm() {
-  const router = useRouter()
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [submitResult, setSubmitResult] = useState<SubmitResult | null>(null)
-  const [formData, setFormData] = useState<LocationFormData>(INITIAL_LOCATION_FORM_DATA)
-
-  const handleFieldChange = <K extends keyof LocationFormData>(field: K, value: LocationFormData[K]) => {
-    setFormData(prev => ({ ...prev, [field]: value }))
-  }
+  const form = useFormHandler<LocationFormData>({
+    initialData: INITIAL_LOCATION_FORM_DATA,
+    apiEndpoint: '/api/locations',
+    redirectTo: '/admin/locations',
+    redirectDelay: 2000,
+    createSuccessMessage: 'Ort erfolgreich erstellt und zur Genehmigung eingereicht',
+    validate: (data) => {
+      if (!data.name || !data.type || !data.city) {
+        return 'Bitte füllen Sie alle erforderlichen Felder aus'
+      }
+      if (data.postal_code && !/^[0-9]{4}$/.test(data.postal_code)) {
+        return 'Bitte geben Sie eine gültige Schweizer Postleitzahl ein (4 Ziffern)'
+      }
+      if ((data.latitude && !data.longitude) || (!data.latitude && data.longitude)) {
+        return 'Bitte geben Sie beide Koordinaten an oder keine'
+      }
+      return null
+    },
+    transformBeforeSubmit: (data) => ({
+      ...data,
+      latitude: data.latitude ? parseFloat(data.latitude) : null,
+      longitude: data.longitude ? parseFloat(data.longitude) : null,
+      max_capacity: data.max_capacity ? parseInt(data.max_capacity) : null,
+      accessibility_info: {
+        ...data.accessibility_info,
+        wheelchairAccessible: Boolean(data.accessibility_info.wheelchairAccessible),
+        parkingAvailable: Boolean(data.accessibility_info.parkingAvailable),
+      },
+    }),
+  })
 
   const handleFacilityChange = (facility: string, checked: boolean) => {
-    setFormData(prev => ({
+    form.setData(prev => ({
       ...prev,
       facilities: checked
         ? [...prev.facilities, facility]
@@ -25,7 +47,7 @@ export function useLocationForm() {
   }
 
   const handleAccessibilityChange = (field: string, value: string | boolean) => {
-    setFormData(prev => ({
+    form.setData(prev => ({
       ...prev,
       accessibility_info: {
         ...prev.accessibility_info,
@@ -34,91 +56,20 @@ export function useLocationForm() {
     }))
   }
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-
-    if (!formData.name || !formData.type || !formData.city) {
-      setSubmitResult({
-        success: false,
-        message: 'Bitte füllen Sie alle erforderlichen Felder aus',
-      })
-      return
-    }
-
-    // Validate Swiss postal code
-    if (formData.postal_code && !/^[0-9]{4}$/.test(formData.postal_code)) {
-      setSubmitResult({
-        success: false,
-        message: 'Bitte geben Sie eine gültige Schweizer Postleitzahl ein (4 Ziffern)',
-      })
-      return
-    }
-
-    // Validate coordinates if provided
-    if ((formData.latitude && !formData.longitude) || (!formData.latitude && formData.longitude)) {
-      setSubmitResult({
-        success: false,
-        message: 'Bitte geben Sie beide Koordinaten an oder keine',
-      })
-      return
-    }
-
-    setIsSubmitting(true)
-    setSubmitResult(null)
-
-    try {
-      const submitData = {
-        ...formData,
-        latitude: formData.latitude ? parseFloat(formData.latitude) : null,
-        longitude: formData.longitude ? parseFloat(formData.longitude) : null,
-        max_capacity: formData.max_capacity ? parseInt(formData.max_capacity) : null,
-        accessibility_info: {
-          ...formData.accessibility_info,
-          wheelchairAccessible: Boolean(formData.accessibility_info.wheelchairAccessible),
-          parkingAvailable: Boolean(formData.accessibility_info.parkingAvailable),
-        },
-      }
-
-      const response = await fetch('/api/locations', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(submitData),
-      })
-
-      const data = await response.json()
-
-      if (data.success) {
-        setSubmitResult({
-          success: true,
-          message: 'Ort erfolgreich erstellt und zur Genehmigung eingereicht',
-        })
-
-        setTimeout(() => {
-          router.push('/admin/locations')
-        }, 2000)
-      } else {
-        setSubmitResult({
-          success: false,
-          message: data.error || 'Fehler beim Erstellen des Ortes',
-        })
-      }
-    } catch {
-      setSubmitResult({
-        success: false,
-        message: 'Netzwerkfehler. Bitte versuchen Sie es erneut.',
-      })
-    } finally {
-      setIsSubmitting(false)
-    }
-  }
+  // Derive submitResult for backward compatibility with consumers
+  const submitResult: SubmitResult | null = useMemo(() => {
+    if (form.success) return { success: true, message: form.success }
+    if (form.error) return { success: false, message: form.error }
+    return null
+  }, [form.success, form.error])
 
   return {
-    formData,
-    isSubmitting,
+    formData: form.data,
+    isSubmitting: form.isSubmitting,
     submitResult,
-    handleFieldChange,
+    handleFieldChange: form.updateField,
     handleFacilityChange,
     handleAccessibilityChange,
-    handleSubmit,
+    handleSubmit: form.handleSubmit,
   }
 }

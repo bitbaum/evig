@@ -8,6 +8,7 @@ import Link from 'next/link'
 import ConversationList from '@/components/messages/ConversationList'
 import type { Conversation } from '@/components/messages/ConversationList'
 import MessageThread from '@/components/messages/MessageThread'
+import { apiFetch } from '@/lib/api/client'
 import { logger } from '@/lib/logger'
 
 export default function MessagesPage() {
@@ -25,13 +26,12 @@ export default function MessagesPage() {
 
   const fetchConversations = useCallback(async () => {
     try {
-      const res = await fetch('/api/messages')
-      const data = await res.json()
-      if (data.success) {
-        setConversations(data.data.conversations)
+      const result = await apiFetch<{ conversations: Conversation[] }>('/api/messages')
+      if (result.success) {
+        setConversations(result.data!.conversations)
         // If deep-link param but not yet in list, keep it
         const deepLink = searchParams.get('conversation')
-        if (deepLink && data.data.conversations.some((c: Conversation) => c.id === deepLink)) {
+        if (deepLink && result.data!.conversations.some((c: Conversation) => c.id === deepLink)) {
           setSelectedConvId(deepLink)
         }
       }

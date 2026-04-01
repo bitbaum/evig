@@ -18,6 +18,7 @@ import {
   ChevronLeft,
   ChevronRight,
 } from 'lucide-react'
+import { apiFetch } from '@/lib/api/client'
 import { ListingImage } from '@/components/marketplace/ListingImage'
 import { LISTING_STATUS_CONFIG, LISTING_STATUS, formatCHF } from '@/config/marketplace'
 import type { ListingStatus } from '@/config/marketplace'
@@ -61,27 +62,21 @@ export default function MyListingsPage() {
     setIsLoading(true)
     setError(null)
 
-    try {
-      const params = new URLSearchParams()
-      if (statusFilter) params.set('status', statusFilter)
-      params.set('page', String(fetchPage))
+    const params = new URLSearchParams()
+    if (statusFilter) params.set('status', statusFilter)
+    params.set('page', String(fetchPage))
 
-      const response = await fetch(`/api/listings/mine?${params.toString()}`)
-      const data = await response.json()
+    const result = await apiFetch<{ items: MyListing[]; page: number; totalPages: number; total: number }>(`/api/listings/mine?${params.toString()}`)
 
-      if (data.success && data.data) {
-        setListings(data.data.items)
-        setPage(data.data.page)
-        setTotalPages(data.data.totalPages)
-        setTotal(data.data.total)
-      } else {
-        throw new Error(data.error || 'Fehler beim Laden')
-      }
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Ein unerwarteter Fehler ist aufgetreten')
-    } finally {
-      setIsLoading(false)
+    if (result.success && result.data) {
+      setListings(result.data.items)
+      setPage(result.data.page)
+      setTotalPages(result.data.totalPages)
+      setTotal(result.data.total)
+    } else {
+      setError(result.error || 'Fehler beim Laden')
     }
+    setIsLoading(false)
   }, [statusFilter])
 
   useEffect(() => {
@@ -90,8 +85,28 @@ export default function MyListingsPage() {
       router.push('/auth/login')
       return
     }
-    fetchListings(1)
-  }, [session, sessionStatus, router, fetchListings])
+    let cancelled = false
+    async function load() {
+      setIsLoading(true)
+      setError(null)
+      const params = new URLSearchParams()
+      if (statusFilter) params.set('status', statusFilter)
+      params.set('page', '1')
+      const result = await apiFetch<{ items: MyListing[]; page: number; totalPages: number; total: number }>(`/api/listings/mine?${params.toString()}`)
+      if (cancelled) return
+      if (result.success && result.data) {
+        setListings(result.data.items)
+        setPage(result.data.page)
+        setTotalPages(result.data.totalPages)
+        setTotal(result.data.total)
+      } else {
+        setError(result.error || 'Fehler beim Laden')
+      }
+      setIsLoading(false)
+    }
+    load()
+    return () => { cancelled = true }
+  }, [session, sessionStatus, router, statusFilter])
 
   const handleStatusFilterChange = (value: string) => {
     setStatusFilter(value)
@@ -101,29 +116,21 @@ export default function MyListingsPage() {
   const handleDelete = async (id: string) => {
     if (!confirm('Möchten Sie dieses Inserat wirklich löschen?')) return
     setDeletingId(id)
-    try {
-      const response = await fetch(`/api/listings/${id}`, { method: 'DELETE' })
-      const data = await response.json()
-      if (data.success) {
-        setListings(prev => prev.filter(l => l.id !== id))
-        setTotal(prev => prev - 1)
-      }
-    } finally {
-      setDeletingId(null)
+    const result = await apiFetch<void>(`/api/listings/${id}`, { method: 'DELETE' })
+    if (result.success) {
+      setListings(prev => prev.filter(l => l.id !== id))
+      setTotal(prev => prev - 1)
     }
+    setDeletingId(null)
   }
 
   const handleDuplicate = async (id: string) => {
     setDuplicatingId(id)
-    try {
-      const response = await fetch(`/api/listings/${id}/duplicate`, { method: 'POST' })
-      const data = await response.json()
-      if (data.success && data.data?.id) {
-        router.push(`/marketplace/sell?edit=${data.data.id}`)
-      }
-    } finally {
-      setDuplicatingId(null)
+    const result = await apiFetch<{ id: string }>(`/api/listings/${id}/duplicate`, { method: 'POST' })
+    if (result.success && result.data?.id) {
+      router.push(`/marketplace/sell?edit=${result.data.id}`)
     }
+    setDuplicatingId(null)
   }
 
   if (sessionStatus === 'loading') {

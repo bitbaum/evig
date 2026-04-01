@@ -31,7 +31,7 @@ export function VoiceTimer({ currentTime, maxDuration, state }: VoiceTimerProps)
         <span className="text-2xl font-mono text-gray-900 dark:text-white">
           {formatTime(currentTime)}
         </span>
-        <span className="text-gray-500 dark:text-gray-400">
+        <span className="text-gray-600 dark:text-gray-400">
           {' '}
           / {formatTime(maxDuration)}
         </span>

@@ -1,6 +1,7 @@
 import { useState, useCallback, useEffect } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { logger } from '@/lib/logger'
+import { apiFetch } from '@/lib/api/client'
 import type { ErfassungFormData, AIFieldMetadata } from '@/types/erfassung'
 import { DEFAULT_FORM_DATA, formDataToPayload } from '@/types/erfassung'
 import { SPEC_TEMPLATES, templateToSpecFields } from '@/config/erfassung'
@@ -46,14 +47,11 @@ export function useErfassungForm() {
       setIsLoadingProduct(true)
       setShowAdvanced(true)
 
-      fetch(`/api/admin/inventory/${editId}`)
-        .then(res => {
-          if (!res.ok) throw new Error(`HTTP ${res.status}`)
-          return res.json()
-        })
-        .then(data => {
-          if (data.success && data.data?.product) {
-            const p = data.data.product
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      apiFetch<{ product: any }>(`/api/admin/inventory/${editId}`)
+        .then(result => {
+          if (result.success && result.data?.product) {
+            const p = result.data.product
             const specsArray = p.specifications
               ? Object.entries(p.specifications).map(([key, value]) => ({
                   key,
@@ -80,10 +78,9 @@ export function useErfassungForm() {
               kundenprofile: p.customer_profiles || [],
               image: p.image_url || null,
             })
+          } else if (!result.success) {
+            logger.error('Failed to load product for edit', { error: result.error, editId })
           }
-        })
-        .catch(err => {
-          logger.error('Failed to load product for edit', { error: err, editId })
         })
         .finally(() => {
           setIsLoadingProduct(false)
@@ -193,36 +190,31 @@ export function useErfassungForm() {
           quantity_available: parseInt(formData.auf_lager) || 1,
         }
 
-        const response = await fetch(`/api/admin/inventory/${editId}`, {
+        const result = await apiFetch<void>(`/api/admin/inventory/${editId}`, {
           method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(updatePayload),
+          body: updatePayload,
         })
 
-        if (!response.ok) {
-          throw new Error('Produkt konnte nicht aktualisiert werden')
+        if (!result.success) {
+          throw new Error(result.error || 'Produkt konnte nicht aktualisiert werden')
         }
 
         router.push('/admin/products')
       } else {
         const payload = formDataToPayload(formData, action)
 
-        const response = await fetch('/api/admin/erfassung', {
+        const result = await apiFetch<{ item_uuid: string; product_id: string }>('/api/admin/erfassung', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload),
+          body: payload,
         })
 
-        if (!response.ok) {
-          throw new Error('Produkt konnte nicht gespeichert werden')
+        if (!result.success) {
+          throw new Error(result.error || 'Produkt konnte nicht gespeichert werden')
         }
 
-        const result = await response.json()
-        if (result.success && result.data) {
+        if (result.data) {
           setSavedItemUUID(result.data.item_uuid)
           setSavedProductId(result.data.product_id)
-        } else {
-          throw new Error(result.error || 'Unbekannter Fehler')
         }
       }
     } catch (error) {

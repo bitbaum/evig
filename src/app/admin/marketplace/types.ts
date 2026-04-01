@@ -1,4 +1,7 @@
 import { Package, AlertTriangle, ShoppingBag } from 'lucide-react'
+import type { OffsetPaginatedResponse } from '@/lib/api/types'
+
+export type { OffsetPaginatedResponse as PaginatedResponse }
 
 // ---------------------------------------------------------------------------
 // Data types
@@ -63,11 +66,6 @@ export interface Stats {
   openReports: number
   totalOrders: number
   revenueCents: number
-}
-
-export interface PaginatedResponse<T> {
-  items: T[]
-  pagination: { total: number; limit: number; offset: number; hasMore: boolean }
 }
 
 // ---------------------------------------------------------------------------

@@ -15,6 +15,7 @@
 import { useState, useCallback, useEffect } from 'react'
 import { Mic, Camera, Zap, Loader2, CheckCircle2, AlertCircle, ChevronDown, ChevronUp, FileUp } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { apiFetch } from '@/lib/api/client'
 import { logger } from '@/lib/logger'
 import { detectMultipleProducts } from '@/lib/erfassung/detect-multi'
 import type { VoiceProductData, ErfassungFormData, AIFieldMetadata, BulkProduct } from '@/types/erfassung'
@@ -136,21 +137,18 @@ export function DataEntryTabs({
 
       if (isMulti && onBulkData) {
         // Multi-product: call bulk-text API
-        const response = await fetch('/api/admin/erfassung/bulk-text', {
+        const result = await apiFetch<{ products: BulkProduct[]; productCount: number }>('/api/admin/erfassung/bulk-text', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ text: quickText }),
+          body: { text: quickText },
         })
 
-        const result = await response.json()
-
-        if (!response.ok || !result.success) {
+        if (!result.success) {
           throw new Error(result.error || 'Verarbeitung fehlgeschlagen')
         }
 
-        onBulkData(result.data.products)
+        onBulkData(result.data!.products)
         setQuickEntryState('success')
-        logger.info('Bulk text entry successful', { count: result.data.productCount })
+        logger.info('Bulk text entry successful', { count: result.data!.productCount })
 
         setTimeout(() => {
           setQuickEntryState('idle')
@@ -159,19 +157,16 @@ export function DataEntryTabs({
         }, 1500)
       } else {
         // Single product: call existing text API
-        const response = await fetch('/api/admin/erfassung/text', {
+        const result = await apiFetch<{ data: Partial<ErfassungFormData>; metadata: AIFieldMetadata }>('/api/admin/erfassung/text', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ text: quickText }),
+          body: { text: quickText },
         })
 
-        const result = await response.json()
-
-        if (!response.ok || !result.success) {
+        if (!result.success) {
           throw new Error(result.error || 'Verarbeitung fehlgeschlagen')
         }
 
-        const productData = result.data.data
+        const productData = result.data!.data
         const formData: Partial<ErfassungFormData> = {
           hersteller: productData.hersteller,
           produktname: productData.produktname,
@@ -184,7 +179,7 @@ export function DataEntryTabs({
           kundenprofile: productData.kundenprofile,
         }
 
-        onProductData(formData, result.data.metadata as AIFieldMetadata)
+        onProductData(formData, result.data!.metadata as AIFieldMetadata)
         setQuickEntryState('success')
         logger.info('Quick text entry successful', { product: productData.produktname })
 

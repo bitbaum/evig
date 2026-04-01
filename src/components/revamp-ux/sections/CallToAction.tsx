@@ -57,7 +57,7 @@ export function CallToAction() {
           </Link>
         </div>
 
-        <p className="mt-6 text-sm text-gray-500">
+        <p className="mt-6 text-sm text-gray-600">
           Keine Kreditkarte erforderlich • 30 Tage kostenlos testen • Jederzeit kündbar
         </p>
       </div>

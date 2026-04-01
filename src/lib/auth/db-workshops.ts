@@ -5,6 +5,7 @@
 import { db } from '@/db'
 import { workshops, workshopInstances, workshopRegistrations } from '@/db/schema'
 import { eq, and, ne, desc } from 'drizzle-orm'
+import { WORKSHOP_REGISTRATION_STATUS } from '@/config/workshop-registration-status'
 
 // ============================================================================
 // Workshop queries
@@ -149,7 +150,7 @@ export async function isUserRegisteredForWorkshop(userId: string, workshopSlug: 
       and(
         eq(workshopRegistrations.userId, userId),
         eq(workshops.slug, workshopSlug),
-        ne(workshopRegistrations.status, 'cancelled')
+        ne(workshopRegistrations.status, WORKSHOP_REGISTRATION_STATUS.CANCELLED)
       )
     )
     .limit(1)

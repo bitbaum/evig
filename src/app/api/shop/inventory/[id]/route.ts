@@ -11,6 +11,7 @@ import { db } from '@/db'
 import { aiExtractedProducts, inventoryItems, productCustomerProfiles, customerProfiles, productImages } from '@/db/schema'
 import { eq, desc } from 'drizzle-orm'
 import { logger } from '@/lib/logger'
+import { MARKETPLACE_STATUS, PRODUCT_STATUS } from '@/config/marketplace-status'
 
 export async function GET(
   request: NextRequest,
@@ -70,7 +71,7 @@ export async function GET(
       return apiNotFound('Produkt nicht gefunden')
     }
 
-    if (product.marketplace_status !== 'published' || product.status !== 'approved') {
+    if (product.marketplace_status !== MARKETPLACE_STATUS.PUBLISHED || product.status !== PRODUCT_STATUS.APPROVED) {
       return apiNotFound('Produkt nicht verfügbar')
     }
 

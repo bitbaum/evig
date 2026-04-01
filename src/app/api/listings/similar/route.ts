@@ -10,6 +10,7 @@ import { db } from '@/db';
 import { listings, listingImages } from '@/db/schema';
 import { eq, and, ne, sql, desc } from 'drizzle-orm';
 import { LISTING_STATUS } from '@/config/marketplace';
+import { TABLE_NAMES } from '@/config/database';
 
 export async function GET(request: NextRequest) {
   try {
@@ -42,7 +43,7 @@ export async function GET(request: NextRequest) {
         view_count: listings.viewCount,
         favorite_count: listings.favoriteCount,
         created_at: listings.createdAt,
-        thumbnail: sql<string | null>`(SELECT ${listingImages.url} FROM listing_images WHERE ${listingImages.listingId} = ${listings.id} AND ${listingImages.isPrimary} = true LIMIT 1)`,
+        thumbnail: sql<string | null>`(SELECT ${listingImages.url} FROM ${TABLE_NAMES.LISTING_IMAGES} WHERE ${listingImages.listingId} = ${listings.id} AND ${listingImages.isPrimary} = true LIMIT 1)`,
       })
       .from(listings)
       .where(and(

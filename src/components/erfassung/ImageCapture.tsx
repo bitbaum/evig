@@ -174,7 +174,7 @@ export function ImageCapture({
           >
             <div className="flex flex-col items-center gap-4">
               <div className="w-16 h-16 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center">
-                <ImageIcon className="w-8 h-8 text-gray-400" />
+                <ImageIcon className="w-8 h-8 text-gray-500" />
               </div>
 
               <div>

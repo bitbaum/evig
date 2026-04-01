@@ -7,6 +7,7 @@
  */
 
 import { useState, useEffect, useCallback } from 'react'
+import { apiFetch } from '@/lib/api/client'
 import type { ActivityUpdate } from './types'
 
 // ============================================================================
@@ -35,10 +36,9 @@ export function useActivityUpdates(userId?: string): UseActivityUpdatesReturn {
       const params = new URLSearchParams()
       if (userId) params.set('user_id', userId)
 
-      const response = await fetch(`/api/admin/team/activity/updates?${params.toString()}`)
-      const result = await response.json()
+      const result = await apiFetch<{ items: ActivityUpdate[]; total: number }>(`/api/admin/team/activity/updates?${params.toString()}`)
 
-      if (!response.ok) {
+      if (!result.success) {
         throw new Error(result.error || 'Fehler beim Laden')
       }
 
@@ -104,14 +104,12 @@ export function useActivityUpdateMutations(): UseActivityUpdateMutationsReturn {
       setError(null)
 
       try {
-        const response = await fetch('/api/admin/team/activity/updates', {
+        const result = await apiFetch<{ id: string }>('/api/admin/team/activity/updates', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(data),
+          body: data,
         })
-        const result = await response.json()
 
-        if (!response.ok) {
+        if (!result.success) {
           throw new Error(result.error || 'Fehler beim Erstellen')
         }
 
@@ -142,14 +140,12 @@ export function useActivityUpdateMutations(): UseActivityUpdateMutationsReturn {
       setError(null)
 
       try {
-        const response = await fetch(`/api/admin/team/activity/updates/${id}`, {
+        const result = await apiFetch<void>(`/api/admin/team/activity/updates/${id}`, {
           method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(data),
+          body: data,
         })
-        const result = await response.json()
 
-        if (!response.ok) {
+        if (!result.success) {
           throw new Error(result.error || 'Fehler beim Aktualisieren')
         }
 
@@ -169,12 +165,11 @@ export function useActivityUpdateMutations(): UseActivityUpdateMutationsReturn {
     setError(null)
 
     try {
-      const response = await fetch(`/api/admin/team/activity/updates/${id}`, {
+      const result = await apiFetch<void>(`/api/admin/team/activity/updates/${id}`, {
         method: 'DELETE',
       })
-      const result = await response.json()
 
-      if (!response.ok) {
+      if (!result.success) {
         throw new Error(result.error || 'Fehler beim Löschen')
       }
 

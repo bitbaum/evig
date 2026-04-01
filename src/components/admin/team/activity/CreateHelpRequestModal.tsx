@@ -71,10 +71,10 @@ export function CreateHelpRequestModal({
         <div className="fixed inset-0 bg-black/50" aria-hidden="true" onClick={onClose} />
 
         {/* Modal */}
-        <div role="dialog" aria-modal="true" onKeyDown={(e) => { if (e.key === 'Escape') onClose() }} className="relative bg-white dark:bg-gray-800 rounded-xl shadow-xl max-w-lg w-full p-6">
+        <div role="dialog" aria-modal="true" aria-labelledby="help-request-dialog-title" onKeyDown={(e) => { if (e.key === 'Escape') onClose() }} className="relative bg-white dark:bg-gray-800 rounded-xl shadow-xl max-w-lg w-full p-6">
           {/* Header */}
           <div className="flex items-center justify-between mb-6">
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+            <h3 id="help-request-dialog-title" className="text-lg font-semibold text-gray-900 dark:text-gray-100">
               Hilfe anfordern
             </h3>
             <button

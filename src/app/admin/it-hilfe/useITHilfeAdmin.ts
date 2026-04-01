@@ -3,6 +3,7 @@
 // ---------------------------------------------------------------------------
 
 import { useState, useEffect, useCallback } from 'react'
+import { apiFetch } from '@/lib/api/client'
 import type {
   Tab, Stats, RequestRow, HelperRow, PaginatedResponse,
   RequestFilter, HelperFilter, EditData,
@@ -37,9 +38,8 @@ export function useITHilfeAdmin() {
 
   // Fetch stats
   useEffect(() => {
-    fetch('/api/admin/it-hilfe/stats')
-      .then(r => r.json())
-      .then(r => { if (r.success) setStats(r.data) })
+    apiFetch<Stats>('/api/admin/it-hilfe/stats')
+      .then(r => { if (r.success && r.data) setStats(r.data) })
   }, [])
 
   // Fetch functions (for use in event handlers after mutations)
@@ -54,9 +54,8 @@ export function useITHilfeAdmin() {
     })
     if (reqFilter.canton) params.set('canton', reqFilter.canton)
     if (reqFilter.search) params.set('search', reqFilter.search)
-    const r = await fetch(`/api/admin/it-hilfe?${params}`)
-    const data = await r.json()
-    if (data.success) setRequests(data.data)
+    const result = await apiFetch<PaginatedResponse<RequestRow>>(`/api/admin/it-hilfe?${params}`)
+    if (result.success && result.data) setRequests(result.data)
     setLoading(false)
   }, [reqFilter, reqOffset])
 
@@ -68,9 +67,8 @@ export function useITHilfeAdmin() {
       offset: String(helpOffset),
     })
     if (helpFilter.canton) params.set('canton', helpFilter.canton)
-    const r = await fetch(`/api/admin/it-hilfe/helpers?${params}`)
-    const data = await r.json()
-    if (data.success) setHelpers(data.data)
+    const result = await apiFetch<PaginatedResponse<HelperRow>>(`/api/admin/it-hilfe/helpers?${params}`)
+    if (result.success && result.data) setHelpers(result.data)
     setLoading(false)
   }, [helpFilter, helpOffset])
 
@@ -88,15 +86,13 @@ export function useITHilfeAdmin() {
         })
         if (reqFilter.canton) params.set('canton', reqFilter.canton)
         if (reqFilter.search) params.set('search', reqFilter.search)
-        const r = await fetch(`/api/admin/it-hilfe?${params}`)
-        const data = await r.json()
-        if (!cancelled && data.success) setRequests(data.data)
+        const result = await apiFetch<PaginatedResponse<RequestRow>>(`/api/admin/it-hilfe?${params}`)
+        if (!cancelled && result.success && result.data) setRequests(result.data)
       } else {
         const params = new URLSearchParams({ status: helpFilter.status, limit: '50', offset: String(helpOffset) })
         if (helpFilter.canton) params.set('canton', helpFilter.canton)
-        const r = await fetch(`/api/admin/it-hilfe/helpers?${params}`)
-        const data = await r.json()
-        if (!cancelled && data.success) setHelpers(data.data)
+        const result = await apiFetch<PaginatedResponse<HelperRow>>(`/api/admin/it-hilfe/helpers?${params}`)
+        if (!cancelled && result.success && result.data) setHelpers(result.data)
       }
       if (!cancelled) setLoading(false)
     }
@@ -105,17 +101,16 @@ export function useITHilfeAdmin() {
   }, [tab, reqFilter, reqOffset, helpFilter, helpOffset])
 
   const refreshStats = () => {
-    fetch('/api/admin/it-hilfe/stats').then(r => r.json()).then(r => { if (r.success) setStats(r.data) })
+    apiFetch<Stats>('/api/admin/it-hilfe/stats').then(r => { if (r.success && r.data) setStats(r.data) })
   }
 
   // Actions
   async function handleEditSave() {
     if (!editId) return
     setEditLoading(true)
-    await fetch(`/api/admin/it-hilfe/${editId}`, {
+    await apiFetch<void>(`/api/admin/it-hilfe/${editId}`, {
       method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(editData),
+      body: editData,
     })
     setEditLoading(false)
     setEditId(null)
@@ -126,10 +121,9 @@ export function useITHilfeAdmin() {
   async function handleHelperAction() {
     if (!actionHelperId) return
     setActionLoading(true)
-    await fetch(`/api/admin/it-hilfe/helpers/${actionHelperId}`, {
+    await apiFetch<void>(`/api/admin/it-hilfe/helpers/${actionHelperId}`, {
       method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ action: helperAction, admin_notes: helperNotes || null }),
+      body: { action: helperAction, admin_notes: helperNotes || null },
     })
     setActionLoading(false)
     setActionHelperId(null)

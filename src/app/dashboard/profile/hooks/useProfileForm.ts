@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { apiFetch } from '@/lib/api/client'
 import { logger } from '@/lib/logger'
 import type { ProfileData } from './useProfileData'
 
@@ -25,19 +26,16 @@ export function useProfileForm({ profile, setProfile }: UseProfileFormParams) {
     })
 
     try {
-      const response = await fetch('/api/user/profile', {
+      const result = await apiFetch<void>('/api/user/profile', {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(profile),
+        body: profile,
       })
 
-      if (!response.ok) {
-        const data = await response.json()
+      if (!result.success) {
         logger.error('Profile save failed', {
-          status: response.status,
-          error: data.error,
+          error: result.error,
         })
-        throw new Error(data.error || 'Speichern fehlgeschlagen')
+        throw new Error(result.error || 'Speichern fehlgeschlagen')
       }
 
       logger.info('Profile saved successfully')

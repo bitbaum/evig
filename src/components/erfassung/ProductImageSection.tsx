@@ -42,9 +42,9 @@ export function ProductImageSection({ image, onImageChange }: ProductImageSectio
           </div>
         ) : (
           <label className="flex flex-col items-center justify-center w-48 h-36 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg cursor-pointer hover:border-green-500 hover:bg-green-50 dark:hover:bg-green-900/20 transition-colors">
-            <Camera className="w-8 h-8 text-gray-400 mb-2" />
+            <Camera className="w-8 h-8 text-gray-500 mb-2" />
             <span className="text-sm text-gray-600 dark:text-gray-400">Bild hochladen</span>
-            <span className="text-xs text-gray-400 dark:text-gray-500 mt-1">oder hierher ziehen</span>
+            <span className="text-xs text-gray-500 dark:text-gray-500 mt-1">oder hierher ziehen</span>
             <input
               type="file"
               accept="image/*"

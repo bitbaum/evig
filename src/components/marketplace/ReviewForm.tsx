@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { Star, Loader2, AlertCircle } from 'lucide-react'
+import { apiFetch } from '@/lib/api/client'
 
 interface ReviewFormProps {
   targetType: string
@@ -32,23 +33,21 @@ export default function ReviewForm({ targetType, targetId, onSubmitted, onCancel
     setError(null)
 
     try {
-      const response = await fetch('/api/reviews', {
+      const result = await apiFetch<void>('/api/reviews', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
+        body: {
           targetType,
           targetId,
           overallRating: rating,
           title: title.trim() || null,
           content: content.trim(),
-        }),
+        },
       })
-      const data = await response.json()
 
-      if (data.success) {
+      if (result.success) {
         onSubmitted()
       } else {
-        setError(data.error || 'Fehler beim Senden der Bewertung')
+        setError(result.error || 'Fehler beim Senden der Bewertung')
       }
     } catch {
       setError('Ein unerwarteter Fehler ist aufgetreten')

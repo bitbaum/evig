@@ -13,6 +13,7 @@ import Link from 'next/link'
 import { useBlogCategories } from '@/hooks/useBlogCategories'
 import type { CategoryFormData } from '@/hooks/useBlogCategories'
 import { UI_COLOR_PALETTE } from '@/config/ui-colors'
+import { generateSlug } from '@/lib/utils/slug'
 
 interface CategoryFormProps {
   initialData?: Partial<CategoryFormData>
@@ -20,18 +21,6 @@ interface CategoryFormProps {
 }
 
 const COLOR_PALETTE = UI_COLOR_PALETTE
-
-function generateSlug(name: string): string {
-  return name
-    .toLowerCase()
-    .replace(/[äàâ]/g, 'a')
-    .replace(/[öò]/g, 'o')
-    .replace(/[üù]/g, 'u')
-    .replace(/[éèêë]/g, 'e')
-    .replace(/[ß]/g, 'ss')
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-|-$/g, '')
-}
 
 export default function CategoryForm({
   initialData,

@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react'
 import { Send, Loader2, ArrowLeft } from 'lucide-react'
+import { apiFetch } from '@/lib/api/client'
 import { logger } from '@/lib/logger'
 
 export interface Message {
@@ -56,21 +57,22 @@ export default function MessageThread({
   const textareaRef = useRef<HTMLTextAreaElement>(null)
 
   useEffect(() => {
-    const fetchMessages = async () => {
+    let cancelled = false
+    async function load() {
       setIsLoading(true)
       try {
-        const res = await fetch(`/api/messages/${conversationId}`)
-        const data = await res.json()
-        if (data.success) {
-          setMessages(data.data.messages)
+        const result = await apiFetch<{ messages: Message[] }>(`/api/messages/${conversationId}`)
+        if (!cancelled && result.success) {
+          setMessages(result.data!.messages)
         }
       } catch (err) {
         logger.error('Failed to load messages', { error: err })
       } finally {
-        setIsLoading(false)
+        if (!cancelled) setIsLoading(false)
       }
     }
-    fetchMessages()
+    load()
+    return () => { cancelled = true }
   }, [conversationId])
 
   useEffect(() => {
@@ -81,25 +83,23 @@ export default function MessageThread({
     if (!reply.trim() || sending) return
     setSending(true)
     try {
-      const res = await fetch('/api/messages', {
+      const result = await apiFetch<{ message_id: string; created_at?: string }>('/api/messages', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
+        body: {
           recipient_id: recipientId,
           content: reply.trim(),
           context_type: contextType || 'general',
           context_id: contextId || null,
-        }),
+        },
       })
-      const data = await res.json()
-      if (data.success) {
+      if (result.success && result.data) {
         setMessages(prev => [...prev, {
-          id: data.data.message_id,
+          id: result.data!.message_id,
           sender_id: currentUserId,
           sender_name: 'Du',
           content: reply.trim(),
           is_read: false,
-          created_at: data.data.created_at || new Date().toISOString(),
+          created_at: result.data!.created_at || new Date().toISOString(),
         }])
         setReply('')
         textareaRef.current?.focus()

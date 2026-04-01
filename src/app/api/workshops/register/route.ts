@@ -10,6 +10,7 @@ import { sendEmail } from '@/lib/email'
 import { logger } from '@/lib/logger'
 import { formatDateTimeWithWeekday } from '@/lib/date-formats'
 import { validateBody, WorkshopRegistrationSchema } from '@/lib/schemas'
+import { APP_URL } from '@/config/urls'
 
 export async function POST(request: NextRequest) {
   try {
@@ -94,8 +95,7 @@ export async function POST(request: NextRequest) {
       .where(eq(workshopInstances.id, instance.id))
 
     // Send registration confirmation email
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://revampit.ch'
-    const workshopUrl = `${baseUrl}/workshops/${workshop.slug}`
+    const workshopUrl = `${APP_URL}/workshops/${workshop.slug}`
     const workshopDate = formatDateTimeWithWeekday(instanceDetails.startDate)
 
     try {

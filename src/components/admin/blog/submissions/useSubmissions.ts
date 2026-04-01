@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect, useCallback } from 'react'
+import { apiFetch } from '@/lib/api/client'
 import { APPROVAL_STATUS } from '@/config/approval-status'
 import type { Submission, FilterStatus, SubmissionAction, StatusCounts } from './types'
 
@@ -21,10 +22,9 @@ export function useSubmissions() {
   const fetchSubmissions = useCallback(async () => {
     try {
       setIsLoading(true)
-      const response = await fetch('/api/blog/submit')
-      const data = await response.json()
-      if (data.success) {
-        setSubmissions(data.data?.submissions || [])
+      const result = await apiFetch<{ submissions: Submission[] }>('/api/blog/submit')
+      if (result.success) {
+        setSubmissions(result.data?.submissions || [])
       }
     } catch {
       setError('Fehler beim Laden der Einreichungen')
@@ -48,25 +48,22 @@ export function useSubmissions() {
 
     try {
       if (action === 'delete') {
-        const res = await fetch(`/api/admin/blog/submissions/${submissionId}`, {
+        const result = await apiFetch<void>(`/api/admin/blog/submissions/${submissionId}`, {
           method: 'DELETE',
         })
-        const data = await res.json()
-        if (data.success) {
+        if (result.success) {
           setSuccess('Einreichung gelöscht')
           setSelectedSubmission(null)
           fetchSubmissions()
         } else {
-          setError(data.error || 'Fehler beim Löschen')
+          setError(result.error || 'Fehler beim Löschen')
         }
       } else {
-        const res = await fetch(`/api/admin/blog/submissions/${submissionId}`, {
+        const result = await apiFetch<void>(`/api/admin/blog/submissions/${submissionId}`, {
           method: 'PATCH',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ action, ...extraData }),
+          body: { action, ...extraData },
         })
-        const data = await res.json()
-        if (data.success) {
+        if (result.success) {
           const messages: Record<string, string> = {
             approve: 'Einreichung genehmigt',
             reject: 'Einreichung abgelehnt',
@@ -81,7 +78,7 @@ export function useSubmissions() {
           setReviewNotes('')
           fetchSubmissions()
         } else {
-          setError(data.error || 'Fehler bei der Aktion')
+          setError(result.error || 'Fehler bei der Aktion')
         }
       }
     } catch {

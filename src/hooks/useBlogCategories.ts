@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useCallback } from 'react'
+import { apiFetch } from '@/lib/api/client'
 
 interface CategoryFormData {
   id?: string
@@ -48,13 +49,10 @@ export function useBlogCategories(): UseBlogCategoriesResult {
         ? `/api/admin/blog/categories/${options.id}`
         : '/api/admin/blog/categories'
 
-      const res = await fetch(url, {
+      const result = await apiFetch<void>(url, {
         method: options.isEdit ? 'PATCH' : 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
+        body: data,
       })
-
-      const result = await res.json()
 
       if (result.success) {
         setSuccess(options.isEdit ? 'Kategorie gespeichert!' : 'Kategorie erstellt!')
@@ -76,11 +74,9 @@ export function useBlogCategories(): UseBlogCategoriesResult {
     setError('')
 
     try {
-      const res = await fetch(`/api/admin/blog/categories/${id}`, {
+      const result = await apiFetch<void>(`/api/admin/blog/categories/${id}`, {
         method: 'DELETE',
       })
-
-      const result = await res.json()
 
       if (result.success) {
         return true

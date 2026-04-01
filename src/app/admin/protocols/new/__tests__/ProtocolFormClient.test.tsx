@@ -13,8 +13,8 @@ describe('ProtocolFormClient', () => {
   beforeEach(() => {
     pushMock.mockReset()
     global.fetch = jest.fn()
-      .mockResolvedValueOnce({ json: async () => ({ success: true, data: { id: 'p-100' } }) })
-      .mockResolvedValueOnce({ json: async () => ({ success: true, data: { processed: true } }) }) as jest.Mock
+      .mockResolvedValueOnce({ ok: true, json: async () => ({ success: true, data: { id: 'p-100' } }) })
+      .mockResolvedValueOnce({ ok: true, json: async () => ({ success: true, data: { processed: true } }) }) as jest.Mock
   })
 
   it('runs progressive transcript flow create + process', async () => {

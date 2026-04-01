@@ -57,7 +57,7 @@ function MultiColumnLayout({
       {groups.map((group, idx) => (
         <div key={idx} className="p-6">
           {group.section && (
-            <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">
+            <h3 className="text-xs font-semibold text-gray-600 uppercase tracking-wider mb-4">
               {group.section.name}
             </h3>
           )}
@@ -101,10 +101,10 @@ function SingleColumnLayout({
                 {subItem.name}
               </span>
               <ItemBadge badge={subItem.badge} />
-              {subItem.external && <ExternalLink className="w-3 h-3 text-gray-500" />}
+              {subItem.external && <ExternalLink className="w-3 h-3 text-gray-600" />}
             </div>
             {subItem.description && (
-              <p className="mt-0.5 text-sm text-gray-500">
+              <p className="mt-0.5 text-sm text-gray-600">
                 {subItem.description}
               </p>
             )}
@@ -140,10 +140,10 @@ function MenuLink({
             {item.name}
           </span>
           <ItemBadge badge={item.badge} />
-          {item.external && <ExternalLink className="w-3 h-3 text-gray-500" />}
+          {item.external && <ExternalLink className="w-3 h-3 text-gray-600" />}
         </div>
         {item.description && (
-          <p className="mt-1 text-sm text-gray-500 line-clamp-2">
+          <p className="mt-1 text-sm text-gray-600 line-clamp-2">
             {item.description}
           </p>
         )}

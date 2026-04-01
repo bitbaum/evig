@@ -12,6 +12,7 @@ import { useState, useMemo, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { useInventoryProducts, type InventoryProduct } from '@/hooks/useInventoryProducts'
 import { useShopProducts, type ShopProduct } from '@/hooks/useShopProducts'
+import { API_DEFAULTS } from '@/config/api-defaults'
 import { MARKETPLACE_STATUS, PRODUCT_STATUS } from '@/config/marketplace-status'
 import type { TabType, FilterStatus, InventoryStats, ShopStats } from './types'
 import { useProductConfirmActions } from './useProductConfirmActions'
@@ -23,7 +24,7 @@ export function useProductActions() {
   const router = useRouter()
 
   // Data hooks
-  const { data: shopData, isLoading: shopLoading, error: shopError, refetch: refetchShop } = useShopProducts({ limit: 100 })
+  const { data: shopData, isLoading: shopLoading, error: shopError, refetch: refetchShop } = useShopProducts({ limit: API_DEFAULTS.BULK_OPERATION_LIMIT })
   const { data: inventoryData, isLoading: inventoryLoading, error: inventoryError, refetch: refetchInventory } = useInventoryProducts()
 
   // UI filter state

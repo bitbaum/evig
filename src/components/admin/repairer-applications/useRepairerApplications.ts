@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import { APPROVAL_STATUS } from '@/config/approval-status'
 import { logger } from '@/lib/logger'
+import { apiFetch } from '@/lib/api/client'
 import type {
   RepairerApplication,
   ApplicationStatus,
@@ -29,10 +30,9 @@ export function useRepairerApplications() {
   const fetchApplications = useCallback(async () => {
     try {
       setLoading(true)
-      const response = await fetch(`/api/admin/repairer-applications?status=${selectedStatus}`)
-      if (!response.ok) throw new Error('Failed to fetch applications')
-      const data = await response.json()
-      setApplications(data.applications)
+      const result = await apiFetch<{ applications: RepairerApplication[] }>(`/api/admin/repairer-applications?status=${selectedStatus}`)
+      if (!result.success) throw new Error(result.error || 'Failed to fetch applications')
+      setApplications(result.data?.applications || [])
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Unknown error')
     } finally {
@@ -57,11 +57,10 @@ export function useRepairerApplications() {
 
   const fetchApplicationDocuments = async (applicationId: string) => {
     try {
-      const response = await fetch(`/api/admin/documents?applicationId=${applicationId}`)
-      if (!response.ok) throw new Error('Failed to fetch documents')
-      const data = await response.json()
-      setSelectedApplicationDocuments(data.documents || [])
-      setMissingRequiredDocuments(data.missingRequiredDocuments || [])
+      const result = await apiFetch<{ documents: VerificationDocument[]; missingRequiredDocuments: DocumentType[] }>(`/api/admin/documents?applicationId=${applicationId}`)
+      if (!result.success) throw new Error(result.error || 'Failed to fetch documents')
+      setSelectedApplicationDocuments(result.data?.documents || [])
+      setMissingRequiredDocuments(result.data?.missingRequiredDocuments || [])
     } catch (err) {
       logger.error('Error fetching documents', { error: err })
       setSelectedApplicationDocuments([])
@@ -71,10 +70,9 @@ export function useRepairerApplications() {
 
   const fetchApplicationCertifications = async (applicationId: string) => {
     try {
-      const response = await fetch(`/api/admin/certifications?applicationId=${applicationId}`)
-      if (!response.ok) throw new Error('Failed to fetch certifications')
-      const data = await response.json()
-      setSelectedApplicationCertifications(data.certifications || [])
+      const result = await apiFetch<{ certifications: Certification[] }>(`/api/admin/certifications?applicationId=${applicationId}`)
+      if (!result.success) throw new Error(result.error || 'Failed to fetch certifications')
+      setSelectedApplicationCertifications(result.data?.certifications || [])
     } catch (err) {
       logger.error('Error fetching certifications', { error: err })
       setSelectedApplicationCertifications([])
@@ -135,13 +133,12 @@ export function useRepairerApplications() {
           break
       }
 
-      const response = await fetch(url, {
+      const result = await apiFetch<void>(url, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body)
+        body,
       })
 
-      if (!response.ok) throw new Error('Aktion fehlgeschlagen')
+      if (!result.success) throw new Error(result.error || 'Aktion fehlgeschlagen')
 
       if (type.includes('doc') && selectedApplication) {
         await fetchApplicationDocuments(selectedApplication.id)

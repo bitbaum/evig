@@ -10,8 +10,7 @@ import { withAdmin } from '@/lib/api/middleware'
 import { logger } from '@/lib/logger'
 import { apiSuccess, apiError, apiBadRequest } from '@/lib/api/helpers'
 import { extractProductFromText } from '@/lib/erfassung/ai-extraction'
-
-const TRANSCRIPTION_URL = process.env.TRANSCRIPTION_URL || 'http://localhost:5111'
+import { SERVICE_URLS } from '@/config/services'
 
 export const POST = withAdmin('intake', async (request, session) => {
   try {
@@ -33,7 +32,7 @@ export const POST = withAdmin('intake', async (request, session) => {
     transcribeFormData.append('audio', audioFile)
 
     const transcribeResponse = await fetch(
-      `${TRANSCRIPTION_URL}/transcribe?language=de`,
+      `${SERVICE_URLS.TRANSCRIPTION}/transcribe?language=de`,
       {
         method: 'POST',
         body: transcribeFormData,

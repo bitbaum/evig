@@ -9,8 +9,6 @@
  * Sub-components extracted to service-form/ directory.
  */
 
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { ArrowLeft, Save, Loader2 } from 'lucide-react'
 import { IconPicker } from './IconPicker'
@@ -24,6 +22,8 @@ import {
 } from './service-form'
 import type { Feature, ProcessStep, ServiceFormData } from './service-form'
 import { AIFormAssist } from '@/components/ai/AIFormAssist'
+import { generateSlug } from '@/lib/utils/slug'
+import { useFormHandler } from '@/hooks/useFormHandler'
 
 interface ServiceFormProps {
   initialData?: Partial<ServiceFormData>
@@ -31,74 +31,39 @@ interface ServiceFormProps {
 }
 
 export function ServiceForm({ initialData, isEdit = false }: ServiceFormProps) {
-  const router = useRouter()
-  const [saving, setSaving] = useState(false)
-  const [error, setError] = useState('')
-  const [success, setSuccess] = useState('')
-
-  const [formData, setFormData] = useState<ServiceFormData>({
-    name: initialData?.name || '',
-    slug: initialData?.slug || '',
-    description: initialData?.description || '',
-    category: initialData?.category || 'general',
-    durationMinutes: initialData?.durationMinutes || 60,
-    priceCents: initialData?.priceCents ?? null,
-    requiresApproval: initialData?.requiresApproval || false,
-    isActive: initialData?.isActive ?? true,
-    isBookable: initialData?.isBookable ?? true,
-    isFeatured: initialData?.isFeatured || false,
-    displayOrder: initialData?.displayOrder || 100,
-    iconName: initialData?.iconName || 'Wrench',
-    heroTitle: initialData?.heroTitle || '',
-    heroSubtitle: initialData?.heroSubtitle || '',
-    heroDescription: initialData?.heroDescription || '',
-    features: initialData?.features || [],
-    process: initialData?.process || [],
-    pricingBase: initialData?.pricingBase || '',
-    pricingDetails: initialData?.pricingDetails || [],
-    pricingMediaPrices: initialData?.pricingMediaPrices || null,
+  const form = useFormHandler<ServiceFormData>({
+    initialData: {
+      name: initialData?.name || '',
+      slug: initialData?.slug || '',
+      description: initialData?.description || '',
+      category: initialData?.category || 'general',
+      durationMinutes: initialData?.durationMinutes || 60,
+      priceCents: initialData?.priceCents ?? null,
+      requiresApproval: initialData?.requiresApproval || false,
+      isActive: initialData?.isActive ?? true,
+      isBookable: initialData?.isBookable ?? true,
+      isFeatured: initialData?.isFeatured || false,
+      displayOrder: initialData?.displayOrder || 100,
+      iconName: initialData?.iconName || 'Wrench',
+      heroTitle: initialData?.heroTitle || '',
+      heroSubtitle: initialData?.heroSubtitle || '',
+      heroDescription: initialData?.heroDescription || '',
+      features: initialData?.features || [],
+      process: initialData?.process || [],
+      pricingBase: initialData?.pricingBase || '',
+      pricingDetails: initialData?.pricingDetails || [],
+      pricingMediaPrices: initialData?.pricingMediaPrices || null,
+    },
+    apiEndpoint: '/api/admin/services',
+    isEdit,
+    editId: initialData?.id,
+    editMethod: 'PUT',
+    redirectTo: '/admin/services',
+    createSuccessMessage: 'Dienstleistung erstellt!',
+    editSuccessMessage: 'Dienstleistung gespeichert!',
   })
 
-  const generateSlug = (title: string) => {
-    return title
-      .toLowerCase()
-      .replace(/[äöüÄÖÜ]/g, (match) => {
-        const map: Record<string, string> = { ä: 'ae', ö: 'oe', ü: 'ue', Ä: 'ae', Ö: 'oe', Ü: 'ue' }
-        return map[match] || match
-      })
-      .replace(/[^a-z0-9]+/g, '-')
-      .replace(/^-|-$/g, '')
-  }
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setError('')
-    setSuccess('')
-    setSaving(true)
-
-    try {
-      const url = isEdit ? `/api/admin/services/${initialData?.id}` : '/api/admin/services'
-      const res = await fetch(url, {
-        method: isEdit ? 'PUT' : 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
-      })
-      const data = await res.json()
-      if (!res.ok || !data.success) {
-        throw new Error(data.error || 'Speichern fehlgeschlagen')
-      }
-      setSuccess(isEdit ? 'Dienstleistung gespeichert!' : 'Dienstleistung erstellt!')
-      setTimeout(() => { router.push('/admin/services'); router.refresh() }, 1000)
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Speichern fehlgeschlagen')
-    } finally {
-      setSaving(false)
-    }
-  }
-
-  const updateField = <K extends keyof ServiceFormData>(field: K, value: ServiceFormData[K]) => {
-    setFormData((prev) => ({ ...prev, [field]: value }))
-  }
+  const { data: formData, setData: setFormData, updateField, isSubmitting: saving, error, success, handleSubmit } = form
 
   const handleAIFieldsFilled = (data: Partial<Record<string, unknown>>) => {
     setFormData(prev => {

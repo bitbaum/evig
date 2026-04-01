@@ -11,6 +11,7 @@ import { OFFER_STATUS } from '@/config/it-hilfe'
 import { sendCustomEmail } from '@/lib/email'
 import { itHilfeOfferRejected } from '@/lib/email/templates/it-hilfe'
 import { sendItHilfeNotification } from '@/lib/it-hilfe/notifications'
+import { APP_URL } from '@/config/urls'
 
 interface RouteParams {
   params: Promise<{ id: string; offerId: string }>
@@ -96,7 +97,7 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
     })
 
     // Send rejection email (fire-and-forget)
-    const requestUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'https://revampit.ch'}/it-hilfe/${id}`
+    const requestUrl = `${APP_URL}/it-hilfe/${id}`
     sendCustomEmail(
       offer.helperEmail,
       itHilfeOfferRejected(offer.helperName || 'Techniker', requestData.title, requestUrl)

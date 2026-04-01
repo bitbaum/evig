@@ -6,6 +6,7 @@ import { eq, sql } from 'drizzle-orm'
 import { apiError, apiSuccess, apiUnauthorized, apiNotFound, apiBadRequest } from '@/lib/api/helpers'
 import { logger } from '@/lib/logger'
 import { validateBody, UpdateInvoiceSchema } from '@/lib/schemas'
+import { INVOICE_STATUS } from '@/config/invoice-status'
 
 // GET /api/invoices/[id] - Get invoice details
 export const GET = withAuth<{ id: string }>(async (request, session, context) => {
@@ -195,7 +196,7 @@ export const DELETE = withAuth<{ id: string }>(async (request, session, context)
     }
 
     // Only allow deletion of draft invoices
-    if (invoice.status !== 'draft') {
+    if (invoice.status !== INVOICE_STATUS.DRAFT) {
       return apiBadRequest('Nur Rechnungsentwürfe können gelöscht werden')
     }
 

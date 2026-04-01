@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { LogOut, Loader2, AlertCircle } from 'lucide-react'
+import { logger } from '@/lib/logger'
 
 const LOGOUT_CALLBACK = '/auth/login?logout=1'
 
@@ -102,7 +103,8 @@ export default function LogoutPage() {
                         .then(() => {
                           window.location.replace(LOGOUT_CALLBACK)
                         })
-                        .catch(() => {
+                        .catch((error) => {
+                          logger.error('Logout failed', { error })
                           setError('Abmeldung fehlgeschlagen. Bitte versuchen Sie es erneut.')
                         })
                     }}

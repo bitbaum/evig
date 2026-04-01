@@ -26,6 +26,8 @@ import {
 } from '@/lib/email/templates/marketplace';
 import { formatCHF, DELIVERY_LABELS, ORDER_STATUS, LISTING_STATUS } from '@/config/marketplace';
 import { PAYMENT_STATUS } from '@/config/payment-status';
+import { WORKSHOP_REGISTRATION_STATUS } from '@/config/workshop-registration-status';
+import { APP_URL } from '@/config/urls';
 import type { DeliveryOption } from '@/config/marketplace';
 
 const PAYREXX_WEBHOOK_SECRET = process.env.PAYREXX_WEBHOOK_SECRET;
@@ -295,7 +297,7 @@ async function handleGenericPaymentWebhook(
   switch (status) {
     case 'reserved': {
       // Payment succeeded — update transaction and linked records
-      if (paymentTx.status !== 'pending') {
+      if (paymentTx.status !== PAYMENT_STATUS.PENDING) {
         logger.info('Payrexx webhook: payment transaction not pending, skipping', {
           transactionId: paymentTx.id,
           currentStatus: paymentTx.status,
@@ -369,7 +371,7 @@ async function handleGenericPaymentWebhook(
           .update(workshopRegistrations)
           .set({
             paymentStatus: 'not_required',
-            status: 'cancelled',
+            status: WORKSHOP_REGISTRATION_STATUS.CANCELLED,
             cancelledAt: sql`CURRENT_TIMESTAMP`,
             updatedAt: sql`CURRENT_TIMESTAMP`,
           })
@@ -381,7 +383,7 @@ async function handleGenericPaymentWebhook(
         await db
           .update(serviceAppointments)
           .set({
-            status: 'cancelled',
+            status: PAYMENT_STATUS.CANCELLED,
             updatedAt: sql`CURRENT_TIMESTAMP`,
           })
           .where(eq(serviceAppointments.id, paymentTx.serviceAppointmentId));
@@ -435,8 +437,7 @@ async function sendOrderEmails(order: {
   sellerPayoutChf: string;
   deliveryMethod: string;
 }) {
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
-  const orderUrl = `${baseUrl}/dashboard/orders/${order.id}`;
+  const orderUrl = `${APP_URL}/dashboard/orders/${order.id}`;
   const deliveryLabel = DELIVERY_LABELS[order.deliveryMethod as DeliveryOption] || order.deliveryMethod;
 
   // Fetch listing title + buyer/seller info
@@ -490,7 +491,7 @@ async function sendOrderEmails(order: {
         listingTitle: buyerInfo.title,
         payoutAmountChf: formatCHF(Number(order.sellerPayoutChf)),
         deliveryMethod: deliveryLabel,
-        orderUrl: `${baseUrl}/dashboard/orders/${order.id}`,
+        orderUrl: `${APP_URL}/dashboard/orders/${order.id}`,
       })
     );
   }

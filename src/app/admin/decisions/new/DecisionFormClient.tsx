@@ -143,9 +143,9 @@ export default function DecisionFormClient() {
 
       {/* Decision Type Selector */}
       <div>
-        <label className="mb-2 block text-sm font-medium text-gray-700">
+        <span className="mb-2 block text-sm font-medium text-gray-700">
           Entscheidungstyp
-        </label>
+        </span>
         <div className="grid grid-cols-2 gap-3">
           {DECISION_TYPES.map((type) => {
             const conf = DECISION_TYPE_CONFIG[type];
@@ -212,9 +212,9 @@ export default function DecisionFormClient() {
       {/* Options (if needed) */}
       {needsOptions && (
         <div>
-          <label className="mb-2 block text-sm font-medium text-gray-700">
+          <span className="mb-2 block text-sm font-medium text-gray-700">
             Optionen
-          </label>
+          </span>
           <div className="space-y-2">
             {options.map((opt, i) => (
               <div key={opt.id} className="flex gap-2">
@@ -271,10 +271,11 @@ export default function DecisionFormClient() {
           <div className="mt-3 space-y-4 rounded-lg border border-gray-200 bg-gray-50 p-4">
             {/* Voting Method */}
             <div>
-              <label className="mb-1 block text-sm font-medium text-gray-700">
+              <label htmlFor="decision-voting-method" className="mb-1 block text-sm font-medium text-gray-700">
                 Abstimmungsmethode
               </label>
               <select
+                id="decision-voting-method"
                 value={votingMethod}
                 onChange={(e) => setVotingMethod(e.target.value as VotingMethod)}
                 className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
@@ -293,10 +294,11 @@ export default function DecisionFormClient() {
             {/* Dot Count */}
             {votingMethod === 'dot' && (
               <div>
-                <label className="mb-1 block text-sm font-medium text-gray-700">
+                <label htmlFor="decision-dot-count" className="mb-1 block text-sm font-medium text-gray-700">
                   Punkte pro Person
                 </label>
                 <input
+                  id="decision-dot-count"
                   type="number"
                   value={dotCount}
                   onChange={(e) => setDotCount(Number(e.target.value))}
@@ -310,10 +312,11 @@ export default function DecisionFormClient() {
             {/* Quorum */}
             <div className="flex gap-3">
               <div>
-                <label className="mb-1 block text-sm font-medium text-gray-700">
+                <label htmlFor="decision-quorum-type" className="mb-1 block text-sm font-medium text-gray-700">
                   Quorum Typ
                 </label>
                 <select
+                  id="decision-quorum-type"
                   value={quorumType}
                   onChange={(e) =>
                     setQuorumType(e.target.value as 'percentage' | 'absolute')
@@ -325,10 +328,11 @@ export default function DecisionFormClient() {
                 </select>
               </div>
               <div>
-                <label className="mb-1 block text-sm font-medium text-gray-700">
+                <label htmlFor="decision-quorum-value" className="mb-1 block text-sm font-medium text-gray-700">
                   Wert
                 </label>
                 <input
+                  id="decision-quorum-value"
                   type="number"
                   value={quorumValue}
                   onChange={(e) => setQuorumValue(Number(e.target.value))}

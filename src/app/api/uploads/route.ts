@@ -5,6 +5,7 @@ import path from 'path'
 import sharp from 'sharp'
 import { apiError, apiSuccess, apiBadRequest } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
+import { FILE_SIZE_LIMITS } from '@/config/limits'
 import { logger } from '@/lib/logger'
 
 export const dynamic = 'force-dynamic'
@@ -56,8 +57,7 @@ export const POST = withAuth(async (request, session) => {
         return apiBadRequest('Nur JPEG, PNG, WebP und GIF sind erlaubt')
       }
 
-      const maxSize = 10 * 1024 * 1024 // 10 MB
-      if (file.size > maxSize) {
+      if (file.size > FILE_SIZE_LIMITS.UPLOAD_MAX) {
         return apiBadRequest('Datei zu gross (max 10MB)')
       }
 

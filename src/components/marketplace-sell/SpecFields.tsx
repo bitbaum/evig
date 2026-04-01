@@ -41,17 +41,18 @@ export function SpecFields({ categoryValue, specs, onSpecsChange }: SpecFieldsPr
 
   return (
     <div>
-      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+      <span className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
         Technische Daten
         <span className="text-xs text-gray-500 ml-1">(optional)</span>
-      </label>
+      </span>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         {mergedSpecs.map(spec => (
           <div key={spec.key} className="flex items-center gap-2">
-            <label className="text-xs font-medium text-gray-500 dark:text-gray-400 w-24 flex-shrink-0 text-right">
+            <label htmlFor={`spec-${spec.key}`} className="text-xs font-medium text-gray-500 dark:text-gray-400 w-24 flex-shrink-0 text-right">
               {spec.key}
             </label>
             <input
+              id={`spec-${spec.key}`}
               type="text"
               value={spec.value}
               onChange={(e) => handleChange(spec.key, e.target.value)}

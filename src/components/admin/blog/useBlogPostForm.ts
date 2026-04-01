@@ -1,104 +1,81 @@
-import { useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
+import { useState, useEffect, useCallback } from 'react'
+import { useFormHandler } from '@/hooks/useFormHandler'
 import { generateSlug } from '@/lib/utils/slug'
+import { apiFetch } from '@/lib/api/client'
 import type { Category, BlogPostData, BlogPostFormProps } from './types'
 
 export function useBlogPostForm({ initialData, isEdit = false }: BlogPostFormProps) {
-  const router = useRouter()
-  const [saving, setSaving] = useState(false)
   const [categories, setCategories] = useState<Category[]>([])
-  const [error, setError] = useState('')
-  const [success, setSuccess] = useState('')
-
-  const [formData, setFormData] = useState<BlogPostData>({
-    title: initialData?.title || '',
-    slug: initialData?.slug || '',
-    excerpt: initialData?.excerpt || '',
-    content: initialData?.content || '',
-    featuredImage: initialData?.featuredImage || '',
-    categoryId: initialData?.categoryId || '',
-    tags: initialData?.tags || [],
-    isPublished: initialData?.isPublished || false,
-    seoTitle: initialData?.seoTitle || '',
-    seoDescription: initialData?.seoDescription || '',
-  })
-
   const [tagInput, setTagInput] = useState('')
 
+  const form = useFormHandler<BlogPostData>({
+    initialData: {
+      title: initialData?.title || '',
+      slug: initialData?.slug || '',
+      excerpt: initialData?.excerpt || '',
+      content: initialData?.content || '',
+      featuredImage: initialData?.featuredImage || '',
+      categoryId: initialData?.categoryId || '',
+      tags: initialData?.tags || [],
+      isPublished: initialData?.isPublished || false,
+      seoTitle: initialData?.seoTitle || '',
+      seoDescription: initialData?.seoDescription || '',
+    },
+    apiEndpoint: '/api/admin/blog',
+    isEdit,
+    editId: initialData?.id,
+    editMethod: 'PATCH',
+    redirectTo: '/admin/content/blog',
+    createSuccessMessage: 'Artikel gespeichert!',
+    editSuccessMessage: 'Artikel gespeichert!',
+  })
+
+  const { data, setData, updateField, isSubmitting, error, success, submitCustom, setSuccess } = form
+
   useEffect(() => {
-    loadCategories()
+    let cancelled = false
+    apiFetch<Category[]>('/api/admin/blog/categories').then(result => {
+      if (!cancelled && result.success && result.data) setCategories(result.data)
+    })
+    return () => { cancelled = true }
   }, [])
 
-  const loadCategories = async () => {
-    try {
-      const res = await fetch('/api/admin/blog/categories')
-      const data = await res.json()
-      if (data.success) setCategories(data.data)
-    } catch {
-      // Ignore - categories are optional
-    }
-  }
-
-  const handleTitleChange = (title: string) => {
-    setFormData(prev => ({
+  const handleTitleChange = useCallback((title: string) => {
+    setData(prev => ({
       ...prev,
       title,
       slug: !isEdit && (!prev.slug || prev.slug === generateSlug(prev.title))
         ? generateSlug(title)
         : prev.slug,
     }))
-  }
+  }, [isEdit, setData])
 
-  const addTag = () => {
+  const addTag = useCallback(() => {
     const tag = tagInput.trim()
-    if (tag && !formData.tags.includes(tag)) {
-      setFormData(prev => ({ ...prev, tags: [...prev.tags, tag] }))
+    if (tag && !data.tags.includes(tag)) {
+      updateField('tags', [...data.tags, tag])
       setTagInput('')
     }
-  }
+  }, [tagInput, data.tags, updateField])
 
-  const removeTag = (tagToRemove: string) => {
-    setFormData(prev => ({ ...prev, tags: prev.tags.filter(t => t !== tagToRemove) }))
-  }
+  const removeTag = useCallback((tagToRemove: string) => {
+    updateField('tags', data.tags.filter(t => t !== tagToRemove))
+  }, [data.tags, updateField])
 
-  const handleSubmit = async (publish: boolean = false) => {
-    setError('')
-    setSuccess('')
-    setSaving(true)
-
-    try {
-      const payload = { ...formData, isPublished: publish || formData.isPublished }
-      const url = isEdit ? `/api/admin/blog/${initialData?.id}` : '/api/admin/blog'
-
-      const res = await fetch(url, {
-        method: isEdit ? 'PATCH' : 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-      })
-
-      const data = await res.json()
-
-      if (data.success) {
-        setSuccess(publish ? 'Artikel veröffentlicht!' : 'Artikel gespeichert!')
-        setTimeout(() => {
-          router.push('/admin/content/blog')
-          router.refresh()
-        }, 1000)
-      } else {
-        setError(data.error || 'Speichern fehlgeschlagen')
-      }
-    } catch {
-      setError('Netzwerkfehler. Bitte versuchen Sie es erneut.')
-    } finally {
-      setSaving(false)
+  // Custom submit that supports the publish parameter
+  const handleSubmit = useCallback(async (publish: boolean = false) => {
+    const payload = { ...data, isPublished: publish || data.isPublished }
+    const succeeded = await submitCustom(payload)
+    if (succeeded && publish) {
+      setSuccess('Artikel veröffentlicht!')
     }
-  }
+  }, [data, submitCustom, setSuccess])
 
   return {
-    formData,
-    setFormData,
+    formData: data,
+    setFormData: setData,
     categories,
-    saving,
+    saving: isSubmitting,
     error,
     success,
     tagInput,

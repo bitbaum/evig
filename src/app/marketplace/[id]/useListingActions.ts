@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { apiFetch } from '@/lib/api/client'
 import type { ListingDetail } from './types'
 
 interface UseListingActionsProps {
@@ -78,13 +79,12 @@ export function useListingActions({
     setTogglingFav(true)
     setActionError(null)
     try {
-      const response = await fetch(`/api/listings/${listing.id}/favorite`, { method: 'POST' })
-      const data = await response.json()
-      if (data.success) {
-        setIsFavorited(data.data.favorited)
-        setFavoriteCount(data.data.favorite_count)
+      const result = await apiFetch<{ favorited: boolean; favorite_count: number }>(`/api/listings/${listing.id}/favorite`, { method: 'POST' })
+      if (result.success) {
+        setIsFavorited(result.data!.favorited)
+        setFavoriteCount(result.data!.favorite_count)
       } else {
-        setActionError(data.error || 'Fehler beim Aktualisieren des Favoriten')
+        setActionError(result.error || 'Fehler beim Aktualisieren des Favoriten')
       }
     } catch {
       setActionError('Netzwerkfehler beim Aktualisieren des Favoriten')
@@ -102,17 +102,15 @@ export function useListingActions({
     setSendingMessage(true)
     setActionError(null)
     try {
-      const response = await fetch(`/api/listings/${listing.id}/contact`, {
+      const result = await apiFetch<void>(`/api/listings/${listing.id}/contact`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: contactMessage.trim() }),
+        body: { message: contactMessage.trim() },
       })
-      const data = await response.json()
-      if (data.success) {
+      if (result.success) {
         setMessageSent(true)
         setContactMessage('')
       } else {
-        setActionError(data.error || 'Fehler beim Senden der Nachricht')
+        setActionError(result.error || 'Fehler beim Senden der Nachricht')
       }
     } catch {
       setActionError('Netzwerkfehler beim Senden der Nachricht')
@@ -141,19 +139,17 @@ export function useListingActions({
     setReportSending(true)
     setActionError(null)
     try {
-      const res = await fetch(`/api/listings/${listing.id}/report`, {
+      const result = await apiFetch<void>(`/api/listings/${listing.id}/report`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
+        body: {
           reason: reportReason,
           details: reportDetails.trim() || null,
-        }),
+        },
       })
-      const data = await res.json()
-      if (data.success) {
+      if (result.success) {
         setReportSent(true)
       } else {
-        setActionError(data.error || 'Fehler beim Melden des Inserats')
+        setActionError(result.error || 'Fehler beim Melden des Inserats')
       }
     } catch {
       setActionError('Netzwerkfehler beim Melden des Inserats')

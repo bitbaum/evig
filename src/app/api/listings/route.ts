@@ -18,6 +18,7 @@ import { sendCustomEmail } from '@/lib/email';
 import { listingPublishedConfirmation } from '@/lib/email/templates/marketplace';
 import { rateLimiters, getClientIdentifier } from '@/lib/security/rate-limit';
 import { sanitizeInput } from '@/lib/security/sanitize';
+import { APP_URL } from '@/config/urls';
 
 // ============================================================================
 // GET — Public browse
@@ -310,13 +311,12 @@ export const POST = withAuth(async (request: NextRequest, session: ValidSession)
 
     // Fire-and-forget: send confirmation email
     if (session.user.email && data.status !== LISTING_STATUS.DRAFT) {
-      const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
       sendCustomEmail(
         session.user.email,
         listingPublishedConfirmation({
           recipientName: session.user.name || 'Nutzer',
           listingTitle: sanitizedTitle,
-          listingUrl: `${baseUrl}/marketplace/${result}`,
+          listingUrl: `${APP_URL}/marketplace/${result}`,
         })
       ).catch(err => logger.error('Failed to send listing published email', { error: err, listingId: result }));
     }

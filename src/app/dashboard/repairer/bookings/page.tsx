@@ -10,6 +10,7 @@ import {
 } from 'lucide-react'
 import { BOOKING_STATUS, getBookingStatusBadge, getUrgencyBadge } from '@/config/booking-status'
 import { formatDateShort } from '@/lib/date-formats'
+import { apiFetch } from '@/lib/api/client'
 
 interface Appointment {
   id: string
@@ -51,12 +52,11 @@ export default function RepairerBookingsPage() {
   const fetchAppointments = useCallback(async () => {
     try {
       setLoading(true)
-      const res = await fetch('/api/appointments?role=repairer')
-      const data = await res.json()
-      if (data.success) {
-        setAppointments(data.data.appointments)
+      const result = await apiFetch<{ appointments: Appointment[] }>('/api/appointments?role=repairer')
+      if (result.success) {
+        setAppointments(result.data!.appointments)
       } else {
-        setError(data.error || 'Fehler beim Laden')
+        setError(result.error || 'Fehler beim Laden')
       }
     } catch {
       setError('Netzwerkfehler')
@@ -76,19 +76,17 @@ export default function RepairerBookingsPage() {
   const handleAction = async (appointmentId: string, action: string, extraData?: Record<string, unknown>) => {
     setActionLoading(appointmentId)
     try {
-      const res = await fetch('/api/appointments/' + appointmentId, {
+      const result = await apiFetch<void>('/api/appointments/' + appointmentId, {
         method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action, ...extraData })
+        body: { action, ...extraData }
       })
-      const data = await res.json()
-      if (data.success) {
+      if (result.success) {
         fetchAppointments()
         setQuoteModal(null)
         setQuotePrice('')
         setQuoteDiagnosis('')
       } else {
-        setError(data.error || 'Aktion fehlgeschlagen')
+        setError(result.error || 'Aktion fehlgeschlagen')
       }
     } catch {
       setError('Netzwerkfehler')

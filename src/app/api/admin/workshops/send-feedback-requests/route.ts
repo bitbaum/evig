@@ -9,6 +9,7 @@ import { logger } from '@/lib/logger'
 import { WORKSHOP_REGISTRATION_STATUS } from '@/config/workshop-registration-status'
 import { sendEmail } from '@/lib/email'
 import { formatDateWithWeekday } from '@/lib/date-formats'
+import { APP_URL } from '@/config/urls'
 
 // POST /api/admin/workshops/send-feedback-requests - Send feedback requests for completed workshops
 export const POST = withAdmin('workshops-admin', async (request, session) => {
@@ -46,15 +47,13 @@ export const POST = withAdmin('workshops-admin', async (request, session) => {
       ))
       .orderBy(sql`${workshopInstances.startDate} DESC`)
 
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://revampit.ch'
-
     let sentCount = 0
     let failedCount = 0
 
     for (const registration of completed) {
       try {
         const workshopDate = formatDateWithWeekday(registration.start_date)
-        const feedbackUrl = `${baseUrl}/workshops/${registration.workshop_slug}#feedback`
+        const feedbackUrl = `${APP_URL}/workshops/${registration.workshop_slug}#feedback`
 
         await sendEmail(
           registration.user_email!,

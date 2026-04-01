@@ -210,7 +210,7 @@ export function VoiceProductInput({
 
       {/* Recording hint */}
       {state === 'recording' && (
-        <div className="text-sm text-gray-500">
+        <div className="text-sm text-gray-600">
           Sprich jetzt... z.B. &quot;Dell Latitude 7470, guter Zustand, 280 Franken&quot;
         </div>
       )}

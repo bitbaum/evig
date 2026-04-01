@@ -7,6 +7,7 @@
  */
 
 import { useState, useEffect, useCallback } from 'react'
+import { API_DEFAULTS } from '@/config/api-defaults'
 import type { UnifiedActivity, ActivityStreamFilter } from './types'
 
 // Re-export sub-hooks for backward compatibility with barrel index
@@ -37,7 +38,7 @@ export function useActivityStream(
   const [error, setError] = useState<string | null>(null)
   const [total, setTotal] = useState(0)
   const [filters, setFiltersState] = useState<ActivityStreamFilter>({
-    limit: 50,
+    limit: API_DEFAULTS.PAGINATION_LIMIT,
     offset: 0,
     ...initialFilters,
   })

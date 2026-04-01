@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react'
 import { Send, Loader2, Bot, User, Sparkles, Trash2, Rocket, TriangleAlert } from 'lucide-react'
+import { apiFetch } from '@/lib/api/client'
 
 interface HirnActionCard {
   id: string
@@ -43,12 +44,11 @@ export function HirnChat({ sessionId, onSessionChange, compact = false }: HirnCh
     const loadHistory = async () => {
       setLoadingHistory(true)
       try {
-        const response = await fetch(`/api/admin/hirn/history?sessionId=${sessionId}`)
-        if (!response.ok) throw new Error(`HTTP ${response.status}`)
-        const data = await response.json()
-        if (data.success) {
-          setMessages(data.data.map((m: { id: string; role: string; content: string; created_at?: string; createdAt?: string }) => ({
+        const result = await apiFetch<{ id: string; role: string; content: string; created_at?: string; createdAt?: string }[]>(`/api/admin/hirn/history?sessionId=${sessionId}`)
+        if (result.success && result.data) {
+          setMessages(result.data.map((m) => ({
             ...m,
+            role: m.role as 'user' | 'assistant',
             createdAt: new Date(m.created_at || m.createdAt || Date.now()),
           })))
         }
@@ -83,36 +83,28 @@ export function HirnChat({ sessionId, onSessionChange, compact = false }: HirnCh
     setError('')
 
     try {
-      const response = await fetch('/api/admin/hirn/chat', {
+      const result = await apiFetch<{ content: string; model?: string; provider?: string; actions?: HirnActionCard[] }>('/api/admin/hirn/chat', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
+        body: {
           message: userMessage.content,
           sessionId,
-        }),
+        },
       })
 
-      let data: Record<string, unknown>
-      try {
-        data = await response.json()
-      } catch {
-        throw new Error('Server hat eine ungültige Antwort gesendet')
+      if (!result.success) {
+        throw new Error(result.error || 'Fehler beim Senden')
       }
 
-      if (!response.ok) {
-        throw new Error((data.error as string) || 'Fehler beim Senden')
-      }
-
-      const responseData = (data.data || {}) as Record<string, unknown>
+      const responseData = result.data!
 
       const assistantMessage: Message = {
         id: `assistant-${Date.now()}`,
         role: 'assistant',
-        content: (responseData.content as string) || 'Keine Antwort erhalten.',
+        content: responseData.content || 'Keine Antwort erhalten.',
         createdAt: new Date(),
-        model: (responseData.model as string) || undefined,
-        provider: (responseData.provider as string) || undefined,
-        actions: (responseData.actions as HirnActionCard[]) || [],
+        model: responseData.model || undefined,
+        provider: responseData.provider || undefined,
+        actions: responseData.actions || [],
       }
 
       setMessages(prev => [...prev, assistantMessage])
@@ -128,7 +120,7 @@ export function HirnChat({ sessionId, onSessionChange, compact = false }: HirnCh
     if (!confirm('Möchtest du dieses Gespräch wirklich löschen?')) return
 
     try {
-      await fetch(`/api/admin/hirn/history?sessionId=${sessionId}`, {
+      await apiFetch<void>(`/api/admin/hirn/history?sessionId=${sessionId}`, {
         method: 'DELETE',
       })
       setMessages([])
@@ -149,21 +141,19 @@ export function HirnChat({ sessionId, onSessionChange, compact = false }: HirnCh
     }
 
     try {
-      const response = await fetch('/api/admin/hirn/actions/execute', {
+      const result = await apiFetch<{ entity?: { link?: string } }>('/api/admin/hirn/actions/execute', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
+        body: {
           actionId: action.id,
           actionType: action.type,
           payload: action.payload,
           dryRun: false,
-        }),
+        },
       })
 
-      const data = await response.json()
-      if (!response.ok) throw new Error(data.error || 'Aktion fehlgschlage')
+      if (!result.success) throw new Error(result.error || 'Aktion fehlgschlage')
 
-      const link = data.data?.entity?.link
+      const link = result.data?.entity?.link
       if (link) {
         window.location.href = link
       }

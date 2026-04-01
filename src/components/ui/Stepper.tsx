@@ -26,14 +26,14 @@ const StepperComponent: React.FC<StepperProps> = ({
     <nav aria-label="Fortschritt" className={cn('w-full', className)}>
       {/* Mobile view - compact */}
       <div className="sm:hidden">
-        <p className="text-sm font-medium text-gray-500">
+        <p className="text-sm font-medium text-gray-600">
           Schritt {currentStep + 1} von {steps.length}
         </p>
         <p className="text-lg font-semibold text-gray-900 mt-1">
           {steps[currentStep]?.label}
         </p>
         {steps[currentStep]?.description && (
-          <p className="text-sm text-gray-500 mt-1">
+          <p className="text-sm text-gray-600 mt-1">
             {steps[currentStep].description}
           </p>
         )}
@@ -109,7 +109,7 @@ const StepperComponent: React.FC<StepperProps> = ({
                     {step.label}
                   </p>
                   {step.description && (
-                    <p className="text-xs text-gray-500 mt-0.5">
+                    <p className="text-xs text-gray-600 mt-0.5">
                       {step.description}
                     </p>
                   )}

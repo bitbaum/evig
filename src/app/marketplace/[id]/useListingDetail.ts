@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { apiFetch } from '@/lib/api/client'
 import { logger } from '@/lib/logger'
 import type { ListingDetail, SimilarListing } from './types'
 
@@ -22,37 +23,37 @@ export function useListingDetail(params: Promise<{ id: string }>): UseListingDet
   const [similarListings, setSimilarListings] = useState<SimilarListing[]>([])
 
   useEffect(() => {
-    const fetchListing = async () => {
+    let cancelled = false
+    async function load() {
       try {
         const { id } = await params
-        const response = await fetch(`/api/listings/${id}`)
-        if (!response.ok) throw new Error(`HTTP ${response.status}`)
-        const data = await response.json()
+        const result = await apiFetch<ListingDetail>(`/api/listings/${id}`)
 
-        if (data.success && data.data) {
-          setListing(data.data)
-          setIsFavorited(data.data.is_favorited)
-          setFavoriteCount(data.data.favorite_count)
+        if (cancelled) return
+
+        if (result.success && result.data) {
+          setListing(result.data)
+          setIsFavorited(result.data.is_favorited)
+          setFavoriteCount(result.data.favorite_count)
           // Fetch similar listings
-          fetch(`/api/listings/similar?listing_id=${data.data.id}&limit=4`)
-            .then(res => {
-              if (!res.ok) throw new Error(`HTTP ${res.status}`)
-              return res.json()
-            })
-            .then(simData => {
-              if (simData.success && simData.data) setSimilarListings(simData.data)
+          apiFetch<SimilarListing[]>(`/api/listings/similar?listing_id=${result.data.id}&limit=4`)
+            .then(simResult => {
+              if (!cancelled && simResult.success && simResult.data) {
+                setSimilarListings(simResult.data)
+              }
             })
             .catch(err => logger.warn('Failed to load similar listings', { error: err }))
         } else {
-          setError(data.error || 'Inserat nicht gefunden')
+          setError(result.error || 'Inserat nicht gefunden')
         }
       } catch {
-        setError('Fehler beim Laden des Inserats')
+        if (!cancelled) setError('Fehler beim Laden des Inserats')
       } finally {
-        setIsLoading(false)
+        if (!cancelled) setIsLoading(false)
       }
     }
-    fetchListing()
+    load()
+    return () => { cancelled = true }
   }, [params])
 
   return {

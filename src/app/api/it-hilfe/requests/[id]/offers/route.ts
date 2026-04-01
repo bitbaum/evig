@@ -12,6 +12,7 @@ import { sendCustomEmail } from '@/lib/email'
 import { itHilfeNewOfferReceived } from '@/lib/email/templates/it-hilfe'
 import { sendItHilfeNotification } from '@/lib/it-hilfe/notifications'
 import { rateLimiters } from '@/lib/security/rate-limit'
+import { APP_URL } from '@/config/urls'
 
 interface RouteParams {
   params: Promise<{ id: string }>
@@ -241,7 +242,7 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
 
     // Notify requester about new offer (fire-and-forget)
     if (requestData.requester_email) {
-      const requestUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'https://revampit.ch'}/it-hilfe/${id}`
+      const requestUrl = `${APP_URL}/it-hilfe/${id}`
       sendCustomEmail(
         requestData.requester_email,
         itHilfeNewOfferReceived(

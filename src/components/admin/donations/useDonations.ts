@@ -1,5 +1,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import { useSession } from 'next-auth/react'
+import { apiFetch } from '@/lib/api/client'
+import { API_DEFAULTS } from '@/config/api-defaults'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { DONATION_TYPES, DONATION_STATUSES, type DonationType } from '@/config/donations'
 import type { Donation, DonationStats, DonationFormData, DonationFiltersState, UserResult } from './types'
@@ -34,7 +36,7 @@ export function useDonations() {
   const loadDonations = useCallback(async () => {
     try {
       setLoading(true)
-      const params = new URLSearchParams({ limit: '50' })
+      const params = new URLSearchParams({ limit: String(API_DEFAULTS.PAGINATION_LIMIT) })
 
       if (filters.donation_type !== 'all') {
         params.set('donation_type', filters.donation_type)
@@ -43,36 +45,32 @@ export function useDonations() {
         params.set('status', filters.status)
       }
 
-      const response = await fetch(`/api/admin/donations?${params}`)
-      if (response.ok) {
-        const result = await response.json()
-        if (result.success && result.data) {
-          const items = result.data.items || []
-          setDonations(items)
+      const result = await apiFetch<{ items: Donation[] }>(`/api/admin/donations?${params}`)
 
-          const monetary = items.filter((d: Donation) => d.donation_type === DONATION_TYPES.MONETARY)
-          const device = items.filter((d: Donation) => d.donation_type === DONATION_TYPES.DEVICE)
-          const pendingThanks = items.filter((d: Donation) => !d.thank_you_sent)
-          const pendingReceipts = items.filter((d: Donation) => d.receipt_requested && !d.receipt_sent)
-          const totalValue = items.reduce((sum: number, d: Donation) => {
-            if (d.donation_type === DONATION_TYPES.MONETARY && d.amount_cents) return sum + d.amount_cents
-            if (d.donation_type === DONATION_TYPES.DEVICE && d.estimated_value_cents) return sum + d.estimated_value_cents
-            return sum
-          }, 0)
+      if (result.success && result.data) {
+        const items = result.data.items || []
+        setDonations(items)
 
-          setStats({
-            total: items.length,
-            monetary: monetary.length,
-            device: device.length,
-            pendingThanks: pendingThanks.length,
-            pendingReceipts: pendingReceipts.length,
-            totalValueCents: totalValue,
-          })
-        } else {
-          setError(ERROR_MESSAGES.INTERNAL_SERVER_ERROR)
-        }
+        const monetary = items.filter((d: Donation) => d.donation_type === DONATION_TYPES.MONETARY)
+        const device = items.filter((d: Donation) => d.donation_type === DONATION_TYPES.DEVICE)
+        const pendingThanks = items.filter((d: Donation) => !d.thank_you_sent)
+        const pendingReceipts = items.filter((d: Donation) => d.receipt_requested && !d.receipt_sent)
+        const totalValue = items.reduce((sum: number, d: Donation) => {
+          if (d.donation_type === DONATION_TYPES.MONETARY && d.amount_cents) return sum + d.amount_cents
+          if (d.donation_type === DONATION_TYPES.DEVICE && d.estimated_value_cents) return sum + d.estimated_value_cents
+          return sum
+        }, 0)
+
+        setStats({
+          total: items.length,
+          monetary: monetary.length,
+          device: device.length,
+          pendingThanks: pendingThanks.length,
+          pendingReceipts: pendingReceipts.length,
+          totalValueCents: totalValue,
+        })
       } else {
-        setError(ERROR_MESSAGES.INTERNAL_SERVER_ERROR)
+        setError(result.error || ERROR_MESSAGES.INTERNAL_SERVER_ERROR)
       }
     } catch {
       setError(ERROR_MESSAGES.NETWORK_ERROR)
@@ -97,12 +95,9 @@ export function useDonations() {
     const timeoutId = setTimeout(async () => {
       setSearchingUsers(true)
       try {
-        const response = await fetch(`/api/admin/donations/users?search=${encodeURIComponent(userSearch)}`)
-        if (response.ok) {
-          const result = await response.json()
-          if (result.success) {
-            setUserResults(result.data.users || [])
-          }
+        const result = await apiFetch<{ users: UserResult[] }>(`/api/admin/donations/users?search=${encodeURIComponent(userSearch)}`)
+        if (result.success && result.data) {
+          setUserResults(result.data.users || [])
         }
       } catch {
         // Ignore search errors
@@ -165,13 +160,12 @@ export function useDonations() {
         }
       }
 
-      const response = await fetch('/api/admin/donations', {
+      const result = await apiFetch<unknown>('/api/admin/donations', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
+        body: payload,
       })
 
-      if (response.ok) {
+      if (result.success) {
         setShowForm(false)
         setSelectedUser(null)
         setUserSearch('')
@@ -179,7 +173,6 @@ export function useDonations() {
         setFormData(DEFAULT_FORM_DATA)
         loadDonations()
       } else {
-        const result = await response.json()
         alert(result.error || 'Fehler beim Speichern')
       }
     } catch {
@@ -191,12 +184,11 @@ export function useDonations() {
 
   const handleMarkThanked = async (id: string) => {
     try {
-      const response = await fetch(`/api/admin/donations/${id}`, {
+      const result = await apiFetch<unknown>(`/api/admin/donations/${id}`, {
         method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ thank_you_sent: true, status: DONATION_STATUSES.THANKED }),
+        body: { thank_you_sent: true, status: DONATION_STATUSES.THANKED },
       })
-      if (response.ok) loadDonations()
+      if (result.success) loadDonations()
     } catch {
       alert(ERROR_MESSAGES.NETWORK_ERROR)
     }
@@ -204,12 +196,11 @@ export function useDonations() {
 
   const handleMarkReceiptSent = async (id: string) => {
     try {
-      const response = await fetch(`/api/admin/donations/${id}`, {
+      const result = await apiFetch<unknown>(`/api/admin/donations/${id}`, {
         method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ receipt_sent: true, status: DONATION_STATUSES.RECEIPT_SENT }),
+        body: { receipt_sent: true, status: DONATION_STATUSES.RECEIPT_SENT },
       })
-      if (response.ok) loadDonations()
+      if (result.success) loadDonations()
     } catch {
       alert(ERROR_MESSAGES.NETWORK_ERROR)
     }

@@ -52,7 +52,9 @@ export async function getRedis(): Promise<RedisLike | null> {
 
     cached = wrapper
     return cached
-  } catch {}
+  } catch (error) {
+    logger.warn('Failed to load ioredis', { error })
+  }
 
   // Try node-redis
   try {

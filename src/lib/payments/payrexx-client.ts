@@ -11,6 +11,8 @@
 
 import crypto from 'crypto';
 import { logger } from '@/lib/logger';
+import { PAYMENT_STATUS } from '@/config/payment-status';
+import { APP_URL } from '@/config/urls';
 
 // ============================================================================
 // Types
@@ -159,7 +161,7 @@ export async function captureTransaction(transactionId: string, amount: number):
 export async function cancelTransaction(transactionId: string): Promise<PayrexxTransactionResult> {
   if (!isConfigured()) {
     logger.info('Mock: Payrexx cancel', { transactionId });
-    return { id: Number(transactionId), status: 'cancelled' };
+    return { id: Number(transactionId), status: PAYMENT_STATUS.CANCELLED };
   }
 
   const result = await apiRequest<PayrexxTransactionResult>(
@@ -195,7 +197,6 @@ export async function refundTransaction(transactionId: string, amount: number): 
 // ============================================================================
 
 function createMockGateway(params: PayrexxGatewayParams): PayrexxGateway {
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
   const mockId = Math.floor(Math.random() * 900000) + 100000;
 
   const mockParams = new URLSearchParams({
@@ -207,7 +208,7 @@ function createMockGateway(params: PayrexxGatewayParams): PayrexxGateway {
     cancelUrl: params.cancelRedirectUrl,
   });
 
-  const link = `${baseUrl}/api/payments/payrexx-mock-redirect?${mockParams.toString()}`;
+  const link = `${APP_URL}/api/payments/payrexx-mock-redirect?${mockParams.toString()}`;
 
   logger.info('Mock Payrexx gateway created', {
     gatewayId: mockId,

@@ -3,6 +3,7 @@
  */
 
 import { useState, useEffect, useCallback } from 'react'
+import { apiFetch } from '@/lib/api/client'
 
 export interface InventoryProduct {
   id: string
@@ -38,17 +39,11 @@ export function useInventoryProducts(): UseInventoryProductsReturn {
   const fetchProducts = useCallback(async () => {
     try {
       setIsLoading(true)
-      const response = await fetch('/api/admin/inventory')
-      if (!response.ok) {
-        throw new Error('Failed to fetch inventory products')
-      }
-      const result = await response.json()
-      // API returns { success: true, data: { products, total } }
-      if (result.success && result.data) {
-        setData(result.data)
-      } else {
+      const result = await apiFetch<{ products: InventoryProduct[]; total: number }>('/api/admin/inventory')
+      if (!result.success) {
         throw new Error(result.error || 'Failed to fetch inventory products')
       }
+      setData(result.data!)
       setError(null)
     } catch (err) {
       setError(err instanceof Error ? err : new Error('Unknown error'))

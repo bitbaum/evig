@@ -12,6 +12,7 @@ import {
   Camera,
 } from 'lucide-react'
 import { MARKETPLACE_LIMITS } from '@/config/marketplace'
+import { logger } from '@/lib/logger'
 import { validateListingForm, transformListingFormToPayload } from '@/lib/domain/marketplace'
 import { AIFormAssist } from '@/components/ai/AIFormAssist'
 import type { ListingFormData } from '@/components/marketplace-sell/types'
@@ -100,7 +101,8 @@ function SellPageContent() {
             : [],
         })
       })
-      .catch(() => {
+      .catch((error) => {
+        logger.error('Failed to load listing for edit', { error })
         setError('Fehler beim Laden des Inserats')
         setEditId(null)
       })

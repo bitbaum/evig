@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import { useDebounce } from '@/hooks/useDebounce'
+import { apiFetch } from '@/lib/api/client'
 import { MARKETPLACE_LIMITS } from '@/config/marketplace'
 
 export interface ListingItem {
@@ -135,14 +136,13 @@ export function useMarketplaceListings() {
       params.set('limit', String(pagination.limit))
       params.set('offset', String(pagination.offset))
 
-      const response = await fetch(`/api/listings?${params.toString()}`)
-      const data = await response.json()
+      const result = await apiFetch<{ items: ListingItem[]; pagination: Pagination }>(`/api/listings?${params.toString()}`)
 
-      if (data.success && data.data) {
-        setListings(data.data.items)
-        setPagination(data.data.pagination)
+      if (result.success && result.data) {
+        setListings(result.data.items)
+        setPagination(result.data.pagination)
       } else {
-        throw new Error(data.error || 'Fehler beim Laden der Inserate')
+        throw new Error(result.error || 'Fehler beim Laden der Inserate')
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Ein unerwarteter Fehler ist aufgetreten')

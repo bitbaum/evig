@@ -11,6 +11,8 @@ import {
   AlertCircle,
   CheckCircle,
 } from 'lucide-react'
+import { generateSlug } from '@/lib/utils/slug'
+import { apiFetch } from '@/lib/api/client'
 
 function NewStaticPageContent() {
   const { data: session, status: sessionStatus } = useSession()
@@ -38,35 +40,18 @@ function NewStaticPageContent() {
       return
     }
 
-    try {
-      setSaving(true)
-      const response = await fetch('/api/admin/pages', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
-      })
+    setSaving(true)
+    const result = await apiFetch<void>('/api/admin/pages', {
+      method: 'POST',
+      body: formData,
+    })
+    setSaving(false)
 
-      if (response.ok) {
-        router.push('/admin/content/pages')
-      } else {
-        const result = await response.json()
-        setError(result.error || 'Fehler beim Erstellen der Seite')
-      }
-    } catch {
-      setError('Netzwerkfehler')
-    } finally {
-      setSaving(false)
+    if (result.success) {
+      router.push('/admin/content/pages')
+    } else {
+      setError(result.error || 'Fehler beim Erstellen der Seite')
     }
-  }
-
-  function generateSlug(title: string) {
-    return title
-      .toLowerCase()
-      .replace(/ä/g, 'ae')
-      .replace(/ö/g, 'oe')
-      .replace(/ü/g, 'ue')
-      .replace(/[^a-z0-9]+/g, '-')
-      .replace(/^-+|-+$/g, '')
   }
 
   if (sessionStatus === 'loading') {

@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect, useCallback } from 'react'
+import { apiFetch } from '@/lib/api/client'
 import type { Tab, Stats, ListingRow, ReportRow, OrderRow, PaginatedResponse } from './types'
 
 // ---------------------------------------------------------------------------
@@ -42,9 +43,8 @@ export function useMarketplaceAdmin() {
   // ------- Fetchers -------
 
   const refreshStats = useCallback(() => {
-    fetch('/api/admin/marketplace/stats')
-      .then(r => r.json())
-      .then(r => { if (r.success) setStats(r.data) })
+    apiFetch<Stats>('/api/admin/marketplace/stats')
+      .then(r => { if (r.success && r.data) setStats(r.data) })
   }, [])
 
   useEffect(() => { refreshStats() }, [refreshStats])
@@ -61,9 +61,8 @@ export function useMarketplaceAdmin() {
     })
     if (listingsFilter.category) params.set('category', listingsFilter.category)
     if (listingsFilter.search) params.set('search', listingsFilter.search)
-    const r = await fetch(`/api/admin/marketplace?${params}`)
-    const data = await r.json()
-    if (data.success) setListings(data.data)
+    const result = await apiFetch<PaginatedResponse<ListingRow>>(`/api/admin/marketplace?${params}`)
+    if (result.success && result.data) setListings(result.data)
     setLoading(false)
   }, [listingsFilter, listingsOffset])
 
@@ -74,9 +73,8 @@ export function useMarketplaceAdmin() {
       limit: '50',
       offset: String(reportsOffset),
     })
-    const r = await fetch(`/api/admin/marketplace/reports?${params}`)
-    const data = await r.json()
-    if (data.success) setReports(data.data)
+    const result = await apiFetch<PaginatedResponse<ReportRow>>(`/api/admin/marketplace/reports?${params}`)
+    if (result.success && result.data) setReports(result.data)
     setLoading(false)
   }, [reportsFilter, reportsOffset])
 
@@ -87,9 +85,8 @@ export function useMarketplaceAdmin() {
       limit: '50',
       offset: String(ordersOffset),
     })
-    const r = await fetch(`/api/admin/marketplace/orders?${params}`)
-    const data = await r.json()
-    if (data.success) setOrders(data.data)
+    const result = await apiFetch<PaginatedResponse<OrderRow>>(`/api/admin/marketplace/orders?${params}`)
+    if (result.success && result.data) setOrders(result.data)
     setLoading(false)
   }, [ordersFilter, ordersOffset])
 
@@ -108,19 +105,16 @@ export function useMarketplaceAdmin() {
         })
         if (listingsFilter.category) params.set('category', listingsFilter.category)
         if (listingsFilter.search) params.set('search', listingsFilter.search)
-        const r = await fetch(`/api/admin/marketplace?${params}`)
-        const data = await r.json()
-        if (!cancelled && data.success) setListings(data.data)
+        const result = await apiFetch<PaginatedResponse<ListingRow>>(`/api/admin/marketplace?${params}`)
+        if (!cancelled && result.success && result.data) setListings(result.data)
       } else if (tab === 'reports') {
         const params = new URLSearchParams({ status: reportsFilter.status, limit: '50', offset: String(reportsOffset) })
-        const r = await fetch(`/api/admin/marketplace/reports?${params}`)
-        const data = await r.json()
-        if (!cancelled && data.success) setReports(data.data)
+        const result = await apiFetch<PaginatedResponse<ReportRow>>(`/api/admin/marketplace/reports?${params}`)
+        if (!cancelled && result.success && result.data) setReports(result.data)
       } else if (tab === 'orders') {
         const params = new URLSearchParams({ status: ordersFilter.status, limit: '50', offset: String(ordersOffset) })
-        const r = await fetch(`/api/admin/marketplace/orders?${params}`)
-        const data = await r.json()
-        if (!cancelled && data.success) setOrders(data.data)
+        const result = await apiFetch<PaginatedResponse<OrderRow>>(`/api/admin/marketplace/orders?${params}`)
+        if (!cancelled && result.success && result.data) setOrders(result.data)
       }
       if (!cancelled) setLoading(false)
     }
@@ -133,10 +127,9 @@ export function useMarketplaceAdmin() {
   async function handleEditSave() {
     if (!editId) return
     setEditLoading(true)
-    await fetch(`/api/admin/marketplace/${editId}`, {
+    await apiFetch<void>(`/api/admin/marketplace/${editId}`, {
       method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(editData),
+      body: editData,
     })
     setEditLoading(false)
     setEditId(null)
@@ -146,7 +139,7 @@ export function useMarketplaceAdmin() {
 
   async function handleRemove(id: string, title: string) {
     if (!confirm(`Inserat "${title}" entfernen?`)) return
-    await fetch(`/api/admin/marketplace/${id}`, { method: 'DELETE' })
+    await apiFetch<void>(`/api/admin/marketplace/${id}`, { method: 'DELETE' })
     fetchListings()
     refreshStats()
   }
@@ -154,10 +147,9 @@ export function useMarketplaceAdmin() {
   async function handleReport() {
     if (!handlingReportId) return
     setReportLoading(true)
-    await fetch(`/api/admin/marketplace/reports/${handlingReportId}`, {
+    await apiFetch<void>(`/api/admin/marketplace/reports/${handlingReportId}`, {
       method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ action: reportAction, admin_notes: reportNotes || null }),
+      body: { action: reportAction, admin_notes: reportNotes || null },
     })
     setReportLoading(false)
     setHandlingReportId(null)

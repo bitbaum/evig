@@ -16,6 +16,7 @@ import {
   Loader2,
   Archive,
 } from 'lucide-react'
+import { apiFetch } from '@/lib/api/client'
 import { getErrorMessage } from '@/lib/utils/error'
 
 interface TaskActionsClientProps {
@@ -45,19 +46,16 @@ export default function TaskActionsClient({
     setError(null)
 
     try {
-      const res = await fetch(`/api/tasks/${taskId}/complete`, {
+      const result = await apiFetch<void>(`/api/tasks/${taskId}/complete`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
+        body: {
           notes: notes || null,
           duration_minutes: duration ? parseInt(duration, 10) : null,
-        }),
+        },
       })
 
-      const data = await res.json()
-
-      if (!data.success) {
-        throw new Error(data.error || 'Fehler beim Erledigen')
+      if (!result.success) {
+        throw new Error(result.error || 'Fehler beim Erledigen')
       }
 
       setShowCompleteForm(false)
@@ -76,18 +74,15 @@ export default function TaskActionsClient({
     setError(null)
 
     try {
-      const res = await fetch(`/api/tasks/${taskId}/attention`, {
+      const result = await apiFetch<void>(`/api/tasks/${taskId}/attention`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
+        body: {
           message: message || null,
-        }),
+        },
       })
 
-      const data = await res.json()
-
-      if (!data.success) {
-        throw new Error(data.error || 'Fehler beim Markieren')
+      if (!result.success) {
+        throw new Error(result.error || 'Fehler beim Markieren')
       }
 
       setShowAttentionForm(false)
@@ -105,19 +100,16 @@ export default function TaskActionsClient({
     setError(null)
 
     try {
-      const res = await fetch(`/api/tasks/${taskId}/request`, {
+      const result = await apiFetch<void>(`/api/tasks/${taskId}/request`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
+        body: {
           requested_user_id: broadcast ? null : undefined,
           message: message || null,
-        }),
+        },
       })
 
-      const data = await res.json()
-
-      if (!data.success) {
-        throw new Error(data.error || 'Fehler beim Anfragen')
+      if (!result.success) {
+        throw new Error(result.error || 'Fehler beim Anfragen')
       }
 
       setShowRequestForm(false)
@@ -135,14 +127,12 @@ export default function TaskActionsClient({
     setError(null)
 
     try {
-      const res = await fetch(`/api/tasks/${taskId}`, {
+      const result = await apiFetch<void>(`/api/tasks/${taskId}`, {
         method: 'DELETE',
       })
 
-      const data = await res.json()
-
-      if (!data.success) {
-        throw new Error(data.error || 'Fehler beim Archivieren')
+      if (!result.success) {
+        throw new Error(result.error || 'Fehler beim Archivieren')
       }
 
       router.push('/admin/tasks')

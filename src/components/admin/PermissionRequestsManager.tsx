@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { Shield, Check, X, Clock, User, RefreshCw } from 'lucide-react'
+import { apiFetch } from '@/lib/api/client'
 import { formatDateTimeNumeric } from '@/lib/date-formats'
 
 interface PermissionRequest {
@@ -43,14 +44,13 @@ export function PermissionRequestsManager() {
   const fetchRequests = async () => {
     try {
       setLoading(true)
-      const response = await fetch('/api/admin/permissions/requests?status=pending')
-      const data = await response.json()
+      const result = await apiFetch<{ requests: PermissionRequest[] }>('/api/admin/permissions/requests?status=pending')
 
-      if (!response.ok) {
-        throw new Error(data.error || 'Fehler beim Laden')
+      if (!result.success) {
+        throw new Error(result.error || 'Fehler beim Laden')
       }
 
-      setRequests(data.requests || [])
+      setRequests(result.data?.requests || [])
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Unbekannter Fehler')
     } finally {
@@ -65,14 +65,12 @@ export function PermissionRequestsManager() {
   const handleApprove = async (requestId: string) => {
     setProcessingId(requestId)
     try {
-      const response = await fetch(`/api/admin/permissions/requests/${requestId}`, {
+      const result = await apiFetch<{ message: string }>(`/api/admin/permissions/requests/${requestId}`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'approve', notes: null }),
+        body: { action: 'approve', notes: null },
       })
-      const data = await response.json()
-      if (!response.ok) {
-        throw new Error(data.error || 'Fehler bei der Verarbeitung')
+      if (!result.success) {
+        throw new Error(result.error || 'Fehler bei der Verarbeitung')
       }
       setRequests(prev => prev.filter(r => r.id !== requestId))
     } catch (err) {
@@ -85,14 +83,12 @@ export function PermissionRequestsManager() {
   const handleReject = async (requestId: string) => {
     setProcessingId(requestId)
     try {
-      const response = await fetch(`/api/admin/permissions/requests/${requestId}`, {
+      const result = await apiFetch<{ message: string }>(`/api/admin/permissions/requests/${requestId}`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'reject', notes: rejectionNotes || null }),
+        body: { action: 'reject', notes: rejectionNotes || null },
       })
-      const data = await response.json()
-      if (!response.ok) {
-        throw new Error(data.error || 'Fehler bei der Verarbeitung')
+      if (!result.success) {
+        throw new Error(result.error || 'Fehler bei der Verarbeitung')
       }
       setRejectingId(null)
       setRejectionNotes('')
@@ -219,10 +215,11 @@ export function PermissionRequestsManager() {
 
             {rejectingId === request.id && (
               <div className="mt-3 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
-                <label className="block text-sm font-medium text-red-800 dark:text-red-300 mb-1">
+                <label htmlFor={`rejection-notes-${request.id}`} className="block text-sm font-medium text-red-800 dark:text-red-300 mb-1">
                   Grund für Ablehnung (optional):
                 </label>
                 <textarea
+                  id={`rejection-notes-${request.id}`}
                   value={rejectionNotes}
                   onChange={(e) => setRejectionNotes(e.target.value)}
                   placeholder="Optionaler Ablehnungsgrund..."

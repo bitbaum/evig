@@ -2,6 +2,7 @@
 
 import { useSession } from 'next-auth/react'
 import { useEffect, useState } from 'react'
+import { apiFetch } from '@/lib/api/client'
 import { Calendar, Clock, MapPin, Users, CheckCircle, XCircle, AlertCircle, ArrowLeft } from 'lucide-react'
 import { WORKSHOP_REGISTRATION_STATUS } from '@/config/workshop-registration-status'
 import Link from 'next/link'
@@ -36,25 +37,30 @@ export default function WorkshopsDashboard() {
   const [saving, setSaving] = useState(false)
 
   useEffect(() => {
-    if (session?.user) {
-      fetchRegistrations()
+    if (!session?.user) return
+    let cancelled = false
+    async function load() {
+      const result = await apiFetch<{ registrations: WorkshopRegistration[] }>('/api/user/workshop-registrations')
+      if (cancelled) return
+      if (result.success && result.data) {
+        setRegistrations(result.data.registrations || [])
+      } else {
+        setError(result.error || 'Fehler beim Laden der Workshop-Anmeldungen')
+      }
+      setLoading(false)
     }
+    load()
+    return () => { cancelled = true }
   }, [session])
 
   const fetchRegistrations = async () => {
-    try {
-      const response = await fetch('/api/user/workshop-registrations')
-      if (response.ok) {
-        const data = await response.json()
-        setRegistrations(data.data?.registrations || [])
-      } else {
-        setError('Fehler beim Laden der Workshop-Anmeldungen')
-      }
-    } catch (error) {
-      setError('Netzwerkfehler beim Laden der Daten')
-    } finally {
-      setLoading(false)
+    const result = await apiFetch<{ registrations: WorkshopRegistration[] }>('/api/user/workshop-registrations')
+    if (result.success && result.data) {
+      setRegistrations(result.data.registrations || [])
+    } else {
+      setError(result.error || 'Fehler beim Laden der Workshop-Anmeldungen')
     }
+    setLoading(false)
   }
 
   const openEdit = (reg: WorkshopRegistration) => {
@@ -66,23 +72,17 @@ export default function WorkshopsDashboard() {
   const saveEdit = async () => {
     if (!editingId) return
     setSaving(true)
-    try {
-      const resp = await fetch(`/api/workshops/registrations/${editingId}`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ rating: editRating, feedback: editFeedback })
-      })
-      if (resp.ok) {
-        setEditingId(null)
-        fetchRegistrations()
-      } else {
-        alert('Speichern fehlgeschlagen')
-      }
-    } catch {
-      alert('Netzwerkfehler beim Speichern')
-    } finally {
-      setSaving(false)
+    const result = await apiFetch<void>(`/api/workshops/registrations/${editingId}`, {
+      method: 'PATCH',
+      body: { rating: editRating, feedback: editFeedback }
+    })
+    if (result.success) {
+      setEditingId(null)
+      fetchRegistrations()
+    } else {
+      alert(result.error || 'Speichern fehlgeschlagen')
     }
+    setSaving(false)
   }
 
   const getStatusIcon = (status: string) => {
@@ -245,19 +245,14 @@ export default function WorkshopsDashboard() {
                     <button
                       onClick={async () => {
                         if (!confirm('Möchten Sie diese Anmeldung wirklich stornieren?')) return
-                        try {
-                          const resp = await fetch(`/api/workshops/registrations/${registration.id}`, {
-                            method: 'PATCH',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ action: 'cancel' })
-                          })
-                          if (resp.ok) {
-                            fetchRegistrations()
-                          } else {
-                            alert('Stornierung fehlgeschlagen')
-                          }
-                        } catch {
-                          alert('Netzwerkfehler bei der Stornierung')
+                        const result = await apiFetch<void>(`/api/workshops/registrations/${registration.id}`, {
+                          method: 'PATCH',
+                          body: { action: 'cancel' }
+                        })
+                        if (result.success) {
+                          fetchRegistrations()
+                        } else {
+                          alert(result.error || 'Stornierung fehlgeschlagen')
                         }
                       }}
                       className="px-4 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-50"

@@ -145,10 +145,11 @@ function DescriptionField({
 }) {
   return (
     <div>
-      <label className="block text-sm font-medium mb-2">
+      <label htmlFor="booking-description" className="block text-sm font-medium mb-2">
         Beschreibung Ihres Problems *
       </label>
       <textarea
+        id="booking-description"
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder="Beschreiben Sie das Problem so detailliert wie möglich..."
@@ -169,10 +170,11 @@ function UrgencyField({
 }) {
   return (
     <div>
-      <label className="block text-sm font-medium mb-2">
+      <label htmlFor="booking-urgency" className="block text-sm font-medium mb-2">
         Dringlichkeit
       </label>
       <select
+        id="booking-urgency"
         value={value}
         onChange={(e) => onChange(e.target.value as 'low' | 'normal' | 'high' | 'urgent')}
         className="w-full p-3 border rounded-lg"
@@ -195,10 +197,11 @@ function DeviceInfoField({
 }) {
   return (
     <div>
-      <label className="block text-sm font-medium mb-2">
+      <label htmlFor="booking-device-info" className="block text-sm font-medium mb-2">
         Geräte-Informationen (optional)
       </label>
       <input
+        id="booking-device-info"
         type="text"
         value={value}
         onChange={(e) => onChange(e.target.value)}

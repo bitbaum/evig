@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import { useSession } from 'next-auth/react'
+import { apiFetch } from '@/lib/api/client'
 import { logger } from '@/lib/logger'
 import { REQUEST_STATUS } from '@/config/it-hilfe'
 import type { ITHilfeRequest, Offer } from './types'
@@ -42,14 +43,14 @@ export function useITHilfeDetail(id: string) {
   const fetchRequest = useCallback(async () => {
     try {
       setLoading(true)
-      const response = await fetch(`/api/it-hilfe/requests/${id}`)
-      const data = await response.json()
+      const result = await apiFetch<{ request: ITHilfeRequest }>(`/api/it-hilfe/requests/${id}`)
 
-      if (!response.ok) {
-        throw new Error(data.error || 'Fehler beim Laden der Anfrage')
+      if (!result.success || !result.data) {
+        setError(result.error || 'Fehler beim Laden der Anfrage')
+        return
       }
 
-      setRequest(data.data.request)
+      setRequest(result.data.request)
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Ein Fehler ist aufgetreten'
       setError(message)
@@ -63,11 +64,10 @@ export function useITHilfeDetail(id: string) {
     if (!request?.isOwner) return
 
     try {
-      const response = await fetch(`/api/it-hilfe/requests/${id}/offers`)
-      const data = await response.json()
+      const result = await apiFetch<{ offers: Offer[] }>(`/api/it-hilfe/requests/${id}/offers`)
 
-      if (response.ok) {
-        setOffers(data.data.offers)
+      if (result.success && result.data) {
+        setOffers(result.data.offers)
       }
     } catch (err) {
       logger.error('Error fetching offers', { error: err })
@@ -88,14 +88,10 @@ export function useITHilfeDetail(id: string) {
   useEffect(() => {
     if (!session?.user || !request || request.isOwner) return
 
-    fetch(`/api/it-hilfe/my-offers?status=pending`)
-      .then(res => {
-        if (!res.ok) throw new Error(`HTTP ${res.status}`)
-        return res.json()
-      })
-      .then(data => {
-        if (data.success) {
-          const match = data.data.offers.find((o: { requestId: string }) => o.requestId === id)
+    apiFetch<{ offers: Array<{ id: string; requestId: string; message: string; estimatedTime: string; proposedCompensation: string; relevantSkills: string[]; status: string; createdAt: string }> }>(`/api/it-hilfe/my-offers?status=pending`)
+      .then(result => {
+        if (result.success && result.data) {
+          const match = result.data.offers.find((o) => o.requestId === id)
           if (match) {
             setUserOffer({
               id: match.id,
@@ -120,15 +116,11 @@ export function useITHilfeDetail(id: string) {
   useEffect(() => {
     if (!session?.user || !request || request.status !== REQUEST_STATUS.COMPLETED) return
 
-    fetch(`/api/reviews?targetType=it_hilfe&targetId=${id}`)
-      .then(res => {
-        if (!res.ok) throw new Error(`HTTP ${res.status}`)
-        return res.json()
-      })
-      .then(data => {
-        if (data.success) {
-          const userReview = data.data.reviews.find(
-            (r: { reviewerId: string }) => r.reviewerId === session.user!.id
+    apiFetch<{ reviews: Array<{ reviewerId: string }> }>(`/api/reviews?targetType=it_hilfe&targetId=${id}`)
+      .then(result => {
+        if (result.success && result.data) {
+          const userReview = result.data.reviews.find(
+            (r) => r.reviewerId === session.user!.id
           )
           if (userReview) setHasReviewed(true)
         }
@@ -140,14 +132,10 @@ export function useITHilfeDetail(id: string) {
   useEffect(() => {
     if (!session?.user || !request) return
 
-    fetch(`/api/messages?context_id=${id}`)
-      .then(res => {
-        if (!res.ok) throw new Error(`HTTP ${res.status}`)
-        return res.json()
-      })
-      .then(data => {
-        if (data.success && data.data?.conversations?.length > 0) {
-          setConversationId(data.data.conversations[0].id)
+    apiFetch<{ conversations: Array<{ id: string }> }>(`/api/messages?context_id=${id}`)
+      .then(result => {
+        if (result.success && result.data && result.data.conversations && result.data.conversations.length > 0) {
+          setConversationId(result.data.conversations[0].id)
         }
       })
       .catch(err => logger.error('Error fetching conversation', { error: err }))
@@ -167,21 +155,19 @@ export function useITHilfeDetail(id: string) {
     setSubmittingOffer(true)
 
     try {
-      const response = await fetch(`/api/it-hilfe/requests/${id}/offers`, {
+      const result = await apiFetch<unknown>(`/api/it-hilfe/requests/${id}/offers`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
+        body: {
           message: offerMessage,
           estimatedTime: offerEstimatedTime || null,
           proposedCompensation: offerCompensation || null,
           relevantSkills: offerSkills,
-        }),
+        },
       })
 
-      const data = await response.json()
-
-      if (!response.ok) {
-        throw new Error(data.error || 'Fehler beim Senden des Angebots')
+      if (!result.success) {
+        setOfferError(result.error || 'Fehler beim Senden des Angebots')
+        return
       }
 
       // Reset form and close
@@ -207,12 +193,12 @@ export function useITHilfeDetail(id: string) {
 
     setWithdrawing(true)
     try {
-      const response = await fetch(`/api/it-hilfe/requests/${id}/offers/${userOffer.id}`, {
+      const result = await apiFetch<unknown>(`/api/it-hilfe/requests/${id}/offers/${userOffer.id}`, {
         method: 'DELETE',
       })
-      const data = await response.json()
-      if (!response.ok) {
-        throw new Error(data.error || 'Fehler beim Zurückziehen')
+      if (!result.success) {
+        alert(result.error || 'Fehler beim Zurückziehen')
+        return
       }
       setUserOffer(null)
       fetchRequest()
@@ -232,14 +218,13 @@ export function useITHilfeDetail(id: string) {
     setAcceptingOfferId(offerId)
 
     try {
-      const response = await fetch(`/api/it-hilfe/requests/${id}/offers/${offerId}/accept`, {
+      const result = await apiFetch<unknown>(`/api/it-hilfe/requests/${id}/offers/${offerId}/accept`, {
         method: 'POST',
       })
 
-      const data = await response.json()
-
-      if (!response.ok) {
-        throw new Error(data.error || 'Fehler beim Akzeptieren des Angebots')
+      if (!result.success) {
+        alert(result.error || 'Fehler beim Akzeptieren des Angebots')
+        return
       }
 
       // Refresh both request and offers
@@ -258,12 +243,12 @@ export function useITHilfeDetail(id: string) {
 
     setDecliningOfferId(offerId)
     try {
-      const response = await fetch(`/api/it-hilfe/requests/${id}/offers/${offerId}/decline`, {
+      const result = await apiFetch<unknown>(`/api/it-hilfe/requests/${id}/offers/${offerId}/decline`, {
         method: 'POST',
       })
-      const data = await response.json()
-      if (!response.ok) {
-        throw new Error(data.error || 'Fehler beim Ablehnen')
+      if (!result.success) {
+        alert(result.error || 'Fehler beim Ablehnen')
+        return
       }
       fetchRequest()
       fetchOffers()
@@ -283,16 +268,14 @@ export function useITHilfeDetail(id: string) {
     if (!confirm(confirmMsg)) return
 
     try {
-      const res = await fetch(`/api/it-hilfe/requests/${request.id}`, {
+      const result = await apiFetch<unknown>(`/api/it-hilfe/requests/${request.id}`, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ status }),
+        body: { status },
       })
-      if (res.ok) {
+      if (result.success) {
         fetchRequest()
       } else {
-        const data = await res.json()
-        alert(data.error || 'Fehler beim Aktualisieren')
+        alert(result.error || 'Fehler beim Aktualisieren')
       }
     } catch {
       alert('Fehler beim Aktualisieren')

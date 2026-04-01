@@ -94,7 +94,7 @@ export function Breadcrumbs({ homePath, className = '' }: BreadcrumbsProps) {
 
   return (
     <nav aria-label="Breadcrumb" className={`mb-4 ${className}`}>
-      <ol className="flex items-center gap-1.5 text-sm text-gray-500">
+      <ol className="flex items-center gap-1.5 text-sm text-gray-600">
         <li>
           <Link
             href={resolvedHomePath}

@@ -18,6 +18,7 @@ import { validateBody, ContactSellerSchema } from '@/lib/schemas';
 import { sendCustomEmail } from '@/lib/email';
 import { newMarketplaceMessage } from '@/lib/email/templates/marketplace';
 import { rateLimiters } from '@/lib/security/rate-limit';
+import { APP_URL } from '@/config/urls';
 
 type RouteContext = { params?: { id: string } };
 
@@ -132,7 +133,6 @@ export const POST = withAuth<{ id: string }>(async (
 
     // Fire-and-forget: email notification to seller
     if (listing.sellerEmail) {
-      const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
       sendCustomEmail(
         listing.sellerEmail,
         newMarketplaceMessage({
@@ -140,7 +140,7 @@ export const POST = withAuth<{ id: string }>(async (
           senderName: session.user.name || 'Nutzer',
           listingTitle: listing.title,
           messagePreview: message.substring(0, 200),
-          conversationUrl: `${baseUrl}/dashboard/messages`,
+          conversationUrl: `${APP_URL}/dashboard/messages`,
         })
       ).catch(err => logger.error('Failed to send marketplace message notification', { error: err, listingId: id }));
     }

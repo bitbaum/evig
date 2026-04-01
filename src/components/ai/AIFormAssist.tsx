@@ -141,9 +141,9 @@ export function AIFormAssist<T = Record<string, unknown>>({
           {/* Layer 2: Quick actions */}
           {showQuickActions && (
             <div>
-              <label className="text-sm font-medium text-purple-700 dark:text-purple-300 mb-2 block">
+              <span className="text-sm font-medium text-purple-700 dark:text-purple-300 mb-2 block">
                 Schnellaktionen
-              </label>
+              </span>
               <div className="flex flex-wrap gap-2">
                 {quickActions.map((action) => (
                   <button
@@ -178,12 +178,13 @@ export function AIFormAssist<T = Record<string, unknown>>({
           {/* Layer 3: Text input */}
           <div>
             {showQuickActions && (
-              <label className="text-sm font-medium text-purple-700 dark:text-purple-300 mb-1.5 block">
+              <label htmlFor="ai-custom-instruction" className="text-sm font-medium text-purple-700 dark:text-purple-300 mb-1.5 block">
                 Eigene Anweisung
               </label>
             )}
             <div className="flex gap-2">
               <textarea
+                id="ai-custom-instruction"
                 value={inputText}
                 onChange={(e) => setInputText(e.target.value)}
                 onKeyDown={handleKeyDown}

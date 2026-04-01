@@ -22,7 +22,7 @@ export function VoiceStatusMessage({
   return (
     <>
       {/* Status hint */}
-      <div className="text-center mt-4 text-sm text-gray-500 dark:text-gray-400">
+      <div className="text-center mt-4 text-sm text-gray-600 dark:text-gray-400">
         {state === 'idle' && 'Klicke zum Aufnehmen'}
         {state === 'recording' && (
           <span className="text-red-600">

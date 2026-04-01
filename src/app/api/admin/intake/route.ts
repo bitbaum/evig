@@ -16,6 +16,7 @@ import { ERROR_MESSAGES } from '@/config/error-messages'
 import { validateBody, validateQuery } from '@/lib/schemas'
 import { IntakeCreateSchema, IntakeQuerySchema } from '@/lib/schemas/intake'
 import { INTAKE_STATUS } from '@/config/intake-status'
+import { MARKETPLACE_STATUS, PRODUCT_STATUS } from '@/config/marketplace-status'
 import { getChecklistForDevice, isChecklistComplete, getChecklistProgress } from '@/config/intake-checklist'
 import type { ChecklistState } from '@/config/intake-checklist'
 import { generateItemUUID } from '@/lib/erfassung/create-product'
@@ -45,7 +46,7 @@ export const POST = withAdmin('intake', async (request, session) => {
         condition: data.zustand,
         category: data.hauptkategorie || null,
         subcategory: data.unterkategorie || null,
-        status: 'approved',
+        status: PRODUCT_STATUS.APPROVED,
         sourceType: 'intake',
         createdBy: session.user.id,
       }).returning({ id: aiExtractedProducts.id })
@@ -173,9 +174,9 @@ export const GET = withAdmin('intake', async (request) => {
     }
 
     if (status === INTAKE_STATUS.IN_PROGRESS) {
-      conditions.push(sql`ii.checklist_complete = false AND ii.marketplace_status = 'draft'`)
+      conditions.push(sql`ii.checklist_complete = false AND ii.marketplace_status = ${MARKETPLACE_STATUS.DRAFT}`)
     } else if (status === INTAKE_STATUS.READY) {
-      conditions.push(sql`ii.checklist_complete = true AND ii.marketplace_status = 'draft'`)
+      conditions.push(sql`ii.checklist_complete = true AND ii.marketplace_status = ${MARKETPLACE_STATUS.DRAFT}`)
     } else if (status === INTAKE_STATUS.PUBLISHED) {
       conditions.push(sql`ii.marketplace_status = ${INTAKE_STATUS.PUBLISHED}`)
     }
