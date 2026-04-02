@@ -10,6 +10,7 @@ import Link from 'next/link'
 import { Suspense } from 'react'
 import { query } from '@/lib/auth/db'
 import { TABLE_NAMES } from '@/config/database'
+import { formatDateShort } from '@/lib/date-formats'
 import { logger } from '@/lib/logger'
 import {
   TASK_CATEGORY_LABELS,
@@ -134,6 +135,7 @@ async function getTasks(
       t.priority,
       t.current_status,
       t.estimated_minutes,
+      t.due_date,
       t.is_completed,
       t.created_at,
       u.name as created_by_name,
@@ -341,6 +343,9 @@ export default async function TasksAdminPage({
                 <th className="text-left px-4 py-3 text-sm font-medium text-gray-600">
                   Typ
                 </th>
+                <th className="text-left px-4 py-3 text-sm font-medium text-gray-600">
+                  Fällig
+                </th>
                 <th className="text-right px-4 py-3 text-sm font-medium text-gray-600">
                   Erledigungen
                 </th>
@@ -389,6 +394,19 @@ export default async function TasksAdminPage({
                     <span className="text-sm text-gray-600">
                       {TASK_TYPE_LABELS[task.task_type]}
                     </span>
+                  </td>
+                  <td className="px-4 py-3">
+                    {task.due_date ? (() => {
+                      const isOverdue = !task.is_completed && new Date(task.due_date) < new Date(new Date().toDateString())
+                      return (
+                        <span className={`text-sm ${isOverdue ? 'text-red-600 font-medium' : 'text-gray-600'}`}>
+                          {formatDateShort(task.due_date)}
+                          {isOverdue && ' (überfällig)'}
+                        </span>
+                      )
+                    })() : (
+                      <span className="text-sm text-gray-400">—</span>
+                    )}
                   </td>
                   <td className="px-4 py-3 text-right">
                     <span className="text-sm text-gray-600">

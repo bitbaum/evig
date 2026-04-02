@@ -34,6 +34,7 @@ interface TaskFormData {
   priority: string
   schedule_human: string
   estimated_minutes: string
+  due_date: string
   tags: string
 }
 
@@ -50,6 +51,7 @@ export default function TaskEditFormClient({ task }: TaskEditFormClientProps) {
     priority: task.priority,
     schedule_human: task.schedule_human || '',
     estimated_minutes: task.estimated_minutes?.toString() || '',
+    due_date: task.due_date || '',
     tags: task.tags?.join(', ') || '',
   })
 
@@ -77,6 +79,7 @@ export default function TaskEditFormClient({ task }: TaskEditFormClientProps) {
         estimated_minutes: formData.estimated_minutes
           ? parseInt(formData.estimated_minutes, 10)
           : null,
+        due_date: formData.due_date || null,
         tags: formData.tags
           ? formData.tags.split(',').map((t) => t.trim()).filter(Boolean)
           : [],
@@ -288,6 +291,24 @@ export default function TaskEditFormClient({ task }: TaskEditFormClientProps) {
             min={1}
             max={480}
             placeholder="z.B. 30"
+            className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+
+        {/* Due Date */}
+        <div>
+          <label
+            htmlFor="due_date"
+            className="block text-sm font-medium text-gray-700 mb-1"
+          >
+            Fälligkeitsdatum (optional)
+          </label>
+          <input
+            type="date"
+            id="due_date"
+            name="due_date"
+            value={formData.due_date}
+            onChange={handleChange}
             className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>

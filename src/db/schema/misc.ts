@@ -311,6 +311,7 @@ export const tasks = pgTable('tasks', {
   tags: text('tags').array().default([]),
   priority: text('priority').notNull().default('normal'),
   estimatedMinutes: integer('estimated_minutes'),
+  dueDate: date('due_date', { mode: 'string' }),
   currentStatus: text('current_status').notNull().default('idle'),
   isCompleted: boolean('is_completed').default(false),
   completedAt: timestamp('completed_at', { withTimezone: true, mode: 'string' }),

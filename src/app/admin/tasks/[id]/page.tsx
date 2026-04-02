@@ -8,7 +8,7 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { formatDateTimeNumeric } from '@/lib/date-formats'
+import { formatDateTimeNumeric, formatDateShort } from '@/lib/date-formats'
 import { query } from '@/lib/auth/db'
 import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
@@ -358,6 +358,21 @@ export default async function TaskDetailPage({
                   </dd>
                 </div>
               )}
+              {task.due_date && (() => {
+                const isOverdue = !task.is_completed && new Date(task.due_date) < new Date(new Date().toDateString())
+                return (
+                  <div>
+                    <dt className="text-sm text-gray-500">Fälligkeitsdatum</dt>
+                    <dd className="flex items-center gap-2 mt-1">
+                      <Calendar className={`w-4 h-4 ${isOverdue ? 'text-red-500' : 'text-gray-400'}`} />
+                      <span className={isOverdue ? 'text-red-600 font-medium' : 'text-gray-900'}>
+                        {formatDateShort(task.due_date)}
+                        {isOverdue && ' (überfällig)'}
+                      </span>
+                    </dd>
+                  </div>
+                )
+              })()}
               {task.schedule_human && (
                 <div>
                   <dt className="text-sm text-gray-500">Zeitplan</dt>

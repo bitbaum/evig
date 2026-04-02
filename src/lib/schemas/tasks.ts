@@ -50,6 +50,7 @@ export const createTaskSchema = z.object({
   tags: z.array(z.string().max(50)).max(10).optional().default([]),
   priority: z.enum(taskPriorities).default('normal'),
   estimated_minutes: z.number().int().min(1).max(480).optional().nullable(),
+  due_date: z.string().optional().nullable(),
   project_id: z.string().uuid().optional().nullable(),
 });
 
@@ -139,6 +140,7 @@ export interface TaskListItem {
   priority: TaskPriority;
   current_status: TaskStatus;
   estimated_minutes: number | null;
+  due_date: string | null;
   is_completed: boolean;
   completion_count: number;
   created_at: string;
@@ -156,6 +158,7 @@ export interface TaskDetail {
   priority: TaskPriority;
   current_status: TaskStatus;
   estimated_minutes: number | null;
+  due_date: string | null;
   schedule_human: string | null;
   is_completed: boolean;
   is_archived: boolean;
@@ -177,6 +180,7 @@ export interface TaskEditItem {
   priority: string;
   schedule_human: string | null;
   estimated_minutes: number | null;
+  due_date: string | null;
   tags: string[];
 }
 

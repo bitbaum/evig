@@ -52,6 +52,7 @@ export const GET = withAdmin(async (request: NextRequest, session: ValidSession)
         tags: tasks.tags,
         priority: tasks.priority,
         estimated_minutes: tasks.estimatedMinutes,
+        due_date: tasks.dueDate,
         current_status: tasks.currentStatus,
         is_completed: tasks.isCompleted,
         completed_at: tasks.completedAt,
@@ -139,6 +140,7 @@ export const POST = withAdmin(async (request: NextRequest, session: ValidSession
         tags: data.tags || [],
         priority: data.priority,
         estimatedMinutes: data.estimated_minutes || undefined,
+        dueDate: data.due_date || undefined,
         projectId: data.project_id || undefined,
         createdBy: dbUserId,
       })
