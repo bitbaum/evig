@@ -14,6 +14,7 @@ import { db } from '@/db';
 import { taskCompletions } from '@/db/schema';
 import { sql } from 'drizzle-orm';
 import { taskCompletionSchema } from '@/lib/schemas/tasks';
+import { notifyUsers } from '@/lib/services/notifications';
 import { logger } from '@/lib/logger';
 
 type RouteParams = { id: string };
@@ -69,6 +70,17 @@ export const POST = withAdmin<RouteParams>(async (
         durationMinutes: data.duration_minutes || undefined,
       })
       .returning()
+
+    // Notify task creator that it was completed
+    if (task.created_by && task.created_by !== dbUserId) {
+      await notifyUsers([task.created_by], {
+        type: 'task_completed',
+        title: `Aufgabe erledigt: ${task.title}`,
+        content: `${session.user.name || session.user.email} hat die Aufgabe erledigt.${data.notes ? ` Notiz: ${data.notes}` : ''}`,
+        related_type: 'task',
+        related_id: taskId,
+      })
+    }
 
     logger.info('Task completed', {
       taskId,

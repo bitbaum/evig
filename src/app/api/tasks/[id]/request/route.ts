@@ -12,9 +12,10 @@
 import { NextRequest } from 'next/server';
 import { withAdmin, ValidSession } from '@/lib/api/middleware';
 import { apiSuccess, apiError, apiNotFound, apiBadRequest } from '@/lib/api/helpers';
-import { getDbUserId, getActiveTask, createInAppNotifications } from '@/lib/api/task-helpers';
+import { getDbUserId, getActiveTask } from '@/lib/api/task-helpers';
+import { notifyAllStaff, notifyUsers } from '@/lib/services/notifications';
 import { db } from '@/db';
-import { eq, and, ne } from 'drizzle-orm';
+import { eq } from 'drizzle-orm';
 import { tasks, taskRequests } from '@/db/schema/misc';
 import { users } from '@/db/schema/auth';
 import { TASK_STATUSES, REQUEST_STATUSES } from '@/config/tasks';
@@ -86,29 +87,22 @@ export const POST = withAdmin<RouteParams>(async (
       return requestRow;
     });
 
-    // In-app notifications (non-blocking for API success)
-    let notificationRecipientIds: string[] = []
-
-    if (data.requested_user_id) {
-      // Specific user request
-      if (data.requested_user_id !== dbUserId) {
-        notificationRecipientIds = [data.requested_user_id]
-      }
-    } else {
-      // Broadcast request to all staff except requester
-      const staffResult = await db.select({ id: users.id })
-        .from(users)
-        .where(and(eq(users.isStaff, true), ne(users.id, dbUserId)));
-      notificationRecipientIds = staffResult.map(row => row.id)
-    }
-
-    await createInAppNotifications({
-      recipientIds: notificationRecipientIds,
+    // Notifications (in-app + email, respecting user preferences)
+    const notificationPayload = {
+      type: 'task_request',
       title: `Aufgabenanfrage: ${task.title}`,
       content: data.message?.trim() || 'Eine Aufgabe wurde zur Bearbeitung angefragt.',
-      relatedType: 'task',
-      relatedId: taskId,
-    })
+      related_type: 'task' as const,
+      related_id: taskId,
+    }
+
+    if (data.requested_user_id) {
+      if (data.requested_user_id !== dbUserId) {
+        await notifyUsers([data.requested_user_id], notificationPayload)
+      }
+    } else {
+      await notifyAllStaff(notificationPayload, dbUserId)
+    }
 
     logger.info('Task request created', {
       taskId,
@@ -116,7 +110,6 @@ export const POST = withAdmin<RouteParams>(async (
       userId: session.user.id,
       isBroadcast,
       requestedUserId: data.requested_user_id || null,
-      notificationRecipients: notificationRecipientIds.length,
       taskTitle: task.title
     });
 

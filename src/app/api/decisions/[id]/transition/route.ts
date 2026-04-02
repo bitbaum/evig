@@ -11,6 +11,7 @@ import { getDbUserId } from '@/lib/api/task-helpers'
 import { transitionDecisionSchema } from '@/lib/schemas/decisions'
 import { transitionDecision } from '@/lib/services/decisions'
 import { ERROR_MESSAGES } from '@/config/error-messages'
+import { notifyAllStaff } from '@/lib/services/notifications'
 import { logger } from '@/lib/logger'
 
 type RouteParams = { id: string }
@@ -52,6 +53,26 @@ export const POST = withAdmin<RouteParams>(async (
       newStatus: parsed.data.status,
       userId: dbUserId,
     })
+
+    // Notify team on key transitions
+    if (parsed.data.status === 'voting') {
+      await notifyAllStaff({
+        type: 'decision_voting',
+        title: `Neue Abstimmung: ${result.decision.title}`,
+        content: 'Eine neue Entscheidung wartet auf deine Stimme.',
+        related_type: 'decision',
+        related_id: decisionId,
+      }, dbUserId)
+    } else if (parsed.data.status === 'closed') {
+      await notifyAllStaff({
+        type: 'decision_closed',
+        title: `Entscheidung getroffen: ${result.decision.title}`,
+        content: parsed.data.outcomeSummary || 'Die Abstimmung wurde abgeschlossen.',
+        related_type: 'decision',
+        related_id: decisionId,
+      }, dbUserId)
+    }
+
     return apiSuccess(result.decision)
   } catch (error) {
     logger.error('Error transitioning decision', { error, userId: session.user.id })

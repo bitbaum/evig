@@ -9,11 +9,11 @@
 import { NextRequest } from 'next/server';
 import { withAdmin, ValidSession } from '@/lib/api/middleware';
 import { apiSuccess, apiError, apiBadRequest } from '@/lib/api/helpers';
-import { getDbUserId, getActiveTask, createInAppNotifications } from '@/lib/api/task-helpers';
+import { getDbUserId, getActiveTask } from '@/lib/api/task-helpers';
+import { notifyAllStaff } from '@/lib/services/notifications';
 import { db } from '@/db';
 import { eq } from 'drizzle-orm';
 import { tasks, taskAttentionFlags } from '@/db/schema/misc';
-import { users } from '@/db/schema/auth';
 import { TASK_STATUSES } from '@/config/tasks';
 import { attentionFlagSchema } from '@/lib/schemas/tasks';
 import { logger } from '@/lib/logger';
@@ -69,29 +69,18 @@ export const POST = withAdmin<RouteParams>(async (
       return flagRow;
     });
 
-    // In-app notifications (non-blocking for API success)
-    const staffResult = await db.select({ id: users.id })
-      .from(users)
-      .where(eq(users.isStaff, true));
-
-    const notificationRecipientIds = [
-      task.created_by,
-      ...staffResult.filter(row => row.id !== dbUserId).map(row => row.id),
-    ].filter((id, index, all) => id !== dbUserId && all.indexOf(id) === index)
-
-    await createInAppNotifications({
-      recipientIds: notificationRecipientIds,
+    await notifyAllStaff({
+      type: 'task_attention',
       title: `Aufgabe braucht Aufmerksamkeit: ${task.title}`,
       content: data.message?.trim() || 'Eine Aufgabe wurde als aufmerksamkeitsbedürftig markiert.',
-      relatedType: 'task',
-      relatedId: taskId,
-    })
+      related_type: 'task',
+      related_id: taskId,
+    }, dbUserId)
 
     logger.info('Task flagged for attention', {
       taskId,
       flagId: flag.id,
       userId: session.user.id,
-      notificationRecipients: notificationRecipientIds.length,
       taskTitle: task.title
     });
 
