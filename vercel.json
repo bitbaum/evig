@@ -38,5 +38,11 @@
       ]
     }
   ],
-  "alias": ["revampit.vercel.app"]
+  "alias": ["revampit.vercel.app"],
+  "crons": [
+    {
+      "path": "/api/cron/close-decisions",
+      "schedule": "*/15 * * * *"
+    }
+  ]
 } 
