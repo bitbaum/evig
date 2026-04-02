@@ -28,13 +28,11 @@ interface Location {
   type: string
   city: string
   canton: string
-  approval_status: string
-  max_capacity: number | null
-  usage_count: number
-  active_bookings: number
-  created_at: string
-  creator_name: string
-  creator_email: string
+  approvalStatus: string
+  maxCapacity: number | null
+  usageCount: number
+  createdAt: string
+  createdBy: string
 }
 
 export default function AdminLocationsPage() {
@@ -278,9 +276,9 @@ export default function AdminLocationsPage() {
                       <h3 className="text-lg font-semibold text-gray-900 truncate">
                         {location.name}
                       </h3>
-                      {getStatusIcon(location.approval_status)}
+                      {getStatusIcon(location.approvalStatus)}
                       <span className="text-sm text-gray-600">
-                        {getStatusText(location.approval_status)}
+                        {getStatusText(location.approvalStatus)}
                       </span>
                     </div>
 
@@ -290,27 +288,22 @@ export default function AdminLocationsPage() {
                         {location.city}, {location.canton}
                       </div>
 
-                      {location.max_capacity && (
+                      {location.maxCapacity && (
                         <div className="flex items-center gap-1">
                           <Users className="w-4 h-4" />
-                          Max. {location.max_capacity} Personen
+                          Max. {location.maxCapacity} Personen
                         </div>
                       )}
 
                       <div className="flex items-center gap-1">
                         <Calendar className="w-4 h-4" />
-                        {location.usage_count} Buchungen
+                        {location.usageCount} Buchungen
                       </div>
 
-                      {location.active_bookings > 0 && (
-                        <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                          {location.active_bookings} aktiv
-                        </span>
-                      )}
                     </div>
 
                     <div className="text-sm text-gray-500">
-                      Erstellt von {location.creator_name} ({location.creator_email}) • {formatDateShort(location.created_at)}
+                      {location.createdAt && formatDateShort(location.createdAt)}
                     </div>
                   </div>
 
@@ -323,7 +316,7 @@ export default function AdminLocationsPage() {
                       Details
                     </Link>
 
-                    {location.approval_status === LOCATION_STATUS.PENDING && (
+                    {location.approvalStatus === LOCATION_STATUS.PENDING && (
                       <>
                         <button
                           onClick={() => handleApproval(location.id, 'approve')}
