@@ -7,7 +7,7 @@
  * Created: 2026-02-05
  */
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import {
   CheckCircle2,
@@ -40,6 +40,17 @@ export default function TaskActionsClient({
   const [duration, setDuration] = useState('')
   const [message, setMessage] = useState('')
   const [error, setError] = useState<string | null>(null)
+  const [staffMembers, setStaffMembers] = useState<{ id: string; name: string | null; email: string }[]>([])
+  const [selectedUserId, setSelectedUserId] = useState<string>('')
+
+  useEffect(() => {
+    apiFetch<{ profiles: { user_id: string; name: string | null; email: string }[] }>('/api/admin/team/profiles')
+      .then(res => {
+        if (res.success && res.data?.profiles) {
+          setStaffMembers(res.data.profiles.map(p => ({ id: p.user_id, name: p.name, email: p.email })))
+        }
+      })
+  }, [])
 
   const handleComplete = async () => {
     setLoading('complete')
@@ -95,7 +106,7 @@ export default function TaskActionsClient({
     }
   }
 
-  const handleRequest = async (broadcast: boolean) => {
+  const handleRequest = async () => {
     setLoading('request')
     setError(null)
 
@@ -103,7 +114,7 @@ export default function TaskActionsClient({
       const result = await apiFetch<void>(`/api/tasks/${taskId}/request`, {
         method: 'POST',
         body: {
-          requested_user_id: broadcast ? null : undefined,
+          requested_user_id: selectedUserId || null,
           message: message || null,
         },
       })
@@ -283,6 +294,23 @@ export default function TaskActionsClient({
           <div className="space-y-3">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
+                An wen?
+              </label>
+              <select
+                value={selectedUserId}
+                onChange={(e) => setSelectedUserId(e.target.value)}
+                className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500"
+              >
+                <option value="">Alle Teammitglieder</option>
+                {staffMembers.map((member) => (
+                  <option key={member.id} value={member.id}>
+                    {member.name || member.email}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
                 Nachricht (optional)
               </label>
               <textarea
@@ -295,14 +323,14 @@ export default function TaskActionsClient({
             </div>
             <div className="flex gap-2">
               <button
-                onClick={() => handleRequest(true)}
+                onClick={handleRequest}
                 disabled={loading === 'request'}
                 className="flex items-center gap-2 px-4 py-2 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700 transition-colors disabled:opacity-50"
               >
                 {loading === 'request' && (
                   <Loader2 className="w-4 h-4 animate-spin" />
                 )}
-                An alle senden
+                {selectedUserId ? 'Anfrage senden' : 'An alle senden'}
               </button>
               <button
                 onClick={() => setShowRequestForm(false)}
