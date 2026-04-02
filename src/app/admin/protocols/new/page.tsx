@@ -7,6 +7,7 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
 import { ArrowLeft, FileText } from 'lucide-react'
+import { getTeamMembers } from '@/lib/services/protocols'
 import ProtocolFormClient from './ProtocolFormClient'
 
 export const metadata: Metadata = {
@@ -14,7 +15,9 @@ export const metadata: Metadata = {
   description: 'Neues Sitzungsprotokoll erstellen.',
 }
 
-export default function NewProtocolPage() {
+export default async function NewProtocolPage() {
+  const teamMembers = await getTeamMembers()
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -39,7 +42,7 @@ export default function NewProtocolPage() {
       </div>
 
       {/* Form */}
-      <ProtocolFormClient />
+      <ProtocolFormClient teamMembers={teamMembers} />
     </div>
   )
 }

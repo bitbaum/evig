@@ -11,7 +11,6 @@ import { Loader2, CheckCircle2, FileText, Trash2 } from 'lucide-react'
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog'
 import {
   useProtocolDetail,
-  ProtocolWorkflowStepper,
   ProtocolReprocessSection,
   ProtocolDraftInput,
   ProtocolSummarySection,
@@ -80,13 +79,25 @@ export default function ProtocolDetailClient(props: ProtocolDetailProps) {
         </div>
       )}
 
-      <ProtocolWorkflowStepper
-        currentStepIndex={currentStepIndex}
-        workflowProgress={workflowProgress}
-        onScrollToStep={scrollToStep}
-      />
-
-      <div id="protocol-step-ai" className="-mt-2" />
+      {/* Status Badge */}
+      <div className="flex items-center gap-3">
+        <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${
+          isFinalized ? 'bg-green-100 text-green-800' :
+          protocol.status === 'processing' ? 'bg-yellow-100 text-yellow-800' :
+          isDraft ? 'bg-gray-100 text-gray-800' :
+          'bg-blue-100 text-blue-800'
+        }`}>
+          {isFinalized ? 'Abgeschlossen' :
+           protocol.status === 'processing' ? 'Wird verarbeitet...' :
+           isDraft ? 'Entwurf' :
+           'Zur Überprüfung'}
+        </span>
+        {unlinkedTaskItems.length > 0 && isReview && (
+          <span className="text-sm text-amber-600 font-medium">
+            {unlinkedTaskItems.length} Aufgabe{unlinkedTaskItems.length !== 1 ? 'n' : ''} noch nicht verknüpft
+          </span>
+        )}
+      </div>
 
       {isReview && (
         <ProtocolReprocessSection
@@ -194,7 +205,7 @@ export default function ProtocolDetailClient(props: ProtocolDetailProps) {
                     className="flex items-center gap-2 px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
                   >
                     <CheckCircle2 className="w-4 h-4" />
-                    Schritt 5: Protokoll abschliessen
+                    Protokoll abschliessen
                   </button>
                 )}
               </div>

@@ -9,6 +9,11 @@ jest.mock('next/navigation', () => ({
   }),
 }))
 
+const teamMembers = [
+  { id: 'u1', name: 'Alice' },
+  { id: 'u2', name: 'Bob' },
+]
+
 describe('ProtocolFormClient', () => {
   beforeEach(() => {
     pushMock.mockReset()
@@ -17,18 +22,21 @@ describe('ProtocolFormClient', () => {
       .mockResolvedValueOnce({ ok: true, json: async () => ({ success: true, data: { processed: true } }) }) as jest.Mock
   })
 
-  it('runs progressive transcript flow create + process', async () => {
-    render(<ProtocolFormClient />)
+  it('creates protocol with transcript in 2-step flow', async () => {
+    render(<ProtocolFormClient teamMembers={teamMembers} />)
 
-    fireEvent.click(screen.getByRole('button', { name: /Teamsitzung/i }))
+    // Step 1: Setup — select meeting type
+    fireEvent.change(screen.getByLabelText(/Sitzungstyp/i), {
+      target: { value: 'team_weekly' },
+    })
 
-    fireEvent.click(screen.getByRole('button', { name: /Transkript.*Rohtext/i }))
-
-    fireEvent.change(screen.getByLabelText(/Transkript/i), {
+    // Step 2: Content — enter transcript
+    const textarea = await screen.findByLabelText(/Transkript oder Notizen/i)
+    fireEvent.change(textarea, {
       target: { value: 'Dies ist ein genügend langes Transkript für die Verarbeitung mit mehr als fünfzig Zeichen.' },
     })
 
-    fireEvent.click(screen.getByRole('button', { name: /Erstellen & Verarbeiten/i }))
+    fireEvent.click(screen.getByRole('button', { name: /Protokoll erstellen/i }))
 
     await waitFor(() => {
       expect(global.fetch).toHaveBeenNthCalledWith(

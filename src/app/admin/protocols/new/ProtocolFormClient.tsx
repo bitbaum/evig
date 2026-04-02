@@ -1,199 +1,180 @@
 'use client'
 
 /**
- * Protocol Form Client Component
+ * Protocol Form Client Component — Simplified 2-Step Form
  *
- * Single-page progressive form with stepper:
- * 1. Select meeting type (grid of cards with icons)
- * 2. Fill details (title, date, visibility)
- * 3. Select input method (audio, transcript, notes, tasks)
- * 4. Enter content (adapts to selected method)
+ * Step 1: Setup (type, title, date, visibility, attendees)
+ * Step 2: Content (unified text/audio input with auto-detection)
  */
 
 import { useState, useMemo, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { Stepper } from '@/components/ui/Stepper'
+import { Loader2, Upload, Mic, FileText, Users, ChevronDown, ChevronUp, Check } from 'lucide-react'
 import {
   MEETING_TYPE_LABELS,
   MEETING_TYPE_TEMPLATES,
+  PROTOCOL_VISIBILITY_LABELS,
 } from '@/config/protocols'
-import type { MeetingType, ProtocolVisibility, InputMethod } from '@/config/protocols'
+import type { MeetingType, ProtocolVisibility } from '@/config/protocols'
 import { getErrorMessage } from '@/lib/utils/error'
 import { validateAudioUpload } from '@/lib/protocols/audio-validation'
-import { DEFAULT_WHISPER_MODEL } from '@/config/transcription'
-import {
-  MeetingTypeStep,
-  ProtocolDetailsStep,
-  InputMethodStep,
-  ContentInputStep,
-} from '@/components/admin/protocols'
+import { DEFAULT_WHISPER_MODEL, WHISPER_MODELS } from '@/config/transcription'
 
-const STEPS = [
-  { label: 'Typ' },
-  { label: 'Details' },
-  { label: 'Eingabe' },
-  { label: 'Inhalt' },
-]
-
-interface FormData {
-  title: string
-  meeting_date: string
-  meeting_type: MeetingType | ''
-  visibility: ProtocolVisibility
-  input_method: InputMethod | ''
-  content: string
+interface ProtocolFormClientProps {
+  teamMembers: Array<{ id: string; name: string }>
 }
 
-export default function ProtocolFormClient() {
+export default function ProtocolFormClient({ teamMembers }: ProtocolFormClientProps) {
   const router = useRouter()
+
+  // Form state
+  const [meetingType, setMeetingType] = useState<MeetingType | ''>('')
+  const [title, setTitle] = useState('')
+  const [meetingDate, setMeetingDate] = useState(new Date().toISOString().split('T')[0])
+  const [visibility, setVisibility] = useState<ProtocolVisibility>('team')
+  const [selectedAttendees, setSelectedAttendees] = useState<string[]>([])
+  const [showAttendees, setShowAttendees] = useState(false)
+
+  // Content state
+  const [content, setContent] = useState('')
+  const [audioFile, setAudioFile] = useState<File | null>(null)
+  const [whisperModel, setWhisperModel] = useState(DEFAULT_WHISPER_MODEL)
+
+  // UI state
   const [loading, setLoading] = useState(false)
   const [processing, setProcessing] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const [audioFile, setAudioFile] = useState<File | null>(null)
-  const [audioStage, setAudioStage] = useState<'idle' | 'uploading' | 'transcribing' | 'processing'>('idle')
-  const [whisperModel, setWhisperModel] = useState(DEFAULT_WHISPER_MODEL)
-  const [formData, setFormData] = useState<FormData>({
-    title: '',
-    meeting_date: new Date().toISOString().split('T')[0],
-    meeting_type: '',
-    visibility: 'team',
-    input_method: '',
-    content: '',
-  })
 
-  const hasType = formData.meeting_type !== ''
-  const hasDetails = hasType && formData.title.trim() !== '' && formData.meeting_date !== ''
-  const hasInputMethod = hasDetails && formData.input_method !== ''
-  const currentStep = !hasType ? 0 : !hasDetails ? 1 : !hasInputMethod ? 2 : 3
+  // Step 1 complete when type + title + date filled
+  const setupComplete = meetingType !== '' && title.trim() !== '' && meetingDate !== ''
 
+  // Auto-detect content format
   const contentFormat = useMemo(() => {
-    if (!formData.content.trim()) return null
-    try {
-      JSON.parse(formData.content)
-      return 'json' as const
-    } catch {
-      return 'text' as const
-    }
-  }, [formData.content])
+    if (!content.trim()) return null
+    try { JSON.parse(content); return 'json' as const } catch { return 'text' as const }
+  }, [content])
 
+  // Determine input method from content
+  const detectedInputMethod = useMemo(() => {
+    if (audioFile) return 'audio'
+    if (contentFormat === 'json') return 'notes'
+    return 'transcript'
+  }, [audioFile, contentFormat])
+
+  // Can submit when setup is done and has content
+  const hasContent = audioFile !== null || content.trim().length >= 20
+  const canSubmit = setupComplete && hasContent && !loading && !processing
+
+  // Auto-generate title when meeting type changes
   useEffect(() => {
-    const mt = formData.meeting_type
-    if (mt) {
-      const template = MEETING_TYPE_TEMPLATES[mt]
-      setFormData(prev => ({
-        ...prev,
-        visibility: template.default_visibility,
-        title: prev.title || `${MEETING_TYPE_LABELS[mt]} — ${new Date(prev.meeting_date).toLocaleDateString('de-CH')}`,
-      }))
+    if (meetingType) {
+      const template = MEETING_TYPE_TEMPLATES[meetingType]
+      setVisibility(template.default_visibility)
+      if (!title) {
+        setTitle(`${MEETING_TYPE_LABELS[meetingType]} — ${new Date(meetingDate).toLocaleDateString('de-CH')}`)
+      }
     }
-  }, [formData.meeting_type])
+  }, [meetingType])
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    const { name, value } = e.target
-    setFormData(prev => ({ ...prev, [name]: value }))
+  const toggleAttendee = (id: string) => {
+    setSelectedAttendees(prev =>
+      prev.includes(id) ? prev.filter(a => a !== id) : [...prev, id]
+    )
   }
 
-  const handleAudioUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    if (!file) return
-    const validationError = validateAudioUpload(file)
-    if (validationError) { setError(validationError); return }
-    setError(null)
-    setAudioFile(file)
+  const selectAllAttendees = () => {
+    if (selectedAttendees.length === teamMembers.length) {
+      setSelectedAttendees([])
+    } else {
+      setSelectedAttendees(teamMembers.map(m => m.id))
+    }
   }
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (!file) return
+    setError(null)
+
+    // Audio file
+    if (file.type.startsWith('audio/') || file.name.match(/\.(mp3|wav|m4a|webm|ogg|flac)$/i)) {
+      const validationError = validateAudioUpload(file)
+      if (validationError) { setError(validationError); return }
+      setAudioFile(file)
+      setContent('')
+      return
+    }
+
+    // Text file
     const reader = new FileReader()
     reader.onload = (event) => {
       const text = event.target?.result
-      if (typeof text === 'string') setFormData(prev => ({ ...prev, content: text }))
+      if (typeof text === 'string') {
+        setContent(text)
+        setAudioFile(null)
+      }
     }
     reader.readAsText(file)
   }
 
-  const getProcessEndpoint = () => {
-    switch (formData.input_method) {
-      case 'notes': return 'process-notes'
-      case 'tasks': return 'import-tasks'
-      default: return 'process'
-    }
-  }
-
-  const getProcessBody = () => {
-    if (formData.input_method === 'transcript') return { raw_transcript: formData.content }
-    return { content: formData.content }
-  }
-
-  const getMinContentLength = () => {
-    switch (formData.input_method) {
-      case 'tasks': return 10
-      case 'notes': return 20
-      default: return 50
-    }
-  }
-
-  const handleCreateAndProcess = async () => {
-    if (!formData.meeting_type || !formData.title) return
+  const handleSubmit = async () => {
+    if (!canSubmit || !meetingType) return
     setLoading(true)
     setError(null)
 
     try {
+      // 1. Create protocol
       const createRes = await fetch('/api/protocols', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          title: formData.title,
-          meeting_date: formData.meeting_date,
-          meeting_type: formData.meeting_type,
-          visibility: formData.visibility,
-          input_method: formData.input_method || 'transcript',
-          attendees: [],
+          title,
+          meeting_date: meetingDate,
+          meeting_type: meetingType,
+          visibility,
+          input_method: detectedInputMethod,
+          attendees: selectedAttendees,
         }),
       })
       const createData = await createRes.json()
       if (!createData.success) throw new Error(createData.error || 'Fehler beim Erstellen')
 
       const protocolId = createData.data.id
-      const minLen = getMinContentLength()
 
-      if (formData.input_method === 'audio' && audioFile) {
-        setProcessing(true)
-        setAudioStage('uploading')
+      // 2. Process content
+      setProcessing(true)
+
+      if (audioFile) {
         const audioFormData = new FormData()
         audioFormData.append('audio', audioFile)
         audioFormData.append('model', whisperModel)
-        setAudioStage('transcribing')
 
-        const processAudioRes = await fetch(`/api/protocols/${protocolId}/process-audio`, {
+        const processRes = await fetch(`/api/protocols/${protocolId}/process-audio`, {
           method: 'POST',
           body: audioFormData,
         })
-        const processAudioData = await processAudioRes.json()
-        if (!processAudioData.success) {
-          const params = new URLSearchParams()
-          params.set('processing', 'failed')
-          params.set('retryable', String(processAudioData.retryable ?? true))
-          if (processAudioData.error) params.set('error', String(processAudioData.error).slice(0, 250))
-          router.push(`/admin/protocols/${protocolId}?${params.toString()}`)
+        const processData = await processRes.json()
+        if (!processData.success) {
+          const params = new URLSearchParams({ processing: 'failed', retryable: String(processData.retryable ?? true) })
+          if (processData.error) params.set('error', String(processData.error).slice(0, 250))
+          router.push(`/admin/protocols/${protocolId}?${params}`)
           return
         }
-      } else if (formData.content.trim().length >= minLen && formData.input_method && formData.input_method !== 'audio') {
-        setProcessing(true)
-        const endpoint = getProcessEndpoint()
+      } else if (content.trim()) {
+        const endpoint = detectedInputMethod === 'notes' ? 'process-notes' : 'process'
+        const body = detectedInputMethod === 'transcript'
+          ? { raw_transcript: content }
+          : { content }
+
         const processRes = await fetch(`/api/protocols/${protocolId}/${endpoint}`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(getProcessBody()),
+          body: JSON.stringify(body),
         })
         const processData = await processRes.json()
         if (!processData.success) {
-          const params = new URLSearchParams()
-          params.set('processing', 'failed')
-          params.set('retryable', String(processData.retryable ?? true))
+          const params = new URLSearchParams({ processing: 'failed', retryable: String(processData.retryable ?? true) })
           if (processData.error) params.set('error', String(processData.error).slice(0, 250))
-          router.push(`/admin/protocols/${protocolId}?${params.toString()}`)
+          router.push(`/admin/protocols/${protocolId}?${params}`)
           return
         }
       }
@@ -204,89 +185,248 @@ export default function ProtocolFormClient() {
     } finally {
       setLoading(false)
       setProcessing(false)
-      setAudioStage('idle')
     }
-  }
-
-  const handleStepClick = (step: number) => {
-    if (step === 0 && hasType) {
-      setFormData(prev => ({ ...prev, meeting_type: '', title: '', input_method: '', content: '' }))
-    } else if (step === 1 && hasDetails) {
-      setFormData(prev => ({ ...prev, title: '', meeting_date: prev.meeting_date }))
-    } else if (step === 2 && hasInputMethod) {
-      setFormData(prev => ({ ...prev, input_method: '', content: '' }))
-    }
-  }
-
-  const getSubmitButtonLabel = () => {
-    if (formData.input_method === 'tasks') return 'Erstellen & Importieren'
-    return 'Erstellen & Verarbeiten'
   }
 
   return (
     <div className="max-w-3xl space-y-6">
-      <Stepper steps={STEPS} currentStep={currentStep} onStepClick={handleStepClick} />
-
       {error && (
         <div className="p-4 bg-red-50 border border-red-200 rounded-lg text-red-700">{error}</div>
       )}
 
-      <MeetingTypeStep
-        selectedType={formData.meeting_type}
-        onSelect={(type) => setFormData(prev => ({ ...prev, meeting_type: type }))}
-        onReset={() => setFormData(prev => ({ ...prev, meeting_type: '', title: '', input_method: '', content: '' }))}
-      />
+      {/* Step 1: Setup */}
+      <div className="bg-white rounded-lg border p-6 space-y-4">
+        <h2 className="text-lg font-semibold text-gray-900">Sitzungsdetails</h2>
 
-      {hasType && (
-        <ProtocolDetailsStep
-          values={{ title: formData.title, meeting_date: formData.meeting_date, visibility: formData.visibility }}
-          isComplete={hasDetails}
-          onChange={handleChange}
-          onReset={() => setFormData(prev => ({ ...prev, title: '' }))}
-        />
-      )}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {/* Meeting Type */}
+          <div>
+            <label htmlFor="meeting_type" className="block text-sm font-medium text-gray-700 mb-1">
+              Sitzungstyp
+            </label>
+            <select
+              id="meeting_type"
+              value={meetingType}
+              onChange={(e) => setMeetingType(e.target.value as MeetingType)}
+              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              <option value="">Typ wählen...</option>
+              {Object.entries(MEETING_TYPE_LABELS).map(([key, label]) => (
+                <option key={key} value={key}>{label}</option>
+              ))}
+            </select>
+          </div>
 
-      {hasDetails && (
-        <InputMethodStep
-          selectedMethod={formData.input_method}
-          onSelect={(method) => {
-            setFormData(prev => ({ ...prev, input_method: method, content: '' }))
-            setAudioFile(null)
-            setAudioStage('idle')
-          }}
-          onReset={() => setFormData(prev => ({ ...prev, input_method: '', content: '' }))}
-        />
-      )}
+          {/* Date */}
+          <div>
+            <label htmlFor="meeting_date" className="block text-sm font-medium text-gray-700 mb-1">
+              Datum
+            </label>
+            <input
+              id="meeting_date"
+              type="date"
+              value={meetingDate}
+              onChange={(e) => setMeetingDate(e.target.value)}
+              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+        </div>
 
-      {hasInputMethod && formData.input_method && formData.meeting_type && (
-        <ContentInputStep
-          inputMethod={formData.input_method as InputMethod}
-          meetingType={formData.meeting_type as MeetingType}
-          content={formData.content}
-          loading={loading}
-          processing={processing}
-          audioFile={audioFile}
-          audioStage={audioStage}
-          whisperModel={whisperModel}
-          contentFormat={contentFormat}
-          submitButtonLabel={getSubmitButtonLabel()}
-          onContentChange={handleChange}
-          onWhisperModelChange={setWhisperModel}
-          onAudioUpload={handleAudioUpload}
-          onFileUpload={handleFileUpload}
-          onCreateAndProcess={() => {
-            if (formData.input_method === 'audio') setAudioStage('processing')
-            handleCreateAndProcess()
-          }}
-          onCreateWithoutContent={() => {
-            setFormData(prev => ({ ...prev, content: '' }))
-            handleCreateAndProcess()
-          }}
-          onBack={() => {
-            setFormData(prev => ({ ...prev, input_method: '', content: '' }))
-            setAudioFile(null)
-          }}
-        />
+        {/* Title */}
+        <div>
+          <label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-1">
+            Titel
+          </label>
+          <input
+            id="title"
+            type="text"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            placeholder="z.B. Teamsitzung — 2. April 2026"
+            className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {/* Visibility */}
+          <div>
+            <label htmlFor="visibility" className="block text-sm font-medium text-gray-700 mb-1">
+              Sichtbarkeit
+            </label>
+            <select
+              id="visibility"
+              value={visibility}
+              onChange={(e) => setVisibility(e.target.value as ProtocolVisibility)}
+              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              {Object.entries(PROTOCOL_VISIBILITY_LABELS).map(([key, label]) => (
+                <option key={key} value={key}>{label}</option>
+              ))}
+            </select>
+          </div>
+        </div>
+
+        {/* Attendees */}
+        <div>
+          <button
+            type="button"
+            onClick={() => setShowAttendees(!showAttendees)}
+            className="flex items-center gap-2 text-sm font-medium text-gray-700 hover:text-gray-900"
+          >
+            <Users className="w-4 h-4" />
+            Teilnehmer ({selectedAttendees.length}/{teamMembers.length})
+            {showAttendees ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+          </button>
+
+          {showAttendees && (
+            <div className="mt-2 p-3 bg-gray-50 rounded-lg border space-y-2">
+              <button
+                type="button"
+                onClick={selectAllAttendees}
+                className="text-xs text-blue-600 hover:text-blue-800 font-medium"
+              >
+                {selectedAttendees.length === teamMembers.length ? 'Keine auswählen' : 'Alle auswählen'}
+              </button>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-1">
+                {teamMembers.map((member) => (
+                  <label
+                    key={member.id}
+                    className="flex items-center gap-2 px-2 py-1.5 rounded hover:bg-gray-100 cursor-pointer text-sm"
+                  >
+                    <input
+                      type="checkbox"
+                      checked={selectedAttendees.includes(member.id)}
+                      onChange={() => toggleAttendee(member.id)}
+                      className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                    />
+                    {member.name}
+                  </label>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Step 2: Content */}
+      {setupComplete && (
+        <div className="bg-white rounded-lg border p-6 space-y-4">
+          <h2 className="text-lg font-semibold text-gray-900">Inhalt</h2>
+          <p className="text-sm text-gray-600">
+            Transkript, Notizen einfügen oder Audio-Datei hochladen. Die KI strukturiert den Inhalt automatisch.
+          </p>
+
+          {/* Textarea */}
+          <div>
+            <label htmlFor="content" className="block text-sm font-medium text-gray-700 mb-1">
+              Transkript oder Notizen
+            </label>
+            <textarea
+              id="content"
+              value={content}
+              onChange={(e) => { setContent(e.target.value); setAudioFile(null) }}
+              placeholder="Sitzungsnotizen hier einfügen..."
+              rows={10}
+              disabled={!!audioFile}
+              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100 disabled:text-gray-500 font-mono text-sm"
+            />
+            <div className="flex items-center justify-between mt-1">
+              <div className="flex items-center gap-2">
+                {contentFormat && (
+                  <span className={`text-xs px-2 py-0.5 rounded-full ${contentFormat === 'json' ? 'bg-purple-100 text-purple-700' : 'bg-gray-100 text-gray-600'}`}>
+                    {contentFormat === 'json' ? 'JSON erkannt' : 'Freitext'}
+                  </span>
+                )}
+              </div>
+              <span className="text-xs text-gray-500">{content.length} Zeichen</span>
+            </div>
+          </div>
+
+          {/* File Upload */}
+          <div className="border-t pt-4">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Oder Datei hochladen
+            </label>
+            <div className="flex items-center gap-3">
+              <label className="flex items-center gap-2 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 cursor-pointer transition-colors text-sm">
+                <Upload className="w-4 h-4" />
+                Datei wählen
+                <input
+                  type="file"
+                  accept=".txt,.md,.json,.mp3,.wav,.m4a,.webm,.ogg,.flac"
+                  onChange={handleFileUpload}
+                  className="hidden"
+                />
+              </label>
+              <span className="text-xs text-gray-500">.txt, .json, .mp3, .wav, .m4a, .webm</span>
+            </div>
+
+            {/* Audio file selected */}
+            {audioFile && (
+              <div className="mt-3 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <Mic className="w-4 h-4 text-blue-600" />
+                    <span className="text-sm font-medium text-blue-800">{audioFile.name}</span>
+                    <span className="text-xs text-blue-600">({(audioFile.size / 1024 / 1024).toFixed(1)} MB)</span>
+                  </div>
+                  <button
+                    onClick={() => setAudioFile(null)}
+                    className="text-xs text-blue-600 hover:text-blue-800"
+                  >
+                    Entfernen
+                  </button>
+                </div>
+
+                <div className="mt-2">
+                  <label htmlFor="whisper_model" className="block text-xs font-medium text-blue-700 mb-1">
+                    Whisper-Modell
+                  </label>
+                  <select
+                    id="whisper_model"
+                    value={whisperModel}
+                    onChange={(e) => setWhisperModel(e.target.value)}
+                    className="w-full px-2 py-1 text-sm border border-blue-200 rounded focus:outline-none focus:ring-1 focus:ring-blue-500 bg-white"
+                  >
+                    {WHISPER_MODELS.map((model) => (
+                      <option key={model.id} value={model.id}>{model.label}</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Submit */}
+          <div className="flex items-center justify-between pt-4 border-t">
+            <div className="text-sm text-gray-500">
+              {audioFile ? (
+                <span className="flex items-center gap-1"><Mic className="w-3 h-3" /> Audio wird transkribiert und strukturiert</span>
+              ) : content.trim() ? (
+                <span className="flex items-center gap-1"><FileText className="w-3 h-3" /> Text wird von KI strukturiert</span>
+              ) : (
+                <span>Inhalt eingeben oder Datei hochladen</span>
+              )}
+            </div>
+            <button
+              onClick={handleSubmit}
+              disabled={!canSubmit}
+              className="flex items-center gap-2 px-6 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed font-medium"
+            >
+              {(loading || processing) ? (
+                <>
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                  {processing ? 'KI verarbeitet...' : 'Erstellt...'}
+                </>
+              ) : (
+                <>
+                  <Check className="w-4 h-4" />
+                  Protokoll erstellen
+                </>
+              )}
+            </button>
+          </div>
+        </div>
       )}
     </div>
   )

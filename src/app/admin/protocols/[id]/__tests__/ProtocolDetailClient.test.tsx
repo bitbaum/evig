@@ -141,12 +141,10 @@ describe('ProtocolDetailClient', () => {
       />
     )
 
-    expect(screen.getByText('Workflow')).toBeInTheDocument()
-    expect(screen.getByText(/Schritt 3 von 5/i)).toBeInTheDocument()
-    expect(screen.getByText(/Nächster Schritt: Aufgaben erstellen/i)).toBeInTheDocument()
+    expect(screen.getByText('Zur Überprüfung')).toBeInTheDocument()
   })
 
-  it('jumps to selected step when clicking the workflow stepper', () => {
+  it('shows status badge in review mode', () => {
     render(
       <ProtocolDetailClient
         protocol={baseProtocol}
@@ -160,8 +158,7 @@ describe('ProtocolDetailClient', () => {
       />
     )
 
-    fireEvent.click(screen.getByRole('button', { name: /4\. Aufgaben erstellen/i }))
-    expect(scrollIntoViewMock).toHaveBeenCalled()
+    expect(screen.getByText('Zur Überprüfung')).toBeInTheDocument()
   })
 
   it('shows actionable empty state when no action items were extracted', () => {
