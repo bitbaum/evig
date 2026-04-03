@@ -3,6 +3,7 @@
 import React, { useState } from 'react'
 import { AlertTriangle, Mail, X, CheckCircle2, Loader2 } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { apiFetch } from '@/lib/api/client'
 
 interface EmailVerificationBannerProps {
   email: string
@@ -20,15 +21,13 @@ export function EmailVerificationBanner({ email, className }: EmailVerificationB
     setError(undefined)
 
     try {
-      const response = await fetch('/api/auth/resend-code', {
+      const { error: apiError } = await apiFetch('/api/auth/resend-code', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email }),
+        body: { email },
       })
 
-      if (!response.ok) {
-        const data = await response.json()
-        setError(data.error || 'Fehler beim Senden')
+      if (apiError) {
+        setError(apiError)
         return
       }
 

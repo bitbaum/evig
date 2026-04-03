@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { Mail, MessageSquare, Send, User } from 'lucide-react'
 import { ORG } from '@/config/org'
+import { apiFetch } from '@/lib/api/client'
 
 export default function ContactForm() {
   const [name, setName] = useState('')
@@ -29,14 +30,12 @@ export default function ContactForm() {
         selectedElements: [],
         timestamp: new Date().toISOString()
       }
-      const res = await fetch('/api/suggestions', {
+      const { error: apiError } = await apiFetch('/api/suggestions', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
+        body: payload,
       })
-      if (!res.ok) {
-        const data = await res.json().catch(() => ({}))
-        throw new Error(data.error || `Submit failed (${res.status})`)
+      if (apiError) {
+        throw new Error(apiError)
       }
       setStatus('success')
       setName('')

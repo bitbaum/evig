@@ -10,35 +10,16 @@ import { NextRequest } from 'next/server'
 import {
   apiSuccess,
   apiError,
-  apiUnauthorized,
 } from '@/lib/api/helpers'
 import { logger } from '@/lib/logger'
-import { auth } from '@/auth'
+import { withAdmin, ValidSession } from '@/lib/api/middleware'
 import { db } from '@/db'
 import { blogSubmissions, blogCategories, users } from '@/db/schema'
-import { eq, desc, sql } from 'drizzle-orm'
+import { eq, desc } from 'drizzle-orm'
 import { alias } from 'drizzle-orm/pg-core'
-import { canAccessSection } from '@/lib/permissions'
 
-export async function GET(request: NextRequest) {
+export const GET = withAdmin('content', async (request: NextRequest, session: ValidSession) => {
   try {
-    // Authentication required
-    const session = await auth()
-    if (!session?.user) {
-      return apiUnauthorized('Anmeldung erforderlich')
-    }
-
-    // Check admin access
-    const userForPermissions = {
-      email: session.user.email || '',
-      is_staff: session.user.isStaff || false,
-      staff_permissions: session.user.staffPermissions || [],
-    }
-
-    if (!canAccessSection(userForPermissions, 'content')) {
-      return apiUnauthorized('Keine Berechtigung für diesen Bereich')
-    }
-
     // Get query params for filtering
     const { searchParams } = new URL(request.url)
     const status = searchParams.get('status')
@@ -88,4 +69,4 @@ export async function GET(request: NextRequest) {
     logger.error('Failed to fetch blog submissions', { error })
     return apiError(error, 'Fehler beim Laden der Einreichungen')
   }
-}
+})

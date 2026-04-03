@@ -5,14 +5,13 @@
  */
 
 import { NextRequest } from 'next/server'
-import { auth } from '@/auth'
+import { withAuth, ValidSession } from '@/lib/api/middleware'
 import { db } from '@/db'
 import { helperProfiles, userSkills } from '@/db/schema'
 import { eq, sql } from 'drizzle-orm'
 import {
   apiError,
   apiSuccess,
-  apiUnauthorized,
 } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { logger } from '@/lib/logger'
@@ -23,13 +22,8 @@ import { validateBody, TechnicianProfileSchema } from '@/lib/schemas'
  * GET /api/user/technician-profile
  * Get current user's technician profile and skills
  */
-export async function GET() {
+export const GET = withAuth(async (_request: NextRequest, session: ValidSession) => {
   try {
-    const session = await auth()
-    if (!session?.user?.id) {
-      return apiUnauthorized(ERROR_MESSAGES.UNAUTHORIZED)
-    }
-
     // Get technician profile
     const [profileRow] = await db
       .select({
@@ -81,19 +75,14 @@ export async function GET() {
     logger.error('Error fetching technician profile', { error })
     return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)
   }
-}
+})
 
 /**
  * PUT /api/user/technician-profile
  * Create or update technician profile and skills
  */
-export async function PUT(request: NextRequest) {
+export const PUT = withAuth(async (request: NextRequest, session: ValidSession) => {
   try {
-    const session = await auth()
-    if (!session?.user?.id) {
-      return apiUnauthorized(ERROR_MESSAGES.UNAUTHORIZED)
-    }
-
     const body = await request.json()
     const validation = validateBody(TechnicianProfileSchema, body)
     if (!validation.success) return validation.error
@@ -174,7 +163,7 @@ export async function PUT(request: NextRequest) {
     logger.error('Error updating technician profile', { error })
     return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)
   }
-}
+})
 
 /**
  * Get category ID for a skill

@@ -1,9 +1,9 @@
 import { NextRequest } from 'next/server'
-import { auth } from '@/auth'
+import { withAuth, ValidSession } from '@/lib/api/middleware'
 import { db } from '@/db'
 import { workshopProposals, locations, users } from '@/db/schema'
 import { eq, and, gte, sql } from 'drizzle-orm'
-import { apiError, apiSuccess, apiBadRequest, apiUnauthorized } from '@/lib/api/helpers'
+import { apiError, apiSuccess, apiBadRequest } from '@/lib/api/helpers'
 import { ERROR_MESSAGES, SUCCESS_MESSAGES } from '@/config/error-messages'
 import { APPROVAL_STATUS } from '@/config/approval-status'
 import { sendEmail } from '@/lib/email'
@@ -11,13 +11,8 @@ import { logger } from '@/lib/logger'
 import { APP_URL } from '@/config/urls'
 import { validateBody, WorkshopProposalSchema } from '@/lib/schemas'
 
-export async function POST(request: NextRequest) {
+export const POST = withAuth(async (request: NextRequest, session: ValidSession) => {
   try {
-    const session = await auth()
-    if (!session?.user?.id) {
-      return apiUnauthorized(ERROR_MESSAGES.UNAUTHORIZED)
-    }
-
     const body = await request.json()
     const validation = validateBody(WorkshopProposalSchema, body)
     if (!validation.success) return validation.error
@@ -158,4 +153,4 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)
   }
-}
+})

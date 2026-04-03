@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { Camera, X, Loader2 } from 'lucide-react'
 import { FILE_SIZE_LIMITS } from '@/config/limits'
 import { logger } from '@/lib/logger'
+import { apiFetch } from '@/lib/api/client'
 
 interface ITHilfeImageUploadProps {
   imageUrls: string[]
@@ -43,17 +44,17 @@ export function ITHilfeImageUpload({
       const formData = new FormData()
       filesToUpload.forEach((file) => formData.append('files', file))
 
-      const response = await fetch('/api/uploads', {
+      const { data, error: apiError } = await apiFetch<{ urls: string[] }>('/api/uploads', {
         method: 'POST',
         body: formData,
+        formData: true,
       })
 
-      const data = await response.json()
-      if (!response.ok) {
-        throw new Error(data.error || 'Upload fehlgeschlagen')
+      if (apiError) {
+        throw new Error(apiError)
       }
 
-      const newUrls = (data.data.urls as string[]) || []
+      const newUrls = data?.urls || []
       onImagesChange([...imageUrls, ...newUrls])
     } catch (err) {
       logger.error('Image upload failed', { error: err })

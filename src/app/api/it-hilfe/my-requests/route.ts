@@ -1,9 +1,9 @@
 import { NextRequest } from 'next/server'
-import { auth } from '@/auth'
+import { withAuth, ValidSession } from '@/lib/api/middleware'
 import { db } from '@/db'
 import { itHilfeRequests } from '@/db/schema'
 import { eq, and, sql, desc } from 'drizzle-orm'
-import { apiError, apiSuccess, apiUnauthorized, parsePagination } from '@/lib/api/helpers'
+import { apiError, apiSuccess, parsePagination } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { logger } from '@/lib/logger'
 
@@ -11,13 +11,8 @@ import { logger } from '@/lib/logger'
  * GET /api/it-hilfe/my-requests
  * Get current user's IT-Hilfe requests
  */
-export async function GET(request: NextRequest) {
+export const GET = withAuth(async (request: NextRequest, session: ValidSession) => {
   try {
-    const session = await auth()
-    if (!session?.user?.id) {
-      return apiUnauthorized(ERROR_MESSAGES.UNAUTHORIZED)
-    }
-
     const { searchParams } = new URL(request.url)
     const status = searchParams.get('status')
     const { limit, offset } = parsePagination(request, { defaultLimit: 20, maxLimit: 50 })
@@ -93,4 +88,4 @@ export async function GET(request: NextRequest) {
     logger.error('Error fetching user IT-Hilfe requests', { error })
     return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)
   }
-}
+})

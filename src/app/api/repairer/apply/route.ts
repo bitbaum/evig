@@ -1,9 +1,9 @@
 import { NextRequest } from 'next/server'
-import { auth } from '@/auth'
+import { withAuth, ValidSession } from '@/lib/api/middleware'
 import { db } from '@/db'
 import { repairerApplications, users } from '@/db/schema'
 import { eq } from 'drizzle-orm'
-import { apiError, apiSuccess, apiBadRequest, apiUnauthorized } from '@/lib/api/helpers'
+import { apiError, apiSuccess, apiBadRequest } from '@/lib/api/helpers'
 import { ERROR_MESSAGES, SUCCESS_MESSAGES } from '@/config/error-messages'
 import { sendEmail } from '@/lib/email'
 import { logger } from '@/lib/logger'
@@ -11,13 +11,8 @@ import { APP_URL } from '@/config/urls'
 import { APPROVAL_STATUS } from '@/config/approval-status'
 import { validateBody, RepairerApplicationSchema } from '@/lib/schemas'
 
-export async function POST(request: NextRequest) {
+export const POST = withAuth(async (request: NextRequest, session: ValidSession) => {
   try {
-    const session = await auth()
-    if (!session?.user?.id) {
-      return apiUnauthorized(ERROR_MESSAGES.UNAUTHORIZED)
-    }
-
     const formData = await request.formData()
 
     // Convert FormData to plain object for Zod validation
@@ -175,4 +170,4 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)
   }
-}
+})

@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { Star, Loader2 } from 'lucide-react'
 import { logger } from '@/lib/logger'
+import { apiFetch } from '@/lib/api/client'
 
 interface ITHilfeReviewFormProps {
   requestId: string
@@ -71,23 +72,20 @@ export function ITHilfeReviewForm({ requestId, requestTitle, onSuccess }: ITHilf
     setSubmitting(true)
 
     try {
-      const response = await fetch('/api/reviews', {
+      const { error: apiError } = await apiFetch('/api/reviews', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
+        body: {
           targetType: 'it_hilfe',
           targetId: requestId,
           overallRating,
           communicationRating: communicationRating || null,
           qualityRating: qualityRating || null,
           content,
-        }),
+        },
       })
 
-      const data = await response.json()
-
-      if (!response.ok) {
-        throw new Error(data.error || 'Fehler beim Erstellen der Bewertung')
+      if (apiError) {
+        throw new Error(apiError)
       }
 
       onSuccess()

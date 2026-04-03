@@ -1,5 +1,6 @@
 import { NextRequest } from 'next/server'
 import { auth } from '@/auth'
+import { withAuth, ValidSession } from '@/lib/api/middleware'
 import { db } from '@/db'
 import { reviews, reviewResponses, reviewAttachments, reviewModerationLog } from '@/db/schema/reviews'
 import { users } from '@/db/schema/auth'
@@ -165,18 +166,14 @@ export async function GET(
   }
 }
 
-export async function PUT(
+export const PUT = withAuth<{ id: string }>(async (
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
-  const { id: reviewId } = await params
+  session: ValidSession,
+  context,
+) => {
+  const { id: reviewId } = context!.params!
 
   try {
-    const session = await auth()
-    if (!session?.user?.id) {
-      return apiUnauthorized(ERROR_MESSAGES.UNAUTHORIZED)
-    }
-
     const body = await request.json()
     const validation = validateBody(UpdateReviewSchema, body)
     if (!validation.success) return validation.error
@@ -254,20 +251,16 @@ export async function PUT(
     logger.error('Error updating review', { error, reviewId })
     return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)
   }
-}
+})
 
-export async function DELETE(
+export const DELETE = withAuth<{ id: string }>(async (
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
-  const { id: reviewId } = await params
+  session: ValidSession,
+  context,
+) => {
+  const { id: reviewId } = context!.params!
 
   try {
-    const session = await auth()
-    if (!session?.user?.id) {
-      return apiUnauthorized(ERROR_MESSAGES.UNAUTHORIZED)
-    }
-
     // Get review and check ownership
     const existingRows = await db
       .select({ reviewerId: reviews.reviewerId })
@@ -326,4 +319,4 @@ export async function DELETE(
     logger.error('Error deleting review', { error, reviewId })
     return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)
   }
-}
+})

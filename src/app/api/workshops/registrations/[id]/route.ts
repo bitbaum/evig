@@ -1,10 +1,9 @@
 import { NextRequest } from 'next/server'
-import { auth } from '@/auth'
+import { withAuth, ValidSession } from '@/lib/api/middleware'
 import { db } from '@/db'
 import { workshopRegistrations } from '@/db/schema'
 import { eq, and, ne, sql } from 'drizzle-orm'
-import { apiError, apiSuccess, apiUnauthorized, apiBadRequest, apiNotFound } from '@/lib/api/helpers'
-import { ERROR_MESSAGES } from '@/config/error-messages'
+import { apiError, apiSuccess, apiBadRequest, apiNotFound } from '@/lib/api/helpers'
 import { WORKSHOP_REGISTRATION_STATUS } from '@/config/workshop-registration-status'
 
 interface UpdateBody {
@@ -13,17 +12,14 @@ interface UpdateBody {
 }
 
 // Cancel workshop registration (set status = 'cancelled')
-export async function PATCH(
+export const PATCH = withAuth<{ id: string }>(async (
   req: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
-  const { id } = await params
+  session: ValidSession,
+  context,
+) => {
+  const { id } = context!.params!
 
   try {
-    const session = await auth()
-    if (!session?.user?.id) {
-      return apiUnauthorized(ERROR_MESSAGES.UNAUTHORIZED)
-    }
     let body: UpdateBody | null = null
     try {
       body = await req.json()
@@ -83,4 +79,4 @@ export async function PATCH(
   } catch (e) {
     return apiError(e, 'Stornierung fehlgeschlagen')
   }
-}
+})

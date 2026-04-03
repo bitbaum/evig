@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { Mail, Heart, Check } from 'lucide-react'
+import { apiFetch } from '@/lib/api/client'
 
 export default function NewsletterSignup() {
   const [email, setEmail] = useState('')
@@ -13,23 +14,20 @@ export default function NewsletterSignup() {
     setStatus('loading')
 
     try {
-      const response = await fetch('/api/newsletter/subscribe', {
+      const { error: apiError } = await apiFetch('/api/newsletter/subscribe', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email }),
+        body: { email },
       })
 
-      const data = await response.json()
-
-      if (response.ok) {
+      if (!apiError) {
         setStatus('success')
         setMessage('Willkommen! Überprüfen Sie Ihre E-Mail.')
         setEmail('')
       } else {
         setStatus('error')
-        setMessage(data.error || 'Etwas ist schief gelaufen')
+        setMessage(apiError)
       }
-    } catch (error) {
+    } catch {
       setStatus('error')
       setMessage('Verbindungsfehler. Bitte versuchen Sie es später erneut.')
     }

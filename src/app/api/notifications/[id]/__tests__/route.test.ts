@@ -5,15 +5,7 @@
 import { NextRequest } from 'next/server'
 import { auth } from '@/auth'
 
-// Mock Drizzle db with chainable API
-const mockSelectResult: unknown[] = []
 const mockUpdateResult: unknown[] = []
-
-const mockSelectChain = {
-  select: jest.fn().mockReturnThis(),
-  from: jest.fn().mockReturnThis(),
-  where: jest.fn().mockImplementation(() => Promise.resolve(mockSelectResult)),
-}
 
 const mockUpdateChain = {
   set: jest.fn().mockReturnThis(),
@@ -23,12 +15,10 @@ const mockUpdateChain = {
 
 jest.mock('@/db', () => ({
   db: {
-    select: jest.fn(() => mockSelectChain),
     update: jest.fn(() => mockUpdateChain),
   },
 }))
 jest.mock('@/db/schema', () => ({
-  users: { id: 'users.id', email: 'users.email' },
   notifications: {
     id: 'n.id', userId: 'n.user_id', isRead: 'n.is_read', readAt: 'n.read_at',
   },
@@ -39,6 +29,11 @@ jest.mock('drizzle-orm', () => ({
   sql: jest.fn(),
 }))
 jest.mock('@/auth', () => ({ auth: jest.fn() }))
+jest.mock('@/lib/permissions', () => ({
+  canAccessSection: jest.fn(() => true),
+  toStaffUser: jest.fn(),
+  ADMIN_SECTIONS: {},
+}))
 jest.mock('@/lib/api/helpers', () => ({
   apiSuccess: jest.fn((data) => ({
     status: 200,
@@ -47,6 +42,14 @@ jest.mock('@/lib/api/helpers', () => ({
   apiError: jest.fn((_err: unknown, _msg: unknown, status = 500) => ({
     status,
     json: () => Promise.resolve({ success: false }),
+  })),
+  apiUnauthorized: jest.fn((msg?: string) => ({
+    status: 401,
+    json: () => Promise.resolve({ success: false, error: msg || 'Unauthorized' }),
+  })),
+  apiForbidden: jest.fn((msg?: string) => ({
+    status: 403,
+    json: () => Promise.resolve({ success: false, error: msg || 'Forbidden' }),
   })),
 }))
 jest.mock('@/lib/logger', () => ({
@@ -64,10 +67,7 @@ function routeParams(id: string) {
 
 beforeEach(() => {
   jest.clearAllMocks()
-  mockSelectResult.length = 0
   mockUpdateResult.length = 0
-  // Reset chain mocks
-  mockSelectChain.where.mockImplementation(() => Promise.resolve(mockSelectResult))
   mockUpdateChain.returning.mockImplementation(() => Promise.resolve(mockUpdateResult))
 })
 
@@ -75,8 +75,8 @@ async function json(response: Response) {
   return response.json() as Promise<Record<string, unknown>>
 }
 
-function mockSession(email = 'user@revamp-it.ch') {
-  mockAuth.mockResolvedValue({ user: { email } })
+function mockSession(id = 'user-123', email = 'user@revamp-it.ch') {
+  mockAuth.mockResolvedValue({ user: { id, email, isStaff: false, staffPermissions: [] }, expires: '2099-01-01' })
 }
 
 function mockNoSession() {
@@ -98,23 +98,8 @@ describe('PATCH /api/notifications/[id]', () => {
     expect(body.success).toBe(false)
   })
 
-  it('returns 404 when user is not found in the database', async () => {
-    mockSession()
-    // user lookup returns nothing
-    mockSelectChain.where.mockResolvedValueOnce([])
-
-    const res = await PATCH(mockRequest, routeParams('notif-1'))
-    const body = await json(res)
-
-    expect(res.status).toBe(404)
-    expect(body.success).toBe(false)
-  })
-
   it('returns 200 with success when notification is marked as read', async () => {
     mockSession()
-    // user lookup
-    mockSelectChain.where.mockResolvedValueOnce([{ id: 'user-1' }])
-    // UPDATE returns the row
     mockUpdateResult.push({ id: 'notif-1' })
 
     const res = await PATCH(mockRequest, routeParams('notif-1'))
@@ -124,11 +109,9 @@ describe('PATCH /api/notifications/[id]', () => {
     expect(body.success).toBe(true)
   })
 
-  it('returns 200 when notification is not found or already read (acceptable state)', async () => {
+  it('returns 200 when notification is not found or already read', async () => {
     mockSession()
-    // user lookup
-    mockSelectChain.where.mockResolvedValueOnce([{ id: 'user-1' }])
-    // UPDATE matched nothing — empty array
+    // UPDATE matched nothing — empty array (no result pushed)
 
     const res = await PATCH(mockRequest, routeParams('notif-missing'))
     const body = await json(res)
@@ -139,8 +122,7 @@ describe('PATCH /api/notifications/[id]', () => {
 
   it('returns 500 when a database error occurs', async () => {
     mockSession()
-    // user lookup throws
-    mockSelectChain.where.mockRejectedValueOnce(new Error('DB error'))
+    mockUpdateChain.returning.mockRejectedValue(new Error('DB error'))
 
     const res = await PATCH(mockRequest, routeParams('notif-1'))
     const body = await json(res)

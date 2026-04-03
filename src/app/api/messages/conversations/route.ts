@@ -1,20 +1,15 @@
 import { NextRequest } from 'next/server'
-import { auth } from '@/auth'
+import { withAuth, ValidSession } from '@/lib/api/middleware'
 import { db } from '@/db'
 import { conversations, messages, users } from '@/db/schema'
 import { eq, and, or, sql, desc } from 'drizzle-orm'
-import { apiError, apiSuccess, apiUnauthorized, apiBadRequest, parsePagination } from '@/lib/api/helpers'
+import { apiError, apiSuccess, apiBadRequest, parsePagination } from '@/lib/api/helpers'
 import { TABLE_NAMES } from '@/config/database'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { validateBody, CreateConversationSchema } from '@/lib/schemas'
 
-export async function GET(request: NextRequest) {
+export const GET = withAuth(async (request: NextRequest, session: ValidSession) => {
   try {
-    const session = await auth()
-    if (!session?.user?.id) {
-      return apiUnauthorized(ERROR_MESSAGES.UNAUTHORIZED)
-    }
-
     const { searchParams } = new URL(request.url)
     const type = searchParams.get('type')
     const { limit, offset } = parsePagination(request, { defaultLimit: 20 })
@@ -81,15 +76,10 @@ export async function GET(request: NextRequest) {
   } catch (error) {
     return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)
   }
-}
+})
 
-export async function POST(request: NextRequest) {
+export const POST = withAuth(async (request: NextRequest, session: ValidSession) => {
   try {
-    const session = await auth()
-    if (!session?.user?.id) {
-      return apiUnauthorized(ERROR_MESSAGES.UNAUTHORIZED)
-    }
-
     const body = await request.json()
     const validation = validateBody(CreateConversationSchema, body)
     if (!validation.success) return validation.error
@@ -156,4 +146,4 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)
   }
-}
+})

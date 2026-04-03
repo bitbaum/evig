@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { MapPin, Euro, Users, Sparkles, Star, CheckCircle } from 'lucide-react'
 import { getSkillById, BUDGET_TIERS } from '@/config/it-hilfe'
 import { logger } from '@/lib/logger'
+import { apiFetch } from '@/lib/api/client'
 import { CONVERSATION_TYPES } from '@/config/database'
 
 interface Helper {
@@ -53,26 +54,23 @@ export function HelperCard({ helper, requestId, requestTitle }: HelperCardProps)
         }).filter(Boolean).join('\n')}\n\nKönntest du mir helfen?`
       }
 
-      const response = await fetch('/api/messages', {
+      const { data, error: apiError } = await apiFetch<{ conversation_id: string }>('/api/messages', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
+        body: {
           recipient_id: helper.userId,
           content: initialMessage,
           context_type: CONVERSATION_TYPES.IT_HILFE,
           context_id: requestId || null,
-        }),
+        },
       })
 
-      if (!response.ok) {
-        const error = await response.json()
-        throw new Error(error.error || 'Fehler beim Senden')
+      if (apiError) {
+        throw new Error(apiError)
       }
 
-      const data = await response.json()
       logger.info('Contacted helper', {
         helperId: helper.userId,
-        conversationId: data.data?.conversation_id,
+        conversationId: data?.conversation_id,
       })
 
       setContactSuccess(true)

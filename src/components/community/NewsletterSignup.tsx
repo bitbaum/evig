@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { apiFetch } from '@/lib/api/client'
 
 interface NewsletterSignupProps {
   title?: string
@@ -29,18 +30,15 @@ export function NewsletterSignup({
     setErrorMsg('')
 
     try {
-      const res = await fetch('/api/newsletter/subscribe', {
+      const { error: apiError } = await apiFetch('/api/newsletter/subscribe', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, name: name || undefined, source }),
+        body: { email, name: name || undefined, source },
       })
 
-      const data = await res.json()
-
-      if (data.success) {
+      if (!apiError) {
         setStatus('success')
       } else {
-        setErrorMsg(data.error || 'Anmeldung fehlgeschlagen.')
+        setErrorMsg(apiError)
         setStatus('error')
       }
     } catch {

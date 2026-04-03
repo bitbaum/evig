@@ -6,8 +6,9 @@
  * Modal for creating a new help request (broadcast or targeted)
  */
 
-import { useState, useEffect } from 'react'
-import { X, Loader2, Users, User } from 'lucide-react'
+import { useState } from 'react'
+import { Loader2, Users, User } from 'lucide-react'
+import { Modal } from '@/components/ui/Modal'
 import {
   HELP_REQUEST_URGENCY_OPTIONS,
   ACTIVITY_CATEGORY_OPTIONS,
@@ -65,181 +66,160 @@ export function CreateHelpRequestModal({
   }
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto">
-      <div className="flex min-h-full items-center justify-center p-4">
-        {/* Backdrop */}
-        <div className="fixed inset-0 bg-black/50" aria-hidden="true" onClick={onClose} />
+    <Modal isOpen onClose={onClose} title="Hilfe anfordern">
+      {/* Error */}
+      {error && (
+        <div id="help-request-error" className="mb-4 p-3 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 rounded-lg text-red-700 dark:text-red-300 text-sm">
+          {error}
+        </div>
+      )}
 
-        {/* Modal */}
-        <div role="dialog" aria-modal="true" aria-labelledby="help-request-dialog-title" onKeyDown={(e) => { if (e.key === 'Escape') onClose() }} className="relative bg-white dark:bg-gray-800 rounded-xl shadow-xl max-w-lg w-full p-6">
-          {/* Header */}
-          <div className="flex items-center justify-between mb-6">
-            <h3 id="help-request-dialog-title" className="text-lg font-semibold text-gray-900 dark:text-gray-100">
-              Hilfe anfordern
-            </h3>
+      {/* Form */}
+      <form onSubmit={handleSubmit} className="space-y-4">
+        {/* Title */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+            Wobei brauchst du Hilfe? <span className="text-red-500">*</span>
+          </label>
+          <input
+            type="text"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            placeholder="z.B. Brauche Hilfe mit der Kaffeemaschine"
+            maxLength={200}
+            required
+            aria-required="true"
+            aria-invalid={!!error}
+            aria-describedby={error ? 'help-request-error' : undefined}
+            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          />
+        </div>
+
+        {/* Description */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+            Details
+          </label>
+          <textarea
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            placeholder="Beschreibe das Problem genauer (optional)"
+            maxLength={2000}
+            rows={3}
+            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+          />
+        </div>
+
+        {/* Target type */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            An wen richtet sich die Anfrage?
+          </label>
+          <div className="flex gap-3">
             <button
-              onClick={onClose}
-              className="text-gray-500 hover:text-gray-600 dark:hover:text-gray-300"
+              type="button"
+              onClick={() => setIsBroadcast(true)}
+              className={`flex-1 p-3 rounded-lg border-2 flex items-center justify-center gap-2 transition-colors ${
+                isBroadcast
+                  ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300'
+                  : 'border-gray-200 dark:border-gray-600 hover:border-gray-300'
+              }`}
             >
-              <X className="w-5 h-5" />
+              <Users className="w-5 h-5" />
+              <span className="font-medium">An alle</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setIsBroadcast(false)}
+              className={`flex-1 p-3 rounded-lg border-2 flex items-center justify-center gap-2 transition-colors ${
+                !isBroadcast
+                  ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300'
+                  : 'border-gray-200 dark:border-gray-600 hover:border-gray-300'
+              }`}
+            >
+              <User className="w-5 h-5" />
+              <span className="font-medium">Bestimmte Person</span>
             </button>
           </div>
-
-          {/* Error */}
-          {error && (
-            <div id="help-request-error" className="mb-4 p-3 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 rounded-lg text-red-700 dark:text-red-300 text-sm">
-              {error}
-            </div>
-          )}
-
-          {/* Form */}
-          <form onSubmit={handleSubmit} className="space-y-4">
-            {/* Title */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                Wobei brauchst du Hilfe? <span className="text-red-500">*</span>
-              </label>
-              <input
-                type="text"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                placeholder="z.B. Brauche Hilfe mit der Kaffeemaschine"
-                maxLength={200}
-                required
-                aria-required="true"
-                aria-invalid={!!error}
-                aria-describedby={error ? 'help-request-error' : undefined}
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              />
-            </div>
-
-            {/* Description */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                Details
-              </label>
-              <textarea
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                placeholder="Beschreibe das Problem genauer (optional)"
-                maxLength={2000}
-                rows={3}
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
-              />
-            </div>
-
-            {/* Target type */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                An wen richtet sich die Anfrage?
-              </label>
-              <div className="flex gap-3">
-                <button
-                  type="button"
-                  onClick={() => setIsBroadcast(true)}
-                  className={`flex-1 p-3 rounded-lg border-2 flex items-center justify-center gap-2 transition-colors ${
-                    isBroadcast
-                      ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300'
-                      : 'border-gray-200 dark:border-gray-600 hover:border-gray-300'
-                  }`}
-                >
-                  <Users className="w-5 h-5" />
-                  <span className="font-medium">An alle</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setIsBroadcast(false)}
-                  className={`flex-1 p-3 rounded-lg border-2 flex items-center justify-center gap-2 transition-colors ${
-                    !isBroadcast
-                      ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300'
-                      : 'border-gray-200 dark:border-gray-600 hover:border-gray-300'
-                  }`}
-                >
-                  <User className="w-5 h-5" />
-                  <span className="font-medium">Bestimmte Person</span>
-                </button>
-              </div>
-            </div>
-
-            {/* Target user (if not broadcast) */}
-            {!isBroadcast && (
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  Person auswählen
-                </label>
-                <select
-                  value={targetUserId}
-                  onChange={(e) => setTargetUserId(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                >
-                  <option value="">Wähle eine Person...</option>
-                  {teamMembers.map((member) => (
-                    <option key={member.user_id} value={member.user_id}>
-                      {member.user_name || member.user_email}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            )}
-
-            {/* Urgency */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                Dringlichkeit
-              </label>
-              <select
-                value={urgency}
-                onChange={(e) => setUrgency(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              >
-                {HELP_REQUEST_URGENCY_OPTIONS.map((urg) => (
-                  <option key={urg} value={urg}>
-                    {HELP_REQUEST_URGENCY_LABELS[urg as HelpRequestUrgency]}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            {/* Category */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                Kategorie
-              </label>
-              <select
-                value={category}
-                onChange={(e) => setCategory(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              >
-                <option value="">Keine Kategorie</option>
-                {ACTIVITY_CATEGORY_OPTIONS.map((cat) => (
-                  <option key={cat} value={cat}>
-                    {ACTIVITY_CATEGORY_LABELS[cat as ActivityCategory]}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            {/* Actions */}
-            <div className="flex justify-end gap-3 pt-4 border-t border-gray-200 dark:border-gray-700">
-              <button
-                type="button"
-                onClick={onClose}
-                className="px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg"
-              >
-                Abbrechen
-              </button>
-              <button
-                type="submit"
-                disabled={saving || !title.trim() || (!isBroadcast && !targetUserId)}
-                className="px-4 py-2 text-sm text-white bg-blue-600 hover:bg-blue-700 rounded-lg disabled:opacity-50 flex items-center gap-2"
-              >
-                {saving && <Loader2 className="w-4 h-4 animate-spin" />}
-                Anfrage senden
-              </button>
-            </div>
-          </form>
         </div>
-      </div>
-    </div>
+
+        {/* Target user (if not broadcast) */}
+        {!isBroadcast && (
+          <div>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              Person auswählen
+            </label>
+            <select
+              value={targetUserId}
+              onChange={(e) => setTargetUserId(e.target.value)}
+              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            >
+              <option value="">Wähle eine Person...</option>
+              {teamMembers.map((member) => (
+                <option key={member.user_id} value={member.user_id}>
+                  {member.user_name || member.user_email}
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
+
+        {/* Urgency */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+            Dringlichkeit
+          </label>
+          <select
+            value={urgency}
+            onChange={(e) => setUrgency(e.target.value)}
+            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          >
+            {HELP_REQUEST_URGENCY_OPTIONS.map((urg) => (
+              <option key={urg} value={urg}>
+                {HELP_REQUEST_URGENCY_LABELS[urg as HelpRequestUrgency]}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        {/* Category */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+            Kategorie
+          </label>
+          <select
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          >
+            <option value="">Keine Kategorie</option>
+            {ACTIVITY_CATEGORY_OPTIONS.map((cat) => (
+              <option key={cat} value={cat}>
+                {ACTIVITY_CATEGORY_LABELS[cat as ActivityCategory]}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        {/* Actions */}
+        <div className="flex justify-end gap-3 pt-4 border-t border-gray-200 dark:border-gray-700">
+          <button
+            type="button"
+            onClick={onClose}
+            className="px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg"
+          >
+            Abbrechen
+          </button>
+          <button
+            type="submit"
+            disabled={saving || !title.trim() || (!isBroadcast && !targetUserId)}
+            className="px-4 py-2 text-sm text-white bg-blue-600 hover:bg-blue-700 rounded-lg disabled:opacity-50 flex items-center gap-2"
+          >
+            {saving && <Loader2 className="w-4 h-4 animate-spin" />}
+            Anfrage senden
+          </button>
+        </div>
+      </form>
+    </Modal>
   )
 }

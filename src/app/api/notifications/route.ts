@@ -6,33 +6,15 @@
  */
 
 import { NextRequest } from 'next/server'
-import { auth } from '@/auth'
+import { withAuth, ValidSession } from '@/lib/api/middleware'
 import { db } from '@/db'
-import { users, notifications } from '@/db/schema'
+import { notifications } from '@/db/schema'
 import { eq, and, asc, desc, sql } from 'drizzle-orm'
 import { logger } from '@/lib/logger'
 import { apiSuccess, apiError } from '@/lib/api/helpers'
 
-async function getDbUserId(email: string): Promise<string | null> {
-  const [user] = await db
-    .select({ id: users.id })
-    .from(users)
-    .where(eq(users.email, email))
-  return user?.id ?? null
-}
-
-export async function GET(_request: NextRequest) {
+export const GET = withAuth(async (_request: NextRequest, session: ValidSession) => {
   try {
-    const session = await auth()
-    if (!session?.user?.email) {
-      return apiError('Unauthorized', 'Nicht angemeldet', 401)
-    }
-
-    const userId = await getDbUserId(session.user.email)
-    if (!userId) {
-      return apiError('Not found', 'Benutzer nicht gefunden', 404)
-    }
-
     const rows = await db
       .select({
         id: notifications.id,
@@ -46,7 +28,7 @@ export async function GET(_request: NextRequest) {
         created_at: notifications.createdAt,
       })
       .from(notifications)
-      .where(eq(notifications.userId, userId))
+      .where(eq(notifications.userId, session.user.id))
       .orderBy(asc(notifications.isRead), desc(notifications.createdAt))
       .limit(30)
 
@@ -60,28 +42,18 @@ export async function GET(_request: NextRequest) {
     logger.error('Failed to fetch notifications', { error })
     return apiError(error, 'Benachrichtigungen konnten nicht geladen werden')
   }
-}
+})
 
-export async function PATCH(_request: NextRequest) {
+export const PATCH = withAuth(async (_request: NextRequest, session: ValidSession) => {
   try {
-    const session = await auth()
-    if (!session?.user?.email) {
-      return apiError('Unauthorized', 'Nicht angemeldet', 401)
-    }
-
-    const userId = await getDbUserId(session.user.email)
-    if (!userId) {
-      return apiError('Not found', 'Benutzer nicht gefunden', 404)
-    }
-
     await db
       .update(notifications)
       .set({ isRead: true, readAt: sql`NOW()` })
-      .where(and(eq(notifications.userId, userId), eq(notifications.isRead, false)))
+      .where(and(eq(notifications.userId, session.user.id), eq(notifications.isRead, false)))
 
     return apiSuccess({ message: 'Alle Benachrichtigungen als gelesen markiert' })
   } catch (error) {
     logger.error('Failed to mark notifications as read', { error })
     return apiError(error, 'Benachrichtigungen konnten nicht aktualisiert werden')
   }
-}
+})

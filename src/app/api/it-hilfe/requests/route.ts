@@ -1,5 +1,6 @@
 import { NextRequest } from 'next/server'
 import { auth } from '@/auth'
+import { withAuth, ValidSession } from '@/lib/api/middleware'
 import { db } from '@/db'
 import { sql, getTableName, SQL } from 'drizzle-orm'
 import { itHilfeRequests } from '@/db/schema/itHilfe'
@@ -147,13 +148,8 @@ export async function GET(request: NextRequest) {
  * POST /api/it-hilfe/requests
  * Create a new IT-Hilfe request (requires auth)
  */
-export async function POST(request: NextRequest) {
+export const POST = withAuth(async (request: NextRequest, session: ValidSession) => {
   try {
-    const session = await auth()
-    if (!session?.user?.id) {
-      return apiUnauthorized(ERROR_MESSAGES.UNAUTHORIZED)
-    }
-
     // SECURITY: Rate limiting - 5 requests per hour per user
     if (!rateLimiters.itHilfeCreate(`${session.user.id}:it-hilfe-create`)) {
       return apiBadRequest('Zu viele Anfragen. Bitte warte 1 Stunde.')
@@ -253,4 +249,4 @@ export async function POST(request: NextRequest) {
     logger.error('Error creating IT-Hilfe request', { error })
     return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)
   }
-}
+})

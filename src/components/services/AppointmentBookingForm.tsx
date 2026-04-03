@@ -5,6 +5,7 @@ import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { Calendar, Clock, AlertCircle, CheckCircle, Loader2, Wrench } from 'lucide-react'
 import Link from 'next/link'
+import { apiFetch } from '@/lib/api/client'
 
 interface AppointmentBookingFormProps {
   serviceSlug: string
@@ -39,27 +40,22 @@ export default function AppointmentBookingForm({ serviceSlug, serviceTitle, pric
     setSubmitResult(null)
 
     try {
-      const response = await fetch('/api/appointments', {
+      const { data: result, error: apiError } = await apiFetch<{ message?: string }>('/api/appointments', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
+        body: {
           serviceSlug,
           description: formData.description,
           urgency: formData.urgency,
           preferredDate: formData.preferredDate && formData.preferredTime
             ? `${formData.preferredDate}T${formData.preferredTime}`
             : null
-        })
+        },
       })
 
-      const result = await response.json()
-
-      if (result.success) {
+      if (!apiError) {
         setSubmitResult({
           success: true,
-          message: result.message || 'Termin erfolgreich gebucht!'
+          message: result?.message || 'Termin erfolgreich gebucht!'
         })
         // Reset form
         setFormData({
@@ -78,7 +74,7 @@ export default function AppointmentBookingForm({ serviceSlug, serviceTitle, pric
       } else {
         setSubmitResult({
           success: false,
-          message: result.error || 'Fehler beim Buchen des Termins'
+          message: apiError,
         })
       }
     } catch (error) {

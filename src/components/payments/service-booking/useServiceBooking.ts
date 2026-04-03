@@ -3,8 +3,10 @@
  */
 
 import { useState, useMemo } from 'react'
+import { apiFetch } from '@/lib/api/client'
 import type { PaymentResult } from '@/types/common'
 import type {
+  ApiPricingResponse,
   BookingStep,
   BookingData,
   PaymentData,
@@ -88,23 +90,27 @@ export function useServiceBooking({
     setError('')
 
     try {
-      const response = await fetch('/api/appointments/book-with-payment', {
+      const { data: result, error: apiError } = await apiFetch<{
+        clientSecret: string
+        amount: number
+        appointmentId: string
+        invoiceId: string
+        invoiceNumber: string
+        pricing: ApiPricingResponse
+      }>('/api/appointments/book-with-payment', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
+        body: {
           serviceSlug: service.slug,
           ...bookingData,
           currency: selectedCurrency,
           amount: currentPricing.total,
           includeVAT: true,
           businessType: 'service',
-        }),
+        },
       })
 
-      const result = await response.json()
-
-      if (!response.ok) {
-        throw new Error(result.message || 'Booking failed')
+      if (apiError || !result) {
+        throw new Error(apiError || 'Booking failed')
       }
 
       setPaymentData({

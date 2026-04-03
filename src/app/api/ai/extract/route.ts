@@ -7,10 +7,10 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server'
-import { auth } from '@/auth'
+import { withAuth, ValidSession } from '@/lib/api/middleware'
 import { z } from 'zod'
 import { logger } from '@/lib/logger'
-import { apiUnauthorized, apiBadRequest, apiForbidden, apiError } from '@/lib/api/helpers'
+import { apiBadRequest, apiForbidden, apiError } from '@/lib/api/helpers'
 import { registryExtract, type ExtractMode } from '@/lib/ai/extract'
 import { FORM_AI_REGISTRY } from '@/lib/ai/config/prompts'
 import { isStaffEmail } from '@/lib/permissions'
@@ -28,13 +28,8 @@ const extractRequestSchema = z.object({
   quickAction: z.string().max(100).optional(),
 })
 
-export async function POST(request: NextRequest) {
+export const POST = withAuth(async (request: NextRequest, session: ValidSession) => {
   try {
-    const session = await auth()
-    if (!session?.user) {
-      return apiUnauthorized('Nicht autorisiert')
-    }
-
     let body: unknown
     try {
       body = await request.json()
@@ -84,4 +79,4 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     return apiError(error, 'Fehler bei der KI-Extraktion')
   }
-}
+})

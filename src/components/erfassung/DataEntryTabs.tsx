@@ -208,21 +208,20 @@ export function DataEntryTabs({
       const formData = new FormData()
       formData.append('file', file)
 
-      const response = await fetch('/api/admin/erfassung/bulk-upload', {
+      const { data: result, error: apiError } = await apiFetch<{ products: BulkProduct[]; unmappedColumns?: string[] }>('/api/admin/erfassung/bulk-upload', {
         method: 'POST',
         body: formData,
+        formData: true,
       })
 
-      const result = await response.json()
-
-      if (!response.ok || !result.success) {
-        throw new Error(result.error || 'Datei konnte nicht verarbeitet werden')
+      if (apiError || !result) {
+        throw new Error(apiError || 'Datei konnte nicht verarbeitet werden')
       }
 
-      onBulkData(result.data.products)
-      setUnmappedColumns(result.data.unmappedColumns || [])
+      onBulkData(result.products)
+      setUnmappedColumns(result.unmappedColumns || [])
       setIsCollapsed(true)
-      logger.info('File upload successful', { count: result.data.products.length, unmappedColumns: result.data.unmappedColumns })
+      logger.info('File upload successful', { count: result.products.length, unmappedColumns: result.unmappedColumns })
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Unbekannter Fehler'
       onError?.(message)

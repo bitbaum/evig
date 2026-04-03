@@ -1,27 +1,24 @@
 import { NextRequest } from 'next/server'
-import { auth } from '@/auth'
+import { withAuth, ValidSession } from '@/lib/api/middleware'
 import { db } from '@/db'
 import { reviews, reviewResponses } from '@/db/schema/reviews'
 import { repairerProfiles } from '@/db/schema/services'
 import { eq, and, sql } from 'drizzle-orm'
-import { apiError, apiSuccess, apiUnauthorized, apiBadRequest, apiNotFound, apiForbidden } from '@/lib/api/helpers'
+import { apiError, apiSuccess, apiBadRequest, apiNotFound, apiForbidden } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { REVIEW_TARGET_TYPES } from '@/config/database'
 import { REVIEW_STATUS } from '@/config/review-status'
 import { logger } from '@/lib/logger'
 import { validateBody, ReviewResponseSchema } from '@/lib/schemas'
 
-export async function POST(
+export const POST = withAuth<{ id: string }>(async (
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
-  const { id: reviewId } = await params
+  session: ValidSession,
+  context,
+) => {
+  const { id: reviewId } = context!.params!
 
   try {
-    const session = await auth()
-    if (!session?.user?.id) {
-      return apiUnauthorized(ERROR_MESSAGES.UNAUTHORIZED)
-    }
     const body = await request.json()
     const validation = validateBody(ReviewResponseSchema, body)
     if (!validation.success) return validation.error
@@ -99,19 +96,16 @@ export async function POST(
     logger.error('Error creating review response', { error, reviewId })
     return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)
   }
-}
+})
 
-export async function PUT(
+export const PUT = withAuth<{ id: string }>(async (
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
-  const { id: reviewId } = await params
+  session: ValidSession,
+  context,
+) => {
+  const { id: reviewId } = context!.params!
 
   try {
-    const session = await auth()
-    if (!session?.user?.id) {
-      return apiUnauthorized(ERROR_MESSAGES.UNAUTHORIZED)
-    }
     const body = await request.json()
     const validation = validateBody(ReviewResponseSchema, body)
     if (!validation.success) return validation.error
@@ -173,20 +167,16 @@ export async function PUT(
     logger.error('Error updating review response', { error, reviewId })
     return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)
   }
-}
+})
 
-export async function DELETE(
+export const DELETE = withAuth<{ id: string }>(async (
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
-  const { id: reviewId } = await params
+  session: ValidSession,
+  context,
+) => {
+  const { id: reviewId } = context!.params!
 
   try {
-    const session = await auth()
-    if (!session?.user?.id) {
-      return apiUnauthorized(ERROR_MESSAGES.UNAUTHORIZED)
-    }
-
     // Get response and check ownership
     const responseRows = await db
       .select({
@@ -238,4 +228,4 @@ export async function DELETE(
     logger.error('Error deleting review response', { error, reviewId })
     return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)
   }
-}
+})

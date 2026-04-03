@@ -18,6 +18,8 @@ interface ApiFetchOptions {
   method?: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE'
   body?: unknown
   headers?: Record<string, string>
+  /** Pass true when body is FormData (skips JSON.stringify and Content-Type header) */
+  formData?: boolean
 }
 
 /**
@@ -28,15 +30,15 @@ export async function apiFetch<T = unknown>(
   url: string,
   options: ApiFetchOptions = {}
 ): Promise<ApiResponse<T>> {
-  const { method = 'GET', body, headers = {} } = options
+  const { method = 'GET', body, headers = {}, formData = false } = options
 
   const fetchOptions: RequestInit = {
     method,
     headers: {
-      ...(body !== undefined ? { 'Content-Type': 'application/json' } : {}),
+      ...(body !== undefined && !formData ? { 'Content-Type': 'application/json' } : {}),
       ...headers,
     },
-    ...(body !== undefined ? { body: JSON.stringify(body) } : {}),
+    ...(body !== undefined ? { body: formData ? (body as BodyInit) : JSON.stringify(body) } : {}),
   }
 
   try {

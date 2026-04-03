@@ -1,23 +1,18 @@
 import { NextRequest } from 'next/server'
-import { auth } from '@/auth'
+import { withAuth, ValidSession } from '@/lib/api/middleware'
 import { db } from '@/db'
 import { reviews, reviewResponses } from '@/db/schema/reviews'
 import { users } from '@/db/schema/auth'
 import { repairerProfiles } from '@/db/schema/services'
 import { workshops } from '@/db/schema/workshops'
 import { eq, and, sql, count, desc } from 'drizzle-orm'
-import { apiError, apiSuccess, apiUnauthorized, parsePagination } from '@/lib/api/helpers'
+import { apiError, apiSuccess, parsePagination } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { REVIEW_STATUS } from '@/config/review-status'
 import { logger } from '@/lib/logger'
 
-export async function GET(request: NextRequest) {
+export const GET = withAuth(async (request: NextRequest, session: ValidSession) => {
   try {
-    const session = await auth()
-    if (!session?.user?.id) {
-      return apiUnauthorized(ERROR_MESSAGES.UNAUTHORIZED)
-    }
-
     const { searchParams } = new URL(request.url)
     const status = searchParams.get('status') || 'all'
     const { limit, offset } = parsePagination(request)
@@ -153,4 +148,4 @@ export async function GET(request: NextRequest) {
     logger.error('Error fetching user reviews', { error })
     return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)
   }
-}
+})

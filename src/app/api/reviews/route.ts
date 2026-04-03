@@ -1,5 +1,6 @@
 import { NextRequest } from 'next/server'
 import { auth } from '@/auth'
+import { withAuth, ValidSession } from '@/lib/api/middleware'
 import { db } from '@/db'
 import { reviews, reviewResponses, reviewVotes, reviewAttachments } from '@/db/schema/reviews'
 import { users } from '@/db/schema/auth'
@@ -217,11 +218,8 @@ export async function GET(request: NextRequest) {
   }
 }
 
-export async function POST(request: NextRequest) {
+export const POST = withAuth(async (request: NextRequest, session: ValidSession) => {
   try {
-    const session = await auth()
-    if (!session?.user?.id) return apiUnauthorized(ERROR_MESSAGES.UNAUTHORIZED)
-
     if (!rateLimiters.reviewCreate(session.user.id + ':review')) {
       return apiError(new Error('Rate limit'), 'Zu viele Bewertungen. Bitte versuchen Sie es später erneut.', 429)
     }
@@ -309,4 +307,4 @@ export async function POST(request: NextRequest) {
     logger.error('Error creating review', { error })
     return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)
   }
-}
+})

@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { MessageSquare } from 'lucide-react'
 import { MessageSidebar } from './MessageSidebar'
-import { logger } from '@/lib/logger'
+import { apiFetch } from '@/lib/api/client'
 
 interface Conversation {
   id: string
@@ -18,17 +18,18 @@ export function MessageButton() {
     // Poll for unread messages every 30 seconds
     const fetchUnreadCount = async () => {
       try {
-        const response = await fetch('/api/messages/conversations?limit=1')
-        const data = await response.json()
-        if (data.success && data.data?.conversations) {
-          const totalUnread = data.data.conversations.reduce(
+        const { data } = await apiFetch<{ conversations: Conversation[] }>(
+          '/api/messages/conversations?limit=1'
+        )
+        if (data?.conversations) {
+          const totalUnread = data.conversations.reduce(
             (sum: number, conv: Conversation) => sum + (conv.unread_count || 0),
             0
           )
           setUnreadCount(totalUnread)
         }
-      } catch (error) {
-        logger.error('Error fetching unread count', { error })
+      } catch {
+        // Silently ignore polling errors
       }
     }
 

@@ -5,33 +5,20 @@
  */
 
 import { NextRequest } from 'next/server'
-import { auth } from '@/auth'
+import { withAuth, ValidSession } from '@/lib/api/middleware'
 import { db } from '@/db'
-import { notifications, users } from '@/db/schema'
+import { notifications } from '@/db/schema'
 import { eq, and, sql } from 'drizzle-orm'
 import { logger } from '@/lib/logger'
 import { apiSuccess, apiError } from '@/lib/api/helpers'
 
-export async function PATCH(
+export const PATCH = withAuth<{ id: string }>(async (
   _request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+  session: ValidSession,
+  context,
+) => {
   try {
-    const session = await auth()
-    if (!session?.user?.email) {
-      return apiError('Unauthorized', 'Nicht angemeldet', 401)
-    }
-
-    const { id } = await params
-
-    const [user] = await db
-      .select({ id: users.id })
-      .from(users)
-      .where(eq(users.email, session.user.email))
-
-    if (!user) {
-      return apiError('Not found', 'Benutzer nicht gefunden', 404)
-    }
+    const { id } = context!.params!
 
     // Update only if owned by this user (prevents reading other users' notifications)
     const [updated] = await db
@@ -42,7 +29,7 @@ export async function PATCH(
       })
       .where(and(
         eq(notifications.id, id),
-        eq(notifications.userId, user.id),
+        eq(notifications.userId, session.user.id),
         eq(notifications.isRead, false),
       ))
       .returning({ id: notifications.id })
@@ -56,4 +43,4 @@ export async function PATCH(
     logger.error('Failed to mark notification as read', { error })
     return apiError(error, 'Benachrichtigung konnte nicht aktualisiert werden')
   }
-}
+})

@@ -1,22 +1,17 @@
 import { NextRequest } from 'next/server'
-import { auth } from '@/auth'
+import { withAuth, ValidSession } from '@/lib/api/middleware'
 import { db } from '@/db'
 import { donations } from '@/db/schema'
 import { eq, desc } from 'drizzle-orm'
-import { apiError, apiSuccess, apiUnauthorized } from '@/lib/api/helpers'
+import { apiError, apiSuccess } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 
 /**
  * GET /api/user/donations
  * Fetch current user's donation history
  */
-export async function GET(request: NextRequest) {
+export const GET = withAuth(async (request: NextRequest, session: ValidSession) => {
   try {
-    const session = await auth()
-    if (!session?.user?.id) {
-      return apiUnauthorized(ERROR_MESSAGES.UNAUTHORIZED)
-    }
-
     const rows = await db
       .select({
         id: donations.id,
@@ -44,4 +39,4 @@ export async function GET(request: NextRequest) {
   } catch (error) {
     return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)
   }
-}
+})

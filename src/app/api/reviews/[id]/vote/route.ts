@@ -1,25 +1,22 @@
 import { NextRequest } from 'next/server'
-import { auth } from '@/auth'
+import { withAuth, ValidSession } from '@/lib/api/middleware'
 import { db } from '@/db'
 import { reviews, reviewVotes } from '@/db/schema/reviews'
 import { eq, and, sql } from 'drizzle-orm'
-import { apiError, apiSuccess, apiUnauthorized, apiBadRequest, apiNotFound } from '@/lib/api/helpers'
+import { apiError, apiSuccess, apiBadRequest, apiNotFound } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { REVIEW_STATUS } from '@/config/review-status'
 import { logger } from '@/lib/logger'
 import { validateBody, ReviewVoteSchema } from '@/lib/schemas'
 
-export async function POST(
+export const POST = withAuth<{ id: string }>(async (
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
-  try {
-    const session = await auth()
-    if (!session?.user?.id) {
-      return apiUnauthorized(ERROR_MESSAGES.UNAUTHORIZED)
-    }
+  session: ValidSession,
+  context,
+) => {
+  const { id: reviewId } = context!.params!
 
-    const { id: reviewId } = await params
+  try {
     const body = await request.json()
     const validation = validateBody(ReviewVoteSchema, body)
     if (!validation.success) return validation.error
@@ -149,8 +146,7 @@ export async function POST(
     }
 
   } catch (error) {
-    const { id } = await params
-    logger.error('Error voting on review', { error, reviewId: id })
+    logger.error('Error voting on review', { error })
     return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)
   }
-}
+})

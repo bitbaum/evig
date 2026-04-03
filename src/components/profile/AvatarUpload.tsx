@@ -3,6 +3,7 @@
 import { useState, useRef, ChangeEvent } from 'react'
 import Image from 'next/image'
 import { logger } from '@/lib/logger'
+import { apiFetch } from '@/lib/api/client'
 import { PROFILE_CONFIG } from '@/config/profile'
 
 interface AvatarUploadProps {
@@ -78,19 +79,18 @@ export function AvatarUpload({
       const formData = new FormData()
       formData.append('file', file)
 
-      const response = await fetch('/api/uploads', {
+      const { data, error: apiError } = await apiFetch<{ images?: { thumbnail: string }[]; urls?: string[] }>('/api/uploads', {
         method: 'POST',
         body: formData,
+        formData: true,
       })
 
-      const data = await response.json()
-
-      if (!response.ok || !data.success) {
-        throw new Error(data.error || config.errorMessages.uploadFailed)
+      if (apiError) {
+        throw new Error(apiError)
       }
 
       // Use thumbnail URL (200x200) for avatars
-      const avatarUrl = data.data.images[0]?.thumbnail || data.data.urls[0]
+      const avatarUrl = data?.images?.[0]?.thumbnail || data?.urls?.[0] || ''
 
       logger.info('Avatar upload successful', {
         url: avatarUrl,

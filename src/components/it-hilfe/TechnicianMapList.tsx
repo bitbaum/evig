@@ -9,6 +9,7 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import { apiFetch } from '@/lib/api/client'
 import {
   Sparkles,
   TrendingUp,
@@ -61,19 +62,15 @@ export function TechnicianMapList({ requestId, requestTitle }: TechnicianMapList
     async function fetchMatches() {
       try {
         setLoading(true)
-        const response = await fetch(`/api/it-hilfe/requests/${requestId}/matches`)
+        const { data, error: apiError } = await apiFetch<{ matches: MatchedHelper[] }>(
+          `/api/it-hilfe/requests/${requestId}/matches`
+        )
 
-        if (!response.ok) {
-          throw new Error('Fehler beim Laden der passenden Techniker')
+        if (apiError) {
+          throw new Error(apiError)
         }
 
-        const data = await response.json()
-
-        if (data.success && data.data) {
-          setMatches(data.data.matches || [])
-        } else {
-          throw new Error(data.error || 'Unbekannter Fehler')
-        }
+        setMatches(data?.matches || [])
       } catch (err) {
         logger.error('Error fetching matched helpers', { error: err, requestId })
         setError(err instanceof Error ? err.message : 'Fehler beim Laden')
