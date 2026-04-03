@@ -6,6 +6,7 @@
  */
 
 import { logger } from '@/lib/logger'
+import { APP_URL } from '@/config/urls'
 import type {
   AIProvider,
   ChatCompletionOptions,
@@ -44,7 +45,7 @@ export class OpenRouterProvider implements AIProvider {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${this.apiKey}`,
-          'HTTP-Referer': process.env.NEXT_PUBLIC_APP_URL || 'https://revamp-it.ch',
+          'HTTP-Referer': APP_URL,
           'X-Title': 'RevampIT Hirn',
         },
         body: JSON.stringify({

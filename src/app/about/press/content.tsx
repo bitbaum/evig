@@ -9,6 +9,7 @@
 
 import { ExternalLink, Quote, Newspaper, Award, Star, ArrowLeft } from 'lucide-react'
 import Link from 'next/link'
+import { CONTACT } from '@/config/org'
 import { ResponsiveHero } from '@/components/layout/ResponsiveHero'
 import AboutSubNav from '@/components/about/AboutSubNav'
 import {
@@ -228,10 +229,10 @@ export default function PressPageContent() {
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <a
-              href="mailto:presse@revamp-it.ch"
+              href={`mailto:${CONTACT.email}`}
               className="inline-block bg-white text-green-600 px-8 py-4 rounded-lg font-semibold hover:bg-gray-100 transition-colors"
             >
-              presse@revamp-it.ch
+              {CONTACT.email}
             </a>
             <Link
               href="/contact"

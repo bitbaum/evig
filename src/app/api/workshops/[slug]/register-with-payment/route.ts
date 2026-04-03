@@ -6,6 +6,7 @@ import { workshops, workshopInstances, workshopRegistrations } from '@/db/schema
 import { apiError, apiSuccess, apiUnauthorized, apiNotFound, apiBadRequest } from '@/lib/api/helpers'
 import { logger } from '@/lib/logger'
 import { WORKSHOP_REGISTRATION_STATUS } from '@/config/workshop-registration-status'
+import { PAYMENT_STATUS } from '@/config/payment-status'
 import {
   processPayment,
   buildInvoiceLineItem,
@@ -129,7 +130,7 @@ export async function POST(request: NextRequest) {
         userId: session.user.id,
         workshopInstanceId: registrationTarget,
         status: WORKSHOP_REGISTRATION_STATUS.PENDING,
-        paymentStatus: 'pending',
+        paymentStatus: PAYMENT_STATUS.PENDING,
         paymentAmountCents: baseAmount,
       }).returning({ id: workshopRegistrations.id })
 

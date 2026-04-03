@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { ArrowRight, Calendar, Cpu, Wifi, Zap, Layers, Smartphone, Clock, AlertTriangle, Heart } from 'lucide-react'
 import { PageHero } from '@/components/layout/PageHero'
+import { ORG } from '@/config/org'
 
 export const metadata: Metadata = {
   title: 'IoT-Lösungen - Zukunftsvision | RevampIT',
@@ -28,7 +29,7 @@ export default function IoTSolutionsPage() {
             'provider': {
               '@type': 'Organization',
               'name': 'Revamp-IT',
-              'url': 'https://revamp-it.ch'
+              'url': ORG.website
             },
             'serviceType': 'IoT-Lösungen',
             'areaServed': {

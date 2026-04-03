@@ -1,5 +1,6 @@
 import { pgTable, uuid, text, boolean, timestamp, integer, varchar, date, time, jsonb, index, uniqueIndex } from 'drizzle-orm/pg-core'
 import { users } from './auth'
+import { ORG, LOCATIONS } from '@/config/org'
 
 // =============================================================================
 // WORKSHOPS
@@ -56,7 +57,7 @@ export const workshopInstances = pgTable('workshop_instances', {
   workshopId: uuid('workshop_id').notNull().references(() => workshops.id, { onDelete: 'cascade' }),
   startDate: timestamp('start_date', { withTimezone: true, mode: 'string' }).notNull(),
   endDate: timestamp('end_date', { withTimezone: true, mode: 'string' }),
-  location: text('location').default('Revamp-IT, Birmensdorferstrasse 379, 8055 Zürich'),
+  location: text('location').default(`${ORG.name}, ${LOCATIONS.store.full}`),
   instructor: text('instructor'),
   maxParticipants: integer('max_participants'),
   notes: text('notes'),

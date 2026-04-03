@@ -73,7 +73,7 @@ export const LOCATIONS = {
 
 export const CONTACT = {
   email: 'empfang@revamp-it.ch',
-  supportEmail: process.env.SUPPORT_EMAIL || 'support@revamp-it.ch',
+  supportEmail: process.env.SUPPORT_EMAIL || 'empfang@revamp-it.ch',
   phone: '+41 (0)43 960 32 64',
   /** Phone in tel: URI format */
   phoneTel: 'tel:+41439603264',

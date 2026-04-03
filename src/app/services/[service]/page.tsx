@@ -7,6 +7,7 @@ import ServiceProcessSection from '@/components/services/ServiceProcess'
 import ServiceCTA from '@/components/services/ServiceCTA'
 import { getService, getAllServiceSlugs } from '@/lib/services'
 import { Clock } from 'lucide-react'
+import { ORG } from '@/config/org'
 
 /**
  * Generate static paths for all featured services
@@ -88,8 +89,8 @@ export default async function ServicePage({ params }: { params: Promise<{ servic
               'provider': {
                 '@type': 'Organization',
                 'name': 'Revamp-IT',
-                'url': 'https://revamp-it.ch',
-                'logo': 'https://revamp-it.ch/logo.png',
+                'url': ORG.website,
+                'logo': `${ORG.website}/logo.png`,
                 'address': {
                   '@type': 'PostalAddress',
                   'addressLocality': 'Zurich',

@@ -8,6 +8,7 @@ import {
 } from 'lucide-react'
 import Link from 'next/link'
 import { PageHero } from '@/components/layout/PageHero'
+import { ORG } from '@/config/org'
 import {
   coreValues,
   painPoints,
@@ -45,7 +46,7 @@ export default function EnterpriseAIPage() {
             'provider': {
               '@type': 'Organization',
               'name': 'Revamp-IT',
-              'url': 'https://revamp-it.ch'
+              'url': ORG.website
             },
             'serviceType': 'Nachhaltige KI-Lösungen für Unternehmen',
             'areaServed': {

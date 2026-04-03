@@ -6,6 +6,7 @@
 
 import type { EmailContent } from '../types';
 import { createEmailLayout, createTextFooter, BASE_STYLES, COPYRIGHT_TEXT, AUTO_GENERATED_TEXT } from './base-styles';
+import { CONTACT, ORG } from '@/config/org';
 
 export const verificationCode = (name: string, code: string): EmailContent => ({
   subject: 'Ihr Bestätigungscode - RevampIT',
@@ -181,7 +182,7 @@ export const staffVerificationCode = (name: string, code: string): EmailContent 
             <li>Teilnahme an internen Projekten</li>
           </ul>
           <p><strong>Sicherheitshinweis:</strong> Dieser Code ist 15 Minuten gültig. Teile diesen Code mit niemandem.</p>
-          <p>Bei Fragen wende dich an das bestehende Team oder schreibe an info@revamp-it.ch.</p>
+          <p>Bei Fragen wende dich an das bestehende Team oder schreibe an ${CONTACT.email}.</p>
         </div>
         <div class="footer">
           <p>${AUTO_GENERATED_TEXT}</p>
@@ -206,7 +207,7 @@ Was dich erwartet:
 
 Dieser Code ist 15 Minuten gültig.
 
-Bei Fragen wende dich an das bestehende Team oder schreibe an info@revamp-it.ch.
+Bei Fragen wende dich an das bestehende Team oder schreibe an ${CONTACT.email}.
 ${createTextFooter()}
   `.trim(),
 });
@@ -244,10 +245,10 @@ export const staffWelcome = (name: string): EmailContent => ({
           <ul>
             <li><a href="https://revampit.vercel.app/admin">Admin-Dashboard</a></li>
             <li><a href="https://revampit.vercel.app/admin/team">Team-Übersicht</a></li>
-            <li><a href="https://revamp-it.ch">Öffentliche Website</a></li>
+            <li><a href="${ORG.website}">Öffentliche Website</a></li>
           </ul>
           <p>Wir freuen uns auf die Zusammenarbeit!</p>
-          <p>Bei Fragen erreichst du uns unter info@revamp-it.ch.</p>
+          <p>Bei Fragen erreichst du uns unter ${CONTACT.email}.</p>
         </div>
         <div class="footer">
           <p>${COPYRIGHT_TEXT}</p>
@@ -269,11 +270,11 @@ Deine ersten Schritte:
 Wichtige Links:
 - Admin-Dashboard: https://revampit.vercel.app/admin
 - Team-Übersicht: https://revampit.vercel.app/admin/team
-- Öffentliche Website: https://revamp-it.ch
+- Öffentliche Website: ${ORG.website}
 
 Wir freuen uns auf die Zusammenarbeit!
 
-Bei Fragen erreichst du uns unter info@revamp-it.ch.
+Bei Fragen erreichst du uns unter ${CONTACT.email}.
 ${createTextFooter()}
   `.trim(),
 });

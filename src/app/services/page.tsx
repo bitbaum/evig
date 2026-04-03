@@ -8,6 +8,7 @@ import {
   Calendar,
   Loader2
 } from 'lucide-react'
+import { ORG } from '@/config/org'
 import Link from 'next/link'
 import { useState } from 'react'
 import { useSession } from 'next-auth/react'
@@ -193,8 +194,8 @@ export default function ServicesPage() {
             'provider': {
               '@type': 'Organization',
               'name': 'Revamp-IT',
-              'url': 'https://revamp-it.ch',
-              'logo': 'https://revamp-it.ch/logo.png'
+              'url': ORG.website,
+              'logo': `${ORG.website}/logo.png`
             },
             'serviceType': [
               'Computer Repair',

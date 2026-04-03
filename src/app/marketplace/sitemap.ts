@@ -4,9 +4,10 @@ import { listings } from '@/db/schema'
 import { eq, desc } from 'drizzle-orm'
 import { LISTING_STATUS } from '@/config/marketplace'
 import { logger } from '@/lib/logger'
+import { APP_URL } from '@/config/urls'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://revamp-it.ch'
+  const baseUrl = APP_URL
 
   try {
     const rows = await db

@@ -161,6 +161,24 @@ export const WORKSHOP_LEVELS: WorkshopLevel[] = [
 ];
 
 /**
+ * Workshop instance statuses
+ * CHECK (status IN ('scheduled', 'cancelled', 'completed'))
+ */
+export const WORKSHOP_INSTANCE_STATUS = {
+  SCHEDULED: 'scheduled',
+  CANCELLED: 'cancelled',
+  COMPLETED: 'completed',
+} as const;
+
+export type WorkshopInstanceStatus = typeof WORKSHOP_INSTANCE_STATUS[keyof typeof WORKSHOP_INSTANCE_STATUS];
+
+export const WORKSHOP_INSTANCE_STATUS_LABELS: Record<WorkshopInstanceStatus, string> = {
+  [WORKSHOP_INSTANCE_STATUS.SCHEDULED]: 'Geplant',
+  [WORKSHOP_INSTANCE_STATUS.CANCELLED]: 'Abgesagt',
+  [WORKSHOP_INSTANCE_STATUS.COMPLETED]: 'Abgeschlossen',
+};
+
+/**
  * Workshop proposal statuses
  * Used in workshop_proposals table and admin UI
  */

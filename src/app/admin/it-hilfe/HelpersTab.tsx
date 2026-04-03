@@ -6,6 +6,7 @@ import {
   HelpCircle, UserCheck, ShieldCheck, Ban,
 } from 'lucide-react'
 import { SWISS_CANTONS } from '@/config/swiss-cantons'
+import { HELPER_STATUS, HELPER_STATUS_LABELS } from '@/config/helper-status'
 import type { HelperRow, PaginatedResponse, HelperFilter, Stats } from './types'
 import { StatsCard, SkillTag } from './shared'
 
@@ -37,9 +38,9 @@ export function HelpersTab({
       <div className="flex flex-wrap gap-3">
         <select value={helpFilter.status} onChange={e => { setHelpFilter(f => ({ ...f, status: e.target.value })); setHelpOffset(0) }} className="px-3 py-2 text-sm border rounded-lg dark:bg-gray-800 dark:border-gray-600">
           <option value="all">Alle Helfer</option>
-          <option value="active">Aktiv</option>
-          <option value="verified">Verifiziert</option>
-          <option value="suspended">Gesperrt</option>
+          <option value={HELPER_STATUS.ACTIVE}>{HELPER_STATUS_LABELS[HELPER_STATUS.ACTIVE]}</option>
+          <option value={HELPER_STATUS.VERIFIED}>{HELPER_STATUS_LABELS[HELPER_STATUS.VERIFIED]}</option>
+          <option value={HELPER_STATUS.SUSPENDED}>{HELPER_STATUS_LABELS[HELPER_STATUS.SUSPENDED]}</option>
         </select>
         <select value={helpFilter.canton} onChange={e => { setHelpFilter(f => ({ ...f, canton: e.target.value })); setHelpOffset(0) }} className="px-3 py-2 text-sm border rounded-lg dark:bg-gray-800 dark:border-gray-600">
           <option value="">Alle Kantone</option>

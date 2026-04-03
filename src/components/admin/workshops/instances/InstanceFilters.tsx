@@ -1,6 +1,7 @@
 'use client'
 
 import type { Workshop, InstanceFiltersState } from './types'
+import { WORKSHOP_INSTANCE_STATUS, WORKSHOP_INSTANCE_STATUS_LABELS } from '@/config/workshops'
 
 interface InstanceFiltersProps {
   filters: InstanceFiltersState
@@ -34,9 +35,9 @@ export function InstanceFilters({ filters, setFilters, workshops }: InstanceFilt
             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
           >
             <option value="all">Alle</option>
-            <option value="scheduled">Geplant</option>
-            <option value="cancelled">Abgesagt</option>
-            <option value="completed">Abgeschlossen</option>
+            <option value={WORKSHOP_INSTANCE_STATUS.SCHEDULED}>{WORKSHOP_INSTANCE_STATUS_LABELS[WORKSHOP_INSTANCE_STATUS.SCHEDULED]}</option>
+            <option value={WORKSHOP_INSTANCE_STATUS.CANCELLED}>{WORKSHOP_INSTANCE_STATUS_LABELS[WORKSHOP_INSTANCE_STATUS.CANCELLED]}</option>
+            <option value={WORKSHOP_INSTANCE_STATUS.COMPLETED}>{WORKSHOP_INSTANCE_STATUS_LABELS[WORKSHOP_INSTANCE_STATUS.COMPLETED]}</option>
           </select>
         </div>
 

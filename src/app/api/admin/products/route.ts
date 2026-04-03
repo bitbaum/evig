@@ -99,7 +99,7 @@ export const POST = withAdmin('products', async (request, session) => {
       .values({
         aiProductId: product.id,
         quantityAvailable: data.quantity || 1,
-        marketplaceStatus: 'draft',
+        marketplaceStatus: MARKETPLACE_STATUS.DRAFT,
       })
 
     logger.info("Product created", { productId: product.id, user: session.user?.email })

@@ -10,6 +10,7 @@ import { logger } from '@/lib/logger'
 import { validateBody, AppointmentActionSchema } from '@/lib/schemas'
 import { sendCustomEmail, appointmentStatusUpdate, appointmentQuoteReceived } from '@/lib/email'
 import { BOOKING_STATUS, getBookingStatusLabel } from '@/config/booking-status'
+import { APP_URL } from '@/config/urls'
 
 const customerUser = alias(users, 'customer')
 const repairerUser = alias(users, 'repairer')
@@ -278,7 +279,7 @@ export const PATCH = withAuth<{ id: string }>(async (
         .where(eq(serviceAppointments.id, appointmentId))
 
       if (party) {
-        const baseUrl = process.env.NEXT_PUBLIC_URL || 'https://revamp-it.ch'
+        const baseUrl = APP_URL
         const serviceName = party.service_name || 'Reparatur'
         const statusLabel = getBookingStatusLabel(newStatus)
 

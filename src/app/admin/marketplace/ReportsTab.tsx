@@ -3,7 +3,7 @@
 import { ExternalLink } from 'lucide-react'
 import { formatDateShort } from '@/lib/date-formats'
 import { REPORT_REASONS } from '@/config/marketplace'
-import { REPORT_STATUS } from '@/config/report-status'
+import { REPORT_STATUS, REPORT_STATUS_LABELS } from '@/config/report-status'
 import type { ReportRow, PaginatedResponse } from './types'
 
 function getReportReasonLabel(reason: string): string {
@@ -24,8 +24,8 @@ export function ReportsTab({ reports, filter, setFilter, offset, setOffset, onHa
     <div className="space-y-4">
       <div className="flex gap-3">
         <select value={filter.status} onChange={e => { setFilter({ status: e.target.value }); setOffset(0) }} className="px-3 py-2 text-sm border rounded-lg dark:bg-gray-800 dark:border-gray-600">
-          <option value="pending">Offen</option>
-          <option value="reviewed">Bearbeitet</option>
+          <option value={REPORT_STATUS.PENDING}>{REPORT_STATUS_LABELS[REPORT_STATUS.PENDING]}</option>
+          <option value={REPORT_STATUS.REVIEWED}>{REPORT_STATUS_LABELS[REPORT_STATUS.REVIEWED]}</option>
           <option value="all">Alle</option>
         </select>
       </div>

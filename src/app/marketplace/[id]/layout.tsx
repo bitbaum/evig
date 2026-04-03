@@ -2,6 +2,7 @@ import { Metadata } from 'next'
 import { query } from '@/lib/auth/db'
 import { TABLE_NAMES } from '@/config/database'
 import { LISTING_STATUS } from '@/config/marketplace'
+import { APP_URL } from '@/config/urls'
 
 interface ListingMeta {
   title: string
@@ -79,7 +80,7 @@ export default async function MarketplaceDetailLayout({
 
   if (!listing) return children
 
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://revamp-it.ch'
+  const baseUrl = APP_URL
   const brand = listing.brand && !listing.title.startsWith(listing.brand) ? `${listing.brand} ` : ''
   const isGratis = listing.price_chf !== null && Number(listing.price_chf) === 0
 

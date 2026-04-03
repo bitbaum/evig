@@ -1,3 +1,5 @@
+import { EXTERNAL_LINKS } from '@/config/org'
+
 export type Language = 'en' | 'de'
 
 export interface ChatbotMessages {
@@ -137,12 +139,12 @@ export function getContextualSuggestions(page: string, language: Language) {
     
     '/about': language === 'de' ? [
       { label: '🏷️ REVAMPED-Zertifizierung', href: '/revamped', description: 'Unsere nachhaltige Computer-Zertifizierung' },
-      { label: '📚 Wiki besuchen', href: 'https://revamp-it.ch/index.php/de/wiki-de', description: 'Unser Wissensportal', external: true },
+      { label: '📚 Wiki besuchen', href: EXTERNAL_LINKS.wiki, description: 'Unser Wissensportal', external: true },
       { label: '🔧 Dienstleistungen ansehen', href: '/services', description: 'Was wir für Sie tun können' },
       { label: '💼 Projekte entdecken', href: '/projects', description: 'Unsere aktuellen Initiativen' }
     ] : [
       { label: '🏷️ REVAMPED Certification', href: '/revamped', description: 'Our sustainable computer certification' },
-      { label: '📚 Visit Wiki', href: 'https://revamp-it.ch/index.php/de/wiki-de', description: 'Our knowledge portal', external: true },
+      { label: '📚 Visit Wiki', href: EXTERNAL_LINKS.wiki, description: 'Our knowledge portal', external: true },
       { label: '🔧 View Services', href: '/services', description: 'What we can do for you' },
       { label: '💼 Discover Projects', href: '/projects', description: 'Our current initiatives' }
     ],

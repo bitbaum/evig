@@ -9,6 +9,7 @@ import { logger } from '@/lib/logger'
 import { sendCustomEmail, appointmentNewBooking } from '@/lib/email'
 import { rateLimiters } from '@/lib/security/rate-limit'
 import { BOOKING_STATUS } from '@/config/booking-status'
+import { APP_URL } from '@/config/urls'
 
 // POST /api/repairers/[id]/book - Book an appointment with a specific repairer
 export const POST = withAuth<{ id: string }>(async (
@@ -190,7 +191,7 @@ export const POST = withAuth<{ id: string }>(async (
 
     if (repairerUserRows.length > 0) {
       const repairerUser = repairerUserRows[0]
-      const appointmentUrl = `${process.env.NEXT_PUBLIC_URL || 'https://revamp-it.ch'}/dashboard/repairer/bookings`
+      const appointmentUrl = `${APP_URL}/dashboard/repairer/bookings`
       const emailContent = appointmentNewBooking(
         repairerUser.name || repairer.businessName || 'Reparateur',
         session.user.name || 'Kunde',

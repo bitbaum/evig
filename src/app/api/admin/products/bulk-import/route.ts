@@ -88,7 +88,7 @@ export const POST = withAdmin('products', async (request: NextRequest) => {
           .values({
             aiProductId: productRow.id,
             quantityAvailable: 1,
-            marketplaceStatus: 'draft',
+            marketplaceStatus: MARKETPLACE_STATUS.DRAFT,
           });
 
         createdProducts.push({ id: productRow.id, title: product.title });

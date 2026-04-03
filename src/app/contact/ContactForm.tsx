@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { Mail, MessageSquare, Send, User } from 'lucide-react'
+import { ORG } from '@/config/org'
 
 export default function ContactForm() {
   const [name, setName] = useState('')
@@ -21,7 +22,7 @@ export default function ContactForm() {
         suggestion: subject.trim() ? `${subject.trim()}\n\n${message.trim()}` : message.trim(),
         contact: [name.trim(), email.trim()].filter(Boolean).join(' | '),
         page: '/contact',
-        url: typeof window !== 'undefined' ? window.location.href : 'https://revamp-it.ch/contact',
+        url: typeof window !== 'undefined' ? window.location.href : `${ORG.website}/contact`,
         pageTitle: 'Contact',
         pageSection: 'Contact',
         feedbackScope: 'page',

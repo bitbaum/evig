@@ -6,6 +6,7 @@
 
 import { createEmailLayout, createTextFooter } from './base-styles'
 import type { EmailContent } from '../types'
+import { APP_URL } from '@/config/urls'
 
 export function notificationEmail(title: string, content: string): EmailContent {
   const html = createEmailLayout(
@@ -15,14 +16,14 @@ export function notificationEmail(title: string, content: string): EmailContent 
       <h2>${title}</h2>
       <p>${content}</p>
       <p style="margin-top: 20px;">
-        <a href="${process.env.NEXT_PUBLIC_APP_URL || 'https://revamp-it.ch'}/dashboard" class="button button-blue">
+        <a href="${APP_URL}/dashboard" class="button button-blue">
           Im Dashboard ansehen
         </a>
       </p>
     `
   )
 
-  const text = `${title}\n\n${content}\n\nIm Dashboard ansehen: ${process.env.NEXT_PUBLIC_APP_URL || 'https://revamp-it.ch'}/dashboard\n${createTextFooter()}`
+  const text = `${title}\n\n${content}\n\nIm Dashboard ansehen: ${APP_URL}/dashboard\n${createTextFooter()}`
 
   return {
     subject: title,

@@ -55,7 +55,7 @@ export async function POST(
       [LOCATION_STATUS.SUSPENDED]: { reinstate: LOCATION_STATUS.APPROVED },
     }
 
-    const currentStatus = locationRow.approvalStatus ?? 'pending'
+    const currentStatus = locationRow.approvalStatus ?? LOCATION_STATUS.PENDING
     const transitions = VALID_TRANSITIONS[currentStatus]
     if (!transitions || !(action in transitions)) {
       return apiBadRequest(

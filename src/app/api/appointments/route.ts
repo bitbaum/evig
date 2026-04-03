@@ -11,6 +11,7 @@ import { validateBody, validateQuery, CreateAppointmentSchema, GetAppointmentsQu
 import { sendCustomEmail, appointmentUnassignedAlert } from '@/lib/email'
 import { REVAMPIT_NOTIFICATION_EMAIL } from '@/config/it-hilfe'
 import { BOOKING_STATUS } from '@/config/booking-status'
+import { APP_URL } from '@/config/urls'
 
 const customer = alias(users, 'customer')
 const repairer = alias(users, 'repairer')
@@ -218,7 +219,7 @@ function notifyUnassigned(
   urgency: string | undefined
 ) {
   if (!repairerId && appointmentId) {
-    const baseUrl = process.env.NEXT_PUBLIC_URL || 'https://revamp-it.ch'
+    const baseUrl = APP_URL
     const emailContent = appointmentUnassignedAlert(
       'Admin',
       session.user.name || 'Kunde',

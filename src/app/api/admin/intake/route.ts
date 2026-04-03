@@ -89,7 +89,7 @@ export const POST = withAdmin('intake', async (request, session) => {
         quantityAvailable: 1,
         status: 'available',
         sellingPriceChf: data.verkaufspreis ? String(data.verkaufspreis) : null,
-        marketplaceStatus: 'draft',
+        marketplaceStatus: MARKETPLACE_STATUS.DRAFT,
         intakeTier: data.intake_tier,
         intakeChecklist: checklistState,
         checklistComplete: false,

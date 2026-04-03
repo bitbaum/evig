@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { ArrowRight, Calendar, Cloud, Server, Zap, Shield, Globe, Clock, AlertTriangle, Heart } from 'lucide-react'
 import { PageHero } from '@/components/layout/PageHero'
+import { ORG } from '@/config/org'
 
 export const metadata: Metadata = {
   title: 'Cloud-Infrastruktur - Zukunftsvision | RevampIT',
@@ -28,7 +29,7 @@ export default function CloudInfrastructurePage() {
             'provider': {
               '@type': 'Organization',
               'name': 'Revamp-IT',
-              'url': 'https://revamp-it.ch'
+              'url': ORG.website
             },
             'serviceType': 'Cloud-Infrastruktur',
             'areaServed': {

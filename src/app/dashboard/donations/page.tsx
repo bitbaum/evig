@@ -7,6 +7,7 @@ import Link from 'next/link'
 import { getTextColor, getStatusColors } from '@/lib/design-system'
 import { cn } from '@/lib/utils'
 import { formatDate } from '@/lib/date-formats'
+import { CONTACT } from '@/config/org'
 import {
   getDonationTypeLabel,
   getDeviceCategoryLabel,
@@ -258,7 +259,7 @@ export default function DonationsDashboard() {
           <p className="text-sm text-info-700">
             RevampIT ist ein gemeinnütziger Verein. Für Spenden ab CHF 100 stellen wir Ihnen gerne
             eine Spendenbestätigung für die Steuererklärung aus. Kontaktieren Sie uns unter{' '}
-            <a href="mailto:spenden@revamp-it.ch" className="underline text-info-800 hover:text-info-900">spenden@revamp-it.ch</a>.
+            <a href={`mailto:${CONTACT.email}`} className="underline text-info-800 hover:text-info-900">{CONTACT.email}</a>.
           </p>
         </div>
       </div>
