@@ -6,11 +6,10 @@
  * DELETE /api/admin/blog/submissions/[id] - Delete submission
  */
 
-import { NextRequest } from 'next/server'
 import { withAdmin } from '@/lib/api/middleware'
 import { db } from '@/db'
-import { blogSubmissions, blogCategories, blogPosts, users } from '@/db/schema'
-import { eq, sql, getTableName } from 'drizzle-orm'
+import { blogSubmissions, blogCategories, users } from '@/db/schema'
+import { eq } from 'drizzle-orm'
 import { logger } from '@/lib/logger'
 import {
   apiSuccess,
@@ -18,9 +17,15 @@ import {
   apiNotFound,
   apiBadRequest,
 } from '@/lib/api/helpers'
-import { APPROVAL_STATUS } from '@/config/approval-status'
-import { sendEmail } from '@/lib/email'
-import { createEditSnapshot, appendEditHistory, type EditHistoryEntry } from '@/lib/admin/edit-utils'
+import {
+  approveSubmission,
+  rejectSubmission,
+  publishSubmission,
+  requestChanges,
+  editSubmission,
+  EditNotAllowedError,
+  NoFieldsError,
+} from '@/lib/services/blog-submission'
 
 export const GET = withAdmin<{ id: string }>('content', async (request, session, context) => {
   try {
@@ -110,266 +115,44 @@ export const PATCH = withAdmin<{ id: string }>('content', async (request, sessio
     const submission = existingRows[0]
     const reviewerId = session.user.id
 
-    // Handle different actions
     switch (action) {
-      case 'approve': {
-        // Update submission status
-        await db
-          .update(blogSubmissions)
-          .set({
-            status: APPROVAL_STATUS.APPROVED,
-            reviewedBy: reviewerId,
-            reviewedAt: sql`NOW()`,
-            reviewNotes: review_notes || null,
-          })
-          .where(eq(blogSubmissions.id, id))
-
-        // Send approval email to submitter
-        try {
-          await sendEmail(
-            submission.submitterEmail,
-            'blogSubmissionApproved',
-            submission.submitterName,
-            submission.title
-          )
-        } catch (emailError) {
-          logger.warn('Failed to send approval email', { error: emailError })
-        }
-
-        logger.info('Blog submission approved', {
-          submissionId: id,
-          reviewerId,
-        })
-
-        return apiSuccess({ status: APPROVAL_STATUS.APPROVED, message: 'Einreichung genehmigt' })
-      }
-
-      case 'edit': {
-        // Admin editing before approval
-        const { fields } = body
-
-        if (!fields || typeof fields !== 'object' || Object.keys(fields).length === 0) {
-          return apiBadRequest('Keine Felder zum Bearbeiten angegeben')
-        }
-
-        // Only allow editing pending submissions
-        if (submission.status !== APPROVAL_STATUS.PENDING) {
-          return apiBadRequest(
-            `Einreichung kann nicht bearbeitet werden (Status: ${submission.status})`
-          )
-        }
-
-        // Create edit snapshot
-        const editorName = session.user.name || session.user.email || 'Admin'
-        const editEntry = createEditSnapshot(
-          submission,
-          fields,
-          reviewerId,
-          editorName
-        )
-
-        // Only create entry if there are actual changes
-        if (editEntry.fields_changed.length === 0) {
-          return apiSuccess({
-            submission,
-            message: 'Keine Änderungen erkannt',
-          })
-        }
-
-        const updatedHistory = appendEditHistory(
-          (submission.editHistory as EditHistoryEntry[] | null) || null,
-          editEntry
-        )
-
-        // Build dynamic UPDATE using sql template for proper parameterization
-        // Field names are validated against a whitelist to prevent SQL injection
-        const allowedFields = ['title', 'slug', 'content', 'excerpt', 'category_id', 'category_name', 'tags', 'submission_type']
-        const updateFields = Object.keys(fields).filter(f => allowedFields.includes(f))
-
-        if (updateFields.length === 0) {
-          return apiBadRequest('Keine gültigen Felder zum Bearbeiten')
-        }
-
-        const setFragments = updateFields.map((field) =>
-          sql`${sql.raw(field)} = ${fields[field]}`
-        )
-        const allSets = [
-          ...setFragments,
-          sql`edit_history = ${JSON.stringify(updatedHistory)}`,
-          sql`last_edited_by = ${reviewerId}`,
-          sql`last_edited_at = NOW()`,
-          sql`updated_at = NOW()`,
-        ]
-
-        const updateResult = await db.execute(sql`
-          UPDATE ${sql.raw(getTableName(blogSubmissions))}
-          SET ${sql.join(allSets, sql`, `)}
-          WHERE id = ${id}
-          RETURNING *
-        `)
-
-        logger.info('Blog submission edited by admin', {
-          submissionId: id,
-          editorId: reviewerId,
-          fieldsChanged: editEntry.fields_changed,
-        })
-
-        return apiSuccess({
-          submission: updateResult.rows[0],
-          message: 'Einreichung erfolgreich aktualisiert',
-        })
-      }
+      case 'approve':
+        return apiSuccess(await approveSubmission(submission, reviewerId, review_notes))
 
       case 'reject': {
         if (!rejection_reason) {
           return apiBadRequest('Ablehnungsgrund ist erforderlich')
         }
-
-        await db
-          .update(blogSubmissions)
-          .set({
-            status: APPROVAL_STATUS.REJECTED,
-            reviewedBy: reviewerId,
-            reviewedAt: sql`NOW()`,
-            reviewNotes: review_notes || null,
-            rejectionReason: rejection_reason,
-          })
-          .where(eq(blogSubmissions.id, id))
-
-        // Send rejection email to submitter
-        try {
-          await sendEmail(
-            submission.submitterEmail,
-            'blogSubmissionRejected',
-            submission.submitterName,
-            submission.title,
-            rejection_reason
-          )
-        } catch (emailError) {
-          logger.warn('Failed to send rejection email', { error: emailError })
-        }
-
-        logger.info('Blog submission rejected', {
-          submissionId: id,
-          reviewerId,
-          reason: rejection_reason,
-        })
-
-        return apiSuccess({ status: APPROVAL_STATUS.REJECTED, message: 'Einreichung abgelehnt' })
+        return apiSuccess(await rejectSubmission(submission, reviewerId, rejection_reason, review_notes))
       }
 
-      case 'publish': {
-        // Wrap INSERT + UPDATE in Drizzle transaction
-        const { postId, postSlug } = await db.transaction(async (tx) => {
-          const [post] = await tx
-            .insert(blogPosts)
-            .values({
-              slug: submission.slug!,
-              title: submission.title,
-              content: submission.content,
-              excerpt: submission.content.substring(0, 200) + '...',
-              categoryId: submission.categoryId,
-              tags: submission.tags || [],
-              isPublished: true,
-              publishedAt: sql`NOW()`,
-              createdBy: reviewerId,
-              seoTitle: submission.title,
-              seoDescription: submission.content.substring(0, 160),
-            })
-            .returning({ id: blogPosts.id })
-
-          const createdPostId = post.id
-
-          // Update submission with link to published post
-          await tx
-            .update(blogSubmissions)
-            .set({
-              status: APPROVAL_STATUS.PUBLISHED,
-              reviewedBy: reviewerId,
-              reviewedAt: sql`NOW()`,
-              reviewNotes: review_notes || 'Veröffentlicht',
-              publishedPostId: createdPostId,
-              publishedAt: sql`NOW()`,
-            })
-            .where(eq(blogSubmissions.id, id))
-
-          return { postId: createdPostId, postSlug: submission.slug }
-        })
-
-        // Send published notification email
-        try {
-          await sendEmail(
-            submission.submitterEmail,
-            'blogSubmissionPublished',
-            submission.submitterName,
-            submission.title,
-            `/blog/${submission.slug}`
-          )
-        } catch (emailError) {
-          logger.warn('Failed to send publish notification email', {
-            error: emailError,
-          })
-        }
-
-        logger.info('Blog submission published', {
-          submissionId: id,
-          postId,
-          reviewerId,
-        })
-
-        return apiSuccess({
-          status: APPROVAL_STATUS.PUBLISHED,
-          message: 'Beitrag veröffentlicht',
-          postId,
-          postSlug,
-        })
-      }
+      case 'publish':
+        return apiSuccess(await publishSubmission(submission, reviewerId, review_notes))
 
       case 'request_changes': {
         if (!review_notes) {
           return apiBadRequest('Änderungshinweise sind erforderlich')
         }
+        return apiSuccess(await requestChanges(submission, reviewerId, review_notes))
+      }
 
-        await db
-          .update(blogSubmissions)
-          .set({
-            status: APPROVAL_STATUS.PENDING,
-            reviewedBy: reviewerId,
-            reviewedAt: sql`NOW()`,
-            reviewNotes: review_notes,
-          })
-          .where(eq(blogSubmissions.id, id))
+      case 'edit': {
+        const editorName = session.user.name || session.user.email || 'Admin'
+        const result = await editSubmission(submission, reviewerId, editorName, body.fields)
 
-        // Send change request email
-        try {
-          await sendEmail(
-            submission.submitterEmail,
-            'blogSubmissionChangesRequested',
-            submission.submitterName,
-            submission.title,
-            review_notes
-          )
-        } catch (emailError) {
-          logger.warn('Failed to send changes requested email', {
-            error: emailError,
-          })
+        if ('noChanges' in result) {
+          return apiSuccess({ submission: result.submission, message: 'Keine Änderungen erkannt' })
         }
-
-        logger.info('Blog submission changes requested', {
-          submissionId: id,
-          reviewerId,
-        })
-
-        return apiSuccess({
-          status: APPROVAL_STATUS.PENDING,
-          message: 'Änderungen angefragt',
-        })
+        return apiSuccess(result)
       }
 
       default:
         return apiBadRequest('Ungültige Aktion')
     }
   } catch (error) {
+    if (error instanceof EditNotAllowedError || error instanceof NoFieldsError) {
+      return apiBadRequest(error.message)
+    }
     logger.error('Failed to update blog submission', { error })
     return apiError(error, 'Fehler beim Aktualisieren der Einreichung')
   }
