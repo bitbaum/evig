@@ -28,6 +28,8 @@ export const users = pgTable('users', {
   index('idx_users_is_staff').on(table.isStaff),
   index('idx_users_staff_permissions').using('gin', table.staffPermissions),
   index('idx_users_is_super_admin').on(table.isSuperAdmin),
+  // 055: admin user listing sorted by join date
+  index('idx_users_staff_created').on(table.isStaff, table.createdAt),
 ])
 
 export type User = typeof users.$inferSelect

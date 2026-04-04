@@ -65,6 +65,9 @@ export const listings = pgTable('listings', {
   index('idx_listings_seller').on(table.sellerId, table.status),
   // 041: status filter for active listings
   index('idx_listings_status_created').on(table.status, table.createdAt),
+  // 055: verified listings filter + price range queries
+  index('idx_listings_verified_at').on(table.verifiedAt),
+  index('idx_listings_price_chf').on(table.priceChf),
 ])
 
 export type Listing = typeof listings.$inferSelect

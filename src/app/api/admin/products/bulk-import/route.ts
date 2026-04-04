@@ -67,31 +67,34 @@ export const POST = withAdmin('products', async (request: NextRequest) => {
 
     for (const product of products) {
       try {
-        // Insert into ai_extracted_products
-        const [productRow] = await db
-          .insert(aiExtractedProducts)
-          .values({
-            itemUuid: sql`gen_random_uuid()::text`,
-            productName: product.title,
-            brand: product.brand,
-            shortDescription: product.description,
-            estimatedPriceChf: String(product.price),
-            category: product.category,
-            condition: 'unknown',
-            status: MARKETPLACE_STATUS.DRAFT,
-          })
-          .returning({ id: aiExtractedProducts.id });
+        // Transaction ensures product + inventory are created atomically
+        const productId = await db.transaction(async (tx) => {
+          const [productRow] = await tx
+            .insert(aiExtractedProducts)
+            .values({
+              itemUuid: sql`gen_random_uuid()::text`,
+              productName: product.title,
+              brand: product.brand,
+              shortDescription: product.description,
+              estimatedPriceChf: String(product.price),
+              category: product.category,
+              condition: 'unknown',
+              status: MARKETPLACE_STATUS.DRAFT,
+            })
+            .returning({ id: aiExtractedProducts.id });
 
-        // Insert into inventory_items
-        await db
-          .insert(inventoryItems)
-          .values({
-            aiProductId: productRow.id,
-            quantityAvailable: 1,
-            marketplaceStatus: MARKETPLACE_STATUS.DRAFT,
-          });
+          await tx
+            .insert(inventoryItems)
+            .values({
+              aiProductId: productRow.id,
+              quantityAvailable: 1,
+              marketplaceStatus: MARKETPLACE_STATUS.DRAFT,
+            });
 
-        createdProducts.push({ id: productRow.id, title: product.title });
+          return productRow.id;
+        });
+
+        createdProducts.push({ id: productId, title: product.title });
 
       } catch (error) {
         logger.error(`Error creating product "${product.title}"`, { error, product });

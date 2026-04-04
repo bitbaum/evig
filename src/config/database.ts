@@ -60,7 +60,10 @@ export const TABLE_NAMES = {
   BLOG_CATEGORIES: 'blog_categories',
   STATIC_PAGES: 'static_pages',
 
-  // User Roles & Permissions
+  // Applications
+  APPLICATIONS: 'applications',
+
+  // Legacy Role & Permission tables (raw SQL, no Drizzle schema)
   USER_ROLES: 'user_roles',
   ROLE_PERMISSIONS: 'role_permissions',
   PERMISSIONS: 'permissions',
@@ -152,6 +155,27 @@ export const TABLE_NAMES = {
 
   // Organizational Numbers (shared SSOT)
   ORG_NUMBERS: 'org_numbers',
+
+  // Messaging (extended)
+  MESSAGE_REACTIONS: 'message_reactions',
+  USER_NOTIFICATION_PREFERENCES: 'user_notification_preferences',
+
+  // Order History
+  ORDER_STATUS_HISTORY: 'order_status_history',
+
+  // Payment (extended)
+  PAYMENT_ANALYTICS: 'payment_analytics',
+  PAYMENT_METHODS: 'payment_methods',
+
+  // Subscription Pools
+  SUBSCRIPTION_POOLS: 'subscription_pools',
+  POOL_MEMBERSHIPS: 'pool_memberships',
+  POOL_CONTRIBUTIONS: 'pool_contributions',
+  POOL_VOTES: 'pool_votes',
+
+  // Product Taxonomy
+  PRODUCT_ATTRIBUTES: 'product_attributes',
+  PRODUCT_CATEGORIES: 'product_categories',
 } as const;
 
 /**
