@@ -1,5 +1,8 @@
 /**
- * Decisions & Voting — Vote Submission, Retrieval, Participation
+ * Decisions — Voting & Tally Computation
+ *
+ * Vote validation, submission, retrieval, participation status,
+ * and tally computation for all voting methods.
  */
 
 import { db } from '@/db';
@@ -16,10 +19,15 @@ import {
   scoreVoteSchema,
   simpleMajorityVoteSchema,
   type VoteData,
+  type ConsentVoteInput,
+  type ApprovalVoteInput,
+  type DotVoteInput,
+  type ScoreVoteInput,
+  type SimpleMajorityVoteInput,
   type DecisionOption,
   type QuorumConfig,
 } from '@/lib/schemas/decisions';
-import { type DbDecisionRow, asArray, asObject } from './decisions-core';
+import { type DbDecisionRow, asArray, asObject } from './decisions-crud';
 
 // Table name refs
 const dTable = getTableName(decisions);
@@ -244,4 +252,113 @@ export async function getParticipationStatus(decisionId: string) {
         ? Math.round((voted.length / eligibleUsers.length) * 100)
         : 0,
   };
+}
+
+// ---- Tally Computation ----
+
+export function computeTallies(
+  method: VotingMethod,
+  votes: VoteData[],
+  options: DecisionOption[]
+) {
+  switch (method) {
+    case 'consent': {
+      const counts = { agree: 0, abstain: 0, disagree: 0, block: 0 };
+      const blocks: { rationale?: string }[] = [];
+      for (const vote of votes) {
+        const v = vote as ConsentVoteInput;
+        if (v.response in counts) counts[v.response as keyof typeof counts]++;
+        if (v.response === 'block') blocks.push({ rationale: v.rationale });
+      }
+      return {
+        method: 'consent',
+        counts,
+        blocks,
+        passed: counts.block === 0,
+        totalVotes: votes.length,
+      };
+    }
+    case 'approval': {
+      const optionCounts: Record<string, number> = {};
+      for (const opt of options) optionCounts[opt.id!] = 0;
+      for (const vote of votes) {
+        const v = vote as ApprovalVoteInput;
+        for (const optId of v.approved_options) {
+          optionCounts[optId] = (optionCounts[optId] || 0) + 1;
+        }
+      }
+      const ranked = options
+        .map((o) => ({ ...o, votes: optionCounts[o.id!] || 0 }))
+        .sort((a, b) => b.votes - a.votes);
+      return {
+        method: 'approval',
+        optionCounts,
+        ranked,
+        winner: ranked[0] || null,
+        totalVotes: votes.length,
+      };
+    }
+    case 'dot': {
+      const optionDots: Record<string, number> = {};
+      for (const opt of options) optionDots[opt.id!] = 0;
+      for (const vote of votes) {
+        const v = vote as DotVoteInput;
+        for (const [optId, count] of Object.entries(v.allocations)) {
+          optionDots[optId] = (optionDots[optId] || 0) + count;
+        }
+      }
+      const ranked = options
+        .map((o) => ({ ...o, dots: optionDots[o.id!] || 0 }))
+        .sort((a, b) => b.dots - a.dots);
+      return {
+        method: 'dot',
+        optionDots,
+        ranked,
+        winner: ranked[0] || null,
+        totalVotes: votes.length,
+      };
+    }
+    case 'score': {
+      const optionScores: Record<string, number[]> = {};
+      for (const opt of options) optionScores[opt.id!] = [];
+      for (const vote of votes) {
+        const v = vote as ScoreVoteInput;
+        for (const [optId, score] of Object.entries(v.scores)) {
+          if (!optionScores[optId]) optionScores[optId] = [];
+          optionScores[optId].push(score);
+        }
+      }
+      const ranked = options
+        .map((o) => {
+          const scores = optionScores[o.id!] || [];
+          const avg =
+            scores.length > 0
+              ? scores.reduce((a: number, b: number) => a + b, 0) / scores.length
+              : 0;
+          return { ...o, averageScore: Math.round(avg * 100) / 100, voteCount: scores.length };
+        })
+        .sort((a, b) => b.averageScore - a.averageScore);
+      return {
+        method: 'score',
+        ranked,
+        winner: ranked[0] || null,
+        totalVotes: votes.length,
+      };
+    }
+    case 'simple_majority': {
+      const counts = { yes: 0, no: 0, abstain: 0 };
+      for (const vote of votes) {
+        const v = vote as SimpleMajorityVoteInput;
+        if (v.response in counts) counts[v.response as keyof typeof counts]++;
+      }
+      return {
+        method: 'simple_majority',
+        counts,
+        passed: counts.yes > counts.no,
+        totalVotes: votes.length,
+      };
+    }
+    default:
+      return { method, totalVotes: votes.length };
+  }
 }

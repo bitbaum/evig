@@ -1,12 +1,10 @@
 /**
- * Payment Flow Utility
+ * Payment Flow Orchestrator
  *
- * Consolidated payment processing logic for RevampIT.
- * Eliminates DRY violations across payment routes by providing
- * a single source of truth for payment operations.
+ * High-level payment processing that coordinates fee calculation,
+ * transaction creation, gateway integration, escrow, and invoicing.
  *
- * Uses Payrexx (redirect-based) for all payment processing.
- * In dev mode (no PAYREXX_INSTANCE env var), falls back to mock gateway.
+ * Re-exports all sub-module functions so existing consumers don't break.
  *
  * Used by:
  * - /api/appointments/book-with-payment
@@ -14,285 +12,31 @@
  * - /api/appointments/[id]/pay
  */
 
-import { db } from '@/db'
-import { paymentProviders, paymentTransactions, escrowAccounts, invoices } from '@/db/schema'
-import { eq, and, sql } from 'drizzle-orm'
-import { SWISS_VAT_RATES } from '@/lib/payments/tax-compliance'
-import { PAYMENT_STATUS } from '@/config/payment-status'
-import { INVOICE_STATUS } from '@/config/invoice-status'
 import { logger } from '@/lib/logger'
 import { createGateway } from '@/lib/payments/payrexx-client'
 import type { SupportedCurrency } from '@/lib/payments/currency'
 
-// ============================================================================
-// Constants
-// ============================================================================
+// Re-export everything from sub-modules for backward compatibility
+export { DEFAULT_CURRENCY, DEFAULT_AUTO_RELEASE_DAYS, calculateFees, calculateSwissVAT, centsToDisplay } from './payments-fees'
+export type { PaymentProvider, FeeCalculation } from './payments-fees'
 
-export const DEFAULT_CURRENCY: SupportedCurrency = 'CHF'
-export const DEFAULT_PAYMENT_PROVIDER = 'payrexx'
-export const DEFAULT_AUTO_RELEASE_DAYS = 7
+export { DEFAULT_PAYMENT_PROVIDER, getPaymentProvider, createTransaction, updateTransactionGatewayId } from './payments-gateway'
+export type { TransactionParams, TransactionResult } from './payments-gateway'
+
+export { createEscrowAccount } from './payments-escrow'
+export type { EscrowParams } from './payments-escrow'
+
+export { createInvoice, buildInvoiceLineItem } from './payments-invoice'
+export type { InvoiceParams, InvoiceLineItem, InvoiceResult } from './payments-invoice'
+
+// Import what we need for the orchestrator functions
+import { DEFAULT_CURRENCY, DEFAULT_AUTO_RELEASE_DAYS, calculateFees } from './payments-fees'
+import { getPaymentProvider, createTransaction, updateTransactionGatewayId } from './payments-gateway'
+import { createEscrowAccount } from './payments-escrow'
+import { createInvoice } from './payments-invoice'
 
 // ============================================================================
 // Types
-// ============================================================================
-
-export interface PaymentProvider {
-  id: string
-  slug: string
-  fee_percentage: number
-  fee_fixed_cents: number
-}
-
-export interface FeeCalculation {
-  baseAmountCents: number
-  feeCents: number
-  totalAmountCents: number
-  currency: SupportedCurrency
-}
-
-export interface TransactionParams {
-  userId: string
-  providerId: string
-  providerTransactionId?: string
-  amountCents: number
-  feeCents: number
-  netAmountCents: number
-  currency: SupportedCurrency
-  description: string
-  useEscrow: boolean
-  autoReleaseDays: number
-  // One of these should be provided
-  serviceAppointmentId?: string
-  workshopRegistrationId?: string
-  metadata?: Record<string, unknown>
-}
-
-export interface TransactionResult {
-  transactionId: string
-}
-
-export interface EscrowParams {
-  transactionId: string
-  totalAmountCents: number
-  currency: SupportedCurrency
-  autoReleaseDays: number
-  buyerId: string
-}
-
-export interface InvoiceParams {
-  userId: string
-  baseAmountCents: number
-  totalAmountCents: number
-  currency: SupportedCurrency
-  lineItems: InvoiceLineItem[]
-  notes: string
-  paymentTerms: string
-  // One of these should be provided
-  serviceAppointmentId?: string
-  workshopRegistrationId?: string
-}
-
-export interface InvoiceLineItem {
-  description: string
-  quantity: number
-  unitPrice: string
-  total: string
-}
-
-export interface InvoiceResult {
-  invoiceId: string
-  invoiceNumber: string
-}
-
-// ============================================================================
-// Payment Provider Operations
-// ============================================================================
-
-/**
- * Fetch active payment provider by slug
- */
-export async function getPaymentProvider(
-  providerSlug: string = DEFAULT_PAYMENT_PROVIDER
-): Promise<PaymentProvider | null> {
-  const rows = await db
-    .select({
-      id: paymentProviders.id,
-      slug: paymentProviders.slug,
-      fee_percentage: paymentProviders.feePercentage,
-      fee_fixed_cents: paymentProviders.feeFixedCents,
-    })
-    .from(paymentProviders)
-    .where(
-      and(
-        eq(paymentProviders.slug, providerSlug),
-        eq(paymentProviders.isActive, true),
-      )
-    )
-
-  if (rows.length === 0) {
-    logger.warn('Payment provider not found or inactive', { providerSlug })
-    return null
-  }
-
-  const row = rows[0]
-  return {
-    id: row.id,
-    slug: row.slug,
-    fee_percentage: Number(row.fee_percentage ?? 0),
-    fee_fixed_cents: row.fee_fixed_cents ?? 0,
-  }
-}
-
-// ============================================================================
-// Fee Calculations
-// ============================================================================
-
-/**
- * Calculate payment fees based on provider configuration
- */
-export function calculateFees(
-  baseAmountCents: number,
-  provider: PaymentProvider,
-  currency: SupportedCurrency = DEFAULT_CURRENCY
-): FeeCalculation {
-  const feeCents = Math.round(baseAmountCents * (provider.fee_percentage / 100)) + provider.fee_fixed_cents
-  const totalAmountCents = baseAmountCents + feeCents
-
-  return {
-    baseAmountCents,
-    feeCents,
-    totalAmountCents,
-    currency
-  }
-}
-
-/**
- * Calculate VAT for Swiss transactions
- */
-export function calculateSwissVAT(baseAmountCents: number): number {
-  return Math.round(baseAmountCents * SWISS_VAT_RATES.standard)
-}
-
-// ============================================================================
-// Transaction Operations
-// ============================================================================
-
-/**
- * Create a payment transaction record
- */
-export async function createTransaction(
-  params: TransactionParams
-): Promise<TransactionResult> {
-  const rows = await db
-    .insert(paymentTransactions)
-    .values({
-      userId: params.userId,
-      providerId: params.providerId,
-      providerTransactionId: params.providerTransactionId || null,
-      type: 'payment',
-      status: PAYMENT_STATUS.PENDING,
-      amountCents: params.amountCents,
-      currency: params.currency,
-      feeCents: params.feeCents,
-      netAmountCents: params.netAmountCents,
-      serviceAppointmentId: params.serviceAppointmentId || null,
-      workshopRegistrationId: params.workshopRegistrationId || null,
-      description: params.description,
-      escrowReleaseDate: params.useEscrow
-        ? sql`CURRENT_TIMESTAMP + INTERVAL '1 day' * ${params.autoReleaseDays}`
-        : null,
-      metadata: params.metadata ? params.metadata : {},
-    })
-    .returning({ id: paymentTransactions.id })
-
-  const transactionId = rows[0].id
-
-  logger.info('Payment transaction created', {
-    transactionId,
-    userId: params.userId,
-    amount: params.amountCents,
-    useEscrow: params.useEscrow
-  })
-
-  return { transactionId }
-}
-
-// ============================================================================
-// Escrow Operations
-// ============================================================================
-
-/**
- * Create an escrow account for a transaction
- */
-export async function createEscrowAccount(params: EscrowParams): Promise<void> {
-  await db
-    .insert(escrowAccounts)
-    .values({
-      transactionId: params.transactionId,
-      totalAmountCents: params.totalAmountCents,
-      currency: params.currency,
-      autoReleaseDays: params.autoReleaseDays,
-      releaseDeadline: sql`CURRENT_TIMESTAMP + INTERVAL '1 day' * ${params.autoReleaseDays}`,
-      buyerId: params.buyerId,
-      status: 'active',
-    })
-
-  logger.info('Escrow account created', {
-    transactionId: params.transactionId,
-    amount: params.totalAmountCents,
-    autoReleaseDays: params.autoReleaseDays
-  })
-}
-
-// ============================================================================
-// Invoice Operations
-// ============================================================================
-
-/**
- * Create an invoice for a payment
- */
-export async function createInvoice(params: InvoiceParams): Promise<InvoiceResult> {
-  const taxCents = calculateSwissVAT(params.baseAmountCents)
-
-  const rows = await db
-    .insert(invoices)
-    .values({
-      invoiceNumber: sql`generate_invoice_number()`,
-      type: 'service',
-      status: INVOICE_STATUS.DRAFT,
-      userId: params.userId,
-      serviceAppointmentId: params.serviceAppointmentId || null,
-      workshopRegistrationId: params.workshopRegistrationId || null,
-      subtotalCents: params.baseAmountCents,
-      taxCents,
-      totalCents: params.totalAmountCents,
-      currency: params.currency,
-      taxRate: String(SWISS_VAT_RATES.standard),
-      lineItems: params.lineItems,
-      issueDate: sql`CURRENT_DATE`,
-      notes: params.notes,
-      paymentTerms: params.paymentTerms,
-    })
-    .returning({
-      id: invoices.id,
-      invoiceNumber: invoices.invoiceNumber,
-    })
-
-  const invoiceId = rows[0].id
-  const invoiceNumber = rows[0].invoiceNumber
-
-  logger.info('Invoice created', {
-    invoiceId,
-    invoiceNumber,
-    userId: params.userId,
-    amount: params.totalAmountCents
-  })
-
-  return { invoiceId, invoiceNumber }
-}
-
-// ============================================================================
-// High-Level Payment Flow
 // ============================================================================
 
 export interface ProcessPaymentParams {
@@ -313,7 +57,7 @@ export interface ProcessPaymentParams {
   serviceAppointmentId?: string
   workshopRegistrationId?: string
   // Invoice details
-  invoiceLineItems: InvoiceLineItem[]
+  invoiceLineItems: import('./payments-invoice').InvoiceLineItem[]
   invoiceNotes: string
   invoicePaymentTerms: string
   // Additional transaction metadata
@@ -330,6 +74,10 @@ export interface ProcessPaymentResult {
   feeCents: number
   currency: SupportedCurrency
 }
+
+// ============================================================================
+// High-Level Payment Flow
+// ============================================================================
 
 /**
  * Process a complete payment flow:
@@ -384,10 +132,7 @@ export async function processPayment(
   })
 
   // 5. Update transaction with gateway ID
-  await db
-    .update(paymentTransactions)
-    .set({ providerTransactionId: String(gateway.id) })
-    .where(eq(paymentTransactions.id, transaction.transactionId))
+  await updateTransactionGatewayId(transaction.transactionId, gateway.id)
 
   // 6. Create escrow account if enabled
   if (params.useEscrow) {
@@ -480,10 +225,7 @@ export async function processPaymentWithoutInvoice(
   })
 
   // 5. Update transaction with gateway ID
-  await db
-    .update(paymentTransactions)
-    .set({ providerTransactionId: String(gateway.id) })
-    .where(eq(paymentTransactions.id, transaction.transactionId))
+  await updateTransactionGatewayId(transaction.transactionId, gateway.id)
 
   // 6. Create escrow account if enabled
   if (params.useEscrow) {
@@ -504,28 +246,4 @@ export async function processPaymentWithoutInvoice(
     feeCents: fees.feeCents,
     currency
   }
-}
-
-/**
- * Helper to build invoice line items
- */
-export function buildInvoiceLineItem(
-  description: string,
-  baseAmountCents: number,
-  quantity: number = 1
-): InvoiceLineItem {
-  const unitPrice = (baseAmountCents / 100).toFixed(2)
-  return {
-    description,
-    quantity,
-    unitPrice,
-    total: unitPrice
-  }
-}
-
-/**
- * Convert cents to display amount
- */
-export function centsToDisplay(cents: number): number {
-  return cents / 100
 }
