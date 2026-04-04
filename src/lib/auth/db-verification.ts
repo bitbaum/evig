@@ -2,7 +2,7 @@
  * Email verification and password reset database queries
  */
 
-import { randomBytes } from 'crypto'
+import { randomBytes, randomInt } from 'crypto'
 import { eq, and, gt, sql, desc } from 'drizzle-orm'
 import { db } from '@/db'
 import { users, verificationTokens } from '@/db/schema/auth'
@@ -112,8 +112,8 @@ export async function getVerificationToken(email: string): Promise<DbVerificatio
  * @returns The generated 6-digit code
  */
 export async function createVerificationCode(email: string, expiresInMinutes = 15): Promise<string> {
-  // Generate a 6-digit code
-  const code = Math.floor(100000 + Math.random() * 900000).toString()
+  // Generate a cryptographically secure 6-digit code
+  const code = String(randomInt(100000, 999999))
 
   // Set expiration
   const expires = new Date(Date.now() + expiresInMinutes * 60 * 1000)

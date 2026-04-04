@@ -12,6 +12,7 @@ import type { Session, User } from 'next-auth'
 import { getUserByEmail, createUser, getOrCreateProfile, createVerificationCode, type DbUser } from '@/lib/auth/db'
 import { hashPassword, verifyPassword, validatePasswordStrength } from '@/lib/auth/password'
 import { ROLES, isStaffEmail, getInitialStaffPermissions, isSuperAdmin } from '@/lib/constants'
+import { recordFailedAttempt, isAccountLocked, recordFailedAttemptDb, clearLockoutDb } from '@/lib/auth/rate-limiter'
 import { updateUser } from '@/lib/auth/db'
 import { logger } from '@/lib/logger'
 import { sendEmail } from '@/lib/email'
@@ -120,10 +121,17 @@ export const authConfig = {
           const user = await getUserByEmail(email)
 
           // Generic error message to prevent user enumeration
-        const invalidCredentialsError = 'Ungültige E-Mail-Adresse oder Passwort'
+          const invalidCredentialsError = 'Ungültige E-Mail-Adresse oder Passwort'
 
-        if (!user) {
+          if (!user) {
             throw new Error(invalidCredentialsError)
+          }
+
+          // SECURITY: Check account lockout before password validation
+          const lockoutCheck = isAccountLocked(`${user.id}:login`)
+          if (lockoutCheck.locked) {
+            const minutes = Math.ceil((lockoutCheck.retryAfter ?? 60) / 60)
+            throw new Error(`Konto vorübergehend gesperrt. Versuchen Sie es in ${minutes} Minuten erneut.`)
           }
 
           if (!user.password_hash) {
@@ -134,19 +142,28 @@ export const authConfig = {
           const isValid = await verifyPassword(password, user.password_hash)
 
           if (!isValid) {
+            // Record failed attempt for lockout tracking (in-memory + DB)
+            recordFailedAttempt(`${user.id}:login`)
+            recordFailedAttemptDb(user.id, 'login').catch(err =>
+              logger.error('Failed to record lockout attempt in DB', { error: err, userId: user.id })
+            )
             throw new Error(invalidCredentialsError)
           }
 
-          // Email verification not required for community app
-          // Users can log in immediately after registration
+          // SECURITY: Clear lockout on successful login
+          clearLockoutDb(user.id).catch(err =>
+            logger.error('Failed to clear lockout in DB', { error: err, userId: user.id })
+          )
 
-          // Determine staff status from email or database
-          // SECURITY: Only grant staff privileges if email is verified
-          const emailVerified = !!user.emailVerified
-          const userIsStaff = emailVerified ? (user.is_staff ?? isStaffEmail(user.email)) : false
+          // SECURITY: Require email verification before login
+          if (!user.emailVerified) {
+            throw new Error('Bitte bestätigen Sie zuerst Ihre E-Mail-Adresse. Überprüfen Sie Ihren Posteingang.')
+          }
+
+          // Determine staff status — DB flag is SSOT, email domain only for initial setup
+          const userIsStaff = user.is_staff ?? isStaffEmail(user.email)
           const userPermissions = user.staff_permissions ?? (userIsStaff ? getInitialStaffPermissions(user.email) : [])
-          // Super admin status from database or check email list
-          const userIsSuperAdmin = emailVerified ? (user.is_super_admin ?? false) : false
+          const userIsSuperAdmin = user.is_super_admin ?? false
 
           // Return user object with new simplified auth fields
           return {
