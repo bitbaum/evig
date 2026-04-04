@@ -1,12 +1,14 @@
 import { NextRequest } from 'next/server'
 import { auth } from '@/auth'
 import { db } from '@/db'
-import { locations } from '@/db/schema'
+import { locations, users } from '@/db/schema'
 import { eq, and, ilike, sql, desc } from 'drizzle-orm'
 import { apiError, apiSuccess, apiBadRequest, apiUnauthorized, parsePagination } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { LOCATION_STATUS } from '@/config/location-status'
 import { validateBody, CreateLocationSchema } from '@/lib/schemas'
+import { sendCustomEmail, locationSubmissionConfirmation } from '@/lib/email'
+import { logger } from '@/lib/logger'
 
 // GET /api/locations - List locations with filtering
 export async function GET(request: NextRequest) {
@@ -137,6 +139,22 @@ export async function POST(request: NextRequest) {
         createdBy: session.user.id,
       })
       .returning()
+
+    // Fire-and-forget: send submission confirmation email
+    const userRows = await db
+      .select({ name: users.name, email: users.email })
+      .from(users)
+      .where(eq(users.id, session.user.id))
+
+    if (userRows[0]?.email) {
+      const userName = userRows[0].name || 'Benutzer'
+      sendCustomEmail(
+        userRows[0].email,
+        locationSubmissionConfirmation(userName, name, city)
+      ).catch(err => {
+        logger.warn('Failed to send location submission confirmation email', { error: err, locationId: newLocation.id })
+      })
+    }
 
     return apiSuccess({
       location: newLocation,

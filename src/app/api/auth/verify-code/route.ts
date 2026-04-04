@@ -11,6 +11,11 @@ import { logger } from '@/lib/logger'
 import { verifyEmailCode } from '@/lib/auth/db'
 import { checkRateLimit, getClientIp } from '@/lib/auth/rate-limiter'
 import { validateBody, VerifyCodeSchema } from '@/lib/schemas'
+import { sendCustomEmail, staffWelcome, welcome } from '@/lib/email'
+import { isStaffEmail } from '@/lib/permissions'
+import { db } from '@/db'
+import { users } from '@/db/schema'
+import { eq } from 'drizzle-orm'
 
 export async function POST(request: NextRequest) {
   try {
@@ -39,6 +44,21 @@ export async function POST(request: NextRequest) {
     }
 
     logger.info('Email verified successfully', { email })
+
+    // Fire-and-forget: send welcome email (staff or regular)
+    const userRows = await db
+      .select({ name: users.name })
+      .from(users)
+      .where(eq(users.email, email.toLowerCase()))
+
+    const userName = userRows[0]?.name || 'Benutzer'
+    const emailContent = isStaffEmail(email)
+      ? staffWelcome(userName)
+      : welcome(userName)
+
+    sendCustomEmail(email, emailContent).catch(err => {
+      logger.warn('Failed to send welcome email after verification', { error: err, email })
+    })
 
     return apiSuccess({
       message: 'E-Mail-Adresse erfolgreich bestätigt',

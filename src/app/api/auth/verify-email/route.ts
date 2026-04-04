@@ -1,10 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { verifyEmailWithToken } from '@/lib/auth/db'
-import { sendEmail } from '@/lib/email'
+import { sendCustomEmail, staffWelcome, welcome } from '@/lib/email'
 import { apiError, apiSuccess, apiBadRequest } from '@/lib/api/helpers'
 import { logger } from '@/lib/logger'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { validateBody, VerifyEmailTokenSchema } from '@/lib/schemas'
+import { isStaffEmail } from '@/lib/permissions'
+import { db } from '@/db'
+import { users } from '@/db/schema'
+import { eq } from 'drizzle-orm'
 
 export async function POST(request: NextRequest) {
   try {
@@ -19,26 +23,20 @@ export async function POST(request: NextRequest) {
       return apiBadRequest(result.error || ERROR_MESSAGES.INTERNAL_SERVER_ERROR)
     }
 
-    // Send welcome email
-    try {
-      const { APP_URL } = require('@/config/urls')
-      const userResult = await fetch(`${APP_URL}/api/user/profile`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          // Note: This would need proper authentication in a real implementation
-        }
-      })
+    // Fire-and-forget: send welcome email (staff or regular)
+    const userRows = await db
+      .select({ name: users.name })
+      .from(users)
+      .where(eq(users.email, result.email!.toLowerCase()))
 
-      if (userResult.ok) {
-        const userData = await userResult.json()
-        const userName = userData.first_name || userData.last_name || 'RevampIT Benutzer'
-        await sendEmail(result.email!, 'welcome', userName)
-      }
-    } catch (emailError) {
-      logger.error('Failed to send welcome email', { error: emailError })
-      // Don't fail the verification if welcome email fails
-    }
+    const userName = userRows[0]?.name || 'Benutzer'
+    const emailContent = isStaffEmail(result.email!)
+      ? staffWelcome(userName)
+      : welcome(userName)
+
+    sendCustomEmail(result.email!, emailContent).catch(err => {
+      logger.warn('Failed to send welcome email after verification', { error: err, email: result.email })
+    })
 
     return apiSuccess({
       message: 'E-Mail-Adresse erfolgreich bestätigt! Sie können sich jetzt anmelden.',
@@ -63,14 +61,20 @@ export async function GET(request: NextRequest) {
       return NextResponse.redirect(new URL('/auth/login?error=verification_failed', request.url))
     }
 
-    // Send welcome email
-    try {
-      // Get user info for personalized welcome email
-      // This is a simplified approach - in production you'd want to get user details
-      await sendEmail(result.email!, 'welcome', 'RevampIT Benutzer')
-    } catch (emailError) {
-      logger.error('Failed to send welcome email', { error: emailError })
-    }
+    // Fire-and-forget: send welcome email (staff or regular)
+    const getUserRows = await db
+      .select({ name: users.name })
+      .from(users)
+      .where(eq(users.email, result.email!.toLowerCase()))
+
+    const getUserName = getUserRows[0]?.name || 'Benutzer'
+    const getEmailContent = isStaffEmail(result.email!)
+      ? staffWelcome(getUserName)
+      : welcome(getUserName)
+
+    sendCustomEmail(result.email!, getEmailContent).catch(err => {
+      logger.warn('Failed to send welcome email after verification', { error: err, email: result.email })
+    })
 
     // Redirect to login with success message
     return NextResponse.redirect(new URL('/auth/login?verified=true', request.url))

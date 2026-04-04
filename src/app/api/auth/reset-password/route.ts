@@ -11,6 +11,10 @@ import { logger } from '@/lib/logger'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { checkRateLimit, getClientIp } from '@/lib/auth/rate-limiter'
 import { validateBody, ResetPasswordSchema } from '@/lib/schemas'
+import { sendCustomEmail, passwordChangeConfirmation } from '@/lib/email'
+import { db } from '@/db'
+import { users } from '@/db/schema'
+import { eq } from 'drizzle-orm'
 
 export async function POST(request: NextRequest) {
   try {
@@ -47,6 +51,17 @@ export async function POST(request: NextRequest) {
         'Passwort konnte nicht aktualisiert werden'
       )
     }
+
+    // Fire-and-forget: send password change confirmation email
+    const userRows = await db
+      .select({ name: users.name })
+      .from(users)
+      .where(eq(users.email, result.email!.toLowerCase()))
+
+    const userName = userRows[0]?.name || 'Benutzer'
+    sendCustomEmail(result.email!, passwordChangeConfirmation(userName)).catch(err => {
+      logger.warn('Failed to send password change confirmation email', { error: err, email: result.email })
+    })
 
     return apiSuccess({
       message: 'Passwort erfolgreich geändert',

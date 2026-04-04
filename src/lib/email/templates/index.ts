@@ -10,6 +10,9 @@ export {
   emailVerification,
   welcome,
   passwordReset,
+  passwordChangeConfirmation,
+  staffVerificationCode,
+  staffWelcome,
 } from './auth';
 
 // Repairer application templates
@@ -48,6 +51,7 @@ export {
   newReviewNotification,
   sellerApplicationSubmitted,
   locationApprovalNotification,
+  locationSubmissionConfirmation,
   contentSubmissionApproved,
   contentSubmissionRejected,
 } from './misc';

@@ -327,3 +327,46 @@ Falls Sie diese Anfrage nicht gestellt haben, ignorieren Sie diese E-Mail.
 ${createTextFooter()}
   `.trim(),
 });
+
+/**
+ * Password change confirmation email
+ * Sent after a user successfully resets their password
+ */
+export const passwordChangeConfirmation = (name: string): EmailContent => ({
+  subject: 'Passwort erfolgreich geändert - RevampIT',
+  html: `
+    <!DOCTYPE html>
+    <html lang="de">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Passwort geändert</title>
+      <style>${BASE_STYLES}</style>
+    </head>
+    <body>
+      <div class="container">
+        <div class="header header-green">
+          <h1>Passwort geändert</h1>
+        </div>
+        <div class="content">
+          <h2>Hallo ${name},</h2>
+          <p>Ihr Passwort wurde erfolgreich geändert.</p>
+          <p><strong>Sicherheitshinweis:</strong> Falls Sie diese Änderung nicht vorgenommen haben, kontaktieren Sie uns bitte umgehend unter ${CONTACT.email}.</p>
+        </div>
+        <div class="footer">
+          <p>${AUTO_GENERATED_TEXT}</p>
+          <p>${COPYRIGHT_TEXT}</p>
+        </div>
+      </div>
+    </body>
+    </html>
+  `,
+  text: `
+Hallo ${name},
+
+Ihr Passwort wurde erfolgreich geändert.
+
+Sicherheitshinweis: Falls Sie diese Änderung nicht vorgenommen haben, kontaktieren Sie uns bitte umgehend unter ${CONTACT.email}.
+${createTextFooter()}
+  `.trim(),
+});

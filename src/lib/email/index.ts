@@ -68,6 +68,7 @@ export const emailTemplates = {
   welcome: authTemplates.welcome,
   staffWelcome: authTemplates.staffWelcome,
   passwordReset: authTemplates.passwordReset,
+  passwordChangeConfirmation: authTemplates.passwordChangeConfirmation,
 
   // Repairer
   repairerApplicationSubmitted: repairerTemplates.repairerApplicationSubmitted,
@@ -102,6 +103,7 @@ export const emailTemplates = {
   newReviewNotification: miscTemplates.newReviewNotification,
   sellerApplicationSubmitted: miscTemplates.sellerApplicationSubmitted,
   locationApprovalNotification: miscTemplates.locationApprovalNotification,
+  locationSubmissionConfirmation: miscTemplates.locationSubmissionConfirmation,
   contentSubmissionApproved: miscTemplates.contentSubmissionApproved,
   contentSubmissionRejected: miscTemplates.contentSubmissionRejected,
 
