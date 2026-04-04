@@ -10,13 +10,15 @@ import { auth } from '@/auth'
 import { redirect } from 'next/navigation'
 import { query } from '@/lib/auth/db'
 import { TABLE_NAMES } from '@/config/database'
-import { CheckSquare, Clock, CheckCircle, XCircle, FileText, Shield } from 'lucide-react'
+import { CheckSquare, Clock, CheckCircle, XCircle, FileText, Shield, ExternalLink } from 'lucide-react'
 import { APPROVAL_STATUS } from '@/config/approval-status'
 import { formatDateShort } from '@/lib/date-formats'
 import { isSuperAdmin } from '@/lib/permissions'
 import { ApprovalActions } from './ApprovalActions'
 import { PermissionRequestsManager } from '@/components/admin/PermissionRequestsManager'
 import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
+import Link from 'next/link'
+import { logger } from '@/lib/logger'
 
 export const metadata: Metadata = {
   title: 'Freigaben | RevampIT Admin',
@@ -38,6 +40,51 @@ interface ApprovalStats {
   pending: number
   approved: number
   rejected: number
+}
+
+interface ApprovalSource {
+  label: string
+  count: number
+  href: string
+}
+
+async function getApprovalSourceCounts(): Promise<ApprovalSource[]> {
+  const sources: ApprovalSource[] = []
+
+  const queries = [
+    {
+      label: 'Blog-Beiträge',
+      href: '/admin/content/submissions',
+      sql: `SELECT COUNT(*) as count FROM ${TABLE_NAMES.BLOG_SUBMISSIONS} WHERE status = 'pending'`,
+    },
+    {
+      label: 'Workshop-Vorschläge',
+      href: '/admin/workshops',
+      sql: `SELECT COUNT(*) as count FROM ${TABLE_NAMES.WORKSHOP_PROPOSALS} WHERE status = 'pending'`,
+    },
+    {
+      label: 'Techniker-Bewerbungen',
+      href: '/admin/repairer-applications',
+      sql: `SELECT COUNT(*) as count FROM ${TABLE_NAMES.REPAIRER_APPLICATIONS} WHERE status = 'pending'`,
+    },
+    {
+      label: 'Standorte',
+      href: '/admin/locations',
+      sql: `SELECT COUNT(*) as count FROM ${TABLE_NAMES.LOCATIONS} WHERE approval_status = 'pending'`,
+    },
+  ]
+
+  for (const q of queries) {
+    try {
+      const result = await query<{ count: string }>(q.sql)
+      sources.push({ label: q.label, count: parseInt(result.rows[0]?.count || '0'), href: q.href })
+    } catch {
+      // Table might not exist yet
+      sources.push({ label: q.label, count: 0, href: q.href })
+    }
+  }
+
+  return sources
 }
 
 async function getApprovalStats(): Promise<ApprovalStats> {
@@ -120,10 +167,13 @@ export default async function ApprovalsPage() {
 
   const isSuper = isSuperAdmin(session.user.email)
 
-  const [stats, pendingItems] = await Promise.all([
+  const [stats, pendingItems, approvalSources] = await Promise.all([
     getApprovalStats(),
     getPendingSubmissions(),
+    getApprovalSourceCounts(),
   ])
+
+  const totalPendingAllSources = approvalSources.reduce((sum, s) => sum + s.count, 0) + stats.pending
 
   return (
     <AdminPageWrapper
@@ -138,8 +188,8 @@ export default async function ApprovalsPage() {
           <div className="flex items-center gap-3">
             <Clock className="w-5 h-5 text-yellow-600" />
             <div>
-              <p className="text-2xl font-bold text-yellow-800 dark:text-yellow-200">{stats.pending}</p>
-              <p className="text-sm text-yellow-600 dark:text-yellow-400">Ausstehend</p>
+              <p className="text-2xl font-bold text-yellow-800 dark:text-yellow-200">{totalPendingAllSources}</p>
+              <p className="text-sm text-yellow-600 dark:text-yellow-400">Ausstehend (gesamt)</p>
             </div>
           </div>
         </div>
@@ -163,7 +213,38 @@ export default async function ApprovalsPage() {
         </div>
       </div>
 
-      {/* Pending Items */}
+      {/* Übersicht — pending counts from all approval sources */}
+      <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
+        <div className="p-4 border-b border-gray-200 dark:border-gray-700">
+          <h2 className="font-semibold text-gray-900 dark:text-white">Übersicht</h2>
+        </div>
+        <div className="divide-y divide-gray-200 dark:divide-gray-700">
+          {approvalSources.map(source => (
+            <Link
+              key={source.href}
+              href={source.href}
+              className="p-4 flex items-center justify-between hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
+            >
+              <span className="text-gray-900 dark:text-white">{source.label}</span>
+              <span className="flex items-center gap-2">
+                <span className={`text-sm font-medium ${source.count > 0 ? 'text-yellow-600 dark:text-yellow-400' : 'text-gray-400 dark:text-gray-500'}`}>
+                  {source.count} ausstehend
+                </span>
+                <ExternalLink className="w-4 h-4 text-gray-400" />
+              </span>
+            </Link>
+          ))}
+          {/* Inline submissions count */}
+          <div className="p-4 flex items-center justify-between">
+            <span className="text-gray-900 dark:text-white">Allgemeine Einreichungen</span>
+            <span className={`text-sm font-medium ${stats.pending > 0 ? 'text-yellow-600 dark:text-yellow-400' : 'text-gray-400 dark:text-gray-500'}`}>
+              {stats.pending} ausstehend
+            </span>
+          </div>
+        </div>
+      </div>
+
+      {/* Pending Items — inline list for user_content_submissions */}
       <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
         <div className="p-4 border-b border-gray-200 dark:border-gray-700">
           <h2 className="font-semibold text-gray-900 dark:text-white">Ausstehende Freigaben</h2>

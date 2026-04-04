@@ -277,6 +277,19 @@ export const POST = withAuth(async (request: NextRequest, session: ValidSession)
         }
       }
 
+      // Auto-create seller profile if the user doesn't have one yet
+      const [existingProfile] = await tx
+        .select({ id: sellerProfiles.id })
+        .from(sellerProfiles)
+        .where(eq(sellerProfiles.userId, session.user.id));
+
+      if (!existingProfile) {
+        await tx.insert(sellerProfiles).values({
+          userId: session.user.id,
+        });
+        logger.info('Auto-created seller profile', { userId: session.user.id });
+      }
+
       return listingId;
     });
 
