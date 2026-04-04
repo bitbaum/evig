@@ -5,7 +5,8 @@
  * were removed after callers migrated to inline Drizzle ORM calls.
  */
 
-import { normalizeSpecValue, SPEC_MEILI_FIELD_MAP } from '@/config/marketplace';
+import { SPEC_MEILI_FIELD_MAP } from '@/config/marketplace';
+import { normalizeSpecValue } from './spec-utils';
 import { logger } from '@/lib/logger';
 import { indexListing } from '@/lib/search/meilisearch';
 import type { MeilisearchDocument } from '@/lib/search/meilisearch';

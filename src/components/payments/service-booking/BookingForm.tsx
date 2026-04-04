@@ -6,6 +6,7 @@
 
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { calculatePaymentFees, getVATRateLabel } from '@/lib/pricing'
 import { Badge } from '@/components/ui/badge'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { CreditCard, Shield } from 'lucide-react'
@@ -32,7 +33,7 @@ export function BookingForm({
   onSubmit,
 }: BookingFormProps) {
   const servicePrice = service.price_cents / 100
-  const totalWithFees = currentPricing.total * 1.029 + 0.30
+  const totalWithFees = currentPricing.total + calculatePaymentFees(currentPricing.total)
 
   return (
     <Card className="w-full max-w-2xl mx-auto">
@@ -113,9 +114,9 @@ function ServiceDetailsCard({
   selectedCurrency: SupportedCurrency
   currentPricing: DisplayPricing
 }) {
-  const vatRate = selectedCurrency === 'CHF' ? '7.7' : '19.0'
-  const estimatedFees = currentPricing.total * 0.029 + 0.30
-  const totalWithFees = currentPricing.total * 1.029 + 0.30
+  const vatRate = getVATRateLabel(selectedCurrency)
+  const estimatedFees = calculatePaymentFees(currentPricing.total)
+  const totalWithFees = currentPricing.total + estimatedFees
 
   return (
     <div className="p-4 bg-blue-50 rounded-lg">

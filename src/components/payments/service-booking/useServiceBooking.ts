@@ -4,6 +4,7 @@
 
 import { useState, useMemo } from 'react'
 import { apiFetch } from '@/lib/api/client'
+import { calculateVAT, calculatePaymentFees } from '@/lib/pricing'
 import type { PaymentResult } from '@/types/common'
 import type {
   ApiPricingResponse,
@@ -73,10 +74,12 @@ export function useServiceBooking({
         total: currencyPricing.total,
       }
     }
+    const vat = calculateVAT(servicePrice)
+    const subtotalWithVat = servicePrice + vat
     return {
       subtotal: servicePrice,
-      vat: servicePrice * 0.077, // Swiss VAT
-      total: servicePrice * 1.077 + Math.round(servicePrice * 0.029) + 0.30,
+      vat,
+      total: subtotalWithVat + calculatePaymentFees(servicePrice),
     }
   }, [currencyPricing, servicePrice])
 

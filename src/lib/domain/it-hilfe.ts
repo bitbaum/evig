@@ -4,7 +4,7 @@
  */
 
 import { itHilfeRequestSchema } from '@/lib/schemas/it-hilfe'
-import type { ITHilfeCreateFormData } from '@/components/it-hilfe-create/types'
+import type { ITHilfeCreateFormData } from '@/types/it-hilfe-form'
 
 /**
  * Transform client form data to API payload shape.

@@ -6,7 +6,7 @@
  */
 
 import { CreateListingSchema } from '@/lib/schemas/marketplace'
-import type { ListingFormData } from '@/components/marketplace-sell/types'
+import type { ListingFormData } from '@/types/listing-form'
 
 /**
  * Validate listing form data against the Zod schema (SSOT).

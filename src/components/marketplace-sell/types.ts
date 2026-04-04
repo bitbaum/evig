@@ -1,49 +1,6 @@
-import type { Dispatch, SetStateAction } from 'react'
-
-export interface SpecFieldData {
-  key: string
-  value: string
-  unit?: string
-}
-
-export interface ConditionCheckData {
-  key: string
-  label: string
-  checked: boolean
-}
-
-export interface ListingFormData {
-  title: string
-  description: string
-  price: string
-  category: string
-  condition: string
-  brand: string
-  model: string
-  images: string[]
-  deliveryOptions: string
-  shippingCost: string
-  pickupLocation: string
-  paymentMode: string
-  specs: SpecFieldData[]
-  conditionChecks: ConditionCheckData[]
-}
-
-export type ListingFormUpdater = Dispatch<SetStateAction<ListingFormData>>
-
-export const INITIAL_LISTING_FORM: ListingFormData = {
-  title: '',
-  description: '',
-  price: '',
-  category: '',
-  condition: '',
-  brand: '',
-  model: '',
-  images: [],
-  deliveryOptions: 'pickup',
-  shippingCost: '',
-  pickupLocation: '',
-  paymentMode: 'direct',
-  specs: [],
-  conditionChecks: [],
-}
+/**
+ * Re-export from canonical location.
+ * Types live in src/types/ to avoid domain ↔ component circular dependency.
+ */
+export type { SpecFieldData, ConditionCheckData, ListingFormData, ListingFormUpdater } from '@/types/listing-form'
+export { INITIAL_LISTING_FORM } from '@/types/listing-form'
