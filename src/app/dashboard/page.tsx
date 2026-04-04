@@ -219,6 +219,26 @@ export default async function DashboardPage() {
             </Link>
           )}
 
+          {/* IT-Hilfe Helper Card */}
+          <Link
+            href="/dashboard/helper"
+            className="bg-white dark:bg-neutral-800 rounded-lg shadow-sm border-2 border-neutral-200 dark:border-neutral-700 p-4 sm:p-6 hover:shadow-md transition-shadow"
+          >
+            <div className="flex items-center">
+              <div className="w-12 h-12 bg-cyan-100 dark:bg-cyan-900 rounded-lg flex items-center justify-center">
+                <span className="text-cyan-600 dark:text-cyan-400 text-xl">💻</span>
+              </div>
+              <div className="ml-4">
+                <h3 className={cn('text-lg font-semibold', getTextColor('white', 'primary'), 'dark:text-white')}>
+                  IT-Hilfe
+                </h3>
+                <p className={cn('text-sm', getTextColor('white', 'muted'), 'dark:text-neutral-400')}>
+                  Anfragen finden und Hilfe anbieten
+                </p>
+              </div>
+            </div>
+          </Link>
+
           {/* Workshop Proposal Card */}
           <Link
             href="/workshops/propose"

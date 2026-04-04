@@ -1,248 +1,137 @@
-'use client'
-
-import { useState, useEffect, useCallback } from 'react'
-import Link from 'next/link'
+import { Metadata } from 'next'
+import { db } from '@/db'
+import { workshops, workshopInstances, workshopRegistrations } from '@/db/schema'
+import { eq, desc, asc, inArray, sql, and } from 'drizzle-orm'
 import { logger } from '@/lib/logger'
-import {
-  Calendar,
-  Clock,
-  Users,
-  MapPin,
-  ArrowRight,
-  CheckCircle,
-  Sparkles,
-  BookOpen,
-  GraduationCap,
-} from 'lucide-react'
-import { getCategoryIcon, getLevelBadgeClass } from '@/config/workshops'
-import Heading from '@/components/ui/Heading'
-import { PageHero } from '@/components/layout/PageHero'
-import { formatDateShort } from '@/lib/date-formats'
+import { auth } from '@/auth'
+import WorkshopBrowseClient from './WorkshopBrowseClient'
 import type { WorkshopWithInstances } from '@/components/workshops/types'
 
-export default function WorkshopsPage() {
-  const [workshops, setWorkshops] = useState<WorkshopWithInstances[]>([])
-  const [loading, setLoading] = useState(true)
-  const [filter, setFilter] = useState<string>('all')
+export const metadata: Metadata = {
+  title: 'Workshops | RevampIT',
+  description:
+    'Entdecken Sie unsere Workshops zu nachhaltiger Technologie, Linux, Reparatur, Programmierung und mehr. Praxisnah lernen bei RevampIT in Zürich.',
+  openGraph: {
+    title: 'Workshops | RevampIT',
+    description:
+      'Praxisnahe Workshops zu nachhaltiger Technologie. Von Linux über Hardware-Reparatur bis KI.',
+    type: 'website',
+  },
+}
 
-  const fetchWorkshops = useCallback(async () => {
-    try {
-      const response = await fetch('/api/workshops?include=instances')
-      const data = await response.json()
+async function getWorkshopsWithInstances(): Promise<WorkshopWithInstances[]> {
+  try {
+    // Fetch all active workshops
+    const workshopRows = await db
+      .select({
+        id: workshops.id,
+        slug: workshops.slug,
+        title: workshops.title,
+        description: workshops.description,
+        category: workshops.category,
+        duration: workshops.duration,
+        level: workshops.level,
+        max_participants: workshops.maxParticipants,
+        price_cents: workshops.priceCents,
+        is_active: workshops.isActive,
+        created_at: workshops.createdAt,
+        updated_at: workshops.updatedAt,
+      })
+      .from(workshops)
+      .where(eq(workshops.isActive, true))
+      .orderBy(desc(workshops.createdAt))
 
-      if (data.success && Array.isArray(data.data)) {
-        setWorkshops(data.data)
+    if (workshopRows.length === 0) return []
+
+    const workshopIds = workshopRows.map(w => w.id)
+
+    // Fetch instances with registration counts
+    const instanceRows = await db
+      .select({
+        id: workshopInstances.id,
+        workshop_id: workshopInstances.workshopId,
+        start_date: workshopInstances.startDate,
+        end_date: workshopInstances.endDate,
+        location: workshopInstances.location,
+        instructor: workshopInstances.instructor,
+        max_participants: workshopInstances.maxParticipants,
+        notes: workshopInstances.notes,
+        status: workshopInstances.status,
+        created_at: workshopInstances.createdAt,
+        updated_at: workshopInstances.updatedAt,
+        current_participants: sql<number>`count(${workshopRegistrations.id})`,
+      })
+      .from(workshopInstances)
+      .leftJoin(workshopRegistrations, eq(workshopInstances.id, workshopRegistrations.workshopInstanceId))
+      .where(inArray(workshopInstances.workshopId, workshopIds))
+      .groupBy(workshopInstances.id)
+      .orderBy(asc(workshopInstances.startDate))
+
+    // Check user registrations
+    const session = await auth()
+    const registeredWorkshopIds = new Set<string>()
+
+    if (session?.user?.id) {
+      const regs = await db
+        .select({ workshopId: workshopInstances.workshopId })
+        .from(workshopRegistrations)
+        .innerJoin(workshopInstances, eq(workshopRegistrations.workshopInstanceId, workshopInstances.id))
+        .where(
+          and(
+            eq(workshopRegistrations.userId, session.user.id),
+            inArray(workshopInstances.workshopId, workshopIds)
+          )
+        )
+
+      for (const reg of regs) {
+        registeredWorkshopIds.add(reg.workshopId)
       }
-    } catch (error) {
-      logger.error('Error fetching workshops', { error })
-    } finally {
-      setLoading(false)
     }
-  }, [])
 
-  useEffect(() => {
-    fetchWorkshops()
-  }, [fetchWorkshops])
+    // Group instances by workshop
+    const instancesByWorkshop = new Map<string, typeof instanceRows>()
+    for (const inst of instanceRows) {
+      const list = instancesByWorkshop.get(inst.workshop_id) || []
+      list.push(inst)
+      instancesByWorkshop.set(inst.workshop_id, list)
+    }
 
-
-  const filteredWorkshops = workshops.filter(workshop => {
-    if (filter === 'all') return true
-    return (workshop.category || '').toLowerCase().includes(filter.toLowerCase())
-  })
-
-  const categories = ['all', ...Array.from(new Set(workshops.map(w => w.category).filter((c): c is string => c !== null)))]
-
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-gray-50 py-12">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="animate-pulse">
-            <div className="h-8 bg-gray-200 rounded w-1/3 mb-8"></div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {[1, 2, 3, 4, 5, 6].map(i => (
-                <div key={i} className="bg-white rounded-xl p-6">
-                  <div className="h-6 bg-gray-200 rounded w-3/4 mb-4"></div>
-                  <div className="h-4 bg-gray-200 rounded w-full mb-2"></div>
-                  <div className="h-4 bg-gray-200 rounded w-2/3"></div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
-    )
+    // Assemble result
+    return workshopRows.map(w => ({
+      id: w.id,
+      slug: w.slug,
+      title: w.title,
+      description: w.description,
+      category: w.category,
+      duration: w.duration,
+      level: w.level,
+      max_participants: w.max_participants ?? 12,
+      price_cents: w.price_cents ?? 0,
+      is_active: w.is_active ?? true,
+      created_at: w.created_at ?? '',
+      updated_at: w.updated_at ?? '',
+      instances: (instancesByWorkshop.get(w.id) || []).map(inst => ({
+        ...inst,
+        start_date: inst.start_date,
+        end_date: inst.end_date,
+        location: inst.location,
+        instructor: inst.instructor,
+        max_participants: inst.max_participants,
+        notes: inst.notes,
+        status: (inst.status ?? 'scheduled') as 'scheduled' | 'cancelled' | 'completed',
+        created_at: inst.created_at ?? '',
+        updated_at: inst.updated_at ?? '',
+        current_participants: Number(inst.current_participants) || 0,
+      })),
+      user_registered: registeredWorkshopIds.has(w.id),
+    }))
+  } catch (error) {
+    logger.error('Error fetching workshops for browse page', { error })
+    return []
   }
+}
 
-  return (
-    <div className="min-h-screen bg-gray-50">
-      <PageHero
-        theme="workshops"
-        icon={GraduationCap}
-        title="RevampIT Workshops"
-        subtitle="Erweitere dein Wissen in nachhaltiger Technologie. Von Linux über Open-Source bis hin zu Blockchain und KI."
-      />
-
-      <div className="max-w-7xl mx-auto px-4 pt-12">
-        {/* Filters */}
-        <div className="flex flex-wrap justify-center gap-2 mb-8">
-          {categories.map(category => (
-            <button
-              key={category}
-              onClick={() => setFilter(category)}
-              className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-                filter === category
-                  ? 'bg-green-600 text-white'
-                  : 'bg-white text-gray-700 hover:bg-gray-100'
-              }`}
-            >
-              {category === 'all' ? 'Alle Workshops' : category}
-            </button>
-          ))}
-        </div>
-
-        {/* Workshops Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {filteredWorkshops.map((workshop) => {
-            const IconComponent = getCategoryIcon(workshop.category)
-            const instances = workshop.instances || []
-            const nextInstance = instances.find(inst => new Date(inst.start_date) > new Date())
-
-            return (
-              <div key={workshop.id} className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
-                {/* Workshop Header */}
-                <div className="p-6 border-b border-gray-100">
-                  <div className="flex items-start justify-between mb-4">
-                    <div className="p-3 bg-green-100 rounded-lg">
-                      <IconComponent className="w-6 h-6 text-green-600" />
-                    </div>
-                    <span className={`px-3 py-1 rounded-full text-xs font-medium ${getLevelBadgeClass(workshop.level)}`}>
-                      {workshop.level}
-                    </span>
-                  </div>
-
-                  <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                    {workshop.title}
-                  </h3>
-
-                  <p className="text-gray-600 text-sm mb-4 line-clamp-3">
-                    {workshop.description}
-                  </p>
-
-                  <div className="flex items-center gap-4 text-sm text-gray-500">
-                    <div className="flex items-center">
-                      <Clock className="w-4 h-4 mr-1" />
-                      {workshop.duration}
-                    </div>
-                    <div className="flex items-center">
-                      <Users className="w-4 h-4 mr-1" />
-                      Max {workshop.max_participants}
-                    </div>
-                  </div>
-                </div>
-
-                {/* Workshop Details */}
-                <div className="p-6">
-                  {nextInstance ? (
-                    <div className="mb-4">
-                      <div className="flex items-center text-sm text-gray-600 mb-2">
-                        <Calendar className="w-4 h-4 mr-1" />
-                        <span>Nächster Termin: {formatDateShort(nextInstance.start_date)}</span>
-                      </div>
-                      <div className="flex items-center text-sm text-gray-600">
-                        <MapPin className="w-4 h-4 mr-1" />
-                        <span>{nextInstance.location}</span>
-                      </div>
-                    </div>
-                  ) : (
-                    <div className="mb-4">
-                      <div className="flex items-center text-sm text-orange-600">
-                        <Calendar className="w-4 h-4 mr-1" />
-                        <span>Termin folgt in Kürze</span>
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Price */}
-                  <div className="flex items-center justify-between mb-4">
-                    <span className="text-2xl font-bold text-green-600">
-                      {workshop.price_cents === 0 ? 'Kostenlos' : `CHF ${(workshop.price_cents / 100).toFixed(0)}`}
-                    </span>
-                    {workshop.user_registered && (
-                      <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                        <CheckCircle className="w-3 h-3 mr-1" />
-                        Angemeldet
-                      </span>
-                    )}
-                  </div>
-
-                  {/* Actions */}
-                  <div className="flex gap-2">
-                    <Link
-                      href={`/workshops/${workshop.slug}`}
-                      className="flex-1 bg-gray-100 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-200 transition-colors text-center text-sm font-medium"
-                    >
-                      Details
-                    </Link>
-
-                    {workshop.user_registered ? (
-                      <Link
-                        href="/dashboard/workshops"
-                        className="flex-1 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors text-center text-sm font-medium"
-                      >
-                        Verwalten
-                      </Link>
-                    ) : nextInstance ? (
-                      <Link
-                        href={`/workshops/${workshop.slug}#register`}
-                        className="flex-1 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors text-center text-sm font-medium"
-                      >
-                        Anmelden
-                      </Link>
-                    ) : (
-                      <button
-                        disabled
-                        className="flex-1 bg-gray-300 text-gray-500 px-4 py-2 rounded-lg cursor-not-allowed text-center text-sm font-medium"
-                      >
-                        Ausgebucht
-                      </button>
-                    )}
-                  </div>
-                </div>
-              </div>
-            )
-          })}
-        </div>
-
-        {filteredWorkshops.length === 0 && (
-          <div className="text-center py-12">
-            <BookOpen className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">
-              Keine Workshops gefunden
-            </h3>
-            <p className="text-gray-600">
-              Versuche andere Filter oder schaue später wieder vorbei.
-            </p>
-          </div>
-        )}
-
-        {/* Call to Action */}
-        <div className="mt-16 bg-gradient-to-r from-green-600 to-blue-600 rounded-xl p-8 text-white text-center">
-          <Sparkles className="w-12 h-12 mx-auto mb-4" />
-          <Heading level={2} className="mb-4">
-            Workshop vorschlagen?
-          </Heading>
-          <p className="text-green-100 mb-6 max-w-2xl mx-auto">
-            Hast du eine Idee für einen Workshop? Wir freuen uns über deine Vorschläge für neue Themen und Inhalte.
-          </p>
-          <Link
-            href="/workshops/propose"
-            className="inline-flex items-center gap-2 bg-white text-green-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-50 transition-colors"
-          >
-            Workshop vorschlagen
-            <ArrowRight className="w-5 h-5" />
-          </Link>
-        </div>
-      </div>
-    </div>
-  )
+export default async function WorkshopsPage() {
+  const workshopsData = await getWorkshopsWithInstances()
+  return <WorkshopBrowseClient workshops={workshopsData} />
 }

@@ -5,6 +5,7 @@ import { query } from '@/lib/auth/db'
 import { logger } from '@/lib/logger'
 import { formatDateWithWeekday } from '@/lib/date-formats'
 import { TABLE_NAMES } from '@/config/database'
+import { getLevelBadgeClass, WORKSHOP_CATEGORIES } from '@/config/workshops'
 import {
   Calendar,
   Clock,
@@ -14,12 +15,36 @@ import {
   CheckCircle,
   BookOpen,
   Award,
-  Star
+  Target,
+  Package,
+  ClipboardList,
 } from 'lucide-react'
 import WorkshopRegistrationForm from '@/components/workshops/WorkshopRegistrationForm'
 import WorkshopReviews from '@/components/workshops/WorkshopReviews'
 import WorkshopMaterials from '@/components/workshops/WorkshopMaterials'
-import type { Workshop, WorkshopInstanceWithCount } from '@/components/workshops/types'
+import type { WorkshopInstanceWithCount } from '@/components/workshops/types'
+
+// Extended Workshop type to include fields from migration 038
+interface WorkshopDetail {
+  id: string
+  slug: string
+  title: string
+  description: string | null
+  short_description: string | null
+  category: string | null
+  duration: string | null
+  level: string | null
+  max_participants: number
+  price_cents: number
+  is_active: boolean
+  prerequisites: string | null
+  learning_objectives: string[] | null
+  target_audience: string | null
+  materials_provided: string | null
+  materials_required: string | null
+  created_at: string
+  updated_at: string
+}
 
 // DB row type - COUNT returns string, needs conversion
 interface WorkshopInstanceRow {
@@ -37,13 +62,16 @@ interface WorkshopInstanceRow {
   current_participants: string  // COUNT returns string
 }
 
-async function getWorkshop(slug: string): Promise<Workshop | null> {
+async function getWorkshop(slug: string): Promise<WorkshopDetail | null> {
   try {
     const result = await query(
-      `SELECT * FROM ${TABLE_NAMES.WORKSHOPS} WHERE slug = $1 AND is_active = true`,
+      `SELECT id, slug, title, description, short_description, category, duration, level,
+              max_participants, price_cents, is_active, prerequisites, learning_objectives,
+              target_audience, materials_provided, materials_required, created_at, updated_at
+       FROM ${TABLE_NAMES.WORKSHOPS} WHERE slug = $1 AND is_active = true`,
       [slug]
     )
-    return (result.rows[0] as Workshop) || null
+    return (result.rows[0] as WorkshopDetail) || null
   } catch (error) {
     logger.error('Error fetching workshop', { error })
     return null
@@ -89,16 +117,18 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
   if (!workshop) {
     return {
-      title: 'Workshop Not Found | RevampIT'
+      title: 'Workshop nicht gefunden | RevampIT'
     }
   }
 
+  const description = workshop.short_description || workshop.description || undefined
+
   return {
     title: `${workshop.title} | RevampIT Workshops`,
-    description: workshop.description ?? undefined,
+    description,
     openGraph: {
       title: `${workshop.title} | RevampIT Workshops`,
-      description: workshop.description ?? undefined,
+      description,
       type: 'website'
     }
   }
@@ -113,27 +143,26 @@ export default async function WorkshopDetailPage({ params }: { params: Promise<{
   }
 
   const instances = await getWorkshopInstances(workshop.id)
-  const upcomingInstances = instances.filter(inst => new Date(inst.start_date) > new Date())
+  const upcomingInstances = instances.filter(
+    inst => inst.status === 'scheduled' && new Date(inst.start_date) > new Date()
+  )
   const nextInstance = upcomingInstances[0]
+  const categoryName = WORKSHOP_CATEGORIES.find(c => c.id === workshop.category)?.name || workshop.category
 
-  const getLevelColor = (level: string | null) => {
-    if (!level) return 'bg-gray-100 text-gray-800'
-    switch (level.toLowerCase()) {
-      case 'anfänger': return 'bg-green-100 text-green-800'
-      case 'fortgeschrittene': return 'bg-blue-100 text-blue-800'
-      case 'alle stufen': return 'bg-purple-100 text-purple-800'
-      default: return 'bg-gray-100 text-gray-800'
-    }
-  }
-
-  const getLevelDescription = (level: string | null) => {
-    if (!level) return ''
-    switch (level.toLowerCase()) {
-      case 'anfänger': return 'Perfekt für Einsteiger ohne Vorkenntnisse'
-      case 'fortgeschrittene': return 'Für Teilnehmer mit grundlegenden Kenntnissen'
-      case 'alle stufen': return 'Geeignet für alle Erfahrungsstufen'
-      default: return level
-    }
+  // Build a Workshop-compatible object for the registration form
+  const workshopForForm = {
+    id: workshop.id,
+    slug: workshop.slug,
+    title: workshop.title,
+    description: workshop.description,
+    category: workshop.category,
+    duration: workshop.duration,
+    level: workshop.level,
+    max_participants: workshop.max_participants,
+    price_cents: workshop.price_cents,
+    is_active: workshop.is_active,
+    created_at: workshop.created_at,
+    updated_at: workshop.updated_at,
   }
 
   return (
@@ -151,14 +180,24 @@ export default async function WorkshopDetailPage({ params }: { params: Promise<{
 
           <div className="flex items-start justify-between">
             <div className="flex-1">
-              <div className="flex items-center gap-3 mb-2">
+              <div className="flex items-center gap-3 mb-2 flex-wrap">
                 <h1 className="text-3xl font-bold text-gray-900">{workshop.title}</h1>
-                <span className={`px-3 py-1 rounded-full text-sm font-medium ${getLevelColor(workshop.level)}`}>
-                  {workshop.level}
+                <span className={`px-3 py-1 rounded-full text-sm font-medium ${getLevelBadgeClass(workshop.level)}`}>
+                  {workshop.level || 'Alle Stufen'}
                 </span>
               </div>
-              <p className="text-xl text-gray-600 mb-4">{workshop.description}</p>
-              <p className="text-gray-500">{getLevelDescription(workshop.level)}</p>
+              {workshop.short_description && (
+                <p className="text-xl text-gray-600 mb-2">{workshop.short_description}</p>
+              )}
+              <p className="text-gray-600 mb-4">
+                {workshop.description}
+              </p>
+              {categoryName && (
+                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-700">
+                  <BookOpen className="w-3 h-3 mr-1" />
+                  {categoryName}
+                </span>
+              )}
             </div>
           </div>
         </div>
@@ -176,7 +215,7 @@ export default async function WorkshopDetailPage({ params }: { params: Promise<{
                 <div className="text-center">
                   <Clock className="w-8 h-8 text-green-600 mx-auto mb-2" />
                   <div className="text-sm font-medium text-gray-900">Dauer</div>
-                  <div className="text-sm text-gray-600">{workshop.duration}</div>
+                  <div className="text-sm text-gray-600">{workshop.duration || 'Variabel'}</div>
                 </div>
 
                 <div className="text-center">
@@ -188,7 +227,7 @@ export default async function WorkshopDetailPage({ params }: { params: Promise<{
                 <div className="text-center">
                   <BookOpen className="w-8 h-8 text-purple-600 mx-auto mb-2" />
                   <div className="text-sm font-medium text-gray-900">Kategorie</div>
-                  <div className="text-sm text-gray-600">{workshop.category}</div>
+                  <div className="text-sm text-gray-600">{categoryName || 'Allgemein'}</div>
                 </div>
 
                 <div className="text-center">
@@ -200,17 +239,62 @@ export default async function WorkshopDetailPage({ params }: { params: Promise<{
                 </div>
               </div>
 
-              {workshop.outcomes && workshop.outcomes.length > 0 && (
-                <div>
+              {/* Target Audience */}
+              {workshop.target_audience && (
+                <div className="mb-6">
+                  <div className="flex items-center gap-2 mb-2">
+                    <Target className="w-5 h-5 text-gray-500" />
+                    <h3 className="text-lg font-medium text-gray-900">Zielgruppe</h3>
+                  </div>
+                  <p className="text-gray-700">{workshop.target_audience}</p>
+                </div>
+              )}
+
+              {/* Prerequisites */}
+              {workshop.prerequisites && (
+                <div className="mb-6">
+                  <div className="flex items-center gap-2 mb-2">
+                    <ClipboardList className="w-5 h-5 text-gray-500" />
+                    <h3 className="text-lg font-medium text-gray-900">Voraussetzungen</h3>
+                  </div>
+                  <p className="text-gray-700">{workshop.prerequisites}</p>
+                </div>
+              )}
+
+              {/* Learning Objectives */}
+              {workshop.learning_objectives && workshop.learning_objectives.length > 0 && (
+                <div className="mb-6">
                   <h3 className="text-lg font-medium text-gray-900 mb-3">Was du lernst:</h3>
                   <ul className="space-y-2">
-                    {workshop.outcomes.map((outcome, index) => (
+                    {workshop.learning_objectives.map((objective, index) => (
                       <li key={index} className="flex items-start">
                         <CheckCircle className="w-5 h-5 text-green-500 mr-3 mt-0.5 flex-shrink-0" />
-                        <span className="text-gray-700">{outcome}</span>
+                        <span className="text-gray-700">{objective}</span>
                       </li>
                     ))}
                   </ul>
+                </div>
+              )}
+
+              {/* Materials */}
+              {(workshop.materials_provided || workshop.materials_required) && (
+                <div>
+                  <div className="flex items-center gap-2 mb-3">
+                    <Package className="w-5 h-5 text-gray-500" />
+                    <h3 className="text-lg font-medium text-gray-900">Materialien</h3>
+                  </div>
+                  {workshop.materials_provided && (
+                    <div className="mb-3">
+                      <p className="text-sm font-medium text-gray-700 mb-1">Wird bereitgestellt:</p>
+                      <p className="text-gray-600">{workshop.materials_provided}</p>
+                    </div>
+                  )}
+                  {workshop.materials_required && (
+                    <div>
+                      <p className="text-sm font-medium text-gray-700 mb-1">Bitte mitbringen:</p>
+                      <p className="text-gray-600">{workshop.materials_required}</p>
+                    </div>
+                  )}
                 </div>
               )}
             </div>
@@ -221,46 +305,67 @@ export default async function WorkshopDetailPage({ params }: { params: Promise<{
                 <h2 className="text-xl font-semibold text-gray-900 mb-4">Kommende Termine</h2>
 
                 <div className="space-y-4">
-                  {upcomingInstances.slice(0, 3).map((instance) => (
-                    <div key={instance.id} className="border border-gray-200 rounded-lg p-4">
-                      <div className="flex items-center justify-between mb-3">
-                        <div className="flex items-center gap-4">
-                          <div className="flex items-center">
-                            <Calendar className="w-5 h-5 text-gray-400 mr-2" />
-                            <span className="font-medium text-gray-900">
-                              {formatDateWithWeekday(instance.start_date)}
-                            </span>
+                  {upcomingInstances.map((instance) => {
+                    const maxParts = instance.max_participants ?? workshop.max_participants
+                    const spotsLeft = maxParts - instance.current_participants
+                    const isFull = spotsLeft <= 0
+
+                    return (
+                      <div key={instance.id} className="border border-gray-200 rounded-lg p-4">
+                        <div className="flex items-center justify-between mb-3 flex-wrap gap-2">
+                          <div className="flex items-center gap-4 flex-wrap">
+                            <div className="flex items-center">
+                              <Calendar className="w-5 h-5 text-gray-400 mr-2" />
+                              <span className="font-medium text-gray-900">
+                                {formatDateWithWeekday(instance.start_date)}
+                              </span>
+                            </div>
+                            <div className="flex items-center">
+                              <Clock className="w-5 h-5 text-gray-400 mr-2" />
+                              <span className="text-gray-600">
+                                {new Date(instance.start_date).toLocaleTimeString('de-CH', {
+                                  hour: '2-digit',
+                                  minute: '2-digit'
+                                })}
+                              </span>
+                            </div>
                           </div>
-                          <div className="flex items-center">
-                            <Clock className="w-5 h-5 text-gray-400 mr-2" />
-                            <span className="text-gray-600">
-                              {new Date(instance.start_date).toLocaleTimeString('de-CH', {
-                                hour: '2-digit',
-                                minute: '2-digit'
-                              })}
-                            </span>
+
+                          <div className="text-right">
+                            {isFull ? (
+                              <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                                Ausgebucht
+                              </span>
+                            ) : (
+                              <>
+                                <div className="text-sm text-gray-600 mb-1">
+                                  {instance.current_participants}/{maxParts} angemeldet
+                                </div>
+                                <div className="w-24 bg-gray-200 rounded-full h-2">
+                                  <div
+                                    className="bg-green-600 h-2 rounded-full"
+                                    style={{ width: `${Math.min(100, (instance.current_participants / maxParts) * 100)}%` }}
+                                  />
+                                </div>
+                              </>
+                            )}
                           </div>
                         </div>
 
-                        <div className="text-right">
-                          <div className="text-sm text-gray-600 mb-1">
-                            {instance.current_participants}/{workshop.max_participants} angemeldet
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center text-gray-600">
+                            <MapPin className="w-4 h-4 mr-2" />
+                            <span>{instance.location || 'Wird noch bekannt gegeben'}</span>
                           </div>
-                          <div className="w-full bg-gray-200 rounded-full h-2">
-                            <div
-                              className="bg-green-600 h-2 rounded-full"
-                              style={{ width: `${(instance.current_participants / workshop.max_participants) * 100}%` }}
-                            ></div>
-                          </div>
+                          {instance.instructor && (
+                            <span className="text-sm text-gray-500">
+                              Leitung: {instance.instructor}
+                            </span>
+                          )}
                         </div>
                       </div>
-
-                      <div className="flex items-center text-gray-600">
-                        <MapPin className="w-4 h-4 mr-2" />
-                        <span>{instance.location}</span>
-                      </div>
-                    </div>
-                  ))}
+                    )
+                  })}
                 </div>
               </div>
             )}
@@ -269,12 +374,21 @@ export default async function WorkshopDetailPage({ params }: { params: Promise<{
           {/* Sidebar */}
           <div className="space-y-6">
             {/* Registration Form */}
-            {nextInstance && (
+            {nextInstance ? (
               <div id="register" className="bg-white rounded-xl shadow-sm p-6">
                 <WorkshopRegistrationForm
-                  workshop={workshop}
+                  workshop={workshopForForm}
                   instance={nextInstance}
                 />
+              </div>
+            ) : (
+              <div className="bg-white rounded-xl shadow-sm p-6">
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">Anmeldung</h3>
+                <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                  <p className="text-yellow-800 text-sm">
+                    Aktuell sind keine Termine für diesen Workshop geplant. Schauen Sie bald wieder vorbei!
+                  </p>
+                </div>
               </div>
             )}
 
@@ -285,17 +399,17 @@ export default async function WorkshopDetailPage({ params }: { params: Promise<{
               <div className="space-y-3">
                 <div className="flex justify-between">
                   <span className="text-gray-600">Kategorie</span>
-                  <span className="font-medium">{workshop.category}</span>
+                  <span className="font-medium">{categoryName || 'Allgemein'}</span>
                 </div>
 
                 <div className="flex justify-between">
                   <span className="text-gray-600">Level</span>
-                  <span className="font-medium">{workshop.level}</span>
+                  <span className="font-medium">{workshop.level || 'Alle Stufen'}</span>
                 </div>
 
                 <div className="flex justify-between">
                   <span className="text-gray-600">Dauer</span>
-                  <span className="font-medium">{workshop.duration}</span>
+                  <span className="font-medium">{workshop.duration || 'Variabel'}</span>
                 </div>
 
                 <div className="flex justify-between">
@@ -306,7 +420,7 @@ export default async function WorkshopDetailPage({ params }: { params: Promise<{
                 {instances.length > 0 && (
                   <div className="flex justify-between">
                     <span className="text-gray-600">Termine</span>
-                    <span className="font-medium">{instances.length} verfügbar</span>
+                    <span className="font-medium">{upcomingInstances.length} verfügbar</span>
                   </div>
                 )}
               </div>
