@@ -36,6 +36,9 @@ export {
   emailVerification,
   welcome,
   passwordReset,
+  passwordChangeConfirmation,
+  staffVerificationCode,
+  staffWelcome,
   repairerApplicationSubmitted,
   repairerApplicationApproved,
   repairerApplicationRejected,
@@ -46,6 +49,9 @@ export {
   workshopCancellation,
   workshopFeedbackRequest,
   workshopProposalSubmitted,
+  workshopProposalApproved,
+  workshopProposalRejected,
+  workshopProposalChangesRequested,
   adminNewRepairerApplication,
   adminNewWorkshopProposal,
   adminNewBlogSubmission,
@@ -55,6 +61,9 @@ export {
   newReviewNotification,
   sellerApplicationSubmitted,
   locationApprovalNotification,
+  locationSubmissionConfirmation,
+  contentSubmissionApproved,
+  contentSubmissionRejected,
 
   // IT-Hilfe templates
   itHilfeRequestConfirmation,
@@ -66,6 +75,17 @@ export {
   appointmentQuoteReceived,
   appointmentStatusUpdate,
   appointmentUnassignedAlert,
+
+  // Marketplace templates
+  listingPublishedConfirmation,
+  newMarketplaceMessage,
+  listingReviewNotification,
+  orderConfirmationBuyer,
+  newOrderNotificationSeller,
+  orderStatusUpdate,
+
+  // Notification template
+  notificationEmail,
 
   // Base styles (for custom templates)
   BASE_STYLES,
