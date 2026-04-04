@@ -38,6 +38,7 @@ export const createDecisionSchema = z
   .object({
     title: z.string().min(1).max(200),
     description: z.string().min(1),
+    category: z.string().optional(),
     decisionType: z.enum(DECISION_TYPES as unknown as [string, ...string[]]) as z.ZodType<DecisionType>,
     votingMethod: z.enum(VOTING_METHODS as unknown as [string, ...string[]]) as z.ZodType<VotingMethod>,
     options: z.array(optionSchema).optional().default([]),
@@ -84,6 +85,7 @@ export type CreateDecisionInput = z.infer<typeof createDecisionSchema>;
 export const updateDecisionSchema = z.object({
   title: z.string().min(1).max(200).optional(),
   description: z.string().min(1).optional(),
+  category: z.string().optional(),
   decisionType: z.enum(DECISION_TYPES as unknown as [string, ...string[]]).optional() as z.ZodType<DecisionType | undefined>,
   votingMethod: z.enum(VOTING_METHODS as unknown as [string, ...string[]]).optional() as z.ZodType<VotingMethod | undefined>,
   options: z.array(optionSchema).optional(),

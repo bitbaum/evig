@@ -46,7 +46,11 @@ export const POST = withAdmin<RouteParams>(async (
     if ('error' in result) {
       if (result.error === 'not_found') return apiNotFound('Entscheidung')
       if (result.error === 'invalid_transition') return apiBadRequest(ERROR_MESSAGES.DECISION_INVALID_TRANSITION)
+      if (result.error === 'quorum_not_met') return apiBadRequest((result as { error: string; message: string }).message)
+      return apiBadRequest(String(result.error))
     }
+
+    const decision = (result as { decision: { title: string } }).decision
 
     logger.info('Decision transitioned', {
       decisionId,
@@ -58,7 +62,7 @@ export const POST = withAdmin<RouteParams>(async (
     if (parsed.data.status === 'voting') {
       await notifyAllStaff({
         type: 'decision_voting',
-        title: `Neue Abstimmung: ${result.decision.title}`,
+        title: `Neue Abstimmung: ${decision.title}`,
         content: 'Eine neue Entscheidung wartet auf deine Stimme.',
         related_type: 'decision',
         related_id: decisionId,
@@ -66,14 +70,14 @@ export const POST = withAdmin<RouteParams>(async (
     } else if (parsed.data.status === 'closed') {
       await notifyAllStaff({
         type: 'decision_closed',
-        title: `Entscheidung getroffen: ${result.decision.title}`,
+        title: `Entscheidung getroffen: ${decision.title}`,
         content: parsed.data.outcomeSummary || 'Die Abstimmung wurde abgeschlossen.',
         related_type: 'decision',
         related_id: decisionId,
       }, dbUserId)
     }
 
-    return apiSuccess(result.decision)
+    return apiSuccess(decision)
   } catch (error) {
     logger.error('Error transitioning decision', { error, userId: session.user.id })
     return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)

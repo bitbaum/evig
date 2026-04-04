@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   CONSENT_RESPONSE_CONFIG,
   SIMPLE_MAJORITY_RESPONSE_CONFIG,
@@ -25,6 +25,55 @@ interface Props {
   dotCount: number | null;
   hasUserVoted: boolean;
   onVoted: () => void;
+  votingDeadline?: string | null;
+  status?: string;
+}
+
+function DeadlineCountdown({ deadline }: { deadline: string }) {
+  const [now, setNow] = useState(() => Date.now());
+
+  useEffect(() => {
+    const interval = setInterval(() => setNow(Date.now()), 60_000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const deadlineMs = new Date(deadline).getTime();
+  const diffMs = deadlineMs - now;
+
+  if (diffMs <= 0) {
+    return (
+      <div className="rounded-md bg-red-50 px-3 py-2 text-sm text-red-700">
+        Abstimmungsfrist abgelaufen
+      </div>
+    );
+  }
+
+  const hours = Math.floor(diffMs / (1000 * 60 * 60));
+  const days = Math.floor(hours / 24);
+  const remainingHours = hours % 24;
+
+  let colorClass = 'text-gray-600';
+  if (hours < 24) {
+    colorClass = 'text-red-600 font-medium';
+  } else if (hours < 72) {
+    colorClass = 'text-amber-600 font-medium';
+  }
+
+  const dateStr = new Date(deadline).toLocaleDateString('de-CH', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+  });
+
+  return (
+    <div className={`rounded-md bg-gray-50 px-3 py-2 text-sm ${colorClass}`}>
+      <span>
+        Abstimmung endet in{' '}
+        {days > 0 ? `${days} Tagen, ${remainingHours} Stunden` : `${remainingHours} Stunden`}
+      </span>
+      <span className="ml-2 text-xs text-gray-500">(Frist: {dateStr})</span>
+    </div>
+  );
 }
 
 export default function VotingPanel({
@@ -34,6 +83,8 @@ export default function VotingPanel({
   dotCount,
   hasUserVoted,
   onVoted,
+  votingDeadline,
+  status,
 }: Props) {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
@@ -116,19 +167,31 @@ export default function VotingPanel({
 
   if (success || hasUserVoted) {
     return (
-      <div className="rounded-lg bg-green-50 p-6 text-center shadow-sm">
-        <p className="font-medium text-green-700">
-          Deine Stimme wurde abgegeben
-        </p>
-        <p className="mt-1 text-sm text-green-600">
-          Du kannst deine Stimme ändern, solange die Abstimmung läuft.
-        </p>
+      <div className="space-y-3">
+        {votingDeadline && status === 'voting' && (
+          <DeadlineCountdown deadline={votingDeadline} />
+        )}
+        <div className="rounded-lg bg-green-50 p-6 text-center shadow-sm">
+          <p className="font-medium text-green-700">
+            Deine Stimme wurde abgegeben
+          </p>
+          <p className="mt-1 text-sm text-green-600">
+            Du kannst deine Stimme ändern, solange die Abstimmung läuft.
+          </p>
+        </div>
       </div>
     );
   }
 
   return (
     <div className="rounded-lg bg-white p-6 shadow-sm">
+      {/* Deadline countdown */}
+      {votingDeadline && status === 'voting' && (
+        <div className="mb-4">
+          <DeadlineCountdown deadline={votingDeadline} />
+        </div>
+      )}
+
       <h2 className="mb-4 text-lg font-semibold text-gray-900">
         Deine Stimme
       </h2>

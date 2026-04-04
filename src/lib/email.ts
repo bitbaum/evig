@@ -84,6 +84,10 @@ export {
   newOrderNotificationSeller,
   orderStatusUpdate,
 
+  // Decision templates
+  decisionVotingOpened,
+  decisionDeadlineReminder,
+
   // Notification template
   notificationEmail,
 

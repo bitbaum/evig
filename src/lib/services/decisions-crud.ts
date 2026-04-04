@@ -32,6 +32,7 @@ export interface DbDecisionRow {
   id: string;
   title: string;
   description: string;
+  category: string | null;
   decision_type: string;
   voting_method: string;
   options: DecisionOption[];
@@ -170,6 +171,7 @@ export async function getDecisions(
       id: d.id,
       title: d.title,
       description: d.description,
+      category: d.category || 'operativ',
       decisionType: d.decision_type,
       votingMethod: d.voting_method,
       options: asArray<DecisionOption>(d.options, []),
@@ -219,6 +221,7 @@ export async function getDecisionById(id: string, requestingUserId: string) {
     id: d.id,
     title: d.title,
     description: d.description,
+    category: d.category || 'operativ',
     decisionType: d.decision_type,
     votingMethod: d.voting_method,
     options: asArray<DecisionOption>(d.options, []),
@@ -246,6 +249,7 @@ export async function getDecisionById(id: string, requestingUserId: string) {
 interface CreateDecisionData {
   title: string;
   description: string;
+  category?: string;
   decisionType: string;
   votingMethod: string;
   options?: DecisionOption[];
@@ -271,12 +275,13 @@ export async function createDecision(
   const result = await db.execute(sql`
     WITH inserted AS (
       INSERT INTO ${sql.raw(dTable)}
-        (title, description, decision_type, voting_method, options, quorum,
+        (title, description, category, decision_type, voting_method, options, quorum,
          blind_voting, dot_count, invited_participants, discussion_deadline,
          voting_deadline, status, created_by)
       VALUES (
         ${data.title},
         ${data.description},
+        ${data.category || 'operativ'},
         ${data.decisionType},
         ${data.votingMethod},
         ${JSON.stringify(options)}::jsonb,
@@ -310,6 +315,7 @@ export async function createDecision(
 interface UpdateDecisionData {
   title?: string;
   description?: string;
+  category?: string;
   decisionType?: string;
   votingMethod?: string;
   options?: DecisionOption[];
@@ -360,6 +366,9 @@ export async function updateDecision(
   }
   if (data.description !== undefined) {
     setClauses.push(sql`description = ${data.description}`);
+  }
+  if (data.category !== undefined) {
+    setClauses.push(sql`category = ${data.category}`);
   }
   if (data.decisionType !== undefined) {
     setClauses.push(sql`decision_type = ${data.decisionType}`);

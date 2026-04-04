@@ -525,6 +525,9 @@ export const decisions = pgTable('decisions', {
   title: text('title').notNull(),
   description: text('description').notNull(),
 
+  // Category (Verein)
+  category: text('category').default('operativ'),
+
   // Type & method
   decisionType: text('decision_type').notNull(),
   votingMethod: text('voting_method').notNull(),

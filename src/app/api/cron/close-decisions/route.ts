@@ -26,6 +26,45 @@ export async function GET(request: NextRequest) {
   }
 
   try {
+    // Send 24h deadline reminders for decisions expiring tomorrow
+    try {
+      const upcomingDecisions = await db
+        .select({
+          id: decisions.id,
+          title: decisions.title,
+          votingDeadline: decisions.votingDeadline,
+        })
+        .from(decisions)
+        .where(
+          and(
+            eq(decisions.status, 'voting'),
+            isNotNull(decisions.votingDeadline),
+            // Deadline is between 23h and 25h from now (window for daily cron)
+            sql`voting_deadline BETWEEN NOW() + INTERVAL '23 hours' AND NOW() + INTERVAL '25 hours'`
+          )
+        )
+
+      for (const decision of upcomingDecisions) {
+        try {
+          await notifyAllStaff({
+            type: 'decision_reminder',
+            title: `Abstimmung endet morgen: ${decision.title}`,
+            content: `Die Abstimmungsfrist für "${decision.title}" endet morgen. Bitte gib deine Stimme ab.`,
+            related_type: 'decision',
+            related_id: decision.id,
+          })
+        } catch (err) {
+          logger.error('Failed to send deadline reminder', { decisionId: decision.id, error: err })
+        }
+      }
+
+      if (upcomingDecisions.length > 0) {
+        logger.info('Cron: deadline reminders sent', { count: upcomingDecisions.length })
+      }
+    } catch (err) {
+      logger.error('Cron: deadline reminder check failed', { error: err })
+    }
+
     // Find decisions past their voting deadline
     const expiredDecisions = await db
       .select({

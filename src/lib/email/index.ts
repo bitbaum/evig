@@ -59,6 +59,7 @@ import * as adminTemplates from './templates/admin';
 import * as miscTemplates from './templates/misc';
 import * as itHilfeTemplates from './templates/it-hilfe';
 import * as appointmentTemplates from './templates/appointments';
+import * as decisionTemplates from './templates/decisions';
 
 export const emailTemplates = {
   // Auth
@@ -111,6 +112,10 @@ export const emailTemplates = {
   itHilfeRequestConfirmation: itHilfeTemplates.itHilfeRequestConfirmation,
   adminNewITHilfeRequest: itHilfeTemplates.adminNewITHilfeRequest,
   helperNewMatchingRequest: itHilfeTemplates.helperNewMatchingRequest,
+
+  // Decisions
+  decisionVotingOpened: decisionTemplates.decisionVotingOpened,
+  decisionDeadlineReminder: decisionTemplates.decisionDeadlineReminder,
 
   // Appointments
   appointmentNewBooking: appointmentTemplates.appointmentNewBooking,

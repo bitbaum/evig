@@ -81,6 +81,12 @@ export {
   orderStatusUpdate,
 } from './marketplace';
 
+// Decision templates
+export {
+  decisionVotingOpened,
+  decisionDeadlineReminder,
+} from './decisions';
+
 // Notification template (generic, used by notification service)
 export { notificationEmail } from './notification';
 

@@ -20,7 +20,7 @@ import {
   type VoteData,
   type DecisionOption,
 } from '@/lib/schemas/decisions';
-import { type DbDecisionRow, asArray } from './decisions-crud';
+import { type DbDecisionRow, asArray, asObject } from './decisions-crud';
 import { computeTallies } from './decisions-voting';
 
 // Table name refs
@@ -61,6 +61,39 @@ export async function transitionDecision(
   }
 
   if (newStatus === DECISION_STATUS.CLOSED) {
+    // Enforce quorum before closing
+    const quorumConfig = asObject<{ type: string; value: number }>(decision.quorum, { type: 'percentage', value: 50 });
+    const invitedParticipants = asArray<string>(decision.invited_participants, []);
+
+    // Determine total eligible voters
+    let totalEligible: number;
+    if (invitedParticipants.length > 0) {
+      totalEligible = invitedParticipants.length;
+    } else {
+      const staffCount = await db.execute(sql`
+        SELECT COUNT(*) AS cnt FROM ${sql.raw(uTable)} WHERE is_staff = true
+      `);
+      totalEligible = parseInt((staffCount.rows[0] as unknown as { cnt: string }).cnt || '0', 10);
+    }
+
+    const voteCountResult = await db.execute(sql`
+      SELECT COUNT(*) AS cnt FROM ${sql.raw(dvTable)} WHERE decision_id = ${id}
+    `);
+    const actualVotes = parseInt((voteCountResult.rows[0] as unknown as { cnt: string }).cnt || '0', 10);
+
+    // Calculate required votes based on quorum config
+    const requiredVotes = quorumConfig.type === 'percentage'
+      ? Math.ceil((quorumConfig.value / 100) * totalEligible)
+      : quorumConfig.value;
+
+    if (actualVotes < requiredVotes) {
+      const pct = totalEligible > 0 ? Math.round((actualVotes / totalEligible) * 100) : 0;
+      return {
+        error: 'quorum_not_met' as const,
+        message: `Quorum nicht erreicht. ${actualVotes} von ${requiredVotes} Stimmen benötigt (${pct}%).`,
+      };
+    }
+
     // Closing requires reading votes + computing tallies + updating atomically
     const txResult = await db.transaction(async (tx) => {
       const votesResult = await tx.execute(sql`
@@ -119,12 +152,15 @@ export async function transitionDecision(
 
   // Notify all staff when voting opens
   if (newStatus === DECISION_STATUS.VOTING && updatedDecision) {
+    const deadlineInfo = updatedDecision.voting_deadline
+      ? ` Frist: ${new Date(updatedDecision.voting_deadline).toLocaleDateString('de-CH', { day: '2-digit', month: '2-digit', year: 'numeric' })}`
+      : '';
     fireNotification(
       () => notifyAllStaff(
         {
           type: 'decision_voting',
           title: 'Abstimmung geöffnet',
-          content: `"${updatedDecision.title}" wartet auf deine Stimme.`,
+          content: `"${updatedDecision.title}" wartet auf deine Stimme.${deadlineInfo}`,
           related_type: 'decision',
           related_id: updatedDecision.id,
         },

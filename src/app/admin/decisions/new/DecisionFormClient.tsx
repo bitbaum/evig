@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import {
   DECISION_TYPES,
@@ -10,8 +10,11 @@ import {
   VOTING_METHOD_CONFIG,
   METHODS_REQUIRING_OPTIONS,
   DOT_VOTING_DEFAULTS,
+  DECISION_CATEGORIES,
+  DECISION_CATEGORY_LABELS,
   type DecisionType,
   type VotingMethod,
+  type DecisionCategory,
 } from '@/config/decisions';
 import { AIFormAssist } from '@/components/ai/AIFormAssist'
 
@@ -19,6 +22,12 @@ interface OptionItem {
   id: string;
   label: string;
   description: string;
+}
+
+interface TeamMember {
+  id: string;
+  name: string | null;
+  email: string;
 }
 
 export default function DecisionFormClient() {
@@ -31,6 +40,7 @@ export default function DecisionFormClient() {
   const [decisionType, setDecisionType] = useState<DecisionType>('sense_check');
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
+  const [category, setCategory] = useState<DecisionCategory>('operativ');
   const [votingMethod, setVotingMethod] = useState<VotingMethod>(
     DECISION_TYPE_DEFAULTS.sense_check.votingMethod
   );
@@ -45,6 +55,52 @@ export default function DecisionFormClient() {
   );
   const [quorumValue, setQuorumValue] = useState(50);
   const initialStatusRef = useRef<'draft' | 'discussion' | 'voting'>('draft');
+
+  // Deadlines
+  const [discussionDeadline, setDiscussionDeadline] = useState('');
+  const [votingDeadline, setVotingDeadline] = useState('');
+
+  // Participants
+  const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
+  const [selectedParticipants, setSelectedParticipants] = useState<Set<string>>(new Set());
+  const [participantSearch, setParticipantSearch] = useState('');
+
+  useEffect(() => {
+    fetch('/api/admin/team/profiles')
+      .then((res) => res.json())
+      .then((json) => {
+        if (json.success && Array.isArray(json.data)) {
+          setTeamMembers(
+            json.data.map((m: { userId: string; name: string | null; email: string }) => ({
+              id: m.userId,
+              name: m.name,
+              email: m.email,
+            }))
+          );
+        }
+      })
+      .catch(() => {
+        // Team members are optional — fail silently
+      });
+  }, []);
+
+  const filteredMembers = teamMembers.filter((m) => {
+    if (!participantSearch) return true;
+    const q = participantSearch.toLowerCase();
+    return (
+      m.email.toLowerCase().includes(q) ||
+      (m.name && m.name.toLowerCase().includes(q))
+    );
+  });
+
+  function toggleParticipant(id: string) {
+    setSelectedParticipants((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  }
 
   const handleAIFieldsFilled = (data: Partial<Record<string, unknown>>) => {
     if (data.title) setTitle(String(data.title))
@@ -92,6 +148,7 @@ export default function DecisionFormClient() {
     const payload = {
       title,
       description,
+      category,
       decisionType,
       votingMethod,
       options: needsOptions
@@ -100,7 +157,13 @@ export default function DecisionFormClient() {
       quorum: { type: quorumType, value: quorumValue },
       blindVoting,
       dotCount: votingMethod === 'dot' ? dotCount : null,
-      invitedParticipants: [],
+      invitedParticipants: Array.from(selectedParticipants),
+      discussionDeadline: discussionDeadline
+        ? new Date(discussionDeadline).toISOString()
+        : null,
+      votingDeadline: votingDeadline
+        ? new Date(votingDeadline).toISOString()
+        : null,
       initialStatus: initialStatusRef.current,
     };
 
@@ -256,6 +319,112 @@ export default function DecisionFormClient() {
           </button>
         </div>
       )}
+
+      {/* Fristen & Kategorie */}
+      <div className="rounded-lg border border-gray-200 bg-gray-50 p-4 space-y-4">
+        <h3 className="text-sm font-medium text-gray-900">Fristen &amp; Kategorie</h3>
+
+        {/* Category */}
+        <div>
+          <label htmlFor="decision-category" className="mb-1 block text-sm font-medium text-gray-700">
+            Kategorie
+          </label>
+          <select
+            id="decision-category"
+            value={category}
+            onChange={(e) => setCategory(e.target.value as DecisionCategory)}
+            className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
+          >
+            {Object.values(DECISION_CATEGORIES).map((cat) => (
+              <option key={cat} value={cat}>
+                {DECISION_CATEGORY_LABELS[cat]}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        {/* Discussion deadline */}
+        <div>
+          <label htmlFor="discussion-deadline" className="mb-1 block text-sm font-medium text-gray-700">
+            Diskussionsfrist
+          </label>
+          <input
+            id="discussion-deadline"
+            type="datetime-local"
+            value={discussionDeadline}
+            onChange={(e) => setDiscussionDeadline(e.target.value)}
+            className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
+          />
+        </div>
+
+        {/* Voting deadline */}
+        <div>
+          <label htmlFor="voting-deadline" className="mb-1 block text-sm font-medium text-gray-700">
+            Abstimmungsfrist
+          </label>
+          <input
+            id="voting-deadline"
+            type="datetime-local"
+            value={votingDeadline}
+            onChange={(e) => setVotingDeadline(e.target.value)}
+            className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
+          />
+        </div>
+
+        <p className="text-xs text-gray-500">
+          Entscheidungen werden automatisch geschlossen wenn die Abstimmungsfrist abläuft
+        </p>
+      </div>
+
+      {/* Teilnehmer / Participant Selector */}
+      <div className="rounded-lg border border-gray-200 bg-gray-50 p-4 space-y-3">
+        <div>
+          <h3 className="text-sm font-medium text-gray-900">Abstimmungsberechtigt</h3>
+          <p className="mt-0.5 text-xs text-gray-500">
+            Leer lassen = alle Teammitglieder können abstimmen
+          </p>
+        </div>
+
+        <input
+          type="text"
+          value={participantSearch}
+          onChange={(e) => setParticipantSearch(e.target.value)}
+          placeholder="Teilnehmer suchen..."
+          className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
+        />
+
+        {teamMembers.length === 0 ? (
+          <p className="text-xs text-gray-400">Team wird geladen...</p>
+        ) : (
+          <div className="max-h-48 overflow-y-auto space-y-1">
+            {filteredMembers.map((m) => (
+              <label
+                key={m.id}
+                className="flex items-center gap-2 rounded-md px-2 py-1.5 hover:bg-gray-100 cursor-pointer"
+              >
+                <input
+                  type="checkbox"
+                  checked={selectedParticipants.has(m.id)}
+                  onChange={() => toggleParticipant(m.id)}
+                  className="rounded"
+                />
+                <span className="text-sm text-gray-700">
+                  {m.name || m.email}
+                </span>
+                {m.name && (
+                  <span className="text-xs text-gray-400">{m.email}</span>
+                )}
+              </label>
+            ))}
+          </div>
+        )}
+
+        {selectedParticipants.size > 0 && (
+          <p className="text-xs text-gray-500">
+            {selectedParticipants.size} Teilnehmer ausgewählt
+          </p>
+        )}
+      </div>
 
       {/* Advanced Settings */}
       <div>

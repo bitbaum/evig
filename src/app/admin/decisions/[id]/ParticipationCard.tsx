@@ -9,6 +9,7 @@ interface ParticipationData {
   quorumTarget: number;
   quorumMet: boolean;
   progressPercent: number;
+  quorumPercent?: number;
 }
 
 export default function ParticipationCard({
@@ -33,6 +34,8 @@ export default function ParticipationCard({
 
   if (!data) return null;
 
+  const quorumPct = data.quorumPercent ?? (data.total > 0 ? Math.round((data.quorumTarget / data.total) * 100) : 0);
+
   return (
     <div className="rounded-lg bg-white p-4 shadow-sm">
       <div className="flex items-center justify-between">
@@ -44,7 +47,7 @@ export default function ParticipationCard({
               : 'bg-amber-100 text-amber-700'
           }`}
         >
-          {data.quorumMet ? 'Quorum erreicht' : `Quorum: ${data.quorumTarget}`}
+          {data.quorumMet ? 'Quorum erreicht' : 'Quorum ausstehend'}
         </span>
       </div>
 
@@ -52,9 +55,11 @@ export default function ParticipationCard({
       <div className="mt-2">
         <div className="flex items-center justify-between text-xs text-gray-500">
           <span>
-            {data.voted.length} von {data.total} haben abgestimmt
+            {data.voted.length} / {data.total} abgestimmt ({data.progressPercent}%)
           </span>
-          <span>{data.progressPercent}%</span>
+          <span className={data.quorumMet ? 'text-green-600' : 'text-amber-600'}>
+            Quorum: {quorumPct}% erforderlich
+          </span>
         </div>
         <div className="mt-1 h-2 overflow-hidden rounded-full bg-gray-200">
           <div
@@ -65,6 +70,13 @@ export default function ParticipationCard({
           />
         </div>
       </div>
+
+      {/* Quorum warning */}
+      {!data.quorumMet && (
+        <div className="mt-2 rounded-md bg-amber-50 px-3 py-2 text-xs text-amber-700">
+          Quorum noch nicht erreicht. {data.quorumTarget - data.voted.length} weitere Stimme(n) benötigt.
+        </div>
+      )}
 
       {/* Who hasn't voted */}
       {data.notVoted.length > 0 && (

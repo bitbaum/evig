@@ -240,3 +240,25 @@ export function isStatusEditable(status: DecisionStatus): boolean {
 export function isStatusCommentable(status: DecisionStatus): boolean {
   return (COMMENTABLE_STATUSES as readonly string[]).includes(status);
 }
+
+// ─── Decision Categories (Verein) ────────────────────────────────────────
+
+export const DECISION_CATEGORIES = {
+  VORSTANDSBESCHLUSS: 'vorstandsbeschluss',
+  MITGLIEDERBESCHLUSS: 'mitgliederbeschluss',
+  RATIFIZIERUNG: 'ratifizierung',
+  STATUTENAENDERUNG: 'statutenaenderung',
+  BUDGET: 'budget',
+  OPERATIV: 'operativ',
+} as const;
+
+export type DecisionCategory = typeof DECISION_CATEGORIES[keyof typeof DECISION_CATEGORIES];
+
+export const DECISION_CATEGORY_LABELS: Record<DecisionCategory, string> = {
+  vorstandsbeschluss: 'Vorstandsbeschluss',
+  mitgliederbeschluss: 'Mitgliederbeschluss',
+  ratifizierung: 'Ratifizierung',
+  statutenaenderung: 'Statutenänderung',
+  budget: 'Budget-Genehmigung',
+  operativ: 'Operative Entscheidung',
+};

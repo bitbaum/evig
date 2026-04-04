@@ -9,12 +9,14 @@ import {
   DECISION_STATUS_CONFIG,
   DECISION_TYPE_CONFIG,
   VOTING_METHOD_CONFIG,
+  DECISION_CATEGORY_LABELS,
   VALID_TRANSITIONS,
   EDITABLE_STATUSES,
   PARTICIPATABLE_STATUSES,
   READ_ONLY_STATUSES,
   type DecisionStatus,
   type DecisionType,
+  type DecisionCategory,
   type VotingMethod,
 } from '@/config/decisions';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
@@ -33,6 +35,7 @@ interface DecisionDetail {
   id: string;
   title: string;
   description: string;
+  category: DecisionCategory;
   decisionType: DecisionType;
   votingMethod: VotingMethod;
   status: DecisionStatus;
@@ -163,6 +166,8 @@ export default function DecisionDetailClient({
               <span className="text-xs text-gray-500">{typeConf.label}</span>
               <span className="text-xs text-gray-400">&middot;</span>
               <span className="text-xs text-gray-500">{methodConf.label}</span>
+              <span className="text-xs text-gray-400">&middot;</span>
+              <span className="text-xs text-gray-500">{DECISION_CATEGORY_LABELS[decision.category] || decision.category}</span>
             </div>
             <h1 className="text-xl font-bold text-gray-900">
               {decision.title}
@@ -350,6 +355,8 @@ export default function DecisionDetailClient({
           dotCount={decision.dotCount}
           hasUserVoted={decision.hasUserVoted}
           onVoted={fetchDecision}
+          votingDeadline={decision.votingDeadline}
+          status={decision.status}
         />
       )}
 
