@@ -42,7 +42,7 @@
   "crons": [
     {
       "path": "/api/cron/close-decisions",
-      "schedule": "*/15 * * * *"
+      "schedule": "0 0 * * *"
     }
   ]
 } 
