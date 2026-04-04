@@ -7,7 +7,8 @@
  * Adapts to status: review (editable) vs finalized (read-only).
  */
 
-import { Loader2, CheckCircle2, FileText, Trash2 } from 'lucide-react'
+import { useState, useMemo } from 'react'
+import { Loader2, CheckCircle2, FileText, Trash2, Users, Pencil, X, Check } from 'lucide-react'
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog'
 import {
   useProtocolDetail,
@@ -21,10 +22,45 @@ import {
 import type { ProtocolDetailProps } from '@/components/admin/protocols'
 import { PROTOCOL_STATUSES } from '@/config/protocols'
 import { useRouter } from 'next/navigation'
+import { getErrorMessage } from '@/lib/utils/error'
 
 export default function ProtocolDetailClient(props: ProtocolDetailProps) {
   const router = useRouter()
   const { protocol, actionLinks, teamMembers, decisionVotes, decisionOutcomes, currentUserId, isProtocolCreator, isSuperAdmin } = props
+
+  // Attendee editing state
+  const [editingAttendees, setEditingAttendees] = useState(false)
+  const [editedAttendees, setEditedAttendees] = useState<string[]>(protocol.attendees || [])
+  const [attendeeSearch, setAttendeeSearch] = useState('')
+  const [savingAttendees, setSavingAttendees] = useState(false)
+  const [attendeeError, setAttendeeError] = useState<string | null>(null)
+
+  const filteredTeamMembersForEdit = useMemo(() => {
+    if (!attendeeSearch.trim()) return teamMembers
+    const search = attendeeSearch.toLowerCase()
+    return teamMembers.filter(m => m.name.toLowerCase().includes(search))
+  }, [teamMembers, attendeeSearch])
+
+  const handleSaveAttendees = async () => {
+    setSavingAttendees(true)
+    setAttendeeError(null)
+    try {
+      const res = await fetch(`/api/protocols/${protocol.id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ attendees: editedAttendees }),
+      })
+      const data = await res.json()
+      if (!data.success) throw new Error(data.error || 'Fehler beim Speichern')
+      setEditingAttendees(false)
+      router.refresh()
+    } catch (err) {
+      setAttendeeError(getErrorMessage(err))
+    } finally {
+      setSavingAttendees(false)
+    }
+  }
+
   const {
     notes,
     isReview,
@@ -98,6 +134,96 @@ export default function ProtocolDetailClient(props: ProtocolDetailProps) {
           </span>
         )}
       </div>
+
+      {/* Edit Attendees (review phase) */}
+      {isReview && (
+        <div className="bg-white rounded-lg border p-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <Users className="w-4 h-4 text-gray-500" />
+              <span className="text-sm font-medium text-gray-700">
+                Teilnehmer ({protocol.attendees?.length || 0})
+              </span>
+            </div>
+            {!editingAttendees ? (
+              <button
+                onClick={() => {
+                  setEditedAttendees(protocol.attendees || [])
+                  setAttendeeSearch('')
+                  setEditingAttendees(true)
+                }}
+                className="flex items-center gap-1 text-sm text-blue-600 hover:text-blue-800"
+              >
+                <Pencil className="w-3.5 h-3.5" />
+                Teilnehmer bearbeiten
+              </button>
+            ) : (
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => setEditingAttendees(false)}
+                  className="flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700"
+                >
+                  <X className="w-3.5 h-3.5" />
+                  Abbrechen
+                </button>
+                <button
+                  onClick={handleSaveAttendees}
+                  disabled={savingAttendees}
+                  className="flex items-center gap-1 text-sm text-white bg-blue-600 hover:bg-blue-700 px-3 py-1 rounded disabled:opacity-50"
+                >
+                  {savingAttendees ? (
+                    <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                  ) : (
+                    <Check className="w-3.5 h-3.5" />
+                  )}
+                  Speichern
+                </button>
+              </div>
+            )}
+          </div>
+
+          {attendeeError && (
+            <p className="mt-2 text-sm text-red-600">{attendeeError}</p>
+          )}
+
+          {editingAttendees && (
+            <div className="mt-3 space-y-2">
+              <input
+                type="text"
+                value={attendeeSearch}
+                onChange={(e) => setAttendeeSearch(e.target.value)}
+                placeholder="Teilnehmer suchen..."
+                className="w-full px-2 py-1 text-sm border rounded focus:outline-none focus:ring-1 focus:ring-blue-500"
+              />
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-1 max-h-48 overflow-y-auto">
+                {filteredTeamMembersForEdit.map((member) => (
+                  <label
+                    key={member.id}
+                    className="flex items-center gap-2 px-2 py-1.5 rounded hover:bg-gray-50 cursor-pointer text-sm"
+                  >
+                    <input
+                      type="checkbox"
+                      checked={editedAttendees.includes(member.id)}
+                      onChange={() => {
+                        setEditedAttendees(prev =>
+                          prev.includes(member.id)
+                            ? prev.filter(id => id !== member.id)
+                            : [...prev, member.id]
+                        )
+                      }}
+                      className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                    />
+                    {member.name}
+                  </label>
+                ))}
+                {filteredTeamMembersForEdit.length === 0 && (
+                  <p className="text-sm text-gray-500 px-2 py-1">Keine Teilnehmer gefunden</p>
+                )}
+              </div>
+            </div>
+          )}
+        </div>
+      )}
 
       {isReview && (
         <ProtocolReprocessSection

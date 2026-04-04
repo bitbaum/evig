@@ -17,10 +17,12 @@ import { eq, and, desc, sql } from 'drizzle-orm';
 import { alias } from 'drizzle-orm/pg-core';
 import { REQUEST_STATUSES } from '@/config/tasks';
 import { updateTaskSchema } from '@/lib/schemas/tasks';
+import { notifyUsers } from '@/lib/services/notifications';
 import { logger } from '@/lib/logger';
 
 const requestedByUser = alias(users, 'requested_by_user');
 const requestedUser = alias(users, 'requested_user');
+const assignedUser = alias(users, 'assigned_user');
 
 type RouteParams = { id: string };
 
@@ -62,15 +64,18 @@ export const GET = withAdmin<RouteParams>(async (
           completed_at: tasks.completedAt,
           completed_by: tasks.completedBy,
           project_id: tasks.projectId,
+          assigned_to: tasks.assignedTo,
           created_by: tasks.createdBy,
           is_archived: tasks.isArchived,
           created_at: tasks.createdAt,
           updated_at: tasks.updatedAt,
           created_by_name: users.name,
           created_by_email: users.email,
+          assigned_to_name: assignedUser.name,
         })
         .from(tasks)
         .leftJoin(users, eq(tasks.createdBy, users.id))
+        .leftJoin(assignedUser, eq(tasks.assignedTo, assignedUser.id))
         .where(eq(tasks.id, taskId)),
 
       // Get completion history
@@ -188,9 +193,9 @@ export const PATCH = withAdmin<RouteParams>(async (
 
     const data = result.data;
 
-    // Check if task exists
+    // Check if task exists (and get current assignee for notification logic)
     const [existing] = await db
-      .select({ id: tasks.id })
+      .select({ id: tasks.id, title: tasks.title, assignedTo: tasks.assignedTo })
       .from(tasks)
       .where(eq(tasks.id, taskId))
 
@@ -213,6 +218,7 @@ export const PATCH = withAdmin<RouteParams>(async (
       estimated_minutes: 'estimatedMinutes',
       due_date: 'dueDate',
       project_id: 'projectId',
+      assigned_to: 'assignedTo',
       current_status: 'currentStatus',
       is_archived: 'isArchived',
     };
@@ -240,6 +246,18 @@ export const PATCH = withAdmin<RouteParams>(async (
       userId: session.user.id,
       updatedFields: Object.keys(data)
     });
+
+    // Notify new assignee if assigned_to changed to a different user
+    const newAssignee = (data as Record<string, unknown>).assigned_to as string | null | undefined;
+    if (newAssignee && newAssignee !== existing.assignedTo) {
+      notifyUsers([newAssignee], {
+        type: 'task_assigned',
+        title: 'Aufgabe zugewiesen',
+        content: `Dir wurde eine Aufgabe zugewiesen: ${existing.title}`,
+        related_type: 'task',
+        related_id: taskId,
+      }).catch(err => logger.error('Failed to notify task assignee', { error: err, taskId }));
+    }
 
     return apiSuccess(updated);
   } catch (error) {

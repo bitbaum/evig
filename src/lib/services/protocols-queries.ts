@@ -81,7 +81,7 @@ export async function getTeamMembers(): Promise<Array<{ id: string; name: string
 export async function getProtocols(
   userId: string,
   isSuperAdmin: boolean,
-  filters?: { meeting_type?: string; status?: string; q?: string; page?: number; limit?: number }
+  filters?: { meeting_type?: string; status?: string; q?: string; attendee?: string; page?: number; limit?: number }
 ): Promise<{ protocols: ProtocolListItem[]; total: number }> {
   const page = filters?.page ?? 1
   const limit = filters?.limit ?? 20
@@ -106,6 +106,9 @@ export async function getProtocols(
   if (filters?.q) {
     conditions.push(sql`mp.title ILIKE '%' || ${filters.q} || '%'`)
   }
+  if (filters?.attendee) {
+    conditions.push(sql`mp.attendees @> to_jsonb(${filters.attendee}::text)`)
+  }
 
   // Join conditions with AND
   let whereClause = conditions[0]
@@ -122,6 +125,12 @@ export async function getProtocols(
       mp.meeting_type,
       mp.visibility,
       mp.attendees,
+      COALESCE(
+        (SELECT jsonb_agg(au.name ORDER BY au.name)
+         FROM ${sql.raw(uTable)} au
+         WHERE au.id::text IN (SELECT jsonb_array_elements_text(COALESCE(mp.attendees, '[]'::jsonb)))
+        ), '[]'::jsonb
+      ) as attendee_names,
       mp.status,
       mp.created_at,
       u.name as created_by_name,

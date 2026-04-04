@@ -33,7 +33,8 @@ export default function ProtocolFormClient({ teamMembers }: ProtocolFormClientPr
   const [meetingDate, setMeetingDate] = useState(new Date().toISOString().split('T')[0])
   const [visibility, setVisibility] = useState<ProtocolVisibility>('team')
   const [selectedAttendees, setSelectedAttendees] = useState<string[]>([])
-  const [showAttendees, setShowAttendees] = useState(false)
+  const [showAttendees, setShowAttendees] = useState(true)
+  const [attendeeSearch, setAttendeeSearch] = useState('')
 
   // Content state
   const [content, setContent] = useState('')
@@ -75,6 +76,12 @@ export default function ProtocolFormClient({ teamMembers }: ProtocolFormClientPr
       }
     }
   }, [meetingType])
+
+  const filteredTeamMembers = useMemo(() => {
+    if (!attendeeSearch.trim()) return teamMembers
+    const search = attendeeSearch.toLowerCase()
+    return teamMembers.filter(m => m.name.toLowerCase().includes(search))
+  }, [teamMembers, attendeeSearch])
 
   const toggleAttendee = (id: string) => {
     setSelectedAttendees(prev =>
@@ -280,15 +287,24 @@ export default function ProtocolFormClient({ teamMembers }: ProtocolFormClientPr
 
           {showAttendees && (
             <div className="mt-2 p-3 bg-gray-50 rounded-lg border space-y-2">
-              <button
-                type="button"
-                onClick={selectAllAttendees}
-                className="text-xs text-blue-600 hover:text-blue-800 font-medium"
-              >
-                {selectedAttendees.length === teamMembers.length ? 'Keine auswählen' : 'Alle auswählen'}
-              </button>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-1">
-                {teamMembers.map((member) => (
+              <div className="flex items-center justify-between gap-2">
+                <input
+                  type="text"
+                  value={attendeeSearch}
+                  onChange={(e) => setAttendeeSearch(e.target.value)}
+                  placeholder="Teilnehmer suchen..."
+                  className="flex-1 px-2 py-1 text-sm border rounded focus:outline-none focus:ring-1 focus:ring-blue-500"
+                />
+                <button
+                  type="button"
+                  onClick={selectAllAttendees}
+                  className="text-xs text-blue-600 hover:text-blue-800 font-medium whitespace-nowrap"
+                >
+                  {selectedAttendees.length === teamMembers.length ? 'Keine auswählen' : 'Alle auswählen'}
+                </button>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-1 max-h-64 overflow-y-auto">
+                {filteredTeamMembers.map((member) => (
                   <label
                     key={member.id}
                     className="flex items-center gap-2 px-2 py-1.5 rounded hover:bg-gray-100 cursor-pointer text-sm"
@@ -302,6 +318,9 @@ export default function ProtocolFormClient({ teamMembers }: ProtocolFormClientPr
                     {member.name}
                   </label>
                 ))}
+                {filteredTeamMembers.length === 0 && (
+                  <p className="text-sm text-gray-500 px-2 py-1">Keine Teilnehmer gefunden</p>
+                )}
               </div>
             </div>
           )}

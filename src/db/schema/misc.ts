@@ -316,6 +316,7 @@ export const tasks = pgTable('tasks', {
   isCompleted: boolean('is_completed').default(false),
   completedAt: timestamp('completed_at', { withTimezone: true, mode: 'string' }),
   completedBy: uuid('completed_by').references(() => users.id),
+  assignedTo: uuid('assigned_to').references(() => users.id, { onDelete: 'set null' }),
   projectId: uuid('project_id').references(() => taskProjects.id, { onDelete: 'set null' }),
   createdBy: uuid('created_by').notNull().references(() => users.id),
   isArchived: boolean('is_archived').default(false),
@@ -326,6 +327,7 @@ export const tasks = pgTable('tasks', {
   index('idx_tasks_category').on(table.category),
   index('idx_tasks_type').on(table.taskType),
   index('idx_tasks_project').on(table.projectId),
+  index('idx_tasks_assigned_to').on(table.assignedTo),
 ])
 
 export type Task = typeof tasks.$inferSelect

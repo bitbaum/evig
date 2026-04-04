@@ -138,7 +138,9 @@ async function getTasks(
       t.due_date,
       t.is_completed,
       t.created_at,
+      t.assigned_to,
       u.name as created_by_name,
+      au.name as assigned_to_name,
       (
         SELECT COUNT(*)::int
         FROM ${TABLE_NAMES.TASK_COMPLETIONS} tc
@@ -146,6 +148,7 @@ async function getTasks(
       ) as completion_count
     FROM ${TABLE_NAMES.TASKS} t
     LEFT JOIN ${TABLE_NAMES.USERS} u ON t.created_by = u.id
+    LEFT JOIN ${TABLE_NAMES.USERS} au ON t.assigned_to = au.id
     ${filterClause}
     ORDER BY
       CASE t.current_status
@@ -344,6 +347,9 @@ export default async function TasksAdminPage({
                   Typ
                 </th>
                 <th className="text-left px-4 py-3 text-sm font-medium text-gray-600">
+                  Zugewiesen
+                </th>
+                <th className="text-left px-4 py-3 text-sm font-medium text-gray-600">
                   Fällig
                 </th>
                 <th className="text-right px-4 py-3 text-sm font-medium text-gray-600">
@@ -394,6 +400,13 @@ export default async function TasksAdminPage({
                     <span className="text-sm text-gray-600">
                       {TASK_TYPE_LABELS[task.task_type]}
                     </span>
+                  </td>
+                  <td className="px-4 py-3">
+                    {task.assigned_to_name ? (
+                      <span className="text-sm text-gray-600">{task.assigned_to_name}</span>
+                    ) : (
+                      <span className="text-sm text-gray-400">&mdash;</span>
+                    )}
                   </td>
                   <td className="px-4 py-3">
                     {task.due_date ? (() => {

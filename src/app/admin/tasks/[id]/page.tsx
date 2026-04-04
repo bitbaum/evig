@@ -51,9 +51,11 @@ async function getTask(id: string): Promise<TaskDetail | null> {
       `SELECT
         t.*,
         u.name as created_by_name,
-        u.email as created_by_email
+        u.email as created_by_email,
+        au.name as assigned_to_name
       FROM ${TABLE_NAMES.TASKS} t
       LEFT JOIN ${TABLE_NAMES.USERS} u ON t.created_by = u.id
+      LEFT JOIN ${TABLE_NAMES.USERS} au ON t.assigned_to = au.id
       WHERE t.id = $1`,
       [id]
     )
@@ -337,6 +339,15 @@ export default async function TaskDetailPage({
                   <User className="w-4 h-4 text-gray-400" />
                   <span className="text-gray-900">
                     {task.created_by_name || task.created_by_email || 'Unbekannt'}
+                  </span>
+                </dd>
+              </div>
+              <div>
+                <dt className="text-sm text-gray-500">Zugewiesen an</dt>
+                <dd className="flex items-center gap-2 mt-1">
+                  <User className="w-4 h-4 text-gray-400" />
+                  <span className="text-gray-900">
+                    {task.assigned_to_name || 'Nicht zugewiesen'}
                   </span>
                 </dd>
               </div>

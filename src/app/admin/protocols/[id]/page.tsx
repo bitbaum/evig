@@ -79,6 +79,16 @@ export default async function ProtocolDetailPage({
     getDecisionData(id),
   ])
 
+  // Resolve attendee UUIDs to names
+  const attendeeNames: Record<string, string> = {}
+  if (protocol.attendees && protocol.attendees.length > 0) {
+    for (const member of teamMembers) {
+      if (protocol.attendees.includes(member.id)) {
+        attendeeNames[member.id] = member.name
+      }
+    }
+  }
+
   const MeetingIcon = MEETING_TYPE_ICON_COMPONENTS[protocol.meeting_type as MeetingType] || FileText
 
   return (
@@ -200,11 +210,17 @@ export default async function ProtocolDetailPage({
               {protocol.attendees && protocol.attendees.length > 0 && (
                 <div>
                   <dt className="text-sm text-gray-500">Teilnehmer</dt>
-                  <dd className="flex items-center gap-2 mt-1">
-                    <Users className="w-4 h-4 text-gray-400" />
-                    <span className="text-gray-900">
-                      {protocol.attendees.length} Personen
-                    </span>
+                  <dd className="mt-1">
+                    <div className="flex flex-wrap gap-1">
+                      {protocol.attendees.map((uid) => (
+                        <span
+                          key={uid}
+                          className="inline-flex px-1.5 py-0.5 text-xs font-medium rounded bg-gray-100 text-gray-700"
+                        >
+                          {attendeeNames[uid] || 'Unbekannt'}
+                        </span>
+                      ))}
+                    </div>
                   </dd>
                 </div>
               )}

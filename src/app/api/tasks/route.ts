@@ -14,8 +14,12 @@ import { getDbUserId } from '@/lib/api/task-helpers';
 import { db } from '@/db';
 import { tasks, taskCompletions, users } from '@/db/schema';
 import { eq, and, sql, desc, SQL } from 'drizzle-orm';
+import { alias } from 'drizzle-orm/pg-core';
 import { TASK_PRIORITIES } from '@/config/tasks';
+
+const assignedUser = alias(users, 'assigned_user');
 import { createTaskSchema } from '@/lib/schemas/tasks';
+import { notifyUsers } from '@/lib/services/notifications';
 import { logger } from '@/lib/logger';
 
 /**
@@ -62,8 +66,10 @@ export const GET = withAdmin(async (request: NextRequest, session: ValidSession)
         is_archived: tasks.isArchived,
         created_at: tasks.createdAt,
         updated_at: tasks.updatedAt,
+        assigned_to: tasks.assignedTo,
         created_by_name: users.name,
         created_by_email: users.email,
+        assigned_to_name: assignedUser.name,
         completion_count: sql<number>`(
           SELECT COUNT(*)::int
           FROM ${taskCompletions} tc
@@ -84,6 +90,7 @@ export const GET = withAdmin(async (request: NextRequest, session: ValidSession)
       })
       .from(tasks)
       .leftJoin(users, eq(tasks.createdBy, users.id))
+      .leftJoin(assignedUser, eq(tasks.assignedTo, assignedUser.id))
       .where(conditions.length > 0 ? and(...conditions) : undefined)
       .orderBy(
         sql`CASE ${tasks.priority}
@@ -142,6 +149,7 @@ export const POST = withAdmin(async (request: NextRequest, session: ValidSession
         estimatedMinutes: data.estimated_minutes || undefined,
         dueDate: data.due_date || undefined,
         projectId: data.project_id || undefined,
+        assignedTo: data.assigned_to || undefined,
         createdBy: dbUserId,
       })
       .returning()
@@ -151,6 +159,17 @@ export const POST = withAdmin(async (request: NextRequest, session: ValidSession
       userId: dbUserId,
       title: data.title
     });
+
+    // Notify assignee if assigned
+    if (data.assigned_to) {
+      notifyUsers([data.assigned_to], {
+        type: 'task_assigned',
+        title: 'Aufgabe zugewiesen',
+        content: `Dir wurde eine Aufgabe zugewiesen: ${data.title}`,
+        related_type: 'task',
+        related_id: task.id,
+      }).catch(err => logger.error('Failed to notify task assignee', { error: err, taskId: task.id }));
+    }
 
     return apiSuccess(task, 201);
   } catch (error) {

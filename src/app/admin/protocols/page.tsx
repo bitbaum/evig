@@ -39,6 +39,7 @@ import {
 import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
 import ProtocolListClient from './ProtocolListClient'
 import { Pagination } from '@/components/ui/Pagination'
+import { getTeamMembers } from '@/lib/services/protocols'
 
 export const metadata: Metadata = {
   title: 'Protokolle | RevampIT Admin',
@@ -50,7 +51,7 @@ const PROTOCOLS_PAGE_SIZE = 20
 export default async function ProtocolsAdminPage({
   searchParams,
 }: {
-  searchParams: Promise<{ meeting_type?: string; status?: string; step?: string; q?: string; page?: string }>
+  searchParams: Promise<{ meeting_type?: string; status?: string; step?: string; q?: string; attendee?: string; page?: string }>
 }) {
   const params = await searchParams
 
@@ -83,21 +84,25 @@ export default async function ProtocolsAdminPage({
   let stats = { total: 0, draft: 0, review: 0, finalized: 0 }
   let protocols: ProtocolListItem[] = []
   let totalProtocols = 0
+  let teamMembers: Array<{ id: string; name: string }> = []
   let listError = false
   try {
-    const [fetchedStats, fetchedProtocols] = await Promise.all([
+    const [fetchedStats, fetchedProtocols, fetchedTeamMembers] = await Promise.all([
       getProtocolStats(dbUserId, isAdmin),
       getProtocols(dbUserId, isAdmin, {
         meeting_type: params.meeting_type,
         status: params.status,
         q: params.q,
+        attendee: params.attendee,
         page: currentPage,
         limit: pageLimit,
       }),
+      getTeamMembers(),
     ])
     stats = fetchedStats
     protocols = fetchedProtocols.protocols
     totalProtocols = fetchedProtocols.total
+    teamMembers = fetchedTeamMembers
   } catch (error) {
     logger.error('Error fetching protocols', { error })
     listError = true
@@ -118,6 +123,7 @@ export default async function ProtocolsAdminPage({
     if (params.meeting_type) p.set('meeting_type', params.meeting_type)
     if (params.status) p.set('status', params.status)
     if (params.q) p.set('q', params.q)
+    if (params.attendee) p.set('attendee', params.attendee)
     const qs = p.toString()
     return `/admin/protocols${qs ? `?${qs}` : ''}`
   })()
@@ -191,7 +197,7 @@ export default async function ProtocolsAdminPage({
 
       {/* Filters */}
       <Suspense fallback={<div className="bg-white rounded-lg border p-4 h-14" />}>
-        <ProtocolListClient />
+        <ProtocolListClient teamMembers={teamMembers} />
       </Suspense>
 
       {/* Protocol List */}
@@ -243,6 +249,9 @@ export default async function ProtocolsAdminPage({
                   Datum
                 </th>
                 <th className="text-left px-4 py-3 text-sm font-medium text-gray-600">
+                  Teilnehmer
+                </th>
+                <th className="text-left px-4 py-3 text-sm font-medium text-gray-600">
                   Status
                 </th>
                 <th className="text-left px-4 py-3 text-sm font-medium text-gray-600">
@@ -285,6 +294,27 @@ export default async function ProtocolsAdminPage({
                       <span className="text-sm text-gray-600">
                         {new Date(protocol.meeting_date).toLocaleDateString('de-CH')}
                       </span>
+                    </td>
+                    <td className="px-4 py-3">
+                      {protocol.attendee_names && protocol.attendee_names.length > 0 ? (
+                        <div className="flex flex-wrap gap-1">
+                          {protocol.attendee_names.slice(0, 3).map((name, i) => (
+                            <span
+                              key={i}
+                              className="inline-flex px-1.5 py-0.5 text-xs font-medium rounded bg-gray-100 text-gray-700"
+                            >
+                              {name.split(' ')[0]}
+                            </span>
+                          ))}
+                          {protocol.attendee_names.length > 3 && (
+                            <span className="inline-flex px-1.5 py-0.5 text-xs text-gray-500">
+                              +{protocol.attendee_names.length - 3} weitere
+                            </span>
+                          )}
+                        </div>
+                      ) : (
+                        <span className="text-xs text-gray-400">—</span>
+                      )}
                     </td>
                     <td className="px-4 py-3">
                       <span

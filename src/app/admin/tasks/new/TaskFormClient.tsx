@@ -7,7 +7,7 @@
  * Created: 2026-02-05
  */
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import {
   TASK_TYPES,
@@ -21,6 +21,12 @@ import { getErrorMessage } from '@/lib/utils/error'
 import { Loader2, Save } from 'lucide-react'
 import { AIFormAssist } from '@/components/ai/AIFormAssist'
 
+interface TeamMember {
+  user_id: string
+  name: string
+  position: string | null
+}
+
 interface TaskFormData {
   title: string
   description: string
@@ -32,12 +38,14 @@ interface TaskFormData {
   estimated_minutes: string
   due_date: string
   tags: string
+  assigned_to: string
 }
 
 export default function TaskFormClient() {
   const router = useRouter()
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [teamMembers, setTeamMembers] = useState<TeamMember[]>([])
   const [formData, setFormData] = useState<TaskFormData>({
     title: '',
     description: '',
@@ -49,7 +57,27 @@ export default function TaskFormClient() {
     estimated_minutes: '',
     due_date: '',
     tags: '',
+    assigned_to: '',
   })
+
+  useEffect(() => {
+    fetch('/api/admin/team/profiles')
+      .then(res => res.json())
+      .then(data => {
+        if (data.success && Array.isArray(data.data)) {
+          setTeamMembers(
+            data.data
+              .filter((p: Record<string, unknown>) => p.is_active !== false)
+              .map((p: Record<string, unknown>) => ({
+                user_id: p.user_id as string,
+                name: (p.user_name || 'Unbekannt') as string,
+                position: (p.position || null) as string | null,
+              }))
+          )
+        }
+      })
+      .catch(() => { /* team members optional */ })
+  }, [])
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
@@ -89,6 +117,7 @@ export default function TaskFormClient() {
           ? parseInt(formData.estimated_minutes, 10)
           : null,
         due_date: formData.due_date || null,
+        assigned_to: formData.assigned_to || null,
         tags: formData.tags
           ? formData.tags.split(',').map((t) => t.trim()).filter(Boolean)
           : [],
@@ -228,6 +257,32 @@ export default function TaskFormClient() {
             ))}
           </select>
         </div>
+
+        {/* Assign To */}
+        {teamMembers.length > 0 && (
+          <div>
+            <label
+              htmlFor="assigned_to"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
+              Zuweisen an
+            </label>
+            <select
+              id="assigned_to"
+              name="assigned_to"
+              value={formData.assigned_to}
+              onChange={handleChange}
+              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              <option value="">Nicht zugewiesen</option>
+              {teamMembers.map((member) => (
+                <option key={member.user_id} value={member.user_id}>
+                  {member.name}{member.position ? ` (${member.position})` : ''}
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
 
         {/* Description */}
         <div>

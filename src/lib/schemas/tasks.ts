@@ -52,6 +52,7 @@ export const createTaskSchema = z.object({
   estimated_minutes: z.number().int().min(1).max(480).optional().nullable(),
   due_date: z.string().optional().nullable(),
   project_id: z.string().uuid().optional().nullable(),
+  assigned_to: z.string().uuid().optional().nullable(),
 });
 
 /**
@@ -145,6 +146,8 @@ export interface TaskListItem {
   completion_count: number;
   created_at: string;
   created_by_name: string | null;
+  assigned_to: string | null;
+  assigned_to_name: string | null;
 }
 
 /** Task row for detail page (full fields) */
@@ -164,6 +167,8 @@ export interface TaskDetail {
   is_archived: boolean;
   created_at: string;
   updated_at: string;
+  assigned_to: string | null;
+  assigned_to_name: string | null;
   created_by: string;
   created_by_name: string | null;
   created_by_email: string | null;
@@ -182,6 +187,7 @@ export interface TaskEditItem {
   estimated_minutes: number | null;
   due_date: string | null;
   tags: string[];
+  assigned_to: string | null;
 }
 
 /** Completion history record */

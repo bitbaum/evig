@@ -15,7 +15,11 @@ import {
 } from '@/config/protocols'
 import { PROTOCOL_WORKFLOW_STEPS } from '@/lib/protocols/workflow'
 
-export default function ProtocolListClient() {
+interface ProtocolListClientProps {
+  teamMembers: Array<{ id: string; name: string }>
+}
+
+export default function ProtocolListClient({ teamMembers }: ProtocolListClientProps) {
   const router = useRouter()
   const searchParams = useSearchParams()
 
@@ -104,6 +108,23 @@ export default function ProtocolListClient() {
             {PROTOCOL_WORKFLOW_STEPS.map((step, index) => (
               <option key={step.id} value={step.id}>
                 {index + 1}) {step.label}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        {/* Attendee filter */}
+        <div className="flex items-center gap-2">
+          <label className="text-sm text-gray-600">Teilnehmer:</label>
+          <select
+            className="text-sm border rounded px-2 py-1"
+            value={searchParams.get('attendee') || ''}
+            onChange={(e) => handleFilterChange('attendee', e.target.value)}
+          >
+            <option value="">Alle</option>
+            {teamMembers.map((member) => (
+              <option key={member.id} value={member.id}>
+                {member.name}
               </option>
             ))}
           </select>

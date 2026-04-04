@@ -170,6 +170,7 @@ export interface ProtocolListItem {
   meeting_type: MeetingType;
   visibility: ProtocolVisibility;
   attendees: string[];
+  attendee_names: string[];
   input_method: InputMethod;
   status: ProtocolStatus;
   created_by_name: string | null;

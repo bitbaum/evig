@@ -23,7 +23,7 @@ export const metadata: Metadata = {
 async function getTask(id: string): Promise<TaskEditItem | null> {
   try {
     const result = await query<TaskEditItem>(
-      `SELECT id, title, description, instructions, task_type, category, priority, schedule_human, estimated_minutes, tags
+      `SELECT id, title, description, instructions, task_type, category, priority, schedule_human, estimated_minutes, due_date, tags, assigned_to
        FROM ${TABLE_NAMES.TASKS}
        WHERE id = $1 AND is_archived = false`,
       [id]
