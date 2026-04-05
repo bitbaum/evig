@@ -35,6 +35,8 @@ export default function AdminWorkshopsPage() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string>('')
 
+  const [searchTerm, setSearchTerm] = useState('')
+
   const [filters, setFilters] = useState<{
     status: ProposalStatus | 'all'
     category: string
@@ -226,6 +228,20 @@ export default function AdminWorkshopsPage() {
         <div className="bg-white rounded-xl shadow-sm border p-6 mb-6">
           <div className="flex flex-wrap gap-4">
             <div className="flex-1 min-w-48">
+              <label className="block text-sm font-medium text-gray-700 mb-1">Suche</label>
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
+                <input
+                  type="text"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  placeholder="Titel suchen..."
+                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+            </div>
+
+            <div className="flex-1 min-w-48">
               <label className="block text-sm font-medium text-gray-700 mb-1">Status</label>
               <select
                 value={filters.status}
@@ -264,15 +280,20 @@ export default function AdminWorkshopsPage() {
         )}
 
         {/* Proposals List */}
+        {(() => {
+          const filteredProposals = searchTerm.trim()
+            ? proposals.filter(p => p.title.toLowerCase().includes(searchTerm.toLowerCase()))
+            : proposals
+          return (
         <div className="bg-white rounded-xl shadow-sm border">
           <div className="px-6 py-4 border-b border-gray-200">
             <h2 className="text-lg font-semibold text-gray-900">
-              Workshop-Vorschläge ({proposals.length})
+              Workshop-Vorschläge ({filteredProposals.length})
             </h2>
           </div>
 
           <div className="divide-y divide-gray-200">
-            {proposals.map((proposal) => (
+            {filteredProposals.map((proposal) => (
               <div key={proposal.id} className="p-6 hover:bg-gray-50">
                 <div className="flex items-start justify-between">
                   <div className="flex-1 min-w-0">
@@ -387,17 +408,21 @@ export default function AdminWorkshopsPage() {
               </div>
             ))}
 
-            {proposals.length === 0 && !loading && (
+            {filteredProposals.length === 0 && !loading && (
               <div className="px-6 py-12 text-center">
                 <GraduationCap className="w-12 h-12 text-gray-400 mx-auto mb-4" />
                 <h3 className="text-lg font-medium text-gray-900 mb-2">Keine Workshop-Vorschläge gefunden</h3>
                 <p className="text-gray-600 mb-4">
-                  {filters.status === PROPOSAL_STATUS.PENDING ? 'Keine ausstehenden Vorschläge vorhanden.' : `Keine Vorschläge mit Status "${filters.status}" gefunden.`}
+                  {searchTerm.trim()
+                    ? `Keine Vorschläge für "${searchTerm}" gefunden.`
+                    : filters.status === PROPOSAL_STATUS.PENDING ? 'Keine ausstehenden Vorschläge vorhanden.' : `Keine Vorschläge mit Status "${filters.status}" gefunden.`}
                 </p>
               </div>
             )}
           </div>
         </div>
+          )
+        })()}
 
         {/* Pagination */}
         {totalPages > 1 && (

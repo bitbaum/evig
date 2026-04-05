@@ -6,6 +6,13 @@ export interface DashboardStats {
   pendingPermissionRequests: number
   pendingAppointments: number
 
+  // Alert counts
+  pendingBlogSubmissions: number
+  urgentItHilfe: number
+  pendingRepairerApplications: number
+  overdueTasks: number
+  openDecisions: number
+
   // Activity (this week)
   newUsersThisWeek: number
   postsPublishedThisWeek: number

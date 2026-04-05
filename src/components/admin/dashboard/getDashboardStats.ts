@@ -3,8 +3,9 @@ import { sql, getTableName } from 'drizzle-orm'
 import {
   users, userContentSubmissions, staffPermissionRequests,
   serviceAppointments, helperProfiles, listings,
+  tasks, decisions, itHilfeRequests, repairerApplications,
 } from '@/db/schema'
-import { blogPosts } from '@/db/schema/content'
+import { blogPosts, blogSubmissions } from '@/db/schema/content'
 import { APPROVAL_STATUS } from '@/config/approval-status'
 import { PERMISSION_REQUEST_STATUS } from '@/config/permission-request-status'
 import { LISTING_STATUS } from '@/config/marketplace'
@@ -18,12 +19,22 @@ const saTable = getTableName(serviceAppointments)
 const hpTable = getTableName(helperProfiles)
 const blogTable = getTableName(blogPosts)
 const listingsTable = getTableName(listings)
+const blogSubTable = getTableName(blogSubmissions)
+const itHilfeTable = getTableName(itHilfeRequests)
+const repairerAppTable = getTableName(repairerApplications)
+const tasksTable = getTableName(tasks)
+const decisionsTable = getTableName(decisions)
 
 export async function getDashboardStats(isSuper: boolean): Promise<DashboardStats> {
   const stats: DashboardStats = {
     pendingApprovals: 0,
     pendingPermissionRequests: 0,
     pendingAppointments: 0,
+    pendingBlogSubmissions: 0,
+    urgentItHilfe: 0,
+    pendingRepairerApplications: 0,
+    overdueTasks: 0,
+    openDecisions: 0,
     newUsersThisWeek: 0,
     postsPublishedThisWeek: 0,
     totalUsers: 0,
@@ -114,6 +125,57 @@ export async function getDashboardStats(isSuper: boolean): Promise<DashboardStat
       stats.postsPublishedThisWeek = parseInt((postsResult.rows as unknown as { count: string }[])[0]?.count || '0')
     } catch {
       // Table might not exist
+    }
+
+    // Get pending blog submissions
+    try {
+      const blogSubResult = await db.execute(sql`
+        SELECT COUNT(*)::int as count FROM ${sql.raw(blogSubTable)} WHERE status = 'pending'
+      `)
+      stats.pendingBlogSubmissions = parseInt((blogSubResult.rows as unknown as { count: string }[])[0]?.count || '0')
+    } catch {
+      // Table might not exist yet
+    }
+
+    // Get urgent IT-Hilfe requests
+    try {
+      const itHilfeResult = await db.execute(sql`
+        SELECT COUNT(*)::int as count FROM ${sql.raw(itHilfeTable)} WHERE status = 'open' AND urgency = 'urgent'
+      `)
+      stats.urgentItHilfe = parseInt((itHilfeResult.rows as unknown as { count: string }[])[0]?.count || '0')
+    } catch {
+      // Table might not exist yet
+    }
+
+    // Get pending repairer applications
+    try {
+      const repairerResult = await db.execute(sql`
+        SELECT COUNT(*)::int as count FROM ${sql.raw(repairerAppTable)} WHERE status = 'pending'
+      `)
+      stats.pendingRepairerApplications = parseInt((repairerResult.rows as unknown as { count: string }[])[0]?.count || '0')
+    } catch {
+      // Table might not exist yet
+    }
+
+    // Get overdue tasks (past due date, not completed, not archived)
+    try {
+      const tasksResult = await db.execute(sql`
+        SELECT COUNT(*)::int as count FROM ${sql.raw(tasksTable)}
+        WHERE due_date < CURRENT_DATE AND is_completed = false AND is_archived = false
+      `)
+      stats.overdueTasks = parseInt((tasksResult.rows as unknown as { count: string }[])[0]?.count || '0')
+    } catch {
+      // Table might not exist yet
+    }
+
+    // Get open decisions (voting in progress)
+    try {
+      const decisionsResult = await db.execute(sql`
+        SELECT COUNT(*)::int as count FROM ${sql.raw(decisionsTable)} WHERE status = 'voting'
+      `)
+      stats.openDecisions = parseInt((decisionsResult.rows as unknown as { count: string }[])[0]?.count || '0')
+    } catch {
+      // Table might not exist yet
     }
 
     // Get marketplace listing stats

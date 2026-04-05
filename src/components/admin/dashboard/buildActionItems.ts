@@ -51,5 +51,60 @@ export function buildActionItems(
     })
   }
 
+  // Urgent IT-Hilfe requests
+  if (stats.urgentItHilfe > 0) {
+    items.push({
+      type: 'urgent',
+      label: `${stats.urgentItHilfe} dringende IT-Hilfe-Anfrage${stats.urgentItHilfe > 1 ? 'n' : ''}`,
+      count: stats.urgentItHilfe,
+      href: '/admin/it-hilfe',
+      actionLabel: 'Ansehen',
+    })
+  }
+
+  // Overdue tasks
+  if (stats.overdueTasks > 0) {
+    items.push({
+      type: 'urgent',
+      label: `${stats.overdueTasks} überfällige Aufgabe${stats.overdueTasks > 1 ? 'n' : ''}`,
+      count: stats.overdueTasks,
+      href: '/admin/tasks',
+      actionLabel: 'Ansehen',
+    })
+  }
+
+  // Pending blog submissions
+  if (stats.pendingBlogSubmissions > 0) {
+    items.push({
+      type: 'warning',
+      label: `${stats.pendingBlogSubmissions} Blog-Einreichung${stats.pendingBlogSubmissions > 1 ? 'en' : ''} ausstehend`,
+      count: stats.pendingBlogSubmissions,
+      href: '/admin/approvals',
+      actionLabel: 'Prüfen',
+    })
+  }
+
+  // Pending repairer applications
+  if (stats.pendingRepairerApplications > 0) {
+    items.push({
+      type: 'warning',
+      label: `${stats.pendingRepairerApplications} Techniker-Bewerbung${stats.pendingRepairerApplications > 1 ? 'en' : ''}`,
+      count: stats.pendingRepairerApplications,
+      href: '/admin/repairer-applications',
+      actionLabel: 'Prüfen',
+    })
+  }
+
+  // Open decisions (voting)
+  if (stats.openDecisions > 0) {
+    items.push({
+      type: 'warning',
+      label: `${stats.openDecisions} offene Abstimmung${stats.openDecisions > 1 ? 'en' : ''}`,
+      count: stats.openDecisions,
+      href: '/admin/decisions',
+      actionLabel: 'Abstimmen',
+    })
+  }
+
   return items
 }

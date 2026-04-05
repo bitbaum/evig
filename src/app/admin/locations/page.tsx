@@ -43,6 +43,8 @@ export default function AdminLocationsPage() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string>('')
 
+  const [searchName, setSearchName] = useState('')
+
   const [filters, setFilters] = useState({
     status: 'all',
     type: 'all',
@@ -55,7 +57,7 @@ export default function AdminLocationsPage() {
   const loadLocations = useCallback(async () => {
     setLoading(true)
     const params = new URLSearchParams({
-      status: filters.status === 'all' ? LOCATION_STATUS.APPROVED : filters.status,
+      status: filters.status,
       limit: '20',
       offset: ((currentPage - 1) * 20).toString()
     })
@@ -80,7 +82,7 @@ export default function AdminLocationsPage() {
     async function load() {
       setLoading(true)
       const params = new URLSearchParams({
-        status: filters.status === 'all' ? LOCATION_STATUS.APPROVED : filters.status,
+        status: filters.status,
         limit: '20',
         offset: ((currentPage - 1) * 20).toString()
       })
@@ -205,6 +207,20 @@ export default function AdminLocationsPage() {
         <div className="bg-white rounded-xl shadow-sm border p-6 mb-6">
           <div className="flex flex-wrap gap-4">
             <div className="flex-1 min-w-48">
+              <label className="block text-sm font-medium text-gray-700 mb-1">Name</label>
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
+                <input
+                  type="text"
+                  value={searchName}
+                  onChange={(e) => setSearchName(e.target.value)}
+                  placeholder="Name suchen..."
+                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+            </div>
+
+            <div className="flex-1 min-w-48">
               <label className="block text-sm font-medium text-gray-700 mb-1">Status</label>
               <select
                 value={filters.status}
@@ -259,15 +275,23 @@ export default function AdminLocationsPage() {
         )}
 
         {/* Locations List */}
+        {(() => {
+          const filteredLocations = searchName.trim()
+            ? locations.filter(l =>
+                l.name.toLowerCase().includes(searchName.toLowerCase()) ||
+                l.city.toLowerCase().includes(searchName.toLowerCase())
+              )
+            : locations
+          return (
         <div className="bg-white rounded-xl shadow-sm border">
           <div className="px-6 py-4 border-b border-gray-200">
             <h2 className="text-lg font-semibold text-gray-900">
-              Orte ({locations.length})
+              Orte ({filteredLocations.length})
             </h2>
           </div>
 
           <div className="divide-y divide-gray-200">
-            {locations.map((location) => (
+            {filteredLocations.map((location) => (
               <div key={location.id} className="p-6 hover:bg-gray-50">
                 <div className="flex items-start justify-between">
                   <div className="flex-1 min-w-0">
@@ -339,12 +363,14 @@ export default function AdminLocationsPage() {
               </div>
             ))}
 
-            {locations.length === 0 && !loading && (
+            {filteredLocations.length === 0 && !loading && (
               <div className="px-6 py-12 text-center">
                 <MapPin className="w-12 h-12 text-gray-400 mx-auto mb-4" />
                 <h3 className="text-lg font-medium text-gray-900 mb-2">Keine Orte gefunden</h3>
                 <p className="text-gray-600 mb-4">
-                  {filters.status === 'all' ? 'Es wurden noch keine Orte erstellt.' : `Keine Orte mit Status "${filters.status}" gefunden.`}
+                  {searchName.trim()
+                    ? `Keine Orte für "${searchName}" gefunden.`
+                    : filters.status === 'all' ? 'Es wurden noch keine Orte erstellt.' : `Keine Orte mit Status "${filters.status}" gefunden.`}
                 </p>
                 <Link
                   href="/admin/locations/new"
@@ -357,6 +383,8 @@ export default function AdminLocationsPage() {
             )}
           </div>
         </div>
+          )
+        })()}
 
         {/* Pagination */}
         {totalPages > 1 && (
