@@ -70,17 +70,40 @@ export default function DatenschutzPage() {
           <li>Berichtigung unrichtiger Daten</li>
           <li>Löschung Ihrer Daten</li>
           <li>Einschränkung der Verarbeitung</li>
-          <li>Datenübertragbarkeit</li>
+          <li>Datenübertragbarkeit (Datenexport)</li>
           <li>Widerruf erteilter Einwilligungen</li>
         </ul>
         <p>
-          Wenden Sie sich dazu an: <a href={`mailto:${CONTACT.email}`} className="text-green-700 underline">{CONTACT.email}</a>
+          Angemeldete Nutzer können eine vollständige Kopie ihrer Daten jederzeit
+          selbst herunterladen unter{' '}
+          <a href="/dashboard/settings" className="text-green-700 underline">
+            Einstellungen → Datenschutz
+          </a>
+          . Für alle weiteren Anliegen wenden Sie sich bitte an:{' '}
+          <a href={`mailto:${CONTACT.email}`} className="text-green-700 underline">{CONTACT.email}</a>
         </p>
 
-        <h2>8. Anwendbares Recht</h2>
+        <h2>8. Speicherdauer</h2>
+        <p>
+          Wir speichern Ihre personenbezogenen Daten nur so lange, wie es für die
+          genannten Zwecke erforderlich ist oder gesetzliche Aufbewahrungsfristen dies
+          verlangen. Konto- und Profildaten werden nach Löschung des Kontos entfernt,
+          sofern keine gesetzlichen Pflichten (z.B. steuerliche Aufbewahrung von
+          Rechnungen) entgegenstehen.
+        </p>
+
+        <h2>9. Rechtsgrundlage</h2>
+        <p>
+          Die Verarbeitung erfolgt gestützt auf das Schweizer Datenschutzgesetz (DSG)
+          sowie, soweit anwendbar, auf Art. 6 Abs. 1 DSGVO (Vertragserfüllung,
+          berechtigte Interessen, Einwilligung).
+        </p>
+
+        <h2>10. Anwendbares Recht</h2>
         <p>
           Diese Datenschutzerklärung unterliegt dem Schweizer Datenschutzgesetz (DSG)
           sowie, soweit anwendbar, der Europäischen Datenschutz-Grundverordnung (DSGVO).
+          Siehe auch unser <a href="/impressum" className="text-green-700 underline">Impressum</a>.
         </p>
 
         <p className="mt-12 text-sm text-neutral-500">Stand: März 2026</p>

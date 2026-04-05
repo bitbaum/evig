@@ -120,6 +120,21 @@ export default function Footer() {
           </div>
         </div>
 
+        {/* Legal Links */}
+        <div className="mt-8 pt-8 border-t border-gray-800">
+          <nav aria-label="Rechtliche Hinweise" className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm">
+            <Link href="/impressum" className="text-gray-400 hover:text-white transition-colors">
+              Impressum
+            </Link>
+            <Link href="/datenschutz" className="text-gray-400 hover:text-white transition-colors">
+              Datenschutz
+            </Link>
+            <Link href="/agb" className="text-gray-400 hover:text-white transition-colors">
+              AGB
+            </Link>
+          </nav>
+        </div>
+
         {/* Copyright */}
         <div className="mt-8 text-center text-gray-400">
           <p>&copy; {new Date().getFullYear()} RevampIT. Alle Rechte vorbehalten.</p>

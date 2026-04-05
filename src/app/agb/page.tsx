@@ -1,5 +1,5 @@
 import { Metadata } from 'next'
-import { ORG, LOCATIONS } from '@/config/org'
+import { ORG, LOCATIONS, CONTACT } from '@/config/org'
 
 export const metadata: Metadata = {
   title: `AGB | ${ORG.name}`,
@@ -38,7 +38,24 @@ export default function AGBPage() {
           Angebot spezifiziert.
         </p>
 
-        <h2>4. Gewährleistung</h2>
+        <h2>4. Vertragsschluss</h2>
+        <p>
+          Ein Vertrag kommt durch Bestellung über die Plattform, im Ladenlokal oder
+          per E-Mail und anschliessende Bestätigung durch {ORG.name} zustande.
+          Darstellungen auf der Website gelten als unverbindliche Einladung zur
+          Abgabe eines Angebots.
+        </p>
+
+        <h2>5. Widerrufsrecht</h2>
+        <p>
+          Beim Kauf im Ladenlokal gilt kein gesetzliches Widerrufsrecht, da dies im
+          Schweizer Recht für stationäre Geschäfte nicht vorgesehen ist. Bei
+          Online-Käufen gewähren wir ein freiwilliges Rückgaberecht von 14 Tagen
+          ab Erhalt der Ware, sofern diese ungenutzt und in originalverpacktem
+          Zustand zurückgesandt wird. Kontakt: <a href={`mailto:${CONTACT.email}`} className="text-green-700 underline">{CONTACT.email}</a>.
+        </p>
+
+        <h2>6. Gewährleistung</h2>
         <p>
           Für aufbereitete Geräte gewährt RevampIT eine Garantie gemäss den gesetzlichen
           Bestimmungen. Die genauen Garantiebedingungen werden beim Kauf mitgeteilt.
@@ -46,30 +63,34 @@ export default function AGBPage() {
           übernimmt RevampIT keine Gewährleistung.
         </p>
 
-        <h2>5. Haftung</h2>
+        <h2>7. Haftung</h2>
         <p>
           RevampIT haftet im Rahmen der gesetzlichen Bestimmungen. Die Haftung für
           leichte Fahrlässigkeit ist ausgeschlossen, soweit gesetzlich zulässig.
         </p>
 
-        <h2>6. Datenschutz</h2>
+        <h2>8. Datenschutz</h2>
         <p>
           Die Bearbeitung personenbezogener Daten erfolgt gemäss unserer{' '}
           <a href="/datenschutz" className="text-green-700 underline">Datenschutzerklärung</a>.
+          Angemeldete Nutzer können ihre Daten jederzeit selbst exportieren.
         </p>
 
-        <h2>7. Anwendbares Recht und Gerichtsstand</h2>
+        <h2>9. Schlussbestimmungen</h2>
         <p>
-          Es gilt Schweizer Recht. Gerichtsstand ist Zürich, Schweiz.
+          Sollten einzelne Bestimmungen dieser AGB unwirksam sein, bleibt die
+          Wirksamkeit der übrigen Bestimmungen unberührt. Es gilt Schweizer Recht.
+          Gerichtsstand ist Zürich, Schweiz.
         </p>
 
-        <h2>8. Änderungen</h2>
+        <h2>10. Änderungen</h2>
         <p>
           RevampIT behält sich vor, diese AGB jederzeit zu ändern. Die jeweils aktuelle
-          Fassung ist auf dieser Seite abrufbar.
+          Fassung ist auf dieser Seite abrufbar. Rechtliche Angaben zum Anbieter finden
+          Sie im <a href="/impressum" className="text-green-700 underline">Impressum</a>.
         </p>
 
-        <p className="mt-12 text-sm text-neutral-500">Stand: März 2026</p>
+        <p className="mt-12 text-sm text-neutral-500">Stand: April 2026</p>
       </section>
     </main>
   )

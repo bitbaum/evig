@@ -1,9 +1,13 @@
-# *
+# RevampIT robots.txt
 User-agent: *
 Allow: /
+Disallow: /admin/
+Disallow: /api/
+Disallow: /dashboard/
+Disallow: /auth/
 
 # Host
-Host: https://revampit.ch
+Host: https://revamp-it.ch
 
 # Sitemaps
-Sitemap: https://revampit.ch/sitemap.xml
+Sitemap: https://revamp-it.ch/sitemap.xml

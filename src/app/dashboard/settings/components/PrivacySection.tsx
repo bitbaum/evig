@@ -1,6 +1,7 @@
 'use client'
 
-import { Globe, Lock, Eye, EyeOff } from 'lucide-react'
+import { useState } from 'react'
+import { Globe, Lock, Eye, EyeOff, Download, Loader2 } from 'lucide-react'
 import { SETTINGS_CONFIG } from '@/config/profile'
 import type { ProfileData } from '../../profile/hooks/useProfileData'
 
@@ -11,6 +12,37 @@ interface PrivacySectionProps {
 
 export function PrivacySection({ profile, handleChange }: PrivacySectionProps) {
   const labels = SETTINGS_CONFIG.labels.privacy
+  const [isExporting, setIsExporting] = useState(false)
+  const [exportError, setExportError] = useState<string | null>(null)
+
+  const handleExportData = async () => {
+    setIsExporting(true)
+    setExportError(null)
+    try {
+      const response = await fetch('/api/user/export-data')
+      if (!response.ok) {
+        const data = await response.json().catch(() => ({}))
+        throw new Error(data.error || 'Export fehlgeschlagen')
+      }
+      const blob = await response.blob()
+      const url = URL.createObjectURL(blob)
+      const link = document.createElement('a')
+      link.href = url
+      const disposition = response.headers.get('Content-Disposition') || ''
+      const match = disposition.match(/filename="?([^"]+)"?/)
+      link.download = match?.[1] || `revampit-data-export-${new Date().toISOString().slice(0, 10)}.json`
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
+      URL.revokeObjectURL(url)
+    } catch (error) {
+      setExportError(
+        error instanceof Error ? error.message : 'Export fehlgeschlagen. Bitte versuchen Sie es später erneut.',
+      )
+    } finally {
+      setIsExporting(false)
+    }
+  }
 
   return (
     <div className="space-y-8">
@@ -147,6 +179,42 @@ export function PrivacySection({ profile, handleChange }: PrivacySectionProps) {
             </div>
           </div>
         </div>
+      </div>
+
+      {/* Data Export (GDPR / Swiss DSG) */}
+      <div className="border-t-2 border-gray-200 dark:border-gray-700 pt-6">
+        <h4 className="text-base font-semibold text-gray-900 dark:text-white mb-2">
+          Datenschutz & Export
+        </h4>
+        <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+          Gemäss Schweizer Datenschutzgesetz (DSG) und EU-DSGVO können Sie jederzeit
+          eine Kopie Ihrer Daten anfordern.
+        </p>
+
+        {exportError && (
+          <div className="mb-4 rounded-lg border-2 border-red-200 bg-red-50 p-3 dark:border-red-800 dark:bg-red-900/20">
+            <p className="text-sm text-red-700 dark:text-red-300">{exportError}</p>
+          </div>
+        )}
+
+        <button
+          type="button"
+          onClick={handleExportData}
+          disabled={isExporting}
+          className="inline-flex items-center gap-2 rounded-lg border-2 border-purple-600 bg-white px-4 py-2 text-sm font-semibold text-purple-700 transition-colors hover:bg-purple-50 disabled:cursor-not-allowed disabled:opacity-60 dark:bg-neutral-800 dark:text-purple-300 dark:hover:bg-purple-900/20"
+        >
+          {isExporting ? (
+            <>
+              <Loader2 className="h-4 w-4 animate-spin" />
+              Export wird erstellt...
+            </>
+          ) : (
+            <>
+              <Download className="h-4 w-4" />
+              Meine Daten herunterladen
+            </>
+          )}
+        </button>
       </div>
     </div>
   )
