@@ -19,8 +19,12 @@ export interface ITHilfeRequest {
   imageUrls: string[]
   status: string
   matchedOfferId: string | null
+  matchedHelperId: string | null
   offerCount: number
   aiDiagnosis: string | null
+  completedAt: string | null
+  completedBy: string | null
+  reviewedAt: string | null
   expiresAt: string
   createdAt: string
   updatedAt: string

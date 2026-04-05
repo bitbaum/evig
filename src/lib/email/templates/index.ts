@@ -61,6 +61,8 @@ export {
   itHilfeRequestConfirmation,
   adminNewITHilfeRequest,
   helperNewMatchingRequest,
+  itHilfeCompleted,
+  itHilfeReviewReceived,
 } from './it-hilfe';
 
 // Appointment templates
@@ -79,6 +81,9 @@ export {
   orderConfirmationBuyer,
   newOrderNotificationSeller,
   orderStatusUpdate,
+  orderReceiptConfirmed,
+  orderReviewPrompt,
+  orderReviewReceived,
 } from './marketplace';
 
 // Decision templates

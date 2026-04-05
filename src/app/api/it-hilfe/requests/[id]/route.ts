@@ -2,6 +2,7 @@ import { NextRequest } from 'next/server'
 import { auth } from '@/auth'
 import { db } from '@/db'
 import { itHilfeRequests, helperProfiles, itHilfeOffers, users } from '@/db/schema'
+import { alias } from 'drizzle-orm/pg-core'
 import { eq, and, sql } from 'drizzle-orm'
 import { apiError, apiSuccess, apiUnauthorized, apiBadRequest, apiNotFound, apiForbidden } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
@@ -29,6 +30,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
     }
 
     // Use explicit snake_case aliases to match the RequestRow mapper interface
+    const matchedOffer = alias(itHilfeOffers, 'matched_offer')
     const [row] = await db
       .select({
         id: itHilfeRequests.id,
@@ -51,14 +53,19 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
         image_urls: itHilfeRequests.imageUrls,
         status: itHilfeRequests.status,
         matched_offer_id: itHilfeRequests.matchedOfferId,
+        matched_helper_id: matchedOffer.helperId,
         offer_count: itHilfeRequests.offerCount,
         ai_diagnosis: itHilfeRequests.aiDiagnosis,
+        completed_at: itHilfeRequests.completedAt,
+        completed_by: itHilfeRequests.completedBy,
+        reviewed_at: itHilfeRequests.reviewedAt,
         expires_at: itHilfeRequests.expiresAt,
         created_at: itHilfeRequests.createdAt,
         updated_at: itHilfeRequests.updatedAt,
       })
       .from(itHilfeRequests)
       .innerJoin(users, eq(itHilfeRequests.requesterId, users.id))
+      .leftJoin(matchedOffer, eq(itHilfeRequests.matchedOfferId, matchedOffer.id))
       .where(eq(itHilfeRequests.id, id))
 
     if (!row) {

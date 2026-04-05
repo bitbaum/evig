@@ -50,6 +50,11 @@ export const itHilfeRequests = pgTable('it_hilfe_requests', {
   // Admin management (added by 045)
   adminNotes: text('admin_notes'),
 
+  // Completion tracking (added by 058)
+  completedAt: timestamp('completed_at', { withTimezone: true, mode: 'string' }),
+  completedBy: uuid('completed_by').references(() => users.id, { onDelete: 'set null' }),
+  reviewedAt: timestamp('reviewed_at', { withTimezone: true, mode: 'string' }),
+
   // Timestamps
   expiresAt: timestamp('expires_at', { withTimezone: true, mode: 'string' }),
   createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' }).defaultNow(),

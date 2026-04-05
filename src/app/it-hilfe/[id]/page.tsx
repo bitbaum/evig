@@ -15,6 +15,8 @@ import {
   OffersList,
   UserOffer,
   RequestSidebar,
+  MarkCompletedCard,
+  ConfirmReviewCard,
   useITHilfeDetail,
 } from '@/components/it-hilfe/detail'
 
@@ -94,6 +96,33 @@ export default function ITHilfeDetailPage() {
             {(request.status === REQUEST_STATUS.OPEN || request.status === REQUEST_STATUS.IN_DISCUSSION) && (
               <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
                 <TechnicianMapList requestId={request.id} requestTitle={request.title} />
+              </div>
+            )}
+
+            {/* Helper: mark completed */}
+            {detail.canMarkCompleted && (
+              <MarkCompletedCard
+                onMarkCompleted={detail.handleMarkCompleted}
+                submitting={detail.markingCompleted}
+              />
+            )}
+
+            {/* Requester: confirm + review after helper marks completed */}
+            {detail.needsConfirmation && (
+              <ConfirmReviewCard
+                requestTitle={request.title}
+                submitting={detail.confirmingReview}
+                onSubmit={detail.handleConfirmReview}
+              />
+            )}
+
+            {/* Completion badge (status completed, visible to everyone) */}
+            {request.status === REQUEST_STATUS.COMPLETED && request.completedAt && (
+              <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-4 flex items-center gap-3">
+                <CheckCircle className="w-5 h-5 text-emerald-600 flex-shrink-0" aria-hidden="true" />
+                <p className="text-emerald-800 text-sm font-medium">
+                  Abgeschlossen am {formatDate(request.completedAt)}
+                </p>
               </div>
             )}
 

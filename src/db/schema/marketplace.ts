@@ -198,6 +198,11 @@ export const marketplaceOrders = pgTable('marketplace_orders', {
   trackingNumber: text('tracking_number'),
   shippingAddress: jsonb('shipping_address'),
 
+  // Added by 058: lifecycle timestamps for buyer confirmation and review flow
+  deliveredAt: timestamp('delivered_at', { withTimezone: true, mode: 'string' }),
+  completedAt: timestamp('completed_at', { withTimezone: true, mode: 'string' }),
+  reviewedAt: timestamp('reviewed_at', { withTimezone: true, mode: 'string' }),
+
   createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' }).notNull().defaultNow(),
   updatedAt: timestamp('updated_at', { withTimezone: true, mode: 'string' }).notNull().defaultNow(),
 }, (table) => [

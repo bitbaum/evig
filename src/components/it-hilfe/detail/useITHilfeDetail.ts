@@ -40,6 +40,12 @@ export function useITHilfeDetail(id: string) {
   const [hasReviewed, setHasReviewed] = useState(false)
   const [reviewSubmitted, setReviewSubmitted] = useState(false)
 
+  // Helper-completion state
+  const [markingCompleted, setMarkingCompleted] = useState(false)
+
+  // Confirm+review state
+  const [confirmingReview, setConfirmingReview] = useState(false)
+
   const fetchRequest = useCallback(async () => {
     try {
       setLoading(true)
@@ -285,6 +291,79 @@ export function useITHilfeDetail(id: string) {
   const isExpired = request ? new Date(request.expiresAt) < new Date() : false
   const canOffer = !!(session?.user && request && !request.isOwner && (request.status === REQUEST_STATUS.OPEN || request.status === REQUEST_STATUS.IN_DISCUSSION) && !isExpired)
 
+  // Is the current user the matched helper for this request?
+  const isMatchedHelper = !!(
+    session?.user?.id &&
+    request &&
+    request.matchedHelperId &&
+    request.matchedHelperId === session.user.id
+  )
+
+  // Helper can mark completed while the request is in the matched state
+  const canMarkCompleted = !!(isMatchedHelper && request?.status === REQUEST_STATUS.MATCHED)
+
+  // Requester needs to confirm + review when status is completed and not yet reviewed
+  const needsConfirmation = !!(
+    request?.isOwner &&
+    request?.status === REQUEST_STATUS.COMPLETED &&
+    !request?.reviewedAt &&
+    !hasReviewed &&
+    !reviewSubmitted
+  )
+
+  const handleMarkCompleted = async () => {
+    if (!request) return
+    if (!confirm('Bestätigen Sie, dass die Hilfe abgeschlossen ist?')) return
+
+    setMarkingCompleted(true)
+    try {
+      const result = await apiFetch<unknown>(`/api/it-hilfe/requests/${request.id}/complete`, {
+        method: 'POST',
+      })
+      if (!result.success) {
+        alert(result.error || 'Fehler beim Abschliessen')
+        return
+      }
+      fetchRequest()
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Ein Fehler ist aufgetreten'
+      alert(message)
+      logger.error('Error marking IT-Hilfe completed', { error: err })
+    } finally {
+      setMarkingCompleted(false)
+    }
+  }
+
+  const handleConfirmReview = async (params: {
+    rating: number
+    reviewText: string
+    recommended: boolean
+  }) => {
+    if (!request) return
+    setConfirmingReview(true)
+    try {
+      const result = await apiFetch<unknown>(
+        `/api/it-hilfe/requests/${request.id}/confirm-review`,
+        {
+          method: 'POST',
+          body: params,
+        },
+      )
+      if (!result.success) {
+        alert(result.error || 'Fehler beim Abgeben der Bewertung')
+        return
+      }
+      setReviewSubmitted(true)
+      fetchRequest()
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Ein Fehler ist aufgetreten'
+      alert(message)
+      logger.error('Error confirming IT-Hilfe review', { error: err })
+    } finally {
+      setConfirmingReview(false)
+    }
+  }
+
   return {
     session,
     request,
@@ -332,6 +411,17 @@ export function useITHilfeDetail(id: string) {
     hasReviewed,
     reviewSubmitted,
     setReviewSubmitted,
+
+    // Helper completion
+    isMatchedHelper,
+    canMarkCompleted,
+    markingCompleted,
+    handleMarkCompleted,
+
+    // Requester confirmation + review
+    needsConfirmation,
+    confirmingReview,
+    handleConfirmReview,
 
     // Refresh
     fetchRequest,

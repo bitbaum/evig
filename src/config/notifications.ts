@@ -26,6 +26,9 @@ export const NOTIFICATION_TYPES = {
   IT_HILFE_OFFER_REJECTED: 'it_hilfe_offer_rejected',
   IT_HILFE_REQUEST_COMPLETED: 'it_hilfe_request_completed',
 
+  // Blog submissions
+  BLOG_SUBMISSION_STATUS: 'blog_submission_status',
+
   // Core
   MESSAGE: 'message',
   APPOINTMENT: 'appointment',

@@ -28,6 +28,10 @@ export interface RequestRow {
   matched_offer_id: string | null
   offer_count: number
   ai_diagnosis?: string | null
+  completed_at?: string | null
+  completed_by?: string | null
+  reviewed_at?: string | null
+  matched_helper_id?: string | null
   expires_at: string
   created_at: string
   updated_at: string
@@ -55,7 +59,11 @@ export function mapRequestListRow(row: RequestRow) {
     imageUrls: row.image_urls || [],
     status: row.status,
     matchedOfferId: row.matched_offer_id,
+    matchedHelperId: row.matched_helper_id ?? null,
     offerCount: row.offer_count,
+    completedAt: row.completed_at ?? null,
+    completedBy: row.completed_by ?? null,
+    reviewedAt: row.reviewed_at ?? null,
     expiresAt: row.expires_at,
     createdAt: row.created_at,
     updatedAt: row.updated_at,

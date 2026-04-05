@@ -22,6 +22,8 @@ import {
 import { ORDER_STATUS_CONFIG, ORDER_STATUS, formatCHF, DELIVERY_LABELS } from '@/config/marketplace'
 import type { OrderStatus, DeliveryOption } from '@/config/marketplace'
 import { formatDateShort } from '@/lib/date-formats'
+import { OrderStatusTimeline } from '@/components/marketplace/OrderStatusTimeline'
+import { OrderReviewForm } from '@/components/marketplace/OrderReviewForm'
 
 interface OrderDetail {
   id: string
@@ -42,6 +44,9 @@ interface OrderDetail {
     tracking_number?: string
     tracking_url?: string
   } | null
+  delivered_at: string | null
+  completed_at: string | null
+  reviewed_at: string | null
   created_at: string
   updated_at: string
   listing_title: string
@@ -53,8 +58,6 @@ interface OrderDetail {
   role: 'buyer' | 'seller'
   counterparty_name: string | null
 }
-
-const STATUS_STEPS: OrderStatus[] = [ORDER_STATUS.PENDING_PAYMENT, ORDER_STATUS.PAID, ORDER_STATUS.SHIPPED, ORDER_STATUS.DELIVERED, ORDER_STATUS.COMPLETED]
 
 export default function OrderDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { data: session, status: sessionStatus } = useSession()
@@ -90,6 +93,34 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
     }
     fetchOrder()
   }, [params, sessionStatus, router])
+
+  const confirmReceipt = async () => {
+    if (!order || updatingStatus) return
+    setUpdatingStatus(true)
+    setError(null)
+    try {
+      const { id } = await params
+      const response = await fetch(`/api/marketplace/orders/${id}/confirm-receipt`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+      })
+      const data = await response.json()
+      if (data.success) {
+        setOrder(prev => prev ? {
+          ...prev,
+          status: ORDER_STATUS.COMPLETED,
+          completed_at: new Date().toISOString(),
+          delivered_at: prev.delivered_at ?? new Date().toISOString(),
+        } : null)
+      } else {
+        setError(data.error || 'Empfang konnte nicht bestätigt werden')
+      }
+    } catch {
+      setError('Netzwerkfehler')
+    } finally {
+      setUpdatingStatus(false)
+    }
+  }
 
   const updateStatus = async (newStatus: string) => {
     if (!order || updatingStatus) return
@@ -146,9 +177,9 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
   if (!order) return null
 
   const statusConfig = ORDER_STATUS_CONFIG[order.status as OrderStatus]
-  const currentStepIndex = STATUS_STEPS.indexOf(order.status as OrderStatus)
   const isCancelled = order.status === ORDER_STATUS.CANCELLED || order.status === ORDER_STATUS.REFUNDED
   const deliveryLabel = DELIVERY_LABELS[order.delivery_method as DeliveryOption] || order.delivery_method
+  const hasReview = Boolean(order.reviewed_at)
 
   return (
     <div className="max-w-3xl mx-auto">
@@ -212,36 +243,16 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
       {!isCancelled && (
         <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm mb-6">
           <h2 className="text-sm font-semibold text-gray-900 dark:text-white mb-4">Bestellverlauf</h2>
-          <div className="flex items-center justify-between">
-            {STATUS_STEPS.map((step, idx) => {
-              const stepConfig = ORDER_STATUS_CONFIG[step]
-              const isActive = idx <= currentStepIndex
-              const isCurrent = idx === currentStepIndex
-              return (
-                <div key={step} className="flex-1 flex items-center">
-                  <div className="flex flex-col items-center flex-shrink-0">
-                    <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                      isActive
-                        ? 'bg-green-500 text-white'
-                        : 'bg-gray-200 dark:bg-gray-700 text-gray-400'
-                    }`}>
-                      {isActive ? <CheckCircle className="w-4 h-4" /> : <Clock className="w-4 h-4" />}
-                    </div>
-                    <span className={`text-xs mt-1 text-center ${
-                      isCurrent ? 'font-semibold text-green-600' : isActive ? 'text-gray-700 dark:text-gray-300' : 'text-gray-400'
-                    }`}>
-                      {stepConfig.label}
-                    </span>
-                  </div>
-                  {idx < STATUS_STEPS.length - 1 && (
-                    <div className={`flex-1 h-0.5 mx-2 ${
-                      idx < currentStepIndex ? 'bg-green-500' : 'bg-gray-200 dark:bg-gray-700'
-                    }`} />
-                  )}
-                </div>
-              )
-            })}
-          </div>
+          <OrderStatusTimeline
+            status={order.status}
+            hasReview={hasReview}
+            timestamps={{
+              createdAt: order.created_at,
+              deliveredAt: order.delivered_at,
+              completedAt: order.completed_at,
+              reviewedAt: order.reviewed_at,
+            }}
+          />
         </div>
       )}
 
@@ -403,10 +414,10 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
             </button>
           )}
 
-          {/* Buyer: delivered → completed */}
-          {order.role === 'buyer' && order.status === ORDER_STATUS.DELIVERED && (
+          {/* Buyer: shipped or delivered → completed (via confirm-receipt) */}
+          {order.role === 'buyer' && (order.status === ORDER_STATUS.SHIPPED || order.status === ORDER_STATUS.DELIVERED) && (
             <button
-              onClick={() => updateStatus(ORDER_STATUS.COMPLETED)}
+              onClick={confirmReceipt}
               disabled={updatingStatus}
               className="w-full flex items-center justify-center gap-2 bg-green-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-green-700 disabled:opacity-50 transition-colors"
             >
@@ -446,6 +457,28 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
           )}
         </div>
       </div>
+
+      {/* Review section — only for buyer once order is completed */}
+      {order.role === 'buyer' && order.status === ORDER_STATUS.COMPLETED && (
+        <div className="mt-6 bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
+          <h2 className="text-sm font-semibold text-gray-900 dark:text-white mb-4">
+            {hasReview ? 'Ihre Bewertung' : 'Bewertung abgeben'}
+          </h2>
+          {hasReview ? (
+            <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300">
+              <CheckCircle className="w-4 h-4 text-green-600" />
+              Sie haben diese Bestellung am {order.reviewed_at ? formatDateShort(order.reviewed_at) : ''} bewertet. Vielen Dank!
+            </div>
+          ) : (
+            <OrderReviewForm
+              orderId={order.id}
+              onSubmitted={() =>
+                setOrder(prev => prev ? { ...prev, reviewed_at: new Date().toISOString() } : null)
+              }
+            />
+          )}
+        </div>
+      )}
     </div>
   )
 }

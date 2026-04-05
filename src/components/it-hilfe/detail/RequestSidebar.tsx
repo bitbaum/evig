@@ -5,7 +5,6 @@ import {
   Calendar,
   User,
   MessageSquare,
-  CheckCircle,
   XCircle,
   Wrench,
   Users,
@@ -175,15 +174,6 @@ export function RequestSidebar({
                 <Pencil className="w-4 h-4 inline-block mr-2" />
                 Anfrage bearbeiten
               </Link>
-            )}
-            {request.status === REQUEST_STATUS.MATCHED && (
-              <button
-                onClick={() => onStatusChange(REQUEST_STATUS.COMPLETED)}
-                className="block w-full py-3 px-4 min-h-[44px] bg-emerald-600 text-white rounded-lg text-center font-medium hover:bg-emerald-700 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
-              >
-                <CheckCircle className="w-4 h-4 inline-block mr-2" />
-                Als abgeschlossen markieren
-              </button>
             )}
             {(request.status === REQUEST_STATUS.OPEN || request.status === REQUEST_STATUS.IN_DISCUSSION || request.status === REQUEST_STATUS.MATCHED) && (
               <button

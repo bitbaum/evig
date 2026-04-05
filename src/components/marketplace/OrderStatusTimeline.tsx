@@ -1,0 +1,129 @@
+'use client'
+
+/**
+ * OrderStatusTimeline
+ *
+ * Visual progress indicator for a marketplace order.
+ * Steps: Bestellt -> Bezahlt -> Versandt -> Erhalten -> Bewertet.
+ * Completed steps show a checkmark (with date when available);
+ * the current step is highlighted; future steps are greyed out.
+ */
+
+import { CheckCircle, Circle } from 'lucide-react'
+import { ORDER_STATUS } from '@/config/marketplace'
+import { formatDateShort } from '@/lib/date-formats'
+
+export interface OrderTimestamps {
+  createdAt?: string | null
+  // Order transitioned out of pending_payment
+  paidAt?: string | null
+  shippedAt?: string | null
+  deliveredAt?: string | null
+  completedAt?: string | null
+  reviewedAt?: string | null
+}
+
+interface OrderStatusTimelineProps {
+  status: string
+  timestamps?: OrderTimestamps
+  hasReview?: boolean
+  className?: string
+}
+
+type StepKey = 'ordered' | 'paid' | 'shipped' | 'delivered' | 'reviewed'
+
+const STEPS: Array<{ key: StepKey; label: string }> = [
+  { key: 'ordered',   label: 'Bestellt' },
+  { key: 'paid',      label: 'Bezahlt' },
+  { key: 'shipped',   label: 'Versandt' },
+  { key: 'delivered', label: 'Erhalten' },
+  { key: 'reviewed',  label: 'Bewertet' },
+]
+
+/**
+ * Determine how far along the order is.
+ * Returns the index (inclusive) of the highest step the order has reached.
+ */
+function getCurrentStepIndex(status: string, hasReview: boolean): number {
+  if (hasReview) return 4
+  switch (status) {
+    case ORDER_STATUS.COMPLETED:
+      return hasReview ? 4 : 3
+    case ORDER_STATUS.DELIVERED:
+      return 3
+    case ORDER_STATUS.SHIPPED:
+      return 2
+    case ORDER_STATUS.PAID:
+      return 1
+    case ORDER_STATUS.PENDING_PAYMENT:
+      return 0
+    default:
+      return 0
+  }
+}
+
+export function OrderStatusTimeline({
+  status,
+  timestamps,
+  hasReview = false,
+  className = '',
+}: OrderStatusTimelineProps) {
+  const currentIdx = getCurrentStepIndex(status, hasReview)
+
+  const stepDate = (key: StepKey): string | null => {
+    if (!timestamps) return null
+    switch (key) {
+      case 'ordered':   return timestamps.createdAt ?? null
+      case 'paid':      return timestamps.paidAt ?? null
+      case 'shipped':   return timestamps.shippedAt ?? null
+      case 'delivered': return timestamps.deliveredAt ?? timestamps.completedAt ?? null
+      case 'reviewed':  return timestamps.reviewedAt ?? null
+    }
+  }
+
+  return (
+    <div className={`flex items-center justify-between ${className}`}>
+      {STEPS.map((step, idx) => {
+        const reached = idx <= currentIdx
+        const isCurrent = idx === currentIdx
+        const date = stepDate(step.key)
+        return (
+          <div key={step.key} className="flex-1 flex items-center">
+            <div className="flex flex-col items-center flex-shrink-0 min-w-[60px]">
+              <div className={`w-8 h-8 rounded-full flex items-center justify-center transition-colors ${
+                reached
+                  ? 'bg-green-500 text-white'
+                  : 'bg-gray-200 dark:bg-gray-700 text-gray-400'
+              }`}>
+                {reached
+                  ? <CheckCircle className="w-4 h-4" />
+                  : <Circle className="w-4 h-4" />}
+              </div>
+              <span className={`text-xs mt-1 text-center ${
+                isCurrent
+                  ? 'font-semibold text-green-600'
+                  : reached
+                    ? 'text-gray-700 dark:text-gray-300'
+                    : 'text-gray-400'
+              }`}>
+                {step.label}
+              </span>
+              {reached && date && (
+                <span className="text-[10px] text-gray-400 mt-0.5">
+                  {formatDateShort(date)}
+                </span>
+              )}
+            </div>
+            {idx < STEPS.length - 1 && (
+              <div className={`flex-1 h-0.5 mx-2 ${
+                idx < currentIdx ? 'bg-green-500' : 'bg-gray-200 dark:bg-gray-700'
+              }`} />
+            )}
+          </div>
+        )
+      })}
+    </div>
+  )
+}
+
+export default OrderStatusTimeline

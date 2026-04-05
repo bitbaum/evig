@@ -205,6 +205,110 @@ export function orderStatusUpdate(data: OrderStatusUpdateData): { subject: strin
   };
 }
 
+// ============================================================================
+// Order Completion / Review Flow Templates
+// ============================================================================
+
+export interface OrderReceiptConfirmedData extends MarketplaceEmailData {
+  orderNumber: string;
+  listingTitle: string;
+  orderUrl: string;
+}
+
+export interface OrderReviewPromptData extends MarketplaceEmailData {
+  listingTitle: string;
+  reviewUrl: string;
+}
+
+export interface OrderReviewReceivedData extends MarketplaceEmailData {
+  listingTitle: string;
+  rating: number;
+  content: string;
+  reviewUrl: string;
+}
+
+/**
+ * Notify seller that the buyer confirmed receipt of the item.
+ */
+export function orderReceiptConfirmed(data: OrderReceiptConfirmedData): { subject: string; html: string; text: string } {
+  return {
+    subject: `Empfang bestätigt: "${data.listingTitle}"`,
+    text: `Hallo ${data.recipientName}, der Käufer hat den Erhalt von "${data.listingTitle}" bestätigt. Die Zahlung wurde freigegeben. Details: ${data.orderUrl}`,
+    html: `
+      <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto;">
+        <h2>Der Käufer hat den Erhalt bestätigt</h2>
+        <p>Hallo ${data.recipientName},</p>
+        <p>Der Käufer hat den Erhalt von <strong>"${data.listingTitle}"</strong> bestätigt. Die Zahlung wurde freigegeben und wird Ihnen in Kürze ausbezahlt.</p>
+        <p style="color: #6b7280; font-size: 14px;">Bestellnummer: ${data.orderNumber}</p>
+        <p>
+          <a href="${data.orderUrl}" style="display: inline-block; background-color: #16a34a; color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 600;">
+            Bestellung ansehen
+          </a>
+        </p>
+        <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 24px 0;" />
+        <p style="color: #9ca3af; font-size: 12px;">RevampIT Marketplace</p>
+      </div>
+    `,
+  };
+}
+
+/**
+ * Thank-you and review prompt sent to buyer after delivery confirmation.
+ */
+export function orderReviewPrompt(data: OrderReviewPromptData): { subject: string; html: string; text: string } {
+  return {
+    subject: `Wie war Ihr Kauf von "${data.listingTitle}"?`,
+    text: `Hallo ${data.recipientName}, vielen Dank für Ihren Kauf von "${data.listingTitle}". Teilen Sie Ihre Erfahrung mit einer Bewertung: ${data.reviewUrl}`,
+    html: `
+      <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto;">
+        <h2>Vielen Dank für Ihren Kauf!</h2>
+        <p>Hallo ${data.recipientName},</p>
+        <p>Wir hoffen, Sie sind zufrieden mit <strong>"${data.listingTitle}"</strong>. Ihre Bewertung hilft anderen Käuferinnen und Käufern bei der Entscheidung und unterstützt verantwortungsvolle Verkäufer.</p>
+        <p>
+          <a href="${data.reviewUrl}" style="display: inline-block; background-color: #16a34a; color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 600;">
+            Jetzt bewerten
+          </a>
+        </p>
+        <p style="color: #6b7280; font-size: 14px;">Es dauert nur einen kurzen Moment.</p>
+        <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 24px 0;" />
+        <p style="color: #9ca3af; font-size: 12px;">RevampIT Marketplace</p>
+      </div>
+    `,
+  };
+}
+
+/**
+ * Notify seller that their order received a review.
+ */
+export function orderReviewReceived(data: OrderReviewReceivedData): { subject: string; html: string; text: string } {
+  const stars = '★'.repeat(data.rating) + '☆'.repeat(5 - data.rating);
+  return {
+    subject: `Neue Bewertung (${data.rating}/5) für "${data.listingTitle}"`,
+    text: `Hallo ${data.recipientName}, Sie haben eine neue Bewertung für "${data.listingTitle}" erhalten: ${data.rating}/5 Sterne. "${data.content}" Details: ${data.reviewUrl}`,
+    html: `
+      <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto;">
+        <h2>Neue Bewertung erhalten</h2>
+        <p>Hallo ${data.recipientName},</p>
+        <p>Sie haben eine neue Bewertung für Ihr Inserat <strong>"${data.listingTitle}"</strong> erhalten:</p>
+        <div style="background-color: #f3f4f6; border-radius: 8px; padding: 16px; margin: 16px 0; text-align: center;">
+          <p style="font-size: 24px; margin: 0; color: #f59e0b;">${stars}</p>
+          <p style="margin: 8px 0 0; color: #374151; font-weight: 600;">${data.rating} von 5 Sternen</p>
+        </div>
+        <blockquote style="margin: 16px 0; padding: 12px 16px; border-left: 4px solid #d1d5db; color: #374151;">
+          ${data.content}
+        </blockquote>
+        <p>
+          <a href="${data.reviewUrl}" style="display: inline-block; background-color: #16a34a; color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 600;">
+            Bewertung ansehen
+          </a>
+        </p>
+        <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 24px 0;" />
+        <p style="color: #9ca3af; font-size: 12px;">RevampIT Marketplace</p>
+      </div>
+    `,
+  };
+}
+
 export function listingReviewNotification(data: ListingReviewData): { subject: string; html: string; text: string } {
   const stars = '★'.repeat(data.rating) + '☆'.repeat(5 - data.rating);
   return {

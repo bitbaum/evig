@@ -412,6 +412,134 @@ Das RevampIT Team
   `.trim(),
 })
 
+/**
+ * Notification email sent to the requester when the helper marks the repair
+ * as completed. Prompts them to confirm and leave a review.
+ */
+export const itHilfeCompleted = (
+  requesterName: string,
+  requestTitle: string,
+  requestUrl: string
+): EmailContent => ({
+  subject: 'Hilfe abgeschlossen - bitte bestätigen und bewerten - RevampIT',
+  html: `
+    <!DOCTYPE html>
+    <html lang="de">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Hilfe abgeschlossen</title>
+      <style>${BASE_STYLES}</style>
+    </head>
+    <body>
+      <div class="container">
+        <div class="header header-green">
+          <h1>Die Hilfe wurde abgeschlossen</h1>
+        </div>
+        <div class="content">
+          <p>Hallo ${requesterName},</p>
+          <p>Der Helfer hat deine Anfrage als abgeschlossen markiert:</p>
+
+          <div class="highlight-box">
+            <p><strong>${requestTitle}</strong></p>
+          </div>
+
+          <p>Bitte bestätige, dass die Hilfe erfolgreich war, und gib eine kurze Bewertung ab. Dein Feedback hilft der Community, gute Helfer zu finden.</p>
+
+          <a href="${requestUrl}" class="button button-green">Bestätigen &amp; bewerten</a>
+        </div>
+        <div class="footer">
+          <p>Vielen Dank, dass du Teil der RevampIT-Community bist!</p>
+          <p>${COPYRIGHT_TEXT}</p>
+        </div>
+      </div>
+    </body>
+    </html>
+  `,
+  text: `
+Hallo ${requesterName},
+
+Der Helfer hat deine Anfrage als abgeschlossen markiert:
+
+"${requestTitle}"
+
+Bitte bestätige, dass die Hilfe erfolgreich war, und gib eine kurze Bewertung ab.
+Dein Feedback hilft der Community, gute Helfer zu finden.
+
+Bestätigen & bewerten: ${requestUrl}
+
+Mit freundlichen Grüssen,
+Das RevampIT Team
+  `.trim(),
+})
+
+/**
+ * Notification email sent to the helper when the requester submits a review.
+ */
+export const itHilfeReviewReceived = (
+  helperName: string,
+  requestTitle: string,
+  rating: number,
+  reviewText: string,
+  requestUrl: string
+): EmailContent => ({
+  subject: 'Du hast eine neue Bewertung erhalten - RevampIT IT-Hilfe',
+  html: `
+    <!DOCTYPE html>
+    <html lang="de">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Neue Bewertung erhalten</title>
+      <style>${BASE_STYLES}</style>
+    </head>
+    <body>
+      <div class="container">
+        <div class="header header-green">
+          <h1>Du hast eine Bewertung erhalten</h1>
+        </div>
+        <div class="content">
+          <p>Hallo ${helperName},</p>
+          <p>Vielen Dank für deine Hilfe! Der Anfragende hat deinen Einsatz bewertet:</p>
+
+          <div class="highlight-box">
+            <p><strong>${requestTitle}</strong></p>
+            <p style="font-size: 22px; color: #f59e0b; margin: 8px 0;">
+              ${'★'.repeat(rating)}${'☆'.repeat(5 - rating)}
+              <span style="color: #374151; font-size: 16px;">(${rating}/5)</span>
+            </p>
+            ${reviewText ? `<p style="font-style: italic; color: #4b5563;">&ldquo;${reviewText}&rdquo;</p>` : ''}
+          </div>
+
+          <p>Dank dir wird Technik wieder nutzbar gemacht - herzlichen Dank für dein Engagement!</p>
+
+          <a href="${requestUrl}" class="button button-green">Bewertung ansehen</a>
+        </div>
+        <div class="footer">
+          <p>Vielen Dank, dass du der Community hilfst!</p>
+          <p>${COPYRIGHT_TEXT}</p>
+        </div>
+      </div>
+    </body>
+    </html>
+  `,
+  text: `
+Hallo ${helperName},
+
+Vielen Dank für deine Hilfe! Der Anfragende hat deinen Einsatz bewertet:
+
+"${requestTitle}"
+Bewertung: ${rating}/5 Sterne
+${reviewText ? `\n"${reviewText}"\n` : ''}
+Dank dir wird Technik wieder nutzbar gemacht - herzlichen Dank für dein Engagement!
+
+Bewertung ansehen: ${requestUrl}
+
+Mit freundlichen Grüssen,
+Das RevampIT Team
+  `.trim(),
+})
+
 export const itHilfeOfferRejected = (
   helperName: string,
   requestTitle: string,

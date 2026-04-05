@@ -69,6 +69,8 @@ export {
   itHilfeRequestConfirmation,
   adminNewITHilfeRequest,
   helperNewMatchingRequest,
+  itHilfeCompleted,
+  itHilfeReviewReceived,
 
   // Appointment templates
   appointmentNewBooking,

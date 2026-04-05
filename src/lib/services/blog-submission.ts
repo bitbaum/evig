@@ -6,12 +6,43 @@
  */
 
 import { db } from '@/db'
-import { blogSubmissions, blogPosts } from '@/db/schema'
+import { blogSubmissions, blogPosts, notifications } from '@/db/schema'
 import { eq, sql, getTableName } from 'drizzle-orm'
 import { logger } from '@/lib/logger'
 import { sendEmail } from '@/lib/email'
 import { APPROVAL_STATUS } from '@/config/approval-status'
+import { NOTIFICATION_TYPES } from '@/config/notifications'
 import { createEditSnapshot, appendEditHistory, type EditHistoryEntry } from '@/lib/admin/edit-utils'
+
+/**
+ * Create an in-app notification for a submitter when their blog submission
+ * status changes. Fire-and-forget: never throws — a failed notification must
+ * not block the admin action.
+ */
+async function notifySubmitterOfStatusChange(
+  submission: Submission,
+  status: string,
+  title: string,
+  content: string,
+): Promise<void> {
+  if (!submission.userId) return
+  try {
+    await db.insert(notifications).values({
+      userId: submission.userId,
+      type: NOTIFICATION_TYPES.BLOG_SUBMISSION_STATUS,
+      title,
+      content,
+      relatedId: submission.id,
+      sentInApp: true,
+    })
+  } catch (error) {
+    logger.warn('Failed to create blog submission in-app notification', {
+      submissionId: submission.id,
+      status,
+      error,
+    })
+  }
+}
 
 // ============================================================================
 // Types
@@ -95,6 +126,13 @@ export async function approveSubmission(
     reviewerId,
   })
 
+  await notifySubmitterOfStatusChange(
+    submission,
+    APPROVAL_STATUS.APPROVED,
+    'Ihr Beitrag wurde genehmigt',
+    `«${submission.title}» wurde vom Redaktionsteam genehmigt und wird bald veröffentlicht.`,
+  )
+
   return { status: APPROVAL_STATUS.APPROVED, message: 'Einreichung genehmigt' }
 }
 
@@ -133,6 +171,13 @@ export async function rejectSubmission(
     reviewerId,
     reason: rejectionReason,
   })
+
+  await notifySubmitterOfStatusChange(
+    submission,
+    APPROVAL_STATUS.REJECTED,
+    'Ihr Beitrag wurde abgelehnt',
+    `«${submission.title}» wurde leider abgelehnt. Grund: ${rejectionReason}`,
+  )
 
   return { status: APPROVAL_STATUS.REJECTED, message: 'Einreichung abgelehnt' }
 }
@@ -198,6 +243,13 @@ export async function publishSubmission(
     reviewerId,
   })
 
+  await notifySubmitterOfStatusChange(
+    submission,
+    APPROVAL_STATUS.PUBLISHED,
+    'Ihr Beitrag ist jetzt online',
+    `«${submission.title}» wurde veröffentlicht und ist jetzt im Blog verfügbar.`,
+  )
+
   return {
     status: APPROVAL_STATUS.PUBLISHED,
     message: 'Beitrag veröffentlicht',
@@ -215,7 +267,7 @@ export async function requestChanges(
   await db
     .update(blogSubmissions)
     .set({
-      status: APPROVAL_STATUS.PENDING,
+      status: APPROVAL_STATUS.REQUIRES_CHANGES,
       reviewedBy: reviewerId,
       reviewedAt: sql`NOW()`,
       reviewNotes: reviewNotes,
@@ -241,8 +293,15 @@ export async function requestChanges(
     reviewerId,
   })
 
+  await notifySubmitterOfStatusChange(
+    submission,
+    APPROVAL_STATUS.REQUIRES_CHANGES,
+    'Überarbeitung erforderlich',
+    `Das Redaktionsteam hat Änderungen für «${submission.title}» angefragt: ${reviewNotes}`,
+  )
+
   return {
-    status: APPROVAL_STATUS.PENDING,
+    status: APPROVAL_STATUS.REQUIRES_CHANGES,
     message: 'Änderungen angefragt',
   }
 }
