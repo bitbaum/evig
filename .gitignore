@@ -114,3 +114,4 @@ docker-compose.override.yml
 
 # Presentations served from public/ (unlisted, share-by-link)
 !public/presentations/
+.playwright-mcp/
