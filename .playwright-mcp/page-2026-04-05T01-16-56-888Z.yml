@@ -1,0 +1,312 @@
+- generic [ref=e1]:
+  - link "Zum Inhalt springen" [ref=e2] [cursor=pointer]:
+    - /url: "#main"
+  - generic [ref=e3]:
+    - banner [ref=e4]:
+      - navigation [ref=e6]:
+        - link "Revamp-IT" [ref=e8] [cursor=pointer]:
+          - /url: /
+          - img "Revamp-IT" [ref=e9]
+        - generic [ref=e10]:
+          - generic [ref=e11]:
+            - link "Anmelden" [ref=e12] [cursor=pointer]:
+              - /url: /auth/login
+            - link "Registrieren" [ref=e13] [cursor=pointer]:
+              - /url: /auth/register
+              - text: Registrieren
+              - img [ref=e14]
+          - button "Menü öffnen" [active] [ref=e16] [cursor=pointer]:
+            - img [ref=e17]
+    - main [ref=e19]:
+      - main [ref=e20]:
+        - generic [ref=e23]:
+          - img [ref=e26]
+          - heading "Technik ein zweites Leben geben" [level=1] [ref=e29]
+          - paragraph [ref=e30]: Seit über 20 Jahren setzen wir uns gegen die vorschnelle Ausmusterung von Computern ein und fördern nachhaltige IT-Praktiken.
+        - navigation [ref=e31]:
+          - generic [ref=e33]:
+            - link "Über uns" [ref=e34] [cursor=pointer]:
+              - /url: /about
+              - img [ref=e35]
+              - generic [ref=e37]: Über uns
+            - link "Wirkung" [ref=e38] [cursor=pointer]:
+              - /url: /about/impact
+              - img [ref=e39]
+              - generic [ref=e41]: Wirkung
+            - link "Finanzen" [ref=e42] [cursor=pointer]:
+              - /url: /about/finances
+              - img [ref=e43]
+              - generic [ref=e46]: Finanzen
+            - link "Presse" [ref=e47] [cursor=pointer]:
+              - /url: /about/press
+              - img [ref=e48]
+              - generic [ref=e51]: Presse
+        - generic [ref=e53]:
+          - generic [ref=e54]:
+            - generic [ref=e55]:
+              - img [ref=e56]
+              - text: Unsere Mission
+            - heading "Nachhaltigkeit trifft Technologie" [level=2] [ref=e60]
+          - generic [ref=e61]:
+            - generic [ref=e62]:
+              - img "Revamp-IT Schaufenster mit Computern und Geräten" [ref=e64]
+              - generic [ref=e65]:
+                - paragraph [ref=e66]: 20+
+                - paragraph [ref=e67]: Jahre Erfahrung
+            - generic [ref=e68]:
+              - generic [ref=e69]:
+                - img [ref=e70]
+                - paragraph [ref=e73]: "\"10 Jahre sind das Minimum für ein Velo – und für einen Laptop auch!\""
+              - paragraph [ref=e74]:
+                - text: "Als gemeinnütziger Verein verändern wir seit 2003 den Umgang mit Technik. Unsere Mission ist klar:"
+                - strong [ref=e75]: Die Lebensdauer von IT-Geräten verlängern
+                - text: und Elektroschrott durch Reparatur, Wiederaufbereitung und nachhaltige Praktiken reduzieren.
+              - paragraph [ref=e76]: In unseren Räumlichkeiten – einer ehemaligen Bank – haben wir einen Treffpunkt geschaffen, wo Technik und Nachhaltigkeit zusammenkommen. Unser Ansatz verbindet Hardware-Recycling mit Open Source-Software und schafft so nachhaltige IT-Lösungen für Mensch und Umwelt.
+        - generic [ref=e78]:
+          - generic [ref=e79]:
+            - heading "Unsere Wirkungsbereiche" [level=2] [ref=e80]
+            - paragraph [ref=e81]: "Drei Säulen, ein Ziel: Technologie nachhaltiger und zugänglicher machen."
+          - generic [ref=e82]:
+            - generic [ref=e83]:
+              - img [ref=e85]
+              - heading "Hardware-Recycling" [level=3] [ref=e92]
+              - paragraph [ref=e93]: Wir reparieren und überholen IT-Geräte jeden Alters und schenken ihnen ein zweites Leben. Von alten MacBooks bis zu Vintage-Computern – jedes Gerät verdient eine zweite Chance.
+            - generic [ref=e94]:
+              - img [ref=e96]
+              - heading "Open Source-Software" [level=3] [ref=e99]
+              - paragraph [ref=e100]: Wir setzen auf Linux und andere Open Source-Lösungen. Diese Technologien halten ältere Geräte effizient am Laufen und bieten Sicherheit durch Kontrolle über das eigene System.
+            - generic [ref=e101]:
+              - img [ref=e103]
+              - heading "Gemeinschaft & Soziales" [level=3] [ref=e108]
+              - paragraph [ref=e109]: Wir schaffen sinnvolle Arbeitsplätze für Menschen, die es auf dem regulären Arbeitsmarkt schwer haben. Mit unserem Tauschsystem kann man Dienstleistungen gegen Technik tauschen.
+        - generic [ref=e111]:
+          - heading "Zahlen & Fakten" [level=2] [ref=e112]
+          - generic [ref=e113]:
+            - generic [ref=e114]:
+              - generic [ref=e115]:
+                - img [ref=e117]
+                - heading "Umweltwirkung" [level=3] [ref=e120]
+              - generic [ref=e121]:
+                - generic [ref=e122]:
+                  - paragraph [ref=e123]: 150+
+                  - paragraph [ref=e124]: Anzahl der IT-Geräte, die wir jährlich vor dem Entsorgen retten (verkauft)
+                - generic [ref=e125]:
+                  - paragraph [ref=e126]: 5+
+                  - paragraph [ref=e127]: Durchschnittliche Lebensdauerverlängerung pro Gerät (in Jahren)
+                - generic [ref=e128]:
+                  - paragraph [ref=e129]: 75%
+                  - paragraph [ref=e130]: Anteil der gespendeten Geräte, die wir erfolgreich wiederverwenden
+            - generic [ref=e131]:
+              - generic [ref=e132]:
+                - img [ref=e134]
+                - heading "Soziale Wirkung" [level=3] [ref=e139]
+              - generic [ref=e140]:
+                - generic [ref=e141]:
+                  - paragraph [ref=e142]: 20+
+                  - paragraph [ref=e143]: Personen, die wir jährlich in Open Source und nachhaltiger IT schulen
+                - generic [ref=e144]:
+                  - paragraph [ref=e145]: ~40%
+                  - paragraph [ref=e146]: Unserer Praktikant:innen finden den Einstieg in die IT oder eine Weiterbildung
+                - generic [ref=e147]:
+                  - paragraph [ref=e148]: ~4
+                  - paragraph [ref=e149]: Erfolgreiche Wiedereinstiege ins Berufsleben durch unser Programm
+          - link "Mehr zu unserer Wirkung erfahren" [ref=e151] [cursor=pointer]:
+            - /url: /about/impact
+            - text: Mehr zu unserer Wirkung erfahren
+            - generic [ref=e152]: →
+        - generic [ref=e154]:
+          - generic [ref=e155]:
+            - generic [ref=e156]:
+              - img [ref=e157]
+              - text: Unsere Geschichte
+            - heading "Die Gründung von Revamp-IT" [level=2] [ref=e160]
+            - paragraph [ref=e161]: Vom Käsekeller zur Bewegung
+          - generic [ref=e164]:
+            - paragraph [ref=e165]: "Revamp-IT wurde im Dezember 2003 in Zürich gegründet – geboren aus einer einfachen Beobachtung: Immer mehr brauchbare Computer landeten im Müll. \"Da muss etwas passieren\", war der Gedanke, der alles ins Rollen brachte."
+            - paragraph [ref=e166]: "Der erste Standort war ein alter Käsekeller in der Toni Molkerei. Dort entstand die Idee, die bis heute trägt: Hardware-Recycling und Linux kombinieren. Denn mit Open-Source-Software funktionieren auch ältere Geräte noch jahrelang."
+            - paragraph [ref=e167]: "Was als kleines Projekt begann, wurde zur Bewegung. Ohne gross nach Leuten zu suchen, kamen immer wieder Menschen dazu, die sagten: \"Toll, was ihr da macht.\" Heute, über 20 Jahre später, verarbeiten wir jährlich rund 1000 Geräte – davon werden etwa 150 aufbereitet und verkauft, der Rest geht in Ersatzteilgewinnung und fachgerechtes Recycling."
+          - generic [ref=e168]:
+            - heading "Meilensteine" [level=3] [ref=e169]
+            - paragraph [ref=e170]: Von der kleinen Werkstatt zur führenden Organisation für nachhaltige IT in der Schweiz.
+          - generic [ref=e173]:
+            - generic [ref=e176]:
+              - generic [ref=e177]:
+                - img [ref=e179]
+                - generic [ref=e184]:
+                  - text: "2003"
+                  - heading "Gründung" [level=3] [ref=e185]
+              - paragraph [ref=e186]: "Revamp-IT wird in der Toni Molkerei in Zürich gegründet – in einem alten Käsekeller. Die Vision: Brauchbare Computer vor dem Müll retten."
+            - generic [ref=e191]:
+              - generic [ref=e192]:
+                - img [ref=e194]
+                - generic [ref=e199]:
+                  - text: "2004"
+                  - heading "Erste Projekte" [level=3] [ref=e200]
+              - paragraph [ref=e201]: Linux-Workshops und erste Afrika-Projekte starten. Die Kombination von Hardware-Recycling und Open Source zeigt ihre Stärke.
+            - generic [ref=e206]:
+              - generic [ref=e207]:
+                - img [ref=e209]
+                - generic [ref=e214]:
+                  - text: "2005"
+                  - heading "Debian-Jubiläum" [level=3] [ref=e215]
+              - paragraph [ref=e216]: 10-jähriges Debian-Jubiläum auf dem Dach der Toni Molkerei. Die Open-Source-Community wächst zusammen.
+            - generic [ref=e221]:
+              - generic [ref=e222]:
+                - img [ref=e224]
+                - generic [ref=e227]:
+                  - text: "2008"
+                  - heading "Umzug nach Wipkingen" [level=3] [ref=e228]
+              - paragraph [ref=e229]: Neue Räume in der Reformierten Kirche Wipkingen. Mehr Platz für Werkstatt und wachsendes Team.
+            - generic [ref=e234]:
+              - generic [ref=e235]:
+                - img [ref=e237]
+                - generic [ref=e240]:
+                  - text: "2012"
+                  - heading "Wachstum" [level=3] [ref=e241]
+              - paragraph [ref=e242]: Röschibachstrasse – mehr Raum, mehr Möglichkeiten. Das Team wächst und die Nachfrage steigt.
+            - generic [ref=e247]:
+              - generic [ref=e248]:
+                - img [ref=e250]
+                - generic [ref=e253]:
+                  - text: "2015"
+                  - heading "Zwei Standorte" [level=3] [ref=e254]
+              - paragraph [ref=e255]: Laden an der Birmensdorferstrasse 379, Lager an der Badenerstrasse 816. Revamp-IT etabliert sich im Quartier.
+            - generic [ref=e260]:
+              - generic [ref=e261]:
+                - img [ref=e263]
+                - generic [ref=e266]:
+                  - text: "2017"
+                  - heading "Neue Räumlichkeiten" [level=3] [ref=e267]
+              - paragraph [ref=e268]: Umzug in die ehemalige Bank an der Birmensdorferstrasse 379. Mehr Platz für Werkstatt, Laden und Community.
+            - generic [ref=e273]:
+              - generic [ref=e274]:
+                - img [ref=e276]
+                - generic [ref=e281]:
+                  - text: "2020"
+                  - heading "Digital trotz Pandemie" [level=3] [ref=e282]
+              - paragraph [ref=e283]: Während der Pandemie helfen wir Schulen und Familien mit günstigen Laptops für Homeschooling. Online-Workshops starten.
+            - generic [ref=e288]:
+              - generic [ref=e289]:
+                - img [ref=e291]
+                - generic [ref=e294]:
+                  - text: "2022"
+                  - heading "Hosting & Cloud-Services" [level=3] [ref=e295]
+              - paragraph [ref=e296]: Erweiterung um Schweizer Cloud- und Hosting-Services. Datensouveränität für KMU, die ihre Daten in der Schweiz behalten wollen.
+            - generic [ref=e301]:
+              - generic [ref=e302]:
+                - img [ref=e304]
+                - generic [ref=e307]:
+                  - text: "2024"
+                  - heading "21 Jahre nachhaltige IT" [level=3] [ref=e308]
+              - paragraph [ref=e309]: Rund 1000 Geräte pro Jahr verarbeitet, davon ~150 verkauft. Über 43 Tonnen CO₂ pro Jahr eingespart. ~40% Erfolgsquote bei Praktika. Revamp-IT ist Vorbild für nachhaltige IT in der Schweiz.
+          - generic [ref=e312]:
+            - heading "Heute" [level=3] [ref=e313]
+            - generic [ref=e314]:
+              - generic [ref=e315]:
+                - paragraph [ref=e316]: "23"
+                - paragraph [ref=e317]: Jahre aktiv
+              - generic [ref=e318]:
+                - paragraph [ref=e319]: "20"
+                - paragraph [ref=e320]: Teammitglieder
+              - generic [ref=e321]:
+                - paragraph [ref=e322]: 1000+
+                - paragraph [ref=e323]: Geräte pro Jahr gerettet
+        - generic [ref=e325]:
+          - heading "Werde Teil unserer Mission" [level=2] [ref=e326]
+          - paragraph [ref=e327]: Ob du ein Gerät reparieren lassen möchtest, mehr über nachhaltige IT erfahren willst oder unsere Sache unterstützen möchtest – bei uns bist du willkommen. Gemeinsam machen wir Technik nachhaltiger und zugänglicher für alle.
+          - link "Mitmachen" [ref=e328] [cursor=pointer]:
+            - /url: /get-involved
+    - contentinfo [ref=e329]:
+      - generic [ref=e330]:
+        - generic [ref=e331]:
+          - generic [ref=e332]:
+            - link "Revamp-IT" [ref=e333] [cursor=pointer]:
+              - /url: /
+              - img "Revamp-IT" [ref=e334]
+            - paragraph [ref=e335]: Die Zukunft der IT durch nachhaltige Aufarbeitung und Recycling gestalten.
+          - navigation "Footer-Navigation" [ref=e336]:
+            - heading "Navigation" [level=3] [ref=e337]
+            - list [ref=e338]:
+              - listitem [ref=e339]:
+                - link "Über uns" [ref=e340] [cursor=pointer]:
+                  - /url: /about
+              - listitem [ref=e341]:
+                - link "Dienstleistungen" [ref=e342] [cursor=pointer]:
+                  - /url: /services
+              - listitem [ref=e343]:
+                - link "Marktplatz" [ref=e344] [cursor=pointer]:
+                  - /url: /marketplace
+              - listitem [ref=e345]:
+                - link "Lernen" [ref=e346] [cursor=pointer]:
+                  - /url: /knowhow
+              - listitem [ref=e347]:
+                - link "Mitmachen" [ref=e348] [cursor=pointer]:
+                  - /url: /get-involved
+              - listitem [ref=e349]:
+                - link "Kontakt" [ref=e350] [cursor=pointer]:
+                  - /url: /contact
+          - generic [ref=e351]:
+            - heading "Kontakt" [level=3] [ref=e352]
+            - generic [ref=e353]:
+              - generic [ref=e354]:
+                - img [ref=e355]
+                - generic [ref=e358]:
+                  - paragraph [ref=e359]: Verkaufsstelle
+                  - paragraph [ref=e360]: Birmensdorferstrasse 379
+                  - paragraph [ref=e361]: 8055 Zürich
+                  - paragraph [ref=e362]: Schweiz
+              - generic [ref=e363]:
+                - img [ref=e364]
+                - generic [ref=e367]:
+                  - paragraph [ref=e368]: Lager
+                  - paragraph [ref=e369]: Badenerstrasse 816
+                  - paragraph [ref=e370]: 8048 Zürich
+                  - paragraph [ref=e371]: (nur nach Terminvereinbarung)
+              - generic [ref=e372]:
+                - img [ref=e373]
+                - link "+41 (0)43 960 32 64" [ref=e375] [cursor=pointer]:
+                  - /url: tel:+41 (0)43 960 32 64
+              - generic [ref=e376]:
+                - img [ref=e377]
+                - link "empfang@revamp-it.ch" [ref=e380] [cursor=pointer]:
+                  - /url: mailto:empfang@revamp-it.ch
+          - generic [ref=e381]:
+            - heading "Öffnungszeiten" [level=3] [ref=e382]
+            - generic [ref=e383]:
+              - img [ref=e384]
+              - generic [ref=e387]:
+                - paragraph [ref=e388]: "Montag: 9:00 - 12:00"
+                - paragraph [ref=e389]: "Dienstag - Freitag: 13:00 - 17:00"
+        - generic [ref=e391]:
+          - generic [ref=e392]:
+            - paragraph [ref=e393]: Newsletter
+            - paragraph [ref=e394]: Updates zu unserer Arbeit — keine Werbung.
+          - generic [ref=e395]:
+            - textbox "Name (optional)" [ref=e396]
+            - textbox "E-Mail-Adresse" [ref=e397]
+            - button "Anmelden" [ref=e398] [cursor=pointer]
+        - generic [ref=e400]:
+          - link "Facebook" [ref=e401] [cursor=pointer]:
+            - /url: https://facebook.com/revampit
+            - generic [ref=e402]: Facebook
+            - img [ref=e403]
+          - link "Instagram" [ref=e405] [cursor=pointer]:
+            - /url: https://instagram.com/revampit_ch
+            - generic [ref=e406]: Instagram
+            - img [ref=e407]
+          - link "LinkedIn" [ref=e409] [cursor=pointer]:
+            - /url: https://linkedin.com/company/revampit
+            - generic [ref=e410]: LinkedIn
+            - img [ref=e411]
+          - link "Mastodon" [ref=e413] [cursor=pointer]:
+            - /url: https://mastodon.social/@revampit
+            - generic [ref=e414]: Mastodon
+            - img [ref=e415]
+        - paragraph [ref=e418]: © 2026 RevampIT. Alle Rechte vorbehalten.
+    - button "Revamp IT Assistent öffnen" [ref=e419] [cursor=pointer]:
+      - generic [ref=e420]:
+        - img [ref=e421]
+        - img [ref=e425]
+    - button "Verbesserungen vorschlagen öffnen" [ref=e428] [cursor=pointer]:
+      - img [ref=e429]
+  - alert [ref=e431]

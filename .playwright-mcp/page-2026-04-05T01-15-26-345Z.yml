@@ -1,0 +1,309 @@
+- generic [ref=e1]:
+  - link "Zum Inhalt springen" [ref=e2] [cursor=pointer]:
+    - /url: "#main"
+  - generic [ref=e3]:
+    - banner [ref=e4]:
+      - navigation [ref=e6]:
+        - link "Revamp-IT" [ref=e8] [cursor=pointer]:
+          - /url: /
+          - img "Revamp-IT" [ref=e9]
+        - generic [ref=e10]:
+          - generic [ref=e11]:
+            - link "Anmelden" [ref=e12] [cursor=pointer]:
+              - /url: /auth/login
+            - link "Registrieren" [ref=e13] [cursor=pointer]:
+              - /url: /auth/register
+              - text: Registrieren
+              - img [ref=e14]
+          - button "Menü öffnen" [active] [ref=e16] [cursor=pointer]:
+            - img [ref=e17]
+    - main [ref=e19]:
+      - generic [ref=e20]:
+        - generic [ref=e23]:
+          - img [ref=e26]
+          - heading "Workshops & Kurse" [level=1] [ref=e29]
+          - paragraph [ref=e30]: Lerne nachhaltige Technologie in praxisnahen Workshops. Von Linux über Hardware-Reparatur bis hin zu KI und Programmierung.
+        - generic [ref=e31]:
+          - generic [ref=e33]:
+            - generic [ref=e34]:
+              - generic [ref=e35]: Kategorie
+              - combobox "Kategorie Kategorie" [ref=e36]:
+                - option "Alle Kategorien" [selected]
+                - option "Umschulung & Karriere"
+                - option "Linux & Open Source"
+                - option "Hardware-Reparatur"
+                - option "Programmierung"
+                - option "Webentwicklung"
+                - option "KI & Machine Learning"
+                - option "Blockchain & Web3"
+                - option "Datenschutz & Sicherheit"
+                - option "Nachhaltigkeit"
+                - option "Digital Skills"
+            - generic [ref=e37]:
+              - generic [ref=e38]: Schwierigkeitsgrad
+              - combobox "Schwierigkeitsgrad Schwierigkeitsgrad" [ref=e39]:
+                - option "Alle Stufen" [selected]
+                - option "Anfänger"
+                - option "Fortgeschrittene"
+                - option "Experten"
+                - option "Alle Stufen"
+            - generic [ref=e40]: 6 Workshops
+          - generic [ref=e41]:
+            - generic [ref=e42]:
+              - generic [ref=e43]:
+                - generic [ref=e44]:
+                  - img [ref=e46]
+                  - generic [ref=e48]: Anfänger bis Fortgeschrittene
+                - heading "Linux Workshop" [level=3] [ref=e49]
+                - paragraph [ref=e50]: Meistern Sie das Linux-Betriebssystem von den Grundlagen bis zu fortgeschrittenen Themen.
+                - generic [ref=e52]:
+                  - img [ref=e53]
+                  - text: Betriebssysteme
+                - generic [ref=e55]:
+                  - generic [ref=e56]:
+                    - img [ref=e57]
+                    - text: 2 Tage
+                  - generic [ref=e60]:
+                    - img [ref=e61]
+                    - text: Max 12
+              - generic [ref=e66]:
+                - generic [ref=e68]:
+                  - img [ref=e69]
+                  - generic [ref=e71]: Termin folgt in Kürze
+                - generic [ref=e73]: Kostenlos
+                - generic [ref=e74]:
+                  - link "Details ansehen" [ref=e75] [cursor=pointer]:
+                    - /url: /workshops/linux-workshop
+                  - generic [ref=e76]: Kein Termin
+            - generic [ref=e77]:
+              - generic [ref=e78]:
+                - generic [ref=e79]:
+                  - img [ref=e81]
+                  - generic [ref=e84]: Alle Stufen
+                - heading "Open-Source-Software" [level=3] [ref=e85]
+                - paragraph [ref=e86]: Entdecken Sie die Welt der Open-Source-Software-Entwicklung.
+                - generic [ref=e88]:
+                  - img [ref=e89]
+                  - text: Entwicklung
+                - generic [ref=e92]:
+                  - generic [ref=e93]:
+                    - img [ref=e94]
+                    - text: 1 Tag
+                  - generic [ref=e97]:
+                    - img [ref=e98]
+                    - text: Max 15
+              - generic [ref=e103]:
+                - generic [ref=e105]:
+                  - img [ref=e106]
+                  - generic [ref=e108]: Termin folgt in Kürze
+                - generic [ref=e110]: Kostenlos
+                - generic [ref=e111]:
+                  - link "Details ansehen" [ref=e112] [cursor=pointer]:
+                    - /url: /workshops/open-source-software
+                  - generic [ref=e113]: Kein Termin
+            - generic [ref=e114]:
+              - generic [ref=e115]:
+                - generic [ref=e116]:
+                  - img [ref=e118]
+                  - generic [ref=e120]: Anfänger
+                - heading "Computerreparatur" [level=3] [ref=e121]
+                - paragraph [ref=e122]: Lernen Sie grundlegende Hardware-Reparatur- und Wartungsfähigkeiten.
+                - generic [ref=e124]:
+                  - img [ref=e125]
+                  - text: Hardware
+                - generic [ref=e127]:
+                  - generic [ref=e128]:
+                    - img [ref=e129]
+                    - text: 2 Tage
+                  - generic [ref=e132]:
+                    - img [ref=e133]
+                    - text: Max 10
+              - generic [ref=e138]:
+                - generic [ref=e140]:
+                  - img [ref=e141]
+                  - generic [ref=e143]: Termin folgt in Kürze
+                - generic [ref=e145]: Kostenlos
+                - generic [ref=e146]:
+                  - link "Details ansehen" [ref=e147] [cursor=pointer]:
+                    - /url: /workshops/computer-repair
+                  - generic [ref=e148]: Kein Termin
+            - generic [ref=e149]:
+              - generic [ref=e150]:
+                - generic [ref=e151]:
+                  - img [ref=e153]
+                  - generic [ref=e155]: Anfänger
+                - heading "Bitcoin & Blockchain" [level=3] [ref=e156]
+                - paragraph [ref=e157]: Verstehen Sie die Grundlagen von Bitcoin und Blockchain-Technologie.
+                - generic [ref=e159]:
+                  - img [ref=e160]
+                  - text: Blockchain
+                - generic [ref=e162]:
+                  - generic [ref=e163]:
+                    - img [ref=e164]
+                    - text: 1 Tag
+                  - generic [ref=e167]:
+                    - img [ref=e168]
+                    - text: Max 20
+              - generic [ref=e173]:
+                - generic [ref=e175]:
+                  - img [ref=e176]
+                  - generic [ref=e178]: Termin folgt in Kürze
+                - generic [ref=e180]: Kostenlos
+                - generic [ref=e181]:
+                  - link "Details ansehen" [ref=e182] [cursor=pointer]:
+                    - /url: /workshops/bitcoin-blockchain
+                  - generic [ref=e183]: Kein Termin
+            - generic [ref=e184]:
+              - generic [ref=e185]:
+                - generic [ref=e186]:
+                  - img [ref=e188]
+                  - generic [ref=e198]: Fortgeschrittene
+                - heading "Künstliche Intelligenz" [level=3] [ref=e199]
+                - paragraph [ref=e200]: Tauchen Sie ein in die Welt der KI und des maschinellen Lernens.
+                - generic [ref=e202]:
+                  - img [ref=e203]
+                  - text: KI & ML
+                - generic [ref=e213]:
+                  - generic [ref=e214]:
+                    - img [ref=e215]
+                    - text: 2 Tage
+                  - generic [ref=e218]:
+                    - img [ref=e219]
+                    - text: Max 15
+              - generic [ref=e224]:
+                - generic [ref=e226]:
+                  - img [ref=e227]
+                  - generic [ref=e229]: Termin folgt in Kürze
+                - generic [ref=e231]: Kostenlos
+                - generic [ref=e232]:
+                  - link "Details ansehen" [ref=e233] [cursor=pointer]:
+                    - /url: /workshops/ai-workshop
+                  - generic [ref=e234]: Kein Termin
+            - generic [ref=e235]:
+              - generic [ref=e236]:
+                - generic [ref=e237]:
+                  - img [ref=e239]
+                  - generic [ref=e241]: Anfänger bis Fortgeschrittene
+                - heading "Kreatives Programmieren" [level=3] [ref=e242]
+                - paragraph [ref=e243]: Verwandeln Sie Ideen in funktionierende Prototypen mit KI-gestützten Workflows.
+                - generic [ref=e245]:
+                  - img [ref=e246]
+                  - text: Kreativ
+                - generic [ref=e248]:
+                  - generic [ref=e249]:
+                    - img [ref=e250]
+                    - text: 4 Sitzungen
+                  - generic [ref=e253]:
+                    - img [ref=e254]
+                    - text: Max 12
+              - generic [ref=e259]:
+                - generic [ref=e261]:
+                  - img [ref=e262]
+                  - generic [ref=e264]: Termin folgt in Kürze
+                - generic [ref=e266]: Kostenlos
+                - generic [ref=e267]:
+                  - link "Details ansehen" [ref=e268] [cursor=pointer]:
+                    - /url: /workshops/creative-coding
+                  - generic [ref=e269]: Kein Termin
+          - generic [ref=e270]:
+            - img [ref=e271]
+            - heading "Workshop vorschlagen?" [level=2] [ref=e273]
+            - paragraph [ref=e274]: Hast du eine Idee für einen Workshop? Wir freuen uns über deine Vorschläge für neue Themen und Inhalte.
+            - link "Workshop vorschlagen" [ref=e275] [cursor=pointer]:
+              - /url: /workshops/propose
+              - text: Workshop vorschlagen
+              - img [ref=e276]
+    - contentinfo [ref=e278]:
+      - generic [ref=e279]:
+        - generic [ref=e280]:
+          - generic [ref=e281]:
+            - link "Revamp-IT" [ref=e282] [cursor=pointer]:
+              - /url: /
+              - img "Revamp-IT" [ref=e283]
+            - paragraph [ref=e284]: Die Zukunft der IT durch nachhaltige Aufarbeitung und Recycling gestalten.
+          - navigation "Footer-Navigation" [ref=e285]:
+            - heading "Navigation" [level=3] [ref=e286]
+            - list [ref=e287]:
+              - listitem [ref=e288]:
+                - link "Über uns" [ref=e289] [cursor=pointer]:
+                  - /url: /about
+              - listitem [ref=e290]:
+                - link "Dienstleistungen" [ref=e291] [cursor=pointer]:
+                  - /url: /services
+              - listitem [ref=e292]:
+                - link "Marktplatz" [ref=e293] [cursor=pointer]:
+                  - /url: /marketplace
+              - listitem [ref=e294]:
+                - link "Lernen" [ref=e295] [cursor=pointer]:
+                  - /url: /knowhow
+              - listitem [ref=e296]:
+                - link "Mitmachen" [ref=e297] [cursor=pointer]:
+                  - /url: /get-involved
+              - listitem [ref=e298]:
+                - link "Kontakt" [ref=e299] [cursor=pointer]:
+                  - /url: /contact
+          - generic [ref=e300]:
+            - heading "Kontakt" [level=3] [ref=e301]
+            - generic [ref=e302]:
+              - generic [ref=e303]:
+                - img [ref=e304]
+                - generic [ref=e307]:
+                  - paragraph [ref=e308]: Verkaufsstelle
+                  - paragraph [ref=e309]: Birmensdorferstrasse 379
+                  - paragraph [ref=e310]: 8055 Zürich
+                  - paragraph [ref=e311]: Schweiz
+              - generic [ref=e312]:
+                - img [ref=e313]
+                - generic [ref=e316]:
+                  - paragraph [ref=e317]: Lager
+                  - paragraph [ref=e318]: Badenerstrasse 816
+                  - paragraph [ref=e319]: 8048 Zürich
+                  - paragraph [ref=e320]: (nur nach Terminvereinbarung)
+              - generic [ref=e321]:
+                - img [ref=e322]
+                - link "+41 (0)43 960 32 64" [ref=e324] [cursor=pointer]:
+                  - /url: tel:+41 (0)43 960 32 64
+              - generic [ref=e325]:
+                - img [ref=e326]
+                - link "empfang@revamp-it.ch" [ref=e329] [cursor=pointer]:
+                  - /url: mailto:empfang@revamp-it.ch
+          - generic [ref=e330]:
+            - heading "Öffnungszeiten" [level=3] [ref=e331]
+            - generic [ref=e332]:
+              - img [ref=e333]
+              - generic [ref=e336]:
+                - paragraph [ref=e337]: "Montag: 9:00 - 12:00"
+                - paragraph [ref=e338]: "Dienstag - Freitag: 13:00 - 17:00"
+        - generic [ref=e340]:
+          - generic [ref=e341]:
+            - paragraph [ref=e342]: Newsletter
+            - paragraph [ref=e343]: Updates zu unserer Arbeit — keine Werbung.
+          - generic [ref=e344]:
+            - textbox "Name (optional)" [ref=e345]
+            - textbox "E-Mail-Adresse" [ref=e346]
+            - button "Anmelden" [ref=e347] [cursor=pointer]
+        - generic [ref=e349]:
+          - link "Facebook" [ref=e350] [cursor=pointer]:
+            - /url: https://facebook.com/revampit
+            - generic [ref=e351]: Facebook
+            - img [ref=e352]
+          - link "Instagram" [ref=e354] [cursor=pointer]:
+            - /url: https://instagram.com/revampit_ch
+            - generic [ref=e355]: Instagram
+            - img [ref=e356]
+          - link "LinkedIn" [ref=e358] [cursor=pointer]:
+            - /url: https://linkedin.com/company/revampit
+            - generic [ref=e359]: LinkedIn
+            - img [ref=e360]
+          - link "Mastodon" [ref=e362] [cursor=pointer]:
+            - /url: https://mastodon.social/@revampit
+            - generic [ref=e363]: Mastodon
+            - img [ref=e364]
+        - paragraph [ref=e367]: © 2026 RevampIT. Alle Rechte vorbehalten.
+    - button "Revamp IT Assistent öffnen" [ref=e368] [cursor=pointer]:
+      - generic [ref=e369]:
+        - img [ref=e370]
+        - img [ref=e374]
+    - button "Verbesserungen vorschlagen öffnen" [ref=e377] [cursor=pointer]:
+      - img [ref=e378]
+  - alert [ref=e380]

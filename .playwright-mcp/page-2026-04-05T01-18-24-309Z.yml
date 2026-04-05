@@ -1,0 +1,184 @@
+- generic [ref=e1]:
+  - link "Zum Inhalt springen" [ref=e2] [cursor=pointer]:
+    - /url: "#main"
+  - generic [ref=e3]:
+    - banner [ref=e4]:
+      - navigation [ref=e6]:
+        - link "Revamp-IT" [ref=e8] [cursor=pointer]:
+          - /url: /
+          - img "Revamp-IT" [ref=e9]
+        - generic [ref=e10]:
+          - generic [ref=e11]:
+            - link "Anmelden" [ref=e12] [cursor=pointer]:
+              - /url: /auth/login
+            - link "Registrieren" [ref=e13] [cursor=pointer]:
+              - /url: /auth/register
+              - text: Registrieren
+              - img [ref=e14]
+          - button "Menü öffnen" [active] [ref=e16] [cursor=pointer]:
+            - img [ref=e17]
+    - main [ref=e19]:
+      - main [ref=e20]:
+        - generic [ref=e23]:
+          - img [ref=e26]
+          - heading "Wie möchtest du einkaufen?" [level=1] [ref=e30]
+          - paragraph [ref=e31]: "Wähle den Kanal, der am besten zu dir passt: unseren Online-Shop, den Shopware-Shop oder unser Ladenlokal in Zürich."
+        - generic [ref=e34]:
+          - generic [ref=e35]:
+            - generic [ref=e37]:
+              - img [ref=e39]
+              - generic [ref=e44]:
+                - heading "Ladenlokal (Zürich)" [level=3] [ref=e45]
+                - paragraph [ref=e46]: Beratung, Geräte ansehen, direkt mitnehmen
+            - generic [ref=e47]:
+              - generic [ref=e48]:
+                - img [ref=e49]
+                - generic [ref=e52]:
+                  - paragraph [ref=e53]: Birmensdorferstrasse 379, 8055 Zürich
+                  - paragraph [ref=e54]: Gut mit ÖV erreichbar. Parkmöglichkeiten in der Nähe.
+              - generic [ref=e55]:
+                - img [ref=e56]
+                - generic [ref=e59]:
+                  - paragraph [ref=e60]: Öffnungszeiten
+                  - paragraph [ref=e61]:
+                    - text: "Montag: 9:00 - 12:00"
+                    - text: "Dienstag - Freitag: 13:00 - 17:00"
+              - generic [ref=e62]:
+                - link "In Google Maps öffnen" [ref=e63] [cursor=pointer]:
+                  - /url: https://www.google.com/maps/place/Birmensdorferstrasse+379,+8055+Zürich
+                  - img [ref=e64]
+                  - text: In Google Maps öffnen
+                - link "In OpenStreetMap öffnen" [ref=e67] [cursor=pointer]:
+                  - /url: https://www.openstreetmap.org/?mlat=47.3815&mlon=8.5237#map=17/47.3815/8.5237
+                  - img [ref=e68]
+                  - text: In OpenStreetMap öffnen
+                - link "Kontakt" [ref=e70] [cursor=pointer]:
+                  - /url: /contact
+              - generic [ref=e72]:
+                - img [ref=e73]
+                - generic [ref=e75]:
+                  - paragraph [ref=e76]: Warum zwei Kartenoptionen?
+                  - paragraph [ref=e77]: OpenStreetMap ist community‑getrieben und datensparsam. Google/Apple Maps bieten oft bessere Navigation, Live‑Verkehr und POIs. Wählen Sie, was für Sie am besten passt – Transparenz und Wahlfreiheit sind uns wichtig.
+          - generic [ref=e78]:
+            - generic [ref=e80]:
+              - img [ref=e82]
+              - generic [ref=e86]:
+                - heading "Online-Shops" [level=3] [ref=e87]
+                - paragraph [ref=e88]: Wähle zwischen unserem Online-Shop und dem Shopware-Kanal.
+            - generic [ref=e89]:
+              - list [ref=e90]:
+                - listitem [ref=e91]: Geprüfte Qualität und Garantie in allen Kanälen
+                - listitem [ref=e92]: Faire Preise, nachhaltige Auswahl
+                - listitem [ref=e93]: Sichere Zahlung
+              - generic [ref=e94]:
+                - link "Aktueller Online‑Shop" [ref=e95] [cursor=pointer]:
+                  - /url: https://revamp-it.ch/shop
+                  - img [ref=e96]
+                  - text: Aktueller Online‑Shop
+                - link "Zum Shopware‑Shop" [ref=e100] [cursor=pointer]:
+                  - /url: https://revamp-it.ch/shop-sw
+                  - img [ref=e101]
+                  - text: Zum Shopware‑Shop
+                - link "Revamp-IT Online‑Shop" [ref=e105] [cursor=pointer]:
+                  - /url: /marketplace
+                  - img [ref=e106]
+                  - text: Revamp-IT Online‑Shop
+              - generic [ref=e111]:
+                - img [ref=e112]
+                - generic [ref=e114]:
+                  - paragraph [ref=e115]: Mehrere Shop‑Kanäle?
+                  - paragraph [ref=e116]: Unser Revamp-IT Online-Shop bietet dir die beste Auswahl an aufgearbeiteter IT-Hardware. Alternativ findest du unser Sortiment auch im Shopware-Shop und im Legacy-System.
+    - contentinfo [ref=e117]:
+      - generic [ref=e118]:
+        - generic [ref=e119]:
+          - generic [ref=e120]:
+            - link "Revamp-IT" [ref=e121] [cursor=pointer]:
+              - /url: /
+              - img "Revamp-IT" [ref=e122]
+            - paragraph [ref=e123]: Die Zukunft der IT durch nachhaltige Aufarbeitung und Recycling gestalten.
+          - navigation "Footer-Navigation" [ref=e124]:
+            - heading "Navigation" [level=3] [ref=e125]
+            - list [ref=e126]:
+              - listitem [ref=e127]:
+                - link "Über uns" [ref=e128] [cursor=pointer]:
+                  - /url: /about
+              - listitem [ref=e129]:
+                - link "Dienstleistungen" [ref=e130] [cursor=pointer]:
+                  - /url: /services
+              - listitem [ref=e131]:
+                - link "Marktplatz" [ref=e132] [cursor=pointer]:
+                  - /url: /marketplace
+              - listitem [ref=e133]:
+                - link "Lernen" [ref=e134] [cursor=pointer]:
+                  - /url: /knowhow
+              - listitem [ref=e135]:
+                - link "Mitmachen" [ref=e136] [cursor=pointer]:
+                  - /url: /get-involved
+              - listitem [ref=e137]:
+                - link "Kontakt" [ref=e138] [cursor=pointer]:
+                  - /url: /contact
+          - generic [ref=e139]:
+            - heading "Kontakt" [level=3] [ref=e140]
+            - generic [ref=e141]:
+              - generic [ref=e142]:
+                - img [ref=e143]
+                - generic [ref=e146]:
+                  - paragraph [ref=e147]: Verkaufsstelle
+                  - paragraph [ref=e148]: Birmensdorferstrasse 379
+                  - paragraph [ref=e149]: 8055 Zürich
+                  - paragraph [ref=e150]: Schweiz
+              - generic [ref=e151]:
+                - img [ref=e152]
+                - generic [ref=e155]:
+                  - paragraph [ref=e156]: Lager
+                  - paragraph [ref=e157]: Badenerstrasse 816
+                  - paragraph [ref=e158]: 8048 Zürich
+                  - paragraph [ref=e159]: (nur nach Terminvereinbarung)
+              - generic [ref=e160]:
+                - img [ref=e161]
+                - link "+41 (0)43 960 32 64" [ref=e163] [cursor=pointer]:
+                  - /url: tel:+41 (0)43 960 32 64
+              - generic [ref=e164]:
+                - img [ref=e165]
+                - link "empfang@revamp-it.ch" [ref=e168] [cursor=pointer]:
+                  - /url: mailto:empfang@revamp-it.ch
+          - generic [ref=e169]:
+            - heading "Öffnungszeiten" [level=3] [ref=e170]
+            - generic [ref=e171]:
+              - img [ref=e172]
+              - generic [ref=e175]:
+                - paragraph [ref=e176]: "Montag: 9:00 - 12:00"
+                - paragraph [ref=e177]: "Dienstag - Freitag: 13:00 - 17:00"
+        - generic [ref=e179]:
+          - generic [ref=e180]:
+            - paragraph [ref=e181]: Newsletter
+            - paragraph [ref=e182]: Updates zu unserer Arbeit — keine Werbung.
+          - generic [ref=e183]:
+            - textbox "Name (optional)" [ref=e184]
+            - textbox "E-Mail-Adresse" [ref=e185]
+            - button "Anmelden" [ref=e186] [cursor=pointer]
+        - generic [ref=e188]:
+          - link "Facebook" [ref=e189] [cursor=pointer]:
+            - /url: https://facebook.com/revampit
+            - generic [ref=e190]: Facebook
+            - img [ref=e191]
+          - link "Instagram" [ref=e193] [cursor=pointer]:
+            - /url: https://instagram.com/revampit_ch
+            - generic [ref=e194]: Instagram
+            - img [ref=e195]
+          - link "LinkedIn" [ref=e197] [cursor=pointer]:
+            - /url: https://linkedin.com/company/revampit
+            - generic [ref=e198]: LinkedIn
+            - img [ref=e199]
+          - link "Mastodon" [ref=e201] [cursor=pointer]:
+            - /url: https://mastodon.social/@revampit
+            - generic [ref=e202]: Mastodon
+            - img [ref=e203]
+        - paragraph [ref=e206]: © 2026 RevampIT. Alle Rechte vorbehalten.
+    - button "Revamp IT Assistent öffnen" [ref=e207] [cursor=pointer]:
+      - generic [ref=e208]:
+        - img [ref=e209]
+        - img [ref=e213]
+    - button "Verbesserungen vorschlagen öffnen" [ref=e216] [cursor=pointer]:
+      - img [ref=e217]
+  - alert [ref=e219]

@@ -1,0 +1,201 @@
+- generic [ref=e1]:
+  - link "Zum Inhalt springen" [ref=e2] [cursor=pointer]:
+    - /url: "#main"
+  - generic [ref=e3]:
+    - banner [ref=e4]:
+      - navigation [ref=e6]:
+        - link "Revamp-IT" [ref=e8] [cursor=pointer]:
+          - /url: /
+          - img "Revamp-IT" [ref=e9]
+        - generic [ref=e10]:
+          - generic [ref=e11]:
+            - link "Anmelden" [ref=e12] [cursor=pointer]:
+              - /url: /auth/login
+            - link "Registrieren" [ref=e13] [cursor=pointer]:
+              - /url: /auth/register
+              - text: Registrieren
+              - img [ref=e14]
+          - button "Menü öffnen" [active] [ref=e16] [cursor=pointer]:
+            - img [ref=e17]
+    - main [ref=e19]:
+      - main [ref=e20]:
+        - generic [ref=e23]:
+          - img [ref=e26]
+          - heading "Kontakt" [level=1] [ref=e28]
+          - paragraph [ref=e29]: Haben Sie Fragen zu unseren Dienstleistungen, Workshops oder Linux-Lösungen? Wir helfen gerne!
+        - generic [ref=e32]:
+          - generic [ref=e33]:
+            - img [ref=e35]
+            - heading "E-Mail" [level=3] [ref=e38]
+            - link "empfang@revamp-it.ch" [ref=e39] [cursor=pointer]:
+              - /url: mailto:empfang@revamp-it.ch
+          - generic [ref=e40]:
+            - img [ref=e42]
+            - heading "Telefon" [level=3] [ref=e44]
+            - link "+41 (0)43 960 32 64" [ref=e45] [cursor=pointer]:
+              - /url: tel:+41439603264
+          - generic [ref=e46]:
+            - img [ref=e48]
+            - heading "Adresse" [level=3] [ref=e51]
+            - link "Birmensdorferstrasse 379 8055 Zürich Schweiz" [ref=e52] [cursor=pointer]:
+              - /url: https://www.google.com/maps/place/Birmensdorferstrasse+379,+8055+Zürich
+          - generic [ref=e53]:
+            - img [ref=e55]
+            - heading "Öffnungszeiten" [level=3] [ref=e58]
+            - paragraph [ref=e59]: "Montag: 9:00 - 12:00 Dienstag - Freitag: 13:00 - 17:00"
+        - generic [ref=e63]:
+          - heading "Senden Sie uns eine Nachricht" [level=2] [ref=e64]
+          - generic [ref=e65]:
+            - generic [ref=e66]:
+              - generic [ref=e67]:
+                - generic [ref=e68]: Name
+                - generic [ref=e69]:
+                  - generic:
+                    - img
+                  - textbox "Name" [ref=e70]:
+                    - /placeholder: Ihr Name
+              - generic [ref=e71]:
+                - generic [ref=e72]: E-Mail
+                - generic [ref=e73]:
+                  - generic:
+                    - img
+                  - textbox "E-Mail" [ref=e74]:
+                    - /placeholder: ihre@email.com
+            - generic [ref=e75]:
+              - generic [ref=e76]: Betreff
+              - textbox "Betreff" [ref=e77]:
+                - /placeholder: Worum geht es?
+            - generic [ref=e78]:
+              - generic [ref=e79]: Nachricht
+              - generic [ref=e80]:
+                - generic:
+                  - img
+                - textbox "Nachricht" [ref=e81]:
+                  - /placeholder: Ihre Nachricht...
+            - button "Nachricht senden" [ref=e83] [cursor=pointer]:
+              - img [ref=e84]
+              - text: Nachricht senden
+        - generic [ref=e89]:
+          - heading "Finden Sie uns" [level=2] [ref=e90]
+          - iframe [ref=e92]:
+            
+          - generic [ref=e93]:
+            - generic [ref=e94]:
+              - link "In Google Maps öffnen" [ref=e95] [cursor=pointer]:
+                - /url: https://www.google.com/maps/place/Birmensdorferstrasse+379,+8055+Zürich
+                - img [ref=e96]
+                - text: In Google Maps öffnen
+              - link "In OpenStreetMap öffnen" [ref=e99] [cursor=pointer]:
+                - /url: https://www.openstreetmap.org/?mlat=47.3815&mlon=8.5237#map=17/47.3815/8.5237
+                - img [ref=e100]
+                - text: In OpenStreetMap öffnen
+            - generic [ref=e103]:
+              - img [ref=e104]
+              - generic [ref=e106]:
+                - paragraph [ref=e107]: Warum zwei Kartenoptionen?
+                - paragraph [ref=e108]: OpenStreetMap ist community‑getrieben und datensparsam. Google/Apple Maps bieten oft bessere Navigation, Live‑Verkehr und POIs. Wählen Sie, was für Sie am besten passt – Transparenz und Wahlfreiheit sind uns wichtig.
+            - generic [ref=e109]:
+              - paragraph [ref=e110]: Wir haben auch einen Lagerstandort an der Badenerstrasse 816, 8048 Zürich (nur nach Terminvereinbarung)
+              - generic [ref=e111]:
+                - link "Lager in Google Maps" [ref=e112] [cursor=pointer]:
+                  - /url: https://www.google.com/maps/place/Badenerstrasse+816,+8048+Zürich
+                  - img [ref=e113]
+                  - text: Lager in Google Maps
+                - link "Lager in OpenStreetMap" [ref=e116] [cursor=pointer]:
+                  - /url: https://www.openstreetmap.org/?mlat=47.3890&mlon=8.4880#map=17/47.3890/8.4880
+                  - img [ref=e117]
+                  - text: Lager in OpenStreetMap
+    - contentinfo [ref=e119]:
+      - generic [ref=e120]:
+        - generic [ref=e121]:
+          - generic [ref=e122]:
+            - link "Revamp-IT" [ref=e123] [cursor=pointer]:
+              - /url: /
+              - img "Revamp-IT" [ref=e124]
+            - paragraph [ref=e125]: Die Zukunft der IT durch nachhaltige Aufarbeitung und Recycling gestalten.
+          - navigation "Footer-Navigation" [ref=e126]:
+            - heading "Navigation" [level=3] [ref=e127]
+            - list [ref=e128]:
+              - listitem [ref=e129]:
+                - link "Über uns" [ref=e130] [cursor=pointer]:
+                  - /url: /about
+              - listitem [ref=e131]:
+                - link "Dienstleistungen" [ref=e132] [cursor=pointer]:
+                  - /url: /services
+              - listitem [ref=e133]:
+                - link "Marktplatz" [ref=e134] [cursor=pointer]:
+                  - /url: /marketplace
+              - listitem [ref=e135]:
+                - link "Lernen" [ref=e136] [cursor=pointer]:
+                  - /url: /knowhow
+              - listitem [ref=e137]:
+                - link "Mitmachen" [ref=e138] [cursor=pointer]:
+                  - /url: /get-involved
+              - listitem [ref=e139]:
+                - link "Kontakt" [ref=e140] [cursor=pointer]:
+                  - /url: /contact
+          - generic [ref=e141]:
+            - heading "Kontakt" [level=3] [ref=e142]
+            - generic [ref=e143]:
+              - generic [ref=e144]:
+                - img [ref=e145]
+                - generic [ref=e148]:
+                  - paragraph [ref=e149]: Verkaufsstelle
+                  - paragraph [ref=e150]: Birmensdorferstrasse 379
+                  - paragraph [ref=e151]: 8055 Zürich
+                  - paragraph [ref=e152]: Schweiz
+              - generic [ref=e153]:
+                - img [ref=e154]
+                - generic [ref=e157]:
+                  - paragraph [ref=e158]: Lager
+                  - paragraph [ref=e159]: Badenerstrasse 816
+                  - paragraph [ref=e160]: 8048 Zürich
+                  - paragraph [ref=e161]: (nur nach Terminvereinbarung)
+              - generic [ref=e162]:
+                - img [ref=e163]
+                - link "+41 (0)43 960 32 64" [ref=e165] [cursor=pointer]:
+                  - /url: tel:+41 (0)43 960 32 64
+              - generic [ref=e166]:
+                - img [ref=e167]
+                - link "empfang@revamp-it.ch" [ref=e170] [cursor=pointer]:
+                  - /url: mailto:empfang@revamp-it.ch
+          - generic [ref=e171]:
+            - heading "Öffnungszeiten" [level=3] [ref=e172]
+            - generic [ref=e173]:
+              - img [ref=e174]
+              - generic [ref=e177]:
+                - paragraph [ref=e178]: "Montag: 9:00 - 12:00"
+                - paragraph [ref=e179]: "Dienstag - Freitag: 13:00 - 17:00"
+        - generic [ref=e181]:
+          - generic [ref=e182]:
+            - paragraph [ref=e183]: Newsletter
+            - paragraph [ref=e184]: Updates zu unserer Arbeit — keine Werbung.
+          - generic [ref=e185]:
+            - textbox "Name (optional)" [ref=e186]
+            - textbox "E-Mail-Adresse" [ref=e187]
+            - button "Anmelden" [ref=e188] [cursor=pointer]
+        - generic [ref=e190]:
+          - link "Facebook" [ref=e191] [cursor=pointer]:
+            - /url: https://facebook.com/revampit
+            - generic [ref=e192]: Facebook
+            - img [ref=e193]
+          - link "Instagram" [ref=e195] [cursor=pointer]:
+            - /url: https://instagram.com/revampit_ch
+            - generic [ref=e196]: Instagram
+            - img [ref=e197]
+          - link "LinkedIn" [ref=e199] [cursor=pointer]:
+            - /url: https://linkedin.com/company/revampit
+            - generic [ref=e200]: LinkedIn
+            - img [ref=e201]
+          - link "Mastodon" [ref=e203] [cursor=pointer]:
+            - /url: https://mastodon.social/@revampit
+            - generic [ref=e204]: Mastodon
+            - img [ref=e205]
+        - paragraph [ref=e208]: © 2026 RevampIT. Alle Rechte vorbehalten.
+    - button "Revamp IT Assistent öffnen" [ref=e209] [cursor=pointer]:
+      - generic [ref=e210]:
+        - img [ref=e211]
+        - img [ref=e215]
+    - button "Verbesserungen vorschlagen öffnen" [ref=e218] [cursor=pointer]:
+      - img [ref=e219]
+  - alert [ref=e221]

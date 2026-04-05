@@ -1,0 +1,121 @@
+- generic [ref=e1]:
+  - link "Zum Inhalt springen" [ref=e2] [cursor=pointer]:
+    - /url: "#main"
+  - generic [ref=e3]:
+    - banner [ref=e4]:
+      - navigation [ref=e6]:
+        - link "Revamp-IT" [ref=e8] [cursor=pointer]:
+          - /url: /
+          - img "Revamp-IT" [ref=e9]
+        - generic [ref=e10]:
+          - generic [ref=e11]:
+            - link "Anmelden" [ref=e12] [cursor=pointer]:
+              - /url: /auth/login
+            - link "Registrieren" [ref=e13] [cursor=pointer]:
+              - /url: /auth/register
+              - text: Registrieren
+              - img [ref=e14]
+          - button "Menü öffnen" [active] [ref=e16] [cursor=pointer]:
+            - img [ref=e17]
+    - main [ref=e19]:
+      - generic [ref=e21]:
+        - img [ref=e23]
+        - generic [ref=e25]:
+          - heading "Seite nicht gefunden" [level=1] [ref=e26]
+          - paragraph [ref=e27]: Die gesuchte Seite konnte nicht gefunden werden.
+          - link "Zurück zur Startseite" [ref=e28] [cursor=pointer]:
+            - /url: /
+    - contentinfo [ref=e29]:
+      - generic [ref=e30]:
+        - generic [ref=e31]:
+          - generic [ref=e32]:
+            - link "Revamp-IT" [ref=e33] [cursor=pointer]:
+              - /url: /
+              - img "Revamp-IT" [ref=e34]
+            - paragraph [ref=e35]: Die Zukunft der IT durch nachhaltige Aufarbeitung und Recycling gestalten.
+          - navigation "Footer-Navigation" [ref=e36]:
+            - heading "Navigation" [level=3] [ref=e37]
+            - list [ref=e38]:
+              - listitem [ref=e39]:
+                - link "Über uns" [ref=e40] [cursor=pointer]:
+                  - /url: /about
+              - listitem [ref=e41]:
+                - link "Dienstleistungen" [ref=e42] [cursor=pointer]:
+                  - /url: /services
+              - listitem [ref=e43]:
+                - link "Marktplatz" [ref=e44] [cursor=pointer]:
+                  - /url: /marketplace
+              - listitem [ref=e45]:
+                - link "Lernen" [ref=e46] [cursor=pointer]:
+                  - /url: /knowhow
+              - listitem [ref=e47]:
+                - link "Mitmachen" [ref=e48] [cursor=pointer]:
+                  - /url: /get-involved
+              - listitem [ref=e49]:
+                - link "Kontakt" [ref=e50] [cursor=pointer]:
+                  - /url: /contact
+          - generic [ref=e51]:
+            - heading "Kontakt" [level=3] [ref=e52]
+            - generic [ref=e53]:
+              - generic [ref=e54]:
+                - img [ref=e55]
+                - generic [ref=e58]:
+                  - paragraph [ref=e59]: Verkaufsstelle
+                  - paragraph [ref=e60]: Birmensdorferstrasse 379
+                  - paragraph [ref=e61]: 8055 Zürich
+                  - paragraph [ref=e62]: Schweiz
+              - generic [ref=e63]:
+                - img [ref=e64]
+                - generic [ref=e67]:
+                  - paragraph [ref=e68]: Lager
+                  - paragraph [ref=e69]: Badenerstrasse 816
+                  - paragraph [ref=e70]: 8048 Zürich
+                  - paragraph [ref=e71]: (nur nach Terminvereinbarung)
+              - generic [ref=e72]:
+                - img [ref=e73]
+                - link "+41 (0)43 960 32 64" [ref=e75] [cursor=pointer]:
+                  - /url: tel:+41 (0)43 960 32 64
+              - generic [ref=e76]:
+                - img [ref=e77]
+                - link "empfang@revamp-it.ch" [ref=e80] [cursor=pointer]:
+                  - /url: mailto:empfang@revamp-it.ch
+          - generic [ref=e81]:
+            - heading "Öffnungszeiten" [level=3] [ref=e82]
+            - generic [ref=e83]:
+              - img [ref=e84]
+              - generic [ref=e87]:
+                - paragraph [ref=e88]: "Montag: 9:00 - 12:00"
+                - paragraph [ref=e89]: "Dienstag - Freitag: 13:00 - 17:00"
+        - generic [ref=e91]:
+          - generic [ref=e92]:
+            - paragraph [ref=e93]: Newsletter
+            - paragraph [ref=e94]: Updates zu unserer Arbeit — keine Werbung.
+          - generic [ref=e95]:
+            - textbox "Name (optional)" [ref=e96]
+            - textbox "E-Mail-Adresse" [ref=e97]
+            - button "Anmelden" [ref=e98] [cursor=pointer]
+        - generic [ref=e100]:
+          - link "Facebook" [ref=e101] [cursor=pointer]:
+            - /url: https://facebook.com/revampit
+            - generic [ref=e102]: Facebook
+            - img [ref=e103]
+          - link "Instagram" [ref=e105] [cursor=pointer]:
+            - /url: https://instagram.com/revampit_ch
+            - generic [ref=e106]: Instagram
+            - img [ref=e107]
+          - link "LinkedIn" [ref=e109] [cursor=pointer]:
+            - /url: https://linkedin.com/company/revampit
+            - generic [ref=e110]: LinkedIn
+            - img [ref=e111]
+          - link "Mastodon" [ref=e113] [cursor=pointer]:
+            - /url: https://mastodon.social/@revampit
+            - generic [ref=e114]: Mastodon
+            - img [ref=e115]
+        - paragraph [ref=e118]: © 2026 RevampIT. Alle Rechte vorbehalten.
+    - button "Revamp IT Assistent öffnen" [ref=e119] [cursor=pointer]:
+      - generic [ref=e120]:
+        - img [ref=e121]
+        - img [ref=e125]
+    - button "Verbesserungen vorschlagen öffnen" [ref=e128] [cursor=pointer]:
+      - img [ref=e129]
+  - alert [ref=e131]

@@ -1,0 +1,144 @@
+- generic [ref=e1]:
+  - link "Zum Inhalt springen" [ref=e2] [cursor=pointer]:
+    - /url: "#main"
+  - generic [ref=e3]:
+    - banner [ref=e4]:
+      - navigation [ref=e6]:
+        - link "Revamp-IT" [ref=e8] [cursor=pointer]:
+          - /url: /
+          - img "Revamp-IT" [ref=e9]
+        - generic [ref=e10]:
+          - generic [ref=e11]:
+            - link "Anmelden" [ref=e12] [cursor=pointer]:
+              - /url: /auth/login
+            - link "Registrieren" [ref=e13] [cursor=pointer]:
+              - /url: /auth/register
+              - text: Registrieren
+              - img [ref=e14]
+          - button "Menü öffnen" [active] [ref=e16] [cursor=pointer]:
+            - img [ref=e17]
+    - main [ref=e19]:
+      - generic [ref=e20]:
+        - generic [ref=e23]:
+          - img [ref=e26]
+          - heading "Reparateure finden" [level=1] [ref=e28]
+          - paragraph [ref=e29]: Finden Sie zertifizierte Reparateure in Ihrer Nähe für alle Arten von Elektronik-Reparaturen.
+        - generic [ref=e30]:
+          - generic [ref=e32]:
+            - generic [ref=e33]:
+              - img [ref=e34]
+              - textbox "Reparateur suchen..." [ref=e37]
+            - combobox [ref=e38]:
+              - option "Alle Services" [selected]
+              - option "Laptop-Reparatur"
+              - option "Smartphone-Reparatur"
+              - option "Tablet-Reparatur"
+              - option "Desktop-PC Reparatur"
+              - option "Spielkonsole Reparatur"
+              - option "Audio-Geräte Reparatur"
+              - option "Anderes Gerät"
+            - textbox "PLZ oder Ort..." [ref=e39]
+            - button "Suchen" [ref=e40] [cursor=pointer]
+            - button [ref=e41] [cursor=pointer]:
+              - img [ref=e42]
+          - paragraph [ref=e46]: Suche nach Reparateuren...
+          - generic [ref=e47]:
+            - img [ref=e48]
+            - heading "Sind Sie ein Reparaturexperte?" [level=2] [ref=e50]
+            - paragraph [ref=e51]: Treten Sie unserer Plattform bei und verbinden Sie sich mit Kunden, die Ihre Fachkenntnisse brauchen. Verdienen Sie Geld mit Ihren Fähigkeiten.
+            - link "Als Reparateur bewerben" [ref=e52] [cursor=pointer]:
+              - /url: /dashboard/repairer/onboarding
+    - contentinfo [ref=e53]:
+      - generic [ref=e54]:
+        - generic [ref=e55]:
+          - generic [ref=e56]:
+            - link "Revamp-IT" [ref=e57] [cursor=pointer]:
+              - /url: /
+              - img "Revamp-IT" [ref=e58]
+            - paragraph [ref=e59]: Die Zukunft der IT durch nachhaltige Aufarbeitung und Recycling gestalten.
+          - navigation "Footer-Navigation" [ref=e60]:
+            - heading "Navigation" [level=3] [ref=e61]
+            - list [ref=e62]:
+              - listitem [ref=e63]:
+                - link "Über uns" [ref=e64] [cursor=pointer]:
+                  - /url: /about
+              - listitem [ref=e65]:
+                - link "Dienstleistungen" [ref=e66] [cursor=pointer]:
+                  - /url: /services
+              - listitem [ref=e67]:
+                - link "Marktplatz" [ref=e68] [cursor=pointer]:
+                  - /url: /marketplace
+              - listitem [ref=e69]:
+                - link "Lernen" [ref=e70] [cursor=pointer]:
+                  - /url: /knowhow
+              - listitem [ref=e71]:
+                - link "Mitmachen" [ref=e72] [cursor=pointer]:
+                  - /url: /get-involved
+              - listitem [ref=e73]:
+                - link "Kontakt" [ref=e74] [cursor=pointer]:
+                  - /url: /contact
+          - generic [ref=e75]:
+            - heading "Kontakt" [level=3] [ref=e76]
+            - generic [ref=e77]:
+              - generic [ref=e78]:
+                - img [ref=e79]
+                - generic [ref=e82]:
+                  - paragraph [ref=e83]: Verkaufsstelle
+                  - paragraph [ref=e84]: Birmensdorferstrasse 379
+                  - paragraph [ref=e85]: 8055 Zürich
+                  - paragraph [ref=e86]: Schweiz
+              - generic [ref=e87]:
+                - img [ref=e88]
+                - generic [ref=e91]:
+                  - paragraph [ref=e92]: Lager
+                  - paragraph [ref=e93]: Badenerstrasse 816
+                  - paragraph [ref=e94]: 8048 Zürich
+                  - paragraph [ref=e95]: (nur nach Terminvereinbarung)
+              - generic [ref=e96]:
+                - img [ref=e97]
+                - link "+41 (0)43 960 32 64" [ref=e99] [cursor=pointer]:
+                  - /url: tel:+41 (0)43 960 32 64
+              - generic [ref=e100]:
+                - img [ref=e101]
+                - link "empfang@revamp-it.ch" [ref=e104] [cursor=pointer]:
+                  - /url: mailto:empfang@revamp-it.ch
+          - generic [ref=e105]:
+            - heading "Öffnungszeiten" [level=3] [ref=e106]
+            - generic [ref=e107]:
+              - img [ref=e108]
+              - generic [ref=e111]:
+                - paragraph [ref=e112]: "Montag: 9:00 - 12:00"
+                - paragraph [ref=e113]: "Dienstag - Freitag: 13:00 - 17:00"
+        - generic [ref=e115]:
+          - generic [ref=e116]:
+            - paragraph [ref=e117]: Newsletter
+            - paragraph [ref=e118]: Updates zu unserer Arbeit — keine Werbung.
+          - generic [ref=e119]:
+            - textbox "Name (optional)" [ref=e120]
+            - textbox "E-Mail-Adresse" [ref=e121]
+            - button "Anmelden" [ref=e122] [cursor=pointer]
+        - generic [ref=e124]:
+          - link "Facebook" [ref=e125] [cursor=pointer]:
+            - /url: https://facebook.com/revampit
+            - generic [ref=e126]: Facebook
+            - img [ref=e127]
+          - link "Instagram" [ref=e129] [cursor=pointer]:
+            - /url: https://instagram.com/revampit_ch
+            - generic [ref=e130]: Instagram
+            - img [ref=e131]
+          - link "LinkedIn" [ref=e133] [cursor=pointer]:
+            - /url: https://linkedin.com/company/revampit
+            - generic [ref=e134]: LinkedIn
+            - img [ref=e135]
+          - link "Mastodon" [ref=e137] [cursor=pointer]:
+            - /url: https://mastodon.social/@revampit
+            - generic [ref=e138]: Mastodon
+            - img [ref=e139]
+        - paragraph [ref=e142]: © 2026 RevampIT. Alle Rechte vorbehalten.
+    - button "Revamp IT Assistent öffnen" [ref=e143] [cursor=pointer]:
+      - generic [ref=e144]:
+        - img [ref=e145]
+        - img [ref=e149]
+    - button "Verbesserungen vorschlagen öffnen" [ref=e152] [cursor=pointer]:
+      - img [ref=e153]
+  - alert [ref=e155]

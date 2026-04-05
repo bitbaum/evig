@@ -1,0 +1,316 @@
+- generic [ref=e1]:
+  - link "Zum Inhalt springen" [ref=e2] [cursor=pointer]:
+    - /url: "#main"
+  - generic [ref=e3]:
+    - banner [ref=e4]:
+      - navigation [ref=e6]:
+        - link "Revamp-IT" [ref=e8] [cursor=pointer]:
+          - /url: /
+          - img "Revamp-IT" [ref=e9]
+        - generic [ref=e10]:
+          - generic [ref=e11]:
+            - link "Anmelden" [ref=e12] [cursor=pointer]:
+              - /url: /auth/login
+            - link "Registrieren" [ref=e13] [cursor=pointer]:
+              - /url: /auth/register
+              - text: Registrieren
+              - img [ref=e14]
+          - button "Menü öffnen" [active] [ref=e16] [cursor=pointer]:
+            - img [ref=e17]
+    - main [ref=e19]:
+      - generic [ref=e20]:
+        - generic [ref=e23]:
+          - img [ref=e26]
+          - heading "Alte Hardware. Neues Leben." [level=1] [ref=e33]
+          - paragraph [ref=e34]: Alte Computer reparieren, aufrüsten und wiederherstellen. Gebrauchte Hardware bekommt mit Linux und Open Source ein zweites Leben. Für eine nachhaltigere Zukunft und mehr Technologie für alle.
+          - generic [ref=e36]:
+            - link "Zum Marktplatz" [ref=e37] [cursor=pointer]:
+              - /url: /marketplace
+            - link "Unsere Dienstleistungen" [ref=e38] [cursor=pointer]:
+              - /url: /services
+              - text: Unsere Dienstleistungen →
+        - generic [ref=e40]:
+          - paragraph [ref=e41]: Bekannt aus
+          - generic [ref=e42]:
+            - link "SRF" [ref=e43] [cursor=pointer]:
+              - /url: https://www.srf.ch/news/zuerich-schaffhausen-der-computer-recycler
+            - link "Beobachter" [ref=e44] [cursor=pointer]:
+              - /url: https://beobachter.ch/umwelt/okologie/recycling-mit-einfallen-gegen-den-abfall
+            - link "HelloZurich" [ref=e45] [cursor=pointer]:
+              - /url: https://www.hellozurich.ch/de/aktuell/revamp-it.html
+            - link "öbu" [ref=e46] [cursor=pointer]:
+              - /url: https://www.oebu.ch/news/revamp-it-nachhaltiges-it-upcycling-fuer-oebu-mitglieder
+            - link "RECYCLING magazin" [ref=e47] [cursor=pointer]:
+              - /url: https://www.recyclingmagazin.de/2019/05/06/initiative-fuer-ressourcenschonende-geschaeftsmodelle-in-der-schweiz
+          - link "Alle Medienberichte ansehen →" [ref=e49] [cursor=pointer]:
+            - /url: /about/press
+        - generic [ref=e51]:
+          - generic [ref=e52]:
+            - generic [ref=e53]:
+              - img [ref=e54]
+              - text: "Neu: Community-Plattformen"
+            - 'heading "Community: Gemeinsam stärker" [level=2] [ref=e59]'
+            - paragraph [ref=e60]: "Unsere neuen Peer-to-Peer-Plattformen verbinden die Community: Kaufe und verkaufe gebrauchte IT-Geräte oder finde freiwillige Techniker in deiner Nähe."
+          - generic [ref=e61]:
+            - generic [ref=e62]:
+              - generic [ref=e63]:
+                - img [ref=e66]
+                - generic [ref=e71]:
+                  - heading "Marketplace" [level=3] [ref=e72]
+                  - paragraph [ref=e73]: Community-Marktplatz für gebrauchte IT. Kaufe und verkaufe Computer, Laptops und Zubehör direkt mit anderen – fair, nachhaltig und lokal.
+              - generic [ref=e74]:
+                - generic [ref=e75]:
+                  - img [ref=e76]
+                  - generic [ref=e79]:
+                    - generic [ref=e80]: Kaufen
+                    - generic [ref=e81]: Faire Preise, grosse Auswahl
+                - generic [ref=e82]:
+                  - img [ref=e83]
+                  - generic [ref=e85]:
+                    - generic [ref=e86]: Verkaufen
+                    - generic [ref=e87]: Alte Hardware weitergeben
+              - generic [ref=e88]:
+                - link "Inserate durchsuchen" [ref=e89] [cursor=pointer]:
+                  - /url: /marketplace
+                - link "Inserat erstellen" [ref=e90] [cursor=pointer]:
+                  - /url: /marketplace/sell
+            - generic [ref=e91]:
+              - generic [ref=e92]:
+                - img [ref=e95]
+                - generic [ref=e97]:
+                  - heading "IT-Hilfe" [level=3] [ref=e98]
+                  - paragraph [ref=e99]: Community-basierter IT-Support. Finde freiwillige Techniker in deiner Nähe oder teile dein Wissen und hilf anderen.
+              - generic [ref=e100]:
+                - generic [ref=e101]:
+                  - img [ref=e102]
+                  - generic [ref=e107]:
+                    - generic [ref=e108]: Hilfe finden
+                    - generic [ref=e109]: Techniker in der Nähe
+                - generic [ref=e110]:
+                  - img [ref=e111]
+                  - generic [ref=e113]:
+                    - generic [ref=e114]: Helfen
+                    - generic [ref=e115]: Wissen teilen
+              - generic [ref=e116]:
+                - link "Hilfe suchen" [ref=e117] [cursor=pointer]:
+                  - /url: /it-hilfe
+                - link "Techniker werden" [ref=e118] [cursor=pointer]:
+                  - /url: /profil/skills
+        - generic [ref=e119]:
+          - generic [ref=e120]:
+            - heading "Was wir tun" [level=2] [ref=e121]
+            - paragraph [ref=e122]: Expertise in Vintage Hardware, Linux und Open Source
+          - generic [ref=e124]:
+            - link "Vintage-Computer Reparieren und Aufbauen von Retro-Computern für Gaming und Sammler. Seltene Hardware, die noch funktioniert. Mehr erfahren →" [ref=e125] [cursor=pointer]:
+              - /url: /projects/vintage-computers
+              - term [ref=e126]:
+                - img [ref=e127]
+                - text: Vintage-Computer
+              - definition [ref=e129]:
+                - paragraph [ref=e130]: Reparieren und Aufbauen von Retro-Computern für Gaming und Sammler. Seltene Hardware, die noch funktioniert.
+                - generic [ref=e131]: Mehr erfahren →
+            - 'link "Gebrauchte Laptops mit Linux Alte Laptops schneller gemacht: Linux-Installation, kostenlose Software, professioneller Support. Mehr erfahren →" [ref=e132] [cursor=pointer]':
+              - /url: /services/linux-open-source
+              - term [ref=e133]:
+                - img [ref=e134]
+                - text: Gebrauchte Laptops mit Linux
+              - definition [ref=e137]:
+                - paragraph [ref=e138]: "Alte Laptops schneller gemacht: Linux-Installation, kostenlose Software, professioneller Support."
+                - generic [ref=e139]: Mehr erfahren →
+            - link "Datenrettung Wiederherstellung von Daten aus beschädigten Geräten und alten Speichermedien (Disketten, ZIP, etc.). Mehr erfahren →" [ref=e140] [cursor=pointer]:
+              - /url: /services
+              - term [ref=e141]:
+                - img [ref=e142]
+                - text: Datenrettung
+              - definition [ref=e144]:
+                - paragraph [ref=e145]: Wiederherstellung von Daten aus beschädigten Geräten und alten Speichermedien (Disketten, ZIP, etc.).
+                - generic [ref=e146]: Mehr erfahren →
+            - link "Webentwicklung Moderne Websites und Apps mit Open-Source-Technologien. Next.js, Headless CMS, E-Commerce. Mehr erfahren →" [ref=e147] [cursor=pointer]:
+              - /url: /services/web-design-development
+              - term [ref=e148]:
+                - img [ref=e149]
+                - text: Webentwicklung
+              - definition [ref=e152]:
+                - paragraph [ref=e153]: Moderne Websites und Apps mit Open-Source-Technologien. Next.js, Headless CMS, E-Commerce.
+                - generic [ref=e154]: Mehr erfahren →
+        - generic [ref=e156]:
+          - heading "Bereit für eine nachhaltige IT-Lösung?" [level=2] [ref=e157]
+          - paragraph [ref=e158]: Vereinbare einen kostenlosen Beratungstermin. Wir analysieren deine Bedürfnisse und finden gemeinsam die beste Lösung.
+          - generic [ref=e159]:
+            - link "Termin vereinbaren" [ref=e160] [cursor=pointer]:
+              - /url: /contact
+            - link "Alle Dienstleistungen" [ref=e161] [cursor=pointer]:
+              - /url: /services
+              - text: Alle Dienstleistungen
+              - img [ref=e162]
+        - generic [ref=e165]:
+          - generic [ref=e166]:
+            - heading "Unsere Wirkung" [level=2] [ref=e167]
+            - paragraph [ref=e168]: Zahlen & Fakten
+          - generic [ref=e169]:
+            - generic [ref=e170]:
+              - definition [ref=e171]: 150+
+              - term [ref=e172]: Geräte jährlich gerettet
+            - generic [ref=e173]:
+              - definition [ref=e174]: 20+
+              - term [ref=e175]: Personen geschult
+            - generic [ref=e176]:
+              - definition [ref=e177]: 75%
+              - term [ref=e178]: Wiederverwendungsrate
+            - generic [ref=e179]:
+              - definition [ref=e180]: 5+
+              - term [ref=e181]: Jahre Lebensverlängerung
+            - generic [ref=e182]:
+              - definition [ref=e183]: ~40%
+              - term [ref=e184]: Erfolgreiche Praktika
+            - generic [ref=e185]:
+              - definition [ref=e186]: ~4
+              - term [ref=e187]: Berufliche Wiedereinstiege
+          - generic [ref=e188]:
+            - link "Mehr über unsere Wirkung" [ref=e189] [cursor=pointer]:
+              - /url: /about/impact
+            - link "Jetzt mitmachen" [ref=e190] [cursor=pointer]:
+              - /url: /get-involved
+              - text: Jetzt mitmachen
+              - img [ref=e191]
+        - generic [ref=e193]:
+          - generic [ref=e194]:
+            - heading "Was unsere Kunden sagen" [level=2] [ref=e195]
+            - paragraph [ref=e196]: Echte Erfolgsgeschichten
+          - generic [ref=e197]:
+            - generic [ref=e198]:
+              - generic [ref=e199]: "\""
+              - blockquote [ref=e200]: Mein Laptop von 2012 war langsam und Windows-Lizenzen teuer. revamp-it hat Linux installiert – er läuft jetzt schneller als je zuvor. Alle Programme sind kostenlos und werden unterstützt.
+              - generic [ref=e201]:
+                - generic [ref=e202]: Maria K.
+                - generic [ref=e203]: Zürich
+            - generic [ref=e204]:
+              - generic [ref=e205]: "\""
+              - blockquote [ref=e206]: Ich wollte einen Retro-Gaming PC bauen. revamp-it hat mir ein funktionierendes Vintage-System mit Original-Komponenten zusammengestellt. Klassische Spiele laufen perfekt.
+              - generic [ref=e207]:
+                - generic [ref=e208]: Thomas R.
+                - generic [ref=e209]: Basel
+            - generic [ref=e210]:
+              - generic [ref=e211]: "\""
+              - blockquote [ref=e212]: Meine externe Festplatte war kaputt – alle meine Fotos und Dokumente schienen verloren. revamp-it hat die Daten wiederhergestellt. Sehr dankbar!
+              - generic [ref=e213]:
+                - generic [ref=e214]: Sandra M.
+                - generic [ref=e215]: Luzern
+            - generic [ref=e216]:
+              - generic [ref=e217]: "\""
+              - blockquote [ref=e218]: Wir brauchten eine Website für unser Projekt. revamp-it hat mit Open-Source-Technologien eine moderne, schnelle Website gebaut. Die kostenlose Erstberatung war sehr hilfreich.
+              - generic [ref=e219]:
+                - generic [ref=e220]: Projekt-Team
+                - generic [ref=e221]: Zürich
+        - generic [ref=e223]:
+          - heading "Bereit, einen Unterschied zu machen?" [level=2] [ref=e224]
+          - paragraph [ref=e225]: Werde Teil unserer Freiwilligen-Community und hilf mit, eine nachhaltigere Zukunft durch Technik zu gestalten.
+          - generic [ref=e226]:
+            - link "Mitmachen" [ref=e227] [cursor=pointer]:
+              - /url: /get-involved
+            - link "Mehr erfahren" [ref=e228] [cursor=pointer]:
+              - /url: /about
+              - text: Mehr erfahren
+              - img [ref=e229]
+          - generic [ref=e232]:
+            - generic [ref=e233]:
+              - paragraph [ref=e234]: Updates bleiben
+              - paragraph [ref=e235]: Erfahre, wie wir Technologie nachhaltig machen — kein Spam.
+            - generic [ref=e236]:
+              - textbox "Name (optional)" [ref=e237]
+              - textbox "E-Mail-Adresse" [ref=e238]
+              - button "Anmelden" [ref=e239] [cursor=pointer]
+    - contentinfo [ref=e240]:
+      - generic [ref=e241]:
+        - generic [ref=e242]:
+          - generic [ref=e243]:
+            - link "Revamp-IT" [ref=e244] [cursor=pointer]:
+              - /url: /
+              - img "Revamp-IT" [ref=e245]
+            - paragraph [ref=e246]: Die Zukunft der IT durch nachhaltige Aufarbeitung und Recycling gestalten.
+          - navigation "Footer-Navigation" [ref=e247]:
+            - heading "Navigation" [level=3] [ref=e248]
+            - list [ref=e249]:
+              - listitem [ref=e250]:
+                - link "Über uns" [ref=e251] [cursor=pointer]:
+                  - /url: /about
+              - listitem [ref=e252]:
+                - link "Dienstleistungen" [ref=e253] [cursor=pointer]:
+                  - /url: /services
+              - listitem [ref=e254]:
+                - link "Marktplatz" [ref=e255] [cursor=pointer]:
+                  - /url: /marketplace
+              - listitem [ref=e256]:
+                - link "Lernen" [ref=e257] [cursor=pointer]:
+                  - /url: /knowhow
+              - listitem [ref=e258]:
+                - link "Mitmachen" [ref=e259] [cursor=pointer]:
+                  - /url: /get-involved
+              - listitem [ref=e260]:
+                - link "Kontakt" [ref=e261] [cursor=pointer]:
+                  - /url: /contact
+          - generic [ref=e262]:
+            - heading "Kontakt" [level=3] [ref=e263]
+            - generic [ref=e264]:
+              - generic [ref=e265]:
+                - img [ref=e266]
+                - generic [ref=e269]:
+                  - paragraph [ref=e270]: Verkaufsstelle
+                  - paragraph [ref=e271]: Birmensdorferstrasse 379
+                  - paragraph [ref=e272]: 8055 Zürich
+                  - paragraph [ref=e273]: Schweiz
+              - generic [ref=e274]:
+                - img [ref=e275]
+                - generic [ref=e278]:
+                  - paragraph [ref=e279]: Lager
+                  - paragraph [ref=e280]: Badenerstrasse 816
+                  - paragraph [ref=e281]: 8048 Zürich
+                  - paragraph [ref=e282]: (nur nach Terminvereinbarung)
+              - generic [ref=e283]:
+                - img [ref=e284]
+                - link "+41 (0)43 960 32 64" [ref=e286] [cursor=pointer]:
+                  - /url: tel:+41 (0)43 960 32 64
+              - generic [ref=e287]:
+                - img [ref=e288]
+                - link "empfang@revamp-it.ch" [ref=e291] [cursor=pointer]:
+                  - /url: mailto:empfang@revamp-it.ch
+          - generic [ref=e292]:
+            - heading "Öffnungszeiten" [level=3] [ref=e293]
+            - generic [ref=e294]:
+              - img [ref=e295]
+              - generic [ref=e298]:
+                - paragraph [ref=e299]: "Montag: 9:00 - 12:00"
+                - paragraph [ref=e300]: "Dienstag - Freitag: 13:00 - 17:00"
+        - generic [ref=e302]:
+          - generic [ref=e303]:
+            - paragraph [ref=e304]: Newsletter
+            - paragraph [ref=e305]: Updates zu unserer Arbeit — keine Werbung.
+          - generic [ref=e306]:
+            - textbox "Name (optional)" [ref=e307]
+            - textbox "E-Mail-Adresse" [ref=e308]
+            - button "Anmelden" [ref=e309] [cursor=pointer]
+        - generic [ref=e311]:
+          - link "Facebook" [ref=e312] [cursor=pointer]:
+            - /url: https://facebook.com/revampit
+            - generic [ref=e313]: Facebook
+            - img [ref=e314]
+          - link "Instagram" [ref=e316] [cursor=pointer]:
+            - /url: https://instagram.com/revampit_ch
+            - generic [ref=e317]: Instagram
+            - img [ref=e318]
+          - link "LinkedIn" [ref=e320] [cursor=pointer]:
+            - /url: https://linkedin.com/company/revampit
+            - generic [ref=e321]: LinkedIn
+            - img [ref=e322]
+          - link "Mastodon" [ref=e324] [cursor=pointer]:
+            - /url: https://mastodon.social/@revampit
+            - generic [ref=e325]: Mastodon
+            - img [ref=e326]
+        - paragraph [ref=e329]: © 2026 RevampIT. Alle Rechte vorbehalten.
+    - button "Revamp IT Assistent öffnen" [ref=e330] [cursor=pointer]:
+      - generic [ref=e331]:
+        - img [ref=e332]
+        - img [ref=e336]
+    - button "Verbesserungen vorschlagen öffnen" [ref=e339] [cursor=pointer]:
+      - img [ref=e340]
+  - alert [ref=e342]

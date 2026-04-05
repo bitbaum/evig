@@ -1,0 +1,51 @@
+- generic [ref=e1]:
+  - link "Zum Inhalt springen" [ref=e2] [cursor=pointer]:
+    - /url: "#main"
+  - generic [ref=e3]:
+    - banner [ref=e4]:
+      - navigation [ref=e6]:
+        - link "Revamp-IT" [ref=e8] [cursor=pointer]:
+          - /url: /
+          - img "Revamp-IT" [ref=e9]
+        - generic [ref=e10]:
+          - generic [ref=e11]
+          - button "Menü öffnen" [active] [ref=e16] [cursor=pointer]
+    - main [ref=e19]:
+      - generic [ref=e20]:
+        - generic [ref=e23]:
+          - img [ref=e26]
+          - heading "IT-Hilfe" [level=1] [ref=e31]
+          - paragraph [ref=e32]: Community-basierte IT-Unterstützung. Finde Hilfe in deiner Nähe oder biete deine Skills an.
+          - generic [ref=e33]
+        - generic [ref=e59]:
+          - generic [ref=e61]
+          - generic [ref=e74]
+          - generic [ref=e332]
+          - generic [ref=e219]
+    - contentinfo [ref=e229]:
+      - generic [ref=e230]:
+        - generic [ref=e231]:
+          - generic [ref=e232]
+          - navigation "Footer-Navigation" [ref=e236]
+          - generic [ref=e251]
+          - generic [ref=e281]
+        - generic [ref=e291]:
+          - generic [ref=e292]
+          - generic [ref=e295]
+        - generic [ref=e300]:
+          - link "Facebook" [ref=e301] [cursor=pointer]:
+            - /url: https://facebook.com/revampit
+          - link "Instagram" [ref=e305] [cursor=pointer]:
+            - /url: https://instagram.com/revampit_ch
+          - link "LinkedIn" [ref=e309] [cursor=pointer]:
+            - /url: https://linkedin.com/company/revampit
+          - link "Mastodon" [ref=e313] [cursor=pointer]:
+            - /url: https://mastodon.social/@revampit
+        - paragraph [ref=e318]: © 2026 RevampIT. Alle Rechte vorbehalten.
+    - button "Revamp IT Assistent öffnen" [ref=e319] [cursor=pointer]:
+      - generic [ref=e320]:
+        - img [ref=e321]
+        - img [ref=e325]
+    - button "Verbesserungen vorschlagen öffnen" [ref=e328] [cursor=pointer]:
+      - img [ref=e329]
+  - alert [ref=e331]

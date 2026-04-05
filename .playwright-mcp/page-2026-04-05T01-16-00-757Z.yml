@@ -1,0 +1,168 @@
+- generic [ref=e1]:
+  - link "Zum Inhalt springen" [ref=e2] [cursor=pointer]:
+    - /url: "#main"
+  - generic [ref=e3]:
+    - banner [ref=e4]:
+      - navigation [ref=e6]:
+        - link "Revamp-IT" [ref=e8] [cursor=pointer]:
+          - /url: /
+          - img "Revamp-IT" [ref=e9]
+        - generic [ref=e10]:
+          - generic [ref=e11]:
+            - link "Anmelden" [ref=e12] [cursor=pointer]:
+              - /url: /auth/login
+            - link "Registrieren" [ref=e13] [cursor=pointer]:
+              - /url: /auth/register
+              - text: Registrieren
+              - img [ref=e14]
+          - button "Menü öffnen" [active] [ref=e16] [cursor=pointer]:
+            - img [ref=e17]
+    - main [ref=e19]:
+      - generic [ref=e20]:
+        - generic [ref=e23]:
+          - img [ref=e26]
+          - heading "IT-Hilfe" [level=1] [ref=e31]
+          - paragraph [ref=e32]: Community-basierte IT-Unterstützung. Finde Hilfe in deiner Nähe oder biete deine Skills an.
+          - generic [ref=e33]:
+            - generic [ref=e35]:
+              - img [ref=e36]
+              - textbox "Anfragen durchsuchen..." [ref=e39]
+              - button "Suchen" [ref=e40] [cursor=pointer]
+            - generic [ref=e41]:
+              - generic [ref=e42]:
+                - img [ref=e43]
+                - generic [ref=e46]:
+                  - strong [ref=e47]: "0"
+                  - text: Anfragen
+              - generic [ref=e48]:
+                - img [ref=e49]
+                - generic [ref=e54]: Community-Techniker
+              - generic [ref=e55]:
+                - img [ref=e56]
+                - generic [ref=e58]: Kostenlos helfen
+        - generic [ref=e59]:
+          - generic [ref=e61]:
+            - link "Anmelden & Anfrage erstellen" [ref=e62] [cursor=pointer]:
+              - /url: /auth/login?callbackUrl=/it-hilfe/create
+              - img [ref=e63]
+              - text: Anmelden & Anfrage erstellen
+            - link "Techniker finden" [ref=e64] [cursor=pointer]:
+              - /url: /it-hilfe/helfer
+              - img [ref=e65]
+              - text: Techniker finden
+            - link "Techniker werden" [ref=e70] [cursor=pointer]:
+              - /url: /auth/login?callbackUrl=/profil/skills
+              - img [ref=e71]
+              - text: Techniker werden
+          - generic [ref=e74]:
+            - button "Filter" [ref=e75] [cursor=pointer]:
+              - img [ref=e76]
+              - text: Filter
+            - combobox "Sortierung" [ref=e77]:
+              - option "Neueste zuerst" [selected]
+              - option "Dringlichste zuerst"
+              - option "Höchstes Budget"
+              - option "Meiste Angebote"
+          - generic [ref=e219]:
+            - img [ref=e222]
+            - heading "Kannst du Geräte reparieren?" [level=3] [ref=e224]
+            - paragraph [ref=e225]: Registriere dich als Techniker und hilf Menschen in deiner Nähe. Kostenlos oder gegen Vergütung – du entscheidest.
+            - generic [ref=e226]:
+              - link "Techniker-Profil erstellen" [ref=e227] [cursor=pointer]:
+                - /url: /auth/login?callbackUrl=/profil/skills
+              - link "Mehr über IT-Hilfe →" [ref=e228] [cursor=pointer]:
+                - /url: /it-hilfe
+    - contentinfo [ref=e229]:
+      - generic [ref=e230]:
+        - generic [ref=e231]:
+          - generic [ref=e232]:
+            - link "Revamp-IT" [ref=e233] [cursor=pointer]:
+              - /url: /
+              - img "Revamp-IT" [ref=e234]
+            - paragraph [ref=e235]: Die Zukunft der IT durch nachhaltige Aufarbeitung und Recycling gestalten.
+          - navigation "Footer-Navigation" [ref=e236]:
+            - heading "Navigation" [level=3] [ref=e237]
+            - list [ref=e238]:
+              - listitem [ref=e239]:
+                - link "Über uns" [ref=e240] [cursor=pointer]:
+                  - /url: /about
+              - listitem [ref=e241]:
+                - link "Dienstleistungen" [ref=e242] [cursor=pointer]:
+                  - /url: /services
+              - listitem [ref=e243]:
+                - link "Marktplatz" [ref=e244] [cursor=pointer]:
+                  - /url: /marketplace
+              - listitem [ref=e245]:
+                - link "Lernen" [ref=e246] [cursor=pointer]:
+                  - /url: /knowhow
+              - listitem [ref=e247]:
+                - link "Mitmachen" [ref=e248] [cursor=pointer]:
+                  - /url: /get-involved
+              - listitem [ref=e249]:
+                - link "Kontakt" [ref=e250] [cursor=pointer]:
+                  - /url: /contact
+          - generic [ref=e251]:
+            - heading "Kontakt" [level=3] [ref=e252]
+            - generic [ref=e253]:
+              - generic [ref=e254]:
+                - img [ref=e255]
+                - generic [ref=e258]:
+                  - paragraph [ref=e259]: Verkaufsstelle
+                  - paragraph [ref=e260]: Birmensdorferstrasse 379
+                  - paragraph [ref=e261]: 8055 Zürich
+                  - paragraph [ref=e262]: Schweiz
+              - generic [ref=e263]:
+                - img [ref=e264]
+                - generic [ref=e267]:
+                  - paragraph [ref=e268]: Lager
+                  - paragraph [ref=e269]: Badenerstrasse 816
+                  - paragraph [ref=e270]: 8048 Zürich
+                  - paragraph [ref=e271]: (nur nach Terminvereinbarung)
+              - generic [ref=e272]:
+                - img [ref=e273]
+                - link "+41 (0)43 960 32 64" [ref=e275] [cursor=pointer]:
+                  - /url: tel:+41 (0)43 960 32 64
+              - generic [ref=e276]:
+                - img [ref=e277]
+                - link "empfang@revamp-it.ch" [ref=e280] [cursor=pointer]:
+                  - /url: mailto:empfang@revamp-it.ch
+          - generic [ref=e281]:
+            - heading "Öffnungszeiten" [level=3] [ref=e282]
+            - generic [ref=e283]:
+              - img [ref=e284]
+              - generic [ref=e287]:
+                - paragraph [ref=e288]: "Montag: 9:00 - 12:00"
+                - paragraph [ref=e289]: "Dienstag - Freitag: 13:00 - 17:00"
+        - generic [ref=e291]:
+          - generic [ref=e292]:
+            - paragraph [ref=e293]: Newsletter
+            - paragraph [ref=e294]: Updates zu unserer Arbeit — keine Werbung.
+          - generic [ref=e295]:
+            - textbox "Name (optional)" [ref=e296]
+            - textbox "E-Mail-Adresse" [ref=e297]
+            - button "Anmelden" [ref=e298] [cursor=pointer]
+        - generic [ref=e300]:
+          - link "Facebook" [ref=e301] [cursor=pointer]:
+            - /url: https://facebook.com/revampit
+            - generic [ref=e302]: Facebook
+            - img [ref=e303]
+          - link "Instagram" [ref=e305] [cursor=pointer]:
+            - /url: https://instagram.com/revampit_ch
+            - generic [ref=e306]: Instagram
+            - img [ref=e307]
+          - link "LinkedIn" [ref=e309] [cursor=pointer]:
+            - /url: https://linkedin.com/company/revampit
+            - generic [ref=e310]: LinkedIn
+            - img [ref=e311]
+          - link "Mastodon" [ref=e313] [cursor=pointer]:
+            - /url: https://mastodon.social/@revampit
+            - generic [ref=e314]: Mastodon
+            - img [ref=e315]
+        - paragraph [ref=e318]: © 2026 RevampIT. Alle Rechte vorbehalten.
+    - button "Revamp IT Assistent öffnen" [ref=e319] [cursor=pointer]:
+      - generic [ref=e320]:
+        - img [ref=e321]
+        - img [ref=e325]
+    - button "Verbesserungen vorschlagen öffnen" [ref=e328] [cursor=pointer]:
+      - img [ref=e329]
+  - alert [ref=e331]

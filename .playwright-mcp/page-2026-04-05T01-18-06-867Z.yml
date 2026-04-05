@@ -1,0 +1,192 @@
+- generic [ref=e1]:
+  - link "Zum Inhalt springen" [ref=e2] [cursor=pointer]:
+    - /url: "#main"
+  - generic [ref=e3]:
+    - banner [ref=e4]:
+      - navigation [ref=e6]:
+        - link "Revamp-IT" [ref=e8] [cursor=pointer]:
+          - /url: /
+          - img "Revamp-IT" [ref=e9]
+        - generic [ref=e10]:
+          - generic [ref=e11]:
+            - link "Anmelden" [ref=e12] [cursor=pointer]:
+              - /url: /auth/login
+            - link "Registrieren" [ref=e13] [cursor=pointer]:
+              - /url: /auth/register
+              - text: Registrieren
+              - img [ref=e14]
+          - button "Menü öffnen" [active] [ref=e16] [cursor=pointer]:
+            - img [ref=e17]
+    - main [ref=e19]:
+      - generic [ref=e21]:
+        - generic [ref=e22]:
+          - heading "Direkt helfen." [level=1] [ref=e23]
+          - paragraph [ref=e24]: Jede Spende rettet Geräte vor dem Elektroschrott, verlängert Lebenszyklen und ermöglicht Technologie für Menschen, die sich das sonst nicht leisten können.
+          - link "Jetzt überweisen" [ref=e25] [cursor=pointer]:
+            - /url: "#bankueberweisung"
+            - text: Jetzt überweisen
+            - img [ref=e26]
+        - generic [ref=e28]:
+          - paragraph [ref=e29]: Transparenz
+          - generic [ref=e30]:
+            - generic [ref=e31]:
+              - paragraph [ref=e32]: CHF 60k
+              - paragraph [ref=e33]: Jahresbudget (gemeinnütziger Verein)
+            - generic [ref=e34]:
+              - paragraph [ref=e35]: 150+
+              - paragraph [ref=e36]: Geräte jährlich gerettet
+            - generic [ref=e37]:
+              - paragraph [ref=e38]: 43 t CO₂
+              - paragraph [ref=e39]: eingespart pro Jahr
+        - generic [ref=e40]:
+          - heading "Was deine Spende bewirkt" [level=2] [ref=e41]
+          - generic [ref=e42]:
+            - generic [ref=e43]:
+              - generic [ref=e44]:
+                - img [ref=e46]
+                - generic [ref=e49]: CHF 50
+              - paragraph [ref=e50]: 1 Gerät gerettet
+              - paragraph [ref=e51]: 1 Laptop vor dem Elektroschrott gerettet + 285 kg CO₂ vermieden.
+            - generic [ref=e52]:
+              - generic [ref=e53]: Empfohlen
+              - generic [ref=e54]:
+                - img [ref=e56]
+                - generic [ref=e58]: CHF 100
+              - paragraph [ref=e59]: 2 Geräte + Workshop-Platz
+              - paragraph [ref=e60]: 2 Geräte aufbereitet + ein Platz in unserem Linux-Workshop für jemanden, der es sich nicht leisten könnte.
+            - generic [ref=e61]:
+              - generic [ref=e62]:
+                - img [ref=e64]
+                - generic [ref=e68]: CHF 500
+              - paragraph [ref=e69]: Firmenspende — 10 Geräte
+              - paragraph [ref=e70]: 10 Geräte für Bildungseinrichtungen, Sozialprojekte oder einkommensschwache Haushalte.
+        - link "Betrag wählen und überweisen" [ref=e72] [cursor=pointer]:
+          - /url: "#bankueberweisung"
+          - text: Betrag wählen und überweisen
+          - img [ref=e73]
+        - generic [ref=e76]:
+          - heading "Banküberweisung" [level=2] [ref=e77]
+          - paragraph [ref=e78]: "Überweisen Sie auf folgendes Konto:"
+          - generic [ref=e79]:
+            - generic [ref=e80]:
+              - generic [ref=e81]:
+                - paragraph [ref=e82]: Empfänger
+                - paragraph [ref=e83]: Verein Revamp-IT
+              - button "Kopieren" [ref=e84] [cursor=pointer]
+            - generic [ref=e85]:
+              - generic [ref=e86]:
+                - paragraph [ref=e87]: IBAN
+                - paragraph [ref=e88]: CH16 0900 0000 8725 0971 7
+              - button "IBAN kopieren" [ref=e89] [cursor=pointer]
+            - generic [ref=e90]:
+              - generic [ref=e91]:
+                - paragraph [ref=e92]: Bank
+                - paragraph [ref=e93]: PostFinance AG
+              - button "BIC POFICHBEXXX" [ref=e94] [cursor=pointer]
+            - generic [ref=e95]:
+              - generic [ref=e96]:
+                - paragraph [ref=e97]: Verwendungszweck
+                - paragraph [ref=e98]: Spende RevampIT April 2026
+              - button "Kopieren" [ref=e99] [cursor=pointer]
+        - generic [ref=e101]:
+          - generic [ref=e102]:
+            - paragraph [ref=e103]: Wir informieren dich, wie deine Spende wirkt.
+            - paragraph [ref=e104]: Keine Werbung. Nur echte Updates zu Geräten gerettet, CO₂ eingespart und Menschen unterstützt.
+          - generic [ref=e105]:
+            - textbox "Name (optional)" [ref=e106]
+            - textbox "E-Mail-Adresse" [ref=e107]
+            - button "Anmelden" [ref=e108] [cursor=pointer]
+    - contentinfo [ref=e109]:
+      - generic [ref=e110]:
+        - generic [ref=e111]:
+          - generic [ref=e112]:
+            - link "Revamp-IT" [ref=e113] [cursor=pointer]:
+              - /url: /
+              - img "Revamp-IT" [ref=e114]
+            - paragraph [ref=e115]: Die Zukunft der IT durch nachhaltige Aufarbeitung und Recycling gestalten.
+          - navigation "Footer-Navigation" [ref=e116]:
+            - heading "Navigation" [level=3] [ref=e117]
+            - list [ref=e118]:
+              - listitem [ref=e119]:
+                - link "Über uns" [ref=e120] [cursor=pointer]:
+                  - /url: /about
+              - listitem [ref=e121]:
+                - link "Dienstleistungen" [ref=e122] [cursor=pointer]:
+                  - /url: /services
+              - listitem [ref=e123]:
+                - link "Marktplatz" [ref=e124] [cursor=pointer]:
+                  - /url: /marketplace
+              - listitem [ref=e125]:
+                - link "Lernen" [ref=e126] [cursor=pointer]:
+                  - /url: /knowhow
+              - listitem [ref=e127]:
+                - link "Mitmachen" [ref=e128] [cursor=pointer]:
+                  - /url: /get-involved
+              - listitem [ref=e129]:
+                - link "Kontakt" [ref=e130] [cursor=pointer]:
+                  - /url: /contact
+          - generic [ref=e131]:
+            - heading "Kontakt" [level=3] [ref=e132]
+            - generic [ref=e133]:
+              - generic [ref=e134]:
+                - img [ref=e135]
+                - generic [ref=e138]:
+                  - paragraph [ref=e139]: Verkaufsstelle
+                  - paragraph [ref=e140]: Birmensdorferstrasse 379
+                  - paragraph [ref=e141]: 8055 Zürich
+                  - paragraph [ref=e142]: Schweiz
+              - generic [ref=e143]:
+                - img [ref=e144]
+                - generic [ref=e147]:
+                  - paragraph [ref=e148]: Lager
+                  - paragraph [ref=e149]: Badenerstrasse 816
+                  - paragraph [ref=e150]: 8048 Zürich
+                  - paragraph [ref=e151]: (nur nach Terminvereinbarung)
+              - generic [ref=e152]:
+                - img [ref=e153]
+                - link "+41 (0)43 960 32 64" [ref=e155] [cursor=pointer]:
+                  - /url: tel:+41 (0)43 960 32 64
+              - generic [ref=e156]:
+                - img [ref=e157]
+                - link "empfang@revamp-it.ch" [ref=e160] [cursor=pointer]:
+                  - /url: mailto:empfang@revamp-it.ch
+          - generic [ref=e161]:
+            - heading "Öffnungszeiten" [level=3] [ref=e162]
+            - generic [ref=e163]:
+              - img [ref=e164]
+              - generic [ref=e167]:
+                - paragraph [ref=e168]: "Montag: 9:00 - 12:00"
+                - paragraph [ref=e169]: "Dienstag - Freitag: 13:00 - 17:00"
+        - generic [ref=e171]:
+          - generic [ref=e172]:
+            - paragraph [ref=e173]: Newsletter
+            - paragraph [ref=e174]: Updates zu unserer Arbeit — keine Werbung.
+          - generic [ref=e175]:
+            - textbox "Name (optional)" [ref=e176]
+            - textbox "E-Mail-Adresse" [ref=e177]
+            - button "Anmelden" [ref=e178] [cursor=pointer]
+        - generic [ref=e180]:
+          - link "Facebook" [ref=e181] [cursor=pointer]:
+            - /url: https://facebook.com/revampit
+            - generic [ref=e182]: Facebook
+            - img [ref=e183]
+          - link "Instagram" [ref=e185] [cursor=pointer]:
+            - /url: https://instagram.com/revampit_ch
+            - generic [ref=e186]: Instagram
+            - img [ref=e187]
+          - link "LinkedIn" [ref=e189] [cursor=pointer]:
+            - /url: https://linkedin.com/company/revampit
+            - generic [ref=e190]: LinkedIn
+            - img [ref=e191]
+          - link "Mastodon" [ref=e193] [cursor=pointer]:
+            - /url: https://mastodon.social/@revampit
+            - generic [ref=e194]: Mastodon
+            - img [ref=e195]
+        - paragraph [ref=e198]: © 2026 RevampIT. Alle Rechte vorbehalten.
+    - button "Revamp IT Assistent öffnen" [ref=e199] [cursor=pointer]:
+      - generic [ref=e200]:
+        - img [ref=e201]
+        - img [ref=e205]
+    - button "Verbesserungen vorschlagen öffnen" [ref=e208] [cursor=pointer]:
+      - img [ref=e209]
+  - alert [ref=e211]

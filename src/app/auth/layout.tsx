@@ -1,7 +1,10 @@
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Anmelden | RevampIT',
+  title: {
+    template: '%s | RevampIT',
+    default: 'Konto | RevampIT',
+  },
   description:
     'Melden Sie sich bei RevampIT an, um Reparaturanfragen zu stellen, auf dem Marktplatz zu handeln und an Workshops teilzunehmen.',
   robots: {

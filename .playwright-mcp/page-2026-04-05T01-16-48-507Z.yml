@@ -1,0 +1,485 @@
+- generic [active] [ref=e1]:
+  - link "Zum Inhalt springen" [ref=e2] [cursor=pointer]:
+    - /url: "#main"
+  - generic [ref=e3]:
+    - banner [ref=e4]:
+      - navigation [ref=e6]:
+        - link "Revamp-IT" [ref=e8] [cursor=pointer]:
+          - /url: /
+          - img "Revamp-IT" [ref=e9]
+        - generic [ref=e10]:
+          - generic [ref=e11]:
+            - link "Anmelden" [ref=e12] [cursor=pointer]:
+              - /url: /auth/login
+            - link "Registrieren" [ref=e13] [cursor=pointer]:
+              - /url: /auth/register
+              - text: Registrieren
+              - img [ref=e14]
+          - button "Menü öffnen" [ref=e16] [cursor=pointer]:
+            - img [ref=e17]
+    - main [ref=e19]:
+      - main [ref=e20]:
+        - generic [ref=e23]:
+          - img [ref=e26]
+          - heading "Experten-IT-Dienstleistungen" [level=1] [ref=e28]
+          - paragraph [ref=e29]: Nachhaltige Lösungen für Ihre Technologiebedürfnisse. Wir kombinieren technische Expertise mit Umweltverantwortung, um umfassende IT-Lösungen zu bieten, die Ihnen Geld sparen und Elektroschrott reduzieren.
+        - generic [ref=e31]:
+          - generic [ref=e32]:
+            - heading "Unsere Dienstleistungen" [level=2] [ref=e33]
+            - paragraph [ref=e34]: Die Reparaturdauer variiert je nach Teileverfügbarkeit und dauert in der Regel einige Wochen.
+            - generic [ref=e36]:
+              - generic [ref=e37]:
+                - img [ref=e38]
+                - generic [ref=e40]: "Nach Kategorie filtern:"
+              - button "Alle" [ref=e41] [cursor=pointer]
+              - button "Hardware-Dienstleistungen" [ref=e42] [cursor=pointer]
+              - button "Software-Lösungen" [ref=e43] [cursor=pointer]
+              - button "Bald verfügbar" [ref=e44] [cursor=pointer]
+          - generic [ref=e45]:
+            - generic [ref=e48]:
+              - generic [ref=e49]:
+                - img [ref=e51]
+                - generic [ref=e53]:
+                  - heading "Computerreparatur & Aufrüstungen" [level=3] [ref=e55]
+                  - generic [ref=e56]:
+                    - img [ref=e57]
+                    - generic [ref=e59]: Professional assessment required
+              - paragraph [ref=e60]: Expertenreparaturen für alle Arten von Computern und Komponenten. Wir spezialisieren uns darauf zu reparieren, was andere nicht können, einschliesslich Motherboard-Reparaturen und Bauteil-Level-Fixes.
+              - generic [ref=e61]:
+                - generic [ref=e62]:
+                  - img [ref=e63]
+                  - generic [ref=e66]: Bauteil-Level-Reparaturen
+                - generic [ref=e67]:
+                  - img [ref=e68]
+                  - generic [ref=e71]: Hardware-Aufrüstungen
+                - generic [ref=e72]:
+                  - img [ref=e73]
+                  - generic [ref=e76]: Diagnosedienste
+                - generic [ref=e77]:
+                  - img [ref=e78]
+                  - generic [ref=e81]: Professionelle Bewertung
+              - generic [ref=e82]:
+                - generic [ref=e83]:
+                  - generic [ref=e84]: CHF 70/hour + parts
+                  - link "Details" [ref=e85] [cursor=pointer]:
+                    - /url: /services/computer-repair-upgrades
+                    - generic [ref=e86]: Details
+                    - img [ref=e87]
+                - button "Termin buchen" [ref=e90] [cursor=pointer]:
+                  - img [ref=e91]
+                  - text: Termin buchen
+            - generic [ref=e95]:
+              - generic [ref=e96]:
+                - img [ref=e98]
+                - generic [ref=e100]:
+                  - heading "Datenrettung & Transfer" [level=3] [ref=e102]
+                  - generic [ref=e103]:
+                    - img [ref=e104]
+                    - generic [ref=e106]: Evaluation required before recovery
+              - paragraph [ref=e107]: Sichere und zuverlässige Datentransferdienste für alle Arten von Speichermedien. Wir können Daten von beschädigten Geräten wiederherstellen und auf moderne Speicherlösungen übertragen.
+              - generic [ref=e108]:
+                - generic [ref=e109]:
+                  - img [ref=e110]
+                  - generic [ref=e113]: Sicherer Datentransfer
+                - generic [ref=e114]:
+                  - img [ref=e115]
+                  - generic [ref=e118]: Datenwiederherstellung von beschädigten Geräten
+                - generic [ref=e119]:
+                  - img [ref=e120]
+                  - generic [ref=e123]: Unterstützung für Legacy-Medien (Disketten, ZIP-Laufwerke, MO-Laufwerke, SCSI/IDE-Laufwerke)
+                - generic [ref=e124]:
+                  - img [ref=e125]
+                  - generic [ref=e128]: Komplette Datensicherheit
+              - generic [ref=e129]:
+                - generic [ref=e130]:
+                  - generic [ref=e131]: CHF 70/hour
+                  - link "Details" [ref=e132] [cursor=pointer]:
+                    - /url: /services/data-recovery-transfer
+                    - generic [ref=e133]: Details
+                    - img [ref=e134]
+                - button "Termin buchen" [ref=e137] [cursor=pointer]:
+                  - img [ref=e138]
+                  - text: Termin buchen
+            - generic [ref=e142]:
+              - generic [ref=e143]:
+                - img [ref=e145]
+                - generic [ref=e147]:
+                  - heading "Hardware-Recycling" [level=3] [ref=e149]
+                  - generic [ref=e150]:
+                    - img [ref=e151]
+                    - generic [ref=e153]: Free pickup service available
+              - paragraph [ref=e154]: Verantwortungsvolles Recycling und Aufbereitung von IT-Geräten. Wir geben Ihren alten Geräten ein neues Leben und sorgen für sichere Datenlöschung.
+              - generic [ref=e155]:
+                - generic [ref=e156]:
+                  - img [ref=e157]
+                  - generic [ref=e160]: Sichere Datenlöschung
+                - generic [ref=e161]:
+                  - img [ref=e162]
+                  - generic [ref=e165]: Geräteaufbereitung
+                - generic [ref=e166]:
+                  - img [ref=e167]
+                  - generic [ref=e170]: Komponenten-Recycling
+                - generic [ref=e171]:
+                  - img [ref=e172]
+                  - generic [ref=e175]: Kostenloser Abholservice
+              - generic [ref=e176]:
+                - generic [ref=e177]:
+                  - generic [ref=e178]: Free for most items
+                  - link "Details" [ref=e179] [cursor=pointer]:
+                    - /url: /services/hardware-recycling
+                    - generic [ref=e180]: Details
+                    - img [ref=e181]
+                - button "Termin buchen" [ref=e184] [cursor=pointer]:
+                  - img [ref=e185]
+                  - text: Termin buchen
+            - generic [ref=e189]:
+              - generic [ref=e190]:
+                - img [ref=e192]
+                - generic [ref=e195]:
+                  - heading "Webdesign & Entwicklung" [level=3] [ref=e197]
+                  - generic [ref=e198]:
+                    - img [ref=e199]
+                    - generic [ref=e201]: Free initial consultation
+              - paragraph [ref=e202]: Professionelle Webdesign- und Entwicklungsdienstleistungen mit modernen Open-Source-Technologien. Schnelle, responsive Websites mit Next.js, Headless CMS und nachhaltigen Praktiken.
+              - generic [ref=e203]:
+                - generic [ref=e204]:
+                  - img [ref=e205]
+                  - generic [ref=e208]: Moderne Frameworks (Next.js, React)
+                - generic [ref=e209]:
+                  - img [ref=e210]
+                  - generic [ref=e213]: Headless CMS (Strapi, Payload, Tina)
+                - generic [ref=e214]:
+                  - img [ref=e215]
+                  - generic [ref=e218]: Responsive Design & Tailwind CSS
+                - generic [ref=e219]:
+                  - img [ref=e220]
+                  - generic [ref=e223]: E-Commerce-Lösungen (WooCommerce, Shopware 6)
+                - generic [ref=e224]:
+                  - img [ref=e225]
+                  - generic [ref=e228]: SEO-Optimierung & Performance
+              - generic [ref=e229]:
+                - generic [ref=e230]:
+                  - generic [ref=e231]: CHF 70/hour
+                  - link "Details" [ref=e232] [cursor=pointer]:
+                    - /url: /services/web-design-development
+                    - generic [ref=e233]: Details
+                    - img [ref=e234]
+                - button "Termin buchen" [ref=e237] [cursor=pointer]:
+                  - img [ref=e238]
+                  - text: Termin buchen
+            - generic [ref=e242]:
+              - generic [ref=e243]:
+                - img [ref=e245]
+                - generic [ref=e248]:
+                  - heading "Linux & Open Source" [level=3] [ref=e250]
+                  - generic [ref=e251]:
+                    - img [ref=e252]
+                    - generic [ref=e254]: Professional assessment required
+              - paragraph [ref=e255]: Professionelle Linux-Installation, -Konfiguration und -Support-Dienstleistungen. Wir helfen Ihnen, das Beste aus Ihrem Linux-System mit fachkundiger Anleitung und Wartung herauszuholen.
+              - generic [ref=e256]:
+                - generic [ref=e257]:
+                  - img [ref=e258]
+                  - generic [ref=e261]: Linux-Installation & Konfiguration
+                - generic [ref=e262]:
+                  - img [ref=e263]
+                  - generic [ref=e266]: Systemoptimierung & Wartung
+                - generic [ref=e267]:
+                  - img [ref=e268]
+                  - generic [ref=e271]: Sicherheitshärtung
+                - generic [ref=e272]:
+                  - img [ref=e273]
+                  - generic [ref=e276]: Performance-Tuning
+              - generic [ref=e277]:
+                - generic [ref=e278]:
+                  - generic [ref=e279]: CHF 70/hour
+                  - link "Details" [ref=e280] [cursor=pointer]:
+                    - /url: /services/linux-open-source
+                    - generic [ref=e281]: Details
+                    - img [ref=e282]
+                - button "Termin buchen" [ref=e285] [cursor=pointer]:
+                  - img [ref=e286]
+                  - text: Termin buchen
+            - generic [ref=e290]:
+              - generic [ref=e291]:
+                - img [ref=e293]
+                - generic [ref=e296]:
+                  - heading "Open Source Solutions" [level=3] [ref=e298]
+                  - generic [ref=e299]:
+                    - img [ref=e300]
+                    - generic [ref=e302]: Free initial consultation
+              - paragraph [ref=e303]: Fachkundige Implementierung und Support für Open-Source-Software. Wir helfen Ihnen beim Übergang zu und der Wartung von Open-Source-Lösungen für Ihre Geschäftsanforderungen.
+              - generic [ref=e304]:
+                - generic [ref=e305]:
+                  - img [ref=e306]
+                  - generic [ref=e309]: Open-Source-Beratung
+                - generic [ref=e310]:
+                  - img [ref=e311]
+                  - generic [ref=e314]: Massgeschneiderte Entwicklung
+                - generic [ref=e315]:
+                  - img [ref=e316]
+                  - generic [ref=e319]: Community-Integration
+                - generic [ref=e320]:
+                  - img [ref=e321]
+                  - generic [ref=e324]: Sicherheit & Compliance
+              - generic [ref=e325]:
+                - generic [ref=e326]:
+                  - generic [ref=e327]: CHF 70/hour
+                  - link "Details" [ref=e328] [cursor=pointer]:
+                    - /url: /services/open-source-solutions
+                    - generic [ref=e329]: Details
+                    - img [ref=e330]
+                - button "Termin buchen" [ref=e333] [cursor=pointer]:
+                  - img [ref=e334]
+                  - text: Termin buchen
+            - generic [ref=e338]:
+              - generic [ref=e339]:
+                - img [ref=e341]
+                - generic [ref=e344]:
+                  - generic [ref=e345]:
+                    - heading "Build Your Computer" [level=3] [ref=e346]
+                    - generic [ref=e347]: Soon
+                  - generic [ref=e348]:
+                    - img [ref=e349]
+                    - generic [ref=e351]: Bald verfügbar
+              - paragraph [ref=e352]: Erhalten Sie einen massgeschneiderten Computer für Ihre spezifischen Bedürfnisse, unterstützt durch KI-Analyse unseres umfangreichen Inventars. Wir beziehen Teile global und bieten professionelle Montage.
+              - generic [ref=e353]:
+                - generic [ref=e354]:
+                  - img [ref=e355]
+                  - generic [ref=e358]: KI-gestützte Build-Empfehlungen
+                - generic [ref=e359]:
+                  - img [ref=e360]
+                  - generic [ref=e363]: Globales Teile-Beschaffungsnetzwerk
+                - generic [ref=e364]:
+                  - img [ref=e365]
+                  - generic [ref=e368]: Professionelle Montage und Tests
+                - generic [ref=e369]:
+                  - img [ref=e370]
+                  - generic [ref=e373]: Qualitätsgarantie und Gewährleistung
+              - generic [ref=e375]:
+                - generic [ref=e376]: Pricing TBD
+                - link "Details" [ref=e377] [cursor=pointer]:
+                  - /url: /services/build-your-computer
+                  - generic [ref=e378]: Details
+                  - img [ref=e379]
+            - generic [ref=e383]:
+              - generic [ref=e384]:
+                - img [ref=e386]
+                - generic [ref=e396]:
+                  - generic [ref=e397]:
+                    - heading "Enterprise AI Solutions" [level=3] [ref=e398]
+                    - generic [ref=e399]: Soon
+                  - generic [ref=e400]:
+                    - img [ref=e401]
+                    - generic [ref=e403]: Bald verfügbar
+              - paragraph [ref=e404]: Private, vor-Ort KI-Systeme für professionelle Unternehmen. GPT-4-Level-Performance mit vollständigem Datenschutz und DSGVO-Compliance.
+              - generic [ref=e405]:
+                - generic [ref=e406]:
+                  - img [ref=e407]
+                  - generic [ref=e410]: Selbstgehostete Llama 3 70B-Bereitstellung
+                - generic [ref=e411]:
+                  - img [ref=e412]
+                  - generic [ref=e415]: RAG-unterstützte Dokumentensuche
+                - generic [ref=e416]:
+                  - img [ref=e417]
+                  - generic [ref=e420]: Vollständiger Datenschutz & DSGVO-Compliance
+                - generic [ref=e421]:
+                  - img [ref=e422]
+                  - generic [ref=e425]: Massgeschneiderte Schulung auf Ihren Dokumenten
+              - generic [ref=e427]:
+                - generic [ref=e428]: Pricing TBD
+                - link "Details" [ref=e429] [cursor=pointer]:
+                  - /url: /services/enterprise-ai-solutions
+                  - generic [ref=e430]: Details
+                  - img [ref=e431]
+            - generic [ref=e435]:
+              - generic [ref=e436]:
+                - img [ref=e438]
+                - generic [ref=e440]:
+                  - generic [ref=e441]:
+                    - heading "Cloud Infrastructure" [level=3] [ref=e442]
+                    - generic [ref=e443]: Soon
+                  - generic [ref=e444]:
+                    - img [ref=e445]
+                    - generic [ref=e447]: Bald verfügbar
+              - paragraph [ref=e448]: Nachhaltige Cloud-Hosting- und Infrastrukturlösungen. Wir bieten skalierbare, umweltfreundliche Hosting-Lösungen mit erneuerbarer Energie und Open-Source-Technologien.
+              - generic [ref=e449]:
+                - generic [ref=e450]:
+                  - img [ref=e451]
+                  - generic [ref=e454]: Hosting mit erneuerbarer Energie
+                - generic [ref=e455]:
+                  - img [ref=e456]
+                  - generic [ref=e459]: Open-Source-Infrastruktur
+                - generic [ref=e460]:
+                  - img [ref=e461]
+                  - generic [ref=e464]: Skalierbare Lösungen
+                - generic [ref=e465]:
+                  - img [ref=e466]
+                  - generic [ref=e469]: Professionelle Überwachung
+              - generic [ref=e471]:
+                - generic [ref=e472]: Pricing TBD
+                - link "Details" [ref=e473] [cursor=pointer]:
+                  - /url: /services/cloud-infrastructure
+                  - generic [ref=e474]: Details
+                  - img [ref=e475]
+            - generic [ref=e479]:
+              - generic [ref=e480]:
+                - img [ref=e482]
+                - generic [ref=e485]:
+                  - generic [ref=e486]:
+                    - heading "Server Management" [level=3] [ref=e487]
+                    - generic [ref=e488]: Soon
+                  - generic [ref=e489]:
+                    - img [ref=e490]
+                    - generic [ref=e492]: Bald verfügbar
+              - paragraph [ref=e493]: Professionelle Server-Setup- und Wartungsdienste. Wir verwalten Ihre Server, damit Sie sich auf Ihr Geschäft konzentrieren können.
+              - generic [ref=e494]:
+                - generic [ref=e495]:
+                  - img [ref=e496]
+                  - generic [ref=e499]: Server-Setup & Konfiguration
+                - generic [ref=e500]:
+                  - img [ref=e501]
+                  - generic [ref=e504]: 24/7-Überwachung
+                - generic [ref=e505]:
+                  - img [ref=e506]
+                  - generic [ref=e509]: Sicherheitsverwaltung
+                - generic [ref=e510]:
+                  - img [ref=e511]
+                  - generic [ref=e514]: Performance-Optimierung
+              - generic [ref=e516]:
+                - generic [ref=e517]: Pricing TBD
+                - link "Details" [ref=e518] [cursor=pointer]:
+                  - /url: /services/server-management
+                  - generic [ref=e519]: Details
+                  - img [ref=e520]
+            - generic [ref=e524]:
+              - generic [ref=e525]:
+                - img [ref=e527]
+                - generic [ref=e530]:
+                  - generic [ref=e531]:
+                    - heading "IoT Solutions" [level=3] [ref=e532]
+                    - generic [ref=e533]: Soon
+                  - generic [ref=e534]:
+                    - img [ref=e535]
+                    - generic [ref=e537]: Bald verfügbar
+              - paragraph [ref=e538]: Internet-of-Things-Lösungen mit Open-Source-Hardware. Erstellen Sie vernetzte Geräte, die Ihre Privatsphäre und Dateneigentum respektieren.
+              - generic [ref=e539]:
+                - generic [ref=e540]:
+                  - img [ref=e541]
+                  - generic [ref=e544]: Open-Source-Hardware
+                - generic [ref=e545]:
+                  - img [ref=e546]
+                  - generic [ref=e549]: Datenschutz-fokussiertes Design
+                - generic [ref=e550]:
+                  - img [ref=e551]
+                  - generic [ref=e554]: Massgeschneiderte IoT-Entwicklung
+                - generic [ref=e555]:
+                  - img [ref=e556]
+                  - generic [ref=e559]: Dateneigentum garantiert
+              - generic [ref=e561]:
+                - generic [ref=e562]: Pricing TBD
+                - link "Details" [ref=e563] [cursor=pointer]:
+                  - /url: /services/iot-solutions
+                  - generic [ref=e564]: Details
+                  - img [ref=e565]
+          - paragraph [ref=e568]: 11 von 11 Ergebnissen
+        - generic [ref=e570]:
+          - heading "Bereit, Ihre Technologie zu erneuern?" [level=2] [ref=e571]
+          - paragraph [ref=e572]: Kontaktieren Sie uns heute für eine kostenlose Beratung und entdecken Sie, wie wir Ihnen helfen können, das Beste aus Ihren Geräten herauszuholen.
+          - generic [ref=e573]:
+            - link "Kontaktieren Sie uns" [ref=e574] [cursor=pointer]:
+              - /url: /contact
+            - link "Inventar durchsuchen" [ref=e575] [cursor=pointer]:
+              - /url: https://www.revamp-it.ch/index.php/de/shop-de
+    - contentinfo [ref=e576]:
+      - generic [ref=e577]:
+        - generic [ref=e578]:
+          - generic [ref=e579]:
+            - link "Revamp-IT" [ref=e580] [cursor=pointer]:
+              - /url: /
+              - img "Revamp-IT" [ref=e581]
+            - paragraph [ref=e582]: Die Zukunft der IT durch nachhaltige Aufarbeitung und Recycling gestalten.
+          - navigation "Footer-Navigation" [ref=e583]:
+            - heading "Navigation" [level=3] [ref=e584]
+            - list [ref=e585]:
+              - listitem [ref=e586]:
+                - link "Über uns" [ref=e587] [cursor=pointer]:
+                  - /url: /about
+              - listitem [ref=e588]:
+                - link "Dienstleistungen" [ref=e589] [cursor=pointer]:
+                  - /url: /services
+              - listitem [ref=e590]:
+                - link "Marktplatz" [ref=e591] [cursor=pointer]:
+                  - /url: /marketplace
+              - listitem [ref=e592]:
+                - link "Lernen" [ref=e593] [cursor=pointer]:
+                  - /url: /knowhow
+              - listitem [ref=e594]:
+                - link "Mitmachen" [ref=e595] [cursor=pointer]:
+                  - /url: /get-involved
+              - listitem [ref=e596]:
+                - link "Kontakt" [ref=e597] [cursor=pointer]:
+                  - /url: /contact
+          - generic [ref=e598]:
+            - heading "Kontakt" [level=3] [ref=e599]
+            - generic [ref=e600]:
+              - generic [ref=e601]:
+                - img [ref=e602]
+                - generic [ref=e605]:
+                  - paragraph [ref=e606]: Verkaufsstelle
+                  - paragraph [ref=e607]: Birmensdorferstrasse 379
+                  - paragraph [ref=e608]: 8055 Zürich
+                  - paragraph [ref=e609]: Schweiz
+              - generic [ref=e610]:
+                - img [ref=e611]
+                - generic [ref=e614]:
+                  - paragraph [ref=e615]: Lager
+                  - paragraph [ref=e616]: Badenerstrasse 816
+                  - paragraph [ref=e617]: 8048 Zürich
+                  - paragraph [ref=e618]: (nur nach Terminvereinbarung)
+              - generic [ref=e619]:
+                - img [ref=e620]
+                - link "+41 (0)43 960 32 64" [ref=e622] [cursor=pointer]:
+                  - /url: tel:+41 (0)43 960 32 64
+              - generic [ref=e623]:
+                - img [ref=e624]
+                - link "empfang@revamp-it.ch" [ref=e627] [cursor=pointer]:
+                  - /url: mailto:empfang@revamp-it.ch
+          - generic [ref=e628]:
+            - heading "Öffnungszeiten" [level=3] [ref=e629]
+            - generic [ref=e630]:
+              - img [ref=e631]
+              - generic [ref=e634]:
+                - paragraph [ref=e635]: "Montag: 9:00 - 12:00"
+                - paragraph [ref=e636]: "Dienstag - Freitag: 13:00 - 17:00"
+        - generic [ref=e638]:
+          - generic [ref=e639]:
+            - paragraph [ref=e640]: Newsletter
+            - paragraph [ref=e641]: Updates zu unserer Arbeit — keine Werbung.
+          - generic [ref=e642]:
+            - textbox "Name (optional)" [ref=e643]
+            - textbox "E-Mail-Adresse" [ref=e644]
+            - button "Anmelden" [ref=e645] [cursor=pointer]
+        - generic [ref=e647]:
+          - link "Facebook" [ref=e648] [cursor=pointer]:
+            - /url: https://facebook.com/revampit
+            - generic [ref=e649]: Facebook
+            - img [ref=e650]
+          - link "Instagram" [ref=e652] [cursor=pointer]:
+            - /url: https://instagram.com/revampit_ch
+            - generic [ref=e653]: Instagram
+            - img [ref=e654]
+          - link "LinkedIn" [ref=e656] [cursor=pointer]:
+            - /url: https://linkedin.com/company/revampit
+            - generic [ref=e657]: LinkedIn
+            - img [ref=e658]
+          - link "Mastodon" [ref=e660] [cursor=pointer]:
+            - /url: https://mastodon.social/@revampit
+            - generic [ref=e661]: Mastodon
+            - img [ref=e662]
+        - paragraph [ref=e665]: © 2026 RevampIT. Alle Rechte vorbehalten.
+    - button "Revamp IT Assistent öffnen" [ref=e666] [cursor=pointer]:
+      - generic [ref=e667]:
+        - img [ref=e668]
+        - img [ref=e672]
+    - button "Verbesserungen vorschlagen öffnen" [ref=e675] [cursor=pointer]:
+      - img [ref=e676]
