@@ -32,7 +32,7 @@ export default async function Image() {
           Neues Leben.
         </div>
         <div style={{ fontSize: 26, color: '#4b5563', marginTop: 36, textAlign: 'center', maxWidth: 800, lineHeight: 1.5 }}>
-          Computer reparieren · Gebrauchte Hardware · Linux &amp; Open Source
+          Computer reparieren · Gebrauchte Hardware · Linux & Open Source
         </div>
         <div style={{ fontSize: 22, color: '#9ca3af', marginTop: 44, letterSpacing: 1 }}>
           revamp-it.ch

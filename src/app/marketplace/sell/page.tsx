@@ -10,19 +10,23 @@ import {
   Package,
   Loader2,
   Camera,
+  Sparkles,
+  Wand2,
+  Send,
 } from 'lucide-react'
 import { MARKETPLACE_LIMITS } from '@/config/marketplace'
 import { logger } from '@/lib/logger'
 import { validateListingForm, transformListingFormToPayload } from '@/lib/domain/marketplace'
-import { AIFormAssist } from '@/components/ai/AIFormAssist'
-import type { ListingFormData } from '@/components/marketplace-sell/types'
-import { INITIAL_LISTING_FORM } from '@/components/marketplace-sell/types'
+import { useAIFormAssist } from '@/hooks/useAIFormAssist'
+import type { ListingFormData } from '@/types/listing-form'
+import { INITIAL_LISTING_FORM } from '@/types/listing-form'
 import { ImageUploadGrid } from '@/components/marketplace-sell/ImageUploadGrid'
 import { ListingFormFields } from '@/components/marketplace-sell/ListingFormFields'
 import { ListingPreview } from '@/components/marketplace-sell/ListingPreview'
 import { AICameraProductListing } from '@/components/marketplace/ai-camera'
 import { ErrorAlert } from '@/components/common/ErrorAlert'
 import type { DetectedProductData } from '@/components/marketplace/ai-camera/types'
+import type { AIFieldMetadataEntry } from '@/hooks/useAIFormAssist'
 
 type Step = 'form' | 'preview'
 
@@ -40,6 +44,34 @@ function SellPageContent() {
   const [isLoadingEdit, setIsLoadingEdit] = useState(false)
   const [formData, setFormData] = useState<ListingFormData>(INITIAL_LISTING_FORM)
   const [showCamera, setShowCamera] = useState(false)
+  const [aiInput, setAiInput] = useState('')
+
+  // AI form assist hook
+  const handleAIFieldsFilled = (data: Partial<Record<string, unknown>>, _metadata: Record<string, AIFieldMetadataEntry>) => {
+    setFormData(prev => {
+      const updated = { ...prev }
+      if (data.title) updated.title = String(data.title)
+      if (data.description) updated.description = String(data.description)
+      if (data.category) updated.category = String(data.category)
+      if (data.price !== undefined) updated.price = String(data.price)
+      if (data.condition) updated.condition = String(data.condition)
+      if (data.brand) updated.brand = String(data.brand)
+      if (data.model) updated.model = String(data.model)
+      if (Array.isArray(data.specs)) {
+        updated.specs = data.specs.map((s: Record<string, unknown>) => ({
+          key: String(s.key || ''),
+          value: String(s.value || ''),
+          unit: s.unit ? String(s.unit) : undefined,
+        }))
+      }
+      return updated
+    })
+  }
+
+  const { extractFromText, refineFields, runQuickAction, isExtracting } =
+    useAIFormAssist({ formType: 'marketplace', onFieldsFilled: handleAIFieldsFilled })
+
+  const formHasData = formData.title.trim() !== '' || formData.description.trim() !== ''
 
   // Load existing listing data when editing
   useEffect(() => {
@@ -101,8 +133,8 @@ function SellPageContent() {
             : [],
         })
       })
-      .catch((error) => {
-        logger.error('Failed to load listing for edit', { error })
+      .catch((err) => {
+        logger.error('Failed to load listing for edit', { error: err })
         setError('Fehler beim Laden des Inserats')
         setEditId(null)
       })
@@ -184,7 +216,6 @@ function SellPageContent() {
 
     try {
       const body = transformListingFormToPayload(formData)
-
       const url = editId ? `/api/listings/${editId}` : '/api/listings'
       const method = editId ? 'PATCH' : 'POST'
 
@@ -199,7 +230,7 @@ function SellPageContent() {
         setSuccess(editId ? 'Änderungen erfolgreich gespeichert!' : 'Inserat erfolgreich erstellt!')
         setTimeout(() => router.push(`/marketplace/${data.data.id}`), 1500)
       } else {
-        setError(data.error || (editId ? 'Fehler beim Speichern der Änderungen' : 'Fehler beim Erstellen des Inserats'))
+        setError(data.error || (editId ? 'Fehler beim Speichern' : 'Fehler beim Erstellen'))
         setStep('form')
       }
     } catch {
@@ -223,26 +254,20 @@ function SellPageContent() {
     setShowCamera(false)
   }
 
-  const handleAIFieldsFilled = (data: Partial<Record<string, unknown>>) => {
-    setFormData(prev => {
-      const updated = { ...prev }
-      if (data.title) updated.title = String(data.title)
-      if (data.description) updated.description = String(data.description)
-      if (data.category) updated.category = String(data.category)
-      if (data.price !== undefined) updated.price = String(data.price)
-      if (data.condition) updated.condition = String(data.condition)
-      if (data.brand) updated.brand = String(data.brand)
-      if (data.model) updated.model = String(data.model)
-      if (Array.isArray(data.specs)) {
-        updated.specs = data.specs.map((s: Record<string, unknown>) => ({
-          key: String(s.key || ''),
-          value: String(s.value || ''),
-          unit: s.unit ? String(s.unit) : undefined,
-        }))
-      }
-      return updated
-    })
+  const handleAISubmit = () => {
+    if (!aiInput.trim() || isExtracting) return
+    if (formHasData) {
+      refineFields(
+        { title: formData.title, description: formData.description, price: formData.price, category: formData.category, condition: formData.condition, brand: formData.brand, model: formData.model, specs: formData.specs },
+        aiInput
+      )
+    } else {
+      extractFromText(aiInput)
+    }
+    setAiInput('')
   }
+
+  const currentFormData = { title: formData.title, description: formData.description, price: formData.price, category: formData.category, condition: formData.condition, brand: formData.brand, model: formData.model, specs: formData.specs }
 
   // Preview step
   if (step === 'preview') {
@@ -279,7 +304,7 @@ function SellPageContent() {
           <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
             {editId
               ? 'Änderungen an Ihrem Inserat speichern.'
-              : 'Verkaufen Sie Ihr gebrauchtes IT-Equipment direkt an die Community.'}
+              : 'Beschreiben Sie Ihr Produkt oder machen Sie ein Foto — die KI füllt den Rest aus.'}
           </p>
         </div>
 
@@ -292,25 +317,125 @@ function SellPageContent() {
             />
           )}
 
-          {/* AI Camera button */}
+          {/* === CREATION ASSISTANT (new listings only) === */}
           {!editId && !showCamera && (
-            <button
-              type="button"
-              onClick={() => setShowCamera(true)}
-              className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-lg border-2 border-dashed border-green-300 dark:border-green-800 text-green-700 dark:text-green-400 hover:bg-green-50 dark:hover:bg-green-900/20 transition-colors"
-            >
-              <Camera className="w-5 h-5" />
-              Mit Kamera erfassen
-            </button>
+            <div className="bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-xl border border-green-200 dark:border-green-800 p-4 md:p-6 space-y-4">
+              <div className="flex items-center gap-2 text-green-800 dark:text-green-200 font-semibold">
+                <Sparkles className="w-5 h-5" />
+                {formHasData ? 'KI-Assistent' : 'Was möchten Sie verkaufen?'}
+              </div>
+
+              <div className="space-y-3">
+                <div className="flex gap-2">
+                  <textarea
+                    value={aiInput}
+                    onChange={(e) => setAiInput(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault()
+                        handleAISubmit()
+                      }
+                    }}
+                    placeholder={formHasData
+                      ? 'z.B. "Ergänze fehlende Specs" oder "Mache die Beschreibung ansprechender"'
+                      : 'z.B. "ThinkPad T480, 16GB RAM, guter Zustand, möchte 400 CHF"'
+                    }
+                    rows={2}
+                    disabled={isExtracting}
+                    className="flex-1 px-4 py-3 text-sm border border-green-300 dark:border-green-700 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white resize-none focus:ring-2 focus:ring-green-500 focus:border-transparent disabled:opacity-50 placeholder:text-gray-400"
+                  />
+                  <button
+                    type="button"
+                    onClick={handleAISubmit}
+                    disabled={isExtracting || !aiInput.trim()}
+                    className="px-4 py-2 bg-green-600 hover:bg-green-700 disabled:bg-green-400 text-white font-medium rounded-lg transition-colors self-end"
+                    title={formHasData ? 'Verbessern' : 'Formular ausfüllen'}
+                  >
+                    {isExtracting ? (
+                      <Loader2 className="w-5 h-5 animate-spin" />
+                    ) : (
+                      <Send className="w-5 h-5" />
+                    )}
+                  </button>
+                </div>
+
+                {!formHasData && (
+                  <>
+                    <div className="relative">
+                      <div className="absolute inset-0 flex items-center">
+                        <div className="w-full border-t border-green-200 dark:border-green-700" />
+                      </div>
+                      <div className="relative flex justify-center text-sm">
+                        <span className="px-3 bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 text-green-500 dark:text-green-400">
+                          oder
+                        </span>
+                      </div>
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={() => setShowCamera(true)}
+                      className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-lg border-2 border-dashed border-green-300 dark:border-green-700 text-green-700 dark:text-green-400 hover:bg-green-100 dark:hover:bg-green-900/30 transition-colors"
+                    >
+                      <Camera className="w-5 h-5" />
+                      Foto aufnehmen — KI erkennt das Produkt
+                    </button>
+                  </>
+                )}
+              </div>
+
+              <p className="text-xs text-green-600 dark:text-green-400">
+                {formHasData
+                  ? 'Beschreiben Sie, was verbessert werden soll. Enter zum Absenden.'
+                  : 'Die KI füllt das Formular anhand Ihrer Beschreibung oder des Fotos aus. Sie können alles danach anpassen.'
+                }
+              </p>
+            </div>
           )}
 
-          <AIFormAssist
-            formType="marketplace"
-            placeholder="Beschreibe dein Produkt in 1-2 Sätzen..."
-            onFieldsFilled={handleAIFieldsFilled}
-            currentData={{ title: formData.title, description: formData.description, price: formData.price, category: formData.category, condition: formData.condition, brand: formData.brand, model: formData.model, specs: formData.specs }}
-          />
+          {/* === QUICK REFINEMENT (only after form has data, new listings) === */}
+          {formHasData && !editId && (
+            <div className="rounded-lg border border-purple-200 dark:border-purple-800 bg-purple-50 dark:bg-purple-900/20 p-3">
+              <div className="flex items-center gap-2 text-purple-800 dark:text-purple-200 text-sm font-medium mb-2">
+                <Wand2 className="w-4 h-4" />
+                Schnellverbesserungen
+              </div>
+              <div className="flex flex-wrap gap-2">
+                <button
+                  type="button"
+                  onClick={() => runQuickAction(currentFormData, 'improve_description')}
+                  disabled={isExtracting}
+                  className="inline-flex items-center gap-1 px-3 py-1.5 bg-purple-100 dark:bg-purple-800/40 text-purple-700 dark:text-purple-300 rounded-lg text-sm font-medium hover:bg-purple-200 dark:hover:bg-purple-700/50 disabled:opacity-50 transition-colors"
+                >
+                  Beschreibung verbessern
+                </button>
+                <button
+                  type="button"
+                  onClick={() => runQuickAction(currentFormData, 'suggest_price')}
+                  disabled={isExtracting}
+                  className="inline-flex items-center gap-1 px-3 py-1.5 bg-purple-100 dark:bg-purple-800/40 text-purple-700 dark:text-purple-300 rounded-lg text-sm font-medium hover:bg-purple-200 dark:hover:bg-purple-700/50 disabled:opacity-50 transition-colors"
+                >
+                  Preis vorschlagen
+                </button>
+                <button
+                  type="button"
+                  onClick={() => runQuickAction(currentFormData, 'detect_specs')}
+                  disabled={isExtracting}
+                  className="inline-flex items-center gap-1 px-3 py-1.5 bg-purple-100 dark:bg-purple-800/40 text-purple-700 dark:text-purple-300 rounded-lg text-sm font-medium hover:bg-purple-200 dark:hover:bg-purple-700/50 disabled:opacity-50 transition-colors"
+                >
+                  Specs erkennen
+                </button>
+              </div>
+              {isExtracting && (
+                <div className="flex items-center gap-2 mt-2 text-sm text-purple-600 dark:text-purple-400">
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                  KI arbeitet...
+                </div>
+              )}
+            </div>
+          )}
 
+          {/* Images */}
           <ImageUploadGrid
             images={formData.images}
             isUploading={isUploading}
@@ -318,18 +443,17 @@ function SellPageContent() {
             onRemove={removeImage}
           />
 
+          {/* Form fields */}
           <ListingFormFields formData={formData} setFormData={setFormData} />
         </div>
 
-        {/* Form Footer */}
+        {/* Footer */}
         <div className="p-4 md:p-6 border-t border-gray-100 dark:border-gray-700">
-          {error && (
-            <ErrorAlert message={error} variant="inline" className="mb-4" />
-          )}
+          {error && <ErrorAlert message={error} variant="inline" className="mb-4" />}
           <div className="flex flex-col-reverse sm:flex-row gap-3">
             <Link
               href="/marketplace"
-              className="px-6 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800"
+              className="px-6 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 text-center"
             >
               Abbrechen
             </Link>
