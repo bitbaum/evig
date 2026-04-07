@@ -4,6 +4,7 @@
  */
 
 import React from 'react'
+import { Button } from '@/components/ui/button'
 import { FeatureModalProps } from './types'
 
 export function FeatureModal({ selectedFeature, featureDetails, onClose }: FeatureModalProps) {
@@ -22,9 +23,9 @@ export function FeatureModal({ selectedFeature, featureDetails, onClose }: Featu
       {/* Sliding Panel */}
       <div role="dialog" aria-modal="true" aria-labelledby="feature-modal-title" className="fixed top-0 left-0 h-full w-full max-w-2xl bg-white shadow-2xl z-50 transform translate-x-0 transition-transform duration-300 ease-in-out">
         {/* Close Arrow Button */}
-        <button
+        <Button
           onClick={onClose}
-          className="absolute top-6 right-6 w-12 h-12 bg-green-600 hover:bg-green-700 text-white rounded-full flex items-center justify-center shadow-lg transition-colors duration-200 z-10"
+          className="absolute top-6 right-6 w-12 h-12 rounded-full shadow-lg z-10"
           aria-label="Panel schliessen"
         >
           <svg
@@ -40,7 +41,7 @@ export function FeatureModal({ selectedFeature, featureDetails, onClose }: Featu
               d="M9 5l7 7-7 7"
             />
           </svg>
-        </button>
+        </Button>
 
         {/* Panel Content */}
         <div className="h-full overflow-y-auto pt-20 pb-6">

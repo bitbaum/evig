@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { Shield, Crown, Check, Save } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 import { apiFetch } from '@/lib/api/client'
 import { Modal } from '@/components/ui/Modal'
 
@@ -217,16 +218,16 @@ export function UserPermissionsEditor({
 
         {/* Footer */}
         <div className="pt-6 border-t border-gray-200 dark:border-gray-700 flex justify-end gap-3 mt-6">
-          <button
+          <Button
             onClick={onClose}
-            className="px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
+            variant="ghost"
           >
             Abbrechen
-          </button>
-          <button
+          </Button>
+          <Button
             onClick={handleSave}
             disabled={saving}
-            className="flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-700 disabled:bg-gray-400 text-white font-medium rounded-lg transition-colors"
+            className="gap-2"
           >
             {saving ? (
               <>
@@ -239,7 +240,7 @@ export function UserPermissionsEditor({
                 Speichern
               </>
             )}
-          </button>
+          </Button>
         </div>
     </Modal>
   )

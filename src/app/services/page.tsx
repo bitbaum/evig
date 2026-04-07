@@ -8,6 +8,7 @@ import {
   Calendar,
   Loader2
 } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 import { ORG } from '@/config/org'
 import Link from 'next/link'
 import { useState } from 'react'
@@ -149,14 +150,14 @@ const ServiceCard: React.FC<{ service: Service }> = ({ service }) => {
                   Termin buchen
                 </button>
               ) : service.slug ? (
-                <button
+                <Button
                   onClick={handleBooking}
-                  className="flex-1 inline-flex items-center justify-center text-white font-semibold bg-green-600 hover:bg-green-700 px-4 py-2 rounded-lg transition-colors duration-300 disabled:opacity-50"
+                  className="flex-1"
                   disabled={bookingStatus !== 'idle' && bookingStatus !== 'error'}
                 >
                   <Calendar className="w-4 h-4 mr-2" />
                   Termin buchen
-                </button>
+                </Button>
               ) : (
                 <Link
                   href={service.href}

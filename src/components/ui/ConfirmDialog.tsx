@@ -4,11 +4,12 @@
  * ConfirmDialog - Reusable confirmation dialog
  *
  * Used for destructive actions like delete, with customizable title,
- * message, and button labels.
+ * message, and button labels. Built on the shared Modal wrapper.
  */
 
-import { X, Loader2, AlertTriangle, CheckCircle } from 'lucide-react'
+import { Loader2, AlertTriangle, CheckCircle } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { Modal } from '@/components/ui/Modal'
 
 interface ConfirmDialogProps {
   isOpen: boolean
@@ -60,81 +61,63 @@ export function ConfirmDialog({
   onConfirm,
   onClose,
 }: ConfirmDialogProps) {
-  if (!isOpen) return null
-
   const styles = VARIANT_STYLES[variant]
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto">
-      <div className="flex min-h-full items-center justify-center p-4">
-        {/* Backdrop */}
-        <div className="fixed inset-0 bg-black/50" aria-hidden="true" onClick={onClose} />
-
-        {/* Dialog */}
-        <div role="dialog" aria-modal="true" aria-labelledby="confirm-dialog-title" onKeyDown={(e) => { if (e.key === 'Escape') onClose() }} className="relative bg-white dark:bg-gray-800 rounded-xl shadow-xl max-w-md w-full p-6">
-          {/* Header */}
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center gap-2">
-              {variant === 'success' ? (
-                <CheckCircle className={`w-5 h-5 ${styles.icon}`} />
-              ) : (
-                <AlertTriangle className={`w-5 h-5 ${styles.icon}`} />
-              )}
-              <h3 id="confirm-dialog-title" className={`text-lg font-semibold ${styles.title}`}>
-                {title}
-              </h3>
-            </div>
-            <button
-              onClick={onClose}
-              className="text-gray-600 hover:text-gray-700 dark:hover:text-gray-300"
-            >
-              <X className="w-5 h-5" />
-            </button>
-          </div>
-
-          {/* Error */}
-          {error && (
-            <div className="mb-4 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg text-red-700 dark:text-red-300 text-sm">
-              {error}
-            </div>
-          )}
-
-          {/* Content */}
-          <div className="mb-6">
-            <p className="text-gray-700 dark:text-gray-300 mb-2">
-              {message}
-            </p>
-            {itemName && (
-              <div className="p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
-                <p className="font-medium text-gray-900 dark:text-white">
-                  {itemName}
-                </p>
-              </div>
-            )}
-            {variant === 'danger' && (
-              <p className="mt-3 text-sm text-red-600 dark:text-red-400">
-                Diese Aktion kann nicht rückgängig gemacht werden.
-              </p>
-            )}
-          </div>
-
-          {/* Actions */}
-          <div className="flex justify-end gap-3">
-            <Button onClick={onClose} disabled={isLoading} variant="ghost" size="sm">
-              {cancelLabel}
-            </Button>
-            <Button
-              onClick={onConfirm}
-              disabled={isLoading}
-              size="sm"
-              className={`${styles.button} gap-2`}
-            >
-              {isLoading && <Loader2 className="w-4 h-4 animate-spin" />}
-              {confirmLabel}
-            </Button>
-          </div>
-        </div>
+    <Modal isOpen={isOpen} onClose={onClose} title={title} size="sm">
+      {/* Variant icon next to title (rendered above Modal's title via negative margin) */}
+      <div className="flex items-center gap-2 -mt-4 mb-4">
+        {variant === 'success' ? (
+          <CheckCircle className={`w-5 h-5 ${styles.icon}`} />
+        ) : (
+          <AlertTriangle className={`w-5 h-5 ${styles.icon}`} />
+        )}
+        <span className={`text-lg font-semibold ${styles.title}`}>
+          {title}
+        </span>
       </div>
-    </div>
+
+      {/* Error */}
+      {error && (
+        <div className="mb-4 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg text-red-700 dark:text-red-300 text-sm">
+          {error}
+        </div>
+      )}
+
+      {/* Content */}
+      <div className="mb-6">
+        <p className="text-gray-700 dark:text-gray-300 mb-2">
+          {message}
+        </p>
+        {itemName && (
+          <div className="p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+            <p className="font-medium text-gray-900 dark:text-white">
+              {itemName}
+            </p>
+          </div>
+        )}
+        {variant === 'danger' && (
+          <p className="mt-3 text-sm text-red-600 dark:text-red-400">
+            Diese Aktion kann nicht rückgängig gemacht werden.
+          </p>
+        )}
+      </div>
+
+      {/* Actions */}
+      <div className="flex justify-end gap-3">
+        <Button onClick={onClose} disabled={isLoading} variant="ghost" size="sm">
+          {cancelLabel}
+        </Button>
+        <Button
+          onClick={onConfirm}
+          disabled={isLoading}
+          size="sm"
+          className={`${styles.button} gap-2`}
+        >
+          {isLoading && <Loader2 className="w-4 h-4 animate-spin" />}
+          {confirmLabel}
+        </Button>
+      </div>
+    </Modal>
   )
 }

@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { MessageSquare } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 import { MessageSidebar } from './MessageSidebar'
 import { apiFetch } from '@/lib/api/client'
 
@@ -41,9 +42,9 @@ export function MessageButton() {
 
   return (
     <>
-      <button
+      <Button
         onClick={() => setIsOpen(true)}
-        className="fixed bottom-6 right-6 bg-green-600 hover:bg-green-700 text-white p-4 rounded-full shadow-lg transition-all duration-200 hover:scale-105 z-40"
+        className="fixed bottom-6 right-6 p-4 rounded-full shadow-lg hover:scale-105 z-40"
         title="Nachrichten"
       >
         <MessageSquare className="w-6 h-6" />
@@ -52,7 +53,7 @@ export function MessageButton() {
             {unreadCount > 99 ? '99+' : unreadCount}
           </span>
         )}
-      </button>
+      </Button>
 
       <MessageSidebar isOpen={isOpen} onClose={() => setIsOpen(false)} />
     </>

@@ -86,7 +86,7 @@ export default function CommunitySpaceSection() {
 
             <div className="mt-8">
               <Button
-                className="bg-green-600 hover:bg-green-700 text-white w-full sm:w-auto"
+                className="w-full sm:w-auto"
                 onClick={() => window.open(`https://maps.google.com/?q=${encodeURIComponent(address + ', Schweiz')}`, '_blank')}
               >
                 <MapPin className="h-4 w-4 mr-2" />
@@ -158,7 +158,7 @@ export default function CommunitySpaceSection() {
             <p className="text-gray-400 mb-4">
               Helfen Sie uns, diese Vision Wirklichkeit werden zu lassen.
             </p>
-            <Button className="bg-green-600 hover:bg-green-700 text-white">
+            <Button>
               Projekt unterstützen
               <ArrowRight className="h-4 w-4 ml-2" />
             </Button>
