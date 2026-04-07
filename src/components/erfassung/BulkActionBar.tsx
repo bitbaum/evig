@@ -7,6 +7,7 @@
  */
 
 import { Save, Package, Loader2 } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 
 interface BulkActionBarProps {
   totalCount: number
@@ -62,35 +63,38 @@ export function BulkActionBar({
 
         {/* Right: action buttons */}
         <div className="flex gap-2">
-          <button
+          <Button
             type="button"
             onClick={() => onSave('draft')}
             disabled={selectedCount === 0 || isSaving}
-            className="inline-flex items-center gap-1.5 bg-gray-500 hover:bg-gray-600 disabled:bg-gray-300 text-white font-medium px-3 py-2 rounded-lg transition-colors text-sm"
+            size="sm"
+            className="gap-1.5 bg-gray-500 hover:bg-gray-600 disabled:bg-gray-300"
           >
             <Save className="w-4 h-4" />
             <span className="hidden sm:inline">Entwurf</span>
-          </button>
+          </Button>
 
-          <button
+          <Button
             type="button"
             onClick={() => onSave('erfassen')}
             disabled={selectedCount === 0 || isSaving}
-            className="inline-flex items-center gap-1.5 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-300 text-white font-medium px-3 py-2 rounded-lg transition-colors text-sm"
+            size="sm"
+            className="gap-1.5 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-300"
           >
             <Package className="w-4 h-4" />
             <span className="hidden sm:inline">Erfassen</span>
-          </button>
+          </Button>
 
-          <button
+          <Button
             type="button"
             onClick={() => onSave('publish')}
             disabled={selectedCount === 0 || isSaving}
-            className="inline-flex items-center gap-1.5 bg-green-600 hover:bg-green-700 disabled:bg-green-300 text-white font-medium px-3 py-2 rounded-lg transition-colors text-sm"
+            size="sm"
+            className="gap-1.5"
           >
             <Package className="w-4 h-4" />
             <span className="hidden sm:inline">Erfassen & Shop</span>
-          </button>
+          </Button>
         </div>
       </div>
     </div>

@@ -1,4 +1,4 @@
-import { Heart, Package, X } from 'lucide-react'
+import { Heart, Package } from 'lucide-react'
 import {
   DONATION_TYPES,
   getPaymentMethodOptions,
@@ -9,6 +9,8 @@ import {
 } from '@/config/donations'
 import type { DonationFormData, UserResult } from './types'
 import { UserSearchField } from './UserSearchField'
+import { Modal } from '@/components/ui/Modal'
+import { Button } from '@/components/ui/button'
 
 interface Props {
   formType: DonationType
@@ -48,15 +50,8 @@ export function DonationFormModal({
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-      <div className="bg-white rounded-xl shadow-xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
-        <div className="p-6">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-xl font-semibold text-gray-900">Spende erfassen</h2>
-            <button onClick={onClose} className="text-gray-500 hover:text-gray-600">
-              <X className="w-6 h-6" />
-            </button>
-          </div>
+    <Modal isOpen={true} onClose={onClose} title="Spende erfassen" size="lg">
+      <div>
 
           {/* Type Toggle */}
           <div className="flex gap-2 mb-6">
@@ -265,24 +260,15 @@ export function DonationFormModal({
 
             {/* Submit */}
             <div className="flex gap-3 pt-4">
-              <button
-                type="button"
-                onClick={onClose}
-                className="flex-1 px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50"
-              >
+              <Button type="button" onClick={onClose} variant="outline" className="flex-1">
                 Abbrechen
-              </button>
-              <button
-                type="submit"
-                disabled={submitting}
-                className="flex-1 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50"
-              >
+              </Button>
+              <Button type="submit" disabled={submitting} className="flex-1">
                 {submitting ? 'Speichern...' : 'Spende erfassen'}
-              </button>
+              </Button>
             </div>
           </form>
-        </div>
       </div>
-    </div>
+    </Modal>
   )
 }

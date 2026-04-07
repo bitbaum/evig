@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { Shield, Plus } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 import { PermissionRequestForm } from '@/components/admin/PermissionRequestForm'
 
 interface Section {
@@ -60,13 +61,10 @@ export function RequestAccessSection({ inaccessibleSections }: RequestAccessSect
                 </span>
               )}
             </div>
-            <button
-              onClick={() => setShowForm(true)}
-              className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors"
-            >
+            <Button onClick={() => setShowForm(true)} className="gap-2 bg-blue-600 hover:bg-blue-700">
               <Plus className="w-4 h-4" />
               Zugriff anfordern
-            </button>
+            </Button>
           </div>
         )}
       </div>

@@ -8,6 +8,7 @@
  */
 
 import { X, Loader2, AlertTriangle, CheckCircle } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 
 interface ConfirmDialogProps {
   isOpen: boolean
@@ -119,21 +120,18 @@ export function ConfirmDialog({
 
           {/* Actions */}
           <div className="flex justify-end gap-3">
-            <button
-              onClick={onClose}
-              disabled={isLoading}
-              className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg disabled:opacity-50"
-            >
+            <Button onClick={onClose} disabled={isLoading} variant="ghost" size="sm">
               {cancelLabel}
-            </button>
-            <button
+            </Button>
+            <Button
               onClick={onConfirm}
               disabled={isLoading}
-              className={`px-4 py-2 text-sm font-medium text-white ${styles.button} rounded-lg disabled:opacity-50 flex items-center gap-2`}
+              size="sm"
+              className={`${styles.button} gap-2`}
             >
               {isLoading && <Loader2 className="w-4 h-4 animate-spin" />}
               {confirmLabel}
-            </button>
+            </Button>
           </div>
         </div>
       </div>

@@ -8,6 +8,7 @@
 
 import { useState } from 'react'
 import { Plus, Filter, RefreshCw } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 import {
   HELP_REQUEST_STATUS_OPTIONS,
   HELP_REQUEST_URGENCY_OPTIONS,
@@ -119,13 +120,10 @@ export function HelpRequestsPageClient({
           )}
         </div>
 
-        <button
-          onClick={() => setShowCreateModal(true)}
-          className="px-4 py-2 text-sm text-white bg-blue-600 hover:bg-blue-700 rounded-lg flex items-center gap-2"
-        >
+        <Button onClick={() => setShowCreateModal(true)} size="sm" className="gap-2 bg-blue-600 hover:bg-blue-700">
           <Plus className="w-4 h-4" />
           Hilfe anfordern
-        </button>
+        </Button>
       </div>
 
       {/* Filter Panel */}

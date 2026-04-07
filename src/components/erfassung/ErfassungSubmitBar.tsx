@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { Save, Loader2, Package } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 
 interface Props {
   isEditMode: boolean
@@ -14,64 +15,60 @@ export function ErfassungSubmitBar({ isEditMode, isLoading, onSubmit }: Props) {
       <div className="hidden sm:flex justify-between items-center pt-4">
         <Link
           href="/admin/products"
-          className="px-6 py-3 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 font-medium"
+          className="inline-flex items-center justify-center rounded-md font-medium px-6 py-3 border border-gray-300 bg-white hover:bg-gray-50 text-gray-900"
         >
           Abbrechen
         </Link>
 
         <div className="flex gap-3">
           {isEditMode ? (
-            <button
-              type="submit"
-              disabled={isLoading}
-              className="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 disabled:bg-green-400 text-white font-semibold px-6 py-3 rounded-lg transition-colors"
-            >
+            <Button type="submit" disabled={isLoading} className="gap-2 px-6 py-3">
               {isLoading ? (
                 <><Loader2 className="w-5 h-5 animate-spin" /> Speichere...</>
               ) : (
                 <><Save className="w-5 h-5" /> Änderungen speichern</>
               )}
-            </button>
+            </Button>
           ) : (
             <>
-              <button
+              <Button
                 type="button"
                 onClick={(e) => onSubmit(e as unknown as React.FormEvent, 'draft')}
                 disabled={isLoading}
-                className="inline-flex items-center gap-2 bg-gray-500 hover:bg-gray-600 disabled:bg-gray-400 text-white font-semibold px-5 py-3 rounded-lg transition-colors"
+                className="gap-2 px-5 py-3 bg-gray-500 hover:bg-gray-600 disabled:bg-gray-400"
               >
                 {isLoading ? (
                   <Loader2 className="w-5 h-5 animate-spin" />
                 ) : (
                   <><Save className="w-5 h-5" /> Entwurf</>
                 )}
-              </button>
+              </Button>
 
-              <button
+              <Button
                 type="button"
                 onClick={(e) => onSubmit(e as unknown as React.FormEvent, 'erfassen')}
                 disabled={isLoading}
-                className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white font-semibold px-5 py-3 rounded-lg transition-colors"
+                className="gap-2 px-5 py-3 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400"
               >
                 {isLoading ? (
                   <Loader2 className="w-5 h-5 animate-spin" />
                 ) : (
                   <><Package className="w-5 h-5" /> Erfassen</>
                 )}
-              </button>
+              </Button>
 
-              <button
+              <Button
                 type="button"
                 onClick={(e) => onSubmit(e as unknown as React.FormEvent, 'publish')}
                 disabled={isLoading}
-                className="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 disabled:bg-green-400 text-white font-semibold px-5 py-3 rounded-lg transition-colors"
+                className="gap-2 px-5 py-3"
               >
                 {isLoading ? (
                   <Loader2 className="w-5 h-5 animate-spin" />
                 ) : (
                   <><Package className="w-5 h-5" /> Erfassen & Shop</>
                 )}
-              </button>
+              </Button>
             </>
           )}
         </div>
@@ -80,7 +77,7 @@ export function ErfassungSubmitBar({ isEditMode, isLoading, onSubmit }: Props) {
       {/* Mobile Sticky Bottom Bar */}
       <div className="sm:hidden fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 p-4 z-50 safe-area-inset-bottom">
         {isEditMode ? (
-          <button
+          <Button
             type="button"
             onClick={(e) => {
               e.preventDefault()
@@ -88,7 +85,7 @@ export function ErfassungSubmitBar({ isEditMode, isLoading, onSubmit }: Props) {
               if (form) form.requestSubmit()
             }}
             disabled={isLoading}
-            className="w-full inline-flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 disabled:bg-green-400 text-white font-semibold py-4 rounded-xl transition-colors touch-manipulation min-h-[52px]"
+            className="w-full gap-2 py-4 rounded-xl touch-manipulation min-h-[52px]"
           >
             {isLoading ? (
               <Loader2 className="w-5 h-5 animate-spin" />
@@ -98,27 +95,27 @@ export function ErfassungSubmitBar({ isEditMode, isLoading, onSubmit }: Props) {
                 <span>Änderungen speichern</span>
               </>
             )}
-          </button>
+          </Button>
         ) : (
           <div className="flex gap-2">
-            <button
+            <Button
               type="button"
               onClick={(e) => onSubmit(e as unknown as React.FormEvent, 'draft')}
               disabled={isLoading}
-              className="inline-flex items-center justify-center gap-1 bg-gray-500 hover:bg-gray-600 disabled:bg-gray-400 text-white font-semibold px-3 py-4 rounded-xl transition-colors touch-manipulation min-h-[52px]"
+              className="gap-1 px-3 py-4 rounded-xl touch-manipulation min-h-[52px] bg-gray-500 hover:bg-gray-600 disabled:bg-gray-400"
             >
               {isLoading ? (
                 <Loader2 className="w-5 h-5 animate-spin" />
               ) : (
                 <Save className="w-5 h-5" />
               )}
-            </button>
+            </Button>
 
-            <button
+            <Button
               type="button"
               onClick={(e) => onSubmit(e as unknown as React.FormEvent, 'erfassen')}
               disabled={isLoading}
-              className="flex-1 inline-flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white font-semibold py-4 rounded-xl transition-colors touch-manipulation min-h-[52px]"
+              className="flex-1 gap-2 py-4 rounded-xl touch-manipulation min-h-[52px] bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400"
             >
               {isLoading ? (
                 <Loader2 className="w-5 h-5 animate-spin" />
@@ -128,13 +125,13 @@ export function ErfassungSubmitBar({ isEditMode, isLoading, onSubmit }: Props) {
                   <span>Erfassen</span>
                 </>
               )}
-            </button>
+            </Button>
 
-            <button
+            <Button
               type="button"
               onClick={(e) => onSubmit(e as unknown as React.FormEvent, 'publish')}
               disabled={isLoading}
-              className="flex-1 inline-flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 disabled:bg-green-400 text-white font-semibold py-4 rounded-xl transition-colors touch-manipulation min-h-[52px]"
+              className="flex-1 gap-2 py-4 rounded-xl touch-manipulation min-h-[52px]"
             >
               {isLoading ? (
                 <Loader2 className="w-5 h-5 animate-spin" />
@@ -144,7 +141,7 @@ export function ErfassungSubmitBar({ isEditMode, isLoading, onSubmit }: Props) {
                   <span>+ Shop</span>
                 </>
               )}
-            </button>
+            </Button>
           </div>
         )}
       </div>

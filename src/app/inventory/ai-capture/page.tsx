@@ -13,6 +13,7 @@ import {
   DollarSign,
   RefreshCw
 } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 import { getConditionBadge } from '@/config/erfassung/conditions'
 import { useAICapture, getConfidenceColor } from '@/hooks/useAICapture'
 
@@ -60,20 +61,14 @@ export default function AICapturePage() {
                   Verwende deine Kamera oder wähle ein Bild aus deiner Galerie
                 </p>
                 <div className="flex gap-4 justify-center">
-                  <button
-                    onClick={handleCameraCapture}
-                    className="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white font-semibold px-6 py-3 rounded-lg transition-colors"
-                  >
+                  <Button onClick={handleCameraCapture} className="gap-2 px-6 py-3">
                     <Camera className="w-5 h-5" />
                     Kamera
-                  </button>
-                  <button
-                    onClick={() => fileInputRef.current?.click()}
-                    className="inline-flex items-center gap-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 font-semibold px-6 py-3 rounded-lg transition-colors"
-                  >
+                  </Button>
+                  <Button onClick={() => fileInputRef.current?.click()} variant="outline" className="gap-2 px-6 py-3">
                     <Upload className="w-5 h-5" />
                     Datei wählen
-                  </button>
+                  </Button>
                 </div>
               </div>
 
@@ -116,13 +111,10 @@ export default function AICapturePage() {
               {/* Analysis Button */}
               {!analysis && !isAnalyzing && (
                 <div className="text-center">
-                  <button
-                    onClick={analyzeImage}
-                    className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold px-8 py-3 rounded-lg transition-colors"
-                  >
+                  <Button onClick={analyzeImage} className="gap-2 px-8 py-3 bg-blue-600 hover:bg-blue-700">
                     <Zap className="w-5 h-5" />
                     Mit KI analysieren
-                  </button>
+                  </Button>
                 </div>
               )}
 
@@ -318,18 +310,11 @@ export default function AICapturePage() {
                   </div>
                 ) : (
                   <>
-                    <button
-                      onClick={resetCapture}
-                      className="inline-flex items-center gap-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 font-semibold px-6 py-3 rounded-lg transition-colors"
-                    >
+                    <Button onClick={resetCapture} variant="outline" className="gap-2 px-6 py-3">
                       <RefreshCw className="w-5 h-5" />
                       Neu aufnehmen
-                    </button>
-                    <button
-                      onClick={saveProduct}
-                      disabled={isSaving}
-                      className="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 disabled:bg-green-400 text-white font-semibold px-8 py-3 rounded-lg transition-colors"
-                    >
+                    </Button>
+                    <Button onClick={saveProduct} disabled={isSaving} className="gap-2 px-8 py-3">
                       {isSaving ? (
                         <>
                           <Loader2 className="w-5 h-5 animate-spin" />
@@ -341,7 +326,7 @@ export default function AICapturePage() {
                           Produkt speichern
                         </>
                       )}
-                    </button>
+                    </Button>
                   </>
                 )}
               </div>

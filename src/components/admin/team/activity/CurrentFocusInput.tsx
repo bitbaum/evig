@@ -8,6 +8,7 @@
 
 import { useState, useMemo } from 'react'
 import { Target, Loader2, Check, X } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 import { useCurrentFocus } from './useActivityStream'
 
 interface CurrentFocusInputProps {
@@ -157,14 +158,15 @@ export function CurrentFocusInput({
               >
                 Abbrechen
               </button>
-              <button
+              <Button
                 onClick={handleSave}
                 disabled={saving || !hasChanges}
-                className="px-3 py-1.5 text-sm text-white bg-blue-600 hover:bg-blue-700 rounded-lg disabled:opacity-50 flex items-center gap-2"
+                size="sm"
+                className="gap-2 bg-blue-600 hover:bg-blue-700"
               >
                 {saving && <Loader2 className="w-4 h-4 animate-spin" />}
                 Speichern
-              </button>
+              </Button>
             </div>
           </div>
         )}

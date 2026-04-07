@@ -19,6 +19,7 @@ import {
   ChevronRight,
 } from 'lucide-react'
 import { apiFetch } from '@/lib/api/client'
+import { Button } from '@/components/ui/button'
 import { ListingImage } from '@/components/marketplace/ListingImage'
 import { LISTING_STATUS_CONFIG, LISTING_STATUS, formatCHF } from '@/config/marketplace'
 import type { ListingStatus } from '@/config/marketplace'
@@ -153,7 +154,7 @@ export default function MyListingsPage() {
         </div>
         <Link
           href="/marketplace/sell"
-          className="inline-flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg text-sm font-medium transition-colors"
+          className="inline-flex items-center justify-center gap-2 rounded-md font-medium h-9 px-3 bg-green-600 text-white hover:bg-green-700 transition-colors"
         >
           <Plus className="w-4 h-4" />
           Neues Inserat
@@ -190,13 +191,10 @@ export default function MyListingsPage() {
         <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl p-6 text-center">
           <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-4" />
           <p className="text-red-600 dark:text-red-300 mb-4">{error}</p>
-          <button
-            onClick={() => fetchListings(page)}
-            className="inline-flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg"
-          >
+          <Button onClick={() => fetchListings(page)} variant="destructive" className="gap-2">
             <RefreshCw className="w-4 h-4" />
             Erneut versuchen
-          </button>
+          </Button>
         </div>
       )}
 

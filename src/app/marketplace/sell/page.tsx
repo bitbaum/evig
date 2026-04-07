@@ -15,6 +15,7 @@ import {
   Send,
 } from 'lucide-react'
 import { MARKETPLACE_LIMITS } from '@/config/marketplace'
+import { Button } from '@/components/ui/button'
 import { logger } from '@/lib/logger'
 import { validateListingForm, transformListingFormToPayload } from '@/lib/domain/marketplace'
 import { useAIFormAssist } from '@/hooks/useAIFormAssist'
@@ -383,9 +384,9 @@ function SellPageContent() {
                         disabled={isExtracting}
                         className="flex-1 px-4 py-3 text-sm border border-green-300 dark:border-green-700 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white resize-none focus:ring-2 focus:ring-green-500 focus:border-transparent disabled:opacity-50 placeholder:text-gray-400"
                       />
-                      <button type="button" onClick={handleAISubmit} disabled={isExtracting || !aiInput.trim()} className="px-4 py-2 bg-green-600 hover:bg-green-700 disabled:bg-green-400 text-white font-medium rounded-lg transition-colors self-end">
+                      <Button type="button" onClick={handleAISubmit} disabled={isExtracting || !aiInput.trim()} className="px-4 py-2 self-end">
                         {isExtracting ? <Loader2 className="w-5 h-5 animate-spin" /> : <Send className="w-5 h-5" />}
-                      </button>
+                      </Button>
                     </div>
                     <div className="relative">
                       <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-green-200 dark:border-green-700" /></div>
@@ -428,13 +429,10 @@ function SellPageContent() {
             >
               Abbrechen
             </Link>
-            <button
-              onClick={handlePreview}
-              className="flex-1 flex items-center justify-center gap-2 px-6 py-2.5 rounded-lg bg-green-600 hover:bg-green-700 text-white font-semibold transition-colors"
-            >
+            <Button onClick={handlePreview} className="flex-1 gap-2 px-6 py-2.5">
               <Eye className="w-4 h-4" />
               {editId ? 'Vorschau & Speichern' : 'Vorschau & Veröffentlichen'}
-            </button>
+            </Button>
           </div>
         </div>
       </div>

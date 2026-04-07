@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { useState } from 'react'
 import { User, Bell, Shield, FileText, Save, Loader2, CheckCircle2, ArrowLeft } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 import { SETTINGS_CONFIG } from '@/config/profile'
 
 // Hooks (reuse from profile)
@@ -146,11 +147,7 @@ export default function SettingsPage() {
 
           {/* Submit Button */}
           <div className="flex justify-end">
-            <button
-              type="submit"
-              disabled={isSaving}
-              className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 disabled:cursor-not-allowed text-white font-semibold px-6 py-3 rounded-lg transition-colors"
-            >
+            <Button type="submit" disabled={isSaving} className="gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-700">
               {isSaving ? (
                 <>
                   <Loader2 className="w-5 h-5 animate-spin" />
@@ -162,7 +159,7 @@ export default function SettingsPage() {
                   {labels.save}
                 </>
               )}
-            </button>
+            </Button>
           </div>
         </form>
       </div>

@@ -8,6 +8,7 @@
 
 import { useState } from 'react'
 import { Plus, Filter, RefreshCw, Loader2 } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 import {
   ACTIVITY_SOURCE_LABELS,
   ACTIVITY_CATEGORY_OPTIONS,
@@ -103,13 +104,14 @@ export function ActivityFeed({
           )}
 
           {showAddButton && (
-            <button
+            <Button
               onClick={() => setShowAddModal(true)}
-              className="px-3 py-2 text-sm text-white bg-blue-600 hover:bg-blue-700 rounded-lg flex items-center gap-2"
+              size="sm"
+              className="gap-2 bg-blue-600 hover:bg-blue-700"
             >
               <Plus className="w-4 h-4" />
               Aktivität
-            </button>
+            </Button>
           )}
         </div>
       </div>

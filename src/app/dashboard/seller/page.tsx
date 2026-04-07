@@ -19,6 +19,7 @@ import {
   RefreshCw
 } from 'lucide-react'
 import { ListingImage } from '@/components/marketplace/ListingImage'
+import { Button } from '@/components/ui/button'
 import { ROLES } from '@/lib/constants'
 import { LISTING_STATUS_CONFIG } from '@/config/marketplace'
 import type { ListingStatus } from '@/config/marketplace'
@@ -160,13 +161,10 @@ export default function SellerDashboard() {
           Fehler beim Laden
         </h3>
         <p className="text-red-600 dark:text-red-300 mb-4">{error}</p>
-        <button
-          onClick={fetchDashboardData}
-          className="inline-flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg"
-        >
+        <Button onClick={fetchDashboardData} variant="destructive" className="gap-2">
           <RefreshCw className="w-4 h-4" />
           Erneut versuchen
-        </button>
+        </Button>
       </div>
     )
   }

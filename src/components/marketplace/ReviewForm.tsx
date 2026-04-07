@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { Star, Loader2, AlertCircle } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 import { apiFetch } from '@/lib/api/client'
 
 interface ReviewFormProps {
@@ -127,23 +128,16 @@ export default function ReviewForm({ targetType, targetId, onSubmitted, onCancel
       )}
 
       <div className="flex gap-2">
-        <button
-          onClick={onCancel}
-          className="px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800"
-        >
+        <Button onClick={onCancel} variant="outline" size="sm">
           Abbrechen
-        </button>
-        <button
-          onClick={handleSubmit}
-          disabled={isSubmitting}
-          className="flex-1 flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-green-600 hover:bg-green-700 text-white text-sm font-semibold disabled:opacity-50 transition-colors"
-        >
+        </Button>
+        <Button onClick={handleSubmit} disabled={isSubmitting} size="sm" className="flex-1 gap-2">
           {isSubmitting ? (
             <Loader2 className="w-4 h-4 animate-spin" />
           ) : (
             'Bewertung senden'
           )}
-        </button>
+        </Button>
       </div>
     </div>
   )

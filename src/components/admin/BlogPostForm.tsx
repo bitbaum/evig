@@ -15,6 +15,7 @@ import {
   Loader2,
   Send,
 } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 import {
   useBlogPostForm,
   BlogPostEditor,
@@ -83,22 +84,22 @@ export function BlogPostForm({ initialData, isEdit = false }: BlogPostFormProps)
               </span>
             )
           )}
-          <button
+          <Button
             onClick={() => handleSubmit(false)}
             disabled={saving || !formData.title || !formData.content}
-            className="inline-flex items-center gap-2 px-4 py-2 bg-gray-600 hover:bg-gray-700 disabled:bg-gray-400 text-white font-medium rounded-lg transition-colors"
+            className="gap-2 bg-gray-600 hover:bg-gray-700 disabled:bg-gray-400"
           >
             {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
             Speichern
-          </button>
-          <button
+          </Button>
+          <Button
             onClick={() => handleSubmit(true)}
             disabled={saving || !formData.title || !formData.content}
-            className="inline-flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-700 disabled:bg-green-400 text-white font-medium rounded-lg transition-colors"
+            className="gap-2"
           >
             {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
             Veröffentlichen
-          </button>
+          </Button>
         </div>
       </div>
 

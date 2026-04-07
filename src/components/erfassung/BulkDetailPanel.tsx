@@ -9,6 +9,7 @@
 
 import { useState } from 'react'
 import { X } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 import { ProductForm } from '@/components/erfassung/ProductForm'
 import type { BulkProduct, ErfassungFormData } from '@/types/erfassung'
 import { SPEC_TEMPLATES, templateToSpecFields } from '@/config/erfassung'
@@ -138,20 +139,12 @@ export function BulkDetailPanel({ product, onUpdate, onClose }: BulkDetailPanelP
 
         {/* Footer with apply button */}
         <div className="sticky bottom-0 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 px-4 py-3 flex gap-3">
-          <button
-            type="button"
-            onClick={onClose}
-            className="flex-1 px-4 py-2.5 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 font-medium"
-          >
+          <Button type="button" onClick={onClose} variant="outline" className="flex-1 py-2.5">
             Schliessen
-          </button>
-          <button
-            type="button"
-            onClick={handleApply}
-            className="flex-1 px-4 py-2.5 bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium transition-colors"
-          >
+          </Button>
+          <Button type="button" onClick={handleApply} className="flex-1 py-2.5">
             Übernehmen
-          </button>
+          </Button>
         </div>
       </div>
     </>

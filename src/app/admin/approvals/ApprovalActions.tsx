@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { CheckCircle, XCircle, Loader2 } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 
 interface ApprovalActionsProps {
   submissionId: string
@@ -38,10 +39,11 @@ export function ApprovalActions({ submissionId, title }: ApprovalActionsProps) {
 
   return (
     <div className="flex gap-2">
-      <button
+      <Button
         onClick={() => handleAction('approve')}
         disabled={isLoading !== null}
-        className="px-3 py-1 bg-green-600 hover:bg-green-700 disabled:bg-green-400 text-white text-sm rounded transition-colors flex items-center gap-1"
+        size="sm"
+        className="flex items-center gap-1"
       >
         {isLoading === 'approve' ? (
           <Loader2 className="w-3 h-3 animate-spin" />
@@ -49,11 +51,13 @@ export function ApprovalActions({ submissionId, title }: ApprovalActionsProps) {
           <CheckCircle className="w-3 h-3" />
         )}
         Genehmigen
-      </button>
-      <button
+      </Button>
+      <Button
         onClick={() => handleAction('reject')}
         disabled={isLoading !== null}
-        className="px-3 py-1 bg-red-600 hover:bg-red-700 disabled:bg-red-400 text-white text-sm rounded transition-colors flex items-center gap-1"
+        variant="destructive"
+        size="sm"
+        className="flex items-center gap-1"
       >
         {isLoading === 'reject' ? (
           <Loader2 className="w-3 h-3 animate-spin" />
@@ -61,7 +65,7 @@ export function ApprovalActions({ submissionId, title }: ApprovalActionsProps) {
           <XCircle className="w-3 h-3" />
         )}
         Ablehnen
-      </button>
+      </Button>
     </div>
   )
 }

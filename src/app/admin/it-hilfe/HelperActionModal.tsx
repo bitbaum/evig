@@ -4,6 +4,7 @@
 
 import { Loader2 } from 'lucide-react'
 import { Modal } from '@/components/ui/Modal'
+import { Button } from '@/components/ui/button'
 
 interface HelperActionModalProps {
   helperAction: string
@@ -42,16 +43,16 @@ export function HelperActionModal({
           />
         </div>
         <div className="flex justify-end gap-2">
-          <button onClick={onClose} className="px-4 py-2 text-sm border rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700">Abbrechen</button>
-          <button
+          <Button onClick={onClose} variant="outline" size="sm">Abbrechen</Button>
+          <Button
             onClick={onConfirm}
             disabled={actionLoading}
-            className={`px-4 py-2 text-sm text-white rounded-lg disabled:opacity-50 ${
-              helperAction === 'suspend' ? 'bg-red-600 hover:bg-red-700' : 'bg-blue-600 hover:bg-blue-700'
-            }`}
+            size="sm"
+            variant={helperAction === 'suspend' ? 'destructive' : 'default'}
+            className={helperAction === 'suspend' ? '' : 'bg-blue-600 hover:bg-blue-700'}
           >
             {actionLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Bestätigen'}
-          </button>
+          </Button>
         </div>
       </div>
     </Modal>

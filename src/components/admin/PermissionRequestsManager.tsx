@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { Shield, Check, X, Clock, User, RefreshCw } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 import { apiFetch } from '@/lib/api/client'
 import { getSection } from '@/config/sections'
 import { formatDateTimeNumeric } from '@/lib/date-formats'
@@ -182,22 +183,25 @@ export function PermissionRequestsManager() {
               </div>
 
               <div className="flex gap-2 ml-4">
-                <button
+                <Button
                   onClick={() => handleApprove(request.id)}
                   disabled={processingId === request.id}
-                  className="flex items-center gap-1 px-3 py-1.5 bg-green-600 hover:bg-green-700 disabled:bg-gray-400 text-white text-sm rounded transition-colors"
+                  size="sm"
+                  className="gap-1"
                 >
                   <Check className="w-4 h-4" />
                   Genehmigen
-                </button>
-                <button
+                </Button>
+                <Button
                   onClick={() => { setRejectingId(request.id); setRejectionNotes('') }}
                   disabled={processingId === request.id}
-                  className="flex items-center gap-1 px-3 py-1.5 bg-red-600 hover:bg-red-700 disabled:bg-gray-400 text-white text-sm rounded transition-colors"
+                  variant="destructive"
+                  size="sm"
+                  className="gap-1"
                 >
                   <X className="w-4 h-4" />
                   Ablehnen
-                </button>
+                </Button>
               </div>
             </div>
 
@@ -216,19 +220,21 @@ export function PermissionRequestsManager() {
                   autoFocus
                 />
                 <div className="flex gap-2 mt-2">
-                  <button
+                  <Button
                     onClick={() => handleReject(request.id)}
                     disabled={processingId === request.id}
-                    className="px-3 py-1.5 bg-red-600 text-white rounded text-sm font-medium hover:bg-red-700 disabled:opacity-50"
+                    variant="destructive"
+                    size="sm"
                   >
                     Ablehnung bestätigen
-                  </button>
-                  <button
+                  </Button>
+                  <Button
                     onClick={() => { setRejectingId(null); setRejectionNotes('') }}
-                    className="px-3 py-1.5 border border-gray-300 rounded text-sm font-medium text-gray-700 hover:bg-gray-50"
+                    variant="outline"
+                    size="sm"
                   >
                     Abbrechen
-                  </button>
+                  </Button>
                 </div>
               </div>
             )}

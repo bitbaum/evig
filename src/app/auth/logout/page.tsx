@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { LogOut, Loader2, AlertCircle } from 'lucide-react'
 import { logger } from '@/lib/logger'
+import { Button } from '@/components/ui/button'
 
 const LOGOUT_CALLBACK = '/auth/login?logout=1'
 
@@ -96,7 +97,7 @@ export default function LogoutPage() {
                 </h2>
                 <p className="text-gray-600 dark:text-gray-400 mb-6">{error}</p>
                 <div className="space-y-3">
-                  <button
+                  <Button
                     onClick={() => {
                       setError(null)
                       void forceServerSignOut(LOGOUT_CALLBACK)
@@ -108,11 +109,12 @@ export default function LogoutPage() {
                           setError('Abmeldung fehlgeschlagen. Bitte versuchen Sie es erneut.')
                         })
                     }}
-                    className="inline-flex items-center justify-center gap-2 bg-red-600 hover:bg-red-700 text-white font-medium px-6 py-3 rounded-lg transition-colors w-full"
+                    variant="destructive"
+                    className="w-full gap-2 px-6 py-3"
                   >
                     <LogOut className="w-4 h-4" />
                     Erneut abmelden
-                  </button>
+                  </Button>
                   <Link
                     href="/dashboard"
                     className="inline-flex items-center justify-center gap-2 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-900 dark:text-white font-medium px-6 py-3 rounded-lg transition-colors w-full"

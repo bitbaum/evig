@@ -13,6 +13,7 @@ import {
   ArrowLeft,
   Info
 } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 
 interface ImportResult {
   success: boolean;
@@ -179,13 +180,10 @@ ALI00001;W;100% getestet Echtem Touch Panel Touchpad Trackpad Mit Kabel Für App
                   onChange={handleFileSelect}
                   className="hidden"
                 />
-                <button
-                  onClick={() => fileInputRef.current?.click()}
-                  className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 rounded-lg transition-colors"
-                >
+                <Button onClick={() => fileInputRef.current?.click()} className="gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-700">
                   <Upload className="w-5 h-5" />
                   Datei auswählen
-                </button>
+                </Button>
               </div>
             ) : (
               <div>
@@ -197,17 +195,10 @@ ALI00001;W;100% getestet Echtem Touch Panel Touchpad Trackpad Mit Kabel Für App
                   {file.name} ({(file.size / 1024).toFixed(1)} KB)
                 </p>
                 <div className="flex gap-4 justify-center">
-                  <button
-                    onClick={() => fileInputRef.current?.click()}
-                    className="inline-flex items-center gap-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 font-semibold px-4 py-2 rounded-lg transition-colors"
-                  >
+                  <Button onClick={() => fileInputRef.current?.click()} variant="outline" size="sm">
                     Andere Datei
-                  </button>
-                  <button
-                    onClick={handleUpload}
-                    disabled={isUploading}
-                    className="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 disabled:bg-green-400 text-white font-semibold px-6 py-3 rounded-lg transition-colors"
-                  >
+                  </Button>
+                  <Button onClick={handleUpload} disabled={isUploading} className="gap-2 px-6 py-3">
                     {isUploading ? (
                       <>
                         <Loader2 className="w-5 h-5 animate-spin" />
@@ -219,7 +210,7 @@ ALI00001;W;100% getestet Echtem Touch Panel Touchpad Trackpad Mit Kabel Für App
                         Import starten
                       </>
                     )}
-                  </button>
+                  </Button>
                 </div>
               </div>
             )}
@@ -310,22 +301,20 @@ ALI00001;W;100% getestet Echtem Touch Panel Touchpad Trackpad Mit Kabel Für App
             )}
 
             <div className="flex gap-4">
-              <button
-                onClick={() => router.push('/inventory/dashboard')}
-                className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 rounded-lg transition-colors"
-              >
+              <Button onClick={() => router.push('/inventory/dashboard')} className="gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-700">
                 Zum Dashboard
-              </button>
-              <button
+              </Button>
+              <Button
                 onClick={() => {
                   setFile(null)
                   setResult(null)
                   setPreview(null)
                 }}
-                className="inline-flex items-center gap-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 font-semibold px-6 py-3 rounded-lg transition-colors"
+                variant="outline"
+                className="gap-2 px-6 py-3"
               >
                 Neue Datei importieren
-              </button>
+              </Button>
             </div>
           </div>
         )}

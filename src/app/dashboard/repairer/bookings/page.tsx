@@ -9,6 +9,8 @@ import {
   User, Loader2, RefreshCw, Wrench, Home, ChevronRight, Send
 } from 'lucide-react'
 import { BOOKING_STATUS, getBookingStatusBadge, getUrgencyBadge } from '@/config/booking-status'
+import { Button } from '@/components/ui/button'
+import { Modal } from '@/components/ui/Modal'
 import { formatDateShort } from '@/lib/date-formats'
 import { apiFetch } from '@/lib/api/client'
 
@@ -315,14 +317,15 @@ export default function RepairerBookingsPage() {
                   <div className="flex flex-wrap gap-2 pt-4 border-t border-gray-100 dark:border-gray-700">
                     {apt.status === BOOKING_STATUS.REQUESTED && (
                       <>
-                        <button
+                        <Button
                           onClick={() => handleAction(apt.id, 'accept')}
                           disabled={actionLoading === apt.id}
-                          className="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-medium disabled:opacity-50"
+                          size="sm"
+                          className="gap-2"
                         >
                           {actionLoading === apt.id ? <Loader2 className="w-4 h-4 animate-spin" /> : <CheckCircle className="w-4 h-4" />}
                           Annehmen
-                        </button>
+                        </Button>
                         <button
                           onClick={() => handleAction(apt.id, 'reject')}
                           disabled={actionLoading === apt.id}
@@ -346,25 +349,27 @@ export default function RepairerBookingsPage() {
                     )}
 
                     {([BOOKING_STATUS.ACCEPTED, BOOKING_STATUS.QUOTE_APPROVED] as string[]).includes(apt.status) && (
-                      <button
+                      <Button
                         onClick={() => handleAction(apt.id, 'start')}
                         disabled={actionLoading === apt.id}
-                        className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium disabled:opacity-50"
+                        size="sm"
+                        className="gap-2 bg-blue-600 hover:bg-blue-700"
                       >
                         {actionLoading === apt.id ? <Loader2 className="w-4 h-4 animate-spin" /> : <Wrench className="w-4 h-4" />}
                         Reparatur starten
-                      </button>
+                      </Button>
                     )}
 
                     {apt.status === BOOKING_STATUS.IN_PROGRESS && (
-                      <button
+                      <Button
                         onClick={() => handleAction(apt.id, 'complete')}
                         disabled={actionLoading === apt.id}
-                        className="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-medium disabled:opacity-50"
+                        size="sm"
+                        className="gap-2"
                       >
                         {actionLoading === apt.id ? <Loader2 className="w-4 h-4 animate-spin" /> : <CheckCircle className="w-4 h-4" />}
                         Abgeschlossen
-                      </button>
+                      </Button>
                     )}
 
                     <Link
@@ -383,66 +388,68 @@ export default function RepairerBookingsPage() {
       </div>
 
       {/* Quote Modal */}
-      {quoteModal?.open && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="bg-white dark:bg-gray-800 rounded-xl p-6 max-w-md w-full mx-4 shadow-xl">
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Angebot erstellen</h3>
-            <div className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  Preis (CHF)
-                </label>
-                <input
-                  type="number"
-                  value={quotePrice}
-                  onChange={(e) => setQuotePrice(e.target.value)}
-                  placeholder="z.B. 150"
-                  min="1"
-                  step="0.01"
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-purple-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  Diagnose / Notizen (optional)
-                </label>
-                <textarea
-                  value={quoteDiagnosis}
-                  onChange={(e) => setQuoteDiagnosis(e.target.value)}
-                  placeholder="Beschreiben Sie das Problem und die geplante Reparatur..."
-                  rows={3}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-purple-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-                />
-              </div>
-            </div>
-            <div className="flex gap-2 mt-6">
-              <button
-                onClick={() => { setQuoteModal(null); setQuotePrice(''); setQuoteDiagnosis('') }}
-                className="flex-1 px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600"
-              >
-                Abbrechen
-              </button>
-              <button
-                onClick={() => {
-                  const price = parseFloat(quotePrice)
-                  if (!price || price <= 0) {
-                    setError('Bitte geben Sie einen gültigen Preis ein')
-                    return
-                  }
-                  handleAction(quoteModal.appointmentId, 'quote', {
-                    quoted_price_chf: price,
-                    diagnosis_notes: quoteDiagnosis || undefined
-                  })
-                }}
-                disabled={actionLoading !== null}
-                className="flex-1 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 disabled:opacity-50"
-              >
-                {actionLoading ? <Loader2 className="h-4 w-4 animate-spin mx-auto" /> : 'Angebot senden'}
-              </button>
-            </div>
+      <Modal
+        isOpen={!!quoteModal?.open}
+        onClose={() => { setQuoteModal(null); setQuotePrice(''); setQuoteDiagnosis('') }}
+        title="Angebot erstellen"
+        size="sm"
+      >
+        <div className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              Preis (CHF)
+            </label>
+            <input
+              type="number"
+              value={quotePrice}
+              onChange={(e) => setQuotePrice(e.target.value)}
+              placeholder="z.B. 150"
+              min="1"
+              step="0.01"
+              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-purple-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              Diagnose / Notizen (optional)
+            </label>
+            <textarea
+              value={quoteDiagnosis}
+              onChange={(e) => setQuoteDiagnosis(e.target.value)}
+              placeholder="Beschreiben Sie das Problem und die geplante Reparatur..."
+              rows={3}
+              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-purple-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+            />
           </div>
         </div>
-      )}
+        <div className="flex gap-2 mt-6">
+          <Button
+            onClick={() => { setQuoteModal(null); setQuotePrice(''); setQuoteDiagnosis('') }}
+            variant="secondary"
+            className="flex-1"
+          >
+            Abbrechen
+          </Button>
+          <button
+            onClick={() => {
+              if (!quoteModal) return
+              const price = parseFloat(quotePrice)
+              if (!price || price <= 0) {
+                setError('Bitte geben Sie einen gültigen Preis ein')
+                return
+              }
+              handleAction(quoteModal.appointmentId, 'quote', {
+                quoted_price_chf: price,
+                diagnosis_notes: quoteDiagnosis || undefined
+              })
+            }}
+            disabled={actionLoading !== null}
+            className="flex-1 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 disabled:opacity-50"
+          >
+            {actionLoading ? <Loader2 className="h-4 w-4 animate-spin mx-auto" /> : 'Angebot senden'}
+          </button>
+        </div>
+      </Modal>
 
       {/* Help Section */}
       <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-xl p-6">

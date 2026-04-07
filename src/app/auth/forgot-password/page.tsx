@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { Mail, ArrowLeft, CheckCircle2, AlertCircle, Loader2 } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 
 export default function ForgotPasswordPage() {
   const router = useRouter()
@@ -144,11 +145,7 @@ export default function ForgotPasswordPage() {
               </div>
             </div>
 
-            <button
-              type="submit"
-              disabled={isLoading}
-              className="w-full flex justify-center items-center gap-2 bg-green-600 hover:bg-green-700 disabled:bg-green-400 text-white font-semibold py-2.5 px-4 rounded-lg transition-colors"
-            >
+            <Button type="submit" disabled={isLoading} className="w-full gap-2 py-2.5">
               {isLoading ? (
                 <>
                   <Loader2 className="w-5 h-5 animate-spin" />
@@ -157,7 +154,7 @@ export default function ForgotPasswordPage() {
               ) : (
                 'Passwort-Reset senden'
               )}
-            </button>
+            </Button>
           </form>
 
           <div className="mt-6 text-center">

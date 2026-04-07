@@ -11,6 +11,7 @@
 
 import Link from 'next/link'
 import { ArrowLeft, Save, Loader2 } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 import { IconPicker } from './IconPicker'
 import { SERVICE_CATEGORIES } from '@/config/database'
 import { CATEGORY_LABELS } from '@/config/service-categories'
@@ -125,14 +126,10 @@ export function ServiceForm({ initialData, isEdit = false }: ServiceFormProps) {
             {initialData?.slug && <p className="text-sm text-gray-500 dark:text-gray-400">/{initialData.slug}</p>}
           </div>
         </div>
-        <button
-          type="submit"
-          disabled={saving}
-          className="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 disabled:opacity-50 text-white font-semibold px-6 py-2.5 rounded-lg transition-colors"
-        >
+        <Button type="submit" disabled={saving} className="gap-2 px-6">
           {saving ? <Loader2 className="w-5 h-5 animate-spin" /> : <Save className="w-5 h-5" />}
           Speichern
-        </button>
+        </Button>
       </div>
 
       {/* Alerts */}
