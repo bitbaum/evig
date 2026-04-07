@@ -1,6 +1,7 @@
 'use client'
 
 import { FileText, Plus, Minus } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 
 interface Props {
   objectives: string[]
@@ -17,14 +18,15 @@ export function WorkshopLearningObjectives({ objectives, onObjectiveChange, onAd
           <FileText className="w-5 h-5" />
           Lernziele
         </h2>
-        <button
+        <Button
           type="button"
           onClick={onAdd}
-          className="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-3 py-1.5 rounded-lg text-sm font-medium"
+          size="sm"
+          className="gap-2"
         >
           <Plus className="w-4 h-4" />
           Hinzufügen
-        </button>
+        </Button>
       </div>
 
       <div className="space-y-4">

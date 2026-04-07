@@ -1,6 +1,7 @@
 'use client'
 
 import { Plus, Minus } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 import type { ProductVariant } from './types'
 
 interface Props {
@@ -15,14 +16,15 @@ export function ProductVariantsSection({ variants, onVariantChange, onAdd, onRem
     <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Produktvarianten</h2>
-        <button
+        <Button
           type="button"
           onClick={onAdd}
-          className="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-3 py-1.5 rounded-lg text-sm font-medium"
+          size="sm"
+          className="gap-2"
         >
           <Plus className="w-4 h-4" />
           Variante hinzufügen
-        </button>
+        </Button>
       </div>
 
       <div className="space-y-4">

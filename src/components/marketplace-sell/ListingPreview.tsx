@@ -1,5 +1,6 @@
 import Image from 'next/image'
 import { ArrowLeft, Eye, Loader2, CheckCircle, AlertCircle } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 import { formatCHF, DELIVERY_LABELS, PAYMENT_MODE_LABELS } from '@/config/marketplace'
 import type { DeliveryOption, PaymentMode } from '@/config/marketplace'
 import { ZUSTAND_OPTIONS } from '@/config/erfassung/conditions'
@@ -79,10 +80,10 @@ export function ListingPreview({ formData, editId, isSubmitting, success, error,
           >
             Bearbeiten
           </button>
-          <button
+          <Button
             onClick={onSubmit}
             disabled={isSubmitting}
-            className="flex-1 flex items-center justify-center gap-2 px-6 py-2.5 rounded-lg bg-green-600 hover:bg-green-700 text-white font-semibold disabled:opacity-50 transition-colors"
+            className="flex-1 gap-2 px-6 py-2.5 font-semibold"
           >
             {isSubmitting ? (
               <>
@@ -92,7 +93,7 @@ export function ListingPreview({ formData, editId, isSubmitting, success, error,
             ) : (
               editId ? 'Änderungen speichern' : 'Inserat veröffentlichen'
             )}
-          </button>
+          </Button>
         </div>
       </div>
 

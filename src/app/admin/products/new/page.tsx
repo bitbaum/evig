@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { ArrowLeft, Save, Loader2 } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 import {
   useProductForm,
   useSmartEntry,
@@ -73,10 +74,10 @@ export default function NewProductPage() {
           >
             Abbrechen
           </Link>
-          <button
+          <Button
             type="submit"
             disabled={isLoading}
-            className="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 disabled:bg-green-400 text-white font-semibold px-6 py-3 rounded-lg transition-colors"
+            className="gap-2 px-6 py-3 font-semibold"
           >
             {isLoading ? (
               <>
@@ -89,7 +90,7 @@ export default function NewProductPage() {
                 Produkt erstellen
               </>
             )}
-          </button>
+          </Button>
         </div>
       </form>
     </div>

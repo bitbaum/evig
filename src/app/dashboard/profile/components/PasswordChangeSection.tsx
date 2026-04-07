@@ -1,5 +1,6 @@
 'use client'
 
+import { Button } from '@/components/ui/button'
 import {
   Shield,
   Loader2,
@@ -121,10 +122,11 @@ export function PasswordChangeSection({
         </div>
 
         <div className="flex justify-end">
-          <button
+          <Button
             type="submit"
             disabled={isChangingPassword}
-            className="inline-flex items-center gap-2 bg-red-600 hover:bg-red-700 disabled:bg-red-400 text-white font-medium px-4 py-2 rounded-lg transition-colors"
+            variant="destructive"
+            className="gap-2"
           >
             {isChangingPassword ? (
               <>
@@ -137,7 +139,7 @@ export function PasswordChangeSection({
                 Passwort ändern
               </>
             )}
-          </button>
+          </Button>
         </div>
       </form>
     </div>

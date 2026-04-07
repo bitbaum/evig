@@ -9,6 +9,7 @@
 
 import { useState, useMemo } from 'react'
 import { Loader2, CheckCircle2, FileText, Trash2, Users, Pencil, X, Check } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog'
 import {
   useProtocolDetail,
@@ -166,10 +167,11 @@ export default function ProtocolDetailClient(props: ProtocolDetailProps) {
                   <X className="w-3.5 h-3.5" />
                   Abbrechen
                 </button>
-                <button
+                <Button
                   onClick={handleSaveAttendees}
                   disabled={savingAttendees}
-                  className="flex items-center gap-1 text-sm text-white bg-blue-600 hover:bg-blue-700 px-3 py-1 rounded disabled:opacity-50"
+                  size="sm"
+                  className="gap-1 bg-blue-600 hover:bg-blue-700"
                 >
                   {savingAttendees ? (
                     <Loader2 className="w-3.5 h-3.5 animate-spin" />
@@ -177,7 +179,7 @@ export default function ProtocolDetailClient(props: ProtocolDetailProps) {
                     <Check className="w-3.5 h-3.5" />
                   )}
                   Speichern
-                </button>
+                </Button>
               </div>
             )}
           </div>
@@ -326,13 +328,13 @@ export default function ProtocolDetailClient(props: ProtocolDetailProps) {
               </div>
               <div>
                 {isReview && (
-                  <button
+                  <Button
                     onClick={() => setShowFinalizeDialog(true)}
-                    className="flex items-center gap-2 px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+                    className="gap-2 px-6"
                   >
                     <CheckCircle2 className="w-4 h-4" />
                     Protokoll abschliessen
-                  </button>
+                  </Button>
                 )}
               </div>
             </div>

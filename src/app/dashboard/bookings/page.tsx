@@ -9,6 +9,7 @@ import {
   Calendar, MapPin, Star, Euro, MessageSquare,
   ChevronRight, Loader2, RefreshCw, Home, Phone
 } from 'lucide-react'
+import { Modal } from '@/components/ui/Modal'
 import { BOOKING_STATUS_BADGES } from '@/config/booking-status'
 import { formatDateShort } from '@/lib/date-formats'
 import { apiFetch } from '@/lib/api/client'
@@ -303,59 +304,54 @@ export default function CustomerBookings() {
         </div>
 
         {/* Rating Modal */}
-        {ratingModal?.open && (
-          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-            <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
-              <h3 className="text-lg font-semibold mb-4">Bewertung abgeben</h3>
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Bewertung</label>
-                  <div className="flex gap-2">
-                    {[1, 2, 3, 4, 5].map(star => (
-                      <button
-                        key={star}
-                        onClick={() => setRating(star)}
-                        className="p-1"
-                      >
-                        <Star
-                          className={'h-8 w-8 ' + (star <= rating ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300')}
-                        />
-                      </button>
-                    ))}
-                  </div>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Kommentar (optional)</label>
-                  <textarea
-                    value={review}
-                    onChange={(e) => setReview(e.target.value)}
-                    placeholder="Wie war Ihre Erfahrung?"
-                    rows={3}
-                    className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
-                  />
-                </div>
-              </div>
-              <div className="flex gap-2 mt-6">
-                <button
-                  onClick={() => setRatingModal(null)}
-                  className="flex-1 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200"
-                >
-                  Abbrechen
-                </button>
-                <button
-                  onClick={() => handleAction(ratingModal.appointmentId, 'rate', {
-                    customer_rating: rating,
-                    customer_review: review || undefined
-                  })}
-                  disabled={actionLoading !== null}
-                  className="flex-1 px-4 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 disabled:opacity-50"
-                >
-                  {actionLoading ? <Loader2 className="h-4 w-4 animate-spin mx-auto" /> : 'Bewertung senden'}
-                </button>
+        <Modal isOpen={!!ratingModal?.open} onClose={() => setRatingModal(null)} title="Bewertung abgeben" size="sm">
+          <div className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Bewertung</label>
+              <div className="flex gap-2">
+                {[1, 2, 3, 4, 5].map(star => (
+                  <button
+                    key={star}
+                    onClick={() => setRating(star)}
+                    className="p-1"
+                  >
+                    <Star
+                      className={'h-8 w-8 ' + (star <= rating ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300')}
+                    />
+                  </button>
+                ))}
               </div>
             </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Kommentar (optional)</label>
+              <textarea
+                value={review}
+                onChange={(e) => setReview(e.target.value)}
+                placeholder="Wie war Ihre Erfahrung?"
+                rows={3}
+                className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
           </div>
-        )}
+          <div className="flex gap-2 mt-6">
+            <button
+              onClick={() => setRatingModal(null)}
+              className="flex-1 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200"
+            >
+              Abbrechen
+            </button>
+            <button
+              onClick={() => ratingModal && handleAction(ratingModal.appointmentId, 'rate', {
+                customer_rating: rating,
+                customer_review: review || undefined
+              })}
+              disabled={actionLoading !== null}
+              className="flex-1 px-4 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 disabled:opacity-50"
+            >
+              {actionLoading ? <Loader2 className="h-4 w-4 animate-spin mx-auto" /> : 'Bewertung senden'}
+            </button>
+          </div>
+        </Modal>
       </div>
     </div>
   )

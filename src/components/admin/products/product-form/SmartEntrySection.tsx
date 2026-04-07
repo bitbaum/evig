@@ -1,6 +1,7 @@
 'use client'
 
 import { Sparkles, Loader2, Mic, Camera } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 
 interface Props {
   query: string
@@ -43,11 +44,11 @@ export function SmartEntrySection({ query, isLoading, error, success, onQueryCha
             disabled={isLoading}
           />
         </div>
-        <button
+        <Button
           type="button"
           onClick={onSubmit}
           disabled={isLoading || !query.trim()}
-          className="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 disabled:bg-green-400 disabled:cursor-not-allowed text-white font-medium px-6 py-3 rounded-lg transition-colors"
+          className="gap-2 px-6 py-3"
         >
           {isLoading ? (
             <>
@@ -60,7 +61,7 @@ export function SmartEntrySection({ query, isLoading, error, success, onQueryCha
               Erkennen
             </>
           )}
-        </button>
+        </Button>
       </div>
 
       <div className="flex gap-2 mt-3">

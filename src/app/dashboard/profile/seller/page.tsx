@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { apiFetch } from '@/lib/api/client'
+import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import {
   ArrowLeft,
@@ -272,10 +273,10 @@ export default function SellerProfileEditPage() {
               <p className="text-sm text-green-800 dark:text-green-200">{success}</p>
             </div>
           )}
-          <button
+          <Button
             onClick={handleSave}
             disabled={isSaving}
-            className="w-full flex items-center justify-center gap-2 px-6 py-2.5 rounded-lg bg-green-600 hover:bg-green-700 text-white font-semibold disabled:opacity-50 transition-colors"
+            className="w-full gap-2 font-semibold"
           >
             {isSaving ? (
               <Loader2 className="w-4 h-4 animate-spin" />
@@ -283,7 +284,7 @@ export default function SellerProfileEditPage() {
               <Save className="w-4 h-4" />
             )}
             {isSaving ? 'Wird gespeichert...' : 'Profil speichern'}
-          </button>
+          </Button>
         </div>
       </div>
     </div>

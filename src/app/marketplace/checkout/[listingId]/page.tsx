@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import { Button } from '@/components/ui/button'
 import {
   ArrowLeft,
   Truck,
@@ -308,10 +309,10 @@ export default function CheckoutPage({ params }: { params: Promise<{ listingId: 
           )}
 
           {/* Proceed button */}
-          <button
+          <Button
             onClick={handleCreateOrder}
             disabled={creatingOrder || !shippingFormValid}
-            className="w-full flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed text-white py-3 px-6 rounded-lg font-semibold text-lg transition-colors"
+            className="w-full gap-2 py-3 px-6 font-semibold text-lg"
           >
             {creatingOrder ? (
               <>
@@ -324,7 +325,7 @@ export default function CheckoutPage({ params }: { params: Promise<{ listingId: 
                 Weiter zur Zahlung
               </>
             )}
-          </button>
+          </Button>
         </div>
 
         {/* Right: Order summary */}

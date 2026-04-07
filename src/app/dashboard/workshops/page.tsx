@@ -9,6 +9,7 @@ import Link from 'next/link'
 import { getTextColor, getStatusColors } from '@/lib/design-system'
 import { cn } from '@/lib/utils'
 import { formatDate } from '@/lib/date-formats'
+import { Modal } from '@/components/ui/Modal'
 
 interface WorkshopRegistration {
   id: string
@@ -289,57 +290,40 @@ export default function WorkshopsDashboard() {
         )}
       </div>
 
-      <Modal open={!!editingId} onClose={() => setEditingId(null)}>
-        <div className="p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Feedback bearbeiten</h3>
-          <div className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Bewertung (1-5)</label>
-              <input
-                type="number"
-                min={1}
-                max={5}
-                value={editRating}
-                onChange={(e) => setEditRating(Math.max(1, Math.min(5, Number(e.target.value))))}
-                className="w-24 px-3 py-2 border border-gray-300 rounded-lg"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Feedback</label>
-              <textarea
-                value={editFeedback}
-                onChange={(e) => setEditFeedback(e.target.value)}
-                rows={4}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg"
-                placeholder="Wie war Ihre Erfahrung?"
-              />
-            </div>
+      <Modal isOpen={!!editingId} onClose={() => setEditingId(null)} title="Feedback bearbeiten">
+        <div className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Bewertung (1-5)</label>
+            <input
+              type="number"
+              min={1}
+              max={5}
+              value={editRating}
+              onChange={(e) => setEditRating(Math.max(1, Math.min(5, Number(e.target.value))))}
+              className="w-24 px-3 py-2 border border-gray-300 rounded-lg"
+            />
           </div>
-          <div className="mt-6 flex justify-end gap-3">
-            <button onClick={() => setEditingId(null)} className="px-4 py-2 rounded-lg border border-gray-300">Abbrechen</button>
-            <button onClick={saveEdit} disabled={saving} className="px-4 py-2 rounded-lg bg-indigo-600 text-white disabled:opacity-50">
-              {saving ? 'Speichern…' : 'Speichern'}
-            </button>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Feedback</label>
+            <textarea
+              value={editFeedback}
+              onChange={(e) => setEditFeedback(e.target.value)}
+              rows={4}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg"
+              placeholder="Wie war Ihre Erfahrung?"
+            />
           </div>
+        </div>
+        <div className="mt-6 flex justify-end gap-3">
+          <button onClick={() => setEditingId(null)} className="px-4 py-2 rounded-lg border border-gray-300">Abbrechen</button>
+          <button onClick={saveEdit} disabled={saving} className="px-4 py-2 rounded-lg bg-indigo-600 text-white disabled:opacity-50">
+            {saving ? 'Speichern…' : 'Speichern'}
+          </button>
         </div>
       </Modal>
     </div>
   )
 }
-
-// Simple modal
-function Modal({ open, onClose, children }: { open: boolean, onClose: () => void, children: React.ReactNode }) {
-  if (!open) return null
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4" onClick={onClose}>
-      <div className="bg-white rounded-xl shadow-xl w-full max-w-lg" onClick={(e) => e.stopPropagation()}>
-        {children}
-      </div>
-    </div>
-  )
-}
-
-
 
 
 

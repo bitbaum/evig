@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation'
 import { Calendar, Clock, AlertCircle, CheckCircle, Loader2, Wrench } from 'lucide-react'
 import Link from 'next/link'
 import { apiFetch } from '@/lib/api/client'
+import { Modal } from '@/components/ui/Modal'
 
 interface AppointmentBookingFormProps {
   serviceSlug: string
@@ -100,22 +101,7 @@ export default function AppointmentBookingForm({ serviceSlug, serviceTitle, pric
   }
 
   return (
-    <div className="fixed inset-0 bg-neutral-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-      <div className="bg-white rounded-xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
-        <div className="p-4 sm:p-6">
-          <div className="flex items-center justify-between mb-4 sm:mb-6">
-            <h3 className="text-lg sm:text-xl font-bold text-neutral-900">
-              Termin für {serviceTitle} buchen
-            </h3>
-            <button
-              onClick={() => setIsOpen(false)}
-              className="text-neutral-500 hover:text-neutral-700 min-w-[touch] min-h-[touch] touch-target p-2 -mr-2"
-              aria-label="Schliessen"
-            >
-              ✕
-            </button>
-          </div>
-
+    <Modal isOpen={isOpen} onClose={() => setIsOpen(false)} title={`Termin für ${serviceTitle} buchen`}>
           {pricing && (
             <div className="bg-info-50 border border-info-200 rounded-lg p-3 sm:p-4 mb-4 sm:mb-6">
               <div className="flex items-center text-info-800">
@@ -268,9 +254,7 @@ export default function AppointmentBookingForm({ serviceSlug, serviceTitle, pric
               </div>
             </form>
           )}
-        </div>
-      </div>
-    </div>
+    </Modal>
   )
 }
 

@@ -1,8 +1,9 @@
 'use client'
 
 import { useState } from 'react'
-import { Shield, Crown, Check, X, Save } from 'lucide-react'
+import { Shield, Crown, Check, Save } from 'lucide-react'
 import { apiFetch } from '@/lib/api/client'
+import { Modal } from '@/components/ui/Modal'
 
 interface UserPermissionsEditorProps {
   userId: string
@@ -89,30 +90,13 @@ export function UserPermissionsEditor({
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-xl max-w-2xl w-full mx-4 max-h-[90vh] overflow-hidden">
-        {/* Header */}
-        <div className="p-6 border-b border-gray-200 dark:border-gray-700">
-          <div className="flex items-center justify-between">
-            <div>
-              <h2 className="text-xl font-bold text-gray-900 dark:text-white">
-                Berechtigungen bearbeiten
-              </h2>
-              <p className="text-sm text-gray-600 dark:text-gray-400">
-                {userName || userEmail}
-              </p>
-            </div>
-            <button
-              onClick={onClose}
-              className="p-2 text-gray-500 hover:text-gray-600 rounded-lg"
-            >
-              <X className="w-5 h-5" />
-            </button>
-          </div>
-        </div>
+    <Modal isOpen={true} onClose={onClose} title="Berechtigungen bearbeiten" size="lg">
+        <p className="text-sm text-gray-600 dark:text-gray-400 -mt-3 mb-4">
+          {userName || userEmail}
+        </p>
 
         {/* Content */}
-        <div className="p-6 overflow-y-auto max-h-[60vh]">
+        <div className="overflow-y-auto max-h-[60vh]">
           {/* Super Admin Toggle */}
           <div className="mb-6 p-4 bg-purple-50 dark:bg-purple-900/20 rounded-lg">
             <div className="flex items-center justify-between">
@@ -232,7 +216,7 @@ export function UserPermissionsEditor({
         </div>
 
         {/* Footer */}
-        <div className="p-6 border-t border-gray-200 dark:border-gray-700 flex justify-end gap-3">
+        <div className="pt-6 border-t border-gray-200 dark:border-gray-700 flex justify-end gap-3 mt-6">
           <button
             onClick={onClose}
             className="px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
@@ -257,7 +241,6 @@ export function UserPermissionsEditor({
             )}
           </button>
         </div>
-      </div>
-    </div>
+    </Modal>
   )
 }

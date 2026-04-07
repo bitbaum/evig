@@ -8,6 +8,7 @@ import Link from 'next/link'
 import { formatDateTime } from '@/lib/date-formats'
 import { APPOINTMENT_STATUS } from '@/config/appointment-status'
 import { BOOKING_STATUS } from '@/config/booking-status'
+import { Modal } from '@/components/ui/Modal'
 
 interface ServiceAppointment {
   id: string
@@ -335,55 +336,38 @@ export default function AppointmentsDashboard() {
           </div>
         )}
       </div>
-      <Modal open={!!editingId} onClose={() => setEditingId(null)}>
-        <div className="p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Termindetails bearbeiten</h3>
-          <div className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Beschreibung</label>
-              <textarea
-                value={editDescription}
-                onChange={(e) => setEditDescription(e.target.value)}
-                rows={4}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg"
-                placeholder="Problem oder Wunsch genauer beschreiben"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Bevorzugtes Datum/Zeit</label>
-              <input
-                type="datetime-local"
-                value={editPreferredDate}
-                onChange={(e) => setEditPreferredDate(e.target.value)}
-                className="px-3 py-2 border border-gray-300 rounded-lg"
-              />
-            </div>
+      <Modal isOpen={!!editingId} onClose={() => setEditingId(null)} title="Termindetails bearbeiten">
+        <div className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Beschreibung</label>
+            <textarea
+              value={editDescription}
+              onChange={(e) => setEditDescription(e.target.value)}
+              rows={4}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg"
+              placeholder="Problem oder Wunsch genauer beschreiben"
+            />
           </div>
-          <div className="mt-6 flex justify-end gap-3">
-            <button onClick={() => setEditingId(null)} className="px-4 py-2 rounded-lg border border-gray-300">Abbrechen</button>
-            <button onClick={saveEdit} disabled={saving} className="px-4 py-2 rounded-lg bg-indigo-600 text-white disabled:opacity-50">
-              {saving ? 'Speichern…' : 'Speichern'}
-            </button>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Bevorzugtes Datum/Zeit</label>
+            <input
+              type="datetime-local"
+              value={editPreferredDate}
+              onChange={(e) => setEditPreferredDate(e.target.value)}
+              className="px-3 py-2 border border-gray-300 rounded-lg"
+            />
           </div>
+        </div>
+        <div className="mt-6 flex justify-end gap-3">
+          <button onClick={() => setEditingId(null)} className="px-4 py-2 rounded-lg border border-gray-300">Abbrechen</button>
+          <button onClick={saveEdit} disabled={saving} className="px-4 py-2 rounded-lg bg-indigo-600 text-white disabled:opacity-50">
+            {saving ? 'Speichern…' : 'Speichern'}
+          </button>
         </div>
       </Modal>
     </div>
   )
 }
-
-// Simple modal
-function Modal({ open, onClose, children }: { open: boolean, onClose: () => void, children: React.ReactNode }) {
-  if (!open) return null
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-neutral-900/60 backdrop-blur-sm p-4" onClick={onClose}>
-      <div className="bg-white rounded-xl shadow-xl w-full max-w-lg max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
-        {children}
-      </div>
-    </div>
-  )
-}
-
-
 
 
 
