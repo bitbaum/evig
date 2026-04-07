@@ -37,6 +37,7 @@ import {
   AlertTriangle,
 } from 'lucide-react'
 import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
+import { formatDateShort } from '@/lib/date-formats'
 import ProtocolListClient from './ProtocolListClient'
 import { Pagination } from '@/components/ui/Pagination'
 import { getTeamMembers } from '@/lib/services/protocols'
@@ -292,7 +293,7 @@ export default async function ProtocolsAdminPage({
                     </td>
                     <td className="px-4 py-3">
                       <span className="text-sm text-gray-600">
-                        {new Date(protocol.meeting_date).toLocaleDateString('de-CH')}
+                        {formatDateShort(protocol.meeting_date)}
                       </span>
                     </td>
                     <td className="px-4 py-3">

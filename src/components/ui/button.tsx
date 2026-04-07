@@ -5,7 +5,7 @@ import { cn } from '@/lib/utils'
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   as?: ElementType
-  variant?: 'default' | 'outline' | 'outline-light' | 'secondary' | 'ghost' | 'destructive'
+  variant?: 'default' | 'primary' | 'outline' | 'outline-light' | 'secondary' | 'ghost' | 'destructive'
   size?: 'default' | 'sm' | 'lg'
 }
 
@@ -17,6 +17,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
           'inline-flex items-center justify-center rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 whitespace-nowrap',
           {
             'bg-green-600 text-white hover:bg-green-700': variant === 'default',
+            'bg-blue-600 text-white hover:bg-blue-700': variant === 'primary',
             'border border-gray-300 bg-white hover:bg-gray-50 text-gray-900': variant === 'outline',
             'border border-white/70 bg-transparent text-white hover:bg-white hover:text-gray-900': variant === 'outline-light',
             'bg-gray-100 text-gray-900 hover:bg-gray-200': variant === 'secondary',

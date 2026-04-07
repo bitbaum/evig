@@ -26,6 +26,7 @@ import { TeamTalentSection } from './TeamTalentSection'
 import { TeamAvailabilitySection } from './TeamAvailabilitySection'
 import { TeamEmergencySection } from './TeamEmergencySection'
 import { TeamHRNotesSection } from './TeamHRNotesSection'
+import { Button } from '@/components/ui/button'
 
 interface FormSection {
   id: string
@@ -81,14 +82,15 @@ export function TeamProfileForm({
           <ArrowLeft className="w-5 h-5" />
           Abbrechen
         </button>
-        <button
+        <Button
           type="submit"
           disabled={saving || (!isEdit && !form.user_id)}
-          className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white rounded-lg transition-colors"
+          variant="primary"
+          className="flex items-center gap-2"
         >
           {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
           {isEdit ? 'Speichern' : 'Erstellen'}
-        </button>
+        </Button>
       </div>
 
       {/* Error */}

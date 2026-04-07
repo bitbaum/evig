@@ -46,7 +46,7 @@ export function EditRequestModal({
         </div>
         <div className="flex justify-end gap-2">
           <Button onClick={onClose} variant="outline" size="sm">Abbrechen</Button>
-          <Button onClick={onSave} disabled={editLoading} size="sm" className="bg-blue-600 hover:bg-blue-700">
+          <Button onClick={onSave} disabled={editLoading} size="sm" variant="primary">
             {editLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Speichern'}
           </Button>
         </div>

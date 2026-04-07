@@ -12,6 +12,7 @@ import { KATEGORIEN } from '@/config/erfassung/categories'
 import { INTAKE_STATUS } from '@/config/intake-status'
 import { LISTING_STATUS } from '@/config/marketplace'
 import { Pagination } from '@/components/ui/Pagination'
+import { formatDateShort } from '@/lib/date-formats'
 import type { PipelineItem } from './types'
 
 interface IntakePipelineViewProps {
@@ -211,7 +212,7 @@ export function IntakePipelineView({
                         )}
                       </td>
                       <td className="py-2.5 text-xs text-gray-500">
-                        {new Date(item.created_at).toLocaleDateString('de-CH')}
+                        {formatDateShort(item.created_at)}
                       </td>
                     </tr>
                   )

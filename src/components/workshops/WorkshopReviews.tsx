@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { Star, MessageSquare, User } from 'lucide-react'
 import { logger } from '@/lib/logger'
 import { apiFetch } from '@/lib/api/client'
+import { formatDateMonth } from '@/lib/date-formats'
 
 interface Review {
   id: string
@@ -129,10 +130,7 @@ export default function WorkshopReviews({ workshopSlug }: WorkshopReviewsProps) 
                 </div>
                 <p className="text-gray-700 text-sm">{review.feedback}</p>
                 <p className="text-gray-500 text-xs mt-2">
-                  {new Date(review.instance_date).toLocaleDateString('de-CH', {
-                    year: 'numeric',
-                    month: 'long'
-                  })}
+                  {formatDateMonth(review.instance_date)}
                 </p>
               </div>
             </div>

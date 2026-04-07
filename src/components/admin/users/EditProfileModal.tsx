@@ -6,6 +6,7 @@
 
 import { Loader2 } from 'lucide-react'
 import { Modal } from '@/components/ui/Modal'
+import { Button } from '@/components/ui/button'
 import type { UserRow } from './types'
 
 interface EditProfileModalProps {
@@ -76,14 +77,16 @@ export function EditProfileModal({
         >
           Abbrechen
         </button>
-        <button
+        <Button
           onClick={onSave}
           disabled={isSaving}
-          className="px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-lg disabled:opacity-50 flex items-center gap-2"
+          variant="primary"
+          size="sm"
+          className="flex items-center gap-2"
         >
           {isSaving && <Loader2 className="w-4 h-4 animate-spin" />}
           Speichern
-        </button>
+        </Button>
       </div>
     </Modal>
   )

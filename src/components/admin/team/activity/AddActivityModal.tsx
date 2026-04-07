@@ -9,6 +9,7 @@
 import { useState } from 'react'
 import { Loader2 } from 'lucide-react'
 import { Modal } from '@/components/ui/Modal'
+import { Button } from '@/components/ui/button'
 import {
   ACTIVITY_UPDATE_TYPE_OPTIONS,
   VISIBILITY_OPTIONS,
@@ -169,14 +170,16 @@ export function AddActivityModal({ onClose, onSuccess }: AddActivityModalProps) 
           >
             Abbrechen
           </button>
-          <button
+          <Button
             type="submit"
             disabled={saving || !title.trim()}
-            className="px-4 py-2 text-sm text-white bg-blue-600 hover:bg-blue-700 rounded-lg disabled:opacity-50 flex items-center gap-2"
+            variant="primary"
+            size="sm"
+            className="flex items-center gap-2"
           >
             {saving && <Loader2 className="w-4 h-4 animate-spin" />}
             Hinzufügen
-          </button>
+          </Button>
         </div>
       </form>
     </Modal>

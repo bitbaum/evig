@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { query } from '@/lib/auth/db'
 import { logger } from '@/lib/logger'
-import { formatDateWithWeekday } from '@/lib/date-formats'
+import { formatDateWithWeekday, formatTime } from '@/lib/date-formats'
 import { TABLE_NAMES } from '@/config/database'
 import { getLevelBadgeClass, WORKSHOP_CATEGORIES } from '@/config/workshops'
 import {
@@ -323,10 +323,7 @@ export default async function WorkshopDetailPage({ params }: { params: Promise<{
                             <div className="flex items-center">
                               <Clock className="w-5 h-5 text-gray-400 mr-2" />
                               <span className="text-gray-600">
-                                {new Date(instance.start_date).toLocaleTimeString('de-CH', {
-                                  hour: '2-digit',
-                                  minute: '2-digit'
-                                })}
+                                {formatTime(instance.start_date)}
                               </span>
                             </div>
                           </div>

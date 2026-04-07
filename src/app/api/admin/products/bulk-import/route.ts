@@ -6,9 +6,10 @@ import { apiSuccess, apiError, apiBadRequest } from "@/lib/api/helpers";
 import { logger } from "@/lib/logger";
 import { withAdmin } from "@/lib/api/middleware";
 import { MARKETPLACE_STATUS } from '@/config/marketplace-status';
+import { createErfassungProduct } from '@/lib/erfassung/create-product';
 
 // POST /api/admin/products/bulk-import - Bulk import products from CSV
-export const POST = withAdmin('products', async (request: NextRequest) => {
+export const POST = withAdmin('products', async (request: NextRequest, session) => {
   try {
     const formData = await request.formData();
     const file = formData.get('file') as File;
@@ -67,34 +68,24 @@ export const POST = withAdmin('products', async (request: NextRequest) => {
 
     for (const product of products) {
       try {
-        // Transaction ensures product + inventory are created atomically
-        const productId = await db.transaction(async (tx) => {
-          const [productRow] = await tx
-            .insert(aiExtractedProducts)
-            .values({
-              itemUuid: sql`gen_random_uuid()::text`,
-              productName: product.title,
-              brand: product.brand,
-              shortDescription: product.description,
-              estimatedPriceChf: String(product.price),
-              category: product.category,
-              condition: 'unknown',
-              status: MARKETPLACE_STATUS.DRAFT,
-            })
-            .returning({ id: aiExtractedProducts.id });
-
-          await tx
-            .insert(inventoryItems)
-            .values({
-              aiProductId: productRow.id,
-              quantityAvailable: 1,
-              marketplaceStatus: MARKETPLACE_STATUS.DRAFT,
-            });
-
-          return productRow.id;
+        const result = await db.transaction(async (tx) => {
+          return createErfassungProduct(
+            {
+              produktname: product.title,
+              hersteller: product.brand || '',
+              kurzbeschreibung: product.description || '',
+              verkaufspreis: product.price || 0,
+              zustand: 'unknown',
+              hauptkategorie: product.category || undefined,
+              action: 'draft',
+            },
+            session.user?.id || 'system',
+            tx,
+            { source: 'csv_import' },
+          )
         });
 
-        createdProducts.push({ id: productId, title: product.title });
+        createdProducts.push({ id: result.productId, title: product.title });
 
       } catch (error) {
         logger.error(`Error creating product "${product.title}"`, { error, product });

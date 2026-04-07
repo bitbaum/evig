@@ -2,6 +2,7 @@
 
 import { Shield, Send, X, Check } from 'lucide-react'
 import { useFormHandler } from '@/hooks/useFormHandler'
+import { Button } from '@/components/ui/button'
 
 interface Section {
   id: string
@@ -154,10 +155,11 @@ export function PermissionRequestForm({ availableSections, onClose }: Permission
       )}
 
       {/* Submit */}
-      <button
+      <Button
         type="submit"
         disabled={form.isSubmitting || form.data.sections.length === 0}
-        className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white font-medium rounded-lg transition-colors"
+        variant="primary"
+        className="w-full flex items-center justify-center gap-2 px-4 py-3"
       >
         {form.isSubmitting ? (
           <>
@@ -170,7 +172,7 @@ export function PermissionRequestForm({ availableSections, onClose }: Permission
             Anfrage senden
           </>
         )}
-      </button>
+      </Button>
     </form>
   )
 }

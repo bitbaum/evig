@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { ChevronDown, ChevronRight, Check } from 'lucide-react'
+import { formatDateShort } from '@/lib/date-formats'
 import type { ChecklistGroup as ChecklistGroupType } from './types'
 
 interface ChecklistGroupProps {
@@ -66,7 +67,7 @@ export function ChecklistGroup({ group, onToggle }: ChecklistGroupProps) {
                 <p className="text-xs text-gray-500 mt-0.5">{item.description}</p>
                 {item.state.completed && item.state.completedAt && (
                   <p className="text-xs text-green-600 mt-1">
-                    Erledigt am {new Date(item.state.completedAt).toLocaleDateString('de-CH')}
+                    Erledigt am {formatDateShort(item.state.completedAt)}
                   </p>
                 )}
               </div>

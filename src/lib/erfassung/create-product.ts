@@ -20,13 +20,37 @@ import {
   marketplaceListings,
   productImages,
 } from '@/db/schema/inventory'
+import { donations } from '@/db/schema/misc'
+import { getChecklistForDevice, type ChecklistState } from '@/config/intake-checklist'
 import type { ErfassungPayload } from '@/types/erfassung'
 import type { PoolClient } from 'pg'
 
 export interface CreateProductResult {
   productId: string
+  inventoryId: string
   itemUUID: string
   imageUrl: string | null
+  donationId: string | null
+}
+
+/**
+ * Options for product creation — extends base erfassung with intake-specific features.
+ * All fields optional for backward compatibility.
+ */
+export interface CreateProductOptions {
+  /** Source tracking for audit trail */
+  source?: 'erfassung' | 'intake' | 'admin' | 'csv_import'
+  /** Intake tier — activates checklist initialization */
+  intakeTier?: 'refurbish' | 'parts' | 'recycle'
+  /** Create a linked donation record */
+  donation?: {
+    donorName?: string | null
+    donorEmail?: string | null
+    notes?: string | null
+    deviceCategory?: string | null
+  }
+  /** Forces DRAFT marketplace status, skips marketplace_listings insert */
+  checklistGated?: boolean
 }
 
 /** Drizzle db or transaction object — both share insert/select/execute */
@@ -85,6 +109,7 @@ export async function createErfassungProduct(
   payload: ErfassungPayload,
   userId: string,
   tx: DbOrTx,
+  options?: CreateProductOptions,
 ): Promise<CreateProductResult> {
   // Generate Item UUID within the transaction to prevent race conditions
   const itemUUID = await generateItemUUID(tx)
@@ -129,13 +154,51 @@ export async function createErfassungProduct(
       category: payload.hauptkategorie || null,
       subcategory: payload.unterkategorie || null,
       status: productStatus,
+      sourceType: options?.source || 'erfassung',
       createdBy: userId,
     })
     .returning({ id: aiExtractedProducts.id })
 
   const productId = productRow.id
 
-  // 2. Insert into inventory_items
+  // 2. Create donation record if intake with donation
+  let donationId: string | null = null
+  if (options?.donation) {
+    const [donationRow] = await tx.insert(donations).values({
+      donationType: 'device',
+      deviceCategory: options.donation.deviceCategory || payload.hauptkategorie || 'other',
+      deviceBrand: payload.hersteller,
+      deviceModel: payload.produktname,
+      deviceDescription: payload.kurzbeschreibung || null,
+      deviceCondition: payload.zustand || null,
+      donorName: options.donation.donorName || null,
+      donorEmail: options.donation.donorEmail || null,
+      notes: options.donation.notes || null,
+      status: 'recorded',
+      recordedBy: userId,
+    }).returning({ id: donations.id })
+    donationId = donationRow.id
+  }
+
+  // 3. Initialize intake checklist if tier provided
+  let intakeChecklist: ChecklistState | undefined
+  if (options?.intakeTier) {
+    const checklistItems = getChecklistForDevice(options.intakeTier, payload.hauptkategorie)
+    intakeChecklist = {}
+    for (const item of checklistItems) {
+      intakeChecklist[item.id] = {
+        completed: false,
+        completedBy: null,
+        completedAt: null,
+        notes: '',
+      }
+    }
+  }
+
+  // 4. Determine final marketplace status (checklist gate overrides publish)
+  const finalMarketplaceStatus = options?.checklistGated ? MARKETPLACE_STATUS.DRAFT : marketplaceStatus
+
+  // 5. Insert into inventory_items
   const [inventoryRow] = await tx
     .insert(inventoryItems)
     .values({
@@ -145,13 +208,20 @@ export async function createErfassungProduct(
       quantityAvailable: payload.auf_lager || 1,
       status: 'available',
       sellingPriceChf: String(payload.verkaufspreis),
-      marketplaceStatus: marketplaceStatus,
+      marketplaceStatus: finalMarketplaceStatus,
+      // Intake-specific fields (null/undefined for non-intake)
+      ...(options?.intakeTier ? {
+        intakeTier: options.intakeTier,
+        intakeChecklist: intakeChecklist,
+        checklistComplete: false,
+        sourceDonationId: donationId,
+      } : {}),
     })
     .returning({ id: inventoryItems.id })
 
   const inventoryItemId = inventoryRow.id
 
-  // 3. Link customer profiles if provided (batch to avoid N+1)
+  // 6. Link customer profiles if provided (batch to avoid N+1)
   if (payload.kundenprofile && payload.kundenprofile.length > 0) {
     const profileRows = await tx
       .select({ id: customerProfiles.id })
@@ -172,8 +242,8 @@ export async function createErfassungProduct(
     }
   }
 
-  // 4. Create marketplace listing if publishing to shop
-  if (action === 'publish') {
+  // 7. Create marketplace listing if publishing to shop (skip if checklist-gated)
+  if (action === 'publish' && !options?.checklistGated) {
     await tx
       .insert(marketplaceListings)
       .values({
@@ -188,7 +258,7 @@ export async function createErfassungProduct(
       })
   }
 
-  // 5. Handle image upload if provided
+  // 8. Handle image upload if provided
   let imageUrl: string | null = null
   if (payload.image) {
     const filename = generateImageFilename(itemUUID)
@@ -222,5 +292,5 @@ export async function createErfassungProduct(
     }
   }
 
-  return { productId, itemUUID, imageUrl }
+  return { productId, inventoryId: inventoryItemId, itemUUID, imageUrl, donationId }
 }

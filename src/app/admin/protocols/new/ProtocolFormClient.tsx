@@ -19,6 +19,7 @@ import type { MeetingType, ProtocolVisibility } from '@/config/protocols'
 import { getErrorMessage } from '@/lib/utils/error'
 import { validateAudioUpload } from '@/lib/protocols/audio-validation'
 import { DEFAULT_WHISPER_MODEL, WHISPER_MODELS } from '@/config/transcription'
+import { formatDateShort } from '@/lib/date-formats'
 
 interface ProtocolFormClientProps {
   teamMembers: Array<{ id: string; name: string }>
@@ -72,7 +73,7 @@ export default function ProtocolFormClient({ teamMembers }: ProtocolFormClientPr
       const template = MEETING_TYPE_TEMPLATES[meetingType]
       setVisibility(template.default_visibility)
       if (!title) {
-        setTitle(`${MEETING_TYPE_LABELS[meetingType]} — ${new Date(meetingDate).toLocaleDateString('de-CH')}`)
+        setTitle(`${MEETING_TYPE_LABELS[meetingType]} — ${formatDateShort(meetingDate)}`)
       }
     }
   }, [meetingType])

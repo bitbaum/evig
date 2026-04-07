@@ -7,6 +7,7 @@ import { logger } from "@/lib/logger"
 import { apiError, apiSuccess } from "@/lib/api/helpers"
 import { MARKETPLACE_STATUS } from '@/config/marketplace-status'
 import { validateBody, AdminCreateProductSchema } from '@/lib/schemas'
+import { createErfassungProduct } from '@/lib/erfassung/create-product'
 
 // GET /api/admin/products - List all products for admin
 export const GET = withAdmin('products', async (request, session) => {
@@ -70,7 +71,7 @@ export const GET = withAdmin('products', async (request, session) => {
   }
 })
 
-// POST /api/admin/products - Create new product
+// POST /api/admin/products - Create new product (delegates to unified SSOT)
 export const POST = withAdmin('products', async (request, session) => {
   try {
     const body = await request.json()
@@ -78,33 +79,29 @@ export const POST = withAdmin('products', async (request, session) => {
     if (!validation.success) return validation.error
     const data = validation.data
 
-    const [product] = await db
-      .insert(aiExtractedProducts)
-      .values({
-        itemUuid: sql`gen_random_uuid()::text`,
-        productName: data.title || data.product_name,
-        brand: data.brand || '',
-        shortDescription: data.description || data.short_description || '',
-        estimatedPriceChf: String(data.price || data.estimated_price_chf || 0),
-        condition: data.condition || 'unknown',
-        category: data.category || null,
-        subcategory: data.subcategory || null,
-        status: MARKETPLACE_STATUS.DRAFT,
-      })
-      .returning({ id: aiExtractedProducts.id })
+    // Map English field names to unified German-canonical payload
+    const result = await db.transaction(async (tx) => {
+      return createErfassungProduct(
+        {
+          produktname: data.title || data.product_name || '',
+          hersteller: data.brand || '',
+          kurzbeschreibung: data.description || data.short_description || '',
+          verkaufspreis: data.price || data.estimated_price_chf || 0,
+          zustand: data.condition || 'unknown',
+          hauptkategorie: data.category || undefined,
+          unterkategorie: data.subcategory || undefined,
+          auf_lager: data.quantity || 1,
+          action: 'draft',
+        },
+        session.user.id,
+        tx,
+        { source: 'admin' },
+      )
+    })
 
-    // Create inventory item
-    await db
-      .insert(inventoryItems)
-      .values({
-        aiProductId: product.id,
-        quantityAvailable: data.quantity || 1,
-        marketplaceStatus: MARKETPLACE_STATUS.DRAFT,
-      })
+    logger.info("Product created", { productId: result.productId, user: session.user?.email })
 
-    logger.info("Product created", { productId: product.id, user: session.user?.email })
-
-    return apiSuccess({ id: product.id }, 201)
+    return apiSuccess({ id: result.productId }, 201)
   } catch (error) {
     logger.error("Failed to create product", { error })
     return apiError(error, "Fehler beim Erstellen des Produkts")

@@ -20,6 +20,7 @@ import {
   type VotingMethod,
 } from '@/config/decisions';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
+import { formatDateShort } from '@/lib/date-formats';
 import VotingPanel from './VotingPanel';
 import DiscussionThread from './DiscussionThread';
 import ParticipationCard from './ParticipationCard';
@@ -174,7 +175,7 @@ export default function DecisionDetailClient({
             </h1>
             <p className="mt-1 text-sm text-gray-500">
               Erstellt von {decision.creator.email} am{' '}
-              {new Date(decision.createdAt).toLocaleDateString('de-CH')}
+              {formatDateShort(decision.createdAt)}
             </p>
           </div>
 

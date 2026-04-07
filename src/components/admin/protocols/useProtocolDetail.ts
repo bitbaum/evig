@@ -4,6 +4,7 @@ import { getErrorMessage } from '@/lib/utils/error'
 import { validateAudioUpload } from '@/lib/protocols/audio-validation'
 import { PROTOCOL_WORKFLOW_STEPS, getProtocolWorkflowProgress, type ProtocolWorkflowStepId } from '@/lib/protocols/workflow'
 import { apiFetch } from '@/lib/api/client'
+import { formatDateShort } from '@/lib/date-formats'
 import type { StructuredNotes } from '@/lib/schemas/protocols'
 import type { ProtocolDetailProps } from './types'
 
@@ -211,7 +212,7 @@ export function useProtocolDetail({ protocol, actionLinks, initialProcessingErro
           link_type: 'task',
           task_data: {
             title: actionItem.description,
-            description: `Aus Protokoll: ${protocol.title} (${new Date(protocol.meeting_date).toLocaleDateString('de-CH')})${topicTitle ? `\nThema: ${topicTitle}` : ''}`,
+            description: `Aus Protokoll: ${protocol.title} (${formatDateShort(protocol.meeting_date)})${topicTitle ? `\nThema: ${topicTitle}` : ''}`,
             task_type: 'one_time',
             category: 'admin',
             priority: actionItem.priority_hint || 'normal',
@@ -244,7 +245,7 @@ export function useProtocolDetail({ protocol, actionLinks, initialProcessingErro
             link_type: 'task',
             task_data: {
               title: item.description,
-              description: `Aus Protokoll: ${protocol.title} (${new Date(protocol.meeting_date).toLocaleDateString('de-CH')})${topicTitle ? `\nThema: ${topicTitle}` : ''}`,
+              description: `Aus Protokoll: ${protocol.title} (${formatDateShort(protocol.meeting_date)})${topicTitle ? `\nThema: ${topicTitle}` : ''}`,
               task_type: 'one_time',
               category: 'admin',
               priority: item.priority_hint || 'normal',

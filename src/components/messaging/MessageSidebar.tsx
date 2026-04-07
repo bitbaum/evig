@@ -255,10 +255,7 @@ export function MessageSidebar({ isOpen, onClose, initialConversationId }: Messa
                           <div className={`flex items-center gap-1 mt-1 text-xs ${
                             isOwn ? 'text-green-100' : 'text-gray-500'
                           }`}>
-                            <span>{new Date(message.created_at).toLocaleTimeString('de-CH', {
-                              hour: '2-digit',
-                              minute: '2-digit'
-                            })}</span>
+                            <span>{formatTime(message.created_at)}</span>
                             {isOwn && (
                               message.is_read ? (
                                 <CheckCheck className="w-3 h-3" />

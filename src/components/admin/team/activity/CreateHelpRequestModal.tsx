@@ -9,6 +9,7 @@
 import { useState } from 'react'
 import { Loader2, Users, User } from 'lucide-react'
 import { Modal } from '@/components/ui/Modal'
+import { Button } from '@/components/ui/button'
 import {
   HELP_REQUEST_URGENCY_OPTIONS,
   ACTIVITY_CATEGORY_OPTIONS,
@@ -210,14 +211,16 @@ export function CreateHelpRequestModal({
           >
             Abbrechen
           </button>
-          <button
+          <Button
             type="submit"
             disabled={saving || !title.trim() || (!isBroadcast && !targetUserId)}
-            className="px-4 py-2 text-sm text-white bg-blue-600 hover:bg-blue-700 rounded-lg disabled:opacity-50 flex items-center gap-2"
+            variant="primary"
+            size="sm"
+            className="flex items-center gap-2"
           >
             {saving && <Loader2 className="w-4 h-4 animate-spin" />}
             Anfrage senden
-          </button>
+          </Button>
         </div>
       </form>
     </Modal>

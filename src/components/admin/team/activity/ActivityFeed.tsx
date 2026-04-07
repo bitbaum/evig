@@ -107,7 +107,7 @@ export function ActivityFeed({
             <Button
               onClick={() => setShowAddModal(true)}
               size="sm"
-              className="gap-2 bg-blue-600 hover:bg-blue-700"
+              variant="primary" className="gap-2"
             >
               <Plus className="w-4 h-4" />
               Aktivität
@@ -231,13 +231,15 @@ export function ActivityFeed({
               : 'Noch keine Aktivitäten vorhanden.'}
           </p>
           {showAddButton && !hasActiveFilters && (
-            <button
+            <Button
               onClick={() => setShowAddModal(true)}
-              className="px-4 py-2 text-sm text-white bg-blue-600 hover:bg-blue-700 rounded-lg inline-flex items-center gap-2"
+              variant="primary"
+              size="sm"
+              className="inline-flex items-center gap-2"
             >
               <Plus className="w-4 h-4" />
               Erste Aktivität hinzufügen
-            </button>
+            </Button>
           )}
         </div>
       )}

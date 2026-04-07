@@ -34,6 +34,7 @@ import {
   Users,
 } from 'lucide-react'
 import ProtocolDetailClient from './ProtocolDetailClient'
+import { formatDateWithWeekday } from '@/lib/date-formats'
 
 export const metadata: Metadata = {
   title: 'Protokoll Details | RevampIT Admin',
@@ -166,12 +167,7 @@ export default async function ProtocolDetailPage({
                 <dd className="flex items-center gap-2 mt-1">
                   <Calendar className="w-4 h-4 text-gray-400" />
                   <span className="text-gray-900">
-                    {new Date(protocol.meeting_date).toLocaleDateString('de-CH', {
-                      weekday: 'long',
-                      year: 'numeric',
-                      month: 'long',
-                      day: 'numeric',
-                    })}
+                    {formatDateWithWeekday(protocol.meeting_date)}
                   </span>
                 </dd>
               </div>

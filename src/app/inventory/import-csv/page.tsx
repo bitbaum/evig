@@ -180,7 +180,7 @@ ALI00001;W;100% getestet Echtem Touch Panel Touchpad Trackpad Mit Kabel Für App
                   onChange={handleFileSelect}
                   className="hidden"
                 />
-                <Button onClick={() => fileInputRef.current?.click()} className="gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-700">
+                <Button onClick={() => fileInputRef.current?.click()} variant="primary" className="gap-2 px-6 py-3">
                   <Upload className="w-5 h-5" />
                   Datei auswählen
                 </Button>
@@ -301,7 +301,7 @@ ALI00001;W;100% getestet Echtem Touch Panel Touchpad Trackpad Mit Kabel Für App
             )}
 
             <div className="flex gap-4">
-              <Button onClick={() => router.push('/inventory/dashboard')} className="gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-700">
+              <Button onClick={() => router.push('/inventory/dashboard')} variant="primary" className="gap-2 px-6 py-3">
                 Zum Dashboard
               </Button>
               <Button

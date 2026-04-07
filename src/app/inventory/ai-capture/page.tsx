@@ -111,7 +111,7 @@ export default function AICapturePage() {
               {/* Analysis Button */}
               {!analysis && !isAnalyzing && (
                 <div className="text-center">
-                  <Button onClick={analyzeImage} className="gap-2 px-8 py-3 bg-blue-600 hover:bg-blue-700">
+                  <Button onClick={analyzeImage} variant="primary" className="gap-2 px-8 py-3">
                     <Zap className="w-5 h-5" />
                     Mit KI analysieren
                   </Button>

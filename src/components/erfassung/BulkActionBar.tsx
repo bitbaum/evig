@@ -79,7 +79,7 @@ export function BulkActionBar({
             onClick={() => onSave('erfassen')}
             disabled={selectedCount === 0 || isSaving}
             size="sm"
-            className="gap-1.5 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-300"
+            variant="primary" className="gap-1.5 disabled:bg-blue-300"
           >
             <Package className="w-4 h-4" />
             <span className="hidden sm:inline">Erfassen</span>

@@ -39,7 +39,7 @@ export default function Error({
           <p className="mt-2 text-sm text-gray-600">
             Ein unerwarteter Fehler ist aufgetreten. Bitte versuche es erneut.
           </p>
-          <Button onClick={reset} className="mt-4 bg-blue-600 hover:bg-blue-700" size="sm">
+          <Button onClick={reset} variant="primary" className="mt-4" size="sm">
             Erneut versuchen
           </Button>
         </div>

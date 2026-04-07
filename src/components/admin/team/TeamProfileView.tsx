@@ -23,6 +23,7 @@ import {
   Activity,
 } from 'lucide-react'
 import Link from 'next/link'
+import { Button } from '@/components/ui/button'
 import {
   getEmploymentTypeLabel,
   getEmploymentTypeColor,
@@ -62,13 +63,14 @@ export function TeamProfileView({
           <ArrowLeft className="w-5 h-5" />
           Zurück zum Team
         </button>
-        <button
+        <Button
           onClick={onEdit}
-          className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
+          variant="primary"
+          className="flex items-center gap-2"
         >
           <Edit2 className="w-4 h-4" />
           Bearbeiten
-        </button>
+        </Button>
       </div>
 
       {/* Profile Header Card */}

@@ -11,6 +11,7 @@ import {
   type ConsentResponse,
   type SimpleMajorityResponse,
 } from '@/config/decisions';
+import { formatDateNumeric } from '@/lib/date-formats';
 
 interface Option {
   id: string;
@@ -59,11 +60,7 @@ function DeadlineCountdown({ deadline }: { deadline: string }) {
     colorClass = 'text-amber-600 font-medium';
   }
 
-  const dateStr = new Date(deadline).toLocaleDateString('de-CH', {
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric',
-  });
+  const dateStr = formatDateNumeric(deadline);
 
   return (
     <div className={`rounded-md bg-gray-50 px-3 py-2 text-sm ${colorClass}`}>

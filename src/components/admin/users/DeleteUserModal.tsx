@@ -6,6 +6,7 @@
 
 import { Loader2 } from 'lucide-react'
 import { Modal } from '@/components/ui/Modal'
+import { Button } from '@/components/ui/button'
 import type { UserRow } from './types'
 
 interface DeleteUserModalProps {
@@ -55,14 +56,16 @@ export function DeleteUserModal({
         >
           Abbrechen
         </button>
-        <button
+        <Button
           onClick={onConfirm}
           disabled={isDeleting}
-          className="px-4 py-2 text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-lg disabled:opacity-50 flex items-center gap-2"
+          variant="destructive"
+          size="sm"
+          className="flex items-center gap-2"
         >
           {isDeleting && <Loader2 className="w-4 h-4 animate-spin" />}
           Endgültig löschen
-        </button>
+        </Button>
       </div>
     </Modal>
   )

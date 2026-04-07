@@ -120,7 +120,7 @@ export function HelpRequestsPageClient({
           )}
         </div>
 
-        <Button onClick={() => setShowCreateModal(true)} size="sm" className="gap-2 bg-blue-600 hover:bg-blue-700">
+        <Button onClick={() => setShowCreateModal(true)} size="sm" variant="primary" className="gap-2">
           <Plus className="w-4 h-4" />
           Hilfe anfordern
         </Button>

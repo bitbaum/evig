@@ -158,7 +158,7 @@ export default function ProfilePage() {
 
           {/* Submit Button */}
           <div className="flex justify-end gap-3">
-            <Button type="submit" disabled={isSaving} className="gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-700">
+            <Button type="submit" disabled={isSaving} variant="primary" className="gap-2 px-6 py-3">
               {isSaving ? (
                 <>
                   <Loader2 className="w-5 h-5 animate-spin" />

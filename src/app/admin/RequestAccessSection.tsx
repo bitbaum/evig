@@ -61,7 +61,7 @@ export function RequestAccessSection({ inaccessibleSections }: RequestAccessSect
                 </span>
               )}
             </div>
-            <Button onClick={() => setShowForm(true)} className="gap-2 bg-blue-600 hover:bg-blue-700">
+            <Button onClick={() => setShowForm(true)} variant="primary" className="gap-2">
               <Plus className="w-4 h-4" />
               Zugriff anfordern
             </Button>

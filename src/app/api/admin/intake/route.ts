@@ -17,10 +17,9 @@ import { validateBody, validateQuery } from '@/lib/schemas'
 import { IntakeCreateSchema, IntakeQuerySchema } from '@/lib/schemas/intake'
 import { INTAKE_STATUS } from '@/config/intake-status'
 import { MARKETPLACE_STATUS, PRODUCT_STATUS } from '@/config/marketplace-status'
-import { getChecklistForDevice, isChecklistComplete, getChecklistProgress } from '@/config/intake-checklist'
+import { isChecklistComplete, getChecklistProgress } from '@/config/intake-checklist'
 import type { ChecklistState } from '@/config/intake-checklist'
-import { generateItemUUID } from '@/lib/erfassung/create-product'
-import { uploadImage, generateImageFilename } from '@/lib/storage/image-upload'
+import { createErfassungProduct } from '@/lib/erfassung/create-product'
 import { logger } from '@/lib/logger'
 import { appendIntakeEvent } from '@/lib/intake/timeline'
 
@@ -32,90 +31,34 @@ export const POST = withAdmin('intake', async (request, session) => {
     if (!validation.success) return validation.error
     const data = validation.data
 
+    // Use unified product creation (SSOT) with intake-specific options
     const result = await db.transaction(async (tx) => {
-      // 1. Generate Item UUID
-      const itemUUID = await generateItemUUID(tx)
-
-      // 2. Create ai_extracted_products entry
-      const [productRow] = await tx.insert(aiExtractedProducts).values({
-        itemUuid: itemUUID,
-        productName: data.produktname,
-        brand: data.hersteller,
-        shortDescription: data.kurzbeschreibung || null,
-        estimatedPriceChf: data.verkaufspreis ? String(data.verkaufspreis) : null,
-        condition: data.zustand,
-        category: data.hauptkategorie || null,
-        subcategory: data.unterkategorie || null,
-        status: PRODUCT_STATUS.APPROVED,
-        sourceType: 'intake',
-        createdBy: session.user.id,
-      }).returning({ id: aiExtractedProducts.id })
-      const productId = productRow.id
-
-      // 3. Create donation record if this is a donation
-      let donationId: string | null = null
-      if (data.is_donation) {
-        const [donationRow] = await tx.insert(donations).values({
-          donationType: 'device',
-          deviceCategory: data.hauptkategorie || 'other',
-          deviceBrand: data.hersteller,
-          deviceModel: data.produktname,
-          deviceDescription: data.kurzbeschreibung || null,
-          deviceCondition: data.zustand,
-          donorName: data.donor_name || null,
-          donorEmail: data.donor_email || null,
-          notes: data.donor_notes || null,
-          status: 'recorded',
-          recordedBy: session.user.id,
-        }).returning({ id: donations.id })
-        donationId = donationRow.id
-      }
-
-      // 4. Initialize checklist state (all items for this tier+category, all unchecked)
-      const checklistItems = getChecklistForDevice(data.intake_tier, data.hauptkategorie)
-      const checklistState: ChecklistState = {}
-      for (const item of checklistItems) {
-        checklistState[item.id] = {
-          completed: false,
-          completedBy: null,
-          completedAt: null,
-          notes: '',
-        }
-      }
-
-      // 5. Create inventory_items entry with intake metadata
-      const [inventoryRow] = await tx.insert(inventoryItems).values({
-        aiProductId: productId,
-        quantityAvailable: 1,
-        status: 'available',
-        sellingPriceChf: data.verkaufspreis ? String(data.verkaufspreis) : null,
-        marketplaceStatus: MARKETPLACE_STATUS.DRAFT,
-        intakeTier: data.intake_tier,
-        intakeChecklist: checklistState,
-        checklistComplete: false,
-        sourceDonationId: donationId,
-      }).returning({ id: inventoryItems.id })
-      const inventoryId = inventoryRow.id
-
-      // 6. Handle image upload if provided
-      let imageUrl: string | null = null
-      if (data.image) {
-        const filename = generateImageFilename(itemUUID)
-        const uploadResult = await uploadImage(data.image, filename, 'products')
-        if (uploadResult.success && uploadResult.url) {
-          imageUrl = uploadResult.url
-          await tx.insert(productImages).values({
-            productId,
-            filename,
-            filePath: uploadResult.url,
-            isPrimary: true,
-            uploadedBy: session.user.id,
-            uploadStatus: 'ready',
-          })
-        }
-      }
-
-      return { itemUUID, productId, inventoryId, donationId, imageUrl }
+      return createErfassungProduct(
+        {
+          produktname: data.produktname,
+          hersteller: data.hersteller,
+          kurzbeschreibung: data.kurzbeschreibung,
+          verkaufspreis: data.verkaufspreis || 0,
+          zustand: data.zustand,
+          hauptkategorie: data.hauptkategorie,
+          unterkategorie: data.unterkategorie,
+          image: data.image,
+          action: 'erfassen', // intake always approves, never direct-publishes
+        },
+        session.user.id,
+        tx,
+        {
+          source: 'intake',
+          intakeTier: data.intake_tier,
+          donation: data.is_donation ? {
+            donorName: data.donor_name,
+            donorEmail: data.donor_email,
+            notes: data.donor_notes,
+            deviceCategory: data.hauptkategorie,
+          } : undefined,
+          checklistGated: true,
+        },
+      )
     })
 
     // Record timeline event
