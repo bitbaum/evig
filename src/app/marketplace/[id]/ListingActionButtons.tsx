@@ -63,22 +63,19 @@ export function ListingActionButtons({
 
   return (
     <div className="space-y-3">
-      {!isOwner && listing.payment_mode !== 'direct' && (
-        <button
-          className="w-full flex items-center justify-center gap-2 bg-green-600 text-white py-3 px-6 min-h-[44px] rounded-lg font-semibold hover:bg-green-700 transition-colors focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
-          onClick={() => {
-            if (!sessionUserId) {
-              router.push(`/auth/login?callbackUrl=${encodeURIComponent(window.location.pathname)}`)
-              return
-            }
-            router.push(`/marketplace/checkout/${listing.id}`)
-          }}
-        >
-          <Shield className="w-5 h-5" aria-hidden="true" />
-          Jetzt kaufen (sicher)
-        </button>
+      {/* P2P payment info */}
+      {!isOwner && (
+        <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-4 space-y-2">
+          <div className="flex items-center gap-2 text-green-800 dark:text-green-300 font-medium text-sm">
+            <Shield className="w-4 h-4" aria-hidden="true" />
+            Direkte Zahlung zwischen Käufer und Verkäufer
+          </div>
+          <p className="text-xs text-green-700 dark:text-green-400">
+            TWINT · Banküberweisung · Bar bei Abholung
+          </p>
+        </div>
       )}
-      {!isOwner && listing.payment_mode !== 'secure' && (
+      {!isOwner && (
         <>
           {messageSent ? (
             <div className="w-full bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-4 text-center space-y-2">

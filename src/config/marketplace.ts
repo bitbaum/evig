@@ -91,8 +91,8 @@ export const PAYMENT_MODES = ['secure', 'direct', 'both'] as const;
 export type PaymentMode = typeof PAYMENT_MODES[number];
 
 export const PAYMENT_MODE_LABELS: Record<PaymentMode, string> = {
-  secure: 'Sichere Zahlung (Payrexx)',
-  direct: 'Direkt (Kontakt)',
+  secure: 'Sichere Zahlung — demnächst verfügbar',
+  direct: 'Direkt (TWINT, Bar, Überweisung)',
   both:   'Beide Optionen',
 };
 
