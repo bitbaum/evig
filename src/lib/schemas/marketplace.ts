@@ -94,8 +94,8 @@ export const CreateListingSchema = z.object({
       (s) => s.startsWith('/uploads/') || s.startsWith('http://') || s.startsWith('https://'),
       'Ungültige Bild-URL',
     ))
-    .min(MARKETPLACE_LIMITS.MIN_IMAGES, `Mindestens ${MARKETPLACE_LIMITS.MIN_IMAGES} Bild erforderlich`)
-    .max(MARKETPLACE_LIMITS.MAX_IMAGES, `Maximal ${MARKETPLACE_LIMITS.MAX_IMAGES} Bilder erlaubt`),
+    .max(MARKETPLACE_LIMITS.MAX_IMAGES, `Maximal ${MARKETPLACE_LIMITS.MAX_IMAGES} Bilder erlaubt`)
+    .default([]),
   delivery_options: z.enum(DELIVERY_OPTIONS as unknown as [string, ...string[]]).default('pickup'),
   shipping_cost_chf: z.number().min(0).optional().nullable(),
   pickup_location: z.string().max(200).optional().nullable(),

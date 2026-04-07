@@ -122,7 +122,7 @@ export type ListingCondition = typeof LISTING_CONDITIONS[number];
 
 export const MARKETPLACE_LIMITS = {
   MAX_IMAGES: 8,
-  MIN_IMAGES: 1,
+  MIN_IMAGES: 0,
   MAX_TITLE_LENGTH: 120,
   MAX_DESCRIPTION_LENGTH: 5000,
   MAX_PRICE_CHF: 50000,

@@ -15,8 +15,7 @@ export function ImageUploadGrid({ images, isUploading, onUpload, onRemove }: Pro
   return (
     <div>
       <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-        Bilder <span className="text-red-500">*</span>
-        <span className="text-xs text-gray-500 ml-1">({images.length}/{MARKETPLACE_LIMITS.MAX_IMAGES})</span>
+        Bilder <span className="text-xs text-gray-500 ml-1">(optional, {images.length}/{MARKETPLACE_LIMITS.MAX_IMAGES})</span>
       </label>
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         {images.map((url, idx) => (
