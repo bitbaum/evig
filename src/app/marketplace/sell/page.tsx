@@ -317,120 +317,91 @@ function SellPageContent() {
             />
           )}
 
-          {/* === CREATION ASSISTANT (new listings only) === */}
+          {/* === AI ASSISTANT (unified: creation OR refinement) === */}
           {!editId && !showCamera && (
-            <div className="bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-xl border border-green-200 dark:border-green-800 p-4 md:p-6 space-y-4">
-              <div className="flex items-center gap-2 text-green-800 dark:text-green-200 font-semibold">
-                <Sparkles className="w-5 h-5" />
-                {formHasData ? 'KI-Assistent' : 'Was möchten Sie verkaufen?'}
-              </div>
-
-              <div className="space-y-3">
-                <div className="flex gap-2">
-                  <textarea
-                    value={aiInput}
-                    onChange={(e) => setAiInput(e.target.value)}
-                    onKeyDown={(e) => {
-                      if (e.key === 'Enter' && !e.shiftKey) {
-                        e.preventDefault()
-                        handleAISubmit()
-                      }
-                    }}
-                    placeholder={formHasData
-                      ? 'z.B. "Ergänze fehlende Specs" oder "Mache die Beschreibung ansprechender"'
-                      : 'z.B. "ThinkPad T480, 16GB RAM, guter Zustand, möchte 400 CHF"'
-                    }
-                    rows={2}
-                    disabled={isExtracting}
-                    className="flex-1 px-4 py-3 text-sm border border-green-300 dark:border-green-700 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white resize-none focus:ring-2 focus:ring-green-500 focus:border-transparent disabled:opacity-50 placeholder:text-gray-400"
-                  />
-                  <button
-                    type="button"
-                    onClick={handleAISubmit}
-                    disabled={isExtracting || !aiInput.trim()}
-                    className="px-4 py-2 bg-green-600 hover:bg-green-700 disabled:bg-green-400 text-white font-medium rounded-lg transition-colors self-end"
-                    title={formHasData ? 'Verbessern' : 'Formular ausfüllen'}
-                  >
-                    {isExtracting ? (
-                      <Loader2 className="w-5 h-5 animate-spin" />
-                    ) : (
-                      <Send className="w-5 h-5" />
-                    )}
-                  </button>
-                </div>
-
-                {!formHasData && (
-                  <>
-                    <div className="relative">
-                      <div className="absolute inset-0 flex items-center">
-                        <div className="w-full border-t border-green-200 dark:border-green-700" />
+            <div className={`rounded-xl border p-4 md:p-6 space-y-4 ${
+              formHasData
+                ? 'border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50'
+                : 'bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 border-green-200 dark:border-green-800'
+            }`}>
+              {formHasData ? (
+                /* --- REFINEMENT MODE: quick actions + compact custom input --- */
+                <>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2 text-gray-700 dark:text-gray-300 text-sm font-medium">
+                      <Wand2 className="w-4 h-4" />
+                      KI-Verbesserungen
+                    </div>
+                    {isExtracting && (
+                      <div className="flex items-center gap-1.5 text-xs text-green-600 dark:text-green-400">
+                        <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                        KI arbeitet...
                       </div>
+                    )}
+                  </div>
+                  <div className="flex flex-wrap gap-2">
+                    <button type="button" onClick={() => runQuickAction(currentFormData, 'improve_description')} disabled={isExtracting} className="inline-flex items-center gap-1 px-3 py-1.5 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-700 disabled:opacity-50 transition-colors">
+                      Beschreibung verbessern
+                    </button>
+                    <button type="button" onClick={() => runQuickAction(currentFormData, 'suggest_price')} disabled={isExtracting} className="inline-flex items-center gap-1 px-3 py-1.5 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-700 disabled:opacity-50 transition-colors">
+                      Preis vorschlagen
+                    </button>
+                    <button type="button" onClick={() => runQuickAction(currentFormData, 'detect_specs')} disabled={isExtracting} className="inline-flex items-center gap-1 px-3 py-1.5 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-700 disabled:opacity-50 transition-colors">
+                      Specs erkennen
+                    </button>
+                  </div>
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      value={aiInput}
+                      onChange={(e) => setAiInput(e.target.value)}
+                      onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); handleAISubmit() } }}
+                      placeholder="Eigene Anweisung..."
+                      disabled={isExtracting}
+                      className="flex-1 px-3 py-2 text-sm border border-gray-200 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 focus:border-transparent disabled:opacity-50 placeholder:text-gray-400"
+                    />
+                    <button type="button" onClick={handleAISubmit} disabled={isExtracting || !aiInput.trim()} className="px-3 py-2 bg-gray-700 hover:bg-gray-800 disabled:bg-gray-400 text-white rounded-lg transition-colors">
+                      <Send className="w-4 h-4" />
+                    </button>
+                  </div>
+                </>
+              ) : (
+                /* --- CREATION MODE: describe product or take photo --- */
+                <>
+                  <div className="flex items-center gap-2 text-green-800 dark:text-green-200 font-semibold">
+                    <Sparkles className="w-5 h-5" />
+                    Was möchten Sie verkaufen?
+                  </div>
+                  <div className="space-y-3">
+                    <div className="flex gap-2">
+                      <textarea
+                        value={aiInput}
+                        onChange={(e) => setAiInput(e.target.value)}
+                        onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleAISubmit() } }}
+                        placeholder='z.B. "ThinkPad T480, 16GB RAM, guter Zustand, möchte 400 CHF"'
+                        rows={2}
+                        disabled={isExtracting}
+                        className="flex-1 px-4 py-3 text-sm border border-green-300 dark:border-green-700 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white resize-none focus:ring-2 focus:ring-green-500 focus:border-transparent disabled:opacity-50 placeholder:text-gray-400"
+                      />
+                      <button type="button" onClick={handleAISubmit} disabled={isExtracting || !aiInput.trim()} className="px-4 py-2 bg-green-600 hover:bg-green-700 disabled:bg-green-400 text-white font-medium rounded-lg transition-colors self-end">
+                        {isExtracting ? <Loader2 className="w-5 h-5 animate-spin" /> : <Send className="w-5 h-5" />}
+                      </button>
+                    </div>
+                    <div className="relative">
+                      <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-green-200 dark:border-green-700" /></div>
                       <div className="relative flex justify-center text-sm">
-                        <span className="px-3 bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 text-green-500 dark:text-green-400">
-                          oder
-                        </span>
+                        <span className="px-3 bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 text-green-500 dark:text-green-400">oder</span>
                       </div>
                     </div>
-
-                    <button
-                      type="button"
-                      onClick={() => setShowCamera(true)}
-                      className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-lg border-2 border-dashed border-green-300 dark:border-green-700 text-green-700 dark:text-green-400 hover:bg-green-100 dark:hover:bg-green-900/30 transition-colors"
-                    >
+                    <button type="button" onClick={() => setShowCamera(true)} className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-lg border-2 border-dashed border-green-300 dark:border-green-700 text-green-700 dark:text-green-400 hover:bg-green-100 dark:hover:bg-green-900/30 transition-colors">
                       <Camera className="w-5 h-5" />
                       Foto aufnehmen — KI erkennt das Produkt
                     </button>
-                  </>
-                )}
-              </div>
-
-              <p className="text-xs text-green-600 dark:text-green-400">
-                {formHasData
-                  ? 'Beschreiben Sie, was verbessert werden soll. Enter zum Absenden.'
-                  : 'Die KI füllt das Formular anhand Ihrer Beschreibung oder des Fotos aus. Sie können alles danach anpassen.'
-                }
-              </p>
-            </div>
-          )}
-
-          {/* === QUICK REFINEMENT (only after form has data, new listings) === */}
-          {formHasData && !editId && (
-            <div className="rounded-lg border border-purple-200 dark:border-purple-800 bg-purple-50 dark:bg-purple-900/20 p-3">
-              <div className="flex items-center gap-2 text-purple-800 dark:text-purple-200 text-sm font-medium mb-2">
-                <Wand2 className="w-4 h-4" />
-                Schnellverbesserungen
-              </div>
-              <div className="flex flex-wrap gap-2">
-                <button
-                  type="button"
-                  onClick={() => runQuickAction(currentFormData, 'improve_description')}
-                  disabled={isExtracting}
-                  className="inline-flex items-center gap-1 px-3 py-1.5 bg-purple-100 dark:bg-purple-800/40 text-purple-700 dark:text-purple-300 rounded-lg text-sm font-medium hover:bg-purple-200 dark:hover:bg-purple-700/50 disabled:opacity-50 transition-colors"
-                >
-                  Beschreibung verbessern
-                </button>
-                <button
-                  type="button"
-                  onClick={() => runQuickAction(currentFormData, 'suggest_price')}
-                  disabled={isExtracting}
-                  className="inline-flex items-center gap-1 px-3 py-1.5 bg-purple-100 dark:bg-purple-800/40 text-purple-700 dark:text-purple-300 rounded-lg text-sm font-medium hover:bg-purple-200 dark:hover:bg-purple-700/50 disabled:opacity-50 transition-colors"
-                >
-                  Preis vorschlagen
-                </button>
-                <button
-                  type="button"
-                  onClick={() => runQuickAction(currentFormData, 'detect_specs')}
-                  disabled={isExtracting}
-                  className="inline-flex items-center gap-1 px-3 py-1.5 bg-purple-100 dark:bg-purple-800/40 text-purple-700 dark:text-purple-300 rounded-lg text-sm font-medium hover:bg-purple-200 dark:hover:bg-purple-700/50 disabled:opacity-50 transition-colors"
-                >
-                  Specs erkennen
-                </button>
-              </div>
-              {isExtracting && (
-                <div className="flex items-center gap-2 mt-2 text-sm text-purple-600 dark:text-purple-400">
-                  <Loader2 className="w-4 h-4 animate-spin" />
-                  KI arbeitet...
-                </div>
+                  </div>
+                  <p className="text-xs text-green-600 dark:text-green-400">
+                    Die KI füllt das Formular anhand Ihrer Beschreibung oder des Fotos aus. Sie können alles danach anpassen.
+                  </p>
+                </>
               )}
             </div>
           )}
