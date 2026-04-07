@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { logger } from '@/lib/logger'
 import { HelpCircle, MapPin, Clock, AlertTriangle } from 'lucide-react'
 import { getCategoryById, getUrgencyById } from '@/config/it-hilfe'
+import { formatDateShort } from '@/lib/date-formats'
 
 interface MatchingRequest {
   id: string
@@ -111,7 +112,7 @@ export function MatchingRequestsTab({ repairerId }: MatchingRequestsTabProps) {
                 )}
                 <span className="flex items-center gap-1 text-xs text-gray-400">
                   <Clock className="w-3 h-3" />
-                  {new Date(request.createdAt).toLocaleDateString('de-CH')}
+                  {formatDateShort(request.createdAt)}
                 </span>
               </div>
             </div>

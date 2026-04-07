@@ -110,7 +110,7 @@ export default function BlogSubmissionsClient() {
 
   const resubmit = async (id: string) => {
     if (!editContent.trim()) {
-      alert('Bitte geben Sie den überarbeiteten Inhalt ein.')
+      setError('Bitte geben Sie den überarbeiteten Inhalt ein.')
       return
     }
     setSaving(true)
@@ -126,7 +126,7 @@ export default function BlogSubmissionsClient() {
       cancelEditing()
       await load()
     } else {
-      alert(result.error || 'Erneutes Einreichen fehlgeschlagen')
+      setError(result.error || 'Erneutes Einreichen fehlgeschlagen')
     }
   }
 

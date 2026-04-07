@@ -10,14 +10,22 @@ interface ITHilfeImageUploadProps {
   imageUrls: string[]
   onImagesChange: (urls: string[]) => void
   maxImages?: number
+  onError?: (message: string) => void
 }
 
 export function ITHilfeImageUpload({
   imageUrls,
   onImagesChange,
   maxImages = 5,
+  onError,
 }: ITHilfeImageUploadProps) {
   const [uploading, setUploading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+
+  const reportError = (message: string) => {
+    setError(message)
+    onError?.(message)
+  }
 
   const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files
@@ -30,11 +38,11 @@ export function ITHilfeImageUpload({
     const filesToUpload = Array.from(files).slice(0, remaining)
     for (const file of filesToUpload) {
       if (!file.type.startsWith('image/')) {
-        alert('Nur Bilddateien sind erlaubt')
+        reportError('Nur Bilddateien sind erlaubt')
         return
       }
       if (file.size > FILE_SIZE_LIMITS.UPLOAD_MAX) {
-        alert('Datei zu gross (max 10MB)')
+        reportError('Datei zu gross (max 10MB)')
         return
       }
     }
@@ -58,7 +66,7 @@ export function ITHilfeImageUpload({
       onImagesChange([...imageUrls, ...newUrls])
     } catch (err) {
       logger.error('Image upload failed', { error: err })
-      alert('Bild-Upload fehlgeschlagen. Bitte versuche es erneut.')
+      reportError('Bild-Upload fehlgeschlagen. Bitte versuche es erneut.')
     } finally {
       setUploading(false)
       // Reset input so same file can be re-selected
@@ -73,6 +81,10 @@ export function ITHilfeImageUpload({
   return (
     <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
       <h2 className="text-lg font-semibold text-gray-900 mb-4">Fotos (optional)</h2>
+
+      {error && (
+        <p className="text-sm text-red-600 mb-3">{error}</p>
+      )}
 
       {imageUrls.length < maxImages && (
         <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center mb-4">

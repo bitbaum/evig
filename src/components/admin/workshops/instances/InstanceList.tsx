@@ -12,6 +12,7 @@ import {
   MapPin,
 } from 'lucide-react'
 import type { WorkshopInstanceWithDetails } from './types'
+import { formatDateTime } from '@/lib/date-formats'
 
 interface InstanceListProps {
   instances: WorkshopInstanceWithDetails[]
@@ -58,14 +59,7 @@ export function InstanceList({
                   <div className="flex flex-wrap items-center gap-4 text-sm text-gray-600 mb-3">
                     <div className="flex items-center gap-1">
                       <Calendar className="w-4 h-4" />
-                      {new Date(instance.start_date).toLocaleDateString('de-CH', {
-                        weekday: 'short',
-                        year: 'numeric',
-                        month: 'short',
-                        day: 'numeric',
-                        hour: '2-digit',
-                        minute: '2-digit',
-                      })}
+                      {formatDateTime(instance.start_date)}
                     </div>
 
                     <div className="flex items-center gap-1">

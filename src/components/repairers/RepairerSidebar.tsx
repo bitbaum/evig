@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { MapPin, Phone, Globe, ChevronRight } from 'lucide-react'
 import { type RepairerProfile, type AvailabilitySlot } from './types'
 import { formatPrice } from './helpers'
+import { formatDateShort } from '@/lib/date-formats'
 
 interface RepairerSidebarProps {
   repairer: RepairerProfile
@@ -88,11 +89,7 @@ export function RepairerSidebar({ repairer, availability }: RepairerSidebarProps
                 className="flex items-center justify-between text-sm p-2 bg-green-50 rounded"
               >
                 <span className="text-gray-700">
-                  {new Date(slot.date).toLocaleDateString('de-CH', {
-                    weekday: 'short',
-                    day: 'numeric',
-                    month: 'short',
-                  })}
+                  {formatDateShort(slot.date)}
                 </span>
                 <span className="text-green-700">
                   {slot.start_time.slice(0, 5)} - {slot.end_time.slice(0, 5)}

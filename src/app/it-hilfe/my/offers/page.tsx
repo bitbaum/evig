@@ -52,6 +52,7 @@ export default function MyOffersPage() {
   const [total, setTotal] = useState(0)
   const [statusFilter, setStatusFilter] = useState('')
   const [withdrawingId, setWithdrawingId] = useState<string | null>(null)
+  const [error, setError] = useState<string | null>(null)
 
   // Redirect if not authenticated
   useEffect(() => {
@@ -101,7 +102,7 @@ export default function MyOffersPage() {
       fetchOffers()
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Ein Fehler ist aufgetreten'
-      alert(message)
+      setError(message)
       logger.error('Error withdrawing offer', { error: err })
     } finally {
       setWithdrawingId(null)
@@ -173,6 +174,13 @@ export default function MyOffersPage() {
             ))}
           </div>
         </div>
+
+        {/* Error Message */}
+        {error && (
+          <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
+            <p className="text-sm text-red-800">{error}</p>
+          </div>
+        )}
 
         {/* Offers List */}
         {offers.length === 0 ? (

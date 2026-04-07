@@ -169,19 +169,18 @@ export function useProtocolDetail({ protocol, actionLinks, initialProcessingErro
       const endpoint = getReprocessEndpoint()
 
       if (protocol.input_method === 'audio') {
-        // Audio upload uses FormData — cannot use apiFetch (it JSON.stringifies the body)
         if (!audioFile) throw new Error('Bitte wählen Sie eine Audiodatei aus.')
         const validationError = validateAudioUpload(audioFile)
         if (validationError) throw new Error(validationError)
 
         const formData = new FormData()
         formData.append('audio', audioFile)
-        const res = await fetch(`/api/protocols/${protocol.id}/${endpoint}`, {
+        const result = await apiFetch<void>(`/api/protocols/${protocol.id}/${endpoint}`, {
           method: 'POST',
           body: formData,
+          formData: true,
         })
-        const data = await res.json()
-        if (!data.success) throw new Error(data.error || 'Verarbeitung fehlgeschlagen')
+        if (!result.success) throw new Error(result.error || 'Verarbeitung fehlgeschlagen')
       } else {
         const result = await apiFetch<void>(`/api/protocols/${protocol.id}/${endpoint}`, {
           method: 'POST',

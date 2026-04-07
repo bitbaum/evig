@@ -2,6 +2,7 @@
 
 import { type AvailabilitySlots } from './types'
 import { getAvailableDates } from './helpers'
+import { formatWeekdayShort } from '@/lib/date-formats'
 
 interface BookingStepScheduleProps {
   selectedDate: string
@@ -56,7 +57,7 @@ export function BookingStepSchedule({
                 }`}
               >
                 <div className="text-xs text-gray-500">
-                  {dateObj.toLocaleDateString('de-CH', { weekday: 'short' })}
+                  {formatWeekdayShort(dateObj)}
                 </div>
                 <div className="font-medium">{dateObj.getDate()}</div>
               </button>

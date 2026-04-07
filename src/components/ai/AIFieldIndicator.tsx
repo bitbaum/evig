@@ -12,6 +12,7 @@
 import { useState } from 'react'
 import { Mic, Type, Image, Sparkles, X, ExternalLink } from 'lucide-react'
 import type { AIFieldSource } from '@/types/erfassung'
+import { formatTime } from '@/lib/date-formats'
 
 interface AIFieldIndicatorProps {
   source: AIFieldSource
@@ -172,7 +173,7 @@ export function AIFieldIndicator({
 
               {/* Timestamp */}
               <div className="text-xs text-gray-500 mt-2">
-                Extrahiert: {new Date(source.timestamp).toLocaleTimeString('de-CH')}
+                Extrahiert: {formatTime(new Date(source.timestamp))}
               </div>
             </div>
           </div>

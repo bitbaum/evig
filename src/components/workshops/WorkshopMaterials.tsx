@@ -12,6 +12,7 @@ import {
   Unlock
 } from 'lucide-react'
 import { logger } from '@/lib/logger'
+import { apiFetch } from '@/lib/api/client'
 
 interface Material {
   id: string
@@ -37,13 +38,12 @@ export default function WorkshopMaterials({ workshopSlug }: WorkshopMaterialsPro
   useEffect(() => {
     const fetchMaterials = async () => {
       try {
-        const response = await fetch(`/api/workshops/${workshopSlug}/materials`)
-        if (response.ok) {
-          const data = await response.json()
-          setMaterials(data.data.materials)
-          setAccessLevel(data.data.accessLevel)
+        const result = await apiFetch<{ materials: Material[]; accessLevel: string }>(`/api/workshops/${workshopSlug}/materials`)
+        if (result.success && result.data) {
+          setMaterials(result.data.materials)
+          setAccessLevel(result.data.accessLevel)
         } else {
-          setError('Fehler beim Laden der Materialien')
+          setError(result.error || 'Fehler beim Laden der Materialien')
         }
       } catch (err) {
         logger.error('Error fetching workshop materials', { error: err })

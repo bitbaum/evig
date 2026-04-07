@@ -3,6 +3,7 @@
 import { AlertCircle, Building, Home, Loader2 } from 'lucide-react'
 import { type RepairerProfile } from './types'
 import { SERVICE_CATEGORIES, URGENCY_OPTIONS, formatPrice } from './helpers'
+import { formatDateLong } from '@/lib/date-formats'
 
 interface BookingStepConfirmProps {
   repairer: RepairerProfile
@@ -156,11 +157,7 @@ export function BookingStepConfirm({
             <div className="flex justify-between">
               <dt className="text-gray-600">Wunschtermin:</dt>
               <dd className="font-medium">
-                {new Date(selectedDate).toLocaleDateString('de-CH', {
-                  weekday: 'long',
-                  day: 'numeric',
-                  month: 'long',
-                })}
+                {formatDateLong(selectedDate)}
                 {selectedTime && ` um ${selectedTime}`}
               </dd>
             </div>

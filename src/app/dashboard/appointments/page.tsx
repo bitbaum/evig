@@ -87,7 +87,7 @@ export default function AppointmentsDashboard() {
       setEditingId(null)
       fetchAppointments()
     } else {
-      alert(result.error || 'Speichern nicht möglich (nur im Status "Angefragt")')
+      setError(result.error || 'Speichern nicht möglich (nur im Status "Angefragt")')
     }
     setSaving(false)
   }
@@ -298,7 +298,7 @@ export default function AppointmentsDashboard() {
                         if (result.success) {
                           fetchAppointments()
                         } else {
-                          alert(result.error || 'Stornierung fehlgeschlagen')
+                          setError(result.error || 'Stornierung fehlgeschlagen')
                         }
                       }}
                       className="px-4 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-50"

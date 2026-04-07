@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { Star, MessageSquare, User } from 'lucide-react'
 import { logger } from '@/lib/logger'
+import { apiFetch } from '@/lib/api/client'
 
 interface Review {
   id: string
@@ -31,13 +32,12 @@ export default function WorkshopReviews({ workshopSlug }: WorkshopReviewsProps) 
   useEffect(() => {
     const fetchReviews = async () => {
       try {
-        const response = await fetch(`/api/workshops/${workshopSlug}/reviews`)
-        if (response.ok) {
-          const data = await response.json()
-          setReviews(data.data.reviews)
-          setStats(data.data.stats)
+        const result = await apiFetch<{ reviews: Review[]; stats: ReviewStats }>(`/api/workshops/${workshopSlug}/reviews`)
+        if (result.success && result.data) {
+          setReviews(result.data.reviews)
+          setStats(result.data.stats)
         } else {
-          setError('Fehler beim Laden der Bewertungen')
+          setError(result.error || 'Fehler beim Laden der Bewertungen')
         }
       } catch (err) {
         logger.error('Error fetching workshop reviews', { error: err })

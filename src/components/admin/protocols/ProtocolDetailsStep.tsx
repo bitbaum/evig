@@ -1,5 +1,6 @@
 import { PROTOCOL_VISIBILITY_LABELS } from '@/config/protocols'
 import type { ProtocolVisibility } from '@/config/protocols'
+import { formatDateShort } from '@/lib/date-formats'
 
 interface FormValues {
   title: string
@@ -21,7 +22,7 @@ export function ProtocolDetailsStep({ values, isComplete, onChange, onReset }: P
         <div className="flex items-center gap-2 text-sm text-gray-700">
           <span className="font-medium">{values.title}</span>
           <span className="text-gray-400">·</span>
-          <span>{new Date(values.meeting_date).toLocaleDateString('de-CH')}</span>
+          <span>{formatDateShort(values.meeting_date)}</span>
           <span className="text-gray-400">·</span>
           <span>{PROTOCOL_VISIBILITY_LABELS[values.visibility]}</span>
         </div>

@@ -118,7 +118,7 @@ export default function AdminLocationsPage() {
     if (result.success) {
       loadLocations()
     } else {
-      alert(result.error || 'Fehler bei der Genehmigung')
+      setError(result.error || 'Fehler bei der Genehmigung')
     }
   }
 

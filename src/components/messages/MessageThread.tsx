@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from 'react'
 import { Send, Loader2, ArrowLeft } from 'lucide-react'
 import { apiFetch } from '@/lib/api/client'
+import { formatTime as fmtTime, formatDateShort } from '@/lib/date-formats'
 import { logger } from '@/lib/logger'
 
 export interface Message {
@@ -29,7 +30,7 @@ function formatTime(dateStr: string): string {
   const now = new Date()
   const isToday = date.toDateString() === now.toDateString()
 
-  const time = date.toLocaleTimeString('de-CH', { hour: '2-digit', minute: '2-digit' })
+  const time = fmtTime(date)
 
   if (isToday) return time
 
@@ -37,7 +38,7 @@ function formatTime(dateStr: string): string {
   yesterday.setDate(yesterday.getDate() - 1)
   if (date.toDateString() === yesterday.toDateString()) return `Gestern, ${time}`
 
-  return `${date.toLocaleDateString('de-CH')}, ${time}`
+  return `${formatDateShort(date)}, ${time}`
 }
 
 export default function MessageThread({

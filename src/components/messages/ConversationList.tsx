@@ -1,6 +1,7 @@
 'use client'
 
 import { MessageSquare, User } from 'lucide-react'
+import { formatDateShort } from '@/lib/date-formats'
 
 export interface Conversation {
   id: string
@@ -28,7 +29,7 @@ function timeAgo(dateStr: string): string {
   if (hours < 24) return `${hours} Std.`
   const days = Math.floor(hours / 24)
   if (days < 7) return `${days} T.`
-  return new Date(dateStr).toLocaleDateString('de-CH')
+  return formatDateShort(dateStr)
 }
 
 export default function ConversationList({ conversations, selectedId, onSelect }: ConversationListProps) {

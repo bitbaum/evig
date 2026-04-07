@@ -7,6 +7,8 @@
  * Listmonk is the recommended FOSS solution for production.
  */
 
+import { ORG } from './org'
+
 /**
  * Email provider type
  * - 'listmonk': Use Listmonk for transactional and newsletter emails (recommended)
@@ -33,7 +35,7 @@ export const EMAIL_CONFIG = {
   SECURE: process.env.EMAIL_SECURE === 'true',
   USER: process.env.EMAIL_USER || '',
   PASS: process.env.EMAIL_PASS || '',
-  FROM: process.env.EMAIL_FROM || process.env.EMAIL_USER || `noreply@revamp-it.ch`,
+  FROM: process.env.EMAIL_FROM || process.env.EMAIL_USER || `noreply@${ORG.emailDomain}`,
 } as const;
 
 /**
@@ -43,7 +45,7 @@ export const LISTMONK_CONFIG = {
   URL: process.env.LISTMONK_URL || 'http://localhost:9090',
   USERNAME: process.env.LISTMONK_USERNAME || 'admin',
   PASSWORD: process.env.LISTMONK_PASSWORD || 'revampit2024',
-  FROM_EMAIL: process.env.LISTMONK_FROM_EMAIL || 'noreply@revamp-it.ch',
+  FROM_EMAIL: process.env.LISTMONK_FROM_EMAIL || `noreply@${ORG.emailDomain}`,
   FROM_NAME: process.env.LISTMONK_FROM_NAME || 'Revamp-IT',
   ENABLED: process.env.LISTMONK_ENABLED === 'true',
 } as const;

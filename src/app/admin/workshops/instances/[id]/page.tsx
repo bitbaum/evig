@@ -91,10 +91,10 @@ export default function AdminWorkshopInstanceDetailPage({
       if (response.ok) {
         loadInstanceDetails()
       } else {
-        alert('Fehler beim Aktualisieren')
+        setError('Fehler beim Aktualisieren')
       }
-    } catch (err) {
-      alert('Netzwerkfehler')
+    } catch {
+      setError('Netzwerkfehler')
     }
   }
 
@@ -211,6 +211,13 @@ export default function AdminWorkshopInstanceDetailPage({
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Error Message */}
+        {error && (
+          <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
+            <p className="text-sm text-red-800">{error}</p>
+          </div>
+        )}
+
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
           <div className="bg-white rounded-xl shadow-sm border p-4">

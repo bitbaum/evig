@@ -81,7 +81,7 @@ export default function WorkshopsDashboard() {
       setEditingId(null)
       fetchRegistrations()
     } else {
-      alert(result.error || 'Speichern fehlgeschlagen')
+      setError(result.error || 'Speichern fehlgeschlagen')
     }
     setSaving(false)
   }
@@ -253,7 +253,7 @@ export default function WorkshopsDashboard() {
                         if (result.success) {
                           fetchRegistrations()
                         } else {
-                          alert(result.error || 'Stornierung fehlgeschlagen')
+                          setError(result.error || 'Stornierung fehlgeschlagen')
                         }
                       }}
                       className="px-4 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-50"

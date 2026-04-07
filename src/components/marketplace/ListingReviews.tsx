@@ -5,6 +5,7 @@ import { useSession } from 'next-auth/react'
 import { Star, Loader2, MessageSquare } from 'lucide-react'
 import ReviewForm from './ReviewForm'
 import { formatDateShort } from '@/lib/date-formats'
+import { apiFetch } from '@/lib/api/client'
 
 interface Review {
   id: string
@@ -35,14 +36,14 @@ export default function ListingReviews({ listingId, sellerId }: ListingReviewsPr
 
   const fetchReviews = useCallback(async () => {
     try {
-      const response = await fetch(`/api/reviews?targetType=listing&targetId=${listingId}`)
-      const data = await response.json()
-      if (data.success && data.data) {
-        setReviews(data.data.reviews || data.data || [])
-        if (data.data.stats) {
-          setStats(data.data.stats)
-        } else if (Array.isArray(data.data)) {
-          const ratings = data.data.map((r: Review) => r.overallRating)
+      const result = await apiFetch<{ reviews: Review[]; stats?: ReviewStats }>(`/api/reviews?targetType=listing&targetId=${listingId}`)
+      if (result.success && result.data) {
+        const data = result.data
+        setReviews(data.reviews || [])
+        if (data.stats) {
+          setStats(data.stats)
+        } else {
+          const ratings = (data.reviews || []).map((r: Review) => r.overallRating)
           setStats({
             average_rating: ratings.length > 0 ? ratings.reduce((a: number, b: number) => a + b, 0) / ratings.length : null,
             review_count: ratings.length,

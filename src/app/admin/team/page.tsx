@@ -8,6 +8,7 @@
  */
 
 import { Metadata } from 'next'
+import { ORG } from '@/config/org'
 import { auth } from '@/auth'
 import { redirect } from 'next/navigation'
 import { query } from '@/lib/auth/db'
@@ -227,7 +228,7 @@ export default async function TeamPage() {
 
         <div className="p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-xl">
           <p className="text-sm text-blue-700 dark:text-blue-300">
-            <strong>Hinweis:</strong> Benutzer mit @revamp-it.ch E-Mail-Adresse werden automatisch als Staff erkannt.
+            <strong>Hinweis:</strong> Benutzer mit @{ORG.emailDomain} E-Mail-Adresse werden automatisch als Staff erkannt.
           </p>
         </div>
       </div>

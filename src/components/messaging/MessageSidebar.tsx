@@ -14,7 +14,7 @@ import {
 } from 'lucide-react'
 import { apiFetch } from '@/lib/api/client'
 import { logger } from '@/lib/logger'
-import { formatDateShort } from '@/lib/date-formats'
+import { formatDateShort, formatTime } from '@/lib/date-formats'
 
 interface Conversation {
   id: string

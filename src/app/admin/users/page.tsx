@@ -8,6 +8,7 @@
 import { Metadata } from 'next'
 import { auth } from '@/auth'
 import { redirect } from 'next/navigation'
+import { ORG } from '@/config/org'
 import { query } from '@/lib/auth/db'
 import { TABLE_NAMES } from '@/config/database'
 import { canAccessSection, isSuperAdmin } from '@/lib/permissions'
@@ -146,7 +147,7 @@ export default async function AdminUsersPage() {
               Berechtigungssystem
             </h3>
             <p className="text-sm text-blue-700 dark:text-blue-300 mt-1">
-              Benutzer mit @revamp-it.ch E-Mail-Adressen werden automatisch als Staff erkannt.
+              Benutzer mit @{ORG.emailDomain} E-Mail-Adressen werden automatisch als Staff erkannt.
               Super Admins haben vollen Zugriff und können anderen Staff-Mitgliedern Berechtigungen erteilen.
             </p>
           </div>

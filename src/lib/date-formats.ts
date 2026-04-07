@@ -14,6 +14,9 @@
  *   formatDateTimeNumeric()  → "01.01.2026, 14:30"
  *   formatDateWithWeekday()      → "Montag, 1. Januar 2026"
  *   formatDateTimeWithWeekday()  → "Montag, 1. Januar 2026, 14:30"
+ *   formatTime()                → "14:30"
+ *   formatDateMonth()           → "Januar 2026"
+ *   formatWeekdayShort()        → "Mo"
  */
 
 const LOCALE = 'de-CH'
@@ -101,5 +104,43 @@ export function formatDateTimeWithWeekday(date: Date | string): string {
     day: 'numeric',
     hour: '2-digit',
     minute: '2-digit',
+  })
+}
+
+/**
+ * Format time only: "14:30"
+ */
+export function formatTime(date: Date | string): string {
+  return toDate(date).toLocaleTimeString(LOCALE, {
+    hour: '2-digit',
+    minute: '2-digit',
+  })
+}
+
+/**
+ * Format month and year: "Januar 2026"
+ */
+export function formatDateMonth(date: Date | string): string {
+  return toDate(date).toLocaleDateString(LOCALE, {
+    year: 'numeric',
+    month: 'long',
+  })
+}
+
+/**
+ * Format short weekday: "Mo"
+ */
+export function formatWeekdayShort(date: Date | string): string {
+  return toDate(date).toLocaleDateString(LOCALE, { weekday: 'short' })
+}
+
+/**
+ * Format date with long weekday, day, and month (no year): "Montag, 1. Januar"
+ */
+export function formatDateLong(date: Date | string): string {
+  return toDate(date).toLocaleDateString(LOCALE, {
+    weekday: 'long',
+    day: 'numeric',
+    month: 'long',
   })
 }
