@@ -11,7 +11,7 @@ import {
   CheckCircle,
   Sparkles,
   BookOpen,
-  GraduationCap,
+  Plus,
 } from 'lucide-react'
 import {
   WORKSHOP_CATEGORIES,
@@ -20,7 +20,6 @@ import {
   getLevelBadgeClass,
 } from '@/config/workshops'
 import Heading from '@/components/ui/Heading'
-import { PageHero } from '@/components/layout/PageHero'
 import { formatDateShort } from '@/lib/date-formats'
 import type { WorkshopWithInstances } from '@/components/workshops/types'
 
@@ -44,12 +43,26 @@ export default function WorkshopBrowseClient({ workshops }: WorkshopBrowseClient
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <PageHero
-        theme="workshops"
-        icon={GraduationCap}
-        title="Workshops & Kurse"
-        subtitle="Lerne nachhaltige Technologie in praxisnahen Workshops. Von Linux über Hardware-Reparatur bis hin zu KI und Programmierung."
-      />
+      {/* Compact hero — workshops visible without scrolling */}
+      <div className="bg-gradient-to-br from-green-50 to-emerald-50 py-6 sm:py-8">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div>
+              <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Workshops & Kurse</h1>
+              <p className="text-sm text-gray-600 mt-1">
+                {workshops.length} {workshops.length === 1 ? 'Workshop' : 'Workshops'} · Praxisnah lernen bei RevampIT
+              </p>
+            </div>
+            <Link
+              href="/workshops/propose"
+              className="inline-flex items-center gap-2 px-5 py-2.5 bg-green-600 hover:bg-green-500 text-white rounded-lg text-base font-semibold transition-colors shadow-sm"
+            >
+              <Plus className="w-4 h-4" />
+              Workshop vorschlagen
+            </Link>
+          </div>
+        </div>
+      </div>
 
       <div className="max-w-7xl mx-auto px-4 pt-12 pb-16">
         {/* Filter Bar */}

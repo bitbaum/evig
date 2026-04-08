@@ -14,8 +14,6 @@ import {
   Wrench,
   Heart,
   Users,
-  HelpCircle,
-  HeartHandshake,
 } from 'lucide-react'
 import {
   IT_HILFE,
@@ -29,7 +27,6 @@ import { RequestCard, RequestCardGrid } from '@/components/it-hilfe/RequestCard'
 import { EmptyState } from '@/components/common/EmptyState'
 import { LoadingSkeleton } from '@/components/common/LoadingState'
 import { ErrorAlert } from '@/components/common/ErrorAlert'
-import { PageHero } from '@/components/layout/PageHero'
 import type { ITHilfeRequest } from '@/components/it-hilfe/detail/types'
 
 export default function ITHilfePage() {
@@ -125,107 +122,82 @@ export default function ITHilfePage() {
 
   return (
     <div className="bg-white min-h-screen">
-      <PageHero
-        theme="itHilfe"
-        icon={HeartHandshake}
-        title="IT-Hilfe"
-        subtitle={`${IT_HILFE.description}. Finde Hilfe in deiner Nähe oder biete deine Skills an.`}
-      >
-        {/* Search Bar */}
-        <form onSubmit={handleSearch} className="max-w-2xl mx-auto">
-          <div className="relative">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
-            <input
-              type="text"
-              value={searchInput}
-              onChange={(e) => setSearchInput(e.target.value)}
-              placeholder="Anfragen durchsuchen..."
-              className="w-full pl-12 pr-24 py-3.5 rounded-lg border border-gray-300 text-gray-900 placeholder-gray-500 focus:ring-2 focus:ring-emerald-500 focus:border-transparent shadow-sm"
-            />
-            <button
-              type="submit"
-              className="absolute right-2 top-1/2 -translate-y-1/2 bg-emerald-600 hover:bg-emerald-500 text-white px-5 py-2 rounded-md transition-colors text-sm font-semibold shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600"
-            >
-              Suchen
-            </button>
+      {/* Compact hero — requests visible without scrolling */}
+      <div className="bg-gradient-to-br from-emerald-50 to-teal-50 py-6 sm:py-8">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
+            <div>
+              <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">IT-Hilfe</h1>
+              <p className="text-sm text-gray-600 mt-1">
+                {total} {total === 1 ? 'Anfrage' : 'Anfragen'} · Community-basierte Tech-Reparatur
+              </p>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              <Link
+                href={session?.user ? IT_HILFE.routes.create : `/auth/login?callbackUrl=${IT_HILFE.routes.create}`}
+                className="inline-flex items-center gap-2 px-5 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-base font-semibold transition-colors shadow-sm"
+              >
+                <Plus className="w-4 h-4" />
+                Hilfe holen
+              </Link>
+              <Link
+                href={IT_HILFE.routes.helpers}
+                className="inline-flex items-center gap-2 px-5 py-2.5 bg-white hover:bg-emerald-50 text-emerald-600 border border-emerald-600 rounded-lg text-base font-semibold transition-colors"
+              >
+                <Users className="w-4 h-4" />
+                Techniker finden
+              </Link>
+            </div>
           </div>
-        </form>
-
-        {/* Quick Stats */}
-        <div className="mt-4 flex flex-wrap items-center justify-center gap-6 text-sm text-gray-600">
-          <div className="flex items-center gap-2">
-            <HelpCircle className="h-5 w-5 text-emerald-600" />
-            <span><strong>{total}</strong> {total === 1 ? 'Anfrage' : 'Anfragen'}</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <Users className="h-5 w-5 text-emerald-600" />
-            <span>Community-Techniker</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <Heart className="h-5 w-5 text-emerald-600" />
-            <span>Kostenlos helfen</span>
-          </div>
+          <form onSubmit={handleSearch} className="max-w-2xl">
+            <div className="relative">
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
+              <input
+                type="text"
+                value={searchInput}
+                onChange={(e) => setSearchInput(e.target.value)}
+                placeholder="Laptop kaputt, WLAN Problem, Drucker..."
+                aria-label="IT-Hilfe Anfragen durchsuchen"
+                className="w-full pl-12 pr-24 py-3 rounded-lg border border-gray-300 text-gray-900 placeholder-gray-500 focus:ring-2 focus:ring-emerald-500 focus:border-transparent shadow-sm"
+              />
+              <button
+                type="submit"
+                className="absolute right-2 top-1/2 -translate-y-1/2 bg-emerald-600 hover:bg-emerald-500 text-white px-5 py-2 rounded-md transition-colors text-sm font-semibold shadow-sm"
+              >
+                Suchen
+              </button>
+            </div>
+          </form>
         </div>
-      </PageHero>
+      </div>
 
       {/* Main Content */}
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
-        {/* Quick Actions - Card Style */}
-        <div className="mb-8 bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-          <div className="flex flex-wrap gap-3 justify-center sm:justify-start">
-            {session?.user ? (
-              <Link
-                href={IT_HILFE.routes.create}
-                className="inline-flex items-center gap-2 px-5 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-sm font-semibold transition-colors shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600"
-              >
-                <Plus className="w-4 h-4" />
-                Anfrage erstellen
-              </Link>
-            ) : (
-              <Link
-                href={`/auth/login?callbackUrl=${IT_HILFE.routes.create}`}
-                className="inline-flex items-center gap-2 px-5 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-sm font-semibold transition-colors shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600"
-              >
-                <Plus className="w-4 h-4" />
-                Anmelden & Anfrage erstellen
-              </Link>
-            )}
-
-            <Link
-              href={IT_HILFE.routes.helpers}
-              className="inline-flex items-center gap-2 px-5 py-2.5 bg-white hover:bg-emerald-50 text-emerald-600 border border-emerald-600 rounded-lg text-sm font-semibold transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600"
-            >
-              <Users className="w-4 h-4" />
-              Techniker finden
-            </Link>
-
+        {/* Secondary actions for logged-in users */}
+        {session?.user && (
+          <div className="mb-6 flex flex-wrap gap-2">
             <Link
               href={session?.user ? IT_HILFE.routes.register : `/auth/login?callbackUrl=${IT_HILFE.routes.register}`}
-              className="inline-flex items-center gap-2 px-5 py-2.5 bg-white hover:bg-emerald-50 text-emerald-600 border border-emerald-600 rounded-lg text-sm font-semibold transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600"
+              className="inline-flex items-center gap-2 px-4 py-2 bg-white hover:bg-emerald-50 text-emerald-600 border border-emerald-200 rounded-lg text-sm font-medium transition-colors"
             >
               <Wrench className="w-4 h-4" />
               Techniker werden
             </Link>
-
-            {session?.user && (
-              <>
-                <Link
-                  href={IT_HILFE.routes.my}
-                  className="inline-flex items-center gap-2 px-5 py-2.5 bg-white hover:bg-gray-50 text-gray-700 border border-gray-300 rounded-lg text-sm font-semibold transition-colors"
-                >
-                  Meine Anfragen
-                </Link>
-                <Link
-                  href={IT_HILFE.routes.myOffers}
-                  className="inline-flex items-center gap-2 px-5 py-2.5 bg-white hover:bg-gray-50 text-gray-700 border border-gray-300 rounded-lg text-sm font-semibold transition-colors"
-                >
-                  <Heart className="w-4 h-4" />
-                  Meine Angebote
-                </Link>
-              </>
-            )}
+            <Link
+              href={IT_HILFE.routes.my}
+              className="inline-flex items-center gap-2 px-4 py-2 bg-white hover:bg-gray-50 text-gray-700 border border-gray-200 rounded-lg text-sm font-medium transition-colors"
+            >
+              Meine Anfragen
+            </Link>
+            <Link
+              href={IT_HILFE.routes.myOffers}
+              className="inline-flex items-center gap-2 px-4 py-2 bg-white hover:bg-gray-50 text-gray-700 border border-gray-200 rounded-lg text-sm font-medium transition-colors"
+            >
+              <Heart className="w-4 h-4" />
+              Meine Angebote
+            </Link>
           </div>
-        </div>
+        )}
 
         {/* Filter Bar */}
         <div className="mb-6 bg-white rounded-2xl shadow-sm border border-gray-100 p-4">
