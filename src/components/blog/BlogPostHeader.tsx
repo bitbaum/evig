@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { ArrowLeft } from 'lucide-react'
 import { BlogPost } from '@/lib/blog'
 import { formatDate } from '@/lib/date-formats'
+import Heading from '@/components/ui/Heading'
 
 interface BlogPostHeaderProps {
   post: BlogPost
@@ -29,9 +30,9 @@ export default function BlogPostHeader({ post }: BlogPostHeaderProps) {
       )}
 
       {/* Title */}
-      <h1 className="text-5xl md:text-6xl font-bold text-gray-900 leading-tight mb-6">
+      <Heading level={1} className="text-5xl md:text-6xl font-bold text-gray-900 leading-tight mb-6">
         {post.title}
-      </h1>
+      </Heading>
 
       {/* Excerpt */}
       {post.excerpt && (

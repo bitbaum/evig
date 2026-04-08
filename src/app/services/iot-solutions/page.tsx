@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { ArrowRight, Calendar, Cpu, Wifi, Zap, Layers, Smartphone, Clock, AlertTriangle, Heart } from 'lucide-react'
 import { PageHero } from '@/components/layout/PageHero'
 import { ORG } from '@/config/org'
+import Heading from '@/components/ui/Heading'
 
 export const metadata: Metadata = {
   title: 'IoT-Lösungen - Zukunftsvision | RevampIT',
@@ -77,7 +78,7 @@ export default function IoTSolutionsPage() {
             <div className="text-center mb-16">
               <div className="flex items-center justify-center gap-2 mb-4">
                 <Heart className="w-8 h-8 text-green-600" />
-                <h2 className="text-4xl font-bold text-gray-900">IoT für das soziale Wohl</h2>
+                <Heading level={2} className="text-gray-900">IoT für das soziale Wohl</Heading>
               </div>
               <p className="text-xl text-gray-600 max-w-3xl mx-auto">
                 Unsere zukünftigen IoT-Lösungen werden die Stärkung der Gemeinschaft, die Umweltüberwachung
@@ -124,7 +125,7 @@ export default function IoTSolutionsPage() {
                       <feature.icon className="w-6 h-6" />
                     </div>
                     <div>
-                      <h3 className="text-xl font-bold mb-2">{feature.title}</h3>
+                      <Heading level={3} className="mb-2">{feature.title}</Heading>
                       <p className="text-gray-600">{feature.description}</p>
                     </div>
                   </div>
@@ -138,7 +139,7 @@ export default function IoTSolutionsPage() {
         <section className="py-12 sm:py-16 md:py-20">
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto">
-              <h2 className="text-4xl font-bold text-gray-900 mb-8 text-center">Ethische Entwicklung braucht Zeit</h2>
+              <Heading level={2} className="text-gray-900 mb-8 text-center">Ethische Entwicklung braucht Zeit</Heading>
               <div className="bg-gray-50 rounded-xl p-8 border">
                 <p className="text-lg text-gray-700 mb-6">
                   Im Gegensatz zu gewinnorientierten IoT-Unternehmen, die eine schnelle Bereitstellung und Datenerfassung priorisieren,
@@ -149,14 +150,14 @@ export default function IoTSolutionsPage() {
                     <div className="flex items-start gap-3">
                       <div className="w-2 h-2 bg-green-600 rounded-full mt-3"></div>
                       <div>
-                        <h4 className="font-semibold text-gray-900">Konsultation der Gemeinschaft</h4>
+                        <Heading level={4} className="text-gray-900">Konsultation der Gemeinschaft</Heading>
                         <p className="text-gray-600">Umfassendes Engagement, um die tatsächlichen Bedürfnisse und Anliegen der Gemeinschaft zu verstehen</p>
                       </div>
                     </div>
                     <div className="flex items-start gap-3">
                       <div className="w-2 h-2 bg-green-600 rounded-full mt-3"></div>
                       <div>
-                        <h4 className="font-semibold text-gray-900">Datenschutzfreundliches Design</h4>
+                        <Heading level={4} className="text-gray-900">Datenschutzfreundliches Design</Heading>
                         <p className="text-gray-600">Entwicklung von Systemen, die Benutzerdaten schützen statt ausnutzen</p>
                       </div>
                     </div>
@@ -165,14 +166,14 @@ export default function IoTSolutionsPage() {
                     <div className="flex items-start gap-3">
                       <div className="w-2 h-2 bg-green-600 rounded-full mt-3"></div>
                       <div>
-                        <h4 className="font-semibold text-gray-900">Nachhaltige Lieferketten</h4>
+                        <Heading level={4} className="text-gray-900">Nachhaltige Lieferketten</Heading>
                         <p className="text-gray-600">Erforschung ethischer Beschaffung und Ansätze der Kreislaufwirtschaft</p>
                       </div>
                     </div>
                     <div className="flex items-start gap-3">
                       <div className="w-2 h-2 bg-green-600 rounded-full mt-3"></div>
                       <div>
-                        <h4 className="font-semibold text-gray-900">Open-Source-Entwicklung</h4>
+                        <Heading level={4} className="text-gray-900">Open-Source-Entwicklung</Heading>
                         <p className="text-gray-600">Aufbau kollaborativer Entwicklungsprozesse mit Transparenz</p>
                       </div>
                     </div>
@@ -187,7 +188,7 @@ export default function IoTSolutionsPage() {
         <section className="py-12 sm:py-16 md:py-20 bg-white">
           <div className="container mx-auto px-4">
             <div className="text-center mb-16">
-              <h2 className="text-4xl font-bold text-gray-900 mb-4">Gemeinschaftszentrierte Anwendungen</h2>
+              <Heading level={2} className="text-gray-900 mb-4">Gemeinschaftszentrierte Anwendungen</Heading>
               <p className="text-xl text-gray-600 max-w-3xl mx-auto">
                 Wenn wir bereit sind, werden unsere IoT-Lösungen echte Herausforderungen der Gemeinschaft angehen,
                 anstatt neue Formen der Überwachung oder Abhängigkeit zu schaffen.
@@ -218,7 +219,7 @@ export default function IoTSolutionsPage() {
                 }
               ].map((useCase, index) => (
                 <div key={index} className="bg-gray-50 rounded-xl p-8 border-2 border-gray-200">
-                  <h3 className="text-2xl font-bold text-gray-900 mb-3">{useCase.title}</h3>
+                  <Heading level={3} className="text-gray-900 mb-3">{useCase.title}</Heading>
                   <p className="text-gray-600 mb-6">{useCase.description}</p>
                   <div className="space-y-2">
                     {useCase.applications.map((app, appIndex) => (
@@ -238,13 +239,13 @@ export default function IoTSolutionsPage() {
         <section className="py-20 bg-gray-50">
           <div className="container mx-auto px-4 text-center">
             <div className="max-w-3xl mx-auto">
-              <h2 className="text-4xl font-bold text-gray-900 mb-6">Gestalte unsere Forschung mit</h2>
+              <Heading level={2} className="text-gray-900 mb-6">Gestalte unsere Forschung mit</Heading>
               <p className="text-xl text-gray-600 mb-8">
                 Hilf uns bei der Erforschung und Entwicklung von IoT-Lösungen, die wirklich den Bedürfnissen der Gemeinschaft dienen.
                 dein Beitrag ist für eine ethische Technologieentwicklung unerlässlich.
               </p>
               <div className="bg-green-50 border border-green-200 rounded-lg p-8">
-                <h3 className="text-2xl font-bold text-green-800 mb-4">Forschungspartnerschaft mit der Gemeinschaft</h3>
+                <Heading level={3} className="text-green-800 mb-4">Forschungspartnerschaft mit der Gemeinschaft</Heading>
                 <p className="text-green-700 mb-6">
                   Nimm an unserem Forschungsprozess teil, um zu untersuchen, wie die IoT-Technologie deine Gemeinschaft unterstützen kann,
                   ohne die Privatsphäre oder Autonomie zu beeinträchtigen. Wir brauchen vielfältige Stimmen, um bessere Lösungen zu entwickeln.
@@ -278,7 +279,7 @@ export default function IoTSolutionsPage() {
         {/* Current Services CTA */}
         <section className="py-20 bg-gradient-to-r from-green-700 to-green-800 text-white">
           <div className="container mx-auto px-4 text-center">
-            <h2 className="text-4xl font-bold mb-6">Benötigst du heute technische Unterstützung?</h2>
+            <Heading level={2} className="mb-6">Benötigst du heute technische Unterstützung?</Heading>
             <p className="text-xl mb-8 max-w-2xl mx-auto text-green-100">
               Während wir unsere IoT-Vision entwickeln, unterstützen wir aktiv Gemeinschaften mit
               Open-Source-Lösungen und der Wiederaufbereitung von Hardware.

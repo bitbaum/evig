@@ -25,6 +25,7 @@ import { CONVERSATION_TYPES } from '@/config/database'
 import { formatDate } from '@/lib/date-formats'
 import { logger } from '@/lib/logger'
 import { apiFetch } from '@/lib/api/client'
+import Heading from '@/components/ui/Heading'
 
 interface Review {
   id: string
@@ -155,7 +156,7 @@ export default function HelperDetailPage() {
             </div>
             <div>
               <div className="flex items-center gap-3">
-                <h1 className="text-2xl font-bold">{helper.name}</h1>
+                <Heading level={1} className="text-2xl">{helper.name}</Heading>
                 {helper.isVerified && (
                   <span className="inline-flex items-center gap-1 bg-white/20 px-2 py-0.5 rounded-full text-xs">
                     <Shield className="w-3 h-3" />
@@ -191,14 +192,14 @@ export default function HelperDetailPage() {
         {/* Bio */}
         {helper.bio && (
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-3">Über mich</h2>
+            <Heading level={2} className="text-lg text-gray-900 mb-3">Über mich</Heading>
             <p className="text-gray-700 whitespace-pre-line">{helper.bio}</p>
           </div>
         )}
 
         {/* Skills */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">Fähigkeiten</h2>
+          <Heading level={2} className="text-lg text-gray-900 mb-4">Fähigkeiten</Heading>
           <div className="space-y-4">
             {groupedSkills
               .filter(g => g.skills.some(s => helperSkillSet.has(s.id)))
@@ -230,7 +231,7 @@ export default function HelperDetailPage() {
 
         {/* Service Info */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">Service-Details</h2>
+          <Heading level={2} className="text-lg text-gray-900 mb-4">Service-Details</Heading>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {/* Service types */}
             {helper.serviceTypes && helper.serviceTypes.length > 0 && (
@@ -287,9 +288,9 @@ export default function HelperDetailPage() {
         {/* Reviews */}
         {reviews.length > 0 && (
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">
+            <Heading level={2} className="text-lg text-gray-900 mb-4">
               Bewertungen ({reviews.length})
-            </h2>
+            </Heading>
             <div className="space-y-4">
               {reviews.map(review => (
                 <div key={review.id} className="border-b border-gray-100 last:border-0 pb-4 last:pb-0">

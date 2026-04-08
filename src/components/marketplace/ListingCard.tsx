@@ -10,6 +10,7 @@ import { Star, MapPin, Heart, ShieldCheck } from 'lucide-react'
 import { getConditionBadge } from '@/config/erfassung/conditions'
 import { formatCHF, GRATIS_CONFIG, VERIFICATION_CONFIG } from '@/config/marketplace'
 import { ListingImage } from './ListingImage'
+import Heading from '@/components/ui/Heading'
 
 export interface ListingCardData {
   id: string
@@ -109,9 +110,9 @@ export function ListingCard({ listing, variant = 'default', className = '' }: Li
 
       {/* Info */}
       <div className={isCompact ? 'p-2 md:p-3' : 'p-3 md:p-4'}>
-        <h3 className={`font-semibold text-gray-900 dark:text-white mb-1 line-clamp-2 ${isCompact ? 'text-xs md:text-sm' : 'text-sm md:text-base'} group-hover:text-green-600 transition-colors`}>
+        <Heading level={3} className={`font-semibold text-gray-900 dark:text-white mb-1 line-clamp-2 ${isCompact ? 'text-xs md:text-sm' : 'text-sm md:text-base'} group-hover:text-green-600 transition-colors`}>
           {listing.title}
-        </h3>
+        </Heading>
 
         <p className={`${isCompact ? 'text-base' : 'text-lg'} font-bold mb-1 ${isGratis ? 'text-teal-600' : 'text-gray-900 dark:text-white'}`}>
           {formatCHF(Number(listing.price_chf))}

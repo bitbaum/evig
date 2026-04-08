@@ -3,6 +3,7 @@
 import { useParams } from 'next/navigation'
 import Link from 'next/link'
 import { ArrowLeft, AlertCircle, CheckCircle } from 'lucide-react'
+import Heading from '@/components/ui/Heading'
 import { formatDate } from '@/lib/date-formats'
 import { getCategoryById, REQUEST_STATUS } from '@/config/it-hilfe'
 import { TechnicianMapList } from '@/components/it-hilfe/TechnicianMapList'
@@ -37,7 +38,7 @@ export default function ITHilfeDetailPage() {
       <div className="min-h-screen bg-gray-50 py-12">
         <div className="max-w-3xl mx-auto px-4 text-center">
           <AlertCircle className="w-16 h-16 text-red-500 mx-auto mb-4" aria-hidden="true" />
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">Fehler</h1>
+          <Heading level={1} className="text-2xl text-gray-900 mb-2">Fehler</Heading>
           <p className="text-gray-600 mb-6">{detail.error || 'Anfrage nicht gefunden'}</p>
           <Link
             href="/it-hilfe"

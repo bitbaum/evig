@@ -8,6 +8,7 @@
 import type { ServiceFeature } from '@/lib/services'
 import { getTextColor } from '@/lib/design-system'
 import { cn } from '@/lib/utils'
+import Heading from '@/components/ui/Heading'
 
 interface ServiceFeaturesProps {
   features: ServiceFeature[]
@@ -25,7 +26,7 @@ export default function ServiceFeatures({ features }: ServiceFeaturesProps) {
                   <feature.icon className="w-6 h-6 sm:w-8 sm:h-8" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <h3 className={cn('text-xl sm:text-2xl font-bold mb-2 sm:mb-3', getTextColor('white', 'primary'))}>{feature.title}</h3>
+                  <Heading level={3} className={cn('text-xl sm:text-2xl font-bold mb-2 sm:mb-3', getTextColor('white', 'primary'))}>{feature.title}</Heading>
                   <p className={cn('text-sm sm:text-base', getTextColor('white', 'muted'))}>{feature.description}</p>
                 </div>
               </div>

@@ -1,5 +1,6 @@
 import { Metadata } from 'next'
 import { ORG, CONTACT, LOCATIONS } from '@/config/org'
+import Heading from '@/components/ui/Heading'
 
 export const metadata: Metadata = {
   title: `Datenschutzerklärung | ${ORG.name}`,
@@ -9,10 +10,10 @@ export const metadata: Metadata = {
 export default function DatenschutzPage() {
   return (
     <main className="mx-auto max-w-3xl px-4 py-16">
-      <h1 className="mb-8 text-3xl font-bold">Datenschutzerklärung</h1>
+      <Heading level={1} className="mb-8 text-3xl">Datenschutzerklärung</Heading>
 
       <section className="prose prose-neutral max-w-none space-y-6">
-        <h2>1. Verantwortliche Stelle</h2>
+        <Heading level={2}>1. Verantwortliche Stelle</Heading>
         <p>
           {ORG.legalName}<br />
           {LOCATIONS.store.street}<br />
@@ -20,7 +21,7 @@ export default function DatenschutzPage() {
           E-Mail: {CONTACT.email}
         </p>
 
-        <h2>2. Erhebung und Verarbeitung personenbezogener Daten</h2>
+        <Heading level={2}>2. Erhebung und Verarbeitung personenbezogener Daten</Heading>
         <p>
           Wir erheben personenbezogene Daten, wenn Sie sich auf unserer Plattform registrieren,
           unsere Dienstleistungen nutzen oder mit uns in Kontakt treten. Dies umfasst:
@@ -31,7 +32,7 @@ export default function DatenschutzPage() {
           <li>Nutzungsdaten (bei Verwendung der Plattform)</li>
         </ul>
 
-        <h2>3. Zweck der Datenverarbeitung</h2>
+        <Heading level={2}>3. Zweck der Datenverarbeitung</Heading>
         <p>Ihre Daten werden verwendet für:</p>
         <ul>
           <li>Bereitstellung und Verwaltung Ihres Benutzerkontos</li>
@@ -41,7 +42,7 @@ export default function DatenschutzPage() {
           <li>Kommunikation bezüglich unserer Angebote (nur mit Einwilligung)</li>
         </ul>
 
-        <h2>4. Datenweitergabe</h2>
+        <Heading level={2}>4. Datenweitergabe</Heading>
         <p>
           Ihre Daten werden nicht an Dritte verkauft. Eine Weitergabe erfolgt nur, wenn
           dies zur Erbringung unserer Dienstleistungen erforderlich ist (z.B. an
@@ -49,21 +50,21 @@ export default function DatenschutzPage() {
           dazu verpflichtet sind.
         </p>
 
-        <h2>5. Datensicherheit</h2>
+        <Heading level={2}>5. Datensicherheit</Heading>
         <p>
           Wir setzen technische und organisatorische Massnahmen ein, um Ihre Daten
           vor unbefugtem Zugriff, Verlust oder Missbrauch zu schützen. Passwörter
           werden ausschliesslich gehasht gespeichert.
         </p>
 
-        <h2>6. Cookies</h2>
+        <Heading level={2}>6. Cookies</Heading>
         <p>
           Unsere Plattform verwendet funktionale Cookies für die Sitzungsverwaltung
           und Authentifizierung. Analytische Cookies werden nur mit Ihrer Einwilligung
           gesetzt.
         </p>
 
-        <h2>7. Ihre Rechte</h2>
+        <Heading level={2}>7. Ihre Rechte</Heading>
         <p>Sie haben das Recht auf:</p>
         <ul>
           <li>Auskunft über Ihre gespeicherten Daten</li>
@@ -83,7 +84,7 @@ export default function DatenschutzPage() {
           <a href={`mailto:${CONTACT.email}`} className="text-green-700 underline">{CONTACT.email}</a>
         </p>
 
-        <h2>8. Speicherdauer</h2>
+        <Heading level={2}>8. Speicherdauer</Heading>
         <p>
           Wir speichern Ihre personenbezogenen Daten nur so lange, wie es für die
           genannten Zwecke erforderlich ist oder gesetzliche Aufbewahrungsfristen dies
@@ -92,14 +93,14 @@ export default function DatenschutzPage() {
           Rechnungen) entgegenstehen.
         </p>
 
-        <h2>9. Rechtsgrundlage</h2>
+        <Heading level={2}>9. Rechtsgrundlage</Heading>
         <p>
           Die Verarbeitung erfolgt gestützt auf das Schweizer Datenschutzgesetz (DSG)
           sowie, soweit anwendbar, auf Art. 6 Abs. 1 DSGVO (Vertragserfüllung,
           berechtigte Interessen, Einwilligung).
         </p>
 
-        <h2>10. Anwendbares Recht</h2>
+        <Heading level={2}>10. Anwendbares Recht</Heading>
         <p>
           Diese Datenschutzerklärung unterliegt dem Schweizer Datenschutzgesetz (DSG)
           sowie, soweit anwendbar, der Europäischen Datenschutz-Grundverordnung (DSGVO).

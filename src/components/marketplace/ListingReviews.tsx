@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from 'react'
 import { useSession } from 'next-auth/react'
 import { Star, Loader2, MessageSquare } from 'lucide-react'
 import ReviewForm from './ReviewForm'
+import Heading from '@/components/ui/Heading'
 import { formatDateShort } from '@/lib/date-formats'
 import { apiFetch } from '@/lib/api/client'
 
@@ -80,13 +81,13 @@ export default function ListingReviews({ listingId, sellerId }: ListingReviewsPr
   return (
     <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2">
+        <Heading level={2} className="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2">
           <MessageSquare className="w-5 h-5" />
           Bewertungen
           {stats.review_count > 0 && (
             <span className="text-sm font-normal text-gray-500">({stats.review_count})</span>
           )}
-        </h2>
+        </Heading>
 
         {stats.average_rating && Number(stats.average_rating) > 0 && (
           <div className="flex items-center gap-1">
@@ -133,9 +134,9 @@ export default function ListingReviews({ listingId, sellerId }: ListingReviewsPr
                 </span>
               </div>
               {review.title && (
-                <h4 className="text-sm font-medium text-gray-900 dark:text-white mb-1">
+                <Heading level={4} className="text-sm font-medium text-gray-900 dark:text-white mb-1">
                   {review.title}
-                </h4>
+                </Heading>
               )}
               <p className="text-sm text-gray-600 dark:text-gray-300">{review.content}</p>
             </div>

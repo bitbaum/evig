@@ -7,6 +7,7 @@ function getReadingTime(content: string): number {
   return Math.ceil(content.trim().split(/\s+/).length / 200)
 }
 import { Clock } from 'lucide-react'
+import Heading from '@/components/ui/Heading'
 
 interface BlogLatestListProps {
   posts: BlogPost[]
@@ -49,9 +50,9 @@ export default function BlogLatestList({ posts }: BlogLatestListProps) {
                 )}
 
                 {/* Title */}
-                <h3 className="text-lg font-bold text-gray-900 mb-2 leading-snug group-hover:text-primary-700 transition-colors line-clamp-2">
+                <Heading level={3} className="text-lg font-bold text-gray-900 mb-2 leading-snug group-hover:text-primary-700 transition-colors line-clamp-2">
                   {post.title}
-                </h3>
+                </Heading>
 
                 {/* Meta */}
                 <div className="flex items-center gap-3 text-xs text-gray-500">

@@ -9,6 +9,7 @@ import {
 } from 'lucide-react'
 import { WorkshopProposalForm } from './components/WorkshopProposalForm'
 import { responsiveTypography } from '@/lib/responsive'
+import Heading from '@/components/ui/Heading'
 
 export default function WorkshopProposalPage() {
   const { data: session } = useSession()
@@ -19,9 +20,9 @@ export default function WorkshopProposalPage() {
         <div className="max-w-2xl mx-auto px-4">
           <div className="bg-white rounded-xl shadow-lg p-8 text-center">
             <AlertCircle className="w-16 h-16 text-yellow-500 mx-auto mb-4" />
-            <h1 className={`${responsiveTypography.subsection} font-bold text-gray-900 mb-4`}>
+            <Heading level={1} className={`${responsiveTypography.subsection} text-gray-900 mb-4`}>
               Anmeldung erforderlich
-            </h1>
+            </Heading>
             <p className="text-gray-600 mb-6">
               Bitte melde sich an, um einen Workshop vorzuschlagen.
             </p>
@@ -54,9 +55,9 @@ export default function WorkshopProposalPage() {
             <div className="inline-flex items-center justify-center w-16 h-16 bg-green-100 rounded-full mb-6">
               <GraduationCap className="w-8 h-8 text-green-600" />
             </div>
-            <h1 className={`${responsiveTypography.section} font-bold text-gray-900 mb-2`}>
+            <Heading level={1} className={`${responsiveTypography.section} text-gray-900 mb-2`}>
               Workshop vorschlagen
-            </h1>
+            </Heading>
             <p className="text-gray-600">
               Schlage einen neuen Workshop vor und teile dein Wissen mit der Community
             </p>

@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { cn } from '@/lib/utils'
+import Heading from '@/components/ui/Heading'
 
 interface BlogNavigationProps {
   categories: string[]
@@ -25,7 +26,7 @@ export default function BlogNavigation({
         <div className="flex items-center justify-between h-16">
           {/* Logo/Title */}
           <Link href="/blog" className="flex items-center">
-            <h1 className="text-2xl font-bold text-gray-900">Blog</h1>
+            <Heading level={1} className="text-2xl font-bold text-gray-900">Blog</Heading>
           </Link>
 
           {/* Categories */}

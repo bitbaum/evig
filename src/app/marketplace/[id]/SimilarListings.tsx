@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import Heading from '@/components/ui/Heading'
 import { getConditionBadge } from '@/config/erfassung/conditions'
 import { formatCHF } from '@/config/marketplace'
 import { ListingImage } from '@/components/marketplace/ListingImage'
@@ -15,7 +16,7 @@ export function SimilarListings({ listings }: SimilarListingsProps) {
 
   return (
     <div className="mt-6">
-      <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-4">Ähnliche Inserate</h2>
+      <Heading level={2} className="text-lg text-gray-900 dark:text-white mb-4">Ähnliche Inserate</Heading>
       <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         {listings.map((sim) => {
           const simCondition = getConditionBadge(sim.condition)
@@ -34,9 +35,9 @@ export function SimilarListings({ listings }: SimilarListingsProps) {
                 </div>
               </div>
               <div className="p-3">
-                <h3 className="font-semibold text-gray-900 dark:text-white mb-1 line-clamp-2 text-sm group-hover:text-green-600 transition-colors">
+                <Heading level={3} className="text-gray-900 dark:text-white mb-1 line-clamp-2 text-sm group-hover:text-green-600 transition-colors">
                   {sim.title}
-                </h3>
+                </Heading>
                 <p className="text-lg font-bold text-gray-900 dark:text-white">
                   {formatCHF(Number(sim.price_chf))}
                 </p>

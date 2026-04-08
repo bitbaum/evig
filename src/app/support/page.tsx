@@ -2,6 +2,7 @@ import { Metadata } from 'next'
 import Link from 'next/link'
 import { Heart, Coffee, Users, Shield } from 'lucide-react'
 import { PageHero } from '@/components/layout/PageHero'
+import Heading from '@/components/ui/Heading'
 
 export const metadata: Metadata = {
   title: 'RevampIt unterstützen | Community-gestützte Inhalte',
@@ -25,7 +26,7 @@ export default function SupportPage() {
             <div className="inline-flex items-center justify-center w-12 h-12 sm:w-16 sm:h-16 bg-green-100 rounded-full mb-3 sm:mb-4">
               <Shield className="w-6 h-6 sm:w-8 sm:h-8 text-green-600" />
             </div>
-            <h3 className="text-base sm:text-lg font-bold text-gray-900 mb-2">Keine Werbung</h3>
+            <Heading level={3} className="text-base sm:text-lg text-gray-900 mb-2">Keine Werbung</Heading>
             <p className="text-gray-600">
               Wir werden niemals Werbung schalten oder deine Daten verkaufen
             </p>
@@ -34,7 +35,7 @@ export default function SupportPage() {
             <div className="inline-flex items-center justify-center w-16 h-16 bg-green-100 rounded-full mb-4">
               <Users className="w-8 h-8 text-green-600" />
             </div>
-            <h3 className="text-lg font-bold text-gray-900 mb-2">Community-getrieben</h3>
+            <Heading level={3} className="text-lg text-gray-900 mb-2">Community-getrieben</Heading>
             <p className="text-gray-600">
               Von der Community, für die Community – ohne kommerzielle Interessen
             </p>
@@ -43,7 +44,7 @@ export default function SupportPage() {
             <div className="inline-flex items-center justify-center w-16 h-16 bg-green-100 rounded-full mb-4">
               <Heart className="w-8 h-8 text-green-600" />
             </div>
-            <h3 className="text-lg font-bold text-gray-900 mb-2">Qualität zuerst</h3>
+            <Heading level={3} className="text-lg text-gray-900 mb-2">Qualität zuerst</Heading>
             <p className="text-gray-600">
               Fokus auf wahrheitsgetreue, gut recherchierte Inhalte
             </p>
@@ -52,7 +53,7 @@ export default function SupportPage() {
 
         {/* Our Promise */}
         <div className="bg-gray-50 rounded-lg p-6 sm:p-8 mb-8 sm:mb-12">
-          <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-3 sm:mb-4">Unser Versprechen</h2>
+          <Heading level={2} className="text-xl sm:text-2xl text-gray-900 mb-3 sm:mb-4">Unser Versprechen</Heading>
           <div className="prose prose-lg text-gray-700">
             <p>
               RevampIt ist kein Unternehmen – es ist eine Bewegung. Wir glauben daran, dass
@@ -78,7 +79,7 @@ export default function SupportPage() {
           <div className="border-2 border-gray-200 rounded-lg p-6 sm:p-8 hover:border-green-500 transition-colors">
             <div className="flex items-center gap-3 mb-3 sm:mb-4">
               <Coffee className="w-6 h-6 sm:w-8 sm:h-8 text-green-600" />
-              <h3 className="text-xl sm:text-2xl font-bold text-gray-900">Einmalige Spende</h3>
+              <Heading level={3} className="text-xl sm:text-2xl text-gray-900">Einmalige Spende</Heading>
             </div>
             <p className="text-gray-600 mb-6">
               Kaufe uns einen Kaffee oder unterstütze uns mit einem beliebigen Betrag
@@ -97,7 +98,7 @@ export default function SupportPage() {
           <div className="border-2 border-green-500 rounded-lg p-6 sm:p-8 bg-green-50">
             <div className="flex items-center gap-3 mb-3 sm:mb-4">
               <Heart className="w-6 h-6 sm:w-8 sm:h-8 text-green-600" />
-              <h3 className="text-xl sm:text-2xl font-bold text-gray-900">Monatlicher Support</h3>
+              <Heading level={3} className="text-xl sm:text-2xl text-gray-900">Monatlicher Support</Heading>
             </div>
             <p className="text-gray-600 mb-6">
               Werde Unterstützer und hilf uns nachhaltig zu wachsen
@@ -115,9 +116,9 @@ export default function SupportPage() {
 
         {/* Alternative Ways */}
         <div className="text-center py-8 border-t border-gray-200">
-          <h3 className="text-xl font-bold text-gray-900 mb-4">
+          <Heading level={3} className="text-xl text-gray-900 mb-4">
             Andere Wege zu helfen
-          </h3>
+          </Heading>
           <div className="flex flex-wrap justify-center gap-4">
             <Link
               href="/blog/submit"

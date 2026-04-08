@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { HelpCircle } from 'lucide-react'
 import { PageHero } from '@/components/layout/PageHero'
+import Heading from '@/components/ui/Heading'
 
 export const metadata: Metadata = {
   title: 'FAQ – Häufige Fragen | RevampIT',
@@ -186,7 +187,7 @@ export default function FAQPage() {
             <div className="space-y-8 sm:space-y-10">
               {faqs.map((group) => (
                 <section key={group.category}>
-                  <h2 className="text-lg sm:text-xl font-semibold text-gray-800 mb-3 sm:mb-4">{group.category}</h2>
+                  <Heading level={2} className="text-lg sm:text-xl text-gray-800 mb-3 sm:mb-4">{group.category}</Heading>
                   <div className="divide-y divide-gray-200 rounded-xl border border-gray-200 bg-white">
                     {group.items.map((item, idx) => (
                       <details key={idx} className="group p-4 sm:p-5 open:bg-gray-50/60">

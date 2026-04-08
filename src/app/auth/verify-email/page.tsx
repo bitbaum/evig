@@ -4,6 +4,7 @@ import { useEffect, useState, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { CheckCircle, XCircle, Loader2, Mail } from 'lucide-react'
 import Link from 'next/link'
+import Heading from '@/components/ui/Heading'
 
 function VerifyEmailContent() {
   const router = useRouter()
@@ -61,9 +62,9 @@ function VerifyEmailContent() {
             <Mail className="w-8 h-8 text-green-600" />
           </div>
         </div>
-        <h2 className="mt-6 text-center text-3xl font-bold text-gray-900">
+        <Heading level={2} className="mt-6 text-center text-3xl text-gray-900">
           E-Mail-Adresse bestätigen
-        </h2>
+        </Heading>
         <p className="mt-2 text-center text-sm text-gray-600">
           Wir bestätigen deine E-Mail-Adresse...
         </p>
@@ -82,9 +83,9 @@ function VerifyEmailContent() {
             {status === 'success' && (
               <div className="flex flex-col items-center">
                 <CheckCircle className="w-12 h-12 text-green-500 mb-4" />
-                <h3 className="text-lg font-medium text-green-900 mb-2">
+                <Heading level={3} className="text-lg text-green-900 mb-2">
                   E-Mail-Adresse bestätigt!
-                </h3>
+                </Heading>
                 <p className="text-gray-600 mb-4">{message}</p>
                 <p className="text-sm text-gray-500">
                   du wirst in wenigen Sekunden zur Anmeldung weitergeleitet...
@@ -103,9 +104,9 @@ function VerifyEmailContent() {
             {status === 'error' && (
               <div className="flex flex-col items-center">
                 <XCircle className="w-12 h-12 text-red-500 mb-4" />
-                <h3 className="text-lg font-medium text-red-900 mb-2">
+                <Heading level={3} className="text-lg text-red-900 mb-2">
                   Verifizierung fehlgeschlagen
-                </h3>
+                </Heading>
                 <p className="text-gray-600 mb-4">{message}</p>
                 <div className="space-y-3">
                   <Link
@@ -141,9 +142,9 @@ function VerifyEmailFallback() {
             <Mail className="w-8 h-8 text-green-600" />
           </div>
         </div>
-        <h2 className="mt-6 text-center text-3xl font-bold text-gray-900">
+        <Heading level={2} className="mt-6 text-center text-3xl text-gray-900">
           E-Mail-Adresse bestätigen
-        </h2>
+        </Heading>
       </div>
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <div className="bg-white py-8 px-4 shadow-lg rounded-lg sm:px-10">

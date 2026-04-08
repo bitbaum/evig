@@ -18,6 +18,7 @@ import {
   IT_SKILLS,
 } from '@/config/it-hilfe'
 import { HelperCard } from '@/components/it-hilfe/HelperCard'
+import Heading from '@/components/ui/Heading'
 
 interface Helper {
   userId: string
@@ -125,7 +126,7 @@ export default function HelferPage() {
             <div className="p-3 bg-white/20 rounded-xl">
               <Users className="w-8 h-8" />
             </div>
-            <h1 className="text-3xl font-bold">IT-Techniker finden</h1>
+            <Heading level={1} className="text-3xl">IT-Techniker finden</Heading>
           </div>
           <p className="text-blue-100 text-lg max-w-2xl mb-8">
             Finde erfahrene IT-Techniker in deiner Nähe. Von Reparaturen bis Beratung - unsere Community hilft dir weiter.
@@ -313,9 +314,9 @@ export default function HelferPage() {
         ) : helpers.length === 0 ? (
           <div className="text-center py-16">
             <Search className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">
+            <Heading level={3} className="text-xl text-gray-900 mb-2">
               Keine Techniker gefunden
-            </h3>
+            </Heading>
             <p className="text-gray-600 mb-6">
               {hasActiveFilters
                 ? 'Versuche andere Filter oder setze sie zurück.'

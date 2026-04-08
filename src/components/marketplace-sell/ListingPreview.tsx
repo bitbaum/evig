@@ -1,6 +1,7 @@
 import Image from 'next/image'
 import { ArrowLeft, Eye, Loader2, CheckCircle, AlertCircle } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import Heading from '@/components/ui/Heading'
 import { formatCHF, DELIVERY_LABELS, PAYMENT_MODE_LABELS } from '@/config/marketplace'
 import type { DeliveryOption, PaymentMode } from '@/config/marketplace'
 import { ZUSTAND_OPTIONS } from '@/config/erfassung/conditions'
@@ -31,10 +32,10 @@ export function ListingPreview({ formData, editId, isSubmitting, success, error,
 
       <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">
         <div className="p-6 border-b border-gray-100 dark:border-gray-700">
-          <h1 className="text-xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
+          <Heading level={1} className="text-xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
             <Eye className="w-5 h-5" />
             Vorschau
-          </h1>
+          </Heading>
           <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
             So wird Ihr Inserat im Marketplace angezeigt.
           </p>
@@ -51,7 +52,7 @@ export function ListingPreview({ formData, editId, isSubmitting, success, error,
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <h2 className="text-2xl font-bold text-gray-900 dark:text-white">{formData.title}</h2>
+              <Heading level={2} className="text-2xl font-bold text-gray-900 dark:text-white">{formData.title}</Heading>
               <p className="text-3xl font-bold text-green-600 mt-2">{formatCHF(parseFloat(formData.price) || 0)}</p>
               <div className="flex gap-2 mt-3">
                 <span className="px-3 py-1 rounded-full text-xs font-medium bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300">{formData.category}</span>
@@ -68,7 +69,7 @@ export function ListingPreview({ formData, editId, isSubmitting, success, error,
           </div>
 
           <div>
-            <h3 className="font-semibold text-gray-900 dark:text-white mb-2">Beschreibung</h3>
+            <Heading level={3} className="font-semibold text-gray-900 dark:text-white mb-2">Beschreibung</Heading>
             <p className="text-gray-600 dark:text-gray-300 whitespace-pre-line text-sm">{formData.description}</p>
           </div>
         </div>

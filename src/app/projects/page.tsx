@@ -5,6 +5,7 @@ import { Metadata } from 'next'
 import Link from 'next/link'
 import { PageHero } from '@/components/layout/PageHero'
 import { ArrowRight, Filter, CheckCircle2, Calendar, Users, Code, Globe, Wrench, Rocket } from 'lucide-react'
+import Heading from '@/components/ui/Heading'
 
 // Note: metadata export removed since this is now a client component
 // const metadata: Metadata = {
@@ -139,7 +140,7 @@ export default function ProjectsPage() {
       <section className="py-12 sm:py-16 md:py-20">
         <div className="container mx-auto px-4 sm:px-6">
           <div className="max-w-3xl mx-auto text-center mb-8 sm:mb-12">
-            <h2 className="text-2xl sm:text-3xl font-bold mb-4 sm:mb-6">Unsere Projekte</h2>
+            <Heading level={2} className="text-2xl sm:text-3xl mb-4 sm:mb-6">Unsere Projekte</Heading>
             <p className="text-base sm:text-lg text-gray-600 mb-6 sm:mb-8">
               Von Open-Source-Software bis hin zu Community-Initiativen - entdecke unsere vielfältigen Projekte.
             </p>
@@ -181,7 +182,7 @@ export default function ProjectsPage() {
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex flex-wrap items-center gap-2 mb-2">
-                        <h3 className="text-xl sm:text-2xl font-bold">{project.title}</h3>
+                        <Heading level={3} className="text-xl sm:text-2xl">{project.title}</Heading>
                         <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-700">
                           {project.status}
                         </span>

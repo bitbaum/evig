@@ -23,6 +23,7 @@ import { getSkillById, REVAMPIT_STORE } from '@/config/it-hilfe'
 import { getCantonCoordinates } from '@/config/canton-coordinates'
 import LeafletMap, { type MapMarker } from '@/components/map/LeafletMap'
 import { HelperCard } from './HelperCard'
+import Heading from '@/components/ui/Heading'
 
 // =============================================================================
 // TYPES
@@ -126,7 +127,7 @@ export function TechnicianMapList({ requestId, requestTitle }: TechnicianMapList
       <div className="space-y-4">
         <div className="flex items-center gap-2">
           <Sparkles className="w-5 h-5 text-blue-600" />
-          <h3 className="text-lg font-semibold text-gray-900">Techniker werden gesucht...</h3>
+          <Heading level={3} className="text-lg font-semibold text-gray-900">Techniker werden gesucht...</Heading>
         </div>
         <div className="animate-pulse bg-gray-100 rounded-lg min-h-[300px]" />
       </div>
@@ -146,9 +147,9 @@ export function TechnicianMapList({ requestId, requestTitle }: TechnicianMapList
       {/* Header */}
       <div className="flex items-center gap-2">
         <Sparkles className="w-5 h-5 text-blue-600" />
-        <h3 className="text-lg font-semibold text-gray-900">
+        <Heading level={3} className="text-lg font-semibold text-gray-900">
           Techniker & Werkstatt
-        </h3>
+        </Heading>
       </div>
 
       {/* Split Layout: Desktop side-by-side, Mobile stacked */}
@@ -159,7 +160,7 @@ export function TechnicianMapList({ requestId, requestTitle }: TechnicianMapList
           <div className="bg-gradient-to-r from-emerald-50 to-green-50 border-2 border-emerald-300 rounded-xl p-5">
             <div className="flex items-center gap-2 mb-2">
               <Store className="w-5 h-5 text-emerald-600" />
-              <h4 className="font-semibold text-gray-900">{REVAMPIT_STORE.name}</h4>
+              <Heading level={4} className="font-semibold text-gray-900">{REVAMPIT_STORE.name}</Heading>
             </div>
             <p className="text-sm text-gray-600 mb-2">
               {REVAMPIT_STORE.description}

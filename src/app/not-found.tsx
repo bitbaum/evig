@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Heading from '@/components/ui/Heading'
 
 export default function NotFound() {
   return (
@@ -21,7 +22,7 @@ export default function NotFound() {
           </svg>
         </div>
         <div className="mt-4 text-center">
-          <h1 className="text-lg font-medium text-gray-900">Seite nicht gefunden</h1>
+          <Heading level={1} className="text-lg text-gray-900">Seite nicht gefunden</Heading>
           <p className="mt-2 text-sm text-gray-600">
             Die gesuchte Seite konnte nicht gefunden werden.
           </p>

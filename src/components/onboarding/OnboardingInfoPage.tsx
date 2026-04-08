@@ -11,6 +11,7 @@ import Link from 'next/link'
 import { useState } from 'react'
 import { ChevronDown, ChevronUp, ArrowRight } from 'lucide-react'
 import type { OnboardingConfig } from '@/config/onboarding'
+import Heading from '@/components/ui/Heading'
 
 interface OnboardingInfoPageProps {
   config: OnboardingConfig
@@ -33,9 +34,9 @@ export function OnboardingInfoPage({ config }: OnboardingInfoPageProps) {
           <div className={`inline-flex items-center justify-center w-16 h-16 rounded-full ${config.header.iconBgColor} mb-4`}>
             <HeaderIcon className={`w-8 h-8 ${config.header.iconColor}`} />
           </div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-4">
+          <Heading level={1} className="text-3xl font-bold text-gray-900 mb-4">
             {config.header.title}
-          </h1>
+          </Heading>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
             {config.header.subtitle}
           </p>
@@ -55,9 +56,9 @@ export function OnboardingInfoPage({ config }: OnboardingInfoPageProps) {
                     <BenefitIcon className={`w-6 h-6 ${benefit.iconColor}`} />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-gray-900 mb-2">
+                    <Heading level={3} className="font-semibold text-gray-900 mb-2">
                       {benefit.title}
-                    </h3>
+                    </Heading>
                     <p className="text-gray-600 text-sm">
                       {benefit.description}
                     </p>
@@ -70,9 +71,9 @@ export function OnboardingInfoPage({ config }: OnboardingInfoPageProps) {
 
         {/* Requirements Section */}
         <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-200 mb-8">
-          <h2 className="text-xl font-semibold text-gray-900 mb-4">
+          <Heading level={2} className="text-xl font-semibold text-gray-900 mb-4">
             {config.requirements.title}
-          </h2>
+          </Heading>
           <ul className="space-y-4">
             {config.requirements.items.map((item, index) => (
               <li key={index} className="flex items-start space-x-3">
@@ -92,9 +93,9 @@ export function OnboardingInfoPage({ config }: OnboardingInfoPageProps) {
         <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg p-6 border border-blue-100 mb-8">
           <div className="flex items-center space-x-3 mb-4">
             <config.pricing.icon className={`w-6 h-6 ${config.pricing.iconColor}`} />
-            <h2 className="text-xl font-semibold text-gray-900">
+            <Heading level={2} className="text-xl font-semibold text-gray-900">
               {config.pricing.title}
-            </h2>
+            </Heading>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {config.pricing.items.map((item, index) => (
@@ -143,9 +144,9 @@ export function OnboardingInfoPage({ config }: OnboardingInfoPageProps) {
 
         {/* FAQ Section */}
         <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-200">
-          <h2 className="text-xl font-semibold text-gray-900 mb-6">
+          <Heading level={2} className="text-xl font-semibold text-gray-900 mb-6">
             {config.faq.title}
-          </h2>
+          </Heading>
           <div className="space-y-4">
             {config.faq.items.map((item, index) => (
               <div key={index} className="border-b border-gray-100 last:border-0 pb-4 last:pb-0">

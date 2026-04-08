@@ -23,6 +23,7 @@ import {
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { PageHero } from '@/components/layout/PageHero'
+import Heading from '@/components/ui/Heading'
 import { STORE_ADDRESS, STORE_GOOGLE_MAPS_URL, STORE_OSM_URL } from '@/lib/constants'
 import { ORG, LOCATIONS } from '@/config/org'
 
@@ -161,7 +162,7 @@ export default function SpacePage() {
       <section className="py-16 md:py-20 bg-gray-50">
         <div className="container mx-auto px-4 sm:px-6">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">Unsere Reise durch Zürich</h2>
+            <Heading level={2} className="text-3xl md:text-4xl mb-4">Unsere Reise durch Zürich</Heading>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
               Über 20 Jahre, mehrere Standorte, eine Mission: Technologie nachhaltig nutzen.
             </p>
@@ -275,7 +276,7 @@ export default function SpacePage() {
               <Calendar className="w-4 h-4" />
               <span className="text-sm font-medium">Umzug bis Ende 2026</span>
             </div>
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">Unser Traumlokal</h2>
+            <Heading level={2} className="text-3xl md:text-4xl mb-4">Unser Traumlokal</Heading>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
               Wir müssen unser aktuelles Lokal bis Ende 2026 verlassen.
               Das ist unsere Chance, etwas Grösseres zu schaffen.
@@ -375,9 +376,9 @@ export default function SpacePage() {
         <div className="container mx-auto px-4 sm:px-6">
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-bold mb-4">
+              <Heading level={2} className="text-3xl md:text-4xl mb-4">
                 Warum ein grösserer Raum mehr Wirkung bedeutet
-              </h2>
+              </Heading>
               <p className="text-lg text-gray-600 max-w-2xl mx-auto">
                 Mit mehr Platz können wir unsere KPIs vervielfachen -
                 mehr Geräte retten, mehr Menschen ausbilden, mehr Wirkung erzielen.
@@ -417,9 +418,9 @@ export default function SpacePage() {
             <Card className="bg-gradient-to-br from-green-600 to-green-700 text-white">
               <CardContent className="p-8 text-center">
                 <Heart className="w-12 h-12 mx-auto mb-4 opacity-90" />
-                <h3 className="text-2xl font-bold mb-3">
+                <Heading level={3} className="text-2xl mb-3">
                   Unterstütze unser Standort-Budget
-                </h3>
+                </Heading>
                 <p className="text-green-100 max-w-xl mx-auto mb-6">
                   Mit einem grösseren Budget können wir einen besseren Standort finden -
                   und damit unsere Wirkung für Umwelt und Gesellschaft vervielfachen.
@@ -448,7 +449,7 @@ export default function SpacePage() {
       <section className="py-12 bg-gray-50 border-t border-gray-200">
         <div className="container mx-auto px-4 sm:px-6">
           <div className="text-center mb-8">
-            <h3 className="text-xl font-semibold mb-2">Alle Einkaufsmöglichkeiten</h3>
+            <Heading level={3} className="text-xl mb-2">Alle Einkaufsmöglichkeiten</Heading>
             <p className="text-gray-600">Physisch und online - wähle, was am besten passt.</p>
           </div>
           <div className="flex flex-wrap justify-center gap-4">

@@ -1,11 +1,12 @@
 import { benefits } from '../data'
+import Heading from '@/components/ui/Heading'
 
 export function BenefitsSection() {
   return (
     <section className="py-12 sm:py-16 md:py-20 bg-gray-50">
       <div className="container mx-auto px-4">
         <div className="max-w-3xl mx-auto text-center mb-16">
-          <h2 className="text-3xl font-bold mb-6">Warum unsere Webentwicklungsdienste wählen?</h2>
+          <Heading level={2} className="mb-6">Warum unsere Webentwicklungsdienste wählen?</Heading>
           <p className="text-lg text-gray-600">
             Wir kombinieren technisches Fachwissen mit nachhaltigen Praktiken, um Websites zu liefern,
             die hervorragend funktionieren und gleichzeitig Ihre Werte unterstützen.
@@ -19,7 +20,7 @@ export function BenefitsSection() {
                   <benefit.icon className="w-8 h-8" />
                 </div>
                 <div>
-                  <h3 className="text-2xl font-bold mb-3">{benefit.title}</h3>
+                  <Heading level={3} className="mb-3">{benefit.title}</Heading>
                   <p className="text-gray-600">{benefit.description}</p>
                 </div>
               </div>

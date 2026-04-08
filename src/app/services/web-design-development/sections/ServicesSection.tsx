@@ -1,12 +1,13 @@
 import { CheckCircle2 } from 'lucide-react'
 import { services } from '../data'
+import Heading from '@/components/ui/Heading'
 
 export function ServicesSection() {
   return (
     <section id="services" className="py-20 bg-white">
       <div className="container mx-auto px-4">
         <div className="max-w-3xl mx-auto text-center mb-16">
-          <h2 className="text-3xl font-bold mb-6">Unsere Webentwicklungsdienste</h2>
+          <Heading level={2} className="mb-6">Unsere Webentwicklungsdienste</Heading>
           <p className="text-lg text-gray-600 mb-4">
             Umfassende Weblösungen, die mit Open-Source-Technologien und nachhaltigen Praktiken erstellt werden.
           </p>
@@ -14,7 +15,7 @@ export function ServicesSection() {
             Professionelle Webentwicklung ab CHF 70/Stunde
           </div>
           <div className="bg-green-50 rounded-lg p-6 text-left">
-            <h3 className="font-semibold text-green-800 mb-2">Kostenlose Erstberatung</h3>
+            <Heading level={3} className="text-green-800 mb-2">Kostenlose Erstberatung</Heading>
             <p className="text-green-700">
               Wir beginnen jedes Projekt mit einer umfassenden Beratung, um Ihre Bedürfnisse,
               Ziele und technischen Anforderungen zu verstehen. Dies hilft uns, genaue Schätzungen zu liefern und
@@ -30,7 +31,7 @@ export function ServicesSection() {
                   <service.icon className="w-8 h-8" />
                 </div>
                 <div>
-                  <h3 className="text-2xl font-bold mb-3">{service.title}</h3>
+                  <Heading level={3} className="mb-3">{service.title}</Heading>
                   <p className="text-gray-600 mb-4">{service.description}</p>
                 </div>
               </div>

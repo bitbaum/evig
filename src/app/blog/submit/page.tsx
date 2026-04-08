@@ -6,6 +6,7 @@ import { ArrowLeft, Send, Lightbulb, FileText, Edit } from 'lucide-react'
 import { PageHero } from '@/components/layout/PageHero'
 import { AIFormAssist } from '@/components/ai/AIFormAssist'
 import { logger } from '@/lib/logger'
+import Heading from '@/components/ui/Heading'
 
 type SubmissionType = 'idea' | 'draft'
 
@@ -125,7 +126,7 @@ export default function SubmitPostPage() {
       <div className="container mx-auto px-4 py-12 max-w-4xl">
         {/* Submission Type Selection */}
         <div className="bg-white rounded-lg shadow-sm p-8 mb-8">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">Was möchtest du einreichen?</h2>
+          <Heading level={2} className="text-2xl text-gray-900 mb-6">Was möchtest du einreichen?</Heading>
           <div className="grid md:grid-cols-2 gap-4">
             <button
               type="button"
@@ -137,7 +138,7 @@ export default function SubmitPostPage() {
               }`}
             >
               <Lightbulb className={`w-8 h-8 mb-3 ${submissionType === 'idea' ? 'text-green-600' : 'text-gray-400'}`} />
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">Post-Idee</h3>
+              <Heading level={3} className="text-lg text-gray-900 mb-2">Post-Idee</Heading>
               <p className="text-sm text-gray-600">
                 Schlage ein Thema vor, über das wir schreiben sollten
               </p>
@@ -153,7 +154,7 @@ export default function SubmitPostPage() {
               }`}
             >
               <FileText className={`w-8 h-8 mb-3 ${submissionType === 'draft' ? 'text-green-600' : 'text-gray-400'}`} />
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">Vollständiger Entwurf</h3>
+              <Heading level={3} className="text-lg text-gray-900 mb-2">Vollständiger Entwurf</Heading>
               <p className="text-sm text-gray-600">
                 Reiche einen vollständigen Artikel zur Überprüfung ein
               </p>
@@ -163,9 +164,9 @@ export default function SubmitPostPage() {
 
         {/* Submission Form */}
         <form onSubmit={handleSubmit} className="bg-white rounded-lg shadow-sm p-8">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">
+          <Heading level={2} className="text-2xl text-gray-900 mb-6">
             {submissionType === 'idea' ? 'deine Idee' : 'dein Entwurf'}
-          </h2>
+          </Heading>
 
           {/* AI Assistant */}
           <AIFormAssist

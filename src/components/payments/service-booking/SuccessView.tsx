@@ -9,6 +9,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { CheckCircle, Shield, Clock } from 'lucide-react'
 import type { ServiceInfo, PaymentData } from './types'
+import Heading from '@/components/ui/Heading'
 
 interface SuccessViewProps {
   service: ServiceInfo
@@ -28,7 +29,7 @@ export function SuccessView({ service, paymentData, useEscrow }: SuccessViewProp
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="bg-green-50 p-4 rounded-lg">
-          <h3 className="font-semibold text-green-800 mb-2">Buchungsdetails</h3>
+          <Heading level={3} className="font-semibold text-green-800 mb-2">Buchungsdetails</Heading>
           <div className="space-y-2 text-sm text-green-700">
             <p><strong>Service:</strong> {service.name}</p>
             <p><strong>Termin-ID:</strong> {paymentData?.appointmentId}</p>

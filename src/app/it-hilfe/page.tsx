@@ -27,6 +27,7 @@ import { RequestCard, RequestCardGrid } from '@/components/it-hilfe/RequestCard'
 import { EmptyState } from '@/components/common/EmptyState'
 import { LoadingSkeleton } from '@/components/common/LoadingState'
 import { ErrorAlert } from '@/components/common/ErrorAlert'
+import Heading from '@/components/ui/Heading'
 import type { ITHilfeRequest } from '@/components/it-hilfe/detail/types'
 
 export default function ITHilfePage() {
@@ -127,7 +128,7 @@ export default function ITHilfePage() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
             <div>
-              <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">IT-Hilfe</h1>
+              <Heading level={1} className="text-2xl sm:text-3xl text-gray-900">IT-Hilfe</Heading>
               <p className="text-sm text-gray-600 mt-1">
                 {total} {total === 1 ? 'Anfrage' : 'Anfragen'} · Community-basierte Tech-Reparatur
               </p>
@@ -416,9 +417,9 @@ export default function ITHilfePage() {
                 <Wrench className="h-6 w-6 text-emerald-600" />
               </div>
             </div>
-            <h3 className="text-xl font-bold text-gray-900 mb-2">
+            <Heading level={3} className="text-xl text-gray-900 mb-2">
               Kannst du Geräte reparieren?
-            </h3>
+            </Heading>
             <p className="text-base text-gray-600 mb-6 max-w-md mx-auto">
               Registriere dich als Techniker und hilf Menschen in deiner Nähe. Kostenlos oder gegen Vergütung – du entscheidest.
             </p>

@@ -4,6 +4,7 @@ import { Star, CheckCircle, MessageCircle } from 'lucide-react'
 import { formatDateShort } from '@/lib/date-formats'
 import { type RepairerReview } from './types'
 import { StarRating } from './StarRating'
+import Heading from '@/components/ui/Heading'
 
 interface ReviewsTabProps {
   reviews: RepairerReview[]
@@ -85,7 +86,7 @@ export function ReviewsTab({
               </div>
 
               {review.title && (
-                <h4 className="font-medium text-gray-900 mb-1">{review.title}</h4>
+                <Heading level={4} className="font-medium text-gray-900 mb-1">{review.title}</Heading>
               )}
 
               {review.content && <p className="text-gray-700 text-sm">{review.content}</p>}

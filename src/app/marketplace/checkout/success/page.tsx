@@ -5,6 +5,7 @@ import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
 import { CheckCircle, Package, ArrowRight, Loader2 } from 'lucide-react'
+import Heading from '@/components/ui/Heading'
 import { logger } from '@/lib/logger'
 import { formatCHF } from '@/config/marketplace'
 import { ORDER_STATUS_CONFIG } from '@/config/marketplace'
@@ -58,9 +59,9 @@ function CheckoutSuccessContent() {
       <div className="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-sm">
         <CheckCircle className="w-16 h-16 text-green-500 mx-auto mb-4" />
 
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+        <Heading level={1} className="text-2xl text-gray-900 dark:text-white mb-2">
           Bestellung erfolgreich!
-        </h1>
+        </Heading>
         <p className="text-gray-600 dark:text-gray-400 mb-6">
           deine Zahlung wurde autorisiert. Der Betrag wird erst freigegeben, wenn du den Empfang bestätigen.
         </p>
@@ -78,7 +79,7 @@ function CheckoutSuccessContent() {
                 )}
               </div>
               <div>
-                <h3 className="font-medium text-gray-900 dark:text-white text-sm">{order.listing_title}</h3>
+                <Heading level={3} className="text-gray-900 dark:text-white text-sm">{order.listing_title}</Heading>
                 <p className="text-lg font-bold text-green-600 mt-0.5">{formatCHF(Number(order.amount_chf))}</p>
               </div>
             </div>

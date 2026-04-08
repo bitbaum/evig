@@ -19,6 +19,7 @@ import { formatPriceCents as formatPrice } from '@/config/marketplace'
 import { BookingStepProblem } from '@/components/repairers/BookingStepProblem'
 import { BookingStepSchedule } from '@/components/repairers/BookingStepSchedule'
 import { BookingStepConfirm } from '@/components/repairers/BookingStepConfirm'
+import Heading from '@/components/ui/Heading'
 
 export default function BookRepairerPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params)
@@ -152,7 +153,7 @@ export default function BookRepairerPage({ params }: { params: Promise<{ id: str
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <AlertCircle className="w-16 h-16 text-red-400 mx-auto mb-4" />
-          <h2 className="text-xl font-semibold text-gray-900 mb-2">{error}</h2>
+          <Heading level={2} className="text-xl text-gray-900 mb-2">{error}</Heading>
           <Link href="/repairers" className="text-blue-600 hover:underline">
             Zurück zur Suche
           </Link>
@@ -168,7 +169,7 @@ export default function BookRepairerPage({ params }: { params: Promise<{ id: str
           <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
             <CheckCircle className="w-8 h-8 text-green-600" />
           </div>
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">Anfrage gesendet!</h2>
+          <Heading level={2} className="text-2xl text-gray-900 mb-2">Anfrage gesendet!</Heading>
           <p className="text-gray-600 mb-6">
             deine Reparaturanfrage wurde an {repairer?.business_name || 'den Reparateur'} gesendet.
             du erhältst in Kürze eine Bestätigung.
@@ -204,7 +205,7 @@ export default function BookRepairerPage({ params }: { params: Promise<{ id: str
             <ArrowLeft className="w-4 h-4 mr-2" />
             Zurück zum Profil
           </Link>
-          <h1 className="text-2xl font-bold text-gray-900">Reparatur anfragen</h1>
+          <Heading level={1} className="text-2xl text-gray-900">Reparatur anfragen</Heading>
           {repairer && (
             <p className="text-gray-600 mt-1">
               bei {repairer.business_name || 'Reparateur'} in {repairer.city}
@@ -302,7 +303,7 @@ export default function BookRepairerPage({ params }: { params: Promise<{ id: str
               </div>
               <div className="flex-1">
                 <div className="flex items-center gap-2">
-                  <h3 className="font-medium text-gray-900">{repairer.business_name}</h3>
+                  <Heading level={3} className="text-gray-900">{repairer.business_name}</Heading>
                   {repairer.is_verified && (
                     <CheckCircle className="w-4 h-4 text-green-500" />
                   )}

@@ -26,6 +26,7 @@ import { ReviewsTab } from '@/components/repairers/ReviewsTab'
 import { AboutTab } from '@/components/repairers/AboutTab'
 import { RepairerSidebar } from '@/components/repairers/RepairerSidebar'
 import { MatchingRequestsTab } from '@/components/repairers/MatchingRequestsTab'
+import Heading from '@/components/ui/Heading'
 
 export default function RepairerDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params)
@@ -87,9 +88,9 @@ export default function RepairerDetailPage({ params }: { params: Promise<{ id: s
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <Wrench className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-          <h2 className="text-xl font-semibold text-gray-900 mb-2">
+          <Heading level={2} className="text-xl text-gray-900 mb-2">
             {error || 'Reparateur nicht gefunden'}
-          </h2>
+          </Heading>
           <Link href="/repairers" className="text-blue-600 hover:text-blue-700 font-medium">
             Zurück zur Suche
           </Link>
@@ -119,9 +120,9 @@ export default function RepairerDetailPage({ params }: { params: Promise<{ id: s
               </div>
               <div>
                 <div className="flex items-center gap-2 mb-1">
-                  <h1 className="text-2xl font-bold text-gray-900">
+                  <Heading level={1} className="text-2xl text-gray-900">
                     {repairer.business_name || 'Reparateur'}
-                  </h1>
+                  </Heading>
                   {repairer.is_verified && (
                     <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
                       <CheckCircle className="w-3 h-3 mr-1" />
@@ -185,7 +186,7 @@ export default function RepairerDetailPage({ params }: { params: Promise<{ id: s
             {/* Description */}
             {repairer.description && (
               <div className="bg-white rounded-xl p-6 shadow-sm">
-                <h2 className="text-lg font-semibold text-gray-900 mb-3">Über uns</h2>
+                <Heading level={2} className="text-lg text-gray-900 mb-3">Über uns</Heading>
                 <p className="text-gray-600 whitespace-pre-line">{repairer.description}</p>
               </div>
             )}

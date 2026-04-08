@@ -7,6 +7,7 @@
 
 import Link from 'next/link'
 import AppointmentBookingForm from './AppointmentBookingForm'
+import Heading from '@/components/ui/Heading'
 
 interface ServiceCTAProps {
   serviceTitle: string
@@ -18,7 +19,7 @@ export default function ServiceCTA({ serviceTitle, serviceSlug, pricing }: Servi
   return (
     <section className="py-12 sm:py-16 md:py-20 bg-gradient-to-r from-primary-700 to-primary-800 text-white">
       <div className="container mx-auto px-4 sm:px-6 text-center">
-        <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 sm:mb-6">Bereit loszulegen?</h2>
+        <Heading level={2} className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 sm:mb-6">Bereit loszulegen?</Heading>
         <p className="text-base sm:text-lg md:text-xl mb-6 sm:mb-8 max-w-2xl mx-auto text-primary-100">
           Buche jetzt deinen Termin für unsere {serviceTitle} Dienstleistungen.
         </p>

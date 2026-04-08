@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { Mail, Lock, User, ArrowRight, ArrowLeft, Eye, EyeOff, Loader2 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { getTextColor, getButtonVariant } from '@/lib/design-system'
+import Heading from '@/components/ui/Heading'
 
 interface AccountStepProps {
   name: string
@@ -61,9 +62,9 @@ export function AccountStep({
   return (
     <form onSubmit={handleSubmit} className="space-y-5">
       <div className="text-center mb-6">
-        <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
+        <Heading level={2} className="text-xl font-bold text-gray-900 dark:text-white mb-2">
           Konto erstellen
-        </h2>
+        </Heading>
         <p className="text-gray-600 dark:text-gray-400">
           Gib deine Daten ein
         </p>

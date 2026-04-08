@@ -3,6 +3,7 @@ import remarkGfm from 'remark-gfm'
 import { BlogPost } from '@/lib/blog'
 import ShareButtons from './ShareButtons'
 import NewsletterSignup from './NewsletterSignup'
+import Heading from '@/components/ui/Heading'
 
 interface BlogPostContentProps {
   post: BlogPost
@@ -18,19 +19,19 @@ export default function BlogPostContent({ post }: BlogPostContentProps) {
           remarkPlugins={[remarkGfm]}
           components={{
             h1: ({ children }) => (
-              <h1 className="text-4xl font-bold text-gray-900 mt-12 mb-4 leading-tight">
+              <Heading level={1} className="text-4xl font-bold text-gray-900 mt-12 mb-4 leading-tight">
                 {children}
-              </h1>
+              </Heading>
             ),
             h2: ({ children }) => (
-              <h2 className="text-3xl font-bold text-gray-900 mt-10 mb-3 leading-tight">
+              <Heading level={2} className="text-3xl font-bold text-gray-900 mt-10 mb-3 leading-tight">
                 {children}
-              </h2>
+              </Heading>
             ),
             h3: ({ children }) => (
-              <h3 className="text-2xl font-bold text-gray-900 mt-8 mb-3 leading-tight">
+              <Heading level={3} className="text-2xl font-bold text-gray-900 mt-8 mb-3 leading-tight">
                 {children}
-              </h3>
+              </Heading>
             ),
             p: ({ children }) => (
               <p className="text-[21px] text-gray-800 leading-[1.58] mb-8 font-serif">

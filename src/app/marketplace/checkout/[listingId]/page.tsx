@@ -14,6 +14,7 @@ import {
   AlertCircle,
 } from 'lucide-react'
 import { ListingImage } from '@/components/marketplace/ListingImage'
+import Heading from '@/components/ui/Heading'
 import { formatCHF, COMMISSION_RATE, DELIVERY_LABELS } from '@/config/marketplace'
 import type { DeliveryOption } from '@/config/marketplace'
 
@@ -131,7 +132,7 @@ export default function CheckoutPage({ params }: { params: Promise<{ listingId: 
     return (
       <div className="max-w-2xl mx-auto py-12 text-center">
         <AlertCircle className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-        <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-2">{error}</h2>
+        <Heading level={2} className="text-xl text-gray-900 dark:text-white mb-2">{error}</Heading>
         <Link href="/marketplace" className="text-green-600 hover:text-green-700 font-medium">
           Zurück zum Marketplace
         </Link>
@@ -147,9 +148,9 @@ export default function CheckoutPage({ params }: { params: Promise<{ listingId: 
     return (
       <div className="max-w-2xl mx-auto py-12 text-center">
         <AlertCircle className="w-16 h-16 text-yellow-400 mx-auto mb-4" />
-        <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
+        <Heading level={2} className="text-xl text-gray-900 dark:text-white mb-2">
           Eigenes Inserat
-        </h2>
+        </Heading>
         <p className="text-gray-600 dark:text-gray-400 mb-4">
           du kannst Ihr eigenes Inserat nicht kaufen.
         </p>
@@ -183,7 +184,7 @@ export default function CheckoutPage({ params }: { params: Promise<{ listingId: 
         Zurück zum Inserat
       </Link>
 
-      <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Sichere Zahlung</h1>
+      <Heading level={1} className="text-2xl text-gray-900 dark:text-white mb-6">Sichere Zahlung</Heading>
 
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
         {/* Left: Form */}
@@ -191,7 +192,7 @@ export default function CheckoutPage({ params }: { params: Promise<{ listingId: 
           {/* Delivery method selection */}
           {canSelectDelivery && (
             <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
-              <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Lieferart wählen</h2>
+              <Heading level={2} className="text-lg text-gray-900 dark:text-white mb-4">Lieferart wählen</Heading>
               <div className="space-y-3">
                 <label className={`flex items-center gap-3 p-4 rounded-lg border-2 cursor-pointer transition-colors ${
                   deliveryMethod === 'pickup'
@@ -245,7 +246,7 @@ export default function CheckoutPage({ params }: { params: Promise<{ listingId: 
           {/* Shipping address form */}
           {deliveryMethod === 'shipping' && (
             <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
-              <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Lieferadresse</h2>
+              <Heading level={2} className="text-lg text-gray-900 dark:text-white mb-4">Lieferadresse</Heading>
               <div className="space-y-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Name</label>
@@ -331,7 +332,7 @@ export default function CheckoutPage({ params }: { params: Promise<{ listingId: 
         {/* Right: Order summary */}
         <div className="lg:col-span-2">
           <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm sticky top-6">
-            <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Bestellübersicht</h2>
+            <Heading level={2} className="text-lg text-gray-900 dark:text-white mb-4">Bestellübersicht</Heading>
 
             {/* Listing preview */}
             <div className="flex gap-3 mb-4">
@@ -339,7 +340,7 @@ export default function CheckoutPage({ params }: { params: Promise<{ listingId: 
                 <ListingImage src={listing.thumbnail} alt={listing.title} fallbackIconSize="w-6 h-6" />
               </div>
               <div className="min-w-0">
-                <h3 className="font-medium text-gray-900 dark:text-white text-sm line-clamp-2">{listing.title}</h3>
+                <Heading level={3} className="text-gray-900 dark:text-white text-sm line-clamp-2">{listing.title}</Heading>
                 <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
                   Verkäufer: {listing.seller_name}
                 </p>

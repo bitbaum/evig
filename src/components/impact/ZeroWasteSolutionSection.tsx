@@ -7,6 +7,7 @@
  */
 
 import { Wrench, RefreshCw, Recycle, Heart, ArrowDown, CheckCircle } from 'lucide-react'
+import Heading from '@/components/ui/Heading'
 import { ZERO_WASTE_PRINCIPLES, getEnvironmentalSummary, type ZeroWastePrinciple } from '@/data/impact-metrics'
 
 const getIcon = (icon: ZeroWastePrinciple['icon']) => {
@@ -42,7 +43,7 @@ function PrincipleCard({ principle, isLast }: { principle: ZeroWastePrinciple; i
                 Priorität {principle.priority}
               </span>
             </div>
-            <h3 className="text-xl font-bold text-gray-900 mb-2">{principle.title}</h3>
+            <Heading level={3} className="text-xl font-bold text-gray-900 mb-2">{principle.title}</Heading>
             <p className="text-gray-600">{principle.description}</p>
           </div>
         </div>
@@ -70,9 +71,9 @@ export default function ZeroWasteSolutionSection() {
             <CheckCircle className="h-4 w-4" />
             Die Lösung
           </div>
-          <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+          <Heading level={2} className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
             Unser Zero-Waste Ansatz
-          </h2>
+          </Heading>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
             RevampIT folgt dem Prinzip: Reparieren vor Aufbereiten vor Recyceln.
             So maximieren wir den Wert jedes Geräts und minimieren Umweltauswirkungen.
@@ -95,7 +96,7 @@ export default function ZeroWasteSolutionSection() {
           {/* Impact Summary */}
           <div className="lg:sticky lg:top-24 space-y-6">
             <div className="bg-green-600 rounded-2xl p-8 text-white">
-              <h3 className="text-2xl font-bold mb-6">Unsere Wirkung durch diesen Ansatz</h3>
+              <Heading level={3} className="text-2xl font-bold mb-6">Unsere Wirkung durch diesen Ansatz</Heading>
 
               <div className="space-y-6">
                 <div className="flex items-center gap-4">
@@ -132,7 +133,7 @@ export default function ZeroWasteSolutionSection() {
 
             {/* Key Insight */}
             <div className="bg-white rounded-xl p-6 shadow-lg border border-gray-100">
-              <h4 className="font-bold text-gray-900 mb-3">Warum Reparatur zuerst?</h4>
+              <Heading level={4} className="font-bold text-gray-900 mb-3">Warum Reparatur zuerst?</Heading>
               <p className="text-gray-600 text-sm mb-4">
                 Die Herstellung eines neuen Laptops verursacht durchschnittlich 331 kg CO₂.
                 Eine Reparatur verursacht nur etwa 15 kg – eine Einsparung von über 95%.

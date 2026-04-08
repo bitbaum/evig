@@ -15,6 +15,7 @@ import {
   Euro,
   Users,
 } from 'lucide-react'
+import Heading from '@/components/ui/Heading'
 import {
   IT_HILFE,
   SERVICE_CATEGORIES,
@@ -159,9 +160,9 @@ export default function SkillsProfilePage() {
             Zurück zum Dashboard
           </Link>
 
-          <h1 className="text-2xl font-bold text-gray-900">
+          <Heading level={1} className="text-2xl text-gray-900">
             IT-Hilfe anbieten
-          </h1>
+          </Heading>
           <p className="text-gray-600 mt-1">
             Erfasse deine Skills und Verfügbarkeit, um anderen bei IT-Problemen zu helfen.
           </p>
@@ -183,10 +184,10 @@ export default function SkillsProfilePage() {
 
         {/* Skills Selection */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+          <Heading level={2} className="text-lg text-gray-900 mb-4 flex items-center gap-2">
             <Users className="w-5 h-5 text-emerald-600" />
             Deine Skills
-          </h2>
+          </Heading>
           <p className="text-sm text-gray-600 mb-6">
             Wähle die Bereiche aus, in denen du anderen helfen kannst.
           </p>
@@ -229,10 +230,10 @@ export default function SkillsProfilePage() {
 
         {/* Service Type */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+          <Heading level={2} className="text-lg text-gray-900 mb-4 flex items-center gap-2">
             <Clock className="w-5 h-5 text-emerald-600" />
             Art der Hilfe
-          </h2>
+          </Heading>
           <p className="text-sm text-gray-600 mb-4">
             Wie möchtest du Hilfe anbieten?
           </p>
@@ -258,10 +259,10 @@ export default function SkillsProfilePage() {
 
         {/* Location */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+          <Heading level={2} className="text-lg text-gray-900 mb-4 flex items-center gap-2">
             <MapPin className="w-5 h-5 text-emerald-600" />
             Standort
-          </h2>
+          </Heading>
           <p className="text-sm text-gray-600 mb-4">
             Wo bist du verfügbar?
           </p>
@@ -341,10 +342,10 @@ export default function SkillsProfilePage() {
 
         {/* Pricing */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+          <Heading level={2} className="text-lg text-gray-900 mb-4 flex items-center gap-2">
             <Euro className="w-5 h-5 text-emerald-600" />
             Vergütung
-          </h2>
+          </Heading>
           <p className="text-sm text-gray-600 mb-4">
             Lege fest, wie du vergütet werden möchtest.
           </p>
@@ -415,9 +416,9 @@ export default function SkillsProfilePage() {
 
         {/* Bio */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">
+          <Heading level={2} className="text-lg text-gray-900 mb-4">
             Über dich
-          </h2>
+          </Heading>
           <p className="text-sm text-gray-600 mb-4">
             Erzähle etwas über deine Erfahrung und warum du anderen helfen möchtest.
           </p>
@@ -441,9 +442,9 @@ export default function SkillsProfilePage() {
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-6">
           <label className="flex items-center justify-between cursor-pointer">
             <div>
-              <h2 className="text-lg font-semibold text-gray-900">
+              <Heading level={2} className="text-lg text-gray-900">
                 Profil aktivieren
-              </h2>
+              </Heading>
               <p className="text-sm text-gray-600">
                 Dein Profil wird in der Techniker-Suche angezeigt
               </p>

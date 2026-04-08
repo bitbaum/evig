@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { Star, Loader2, CheckCircle } from 'lucide-react'
+import Heading from '@/components/ui/Heading'
 
 interface ConfirmReviewCardProps {
   requestTitle: string
@@ -50,9 +51,9 @@ export function ConfirmReviewCard({
       <div className="flex items-start gap-3 mb-4">
         <CheckCircle className="w-6 h-6 text-emerald-600 flex-shrink-0 mt-0.5" aria-hidden="true" />
         <div>
-          <h3 className="text-lg font-semibold text-gray-900">
+          <Heading level={3} className="text-lg font-semibold text-gray-900">
             Hilfe abgeschlossen - bitte bewerten Sie
-          </h3>
+          </Heading>
           <p className="text-sm text-gray-700 mt-1">
             Der Helfer hat &quot;{requestTitle}&quot; als abgeschlossen markiert.
             Bestätige die Hilfe und hinterlasse eine kurze Bewertung.

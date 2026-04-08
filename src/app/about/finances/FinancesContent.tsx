@@ -5,6 +5,7 @@ import { PageHero } from '@/components/layout/PageHero'
 import AboutSubNav from '@/components/about/AboutSubNav'
 import { Wallet, TrendingUp, Heart, ArrowUpRight, ArrowDownRight } from 'lucide-react'
 import { logger } from '@/lib/logger'
+import Heading from '@/components/ui/Heading'
 
 interface YearData {
   year: number
@@ -133,7 +134,7 @@ export default function FinancesContent() {
             {/* Revenue Breakdown Table */}
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden mb-10">
               <div className="px-6 py-4 border-b border-gray-100">
-                <h2 className="text-lg font-bold text-gray-900">Einnahmen nach Quelle</h2>
+                <Heading level={2} className="text-lg text-gray-900">Einnahmen nach Quelle</Heading>
                 <p className="text-sm text-gray-600">Alle Beträge in CHF, basierend auf Buchhaltungsdaten (Kivitendo)</p>
               </div>
               <div className="overflow-x-auto">
@@ -186,7 +187,7 @@ export default function FinancesContent() {
 
             {/* Methodology Note */}
             <div className="bg-green-50 border border-green-200 rounded-xl p-6">
-              <h3 className="font-semibold text-green-900 mb-2">Zur Methodik</h3>
+              <Heading level={3} className="text-green-900 mb-2">Zur Methodik</Heading>
               <ul className="text-sm text-green-800 space-y-1">
                 <li>Die Eigenfinanzierungsquote berechnet sich aus: (Warenverkauf + Dienstleistungen + Integration) / Total × 100</li>
                 <li>Alle Daten stammen aus der Kivitendo-Buchhaltung und sind auf den Franken genau.</li>

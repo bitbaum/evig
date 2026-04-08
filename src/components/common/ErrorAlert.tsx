@@ -7,6 +7,7 @@
 
 import { AlertCircle, RefreshCw } from 'lucide-react'
 import { TYPOGRAPHY, SPACING } from '@/config/ui'
+import Heading from '@/components/ui/Heading'
 
 interface ErrorAlertProps {
   title?: string
@@ -49,9 +50,9 @@ export function ErrorAlert({
       <div className="mx-auto w-16 h-16 rounded-full bg-red-100 dark:bg-red-900/20 flex items-center justify-center mb-4">
         <AlertCircle className="w-8 h-8 text-red-600 dark:text-red-400" />
       </div>
-      <h3 className={`${TYPOGRAPHY.sectionTitleSmall} text-gray-900 dark:text-gray-100 mb-2`}>
+      <Heading level={3} className={`${TYPOGRAPHY.sectionTitleSmall} text-gray-900 dark:text-gray-100 mb-2`}>
         {title}
-      </h3>
+      </Heading>
       <p className={`${TYPOGRAPHY.body} text-gray-600 dark:text-gray-400 mb-6 max-w-md mx-auto`}>
         {message}
       </p>

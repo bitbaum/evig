@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
+import Heading from '@/components/ui/Heading'
 import {
   ArrowRight,
   Recycle,
@@ -107,7 +108,7 @@ export default function HardwareRecyclingPage() {
                       <feature.icon className="w-6 h-6 sm:w-8 sm:h-8" />
                     </div>
                     <div>
-                      <h3 className="text-lg sm:text-xl font-bold mb-2">{feature.title}</h3>
+                      <Heading level={3} className="mb-2">{feature.title}</Heading>
                       <p className="text-sm sm:text-base text-gray-600">{feature.description}</p>
                     </div>
                   </div>
@@ -122,7 +123,7 @@ export default function HardwareRecyclingPage() {
           <div className="container mx-auto px-4 sm:px-6">
             <div className="max-w-3xl mx-auto">
               <div className="text-center mb-8 sm:mb-12">
-                <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-3 sm:mb-4">Preise</h2>
+                <Heading level={2} className="text-gray-900 mb-3 sm:mb-4">Preise</Heading>
                 <p className="text-base sm:text-lg md:text-xl text-gray-600">Nachhaltig und erschwinglich</p>
               </div>
 
@@ -163,7 +164,7 @@ export default function HardwareRecyclingPage() {
             <div className="max-w-4xl mx-auto">
               <div className="text-center mb-8 sm:mb-12">
                 <Leaf className="w-12 h-12 sm:w-16 sm:h-16 text-green-600 mx-auto mb-3 sm:mb-4" />
-                <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-3 sm:mb-4">Umweltverantwortung</h2>
+                <Heading level={2} className="text-gray-900 mb-3 sm:mb-4">Umweltverantwortung</Heading>
                 <p className="text-base sm:text-lg md:text-xl text-gray-600">
                   Jedes recycelte Gerät hilft, unseren Planeten zu schützen
                 </p>
@@ -192,7 +193,7 @@ export default function HardwareRecyclingPage() {
           <div className="container mx-auto px-4 sm:px-6">
             <div className="max-w-4xl mx-auto">
               <div className="text-center mb-8 sm:mb-12">
-                <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-3 sm:mb-4">Kontaktiere uns heute</h2>
+                <Heading level={2} className="text-gray-900 mb-3 sm:mb-4">Kontaktiere uns heute</Heading>
                 <p className="text-base sm:text-lg md:text-xl text-gray-600">
                   Um mehr über unsere Hardware-Recycling Dienstleistungen zu erfahren
                 </p>
@@ -201,7 +202,7 @@ export default function HardwareRecyclingPage() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
                 <div className="bg-white rounded-xl p-6 sm:p-8 shadow-lg">
                   <MapPin className="w-6 h-6 sm:w-8 sm:h-8 text-green-600 mb-3 sm:mb-4" />
-                  <h3 className="text-lg sm:text-xl font-bold mb-3 sm:mb-4">Standorte</h3>
+                  <Heading level={3} className="mb-3 sm:mb-4">Standorte</Heading>
                   <div className="space-y-2 sm:space-y-3 text-sm sm:text-base text-gray-600">
                     <p><strong>Verkauf:</strong><br />{LOCATIONS.store.full}</p>
                     <p><strong>Lager:</strong><br />{LOCATIONS.warehouse.full}<br />{LOCATIONS.warehouse.note}</p>
@@ -211,7 +212,7 @@ export default function HardwareRecyclingPage() {
                 <div className="bg-white rounded-xl p-6 sm:p-8 shadow-lg">
                   <div className="mb-4 sm:mb-6">
                     <Phone className="w-6 h-6 sm:w-8 sm:h-8 text-green-600 mb-3 sm:mb-4" />
-                    <h3 className="text-lg sm:text-xl font-bold mb-3 sm:mb-4">Kontakt</h3>
+                    <Heading level={3} className="mb-3 sm:mb-4">Kontakt</Heading>
                     <p className="text-sm sm:text-base text-gray-600">
                       <strong>Telefon:</strong><br />
                       {CONTACT.phone}
@@ -220,7 +221,7 @@ export default function HardwareRecyclingPage() {
 
                   <div>
                     <Clock className="w-6 h-6 sm:w-8 sm:h-8 text-green-600 mb-3 sm:mb-4" />
-                    <h3 className="text-lg sm:text-xl font-bold mb-3 sm:mb-4">Öffnungszeiten</h3>
+                    <Heading level={3} className="mb-3 sm:mb-4">Öffnungszeiten</Heading>
                     <div className="text-sm sm:text-base text-gray-600 space-y-1">
                       <p>Montag: {OPENING_HOURS.monday}</p>
                       <p>Dienstag - Freitag: {OPENING_HOURS.tuesdayToFriday}</p>
@@ -235,7 +236,7 @@ export default function HardwareRecyclingPage() {
         {/* CTA Section */}
         <section className="py-12 sm:py-16 md:py-20 bg-gradient-to-r from-green-700 to-green-800 text-white">
           <div className="container mx-auto px-4 sm:px-6 text-center">
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 sm:mb-6">Bereit loszulegen?</h2>
+            <Heading level={2} className="mb-4 sm:mb-6">Bereit loszulegen?</Heading>
             <p className="text-base sm:text-lg md:text-xl mb-6 sm:mb-8 max-w-2xl mx-auto text-green-100">
               Kontaktiere uns heute, um mehr über unsere Hardware-Recycling Dienstleistungen zu erfahren.
             </p>

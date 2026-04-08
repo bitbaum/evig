@@ -20,6 +20,7 @@ import {
 } from 'lucide-react'
 import { PHYSICAL_SPACE, getFormattedAddress } from '@/data/impact-metrics'
 import { Button } from '@/components/ui/button'
+import Heading from '@/components/ui/Heading'
 
 const offeringIcons: Record<number, React.ReactNode> = {
   0: <Store className="h-5 w-5" />,
@@ -54,9 +55,9 @@ export default function CommunitySpaceSection() {
             <MapPin className="h-4 w-4" />
             Unser Standort
           </div>
-          <h2 className="text-4xl md:text-5xl font-bold mb-6">
+          <Heading level={2} className="text-4xl md:text-5xl font-bold mb-6">
             Besuche uns
-          </h2>
+          </Heading>
           <p className="text-xl text-gray-500 max-w-3xl mx-auto">
             Unser Laden in Zürich ist mehr als nur ein Geschäft – er ist ein Treffpunkt
             für alle, die sich für nachhaltige IT und Open Source interessieren.
@@ -66,13 +67,13 @@ export default function CommunitySpaceSection() {
         <div className="grid lg:grid-cols-2 gap-12 items-start mb-16">
           {/* Current Location */}
           <div className="bg-gray-800 rounded-2xl p-8 border border-gray-700">
-            <h3 className="text-2xl font-bold mb-2">{PHYSICAL_SPACE.current.name}</h3>
+            <Heading level={3} className="text-2xl font-bold mb-2">{PHYSICAL_SPACE.current.name}</Heading>
             <p className="text-green-400 font-medium mb-6 flex items-center gap-2">
               <MapPin className="h-4 w-4" />
               {address}
             </p>
 
-            <h4 className="text-lg font-semibold mb-4 text-gray-300">Was du bei uns finden:</h4>
+            <Heading level={4} className="text-lg font-semibold mb-4 text-gray-300">Was du bei uns finden:</Heading>
             <ul className="space-y-3">
               {PHYSICAL_SPACE.current.offerings.map((offering, index) => (
                 <li key={index} className="flex items-center gap-3">
@@ -101,7 +102,7 @@ export default function CommunitySpaceSection() {
               <div className="p-2 bg-blue-500/20 rounded-lg text-blue-400">
                 <GraduationCap className="h-6 w-6" />
               </div>
-              <h3 className="text-2xl font-bold">{PHYSICAL_SPACE.workshops.title}</h3>
+              <Heading level={3} className="text-2xl font-bold">{PHYSICAL_SPACE.workshops.title}</Heading>
             </div>
 
             <p className="text-gray-400 mb-6">
@@ -132,7 +133,7 @@ export default function CommunitySpaceSection() {
             </div>
             <div>
               <span className="text-sm text-green-400 font-medium">Unsere Vision</span>
-              <h3 className="text-2xl font-bold">{PHYSICAL_SPACE.vision.title}</h3>
+              <Heading level={3} className="text-2xl font-bold">{PHYSICAL_SPACE.vision.title}</Heading>
             </div>
           </div>
 

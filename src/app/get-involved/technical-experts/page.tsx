@@ -6,6 +6,7 @@ import { PageSection } from '@/components/community/PageSection'
 import { TECHNICAL_EXPERTS_PAGE } from '@/config/community'
 import { responsiveTypography } from '@/lib/responsive'
 import { ORG, CONTACT } from '@/config/org'
+import Heading from '@/components/ui/Heading'
 
 export const metadata: Metadata = {
   title: `Technische Experten | ${ORG.name}`,
@@ -29,9 +30,9 @@ export default function TechnicalExpertsPage() {
 
         {/* Opportunities Section */}
         <section className="space-y-8">
-          <h2 className={`${responsiveTypography.section} font-bold text-gray-900`}>
+          <Heading level={2} className={`${responsiveTypography.section} text-gray-900`}>
             Möglichkeiten für technische Experten
-          </h2>
+          </Heading>
           <BenefitCardGrid>
             {TECHNICAL_EXPERTS_PAGE.benefits?.map((benefit, index) => (
               <BenefitCard

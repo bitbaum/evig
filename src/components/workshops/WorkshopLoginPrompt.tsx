@@ -2,11 +2,12 @@
 
 import Link from 'next/link'
 import { LogIn, UserPlus } from 'lucide-react'
+import Heading from '@/components/ui/Heading'
 
 export function WorkshopLoginPrompt() {
   return (
     <div>
-      <h3 className="text-lg font-semibold text-gray-900 mb-4">Für Workshop anmelden</h3>
+      <Heading level={3} className="text-lg font-semibold text-gray-900 mb-4">Für Workshop anmelden</Heading>
 
       <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
         <div className="flex items-center text-blue-800 mb-2">

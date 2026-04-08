@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { CheckCircle, FileText } from 'lucide-react'
+import Heading from '@/components/ui/Heading'
 
 interface RegistrationSuccessCardProps {
   requiresPayment: boolean
@@ -16,7 +17,7 @@ export function RegistrationSuccessCard({
 }: RegistrationSuccessCardProps) {
   return (
     <div>
-      <h3 className="text-lg font-semibold text-gray-900 mb-4">Workshop-Anmeldung</h3>
+      <Heading level={3} className="text-lg font-semibold text-gray-900 mb-4">Workshop-Anmeldung</Heading>
 
       <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-4">
         <div className="flex items-center text-green-800 mb-2">

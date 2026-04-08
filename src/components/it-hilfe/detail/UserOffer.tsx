@@ -1,5 +1,6 @@
 import { Clock } from 'lucide-react'
 import type { Offer } from './types'
+import Heading from '@/components/ui/Heading'
 
 interface UserOfferProps {
   offer: Offer
@@ -11,7 +12,7 @@ export function UserOffer({ offer, withdrawing, onWithdraw }: UserOfferProps) {
   return (
     <div className="bg-white rounded-xl shadow-sm border border-emerald-200 p-6">
       <div className="flex items-center justify-between mb-3">
-        <h3 className="text-lg font-semibold text-gray-900">Dein Angebot</h3>
+        <Heading level={3} className="text-lg font-semibold text-gray-900">Dein Angebot</Heading>
         <span className="px-2.5 py-1 rounded-full text-xs font-medium bg-amber-100 text-amber-700">
           Ausstehend
         </span>

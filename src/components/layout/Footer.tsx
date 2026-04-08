@@ -6,6 +6,7 @@ import { Logo } from '@/components/ui/Logo'
 import { Mail, Phone, MapPin, Clock } from 'lucide-react'
 import { siteConfig } from '@/config/site'
 import { NewsletterSignup } from '@/components/community/NewsletterSignup'
+import Heading from '@/components/ui/Heading'
 
 export default function Footer() {
   return (
@@ -22,7 +23,7 @@ export default function Footer() {
 
           {/* Navigation Section */}
           <nav aria-label="Footer-Navigation">
-            <h3 className="text-xl font-bold mb-4">Navigation</h3>
+            <Heading level={3} className="text-xl font-bold mb-4">Navigation</Heading>
             <ul className="space-y-2">
               {mainNavigation.map((item) => (
                 <li key={item.name}>
@@ -50,7 +51,7 @@ export default function Footer() {
 
           {/* Contact Section */}
           <div>
-            <h3 className="text-xl font-bold mb-4">Kontakt</h3>
+            <Heading level={3} className="text-xl font-bold mb-4">Kontakt</Heading>
             <address className="space-y-4 not-italic">
               {siteConfig.contact.locations.map((location) => (
                 <div className="flex items-start" key={location.name}>
@@ -81,7 +82,7 @@ export default function Footer() {
 
           {/* Opening Hours Section */}
           <div>
-            <h3 className="text-xl font-bold mb-4">Öffnungszeiten</h3>
+            <Heading level={3} className="text-xl font-bold mb-4">Öffnungszeiten</Heading>
             <div className="flex items-start">
               <Clock className="w-5 h-5 mt-1 mr-3 flex-shrink-0" />
               <div className="space-y-2">

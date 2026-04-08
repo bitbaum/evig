@@ -7,6 +7,7 @@
 
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
+import Heading from '@/components/ui/Heading'
 
 interface AboutCTAProps {
   title: string
@@ -20,7 +21,7 @@ export default function AboutCTA({ title, description, buttonText, href }: About
     <section className="py-20 bg-green-600 text-white">
       <div className="container mx-auto px-4">
         <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-3xl font-bold mb-6">{title}</h2>
+          <Heading level={2} className="text-3xl font-bold mb-6">{title}</Heading>
           <p className="text-xl mb-8">
             {description}
           </p>

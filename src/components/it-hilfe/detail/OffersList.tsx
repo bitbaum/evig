@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { Clock, User, Wrench, CheckCircle, Star } from 'lucide-react'
+import Heading from '@/components/ui/Heading'
 import { getOfferStatusById, getSkillById, OFFER_STATUS, REQUEST_STATUS } from '@/config/it-hilfe'
 import type { Offer } from './types'
 
@@ -24,9 +25,9 @@ export function OffersList({
 
   return (
     <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-      <h3 className="text-lg font-semibold text-gray-900 mb-4">
+      <Heading level={3} className="text-lg font-semibold text-gray-900 mb-4">
         Eingegangene Angebote ({offers.length})
-      </h3>
+      </Heading>
       <div className="space-y-4">
         {offers.map((offer) => {
           const offerStatusConfig = getOfferStatusById(offer.status)

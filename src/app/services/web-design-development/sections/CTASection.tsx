@@ -1,10 +1,11 @@
 import Link from 'next/link'
+import Heading from '@/components/ui/Heading'
 
 export function CTASection() {
   return (
     <section className="py-20 bg-gradient-to-r from-green-700 to-green-800 text-white">
       <div className="container mx-auto px-4 text-center">
-        <h2 className="text-4xl font-bold mb-6">Bereit, deine Website zu erstellen?</h2>
+        <Heading level={2} className="mb-6">Bereit, deine Website zu erstellen?</Heading>
         <p className="text-xl mb-8 max-w-2xl mx-auto text-green-100">
           Lass uns eine Website erstellen, die deine Werte widerspiegelt und deine Ziele erreicht.
           Kontaktiere uns noch heute für eine kostenlose Beratung.

@@ -7,6 +7,7 @@
 
 import Link from 'next/link'
 import { Wrench, MapPin, Users, Clock } from 'lucide-react'
+import Heading from '@/components/ui/Heading'
 import { getCategoryById, getUrgencyById, formatBudget, IT_HILFE } from '@/config/it-hilfe'
 import { formatDateShort } from '@/lib/date-formats'
 
@@ -81,9 +82,9 @@ export function RequestCard({ request, className = '' }: RequestCardProps) {
           </div>
         </div>
 
-        <h3 className="font-semibold text-gray-900 dark:text-white mb-2 group-hover:text-emerald-600 transition-colors line-clamp-2">
+        <Heading level={3} className="font-semibold text-gray-900 dark:text-white mb-2 group-hover:text-emerald-600 transition-colors line-clamp-2">
           {request.title}
-        </h3>
+        </Heading>
 
         <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-2 mb-3">
           {request.description}

@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Image from 'next/image'
+import Heading from '@/components/ui/Heading'
 import { ResponsiveHero } from '@/components/layout/ResponsiveHero'
 import AboutSubNav from '@/components/about/AboutSubNav'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
@@ -184,7 +185,7 @@ export default function ImpactPageContent() {
       {/* Impact Overview */}
       <section className="py-16 px-4 max-w-7xl mx-auto">
         <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold mb-4">Warum Transparenz wichtig ist</h2>
+          <Heading level={2} className="mb-4">Warum Transparenz wichtig ist</Heading>
           <p className="text-lg text-gray-600 max-w-3xl mx-auto">
             Als gemeinnütziger Verein legen wir grössten Wert auf Transparenz. Jede unserer Zahlen ist nachvollziehbar dokumentiert,
             damit dir als Spender:in genau verstehen, wie deine Unterstützung wirkt.
@@ -222,7 +223,7 @@ export default function ImpactPageContent() {
 
         {/* Impact Stories */}
         <div className="bg-gray-50 rounded-lg p-8">
-          <h3 className="text-2xl font-bold mb-6 text-center">Wirkung in Zahlen verstehen</h3>
+          <Heading level={3} className="mb-6 text-center">Wirkung in Zahlen verstehen</Heading>
           <SimpleTabs
             defaultValue="environmental"
             tabs={[
@@ -236,7 +237,7 @@ export default function ImpactPageContent() {
                 {activeTab === 'environmental' && (
                   <div className="grid md:grid-cols-2 gap-6">
                     <div>
-                      <h4 className="text-lg font-semibold mb-3">Umweltwirkung im Detail</h4>
+                      <Heading level={4} className="mb-3">Umweltwirkung im Detail</Heading>
                       <ul className="space-y-2 text-sm">
                         <li className="flex items-start gap-2">
                           <CheckCircle className="h-4 w-4 text-green-600 mt-0.5 flex-shrink-0" />
@@ -275,7 +276,7 @@ export default function ImpactPageContent() {
                 {activeTab === 'social' && (
                   <div className="grid md:grid-cols-2 gap-6">
                     <div>
-                      <h4 className="text-lg font-semibold mb-3">Soziale Wirkung im Detail</h4>
+                      <Heading level={4} className="mb-3">Soziale Wirkung im Detail</Heading>
                       <ul className="space-y-2 text-sm">
                         <li className="flex items-start gap-2">
                           <CheckCircle className="h-4 w-4 text-blue-600 mt-0.5 flex-shrink-0" />
@@ -304,7 +305,7 @@ export default function ImpactPageContent() {
                 {activeTab === 'economic' && (
                   <div className="grid md:grid-cols-2 gap-6">
                     <div>
-                      <h4 className="text-lg font-semibold mb-3">Wirtschaftliche Wirkung</h4>
+                      <Heading level={4} className="mb-3">Wirtschaftliche Wirkung</Heading>
                       <ul className="space-y-2 text-sm">
                         <li className="flex items-start gap-2">
                           <CheckCircle className="h-4 w-4 text-purple-600 mt-0.5 flex-shrink-0" />
@@ -349,7 +350,7 @@ export default function ImpactPageContent() {
       <section className="py-16 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">Wie du uns unterstützen können</h2>
+            <Heading level={2} className="mb-4">Wie du uns unterstützen können</Heading>
             <p className="text-lg text-gray-600 max-w-3xl mx-auto">
               Jede Unterstützung zählt und trägt direkt zu unserer Mission bei. Wähle die für dich passende Art der Unterstützung.
             </p>
@@ -428,7 +429,7 @@ export default function ImpactPageContent() {
       {/* Transparency & Reports */}
       <section className="py-16 px-4 max-w-7xl mx-auto">
         <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold mb-4">Transparenz & Berichterstattung</h2>
+          <Heading level={2} className="mb-4">Transparenz & Berichterstattung</Heading>
           <p className="text-lg text-gray-600 max-w-3xl mx-auto">
             Wir berichten regelmässig über unsere Aktivitäten und Wirkung. Alle Dokumente sind öffentlich zugänglich.
           </p>
@@ -491,7 +492,7 @@ export default function ImpactPageContent() {
       {/* Call to Action */}
       <section className="py-16 bg-green-600 text-white">
         <div className="max-w-4xl mx-auto text-center px-4">
-          <h2 className="text-3xl font-bold mb-6">Gemeinsam mehr erreichen</h2>
+          <Heading level={2} className="mb-6">Gemeinsam mehr erreichen</Heading>
           <p className="text-xl mb-8">
             deine Unterstützung macht den Unterschied. Jeder Beitrag, ob gross oder klein, hilft uns dabei,
             die Schweizer IT-Landschaft nachhaltiger zu gestalten und Menschen neue Chancen zu geben.

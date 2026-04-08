@@ -26,6 +26,7 @@ import { ProblemDetailsSection } from '@/components/it-hilfe-create/ProblemDetai
 import { LocationSection } from '@/components/it-hilfe-create/LocationSection'
 import { SkillsSection } from '@/components/it-hilfe-create/SkillsSection'
 import { ErrorAlert } from '@/components/common/ErrorAlert'
+import Heading from '@/components/ui/Heading'
 import { validateITHilfeForm, transformITHilfeFormToPayload } from '@/lib/domain/it-hilfe'
 import type { ITHilfeCreateFormData } from '@/components/it-hilfe-create/types'
 import { INITIAL_IT_HILFE_FORM } from '@/components/it-hilfe-create/types'
@@ -204,7 +205,7 @@ export default function CreatePeerRepairPage() {
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <CheckCircle className="w-16 h-16 text-emerald-500 mx-auto mb-4" />
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">Anfrage erstellt!</h2>
+          <Heading level={2} className="text-2xl text-gray-900 mb-2">Anfrage erstellt!</Heading>
           <p className="text-gray-600">Du wirst gleich weitergeleitet...</p>
         </div>
       </div>
@@ -228,7 +229,7 @@ export default function CreatePeerRepairPage() {
             <div className="p-2 bg-emerald-100 rounded-lg">
               <Wrench className="w-6 h-6 text-emerald-600" />
             </div>
-            <h1 className="text-2xl font-bold text-gray-900">Reparaturanfrage erstellen</h1>
+            <Heading level={1} className="text-2xl text-gray-900">Reparaturanfrage erstellen</Heading>
           </div>
           <p className="text-gray-600">
             Wähle ein Gerät und beschreibe dein Problem. Die Community hilft dir.
@@ -244,7 +245,7 @@ export default function CreatePeerRepairPage() {
           <div className="bg-gradient-to-r from-purple-50 to-indigo-50 rounded-xl border border-purple-200 p-6">
             <div className="flex items-center gap-2 mb-3">
               <Sparkles className="w-5 h-5 text-purple-600" />
-              <h2 className="text-lg font-semibold text-gray-900">KI-Assistent</h2>
+              <Heading level={2} className="text-lg text-gray-900">KI-Assistent</Heading>
               <span className="text-xs bg-purple-100 text-purple-700 px-2 py-0.5 rounded-full">Beta</span>
             </div>
             <p className="text-sm text-gray-600 mb-3">
@@ -293,7 +294,7 @@ export default function CreatePeerRepairPage() {
 
           {/* Device Category */}
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">Was möchtest du reparieren?</h2>
+            <Heading level={2} className="text-lg text-gray-900 mb-4">Was möchtest du reparieren?</Heading>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
               {DEVICE_CATEGORIES.map((cat) => {
                 const Icon = cat.icon
@@ -348,7 +349,7 @@ export default function CreatePeerRepairPage() {
 
               {/* Budget */}
               <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                <h2 className="text-lg font-semibold text-gray-900 mb-2">Budget</h2>
+                <Heading level={2} className="text-lg text-gray-900 mb-2">Budget</Heading>
                 <p className="text-sm text-gray-600 mb-4">
                   Was bist du maximal bereit zu zahlen? Leer lassen für kostenlose Community-Hilfe.
                 </p>
@@ -371,7 +372,7 @@ export default function CreatePeerRepairPage() {
 
               {/* Service Type & Urgency */}
               <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                <h2 className="text-lg font-semibold text-gray-900 mb-4">Optionen</h2>
+                <Heading level={2} className="text-lg text-gray-900 mb-4">Optionen</Heading>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">

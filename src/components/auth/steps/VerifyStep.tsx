@@ -4,6 +4,7 @@ import React, { useState, useRef, useEffect } from 'react'
 import { Mail, ArrowRight, RefreshCw, Loader2, CheckCircle2 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { getButtonVariant } from '@/lib/design-system'
+import Heading from '@/components/ui/Heading'
 
 export interface VerifyStepProps {
   email: string
@@ -110,9 +111,9 @@ export function VerifyStep({
         <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
           <CheckCircle2 className="w-8 h-8 text-green-600" />
         </div>
-        <h2 className="text-xl font-bold text-gray-900 mb-2">
+        <Heading level={2} className="text-xl font-bold text-gray-900 mb-2">
           E-Mail verifiziert!
-        </h2>
+        </Heading>
         <p className="text-gray-600 mb-6">
           dein Konto ist jetzt vollständig aktiviert.
         </p>
@@ -126,9 +127,9 @@ export function VerifyStep({
         <div className="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-4">
           <Mail className="w-8 h-8 text-primary-600" />
         </div>
-        <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
+        <Heading level={2} className="text-xl font-bold text-gray-900 dark:text-white mb-2">
           Bestätige deine E-Mail
-        </h2>
+        </Heading>
         <p className="text-gray-600 dark:text-gray-400">
           Wir haben einen 6-stelligen Code an{' '}
           <span className="font-medium text-gray-900 dark:text-white">{email}</span>{' '}

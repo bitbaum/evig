@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { CheckCircle2, ArrowRight, Filter } from 'lucide-react'
 import { technologies, getUniqueCategories } from '../data'
+import Heading from '@/components/ui/Heading'
 
 export function TechnologiesSection() {
   const [selectedCategory, setSelectedCategory] = useState('Alle')
@@ -16,7 +17,7 @@ export function TechnologiesSection() {
     <section className="py-12 sm:py-16 md:py-20 bg-white">
       <div className="container mx-auto px-4">
         <div className="max-w-3xl mx-auto text-center mb-12">
-          <h2 className="text-3xl font-bold mb-6">Technologien, die wir verwenden</h2>
+          <Heading level={2} className="mb-6">Technologien, die wir verwenden</Heading>
           <p className="text-lg text-gray-600 mb-8">
             Wir arbeiten mit bewährten Open-Source-Technologien, die Zuverlässigkeit,
             Leistung und langfristige Nachhaltigkeit bieten.
@@ -61,7 +62,7 @@ export function TechnologiesSection() {
                 </div>
                 <div className="min-w-0 flex-1">
                   <div className="text-sm text-green-600 font-semibold mb-1 truncate">{tech.category}</div>
-                  <h3 className="text-xl font-bold mb-2 line-clamp-2 group-hover:text-green-700 transition-colors duration-300">{tech.name}</h3>
+                  <Heading level={3} className="mb-2 line-clamp-2 group-hover:text-green-700 transition-colors duration-300">{tech.name}</Heading>
                 </div>
               </div>
               <p className="text-gray-600 mb-4 text-sm leading-relaxed">{tech.description}</p>

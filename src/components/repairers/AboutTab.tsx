@@ -1,6 +1,7 @@
 'use client'
 
 import { Award, Shield, Globe } from 'lucide-react'
+import Heading from '@/components/ui/Heading'
 import { type RepairerProfile } from './types'
 
 interface AboutTabProps {
@@ -13,7 +14,7 @@ export function AboutTab({ repairer }: AboutTabProps) {
       {/* Specializations */}
       {repairer.specializations && repairer.specializations.length > 0 && (
         <div>
-          <h4 className="text-sm font-medium text-gray-700 mb-3">Spezialisierungen</h4>
+          <Heading level={4} className="text-sm font-medium text-gray-700 mb-3">Spezialisierungen</Heading>
           <div className="flex flex-wrap gap-2">
             {repairer.specializations.map((spec) => (
               <span
@@ -30,7 +31,7 @@ export function AboutTab({ repairer }: AboutTabProps) {
       {/* Certifications */}
       {repairer.certifications && repairer.certifications.length > 0 && (
         <div>
-          <h4 className="text-sm font-medium text-gray-700 mb-3">Zertifizierungen</h4>
+          <Heading level={4} className="text-sm font-medium text-gray-700 mb-3">Zertifizierungen</Heading>
           <div className="flex flex-wrap gap-2">
             {repairer.certifications.map((cert) => (
               <span

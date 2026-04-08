@@ -6,6 +6,7 @@
  */
 
 import { Clock, Rocket, Award, TrendingUp, Users, Building } from 'lucide-react'
+import Heading from '@/components/ui/Heading'
 import {
   HISTORY_CONFIG,
   type Milestone,
@@ -72,9 +73,9 @@ function TimelineItem({
               <span className="text-sm font-medium text-gray-500">
                 {milestone.year}
               </span>
-              <h3 className="text-lg font-bold text-gray-900">
+              <Heading level={3} className="text-lg font-bold text-gray-900">
                 {milestone.title}
-              </h3>
+              </Heading>
             </div>
           </div>
           <p className="text-gray-600">{milestone.description}</p>
@@ -108,9 +109,9 @@ export default function GeschichteSection() {
             <Clock className="h-4 w-4" />
             Unsere Geschichte
           </div>
-          <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+          <Heading level={2} className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
             {founding.title}
-          </h2>
+          </Heading>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
             {founding.subtitle}
           </p>
@@ -131,9 +132,9 @@ export default function GeschichteSection() {
 
         {/* Timeline Header */}
         <div className="text-center mb-12">
-          <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">
+          <Heading level={3} className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">
             Meilensteine
-          </h3>
+          </Heading>
           <p className="text-gray-600 max-w-2xl mx-auto">
             Von der kleinen Werkstatt zur führenden Organisation für nachhaltige IT
             in der Schweiz.
@@ -159,7 +160,7 @@ export default function GeschichteSection() {
 
         {/* Current State Summary */}
         <div className="mt-20 bg-green-600 rounded-2xl p-8 text-white text-center">
-          <h3 className="text-2xl font-bold mb-6">Heute</h3>
+          <Heading level={3} className="text-2xl font-bold mb-6">Heute</Heading>
           <div className="grid md:grid-cols-3 gap-8">
             <div>
               <p className="text-4xl font-bold mb-2">{currentState.yearsActive}</p>

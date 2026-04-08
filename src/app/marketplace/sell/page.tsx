@@ -26,6 +26,7 @@ import { ListingFormFields } from '@/components/marketplace-sell/ListingFormFiel
 import { ListingPreview } from '@/components/marketplace-sell/ListingPreview'
 import { AICameraProductListing } from '@/components/marketplace/ai-camera'
 import { ErrorAlert } from '@/components/common/ErrorAlert'
+import Heading from '@/components/ui/Heading'
 import type { DetectedProductData } from '@/components/marketplace/ai-camera/types'
 import type { AIFieldMetadataEntry } from '@/hooks/useAIFormAssist'
 
@@ -156,9 +157,9 @@ function SellPageContent() {
     return (
       <div className="max-w-2xl mx-auto py-12 text-center">
         <Package className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-        <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
+        <Heading level={2} className="text-xl text-gray-900 dark:text-white mb-2">
           Anmeldung erforderlich
-        </h2>
+        </Heading>
         <p className="text-gray-600 dark:text-gray-400 mb-6">
           Melde dich an, um Inserate zu erstellen.
         </p>
@@ -298,10 +299,10 @@ function SellPageContent() {
 
       <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
         <div className="p-4 md:p-6 border-b border-gray-100 dark:border-gray-700">
-          <h1 className="text-xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
+          <Heading level={1} className="text-xl text-gray-900 dark:text-white flex items-center gap-2">
             <Package className="w-5 h-5 text-green-600" />
             {editId ? 'Inserat bearbeiten' : 'Inserat erstellen'}
-          </h1>
+          </Heading>
           <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
             {editId
               ? 'Änderungen an deinem Inserat speichern.'

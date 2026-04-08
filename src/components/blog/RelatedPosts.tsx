@@ -2,6 +2,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { BlogPost } from '@/lib/blog'
 import { formatDate } from '@/lib/date-formats'
+import Heading from '@/components/ui/Heading'
 
 interface RelatedPostsProps {
   posts: BlogPost[]
@@ -11,7 +12,7 @@ export default function RelatedPosts({ posts }: RelatedPostsProps) {
   return (
     <section className="bg-gray-50 py-16">
       <div className="max-w-[1200px] mx-auto px-6">
-        <h2 className="text-3xl font-bold text-gray-900 mb-8">Related Articles</h2>
+        <Heading level={2} className="text-3xl font-bold text-gray-900 mb-8">Related Articles</Heading>
         <div className="grid md:grid-cols-3 gap-8">
           {posts.map((post) => (
             <Link
@@ -33,9 +34,9 @@ export default function RelatedPosts({ posts }: RelatedPostsProps) {
                   </div>
                 )}
                 <div className="p-6">
-                  <h3 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-primary-700 transition-colors line-clamp-2">
+                  <Heading level={3} className="text-xl font-bold text-gray-900 mb-2 group-hover:text-primary-700 transition-colors line-clamp-2">
                     {post.title}
-                  </h3>
+                  </Heading>
                   {post.excerpt && (
                     <p className="text-gray-600 mb-4 line-clamp-3">
                       {post.excerpt}

@@ -8,6 +8,7 @@
 'use client'
 
 import { ExternalLink, Quote, Newspaper, Award, Star } from 'lucide-react'
+import Heading from '@/components/ui/Heading'
 import {
   MEDIA_COVERAGE,
   getTier1Sources,
@@ -45,9 +46,9 @@ function MediaCard({ mention }: { mention: MediaMention }) {
           <span className={`inline-block text-xs font-medium px-2 py-1 rounded-full border ${TIER_STYLES[mention.tier]} mb-2`}>
             {TIER_LABELS[mention.tier]}
           </span>
-          <h3 className="font-bold text-gray-900 group-hover:text-green-600 transition-colors line-clamp-2">
+          <Heading level={3} className="font-bold text-gray-900 group-hover:text-green-600 transition-colors line-clamp-2">
             {mention.title}
-          </h3>
+          </Heading>
         </div>
         <ExternalLink className="h-4 w-4 text-gray-500 group-hover:text-green-500 flex-shrink-0 transition-colors" />
       </div>
@@ -126,9 +127,9 @@ export default function MediaCoverageSection() {
             <Award className="h-4 w-4" />
             Bekannt aus
           </div>
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+          <Heading level={2} className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
             Medien über uns
-          </h2>
+          </Heading>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
             Seit über 20 Jahren setzen wir uns für nachhaltige IT ein.
             Das hat auch die Medien auf uns aufmerksam gemacht.
@@ -157,7 +158,7 @@ export default function MediaCoverageSection() {
         <div className="mb-16">
           <div className="flex items-center justify-center gap-2 mb-8">
             <Star className="h-5 w-5 text-amber-500" />
-            <h3 className="text-lg font-semibold text-gray-700">Nationale Medien</h3>
+            <Heading level={3} className="text-lg font-semibold text-gray-700">Nationale Medien</Heading>
             <Star className="h-5 w-5 text-amber-500" />
           </div>
 
@@ -170,9 +171,9 @@ export default function MediaCoverageSection() {
 
         {/* Featured Articles - Full Cards */}
         <div className="mb-16">
-          <h3 className="text-xl font-semibold text-gray-900 mb-8 text-center">
+          <Heading level={3} className="text-xl font-semibold text-gray-900 mb-8 text-center">
             Ausgewählte Artikel
-          </h3>
+          </Heading>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {featuredMedia.slice(0, 3).map((mention) => (
@@ -183,9 +184,9 @@ export default function MediaCoverageSection() {
 
         {/* Other Mentions - Compact Grid */}
         <div className="bg-white rounded-2xl border border-gray-200 p-8">
-          <h3 className="text-lg font-semibold text-gray-900 mb-6 text-center">
+          <Heading level={3} className="text-lg font-semibold text-gray-900 mb-6 text-center">
             Weitere Erwähnungen & Partnerschaften
-          </h3>
+          </Heading>
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {otherMedia.map((mention) => (

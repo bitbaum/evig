@@ -12,6 +12,7 @@
 
 import { useState } from 'react'
 import { Star, Loader2, ThumbsUp, ThumbsDown, CheckCircle } from 'lucide-react'
+import Heading from '@/components/ui/Heading'
 import { apiFetch } from '@/lib/api/client'
 
 interface OrderReviewFormProps {
@@ -68,7 +69,7 @@ export function OrderReviewForm({ orderId, onSubmitted }: OrderReviewFormProps) 
     return (
       <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-xl p-6 text-center">
         <CheckCircle className="w-10 h-10 text-green-600 mx-auto mb-2" />
-        <h3 className="font-semibold text-green-800 dark:text-green-200">Vielen Dank für deine Bewertung!</h3>
+        <Heading level={3} className="font-semibold text-green-800 dark:text-green-200">Vielen Dank für deine Bewertung!</Heading>
         <p className="text-sm text-green-700 dark:text-green-300 mt-1">
           deine Rückmeldung hilft der Community.
         </p>

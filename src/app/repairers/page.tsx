@@ -10,6 +10,7 @@ import { type RepairerProfile, type RepairerReview } from '@/components/repairer
 import { RepairerSearchBar } from '@/components/repairers/RepairerSearchBar'
 import { RepairerCard } from '@/components/repairers/RepairerCard'
 import { RepairerReviewsModal } from '@/components/repairers/RepairerReviewsModal'
+import Heading from '@/components/ui/Heading'
 
 interface RepairerFilters {
   q?: string
@@ -168,9 +169,9 @@ export default function RepairersPage() {
         ) : repairers.length === 0 ? (
           <div className="text-center py-12">
             <Wrench className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">
+            <Heading level={3} className="text-xl text-gray-900 mb-2">
               Keine Reparateure gefunden
-            </h3>
+            </Heading>
             <p className="text-gray-600 mb-6">
               Versuche andere Suchkriterien oder erweitere deinen Suchradius.
             </p>
@@ -196,9 +197,9 @@ export default function RepairersPage() {
         {/* Become a Repairer CTA */}
         <div className="mt-16 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl p-8 text-white text-center">
           <Wrench className="w-12 h-12 mx-auto mb-4" />
-          <h2 className="text-2xl font-bold mb-4">
+          <Heading level={2} className="text-2xl mb-4">
             Bist du ein Reparaturexperte?
-          </h2>
+          </Heading>
           <p className="text-blue-100 mb-6 max-w-2xl mx-auto">
             Tritt unserer Plattform bei und verbinde dich mit Kunden,
             die deine Fachkenntnisse brauchen. Verdiene Geld mit deinen Fähigkeiten.

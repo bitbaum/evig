@@ -1,6 +1,7 @@
 'use client'
 
 import { CheckCircle, Loader2 } from 'lucide-react'
+import Heading from '@/components/ui/Heading'
 
 interface MarkCompletedCardProps {
   onMarkCompleted: () => void
@@ -17,9 +18,9 @@ export function MarkCompletedCard({ onMarkCompleted, submitting }: MarkCompleted
       <div className="flex items-start gap-3">
         <CheckCircle className="w-6 h-6 text-emerald-600 flex-shrink-0 mt-0.5" aria-hidden="true" />
         <div className="flex-1">
-          <h3 className="text-lg font-semibold text-gray-900 mb-1">
+          <Heading level={3} className="text-lg font-semibold text-gray-900 mb-1">
             Hilfe abgeschlossen?
-          </h3>
+          </Heading>
           <p className="text-sm text-gray-600 mb-4">
             Wenn du die Reparatur bzw. Hilfe beendet hast, markiere sie als
             abgeschlossen. Der Anfragende wird dann gebeten, dir eine Bewertung

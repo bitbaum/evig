@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { LogOut, Loader2, AlertCircle } from 'lucide-react'
 import { logger } from '@/lib/logger'
 import { Button } from '@/components/ui/button'
+import Heading from '@/components/ui/Heading'
 
 const LOGOUT_CALLBACK = '/auth/login?logout=1'
 
@@ -82,9 +83,9 @@ export default function LogoutPage() {
                 <div className="w-16 h-16 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center mx-auto mb-4">
                   <Loader2 className="w-8 h-8 text-green-600 animate-spin" />
                 </div>
-                <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
+                <Heading level={2} className="text-xl text-gray-900 dark:text-white mb-2">
                   Abmeldung läuft...
-                </h2>
+                </Heading>
                 <p className="text-gray-600 dark:text-gray-400">Bitte warte einen Moment.</p>
               </>
             ) : (
@@ -92,9 +93,9 @@ export default function LogoutPage() {
                 <div className="w-16 h-16 bg-red-100 dark:bg-red-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
                   <AlertCircle className="w-8 h-8 text-red-600" />
                 </div>
-                <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
+                <Heading level={2} className="text-xl text-gray-900 dark:text-white mb-2">
                   Abmeldung fehlgeschlagen
-                </h2>
+                </Heading>
                 <p className="text-gray-600 dark:text-gray-400 mb-6">{error}</p>
                 <div className="space-y-3">
                   <Button

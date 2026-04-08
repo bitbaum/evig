@@ -23,6 +23,7 @@ import {
 } from 'lucide-react'
 import { apiFetch } from '@/lib/api/client'
 import { logger } from '@/lib/logger'
+import Heading from '@/components/ui/Heading'
 import {
   PaymentForm,
   WorkshopLoginPrompt,
@@ -190,7 +191,7 @@ export default function WorkshopRegistrationForm({ workshop, instance }: Worksho
   if (isFull) {
     return (
       <div>
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">Workshop ausgebucht</h3>
+        <Heading level={3} className="text-lg font-semibold text-gray-900 mb-4">Workshop ausgebucht</Heading>
 
         <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-4">
           <div className="flex items-center text-red-800 mb-2">
@@ -216,7 +217,7 @@ export default function WorkshopRegistrationForm({ workshop, instance }: Worksho
   if (registrationStatus === 'error') {
     return (
       <div>
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">Fehler</h3>
+        <Heading level={3} className="text-lg font-semibold text-gray-900 mb-4">Fehler</Heading>
 
         <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-4">
           <div className="flex items-center text-red-800 mb-2">
@@ -240,7 +241,7 @@ export default function WorkshopRegistrationForm({ workshop, instance }: Worksho
   if (registrationStatus === 'payment' && paymentData) {
     return (
       <div>
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">Zahlung abschliessen</h3>
+        <Heading level={3} className="text-lg font-semibold text-gray-900 mb-4">Zahlung abschliessen</Heading>
 
         {/* Payment Summary */}
         <div className="bg-gray-50 rounded-lg p-4 mb-4">
@@ -290,7 +291,7 @@ export default function WorkshopRegistrationForm({ workshop, instance }: Worksho
   // Default: Registration form
   return (
     <div>
-      <h3 className="text-lg font-semibold text-gray-900 mb-4">Für Workshop anmelden</h3>
+      <Heading level={3} className="text-lg font-semibold text-gray-900 mb-4">Für Workshop anmelden</Heading>
 
       <WorkshopInstanceCard
         instance={instance}

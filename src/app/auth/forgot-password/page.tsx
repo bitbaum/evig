@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { Mail, ArrowLeft, CheckCircle2, AlertCircle, Loader2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import Heading from '@/components/ui/Heading'
 
 export default function ForgotPasswordPage() {
   const router = useRouter()
@@ -48,9 +49,9 @@ export default function ForgotPasswordPage() {
               <CheckCircle2 className="w-8 h-8 text-green-600" />
             </div>
           </div>
-          <h2 className="mt-6 text-center text-3xl font-bold text-gray-900">
+          <Heading level={2} className="mt-6 text-center text-3xl text-gray-900">
             E-Mail gesendet!
-          </h2>
+          </Heading>
           <p className="mt-2 text-center text-sm text-gray-600">
             Wir haben dir eine E-Mail mit Anweisungen zum Zurücksetzen deines Passworts gesendet.
           </p>
@@ -95,9 +96,9 @@ export default function ForgotPasswordPage() {
             <Mail className="w-8 h-8 text-blue-600" />
           </div>
         </div>
-        <h2 className="mt-6 text-center text-3xl font-bold text-gray-900">
+        <Heading level={2} className="mt-6 text-center text-3xl text-gray-900">
           Passwort zurücksetzen
-        </h2>
+        </Heading>
         <p className="mt-2 text-center text-sm text-gray-600">
           Gib deine E-Mail-Adresse ein und wir senden dir einen Link zum Zurücksetzen deines Passworts.
         </p>

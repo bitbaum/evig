@@ -17,6 +17,7 @@ import {
 import { getConditionBadge } from '@/config/erfassung/conditions'
 import { formatCHF } from '@/config/marketplace'
 import { formatDateShort } from '@/lib/date-formats'
+import Heading from '@/components/ui/Heading'
 
 interface SellerProfile {
   id: string
@@ -97,9 +98,9 @@ export default function SellerProfilePage({ params }: { params: Promise<{ id: st
     return (
       <div className="max-w-4xl mx-auto py-12 text-center">
         <AlertCircle className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-        <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
+        <Heading level={2} className="text-xl text-gray-900 dark:text-white mb-2">
           {error || 'Verkäufer nicht gefunden'}
-        </h2>
+        </Heading>
         <Link href="/marketplace" className="text-green-600 hover:text-green-700 font-medium">
           Zurück zum Marketplace
         </Link>
@@ -132,7 +133,7 @@ export default function SellerProfilePage({ params }: { params: Promise<{ id: st
             )}
           </div>
           <div className="flex-1">
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{displayName}</h1>
+            <Heading level={1} className="text-2xl text-gray-900 dark:text-white">{displayName}</Heading>
             <div className="flex items-center gap-4 mt-2 text-sm text-gray-500 dark:text-gray-400">
               {seller.city && (
                 <span className="flex items-center gap-1">
@@ -185,10 +186,10 @@ export default function SellerProfilePage({ params }: { params: Promise<{ id: st
 
       {/* Active Listings */}
       <div>
-        <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+        <Heading level={2} className="text-lg text-gray-900 dark:text-white mb-4 flex items-center gap-2">
           <ShoppingBag className="w-5 h-5" />
           Aktive Inserate ({seller.listings.length})
-        </h2>
+        </Heading>
 
         {seller.listings.length === 0 ? (
           <div className="bg-gray-50 dark:bg-gray-800 rounded-xl p-8 text-center border-2 border-dashed border-gray-300 dark:border-gray-600">

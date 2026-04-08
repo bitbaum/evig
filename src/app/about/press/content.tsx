@@ -10,6 +10,7 @@
 import { ExternalLink, Quote, Newspaper, Award, Star, ArrowLeft } from 'lucide-react'
 import Link from 'next/link'
 import { CONTACT } from '@/config/org'
+import Heading from '@/components/ui/Heading'
 import { ResponsiveHero } from '@/components/layout/ResponsiveHero'
 import AboutSubNav from '@/components/about/AboutSubNav'
 import {
@@ -49,9 +50,9 @@ function MediaCard({ mention }: { mention: MediaMention }) {
           <span className={`inline-block text-xs font-medium px-2 py-1 rounded-full border ${TIER_STYLES[mention.tier]} mb-2`}>
             {TIER_LABELS[mention.tier]}
           </span>
-          <h3 className="font-bold text-gray-900 group-hover:text-green-600 transition-colors line-clamp-2">
+          <Heading level={3} className="text-gray-900 group-hover:text-green-600 transition-colors line-clamp-2">
             {mention.title}
-          </h3>
+          </Heading>
         </div>
         <ExternalLink className="h-4 w-4 text-gray-500 group-hover:text-green-500 flex-shrink-0 transition-colors" />
       </div>
@@ -154,7 +155,7 @@ export default function PressPageContent() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="flex items-center justify-center gap-2 mb-8">
             <Star className="h-5 w-5 text-amber-500" />
-            <h2 className="text-xl font-semibold text-gray-900">Nationale Medien</h2>
+            <Heading level={2} className="text-xl text-gray-900">Nationale Medien</Heading>
             <Star className="h-5 w-5 text-amber-500" />
           </div>
 
@@ -169,9 +170,9 @@ export default function PressPageContent() {
       {/* Featured Articles */}
       <section className="py-16 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <h2 className="text-2xl font-bold text-gray-900 mb-8 text-center">
+          <Heading level={2} className="text-gray-900 mb-8 text-center">
             Ausgewählte Artikel
-          </h2>
+          </Heading>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {featuredMedia.map((mention) => (
@@ -184,9 +185,9 @@ export default function PressPageContent() {
       {/* Other Mentions */}
       <section className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <h2 className="text-2xl font-bold text-gray-900 mb-8 text-center">
+          <Heading level={2} className="text-gray-900 mb-8 text-center">
             Weitere Erwähnungen & Partnerschaften
-          </h2>
+          </Heading>
 
           <div className="bg-gray-50 rounded-2xl border border-gray-200 p-8">
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -222,7 +223,7 @@ export default function PressPageContent() {
       {/* Press Contact CTA */}
       <section className="py-20 bg-green-600 text-white">
         <div className="max-w-4xl mx-auto text-center px-4">
-          <h2 className="text-3xl font-bold mb-6">Presseanfragen</h2>
+          <Heading level={2} className="mb-6">Presseanfragen</Heading>
           <p className="text-xl mb-8 text-green-100">
             Möchtest du über RevampIT berichten? Wir freuen uns über dein Interesse
             und stehen gerne für Interviews und Hintergrundgespräche zur Verfügung.

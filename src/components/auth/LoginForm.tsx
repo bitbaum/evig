@@ -7,6 +7,7 @@ import Link from 'next/link'
 import { Mail, Lock, Loader2, AlertCircle, CheckCircle2, ArrowRight, Eye, EyeOff } from 'lucide-react'
 import { getTextColor, getStatusColors, getButtonVariant } from '@/lib/design-system'
 import { cn } from '@/lib/utils'
+import Heading from '@/components/ui/Heading'
 
 export function LoginForm() {
   const router = useRouter()
@@ -81,9 +82,9 @@ export function LoginForm() {
       <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 border border-gray-100 dark:border-gray-700">
         {/* Header */}
         <div className="text-center mb-8">
-          <h1 className={cn('text-2xl font-bold mb-2', getTextColor('white', 'primary'), 'dark:text-white')}>
+          <Heading level={1} className={cn('text-2xl font-bold mb-2', getTextColor('white', 'primary'), 'dark:text-white')}>
             Willkommen zurück
-          </h1>
+          </Heading>
           <p className={cn('text-sm sm:text-base', getTextColor('white', 'muted'), 'dark:text-neutral-400')}>
             Melde dich in deinem Konto an
           </p>

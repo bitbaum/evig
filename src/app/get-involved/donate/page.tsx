@@ -4,6 +4,7 @@ import { Leaf, Monitor, Building2, ArrowDown } from 'lucide-react'
 import { NewsletterSignup } from '@/components/community/NewsletterSignup'
 import { CopyButton } from '@/components/community/CopyButton'
 import { getEnvironmentalSummary } from '@/data/impact-metrics'
+import Heading from '@/components/ui/Heading'
 
 export const metadata: Metadata = {
   title: 'Spenden | RevampIT',
@@ -65,9 +66,9 @@ export default function DonatePage() {
 
         {/* Hero */}
         <div className="text-center mb-10">
-          <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
+          <Heading level={1} className="text-gray-900 mb-4">
             Direkt helfen.
-          </h1>
+          </Heading>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto mb-8">
             Jede Spende rettet Geräte vor dem Elektroschrott, verlängert Lebenszyklen
             und ermöglicht Technologie für Menschen, die sich das sonst nicht leisten können.
@@ -104,7 +105,7 @@ export default function DonatePage() {
 
         {/* Impact tiers */}
         <section className="mb-4">
-          <h2 className="text-xl font-semibold text-gray-900 mb-6 text-center">Was deine Spende bewirkt</h2>
+          <Heading level={2} className="text-gray-900 mb-6 text-center">Was deine Spende bewirkt</Heading>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             {IMPACT_TIERS.map((tier) => (
               <div
@@ -152,7 +153,7 @@ export default function DonatePage() {
         {/* Bank transfer box — primary CTA */}
         <section id="bankueberweisung" className="mb-12 scroll-mt-8">
           <div className="rounded-xl border-2 border-green-200 bg-green-50 p-6 sm:p-8">
-            <h2 className="text-xl font-semibold text-gray-900 mb-2">Banküberweisung</h2>
+            <Heading level={2} className="text-gray-900 mb-2">Banküberweisung</Heading>
             <p className="text-sm text-gray-500 mb-6">Überweise auf folgendes Konto:</p>
             <div className="space-y-4">
               <div className="flex items-start justify-between gap-4">

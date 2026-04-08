@@ -1,3 +1,5 @@
+import Heading from '@/components/ui/Heading'
+
 const freedomRatings = [
   { label: 'Open-Source-Freiheit', color: 'bg-green-500', desc: 'Vollständige Code-Transparenz & Eigentum' },
   { label: 'Dezentralisierungsfreiheit', color: 'bg-blue-500', desc: 'Unabhängigkeit von Plattformkontrolle' },
@@ -15,7 +17,7 @@ export function PhilosophySection() {
       <div className="container mx-auto px-4">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-6">Unsere Freiheits-First-Philosophie</h2>
+            <Heading level={2} className="mb-6">Unsere Freiheits-First-Philosophie</Heading>
             <p className="text-lg text-gray-600 mb-4">
               Wir glauben an <strong>100% Engagement für Freiheit</strong> durch maximale Automatisierung.
             </p>
@@ -26,7 +28,7 @@ export function PhilosophySection() {
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div>
-              <h3 className="text-2xl font-bold mb-6 text-gray-800">Anstrengung als Wahl, nicht als Notwendigkeit</h3>
+              <Heading level={3} className="mb-6 text-gray-800">Anstrengung als Wahl, nicht als Notwendigkeit</Heading>
               <div className="space-y-6 text-gray-600">
                 <div className="border-l-4 border-green-500 pl-4">
                   <p className="font-semibold text-green-800 mb-2">Das Freiheitsprinzip</p>
@@ -56,7 +58,7 @@ export function PhilosophySection() {
             </div>
 
             <div className="bg-gradient-to-br from-green-50 to-blue-50 rounded-xl p-8">
-              <h4 className="text-xl font-bold mb-4 text-gray-800">Unser Freiheits-Bewertungssystem</h4>
+              <Heading level={4} className="mb-4 text-gray-800">Unser Freiheits-Bewertungssystem</Heading>
               <p className="text-gray-600 mb-4">
                 Jede von uns erstellte Website und Web-App erhält eine umfassende Freiheitsbewertung, die darauf basiert, wie gut sie deine Autonomie unterstützt:
               </p>

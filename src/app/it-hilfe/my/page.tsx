@@ -24,6 +24,7 @@ import {
   REQUEST_STATUSES,
 } from '@/config/it-hilfe'
 import type { ITHilfeRequest } from '@/components/it-hilfe/detail/types'
+import Heading from '@/components/ui/Heading'
 
 export default function MyRequestsPage() {
   const { data: session, status } = useSession()
@@ -81,7 +82,7 @@ export default function MyRequestsPage() {
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">Meine Reparaturanfragen</h1>
+            <Heading level={1} className="text-2xl text-gray-900">Meine Reparaturanfragen</Heading>
             <p className="text-gray-600 mt-1">
               Verwalte deine Anfragen und sieh eingegangene Angebote
             </p>
@@ -137,9 +138,9 @@ export default function MyRequestsPage() {
         {requests.length === 0 ? (
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-12 text-center">
             <FileText className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">
+            <Heading level={3} className="text-xl text-gray-900 mb-2">
               {statusFilter ? 'Keine Anfragen mit diesem Status' : 'Noch keine Anfragen'}
-            </h3>
+            </Heading>
             <p className="text-gray-600 mb-6">
               {statusFilter
                 ? 'Versuche einen anderen Filter.'

@@ -9,6 +9,7 @@
 
 import { useEffect, useCallback, type ReactNode } from 'react'
 import { X } from 'lucide-react'
+import Heading from '@/components/ui/Heading'
 
 const SIZE_CLASSES = {
   sm: 'max-w-sm',
@@ -67,9 +68,9 @@ export function Modal({
         >
           {/* Header */}
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+            <Heading level={3} className="text-lg font-semibold text-gray-900 dark:text-white">
               {title}
-            </h3>
+            </Heading>
             <button
               onClick={onClose}
               className="text-gray-500 hover:text-gray-600 dark:hover:text-gray-300"

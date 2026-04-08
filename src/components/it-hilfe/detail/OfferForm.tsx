@@ -1,5 +1,6 @@
 import { Send } from 'lucide-react'
 import { getAllSkills } from '@/config/it-hilfe'
+import Heading from '@/components/ui/Heading'
 
 interface OfferFormProps {
   showForm: boolean
@@ -46,7 +47,7 @@ export function OfferForm({
         </button>
       ) : (
         <form onSubmit={onSubmit}>
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Dein Angebot</h3>
+          <Heading level={3} className="text-lg font-semibold text-gray-900 mb-4">Dein Angebot</Heading>
 
           {error && (
             <div id="offer-error" className="bg-red-50 border border-red-200 rounded-lg p-3 mb-4 text-sm text-red-700">

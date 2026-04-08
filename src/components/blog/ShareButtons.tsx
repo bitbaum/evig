@@ -1,3 +1,5 @@
+import Heading from '@/components/ui/Heading'
+
 interface ShareButtonsProps {
   url: string
   title: string
@@ -15,7 +17,7 @@ export default function ShareButtons({ url, title }: ShareButtonsProps) {
 
   return (
     <div>
-      <h3 className="text-lg font-semibold text-gray-900 mb-4">Artikel teilen</h3>
+      <Heading level={3} className="text-lg font-semibold text-gray-900 mb-4">Artikel teilen</Heading>
       <div className="flex flex-wrap gap-3">
         {/* Mastodon */}
         <a

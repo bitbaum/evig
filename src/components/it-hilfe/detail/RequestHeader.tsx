@@ -1,5 +1,6 @@
 import Image from 'next/image'
 import { Wrench } from 'lucide-react'
+import Heading from '@/components/ui/Heading'
 import {
   getCategoryById,
   getUrgencyById,
@@ -33,7 +34,7 @@ export function RequestHeader({ request }: RequestHeaderProps) {
               {urgencyConfig?.name || request.urgency}
             </span>
           </div>
-          <h1 className="text-2xl font-bold text-gray-900">{request.title}</h1>
+          <Heading level={1} className="text-2xl font-bold text-gray-900">{request.title}</Heading>
         </div>
       </div>
 
@@ -79,7 +80,7 @@ export function RequestHeader({ request }: RequestHeaderProps) {
       {/* Skills needed */}
       {request.skillsNeeded.length > 0 && (
         <div className="mt-6 pt-6 border-t border-gray-100">
-          <h3 className="text-sm font-medium text-gray-700 mb-2">Benötigte Skills</h3>
+          <Heading level={3} className="text-sm font-medium text-gray-700 mb-2">Benötigte Skills</Heading>
           <div className="flex flex-wrap gap-2">
             {request.skillsNeeded.map((skillId) => {
               const skill = getSkillById(skillId)

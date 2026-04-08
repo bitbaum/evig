@@ -6,6 +6,7 @@
  */
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import Heading from '@/components/ui/Heading'
 import { AboutSection as AboutSectionType } from '@/data/about'
 import { CheckCircle } from 'lucide-react'
 
@@ -29,9 +30,9 @@ export default function AboutSection({ section }: AboutSectionProps) {
           {/* Section Header */}
           <div className="text-center mb-12">
             {section.title && (
-              <h2 className={`text-4xl font-bold mb-4 ${textColorClass}`}>
+              <Heading level={2} className={`text-4xl font-bold mb-4 ${textColorClass}`}>
                 {section.title}
-              </h2>
+              </Heading>
             )}
             {section.description && (
               <p className={`text-xl max-w-3xl mx-auto ${textSecondaryClass}`}>

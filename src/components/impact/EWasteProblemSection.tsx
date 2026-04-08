@@ -7,6 +7,7 @@
  */
 
 import { AlertTriangle, ExternalLink, Globe, Recycle, Laptop, Scale } from 'lucide-react'
+import Heading from '@/components/ui/Heading'
 import { EWASTE_GLOBAL_STATS, type EWasteStat } from '@/data/impact-metrics'
 
 const getStatIcon = (id: string) => {
@@ -31,7 +32,7 @@ function StatCard({ stat }: { stat: EWasteStat }) {
             {stat.value}
             <span className="text-lg font-normal ml-2 text-white/80">{stat.unit}</span>
           </div>
-          <h3 className="text-lg font-semibold text-white/90 mb-2">{stat.label}</h3>
+          <Heading level={3} className="text-lg font-semibold text-white/90 mb-2">{stat.label}</Heading>
           <p className="text-sm text-white/70 mb-3">{stat.description}</p>
           <a
             href={stat.sourceUrl}
@@ -65,9 +66,9 @@ export default function EWasteProblemSection() {
             <AlertTriangle className="h-4 w-4" />
             Das Problem
           </div>
-          <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
+          <Heading level={2} className="text-4xl md:text-5xl font-bold text-white mb-6">
             Die E-Waste Krise
-          </h2>
+          </Heading>
           <p className="text-xl text-white/80 max-w-3xl mx-auto">
             Elektroschrott ist der am schnellsten wachsende Abfallstrom der Welt.
             Die Zahlen zeigen das Ausmass des Problems – und warum Handeln dringend nötig ist.

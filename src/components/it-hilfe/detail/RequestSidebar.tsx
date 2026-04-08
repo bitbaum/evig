@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Heading from '@/components/ui/Heading'
 import {
   MapPin,
   Clock,
@@ -49,9 +50,9 @@ export function RequestSidebar({
     <div className="space-y-6">
       {/* Request Info */}
       <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-        <h3 className="text-sm font-medium text-gray-500 uppercase tracking-wider mb-4">
+        <Heading level={3} className="text-sm font-medium text-gray-500 uppercase tracking-wider mb-4">
           Details
-        </h3>
+        </Heading>
 
         <div className="space-y-4">
           {/* Location */}
@@ -130,9 +131,9 @@ export function RequestSidebar({
 
       {/* Requester Info */}
       <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-        <h3 className="text-sm font-medium text-gray-500 uppercase tracking-wider mb-4">
+        <Heading level={3} className="text-sm font-medium text-gray-500 uppercase tracking-wider mb-4">
           Anfragender
-        </h3>
+        </Heading>
         <div className="flex items-center gap-3">
           <div className="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center">
             <User className="w-6 h-6 text-gray-500" aria-hidden="true" />
@@ -162,9 +163,9 @@ export function RequestSidebar({
       {/* Owner Actions */}
       {request.isOwner && (
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-          <h3 className="text-sm font-medium text-gray-500 uppercase tracking-wider mb-4">
+          <Heading level={3} className="text-sm font-medium text-gray-500 uppercase tracking-wider mb-4">
             Aktionen
-          </h3>
+          </Heading>
           <div className="space-y-2">
             {(request.status === REQUEST_STATUS.OPEN || request.status === REQUEST_STATUS.IN_DISCUSSION) && (
               <Link

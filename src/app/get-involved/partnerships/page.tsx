@@ -6,6 +6,7 @@ import { PageSection } from '@/components/community/PageSection'
 import { PARTNERSHIPS_PAGE } from '@/config/community'
 import { responsiveTypography } from '@/lib/responsive'
 import { ORG, CONTACT } from '@/config/org'
+import Heading from '@/components/ui/Heading'
 
 export const metadata: Metadata = {
   title: `Partnerschaften | ${ORG.name}`,
@@ -29,9 +30,9 @@ export default function PartnershipsPage() {
 
         {/* Benefits Section */}
         <section className="space-y-8">
-          <h2 className={`${responsiveTypography.section} font-bold text-gray-900`}>
+          <Heading level={2} className={`${responsiveTypography.section} text-gray-900`}>
             Partnerschaftsvorteile
-          </h2>
+          </Heading>
           <BenefitCardGrid>
             {PARTNERSHIPS_PAGE.benefits?.map((benefit, index) => (
               <BenefitCard

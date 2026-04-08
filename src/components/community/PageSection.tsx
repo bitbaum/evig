@@ -6,6 +6,7 @@
  */
 
 import { responsiveTypography, responsiveSpacing } from '@/lib/responsive'
+import Heading from '@/components/ui/Heading'
 
 interface PageSectionProps {
   title: string
@@ -16,9 +17,9 @@ interface PageSectionProps {
 export function PageSection({ title, content, className = '' }: PageSectionProps) {
   return (
     <section className={`space-y-6 ${className}`}>
-      <h2 className={`${responsiveTypography.section} font-bold text-gray-900`}>
+      <Heading level={2} className={`${responsiveTypography.section} font-bold text-gray-900`}>
         {title}
-      </h2>
+      </Heading>
       <p className={`${responsiveTypography.lead} text-gray-600 leading-relaxed`}>
         {content}
       </p>

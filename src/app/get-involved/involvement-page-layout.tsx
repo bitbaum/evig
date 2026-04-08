@@ -2,6 +2,7 @@ import { ReactNode } from 'react'
 import { ContactLink } from '@/components/ui/contact-link'
 import { ResponsiveHero } from '@/components/layout/ResponsiveHero'
 import { responsiveTypography, responsiveSpacing, responsiveButtons } from '@/lib/responsive'
+import Heading from '@/components/ui/Heading'
 
 interface InvolvementPageLayoutProps {
   title: string
@@ -41,9 +42,9 @@ export function InvolvementPageLayout({
       {/* CTA Section */}
       <section className={`${responsiveSpacing.section} bg-gray-50`}>
         <div className={`${responsiveSpacing.container} mx-auto text-center`}>
-          <h2 className={`${responsiveTypography.section} font-bold ${responsiveSpacing.mbMedium}`}>
+          <Heading level={2} className={`${responsiveTypography.section} ${responsiveSpacing.mbMedium}`}>
             Bereit anzufangen?
-          </h2>
+          </Heading>
           <p className={`${responsiveTypography.lead} ${responsiveSpacing.mbLarge} max-w-2xl mx-auto text-gray-600`}>
             Hast du Fragen oder möchtest du mehr erfahren? Wir sind da, um dir beim nächsten Schritt zu helfen.
           </p>

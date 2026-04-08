@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { MapPin, Star, User, CheckCircle } from 'lucide-react'
 import { type RepairerProfile } from './types'
 import { StarRating } from './StarRating'
+import Heading from '@/components/ui/Heading'
 import { getServiceIcon, formatPrice } from './helpers'
 
 interface RepairerCardProps {
@@ -51,9 +52,9 @@ export function RepairerCard({ repairer, onViewReviews }: RepairerCardProps) {
               <User className="w-6 h-6 text-blue-600" />
             </div>
             <div>
-              <h3 className="font-semibold text-gray-900">
+              <Heading level={3} className="font-semibold text-gray-900">
                 {repairer.business_name || 'Unbenannter Reparateur'}
-              </h3>
+              </Heading>
               <div className="flex items-center text-sm text-gray-600">
                 {repairer.is_verified && (
                   <CheckCircle className="w-4 h-4 text-green-500 mr-1" />

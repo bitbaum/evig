@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { MapPin, Euro, Users, Sparkles, Star, CheckCircle } from 'lucide-react'
+import Heading from '@/components/ui/Heading'
 import { getSkillById, BUDGET_TIERS } from '@/config/it-hilfe'
 import { logger } from '@/lib/logger'
 import { apiFetch } from '@/lib/api/client'
@@ -86,7 +87,7 @@ export function HelperCard({ helper, requestId, requestTitle }: HelperCardProps)
       {/* Helper Info */}
       <div className="mb-4">
         <Link href={`/it-hilfe/helfer/${helper.userId}`} className="hover:underline">
-          <h3 className="text-lg font-semibold text-gray-900 mb-2">{helper.name}</h3>
+          <Heading level={3} className="text-lg font-semibold text-gray-900 mb-2">{helper.name}</Heading>
         </Link>
         {helper.bio && (
           <p className="text-gray-600 text-sm line-clamp-2 mb-3">{helper.bio}</p>

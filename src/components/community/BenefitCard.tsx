@@ -7,6 +7,7 @@
 
 import { LucideIcon } from 'lucide-react'
 import { responsiveTypography, responsiveSpacing } from '@/lib/responsive'
+import Heading from '@/components/ui/Heading'
 
 export interface BenefitCardProps {
   icon: LucideIcon
@@ -21,9 +22,9 @@ export function BenefitCard({ icon: Icon, title, description, className = '' }: 
       <div className={`text-green-600 ${responsiveSpacing.mbSmall}`}>
         <Icon className="w-10 h-10" />
       </div>
-      <h3 className={`${responsiveTypography.cardTitle} font-semibold ${responsiveSpacing.mbSmall} text-gray-900`}>
+      <Heading level={3} className={`${responsiveTypography.cardTitle} font-semibold ${responsiveSpacing.mbSmall} text-gray-900`}>
         {title}
-      </h3>
+      </Heading>
       <p className={`${responsiveTypography.body} text-gray-600 leading-relaxed`}>
         {description}
       </p>

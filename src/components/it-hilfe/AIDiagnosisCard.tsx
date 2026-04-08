@@ -1,6 +1,7 @@
 'use client'
 
 import { Stethoscope, MapPin, ExternalLink } from 'lucide-react'
+import Heading from '@/components/ui/Heading'
 import { REVAMPIT_STORE } from '@/config/it-hilfe'
 
 interface AIDiagnosisCardProps {
@@ -13,7 +14,7 @@ export function AIDiagnosisCard({ diagnosis, deviceInfo }: AIDiagnosisCardProps)
     <div className="bg-gradient-to-r from-emerald-50 to-teal-50 rounded-xl border border-emerald-200 p-6">
       <div className="flex items-center gap-2 mb-3">
         <Stethoscope className="w-5 h-5 text-emerald-600" />
-        <h3 className="text-lg font-semibold text-gray-900">KI-Ersteinschätzung</h3>
+        <Heading level={3} className="text-lg font-semibold text-gray-900">KI-Ersteinschätzung</Heading>
       </div>
 
       {deviceInfo && (

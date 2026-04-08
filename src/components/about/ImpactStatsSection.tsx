@@ -6,6 +6,7 @@
  */
 
 import { Leaf, Users } from 'lucide-react'
+import Heading from '@/components/ui/Heading'
 import { getMetricsByCategory } from '@/data/impact-metrics'
 
 export default function ImpactStatsSection() {
@@ -15,9 +16,9 @@ export default function ImpactStatsSection() {
   return (
     <section className="py-12 sm:py-16 md:py-20 bg-white">
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
-        <h2 className="text-2xl sm:text-3xl font-bold mb-8 sm:mb-12 text-center">
+        <Heading level={2} className="text-2xl sm:text-3xl font-bold mb-8 sm:mb-12 text-center">
           Zahlen & Fakten
-        </h2>
+        </Heading>
         <div className="grid md:grid-cols-2 gap-6 sm:gap-8">
           {/* Environmental Impact */}
           <div className="bg-green-50 p-6 sm:p-8 rounded-lg shadow-md">
@@ -25,9 +26,9 @@ export default function ImpactStatsSection() {
               <div className="bg-green-600 p-2 rounded-lg">
                 <Leaf className="h-5 w-5 text-white" />
               </div>
-              <h3 className="text-xl sm:text-2xl font-bold text-green-800">
+              <Heading level={3} className="text-xl sm:text-2xl font-bold text-green-800">
                 Umweltwirkung
-              </h3>
+              </Heading>
             </div>
             <div className="space-y-4 sm:space-y-6">
               {environmentalMetrics.slice(0, 3).map((metric) => (
@@ -49,9 +50,9 @@ export default function ImpactStatsSection() {
               <div className="bg-green-600 p-2 rounded-lg">
                 <Users className="h-5 w-5 text-white" />
               </div>
-              <h3 className="text-xl sm:text-2xl font-bold text-green-800">
+              <Heading level={3} className="text-xl sm:text-2xl font-bold text-green-800">
                 Soziale Wirkung
-              </h3>
+              </Heading>
             </div>
             <div className="space-y-4 sm:space-y-6">
               {socialMetrics.map((metric) => (

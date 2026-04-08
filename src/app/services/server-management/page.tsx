@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { ArrowRight, Calendar, Server, Database, Monitor, Shield, Settings, Clock, AlertTriangle, Heart } from 'lucide-react'
 import { PageHero } from '@/components/layout/PageHero'
 import { ORG } from '@/config/org'
+import Heading from '@/components/ui/Heading'
 
 export const metadata: Metadata = {
   title: 'Server-Management - Zukunftsvision | RevampIT',
@@ -77,7 +78,7 @@ export default function ServerManagementPage() {
             <div className="text-center mb-16">
               <div className="flex items-center justify-center gap-2 mb-4">
                 <Heart className="w-8 h-8 text-green-600" />
-                <h2 className="text-4xl font-bold text-gray-900">Gemeinschaftszentrierte Infrastruktur</h2>
+                <Heading level={2} className="text-gray-900">Gemeinschaftszentrierte Infrastruktur</Heading>
               </div>
               <p className="text-xl text-gray-600 max-w-3xl mx-auto">
                 Unser zukünftiges Server-Management wird gemeinnützige Organisationen, Genossenschaften
@@ -124,7 +125,7 @@ export default function ServerManagementPage() {
                       <feature.icon className="w-6 h-6" />
                     </div>
                     <div>
-                      <h3 className="text-xl font-bold mb-2">{feature.title}</h3>
+                      <Heading level={3} className="mb-2">{feature.title}</Heading>
                       <p className="text-gray-600">{feature.description}</p>
                     </div>
                   </div>
@@ -138,7 +139,7 @@ export default function ServerManagementPage() {
         <section className="py-12 sm:py-16 md:py-20">
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto">
-              <h2 className="text-4xl font-bold text-gray-900 mb-8 text-center">Kapazitäten verantwortungsvoll aufbauen</h2>
+              <Heading level={2} className="text-gray-900 mb-8 text-center">Kapazitäten verantwortungsvoll aufbauen</Heading>
               <div className="bg-gray-50 rounded-xl p-8 border">
                 <p className="text-lg text-gray-700 mb-6">
                   Als gemeinnützige Organisation verpflichten wir uns zu nachhaltigem Wachstum, das unsere Werte nicht beeinträchtigt.
@@ -149,14 +150,14 @@ export default function ServerManagementPage() {
                     <div className="flex items-start gap-3">
                       <div className="w-2 h-2 bg-green-600 rounded-full mt-3"></div>
                       <div>
-                        <h4 className="font-semibold text-gray-900">Entwicklung interner Expertise</h4>
+                        <Heading level={4} className="text-gray-900">Entwicklung interner Expertise</Heading>
                         <p className="text-gray-600">Schulung unseres Teams in nachhaltigen Server-Management-Praktiken</p>
                       </div>
                     </div>
                     <div className="flex items-start gap-3">
                       <div className="w-2 h-2 bg-green-600 rounded-full mt-3"></div>
                       <div>
-                        <h4 className="font-semibold text-gray-900">Bedarfsanalyse der Gemeinschaft</h4>
+                        <Heading level={4} className="text-gray-900">Bedarfsanalyse der Gemeinschaft</Heading>
                         <p className="text-gray-600">Verstehen, welche Server-Management-Dienste unsere Gemeinschaft tatsächlich benötigt</p>
                       </div>
                     </div>
@@ -165,14 +166,14 @@ export default function ServerManagementPage() {
                     <div className="flex items-start gap-3">
                       <div className="w-2 h-2 bg-green-600 rounded-full mt-3"></div>
                       <div>
-                        <h4 className="font-semibold text-gray-900">Nachhaltiges Geschäftsmodell</h4>
+                        <Heading level={4} className="text-gray-900">Nachhaltiges Geschäftsmodell</Heading>
                         <p className="text-gray-600">Schaffung eines Preismodells, das unsere Mission unterstützt und gleichzeitig zugänglich bleibt</p>
                       </div>
                     </div>
                     <div className="flex items-start gap-3">
                       <div className="w-2 h-2 bg-green-600 rounded-full mt-3"></div>
                       <div>
-                        <h4 className="font-semibold text-gray-900">Entwicklung von Partnerschaften</h4>
+                        <Heading level={4} className="text-gray-900">Entwicklung von Partnerschaften</Heading>
                         <p className="text-gray-600">Aufbau von Beziehungen zu anderen missionsgetriebenen Organisationen</p>
                       </div>
                     </div>
@@ -187,7 +188,7 @@ export default function ServerManagementPage() {
         <section className="py-12 sm:py-16 md:py-20 bg-white">
           <div className="container mx-auto px-4">
             <div className="text-center mb-16">
-              <h2 className="text-4xl font-bold text-gray-900 mb-4">Zukünftiges Dienstleistungsmodell</h2>
+              <Heading level={2} className="text-gray-900 mb-4">Zukünftiges Dienstleistungsmodell</Heading>
               <p className="text-xl text-gray-600 max-w-3xl mx-auto">
                 Wenn wir bereit sind, wird unser Server-Management so strukturiert sein, dass es den Bedürfnissen der Gemeinschaft dient,
                 nicht der Gewinnmaximierung.
@@ -213,7 +214,7 @@ export default function ServerManagementPage() {
                 }
               ].map((plan, index) => (
                 <div key={index} className="bg-gray-50 rounded-xl p-8 border-2 border-gray-200">
-                  <h3 className="text-2xl font-bold text-gray-900 mb-2">{plan.name}</h3>
+                  <Heading level={3} className="text-gray-900 mb-2">{plan.name}</Heading>
                   <p className="text-gray-600 mb-6">{plan.description}</p>
                   <ul className="space-y-3">
                     {plan.features.map((feature, featureIndex) => (
@@ -233,13 +234,13 @@ export default function ServerManagementPage() {
         <section className="py-20 bg-gray-50">
           <div className="container mx-auto px-4 text-center">
             <div className="max-w-3xl mx-auto">
-              <h2 className="text-4xl font-bold text-gray-900 mb-6">Hilf uns bei der Planung</h2>
+              <Heading level={2} className="text-gray-900 mb-6">Hilf uns bei der Planung</Heading>
               <p className="text-xl text-gray-600 mb-8">
                 Bist du Teil einer Gemeinschaftsorganisation, die von ethischem Server-Management profitieren könnte?
                 Hilf uns zu verstehen, was du brauchst.
               </p>
               <div className="bg-green-50 border border-green-200 rounded-lg p-8">
-                <h3 className="text-2xl font-bold text-green-800 mb-4">Planungssitzung der Gemeinschaft</h3>
+                <Heading level={3} className="text-green-800 mb-4">Planungssitzung der Gemeinschaft</Heading>
                 <p className="text-green-700 mb-6">
                   Teile deine Herausforderungen im Server-Management und hilf uns, Dienstleistungen zu entwickeln, die wirklich den
                   Bedürfnissen der Gemeinschaft dienen. dein Beitrag ist für unseren Planungsprozess von unschätzbarem Wert.
@@ -259,7 +260,7 @@ export default function ServerManagementPage() {
         {/* Current Services CTA */}
         <section className="py-20 bg-gradient-to-r from-green-700 to-green-800 text-white">
           <div className="container mx-auto px-4 text-center">
-            <h2 className="text-4xl font-bold mb-6">Benötigst du heute Server-Hilfe?</h2>
+            <Heading level={2} className="mb-6">Benötigst du heute Server-Hilfe?</Heading>
             <p className="text-xl mb-8 max-w-2xl mx-auto text-green-100">
               Während wir unsere Vision für das Server-Management entwickeln, können wir bei der Linux-Installation und Open-Source-Lösungen helfen.
             </p>

@@ -2,6 +2,7 @@ import { Metadata } from 'next'
 import Link from 'next/link'
 import { BookOpen, FileText, Users, LinkIcon, Lightbulb } from 'lucide-react'
 import { PageHero } from '@/components/layout/PageHero'
+import Heading from '@/components/ui/Heading'
 
 export const metadata: Metadata = {
   title: 'Knowhow - Guides, Blog, Workshops | revamp-it',
@@ -110,7 +111,7 @@ export default function WissenPage() {
                 >
                   <div className="flex items-center gap-3 mb-3 sm:mb-4">
                     <Icon className="w-5 h-5 sm:w-6 sm:h-6" />
-                    <h2 className="text-xl sm:text-2xl font-bold">{section.title}</h2>
+                    <Heading level={2} className="text-xl sm:text-2xl">{section.title}</Heading>
                   </div>
                   <p className="text-sm sm:text-base mb-4 sm:mb-6 flex-grow">{section.description}</p>
                   <Link
@@ -129,13 +130,13 @@ export default function WissenPage() {
       {/* Resources Section */}
       <section id="ressourcen" className="px-4 sm:px-6 py-12 sm:py-16 md:py-20 lg:px-8 bg-gray-50">
         <div className="mx-auto max-w-6xl">
-          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-gray-900 mb-8 sm:mb-12 md:mb-16 text-center">
+          <Heading level={2} className="text-2xl sm:text-3xl tracking-tight text-gray-900 mb-8 sm:mb-12 md:mb-16 text-center">
             Curatierte Ressourcen
-          </h2>
+          </Heading>
 
           {/* Open Source Software */}
           <div className="mb-12 sm:mb-16">
-            <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6">Open Source Software Alternativen</h3>
+            <Heading level={3} className="text-xl sm:text-2xl text-gray-900 mb-4 sm:mb-6">Open Source Software Alternativen</Heading>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
               {resources.openSource.map((resource, idx) => (
                 <a
@@ -154,7 +155,7 @@ export default function WissenPage() {
 
           {/* Linux Distributionen */}
           <div className="mb-12 sm:mb-16">
-            <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6">Linux Distributionen</h3>
+            <Heading level={3} className="text-xl sm:text-2xl text-gray-900 mb-4 sm:mb-6">Linux Distributionen</Heading>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
               {resources.linux.map((resource, idx) => (
                 <a
@@ -173,7 +174,7 @@ export default function WissenPage() {
 
           {/* Documentation */}
           <div>
-            <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6">Externe Dokumentation & Portale</h3>
+            <Heading level={3} className="text-xl sm:text-2xl text-gray-900 mb-4 sm:mb-6">Externe Dokumentation & Portale</Heading>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
               {resources.documentation.map((resource, idx) => (
                 <a
@@ -195,9 +196,9 @@ export default function WissenPage() {
       {/* CTA Section */}
       <section className="px-4 sm:px-6 py-12 sm:py-16 md:py-20 lg:px-8">
         <div className="mx-auto max-w-3xl text-center">
-          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-gray-900 mb-4 sm:mb-6">
+          <Heading level={2} className="text-2xl sm:text-3xl tracking-tight text-gray-900 mb-4 sm:mb-6">
             Bereit zu lernen?
-          </h2>
+          </Heading>
           <p className="text-base sm:text-lg text-gray-600 mb-8 sm:mb-10">
             Starte mit unserem Blog, besuche einen Workshop oder schau dir ein Guide an.
           </p>

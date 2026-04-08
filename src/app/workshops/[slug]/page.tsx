@@ -23,6 +23,7 @@ import WorkshopRegistrationForm from '@/components/workshops/WorkshopRegistratio
 import WorkshopReviews from '@/components/workshops/WorkshopReviews'
 import WorkshopMaterials from '@/components/workshops/WorkshopMaterials'
 import type { WorkshopInstanceWithCount } from '@/components/workshops/types'
+import Heading from '@/components/ui/Heading'
 
 // Extended Workshop type to include fields from migration 038
 interface WorkshopDetail {
@@ -181,7 +182,7 @@ export default async function WorkshopDetailPage({ params }: { params: Promise<{
           <div className="flex items-start justify-between">
             <div className="flex-1">
               <div className="flex items-center gap-3 mb-2 flex-wrap">
-                <h1 className="text-3xl font-bold text-gray-900">{workshop.title}</h1>
+                <Heading level={1} className="text-3xl text-gray-900">{workshop.title}</Heading>
                 <span className={`px-3 py-1 rounded-full text-sm font-medium ${getLevelBadgeClass(workshop.level)}`}>
                   {workshop.level || 'Alle Stufen'}
                 </span>
@@ -209,7 +210,7 @@ export default async function WorkshopDetailPage({ params }: { params: Promise<{
           <div className="lg:col-span-2 space-y-8">
             {/* Workshop Details */}
             <div className="bg-white rounded-xl shadow-sm p-6">
-              <h2 className="text-xl font-semibold text-gray-900 mb-4">Workshop Details</h2>
+              <Heading level={2} className="text-xl text-gray-900 mb-4">Workshop Details</Heading>
 
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
                 <div className="text-center">
@@ -244,7 +245,7 @@ export default async function WorkshopDetailPage({ params }: { params: Promise<{
                 <div className="mb-6">
                   <div className="flex items-center gap-2 mb-2">
                     <Target className="w-5 h-5 text-gray-500" />
-                    <h3 className="text-lg font-medium text-gray-900">Zielgruppe</h3>
+                    <Heading level={3} className="text-lg text-gray-900">Zielgruppe</Heading>
                   </div>
                   <p className="text-gray-700">{workshop.target_audience}</p>
                 </div>
@@ -255,7 +256,7 @@ export default async function WorkshopDetailPage({ params }: { params: Promise<{
                 <div className="mb-6">
                   <div className="flex items-center gap-2 mb-2">
                     <ClipboardList className="w-5 h-5 text-gray-500" />
-                    <h3 className="text-lg font-medium text-gray-900">Voraussetzungen</h3>
+                    <Heading level={3} className="text-lg text-gray-900">Voraussetzungen</Heading>
                   </div>
                   <p className="text-gray-700">{workshop.prerequisites}</p>
                 </div>
@@ -264,7 +265,7 @@ export default async function WorkshopDetailPage({ params }: { params: Promise<{
               {/* Learning Objectives */}
               {workshop.learning_objectives && workshop.learning_objectives.length > 0 && (
                 <div className="mb-6">
-                  <h3 className="text-lg font-medium text-gray-900 mb-3">Was du lernst:</h3>
+                  <Heading level={3} className="text-lg text-gray-900 mb-3">Was du lernst:</Heading>
                   <ul className="space-y-2">
                     {workshop.learning_objectives.map((objective, index) => (
                       <li key={index} className="flex items-start">
@@ -281,7 +282,7 @@ export default async function WorkshopDetailPage({ params }: { params: Promise<{
                 <div>
                   <div className="flex items-center gap-2 mb-3">
                     <Package className="w-5 h-5 text-gray-500" />
-                    <h3 className="text-lg font-medium text-gray-900">Materialien</h3>
+                    <Heading level={3} className="text-lg text-gray-900">Materialien</Heading>
                   </div>
                   {workshop.materials_provided && (
                     <div className="mb-3">
@@ -302,7 +303,7 @@ export default async function WorkshopDetailPage({ params }: { params: Promise<{
             {/* Upcoming Instances */}
             {upcomingInstances.length > 0 && (
               <div className="bg-white rounded-xl shadow-sm p-6">
-                <h2 className="text-xl font-semibold text-gray-900 mb-4">Kommende Termine</h2>
+                <Heading level={2} className="text-xl text-gray-900 mb-4">Kommende Termine</Heading>
 
                 <div className="space-y-4">
                   {upcomingInstances.map((instance) => {
@@ -380,7 +381,7 @@ export default async function WorkshopDetailPage({ params }: { params: Promise<{
               </div>
             ) : (
               <div className="bg-white rounded-xl shadow-sm p-6">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Anmeldung</h3>
+                <Heading level={3} className="text-lg text-gray-900 mb-4">Anmeldung</Heading>
                 <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
                   <p className="text-yellow-800 text-sm">
                     Aktuell sind keine Termine für diesen Workshop geplant. Schau bald wieder vorbei!
@@ -391,7 +392,7 @@ export default async function WorkshopDetailPage({ params }: { params: Promise<{
 
             {/* Workshop Stats */}
             <div className="bg-white rounded-xl shadow-sm p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Workshop Statistiken</h3>
+              <Heading level={3} className="text-lg text-gray-900 mb-4">Workshop Statistiken</Heading>
 
               <div className="space-y-3">
                 <div className="flex justify-between">
@@ -425,13 +426,13 @@ export default async function WorkshopDetailPage({ params }: { params: Promise<{
 
             {/* Workshop Materials */}
             <div className="bg-white rounded-xl shadow-sm p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Materialien</h3>
+              <Heading level={3} className="text-lg text-gray-900 mb-4">Materialien</Heading>
               <WorkshopMaterials workshopSlug={workshop.slug} />
             </div>
 
             {/* Reviews/Feedback */}
             <div className="bg-white rounded-xl shadow-sm p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Bewertungen</h3>
+              <Heading level={3} className="text-lg text-gray-900 mb-4">Bewertungen</Heading>
               <WorkshopReviews workshopSlug={workshop.slug} />
             </div>
           </div>

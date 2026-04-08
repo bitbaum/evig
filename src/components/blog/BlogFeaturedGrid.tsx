@@ -7,6 +7,7 @@ function getReadingTime(content: string): number {
   return Math.ceil(content.trim().split(/\s+/).length / 200)
 }
 import { Clock } from 'lucide-react'
+import Heading from '@/components/ui/Heading'
 
 interface BlogFeaturedGridProps {
   posts: BlogPost[]
@@ -47,9 +48,9 @@ export default function BlogFeaturedGrid({ posts }: BlogFeaturedGridProps) {
               )}
 
               {/* Title */}
-              <h3 className="text-xl font-bold text-gray-900 mb-2 leading-snug group-hover:text-primary-700 transition-colors line-clamp-3">
+              <Heading level={3} className="text-xl font-bold text-gray-900 mb-2 leading-snug group-hover:text-primary-700 transition-colors line-clamp-3">
                 {post.title}
-              </h3>
+              </Heading>
 
               {/* Excerpt */}
               {post.excerpt && (

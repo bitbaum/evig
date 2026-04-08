@@ -2,6 +2,7 @@ import React from 'react'
 import { FilterBar } from './FilterBar'
 import { FilterableGrid } from './FilterableGrid'
 import { useFiltering, FilterConfig, FilterableItem } from '@/hooks/useFiltering'
+import Heading from '@/components/ui/Heading'
 
 interface FilterableSectionProps<T extends FilterableItem> {
   title: string
@@ -54,7 +55,7 @@ export function FilterableSection<T extends FilterableItem>({
     <section className={`py-20 ${className}`}>
       <div className="container mx-auto px-4">
         <div className="max-w-3xl mx-auto text-center mb-12">
-          <h2 className="text-3xl font-bold mb-6">{title}</h2>
+          <Heading level={2} className="text-3xl font-bold mb-6">{title}</Heading>
           {description && (
             <p className="text-lg text-gray-600 mb-8">{description}</p>
           )}

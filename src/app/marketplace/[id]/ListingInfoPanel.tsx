@@ -6,6 +6,7 @@ import {
   CreditCard,
   ShieldCheck,
 } from 'lucide-react'
+import Heading from '@/components/ui/Heading'
 import { getConditionBadge } from '@/config/erfassung/conditions'
 import { DELIVERY_LABELS, PAYMENT_MODE_LABELS, formatCHF, getCategoryLabel, GRATIS_CONFIG, VERIFICATION_CONFIG } from '@/config/marketplace'
 import type { DeliveryOption, PaymentMode } from '@/config/marketplace'
@@ -50,9 +51,9 @@ export function ListingInfoPanel({ listing, isVerified, isGratis }: ListingInfoP
 
       {/* Title & Price */}
       <div>
-        <h1 className="text-2xl lg:text-3xl font-bold text-gray-900 dark:text-white mb-2">
+        <Heading level={1} className="text-2xl lg:text-3xl text-gray-900 dark:text-white mb-2">
           {listing.title}
-        </h1>
+        </Heading>
         <p className={`text-3xl font-bold ${isGratis ? 'text-teal-600' : 'text-green-600'}`}>
           {formatCHF(Number(listing.price_chf))}
         </p>

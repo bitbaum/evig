@@ -1,5 +1,6 @@
 import { Metadata } from 'next'
 import { ORG, CONTACT, LOCATIONS } from '@/config/org'
+import Heading from '@/components/ui/Heading'
 
 export const metadata: Metadata = {
   title: `Impressum | ${ORG.name}`,
@@ -9,12 +10,12 @@ export const metadata: Metadata = {
 export default function ImpressumPage() {
   return (
     <main className="mx-auto max-w-3xl px-4 py-16">
-      <h1 className="mb-8 text-3xl font-bold">Impressum</h1>
+      <Heading level={1} className="mb-8 text-3xl">Impressum</Heading>
 
       <section className="prose prose-neutral max-w-none space-y-6">
-        <h2>Angaben gemäss Schweizer Recht</h2>
+        <Heading level={2}>Angaben gemäss Schweizer Recht</Heading>
 
-        <h3>Organisation</h3>
+        <Heading level={3}>Organisation</Heading>
         <p>
           {ORG.legalName}<br />
           {LOCATIONS.store.street}<br />
@@ -22,19 +23,19 @@ export default function ImpressumPage() {
           {LOCATIONS.store.country}
         </p>
 
-        <h3>Kontakt</h3>
+        <Heading level={3}>Kontakt</Heading>
         <p>
           E-Mail: <a href={`mailto:${CONTACT.email}`} className="text-green-700 underline">{CONTACT.email}</a><br />
           Telefon: <a href={CONTACT.phoneTel} className="text-green-700 underline">{CONTACT.phone}</a>
         </p>
 
-        <h3>Vertretungsberechtigt</h3>
+        <Heading level={3}>Vertretungsberechtigt</Heading>
         <p>Der Vorstand</p>
 
-        <h3>Rechtsform</h3>
+        <Heading level={3}>Rechtsform</Heading>
         <p>Verein nach Art. 60 ff. ZGB (Schweizerisches Zivilgesetzbuch)</p>
 
-        <h3>Zweck</h3>
+        <Heading level={3}>Zweck</Heading>
         <p>
           {ORG.description} {ORG.name} ist ein gemeinnütziger Verein, der sich für den
           freien Austausch von Technologie, die Förderung von Open-Source-Hardware und
@@ -42,7 +43,7 @@ export default function ImpressumPage() {
           IT-Geräten einsetzt.
         </p>
 
-        <h2>Haftungsausschluss</h2>
+        <Heading level={2}>Haftungsausschluss</Heading>
         <p>
           Der Autor übernimmt keinerlei Gewähr hinsichtlich der inhaltlichen Richtigkeit,
           Genauigkeit, Aktualität, Zuverlässigkeit und Vollständigkeit der Informationen
@@ -61,7 +62,7 @@ export default function ImpressumPage() {
           endgültig einzustellen.
         </p>
 
-        <h2>Haftungsausschluss für Verweise und Links</h2>
+        <Heading level={2}>Haftungsausschluss für Verweise und Links</Heading>
         <p>
           Verweise und Links auf Webseiten Dritter liegen ausserhalb unseres
           Verantwortungsbereichs. Es wird jegliche Verantwortung für solche Webseiten
@@ -69,7 +70,7 @@ export default function ImpressumPage() {
           Gefahr des jeweiligen Nutzers.
         </p>
 
-        <h2>Urheberrechte</h2>
+        <Heading level={2}>Urheberrechte</Heading>
         <p>
           Die Urheber- und alle anderen Rechte an Inhalten, Bildern, Fotos oder anderen
           Dateien auf dieser Website gehören ausschliesslich {ORG.legalName} oder den
@@ -77,7 +78,7 @@ export default function ImpressumPage() {
           die schriftliche Zustimmung der Urheberrechtsträger im Voraus einzuholen.
         </p>
 
-        <h2>Weitere rechtliche Hinweise</h2>
+        <Heading level={2}>Weitere rechtliche Hinweise</Heading>
         <p>
           Siehe auch unsere{' '}
           <a href="/datenschutz" className="text-green-700 underline">Datenschutzerklärung</a>

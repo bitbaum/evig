@@ -13,6 +13,7 @@ import {
   FileText,
   Wrench,
 } from 'lucide-react'
+import Heading from '@/components/ui/Heading'
 import {
   getCategoryById,
   getOfferStatusById,
@@ -123,7 +124,7 @@ export default function MyOffersPage() {
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">Meine Angebote</h1>
+            <Heading level={1} className="text-2xl text-gray-900">Meine Angebote</Heading>
             <p className="text-gray-600 mt-1">
               Angebote, die du für Reparaturanfragen abgegeben hast
             </p>
@@ -186,9 +187,9 @@ export default function MyOffersPage() {
         {offers.length === 0 ? (
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-12 text-center">
             <Heart className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">
+            <Heading level={3} className="text-xl text-gray-900 mb-2">
               {statusFilter ? 'Keine Angebote mit diesem Status' : 'Noch keine Angebote abgegeben'}
-            </h3>
+            </Heading>
             <p className="text-gray-600 mb-6">
               {statusFilter
                 ? 'Versuche einen anderen Filter.'

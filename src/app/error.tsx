@@ -3,6 +3,7 @@
 import { useEffect } from 'react'
 import { logger } from '@/lib/logger'
 import { Button } from '@/components/ui/button'
+import Heading from '@/components/ui/Heading'
 
 export default function Error({
   error,
@@ -35,7 +36,7 @@ export default function Error({
           </svg>
         </div>
         <div className="mt-4 text-center" role="alert" aria-live="assertive">
-          <h1 className="text-lg font-medium text-gray-900">Etwas ist schiefgelaufen!</h1>
+          <Heading level={1} className="text-lg text-gray-900">Etwas ist schiefgelaufen!</Heading>
           <p className="mt-2 text-sm text-gray-600">
             Ein unerwarteter Fehler ist aufgetreten. Bitte versuche es erneut.
           </p>

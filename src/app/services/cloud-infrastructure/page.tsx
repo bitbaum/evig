@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { ArrowRight, Calendar, Cloud, Server, Zap, Shield, Globe, Clock, AlertTriangle, Heart } from 'lucide-react'
 import { PageHero } from '@/components/layout/PageHero'
 import { ORG } from '@/config/org'
+import Heading from '@/components/ui/Heading'
 
 export const metadata: Metadata = {
   title: 'Cloud-Infrastruktur - Zukunftsvision | RevampIT',
@@ -78,7 +79,7 @@ export default function CloudInfrastructurePage() {
             <div className="text-center mb-16">
               <div className="flex items-center justify-center gap-2 mb-4">
                 <Heart className="w-8 h-8 text-green-600" />
-                <h2 className="text-4xl font-bold text-gray-900">Missionsgetriebene Technologie</h2>
+                <Heading level={2} className="text-gray-900">Missionsgetriebene Technologie</Heading>
               </div>
               <p className="text-xl text-gray-600 max-w-3xl mx-auto">
                 Als gemeinnützige Organisation wird unsere zukünftige Cloud-Infrastruktur auf den Prinzipien der
@@ -125,7 +126,7 @@ export default function CloudInfrastructurePage() {
                       <feature.icon className="w-6 h-6" />
                     </div>
                     <div>
-                      <h3 className="text-xl font-bold mb-2">{feature.title}</h3>
+                      <Heading level={3} className="mb-2">{feature.title}</Heading>
                       <p className="text-gray-600">{feature.description}</p>
                     </div>
                   </div>
@@ -139,7 +140,7 @@ export default function CloudInfrastructurePage() {
         <section className="py-12 sm:py-16 md:py-20">
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto">
-              <h2 className="text-4xl font-bold text-gray-900 mb-8 text-center">Warum wir noch nicht bereit sind</h2>
+              <Heading level={2} className="text-gray-900 mb-8 text-center">Warum wir noch nicht bereit sind</Heading>
               <div className="bg-gray-50 rounded-xl p-8 border">
                 <p className="text-lg text-gray-700 mb-6">
                   Als missionsgetriebene gemeinnützige Organisation glauben wir daran, Technologieinfrastruktur verantwortungsvoll und nachhaltig aufzubauen.
@@ -150,14 +151,14 @@ export default function CloudInfrastructurePage() {
                     <div className="flex items-start gap-3">
                       <div className="w-2 h-2 bg-green-600 rounded-full mt-3"></div>
                       <div>
-                        <h4 className="font-semibold text-gray-900">Gemeinschaftspartnerschaften aufzubauen</h4>
+                        <Heading level={4} className="text-gray-900">Gemeinschaftspartnerschaften aufzubauen</Heading>
                         <p className="text-gray-600">Zusammenarbeit mit lokalen Organisationen und Gemeinschaften, um echte Bedürfnisse zu verstehen</p>
                       </div>
                     </div>
                     <div className="flex items-start gap-3">
                       <div className="w-2 h-2 bg-green-600 rounded-full mt-3"></div>
                       <div>
-                        <h4 className="font-semibold text-gray-900">Finanzielle Nachhaltigkeit sicherzustellen</h4>
+                        <Heading level={4} className="text-gray-900">Finanzielle Nachhaltigkeit sicherzustellen</Heading>
                         <p className="text-gray-600">Entwicklung eines sich selbst tragenden Modells, das unsere Mission nicht gefährdet</p>
                       </div>
                     </div>
@@ -166,14 +167,14 @@ export default function CloudInfrastructurePage() {
                     <div className="flex items-start gap-3">
                       <div className="w-2 h-2 bg-green-600 rounded-full mt-3"></div>
                       <div>
-                        <h4 className="font-semibold text-gray-900">Nachhaltige Technologien zu erforschen</h4>
+                        <Heading level={4} className="text-gray-900">Nachhaltige Technologien zu erforschen</Heading>
                         <p className="text-gray-600">Identifizierung und Erprobung der umweltverträglichsten Lösungen</p>
                       </div>
                     </div>
                     <div className="flex items-start gap-3">
                       <div className="w-2 h-2 bg-green-600 rounded-full mt-3"></div>
                       <div>
-                        <h4 className="font-semibold text-gray-900">Unser Team zu schulen</h4>
+                        <Heading level={4} className="text-gray-900">Unser Team zu schulen</Heading>
                         <p className="text-gray-600">Aufbau interner Expertise bei gleichzeitiger Schaffung sinnvoller Beschäftigungsmöglichkeiten</p>
                       </div>
                     </div>
@@ -188,13 +189,13 @@ export default function CloudInfrastructurePage() {
         <section className="py-12 sm:py-16 md:py-20 bg-white">
           <div className="container mx-auto px-4 text-center">
             <div className="max-w-3xl mx-auto">
-              <h2 className="text-4xl font-bold text-gray-900 mb-6">Gestalte unsere Vision mit</h2>
+              <Heading level={2} className="text-gray-900 mb-6">Gestalte unsere Vision mit</Heading>
               <p className="text-xl text-gray-600 mb-8">
                 Möchtest du Teil des Aufbaus einer ethischen, nachhaltigen Cloud-Infrastruktur sein?
                 Tritt unserer Gemeinschaft bei und hilf uns, für die Zukunft zu planen.
               </p>
               <div className="bg-green-50 border border-green-200 rounded-lg p-8">
-                <h3 className="text-2xl font-bold text-green-800 mb-4">Gemeinschaftlicher Input benötigt</h3>
+                <Heading level={3} className="text-green-800 mb-4">Gemeinschaftlicher Input benötigt</Heading>
                 <p className="text-green-700 mb-6">
                   Teile deine Gedanken zu nachhaltiger Cloud-Infrastruktur und hilf uns, die Bedürfnisse der Gemeinschaft zu verstehen.
                   dein Beitrag wird unsere Entwicklungs-Roadmap direkt beeinflussen.
@@ -214,7 +215,7 @@ export default function CloudInfrastructurePage() {
         {/* Current Services CTA */}
         <section className="py-20 bg-gradient-to-r from-green-700 to-green-800 text-white">
           <div className="container mx-auto px-4 text-center">
-            <h2 className="text-4xl font-bold mb-6">Benötigst du heute technische Hilfe?</h2>
+            <Heading level={2} className="mb-6">Benötigst du heute technische Hilfe?</Heading>
             <p className="text-xl mb-8 max-w-2xl mx-auto text-green-100">
               Während wir unsere langfristige Vision entwickeln, unterstützen wir unsere Gemeinschaft aktiv mit diesen Dienstleistungen.
             </p>

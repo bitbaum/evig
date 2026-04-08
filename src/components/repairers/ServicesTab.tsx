@@ -2,6 +2,7 @@
 
 import { Clock, Wrench } from 'lucide-react'
 import { type RepairerService } from './types'
+import Heading from '@/components/ui/Heading'
 import { formatPrice, getServiceIcon } from './helpers'
 
 interface ServicesTabProps {
@@ -30,7 +31,7 @@ export function ServicesTab({ services, servicesOffered }: ServicesTabProps) {
               <div className="flex items-start gap-3">
                 <span className="text-2xl">{getServiceIcon(service.service_category)}</span>
                 <div>
-                  <h3 className="font-medium text-gray-900">{service.service_name}</h3>
+                  <Heading level={3} className="font-medium text-gray-900">{service.service_name}</Heading>
                   <p className="text-sm text-gray-500 capitalize">
                     {service.service_category.replace('_', ' ')}
                   </p>
@@ -67,7 +68,7 @@ export function ServicesTab({ services, servicesOffered }: ServicesTabProps) {
 
       {servicesOffered.length > 0 && (
         <div className="mt-6 pt-6 border-t">
-          <h4 className="text-sm font-medium text-gray-700 mb-3">Allgemeine Servicebereiche</h4>
+          <Heading level={4} className="text-sm font-medium text-gray-700 mb-3">Allgemeine Servicebereiche</Heading>
           <div className="flex flex-wrap gap-2">
             {servicesOffered.map((service) => (
               <span

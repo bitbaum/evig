@@ -1,3 +1,4 @@
+import Heading from '@/components/ui/Heading'
 import {
   Code,
   Globe,
@@ -25,7 +26,7 @@ export function ValuesSection() {
     <section className="py-12 sm:py-16 md:py-20 bg-gradient-to-br from-green-50 to-blue-50">
       <div className="container mx-auto px-4">
         <div className="max-w-4xl mx-auto text-center mb-16">
-          <h2 className="text-4xl font-bold mb-6 text-gray-800">Unsere Grundwerte</h2>
+          <Heading level={2} className="mb-6 text-gray-800">Unsere Grundwerte</Heading>
           <p className="text-xl text-gray-600 mb-8">
             Jede von uns erstellte Website dient einem ultimativen Ziel: <strong>deiner Freiheit</strong>. Jedes Prinzip arbeitet zusammen, um Anstrengung von Notwendigkeit in Wahl zu verwandeln.
           </p>
@@ -37,7 +38,7 @@ export function ValuesSection() {
                 <div className={`w-14 h-14 ${value.bgColor} rounded-full flex items-center justify-center mx-auto mb-3`}>
                   <value.icon className={`w-7 h-7 ${value.iconColor}`} />
                 </div>
-                <h3 className={`text-xl font-bold mb-3 ${value.titleColor}`}>{value.title}</h3>
+                <Heading level={3} className={`mb-3 ${value.titleColor}`}>{value.title}</Heading>
                 <p className="text-gray-600 text-sm">{value.description}</p>
               </div>
             </div>

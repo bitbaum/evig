@@ -7,6 +7,7 @@
 
 import { responsiveTypography, responsiveSpacing } from '@/lib/responsive'
 import { ListItem } from '@/config/community'
+import Heading from '@/components/ui/Heading'
 
 interface InfoSectionProps {
   title: string
@@ -18,9 +19,9 @@ interface InfoSectionProps {
 export function InfoSection({ title, items, description, className = '' }: InfoSectionProps) {
   return (
     <section className={`space-y-6 ${className}`}>
-      <h2 className={`${responsiveTypography.section} font-bold text-gray-900`}>
+      <Heading level={2} className={`${responsiveTypography.section} font-bold text-gray-900`}>
         {title}
-      </h2>
+      </Heading>
       {description && (
         <p className={`${responsiveTypography.lead} text-gray-600 leading-relaxed ${responsiveSpacing.mbMedium}`}>
           {description}
@@ -56,9 +57,9 @@ interface NumberedStepsProps {
 export function NumberedSteps({ title, steps, className = '' }: NumberedStepsProps) {
   return (
     <section className={`space-y-6 ${className}`}>
-      <h2 className={`${responsiveTypography.section} font-bold text-gray-900`}>
+      <Heading level={2} className={`${responsiveTypography.section} font-bold text-gray-900`}>
         {title}
-      </h2>
+      </Heading>
       <div className={`bg-white rounded-xl ${responsiveSpacing.cardPadding} shadow-lg border border-gray-100`}>
         <ol className="space-y-4">
           {steps.map((step, index) => (
@@ -89,9 +90,9 @@ interface CalloutProps {
 export function Callout({ title, content, className = '' }: CalloutProps) {
   return (
     <section className={`bg-green-50 rounded-xl ${responsiveSpacing.cardPadding} space-y-4 ${className}`}>
-      <h3 className={`${responsiveTypography.cardTitle} font-semibold text-gray-900`}>
+      <Heading level={3} className={`${responsiveTypography.cardTitle} font-semibold text-gray-900`}>
         {title}
-      </h3>
+      </Heading>
       <p className={`${responsiveTypography.body} text-gray-600 leading-relaxed`}>
         {content}
       </p>

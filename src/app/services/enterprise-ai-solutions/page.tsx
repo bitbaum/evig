@@ -9,6 +9,7 @@ import {
 import Link from 'next/link'
 import { PageHero } from '@/components/layout/PageHero'
 import { ORG } from '@/config/org'
+import Heading from '@/components/ui/Heading'
 import {
   coreValues,
   painPoints,
@@ -96,7 +97,7 @@ export default function EnterpriseAIPage() {
         <section className="py-12 sm:py-16 md:py-20">
           <div className="container mx-auto px-4 sm:px-6">
             <div className="text-center mb-16">
-              <h2 className="text-4xl font-bold mb-6">Unser Ethos: Die Zukunft des Computing</h2>
+              <Heading level={2} className="mb-6">Unser Ethos: Die Zukunft des Computing</Heading>
               <p className="text-xl text-gray-600 max-w-3xl mx-auto">
                 Nachhaltiges, souveränes Computing stellt einen grundlegenden Wandel hin zu einer verantwortungsvollen KI dar, die die Datensouveränität respektiert, Transparenz begrüsst und die Umweltbelastung minimiert.
               </p>
@@ -107,7 +108,7 @@ export default function EnterpriseAIPage() {
                   <div className={`w-20 h-20 mx-auto mb-6 bg-${value.color}-100 rounded-full flex items-center justify-center`}>
                     <value.icon className={`w-10 h-10 text-${value.color}-600`} />
                   </div>
-                  <h3 className="text-2xl font-bold mb-4">{value.title}</h3>
+                  <Heading level={3} className="mb-4">{value.title}</Heading>
                   <p className="text-gray-600 leading-relaxed">{value.description}</p>
                 </div>
               ))}
@@ -119,7 +120,7 @@ export default function EnterpriseAIPage() {
         <section className="py-12 sm:py-16 md:py-20 bg-white">
           <div className="container mx-auto px-4">
             <div className="text-center mb-16">
-              <h2 className="text-4xl font-bold mb-6">Warum nachhaltige, souveräne KI?</h2>
+              <Heading level={2} className="mb-6">Warum nachhaltige, souveräne KI?</Heading>
               <p className="text-xl text-gray-600 max-w-3xl mx-auto">
                 Transformiere deine Dokumenten-Workflows mit einer KI, die den Schweizer Werten von Datenschutz, Nachhaltigkeit und Unabhängigkeit entspricht.
               </p>
@@ -131,12 +132,12 @@ export default function EnterpriseAIPage() {
                     <div className="p-3 bg-green-100 rounded-lg text-green-600 mr-4">
                       <item.icon className="w-8 h-8" />
                     </div>
-                    <h3 className="text-xl font-bold">Herausforderung</h3>
+                    <Heading level={3} className="">Herausforderung</Heading>
                   </div>
                   <p className="text-gray-600 mb-4 font-medium">{item.pain}</p>
 
                   <div className="border-t pt-4">
-                    <h4 className="font-semibold text-green-600 mb-2">Souveräne Lösung</h4>
+                    <Heading level={4} className="text-green-600 mb-2">Souveräne Lösung</Heading>
                     <p className="text-gray-700 mb-3">{item.solution}</p>
                     <div className="flex items-center text-green-600 font-medium">
                       <CheckCircle2 className="w-5 h-5 mr-2" />
@@ -153,7 +154,7 @@ export default function EnterpriseAIPage() {
         <section className="py-20">
           <div className="container mx-auto px-4">
             <div className="text-center mb-16">
-              <h2 className="text-4xl font-bold mb-6">Technische Grundlage: Open Source</h2>
+              <Heading level={2} className="mb-6">Technische Grundlage: Open Source</Heading>
               <p className="text-xl text-gray-600 max-w-3xl mx-auto">
                 Vollständig auf transparenten, überprüfbaren Open-Source-Technologien aufgebaut. Keine proprietären Abhängigkeiten, kein Anbieter-Lock-in, vollständige digitale Souveränität.
               </p>
@@ -166,7 +167,7 @@ export default function EnterpriseAIPage() {
                       <component.icon className="w-6 h-6" />
                     </div>
                     <div>
-                      <h3 className="font-bold text-lg">{component.component}</h3>
+                      <Heading level={3} className="">{component.component}</Heading>
                       <p className="text-green-600 font-medium">{component.technology}</p>
                     </div>
                   </div>
@@ -189,7 +190,7 @@ export default function EnterpriseAIPage() {
         <section id="case-study" className="py-20 bg-green-50">
           <div className="container mx-auto px-4">
             <div className="text-center mb-16">
-              <h2 className="text-4xl font-bold mb-6">Bereitstellungsbeispiele nach Unternehmensgrösse</h2>
+              <Heading level={2} className="mb-6">Bereitstellungsbeispiele nach Unternehmensgrösse</Heading>
               <p className="text-xl text-gray-600 max-w-3xl mx-auto">
                 Skalierbare KI-Lösungen von kleinen Start-ups bis hin zu grossen Unternehmen - wir haben Optionen für jedes Budget und jeden Umfang.
               </p>
@@ -198,7 +199,7 @@ export default function EnterpriseAIPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
               {deploymentExamples.map((example, index) => (
                 <div key={index} className="bg-white rounded-xl p-6 shadow-lg">
-                  <h3 className="text-lg font-bold text-green-600 mb-2">{example.title}</h3>
+                  <Heading level={3} className="text-green-600 mb-2">{example.title}</Heading>
                   <p className="text-sm text-gray-500 mb-2">{example.scale}</p>
                   <p className="text-gray-600 mb-4">{example.description}</p>
                   <div className="space-y-2 text-sm">
@@ -214,10 +215,10 @@ export default function EnterpriseAIPage() {
             </div>
 
             <div className="bg-white rounded-xl shadow-lg p-8">
-              <h3 className="text-2xl font-bold mb-6 text-center">Hardware-Optionen & Technologie-Stack</h3>
+              <Heading level={3} className="mb-6 text-center">Hardware-Optionen & Technologie-Stack</Heading>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div>
-                  <h4 className="font-semibold text-green-600 mb-3">Hardware-Stufen</h4>
+                  <Heading level={4} className="text-green-600 mb-3">Hardware-Stufen</Heading>
                   <ul className="space-y-2 text-gray-700">
                     <li>&bull; <strong>Einstiegslevel:</strong> RTX 4090 24GB (hervorragendes Preis-Leistungs-Verhältnis)</li>
                     <li>&bull; <strong>Professionell:</strong> RTX 4090 Ti oder duale RTX 4090-Setups</li>
@@ -226,7 +227,7 @@ export default function EnterpriseAIPage() {
                   </ul>
                 </div>
                 <div>
-                  <h4 className="font-semibold text-green-600 mb-3">Software & KI-Modelle</h4>
+                  <Heading level={4} className="text-green-600 mb-3">Software & KI-Modelle</Heading>
                   <ul className="space-y-2 text-gray-700">
                     <li>&bull; <strong>Klein:</strong> Llama 3.1 8B (schnell, effizient, budgetfreundlich)</li>
                     <li>&bull; <strong>Mittel:</strong> Llama 3.1 13B (ausgewogene Leistung)</li>
@@ -237,7 +238,7 @@ export default function EnterpriseAIPage() {
               </div>
 
               <div className="mt-8 bg-green-50 rounded-lg p-6">
-                <h4 className="font-semibold text-green-800 mb-3">Klein anfangen, intelligent skalieren</h4>
+                <Heading level={4} className="text-green-800 mb-3">Klein anfangen, intelligent skalieren</Heading>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <div>
                     <h5 className="font-semibold text-green-700">Einstiegspunkt</h5>
@@ -261,7 +262,7 @@ export default function EnterpriseAIPage() {
         <section className="py-20">
           <div className="container mx-auto px-4">
             <div className="text-center mb-16">
-              <h2 className="text-4xl font-bold mb-6">Branchenanwendungen</h2>
+              <Heading level={2} className="mb-6">Branchenanwendungen</Heading>
               <p className="text-xl text-gray-600 max-w-3xl mx-auto">
                 Unsere souveränen KI-Lösungen passen sich den spezifischen Bedürfnissen deiner Branche an und gewährleisten gleichzeitig vollständige Datensouveränität und Compliance.
               </p>
@@ -274,7 +275,7 @@ export default function EnterpriseAIPage() {
                       <industry.icon className="w-8 h-8" />
                     </div>
                     <div>
-                      <h3 className="text-xl font-bold">{industry.name}</h3>
+                      <Heading level={3} className="">{industry.name}</Heading>
                     </div>
                   </div>
                   <p className="text-gray-600 mb-4">{industry.description}</p>
@@ -296,7 +297,7 @@ export default function EnterpriseAIPage() {
         <section id="pricing" className="py-20 bg-white">
           <div className="container mx-auto px-4">
             <div className="text-center mb-16">
-              <h2 className="text-4xl font-bold mb-6">Nachhaltige Investition in die digitale Souveränität</h2>
+              <Heading level={2} className="mb-6">Nachhaltige Investition in die digitale Souveränität</Heading>
               <p className="text-xl text-gray-600 max-w-3xl mx-auto">
                 Transparente Preise, die unser Engagement für nachhaltige, souveräne KI widerspiegeln. Skaliere vom Proof-of-Concept bis zur vollen Produktion mit vollständiger Kostentransparenz.
               </p>
@@ -310,7 +311,7 @@ export default function EnterpriseAIPage() {
                         Beliebteste Option
                       </div>
                     )}
-                    <h3 className="text-2xl font-bold mb-2">{tier.name}</h3>
+                    <Heading level={3} className="mb-2">{tier.name}</Heading>
                     <p className="text-gray-600 mb-4">{tier.description}</p>
                     <div className="mb-6">
                       <span className="text-3xl font-bold text-green-600">{tier.price}</span>
@@ -341,7 +342,7 @@ export default function EnterpriseAIPage() {
               <div className="bg-green-50 rounded-xl p-8 max-w-4xl mx-auto">
                 <div className="flex items-center justify-center mb-4">
                   <Leaf className="w-8 h-8 text-green-600 mr-3" />
-                  <h3 className="text-2xl font-bold text-green-800">Nachhaltigkeitsverpflichtung</h3>
+                  <Heading level={3} className="text-green-800">Nachhaltigkeitsverpflichtung</Heading>
                 </div>
                 <p className="text-gray-700 leading-relaxed">
                   Unsere Preisgestaltung spiegelt die wahren Kosten nachhaltiger KI wider. Durch die Wahl energieeffizienter Modelle, optimierter Infrastruktur und transparenter Open-Source-Technologien liefern wir einen überlegenen Wert und minimieren gleichzeitig die Umweltbelastung. Jede Bereitstellung trägt zu einer nachhaltigeren digitalen Zukunft bei.
@@ -355,7 +356,7 @@ export default function EnterpriseAIPage() {
         <section className="py-20">
           <div className="container mx-auto px-4">
             <div className="text-center mb-16">
-              <h2 className="text-4xl font-bold mb-6">8-12 Wochen Implementierungszeitplan</h2>
+              <Heading level={2} className="mb-6">8-12 Wochen Implementierungszeitplan</Heading>
               <p className="text-xl text-gray-600 max-w-3xl mx-auto">
                 Strukturierter Bereitstellungsprozess mit klaren Meilensteinen und Ergebnissen. Der Zeitplan variiert je nach Komplexität und Anforderungen.
               </p>
@@ -368,7 +369,7 @@ export default function EnterpriseAIPage() {
                       <span className="text-2xl font-bold text-green-600">W{item.week}</span>
                     </div>
                     <div className="flex-grow">
-                      <h3 className="text-lg font-semibold mb-2">Woche {item.week}</h3>
+                      <Heading level={3} className="mb-2">Woche {item.week}</Heading>
                       <p className="text-gray-600">{item.milestone}</p>
                     </div>
                     <div className="flex-shrink-0">
@@ -385,7 +386,7 @@ export default function EnterpriseAIPage() {
         <section className="py-12 sm:py-16 md:py-20 bg-white">
           <div className="container mx-auto px-4">
             <div className="text-center mb-16">
-              <h2 className="text-4xl font-bold mb-6">Risikomanagement</h2>
+              <Heading level={2} className="mb-6">Risikomanagement</Heading>
               <p className="text-xl text-gray-600 max-w-3xl mx-auto">
                 Wir haben die Hauptrisiken bei der Bereitstellung von Unternehmens-KI identifiziert und gemindert.
               </p>
@@ -398,7 +399,7 @@ export default function EnterpriseAIPage() {
                       <item.icon className="w-6 h-6" />
                     </div>
                     <div>
-                      <h3 className="font-bold text-lg mb-2 text-red-700">Risiko: {item.risk}</h3>
+                      <Heading level={3} className="mb-2 text-red-700">Risiko: {item.risk}</Heading>
                       <p className="text-gray-700">{item.mitigation}</p>
                     </div>
                   </div>
@@ -412,7 +413,7 @@ export default function EnterpriseAIPage() {
         <section className="py-20">
           <div className="container mx-auto px-4">
             <div className="text-center mb-16">
-              <h2 className="text-4xl font-bold mb-6">Technischer Implementierungsüberblick</h2>
+              <Heading level={2} className="mb-6">Technischer Implementierungsüberblick</Heading>
               <p className="text-xl text-gray-600 max-w-3xl mx-auto">
                 Ein vollständiger technischer Überblick über unseren souveränen KI-Bereitstellungsprozess und unsere Technologieentscheidungen.
               </p>
@@ -426,7 +427,7 @@ export default function EnterpriseAIPage() {
                         <Clock className="w-6 h-6" />
                       </div>
                       <div>
-                        <h3 className="font-bold text-lg">{step.phase}</h3>
+                        <Heading level={3} className="">{step.phase}</Heading>
                         <p className="text-green-600 font-medium">{step.duration}</p>
                       </div>
                     </div>
@@ -454,7 +455,7 @@ export default function EnterpriseAIPage() {
               <Heart className="w-8 h-8 mr-4 text-green-300" />
               <Leaf className="w-10 h-10 text-green-300" />
             </div>
-            <h2 className="text-4xl font-bold mb-6">Bereit für nachhaltige, souveräne KI?</h2>
+            <Heading level={2} className="mb-6">Bereit für nachhaltige, souveräne KI?</Heading>
             <p className="text-xl mb-8 max-w-3xl mx-auto text-green-100">
               Schliess dich der Bewegung zur digitalen Souveränität an. Setze eine KI ein, die deine Daten respektiert, Transparenz begrüsst und eine nachhaltige digitale Zukunft für die Schweiz und darüber hinaus schafft.
             </p>

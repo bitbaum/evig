@@ -5,6 +5,7 @@ import { MapPin, Phone, Globe, ChevronRight } from 'lucide-react'
 import { type RepairerProfile, type AvailabilitySlot } from './types'
 import { formatPrice } from './helpers'
 import { formatDateShort } from '@/lib/date-formats'
+import Heading from '@/components/ui/Heading'
 
 interface RepairerSidebarProps {
   repairer: RepairerProfile
@@ -16,7 +17,7 @@ export function RepairerSidebar({ repairer, availability }: RepairerSidebarProps
     <div className="space-y-6">
       {/* Contact Card */}
       <div className="bg-white rounded-xl p-6 shadow-sm">
-        <h3 className="font-semibold text-gray-900 mb-4">Kontakt</h3>
+        <Heading level={3} className="font-semibold text-gray-900 mb-4">Kontakt</Heading>
         <div className="space-y-3">
           <div className="flex items-center gap-3 text-sm">
             <MapPin className="w-4 h-4 text-gray-400" />
@@ -57,7 +58,7 @@ export function RepairerSidebar({ repairer, availability }: RepairerSidebarProps
 
       {/* Pricing Card */}
       <div className="bg-white rounded-xl p-6 shadow-sm">
-        <h3 className="font-semibold text-gray-900 mb-4">Preise</h3>
+        <Heading level={3} className="font-semibold text-gray-900 mb-4">Preise</Heading>
         <div className="space-y-3 text-sm">
           <div className="flex justify-between">
             <span className="text-gray-600">Stundensatz</span>
@@ -81,7 +82,7 @@ export function RepairerSidebar({ repairer, availability }: RepairerSidebarProps
       {/* Availability Preview */}
       {availability.length > 0 && (
         <div className="bg-white rounded-xl p-6 shadow-sm">
-          <h3 className="font-semibold text-gray-900 mb-4">Nächste Verfügbarkeit</h3>
+          <Heading level={3} className="font-semibold text-gray-900 mb-4">Nächste Verfügbarkeit</Heading>
           <div className="space-y-2">
             {availability.slice(0, 5).map((slot, index) => (
               <div
@@ -109,7 +110,7 @@ export function RepairerSidebar({ repairer, availability }: RepairerSidebarProps
 
       {/* CTA Card */}
       <div className="bg-gradient-to-br from-blue-600 to-blue-700 rounded-xl p-6 text-white">
-        <h3 className="font-semibold mb-2">Reparatur anfragen</h3>
+        <Heading level={3} className="font-semibold mb-2">Reparatur anfragen</Heading>
         <p className="text-blue-100 text-sm mb-4">
           Beschreibe dein Problem und erhältst du ein unverbindliches Angebot.
         </p>

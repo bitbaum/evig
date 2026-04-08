@@ -5,6 +5,7 @@ import { ContactLink } from '@/components/ui/contact-link'
 import { PageHero } from '@/components/layout/PageHero'
 import { responsiveTypography, responsiveSpacing, responsiveButtons, responsiveGrid } from '@/lib/responsive'
 import { INVOLVEMENT_OPTIONS, TESTIMONIALS, PARTNER_INSTITUTIONS, GET_INVOLVED_CONFIG } from '@/config/community'
+import Heading from '@/components/ui/Heading'
 
 export const metadata: Metadata = {
   title: 'Mitmachen | RevampIT',
@@ -62,18 +63,18 @@ export default function GetInvolvedPage() {
       {/* Core Values Section */}
       <section id="learn-more" className={`${responsiveSpacing.section} bg-gray-50`}>
         <div className={`${responsiveSpacing.container} mx-auto`}>
-          <h2 className={`${responsiveTypography.section} font-bold text-center ${responsiveSpacing.mbLarge}`}>
+          <Heading level={2} className={`${responsiveTypography.section} text-center ${responsiveSpacing.mbLarge}`}>
             {GET_INVOLVED_CONFIG.coreValues.title}
-          </h2>
+          </Heading>
           <div className={responsiveGrid.cards}>
             {coreValues.map((value, index) => (
               <div key={index} className={`bg-white rounded-xl ${responsiveSpacing.cardPadding} shadow-lg hover:shadow-xl transition-all duration-300`}>
                 <div className={`text-green-600 ${responsiveSpacing.mbMedium}`}>
                   <value.icon className="w-10 h-10 sm:w-12 sm:h-12" />
                 </div>
-                <h3 className={`${responsiveTypography.cardTitle} font-semibold ${responsiveSpacing.mbSmall}`}>
+                <Heading level={3} className={`${responsiveTypography.cardTitle} ${responsiveSpacing.mbSmall}`}>
                   {value.title}
-                </h3>
+                </Heading>
                 <p className={`${responsiveTypography.body} text-gray-600`}>
                   {value.description}
                 </p>
@@ -86,18 +87,18 @@ export default function GetInvolvedPage() {
       {/* Involvement Options */}
       <section id="get-started" className={responsiveSpacing.section}>
         <div className={`${responsiveSpacing.container} mx-auto`}>
-          <h2 className={`${responsiveTypography.section} font-bold text-center ${responsiveSpacing.mbLarge}`}>
+          <Heading level={2} className={`${responsiveTypography.section} text-center ${responsiveSpacing.mbLarge}`}>
             Wege zum Mitmachen
-          </h2>
+          </Heading>
           <div className={responsiveGrid.cards}>
             {INVOLVEMENT_OPTIONS.map((option, index) => (
               <div key={index} className={`bg-white rounded-xl shadow-lg ${responsiveSpacing.cardPadding} hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border border-gray-100 flex flex-col h-full`}>
                 <div className={`text-green-600 ${responsiveSpacing.mbMedium}`}>
                   <option.icon className="w-10 h-10 sm:w-12 sm:h-12" />
                 </div>
-                <h3 className={`${responsiveTypography.cardTitle} font-semibold ${responsiveSpacing.mbSmall}`}>
+                <Heading level={3} className={`${responsiveTypography.cardTitle} ${responsiveSpacing.mbSmall}`}>
                   {option.title}
-                </h3>
+                </Heading>
                 <p className={`${responsiveTypography.body} text-gray-600 ${responsiveSpacing.mbMedium} flex-grow`}>
                   {option.description}
                 </p>
@@ -126,9 +127,9 @@ export default function GetInvolvedPage() {
       {/* Testimonials Section */}
       <section className={`${responsiveSpacing.section} bg-gray-50`}>
         <div className={`${responsiveSpacing.container} mx-auto`}>
-          <h2 className={`${responsiveTypography.section} font-bold text-center ${responsiveSpacing.mbLarge}`}>
+          <Heading level={2} className={`${responsiveTypography.section} text-center ${responsiveSpacing.mbLarge}`}>
             Was unsere Gemeinschaft sagt
-          </h2>
+          </Heading>
           <div className="max-w-3xl mx-auto">
             {TESTIMONIALS.map((testimonial, index) => (
               <div key={index} className={`bg-white rounded-xl ${responsiveSpacing.cardPadding} shadow-lg`}>
@@ -149,9 +150,9 @@ export default function GetInvolvedPage() {
       {/* Partner Institutions */}
       <section className={responsiveSpacing.section}>
         <div className={`${responsiveSpacing.container} mx-auto`}>
-          <h2 className={`${responsiveTypography.section} font-bold text-center ${responsiveSpacing.mbLarge}`}>
+          <Heading level={2} className={`${responsiveTypography.section} text-center ${responsiveSpacing.mbLarge}`}>
             Unsere Partnerorganisationen
-          </h2>
+          </Heading>
           <div className="max-w-4xl mx-auto">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
               {PARTNER_INSTITUTIONS.map((institution, index) => (
@@ -178,9 +179,9 @@ export default function GetInvolvedPage() {
       {/* CTA Section */}
       <section className={`${responsiveSpacing.section} bg-gradient-to-br from-green-600 to-emerald-700 text-white`}>
         <div className={`${responsiveSpacing.container} mx-auto text-center`}>
-          <h2 className={`${responsiveTypography.section} font-bold ${responsiveSpacing.mbSmall}`}>
+          <Heading level={2} className={`${responsiveTypography.section} ${responsiveSpacing.mbSmall}`}>
             Bereit, einen Unterschied zu machen?
-          </h2>
+          </Heading>
           <p className={`${responsiveTypography.lead} ${responsiveSpacing.mbMedium} max-w-2xl mx-auto text-green-100`}>
             Schliess dich unserer Gemeinschaft von Veränderern an und hilf uns, eine nachhaltigere Zukunft durch Technologie zu schaffen.
           </p>

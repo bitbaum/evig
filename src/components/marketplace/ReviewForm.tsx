@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { Star, Loader2, AlertCircle } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { apiFetch } from '@/lib/api/client'
+import Heading from '@/components/ui/Heading'
 
 interface ReviewFormProps {
   targetType: string
@@ -59,7 +60,7 @@ export default function ReviewForm({ targetType, targetId, onSubmitted, onCancel
 
   return (
     <div className="border-t border-gray-100 dark:border-gray-700 pt-4 mt-4 space-y-4">
-      <h3 className="text-sm font-semibold text-gray-900 dark:text-white">Bewertung schreiben</h3>
+      <Heading level={3} className="text-sm font-semibold text-gray-900 dark:text-white">Bewertung schreiben</Heading>
 
       {/* Star Rating */}
       <div>

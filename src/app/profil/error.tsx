@@ -4,6 +4,7 @@ import { useEffect } from 'react'
 import Link from 'next/link'
 import { AlertCircle, ArrowLeft } from 'lucide-react'
 import { logger } from '@/lib/logger'
+import Heading from '@/components/ui/Heading'
 
 export default function ProfilError({
   error,
@@ -20,9 +21,9 @@ export default function ProfilError({
     <div className="min-h-screen bg-gray-50 flex items-center justify-center">
       <div className="max-w-md w-full bg-white shadow-lg rounded-lg p-6 text-center">
         <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-4" aria-hidden="true" />
-        <h1 className="text-lg font-medium text-gray-900" role="alert">
+        <Heading level={1} className="text-lg text-gray-900">
           Etwas ist schiefgelaufen
-        </h1>
+        </Heading>
         <p className="mt-2 text-sm text-gray-600">
           Beim Laden deines Profils ist ein Fehler aufgetreten.
         </p>

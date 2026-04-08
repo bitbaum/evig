@@ -7,6 +7,7 @@ function getReadingTime(content: string): number {
   return Math.ceil(content.trim().split(/\s+/).length / 200)
 }
 import { Clock } from 'lucide-react'
+import Heading from '@/components/ui/Heading'
 
 interface BlogHeroProps {
   post: BlogPost
@@ -46,9 +47,9 @@ export default function BlogHero({ post }: BlogHeroProps) {
           )}
 
           {/* Title */}
-          <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-4 leading-tight group-hover:text-primary-700 transition-colors">
+          <Heading level={2} className="text-4xl lg:text-5xl font-bold text-gray-900 mb-4 leading-tight group-hover:text-primary-700 transition-colors">
             {post.title}
-          </h2>
+          </Heading>
 
           {/* Excerpt */}
           {post.excerpt && (

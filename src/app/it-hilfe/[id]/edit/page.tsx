@@ -24,6 +24,7 @@ import { ProblemDetailsSection } from '@/components/it-hilfe-create/ProblemDetai
 import { LocationSection } from '@/components/it-hilfe-create/LocationSection'
 import { SkillsSection } from '@/components/it-hilfe-create/SkillsSection'
 import { ErrorAlert } from '@/components/common/ErrorAlert'
+import Heading from '@/components/ui/Heading'
 import { validateITHilfeForm, transformITHilfeFormToPayload } from '@/lib/domain/it-hilfe'
 import type { ITHilfeCreateFormData } from '@/components/it-hilfe-create/types'
 
@@ -198,7 +199,7 @@ export default function EditRequestPage() {
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <CheckCircle className="w-16 h-16 text-emerald-500 mx-auto mb-4" />
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">Änderungen gespeichert!</h2>
+          <Heading level={2} className="text-2xl text-gray-900 mb-2">Änderungen gespeichert!</Heading>
           <p className="text-gray-600">Du wirst gleich weitergeleitet...</p>
         </div>
       </div>
@@ -223,7 +224,7 @@ export default function EditRequestPage() {
             <div className="p-2 bg-emerald-100 rounded-lg">
               <Wrench className="w-6 h-6 text-emerald-600" />
             </div>
-            <h1 className="text-2xl font-bold text-gray-900">Anfrage bearbeiten</h1>
+            <Heading level={1} className="text-2xl text-gray-900">Anfrage bearbeiten</Heading>
           </div>
           <p className="text-gray-600">
             Ändere die Details deiner IT-Hilfe Anfrage.
@@ -237,7 +238,7 @@ export default function EditRequestPage() {
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Device Category */}
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">Gerätekategorie</h2>
+            <Heading level={2} className="text-lg text-gray-900 mb-4">Gerätekategorie</Heading>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
               {DEVICE_CATEGORIES.map((cat) => {
                 const Icon = cat.icon
@@ -292,7 +293,7 @@ export default function EditRequestPage() {
 
               {/* Budget */}
               <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                <h2 className="text-lg font-semibold text-gray-900 mb-2">Budget</h2>
+                <Heading level={2} className="text-lg text-gray-900 mb-2">Budget</Heading>
                 <p className="text-sm text-gray-600 mb-4">
                   Was bist du maximal bereit zu zahlen? Leer lassen für kostenlose Community-Hilfe.
                 </p>
@@ -315,7 +316,7 @@ export default function EditRequestPage() {
 
               {/* Service Type & Urgency */}
               <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                <h2 className="text-lg font-semibold text-gray-900 mb-4">Optionen</h2>
+                <Heading level={2} className="text-lg text-gray-900 mb-4">Optionen</Heading>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">

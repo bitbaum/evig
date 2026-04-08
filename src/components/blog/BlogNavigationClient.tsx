@@ -7,6 +7,7 @@ import { ChevronDown, X } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import type { BlogCategory } from '@/lib/blog-db'
 import { UI_COLOR_PALETTE } from '@/config/ui-colors'
+import Heading from '@/components/ui/Heading'
 
 interface BlogNavigationClientProps {
   categories: BlogCategory[]
@@ -62,7 +63,7 @@ export default function BlogNavigationClient({
         <div className="flex items-center justify-between h-14 sm:h-16">
           {/* Logo/Title */}
           <Link href="/blog" className="flex items-center">
-            <h1 className="text-xl sm:text-2xl font-bold text-gray-900">Blog</h1>
+            <Heading level={1} className="text-xl sm:text-2xl font-bold text-gray-900">Blog</Heading>
           </Link>
 
           {/* Desktop Categories */}

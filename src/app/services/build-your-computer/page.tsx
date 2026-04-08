@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import Heading from '@/components/ui/Heading'
 import {
   Computer,
   Cpu,
@@ -80,26 +81,26 @@ export default function BuildYourComputerPage() {
       {/* How It Works */}
       <section className="py-12 sm:py-16 md:py-20 bg-gray-50">
         <div className="container mx-auto px-4">
-          <h2 className="text-4xl font-bold text-center mb-12">Wie unser KI-Build-System funktioniert</h2>
+          <Heading level={2} className="text-center mb-12">Wie unser KI-Build-System funktioniert</Heading>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div className="text-center">
               <div className="w-16 h-16 bg-green-600 text-white rounded-full flex items-center justify-center text-xl font-bold mx-auto mb-4">1</div>
-              <h3 className="text-xl font-bold mb-3">Anforderungsanalyse</h3>
+              <Heading level={3} className="mb-3">Anforderungsanalyse</Heading>
               <p className="text-gray-600">Teile uns deinen Anwendungsfall, deine Leistungsanforderungen und deine Nachhaltigkeitspräferenzen mit</p>
             </div>
             <div className="text-center">
               <div className="w-16 h-16 bg-green-600 text-white rounded-full flex items-center justify-center text-xl font-bold mx-auto mb-4">2</div>
-              <h3 className="text-xl font-bold mb-3">Globaler Inventar-Scan</h3>
+              <Heading level={3} className="mb-3">Globaler Inventar-Scan</Heading>
               <p className="text-gray-600">Die KI scannt unser Inventar + Partnernetzwerke in ganz Europa und darüber hinaus</p>
             </div>
             <div className="text-center">
               <div className="w-16 h-16 bg-green-600 text-white rounded-full flex items-center justify-center text-xl font-bold mx-auto mb-4">3</div>
-              <h3 className="text-xl font-bold mb-3">Intelligente Optimierung</h3>
+              <Heading level={3} className="mb-3">Intelligente Optimierung</Heading>
               <p className="text-gray-600">Der Algorithmus priorisiert gebrauchte Teile, optimiert auf Leistung und Nachhaltigkeit</p>
             </div>
             <div className="text-center">
               <div className="w-16 h-16 bg-green-600 text-white rounded-full flex items-center justify-center text-xl font-bold mx-auto mb-4">4</div>
-              <h3 className="text-xl font-bold mb-3">Zusammenbau & Zertifizierung</h3>
+              <Heading level={3} className="mb-3">Zusammenbau & Zertifizierung</Heading>
               <p className="text-gray-600">Professionelle Montage mit unserer "Revamped"-Nachhaltigkeitszertifizierung</p>
             </div>
           </div>
@@ -110,7 +111,7 @@ export default function BuildYourComputerPage() {
       <section className="py-12 sm:py-16 md:py-20" id="build-tool">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
-            <h2 className="text-4xl font-bold text-center mb-4">Teste unsere Build-Tool-Demo</h2>
+            <Heading level={2} className="text-center mb-4">Teste unsere Build-Tool-Demo</Heading>
             <p className="text-center text-gray-600 mb-12">Erleben Sie, wie unser KI-System Komponenten für deine spezifischen Bedürfnisse empfehlen würde</p>
             
             {/* Progress Bar */}
@@ -126,7 +127,7 @@ export default function BuildYourComputerPage() {
               {/* Step 1: Requirements */}
               {step === 1 && (
                 <div className="space-y-8">
-                  <h3 className="text-2xl font-bold mb-6">Wofür wirst du deinen Computer verwenden?</h3>
+                  <Heading level={3} className="mb-6">Wofür wirst du deinen Computer verwenden?</Heading>
                   
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {USE_CASE_OPTIONS.map((category) => (
@@ -139,14 +140,14 @@ export default function BuildYourComputerPage() {
                             : 'border-gray-200 hover:border-gray-300'
                         }`}
                       >
-                        <h4 className="font-semibold">{category.name}</h4>
+                        <Heading level={4} className="">{category.name}</Heading>
                         <p className="text-sm text-gray-600">{category.description}</p>
                       </div>
                     ))}
                   </div>
 
                   <div>
-                    <h4 className="font-semibold mb-4">Leistungsanforderungen</h4>
+                    <Heading level={4} className="mb-4">Leistungsanforderungen</Heading>
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                       {PERFORMANCE_OPTIONS.map((perf) => (
                         <button
@@ -202,12 +203,12 @@ export default function BuildYourComputerPage() {
               {/* Step 2: AI Analysis */}
               {step === 2 && (
                 <div className="text-center space-y-8">
-                  <h3 className="text-2xl font-bold">KI-Inventaranalyse</h3>
+                  <Heading level={3} className="">KI-Inventaranalyse</Heading>
                   
                   {!isAnalyzing ? (
                     <>
                       <div className="bg-green-50 p-6 rounded-lg">
-                        <h4 className="font-semibold mb-4">Zusammenfassung deiner Anforderungen:</h4>
+                        <Heading level={4} className="mb-4">Zusammenfassung deiner Anforderungen:</Heading>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-left">
                           <div><strong>Anwendungsfall:</strong> {USE_CASE_OPTIONS.find(c => c.id === formData.useCase)?.name}</div>
                           <div><strong>Leistung:</strong> {PERFORMANCE_OPTIONS.find(p => p.id === formData.performance)?.name}</div>
@@ -256,7 +257,7 @@ export default function BuildYourComputerPage() {
               {step === 3 && buildResult && (
                 <div className="space-y-8">
                   <div className="text-center">
-                    <h3 className="text-2xl font-bold mb-2">dein optimierter Build</h3>
+                    <Heading level={3} className="mb-2">dein optimierter Build</Heading>
                     <div className="flex justify-center gap-6 text-sm">
                       <div className="flex items-center">
                         <Leaf className="w-4 h-4 text-green-500 mr-1" />
@@ -285,7 +286,7 @@ export default function BuildYourComputerPage() {
                         <item.icon className="w-8 h-8 text-green-600 mr-4" />
                         <div className="flex-grow">
                           <div className="flex items-center gap-2 mb-1">
-                            <h4 className="font-semibold">{item.component.name}</h4>
+                            <Heading level={4} className="">{item.component.name}</Heading>
                             <span className={`px-2 py-1 text-xs rounded-full ${ 
                               item.component.condition === 'used' ? 'bg-green-100 text-green-800' :
                               item.component.condition === 'refurbished' ? 'bg-blue-100 text-blue-800' :
@@ -340,10 +341,10 @@ export default function BuildYourComputerPage() {
 
                   {/* Sustainability Impact */}
                   <div className="bg-green-50 p-6 rounded-lg">
-                    <h4 className="font-bold mb-4 flex items-center">
+                    <Heading level={4} className="mb-4 flex items-center">
                       <Leaf className="w-5 h-5 text-green-600 mr-2" />
                       Umweltauswirkungen
-                    </h4>
+                    </Heading>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
                       <div>
                         <div className="font-semibold">CO₂ gespart</div>
@@ -369,21 +370,21 @@ export default function BuildYourComputerPage() {
       {/* Features */}
       <section className="py-12 sm:py-16 md:py-20 bg-gray-50">
         <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-12">Warum unser KI-Build-System wählen?</h2>
+          <Heading level={2} className="text-center mb-12">Warum unser KI-Build-System wählen?</Heading>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="bg-white p-8 rounded-xl shadow-lg">
               <Globe className="w-12 h-12 text-green-600 mb-4" />
-              <h3 className="text-xl font-bold mb-4">Globales Inventar-Netzwerk</h3>
+              <Heading level={3} className="mb-4">Globales Inventar-Netzwerk</Heading>
               <p className="text-gray-600">Zugang zu Tausenden von gebrauchten und wiederaufbereiteten Komponenten in ganz Europa und darüber hinaus, mit Echtzeit-Bestandsverfolgung.</p>
             </div>
             <div className="bg-white p-8 rounded-xl shadow-lg">
               <Star className="w-12 h-12 text-green-600 mb-4" />
-              <h3 className="text-xl font-bold mb-4">KI-gestützte Optimierung</h3>
+              <Heading level={3} className="mb-4">KI-gestützte Optimierung</Heading>
               <p className="text-gray-600">Intelligente Algorithmen gleichen Leistung, Nachhaltigkeit, Kosten und Verfügbarkeit ab, um deine perfekte Build-Kombination zu finden.</p>
             </div>
             <div className="bg-white p-8 rounded-xl shadow-lg">
               <CheckCircle2 className="w-12 h-12 text-green-600 mb-4" />
-              <h3 className="text-xl font-bold mb-4">"Revamped"-Zertifizierung</h3>
+              <Heading level={3} className="mb-4">"Revamped"-Zertifizierung</Heading>
               <p className="text-gray-600">Jeder Build erhält unsere Nachhaltigkeitszertifizierung, die Qualität garantiert und gleichzeitig die Kreislaufwirtschaft unterstützt.</p>
             </div>
           </div>
@@ -400,7 +401,7 @@ export default function BuildYourComputerPage() {
                 <span className="text-2xl font-bold text-green-800">Revamped</span>
                 <Sparkles className="w-6 h-6 text-green-600 ml-2" />
               </div>
-              <h2 className="text-3xl font-bold mb-4">Hol sich deine Revamped-Zertifizierung</h2>
+              <Heading level={2} className="mb-4">Hol sich deine Revamped-Zertifizierung</Heading>
               <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
                 Jeder von uns gebaute Computer erhält unsere exklusive "Revamped"-Zertifizierung - deine Garantie für Nachhaltigkeit, Qualität und Leistung.
               </p>
@@ -433,7 +434,7 @@ export default function BuildYourComputerPage() {
       {/* CTA */}
       <section className="py-20 bg-gradient-to-r from-green-700 to-green-800 text-white">
         <div className="container mx-auto px-4 text-center">
-          <h2 className="text-4xl font-bold mb-6">Bereit, nachhaltig zu bauen?</h2>
+          <Heading level={2} className="mb-6">Bereit, nachhaltig zu bauen?</Heading>
           <p className="text-xl mb-8 max-w-2xl mx-auto text-green-100">
             Schliess dich der Revolution im Computerbau an. Hol sich einen massgeschneiderten, nachhaltigen Build, der hervorragend funktioniert und gleichzeitig unseren Planeten schont.
           </p>

@@ -11,6 +11,7 @@ import { Badge } from '@/components/ui/badge'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { CreditCard, Shield } from 'lucide-react'
 import CurrencySelector from '../CurrencySelector'
+import Heading from '@/components/ui/Heading'
 import type { ServiceInfo, BookingData, DisplayPricing, SupportedCurrency, ServicePricing } from './types'
 
 interface BookingFormProps {
@@ -120,7 +121,7 @@ function ServiceDetailsCard({
 
   return (
     <div className="p-4 bg-blue-50 rounded-lg">
-      <h3 className="font-semibold text-blue-800 mb-2">Service-Details</h3>
+      <Heading level={3} className="font-semibold text-blue-800 mb-2">Service-Details</Heading>
       <div className="space-y-2 text-sm text-blue-700">
         <p><strong>Service:</strong> {service.name}</p>
         <p><strong>Preis:</strong> {selectedCurrency} {currentPricing.subtotal.toFixed(2)}</p>

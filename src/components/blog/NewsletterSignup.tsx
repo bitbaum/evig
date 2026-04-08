@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { Mail, Heart, Check } from 'lucide-react'
 import { apiFetch } from '@/lib/api/client'
+import Heading from '@/components/ui/Heading'
 
 export default function NewsletterSignup() {
   const [email, setEmail] = useState('')
@@ -41,9 +42,9 @@ export default function NewsletterSignup() {
           <div className="inline-flex items-center justify-center w-16 h-16 bg-primary-100 rounded-full mb-4">
             <Mail className="w-8 h-8 text-primary-600" />
           </div>
-          <h3 className="text-2xl font-bold text-gray-900 mb-3">
+          <Heading level={3} className="text-2xl font-bold text-gray-900 mb-3">
             Hat dir dieser Artikel gefallen?
-          </h3>
+          </Heading>
           <p className="text-lg text-gray-600 leading-relaxed">
             Erhalte wöchentlich qualitativ hochwertige Artikel über nachhaltige Technologie,
             Open Source und die Zukunft des Computing – direkt in deinen Posteingang.

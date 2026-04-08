@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { Lock, CheckCircle2, AlertCircle, Loader2, Eye, EyeOff } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import Heading from '@/components/ui/Heading'
 
 function ResetPasswordContent() {
   const router = useRouter()
@@ -85,9 +86,9 @@ function ResetPasswordContent() {
               <AlertCircle className="w-8 h-8 text-red-600" />
             </div>
           </div>
-          <h2 className="mt-6 text-center text-3xl font-bold text-gray-900">
+          <Heading level={2} className="mt-6 text-center text-3xl text-gray-900">
             Ungültiger Link
-          </h2>
+          </Heading>
           <p className="mt-2 text-center text-sm text-gray-600">
             Dieser Passwort-Reset-Link ist ungültig oder abgelaufen.
           </p>
@@ -123,9 +124,9 @@ function ResetPasswordContent() {
               <CheckCircle2 className="w-8 h-8 text-green-600" />
             </div>
           </div>
-          <h2 className="mt-6 text-center text-3xl font-bold text-gray-900">
+          <Heading level={2} className="mt-6 text-center text-3xl text-gray-900">
             Passwort geändert!
-          </h2>
+          </Heading>
           <p className="mt-2 text-center text-sm text-gray-600">
             Ihr Passwort wurde erfolgreich geändert. du kannst sich jetzt mit deinem neuen Passwort anmelden.
           </p>
@@ -156,9 +157,9 @@ function ResetPasswordContent() {
             <Lock className="w-8 h-8 text-blue-600" />
           </div>
         </div>
-        <h2 className="mt-6 text-center text-3xl font-bold text-gray-900">
+        <Heading level={2} className="mt-6 text-center text-3xl text-gray-900">
           Neues Passwort festlegen
-        </h2>
+        </Heading>
         <p className="mt-2 text-center text-sm text-gray-600">
           Gib Ihr neues Passwort ein.
         </p>
@@ -273,9 +274,9 @@ function ResetPasswordFallback() {
             <Lock className="w-8 h-8 text-blue-600" />
           </div>
         </div>
-        <h2 className="mt-6 text-center text-3xl font-bold text-gray-900">
+        <Heading level={2} className="mt-6 text-center text-3xl text-gray-900">
           Neues Passwort festlegen
-        </h2>
+        </Heading>
       </div>
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <div className="bg-white py-8 px-4 shadow-lg rounded-lg sm:px-10">
