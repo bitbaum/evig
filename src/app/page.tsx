@@ -98,106 +98,110 @@ export default function Home() {
         theme="home"
         icon={Recycle}
         title="Alte Hardware. Neues Leben."
-        subtitle="Ihr alter Computer verdient ein zweites Leben. Verkaufen Sie gebrauchte Geräte, lassen Sie defekte Hardware reparieren, oder lernen Sie in unseren Workshops."
+        subtitle="Jedes Jahr landen 62 Millionen Tonnen Elektrogeräte auf dem Müll. Wir ändern das — mit einer Community, die repariert, weitergibt und voneinander lernt."
       >
         <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-x-6">
           <Link
-            href="#actions"
-            className="w-full sm:w-auto rounded-md bg-green-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600 text-center"
+            href="/marketplace"
+            className="w-full sm:w-auto rounded-md bg-green-600 px-6 py-3 text-base font-semibold text-white shadow-sm hover:bg-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600 text-center"
           >
-            Loslegen
+            Jetzt entdecken
           </Link>
-          <Link href="/about" className="text-sm font-semibold leading-6 text-gray-900">
-            Mehr über uns <span aria-hidden="true">→</span>
+          <Link href="/about" className="text-base font-semibold leading-6 text-gray-900">
+            Über uns <span aria-hidden="true">→</span>
           </Link>
         </div>
       </PageHero>
 
       {/* Section 2: Three Action Cards */}
-      <div id="actions" className="bg-white py-12 sm:py-16 lg:py-20">
+      <div id="actions" className="bg-gradient-to-b from-white to-gray-50 py-12 sm:py-16 lg:py-20" aria-label="Hauptaktionen">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-10 sm:mb-12">
             <Heading level={2} className="tracking-tight text-gray-900">
-              Was möchten Sie tun?
+              Was möchtest du tun?
             </Heading>
           </div>
 
           <div className="grid gap-6 sm:gap-8 lg:grid-cols-3">
-            {/* Card 1: Sell/Buy */}
-            <div className="bg-white rounded-2xl border border-gray-200 p-6 sm:p-8 shadow-sm hover:shadow-md transition-shadow flex flex-col">
-              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-orange-100 mb-4" aria-hidden="true">
-                <Store className="h-6 w-6 text-orange-600" />
+            {[
+              {
+                icon: Store,
+                iconBg: 'bg-orange-100',
+                iconColor: 'text-orange-600',
+                title: 'Altes Gerät übrig?',
+                subtitle: 'Verkaufe oder verschenke es in 2 Minuten — kostenlos und ohne Gebühren.',
+                primaryLabel: 'Marktplatz entdecken',
+                primaryHref: '/marketplace',
+                primaryColor: 'bg-orange-600 hover:bg-orange-500 focus-visible:outline-orange-600',
+                secondaryLabel: 'Jetzt verkaufen',
+                secondaryHref: '/marketplace/sell',
+                secondaryColor: 'text-orange-600 border-orange-600 hover:bg-orange-50 focus-visible:outline-orange-600',
+              },
+              {
+                icon: Wrench,
+                iconBg: 'bg-emerald-100',
+                iconColor: 'text-emerald-600',
+                title: 'Computer kaputt?',
+                subtitle: 'Freiwillige Techniker in deiner Nähe helfen — oder werde selbst Helfer.',
+                primaryLabel: 'Hilfe finden',
+                primaryHref: '/it-hilfe',
+                primaryColor: 'bg-emerald-600 hover:bg-emerald-500 focus-visible:outline-emerald-600',
+                secondaryLabel: 'Techniker werden',
+                secondaryHref: '/profil/skills',
+                secondaryColor: 'text-emerald-600 border-emerald-600 hover:bg-emerald-50 focus-visible:outline-emerald-600',
+              },
+              {
+                icon: BookOpen,
+                iconBg: 'bg-blue-100',
+                iconColor: 'text-blue-600',
+                title: 'Etwas Neues lernen?',
+                subtitle: 'Praxisnahe Workshops zu Linux, Hardware-Reparatur, Programmierung und KI.',
+                primaryLabel: 'Workshops ansehen',
+                primaryHref: '/workshops',
+                primaryColor: 'bg-blue-600 hover:bg-blue-500 focus-visible:outline-blue-600',
+                secondaryLabel: 'Knowhow entdecken',
+                secondaryHref: '/knowhow',
+                secondaryColor: 'text-blue-600 border-blue-600 hover:bg-blue-50 focus-visible:outline-blue-600',
+              },
+            ].map((card) => (
+              <div key={card.title} className="bg-white rounded-2xl border border-gray-200 p-6 sm:p-8 shadow-sm hover:shadow-md transition-shadow flex flex-col">
+                <div className={`flex h-12 w-12 items-center justify-center rounded-xl ${card.iconBg} mb-4`} aria-hidden="true">
+                  <card.icon className={`h-6 w-6 ${card.iconColor}`} />
+                </div>
+                <h3 className="text-xl sm:text-2xl font-bold text-gray-900">{card.title}</h3>
+                <p className="mt-2 text-base text-gray-600 flex-1">
+                  {card.subtitle}
+                </p>
+                <div className="mt-6 flex flex-col sm:flex-row gap-3">
+                  <Link
+                    href={card.primaryHref}
+                    className={`flex-1 rounded-md ${card.primaryColor} px-4 py-3 text-base font-semibold text-white text-center shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2`}
+                  >
+                    {card.primaryLabel}
+                  </Link>
+                  <Link
+                    href={card.secondaryHref}
+                    className={`flex-1 rounded-md bg-white px-4 py-3 text-base font-semibold ${card.secondaryColor} text-center border focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2`}
+                  >
+                    {card.secondaryLabel}
+                  </Link>
+                </div>
               </div>
-              <h3 className="text-xl font-bold text-gray-900">Altes Gerät übrig?</h3>
-              <p className="mt-2 text-base text-gray-600 flex-1">
-                Verkaufen oder verschenken Sie es in 2 Minuten
-              </p>
-              <div className="mt-6 flex flex-col sm:flex-row gap-3">
-                <Link
-                  href="/marketplace"
-                  className="flex-1 rounded-md bg-orange-600 px-4 py-2.5 text-sm font-semibold text-white text-center shadow-sm hover:bg-orange-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-600"
-                >
-                  Inserate durchsuchen
-                </Link>
-                <Link
-                  href="/marketplace/sell"
-                  className="flex-1 rounded-md bg-white px-4 py-2.5 text-sm font-semibold text-orange-600 text-center border border-orange-600 hover:bg-orange-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-600"
-                >
-                  Jetzt verkaufen
-                </Link>
-              </div>
-            </div>
-
-            {/* Card 2: Repair */}
-            <div className="bg-white rounded-2xl border border-gray-200 p-6 sm:p-8 shadow-sm hover:shadow-md transition-shadow flex flex-col">
-              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-100 mb-4" aria-hidden="true">
-                <Wrench className="h-6 w-6 text-emerald-600" />
-              </div>
-              <h3 className="text-xl font-bold text-gray-900">Computer kaputt?</h3>
-              <p className="mt-2 text-base text-gray-600 flex-1">
-                Freiwillige Techniker in Ihrer Nähe helfen
-              </p>
-              <div className="mt-6 flex flex-col sm:flex-row gap-3">
-                <Link
-                  href="/it-hilfe"
-                  className="flex-1 rounded-md bg-emerald-600 px-4 py-2.5 text-sm font-semibold text-white text-center shadow-sm hover:bg-emerald-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600"
-                >
-                  Hilfe finden
-                </Link>
-                <Link
-                  href="/profil/skills"
-                  className="flex-1 rounded-md bg-white px-4 py-2.5 text-sm font-semibold text-emerald-600 text-center border border-emerald-600 hover:bg-emerald-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600"
-                >
-                  Selbst helfen
-                </Link>
-              </div>
-            </div>
-
-            {/* Card 3: Learn */}
-            <div className="bg-white rounded-2xl border border-gray-200 p-6 sm:p-8 shadow-sm hover:shadow-md transition-shadow flex flex-col">
-              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-blue-100 mb-4" aria-hidden="true">
-                <BookOpen className="h-6 w-6 text-blue-600" />
-              </div>
-              <h3 className="text-xl font-bold text-gray-900">Etwas Neues lernen?</h3>
-              <p className="mt-2 text-base text-gray-600 flex-1">
-                Workshops zu Linux, Hardware, Programmierung und KI
-              </p>
-              <div className="mt-6 flex flex-col sm:flex-row gap-3">
-                <Link
-                  href="/workshops"
-                  className="flex-1 rounded-md bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white text-center shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
-                >
-                  Workshops ansehen
-                </Link>
-                <Link
-                  href="/workshops/propose"
-                  className="flex-1 rounded-md bg-white px-4 py-2.5 text-sm font-semibold text-blue-600 text-center border border-blue-600 hover:bg-blue-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
-                >
-                  Workshop vorschlagen
-                </Link>
-              </div>
-            </div>
+            ))}
           </div>
+        </div>
+      </div>
+
+      {/* Section 2b: Professional Services (brief mention) */}
+      <div className="bg-white py-8 sm:py-12">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
+          <p className="text-base text-gray-600">
+            Wir bieten auch professionelle{' '}
+            <Link href="/services" className="font-semibold text-green-600 hover:text-green-700 underline underline-offset-2">
+              IT-Dienstleistungen
+            </Link>
+            {' '}an: Computer-Reparatur, Datenrettung, Linux-Installation und Webentwicklung.
+          </p>
         </div>
       </div>
 
@@ -237,66 +241,32 @@ export default function Home() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-10 sm:mb-12">
             <Heading level={2} className="tracking-tight text-gray-900">
-              Werden Sie Teil der Community
+              Werde Teil der Community
             </Heading>
+            <p className="mt-4 text-base sm:text-lg text-gray-600 max-w-2xl mx-auto">
+              Ob nutzen, mithelfen oder unterstützen — jeder Beitrag zählt.
+            </p>
           </div>
 
           <div className="grid gap-6 sm:gap-8 sm:grid-cols-2 lg:grid-cols-4">
-            {/* Nutzen */}
-            <Link
-              href="/auth/register"
-              className="bg-white rounded-xl p-6 border border-gray-200 hover:shadow-md transition-shadow group"
-            >
-              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-green-100 mb-4" aria-hidden="true">
-                <Users className="h-5 w-5 text-green-600" />
-              </div>
-              <h3 className="text-lg font-bold text-gray-900 group-hover:text-green-600 transition-colors">Nutzen</h3>
-              <p className="mt-2 text-sm text-gray-600">
-                Kaufen, verkaufen, reparieren — kostenlos
-              </p>
-            </Link>
-
-            {/* Mithelfen */}
-            <Link
-              href="/profil/skills"
-              className="bg-white rounded-xl p-6 border border-gray-200 hover:shadow-md transition-shadow group"
-            >
-              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-100 mb-4" aria-hidden="true">
-                <Heart className="h-5 w-5 text-blue-600" />
-              </div>
-              <h3 className="text-lg font-bold text-gray-900 group-hover:text-blue-600 transition-colors">Mithelfen</h3>
-              <p className="mt-2 text-sm text-gray-600">
-                Teilen Sie Ihr Wissen als Freiwilliger
-              </p>
-            </Link>
-
-            {/* Unterstützen */}
-            <Link
-              href="/get-involved/donate"
-              className="bg-white rounded-xl p-6 border border-gray-200 hover:shadow-md transition-shadow group"
-            >
-              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-orange-100 mb-4" aria-hidden="true">
-                <Gift className="h-5 w-5 text-orange-600" />
-              </div>
-              <h3 className="text-lg font-bold text-gray-900 group-hover:text-orange-600 transition-colors">Unterstützen</h3>
-              <p className="mt-2 text-sm text-gray-600">
-                Spenden Sie Geräte oder Geld
-              </p>
-            </Link>
-
-            {/* Mitglied werden */}
-            <Link
-              href="/mitglied-werden"
-              className="bg-white rounded-xl p-6 border border-gray-200 hover:shadow-md transition-shadow group"
-            >
-              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-purple-100 mb-4" aria-hidden="true">
-                <Award className="h-5 w-5 text-purple-600" />
-              </div>
-              <h3 className="text-lg font-bold text-gray-900 group-hover:text-purple-600 transition-colors">Mitglied werden</h3>
-              <p className="mt-2 text-sm text-gray-600">
-                Gestalten Sie den Verein mit
-              </p>
-            </Link>
+            {[
+              { icon: Users, iconBg: 'bg-green-100', iconColor: 'text-green-600', hoverColor: 'group-hover:text-green-600', title: 'Nutzen', desc: 'Kaufen, verkaufen, reparieren — kostenlos', href: '/auth/register', border: 'border-gray-200' },
+              { icon: Heart, iconBg: 'bg-blue-100', iconColor: 'text-blue-600', hoverColor: 'group-hover:text-blue-600', title: 'Mithelfen', desc: 'Teile dein Wissen als freiwilliger Techniker', href: '/get-involved/volunteer', border: 'border-gray-200' },
+              { icon: Gift, iconBg: 'bg-orange-100', iconColor: 'text-orange-600', hoverColor: 'group-hover:text-orange-600', title: 'Unterstützen', desc: 'Spende Geräte oder Geld für den Verein', href: '/get-involved/donate', border: 'border-gray-200' },
+              { icon: Award, iconBg: 'bg-purple-100', iconColor: 'text-purple-600', hoverColor: 'group-hover:text-purple-600', title: 'Mitglied werden', desc: 'Stimme mit und gestalte den Verein aktiv', href: '/mitglied-werden', border: 'border-purple-300 ring-1 ring-purple-200' },
+            ].map((item) => (
+              <Link
+                key={item.title}
+                href={item.href}
+                className={`bg-white rounded-xl p-6 border ${item.border} hover:shadow-md transition-shadow group`}
+              >
+                <div className={`flex h-10 w-10 items-center justify-center rounded-lg ${item.iconBg} mb-4`} aria-hidden="true">
+                  <item.icon className={`h-5 w-5 ${item.iconColor}`} />
+                </div>
+                <h3 className={`text-lg font-bold text-gray-900 ${item.hoverColor} transition-colors`}>{item.title}</h3>
+                <p className="mt-2 text-sm text-gray-600">{item.desc}</p>
+              </Link>
+            ))}
           </div>
         </div>
       </div>
@@ -305,8 +275,8 @@ export default function Home() {
       <div className="bg-white py-12 sm:py-16">
         <div className="mx-auto max-w-2xl px-4 sm:px-6 lg:px-8 text-center">
           <NewsletterSignup
-            title="Bleiben Sie informiert"
-            description="Erfahren Sie, wie wir Technologie nachhaltig machen — kein Spam."
+            title="Bleib auf dem Laufenden"
+            description="Erfahre, wie wir Technologie nachhaltig machen. Kein Spam, nur Inhalte die zählen."
             source="homepage-footer"
           />
         </div>
