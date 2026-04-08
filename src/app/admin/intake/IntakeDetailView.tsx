@@ -15,6 +15,7 @@ import type { IntakeEventType } from '@/lib/intake/timeline-types'
 import { EVENT_TYPE_LABELS, EVENT_TYPE_ICONS } from '@/lib/intake/timeline-types'
 import { ChecklistGroup } from './ChecklistGroup'
 import type { DetailData } from './types'
+import Heading from '@/components/ui/Heading'
 
 interface IntakeDetailViewProps {
   detail: DetailData | null
@@ -72,7 +73,7 @@ export function IntakeDetailView({
           >
             ← Zurück zur Pipeline
           </button>
-          <h2 className="text-lg font-semibold">{detail.brand} {detail.product_name}</h2>
+          <Heading level={2} className="text-lg font-semibold">{detail.brand} {detail.product_name}</Heading>
           <div className="flex items-center gap-3 text-sm text-gray-500 mt-1">
             <span className="font-mono">{detail.item_uuid}</span>
             <span>{INTAKE_TIER_ICONS[detail.intake_tier]} {INTAKE_TIER_LABELS[detail.intake_tier]}</span>
@@ -150,10 +151,10 @@ export function IntakeDetailView({
             ? 'border-green-300 bg-green-50'
             : 'border-gray-200 bg-gray-50'
         }`}>
-          <h3 className="font-medium mb-3 flex items-center gap-2">
+          <Heading level={3} className="font-medium mb-3 flex items-center gap-2">
             <ExternalLink className="w-4 h-4" />
             Im Shop veröffentlichen
-          </h3>
+          </Heading>
 
           {!detail.checklist_complete && (
             <div className="flex items-start gap-2 mb-3 text-sm text-amber-700 bg-amber-50 p-2 rounded">
@@ -199,9 +200,9 @@ export function IntakeDetailView({
       {/* Tier Change Dialog */}
       {showTierChange && (
         <div className="border-2 border-orange-300 bg-orange-50 rounded-lg p-4 space-y-3">
-          <h3 className="font-medium flex items-center gap-2 text-orange-800">
+          <Heading level={3} className="font-medium flex items-center gap-2 text-orange-800">
             <ArrowDownUp className="w-4 h-4" /> Stufe ändern
-          </h3>
+          </Heading>
           <div className="flex items-start gap-2 text-sm text-orange-700 bg-orange-100 p-2 rounded">
             <AlertCircle className="w-4 h-4 mt-0.5 shrink-0" />
             <span>Alle Checklisten-Fortschritte werden zurückgesetzt.</span>

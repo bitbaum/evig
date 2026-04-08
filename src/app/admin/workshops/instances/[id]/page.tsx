@@ -23,6 +23,7 @@ import {
 import { logger } from '@/lib/logger'
 import { formatDateShort, formatDateTimeWithWeekday } from '@/lib/date-formats'
 import { WORKSHOP_REGISTRATION_STATUS } from '@/config/workshop-registration-status'
+import Heading from '@/components/ui/Heading'
 import type { WorkshopInstanceWithDetails } from '@/components/workshops/types'
 
 // Admin-specific registration view with user details
@@ -181,7 +182,7 @@ export default function AdminWorkshopInstanceDetailPage({
             <div>
               <div className="flex items-center gap-3">
                 <GraduationCap className="w-8 h-8 text-blue-600" />
-                <h1 className="text-2xl font-bold text-gray-900">{instance.workshop_title}</h1>
+                <Heading level={1} className="text-2xl font-bold text-gray-900">{instance.workshop_title}</Heading>
               </div>
               <div className="mt-2 flex flex-wrap items-center gap-4 text-sm text-gray-600">
                 <div className="flex items-center gap-1">
@@ -283,15 +284,15 @@ export default function AdminWorkshopInstanceDetailPage({
         {/* Registrations Table */}
         <div className="bg-white rounded-xl shadow-sm border">
           <div className="px-6 py-4 border-b border-gray-200">
-            <h2 className="text-lg font-semibold text-gray-900">
+            <Heading level={2} className="text-lg font-semibold text-gray-900">
               Anmeldungen ({registrations.length})
-            </h2>
+            </Heading>
           </div>
 
           {registrations.length === 0 ? (
             <div className="px-6 py-12 text-center">
               <Users className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-              <h3 className="text-lg font-medium text-gray-900 mb-2">Noch keine Anmeldungen</h3>
+              <Heading level={3} className="text-lg font-medium text-gray-900 mb-2">Noch keine Anmeldungen</Heading>
               <p className="text-gray-600">
                 Sobald sich jemand anmeldet, erscheinen die Daten hier.
               </p>
@@ -403,7 +404,7 @@ export default function AdminWorkshopInstanceDetailPage({
         {/* Notes Section */}
         {instance.notes && (
           <div className="mt-8 bg-white rounded-xl shadow-sm border p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">Interne Notizen</h3>
+            <Heading level={3} className="text-lg font-semibold text-gray-900 mb-2">Interne Notizen</Heading>
             <p className="text-gray-600">{instance.notes}</p>
           </div>
         )}

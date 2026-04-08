@@ -13,6 +13,7 @@ import {
 } from 'lucide-react'
 import { generateSlug } from '@/lib/utils/slug'
 import { apiFetch } from '@/lib/api/client'
+import Heading from '@/components/ui/Heading'
 
 function NewStaticPageContent() {
   const { data: session, status: sessionStatus } = useSession()
@@ -85,9 +86,9 @@ function NewStaticPageContent() {
           <ArrowLeft className="w-5 h-5 text-gray-600 dark:text-gray-400" />
         </Link>
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+          <Heading level={1} className="text-2xl font-bold text-gray-900 dark:text-white">
             Neue Seite erstellen
-          </h1>
+          </Heading>
           <p className="text-gray-600 dark:text-gray-400 mt-1">
             Erstellen Sie eine neue statische Seite
           </p>
@@ -186,7 +187,7 @@ function NewStaticPageContent() {
 
         {/* SEO Section */}
         <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6 space-y-6">
-          <h2 className="text-lg font-semibold text-gray-900 dark:text-white">SEO</h2>
+          <Heading level={2} className="text-lg font-semibold text-gray-900 dark:text-white">SEO</Heading>
 
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">

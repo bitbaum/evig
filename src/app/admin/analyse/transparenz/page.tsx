@@ -15,6 +15,7 @@ import { ArrowLeft, Eye, FileText, Database, GitBranch } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { AnalyseTabs } from '@/components/analyse'
+import Heading from '@/components/ui/Heading'
 
 export default async function TransparenzPage() {
   const session = await auth()
@@ -104,7 +105,7 @@ export default async function TransparenzPage() {
             <Eye className="w-6 h-6 text-orange-600" />
           </div>
           <div>
-            <h1 className="text-3xl font-bold">Transparenz</h1>
+            <Heading level={1} className="text-3xl font-bold">Transparenz</Heading>
             <p className="text-muted-foreground">
               First Principles und Methodologie
             </p>

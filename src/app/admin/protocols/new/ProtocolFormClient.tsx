@@ -20,6 +20,7 @@ import { getErrorMessage } from '@/lib/utils/error'
 import { validateAudioUpload } from '@/lib/protocols/audio-validation'
 import { DEFAULT_WHISPER_MODEL, WHISPER_MODELS } from '@/config/transcription'
 import { formatDateShort } from '@/lib/date-formats'
+import Heading from '@/components/ui/Heading'
 
 interface ProtocolFormClientProps {
   teamMembers: Array<{ id: string; name: string }>
@@ -204,7 +205,7 @@ export default function ProtocolFormClient({ teamMembers }: ProtocolFormClientPr
 
       {/* Step 1: Setup */}
       <div className="bg-white rounded-lg border p-6 space-y-4">
-        <h2 className="text-lg font-semibold text-gray-900">Sitzungsdetails</h2>
+        <Heading level={2} className="text-lg font-semibold text-gray-900">Sitzungsdetails</Heading>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {/* Meeting Type */}
@@ -331,7 +332,7 @@ export default function ProtocolFormClient({ teamMembers }: ProtocolFormClientPr
       {/* Step 2: Content */}
       {setupComplete && (
         <div className="bg-white rounded-lg border p-6 space-y-4">
-          <h2 className="text-lg font-semibold text-gray-900">Inhalt</h2>
+          <Heading level={2} className="text-lg font-semibold text-gray-900">Inhalt</Heading>
           <p className="text-sm text-gray-600">
             Transkript, Notizen einfügen oder Audio-Datei hochladen. Die KI strukturiert den Inhalt automatisch.
           </p>

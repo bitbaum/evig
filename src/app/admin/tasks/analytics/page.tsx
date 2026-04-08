@@ -23,6 +23,7 @@ import {
   Clock,
   AlertCircle,
 } from 'lucide-react'
+import Heading from '@/components/ui/Heading'
 import { logger } from '@/lib/logger'
 
 export const metadata: Metadata = {
@@ -193,7 +194,7 @@ export default async function TaskAnalyticsPage() {
             <BarChart3 className="w-5 h-5 text-purple-600" />
           </div>
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">Aufgaben Analyse</h1>
+            <Heading level={1} className="text-2xl font-bold text-gray-900">Aufgaben Analyse</Heading>
             <p className="text-gray-600">Statistiken und Auswertungen</p>
           </div>
         </div>
@@ -276,9 +277,9 @@ export default async function TaskAnalyticsPage() {
       <div className="grid grid-cols-2 gap-6">
         {/* Contributor Stats */}
         <div className="bg-white rounded-lg border p-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">
+          <Heading level={2} className="text-lg font-semibold text-gray-900 mb-4">
             Beiträge pro Person (letzte 30 Tage)
-          </h2>
+          </Heading>
           {contributors.length === 0 ? (
             <p className="text-gray-500">Keine Daten vorhanden</p>
           ) : (
@@ -314,9 +315,9 @@ export default async function TaskAnalyticsPage() {
 
         {/* Category Stats */}
         <div className="bg-white rounded-lg border p-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">
+          <Heading level={2} className="text-lg font-semibold text-gray-900 mb-4">
             Erledigungen pro Kategorie (letzte 30 Tage)
-          </h2>
+          </Heading>
           {categories.length === 0 ? (
             <p className="text-gray-500">Keine Daten vorhanden</p>
           ) : (
@@ -346,9 +347,9 @@ export default async function TaskAnalyticsPage() {
 
       {/* Recent Completions */}
       <div className="bg-white rounded-lg border p-6">
-        <h2 className="text-lg font-semibold text-gray-900 mb-4">
+        <Heading level={2} className="text-lg font-semibold text-gray-900 mb-4">
           Letzte Erledigungen
-        </h2>
+        </Heading>
         {recentCompletions.length === 0 ? (
           <p className="text-gray-500">Noch keine Erledigungen</p>
         ) : (

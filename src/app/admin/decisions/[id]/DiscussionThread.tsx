@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { Pencil, Trash2, Check, X } from 'lucide-react';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
+import Heading from '@/components/ui/Heading';
 import { apiFetch } from '@/lib/api/client';
 import {
   COMMENT_POSITIONS,
@@ -141,7 +142,7 @@ export default function DiscussionThread({
 
   return (
     <div className="rounded-lg bg-white p-6 shadow-sm">
-      <h2 className="mb-4 text-lg font-semibold text-gray-900">Diskussion</h2>
+      <Heading level={2} className="mb-4 text-lg font-semibold text-gray-900">Diskussion</Heading>
 
       {loading ? (
         <p className="text-sm text-gray-500">Laden...</p>
@@ -156,11 +157,12 @@ export default function DiscussionThread({
 
             return (
               <div key={pos}>
-                <h3
+                <Heading
+                  level={3}
                   className={`mb-2 inline-block rounded-full px-2.5 py-0.5 text-xs font-medium ${conf.color}`}
                 >
                   {conf.label} ({posComments.length})
-                </h3>
+                </Heading>
                 <div className="space-y-2">
                   {posComments.map((c) => {
                     const isOwn = currentUserId && c.user.id === currentUserId;

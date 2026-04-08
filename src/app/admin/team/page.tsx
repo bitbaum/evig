@@ -20,6 +20,7 @@ import Link from 'next/link'
 import { PermissionRequestsManager } from '@/components/admin/PermissionRequestsManager'
 import { TeamListClient } from './TeamListClient'
 import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
+import Heading from '@/components/ui/Heading'
 
 export const metadata: Metadata = {
   title: 'Team & HR | RevampIT Admin',
@@ -193,9 +194,9 @@ export default async function TeamPage() {
       {/* Staff without profiles warning */}
       {staffWithoutProfiles.length > 0 && (
         <div className="p-4 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-xl">
-          <h3 className="font-medium text-yellow-900 dark:text-yellow-200 mb-2">
+          <Heading level={3} className="font-medium text-yellow-900 dark:text-yellow-200 mb-2">
             {staffWithoutProfiles.length} Staff-Mitglieder ohne Profil
-          </h3>
+          </Heading>
           <div className="flex flex-wrap gap-2">
             {staffWithoutProfiles.slice(0, 5).map(user => (
               <Link

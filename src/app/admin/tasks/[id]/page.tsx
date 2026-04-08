@@ -39,6 +39,7 @@ import {
   Edit,
 } from 'lucide-react'
 import TaskActionsClient from './TaskActionsClient'
+import Heading from '@/components/ui/Heading'
 
 export const metadata: Metadata = {
   title: 'Aufgabe Details | RevampIT Admin',
@@ -166,7 +167,7 @@ export default async function TaskDetailPage({
               <ClipboardList className="w-5 h-5 text-blue-600" />
             </div>
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">{task.title}</h1>
+              <Heading level={1} className="text-2xl font-bold text-gray-900">{task.title}</Heading>
               <p className="text-gray-600">
                 {TASK_CATEGORY_LABELS[task.category]} · {TASK_TYPE_LABELS[task.task_type]}
               </p>
@@ -219,9 +220,9 @@ export default async function TaskDetailPage({
           <div className="flex items-start gap-3">
             <AlertTriangle className="w-5 h-5 text-red-600 mt-0.5" />
             <div>
-              <h3 className="font-medium text-red-800">
+              <Heading level={3} className="font-medium text-red-800">
                 Aufgabe braucht Aufmerksamkeit
-              </h3>
+              </Heading>
               {activeFlags.map((flag) => (
                 <p key={flag.id} className="text-sm text-red-700 mt-1">
                   {flag.flagged_by_name || 'Jemand'}: {flag.message || 'Keine Nachricht'}
@@ -241,7 +242,7 @@ export default async function TaskDetailPage({
           <div className="flex items-start gap-3">
             <Send className="w-5 h-5 text-yellow-600 mt-0.5" />
             <div>
-              <h3 className="font-medium text-yellow-800">Offene Anfragen</h3>
+              <Heading level={3} className="font-medium text-yellow-800">Offene Anfragen</Heading>
               {pendingRequests.map((req) => (
                 <p key={req.id} className="text-sm text-yellow-700 mt-1">
                   {req.requested_by_name || 'Jemand'} fragt{' '}
@@ -265,9 +266,9 @@ export default async function TaskDetailPage({
           {/* Description */}
           {task.description && (
             <div className="bg-white rounded-lg border p-6">
-              <h2 className="text-lg font-semibold text-gray-900 mb-3">
+              <Heading level={2} className="text-lg font-semibold text-gray-900 mb-3">
                 Beschreibung
-              </h2>
+              </Heading>
               <p className="text-gray-700 whitespace-pre-wrap">{task.description}</p>
             </div>
           )}
@@ -275,7 +276,7 @@ export default async function TaskDetailPage({
           {/* Instructions */}
           {task.instructions && (
             <div className="bg-white rounded-lg border p-6">
-              <h2 className="text-lg font-semibold text-gray-900 mb-3">Anleitung</h2>
+              <Heading level={2} className="text-lg font-semibold text-gray-900 mb-3">Anleitung</Heading>
               <div className="text-gray-700 whitespace-pre-wrap">{task.instructions}</div>
             </div>
           )}
@@ -285,9 +286,9 @@ export default async function TaskDetailPage({
 
           {/* Completion History */}
           <div className="bg-white rounded-lg border p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">
+            <Heading level={2} className="text-lg font-semibold text-gray-900 mb-4">
               Erledigungen ({completions.length})
-            </h2>
+            </Heading>
             {completions.length === 0 ? (
               <p className="text-gray-500">Noch keine Erledigungen</p>
             ) : (
@@ -331,7 +332,7 @@ export default async function TaskDetailPage({
         <div className="space-y-6">
           {/* Task Info */}
           <div className="bg-white rounded-lg border p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">Details</h2>
+            <Heading level={2} className="text-lg font-semibold text-gray-900 mb-4">Details</Heading>
             <dl className="space-y-4">
               <div>
                 <dt className="text-sm text-gray-500">Erstellt von</dt>
@@ -398,7 +399,7 @@ export default async function TaskDetailPage({
 
           {/* Quick Stats */}
           <div className="bg-white rounded-lg border p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">Statistiken</h2>
+            <Heading level={2} className="text-lg font-semibold text-gray-900 mb-4">Statistiken</Heading>
             <div className="space-y-3">
               <div className="flex justify-between">
                 <span className="text-gray-600">Erledigungen gesamt</span>

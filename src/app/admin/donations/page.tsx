@@ -8,6 +8,7 @@ import {
   DonationsTable,
   DonationFormModal,
 } from '@/components/admin/donations'
+import Heading from '@/components/ui/Heading'
 
 export default function AdminDonationsPage() {
   const {
@@ -57,7 +58,7 @@ export default function AdminDonationsPage() {
       {/* Header */}
       <div className="mb-6 flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Spenden</h1>
+          <Heading level={1} className="text-2xl font-bold text-gray-900">Spenden</Heading>
           <p className="text-gray-600">Geld- und Sachspenden verwalten</p>
         </div>
         <button

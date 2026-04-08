@@ -24,6 +24,7 @@ import {
   HelpRequestCard,
   CreateHelpRequestModal,
 } from '@/components/admin/team/activity'
+import Heading from '@/components/ui/Heading'
 
 interface TeamMemberOption {
   id: string
@@ -258,9 +259,9 @@ export function HelpRequestsPageClient({
           {/* Open Requests */}
           {openRequests.length > 0 && (
             <div>
-              <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-3">
+              <Heading level={3} className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-3">
                 Offene Anfragen ({openRequests.length})
-              </h3>
+              </Heading>
               <div className="space-y-4">
                 {openRequests.map((request) => (
                   <HelpRequestCard
@@ -279,9 +280,9 @@ export function HelpRequestsPageClient({
           {/* In Progress Requests */}
           {inProgressRequests.length > 0 && (
             <div>
-              <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-3">
+              <Heading level={3} className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-3">
                 In Bearbeitung ({inProgressRequests.length})
-              </h3>
+              </Heading>
               <div className="space-y-4">
                 {inProgressRequests.map((request) => (
                   <HelpRequestCard
@@ -299,9 +300,9 @@ export function HelpRequestsPageClient({
           {/* Resolved Requests */}
           {resolvedRequests.length > 0 && (
             <div>
-              <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-3">
+              <Heading level={3} className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-3">
                 Abgeschlossen ({resolvedRequests.length})
-              </h3>
+              </Heading>
               <div className="space-y-4">
                 {resolvedRequests.map((request) => (
                   <HelpRequestCard

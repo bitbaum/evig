@@ -16,6 +16,7 @@ import { ErfassungSubmitBar } from '@/components/erfassung/ErfassungSubmitBar'
 import { useErfassungForm } from '@/components/erfassung/useErfassungForm'
 import type { BulkProduct, BulkSaveResponse } from '@/types/erfassung'
 import { formDataToPayload } from '@/types/erfassung'
+import Heading from '@/components/ui/Heading'
 
 function ErfassungContent() {
   const form = useErfassungForm()
@@ -167,9 +168,9 @@ function ErfassungContent() {
           <ArrowLeft className="w-5 h-5 sm:w-5 sm:h-5" />
         </Link>
         <div className="flex-1 min-w-0">
-          <h1 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white truncate">
+          <Heading level={1} className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white truncate">
             {form.isEditMode ? 'Produkt bearbeiten' : viewMode === 'bulk' ? `Bulk Erfassung (${bulkProducts.length} Produkte)` : 'Produkt Erfassung'}
-          </h1>
+          </Heading>
           <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400 hidden sm:block">
             {form.isEditMode ? 'Produktdaten aktualisieren' : viewMode === 'bulk' ? 'Mehrere Produkte prüfen und erfassen' : 'Neues Produkt ins Inventar aufnehmen'}
           </p>

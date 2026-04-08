@@ -37,6 +37,7 @@ import {
   AlertTriangle,
 } from 'lucide-react'
 import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
+import Heading from '@/components/ui/Heading'
 import { formatDateShort } from '@/lib/date-formats'
 import ProtocolListClient from './ProtocolListClient'
 import { Pagination } from '@/components/ui/Pagination'
@@ -206,9 +207,9 @@ export default async function ProtocolsAdminPage({
         {listError ? (
           <div className="p-12 text-center">
             <AlertTriangle className="w-12 h-12 text-red-300 mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-gray-900 mb-2">
+            <Heading level={3} className="text-lg font-medium text-gray-900 mb-2">
               Protokolle konnten nicht geladen werden
-            </h3>
+            </Heading>
             <p className="text-gray-600 mb-4">
               Es gab ein Problem beim Laden der Protokolle. Bitte versuche es erneut.
             </p>
@@ -222,9 +223,9 @@ export default async function ProtocolsAdminPage({
         ) : filteredProtocols.length === 0 ? (
           <div className="p-12 text-center">
             <FileText className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-gray-900 mb-2">
+            <Heading level={3} className="text-lg font-medium text-gray-900 mb-2">
               Keine Protokolle gefunden
-            </h3>
+            </Heading>
             <p className="text-gray-600 mb-4">
               Erstellen Sie Ihr erstes Sitzungsprotokoll.
             </p>

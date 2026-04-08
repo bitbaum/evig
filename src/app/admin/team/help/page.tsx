@@ -17,6 +17,7 @@ import { HELP_REQUEST_STATUS } from '@/config/help-request-status'
 import { HelpCircle, ArrowLeft, Users, AlertTriangle, CheckCircle } from 'lucide-react'
 import Link from 'next/link'
 import { HelpRequestsPageClient } from './HelpRequestsPageClient'
+import Heading from '@/components/ui/Heading'
 
 export const metadata: Metadata = {
   title: 'Hilfsanfragen | RevampIT Admin',
@@ -121,9 +122,9 @@ export default async function HelpRequestsPage() {
             <HelpCircle className="w-6 h-6 text-yellow-600" />
           </div>
           <div>
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+            <Heading level={1} className="text-2xl font-bold text-gray-900 dark:text-white">
               Hilfsanfragen
-            </h1>
+            </Heading>
             <p className="text-gray-600 dark:text-gray-400">
               Hilfe anfordern und Kollegen unterstützen
             </p>

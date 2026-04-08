@@ -32,6 +32,7 @@ import {
   Clock,
   PenSquare,
 } from 'lucide-react'
+import Heading from '@/components/ui/Heading'
 
 interface MySubmission {
   id: string

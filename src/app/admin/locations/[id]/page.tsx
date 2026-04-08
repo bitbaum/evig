@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
 import { formatDateShort } from '@/lib/date-formats'
+import Heading from '@/components/ui/Heading'
 import { getApprovalStatusLabel } from '@/config/approval-status'
 import { LOCATION_STATUS } from '@/config/location-status'
 import { BOOKING_STATUS } from '@/config/booking-status'
@@ -207,7 +208,7 @@ export default function LocationDetailPage() {
         <div className="max-w-4xl mx-auto px-4">
           <div className="bg-white rounded-xl shadow-lg p-8 text-center">
             <AlertCircle className="w-12 h-12 text-red-400 mx-auto mb-4" />
-            <h2 className="text-lg font-medium text-gray-900 mb-2">{error}</h2>
+            <Heading level={2} className="text-lg font-medium text-gray-900 mb-2">{error}</Heading>
             <Link
               href="/admin/locations"
               className="inline-flex items-center text-blue-600 hover:text-blue-700 mt-4"
@@ -241,7 +242,7 @@ export default function LocationDetailPage() {
                 >
                   <ArrowLeft className="w-5 h-5" />
                 </Link>
-                <h1 className="text-2xl font-bold text-gray-900">{location.name}</h1>
+                <Heading level={1} className="text-2xl font-bold text-gray-900">{location.name}</Heading>
                 {getStatusBadge(location.approval_status)}
               </div>
               <div className="flex items-center gap-4 ml-8">
@@ -288,7 +289,7 @@ export default function LocationDetailPage() {
 
         {/* Basic Info */}
         <div className="bg-white rounded-xl shadow-sm border p-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">Grundinformationen</h2>
+          <Heading level={2} className="text-lg font-semibold text-gray-900 mb-4">Grundinformationen</Heading>
           <dl className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {location.description && (
               <div className="sm:col-span-2">
@@ -326,10 +327,10 @@ export default function LocationDetailPage() {
         {/* Address */}
         {(location.address_line1 || location.city) && (
           <div className="bg-white rounded-xl shadow-sm border p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+            <Heading level={2} className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
               <MapPin className="w-5 h-5 text-gray-400" />
               Adresse
-            </h2>
+            </Heading>
             <div className="text-sm text-gray-900 space-y-1">
               {location.address_line1 && <p>{location.address_line1}</p>}
               {location.address_line2 && <p>{location.address_line2}</p>}
@@ -346,7 +347,7 @@ export default function LocationDetailPage() {
         {/* Facilities */}
         {location.facilities && location.facilities.length > 0 && (
           <div className="bg-white rounded-xl shadow-sm border p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">Ausstattung</h2>
+            <Heading level={2} className="text-lg font-semibold text-gray-900 mb-4">Ausstattung</Heading>
             <div className="flex flex-wrap gap-2">
               {location.facilities.map((facility, i) => (
                 <span key={i} className="px-3 py-1 bg-blue-50 text-blue-700 rounded-full text-sm">
@@ -360,7 +361,7 @@ export default function LocationDetailPage() {
         {/* Accessibility */}
         {accessibilityInfo && (
           <div className="bg-white rounded-xl shadow-sm border p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">Barrierefreiheit</h2>
+            <Heading level={2} className="text-lg font-semibold text-gray-900 mb-4">Barrierefreiheit</Heading>
             <dl className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <dt className="text-sm font-medium text-gray-500">Rollstuhlgerecht</dt>
@@ -393,7 +394,7 @@ export default function LocationDetailPage() {
         {/* Contact */}
         {(location.contact_name || location.contact_phone || location.contact_email) && (
           <div className="bg-white rounded-xl shadow-sm border p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">Kontakt</h2>
+            <Heading level={2} className="text-lg font-semibold text-gray-900 mb-4">Kontakt</Heading>
             <dl className="space-y-3">
               {location.contact_name && (
                 <div className="flex items-center gap-2 text-sm">
@@ -419,7 +420,7 @@ export default function LocationDetailPage() {
 
         {/* Creator Info */}
         <div className="bg-white rounded-xl shadow-sm border p-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">Erstellt von</h2>
+          <Heading level={2} className="text-lg font-semibold text-gray-900 mb-4">Erstellt von</Heading>
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center">
               <User className="w-5 h-5 text-gray-500" />
@@ -434,7 +435,7 @@ export default function LocationDetailPage() {
         {/* Review History */}
         {location.last_approval_action && (
           <div className="bg-white rounded-xl shadow-sm border p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">Letzte Prüfung</h2>
+            <Heading level={2} className="text-lg font-semibold text-gray-900 mb-4">Letzte Prüfung</Heading>
             <div className="text-sm text-gray-600 space-y-2">
               <p>
                 <span className="font-medium">Aktion:</span>{' '}
@@ -459,7 +460,7 @@ export default function LocationDetailPage() {
         {/* Upcoming Bookings */}
         {bookings.length > 0 && (
           <div className="bg-white rounded-xl shadow-sm border p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">Bevorstehende Buchungen</h2>
+            <Heading level={2} className="text-lg font-semibold text-gray-900 mb-4">Bevorstehende Buchungen</Heading>
             <div className="divide-y divide-gray-200">
               {bookings.map((booking) => (
                 <div key={booking.id} className="py-3 flex items-center justify-between">

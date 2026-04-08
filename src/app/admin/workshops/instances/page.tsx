@@ -9,6 +9,7 @@ import {
   InstanceList,
   InstanceFormModal,
 } from '@/components/admin/workshops/instances'
+import Heading from '@/components/ui/Heading'
 
 export default function AdminWorkshopInstancesPage() {
   const router = useRouter()
@@ -33,7 +34,7 @@ export default function AdminWorkshopInstancesPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">Workshop-Termine</h1>
+              <Heading level={1} className="text-2xl font-bold text-gray-900">Workshop-Termine</Heading>
               <p className="mt-1 text-sm text-gray-600">
                 Verwalten Sie Termine für Ihre Workshops
               </p>

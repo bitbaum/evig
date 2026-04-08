@@ -4,6 +4,7 @@ import { useEffect } from 'react'
 import Link from 'next/link'
 import { AlertCircle } from 'lucide-react'
 import { logger } from '@/lib/logger'
+import Heading from '@/components/ui/Heading'
 
 export default function AppointmentsError({
   error,
@@ -20,9 +21,9 @@ export default function AppointmentsError({
     <div className="flex items-center justify-center min-h-[400px]">
       <div className="max-w-md w-full bg-white shadow-lg rounded-lg p-6 text-center">
         <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-4" aria-hidden="true" />
-        <h1 className="text-lg font-medium text-gray-900" role="alert">
+        <Heading level={1} className="text-lg font-medium text-gray-900" role="alert">
           Fehler beim Laden der Termine
-        </h1>
+        </Heading>
         <p className="mt-2 text-sm text-gray-600">
           Die Terminübersicht konnte nicht geladen werden.
         </p>

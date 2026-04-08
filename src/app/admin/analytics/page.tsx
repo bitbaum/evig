@@ -23,6 +23,7 @@ import {
   ClipboardList,
   DollarSign,
 } from 'lucide-react'
+import Heading from '@/components/ui/Heading'
 
 export const metadata: Metadata = {
   title: 'Analytics | RevampIT Admin',
@@ -227,9 +228,9 @@ export default async function AnalyticsPage() {
           <BarChart3 className="w-6 h-6 text-indigo-600" />
         </div>
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+          <Heading level={1} className="text-2xl font-bold text-gray-900 dark:text-white">
             Analytics
-          </h1>
+          </Heading>
           <p className="text-gray-600 dark:text-gray-400">
             Statistiken und Auswertungen für RevampIT
           </p>
@@ -306,7 +307,7 @@ export default async function AnalyticsPage() {
       <div className="grid md:grid-cols-2 gap-6">
         {/* User Growth */}
         <div className="p-6 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
-          <h3 className="font-semibold text-gray-900 dark:text-white mb-4">Benutzer-Wachstum</h3>
+          <Heading level={3} className="font-semibold text-gray-900 dark:text-white mb-4">Benutzer-Wachstum</Heading>
           {userGrowth.length === 0 ? (
             <p className="text-sm text-gray-500 dark:text-gray-400">Keine Daten vorhanden</p>
           ) : (
@@ -336,7 +337,7 @@ export default async function AnalyticsPage() {
 
         {/* Activity Overview */}
         <div className="p-6 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
-          <h3 className="font-semibold text-gray-900 dark:text-white mb-4">Aktivitäts-Übersicht</h3>
+          <Heading level={3} className="font-semibold text-gray-900 dark:text-white mb-4">Aktivitäts-Übersicht</Heading>
           <div className="space-y-4">
             <div className="flex items-center justify-between p-3 bg-green-50 dark:bg-green-900/20 rounded-lg">
               <div className="flex items-center gap-2">

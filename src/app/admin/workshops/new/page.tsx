@@ -14,6 +14,7 @@ import {
   WorkshopImageUpload,
   WorkshopTagsSection,
 } from '@/components/admin/workshops/workshop-form'
+import Heading from '@/components/ui/Heading'
 
 export default function NewWorkshopPage() {
   const {
@@ -38,7 +39,7 @@ export default function NewWorkshopPage() {
           <ArrowLeft className="w-5 h-5" />
         </Link>
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Workshop erstellen</h1>
+          <Heading level={1} className="text-2xl font-bold text-gray-900 dark:text-white">Workshop erstellen</Heading>
           <p className="text-gray-600 dark:text-gray-400 mt-1">Planen und veröffentlichen Sie einen neuen Workshop</p>
         </div>
       </div>

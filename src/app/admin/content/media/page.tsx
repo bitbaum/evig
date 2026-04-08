@@ -22,6 +22,7 @@ import {
   List,
   Filter,
 } from 'lucide-react'
+import Heading from '@/components/ui/Heading'
 
 export const metadata: Metadata = {
   title: 'Medienbibliothek | RevampIT Admin',
@@ -47,9 +48,9 @@ export default async function AdminMediaPage() {
             <ArrowLeft className="w-5 h-5 text-gray-600 dark:text-gray-400" />
           </Link>
           <div>
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+            <Heading level={1} className="text-2xl font-bold text-gray-900 dark:text-white">
               Medienbibliothek
-            </h1>
+            </Heading>
             <p className="text-gray-600 dark:text-gray-400 mt-1">
               Bilder, Videos und Dokumente verwalten
             </p>
@@ -160,9 +161,9 @@ export default async function AdminMediaPage() {
           <div className="w-20 h-20 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center mx-auto mb-6">
             <ImageIcon className="w-10 h-10 text-gray-400" />
           </div>
-          <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
+          <Heading level={3} className="text-lg font-medium text-gray-900 dark:text-white mb-2">
             Noch keine Medien hochgeladen
-          </h3>
+          </Heading>
           <p className="text-gray-600 dark:text-gray-400 mb-6 max-w-md mx-auto">
             Laden Sie Bilder, Videos und Dokumente hoch, um sie in Ihren
             Blog-Artikeln und Seiten zu verwenden.
@@ -191,9 +192,9 @@ export default async function AdminMediaPage() {
         <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-xl p-5">
           <div className="flex items-center gap-3 mb-3">
             <ImageIcon className="w-6 h-6 text-blue-600" />
-            <h3 className="font-medium text-blue-900 dark:text-blue-200">
+            <Heading level={3} className="font-medium text-blue-900 dark:text-blue-200">
               Bilder
-            </h3>
+            </Heading>
           </div>
           <p className="text-sm text-blue-700 dark:text-blue-300">
             JPG, PNG, GIF, WebP, SVG
@@ -206,9 +207,9 @@ export default async function AdminMediaPage() {
         <div className="bg-purple-50 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-800 rounded-xl p-5">
           <div className="flex items-center gap-3 mb-3">
             <Video className="w-6 h-6 text-purple-600" />
-            <h3 className="font-medium text-purple-900 dark:text-purple-200">
+            <Heading level={3} className="font-medium text-purple-900 dark:text-purple-200">
               Videos
-            </h3>
+            </Heading>
           </div>
           <p className="text-sm text-purple-700 dark:text-purple-300">
             MP4, WebM, MOV
@@ -221,9 +222,9 @@ export default async function AdminMediaPage() {
         <div className="bg-orange-50 dark:bg-orange-900/20 border border-orange-200 dark:border-orange-800 rounded-xl p-5">
           <div className="flex items-center gap-3 mb-3">
             <FileText className="w-6 h-6 text-orange-600" />
-            <h3 className="font-medium text-orange-900 dark:text-orange-200">
+            <Heading level={3} className="font-medium text-orange-900 dark:text-orange-200">
               Dokumente
-            </h3>
+            </Heading>
           </div>
           <p className="text-sm text-orange-700 dark:text-orange-300">
             PDF, DOC, DOCX, XLS, XLSX
@@ -241,9 +242,9 @@ export default async function AdminMediaPage() {
             <FolderOpen className="w-5 h-5 text-yellow-600" />
           </div>
           <div>
-            <h3 className="font-medium text-yellow-900 dark:text-yellow-200">
+            <Heading level={3} className="font-medium text-yellow-900 dark:text-yellow-200">
               In Entwicklung
-            </h3>
+            </Heading>
             <p className="text-sm text-yellow-700 dark:text-yellow-300 mt-1">
               Die Medienbibliothek wird gerade entwickelt. Bald können Sie hier
               Bilder und Dokumente hochladen, organisieren und in Ihren Inhalten

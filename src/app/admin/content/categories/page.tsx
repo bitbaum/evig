@@ -20,6 +20,7 @@ import {
   CheckCircle,
   XCircle,
 } from 'lucide-react'
+import Heading from '@/components/ui/Heading'
 
 export const metadata: Metadata = {
   title: 'Kategorien | RevampIT Admin',
@@ -118,9 +119,9 @@ export default async function AdminCategoriesPage() {
             <ArrowLeft className="w-5 h-5 text-gray-600 dark:text-gray-400" />
           </Link>
           <div>
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+            <Heading level={1} className="text-2xl font-bold text-gray-900 dark:text-white">
               Blog-Kategorien
-            </h1>
+            </Heading>
             <p className="text-gray-600 dark:text-gray-400 mt-1">
               Kategorien für Blog-Artikel verwalten
             </p>
@@ -295,9 +296,9 @@ export default async function AdminCategoriesPage() {
         ) : (
           <div className="text-center py-12">
             <Tag className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
+            <Heading level={3} className="text-lg font-medium text-gray-900 dark:text-white mb-2">
               Noch keine Kategorien
-            </h3>
+            </Heading>
             <p className="text-gray-600 dark:text-gray-400 mb-6">
               Erstellen Sie Kategorien, um Ihre Blog-Artikel zu organisieren.
             </p>
@@ -319,9 +320,9 @@ export default async function AdminCategoriesPage() {
             <Tag className="w-5 h-5 text-blue-600" />
           </div>
           <div>
-            <h3 className="font-medium text-blue-900 dark:text-blue-200">
+            <Heading level={3} className="font-medium text-blue-900 dark:text-blue-200">
               Kategorien-Verwaltung
-            </h3>
+            </Heading>
             <p className="text-sm text-blue-700 dark:text-blue-300 mt-1">
               Kategorien helfen beim Organisieren Ihrer Blog-Artikel. Jede
               Kategorie kann eine eigene Farbe und Beschreibung haben. Aktive

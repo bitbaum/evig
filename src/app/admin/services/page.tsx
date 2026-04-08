@@ -18,6 +18,7 @@ import {
 } from 'lucide-react'
 import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
 import { ServiceListClient } from './ServiceListClient'
+import Heading from '@/components/ui/Heading'
 
 export const metadata: Metadata = {
   title: 'Dienstleistungen verwalten | RevampIT Admin',
@@ -187,9 +188,9 @@ export default async function AdminServicesPage() {
             <Wrench className="w-5 h-5 text-blue-600" />
           </div>
           <div>
-            <h3 className="font-medium text-blue-900 dark:text-blue-200">
+            <Heading level={3} className="font-medium text-blue-900 dark:text-blue-200">
               Dienstleistungs-Verwaltung
-            </h3>
+            </Heading>
             <p className="text-sm text-blue-700 dark:text-blue-300 mt-1 mb-3">
               Dienstleistungen sind die Kernkompetenz von RevampIT. Bieten Sie Reparaturen, Installationen,
               Beratungen und andere technische Services an. Kunden können online Termine buchen.

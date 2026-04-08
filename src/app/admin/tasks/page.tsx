@@ -32,6 +32,7 @@ import {
   BarChart3,
 } from 'lucide-react'
 import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
+import Heading from '@/components/ui/Heading'
 import TaskFiltersClient from './TaskFiltersClient'
 import { Pagination } from '@/components/ui/Pagination'
 
@@ -297,9 +298,9 @@ export default async function TasksAdminPage({
         {listError ? (
           <div className="p-12 text-center">
             <AlertTriangle className="w-12 h-12 text-red-300 mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-gray-900 mb-2">
+            <Heading level={3} className="text-lg font-medium text-gray-900 mb-2">
               Aufgaben konnten nicht geladen werden
-            </h3>
+            </Heading>
             <p className="text-gray-600 mb-4">
               Es gab ein Problem beim Laden der Aufgaben. Bitte versuche es erneut.
             </p>
@@ -313,9 +314,9 @@ export default async function TasksAdminPage({
         ) : tasks.length === 0 ? (
           <div className="p-12 text-center">
             <ClipboardList className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-gray-900 mb-2">
+            <Heading level={3} className="text-lg font-medium text-gray-900 mb-2">
               Keine Aufgaben gefunden
-            </h3>
+            </Heading>
             <p className="text-gray-600 mb-4">
               Erstellen Sie Ihre erste Aufgabe, um loszulegen.
             </p>

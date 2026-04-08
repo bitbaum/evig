@@ -27,6 +27,7 @@ import {
   Flag,
   RefreshCw
 } from 'lucide-react'
+import Heading from '@/components/ui/Heading'
 
 interface Review {
   id: string
@@ -195,7 +196,7 @@ export default function AdminReviewsPage() {
         <div className="flex">
           <XCircle className="w-5 h-5 text-red-400" />
           <div className="ml-3">
-            <h3 className="text-sm font-medium text-red-800">Fehler beim Laden</h3>
+            <Heading level={3} className="text-sm font-medium text-red-800">Fehler beim Laden</Heading>
             <p className="text-sm text-red-700 mt-1">{error}</p>
           </div>
         </div>
@@ -216,7 +217,7 @@ export default function AdminReviewsPage() {
             Zurück zum Admin-Bereich
           </button>
         </div>
-        <h1 className="text-2xl font-bold text-gray-900">Bewertungs-Management</h1>
+        <Heading level={1} className="text-2xl font-bold text-gray-900">Bewertungs-Management</Heading>
       </div>
 
       {/* Filters and Search */}
@@ -276,9 +277,9 @@ export default function AdminReviewsPage() {
       {/* Moderation Dialog */}
       {moderatingId && (
         <div className="bg-white rounded-lg shadow-sm border border-orange-200 p-6">
-          <h3 className="text-sm font-semibold text-gray-900 mb-2">
+          <Heading level={3} className="text-sm font-semibold text-gray-900 mb-2">
             Grund für {getReviewActionLabel(moderatingAction)}:
-          </h3>
+          </Heading>
           <textarea
             value={moderationReason}
             onChange={(e) => setModerationReason(e.target.value)}
@@ -310,7 +311,7 @@ export default function AdminReviewsPage() {
         {filteredReviews.length === 0 ? (
           <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-12 text-center">
             <MessageSquare className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-gray-900 mb-2">Keine Bewertungen gefunden</h3>
+            <Heading level={3} className="text-lg font-medium text-gray-900 mb-2">Keine Bewertungen gefunden</Heading>
             <p className="text-gray-600">
               {searchQuery
                 ? 'Keine Bewertungen entsprechen Ihrer Suchanfrage.'
@@ -326,9 +327,9 @@ export default function AdminReviewsPage() {
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
                     <div className="flex items-center gap-3 mb-2">
-                      <h3 className="text-lg font-semibold text-gray-900">
+                      <Heading level={3} className="text-lg font-semibold text-gray-900">
                         Bewertung für {review.targetName}
-                      </h3>
+                      </Heading>
                       {getStatusBadge(review.status)}
                       {review.isVerifiedPurchase && (
                         <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
@@ -344,7 +345,7 @@ export default function AdminReviewsPage() {
                       <span>{formatDateShort(review.createdAt)}</span>
                     </div>
                     {review.title && (
-                      <h4 className="font-medium text-gray-900 mb-2">{review.title}</h4>
+                      <Heading level={4} className="font-medium text-gray-900 mb-2">{review.title}</Heading>
                     )}
                     <p className="text-gray-700 text-sm leading-relaxed">{review.content}</p>
 

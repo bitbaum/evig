@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import Heading from '@/components/ui/Heading';
 
 interface ParticipationData {
   total: number;
@@ -39,7 +40,7 @@ export default function ParticipationCard({
   return (
     <div className="rounded-lg bg-white p-4 shadow-sm">
       <div className="flex items-center justify-between">
-        <h3 className="text-sm font-medium text-gray-700">Beteiligung</h3>
+        <Heading level={3} className="text-sm font-medium text-gray-700">Beteiligung</Heading>
         <span
           className={`rounded-full px-2 py-0.5 text-xs font-medium ${
             data.quorumMet

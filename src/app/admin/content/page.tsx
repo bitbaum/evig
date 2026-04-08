@@ -1,6 +1,7 @@
 import { Metadata } from 'next'
 import { FileText, Plus } from 'lucide-react'
 import Link from 'next/link'
+import Heading from '@/components/ui/Heading'
 
 export const metadata: Metadata = {
   title: 'Inhalte | RevampIT Admin',
@@ -16,9 +17,9 @@ export default function ContentPage() {
             <FileText className="w-6 h-6 text-teal-600" />
           </div>
           <div>
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+            <Heading level={1} className="text-2xl font-bold text-gray-900 dark:text-white">
               Inhalte
-            </h1>
+            </Heading>
             <p className="text-gray-600 dark:text-gray-400">
               Blog-Artikel, Seiten und Medien verwalten
             </p>
@@ -35,7 +36,7 @@ export default function ContentPage() {
           href="/admin/content/submissions"
           className="p-6 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 hover:border-yellow-500 transition-colors relative"
         >
-          <h3 className="font-semibold text-gray-900 dark:text-white mb-2">Einreichungen</h3>
+          <Heading level={3} className="font-semibold text-gray-900 dark:text-white mb-2">Einreichungen</Heading>
           <p className="text-sm text-gray-600 dark:text-gray-400">
             Benutzer-Einreichungen prüfen und veröffentlichen
           </p>
@@ -46,7 +47,7 @@ export default function ContentPage() {
           href="/admin/content/blog"
           className="p-6 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 hover:border-teal-500 transition-colors"
         >
-          <h3 className="font-semibold text-gray-900 dark:text-white mb-2">Blog-Artikel</h3>
+          <Heading level={3} className="font-semibold text-gray-900 dark:text-white mb-2">Blog-Artikel</Heading>
           <p className="text-sm text-gray-600 dark:text-gray-400">
             News, Tutorials und Ankündigungen
           </p>
@@ -56,7 +57,7 @@ export default function ContentPage() {
           href="/admin/content/categories"
           className="p-6 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 hover:border-purple-500 transition-colors"
         >
-          <h3 className="font-semibold text-gray-900 dark:text-white mb-2">Kategorien</h3>
+          <Heading level={3} className="font-semibold text-gray-900 dark:text-white mb-2">Kategorien</Heading>
           <p className="text-sm text-gray-600 dark:text-gray-400">
             Blog-Kategorien verwalten
           </p>
@@ -66,7 +67,7 @@ export default function ContentPage() {
           href="/admin/content/pages"
           className="p-6 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 hover:border-teal-500 transition-colors"
         >
-          <h3 className="font-semibold text-gray-900 dark:text-white mb-2">Seiten</h3>
+          <Heading level={3} className="font-semibold text-gray-900 dark:text-white mb-2">Seiten</Heading>
           <p className="text-sm text-gray-600 dark:text-gray-400">
             Statische Seiten wie Über uns, Kontakt, etc.
           </p>
@@ -76,7 +77,7 @@ export default function ContentPage() {
           href="/admin/content/media"
           className="p-6 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 hover:border-teal-500 transition-colors"
         >
-          <h3 className="font-semibold text-gray-900 dark:text-white mb-2">Medien</h3>
+          <Heading level={3} className="font-semibold text-gray-900 dark:text-white mb-2">Medien</Heading>
           <p className="text-sm text-gray-600 dark:text-gray-400">
             Bilder, Videos und Dokumente
           </p>

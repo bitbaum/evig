@@ -26,6 +26,7 @@ import {
 } from 'lucide-react'
 import { CUSTOMER_PROFILES } from '@/config/erfassung/profiles'
 import { CONDITION_COLORS } from '@/config/ui-colors'
+import Heading from '@/components/ui/Heading'
 
 // Profile icons mapped by slug
 const PROFILE_ICONS: Record<string, React.ReactNode> = {
@@ -117,9 +118,9 @@ export default function FactSheetPage() {
       <div className="min-h-screen flex items-center justify-center bg-gray-100">
         <div className="text-center">
           <Package className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-          <h2 className="text-xl font-semibold text-gray-900">
+          <Heading level={2} className="text-xl font-semibold text-gray-900">
             {error || 'Produkt nicht gefunden'}
-          </h2>
+          </Heading>
         </div>
       </div>
     )
@@ -174,7 +175,7 @@ export default function FactSheetPage() {
                   <span className="text-green-600 font-bold text-2xl">R</span>
                 </div>
                 <div>
-                  <h1 className="text-2xl font-bold tracking-tight">Revamp-IT</h1>
+                  <Heading level={1} className="text-2xl font-bold tracking-tight">Revamp-IT</Heading>
                   <p className="text-green-100 text-sm">Nachhaltige IT - Gut für dich, gut für die Umwelt</p>
                 </div>
               </div>
@@ -206,9 +207,9 @@ export default function FactSheetPage() {
               {/* Product Info */}
               <div className="flex-1">
                 <div className="text-gray-500 text-sm font-medium mb-1">{product.brand}</div>
-                <h2 className="text-3xl font-bold text-gray-900 mb-2 leading-tight">
+                <Heading level={2} className="text-3xl font-bold text-gray-900 mb-2 leading-tight">
                   {product.product_name}
-                </h2>
+                </Heading>
                 {product.short_description && (
                   <p className="text-gray-600 text-base mb-4 leading-relaxed">
                     {product.short_description}
@@ -245,9 +246,9 @@ export default function FactSheetPage() {
             {/* Technical Specs */}
             {specEntries.length > 0 && (
               <div className="mb-6">
-                <h3 className="text-lg font-bold text-gray-900 mb-3 pb-2 border-b-2 border-gray-200">
+                <Heading level={3} className="text-lg font-bold text-gray-900 mb-3 pb-2 border-b-2 border-gray-200">
                   Technische Daten
-                </h3>
+                </Heading>
                 <div className="grid grid-cols-2 gap-x-8 gap-y-2">
                   {specEntries.map(([key, value]) => (
                     <div key={key} className="flex justify-between py-2 border-b border-gray-100">
@@ -262,9 +263,9 @@ export default function FactSheetPage() {
             {/* Who is this for? */}
             {product.customer_profiles && product.customer_profiles.length > 0 && (
               <div className="mb-6">
-                <h3 className="text-lg font-bold text-gray-900 mb-3 pb-2 border-b-2 border-gray-200">
+                <Heading level={3} className="text-lg font-bold text-gray-900 mb-3 pb-2 border-b-2 border-gray-200">
                   Perfekt geeignet für
-                </h3>
+                </Heading>
                 <div className="flex flex-wrap gap-3">
                   {product.customer_profiles.map((slug) => {
                     const profile = PROFILES[slug]
@@ -288,9 +289,9 @@ export default function FactSheetPage() {
             <div className="flex gap-6 mt-auto">
               {/* Trust Badges */}
               <div className="flex-1">
-                <h3 className="text-lg font-bold text-gray-900 mb-3 pb-2 border-b-2 border-gray-200">
+                <Heading level={3} className="text-lg font-bold text-gray-900 mb-3 pb-2 border-b-2 border-gray-200">
                   Ihre Vorteile
-                </h3>
+                </Heading>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="flex items-start gap-3">
                     <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0">

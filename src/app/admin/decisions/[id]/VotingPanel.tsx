@@ -12,6 +12,7 @@ import {
   type SimpleMajorityResponse,
 } from '@/config/decisions';
 import { formatDateNumeric } from '@/lib/date-formats';
+import Heading from '@/components/ui/Heading';
 
 interface Option {
   id: string;
@@ -189,9 +190,9 @@ export default function VotingPanel({
         </div>
       )}
 
-      <h2 className="mb-4 text-lg font-semibold text-gray-900">
+      <Heading level={2} className="mb-4 text-lg font-semibold text-gray-900">
         Deine Stimme
-      </h2>
+      </Heading>
 
       {error && (
         <div className="mb-4 rounded-md bg-red-50 p-3 text-sm text-red-700">

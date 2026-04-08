@@ -20,6 +20,7 @@ import {
 } from 'lucide-react'
 import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
 import { BlogListClient } from './BlogListClient'
+import Heading from '@/components/ui/Heading'
 
 export const metadata: Metadata = {
   title: 'Blog-Artikel | RevampIT Admin',
@@ -199,9 +200,9 @@ export default async function AdminBlogPage() {
             <FileText className="w-5 h-5 text-blue-600" />
           </div>
           <div>
-            <h3 className="font-medium text-blue-900 dark:text-blue-200">
+            <Heading level={3} className="font-medium text-blue-900 dark:text-blue-200">
               Blog-Verwaltung
-            </h3>
+            </Heading>
             <p className="text-sm text-blue-700 dark:text-blue-300 mt-1 mb-3">
               Blog-Artikel sind ein wichtiger Kommunikationskanal. Teilen Sie
               News über RevampIT, schreiben Sie Tutorials zur

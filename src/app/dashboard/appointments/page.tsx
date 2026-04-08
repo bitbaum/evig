@@ -9,6 +9,7 @@ import { formatDateTime } from '@/lib/date-formats'
 import { APPOINTMENT_STATUS } from '@/config/appointment-status'
 import { BOOKING_STATUS } from '@/config/booking-status'
 import { Modal } from '@/components/ui/Modal'
+import Heading from '@/components/ui/Heading'
 
 interface ServiceAppointment {
   id: string
@@ -163,7 +164,7 @@ export default function AppointmentsDashboard() {
       <div className="min-h-screen bg-neutral-50 py-4 sm:py-8">
         <div className="max-w-4xl mx-auto px-4">
           <div className="bg-white rounded-xl shadow-lg p-6 sm:p-8 text-center">
-            <h1 className="text-xl sm:text-2xl font-bold mb-4 text-neutral-900">Anmeldung erforderlich</h1>
+            <Heading level={1} className="text-xl sm:text-2xl font-bold mb-4 text-neutral-900">Anmeldung erforderlich</Heading>
             <p className="text-neutral-600 mb-6 text-sm sm:text-base">
               Bitte melden Sie sich an, um Ihre Termine zu sehen.
             </p>
@@ -191,7 +192,7 @@ export default function AppointmentsDashboard() {
             <ArrowLeft className="w-4 h-4 mr-2" />
             Zurück zum Dashboard
           </Link>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Meine Termine</h1>
+          <Heading level={1} className="text-3xl font-bold text-gray-900 mb-2">Meine Termine</Heading>
           <p className="text-gray-600">
             Übersicht Ihrer Service-Termin-Anfragen und gebuchten Dienstleistungen
           </p>
@@ -215,9 +216,9 @@ export default function AppointmentsDashboard() {
                       <Wrench className="w-5 h-5 sm:w-6 sm:h-6 text-info-600" />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <h3 className="text-lg sm:text-xl font-semibold text-neutral-900 mb-2">
+                      <Heading level={3} className="text-lg sm:text-xl font-semibold text-neutral-900 mb-2">
                         {appointment.service_name}
-                      </h3>
+                      </Heading>
                       <div className="flex flex-wrap items-center gap-2 sm:gap-4 text-xs sm:text-sm text-neutral-600 mb-3">
                         <div className="flex items-center">
                           {getStatusIcon(appointment.status)}

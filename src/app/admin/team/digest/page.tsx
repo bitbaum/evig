@@ -15,6 +15,7 @@ import { canAccessSection } from '@/lib/permissions'
 import { BarChart3, ArrowLeft } from 'lucide-react'
 import Link from 'next/link'
 import { DigestPageClient } from './DigestPageClient'
+import Heading from '@/components/ui/Heading'
 
 export const metadata: Metadata = {
   title: 'Wochenübersicht | RevampIT Admin',
@@ -53,9 +54,9 @@ export default async function DigestPage() {
             <BarChart3 className="w-6 h-6 text-indigo-600" />
           </div>
           <div>
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+            <Heading level={1} className="text-2xl font-bold text-gray-900 dark:text-white">
               Wochenübersicht
-            </h1>
+            </Heading>
             <p className="text-gray-600 dark:text-gray-400">
               Zusammenfassung der Team-Aktivitäten
             </p>

@@ -22,6 +22,7 @@ import {
   ArrowLeft,
   Globe,
 } from 'lucide-react'
+import Heading from '@/components/ui/Heading'
 
 export const metadata: Metadata = {
   title: 'Statische Seiten | RevampIT Admin',
@@ -110,9 +111,9 @@ export default async function AdminPagesPage() {
             <ArrowLeft className="w-5 h-5 text-gray-600 dark:text-gray-400" />
           </Link>
           <div>
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+            <Heading level={1} className="text-2xl font-bold text-gray-900 dark:text-white">
               Statische Seiten
-            </h1>
+            </Heading>
             <p className="text-gray-600 dark:text-gray-400 mt-1">
               Über uns, Kontakt, FAQ und andere Seiten verwalten
             </p>
@@ -253,9 +254,9 @@ export default async function AdminPagesPage() {
         ) : (
           <div className="text-center py-12">
             <FileText className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
+            <Heading level={3} className="text-lg font-medium text-gray-900 dark:text-white mb-2">
               Noch keine Seiten
-            </h3>
+            </Heading>
             <p className="text-gray-600 dark:text-gray-400 mb-6">
               Erstellen Sie statische Seiten wie Über uns, Kontakt oder FAQ.
             </p>
@@ -273,9 +274,9 @@ export default async function AdminPagesPage() {
       {/* Common Pages Suggestion */}
       {pages.length === 0 && (
         <div className="bg-purple-50 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-800 rounded-xl p-6">
-          <h3 className="font-medium text-purple-900 dark:text-purple-200 mb-3">
+          <Heading level={3} className="font-medium text-purple-900 dark:text-purple-200 mb-3">
             Empfohlene Seiten
-          </h3>
+          </Heading>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-3">
             {[
               { title: 'Über uns', slug: 'ueber-uns' },
@@ -309,9 +310,9 @@ export default async function AdminPagesPage() {
             <Globe className="w-5 h-5 text-blue-600" />
           </div>
           <div>
-            <h3 className="font-medium text-blue-900 dark:text-blue-200">
+            <Heading level={3} className="font-medium text-blue-900 dark:text-blue-200">
               Statische Seiten
-            </h3>
+            </Heading>
             <p className="text-sm text-blue-700 dark:text-blue-300 mt-1">
               Statische Seiten enthalten wichtige Informationen über Ihre
               Organisation. Sie erscheinen in der Navigation und im Footer der

@@ -18,6 +18,7 @@ import {
 } from 'lucide-react'
 import { apiFetch } from '@/lib/api/client'
 import { getErrorMessage } from '@/lib/utils/error'
+import Heading from '@/components/ui/Heading'
 
 interface TaskActionsClientProps {
   taskId: string
@@ -156,7 +157,7 @@ export default function TaskActionsClient({
 
   return (
     <div className="bg-white rounded-lg border p-6">
-      <h2 className="text-lg font-semibold text-gray-900 mb-4">Aktionen</h2>
+      <Heading level={2} className="text-lg font-semibold text-gray-900 mb-4">Aktionen</Heading>
 
       {error && (
         <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
@@ -196,9 +197,9 @@ export default function TaskActionsClient({
       {/* Complete Form */}
       {showCompleteForm && (
         <div className="mt-4 p-4 bg-green-50 rounded-lg border border-green-200">
-          <h3 className="font-medium text-green-800 mb-3">
+          <Heading level={3} className="font-medium text-green-800 mb-3">
             Aufgabe als erledigt markieren
-          </h3>
+          </Heading>
           <div className="space-y-3">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -249,9 +250,9 @@ export default function TaskActionsClient({
       {/* Attention Form */}
       {showAttentionForm && (
         <div className="mt-4 p-4 bg-red-50 rounded-lg border border-red-200">
-          <h3 className="font-medium text-red-800 mb-3">
+          <Heading level={3} className="font-medium text-red-800 mb-3">
             Aufgabe braucht Aufmerksamkeit
-          </h3>
+          </Heading>
           <div className="space-y-3">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -290,7 +291,7 @@ export default function TaskActionsClient({
       {/* Request Form */}
       {showRequestForm && (
         <div className="mt-4 p-4 bg-yellow-50 rounded-lg border border-yellow-200">
-          <h3 className="font-medium text-yellow-800 mb-3">Um Hilfe bitten</h3>
+          <Heading level={3} className="font-medium text-yellow-800 mb-3">Um Hilfe bitten</Heading>
           <div className="space-y-3">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">

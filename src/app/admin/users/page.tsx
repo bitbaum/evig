@@ -21,6 +21,7 @@ import {
 } from 'lucide-react'
 import { UsersListClient } from './UsersListClient'
 import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
+import Heading from '@/components/ui/Heading'
 
 export const metadata: Metadata = {
   title: 'Benutzer verwalten | RevampIT Admin',
@@ -143,9 +144,9 @@ export default async function AdminUsersPage() {
             <Shield className="w-5 h-5 text-blue-600" />
           </div>
           <div>
-            <h3 className="font-medium text-blue-900 dark:text-blue-200">
+            <Heading level={3} className="font-medium text-blue-900 dark:text-blue-200">
               Berechtigungssystem
-            </h3>
+            </Heading>
             <p className="text-sm text-blue-700 dark:text-blue-300 mt-1">
               Benutzer mit @{ORG.emailDomain} E-Mail-Adressen werden automatisch als Staff erkannt.
               Super Admins haben vollen Zugriff und können anderen Staff-Mitgliedern Berechtigungen erteilen.

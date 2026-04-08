@@ -8,6 +8,7 @@ import { formatDateShort } from '@/lib/date-formats'
 import { getApprovalStatusLabel } from '@/config/approval-status'
 import { LOCATION_STATUS } from '@/config/location-status'
 import { apiFetch } from '@/lib/api/client'
+import Heading from '@/components/ui/Heading'
 import {
   MapPin,
   Plus,
@@ -186,7 +187,7 @@ export default function AdminLocationsPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">Ortsverwaltung</h1>
+              <Heading level={1} className="text-2xl font-bold text-gray-900">Ortsverwaltung</Heading>
               <p className="mt-1 text-sm text-gray-600">
                 Verwalten Sie Veranstaltungsorte und deren Genehmigungen
               </p>
@@ -285,9 +286,9 @@ export default function AdminLocationsPage() {
           return (
         <div className="bg-white rounded-xl shadow-sm border">
           <div className="px-6 py-4 border-b border-gray-200">
-            <h2 className="text-lg font-semibold text-gray-900">
+            <Heading level={2} className="text-lg font-semibold text-gray-900">
               Orte ({filteredLocations.length})
-            </h2>
+            </Heading>
           </div>
 
           <div className="divide-y divide-gray-200">
@@ -297,9 +298,9 @@ export default function AdminLocationsPage() {
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-3 mb-2">
                       {getTypeIcon(location.type)}
-                      <h3 className="text-lg font-semibold text-gray-900 truncate">
+                      <Heading level={3} className="text-lg font-semibold text-gray-900 truncate">
                         {location.name}
-                      </h3>
+                      </Heading>
                       {getStatusIcon(location.approvalStatus)}
                       <span className="text-sm text-gray-600">
                         {getStatusText(location.approvalStatus)}
@@ -366,7 +367,7 @@ export default function AdminLocationsPage() {
             {filteredLocations.length === 0 && !loading && (
               <div className="px-6 py-12 text-center">
                 <MapPin className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                <h3 className="text-lg font-medium text-gray-900 mb-2">Keine Orte gefunden</h3>
+                <Heading level={3} className="text-lg font-medium text-gray-900 mb-2">Keine Orte gefunden</Heading>
                 <p className="text-gray-600 mb-4">
                   {searchName.trim()
                     ? `Keine Orte für "${searchName}" gefunden.`

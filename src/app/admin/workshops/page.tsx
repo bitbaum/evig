@@ -26,6 +26,7 @@ import { ERROR_MESSAGES } from '@/config/error-messages'
 import { formatDateShort } from '@/lib/date-formats'
 import { PROPOSAL_STATUS, PROPOSAL_STATUS_LABELS, WORKSHOP_CATEGORIES, type ProposalStatus } from '@/config/workshops'
 import type { WorkshopProposalWithProposer } from '@/components/workshops/types'
+import Heading from '@/components/ui/Heading'
 
 export default function AdminWorkshopsPage() {
   const { data: session, status } = useSession()
@@ -198,7 +199,7 @@ export default function AdminWorkshopsPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">Workshop-Verwaltung</h1>
+              <Heading level={1} className="text-2xl font-bold text-gray-900">Workshop-Verwaltung</Heading>
               <p className="mt-1 text-sm text-gray-600">
                 Genehmigen und verwalten Sie Workshop-Vorschläge
               </p>
@@ -287,9 +288,9 @@ export default function AdminWorkshopsPage() {
           return (
         <div className="bg-white rounded-xl shadow-sm border">
           <div className="px-6 py-4 border-b border-gray-200">
-            <h2 className="text-lg font-semibold text-gray-900">
+            <Heading level={2} className="text-lg font-semibold text-gray-900">
               Workshop-Vorschläge ({filteredProposals.length})
-            </h2>
+            </Heading>
           </div>
 
           <div className="divide-y divide-gray-200">
@@ -299,9 +300,9 @@ export default function AdminWorkshopsPage() {
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-3 mb-2">
                       <GraduationCap className="w-5 h-5 text-blue-600" />
-                      <h3 className="text-lg font-semibold text-gray-900 truncate">
+                      <Heading level={3} className="text-lg font-semibold text-gray-900 truncate">
                         {proposal.title}
-                      </h3>
+                      </Heading>
                       {getStatusIcon(proposal.status)}
                       <span className="text-sm text-gray-600">
                         {getStatusText(proposal.status)}
@@ -411,7 +412,7 @@ export default function AdminWorkshopsPage() {
             {filteredProposals.length === 0 && !loading && (
               <div className="px-6 py-12 text-center">
                 <GraduationCap className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                <h3 className="text-lg font-medium text-gray-900 mb-2">Keine Workshop-Vorschläge gefunden</h3>
+                <Heading level={3} className="text-lg font-medium text-gray-900 mb-2">Keine Workshop-Vorschläge gefunden</Heading>
                 <p className="text-gray-600 mb-4">
                   {searchTerm.trim()
                     ? `Keine Vorschläge für "${searchTerm}" gefunden.`

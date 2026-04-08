@@ -8,6 +8,7 @@ import { AdminSidebar } from './AdminSidebar'
 import { UserMenuDropdown } from './UserMenuDropdown'
 import { HirnFloatingButton } from '@/components/admin/HirnFloatingButton'
 import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import Heading from '@/components/ui/Heading'
 import { NotificationBell } from '@/components/admin/NotificationBell'
 import { getHirnSection } from '@/config/sections'
 
@@ -90,9 +91,9 @@ export function AdminLayoutClient({
                 <Menu className="w-4 h-4 text-gray-600 dark:text-gray-400" />
               </button>
 
-              <h1 className="text-xl font-semibold text-gray-900 dark:text-white">
+              <Heading level={1} className="text-xl font-semibold text-gray-900 dark:text-white">
                 RevampIT Admin
-              </h1>
+              </Heading>
             </div>
 
             <div className="flex items-center gap-4">

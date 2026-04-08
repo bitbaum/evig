@@ -27,6 +27,7 @@ import {
   WeeklyActivitySection,
   StatsOverview,
 } from '@/components/admin/dashboard'
+import Heading from '@/components/ui/Heading'
 
 export const metadata: Metadata = {
   title: 'Admin Dashboard | RevampIT',
@@ -73,9 +74,9 @@ export default async function AdminDashboard() {
       {/* Welcome Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+          <Heading level={1} className="text-2xl font-bold text-gray-900 dark:text-white">
             Hallo, {session.user.name?.split(' ')[0] || 'Admin'}
-          </h1>
+          </Heading>
           <p className="text-gray-600 dark:text-gray-400">
             {isSuper ? 'Super Admin' : 'Staff'} &bull; {accessibleSections.length} Bereiche
           </p>

@@ -14,6 +14,7 @@ import { canAccessSection } from '@/lib/permissions'
 import { Activity, ArrowLeft } from 'lucide-react'
 import Link from 'next/link'
 import { ActivityPageClient } from './ActivityPageClient'
+import Heading from '@/components/ui/Heading'
 
 export const metadata: Metadata = {
   title: 'Aktivitäten | RevampIT Admin',
@@ -52,9 +53,9 @@ export default async function TeamActivityPage() {
             <Activity className="w-6 h-6 text-green-600" />
           </div>
           <div>
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+            <Heading level={1} className="text-2xl font-bold text-gray-900 dark:text-white">
               Team-Aktivitäten
-            </h1>
+            </Heading>
             <p className="text-gray-600 dark:text-gray-400">
               Was im Team passiert - Aufgaben, Updates, Meilensteine
             </p>

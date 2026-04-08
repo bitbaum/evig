@@ -17,6 +17,7 @@ import {
   type DecisionCategory,
 } from '@/config/decisions';
 import { AIFormAssist } from '@/components/ai/AIFormAssist'
+import Heading from '@/components/ui/Heading'
 
 interface OptionItem {
   id: string;
@@ -322,7 +323,7 @@ export default function DecisionFormClient() {
 
       {/* Fristen & Kategorie */}
       <div className="rounded-lg border border-gray-200 bg-gray-50 p-4 space-y-4">
-        <h3 className="text-sm font-medium text-gray-900">Fristen &amp; Kategorie</h3>
+        <Heading level={3} className="text-sm font-medium text-gray-900">Fristen &amp; Kategorie</Heading>
 
         {/* Category */}
         <div>
@@ -379,7 +380,7 @@ export default function DecisionFormClient() {
       {/* Teilnehmer / Participant Selector */}
       <div className="rounded-lg border border-gray-200 bg-gray-50 p-4 space-y-3">
         <div>
-          <h3 className="text-sm font-medium text-gray-900">Abstimmungsberechtigt</h3>
+          <Heading level={3} className="text-sm font-medium text-gray-900">Abstimmungsberechtigt</Heading>
           <p className="mt-0.5 text-xs text-gray-500">
             Leer lassen = alle Teammitglieder können abstimmen
           </p>

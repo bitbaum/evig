@@ -17,6 +17,7 @@ import { Button } from '@/components/ui/button'
 import { AnalyseTabs } from '@/components/analyse'
 import { formatCHF } from '@/lib/hirn/format'
 import { formatDateShort } from '@/lib/date-formats'
+import Heading from '@/components/ui/Heading'
 
 export default async function AnalysePage() {
   const session = await auth()
@@ -104,7 +105,7 @@ export default async function AnalysePage() {
             <BarChart3 className="w-6 h-6 text-indigo-600" />
           </div>
           <div>
-            <h1 className="text-3xl font-bold">Analyse</h1>
+            <Heading level={1} className="text-3xl font-bold">Analyse</Heading>
             <p className="text-muted-foreground">
               Übersicht aller Kennzahlen und Metriken
             </p>

@@ -15,6 +15,7 @@ import {
   Pagination,
   type UserRow,
 } from '@/components/admin/users'
+import Heading from '@/components/ui/Heading'
 
 interface UsersListClientProps {
   currentUserIsSuperAdmin: boolean
@@ -161,9 +162,9 @@ export function UsersListClient({ currentUserIsSuperAdmin }: UsersListClientProp
       {!loading && !error && users.length === 0 && (
         <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 p-12 text-center">
           <Users className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-          <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
+          <Heading level={3} className="text-lg font-medium text-gray-900 dark:text-white mb-2">
             Keine Benutzer gefunden
-          </h3>
+          </Heading>
           <p className="text-gray-500 dark:text-gray-400 mb-4">
             {filters.search || filters.type !== 'all' || filters.verified !== 'all'
               ? 'Keine Benutzer entsprechen Ihren Filterkriterien.'

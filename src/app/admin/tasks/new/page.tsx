@@ -9,6 +9,7 @@ import { Metadata } from 'next'
 import Link from 'next/link'
 import { ArrowLeft, ClipboardList } from 'lucide-react'
 import TaskFormClient from './TaskFormClient'
+import Heading from '@/components/ui/Heading'
 
 export const metadata: Metadata = {
   title: 'Neue Aufgabe | RevampIT Admin',
@@ -33,7 +34,7 @@ export default function NewTaskPage() {
             <ClipboardList className="w-5 h-5 text-blue-600" />
           </div>
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">Neue Aufgabe</h1>
+            <Heading level={1} className="text-2xl font-bold text-gray-900">Neue Aufgabe</Heading>
             <p className="text-gray-600">Erstellen Sie eine neue Teamaufgabe</p>
           </div>
         </div>

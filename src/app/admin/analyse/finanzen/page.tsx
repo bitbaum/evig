@@ -16,6 +16,7 @@ import { formatDateShort } from '@/lib/date-formats'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { AnalyseTabs, RevenueAreaChart, RevenuePieChart, TrendBarChart } from '@/components/analyse'
+import Heading from '@/components/ui/Heading'
 
 const CATEGORY_LABELS = {
   warenverkauf: 'Warenverkauf',
@@ -65,10 +66,10 @@ export default async function FinanzenPage() {
               Zurück
             </Button>
           </Link>
-          <h1 className="text-3xl font-bold">Finanzen</h1>
+          <Heading level={1} className="text-3xl font-bold">Finanzen</Heading>
         </div>
         <div className="p-6 bg-yellow-50 border border-yellow-200 rounded-lg">
-          <h3 className="font-semibold text-yellow-800">Keine Daten verfügbar</h3>
+          <Heading level={3} className="font-semibold text-yellow-800">Keine Daten verfügbar</Heading>
           <p className="text-sm text-yellow-700 mt-2">
             Die Finanzdaten konnten nicht geladen werden.
           </p>
@@ -153,7 +154,7 @@ export default async function FinanzenPage() {
             <PiggyBank className="w-6 h-6 text-blue-600" />
           </div>
           <div>
-            <h1 className="text-3xl font-bold">Finanzen</h1>
+            <Heading level={1} className="text-3xl font-bold">Finanzen</Heading>
             <p className="text-muted-foreground">
               Detaillierte Finanzübersicht aller Jahre
             </p>
@@ -263,7 +264,7 @@ export default async function FinanzenPage() {
 
       {/* Years Overview */}
       <div>
-        <h2 className="text-xl font-semibold mb-4">Jahresübersicht</h2>
+        <Heading level={2} className="text-xl font-semibold mb-4">Jahresübersicht</Heading>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
           {yearsData.map(([year, yearData]) => {
             const selfFinancingPct = yearData.derived.eigenfinanzierungPct.value

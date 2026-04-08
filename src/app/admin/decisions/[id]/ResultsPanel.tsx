@@ -7,6 +7,7 @@ import {
   type ConsentResponse,
   type SimpleMajorityResponse,
 } from '@/config/decisions';
+import Heading from '@/components/ui/Heading';
 
 /** Covers all voting method outcome shapes (consent, approval, dot, score, simple_majority) */
 interface OutcomeData {
@@ -65,7 +66,7 @@ export default function ResultsPanel({
 
   return (
     <div className="rounded-lg bg-white p-6 shadow-sm">
-      <h2 className="mb-4 text-lg font-semibold text-gray-900">Ergebnis</h2>
+      <Heading level={2} className="mb-4 text-lg font-semibold text-gray-900">Ergebnis</Heading>
 
       {/* Passed/Failed badge */}
       {'passed' in data && (

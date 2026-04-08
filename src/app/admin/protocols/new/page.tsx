@@ -8,6 +8,7 @@ import { Metadata } from 'next'
 import Link from 'next/link'
 import { ArrowLeft, FileText } from 'lucide-react'
 import { getTeamMembers } from '@/lib/services/protocols'
+import Heading from '@/components/ui/Heading'
 import ProtocolFormClient from './ProtocolFormClient'
 
 export const metadata: Metadata = {
@@ -35,7 +36,7 @@ export default async function NewProtocolPage() {
             <FileText className="w-5 h-5 text-blue-600" />
           </div>
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">Neues Protokoll</h1>
+            <Heading level={1} className="text-2xl font-bold text-gray-900">Neues Protokoll</Heading>
             <p className="text-gray-600">Sitzungsprotokoll erstellen und verarbeiten</p>
           </div>
         </div>

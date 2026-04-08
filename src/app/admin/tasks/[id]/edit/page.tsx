@@ -14,6 +14,7 @@ import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
 import type { TaskEditItem } from '@/lib/schemas/tasks'
 import TaskEditFormClient from './TaskEditFormClient'
+import Heading from '@/components/ui/Heading'
 
 export const metadata: Metadata = {
   title: 'Aufgabe bearbeiten | RevampIT Admin',
@@ -64,7 +65,7 @@ export default async function EditTaskPage({
             <ClipboardList className="w-5 h-5 text-blue-600" />
           </div>
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">Aufgabe bearbeiten</h1>
+            <Heading level={1} className="text-2xl font-bold text-gray-900">Aufgabe bearbeiten</Heading>
             <p className="text-gray-600">{task.title}</p>
           </div>
         </div>

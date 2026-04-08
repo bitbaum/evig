@@ -12,6 +12,7 @@ import { query } from '@/lib/auth/db'
 import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
 import { TeamProfileForm } from '@/components/admin/team'
+import Heading from '@/components/ui/Heading'
 
 interface PageProps {
   params: Promise<{ id: string }>
@@ -125,9 +126,9 @@ export default async function TeamProfileEditPage({ params }: PageProps) {
   return (
     <div className="max-w-4xl mx-auto">
       <div className="mb-6">
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+        <Heading level={1} className="text-2xl font-bold text-gray-900 dark:text-white">
           Profil bearbeiten
-        </h1>
+        </Heading>
         <p className="text-gray-600 dark:text-gray-400 mt-1">
           {profile.user_name || profile.user_email}
         </p>

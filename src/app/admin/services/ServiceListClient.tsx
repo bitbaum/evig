@@ -12,6 +12,7 @@ import {
 } from 'lucide-react'
 import { CATEGORY_LABELS } from '@/config/service-categories'
 import { formatPriceCents } from '@/config/marketplace'
+import Heading from '@/components/ui/Heading'
 
 interface ServiceType {
   id: string
@@ -193,11 +194,11 @@ export function ServiceListClient({ services }: ServiceListClientProps) {
       ) : (
         <div className="text-center py-12">
           <Wrench className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-          <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
+          <Heading level={3} className="text-lg font-medium text-gray-900 dark:text-white mb-2">
             {search.trim() || categoryFilter || statusFilter
               ? 'Keine Ergebnisse'
               : 'Noch keine Dienstleistungen'}
-          </h3>
+          </Heading>
           <p className="text-gray-600 dark:text-gray-400">
             {search.trim() || categoryFilter || statusFilter
               ? 'Versuchen Sie andere Suchkriterien.'

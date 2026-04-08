@@ -25,6 +25,7 @@ import {
   User,
   ExternalLink,
 } from 'lucide-react'
+import Heading from '@/components/ui/Heading'
 
 interface PageProps {
   params: Promise<{ id: string }>
@@ -147,9 +148,9 @@ export default async function UserDetailPage({ params }: PageProps) {
           {/* Info */}
           <div className="flex-1">
             <div className="flex items-center gap-3">
-              <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+              <Heading level={1} className="text-2xl font-bold text-gray-900 dark:text-white">
                 {user.name || 'Kein Name'}
-              </h1>
+              </Heading>
               {userIsSuperAdmin && (
                 <span className="inline-flex items-center gap-1 px-2 py-1 text-xs font-semibold rounded-full bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300">
                   <Crown className="w-3 h-3" />
@@ -202,10 +203,10 @@ export default async function UserDetailPage({ params }: PageProps) {
       {/* Team Profile Link */}
       {userIsStaff && (
         <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
-          <h2 className="font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+          <Heading level={2} className="font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
             <User className="w-5 h-5" />
             Team-Profil
-          </h2>
+          </Heading>
 
           {user.team_profile_id ? (
             <div className="flex items-center justify-between">
@@ -240,10 +241,10 @@ export default async function UserDetailPage({ params }: PageProps) {
       {/* Permissions */}
       {userIsStaff && (
         <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
-          <h2 className="font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+          <Heading level={2} className="font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
             <Shield className="w-5 h-5" />
             Berechtigungen
-          </h2>
+          </Heading>
 
           {userIsSuperAdmin ? (
             <p className="text-purple-600 dark:text-purple-400 font-medium">

@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import Heading from '@/components/ui/Heading'
 import { MapPin, ArrowLeft, Save, Loader2, CheckCircle, AlertCircle } from 'lucide-react'
 import {
   useLocationForm,
@@ -39,9 +40,9 @@ export default function NewLocationPage() {
             <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-100 rounded-full mb-6">
               <MapPin className="w-8 h-8 text-blue-600" />
             </div>
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">
+            <Heading level={1} className="text-3xl font-bold text-gray-900 mb-2">
               Neuen Ort erstellen
-            </h1>
+            </Heading>
             <p className="text-gray-600">
               Fügen Sie einen neuen Veranstaltungsort zur Plattform hinzu
             </p>
@@ -63,9 +64,9 @@ export default function NewLocationPage() {
                 <AlertCircle className="w-6 h-6 mr-3" />
               )}
               <div>
-                <h3 className="font-semibold mb-1">
+                <Heading level={3} className="font-semibold mb-1">
                   {submitResult.success ? 'Ort erstellt!' : 'Fehler'}
-                </h3>
+                </Heading>
                 <p>{submitResult.message}</p>
               </div>
             </div>

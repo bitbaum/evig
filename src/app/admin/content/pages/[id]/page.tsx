@@ -15,6 +15,7 @@ import {
 } from 'lucide-react'
 import { generateSlug } from '@/lib/utils/slug'
 import { apiFetch } from '@/lib/api/client'
+import Heading from '@/components/ui/Heading'
 
 interface PageData {
   id: string
@@ -130,11 +131,11 @@ export default function EditStaticPagePage() {
           >
             <ArrowLeft className="w-5 h-5 text-gray-600 dark:text-gray-400" />
           </Link>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Seite bearbeiten</h1>
+          <Heading level={1} className="text-2xl font-bold text-gray-900 dark:text-white">Seite bearbeiten</Heading>
         </div>
         <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border p-8 text-center">
           <AlertCircle className="w-12 h-12 text-red-400 mx-auto mb-4" />
-          <h2 className="text-lg font-medium text-gray-900 dark:text-white mb-2">{error}</h2>
+          <Heading level={2} className="text-lg font-medium text-gray-900 dark:text-white mb-2">{error}</Heading>
           <Link
             href="/admin/content/pages"
             className="inline-flex items-center text-blue-600 hover:text-blue-700 mt-4"
@@ -159,9 +160,9 @@ export default function EditStaticPagePage() {
             <ArrowLeft className="w-5 h-5 text-gray-600 dark:text-gray-400" />
           </Link>
           <div>
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+            <Heading level={1} className="text-2xl font-bold text-gray-900 dark:text-white">
               Seite bearbeiten
-            </h1>
+            </Heading>
             <p className="text-gray-600 dark:text-gray-400 mt-1">
               {formData.title || 'Unbenannt'}
             </p>
@@ -267,7 +268,7 @@ export default function EditStaticPagePage() {
 
         {/* SEO Section */}
         <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6 space-y-6">
-          <h2 className="text-lg font-semibold text-gray-900 dark:text-white">SEO</h2>
+          <Heading level={2} className="text-lg font-semibold text-gray-900 dark:text-white">SEO</Heading>
 
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">

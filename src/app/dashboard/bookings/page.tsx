@@ -13,6 +13,7 @@ import { Modal } from '@/components/ui/Modal'
 import { BOOKING_STATUS_BADGES } from '@/config/booking-status'
 import { formatDateShort } from '@/lib/date-formats'
 import { apiFetch } from '@/lib/api/client'
+import Heading from '@/components/ui/Heading'
 
 interface Appointment {
   id: string

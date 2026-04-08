@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { Shield, Plus } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { PermissionRequestForm } from '@/components/admin/PermissionRequestForm'
+import Heading from '@/components/ui/Heading'
 
 interface Section {
   id: string
@@ -25,10 +26,10 @@ export function RequestAccessSection({ inaccessibleSections }: RequestAccessSect
   return (
     <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
       <div className="p-6 border-b border-gray-100 dark:border-gray-700">
-        <h2 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+        <Heading level={2} className="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2">
           <Shield className="w-5 h-5 text-blue-500" />
           Weitere Bereiche verfügbar
-        </h2>
+        </Heading>
         <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
           Zugriff auf zusätzliche Admin-Bereiche anfordern
         </p>

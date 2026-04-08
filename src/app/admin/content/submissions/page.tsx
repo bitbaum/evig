@@ -9,6 +9,7 @@
 
 import Link from 'next/link'
 import { ArrowLeft, Loader2, FileText } from 'lucide-react'
+import Heading from '@/components/ui/Heading'
 import { EditSubmissionModal } from '@/components/admin/blog/EditSubmissionModal'
 import {
   useSubmissions,
@@ -34,9 +35,9 @@ export default function SubmissionsAdminPage() {
             <ArrowLeft className="w-5 h-5 text-gray-600 dark:text-gray-400" />
           </Link>
           <div>
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+            <Heading level={1} className="text-2xl font-bold text-gray-900 dark:text-white">
               Blog-Einreichungen
-            </h1>
+            </Heading>
             <p className="text-gray-600 dark:text-gray-400 mt-1">
               Von Benutzern eingereichte Inhalte prüfen und veröffentlichen
             </p>

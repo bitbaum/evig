@@ -22,6 +22,7 @@ import { ArrowLeft, TrendingUp, Leaf, Users, Monitor, PiggyBank } from 'lucide-r
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { AnalyseTabs, KPIGrid, MissingDataBanner } from '@/components/analyse'
+import Heading from '@/components/ui/Heading'
 
 const CATEGORY_ICONS = {
   financial: PiggyBank,
@@ -135,7 +136,7 @@ export default async function KennzahlenPage() {
             <TrendingUp className="w-6 h-6 text-purple-600" />
           </div>
           <div>
-            <h1 className="text-3xl font-bold">Kennzahlen</h1>
+            <Heading level={1} className="text-3xl font-bold">Kennzahlen</Heading>
             <p className="text-muted-foreground">
               KPIs und Metriken auf einen Blick
             </p>
@@ -205,9 +206,9 @@ export default async function KennzahlenPage() {
               {pendingMetrics.length > 0 && (
                 <div>
                   {availableMetrics.length > 0 && (
-                    <h4 className="text-sm font-medium text-muted-foreground mb-3">
+                    <Heading level={4} className="text-sm font-medium text-muted-foreground mb-3">
                       Daten benötigt
-                    </h4>
+                    </Heading>
                   )}
                   <KPIGrid
                     metrics={pendingMetrics}

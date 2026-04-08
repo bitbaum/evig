@@ -24,6 +24,7 @@ import type { ProtocolDetailProps } from '@/components/admin/protocols'
 import { PROTOCOL_STATUSES } from '@/config/protocols'
 import { useRouter } from 'next/navigation'
 import { getErrorMessage } from '@/lib/utils/error'
+import Heading from '@/components/ui/Heading'
 
 export default function ProtocolDetailClient(props: ProtocolDetailProps) {
   const router = useRouter()
@@ -345,9 +346,9 @@ export default function ProtocolDetailClient(props: ProtocolDetailProps) {
       {!notes && !isDraft && protocol.status !== 'processing' && (
         <div className="bg-white rounded-lg border p-12 text-center">
           <FileText className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-          <h3 className="text-lg font-medium text-gray-900 mb-2">
+          <Heading level={3} className="text-lg font-medium text-gray-900 mb-2">
             Keine strukturierten Notizen
-          </h3>
+          </Heading>
           <p className="text-gray-600">
             Fügen Sie ein Transkript hinzu, um es von der KI verarbeiten zu lassen.
           </p>

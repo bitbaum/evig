@@ -22,6 +22,7 @@ import { formatDateTime, formatDateShort } from '@/lib/date-formats';
 import { logger } from '@/lib/logger';
 import { APPROVAL_STATUS } from '@/config/approval-status';
 import type { WorkshopProposalWithProposer } from '@/components/workshops/types';
+import Heading from '@/components/ui/Heading';
 
 export default function WorkshopProposalDetailPage() {
   const params = useParams();
@@ -112,7 +113,7 @@ export default function WorkshopProposalDetailPage() {
           </Link>
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">{proposal.title}</h1>
+              <Heading level={1} className="text-3xl font-bold text-gray-900">{proposal.title}</Heading>
               <p className="mt-2 text-sm text-gray-600">
                 Vorgeschlagen von {proposal.proposer_name} ({proposal.proposer_email}) •{' '}
                 {formatDateShort(proposal.created_at)}
@@ -150,14 +151,14 @@ export default function WorkshopProposalDetailPage() {
           <div className="lg:col-span-2 space-y-6">
             {/* Description */}
             <section className="bg-white rounded-lg shadow-sm border p-6">
-              <h2 className="text-xl font-semibold mb-4">Beschreibung</h2>
+              <Heading level={2} className="text-xl font-semibold mb-4">Beschreibung</Heading>
               <p className="text-gray-700 whitespace-pre-wrap">{proposal.description}</p>
             </section>
 
             {/* Short Description */}
             {proposal.short_description && (
               <section className="bg-white rounded-lg shadow-sm border p-6">
-                <h2 className="text-xl font-semibold mb-4">Kurzbeschreibung</h2>
+                <Heading level={2} className="text-xl font-semibold mb-4">Kurzbeschreibung</Heading>
                 <p className="text-gray-700">{proposal.short_description}</p>
               </section>
             )}
@@ -165,7 +166,7 @@ export default function WorkshopProposalDetailPage() {
             {/* Learning Objectives */}
             {proposal.learning_objectives && proposal.learning_objectives.length > 0 && (
               <section className="bg-white rounded-lg shadow-sm border p-6">
-                <h2 className="text-xl font-semibold mb-4">Lernziele</h2>
+                <Heading level={2} className="text-xl font-semibold mb-4">Lernziele</Heading>
                 <ul className="list-disc list-inside space-y-2">
                   {proposal.learning_objectives.map((obj: string, idx: number) => (
                     <li key={idx} className="text-gray-700">
@@ -179,7 +180,7 @@ export default function WorkshopProposalDetailPage() {
             {/* Prerequisites */}
             {proposal.prerequisites && (
               <section className="bg-white rounded-lg shadow-sm border p-6">
-                <h2 className="text-xl font-semibold mb-4">Voraussetzungen</h2>
+                <Heading level={2} className="text-xl font-semibold mb-4">Voraussetzungen</Heading>
                 <p className="text-gray-700">{proposal.prerequisites}</p>
               </section>
             )}
@@ -187,20 +188,20 @@ export default function WorkshopProposalDetailPage() {
             {/* Materials */}
             {(proposal.materials_provided || proposal.materials_required) && (
               <section className="bg-white rounded-lg shadow-sm border p-6">
-                <h2 className="text-xl font-semibold mb-4">Materialien</h2>
+                <Heading level={2} className="text-xl font-semibold mb-4">Materialien</Heading>
                 {proposal.materials_provided && (
                   <div className="mb-4">
-                    <h3 className="text-sm font-semibold text-gray-700 mb-2">
+                    <Heading level={3} className="text-sm font-semibold text-gray-700 mb-2">
                       Bereitgestellte Materialien:
-                    </h3>
+                    </Heading>
                     <p className="text-gray-700">{proposal.materials_provided}</p>
                   </div>
                 )}
                 {proposal.materials_required && (
                   <div>
-                    <h3 className="text-sm font-semibold text-gray-700 mb-2">
+                    <Heading level={3} className="text-sm font-semibold text-gray-700 mb-2">
                       Benötigte Materialien:
-                    </h3>
+                    </Heading>
                     <p className="text-gray-700">{proposal.materials_required}</p>
                   </div>
                 )}
@@ -210,7 +211,7 @@ export default function WorkshopProposalDetailPage() {
             {/* Edit History */}
             {proposal.edit_history && proposal.edit_history.length > 0 && (
               <section className="bg-white rounded-lg shadow-sm border p-6">
-                <h2 className="text-xl font-semibold mb-4">Bearbeitungsverlauf</h2>
+                <Heading level={2} className="text-xl font-semibold mb-4">Bearbeitungsverlauf</Heading>
                 <EditHistoryView history={proposal.edit_history} fieldLabels={fieldLabels} />
               </section>
             )}
@@ -220,7 +221,7 @@ export default function WorkshopProposalDetailPage() {
           <div className="space-y-6">
             {/* Status */}
             <section className="bg-white rounded-lg shadow-sm border p-6">
-              <h3 className="font-semibold mb-4">Status</h3>
+              <Heading level={3} className="font-semibold mb-4">Status</Heading>
               <div className="flex items-center gap-2">
                 {proposal.status === APPROVAL_STATUS.APPROVED && (
                   <Check className="w-5 h-5 text-green-600" />
@@ -236,7 +237,7 @@ export default function WorkshopProposalDetailPage() {
 
             {/* Details */}
             <section className="bg-white rounded-lg shadow-sm border p-6">
-              <h3 className="font-semibold mb-4">Details</h3>
+              <Heading level={3} className="font-semibold mb-4">Details</Heading>
               <dl className="space-y-3 text-sm">
                 <div>
                   <dt className="text-gray-600 flex items-center gap-2">
@@ -285,10 +286,10 @@ export default function WorkshopProposalDetailPage() {
 
             {/* Location */}
             <section className="bg-white rounded-lg shadow-sm border p-6">
-              <h3 className="font-semibold mb-4 flex items-center gap-2">
+              <Heading level={3} className="font-semibold mb-4 flex items-center gap-2">
                 <MapPin className="w-4 h-4" />
                 Standort
-              </h3>
+              </Heading>
               <p className="text-sm text-gray-700">
                 {proposal.location_type === 'online'
                   ? 'Online'
@@ -301,7 +302,7 @@ export default function WorkshopProposalDetailPage() {
             {/* Reviewer Info */}
             {proposal.reviewed_by && (
               <section className="bg-white rounded-lg shadow-sm border p-6">
-                <h3 className="font-semibold mb-4">Reviewer</h3>
+                <Heading level={3} className="font-semibold mb-4">Reviewer</Heading>
                 <p className="text-sm text-gray-700">
                   {proposal.reviewer_name || 'Admin'}
                   <br />

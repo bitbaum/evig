@@ -19,6 +19,7 @@ import { ArrowLeft, Target, Leaf, Users, Recycle, AlertCircle } from 'lucide-rea
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { AnalyseTabs, MissingDataBanner } from '@/components/analyse'
+import Heading from '@/components/ui/Heading'
 
 function ImpactCard({ metric }: { metric: MetricDefinition }) {
   const needsData = metric.status === 'needs_data'
@@ -118,7 +119,7 @@ export default async function WirkungPage() {
             <Target className="w-6 h-6 text-green-600" />
           </div>
           <div>
-            <h1 className="text-3xl font-bold">Wirkung</h1>
+            <Heading level={1} className="text-3xl font-bold">Wirkung</Heading>
             <p className="text-muted-foreground">
               Ökologische und soziale Wirkung von Revamp-IT
             </p>
@@ -196,7 +197,7 @@ export default async function WirkungPage() {
         <CardContent>
           <div className="grid md:grid-cols-2 gap-6">
             <div>
-              <h4 className="font-medium mb-2">CO2-Einsparung</h4>
+              <Heading level={4} className="font-medium mb-2">CO2-Einsparung</Heading>
               <p className="text-sm text-muted-foreground mb-2">
                 Pro wiederverwendetem Gerät werden durchschnittlich <strong>285 kg CO2</strong> eingespart.
                 Diese Zahl basiert auf Studien zur Herstellungsenergie von Elektronikgeräten.
@@ -206,7 +207,7 @@ export default async function WirkungPage() {
               </code>
             </div>
             <div>
-              <h4 className="font-medium mb-2">Rohstoffeinsparung</h4>
+              <Heading level={4} className="font-medium mb-2">Rohstoffeinsparung</Heading>
               <p className="text-sm text-muted-foreground mb-2">
                 Die Wiederverwendung von Hardware spart wertvolle Rohstoffe wie Seltene Erden,
                 Kupfer und andere Metalle, die sonst neu abgebaut werden müssten.
@@ -250,9 +251,9 @@ export default async function WirkungPage() {
 
       {/* Data Collection Note */}
       <div className="p-4 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg text-sm">
-        <h4 className="font-medium text-amber-800 dark:text-amber-200 mb-2">
+        <Heading level={4} className="font-medium text-amber-800 dark:text-amber-200 mb-2">
           Datenerfassung erforderlich
-        </h4>
+        </Heading>
         <p className="text-amber-700 dark:text-amber-300">
           Um die Wirkung vollständig zu erfassen, benötigen wir regelmässige Daten aus dem operativen Betrieb.
           Die verantwortlichen Teams sollten quartalsweise folgende Daten liefern:

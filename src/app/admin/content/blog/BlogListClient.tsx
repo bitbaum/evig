@@ -12,6 +12,7 @@ import {
   Trash2,
   Calendar,
 } from 'lucide-react'
+import Heading from '@/components/ui/Heading'
 
 interface BlogPost {
   id: string
@@ -173,11 +174,11 @@ export function BlogListClient({ posts }: BlogListClientProps) {
       ) : (
         <div className="text-center py-12">
           <FileText className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-          <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
+          <Heading level={3} className="text-lg font-medium text-gray-900 dark:text-white mb-2">
             {search.trim() || statusFilter
               ? 'Keine Ergebnisse'
               : 'Noch keine Blog-Artikel'}
-          </h3>
+          </Heading>
           <p className="text-gray-600 dark:text-gray-400 mb-6">
             {search.trim() || statusFilter
               ? 'Versuchen Sie andere Suchkriterien.'

@@ -9,6 +9,7 @@ import { KATEGORIEN } from '@/config/erfassung/categories'
 import { ZUSTAND_OPTIONS } from '@/config/erfassung/conditions'
 import { ImageCapture } from '@/components/erfassung/ImageCapture'
 import type { CreateFormData } from './types'
+import Heading from '@/components/ui/Heading'
 
 interface IntakeCreateFormProps {
   formData: CreateFormData
@@ -57,7 +58,7 @@ export function IntakeCreateForm({
   return (
     <div className="max-w-2xl space-y-6">
       <div className="flex items-center justify-between">
-        <h2 className="text-lg font-semibold">Neues Gerät erfassen</h2>
+        <Heading level={2} className="text-lg font-semibold">Neues Gerät erfassen</Heading>
         <button onClick={onCancel} className="text-gray-500 hover:text-gray-700">
           <X className="w-5 h-5" />
         </button>

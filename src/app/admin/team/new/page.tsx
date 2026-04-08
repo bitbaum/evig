@@ -12,6 +12,7 @@ import { query } from '@/lib/auth/db'
 import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
 import { TeamProfileForm } from '@/components/admin/team'
+import Heading from '@/components/ui/Heading'
 
 export const metadata: Metadata = {
   title: 'Neues Team-Profil | RevampIT Admin',
@@ -73,9 +74,9 @@ export default async function NewTeamProfilePage({ searchParams }: PageProps) {
   return (
     <div className="max-w-4xl mx-auto">
       <div className="mb-6">
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+        <Heading level={1} className="text-2xl font-bold text-gray-900 dark:text-white">
           Neues Team-Profil erstellen
-        </h1>
+        </Heading>
         <p className="text-gray-600 dark:text-gray-400 mt-1">
           Erstellen Sie ein Profil für ein Staff-Mitglied
         </p>
@@ -83,9 +84,9 @@ export default async function NewTeamProfilePage({ searchParams }: PageProps) {
 
       {availableUsers.length === 0 ? (
         <div className="p-8 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-xl text-center">
-          <h2 className="text-lg font-medium text-yellow-900 dark:text-yellow-200 mb-2">
+          <Heading level={2} className="text-lg font-medium text-yellow-900 dark:text-yellow-200 mb-2">
             Alle Staff-Mitglieder haben bereits ein Profil
-          </h2>
+          </Heading>
           <p className="text-yellow-700 dark:text-yellow-300">
             Es gibt keine Staff-Mitglieder ohne Team-Profil.
           </p>

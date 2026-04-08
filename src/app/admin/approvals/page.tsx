@@ -18,6 +18,7 @@ import { ApprovalActions } from './ApprovalActions'
 import { PermissionRequestsManager } from '@/components/admin/PermissionRequestsManager'
 import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
 import Link from 'next/link'
+import Heading from '@/components/ui/Heading'
 import { logger } from '@/lib/logger'
 
 export const metadata: Metadata = {
@@ -216,7 +217,7 @@ export default async function ApprovalsPage() {
       {/* Übersicht — pending counts from all approval sources */}
       <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
         <div className="p-4 border-b border-gray-200 dark:border-gray-700">
-          <h2 className="font-semibold text-gray-900 dark:text-white">Übersicht</h2>
+          <Heading level={2} className="font-semibold text-gray-900 dark:text-white">Übersicht</Heading>
         </div>
         <div className="divide-y divide-gray-200 dark:divide-gray-700">
           {approvalSources.map(source => (
@@ -247,7 +248,7 @@ export default async function ApprovalsPage() {
       {/* Pending Items — inline list for user_content_submissions */}
       <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
         <div className="p-4 border-b border-gray-200 dark:border-gray-700">
-          <h2 className="font-semibold text-gray-900 dark:text-white">Ausstehende Freigaben</h2>
+          <Heading level={2} className="font-semibold text-gray-900 dark:text-white">Ausstehende Freigaben</Heading>
         </div>
 
         {pendingItems.length > 0 ? (
@@ -272,9 +273,9 @@ export default async function ApprovalsPage() {
         ) : (
           <div className="p-8 text-center">
             <FileText className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
+            <Heading level={3} className="text-lg font-medium text-gray-900 dark:text-white mb-2">
               Keine ausstehenden Freigaben
-            </h3>
+            </Heading>
             <p className="text-gray-500 dark:text-gray-400">
               Alle eingereichten Inhalte wurden bearbeitet.
             </p>
@@ -285,10 +286,10 @@ export default async function ApprovalsPage() {
       {/* Permission Requests (super admin only) */}
       {isSuper && (
         <div>
-          <h2 className="font-semibold text-gray-900 dark:text-white mb-3 flex items-center gap-2">
+          <Heading level={2} className="font-semibold text-gray-900 dark:text-white mb-3 flex items-center gap-2">
             <Shield className="w-5 h-5 text-orange-500" />
             Berechtigungsanfragen
-          </h2>
+          </Heading>
           <PermissionRequestsManager />
         </div>
       )}

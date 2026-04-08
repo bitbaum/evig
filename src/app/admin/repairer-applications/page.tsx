@@ -12,6 +12,7 @@ import {
   CertificationVerificationSection,
 } from '@/components/admin/repairer-applications'
 import { APPROVAL_STATUS } from '@/config/approval-status'
+import Heading from '@/components/ui/Heading'
 
 export default function RepairerApplicationsAdmin() {
   const router = useRouter()
@@ -53,7 +54,7 @@ export default function RepairerApplicationsAdmin() {
         <div className="flex">
           <XCircle className="w-5 h-5 text-red-400" />
           <div className="ml-3">
-            <h3 className="text-sm font-medium text-red-800">Fehler beim Laden</h3>
+            <Heading level={3} className="text-sm font-medium text-red-800">Fehler beim Laden</Heading>
             <p className="text-sm text-red-700 mt-1">{error}</p>
           </div>
         </div>
@@ -74,7 +75,7 @@ export default function RepairerApplicationsAdmin() {
             Zurück zum Admin-Bereich
           </button>
         </div>
-        <h1 className="text-2xl font-bold text-gray-900">Reparateur-Bewerbungen</h1>
+        <Heading level={1} className="text-2xl font-bold text-gray-900">Reparateur-Bewerbungen</Heading>
       </div>
 
       {/* Success Message */}
@@ -106,7 +107,7 @@ export default function RepairerApplicationsAdmin() {
         {applications.length === 0 ? (
           <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-12 text-center">
             <FileText className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-gray-900 mb-2">Keine Bewerbungen gefunden</h3>
+            <Heading level={3} className="text-lg font-medium text-gray-900 mb-2">Keine Bewerbungen gefunden</Heading>
             <p className="text-gray-600">
               {searchQuery
                 ? 'Keine Bewerbungen entsprechen Ihrer Suchanfrage.'

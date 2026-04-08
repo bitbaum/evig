@@ -25,6 +25,7 @@ import {
   INPUT_METHOD_ICON_COMPONENTS,
 } from '@/config/protocols'
 import type { MeetingType, InputMethod } from '@/config/protocols'
+import Heading from '@/components/ui/Heading'
 import {
   ArrowLeft,
   FileText,
@@ -110,7 +111,7 @@ export default async function ProtocolDetailPage({
               <MeetingIcon className="w-5 h-5 text-blue-600" />
             </div>
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">{protocol.title}</h1>
+              <Heading level={1} className="text-2xl font-bold text-gray-900">{protocol.title}</Heading>
               <p className="text-gray-600">
                 {MEETING_TYPE_LABELS[protocol.meeting_type]}
               </p>
@@ -160,7 +161,7 @@ export default async function ProtocolDetailPage({
         <div className="space-y-6">
           {/* Protocol Info */}
           <div className="bg-white rounded-lg border p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">Details</h2>
+            <Heading level={2} className="text-lg font-semibold text-gray-900 mb-4">Details</Heading>
             <dl className="space-y-4">
               <div>
                 <dt className="text-sm text-gray-500">Datum</dt>

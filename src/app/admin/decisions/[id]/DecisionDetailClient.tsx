@@ -25,6 +25,7 @@ import VotingPanel from './VotingPanel';
 import DiscussionThread from './DiscussionThread';
 import ParticipationCard from './ParticipationCard';
 import ResultsPanel from './ResultsPanel';
+import Heading from '@/components/ui/Heading';
 
 interface DecisionOption {
   id: string;
@@ -170,9 +171,9 @@ export default function DecisionDetailClient({
               <span className="text-xs text-gray-400">&middot;</span>
               <span className="text-xs text-gray-500">{DECISION_CATEGORY_LABELS[decision.category] || decision.category}</span>
             </div>
-            <h1 className="text-xl font-bold text-gray-900">
+            <Heading level={1} className="text-xl font-bold text-gray-900">
               {decision.title}
-            </h1>
+            </Heading>
             <p className="mt-1 text-sm text-gray-500">
               Erstellt von {decision.creator.email} am{' '}
               {formatDateShort(decision.createdAt)}
@@ -311,9 +312,9 @@ export default function DecisionDetailClient({
         {/* Options Display */}
         {decision.options.length > 0 && (
           <div className="mt-4">
-            <h3 className="mb-2 text-sm font-medium text-gray-700">
+            <Heading level={3} className="mb-2 text-sm font-medium text-gray-700">
               Optionen
-            </h3>
+            </Heading>
             <div className="space-y-1">
               {decision.options.map((opt) => (
                 <div

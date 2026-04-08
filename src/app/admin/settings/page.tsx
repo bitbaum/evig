@@ -4,6 +4,7 @@ import { redirect } from 'next/navigation'
 import { canAccessSection } from '@/lib/permissions'
 import { Settings, Globe, Mail, Shield, Database, Bell } from 'lucide-react'
 import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
+import Heading from '@/components/ui/Heading'
 
 export const metadata: Metadata = {
   title: 'Einstellungen | RevampIT Admin',
@@ -95,7 +96,7 @@ export default async function SettingsPage() {
                 <section.icon className="w-5 h-5" />
               </div>
               <div>
-                <h3 className="font-semibold text-gray-900 dark:text-white">{section.title}</h3>
+                <Heading level={3} className="font-semibold text-gray-900 dark:text-white">{section.title}</Heading>
                 <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">{section.description}</p>
               </div>
             </div>

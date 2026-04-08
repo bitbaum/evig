@@ -18,6 +18,7 @@ import {
   Flag,
   Calendar,
 } from 'lucide-react'
+import Heading from '@/components/ui/Heading'
 import { useDigest } from '@/components/admin/team/activity'
 import { TASK_CATEGORY_LABELS, type TaskCategory } from '@/config/tasks'
 import { formatRelativeTime } from '@/lib/utils'
@@ -194,7 +195,7 @@ export function DigestPageClient() {
             <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
               <div className="flex items-center gap-2 mb-4">
                 <Trophy className="w-5 h-5 text-yellow-500" />
-                <h3 className="font-semibold text-gray-900 dark:text-gray-100">Top Beiträger</h3>
+                <Heading level={3} className="font-semibold text-gray-900 dark:text-gray-100">Top Beiträger</Heading>
               </div>
 
               {digest.top_contributors.length === 0 ? (
@@ -245,9 +246,9 @@ export function DigestPageClient() {
             <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
               <div className="flex items-center gap-2 mb-4">
                 <Flag className="w-5 h-5 text-purple-500" />
-                <h3 className="font-semibold text-gray-900 dark:text-gray-100">
+                <Heading level={3} className="font-semibold text-gray-900 dark:text-gray-100">
                   Letzte Meilensteine
-                </h3>
+                </Heading>
               </div>
 
               {digest.recent_milestones.length === 0 ? (
@@ -282,9 +283,9 @@ export function DigestPageClient() {
           {/* Category Breakdown */}
           {digest.by_category.length > 0 && (
             <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
-              <h3 className="font-semibold text-gray-900 dark:text-gray-100 mb-4">
+              <Heading level={3} className="font-semibold text-gray-900 dark:text-gray-100 mb-4">
                 Aufgaben nach Kategorie
-              </h3>
+              </Heading>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 {digest.by_category.map((cat) => (
                   <div
@@ -306,9 +307,9 @@ export function DigestPageClient() {
           {/* All Users Activity */}
           {digest.by_user.length > 0 && (
             <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
-              <h3 className="font-semibold text-gray-900 dark:text-gray-100 mb-4">
+              <Heading level={3} className="font-semibold text-gray-900 dark:text-gray-100 mb-4">
                 Alle Mitarbeiter
-              </h3>
+              </Heading>
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
                   <thead>

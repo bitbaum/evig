@@ -1,11 +1,11 @@
 import { cn } from '@/lib/utils'
 import { responsiveTypography } from '@/lib/responsive'
 
-interface HeadingProps {
+type HeadingProps = {
   level: 1 | 2 | 3 | 4
   children: React.ReactNode
   className?: string
-}
+} & Omit<React.HTMLAttributes<HTMLHeadingElement>, 'children'>
 
 const levelConfig = {
   1: { tag: 'h1' as const, typography: responsiveTypography.hero },
@@ -14,7 +14,7 @@ const levelConfig = {
   4: { tag: 'h4' as const, typography: responsiveTypography.cardTitle },
 }
 
-export default function Heading({ level, children, className }: HeadingProps) {
+export default function Heading({ level, children, className, ...props }: HeadingProps) {
   const { tag: Tag, typography } = levelConfig[level]
-  return <Tag className={cn(typography, 'font-bold', className)}>{children}</Tag>
+  return <Tag className={cn(typography, 'font-bold', className)} {...props}>{children}</Tag>
 }

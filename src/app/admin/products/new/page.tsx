@@ -11,6 +11,7 @@ import {
   ProductImageUpload,
   ProductVariantsSection,
 } from '@/components/admin/products/product-form'
+import Heading from '@/components/ui/Heading'
 
 export default function NewProductPage() {
   const {
@@ -43,7 +44,7 @@ export default function NewProductPage() {
           <ArrowLeft className="w-5 h-5" />
         </Link>
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Neues Produkt erstellen</h1>
+          <Heading level={1} className="text-2xl font-bold text-gray-900 dark:text-white">Neues Produkt erstellen</Heading>
           <p className="text-gray-600 dark:text-gray-400 mt-1">Fügen Sie ein neues Produkt zum Shop hinzu</p>
         </div>
       </div>
