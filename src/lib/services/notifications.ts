@@ -20,7 +20,7 @@ interface NotificationPayload {
   type: string
   title: string
   content: string
-  related_type?: 'task' | 'protocol' | 'decision'
+  related_type?: string
   related_id?: string
 }
 

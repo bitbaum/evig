@@ -41,6 +41,12 @@ jest.mock('@/lib/api/helpers', () => ({
 jest.mock('@/lib/logger', () => ({
   logger: { error: jest.fn(), info: jest.fn(), warn: jest.fn() },
 }))
+jest.mock('@/lib/services/notifications', () => ({
+  notifyUsers: jest.fn().mockResolvedValue(undefined),
+  createNotification: jest.fn().mockResolvedValue(undefined),
+  notifyAllStaff: jest.fn().mockResolvedValue(undefined),
+  fireNotification: jest.fn(),
+}))
 
 // Import AFTER mocks
 import { createInAppNotifications } from '@/lib/api/task-helpers'
@@ -73,8 +79,8 @@ describe('createInAppNotifications', () => {
     expect(db.select).not.toHaveBeenCalled()
   })
 
-  it('deduplicates recipients, looks up valid users, and inserts notifications', async () => {
-    mockSelectResult = [{ id: 'u1' }, { id: 'u2' }]
+  it('deduplicates recipients and delegates to notifyUsers', async () => {
+    const { notifyUsers } = require('@/lib/services/notifications')
 
     await createInAppNotifications({
       recipientIds: ['u1', 'u2', 'u1'],
@@ -84,35 +90,37 @@ describe('createInAppNotifications', () => {
       relatedId: 'task-1',
     })
 
-    // Should look up valid users via select
-    expect(db.select).toHaveBeenCalledTimes(1)
-    expect(mockSelectChain.from).toHaveBeenCalled()
-    expect(mockSelectChain.where).toHaveBeenCalled()
-
-    // Should insert notifications for valid users
-    expect(db.insert).toHaveBeenCalledTimes(1)
-    expect(mockInsertChain.values).toHaveBeenCalledWith([
-      expect.objectContaining({ userId: 'u1', title: 'Aufgabe', content: 'Bitte übernehmen', relatedType: 'task', relatedId: 'task-1' }),
-      expect.objectContaining({ userId: 'u2', title: 'Aufgabe', content: 'Bitte übernehmen', relatedType: 'task', relatedId: 'task-1' }),
-    ])
+    // Should call notifyUsers with deduplicated IDs
+    expect(notifyUsers).toHaveBeenCalledWith(
+      ['u1', 'u2'],
+      expect.objectContaining({
+        type: 'system',
+        title: 'Aufgabe',
+        content: 'Bitte übernehmen',
+        related_type: 'task',
+        related_id: 'task-1',
+      })
+    )
   })
 
-  it('skips insert when no valid users found', async () => {
-    mockSelectResult = []
+  it('delegates single recipient to notifyUsers', async () => {
+    const { notifyUsers } = require('@/lib/services/notifications')
 
     await createInAppNotifications({
-      recipientIds: ['unknown-id'],
+      recipientIds: ['u1'],
       title: 'Test',
       content: 'Inhalt',
     })
 
-    expect(db.select).toHaveBeenCalledTimes(1)
-    expect(db.insert).not.toHaveBeenCalled()
+    expect(notifyUsers).toHaveBeenCalledWith(
+      ['u1'],
+      expect.objectContaining({ title: 'Test', content: 'Inhalt' })
+    )
   })
 
-  it('does not throw on insert failure (logs warning instead)', async () => {
-    mockSelectResult = [{ id: 'u1' }]
-    mockInsertChain.values.mockRejectedValueOnce(new Error('DB error'))
+  it('does not throw on notifyUsers failure (logs warning instead)', async () => {
+    const { notifyUsers } = require('@/lib/services/notifications')
+    notifyUsers.mockRejectedValueOnce(new Error('Service error'))
 
     await expect(
       createInAppNotifications({

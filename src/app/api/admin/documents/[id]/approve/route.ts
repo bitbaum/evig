@@ -8,6 +8,8 @@ import { TABLE_NAMES } from '@/config/database'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { DOCUMENT_STATUS, type DocumentStatus } from '@/config/document-status'
 import { logger } from '@/lib/logger'
+import { sendCustomEmail } from '@/lib/email'
+import { notificationEmail } from '@/lib/email/templates/notification'
 
 interface DocumentRow {
   id: string
@@ -15,6 +17,8 @@ interface DocumentRow {
   user_id: string
   status: string
   document_verification_status: string
+  user_email?: string
+  user_name?: string
 }
 
 interface RequiredDocsRow {
@@ -39,9 +43,11 @@ export const PUT = withAdmin<{ id: string }>('content', async (request, session,
 
     // Get document details and check if it exists (read-only, outside transaction)
     const documentResult = await db.execute(sql`
-      SELECT vd.*, ra.user_id, ra.document_verification_status
+      SELECT vd.*, ra.user_id, ra.document_verification_status,
+             u.email as user_email, u.name as user_name
       FROM ${sql.raw(TABLE_NAMES.VERIFICATION_DOCUMENTS)} vd
       JOIN ${sql.raw(getTableName(repairerApplications))} ra ON vd.application_id = ra.id
+      JOIN ${sql.raw(TABLE_NAMES.USERS)} u ON ra.user_id = u.id
       WHERE vd.id = ${documentId}
     `)
 
@@ -109,6 +115,23 @@ export const PUT = withAdmin<{ id: string }>('content', async (request, session,
       userId: document.user_id,
       newVerificationStatus: newStatus
     })
+
+    // Fire-and-forget email to applicant
+    if (document.user_email) {
+      sendCustomEmail(
+        document.user_email,
+        notificationEmail(
+          'Ihr Dokument wurde genehmigt',
+          `Ihr eingereichtes Dokument wurde erfolgreich überprüft und genehmigt.`,
+        ),
+      ).catch((err) =>
+        logger.error('Failed to send document approval email', {
+          error: err,
+          documentId,
+          userId: document.user_id,
+        }),
+      )
+    }
 
     return apiSuccess({
       message: 'Dokument erfolgreich genehmigt',

@@ -6,18 +6,19 @@
  */
 
 import { db } from '@/db'
-import { blogSubmissions, blogPosts, notifications } from '@/db/schema'
+import { blogSubmissions, blogPosts } from '@/db/schema'
 import { eq, sql, getTableName } from 'drizzle-orm'
 import { logger } from '@/lib/logger'
 import { sendEmail } from '@/lib/email'
 import { APPROVAL_STATUS } from '@/config/approval-status'
 import { NOTIFICATION_TYPES } from '@/config/notifications'
 import { createEditSnapshot, appendEditHistory, type EditHistoryEntry } from '@/lib/admin/edit-utils'
+import { createNotification } from '@/lib/services/notifications'
 
 /**
- * Create an in-app notification for a submitter when their blog submission
- * status changes. Fire-and-forget: never throws — a failed notification must
- * not block the admin action.
+ * Create an in-app notification (+ email if user opted in) for a submitter
+ * when their blog submission status changes.
+ * Fire-and-forget: never throws — a failed notification must not block the admin action.
  */
 async function notifySubmitterOfStatusChange(
   submission: Submission,
@@ -27,13 +28,11 @@ async function notifySubmitterOfStatusChange(
 ): Promise<void> {
   if (!submission.userId) return
   try {
-    await db.insert(notifications).values({
-      userId: submission.userId,
+    await createNotification(submission.userId, {
       type: NOTIFICATION_TYPES.BLOG_SUBMISSION_STATUS,
       title,
       content,
-      relatedId: submission.id,
-      sentInApp: true,
+      related_id: submission.id,
     })
   } catch (error) {
     logger.warn('Failed to create blog submission in-app notification', {

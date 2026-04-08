@@ -1,8 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { db } from '@/db'
-import { eq, and, sql } from 'drizzle-orm'
+import { eq, sql } from 'drizzle-orm'
 import { itHilfeRequests, itHilfeOffers, users } from '@/db/schema'
-import { reviews } from '@/db/schema/reviews'
 import { withAuth, type ValidSession } from '@/lib/api/middleware'
 import {
   apiError,
@@ -13,14 +12,13 @@ import {
 } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { REVIEW_TARGET_TYPES } from '@/config/database'
-import { REVIEW_STATUS } from '@/config/review-status'
 import { logger } from '@/lib/logger'
 import { REQUEST_STATUS } from '@/config/it-hilfe'
 import { sendCustomEmail } from '@/lib/email'
 import { itHilfeReviewReceived } from '@/lib/email/templates/it-hilfe'
 import { sendItHilfeNotification } from '@/lib/it-hilfe/notifications'
-import { updateHelperAverageRating } from '@/lib/reviews/review-service'
 import { APP_URL } from '@/config/urls'
+import { createReview, findDuplicateReview } from '@/lib/reviews/create-review'
 
 const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
 
@@ -115,58 +113,33 @@ export const POST = withAuth<{ id: string }>(async (
     if (!offer) return apiBadRequest('Helfer nicht gefunden')
 
     // Guard against duplicate reviews at the DB layer as well
-    const existing = await db
-      .select({ id: reviews.id })
-      .from(reviews)
-      .where(
-        and(
-          eq(reviews.reviewerId, session.user.id),
-          eq(reviews.targetType, REVIEW_TARGET_TYPES.IT_HILFE),
-          eq(reviews.targetId, id),
-        ),
-      )
-
-    if (existing.length > 0) {
+    const existingId = await findDuplicateReview(session.user.id, REVIEW_TARGET_TYPES.IT_HILFE, id)
+    if (existingId) {
       return apiBadRequest('Diese Anfrage wurde bereits bewertet')
     }
 
-    // Create review + stamp reviewed_at atomically. The recommendation flag
-    // is encoded into the review content so existing review surfaces render
-    // it without requiring a schema change.
+    // The recommendation flag is encoded into the review content so existing
+    // review surfaces render it without requiring a schema change.
     const recommendationLine = recommended
       ? '\n\n[Empfehlung: Ja, diesen Helfer gerne weiter]'
       : '\n\n[Empfehlung: Nein]'
     const content = (reviewText || 'Hilfe erfolgreich abgeschlossen.') + recommendationLine
 
-    const reviewId = await db.transaction(async (tx) => {
-      const [created] = await tx
-        .insert(reviews)
-        .values({
-          reviewerId: session.user.id,
-          targetType: REVIEW_TARGET_TYPES.IT_HILFE,
-          targetId: id,
-          overallRating: rating,
-          content,
-          isVerifiedPurchase: true,
-          status: REVIEW_STATUS.PUBLISHED,
-        })
-        .returning({ id: reviews.id })
-
-      await tx
-        .update(itHilfeRequests)
-        .set({ reviewedAt: sql`NOW()` })
-        .where(eq(itHilfeRequests.id, id))
-
-      return created.id
+    // Create review via shared service (handles insert + rating update)
+    const { reviewId } = await createReview({
+      reviewerId: session.user.id,
+      targetType: REVIEW_TARGET_TYPES.IT_HILFE,
+      targetId: id,
+      overallRating: rating,
+      content,
+      isVerifiedPurchase: true,
     })
 
-    // Update helper rolling average (best-effort)
-    updateHelperAverageRating(id).catch((err) =>
-      logger.error('Failed to update helper average rating', {
-        error: err,
-        requestId: id,
-      }),
-    )
+    // Stamp reviewed_at on the request
+    await db
+      .update(itHilfeRequests)
+      .set({ reviewedAt: sql`NOW()` })
+      .where(eq(itHilfeRequests.id, id))
 
     logger.info('IT-Hilfe review submitted', {
       requestId: id,

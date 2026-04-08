@@ -9,8 +9,8 @@ import { NextRequest } from 'next/server';
 import { withAuth, ValidSession } from '@/lib/api/middleware';
 import { apiSuccess, apiError, apiNotFound, apiBadRequest } from '@/lib/api/helpers';
 import { db } from '@/db';
-import { listings, users, conversations, messages } from '@/db/schema';
-import { eq, and, sql } from 'drizzle-orm';
+import { listings, users } from '@/db/schema';
+import { eq } from 'drizzle-orm';
 import { CONVERSATION_TYPES } from '@/config/database';
 import { LISTING_STATUS } from '@/config/marketplace';
 import { logger } from '@/lib/logger';
@@ -19,6 +19,7 @@ import { sendCustomEmail } from '@/lib/email';
 import { newMarketplaceMessage } from '@/lib/email/templates/marketplace';
 import { rateLimiters } from '@/lib/security/rate-limit';
 import { APP_URL } from '@/config/urls';
+import { sendMessageInConversation } from '@/lib/messaging/send-message';
 
 type RouteContext = { params?: { id: string } };
 
@@ -64,75 +65,14 @@ export const POST = withAuth<{ id: string }>(async (
       return apiBadRequest('Sie können sich nicht selbst kontaktieren');
     }
 
-    // Consistent participant ordering (lower UUID first)
-    const participant_1 = session.user.id < listing.sellerId ? session.user.id : listing.sellerId;
-    const participant_2 = session.user.id < listing.sellerId ? listing.sellerId : session.user.id;
-
-    // Transaction: find-or-create conversation + send message + update metadata
-    const { conversationId, newMessage } = await db.transaction(async (tx) => {
-      // Find or create marketplace conversation for this listing
-      const [existingConv] = await tx
-        .select({ id: conversations.id })
-        .from(conversations)
-        .where(and(
-          eq(conversations.participant1, participant_1),
-          eq(conversations.participant2, participant_2),
-          eq(conversations.type, CONVERSATION_TYPES.MARKETPLACE),
-          eq(conversations.contextId, id)
-        ));
-
-      let convId: string;
-
-      if (existingConv) {
-        convId = existingConv.id;
-      } else {
-        const [newConv] = await tx
-          .insert(conversations)
-          .values({
-            participant1: participant_1,
-            participant2: participant_2,
-            type: CONVERSATION_TYPES.MARKETPLACE,
-            contextId: id,
-            title: listing.title,
-            lastMessagePreview: message.substring(0, 100),
-          })
-          .returning({ id: conversations.id });
-        convId = newConv.id;
-      }
-
-      // Send the message
-      const [msg] = await tx
-        .insert(messages)
-        .values({
-          conversationId: convId,
-          senderId: session.user.id,
-          recipientId: listing.sellerId,
-          content: message,
-        })
-        .returning({ id: messages.id, createdAt: messages.createdAt });
-
-      // Update conversation metadata
-      const unreadField = session.user.id === participant_1 ? 'unread_count_2' : 'unread_count_1';
-      await tx
-        .update(conversations)
-        .set({
-          lastMessageAt: sql`CURRENT_TIMESTAMP`,
-          lastMessagePreview: message.substring(0, 100),
-          ...(unreadField === 'unread_count_2'
-            ? { unreadCount2: sql`${conversations.unreadCount2} + 1` }
-            : { unreadCount1: sql`${conversations.unreadCount1} + 1` }),
-          updatedAt: sql`CURRENT_TIMESTAMP`,
-        })
-        .where(eq(conversations.id, convId));
-
-      return { conversationId: convId, newMessage: msg };
-    });
-
-    logger.info('Marketplace message sent', {
-      conversationId,
-      listingId: id,
+    // Send message via shared service (handles transaction, metadata, participant ordering)
+    const { conversationId, messageId } = await sendMessageInConversation({
       senderId: session.user.id,
-      sellerId: listing.sellerId,
+      recipientId: listing.sellerId,
+      content: message,
+      type: CONVERSATION_TYPES.MARKETPLACE,
+      contextId: id,
+      title: listing.title,
     });
 
     // Fire-and-forget: email notification to seller
@@ -151,7 +91,7 @@ export const POST = withAuth<{ id: string }>(async (
 
     return apiSuccess({
       conversation_id: conversationId,
-      message_id: newMessage.id,
+      message_id: messageId,
     });
   } catch (error) {
     return apiError(error, 'Fehler beim Senden der Nachricht');

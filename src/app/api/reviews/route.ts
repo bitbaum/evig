@@ -6,7 +6,7 @@ import { reviews, reviewResponses, reviewVotes, reviewAttachments } from '@/db/s
 import { users } from '@/db/schema/auth'
 import { repairerProfiles } from '@/db/schema/services'
 import { listings } from '@/db/schema/marketplace'
-import { eq, and, sql, asc, desc, type SQL } from 'drizzle-orm'
+import { eq, and, sql, asc, desc } from 'drizzle-orm'
 import { apiError, apiSuccess, apiUnauthorized, apiBadRequest, apiNotFound, apiForbidden } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { REVIEW_TARGET_TYPES } from '@/config/database'
@@ -15,9 +15,9 @@ import { logger } from '@/lib/logger'
 import { validateBody, validateQuery, CreateReviewSchema, GetReviewsQuerySchema } from '@/lib/schemas'
 import {
   validateReviewTarget,
-  updateHelperAverageRating,
   notifyRepairerOfReview,
 } from '@/lib/reviews/review-service'
+import { createReview, findDuplicateReview } from '@/lib/reviews/create-review'
 import { rateLimiters } from '@/lib/security/rate-limit'
 
 export async function GET(request: NextRequest) {
@@ -235,21 +235,8 @@ export const POST = withAuth(async (request: NextRequest, session: ValidSession)
     } = validation.data
 
     // Duplicate check
-    const existingReview = await db
-      .select({ id: reviews.id })
-      .from(reviews)
-      .where(
-        and(
-          eq(reviews.reviewerId, session.user.id),
-          eq(reviews.targetType, targetType),
-          eq(reviews.targetId, targetId),
-          bookingId
-            ? eq(reviews.bookingId, bookingId)
-            : sql`(${reviews.bookingId} IS NULL)`
-        )
-      )
-
-    if (existingReview.length > 0) {
+    const existingId = await findDuplicateReview(session.user.id, targetType, targetId, bookingId)
+    if (existingId) {
       return apiBadRequest('Sie haben bereits eine Bewertung für dieses Ziel abgegeben')
     }
 
@@ -258,36 +245,24 @@ export const POST = withAuth(async (request: NextRequest, session: ValidSession)
       return apiNotFound('Das Bewertungsziel wurde nicht gefunden')
     }
 
-    const verifiedPurchase = !!bookingId
+    // Insert review + update target rating
+    const { reviewId } = await createReview({
+      reviewerId: session.user.id,
+      targetType,
+      targetId,
+      bookingId: bookingId || null,
+      overallRating,
+      communicationRating: communicationRating || null,
+      professionalismRating: professionalismRating || null,
+      qualityRating: qualityRating || null,
+      timelinessRating: timelinessRating || null,
+      valueRating: valueRating || null,
+      title: title || null,
+      content,
+      isVerifiedPurchase: !!bookingId,
+    })
 
-    // Insert review
-    const [newReview] = await db
-      .insert(reviews)
-      .values({
-        reviewerId: session.user.id,
-        targetType,
-        targetId,
-        bookingId: bookingId || null,
-        overallRating,
-        communicationRating: communicationRating || null,
-        professionalismRating: professionalismRating || null,
-        qualityRating: qualityRating || null,
-        timelinessRating: timelinessRating || null,
-        valueRating: valueRating || null,
-        title: title || null,
-        content,
-        isVerifiedPurchase: verifiedPurchase,
-        status: REVIEW_STATUS.PUBLISHED,
-      })
-      .returning({ id: reviews.id })
-
-    const reviewId = newReview.id
-
-    // Post-creation side-effects
-    if (targetType === REVIEW_TARGET_TYPES.IT_HILFE) {
-      await updateHelperAverageRating(targetId)
-    }
-
+    // Repairer-specific notification
     if (targetType === REVIEW_TARGET_TYPES.REPAIRER) {
       await notifyRepairerOfReview(
         targetId,

@@ -15,9 +15,9 @@ import { apiBadRequest, apiNotFound } from '@/lib/api/helpers';
 import { db } from '@/db';
 import { users } from '@/db/schema/auth';
 import { tasks } from '@/db/schema/misc';
-import { notifications } from '@/db/schema/messaging';
-import { eq, inArray } from 'drizzle-orm';
+import { eq } from 'drizzle-orm';
 import { logger } from '@/lib/logger';
+import { notifyUsers } from '@/lib/services/notifications';
 
 /**
  * Resolve the database user ID from the Auth.js session email.
@@ -79,7 +79,8 @@ interface InAppNotificationInput {
 
 /**
  * Create in-app notifications for one or more users.
- * Non-critical side effect: failures are logged and should not break the caller flow.
+ * Now delegates to the shared notification service which also handles
+ * email sending based on user preferences.
  */
 export async function createInAppNotifications({
   recipientIds,
@@ -95,25 +96,13 @@ export async function createInAppNotifications({
   }
 
   try {
-    // Find valid user IDs from the provided list
-    const validUsers = await db
-      .select({ id: users.id })
-      .from(users)
-      .where(inArray(users.id, uniqueRecipientIds))
-
-    if (validUsers.length === 0) return
-
-    await db.insert(notifications).values(
-      validUsers.map((u) => ({
-        userId: u.id,
-        type: 'system' as const,
-        title,
-        content,
-        relatedType: relatedType || null,
-        relatedId: relatedId || null,
-        sentInApp: true,
-      }))
-    )
+    await notifyUsers(uniqueRecipientIds, {
+      type: 'system',
+      title,
+      content,
+      related_type: relatedType,
+      related_id: relatedId,
+    })
   } catch (error) {
     logger.warn('Failed to create in-app notifications', {
       error,

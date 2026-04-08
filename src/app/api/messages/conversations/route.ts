@@ -1,12 +1,13 @@
 import { NextRequest } from 'next/server'
 import { withAuth, ValidSession } from '@/lib/api/middleware'
 import { db } from '@/db'
-import { conversations, messages, users } from '@/db/schema'
+import { conversations, users } from '@/db/schema'
 import { eq, and, or, sql, desc } from 'drizzle-orm'
 import { apiError, apiSuccess, apiBadRequest, parsePagination } from '@/lib/api/helpers'
 import { TABLE_NAMES } from '@/config/database'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { validateBody, CreateConversationSchema } from '@/lib/schemas'
+import { sendMessageInConversation } from '@/lib/messaging/send-message'
 
 export const GET = withAuth(async (request: NextRequest, session: ValidSession) => {
   try {
@@ -92,7 +93,24 @@ export const POST = withAuth(async (request: NextRequest, session: ValidSession)
     // Ensure consistent ordering of participants
     const [participant1, participant2] = [session.user.id, participantId].sort()
 
-    // Check if conversation already exists
+    // If there's an initial message, use the shared service (transaction + metadata)
+    if (initialMessage) {
+      const result = await sendMessageInConversation({
+        senderId: session.user.id,
+        recipientId: participantId,
+        content: initialMessage,
+        type,
+        contextId: contextId || null,
+        title: `Unterhaltung mit ${participantId}`,
+      })
+
+      return apiSuccess({
+        conversation: { id: result.conversationId },
+        message_id: result.messageId,
+      })
+    }
+
+    // No initial message — just find or create conversation
     const conditions = [
       eq(conversations.participant1, participant1),
       eq(conversations.participant2, participant2),
@@ -114,7 +132,6 @@ export const POST = withAuth(async (request: NextRequest, session: ValidSession)
       })
     }
 
-    // Create new conversation
     const [newConv] = await db
       .insert(conversations)
       .values({
@@ -123,21 +140,9 @@ export const POST = withAuth(async (request: NextRequest, session: ValidSession)
         type,
         contextId: contextId || undefined,
         title: `Unterhaltung mit ${participantId}`,
-        lastMessagePreview: initialMessage ? initialMessage.substring(0, 100) : 'Neue Unterhaltung',
+        lastMessagePreview: 'Neue Unterhaltung',
       })
       .returning({ id: conversations.id })
-
-    // Create initial message if provided
-    if (initialMessage) {
-      await db
-        .insert(messages)
-        .values({
-          conversationId: newConv.id,
-          senderId: session.user.id,
-          recipientId: participantId,
-          content: initialMessage,
-        })
-    }
 
     return apiSuccess({
       conversation: { id: newConv.id }

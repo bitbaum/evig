@@ -11,7 +11,7 @@ import { z } from 'zod'
 import { withAuth, ValidSession } from '@/lib/api/middleware'
 import { apiSuccess, apiError, apiBadRequest, apiForbidden, apiNotFound } from '@/lib/api/helpers'
 import { db } from '@/db'
-import { listings, marketplaceOrders, reviews, sellerProfiles, users } from '@/db/schema'
+import { listings, marketplaceOrders, reviews, users } from '@/db/schema'
 import { eq, and, sql } from 'drizzle-orm'
 import { ORDER_STATUS } from '@/config/marketplace'
 import { logger } from '@/lib/logger'
@@ -21,6 +21,7 @@ import { orderReviewReceived } from '@/lib/email/templates/marketplace'
 import { createNotification } from '@/lib/services/notifications'
 import { NOTIFICATION_TYPES } from '@/config/notifications'
 import { APP_URL } from '@/config/urls'
+import { createReview } from '@/lib/reviews/create-review'
 
 const ReviewSchema = z.object({
   rating: z.number().int().min(1).max(5),
@@ -101,39 +102,16 @@ export const POST = withAuth<{ id: string }>(async (
         ? 'Empfehlung ohne weiteren Kommentar.'
         : 'Keine Empfehlung ohne weiteren Kommentar.')
 
-    // Insert review
-    const [inserted] = await db
-      .insert(reviews)
-      .values({
-        reviewerId: session.user.id,
-        targetType: 'listing',
-        targetId: order.listingId,
-        bookingId: orderId,
-        overallRating: rating,
-        content: reviewContent,
-        isVerifiedPurchase: true,
-        status: 'published',
-      })
-      .returning({ id: reviews.id })
-
-    // Recalculate seller average from listing reviews on their listings
-    const statsResult = await db.execute(
-      sql`SELECT AVG(r.overall_rating)::numeric(3,2) AS avg, COUNT(*)::int AS cnt
-          FROM reviews r
-          INNER JOIN listings l ON l.id = r.target_id
-          WHERE r.target_type = 'listing'
-            AND r.status = 'published'
-            AND l.seller_id = ${order.sellerId}`,
-    )
-    const stats = statsResult.rows[0] as { avg: string | null; cnt: number } | undefined
-
-    await db
-      .update(sellerProfiles)
-      .set({
-        averageRating: stats?.avg ?? '0.0',
-        totalReviews: stats?.cnt ?? 0,
-      })
-      .where(eq(sellerProfiles.userId, order.sellerId))
+    // Insert review + update seller rating via shared service
+    const { reviewId } = await createReview({
+      reviewerId: session.user.id,
+      targetType: 'listing',
+      targetId: order.listingId,
+      bookingId: orderId,
+      overallRating: rating,
+      content: reviewContent,
+      isVerifiedPurchase: true,
+    })
 
     // Mark order as reviewed
     await db
@@ -146,7 +124,7 @@ export const POST = withAuth<{ id: string }>(async (
 
     logger.info('Marketplace order review created', {
       orderId,
-      reviewId: inserted?.id,
+      reviewId,
       rating,
       buyerId: session.user.id,
       sellerId: order.sellerId,
@@ -180,7 +158,7 @@ export const POST = withAuth<{ id: string }>(async (
     }
 
     return apiSuccess({
-      reviewId: inserted?.id,
+      reviewId,
       rating,
       orderId,
     })
