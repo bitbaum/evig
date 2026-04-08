@@ -10,9 +10,6 @@ import {
   X,
   ChevronLeft,
   ChevronRight,
-  Store,
-  ShoppingBag,
-  DollarSign,
 } from 'lucide-react'
 import {
   MARKETPLACE_CATEGORY_VALUES,
@@ -32,7 +29,6 @@ import { ListingCard, ListingCardGrid } from '@/components/marketplace/ListingCa
 import { EmptyState } from '@/components/common/EmptyState'
 import { LoadingSkeleton } from '@/components/common/LoadingState'
 import { ErrorAlert } from '@/components/common/ErrorAlert'
-import { PageHero } from '@/components/layout/PageHero'
 import { useMarketplaceListings } from '@/hooks/useMarketplaceListings'
 import { useState } from 'react'
 
@@ -59,49 +55,45 @@ export default function MarketplacePage() {
 
   return (
     <div className="bg-white min-h-screen">
-      <PageHero
-        theme="marketplace"
-        icon={Store}
-        title="Marketplace"
-        subtitle="Kaufe und verkaufe gebrauchte IT-Geräte in der Community. Fair, nachhaltig und lokal."
-      >
-        {/* Search Bar */}
-        <form onSubmit={handleSearch} className="max-w-2xl mx-auto">
-          <div className="relative">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
-            <input
-              type="text"
-              value={filters.searchInput}
-              onChange={(e) => filters.setSearchInput(e.target.value)}
-              placeholder="Laptop, Monitor, Smartphone..."
-              aria-label="Im Marketplace suchen"
-              className="w-full pl-12 pr-24 py-3.5 rounded-lg border border-gray-300 text-gray-900 placeholder-gray-500 focus:ring-2 focus:ring-orange-500 focus:border-transparent shadow-sm"
-            />
-            <button
-              type="submit"
-              className="absolute right-2 top-1/2 -translate-y-1/2 bg-orange-600 hover:bg-orange-500 text-white px-5 py-2 rounded-md transition-colors text-sm font-semibold shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-600"
+      {/* Compact hero — products visible without scrolling */}
+      <div className="bg-gradient-to-br from-orange-50 to-amber-50 py-6 sm:py-8">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
+            <div>
+              <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Marketplace</h1>
+              <p className="text-sm text-gray-600 mt-1">
+                {pagination.total} {pagination.total === 1 ? 'Inserat' : 'Inserate'} verfügbar
+              </p>
+            </div>
+            <Link
+              href={session?.user ? '/marketplace/sell' : '/auth/login?callbackUrl=/marketplace/sell'}
+              className="inline-flex items-center gap-2 px-5 py-2.5 bg-orange-600 hover:bg-orange-500 text-white rounded-lg text-base font-semibold transition-colors shadow-sm"
             >
-              Suchen
-            </button>
+              <Plus className="w-4 h-4" />
+              {MARKETPLACE_CONTENT.actions.sell}
+            </Link>
           </div>
-        </form>
-
-        {/* Quick Stats */}
-        <div className="mt-4 flex flex-wrap items-center justify-center gap-6 text-sm text-gray-600">
-          <div className="flex items-center gap-2">
-            <ShoppingBag className="h-5 w-5 text-orange-600" />
-            <span><strong>{pagination.total}</strong> {pagination.total === 1 ? 'Inserat' : 'Inserate'}</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <DollarSign className="h-5 w-5 text-orange-600" />
-            <span>Faire Preise</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <Store className="h-5 w-5 text-orange-600" />
-            <span>Community-Verkäufer</span>
-          </div>
+          <form onSubmit={handleSearch} className="max-w-2xl">
+            <div className="relative">
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
+              <input
+                type="text"
+                value={filters.searchInput}
+                onChange={(e) => filters.setSearchInput(e.target.value)}
+                placeholder="Laptop, Monitor, Smartphone..."
+                aria-label="Im Marketplace suchen"
+                className="w-full pl-12 pr-24 py-3 rounded-lg border border-gray-300 text-gray-900 placeholder-gray-500 focus:ring-2 focus:ring-orange-500 focus:border-transparent shadow-sm"
+              />
+              <button
+                type="submit"
+                className="absolute right-2 top-1/2 -translate-y-1/2 bg-orange-600 hover:bg-orange-500 text-white px-5 py-2 rounded-md transition-colors text-sm font-semibold shadow-sm"
+              >
+                Suchen
+              </button>
+            </div>
+          </form>
         </div>
-      </PageHero>
+      </div>
 
       {/* Main Content */}
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
@@ -114,7 +106,7 @@ export default function MarketplacePage() {
             }`}
             aria-pressed={!filters.sellerType}
           >
-            Alle
+            {MARKETPLACE_CONTENT.sellerTypes.all}
           </button>
           <button
             onClick={() => { filters.setSellerType('revampit'); resetOffset(); }}
@@ -123,7 +115,7 @@ export default function MarketplacePage() {
             }`}
             aria-pressed={filters.sellerType === 'revampit'}
           >
-            RevampIT Geräte
+            {MARKETPLACE_CONTENT.sellerTypes.revampit}
           </button>
           <button
             onClick={() => { filters.setSellerType('community'); resetOffset(); }}
@@ -132,7 +124,7 @@ export default function MarketplacePage() {
             }`}
             aria-pressed={filters.sellerType === 'community'}
           >
-            Community Inserate
+            {MARKETPLACE_CONTENT.sellerTypes.community}
           </button>
         </div>
 
@@ -200,17 +192,6 @@ export default function MarketplacePage() {
               </button>
             )}
 
-            <div className="ml-auto">
-              {session?.user && (
-                <Link
-                  href="/marketplace/sell"
-                  className="inline-flex items-center gap-2 px-4 py-2 bg-orange-600 hover:bg-orange-500 text-white rounded-lg text-sm font-semibold transition-colors shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-600"
-                >
-                  <Plus className="w-4 h-4" />
-                  Verkaufen
-                </Link>
-              )}
-            </div>
           </div>
 
           {/* Expanded Filters */}

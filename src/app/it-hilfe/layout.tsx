@@ -1,12 +1,12 @@
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'IT-Hilfe - Kostenlose Tech-Reparaturhilfe | RevampIT',
+  title: 'IT-Hilfe - Community-basierte Tech-Reparatur | RevampIT',
   description:
-    'Finde kostenlose Hilfe für deine IT-Probleme. Unsere Community aus freiwilligen Technikerinnen und Technikern hilft bei Laptop-, Smartphone- und PC-Reparaturen.',
+    'Finde Hilfe für deine IT-Probleme. Unsere Community aus Technikerinnen und Technikern hilft bei Laptop-, Smartphone- und PC-Reparaturen — kostenlos oder gegen faire Bezahlung.',
   keywords: [
     'IT Hilfe',
-    'kostenlose Reparatur',
+    'Computer Reparatur',
     'Computer Hilfe',
     'Laptop Reparatur',
     'Smartphone Reparatur',
@@ -14,9 +14,9 @@ export const metadata: Metadata = {
     'Zürich',
   ],
   openGraph: {
-    title: 'IT-Hilfe - Kostenlose Tech-Reparaturhilfe | RevampIT',
+    title: 'IT-Hilfe - Community-basierte Tech-Reparatur | RevampIT',
     description:
-      'Kostenlose IT-Hilfe von der Community. Stelle eine Reparaturanfrage und erhalte Hilfe von erfahrenen Technikern.',
+      'IT-Hilfe von der Community. Stelle eine Reparaturanfrage und erhalte Hilfe von erfahrenen Technikern.',
     type: 'website',
   },
 }

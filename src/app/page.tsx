@@ -11,11 +11,11 @@ import { ORG, CONTACT, LOCATIONS, OPENING_HOURS } from '@/config/org'
 
 export const metadata: Metadata = {
   title: `${ORG.name} – Alte Hardware. Neues Leben. | Computer-Reparatur & Linux in der Schweiz`,
-  description: 'Gebrauchte IT kaufen & verkaufen. Computer-Reparatur durch Freiwillige. Workshops zu Linux, Hardware und Programmierung. RevampIT — die Schweizer Community für nachhaltige Technologie.',
+  description: 'Gebrauchte IT kaufen & verkaufen. Computer-Reparatur durch die Community. Workshops zu Linux, Hardware und Programmierung. RevampIT — Schweizer Verein für nachhaltige Technologie.',
   keywords: ['Computer Reparatur Schweiz', 'Linux Installation', 'Datenrettung', 'Vintage Computer', 'Open Source', 'nachhaltige IT', 'Zürich', 'Basel', 'Luzern', 'refurbished Computer'],
   openGraph: {
     title: `${ORG.name} – Alte Hardware. Neues Leben.`,
-    description: 'Gebrauchte IT kaufen & verkaufen. Computer-Reparatur durch Freiwillige. Workshops zu Linux, Hardware und Programmierung.',
+    description: 'Gebrauchte IT kaufen & verkaufen. Computer-Reparatur durch die Community. Workshops zu Linux, Hardware und Programmierung.',
     type: 'website',
     locale: 'de_CH',
     url: ORG.website,
@@ -24,7 +24,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: `${ORG.name} – Alte Hardware. Neues Leben.`,
-    description: 'Gebrauchte IT kaufen & verkaufen. Computer-Reparatur durch Freiwillige. Workshops zu Linux, Hardware und Programmierung.',
+    description: 'Gebrauchte IT kaufen & verkaufen. Computer-Reparatur durch die Community. Workshops zu Linux, Hardware und Programmierung.',
   },
 }
 
@@ -142,7 +142,7 @@ export default function Home() {
                 iconBg: 'bg-emerald-100',
                 iconColor: 'text-emerald-600',
                 title: 'Computer kaputt?',
-                subtitle: 'Freiwillige Techniker in deiner Nähe helfen — oder werde selbst Helfer.',
+                subtitle: 'Techniker in deiner Nähe helfen — oder biete selbst Reparaturen an.',
                 primaryLabel: 'Hilfe finden',
                 primaryHref: '/it-hilfe',
                 primaryColor: 'bg-emerald-600 hover:bg-emerald-500 focus-visible:outline-emerald-600',

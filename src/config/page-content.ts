@@ -8,7 +8,12 @@
 export const MARKETPLACE_CONTENT = {
   page: {
     title: 'Marketplace',
-    description: 'Kaufen und verkaufen Sie gebrauchte IT-Geräte in der Community',
+    description: 'Kaufe und verkaufe gebrauchte IT-Geräte in der Community — fair, nachhaltig und lokal.',
+  },
+  sellerTypes: {
+    all: 'Alle',
+    revampit: 'RevampIT Geräte',
+    community: 'Community Inserate',
   },
   filters: {
     allCategories: 'Alle',
@@ -20,12 +25,12 @@ export const MARKETPLACE_CONTENT = {
   emptyStates: {
     noListings: {
       title: 'Keine Inserate gefunden',
-      messageEmpty: 'Es sind noch keine Inserate verfügbar. Seien Sie der Erste!',
-      messageFiltered: 'Versuchen Sie andere Filteroptionen oder entfernen Sie einige Filter.',
+      messageEmpty: 'Noch keine Inserate vorhanden. Erstelle das erste!',
+      messageFiltered: 'Versuche andere Filter oder setze sie zurück.',
     },
     noSimilar: {
       title: 'Keine ähnlichen Inserate',
-      message: 'Erkunden Sie andere Kategorien im Marketplace.',
+      message: 'Entdecke andere Kategorien im Marketplace.',
     },
   },
   actions: {
@@ -47,7 +52,7 @@ export const MARKETPLACE_CONTENT = {
 export const IT_HILFE_CONTENT = {
   page: {
     title: 'IT-Hilfe',
-    description: 'Finden Sie freiwillige Techniker in Ihrer Nähe',
+    description: 'Finde Techniker in deiner Nähe — Community-basierte IT-Unterstützung',
   },
   filters: {
     allCategories: 'Alle',
@@ -58,8 +63,8 @@ export const IT_HILFE_CONTENT = {
   emptyStates: {
     noRequests: {
       title: 'Keine Anfragen gefunden',
-      messageEmpty: 'Es sind noch keine IT-Hilfe Anfragen verfügbar.',
-      messageFiltered: 'Versuchen Sie andere Filter oder setzen Sie sie zurück.',
+      messageEmpty: 'Noch keine IT-Hilfe-Anfragen vorhanden.',
+      messageFiltered: 'Versuche andere Filter oder setze sie zurück.',
     },
     noHelpers: {
       title: 'Keine Techniker gefunden',
