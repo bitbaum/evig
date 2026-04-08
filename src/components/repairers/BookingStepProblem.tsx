@@ -29,7 +29,7 @@ export function BookingStepProblem({
 }: BookingStepProblemProps) {
   return (
     <div className="bg-white rounded-xl shadow-sm p-6">
-      <h2 className="text-lg font-semibold text-gray-900 mb-6">Beschreiben Sie Ihr Problem</h2>
+      <h2 className="text-lg font-semibold text-gray-900 mb-6">Beschreibe Ihr Problem</h2>
 
       {/* Service Category */}
       <div className="mb-6">
@@ -76,7 +76,7 @@ export function BookingStepProblem({
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           rows={4}
-          placeholder="Beschreiben Sie das Problem so detailliert wie möglich..."
+          placeholder="Beschreibe das Problem so detailliert wie möglich..."
           className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
         />
         <p className="text-sm text-gray-500 mt-1">

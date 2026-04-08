@@ -58,7 +58,7 @@ export function LoginForm() {
       case 'Configuration':
         return 'Ungültige E-Mail-Adresse oder Passwort'
       case 'AccessDenied':
-        return 'Zugriff verweigert. Bitte kontaktieren Sie den Administrator.'
+        return 'Zugriff verweigert. Bitte kontaktiere den Administrator.'
       case 'OAuthAccountNotLinked':
         return 'Diese E-Mail ist bereits mit einem anderen Konto verknüpft'
       case 'invalid_token':
@@ -70,7 +70,7 @@ export function LoginForm() {
       default:
         // Show database/connection errors in a user-friendly way
         if (error.includes('Datenbankverbindung') || error.includes('connect') || error.includes('timeout')) {
-          return 'Verbindungsproblem. Bitte versuchen Sie es in einer Minute erneut.'
+          return 'Verbindungsproblem. Bitte versuche es in einer Minute erneut.'
         }
         return error
     }
@@ -85,7 +85,7 @@ export function LoginForm() {
             Willkommen zurück
           </h1>
           <p className={cn('text-sm sm:text-base', getTextColor('white', 'muted'), 'dark:text-neutral-400')}>
-            Melden Sie sich in Ihrem Konto an
+            Melde dich in deinem Konto an
           </p>
         </div>
 
@@ -94,7 +94,7 @@ export function LoginForm() {
           <div className={cn('mb-6 p-4 rounded-lg flex items-start gap-3 border-2', getStatusColors('success').bg, getStatusColors('success').border)}>
             <CheckCircle2 className={cn('w-5 h-5 flex-shrink-0 mt-0.5', getStatusColors('success').icon)} />
             <p className={cn('text-sm', getStatusColors('success').text)}>
-              E-Mail-Adresse erfolgreich bestätigt! Sie können sich jetzt anmelden.
+              E-Mail-Adresse erfolgreich bestätigt! du kannst sich jetzt anmelden.
             </p>
           </div>
         )}
@@ -103,7 +103,7 @@ export function LoginForm() {
           <div className={cn('mb-6 p-4 rounded-lg flex items-start gap-3 border-2', getStatusColors('success').bg, getStatusColors('success').border)}>
             <CheckCircle2 className={cn('w-5 h-5 flex-shrink-0 mt-0.5', getStatusColors('success').icon)} />
             <p className={cn('text-sm', getStatusColors('success').text)}>
-              Ihr Passwort wurde erfolgreich geändert! Sie können sich jetzt mit Ihrem neuen Passwort anmelden.
+              dein Passwort wurde erfolgreich geändert! du kannst sich jetzt mit deinem neuen Passwort anmelden.
             </p>
           </div>
         )}
@@ -253,13 +253,13 @@ export function LoginForm() {
       {/* Benefits */}
       <div className="mt-8 text-center">
         <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">
-          Mit einem Konto können Sie:
+          Mit einem Konto kannst du:
         </p>
         <ul className="text-sm text-gray-600 dark:text-gray-500 space-y-1">
           <li>✓ Sich für Workshops anmelden</li>
           <li>✓ Termine für Dienstleistungen buchen</li>
-          <li>✓ Ihre Bestellungen im Shop verfolgen</li>
-          <li>✓ Ihre Spenden und Aktivitäten verwalten</li>
+          <li>✓ deine Bestellungen im Shop verfolgen</li>
+          <li>✓ deine Spenden und Aktivitäten verwalten</li>
         </ul>
       </div>
     </div>

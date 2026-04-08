@@ -111,7 +111,7 @@ export function RepairerSidebar({ repairer, availability }: RepairerSidebarProps
       <div className="bg-gradient-to-br from-blue-600 to-blue-700 rounded-xl p-6 text-white">
         <h3 className="font-semibold mb-2">Reparatur anfragen</h3>
         <p className="text-blue-100 text-sm mb-4">
-          Beschreiben Sie Ihr Problem und erhalten Sie ein unverbindliches Angebot.
+          Beschreibe dein Problem und erhältst du ein unverbindliches Angebot.
         </p>
         <Link
           href={`/repairers/${repairer.id}/book`}

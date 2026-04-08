@@ -3,7 +3,7 @@ import { Metadata } from 'next'
 export const metadata: Metadata = {
   title: 'Blog - Neuigkeiten & Wissen | RevampIT',
   description:
-    'Artikel über nachhaltige Technologie, Reparatur-Tipps, Open-Source und die Circular Economy. Bleiben Sie informiert mit dem RevampIT Blog.',
+    'Artikel über nachhaltige Technologie, Reparatur-Tipps, Open-Source und die Circular Economy. Bleib informiert mit dem RevampIT Blog.',
   keywords: [
     'Technologie Blog',
     'Reparatur Tipps',

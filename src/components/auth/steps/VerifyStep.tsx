@@ -114,7 +114,7 @@ export function VerifyStep({
           E-Mail verifiziert!
         </h2>
         <p className="text-gray-600 mb-6">
-          Ihr Konto ist jetzt vollständig aktiviert.
+          dein Konto ist jetzt vollständig aktiviert.
         </p>
       </div>
     )
@@ -127,7 +127,7 @@ export function VerifyStep({
           <Mail className="w-8 h-8 text-primary-600" />
         </div>
         <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
-          Bestätigen Sie Ihre E-Mail
+          Bestätige deine E-Mail
         </h2>
         <p className="text-gray-600 dark:text-gray-400">
           Wir haben einen 6-stelligen Code an{' '}
@@ -143,7 +143,7 @@ export function VerifyStep({
             Der Bestätigungscode konnte nicht gesendet werden.
           </p>
           <p className="text-sm text-amber-700 mt-1">
-            Bitte klicken Sie unten auf «Code erneut senden».
+            Bitte klicke unten auf «Code erneut senden».
           </p>
         </div>
       )}
@@ -239,7 +239,7 @@ export function VerifyStep({
           Später verifizieren
         </button>
         <p className="text-xs text-gray-500 text-center mt-2">
-          Sie können sich anmelden, aber einige Funktionen sind eingeschränkt
+          du kannst sich anmelden, aber einige Funktionen sind eingeschränkt
         </p>
       </div>
     </div>

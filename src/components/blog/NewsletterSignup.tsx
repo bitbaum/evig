@@ -21,7 +21,7 @@ export default function NewsletterSignup() {
 
       if (!apiError) {
         setStatus('success')
-        setMessage('Willkommen! Überprüfen Sie Ihre E-Mail.')
+        setMessage('Willkommen! Überprüfe deine E-Mail.')
         setEmail('')
       } else {
         setStatus('error')
@@ -29,7 +29,7 @@ export default function NewsletterSignup() {
       }
     } catch {
       setStatus('error')
-      setMessage('Verbindungsfehler. Bitte versuchen Sie es später erneut.')
+      setMessage('Verbindungsfehler. Bitte versuche es später erneut.')
     }
   }
 
@@ -42,11 +42,11 @@ export default function NewsletterSignup() {
             <Mail className="w-8 h-8 text-primary-600" />
           </div>
           <h3 className="text-2xl font-bold text-gray-900 mb-3">
-            Hat Ihnen dieser Artikel gefallen?
+            Hat dir dieser Artikel gefallen?
           </h3>
           <p className="text-lg text-gray-600 leading-relaxed">
-            Erhalten Sie wöchentlich qualitativ hochwertige Artikel über nachhaltige Technologie,
-            Open Source und die Zukunft des Computing – direkt in Ihren Posteingang.
+            Erhalte wöchentlich qualitativ hochwertige Artikel über nachhaltige Technologie,
+            Open Source und die Zukunft des Computing – direkt in deinen Posteingang.
           </p>
         </div>
 
@@ -85,7 +85,7 @@ export default function NewsletterSignup() {
             </div>
             <p className="text-primary-800 font-semibold mb-1">{message}</p>
             <p className="text-primary-700 text-sm">
-              Bitte bestätigen Sie Ihre E-Mail-Adresse, um den Newsletter zu aktivieren.
+              Bitte bestätige deine E-Mail-Adresse, um den Newsletter zu aktivieren.
             </p>
           </div>
         ) : (
@@ -117,7 +117,7 @@ export default function NewsletterSignup() {
             )}
 
             <p className="text-xs text-gray-500 text-center">
-              Wir respektieren Ihre Privatsphäre. Keine Spam-Mails, versprochen.
+              Wir respektieren deine Privatsphäre. Keine Spam-Mails, versprochen.
             </p>
           </form>
         )}
@@ -132,7 +132,7 @@ export default function NewsletterSignup() {
           </div>
           <p className="text-sm text-gray-600 mb-4">
             Wir glauben an qualitativ hochwertige, wahrheitsgetreue Inhalte ohne Werbung.
-            Wenn Sie unsere Arbeit schätzen, können Sie uns gerne unterstützen.
+            Wenn du unsere Arbeit schätzen, kannst du uns gerne unterstützen.
           </p>
           <a
             href="/support"

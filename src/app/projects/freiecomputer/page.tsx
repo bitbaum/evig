@@ -8,7 +8,7 @@ const freiecomputerConfig: ProjectPageConfig = {
     description: 'Das Schweizer Label für Computer mit vorinstallierter freier Software und garantiertem Support',
     ctas: [
       {
-        text: 'Unterstützen Sie unsere Mission',
+        text: 'Unterstütze unsere Mission',
         href: '/get-involved/volunteer',
         variant: 'primary'
       },
@@ -113,25 +113,25 @@ export default function FreieComputerPage() {
     <>
       <ProjectPage config={freiecomputerConfig} />
       <ProjectCallToAction
-        title="Machen Sie mit"
+        title="Mache mit"
         actions={[
           {
-            title: 'Machen Sie mit',
-            description: 'Helfen Sie mit, das Label bekannter und zugänglicher zu machen',
+            title: 'Mache mit',
+            description: 'Hilf mit, das Label bekannter und zugänglicher zu machen',
             href: '/get-involved/volunteer',
             ctaText: 'Freiwillig engagieren'
           },
           {
             title: 'Mehr erfahren',
-            description: 'Besuchen Sie unsere Website für detaillierte Informationen über das Label',
+            description: 'Besuche unsere Website für detaillierte Informationen über das Label',
             href: 'https://www.freiecomputer.ch',
-            ctaText: 'Besuchen Sie FreieComputer.ch'
+            ctaText: 'Besuche FreieComputer.ch'
           },
           {
             title: 'Kontakt',
-            description: 'Kontaktieren Sie uns, um mehr über unsere Initiative zu erfahren',
+            description: 'Kontaktiere uns, um mehr über unsere Initiative zu erfahren',
             href: '/contact',
-            ctaText: 'Kontaktieren Sie uns'
+            ctaText: 'Kontaktiere uns'
           }
         ]}
       />

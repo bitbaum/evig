@@ -56,7 +56,7 @@ export default function BuildYourComputerPage() {
         theme="services"
         icon={Computer}
         title="KI-gestützte nachhaltige Computer-Builds"
-        subtitle="Unser revolutionäres KI-System scannt unser Inventar und globale Partnernetzwerke, um Ihren perfekten Computer hauptsächlich aus gebrauchten und wiederaufbereiteten Komponenten zusammenzustellen."
+        subtitle="Unser revolutionäres KI-System scannt unser Inventar und globale Partnernetzwerke, um deinen perfekten Computer hauptsächlich aus gebrauchten und wiederaufbereiteten Komponenten zusammenzustellen."
       >
         <p className="text-lg text-gray-600 max-w-2xl mx-auto mt-4">
           <strong>100% Gebrauchtteile-Priorität • Globales Inventar-Netzwerk • Intelligentes KI-Matching</strong>
@@ -85,7 +85,7 @@ export default function BuildYourComputerPage() {
             <div className="text-center">
               <div className="w-16 h-16 bg-green-600 text-white rounded-full flex items-center justify-center text-xl font-bold mx-auto mb-4">1</div>
               <h3 className="text-xl font-bold mb-3">Anforderungsanalyse</h3>
-              <p className="text-gray-600">Teilen Sie uns Ihren Anwendungsfall, Ihre Leistungsanforderungen und Ihre Nachhaltigkeitspräferenzen mit</p>
+              <p className="text-gray-600">Teile uns deinen Anwendungsfall, deine Leistungsanforderungen und deine Nachhaltigkeitspräferenzen mit</p>
             </div>
             <div className="text-center">
               <div className="w-16 h-16 bg-green-600 text-white rounded-full flex items-center justify-center text-xl font-bold mx-auto mb-4">2</div>
@@ -110,8 +110,8 @@ export default function BuildYourComputerPage() {
       <section className="py-12 sm:py-16 md:py-20" id="build-tool">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
-            <h2 className="text-4xl font-bold text-center mb-4">Testen Sie unsere Build-Tool-Demo</h2>
-            <p className="text-center text-gray-600 mb-12">Erleben Sie, wie unser KI-System Komponenten für Ihre spezifischen Bedürfnisse empfehlen würde</p>
+            <h2 className="text-4xl font-bold text-center mb-4">Teste unsere Build-Tool-Demo</h2>
+            <p className="text-center text-gray-600 mb-12">Erleben Sie, wie unser KI-System Komponenten für deine spezifischen Bedürfnisse empfehlen würde</p>
             
             {/* Progress Bar */}
             <div className="flex items-center justify-center mb-8">
@@ -126,7 +126,7 @@ export default function BuildYourComputerPage() {
               {/* Step 1: Requirements */}
               {step === 1 && (
                 <div className="space-y-8">
-                  <h3 className="text-2xl font-bold mb-6">Wofür werden Sie Ihren Computer verwenden?</h3>
+                  <h3 className="text-2xl font-bold mb-6">Wofür wirst du deinen Computer verwenden?</h3>
                   
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {USE_CASE_OPTIONS.map((category) => (
@@ -184,7 +184,7 @@ export default function BuildYourComputerPage() {
                     <textarea 
                       value={formData.specific}
                       onChange={(e) => setFormData({...formData, specific: e.target.value})}
-                      placeholder="Haben Sie spezielle Bedürfnisse? (z.B. mehrere Monitore, VR-Gaming, spezielle Softwareanforderungen)"
+                      placeholder="Hast du spezielle Bedürfnisse? (z.B. mehrere Monitore, VR-Gaming, spezielle Softwareanforderungen)"
                       className="w-full p-3 border border-gray-300 rounded-lg h-20"
                     />
                   </div>
@@ -207,7 +207,7 @@ export default function BuildYourComputerPage() {
                   {!isAnalyzing ? (
                     <>
                       <div className="bg-green-50 p-6 rounded-lg">
-                        <h4 className="font-semibold mb-4">Zusammenfassung Ihrer Anforderungen:</h4>
+                        <h4 className="font-semibold mb-4">Zusammenfassung deiner Anforderungen:</h4>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-left">
                           <div><strong>Anwendungsfall:</strong> {USE_CASE_OPTIONS.find(c => c.id === formData.useCase)?.name}</div>
                           <div><strong>Leistung:</strong> {PERFORMANCE_OPTIONS.find(p => p.id === formData.performance)?.name}</div>
@@ -219,7 +219,7 @@ export default function BuildYourComputerPage() {
                         )}
                       </div>
 
-                      <p className="text-gray-600">Bereit, unser globales Inventar-Netzwerk zu scannen und Ihre personalisierte Build-Empfehlung zu generieren?</p>
+                      <p className="text-gray-600">Bereit, unser globales Inventar-Netzwerk zu scannen und deine personalisierte Build-Empfehlung zu generieren?</p>
                       
                       <div className="flex gap-4 justify-center">
                         <button 
@@ -256,7 +256,7 @@ export default function BuildYourComputerPage() {
               {step === 3 && buildResult && (
                 <div className="space-y-8">
                   <div className="text-center">
-                    <h3 className="text-2xl font-bold mb-2">Ihr optimierter Build</h3>
+                    <h3 className="text-2xl font-bold mb-2">dein optimierter Build</h3>
                     <div className="flex justify-center gap-6 text-sm">
                       <div className="flex items-center">
                         <Leaf className="w-4 h-4 text-green-500 mr-1" />
@@ -379,7 +379,7 @@ export default function BuildYourComputerPage() {
             <div className="bg-white p-8 rounded-xl shadow-lg">
               <Star className="w-12 h-12 text-green-600 mb-4" />
               <h3 className="text-xl font-bold mb-4">KI-gestützte Optimierung</h3>
-              <p className="text-gray-600">Intelligente Algorithmen gleichen Leistung, Nachhaltigkeit, Kosten und Verfügbarkeit ab, um Ihre perfekte Build-Kombination zu finden.</p>
+              <p className="text-gray-600">Intelligente Algorithmen gleichen Leistung, Nachhaltigkeit, Kosten und Verfügbarkeit ab, um deine perfekte Build-Kombination zu finden.</p>
             </div>
             <div className="bg-white p-8 rounded-xl shadow-lg">
               <CheckCircle2 className="w-12 h-12 text-green-600 mb-4" />
@@ -400,9 +400,9 @@ export default function BuildYourComputerPage() {
                 <span className="text-2xl font-bold text-green-800">Revamped</span>
                 <Sparkles className="w-6 h-6 text-green-600 ml-2" />
               </div>
-              <h2 className="text-3xl font-bold mb-4">Holen Sie sich Ihre Revamped-Zertifizierung</h2>
+              <h2 className="text-3xl font-bold mb-4">Hol sich deine Revamped-Zertifizierung</h2>
               <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
-                Jeder von uns gebaute Computer erhält unsere exklusive "Revamped"-Zertifizierung - Ihre Garantie für Nachhaltigkeit, Qualität und Leistung.
+                Jeder von uns gebaute Computer erhält unsere exklusive "Revamped"-Zertifizierung - deine Garantie für Nachhaltigkeit, Qualität und Leistung.
               </p>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
                 <div className="text-center">
@@ -435,14 +435,14 @@ export default function BuildYourComputerPage() {
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-4xl font-bold mb-6">Bereit, nachhaltig zu bauen?</h2>
           <p className="text-xl mb-8 max-w-2xl mx-auto text-green-100">
-            Schliessen Sie sich der Revolution im Computerbau an. Holen Sie sich einen massgeschneiderten, nachhaltigen Build, der hervorragend funktioniert und gleichzeitig unseren Planeten schont.
+            Schliess dich der Revolution im Computerbau an. Hol sich einen massgeschneiderten, nachhaltigen Build, der hervorragend funktioniert und gleichzeitig unseren Planeten schont.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
               href="/contact"
               className="inline-block bg-white text-green-800 px-8 py-4 rounded-lg font-semibold hover:bg-green-50 transition-colors duration-300 text-lg"
             >
-              Starten Sie Ihren Build
+              Starte deinen Build
             </Link>
             <Link
               href="/services"

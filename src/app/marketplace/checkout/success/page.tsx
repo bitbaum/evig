@@ -62,7 +62,7 @@ function CheckoutSuccessContent() {
           Bestellung erfolgreich!
         </h1>
         <p className="text-gray-600 dark:text-gray-400 mb-6">
-          Ihre Zahlung wurde autorisiert. Der Betrag wird erst freigegeben, wenn Sie den Empfang bestätigen.
+          deine Zahlung wurde autorisiert. Der Betrag wird erst freigegeben, wenn du den Empfang bestätigen.
         </p>
 
         {order && (

@@ -63,7 +63,7 @@ export default function MarketplacePage() {
         theme="marketplace"
         icon={Store}
         title="Marketplace"
-        subtitle="Kaufen und verkaufen Sie gebrauchte IT-Geräte in der Community. Fair, nachhaltig und lokal."
+        subtitle="Kaufe und verkaufe gebrauchte IT-Geräte in der Community. Fair, nachhaltig und lokal."
       >
         {/* Search Bar */}
         <form onSubmit={handleSearch} className="max-w-2xl mx-auto">
@@ -450,10 +450,10 @@ export default function MarketplacePage() {
               </div>
             </div>
             <h3 className="text-xl font-bold text-gray-900 mb-2">
-              Melden Sie sich an, um zu kaufen oder zu verkaufen
+              Melde dich an, um zu kaufen oder zu verkaufen
             </h3>
             <p className="text-base text-gray-600 mb-6 max-w-md mx-auto">
-              Erstellen Sie ein Konto, um Inserate aufzugeben oder Verkäufer zu kontaktieren.
+              Erstelle ein Konto, um Inserate aufzugeben oder Verkäufer zu kontaktieren.
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <Link

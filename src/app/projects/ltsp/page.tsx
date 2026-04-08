@@ -81,16 +81,16 @@ const ltspConfig: ProjectPageConfig = {
           title: 'Erste Schritte',
           description: '',
           features: [
-            'Bewertung Ihrer Infrastruktur',
-            'Planung Ihrer Implementierung',
+            'Bewertung deiner Infrastruktur',
+            'Planung deiner Implementierung',
             'Einrichtung von Server & Clients',
             'Schulung der Mitarbeiter',
             'Laufender Support'
           ]
         },
         {
-          title: 'Kontaktieren Sie uns',
-          description: 'Möchten Sie mehr darüber erfahren, wie LTSP Ihrer Organisation zugute kommen kann? Kontaktieren Sie uns, um Ihre Bedürfnisse zu besprechen und wie wir Ihnen bei der Implementierung dieser leistungsstarken Lösung helfen können.'
+          title: 'Kontaktiere uns',
+          description: 'Möchtest du mehr darüber erfahren, wie LTSP deiner Organisation zugute kommen kann? Kontaktiere uns, um deine Bedürfnisse zu besprechen und wie wir dir bei der Implementierung dieser leistungsstarken Lösung helfen können.'
         }
       ]
     }

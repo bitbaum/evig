@@ -81,7 +81,7 @@ export default function AppointmentBookingForm({ serviceSlug, serviceTitle, pric
     } catch (error) {
       setSubmitResult({
         success: false,
-        message: 'Netzwerkfehler. Bitte versuchen Sie es erneut.'
+        message: 'Netzwerkfehler. Bitte versuche es erneut.'
       })
     } finally {
       setIsSubmitting(false)
@@ -135,7 +135,7 @@ export default function AppointmentBookingForm({ serviceSlug, serviceTitle, pric
                 Anmeldung erforderlich
               </h4>
               <p className="text-neutral-600 mb-6 text-sm sm:text-base">
-                Bitte melden Sie sich an, um einen Termin zu buchen.
+                Bitte melde sich an, um einen Termin zu buchen.
               </p>
               <div className="flex flex-col sm:flex-row gap-3 justify-center">
                 <Link
@@ -163,7 +163,7 @@ export default function AppointmentBookingForm({ serviceSlug, serviceTitle, pric
                   onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
                   rows={4}
                   className="w-full px-3 py-2.5 border-2 border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-base"
-                  placeholder="Beschreiben Sie Ihr Problem oder Ihren Bedarf so genau wie möglich..."
+                  placeholder="Beschreibe dein Problem oder deinen Bedarf so genau wie möglich..."
                   required
                   aria-required="true"
                   aria-invalid={!!(submitResult && !submitResult.success)}
@@ -218,9 +218,9 @@ export default function AppointmentBookingForm({ serviceSlug, serviceTitle, pric
                   <div className="text-sm text-neutral-700">
                     <p className="font-medium mb-1">Was passiert als nächstes?</p>
                     <ul className="space-y-1 list-disc list-inside">
-                      <li>Ihre Anfrage wird von unserem Team geprüft</li>
-                      <li>Sie erhalten eine Terminbestätigung per E-Mail</li>
-                      <li>Bei Fragen kontaktieren wir Sie für weitere Details</li>
+                      <li>deine Anfrage wird von unserem Team geprüft</li>
+                      <li>du erhältst eine Terminbestätigung per E-Mail</li>
+                      <li>Bei Fragen kontaktieren wir dich für weitere Details</li>
                     </ul>
                   </div>
                 </div>

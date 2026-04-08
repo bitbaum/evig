@@ -102,19 +102,19 @@ export default function CompiratPage() {
         actions={[
           {
             title: 'Freiwilliger werden',
-            description: 'Unterstützen Sie Kurse und Internetzugangspunkte als Freiwilliger',
+            description: 'Unterstütze Kurse und Internetzugangspunkte als Freiwilliger',
             href: '/get-involved/volunteer',
             ctaText: 'Mitmachen'
           },
           {
             title: 'Mehr erfahren',
-            description: 'Besuchen Sie unsere Website für detaillierte Informationen und Ressourcen',
+            description: 'Besuche unsere Website für detaillierte Informationen und Ressourcen',
             href: 'https://www.compirat.ch',
             ctaText: 'Compirat.ch besuchen'
           },
           {
             title: 'Kontakt',
-            description: 'Kontaktieren Sie uns für weitere Informationen über unsere Programme',
+            description: 'Kontaktiere uns für weitere Informationen über unsere Programme',
             href: '/contact',
             ctaText: 'Kontakt aufnehmen'
           }

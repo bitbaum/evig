@@ -65,7 +65,7 @@ export function AccountStep({
           Konto erstellen
         </h2>
         <p className="text-gray-600 dark:text-gray-400">
-          Geben Sie Ihre Daten ein
+          Gib deine Daten ein
         </p>
       </div>
 

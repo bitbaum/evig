@@ -22,7 +22,7 @@ export default function ReviewForm({ targetType, targetId, onSubmitted, onCancel
 
   const handleSubmit = async () => {
     if (rating === 0) {
-      setError('Bitte wählen Sie eine Bewertung')
+      setError('Bitte wähle eine Bewertung')
       return
     }
     if (content.trim().length < 10) {
@@ -114,7 +114,7 @@ export default function ReviewForm({ targetType, targetId, onSubmitted, onCancel
           value={content}
           onChange={(e) => setContent(e.target.value)}
           rows={3}
-          placeholder="Beschreiben Sie Ihre Erfahrung..."
+          placeholder="Beschreibe deine Erfahrung..."
           maxLength={2000}
           className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-sm text-gray-900 dark:text-white resize-y"
         />

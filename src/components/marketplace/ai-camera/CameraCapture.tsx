@@ -37,7 +37,7 @@ export function CameraCapture({
           Produkt fotografieren
         </h3>
         <p className="text-gray-600">
-          Halten Sie Ihr Produkt in die Kamera - unsere KI erkennt automatisch Marke, Modell und Zustand
+          Halte dein Produkt in die Kamera - unsere KI erkennt automatisch Marke, Modell und Zustand
         </p>
       </div>
 

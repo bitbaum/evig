@@ -29,7 +29,7 @@ export function BookingStepSchedule({
     <div className="bg-white rounded-xl shadow-sm p-6">
       <h2 className="text-lg font-semibold text-gray-900 mb-2">Wunschtermin wählen</h2>
       <p className="text-gray-600 text-sm mb-6">
-        Optional - der Reparateur wird Ihnen verfügbare Termine vorschlagen
+        Optional - der Reparateur wird dir verfügbare Termine vorschlagen
       </p>
 
       {/* Date Selection */}
@@ -97,7 +97,7 @@ export function BookingStepSchedule({
           <div className="mb-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
             <p className="text-yellow-800 text-sm">
               Für dieses Datum sind keine spezifischen Zeitfenster hinterlegt. Der Reparateur wird
-              Ihnen einen Termin vorschlagen.
+              dir einen Termin vorschlagen.
             </p>
           </div>
         )}

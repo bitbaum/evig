@@ -170,8 +170,8 @@ export default function BookRepairerPage({ params }: { params: Promise<{ id: str
           </div>
           <h2 className="text-2xl font-bold text-gray-900 mb-2">Anfrage gesendet!</h2>
           <p className="text-gray-600 mb-6">
-            Ihre Reparaturanfrage wurde an {repairer?.business_name || 'den Reparateur'} gesendet.
-            Sie erhalten in Kürze eine Bestätigung.
+            deine Reparaturanfrage wurde an {repairer?.business_name || 'den Reparateur'} gesendet.
+            du erhältst in Kürze eine Bestätigung.
           </p>
           <div className="space-y-3">
             <Link

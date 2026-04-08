@@ -28,7 +28,7 @@ export async function generateMetadata({
   return {
     title: "Suche | RevampIT Shop",
     description:
-      "Durchsuchen Sie unser Sortiment an nachhaltig aufbereiteten IT-Geräten.",
+      "Durchsuche unser Sortiment an nachhaltig aufbereiteten IT-Geräten.",
   };
 }
 
@@ -108,7 +108,7 @@ function SearchResults({ query }: { query: string }) {
           Suche nach &quot;{query}&quot;
         </h2>
         <p className="text-gray-600 mb-6">
-          Die Produktsuche wird derzeit eingerichtet. Bald können Sie hier nach
+          Die Produktsuche wird derzeit eingerichtet. Bald kannst du hier nach
           aufbereiteten IT-Geräten suchen.
         </p>
         <div className="flex flex-col sm:flex-row gap-3 justify-center">

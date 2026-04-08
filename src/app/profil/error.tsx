@@ -24,7 +24,7 @@ export default function ProfilError({
           Etwas ist schiefgelaufen
         </h1>
         <p className="mt-2 text-sm text-gray-600">
-          Beim Laden Ihres Profils ist ein Fehler aufgetreten.
+          Beim Laden deines Profils ist ein Fehler aufgetreten.
         </p>
         <div className="mt-6 flex flex-col gap-3">
           <button

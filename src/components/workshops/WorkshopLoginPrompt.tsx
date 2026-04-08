@@ -14,7 +14,7 @@ export function WorkshopLoginPrompt() {
           <span className="font-medium">Anmeldung erforderlich</span>
         </div>
         <p className="text-blue-700 text-sm">
-          Bitte melden Sie sich an, um sich für diesen Workshop anzumelden.
+          Bitte melde sich an, um sich für diesen Workshop anzumelden.
         </p>
       </div>
 

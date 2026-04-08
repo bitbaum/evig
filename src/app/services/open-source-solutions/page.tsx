@@ -10,7 +10,7 @@ import {
 
 export const metadata: Metadata = {
   title: 'Open-Source-Alternativen | RevampIT',
-  description: 'Finden Sie die beste Open-Source-Alternative zu proprietärer Software. Ehrliche Bewertungen, Migrations-Tipps und Unterstützung durch RevampIT.',
+  description: 'Finde die beste Open-Source-Alternative zu proprietärer Software. Ehrliche Bewertungen, Migrations-Tipps und Unterstützung durch RevampIT.',
   keywords: [
     'open source alternativen',
     'open source software',
@@ -32,7 +32,7 @@ export default function OpenSourceSolutionsPage() {
         theme="services"
         icon={Code2}
         title="Open-Source-Alternativen"
-        subtitle="Finden Sie die beste freie Alternative zu proprietärer Software — mit ehrlichen Bewertungen und Migrations-Tipps."
+        subtitle="Finde die beste freie Alternative zu proprietärer Software — mit ehrlichen Bewertungen und Migrations-Tipps."
       />
 
       <section className="py-12 sm:py-16 md:py-20 bg-gray-50">

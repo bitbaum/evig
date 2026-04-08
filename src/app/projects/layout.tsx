@@ -5,7 +5,7 @@ export const metadata: Metadata = {
     template: '%s | RevampIT Projekte',
     default: 'Unsere Projekte | RevampIT'
   },
-  description: 'Entdecken Sie unser vielfältiges Spektrum an Projekten, von Open-Source-Beiträgen bis hin zu Gemeinschaftsinitiativen und Hardware-Entwicklung.'
+  description: 'Entdecke unser vielfältiges Spektrum an Projekten, von Open-Source-Beiträgen bis hin zu Gemeinschaftsinitiativen und Hardware-Entwicklung.'
 }
 
 export default function ProjectsLayout({

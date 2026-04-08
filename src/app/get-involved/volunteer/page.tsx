@@ -9,14 +9,14 @@ import { ORG, CONTACT } from '@/config/org'
 
 export const metadata: Metadata = {
   title: `Freiwilligenarbeit | ${ORG.name}`,
-  description: 'Schliessen Sie sich unserem Team engagierter Freiwilliger an und bewirken Sie etwas in Ihrer Gemeinschaft durch Technologie und Nachhaltigkeit.',
+  description: 'Schliess dich unserem Team engagierter Freiwilliger an und bewirke etwas in deiner Gemeinschaft durch Technologie und Nachhaltigkeit.',
 }
 
 export default function VolunteerPage() {
   return (
     <InvolvementPageLayout
       title="Freiwilliger werden"
-      description="Schliessen Sie sich unserem Team engagierter Freiwilliger an und helfen Sie, Technologie nachhaltig und für alle zugänglich zu machen."
+      description="Schliess dich unserem Team engagierter Freiwilliger an und hilf, Technologie nachhaltig und für alle zugänglich zu machen."
       ctaText="Freiwilligenarbeit beginnen"
       ctaHref={`mailto:${CONTACT.email}`}
     >
@@ -50,7 +50,7 @@ export default function VolunteerPage() {
             key={index}
             title={section.title}
             items={section.items}
-            description={index === 1 ? 'Wir verstehen, dass jeder unterschiedliche Zeitpläne hat. Wir bieten flexible Freiwilligentätigkeiten, die sich an Ihre anderen Verpflichtungen anpassen lassen. Ob Sie ein paar Stunden pro Woche oder mehr erhübrigen können - Ihr Beitrag wird einen Unterschied machen.' : undefined}
+            description={index === 1 ? 'Wir verstehen, dass jeder unterschiedliche Zeitpläne hat. Wir bieten flexible Freiwilligentätigkeiten, die sich an deine anderen Verpflichtungen anpassen lassen. Ob du ein paar Stunden pro Woche oder mehr erübrigen kannst - dein Beitrag wird einen Unterschied machen.' : undefined}
           />
         ))}
 
@@ -65,12 +65,12 @@ export default function VolunteerPage() {
 
         {/* How to Get Started */}
         <NumberedSteps
-          title="Wie Sie anfangen können"
+          title="Wie du anfangen können"
           steps={[
-            { text: 'Kontaktieren Sie uns, um Ihr Interesse zu bekunden' },
-            { text: 'Treffen Sie sich mit unserem Team, um Ihre Fähigkeiten und Interessen zu besprechen' },
-            { text: 'Nehmen Sie an einer kurzen Einführungssitzung teil' },
-            { text: 'Beginnen Sie, einen Unterschied zu machen!' }
+            { text: 'Kontaktiere uns, um dein Interesse zu bekunden' },
+            { text: 'Triff sich mit unserem Team, um deine Fähigkeiten und Interessen zu besprechen' },
+            { text: 'Nimm an einer kurzen Einführungssitzung teil' },
+            { text: 'Beginne, einen Unterschied zu machen!' }
           ]}
         />
       </div>

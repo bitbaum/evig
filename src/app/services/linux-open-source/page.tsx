@@ -21,7 +21,7 @@ import { PageHero } from '@/components/layout/PageHero'
 
 export const metadata: Metadata = {
   title: 'Linux & Open Source | RevampIT',
-  description: 'Experten-Linux-Installation, Support und Schulungsdienstleistungen. Entdecken Sie die perfekte Linux-Distribution für Ihre Bedürfnisse.'
+  description: 'Experten-Linux-Installation, Support und Schulungsdienstleistungen. Entdecke die perfekte Linux-Distribution für deine Bedürfnisse.'
 }
 
 const benefits = [
@@ -37,7 +37,7 @@ const benefits = [
   },
   {
     title: 'Anpassung',
-    description: 'Vollständige Kontrolle über Ihr System mit unendlichen Anpassungsmöglichkeiten, um Ihren Workflow und Ihre Präferenzen zu entsprechen.',
+    description: 'Vollständige Kontrolle über dein System mit unendlichen Anpassungsmöglichkeiten, um deinen Workflow und deine Präferenzen zu entsprechen.',
     icon: Code
   },
   {
@@ -98,17 +98,17 @@ const distributions = [
 const services = [
   {
     title: 'Linux-Installation',
-    description: 'Professionelle Installation Ihrer gewählten Linux-Distribution mit vollständiger Hardware-Kompatibilitätsprüfung und Optimierung.',
+    description: 'Professionelle Installation deiner gewählten Linux-Distribution mit vollständiger Hardware-Kompatibilitätsprüfung und Optimierung.',
     icon: Download
   },
   {
     title: 'Systemkonfiguration',
-    description: 'Individuelle Konfiguration Ihres Linux-Systems entsprechend Ihren spezifischen Anforderungen und Workflow-Bedürfnissen.',
+    description: 'Individuelle Konfiguration deines Linux-Systems entsprechend deinen spezifischen Anforderungen und Workflow-Bedürfnissen.',
     icon: Terminal
   },
   {
     title: 'Schulung & Support',
-    description: 'Umfassende Schulungsprogramme und laufende Unterstützung, um das Beste aus Ihrem Linux-System herauszuholen.',
+    description: 'Umfassende Schulungsprogramme und laufende Unterstützung, um das Beste aus deinem Linux-System herauszuholen.',
     icon: Users
   },
   {
@@ -125,7 +125,7 @@ export default function LinuxPage() {
         theme="services"
         icon={Terminal}
         title="Linux & Open Source"
-        subtitle="Professionelle Linux-Installation, Support und Schulungsdienstleistungen. Finden Sie die perfekte Distribution für Ihre Bedürfnisse."
+        subtitle="Professionelle Linux-Installation, Support und Schulungsdienstleistungen. Finde die perfekte Distribution für deine Bedürfnisse."
       >
         <p className="text-lg text-gray-600 max-w-2xl mx-auto mt-6">
           Linux ist ein leistungsstarkes, sicheres und flexibles Betriebssystem, das alles von Personalcomputern bis hin zu Enterprise-Servern antreibt.
@@ -138,7 +138,7 @@ export default function LinuxPage() {
           <div className="max-w-3xl mx-auto text-center mb-16">
             <h2 className="text-3xl font-bold mb-6">Unsere Linux-Dienstleistungen</h2>
             <p className="text-lg text-gray-600 mb-4">
-              Umfassende Unterstützung für alle Ihre Linux-Bedürfnisse, von der Installation bis zur laufenden Wartung.
+              Umfassende Unterstützung für alle deine Linux-Bedürfnisse, von der Installation bis zur laufenden Wartung.
             </p>
             <div className="text-green-600 font-semibold text-xl mb-8">
               Professioneller Linux-Support ab CHF 70/Stunde
@@ -163,9 +163,9 @@ export default function LinuxPage() {
           {/* Value Proposition Section */}
           <div className="mt-20">
             <div className="max-w-3xl mx-auto text-center mb-16">
-              <h2 className="text-3xl font-bold mb-6">Ihr Linux-Vorteil</h2>
+              <h2 className="text-3xl font-bold mb-6">dein Linux-Vorteil</h2>
               <p className="text-lg text-gray-600">
-                Erhalten Sie Expertenunterstützung und maximieren Sie die Vorteile von Linux für Ihre Bedürfnisse.
+                Erhalte Expertenunterstützung und maximiere die Vorteile von Linux für deine Bedürfnisse.
               </p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -178,11 +178,11 @@ export default function LinuxPage() {
                   </li>
                   <li className="flex items-start">
                     <CheckCircle2 className="w-5 h-5 text-green-600 mr-3 mt-0.5 flex-shrink-0" />
-                    <span>Verlängern Sie die Lebensdauer Ihrer vorhandenen Hardware</span>
+                    <span>Verlängere die Lebensdauer deiner vorhandenen Hardware</span>
                   </li>
                   <li className="flex items-start">
                     <CheckCircle2 className="w-5 h-5 text-green-600 mr-3 mt-0.5 flex-shrink-0" />
-                    <span>Reduzieren Sie Wartungs- und Upgrade-Kosten</span>
+                    <span>Reduziere Wartungs- und Upgrade-Kosten</span>
                   </li>
                 </ul>
               </div>
@@ -195,7 +195,7 @@ export default function LinuxPage() {
                   </li>
                   <li className="flex items-start">
                     <CheckCircle2 className="w-5 h-5 text-green-600 mr-3 mt-0.5 flex-shrink-0" />
-                    <span>Optimiert für Ihre spezifischen Bedürfnisse</span>
+                    <span>Optimiert für deine spezifischen Bedürfnisse</span>
                   </li>
                   <li className="flex items-start">
                     <CheckCircle2 className="w-5 h-5 text-green-600 mr-3 mt-0.5 flex-shrink-0" />
@@ -227,7 +227,7 @@ export default function LinuxPage() {
           <div className="mt-12 bg-green-50 rounded-xl p-8 text-center">
             <h3 className="text-2xl font-bold mb-4">Bereit loszulegen?</h3>
             <p className="text-gray-600 mb-6 max-w-2xl mx-auto">
-              Wir bieten professionelle Linux-Unterstützung und -Lösungen für Unternehmen und Privatpersonen. Kontaktieren Sie uns für eine kostenlose Beratung.
+              Wir bieten professionelle Linux-Unterstützung und -Lösungen für Unternehmen und Privatpersonen. Kontaktiere uns für eine kostenlose Beratung.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
@@ -355,7 +355,7 @@ Jetzt anrufen
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-4xl font-bold mb-6">Bereit für den Wechsel zu Linux?</h2>
           <p className="text-xl mb-8 max-w-2xl mx-auto text-green-100">
-            Lassen Sie unsere Experten Ihnen dabei helfen, die perfekte Linux-Distribution für Ihre Bedürfnisse zu finden und einzurichten.
+            Lass unsere Experten dir dabei helfen, die perfekte Linux-Distribution für deine Bedürfnisse zu finden und einzurichten.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link

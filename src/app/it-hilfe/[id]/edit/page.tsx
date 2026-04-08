@@ -55,7 +55,7 @@ export default function EditRequestPage() {
 
         // Only owner can edit
         if (!r.isOwner) {
-          setError('Sie können nur Ihre eigenen Anfragen bearbeiten')
+          setError('du kannst nur deine eigenen Anfragen bearbeiten')
           setLoading(false)
           return
         }

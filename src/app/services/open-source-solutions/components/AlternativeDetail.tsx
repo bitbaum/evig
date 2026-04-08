@@ -219,7 +219,7 @@ export function AlternativeDetail({ alternative }: AlternativeDetailProps) {
                 Hilfe beim Umstieg?
               </h3>
               <p className="text-sm text-green-800 mb-3">
-                Unser Team unterstützt Sie bei der Migration auf Open-Source-Software.
+                Unser Team unterstützt dich bei der Migration auf Open-Source-Software.
               </p>
               <Link
                 href="/contact"

@@ -108,7 +108,7 @@ export default function SubmitPostPage() {
           theme="about"
           icon={Edit}
           title="Beitrag einreichen"
-          subtitle="Teilen Sie Ihre Ideen und Erfahrungen mit unserer Community!"
+          subtitle="Teile deine Ideen und Erfahrungen mit unserer Community!"
         />
         <div className="absolute top-4 left-4 sm:left-8">
           <Link
@@ -125,7 +125,7 @@ export default function SubmitPostPage() {
       <div className="container mx-auto px-4 py-12 max-w-4xl">
         {/* Submission Type Selection */}
         <div className="bg-white rounded-lg shadow-sm p-8 mb-8">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">Was möchten Sie einreichen?</h2>
+          <h2 className="text-2xl font-bold text-gray-900 mb-6">Was möchtest du einreichen?</h2>
           <div className="grid md:grid-cols-2 gap-4">
             <button
               type="button"
@@ -139,7 +139,7 @@ export default function SubmitPostPage() {
               <Lightbulb className={`w-8 h-8 mb-3 ${submissionType === 'idea' ? 'text-green-600' : 'text-gray-400'}`} />
               <h3 className="text-lg font-semibold text-gray-900 mb-2">Post-Idee</h3>
               <p className="text-sm text-gray-600">
-                Schlagen Sie ein Thema vor, über das wir schreiben sollten
+                Schlage ein Thema vor, über das wir schreiben sollten
               </p>
             </button>
 
@@ -155,7 +155,7 @@ export default function SubmitPostPage() {
               <FileText className={`w-8 h-8 mb-3 ${submissionType === 'draft' ? 'text-green-600' : 'text-gray-400'}`} />
               <h3 className="text-lg font-semibold text-gray-900 mb-2">Vollständiger Entwurf</h3>
               <p className="text-sm text-gray-600">
-                Reichen Sie einen vollständigen Artikel zur Überprüfung ein
+                Reiche einen vollständigen Artikel zur Überprüfung ein
               </p>
             </button>
           </div>
@@ -164,7 +164,7 @@ export default function SubmitPostPage() {
         {/* Submission Form */}
         <form onSubmit={handleSubmit} className="bg-white rounded-lg shadow-sm p-8">
           <h2 className="text-2xl font-bold text-gray-900 mb-6">
-            {submissionType === 'idea' ? 'Ihre Idee' : 'Ihr Entwurf'}
+            {submissionType === 'idea' ? 'deine Idee' : 'dein Entwurf'}
           </h2>
 
           {/* AI Assistant */}
@@ -180,7 +180,7 @@ export default function SubmitPostPage() {
           <div className="grid md:grid-cols-2 gap-6 mb-6">
             <div>
               <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
-                Ihr Name *
+                dein Name *
               </label>
               <input
                 type="text"
@@ -197,7 +197,7 @@ export default function SubmitPostPage() {
 
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
-                Ihre E-Mail *
+                deine E-Mail *
               </label>
               <input
                 type="email"
@@ -283,13 +283,13 @@ export default function SubmitPostPage() {
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent font-mono text-sm"
               placeholder={
                 submissionType === 'idea'
-                  ? 'Beschreiben Sie Ihre Idee für einen Blogbeitrag...'
+                  ? 'Beschreibe deine Idee für einen Blogbeitrag...'
                   : '## Einleitung\n\nIhr Artikel in Markdown...\n\n### Abschnitt 1\n\nInhalt hier...'
               }
             />
             {submissionType === 'draft' && (
               <p className="mt-2 text-sm text-gray-500">
-                Sie können Markdown-Formatierung verwenden: **fett**, *kursiv*, [Links](url), usw.
+                du kannst Markdown-Formatierung verwenden: **fett**, *kursiv*, [Links](url), usw.
               </p>
             )}
           </div>
@@ -298,11 +298,11 @@ export default function SubmitPostPage() {
           <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
             <h3 className="text-sm font-semibold text-blue-900 mb-2">📋 Richtlinien für Einreichungen</h3>
             <ul className="text-sm text-blue-800 space-y-1">
-              <li>• Stellen Sie sicher, dass Ihr Inhalt original ist</li>
-              <li>• Verwenden Sie eine klare, respektvolle Sprache</li>
-              <li>• Fügen Sie praktische Beispiele und Tipps hinzu</li>
+              <li>• Stell direr, dass dein Inhalt original ist</li>
+              <li>• Verwende eine klare, respektvolle Sprache</li>
+              <li>• Füge praktische Beispiele und Tipps hinzu</li>
               <li>• Wir überprüfen alle Einreichungen vor der Veröffentlichung</li>
-              <li>• Sie erhalten eine E-Mail über den Status Ihrer Einreichung</li>
+              <li>• du erhältst eine E-Mail über den Status deiner Einreichung</li>
             </ul>
           </div>
 
@@ -336,9 +336,9 @@ export default function SubmitPostPage() {
           {/* Status Messages */}
           {submitStatus === 'success' && (
             <div className="mt-6 p-4 bg-green-50 border border-green-200 rounded-lg">
-              <p className="text-green-800 font-medium">✅ Vielen Dank für Ihre Einreichung!</p>
+              <p className="text-green-800 font-medium">✅ Vielen Dank für deine Einreichung!</p>
               <p className="text-green-700 text-sm mt-1">
-                Wir werden Ihre Einreichung überprüfen und uns per E-Mail bei Ihnen melden.
+                Wir werden deine Einreichung überprüfen und uns per E-Mail bei dir melden.
               </p>
             </div>
           )}
@@ -347,7 +347,7 @@ export default function SubmitPostPage() {
             <div className="mt-6 p-4 bg-red-50 border border-red-200 rounded-lg">
               <p className="text-red-800 font-medium">❌ Fehler beim Senden</p>
               <p className="text-red-700 text-sm mt-1">
-                Bitte versuchen Sie es später erneut oder kontaktieren Sie uns direkt.
+                Bitte versuche es später erneut oder kontaktiere uns direkt.
               </p>
             </div>
           )}

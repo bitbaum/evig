@@ -383,7 +383,7 @@ export default async function WorkshopDetailPage({ params }: { params: Promise<{
                 <h3 className="text-lg font-semibold text-gray-900 mb-4">Anmeldung</h3>
                 <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
                   <p className="text-yellow-800 text-sm">
-                    Aktuell sind keine Termine für diesen Workshop geplant. Schauen Sie bald wieder vorbei!
+                    Aktuell sind keine Termine für diesen Workshop geplant. Schau bald wieder vorbei!
                   </p>
                 </div>
               </div>

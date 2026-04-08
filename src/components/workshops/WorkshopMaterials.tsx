@@ -109,7 +109,7 @@ export default function WorkshopMaterials({ workshopSlug }: WorkshopMaterialsPro
         <p className="text-gray-500 text-sm">Keine Materialien verfügbar</p>
         {accessLevel === 'public' && (
           <p className="text-gray-500 text-xs mt-1">
-            Melden Sie sich an, um auf weitere Materialien zuzugreifen
+            Melde dich an, um auf weitere Materialien zuzugreifen
           </p>
         )}
       </div>

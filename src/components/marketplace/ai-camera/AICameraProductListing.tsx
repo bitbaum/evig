@@ -131,7 +131,7 @@ function ModalHeader({ onClose }: { onClose: () => void }) {
               AI Produkt-Erkennung
             </h2>
             <p className="text-sm text-gray-600">
-              Machen Sie ein Foto - wir identifizieren Ihr Produkt automatisch
+              Mache ein Foto - wir identifizieren Ihr Produkt automatisch
             </p>
           </div>
         </div>

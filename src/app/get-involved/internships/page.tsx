@@ -9,14 +9,14 @@ import { ORG, CONTACT } from '@/config/org'
 
 export const metadata: Metadata = {
   title: `Praktika | ${ORG.name}`,
-  description: 'Sammeln Sie praktische Erfahrungen in Technologie und Nachhaltigkeit durch unser Praktikumsprogramm.',
+  description: 'Sammle praktische Erfahrungen in Technologie und Nachhaltigkeit durch unser Praktikumsprogramm.',
 }
 
 export default function InternshipsPage() {
   return (
     <InvolvementPageLayout
       title="Praktikumsmöglichkeiten"
-      description="Sammeln Sie wertvolle Erfahrungen in Technologie und Nachhaltigkeit und bewirken Sie echte Veränderungen."
+      description="Sammle wertvolle Erfahrungen in Technologie und Nachhaltigkeit und bewirke echte Veränderungen."
       ctaText="Für Praktikum bewerben"
       ctaHref={`mailto:${CONTACT.email}`}
     >
@@ -64,12 +64,12 @@ export default function InternshipsPage() {
 
         {/* How to Apply */}
         <NumberedSteps
-          title="Wie Sie sich bewerben"
+          title="Wie du sich bewerben"
           steps={[
-            { text: 'Senden Sie uns Ihren Lebenslauf und ein Anschreiben' },
-            { text: 'Geben Sie Ihren Interessensbereich und Ihre Verfügbarkeit an' },
-            { text: 'Führen Sie ein kurzes Gespräch' },
-            { text: 'Beginnen Sie Ihre Praktikumsreise!' }
+            { text: 'Sende uns deinen Lebenslauf und ein Anschreiben' },
+            { text: 'Gib deinen Interessensbereich und deine Verfügbarkeit an' },
+            { text: 'Führe ein kurzes Gespräch' },
+            { text: 'Beginne deine Praktikumsreise!' }
           ]}
         />
       </div>

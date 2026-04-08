@@ -29,7 +29,7 @@ export function AIProductResults({
           Produkt-Erkennung abgeschlossen!
         </h3>
         <p className="text-gray-600">
-          Wählen Sie das erkannte Produkt aus oder versuchen Sie es mit einem besseren Foto erneut
+          Wähle das erkannte Produkt aus oder versuche es mit einem besseren Foto erneut
         </p>
       </div>
 

@@ -17,7 +17,7 @@ import { PageHero } from '@/components/layout/PageHero'
 
 export const metadata: Metadata = {
   title: 'REVAMPED Zertifizierung | Nachhaltige Computer-Builds | RevampIT',
-  description: 'Erfahren Sie mehr über unsere exklusive REVAMPED-Zertifizierung - die Nachhaltigkeit, Qualität und Leistung in jedem Computer garantiert, den wir bauen.',
+  description: 'Erfahre mehr über unsere exklusive REVAMPED-Zertifizierung - die Nachhaltigkeit, Qualität und Leistung in jedem Computer garantiert, den wir bauen.',
   keywords: [
     'REVAMPED Zertifizierung',
     'nachhaltige Computer-Zertifizierung',
@@ -32,7 +32,7 @@ export const metadata: Metadata = {
   ],
   openGraph: {
     title: 'REVAMPED Zertifizierung | Nachhaltige Computer-Builds | RevampIT',
-    description: 'Entdecken Sie unsere exklusive REVAMPED-Zertifizierung - eine Garantie für Nachhaltigkeit, Qualität und Leistung, die einen neuen Standard in der Computerbranche setzt.',
+    description: 'Entdecke unsere exklusive REVAMPED-Zertifizierung - eine Garantie für Nachhaltigkeit, Qualität und Leistung, die einen neuen Standard in der Computerbranche setzt.',
     type: 'website',
     url: 'https://revampit.org/revamped'
   },
@@ -113,7 +113,7 @@ export default function RevampedPage() {
                     href="/services/build-your-computer"
                     className="inline-flex items-center bg-green-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors"
                   >
-                    Ihren Computer bauen
+                    deinen Computer bauen
                     <ArrowRight className="w-5 h-5 ml-2" />
                   </Link>
                   <a
@@ -186,7 +186,7 @@ Mehr über Zertifizierung erfahren
                 </div>
                 <h3 className="text-2xl font-bold mb-4">KI-optimiert</h3>
                 <p className="text-gray-600 leading-relaxed">
-                  Unsere KI gewährleistet perfekte Komponentenkompatibilität und optimale Leistungsabstimmung für Ihren spezifischen Anwendungsfall. Jeder Build ist intelligent für Ihre Bedürfnisse konzipiert.
+                  Unsere KI gewährleistet perfekte Komponentenkompatibilität und optimale Leistungsabstimmung für deinen spezifischen Anwendungsfall. Jeder Build ist intelligent für deine Bedürfnisse konzipiert.
                 </p>
               </div>
             </div>
@@ -202,7 +202,7 @@ Mehr über Zertifizierung erfahren
               <div>
                 <h2 className="text-4xl font-bold mb-6">Echtheitszertifikat</h2>
                 <p className="text-xl text-gray-600 mb-8">
-                  Jeder REVAMPED-Computer wird mit einem detaillierten Zertifikat geliefert, das vollständige Transparenz über Ihren nachhaltigen Build bietet.
+                  Jeder REVAMPED-Computer wird mit einem detaillierten Zertifikat geliefert, das vollständige Transparenz über deinen nachhaltigen Build bietet.
                 </p>
                 <div className="space-y-4">
                   <div className="flex items-center">
@@ -238,7 +238,7 @@ Mehr über Zertifizierung erfahren
                   </div>
                   <h3 className="text-2xl font-bold mb-4">Digital & physisch</h3>
                   <p className="text-gray-600">
-                    Ihr Zertifikat umfasst sowohl einen physischen Aufkleber als auch einen digitalen QR-Code für sofortige Verifizierung und detaillierte Komponenteninformationen.
+                    dein Zertifikat umfasst sowohl einen physischen Aufkleber als auch einen digitalen QR-Code für sofortige Verifizierung und detaillierte Komponenteninformationen.
                   </p>
                 </div>
               </div>
@@ -308,16 +308,16 @@ Mehr über Zertifizierung erfahren
       <section className="py-12 sm:py-16 md:py-20">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
-            <h2 className="text-4xl font-bold mb-6">Schliessen Sie sich der REVAMPED-Revolution an</h2>
+            <h2 className="text-4xl font-bold mb-6">Schliess dich der REVAMPED-Revolution an</h2>
             <p className="text-xl text-gray-600 mb-12 max-w-3xl mx-auto">
-              Wenn Sie einen REVAMPED-Computer wählen, erhalten Sie nicht nur eine grossartige Maschine - Sie setzen ein Statement über die Zukunft der Technologie. Nachhaltig, leistungsstark und mit einem Zweck gebaut.
+              Wenn du einen REVAMPED-Computer wählen, erhältst du nicht nur eine grossartige Maschine - du setzt ein Statement über die Zukunft der Technologie. Nachhaltig, leistungsstark und mit einem Zweck gebaut.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
                 href="/services/build-your-computer"
                 className="inline-flex items-center bg-green-600 text-white px-8 py-4 rounded-lg font-semibold hover:bg-green-700 transition-colors duration-300 text-lg"
               >
-                Ihren REVAMPED-Build starten
+                deinen REVAMPED-Build starten
                 <ArrowRight className="w-5 h-5 ml-2" />
               </Link>
               <Link

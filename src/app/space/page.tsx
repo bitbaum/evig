@@ -357,11 +357,11 @@ export default function SpacePage() {
               </div>
               <div className="mt-4 text-center">
                 <p className="text-gray-600 mb-4">
-                  Kennen Sie einen passenden Raum? Wir freuen uns über jeden Hinweis!
+                  Kennst du einen passenden Raum? Wir freuen uns über jeden Hinweis!
                 </p>
                 <Link href="/contact">
                   <Button>
-                    Kontaktieren Sie uns
+                    Kontaktiere uns
                   </Button>
                 </Link>
               </div>
@@ -418,7 +418,7 @@ export default function SpacePage() {
               <CardContent className="p-8 text-center">
                 <Heart className="w-12 h-12 mx-auto mb-4 opacity-90" />
                 <h3 className="text-2xl font-bold mb-3">
-                  Unterstützen Sie unser Standort-Budget
+                  Unterstütze unser Standort-Budget
                 </h3>
                 <p className="text-green-100 max-w-xl mx-auto mb-6">
                   Mit einem grösseren Budget können wir einen besseren Standort finden -
@@ -449,7 +449,7 @@ export default function SpacePage() {
         <div className="container mx-auto px-4 sm:px-6">
           <div className="text-center mb-8">
             <h3 className="text-xl font-semibold mb-2">Alle Einkaufsmöglichkeiten</h3>
-            <p className="text-gray-600">Physisch und online - wählen Sie, was am besten passt.</p>
+            <p className="text-gray-600">Physisch und online - wähle, was am besten passt.</p>
           </div>
           <div className="flex flex-wrap justify-center gap-4">
             <Link href="/shop#ladenlokal">

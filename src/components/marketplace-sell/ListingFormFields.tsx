@@ -78,7 +78,7 @@ export function ListingFormFields({ formData, setFormData }: Props) {
           onChange={(e) => update('description', e.target.value)}
           maxLength={MARKETPLACE_LIMITS.MAX_DESCRIPTION_LENGTH}
           rows={5}
-          placeholder="Beschreiben Sie den Zustand, Spezifikationen und was enthalten ist..."
+          placeholder="Beschreibe den Zustand, Spezifikationen und was enthalten ist..."
           className="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white resize-y"
         />
       </div>

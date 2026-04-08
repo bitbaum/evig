@@ -143,7 +143,7 @@ export default function RepairersPage() {
         theme="repairers"
         icon={Wrench}
         title="Reparateure finden"
-        subtitle="Finden Sie zertifizierte Reparateure in Ihrer Nähe für alle Arten von Elektronik-Reparaturen."
+        subtitle="Finde zertifizierte Reparateure in deiner Nähe für alle Arten von Elektronik-Reparaturen."
       />
 
       <div className="max-w-7xl mx-auto px-4 py-12">
@@ -172,7 +172,7 @@ export default function RepairersPage() {
               Keine Reparateure gefunden
             </h3>
             <p className="text-gray-600 mb-6">
-              Versuchen Sie andere Suchkriterien oder erweitern Sie Ihren Suchradius.
+              Versuche andere Suchkriterien oder erweitere deinen Suchradius.
             </p>
             <button
               onClick={handleResetSearch}
@@ -197,11 +197,11 @@ export default function RepairersPage() {
         <div className="mt-16 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl p-8 text-white text-center">
           <Wrench className="w-12 h-12 mx-auto mb-4" />
           <h2 className="text-2xl font-bold mb-4">
-            Sind Sie ein Reparaturexperte?
+            Bist du ein Reparaturexperte?
           </h2>
           <p className="text-blue-100 mb-6 max-w-2xl mx-auto">
-            Treten Sie unserer Plattform bei und verbinden Sie sich mit Kunden,
-            die Ihre Fachkenntnisse brauchen. Verdienen Sie Geld mit Ihren Fähigkeiten.
+            Tritt unserer Plattform bei und verbinde dich mit Kunden,
+            die deine Fachkenntnisse brauchen. Verdiene Geld mit deinen Fähigkeiten.
           </p>
           <Link
             href="/dashboard/repairer/onboarding"

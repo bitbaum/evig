@@ -11,7 +11,7 @@ export function CTASection() {
           Interesse an unserem System?
         </h2>
         <p className={cn('text-lg mb-8', getTextColor('white', 'muted'))}>
-          Möchten Sie ein ähnliches Verbesserungssystem für Ihre Website? Wir helfen bei der Umsetzung.
+          Möchtest du ein ähnliches Verbesserungssystem für deine Website? Wir helfen bei der Umsetzung.
         </p>
 
         <div className="bg-neutral-50 rounded-xl p-4 sm:p-6 mb-8 text-left max-w-2xl mx-auto border-2 border-neutral-200">

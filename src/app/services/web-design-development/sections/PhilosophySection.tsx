@@ -2,7 +2,7 @@ const freedomRatings = [
   { label: 'Open-Source-Freiheit', color: 'bg-green-500', desc: 'Vollständige Code-Transparenz & Eigentum' },
   { label: 'Dezentralisierungsfreiheit', color: 'bg-blue-500', desc: 'Unabhängigkeit von Plattformkontrolle' },
   { label: 'Datenschutzfreiheit', color: 'bg-purple-500', desc: 'Datensouveränität & Schutz' },
-  { label: 'Dateneigentumsfreiheit', color: 'bg-orange-500', desc: 'Vollständige Kontrolle über Ihre Informationen' },
+  { label: 'Dateneigentumsfreiheit', color: 'bg-orange-500', desc: 'Vollständige Kontrolle über deine Informationen' },
   { label: 'Code-Eigentumsfreiheit', color: 'bg-teal-500', desc: 'Uneingeschränkte Änderungsrechte' },
   { label: 'Automatisierungsfreiheit', color: 'bg-rose-500', desc: 'Anstrengung in Wahl verwandelt' },
   { label: 'Benutzererfahrungsfreiheit', color: 'bg-indigo-500', desc: 'Intuitive, mühelose Interaktion' },
@@ -31,26 +31,26 @@ export function PhilosophySection() {
                 <div className="border-l-4 border-green-500 pl-4">
                   <p className="font-semibold text-green-800 mb-2">Das Freiheitsprinzip</p>
                   <p>
-                    <strong>100% Engagement für Freiheit</strong> bedeutet, dass jeder Aspekt Ihrer digitalen Präsenz Ihrer Autonomie dienen und sie nicht einschränken sollte.
+                    <strong>100% Engagement für Freiheit</strong> bedeutet, dass jeder Aspekt deiner digitalen Präsenz deiner Autonomie dienen und sie nicht einschränken sollte.
                   </p>
                 </div>
 
                 <div className="border-l-4 border-blue-500 pl-4">
                   <p className="font-semibold text-blue-800 mb-2">Automatisierung als Befreiung</p>
                   <p>
-                    Maximale Automatisierung eliminiert sich wiederholende, unerwünschte Aufgaben und gibt Ihnen die Freiheit, sich auf das zu konzentrieren, was Ihnen und Ihrer Mission wirklich wichtig ist.
+                    Maximale Automatisierung eliminiert sich wiederholende, unerwünschte Aufgaben und gibt dir die Freiheit, sich auf das zu konzentrieren, was dir und deiner Mission wirklich wichtig ist.
                   </p>
                 </div>
 
                 <div className="border-l-4 border-purple-500 pl-4">
                   <p className="font-semibold text-purple-800 mb-2">Wahl statt Zwang</p>
                   <p>
-                    Wenn Systeme nahtlos ohne Ihr ständiges Eingreifen funktionieren, wird jeder Moment, den Sie aufwenden, beabsichtigt &ndash; eine Wahl, keine Notwendigkeit.
+                    Wenn Systeme nahtlos ohne dein ständiges Eingreifen funktionieren, wird jeder Moment, den du aufwendest, beabsichtigt &ndash; eine Wahl, keine Notwendigkeit.
                   </p>
                 </div>
 
                 <p className="italic text-gray-500 text-sm mt-6">
-                  &ldquo;Wahre Freiheit ist nicht nur die Fähigkeit zu wählen &ndash; es sind Systeme, die Ihr Recht auf Wahl bewahren, indem sie erzwungenen Aufwand beseitigen.&rdquo;
+                  &ldquo;Wahre Freiheit ist nicht nur die Fähigkeit zu wählen &ndash; es sind Systeme, die dein Recht auf Wahl bewahren, indem sie erzwungenen Aufwand beseitigen.&rdquo;
                 </p>
               </div>
             </div>
@@ -58,7 +58,7 @@ export function PhilosophySection() {
             <div className="bg-gradient-to-br from-green-50 to-blue-50 rounded-xl p-8">
               <h4 className="text-xl font-bold mb-4 text-gray-800">Unser Freiheits-Bewertungssystem</h4>
               <p className="text-gray-600 mb-4">
-                Jede von uns erstellte Website und Web-App erhält eine umfassende Freiheitsbewertung, die darauf basiert, wie gut sie Ihre Autonomie unterstützt:
+                Jede von uns erstellte Website und Web-App erhält eine umfassende Freiheitsbewertung, die darauf basiert, wie gut sie deine Autonomie unterstützt:
               </p>
               <div className="space-y-3">
                 {freedomRatings.map((item, index) => (

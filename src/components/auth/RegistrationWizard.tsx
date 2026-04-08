@@ -24,8 +24,8 @@ interface RegistrationState {
 }
 
 const STEPS = [
-  { label: 'Konto', description: 'Erstellen Sie Ihr Konto' },
-  { label: 'Verifizierung', description: 'Bestätigen Sie Ihre E-Mail' },
+  { label: 'Konto', description: 'Erstelle dein Konto' },
+  { label: 'Verifizierung', description: 'Bestätige deine E-Mail' },
 ]
 
 const STORAGE_KEY = 'revampit_registration_state'
@@ -161,15 +161,15 @@ export function RegistrationWizard() {
             </h2>
             <p className="text-gray-600 dark:text-gray-400">
               {state.emailVerified
-                ? 'Ihr Konto ist vollständig eingerichtet.'
-                : 'Ihr Konto wurde erstellt. Vergessen Sie nicht, Ihre E-Mail zu verifizieren.'}
+                ? 'dein Konto ist vollständig eingerichtet.'
+                : 'dein Konto wurde erstellt. Vergiss nicht, deine E-Mail zu verifizieren.'}
             </p>
           </div>
 
           {/* What do you want to do? */}
           <div className="space-y-3">
             <p className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
-              Was möchten Sie als Nächstes tun?
+              Was möchtest du als Nächstes tun?
             </p>
 
             <Link

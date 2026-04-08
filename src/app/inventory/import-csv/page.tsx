@@ -36,7 +36,7 @@ export default function ImportCSVPage() {
     const selectedFile = event.target.files?.[0]
     if (selectedFile) {
       if (!selectedFile.name.toLowerCase().endsWith('.csv')) {
-        setError('Bitte wählen Sie eine CSV-Datei aus')
+        setError('Bitte wähle eine CSV-Datei aus')
         return
       }
 
@@ -145,7 +145,7 @@ ALI00001;W;100% getestet Echtem Touch Panel Touchpad Trackpad Mit Kabel Für App
                 So funktioniert der Import
               </h3>
               <ul className="text-sm text-blue-800 dark:text-blue-300 space-y-1">
-                <li>• Laden Sie Ihre CSV-Datei aus Kivitendo hoch</li>
+                <li>• Lade deine CSV-Datei aus Kivitendo hoch</li>
                 <li>• Die KI analysiert automatisch Produktnamen und Kategorien</li>
                 <li>• Nachhaltigkeits-Scores werden automatisch berechnet</li>
                 <li>• Doppelte Artikelnummern werden übersprungen</li>
@@ -171,7 +171,7 @@ ALI00001;W;100% getestet Echtem Touch Panel Touchpad Trackpad Mit Kabel Für App
                   CSV-Datei auswählen
                 </h3>
                 <p className="text-gray-600 dark:text-gray-400 mb-6">
-                  Wählen Sie Ihre exportierte Kivitendo-CSV-Datei aus
+                  Wähle deine exportierte Kivitendo-CSV-Datei aus
                 </p>
                 <input
                   ref={fileInputRef}

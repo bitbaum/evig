@@ -50,7 +50,7 @@ export default function LogoutPage() {
         await forceServerSignOut(LOGOUT_CALLBACK)
         window.location.replace(LOGOUT_CALLBACK)
       } catch {
-        setError('Abmeldung fehlgeschlagen. Bitte versuchen Sie es erneut.')
+        setError('Abmeldung fehlgeschlagen. Bitte versuche es erneut.')
       }
     }
 
@@ -85,7 +85,7 @@ export default function LogoutPage() {
                 <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
                   Abmeldung läuft...
                 </h2>
-                <p className="text-gray-600 dark:text-gray-400">Bitte warten Sie einen Moment.</p>
+                <p className="text-gray-600 dark:text-gray-400">Bitte warte einen Moment.</p>
               </>
             ) : (
               <>
@@ -106,7 +106,7 @@ export default function LogoutPage() {
                         })
                         .catch((error) => {
                           logger.error('Logout failed', { error })
-                          setError('Abmeldung fehlgeschlagen. Bitte versuchen Sie es erneut.')
+                          setError('Abmeldung fehlgeschlagen. Bitte versuche es erneut.')
                         })
                     }}
                     variant="destructive"

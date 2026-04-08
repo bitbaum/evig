@@ -3,7 +3,7 @@ import { Metadata } from 'next'
 export const metadata: Metadata = {
   title: 'Reparateure finden | RevampIT',
   description:
-    'Finden Sie zertifizierte Reparateure in Ihrer Nähe für Laptop-, Smartphone-, Tablet- und PC-Reparaturen. Bewertungen, Preise und Online-Buchung.',
+    'Finde zertifizierte Reparateure in deiner Nähe für Laptop-, Smartphone-, Tablet- und PC-Reparaturen. Bewertungen, Preise und Online-Buchung.',
   keywords: [
     'Reparateur finden',
     'Elektronik Reparatur',

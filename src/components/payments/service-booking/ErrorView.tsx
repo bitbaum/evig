@@ -21,7 +21,7 @@ export function ErrorView({ error, onRetry }: ErrorViewProps) {
         <AlertCircle className="w-16 h-16 text-red-600 mx-auto mb-4" />
         <CardTitle className="text-red-800">Fehler bei der Buchung</CardTitle>
         <CardDescription>
-          Es ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut.
+          Es ist ein Fehler aufgetreten. Bitte versuche es erneut.
         </CardDescription>
       </CardHeader>
       <CardContent>

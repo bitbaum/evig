@@ -188,22 +188,22 @@ export default function CloudInfrastructurePage() {
         <section className="py-12 sm:py-16 md:py-20 bg-white">
           <div className="container mx-auto px-4 text-center">
             <div className="max-w-3xl mx-auto">
-              <h2 className="text-4xl font-bold text-gray-900 mb-6">Gestalten Sie unsere Vision mit</h2>
+              <h2 className="text-4xl font-bold text-gray-900 mb-6">Gestalte unsere Vision mit</h2>
               <p className="text-xl text-gray-600 mb-8">
-                Möchten Sie Teil des Aufbaus einer ethischen, nachhaltigen Cloud-Infrastruktur sein?
-                Treten Sie unserer Gemeinschaft bei und helfen Sie uns, für die Zukunft zu planen.
+                Möchtest du Teil des Aufbaus einer ethischen, nachhaltigen Cloud-Infrastruktur sein?
+                Tritt unserer Gemeinschaft bei und hilf uns, für die Zukunft zu planen.
               </p>
               <div className="bg-green-50 border border-green-200 rounded-lg p-8">
                 <h3 className="text-2xl font-bold text-green-800 mb-4">Gemeinschaftlicher Input benötigt</h3>
                 <p className="text-green-700 mb-6">
-                  Teilen Sie Ihre Gedanken zu nachhaltiger Cloud-Infrastruktur und helfen Sie uns, die Bedürfnisse der Gemeinschaft zu verstehen.
-                  Ihr Beitrag wird unsere Entwicklungs-Roadmap direkt beeinflussen.
+                  Teile deine Gedanken zu nachhaltiger Cloud-Infrastruktur und hilf uns, die Bedürfnisse der Gemeinschaft zu verstehen.
+                  dein Beitrag wird unsere Entwicklungs-Roadmap direkt beeinflussen.
                 </p>
                 <Link
                   href="/contact"
                   className="inline-flex items-center bg-green-600 text-white px-8 py-4 rounded-lg font-semibold hover:bg-green-700 transition-colors duration-300 text-lg"
                 >
-                  Teilen Sie Ihre Vision
+                  Teile deine Vision
                   <ArrowRight className="ml-2 w-5 h-5" />
                 </Link>
               </div>
@@ -214,7 +214,7 @@ export default function CloudInfrastructurePage() {
         {/* Current Services CTA */}
         <section className="py-20 bg-gradient-to-r from-green-700 to-green-800 text-white">
           <div className="container mx-auto px-4 text-center">
-            <h2 className="text-4xl font-bold mb-6">Benötigen Sie heute technische Hilfe?</h2>
+            <h2 className="text-4xl font-bold mb-6">Benötigst du heute technische Hilfe?</h2>
             <p className="text-xl mb-8 max-w-2xl mx-auto text-green-100">
               Während wir unsere langfristige Vision entwickeln, unterstützen wir unsere Gemeinschaft aktiv mit diesen Dienstleistungen.
             </p>
@@ -229,7 +229,7 @@ export default function CloudInfrastructurePage() {
                 href="/get-involved"
                 className="inline-block border-2 border-white text-white px-8 py-4 rounded-lg font-semibold hover:bg-white/10 transition-colors duration-300 text-lg"
               >
-                Machen Sie mit
+                Mache mit
               </Link>
             </div>
           </div>

@@ -50,10 +50,10 @@ export default function ContactForm() {
 
   return (
     <div className="bg-white rounded-xl shadow-lg p-8">
-      <h2 className="text-3xl font-bold mb-6 text-center">Senden Sie uns eine Nachricht</h2>
+      <h2 className="text-3xl font-bold mb-6 text-center">Sende uns eine Nachricht</h2>
       {status === 'success' && (
         <div className="mb-6 rounded-lg border border-green-200 bg-green-50 px-4 py-3 text-green-800 text-sm">
-          Vielen Dank! Ihre Nachricht wurde gesendet.
+          Vielen Dank! deine Nachricht wurde gesendet.
         </div>
       )}
       {status === 'error' && (
@@ -135,7 +135,7 @@ export default function ContactForm() {
               aria-invalid={status === 'error'}
               aria-describedby={status === 'error' ? 'contact-error' : undefined}
               className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500"
-              placeholder="Ihre Nachricht..."
+              placeholder="deine Nachricht..."
             />
           </div>
         </div>

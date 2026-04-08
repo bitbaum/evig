@@ -25,10 +25,10 @@ export function RegistrationSuccessCard({
         </div>
         <p className="text-green-700 text-sm">
           {requiresPayment && isPaymentSuccess
-            ? 'Ihre Zahlung wurde erfolgreich verarbeitet.'
-            : 'Sie sind für diesen Workshop angemeldet.'
+            ? 'deine Zahlung wurde erfolgreich verarbeitet.'
+            : 'du bist für diesen Workshop angemeldet.'
           }
-          {' '}Details finden Sie in Ihrem Dashboard.
+          {' '}Details findest du in deinem Dashboard.
         </p>
       </div>
 

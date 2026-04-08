@@ -7,10 +7,10 @@ import { ORG, CONTACT } from '@/config/org'
 
 export const metadata: Metadata = {
   title: `Mitglied werden | ${ORG.name}`,
-  description: `Werden Sie Mitglied bei ${ORG.name} und gestalten Sie die Zukunft nachhaltiger Technologie aktiv mit. Stimmrecht, Mitbestimmung und exklusive Veranstaltungen.`,
+  description: `Werde Mitglied bei ${ORG.name} und gestalte die Zukunft nachhaltiger Technologie aktiv mit. Stimmrecht, Mitbestimmung und exklusive Veranstaltungen.`,
   openGraph: {
     title: `Mitglied werden | ${ORG.name}`,
-    description: `Werden Sie Mitglied bei ${ORG.name} und gestalten Sie die Zukunft nachhaltiger Technologie aktiv mit.`,
+    description: `Werde Mitglied bei ${ORG.name} und gestalte die Zukunft nachhaltiger Technologie aktiv mit.`,
     type: 'website',
     locale: 'de_CH',
     url: `${ORG.website}/mitglied-werden`,
@@ -22,22 +22,22 @@ const MEMBERSHIP_BENEFITS = [
   {
     icon: Vote,
     title: 'Stimmrecht an der Generalversammlung',
-    description: 'Stimmen Sie über wichtige Entscheidungen ab und wählen Sie den Vorstand.',
+    description: 'Stimme über wichtige Entscheidungen ab und wähle den Vorstand.',
   },
   {
     icon: Star,
     title: 'Mitbestimmung bei wichtigen Entscheidungen',
-    description: 'Bringen Sie Ihre Ideen ein und gestalten Sie die Richtung des Vereins.',
+    description: 'Bring deine Ideen ein und gestalte die Richtung des Vereins.',
   },
   {
     icon: Calendar,
     title: 'Einladung zu exklusiven Veranstaltungen',
-    description: 'Nehmen Sie an Mitglieder-Events, Workshops und Netzwerktreffen teil.',
+    description: 'Nimm an Mitglieder-Events, Workshops und Netzwerktreffen teil.',
   },
   {
     icon: Leaf,
     title: 'Beitrag zu einer nachhaltigen IT-Zukunft',
-    description: 'Unterstützen Sie aktiv die Wiederverwendung von Technologie und offene Software.',
+    description: 'Unterstütze aktiv die Wiederverwendung von Technologie und offene Software.',
   },
 ]
 
@@ -48,7 +48,7 @@ const FAQ = [
   },
   {
     question: 'Wann ist die nächste Generalversammlung?',
-    answer: 'Die Generalversammlung findet einmal jährlich statt. Mitglieder werden rechtzeitig per E-Mail eingeladen. Den genauen Termin erfahren Sie nach Ihrer Aufnahme.',
+    answer: 'Die Generalversammlung findet einmal jährlich statt. Mitglieder werden rechtzeitig per E-Mail eingeladen. Den genauen Termin erfahre nach deiner Aufnahme.',
   },
   {
     question: 'Kann ich jederzeit austreten?',
@@ -64,7 +64,7 @@ export default function MitgliedWerdenPage() {
         theme="getInvolved"
         icon={Award}
         title="Mitglied werden"
-        subtitle="Gestalten Sie die Zukunft von RevampIT aktiv mit"
+        subtitle="Gestalte die Zukunft von RevampIT aktiv mit"
       />
 
       {/* Benefits */}
@@ -75,7 +75,7 @@ export default function MitgliedWerdenPage() {
               Was bedeutet Mitgliedschaft?
             </Heading>
             <p className="mt-4 text-lg text-gray-600 max-w-2xl mx-auto">
-              Als Mitglied des {ORG.legalName} haben Sie echte Mitsprachemöglichkeiten und tragen aktiv zur Mission bei.
+              Als Mitglied des {ORG.legalName} hast du echte Mitsprachemöglichkeiten und tragen aktiv zur Mission bei.
             </p>
           </div>
 
@@ -109,17 +109,17 @@ export default function MitgliedWerdenPage() {
 
             <div className="mt-8 pt-8 border-t border-gray-200">
               <Heading level={3} className="tracking-tight text-gray-900">
-                So werden Sie Mitglied
+                So wirst du Mitglied
               </Heading>
               <p className="mt-4 text-base text-gray-600">
-                Senden Sie eine E-Mail an{' '}
+                Sende eine E-Mail an{' '}
                 <a
                   href={`mailto:${CONTACT.email}?subject=Mitgliedschaftsantrag`}
                   className="font-semibold text-green-600 hover:text-green-700 underline"
                 >
                   {CONTACT.email}
                 </a>{' '}
-                mit Ihrem Namen und Ihrer Adresse. Wir nehmen Ihren Antrag an der nächsten Vorstandssitzung auf.
+                mit deinem Namen und deiner Adresse. Wir nehmen deinen Antrag an der nächsten Vorstandssitzung auf.
               </p>
               <div className="mt-6">
                 <a
@@ -157,7 +157,7 @@ export default function MitgliedWerdenPage() {
             <p className="text-sm text-gray-600">
               Weitere Fragen?{' '}
               <Link href="/contact" className="font-semibold text-green-600 hover:text-green-700">
-                Kontaktieren Sie uns
+                Kontaktiere uns
               </Link>
             </p>
           </div>

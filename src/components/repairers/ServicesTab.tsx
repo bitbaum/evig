@@ -17,7 +17,7 @@ export function ServicesTab({ services, servicesOffered }: ServicesTabProps) {
           <Wrench className="w-12 h-12 mx-auto mb-3 text-gray-300" />
           <p>Keine spezifischen Services hinterlegt.</p>
           <p className="text-sm mt-2">
-            Kontaktieren Sie den Reparateur für ein individuelles Angebot.
+            Kontaktiere den Reparateur für ein individuelles Angebot.
           </p>
         </div>
       ) : (

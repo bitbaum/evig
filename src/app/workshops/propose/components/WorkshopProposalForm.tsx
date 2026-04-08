@@ -160,7 +160,7 @@ export function WorkshopProposalForm() {
     if (!formData.termsAccepted) {
       setSubmitResult({
         success: false,
-        message: 'Bitte akzeptieren Sie die Nutzungsbedingungen'
+        message: 'Bitte akzeptiere die Nutzungsbedingungen'
       })
       return
     }
@@ -168,7 +168,7 @@ export function WorkshopProposalForm() {
     if (formData.learningObjectives.length === 0) {
       setSubmitResult({
         success: false,
-        message: 'Bitte geben Sie mindestens ein Lernziel an'
+        message: 'Bitte gib mindestens ein Lernziel an'
       })
       return
     }
@@ -190,7 +190,7 @@ export function WorkshopProposalForm() {
       if (data.success) {
         setSubmitResult({
           success: true,
-          message: 'Ihr Workshop-Vorschlag wurde erfolgreich eingereicht! Sie erhalten in Kürze eine E-Mail mit weiteren Informationen.'
+          message: 'dein Workshop-Vorschlag wurde erfolgreich eingereicht! du erhältst in Kürze eine E-Mail mit weiteren Informationen.'
         })
 
         // Redirect after success
@@ -200,14 +200,14 @@ export function WorkshopProposalForm() {
       } else {
         setSubmitResult({
           success: false,
-          message: data.error || 'Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut.'
+          message: data.error || 'Ein Fehler ist aufgetreten. Bitte versuche es erneut.'
         })
       }
     } catch (error) {
       logger.error('Workshop proposal submission failed', { error })
       setSubmitResult({
         success: false,
-        message: 'Netzwerkfehler. Bitte versuchen Sie es erneut.'
+        message: 'Netzwerkfehler. Bitte versuche es erneut.'
       })
     } finally {
       setIsSubmitting(false)
@@ -311,7 +311,7 @@ export function WorkshopProposalForm() {
         </button>
 
         <p className="text-sm text-gray-600 mt-4">
-          Nach Einreichung wird Ihr Vorschlag geprüft. Dies kann 1-2 Werktage dauern.
+          Nach Einreichung wird dein Vorschlag geprüft. Dies kann 1-2 Werktage dauern.
         </p>
       </div>
     </form>

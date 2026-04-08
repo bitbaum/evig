@@ -62,7 +62,7 @@ const ServiceCard: React.FC<{ service: Service }> = ({ service }) => {
       }
     } catch {
       setBookingStatus('error')
-      setErrorMessage('Netzwerkfehler. Bitte versuchen Sie es erneut.')
+      setErrorMessage('Netzwerkfehler. Bitte versuche es erneut.')
     }
   }
 
@@ -219,7 +219,7 @@ export default function ServicesPage() {
           theme="services"
           icon={Wrench}
           title="Experten-IT-Dienstleistungen"
-          subtitle="Nachhaltige Lösungen für Ihre Technologiebedürfnisse. Wir kombinieren technische Expertise mit Umweltverantwortung, um umfassende IT-Lösungen zu bieten, die Ihnen Geld sparen und Elektroschrott reduzieren."
+          subtitle="Nachhaltige Lösungen für deine Technologiebedürfnisse. Wir kombinieren technische Expertise mit Umweltverantwortung, um umfassende IT-Lösungen zu bieten, die dir Geld sparen und Elektroschrott reduzieren."
         />
 
         <FilterableSection
@@ -235,14 +235,14 @@ export default function ServicesPage() {
 
         <section className="py-12 sm:py-16 md:py-20 bg-white border-t border-gray-200">
           <div className="container mx-auto px-4 sm:px-6 text-center">
-            <Heading level={2} className="mb-4 sm:mb-6 text-gray-900">Bereit, Ihre Technologie zu erneuern?</Heading>
-            <p className="text-base sm:text-lg md:text-xl mb-6 sm:mb-8 max-w-2xl mx-auto text-gray-600">Kontaktieren Sie uns heute für eine kostenlose Beratung und entdecken Sie, wie wir Ihnen helfen können, das Beste aus Ihren Geräten herauszuholen.</p>
+            <Heading level={2} className="mb-4 sm:mb-6 text-gray-900">Bereit, deine Technologie zu erneuern?</Heading>
+            <p className="text-base sm:text-lg md:text-xl mb-6 sm:mb-8 max-w-2xl mx-auto text-gray-600">Kontaktiere uns heute für eine kostenlose Beratung und entdecken Sie, wie wir dir helfen können, das Beste aus deinen Geräten herauszuholen.</p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
                 href="/contact"
                 className="inline-block bg-blue-600 text-white px-8 py-4 rounded-lg font-semibold hover:bg-blue-500 transition-colors duration-300 text-lg"
               >
-                Kontaktieren Sie uns
+                Kontaktiere uns
               </Link>
               <Link
                 href="https://www.revamp-it.ch/index.php/de/shop-de"

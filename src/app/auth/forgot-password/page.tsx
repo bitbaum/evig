@@ -52,7 +52,7 @@ export default function ForgotPasswordPage() {
             E-Mail gesendet!
           </h2>
           <p className="mt-2 text-center text-sm text-gray-600">
-            Wir haben Ihnen eine E-Mail mit Anweisungen zum Zurücksetzen Ihres Passworts gesendet.
+            Wir haben dir eine E-Mail mit Anweisungen zum Zurücksetzen deines Passworts gesendet.
           </p>
         </div>
 
@@ -60,8 +60,8 @@ export default function ForgotPasswordPage() {
           <div className="bg-white py-8 px-4 shadow-lg rounded-lg sm:px-10">
             <div className="text-center">
               <p className="text-sm text-gray-600 mb-6">
-                Überprüfen Sie Ihr E-Mail-Postfach und folgen Sie den Anweisungen. Falls Sie keine E-Mail erhalten haben,
-                überprüfen Sie Ihren Spam-Ordner.
+                Überprüfe dein E-Mail-Postfach und folge den Anweisungen. Falls du keine E-Mail erhalten hast,
+                überprüfe deinen Spam-Ordner.
               </p>
 
               <div className="space-y-3">
@@ -99,7 +99,7 @@ export default function ForgotPasswordPage() {
           Passwort zurücksetzen
         </h2>
         <p className="mt-2 text-center text-sm text-gray-600">
-          Geben Sie Ihre E-Mail-Adresse ein und wir senden Ihnen einen Link zum Zurücksetzen Ihres Passworts.
+          Gib deine E-Mail-Adresse ein und wir senden dir einen Link zum Zurücksetzen deines Passworts.
         </p>
       </div>
 
@@ -159,7 +159,7 @@ export default function ForgotPasswordPage() {
 
           <div className="mt-6 text-center">
             <p className="text-sm text-gray-600">
-              Erinnern Sie sich an Ihr Passwort?{' '}
+              Erinnerst du dich an dein Passwort?{' '}
               <Link href="/auth/login" className="font-medium text-green-600 hover:text-green-700">
                 Jetzt anmelden
               </Link>

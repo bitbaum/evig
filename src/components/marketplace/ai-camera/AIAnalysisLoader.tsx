@@ -16,7 +16,7 @@ export function AIAnalysisLoader() {
         Produkt wird analysiert...
       </h3>
       <p className="text-gray-600">
-        Unsere KI erkennt Marke, Modell und Zustand Ihres Produkts
+        Unsere KI erkennt Marke, Modell und Zustand deines Produkts
       </p>
       <div className="mt-6 bg-gray-200 rounded-full h-2">
         <div className="bg-purple-600 h-2 rounded-full animate-pulse" style={{ width: '60%' }}></div>

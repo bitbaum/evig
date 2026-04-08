@@ -238,15 +238,15 @@ export default function IoTSolutionsPage() {
         <section className="py-20 bg-gray-50">
           <div className="container mx-auto px-4 text-center">
             <div className="max-w-3xl mx-auto">
-              <h2 className="text-4xl font-bold text-gray-900 mb-6">Gestalten Sie unsere Forschung mit</h2>
+              <h2 className="text-4xl font-bold text-gray-900 mb-6">Gestalte unsere Forschung mit</h2>
               <p className="text-xl text-gray-600 mb-8">
-                Helfen Sie uns bei der Erforschung und Entwicklung von IoT-Lösungen, die wirklich den Bedürfnissen der Gemeinschaft dienen.
-                Ihr Beitrag ist für eine ethische Technologieentwicklung unerlässlich.
+                Hilf uns bei der Erforschung und Entwicklung von IoT-Lösungen, die wirklich den Bedürfnissen der Gemeinschaft dienen.
+                dein Beitrag ist für eine ethische Technologieentwicklung unerlässlich.
               </p>
               <div className="bg-green-50 border border-green-200 rounded-lg p-8">
                 <h3 className="text-2xl font-bold text-green-800 mb-4">Forschungspartnerschaft mit der Gemeinschaft</h3>
                 <p className="text-green-700 mb-6">
-                  Nehmen Sie an unserem Forschungsprozess teil, um zu untersuchen, wie die IoT-Technologie Ihre Gemeinschaft unterstützen kann,
+                  Nimm an unserem Forschungsprozess teil, um zu untersuchen, wie die IoT-Technologie deine Gemeinschaft unterstützen kann,
                   ohne die Privatsphäre oder Autonomie zu beeinträchtigen. Wir brauchen vielfältige Stimmen, um bessere Lösungen zu entwickeln.
                 </p>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
@@ -267,7 +267,7 @@ export default function IoTSolutionsPage() {
                   href="/contact"
                   className="inline-flex items-center bg-green-600 text-white px-8 py-4 rounded-lg font-semibold hover:bg-green-700 transition-colors duration-300 text-lg"
                 >
-                  Treten Sie der Forschungsgemeinschaft bei
+                  Tritt der Forschungsgemeinschaft bei
                   <ArrowRight className="ml-2 w-5 h-5" />
                 </Link>
               </div>
@@ -278,7 +278,7 @@ export default function IoTSolutionsPage() {
         {/* Current Services CTA */}
         <section className="py-20 bg-gradient-to-r from-green-700 to-green-800 text-white">
           <div className="container mx-auto px-4 text-center">
-            <h2 className="text-4xl font-bold mb-6">Benötigen Sie heute technische Unterstützung?</h2>
+            <h2 className="text-4xl font-bold mb-6">Benötigst du heute technische Unterstützung?</h2>
             <p className="text-xl mb-8 max-w-2xl mx-auto text-green-100">
               Während wir unsere IoT-Vision entwickeln, unterstützen wir aktiv Gemeinschaften mit
               Open-Source-Lösungen und der Wiederaufbereitung von Hardware.
@@ -294,7 +294,7 @@ export default function IoTSolutionsPage() {
                 href="/get-involved"
                 className="inline-block border-2 border-white text-white px-8 py-4 rounded-lg font-semibold hover:bg-white/10 transition-colors duration-300 text-lg"
               >
-                Machen Sie mit
+                Mache mit
               </Link>
             </div>
           </div>

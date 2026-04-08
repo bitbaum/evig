@@ -266,8 +266,8 @@ export default function WorkshopBrowseClient({ workshops }: WorkshopBrowseClient
             </h3>
             <p className="text-gray-600 mb-4">
               {categoryFilter !== 'all' || levelFilter !== 'all'
-                ? 'Versuchen Sie andere Filter oder schauen Sie später wieder vorbei.'
-                : 'Schauen Sie bald wieder vorbei!'}
+                ? 'Versuche andere Filter oder schau später wieder vorbei.'
+                : 'Schau bald wieder vorbei!'}
             </p>
             {(categoryFilter !== 'all' || levelFilter !== 'all') && (
               <button

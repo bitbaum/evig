@@ -40,7 +40,7 @@ export function BookingForm({
       <CardHeader>
         <CardTitle>Service buchen: {service.name}</CardTitle>
         <CardDescription>
-          Buchen Sie diesen Service mit sofortiger Zahlung
+          Buche diesen Service mit sofortiger Zahlung
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
@@ -86,7 +86,7 @@ export function BookingForm({
           <Alert>
             <Shield className="h-4 w-4" />
             <AlertDescription>
-              Mit Escrow-Schutz sind Ihre Zahlungsmittel sicher. Sie werden automatisch
+              Mit Escrow-Schutz sind deine Zahlungsmittel sicher. du wirst automatisch
               freigegeben, sobald der Service erfolgreich abgeschlossen wurde.
             </AlertDescription>
           </Alert>
@@ -147,13 +147,13 @@ function DescriptionField({
   return (
     <div>
       <label htmlFor="booking-description" className="block text-sm font-medium mb-2">
-        Beschreibung Ihres Problems *
+        Beschreibung deines Problems *
       </label>
       <textarea
         id="booking-description"
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        placeholder="Beschreiben Sie das Problem so detailliert wie möglich..."
+        placeholder="Beschreibe das Problem so detailliert wie möglich..."
         className="w-full p-3 border rounded-lg"
         rows={4}
         required

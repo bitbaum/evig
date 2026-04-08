@@ -127,14 +127,14 @@ function ResetPasswordContent() {
             Passwort geändert!
           </h2>
           <p className="mt-2 text-center text-sm text-gray-600">
-            Ihr Passwort wurde erfolgreich geändert. Sie können sich jetzt mit Ihrem neuen Passwort anmelden.
+            Ihr Passwort wurde erfolgreich geändert. du kannst sich jetzt mit deinem neuen Passwort anmelden.
           </p>
         </div>
 
         <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
           <div className="bg-white py-8 px-4 shadow-lg rounded-lg sm:px-10 text-center">
             <p className="text-sm text-gray-600 mb-6">
-              Sie werden in wenigen Sekunden zur Anmeldung weitergeleitet...
+              du wirst in wenigen Sekunden zur Anmeldung weitergeleitet...
             </p>
             <Link
               href="/auth/login"
@@ -160,7 +160,7 @@ function ResetPasswordContent() {
           Neues Passwort festlegen
         </h2>
         <p className="mt-2 text-center text-sm text-gray-600">
-          Geben Sie Ihr neues Passwort ein.
+          Gib Ihr neues Passwort ein.
         </p>
       </div>
 

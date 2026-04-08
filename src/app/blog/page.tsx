@@ -112,7 +112,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
               Noch keine Artikel gefunden
             </Heading>
             <p className="text-sm sm:text-base text-gray-600 mb-6 sm:mb-8">
-              Versuchen Sie, Ihre Filter anzupassen oder reichen Sie einen Beitrag ein!
+              Versuche, deine Filter anzupassen oder reiche einen Beitrag ein!
             </p>
             <Link
               href="/blog/submit"
@@ -157,10 +157,10 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
           <div className="flex flex-col md:flex-row items-center justify-between gap-4 sm:gap-6">
             <div>
               <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-2">
-                Teilen Sie Ihr Wissen
+                Teile dein Wissen
               </h3>
               <p className="text-sm sm:text-base text-gray-600">
-                Haben Sie eine Geschichte über nachhaltige Technologie? Reichen Sie einen Beitrag ein.
+                Hast du eine Geschichte über nachhaltige Technologie? Reiche einen Beitrag ein.
               </p>
             </div>
             <Link

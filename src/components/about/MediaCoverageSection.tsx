@@ -218,7 +218,7 @@ export default function MediaCoverageSection() {
         {/* CTA */}
         <div className="mt-12 text-center">
           <p className="text-gray-600 mb-4">
-            Möchten Sie über uns berichten?
+            Möchtest du über uns berichten?
           </p>
           <a
             href="/contact"

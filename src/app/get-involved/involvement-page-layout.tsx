@@ -45,11 +45,11 @@ export function InvolvementPageLayout({
             Bereit anzufangen?
           </h2>
           <p className={`${responsiveTypography.lead} ${responsiveSpacing.mbLarge} max-w-2xl mx-auto text-gray-600`}>
-            Haben Sie Fragen oder möchten Sie mehr erfahren? Wir sind da, um Ihnen beim nächsten Schritt zu helfen.
+            Hast du Fragen oder möchtest du mehr erfahren? Wir sind da, um dir beim nächsten Schritt zu helfen.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
             <ContactLink variant="default" size="lg">
-              Kontaktieren Sie uns
+              Kontaktiere uns
             </ContactLink>
             <a
               href="/get-involved"

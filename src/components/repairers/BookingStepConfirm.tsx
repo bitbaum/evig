@@ -94,7 +94,7 @@ export function BookingStepConfirm({
       {/* Home Visit Address */}
       {isHomeVisit && (
         <div className="mb-6 p-4 bg-gray-50 rounded-lg space-y-4">
-          <h3 className="font-medium text-gray-900">Ihre Adresse</h3>
+          <h3 className="font-medium text-gray-900">deine Adresse</h3>
           <div>
             <label className="block text-sm text-gray-600 mb-1">Strasse & Hausnummer *</label>
             <input
@@ -178,7 +178,7 @@ export function BookingStepConfirm({
           <div>
             <p className="text-yellow-800 font-medium">Anmeldung erforderlich</p>
             <p className="text-yellow-700 text-sm">
-              Sie werden zur Anmeldung weitergeleitet, um die Anfrage abzuschliessen.
+              du wirst zur Anmeldung weitergeleitet, um die Anfrage abzuschliessen.
             </p>
           </div>
         </div>

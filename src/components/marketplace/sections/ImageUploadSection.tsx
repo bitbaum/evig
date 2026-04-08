@@ -26,7 +26,7 @@ export function ImageUploadSection({ images, onImageUpload, onImageRemove }: Ima
         Produkt-Bilder
       </h3>
       <p className={cn('text-sm', getTextColor('white', 'muted'))}>
-        Fügen Sie bis zu {MARKETPLACE_LIMITS.MAX_IMAGES} klare Bilder Ihres Produkts hinzu
+        Füge bis zu {MARKETPLACE_LIMITS.MAX_IMAGES} klare Bilder deines Produkts hinzu
       </p>
 
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">

@@ -151,7 +151,7 @@ export default function CheckoutPage({ params }: { params: Promise<{ listingId: 
           Eigenes Inserat
         </h2>
         <p className="text-gray-600 dark:text-gray-400 mb-4">
-          Sie können Ihr eigenes Inserat nicht kaufen.
+          du kannst Ihr eigenes Inserat nicht kaufen.
         </p>
         <Link href={`/marketplace/${listing.id}`} className="text-green-600 hover:text-green-700 font-medium">
           Zurück zum Inserat

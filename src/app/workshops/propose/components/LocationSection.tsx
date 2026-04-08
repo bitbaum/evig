@@ -79,7 +79,7 @@ export function LocationSection({
                 onChange={(e) => onChange('locationType', e.target.value)}
                 className="mr-3 text-green-600 focus:ring-green-500"
               />
-              <span className="text-sm text-gray-700">Bei Ihnen zu Hause oder in Ihren Räumlichkeiten</span>
+              <span className="text-sm text-gray-700">Bei dir zu Hause oder in deinen Räumlichkeiten</span>
             </label>
           </div>
         </div>
@@ -118,7 +118,7 @@ export function LocationSection({
               ) : (
                 <div className="text-sm text-gray-500 bg-yellow-50 border border-yellow-200 rounded-lg p-3">
                   <p>Keine genehmigten Veranstaltungsorte verfügbar.</p>
-                  <p className="mt-1">Sie können einen neuen Ort vorschlagen oder einen bestehenden Ort zur Genehmigung einreichen.</p>
+                  <p className="mt-1">du kannst einen neuen Ort vorschlagen oder einen bestehenden Ort zur Genehmigung einreichen.</p>
                 </div>
               )}
             </div>
@@ -135,7 +135,7 @@ export function LocationSection({
                 placeholder="z.B. Mein Zuhause, oder neuer Veranstaltungsort"
               />
               <p className="text-xs text-gray-500 mt-1">
-                Verwenden Sie dieses Feld, wenn Sie einen neuen Ort vorschlagen möchten
+                Verwende dieses Feld, wenn du einen neuen Ort vorschlagen möchten
               </p>
             </div>
 
@@ -176,7 +176,7 @@ export function LocationSection({
                 value={proposedLocation}
                 onChange={(e) => onChange('proposedLocation', e.target.value)}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                placeholder="Ihre vollständige Adresse"
+                placeholder="deine vollständige Adresse"
                 required
               />
             </div>

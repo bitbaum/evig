@@ -84,7 +84,7 @@ export function AISearchModal({
                       AI Schnellsuche
                     </h2>
                     <p className={cn('text-sm', getTextColor('white', 'muted'))}>
-                      Geben Sie einen Produktnamen oder Artikelnummer ein
+                      Gib einen Produktnamen oder Artikelnummer ein
                     </p>
                   </div>
                 </div>

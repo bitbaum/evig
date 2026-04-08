@@ -46,7 +46,7 @@ function VerifyEmailContent() {
         }
       } catch (error) {
         setStatus('error')
-        setMessage('Netzwerkfehler. Bitte versuchen Sie es später erneut.')
+        setMessage('Netzwerkfehler. Bitte versuche es später erneut.')
       }
     }
 
@@ -65,7 +65,7 @@ function VerifyEmailContent() {
           E-Mail-Adresse bestätigen
         </h2>
         <p className="mt-2 text-center text-sm text-gray-600">
-          Wir bestätigen Ihre E-Mail-Adresse...
+          Wir bestätigen deine E-Mail-Adresse...
         </p>
       </div>
 
@@ -87,7 +87,7 @@ function VerifyEmailContent() {
                 </h3>
                 <p className="text-gray-600 mb-4">{message}</p>
                 <p className="text-sm text-gray-500">
-                  Sie werden in wenigen Sekunden zur Anmeldung weitergeleitet...
+                  du wirst in wenigen Sekunden zur Anmeldung weitergeleitet...
                 </p>
                 <div className="mt-6">
                   <Link

@@ -104,23 +104,23 @@ export default function LinuxolaPage() {
     <>
       <ProjectPage config={linuxolaConfig} />
       <ProjectCallToAction
-        title="Machen Sie mit"
+        title="Mache mit"
         actions={[
           {
             title: 'Ausrüstung spenden',
-            description: 'Ihre gebrauchte IT-Ausrüstung kann in afrikanischen Gemeinden einen echten Unterschied machen',
+            description: 'deine gebrauchte IT-Ausrüstung kann in afrikanischen Gemeinden einen echten Unterschied machen',
             href: '/get-involved/donate',
             ctaText: 'Jetzt spenden'
           },
           {
             title: 'Freiwillig engagieren',
-            description: 'Teilen Sie Ihr technisches Fachwissen und helfen Sie beim Aufbau von Computerräumen',
+            description: 'Teile dein technisches Fachwissen und hilf beim Aufbau von Computerräumen',
             href: '/get-involved/volunteer',
-            ctaText: 'Engagieren Sie sich'
+            ctaText: 'Engagiere sich'
           },
           {
             title: 'Kontakt',
-            description: 'Kontaktieren Sie uns für weitere Informationen',
+            description: 'Kontaktiere uns für weitere Informationen',
             href: '/contact',
             ctaText: 'Kontakt aufnehmen'
           }

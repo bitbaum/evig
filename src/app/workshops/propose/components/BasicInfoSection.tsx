@@ -103,7 +103,7 @@ export function BasicInfoSection({
             onChange={(e) => onChange('description', e.target.value)}
             rows={4}
             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-            placeholder="Beschreiben Sie den Workshop detailliert..."
+            placeholder="Beschreibe den Workshop detailliert..."
             required
             aria-required="true"
           />

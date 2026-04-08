@@ -25,7 +25,7 @@ export function PaymentView({
       <CardHeader>
         <CardTitle>Zahlung abschliessen</CardTitle>
         <CardDescription>
-          Schliessen Sie die Zahlung für {service.name} ab
+          Schliesse die Zahlung für {service.name} ab
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -63,7 +63,7 @@ export function PaymentView({
             Online-Zahlung wird bald verfügbar sein
           </p>
           <p className="text-sm text-gray-500">
-            Kontaktieren Sie uns direkt für Buchungen
+            Kontaktiere uns direkt für Buchungen
           </p>
         </div>
       </CardContent>

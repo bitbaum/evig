@@ -19,7 +19,7 @@ const kivitendoConfig: ProjectPageConfig = {
           title: 'Open-Source-Vorteile',
           description: '',
           features: [
-            'Hohe Anpassungsfähigkeit an Ihre Bedürfnisse',
+            'Hohe Anpassungsfähigkeit an deine Bedürfnisse',
             'Vollständiger Zugriff auf Code und Entwicklungen',
             'Keine fixen Lizenzkosten'
           ]
@@ -46,13 +46,13 @@ const kivitendoConfig: ProjectPageConfig = {
     },
     {
       title: 'Hauptmerkmale',
-      description: 'Umfassende Funktionen für Ihre Geschäftsanforderungen',
+      description: 'Umfassende Funktionen für deine Geschäftsanforderungen',
       backgroundColor: 'gray',
       layout: 'grid-2',
       cards: [
         {
           title: 'Geschäftskonfiguration',
-          description: 'Konfigurieren Sie das System für Ihre spezifischen Geschäftsanforderungen',
+          description: 'Konfiguriere das System für deine spezifischen Geschäftsanforderungen',
           features: [
             'Mehrere Währungen & Sprachen',
             'Mandantenfähigkeit',
@@ -61,7 +61,7 @@ const kivitendoConfig: ProjectPageConfig = {
         },
         {
           title: 'Integration & Anpassung',
-          description: 'Erweitern Sie die Funktionalität nach Ihren Bedürfnissen',
+          description: 'Erweitere die Funktionalität nach deinen Bedürfnissen',
           features: [
             'Webshop-Integration',
             'Benutzerdefinierte Variablen',
@@ -78,7 +78,7 @@ const kivitendoConfig: ProjectPageConfig = {
       cards: [
         {
           title: 'Unsere Dienstleistungen',
-          description: 'Wir unterstützen Sie bei der Nutzung von Kivitendo',
+          description: 'Wir unterstützen dich bei der Nutzung von Kivitendo',
           features: [
             'Konfiguration & Customization',
             'Support & Wartung',
@@ -105,19 +105,19 @@ export default function KivitendoPage() {
         actions={[
           {
             title: 'Kivitendo Schweiz',
-            description: 'Besuchen Sie die offizielle Schweizer Kivitendo-Website',
+            description: 'Besuche die offizielle Schweizer Kivitendo-Website',
             href: 'https://www.kivitendo.ch',
             ctaText: 'Website besuchen'
           },
           {
             title: 'Community-Forum',
-            description: 'Holen Sie sich Hilfe und teilen Sie Wissen mit anderen Benutzern',
+            description: 'Hol dir Hilfe und teile Wissen mit anderen Benutzern',
             href: 'https://forum.kivitendo.de/',
             ctaText: 'Forum besuchen'
           },
           {
             title: 'Kontakt',
-            description: 'Kontaktieren Sie uns für mehr Informationen',
+            description: 'Kontaktiere uns für mehr Informationen',
             href: '/contact',
             ctaText: 'Kontakt aufnehmen'
           }

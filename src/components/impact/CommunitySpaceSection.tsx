@@ -55,7 +55,7 @@ export default function CommunitySpaceSection() {
             Unser Standort
           </div>
           <h2 className="text-4xl md:text-5xl font-bold mb-6">
-            Besuchen Sie uns
+            Besuche uns
           </h2>
           <p className="text-xl text-gray-500 max-w-3xl mx-auto">
             Unser Laden in Zürich ist mehr als nur ein Geschäft – er ist ein Treffpunkt
@@ -72,7 +72,7 @@ export default function CommunitySpaceSection() {
               {address}
             </p>
 
-            <h4 className="text-lg font-semibold mb-4 text-gray-300">Was Sie bei uns finden:</h4>
+            <h4 className="text-lg font-semibold mb-4 text-gray-300">Was du bei uns finden:</h4>
             <ul className="space-y-3">
               {PHYSICAL_SPACE.current.offerings.map((offering, index) => (
                 <li key={index} className="flex items-center gap-3">
@@ -105,7 +105,7 @@ export default function CommunitySpaceSection() {
             </div>
 
             <p className="text-gray-400 mb-6">
-              Lernen Sie von Experten in unseren regelmässigen Workshops und Vorträgen.
+              Lerne von Experten in unseren regelmässigen Workshops und Vorträgen.
               Für Anfänger bis Fortgeschrittene.
             </p>
 
@@ -156,7 +156,7 @@ export default function CommunitySpaceSection() {
 
           <div className="mt-8 pt-8 border-t border-gray-700/50 text-center">
             <p className="text-gray-400 mb-4">
-              Helfen Sie uns, diese Vision Wirklichkeit werden zu lassen.
+              Hilf uns, diese Vision Wirklichkeit werden zu lassen.
             </p>
             <Button>
               Projekt unterstützen

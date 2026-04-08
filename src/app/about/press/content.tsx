@@ -224,7 +224,7 @@ export default function PressPageContent() {
         <div className="max-w-4xl mx-auto text-center px-4">
           <h2 className="text-3xl font-bold mb-6">Presseanfragen</h2>
           <p className="text-xl mb-8 text-green-100">
-            Möchten Sie über RevampIT berichten? Wir freuen uns über Ihr Interesse
+            Möchtest du über RevampIT berichten? Wir freuen uns über dein Interesse
             und stehen gerne für Interviews und Hintergrundgespräche zur Verfügung.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">

@@ -153,7 +153,7 @@ export default function DonatePage() {
         <section id="bankueberweisung" className="mb-12 scroll-mt-8">
           <div className="rounded-xl border-2 border-green-200 bg-green-50 p-6 sm:p-8">
             <h2 className="text-xl font-semibold text-gray-900 mb-2">Banküberweisung</h2>
-            <p className="text-sm text-gray-500 mb-6">Überweisen Sie auf folgendes Konto:</p>
+            <p className="text-sm text-gray-500 mb-6">Überweise auf folgendes Konto:</p>
             <div className="space-y-4">
               <div className="flex items-start justify-between gap-4">
                 <div>

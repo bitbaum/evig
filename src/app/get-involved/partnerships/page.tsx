@@ -9,14 +9,14 @@ import { ORG, CONTACT } from '@/config/org'
 
 export const metadata: Metadata = {
   title: `Partnerschaften | ${ORG.name}`,
-  description: `Schliessen Sie sich mit ${ORG.name} zusammen, um nachhaltige Technologielösungen zu schaffen und eine dauerhafte Wirkung zu erzielen.`,
+  description: `Schliess dich mit ${ORG.name} zusammen, um nachhaltige Technologielösungen zu schaffen und eine dauerhafte Wirkung zu erzielen.`,
 }
 
 export default function PartnershipsPage() {
   return (
     <InvolvementPageLayout
       title="Partnerschaftsmöglichkeiten"
-      description={`Schliessen Sie sich mit ${ORG.name} zusammen, um nachhaltige Technologielösungen zu schaffen und eine dauerhafte Wirkung zu erzielen.`}
+      description={`Schliess dich mit ${ORG.name} zusammen, um nachhaltige Technologielösungen zu schaffen und eine dauerhafte Wirkung zu erzielen.`}
       ctaText="Partner werden"
       ctaHref={`mailto:${CONTACT.email}`}
     >
@@ -76,13 +76,13 @@ export default function PartnershipsPage() {
 
         {/* How to Get Started */}
         <NumberedSteps
-          title="Wie Sie anfangen können"
+          title="Wie du anfangen können"
           steps={[
-            { text: 'Kontaktieren Sie uns, um Partnerschaftsmöglichkeiten zu besprechen' },
-            { text: 'Teilen Sie die Ziele und Interessen Ihrer Organisation mit' },
-            { text: 'Erkunden Sie potenzielle Zusammenarbeitsbereiche' },
-            { text: 'Entwickeln Sie eine Partnerschaftsvereinbarung' },
-            { text: 'Beginnen Sie Ihre Partnerschaftsreise' }
+            { text: 'Kontaktiere uns, um Partnerschaftsmöglichkeiten zu besprechen' },
+            { text: 'Teile die Ziele und Interessen deiner Organisation mit' },
+            { text: 'Erkunde potenzielle Zusammenarbeitsbereiche' },
+            { text: 'Entwickle eine Partnerschaftsvereinbarung' },
+            { text: 'Beginne deine Partnerschaftsreise' }
           ]}
         />
       </div>

@@ -3,7 +3,7 @@ import { Metadata } from 'next'
 export const metadata: Metadata = {
   title: 'Marktplatz - Gebrauchte Elektronik kaufen & verkaufen | RevampIT',
   description:
-    'Kaufen und verkaufen Sie gebrauchte und aufbereitete Elektronik auf dem RevampIT Marktplatz. Nachhaltig, günstig und mit Käuferschutz.',
+    'Kaufe und verkaufe gebrauchte und aufbereitete Elektronik auf dem RevampIT Marktplatz. Nachhaltig, günstig und mit Käuferschutz.',
   keywords: [
     'gebrauchte Elektronik',
     'Second Hand Laptop',

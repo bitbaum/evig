@@ -23,7 +23,7 @@ export default function WorkshopProposalPage() {
               Anmeldung erforderlich
             </h1>
             <p className="text-gray-600 mb-6">
-              Bitte melden Sie sich an, um einen Workshop vorzuschlagen.
+              Bitte melde sich an, um einen Workshop vorzuschlagen.
             </p>
             <Link
               href="/auth/login"
@@ -58,7 +58,7 @@ export default function WorkshopProposalPage() {
               Workshop vorschlagen
             </h1>
             <p className="text-gray-600">
-              Schlagen Sie einen neuen Workshop vor und teilen Sie Ihr Wissen mit der Community
+              Schlage einen neuen Workshop vor und teile dein Wissen mit der Community
             </p>
           </div>
         </div>

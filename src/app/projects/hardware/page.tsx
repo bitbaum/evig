@@ -113,25 +113,25 @@ export default function HardwarePage() {
     <>
       <ProjectPage config={hardwareConfig} />
       <ProjectCallToAction
-        title="Machen Sie mit"
+        title="Mache mit"
         actions={[
           {
             title: 'Wissen teilen',
-            description: 'Bringen Sie Ihr Fachwissen in der Hardware-Reparatur und -Optimierung ein',
+            description: 'Bring dein Fachwissen in der Hardware-Reparatur und -Optimierung ein',
             href: '/get-involved/volunteer',
-            ctaText: 'Engagieren Sie sich'
+            ctaText: 'Engagiere sich'
           },
           {
             title: 'Hardware spenden',
-            description: 'Spenden Sie alte Hardware für unsere Wiederverwendungsprojekte',
+            description: 'Spende alte Hardware für unsere Wiederverwendungsprojekte',
             href: '/get-involved/donate',
             ctaText: 'Spenden'
           },
           {
             title: 'Zusammenarbeiten',
-            description: 'Arbeiten Sie mit uns an Hardware-Entwicklungsprojekten',
+            description: 'Arbeite mit uns an Hardware-Entwicklungsprojekten',
             href: '/contact',
-            ctaText: 'Kontaktieren Sie uns'
+            ctaText: 'Kontaktiere uns'
           }
         ]}
       />

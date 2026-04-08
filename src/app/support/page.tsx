@@ -5,7 +5,7 @@ import { PageHero } from '@/components/layout/PageHero'
 
 export const metadata: Metadata = {
   title: 'RevampIt unterstützen | Community-gestützte Inhalte',
-  description: 'Unterstützen Sie qualitativ hochwertige, werbefreie Inhalte über nachhaltige Technologie'
+  description: 'Unterstütze qualitativ hochwertige, werbefreie Inhalte über nachhaltige Technologie'
 }
 
 export default function SupportPage() {
@@ -14,8 +14,8 @@ export default function SupportPage() {
       <PageHero
         theme="getInvolved"
         icon={Heart}
-        title="Unterstützen Sie RevampIt"
-        subtitle="Helfen Sie uns, qualitativ hochwertige, werbefreie Inhalte über nachhaltige Technologie, Open Source und die Zukunft des Computing zu erstellen."
+        title="Unterstütze RevampIt"
+        subtitle="Hilf uns, qualitativ hochwertige, werbefreie Inhalte über nachhaltige Technologie, Open Source und die Zukunft des Computing zu erstellen."
       />
 
       {/* Why Support */}
@@ -27,7 +27,7 @@ export default function SupportPage() {
             </div>
             <h3 className="text-base sm:text-lg font-bold text-gray-900 mb-2">Keine Werbung</h3>
             <p className="text-gray-600">
-              Wir werden niemals Werbung schalten oder Ihre Daten verkaufen
+              Wir werden niemals Werbung schalten oder deine Daten verkaufen
             </p>
           </div>
           <div className="text-center">
@@ -60,7 +60,7 @@ export default function SupportPage() {
               zugänglich sein sollten, ohne Bezahlschranken oder aufdringliche Werbung.
             </p>
             <p>
-              Ihre Unterstützung ermöglicht es uns:
+              deine Unterstützung ermöglicht es uns:
             </p>
             <ul className="space-y-2">
               <li>✅ Tiefgreifende Recherchen und Analysen durchzuführen</li>
@@ -81,7 +81,7 @@ export default function SupportPage() {
               <h3 className="text-xl sm:text-2xl font-bold text-gray-900">Einmalige Spende</h3>
             </div>
             <p className="text-gray-600 mb-6">
-              Kaufen Sie uns einen Kaffee oder unterstützen Sie uns mit einem beliebigen Betrag
+              Kaufe uns einen Kaffee oder unterstütze uns mit einem beliebigen Betrag
             </p>
             <a
               href="https://ko-fi.com/revampit"
@@ -100,7 +100,7 @@ export default function SupportPage() {
               <h3 className="text-xl sm:text-2xl font-bold text-gray-900">Monatlicher Support</h3>
             </div>
             <p className="text-gray-600 mb-6">
-              Werden Sie Unterstützer und helfen Sie uns nachhaltig zu wachsen
+              Werde Unterstützer und hilf uns nachhaltig zu wachsen
             </p>
             <a
               href="https://github.com/sponsors/revampit"
@@ -145,7 +145,7 @@ export default function SupportPage() {
         {/* Thank You */}
         <div className="text-center py-8">
           <p className="text-lg text-gray-600">
-            <strong>Vielen Dank</strong> für Ihre Unterstützung unserer Mission für
+            <strong>Vielen Dank</strong> für deine Unterstützung unserer Mission für
             nachhaltige, qualitativ hochwertige Technologie-Inhalte.
           </p>
         </div>

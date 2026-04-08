@@ -123,7 +123,7 @@ export default function ImpactPageContent() {
       amount: 'Ab CHF 5000/Jahr',
       icon: <Award className="h-6 w-6" />,
       benefits: [
-        'Nachhaltigkeitsbericht für Ihr Unternehmen',
+        'Nachhaltigkeitsbericht für dein Unternehmen',
         'Mitarbeiter-Workshops zu nachhaltiger IT',
         'Logo-Platzierung auf unserer Website',
         'Jährlicher Impact-Report'
@@ -133,12 +133,12 @@ export default function ImpactPageContent() {
     {
       id: 'equipment',
       name: 'Geräte-Spende',
-      description: 'Spenden Sie funktionsfähige IT-Geräte',
+      description: 'Spende funktionsfähige IT-Geräte',
       icon: <Leaf className="h-6 w-6" />,
       benefits: [
         'Steuerliche Absetzbarkeit der Geräte',
         'Professionelle Datenlöschung garantiert',
-        'Nachhaltigkeitszertifikat für Ihr Unternehmen',
+        'Nachhaltigkeitszertifikat für dein Unternehmen',
         'Sichtbare Wirkung durch Geräte-Tracking'
       ],
       ctaText: 'Geräte spenden'
@@ -166,7 +166,7 @@ export default function ImpactPageContent() {
       {/* Hero Section */}
       <ResponsiveHero
         title="Unsere messbare Wirkung"
-        description="Entdecken Sie, wie RevampIT seit 2003 die Schweizer IT-Landschaft nachhaltig verändert – transparent, messbar und wirksam."
+        description="Entdecke, wie RevampIT seit 2003 die Schweizer IT-Landschaft nachhaltig verändert – transparent, messbar und wirksam."
       />
 
       {/* Sub Navigation */}
@@ -187,7 +187,7 @@ export default function ImpactPageContent() {
           <h2 className="text-3xl font-bold mb-4">Warum Transparenz wichtig ist</h2>
           <p className="text-lg text-gray-600 max-w-3xl mx-auto">
             Als gemeinnütziger Verein legen wir grössten Wert auf Transparenz. Jede unserer Zahlen ist nachvollziehbar dokumentiert,
-            damit Sie als Spender:in genau verstehen, wie Ihre Unterstützung wirkt.
+            damit dir als Spender:in genau verstehen, wie deine Unterstützung wirkt.
           </p>
         </div>
 
@@ -349,9 +349,9 @@ export default function ImpactPageContent() {
       <section className="py-16 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">Wie Sie uns unterstützen können</h2>
+            <h2 className="text-3xl font-bold mb-4">Wie du uns unterstützen können</h2>
             <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-              Jede Unterstützung zählt und trägt direkt zu unserer Mission bei. Wählen Sie die für Sie passende Art der Unterstützung.
+              Jede Unterstützung zählt und trägt direkt zu unserer Mission bei. Wähle die für dich passende Art der Unterstützung.
             </p>
           </div>
 
@@ -400,9 +400,9 @@ export default function ImpactPageContent() {
           {/* Donation Impact Calculator */}
           <Card className="bg-white">
             <CardHeader>
-              <CardTitle className="text-center">Ihre Spenden-Wirkung berechnen</CardTitle>
+              <CardTitle className="text-center">deine Spenden-Wirkung berechnen</CardTitle>
               <CardDescription className="text-center">
-                Sehen Sie sofort, welche Wirkung Ihre Spende haben kann
+                Sieh sofort, welche Wirkung deine Spende haben kann
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -493,7 +493,7 @@ export default function ImpactPageContent() {
         <div className="max-w-4xl mx-auto text-center px-4">
           <h2 className="text-3xl font-bold mb-6">Gemeinsam mehr erreichen</h2>
           <p className="text-xl mb-8">
-            Ihre Unterstützung macht den Unterschied. Jeder Beitrag, ob gross oder klein, hilft uns dabei,
+            deine Unterstützung macht den Unterschied. Jeder Beitrag, ob gross oder klein, hilft uns dabei,
             die Schweizer IT-Landschaft nachhaltiger zu gestalten und Menschen neue Chancen zu geben.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">

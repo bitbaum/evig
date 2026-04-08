@@ -74,7 +74,7 @@ export default function ShareButtons({ url, title }: ShareButtonsProps) {
         </a>
       </div>
       <p className="text-xs text-gray-500 mt-3">
-        💡 Für Mastodon: Wählen Sie nach dem Klick Ihre Instanz aus
+        💡 Für Mastodon: Wähle nach dem Klick deine Instanz aus
       </p>
     </div>
   )

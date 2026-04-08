@@ -32,7 +32,7 @@ export async function generateMetadata({
     description: `${name} — Profil, Bewertungen und Terminbuchung. Elektronik-Reparatur in ${repairer.city}.`,
     openGraph: {
       title: `${name} in ${repairer.city} | RevampIT`,
-      description: `Profil und Bewertungen von ${name}. Buchen Sie einen Reparaturtermin in ${repairer.city}.`,
+      description: `Profil und Bewertungen von ${name}. Buche einen Reparaturtermin in ${repairer.city}.`,
       type: 'profile',
     },
   }

@@ -9,15 +9,15 @@ import { ORG, CONTACT } from '@/config/org'
 
 export const metadata: Metadata = {
   title: `Arbeitsreintegration | ${ORG.name}`,
-  description: 'Nehmen Sie an unserem Arbeitsreintegrationsprogramm teil, um wertvolle Fähigkeiten und Erfahrungen in der Technologie zu sammeln und dabei Ihre Karriere wieder aufzubauen.',
+  description: 'Nimm an unserem Arbeitsreintegrationsprogramm teil, um wertvolle Fähigkeiten und Erfahrungen in der Technologie zu sammeln und dabei deine Karriere wieder aufzubauen.',
 }
 
 export default function WorkReintegrationPage() {
   return (
     <InvolvementPageLayout
       title="Arbeitsreintegrationsprogramm"
-      description="Schliessen Sie sich unserem unterstützenden Programm an, um Ihre Karriere in Technologie und Nachhaltigkeit wieder aufzubauen."
-      ctaText="Ihre Reise beginnen"
+      description="Schliess dich unserem unterstützenden Programm an, um deine Karriere in Technologie und Nachhaltigkeit wieder aufzubauen."
+      ctaText="deine Reise beginnen"
       ctaHref={`mailto:${CONTACT.email}`}
     >
       <div className="space-y-16">
@@ -60,7 +60,7 @@ export default function WorkReintegrationPage() {
           </h2>
           <p className={`${responsiveTypography.lead} text-gray-600 leading-relaxed`}>
             Viele unserer Teilnehmer sind erfolgreich in eine Vollzeitbeschäftigung in
-            der Technologie und verwandten Bereichen übergegangen. Ihr Erfolg ist ein Zeugnis für die Wirksamkeit
+            der Technologie und verwandten Bereichen übergegangen. dein Erfolg ist ein Zeugnis für die Wirksamkeit
             unseres Programms und das Engagement unseres Teams.
           </p>
         </section>
@@ -76,12 +76,12 @@ export default function WorkReintegrationPage() {
 
         {/* How to Get Started */}
         <NumberedSteps
-          title="Wie Sie anfangen können"
+          title="Wie du anfangen können"
           steps={[
-            { text: 'Kontaktieren Sie uns, um Ihre Situation zu besprechen' },
-            { text: 'Treffen Sie sich mit unserem Team für eine Bewertung' },
-            { text: 'Entwickeln Sie Ihren personalisierten Plan' },
-            { text: 'Beginnen Sie Ihre Arbeitsreintegrationsreise' }
+            { text: 'Kontaktiere uns, um deine Situation zu besprechen' },
+            { text: 'Triff sich mit unserem Team für eine Bewertung' },
+            { text: 'Entwickle deinen personalisierten Plan' },
+            { text: 'Beginne deine Arbeitsreintegrationsreise' }
           ]}
         />
       </div>

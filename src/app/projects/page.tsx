@@ -9,7 +9,7 @@ import { ArrowRight, Filter, CheckCircle2, Calendar, Users, Code, Globe, Wrench,
 // Note: metadata export removed since this is now a client component
 // const metadata: Metadata = {
 //   title: 'Unsere Projekte',
-//   description: 'Entdecken Sie unser vielfältiges Spektrum an Projekten, von Open-Source-Beiträgen bis hin zu Gemeinschaftsinitiativen und Hardware-Entwicklung.'
+//   description: 'Entdecke unser vielfältiges Spektrum an Projekten, von Open-Source-Beiträgen bis hin zu Gemeinschaftsinitiativen und Hardware-Entwicklung.'
 // }
 
 const projects = [
@@ -132,7 +132,7 @@ export default function ProjectsPage() {
         theme="projects"
         icon={Rocket}
         title="Unsere Projekte"
-        subtitle="Entdecken Sie unser vielfältiges Spektrum an Projekten, von Open-Source-Beiträgen bis hin zu Gemeinschaftsinitiativen und Hardware-Entwicklung."
+        subtitle="Entdecke unser vielfältiges Spektrum an Projekten, von Open-Source-Beiträgen bis hin zu Gemeinschaftsinitiativen und Hardware-Entwicklung."
       />
 
       {/* Projects Section with Filtering */}
@@ -141,7 +141,7 @@ export default function ProjectsPage() {
           <div className="max-w-3xl mx-auto text-center mb-8 sm:mb-12">
             <h2 className="text-2xl sm:text-3xl font-bold mb-4 sm:mb-6">Unsere Projekte</h2>
             <p className="text-base sm:text-lg text-gray-600 mb-6 sm:mb-8">
-              Von Open-Source-Software bis hin zu Community-Initiativen - entdecken Sie unsere vielfältigen Projekte.
+              Von Open-Source-Software bis hin zu Community-Initiativen - entdecke unsere vielfältigen Projekte.
             </p>
             
             {/* Project Filter */}

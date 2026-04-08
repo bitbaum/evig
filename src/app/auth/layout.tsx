@@ -6,7 +6,7 @@ export const metadata: Metadata = {
     default: 'Konto | RevampIT',
   },
   description:
-    'Melden Sie sich bei RevampIT an, um Reparaturanfragen zu stellen, auf dem Marktplatz zu handeln und an Workshops teilzunehmen.',
+    'Melde dich bei RevampIT an, um Reparaturanfragen zu stellen, auf dem Marktplatz zu handeln und an Workshops teilzunehmen.',
   robots: {
     index: false,
     follow: false,

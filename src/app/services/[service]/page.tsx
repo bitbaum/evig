@@ -135,7 +135,7 @@ export default async function ServicePage({ params }: { params: Promise<{ servic
             <div className="container mx-auto px-4 py-3">
               <div className="flex items-center justify-center">
                 <Clock className="w-5 h-5 text-yellow-600 mr-2" />
-                <span className="text-yellow-800 font-semibold">Dieser Service kommt bald. Kontaktieren Sie uns, um Ihr Interesse zu bekunden und benachrichtigt zu werden, wenn er verfügbar ist.</span>
+                <span className="text-yellow-800 font-semibold">Dieser Service kommt bald. Kontaktiere uns, um Ihr Interesse zu bekunden und benachrichtigt zu werden, wenn er verfügbar ist.</span>
               </div>
             </div>
           </div>

@@ -32,7 +32,7 @@ export async function generateMetadata({
     description: `IT-Hilfe Anfrage: ${request.title}${location}. Community-basierte Tech-Reparaturhilfe.`,
     openGraph: {
       title: `${request.title} | IT-Hilfe`,
-      description: `Reparaturanfrage${location} — Helfen Sie mit oder erfahren Sie mehr.`,
+      description: `Reparaturanfrage${location} — Hilf mit oder erfahre mehr.`,
       type: 'article',
     },
   }

@@ -10,7 +10,7 @@ import type { WorkshopWithInstances } from '@/components/workshops/types'
 export const metadata: Metadata = {
   title: 'Workshops | RevampIT',
   description:
-    'Entdecken Sie unsere Workshops zu nachhaltiger Technologie, Linux, Reparatur, Programmierung und mehr. Praxisnah lernen bei RevampIT in Zürich.',
+    'Entdecke unsere Workshops zu nachhaltiger Technologie, Linux, Reparatur, Programmierung und mehr. Praxisnah lernen bei RevampIT in Zürich.',
   openGraph: {
     title: 'Workshops | RevampIT',
     description:

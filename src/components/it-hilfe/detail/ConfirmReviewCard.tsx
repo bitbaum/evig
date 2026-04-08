@@ -30,11 +30,11 @@ export function ConfirmReviewCard({
     setError('')
 
     if (rating < 1) {
-      setError('Bitte wählen Sie eine Sternebewertung aus')
+      setError('Bitte wähle eine Sternebewertung aus')
       return
     }
     if (recommended === null) {
-      setError('Bitte geben Sie an, ob Sie den Helfer weiterempfehlen würden')
+      setError('Bitte gib an, ob du den Helfer weiterempfehlen würdest')
       return
     }
     if (reviewText && reviewText.trim().length > 0 && reviewText.trim().length < 10) {
@@ -55,7 +55,7 @@ export function ConfirmReviewCard({
           </h3>
           <p className="text-sm text-gray-700 mt-1">
             Der Helfer hat &quot;{requestTitle}&quot; als abgeschlossen markiert.
-            Bestätigen Sie die Hilfe und hinterlassen Sie eine kurze Bewertung.
+            Bestätige die Hilfe und hinterlasse eine kurze Bewertung.
           </p>
         </div>
       </div>
@@ -115,7 +115,7 @@ export function ConfirmReviewCard({
         {/* Recommend */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
-            Würden Sie diesen Helfer weiterempfehlen? *
+            Würdest du diesen Helfer weiterempfehlen? *
           </label>
           <div className="flex gap-3">
             <button

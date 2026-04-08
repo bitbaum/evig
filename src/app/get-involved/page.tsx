@@ -8,7 +8,7 @@ import { INVOLVEMENT_OPTIONS, TESTIMONIALS, PARTNER_INSTITUTIONS, GET_INVOLVED_C
 
 export const metadata: Metadata = {
   title: 'Mitmachen | RevampIT',
-  description: 'Schliessen Sie sich unserer Mission an, Elektroschrott zu reduzieren und Technologie für alle zugänglich zu machen. Werden Sie Freiwilliger, Praktikant oder Partner.'
+  description: 'Schliess dich unserer Mission an, Elektroschrott zu reduzieren und Technologie für alle zugänglich zu machen. Werde Freiwilliger, Praktikant oder Partner.'
 }
 
 const coreValues = [
@@ -182,7 +182,7 @@ export default function GetInvolvedPage() {
             Bereit, einen Unterschied zu machen?
           </h2>
           <p className={`${responsiveTypography.lead} ${responsiveSpacing.mbMedium} max-w-2xl mx-auto text-green-100`}>
-            Schliessen Sie sich unserer Gemeinschaft von Veränderern an und helfen Sie uns, eine nachhaltigere Zukunft durch Technologie zu schaffen.
+            Schliess dich unserer Gemeinschaft von Veränderern an und hilf uns, eine nachhaltigere Zukunft durch Technologie zu schaffen.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
             <ContactLink variant="outline" size="lg" className="bg-white text-green-800 hover:bg-green-50">

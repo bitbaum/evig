@@ -2,7 +2,7 @@ const processSteps = [
   {
     step: '01',
     title: 'Entdeckung',
-    description: 'Wir beginnen mit einer umfassenden Beratung, um Ihre Ziele, Anforderungen und Zielgruppe zu verstehen.',
+    description: 'Wir beginnen mit einer umfassenden Beratung, um deine Ziele, Anforderungen und Zielgruppe zu verstehen.',
   },
   {
     step: '02',
@@ -12,12 +12,12 @@ const processSteps = [
   {
     step: '03',
     title: 'Entwicklung',
-    description: 'Wir erstellen Ihre Website nach agiler Methodik mit regelmässigen Updates und Feedback-Sitzungen.',
+    description: 'Wir erstellen deine Website nach agiler Methodik mit regelmässigen Updates und Feedback-Sitzungen.',
   },
   {
     step: '04',
     title: 'Start & Support',
-    description: 'Wir starten Ihre Website und bieten laufenden Support, Wartung und Optimierung.',
+    description: 'Wir starten deine Website und bieten laufenden Support, Wartung und Optimierung.',
   },
 ]
 
@@ -29,7 +29,7 @@ export function ProcessSection() {
           <h2 className="text-3xl font-bold mb-6">Unser Entwicklungsprozess</h2>
           <p className="text-lg text-gray-600">
             Wir verfolgen einen kollaborativen, transparenten Prozess, der sicherstellt, dass Ihr Projekt
-            Ihren Bedürfnissen entspricht und Ihre Erwartungen übertrifft.
+            deinen Bedürfnissen entspricht und deine Erwartungen übertrifft.
           </p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">

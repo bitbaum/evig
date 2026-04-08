@@ -93,7 +93,7 @@ export function BasicInfoSection({ formData, errors, onFieldChange }: BasicInfoS
             "w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500",
             errors.description ? "border-error-300" : "border-neutral-300"
           )}
-          placeholder="Beschreiben Sie den Zustand, Ausstattung, eventuelle Mängel und alle wichtigen Details..."
+          placeholder="Beschreibe den Zustand, Ausstattung, eventuelle Mängel und alle wichtigen Details..."
         />
         {errors.description && (
           <p id="description-error" className="text-error-600 text-sm mt-1">{errors.description}</p>

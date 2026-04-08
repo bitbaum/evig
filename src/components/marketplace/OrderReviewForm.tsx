@@ -33,13 +33,13 @@ export function OrderReviewForm({ orderId, onSubmitted }: OrderReviewFormProps) 
     setError(null)
 
     if (rating < 1 || rating > 5) {
-      setError('Bitte wählen Sie eine Sternebewertung.')
+      setError('Bitte wähle eine Sternebewertung.')
       return
     }
 
     const trimmed = content.trim()
     if (trimmed.length > 0 && trimmed.length < 10) {
-      setError('Ihr Kommentar muss mindestens 10 Zeichen enthalten oder leer bleiben.')
+      setError('dein Kommentar muss mindestens 10 Zeichen enthalten oder leer bleiben.')
       return
     }
 
@@ -68,9 +68,9 @@ export function OrderReviewForm({ orderId, onSubmitted }: OrderReviewFormProps) 
     return (
       <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-xl p-6 text-center">
         <CheckCircle className="w-10 h-10 text-green-600 mx-auto mb-2" />
-        <h3 className="font-semibold text-green-800 dark:text-green-200">Vielen Dank für Ihre Bewertung!</h3>
+        <h3 className="font-semibold text-green-800 dark:text-green-200">Vielen Dank für deine Bewertung!</h3>
         <p className="text-sm text-green-700 dark:text-green-300 mt-1">
-          Ihre Rückmeldung hilft der Community.
+          deine Rückmeldung hilft der Community.
         </p>
       </div>
     )
@@ -80,7 +80,7 @@ export function OrderReviewForm({ orderId, onSubmitted }: OrderReviewFormProps) 
     <form onSubmit={handleSubmit} className="space-y-5">
       <div>
         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-          Ihre Bewertung
+          deine Bewertung
         </label>
         <div className="flex items-center gap-1">
           {[1, 2, 3, 4, 5].map((n) => {
@@ -118,23 +118,23 @@ export function OrderReviewForm({ orderId, onSubmitted }: OrderReviewFormProps) 
           htmlFor="review-content"
           className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
         >
-          Ihr Kommentar <span className="text-gray-400 font-normal">(optional)</span>
+          dein Kommentar <span className="text-gray-400 font-normal">(optional)</span>
         </label>
         <textarea
           id="review-content"
           rows={4}
           value={content}
           onChange={(e) => setContent(e.target.value)}
-          placeholder="Wie war Ihre Erfahrung? Entsprach der Artikel der Beschreibung? Wie war die Kommunikation mit dem Verkäufer?"
+          placeholder="Wie war deine Erfahrung? Entsprach der Artikel der Beschreibung? Wie war die Kommunikation mit dem Verkäufer?"
           className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white px-4 py-2.5 text-sm focus:ring-2 focus:ring-green-500 focus:border-transparent"
           maxLength={5000}
         />
-        <p className="text-xs text-gray-400 mt-1">Mindestens 10 Zeichen, wenn Sie einen Kommentar schreiben.</p>
+        <p className="text-xs text-gray-400 mt-1">Mindestens 10 Zeichen, wenn du einen Kommentar schreiben.</p>
       </div>
 
       <div>
         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-          Würden Sie diesen Verkäufer empfehlen?
+          Würdest du diesen Verkäufer empfehlen?
         </label>
         <div className="flex gap-2">
           <button

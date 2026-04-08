@@ -9,15 +9,15 @@ import { ORG, CONTACT } from '@/config/org'
 
 export const metadata: Metadata = {
   title: `Technische Experten | ${ORG.name}`,
-  description: 'Teilen Sie Ihre technische Expertise und helfen Sie uns, innovative Lösungen für nachhaltige Technologie zu entwickeln.',
+  description: 'Teile deine technische Expertise und hilf uns, innovative Lösungen für nachhaltige Technologie zu entwickeln.',
 }
 
 export default function TechnicalExpertsPage() {
   return (
     <InvolvementPageLayout
       title="Technische Experten"
-      description="Teilen Sie Ihre Expertise und helfen Sie uns, innovative Lösungen für nachhaltige Technologie zu entwickeln."
-      ctaText="Ihre Expertise teilen"
+      description="Teile deine Expertise und hilf uns, innovative Lösungen für nachhaltige Technologie zu entwickeln."
+      ctaText="deine Expertise teilen"
       ctaHref={`mailto:${CONTACT.email}`}
     >
       <div className="space-y-16">
@@ -64,12 +64,12 @@ export default function TechnicalExpertsPage() {
 
         {/* How to Get Started */}
         <NumberedSteps
-          title="Wie Sie anfangen können"
+          title="Wie du anfangen können"
           steps={[
-            { text: 'Kontaktieren Sie uns mit Ihrem Fachbereich und Ihren Interessen' },
-            { text: 'Besprechen Sie mögliche Projekte und Beiträge' },
-            { text: 'Überprüfen Sie unsere Entwicklungsrichtlinien und -prozesse' },
-            { text: 'Beginnen Sie, zu unseren Projekten beizutragen' }
+            { text: 'Kontaktiere uns mit deinem Fachbereich und deinen Interessen' },
+            { text: 'Besprich mögliche Projekte und Beiträge' },
+            { text: 'Überprüfe unsere Entwicklungsrichtlinien und -prozesse' },
+            { text: 'Beginne, zu unseren Projekten beizutragen' }
           ]}
         />
       </div>

@@ -23,10 +23,10 @@ import {
 
 export const metadata: Metadata = {
   title: 'Nachhaltige KI-Lösungen für Unternehmen | RevampIT',
-  description: 'Open-Source, souveräne KI-Systeme für professionelle Firmen. Nachhaltige, private und DSGVO-konforme KI, die Ihre Daten schützt und die digitale Souveränität unterstützt.',
+  description: 'Open-Source, souveräne KI-Systeme für professionelle Firmen. Nachhaltige, private und DSGVO-konforme KI, die deine Daten schützt und die digitale Souveränität unterstützt.',
   openGraph: {
     title: 'Nachhaltige KI-Lösungen für Unternehmen | RevampIT',
-    description: 'Open-Source, souveräne KI-Systeme für professionelle Firmen. Nachhaltige, private und DSGVO-konforme KI, die Ihre Daten schützt und die digitale Souveränität unterstützt.',
+    description: 'Open-Source, souveräne KI-Systeme für professionelle Firmen. Nachhaltige, private und DSGVO-konforme KI, die deine Daten schützt und die digitale Souveränität unterstützt.',
     type: 'website',
     url: 'https://revampit.org/services/enterprise-ai-solutions',
   },
@@ -62,7 +62,7 @@ export default function EnterpriseAIPage() {
           <div className="container mx-auto px-4 py-3">
             <div className="flex items-center justify-center">
               <Clock className="w-5 h-5 text-yellow-600 mr-2" />
-              <span className="text-yellow-800 font-semibold">Dieser Service ist bald verfügbar. Kontaktieren Sie uns, um Interesse zu bekunden und benachrichtigt zu werden, wenn er verfügbar ist.</span>
+              <span className="text-yellow-800 font-semibold">Dieser Service ist bald verfügbar. Kontaktiere uns, um Interesse zu bekunden und benachrichtigt zu werden, wenn er verfügbar ist.</span>
             </div>
           </div>
         </div>
@@ -71,7 +71,7 @@ export default function EnterpriseAIPage() {
           theme="services"
           icon={Brain}
           title="Nachhaltige Unternehmens-KI"
-          subtitle="Die Zukunft der KI ist nachhaltiges, souveränes Computing. Setzen Sie fortschrittliche KI-Systeme ein, die Ihre Datensouveränität respektieren, auf Open-Source-Transparenz setzen und die Umweltbelastung minimieren."
+          subtitle="Die Zukunft der KI ist nachhaltiges, souveränes Computing. Setze fortschrittliche KI-Systeme ein, die deine Datensouveränität respektieren, auf Open-Source-Transparenz setzen und die Umweltbelastung minimieren."
         >
           <p className="text-lg text-gray-600 max-w-2xl mx-auto mt-4">
             <strong>Souverän • Open Source • Nachhaltig</strong>
@@ -121,7 +121,7 @@ export default function EnterpriseAIPage() {
             <div className="text-center mb-16">
               <h2 className="text-4xl font-bold mb-6">Warum nachhaltige, souveräne KI?</h2>
               <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                Transformieren Sie Ihre Dokumenten-Workflows mit einer KI, die den Schweizer Werten von Datenschutz, Nachhaltigkeit und Unabhängigkeit entspricht.
+                Transformiere deine Dokumenten-Workflows mit einer KI, die den Schweizer Werten von Datenschutz, Nachhaltigkeit und Unabhängigkeit entspricht.
               </p>
             </div>
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -241,11 +241,11 @@ export default function EnterpriseAIPage() {
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <div>
                     <h5 className="font-semibold text-green-700">Einstiegspunkt</h5>
-                    <p className="text-sm text-gray-700">Beginnen Sie mit einem RTX 4090-Setup für CHF 450/Monat. Perfekt für kleine Teams zum Testen und Lernen.</p>
+                    <p className="text-sm text-gray-700">Beginne mit einem RTX 4090-Setup für CHF 450/Monat. Perfekt für kleine Teams zum Testen und Lernen.</p>
                   </div>
                   <div>
                     <h5 className="font-semibold text-green-700">Allmähliche Skalierung</h5>
-                    <p className="text-sm text-gray-700">Aktualisieren Sie Hardware und Modelle, wenn Ihre Anforderungen wachsen. Sie müssen nicht mit unternehmenstauglicher Ausrüstung beginnen.</p>
+                    <p className="text-sm text-gray-700">Aktualisiere Hardware und Modelle, wenn deine Anforderungen wachsen. du musst nicht mit unternehmenstauglicher Ausrüstung beginnen.</p>
                   </div>
                   <div>
                     <h5 className="font-semibold text-green-700">Zukunftssicher</h5>
@@ -263,7 +263,7 @@ export default function EnterpriseAIPage() {
             <div className="text-center mb-16">
               <h2 className="text-4xl font-bold mb-6">Branchenanwendungen</h2>
               <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                Unsere souveränen KI-Lösungen passen sich den spezifischen Bedürfnissen Ihrer Branche an und gewährleisten gleichzeitig vollständige Datensouveränität und Compliance.
+                Unsere souveränen KI-Lösungen passen sich den spezifischen Bedürfnissen deiner Branche an und gewährleisten gleichzeitig vollständige Datensouveränität und Compliance.
               </p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -298,7 +298,7 @@ export default function EnterpriseAIPage() {
             <div className="text-center mb-16">
               <h2 className="text-4xl font-bold mb-6">Nachhaltige Investition in die digitale Souveränität</h2>
               <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                Transparente Preise, die unser Engagement für nachhaltige, souveräne KI widerspiegeln. Skalieren Sie vom Proof-of-Concept bis zur vollen Produktion mit vollständiger Kostentransparenz.
+                Transparente Preise, die unser Engagement für nachhaltige, souveräne KI widerspiegeln. Skaliere vom Proof-of-Concept bis zur vollen Produktion mit vollständiger Kostentransparenz.
               </p>
             </div>
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -456,14 +456,14 @@ export default function EnterpriseAIPage() {
             </div>
             <h2 className="text-4xl font-bold mb-6">Bereit für nachhaltige, souveräne KI?</h2>
             <p className="text-xl mb-8 max-w-3xl mx-auto text-green-100">
-              Schliessen Sie sich der Bewegung zur digitalen Souveränität an. Setzen Sie eine KI ein, die Ihre Daten respektiert, Transparenz begrüsst und eine nachhaltige digitale Zukunft für die Schweiz und darüber hinaus schafft.
+              Schliess dich der Bewegung zur digitalen Souveränität an. Setze eine KI ein, die deine Daten respektiert, Transparenz begrüsst und eine nachhaltige digitale Zukunft für die Schweiz und darüber hinaus schafft.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
                 href="/contact"
                 className="inline-block bg-white text-green-800 px-8 py-4 rounded-lg font-semibold hover:bg-green-50 transition-colors duration-300 text-lg"
               >
-                Starten Sie Ihre souveräne KI-Reise
+                Starte deine souveräne KI-Reise
               </Link>
               <Link
                 href="/services"

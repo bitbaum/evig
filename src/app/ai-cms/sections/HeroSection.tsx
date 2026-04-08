@@ -28,7 +28,7 @@ export function HeroSection() {
           <div className="mt-8 bg-white/90 backdrop-blur rounded-2xl p-4 sm:p-6 border-2 border-neutral-200 shadow-sm">
             <p className={cn('text-sm font-medium mb-2', getTextColor('white', 'primary'))}>In Entwicklung</p>
             <p className={cn('text-sm', getTextColor('white', 'muted'))}>
-              Dieses System wird entwickelt, um Website-Verbesserungen zu vereinfachen. Hier sehen Sie das Konzept.
+              Dieses System wird entwickelt, um Website-Verbesserungen zu vereinfachen. Hier siehst du das Konzept.
             </p>
           </div>
         </div>

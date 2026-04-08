@@ -10,7 +10,7 @@ import { PageHero } from '@/components/layout/PageHero'
 
 export const metadata: Metadata = {
   title: `Shop | ${ORG.name}`,
-  description: `Wählen Sie, wie Sie bei ${ORG.name} einkaufen möchten – Online-Shop, Shopware-Kanal oder Ladenlokal in Zürich.`,
+  description: `Wähle, wie du bei ${ORG.name} einkaufen möchten – Online-Shop, Shopware-Kanal oder Ladenlokal in Zürich.`,
 }
 
 // URLs and address centralized in constants
@@ -80,7 +80,7 @@ export default function ShopPage() {
                       <p className="font-medium text-gray-900 mb-1">Warum zwei Kartenoptionen?</p>
                       <p>
                         OpenStreetMap ist community‑getrieben und datensparsam. Google/Apple Maps bieten oft bessere Navigation, Live‑Verkehr und POIs. 
-                        Wählen Sie, was für Sie am besten passt – Transparenz und Wahlfreiheit sind uns wichtig.
+                        Wähle, was für dich am besten passt – Transparenz und Wahlfreiheit sind uns wichtig.
                       </p>
                     </div>
                   </div>

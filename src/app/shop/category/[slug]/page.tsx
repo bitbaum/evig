@@ -56,7 +56,7 @@ export async function generateMetadata({
 
   return {
     title,
-    description: `Entdecken Sie unsere Auswahl an ${category.name.toLowerCase()} - nachhaltig aufbereitete IT-Geräte bei RevampIT.`,
+    description: `Entdecke unsere Auswahl an ${category.name.toLowerCase()} - nachhaltig aufbereitete IT-Geräte bei RevampIT.`,
   };
 }
 
@@ -175,7 +175,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
             {category.name}
           </h1>
           <p className="text-lg text-emerald-100 max-w-2xl">
-            Entdecken Sie unsere Auswahl an nachhaltig aufbereiteten{" "}
+            Entdecke unsere Auswahl an nachhaltig aufbereiteten{" "}
             {category.name.toLowerCase()} - geprüfte Qualität zu fairen Preisen.
           </p>
           {category.count !== undefined && (
@@ -212,7 +212,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
               Produkte werden geladen
             </h2>
             <p className="text-gray-600 mb-6">
-              Bald finden Sie hier aufbereitete IT-Geräte in der Kategorie{" "}
+              Bald findest du hier aufbereitete IT-Geräte in der Kategorie{" "}
               <strong>{category.name}</strong> auf unserem Marketplace.
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">

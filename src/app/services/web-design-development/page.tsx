@@ -36,7 +36,7 @@ export default function WebDesignDevelopmentPage() {
             href="/contact"
             className="inline-flex items-center justify-center rounded-md text-sm font-medium px-6 py-3 bg-blue-600 text-white hover:bg-blue-700 transition-colors"
           >
-            Starten Sie Ihr Projekt
+            Starte Ihr Projekt
           </Link>
           <Link
             href="#services"

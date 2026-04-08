@@ -8,7 +8,7 @@ import { PageHero } from '@/components/layout/PageHero'
 
 export const metadata: Metadata = {
   title: `Kontakt | ${ORG.name}`,
-  description: `Kontaktieren Sie ${ORG.name} für Linux-Support, Workshops und Open-Source-Lösungen.`,
+  description: `Kontaktiere ${ORG.name} für Linux-Support, Workshops und Open-Source-Lösungen.`,
 }
 
 const contactInfo = [
@@ -47,7 +47,7 @@ export default function ContactPage() {
         theme="contact"
         icon={MessageCircle}
         title="Kontakt"
-        subtitle="Haben Sie Fragen zu unseren Dienstleistungen, Workshops oder Linux-Lösungen? Wir helfen gerne!"
+        subtitle="Hast du Fragen zu unseren Dienstleistungen, Workshops oder Linux-Lösungen? Wir helfen gerne!"
       />
 
       {/* Contact Information Section */}
@@ -89,7 +89,7 @@ export default function ContactPage() {
       <section className="py-12 sm:py-16 md:py-20 bg-white">
         <div className="container mx-auto px-4 sm:px-6">
           <div className="max-w-4xl mx-auto">
-            <Heading level={2} className="mb-6 sm:mb-8 text-center">Finden Sie uns</Heading>
+            <Heading level={2} className="mb-6 sm:mb-8 text-center">Finde uns</Heading>
             <div className="aspect-w-16 aspect-h-9 rounded-xl overflow-hidden shadow-lg">
               <iframe
                 src={LOCATIONS.store.googleMapsEmbedUrl}
@@ -129,7 +129,7 @@ export default function ContactPage() {
                     <p className="font-medium text-gray-900 mb-1">Warum zwei Kartenoptionen?</p>
                     <p>
                       OpenStreetMap ist community‑getrieben und datensparsam. Google/Apple Maps bieten oft bessere Navigation, Live‑Verkehr und POIs. 
-                      Wählen Sie, was für Sie am besten passt – Transparenz und Wahlfreiheit sind uns wichtig.
+                      Wähle, was für dich am besten passt – Transparenz und Wahlfreiheit sind uns wichtig.
                     </p>
                   </div>
                 </div>

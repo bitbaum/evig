@@ -46,7 +46,7 @@ const features = [
   {
     icon: Truck,
     title: 'Kostenloser Abholservice',
-    description: 'Bequemer Abholservice für Ihre alte Ausrüstung.'
+    description: 'Bequemer Abholservice für deine alte Ausrüstung.'
   }
 ]
 
@@ -192,7 +192,7 @@ export default function HardwareRecyclingPage() {
           <div className="container mx-auto px-4 sm:px-6">
             <div className="max-w-4xl mx-auto">
               <div className="text-center mb-8 sm:mb-12">
-                <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-3 sm:mb-4">Kontaktieren Sie uns heute</h2>
+                <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-3 sm:mb-4">Kontaktiere uns heute</h2>
                 <p className="text-base sm:text-lg md:text-xl text-gray-600">
                   Um mehr über unsere Hardware-Recycling Dienstleistungen zu erfahren
                 </p>
@@ -237,7 +237,7 @@ export default function HardwareRecyclingPage() {
           <div className="container mx-auto px-4 sm:px-6 text-center">
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 sm:mb-6">Bereit loszulegen?</h2>
             <p className="text-base sm:text-lg md:text-xl mb-6 sm:mb-8 max-w-2xl mx-auto text-green-100">
-              Kontaktieren Sie uns heute, um mehr über unsere Hardware-Recycling Dienstleistungen zu erfahren.
+              Kontaktiere uns heute, um mehr über unsere Hardware-Recycling Dienstleistungen zu erfahren.
             </p>
             <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
               <Link

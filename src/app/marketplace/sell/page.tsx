@@ -98,7 +98,7 @@ function SellPageContent() {
         const listing = data.data
 
         if (session.user.id !== listing.seller_id) {
-          setError('Sie können nur Ihre eigenen Inserate bearbeiten')
+          setError('du kannst nur deine eigenen Inserate bearbeiten')
           setEditId(null)
           return
         }
@@ -160,7 +160,7 @@ function SellPageContent() {
           Anmeldung erforderlich
         </h2>
         <p className="text-gray-600 dark:text-gray-400 mb-6">
-          Melden Sie sich an, um Inserate zu erstellen.
+          Melde dich an, um Inserate zu erstellen.
         </p>
         <Link href="/auth/login" className="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg font-medium">
           Anmelden
@@ -304,8 +304,8 @@ function SellPageContent() {
           </h1>
           <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
             {editId
-              ? 'Änderungen an Ihrem Inserat speichern.'
-              : 'Beschreiben Sie Ihr Produkt oder machen Sie ein Foto — die KI füllt den Rest aus.'}
+              ? 'Änderungen an deinem Inserat speichern.'
+              : 'Beschreibe dein Produkt oder mach ein Foto — die KI füllt den Rest aus.'}
           </p>
         </div>
 
@@ -371,7 +371,7 @@ function SellPageContent() {
                 <>
                   <div className="flex items-center gap-2 text-green-800 dark:text-green-200 font-semibold">
                     <Sparkles className="w-5 h-5" />
-                    Was möchten Sie verkaufen?
+                    Was möchten du verkaufst?
                   </div>
                   <div className="space-y-3">
                     <div className="flex gap-2">
@@ -400,7 +400,7 @@ function SellPageContent() {
                     </button>
                   </div>
                   <p className="text-xs text-green-600 dark:text-green-400">
-                    Die KI füllt das Formular anhand Ihrer Beschreibung oder des Fotos aus. Sie können alles danach anpassen.
+                    Die KI füllt das Formular anhand deiner Beschreibung oder des Fotos aus. du kannst alles danach anpassen.
                   </p>
                 </>
               )}
