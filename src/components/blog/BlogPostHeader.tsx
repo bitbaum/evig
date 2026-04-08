@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { ArrowLeft } from 'lucide-react'
 import { BlogPost } from '@/lib/blog'
-import { formatDate } from '@/lib/blog-utils'
+import { formatDate } from '@/lib/date-formats'
 
 interface BlogPostHeaderProps {
   post: BlogPost

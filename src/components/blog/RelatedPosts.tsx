@@ -1,7 +1,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { BlogPost } from '@/lib/blog'
-import { formatDate } from '@/lib/blog-utils'
+import { formatDate } from '@/lib/date-formats'
 
 interface RelatedPostsProps {
   posts: BlogPost[]

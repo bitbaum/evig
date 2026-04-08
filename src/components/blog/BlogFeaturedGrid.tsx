@@ -1,7 +1,11 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { BlogPost } from '@/lib/blog'
-import { formatDate, getReadingTime } from '@/lib/blog-utils'
+import { formatDate } from '@/lib/date-formats'
+
+function getReadingTime(content: string): number {
+  return Math.ceil(content.trim().split(/\s+/).length / 200)
+}
 import { Clock } from 'lucide-react'
 
 interface BlogFeaturedGridProps {

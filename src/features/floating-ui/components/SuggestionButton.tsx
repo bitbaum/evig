@@ -303,13 +303,6 @@ export default function SuggestionButton() {
 
             {/* Footer */}
             <div className="border-t border-gray-200 px-4 py-3 bg-gray-50 flex-shrink-0">
-              <a
-                href="/revamp-ux#wie-funktioniert"
-                className="text-xs text-blue-600 hover:text-blue-800 underline flex items-center space-x-1 justify-center"
-              >
-                <Info className="w-3 h-3" />
-                <span>Wie funktioniert&apos;s?</span>
-              </a>
             </div>
           </div>
         </div>
