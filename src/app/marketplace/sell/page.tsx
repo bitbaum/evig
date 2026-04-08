@@ -341,13 +341,13 @@ function SellPageContent() {
                     )}
                   </div>
                   <div className="flex flex-wrap gap-2">
-                    <button type="button" onClick={() => runQuickAction(currentFormData, 'improve_description')} disabled={isExtracting} className="inline-flex items-center gap-1 px-3 py-1.5 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-700 disabled:opacity-50 transition-colors">
+                    <button type="button" onClick={() => runQuickAction(currentFormData, 'improveDescription')} disabled={isExtracting} className="inline-flex items-center gap-1 px-3 py-1.5 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-700 disabled:opacity-50 transition-colors">
                       Beschreibung verbessern
                     </button>
-                    <button type="button" onClick={() => runQuickAction(currentFormData, 'suggest_price')} disabled={isExtracting} className="inline-flex items-center gap-1 px-3 py-1.5 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-700 disabled:opacity-50 transition-colors">
+                    <button type="button" onClick={() => runQuickAction(currentFormData, 'suggestPrice')} disabled={isExtracting} className="inline-flex items-center gap-1 px-3 py-1.5 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-700 disabled:opacity-50 transition-colors">
                       Preis vorschlagen
                     </button>
-                    <button type="button" onClick={() => runQuickAction(currentFormData, 'detect_specs')} disabled={isExtracting} className="inline-flex items-center gap-1 px-3 py-1.5 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-700 disabled:opacity-50 transition-colors">
+                    <button type="button" onClick={() => runQuickAction(currentFormData, 'extractSpecs')} disabled={isExtracting} className="inline-flex items-center gap-1 px-3 py-1.5 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-700 disabled:opacity-50 transition-colors">
                       Specs erkennen
                     </button>
                   </div>
