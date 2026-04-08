@@ -37,7 +37,7 @@ export const VALUE_PROPS: ValueProp[] = [
     description:
       "Reparieren und Aufbauen von Retro-Computern für Gaming und Sammler. Seltene Hardware, die noch funktioniert.",
     icon: Laptop,
-    href: "/projects/vintage-computers",
+    href: "/projects",
   },
   {
     name: "Gebrauchte Laptops mit Linux",

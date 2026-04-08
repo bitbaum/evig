@@ -132,6 +132,12 @@ export default function Footer() {
             <Link href="/agb" className="text-gray-400 hover:text-white transition-colors">
               AGB
             </Link>
+            <Link href="/transparenz" className="text-gray-400 hover:text-white transition-colors">
+              Transparenz
+            </Link>
+            <Link href="/mitglied-werden" className="text-gray-400 hover:text-white transition-colors">
+              Mitglied werden
+            </Link>
           </nav>
         </div>
 

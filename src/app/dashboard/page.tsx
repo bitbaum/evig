@@ -8,6 +8,7 @@ import { getTextColor } from '@/lib/design-system'
 import { cn } from '@/lib/utils'
 import { EmailVerificationBanner } from '@/components/dashboard/EmailVerificationBanner'
 import { OnboardingChecklist } from '@/components/dashboard/OnboardingChecklist'
+import { WelcomeCard } from '@/components/dashboard/WelcomeCard'
 import { isStaffEmail } from '@/lib/permissions'
 
 export const metadata: Metadata = {
@@ -31,6 +32,9 @@ export default async function DashboardPage() {
         {!session.user.emailVerified && session.user.email && (
           <EmailVerificationBanner email={session.user.email} className="mb-6" />
         )}
+
+        {/* Welcome Card for new users */}
+        <WelcomeCard />
 
         {/* Onboarding Checklist */}
         <OnboardingChecklist
