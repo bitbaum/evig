@@ -10,15 +10,11 @@ import {
   Package,
   Loader2,
   Camera,
-  Sparkles,
-  Wand2,
-  Send,
 } from 'lucide-react'
 import { MARKETPLACE_LIMITS } from '@/config/marketplace'
 import { Button } from '@/components/ui/button'
 import { logger } from '@/lib/logger'
 import { validateListingForm, transformListingFormToPayload } from '@/lib/domain/marketplace'
-import { useAIFormAssist } from '@/hooks/useAIFormAssist'
 import type { ListingFormData } from '@/types/listing-form'
 import { INITIAL_LISTING_FORM } from '@/types/listing-form'
 import { ImageUploadGrid } from '@/components/marketplace-sell/ImageUploadGrid'
@@ -29,6 +25,7 @@ import { ErrorAlert } from '@/components/common/ErrorAlert'
 import Heading from '@/components/ui/Heading'
 import type { DetectedProductData } from '@/components/marketplace/ai-camera/types'
 import type { AIFieldMetadataEntry } from '@/hooks/useAIFormAssist'
+import { AIFormAssist } from '@/components/ai/AIFormAssist'
 
 type Step = 'form' | 'preview'
 
@@ -46,9 +43,7 @@ function SellPageContent() {
   const [isLoadingEdit, setIsLoadingEdit] = useState(false)
   const [formData, setFormData] = useState<ListingFormData>(INITIAL_LISTING_FORM)
   const [showCamera, setShowCamera] = useState(false)
-  const [aiInput, setAiInput] = useState('')
 
-  // AI form assist hook
   const handleAIFieldsFilled = (data: Partial<Record<string, unknown>>, _metadata: Record<string, AIFieldMetadataEntry>) => {
     setFormData(prev => {
       const updated = { ...prev }
@@ -69,11 +64,6 @@ function SellPageContent() {
       return updated
     })
   }
-
-  const { extractFromText, refineFields, runQuickAction, isExtracting } =
-    useAIFormAssist({ formType: 'marketplace', onFieldsFilled: handleAIFieldsFilled })
-
-  const formHasData = formData.title.trim() !== '' || formData.description.trim() !== ''
 
   // Load existing listing data when editing
   useEffect(() => {
@@ -256,21 +246,6 @@ function SellPageContent() {
     setShowCamera(false)
   }
 
-  const handleAISubmit = () => {
-    if (!aiInput.trim() || isExtracting) return
-    if (formHasData) {
-      refineFields(
-        { title: formData.title, description: formData.description, price: formData.price, category: formData.category, condition: formData.condition, brand: formData.brand, model: formData.model, specs: formData.specs },
-        aiInput
-      )
-    } else {
-      extractFromText(aiInput)
-    }
-    setAiInput('')
-  }
-
-  const currentFormData = { title: formData.title, description: formData.description, price: formData.price, category: formData.category, condition: formData.condition, brand: formData.brand, model: formData.model, specs: formData.specs }
-
   // Preview step
   if (step === 'preview') {
     return (
@@ -319,93 +294,29 @@ function SellPageContent() {
             />
           )}
 
-          {/* === AI ASSISTANT (unified: creation OR refinement) === */}
+          {/* === AI ASSISTANT === */}
           {!editId && !showCamera && (
-            <div className={`rounded-xl border p-4 md:p-6 space-y-4 ${
-              formHasData
-                ? 'border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50'
-                : 'bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 border-green-200 dark:border-green-800'
-            }`}>
-              {formHasData ? (
-                /* --- REFINEMENT MODE: quick actions + compact custom input --- */
-                <>
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2 text-gray-700 dark:text-gray-300 text-sm font-medium">
-                      <Wand2 className="w-4 h-4" />
-                      KI-Verbesserungen
-                    </div>
-                    {isExtracting && (
-                      <div className="flex items-center gap-1.5 text-xs text-green-600 dark:text-green-400">
-                        <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                        KI arbeitet...
-                      </div>
-                    )}
-                  </div>
-                  <div className="flex flex-wrap gap-2">
-                    <button type="button" onClick={() => runQuickAction(currentFormData, 'improveDescription')} disabled={isExtracting} className="inline-flex items-center gap-1 px-3 py-1.5 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-700 disabled:opacity-50 transition-colors">
-                      Beschreibung verbessern
-                    </button>
-                    <button type="button" onClick={() => runQuickAction(currentFormData, 'suggestPrice')} disabled={isExtracting} className="inline-flex items-center gap-1 px-3 py-1.5 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-700 disabled:opacity-50 transition-colors">
-                      Preis vorschlagen
-                    </button>
-                    <button type="button" onClick={() => runQuickAction(currentFormData, 'extractSpecs')} disabled={isExtracting} className="inline-flex items-center gap-1 px-3 py-1.5 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-700 disabled:opacity-50 transition-colors">
-                      Specs erkennen
-                    </button>
-                  </div>
-                  <div className="flex gap-2">
-                    <input
-                      type="text"
-                      value={aiInput}
-                      onChange={(e) => setAiInput(e.target.value)}
-                      onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); handleAISubmit() } }}
-                      placeholder="Eigene Anweisung..."
-                      disabled={isExtracting}
-                      className="flex-1 px-3 py-2 text-sm border border-gray-200 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 focus:border-transparent disabled:opacity-50 placeholder:text-gray-400"
-                    />
-                    <button type="button" onClick={handleAISubmit} disabled={isExtracting || !aiInput.trim()} className="px-3 py-2 bg-gray-700 hover:bg-gray-800 disabled:bg-gray-400 text-white rounded-lg transition-colors">
-                      <Send className="w-4 h-4" />
-                    </button>
-                  </div>
-                </>
-              ) : (
-                /* --- CREATION MODE: describe product or take photo --- */
-                <>
-                  <div className="flex items-center gap-2 text-green-800 dark:text-green-200 font-semibold">
-                    <Sparkles className="w-5 h-5" />
-                    Was möchten du verkaufst?
-                  </div>
-                  <div className="space-y-3">
-                    <div className="flex gap-2">
-                      <textarea
-                        value={aiInput}
-                        onChange={(e) => setAiInput(e.target.value)}
-                        onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleAISubmit() } }}
-                        placeholder='z.B. "ThinkPad T480, 16GB RAM, guter Zustand, möchte 400 CHF"'
-                        rows={2}
-                        disabled={isExtracting}
-                        className="flex-1 px-4 py-3 text-sm border border-green-300 dark:border-green-700 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white resize-none focus:ring-2 focus:ring-green-500 focus:border-transparent disabled:opacity-50 placeholder:text-gray-400"
-                      />
-                      <Button type="button" onClick={handleAISubmit} disabled={isExtracting || !aiInput.trim()} className="px-4 py-2 self-end">
-                        {isExtracting ? <Loader2 className="w-5 h-5 animate-spin" /> : <Send className="w-5 h-5" />}
-                      </Button>
-                    </div>
-                    <div className="relative">
-                      <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-green-200 dark:border-green-700" /></div>
-                      <div className="relative flex justify-center text-sm">
-                        <span className="px-3 bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 text-green-500 dark:text-green-400">oder</span>
-                      </div>
-                    </div>
-                    <button type="button" onClick={() => setShowCamera(true)} className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-lg border-2 border-dashed border-green-300 dark:border-green-700 text-green-700 dark:text-green-400 hover:bg-green-100 dark:hover:bg-green-900/30 transition-colors">
-                      <Camera className="w-5 h-5" />
-                      Foto aufnehmen — KI erkennt das Produkt
-                    </button>
-                  </div>
-                  <p className="text-xs text-green-600 dark:text-green-400">
-                    Die KI füllt das Formular anhand deiner Beschreibung oder des Fotos aus. du kannst alles danach anpassen.
-                  </p>
-                </>
+            <>
+              <AIFormAssist
+                formType="marketplace"
+                currentData={{ title: formData.title, description: formData.description, price: formData.price, category: formData.category, condition: formData.condition, brand: formData.brand, model: formData.model, specs: formData.specs }}
+                onFieldsFilled={handleAIFieldsFilled}
+                placeholder='z.B. "ThinkPad T480, 16GB RAM, guter Zustand, möchte 400 CHF"'
+                defaultExpanded={true}
+                variant="section"
+              />
+              {/* Camera trigger (creation mode only, when no form data yet) */}
+              {!formData.title && !formData.description && (
+                <button
+                  type="button"
+                  onClick={() => setShowCamera(true)}
+                  className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-lg border-2 border-dashed border-green-300 dark:border-green-700 text-green-700 dark:text-green-400 hover:bg-green-100 dark:hover:bg-green-900/30 transition-colors"
+                >
+                  <Camera className="w-5 h-5" />
+                  Foto aufnehmen — KI erkennt das Produkt
+                </button>
               )}
-            </div>
+            </>
           )}
 
           {/* Images */}

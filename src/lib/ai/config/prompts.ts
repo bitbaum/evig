@@ -576,6 +576,10 @@ export const FORM_AI_REGISTRY: Record<string, FormAIConfig> = {
     system: IT_HILFE_PROMPTS.system,
     extract: IT_HILFE_PROMPTS.extract,
     schema: IT_HILFE_PROMPTS.schema,
+    quickActions: {
+      diagnoseTips: { label: 'Diagnose-Tipps', prompt: 'Generiere 2-3 mögliche Ursachen und erste Diagnoseschritte basierend auf der Problembeschreibung. Berücksichtige häufige Ursachen für das beschriebene Gerät.' },
+      suggestSkills: { label: 'Benötigte Skills', prompt: 'Schlage die wahrscheinlich benötigten Reparatur-Skills vor basierend auf dem beschriebenen Problem.' },
+    },
     auth: 'user',
   },
   'blog-admin': {
@@ -798,6 +802,10 @@ Antworte NUR mit folgendem JSON:
 
 Wichtig: Schweizer Deutsch (ss statt ß). Anleitungen klar und für Freiwillige verständlich formulieren.`,
     schema: null,
+    quickActions: {
+      estimateTime: { label: 'Zeitschätzung', prompt: 'Schätze den realistischen Zeitaufwand für diese Aufgabe. Berücksichtige, dass Freiwillige arbeiten und oft weniger Erfahrung haben.' },
+      addSteps: { label: 'Schritte strukturieren', prompt: 'Teile die Aufgabe in 3-5 konkrete, umsetzbare Schritte auf. Jeder Schritt sollte für Freiwillige verständlich sein.' },
+    },
     auth: 'staff',
   },
   'decision': {
@@ -829,6 +837,10 @@ Antworte NUR mit folgendem JSON:
 
 Wichtig: Schweizer Deutsch (ss statt ß). Neutral formulieren, alle Seiten fair darstellen.`,
     schema: null,
+    quickActions: {
+      prosAndCons: { label: 'Pro/Contra', prompt: 'Erstelle eine Pro/Contra-Analyse für den beschriebenen Vorschlag. Berücksichtige Kosten, Aufwand, Nutzen und Risiken für den Verein.' },
+      suggestOptions: { label: 'Optionen erweitern', prompt: 'Schlage 2-3 alternative Optionen oder Varianten vor, die der Verein zusätzlich in Betracht ziehen könnte.' },
+    },
     auth: 'staff',
   },
   'blog-submit': {
