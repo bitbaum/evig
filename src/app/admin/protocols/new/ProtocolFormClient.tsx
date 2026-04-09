@@ -21,6 +21,8 @@ import { validateAudioUpload } from '@/lib/protocols/audio-validation'
 import { DEFAULT_WHISPER_MODEL, WHISPER_MODELS } from '@/config/transcription'
 import { formatDateShort } from '@/lib/date-formats'
 import Heading from '@/components/ui/Heading'
+import { AIFormAssist } from '@/components/ai/AIFormAssist'
+import type { AIFieldMetadataEntry } from '@/hooks/useAIFormAssist'
 
 interface ProtocolFormClientProps {
   teamMembers: Array<{ id: string; name: string }>
@@ -47,6 +49,19 @@ export default function ProtocolFormClient({ teamMembers }: ProtocolFormClientPr
   const [loading, setLoading] = useState(false)
   const [processing, setProcessing] = useState(false)
   const [error, setError] = useState<string | null>(null)
+
+  const handleAIFieldsFilled = (data: Partial<Record<string, unknown>>, _metadata: Record<string, AIFieldMetadataEntry>) => {
+    if (data.title) setTitle(String(data.title))
+    if (data.meeting_type && typeof data.meeting_type === 'string') {
+      setMeetingType(data.meeting_type as MeetingType)
+    }
+    if (data.meeting_date && typeof data.meeting_date === 'string') {
+      setMeetingDate(data.meeting_date)
+    }
+    if (data.visibility && typeof data.visibility === 'string') {
+      setVisibility(data.visibility as ProtocolVisibility)
+    }
+  }
 
   // Step 1 complete when type + title + date filled
   const setupComplete = meetingType !== '' && title.trim() !== '' && meetingDate !== ''
@@ -199,6 +214,16 @@ export default function ProtocolFormClient({ teamMembers }: ProtocolFormClientPr
 
   return (
     <div className="max-w-3xl space-y-6">
+      {/* AI pre-fill for setup fields (text-based only, Whisper audio is separate) */}
+      <AIFormAssist
+        formType="protocol"
+        variant="bar"
+        defaultExpanded={true}
+        placeholder="z.B. Vorstandssitzung März 2026 mit Andreas und Maria..."
+        currentData={{ title, meeting_type: meetingType, meeting_date: meetingDate, visibility }}
+        onFieldsFilled={handleAIFieldsFilled}
+      />
+
       {error && (
         <div className="p-4 bg-red-50 border border-red-200 rounded-lg text-red-700">{error}</div>
       )}

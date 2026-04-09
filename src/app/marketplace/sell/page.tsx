@@ -295,7 +295,7 @@ function SellPageContent() {
           )}
 
           {/* === AI ASSISTANT === */}
-          {!editId && !showCamera && (
+          {!showCamera && (
             <>
               <AIFormAssist
                 formType="marketplace"
@@ -306,7 +306,7 @@ function SellPageContent() {
                 variant="section"
               />
               {/* Camera trigger (creation mode only, when no form data yet) */}
-              {!formData.title && !formData.description && (
+              {!editId && !formData.title && !formData.description && (
                 <button
                   type="button"
                   onClick={() => setShowCamera(true)}
