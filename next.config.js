@@ -59,6 +59,32 @@ const nextConfig = {
         destination: '/admin/hirn',
         permanent: true,
       },
+      // Techniker unification redirects
+      {
+        source: '/repairers',
+        destination: '/techniker',
+        permanent: true,
+      },
+      {
+        source: '/repairers/:id',
+        destination: '/techniker/:id',
+        permanent: true,
+      },
+      {
+        source: '/it-hilfe/helfer',
+        destination: '/techniker',
+        permanent: true,
+      },
+      {
+        source: '/it-hilfe/helfer/:id',
+        destination: '/techniker/:id',
+        permanent: true,
+      },
+      {
+        source: '/profil/skills',
+        destination: '/profil/techniker',
+        permanent: true,
+      },
     ];
   },
   webpack: (config, { isServer, dev }) => {

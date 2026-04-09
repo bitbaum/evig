@@ -180,8 +180,13 @@ export const mainNavigation: NavigationItem[] = [
         description: 'Community-Techniker in deiner Nähe',
       },
       {
+        name: 'Techniker finden',
+        href: '/techniker',
+        description: 'Community- und professionelle Techniker',
+      },
+      {
         name: 'Techniker werden',
-        href: '/profil/skills',
+        href: '/profil/techniker',
         description: 'IT-Wissen teilen und helfen',
       },
     ],
@@ -244,7 +249,7 @@ export const mainNavigation: NavigationItem[] = [
       },
       {
         name: 'IT-Hilfe Techniker',
-        href: '/profil/skills',
+        href: '/profil/techniker',
         description: 'IT-Wissen teilen und helfen',
         badge: 'Neu',
       },
