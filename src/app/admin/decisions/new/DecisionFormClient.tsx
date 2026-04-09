@@ -201,6 +201,7 @@ export default function DecisionFormClient() {
       <AIFormAssist
         formType="decision"
         placeholder="Beschreibe den Vorschlag in 1-2 Sätzen..."
+        defaultExpanded={true}
         onFieldsFilled={handleAIFieldsFilled}
         currentData={{ title, description, options }}
       />

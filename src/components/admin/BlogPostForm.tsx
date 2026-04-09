@@ -138,14 +138,15 @@ export function BlogPostForm({ initialData, isEdit = false }: BlogPostFormProps)
       <AIFormAssist
         formType="blog-admin"
         variant="section"
-        currentData={formData.title || formData.content ? {
+        defaultExpanded={true}
+        currentData={{
           title: formData.title,
           excerpt: formData.excerpt,
           content: formData.content,
           tags: formData.tags,
           seoTitle: formData.seoTitle,
           seoDescription: formData.seoDescription,
-        } : undefined}
+        }}
         onFieldsFilled={(data) => {
           setFormData(prev => {
             const updated = { ...prev }

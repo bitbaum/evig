@@ -587,7 +587,12 @@ export const FORM_AI_REGISTRY: Record<string, FormAIConfig> = {
     extract: BLOG_PROMPTS.generate,
     schema: null,
     refine: BLOG_PROMPTS.refine,
-    quickActions: { ...BLOG_PROMPTS.quickActions },
+    quickActions: {
+      ...BLOG_PROMPTS.quickActions,
+      improveContent: { label: 'Inhalt verbessern', prompt: 'Verbessere den Text: klarere Struktur, besserer Lesefluss, ansprechendere Formulierungen.' },
+      addExamples: { label: 'Beispiele hinzufügen', prompt: 'Ergänze konkrete Beispiele und Praxistipps, die den Artikel für die Community wertvoller machen.' },
+      seoOptimize: { label: 'SEO optimieren', prompt: 'Optimiere Titel, Beschreibung und Struktur für Suchmaschinen. Schlage einen SEO-Titel und eine Meta-Beschreibung vor.' },
+    },
     maxTokens: 4096,
     temperature: 0.7,
     auth: 'staff',

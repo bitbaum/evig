@@ -95,6 +95,11 @@ export default function TaskFormClient() {
       if (data.category) updated.category = String(data.category)
       if (data.priority) updated.priority = String(data.priority)
       if (data.estimated_minutes !== undefined) updated.estimated_minutes = String(data.estimated_minutes)
+      if (data.tags) {
+        updated.tags = Array.isArray(data.tags)
+          ? data.tags.map(String).join(', ')
+          : String(data.tags)
+      }
       return updated
     })
   }
@@ -156,6 +161,7 @@ export default function TaskFormClient() {
         <AIFormAssist
           formType="task"
           placeholder="Beschreibe die Aufgabe in 1-2 Sätzen..."
+          defaultExpanded={true}
           onFieldsFilled={handleAIFieldsFilled}
           currentData={formData as unknown as Record<string, unknown>}
         />

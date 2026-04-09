@@ -219,6 +219,8 @@ export function WorkshopProposalForm() {
     <form onSubmit={handleSubmit} className="bg-white rounded-xl shadow-lg p-8">
       <AIFormAssist
         formType="workshop"
+        variant="section"
+        defaultExpanded={true}
         placeholder="Beschreibe deine Workshop-Idee in 1-2 Sätzen..."
         onFieldsFilled={handleAIFieldsFilled}
         currentData={formData as unknown as Record<string, unknown>}

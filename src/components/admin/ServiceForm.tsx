@@ -149,6 +149,7 @@ export function ServiceForm({ initialData, isEdit = false }: ServiceFormProps) {
       <AIFormAssist
         formType="service"
         placeholder="Beschreibe die Dienstleistung in 1-2 Sätzen..."
+        defaultExpanded={true}
         onFieldsFilled={handleAIFieldsFilled}
         currentData={formData as unknown as Record<string, unknown>}
       />

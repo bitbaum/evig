@@ -171,6 +171,8 @@ export default function SubmitPostPage() {
           {/* AI Assistant */}
           <AIFormAssist
             formType="blog-submit"
+            variant="section"
+            defaultExpanded={true}
             placeholder={submissionType === 'idea' ? 'Beschreibe deine Artikelidee...' : 'Beschreibe worum es in deinem Artikel geht...'}
             onFieldsFilled={handleAIFieldsFilled}
             currentData={formData}

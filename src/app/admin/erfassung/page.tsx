@@ -250,6 +250,7 @@ function ErfassungContent() {
               formType="erfassung"
               variant="section"
               defaultExpanded={form.showAIRefine}
+              placeholder="z.B. Dell Latitude 7480, 16GB RAM, 512GB SSD, guter Zustand..."
               currentData={{
                 hersteller: form.formData.hersteller,
                 produktname: form.formData.produktname,
