@@ -2,20 +2,21 @@ import { ArrowRight } from 'lucide-react'
 import Link from 'next/link'
 import { cn } from '@/lib/utils'
 import { getTextColor } from '@/lib/design-system'
+import Heading from '@/components/ui/Heading'
 
 export function CTASection() {
   return (
     <div className="py-16 sm:py-24 bg-white">
       <div className="mx-auto max-w-2xl text-center px-4 sm:px-6 lg:px-8">
-        <h2 className={cn('text-3xl font-bold tracking-tight sm:text-4xl mb-6', getTextColor('white', 'primary'))}>
+        <Heading level={2} className={cn('text-3xl font-bold tracking-tight sm:text-4xl mb-6', getTextColor('white', 'primary'))}>
           Interesse an unserem System?
-        </h2>
+        </Heading>
         <p className={cn('text-lg mb-8', getTextColor('white', 'muted'))}>
           Möchtest du ein ähnliches Verbesserungssystem für deine Website? Wir helfen bei der Umsetzung.
         </p>
 
         <div className="bg-neutral-50 rounded-xl p-4 sm:p-6 mb-8 text-left max-w-2xl mx-auto border-2 border-neutral-200">
-          <h3 className={cn('font-semibold mb-3', getTextColor('neutral', 'primary'))}>Das System ist geeignet für:</h3>
+          <Heading level={3} className={cn('font-semibold mb-3', getTextColor('neutral', 'primary'))}>Das System ist geeignet für:</Heading>
           <ul className={cn('space-y-2', getTextColor('neutral', 'muted'))}>
             <li className="flex items-start">
               <span className="text-success-600 mr-2">&bull;</span>

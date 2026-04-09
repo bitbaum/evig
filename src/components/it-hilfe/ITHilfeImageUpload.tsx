@@ -5,6 +5,7 @@ import { Camera, X, Loader2 } from 'lucide-react'
 import { FILE_SIZE_LIMITS } from '@/config/limits'
 import { logger } from '@/lib/logger'
 import { apiFetch } from '@/lib/api/client'
+import Heading from '@/components/ui/Heading'
 
 interface ITHilfeImageUploadProps {
   imageUrls: string[]
@@ -80,7 +81,7 @@ export function ITHilfeImageUpload({
 
   return (
     <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-      <h2 className="text-lg font-semibold text-gray-900 mb-4">Fotos (optional)</h2>
+      <Heading level={2} className="text-lg font-semibold text-gray-900 mb-4">Fotos (optional)</Heading>
 
       {error && (
         <p className="text-sm text-red-600 mb-3">{error}</p>

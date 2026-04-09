@@ -1,6 +1,7 @@
 'use client'
 
 import { CheckCircle } from 'lucide-react'
+import Heading from '@/components/ui/Heading'
 import type { LocationFormData } from './types'
 
 interface Props {
@@ -11,10 +12,10 @@ interface Props {
 export function LocationAccessibilitySection({ formData, onAccessibilityChange }: Props) {
   return (
     <div className="mb-8">
-      <h2 className="text-xl font-semibold text-gray-900 mb-4 flex items-center">
+      <Heading level={2} className="text-xl text-gray-900 mb-4 flex items-center">
         <CheckCircle className="w-5 h-5 mr-2" />
         Barrierefreiheit & Zugänglichkeit
-      </h2>
+      </Heading>
 
       <div className="space-y-4">
         <div className="flex items-center">

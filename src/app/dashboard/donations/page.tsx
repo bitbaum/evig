@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react'
 import { Heart, Package, ArrowLeft, CheckCircle, Clock, Receipt } from 'lucide-react'
 import Link from 'next/link'
 import { getTextColor, getStatusColors } from '@/lib/design-system'
+import Heading from '@/components/ui/Heading'
 import { cn } from '@/lib/utils'
 import { formatDate } from '@/lib/date-formats'
 import { CONTACT } from '@/config/org'
@@ -127,9 +128,9 @@ export default function DonationsDashboard() {
       <div className="min-h-screen bg-neutral-50 py-8">
         <div className="max-w-4xl mx-auto px-4">
           <div className="bg-white rounded-xl shadow-lg p-8 text-center border-2 border-neutral-200">
-            <h1 className={cn('text-2xl font-bold mb-4', getTextColor('white', 'primary'))}>
+            <Heading level={1} className={cn('text-2xl font-bold mb-4', getTextColor('white', 'primary'))}>
               Anmeldung erforderlich
-            </h1>
+            </Heading>
             <p className={cn('mb-6', getTextColor('white', 'muted'))}>
               Bitte melden Sie sich an, um Ihre Spenden zu sehen.
             </p>
@@ -157,9 +158,9 @@ export default function DonationsDashboard() {
             <ArrowLeft className="w-4 h-4 mr-2" />
             Zurück zum Dashboard
           </Link>
-          <h1 className={cn('text-3xl font-bold mb-2', getTextColor('neutral', 'primary'))}>
+          <Heading level={1} className={cn('text-3xl font-bold mb-2', getTextColor('neutral', 'primary'))}>
             Meine Spenden
-          </h1>
+          </Heading>
           <p className={cn('text-sm sm:text-base', getTextColor('neutral', 'muted'))}>
             Übersicht Ihrer Geld- und Sachspenden an RevampIT
           </p>
@@ -195,12 +196,12 @@ export default function DonationsDashboard() {
                   <div className="flex-1 min-w-0">
                     <div className="flex items-start justify-between gap-2">
                       <div>
-                        <h3 className={cn('text-lg font-semibold', getTextColor('white', 'primary'))}>
+                        <Heading level={3} className={cn('text-lg font-semibold', getTextColor('white', 'primary'))}>
                           {donation.donation_type === DONATION_TYPES.MONETARY
                             ? 'Geldspende'
                             : getDeviceTitle(donation)
                           }
-                        </h3>
+                        </Heading>
                         <p className={cn('text-sm', getTextColor('white', 'muted'))}>
                           {getDonationTypeLabel(donation.donation_type)} • {formatDate(donation.created_at)}
                         </p>
@@ -236,9 +237,9 @@ export default function DonationsDashboard() {
         ) : (
           <div className="bg-white rounded-xl shadow-lg p-8 text-center border-2 border-neutral-200">
             <Heart className="w-16 h-16 text-neutral-300 mx-auto mb-4" />
-            <h3 className={cn('text-xl font-semibold mb-2', getTextColor('white', 'primary'))}>
+            <Heading level={3} className={cn('text-xl font-semibold mb-2', getTextColor('white', 'primary'))}>
               Noch keine Spenden erfasst
-            </h3>
+            </Heading>
             <p className={cn('mb-6', getTextColor('white', 'muted'))}>
               Ihre Spenden an RevampIT werden hier angezeigt, sobald sie von unserem Team erfasst wurden.
             </p>
@@ -253,9 +254,9 @@ export default function DonationsDashboard() {
 
         {/* Info Box */}
         <div className="mt-8 bg-info-50 border border-info-200 rounded-lg p-4">
-          <h4 className="font-medium mb-2 text-info-800">
+          <Heading level={4} className="font-medium mb-2 text-info-800">
             Hinweis zu Spendenquittungen
-          </h4>
+          </Heading>
           <p className="text-sm text-info-700">
             RevampIT ist ein gemeinnütziger Verein. Für Spenden ab CHF 100 stellen wir Ihnen gerne
             eine Spendenbestätigung für die Steuererklärung aus. Kontaktieren Sie uns unter{' '}

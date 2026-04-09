@@ -1,4 +1,5 @@
 import { getFollowUpStatusColor } from '@/config/protocols'
+import Heading from '@/components/ui/Heading'
 import type { StructuredNotes } from '@/lib/schemas/protocols'
 
 interface Props {
@@ -10,9 +11,9 @@ export function ProtocolFollowUps({ followUps }: Props) {
 
   return (
     <div className="bg-white rounded-lg border p-6">
-      <h2 className="text-lg font-semibold text-gray-900 mb-3">
+      <Heading level={2} className="text-lg text-gray-900 mb-3">
         Offene Punkte aus früheren Sitzungen
-      </h2>
+      </Heading>
       <ul className="space-y-2">
         {followUps.map((fu, i) => (
           <li key={i} className="flex items-start gap-2">

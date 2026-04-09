@@ -1,4 +1,5 @@
 import { Image as ImageIcon, Tag } from 'lucide-react'
+import Heading from '@/components/ui/Heading'
 import type { BlogPostData, Category } from './types'
 
 interface Props {
@@ -24,7 +25,7 @@ export function BlogPostSidebar({
     <div className="space-y-6">
       {/* Status */}
       <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-100 dark:border-gray-700">
-        <h3 className="font-medium text-gray-900 dark:text-white mb-4">Status</h3>
+        <Heading level={3} className="font-medium text-gray-900 dark:text-white mb-4">Status</Heading>
         <div className="flex items-center gap-3">
           <label className="relative inline-flex items-center cursor-pointer">
             <input
@@ -43,7 +44,7 @@ export function BlogPostSidebar({
 
       {/* Category */}
       <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-100 dark:border-gray-700">
-        <h3 className="font-medium text-gray-900 dark:text-white mb-4">Kategorie</h3>
+        <Heading level={3} className="font-medium text-gray-900 dark:text-white mb-4">Kategorie</Heading>
         <select
           value={formData.categoryId}
           onChange={(e) => onFormDataChange({ ...formData, categoryId: e.target.value })}
@@ -58,10 +59,10 @@ export function BlogPostSidebar({
 
       {/* Featured Image */}
       <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-100 dark:border-gray-700">
-        <h3 className="font-medium text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+        <Heading level={3} className="font-medium text-gray-900 dark:text-white mb-4 flex items-center gap-2">
           <ImageIcon className="w-4 h-4" />
           Beitragsbild
-        </h3>
+        </Heading>
         <input
           type="text"
           value={formData.featuredImage}
@@ -80,10 +81,10 @@ export function BlogPostSidebar({
 
       {/* Tags */}
       <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-100 dark:border-gray-700">
-        <h3 className="font-medium text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+        <Heading level={3} className="font-medium text-gray-900 dark:text-white mb-4 flex items-center gap-2">
           <Tag className="w-4 h-4" />
           Tags
-        </h3>
+        </Heading>
         <div className="flex gap-2 mb-3">
           <input
             type="text"
@@ -122,7 +123,7 @@ export function BlogPostSidebar({
 
       {/* SEO */}
       <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-100 dark:border-gray-700">
-        <h3 className="font-medium text-gray-900 dark:text-white mb-4">SEO</h3>
+        <Heading level={3} className="font-medium text-gray-900 dark:text-white mb-4">SEO</Heading>
         <div className="space-y-4">
           <div>
             <label className="block text-sm text-gray-600 dark:text-gray-400 mb-1">Meta-Titel</label>

@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import type { QuickAction } from './types'
+import Heading from '@/components/ui/Heading'
 
 interface QuickActionsSectionProps {
   quickActions: QuickAction[]
@@ -11,9 +12,9 @@ export function QuickActionsSection({ quickActions }: QuickActionsSectionProps) 
   return (
     <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
       <div className="p-4 border-b border-gray-100 dark:border-gray-700">
-        <h2 className="font-semibold text-gray-900 dark:text-white">
+        <Heading level={2} className="font-semibold text-gray-900 dark:text-white">
           Schnellaktionen
-        </h2>
+        </Heading>
       </div>
 
       <div className="p-4">

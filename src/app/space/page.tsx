@@ -318,7 +318,7 @@ export default function SpacePage() {
                 <div className="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-3">
                   <feature.icon className="w-6 h-6 text-green-700" />
                 </div>
-                <h3 className="font-semibold text-gray-900 mb-1">{feature.name}</h3>
+                <Heading level={3} className="font-semibold text-gray-900 mb-1">{feature.name}</Heading>
                 <p className="text-sm text-gray-600">{feature.description}</p>
               </Card>
             ))}

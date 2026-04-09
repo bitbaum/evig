@@ -6,6 +6,7 @@ import { ArrowLeft, Eye, Check, X, Edit, Calendar, User, Mail, Tag, Folder } fro
 import { logger } from '@/lib/logger'
 import { APPROVAL_STATUS, getApprovalStatusBadge } from '@/config/approval-status'
 import { formatDateTime } from '@/lib/date-formats'
+import Heading from '@/components/ui/Heading'
 
 interface Submission {
   id: string
@@ -100,7 +101,7 @@ ${submission.content}
           </Link>
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-4xl font-bold mb-2">Einreichungen verwalten</h1>
+              <Heading level={1} className="text-4xl font-bold mb-2">Einreichungen verwalten</Heading>
               <p className="text-green-100">
                 Überprüfen und veröffentlichen Sie von Benutzern eingereichte Inhalte
               </p>
@@ -207,9 +208,9 @@ ${submission.content}
                           {getApprovalStatusBadge(submission.status).label}
                         </span>
                       </div>
-                      <h3 className="font-semibold text-gray-900 mb-1 line-clamp-2">
+                      <Heading level={3} className="font-semibold text-gray-900 mb-1 line-clamp-2">
                         {submission.title}
-                      </h3>
+                      </Heading>
                       <div className="flex items-center gap-3 text-sm text-gray-500">
                         <span className="flex items-center gap-1">
                           <User className="w-3 h-3" />
@@ -239,9 +240,9 @@ ${submission.content}
               {selectedSubmission ? (
                 <div className="bg-white rounded-lg shadow-sm p-6">
                   <div className="border-b border-gray-200 pb-4 mb-4">
-                    <h2 className="text-2xl font-bold text-gray-900 mb-3">
+                    <Heading level={2} className="text-2xl font-bold text-gray-900 mb-3">
                       {selectedSubmission.title}
-                    </h2>
+                    </Heading>
                     <div className="space-y-2 text-sm">
                       <div className="flex items-center gap-2 text-gray-600">
                         <User className="w-4 h-4" />
@@ -279,7 +280,7 @@ ${submission.content}
                   </div>
 
                   <div className="mb-6">
-                    <h3 className="font-semibold text-gray-900 mb-3">Inhalt:</h3>
+                    <Heading level={3} className="font-semibold text-gray-900 mb-3">Inhalt:</Heading>
                     <div className="bg-gray-50 rounded-lg p-4 max-h-96 overflow-y-auto">
                       <pre className="whitespace-pre-wrap text-sm text-gray-800 font-sans">
                         {selectedSubmission.content}

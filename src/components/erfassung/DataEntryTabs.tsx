@@ -14,6 +14,7 @@
 
 import { useState, useCallback, useEffect } from 'react'
 import { Mic, Camera, Zap, Loader2, CheckCircle2, AlertCircle, ChevronDown, ChevronUp, FileUp } from 'lucide-react'
+import Heading from '@/components/ui/Heading'
 import { Button } from '@/components/ui/button'
 import { apiFetch } from '@/lib/api/client'
 import { logger } from '@/lib/logger'
@@ -300,9 +301,9 @@ export function DataEntryTabs({
         {activeMode === 'form' && (
           <div className="space-y-4">
             <div className="text-center mb-2">
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+              <Heading level={3} className="text-lg font-semibold text-gray-900 dark:text-white">
                 KI-Schnelleingabe
-              </h3>
+              </Heading>
               <p className="text-sm text-gray-600 dark:text-gray-400">
                 Ein Produkt oder mehrere auf einmal — die KI erkennt es automatisch
               </p>
@@ -363,9 +364,9 @@ export function DataEntryTabs({
         {activeMode === 'file' && (
           <div className="space-y-4">
             <div className="text-center mb-2">
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+              <Heading level={3} className="text-lg font-semibold text-gray-900 dark:text-white">
                 Datei-Import
-              </h3>
+              </Heading>
               <p className="text-sm text-gray-600 dark:text-gray-400">
                 Lade eine CSV- oder Excel-Datei mit Produktdaten hoch
               </p>

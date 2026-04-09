@@ -11,6 +11,7 @@
 import { ProductFormData } from '../types'
 import { cn } from '@/lib/utils'
 import { getTextColor } from '@/lib/design-system'
+import Heading from '@/components/ui/Heading'
 
 interface ContactInfoSectionProps {
   contactInfo: string
@@ -20,9 +21,9 @@ interface ContactInfoSectionProps {
 export function ContactInfoSection({ contactInfo, onContactInfoChange }: ContactInfoSectionProps) {
   return (
     <div className="space-y-4">
-      <h3 className={cn('text-lg font-medium', getTextColor('white', 'primary'))}>
+      <Heading level={3} className={cn('text-lg font-medium', getTextColor('white', 'primary'))}>
         Kontaktinformationen
-      </h3>
+      </Heading>
       <div>
         <label className={cn('block text-sm font-medium mb-2', getTextColor('white', 'secondary'))}>
           Zusätzliche Kontaktinformationen (optional)

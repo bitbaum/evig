@@ -4,6 +4,7 @@ import { AlertCircle, Building, Home, Loader2 } from 'lucide-react'
 import { type RepairerProfile } from './types'
 import { SERVICE_CATEGORIES, URGENCY_OPTIONS, formatPrice } from './helpers'
 import { formatDateLong } from '@/lib/date-formats'
+import Heading from '@/components/ui/Heading'
 
 interface BookingStepConfirmProps {
   repairer: RepairerProfile
@@ -50,7 +51,7 @@ export function BookingStepConfirm({
 }: BookingStepConfirmProps) {
   return (
     <div className="bg-white rounded-xl shadow-sm p-6">
-      <h2 className="text-lg font-semibold text-gray-900 mb-6">Reparaturort & Bestätigung</h2>
+      <Heading level={2} className="text-lg font-semibold text-gray-900 mb-6">Reparaturort & Bestätigung</Heading>
 
       {/* Location Type */}
       <div className="mb-6">
@@ -94,7 +95,7 @@ export function BookingStepConfirm({
       {/* Home Visit Address */}
       {isHomeVisit && (
         <div className="mb-6 p-4 bg-gray-50 rounded-lg space-y-4">
-          <h3 className="font-medium text-gray-900">deine Adresse</h3>
+          <Heading level={3} className="font-medium text-gray-900">deine Adresse</Heading>
           <div>
             <label className="block text-sm text-gray-600 mb-1">Strasse & Hausnummer *</label>
             <input
@@ -129,7 +130,7 @@ export function BookingStepConfirm({
 
       {/* Summary */}
       <div className="mb-6 p-4 bg-blue-50 rounded-lg">
-        <h3 className="font-medium text-gray-900 mb-3">Zusammenfassung</h3>
+        <Heading level={3} className="font-medium text-gray-900 mb-3">Zusammenfassung</Heading>
         <dl className="space-y-2 text-sm">
           <div className="flex justify-between">
             <dt className="text-gray-600">Reparateur:</dt>

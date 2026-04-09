@@ -8,6 +8,7 @@
  */
 
 import Link from 'next/link'
+import Heading from '@/components/ui/Heading'
 import {
   ArrowLeft,
   Save,
@@ -53,9 +54,9 @@ export function BlogPostForm({ initialData, isEdit = false }: BlogPostFormProps)
             <ArrowLeft className="w-5 h-5 text-gray-600 dark:text-gray-400" />
           </Link>
           <div>
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+            <Heading level={1} className="text-2xl text-gray-900 dark:text-white">
               {isEdit ? 'Artikel bearbeiten' : 'Neuer Artikel'}
-            </h1>
+            </Heading>
             <p className="text-gray-600 dark:text-gray-400 mt-1">
               {isEdit ? 'Änderungen am Artikel vornehmen' : 'Erstellen Sie einen neuen Blog-Artikel'}
             </p>

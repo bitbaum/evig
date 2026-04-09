@@ -8,6 +8,7 @@
  */
 
 import { CheckCircle2, AlertCircle, Download, RotateCcw, Plus } from 'lucide-react'
+import Heading from '@/components/ui/Heading'
 import type { BulkSaveResponse } from '@/types/erfassung'
 
 interface BulkSuccessScreenProps {
@@ -61,9 +62,9 @@ export function BulkSuccessScreen({ result, onRetryFailed, onReset }: BulkSucces
 
         {/* Summary */}
         <div>
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+          <Heading level={2} className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
             {hasFailures ? 'Teilweise erfasst' : 'Alle Produkte erfasst!'}
-          </h2>
+          </Heading>
           <p className="text-gray-600 dark:text-gray-400">
             {result.succeeded} von {result.total} Produkten erfolgreich gespeichert
             {hasFailures && `, ${result.failed} fehlgeschlagen`}
@@ -91,7 +92,7 @@ export function BulkSuccessScreen({ result, onRetryFailed, onReset }: BulkSucces
         {/* Item UUIDs list for successful saves */}
         {result.results.some(r => r.success && r.itemUUID) && (
           <div className="bg-gray-50 dark:bg-gray-900/50 rounded-lg p-4 text-left max-h-48 overflow-y-auto">
-            <h3 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Erstellte Artikel-IDs:</h3>
+            <Heading level={3} className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Erstellte Artikel-IDs:</Heading>
             <div className="space-y-1">
               {result.results
                 .filter(r => r.success && r.itemUUID)

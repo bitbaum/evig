@@ -1,5 +1,6 @@
 import { cn } from '@/lib/utils'
 import { getTextColor, getStatusColors } from '@/lib/design-system'
+import Heading from '@/components/ui/Heading'
 
 export function ComparisonSection() {
   return (
@@ -8,9 +9,9 @@ export function ComparisonSection() {
       <div className="py-16 sm:py-24 bg-neutral-50">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="mx-auto max-w-2xl text-center mb-16">
-            <h2 className={cn('text-3xl font-bold tracking-tight sm:text-4xl', getTextColor('neutral', 'primary'))}>
+            <Heading level={2} className={cn('text-3xl font-bold tracking-tight sm:text-4xl', getTextColor('neutral', 'primary'))}>
               Vergleich mit anderen CMS-Systemen
-            </h2>
+            </Heading>
             <p className={cn('mt-6 text-lg leading-8', getTextColor('neutral', 'muted'))}>
               Ehrlicher Vergleich: Wo unser Ansatz besser ist - und wo nicht.
             </p>
@@ -58,9 +59,9 @@ export function ComparisonSection() {
       <div className="py-16 sm:py-24 bg-white">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="mx-auto max-w-2xl text-center mb-16">
-            <h2 className={cn('text-3xl font-bold tracking-tight sm:text-4xl', getTextColor('white', 'primary'))}>
+            <Heading level={2} className={cn('text-3xl font-bold tracking-tight sm:text-4xl', getTextColor('white', 'primary'))}>
               Warum CMS-Systeme für Feedback ungeeignet sind
-            </h2>
+            </Heading>
             <p className={cn('mt-6 text-lg leading-8', getTextColor('white', 'muted'))}>
               Traditionelle CMS sind für Content-Management optimiert, nicht für Nutzer-Feedback.
             </p>
@@ -68,7 +69,7 @@ export function ComparisonSection() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-12 mb-16">
             <div className="bg-neutral-50 p-6 sm:p-8 rounded-2xl border-2 border-neutral-200">
-              <h3 className={cn('text-xl font-semibold mb-6', getTextColor('neutral', 'primary'))}>Probleme mit WordPress</h3>
+              <Heading level={3} className={cn('text-xl font-semibold mb-6', getTextColor('neutral', 'primary'))}>Probleme mit WordPress</Heading>
               <ul className={cn('space-y-4', getTextColor('neutral', 'muted'))}>
                 {[
                   ['Technische Barrieren:', 'Nutzer brauchen Admin-Zugang oder komplexe Kontaktformulare'],
@@ -85,7 +86,7 @@ export function ComparisonSection() {
             </div>
 
             <div className="bg-neutral-50 p-6 sm:p-8 rounded-2xl border-2 border-neutral-200">
-              <h3 className={cn('text-xl font-semibold mb-6', getTextColor('neutral', 'primary'))}>Probleme mit Strapi & Contentful</h3>
+              <Heading level={3} className={cn('text-xl font-semibold mb-6', getTextColor('neutral', 'primary'))}>Probleme mit Strapi & Contentful</Heading>
               <ul className={cn('space-y-4', getTextColor('neutral', 'muted'))}>
                 {[
                   ['Entwickler-zentriert:', 'Nur technisch versierte Personen können Content bearbeiten'],
@@ -104,7 +105,7 @@ export function ComparisonSection() {
 
           <div className="bg-gradient-to-r from-blue-50 to-green-50 rounded-3xl p-8">
             <div className="text-center mb-8">
-              <h3 className="text-2xl font-bold text-gray-900 mb-4">Unverzichtbar für Open Source & Proprietäre Entwicklung</h3>
+              <Heading level={3} className="text-2xl font-bold text-gray-900 mb-4">Unverzichtbar für Open Source & Proprietäre Entwicklung</Heading>
               <p className="text-lg text-gray-600 max-w-3xl mx-auto">
                 Strukturierte Nutzer-Feedback-Systeme sind für beide Entwicklungsarten essenziell.
               </p>
@@ -116,7 +117,7 @@ export function ComparisonSection() {
                   <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center mr-3">
                     <span className="text-green-600 font-bold">OS</span>
                   </div>
-                  <h4 className="text-lg font-semibold text-gray-900">Open Source Projekte</h4>
+                  <Heading level={4} className="text-lg font-semibold text-gray-900">Open Source Projekte</Heading>
                 </div>
                 <ul className="text-gray-600 space-y-2">
                   <li><strong>Community-Einbindung:</strong> Nutzer werden zu aktiven Mitwirkenden</li>
@@ -132,7 +133,7 @@ export function ComparisonSection() {
                   <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center mr-3">
                     <span className="text-blue-600 font-bold">P</span>
                   </div>
-                  <h4 className="text-lg font-semibold text-gray-900">Proprietäre Entwicklung</h4>
+                  <Heading level={4} className="text-lg font-semibold text-gray-900">Proprietäre Entwicklung</Heading>
                 </div>
                 <ul className="text-gray-600 space-y-2">
                   <li><strong>Kunden-Feedback:</strong> Direkter Kanal zu zahlenden Kunden</li>
@@ -145,7 +146,7 @@ export function ComparisonSection() {
             </div>
 
             <div className="mt-8 bg-white/80 backdrop-blur rounded-xl p-6">
-              <h4 className="text-lg font-semibold text-gray-900 mb-3">Der gemeinsame Nenner</h4>
+              <Heading level={4} className="text-lg font-semibold text-gray-900 mb-3">Der gemeinsame Nenner</Heading>
               <p className="text-gray-600">
                 Beide Entwicklungsarten profitieren von strukturierten Feedback-Systemen, die den Kommunikationsoverhead minimieren
                 und gleichzeitig die Qualität der Eingaben maximieren. Traditionelle CMS-Systeme sind dafür nicht ausgelegt,

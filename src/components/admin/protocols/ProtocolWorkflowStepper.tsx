@@ -1,4 +1,5 @@
 import { PROTOCOL_WORKFLOW_STEPS, type ProtocolWorkflowStepId } from '@/lib/protocols/workflow'
+import Heading from '@/components/ui/Heading'
 
 interface Props {
   currentStepIndex: number
@@ -14,7 +15,7 @@ export function ProtocolWorkflowStepper({ currentStepIndex, workflowProgress, on
   return (
     <div className="bg-white rounded-lg border p-4 sm:p-5 space-y-3">
       <div className="flex items-center justify-between gap-3">
-        <h2 className="text-sm font-semibold text-gray-900">Workflow</h2>
+        <Heading level={2} className="text-sm text-gray-900">Workflow</Heading>
         <span className="text-xs text-gray-500">
           Schritt {currentStepIndex + 1} von {PROTOCOL_WORKFLOW_STEPS.length}
         </span>

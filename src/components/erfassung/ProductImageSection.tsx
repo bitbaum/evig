@@ -9,6 +9,7 @@
 
 import Image from 'next/image'
 import { Camera } from 'lucide-react'
+import Heading from '@/components/ui/Heading'
 
 interface ProductImageSectionProps {
   image: string | null
@@ -18,10 +19,10 @@ interface ProductImageSectionProps {
 export function ProductImageSection({ image, onImageChange }: ProductImageSectionProps) {
   return (
     <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
-      <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+      <Heading level={2} className="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
         <Camera className="w-5 h-5" />
         Produktbild
-      </h2>
+      </Heading>
       <div className="flex items-start gap-4">
         {image ? (
           <div className="relative">

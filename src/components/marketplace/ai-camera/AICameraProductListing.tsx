@@ -13,6 +13,7 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X, Zap } from 'lucide-react'
+import Heading from '@/components/ui/Heading'
 import { useAICamera } from '@/hooks/useAICamera'
 import { ProductSuccessModal } from './ProductSuccessModal'
 import { CameraCapture } from './CameraCapture'
@@ -127,9 +128,9 @@ function ModalHeader({ onClose }: { onClose: () => void }) {
             <Zap className="w-5 h-5 text-purple-600" />
           </div>
           <div>
-            <h2 className="text-xl font-semibold text-gray-900">
+            <Heading level={2} className="text-xl font-semibold text-gray-900">
               AI Produkt-Erkennung
-            </h2>
+            </Heading>
             <p className="text-sm text-gray-600">
               Mache ein Foto - wir identifizieren Ihr Produkt automatisch
             </p>

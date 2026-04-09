@@ -11,6 +11,7 @@
 
 import Link from 'next/link'
 import { ArrowLeft, Save, Loader2 } from 'lucide-react'
+import Heading from '@/components/ui/Heading'
 import { Button } from '@/components/ui/button'
 import { IconPicker } from './IconPicker'
 import { SERVICE_CATEGORIES } from '@/config/database'
@@ -120,9 +121,9 @@ export function ServiceForm({ initialData, isEdit = false }: ServiceFormProps) {
             <ArrowLeft className="w-5 h-5 text-gray-600 dark:text-gray-400" />
           </Link>
           <div>
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+            <Heading level={1} className="text-2xl text-gray-900 dark:text-white">
               {isEdit ? 'Dienstleistung bearbeiten' : 'Neue Dienstleistung'}
-            </h1>
+            </Heading>
             {initialData?.slug && <p className="text-sm text-gray-500 dark:text-gray-400">/{initialData.slug}</p>}
           </div>
         </div>

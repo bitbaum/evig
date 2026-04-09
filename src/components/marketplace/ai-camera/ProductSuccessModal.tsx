@@ -7,6 +7,7 @@
 import { motion } from 'framer-motion'
 import { CheckCircle } from 'lucide-react'
 import type { ProductSuggestion } from './types'
+import Heading from '@/components/ui/Heading'
 
 interface ProductSuccessModalProps {
   suggestion: ProductSuggestion
@@ -29,9 +30,9 @@ export function ProductSuccessModal({ suggestion, onClose }: ProductSuccessModal
         onClick={(e) => e.stopPropagation()}
       >
         <CheckCircle className="w-16 h-16 text-green-500 mx-auto mb-4" />
-        <h2 className="text-2xl font-bold text-gray-900 mb-2">
+        <Heading level={2} className="text-2xl font-bold text-gray-900 mb-2">
           Produkt erkannt!
-        </h2>
+        </Heading>
         <p className="text-gray-600 mb-6">
           {suggestion.name} wurde erfolgreich identifiziert und das Formular ausgefüllt.
         </p>

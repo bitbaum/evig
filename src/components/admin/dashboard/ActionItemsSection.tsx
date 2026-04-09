@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { Zap, ArrowRight, Check } from 'lucide-react'
+import Heading from '@/components/ui/Heading'
 import type { ActionItem } from './types'
 
 interface ActionItemsSectionProps {
@@ -13,9 +14,9 @@ export function ActionItemsSection({ actionItems }: ActionItemsSectionProps) {
     <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
       <div className="p-4 border-b border-gray-100 dark:border-gray-700 flex items-center gap-2">
         <Zap className="w-5 h-5 text-amber-500" />
-        <h2 className="font-semibold text-gray-900 dark:text-white">
+        <Heading level={2} className="font-semibold text-gray-900 dark:text-white">
           Was gibt es zu tun?
-        </h2>
+        </Heading>
       </div>
 
       <div className="p-4">

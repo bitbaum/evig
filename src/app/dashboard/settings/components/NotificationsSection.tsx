@@ -1,6 +1,7 @@
 'use client'
 
 import { Mail, Smartphone, ShoppingBag, Calendar } from 'lucide-react'
+import Heading from '@/components/ui/Heading'
 import { SETTINGS_CONFIG } from '@/config/profile'
 import type { ProfileData } from '../../profile/hooks/useProfileData'
 
@@ -46,9 +47,9 @@ export function NotificationsSection({ profile, handleChange }: NotificationsSec
   return (
     <div className="space-y-6">
       <div>
-        <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+        <Heading level={3} className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
           {labels.title}
-        </h3>
+        </Heading>
         <p className="text-sm text-gray-600 dark:text-gray-400 mb-6">
           {labels.description}
         </p>
@@ -68,9 +69,9 @@ export function NotificationsSection({ profile, handleChange }: NotificationsSec
 
             <div className="flex-1 min-w-0">
               <div className="flex items-center justify-between mb-1">
-                <h4 className="text-sm font-medium text-gray-900 dark:text-white">
+                <Heading level={4} className="text-sm font-medium text-gray-900 dark:text-white">
                   {option.label}
-                </h4>
+                </Heading>
                 <button
                   type="button"
                   onClick={() => handleChange(option.id, !option.value)}

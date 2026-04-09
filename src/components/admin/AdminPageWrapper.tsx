@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { ArrowLeft } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
+import Heading from '@/components/ui/Heading'
 
 const ICON_COLOR_CLASSES = {
   blue: 'bg-blue-100 text-blue-600',
@@ -56,9 +57,9 @@ export default function AdminPageWrapper({
               </div>
             )}
             <div className="min-w-0">
-              <h1 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white truncate">
+              <Heading level={1} className="text-xl sm:text-2xl text-gray-900 dark:text-white truncate">
                 {title}
-              </h1>
+              </Heading>
               {description && (
                 <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400 line-clamp-2">
                   {description}

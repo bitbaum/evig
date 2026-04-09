@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import Heading from '@/components/ui/Heading'
 import { Globe, Lock, Eye, EyeOff, Download, Loader2 } from 'lucide-react'
 import { SETTINGS_CONFIG } from '@/config/profile'
 import type { ProfileData } from '../../profile/hooks/useProfileData'
@@ -48,18 +49,18 @@ export function PrivacySection({ profile, handleChange }: PrivacySectionProps) {
     <div className="space-y-8">
       {/* Profile Visibility */}
       <div>
-        <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+        <Heading level={3} className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
           {labels.title}
-        </h3>
+        </Heading>
         <p className="text-sm text-gray-600 dark:text-gray-400 mb-6">
           {labels.description}
         </p>
 
         <div className="space-y-4">
           <div>
-            <h4 className="text-base font-medium text-gray-900 dark:text-white mb-3">
+            <Heading level={4} className="text-base font-medium text-gray-900 dark:text-white mb-3">
               {labels.profileVisibility}
-            </h4>
+            </Heading>
             <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
               {labels.profileVisibilityDescription}
             </p>
@@ -97,9 +98,9 @@ export function PrivacySection({ profile, handleChange }: PrivacySectionProps) {
 
       {/* Contact Visibility */}
       <div className="border-t-2 border-gray-200 dark:border-gray-700 pt-6">
-        <h4 className="text-base font-semibold text-gray-900 dark:text-white mb-2">
+        <Heading level={4} className="text-base font-semibold text-gray-900 dark:text-white mb-2">
           {labels.contactVisibility}
-        </h4>
+        </Heading>
         <p className="text-sm text-gray-600 dark:text-gray-400 mb-6">
           {labels.contactVisibilityDescription}
         </p>
@@ -183,9 +184,9 @@ export function PrivacySection({ profile, handleChange }: PrivacySectionProps) {
 
       {/* Data Export (GDPR / Swiss DSG) */}
       <div className="border-t-2 border-gray-200 dark:border-gray-700 pt-6">
-        <h4 className="text-base font-semibold text-gray-900 dark:text-white mb-2">
+        <Heading level={4} className="text-base font-semibold text-gray-900 dark:text-white mb-2">
           Datenschutz & Export
-        </h4>
+        </Heading>
         <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
           Gemäss Schweizer Datenschutzgesetz (DSG) und EU-DSGVO können Sie jederzeit
           eine Kopie Ihrer Daten anfordern.

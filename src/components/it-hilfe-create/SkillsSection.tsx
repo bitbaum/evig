@@ -1,4 +1,5 @@
 import { SERVICE_CATEGORIES, IT_SKILLS } from '@/config/it-hilfe'
+import Heading from '@/components/ui/Heading'
 
 interface Props {
   skillsNeeded: string[]
@@ -8,7 +9,7 @@ interface Props {
 export function SkillsSection({ skillsNeeded, onSkillToggle }: Props) {
   return (
     <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-      <h2 className="text-lg font-semibold text-gray-900 mb-2">Benötigte Skills</h2>
+      <Heading level={2} className="text-lg font-semibold text-gray-900 mb-2">Benötigte Skills</Heading>
       <p className="text-sm text-gray-600 mb-4">
         Bereits vorausgewählt basierend auf deinem Gerät. Du kannst anpassen.
       </p>
@@ -18,9 +19,9 @@ export function SkillsSection({ skillsNeeded, onSkillToggle }: Props) {
         if (skills.length === 0) return null
         return (
           <div key={serviceCategory.id} className="mb-4">
-            <h3 className="text-sm font-medium text-gray-700 mb-2">
+            <Heading level={3} className="text-sm font-medium text-gray-700 mb-2">
               {serviceCategory.name}
-            </h3>
+            </Heading>
             <div className="flex flex-wrap gap-2">
               {skills.map((skill) => (
                 <button

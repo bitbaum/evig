@@ -14,6 +14,7 @@
 import Link from 'next/link'
 import { cn } from '@/lib/utils'
 import { getTextColor } from '@/lib/design-system'
+import Heading from '@/components/ui/Heading'
 import type { DashboardCard as DashboardCardType } from '@/config/dashboard'
 
 interface DashboardCardProps {
@@ -73,13 +74,13 @@ export function DashboardCard({ card, className }: DashboardCardProps) {
         </div>
         <div className="ml-4 flex-1 min-w-0">
           <div className="flex items-center gap-2">
-            <h3 className={cn(
+            <Heading level={3} className={cn(
               'text-lg font-semibold',
               getTextColor('white', 'primary'),
               'dark:text-white truncate'
             )}>
               {card.title}
-            </h3>
+            </Heading>
             {card.badge && (
               <span className="px-2 py-0.5 text-xs font-medium bg-primary-100 dark:bg-primary-900 text-primary-700 dark:text-primary-300 rounded">
                 {card.badge}

@@ -1,6 +1,7 @@
 import { MapPin } from 'lucide-react'
 import type { RepairerApplicationForm, FormUpdater } from './types'
 import { SERVICE_RADIUS_OPTIONS } from './config'
+import Heading from '@/components/ui/Heading'
 
 interface Props {
   formData: RepairerApplicationForm
@@ -10,10 +11,10 @@ interface Props {
 export function ContactInfoSection({ formData, setFormData }: Props) {
   return (
     <div className="mb-8">
-      <h2 className="text-xl font-semibold text-gray-900 mb-4 flex items-center">
+      <Heading level={2} className="text-xl font-semibold text-gray-900 mb-4 flex items-center">
         <MapPin className="w-5 h-5 mr-2" />
         Kontaktinformationen
-      </h2>
+      </Heading>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>

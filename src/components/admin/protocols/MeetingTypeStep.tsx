@@ -6,6 +6,7 @@ import {
   MEETING_TYPE_TEMPLATES,
 } from '@/config/protocols'
 import type { MeetingType } from '@/config/protocols'
+import Heading from '@/components/ui/Heading'
 
 interface Props {
   selectedType: MeetingType | ''
@@ -33,7 +34,7 @@ export function MeetingTypeStep({ selectedType, onSelect, onReset }: Props) {
 
   return (
     <div className="space-y-4">
-      <h2 className="text-lg font-semibold text-gray-900">Besprechungstyp wählen</h2>
+      <Heading level={2} className="text-lg text-gray-900">Besprechungstyp wählen</Heading>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
         {Object.values(MEETING_TYPES).map((type) => {
           const template = MEETING_TYPE_TEMPLATES[type]

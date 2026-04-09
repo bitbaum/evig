@@ -3,6 +3,7 @@
 import React, { useState, useMemo, useCallback } from 'react'
 import Link from 'next/link'
 import { CheckCircle2, Circle, ChevronDown, ChevronUp, Sparkles } from 'lucide-react'
+import Heading from '@/components/ui/Heading'
 import { cn } from '@/lib/utils'
 import { ROLES } from '@/lib/constants'
 
@@ -176,9 +177,9 @@ export function OnboardingChecklist({ role, emailVerified, className }: Onboardi
         <div className="flex items-center gap-3">
           <Sparkles className="h-5 w-5 text-primary-600 dark:text-primary-400" />
           <div className="text-left">
-            <h3 className="text-sm font-semibold text-neutral-900 dark:text-white">
+            <Heading level={3} className="text-sm font-semibold text-neutral-900 dark:text-white">
               Erste Schritte
-            </h3>
+            </Heading>
             <p className="text-xs text-neutral-600 dark:text-neutral-400">
               {completedCount} von {totalCount} erledigt ({progressPercent}%)
             </p>

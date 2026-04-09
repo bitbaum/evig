@@ -11,6 +11,7 @@ import {
   Users,
   MapPin,
 } from 'lucide-react'
+import Heading from '@/components/ui/Heading'
 import type { WorkshopInstanceWithDetails } from './types'
 import { formatDateTime } from '@/lib/date-formats'
 
@@ -34,9 +35,9 @@ export function InstanceList({
   return (
     <div className="bg-white rounded-xl shadow-sm border">
       <div className="px-6 py-4 border-b border-gray-200">
-        <h2 className="text-lg font-semibold text-gray-900">
+        <Heading level={2} className="text-lg text-gray-900">
           Termine ({instances.length})
-        </h2>
+        </Heading>
       </div>
 
       <div className="divide-y divide-gray-200">
@@ -48,9 +49,9 @@ export function InstanceList({
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-3 mb-2">
                     <GraduationCap className="w-5 h-5 text-blue-600" />
-                    <h3 className="text-lg font-semibold text-gray-900 truncate">
+                    <Heading level={3} className="text-lg text-gray-900 truncate">
                       {instance.workshop_title}
-                    </h3>
+                    </Heading>
                     <span className={`px-2 py-1 text-xs font-medium rounded-full ${badge.className}`}>
                       {badge.label}
                     </span>
@@ -125,7 +126,7 @@ export function InstanceList({
         {instances.length === 0 && !loading && (
           <div className="px-6 py-12 text-center">
             <Calendar className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-gray-900 mb-2">Keine Termine gefunden</h3>
+            <Heading level={3} className="text-lg text-gray-900 mb-2">Keine Termine gefunden</Heading>
             <p className="text-gray-600 mb-4">
               Erstellen Sie einen neuen Termin für einen Workshop.
             </p>

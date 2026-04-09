@@ -297,7 +297,7 @@ export default function SubmitPostPage() {
 
           {/* Guidelines */}
           <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
-            <h3 className="text-sm font-semibold text-blue-900 mb-2">📋 Richtlinien für Einreichungen</h3>
+            <Heading level={3} className="text-sm font-semibold text-blue-900 mb-2">📋 Richtlinien für Einreichungen</Heading>
             <ul className="text-sm text-blue-800 space-y-1">
               <li>• Stell direr, dass dein Inhalt original ist</li>
               <li>• Verwende eine klare, respektvolle Sprache</li>

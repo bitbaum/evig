@@ -2,6 +2,7 @@ import { Metadata } from "next";
 import Link from "next/link";
 import { Suspense } from "react";
 import { Search, Package, ChevronRight, Home, ArrowLeft } from "lucide-react";
+import Heading from "@/components/ui/Heading";
 import {
   SHOP_CATEGORIES,
   POPULAR_SEARCHES,
@@ -104,9 +105,9 @@ function SearchResults({ query }: { query: string }) {
         <div className="w-16 h-16 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto mb-4">
           <Search className="w-8 h-8" />
         </div>
-        <h2 className="text-xl font-semibold text-gray-900 mb-2">
+        <Heading level={2} className="text-xl font-semibold text-gray-900 mb-2">
           Suche nach &quot;{query}&quot;
-        </h2>
+        </Heading>
         <p className="text-gray-600 mb-6">
           Die Produktsuche wird derzeit eingerichtet. Bald kannst du hier nach
           aufbereiteten IT-Geräten suchen.
@@ -140,9 +141,9 @@ function NoQueryState() {
     <div className="space-y-8">
       {/* Popular searches */}
       <div>
-        <h2 className="text-lg font-semibold text-gray-900 mb-4">
+        <Heading level={2} className="text-lg font-semibold text-gray-900 mb-4">
           Beliebte Suchen
-        </h2>
+        </Heading>
         <div className="flex flex-wrap gap-2">
           {POPULAR_SEARCHES.map((search) => (
             <Link
@@ -159,9 +160,9 @@ function NoQueryState() {
 
       {/* Browse by category */}
       <div>
-        <h2 className="text-lg font-semibold text-gray-900 mb-4">
+        <Heading level={2} className="text-lg font-semibold text-gray-900 mb-4">
           Nach Kategorie stöbern
-        </h2>
+        </Heading>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
           {SHOP_CATEGORIES.slice(0, 9).map((category) => (
             <Link
@@ -208,9 +209,9 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
       <section className="bg-gradient-to-br from-emerald-600 via-emerald-700 to-teal-800 text-white py-12 sm:py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <Breadcrumbs query={query} />
-          <h1 className="text-3xl sm:text-4xl font-bold mb-6 text-center">
+          <Heading level={1} className="text-3xl sm:text-4xl font-bold mb-6 text-center">
             {query ? `Ergebnisse für "${query}"` : "Shop durchsuchen"}
-          </h1>
+          </Heading>
           <Suspense fallback={<div className="h-16" />}>
             <SearchForm initialQuery={query} />
           </Suspense>

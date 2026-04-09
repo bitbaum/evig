@@ -322,9 +322,9 @@ export default function AppointmentsDashboard() {
         ) : (
           <div className="bg-white rounded-xl shadow-lg p-6 sm:p-8 text-center">
             <Calendar className="w-12 h-12 sm:w-16 sm:h-16 text-neutral-300 mx-auto mb-4" />
-            <h3 className="text-lg sm:text-xl font-semibold text-neutral-900 mb-2">
+            <Heading level={3} className="text-lg sm:text-xl font-semibold text-neutral-900 mb-2">
               Noch keine Termine
-            </h3>
+            </Heading>
             <p className="text-neutral-600 mb-6 text-sm sm:text-base">
               Sie haben noch keine Service-Termine gebucht.
             </p>

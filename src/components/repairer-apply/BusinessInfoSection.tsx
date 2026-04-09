@@ -1,5 +1,6 @@
 import { Wrench } from 'lucide-react'
 import type { RepairerApplicationForm, FormUpdater } from './types'
+import Heading from '@/components/ui/Heading'
 
 interface Props {
   formData: RepairerApplicationForm
@@ -9,10 +10,10 @@ interface Props {
 export function BusinessInfoSection({ formData, setFormData }: Props) {
   return (
     <div className="mb-8">
-      <h2 className="text-xl font-semibold text-gray-900 mb-4 flex items-center">
+      <Heading level={2} className="text-xl font-semibold text-gray-900 mb-4 flex items-center">
         <Wrench className="w-5 h-5 mr-2" />
         Geschäftsinformationen
-      </h2>
+      </Heading>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="md:col-span-2">

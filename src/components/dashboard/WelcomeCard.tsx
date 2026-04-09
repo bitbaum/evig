@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { Store, Wrench, BookOpen, User, X } from 'lucide-react'
+import Heading from '@/components/ui/Heading'
 
 const DISMISSED_KEY = 'revampit_onboarding_dismissed'
 
@@ -37,9 +38,9 @@ export function WelcomeCard() {
         <X className="h-5 w-5" aria-hidden="true" />
       </button>
 
-      <h2 className="text-xl font-bold text-gray-900 mb-2">
+      <Heading level={2} className="text-xl font-bold text-gray-900 mb-2">
         Willkommen bei RevampIT!
-      </h2>
+      </Heading>
       <p className="text-base text-gray-600 mb-6">
         Was möchten Sie tun?
       </p>

@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { ArrowLeft, ExternalLink, Code2, CheckCircle2, AlertTriangle, ArrowRight } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import Heading from '@/components/ui/Heading'
 import {
   type OSSAlternative,
   getCategoryById,
@@ -45,9 +46,9 @@ export function AlternativeDetail({ alternative }: AlternativeDetailProps) {
                   {category.icon} {category.label}
                 </span>
               )}
-              <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-2">
+              <Heading level={1} className="text-3xl sm:text-4xl font-bold text-gray-900 mb-2">
                 {alternative.name}
-              </h1>
+              </Heading>
               <p className="text-lg text-gray-600 max-w-2xl">
                 {alternative.tagline}
               </p>
@@ -67,14 +68,14 @@ export function AlternativeDetail({ alternative }: AlternativeDetailProps) {
           <div className="lg:col-span-2 space-y-8">
             {/* Description */}
             <section className="bg-white rounded-xl border border-gray-200 p-6">
-              <h2 className="text-xl font-bold text-gray-900 mb-4">Beschreibung</h2>
+              <Heading level={2} className="text-xl font-bold text-gray-900 mb-4">Beschreibung</Heading>
               <p className="text-gray-700 leading-relaxed">{alternative.description}</p>
             </section>
 
             {/* What it replaces */}
             {alternative.replaces.length > 0 && (
               <section className="bg-white rounded-xl border border-gray-200 p-6">
-                <h2 className="text-xl font-bold text-gray-900 mb-4">Was es ersetzt</h2>
+                <Heading level={2} className="text-xl font-bold text-gray-900 mb-4">Was es ersetzt</Heading>
                 <div className="space-y-4">
                   {alternative.replaces.map(r => {
                     const app = getProprietaryAppById(r.appId)
@@ -121,7 +122,7 @@ export function AlternativeDetail({ alternative }: AlternativeDetailProps) {
 
             {/* Highlights */}
             <section className="bg-white rounded-xl border border-gray-200 p-6">
-              <h2 className="text-xl font-bold text-gray-900 mb-4">Stärken</h2>
+              <Heading level={2} className="text-xl font-bold text-gray-900 mb-4">Stärken</Heading>
               <ul className="space-y-2">
                 {alternative.highlights.map((h, i) => (
                   <li key={i} className="flex items-start gap-3">
@@ -134,7 +135,7 @@ export function AlternativeDetail({ alternative }: AlternativeDetailProps) {
 
             {/* Limitations */}
             <section className="bg-white rounded-xl border border-gray-200 p-6">
-              <h2 className="text-xl font-bold text-gray-900 mb-4">Einschränkungen</h2>
+              <Heading level={2} className="text-xl font-bold text-gray-900 mb-4">Einschränkungen</Heading>
               <ul className="space-y-2">
                 {alternative.limitations.map((l, i) => (
                   <li key={i} className="flex items-start gap-3">
@@ -153,7 +154,7 @@ export function AlternativeDetail({ alternative }: AlternativeDetailProps) {
           <div className="space-y-6">
             {/* Quick links */}
             <div className="bg-white rounded-xl border border-gray-200 p-5">
-              <h3 className="text-base font-bold text-gray-900 mb-4">Links</h3>
+              <Heading level={3} className="text-base font-bold text-gray-900 mb-4">Links</Heading>
               <div className="space-y-3">
                 <a
                   href={alternative.website}
@@ -188,7 +189,7 @@ export function AlternativeDetail({ alternative }: AlternativeDetailProps) {
 
             {/* Info */}
             <div className="bg-white rounded-xl border border-gray-200 p-5">
-              <h3 className="text-base font-bold text-gray-900 mb-4">Details</h3>
+              <Heading level={3} className="text-base font-bold text-gray-900 mb-4">Details</Heading>
               <dl className="space-y-3 text-sm">
                 <div>
                   <dt className="text-gray-500">Lizenz</dt>
@@ -215,9 +216,9 @@ export function AlternativeDetail({ alternative }: AlternativeDetailProps) {
 
             {/* General CTA */}
             <div className="rounded-xl border-2 border-green-200 bg-green-50 p-5">
-              <h3 className="text-base font-bold text-green-900 mb-2">
+              <Heading level={3} className="text-base font-bold text-green-900 mb-2">
                 Hilfe beim Umstieg?
-              </h3>
+              </Heading>
               <p className="text-sm text-green-800 mb-3">
                 Unser Team unterstützt dich bei der Migration auf Open-Source-Software.
               </p>

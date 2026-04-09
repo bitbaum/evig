@@ -79,7 +79,7 @@ const ServiceCard: React.FC<{ service: Service }> = ({ service }) => {
           </div>
           <div className="flex-1">
             <div className="flex items-center gap-2 mb-2">
-              <h3 className="text-xl sm:text-2xl font-bold">{service.title}</h3>
+              <Heading level={3} className="text-xl sm:text-2xl font-bold">{service.title}</Heading>
               {service.badge && (
                 <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-700">
                   {service.badge}

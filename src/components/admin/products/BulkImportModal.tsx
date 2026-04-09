@@ -2,6 +2,7 @@
 
 import { motion, AnimatePresence } from 'framer-motion'
 import { Upload, XCircle } from 'lucide-react'
+import Heading from '@/components/ui/Heading'
 
 interface BulkImportModalProps {
   isOpen: boolean
@@ -28,9 +29,9 @@ export function BulkImportModal({ isOpen, onClose }: BulkImportModalProps) {
           >
             <div className="p-6 border-b border-gray-200">
               <div className="flex items-center justify-between">
-                <h2 className="text-xl font-semibold text-gray-900">
+                <Heading level={2} className="text-xl text-gray-900">
                   Bulk-Import von Produkten
-                </h2>
+                </Heading>
                 <button
                   onClick={onClose}
                   className="text-gray-500 hover:text-gray-600"
@@ -44,9 +45,9 @@ export function BulkImportModal({ isOpen, onClose }: BulkImportModalProps) {
               {/* File Upload */}
               <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
                 <Upload className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                <h3 className="text-lg font-medium text-gray-900 mb-2">
+                <Heading level={3} className="text-lg font-medium text-gray-900 mb-2">
                   CSV-Datei auswählen
-                </h3>
+                </Heading>
                 <p className="text-gray-600 mb-4">
                   Laden Sie eine CSV-Datei mit Ihren Produkten hoch
                 </p>
@@ -66,9 +67,9 @@ export function BulkImportModal({ isOpen, onClose }: BulkImportModalProps) {
 
               {/* CSV Format Info */}
               <div className="bg-blue-50 rounded-lg p-4">
-                <h4 className="font-medium text-blue-900 mb-2">
+                <Heading level={4} className="font-medium text-blue-900 mb-2">
                   Erforderliches CSV-Format:
-                </h4>
+                </Heading>
                 <div className="text-sm text-blue-800 font-mono bg-blue-100 p-3 rounded">
                   Titel,Beschreibung,Preis (CHF),Kategorie,Marke,Bild-URL
                   <br />

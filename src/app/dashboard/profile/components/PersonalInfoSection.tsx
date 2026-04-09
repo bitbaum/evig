@@ -1,6 +1,7 @@
 'use client'
 
 import { User, Building2 } from 'lucide-react'
+import Heading from '@/components/ui/Heading'
 import type { ProfileData } from '../hooks/useProfileData'
 
 interface PersonalInfoSectionProps {
@@ -16,9 +17,9 @@ export function PersonalInfoSection({ profile, handleChange }: PersonalInfoSecti
           <User className="w-5 h-5 text-blue-600" />
         </div>
         <div>
-          <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
+          <Heading level={2} className="text-lg font-semibold text-gray-900 dark:text-white">
             Persönliche Daten
-          </h2>
+          </Heading>
           <p className="text-sm text-gray-500">Ihre grundlegenden Informationen</p>
         </div>
       </div>

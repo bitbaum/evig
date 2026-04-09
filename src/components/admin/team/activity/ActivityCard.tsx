@@ -7,6 +7,7 @@
  */
 
 import { CheckCircle, Flag, FileText, Megaphone, HelpCircle, Clock } from 'lucide-react'
+import Heading from '@/components/ui/Heading'
 import {
   getActivityUpdateTypeColor,
   getActivityCategoryLabel,
@@ -112,10 +113,10 @@ export function ActivityCard({ activity }: ActivityCardProps) {
           </div>
 
           {/* Title */}
-          <h4 className="mt-1 font-medium text-gray-800 dark:text-gray-200 flex items-center gap-2">
+          <Heading level={4} className="mt-1 text-gray-800 dark:text-gray-200 flex items-center gap-2">
             {icon}
             {activity.title}
-          </h4>
+          </Heading>
 
           {/* Description */}
           {activity.description && (

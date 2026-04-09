@@ -14,6 +14,7 @@ import {
 import Link from 'next/link'
 import Image from 'next/image'
 import { PageHero } from '@/components/layout/PageHero'
+import Heading from '@/components/ui/Heading'
 
 export const metadata: Metadata = {
   title: 'REVAMPED Zertifizierung | Nachhaltige Computer-Builds | RevampIT',
@@ -81,9 +82,9 @@ export default function RevampedPage() {
               {/* Left Column - Content */}
               <div className="space-y-6 sm:space-y-8">
                 <div>
-                  <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 sm:mb-6 leading-tight">
+                  <Heading level={2} className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 sm:mb-6 leading-tight">
                     Echte REVAMPED-Computer im Einsatz
-                  </h2>
+                  </Heading>
                   <p className="text-xl text-gray-600 mb-8 leading-relaxed">
                     Nachhaltige Technologie, die Menschen gerne verwenden. Unsere REVAMPED-Zertifizierung ist nicht nur ein Versprechen - sie ist ein sichtbares Bekenntnis zu Qualität und Umweltverantwortung.
                   </p>
@@ -155,7 +156,7 @@ Mehr über Zertifizierung erfahren
         <div className="container mx-auto px-4">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-16">
-              <h2 className="text-4xl font-bold mb-6">Was "REVAMPED" bedeutet</h2>
+              <Heading level={2} className="text-4xl font-bold mb-6">Was "REVAMPED" bedeutet</Heading>
               <p className="text-xl text-gray-600 max-w-3xl mx-auto">
                 Unsere Zertifizierung ist nicht nur ein Label - es ist ein umfassender Standard, der sicherstellt, dass jeder Computer unsere strengen Kriterien für Nachhaltigkeit, Qualität und Leistung erfüllt.
               </p>
@@ -166,7 +167,7 @@ Mehr über Zertifizierung erfahren
                 <div className="inline-flex items-center justify-center w-20 h-20 bg-green-100 rounded-full mb-6">
                   <Recycle className="w-10 h-10 text-green-600" />
                 </div>
-                <h3 className="text-2xl font-bold mb-4">Nachhaltigkeit zuerst</h3>
+                <Heading level={3} className="text-2xl font-bold mb-4">Nachhaltigkeit zuerst</Heading>
                 <p className="text-gray-600 leading-relaxed">
                   Wir priorisieren gebrauchte und aufgearbeitete Komponenten wo immer möglich und reduzieren so die Umweltauswirkungen drastisch, während wir die Spitzenleistung beibehalten. Wir befolgen Kreislaufwirtschaftsprinzipien in jedem Build.
                 </p>
@@ -175,7 +176,7 @@ Mehr über Zertifizierung erfahren
                 <div className="inline-flex items-center justify-center w-20 h-20 bg-blue-100 rounded-full mb-6">
                   <Shield className="w-10 h-10 text-blue-600" />
                 </div>
-                <h3 className="text-2xl font-bold mb-4">Qualität garantiert</h3>
+                <Heading level={3} className="text-2xl font-bold mb-4">Qualität garantiert</Heading>
                 <p className="text-gray-600 leading-relaxed">
                   Jede Komponente wird gründlich getestet, gereinigt und verifiziert, um unsere strengen Leistungs- und Zuverlässigkeitsstandards zu erfüllen. Qualität wird niemals für Nachhaltigkeit kompromittiert.
                 </p>
@@ -184,7 +185,7 @@ Mehr über Zertifizierung erfahren
                 <div className="inline-flex items-center justify-center w-20 h-20 bg-purple-100 rounded-full mb-6">
                   <Star className="w-10 h-10 text-purple-600" />
                 </div>
-                <h3 className="text-2xl font-bold mb-4">KI-optimiert</h3>
+                <Heading level={3} className="text-2xl font-bold mb-4">KI-optimiert</Heading>
                 <p className="text-gray-600 leading-relaxed">
                   Unsere KI gewährleistet perfekte Komponentenkompatibilität und optimale Leistungsabstimmung für deinen spezifischen Anwendungsfall. Jeder Build ist intelligent für deine Bedürfnisse konzipiert.
                 </p>
@@ -200,7 +201,7 @@ Mehr über Zertifizierung erfahren
           <div className="max-w-4xl mx-auto">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
               <div>
-                <h2 className="text-4xl font-bold mb-6">Echtheitszertifikat</h2>
+                <Heading level={2} className="text-4xl font-bold mb-6">Echtheitszertifikat</Heading>
                 <p className="text-xl text-gray-600 mb-8">
                   Jeder REVAMPED-Computer wird mit einem detaillierten Zertifikat geliefert, das vollständige Transparenz über deinen nachhaltigen Build bietet.
                 </p>
@@ -236,7 +237,7 @@ Mehr über Zertifizierung erfahren
                       <div className="text-xs text-gray-600">CERTIFIED</div>
                     </div>
                   </div>
-                  <h3 className="text-2xl font-bold mb-4">Digital & physisch</h3>
+                  <Heading level={3} className="text-2xl font-bold mb-4">Digital & physisch</Heading>
                   <p className="text-gray-600">
                     dein Zertifikat umfasst sowohl einen physischen Aufkleber als auch einen digitalen QR-Code für sofortige Verifizierung und detaillierte Komponenteninformationen.
                   </p>
@@ -252,7 +253,7 @@ Mehr über Zertifizierung erfahren
         <div className="container mx-auto px-4">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-16">
-              <h2 className="text-4xl font-bold mb-6">Die REVAMPED-Label-Kollektion</h2>
+              <Heading level={2} className="text-4xl font-bold mb-6">Die REVAMPED-Label-Kollektion</Heading>
               <p className="text-xl text-gray-600">
                 Jedes Design repräsentiert unser Engagement für nachhaltiges Computing und Qualitätssicherung.
               </p>
@@ -269,7 +270,7 @@ Mehr über Zertifizierung erfahren
                     className="mx-auto object-contain"
                   />
                 </div>
-                <h3 className="text-xl font-bold mb-2">Original-Design</h3>
+                <Heading level={3} className="text-xl font-bold mb-2">Original-Design</Heading>
                 <p className="text-gray-600">Saubere, professionelle Zertifizierungsmarke, die unseren laptop-fokussierten Nachhaltigkeitsansatz betont</p>
               </div>
               <div className="text-center">
@@ -282,7 +283,7 @@ Mehr über Zertifizierung erfahren
                     className="mx-auto object-contain"
                   />
                 </div>
-                <h3 className="text-xl font-bold mb-2">Öko-Variante</h3>
+                <Heading level={3} className="text-xl font-bold mb-2">Öko-Variante</Heading>
                 <p className="text-gray-600">Erweitertes Design, das unseren Umweltfokus und Kreislaufwirtschaftsprinzipien betont</p>
               </div>
               <div className="text-center">
@@ -296,7 +297,7 @@ Mehr über Zertifizierung erfahren
                   </div>
                   <div className="absolute top-3 right-3 bg-blue-500 text-white text-xs px-3 py-1 rounded-full">NEW</div>
                 </div>
-                <h3 className="text-xl font-bold mb-2">Digitales Zertifikat</h3>
+                <Heading level={3} className="text-xl font-bold mb-2">Digitales Zertifikat</Heading>
                 <p className="text-gray-600">QR-Code-verknüpftes Verifizierungssystem mit Blockchain-gestützten Authentizitätsaufzeichnungen</p>
               </div>
             </div>
@@ -308,7 +309,7 @@ Mehr über Zertifizierung erfahren
       <section className="py-12 sm:py-16 md:py-20">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
-            <h2 className="text-4xl font-bold mb-6">Schliess dich der REVAMPED-Revolution an</h2>
+            <Heading level={2} className="text-4xl font-bold mb-6">Schliess dich der REVAMPED-Revolution an</Heading>
             <p className="text-xl text-gray-600 mb-12 max-w-3xl mx-auto">
               Wenn du einen REVAMPED-Computer wählen, erhältst du nicht nur eine grossartige Maschine - du setzt ein Statement über die Zukunft der Technologie. Nachhaltig, leistungsstark und mit einem Zweck gebaut.
             </p>

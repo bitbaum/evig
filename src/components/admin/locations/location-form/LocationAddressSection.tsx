@@ -1,6 +1,7 @@
 'use client'
 
 import { Home } from 'lucide-react'
+import Heading from '@/components/ui/Heading'
 import type { LocationFormData } from './types'
 import { SWISS_CANTONS } from './types'
 
@@ -12,10 +13,10 @@ interface Props {
 export function LocationAddressSection({ formData, onFieldChange }: Props) {
   return (
     <div className="mb-8">
-      <h2 className="text-xl font-semibold text-gray-900 mb-4 flex items-center">
+      <Heading level={2} className="text-xl text-gray-900 mb-4 flex items-center">
         <Home className="w-5 h-5 mr-2" />
         Adresse & Standort
-      </h2>
+      </Heading>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="md:col-span-2">

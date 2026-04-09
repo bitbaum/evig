@@ -13,6 +13,7 @@
 
 import React from 'react'
 import { Loader2, AlertTriangle } from 'lucide-react'
+import Heading from '@/components/ui/Heading'
 import {
   ProductTabSwitcher,
   ProductStatsCards,
@@ -44,9 +45,9 @@ export default function ProductManagement() {
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8">
         <div className="text-center">
           <AlertTriangle className="w-12 h-12 text-red-500 mx-auto mb-4" />
-          <h3 className="text-lg font-medium text-gray-900 mb-2">
+          <Heading level={3} className="text-lg font-medium text-gray-900 mb-2">
             Fehler beim Laden der Produkte
-          </h3>
+          </Heading>
           <p className="text-gray-600 mb-4">
             {actions.error.message || 'Bitte versuchen Sie es später erneut.'}
           </p>

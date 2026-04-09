@@ -15,6 +15,7 @@ import {
 import { ORDER_STATUS_CONFIG, ORDER_STATUS, formatCHF } from '@/config/marketplace'
 import type { OrderStatus } from '@/config/marketplace'
 import { formatDateShort } from '@/lib/date-formats'
+import Heading from '@/components/ui/Heading'
 
 interface OrderItem {
   id: string
@@ -87,10 +88,10 @@ export default function DashboardOrdersPage() {
   return (
     <div className="max-w-4xl mx-auto">
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
+        <Heading level={1} className="text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
           <ShoppingBag className="w-6 h-6" />
           Meine Bestellungen
-        </h1>
+        </Heading>
 
         {/* Role toggle */}
         <div className="flex bg-gray-100 dark:bg-gray-800 rounded-lg p-1">
@@ -142,9 +143,9 @@ export default function DashboardOrdersPage() {
       ) : orders.length === 0 ? (
         <div className="text-center py-12 bg-white dark:bg-gray-800 rounded-xl">
           <ShoppingBag className="w-12 h-12 text-gray-300 dark:text-gray-600 mx-auto mb-3" />
-          <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-1">
+          <Heading level={3} className="text-lg font-medium text-gray-900 dark:text-white mb-1">
             Noch keine Bestellungen
-          </h3>
+          </Heading>
           <p className="text-gray-500 dark:text-gray-400 mb-4">
             {role === 'buyer'
               ? 'Stöbern Sie im Marketplace und finden Sie tolle Angebote.'
@@ -180,7 +181,7 @@ export default function DashboardOrdersPage() {
                 </div>
 
                 <div className="flex-1 min-w-0">
-                  <h3 className="font-medium text-gray-900 dark:text-white truncate">{order.listing_title}</h3>
+                  <Heading level={3} className="font-medium text-gray-900 dark:text-white truncate">{order.listing_title}</Heading>
                   <div className="flex items-center gap-3 mt-1 text-sm text-gray-500 dark:text-gray-400">
                     <span>{role === 'buyer' ? 'Verkäufer' : 'Käufer'}: {order.counterparty_name}</span>
                     <span>{formatDateShort(order.created_at)}</span>

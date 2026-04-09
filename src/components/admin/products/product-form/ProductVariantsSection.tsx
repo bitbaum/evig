@@ -2,6 +2,7 @@
 
 import { Plus, Minus } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import Heading from '@/components/ui/Heading'
 import type { ProductVariant } from './types'
 
 interface Props {
@@ -15,7 +16,7 @@ export function ProductVariantsSection({ variants, onVariantChange, onAdd, onRem
   return (
     <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
       <div className="flex items-center justify-between mb-6">
-        <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Produktvarianten</h2>
+        <Heading level={2} className="text-lg text-gray-900 dark:text-white">Produktvarianten</Heading>
         <Button
           type="button"
           onClick={onAdd}
@@ -31,7 +32,7 @@ export function ProductVariantsSection({ variants, onVariantChange, onAdd, onRem
         {variants.map((variant, index) => (
           <div key={index} className="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="font-medium text-gray-900 dark:text-white">Variante {index + 1}</h3>
+              <Heading level={3} className="text-gray-900 dark:text-white">Variante {index + 1}</Heading>
               {variants.length > 1 && (
                 <button type="button" onClick={() => onRemove(index)} className="text-red-600 hover:text-red-700">
                   <Minus className="w-4 h-4" />

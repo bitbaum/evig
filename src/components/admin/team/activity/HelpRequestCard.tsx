@@ -7,6 +7,7 @@
  */
 
 import { Users, User, CheckCircle, Clock, AlertTriangle, Loader2 } from 'lucide-react'
+import Heading from '@/components/ui/Heading'
 import {
   getHelpRequestUrgencyLabel,
   getHelpRequestUrgencyColor,
@@ -100,7 +101,7 @@ export function HelpRequestCard({
           {/* Title with urgency */}
           <div className="flex items-center gap-2 flex-wrap">
             {getUrgencyIcon(request.urgency)}
-            <h4 className="font-medium text-gray-900 dark:text-gray-100">{request.title}</h4>
+            <Heading level={4} className="text-gray-900 dark:text-gray-100">{request.title}</Heading>
           </div>
 
           {/* Requester */}

@@ -13,6 +13,7 @@ import { ProductFormData, ProductListingErrors } from '../types'
 import { PRODUCT_CONDITIONS } from '../constants'
 import { cn } from '@/lib/utils'
 import { getTextColor, getStatusColors } from '@/lib/design-system'
+import Heading from '@/components/ui/Heading'
 
 interface ConditionSectionProps {
   formData: ProductFormData
@@ -23,9 +24,9 @@ interface ConditionSectionProps {
 export function ConditionSection({ formData, errors, onConditionChange }: ConditionSectionProps) {
   return (
     <div className="space-y-4">
-      <h3 className={cn('text-lg font-medium', getTextColor('white', 'primary'))}>
+      <Heading level={3} className={cn('text-lg font-medium', getTextColor('white', 'primary'))}>
         Zustand *
-      </h3>
+      </Heading>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {PRODUCT_CONDITIONS.map((condition) => {
           const isSelected = formData.condition === condition.value

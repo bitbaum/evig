@@ -9,6 +9,7 @@
 import { useState, useMemo } from 'react'
 import { Target, Loader2, Check, X } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import Heading from '@/components/ui/Heading'
 import { useCurrentFocus } from './useActivityStream'
 
 interface CurrentFocusInputProps {
@@ -110,7 +111,7 @@ export function CurrentFocusInput({
     <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-4">
       <div className="flex items-center gap-2 mb-3">
         <Target className="w-5 h-5 text-blue-500" />
-        <h3 className="font-medium text-gray-900 dark:text-gray-100">Aktueller Fokus</h3>
+        <Heading level={3} className="text-gray-900 dark:text-gray-100">Aktueller Fokus</Heading>
       </div>
 
       {error && (

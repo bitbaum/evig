@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import Heading from '@/components/ui/Heading'
 import { User, Save, Loader2, CheckCircle2, ArrowLeft, Shield, Settings as SettingsIcon } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { PROFILE_CONFIG } from '@/config/profile'
@@ -44,9 +45,9 @@ export default function ProfilePage() {
           </Link>
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+              <Heading level={1} className="text-2xl font-bold text-gray-900 dark:text-white">
                 {labels.pageTitle}
-              </h1>
+              </Heading>
               <p className="mt-1 text-sm sm:text-base text-gray-600 dark:text-neutral-400">
                 {labels.pageDescription}
               </p>
@@ -71,9 +72,9 @@ export default function ProfilePage() {
               <Shield className="w-5 h-5 text-green-600 dark:text-green-400" />
             </div>
             <div>
-              <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
+              <Heading level={2} className="text-lg font-semibold text-gray-900 dark:text-white">
                 Kontoübersicht
-              </h2>
+              </Heading>
               <p className="text-sm text-gray-600 dark:text-neutral-400">
                 Status und Sicherheit Ihres Kontos
               </p>
@@ -136,9 +137,9 @@ export default function ProfilePage() {
 
           {/* Avatar Section */}
           <div className="bg-white dark:bg-neutral-800 rounded-xl shadow-sm border-2 border-neutral-200 dark:border-neutral-700 p-6">
-            <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-6">
+            <Heading level={2} className="text-xl font-semibold text-gray-900 dark:text-white mb-6">
               {labels.avatar}
-            </h2>
+            </Heading>
             <AvatarUpload
               currentAvatarUrl={profile.avatar_url}
               onUploadSuccess={handleAvatarUpload}

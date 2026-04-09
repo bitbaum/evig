@@ -2,6 +2,7 @@
 
 import { Target } from 'lucide-react'
 import { responsiveTypography, responsiveButtons } from '@/lib/responsive'
+import Heading from '@/components/ui/Heading'
 
 interface LearningObjectivesSectionProps {
   objectives: string[]
@@ -18,10 +19,10 @@ export function LearningObjectivesSection({
 }: LearningObjectivesSectionProps) {
   return (
     <div className="mb-8">
-      <h2 className={`${responsiveTypography.subsection} font-semibold text-gray-900 mb-4 flex items-center`}>
+      <Heading level={2} className={`${responsiveTypography.subsection} font-semibold text-gray-900 mb-4 flex items-center`}>
         <Target className="w-5 h-5 mr-2" />
         Lernziele
-      </h2>
+      </Heading>
 
       <div className="space-y-3">
         {objectives.map((objective, index) => (

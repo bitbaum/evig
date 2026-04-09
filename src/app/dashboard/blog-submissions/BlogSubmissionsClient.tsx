@@ -176,9 +176,9 @@ export default function BlogSubmissionsClient() {
             <ArrowLeft className="w-4 h-4 mr-2" />
             Zurück zum Dashboard
           </Link>
-          <h1 className="text-3xl font-bold text-neutral-900 dark:text-white mb-2">
+          <Heading level={1} className="text-3xl font-bold text-neutral-900 dark:text-white mb-2">
             Meine Einreichungen
-          </h1>
+          </Heading>
           <p className="text-sm sm:text-base text-neutral-600 dark:text-neutral-400">
             Status Ihrer Blog-Beiträge und Rückmeldungen des Redaktionsteams
           </p>
@@ -241,9 +241,9 @@ export default function BlogSubmissionsClient() {
                   {/* Header row */}
                   <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 mb-3">
                     <div className="flex-1 min-w-0">
-                      <h3 className="text-lg sm:text-xl font-semibold text-neutral-900 dark:text-white mb-1 break-words">
+                      <Heading level={3} className="text-lg sm:text-xl font-semibold text-neutral-900 dark:text-white mb-1 break-words">
                         {submission.title}
-                      </h3>
+                      </Heading>
                       <p className="text-xs sm:text-sm text-neutral-500 dark:text-neutral-400">
                         Eingereicht am{' '}
                         {formatDate(
@@ -411,9 +411,9 @@ function EmptyState() {
   return (
     <div className="bg-white dark:bg-neutral-800 rounded-xl shadow-sm p-8 text-center border-2 border-neutral-200 dark:border-neutral-700">
       <FileText className="w-16 h-16 text-neutral-300 dark:text-neutral-600 mx-auto mb-4" />
-      <h3 className="text-xl font-semibold text-neutral-900 dark:text-white mb-2">
+      <Heading level={3} className="text-xl font-semibold text-neutral-900 dark:text-white mb-2">
         Sie haben noch keine Blogbeiträge eingereicht
-      </h3>
+      </Heading>
       <p className="text-neutral-600 dark:text-neutral-400 mb-6">
         Teilen Sie Ihr Wissen mit der Community.
       </p>

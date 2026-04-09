@@ -1,5 +1,6 @@
 import { FileText } from 'lucide-react'
 import type { RepairerApplicationForm, FormUpdater } from './types'
+import Heading from '@/components/ui/Heading'
 
 interface Props {
   formData: RepairerApplicationForm
@@ -19,10 +20,10 @@ export function DocumentsSection({ formData, setFormData }: Props) {
 
   return (
     <div className="mb-8">
-      <h2 className="text-xl font-semibold text-gray-900 mb-4 flex items-center">
+      <Heading level={2} className="text-xl font-semibold text-gray-900 mb-4 flex items-center">
         <FileText className="w-5 h-5 mr-2" />
         Dokumente & Verifizierung
-      </h2>
+      </Heading>
 
       <div className="space-y-6">
         <div>

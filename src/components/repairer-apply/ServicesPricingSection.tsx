@@ -1,6 +1,7 @@
 import { Star } from 'lucide-react'
 import type { RepairerApplicationForm, FormUpdater } from './types'
 import { SERVICE_OPTIONS, SPECIALIZATION_OPTIONS } from './config'
+import Heading from '@/components/ui/Heading'
 
 interface Props {
   formData: RepairerApplicationForm
@@ -28,10 +29,10 @@ export function ServicesPricingSection({ formData, setFormData }: Props) {
 
   return (
     <div className="mb-8">
-      <h2 className="text-xl font-semibold text-gray-900 mb-4 flex items-center">
+      <Heading level={2} className="text-xl font-semibold text-gray-900 mb-4 flex items-center">
         <Star className="w-5 h-5 mr-2" />
         Dienstleistungen & Preise
-      </h2>
+      </Heading>
 
       <div className="space-y-6">
         <div>

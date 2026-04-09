@@ -48,7 +48,7 @@ export default function WorkshopBrowseClient({ workshops }: WorkshopBrowseClient
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
-              <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Workshops & Kurse</h1>
+              <Heading level={1} className="text-2xl sm:text-3xl font-bold text-gray-900">Workshops & Kurse</Heading>
               <p className="text-sm text-gray-600 mt-1">
                 {workshops.length} {workshops.length === 1 ? 'Workshop' : 'Workshops'} · Praxisnah lernen bei RevampIT
               </p>
@@ -152,9 +152,9 @@ export default function WorkshopBrowseClient({ workshops }: WorkshopBrowseClient
                       </span>
                     </div>
 
-                    <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                    <Heading level={3} className="text-xl font-semibold text-gray-900 mb-2">
                       {workshop.title}
-                    </h3>
+                    </Heading>
 
                     <p className="text-gray-600 text-sm mb-4 line-clamp-3">
                       {workshop.description}
@@ -272,11 +272,11 @@ export default function WorkshopBrowseClient({ workshops }: WorkshopBrowseClient
         ) : (
           <div className="text-center py-12">
             <BookOpen className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">
+            <Heading level={3} className="text-xl font-semibold text-gray-900 mb-2">
               {categoryFilter !== 'all' || levelFilter !== 'all'
                 ? 'Keine Workshops gefunden'
                 : 'Aktuell sind keine Workshops geplant'}
-            </h3>
+            </Heading>
             <p className="text-gray-600 mb-4">
               {categoryFilter !== 'all' || levelFilter !== 'all'
                 ? 'Versuche andere Filter oder schau später wieder vorbei.'

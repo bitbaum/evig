@@ -2,6 +2,7 @@
 
 import Image from 'next/image'
 import { motion } from 'framer-motion'
+import Heading from '@/components/ui/Heading'
 import { getConditionBadge } from '@/config/erfassung/conditions'
 import {
   Package,
@@ -231,9 +232,9 @@ export function ShopProductsTable({
       {filteredProducts.length === 0 && (
         <div className="text-center py-12">
           <Package className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-          <h3 className="text-lg font-medium text-gray-900 mb-2">
+          <Heading level={3} className="text-lg font-medium text-gray-900 mb-2">
             {searchQuery ? 'Keine Produkte gefunden' : 'Keine veröffentlichten Produkte'}
-          </h3>
+          </Heading>
           <p className="text-gray-600">
             {searchQuery
               ? 'Versuchen Sie eine andere Suche.'

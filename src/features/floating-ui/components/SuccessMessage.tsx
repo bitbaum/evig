@@ -2,6 +2,8 @@
  * Success message shown after a suggestion is submitted.
  * Pure presentational component, no props needed.
  */
+import Heading from '@/components/ui/Heading'
+
 export function SuccessMessage() {
   return (
     <div className="text-center py-8">
@@ -10,7 +12,7 @@ export function SuccessMessage() {
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
         </svg>
       </div>
-      <h3 className="font-semibold text-gray-900 mb-2">Vielen Dank!</h3>
+      <Heading level={3} className="font-semibold text-gray-900 mb-2">Vielen Dank!</Heading>
       <p className="text-sm text-gray-600 mb-4">Ihr Vorschlag wurde erfolgreich gesendet.</p>
       <div className="text-xs text-gray-500">
         Wir werden uns schnellstmöglich darum kümmern.

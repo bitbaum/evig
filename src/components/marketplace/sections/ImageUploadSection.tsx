@@ -12,6 +12,7 @@ import { Image as ImageIcon, X } from 'lucide-react'
 import { MARKETPLACE_LIMITS } from '@/config/marketplace'
 import { cn } from '@/lib/utils'
 import { getTextColor } from '@/lib/design-system'
+import Heading from '@/components/ui/Heading'
 
 interface ImageUploadSectionProps {
   images: File[]
@@ -22,9 +23,9 @@ interface ImageUploadSectionProps {
 export function ImageUploadSection({ images, onImageUpload, onImageRemove }: ImageUploadSectionProps) {
   return (
     <div className="space-y-4">
-      <h3 className={cn('text-lg font-medium', getTextColor('white', 'primary'))}>
+      <Heading level={3} className={cn('text-lg font-medium', getTextColor('white', 'primary'))}>
         Produkt-Bilder
-      </h3>
+      </Heading>
       <p className={cn('text-sm', getTextColor('white', 'muted'))}>
         Füge bis zu {MARKETPLACE_LIMITS.MAX_IMAGES} klare Bilder deines Produkts hinzu
       </p>

@@ -204,7 +204,7 @@ export default function SkillsProfilePage() {
                   <div className={`w-8 h-8 rounded-lg ${category.color} flex items-center justify-center`}>
                     <CategoryIcon className="w-4 h-4 text-white" />
                   </div>
-                  <h3 className="font-medium text-gray-900">{category.name}</h3>
+                  <Heading level={3} className="font-medium text-gray-900">{category.name}</Heading>
                 </div>
                 <div className="flex flex-wrap gap-2 ml-10">
                   {skills.map((skill: ITSkill) => (

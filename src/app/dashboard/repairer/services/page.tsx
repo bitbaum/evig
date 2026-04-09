@@ -12,6 +12,7 @@ import {
   XCircle,
   Eye
 } from 'lucide-react'
+import Heading from '@/components/ui/Heading'
 
 export const metadata: Metadata = {
   title: 'Meine Dienstleistungen | Repairer Dashboard',
@@ -84,9 +85,9 @@ export default async function RepairerServicesPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+          <Heading level={1} className="text-2xl font-bold text-gray-900 dark:text-white">
             Meine Dienstleistungen
-          </h1>
+          </Heading>
           <p className="text-gray-600 dark:text-gray-400 mt-1">
             Verwalten Sie Ihre Reparaturdienstleistungen und Preise
           </p>
@@ -171,9 +172,9 @@ export default async function RepairerServicesPage() {
                     <Wrench className="w-6 h-6 text-orange-600" />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-gray-900 dark:text-white">
+                    <Heading level={3} className="font-semibold text-gray-900 dark:text-white">
                       {service.name}
-                    </h3>
+                    </Heading>
                     <p className="text-sm text-gray-600 dark:text-gray-400">
                       {service.category}
                     </p>
@@ -199,9 +200,9 @@ export default async function RepairerServicesPage() {
 
               {/* Skills */}
               <div className="mb-4">
-                <h4 className="text-sm font-medium text-gray-900 dark:text-white mb-2">
+                <Heading level={4} className="text-sm font-medium text-gray-900 dark:text-white mb-2">
                   Fachgebiete:
-                </h4>
+                </Heading>
                 <div className="flex flex-wrap gap-1">
                   {service.skills.map((skill, index) => (
                     <span
@@ -289,9 +290,9 @@ export default async function RepairerServicesPage() {
             <Wrench className="w-5 h-5 text-orange-600" />
           </div>
           <div>
-            <h3 className="font-medium text-orange-900 dark:text-orange-200">
+            <Heading level={3} className="font-medium text-orange-900 dark:text-orange-200">
               Tipps für erfolgreiche Reparaturdienste
-            </h3>
+            </Heading>
             <ul className="mt-2 text-sm text-orange-700 dark:text-orange-300 space-y-1">
               <li>• Definieren Sie klare Preise und Lieferzeiten für Ihre Dienstleistungen</li>
               <li>• Spezialisieren Sie sich auf bestimmte Gerätetypen für bessere Bewertungen</li>

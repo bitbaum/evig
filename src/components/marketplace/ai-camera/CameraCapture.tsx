@@ -5,6 +5,7 @@
  */
 
 import { Camera, Upload } from 'lucide-react'
+import Heading from '@/components/ui/Heading'
 
 interface CameraCaptureProps {
   isCapturing: boolean
@@ -33,9 +34,9 @@ export function CameraCapture({
         <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
           <Camera className="w-8 h-8 text-blue-600" />
         </div>
-        <h3 className="text-lg font-medium text-gray-900 mb-2">
+        <Heading level={3} className="text-lg font-medium text-gray-900 mb-2">
           Produkt fotografieren
-        </h3>
+        </Heading>
         <p className="text-gray-600">
           Halte dein Produkt in die Kamera - unsere KI erkennt automatisch Marke, Modell und Zustand
         </p>

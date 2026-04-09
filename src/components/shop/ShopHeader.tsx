@@ -15,6 +15,7 @@ import {
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { ShopLogo } from "@/components/shop/ShopLogo";
+import Heading from "@/components/ui/Heading";
 import { UserMenu } from "@/components/auth/UserMenu";
 import {
   MEGA_MENU_COLUMNS,
@@ -234,7 +235,7 @@ export function ShopHeader({
           >
             {/* Mobile header */}
             <div className="lg:hidden flex items-center justify-between p-4 border-b border-gray-200 bg-gray-50">
-              <h2 className="text-lg font-semibold text-gray-900">Kategorien</h2>
+              <Heading level={2} className="text-lg font-semibold text-gray-900">Kategorien</Heading>
               <button
                 onClick={() => setIsMenuOpen(false)}
                 className="p-2 -mr-2 min-h-[44px] min-w-[44px] text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg"
@@ -249,9 +250,9 @@ export function ShopHeader({
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
                 {MEGA_MENU_COLUMNS.map((column) => (
                   <div key={column.title}>
-                    <h3 className="font-semibold text-gray-900 mb-3 text-sm uppercase tracking-wide">
+                    <Heading level={3} className="font-semibold text-gray-900 mb-3 text-sm uppercase tracking-wide">
                       {column.title}
-                    </h3>
+                    </Heading>
                     <ul className="space-y-2">
                       {column.categorySlugs.map((slug) => {
                         const category = getCategoryBySlug(slug);

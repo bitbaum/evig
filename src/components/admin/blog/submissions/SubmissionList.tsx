@@ -1,6 +1,7 @@
 'use client'
 
 import { APPROVAL_STATUS_BADGES } from '@/config/approval-status'
+import Heading from '@/components/ui/Heading'
 import { formatDateTime } from '@/lib/date-formats'
 import {
   Lightbulb,
@@ -63,9 +64,9 @@ export function SubmissionList({ submissions, selectedId, onSelect }: Submission
                   </span>
                 )}
               </div>
-              <h3 className="font-semibold text-gray-900 dark:text-white mb-1 line-clamp-2">
+              <Heading level={3} className="font-semibold text-gray-900 dark:text-white mb-1 line-clamp-2">
                 {submission.title}
-              </h3>
+              </Heading>
               <div className="flex items-center gap-3 text-sm text-gray-500 dark:text-gray-400">
                 <span className="flex items-center gap-1">
                   <User className="w-3 h-3" />

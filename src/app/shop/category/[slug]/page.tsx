@@ -2,6 +2,7 @@ import { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ChevronRight, Home, Package, Filter } from "lucide-react";
+import Heading from "@/components/ui/Heading";
 import {
   SHOP_CATEGORIES,
   getCategoryUrl,
@@ -142,9 +143,9 @@ function SubcategoryCard({ category }: { category: ShopCategory }) {
           <Package className="w-5 h-5" />
         </div>
         <div>
-          <h3 className="font-medium text-gray-900 group-hover:text-emerald-600 transition-colors">
+          <Heading level={3} className="font-medium text-gray-900 group-hover:text-emerald-600 transition-colors">
             {category.name}
-          </h3>
+          </Heading>
           {category.count !== undefined && (
             <p className="text-sm text-gray-500">{category.count} Produkte</p>
           )}
@@ -171,9 +172,9 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
       <section className="bg-gradient-to-br from-emerald-600 via-emerald-700 to-teal-800 text-white py-12 sm:py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <Breadcrumbs category={category} parent={parent} />
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4">
+          <Heading level={1} className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4">
             {category.name}
-          </h1>
+          </Heading>
           <p className="text-lg text-emerald-100 max-w-2xl">
             Entdecke unsere Auswahl an nachhaltig aufbereiteten{" "}
             {category.name.toLowerCase()} - geprüfte Qualität zu fairen Preisen.
@@ -191,9 +192,9 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
         {/* Subcategories */}
         {hasSubcategories && (
           <div className="mb-12">
-            <h2 className="text-xl font-semibold text-gray-900 mb-4">
+            <Heading level={2} className="text-xl font-semibold text-gray-900 mb-4">
               Unterkategorien
-            </h2>
+            </Heading>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {category.children!.map((sub) => (
                 <SubcategoryCard key={sub.slug} category={sub} />
@@ -208,9 +209,9 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
             <div className="w-16 h-16 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto mb-4">
               <Package className="w-8 h-8" />
             </div>
-            <h2 className="text-xl font-semibold text-gray-900 mb-2">
+            <Heading level={2} className="text-xl font-semibold text-gray-900 mb-2">
               Produkte werden geladen
-            </h2>
+            </Heading>
             <p className="text-gray-600 mb-6">
               Bald findest du hier aufbereitete IT-Geräte in der Kategorie{" "}
               <strong>{category.name}</strong> auf unserem Marketplace.
@@ -235,9 +236,9 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
         {/* Related categories */}
         {parent && (
           <div className="mt-12">
-            <h2 className="text-xl font-semibold text-gray-900 mb-4">
+            <Heading level={2} className="text-xl font-semibold text-gray-900 mb-4">
               Weitere in {parent.name}
-            </h2>
+            </Heading>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {parent.children!
                 .filter((c) => c.slug !== category.slug)

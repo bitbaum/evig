@@ -9,6 +9,7 @@
 
 import { Users } from 'lucide-react'
 import { getProfilesByCategory } from '@/config/erfassung'
+import Heading from '@/components/ui/Heading'
 
 interface ProductProfileFieldsProps {
   kundenprofile: string[]
@@ -21,19 +22,19 @@ export function ProductProfileFields({
 }: ProductProfileFieldsProps) {
   return (
     <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-4 sm:p-6">
-      <h2 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-white mb-3 sm:mb-4 flex items-center gap-2">
+      <Heading level={2} className="text-base sm:text-lg font-semibold text-gray-900 dark:text-white mb-3 sm:mb-4 flex items-center gap-2">
         <Users className="w-5 h-5" />
         Geeignet für (Kundenprofile)
-      </h2>
+      </Heading>
       <p className="text-sm text-gray-600 dark:text-gray-400 mb-3 sm:mb-4 hidden sm:block">
         Wähle die Zielgruppen, für die dieses Produkt geeignet ist. Hover für Details.
       </p>
 
       {Object.entries(getProfilesByCategory()).map(([categoryName, profiles]) => (
         <div key={categoryName} className="mb-4 last:mb-0">
-          <h3 className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-2">
+          <Heading level={3} className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-2">
             {categoryName}
-          </h3>
+          </Heading>
           <div className="flex flex-wrap gap-2 sm:gap-2">
             {profiles.map(profile => (
               <button

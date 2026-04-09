@@ -10,6 +10,7 @@ import type { Conversation } from '@/components/messages/ConversationList'
 import MessageThread from '@/components/messages/MessageThread'
 import { apiFetch } from '@/lib/api/client'
 import { logger } from '@/lib/logger'
+import Heading from '@/components/ui/Heading'
 
 export default function MessagesPage() {
   const { data: session, status: sessionStatus } = useSession()
@@ -77,7 +78,7 @@ export default function MessagesPage() {
   return (
     <div className="space-y-4">
       <div>
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Nachrichten</h1>
+        <Heading level={1} className="text-2xl font-bold text-gray-900 dark:text-white">Nachrichten</Heading>
         <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
           Deine Konversationen mit Käufern und Verkäufern
         </p>
@@ -86,9 +87,9 @@ export default function MessagesPage() {
       {conversations.length === 0 ? (
         <div className="bg-gray-50 dark:bg-gray-800 rounded-xl p-8 text-center border-2 border-dashed border-gray-300 dark:border-gray-600">
           <MessageSquare className="w-16 h-16 text-gray-400 mx-auto mb-4" aria-hidden="true" />
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+          <Heading level={3} className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
             Keine Nachrichten
-          </h3>
+          </Heading>
           <p className="text-gray-600 dark:text-gray-400 mb-6">
             Stöbere im Marketplace und kontaktiere Verkäufer, um eine Konversation zu starten.
           </p>

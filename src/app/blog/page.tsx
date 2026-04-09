@@ -156,9 +156,9 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
         <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4 sm:gap-6">
             <div>
-              <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-2">
+              <Heading level={3} className="text-lg sm:text-xl font-bold text-gray-900 mb-2">
                 Teile dein Wissen
-              </h3>
+              </Heading>
               <p className="text-sm sm:text-base text-gray-600">
                 Hast du eine Geschichte über nachhaltige Technologie? Reiche einen Beitrag ein.
               </p>

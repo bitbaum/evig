@@ -1,6 +1,7 @@
 import { Brain, Sparkles } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { getTextColor } from '@/lib/design-system'
+import Heading from '@/components/ui/Heading'
 
 export function HeroSection() {
   return (
@@ -18,9 +19,9 @@ export function HeroSection() {
             </div>
           </div>
 
-          <h1 className={cn('text-4xl font-bold tracking-tight sm:text-6xl', getTextColor('white', 'primary'))}>
+          <Heading level={1} className={cn('text-4xl font-bold tracking-tight sm:text-6xl', getTextColor('white', 'primary'))}>
             Kontextuelle <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-600 to-info-600">Website-Verbesserungen</span>
-          </h1>
+          </Heading>
           <p className={cn('mt-6 text-xl leading-8 max-w-2xl mx-auto', getTextColor('white', 'muted'))}>
             Nutzer können direkt auf jeder Seite Verbesserungsvorschläge machen. Entwickler erhalten kontextuelles Feedback und können gezielt Probleme beheben.
           </p>

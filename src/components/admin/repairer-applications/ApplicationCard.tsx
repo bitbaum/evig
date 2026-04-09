@@ -1,4 +1,5 @@
 import { CheckCircle, XCircle, Clock, AlertCircle, Mail, Phone, ExternalLink, MapPin } from 'lucide-react'
+import Heading from '@/components/ui/Heading'
 import { APPROVAL_STATUS, getApprovalStatusBadge } from '@/config/approval-status'
 import { formatDateShort } from '@/lib/date-formats'
 import type { RepairerApplication, ActionDialogState } from './types'
@@ -35,9 +36,9 @@ export function ApplicationCard({ application, isPending, actionLoading, onOpenD
       <div className="flex items-start justify-between">
         <div className="flex-1">
           <div className="flex items-center gap-3 mb-2">
-            <h3 className="text-lg font-semibold text-gray-900">
+            <Heading level={3} className="text-lg text-gray-900">
               {application.businessName || application.applicantName}
-            </h3>
+            </Heading>
             {getStatusBadge(application.status)}
             <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
               application.documentVerificationStatus === 'approved' ? 'bg-green-100 text-green-800' :

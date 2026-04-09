@@ -1,5 +1,6 @@
 import { useRef } from 'react'
 import { Loader2, Save, Wand2, Upload } from 'lucide-react'
+import Heading from '@/components/ui/Heading'
 import { MEETING_TYPE_TEMPLATES } from '@/config/protocols'
 import type { MeetingType, InputMethod } from '@/config/protocols'
 import { AUDIO_UPLOAD_LIMITS } from '@/lib/protocols/audio-validation'
@@ -49,7 +50,7 @@ export function ContentInputStep({
   if (inputMethod === 'audio') {
     return (
       <div className="bg-white rounded-lg border p-6 space-y-5">
-        <h2 className="text-lg font-semibold text-gray-900">Audio hochladen</h2>
+        <Heading level={2} className="text-lg text-gray-900">Audio hochladen</Heading>
         <p className="text-sm text-gray-600">
           Laden Sie eine Audiodatei hoch. Die Aufnahme wird automatisch transkribiert und danach in Aufgaben umgewandelt.
         </p>
@@ -125,7 +126,7 @@ export function ContentInputStep({
 
   return (
     <div className="bg-white rounded-lg border p-6 space-y-6">
-      <h2 className="text-lg font-semibold text-gray-900">{config.title}</h2>
+      <Heading level={2} className="text-lg text-gray-900">{config.title}</Heading>
       <p className="text-sm text-gray-600">{config.description}</p>
 
       {inputMethod === 'transcript' && MEETING_TYPE_TEMPLATES[meetingType].agenda_hints.length > 0 && (

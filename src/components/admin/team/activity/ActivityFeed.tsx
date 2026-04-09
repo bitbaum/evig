@@ -9,6 +9,7 @@
 import { useState } from 'react'
 import { Plus, Filter, RefreshCw, Loader2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import Heading from '@/components/ui/Heading'
 import {
   ACTIVITY_SOURCE_LABELS,
   ACTIVITY_CATEGORY_OPTIONS,
@@ -71,9 +72,9 @@ export function ActivityFeed({
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+          <Heading level={2} className="text-lg text-gray-900 dark:text-gray-100">
             Aktivitäten
-          </h2>
+          </Heading>
           {!loading && (
             <span className="text-sm text-gray-500 dark:text-gray-400">({total})</span>
           )}

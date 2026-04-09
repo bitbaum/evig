@@ -9,6 +9,7 @@
 
 import Link from 'next/link'
 import { Mail, Calendar, Eye, Edit2 } from 'lucide-react'
+import Heading from '@/components/ui/Heading'
 import {
   getEmploymentTypeLabel,
   getEmploymentTypeColor,
@@ -40,9 +41,9 @@ export function TeamMemberCard({ member, onView, onEdit }: TeamMemberCardProps) 
         {/* Info */}
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2">
-            <h3 className="font-semibold text-gray-900 dark:text-white truncate">
+            <Heading level={3} className="text-gray-900 dark:text-white truncate">
               {displayName}
-            </h3>
+            </Heading>
             {!member.is_active && (
               <span className="px-2 py-0.5 text-xs rounded bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-400">
                 Inaktiv

@@ -1,4 +1,5 @@
 import { formatDateShort } from '@/lib/date-formats'
+import Heading from '@/components/ui/Heading'
 import type { RepairerApplication, Certification, ActionDialogState } from './types'
 
 interface Props {
@@ -21,7 +22,7 @@ export function CertificationVerificationSection({
   return (
     <div className="mt-6 pt-6 border-t border-gray-200">
       <div className="flex items-center justify-between mb-4">
-        <h4 className="font-medium text-gray-900">Zertifizierungsverifizierung</h4>
+        <Heading level={4} className="text-gray-900">Zertifizierungsverifizierung</Heading>
         <button
           onClick={() => onSelect(application)}
           className="text-sm text-blue-600 hover:text-blue-700 font-medium"

@@ -10,6 +10,7 @@ import { EmailVerificationBanner } from '@/components/dashboard/EmailVerificatio
 import { OnboardingChecklist } from '@/components/dashboard/OnboardingChecklist'
 import { WelcomeCard } from '@/components/dashboard/WelcomeCard'
 import { isStaffEmail } from '@/lib/permissions'
+import Heading from '@/components/ui/Heading'
 
 export const metadata: Metadata = {
   title: 'Dashboard | RevampIT',
@@ -44,9 +45,9 @@ export default async function DashboardPage() {
         />
 
         <div className="mb-8">
-          <h1 className={cn('text-3xl font-bold', getTextColor('neutral', 'primary'), 'dark:text-white')}>
+          <Heading level={1} className={cn('text-3xl font-bold', getTextColor('neutral', 'primary'), 'dark:text-white')}>
             Willkommen zurück, {session.user.name || session.user.email}!
-          </h1>
+          </Heading>
           <p className={cn('mt-2 text-sm sm:text-base', getTextColor('neutral', 'muted'), 'dark:text-neutral-400')}>
             Verwalten Sie Ihr Konto und entdecken Sie alle verfügbaren Funktionen.
           </p>
@@ -65,9 +66,9 @@ export default async function DashboardPage() {
                 </span>
               </div>
               <div className="ml-4">
-                <h3 className={cn('text-lg font-semibold', getTextColor('white', 'primary'), 'dark:text-white')}>
+                <Heading level={3} className={cn('text-lg', getTextColor('white', 'primary'), 'dark:text-white')}>
                   Mein Profil
-                </h3>
+                </Heading>
                 <p className={cn('text-sm', getTextColor('white', 'muted'), 'dark:text-neutral-400')}>
                   Persönliche Daten verwalten
                 </p>
@@ -85,9 +86,9 @@ export default async function DashboardPage() {
                 <span className="text-green-600 dark:text-green-400 text-xl">🎓</span>
               </div>
               <div className="ml-4">
-                <h3 className={cn('text-lg font-semibold', getTextColor('white', 'primary'), 'dark:text-white')}>
+                <Heading level={3} className={cn('text-lg', getTextColor('white', 'primary'), 'dark:text-white')}>
                   Meine Workshops
-                </h3>
+                </Heading>
                 <p className={cn('text-sm', getTextColor('white', 'muted'), 'dark:text-neutral-400')}>
                   Angemeldete Kurse verwalten
                 </p>
@@ -105,9 +106,9 @@ export default async function DashboardPage() {
                 <span className="text-orange-600 dark:text-orange-400 text-xl">📅</span>
               </div>
               <div className="ml-4">
-                <h3 className={cn('text-lg font-semibold', getTextColor('white', 'primary'), 'dark:text-white')}>
+                <Heading level={3} className={cn('text-lg', getTextColor('white', 'primary'), 'dark:text-white')}>
                   Termine
-                </h3>
+                </Heading>
                 <p className={cn('text-sm', getTextColor('white', 'muted'), 'dark:text-neutral-400')}>
                   Service-Termin buchen
                 </p>
@@ -126,9 +127,9 @@ export default async function DashboardPage() {
                   <span className="text-secondary-600 dark:text-secondary-400 text-xl">🏪</span>
                 </div>
                 <div className="ml-4">
-                  <h3 className={cn('text-lg font-semibold', getTextColor('white', 'primary'), 'dark:text-white')}>
+                  <Heading level={3} className={cn('text-lg font-semibold', getTextColor('white', 'primary'), 'dark:text-white')}>
                     Seller Dashboard
-                  </h3>
+                  </Heading>
                   <p className={cn('text-sm', getTextColor('white', 'muted'), 'dark:text-neutral-400')}>
                     Produkte und Verkäufe
                   </p>
@@ -147,9 +148,9 @@ export default async function DashboardPage() {
                   <span className="text-warning-600 dark:text-warning-400 text-xl">🔧</span>
                 </div>
                 <div className="ml-4">
-                  <h3 className={cn('text-lg font-semibold', getTextColor('white', 'primary'), 'dark:text-white')}>
+                  <Heading level={3} className={cn('text-lg font-semibold', getTextColor('white', 'primary'), 'dark:text-white')}>
                     Repairer Dashboard
-                  </h3>
+                  </Heading>
                   <p className={cn('text-sm', getTextColor('white', 'muted'), 'dark:text-neutral-400')}>
                     Reparaturen verwalten
                   </p>
@@ -169,9 +170,9 @@ export default async function DashboardPage() {
                   <span className="text-secondary-600 dark:text-secondary-400 text-xl">🏪</span>
                 </div>
                 <div className="ml-4">
-                  <h3 className={cn('text-lg font-semibold', getTextColor('white', 'primary'), 'dark:text-white')}>
+                  <Heading level={3} className={cn('text-lg font-semibold', getTextColor('white', 'primary'), 'dark:text-white')}>
                     Auf Revamp‑IT verkaufen
-                  </h3>
+                  </Heading>
                   <p className={cn('text-sm', getTextColor('white', 'muted'), 'dark:text-neutral-400')}>
                     Eigene Produkte anbieten – Versand direkt an Käufer
                   </p>
@@ -190,9 +191,9 @@ export default async function DashboardPage() {
                   <span className="text-warning-600 dark:text-warning-400 text-xl">🔧</span>
                 </div>
                 <div className="ml-4">
-                  <h3 className={cn('text-lg font-semibold', getTextColor('white', 'primary'), 'dark:text-white')}>
+                  <Heading level={3} className={cn('text-lg font-semibold', getTextColor('white', 'primary'), 'dark:text-white')}>
                     Reparaturen anbieten
-                  </h3>
+                  </Heading>
                   <p className={cn('text-sm', getTextColor('white', 'muted'), 'dark:text-neutral-400')}>
                     Dienstleistungen publizieren und Anfragen erhalten
                   </p>
@@ -212,9 +213,9 @@ export default async function DashboardPage() {
                   <span className="text-error-600 dark:text-error-400 text-xl">⚙️</span>
                 </div>
                 <div className="ml-4">
-                  <h3 className={cn('text-lg font-semibold', getTextColor('white', 'primary'), 'dark:text-white')}>
+                  <Heading level={3} className={cn('text-lg font-semibold', getTextColor('white', 'primary'), 'dark:text-white')}>
                     Admin-Bereich
-                  </h3>
+                  </Heading>
                   <p className={cn('text-sm', getTextColor('white', 'muted'), 'dark:text-neutral-400')}>
                     System verwalten
                   </p>
@@ -233,9 +234,9 @@ export default async function DashboardPage() {
                 <span className="text-cyan-600 dark:text-cyan-400 text-xl">💻</span>
               </div>
               <div className="ml-4">
-                <h3 className={cn('text-lg font-semibold', getTextColor('white', 'primary'), 'dark:text-white')}>
+                <Heading level={3} className={cn('text-lg', getTextColor('white', 'primary'), 'dark:text-white')}>
                   IT-Hilfe
-                </h3>
+                </Heading>
                 <p className={cn('text-sm', getTextColor('white', 'muted'), 'dark:text-neutral-400')}>
                   Anfragen finden und Hilfe anbieten
                 </p>
@@ -253,9 +254,9 @@ export default async function DashboardPage() {
                 <span className="text-purple-600 dark:text-purple-400 text-xl">🎓</span>
               </div>
               <div className="ml-4">
-                <h3 className={cn('text-lg font-semibold', getTextColor('white', 'primary'), 'dark:text-white')}>
+                <Heading level={3} className={cn('text-lg', getTextColor('white', 'primary'), 'dark:text-white')}>
                   Workshop vorschlagen
-                </h3>
+                </Heading>
                 <p className={cn('text-sm', getTextColor('white', 'muted'), 'dark:text-neutral-400')}>
                   Eigene Workshops anbieten
                 </p>
@@ -274,9 +275,9 @@ export default async function DashboardPage() {
                 <span className="text-primary-600 dark:text-primary-400 text-xl">📝</span>
               </div>
               <div className="ml-4">
-                <h3 className={cn('text-lg font-semibold', getTextColor('white', 'primary'), 'dark:text-white')}>
+                <Heading level={3} className={cn('text-lg', getTextColor('white', 'primary'), 'dark:text-white')}>
                   Meine Einreichungen
-                </h3>
+                </Heading>
                 <p className={cn('text-sm', getTextColor('white', 'muted'), 'dark:text-neutral-400')}>
                   Status Ihrer Blog-Beiträge verfolgen
                 </p>
@@ -294,9 +295,9 @@ export default async function DashboardPage() {
                 <span className="text-info-600 dark:text-info-400 text-xl">✍️</span>
               </div>
               <div className="ml-4">
-                <h3 className={cn('text-lg font-semibold', getTextColor('white', 'primary'), 'dark:text-white')}>
+                <Heading level={3} className={cn('text-lg', getTextColor('white', 'primary'), 'dark:text-white')}>
                   Beitrag verfassen
-                </h3>
+                </Heading>
                 <p className={cn('text-sm', getTextColor('white', 'muted'), 'dark:text-neutral-400')}>
                   Idee teilen oder Tutorial schreiben
                 </p>

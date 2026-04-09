@@ -1,6 +1,7 @@
 'use client'
 
 import { Phone, Mail } from 'lucide-react'
+import Heading from '@/components/ui/Heading'
 import type { ProfileData } from '../hooks/useProfileData'
 
 interface ContactInfoSectionProps {
@@ -17,9 +18,9 @@ export function ContactInfoSection({ profile, email, handleChange }: ContactInfo
           <Phone className="w-5 h-5 text-green-600" />
         </div>
         <div>
-          <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
+          <Heading level={2} className="text-lg font-semibold text-gray-900 dark:text-white">
             Kontaktdaten
-          </h2>
+          </Heading>
           <p className="text-sm text-gray-500">So können wir Sie erreichen</p>
         </div>
       </div>

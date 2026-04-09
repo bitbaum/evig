@@ -185,9 +185,9 @@ export default function MyRequestsPage() {
                         </span>
                       </div>
 
-                      <h3 className="font-semibold text-gray-900 mb-2 group-hover:text-emerald-600 transition-colors">
+                      <Heading level={3} className="font-semibold text-gray-900 mb-2 group-hover:text-emerald-600 transition-colors">
                         {req.title}
-                      </h3>
+                      </Heading>
 
                       <p className="text-sm text-gray-600 line-clamp-2 mb-3">
                         {req.description}

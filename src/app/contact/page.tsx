@@ -59,7 +59,7 @@ export default function ContactPage() {
                 <div className="flex justify-center mb-3 sm:mb-4">
                   <info.icon className="w-6 h-6 sm:w-8 sm:h-8 text-green-600" />
                 </div>
-                <h3 className="text-base sm:text-lg font-semibold text-green-700 mb-2">{info.title}</h3>
+                <Heading level={3} className="text-base sm:text-lg font-semibold text-green-700 mb-2">{info.title}</Heading>
                 {info.link ? (
                   <a 
                     href={info.link}

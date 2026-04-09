@@ -3,6 +3,7 @@
 import { type AvailabilitySlots } from './types'
 import { getAvailableDates } from './helpers'
 import { formatWeekdayShort } from '@/lib/date-formats'
+import Heading from '@/components/ui/Heading'
 
 interface BookingStepScheduleProps {
   selectedDate: string
@@ -27,7 +28,7 @@ export function BookingStepSchedule({
 
   return (
     <div className="bg-white rounded-xl shadow-sm p-6">
-      <h2 className="text-lg font-semibold text-gray-900 mb-2">Wunschtermin wählen</h2>
+      <Heading level={2} className="text-lg font-semibold text-gray-900 mb-2">Wunschtermin wählen</Heading>
       <p className="text-gray-600 text-sm mb-6">
         Optional - der Reparateur wird dir verfügbare Termine vorschlagen
       </p>

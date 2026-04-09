@@ -27,6 +27,7 @@ import { TeamAvailabilitySection } from './TeamAvailabilitySection'
 import { TeamEmergencySection } from './TeamEmergencySection'
 import { TeamHRNotesSection } from './TeamHRNotesSection'
 import { Button } from '@/components/ui/button'
+import Heading from '@/components/ui/Heading'
 
 interface FormSection {
   id: string
@@ -105,7 +106,7 @@ export function TeamProfileForm({
         <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
           <div className="flex items-center gap-3 mb-4">
             <User className="w-5 h-5 text-gray-500" />
-            <h2 className="font-semibold text-gray-900 dark:text-white">Benutzer auswählen</h2>
+            <Heading level={2} className="text-gray-900 dark:text-white">Benutzer auswählen</Heading>
           </div>
           <select
             value={form.user_id}

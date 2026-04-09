@@ -1,6 +1,7 @@
 'use client'
 
 import { Shield, Send, X, Check } from 'lucide-react'
+import Heading from '@/components/ui/Heading'
 import { useFormHandler } from '@/hooks/useFormHandler'
 import { Button } from '@/components/ui/button'
 
@@ -57,9 +58,9 @@ export function PermissionRequestForm({ availableSections, onClose }: Permission
             <Check className="w-5 h-5 text-green-600" />
           </div>
           <div>
-            <h3 className="font-semibold text-green-900 dark:text-green-200">
+            <Heading level={3} className="font-semibold text-green-900 dark:text-green-200">
               Anfrage gesendet
-            </h3>
+            </Heading>
             <p className="text-sm text-green-700 dark:text-green-300">
               Ein Super Admin wird Ihre Anfrage prüfen.
             </p>
@@ -84,9 +85,9 @@ export function PermissionRequestForm({ availableSections, onClose }: Permission
           <Shield className="w-5 h-5 text-blue-600" />
         </div>
         <div>
-          <h3 className="font-semibold text-gray-900 dark:text-white">
+          <Heading level={3} className="font-semibold text-gray-900 dark:text-white">
             Zugriff anfordern
-          </h3>
+          </Heading>
           <p className="text-sm text-gray-600 dark:text-gray-400">
             Wählen Sie die Bereiche aus, auf die Sie Zugriff benötigen.
           </p>

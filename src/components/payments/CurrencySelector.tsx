@@ -14,6 +14,7 @@ import {
   formatCurrency,
   convertCurrency
 } from '@/lib/payments/currency'
+import Heading from '@/components/ui/Heading'
 
 interface CurrencySelectorProps {
   baseAmount: number // Amount in CHF (our base currency)
@@ -51,7 +52,7 @@ export default function CurrencySelector({
     <Card className={className}>
       <CardContent className="p-4">
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-sm font-semibold text-gray-700">Währung wählen</h3>
+          <Heading level={3} className="text-sm font-semibold text-gray-700">Währung wählen</Heading>
           <Badge variant="outline" className="text-xs">
             Mehrsprachig
           </Badge>

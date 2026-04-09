@@ -1,4 +1,5 @@
 import { APPROVAL_STATUS } from '@/config/approval-status'
+import Heading from '@/components/ui/Heading'
 import type { RepairerApplication, VerificationDocument, DocumentType, ActionDialogState } from './types'
 
 interface Props {
@@ -23,7 +24,7 @@ export function DocumentVerificationSection({
   return (
     <div className="mt-6 pt-6 border-t border-gray-200">
       <div className="flex items-center justify-between mb-4">
-        <h4 className="font-medium text-gray-900">Dokumentenverifizierung</h4>
+        <Heading level={4} className="text-gray-900">Dokumentenverifizierung</Heading>
         <button
           onClick={() => onSelect(application)}
           className="text-sm text-blue-600 hover:text-blue-700 font-medium"

@@ -5,6 +5,7 @@ import { Send, Loader2, ArrowLeft } from 'lucide-react'
 import { apiFetch } from '@/lib/api/client'
 import { formatTime as fmtTime, formatDateShort } from '@/lib/date-formats'
 import { logger } from '@/lib/logger'
+import Heading from '@/components/ui/Heading'
 
 export interface Message {
   id: string
@@ -133,9 +134,9 @@ export default function MessageThread({
           </button>
         )}
         <div className="flex-1 min-w-0">
-          <h3 className="font-semibold text-gray-900 dark:text-white truncate">
+          <Heading level={3} className="font-semibold text-gray-900 dark:text-white truncate">
             {recipientName}
-          </h3>
+          </Heading>
         </div>
       </div>
 

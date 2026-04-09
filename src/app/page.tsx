@@ -168,7 +168,7 @@ export default function Home() {
                 <div className={`flex h-12 w-12 items-center justify-center rounded-xl ${card.iconBg} mb-4`} aria-hidden="true">
                   <card.icon className={`h-6 w-6 ${card.iconColor}`} />
                 </div>
-                <h3 className="text-xl sm:text-2xl font-bold text-gray-900">{card.title}</h3>
+                <Heading level={3} className="text-xl sm:text-2xl font-bold text-gray-900">{card.title}</Heading>
                 <p className="mt-2 text-base text-gray-600 flex-1">
                   {card.subtitle}
                 </p>
@@ -263,7 +263,7 @@ export default function Home() {
                 <div className={`flex h-10 w-10 items-center justify-center rounded-lg ${item.iconBg} mb-4`} aria-hidden="true">
                   <item.icon className={`h-5 w-5 ${item.iconColor}`} />
                 </div>
-                <h3 className={`text-lg font-bold text-gray-900 ${item.hoverColor} transition-colors`}>{item.title}</h3>
+                <Heading level={3} className={`text-lg font-bold text-gray-900 ${item.hoverColor} transition-colors`}>{item.title}</Heading>
                 <p className="mt-2 text-sm text-gray-600">{item.desc}</p>
               </Link>
             ))}

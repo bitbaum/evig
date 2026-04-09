@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useCallback } from 'react'
 import { X, Brain, Maximize2 } from 'lucide-react'
+import Heading from '@/components/ui/Heading'
 import Link from 'next/link'
 import { HirnChat } from './HirnChat'
 
@@ -66,7 +67,7 @@ export function HirnSlideOver({ isOpen, onClose }: HirnSlideOverProps) {
               <Brain className="w-4 h-4 text-white" />
             </div>
             <div>
-              <h2 className="font-semibold text-white">Hirn AI</h2>
+              <Heading level={2} className="font-semibold text-white">Hirn AI</Heading>
               <p className="text-xs text-white/70">RevampIT Assistent</p>
             </div>
           </div>

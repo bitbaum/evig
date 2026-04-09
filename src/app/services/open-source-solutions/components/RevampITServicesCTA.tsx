@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { Wrench, GraduationCap } from 'lucide-react'
 import { type OSSAlternative } from '@/config/open-source-registry'
+import Heading from '@/components/ui/Heading'
 
 interface RevampITServicesCTAProps {
   alternative: OSSAlternative
@@ -12,9 +13,9 @@ export function RevampITServicesCTA({ alternative }: RevampITServicesCTAProps) {
 
   return (
     <div className="rounded-xl border-2 border-blue-200 bg-blue-50 p-5">
-      <h3 className="text-base font-bold text-blue-900 mb-3">
+      <Heading level={3} className="text-base font-bold text-blue-900 mb-3">
         Wir helfen beim Umstieg
-      </h3>
+      </Heading>
 
       {services.itHilfeNote && (
         <div className="flex items-start gap-3 mb-3">

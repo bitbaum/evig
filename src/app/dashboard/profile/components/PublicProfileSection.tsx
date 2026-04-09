@@ -1,6 +1,7 @@
 'use client'
 
 import { Globe, Lock } from 'lucide-react'
+import Heading from '@/components/ui/Heading'
 import { PROFILE_CONFIG } from '@/config/profile'
 import type { ProfileData } from '../hooks/useProfileData'
 
@@ -15,9 +16,9 @@ export function PublicProfileSection({ profile, handleChange }: PublicProfileSec
 
   return (
     <div className="bg-white dark:bg-neutral-800 rounded-xl shadow-sm border-2 border-neutral-200 dark:border-neutral-700 p-6">
-      <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-6">
+      <Heading level={2} className="text-xl font-semibold text-gray-900 dark:text-white mb-6">
         {labels.publicProfile}
-      </h2>
+      </Heading>
 
       <div className="space-y-6">
         {/* Display Name */}

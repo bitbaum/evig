@@ -1,6 +1,7 @@
 'use client'
 
 import { Bell, Globe } from 'lucide-react'
+import Heading from '@/components/ui/Heading'
 import type { ProfileData } from '../hooks/useProfileData'
 
 interface PreferencesSectionProps {
@@ -16,9 +17,9 @@ export function PreferencesSection({ profile, handleChange }: PreferencesSection
           <Bell className="w-5 h-5 text-purple-600" />
         </div>
         <div>
-          <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
+          <Heading level={2} className="text-lg font-semibold text-gray-900 dark:text-white">
             Einstellungen
-          </h2>
+          </Heading>
           <p className="text-sm text-gray-500">Sprache und Newsletter</p>
         </div>
       </div>

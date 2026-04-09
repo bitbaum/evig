@@ -4,6 +4,7 @@ import { cn } from '@/lib/utils'
 import { type OSSAlternative, getProprietaryAppById, getCategoryById } from '@/config/open-source-registry'
 import { MaturityBadge } from './MaturityBadge'
 import { PlatformIcons } from './PlatformIcons'
+import Heading from '@/components/ui/Heading'
 
 interface AlternativeCardProps {
   alternative: OSSAlternative
@@ -24,9 +25,9 @@ function AlternativeCardComponent({ alternative }: AlternativeCardProps) {
       {/* Header: Name + Category */}
       <div className="flex items-start justify-between mb-3">
         <div className="min-w-0 flex-1">
-          <h3 className="text-lg font-bold text-gray-900 group-hover:text-blue-700 transition-colors truncate">
+          <Heading level={3} className="text-lg font-bold text-gray-900 group-hover:text-blue-700 transition-colors truncate">
             {alternative.name}
-          </h3>
+          </Heading>
           {category && (
             <span className="text-xs text-gray-500">
               {category.icon} {category.label}

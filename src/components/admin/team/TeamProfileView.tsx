@@ -24,6 +24,7 @@ import {
 } from 'lucide-react'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
+import Heading from '@/components/ui/Heading'
 import {
   getEmploymentTypeLabel,
   getEmploymentTypeColor,
@@ -88,9 +89,9 @@ export function TeamProfileView({
           {/* Info */}
           <div className="flex-1">
             <div className="flex items-center gap-3">
-              <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+              <Heading level={1} className="text-2xl text-gray-900 dark:text-white">
                 {displayName}
-              </h1>
+              </Heading>
               {!profile.is_active && (
                 <span className="px-2 py-1 text-sm rounded bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-400">
                   Inaktiv
@@ -153,7 +154,7 @@ export function TeamProfileView({
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <Activity className="w-5 h-5 text-green-500" />
-              <h3 className="font-medium text-gray-900 dark:text-gray-100">Aktivitäten</h3>
+              <Heading level={3} className="text-gray-900 dark:text-gray-100">Aktivitäten</Heading>
             </div>
             <Link
               href="/admin/team/activity"
@@ -174,16 +175,16 @@ export function TeamProfileView({
         <div className="space-y-6">
           {/* Skills & Interests */}
           <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
-            <h2 className="font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+            <Heading level={2} className="text-gray-900 dark:text-white mb-4 flex items-center gap-2">
               <Star className="w-5 h-5 text-yellow-500" />
               Fähigkeiten & Interessen
-            </h2>
+            </Heading>
 
             {profile.skills && profile.skills.length > 0 ? (
               <div className="mb-4">
-                <h3 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                <Heading level={3} className="text-sm text-gray-700 dark:text-gray-300 mb-2">
                   Fähigkeiten
-                </h3>
+                </Heading>
                 <div className="flex flex-wrap gap-2">
                   {profile.skills.map((skill) => (
                     <span
@@ -201,9 +202,9 @@ export function TeamProfileView({
 
             {profile.interests && profile.interests.length > 0 && (
               <div>
-                <h3 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                <Heading level={3} className="text-sm text-gray-700 dark:text-gray-300 mb-2">
                   Interessen
-                </h3>
+                </Heading>
                 <div className="flex flex-wrap gap-2">
                   {profile.interests.map((interest) => (
                     <span
@@ -220,16 +221,16 @@ export function TeamProfileView({
 
           {/* Development Areas */}
           <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
-            <h2 className="font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+            <Heading level={2} className="text-gray-900 dark:text-white mb-4 flex items-center gap-2">
               <Target className="w-5 h-5 text-purple-500" />
               Entwicklung
-            </h2>
+            </Heading>
 
             {profile.goals && (
               <div className="mb-4">
-                <h3 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                <Heading level={3} className="text-sm text-gray-700 dark:text-gray-300 mb-1">
                   Ziele
-                </h3>
+                </Heading>
                 <p className="text-gray-600 dark:text-gray-400 text-sm whitespace-pre-wrap">
                   {profile.goals}
                 </p>
@@ -238,9 +239,9 @@ export function TeamProfileView({
 
             {profile.strengths && (
               <div className="mb-4">
-                <h3 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                <Heading level={3} className="text-sm text-gray-700 dark:text-gray-300 mb-1">
                   Stärken
-                </h3>
+                </Heading>
                 <p className="text-gray-600 dark:text-gray-400 text-sm whitespace-pre-wrap">
                   {profile.strengths}
                 </p>
@@ -249,9 +250,9 @@ export function TeamProfileView({
 
             {profile.development_areas && (
               <div>
-                <h3 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                <Heading level={3} className="text-sm text-gray-700 dark:text-gray-300 mb-1">
                   Entwicklungsbereiche
-                </h3>
+                </Heading>
                 <p className="text-gray-600 dark:text-gray-400 text-sm whitespace-pre-wrap">
                   {profile.development_areas}
                 </p>
@@ -268,17 +269,17 @@ export function TeamProfileView({
         <div className="space-y-6">
           {/* Availability */}
           <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
-            <h2 className="font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+            <Heading level={2} className="text-gray-900 dark:text-white mb-4 flex items-center gap-2">
               <Clock className="w-5 h-5 text-blue-500" />
               Verfügbarkeit
-            </h2>
+            </Heading>
 
             <div className="space-y-3">
               {profile.working_hours && (
                 <div>
-                  <h3 className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                  <Heading level={3} className="text-sm text-gray-700 dark:text-gray-300">
                     Arbeitszeiten
-                  </h3>
+                  </Heading>
                   <p className="text-gray-600 dark:text-gray-400 text-sm">
                     {profile.working_hours}
                   </p>
@@ -287,9 +288,9 @@ export function TeamProfileView({
 
               {profile.contract_hours && (
                 <div>
-                  <h3 className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                  <Heading level={3} className="text-sm text-gray-700 dark:text-gray-300">
                     Vertragsstunden
-                  </h3>
+                  </Heading>
                   <p className="text-gray-600 dark:text-gray-400 text-sm">
                     {profile.contract_hours} Stunden/Woche
                   </p>
@@ -298,9 +299,9 @@ export function TeamProfileView({
 
               {profile.availability && (
                 <div>
-                  <h3 className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                  <Heading level={3} className="text-sm text-gray-700 dark:text-gray-300">
                     Allgemeine Verfügbarkeit
-                  </h3>
+                  </Heading>
                   <p className="text-gray-600 dark:text-gray-400 text-sm whitespace-pre-wrap">
                     {profile.availability}
                   </p>
@@ -308,9 +309,9 @@ export function TeamProfileView({
               )}
 
               <div>
-                <h3 className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                <Heading level={3} className="text-sm text-gray-700 dark:text-gray-300">
                   Bevorzugte Kontaktart
-                </h3>
+                </Heading>
                 <p className="text-gray-600 dark:text-gray-400 text-sm">
                   {CONTACT_METHOD_LABELS[profile.preferred_contact as ContactMethod] || profile.preferred_contact}
                 </p>
@@ -321,10 +322,10 @@ export function TeamProfileView({
           {/* Emergency Contact */}
           {(profile.emergency_contact_name || profile.emergency_contact_phone) && (
             <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
-              <h2 className="font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+              <Heading level={2} className="text-gray-900 dark:text-white mb-4 flex items-center gap-2">
                 <AlertCircle className="w-5 h-5 text-red-500" />
                 Notfallkontakt
-              </h2>
+              </Heading>
 
               <div className="space-y-2">
                 {profile.emergency_contact_name && (
@@ -355,10 +356,10 @@ export function TeamProfileView({
           {/* HR Notes - Super Admin Only */}
           {isSuperAdmin && profile.hr_notes && (
             <div className="bg-yellow-50 dark:bg-yellow-900/20 rounded-xl border border-yellow-200 dark:border-yellow-800 p-6">
-              <h2 className="font-semibold text-yellow-900 dark:text-yellow-200 mb-4 flex items-center gap-2">
+              <Heading level={2} className="text-yellow-900 dark:text-yellow-200 mb-4 flex items-center gap-2">
                 <FileText className="w-5 h-5" />
                 HR-Notizen (Vertraulich)
-              </h2>
+              </Heading>
               <p className="text-yellow-800 dark:text-yellow-300 text-sm whitespace-pre-wrap">
                 {profile.hr_notes}
               </p>

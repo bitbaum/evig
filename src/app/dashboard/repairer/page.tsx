@@ -13,6 +13,7 @@ import { Modal } from '@/components/ui/Modal'
 import { formatDateShort } from '@/lib/date-formats'
 import { BOOKING_STATUS } from '@/config/booking-status'
 import { apiFetch } from '@/lib/api/client'
+import Heading from '@/components/ui/Heading'
 
 interface Appointment {
   id: string
@@ -137,7 +138,7 @@ export default function RepairerDashboard() {
       <div className="max-w-6xl mx-auto px-4">
         <div className="flex justify-between items-center mb-8">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">Reparateur Dashboard</h1>
+            <Heading level={1} className="text-2xl font-bold text-gray-900">Reparateur Dashboard</Heading>
             <p className="text-gray-600">Verwalten Sie Ihre Aufträge</p>
           </div>
           <button
@@ -219,7 +220,7 @@ export default function RepairerDashboard() {
                           </span>
                         )}
                       </div>
-                      <h3 className="font-semibold text-lg text-gray-900">{apt.service_name || 'Reparatur'}</h3>
+                      <Heading level={3} className="font-semibold text-lg text-gray-900">{apt.service_name || 'Reparatur'}</Heading>
                     </div>
                     <div className="text-right text-sm text-gray-500">
                       <div>{formatDateShort(apt.created_at)}</div>

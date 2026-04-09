@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { Mail, MessageSquare, Send, User } from 'lucide-react'
 import { ORG } from '@/config/org'
 import { apiFetch } from '@/lib/api/client'
+import Heading from '@/components/ui/Heading'
 
 export default function ContactForm() {
   const [name, setName] = useState('')
@@ -50,7 +51,7 @@ export default function ContactForm() {
 
   return (
     <div className="bg-white rounded-xl shadow-lg p-8">
-      <h2 className="text-3xl font-bold mb-6 text-center">Sende uns eine Nachricht</h2>
+      <Heading level={2} className="text-3xl font-bold mb-6 text-center">Sende uns eine Nachricht</Heading>
       {status === 'success' && (
         <div className="mb-6 rounded-lg border border-green-200 bg-green-50 px-4 py-3 text-green-800 text-sm">
           Vielen Dank! deine Nachricht wurde gesendet.

@@ -1,6 +1,7 @@
 'use client'
 
 import { Loader2 } from 'lucide-react'
+import Heading from '@/components/ui/Heading'
 
 interface RequestChangesModalProps {
   reviewNotes: string
@@ -20,9 +21,9 @@ export function RequestChangesModal({
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
       <div className="bg-white dark:bg-gray-800 rounded-xl p-6 max-w-md w-full">
-        <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-4">
+        <Heading level={3} className="text-lg text-gray-900 dark:text-white mb-4">
           Änderungen anfragen
-        </h3>
+        </Heading>
         <div className="mb-4">
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
             Welche Änderungen werden benötigt? *

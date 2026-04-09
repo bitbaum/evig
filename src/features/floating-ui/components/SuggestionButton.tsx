@@ -3,6 +3,7 @@
 import { useState, useRef, useCallback, useEffect } from 'react'
 import { Edit3, X, Info } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import Heading from '@/components/ui/Heading'
 import { uiEvents } from '@/lib/ui/uiEvents'
 
 import type { FeedbackScope } from '../types'
@@ -176,9 +177,9 @@ export default function SuggestionButton() {
               <div className="flex justify-between items-center">
                 <div className="flex items-center space-x-2">
                   <Edit3 className="w-4 h-4 text-green-600" />
-                  <h3 id="suggestion-panel-title" className="font-semibold text-gray-900 text-sm">
+                  <Heading level={3} id="suggestion-panel-title" className="font-semibold text-gray-900 text-sm">
                     Verbesserungen vorschlagen
-                  </h3>
+                  </Heading>
                 </div>
                 <button
                   onClick={closePanelAndReset}

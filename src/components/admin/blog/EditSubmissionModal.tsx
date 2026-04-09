@@ -9,6 +9,7 @@
 
 import { useState, useEffect } from 'react';
 import { X, Save } from 'lucide-react';
+import Heading from '@/components/ui/Heading';
 import { BLOG_SUBMISSION_EDITABLE_FIELDS } from '@/config/editable-fields';
 import { logger } from '@/lib/logger';
 import { apiFetch } from '@/lib/api/client';
@@ -180,7 +181,7 @@ export function EditSubmissionModal({
       <div className="bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
         {/* Header */}
         <div className="sticky top-0 bg-white border-b px-6 py-4 flex items-center justify-between">
-          <h2 className="text-2xl font-bold">Einreichung bearbeiten</h2>
+          <Heading level={2} className="text-2xl">Einreichung bearbeiten</Heading>
           <button
             onClick={onClose}
             className="text-gray-500 hover:text-gray-600 transition-colors"

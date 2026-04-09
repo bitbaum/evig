@@ -127,9 +127,9 @@ export default function TransparenzPage() {
                 href={platform.href}
                 className="bg-gray-50 rounded-xl p-6 border border-gray-100 hover:shadow-md transition-shadow group"
               >
-                <h3 className="text-lg font-bold text-gray-900 group-hover:text-green-600 transition-colors">
+                <Heading level={3} className="text-lg font-bold text-gray-900 group-hover:text-green-600 transition-colors">
                   {platform.title}
-                </h3>
+                </Heading>
                 <p className="mt-2 text-sm text-gray-600">{platform.description}</p>
                 <span className="mt-4 inline-block text-sm font-semibold text-green-600">
                   Zur Plattform <span aria-hidden="true">→</span>

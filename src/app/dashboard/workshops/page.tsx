@@ -10,6 +10,7 @@ import { getTextColor, getStatusColors } from '@/lib/design-system'
 import { cn } from '@/lib/utils'
 import { formatDate } from '@/lib/date-formats'
 import { Modal } from '@/components/ui/Modal'
+import Heading from '@/components/ui/Heading'
 
 interface WorkshopRegistration {
   id: string
@@ -137,7 +138,7 @@ export default function WorkshopsDashboard() {
       <div className="min-h-screen bg-neutral-50 py-8">
         <div className="max-w-4xl mx-auto px-4">
           <div className="bg-white rounded-xl shadow-lg p-8 text-center border-2 border-neutral-200">
-            <h1 className={cn('text-2xl font-bold mb-4', getTextColor('white', 'primary'))}>Anmeldung erforderlich</h1>
+            <Heading level={1} className={cn('text-2xl font-bold mb-4', getTextColor('white', 'primary'))}>Anmeldung erforderlich</Heading>
             <p className={cn('mb-6', getTextColor('white', 'muted'))}>
               Bitte melden Sie sich an, um Ihre Workshop-Anmeldungen zu sehen.
             </p>
@@ -165,7 +166,7 @@ export default function WorkshopsDashboard() {
             <ArrowLeft className="w-4 h-4 mr-2" />
             Zurück zum Dashboard
           </Link>
-          <h1 className={cn('text-3xl font-bold mb-2', getTextColor('neutral', 'primary'))}>Meine Workshops</h1>
+          <Heading level={1} className={cn('text-3xl font-bold mb-2', getTextColor('neutral', 'primary'))}>Meine Workshops</Heading>
           <p className={cn('text-sm sm:text-base', getTextColor('neutral', 'muted'))}>
             Übersicht Ihrer Workshop-Anmeldungen und Teilnahmen
           </p>
@@ -185,9 +186,9 @@ export default function WorkshopsDashboard() {
               <div key={registration.id} className="bg-white rounded-xl shadow-lg p-4 sm:p-6 border-2 border-neutral-200">
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex-1">
-                    <h3 className={cn('text-xl font-semibold mb-2', getTextColor('white', 'primary'))}>
+                    <Heading level={3} className={cn('text-xl font-semibold mb-2', getTextColor('white', 'primary'))}>
                       {registration.workshop_title}
-                    </h3>
+                    </Heading>
                     <div className={cn('flex items-center gap-4 text-sm mb-3', getTextColor('white', 'muted'))}>
                       <div className="flex items-center">
                         {getStatusIcon(registration.status)}
@@ -274,9 +275,9 @@ export default function WorkshopsDashboard() {
         ) : (
           <div className="bg-white rounded-xl shadow-lg p-8 text-center">
             <Calendar className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">
+            <Heading level={3} className="text-xl font-semibold text-gray-900 mb-2">
               Noch keine Workshop-Anmeldungen
-            </h3>
+            </Heading>
             <p className="text-gray-600 mb-6">
               Sie haben sich noch für keine Workshops angemeldet.
             </p>

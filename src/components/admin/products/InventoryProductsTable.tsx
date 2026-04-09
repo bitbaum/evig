@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { motion } from 'framer-motion'
+import Heading from '@/components/ui/Heading'
 import {
   Package,
   Eye,
@@ -228,9 +229,9 @@ export function InventoryProductsTable({
       {filteredProducts.length === 0 && (
         <div className="text-center py-12">
           <Package className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-          <h3 className="text-lg font-medium text-gray-900 mb-2">
+          <Heading level={3} className="text-lg font-medium text-gray-900 mb-2">
             Keine erfassten Produkte
-          </h3>
+          </Heading>
           <p className="text-gray-600 mb-4">
             Erfassen Sie Ihr erstes Produkt, um zu beginnen.
           </p>

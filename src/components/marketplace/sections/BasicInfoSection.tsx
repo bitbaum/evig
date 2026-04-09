@@ -13,6 +13,7 @@ import { ProductFormData, ProductListingErrors } from '../types'
 import { PRODUCT_CATEGORIES } from '../constants'
 import { cn } from '@/lib/utils'
 import { getTextColor } from '@/lib/design-system'
+import Heading from '@/components/ui/Heading'
 
 interface BasicInfoSectionProps {
   formData: ProductFormData
@@ -23,9 +24,9 @@ interface BasicInfoSectionProps {
 export function BasicInfoSection({ formData, errors, onFieldChange }: BasicInfoSectionProps) {
   return (
     <div className="space-y-6">
-      <h3 className={cn('text-lg font-medium', getTextColor('white', 'primary'))}>
+      <Heading level={3} className={cn('text-lg font-medium', getTextColor('white', 'primary'))}>
         Grundinformationen
-      </h3>
+      </Heading>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>

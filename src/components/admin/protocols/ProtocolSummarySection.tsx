@@ -1,4 +1,5 @@
 import { Loader2, CheckCircle2, MessageSquare } from 'lucide-react'
+import Heading from '@/components/ui/Heading'
 import type { StructuredNotes } from '@/lib/schemas/protocols'
 
 interface Props {
@@ -24,10 +25,10 @@ export function ProtocolSummarySection({
 }: Props) {
   return (
     <div id="protocol-step-review" className="bg-white rounded-lg border p-6">
-      <h2 className="text-lg font-semibold text-gray-900 mb-3">
+      <Heading level={2} className="text-lg text-gray-900 mb-3">
         <MessageSquare className="w-5 h-5 inline mr-2 text-gray-400" />
         Zusammenfassung
-      </h2>
+      </Heading>
       <p className="text-gray-700">{notes.summary}</p>
 
       {notes.detected_attendees && notes.detected_attendees.length > 0 && (

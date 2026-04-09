@@ -1,6 +1,7 @@
 'use client'
 
 import { X, Loader2, Save } from 'lucide-react'
+import Heading from '@/components/ui/Heading'
 import type { Workshop, WorkshopInstanceWithDetails, InstanceFormData } from './types'
 
 interface InstanceFormModalProps {
@@ -28,9 +29,9 @@ export function InstanceFormModal({
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
       <div className="bg-white rounded-xl shadow-xl max-w-lg w-full max-h-[90vh] overflow-y-auto">
         <div className="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
-          <h2 className="text-xl font-semibold text-gray-900">
+          <Heading level={2} className="text-xl text-gray-900">
             {editingInstance ? 'Termin bearbeiten' : 'Neuer Termin'}
-          </h2>
+          </Heading>
           <button onClick={onClose} className="text-gray-500 hover:text-gray-600">
             <X className="w-5 h-5" />
           </button>

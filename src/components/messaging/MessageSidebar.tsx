@@ -15,6 +15,7 @@ import {
 import { apiFetch } from '@/lib/api/client'
 import { logger } from '@/lib/logger'
 import { formatDateShort, formatTime } from '@/lib/date-formats'
+import Heading from '@/components/ui/Heading'
 
 interface Conversation {
   id: string
@@ -132,7 +133,7 @@ export function MessageSidebar({ isOpen, onClose, initialConversationId }: Messa
       <div className="ml-auto w-full max-w-md bg-white h-full flex flex-col">
         {/* Header */}
         <div className="p-4 border-b border-gray-200 flex items-center justify-between">
-          <h2 className="text-lg font-semibold">Nachrichten</h2>
+          <Heading level={2} className="text-lg font-semibold">Nachrichten</Heading>
           <button
             onClick={onClose}
             className="p-1 hover:bg-gray-100 rounded"
@@ -218,9 +219,9 @@ export function MessageSidebar({ isOpen, onClose, initialConversationId }: Messa
                   ←
                 </button>
                 <div className="flex-1 text-center">
-                  <h3 className="font-medium">
+                  <Heading level={3} className="font-medium">
                     {conversations.find(c => c.id === selectedConversation)?.other_participant.name}
-                  </h3>
+                  </Heading>
                 </div>
                 <button className="p-1 hover:bg-gray-100 rounded">
                   <MoreVertical className="w-4 h-4" />

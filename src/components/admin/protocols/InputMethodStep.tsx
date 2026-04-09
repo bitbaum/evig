@@ -5,6 +5,7 @@ import {
   INPUT_METHOD_ICON_COMPONENTS,
 } from '@/config/protocols'
 import type { InputMethod } from '@/config/protocols'
+import Heading from '@/components/ui/Heading'
 
 interface Props {
   selectedMethod: InputMethod | ''
@@ -30,7 +31,7 @@ export function InputMethodStep({ selectedMethod, onSelect, onReset }: Props) {
 
   return (
     <div className="space-y-4">
-      <h2 className="text-lg font-semibold text-gray-900">Eingabemethode wählen</h2>
+      <Heading level={2} className="text-lg text-gray-900">Eingabemethode wählen</Heading>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
         {Object.values(INPUT_METHODS).map((method) => {
           const IconComponent = INPUT_METHOD_ICON_COMPONENTS[method]

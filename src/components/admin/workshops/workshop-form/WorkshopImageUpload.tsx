@@ -1,6 +1,7 @@
 'use client'
 
 import { Upload, X } from 'lucide-react'
+import Heading from '@/components/ui/Heading'
 
 interface Props {
   imagePreviews: string[]
@@ -11,10 +12,10 @@ interface Props {
 export function WorkshopImageUpload({ imagePreviews, onImageUpload, onRemoveImage }: Props) {
   return (
     <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
-      <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-6 flex items-center gap-2">
+      <Heading level={2} className="text-lg text-gray-900 dark:text-white mb-6 flex items-center gap-2">
         <Upload className="w-5 h-5" />
         Workshop-Bilder
-      </h2>
+      </Heading>
 
       <div className="space-y-4">
         <div className="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-8 text-center">

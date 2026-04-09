@@ -6,6 +6,7 @@ import { logger } from '@/lib/logger'
 import { HelpCircle, MapPin, Clock, AlertTriangle } from 'lucide-react'
 import { getCategoryById, getUrgencyById } from '@/config/it-hilfe'
 import { formatDateShort } from '@/lib/date-formats'
+import Heading from '@/components/ui/Heading'
 
 interface MatchingRequest {
   id: string
@@ -85,7 +86,7 @@ export function MatchingRequestsTab({ repairerId }: MatchingRequestsTabProps) {
           >
             <div className="flex items-start justify-between gap-3">
               <div className="flex-1 min-w-0">
-                <h4 className="font-medium text-gray-900 truncate">{request.title}</h4>
+                <Heading level={4} className="font-medium text-gray-900 truncate">{request.title}</Heading>
                 <div className="flex flex-wrap items-center gap-2 mt-1 text-sm text-gray-500">
                   {category && (
                     <span className="bg-gray-100 px-2 py-0.5 rounded text-xs">

@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { Star, Loader2 } from 'lucide-react'
 import { logger } from '@/lib/logger'
 import { apiFetch } from '@/lib/api/client'
+import Heading from '@/components/ui/Heading'
 
 interface ITHilfeReviewFormProps {
   requestId: string
@@ -100,7 +101,7 @@ export function ITHilfeReviewForm({ requestId, requestTitle, onSuccess }: ITHilf
 
   return (
     <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-      <h3 className="text-lg font-semibold text-gray-900 mb-2">Bewertung abgeben</h3>
+      <Heading level={3} className="text-lg font-semibold text-gray-900 mb-2">Bewertung abgeben</Heading>
       <p className="text-sm text-gray-600 mb-4">
         Wie war deine Erfahrung mit &quot;{requestTitle}&quot;?
       </p>

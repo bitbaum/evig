@@ -8,6 +8,7 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import Heading from '@/components/ui/Heading'
 import { Tag, Save, ArrowLeft, Trash2 } from 'lucide-react'
 import Link from 'next/link'
 import { useBlogCategories } from '@/hooks/useBlogCategories'
@@ -82,9 +83,9 @@ export default function CategoryForm({
               <Tag className="w-5 h-5" style={{ color: formData.color }} />
             </div>
             <div>
-              <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+              <Heading level={1} className="text-2xl text-gray-900 dark:text-white">
                 {isEdit ? 'Kategorie bearbeiten' : 'Neue Kategorie'}
-              </h1>
+              </Heading>
               <p className="text-gray-600 dark:text-gray-400">
                 {isEdit
                   ? 'Kategorie-Details anpassen'
@@ -287,9 +288,9 @@ export default function CategoryForm({
 
         {/* Preview */}
         <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
-          <h3 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-4">
+          <Heading level={3} className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-4">
             Vorschau
-          </h3>
+          </Heading>
           <div className="flex items-center gap-3">
             <span
               className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm font-medium"

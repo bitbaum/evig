@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { Shield, Crown, Check, Save } from 'lucide-react'
+import Heading from '@/components/ui/Heading'
 import { Button } from '@/components/ui/button'
 import { apiFetch } from '@/lib/api/client'
 import { Modal } from '@/components/ui/Modal'
@@ -167,9 +168,9 @@ export function UserPermissionsEditor({
           {/* Individual Permissions */}
           {!superAdminStatus && !grantFullAccess && (
             <div>
-              <h3 className="font-medium text-gray-900 dark:text-white mb-3">
+              <Heading level={3} className="font-medium text-gray-900 dark:text-white mb-3">
                 Einzelne Bereiche
-              </h3>
+              </Heading>
               <div className="grid grid-cols-2 gap-2">
                 {SECTIONS.map(section => (
                   <button

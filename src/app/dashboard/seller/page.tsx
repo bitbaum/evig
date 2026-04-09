@@ -19,6 +19,7 @@ import {
   RefreshCw
 } from 'lucide-react'
 import { ListingImage } from '@/components/marketplace/ListingImage'
+import Heading from '@/components/ui/Heading'
 import { Button } from '@/components/ui/button'
 import { ROLES } from '@/lib/constants'
 import { LISTING_STATUS_CONFIG } from '@/config/marketplace'
@@ -157,9 +158,9 @@ export default function SellerDashboard() {
     return (
       <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl p-6 text-center">
         <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-4" />
-        <h3 className="text-lg font-semibold text-red-800 dark:text-red-200 mb-2">
+        <Heading level={3} className="text-lg font-semibold text-red-800 dark:text-red-200 mb-2">
           Fehler beim Laden
-        </h3>
+        </Heading>
         <p className="text-red-600 dark:text-red-300 mb-4">{error}</p>
         <Button onClick={fetchDashboardData} variant="destructive" className="gap-2">
           <RefreshCw className="w-4 h-4" />
@@ -187,9 +188,9 @@ export default function SellerDashboard() {
       <div className="bg-gradient-to-r from-green-600 to-green-700 rounded-xl p-6 text-white">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold mb-2">
+            <Heading level={1} className="text-2xl font-bold mb-2">
               Seller Dashboard
-            </h1>
+            </Heading>
             <p className="text-green-100">
               Verwalten Sie Ihre Produkte im RevampIT Marketplace und verfolgen Sie Ihre Verkäufe.
             </p>
@@ -260,9 +261,9 @@ export default function SellerDashboard() {
         {/* Recent Products */}
         <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
           <div className="p-6 border-b border-gray-100 dark:border-gray-700">
-            <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
+            <Heading level={2} className="text-lg font-semibold text-gray-900 dark:text-white">
               Meine Produkte
-            </h2>
+            </Heading>
             <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
               Übersicht Ihrer Produkte
             </p>
@@ -293,9 +294,9 @@ export default function SellerDashboard() {
                         <ListingImage src={product.image} alt={product.title} fallbackIconSize="w-5 h-5" />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <h3 className="font-medium text-gray-900 dark:text-white truncate">
+                        <Heading level={3} className="font-medium text-gray-900 dark:text-white truncate">
                           {product.title}
-                        </h3>
+                        </Heading>
                         <p className="text-sm text-gray-500 dark:text-gray-400">
                           CHF {product.price} • {product.viewsCount} Aufrufe
                         </p>
@@ -328,9 +329,9 @@ export default function SellerDashboard() {
         {/* Quick Actions */}
         <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
           <div className="p-6 border-b border-gray-100 dark:border-gray-700">
-            <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
+            <Heading level={2} className="text-lg font-semibold text-gray-900 dark:text-white">
               Schnellzugriff
-            </h2>
+            </Heading>
             <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
               Häufig verwendete Seller-Funktionen
             </p>
@@ -348,9 +349,9 @@ export default function SellerDashboard() {
                     <div className={`w-8 h-8 ${action.color} rounded-lg flex items-center justify-center`}>
                       <action.icon className="w-4 h-4 text-white" />
                     </div>
-                    <h3 className="font-medium text-gray-900 dark:text-white group-hover:text-green-600 transition-colors">
+                    <Heading level={3} className="font-medium text-gray-900 dark:text-white group-hover:text-green-600 transition-colors">
                       {action.title}
-                    </h3>
+                    </Heading>
                   </div>
                   <p className="text-sm text-gray-600 dark:text-gray-400">
                     {action.description}
@@ -369,9 +370,9 @@ export default function SellerDashboard() {
             <Package className="w-5 h-5 text-blue-600" />
           </div>
           <div>
-            <h3 className="font-medium text-blue-900 dark:text-blue-200">
+            <Heading level={3} className="font-medium text-blue-900 dark:text-blue-200">
               RevampIT Marketplace
-            </h3>
+            </Heading>
             <p className="text-sm text-blue-700 dark:text-blue-300 mt-1">
               Als Seller können Sie Ihre eigenen refurbished Produkte im RevampIT Marketplace verkaufen.
               Ihre Produkte erscheinen neben den offiziellen RevampIT Produkten und helfen dabei,

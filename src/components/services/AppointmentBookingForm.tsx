@@ -7,6 +7,7 @@ import { Calendar, Clock, AlertCircle, CheckCircle, Loader2, Wrench } from 'luci
 import Link from 'next/link'
 import { apiFetch } from '@/lib/api/client'
 import { Modal } from '@/components/ui/Modal'
+import Heading from '@/components/ui/Heading'
 
 interface AppointmentBookingFormProps {
   serviceSlug: string
@@ -131,9 +132,9 @@ export default function AppointmentBookingForm({ serviceSlug, serviceTitle, pric
           {!session?.user ? (
             <div className="text-center py-6 sm:py-8">
               <AlertCircle className="w-12 h-12 sm:w-16 sm:h-16 text-warning-500 mx-auto mb-4" />
-              <h4 className="text-base sm:text-lg font-semibold text-neutral-900 mb-2">
+              <Heading level={4} className="text-base sm:text-lg font-semibold text-neutral-900 mb-2">
                 Anmeldung erforderlich
-              </h4>
+              </Heading>
               <p className="text-neutral-600 mb-6 text-sm sm:text-base">
                 Bitte melde sich an, um einen Termin zu buchen.
               </p>

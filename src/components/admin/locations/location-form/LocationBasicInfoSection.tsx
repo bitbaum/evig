@@ -1,6 +1,7 @@
 'use client'
 
 import { MapPin } from 'lucide-react'
+import Heading from '@/components/ui/Heading'
 import type { LocationFormData, SubmitResult } from './types'
 import { LOCATION_TYPES } from './types'
 
@@ -15,10 +16,10 @@ export function LocationBasicInfoSection({ formData, submitResult, onFieldChange
 
   return (
     <div className="mb-8">
-      <h2 className="text-xl font-semibold text-gray-900 mb-4 flex items-center">
+      <Heading level={2} className="text-xl text-gray-900 mb-4 flex items-center">
         <MapPin className="w-5 h-5 mr-2" />
         Grundinformationen
-      </h2>
+      </Heading>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="md:col-span-2">

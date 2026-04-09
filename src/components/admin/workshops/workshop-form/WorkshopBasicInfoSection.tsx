@@ -2,6 +2,7 @@
 
 import { FileText } from 'lucide-react'
 import { WORKSHOP_CATEGORIES } from '@/config/workshops'
+import Heading from '@/components/ui/Heading'
 import type { WorkshopFormData } from './types'
 import { WORKSHOP_LEVEL_OPTIONS } from './types'
 
@@ -13,10 +14,10 @@ interface Props {
 export function WorkshopBasicInfoSection({ formData, onInputChange }: Props) {
   return (
     <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
-      <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-6 flex items-center gap-2">
+      <Heading level={2} className="text-lg text-gray-900 dark:text-white mb-6 flex items-center gap-2">
         <FileText className="w-5 h-5" />
         Grundinformationen
-      </h2>
+      </Heading>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="md:col-span-2">

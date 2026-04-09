@@ -5,6 +5,7 @@ import { logger } from '@/lib/logger'
 import { useRouter } from 'next/navigation'
 import { Loader2 } from 'lucide-react'
 import { responsiveButtons } from '@/lib/responsive'
+import Heading from '@/components/ui/Heading'
 import { BasicInfoSection } from './BasicInfoSection'
 import { LearningObjectivesSection } from './LearningObjectivesSection'
 import { PracticalDetailsSection } from './PracticalDetailsSection'
@@ -285,9 +286,9 @@ export function WorkshopProposalForm() {
         >
           <div className="flex items-center">
             <div>
-              <h3 className="font-semibold mb-1">
+              <Heading level={3} className="font-semibold mb-1">
                 {submitResult.success ? 'Vorschlag erfolgreich!' : 'Fehler'}
-              </h3>
+              </Heading>
               <p>{submitResult.message}</p>
             </div>
           </div>

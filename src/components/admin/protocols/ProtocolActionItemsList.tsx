@@ -5,6 +5,7 @@ import {
   ListChecks,
   ExternalLink,
 } from 'lucide-react'
+import Heading from '@/components/ui/Heading'
 import {
   ACTION_ITEM_TYPE_LABELS,
   ACTION_ITEM_TYPE_COLORS,
@@ -60,7 +61,7 @@ export function ProtocolActionItemsList({
   if (!notes.action_items || notes.action_items.length === 0) {
     return (
       <div id="protocol-step-tasks" className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-        <h3 className="text-sm font-semibold text-blue-900 mb-1">Keine Aktionen erkannt</h3>
+        <Heading level={3} className="text-sm text-blue-900 mb-1">Keine Aktionen erkannt</Heading>
         <p className="text-sm text-blue-800">
           Die KI hat keine konkreten Aufgaben oder Entscheidungen extrahiert. Überarbeiten Sie den Inhalt oben und starten Sie die Verarbeitung erneut.
         </p>
@@ -71,10 +72,10 @@ export function ProtocolActionItemsList({
   return (
     <div id="protocol-step-tasks" className="bg-white rounded-lg border overflow-hidden">
       <div className="p-4 border-b bg-gray-50 flex items-center justify-between gap-3">
-        <h2 className="text-lg font-semibold text-gray-900">
+        <Heading level={2} className="text-lg text-gray-900">
           <ListChecks className="w-5 h-5 inline mr-2 text-gray-400" />
           Aktionen ({notes.action_items.length})
-        </h2>
+        </Heading>
         {unlinkedTaskItems.length > 0 && (isReview || isFinalized) && (
           <button
             onClick={onCreateAllTasks}

@@ -1,10 +1,12 @@
+import Heading from '@/components/ui/Heading'
+
 export function StatusSection() {
   return (
     <div className="py-16 sm:py-24 bg-white">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="bg-gradient-to-r from-info-600 to-secondary-500 rounded-3xl p-6 sm:p-8 lg:p-12 text-white border-2 border-neutral-200">
           <div className="text-center mb-8 sm:mb-12">
-            <h2 className="text-3xl font-bold mb-4">Entwicklungsstatus</h2>
+            <Heading level={2} className="text-3xl font-bold mb-4">Entwicklungsstatus</Heading>
             <p className="text-lg sm:text-xl text-white/90 max-w-2xl mx-auto">
               Das System befindet sich in aktiver Entwicklung. Hier sehen Sie, wie es funktionieren wird.
             </p>
@@ -12,7 +14,7 @@ export function StatusSection() {
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12 items-center">
             <div>
-              <h3 className="text-2xl font-semibold mb-6">Geplante Benutzeroberfläche</h3>
+              <Heading level={3} className="text-2xl font-semibold mb-6">Geplante Benutzeroberfläche</Heading>
               <ul className="space-y-4 text-white/90">
                 {[
                   'Kleiner Verbesserungsbutton auf jeder Seite (konfigurierbar)',

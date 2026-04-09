@@ -1,5 +1,6 @@
 import { TrendingUp } from 'lucide-react'
 import type { DashboardStats } from './types'
+import Heading from '@/components/ui/Heading'
 
 interface WeeklyActivitySectionProps {
   stats: DashboardStats
@@ -10,9 +11,9 @@ export function WeeklyActivitySection({ stats }: WeeklyActivitySectionProps) {
     <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
       <div className="p-4 border-b border-gray-100 dark:border-gray-700 flex items-center gap-2">
         <TrendingUp className="w-5 h-5 text-green-500" />
-        <h2 className="font-semibold text-gray-900 dark:text-white">
+        <Heading level={2} className="font-semibold text-gray-900 dark:text-white">
           Diese Woche
-        </h2>
+        </Heading>
       </div>
 
       <div className="p-4">

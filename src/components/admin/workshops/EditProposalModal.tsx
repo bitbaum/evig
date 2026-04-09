@@ -9,6 +9,7 @@
 
 import { useState } from 'react';
 import { X, Save } from 'lucide-react';
+import Heading from '@/components/ui/Heading';
 import {
   WORKSHOP_PROPOSAL_EDITABLE_FIELDS,
   type WorkshopProposalEditableField,
@@ -172,7 +173,7 @@ export function EditProposalModal({ proposal, onClose, onSaved }: EditProposalMo
       <div className="bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
         {/* Header */}
         <div className="sticky top-0 bg-white border-b px-6 py-4 flex items-center justify-between">
-          <h2 className="text-2xl font-bold">Vorschlag bearbeiten</h2>
+          <Heading level={2} className="text-2xl">Vorschlag bearbeiten</Heading>
           <button
             onClick={onClose}
             className="text-gray-500 hover:text-gray-600 transition-colors"

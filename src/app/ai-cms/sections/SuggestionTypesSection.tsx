@@ -1,14 +1,15 @@
 import { cn } from '@/lib/utils'
 import { getTextColor } from '@/lib/design-system'
+import Heading from '@/components/ui/Heading'
 
 export function SuggestionTypesSection() {
   return (
     <div className="py-16 sm:py-24 bg-white">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-2xl text-center mb-16">
-          <h2 className={cn('text-3xl font-bold tracking-tight sm:text-4xl', getTextColor('white', 'primary'))}>
+          <Heading level={2} className={cn('text-3xl font-bold tracking-tight sm:text-4xl', getTextColor('white', 'primary'))}>
             Was schlagen Nutzer vor?
-          </h2>
+          </Heading>
           <p className={cn('mt-6 text-lg leading-8', getTextColor('white', 'muted'))}>
             Realitätscheck: Die häufigsten Verbesserungsvorschläge basieren auf unserer Erfahrung mit dem System.
           </p>

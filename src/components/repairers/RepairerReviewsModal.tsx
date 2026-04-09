@@ -5,6 +5,7 @@ import { CheckCircle } from 'lucide-react'
 import { formatDateShort } from '@/lib/date-formats'
 import { type RepairerProfile, type RepairerReview } from './types'
 import { StarRating } from './StarRating'
+import Heading from '@/components/ui/Heading'
 
 interface RepairerReviewsModalProps {
   repairer: RepairerProfile
@@ -23,9 +24,9 @@ export function RepairerReviewsModal({
         <div className="p-6 border-b border-gray-200">
           <div className="flex items-center justify-between">
             <div>
-              <h2 className="text-xl font-semibold text-gray-900">
+              <Heading level={2} className="text-xl font-semibold text-gray-900">
                 Bewertungen für {repairer.business_name || 'Reparateur'}
-              </h2>
+              </Heading>
               <div className="flex items-center gap-2 mt-1">
                 <StarRating rating={repairer.average_rating} />
                 <span className="ml-1 text-sm text-gray-600">
@@ -79,9 +80,9 @@ export function RepairerReviewsModal({
                   </div>
 
                   {review.title && (
-                    <h4 className="font-medium text-gray-900 mb-2">
+                    <Heading level={4} className="font-medium text-gray-900 mb-2">
                       {review.title}
-                    </h4>
+                    </Heading>
                   )}
 
                   {review.content && (

@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { Shield, Check, X, Clock, User, RefreshCw } from 'lucide-react'
+import Heading from '@/components/ui/Heading'
 import { Button } from '@/components/ui/button'
 import { apiFetch } from '@/lib/api/client'
 import { getSection } from '@/config/sections'
@@ -134,9 +135,9 @@ export function PermissionRequestsManager() {
       <div className="p-4 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <Shield className="w-5 h-5 text-orange-500" />
-          <h3 className="font-semibold text-gray-900 dark:text-white">
+          <Heading level={3} className="font-semibold text-gray-900 dark:text-white">
             Berechtigungsanfragen ({requests.length})
-          </h3>
+          </Heading>
         </div>
         <button
           onClick={fetchRequests}

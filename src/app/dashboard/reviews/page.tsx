@@ -15,6 +15,7 @@ import {
 } from 'lucide-react'
 import { formatDateShort } from '@/lib/date-formats'
 import { useReviewManagement, type Review } from '@/hooks/useReviewManagement'
+import Heading from '@/components/ui/Heading'
 
 const STATUS_STYLES: Record<string, string> = {
   published: 'bg-green-100 text-green-800',
@@ -151,9 +152,9 @@ function ReviewCard({ review, editingReview, editForm, setEditForm, onEdit, onSa
         <div className="flex items-start justify-between">
           <div className="flex-1">
             <div className="flex items-center gap-3 mb-3">
-              <h3 className="text-lg font-semibold text-gray-900">
+              <Heading level={3} className="text-lg font-semibold text-gray-900">
                 Bewertung für {review.targetName}
-              </h3>
+              </Heading>
               <StatusBadge status={review.status} />
               {review.isVerifiedPurchase && (
                 <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 gap-1">
@@ -177,7 +178,7 @@ function ReviewCard({ review, editingReview, editForm, setEditForm, onEdit, onSa
             ) : (
               <>
                 {review.title && (
-                  <h4 className="font-medium text-gray-900 mb-2">{review.title}</h4>
+                  <Heading level={4} className="font-medium text-gray-900 mb-2">{review.title}</Heading>
                 )}
                 <p className="text-gray-700 mb-3 leading-relaxed">{review.content}</p>
 
@@ -294,7 +295,7 @@ export default function UserReviewsPage() {
         <div className="flex">
           <div className="text-red-400">⚠️</div>
           <div className="ml-3">
-            <h3 className="text-sm font-medium text-red-800">Fehler beim Laden</h3>
+            <Heading level={3} className="text-sm font-medium text-red-800">Fehler beim Laden</Heading>
             <p className="text-sm text-red-700 mt-1">{error}</p>
           </div>
         </div>
@@ -306,7 +307,7 @@ export default function UserReviewsPage() {
     <div className="space-y-6">
       {/* Header */}
       <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-        <h1 className="text-2xl font-bold text-gray-900 mb-2">Meine Bewertungen</h1>
+        <Heading level={1} className="text-2xl font-bold text-gray-900 mb-2">Meine Bewertungen</Heading>
         <p className="text-gray-600">
           Verwalten Sie Ihre Bewertungen und sehen Sie, wie andere Benutzer Ihre Bewertungen gefunden haben.
         </p>
@@ -317,7 +318,7 @@ export default function UserReviewsPage() {
         {reviews.length === 0 ? (
           <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-12 text-center">
             <MessageSquare className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-gray-900 mb-2">Noch keine Bewertungen</h3>
+            <Heading level={3} className="text-lg font-medium text-gray-900 mb-2">Noch keine Bewertungen</Heading>
             <p className="text-gray-600 mb-4">
               Sie haben noch keine Bewertungen abgegeben. Besuchen Sie einen Reparateur oder nehmen Sie an einem Workshop teil, um eine Bewertung zu hinterlassen.
             </p>

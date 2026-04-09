@@ -6,6 +6,7 @@
 
 import { CheckCircle } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import Heading from '@/components/ui/Heading'
 import { CATEGORY_ICONS, DEFAULT_CATEGORY_ICON, getConditionLabel } from './config'
 import type { ProductSuggestion } from './types'
 
@@ -30,7 +31,7 @@ export function ProductSuggestionCard({ suggestion, onSelect }: ProductSuggestio
         <CategoryIcon category={suggestion.category} className="w-8 h-8 text-purple-600 mt-1" />
         <div className="flex-1">
           <div className="flex items-center gap-2 mb-1">
-            <h4 className="font-medium text-gray-900">{suggestion.name}</h4>
+            <Heading level={4} className="font-medium text-gray-900">{suggestion.name}</Heading>
             <ConfidenceBadge confidence={suggestion.confidence} />
           </div>
           <p className="text-sm text-gray-600 mb-2">

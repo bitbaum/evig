@@ -118,7 +118,7 @@ export default function CustomerBookings() {
       <div className="max-w-4xl mx-auto px-4">
         <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-8">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">Meine Buchungen</h1>
+            <Heading level={1} className="text-2xl font-bold text-gray-900">Meine Buchungen</Heading>
             <p className="text-gray-600">Ihre Reparaturaufträge im Überblick</p>
           </div>
           <div className="flex gap-2">
@@ -211,7 +211,7 @@ export default function CustomerBookings() {
                     <Wrench className="h-5 w-5 text-blue-600" />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-gray-900">{apt.business_name || apt.repairer_name}</h3>
+                    <Heading level={3} className="font-semibold text-gray-900">{apt.business_name || apt.repairer_name}</Heading>
                     <p className="text-sm text-gray-500">{apt.service_name || 'Reparatur'}</p>
                   </div>
                 </div>

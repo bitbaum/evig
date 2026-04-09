@@ -12,6 +12,7 @@ import { X } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { ProductForm } from '@/components/erfassung/ProductForm'
 import type { BulkProduct, ErfassungFormData } from '@/types/erfassung'
+import Heading from '@/components/ui/Heading'
 import { SPEC_TEMPLATES, templateToSpecFields } from '@/config/erfassung'
 
 interface BulkDetailPanelProps {
@@ -94,9 +95,9 @@ export function BulkDetailPanel({ product, onUpdate, onClose }: BulkDetailPanelP
         {/* Header */}
         <div className="sticky top-0 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-4 py-3 flex items-center justify-between z-10">
           <div>
-            <h3 className="font-semibold text-gray-900 dark:text-white">
+            <Heading level={3} className="font-semibold text-gray-900 dark:text-white">
               {localData.hersteller || 'Produkt'} {localData.produktname || 'bearbeiten'}
-            </h3>
+            </Heading>
             <p className="text-xs text-gray-500 dark:text-gray-400">
               Quelle: {localData._source}
             </p>

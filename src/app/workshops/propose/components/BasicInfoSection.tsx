@@ -3,6 +3,7 @@
 import { BookOpen } from 'lucide-react'
 import { WORKSHOP_CATEGORIES, WORKSHOP_LEVELS } from '@/config/workshops'
 import { responsiveTypography } from '@/lib/responsive'
+import Heading from '@/components/ui/Heading'
 
 interface BasicInfoSectionProps {
   title: string
@@ -23,10 +24,10 @@ export function BasicInfoSection({
 }: BasicInfoSectionProps) {
   return (
     <div className="mb-8">
-      <h2 className={`${responsiveTypography.subsection} font-semibold text-gray-900 mb-4 flex items-center`}>
+      <Heading level={2} className={`${responsiveTypography.subsection} font-semibold text-gray-900 mb-4 flex items-center`}>
         <BookOpen className="w-5 h-5 mr-2" />
         Grundinformationen
-      </h2>
+      </Heading>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="md:col-span-2">

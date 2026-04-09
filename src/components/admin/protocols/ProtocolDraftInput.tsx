@@ -1,4 +1,5 @@
 import { Loader2, Wand2, Upload } from 'lucide-react'
+import Heading from '@/components/ui/Heading'
 
 interface Props {
   inputMethod: string
@@ -23,9 +24,9 @@ export function ProtocolDraftInput({
 }: Props) {
   return (
     <div id="protocol-step-input" className="bg-white rounded-lg border p-6 space-y-4">
-      <h2 className="text-lg font-semibold text-gray-900">
+      <Heading level={2} className="text-lg text-gray-900">
         {inputMethod === 'audio' ? 'Audio hochladen' : 'Transkript einfügen'}
-      </h2>
+      </Heading>
       <p className="text-sm text-gray-600">
         {inputMethod === 'audio'
           ? 'Laden Sie eine Audiodatei hoch, damit sie transkribiert und strukturiert werden kann.'

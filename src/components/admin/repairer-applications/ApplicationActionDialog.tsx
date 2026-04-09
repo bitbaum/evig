@@ -1,4 +1,5 @@
 import type { ActionDialogState } from './types'
+import Heading from '@/components/ui/Heading'
 
 const DIALOG_TITLES: Record<ActionDialogState['type'], string> = {
   approve_app: 'Bewerbung genehmigen',
@@ -24,9 +25,9 @@ export function ApplicationActionDialog({ dialog, onDialogChange, onSubmit, onCl
 
   return (
     <div className="bg-white rounded-lg shadow-lg border-2 border-blue-300 p-6">
-      <h3 className="text-lg font-semibold text-gray-900 mb-4">
+      <Heading level={3} className="text-lg text-gray-900 mb-4">
         {DIALOG_TITLES[dialog.type]}
-      </h3>
+      </Heading>
 
       {needsReason && (
         <div className="mb-4">

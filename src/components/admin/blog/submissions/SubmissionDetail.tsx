@@ -2,6 +2,7 @@
 
 import { APPROVAL_STATUS } from '@/config/approval-status'
 import { formatDateTime } from '@/lib/date-formats'
+import Heading from '@/components/ui/Heading'
 import Link from 'next/link'
 import {
   Eye,
@@ -53,9 +54,9 @@ export function SubmissionDetail({
     <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
       {/* Header */}
       <div className="border-b border-gray-200 dark:border-gray-700 pb-4 mb-4">
-        <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-3">
+        <Heading level={2} className="text-xl text-gray-900 dark:text-white mb-3">
           {submission.title}
-        </h2>
+        </Heading>
         <div className="space-y-2 text-sm">
           <div className="flex items-center gap-2 text-gray-600 dark:text-gray-400">
             <User className="w-4 h-4" />
@@ -126,9 +127,9 @@ export function SubmissionDetail({
 
       {/* Content */}
       <div className="mb-6">
-        <h3 className="font-semibold text-gray-900 dark:text-white mb-3">
+        <Heading level={3} className="font-semibold text-gray-900 dark:text-white mb-3">
           Inhalt:
-        </h3>
+        </Heading>
         <div className="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-4 max-h-72 overflow-y-auto">
           <pre className="whitespace-pre-wrap text-sm text-gray-800 dark:text-gray-200 font-sans">
             {submission.content}

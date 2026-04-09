@@ -6,6 +6,7 @@
 
 import { ProductSuggestionCard } from './ProductSuggestionCard'
 import type { ProductSuggestion } from './types'
+import Heading from '@/components/ui/Heading'
 
 interface AIProductResultsProps {
   capturedImage: string
@@ -25,9 +26,9 @@ export function AIProductResults({
   return (
     <div className="space-y-4">
       <div className="text-center mb-6">
-        <h3 className="text-lg font-medium text-gray-900 mb-2">
+        <Heading level={3} className="text-lg font-medium text-gray-900 mb-2">
           Produkt-Erkennung abgeschlossen!
-        </h3>
+        </Heading>
         <p className="text-gray-600">
           Wähle das erkannte Produkt aus oder versuche es mit einem besseren Foto erneut
         </p>

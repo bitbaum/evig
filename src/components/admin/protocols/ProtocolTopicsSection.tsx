@@ -1,4 +1,5 @@
 import { ChevronDown, ChevronRight, CheckCircle2 } from 'lucide-react'
+import Heading from '@/components/ui/Heading'
 import type { StructuredNotes } from '@/lib/schemas/protocols'
 
 interface Props {
@@ -13,9 +14,9 @@ export function ProtocolTopicsSection({ topics, expandedTopics, onToggleTopic }:
   return (
     <div className="bg-white rounded-lg border overflow-hidden">
       <div className="p-4 border-b bg-gray-50">
-        <h2 className="text-lg font-semibold text-gray-900">
+        <Heading level={2} className="text-lg text-gray-900">
           Themen ({topics.length})
-        </h2>
+        </Heading>
       </div>
       <div className="divide-y">
         {topics.map((topic) => (

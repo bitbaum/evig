@@ -1,6 +1,7 @@
 'use client'
 
 import { SERVICE_CATEGORIES, URGENCY_OPTIONS } from './helpers'
+import Heading from '@/components/ui/Heading'
 
 interface BookingStepProblemProps {
   serviceCategory: string
@@ -29,7 +30,7 @@ export function BookingStepProblem({
 }: BookingStepProblemProps) {
   return (
     <div className="bg-white rounded-xl shadow-sm p-6">
-      <h2 className="text-lg font-semibold text-gray-900 mb-6">Beschreibe Ihr Problem</h2>
+      <Heading level={2} className="text-lg font-semibold text-gray-900 mb-6">Beschreibe Ihr Problem</Heading>
 
       {/* Service Category */}
       <div className="mb-6">

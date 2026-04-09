@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import Heading from '@/components/ui/Heading'
 import { useState } from 'react'
 import { User, Bell, Shield, FileText, Save, Loader2, CheckCircle2, ArrowLeft } from 'lucide-react'
 import { Button } from '@/components/ui/button'
@@ -58,9 +59,9 @@ export default function SettingsPage() {
             <ArrowLeft className="w-4 h-4 mr-2" />
             Zurück zum Dashboard
           </Link>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+          <Heading level={1} className="text-2xl font-bold text-gray-900 dark:text-white">
             {labels.pageTitle}
-          </h1>
+          </Heading>
           <p className="mt-1 text-sm sm:text-base text-gray-600 dark:text-neutral-400">
             {labels.pageDescription}
           </p>

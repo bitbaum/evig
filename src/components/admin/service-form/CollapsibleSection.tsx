@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { ChevronDown, ChevronUp } from 'lucide-react'
+import Heading from '@/components/ui/Heading'
 
 interface CollapsibleSectionProps {
   title: string
@@ -23,7 +24,7 @@ export function CollapsibleSection({
         onClick={() => setIsOpen(!isOpen)}
         className="w-full flex items-center justify-between px-6 py-4 bg-gray-50 dark:bg-gray-700/50 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
       >
-        <h3 className="text-lg font-semibold text-gray-900 dark:text-white">{title}</h3>
+        <Heading level={3} className="text-lg text-gray-900 dark:text-white">{title}</Heading>
         {isOpen ? (
           <ChevronUp className="w-5 h-5 text-gray-500" />
         ) : (

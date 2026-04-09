@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react'
 import { Send, Loader2, Bot, User, Sparkles, Trash2, Rocket, TriangleAlert } from 'lucide-react'
+import Heading from '@/components/ui/Heading'
 import { apiFetch } from '@/lib/api/client'
 
 interface HirnActionCard {
@@ -196,7 +197,7 @@ export function HirnChat({ sessionId, onSessionChange, compact = false }: HirnCh
         {messages.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-full text-center text-gray-500 dark:text-gray-400">
             <Sparkles className="w-12 h-12 mb-4 text-purple-500" />
-            <h3 className="text-lg font-medium">Willkommen bei Hirn</h3>
+            <Heading level={3} className="text-lg font-medium">Willkommen bei Hirn</Heading>
             <p className="text-sm max-w-md mt-2">
               Stelle Fragen zu RevampIT — ich kenne unsere Mission, Geschichte, Zahlen,
               Dienstleistungen und Preise und helfe dir gerne weiter.

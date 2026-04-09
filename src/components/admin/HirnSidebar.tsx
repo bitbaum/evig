@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { Plus, MessageSquare, Loader2, ChevronRight, FileText, BarChart3 } from 'lucide-react'
+import Heading from '@/components/ui/Heading'
 import { formatRelativeTime } from '@/lib/utils'
 import { logger } from '@/lib/logger'
 import { apiFetch } from '@/lib/api/client'
@@ -102,9 +103,9 @@ export function HirnSidebar({
 
       {/* Sessions List */}
       <div className="flex-1 overflow-y-auto px-2">
-        <h3 className="px-2 py-1 text-xs font-medium text-gray-500 uppercase">
+        <Heading level={3} className="px-2 py-1 text-xs font-medium text-gray-500 uppercase">
           Gespräche
-        </h3>
+        </Heading>
 
         {loading ? (
           <div className="flex items-center justify-center py-8">

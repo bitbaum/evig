@@ -85,7 +85,7 @@ export default function MitgliedWerdenPage() {
                 <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-green-100 mb-4" aria-hidden="true">
                   <benefit.icon className="h-5 w-5 text-green-600" />
                 </div>
-                <h3 className="text-base font-bold text-gray-900">{benefit.title}</h3>
+                <Heading level={3} className="text-base font-bold text-gray-900">{benefit.title}</Heading>
                 <p className="mt-2 text-sm text-gray-600">{benefit.description}</p>
               </div>
             ))}
@@ -147,7 +147,7 @@ export default function MitgliedWerdenPage() {
           <div className="space-y-6">
             {FAQ.map((item) => (
               <div key={item.question} className="bg-gray-50 rounded-xl p-6 border border-gray-100">
-                <h3 className="text-base font-bold text-gray-900">{item.question}</h3>
+                <Heading level={3} className="text-base font-bold text-gray-900">{item.question}</Heading>
                 <p className="mt-2 text-sm text-gray-600">{item.answer}</p>
               </div>
             ))}

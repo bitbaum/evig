@@ -2,6 +2,7 @@
 
 import { Users } from 'lucide-react'
 import type { WorkshopFormData } from './types'
+import Heading from '@/components/ui/Heading'
 
 interface Props {
   formData: WorkshopFormData
@@ -11,10 +12,10 @@ interface Props {
 export function WorkshopParticipantsSection({ formData, onInputChange }: Props) {
   return (
     <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
-      <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-6 flex items-center gap-2">
+      <Heading level={2} className="text-lg text-gray-900 dark:text-white mb-6 flex items-center gap-2">
         <Users className="w-5 h-5" />
         Teilnehmer & Preis
-      </h2>
+      </Heading>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div>

@@ -1,4 +1,5 @@
 import { PROTOCOL_VISIBILITY_LABELS } from '@/config/protocols'
+import Heading from '@/components/ui/Heading'
 import type { ProtocolVisibility } from '@/config/protocols'
 import { formatDateShort } from '@/lib/date-formats'
 
@@ -35,7 +36,7 @@ export function ProtocolDetailsStep({ values, isComplete, onChange, onReset }: P
 
   return (
     <div className="bg-white rounded-lg border p-6 space-y-6">
-      <h2 className="text-lg font-semibold text-gray-900">Details</h2>
+      <Heading level={2} className="text-lg text-gray-900">Details</Heading>
 
       <div>
         <label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-1">

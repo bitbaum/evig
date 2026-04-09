@@ -31,6 +31,7 @@ import { LoadingSkeleton } from '@/components/common/LoadingState'
 import { ErrorAlert } from '@/components/common/ErrorAlert'
 import { useMarketplaceListings } from '@/hooks/useMarketplaceListings'
 import { useState } from 'react'
+import Heading from '@/components/ui/Heading'
 
 export default function MarketplacePage() {
   const { data: session, status } = useSession()
@@ -60,7 +61,7 @@ export default function MarketplacePage() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
             <div>
-              <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Marketplace</h1>
+              <Heading level={1} className="text-2xl sm:text-3xl font-bold text-gray-900">Marketplace</Heading>
               <p className="text-sm text-gray-600 mt-1">
                 {pagination.total} {pagination.total === 1 ? 'Inserat' : 'Inserate'} verfügbar
               </p>
@@ -430,9 +431,9 @@ export default function MarketplacePage() {
                 <Package className="h-6 w-6 text-orange-600" />
               </div>
             </div>
-            <h3 className="text-xl font-bold text-gray-900 mb-2">
+            <Heading level={3} className="text-xl font-bold text-gray-900 mb-2">
               Melde dich an, um zu kaufen oder zu verkaufen
-            </h3>
+            </Heading>
             <p className="text-base text-gray-600 mb-6 max-w-md mx-auto">
               Erstelle ein Konto, um Inserate aufzugeben oder Verkäufer zu kontaktieren.
             </p>

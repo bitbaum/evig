@@ -21,6 +21,7 @@ import { ListingDetails } from './ListingDetails'
 import { ReportModal } from './ReportModal'
 import { SimilarListings } from './SimilarListings'
 import type { ListingImageData } from './types'
+import Heading from '@/components/ui/Heading'
 
 export default function ListingDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { data: session } = useSession()
@@ -59,9 +60,9 @@ export default function ListingDetailPage({ params }: { params: Promise<{ id: st
     return (
       <div className="max-w-4xl mx-auto py-12 text-center">
         <AlertCircle className="w-16 h-16 text-gray-400 mx-auto mb-4" aria-hidden="true" />
-        <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
+        <Heading level={2} className="text-xl font-bold text-gray-900 dark:text-white mb-2">
           {error || 'Inserat nicht gefunden'}
-        </h2>
+        </Heading>
         <Link href="/marketplace" className="text-green-600 hover:text-green-700 font-medium focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 rounded px-2 py-1">
           Zurück zum Marketplace
         </Link>

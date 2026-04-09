@@ -227,9 +227,9 @@ export default function SellerProfilePage({ params }: { params: Promise<{ id: st
                     </div>
                   </div>
                   <div className="p-3">
-                    <h3 className="font-semibold text-gray-900 dark:text-white mb-1 line-clamp-2 text-sm group-hover:text-green-600 transition-colors">
+                    <Heading level={3} className="font-semibold text-gray-900 dark:text-white mb-1 line-clamp-2 text-sm group-hover:text-green-600 transition-colors">
                       {listing.title}
-                    </h3>
+                    </Heading>
                     <p className="text-lg font-bold text-gray-900 dark:text-white">
                       {formatCHF(Number(listing.price_chf))}
                     </p>

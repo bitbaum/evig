@@ -1,6 +1,7 @@
 'use client'
 
 import { X } from 'lucide-react'
+import Heading from '@/components/ui/Heading'
 
 interface Props {
   tags: string[]
@@ -11,9 +12,9 @@ interface Props {
 export function WorkshopTagsSection({ tags, onAddTag, onRemoveTag }: Props) {
   return (
     <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
-      <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-6">
+      <Heading level={2} className="text-lg text-gray-900 dark:text-white mb-6">
         Tags (Optional)
-      </h2>
+      </Heading>
 
       <div className="space-y-4">
         <div>

@@ -1,6 +1,7 @@
 'use client'
 
 import { MapPin } from 'lucide-react'
+import Heading from '@/components/ui/Heading'
 import { type PostalCodeData } from '@/lib/swiss-postal-codes'
 import { SWISS_CANTONS } from '@/config/swiss-cantons'
 import type { ProfileData } from '../hooks/useProfileData'
@@ -31,9 +32,9 @@ export function AddressSection({
           <MapPin className="w-5 h-5 text-orange-600" />
         </div>
         <div>
-          <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
+          <Heading level={2} className="text-lg font-semibold text-gray-900 dark:text-white">
             Adresse
-          </h2>
+          </Heading>
           <p className="text-sm text-gray-500">Für Lieferungen und Rechnungen</p>
         </div>
       </div>

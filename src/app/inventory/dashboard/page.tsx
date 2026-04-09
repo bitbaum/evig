@@ -20,6 +20,7 @@ import {
 import { logger } from '@/lib/logger'
 import { LISTING_STATUS } from '@/config/marketplace'
 import { INTAKE_STATUS } from '@/config/intake-status'
+import Heading from '@/components/ui/Heading'
 
 interface InventoryItem {
   id: string
@@ -185,9 +186,9 @@ export default function InventoryDashboardPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+          <Heading level={1} className="text-2xl font-bold text-gray-900 dark:text-white">
             Inventory Dashboard
-          </h1>
+          </Heading>
           <p className="text-gray-600 dark:text-gray-400 mt-1">
             Manage your AI-powered inventory and sync with the marketplace
           </p>
@@ -268,9 +269,9 @@ export default function InventoryDashboardPage() {
       {stats.draftItems > 0 && (
         <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl p-8 text-white text-center">
           <Zap className="w-16 h-16 text-blue-200 mx-auto mb-4" />
-          <h2 className="text-2xl font-bold mb-4">
+          <Heading level={2} className="text-2xl font-bold mb-4">
             {stats.draftItems} Produkt{stats.draftItems > 1 ? 'e' : ''} bereit zum Veröffentlichen
-          </h2>
+          </Heading>
           <p className="text-blue-100 mb-6 max-w-2xl mx-auto">
             Ihre AI-analyzierten Produkte warten darauf, im RevampIT Marketplace veröffentlicht zu werden.
             Mit einem Klick werden sie automatisch in den Shop übertragen.
@@ -297,9 +298,9 @@ export default function InventoryDashboardPage() {
             <ImageIcon className="w-5 h-5 text-blue-600" />
           </div>
           <div>
-            <h3 className="font-medium text-blue-900 dark:text-blue-200">
+            <Heading level={3} className="font-medium text-blue-900 dark:text-blue-200">
               So funktioniert die AI-Inventur
-            </h3>
+            </Heading>
             <ul className="mt-2 text-sm text-blue-700 dark:text-blue-300 space-y-1">
               <li>• Laden Sie Produktbilder hoch - unsere KI analysiert automatisch Marke, Modell und Zustand</li>
               <li>• Die KI berechnet Nachhaltigkeits-Scores basierend auf Umwelt- und Sozialfaktoren</li>

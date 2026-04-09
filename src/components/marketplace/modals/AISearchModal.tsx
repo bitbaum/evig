@@ -14,6 +14,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { Search, Package, CheckCircle, Loader2, X } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { getTextColor, getStatusColors } from '@/lib/design-system'
+import Heading from '@/components/ui/Heading'
 
 interface SearchResult {
   id: string
@@ -80,9 +81,9 @@ export function AISearchModal({
                     <Search className="w-5 h-5 text-info-600" />
                   </div>
                   <div>
-                    <h2 className={cn('text-xl font-semibold', getTextColor('white', 'primary'))}>
+                    <Heading level={2} className={cn('text-xl font-semibold', getTextColor('white', 'primary'))}>
                       AI Schnellsuche
-                    </h2>
+                    </Heading>
                     <p className={cn('text-sm', getTextColor('white', 'muted'))}>
                       Gib einen Produktnamen oder Artikelnummer ein
                     </p>
@@ -150,9 +151,9 @@ export function AISearchModal({
               {/* Search Results */}
               {searchResults.length > 0 && (
                 <div className="space-y-4">
-                  <h3 className={cn('text-lg font-medium', getTextColor('white', 'primary'))}>
+                  <Heading level={3} className={cn('text-lg font-medium', getTextColor('white', 'primary'))}>
                     {searchResults.length} Produkt{searchResults.length !== 1 ? 'e' : ''} gefunden
-                  </h3>
+                  </Heading>
 
                   <div className="space-y-3 max-h-96 overflow-y-auto">
                     {searchResults.map((result) => {
@@ -173,9 +174,9 @@ export function AISearchModal({
                             </div>
                             <div className="flex-1">
                               <div className="flex items-center gap-2 mb-1">
-                                <h4 className={cn('font-medium', getTextColor('white', 'primary'))}>
+                                <Heading level={4} className={cn('font-medium', getTextColor('white', 'primary'))}>
                                   {result.name}
-                                </h4>
+                                </Heading>
                                 <span className={cn(
                                   "px-2 py-1 text-xs rounded-full",
                                   confidenceColors.bg,
@@ -227,9 +228,9 @@ export function AISearchModal({
               {isSearching && (
                 <div className="text-center py-12">
                   <Loader2 className="w-8 h-8 text-info-600 animate-spin mx-auto mb-4" />
-                  <h3 className={cn('text-lg font-medium mb-2', getTextColor('white', 'primary'))}>
+                  <Heading level={3} className={cn('text-lg font-medium mb-2', getTextColor('white', 'primary'))}>
                     Produkt wird gesucht...
-                  </h3>
+                  </Heading>
                   <p className={cn('text-sm', getTextColor('white', 'muted'))}>
                     Durchsuche Produktdatenbank nach passenden Artikeln
                   </p>
@@ -240,9 +241,9 @@ export function AISearchModal({
               {!isSearching && searchResults.length === 0 && searchQuery && (
                 <div className="text-center py-12">
                   <Search className="w-12 h-12 text-neutral-400 mx-auto mb-4" />
-                  <h3 className={cn('text-lg font-medium mb-2', getTextColor('white', 'primary'))}>
+                  <Heading level={3} className={cn('text-lg font-medium mb-2', getTextColor('white', 'primary'))}>
                     Keine Produkte gefunden
-                  </h3>
+                  </Heading>
                   <p className={cn('text-sm mb-4', getTextColor('white', 'muted'))}>
                     Für "{searchQuery}" wurden keine passenden Produkte gefunden.
                   </p>

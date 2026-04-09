@@ -7,6 +7,7 @@
 import Link from 'next/link'
 import { ExternalLink, ArrowRight } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import Heading from '@/components/ui/Heading'
 import type { NavigationItem } from '@/config/navigation'
 import type { NavigationGroup } from './utils'
 
@@ -57,9 +58,9 @@ function MultiColumnLayout({
       {groups.map((group, idx) => (
         <div key={idx} className="p-6">
           {group.section && (
-            <h3 className="text-xs font-semibold text-gray-600 uppercase tracking-wider mb-4">
+            <Heading level={3} className="text-xs font-semibold text-gray-600 uppercase tracking-wider mb-4">
               {group.section.name}
-            </h3>
+            </Heading>
           )}
           <ul className="space-y-1">
             {group.items.map((subItem) => (

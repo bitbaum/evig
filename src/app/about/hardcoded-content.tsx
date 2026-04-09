@@ -95,7 +95,7 @@ export default function HardcodedAboutPage() {
               <div className="w-14 h-14 bg-green-100 rounded-xl flex items-center justify-center mb-6 group-hover:bg-green-500 group-hover:scale-110 transition-all duration-300">
                 <Recycle className="h-7 w-7 text-green-600 group-hover:text-white transition-colors" />
               </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-3">Hardware-Recycling</h3>
+              <Heading level={3} className="text-xl font-bold text-gray-900 mb-3">Hardware-Recycling</Heading>
               <p className="text-gray-600 leading-relaxed">
                 Wir reparieren und überholen IT-Geräte jeden Alters und schenken ihnen ein zweites Leben.
                 Von alten MacBooks bis zu Vintage-Computern – jedes Gerät verdient eine zweite Chance.
@@ -107,7 +107,7 @@ export default function HardcodedAboutPage() {
               <div className="w-14 h-14 bg-blue-100 rounded-xl flex items-center justify-center mb-6 group-hover:bg-blue-500 group-hover:scale-110 transition-all duration-300">
                 <Code className="h-7 w-7 text-blue-600 group-hover:text-white transition-colors" />
               </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-3">Open Source-Software</h3>
+              <Heading level={3} className="text-xl font-bold text-gray-900 mb-3">Open Source-Software</Heading>
               <p className="text-gray-600 leading-relaxed">
                 Wir setzen auf Linux und andere Open Source-Lösungen. Diese Technologien halten ältere
                 Geräte effizient am Laufen und bieten Sicherheit durch Kontrolle über das eigene System.
@@ -119,7 +119,7 @@ export default function HardcodedAboutPage() {
               <div className="w-14 h-14 bg-purple-100 rounded-xl flex items-center justify-center mb-6 group-hover:bg-purple-500 group-hover:scale-110 transition-all duration-300">
                 <Users className="h-7 w-7 text-purple-600 group-hover:text-white transition-colors" />
               </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-3">Gemeinschaft & Soziales</h3>
+              <Heading level={3} className="text-xl font-bold text-gray-900 mb-3">Gemeinschaft & Soziales</Heading>
               <p className="text-gray-600 leading-relaxed">
                 Wir schaffen sinnvolle Arbeitsplätze für Menschen, die es auf dem regulären Arbeitsmarkt
                 schwer haben. Mit unserem Tauschsystem kann man Dienstleistungen gegen Technik tauschen.

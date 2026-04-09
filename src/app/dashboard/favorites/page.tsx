@@ -12,6 +12,7 @@ import {
   MapPin,
 } from 'lucide-react'
 import { ListingImage } from '@/components/marketplace/ListingImage'
+import Heading from '@/components/ui/Heading'
 import { Button } from '@/components/ui/button'
 import { getConditionBadge } from '@/config/erfassung/conditions'
 import { formatCHF } from '@/config/marketplace'
@@ -94,10 +95,10 @@ export default function FavoritesPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
+        <Heading level={1} className="text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
           <Heart className="w-6 h-6 text-red-500" />
           Meine Favoriten
-        </h1>
+        </Heading>
         <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
           Ihre gemerkten Inserate auf einen Blick
         </p>
@@ -124,9 +125,9 @@ export default function FavoritesPage() {
       {!isLoading && !error && favorites.length === 0 && (
         <div className="bg-gray-50 dark:bg-gray-800 rounded-xl p-8 text-center border-2 border-dashed border-gray-300 dark:border-gray-600">
           <Heart className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+          <Heading level={3} className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
             Noch keine Favoriten
-          </h3>
+          </Heading>
           <p className="text-gray-600 dark:text-gray-400 mb-6">
             Klicken Sie auf das Herz-Symbol bei einem Inserat, um es hier zu speichern.
           </p>
@@ -166,9 +167,9 @@ export default function FavoritesPage() {
                     )}
                   </div>
                   <div className="p-3">
-                    <h3 className="font-semibold text-gray-900 dark:text-white mb-1 line-clamp-2 text-sm group-hover:text-green-600 transition-colors">
+                    <Heading level={3} className="font-semibold text-gray-900 dark:text-white mb-1 line-clamp-2 text-sm group-hover:text-green-600 transition-colors">
                       {listing.title}
-                    </h3>
+                    </Heading>
                     <p className="text-lg font-bold text-gray-900 dark:text-white mb-1">
                       {formatCHF(Number(listing.price_chf))}
                     </p>

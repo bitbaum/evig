@@ -146,7 +146,7 @@ export default function WissenPage() {
                   rel="noopener noreferrer"
                   className="block p-4 sm:p-6 rounded-lg border border-gray-200 hover:border-green-500 hover:bg-green-50 transition-colors"
                 >
-                  <h4 className="font-semibold text-sm sm:text-base text-gray-900 mb-2">{resource.name}</h4>
+                  <Heading level={4} className="font-semibold text-sm sm:text-base text-gray-900 mb-2">{resource.name}</Heading>
                   <p className="text-xs sm:text-sm text-gray-600">{resource.description}</p>
                 </a>
               ))}
@@ -165,7 +165,7 @@ export default function WissenPage() {
                   rel="noopener noreferrer"
                   className="block p-4 sm:p-6 rounded-lg border border-gray-200 hover:border-blue-500 hover:bg-blue-50 transition-colors"
                 >
-                  <h4 className="font-semibold text-sm sm:text-base text-gray-900 mb-2">{resource.name}</h4>
+                  <Heading level={4} className="font-semibold text-sm sm:text-base text-gray-900 mb-2">{resource.name}</Heading>
                   <p className="text-xs sm:text-sm text-gray-600">{resource.description}</p>
                 </a>
               ))}
@@ -184,7 +184,7 @@ export default function WissenPage() {
                   rel="noopener noreferrer"
                   className="block p-4 sm:p-6 rounded-lg border border-gray-200 hover:border-purple-500 hover:bg-purple-50 transition-colors"
                 >
-                  <h4 className="font-semibold text-sm sm:text-base text-gray-900 mb-2">{resource.name}</h4>
+                  <Heading level={4} className="font-semibold text-sm sm:text-base text-gray-900 mb-2">{resource.name}</Heading>
                   <p className="text-xs sm:text-sm text-gray-600">{resource.description}</p>
                 </a>
               ))}

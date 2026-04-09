@@ -1,5 +1,6 @@
 import { type OSSAlternative, getAlternativesByCategory } from '@/config/open-source-registry'
 import { AlternativeCard } from './AlternativeCard'
+import Heading from '@/components/ui/Heading'
 
 interface RelatedAlternativesProps {
   current: OSSAlternative
@@ -14,9 +15,9 @@ export function RelatedAlternatives({ current }: RelatedAlternativesProps) {
 
   return (
     <section className="mt-12">
-      <h2 className="text-xl font-bold text-gray-900 mb-6">
+      <Heading level={2} className="text-xl font-bold text-gray-900 mb-6">
         Weitere Alternativen in dieser Kategorie
-      </h2>
+      </Heading>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
         {related.map(alt => (
           <AlternativeCard key={alt.id} alternative={alt} />

@@ -237,9 +237,9 @@ export default function MyOffersPage() {
                           </span>
                         </div>
 
-                        <h3 className="font-semibold text-gray-900 mb-2 group-hover:text-emerald-600 transition-colors">
+                        <Heading level={3} className="font-semibold text-gray-900 mb-2 group-hover:text-emerald-600 transition-colors">
                           {offer.request.title}
-                        </h3>
+                        </Heading>
 
                         <p className="text-sm text-gray-600 mb-3">
                           <span className="font-medium">Dein Angebot:</span> {offer.message.slice(0, 150)}

@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react'
 import { AlertTriangle, Mail, X, CheckCircle2, Loader2 } from 'lucide-react'
+import Heading from '@/components/ui/Heading'
 import { cn } from '@/lib/utils'
 import { apiFetch } from '@/lib/api/client'
 
@@ -51,9 +52,9 @@ export function EmailVerificationBanner({ email, className }: EmailVerificationB
           <AlertTriangle className="h-5 w-5 text-amber-400" aria-hidden="true" />
         </div>
         <div className="ml-3 flex-1">
-          <h3 className="text-sm font-medium text-amber-800 dark:text-amber-200">
+          <Heading level={3} className="text-sm font-medium text-amber-800 dark:text-amber-200">
             E-Mail-Adresse nicht bestätigt
-          </h3>
+          </Heading>
           <div className="mt-2 text-sm text-amber-700 dark:text-amber-300">
             <p>
               Bitte bestätigen Sie Ihre E-Mail-Adresse <strong>{email}</strong>, um alle Funktionen nutzen zu können.

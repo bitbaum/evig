@@ -1,6 +1,7 @@
 'use client'
 
 import { Mail, Trash2 } from 'lucide-react'
+import Heading from '@/components/ui/Heading'
 import { SETTINGS_CONFIG } from '@/config/profile'
 import type { ProfileData } from '../../profile/hooks/useProfileData'
 
@@ -17,9 +18,9 @@ export function AccountSection({ profile, email, handleChange }: AccountSectionP
     <div className="space-y-8">
       {/* Name Fields */}
       <div>
-        <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+        <Heading level={3} className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
           {labels.title}
-        </h3>
+        </Heading>
         <p className="text-sm text-gray-600 dark:text-gray-400 mb-6">
           {labels.description}
         </p>
@@ -78,9 +79,9 @@ export function AccountSection({ profile, email, handleChange }: AccountSectionP
 
       {/* Password Change Link */}
       <div className="border-t-2 border-gray-200 dark:border-gray-700 pt-6">
-        <h4 className="text-base font-semibold text-gray-900 dark:text-white mb-2">
+        <Heading level={4} className="text-base font-semibold text-gray-900 dark:text-white mb-2">
           {labels.password}
-        </h4>
+        </Heading>
         <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
           {labels.passwordDescription}
         </p>
@@ -91,9 +92,9 @@ export function AccountSection({ profile, email, handleChange }: AccountSectionP
 
       {/* Danger Zone */}
       <div className="border-t-2 border-red-200 dark:border-red-900 pt-6">
-        <h4 className="text-base font-semibold text-red-600 dark:text-red-400 mb-2">
+        <Heading level={4} className="text-base font-semibold text-red-600 dark:text-red-400 mb-2">
           {labels.deleteAccount}
-        </h4>
+        </Heading>
         <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
           {labels.deleteAccountWarning}
         </p>

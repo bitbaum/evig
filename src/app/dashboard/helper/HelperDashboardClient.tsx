@@ -21,6 +21,7 @@ import {
   getBudgetTierById,
   getSkillById,
 } from '@/config/it-hilfe'
+import Heading from '@/components/ui/Heading'
 
 // ---------------------------------------------------------------------------
 // Types
@@ -196,9 +197,9 @@ export default function HelperDashboardClient() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+          <Heading level={1} className="text-2xl font-bold text-gray-900 dark:text-white">
             IT-Hilfe Dashboard
-          </h1>
+          </Heading>
           <p className="text-gray-600 dark:text-gray-400 mt-1">
             Finden Sie passende Anfragen und verwalten Sie Ihre Angebote
           </p>
@@ -442,7 +443,7 @@ function MatchingRequestsTab({
               </div>
 
               {/* Title & Description */}
-              <h3 className="font-semibold text-gray-900 dark:text-white mb-1">{req.title}</h3>
+              <Heading level={3} className="font-semibold text-gray-900 dark:text-white mb-1">{req.title}</Heading>
               <p className="text-sm text-gray-600 dark:text-gray-400 mb-3 line-clamp-2">{req.description}</p>
 
               {/* Meta */}
@@ -564,9 +565,9 @@ function MyOffersTab({
               </div>
 
               {/* Request title */}
-              <h3 className="font-semibold text-gray-900 dark:text-white mb-1">
+              <Heading level={3} className="font-semibold text-gray-900 dark:text-white mb-1">
                 {offer.request.title}
-              </h3>
+              </Heading>
 
               {/* Offer message preview */}
               <p className="text-sm text-gray-600 dark:text-gray-400 mb-3 line-clamp-2">
@@ -644,7 +645,7 @@ function StatsTab({
 
       {/* Status Breakdown */}
       <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-100 dark:border-gray-700">
-        <h3 className="font-semibold text-gray-900 dark:text-white mb-4">Aufschlüsselung nach Status</h3>
+        <Heading level={3} className="font-semibold text-gray-900 dark:text-white mb-4">Aufschlüsselung nach Status</Heading>
         {Object.keys(statusCounts).length === 0 ? (
           <p className="text-gray-500 dark:text-gray-400 text-sm">Noch keine Daten vorhanden</p>
         ) : (

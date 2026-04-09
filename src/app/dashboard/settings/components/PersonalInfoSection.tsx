@@ -1,6 +1,7 @@
 'use client'
 
 import { Building2, Phone, MapPin } from 'lucide-react'
+import Heading from '@/components/ui/Heading'
 import { SETTINGS_CONFIG, SWISS_CANTONS, CANTON_NAMES } from '@/config/profile'
 import type { ProfileData } from '../../profile/hooks/useProfileData'
 import type { PostalCodeData } from '@/lib/swiss-postal-codes'
@@ -32,9 +33,9 @@ export function PersonalInfoSection({
       <div>
         <div className="flex items-center gap-2 mb-4">
           <Building2 className="w-5 h-5 text-gray-600 dark:text-gray-400" />
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+          <Heading level={3} className="text-lg font-semibold text-gray-900 dark:text-white">
             {labels.company}
-          </h3>
+          </Heading>
         </div>
 
         <div>
@@ -56,9 +57,9 @@ export function PersonalInfoSection({
       <div className="border-t-2 border-gray-200 dark:border-gray-700 pt-6">
         <div className="flex items-center gap-2 mb-4">
           <Phone className="w-5 h-5 text-gray-600 dark:text-gray-400" />
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+          <Heading level={3} className="text-lg font-semibold text-gray-900 dark:text-white">
             {labels.contact}
-          </h3>
+          </Heading>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -96,9 +97,9 @@ export function PersonalInfoSection({
       <div className="border-t-2 border-gray-200 dark:border-gray-700 pt-6">
         <div className="flex items-center gap-2 mb-4">
           <MapPin className="w-5 h-5 text-gray-600 dark:text-gray-400" />
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+          <Heading level={3} className="text-lg font-semibold text-gray-900 dark:text-white">
             {labels.address}
-          </h3>
+          </Heading>
         </div>
 
         <div className="space-y-4">

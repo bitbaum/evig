@@ -17,6 +17,7 @@ import { BusinessInfoSection } from '@/components/repairer-apply/BusinessInfoSec
 import { ContactInfoSection } from '@/components/repairer-apply/ContactInfoSection'
 import { ServicesPricingSection } from '@/components/repairer-apply/ServicesPricingSection'
 import { DocumentsSection } from '@/components/repairer-apply/DocumentsSection'
+import Heading from '@/components/ui/Heading'
 
 export default function RepairerApplicationPage() {
   const { data: session, status } = useSession()
@@ -97,7 +98,7 @@ export default function RepairerApplicationPage() {
         <div className="max-w-2xl mx-auto px-4">
           <div className="bg-white rounded-xl shadow-lg p-8 text-center">
             <AlertCircle className="w-16 h-16 text-yellow-500 mx-auto mb-4" />
-            <h1 className="text-2xl font-bold text-gray-900 mb-4">Anmeldung erforderlich</h1>
+            <Heading level={1} className="text-2xl font-bold text-gray-900 mb-4">Anmeldung erforderlich</Heading>
             <p className="text-gray-600 mb-6">
               Bitte melden Sie sich an, um sich als Reparateur zu bewerben.
             </p>
@@ -130,9 +131,9 @@ export default function RepairerApplicationPage() {
             <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-100 rounded-full mb-6">
               <Wrench className="w-8 h-8 text-blue-600" />
             </div>
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">
+            <Heading level={1} className="text-3xl font-bold text-gray-900 mb-2">
               Reparateur-Bewerbung
-            </h1>
+            </Heading>
             <p className="text-gray-600">
               Füllen Sie das Formular aus, um sich als zertifizierter Reparateur bei RevampIT zu bewerben
             </p>
@@ -152,9 +153,9 @@ export default function RepairerApplicationPage() {
                 <AlertCircle className="w-6 h-6 mr-3" />
               )}
               <div>
-                <h3 className="font-semibold mb-1">
+                <Heading level={3} className="font-semibold mb-1">
                   {submitResult.success ? 'Bewerbung erfolgreich!' : 'Fehler'}
-                </h3>
+                </Heading>
                 <p>{submitResult.message}</p>
               </div>
             </div>
@@ -170,7 +171,7 @@ export default function RepairerApplicationPage() {
           {/* Terms and Conditions */}
           <div className="mb-8">
             <div className="bg-gray-50 border border-gray-200 rounded-lg p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Nutzungsbedingungen für Reparateure</h3>
+              <Heading level={3} className="text-lg font-semibold text-gray-900 mb-4">Nutzungsbedingungen für Reparateure</Heading>
 
               <div className="space-y-3 text-sm text-gray-700 mb-4">
                 <p>• Ich verpflichte mich, alle Reparaturen fachgerecht und mit hoher Qualität durchzuführen</p>

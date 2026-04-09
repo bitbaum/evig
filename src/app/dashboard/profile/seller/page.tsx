@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { apiFetch } from '@/lib/api/client'
+import Heading from '@/components/ui/Heading'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import {
@@ -144,10 +145,10 @@ export default function SellerProfileEditPage() {
 
       <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
         <div className="p-6 border-b border-gray-100 dark:border-gray-700">
-          <h1 className="text-xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
+          <Heading level={1} className="text-xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
             <User className="w-5 h-5 text-green-600" />
             Verkäuferprofil
-          </h1>
+          </Heading>
           <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
             {noProfile
               ? 'Erstellen Sie Ihr Verkäuferprofil. Es wird automatisch erstellt, wenn Sie Ihr erstes Inserat veröffentlichen.'

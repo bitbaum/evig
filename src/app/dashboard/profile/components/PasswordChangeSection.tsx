@@ -1,6 +1,7 @@
 'use client'
 
 import { Button } from '@/components/ui/button'
+import Heading from '@/components/ui/Heading'
 import {
   Shield,
   Loader2,
@@ -38,9 +39,9 @@ export function PasswordChangeSection({
           <Shield className="w-5 h-5 text-red-600" />
         </div>
         <div>
-          <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
+          <Heading level={2} className="text-lg font-semibold text-gray-900 dark:text-white">
             Passwort ändern
-          </h2>
+          </Heading>
           <p className="text-sm text-gray-500">Halten Sie Ihr Konto sicher</p>
         </div>
       </div>

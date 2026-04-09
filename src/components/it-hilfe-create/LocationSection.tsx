@@ -1,3 +1,5 @@
+import Heading from '@/components/ui/Heading'
+
 interface Props {
   postalCode: string
   city: string
@@ -17,7 +19,7 @@ export function LocationSection({
 }: Props) {
   return (
     <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-      <h2 className="text-lg font-semibold text-gray-900 mb-4">Wo bist du?</h2>
+      <Heading level={2} className="text-lg font-semibold text-gray-900 mb-4">Wo bist du?</Heading>
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">

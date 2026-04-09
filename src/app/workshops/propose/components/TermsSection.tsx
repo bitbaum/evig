@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import Heading from '@/components/ui/Heading'
 
 interface TermsSectionProps {
   termsAccepted: boolean
@@ -11,9 +12,9 @@ export function TermsSection({ termsAccepted, onChange }: TermsSectionProps) {
   return (
     <div className="mb-8">
       <div className="bg-gray-50 border border-gray-200 rounded-lg p-6">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">
+        <Heading level={3} className="text-lg font-semibold text-gray-900 mb-4">
           Nutzungsbedingungen für Workshop-Veranstalter
-        </h3>
+        </Heading>
 
         <div className="space-y-3 text-sm text-gray-700 mb-4">
           <p>• Ich verpflichte mich, Workshops mit hoher Qualität und Engagement durchzuführen</p>

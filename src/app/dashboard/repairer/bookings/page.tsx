@@ -13,6 +13,7 @@ import { Button } from '@/components/ui/button'
 import { Modal } from '@/components/ui/Modal'
 import { formatDateShort } from '@/lib/date-formats'
 import { apiFetch } from '@/lib/api/client'
+import Heading from '@/components/ui/Heading'
 
 interface Appointment {
   id: string
@@ -119,9 +120,9 @@ export default function RepairerBookingsPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+          <Heading level={1} className="text-2xl font-bold text-gray-900 dark:text-white">
             Reparatur-Buchungen
-          </h1>
+          </Heading>
           <p className="text-gray-600 dark:text-gray-400 mt-1">
             Verwalten Sie Ihre eingehenden Reparaturaufträge
           </p>
@@ -263,7 +264,7 @@ export default function RepairerBookingsPage() {
                       <User className="w-5 h-5 text-gray-600 dark:text-gray-400" />
                     </div>
                     <div>
-                      <h3 className="font-semibold text-gray-900 dark:text-white">{apt.customer_name || 'Kunde'}</h3>
+                      <Heading level={3} className="font-semibold text-gray-900 dark:text-white">{apt.customer_name || 'Kunde'}</Heading>
                       <p className="text-sm text-gray-500 dark:text-gray-400">{apt.service_name || 'Reparatur'}</p>
                     </div>
                   </div>
@@ -458,9 +459,9 @@ export default function RepairerBookingsPage() {
             <Calendar className="w-5 h-5 text-blue-600" />
           </div>
           <div>
-            <h3 className="font-medium text-blue-900 dark:text-blue-200">
+            <Heading level={3} className="font-medium text-blue-900 dark:text-blue-200">
               Tipps für die Buchungsverwaltung
-            </h3>
+            </Heading>
             <ul className="mt-2 text-sm text-blue-700 dark:text-blue-300 space-y-1">
               <li>Antworten Sie schnell auf neue Buchungsanfragen (innerhalb 24h)</li>
               <li>Kommunizieren Sie klar über Preise und Lieferzeiten</li>

@@ -9,6 +9,7 @@
 
 import { Package } from 'lucide-react'
 import { AIFieldIndicator } from '@/components/ai/AIFieldIndicator'
+import Heading from '@/components/ui/Heading'
 import type { ErfassungFormData, AIFieldMetadata } from '@/types/erfassung'
 import { ZUSTAND_OPTIONS, KATEGORIEN } from '@/config/erfassung'
 
@@ -29,10 +30,10 @@ export function ProductBasicFields({
 }: ProductBasicFieldsProps) {
   return (
     <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
-      <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+      <Heading level={2} className="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
         <Package className="w-5 h-5" />
         Grundinformationen
-      </h2>
+      </Heading>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
         <div>
