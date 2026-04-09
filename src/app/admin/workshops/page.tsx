@@ -7,64 +7,113 @@ import Link from 'next/link'
 import {
   GraduationCap,
   Search,
-  Filter,
   CheckCircle,
   XCircle,
   Clock,
   AlertCircle,
   Eye,
-  Edit,
   Calendar,
   Users,
   MapPin,
   DollarSign,
   BookOpen,
-  ArrowLeft
 } from 'lucide-react'
 import { apiFetch } from '@/lib/api/client'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { formatDateShort } from '@/lib/date-formats'
-import { PROPOSAL_STATUS, PROPOSAL_STATUS_LABELS, WORKSHOP_CATEGORIES, type ProposalStatus } from '@/config/workshops'
+import {
+  PROPOSAL_STATUS,
+  PROPOSAL_STATUS_LABELS,
+  WORKSHOP_CATEGORIES,
+  type ProposalStatus,
+} from '@/config/workshops'
 import type { WorkshopProposalWithProposer } from '@/components/workshops/types'
 import Heading from '@/components/ui/Heading'
+import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
+import { Pagination } from '@/components/ui/Pagination'
+
+// ─── Status config ────────────────────────────────────────────────────────────
+
+const PROPOSAL_STATUS_CONFIG: Record<string, { icon: React.ReactNode }> = {
+  [PROPOSAL_STATUS.APPROVED]: {
+    icon: <CheckCircle className="w-5 h-5 text-green-600" />,
+  },
+  [PROPOSAL_STATUS.PENDING]: {
+    icon: <Clock className="w-5 h-5 text-yellow-600" />,
+  },
+  [PROPOSAL_STATUS.REJECTED]: {
+    icon: <XCircle className="w-5 h-5 text-red-600" />,
+  },
+  [PROPOSAL_STATUS.REQUIRES_CHANGES]: {
+    icon: <AlertCircle className="w-5 h-5 text-orange-600" />,
+  },
+}
+
+const DEFAULT_STATUS_ICON = <AlertCircle className="w-5 h-5 text-gray-400" />
+
+// ─── Inline strings (can be moved to src/config/admin-content.ts later) ──────
+
+const STRINGS = {
+  APPROVE_CONFIRM: 'Möchten Sie diesen Workshop-Vorschlag wirklich genehmigen?',
+  APPROVE_ERROR: 'Fehler bei der Genehmigung',
+  REJECT_ERROR: 'Fehler bei der Ablehnung',
+  EMPTY_SEARCH: (term: string) => `Keine Vorschläge für "${term}" gefunden.`,
+  EMPTY_PENDING: 'Keine ausstehenden Vorschläge vorhanden.',
+  EMPTY_STATUS: (s: string) => `Keine Vorschläge mit Status "${s}" gefunden.`,
+} as const
+
+// ─── Helpers ──────────────────────────────────────────────────────────────────
+
+const PAGE_SIZE = 20
+
+function getLocationText(proposal: WorkshopProposalWithProposer): string {
+  switch (proposal.location_type) {
+    case 'venue':
+      return proposal.selected_location_name || proposal.proposed_location || 'Veranstaltungsort'
+    case 'home':
+      return proposal.proposed_location || 'Zu Hause'
+    case 'online':
+      return 'Online'
+    default:
+      return 'Unbekannt'
+  }
+}
+
+// ─── Component ────────────────────────────────────────────────────────────────
 
 export default function AdminWorkshopsPage() {
   const { data: session, status } = useSession()
   const router = useRouter()
 
   const [proposals, setProposals] = useState<WorkshopProposalWithProposer[]>([])
+  const [totalItems, setTotalItems] = useState(0)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string>('')
-
   const [searchTerm, setSearchTerm] = useState('')
-
-  const [filters, setFilters] = useState<{
-    status: ProposalStatus | 'all'
-    category: string
-  }>({
+  const [filters, setFilters] = useState<{ status: ProposalStatus | 'all'; category: string }>({
     status: PROPOSAL_STATUS.PENDING,
-    category: 'all'
+    category: 'all',
   })
-
   const [currentPage, setCurrentPage] = useState(1)
-  const [totalPages, setTotalPages] = useState(1)
   const [rejectingId, setRejectingId] = useState<string | null>(null)
   const [rejectionReason, setRejectionReason] = useState('')
 
-  const loadProposals = useCallback(async () => {
+  const loadProposals = useCallback(async (signal?: AbortSignal) => {
     setLoading(true)
     const params = new URLSearchParams({
       status: filters.status,
-      limit: '20',
-      offset: ((currentPage - 1) * 20).toString()
+      limit: String(PAGE_SIZE),
+      offset: String((currentPage - 1) * PAGE_SIZE),
     })
-
     if (filters.category !== 'all') params.set('category', filters.category)
 
-    const result = await apiFetch<{ items: WorkshopProposalWithProposer[]; pagination?: { total: number } }>(`/api/admin/workshops/proposals?${params}`)
+    const result = await apiFetch<{ items: WorkshopProposalWithProposer[]; pagination?: { total: number } }>(
+      `/api/admin/workshops/proposals?${params}`
+    )
+    if (signal?.aborted) return
     if (result.success && result.data) {
       setProposals(result.data.items || [])
-      setTotalPages(Math.ceil((result.data.pagination?.total || 0) / 20))
+      setTotalItems(result.data.pagination?.total || 0)
     } else {
       setError(result.error || ERROR_MESSAGES.WORKSHOP_PROPOSALS_LOAD_FAILED)
     }
@@ -73,98 +122,36 @@ export default function AdminWorkshopsPage() {
 
   useEffect(() => {
     if (status !== 'authenticated') return
-    let cancelled = false
-    async function load() {
-      setLoading(true)
-      const params = new URLSearchParams({
-        status: filters.status,
-        limit: '20',
-        offset: ((currentPage - 1) * 20).toString()
-      })
-      if (filters.category !== 'all') params.set('category', filters.category)
-      const result = await apiFetch<{ items: WorkshopProposalWithProposer[]; pagination?: { total: number } }>(`/api/admin/workshops/proposals?${params}`)
-      if (cancelled) return
-      if (result.success && result.data) {
-        setProposals(result.data.items || [])
-        setTotalPages(Math.ceil((result.data.pagination?.total || 0) / 20))
-      } else {
-        setError(result.error || ERROR_MESSAGES.WORKSHOP_PROPOSALS_LOAD_FAILED)
-      }
-      setLoading(false)
-    }
-    load()
-    return () => { cancelled = true }
-  }, [status, filters.status, filters.category, currentPage])
+    const controller = new AbortController()
+    loadProposals(controller.signal)
+    return () => controller.abort()
+  }, [status, loadProposals])
 
   const handleApprove = async (proposalId: string) => {
-    if (!confirm('Möchten Sie diesen Workshop-Vorschlag wirklich genehmigen?')) {
-      return
-    }
-
+    if (!confirm(STRINGS.APPROVE_CONFIRM)) return
     const result = await apiFetch<void>(`/api/admin/workshops/proposals/${proposalId}/approve`, {
       method: 'POST',
-      body: {
-        action: 'approve',
-        review_notes: 'Workshop genehmigt'
-      }
+      body: { action: 'approve', review_notes: 'Workshop genehmigt' },
     })
-
     if (result.success) {
       loadProposals()
     } else {
-      setError(result.error || 'Fehler bei der Genehmigung')
+      setError(result.error || STRINGS.APPROVE_ERROR)
     }
   }
 
   const handleReject = async (proposalId: string) => {
     if (!rejectionReason.trim()) return
-
     const result = await apiFetch<void>(`/api/admin/workshops/proposals/${proposalId}/approve`, {
       method: 'POST',
-      body: {
-        action: 'reject',
-        review_notes: rejectionReason
-      }
+      body: { action: 'reject', review_notes: rejectionReason },
     })
-
     if (result.success) {
       setRejectingId(null)
       setRejectionReason('')
       loadProposals()
     } else {
-      setError(result.error || 'Fehler bei der Ablehnung')
-    }
-  }
-
-  const getStatusIcon = (status: string) => {
-    switch (status) {
-      case PROPOSAL_STATUS.APPROVED:
-        return <CheckCircle className="w-5 h-5 text-green-600" />
-      case PROPOSAL_STATUS.PENDING:
-        return <Clock className="w-5 h-5 text-yellow-600" />
-      case PROPOSAL_STATUS.REJECTED:
-        return <XCircle className="w-5 h-5 text-red-600" />
-      case PROPOSAL_STATUS.REQUIRES_CHANGES:
-        return <AlertCircle className="w-5 h-5 text-orange-600" />
-      default:
-        return <AlertCircle className="w-5 h-5 text-gray-400" />
-    }
-  }
-
-  const getStatusText = (status: string) => {
-    return PROPOSAL_STATUS_LABELS[status as ProposalStatus] || status
-  }
-
-  const getLocationText = (proposal: WorkshopProposalWithProposer) => {
-    switch (proposal.location_type) {
-      case 'venue':
-        return proposal.selected_location_name || proposal.proposed_location || 'Veranstaltungsort'
-      case 'home':
-        return proposal.proposed_location || 'Zu Hause'
-      case 'online':
-        return 'Online'
-      default:
-        return 'Unbekannt'
+      setError(result.error || STRINGS.REJECT_ERROR)
     }
   }
 
@@ -174,10 +161,10 @@ export default function AdminWorkshopsPage() {
         <div className="max-w-7xl mx-auto px-4">
           <div className="bg-white rounded-xl shadow-lg p-8">
             <div className="animate-pulse">
-              <div className="h-8 bg-gray-200 rounded w-1/4 mb-6"></div>
+              <div className="h-8 bg-gray-200 rounded w-1/4 mb-6" />
               <div className="space-y-4">
                 {[...Array(5)].map((_, i) => (
-                  <div key={i} className="h-16 bg-gray-200 rounded"></div>
+                  <div key={i} className="h-16 bg-gray-200 rounded" />
                 ))}
               </div>
             </div>
@@ -192,109 +179,98 @@ export default function AdminWorkshopsPage() {
     return null
   }
 
+  const filteredProposals = searchTerm.trim()
+    ? proposals.filter(p => p.title.toLowerCase().includes(searchTerm.toLowerCase()))
+    : proposals
+
+  const totalPages = Math.ceil(totalItems / PAGE_SIZE)
+
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <div className="bg-white shadow-sm border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <Heading level={1} className="text-2xl font-bold text-gray-900">Workshop-Verwaltung</Heading>
-              <p className="mt-1 text-sm text-gray-600">
-                Genehmigen und verwalten Sie Workshop-Vorschläge
-              </p>
+    <AdminPageWrapper
+      title="Workshop-Verwaltung"
+      description="Genehmigen und verwalten Sie Workshop-Vorschläge"
+      icon={GraduationCap}
+      iconColor="blue"
+      actions={
+        <Link
+          href="/admin/workshops/instances"
+          className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+        >
+          <Calendar className="w-4 h-4 mr-2" />
+          Termine verwalten
+        </Link>
+      }
+      backButton={{ href: '/admin', label: 'Zurück zum Dashboard' }}
+    >
+      {/* Filters */}
+      <div className="bg-white rounded-xl shadow-sm border p-6">
+        <div className="flex flex-wrap gap-4">
+          <div className="flex-1 min-w-48">
+            <label className="block text-sm font-medium text-gray-700 mb-1">Suche</label>
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
+              <input
+                type="text"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                placeholder="Titel suchen..."
+                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+              />
             </div>
-            <div className="flex gap-3">
-              <Link
-                href="/admin/workshops/instances"
-                className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-              >
-                <Calendar className="w-4 h-4 mr-2" />
-                Termine verwalten
-              </Link>
-              <Link
-                href="/admin"
-                className="inline-flex items-center px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors"
-              >
-                <ArrowLeft className="w-4 h-4 mr-2" />
-                Zurück zum Dashboard
-              </Link>
-            </div>
+          </div>
+
+          <div className="flex-1 min-w-48">
+            <label className="block text-sm font-medium text-gray-700 mb-1">Status</label>
+            <select
+              value={filters.status}
+              onChange={(e) => setFilters(prev => ({ ...prev, status: e.target.value as ProposalStatus | 'all' }))}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+            >
+              <option value="all">Alle</option>
+              <option value={PROPOSAL_STATUS.PENDING}>{PROPOSAL_STATUS_LABELS[PROPOSAL_STATUS.PENDING]}</option>
+              <option value={PROPOSAL_STATUS.APPROVED}>{PROPOSAL_STATUS_LABELS[PROPOSAL_STATUS.APPROVED]}</option>
+              <option value={PROPOSAL_STATUS.REJECTED}>{PROPOSAL_STATUS_LABELS[PROPOSAL_STATUS.REJECTED]}</option>
+              <option value={PROPOSAL_STATUS.REQUIRES_CHANGES}>{PROPOSAL_STATUS_LABELS[PROPOSAL_STATUS.REQUIRES_CHANGES]}</option>
+            </select>
+          </div>
+
+          <div className="flex-1 min-w-48">
+            <label className="block text-sm font-medium text-gray-700 mb-1">Kategorie</label>
+            <select
+              value={filters.category}
+              onChange={(e) => setFilters(prev => ({ ...prev, category: e.target.value }))}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+            >
+              <option value="all">Alle Kategorien</option>
+              {WORKSHOP_CATEGORIES.map(cat => (
+                <option key={cat.id} value={cat.name}>{cat.name}</option>
+              ))}
+            </select>
           </div>
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Filters */}
-        <div className="bg-white rounded-xl shadow-sm border p-6 mb-6">
-          <div className="flex flex-wrap gap-4">
-            <div className="flex-1 min-w-48">
-              <label className="block text-sm font-medium text-gray-700 mb-1">Suche</label>
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
-                <input
-                  type="text"
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  placeholder="Titel suchen..."
-                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                />
-              </div>
-            </div>
+      {/* Error */}
+      {error && (
+        <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+          <p className="text-red-800">{error}</p>
+        </div>
+      )}
 
-            <div className="flex-1 min-w-48">
-              <label className="block text-sm font-medium text-gray-700 mb-1">Status</label>
-              <select
-                value={filters.status}
-                onChange={(e) => setFilters(prev => ({ ...prev, status: e.target.value as ProposalStatus | 'all' }))}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-              >
-                <option value="all">Alle</option>
-                <option value={PROPOSAL_STATUS.PENDING}>Ausstehend</option>
-                <option value={PROPOSAL_STATUS.APPROVED}>Genehmigt</option>
-                <option value={PROPOSAL_STATUS.REJECTED}>Abgelehnt</option>
-                <option value={PROPOSAL_STATUS.REQUIRES_CHANGES}>Änderungen erforderlich</option>
-              </select>
-            </div>
-
-            <div className="flex-1 min-w-48">
-              <label className="block text-sm font-medium text-gray-700 mb-1">Kategorie</label>
-              <select
-                value={filters.category}
-                onChange={(e) => setFilters(prev => ({ ...prev, category: e.target.value }))}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-              >
-                <option value="all">Alle Kategorien</option>
-                {WORKSHOP_CATEGORIES.map(cat => (
-                  <option key={cat.id} value={cat.name}>{cat.name}</option>
-                ))}
-              </select>
-            </div>
-          </div>
+      {/* Proposals list */}
+      <div className="bg-white rounded-xl shadow-sm border">
+        <div className="px-6 py-4 border-b border-gray-200">
+          <Heading level={2} className="text-lg font-semibold text-gray-900">
+            Workshop-Vorschläge ({filteredProposals.length})
+          </Heading>
         </div>
 
-        {/* Error Message */}
-        {error && (
-          <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
-            <p className="text-red-800">{error}</p>
-          </div>
-        )}
+        <div className="divide-y divide-gray-200">
+          {filteredProposals.map((proposal) => {
+            const statusIcon = PROPOSAL_STATUS_CONFIG[proposal.status]?.icon ?? DEFAULT_STATUS_ICON
+            const statusLabel = PROPOSAL_STATUS_LABELS[proposal.status as ProposalStatus] ?? proposal.status
 
-        {/* Proposals List */}
-        {(() => {
-          const filteredProposals = searchTerm.trim()
-            ? proposals.filter(p => p.title.toLowerCase().includes(searchTerm.toLowerCase()))
-            : proposals
-          return (
-        <div className="bg-white rounded-xl shadow-sm border">
-          <div className="px-6 py-4 border-b border-gray-200">
-            <Heading level={2} className="text-lg font-semibold text-gray-900">
-              Workshop-Vorschläge ({filteredProposals.length})
-            </Heading>
-          </div>
-
-          <div className="divide-y divide-gray-200">
-            {filteredProposals.map((proposal) => (
+            return (
               <div key={proposal.id} className="p-6 hover:bg-gray-50">
                 <div className="flex items-start justify-between">
                   <div className="flex-1 min-w-0">
@@ -303,10 +279,8 @@ export default function AdminWorkshopsPage() {
                       <Heading level={3} className="text-lg font-semibold text-gray-900 truncate">
                         {proposal.title}
                       </Heading>
-                      {getStatusIcon(proposal.status)}
-                      <span className="text-sm text-gray-600">
-                        {getStatusText(proposal.status)}
-                      </span>
+                      {statusIcon}
+                      <span className="text-sm text-gray-600">{statusLabel}</span>
                       {proposal.last_edited_at && (
                         <span className="inline-flex items-center px-2 py-1 text-xs font-medium bg-blue-100 text-blue-800 rounded">
                           Von Admin bearbeitet
@@ -319,22 +293,18 @@ export default function AdminWorkshopsPage() {
                         <BookOpen className="w-4 h-4" />
                         {proposal.category}
                       </div>
-
                       <div className="flex items-center gap-1">
                         <Users className="w-4 h-4" />
                         Max. {proposal.max_participants} Teilnehmer
                       </div>
-
                       <div className="flex items-center gap-1">
                         <Clock className="w-4 h-4" />
                         {Math.floor(proposal.duration_minutes / 60)}h {proposal.duration_minutes % 60}min
                       </div>
-
                       <div className="flex items-center gap-1">
                         <DollarSign className="w-4 h-4" />
                         CHF {(proposal.price_cents / 100).toFixed(2)}
                       </div>
-
                       <div className="flex items-center gap-1">
                         <MapPin className="w-4 h-4" />
                         {getLocationText(proposal)}
@@ -342,7 +312,8 @@ export default function AdminWorkshopsPage() {
                     </div>
 
                     <div className="text-sm text-gray-500">
-                      Vorgeschlagen von {proposal.proposer_name} ({proposal.proposer_email}) • {formatDateShort(proposal.created_at)}
+                      Vorgeschlagen von {proposal.proposer_name} ({proposal.proposer_email}) •{' '}
+                      {formatDateShort(proposal.created_at)}
                     </div>
                   </div>
 
@@ -407,51 +378,34 @@ export default function AdminWorkshopsPage() {
                   </div>
                 )}
               </div>
-            ))}
+            )
+          })}
 
-            {filteredProposals.length === 0 && !loading && (
-              <div className="px-6 py-12 text-center">
-                <GraduationCap className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                <Heading level={3} className="text-lg font-medium text-gray-900 mb-2">Keine Workshop-Vorschläge gefunden</Heading>
-                <p className="text-gray-600 mb-4">
-                  {searchTerm.trim()
-                    ? `Keine Vorschläge für "${searchTerm}" gefunden.`
-                    : filters.status === PROPOSAL_STATUS.PENDING ? 'Keine ausstehenden Vorschläge vorhanden.' : `Keine Vorschläge mit Status "${filters.status}" gefunden.`}
-                </p>
-              </div>
-            )}
-          </div>
+          {filteredProposals.length === 0 && (
+            <div className="px-6 py-12 text-center">
+              <GraduationCap className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+              <Heading level={3} className="text-lg font-medium text-gray-900 mb-2">
+                Keine Workshop-Vorschläge gefunden
+              </Heading>
+              <p className="text-gray-600 mb-4">
+                {searchTerm.trim()
+                  ? STRINGS.EMPTY_SEARCH(searchTerm)
+                  : filters.status === PROPOSAL_STATUS.PENDING
+                  ? STRINGS.EMPTY_PENDING
+                  : STRINGS.EMPTY_STATUS(filters.status)}
+              </p>
+            </div>
+          )}
         </div>
-          )
-        })()}
 
-        {/* Pagination */}
-        {totalPages > 1 && (
-          <div className="mt-6 flex justify-center">
-            <nav className="flex items-center gap-2">
-              <button
-                onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
-                disabled={currentPage === 1}
-                className="px-3 py-2 border border-gray-300 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
-              >
-                ← Zurück
-              </button>
-
-              <span className="px-4 py-2 text-sm text-gray-700">
-                Seite {currentPage} von {totalPages}
-              </span>
-
-              <button
-                onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
-                disabled={currentPage === totalPages}
-                className="px-3 py-2 border border-gray-300 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
-              >
-                Weiter →
-              </button>
-            </nav>
-          </div>
-        )}
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          totalItems={totalItems}
+          pageSize={PAGE_SIZE}
+          onPageChange={setCurrentPage}
+        />
       </div>
-    </div>
+    </AdminPageWrapper>
   )
 }
