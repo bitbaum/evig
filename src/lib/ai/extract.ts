@@ -21,12 +21,18 @@ export interface AIExtractionConfig {
   parseResponse: (raw: unknown) => Record<string, unknown>
 }
 
+export interface SuggestedAction {
+  label: string
+  prompt: string
+}
+
 export interface AIExtractionResult {
   success: true
   data: Record<string, unknown>
   model: string
   provider: string
   confidence: Record<string, number>
+  suggestedActions: SuggestedAction[]
 }
 
 export interface AIExtractionError {
@@ -234,8 +240,11 @@ export async function registryExtract(
     })
   }
 
+  // Append suggestion instruction to system prompt — AI returns suggestedActions alongside data
+  const systemWithSuggestions = config.system + `\n\nWICHTIG: Füge in deiner JSON-Antwort ein Feld "suggestedActions" hinzu — ein Array mit 2-3 konkreten Verbesserungsvorschlägen für die Daten. Jeder Eintrag hat "label" (kurz, max 4 Wörter) und "prompt" (was genau verbessert werden soll). Beispiel: [{"label": "Beschreibung erweitern", "prompt": "Ergänze mehr Details zur Zielgruppe und zum erwarteten Nutzen"}]. Passe die Vorschläge an den Kontext an — was fehlt, was ist dünn, was könnte besser sein.`
+
   const result = await callWithFallback({
-    systemPrompt: config.system,
+    systemPrompt: systemWithSuggestions,
     userPrompt,
     temperature: config.temperature ?? 0.3,
     maxTokens: config.maxTokens ?? 1024,
@@ -257,6 +266,18 @@ export async function registryExtract(
   }
 
   const data = parsed as Record<string, unknown>
+
+  // Extract suggestedActions from AI response (if present) and remove from data
+  const suggestedActions: SuggestedAction[] = []
+  if (Array.isArray(data.suggestedActions)) {
+    for (const action of data.suggestedActions) {
+      if (action && typeof action === 'object' && 'label' in action && 'prompt' in action) {
+        suggestedActions.push({ label: String(action.label), prompt: String(action.prompt) })
+      }
+    }
+    delete data.suggestedActions
+  }
+
   const confidence = calculateGenericConfidence(opts.text, data)
 
   logger.info('Registry extraction successful', {
@@ -265,6 +286,7 @@ export async function registryExtract(
     provider: result.provider,
     model: result.model,
     fieldCount: Object.keys(data).length,
+    suggestedActionsCount: suggestedActions.length,
   })
 
   return {
@@ -273,6 +295,7 @@ export async function registryExtract(
     model: result.model,
     provider: result.provider,
     confidence,
+    suggestedActions,
   }
 }
 
@@ -315,7 +338,7 @@ export async function extractWithFallback(
       model: result.model,
       fallbacks: result.failedProviders.length,
     })
-    return { success: true, data, model: result.model, provider: result.provider, confidence: {} }
+    return { success: true, data, model: result.model, provider: result.provider, confidence: {}, suggestedActions: [] }
   } catch (error) {
     logger.warn('Failed to parse AI response', {
       error,

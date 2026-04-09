@@ -48,7 +48,7 @@ export function AIFormAssist<T = Record<string, unknown>>({
     onFieldsFilled(data, metadata)
   }
 
-  const { extractFromText, refineFields, runQuickAction, isExtracting, error, success } =
+  const { extractFromText, refineFields, runQuickAction, isExtracting, error, success, suggestedActions } =
     useAIFormAssist<T>({ formType, onFieldsFilled: wrappedOnFieldsFilled })
 
   const config = FORM_AI_REGISTRY[formType]
@@ -83,6 +83,11 @@ export function AIFormAssist<T = Record<string, unknown>>({
   const handleQuickAction = (actionKey: string) => {
     if (isExtracting || !hasContent || !currentData) return
     runQuickAction(currentData, actionKey)
+  }
+
+  const handleSuggestedAction = (prompt: string) => {
+    if (isExtracting || !currentData) return
+    refineFields(currentData, prompt)
   }
 
   // Styles
@@ -137,7 +142,10 @@ export function AIFormAssist<T = Record<string, unknown>>({
               value={inputText}
               onChange={(e) => setInputText(e.target.value)}
               onKeyDown={handleKeyDown}
-              placeholder={placeholder || 'Beschreibe in 1-2 Sätzen, die KI füllt das Formular aus...'}
+              placeholder={hasContent
+                ? 'Was möchtest du ändern? z.B. "Beschreibung ausführlicher" oder "Preis auf 300 CHF"'
+                : (placeholder || 'Beschreibe in 1-2 Sätzen, die KI füllt das Formular aus...')
+              }
               rows={2}
               disabled={isExtracting}
               className="flex-1 px-3 py-2 text-sm border border-purple-300 dark:border-purple-700 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white resize-none focus:ring-2 focus:ring-purple-500 focus:border-transparent disabled:opacity-50"
@@ -156,21 +164,34 @@ export function AIFormAssist<T = Record<string, unknown>>({
             </button>
           </div>
 
-          {/* Quick actions — only when form has content to work with */}
-          {quickActions.length > 0 && (
+          {/* Quick actions: AI-suggested (dynamic) or static from registry */}
+          {(suggestedActions.length > 0 || quickActions.length > 0) && (
             <div className="flex flex-wrap gap-1.5">
-              {quickActions.map((action) => (
-                <button
-                  key={action.key}
-                  type="button"
-                  onClick={() => handleQuickAction(action.key)}
-                  disabled={isExtracting || !hasContent}
-                  title={!hasContent ? 'Fülle zuerst das Formular aus' : undefined}
-                  className="px-2.5 py-1 bg-purple-100 dark:bg-purple-800/40 text-purple-700 dark:text-purple-300 rounded-md text-xs font-medium hover:bg-purple-200 dark:hover:bg-purple-700/50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors touch-manipulation"
-                >
-                  {action.label}
-                </button>
-              ))}
+              {suggestedActions.length > 0
+                ? suggestedActions.map((action, i) => (
+                    <button
+                      key={i}
+                      type="button"
+                      onClick={() => handleSuggestedAction(action.prompt)}
+                      disabled={isExtracting}
+                      className="px-2.5 py-1 bg-green-100 dark:bg-green-800/40 text-green-700 dark:text-green-300 rounded-md text-xs font-medium hover:bg-green-200 dark:hover:bg-green-700/50 disabled:opacity-50 transition-colors touch-manipulation"
+                    >
+                      {action.label}
+                    </button>
+                  ))
+                : quickActions.map((action) => (
+                    <button
+                      key={action.key}
+                      type="button"
+                      onClick={() => handleQuickAction(action.key)}
+                      disabled={isExtracting || !hasContent}
+                      title={!hasContent ? 'Fülle zuerst das Formular aus' : undefined}
+                      className="px-2.5 py-1 bg-purple-100 dark:bg-purple-800/40 text-purple-700 dark:text-purple-300 rounded-md text-xs font-medium hover:bg-purple-200 dark:hover:bg-purple-700/50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors touch-manipulation"
+                    >
+                      {action.label}
+                    </button>
+                  ))
+              }
             </div>
           )}
         </div>

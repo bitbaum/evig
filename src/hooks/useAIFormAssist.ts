@@ -20,6 +20,11 @@ export interface UseAIFormAssistOptions<T> {
   onFieldsFilled: (data: Partial<T>, metadata: Record<string, AIFieldMetadataEntry>) => void
 }
 
+export interface SuggestedAction {
+  label: string
+  prompt: string
+}
+
 export interface UseAIFormAssistReturn {
   extractFromText: (text: string) => Promise<void>
   refineFields: (currentData: Record<string, unknown>, instruction: string) => Promise<void>
@@ -27,6 +32,7 @@ export interface UseAIFormAssistReturn {
   isExtracting: boolean
   error: string | null
   success: boolean
+  suggestedActions: SuggestedAction[]
 }
 
 const MAX_INPUT_LENGTH = 5000
@@ -38,6 +44,7 @@ export function useAIFormAssist<T>({
   const [isExtracting, setIsExtracting] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [success, setSuccess] = useState(false)
+  const [suggestedActions, setSuggestedActions] = useState<SuggestedAction[]>([])
   const abortControllerRef = useRef<AbortController | null>(null)
 
   const callAPI = useCallback(async (body: Record<string, unknown>) => {
@@ -92,6 +99,10 @@ export function useAIFormAssist<T>({
 
       onFieldsFilled(result.data as Partial<T>, metadata)
       setSuccess(true)
+
+      // Store AI-suggested next actions
+      const actions = (result.suggestedActions || []) as SuggestedAction[]
+      setSuggestedActions(actions.filter(a => a.label && a.prompt).slice(0, 3))
     } catch (err) {
       if (err instanceof Error && err.name === 'AbortError') return
       setError('Verbindung zum KI-Service fehlgeschlagen.')
@@ -130,5 +141,5 @@ export function useAIFormAssist<T>({
     await callAPI({ text: actionKey, mode: 'refine', currentData, quickAction: actionKey })
   }, [callAPI])
 
-  return { extractFromText, refineFields, runQuickAction, isExtracting, error, success }
+  return { extractFromText, refineFields, runQuickAction, isExtracting, error, success, suggestedActions }
 }
