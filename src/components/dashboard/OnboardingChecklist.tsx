@@ -56,9 +56,9 @@ const getChecklistItems = (role: string, emailVerified: boolean, completedIds: s
   const customerItems: ChecklistItem[] = [
     {
       id: 'browse-services',
-      label: 'Reparaturdienste entdecken',
-      description: 'Finden Sie lokale Reparateure für Ihre Geräte',
-      href: '/repairers',
+      label: 'Techniker entdecken',
+      description: 'Finden Sie lokale Techniker für Ihre Geräte',
+      href: '/techniker',
       completed: completedIds.includes('browse-services'),
     },
     {
@@ -75,21 +75,21 @@ const getChecklistItems = (role: string, emailVerified: boolean, completedIds: s
       id: 'add-services',
       label: 'Dienstleistungen hinzufügen',
       description: 'Definieren Sie Ihre angebotenen Reparaturdienste',
-      href: '/dashboard/repairer/services',
+      href: '/profil/techniker',
       completed: completedIds.includes('add-services'),
     },
     {
       id: 'set-availability',
       label: 'Verfügbarkeit festlegen',
       description: 'Legen Sie Ihre Arbeitszeiten fest',
-      href: '/dashboard/repairer/availability',
+      href: '/profil/techniker',
       completed: completedIds.includes('set-availability'),
     },
     {
       id: 'upload-certifications',
       label: 'Zertifizierungen hochladen',
       description: 'Zeigen Sie Ihre Qualifikationen',
-      href: '/dashboard/repairer/certifications',
+      href: '/profil/techniker',
       completed: completedIds.includes('upload-certifications'),
     },
   ]

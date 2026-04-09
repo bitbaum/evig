@@ -86,7 +86,7 @@ export function HelperCard({ helper, requestId, requestTitle }: HelperCardProps)
     <div className="bg-white rounded-xl border border-gray-200 p-6 hover:shadow-lg transition-shadow">
       {/* Helper Info */}
       <div className="mb-4">
-        <Link href={`/it-hilfe/helfer/${helper.userId}`} className="hover:underline">
+        <Link href={`/techniker/${helper.userId}`} className="hover:underline">
           <Heading level={3} className="text-lg font-semibold text-gray-900 mb-2">{helper.name}</Heading>
         </Link>
         {helper.bio && (

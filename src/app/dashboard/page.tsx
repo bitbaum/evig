@@ -140,7 +140,7 @@ export default async function DashboardPage() {
 
           {userRole === ROLES.REPAIRER && (
             <Link
-              href="/dashboard/repairer"
+              href="/profil/techniker"
               className="bg-white dark:bg-neutral-800 rounded-lg shadow-sm border-2 border-neutral-200 dark:border-neutral-700 p-4 sm:p-6 hover:shadow-md transition-shadow"
             >
               <div className="flex items-center">
@@ -183,7 +183,7 @@ export default async function DashboardPage() {
 
           {userRole !== ROLES.REPAIRER && (
             <Link
-              href="/dashboard/repairer"
+              href="/profil/techniker"
               className="bg-white dark:bg-neutral-800 rounded-lg shadow-sm border-2 border-neutral-200 dark:border-neutral-700 p-4 sm:p-6 hover:shadow-md transition-shadow"
             >
               <div className="flex items-center">
@@ -226,7 +226,7 @@ export default async function DashboardPage() {
 
           {/* IT-Hilfe Helper Card */}
           <Link
-            href="/dashboard/helper"
+            href="/profil/techniker"
             className="bg-white dark:bg-neutral-800 rounded-lg shadow-sm border-2 border-neutral-200 dark:border-neutral-700 p-4 sm:p-6 hover:shadow-md transition-shadow"
           >
             <div className="flex items-center">

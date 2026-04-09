@@ -59,7 +59,7 @@ export function OffersList({
                     {offer.repairerProfile ? (
                       <div className="flex items-center gap-2 text-sm">
                         <Link
-                          href={`/repairers/${offer.repairerProfile.id}`}
+                          href={`/techniker/${offer.repairerProfile.id}`}
                           className="text-blue-600 hover:text-blue-700 font-medium"
                         >
                           {offer.repairerProfile.businessName || 'Reparateur-Profil'}

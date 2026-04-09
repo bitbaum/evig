@@ -44,8 +44,8 @@ export const IT_HILFE = {
     my: '/it-hilfe/my',
     myOffers: '/it-hilfe/my/offers',
     detail: (id: string) => `/it-hilfe/${id}`,
-    helpers: '/it-hilfe/helfer',
-    register: '/profil/skills',
+    helpers: '/techniker',
+    register: '/profil/techniker',
   },
   api: {
     requests: '/api/it-hilfe/requests',

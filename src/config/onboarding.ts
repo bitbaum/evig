@@ -192,10 +192,10 @@ export const REPAIRER_ONBOARDING: OnboardingConfig = {
     }
   ],
   cta: {
-    href: '/dashboard/repairer/onboarding/apply',
-    label: 'Als Reparateur bewerben',
+    href: '/profil/techniker',
+    label: 'Als Techniker bewerben',
     buttonColor: 'bg-blue-600 hover:bg-blue-700',
-    loginText: 'Bereits Reparateur?',
+    loginText: 'Bereits Techniker?',
     loginHref: '/auth/login',
     linkColor: 'text-blue-600 hover:text-blue-700'
   },
@@ -218,6 +218,6 @@ export const REPAIRER_ONBOARDING: OnboardingConfig = {
   },
   roleCheck: {
     redirectRoles: ['repairer'],
-    redirectTo: '/dashboard/repairer'
+    redirectTo: '/profil/techniker'
   }
 }

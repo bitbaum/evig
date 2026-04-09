@@ -256,7 +256,7 @@ export async function sendAppointmentNotification(
       party.customer_name || 'Kunde',
       statusLabel,
       serviceName,
-      baseUrl + '/dashboard/repairer/bookings'
+      baseUrl + '/dashboard/appointments'
     )
     sendCustomEmail(party.repairer_email, emailContent).catch(err => {
       logger.warn('Failed to send status email to repairer', { error: err, appointmentId })

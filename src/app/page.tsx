@@ -147,7 +147,7 @@ export default function Home() {
                 primaryHref: '/it-hilfe',
                 primaryColor: 'bg-emerald-600 hover:bg-emerald-500 focus-visible:outline-emerald-600',
                 secondaryLabel: 'Techniker werden',
-                secondaryHref: '/profil/skills',
+                secondaryHref: '/profil/techniker',
                 secondaryColor: 'text-emerald-600 border-emerald-600 hover:bg-emerald-50 focus-visible:outline-emerald-600',
               },
               {

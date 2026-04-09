@@ -185,7 +185,7 @@ export const PUT = withAdmin<{ id: string }>('services', async (request, session
     })
 
     // Send approval notification email to applicant
-    const dashboardUrl = `${APP_URL}/dashboard/repairer`
+    const dashboardUrl = `${APP_URL}/profil/techniker`
     const approvalEmailResult = await sendEmail(
       application.email,
       'repairerApplicationApproved',

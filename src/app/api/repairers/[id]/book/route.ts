@@ -191,7 +191,7 @@ export const POST = withAuth<{ id: string }>(async (
 
     if (repairerUserRows.length > 0) {
       const repairerUser = repairerUserRows[0]
-      const appointmentUrl = `${APP_URL}/dashboard/repairer/bookings`
+      const appointmentUrl = `${APP_URL}/dashboard/appointments`
       const emailContent = appointmentNewBooking(
         repairerUser.name || repairer.businessName || 'Reparateur',
         session.user.name || 'Kunde',

@@ -140,7 +140,7 @@ export async function notifyRepairerOfReview(
     if (repairerResult.length === 0) return
 
     const repairer = repairerResult[0]
-    const reviewUrl = `${APP_URL}/dashboard/repairer/reviews`
+    const reviewUrl = `${APP_URL}/dashboard/reviews`
 
     const result = await sendEmail(
       repairer.email,

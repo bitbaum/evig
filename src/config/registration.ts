@@ -21,7 +21,7 @@ export type RegistrationRole = (typeof REGISTRATION_ROLES)[number]
 export const REGISTRATION_ROLE_LABELS: Record<RegistrationRole, string> = {
   customer: 'Kunde',
   seller: 'Verkäufer',
-  repairer: 'Reparateur',
+  repairer: 'Techniker',
 }
 
 /**
@@ -30,5 +30,5 @@ export const REGISTRATION_ROLE_LABELS: Record<RegistrationRole, string> = {
 export const REGISTRATION_ROLE_DESCRIPTIONS: Record<RegistrationRole, string> = {
   customer: 'Kaufen Sie refurbished Produkte und buchen Sie Reparaturen',
   seller: 'Verkaufen Sie Ihre eigenen refurbished Produkte',
-  repairer: 'Bieten Sie Reparatur-Dienstleistungen an',
+  repairer: 'Bieten Sie IT-Dienstleistungen und Reparaturen an',
 }

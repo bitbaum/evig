@@ -192,7 +192,7 @@ export function RegistrationWizard() {
             </Link>
 
             <Link
-              href="/profil/skills"
+              href="/profil/techniker"
               className="flex items-center gap-3 p-4 rounded-lg border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
             >
               <div className="w-10 h-10 bg-emerald-100 dark:bg-emerald-900/30 rounded-full flex items-center justify-center">

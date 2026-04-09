@@ -40,7 +40,7 @@ export interface DashboardCard {
 }
 
 /** Community roles (not staff roles) */
-export type CommunityRole = 'seller' | 'repairer' | 'helper'
+export type CommunityRole = 'seller' | 'repairer' | 'techniker'
 
 export type DashboardCategory =
   | 'account'
@@ -143,10 +143,10 @@ export const DASHBOARD_ROUTES = {
   WORKSHOPS: SECTIONS.workshops?.path ?? '/dashboard/workshops',
   APPOINTMENTS: SECTIONS.appointments?.path ?? '/dashboard/appointments',
   SELLER: SECTIONS['seller-dashboard']?.path ?? '/dashboard/seller',
-  REPAIRER: SECTIONS['repairer-dashboard']?.path ?? '/dashboard/repairer',
-  REPAIRER_BOOKINGS: '/dashboard/repairer/bookings',
-  REPAIRER_SERVICES: '/dashboard/repairer/services',
-  REPAIRER_ONBOARDING: SECTIONS['repairer-onboarding']?.path ?? '/dashboard/repairer/onboarding',
+  REPAIRER: SECTIONS['repairer-dashboard']?.path ?? '/profil/techniker',
+  REPAIRER_BOOKINGS: '/dashboard/appointments',
+  REPAIRER_SERVICES: '/profil/techniker',
+  REPAIRER_ONBOARDING: SECTIONS['repairer-onboarding']?.path ?? '/profil/techniker',
   ADMIN: '/admin',
   BLOG_SUBMIT: SECTIONS['blog-submit']?.path ?? '/blog/submit',
 } as const
@@ -219,7 +219,7 @@ export function getDashboardCardsForRole(
   // Legacy: Extract community roles from old role field
   const legacyRole = userInfo?.role ?? userRole
   if (legacyRole && !communityRoles.includes(legacyRole as CommunityRole)) {
-    if (['seller', 'repairer', 'helper'].includes(legacyRole)) {
+    if (['seller', 'repairer', 'techniker'].includes(legacyRole)) {
       communityRoles.push(legacyRole as CommunityRole)
     }
   }

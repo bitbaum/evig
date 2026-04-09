@@ -33,7 +33,7 @@ export const ERROR_MESSAGES = {
   LISTING_NOT_FOUND: 'Inserat nicht gefunden',
   REPORT_NOT_FOUND: 'Meldung nicht gefunden',
   IT_HILFE_REQUEST_NOT_FOUND: 'IT-Hilfe-Anfrage nicht gefunden',
-  HELPER_NOT_FOUND: 'Helfer nicht gefunden',
+  HELPER_NOT_FOUND: 'Techniker nicht gefunden',
   INTAKE_ITEM_NOT_FOUND: 'Gerät nicht gefunden',
   INTAKE_CHECKLIST_INCOMPLETE: 'Checkliste nicht vollständig — alle Pflichtpunkte müssen abgehakt sein',
   INTAKE_ALREADY_PUBLISHED: 'Gerät ist bereits im Shop veröffentlicht',
@@ -57,7 +57,7 @@ export const ERROR_MESSAGES = {
 
   // Business Logic
   SELLER_ONLY: 'Nur Verkäufer können Produkte erstellen',
-  REPAIRER_ONLY: 'Nur Reparateure können diesen Bereich nutzen',
+  REPAIRER_ONLY: 'Nur Techniker können diesen Bereich nutzen',
 
   // Workshops
   WORKSHOP_PROPOSALS_LOAD_FAILED: 'Fehler beim Laden der Workshop-Vorschläge',

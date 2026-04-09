@@ -130,7 +130,7 @@ export default function CustomerBookings() {
               <span className="hidden sm:inline">Aktualisieren</span>
             </button>
             <Link
-              href="/repairers"
+              href="/techniker"
               className="flex items-center gap-2 px-3 md:px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm md:text-base"
             >
               <Wrench className="h-4 w-4" />
@@ -184,10 +184,10 @@ export default function CustomerBookings() {
               <Wrench className="h-12 w-12 text-gray-300 mx-auto mb-4" />
               <p className="text-gray-500 mb-4">Keine Buchungen in dieser Kategorie</p>
               <Link
-                href="/repairers"
+                href="/techniker"
                 className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
               >
-                Reparateur finden
+                Techniker finden
               </Link>
             </div>
           ) : (

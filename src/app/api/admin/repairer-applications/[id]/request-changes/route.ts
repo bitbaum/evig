@@ -75,7 +75,7 @@ export const PUT = withAdmin<{ id: string }>('services', async (request, session
     })
 
     // Send notification email to applicant with requested changes
-    const dashboardUrl = `${APP_URL}/dashboard/repairer/onboarding/apply`
+    const dashboardUrl = `${APP_URL}/profil/techniker`
     const changesEmailResult = await sendEmail(
       application.email,
       'repairerApplicationChangesRequested',

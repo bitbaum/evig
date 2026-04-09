@@ -66,9 +66,9 @@ export interface SectionVisibility {
   /** For admin: sensitive section (requires super admin or explicit grant) */
   sensitive?: boolean
   /** For dashboard: show only for users with this community role */
-  communityRole?: 'seller' | 'repairer' | 'helper'
+  communityRole?: 'seller' | 'repairer' | 'techniker'
   /** For dashboard: hide if user has this role (show onboarding instead) */
-  hideIfRole?: 'seller' | 'repairer' | 'helper'
+  hideIfRole?: 'seller' | 'repairer' | 'techniker'
 }
 
 /**
@@ -330,10 +330,10 @@ export const SECTIONS: Record<string, SectionConfig> = {
   // ---------------------------------------------------------------------------
   'repairer-dashboard': {
     id: 'repairer-dashboard',
-    path: '/dashboard/repairer',
+    path: '/profil/techniker',
     ui: {
-      label: 'Repairer Dashboard',
-      description: 'Reparaturen verwalten',
+      label: 'Techniker-Profil',
+      description: 'Techniker-Profil und Dienstleistungen verwalten',
       icon: Wrench,
       emoji: '🔧',
       color: 'warning',
@@ -345,10 +345,10 @@ export const SECTIONS: Record<string, SectionConfig> = {
 
   'repairer-onboarding': {
     id: 'repairer-onboarding',
-    path: '/dashboard/repairer/onboarding',
+    path: '/profil/techniker',
     ui: {
-      label: 'Reparaturen anbieten',
-      description: 'Dienstleistungen publizieren und Anfragen erhalten',
+      label: 'Als Techniker anbieten',
+      description: 'Techniker-Profil erstellen und Anfragen erhalten',
       icon: Hammer,
       emoji: '🔧',
       color: 'warning',

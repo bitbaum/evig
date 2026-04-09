@@ -31,7 +31,8 @@ const PATH_LABELS: Record<string, string> = {
   // Dashboard sections
   dashboard: 'Dashboard',
   seller: 'Verkäufer',
-  repairer: 'Reparateur',
+  repairer: 'Techniker',
+  techniker: 'Techniker',
   messages: 'Nachrichten',
   profile: 'Profil',
 
