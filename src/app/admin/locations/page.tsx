@@ -15,7 +15,6 @@ import Heading from '@/components/ui/Heading'
 import {
   MapPin,
   Plus,
-  Search,
   CheckCircle,
   XCircle,
   Eye,
@@ -23,6 +22,7 @@ import {
   Users,
   Building2
 } from 'lucide-react'
+import { AdminFilterBar } from '@/components/admin/AdminFilterBar'
 
 interface Location {
   id: string
@@ -181,68 +181,49 @@ export default function AdminLocationsPage() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Filters */}
-        <div className="bg-white rounded-xl shadow-sm border p-6 mb-6">
-          <div className="flex flex-wrap gap-4">
-            <div className="flex-1 min-w-48">
-              <label className="block text-sm font-medium text-gray-700 mb-1">Name</label>
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
-                <input
-                  type="text"
-                  value={searchName}
-                  onChange={(e) => setSearchName(e.target.value)}
-                  placeholder="Name suchen..."
-                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                />
-              </div>
-            </div>
-
-            <div className="flex-1 min-w-48">
-              <label className="block text-sm font-medium text-gray-700 mb-1">Status</label>
-              <select
-                value={filters.status}
-                onChange={(e) => setFilters(prev => ({ ...prev, status: e.target.value }))}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-              >
-                <option value="all">Alle</option>
-                <option value={LOCATION_STATUS.PENDING}>Ausstehend</option>
-                <option value={LOCATION_STATUS.APPROVED}>Genehmigt</option>
-                <option value={LOCATION_STATUS.REJECTED}>Abgelehnt</option>
-                <option value={LOCATION_STATUS.SUSPENDED}>Suspendiert</option>
-              </select>
-            </div>
-
-            <div className="flex-1 min-w-48">
-              <label className="block text-sm font-medium text-gray-700 mb-1">Typ</label>
-              <select
-                value={filters.type}
-                onChange={(e) => setFilters(prev => ({ ...prev, type: e.target.value }))}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-              >
-                <option value="all">Alle</option>
-                <option value="venue">Veranstaltungsort</option>
-                <option value="home">Zu Hause</option>
-                <option value="online">Online</option>
-                <option value="community_center">Gemeinschaftszentrum</option>
-                <option value="business">Geschäft</option>
-              </select>
-            </div>
-
-            <div className="flex-1 min-w-48">
-              <label className="block text-sm font-medium text-gray-700 mb-1">Stadt</label>
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
-                <input
-                  type="text"
-                  value={filters.city}
-                  onChange={(e) => setFilters(prev => ({ ...prev, city: e.target.value }))}
-                  placeholder="Stadt suchen..."
-                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                />
-              </div>
-            </div>
+        <AdminFilterBar
+          searchValue={searchName}
+          onSearchChange={setSearchName}
+          searchPlaceholder="Name suchen..."
+          dropdowns={[
+            {
+              key: 'status',
+              label: 'Status',
+              value: filters.status,
+              onChange: (value) => setFilters(prev => ({ ...prev, status: value })),
+              options: [
+                { value: LOCATION_STATUS.PENDING, label: 'Ausstehend' },
+                { value: LOCATION_STATUS.APPROVED, label: 'Genehmigt' },
+                { value: LOCATION_STATUS.REJECTED, label: 'Abgelehnt' },
+                { value: LOCATION_STATUS.SUSPENDED, label: 'Suspendiert' },
+              ],
+            },
+            {
+              key: 'type',
+              label: 'Typ',
+              value: filters.type,
+              onChange: (value) => setFilters(prev => ({ ...prev, type: value })),
+              options: [
+                { value: 'venue', label: 'Veranstaltungsort' },
+                { value: 'home', label: 'Zu Hause' },
+                { value: 'online', label: 'Online' },
+                { value: 'community_center', label: 'Gemeinschaftszentrum' },
+                { value: 'business', label: 'Geschäft' },
+              ],
+            },
+          ]}
+        >
+          <div className="flex-1 min-w-48">
+            <label className="block text-sm font-medium text-gray-700 mb-1">Stadt</label>
+            <input
+              type="text"
+              value={filters.city}
+              onChange={(e) => setFilters(prev => ({ ...prev, city: e.target.value }))}
+              placeholder="Stadt suchen..."
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+            />
           </div>
-        </div>
+        </AdminFilterBar>
 
         {/* Error Message */}
         {error && (

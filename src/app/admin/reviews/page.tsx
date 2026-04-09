@@ -23,12 +23,12 @@ import {
   MessageSquare,
   Star,
   Filter,
-  Search,
   ArrowLeft,
   Flag,
   RefreshCw
 } from 'lucide-react'
 import Heading from '@/components/ui/Heading'
+import { AdminFilterBar } from '@/components/admin/AdminFilterBar'
 
 interface Review {
   id: string
@@ -206,51 +206,42 @@ export default function AdminReviewsPage() {
       </div>
 
       {/* Filters and Search */}
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-        <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-2">
-              <Filter className="w-5 h-5 text-gray-500" />
-              <span className="text-sm font-medium text-gray-700">Status:</span>
-            </div>
-            <div className="flex gap-2">
-              {(Object.values(REVIEW_STATUS) as ReviewStatus[]).map((status) => (
-                <button
-                  key={status}
-                  onClick={() => setSelectedStatus(status)}
-                  className={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${
-                    selectedStatus === status
-                      ? 'bg-green-100 text-green-800'
-                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                  }`}
-                >
-                  {getReviewFilterLabel(status)}
-                </button>
-              ))}
-            </div>
+      <AdminFilterBar
+        searchValue={searchQuery}
+        onSearchChange={setSearchQuery}
+        searchPlaceholder="Suchen nach Name, E-Mail oder Inhalt..."
+      >
+        <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2">
+            <Filter className="w-5 h-5 text-gray-500" />
+            <span className="text-sm font-medium text-gray-700">Status:</span>
           </div>
-
           <div className="flex gap-2">
-            <div className="relative">
-              <Search className="w-5 h-5 text-gray-500 absolute left-3 top-1/2 transform -translate-y-1/2" />
-              <input
-                type="text"
-                placeholder="Suchen nach Name, E-Mail oder Inhalt..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-              />
-            </div>
-            <button
-              onClick={loadReviews}
-              className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 flex items-center gap-2"
-            >
-              <RefreshCw className="w-4 h-4" />
-              Aktualisieren
-            </button>
+            {(Object.values(REVIEW_STATUS) as ReviewStatus[]).map((status) => (
+              <button
+                key={status}
+                onClick={() => setSelectedStatus(status)}
+                className={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${
+                  selectedStatus === status
+                    ? 'bg-green-100 text-green-800'
+                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                }`}
+              >
+                {getReviewFilterLabel(status)}
+              </button>
+            ))}
           </div>
         </div>
-      </div>
+        <div className="flex items-end">
+          <button
+            onClick={loadReviews}
+            className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 flex items-center gap-2"
+          >
+            <RefreshCw className="w-4 h-4" />
+            Aktualisieren
+          </button>
+        </div>
+      </AdminFilterBar>
 
       {/* Success Message */}
       {successMessage && (

@@ -75,7 +75,7 @@ export default function RepairerApplicationsAdmin() {
             Zurück zum Admin-Bereich
           </button>
         </div>
-        <Heading level={1} className="text-2xl font-bold text-gray-900">Reparateur-Bewerbungen</Heading>
+        <Heading level={1} className="text-2xl font-bold text-gray-900">Techniker-Bewerbungen</Heading>
       </div>
 
       {/* Success Message */}

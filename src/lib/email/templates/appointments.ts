@@ -248,7 +248,7 @@ export const appointmentUnassignedAlert = (
         </div>
         <div class="content">
           <p>Hallo ${adminName},</p>
-          <p>Ein neuer Reparaturauftrag wurde ohne Reparateur erstellt und benötigt manuelle Zuweisung.</p>
+          <p>Ein neuer Reparaturauftrag wurde ohne Techniker erstellt und benötigt manuelle Zuweisung.</p>
 
           <table style="width: 100%; border-collapse: collapse; margin: 15px 0;">
             <tr>
@@ -282,7 +282,7 @@ export const appointmentUnassignedAlert = (
   text: `
 Hallo ${adminName},
 
-Ein neuer Reparaturauftrag wurde ohne Reparateur erstellt und benötigt manuelle Zuweisung.
+Ein neuer Reparaturauftrag wurde ohne Techniker erstellt und benötigt manuelle Zuweisung.
 
 Kunde: ${customerName}
 Service: ${serviceName}

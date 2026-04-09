@@ -62,7 +62,7 @@ export type Tab = 'requests' | 'helpers'
 
 export const TABS: { id: Tab; label: string; icon: typeof HelpCircle }[] = [
   { id: 'requests', label: 'Anfragen', icon: HelpCircle },
-  { id: 'helpers', label: 'Helfer', icon: Users },
+  { id: 'helpers', label: 'Techniker', icon: Users },
 ]
 
 export interface RequestFilter {

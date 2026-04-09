@@ -12,23 +12,23 @@ export const adminNewRepairerApplication = (
   applicantEmail: string,
   adminDashboardUrl: string
 ): EmailContent => ({
-  subject: 'Neue Reparateur-Bewerbung wartet auf Prüfung - RevampIT',
+  subject: 'Neue Techniker-Bewerbung wartet auf Prüfung - RevampIT',
   html: `
     <!DOCTYPE html>
     <html lang="de">
     <head>
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>Neue Reparateur-Bewerbung</title>
+      <title>Neue Techniker-Bewerbung</title>
       <style>${BASE_STYLES}</style>
     </head>
     <body>
       <div class="container">
         <div class="header header-green">
-          <h1>Neue Reparateur-Bewerbung</h1>
+          <h1>Neue Techniker-Bewerbung</h1>
         </div>
         <div class="content">
-          <p>Eine neue Reparateur-Bewerbung wurde eingereicht und wartet auf Ihre Prüfung.</p>
+          <p>Eine neue Techniker-Bewerbung wurde eingereicht und wartet auf Ihre Prüfung.</p>
           <p><strong>Bewerber:</strong> ${applicantName}</p>
           <p><strong>E-Mail:</strong> ${applicantEmail}</p>
           <p>Bitte prüfen Sie die Bewerbung zeitnah, um eine schnelle Bearbeitung zu gewährleisten.</p>
@@ -43,7 +43,7 @@ export const adminNewRepairerApplication = (
     </html>
   `,
   text: `
-Eine neue Reparateur-Bewerbung wurde eingereicht und wartet auf Ihre Prüfung.
+Eine neue Techniker-Bewerbung wurde eingereicht und wartet auf Ihre Prüfung.
 
 Bewerber: ${applicantName}
 E-Mail: ${applicantEmail}

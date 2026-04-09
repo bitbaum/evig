@@ -438,13 +438,13 @@ export const itHilfeCompleted = (
         </div>
         <div class="content">
           <p>Hallo ${requesterName},</p>
-          <p>Der Helfer hat deine Anfrage als abgeschlossen markiert:</p>
+          <p>Der Techniker hat deine Anfrage als abgeschlossen markiert:</p>
 
           <div class="highlight-box">
             <p><strong>${requestTitle}</strong></p>
           </div>
 
-          <p>Bitte bestätige, dass die Hilfe erfolgreich war, und gib eine kurze Bewertung ab. Dein Feedback hilft der Community, gute Helfer zu finden.</p>
+          <p>Bitte bestätige, dass die Hilfe erfolgreich war, und gib eine kurze Bewertung ab. Dein Feedback hilft der Community, gute Techniker zu finden.</p>
 
           <a href="${requestUrl}" class="button button-green">Bestätigen &amp; bewerten</a>
         </div>
@@ -459,12 +459,12 @@ export const itHilfeCompleted = (
   text: `
 Hallo ${requesterName},
 
-Der Helfer hat deine Anfrage als abgeschlossen markiert:
+Der Techniker hat deine Anfrage als abgeschlossen markiert:
 
 "${requestTitle}"
 
 Bitte bestätige, dass die Hilfe erfolgreich war, und gib eine kurze Bewertung ab.
-Dein Feedback hilft der Community, gute Helfer zu finden.
+Dein Feedback hilft der Community, gute Techniker zu finden.
 
 Bestätigen & bewerten: ${requestUrl}
 

@@ -68,19 +68,19 @@ export function buildActionUpdate(
 
   switch (action) {
     case 'accept':
-      if (!isRepairer) return { error: 'Nur der Reparateur kann annehmen' }
+      if (!isRepairer) return { error: 'Nur der Techniker kann annehmen' }
       if (appointment.status !== BOOKING_STATUS.REQUESTED) return { error: 'Termin kann nicht angenommen werden' }
       newStatus = BOOKING_STATUS.ACCEPTED
       break
 
     case 'reject':
-      if (!isRepairer) return { error: 'Nur der Reparateur kann ablehnen' }
+      if (!isRepairer) return { error: 'Nur der Techniker kann ablehnen' }
       if (appointment.status !== BOOKING_STATUS.REQUESTED) return { error: 'Termin kann nicht abgelehnt werden' }
       newStatus = BOOKING_STATUS.REJECTED
       break
 
     case 'quote':
-      if (!isRepairer) return { error: 'Nur der Reparateur kann Angebote erstellen' }
+      if (!isRepairer) return { error: 'Nur der Techniker kann Angebote erstellen' }
       if (!([BOOKING_STATUS.ACCEPTED, BOOKING_STATUS.QUOTE_REJECTED] as string[]).includes(appointment.status!)) {
         return { error: 'Angebot kann in diesem Status nicht erstellt werden' }
       }
@@ -106,7 +106,7 @@ export function buildActionUpdate(
       break
 
     case 'start':
-      if (!isRepairer) return { error: 'Nur der Reparateur kann starten' }
+      if (!isRepairer) return { error: 'Nur der Techniker kann starten' }
       if (!([BOOKING_STATUS.ACCEPTED, BOOKING_STATUS.QUOTE_APPROVED] as string[]).includes(appointment.status!)) {
         return { error: 'Termin kann nicht gestartet werden' }
       }
@@ -117,7 +117,7 @@ export function buildActionUpdate(
       break
 
     case 'complete':
-      if (!isRepairer) return { error: 'Nur der Reparateur kann abschliessen' }
+      if (!isRepairer) return { error: 'Nur der Techniker kann abschliessen' }
       if (appointment.status !== BOOKING_STATUS.IN_PROGRESS) return { error: 'Termin ist nicht in Bearbeitung' }
       newStatus = BOOKING_STATUS.COMPLETED
       updateSet.completedAt = sql`CURRENT_TIMESTAMP`
@@ -231,7 +231,7 @@ export async function sendAppointmentNotification(
   if (action === 'quote' && party.customer_email) {
     const emailContent = appointmentQuoteReceived(
       party.customer_name || 'Kunde',
-      party.repairer_name || 'Reparateur',
+      party.repairer_name || 'Techniker',
       actionData.quoted_price_chf!,
       actionData.diagnosis_notes || null,
       baseUrl + '/dashboard/bookings/' + appointmentId
@@ -242,7 +242,7 @@ export async function sendAppointmentNotification(
   } else if (['accept', 'reject', 'start', 'complete'].includes(action) && party.customer_email) {
     const emailContent = appointmentStatusUpdate(
       party.customer_name || 'Kunde',
-      party.repairer_name || 'Reparateur',
+      party.repairer_name || 'Techniker',
       statusLabel,
       serviceName,
       baseUrl + '/dashboard/bookings/' + appointmentId
@@ -252,7 +252,7 @@ export async function sendAppointmentNotification(
     })
   } else if (['approve_quote', 'reject_quote', 'cancel'].includes(action) && party.repairer_email) {
     const emailContent = appointmentStatusUpdate(
-      party.repairer_name || 'Reparateur',
+      party.repairer_name || 'Techniker',
       party.customer_name || 'Kunde',
       statusLabel,
       serviceName,

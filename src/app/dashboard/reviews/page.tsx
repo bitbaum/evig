@@ -320,7 +320,7 @@ export default function UserReviewsPage() {
             <MessageSquare className="w-12 h-12 text-gray-400 mx-auto mb-4" />
             <Heading level={3} className="text-lg font-medium text-gray-900 mb-2">Noch keine Bewertungen</Heading>
             <p className="text-gray-600 mb-4">
-              Sie haben noch keine Bewertungen abgegeben. Besuchen Sie einen Reparateur oder nehmen Sie an einem Workshop teil, um eine Bewertung zu hinterlassen.
+              Sie haben noch keine Bewertungen abgegeben. Besuche einen Techniker oder nimm an einem Workshop teil, um eine Bewertung zu hinterlassen.
             </p>
           </div>
         ) : (

@@ -6,7 +6,6 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import {
   GraduationCap,
-  Search,
   CheckCircle,
   XCircle,
   Clock,
@@ -31,6 +30,7 @@ import type { WorkshopProposalWithProposer } from '@/components/workshops/types'
 import Heading from '@/components/ui/Heading'
 import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
 import { Pagination } from '@/components/ui/Pagination'
+import { AdminFilterBar } from '@/components/admin/AdminFilterBar'
 
 // ─── Status config ────────────────────────────────────────────────────────────
 
@@ -203,52 +203,33 @@ export default function AdminWorkshopsPage() {
       backButton={{ href: '/admin', label: 'Zurück zum Dashboard' }}
     >
       {/* Filters */}
-      <div className="bg-white rounded-xl shadow-sm border p-6">
-        <div className="flex flex-wrap gap-4">
-          <div className="flex-1 min-w-48">
-            <label className="block text-sm font-medium text-gray-700 mb-1">Suche</label>
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
-              <input
-                type="text"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                placeholder="Titel suchen..."
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-              />
-            </div>
-          </div>
-
-          <div className="flex-1 min-w-48">
-            <label className="block text-sm font-medium text-gray-700 mb-1">Status</label>
-            <select
-              value={filters.status}
-              onChange={(e) => setFilters(prev => ({ ...prev, status: e.target.value as ProposalStatus | 'all' }))}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-            >
-              <option value="all">Alle</option>
-              <option value={PROPOSAL_STATUS.PENDING}>{PROPOSAL_STATUS_LABELS[PROPOSAL_STATUS.PENDING]}</option>
-              <option value={PROPOSAL_STATUS.APPROVED}>{PROPOSAL_STATUS_LABELS[PROPOSAL_STATUS.APPROVED]}</option>
-              <option value={PROPOSAL_STATUS.REJECTED}>{PROPOSAL_STATUS_LABELS[PROPOSAL_STATUS.REJECTED]}</option>
-              <option value={PROPOSAL_STATUS.REQUIRES_CHANGES}>{PROPOSAL_STATUS_LABELS[PROPOSAL_STATUS.REQUIRES_CHANGES]}</option>
-            </select>
-          </div>
-
-          <div className="flex-1 min-w-48">
-            <label className="block text-sm font-medium text-gray-700 mb-1">Kategorie</label>
-            <select
-              value={filters.category}
-              onChange={(e) => setFilters(prev => ({ ...prev, category: e.target.value }))}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-            >
-              <option value="all">Alle Kategorien</option>
-              {WORKSHOP_CATEGORIES.map(cat => (
-                <option key={cat.id} value={cat.name}>{cat.name}</option>
-              ))}
-            </select>
-          </div>
-        </div>
-      </div>
+      <AdminFilterBar
+        searchValue={searchTerm}
+        onSearchChange={setSearchTerm}
+        searchPlaceholder="Titel suchen..."
+        dropdowns={[
+          {
+            key: 'status',
+            label: 'Status',
+            value: filters.status,
+            onChange: (value) => setFilters(prev => ({ ...prev, status: value as ProposalStatus | 'all' })),
+            options: [
+              { value: PROPOSAL_STATUS.PENDING, label: PROPOSAL_STATUS_LABELS[PROPOSAL_STATUS.PENDING] },
+              { value: PROPOSAL_STATUS.APPROVED, label: PROPOSAL_STATUS_LABELS[PROPOSAL_STATUS.APPROVED] },
+              { value: PROPOSAL_STATUS.REJECTED, label: PROPOSAL_STATUS_LABELS[PROPOSAL_STATUS.REJECTED] },
+              { value: PROPOSAL_STATUS.REQUIRES_CHANGES, label: PROPOSAL_STATUS_LABELS[PROPOSAL_STATUS.REQUIRES_CHANGES] },
+            ],
+          },
+          {
+            key: 'category',
+            label: 'Kategorie',
+            value: filters.category,
+            onChange: (value) => setFilters(prev => ({ ...prev, category: value })),
+            options: WORKSHOP_CATEGORIES.map(cat => ({ value: cat.name, label: cat.name })),
+            allLabel: 'Alle Kategorien',
+          },
+        ]}
+      />
 
       {/* Error */}
       {error && (

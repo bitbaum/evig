@@ -16,9 +16,9 @@ interface HelperActionModalProps {
 }
 
 const ACTION_TITLES: Record<string, string> = {
-  verify: 'Helfer verifizieren',
-  suspend: 'Helfer sperren',
-  reactivate: 'Helfer reaktivieren',
+  verify: 'Techniker verifizieren',
+  suspend: 'Techniker sperren',
+  reactivate: 'Techniker reaktivieren',
 }
 
 export function HelperActionModal({

@@ -451,7 +451,7 @@ export const SECTIONS: Record<string, SectionConfig> = {
     path: '/admin/it-hilfe',
     ui: {
       label: 'IT-Hilfe',
-      description: 'Hilfsanfragen und Helfer verwalten',
+      description: 'Hilfsanfragen und Techniker verwalten',
       icon: HelpCircle,
       emoji: '🆘',
       color: 'info',

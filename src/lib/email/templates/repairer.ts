@@ -8,24 +8,24 @@ import type { EmailContent } from '../types';
 import { BASE_STYLES, COPYRIGHT_TEXT, AUTO_GENERATED_TEXT, createTextFooter } from './base-styles';
 
 export const repairerApplicationSubmitted = (name: string, applicationId: string): EmailContent => ({
-  subject: 'Reparateur-Bewerbung erhalten - RevampIT',
+  subject: 'Techniker-Bewerbung erhalten - RevampIT',
   html: `
     <!DOCTYPE html>
     <html lang="de">
     <head>
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>Reparateur-Bewerbung erhalten</title>
+      <title>Techniker-Bewerbung erhalten</title>
       <style>${BASE_STYLES}</style>
     </head>
     <body>
       <div class="container">
         <div class="header header-green">
-          <h1>Reparateur-Bewerbung erhalten</h1>
+          <h1>Techniker-Bewerbung erhalten</h1>
         </div>
         <div class="content">
           <h2>Hallo ${name},</h2>
-          <p>Vielen Dank für Ihre Bewerbung als Reparateur bei RevampIT! Wir haben Ihre Unterlagen erhalten und werden diese zeitnah prüfen.</p>
+          <p>Vielen Dank für Ihre Bewerbung als Techniker bei RevampIT! Wir haben Ihre Unterlagen erhalten und werden diese zeitnah prüfen.</p>
           <p><strong>Bewerbungs-ID:</strong> ${applicationId}</p>
           <p>Der Prüfungsprozess umfasst:</p>
           <ul>
@@ -47,7 +47,7 @@ export const repairerApplicationSubmitted = (name: string, applicationId: string
   text: `
 Hallo ${name},
 
-Vielen Dank für Ihre Bewerbung als Reparateur bei RevampIT! Wir haben Ihre Unterlagen erhalten und werden diese zeitnah prüfen.
+Vielen Dank für Ihre Bewerbung als Techniker bei RevampIT! Wir haben Ihre Unterlagen erhalten und werden diese zeitnah prüfen.
 
 Bewerbungs-ID: ${applicationId}
 
@@ -64,14 +64,14 @@ ${createTextFooter()}
 });
 
 export const repairerApplicationApproved = (name: string, dashboardUrl: string): EmailContent => ({
-  subject: 'Reparateur-Bewerbung genehmigt - RevampIT',
+  subject: 'Techniker-Bewerbung genehmigt - RevampIT',
   html: `
     <!DOCTYPE html>
     <html lang="de">
     <head>
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>Reparateur-Bewerbung genehmigt</title>
+      <title>Techniker-Bewerbung genehmigt</title>
       <style>${BASE_STYLES}</style>
     </head>
     <body>
@@ -81,17 +81,17 @@ export const repairerApplicationApproved = (name: string, dashboardUrl: string):
         </div>
         <div class="content">
           <h2>Hallo ${name},</h2>
-          <p>Wir freuen uns, Ihnen mitteilen zu können, dass Ihre Bewerbung als Reparateur bei RevampIT <strong>genehmigt</strong> wurde!</p>
+          <p>Wir freuen uns, Ihnen mitteilen zu können, dass Ihre Bewerbung als Techniker bei RevampIT <strong>genehmigt</strong> wurde!</p>
           <p>Sie haben jetzt Zugriff auf:</p>
           <ul>
-            <li>Reparateur-Dashboard mit Service-Verwaltung</li>
+            <li>Techniker-Dashboard mit Service-Verwaltung</li>
             <li>Kundenanfragen und Terminplanung</li>
             <li>Bewertungs- und Reputationssystem</li>
             <li>Verkaufsplattform für Ihre Dienstleistungen</li>
           </ul>
-          <a href="${dashboardUrl}" class="button button-green">Zum Reparateur-Dashboard</a>
+          <a href="${dashboardUrl}" class="button button-green">Zum Techniker-Dashboard</a>
           <p>Bitte aktualisieren Sie Ihre Verfügbarkeit und Dienstleistungen in Ihrem Profil, um sofort mit Kunden in Kontakt zu treten.</p>
-          <p>Willkommen im RevampIT Reparateur-Netzwerk!</p>
+          <p>Willkommen im RevampIT Techniker-Netzwerk!</p>
         </div>
         <div class="footer">
           <p>${AUTO_GENERATED_TEXT}</p>
@@ -104,10 +104,10 @@ export const repairerApplicationApproved = (name: string, dashboardUrl: string):
   text: `
 Hallo ${name},
 
-Herzlichen Glückwunsch! Ihre Bewerbung als Reparateur bei RevampIT wurde genehmigt!
+Herzlichen Glückwunsch! Ihre Bewerbung als Techniker bei RevampIT wurde genehmigt!
 
 Sie haben jetzt Zugriff auf:
-- Reparateur-Dashboard mit Service-Verwaltung
+- Techniker-Dashboard mit Service-Verwaltung
 - Kundenanfragen und Terminplanung
 - Bewertungs- und Reputationssystem
 - Verkaufsplattform für Ihre Dienstleistungen
@@ -115,7 +115,7 @@ Sie haben jetzt Zugriff auf:
 Bitte aktualisieren Sie Ihre Verfügbarkeit und Dienstleistungen in Ihrem Profil:
 ${dashboardUrl}
 
-Willkommen im RevampIT Reparateur-Netzwerk!
+Willkommen im RevampIT Techniker-Netzwerk!
 ${createTextFooter()}
   `.trim(),
 });
@@ -125,24 +125,24 @@ export const repairerApplicationRejected = (
   rejectionReason: string,
   supportEmail: string
 ): EmailContent => ({
-  subject: 'Reparateur-Bewerbung - RevampIT',
+  subject: 'Techniker-Bewerbung - RevampIT',
   html: `
     <!DOCTYPE html>
     <html lang="de">
     <head>
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>Reparateur-Bewerbung</title>
+      <title>Techniker-Bewerbung</title>
       <style>${BASE_STYLES}</style>
     </head>
     <body>
       <div class="container">
         <div class="header header-red">
-          <h1>Reparateur-Bewerbung</h1>
+          <h1>Techniker-Bewerbung</h1>
         </div>
         <div class="content">
           <h2>Hallo ${name},</h2>
-          <p>Nach sorgfältiger Prüfung Ihrer Bewerbung als Reparateur bei RevampIT müssen wir Ihnen mitteilen, dass wir Ihre Bewerbung derzeit nicht genehmigen können.</p>
+          <p>Nach sorgfältiger Prüfung Ihrer Bewerbung als Techniker bei RevampIT müssen wir Ihnen mitteilen, dass wir Ihre Bewerbung derzeit nicht genehmigen können.</p>
           <p><strong>Grund:</strong></p>
           <p>${rejectionReason}</p>
           <p>Sie können sich jederzeit erneut bewerben, nachdem Sie die genannten Punkte behoben haben. Bei Fragen stehen wir Ihnen gerne zur Verfügung.</p>
@@ -159,7 +159,7 @@ export const repairerApplicationRejected = (
   text: `
 Hallo ${name},
 
-Nach sorgfältiger Prüfung Ihrer Bewerbung als Reparateur bei RevampIT müssen wir Ihnen mitteilen, dass wir Ihre Bewerbung derzeit nicht genehmigen können.
+Nach sorgfältiger Prüfung Ihrer Bewerbung als Techniker bei RevampIT müssen wir Ihnen mitteilen, dass wir Ihre Bewerbung derzeit nicht genehmigen können.
 
 Grund:
 ${rejectionReason}
@@ -176,7 +176,7 @@ export const repairerApplicationChangesRequested = (
   requestedChanges: string,
   dashboardUrl: string
 ): EmailContent => ({
-  subject: 'Reparateur-Bewerbung - Änderungen erforderlich - RevampIT',
+  subject: 'Techniker-Bewerbung - Änderungen erforderlich - RevampIT',
   html: `
     <!DOCTYPE html>
     <html lang="de">
@@ -193,7 +193,7 @@ export const repairerApplicationChangesRequested = (
         </div>
         <div class="content">
           <h2>Hallo ${name},</h2>
-          <p>Wir haben Ihre Bewerbung als Reparateur bei RevampIT geprüft und benötigen einige zusätzliche Informationen oder Korrekturen.</p>
+          <p>Wir haben Ihre Bewerbung als Techniker bei RevampIT geprüft und benötigen einige zusätzliche Informationen oder Korrekturen.</p>
           <p><strong>Erforderliche Änderungen:</strong></p>
           <div class="highlight-box">
             ${requestedChanges.replace(/\n/g, '<br>')}
@@ -213,7 +213,7 @@ export const repairerApplicationChangesRequested = (
   text: `
 Hallo ${name},
 
-Wir haben Ihre Bewerbung als Reparateur bei RevampIT geprüft und benötigen einige zusätzliche Informationen oder Korrekturen.
+Wir haben Ihre Bewerbung als Techniker bei RevampIT geprüft und benötigen einige zusätzliche Informationen oder Korrekturen.
 
 Erforderliche Änderungen:
 ${requestedChanges}

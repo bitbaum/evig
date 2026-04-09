@@ -53,7 +53,7 @@ export function OffersList({
                     <div className="flex items-center gap-2">
                       <p className="font-medium text-gray-900">{offer.helperName}</p>
                       {offer.repairerProfile?.isVerified && (
-                        <CheckCircle className="w-4 h-4 text-green-600" aria-label="Verifizierter Reparateur" />
+                        <CheckCircle className="w-4 h-4 text-green-600" aria-label="Verifizierter Techniker" />
                       )}
                     </div>
                     {offer.repairerProfile ? (
@@ -62,7 +62,7 @@ export function OffersList({
                           href={`/techniker/${offer.repairerProfile.id}`}
                           className="text-blue-600 hover:text-blue-700 font-medium"
                         >
-                          {offer.repairerProfile.businessName || 'Reparateur-Profil'}
+                          {offer.repairerProfile.businessName || 'Techniker-Profil'}
                         </Link>
                         {Number(offer.repairerProfile.averageRating) > 0 && (
                           <span className="flex items-center gap-0.5 text-gray-500">

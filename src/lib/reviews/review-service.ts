@@ -145,7 +145,7 @@ export async function notifyRepairerOfReview(
     const result = await sendEmail(
       repairer.email,
       'newReviewNotification',
-      repairer.repairerName || repairer.businessName || 'Reparateur',
+      repairer.repairerName || repairer.businessName || 'Techniker',
       reviewerName,
       overallRating,
       content,
