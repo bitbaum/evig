@@ -139,6 +139,26 @@ All org-level data (name, addresses, phone, email, hours, URLs) lives in
 - `scripts/db/migrations/*`
 - `.env*` files
 
+### 7. NEVER Hardcode Numbers/Stats in UI
+Stats, counts, and metrics displayed to users must come from the database
+or from `src/lib/org-numbers.defaults.ts` (the SSOT for org metrics).
+Never use placeholder numbers like `100+`, `50+` in components.
+
+```typescript
+// WRONG — magic numbers in component
+const STATS = [
+  { label: 'Mitglieder', value: '100+' },
+  { label: 'Inserate', value: '50+' },
+]
+
+// CORRECT — fetch real counts from DB
+const { data } = await apiFetch('/api/stats/community')
+
+// CORRECT — source from org-numbers SSOT
+import { getDefaultNumeric } from '@/lib/org-numbers.defaults'
+const devicesSaved = getDefaultNumeric('devices_sold_per_year')
+```
+
 ## API Route Template
 
 ```typescript
@@ -296,7 +316,8 @@ Run `scripts/db/migrations/002-simplified-auth.sql` to add:
 - Delete migration files
 - Use "ß" in German text (use "ss")
 - Commit `.env` files
+- Hardcode numbers/stats/metrics in UI (query from DB or use `org-numbers.defaults.ts`)
 
 ---
 
-**Last Updated**: 2026-03-31
+**Last Updated**: 2026-04-09
