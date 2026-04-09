@@ -32,9 +32,12 @@ import {
   BarChart3,
 } from 'lucide-react'
 import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
+import { AdminStatsGrid } from '@/components/admin/AdminStatsGrid'
+import type { StatCardItem } from '@/components/admin/AdminStatsGrid'
 import Heading from '@/components/ui/Heading'
 import TaskFiltersClient from './TaskFiltersClient'
 import { Pagination } from '@/components/ui/Pagination'
+import { ADMIN_CONTENT } from '@/config/admin-content'
 
 export const metadata: Metadata = {
   title: 'Aufgaben | RevampIT Admin',
@@ -238,55 +241,39 @@ export default async function TasksAdminPage({
       }
     >
       {/* Stats Cards */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <div className="bg-white rounded-lg border p-4">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center">
-              <ClipboardList className="w-5 h-5 text-gray-600" />
-            </div>
-            <div>
-              <p className="text-sm text-gray-600">Gesamt</p>
-              <p className="text-2xl font-bold text-gray-900">{stats.total}</p>
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-white rounded-lg border p-4">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
-              <AlertTriangle className="w-5 h-5 text-red-600" />
-            </div>
-            <div>
-              <p className="text-sm text-gray-600">Braucht Aufmerksamkeit</p>
-              <p className="text-2xl font-bold text-red-600">{stats.needsAttention}</p>
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-white rounded-lg border p-4">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-yellow-100 rounded-lg flex items-center justify-center">
-              <Clock className="w-5 h-5 text-yellow-600" />
-            </div>
-            <div>
-              <p className="text-sm text-gray-600">Angefragt</p>
-              <p className="text-2xl font-bold text-yellow-600">{stats.requested}</p>
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-white rounded-lg border p-4">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
-              <CheckCircle2 className="w-5 h-5 text-green-600" />
-            </div>
-            <div>
-              <p className="text-sm text-gray-600">Heute erledigt</p>
-              <p className="text-2xl font-bold text-green-600">{stats.completedToday}</p>
-            </div>
-          </div>
-        </div>
-      </div>
+      <AdminStatsGrid items={[
+        {
+          icon: ClipboardList,
+          iconBgColor: 'bg-gray-100',
+          iconColor: 'text-gray-600',
+          label: 'Gesamt',
+          value: stats.total,
+        },
+        {
+          icon: AlertTriangle,
+          iconBgColor: 'bg-red-100',
+          iconColor: 'text-red-600',
+          label: 'Braucht Aufmerksamkeit',
+          value: stats.needsAttention,
+          valueColor: 'text-red-600',
+        },
+        {
+          icon: Clock,
+          iconBgColor: 'bg-yellow-100',
+          iconColor: 'text-yellow-600',
+          label: 'Angefragt',
+          value: stats.requested,
+          valueColor: 'text-yellow-600',
+        },
+        {
+          icon: CheckCircle2,
+          iconBgColor: 'bg-green-100',
+          iconColor: 'text-green-600',
+          label: 'Heute erledigt',
+          value: stats.completedToday,
+          valueColor: 'text-green-600',
+        },
+      ] satisfies StatCardItem[]} />
 
       {/* Filters */}
       <Suspense fallback={<div className="bg-white rounded-lg border p-4 h-14" />}>
@@ -299,7 +286,7 @@ export default async function TasksAdminPage({
           <div className="p-12 text-center">
             <AlertTriangle className="w-12 h-12 text-red-300 mx-auto mb-4" />
             <Heading level={3} className="text-lg font-medium text-gray-900 mb-2">
-              Aufgaben konnten nicht geladen werden
+              {ADMIN_CONTENT.tasks.errorMessage}
             </Heading>
             <p className="text-gray-600 mb-4">
               Es gab ein Problem beim Laden der Aufgaben. Bitte versuche es erneut.
@@ -315,10 +302,10 @@ export default async function TasksAdminPage({
           <div className="p-12 text-center">
             <ClipboardList className="w-12 h-12 text-gray-300 mx-auto mb-4" />
             <Heading level={3} className="text-lg font-medium text-gray-900 mb-2">
-              Keine Aufgaben gefunden
+              {ADMIN_CONTENT.tasks.emptyTitle}
             </Heading>
             <p className="text-gray-600 mb-4">
-              Erstellen Sie Ihre erste Aufgabe, um loszulegen.
+              {ADMIN_CONTENT.tasks.emptyDescription}
             </p>
             <Link
               href="/admin/tasks/new"

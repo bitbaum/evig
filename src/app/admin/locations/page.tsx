@@ -1,13 +1,16 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { formatDateShort } from '@/lib/date-formats'
-import { getApprovalStatusLabel } from '@/config/approval-status'
-import { LOCATION_STATUS } from '@/config/location-status'
+import { LOCATION_STATUS, getLocationStatusLabel } from '@/config/location-status'
 import { apiFetch } from '@/lib/api/client'
+import { ADMIN_CONTENT } from '@/config/admin-content'
+import { AdminStatusBadge } from '@/components/admin/AdminStatusBadge'
+import type { StatusConfig } from '@/components/admin/AdminStatusBadge'
+import { Pagination } from '@/components/ui/Pagination'
 import Heading from '@/components/ui/Heading'
 import {
   MapPin,
@@ -15,8 +18,6 @@ import {
   Search,
   CheckCircle,
   XCircle,
-  Clock,
-  AlertCircle,
   Eye,
   Calendar,
   Users,
@@ -36,6 +37,26 @@ interface Location {
   createdBy: string
 }
 
+const PAGE_SIZE = 20
+
+const LOCATION_STATUS_CONFIG: Record<string, StatusConfig> = {
+  [LOCATION_STATUS.APPROVED]: { label: 'Genehmigt', color: 'bg-green-100 text-green-800' },
+  [LOCATION_STATUS.PENDING]: { label: 'Ausstehend', color: 'bg-yellow-100 text-yellow-800' },
+  [LOCATION_STATUS.REJECTED]: { label: 'Abgelehnt', color: 'bg-red-100 text-red-800' },
+  [LOCATION_STATUS.SUSPENDED]: { label: 'Suspendiert', color: 'bg-orange-100 text-orange-800' },
+}
+
+function getTypeIcon(type: string) {
+  switch (type) {
+    case 'venue':
+      return <Building2 className="w-4 h-4" />
+    case 'online':
+      return <Eye className="w-4 h-4" />
+    default:
+      return <MapPin className="w-4 h-4" />
+  }
+}
+
 export default function AdminLocationsPage() {
   const { data: session, status } = useSession()
   const router = useRouter()
@@ -43,62 +64,41 @@ export default function AdminLocationsPage() {
   const [locations, setLocations] = useState<Location[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string>('')
+  const [totalItems, setTotalItems] = useState(0)
 
   const [searchName, setSearchName] = useState('')
-
-  const [filters, setFilters] = useState({
-    status: 'all',
-    type: 'all',
-    city: ''
-  })
-
+  const [filters, setFilters] = useState({ status: 'all', type: 'all', city: '' })
   const [currentPage, setCurrentPage] = useState(1)
-  const [totalPages, setTotalPages] = useState(1)
 
-  const loadLocations = useCallback(async () => {
-    setLoading(true)
-    const params = new URLSearchParams({
-      status: filters.status,
-      limit: '20',
-      offset: ((currentPage - 1) * 20).toString()
-    })
-
-    if (filters.type !== 'all') params.set('type', filters.type)
-    if (filters.city) params.set('city', filters.city)
-
-    const result = await apiFetch<{ locations: Location[]; pagination?: { total: number } }>(`/api/locations?${params}`)
-    setLoading(false)
-
-    if (result.success && result.data) {
-      setLocations(result.data.locations ?? [])
-      setTotalPages(Math.ceil((result.data.pagination?.total ?? 0) / 20))
-    } else {
-      setError(result.error || 'Fehler beim Laden der Orte')
-    }
-  }, [filters.status, filters.type, filters.city, currentPage])
+  const totalPages = Math.ceil(totalItems / PAGE_SIZE)
 
   useEffect(() => {
     if (status !== 'authenticated') return
     let cancelled = false
+
     async function load() {
       setLoading(true)
       const params = new URLSearchParams({
         status: filters.status,
-        limit: '20',
-        offset: ((currentPage - 1) * 20).toString()
+        limit: String(PAGE_SIZE),
+        offset: String((currentPage - 1) * PAGE_SIZE),
       })
       if (filters.type !== 'all') params.set('type', filters.type)
       if (filters.city) params.set('city', filters.city)
-      const result = await apiFetch<{ locations: Location[]; pagination?: { total: number } }>(`/api/locations?${params}`)
+
+      const result = await apiFetch<{ locations: Location[]; pagination?: { total: number } }>(
+        `/api/locations?${params}`
+      )
       if (cancelled) return
       setLoading(false)
       if (result.success && result.data) {
         setLocations(result.data.locations ?? [])
-        setTotalPages(Math.ceil((result.data.pagination?.total ?? 0) / 20))
+        setTotalItems(result.data.pagination?.total ?? 0)
       } else {
-        setError(result.error || 'Fehler beim Laden der Orte')
+        setError(result.error || ADMIN_CONTENT.locations.errorMessage)
       }
     }
+
     load()
     return () => { cancelled = true }
   }, [status, filters.status, filters.type, filters.city, currentPage])
@@ -112,47 +112,15 @@ export default function AdminLocationsPage() {
       method: 'POST',
       body: {
         action,
-        review_notes: action === 'reject' ? 'Administrative Prüfung' : 'Ort genehmigt'
-      }
+        review_notes: action === 'reject' ? 'Administrative Prüfung' : 'Ort genehmigt',
+      },
     })
 
     if (result.success) {
-      loadLocations()
+      // Re-trigger the effect by nudging a stable dependency
+      setFilters(prev => ({ ...prev }))
     } else {
       setError(result.error || 'Fehler bei der Genehmigung')
-    }
-  }
-
-  const getStatusIcon = (status: string) => {
-    switch (status) {
-      case LOCATION_STATUS.APPROVED:
-        return <CheckCircle className="w-5 h-5 text-green-600" />
-      case LOCATION_STATUS.PENDING:
-        return <Clock className="w-5 h-5 text-yellow-600" />
-      case LOCATION_STATUS.REJECTED:
-        return <XCircle className="w-5 h-5 text-red-600" />
-      case LOCATION_STATUS.SUSPENDED:
-        return <AlertCircle className="w-5 h-5 text-orange-600" />
-      default:
-        return <AlertCircle className="w-5 h-5 text-gray-400" />
-    }
-  }
-
-  const getStatusText = (status: string) => {
-    if (status === LOCATION_STATUS.SUSPENDED) return 'Suspendiert'
-    return getApprovalStatusLabel(status)
-  }
-
-  const getTypeIcon = (type: string) => {
-    switch (type) {
-      case 'venue':
-        return <Building2 className="w-4 h-4" />
-      case 'home':
-        return <MapPin className="w-4 h-4" />
-      case 'online':
-        return <Eye className="w-4 h-4" />
-      default:
-        return <MapPin className="w-4 h-4" />
     }
   }
 
@@ -179,6 +147,14 @@ export default function AdminLocationsPage() {
     router.push('/auth/login')
     return null
   }
+
+  const filteredLocations = searchName.trim()
+    ? locations.filter(
+        l =>
+          l.name.toLowerCase().includes(searchName.toLowerCase()) ||
+          l.city.toLowerCase().includes(searchName.toLowerCase())
+      )
+    : locations
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -276,14 +252,6 @@ export default function AdminLocationsPage() {
         )}
 
         {/* Locations List */}
-        {(() => {
-          const filteredLocations = searchName.trim()
-            ? locations.filter(l =>
-                l.name.toLowerCase().includes(searchName.toLowerCase()) ||
-                l.city.toLowerCase().includes(searchName.toLowerCase())
-              )
-            : locations
-          return (
         <div className="bg-white rounded-xl shadow-sm border">
           <div className="px-6 py-4 border-b border-gray-200">
             <Heading level={2} className="text-lg font-semibold text-gray-900">
@@ -301,9 +269,12 @@ export default function AdminLocationsPage() {
                       <Heading level={3} className="text-lg font-semibold text-gray-900 truncate">
                         {location.name}
                       </Heading>
-                      {getStatusIcon(location.approvalStatus)}
-                      <span className="text-sm text-gray-600">
-                        {getStatusText(location.approvalStatus)}
+                      <AdminStatusBadge
+                        status={location.approvalStatus}
+                        config={LOCATION_STATUS_CONFIG}
+                      />
+                      <span className="text-sm text-gray-600 sr-only">
+                        {getLocationStatusLabel(location.approvalStatus)}
                       </span>
                     </div>
 
@@ -324,7 +295,6 @@ export default function AdminLocationsPage() {
                         <Calendar className="w-4 h-4" />
                         {location.usageCount} Buchungen
                       </div>
-
                     </div>
 
                     <div className="text-sm text-gray-500">
@@ -364,14 +334,18 @@ export default function AdminLocationsPage() {
               </div>
             ))}
 
-            {filteredLocations.length === 0 && !loading && (
+            {filteredLocations.length === 0 && (
               <div className="px-6 py-12 text-center">
                 <MapPin className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                <Heading level={3} className="text-lg font-medium text-gray-900 mb-2">Keine Orte gefunden</Heading>
+                <Heading level={3} className="text-lg font-medium text-gray-900 mb-2">
+                  {ADMIN_CONTENT.locations.emptyTitle}
+                </Heading>
                 <p className="text-gray-600 mb-4">
                   {searchName.trim()
                     ? `Keine Orte für "${searchName}" gefunden.`
-                    : filters.status === 'all' ? 'Es wurden noch keine Orte erstellt.' : `Keine Orte mit Status "${filters.status}" gefunden.`}
+                    : filters.status !== 'all'
+                    ? `Keine Orte mit Status "${getLocationStatusLabel(filters.status)}" gefunden.`
+                    : ADMIN_CONTENT.locations.emptyDescription}
                 </p>
                 <Link
                   href="/admin/locations/new"
@@ -383,36 +357,15 @@ export default function AdminLocationsPage() {
               </div>
             )}
           </div>
+
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            totalItems={totalItems}
+            pageSize={PAGE_SIZE}
+            onPageChange={setCurrentPage}
+          />
         </div>
-          )
-        })()}
-
-        {/* Pagination */}
-        {totalPages > 1 && (
-          <div className="mt-6 flex justify-center">
-            <nav className="flex items-center gap-2">
-              <button
-                onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
-                disabled={currentPage === 1}
-                className="px-3 py-2 border border-gray-300 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
-              >
-                ← Zurück
-              </button>
-
-              <span className="px-4 py-2 text-sm text-gray-700">
-                Seite {currentPage} von {totalPages}
-              </span>
-
-              <button
-                onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
-                disabled={currentPage === totalPages}
-                className="px-3 py-2 border border-gray-300 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
-              >
-                Weiter →
-              </button>
-            </nav>
-          </div>
-        )}
       </div>
     </div>
   )

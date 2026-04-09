@@ -20,6 +20,8 @@ import Link from 'next/link'
 import { PermissionRequestsManager } from '@/components/admin/PermissionRequestsManager'
 import { TeamListClient } from './TeamListClient'
 import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
+import { AdminStatsGrid } from '@/components/admin/AdminStatsGrid'
+import type { StatCardItem } from '@/components/admin/AdminStatsGrid'
 import Heading from '@/components/ui/Heading'
 
 export const metadata: Metadata = {
@@ -134,57 +136,36 @@ export default async function TeamPage() {
       }
     >
       {/* Stats */}
-      <div className="grid md:grid-cols-4 gap-6">
-        <div className="p-6 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
-          <div className="flex items-center gap-4">
-            <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-              <Briefcase className="w-6 h-6 text-blue-600" />
-            </div>
-            <div>
-              <p className="text-3xl font-bold text-gray-900 dark:text-white">{stats.totalStaff}</p>
-              <p className="text-gray-600 dark:text-gray-400">Staff Gesamt</p>
-            </div>
-          </div>
-        </div>
-
-        <div className="p-6 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
-          <div className="flex items-center gap-4">
-            <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
-              <Crown className="w-6 h-6 text-purple-600" />
-            </div>
-            <div>
-              <p className="text-3xl font-bold text-gray-900 dark:text-white">{stats.totalProfiles}</p>
-              <p className="text-gray-600 dark:text-gray-400">Profile</p>
-            </div>
-          </div>
-        </div>
-
-        <div className="p-6 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
-          <div className="flex items-center gap-4">
-            <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
-              <Shield className="w-6 h-6 text-green-600" />
-            </div>
-            <div>
-              <p className="text-3xl font-bold text-gray-900 dark:text-white">
-                {Object.values(stats.byDepartment).reduce((a, b) => a + b, 0) || 0}
-              </p>
-              <p className="text-gray-600 dark:text-gray-400">Mit Abteilung</p>
-            </div>
-          </div>
-        </div>
-
-        <div className="p-6 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
-          <div className="flex items-center gap-4">
-            <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center">
-              <UserPlus className="w-6 h-6 text-orange-600" />
-            </div>
-            <div>
-              <p className="text-3xl font-bold text-gray-900 dark:text-white">{staffWithoutProfiles.length}</p>
-              <p className="text-gray-600 dark:text-gray-400">Ohne Profil</p>
-            </div>
-          </div>
-        </div>
-      </div>
+      <AdminStatsGrid items={[
+        {
+          icon: Briefcase,
+          iconBgColor: 'bg-blue-100',
+          iconColor: 'text-blue-600',
+          label: 'Staff Gesamt',
+          value: stats.totalStaff,
+        },
+        {
+          icon: Crown,
+          iconBgColor: 'bg-purple-100',
+          iconColor: 'text-purple-600',
+          label: 'Profile',
+          value: stats.totalProfiles,
+        },
+        {
+          icon: Shield,
+          iconBgColor: 'bg-green-100',
+          iconColor: 'text-green-600',
+          label: 'Mit Abteilung',
+          value: Object.values(stats.byDepartment).reduce((a, b) => a + b, 0) || 0,
+        },
+        {
+          icon: UserPlus,
+          iconBgColor: 'bg-orange-100',
+          iconColor: 'text-orange-600',
+          label: 'Ohne Profil',
+          value: staffWithoutProfiles.length,
+        },
+      ] satisfies StatCardItem[]} />
 
       {/* Permission Requests - Super Admin Only */}
       {currentUserIsSuperAdmin && (

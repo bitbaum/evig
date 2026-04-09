@@ -1,19 +1,20 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { formatDateShort } from '@/lib/date-formats'
 import {
   type ReviewStatus,
   REVIEW_STATUS,
-  getReviewStatusLabel,
-  getReviewStatusBadgeColor,
+  REVIEW_STATUS_LABELS,
+  REVIEW_STATUS_BADGES,
   getReviewFilterLabel,
   getReviewActionLabel,
 } from '@/config/review-status'
+import { ADMIN_CONTENT } from '@/config/admin-content'
 import { apiFetch } from '@/lib/api/client'
+import { AdminStatusBadge, type StatusConfig } from '@/components/admin/AdminStatusBadge'
 import {
-  Eye,
   EyeOff,
   Trash2,
   CheckCircle,
@@ -56,6 +57,13 @@ interface Review {
   }
 }
 
+const REVIEW_STATUS_CONFIG: Record<string, StatusConfig> = Object.fromEntries(
+  Object.values(REVIEW_STATUS).map((status) => [
+    status,
+    { label: REVIEW_STATUS_LABELS[status], color: REVIEW_STATUS_BADGES[status] },
+  ])
+)
+
 export default function AdminReviewsPage() {
   const router = useRouter()
   const [reviews, setReviews] = useState<Review[]>([])
@@ -63,58 +71,61 @@ export default function AdminReviewsPage() {
   const [error, setError] = useState<string | null>(null)
   const [selectedStatus, setSelectedStatus] = useState<ReviewStatus>(REVIEW_STATUS.PENDING_MODERATION)
   const [searchQuery, setSearchQuery] = useState('')
-  const [selectedReview, setSelectedReview] = useState<Review | null>(null)
-  const [moderationAction, setModerationAction] = useState<string | null>(null)
   const [moderatingId, setModeratingId] = useState<string | null>(null)
-  const [moderatingAction, setModeratingAction] = useState<string>('')
+  const [moderatingAction, setModerationAction] = useState<string>('')
   const [moderationReason, setModerationReason] = useState('')
+  const [actionInProgress, setActionInProgress] = useState<string | null>(null)
   const [successMessage, setSuccessMessage] = useState<string | null>(null)
-
-  const fetchReviews = useCallback(async () => {
-    setLoading(true)
-    const result = await apiFetch<{ reviews: Review[] }>(`/api/admin/reviews?status=${selectedStatus}&limit=50`)
-    setLoading(false)
-
-    if (result.success && result.data) {
-      setReviews(result.data.reviews || [])
-    } else {
-      setError(result.error || 'Fehler beim Laden der Bewertungen')
-    }
-  }, [selectedStatus])
 
   useEffect(() => {
     let cancelled = false
-    async function load() {
-      setLoading(true)
-      const result = await apiFetch<{ reviews: Review[] }>(`/api/admin/reviews?status=${selectedStatus}&limit=50`)
-      if (cancelled) return
-      setLoading(false)
-      if (result.success && result.data) {
-        setReviews(result.data.reviews || [])
-      } else {
-        setError(result.error || 'Fehler beim Laden der Bewertungen')
+    setLoading(true)
+    setError(null)
+    apiFetch<{ reviews: Review[] }>(`/api/admin/reviews?status=${selectedStatus}&limit=50`).then(
+      (result) => {
+        if (cancelled) return
+        setLoading(false)
+        if (result.success && result.data) {
+          setReviews(result.data.reviews || [])
+        } else {
+          setError(result.error || ADMIN_CONTENT.reviews.errorMessage)
+        }
       }
-    }
-    load()
+    )
     return () => { cancelled = true }
   }, [selectedStatus])
 
+  const loadReviews = () => {
+    setLoading(true)
+    setError(null)
+    apiFetch<{ reviews: Review[] }>(`/api/admin/reviews?status=${selectedStatus}&limit=50`).then(
+      (result) => {
+        setLoading(false)
+        if (result.success && result.data) {
+          setReviews(result.data.reviews || [])
+        } else {
+          setError(result.error || ADMIN_CONTENT.reviews.errorMessage)
+        }
+      }
+    )
+  }
+
   const startModeration = (reviewId: string, action: string) => {
     setModeratingId(reviewId)
-    setModeratingAction(action)
+    setModerationAction(action)
     setModerationReason('')
   }
 
   const cancelModeration = () => {
     setModeratingId(null)
-    setModeratingAction('')
+    setModerationAction('')
     setModerationReason('')
   }
 
   const handleModerate = async () => {
     if (!moderatingId || !moderationReason.trim()) return
 
-    setModerationAction(moderatingId)
+    setActionInProgress(moderatingId)
     const result = await apiFetch<void>(`/api/admin/reviews/${moderatingId}/moderate`, {
       method: 'PUT',
       body: {
@@ -124,54 +135,28 @@ export default function AdminReviewsPage() {
     })
 
     if (result.success) {
+      const actionLabel = getReviewActionLabel(moderatingAction)
       cancelModeration()
-      await fetchReviews()
-      setSuccessMessage(`Bewertung erfolgreich ${getReviewActionLabel(moderatingAction)}`)
+      loadReviews()
+      setSuccessMessage(`Bewertung erfolgreich ${actionLabel}`)
       setTimeout(() => setSuccessMessage(null), 3000)
     } else {
       setError('Fehler bei der Moderation: ' + (result.error || 'Unbekannter Fehler'))
     }
-    setModerationAction(null)
+    setActionInProgress(null)
   }
 
-
-  const getStatusIcon = (status: string) => {
-    switch (status) {
-      case REVIEW_STATUS.PUBLISHED:
-        return <CheckCircle className="w-5 h-5 text-green-500" />
-      case REVIEW_STATUS.PENDING_MODERATION:
-        return <AlertTriangle className="w-5 h-5 text-orange-500" />
-      case REVIEW_STATUS.HIDDEN:
-        return <EyeOff className="w-5 h-5 text-red-500" />
-      case REVIEW_STATUS.DELETED:
-        return <Trash2 className="w-5 h-5 text-gray-500" />
-      default:
-        return <AlertTriangle className="w-5 h-5 text-gray-500" />
-    }
-  }
-
-  const getStatusBadge = (status: string) => {
-    return (
-      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getReviewStatusBadgeColor(status)}`}>
-        {getStatusIcon(status)}
-        <span className="ml-1">{getReviewStatusLabel(status)}</span>
-      </span>
-    )
-  }
-
-  const renderStars = (rating: number) => {
-    return (
-      <div className="flex items-center gap-1">
-        {[1, 2, 3, 4, 5].map((star) => (
-          <Star
-            key={star}
-            className={`w-4 h-4 ${star <= rating ? 'text-yellow-400 fill-current' : 'text-gray-300'}`}
-          />
-        ))}
-        <span className="ml-2 text-sm text-gray-600">{rating}/5</span>
-      </div>
-    )
-  }
+  const renderStars = (rating: number) => (
+    <div className="flex items-center gap-1">
+      {[1, 2, 3, 4, 5].map((star) => (
+        <Star
+          key={star}
+          className={`w-4 h-4 ${star <= rating ? 'text-yellow-400 fill-current' : 'text-gray-300'}`}
+        />
+      ))}
+      <span className="ml-2 text-sm text-gray-600">{rating}/5</span>
+    </div>
+  )
 
   const filteredReviews = reviews.filter(review =>
     searchQuery === '' ||
@@ -229,7 +214,7 @@ export default function AdminReviewsPage() {
               <span className="text-sm font-medium text-gray-700">Status:</span>
             </div>
             <div className="flex gap-2">
-              {([REVIEW_STATUS.PUBLISHED, REVIEW_STATUS.PENDING_MODERATION, REVIEW_STATUS.HIDDEN, REVIEW_STATUS.DELETED] as ReviewStatus[]).map((status) => (
+              {(Object.values(REVIEW_STATUS) as ReviewStatus[]).map((status) => (
                 <button
                   key={status}
                   onClick={() => setSelectedStatus(status)}
@@ -257,7 +242,7 @@ export default function AdminReviewsPage() {
               />
             </div>
             <button
-              onClick={fetchReviews}
+              onClick={loadReviews}
               className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 flex items-center gap-2"
             >
               <RefreshCw className="w-4 h-4" />
@@ -311,11 +296,13 @@ export default function AdminReviewsPage() {
         {filteredReviews.length === 0 ? (
           <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-12 text-center">
             <MessageSquare className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-            <Heading level={3} className="text-lg font-medium text-gray-900 mb-2">Keine Bewertungen gefunden</Heading>
+            <Heading level={3} className="text-lg font-medium text-gray-900 mb-2">
+              {ADMIN_CONTENT.reviews.emptyTitle}
+            </Heading>
             <p className="text-gray-600">
               {searchQuery
                 ? 'Keine Bewertungen entsprechen Ihrer Suchanfrage.'
-                : `Keine Bewertungen mit Status "${selectedStatus}".`
+                : `Keine Bewertungen mit Status "${getReviewFilterLabel(selectedStatus)}".`
               }
             </p>
           </div>
@@ -330,7 +317,7 @@ export default function AdminReviewsPage() {
                       <Heading level={3} className="text-lg font-semibold text-gray-900">
                         Bewertung für {review.targetName}
                       </Heading>
-                      {getStatusBadge(review.status)}
+                      <AdminStatusBadge status={review.status} config={REVIEW_STATUS_CONFIG} />
                       {review.isVerifiedPurchase && (
                         <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
                           Verifizierter Kauf
@@ -371,19 +358,19 @@ export default function AdminReviewsPage() {
                       <>
                         <button
                           onClick={() => startModeration(review.id, 'approve')}
-                          disabled={moderationAction === review.id}
+                          disabled={actionInProgress === review.id}
                           className="px-3 py-1.5 bg-green-600 text-white rounded text-xs hover:bg-green-700 disabled:opacity-50 flex items-center gap-1"
                         >
                           <CheckCircle className="w-3 h-3" />
-                          {moderationAction === review.id ? '...' : 'Freigeben'}
+                          {actionInProgress === review.id ? '...' : 'Freigeben'}
                         </button>
                         <button
                           onClick={() => startModeration(review.id, 'hide')}
-                          disabled={moderationAction === review.id}
+                          disabled={actionInProgress === review.id}
                           className="px-3 py-1.5 bg-red-600 text-white rounded text-xs hover:bg-red-700 disabled:opacity-50 flex items-center gap-1"
                         >
                           <EyeOff className="w-3 h-3" />
-                          {moderationAction === review.id ? '...' : 'Ausblenden'}
+                          {actionInProgress === review.id ? '...' : 'Ausblenden'}
                         </button>
                       </>
                     )}
@@ -392,19 +379,19 @@ export default function AdminReviewsPage() {
                       <>
                         <button
                           onClick={() => startModeration(review.id, 'restore')}
-                          disabled={moderationAction === review.id}
+                          disabled={actionInProgress === review.id}
                           className="px-3 py-1.5 bg-green-600 text-white rounded text-xs hover:bg-green-700 disabled:opacity-50 flex items-center gap-1"
                         >
                           <RefreshCw className="w-3 h-3" />
-                          {moderationAction === review.id ? '...' : 'Wiederherstellen'}
+                          {actionInProgress === review.id ? '...' : 'Wiederherstellen'}
                         </button>
                         <button
                           onClick={() => startModeration(review.id, 'delete')}
-                          disabled={moderationAction === review.id}
+                          disabled={actionInProgress === review.id}
                           className="px-3 py-1.5 bg-red-600 text-white rounded text-xs hover:bg-red-700 disabled:opacity-50 flex items-center gap-1"
                         >
                           <Trash2 className="w-3 h-3" />
-                          {moderationAction === review.id ? '...' : 'Löschen'}
+                          {actionInProgress === review.id ? '...' : 'Löschen'}
                         </button>
                       </>
                     )}
@@ -412,7 +399,7 @@ export default function AdminReviewsPage() {
                     <div className="flex gap-1 mt-2">
                       <button
                         onClick={() => startModeration(review.id, 'flag_spam')}
-                        disabled={moderationAction === review.id}
+                        disabled={actionInProgress === review.id}
                         className="px-2 py-1 bg-yellow-100 text-yellow-700 rounded text-xs hover:bg-yellow-200 disabled:opacity-50"
                         title="Als Spam markieren"
                       >
@@ -420,7 +407,7 @@ export default function AdminReviewsPage() {
                       </button>
                       <button
                         onClick={() => startModeration(review.id, 'flag_inappropriate')}
-                        disabled={moderationAction === review.id}
+                        disabled={actionInProgress === review.id}
                         className="px-2 py-1 bg-orange-100 text-orange-700 rounded text-xs hover:bg-orange-200 disabled:opacity-50"
                         title="Als unangemessen markieren"
                       >
