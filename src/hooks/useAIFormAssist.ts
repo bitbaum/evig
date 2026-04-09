@@ -129,7 +129,15 @@ export function useAIFormAssist<T>({
   }, [callAPI])
 
   const runQuickAction = useCallback(async (currentData: Record<string, unknown>, actionKey: string) => {
-    await callAPI({ text: actionKey, mode: 'refine', currentData, quickAction: actionKey })
+    // If form has content, refine it. Otherwise, use extract mode with the quick action as context.
+    const hasContent = Object.values(currentData).some(v =>
+      typeof v === 'string' && (v as string).trim().length > 20
+    )
+    if (hasContent) {
+      await callAPI({ text: actionKey, mode: 'refine', currentData, quickAction: actionKey })
+    } else {
+      await callAPI({ text: actionKey, mode: 'extract', quickAction: actionKey })
+    }
   }, [callAPI])
 
   return { extractFromText, refineFields, runQuickAction, isExtracting, error, success }
