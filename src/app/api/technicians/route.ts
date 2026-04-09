@@ -1,0 +1,177 @@
+/**
+ * Unified Technicians API
+ * GET /api/technicians - Search and list all technician profiles
+ *
+ * Replaces the split between /api/repairers (professional tier) and
+ * /api/it-hilfe/helpers (community tier). Both are now rows in repairer_profiles.
+ */
+
+import { NextRequest } from 'next/server'
+import { db } from '@/db'
+import { repairerProfiles, userSkills, users } from '@/db/schema'
+import { eq, and, sql, asc, SQL, desc } from 'drizzle-orm'
+import { apiError, apiSuccess, parsePagination } from '@/lib/api/helpers'
+import { ERROR_MESSAGES } from '@/config/error-messages'
+import { logger } from '@/lib/logger'
+import { getSkillIds } from '@/config/it-hilfe'
+
+/**
+ * GET /api/technicians
+ * Unified search across all technician profiles.
+ *
+ * Query params:
+ *   tier          — "community" | "professional" (omit for all)
+ *   skills        — comma-separated skill IDs (validated against known skills)
+ *   canton        — Swiss canton abbreviation (e.g. "BE")
+ *   q             — free-text search (name / description)
+ *   acceptsGratis — "true" to filter to gratis-accepting technicians
+ *   acceptsKulturlegi — "true" to filter to Kulturlegi-accepting technicians
+ *   limit         — max results (default 20, max 50)
+ *   offset        — pagination offset
+ */
+export async function GET(request: NextRequest) {
+  try {
+    const { searchParams } = new URL(request.url)
+
+    // --- Parse filters ---
+    const tier = searchParams.get('tier') || ''
+    const q = searchParams.get('q') || ''
+    const canton = searchParams.get('canton') || ''
+
+    const skillsParam = searchParams.get('skills')
+    const validSkillIds = getSkillIds()
+    const skills: string[] = (skillsParam ? skillsParam.split(',').filter(Boolean) : []).filter(
+      (s) => validSkillIds.includes(s)
+    )
+
+    const acceptsGratis = searchParams.get('acceptsGratis') === 'true'
+    const acceptsKulturlegi = searchParams.get('acceptsKulturlegi') === 'true'
+
+    const { limit, offset } = parsePagination(request, { defaultLimit: 20, maxLimit: 50 })
+
+    // --- Build WHERE conditions ---
+    const conditions: SQL[] = [eq(repairerProfiles.isActive, true)]
+
+    // Tier filter — 'professional' maps to status='active'; 'community' maps to profile_tier='community'
+    if (tier === 'community') {
+      conditions.push(sql`${repairerProfiles.profileTier} = 'community'`)
+    } else if (tier === 'professional') {
+      conditions.push(sql`${repairerProfiles.profileTier} = 'professional'`)
+      conditions.push(sql`${repairerProfiles.status} = 'active'`)
+    }
+
+    if (q) {
+      const pattern = `%${q}%`
+      conditions.push(
+        sql`(${users.name} ILIKE ${pattern} OR ${repairerProfiles.description} ILIKE ${pattern} OR ${repairerProfiles.city} ILIKE ${pattern})`
+      )
+    }
+
+    // Skills filter via subquery (avoids blowing up GROUP BY)
+    if (skills.length > 0) {
+      conditions.push(sql`EXISTS (
+        SELECT 1 FROM ${userSkills}
+        WHERE ${userSkills.userId} = ${repairerProfiles.userId}
+        AND ${userSkills.skillId} = ANY(${skills}::text[])
+      )`)
+    }
+
+    // canton: repairer_profiles has no location_canton column yet; skip for now
+    // (the migration view helper_profiles_v also omits it from repairer_profiles)
+    // TODO: add canton column to repairer_profiles in a follow-up migration
+
+    if (acceptsGratis) conditions.push(eq(repairerProfiles.acceptsGratis, true))
+    if (acceptsKulturlegi) conditions.push(eq(repairerProfiles.acceptsKulturlegi, true))
+
+    // canton filter — no canton column on repairer_profiles yet; log and ignore
+    if (canton) {
+      logger.warn('canton filter requested but repairer_profiles has no canton column yet', { canton })
+    }
+
+    const whereCondition = and(...conditions)
+
+    // --- Main query: join users + aggregate skills ---
+    const rows = await db
+      .select({
+        id: repairerProfiles.id,
+        userId: repairerProfiles.userId,
+        name: users.name,
+        bio: repairerProfiles.description,
+        hourlyRateCents: repairerProfiles.hourlyRateCents,
+        averageRating: repairerProfiles.averageRating,
+        totalJobsCompleted: repairerProfiles.totalJobsCompleted,
+        profileTier: repairerProfiles.profileTier,
+        city: repairerProfiles.city,
+        postalCode: repairerProfiles.postalCode,
+        acceptsGratis: repairerProfiles.acceptsGratis,
+        acceptsKulturlegi: repairerProfiles.acceptsKulturlegi,
+        isVerified: repairerProfiles.isVerified,
+        serviceDeliveryTypes: repairerProfiles.serviceDeliveryTypes,
+        skills: sql<string[]>`ARRAY_AGG(${userSkills.skillId}) FILTER (WHERE ${userSkills.skillId} IS NOT NULL)`,
+      })
+      .from(repairerProfiles)
+      .innerJoin(users, eq(repairerProfiles.userId, users.id))
+      .leftJoin(userSkills, eq(repairerProfiles.userId, userSkills.userId))
+      .where(whereCondition)
+      .groupBy(
+        repairerProfiles.id,
+        repairerProfiles.userId,
+        users.name,
+        repairerProfiles.description,
+        repairerProfiles.hourlyRateCents,
+        repairerProfiles.averageRating,
+        repairerProfiles.totalJobsCompleted,
+        repairerProfiles.profileTier,
+        repairerProfiles.city,
+        repairerProfiles.postalCode,
+        repairerProfiles.acceptsGratis,
+        repairerProfiles.acceptsKulturlegi,
+        repairerProfiles.isVerified,
+        repairerProfiles.serviceDeliveryTypes,
+      )
+      .orderBy(
+        desc(repairerProfiles.isVerified),
+        desc(repairerProfiles.averageRating),
+        asc(users.name)
+      )
+      .limit(limit)
+      .offset(offset)
+
+    // --- Count query ---
+    const [countRow] = await db
+      .select({ total: sql<string>`COUNT(DISTINCT ${repairerProfiles.id})` })
+      .from(repairerProfiles)
+      .innerJoin(users, eq(repairerProfiles.userId, users.id))
+      .leftJoin(userSkills, eq(repairerProfiles.userId, userSkills.userId))
+      .where(whereCondition)
+
+    const total = parseInt(countRow?.total || '0', 10)
+
+    const technicians = rows.map((row) => ({
+      ...row,
+      skills: row.skills || [],
+    }))
+
+    logger.info('Technicians search completed', {
+      tier,
+      q,
+      skills,
+      canton,
+      resultsCount: technicians.length,
+      total,
+    })
+
+    return apiSuccess({
+      technicians,
+      pagination: {
+        total,
+        limit,
+        offset,
+        hasMore: offset + technicians.length < total,
+      },
+    })
+  } catch (error) {
+    logger.error('Error fetching technicians', { error })
+    return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)
+  }
+}

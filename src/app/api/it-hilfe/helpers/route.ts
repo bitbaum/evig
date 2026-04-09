@@ -1,6 +1,9 @@
 /**
  * IT-Hilfe Helpers API
  * GET /api/it-hilfe/helpers - Browse available helpers
+ *
+ * Legacy endpoint — proxies to /api/technicians?tier=community
+ * TODO: Replace with a thin redirect/proxy once all clients are updated.
  */
 
 import { NextRequest } from 'next/server'

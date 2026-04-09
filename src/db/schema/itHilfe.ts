@@ -140,9 +140,11 @@ export type NewUserSkill = typeof userSkills.$inferInsert
 // =============================================================================
 // DEPRECATED: This table overlaps with repairer_profiles from services.ts.
 // Repairers ARE helpers — use repairer_profiles as the single profile table.
-// TODO: Migrate existing helper_profiles data into repairer_profiles, then
-// drop this table. Keep it for now to avoid breaking existing queries.
-// See migration 051_connect_ithilfe_repairers.sql for the first step.
+// Migration 061_unify_technician_profiles.sql completed the data migration:
+// all helper_profiles rows have been merged into repairer_profiles (profile_tier='community').
+// A backwards-compatible view helper_profiles_v is available during the transition.
+// TODO (Phase 2): Update all queries to use repairer_profiles, then drop this table.
+// Keep the Drizzle definition for now to avoid breaking existing queries.
 //
 // Optional profile for users who want to offer IT help services.
 

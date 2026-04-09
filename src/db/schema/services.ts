@@ -1,4 +1,5 @@
 import { pgTable, uuid, text, boolean, timestamp, integer, decimal, jsonb, varchar, time, date, index, uniqueIndex } from 'drizzle-orm/pg-core'
+import { sql } from 'drizzle-orm'
 import { users } from './auth'
 
 // =============================================================================
@@ -191,6 +192,13 @@ export const repairerProfiles = pgTable('repairer_profiles', {
   // Status — CHECK (status IN ('pending_review', 'active', 'suspended', 'inactive'))
   isActive: boolean('is_active').default(true),
   status: text('status').default('pending_review'),
+
+  // Added by 061: community helper fields (merged from helper_profiles)
+  acceptsGratis: boolean('accepts_gratis').default(false),
+  acceptsKulturlegi: boolean('accepts_kulturlegi').default(false),
+  maxTravelKm: integer('max_travel_km').default(10),
+  serviceDeliveryTypes: text('service_delivery_types').array().default(sql`'{flexible}'`),
+  profileTier: text('profile_tier').default('professional'),
 
   // Metadata
   portfolioImages: text('portfolio_images').array().default([]),

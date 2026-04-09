@@ -1,3 +1,5 @@
+// Legacy endpoint — proxies to /api/technicians?tier=professional
+// TODO: Replace with a thin redirect/proxy once all clients are updated.
 import { NextRequest } from 'next/server'
 import { db } from '@/db'
 import { repairerProfiles, repairerReviews } from '@/db/schema'

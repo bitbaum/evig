@@ -2,12 +2,16 @@
  * Technician Profile API
  * GET /api/user/technician-profile - Get current user's technician profile
  * PUT /api/user/technician-profile - Create or update technician profile
+ *
+ * Self-registered technicians are written to repairer_profiles with
+ * profile_tier = 'community'. Professional repairers go through the
+ * repairer application flow and are assigned tier = 'professional' by admins.
  */
 
 import { NextRequest } from 'next/server'
 import { withAuth, ValidSession } from '@/lib/api/middleware'
 import { db } from '@/db'
-import { helperProfiles, userSkills } from '@/db/schema'
+import { repairerProfiles, userSkills } from '@/db/schema'
 import { eq, sql } from 'drizzle-orm'
 import {
   apiError,
@@ -20,28 +24,26 @@ import { validateBody, TechnicianProfileSchema } from '@/lib/schemas'
 
 /**
  * GET /api/user/technician-profile
- * Get current user's technician profile and skills
+ * Get current user's technician profile and skills.
  */
 export const GET = withAuth(async (_request: NextRequest, session: ValidSession) => {
   try {
-    // Get technician profile
     const [profileRow] = await db
       .select({
-        bio: helperProfiles.bio,
-        hourlyRateCents: helperProfiles.hourlyRateCents,
-        acceptsGratis: helperProfiles.acceptsGratis,
-        acceptsKulturlegi: helperProfiles.acceptsKulturlegi,
-        serviceTypes: helperProfiles.serviceTypes,
-        locationPostalCode: helperProfiles.locationPostalCode,
-        locationCity: helperProfiles.locationCity,
-        locationCanton: helperProfiles.locationCanton,
-        maxTravelKm: helperProfiles.maxTravelKm,
-        isActive: helperProfiles.isActive,
+        bio: repairerProfiles.description,
+        hourlyRateCents: repairerProfiles.hourlyRateCents,
+        acceptsGratis: repairerProfiles.acceptsGratis,
+        acceptsKulturlegi: repairerProfiles.acceptsKulturlegi,
+        serviceTypes: repairerProfiles.serviceDeliveryTypes,
+        postalCode: repairerProfiles.postalCode,
+        city: repairerProfiles.city,
+        maxTravelKm: repairerProfiles.maxTravelKm,
+        isActive: repairerProfiles.isActive,
+        profileTier: repairerProfiles.profileTier,
       })
-      .from(helperProfiles)
-      .where(eq(helperProfiles.userId, session.user.id))
+      .from(repairerProfiles)
+      .where(eq(repairerProfiles.userId, session.user.id))
 
-    // Get user skills
     const skillRows = await db
       .select({
         skillId: userSkills.skillId,
@@ -50,7 +52,6 @@ export const GET = withAuth(async (_request: NextRequest, session: ValidSession)
       .from(userSkills)
       .where(eq(userSkills.userId, session.user.id))
 
-    // Map to response format
     const profile = profileRow
       ? {
           skills: skillRows.map((r) => r.skillId),
@@ -59,11 +60,13 @@ export const GET = withAuth(async (_request: NextRequest, session: ValidSession)
           acceptsGratis: profileRow.acceptsGratis,
           acceptsKulturlegi: profileRow.acceptsKulturlegi,
           serviceTypes: profileRow.serviceTypes || ['flexible'],
-          postalCode: profileRow.locationPostalCode || '',
-          city: profileRow.locationCity || '',
-          canton: profileRow.locationCanton || '',
+          postalCode: profileRow.postalCode || '',
+          city: profileRow.city || '',
+          // canton not available on repairer_profiles yet
+          canton: '',
           maxTravelKm: profileRow.maxTravelKm,
           isActive: profileRow.isActive,
+          profileTier: profileRow.profileTier,
         }
       : null
 
@@ -79,7 +82,8 @@ export const GET = withAuth(async (_request: NextRequest, session: ValidSession)
 
 /**
  * PUT /api/user/technician-profile
- * Create or update technician profile and skills
+ * Create or update technician profile and skills.
+ * Self-registered users always get profile_tier = 'community'.
  */
 export const PUT = withAuth(async (request: NextRequest, session: ValidSession) => {
   try {
@@ -95,45 +99,52 @@ export const PUT = withAuth(async (request: NextRequest, session: ValidSession) 
       serviceTypes,
       postalCode,
       city,
-      canton,
       maxTravelKm,
       isActive,
     } = validation.data
 
-    // Upsert technician profile
+    // repairer_profiles requires phone, address, city, postal_code (NOT NULL).
+    // For community self-registration, use defaults so the INSERT succeeds.
+    // These can be updated later via a fuller profile form.
     await db
-      .insert(helperProfiles)
+      .insert(repairerProfiles)
       .values({
         userId: session.user.id,
-        bio: bio || undefined,
+        description: bio || undefined,
         hourlyRateCents,
         acceptsGratis,
         acceptsKulturlegi,
-        serviceTypes: serviceTypes.length > 0 ? serviceTypes : undefined,
-        locationPostalCode: postalCode || undefined,
-        locationCity: city || undefined,
-        locationCanton: canton || undefined,
+        serviceDeliveryTypes: serviceTypes.length > 0 ? serviceTypes : undefined,
+        city: city || '',
+        postalCode: postalCode || '',
+        // required NOT NULL columns — use empty strings as placeholder for community users
+        phone: '',
+        address: '',
         maxTravelKm,
         isActive,
+        profileTier: 'community',
+        status: 'active',
       })
       .onConflictDoUpdate({
-        target: helperProfiles.userId,
+        target: repairerProfiles.userId,
         set: {
-          bio: bio || null,
+          description: bio || null,
           hourlyRateCents,
           acceptsGratis,
           acceptsKulturlegi,
-          serviceTypes: serviceTypes.length > 0 ? serviceTypes : null,
-          locationPostalCode: postalCode || null,
-          locationCity: city || null,
-          locationCanton: canton || null,
+          serviceDeliveryTypes: serviceTypes.length > 0 ? serviceTypes : null,
+          city: city || '',
+          postalCode: postalCode || '',
           maxTravelKm,
           isActive,
+          // Only set tier to 'community' if it is not already 'professional'
+          // (don't demote a verified professional via this endpoint)
+          profileTier: sql`CASE WHEN ${repairerProfiles.profileTier} = 'professional' THEN 'professional' ELSE 'community' END`,
           updatedAt: sql`NOW()`,
         },
       })
 
-    // Update skills - delete existing and insert new
+    // Replace skills: delete existing, insert new
     await db
       .delete(userSkills)
       .where(eq(userSkills.userId, session.user.id))
