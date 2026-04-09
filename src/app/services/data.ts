@@ -5,10 +5,7 @@ import {
   Shield,
   Code,
   Globe,
-  Brain,
-  Cloud,
   Cpu,
-  Settings,
 } from 'lucide-react'
 import type { FilterConfig } from '@/hooks/useFiltering'
 
@@ -150,74 +147,6 @@ export const services: Service[] = [
     available: false,
     badge: 'Soon'
   },
-  {
-    title: 'Enterprise AI Solutions',
-    description: 'Private, vor-Ort KI-Systeme für professionelle Unternehmen. GPT-4-Level-Performance mit vollständigem Datenschutz und DSGVO-Compliance.',
-    icon: Brain,
-    category: 'Bald verfügbar',
-    features: [
-      'Selbstgehostete Llama 3 70B-Bereitstellung',
-      'RAG-unterstützte Dokumentensuche',
-      'Vollständiger Datenschutz & DSGVO-Compliance',
-      'Massgeschneiderte Schulung auf Ihren Dokumenten'
-    ],
-    pricing: '',
-    highlight: 'Bald verfügbar',
-    href: '/services/enterprise-ai-solutions',
-    available: false,
-    badge: 'Soon'
-  },
-  {
-    title: 'Cloud Infrastructure',
-    description: 'Nachhaltige Cloud-Hosting- und Infrastrukturlösungen. Wir bieten skalierbare, umweltfreundliche Hosting-Lösungen mit erneuerbarer Energie und Open-Source-Technologien.',
-    icon: Cloud,
-    category: 'Bald verfügbar',
-    features: [
-      'Hosting mit erneuerbarer Energie',
-      'Open-Source-Infrastruktur',
-      'Skalierbare Lösungen',
-      'Professionelle Überwachung'
-    ],
-    pricing: '',
-    highlight: 'Bald verfügbar',
-    href: '/services/cloud-infrastructure',
-    available: false,
-    badge: 'Soon'
-  },
-  {
-    title: 'Server Management',
-    description: 'Professionelle Server-Setup- und Wartungsdienste. Wir verwalten Ihre Server, damit Sie sich auf Ihr Geschäft konzentrieren können.',
-    icon: Server,
-    category: 'Bald verfügbar',
-    features: [
-      'Server-Setup & Konfiguration',
-      '24/7-Überwachung',
-      'Sicherheitsverwaltung',
-      'Performance-Optimierung'
-    ],
-    pricing: '',
-    highlight: 'Bald verfügbar',
-    href: '/services/server-management',
-    available: false,
-    badge: 'Soon'
-  },
-  {
-    title: 'IoT Solutions',
-    description: 'Internet-of-Things-Lösungen mit Open-Source-Hardware. Erstellen Sie vernetzte Geräte, die Ihre Privatsphäre und Dateneigentum respektieren.',
-    icon: Settings,
-    category: 'Bald verfügbar',
-    features: [
-      'Open-Source-Hardware',
-      'Datenschutz-fokussiertes Design',
-      'Massgeschneiderte IoT-Entwicklung',
-      'Dateneigentum garantiert'
-    ],
-    pricing: '',
-    highlight: 'Bald verfügbar',
-    href: '/services/iot-solutions',
-    available: false,
-    badge: 'Soon'
-  }
 ]
 
 export const serviceFilters: FilterConfig[] = [

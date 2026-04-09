@@ -194,12 +194,6 @@ export class ChatbotOrchestrator {
               href: '/services',
               description: language === 'de' ? 'Computer und Geräte reparieren' : 'Repair computers and devices',
               priority: 10
-            },
-            {
-              label: language === 'de' ? '☁️ Cloud-Lösungen' : '☁️ Cloud Solutions',
-              href: '/services/cloud-infrastructure',
-              description: language === 'de' ? 'Moderne Cloud-Services' : 'Modern cloud services',
-              priority: 9
             }
           ],
           confidence: 0.9,

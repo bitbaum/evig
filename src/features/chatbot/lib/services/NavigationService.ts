@@ -136,20 +136,6 @@ export class NavigationService {
             languages: ['en', 'de'],
             keywords: ['web', 'website', 'development', 'design', 'programming', 'webentwicklung']
           },
-          {
-            path: '/services/cloud-infrastructure',
-            name: 'Cloud Infrastructure',
-            description: 'Modern cloud solutions and server management',
-            languages: ['en', 'de'],
-            keywords: ['cloud', 'server', 'infrastructure', 'hosting', 'aws', 'deployment']
-          },
-          {
-            path: '/services/enterprise-ai-solutions',
-            name: 'AI Solutions',
-            description: 'Enterprise artificial intelligence and automation',
-            languages: ['en', 'de'],
-            keywords: ['ai', 'artificial', 'intelligence', 'automation', 'machine', 'learning']
-          }
         ]
       },
 
