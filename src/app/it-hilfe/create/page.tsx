@@ -9,10 +9,9 @@ import {
   ArrowLeft,
   Wrench,
   CheckCircle,
-  Sparkles,
-  Loader2,
 } from 'lucide-react'
-import { useAIFormAssist, type AIFieldMetadataEntry } from '@/hooks/useAIFormAssist'
+import { type AIFieldMetadataEntry } from '@/hooks/useAIFormAssist'
+import { AIFormAssist } from '@/components/ai/AIFormAssist'
 import {
   DEVICE_CATEGORIES,
   URGENCY_LEVELS,
@@ -53,7 +52,6 @@ export default function CreatePeerRepairPage() {
   const [formData, setFormData] = useState<ITHilfeCreateFormData>(INITIAL_IT_HILFE_FORM)
 
   // AI assist state
-  const [aiInput, setAiInput] = useState('')
   const [aiFieldMeta, setAiFieldMeta] = useState<Record<string, AIFieldMetadataEntry>>({})
 
   const updateField = <K extends keyof ITHilfeCreateFormData>(
@@ -61,30 +59,27 @@ export default function CreatePeerRepairPage() {
     value: ITHilfeCreateFormData[K],
   ) => setFormData(prev => ({ ...prev, [key]: value }))
 
-  const { extractFromText, isExtracting, error: aiError } = useAIFormAssist<AIFormFields>({
-    formType: 'it-hilfe',
-    onFieldsFilled: (data, metadata) => {
-      setFormData(prev => {
-        const updated = { ...prev }
-        if (data.categoryId) {
-          updated.categoryId = data.categoryId
-          const category = getCategoryById(data.categoryId)
-          if (category && !data.skillsNeeded?.length) {
-            updated.skillsNeeded = category.suggestedSkills
-          }
+  const handleAIFieldsFilled = (data: Partial<AIFormFields>, metadata: Record<string, AIFieldMetadataEntry>) => {
+    setFormData(prev => {
+      const updated = { ...prev }
+      if (data.categoryId) {
+        updated.categoryId = data.categoryId
+        const category = getCategoryById(data.categoryId)
+        if (category && !data.skillsNeeded?.length) {
+          updated.skillsNeeded = category.suggestedSkills
         }
-        if (data.deviceBrand) updated.deviceBrand = data.deviceBrand
-        if (data.deviceModel) updated.deviceModel = data.deviceModel
-        if (data.title) updated.title = data.title
-        if (data.description) updated.description = data.description
-        if (data.urgency) updated.urgency = data.urgency
-        if (data.skillsNeeded?.length) updated.skillsNeeded = data.skillsNeeded
-        if (data.diagnosis) updated.aiDiagnosis = data.diagnosis
-        return updated
-      })
-      setAiFieldMeta(metadata)
-    },
-  })
+      }
+      if (data.deviceBrand) updated.deviceBrand = data.deviceBrand
+      if (data.deviceModel) updated.deviceModel = data.deviceModel
+      if (data.title) updated.title = data.title
+      if (data.description) updated.description = data.description
+      if (data.urgency) updated.urgency = data.urgency
+      if (data.skillsNeeded?.length) updated.skillsNeeded = data.skillsNeeded
+      if (data.diagnosis) updated.aiDiagnosis = data.diagnosis
+      return updated
+    })
+    setAiFieldMeta(metadata)
+  }
 
   // Redirect if not authenticated
   useEffect(() => {
@@ -241,49 +236,16 @@ export default function CreatePeerRepairPage() {
         )}
 
         <form onSubmit={handleSubmit} className="space-y-6">
-          {/* AI Assist */}
-          <div className="bg-gradient-to-r from-purple-50 to-indigo-50 rounded-xl border border-purple-200 p-6">
-            <div className="flex items-center gap-2 mb-3">
-              <Sparkles className="w-5 h-5 text-purple-600" />
-              <Heading level={2} className="text-lg text-gray-900">KI-Assistent</Heading>
-              <span className="text-xs bg-purple-100 text-purple-700 px-2 py-0.5 rounded-full">Beta</span>
-            </div>
-            <p className="text-sm text-gray-600 mb-3">
-              Beschreibe dein Problem in eigenen Worten und die KI füllt das Formular automatisch aus.
-            </p>
-            <div className="flex gap-3">
-              <textarea
-                value={aiInput}
-                onChange={(e) => setAiInput(e.target.value)}
-                placeholder="z.B. Mein MacBook Pro 2019 startet nicht mehr, Bildschirm bleibt schwarz nach dem Einschalten..."
-                rows={3}
-                className="flex-1 px-4 py-2 border border-purple-200 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 bg-white"
-              />
-              <div className="flex flex-col justify-end">
-                <button
-                  type="button"
-                  onClick={() => extractFromText(aiInput)}
-                  disabled={isExtracting || !aiInput.trim()}
-                  className="px-4 py-2 bg-purple-600 text-white rounded-lg font-medium hover:bg-purple-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
-                >
-                  {isExtracting ? (
-                    <Loader2 className="w-4 h-4 animate-spin" />
-                  ) : (
-                    <Sparkles className="w-4 h-4" />
-                  )}
-                  {isExtracting ? 'Analysiere...' : 'KI ausfüllen'}
-                </button>
-              </div>
-            </div>
-            {aiError && (
-              <p className="mt-2 text-sm text-red-600">{aiError}</p>
-            )}
-            {Object.keys(aiFieldMeta).length > 0 && (
-              <p className="mt-2 text-xs text-purple-600">
-                Felder wurden von der KI ausgefüllt. Du kannst alle Felder nachträglich bearbeiten.
-              </p>
-            )}
-          </div>
+          {/* AI Assist — uses shared AIFormAssist component */}
+          <AIFormAssist<AIFormFields>
+            formType="it-hilfe"
+            placeholder="z.B. Mein MacBook Pro 2019 startet nicht mehr, Bildschirm bleibt schwarz nach dem Einschalten..."
+            onFieldsFilled={handleAIFieldsFilled}
+            currentData={formData as unknown as Record<string, unknown>}
+            variant="section"
+            defaultExpanded
+            className=""
+          />
 
           {formData.aiDiagnosis && (
             <AIDiagnosisCard

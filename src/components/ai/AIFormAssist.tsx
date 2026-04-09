@@ -57,8 +57,11 @@ export function AIFormAssist<T = Record<string, unknown>>({
     ? Object.entries(config.quickActions).map(([key, { label }]) => ({ key, label }))
     : []
 
-  // Auto-detect mode: refine if form has data AND registry supports it
-  const hasData = currentData && Object.values(currentData).some(v => v !== '' && v != null)
+  // Auto-detect mode: refine if form has meaningful user content AND registry supports it.
+  // Only check string fields with real content — ignore defaults like 'beginner', '10', booleans, empty arrays.
+  const hasData = currentData && Object.values(currentData).some(v =>
+    typeof v === 'string' && v.trim().length > 20
+  )
   const isRefineMode = !!(hasData && config.refine)
 
   // Show quick actions when: in refine mode, has quick actions, and has current data
