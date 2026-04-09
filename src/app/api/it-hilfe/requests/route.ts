@@ -171,18 +171,17 @@ export const POST = withAuth(async (request: NextRequest, session: ValidSession)
 
     // SECURITY: Sanitize user inputs
     const sanitizedTitle = sanitizeInput(validatedData.title, { maxLength: 200 })
-    const sanitizedDescription = sanitizeInput(validatedData.description, {
-      allowHtml: true,
-      maxLength: 5000,
-    })
+    const sanitizedDescription = validatedData.description
+      ? sanitizeInput(validatedData.description, { allowHtml: true, maxLength: 5000 })
+      : null
 
     const {
-      categoryId,
-      urgency,
+      categoryId = undefined,
+      urgency = 'normal',
       maxBudgetCents,
-      postalCode,
-      city,
-      canton,
+      postalCode = null,
+      city = null,
+      canton = null,
       serviceType = 'flexible',
       skillsNeeded = [],
       budgetTier,
@@ -198,19 +197,19 @@ export const POST = withAuth(async (request: NextRequest, session: ValidSession)
     // Insert the request with sanitized data
     const [insertedRow] = await db.insert(itHilfeRequests).values({
       requesterId: session.user.id,
-      categoryId,
+      categoryId: categoryId ?? 'other',
       deviceBrand: deviceBrand || null,
       deviceModel: deviceModel || null,
       title: sanitizedTitle,
-      description: sanitizedDescription,
-      urgency,
+      description: sanitizedDescription ?? '',
+      urgency: urgency ?? 'normal',
       budgetType,
       budgetAmountCents,
       budgetTier: budgetTier || null,
-      postalCode,
-      city,
-      canton,
-      serviceType,
+      postalCode: postalCode ?? '',
+      city: city ?? '',
+      canton: canton ?? '',
+      serviceType: serviceType ?? 'flexible',
       skillsNeeded: skillsNeeded && skillsNeeded.length > 0 ? skillsNeeded : null,
       imageUrls: imageUrls.length > 0 ? imageUrls : null,
       aiDiagnosis: aiDiagnosis || null,
@@ -233,10 +232,10 @@ export const POST = withAuth(async (request: NextRequest, session: ValidSession)
       requesterName: session.user.name || 'Nutzer',
       requesterEmail: session.user.email || '',
       title: sanitizedTitle,
-      categoryId,
-      urgency,
-      canton,
-      serviceType,
+      categoryId: categoryId ?? 'other',
+      urgency: urgency ?? 'normal',
+      canton: canton ?? '',
+      serviceType: serviceType ?? 'flexible',
       skillsNeeded: skillsNeeded || [],
       aiDiagnosis: aiDiagnosis || null,
     })

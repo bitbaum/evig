@@ -43,7 +43,7 @@ export const INITIAL_LISTING_FORM: ListingFormData = {
   description: '',
   price: '',
   category: '',
-  condition: '',
+  condition: 'good',
   brand: '',
   model: '',
   images: [],

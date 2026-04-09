@@ -386,7 +386,7 @@ export default function CreatePeerRepairPage() {
                 </Link>
                 <button
                   type="submit"
-                  disabled={loading || !formData.categoryId || !formData.title || !formData.postalCode}
+                  disabled={loading || !formData.title.trim()}
                   className="px-6 py-3 bg-emerald-600 text-white rounded-lg font-medium hover:bg-emerald-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {loading ? 'Wird erstellt...' : 'Anfrage erstellen'}

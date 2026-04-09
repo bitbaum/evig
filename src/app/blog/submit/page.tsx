@@ -1,8 +1,9 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { useSession } from 'next-auth/react'
 import Link from 'next/link'
-import { ArrowLeft, Send, Lightbulb, FileText, Edit } from 'lucide-react'
+import { ArrowLeft, Send, Lightbulb, FileText, Edit, CheckCircle } from 'lucide-react'
 import { PageHero } from '@/components/layout/PageHero'
 import { AIFormAssist } from '@/components/ai/AIFormAssist'
 import { logger } from '@/lib/logger'
@@ -19,6 +20,7 @@ interface Category {
 }
 
 export default function SubmitPostPage() {
+  const { data: session } = useSession()
   const [submissionType, setSubmissionType] = useState<SubmissionType>('idea')
   const [categories, setCategories] = useState<Category[]>([])
   const [formData, setFormData] = useState({
@@ -31,6 +33,17 @@ export default function SubmitPostPage() {
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle')
+
+  // Pre-fill name and email from session when user is logged in
+  useEffect(() => {
+    if (session?.user) {
+      setFormData(prev => ({
+        ...prev,
+        name: session.user.name ?? prev.name,
+        email: session.user.email ?? prev.email,
+      }))
+    }
+  }, [session])
 
   // Fetch categories from database
   useEffect(() => {
@@ -80,14 +93,6 @@ export default function SubmitPostPage() {
       if (!response.ok) throw new Error('Submission failed')
 
       setSubmitStatus('success')
-      setFormData({
-        name: '',
-        email: '',
-        title: '',
-        category: '',
-        tags: '',
-        content: '',
-      })
     } catch {
       setSubmitStatus('error')
     } finally {
@@ -100,6 +105,73 @@ export default function SubmitPostPage() {
       ...formData,
       [e.target.name]: e.target.value,
     })
+  }
+
+  const handleReset = () => {
+    setFormData({
+      name: session?.user?.name ?? '',
+      email: session?.user?.email ?? '',
+      title: '',
+      category: '',
+      tags: '',
+      content: '',
+    })
+    setSubmitStatus('idle')
+  }
+
+  const isLoggedIn = !!session?.user
+  const canSubmit = !isSubmitting && formData.title.trim() !== '' && formData.content.trim() !== ''
+
+  // Success screen — shown instead of form after submission
+  if (submitStatus === 'success') {
+    return (
+      <main className="min-h-screen bg-gray-50">
+        <div className="relative">
+          <PageHero
+            theme="about"
+            icon={Edit}
+            title="Beitrag einreichen"
+            subtitle="Teile deine Ideen und Erfahrungen mit unserer Community!"
+          />
+          <div className="absolute top-4 left-4 sm:left-8">
+            <Link
+              href="/blog"
+              className="inline-flex items-center text-gray-600 hover:text-gray-900 transition-colors bg-white px-4 py-2 rounded-lg shadow-sm"
+            >
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              Zurück zum Blog
+            </Link>
+          </div>
+        </div>
+
+        <div className="container mx-auto px-4 py-16 max-w-2xl text-center">
+          <div className="bg-white rounded-lg shadow-sm p-12">
+            <CheckCircle className="w-16 h-16 text-green-500 mx-auto mb-6" />
+            <Heading level={2} className="text-2xl text-gray-900 mb-3">Vielen Dank!</Heading>
+            <p className="text-gray-700 text-lg mb-2">
+              Dein Beitrag wurde eingereicht und wird von uns geprüft.
+            </p>
+            <p className="text-gray-500 text-sm mb-8">
+              Wir melden uns per E-Mail, sobald dein Beitrag veröffentlicht wird.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-3 justify-center">
+              <button
+                onClick={handleReset}
+                className="inline-flex items-center justify-center px-6 py-3 border border-green-600 text-green-600 rounded-lg hover:bg-green-50 transition-colors font-medium"
+              >
+                Weiteren Beitrag einreichen
+              </button>
+              <Link
+                href="/blog"
+                className="inline-flex items-center justify-center px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-medium"
+              >
+                Zum Blog
+              </Link>
+            </div>
+          </div>
+        </div>
+      </main>
+    )
   }
 
   return (
@@ -193,7 +265,8 @@ export default function SubmitPostPage() {
                 onChange={handleChange}
                 required
                 aria-required="true"
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                readOnly={isLoggedIn}
+                className={`w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent ${isLoggedIn ? 'bg-gray-50 text-gray-600 cursor-default' : ''}`}
                 placeholder="Max Mustermann"
               />
             </div>
@@ -210,7 +283,8 @@ export default function SubmitPostPage() {
                 onChange={handleChange}
                 required
                 aria-required="true"
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                readOnly={isLoggedIn}
+                className={`w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent ${isLoggedIn ? 'bg-gray-50 text-gray-600 cursor-default' : ''}`}
                 placeholder="max@beispiel.de"
               />
             </div>
@@ -316,7 +390,7 @@ export default function SubmitPostPage() {
             </div>
             <button
               type="submit"
-              disabled={isSubmitting}
+              disabled={!canSubmit}
               className="inline-flex items-center px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
             >
               {isSubmitting ? (
@@ -336,19 +410,10 @@ export default function SubmitPostPage() {
             </button>
           </div>
 
-          {/* Status Messages */}
-          {submitStatus === 'success' && (
-            <div className="mt-6 p-4 bg-green-50 border border-green-200 rounded-lg">
-              <p className="text-green-800 font-medium">✅ Vielen Dank für deine Einreichung!</p>
-              <p className="text-green-700 text-sm mt-1">
-                Wir werden deine Einreichung überprüfen und uns per E-Mail bei dir melden.
-              </p>
-            </div>
-          )}
-
+          {/* Error Message */}
           {submitStatus === 'error' && (
             <div className="mt-6 p-4 bg-red-50 border border-red-200 rounded-lg">
-              <p className="text-red-800 font-medium">❌ Fehler beim Senden</p>
+              <p className="text-red-800 font-medium">Fehler beim Senden</p>
               <p className="text-red-700 text-sm mt-1">
                 Bitte versuche es später erneut oder kontaktiere uns direkt.
               </p>

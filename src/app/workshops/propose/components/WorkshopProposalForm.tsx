@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { logger } from '@/lib/logger'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 import { Loader2 } from 'lucide-react'
 import { responsiveButtons } from '@/lib/responsive'
 import Heading from '@/components/ui/Heading'
@@ -166,14 +167,6 @@ export function WorkshopProposalForm() {
       return
     }
 
-    if (formData.learningObjectives.length === 0) {
-      setSubmitResult({
-        success: false,
-        message: 'Bitte gib mindestens ein Lernziel an'
-      })
-      return
-    }
-
     setIsSubmitting(true)
     setSubmitResult(null)
 
@@ -191,13 +184,8 @@ export function WorkshopProposalForm() {
       if (data.success) {
         setSubmitResult({
           success: true,
-          message: 'dein Workshop-Vorschlag wurde erfolgreich eingereicht! du erhältst in Kürze eine E-Mail mit weiteren Informationen.'
+          message: formData.title,
         })
-
-        // Redirect after success
-        setTimeout(() => {
-          router.push('/dashboard')
-        }, 3000)
       } else {
         setSubmitResult({
           success: false,
@@ -286,21 +274,36 @@ export function WorkshopProposalForm() {
               : 'bg-red-50 border-red-200 text-red-800'
           }`}
         >
-          <div className="flex items-center">
+          {submitResult.success ? (
             <div>
-              <Heading level={3} className="font-semibold mb-1">
-                {submitResult.success ? 'Vorschlag erfolgreich!' : 'Fehler'}
+              <Heading level={3} className="font-semibold mb-2">
+                Vorschlag erfolgreich eingereicht!
               </Heading>
+              <p className="mb-1">
+                <span className="font-medium">&laquo;{submitResult.message}&raquo;</span> wurde eingereicht.
+              </p>
+              <p className="mb-4">Dein Vorschlag wurde eingereicht. Wir melden uns per E-Mail.</p>
+              <Link
+                href="/workshops"
+                className="inline-flex items-center text-green-700 underline hover:text-green-900 font-medium"
+              >
+                Zurück zu Workshops
+              </Link>
+            </div>
+          ) : (
+            <div>
+              <Heading level={3} className="font-semibold mb-1">Fehler</Heading>
               <p>{submitResult.message}</p>
             </div>
-          </div>
+          )}
         </div>
       )}
 
+      {!submitResult?.success && (
       <div className="text-center">
         <button
           type="submit"
-          disabled={isSubmitting || !formData.termsAccepted}
+          disabled={isSubmitting || !formData.title.trim() || !formData.description.trim() || !formData.category || !formData.termsAccepted}
           className={`${responsiveButtons.primary} inline-flex items-center bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors`}
         >
           {isSubmitting ? (
@@ -317,6 +320,7 @@ export function WorkshopProposalForm() {
           Nach Einreichung wird dein Vorschlag geprüft. Dies kann 1-2 Werktage dauern.
         </p>
       </div>
+      )}
     </form>
   )
 }

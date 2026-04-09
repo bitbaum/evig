@@ -17,31 +17,36 @@ import { paginationSchema } from './common';
 export const itHilfeRequestSchema = z.object({
   categoryId: z.enum(getCategoryIds() as [string, ...string[]], {
     message: 'Ungültige Gerätekategorie',
-  }),
+  }).optional(),
   title: z
     .string()
-    .min(10, 'Titel muss mindestens 10 Zeichen lang sein')
+    .min(5, 'Titel muss mindestens 5 Zeichen lang sein')
     .max(200, 'Titel darf maximal 200 Zeichen lang sein'),
   description: z
     .string()
-    .min(20, 'Beschreibung muss mindestens 20 Zeichen lang sein')
-    .max(5000, 'Beschreibung darf maximal 5000 Zeichen lang sein'),
+    .max(5000, 'Beschreibung darf maximal 5000 Zeichen lang sein')
+    .optional()
+    .nullable(),
   urgency: z.enum(
     URGENCY_LEVELS.map((u) => u.id) as [string, ...string[]],
     {
       message: 'Ungültige Dringlichkeit',
     }
-  ),
+  ).optional(),
   postalCode: z
     .string()
-    .regex(/^\d{4}$/, 'Postleitzahl muss 4 Ziffern haben'),
+    .regex(/^\d{4}$/, 'Postleitzahl muss 4 Ziffern haben')
+    .optional()
+    .nullable(),
   city: z
     .string()
     .min(2, 'Stadt muss mindestens 2 Zeichen lang sein')
-    .max(100, 'Stadt darf maximal 100 Zeichen lang sein'),
+    .max(100, 'Stadt darf maximal 100 Zeichen lang sein')
+    .optional()
+    .nullable(),
   canton: z.enum(SWISS_CANTONS, {
     message: 'Ungültiger Kanton',
-  }),
+  }).optional().nullable(),
   skillsNeeded: z
     .array(z.enum(getSkillIds() as [string, ...string[]]))
     .max(10, 'Maximal 10 Fähigkeiten erlaubt')

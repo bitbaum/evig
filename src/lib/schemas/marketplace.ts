@@ -86,7 +86,7 @@ export const CreateListingSchema = z.object({
   }),
   condition: z.enum(LISTING_CONDITIONS as unknown as [string, ...string[]], {
     error: 'Ungültiger Zustand',
-  }),
+  }).default('good'),
   brand: z.string().max(100).optional().nullable(),
   model: z.string().max(100).optional().nullable(),
   images: z.array(

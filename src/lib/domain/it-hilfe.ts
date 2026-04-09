@@ -11,16 +11,16 @@ import type { ITHilfeCreateFormData } from '@/types/it-hilfe-form'
  */
 export function transformITHilfeFormToPayload(formData: ITHilfeCreateFormData) {
   return {
-    categoryId: formData.categoryId,
+    categoryId: formData.categoryId || undefined,
     deviceBrand: formData.deviceBrand || null,
     deviceModel: formData.deviceModel || null,
     title: formData.title,
-    description: formData.description,
-    urgency: formData.urgency,
+    description: formData.description || null,
+    urgency: formData.urgency || undefined,
     maxBudgetCents: formData.maxBudget ? Math.round(parseFloat(formData.maxBudget) * 100) : null,
-    postalCode: formData.postalCode,
-    city: formData.city,
-    canton: formData.canton,
+    postalCode: formData.postalCode || null,
+    city: formData.city || null,
+    canton: formData.canton || null,
     serviceType: formData.serviceType,
     skillsNeeded: formData.skillsNeeded,
     imageUrls: formData.imageUrls.length > 0 ? formData.imageUrls : undefined,

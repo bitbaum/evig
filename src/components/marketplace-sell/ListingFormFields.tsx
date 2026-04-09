@@ -53,9 +53,14 @@ export function ListingFormFields({ formData, setFormData }: Props) {
     <>
       {/* Title */}
       <div>
-        <label htmlFor="listing-title" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-          Titel <span className="text-red-500">*</span>
-        </label>
+        <div className="flex items-center justify-between mb-1">
+          <label htmlFor="listing-title" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+            Titel <span className="text-red-500">*</span>
+          </label>
+          <span className={`text-xs ${formData.title.length >= MARKETPLACE_LIMITS.MAX_TITLE_LENGTH ? 'text-red-500' : 'text-gray-400'}`}>
+            {formData.title.length}/{MARKETPLACE_LIMITS.MAX_TITLE_LENGTH}
+          </span>
+        </div>
         <input
           id="listing-title"
           type="text"
@@ -69,9 +74,14 @@ export function ListingFormFields({ formData, setFormData }: Props) {
 
       {/* Description */}
       <div>
-        <label htmlFor="listing-description" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-          Beschreibung <span className="text-red-500">*</span>
-        </label>
+        <div className="flex items-center justify-between mb-1">
+          <label htmlFor="listing-description" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+            Beschreibung <span className="text-red-500">*</span>
+          </label>
+          <span className={`text-xs ${formData.description.length >= MARKETPLACE_LIMITS.MAX_DESCRIPTION_LENGTH ? 'text-red-500' : 'text-gray-400'}`}>
+            {formData.description.length}/{MARKETPLACE_LIMITS.MAX_DESCRIPTION_LENGTH}
+          </span>
+        </div>
         <textarea
           id="listing-description"
           value={formData.description}
@@ -87,7 +97,7 @@ export function ListingFormFields({ formData, setFormData }: Props) {
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div>
           <label htmlFor="listing-price" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-            Preis (CHF) <span className="text-red-500">*</span>
+            Preis (CHF)
           </label>
           <input
             id="listing-price"
@@ -123,7 +133,7 @@ export function ListingFormFields({ formData, setFormData }: Props) {
         </div>
         <div>
           <label htmlFor="listing-condition" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-            Zustand <span className="text-red-500">*</span>
+            Zustand
           </label>
           <select
             id="listing-condition"

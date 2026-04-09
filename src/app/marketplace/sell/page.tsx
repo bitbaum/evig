@@ -341,7 +341,11 @@ function SellPageContent() {
             >
               Abbrechen
             </Link>
-            <Button onClick={handlePreview} className="flex-1 gap-2 px-6 py-2.5">
+            <Button
+              onClick={handlePreview}
+              disabled={!formData.title.trim() || !formData.description.trim() || !formData.category}
+              className="flex-1 gap-2 px-6 py-2.5"
+            >
               <Eye className="w-4 h-4" />
               {editId ? 'Vorschau & Speichern' : 'Vorschau & Veröffentlichen'}
             </Button>
