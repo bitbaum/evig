@@ -1,35 +1,30 @@
 'use client'
 
 /**
- * AIFormAssist — Unified AI form assistance component.
+ * AIFormAssist — Unified AI form assistance component (SSOT).
  *
- * Single input field that always does the right thing:
- * - Empty form: user describes what they want → AI creates/fills fields
- * - Filled form: user describes what to change → AI refines fields
- * - Quick actions: one-click shortcuts, always available
+ * Single input that always does the right thing:
+ * - Empty form → user describes what they want → AI fills fields
+ * - Filled form → user describes changes → AI refines fields
+ * - Quick actions → one-click shortcuts (only when form has content)
  *
- * Reads config from FORM_AI_REGISTRY (SSOT).
+ * Config comes from FORM_AI_REGISTRY. To add AI to a new form:
+ * 1. Add entry to FORM_AI_REGISTRY in lib/ai/config/prompts.ts
+ * 2. Drop <AIFormAssist formType="xxx" /> in the component
  */
 
-import { useState, type KeyboardEvent } from 'react'
+import { useState, useRef, type KeyboardEvent } from 'react'
 import { Sparkles, Loader2, AlertCircle, CheckCircle2 } from 'lucide-react'
 import { useAIFormAssist, type AIFieldMetadataEntry } from '@/hooks/useAIFormAssist'
 import { FORM_AI_REGISTRY } from '@/lib/ai/config/prompts'
 
 interface AIFormAssistProps<T = Record<string, unknown>> {
-  /** Registry key from FORM_AI_REGISTRY */
   formType: string
-  /** Current form data — enables refine mode + quick actions */
   currentData?: Record<string, unknown>
-  /** Callback when AI fills/updates fields */
   onFieldsFilled: (data: Partial<T>, metadata: Record<string, AIFieldMetadataEntry>) => void
-  /** Placeholder text for the input textarea */
   placeholder?: string
-  /** Start expanded (default: false) */
   defaultExpanded?: boolean
-  /** Visual variant: 'bar' = compact, 'section' = prominent */
   variant?: 'bar' | 'section'
-  /** Additional CSS class */
   className?: string
 }
 
@@ -44,19 +39,26 @@ export function AIFormAssist<T = Record<string, unknown>>({
 }: AIFormAssistProps<T>) {
   const [isExpanded, setIsExpanded] = useState(defaultExpanded)
   const [inputText, setInputText] = useState('')
+  const [filledCount, setFilledCount] = useState(0)
+
+  const wrappedOnFieldsFilled = (data: Partial<T>, metadata: Record<string, AIFieldMetadataEntry>) => {
+    // Count how many fields were actually filled
+    const count = Object.keys(metadata).length
+    setFilledCount(count)
+    onFieldsFilled(data, metadata)
+  }
 
   const { extractFromText, refineFields, runQuickAction, isExtracting, error, success } =
-    useAIFormAssist<T>({ formType, onFieldsFilled })
+    useAIFormAssist<T>({ formType, onFieldsFilled: wrappedOnFieldsFilled })
 
   const config = FORM_AI_REGISTRY[formType]
   if (!config) return null
 
-  // Quick actions from registry — always available
   const quickActions = config.quickActions
     ? Object.entries(config.quickActions).map(([key, { label }]) => ({ key, label }))
     : []
 
-  // Detect if form has meaningful content (for choosing extract vs refine)
+  // Form has meaningful user content (not just defaults)
   const hasContent = currentData && Object.values(currentData).some(v =>
     typeof v === 'string' && v.trim().length > 20
   )
@@ -79,9 +81,8 @@ export function AIFormAssist<T = Record<string, unknown>>({
   }
 
   const handleQuickAction = (actionKey: string) => {
-    if (isExtracting) return
-    // Quick actions work with current data if available, empty object if not
-    runQuickAction(currentData || {}, actionKey)
+    if (isExtracting || !hasContent || !currentData) return
+    runQuickAction(currentData, actionKey)
   }
 
   // Styles
@@ -93,7 +94,7 @@ export function AIFormAssist<T = Record<string, unknown>>({
 
   return (
     <div className={`${containerClass} ${className}`}>
-      {/* Header — always visible */}
+      {/* Header */}
       <button
         type="button"
         onClick={() => setIsExpanded(!isExpanded)}
@@ -110,17 +111,23 @@ export function AIFormAssist<T = Record<string, unknown>>({
 
       {isExpanded && (
         <div className={`${padding} pb-4 space-y-3`}>
-          {/* Feedback */}
+          {/* Error feedback */}
           {error && (
             <div className="flex items-start gap-2 bg-red-50 border border-red-200 text-red-700 px-3 py-2 rounded-lg text-sm">
               <AlertCircle className="w-4 h-4 flex-shrink-0 mt-0.5" />
               <span>{error}</span>
             </div>
           )}
+
+          {/* Success feedback — persistent until next action, shows field count */}
           {success && !error && (
             <div className="flex items-center gap-2 bg-green-50 border border-green-200 text-green-700 px-3 py-2 rounded-lg text-sm">
               <CheckCircle2 className="w-4 h-4 flex-shrink-0" />
-              <span>Felder ausgefüllt!</span>
+              <span>
+                {filledCount > 0
+                  ? `${filledCount} ${filledCount === 1 ? 'Feld' : 'Felder'} ausgefüllt — überprüfe die Daten unten.`
+                  : 'Felder ausgefüllt!'}
+              </span>
             </div>
           )}
 
@@ -140,6 +147,7 @@ export function AIFormAssist<T = Record<string, unknown>>({
               onClick={handleSubmit}
               disabled={isExtracting || !inputText.trim()}
               className="px-4 py-2 bg-purple-600 hover:bg-purple-700 disabled:bg-purple-400 text-white font-medium rounded-lg transition-colors touch-manipulation self-end"
+              aria-label={isExtracting ? 'KI verarbeitet...' : 'KI ausführen'}
             >
               {isExtracting
                 ? <Loader2 className="w-5 h-5 animate-spin" />
@@ -148,7 +156,7 @@ export function AIFormAssist<T = Record<string, unknown>>({
             </button>
           </div>
 
-          {/* Quick actions — always available, context-aware */}
+          {/* Quick actions — only when form has content to work with */}
           {quickActions.length > 0 && (
             <div className="flex flex-wrap gap-1.5">
               {quickActions.map((action) => (
@@ -156,8 +164,9 @@ export function AIFormAssist<T = Record<string, unknown>>({
                   key={action.key}
                   type="button"
                   onClick={() => handleQuickAction(action.key)}
-                  disabled={isExtracting}
-                  className="px-2.5 py-1 bg-purple-100 dark:bg-purple-800/40 text-purple-700 dark:text-purple-300 rounded-md text-xs font-medium hover:bg-purple-200 dark:hover:bg-purple-700/50 disabled:opacity-50 transition-colors touch-manipulation"
+                  disabled={isExtracting || !hasContent}
+                  title={!hasContent ? 'Fülle zuerst das Formular aus' : undefined}
+                  className="px-2.5 py-1 bg-purple-100 dark:bg-purple-800/40 text-purple-700 dark:text-purple-300 rounded-md text-xs font-medium hover:bg-purple-200 dark:hover:bg-purple-700/50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors touch-manipulation"
                 >
                   {action.label}
                 </button>

@@ -92,8 +92,6 @@ export function useAIFormAssist<T>({
 
       onFieldsFilled(result.data as Partial<T>, metadata)
       setSuccess(true)
-      // Clear success indicator after 3s
-      setTimeout(() => setSuccess(false), 3000)
     } catch (err) {
       if (err instanceof Error && err.name === 'AbortError') return
       setError('Verbindung zum KI-Service fehlgeschlagen.')
@@ -129,15 +127,7 @@ export function useAIFormAssist<T>({
   }, [callAPI])
 
   const runQuickAction = useCallback(async (currentData: Record<string, unknown>, actionKey: string) => {
-    // If form has content, refine it. Otherwise, use extract mode with the quick action as context.
-    const hasContent = Object.values(currentData).some(v =>
-      typeof v === 'string' && (v as string).trim().length > 20
-    )
-    if (hasContent) {
-      await callAPI({ text: actionKey, mode: 'refine', currentData, quickAction: actionKey })
-    } else {
-      await callAPI({ text: actionKey, mode: 'extract', quickAction: actionKey })
-    }
+    await callAPI({ text: actionKey, mode: 'refine', currentData, quickAction: actionKey })
   }, [callAPI])
 
   return { extractFromText, refineFields, runQuickAction, isExtracting, error, success }
