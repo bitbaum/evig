@@ -20,6 +20,11 @@ export const users = pgTable('users', {
   staffPermissions: text('staff_permissions').array().default([]),
   // Super admin management (004)
   isSuperAdmin: boolean('is_super_admin').default(false),
+  // Verein membership (062)
+  isMember: boolean('is_member').default(false),
+  memberSince: timestamp('member_since', { withTimezone: true, mode: 'string' }),
+  memberType: text('member_type').default('regular'),
+  memberPaidUntil: timestamp('member_paid_until', { withTimezone: true, mode: 'string' }),
   // Timestamps (camelCase for Auth.js adapter)
   createdAt: timestamp('createdAt', { withTimezone: true, mode: 'string' }).defaultNow(),
   updatedAt: timestamp('updatedAt', { withTimezone: true, mode: 'string' }).defaultNow(),

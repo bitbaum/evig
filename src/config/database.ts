@@ -52,6 +52,9 @@ export const TABLE_NAMES = {
   REPAIRER_REVIEWS: 'repairer_reviews',
   REPAIRER_CERTIFICATIONS: 'repairer_certifications',
 
+  // Membership
+  MEMBERSHIP_APPLICATIONS: 'membership_applications',
+
   // Other
   DONATIONS: 'donations',
   NEWSLETTER_SUBSCRIPTIONS: 'newsletter_subscriptions',

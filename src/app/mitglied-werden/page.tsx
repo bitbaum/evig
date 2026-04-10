@@ -1,9 +1,14 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { Award, Vote, Calendar, Star, Leaf, Mail } from 'lucide-react'
+import { Award, Vote, Calendar, Star, Leaf, CheckCircle, User as UserIcon } from 'lucide-react'
 import { PageHero } from '@/components/layout/PageHero'
 import Heading from '@/components/ui/Heading'
-import { ORG, CONTACT } from '@/config/org'
+import { ORG } from '@/config/org'
+import { auth } from '@/auth'
+import { db } from '@/db'
+import { users, membershipApplications } from '@/db/schema'
+import { eq, and, desc } from 'drizzle-orm'
+import { MembershipApplicationForm } from '@/components/membership/MembershipApplicationForm'
 
 export const metadata: Metadata = {
   title: `Mitglied werden | ${ORG.name}`,
@@ -43,12 +48,24 @@ const MEMBERSHIP_BENEFITS = [
 
 const FAQ = [
   {
+    question: 'Muss ich ein Konto haben, um Mitglied zu werden?',
+    answer: 'Nein, du kannst den Antrag auch ohne bestehenden Account einreichen. Sobald der Vorstand deinen Antrag bestätigt, erstellen wir dir ein Mitglieder-Konto — oder wir verknüpfen die Mitgliedschaft mit deinem bestehenden Konto, falls du bereits eines hast.',
+  },
+  {
+    question: 'Was ist der Unterschied zwischen einem Nutzerkonto und einer Mitgliedschaft?',
+    answer: 'Ein Nutzerkonto brauchst du, um auf dem Marktplatz zu kaufen/verkaufen, Reparaturen anzufragen oder Workshops zu buchen. Eine Vereinsmitgliedschaft geht darüber hinaus: Sie gibt dir Stimmrecht an der Generalversammlung, Mitbestimmung bei Entscheidungen und macht dich offiziell Teil der Trägerschaft des Vereins.',
+  },
+  {
     question: 'Was macht der Verein genau?',
-    answer: `${ORG.legalName} fördert den nachhaltigen Umgang mit Technologie. Wir betreiben einen Community-Marktplatz für gebrauchte IT, vermitteln freiwillige Techniker für Reparaturen und bieten Workshops zu Linux, Hardware und Programmierung an.`,
+    answer: `${ORG.legalName} fördert den nachhaltigen Umgang mit Technologie. Wir betreiben einen Community-Marktplatz für gebrauchte IT, vermitteln Techniker für Reparaturen und bieten Workshops zu Linux, Hardware und Programmierung an.`,
   },
   {
     question: 'Wann ist die nächste Generalversammlung?',
-    answer: 'Die Generalversammlung findet einmal jährlich statt. Mitglieder werden rechtzeitig per E-Mail eingeladen. Den genauen Termin erfahre nach deiner Aufnahme.',
+    answer: 'Die Generalversammlung findet einmal jährlich statt. Mitglieder werden rechtzeitig per E-Mail eingeladen. Den genauen Termin erfährst du nach deiner Aufnahme.',
+  },
+  {
+    question: 'Wie zahle ich den Jahresbeitrag?',
+    answer: 'Nach Annahme deines Antrags erhältst du eine Rechnung per E-Mail mit allen Zahlungsinformationen. Die Zahlung erfolgt per Banküberweisung oder TWINT.',
   },
   {
     question: 'Kann ich jederzeit austreten?',
@@ -56,7 +73,45 @@ const FAQ = [
   },
 ]
 
-export default function MitgliedWerdenPage() {
+async function getMembershipStatus() {
+  const session = await auth()
+  if (!session?.user?.id) return { isLoggedIn: false, isMember: false, hasPendingApplication: false }
+
+  const [user] = await db
+    .select({
+      isMember: users.isMember,
+      memberSince: users.memberSince,
+      memberType: users.memberType,
+    })
+    .from(users)
+    .where(eq(users.id, session.user.id))
+    .limit(1)
+
+  const [pending] = await db
+    .select({ id: membershipApplications.id, createdAt: membershipApplications.createdAt })
+    .from(membershipApplications)
+    .where(
+      and(
+        eq(membershipApplications.userId, session.user.id),
+        eq(membershipApplications.status, 'pending')
+      )
+    )
+    .orderBy(desc(membershipApplications.createdAt))
+    .limit(1)
+
+  return {
+    isLoggedIn: true,
+    isMember: user?.isMember ?? false,
+    memberSince: user?.memberSince,
+    memberType: user?.memberType,
+    hasPendingApplication: !!pending,
+    pendingSince: pending?.createdAt,
+  }
+}
+
+export default async function MitgliedWerdenPage() {
+  const status = await getMembershipStatus()
+
   return (
     <div className="bg-white">
       {/* Hero */}
@@ -75,7 +130,7 @@ export default function MitgliedWerdenPage() {
               Was bedeutet Mitgliedschaft?
             </Heading>
             <p className="mt-4 text-lg text-gray-600 max-w-2xl mx-auto">
-              Als Mitglied des {ORG.legalName} hast du echte Mitsprachemöglichkeiten und tragen aktiv zur Mission bei.
+              Als Mitglied des {ORG.legalName} hast du echte Mitsprachemöglichkeiten und trägst aktiv zur Mission bei.
             </p>
           </div>
 
@@ -93,44 +148,66 @@ export default function MitgliedWerdenPage() {
         </div>
       </div>
 
-      {/* Fee & How to Join */}
+      {/* Form / Status */}
       <div className="bg-green-50 py-12 sm:py-16">
         <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
           <div className="bg-white rounded-2xl p-8 sm:p-10 border border-gray-200 shadow-sm">
-            <Heading level={2} className="tracking-tight text-gray-900 text-center">
-              Jahresbeitrag
-            </Heading>
-            <div className="mt-6 text-center">
-              <p className="text-4xl font-bold text-green-600">CHF 50</p>
-              <p className="mt-2 text-sm text-gray-600">
-                Ermässigt CHF 20 für Studierende und Lernende
-              </p>
-            </div>
-
-            <div className="mt-8 pt-8 border-t border-gray-200">
-              <Heading level={3} className="tracking-tight text-gray-900">
-                So wirst du Mitglied
-              </Heading>
-              <p className="mt-4 text-base text-gray-600">
-                Sende eine E-Mail an{' '}
-                <a
-                  href={`mailto:${CONTACT.email}?subject=Mitgliedschaftsantrag`}
-                  className="font-semibold text-green-600 hover:text-green-700 underline"
+            {status.isMember ? (
+              // Already a member
+              <div className="text-center">
+                <div className="inline-flex items-center justify-center w-16 h-16 bg-green-100 rounded-full mb-4">
+                  <CheckCircle className="w-8 h-8 text-green-600" />
+                </div>
+                <Heading level={2} className="tracking-tight text-gray-900">Du bist Mitglied!</Heading>
+                <p className="mt-3 text-gray-600">
+                  Vielen Dank für deine Unterstützung. Als Mitglied hast du Stimmrecht an Entscheiden und der Generalversammlung.
+                </p>
+                {status.memberSince && (
+                  <p className="mt-2 text-sm text-gray-500">
+                    Mitglied seit {new Date(status.memberSince).toLocaleDateString('de-CH')}
+                  </p>
+                )}
+                <Link
+                  href="/dashboard"
+                  className="mt-6 inline-flex items-center gap-2 rounded-md bg-green-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-green-500"
                 >
-                  {CONTACT.email}
-                </a>{' '}
-                mit deinem Namen und deiner Adresse. Wir nehmen deinen Antrag an der nächsten Vorstandssitzung auf.
-              </p>
-              <div className="mt-6">
-                <a
-                  href={`mailto:${CONTACT.email}?subject=Mitgliedschaftsantrag`}
-                  className="inline-flex items-center gap-2 rounded-md bg-green-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600"
-                >
-                  <Mail className="h-4 w-4" aria-hidden="true" />
-                  Antrag per E-Mail senden
-                </a>
+                  <UserIcon className="h-4 w-4" />
+                  Zum Dashboard
+                </Link>
               </div>
-            </div>
+            ) : status.hasPendingApplication ? (
+              // Pending application
+              <div className="text-center">
+                <div className="inline-flex items-center justify-center w-16 h-16 bg-yellow-100 rounded-full mb-4">
+                  <Calendar className="w-8 h-8 text-yellow-600" />
+                </div>
+                <Heading level={2} className="tracking-tight text-gray-900">Dein Antrag wird geprüft</Heading>
+                <p className="mt-3 text-gray-600">
+                  Wir haben deinen Mitgliedschaftsantrag erhalten und werden ihn an der nächsten Vorstandssitzung besprechen. Du erhältst eine E-Mail sobald eine Entscheidung getroffen wurde.
+                </p>
+                {status.pendingSince && (
+                  <p className="mt-2 text-sm text-gray-500">
+                    Eingereicht am {new Date(status.pendingSince).toLocaleDateString('de-CH')}
+                  </p>
+                )}
+              </div>
+            ) : (
+              // Show form
+              <>
+                <Heading level={2} className="tracking-tight text-gray-900 text-center">
+                  Jetzt Mitglied werden
+                </Heading>
+                <div className="mt-4 text-center">
+                  <p className="text-4xl font-bold text-green-600">CHF 50</p>
+                  <p className="mt-1 text-sm text-gray-600">
+                    Ermässigt CHF 20 für Studierende und Lernende · Jahresbeitrag
+                  </p>
+                </div>
+                <div className="mt-8">
+                  <MembershipApplicationForm />
+                </div>
+              </>
+            )}
           </div>
         </div>
       </div>

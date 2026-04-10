@@ -20,7 +20,7 @@ function formatCount(n: number): string {
 }
 
 const STAT_LABELS: { key: keyof StatsData; label: string }[] = [
-  { key: 'users', label: 'Mitglieder' },
+  { key: 'users', label: 'Nutzer:innen' },
   { key: 'listings', label: 'Inserate' },
   { key: 'repairs', label: 'Reparaturen' },
   { key: 'workshops', label: 'Workshops' },
