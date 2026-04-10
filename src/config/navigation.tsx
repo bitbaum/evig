@@ -274,6 +274,18 @@ export const mainNavigation: NavigationItem[] = [
         href: '/get-involved/partnerships',
         description: 'Als Unternehmen kooperieren',
       },
+      // Section: Mitgliedschaft
+      {
+        name: 'Mitgliedschaft',
+        href: '/mitglied-werden',
+        isSection: true,
+      },
+      {
+        name: 'Mitglied werden',
+        href: '/mitglied-werden',
+        description: 'Teil des Vereins werden und mitbestimmen',
+        badge: 'Neu',
+      },
     ],
   },
   {

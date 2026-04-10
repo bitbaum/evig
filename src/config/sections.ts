@@ -42,6 +42,7 @@ import {
   Heart,
   ClipboardList,
   Vote,
+  BadgeCheck,
 } from 'lucide-react'
 
 // =============================================================================
@@ -556,6 +557,22 @@ export const SECTIONS: Record<string, SectionConfig> = {
     priority: 106,
     category: 'management',
     sidebarGroup: 'uebersicht',
+  },
+
+  membership: {
+    id: 'membership',
+    path: '/admin/membership',
+    ui: {
+      label: 'Mitgliedschaften',
+      description: 'Mitgliedschaftsanträge prüfen und verwalten',
+      icon: BadgeCheck,
+      emoji: '🏅',
+      color: 'success',
+    },
+    visibility: { admin: true, dashboard: false, requiresStaff: true },
+    priority: 107,
+    category: 'management',
+    sidebarGroup: 'personen',
   },
 
   tasks: {

@@ -11,10 +11,48 @@ import { OnboardingChecklist } from '@/components/dashboard/OnboardingChecklist'
 import { WelcomeCard } from '@/components/dashboard/WelcomeCard'
 import { isStaffEmail } from '@/lib/permissions'
 import Heading from '@/components/ui/Heading'
+import { query } from '@/lib/auth/db'
+import { TABLE_NAMES } from '@/config/database'
+import { formatDate } from '@/lib/date-formats'
 
 export const metadata: Metadata = {
   title: 'Dashboard | RevampIT',
   description: 'Verwalten Sie Ihr RevampIT-Konto, Workshops, Bestellungen und mehr.',
+}
+
+interface MemberStatus {
+  isMember: boolean
+  memberSince: string | null
+  memberType: string | null
+}
+
+async function getMemberStatus(userId: string): Promise<MemberStatus> {
+  try {
+    const result = await query<{
+      is_member: boolean
+      member_since: string | null
+      member_type: string | null
+    }>(
+      `SELECT is_member, member_since, member_type
+       FROM ${TABLE_NAMES.USERS}
+       WHERE id = $1`,
+      [userId]
+    )
+    const row = result.rows[0]
+    return {
+      isMember: row?.is_member ?? false,
+      memberSince: row?.member_since ?? null,
+      memberType: row?.member_type ?? null,
+    }
+  } catch {
+    return { isMember: false, memberSince: null, memberType: null }
+  }
+}
+
+const MEMBER_TYPE_LABELS: Record<string, string> = {
+  regular: 'Ordentliches Mitglied',
+  reduced: 'Ermässigtes Mitglied',
+  honorary: 'Ehrenmitglied',
 }
 
 export default async function DashboardPage() {
@@ -25,6 +63,7 @@ export default async function DashboardPage() {
   }
 
   const userRole = await getCurrentUserRole()
+  const memberStatus = await getMemberStatus(session.user.id!)
 
   return (
     <main className="min-h-screen bg-neutral-50 dark:bg-neutral-900">
@@ -52,6 +91,54 @@ export default async function DashboardPage() {
             Verwalten Sie Ihr Konto und entdecken Sie alle verfügbaren Funktionen.
           </p>
         </div>
+
+        {/* Member Status Card */}
+        {memberStatus.isMember ? (
+          <div className="mb-6 bg-green-50 dark:bg-green-900/20 border-2 border-green-200 dark:border-green-800 rounded-lg p-4 sm:p-5 flex items-center justify-between gap-4">
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 bg-green-100 dark:bg-green-900 rounded-lg flex items-center justify-center shrink-0">
+                <span className="text-green-600 dark:text-green-400 text-xl">🏅</span>
+              </div>
+              <div>
+                <Heading level={3} className={cn('text-base font-semibold', getTextColor('white', 'primary'), 'dark:text-white')}>
+                  Du bist Mitglied
+                </Heading>
+                <p className={cn('text-sm', getTextColor('white', 'muted'), 'dark:text-green-300')}>
+                  {memberStatus.memberType ? MEMBER_TYPE_LABELS[memberStatus.memberType] ?? memberStatus.memberType : 'Mitglied'}
+                  {memberStatus.memberSince ? ` · Dabei seit ${formatDate(memberStatus.memberSince)}` : ''}
+                </p>
+              </div>
+            </div>
+            <Link
+              href="/admin/decisions"
+              className="shrink-0 px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700 transition-colors"
+            >
+              Abstimmungen
+            </Link>
+          </div>
+        ) : (
+          <div className="mb-6 bg-blue-50 dark:bg-blue-900/20 border-2 border-blue-200 dark:border-blue-800 rounded-lg p-4 sm:p-5 flex items-center justify-between gap-4">
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900 rounded-lg flex items-center justify-center shrink-0">
+                <span className="text-blue-600 dark:text-blue-400 text-xl">🤝</span>
+              </div>
+              <div>
+                <Heading level={3} className={cn('text-base font-semibold', getTextColor('white', 'primary'), 'dark:text-white')}>
+                  Werde Mitglied
+                </Heading>
+                <p className={cn('text-sm', getTextColor('white', 'muted'), 'dark:text-blue-300')}>
+                  Unterstütze unsere Mission und nimm an Abstimmungen teil
+                </p>
+              </div>
+            </div>
+            <Link
+              href="/mitglied-werden"
+              className="shrink-0 px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors"
+            >
+              Mitglied werden
+            </Link>
+          </div>
+        )}
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
           {/* Profile Card */}

@@ -67,6 +67,11 @@ export default function DecisionFormClient() {
   const [participantSearch, setParticipantSearch] = useState('');
 
   useEffect(() => {
+    // TODO: Auto-invite members — when creating a decision, all users with
+    // is_member=true should be automatically added as invitedParticipants.
+    // Implementation: add a GET /api/admin/membership/members endpoint that
+    // returns { id, name, email } for all active members, then merge with
+    // teamMembers and pre-select them via setSelectedParticipants.
     fetch('/api/admin/team/profiles')
       .then((res) => res.json())
       .then((json) => {
