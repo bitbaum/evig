@@ -67,27 +67,42 @@ export default function DecisionFormClient() {
   const [participantSearch, setParticipantSearch] = useState('');
 
   useEffect(() => {
-    // TODO: Auto-invite members — when creating a decision, all users with
-    // is_member=true should be automatically added as invitedParticipants.
-    // Implementation: add a GET /api/admin/membership/members endpoint that
-    // returns { id, name, email } for all active members, then merge with
-    // teamMembers and pre-select them via setSelectedParticipants.
-    fetch('/api/admin/team/profiles')
-      .then((res) => res.json())
-      .then((json) => {
-        if (json.success && Array.isArray(json.data)) {
-          setTeamMembers(
-            json.data.map((m: { userId: string; name: string | null; email: string }) => ({
-              id: m.userId,
-              name: m.name,
-              email: m.email,
-            }))
-          );
-        }
-      })
-      .catch(() => {
-        // Team members are optional — fail silently
-      });
+    // Fetch both team members (staff) and Verein members — both are potential voters.
+    // Verein members are auto-selected (they have voting rights by default).
+    Promise.all([
+      fetch('/api/admin/team/profiles').then((res) => res.json()).catch(() => null),
+      fetch('/api/admin/membership/members').then((res) => res.json()).catch(() => null),
+    ]).then(([teamJson, memberJson]) => {
+      const teamList: TeamMember[] = teamJson?.success && Array.isArray(teamJson.data)
+        ? teamJson.data.map((m: { userId: string; name: string | null; email: string }) => ({
+            id: m.userId,
+            name: m.name,
+            email: m.email,
+          }))
+        : []
+
+      const memberList: TeamMember[] = memberJson?.success && Array.isArray(memberJson.data)
+        ? memberJson.data.map((m: { id: string; name: string | null; email: string }) => ({
+            id: m.id,
+            name: m.name,
+            email: m.email,
+          }))
+        : []
+
+      // Merge, dedupe by id (staff member can also be Verein member)
+      const byId = new Map<string, TeamMember>()
+      for (const p of [...teamList, ...memberList]) byId.set(p.id, p)
+      setTeamMembers(Array.from(byId.values()))
+
+      // Auto-select Verein members — they have voting rights by default
+      if (memberList.length > 0) {
+        setSelectedParticipants((prev) => {
+          const next = new Set(prev)
+          for (const m of memberList) next.add(m.id)
+          return next
+        })
+      }
+    })
   }, []);
 
   const filteredMembers = teamMembers.filter((m) => {

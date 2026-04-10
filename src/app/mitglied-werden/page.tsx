@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { Award, Vote, Calendar, Star, Leaf, CheckCircle, User as UserIcon } from 'lucide-react'
+import { Award, Vote, Users, Heart, CheckCircle, User as UserIcon, Calendar } from 'lucide-react'
 import { PageHero } from '@/components/layout/PageHero'
 import Heading from '@/components/ui/Heading'
 import { ORG } from '@/config/org'
@@ -23,45 +23,44 @@ export const metadata: Metadata = {
   },
 }
 
-const MEMBERSHIP_BENEFITS = [
+const MEMBERSHIP_REALITIES = [
   {
     icon: Vote,
-    title: 'Stimmrecht an der Generalversammlung',
-    description: 'Stimme über wichtige Entscheidungen ab und wähle den Vorstand.',
+    title: 'Stimmrecht bei Vereinsentscheiden',
+    description: 'Als Mitglied wirst du automatisch zu Abstimmungen eingeladen. Du entscheidest mit über die Richtung des Vereins.',
   },
   {
-    icon: Star,
-    title: 'Mitbestimmung bei wichtigen Entscheidungen',
-    description: 'Bring deine Ideen ein und gestalte die Richtung des Vereins.',
+    icon: Users,
+    title: 'Offizielle Mitgliederliste',
+    description: 'Du bist rechtlich gesehen Teil der Trägerschaft des Vereins nach Schweizer Vereinsrecht (ZGB Art. 60 ff).',
   },
   {
-    icon: Calendar,
-    title: 'Einladung zu exklusiven Veranstaltungen',
-    description: 'Nimm an Mitglieder-Events, Workshops und Netzwerktreffen teil.',
-  },
-  {
-    icon: Leaf,
-    title: 'Beitrag zu einer nachhaltigen IT-Zukunft',
-    description: 'Unterstütze aktiv die Wiederverwendung von Technologie und offene Software.',
+    icon: Heart,
+    title: 'Finanzielle Unterstützung',
+    description: 'Dein Jahresbeitrag hilft uns, den Verein nachhaltig zu finanzieren — unabhängig von externen Geldgebern.',
   },
 ]
 
 const FAQ = [
   {
-    question: 'Muss ich ein Konto haben, um Mitglied zu werden?',
-    answer: 'Nein, du kannst den Antrag auch ohne bestehenden Account einreichen. Sobald der Vorstand deinen Antrag bestätigt, erstellen wir dir ein Mitglieder-Konto — oder wir verknüpfen die Mitgliedschaft mit deinem bestehenden Konto, falls du bereits eines hast.',
+    question: 'Was ist der Unterschied zwischen einem Nutzerkonto und einer Mitgliedschaft?',
+    answer: 'Ein Nutzerkonto brauchst du, um auf dem Marktplatz zu kaufen/verkaufen, Reparaturen anzufragen oder Workshops zu buchen — das ist kostenlos und für alle offen. Eine Vereinsmitgliedschaft ist etwas anderes: Du wirst rechtlich Teil der Trägerschaft des Vereins und erhältst Stimmrecht bei Entscheiden. Die meisten Nutzer:innen werden nie Mitglied — das ist völlig in Ordnung.',
   },
   {
-    question: 'Was ist der Unterschied zwischen einem Nutzerkonto und einer Mitgliedschaft?',
-    answer: 'Ein Nutzerkonto brauchst du, um auf dem Marktplatz zu kaufen/verkaufen, Reparaturen anzufragen oder Workshops zu buchen. Eine Vereinsmitgliedschaft geht darüber hinaus: Sie gibt dir Stimmrecht an der Generalversammlung, Mitbestimmung bei Entscheidungen und macht dich offiziell Teil der Trägerschaft des Vereins.',
+    question: 'Muss ich ein Konto haben, um Mitglied zu werden?',
+    answer: 'Nein. Du kannst den Antrag auch ohne bestehenden Account einreichen. Sobald der Vorstand deinen Antrag bestätigt, erstellen wir dir ein Mitglieder-Konto — oder wir verknüpfen die Mitgliedschaft mit deinem bestehenden Konto, falls du bereits eines hast.',
+  },
+  {
+    question: 'Was bekomme ich konkret als Mitglied?',
+    answer: 'Ehrliche Antwort: Du bekommst Stimmrecht bei Vereinsentscheiden und stehst auf der offiziellen Mitgliederliste. Das ist es. Wir versprechen keine exklusiven Vorteile, weil wir an einen offenen Verein glauben — unsere Angebote sind für alle da, nicht nur für Mitglieder. Du wirst Mitglied, weil du den Verein mittragen willst, nicht wegen Perks.',
+  },
+  {
+    question: 'Wie läuft eine Abstimmung ab?',
+    answer: `Wenn der Vorstand einen Entscheid zur Abstimmung stellt, werden alle Mitglieder automatisch per E-Mail eingeladen. Du kannst online abstimmen und die Diskussion zum Entscheid verfolgen. Die Ergebnisse sind für alle Mitglieder transparent einsehbar.`,
   },
   {
     question: 'Was macht der Verein genau?',
     answer: `${ORG.legalName} fördert den nachhaltigen Umgang mit Technologie. Wir betreiben einen Community-Marktplatz für gebrauchte IT, vermitteln Techniker für Reparaturen und bieten Workshops zu Linux, Hardware und Programmierung an.`,
-  },
-  {
-    question: 'Wann ist die nächste Generalversammlung?',
-    answer: 'Die Generalversammlung findet einmal jährlich statt. Mitglieder werden rechtzeitig per E-Mail eingeladen. Den genauen Termin erfährst du nach deiner Aufnahme.',
   },
   {
     question: 'Wie zahle ich den Jahresbeitrag?',
@@ -119,29 +118,43 @@ export default async function MitgliedWerdenPage() {
         theme="getInvolved"
         icon={Award}
         title="Mitglied werden"
-        subtitle="Gestalte die Zukunft von RevampIT aktiv mit"
+        subtitle="Trage den Verein mit — rechtlich, finanziell und demokratisch"
       />
 
-      {/* Benefits */}
-      <div className="py-12 sm:py-16 lg:py-20">
+      {/* Honest intro */}
+      <div className="pt-12 sm:pt-16">
+        <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
+          <div className="bg-amber-50 border border-amber-200 rounded-xl p-6">
+            <Heading level={2} className="text-lg text-amber-900 mb-2">
+              Ehrlich: Du musst nicht Mitglied werden
+            </Heading>
+            <p className="text-amber-900 text-sm leading-relaxed">
+              Alle unsere Angebote — Marktplatz, IT-Hilfe, Workshops — sind für alle offen und bleiben es. Du musst kein Mitglied werden, um mitzumachen. Eine Vereinsmitgliedschaft ist etwas anderes: Du wirst <strong>rechtlich Teil der Trägerschaft</strong> des Vereins und übernimmst Mitverantwortung. Das ist kein Upgrade mit Perks — es ist ein Bekenntnis zum Verein.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* What membership actually gives you */}
+      <div className="py-12 sm:py-16">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-10 sm:mb-12">
             <Heading level={2} className="tracking-tight text-gray-900">
-              Was bedeutet Mitgliedschaft?
+              Was du als Mitglied wirklich bekommst
             </Heading>
             <p className="mt-4 text-lg text-gray-600 max-w-2xl mx-auto">
-              Als Mitglied des {ORG.legalName} hast du echte Mitsprachemöglichkeiten und trägst aktiv zur Mission bei.
+              Drei konkrete Dinge — keine leeren Versprechen.
             </p>
           </div>
 
-          <div className="grid gap-6 sm:gap-8 sm:grid-cols-2 lg:grid-cols-4">
-            {MEMBERSHIP_BENEFITS.map((benefit) => (
-              <div key={benefit.title} className="bg-gray-50 rounded-xl p-6 border border-gray-100">
+          <div className="grid gap-6 sm:gap-8 sm:grid-cols-3 max-w-5xl mx-auto">
+            {MEMBERSHIP_REALITIES.map((item) => (
+              <div key={item.title} className="bg-gray-50 rounded-xl p-6 border border-gray-100">
                 <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-green-100 mb-4" aria-hidden="true">
-                  <benefit.icon className="h-5 w-5 text-green-600" />
+                  <item.icon className="h-5 w-5 text-green-600" />
                 </div>
-                <Heading level={3} className="text-base font-bold text-gray-900">{benefit.title}</Heading>
-                <p className="mt-2 text-sm text-gray-600">{benefit.description}</p>
+                <Heading level={3} className="text-base font-bold text-gray-900">{item.title}</Heading>
+                <p className="mt-2 text-sm text-gray-600">{item.description}</p>
               </div>
             ))}
           </div>

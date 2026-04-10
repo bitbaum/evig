@@ -8,7 +8,7 @@
 import {
   Users, Code, GraduationCap, Handshake, Building2, Gift,
   Leaf, Heart, Globe, Wrench, BookOpen, Briefcase,
-  Lightbulb, Cpu, Share2, Target, LucideIcon
+  Lightbulb, Cpu, Share2, Target, Vote, LucideIcon
 } from 'lucide-react'
 
 // Types
@@ -127,16 +127,29 @@ export const INVOLVEMENT_OPTIONS: InvolvementOption[] = [
   },
   {
     title: 'Spenden',
-    description: 'Unterstützen Sie unsere Mission, Technologie nachhaltig und für alle zugänglich zu machen. Ihr Beitrag hilft uns, unsere wichtige Arbeit fortzusetzen.',
+    description: 'Unterstütze unsere Mission, Technologie nachhaltig und für alle zugänglich zu machen. Dein Beitrag hilft uns, unsere Arbeit fortzusetzen.',
     icon: Gift,
     features: [
       'Nachhaltige Technologie unterstützen',
-      'Helfen, Elektroschrott zu reduzieren',
-      'Gemeinschaftsprogramme ermöglichen',
+      'Elektroschrott reduzieren helfen',
+      'Community-Programme ermöglichen',
       'Technologie zugänglich machen'
     ],
     cta: 'Jetzt spenden',
     href: '/get-involved/donate'
+  },
+  {
+    title: 'Vereinsmitgliedschaft',
+    description: 'Werde offizielles Mitglied des Vereins und übernimm Mitverantwortung. Mitglieder stimmen über wichtige Entscheidungen ab und sind Teil der Trägerschaft des Vereins.',
+    icon: Vote,
+    features: [
+      'Stimmrecht bei Vereinsentscheiden',
+      'Teil der offiziellen Mitgliederliste',
+      'Jahresbeitrag CHF 50 (ermässigt CHF 20)',
+      'Finanzielle Unterstützung der Mission'
+    ],
+    cta: 'Mitglied werden',
+    href: '/mitglied-werden'
   }
 ]
 
