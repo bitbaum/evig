@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useSession } from 'next-auth/react'
 import { CheckCircle, Loader2, AlertCircle } from 'lucide-react'
+import Heading from '@/components/ui/Heading'
 import { apiFetch } from '@/lib/api/client'
 
 export function MembershipApplicationForm() {
@@ -63,7 +64,7 @@ export function MembershipApplicationForm() {
         <div className="inline-flex items-center justify-center w-16 h-16 bg-green-100 rounded-full mb-4">
           <CheckCircle className="w-8 h-8 text-green-600" />
         </div>
-        <h3 className="text-xl font-bold text-green-900 mb-2">Antrag eingereicht!</h3>
+        <Heading level={3} className="text-xl text-green-900 mb-2">Antrag eingereicht!</Heading>
         <p className="text-green-800">
           Dein Mitgliedschaftsantrag wurde erfolgreich gespeichert. Wir prüfen ihn an der nächsten
           Vorstandssitzung und melden uns per E-Mail bei dir.
