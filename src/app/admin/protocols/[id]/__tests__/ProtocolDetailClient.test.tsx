@@ -176,6 +176,6 @@ describe('ProtocolDetailClient', () => {
     )
 
     expect(screen.getByText('Keine Aktionen erkannt')).toBeInTheDocument()
-    expect(screen.getByText(/Überarbeiten Sie den Inhalt oben/i)).toBeInTheDocument()
+    expect(screen.getByText(/Überarbeite den Inhalt oben/i)).toBeInTheDocument()
   })
 })
