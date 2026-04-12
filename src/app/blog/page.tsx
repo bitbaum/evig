@@ -133,7 +133,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
             {/* Featured Stories */}
             {featuredPosts.length > 0 && (
               <div className="py-6 sm:py-8 border-t border-gray-200">
-                <Heading level={2} className="text-gray-900 mb-4 sm:mb-6">Featured Stories</Heading>
+                <Heading level={2} className="text-gray-900 mb-4 sm:mb-6">Empfohlene Beiträge</Heading>
                 <BlogFeaturedGrid posts={featuredPosts} />
               </div>
             )}
@@ -142,7 +142,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
             {latestPosts.length > 0 && (
               <div className="py-6 sm:py-8 border-t border-gray-200">
                 <div className="flex items-center justify-between mb-4 sm:mb-6">
-                  <Heading level={2} className="text-gray-900">Latest</Heading>
+                  <Heading level={2} className="text-gray-900">Neueste Beiträge</Heading>
                 </div>
                 <BlogLatestList posts={latestPosts} />
               </div>

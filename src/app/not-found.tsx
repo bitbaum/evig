@@ -1,36 +1,31 @@
 import Link from 'next/link'
+import { Search, Home, ArrowLeft } from 'lucide-react'
 import Heading from '@/components/ui/Heading'
 
 export default function NotFound() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
-      <div className="max-w-md w-full bg-white shadow-lg rounded-lg p-6">
-        <div className="flex items-center justify-center w-12 h-12 mx-auto bg-gray-100 rounded-full">
-          <svg
-            className="w-6 h-6 text-gray-600"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="M9.172 16.172a4 4 0 015.656 0M9 12h6m-6-4h6m2 5.291A7.962 7.962 0 0112 15c-2.34 0-4.462-.743-6.21-2.002M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-            />
-          </svg>
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
+      <div className="max-w-md w-full text-center">
+        <div className="inline-flex items-center justify-center w-16 h-16 bg-gray-100 rounded-full mb-6">
+          <Search className="w-8 h-8 text-gray-400" />
         </div>
-        <div className="mt-4 text-center">
-          <Heading level={1} className="text-lg text-gray-900">Seite nicht gefunden</Heading>
-          <p className="mt-2 text-sm text-gray-600">
-            Die gesuchte Seite konnte nicht gefunden werden.
-          </p>
+        <Heading level={1} className="text-2xl text-gray-900 mb-2">Seite nicht gefunden</Heading>
+        <p className="text-gray-600 mb-8">
+          Die gesuchte Seite existiert nicht oder wurde verschoben.
+        </p>
+        <div className="flex flex-col sm:flex-row gap-3 justify-center">
           <Link
             href="/"
-            className="mt-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+            className="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-green-600 text-white font-medium rounded-lg hover:bg-green-700 transition-colors"
           >
-            Zurück zur Startseite
+            <Home className="w-4 h-4" />
+            Zur Startseite
+          </Link>
+          <Link
+            href="/contact"
+            className="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-white text-gray-700 font-medium rounded-lg border border-gray-300 hover:bg-gray-50 transition-colors"
+          >
+            Problem melden
           </Link>
         </div>
       </div>
